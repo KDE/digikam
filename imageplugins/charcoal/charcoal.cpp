@@ -60,7 +60,7 @@ void Charcoal::filterImage(void)
 {
     if (m_orgImage.isNull())
     {
-       kWarning(50006) << "No image data available!";
+       kWarning() << "No image data available!";
        return;
     }
 
@@ -77,7 +77,7 @@ void Charcoal::filterImage(void)
 
     if ((int)m_orgImage.width() < kernelWidth)
     {
-        kWarning(50006) << "Image is smaller than radius!";
+        kWarning() << "Image is smaller than radius!";
         return;
     }
 
@@ -85,7 +85,7 @@ void Charcoal::filterImage(void)
 
     if (!kernel)
     {
-        kWarning(50006) << "Unable to allocate memory!";
+        kWarning() << "Unable to allocate memory!";
         return;
     }
 
@@ -98,7 +98,7 @@ void Charcoal::filterImage(void)
 
     // -- Applying Gaussian blur effect ---------------------------------------
 
-    Digikam::DImgGaussianBlur(this, m_destImage, m_destImage, 50, 60, (int)(m_smooth/10.0));
+    Digikam::DImgGaussianBlur(this, m_destImage, m_destImage, 80, 85, (int)(m_smooth/10.0));
 
     if (m_cancel)
         return;
@@ -107,7 +107,7 @@ void Charcoal::filterImage(void)
 
     Digikam::DImgImageFilters().stretchContrastImage(m_destImage.bits(), m_destImage.width(),
                                 m_destImage.height(), m_destImage.sixteenBit());
-    postProgress( 70 );
+    postProgress( 90 );
     if (m_cancel)
         return;
 
@@ -115,7 +115,7 @@ void Charcoal::filterImage(void)
 
     Digikam::DImgImageFilters().invertImage(m_destImage.bits(), m_destImage.width(),
                                 m_destImage.height(), m_destImage.sixteenBit());
-    postProgress( 80 );
+    postProgress( 95 );
     if (m_cancel)
         return;
 
@@ -129,7 +129,7 @@ void Charcoal::filterImage(void)
                    0.3F, 0.59F , 0.11F,                             // Red channel gains.
                    0.0F, 1.0F,   0.0F,                              // Green channel gains (not used).
                    0.0F, 0.0F,   1.0F);                             // Blue channel gains (not used).
-    postProgress( 90 );
+    postProgress( 100 );
     if (m_cancel)
         return;
 }
@@ -141,60 +141,79 @@ bool Charcoal::convolveImage(const unsigned int order, const double *kernel)
     long    kernelWidth, i;
     double  red, green, blue, alpha, normalize=0.0;
     double *k=0;
-    Digikam::DColor  color;
 
     kernelWidth = order;
 
     if ((kernelWidth % 2) == 0)
     {
-        kWarning(50006) << "Kernel width must be an odd number!";
+        kWarning() << "Kernel width must be an odd number!";
         return(false);
     }
 
-    double *normal_kernel = new double[kernelWidth*kernelWidth];
+    double *normal_kernel = new double[kernelWidth * kernelWidth];
 
     if (!normal_kernel)
     {
-        kWarning(50006) << "Unable to allocate memory!";
+        kWarning() << "Unable to allocate memory!";
         return(false);
     }
 
-    for(i=0 ; i < (kernelWidth*kernelWidth) ; ++i)
+    for (i = 0; i < (kernelWidth * kernelWidth); ++i)
+    {
         normalize += kernel[i];
+    }
 
     if (fabs(normalize) <= Epsilon)
+    {
         normalize=1.0;
+    }
 
     normalize = 1.0/normalize;
 
-    for(i=0 ; i < (kernelWidth*kernelWidth) ; ++i)
-        normal_kernel[i] = normalize*kernel[i];
+    for (i = 0; i < (kernelWidth * kernelWidth); ++i)
+    {
+        normal_kernel[i] = normalize * kernel[i];
+    }
+
+    // --------------------------------------------------------
+
+    // caching
+    uint height     = m_destImage.height();
+    uint width      = m_destImage.width();
+    bool sixteenBit = m_destImage.sixteenBit();
+    uchar *ddata    = m_destImage.bits();
+    int ddepth      = m_destImage.bytesDepth();
+
+    uchar *sdata    = m_orgImage.bits();
+    int sdepth      = m_orgImage.bytesDepth();
 
     double maxClamp = m_destImage.sixteenBit() ? 16777215.0 : 65535.0;
 
-    for(y=0 ; !m_cancel && (y < m_destImage.height()) ; ++y)
+    // --------------------------------------------------------
+
+    for (y = 0; !m_cancel && (y < height); ++y)
     {
-        sy = y-(kernelWidth/2);
+        sy = y - (kernelWidth / 2);
 
-        for(x=0 ; !m_cancel && (x < m_destImage.width()) ; ++x)
+        for (x = 0; !m_cancel && (x < width); ++x)
         {
-            k   = normal_kernel;
+            k = normal_kernel;
             red = green = blue = alpha = 0;
-            sy  = y-(kernelWidth/2);
+            sy = y - (kernelWidth / 2);
 
-            for(mcy=0 ; !m_cancel && (mcy < kernelWidth) ; ++mcy, ++sy)
+            for (mcy = 0; !m_cancel && (mcy < kernelWidth); ++mcy, ++sy)
             {
-                my = sy < 0 ? 0 : sy > (int)m_destImage.height()-1 ? m_destImage.height()-1 : sy;
-                sx = x+(-kernelWidth/2);
+                my = sy < 0 ? 0 : sy > (int) height - 1 ? height - 1 : sy;
+                sx = x + (-kernelWidth / 2);
 
-                for(mcx=0 ; !m_cancel && (mcx < kernelWidth) ; ++mcx, ++sx)
+                for (mcx = 0; !m_cancel && (mcx < kernelWidth); ++mcx, ++sx)
                 {
-                    mx     = sx < 0 ? 0 : sx > (int)m_destImage.width()-1 ? m_destImage.width()-1 : sx;
-                    color  = m_orgImage.getPixelColor(mx, my);
-                    red   += (*k)*(color.red()   * 257.0);
-                    green += (*k)*(color.green() * 257.0);
-                    blue  += (*k)*(color.blue()  * 257.0);
-                    alpha += (*k)*(color.alpha() * 257.0);
+                    mx = sx < 0 ? 0 : sx > (int) width - 1 ? width - 1 : sx;
+                    Digikam::DColor color(sdata + mx * sdepth + (width * my * sdepth), sixteenBit);
+                    red += (*k) * (color.red() * 257.0);
+                    green += (*k) * (color.green() * 257.0);
+                    blue += (*k) * (color.blue() * 257.0);
+                    alpha += (*k) * (color.alpha() * 257.0);
                     ++k;
                 }
             }
@@ -204,14 +223,16 @@ bool Charcoal::convolveImage(const unsigned int order, const double *kernel)
             blue  =  blue < 0.0 ? 0.0 :  blue > maxClamp ? maxClamp :  blue+0.5;
             alpha = alpha < 0.0 ? 0.0 : alpha > maxClamp ? maxClamp : alpha+0.5;
 
-            m_destImage.setPixelColor(x, y, Digikam::DColor((int)(red / 257UL),  (int)(green / 257UL),
-                                            (int)(blue / 257UL), (int)(alpha / 257UL),
-                                            m_destImage.sixteenBit()));
+            Digikam::DColor color((int)(red / 257UL),  (int)(green / 257UL),
+                                  (int)(blue / 257UL), (int)(alpha / 257UL), sixteenBit);
+            color.setPixel((ddata + x * ddepth + (width * y * ddepth)));
         }
 
-        progress = (int)(((double)y * 50.0) / m_destImage.height());
-        if ( progress%5 == 0 )
-           postProgress( progress );
+        progress = (int) (((double) y * 80.0) / height);
+        if (progress % 5 == 0)
+        {
+            postProgress(progress);
+        }
     }
 
     delete [] normal_kernel;

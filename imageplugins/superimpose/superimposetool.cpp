@@ -46,7 +46,6 @@
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kcursor.h>
-#include <kdebug.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
@@ -76,13 +75,20 @@ class SuperImposeToolPriv
 {
 public:
 
-    SuperImposeToolPriv()
-    {
-        thumbnailsBar = 0;
-        gboxSettings  = 0;
-        previewWidget = 0;
-        dirSelect     = 0;
-    }
+    SuperImposeToolPriv() :
+        configGroupName("superimpose Tool"),
+        configTemplatesRootURLEntry("Templates Root URL"),
+        configTemplatesURLEntry("Templates URL"),
+
+        thumbnailsBar(0),
+        gboxSettings(0),
+        previewWidget(0),
+        dirSelect(0)
+        {}
+
+    const QString       configGroupName;
+    const QString       configTemplatesRootURLEntry;
+    const QString       configTemplatesURLEntry;
 
     KUrl                templatesUrl;
     KUrl                templatesRootUrl;
@@ -149,8 +155,8 @@ SuperImposeTool::SuperImposeTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    gridFrame->addWidget(d->previewWidget,  0, 0, 1, 3);
-    gridFrame->addWidget(toolBox,           1, 1, 1, 1);
+    gridFrame->addWidget(d->previewWidget, 0, 0, 1, 3);
+    gridFrame->addWidget(toolBox,          1, 1, 1, 1);
     gridFrame->setColumnStretch(0, 10);
     gridFrame->setColumnStretch(2, 10);
     gridFrame->setRowStretch(0, 10);
@@ -161,9 +167,7 @@ SuperImposeTool::SuperImposeTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings    = new EditorToolSettings(EditorToolSettings::Default|
-                                                EditorToolSettings::Ok|
-                                                EditorToolSettings::Cancel);
+    d->gboxSettings = new EditorToolSettings;
 
     QGridLayout* grid = new QGridLayout(d->gboxSettings->plainPage());
 
@@ -188,7 +192,7 @@ SuperImposeTool::SuperImposeTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    connect(bGroup, SIGNAL(released(int)),
+    connect(bGroup, SIGNAL(buttonReleased(int)),
             d->previewWidget, SLOT(slotEditModeChanged(int)));
 
     connect(d->thumbnailsBar, SIGNAL(signalUrlSelected(const KUrl&)),
@@ -217,7 +221,7 @@ void SuperImposeTool::populateTemplates(void)
     if (!d->templatesUrl.isValid() || !d->templatesUrl.isLocalFile())
        return;
 
-    QDir dir(d->templatesUrl.path(), "*.png *.PNG");
+    QDir dir(d->templatesUrl.toLocalFile(), "*.png *.PNG");
 
     if (!dir.exists())
        return;
@@ -241,19 +245,19 @@ void SuperImposeTool::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group("Album Settings");
     KUrl albumDBUrl( group.readEntry("Album Path", KGlobalSettings::documentPath()) );
-    group = config->group("superimpose Tool");
-    group = config->group("Template Superimpose Tool Settings");
-    d->templatesRootUrl.setPath( group.readEntry("Templates Root URL", albumDBUrl.path()) );
-    d->templatesUrl.setPath( group.readEntry("Templates URL", albumDBUrl.path()) );
+
+    group = config->group(d->configGroupName);
+    d->templatesRootUrl.setPath( group.readEntry(d->configTemplatesRootURLEntry, albumDBUrl.toLocalFile()) );
+    d->templatesUrl.setPath( group.readEntry(d->configTemplatesURLEntry,         albumDBUrl.toLocalFile()) );
     d->dirSelect->setRootPath(d->templatesRootUrl, d->templatesUrl);
 }
 
 void SuperImposeTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("superimpose Tool");
-    group.writeEntry( "Templates Root URL", d->dirSelect->rootPath().path() );
-    group.writeEntry( "Templates URL", d->templatesUrl.path() );
+    KConfigGroup group = config->group(d->configGroupName);
+    group.writeEntry( d->configTemplatesRootURLEntry, d->dirSelect->rootPath().toLocalFile() );
+    group.writeEntry( d->configTemplatesURLEntry,     d->templatesUrl.toLocalFile() );
     group.sync();
 }
 
@@ -264,7 +268,7 @@ void SuperImposeTool::slotResetSettings()
 
 void SuperImposeTool::slotRootTemplateDirChanged(void)
 {
-    KUrl url = KFileDialog::getExistingDirectory(d->templatesRootUrl.path(), kapp->activeWindow(),
+    KUrl url = KFileDialog::getExistingDirectory(d->templatesRootUrl.toLocalFile(), kapp->activeWindow(),
                                                  i18n("Select Template Root Directory to Use"));
 
     if ( url.isValid() )

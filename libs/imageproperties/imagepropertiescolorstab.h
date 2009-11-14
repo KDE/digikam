@@ -6,7 +6,7 @@
  * Date        : 2004-11-17
  * Description : a tab to display colors information of images
  *
- * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -89,19 +89,9 @@ private Q_SLOTS:
 
 private:
 
-    enum ColorChannel
-    {
-        LuminosityChannel=0,
-        RedChannel,
-        GreenChannel,
-        BlueChannel,
-        AlphaChannel,
-        ColorChannels
-    };
-
     enum AllColorsColorType
     {
-        AllColorsRed=0,
+        AllColorsRed = 0,
         AllColorsGreen,
         AllColorsBlue
     };

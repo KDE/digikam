@@ -88,11 +88,11 @@ Name            Version                       URL                               
 
 CMake           >= 2.4.x (2.4.3 recommended)  http://www.cmake.org
 libqt           >= 4.3.x (4.5.x recommended)  http://www.qtsoftware.com                  Including run-time SQLite3 database plugin
-kdelibs         >= 4.0.x (4.2.x recommended)  http://www.kde.org
+kdelibs         >= 4.0.x (4.3.x recommended)  http://www.kde.org                         Nepomuk support introduced with KDE 4.3.x.
 libkipi         >= 0.2.0                      http://www.digikam.org/sharedlibs
-libkexiv2       >= 0.5.0                      http://www.digikam.org/sharedlibs          Version from trunk KDE svn repository. Will be released with KDE 4.2. Exiv2 >= 0.18.1 shared library recommended.
+libkexiv2       >= 0.5.0                      http://www.digikam.org/sharedlibs          Version from trunk KDE svn repository. Will be released with KDE 4.2. Exiv2 >= 0.18.2 shared library recommended.
 libkdcraw       >= 0.4.0                      http://www.digikam.org/sharedlibs          Version from trunk KDE svn repository. Will be released with KDE 4.2.
-liblcms         >= 1.14.x                     http://www.littlecms.com
+liblcms         >= 1.17.x                     http://www.littlecms.com
 libtiff         >= 3.8.2                      http://www.remotesensing.org/libtiff
 libpng          >= 1.2.x                      http://www.libpng.org/pub/png/libpng.html
 libjpeg         >= 6b                         http://www.ijg.org
@@ -104,7 +104,7 @@ libkdepimlibs   >= 4.0.x (4.2.x recommended)  http://pim.kde.org                
 libmarblewidget >= 0.5.1 (0.6.x recommended)  http://edu.kde.org/marble                  To support Geolocation using Marble Widget.
 liblensfun      >= 0.1.0                      http://lensfun.berlios.de                  To support LensCorrection editor plugin.
 libgphoto2      >= 2.4.0                      http://www.gphoto.org                      To support Gphoto2 Cameras. 
-liblqr-1        >= 0.4.0                      http://liblqr.wikidot.com                  For Liquid Rescale tool. If no external libray is found, internal version is used instead. 
+liblqr-1        >= 0.4.1                      http://liblqr.wikidot.com                  For Liquid Rescale tool. If no external libray is found, internal version is used instead. 
 
 Note : all library dependencies require development and binary packages installed on your
 computer to compile digiKam.
@@ -145,6 +145,7 @@ Compared to old KDE3 autoconf options:
 
 More details can be found at this url: http://techbase.kde.org/Development/Tutorials/CMake#Environment_Variables
 
+Note: To know KDE install path on your computer, use 'kde-config --prefix' command line.
 
 -- DONATE MONEY --------------------------------------------------------
 

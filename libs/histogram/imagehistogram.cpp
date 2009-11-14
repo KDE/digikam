@@ -39,12 +39,13 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kapplication.h>
+#include <kdebug.h>
 
 // Local includes
 
 #include "dimg.h"
+#include "globals.h"
 
 namespace Digikam
 {
@@ -70,10 +71,11 @@ public:
 
     ImageHistogramPriv()
     {
-        imageData   = 0;
-        histogram   = 0;
-        valid       = false;
-        runningFlag = true;
+        imageData     = 0;
+        histogram     = 0;
+        histoSegments = 0;
+        valid         = false;
+        runningFlag   = true;
     }
 
     /** The histogram data.*/
@@ -109,7 +111,7 @@ void ImageHistogram::setup(uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits
     d->imageData     = i_data;
     d->imageWidth    = i_w;
     d->imageHeight   = i_h;
-    d->histoSegments = i_sixteenBits ? 65536 : 256;
+    d->histoSegments = i_sixteenBits ? NUM_SEGMENTS_16BIT : NUM_SEGMENTS_8BIT;
 }
 
 ImageHistogram::~ImageHistogram()
@@ -117,14 +119,24 @@ ImageHistogram::~ImageHistogram()
     stopCalculation();
 
     if (d->histogram)
-       delete [] d->histogram;
+        delete [] d->histogram;
 
     delete d;
+}
+
+bool ImageHistogram::isSixteenBit()
+{
+    return d->histoSegments == NUM_SEGMENTS_16BIT;
 }
 
 int ImageHistogram::getHistogramSegments(void)
 {
     return d->histoSegments;
+}
+
+int ImageHistogram::getMaxSegmentIndex(void)
+{
+    return d->histoSegments - 1;
 }
 
 void ImageHistogram::calculateInThread()
@@ -181,14 +193,14 @@ void ImageHistogram::calculate()
 
     if ( !d->histogram )
     {
-        kWarning(50003) << ("HistogramWidget::calcHistogramValues: Unable to allocate memory!");
+        kWarning() << ("HistogramWidget::calcHistogramValues: Unable to allocate memory!");
         emit calculationFinished(this, false);
         return;
     }
 
     memset(d->histogram, 0, d->histoSegments*sizeof(struct ImageHistogramPriv::double_packet));
 
-    if (d->histoSegments == 65536)         // 16 bits image.
+    if (d->histoSegments == NUM_SEGMENTS_16BIT)         // 16 bits image.
     {
         unsigned short  blue, green, red, alpha;
         unsigned short *data = (unsigned short*)d->imageData;
@@ -257,27 +269,27 @@ double ImageHistogram::getCount(int channel, int start, int end)
 
     switch(channel)
     {
-    case ImageHistogram::ValueChannel:
+    case LuminosityChannel:
         for (i = start ; i <= end ; ++i)
             count += d->histogram[i].value;
         break;
 
-    case ImageHistogram::RedChannel:
+    case RedChannel:
         for (i = start ; i <= end ; ++i)
             count += d->histogram[i].red;
         break;
 
-    case ImageHistogram::GreenChannel:
+    case GreenChannel:
         for (i = start ; i <= end ; ++i)
             count += d->histogram[i].green;
         break;
 
-    case ImageHistogram::BlueChannel:
+    case BlueChannel:
         for (i = start ; i <= end ; ++i)
             count += d->histogram[i].blue;
         break;
 
-    case ImageHistogram::AlphaChannel:
+    case AlphaChannel:
         for (i = start ; i <= end ; ++i)
             count += d->histogram[i].alpha;
         break;
@@ -287,15 +299,15 @@ double ImageHistogram::getCount(int channel, int start, int end)
         break;
     }
 
-  return count;
+    return count;
 }
 
 double ImageHistogram::getPixels()
 {
-  if ( !d->histogram )
-       return 0.0;
+    if ( !d->histogram )
+        return 0.0;
 
-  return(d->imageWidth * d->imageHeight);
+    return(d->imageWidth * d->imageHeight);
 }
 
 double ImageHistogram::getMean(int channel, int start, int end)
@@ -310,27 +322,27 @@ double ImageHistogram::getMean(int channel, int start, int end)
 
     switch(channel)
     {
-        case ImageHistogram::ValueChannel:
+        case LuminosityChannel:
             for (i = start ; i <= end ; ++i)
                 mean += i * d->histogram[i].value;
             break;
 
-        case ImageHistogram::RedChannel:
+        case RedChannel:
             for (i = start ; i <= end ; ++i)
                 mean += i * d->histogram[i].red;
             break;
 
-        case ImageHistogram::GreenChannel:
+        case GreenChannel:
             for (i = start ; i <= end ; ++i)
                 mean += i * d->histogram[i].green;
             break;
 
-        case ImageHistogram::BlueChannel:
+        case BlueChannel:
             for (i = start ; i <= end ; ++i)
                 mean += i * d->histogram[i].blue;
             break;
 
-        case ImageHistogram::AlphaChannel:
+        case AlphaChannel:
             for (i = start ; i <= end ; ++i)
                 mean += i * d->histogram[i].alpha;
             break;
@@ -362,7 +374,7 @@ int ImageHistogram::getMedian(int channel, int start, int end)
 
     switch(channel)
     {
-        case ImageHistogram::ValueChannel:
+        case LuminosityChannel:
             for (i = start ; i <= end ; ++i)
             {
                 sum += d->histogram[i].value;
@@ -370,7 +382,7 @@ int ImageHistogram::getMedian(int channel, int start, int end)
             }
             break;
 
-        case ImageHistogram::RedChannel:
+        case RedChannel:
             for (i = start ; i <= end ; ++i)
             {
                 sum += d->histogram[i].red;
@@ -378,7 +390,7 @@ int ImageHistogram::getMedian(int channel, int start, int end)
             }
             break;
 
-        case ImageHistogram::GreenChannel:
+        case GreenChannel:
             for (i = start ; i <= end ; ++i)
             {
                 sum += d->histogram[i].green;
@@ -386,7 +398,7 @@ int ImageHistogram::getMedian(int channel, int start, int end)
             }
             break;
 
-        case ImageHistogram::BlueChannel:
+        case BlueChannel:
             for (i = start ; i <= end ; ++i)
             {
                 sum += d->histogram[i].blue;
@@ -394,7 +406,7 @@ int ImageHistogram::getMedian(int channel, int start, int end)
             }
             break;
 
-        case ImageHistogram::AlphaChannel:
+        case AlphaChannel:
             for (i = start ; i <= end ; ++i)
             {
                 sum += d->histogram[i].alpha;
@@ -429,27 +441,27 @@ double ImageHistogram::getStdDev(int channel, int start, int end)
 
     switch(channel)
     {
-        case ImageHistogram::ValueChannel:
+        case LuminosityChannel:
             for (i = start ; i <= end ; ++i)
                 dev += (i - mean) * (i - mean) * d->histogram[i].value;
             break;
 
-        case ImageHistogram::RedChannel:
+        case RedChannel:
             for (i = start ; i <= end ; ++i)
                 dev += (i - mean) * (i - mean) * d->histogram[i].red;
             break;
 
-        case ImageHistogram::GreenChannel:
+        case GreenChannel:
             for (i = start ; i <= end ; ++i)
                 dev += (i - mean) * (i - mean) * d->histogram[i].green;
             break;
 
-        case ImageHistogram::BlueChannel:
+        case BlueChannel:
             for (i = start ; i <= end ; ++i)
                 dev += (i - mean) * (i - mean) * d->histogram[i].blue;
             break;
 
-        case ImageHistogram::AlphaChannel:
+        case AlphaChannel:
             for (i = start ; i <= end ; ++i)
                 dev += (i - mean) * (i - mean) * d->histogram[i].alpha;
             break;
@@ -471,23 +483,23 @@ double ImageHistogram::getValue(int channel, int bin)
 
     switch(channel)
     {
-       case ImageHistogram::ValueChannel:
+       case LuminosityChannel:
           value = d->histogram[bin].value;
           break;
 
-       case ImageHistogram::RedChannel:
+       case RedChannel:
           value = d->histogram[bin].red;
           break;
 
-       case ImageHistogram::GreenChannel:
+       case GreenChannel:
           value = d->histogram[bin].green;
           break;
 
-       case ImageHistogram::BlueChannel:
+       case BlueChannel:
           value = d->histogram[bin].blue;
           break;
 
-       case ImageHistogram::AlphaChannel:
+       case AlphaChannel:
           value = d->histogram[bin].alpha;
           break;
 
@@ -509,31 +521,31 @@ double ImageHistogram::getMaximum(int channel)
 
     switch(channel)
     {
-       case ImageHistogram::ValueChannel:
+       case LuminosityChannel:
           for (x = 0 ; x < d->histoSegments ; ++x)
              if (d->histogram[x].value > max)
                 max = d->histogram[x].value;
           break;
 
-       case ImageHistogram::RedChannel:
+       case RedChannel:
           for (x = 0 ; x < d->histoSegments ; ++x)
              if (d->histogram[x].red > max)
                 max = d->histogram[x].red;
           break;
 
-       case ImageHistogram::GreenChannel:
+       case GreenChannel:
           for (x = 0 ; x < d->histoSegments ; ++x)
              if (d->histogram[x].green > max)
                 max = d->histogram[x].green;
           break;
 
-       case ImageHistogram::BlueChannel:
+       case BlueChannel:
           for (x = 0 ; x < d->histoSegments ; ++x)
              if (d->histogram[x].blue > max)
                 max = d->histogram[x].blue;
           break;
 
-       case ImageHistogram::AlphaChannel:
+       case AlphaChannel:
           for (x = 0 ; x < d->histoSegments ; ++x)
              if (d->histogram[x].alpha > max)
                 max = d->histogram[x].alpha;

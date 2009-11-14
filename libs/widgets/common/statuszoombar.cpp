@@ -85,7 +85,6 @@ StatusZoomBar::StatusZoomBar(QWidget *parent)
     d->zoomSlider->setRange(ThumbnailSize::Small, ThumbnailSize::Huge);
     d->zoomSlider->setSingleStep(ThumbnailSize::Step);
     d->zoomSlider->setValue(ThumbnailSize::Medium);
-    d->zoomSlider->setMaximumHeight(fontMetrics().height()+2);
     d->zoomSlider->setFixedWidth(120);
     d->zoomSlider->setFocusPolicy(Qt::NoFocus);
     d->zoomSlider->setInvertedControls(true);       // See B.K.O #161087
@@ -124,7 +123,6 @@ StatusZoomBar::~StatusZoomBar()
     if (d->zoomTimer)
         delete d->zoomTimer;
 
-    delete d->zoomTracker;
     delete d;
 }
 

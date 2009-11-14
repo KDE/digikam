@@ -49,11 +49,11 @@ extern "C"
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kapplication.h>
 #include <kcursor.h>
 #include <kio/job.h>
 #include <kurl.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -576,7 +576,7 @@ void AlbumLister::slotResult(KJob* job)
 
     if (job->error())
     {
-        kWarning(50003) << "Failed to list url: " << job->errorString();
+        kWarning() << "Failed to list url: " << job->errorString();
         d->itemMap.clear();
         d->invalidatedItems.clear();
         return;

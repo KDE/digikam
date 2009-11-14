@@ -32,12 +32,13 @@
 #include <QFrame>
 #include <QLabel>
 #include <QMouseEvent>
+#include <QPointer>
 #include <QTimer>
 #include <QToolTip>
 
 // KDE includes
 
-#include <kdebug.h>
+
 
 namespace Digikam
 {
@@ -55,15 +56,15 @@ public:
         parent        = 0;
     }
 
-    Qt::Alignment alignment;
-    bool          enable;
-    bool          keepOpen;
-    QTimer*       autoHideTimer;
-    QWidget*      parent;
+    Qt::Alignment     alignment;
+    bool              enable;
+    bool              keepOpen;
+    QTimer*           autoHideTimer;
+    QPointer<QWidget> parent;
 };
 
 DCursorTracker::DCursorTracker(const QString& txt, QWidget *parent, Qt::Alignment align)
-              : QLabel(txt, 0, Qt::ToolTip), d(new DCursorTrackerPriv)
+              : QLabel(txt, parent, Qt::ToolTip), d(new DCursorTrackerPriv)
 {
     d->parent = parent;
     d->parent->setMouseTracking(true);
@@ -166,25 +167,31 @@ bool DCursorTracker::eventFilter(QObject *object, QEvent *e)
 
 void DCursorTracker::moveToParent(QWidget* parent)
 {
+    if (!parent)
+        return;
+
     switch (d->alignment)
     {
         case Qt::AlignLeft:
         {
             QPoint p = parent->mapToGlobal(QPoint(0, 0));
-            move(p.x(), p.y()-height());
+            int y    = p.y() - height();
+            move(p.x(), (y < 0) ? (p.y() + parent->height()) : y);
             break;
         }
         case Qt::AlignRight:
         {
             QPoint p = parent->mapToGlobal(QPoint(parent->width(), 0));
-            move(p.x()-width(), p.y()-height());
+            int y    = p.y() - height();
+            move(p.x()-width(), (y < 0) ? (p.y() + parent->height()) : y);
             break;
         }
         case Qt::AlignCenter:
         default:
         {
             QPoint p = parent->mapToGlobal(QPoint(parent->width()/2, 0));
-            move(p.x()-width()/2, p.y()-height());
+            int y    = p.y() - height();
+            move(p.x()-width()/2, (y < 0) ? (p.y() + parent->height()) : y);
             break;
         }
     }

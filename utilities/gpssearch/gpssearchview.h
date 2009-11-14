@@ -28,6 +28,10 @@
 
 #include <QWidget>
 
+// local includes
+
+#include "worldmapwidget.h"
+
 class QDragEnterEvent;
 class QDropEvent;
 class QPixmap;
@@ -37,6 +41,7 @@ namespace Digikam
 
 class SAlbum;
 class ImageInfo;
+class ImageInfoList;
 class SearchTextBar;
 class GPSSearchFolderView;
 class GPSSearchViewPriv;
@@ -74,6 +79,18 @@ private Q_SLOTS:
     void slotCheckNameEditGPSConditions();
 
     void slotSelectionChanged();
+
+    void slotItemsInfo(const ImageInfoList&);
+    
+    void slotDigikamViewNoCurrentItem();
+    void slotDigikamViewImageSelected(const ImageInfoList &selectedImage, bool hasPrevious, bool hasNext, const ImageInfoList &allImages);
+    
+    void slotMapSelectedItems(const GPSInfoList& gpsList);
+    void slotMapSoloItems(const GPSInfoList& gpsList);
+    
+Q_SIGNALS:
+    void signalMapSelectedItems(const KUrl::List url);
+    void signalMapSoloItems(const KUrl::List url, const QString& id);
 
 private:
 

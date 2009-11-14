@@ -59,7 +59,7 @@ public:
         ByDate
     };
 
-    enum ItemRightClickAction
+    enum ItemLeftClickAction
     {
         ShowPreview = 0,
         StartEditor
@@ -81,7 +81,8 @@ public:
 
     void emitSetupChanged();
 
-    bool showToolTipsIsValid() const;
+    bool showToolTipsIsValid()      const;
+    bool showAlbumToolTipsIsValid() const;
 
     void setDatabaseFilePath(const QString& path);
     QString getDatabaseFilePath() const;
@@ -104,8 +105,15 @@ public:
     void setImageSortOrder(int order);
     int getImageSortOrder() const;
 
-    void setItemRightClickAction(const ItemRightClickAction action);
-    ItemRightClickAction getItemRightClickAction() const;
+    // means ascending or descending
+    void setImageSorting(int sorting);
+    int getImageSorting() const;
+
+    void setImageGroupMode(int mode);
+    int getImageGroupMode() const;
+
+    void setItemLeftClickAction(const ItemLeftClickAction action);
+    ItemLeftClickAction getItemLeftClickAction() const;
 
     QString getImageFileFilter() const;
     void addToImageFileFilter(const QString& extensions);
@@ -157,6 +165,15 @@ public:
 
     void setIconShowRating(bool val);
     bool getIconShowRating() const;
+
+    /**
+     * Sets the visibility of the overlay buttons on the image icons.
+     */
+    void setIconShowOverlays(bool val);
+    /**
+     * Determines whether the overlay buttons should be displayed on the icons.
+     */
+    bool getIconShowOverlays() const;
 
     void setExifRotate(bool val);
     bool getExifRotate() const;
@@ -268,6 +285,9 @@ public:
 
     void    setShowTrashDeleteDialog(bool val);
     bool    getShowTrashDeleteDialog() const;
+
+    void    setShowPermanentDeleteDialog(bool val);
+    bool    getShowPermanentDeleteDialog() const;
 
     void    setApplySidebarChangesDirectly(bool val);
     bool    getApplySidebarChangesDirectly() const;

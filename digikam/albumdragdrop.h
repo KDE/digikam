@@ -24,8 +24,6 @@
 #ifndef ALBUMDRAGDROP_H
 #define ALBUMDRAGDROP_H
 
-// Qt includes
-
 // Local includes
 
 #include "albummodeldragdrophandler.h"

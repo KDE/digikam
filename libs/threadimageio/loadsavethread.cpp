@@ -25,10 +25,6 @@
 #include "loadsavethread.h"
 #include "loadsavethread.moc"
 
-// KDE includes
-
-#include <kdebug.h>
-
 // Local includes
 
 #include "dmetadata.h"

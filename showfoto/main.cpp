@@ -25,24 +25,24 @@
 
 // KDE includes
 
+#include <kaboutdata.h>
 #include <kapplication.h>
 #include <kcmdlineargs.h>
-#include <kaboutdata.h>
-#include <klocale.h>
 #include <kconfig.h>
 #include <kglobal.h>
 #include <kimageio.h>
+#include <klocale.h>
 
-// Libkexiv2 includes
+// LibKExiv2 includes
 
-#include <libkexiv2/version.h>
 #include <libkexiv2/kexiv2.h>
+#include <libkexiv2/version.h>
 
 // Local includes
 
-#include "version.h"
 #include "daboutdata.h"
 #include "showfoto.h"
+#include "version.h"
 
 using namespace Digikam;
 

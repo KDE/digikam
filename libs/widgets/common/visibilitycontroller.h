@@ -29,8 +29,6 @@
 #include <QtGui/QWidget>
 #include <QtCore/QList>
 
-// KDE includes
-
 // Local includes
 
 #include "digikam_export.h"
@@ -92,6 +90,8 @@ protected:
     virtual void beginStatusChange();
     void step();
     void allSteps();
+
+private:
 
     VisibilityControllerPriv* const d;
 };

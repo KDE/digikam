@@ -32,8 +32,6 @@
 #include <QtGui/QComboBox>
 #include <QtCore/QPersistentModelIndex>
 
-// KDE includes
-
 // Local includes
 
 #include "digikam_export.h"

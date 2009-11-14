@@ -117,9 +117,16 @@ void BlackFrameParser::blackFrameParsing()
     // Now find the hot pixels and store them in a list
     QList<HotPixel> hpList;
 
-    for (int y=0 ; y < m_Image.height() ; ++y)
+    // If you accidently open a normal image for a black frame, the plugin and host application will
+    // freeze due to heavy calculation.
+    // We should stop at a certain amount of hotpixels, to avoid the freeze.
+    // 1000 of total hot pixels should be good enough for a trigger. Images with such an amount of hot pixels should
+    // be considered as messed up anyway.
+    const int maxHotPixels = 1000;
+
+    for (int y=0 ; y < m_Image.height(); ++y)
     {
-        for (int x=0 ; x < m_Image.width() ; ++x)
+        for (int x=0 ; x < m_Image.width(); ++x)
         {
             //Get each point in the image
             QRgb pixrgb = m_Image.pixel(x,y);
@@ -144,6 +151,8 @@ void BlackFrameParser::blackFrameParsing()
                 hpList.append(point);
             }
         }
+        if (hpList.count() > maxHotPixels)
+            break;
     }
 
     //Now join points together into groups
@@ -171,8 +180,7 @@ void BlackFrameParser::consolidatePixels (QList<HotPixel>& list)
     HotPixel tmp;
     HotPixel point;
     HotPixel point_below;
-    QList<HotPixel>::iterator end(list.end());
-    for (; it != end; ++it )
+    for (; it != list.end(); ++it )
     {
         while (1)
         {

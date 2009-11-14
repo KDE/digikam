@@ -37,10 +37,10 @@ class DIGIKAM_EXPORT DImgRefocus : public DImgThreadedFilter
 
 public:
 
-    DImgRefocus(DImg *orgImage, QObject *parent=0, int matrixSize=5, double radius=0.9,
-                double gauss=0.0, double correlation=0.5, double noise=0.01);
+    explicit DImgRefocus(DImg *orgImage, QObject *parent=0, int matrixSize=5, double radius=0.9,
+                         double gauss=0.0, double correlation=0.5, double noise=0.01);
 
-    ~DImgRefocus(){};
+    ~DImgRefocus();
     
     static int maxMatrixSize();
 

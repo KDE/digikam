@@ -28,6 +28,7 @@
 // Qt includes
 
 #include <QStringList>
+#include <QMainWindow>
 #include <QMap>
 
 // KDE includes
@@ -46,6 +47,7 @@ class AlbumIconItem;
 class AlbumSettings;
 class Album;
 class AlbumIconViewFilter;
+class BatchSyncMetadata;
 class DigikamViewPriv;
 
 class DigikamView : public KHBox
@@ -105,7 +107,6 @@ public Q_SLOTS:
 
     // Album action slots
     void slotNewAlbum();
-    void slotNewAlbumFromSelection();
     void slotSortAlbums(int order);
     void slotDeleteAlbum();
     void slotSelectAlbum(const KUrl& url);
@@ -117,8 +118,8 @@ public Q_SLOTS:
     void slotAlbumAdded(Album *album);
     void slotAlbumDeleted(Album *album);
     void slotAlbumRenamed(Album *album);
-    void slotAlbumSyncPicturesMetadata();
-    void slotAlbumSyncPicturesMetadataDone();
+    void slotAlbumWriteMetadata();
+    void slotAlbumReadMetadata();
     void slotAlbumSelected(Album* album);
 
     void slotGotoAlbumAndItem(const ImageInfo& imageInfo);
@@ -150,10 +151,15 @@ public Q_SLOTS:
     void slotImageDeletePermanently();
     void slotImageDeletePermanentlyDirectly();
     void slotImageTrashDirectly();
+    void slotImageWriteMetadata();
+    void slotImageReadMetadata();
     void slotSelectAll();
     void slotSelectNone();
     void slotSelectInvert();
     void slotSortImages(int order);
+    void slotSortImagesOrder(int order);
+    void slotGroupImages(int mode);
+    void slotMoveSelectionToAlbum();
 
     // Image Rating slots
     void slotAssignRating(int rating);
@@ -176,6 +182,7 @@ private:
     void saveViewState();
     void changeAlbumFromHistory(Album *album, QWidget *widget);
     void slideShow(const ImageInfoList& infoList);
+    void connectBatchSyncMetadata(BatchSyncMetadata *syncMetadata);
 
 private Q_SLOTS:
 

@@ -24,11 +24,13 @@
 
 #include "digikamimageview.h"
 #include "digikamimageview.moc"
+#include "digikamimageview_p.h"
 
 // Qt includes
 
 #include <QClipboard>
 #include <QFileInfo>
+#include <QPointer>
 
 // KDE includes
 
@@ -36,7 +38,6 @@
 #include <kactionmenu.h>
 #include <kactioncollection.h>
 #include <kapplication.h>
-#include <kdebug.h>
 #include <kmenu.h>
 #include <kmimetype.h>
 #include <krun.h>
@@ -48,17 +49,17 @@
 
 // Local includes
 
+#include "advancedrenamedialog.h"
 #include "albumsettings.h"
 #include "contextmenuhelper.h"
 #include "ddragobjects.h"
 #include "digikamapp.h"
 #include "dio.h"
 #include "dpopupmenu.h"
-#include "imagealbummodel.h"
 #include "imagealbumfiltermodel.h"
+#include "imagealbummodel.h"
 #include "imagedragdrop.h"
 #include "imageratingoverlay.h"
-#include "imagerotationoverlay.h"
 #include "imageviewutilities.h"
 #include "imagewindow.h"
 #include "metadatamanager.h"
@@ -67,41 +68,38 @@
 namespace Digikam
 {
 
-class DigikamImageViewPriv
-{
-public:
-    DigikamImageViewPriv()
-    {
-        utilities = 0;
-    }
-
-    ImageViewUtilities *utilities;
-};
-
 DigikamImageView::DigikamImageView(QWidget *parent)
-                : ImageCategorizedView(parent), d(new DigikamImageViewPriv)
+                : ImageCategorizedView(parent), d(new DigikamImageViewPriv(this))
 {
+
+    AlbumSettings *settings = AlbumSettings::instance();
+
     imageFilterModel()->setCategorizationMode(ImageSortSettings::CategoryByAlbum);
 
     imageModel()->setThumbnailLoadThread(ThumbnailLoadThread::defaultIconViewThread());
-    setThumbnailSize((ThumbnailSize::Size)AlbumSettings::instance()->getDefaultIconSize());
+    setThumbnailSize((ThumbnailSize::Size)settings->getDefaultIconSize());
 
     imageModel()->setDragDropHandler(new ImageDragDropHandler(imageModel()));
     setDragEnabled(true);
     setAcceptDrops(true);
     setDropIndicatorShown(false);
 
-    setToolTipEnabled(AlbumSettings::instance()->getShowToolTips());
-    imageFilterModel()->setSortRole((ImageSortSettings::SortRole)AlbumSettings::instance()->getImageSortOrder());
+    setToolTipEnabled(settings->showToolTipsIsValid());
+    imageFilterModel()->setSortRole((ImageSortSettings::SortRole)settings->getImageSortOrder());
+    imageFilterModel()->setSortOrder((ImageSortSettings::SortOrder)settings->getImageSorting());
+    imageFilterModel()->setCategorizationMode((ImageSortSettings::CategorizationMode)settings->getImageGroupMode());
 
-    ImageRotateLeftOverlay *rotateLeftOverlay   = new ImageRotateLeftOverlay(this);
-    addOverlay(rotateLeftOverlay);
+    // rotation overlays
+    d->rotateLeftOverlay = new ImageRotateLeftOverlay(this);
+    d->rotateRightOverlay = new ImageRotateRightOverlay(this);
+    d->updateOverlays();
 
-    ImageRotateRightOverlay *rotateRightOverlay = new ImageRotateRightOverlay(this);
-    addOverlay(rotateRightOverlay);
-
-    ImageRatingOverlay *ratingOverlay           = new ImageRatingOverlay(this);
+    // rating overlay
+    ImageRatingOverlay *ratingOverlay = new ImageRatingOverlay(this);
     addOverlay(ratingOverlay);
+
+    connect(ratingOverlay, SIGNAL(ratingEdited(const QModelIndex &, int)),
+            this, SLOT(assignRating(const QModelIndex&, int)));
 
     d->utilities = new ImageViewUtilities(this);
 
@@ -114,14 +112,8 @@ DigikamImageView::DigikamImageView(QWidget *parent)
     connect(imageModel()->dragDropHandler(), SIGNAL(dioResult(KJob*)),
             d->utilities, SLOT(slotDIOResult(KJob*)));
 
-    connect(ratingOverlay, SIGNAL(ratingEdited(const QModelIndex &, int)),
-            this, SLOT(assignRating(const QModelIndex&, int)));
-
-    connect(rotateLeftOverlay, SIGNAL(signalRotateLeft()),
-            this, SLOT(slotRotateLeft()));
-
-    connect(rotateRightOverlay, SIGNAL(signalRotateRight()),
-            this, SLOT(slotRotateRight()));
+    connect(settings, SIGNAL(setupChanged()),
+            this, SLOT(slotSetupChanged()));
 }
 
 DigikamImageView::~DigikamImageView()
@@ -136,7 +128,10 @@ ImageViewUtilities *DigikamImageView::utilities() const
 
 void DigikamImageView::slotSetupChanged()
 {
-    setToolTipEnabled(AlbumSettings::instance()->getShowToolTips());
+    setToolTipEnabled(AlbumSettings::instance()->showToolTipsIsValid());
+
+    d->updateOverlays();
+
     ImageCategorizedView::slotSetupChanged();
 }
 
@@ -145,8 +140,8 @@ void DigikamImageView::activated(const ImageInfo& info)
     if (info.isNull())
         return;
 
-    if (AlbumSettings::instance()->getItemRightClickAction() == AlbumSettings::ShowPreview)
-        previewRequested(info);
+    if (AlbumSettings::instance()->getItemLeftClickAction() == AlbumSettings::ShowPreview)
+        emit previewRequested(info);
     else
         openInEditor(info);
 }
@@ -182,12 +177,12 @@ void DigikamImageView::showContextMenu(QContextMenuEvent* event, const ImageInfo
     DPopupMenu popmenu(this);
     ContextMenuHelper cmhelper(&popmenu);
 
-    cmhelper.addAction("album_new_from_selection");
+    cmhelper.addAction("move_selection_to_album");
     cmhelper.addAction(viewAction);
     cmhelper.addAction("image_edit");
     cmhelper.addServicesMenu(selectedUrls());
     cmhelper.addGotoMenu(selectedImageIDs);
-    cmhelper.addKipiActions();
+    cmhelper.addKipiActions(selectedImageIDs);
     popmenu.addSeparator();
     // --------------------------------------------------------
     cmhelper.addAction("image_find_similar");
@@ -196,8 +191,9 @@ void DigikamImageView::showContextMenu(QContextMenuEvent* event, const ImageInfo
     popmenu.addSeparator();
     // --------------------------------------------------------
     cmhelper.addAction("image_rename");
-    cmhelper.addActionCopy(this, SLOT(copy()));
-    cmhelper.addActionPaste(this, SLOT(paste()));
+    cmhelper.addAction("cut_album_selection");
+    cmhelper.addAction("copy_album_selection");
+    cmhelper.addAction("paste_album_selection");
     cmhelper.addActionItemDelete(this, SLOT(deleteSelected()), selectedImageIDs.count());
     popmenu.addSeparator();
     // --------------------------------------------------------
@@ -269,11 +265,24 @@ void DigikamImageView::showContextMenu(QContextMenuEvent* event)
     delete paste;
 }
 
+void DigikamImageView::cut()
+{
+    QMimeData *data = imageModel()->dragDropHandler()->createMimeData(selectedImageInfos());
+    if (data)
+    {
+        d->utilities->addIsCutSelection(data, true);
+        kapp->clipboard()->setMimeData(data);
+    }
+}
+
 void DigikamImageView::copy()
 {
     QMimeData *data = imageModel()->dragDropHandler()->createMimeData(selectedImageInfos());
     if (data)
+    {
+        d->utilities->addIsCutSelection(data, false);
         kapp->clipboard()->setMimeData(data);
+    }
 }
 
 void DigikamImageView::paste()
@@ -281,7 +290,16 @@ void DigikamImageView::paste()
     const QMimeData *data = kapp->clipboard()->mimeData(QClipboard::Clipboard);
     if (!data)
         return;
-    QDropEvent event(mapFromGlobal(QCursor::pos()), Qt::CopyAction, data, Qt::NoButton, Qt::ControlModifier);
+    // We need to have a real (context menu action) or fake (Ctrl+V shortcut) mouse position
+    QPoint eventPos = mapFromGlobal(QCursor::pos());
+    if (!rect().contains(eventPos))
+        eventPos = QPoint(0, 0);
+
+    bool cutAction = d->utilities->decodeIsCutSelection(data);
+    QDropEvent event(eventPos,
+                     cutAction ? Qt::MoveAction : Qt::CopyAction,
+                     data, Qt::NoButton,
+                     cutAction ? Qt::ShiftModifier : Qt::ControlModifier);
     QModelIndex index = indexAt(event.pos());
     if (!imageModel()->dragDropHandler()->accepts(&event, index))
         return;
@@ -362,9 +380,39 @@ void DigikamImageView::setExifOrientationOfSelected(int orientation)
     MetadataManager::instance()->setExifOrientation(selectedImageInfos(), orientation);
 }
 
-void DigikamImageView::renameCurrent()
+void DigikamImageView::rename()
 {
-    d->utilities->rename(currentInfo());
+    if (!d->renameThread)
+    {
+        d->renameThread = new RenameThread(this);
+
+        connect(d->renameThread, SIGNAL(renameFile(const KUrl&, const QString&)),
+                d->utilities, SLOT(rename(const KUrl&, const QString&)));
+
+        connect(d->utilities, SIGNAL(imageRenameSucceeded(const KUrl&)),
+                d->renameThread, SLOT(slotSuccess(const KUrl&)));
+
+        connect(d->utilities, SIGNAL(imageRenameFailed(const KUrl&)),
+                d->renameThread, SLOT(slotFailed(const KUrl&)));
+
+        connect(d->utilities, SIGNAL(renamingAborted()),
+                d->renameThread, SLOT(cancel()));
+    }
+
+    KUrl::List urls = selectedUrls();
+
+    QPointer<AdvancedRenameDialog> dlg = new AdvancedRenameDialog(this);
+    dlg->slotAddImages(urls);
+
+    if (dlg->exec() == KDialog::Accepted)
+    {
+        d->renameThread->addNewNames(dlg->newNames());
+        if (!d->renameThread->isRunning())
+        {
+            d->renameThread->start();
+        }
+    }
+    delete dlg;
 }
 
 void DigikamImageView::slotRotateLeft()

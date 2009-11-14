@@ -37,10 +37,6 @@
 #include <QRegExp>
 #include <QStringList>
 
-// KDE includes
-
-#include <kdebug.h>
-
 // Local includes
 
 #include "dimg.h"

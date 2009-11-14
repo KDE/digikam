@@ -44,7 +44,6 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kcursor.h>
-#include <kdebug.h>
 #include <kglobal.h>
 #include <khelpmenu.h>
 #include <kiconloader.h>
@@ -77,17 +76,26 @@ class DistortionFXToolPriv
 {
 public:
 
-    DistortionFXToolPriv()
-    {
-        effectTypeLabel   = 0;
-        levelLabel        = 0;
-        iterationLabel    = 0;
-        effectType        = 0;
-        levelInput        = 0;
-        iterationInput    = 0;
-        previewWidget     = 0;
-        gboxSettings      = 0;
-    }
+    DistortionFXToolPriv() :
+        configGroupName("distortionfx Tool"),
+        configEffectTypeEntry("EffectType"),
+        configIterationAdjustmentEntry("IterationAdjustment"),
+        configLevelAdjustmentEntry("LevelAdjustment"),
+
+        effectTypeLabel(0),
+        levelLabel(0),
+        iterationLabel(0),
+        effectType(0),
+        levelInput(0),
+        iterationInput(0),
+        previewWidget(0),
+        gboxSettings(0)
+        {}
+
+    const QString       configGroupName;
+    const QString       configEffectTypeEntry;
+    const QString       configIterationAdjustmentEntry;
+    const QString       configLevelAdjustmentEntry;
 
     QLabel*             effectTypeLabel;
     QLabel*             levelLabel;
@@ -119,10 +127,8 @@ DistortionFXTool::DistortionFXTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
-                                             EditorToolSettings::Ok|
-                                             EditorToolSettings::Cancel,
-                                             EditorToolSettings::ColorGuide);
+    d->gboxSettings = new EditorToolSettings;
+    d->gboxSettings->setTools(EditorToolSettings::ColorGuide);
 
     // -------------------------------------------------------------
 
@@ -263,15 +269,15 @@ void DistortionFXTool::renderingFinished()
 void DistortionFXTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("distortionfx Tool");
+    KConfigGroup group        = config->group(d->configGroupName);
 
     d->effectType->blockSignals(true);
     d->iterationInput->blockSignals(true);
     d->levelInput->blockSignals(true);
 
-    d->effectType->setCurrentIndex(group.readEntry("EffectType", (int)DistortionFX::FishEye));
-    d->iterationInput->setValue(group.readEntry("IterationAdjustment", 10));
-    d->levelInput->setValue(group.readEntry("LevelAdjustment", 50));
+    d->effectType->setCurrentIndex(group.readEntry(d->configEffectTypeEntry,       (int)DistortionFX::FishEye));
+    d->iterationInput->setValue(group.readEntry(d->configIterationAdjustmentEntry, 10));
+    d->levelInput->setValue(group.readEntry(d->configLevelAdjustmentEntry,         50));
 
     d->effectType->blockSignals(false);
     d->iterationInput->blockSignals(false);
@@ -283,10 +289,11 @@ void DistortionFXTool::readSettings()
 void DistortionFXTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("distortionfx Tool");
-    group.writeEntry("EffectType", d->effectType->currentIndex());
-    group.writeEntry("IterationAdjustment", d->iterationInput->value());
-    group.writeEntry("LevelAdjustment", d->levelInput->value());
+    KConfigGroup group        = config->group(d->configGroupName);
+
+    group.writeEntry(d->configEffectTypeEntry,          d->effectType->currentIndex());
+    group.writeEntry(d->configIterationAdjustmentEntry, d->iterationInput->value());
+    group.writeEntry(d->configLevelAdjustmentEntry,     d->levelInput->value());
     d->previewWidget->writeSettings();
     config->sync();
 }

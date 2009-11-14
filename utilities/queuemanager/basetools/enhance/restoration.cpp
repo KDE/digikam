@@ -26,18 +26,17 @@
 
 // Qt includes
 
-#include <QWidget>
 #include <QLabel>
+#include <QWidget>
 
 // KDE includes
 
-#include <kvbox.h>
-#include <klocale.h>
-#include <kdebug.h>
-#include <kiconloader.h>
 #include <kcombobox.h>
+#include <kiconloader.h>
+#include <klocale.h>
 #include <kstandarddirs.h>
 #include <kurllabel.h>
+#include <kvbox.h>
 
 // Local includes
 
@@ -94,7 +93,7 @@ BatchToolSettings Restoration::defaultSettings()
     return settings;
 }
 
-void Restoration::assignSettings2Widget()
+void Restoration::slotAssignSettings2Widget()
 {
     m_comboBox->setCurrentIndex(settings()["RestorationMethod"].toInt());
 }

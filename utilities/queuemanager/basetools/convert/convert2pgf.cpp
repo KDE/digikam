@@ -26,16 +26,15 @@
 
 // Qt includes
 
-#include <QWidget>
 #include <QFileInfo>
+#include <QWidget>
 
 // KDE includes
 
-#include <kconfiggroup.h>
 #include <kconfig.h>
-#include <klocale.h>
-#include <kdebug.h>
+#include <kconfiggroup.h>
 #include <kiconloader.h>
+#include <klocale.h>
 
 // Local includes
 
@@ -75,7 +74,7 @@ BatchToolSettings Convert2PGF::defaultSettings()
     return settings;
 }
 
-void Convert2PGF::assignSettings2Widget()
+void Convert2PGF::slotAssignSettings2Widget()
 {
     m_settings->setCompressionValue(settings()["quality"].toInt());
     m_settings->setLossLessCompression(settings()["lossless"].toBool());

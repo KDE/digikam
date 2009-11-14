@@ -37,18 +37,20 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kstandarddirs.h>
+#include <kdebug.h>
 
 // Local includes
 
 #include "dimg.h"
 #include "dimgloaderobserver.h"
+#include "icctransform.h"
 #include "imagehistogram.h"
 #include "imagecurves.h"
 #include "imagelevels.h"
 #include "bcgmodifier.h"
 #include "whitebalance.h"
+#include "globals.h"
 
 namespace Digikam
 {
@@ -75,6 +77,29 @@ bool RAWLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     {
         int        width, height, rgbmax;
         QByteArray data;
+
+        if (m_rawDecodingSettings.outputColorSpace == DRawDecoding::CUSTOMOUTPUTCS)
+        {
+            if (m_rawDecodingSettings.outputProfile == IccProfile::sRGB().filePath())
+                m_rawDecodingSettings.outputColorSpace = DRawDecoding::SRGB;
+            else if (m_rawDecodingSettings.outputProfile == IccProfile::adobeRGB().filePath())
+                m_rawDecodingSettings.outputColorSpace = DRawDecoding::ADOBERGB;
+            else if (m_rawDecodingSettings.outputProfile == IccProfile::wideGamutRGB().filePath())
+                m_rawDecodingSettings.outputColorSpace = DRawDecoding::WIDEGAMMUT;
+            else if (m_rawDecodingSettings.outputProfile == IccProfile::proPhotoRGB().filePath())
+                m_rawDecodingSettings.outputColorSpace = DRawDecoding::PROPHOTO;
+            else
+            {
+                // Specifying a custom output is broken somewhere. We use the extremely
+                // wide gamut pro photo profile for 16bit (sRGB for 8bit) and convert afterwards.
+                m_customOutputProfile = m_rawDecodingSettings.outputProfile;
+                if (m_rawDecodingSettings.sixteenBitsImage)
+                    m_rawDecodingSettings.outputColorSpace = DRawDecoding::PROPHOTO;
+                else
+                    m_rawDecodingSettings.outputColorSpace = DRawDecoding::SRGB;
+            }
+        }
+
         if (!KDcrawIface::KDcraw::decodeRAWImage(filePath, m_rawDecodingSettings,
              data, width, height, rgbmax))
             return false;
@@ -129,7 +154,7 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
         uchar *image = new_failureTolerant(width*height*8);
         if (!image)
         {
-            kDebug(50003) << "Failed to allocate memory for loading raw file";
+            kDebug() << "Failed to allocate memory for loading raw file";
             return false;
         }
 
@@ -188,7 +213,7 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
             // Search 99th percentile white level.
 
             perc = (int)(width * height * 0.01);
-            kDebug(50003) << "White Level: " << perc;
+            kDebug() << "White Level: " << perc;
             for (int c = 1 ; c < 4 ; ++c)
             {
                 total = 0;
@@ -201,7 +226,7 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
 
             white *= 1.0 / m_rawDecodingSettings.brightness;
 
-            kDebug(50003) << "White Point: " << white;
+            kDebug() << "White Point: " << white;
 
             // Compute the Gamma lut accordingly.
 
@@ -234,7 +259,7 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
         uchar *image = new_failureTolerant(width*height*4);
         if (!image)
         {
-            kDebug(50003) << "Failed to allocate memory for loading raw file";
+            kDebug() << "Failed to allocate memory for loading raw file";
             return false;
         }
 
@@ -279,32 +304,39 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
     //----------------------------------------------------------
     // Assign the right color-space profile.
 
-    QString filePath = KStandardDirs::installPath("data") + QString("libkdcraw/profiles/");
     switch(m_rawDecodingSettings.outputColorSpace)
     {
         case DRawDecoding::SRGB:
         {
-            filePath.append("srgb.icm");
+            imageSetIccProfile(IccProfile::sRGB());
             break;
         }
         case DRawDecoding::ADOBERGB:
         {
-            filePath.append("adobergb.icm");
+            imageSetIccProfile(IccProfile::adobeRGB());
             break;
         }
         case DRawDecoding::WIDEGAMMUT:
         {
-            filePath.append("widegamut.icm");
+            imageSetIccProfile(IccProfile::wideGamutRGB());
             break;
         }
         case DRawDecoding::PROPHOTO:
         {
-            filePath.append("prophoto.icm");
+            imageSetIccProfile(IccProfile::proPhotoRGB());
             break;
         }
-        default:
-            // No icc color-space profile to assign in RAW color mode.
+        case DRawDecoding::CUSTOMOUTPUTCS:
+        {
+            imageSetIccProfile(m_rawDecodingSettings.outputProfile);
             break;
+        }
+        case DRawDecoding::RAWCOLOR:
+        {
+            // No icc color-space profile to assign in RAW color mode.
+            imageSetAttribute("uncalibratedColor", true);
+            break;
+        }
     }
 
     //----------------------------------------------------------
@@ -315,13 +347,23 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
     imageSetAttribute("originalColorModel", DImg::COLORMODELRAW);
     imageSetAttribute("originalBitDepth", 16);
 
-    postProcessing(observer);
-
     return true;
 }
 
-void RAWLoader::postProcessing(DImgLoaderObserver *observer)
+void RAWLoader::postProcess(DImgLoaderObserver *observer)
 {
+    // emulate LibRaw custom output profile
+    if (!m_customOutputProfile.isNull())
+    {
+        // Note the m_image is not yet ready in load()!
+        IccTransform trans;
+        trans.setIntent(IccTransform::Perceptual);
+        trans.setEmbeddedProfile(*m_image);
+        trans.setOutputProfile(m_customOutputProfile);
+        trans.apply(*m_image, observer);
+        imageSetIccProfile(m_customOutputProfile);
+    }
+
     if (!m_customRawSettings.postProcessingSettingsIsDirty())
         return;
 
@@ -355,9 +397,9 @@ void RAWLoader::postProcessing(DImgLoaderObserver *observer)
     {
         DImg tmp(imageWidth(), imageHeight(), m_rawDecodingSettings.sixteenBitsImage);
         ImageCurves curves(m_rawDecodingSettings.sixteenBitsImage);
-        curves.setCurvePoints(ImageHistogram::ValueChannel, m_customRawSettings.curveAdjust);
-        curves.curvesCalculateCurve(ImageHistogram::ValueChannel);
-        curves.curvesLutSetup(ImageHistogram::AlphaChannel);
+        curves.setCurvePoints(LuminosityChannel, m_customRawSettings.curveAdjust);
+        curves.curvesCalculateCurve(LuminosityChannel);
+        curves.curvesLutSetup(AlphaChannel);
         curves.curvesLutProcess(imageData(), tmp.bits(), imageWidth(), imageHeight());
         memcpy(imageData(), tmp.bits(), tmp.numBytes());
     }
@@ -376,7 +418,7 @@ void RAWLoader::postProcessing(DImgLoaderObserver *observer)
             levels.setLevelHighOutputValue(i, m_customRawSettings.levelsAdjust[j++]);
         }
 
-        levels.levelsLutSetup(ImageHistogram::AlphaChannel);
+        levels.levelsLutSetup(AlphaChannel);
         levels.levelsLutProcess(imageData(), tmp.bits(), imageWidth(), imageHeight());
         memcpy(imageData(), tmp.bits(), tmp.numBytes());
     }

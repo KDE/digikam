@@ -24,8 +24,6 @@
 #ifndef IMAGECATEGORYDRAWER_H
 #define IMAGECATEGORYDRAWER_H
 
-// Qt includes
-
 // KDE includes
 
 #include <kcategorydrawer.h>

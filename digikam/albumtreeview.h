@@ -42,7 +42,7 @@ class AbstractAlbumTreeView : public QTreeView
 
 public:
 
-    AbstractAlbumTreeView(AbstractSpecificAlbumModel *model, QWidget *parent = 0);
+    explicit AbstractAlbumTreeView(AbstractSpecificAlbumModel *model, QWidget *parent = 0);
 
     AbstractSpecificAlbumModel *albumModel() const;
     AlbumFilterModel *albumFilterModel() const;
@@ -106,7 +106,7 @@ class AbstractCountingAlbumTreeView : public AbstractAlbumTreeView
 
 public:
 
-    AbstractCountingAlbumTreeView(AbstractCountingAlbumModel *model, QWidget *parent = 0);
+    explicit AbstractCountingAlbumTreeView(AbstractCountingAlbumModel *model, QWidget *parent = 0);
 
 private Q_SLOTS:
 
@@ -124,7 +124,7 @@ public:
 
     /// Models of these view _can_ be checkable, they need _not_. You need to enable it on the model.
 
-    AbstractCheckableAlbumTreeView(AbstractCheckableAlbumModel *model, QWidget *parent = 0);
+    explicit AbstractCheckableAlbumTreeView(AbstractCheckableAlbumModel *model, QWidget *parent = 0);
 
     /// Manage check state through the model directly
     AbstractCheckableAlbumModel *checkableModel() const;

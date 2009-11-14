@@ -6,7 +6,7 @@
  * Date        : 2004-11-17
  * Description : a tab to display colors information of images
  *
- * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -44,7 +44,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+
 #include <kapplication.h>
 #include <kcombobox.h>
 #include <kconfig.h>
@@ -66,6 +66,7 @@
 #include "iccprofilewidget.h"
 #include "cietonguewidget.h"
 #include "imagepropertiestxtlabel.h"
+#include "globals.h"
 
 namespace Digikam
 {
@@ -123,7 +124,7 @@ public:
 
     QRect                  selectionArea;
 
-    QByteArray             embedded_profile;
+    IccProfile             embedded_profile;
 
     DImg                   image;
     DImg                   imageSelection;
@@ -163,13 +164,13 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
     fullImageButton->setToolTip( i18n( "Full Image" ) );
     fullImageButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/image-full.png")));
     fullImageButton->setCheckable(true);
-    d->regionBG->addButton(fullImageButton, HistogramWidget::FullImageHistogram);
+    d->regionBG->addButton(fullImageButton, FullImageHistogram);
 
     QPushButton *SelectionImageButton = new QPushButton(d->regionBox);
     SelectionImageButton->setToolTip( i18n( "Selection" ) );
     SelectionImageButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/image-selection.png")));
     SelectionImageButton->setCheckable(true);
-    d->regionBG->addButton(SelectionImageButton, HistogramWidget::ImageSelectionHistogram);
+    d->regionBG->addButton(SelectionImageButton, ImageSelectionHistogram);
 
     hlay2->setMargin(0);
     hlay2->setSpacing(0);
@@ -179,7 +180,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
     // -------------------------------------------------------------
 
     KVBox *histoBox    = new KVBox(histogramPage);
-    d->histogramBox    = new HistogramBox(histoBox, HistogramBox::LRGBAC, true);
+    d->histogramBox    = new HistogramBox(histoBox, Digikam::LRGBAC, true);
 
     QLabel *space = new QLabel(histoBox);
     space->setFixedHeight(1);
@@ -293,13 +294,13 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
     d->iccProfileWidget->setCurrentItemByKey(group.readEntry("Current ICC Item", QString()));
 
     d->histogramBox->setChannel(group.readEntry("Histogram Channel",
-                                (int)HistogramBox::LuminosityChannel));
-    d->histogramBox->setScale(group.readEntry("Histogram Scale",
-                                (int)HistogramBox::Logarithmic));
+                                (int)Digikam::LuminosityChannel));
+    d->histogramBox->setScale((HistogramScale)group.readEntry("Histogram Scale",
+                              (int)LogScaleHistogram));
     d->histogramBox->setColorsChannel(group.readEntry("Histogram Color", 0));
 
     d->regionBG->button(group.readEntry("Histogram Rendering",
-                                        (int)HistogramWidget::FullImageHistogram))->setChecked(true);
+                                        (int)FullImageHistogram))->setChecked(true);
 
     // -------------------------------------------------------------
 
@@ -349,7 +350,7 @@ ImagePropertiesColorsTab::~ImagePropertiesColorsTab()
     KConfigGroup group        = config->group(QString("Image Properties SideBar"));
     group.writeEntry("ImagePropertiesColors Tab", currentIndex());
     group.writeEntry("Histogram Channel", d->histogramBox->channel());
-    group.writeEntry("Histogram Scale", d->histogramBox->scale());
+    group.writeEntry("Histogram Scale", (int)d->histogramBox->scale());
     group.writeEntry("Histogram Color", d->histogramBox->colorsChannel());
     group.writeEntry("Histogram Rendering", d->regionBG->checkedId());
     group.writeEntry("ICC Level", d->iccProfileWidget->getMode());
@@ -371,7 +372,7 @@ void ImagePropertiesColorsTab::setData(const KUrl& url, const QRect& selectionAr
     // this will completely mess up the timing of progress info in the histogram widget.
     // So filter here, before the stopHistogramComputation!
     // But do not filter if current path is null, as it would not disable the widget on first run.
-    if (!img && !d->currentFilePath.isNull() && url.path() == d->currentFilePath)
+    if (!img && !d->currentFilePath.isNull() && url.toLocalFile() == d->currentFilePath)
         return;
 
     // This is necessary to stop computation because d->image.bits() is currently used by
@@ -456,7 +457,7 @@ void ImagePropertiesColorsTab::loadImageFromUrl(const KUrl& url)
                 this, SLOT(slotMoreCompleteLoadingAvailable(const LoadingDescription &, const LoadingDescription &)));
     }
 
-    LoadingDescription desc = LoadingDescription(url.path());
+    LoadingDescription desc = LoadingDescription(url.toLocalFile());
 
     if (DImg::fileFormat(desc.filePath) == DImg::RAW)
     {
@@ -536,11 +537,12 @@ void ImagePropertiesColorsTab::setSelection(const QRect& selectionArea)
         d->histogramBox->histogram()->updateSelectionData(d->imageSelection.bits(), d->imageSelection.width(),
                                                 d->imageSelection.height(), d->imageSelection.sixteenBit());
         d->regionBox->show();
+        slotRenderingChanged(d->regionBG->checkedId());
     }
     else
     {
         d->regionBox->hide();
-        slotRenderingChanged(HistogramWidget::FullImageHistogram);
+        slotRenderingChanged(FullImageHistogram);
     }
 }
 
@@ -577,7 +579,7 @@ void ImagePropertiesColorsTab::slotScaleChanged()
 
 void ImagePropertiesColorsTab::slotRenderingChanged(int rendering)
 {
-    d->histogramBox->histogram()->setRenderingType((HistogramWidget::HistogramRenderingType)rendering);
+    d->histogramBox->histogram()->setRenderingType((HistogramRenderingType)rendering);
     updateStatistics();
 }
 
@@ -634,7 +636,8 @@ void ImagePropertiesColorsTab::updateInformation()
 
 void ImagePropertiesColorsTab::updateStatistics()
 {
-    if (!d->histogramBox->histogram()->m_imageHistogram)
+    ImageHistogram *renderedHistogram = d->histogramBox->histogram()->currentHistogram();
+    if (!renderedHistogram)
         return;
 
     QString value;
@@ -642,22 +645,22 @@ void ImagePropertiesColorsTab::updateStatistics()
     int max = d->maxInterv->value();
     int channel = d->histogramBox->channel();
 
-    if ( channel == HistogramWidget::ColorChannelsHistogram )
+    if ( channel == ColorChannels )
         channel = d->histogramBox->colorsChannel()+1;
 
-    double mean = d->histogramBox->histogram()->m_imageHistogram->getMean(channel, min, max);
+    double mean = renderedHistogram->getMean(channel, min, max);
     d->labelMeanValue->setText(value.setNum(mean, 'f', 1));
 
-    double pixels = d->histogramBox->histogram()->m_imageHistogram->getPixels();
+    double pixels = renderedHistogram->getPixels();
     d->labelPixelsValue->setText(value.setNum((float)pixels, 'f', 0));
 
-    double stddev = d->histogramBox->histogram()->m_imageHistogram->getStdDev(channel, min, max);
+    double stddev = renderedHistogram->getStdDev(channel, min, max);
     d->labelStdDevValue->setText(value.setNum(stddev, 'f', 1));
 
-    double counts = d->histogramBox->histogram()->m_imageHistogram->getCount(channel, min, max);
+    double counts = renderedHistogram->getCount(channel, min, max);
     d->labelCountValue->setText(value.setNum((float)counts, 'f', 0));
 
-    double median = d->histogramBox->histogram()->m_imageHistogram->getMedian(channel, min, max);
+    double median = renderedHistogram->getMedian(channel, min, max);
     d->labelMedianValue->setText(value.setNum(median, 'f', 1));
 
     double percentile = (pixels > 0 ? (100.0 * counts / pixels) : 0.0);
@@ -666,14 +669,14 @@ void ImagePropertiesColorsTab::updateStatistics()
 
 void ImagePropertiesColorsTab::getICCData()
 {
-    if (d->image.getICCProfil().isNull())
+    if (d->image.getIccProfile().isNull())
     {
         d->iccProfileWidget->setLoadingFailed();
     }
     else
     {
-        d->embedded_profile = d->image.getICCProfil();
-        d->iccProfileWidget->loadFromProfileData(d->currentFilePath, d->embedded_profile);
+        d->embedded_profile = d->image.getIccProfile();
+        d->iccProfileWidget->loadProfile(d->currentFilePath, d->embedded_profile);
     }
 }
 

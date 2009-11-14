@@ -33,11 +33,11 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kdialog.h>
 #include <klocale.h>
 #include <ktabwidget.h>
 #include <kvbox.h>
+#include <kdebug.h>
 
 // LibKIPI includes
 
@@ -45,7 +45,6 @@
 
 // Local includes
 
-#include "constants.h"
 #include "album.h"
 #include "albummanager.h"
 #include "albumthumbnailloader.h"
@@ -76,17 +75,17 @@ public:
         searchesSearchBar = 0;
     }
 
-    QTreeWidget   *albumsView;
-    QTreeWidget   *tagsView;
-    QTreeWidget   *searchesView;
+    QTreeWidget*   albumsView;
+    QTreeWidget*   tagsView;
+    QTreeWidget*   searchesView;
 
-    KTabWidget    *tab;
+    KTabWidget*    tab;
 
-    KipiInterface *iface;
+    KipiInterface* iface;
 
-    SearchTextBar *albumsSearchBar;
-    SearchTextBar *tagsSearchBar;
-    SearchTextBar *searchesSearchBar;
+    SearchTextBar* albumsSearchBar;
+    SearchTextBar* tagsSearchBar;
+    SearchTextBar* searchesSearchBar;
 };
 
 KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface *iface, QWidget *parent)
@@ -217,7 +216,7 @@ void KipiImageCollectionSelector::populateTreeView(const AlbumList& aList, QTree
 
             if (!pitem)
             {
-                kWarning(50003) << "Failed to find parent for Album " << album->title();
+                kWarning() << "Failed to find parent for Album " << album->title();
                 continue;
             }
 
@@ -317,7 +316,7 @@ QList<KIPI::ImageCollection> KipiImageCollectionSelector::selectedImageCollectio
          ++it3;
     }
 
-    kDebug(50003) << list.count() << " collection items selected";
+    kDebug() << list.count() << " collection items selected";
 
     return list;
 }

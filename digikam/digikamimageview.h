@@ -25,13 +25,11 @@
 #ifndef DIGIKAMIMAGEVIEW_H
 #define DIGIKAMIMAGEVIEW_H
 
-// Qt includes
-
-// KDE includes
-
 // Local includes
 
 #include "imagecategorizedview.h"
+
+class QMimeData;
 
 namespace Digikam
 {
@@ -52,6 +50,7 @@ public:
 
 public Q_SLOTS:
 
+    virtual void cut();
     virtual void copy();
     virtual void paste();
 
@@ -71,7 +70,7 @@ public Q_SLOTS:
     void setAsAlbumThumbnail(const ImageInfo& setAsThumbnail);
     void createNewAlbumForSelected();
     void setExifOrientationOfSelected(int orientation);
-    void renameCurrent();
+    void rename();
 
     void assignRating(const QModelIndex &index, int rating);
 

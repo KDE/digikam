@@ -52,7 +52,7 @@ public:
         ICCPage
     };
 
-    Setup(QWidget* parent=0, const char* name=0, Page page=LastPageUsed);
+    explicit Setup(QWidget* parent=0, const char* name=0, Page page=LastPageUsed);
     ~Setup();
 
 private Q_SLOTS:

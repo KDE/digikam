@@ -33,7 +33,6 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kdialog.h>
-#include <kdebug.h>
 #include <kvbox.h>
 #include <kurllabel.h>
 #include <ktoolinvocation.h>
@@ -189,7 +188,7 @@ TemplateViewer::TemplateViewer(QWidget* parent=0)
     d->labelLocationCity          = new DTextBrowser(QString(), w2);
     d->locationSublocation        = new DTextLabelName(i18n("Sublocation:"), w2);
     d->labelLocationSublocation   = new DTextBrowser(QString(), w2);
-    d->locationProvinceState      = new DTextLabelName(i18n("Province State:"), w2);
+    d->locationProvinceState      = new DTextLabelName(i18n("Province/State:"), w2);
     d->labelLocationProvinceState = new DTextBrowser(QString(), w2);
     d->locationCountry            = new DTextLabelName(i18n("Country:"), w2);
     d->labelLocationCountry       = new DTextBrowser(QString(), w2);
@@ -211,7 +210,7 @@ TemplateViewer::TemplateViewer(QWidget* parent=0)
     d->labelContactPostalCode    = new DTextBrowser(QString(), w3);
     d->contactCity               = new DTextLabelName(i18n("City:"), w3);
     d->labelContactCity          = new DTextBrowser(QString(), w3);
-    d->contactProvinceState      = new DTextLabelName(i18n("Province State:"), w3);
+    d->contactProvinceState      = new DTextLabelName(i18n("Province/State:"), w3);
     d->labelContactProvinceState = new DTextBrowser(QString(), w3);
     d->contactCountry            = new DTextLabelName(i18n("Country:"), w3);
     d->labelContactCountry       = new DTextBrowser(QString(), w3);
@@ -219,7 +218,7 @@ TemplateViewer::TemplateViewer(QWidget* parent=0)
     d->labelContactPhone         = new DTextBrowser(QString(), w3);
     d->contactEmail              = new DTextLabelName(i18n("Email:"), w3);
     d->labelContactEmail         = new KUrlLabel(w3);
-    d->contactWebUrl             = new DTextLabelName(i18n("Url:"), w3);
+    d->contactWebUrl             = new DTextLabelName(i18n("URL:"), w3);
     d->labelContactWebUrl        = new KUrlLabel(w3);
 
     d->contactAddress->setAlignment(Qt::AlignLeft | Qt::AlignTop);

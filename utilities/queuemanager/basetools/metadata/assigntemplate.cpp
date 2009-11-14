@@ -26,24 +26,23 @@
 
 // Qt includes
 
-#include <QWidget>
 #include <QLabel>
+#include <QWidget>
 
 // KDE includes
 
-#include <kvbox.h>
-#include <klocale.h>
-#include <kdebug.h>
 #include <kiconloader.h>
+#include <klocale.h>
+#include <kvbox.h>
 
 // Local includes
 
 #include "dimg.h"
+#include "dmetadata.h"
+#include "template.h"
+#include "templatemanager.h"
 #include "templateselector.h"
 #include "templateviewer.h"
-#include "templatemanager.h"
-#include "template.h"
-#include "dmetadata.h"
 
 namespace Digikam
 {
@@ -79,7 +78,7 @@ BatchToolSettings AssignTemplate::defaultSettings()
     return settings;
 }
 
-void AssignTemplate::assignSettings2Widget()
+void AssignTemplate::slotAssignSettings2Widget()
 {
     QString title = settings()["TemplateTitle"].toString();
     Template t    = TemplateManager::defaultManager()->findByTitle(title);

@@ -52,16 +52,14 @@ public:
 
     AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
                       const QString& header=QString(),
-                      const QString& newAlbumString=QString(),
-                      bool allowRootSelection=false);
+                      const QString& newAlbumString=QString());
     ~AlbumSelectDialog();
 
 
     static PAlbum* selectAlbum(QWidget* parent,
                                PAlbum* albumToSelect,
                                const QString& header=QString(),
-                               const QString& newAlbumString=QString(),
-                               bool allowRootSelection=false);
+                               const QString& newAlbumString=QString());
 
 private Q_SLOTS:
 

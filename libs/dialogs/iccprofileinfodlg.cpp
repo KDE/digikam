@@ -25,7 +25,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+
 #include <klocale.h>
 
 // Local includes
@@ -36,7 +36,7 @@ namespace Digikam
 {
 
 ICCProfileInfoDlg::ICCProfileInfoDlg(QWidget* parent, const QString& profilePath,
-                                     const QByteArray& profileData)
+                                     const IccProfile& profile)
                  : KDialog(parent)
 {
     setCaption(i18n("Color Profile Info - %1", profilePath));
@@ -47,10 +47,10 @@ ICCProfileInfoDlg::ICCProfileInfoDlg(QWidget* parent, const QString& profilePath
 
     ICCProfileWidget *profileWidget = new ICCProfileWidget(this, 340, 256);
 
-    if (profileData.isEmpty())
+    if (profile.isNull())
         profileWidget->loadFromURL(KUrl(profilePath));
     else
-        profileWidget->loadFromProfileData(profilePath, profileData);
+        profileWidget->loadProfile(profilePath, profile);
 
     setMainWidget(profileWidget);
 }

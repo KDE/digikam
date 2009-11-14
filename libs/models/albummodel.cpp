@@ -24,12 +24,9 @@
 #include "albummodel.h"
 #include "albummodel.moc"
 
-// Qt includes
-
 // KDE includes
 
 #include <kcalendarsystem.h>
-#include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>
 

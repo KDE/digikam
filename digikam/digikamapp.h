@@ -100,6 +100,7 @@ Q_SIGNALS:
     void signalPrevItem();
     void signalFirstItem();
     void signalLastItem();
+    void signalCutAlbumItemsSelection();
     void signalCopyAlbumItemsSelection();
     void signalPasteAlbumItemsSelection();
     void signalCancelButtonPressed();
@@ -122,6 +123,7 @@ private:
     void setupStatusBar();
     void setupActions();
     void setupAccelerators();
+    void setupExifOrientationActions();
     void loadPlugins();
     void loadCameras();
     void populateThemes();
@@ -132,6 +134,7 @@ private:
     void openSolidUsmDevice(const QString& udi, const QString& label = QString());
     void runFingerPrintsGenerator(bool rebuildAll);
     void runThumbnailsGenerator(bool rebuildAll);
+    void updateCameraMenu();
 
 private Q_SLOTS:
 
@@ -157,6 +160,8 @@ private Q_SLOTS:
     void slotSetup();
     void slotSetupCamera();
     void slotSetupChanged();
+    void slotSetCheckedExifOrientationAction(const ImageInfo& info);
+    void slotResetExifOrientationActions();
 
     void slotKipiPluginPlug();
 
@@ -181,9 +186,10 @@ private Q_SLOTS:
 
     void slotDatabaseRescan();
     void slotRebuildThumbnails();
-    void slotSyncAllPicturesMetadata();
-    void slotRebuildAllFingerPrints();
-    void slotRebuildAllFingerPrintsDone();
+    void slotWriteMetadataToAllImages();
+    void slotGenerateFingerPrintsFirstTime();
+    void slotRebuildFingerPrints();
+    void slotRebuildFingerPrintsDone();
 
     void slotChangeTheme(const QString& theme);
     void slotThemeChanged();

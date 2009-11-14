@@ -51,7 +51,6 @@
 
 #include <kapplication.h>
 #include <kcursor.h>
-#include <kdebug.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
@@ -125,21 +124,56 @@ class ResizeToolPriv
 {
 public:
 
-    ResizeToolPriv()
-    {
-        previewWidget        = 0;
-        preserveRatioBox     = 0;
-        useGreycstorationBox = 0;
-        mainTab              = 0;
-        gboxSettings         = 0;
-        wInput               = 0;
-        hInput               = 0;
-        wpInput              = 0;
-        hpInput              = 0;
-        settingsWidget       = 0;
-        cimgLogoLabel        = 0;
-        restorationTips      = 0;
-    }
+    ResizeToolPriv() :
+        configGroupName("resize Tool"),
+        configFastApproxEntry("FastApprox"),
+        configInterpolationEntry("Interpolation"),
+        configAmplitudeEntry("Amplitude"),
+        configSharpnessEntry("Sharpness"),
+        configAnisotropyEntry("Anisotropy"),
+        configAlphaEntry("Alpha"),
+        configSigmaEntry("Sigma"),
+        configGaussPrecEntry("GaussPrec"),
+        configDlEntry("Dl"),
+        configDaEntry("Da"),
+        configIterationEntry("Iteration"),
+        configTileEntry("Tile"),
+        configBTileEntry("BTile"),
+
+        orgWidth(0),
+        orgHeight(0),
+        prevW(0),
+        prevH(0),
+        prevWP(0.0),
+        prevHP(0.0),
+        restorationTips(0),
+        preserveRatioBox(0),
+        useGreycstorationBox(0),
+        mainTab(0),
+        cimgLogoLabel(0),
+        previewWidget(0),
+        wInput(0),
+        hInput(0),
+        wpInput(0),
+        hpInput(0),
+        gboxSettings(0),
+        settingsWidget(0)
+        {}
+
+    const QString         configGroupName;
+    const QString         configFastApproxEntry;
+    const QString         configInterpolationEntry;
+    const QString         configAmplitudeEntry;
+    const QString         configSharpnessEntry;
+    const QString         configAnisotropyEntry;
+    const QString         configAlphaEntry;
+    const QString         configSigmaEntry;
+    const QString         configGaussPrecEntry;
+    const QString         configDlEntry;
+    const QString         configDaEntry;
+    const QString         configIterationEntry;
+    const QString         configTileEntry;
+    const QString         configBTileEntry;
 
     int                   orgWidth;
     int                   orgHeight;
@@ -149,25 +183,25 @@ public:
     double                prevWP;
     double                prevHP;
 
-    QLabel               *restorationTips;
+    QLabel*               restorationTips;
 
-    QCheckBox            *preserveRatioBox;
-    QCheckBox            *useGreycstorationBox;
+    QCheckBox*            preserveRatioBox;
+    QCheckBox*            useGreycstorationBox;
 
-    KTabWidget           *mainTab;
+    KTabWidget*           mainTab;
 
-    KUrlLabel            *cimgLogoLabel;
+    KUrlLabel*            cimgLogoLabel;
 
-    ImageWidget          *previewWidget;
+    ImageWidget*          previewWidget;
 
-    RIntNumInput         *wInput;
-    RIntNumInput         *hInput;
+    RIntNumInput*         wInput;
+    RIntNumInput*         hInput;
 
-    RDoubleNumInput      *wpInput;
-    RDoubleNumInput      *hpInput;
+    RDoubleNumInput*      wpInput;
+    RDoubleNumInput*      hpInput;
 
-    EditorToolSettings   *gboxSettings;
-    GreycstorationWidget *settingsWidget;
+    EditorToolSettings*   gboxSettings;
+    GreycstorationWidget* settingsWidget;
 };
 
 // -------------------------------------------------------------
@@ -186,12 +220,13 @@ ResizeTool::ResizeTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
-                                             EditorToolSettings::Try|
-                                             EditorToolSettings::Ok|
-                                             EditorToolSettings::Load|
-                                             EditorToolSettings::SaveAs|
-                                             EditorToolSettings::Cancel);
+    d->gboxSettings = new EditorToolSettings;
+    d->gboxSettings->setButtons(EditorToolSettings::Default|
+                                EditorToolSettings::Try|
+                                EditorToolSettings::Ok|
+                                EditorToolSettings::Load|
+                                EditorToolSettings::SaveAs|
+                                EditorToolSettings::Cancel);
 
     ImageIface iface(0, 0);
     d->orgWidth  = iface.originalWidth();
@@ -273,7 +308,7 @@ ResizeTool::ResizeTool(QObject* parent)
     grid->addWidget(d->restorationTips,        7, 1, 1, 2);
     grid->setRowStretch(8, 10);
     grid->setMargin(d->gboxSettings->spacingHint());
-    grid->setSpacing(0);
+    grid->setSpacing(d->gboxSettings->spacingHint());
 
     // -------------------------------------------------------------
 
@@ -325,47 +360,47 @@ ResizeTool::~ResizeTool()
 void ResizeTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("resize Tool Dialog");
+    KConfigGroup group        = config->group(d->configGroupName);
 
     GreycstorationSettings settings;
     GreycstorationSettings defaults;
     defaults.setResizeDefaultSettings();
 
-    settings.fastApprox = group.readEntry("FastApprox",    defaults.fastApprox);
-    settings.interp     = group.readEntry("Interpolation", defaults.interp);
-    settings.amplitude  = group.readEntry("Amplitude",     (double)defaults.amplitude);
-    settings.sharpness  = group.readEntry("Sharpness",     (double)defaults.sharpness);
-    settings.anisotropy = group.readEntry("Anisotropy",    (double)defaults.anisotropy);
-    settings.alpha      = group.readEntry("Alpha",         (double)defaults.alpha);
-    settings.sigma      = group.readEntry("Sigma",         (double)defaults.sigma);
-    settings.gaussPrec  = group.readEntry("GaussPrec",     (double)defaults.gaussPrec);
-    settings.dl         = group.readEntry("Dl",            (double)defaults.dl);
-    settings.da         = group.readEntry("Da",            (double)defaults.da);
-    settings.nbIter     = group.readEntry("Iteration",     defaults.nbIter);
-    settings.tile       = group.readEntry("Tile",          defaults.tile);
-    settings.btile      = group.readEntry("BTile",         defaults.btile);
+    settings.fastApprox = group.readEntry(d->configFastApproxEntry,    defaults.fastApprox);
+    settings.interp     = group.readEntry(d->configInterpolationEntry, defaults.interp);
+    settings.amplitude  = group.readEntry(d->configAmplitudeEntry,     (double)defaults.amplitude);
+    settings.sharpness  = group.readEntry(d->configSharpnessEntry,     (double)defaults.sharpness);
+    settings.anisotropy = group.readEntry(d->configAnisotropyEntry,    (double)defaults.anisotropy);
+    settings.alpha      = group.readEntry(d->configAlphaEntry,         (double)defaults.alpha);
+    settings.sigma      = group.readEntry(d->configSigmaEntry,         (double)defaults.sigma);
+    settings.gaussPrec  = group.readEntry(d->configGaussPrecEntry,     (double)defaults.gaussPrec);
+    settings.dl         = group.readEntry(d->configDlEntry,            (double)defaults.dl);
+    settings.da         = group.readEntry(d->configDaEntry,            (double)defaults.da);
+    settings.nbIter     = group.readEntry(d->configIterationEntry,     defaults.nbIter);
+    settings.tile       = group.readEntry(d->configTileEntry,          defaults.tile);
+    settings.btile      = group.readEntry(d->configBTileEntry,         defaults.btile);
     d->settingsWidget->setSettings(settings);
 }
 
 void ResizeTool::writeSettings()
 {
     GreycstorationSettings settings = d->settingsWidget->getSettings();
-    KConfigGroup group              = KGlobal::config()->group("resize Tool Dialog");
+    KConfigGroup group              = KGlobal::config()->group(d->configGroupName);
 
-    group.writeEntry("FastApprox",        settings.fastApprox);
-    group.writeEntry("Interpolation",     settings.interp);
-    group.writeEntry("Amplitude",         (double)settings.amplitude);
-    group.writeEntry("Sharpness",         (double)settings.sharpness);
-    group.writeEntry("Anisotropy",        (double)settings.anisotropy);
-    group.writeEntry("Alpha",             (double)settings.alpha);
-    group.writeEntry("Sigma",             (double)settings.sigma);
-    group.writeEntry("GaussPrec",         (double)settings.gaussPrec);
-    group.writeEntry("Dl",                (double)settings.dl);
-    group.writeEntry("Da",                (double)settings.da);
-    group.writeEntry("Iteration",         settings.nbIter);
-    group.writeEntry("Tile",              settings.tile);
-    group.writeEntry("BTile",             settings.btile);
-    group.writeEntry("RestorePhotograph", d->useGreycstorationBox->isChecked());
+    group.writeEntry(d->configFastApproxEntry,    settings.fastApprox);
+    group.writeEntry(d->configInterpolationEntry, settings.interp);
+    group.writeEntry(d->configAmplitudeEntry,     (double)settings.amplitude);
+    group.writeEntry(d->configSharpnessEntry,     (double)settings.sharpness);
+    group.writeEntry(d->configAnisotropyEntry,    (double)settings.anisotropy);
+    group.writeEntry(d->configAlphaEntry,         (double)settings.alpha);
+    group.writeEntry(d->configSigmaEntry,         (double)settings.sigma);
+    group.writeEntry(d->configGaussPrecEntry,     (double)settings.gaussPrec);
+    group.writeEntry(d->configDlEntry,            (double)settings.dl);
+    group.writeEntry(d->configDaEntry,            (double)settings.da);
+    group.writeEntry(d->configIterationEntry,     settings.nbIter);
+    group.writeEntry(d->configTileEntry,          settings.tile);
+    group.writeEntry(d->configBTileEntry,         settings.btile);
+    group.writeEntry("RestorePhotograph",         d->useGreycstorationBox->isChecked());
     group.sync();
 }
 
@@ -523,7 +558,7 @@ void ResizeTool::prepareFinal()
     if (d->useGreycstorationBox->isChecked())
     {
         setFilter(dynamic_cast<DImgThreadedFilter*>(
-                  new GreycstorationIface(iface.getOriginalImg(), 
+                  new GreycstorationIface(iface.getOriginalImg(),
                                           d->settingsWidget->getSettings(),
                                           GreycstorationIface::Resize,
                                           d->wInput->value(),
@@ -537,7 +572,7 @@ void ResizeTool::prepareFinal()
         // to resize image without good quality.
         setFilter(dynamic_cast<DImgThreadedFilter*>(new ResizeImage(iface.getOriginalImg(),
                                                     d->wInput->value(),
-                                                    d->hInput->value(), 
+                                                    d->hInput->value(),
                                                     this)));
     }
 }
@@ -561,8 +596,8 @@ void ResizeTool::putPreviewData()
 
 void ResizeTool::renderingFinished()
 {
-    d->settingsWidget->setEnabled(true);
     d->useGreycstorationBox->setEnabled(true);
+    d->settingsWidget->setEnabled(d->useGreycstorationBox->isChecked());
     d->preserveRatioBox->setEnabled(true);
     d->wInput->setEnabled(true);
     d->hInput->setEnabled(true);
@@ -609,7 +644,7 @@ void ResizeTool::slotLoadSettings()
     if ( loadBlowupFile.isEmpty() )
        return;
 
-    QFile file(loadBlowupFile.path());
+    QFile file(loadBlowupFile.toLocalFile());
 
     if ( file.open(QIODevice::ReadOnly) )
     {
@@ -624,7 +659,7 @@ void ResizeTool::slotLoadSettings()
     }
     else
     {
-        KMessageBox::error(kapp->activeWindow(), 
+        KMessageBox::error(kapp->activeWindow(),
                            i18n("Cannot load settings from the Photograph Resizing text file."));
     }
 
@@ -639,7 +674,7 @@ void ResizeTool::slotSaveAsSettings()
     if ( saveBlowupFile.isEmpty() )
        return;
 
-    QFile file(saveBlowupFile.path());
+    QFile file(saveBlowupFile.toLocalFile());
 
     if ( file.open(QIODevice::WriteOnly) )
         d->settingsWidget->saveSettings(file, QString("# Photograph Resizing Configuration File"));

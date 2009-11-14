@@ -47,7 +47,7 @@ class AlbumSelectWidget : public QWidget
 
 public:
 
-    AlbumSelectWidget(QWidget *parent=0, PAlbum* albumToSelect=0);
+    explicit AlbumSelectWidget(QWidget *parent=0, PAlbum* albumToSelect=0);
     ~AlbumSelectWidget();
 
     void setCurrentAlbumUrl(const KUrl& albumUrl);
@@ -58,17 +58,22 @@ public:
 
     QTreeWidget* albumView() const;
 
+Q_SIGNALS:
+
+    void signalAlbumRenamed();
+
 private:
 
     void populateTreeView(const AlbumList& aList, QTreeWidget *view, PAlbum* albumToSelect);
 
-private Q_SLOTS: 
+private Q_SLOTS:
 
     void slotSearchTextChanged(const SearchTextSettings&);
     void slotNewAlbum();
     void slotAlbumAdded(Album* a);
     void slotAlbumDeleted(Album* a);
     void slotAlbumsCleared();
+    void slotAlbumRenamed(Album*);
     void slotContextMenu();
 
 private:

@@ -153,7 +153,7 @@ void SuperImposeWidget::slotEditModeChanged(int mode)
 
 void SuperImposeWidget::slotSetCurrentTemplate(const KUrl& url)
 {
-    m_template.load(url.path());
+    m_template.load(url.toLocalFile());
 
     if (m_template.isNull())
     {

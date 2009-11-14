@@ -1,20 +1,20 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="5" name="digikamimageplugin_adjustcurves" >
+<gui version="7" name="digikamimageplugin_adjustcurves" >
 
  <MenuBar>
 
    <Menu name="Color" ><text>&amp;Color</text>
-     <Action name="imageplugin_adjustcurves" /> 
+     <Action name="imageplugin_adjustcurves" />
    </Menu>
 
  </MenuBar>
- 
- <ToolBar name="ToolBar" >
+
+ <ToolBar name="mainToolBar" >
   <text>Main Toolbar</text>
  </ToolBar>
- 
+
  <ActionProperties>
   <Action name="imageplugin_adjustcurves" />
  </ActionProperties>
 
-</kpartgui>
+</gui>

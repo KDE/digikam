@@ -44,6 +44,7 @@
 // Local includes
 
 #include "imagehistogram.h"
+#include "globals.h"
 
 namespace Digikam
 {
@@ -142,7 +143,7 @@ void WhiteBalance::autoWBAdjustementFromColor(const QColor& tc, double& temperat
     double tmin, tmax, mBR;
     float mr, mg, mb;
 
-    kDebug(50003) << "Sums:  R:" << tc.red() << " G:" << tc.green() << " B:" << tc.blue();
+    kDebug() << "Sums:  R:" << tc.red() << " G:" << tc.green() << " B:" << tc.blue();
 
     /* This is a dichotomic search based on Blue and Red layers ratio
        to find the matching temperature
@@ -154,7 +155,7 @@ void WhiteBalance::autoWBAdjustementFromColor(const QColor& tc, double& temperat
     green = 1.0;
     for (temperature = (tmin+tmax)/2; tmax-tmin > 10; temperature = (tmin+tmax)/2)
     {
-        kDebug(50003) << "Intermediate Temperature (K):" << temperature;
+        kDebug() << "Intermediate Temperature (K):" << temperature;
         setRGBmult(temperature, green, mr, mg, mb);
         if (mr/mb > mBR)
             tmax = temperature;
@@ -164,8 +165,8 @@ void WhiteBalance::autoWBAdjustementFromColor(const QColor& tc, double& temperat
     // Calculate the green level to neutralize picture
     green = (mr / mg) / ((double)tc.green() / (double)tc.red());
 
-    kDebug(50003) << "Temperature (K):" << temperature;
-    kDebug(50003) << "Green component:" << green;
+    kDebug() << "Temperature (K):" << temperature;
+    kDebug() << "Green component:" << green;
 }
 
 void WhiteBalance::autoExposureAdjustement(uchar* data, int width, int height, bool sb,
@@ -187,18 +188,18 @@ void WhiteBalance::autoExposureAdjustement(uchar* data, int width, int height, b
     stop = width * height / 200;
 
     for (i = rgbMax, sum = 0; (i >= 0) && (sum < stop); --i)
-        sum += histogram->getValue(Digikam::ImageHistogram::ValueChannel, i);
+        sum += histogram->getValue(LuminosityChannel, i);
 
     expo = -log((float)(i+1) / rgbMax) / log(2);
-    kDebug(50003) << "White level at:" << i;
+    kDebug() << "White level at:" << i;
 
     for (i = 1, sum = 0; (i < (int)rgbMax) && (sum < stop); ++i)
-        sum += histogram->getValue(Digikam::ImageHistogram::ValueChannel, i);
+        sum += histogram->getValue(LuminosityChannel, i);
 
     black = (double)i / rgbMax;
     black /= 2;
 
-    kDebug(50003) << "Black:" << black << "  Exposition:" << expo;
+    kDebug() << "Black:" << black << "  Exposition:" << expo;
 
     delete histogram;
 }
@@ -280,7 +281,7 @@ void WhiteBalance::setLUTv()
 
     if (d->WP - d->BP < 1) d->WP = d->BP + 1;
 
-    kDebug(50003) << "T(K): " << d->temperature
+    kDebug() << "T(K): " << d->temperature
              << " => R:" << d->mr
              << " G:"    << d->mg
              << " B:"    << d->mb

@@ -26,13 +26,14 @@
 
 // Qt includes
 
-#include <QWidget>
 #include <QList>
+#include <QWidget>
 
 // KDE includes
 
-#include <klocale.h>
+#include <kdeversion.h>
 #include <kiconloader.h>
+#include <klocale.h>
 
 // Local includes
 
@@ -50,22 +51,26 @@ public:
     ToolsViewPriv()
     {
         baseTools   = 0;
-        customTools = 0;
+//        customTools = 0;
         historyView = 0;
     }
 
-    ToolsListView *baseTools;
-    ToolsListView *customTools;
+    ToolsListView* baseTools;
+//    ToolsListView* customTools;
 
-    DHistoryView  *historyView;
+    DHistoryView*  historyView;
 };
 
 ToolsView::ToolsView(QWidget *parent)
          : KTabWidget(parent), d(new ToolsViewPriv)
 {
     setTabBarHidden(false);
-    setCloseButtonEnabled(false);
 
+#if KDE_IS_VERSION(4,3,0)
+    setTabsClosable(false);
+#else
+    setCloseButtonEnabled(false);
+#endif
     // --------------------------------------------------------
 
     d->baseTools = new ToolsListView(this);
@@ -73,10 +78,10 @@ ToolsView::ToolsView(QWidget *parent)
     new ToolListViewGroup(d->baseTools, BatchTool::BaseTool);
     addTab(d->baseTools, SmallIcon("digikam"), i18n("Base Tools"));
 
-    d->customTools = new ToolsListView(this);
-    d->customTools->setWhatsThis(i18n("This is the list of user customized batch tools."));
-    new ToolListViewGroup(d->customTools, BatchTool::CustomTool);
-    addTab(d->customTools, SmallIcon("user-properties"), i18n("Custom Tools"));
+//    d->customTools = new ToolsListView(this);
+//    d->customTools->setWhatsThis(i18n("This is the list of user customized batch tools."));
+//    new ToolListViewGroup(d->customTools, BatchTool::CustomTool);
+//    addTab(d->customTools, SmallIcon("user-properties"), i18n("Custom Tools"));
 
     d->historyView = new DHistoryView(this);
     d->historyView->setWhatsThis(i18n("You can see below the history of last batch operations processed."));
@@ -87,8 +92,8 @@ ToolsView::ToolsView(QWidget *parent)
     connect(d->baseTools, SIGNAL(signalAssignTools(const QMap<int, QString>&)),
             this, SIGNAL(signalAssignTools(const QMap<int, QString>&)));
 
-    connect(d->customTools, SIGNAL(signalAssignTools(const QMap<int, QString>&)),
-            this, SIGNAL(signalAssignTools(const QMap<int, QString>&)));
+//    connect(d->customTools, SIGNAL(signalAssignTools(const QMap<int, QString>&)),
+//            this, SIGNAL(signalAssignTools(const QMap<int, QString>&)));
 
     connect(d->historyView, SIGNAL(signalEntryClicked(const QVariant&)),
             this, SLOT(slotHistoryEntryClicked(const QVariant&)));
@@ -122,7 +127,7 @@ void ToolsView::addTool(BatchTool* tool)
             // TODO
             break;
         default:      // User customized tools.
-            d->customTools->addTool(tool);
+//            d->customTools->addTool(tool);
             break;
     }
 }
@@ -142,7 +147,7 @@ bool ToolsView::removeTool(BatchTool* tool)
                 // TODO
                 break;
             default:      // User customized tools.
-                ret = d->customTools->removeTool(tool);
+//                ret = d->customTools->removeTool(tool);
                 break;
         }
     }

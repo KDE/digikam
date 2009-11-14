@@ -41,7 +41,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kmenu.h>
 #include <klocale.h>
 #include <kurl.h>
@@ -56,6 +55,7 @@
 #include <kselectaction.h>
 #include <kvbox.h>
 #include <ktabwidget.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -81,7 +81,6 @@
 #include "imageattributeswatch.h"
 #include "metadatahub.h"
 #include "statusprogressbar.h"
-
 #include "config-digikam.h"
 #ifdef HAVE_KDEPIMLIBS
 #include <kabc/stdaddressbook.h>
@@ -541,9 +540,6 @@ void ImageDescEditTab::slotApplyAllChanges()
     if (d->currInfos.isEmpty())
         return;
 
-    d->captionsEdit->apply();
-    slotCommentChanged();
-
     bool progressInfo                   = (d->currInfos.count() > 1);
     MetadataWriteSettings writeSettings = MetadataHub::defaultWriteSettings();
 
@@ -551,7 +547,7 @@ void ImageDescEditTab::slotApplyAllChanges()
     // remove before final release
     if (d->ignoreImageAttributesWatch)
     {
-        kWarning(50003) << "ImageDescEditTab::slotApplyAllChanges(): re-entering from event loop!";
+        kWarning() << "ImageDescEditTab::slotApplyAllChanges(): re-entering from event loop!";
     }
 
     // Create a local copy of the current state of the hub.
@@ -1358,7 +1354,7 @@ void ImageDescEditTab::slotAlbumAdded(Album* a)
 
         if (!parent)
         {
-            kWarning(50003) << "Failed to find parent for Tag " << tag->title();
+            kWarning() << "Failed to find parent for Tag " << tag->title();
             return;
         }
 
@@ -1389,7 +1385,7 @@ void ImageDescEditTab::slotAlbumDeleted(Album* a)
     TAlbumCheckListItem* viewItem = (TAlbumCheckListItem*)(album->extraData(d->tagsView));
     delete viewItem;
     album->removeExtraData(this);
-    d->hub.setTag(album, false, MetadataHub::MetadataDisjoint);
+    d->hub.notifyTagRemoved(album);
 }
 
 void ImageDescEditTab::slotAlbumsCleared()
@@ -1397,6 +1393,7 @@ void ImageDescEditTab::slotAlbumsCleared()
     d->tagsView->clear();
     d->tagsSearchBar->completionObject()->clear();
     d->newTagEdit->completionObject()->clear();
+    d->hub.notifyTagsCleared();
 }
 
 void ImageDescEditTab::slotAlbumIconChanged(Album* a)
@@ -1446,7 +1443,7 @@ void ImageDescEditTab::slotAlbumRenamed(Album* a)
     TAlbumCheckListItem* viewItem = (TAlbumCheckListItem*)(album->extraData(d->tagsView));
     if (!viewItem)
     {
-        kWarning(50003) << "Failed to find view item for Tag "
+        kWarning() << "Failed to find view item for Tag "
                         << album->title();
         return;
     }
@@ -1695,6 +1692,11 @@ void ImageDescEditTab::slotTagsSearchChanged(const SearchTextSettings& settings)
         return;
     }
 
+    // see TODO below.
+    // if we filter, we should reset the assignedTagsBtn again
+    d->assignedTagsBtn->setChecked(false);
+    slotAssignedTagsToggled(false);
+
     //TODO: this will destroy assigned-tags filtering. Unify in one method.
     QString search = settings.text;
 
@@ -1785,8 +1787,17 @@ void ImageDescEditTab::slotTagsSearchChanged(const SearchTextSettings& settings)
 
 void ImageDescEditTab::slotAssignedTagsToggled(bool t)
 {
-    //TODO: this will destroy name filtering. Unify in one method.
+
     Q3ListViewItemIterator it(d->tagsView);
+    while (it.current())
+    {
+        it.current()->setOpen(t);
+        it.current()->setVisible(true);
+        ++it;
+    }
+
+    //TODO: this will destroy name filtering. Unify in one method.
+    it = d->tagsView;
     while (it.current())
     {
         TAlbumCheckListItem* item = dynamic_cast<TAlbumCheckListItem*>(it.current());
@@ -1874,9 +1885,14 @@ void ImageDescEditTab::slotAssignedTagsToggled(bool t)
     if (rootItem)
     {
         if (t)
+        {
             rootItem->setText(0, i18n("Assigned Tags"));
+        }
         else
+        {
             rootItem->setText(0, root->title());
+        }
+        rootItem->setOpen(true);
     }
 }
 

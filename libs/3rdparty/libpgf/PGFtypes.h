@@ -34,11 +34,13 @@
 //-------------------------------------------------------------------------------
 //	Codec versions
 //
-// Version 2:	modified data structure PGFHeader
-// Version 3:	INT32 instead of INT16, allows 31 bit per pixel and channel
-// Version 5:	ROI, new block-reordering scheme
+// Version 2:	modified data structure PGFHeader (backward compatibility assured)
+// Version 3:	DataT: INT32 instead of INT16, allows 31 bit per pixel and channel (backward compatibility assured)
+// Version 5:	ROI, new block-reordering scheme (backward compatibility assured)
+// Version 6:	modified data structure PGFPreHeader: hSize (header size) is now a UINT32 instead of a UINT16 (backward compatibility assured)
+//
 //-------------------------------------------------------------------------------
-#define PGFCodecVersion		"6.09.24"			// Major number
+#define PGFCodecVersion		"6.09.44"			// Major number
 												// Minor number: Year (2) Week (2)
 
 //-------------------------------------------------------------------------------
@@ -90,17 +92,26 @@ enum Orientation { LL=0, HL=1, LH=2, HH=3 };
 // LevelLengths  ::= UINT32[nLevels]
 
 #pragma pack(1)
+/////////////////////////////////////////////////////////////////////
+/// PGF magic and version (part of PGF pre-header)
+/// @author C. Stamm
 struct PGFMagicVersion {
 	char magic[3];				// PGF identification = "PGF"
 	UINT8 version;				// PGF version
 	// total: 4 Bytes
 };
 
+/////////////////////////////////////////////////////////////////////
+/// PGF pre-header
+/// @author C. Stamm
 struct PGFPreHeader : PGFMagicVersion {
 	UINT32 hSize;				// total size of PGFHeader, [ColorTable], and [UserData] in bytes
 	// total: 8 Bytes
 };
 
+/////////////////////////////////////////////////////////////////////
+/// PGF header
+/// @author C. Stamm
 struct PGFHeader {
 	UINT32 width;
 	UINT32 height;
@@ -109,43 +120,81 @@ struct PGFHeader {
 	UINT8 bpp;					// bits per pixel
 	UINT8 channels;				// number of channels
 	UINT8 mode;					// image mode according to Adobe's image modes
-	RGBTRIPLE background;		// background color used in RGBA color mode
+	RGBTRIPLE background;		// background color used in RGBA color mode or number of bits per channel in 16-bit per channel modes
 	// total: 16 Bytes
 };
 
+/////////////////////////////////////////////////////////////////////
+/// PGF post-header is optional
+/// @author C. Stamm
 struct PGFPostHeader {
 	RGBQUAD clut[ColorTableLen];// color table for indexed color images
 	UINT8 *userData;			// user data of size userDataLen
 	UINT32 userDataLen;			// user data size in bytes
 };
 
+/////////////////////////////////////////////////////////////////////
+/// ROI block header (used in ROI coding scheme)
+/// @author C. Stamm
 union ROIBlockHeader {
+	/// Constructor
+	/// @param v Buffer size
 	ROIBlockHeader(UINT16 v) { val = v; }
+	/// Constructor
+	/// @param size Buffer size
+	/// @param end 0/1 Flag; 1: last part of a tile
 	ROIBlockHeader(UINT32 size, bool end)	{ ASSERT(size < (1 << RLblockSizeLen)); bufferSize = size; tileEnd = end; }
 
 	UINT16 val;
 	struct {
+#ifdef __BIG_ENDIAN__
+		UINT16 tileEnd   :				1;	// 1: last part of a tile
+		UINT16 bufferSize: RLblockSizeLen;	// number of uncoded UINT32 values in a block
+#else
 		UINT16 bufferSize: RLblockSizeLen;	// number of uncoded UINT32 values in a block
 		UINT16 tileEnd   :				1;	// 1: last part of a tile
+#endif // __BIG_ENDIAN__
 	};
 	// total: 2 Bytes
 };
 
 #pragma pack()
 
+/////////////////////////////////////////////////////////////////////
+/// PGF i/o exception structure
+/// @author C. Stamm
 struct IOException {
+	/// Standard constructor
 	IOException() : error(NoError) {}
+	/// Constructor
+	/// @param err Run-time error
 	IOException(OSError err) : error(err) {}
 
 	OSError error;				// operating system error code
 };
 
+/////////////////////////////////////////////////////////////////////
+/// Rectangle
+/// @author C. Stamm
 struct PGFRect {
+	/// Standard constructor
 	PGFRect() : left(0), top(0), right(0), bottom(0) {}
+	/// Constructor
+	/// @param x Left offset
+	/// @param y Top offset
+	/// @param width Rectangle width
+	/// @param height Rectangle height
 	PGFRect(UINT32 x, UINT32 y, UINT32 width, UINT32 height) : left(x), top(y), right(x + width), bottom(y + height) {}
 
+	/// @return Rectangle width
 	UINT32 Width() const					{ return right - left; }
+	/// @return Rectangle height
 	UINT32 Height() const					{ return bottom - top; }
+	
+	/// Test if point (x,y) is inside this rectangle
+	/// @param x Point coordinate x
+	/// @param y Point coordinate y
+	/// @return True if point (x,y) is inside this rectangle
 	bool IsInside(UINT32 x, UINT32 y) const { return (x >= left && x < right && y >= top && y < bottom); }
 
 	UINT32 left, top, right, bottom;

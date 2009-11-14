@@ -8,9 +8,10 @@
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2005-2006 by Tom Albers <tomalbers@kde.nl>
+ * Copyright (C) 2008 by Arnd Baecker <arnd dot baecker at web dot de>
  * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
- * Copyright (C) 2008 by Arnd Baecker <arnd dot baecker at web dot de>
+ * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,6 +43,7 @@ extern "C"
 // Qt includes
 
 #include <QCursor>
+#include <QDesktopServices>
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
@@ -50,6 +52,7 @@ extern "C"
 #include <QLabel>
 #include <QLayout>
 #include <QList>
+#include <QPointer>
 #include <QProgressBar>
 #include <QSplitter>
 #include <QVBoxLayout>
@@ -58,11 +61,9 @@ extern "C"
 
 #include <kaction.h>
 #include <kactioncollection.h>
-#include <kactionmenu.h>
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kcursor.h>
-#include <kdebug.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
@@ -74,19 +75,20 @@ extern "C"
 #include <klocale.h>
 #include <kmenubar.h>
 #include <kmessagebox.h>
-#include <kprotocolinfo.h>
 #include <kmultitabbar.h>
+#include <kprotocolinfo.h>
 #include <kstandardaction.h>
 #include <kstandarddirs.h>
 #include <kstatusbar.h>
 #include <ktoggleaction.h>
 #include <ktoolbar.h>
 #include <ktoolbarpopupaction.h>
+#include <kdebug.h>
 
-// Libkdcraw includes
+// LibKDcraw includes
 
-#include <libkdcraw/version.h>
 #include <libkdcraw/kdcraw.h>
+#include <libkdcraw/version.h>
 
 #if KDCRAW_VERSION < 0x000400
 #include <libkdcraw/dcrawbinary.h>
@@ -109,6 +111,7 @@ extern "C"
 #include "loadingcacheinterface.h"
 #include "savingcontextcontainer.h"
 #include "setup.h"
+#include "setupeditor.h"
 #include "setupicc.h"
 #include "slideshow.h"
 #include "splashscreen.h"
@@ -117,6 +120,7 @@ extern "C"
 #include "thumbbar.h"
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
+#include "uifilevalidator.h"
 
 namespace ShowFoto
 {
@@ -131,10 +135,10 @@ public:
         currentItem             = 0;
         itemsNb                 = 0;
         splash                  = 0;
-        BCGAction               = 0;
         openFilesInFolderAction = 0;
         fileOpenAction          = 0;
         thumbBar                = 0;
+        thumbBarDock            = 0;
         rightSideBar            = 0;
         splash                  = 0;
         itemsNb                 = 0;
@@ -156,10 +160,9 @@ public:
 
     KAction                         *openFilesInFolderAction;
 
-    KActionMenu                     *BCGAction;
-
     Digikam::ThumbnailLoadThread    *thumbLoadThread;
     Digikam::ThumbBarView           *thumbBar;
+    Digikam::ThumbBarDock           *thumbBarDock;
     Digikam::ThumbBarItem           *currentItem;
     Digikam::ImagePropertiesSideBar *rightSideBar;
     Digikam::SplashScreen           *splash;
@@ -168,6 +171,18 @@ public:
 ShowFoto::ShowFoto(const KUrl::List& urlList)
         : Digikam::EditorWindow("Showfoto"), d(new ShowFotoPriv)
 {
+    setXMLFile("showfotoui.rc");
+
+    // --------------------------------------------------------
+
+    Digikam::UiFileValidator validator(localXMLFile());
+    if (!validator.isValid())
+    {
+        validator.fixConfigFile();
+    }
+
+    // --------------------------------------------------------
+
     // Show splash-screen at start up.
 
     KGlobal::dirs()->addResourceDir("data", KStandardDirs::installPath("data") + QString("digikam"));
@@ -226,57 +241,6 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
     m_imagePluginLoader = new Digikam::ImagePluginLoader(this, d->splash);
     loadImagePlugins();
 
-    // If plugin core is not available, plug BCG actions to collection instead.
-
-    if ( !m_imagePluginLoader->pluginLibraryIsLoaded("digikamimageplugin_core") )
-    {
-        d->BCGAction = new KActionMenu(i18n("Brightness/Contrast/Gamma"), 0);
-        d->BCGAction->setObjectName("showfoto_bcg");
-        d->BCGAction->setDelayed(false);
-
-        KAction *incGammaAction = new KAction(i18n("Increase Gamma"), this);
-        incGammaAction->setShortcut(Qt::ALT+Qt::Key_G);
-        connect(incGammaAction, SIGNAL(triggered()), this, SLOT(slotChangeBCG()));
-        actionCollection()->addAction("gamma_plus", incGammaAction);
-
-        KAction *decGammaAction = new KAction(i18n("Decrease Gamma"), this);
-        decGammaAction->setShortcut(Qt::ALT+Qt::SHIFT+Qt::Key_G);
-        connect(decGammaAction, SIGNAL(triggered()), this, SLOT(slotChangeBCG()));
-        actionCollection()->addAction("gamma_minus", decGammaAction);
-
-        KAction *incBrightAction = new KAction(i18n("Increase Brightness"), this);
-        incBrightAction->setShortcut(Qt::ALT+Qt::Key_B);
-        connect(incBrightAction, SIGNAL(triggered()), this, SLOT(slotChangeBCG()));
-        actionCollection()->addAction("brightness_plus", incBrightAction);
-
-        KAction *decBrightAction = new KAction(i18n("Decrease Brightness"), this);
-        decBrightAction->setShortcut(Qt::ALT+Qt::SHIFT+Qt::Key_B);
-        connect(decBrightAction, SIGNAL(triggered()), this, SLOT(slotChangeBCG()));
-        actionCollection()->addAction("brightness_minus", decBrightAction);
-
-        KAction *incContrastAction = new KAction(i18n("Increase Contrast"), this);
-        incContrastAction->setShortcut(Qt::ALT+Qt::Key_C);
-        connect(incContrastAction, SIGNAL(triggered()), this, SLOT(slotChangeBCG()));
-        actionCollection()->addAction("contrast_plus", incContrastAction);
-
-        KAction *decContrastAction = new KAction(i18n("Decrease Contrast"), this);
-        decContrastAction->setShortcut(Qt::ALT+Qt::SHIFT+Qt::Key_C);
-        connect(decContrastAction, SIGNAL(triggered()), this, SLOT(slotChangeBCG()));
-        actionCollection()->addAction("contrast_minus", decContrastAction);
-
-        d->BCGAction->addAction(incBrightAction);
-        d->BCGAction->addAction(decBrightAction);
-        d->BCGAction->addAction(incContrastAction);
-        d->BCGAction->addAction(decContrastAction);
-        d->BCGAction->addAction(incGammaAction);
-        d->BCGAction->addAction(decGammaAction);
-
-        QList<QAction*> bcg_actions;
-        bcg_actions.append( d->BCGAction );
-        unplugActionList( "showfoto_bcg" );
-        plugActionList( "showfoto_bcg", bcg_actions );
-    }
-
     // Create context menu.
 
     setupContextMenu();
@@ -301,7 +265,7 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
         KUrl url = *it;
         if (url.isLocalFile())
         {
-            QFileInfo fi(url.path());
+            QFileInfo fi(url.toLocalFile());
             if (fi.isDir())
             {
                 // Local Dir
@@ -338,6 +302,12 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
 ShowFoto::~ShowFoto()
 {
     unLoadImagePlugins();
+
+    Digikam::ThumbnailLoadThread::cleanUp();
+    Digikam::LoadingCacheInterface::cleanUp();
+#if KDCRAW_VERSION < 0x000400
+    KDcrawIface::DcrawBinary::cleanUp();
+#endif
 
     delete m_imagePluginLoader;
     delete d->thumbBar;
@@ -435,59 +405,24 @@ void ShowFoto::setupUserArea()
     KConfigGroup group        = config->group("ImageViewer Settings");
 
     QWidget* widget = new QWidget(this);
+    QHBoxLayout *hlay = new QHBoxLayout(widget);
+    m_splitter        = new Digikam::SidebarSplitter(widget);
 
-    if(!group.readEntry("HorizontalThumbbar", false)) // Vertical thumbbar layout
-    {
-        QHBoxLayout *hlay = new QHBoxLayout(widget);
-        m_splitter        = new Digikam::SidebarSplitter(widget);
-        d->thumbBar       = new Digikam::ThumbBarView(m_splitter, Qt::Vertical);
-        m_stackView       = new Digikam::EditorStackView(m_splitter);
-        m_canvas          = new Digikam::Canvas(m_stackView);
+    KMainWindow* viewContainer = new KMainWindow(widget, Qt::Widget);
+    m_splitter->addWidget(viewContainer);
+    m_stackView = new Digikam::EditorStackView(viewContainer);
+    m_canvas    = new Digikam::Canvas(m_stackView);
+    viewContainer->setCentralWidget(m_stackView);
 
-        m_splitter->setStretchFactor(1, 10);      // set Canvas default size to max.
+    m_splitter->setStretchFactor(1, 10);      // set Canvas default size to max.
 
-        d->rightSideBar   = new Digikam::ImagePropertiesSideBar(widget, m_splitter, KMultiTabBar::Right);
-        d->rightSideBar->setObjectName("ShowFoto Sidebar Right");
+    d->rightSideBar   = new Digikam::ImagePropertiesSideBar(widget, m_splitter, KMultiTabBar::Right);
+    d->rightSideBar->setObjectName("ShowFoto Sidebar Right");
 
-        hlay->addWidget(m_splitter);
-        hlay->addWidget(d->rightSideBar);
-        hlay->setSpacing(0);
-        hlay->setMargin(0);
-    }
-    else                                                     // Horizontal thumbbar layout
-    {
-        m_splitter        = new Digikam::SidebarSplitter(Qt::Horizontal, widget);
-        QWidget* widget2  = new QWidget(m_splitter);
-        QVBoxLayout *vlay = new QVBoxLayout(widget2);
-        m_vSplitter       = new QSplitter(Qt::Vertical, widget2);
-        m_stackView       = new Digikam::EditorStackView(m_vSplitter);
-        m_canvas          = new Digikam::Canvas(m_stackView);
-        d->thumbBar       = new Digikam::ThumbBarView(m_vSplitter, Qt::Horizontal);
-
-        m_vSplitter->setFrameStyle( QFrame::NoFrame );
-        m_vSplitter->setFrameShadow( QFrame::Plain );
-        m_vSplitter->setFrameShape( QFrame::NoFrame );
-        m_vSplitter->setOpaqueResize(false);
-
-        vlay->addWidget(m_vSplitter);
-        vlay->setSpacing(0);
-        vlay->setMargin(0);
-
-        QHBoxLayout *hlay = new QHBoxLayout(widget);
-        d->rightSideBar   = new Digikam::ImagePropertiesSideBar(widget, m_splitter, KMultiTabBar::Right);
-        d->rightSideBar->setObjectName("ShowFoto Sidebar Right");
-
-        hlay->addWidget(m_splitter);
-        hlay->addWidget(d->rightSideBar);
-        hlay->setSpacing(0);
-        hlay->setMargin(0);
-        hlay->setStretchFactor(m_splitter, 10);
-
-        m_splitter->setStretchFactor(0, 10);      // set Canvas+thumbbar container default size to max.
-        m_vSplitter->setStretchFactor(0, 10);     // set Canvas default size to max.
-    }
-
-    d->thumbBar->setToolTip(new Digikam::ThumbBarToolTip(d->thumbBar));
+    hlay->addWidget(m_splitter);
+    hlay->addWidget(d->rightSideBar);
+    hlay->setSpacing(0);
+    hlay->setMargin(0);
 
     m_canvas->makeDefaultEditingCanvas();
     m_stackView->setCanvas(m_canvas);
@@ -497,6 +432,38 @@ void ShowFoto::setupUserArea()
     m_splitter->setFrameShadow( QFrame::Plain );
     m_splitter->setFrameShape( QFrame::NoFrame );
     m_splitter->setOpaqueResize(false);
+
+    // Code to check for the now depreciated HorizontalThumbar directive. It
+    // is found, it is honored and deleted. The state will from than on be saved
+    // by viewContainers built-in mechanism.
+    Qt::DockWidgetArea dockArea    = Qt::LeftDockWidgetArea;
+    Qt::Orientation    orientation = Qt::Vertical;
+    if (group.hasKey("HorizontalThumbbar"))
+    {
+        if (group.readEntry("HorizontalThumbbar", true))
+        {
+            // Horizontal thumbbar layout
+            dockArea    = Qt::TopDockWidgetArea;
+            orientation = Qt::Horizontal;
+        }
+        group.deleteEntry("HorizontalThumbbar");
+    }
+
+    // The thumb bar is placed in a detachable/dockable widget.
+    d->thumbBarDock = new Digikam::ThumbBarDock(viewContainer, Qt::Tool);
+    d->thumbBarDock->setObjectName("editor_thumbbar");
+    d->thumbBarDock->setAllowedAreas(Qt::LeftDockWidgetArea |
+                                     Qt::TopDockWidgetArea  |
+                                     Qt::BottomDockWidgetArea);
+    d->thumbBar = new Digikam::ThumbBarView(d->thumbBarDock, orientation);
+    d->thumbBarDock->setWidget(d->thumbBar);
+    viewContainer->addDockWidget(dockArea, d->thumbBarDock);
+    d->thumbBarDock->setFloating(false);
+
+    d->thumbBar->setToolTip(new Digikam::ThumbBarToolTip(d->thumbBar));
+    viewContainer->setAutoSaveSettings("ImageViewer Thumbbar", true);
+    d->thumbBarDock->reInitialize();
+
     setCentralWidget(widget);
 }
 
@@ -516,7 +483,7 @@ void ShowFoto::setupActions()
                                                       this, SLOT(slotOpenFile()));
 
     d->openFilesInFolderAction = new KAction(KIcon("folder-image"), i18n("Open folder"), this);
-    d->openFilesInFolderAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_O);
+    d->openFilesInFolderAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_O));
     connect(d->openFilesInFolderAction, SIGNAL(triggered()), this, SLOT(slotOpenFilesInFolder()));
     actionCollection()->addAction("showfoto_open_folder", d->openFilesInFolderAction);
 
@@ -524,7 +491,7 @@ void ShowFoto::setupActions()
 
     // --- Create the GUI ----------------------------------------------------
 
-    createGUI("showfotoui.rc");
+    createGUI(xmlFile());
 }
 
 void ShowFoto::readSettings()
@@ -534,8 +501,16 @@ void ShowFoto::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("ImageViewer Settings");
 
-    d->lastOpenedDirectory.setPath(group.readEntry("Last Opened Directory",
-                                   KGlobalSettings::documentPath()));
+    QString defaultDir =group.readEntry("Last Opened Directory", QString());
+    if (defaultDir.isNull())
+    {
+        #if KDE_IS_VERSION(4,1,61)
+        defaultDir = KGlobalSettings::picturesPath();
+        #else
+        defaultDir = QDesktopServices::storageLocation(QDesktopServices::PicturesLocation);
+        #endif
+    }
+    d->lastOpenedDirectory.setPath(defaultDir);
 
     Digikam::ThemeEngine::instance()->setCurrentTheme(group.readEntry("Theme", i18nc("default theme name",
                                                                                      "Default")));
@@ -548,7 +523,7 @@ void ShowFoto::saveSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("ImageViewer Settings");
 
-    group.writeEntry("Last Opened Directory", d->lastOpenedDirectory.path() );
+    group.writeEntry("Last Opened Directory", d->lastOpenedDirectory.toLocalFile() );
     group.writeEntry("Theme", Digikam::ThemeEngine::instance()->getCurrentThemeName());
 
     config->sync();
@@ -647,46 +622,14 @@ void ShowFoto::slotOpenUrl(const KUrl& url)
     // TODO : add preload here like in ImageWindow::slotLoadCurrent() ???
 }
 
-Digikam::ThumbBarView *ShowFoto::thumbBar() const
+Digikam::ThumbBarDock *ShowFoto::thumbBar() const
 {
-    return d->thumbBar;
+    return d->thumbBarDock;
 }
 
 Digikam::Sidebar *ShowFoto::rightSideBar() const
 {
     return (dynamic_cast<Digikam::Sidebar*>(d->rightSideBar));
-}
-
-void ShowFoto::slotChangeBCG()
-{
-    QString name;
-    if (sender())
-        name = sender()->objectName();
-
-    if (name == "gamma_plus")
-    {
-        m_canvas->increaseGamma();
-    }
-    else if  (name == "gamma_minus")
-    {
-        m_canvas->decreaseGamma();
-    }
-    else if  (name == "brightness_plus")
-    {
-        m_canvas->increaseBrightness();
-    }
-    else if  (name == "brightness_minus")
-    {
-        m_canvas->decreaseBrightness();
-    }
-    else if  (name == "contrast_plus")
-    {
-        m_canvas->increaseContrast();
-    }
-    else if  (name == "contrast_minus")
-    {
-        m_canvas->decreaseContrast();
-    }
 }
 
 void ShowFoto::slotChanged()
@@ -724,10 +667,6 @@ void ShowFoto::slotUndoStateChanged(bool moreUndo, bool moreRedo, bool canSave)
 void ShowFoto::toggleActions(bool val)
 {
     toggleStandardActions(val);
-
-    // if BCG actions exists then toggle it.
-    if (d->BCGAction)
-        d->BCGAction->setEnabled(val);
 }
 
 void ShowFoto::slotFilePrint()
@@ -747,10 +686,13 @@ bool ShowFoto::setupICC()
 
 bool ShowFoto::setup(bool iccSetupPage)
 {
-    Setup setup(this, 0, iccSetupPage ? Setup::ICCPage : Setup::LastPageUsed);
+    QPointer<Setup> setup = new Setup(this, 0, iccSetupPage ? Setup::ICCPage : Setup::LastPageUsed);
 
-    if (setup.exec() != QDialog::Accepted)
+    if (setup->exec() != QDialog::Accepted)
+    {
+        delete setup;
         return false;
+    }
 
     KGlobal::config()->sync();
 
@@ -762,6 +704,7 @@ bool ShowFoto::setup(bool iccSetupPage)
         toggleActions(false);
     }
 
+    delete setup;
     return true;
 }
 
@@ -859,12 +802,12 @@ void ShowFoto::openFolder(const KUrl& url)
     patterns.append (" ");
     patterns.append (filter.toUpper());
 
-    kDebug(50005) << "patterns=" << patterns;
+    kDebug() << "patterns=" << patterns;
 
     // Get all image files from directory.
 
-    QDir dir(url.path(), patterns);
-    dir.setFilter ( QDir::Files | QDir::NoSymLinks );
+    QDir dir(url.toLocalFile(), patterns);
+    dir.setFilter ( QDir::Files );
 
     if (!dir.exists())
        return;
@@ -873,26 +816,46 @@ void ShowFoto::openFolder(const KUrl& url)
 
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("ImageViewer Settings");
+
     QDir::SortFlags flag;
+    bool reverse = group.readEntry("ReverseSort", false);
 
-    switch(group.readEntry("SortOrder", 0))
+    switch(group.readEntry("SortOrder", (int)SetupEditor::SortByDate))
     {
-        case 1:
+        case SetupEditor::SortByName:
+        {
             flag = QDir::Name;  // Ordering by file name.
+            if (reverse)
+            {
+                flag = flag | QDir::Reversed;
+            }
             break;
-        case 2:
+        }
+        case SetupEditor::SortByFileSize:
+        {
             flag = QDir::Size;  // Ordering by file size.
+
+            // Disabled reverse in the settings leads e.g. to increasing file sizes
+            // Note, that this is just the opposite to the sort order for QDir.
+            if (!reverse)
+            {
+                flag = flag | QDir::Reversed;
+            }
             break;
+        }
         default:
+        {
             flag = QDir::Time;  // Ordering by file date.
+
+            // Disabled reverse in the settings leads e.g. to increasing dates
+            // Note, that this is just the opposite to the sort order for QDir.
+            if (!reverse)
+            {
+                flag = flag | QDir::Reversed;
+            }
             break;
+        }
     }
-
-    // Disabled reverse in the settings leads e.g. to increasing dates
-    // Note, that this is just the opposite to the sort order for QDir.
-
-    if (!group.readEntry("ReverseSort", false))
-        flag = flag | QDir::Reversed;
 
     dir.setSorting(flag);
 
@@ -1041,14 +1004,14 @@ void ShowFoto::finishSaving(bool success)
 
 void ShowFoto::saveIsComplete()
 {
-    Digikam::LoadingCacheInterface::putImage(m_savingContext->destinationURL.path(), m_canvas->currentImage());
+    Digikam::LoadingCacheInterface::putImage(m_savingContext->destinationURL.toLocalFile(), m_canvas->currentImage());
     d->thumbBar->invalidateThumb(d->currentItem);
 }
 
 void ShowFoto::saveAsIsComplete()
 {
-    m_canvas->switchToLastSaved(m_savingContext->destinationURL.path());
-    Digikam::LoadingCacheInterface::putImage(m_savingContext->destinationURL.path(), m_canvas->currentImage());
+    m_canvas->switchToLastSaved(m_savingContext->destinationURL.toLocalFile());
+    Digikam::LoadingCacheInterface::putImage(m_savingContext->destinationURL.toLocalFile(), m_canvas->currentImage());
 
     // Add the file to the list of thumbbar images if it's not there already
     Digikam::ThumbBarItem* foundItem = d->thumbBar->findItemByUrl(m_savingContext->destinationURL);
@@ -1065,17 +1028,26 @@ void ShowFoto::saveAsIsComplete()
     slotUpdateItemInfo();
 }
 
+KUrl ShowFoto::saveDestinationUrl()
+{
+
+    if (!d->currentItem)
+    {
+        kWarning() << "Cannot return the url of the image to save "
+                   << "because no image is selected.";
+        return KUrl();
+    }
+
+    return d->currentItem->url();
+
+}
+
 bool ShowFoto::save()
 {
     if (!d->currentItem)
     {
-        kWarning(50005) << "This should not happen";
+        kWarning() << "This should not happen";
         return true;
-    }
-
-    if (!d->currentItem->url().isLocalFile())
-    {
-        return false;
     }
 
     startingSave(d->currentItem->url());
@@ -1086,7 +1058,7 @@ bool ShowFoto::saveAs()
 {
     if (!d->currentItem)
     {
-        kWarning(50005) << "This should not happen";
+        kWarning() << "This should not happen";
         return false;
     }
 
@@ -1199,7 +1171,7 @@ void ShowFoto::slideShow(bool startWithCurrent, Digikam::SlideShowSettings& sett
          !m_cancelSlideShow && (it != settings.fileList.constEnd()) ; ++it)
     {
         Digikam::SlidePictureInfo pictInfo;
-        meta.load((*it).path());
+        meta.load((*it).toLocalFile());
         pictInfo.comment   = meta.getImageComments()[QString("x-default")].caption;
         pictInfo.photoInfo = meta.getPhotographInformation();
         settings.pictInfoMap.insert(*it, pictInfo);

@@ -73,12 +73,17 @@ UINT64 CPGFFileStream::GetPos() const THROW_ {
 //////////////////////////////////////////////////////////////////////
 // CPGFMemoryStream
 //////////////////////////////////////////////////////////////////////
-// allocate memory block of given size
+/// Allocate memory block of given size
+/// @param size Memory size
 CPGFMemoryStream::CPGFMemoryStream(size_t size) THROW_ : m_size(size), m_allocated(true) {
 	m_buffer = m_pos = new UINT8[m_size];
 	if (!m_buffer) ReturnWithError(InsufficientMemory);
 }
 
+//////////////////////////////////////////////////////////////////////
+/// Use alreay allocated memory of given size
+/// @param pBuffer Memory location
+/// @param size Memory size
 CPGFMemoryStream::CPGFMemoryStream(UINT8 *pBuffer, size_t size) THROW_ : m_buffer(pBuffer), m_pos(pBuffer), m_size(size), m_allocated(false) {
 	ASSERT(IsValid());
 }
@@ -187,7 +192,7 @@ UINT64 CPGFMemFileStream::GetPos() const THROW_ {
 
 //////////////////////////////////////////////////////////////////////
 // CPGFIStream
-#if defined (WIN32) || defined (WINCE)
+#if defined(WIN32) || defined(WINCE)
 //////////////////////////////////////////////////////////////////////
 void CPGFIStream::Write(int *count, void *buffPtr) THROW_ {
 	ASSERT(count);

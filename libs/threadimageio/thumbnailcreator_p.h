@@ -68,24 +68,24 @@ public:
         digiKamFingerPrint  = QString("Digikam Thumbnail Generator");
     }
 
-    bool                exifRotate;
-    bool                removeAlphaChannel;
-    bool                onlyLargeThumbnails;
+    bool                            exifRotate;
+    bool                            removeAlphaChannel;
+    bool                            onlyLargeThumbnails;
 
     ThumbnailCreator::StorageMethod thumbnailStorage;
-    ThumbnailInfoProvider          *infoProvider;
+    ThumbnailInfoProvider*          infoProvider;
     int                             dbIdForReplacement;
 
-    int                 thumbnailSize;
-    int                 cachedSize;
+    int                             thumbnailSize;
+    int                             cachedSize;
 
-    QString             error;
-    QString             bigThumbPath;
-    QString             smallThumbPath;
-    QString             digiKamFingerPrint;
+    QString                         error;
+    QString                         bigThumbPath;
+    QString                         smallThumbPath;
+    QString                         digiKamFingerPrint;
 
-    DImgLoaderObserver* observer;
-    DRawDecoding        rawSettings;
+    DImgLoaderObserver*             observer;
+    DRawDecoding                    rawSettings;
 };
 
 }  // namespace Digikam

@@ -39,12 +39,15 @@ class KDirWatch;
 namespace Digikam
 {
 
+class ICCSettingsContainer;
+
 class LoadingProcessListener
 {
 public:
 
     virtual ~LoadingProcessListener() {}
     virtual bool querySendNotifyEvent() = 0;
+    virtual void setResult(const LoadingDescription& loadingDescription, const DImg& img) = 0;
     virtual LoadSaveNotifier *loadSaveNotifier() = 0;
     virtual LoadSaveThread::AccessMode accessMode() = 0;
 };
@@ -263,6 +266,10 @@ Q_SIGNALS:
      * The signal may be emitted under CacheLock. Strongly consider a queued connection.
      */
     void fileChanged(const QString& filePath, const QString& cacheKey);
+
+private Q_SLOTS:
+
+    void iccSettingsChanged(const ICCSettingsContainer &current, const ICCSettingsContainer &previous);
 
 private:
 

@@ -1,20 +1,20 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="5" name="digikamimageplugin_hotpixels" >
+<gui version="7" name="digikamimageplugin_hotpixels" >
 
  <MenuBar>
 
   <Menu name="Enhance" ><text>Enh&amp;ance</text>
-   <Action name="imageplugin_hotpixels" /> 
+   <Action name="imageplugin_hotpixels" />
   </Menu>
 
  </MenuBar>
- 
- <ToolBar name="ToolBar" >
+
+ <ToolBar name="mainToolBar" >
   <text>Main Toolbar</text>
  </ToolBar>
 
  <ActionProperties>
   <Action name="imageplugin_hotpixels" />
  </ActionProperties>
- 
-</kpartgui>
+
+</gui>

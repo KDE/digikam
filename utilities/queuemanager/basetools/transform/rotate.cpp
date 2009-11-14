@@ -26,23 +26,23 @@
 
 // Qt includes
 
-#include <QWidget>
-#include <QLabel>
 #include <QCheckBox>
+#include <QLabel>
+#include <QWidget>
 
 // KDE includes
 
-#include <kvbox.h>
-#include <klocale.h>
-#include <kdebug.h>
-#include <kiconloader.h>
 #include <kcombobox.h>
+#include <kiconloader.h>
+#include <klocale.h>
+#include <kvbox.h>
+#include <kdebug.h>
 
 // Local includes
 
-#include "jpegutils.h"
 #include "dimg.h"
 #include "dmetadata.h"
+#include "jpegutils.h"
 
 namespace Digikam
 {
@@ -88,7 +88,7 @@ BatchToolSettings Rotate::defaultSettings()
     return settings;
 }
 
-void Rotate::assignSettings2Widget()
+void Rotate::slotAssignSettings2Widget()
 {
     m_useExif->setChecked(settings()["UseExif"].toBool());
     m_comboBox->setCurrentIndex(settings()["Rotation"].toInt());
@@ -112,11 +112,11 @@ bool Rotate::toolOperations()
 
     // JPEG image : lossless method.
 
-    if (isJpegImage(inputUrl().path()) && image().isNull())
+    if (isJpegImage(inputUrl().toLocalFile()) && image().isNull())
     {
         if (useExif)
         {
-            if (!exifTransform(inputUrl().path(), inputUrl().fileName(), outputUrl().path(), Auto))
+            if (!exifTransform(inputUrl().toLocalFile(), inputUrl().fileName(), outputUrl().toLocalFile(), Auto))
                 return false;
         }
         else
@@ -124,16 +124,16 @@ bool Rotate::toolOperations()
             switch(angle)
             {
                 case DImg::ROT90:
-                    return (exifTransform(inputUrl().path(), inputUrl().fileName(), outputUrl().path(), Rotate90));
+                    return (exifTransform(inputUrl().toLocalFile(), inputUrl().fileName(), outputUrl().toLocalFile(), Rotate90));
                     break;
                 case DImg::ROT180:
-                    return (exifTransform(inputUrl().path(), inputUrl().fileName(), outputUrl().path(), Rotate180));
+                    return (exifTransform(inputUrl().toLocalFile(), inputUrl().fileName(), outputUrl().toLocalFile(), Rotate180));
                     break;
                 case DImg::ROT270:
-                    return (exifTransform(inputUrl().path(), inputUrl().fileName(), outputUrl().path(), Rotate270));
+                    return (exifTransform(inputUrl().toLocalFile(), inputUrl().fileName(), outputUrl().toLocalFile(), Rotate270));
                     break;
                 default:
-                    kDebug(50003) << "Unknow rotate action";
+                    kDebug() << "Unknow rotate action";
                     return false;
                     break;
             }
@@ -146,7 +146,7 @@ bool Rotate::toolOperations()
 
     if (useExif)
     {
-        DMetadata meta(inputUrl().path());
+        DMetadata meta(inputUrl().toLocalFile());
         switch(meta.getImageOrientation())
         {
             case DMetadata::ORIENTATION_HFLIP:

@@ -26,7 +26,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+
 #include <klocale.h>
 #include <kglobal.h>
 
@@ -314,7 +314,7 @@ void ImageComments::addComment(const QString& comment, const QString& lang, cons
         CommentInfo& info = d->infos[i];
 
         // some extra considerations on replacing
-        if (info.type == DatabaseComment::Comment && info.language == language)
+        if (info.type == type && info.type == DatabaseComment::Comment && info.language == language)
         {
             if ( !multipleCommentsPerLanguage
                  || (multipleCommentsPerLanguage && info.author == author) )

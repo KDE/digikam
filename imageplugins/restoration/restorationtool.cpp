@@ -38,7 +38,6 @@
 #include <kaboutdata.h>
 #include <kapplication.h>
 #include <kcombobox.h>
-#include <kdebug.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
@@ -69,15 +68,44 @@ class RestorationToolPriv
 {
 public:
 
-    RestorationToolPriv()
-    {
-        mainTab           = 0;
-        restorationTypeCB = 0;
-        settingsWidget    = 0;
-        previewWidget     = 0;
-        gboxSettings      = 0;
-    }
+    RestorationToolPriv() :
+        configGroupName("restoration Tool"),
+        configPresetEntry("Preset"),
+        configFastApproxEntry("FastApprox"),
+        configInterpolationEntry("Interpolation"),
+        configAmplitudeEntry("Amplitude"),
+        configSharpnessEntry("Sharpness"),
+        configAnisotropyEntry("Anisotropy"),
+        configAlphaEntry("Alpha"),
+        configSigmaEntry("Sigma"),
+        configGaussPrecEntry("GaussPrec"),
+        configDlEntry("Dl"), configDaEntry("Da"),
+        configIterationEntry("Iteration"),
+        configTileEntry("Tile"),
+        configBTileEntry("BTile"),
 
+        mainTab(0),
+        restorationTypeCB(0),
+        settingsWidget(0),
+        previewWidget(0),
+        gboxSettings(0)
+        {}
+
+    const QString         configGroupName;
+    const QString         configPresetEntry;
+    const QString         configFastApproxEntry;
+    const QString         configInterpolationEntry;
+    const QString         configAmplitudeEntry;
+    const QString         configSharpnessEntry;
+    const QString         configAnisotropyEntry;
+    const QString         configAlphaEntry;
+    const QString         configSigmaEntry;
+    const QString         configGaussPrecEntry;
+    const QString         configDlEntry;
+    const QString         configDaEntry;
+    const QString         configIterationEntry;
+    const QString         configTileEntry;
+    const QString         configBTileEntry;
 
     KTabWidget*           mainTab;
 
@@ -98,13 +126,15 @@ RestorationTool::RestorationTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
-                                             EditorToolSettings::Ok|
-                                             EditorToolSettings::Cancel|
-                                             EditorToolSettings::Load|
-                                             EditorToolSettings::SaveAs|
-                                             EditorToolSettings::Try,
-                                             EditorToolSettings::PanIcon);
+    d->gboxSettings = new EditorToolSettings;
+    d->gboxSettings->setButtons(EditorToolSettings::Default|
+                                EditorToolSettings::Ok|
+                                EditorToolSettings::Cancel|
+                                EditorToolSettings::Load|
+                                EditorToolSettings::SaveAs|
+                                EditorToolSettings::Try);
+
+    d->gboxSettings->setTools(EditorToolSettings::PanIcon);
 
     QGridLayout* gridSettings = new QGridLayout(d->gboxSettings->plainPage());
     d->mainTab = new KTabWidget( d->gboxSettings->plainPage() );
@@ -187,28 +217,28 @@ void RestorationTool::renderingFinished()
 void RestorationTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("restoration Tool");
+    KConfigGroup group        = config->group(d->configGroupName);
 
     GreycstorationSettings settings;
     GreycstorationSettings defaults;
     defaults.setRestorationDefaultSettings();
 
-    settings.fastApprox = group.readEntry("FastApprox",    defaults.fastApprox);
-    settings.interp     = group.readEntry("Interpolation", defaults.interp);
-    settings.amplitude  = group.readEntry("Amplitude",     (double)defaults.amplitude);
-    settings.sharpness  = group.readEntry("Sharpness",     (double)defaults.sharpness);
-    settings.anisotropy = group.readEntry("Anisotropy",    (double)defaults.anisotropy);
-    settings.alpha      = group.readEntry("Alpha",         (double)defaults.alpha);
-    settings.sigma      = group.readEntry("Sigma",         (double)defaults.sigma);
-    settings.gaussPrec  = group.readEntry("GaussPrec",     (double)defaults.gaussPrec);
-    settings.dl         = group.readEntry("Dl",            (double)defaults.dl);
-    settings.da         = group.readEntry("Da",            (double)defaults.da);
-    settings.nbIter     = group.readEntry("Iteration",     defaults.nbIter);
-    settings.tile       = group.readEntry("Tile",          defaults.tile);
-    settings.btile      = group.readEntry("BTile",         defaults.btile);
+    settings.fastApprox = group.readEntry(d->configFastApproxEntry,    defaults.fastApprox);
+    settings.interp     = group.readEntry(d->configInterpolationEntry, defaults.interp);
+    settings.amplitude  = group.readEntry(d->configAmplitudeEntry,     (double)defaults.amplitude);
+    settings.sharpness  = group.readEntry(d->configSharpnessEntry,     (double)defaults.sharpness);
+    settings.anisotropy = group.readEntry(d->configAnisotropyEntry,    (double)defaults.anisotropy);
+    settings.alpha      = group.readEntry(d->configAlphaEntry,         (double)defaults.alpha);
+    settings.sigma      = group.readEntry(d->configSigmaEntry,         (double)defaults.sigma);
+    settings.gaussPrec  = group.readEntry(d->configGaussPrecEntry,     (double)defaults.gaussPrec);
+    settings.dl         = group.readEntry(d->configDlEntry,            (double)defaults.dl);
+    settings.da         = group.readEntry(d->configDaEntry,            (double)defaults.da);
+    settings.nbIter     = group.readEntry(d->configIterationEntry,     defaults.nbIter);
+    settings.tile       = group.readEntry(d->configTileEntry,          defaults.tile);
+    settings.btile      = group.readEntry(d->configBTileEntry,         defaults.btile);
     d->settingsWidget->setSettings(settings);
 
-    int p = group.readEntry("Preset", (int)NoPreset);
+    int p = group.readEntry(d->configPresetEntry, (int)NoPreset);
     d->restorationTypeCB->setCurrentIndex(p);
     if (p == NoPreset)
         d->settingsWidget->setEnabled(true);
@@ -220,21 +250,22 @@ void RestorationTool::writeSettings()
 {
     GreycstorationSettings settings = d->settingsWidget->getSettings();
     KSharedConfig::Ptr config       = KGlobal::config();
-    KConfigGroup group              = config->group("restoration Tool");
-    group.writeEntry("Preset",        d->restorationTypeCB->currentIndex());
-    group.writeEntry("FastApprox",    settings.fastApprox);
-    group.writeEntry("Interpolation", settings.interp);
-    group.writeEntry("Amplitude",     (double)settings.amplitude);
-    group.writeEntry("Sharpness",     (double)settings.sharpness);
-    group.writeEntry("Anisotropy",    (double)settings.anisotropy);
-    group.writeEntry("Alpha",         (double)settings.alpha);
-    group.writeEntry("Sigma",         (double)settings.sigma);
-    group.writeEntry("GaussPrec",     (double)settings.gaussPrec);
-    group.writeEntry("Dl",            (double)settings.dl);
-    group.writeEntry("Da",            (double)settings.da);
-    group.writeEntry("Iteration",     settings.nbIter);
-    group.writeEntry("Tile",          settings.tile);
-    group.writeEntry("BTile",         settings.btile);
+    KConfigGroup group              = config->group(d->configGroupName);
+
+    group.writeEntry(d->configPresetEntry,        d->restorationTypeCB->currentIndex());
+    group.writeEntry(d->configFastApproxEntry,    settings.fastApprox);
+    group.writeEntry(d->configInterpolationEntry, settings.interp);
+    group.writeEntry(d->configAmplitudeEntry,     (double)settings.amplitude);
+    group.writeEntry(d->configSharpnessEntry,     (double)settings.sharpness);
+    group.writeEntry(d->configAnisotropyEntry,    (double)settings.anisotropy);
+    group.writeEntry(d->configAlphaEntry,         (double)settings.alpha);
+    group.writeEntry(d->configSigmaEntry,         (double)settings.sigma);
+    group.writeEntry(d->configGaussPrecEntry,     (double)settings.gaussPrec);
+    group.writeEntry(d->configDlEntry,            (double)settings.dl);
+    group.writeEntry(d->configDaEntry,            (double)settings.da);
+    group.writeEntry(d->configIterationEntry,     settings.nbIter);
+    group.writeEntry(d->configTileEntry,          settings.tile);
+    group.writeEntry(d->configBTileEntry,         settings.btile);
     d->previewWidget->writeSettings();
     group.sync();
 }
@@ -336,7 +367,7 @@ void RestorationTool::slotLoadSettings()
     if ( loadRestorationFile.isEmpty() )
        return;
 
-    QFile file(loadRestorationFile.path());
+    QFile file(loadRestorationFile.toLocalFile());
 
     if ( file.open(QIODevice::ReadOnly) )
     {
@@ -369,7 +400,7 @@ void RestorationTool::slotSaveAsSettings()
     if ( saveRestorationFile.isEmpty() )
        return;
 
-    QFile file(saveRestorationFile.path());
+    QFile file(saveRestorationFile.toLocalFile());
 
     if ( file.open(QIODevice::WriteOnly) )
         d->settingsWidget->saveSettings(file, QString("# Photograph Restoration Configuration File V2"));

@@ -33,7 +33,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kcmdlineargs.h>
 #include <kapplication.h>
 #include <kaboutdata.h>
@@ -44,6 +43,7 @@
 #include <ktip.h>
 #include <kdeversion.h>
 #include <kmessagebox.h>
+#include <kdebug.h>
 
 // Libkexiv2 includes
 
@@ -136,6 +136,7 @@ int main(int argc, char *argv[])
 
         firstAlbumPath = firstRun.firstAlbumPath();
         dbName         = firstRun.databasePath();
+        AlbumManager::checkDatabaseDirsAfterFirstRun(dbName, firstAlbumPath);
     }
 
     kDebug(50003) << "Database Path: " << dbName;
@@ -144,12 +145,21 @@ int main(int argc, char *argv[])
 
     if (!QSqlDatabase::isDriverAvailable("QSQLITE"))
     {
-        KMessageBox::errorList(0, i18n("Run-time Qt4 SQLite database plugin is not available - "
+	if (QSqlDatabase::drivers().isEmpty())
+	{
+            KMessageBox::error(0, i18n("Run-time Qt4 SQLite database plugin is not available - "
                                        "please install it.\n"
-                                       "Database plugins installed are:"),
-                               QSqlDatabase::drivers());
+                                       "There is no database plugin installed on your computer."));
+	}
+	else
+	{
+            KMessageBox::errorList(0, i18n("Run-time Qt4 SQLite database plugin is not available - "
+                                           "please install it.\n"
+                                           "Database plugins installed on your computer are listed below:"),
+                                   QSqlDatabase::drivers());
+        }
 
-        kDebug(50003) << "QT Sql drivers list: " << QSqlDatabase::drivers();
+        kDebug() << "QT Sql drivers list: " << QSqlDatabase::drivers();
         return 1;
     }
 

@@ -51,9 +51,9 @@ DatabaseUrl DatabaseUrl::fromFileUrl(const KUrl& fileUrl,
     DatabaseUrl url;
     url.setProtocol("digikamalbums");
     // get album root path without trailing slash
-    QString albumRootPath = albumRoot.path(KUrl::RemoveTrailingSlash);
+    QString albumRootPath = albumRoot.toLocalFile(KUrl::RemoveTrailingSlash);
     // get the hierarchy below the album root
-    QString pathUnderRoot = fileUrl.path().remove(albumRootPath);
+    QString pathUnderRoot = fileUrl.toLocalFile().remove(albumRootPath);
     url.setPath(pathUnderRoot);
     url.addQueryItem("albumRoot", albumRootPath);
     url.addQueryItem("albumRootId", QString::number(albumRootId));
@@ -83,7 +83,7 @@ DatabaseUrl DatabaseUrl::fromAlbumAndName(const QString& name,
     url.addPath(album + '/');
     url.addPath(name);
 
-    url.addQueryItem("albumRoot", albumRoot.path(KUrl::RemoveTrailingSlash));
+    url.addQueryItem("albumRoot", albumRoot.toLocalFile(KUrl::RemoveTrailingSlash));
     url.addQueryItem("albumRootId", QString::number(albumRootId));
     url.setParameters(parameters);
     return url;

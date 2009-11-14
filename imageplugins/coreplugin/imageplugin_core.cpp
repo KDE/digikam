@@ -31,22 +31,25 @@
 #include <kactioncollection.h>
 #include <kapplication.h>
 #include <kcursor.h>
-#include <kdebug.h>
 #include <kgenericfactory.h>
 #include <klibloader.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <kdebug.h>
 
 // Local includes
 
 #include "dimg.h"
 #include "dimgimagefilters.h"
 #include "imageiface.h"
+#include "editortooliface.h"
+#include "iccprofilescombobox.h"
+#include "iccsettings.h"
 #include "autocorrectiontool.h"
 #include "bcgtool.h"
 #include "bwsepiatool.h"
 #include "hsltool.h"
-#include "iccprooftool.h"
+#include "profileconversiontool.h"
 #include "resizetool.h"
 #include "blurtool.h"
 #include "ratiocroptool.h"
@@ -65,38 +68,37 @@ class ImagePlugin_CorePriv
 
 public:
 
-    ImagePlugin_CorePriv()
-    {
-        redeyeAction          = 0;
-        BCGAction             = 0;
-        HSLAction             = 0;
-        RGBAction             = 0;
-        autoCorrectionAction  = 0;
-        invertAction          = 0;
-        BWAction              = 0;
-        aspectRatioCropAction = 0;
-        resizeAction          = 0;
-        sharpenAction         = 0;
-        blurAction            = 0;
-        colorManagementAction = 0;
-        convertTo8Bits        = 0;
-        convertTo16Bits       = 0;
-    }
+    ImagePlugin_CorePriv() :
+        redeyeAction(0),
+        BCGAction(0),
+        HSLAction(0),
+        RGBAction(0),
+        autoCorrectionAction(0),
+        invertAction(0),
+        BWAction(0),
+        aspectRatioCropAction(0),
+        resizeAction(0),
+        sharpenAction(0),
+        blurAction(0),
+        convertTo8Bits(0),
+        convertTo16Bits(0),
+        profileMenuAction(0)
+        {}
 
-    KAction *redeyeAction;
-    KAction *BCGAction;
-    KAction *HSLAction;
-    KAction *RGBAction;
-    KAction *autoCorrectionAction;
-    KAction *invertAction;
-    KAction *BWAction;
-    KAction *aspectRatioCropAction;
-    KAction *resizeAction;
-    KAction *sharpenAction;
-    KAction *blurAction;
-    KAction *colorManagementAction;
-    KAction *convertTo8Bits;
-    KAction *convertTo16Bits;
+    KAction*               redeyeAction;
+    KAction*               BCGAction;
+    KAction*               HSLAction;
+    KAction*               RGBAction;
+    KAction*               autoCorrectionAction;
+    KAction*               invertAction;
+    KAction*               BWAction;
+    KAction*               aspectRatioCropAction;
+    KAction*               resizeAction;
+    KAction*               sharpenAction;
+    KAction*               blurAction;
+    KAction*               convertTo8Bits;
+    KAction*               convertTo16Bits;
+    IccProfilesMenuAction* profileMenuAction;
 };
 
 ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QVariantList &)
@@ -130,28 +132,28 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QVariantList &)
 
     // NOTE: Photoshop 7 use CTRL+U.
     d->HSLAction = new KAction(KIcon("adjusthsl"), i18n("Hue/Saturation/Lightness..."), this);
-    d->HSLAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_U));
+    d->HSLAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_U));
     actionCollection()->addAction("implugcore_hsl", d->HSLAction );
     connect(d->HSLAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotHSL()));
 
     // NOTE: Photoshop 7 use CTRL+B.
     d->RGBAction = new KAction(KIcon("adjustrgb"), i18n("Color Balance..."), this);
-    d->RGBAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_B));
+    d->RGBAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_B));
     actionCollection()->addAction("implugcore_rgb", d->RGBAction );
     connect(d->RGBAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotRGB()));
 
     // NOTE: Photoshop 7 use CTRL+SHIFT+B with
     d->autoCorrectionAction = new KAction(KIcon("autocorrection"), i18n("Auto-Correction..."), this);
-    d->autoCorrectionAction->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_B));
+    d->autoCorrectionAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_B));
     actionCollection()->addAction("implugcore_autocorrection", d->autoCorrectionAction );
     connect(d->autoCorrectionAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotAutoCorrection()));
 
     // NOTE: Photoshop 7 use CTRL+I.
     d->invertAction = new KAction(KIcon("invertimage"), i18n("Invert"), this);
-    d->invertAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_I));
+    d->invertAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_I));
     actionCollection()->addAction("implugcore_invert", d->invertAction );
     connect(d->invertAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotInvert()));
@@ -166,10 +168,21 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QVariantList &)
     connect(d->convertTo16Bits, SIGNAL(triggered(bool) ),
             this, SLOT(slotConvertTo16Bits()));
 
+    /*
     d->colorManagementAction = new KAction(KIcon("colormanagement"), i18n("Color Management..."), this);
     actionCollection()->addAction("implugcore_colormanagement", d->colorManagementAction );
     connect(d->colorManagementAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotColorManagement()));
+    */
+    d->profileMenuAction = new IccProfilesMenuAction(KIcon("colormanagement"), i18n("Color Space Conversion"), this);
+    actionCollection()->addAction("implugcore_colormanagement", d->profileMenuAction );
+    connect(d->profileMenuAction, SIGNAL(triggered(const IccProfile &)),
+            this, SLOT(slotConvertToColorSpace(const IccProfile &)));
+
+    connect(IccSettings::instance(), SIGNAL(settingsChanged()),
+            this, SLOT(slotUpdateColorSpaceMenu()));
+
+    slotUpdateColorSpaceMenu();
 
     //-------------------------------
     // Filters menu actions.
@@ -198,7 +211,7 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QVariantList &)
 
     setXMLFile("digikamimageplugin_core_ui.rc");
 
-    kDebug(50006) << "ImagePlugin_Core plugin loaded";
+    kDebug() << "ImagePlugin_Core plugin loaded";
 }
 
 ImagePlugin_Core::~ImagePlugin_Core()
@@ -221,11 +234,11 @@ void ImagePlugin_Core::setEnabledActions(bool b)
     d->redeyeAction->setEnabled(b);
     d->autoCorrectionAction->setEnabled(b);
     d->BWAction->setEnabled(b);
-    d->colorManagementAction->setEnabled(b);
     d->HSLAction->setEnabled(b);
     d->sharpenAction->setEnabled(b);
     d->aspectRatioCropAction->setEnabled(b);
     d->resizeAction->setEnabled(b);
+    d->profileMenuAction->setEnabled(b);
 }
 
 void ImagePlugin_Core::slotInvert()
@@ -261,7 +274,7 @@ void ImagePlugin_Core::slotConvertTo8Bits()
        if (KMessageBox::warningContinueCancel(
                         kapp->activeWindow(),
                         i18n("Performing this operation will reduce image color quality. "
-                             "Do you want to continue?"), QString(), 
+                             "Do you want to continue?"), QString(),
                         KStandardGuiItem::cont(), KStandardGuiItem::cancel(),
                         QString("ImagePluginCore16To8Bits")) == KMessageBox::Cancel)
            return;
@@ -331,9 +344,83 @@ void ImagePlugin_Core::slotRedEye()
     loadTool(tool);
 }
 
+/*
 void ImagePlugin_Core::slotColorManagement()
 {
     ICCProofTool *tool = new ICCProofTool(this);
+    loadTool(tool);
+}
+*/
+
+void ImagePlugin_Core::slotConvertToColorSpace(const IccProfile& profile)
+{
+    kDebug() << "";
+    ImageIface iface(0, 0);
+
+    if (iface.getOriginalIccProfile().isNull())
+    {
+       KMessageBox::error(kapp->activeWindow(), i18n("This image is not color managed."));
+       return;
+    }
+
+    kapp->setOverrideCursor(Qt::WaitCursor);
+    ProfileConversionTool::fastConversion(profile);
+    kapp->restoreOverrideCursor();
+}
+
+void ImagePlugin_Core::slotUpdateColorSpaceMenu()
+{
+    d->profileMenuAction->clear();
+
+    if (!IccSettings::instance()->isEnabled())
+    {
+        KAction *action = new KAction(i18n("Color Management is disabled..."), this);
+        d->profileMenuAction->addAction(action);
+
+        connect(action, SIGNAL(triggered()),
+                this, SLOT(slotSetupICC()));
+        return;
+    }
+
+    ICCSettingsContainer settings = IccSettings::instance()->settings();
+
+    QList<IccProfile> standardProfiles, favoriteProfiles;
+    QSet<QString> standardProfilePaths, favoriteProfilePaths;
+    standardProfiles << IccProfile::sRGB()
+                     << IccProfile::adobeRGB()
+                     << IccProfile::wideGamutRGB()
+                     << IccProfile::proPhotoRGB();
+
+    foreach (IccProfile profile, standardProfiles)
+    {
+        d->profileMenuAction->addProfile(profile, profile.description());
+        standardProfilePaths << profile.filePath();
+    }
+
+    d->profileMenuAction->addSeparator();
+
+    favoriteProfilePaths = QSet<QString>::fromList(ProfileConversionTool::favoriteProfiles());
+    favoriteProfilePaths -= standardProfilePaths;
+    foreach (const QString &path, favoriteProfilePaths)
+        favoriteProfiles << path;
+    d->profileMenuAction->addProfiles(favoriteProfiles);
+
+    d->profileMenuAction->addSeparator();
+
+    KAction *moreAction = new KAction(i18n("Other..."), this);
+    d->profileMenuAction->addAction(moreAction);
+    connect(moreAction, SIGNAL(triggered()),
+            this, SLOT(slotProfileConversionTool()));
+}
+
+void ImagePlugin_Core::slotSetupICC()
+{
+    EditorToolIface::editorToolIface()->setupICC();
+}
+
+void ImagePlugin_Core::slotProfileConversionTool()
+{
+    ProfileConversionTool *tool = new ProfileConversionTool(this);
     loadTool(tool);
 }
 

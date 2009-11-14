@@ -40,12 +40,12 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kstandarddirs.h>
 #include <kcursor.h>
 #include <kglobal.h>
 #include <kapplication.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -362,7 +362,9 @@ void ImageRegionWidget::updatePreviewImage(DImg *img)
     // Because image plugins are tool witch only work on image data, the DImg container
     // do not contain metadata from original image. About Color Managed View, we need to
     // restore the embedded ICC color profile.
-    image.setICCProfil(d->image.getICCProfil());
+    // However, some plugins may set a profile on the preview image, which we accept of course.
+    if (image.getIccProfile().isNull())
+        image.setIccProfile(d->image.getIccProfile());
     d->pixmapRegion = d->iface->convertToPixmap(image);
 }
 
@@ -451,7 +453,7 @@ void ImageRegionWidget::setContentsSize()
             break;
         }
         default:
-            kWarning(50003) << "Unknown separation view specified";
+            kWarning() << "Unknown separation view specified";
     }
 }
 
@@ -462,9 +464,9 @@ void ImageRegionWidget::contentsWheelEvent(QWheelEvent *e)
     if (e->modifiers() & Qt::ControlModifier)
     {
         if (e->delta() < 0 && !maxZoom())
-            slotIncreaseZoom();
-        else if (e->delta() > 0 && !minZoom())
             slotDecreaseZoom();
+        else if (e->delta() > 0 && !minZoom())
+            slotIncreaseZoom();
         return;
     }
 }

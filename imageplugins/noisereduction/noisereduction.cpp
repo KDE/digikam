@@ -6,7 +6,7 @@
  * Date        : 2005-05-25
  * Description : Noise Reduction threaded image filter.
  *
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Original Noise Filter algorithm copyright (C) 2005
  * Peter Heckert <peter dot heckert at arcor dot de>
@@ -38,12 +38,7 @@
 #define FG 0.715160
 #define FB 0.072169
 
-
 #include "noisereduction.h"
-
-// KDE includes
-
-#include <kdebug.h>
 
 // Local includes
 
@@ -254,9 +249,9 @@ void NoiseReduction::filterImage(void)
             // if (dl > p) dl = p;
             // if (dl < -p) dl = -p;
 
-            dpix[2] =   red2 + dl;
+            dpix[2] = red2   + dl;
             dpix[1] = green2 + dl;
-            dpix[0] =  blue2 + dl;
+            dpix[0] = blue2  + dl;
 
             for (v = 0 ; !m_cancel && (v < 3) ; ++v)
             {
@@ -606,7 +601,7 @@ void NoiseReduction::iir_filter(float* const start, float* const end, float* dst
 // The radius variations are filtered. This reduces spatial phase jitter.
 
 void NoiseReduction::filter(float *buffer, float *data, float *data2, float *rbuf,
-                            float */*tbuf*/, int width, int color)
+                            float* /*tbuf*/, int width, int color)
 {
     float *lp        = data;
     float *rp        = data + width-1;
@@ -617,7 +612,7 @@ void NoiseReduction::filter(float *buffer, float *data, float *data2, float *rbu
     float *rbufrp    = rbuf + width-1;
     float  fboxwidth = m_radius*2.0;
     float  fradius   = m_radius;
-    float *p1, *p2;
+    float *p1=0, *p2=0;
 
     if (fboxwidth < 1.0) fboxwidth = 1.0 ;
     if (fradius < 0.5) fradius = 0.5;
@@ -726,7 +721,7 @@ void NoiseReduction::filter(float *buffer, float *data, float *data2, float *rbu
         blp[i] = mypow(blp[i] - lp2[i], val);
     }
 
-    float *src, *dest;
+    float *src=0, *dest=0;
     val = m_texture + 1.0;
 
     pass = 2;

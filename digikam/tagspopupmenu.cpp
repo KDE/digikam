@@ -44,11 +44,11 @@
 // KDE includes
 
 #include <kapplication.h>
-#include <kdebug.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <ktoggleaction.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -623,7 +623,7 @@ void TagsPopupMenu::slotAddTag(QAction *action)
     TAlbum* parent    = man->findTAlbum(tagID);
     if (!parent)
     {
-        kWarning(50003) << "Failed to find album with id " << tagID;
+        kWarning() << "Failed to find album with id " << tagID;
         return;
     }
 

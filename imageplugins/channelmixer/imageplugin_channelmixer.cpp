@@ -27,7 +27,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <klocale.h>
 #include <kgenericfactory.h>
 #include <klibloader.h>
@@ -35,6 +34,7 @@
 #include <kactioncollection.h>
 #include <kcursor.h>
 #include <kapplication.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -49,7 +49,7 @@ ImagePlugin_ChannelMixer::ImagePlugin_ChannelMixer(QObject *parent, const QVaria
                         : Digikam::ImagePlugin(parent, "ImagePlugin_ChannelMixer")
 {
     m_channelMixerAction  = new KAction(KIcon("channelmixer"), i18n("Channel Mixer..."), this);
-    m_channelMixerAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_H));
+    m_channelMixerAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_H));
     actionCollection()->addAction("imageplugin_channelmixer", m_channelMixerAction );
 
     connect(m_channelMixerAction, SIGNAL(triggered(bool)),
@@ -57,7 +57,7 @@ ImagePlugin_ChannelMixer::ImagePlugin_ChannelMixer(QObject *parent, const QVaria
 
     setXMLFile("digikamimageplugin_channelmixer_ui.rc");
 
-    kDebug(50006) << "ImagePlugin_ChannelMixer plugin loaded";
+    kDebug() << "ImagePlugin_ChannelMixer plugin loaded";
 }
 
 ImagePlugin_ChannelMixer::~ImagePlugin_ChannelMixer()

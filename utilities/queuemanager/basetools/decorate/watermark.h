@@ -32,12 +32,6 @@
 
 #include "batchtool.h"
 
-class KComboBox;
-class KLineEdit;
-class KFontComboBox;
-class KColorButton;
-class KIntNumInput;
-
 namespace Digikam
 {
 
@@ -57,10 +51,10 @@ public:
 private Q_SLOTS:
 
     void slotSettingsChanged();
+    void slotAssignSettings2Widget();
 
 private:
 
-    void assignSettings2Widget();
     bool toolOperations();
     int  queryFontSize(const QString& text, const QFont& font, int length);
 
@@ -71,4 +65,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* AUTO_CORRECTION_H */
+#endif /* WATERMARK_H */

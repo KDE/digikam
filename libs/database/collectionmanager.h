@@ -253,7 +253,9 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 
-    void deviceChange(const QString &);
+    void deviceAdded(const QString &);
+    void deviceRemoved(const QString &);
+    void accessibilityChanged(bool, const QString&);
     void slotAlbumRootChange(const AlbumRootChangeset& changeset);
 
 private:

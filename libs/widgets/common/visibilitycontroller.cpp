@@ -24,15 +24,6 @@
 #include "visibilitycontroller.h"
 #include "visibilitycontroller.moc"
 
-// Qt includes
-
-// KDE includes
-
-#include <kdebug.h>
-
-// Local includes
-
-
 namespace Digikam
 {
 
@@ -204,6 +195,5 @@ void VisibilityController::allSteps()
             d->containerWidget->setUpdatesEnabled(true);
     }
 }
-
 
 } // namespace Digikam

@@ -27,10 +27,6 @@
 
 #include "databasecorebackend_p.h"
 
-// Qt includes
-
-// KDE includes
-
 // Local includes
 
 #include "databasewatch.h"

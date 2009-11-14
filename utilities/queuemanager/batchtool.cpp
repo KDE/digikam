@@ -26,10 +26,10 @@
 
 // Qt includes
 
-#include <QWidget>
 #include <QDataStream>
 #include <QDateTime>
 #include <QFileInfo>
+#include <QWidget>
 
 // KDE includes
 
@@ -65,7 +65,7 @@ public:
     QString                    toolTitle;          // User friendly tool title.
     QString                    toolDescription;    // User friendly tool description.
 
-    QWidget                   *settingsWidget;
+    QWidget*                   settingsWidget;
 
     KIcon                      toolIcon;
 
@@ -77,7 +77,7 @@ public:
 
     BatchToolSettings          settings;
 
-    BatchToolObserver         *observer;
+    BatchToolObserver*         observer;
 
     BatchTool::BatchToolGroup  toolGroup;
 };
@@ -110,6 +110,12 @@ BatchTool::BatchTool(const QString& name, BatchToolGroup group, QObject* parent)
     d->observer  = new BatchToolObserver(d);
     d->toolGroup = group;
     setObjectName(name);
+
+    // NOTE: see B.K.O #209225 : signal/slot connection used internally to prevent crash when settings
+    // are assigned to settings widget by main thread to tool thread.
+
+    connect(this, SIGNAL(signalSettingsChanged(const BatchToolSettings&)),
+            this, SLOT(slotAssignSettings2Widget()));
 }
 
 BatchTool::~BatchTool()
@@ -172,7 +178,6 @@ void BatchTool::slotResetSettingsToDefault()
 void BatchTool::setSettings(const BatchToolSettings& settings)
 {
     d->settings = settings;
-    assignSettings2Widget();
     emit signalSettingsChanged(d->settings);
 }
 
@@ -260,12 +265,12 @@ void BatchTool::setOutputUrlFromInputUrl()
 {
     QFileInfo fi(inputUrl().fileName());
 
-    QString path(workingUrl().path());
+    QString path(workingUrl().toLocalFile());
     path.append("/.");
     path.append(QString::number(QDateTime::currentDateTime().toTime_t()));
     path.append("-");
     path.append(fi.fileName());
-    kDebug(50003) << "path: " << path;
+    kDebug() << "path: " << path;
 
     KUrl url;
     url.setPath(path);
@@ -285,7 +290,7 @@ bool BatchTool::loadToDImg()
 {
     if (!d->image.isNull()) return true;
 
-    return d->image.load(inputUrl().path(), d->observer);
+    return d->image.load(inputUrl().toLocalFile(), d->observer);
 }
 
 bool BatchTool::savefromDImg()
@@ -298,11 +303,11 @@ bool BatchTool::savefromDImg()
         // In case of output support is not set for ex. with all tool which do not convert to new format.
         DImg::FORMAT format = (DImg::FORMAT)(d->image.attribute("detectedFileFormat").toInt());
         d->image.updateMetadata(DImg::formatToMimeType(format), QString(), getExifSetOrientation());
-        return( d->image.save(outputUrl().path(), format, d->observer) );
+        return( d->image.save(outputUrl().toLocalFile(), format, d->observer) );
     }
 
     d->image.updateMetadata(frm, QString(), getExifSetOrientation());
-    bool b   = d->image.save(outputUrl().path(), frm, d->observer);
+    bool b   = d->image.save(outputUrl().toLocalFile(), frm, d->observer);
     d->image = DImg();
     return b;
 }
@@ -316,15 +321,15 @@ bool BatchTool::apply()
 {
     d->cancel = false;
 
-    kDebug(50003) << "Tool:       " << toolTitle();
-    kDebug(50003) << "Input url:  " << inputUrl();
-    kDebug(50003) << "Output url: " << outputUrl();
-    kDebug(50003) << "Settings:   ";
+    kDebug() << "Tool:       " << toolTitle();
+    kDebug() << "Input url:  " << inputUrl();
+    kDebug() << "Output url: " << outputUrl();
+    kDebug() << "Settings:   ";
 
     BatchToolSettings prm = settings();
     for (BatchToolSettings::const_iterator it = prm.constBegin() ; it != prm.constEnd() ; ++it)
     {
-        kDebug(50003) << "   " << it.key() << ": " << it.value();
+        kDebug() << "   " << it.key() << ": " << it.value();
     }
 
     return toolOperations();

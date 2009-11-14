@@ -43,11 +43,13 @@
 #include <kcombobox.h>
 #include <kicon.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 // Local includes
 
 #include "colorgradientwidget.h"
 #include "histogramwidget.h"
+#include "globals.h"
 
 namespace Digikam
 {
@@ -66,9 +68,12 @@ public:
         colorsCB        = 0;
         hGradient       = 0;
         histogramWidget = 0;
+        colorsLabel     = 0;
     }
 
     QButtonGroup*        scaleBG;
+
+    QLabel*              colorsLabel;
 
     QToolButton*         linHistoButton;
     QToolButton*         logHistoButton;
@@ -80,142 +85,11 @@ public:
     HistogramWidget*     histogramWidget;
 };
 
-HistogramBox::HistogramBox(QWidget *parent, int histogramType, bool selectMode)
+HistogramBox::HistogramBox(QWidget *parent, HistogramBoxType type, bool selectMode)
             : QWidget(parent), d(new HistogramBoxPriv)
 {
-    d->channelCB = new KComboBox(this);
-
-    // all possible channels for histogram widget are defined in this map
-    QMap<int, QPair<QString, QString> > channelDescMap;
-
-    // this string will contain the WhatsThis message for the channelCB
-    QString channelCBDescr(i18n("<p>Select the histogram channel to display:</p>"));
-
-    // those pairs hold the combobox text and WhatsThis description for each channel item
-    typedef QPair<QString, QString> ChannelPair;
-
-    ChannelPair luminosityPair(i18nc("The luminosity channel", "Luminosity"),
-                               i18n("<b>Luminosity</b>: display the image's luminosity values."));
-
-    ChannelPair redPair(i18nc("The red channel", "Red"),
-                        i18n("<b>Red</b>: display the red image-channel values."));
-
-    ChannelPair greenPair(i18nc("The green channel", "Green"),
-                          i18n("<b>Green</b>: display the green image-channel values."));
-
-    ChannelPair bluePair(i18nc("The blue channel", "Blue"),
-                         i18n("<b>Blue</b>: display the blue image-channel values."));
-
-    ChannelPair colorsPair(i18nc("The colors channel", "Colors"),
-                           i18n("<b>Colors</b>: Display all color channel values at the same time."));
-
-    ChannelPair alphaPair(i18nc("The alpha channel", "Alpha"),
-                          i18n("<b>Alpha</b>: display the alpha image-channel values. "
-                               "This channel corresponds to the transparency value and "
-                               "is supported by some image formats, such as PNG or TIF."));
-
-    channelDescMap.insert(LuminosityChannel, luminosityPair);
-    channelDescMap.insert(RedChannel, redPair);
-    channelDescMap.insert(GreenChannel, greenPair);
-    channelDescMap.insert(BlueChannel, bluePair);
-    channelDescMap.insert(ColorChannels, colorsPair);
-    channelDescMap.insert(AlphaChannel, alphaPair);
-
-    switch (histogramType)
-    {
-        case RGB:
-            d->channelCB->addItem(channelDescMap[RedChannel].first, QVariant(RedChannel));
-            d->channelCB->addItem(channelDescMap[GreenChannel].first, QVariant(GreenChannel));
-            d->channelCB->addItem(channelDescMap[BlueChannel].first, QVariant(BlueChannel));
-            channelCBDescr.append("<p>");
-            channelCBDescr.append(channelDescMap[RedChannel].second).append("<br/>");
-            channelCBDescr.append(channelDescMap[GreenChannel].second).append("<br/>");
-            channelCBDescr.append(channelDescMap[BlueChannel].second);
-            channelCBDescr.append("</p>");
-            break;
-
-        case RGBA:
-            d->channelCB->addItem(channelDescMap[RedChannel].first, QVariant(RedChannel));
-            d->channelCB->addItem(channelDescMap[GreenChannel].first, QVariant(GreenChannel));
-            d->channelCB->addItem(channelDescMap[BlueChannel].first, QVariant(BlueChannel));
-            d->channelCB->addItem(channelDescMap[AlphaChannel].first, QVariant(AlphaChannel));
-            channelCBDescr.append("<p>");
-            channelCBDescr.append(channelDescMap[RedChannel].second).append("<br/>");
-            channelCBDescr.append(channelDescMap[GreenChannel].second).append("<br/>");
-            channelCBDescr.append(channelDescMap[BlueChannel].second).append("<br/>");
-            channelCBDescr.append(channelDescMap[AlphaChannel].second);
-            channelCBDescr.append("</p>");
-            break;
-
-        case LRGB:
-            d->channelCB->addItem(channelDescMap[LuminosityChannel].first, QVariant(LuminosityChannel));
-            d->channelCB->addItem(channelDescMap[RedChannel].first, QVariant(RedChannel));
-            d->channelCB->addItem(channelDescMap[GreenChannel].first, QVariant(GreenChannel));
-            d->channelCB->addItem(channelDescMap[BlueChannel].first, QVariant(BlueChannel));
-            channelCBDescr.append("<p>");
-            channelCBDescr.append(channelDescMap[LuminosityChannel].second).append("<br/>");
-            channelCBDescr.append(channelDescMap[RedChannel].second).append("<br/>");
-            channelCBDescr.append(channelDescMap[GreenChannel].second).append("<br/>");
-            channelCBDescr.append(channelDescMap[BlueChannel].second);
-            channelCBDescr.append("</p>");
-            break;
-
-        case LRGBA:
-            d->channelCB->addItem(channelDescMap[LuminosityChannel].first, QVariant(LuminosityChannel));
-            d->channelCB->addItem(channelDescMap[RedChannel].first, QVariant(RedChannel));
-            d->channelCB->addItem(channelDescMap[GreenChannel].first, QVariant(GreenChannel));
-            d->channelCB->addItem(channelDescMap[BlueChannel].first, QVariant(BlueChannel));
-            d->channelCB->addItem(channelDescMap[AlphaChannel].first, QVariant(AlphaChannel));
-            channelCBDescr.append("<p>");
-            channelCBDescr.append(channelDescMap[LuminosityChannel].second).append("<br/>");
-            channelCBDescr.append(channelDescMap[RedChannel].second).append("<br/>");
-            channelCBDescr.append(channelDescMap[GreenChannel].second).append("<br/>");
-            channelCBDescr.append(channelDescMap[BlueChannel].second).append("<br/>");
-            channelCBDescr.append(channelDescMap[AlphaChannel].second);
-            channelCBDescr.append("</p>");
-            break;
-
-        case LRGBC:
-            d->channelCB->addItem(channelDescMap[LuminosityChannel].first, QVariant(LuminosityChannel));
-            d->channelCB->addItem(channelDescMap[RedChannel].first, QVariant(RedChannel));
-            d->channelCB->addItem(channelDescMap[GreenChannel].first, QVariant(GreenChannel));
-            d->channelCB->addItem(channelDescMap[BlueChannel].first, QVariant(BlueChannel));
-            d->channelCB->addItem(channelDescMap[ColorChannels].first, QVariant(ColorChannels));
-            channelCBDescr.append("<p>");
-            channelCBDescr.append(channelDescMap[LuminosityChannel].second).append("<br/>");
-            channelCBDescr.append(channelDescMap[RedChannel].second).append("<br/>");
-            channelCBDescr.append(channelDescMap[GreenChannel].second).append("<br/>");
-            channelCBDescr.append(channelDescMap[BlueChannel].second).append("<br/>");
-            channelCBDescr.append(channelDescMap[ColorChannels].second);
-            channelCBDescr.append("</p>");
-            break;
-
-        case LRGBAC:
-            d->channelCB->addItem(channelDescMap[LuminosityChannel].first, QVariant(LuminosityChannel));
-            d->channelCB->addItem(channelDescMap[RedChannel].first, QVariant(RedChannel));
-            d->channelCB->addItem(channelDescMap[GreenChannel].first, QVariant(GreenChannel));
-            d->channelCB->addItem(channelDescMap[BlueChannel].first, QVariant(BlueChannel));
-            d->channelCB->addItem(channelDescMap[AlphaChannel].first, QVariant(AlphaChannel));
-            d->channelCB->addItem(channelDescMap[ColorChannels].first, QVariant(ColorChannels));
-            channelCBDescr.append("<p>");
-            channelCBDescr.append(channelDescMap[LuminosityChannel].second).append("<br/>");
-            channelCBDescr.append(channelDescMap[RedChannel].second).append("<br/>");
-            channelCBDescr.append(channelDescMap[GreenChannel].second).append("<br/>");
-            channelCBDescr.append(channelDescMap[BlueChannel].second).append("<br/>");
-            channelCBDescr.append(channelDescMap[AlphaChannel].second).append("<br/>");
-            channelCBDescr.append(channelDescMap[ColorChannels].second);
-            channelCBDescr.append("</p>");
-            break;
-
-        default:
-            break;
-    }
-
-    d->channelCB->setWhatsThis(channelCBDescr);
-
-    // --------------------------------------------------------
-
-    QLabel *channelLabel    = new QLabel(i18n("Channel:"), this);
+    d->channelCB         = new KComboBox(this);
+    QLabel *channelLabel = new QLabel(i18n("Channel:"), this);
     channelLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
     QWidget *scaleBox = new QWidget(this);
@@ -230,13 +104,13 @@ HistogramBox::HistogramBox(QWidget *parent, int histogramType, bool selectMode)
     d->linHistoButton->setToolTip(i18nc("linear histogram scaling mode", "Linear"));
     d->linHistoButton->setIcon(KIcon("view-object-histogram-linear"));
     d->linHistoButton->setCheckable(true);
-    d->scaleBG->addButton(d->linHistoButton, HistogramWidget::LinScaleHistogram);
+    d->scaleBG->addButton(d->linHistoButton, LinScaleHistogram);
 
     d->logHistoButton = new QToolButton(scaleBox);
     d->logHistoButton->setToolTip(i18nc("logarithmic histogram scaling mode", "Logarithmic"));
     d->logHistoButton->setIcon(KIcon("view-object-histogram-logarithmic"));
     d->logHistoButton->setCheckable(true);
-    d->scaleBG->addButton(d->logHistoButton, HistogramWidget::LogScaleHistogram);
+    d->scaleBG->addButton(d->logHistoButton, LogScaleHistogram);
 
     hlay->setMargin(0);
     hlay->setSpacing(0);
@@ -246,8 +120,8 @@ HistogramBox::HistogramBox(QWidget *parent, int histogramType, bool selectMode)
     d->scaleBG->setExclusive(true);
     d->logHistoButton->setChecked(true);
 
-    QLabel *colorsLabel = new QLabel(i18n("Colors:"), this);
-    colorsLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    d->colorsLabel = new QLabel(i18n("Colors:"), this);
+    d->colorsLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     d->colorsCB = new KComboBox(this);
     d->colorsCB->addItem(i18nc("the red channel for colors histogram mode",     "Red"));
     d->colorsCB->addItem(i18nc("the green channel for colors histogram mode",   "Green"));
@@ -257,7 +131,7 @@ HistogramBox::HistogramBox(QWidget *parent, int histogramType, bool selectMode)
                                    "<p><b>Red</b>: Draw the red image channel in the foreground.<br/>"
                                    "<b>Green</b>: Draw the green image channel in the foreground.<br/>"
                                    "<b>Blue</b>: Draw the blue image channel in the foreground.</p>"));
-    colorsLabel->hide();
+    d->colorsLabel->hide();
     d->colorsCB->hide();
 
     QWidget *histoBox = new QWidget;
@@ -278,27 +152,20 @@ HistogramBox::HistogramBox(QWidget *parent, int histogramType, bool selectMode)
     histoBox->setLayout(histoBoxLayout);
 
     QGridLayout* mainLayout = new QGridLayout;
-    mainLayout->addWidget(channelLabel, 0, 0, 1, 1);
-    mainLayout->addWidget(d->channelCB, 0, 1, 1, 1);
-    mainLayout->addWidget(scaleBox,     0, 3, 1, 2);
-    mainLayout->addWidget(colorsLabel,  1, 0, 1, 1);
-    mainLayout->addWidget(d->colorsCB,  1, 1, 1, 1);
-    mainLayout->addWidget(histoBox,     2, 0, 1, 5);
+    mainLayout->addWidget(channelLabel,   0, 0, 1, 1);
+    mainLayout->addWidget(d->channelCB,   0, 1, 1, 1);
+    mainLayout->addWidget(scaleBox,       0, 3, 1, 2);
+    mainLayout->addWidget(d->colorsLabel, 1, 0, 1, 1);
+    mainLayout->addWidget(d->colorsCB,    1, 1, 1, 1);
+    mainLayout->addWidget(histoBox,       2, 0, 1, 5);
     mainLayout->setColumnStretch(2, 10);
     mainLayout->setSpacing(5);
     mainLayout->setMargin(0);
     setLayout(mainLayout);
 
-    switch (histogramType)
-    {
-        case LRGBC:
-        case LRGBAC:
-            colorsLabel->show();
-            d->colorsCB->show();
-            break;
-        default:
-            break;
-    }
+    // ---------------------------------------------------------------
+
+    setHistogramType(type);
 
     // ---------------------------------------------------------------
 
@@ -373,14 +240,14 @@ void HistogramBox::setColorsChannel(int color)
     emit signalColorsChanged();
 }
 
-int HistogramBox::scale() const
+HistogramScale HistogramBox::scale() const
 {
-    return d->scaleBG->checkedId();
+    return static_cast<HistogramScale>(d->scaleBG->checkedId());
 }
 
-void HistogramBox::setScale(int scale)
+void HistogramBox::setScale(HistogramScale scale)
 {
-    d->scaleBG->button(scale)->setChecked(true);
+    d->scaleBG->button((int)scale)->setChecked(true);
     slotScaleChanged();
     emit signalScaleChanged();
 }
@@ -395,37 +262,37 @@ void HistogramBox::slotChannelChanged()
     switch (channel())
     {
         case LuminosityChannel:
-            d->histogramWidget->m_channelType = HistogramWidget::ValueHistogram;
+            d->histogramWidget->m_channelType = LuminosityChannel;
             setGradientColors(QColor("black"), QColor("white"));
             setColorsEnabled(false);
             break;
 
         case RedChannel:
-            d->histogramWidget->m_channelType = HistogramWidget::RedChannelHistogram;
+            d->histogramWidget->m_channelType = RedChannel;
             setGradientColors(QColor("black"), QColor("red"));
             setColorsEnabled(false);
             break;
 
         case GreenChannel:
-            d->histogramWidget->m_channelType = HistogramWidget::GreenChannelHistogram;
+            d->histogramWidget->m_channelType = GreenChannel;
             setGradientColors(QColor("black"), QColor("green"));
             setColorsEnabled(false);
             break;
 
         case BlueChannel:
-            d->histogramWidget->m_channelType = HistogramWidget::BlueChannelHistogram;
+            d->histogramWidget->m_channelType = BlueChannel;
             setGradientColors(QColor("black"), QColor("blue"));
             setColorsEnabled(false);
             break;
 
         case AlphaChannel:
-            d->histogramWidget->m_channelType = HistogramWidget::AlphaChannelHistogram;
+            d->histogramWidget->m_channelType = AlphaChannel;
             setGradientColors(QColor("black"), QColor("white"));
             setColorsEnabled(false);
             break;
 
         case ColorChannels:
-            d->histogramWidget->m_channelType = HistogramWidget::ColorChannelsHistogram;
+            d->histogramWidget->m_channelType = ColorChannels;
             setGradientColors(QColor("black"), QColor("white"));
             setColorsEnabled(true);
             break;
@@ -444,20 +311,161 @@ void HistogramBox::slotColorsChanged()
 {
     switch (colorsChannel())
     {
-        case HistogramWidget::GreenColor:
-            d->histogramWidget->m_colorType = HistogramWidget::GreenColor;
+        case ColorChannelsGreen:
+            d->histogramWidget->m_colorType = ColorChannelsGreen;
             break;
 
-        case HistogramWidget::BlueColor:
-            d->histogramWidget->m_colorType = HistogramWidget::BlueColor;
+        case ColorChannelsBlue:
+            d->histogramWidget->m_colorType = ColorChannelsBlue;
             break;
 
         default: // Red.
-            d->histogramWidget->m_colorType = HistogramWidget::RedColor;
+            d->histogramWidget->m_colorType = ColorChannelsRed;
             break;
     }
 
     d->histogramWidget->repaint();
+}
+
+void HistogramBox::setHistogramType(HistogramBoxType type)
+{
+    // all possible channels for histogram widget are defined in this map
+    QMap<int, QPair<QString, QString> > channelDescMap;
+
+    // this string will contain the WhatsThis message for the channelCB
+    QString channelCBDescr(i18n("<p>Select the histogram channel to display:</p>"));
+
+    // those pairs hold the combobox text and WhatsThis description for each channel item
+    typedef QPair<QString, QString> ChannelPair;
+
+    ChannelPair luminosityPair(i18nc("The luminosity channel", "Luminosity"), i18n(
+            "<b>Luminosity</b>: display the image's luminosity values."));
+
+    ChannelPair redPair(i18nc("The red channel", "Red"), i18n(
+            "<b>Red</b>: display the red image-channel values."));
+
+    ChannelPair greenPair(i18nc("The green channel", "Green"), i18n(
+            "<b>Green</b>: display the green image-channel values."));
+
+    ChannelPair bluePair(i18nc("The blue channel", "Blue"), i18n(
+            "<b>Blue</b>: display the blue image-channel values."));
+
+    ChannelPair colorsPair(i18nc("The colors channel", "Colors"), i18n(
+            "<b>Colors</b>: Display all color channel values at the same time."));
+
+    ChannelPair alphaPair(i18nc("The alpha channel", "Alpha"), i18n(
+            "<b>Alpha</b>: display the alpha image-channel values. "
+                "This channel corresponds to the transparency value and "
+                "is supported by some image formats, such as PNG or TIF."));
+
+    channelDescMap.insert(LuminosityChannel, luminosityPair);
+    channelDescMap.insert(RedChannel, redPair);
+    channelDescMap.insert(GreenChannel, greenPair);
+    channelDescMap.insert(BlueChannel, bluePair);
+    channelDescMap.insert(ColorChannels, colorsPair);
+    channelDescMap.insert(AlphaChannel, alphaPair);
+
+    switch (type)
+    {
+        case RGB:
+            d->channelCB->clear();
+            d->channelCB->addItem(channelDescMap[RedChannel].first, QVariant(RedChannel));
+            d->channelCB->addItem(channelDescMap[GreenChannel].first, QVariant(GreenChannel));
+            d->channelCB->addItem(channelDescMap[BlueChannel].first, QVariant(BlueChannel));
+            channelCBDescr.append("<p>");
+            channelCBDescr.append(channelDescMap[RedChannel].second).append("<br/>");
+            channelCBDescr.append(channelDescMap[GreenChannel].second).append("<br/>");
+            channelCBDescr.append(channelDescMap[BlueChannel].second);
+            channelCBDescr.append("</p>");
+            break;
+
+        case RGBA:
+            d->channelCB->clear();
+            d->channelCB->addItem(channelDescMap[RedChannel].first, QVariant(RedChannel));
+            d->channelCB->addItem(channelDescMap[GreenChannel].first, QVariant(GreenChannel));
+            d->channelCB->addItem(channelDescMap[BlueChannel].first, QVariant(BlueChannel));
+            d->channelCB->addItem(channelDescMap[AlphaChannel].first, QVariant(AlphaChannel));
+            channelCBDescr.append("<p>");
+            channelCBDescr.append(channelDescMap[RedChannel].second).append("<br/>");
+            channelCBDescr.append(channelDescMap[GreenChannel].second).append("<br/>");
+            channelCBDescr.append(channelDescMap[BlueChannel].second).append("<br/>");
+            channelCBDescr.append(channelDescMap[AlphaChannel].second);
+            channelCBDescr.append("</p>");
+            break;
+
+        case LRGB:
+            d->channelCB->clear();
+            d->channelCB->addItem(channelDescMap[LuminosityChannel].first, QVariant(LuminosityChannel));
+            d->channelCB->addItem(channelDescMap[RedChannel].first, QVariant(RedChannel));
+            d->channelCB->addItem(channelDescMap[GreenChannel].first, QVariant(GreenChannel));
+            d->channelCB->addItem(channelDescMap[BlueChannel].first, QVariant(BlueChannel));
+            channelCBDescr.append("<p>");
+            channelCBDescr.append(channelDescMap[LuminosityChannel].second).append("<br/>");
+            channelCBDescr.append(channelDescMap[RedChannel].second).append("<br/>");
+            channelCBDescr.append(channelDescMap[GreenChannel].second).append("<br/>");
+            channelCBDescr.append(channelDescMap[BlueChannel].second);
+            channelCBDescr.append("</p>");
+            break;
+
+        case LRGBA:
+            d->channelCB->clear();
+            d->channelCB->addItem(channelDescMap[LuminosityChannel].first, QVariant(LuminosityChannel));
+            d->channelCB->addItem(channelDescMap[RedChannel].first, QVariant(RedChannel));
+            d->channelCB->addItem(channelDescMap[GreenChannel].first, QVariant(GreenChannel));
+            d->channelCB->addItem(channelDescMap[BlueChannel].first, QVariant(BlueChannel));
+            d->channelCB->addItem(channelDescMap[AlphaChannel].first, QVariant(AlphaChannel));
+            channelCBDescr.append("<p>");
+            channelCBDescr.append(channelDescMap[LuminosityChannel].second).append("<br/>");
+            channelCBDescr.append(channelDescMap[RedChannel].second).append("<br/>");
+            channelCBDescr.append(channelDescMap[GreenChannel].second).append("<br/>");
+            channelCBDescr.append(channelDescMap[BlueChannel].second).append("<br/>");
+            channelCBDescr.append(channelDescMap[AlphaChannel].second);
+            channelCBDescr.append("</p>");
+            break;
+
+        case LRGBC:
+            d->channelCB->clear();
+            d->channelCB->addItem(channelDescMap[LuminosityChannel].first, QVariant(LuminosityChannel));
+            d->channelCB->addItem(channelDescMap[RedChannel].first, QVariant(RedChannel));
+            d->channelCB->addItem(channelDescMap[GreenChannel].first, QVariant(GreenChannel));
+            d->channelCB->addItem(channelDescMap[BlueChannel].first, QVariant(BlueChannel));
+            d->channelCB->addItem(channelDescMap[ColorChannels].first, QVariant(ColorChannels));
+            channelCBDescr.append("<p>");
+            channelCBDescr.append(channelDescMap[LuminosityChannel].second).append("<br/>");
+            channelCBDescr.append(channelDescMap[RedChannel].second).append("<br/>");
+            channelCBDescr.append(channelDescMap[GreenChannel].second).append("<br/>");
+            channelCBDescr.append(channelDescMap[BlueChannel].second).append("<br/>");
+            channelCBDescr.append(channelDescMap[ColorChannels].second);
+            channelCBDescr.append("</p>");
+            break;
+
+        case LRGBAC:
+            d->channelCB->clear();
+            d->channelCB->addItem(channelDescMap[LuminosityChannel].first, QVariant(LuminosityChannel));
+            d->channelCB->addItem(channelDescMap[RedChannel].first, QVariant(RedChannel));
+            d->channelCB->addItem(channelDescMap[GreenChannel].first, QVariant(GreenChannel));
+            d->channelCB->addItem(channelDescMap[BlueChannel].first, QVariant(BlueChannel));
+            d->channelCB->addItem(channelDescMap[AlphaChannel].first, QVariant(AlphaChannel));
+            d->channelCB->addItem(channelDescMap[ColorChannels].first, QVariant(ColorChannels));
+            channelCBDescr.append("<p>");
+            channelCBDescr.append(channelDescMap[LuminosityChannel].second).append("<br/>");
+            channelCBDescr.append(channelDescMap[RedChannel].second).append("<br/>");
+            channelCBDescr.append(channelDescMap[GreenChannel].second).append("<br/>");
+            channelCBDescr.append(channelDescMap[BlueChannel].second).append("<br/>");
+            channelCBDescr.append(channelDescMap[AlphaChannel].second).append("<br/>");
+            channelCBDescr.append(channelDescMap[ColorChannels].second);
+            channelCBDescr.append("</p>");
+            break;
+
+        default:
+            break;
+    }
+
+    bool showColorWidgets = (type == LRGBC || type == LRGBAC);
+    d->colorsLabel->setVisible(showColorWidgets);
+    d->colorsCB->setVisible(showColorWidgets);
+
+    d->channelCB->setWhatsThis(channelCBDescr);
 }
 
 } // namespace Digikam

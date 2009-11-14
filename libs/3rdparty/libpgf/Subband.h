@@ -87,6 +87,7 @@ public:
 	/// A scalar quantization (with dead-zone) is used. A large quantization value
 	/// results in strong quantization and therefore in big quality loss.
 	/// @param quantParam A quantization parameter (larger or equal to 0)
+	/// @level Level
 	void Dequantize(int quantParam, int level);
 
 	//////////////////////////////////////////////////////////////////////
@@ -135,6 +136,7 @@ public:
 
 	/////////////////////////////////////////////////////////////////////
 	/// Set data buffer position to given position + one row.
+	/// @param pos Given position
 	void IncBuffRow(UINT32 pos)	{ m_dataPos = pos + m_dataWidth; }
 
 #endif

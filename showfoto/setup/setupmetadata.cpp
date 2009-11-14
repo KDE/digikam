@@ -27,31 +27,31 @@
 // Qt includes
 
 #include <QButtonGroup>
-#include <QGroupBox>
 #include <QCheckBox>
 #include <QFrame>
+#include <QGridLayout>
+#include <QGroupBox>
 #include <QLabel>
 #include <QVBoxLayout>
-#include <QGridLayout>
 
 // KDE includes
 
-#include <klocale.h>
-#include <kdialog.h>
-#include <kurllabel.h>
-#include <kiconloader.h>
-#include <kglobalsettings.h>
-#include <kstandarddirs.h>
-#include <kvbox.h>
-#include <ktoolinvocation.h>
-#include <ktabwidget.h>
 #include <kapplication.h>
 #include <kconfig.h>
+#include <kdialog.h>
+#include <kglobalsettings.h>
+#include <kiconloader.h>
+#include <klocale.h>
+#include <kstandarddirs.h>
+#include <ktabwidget.h>
+#include <ktoolinvocation.h>
+#include <kurllabel.h>
+#include <kvbox.h>
 
-// Libkexiv2 includes
+// LibKExiv2 includes
 
-#include <libkexiv2/version.h>
 #include <libkexiv2/kexiv2.h>
+#include <libkexiv2/version.h>
 
 // Local includes
 
@@ -66,19 +66,27 @@ class SetupMetadataPriv
 {
 public:
 
-    SetupMetadataPriv()
-    {
-        exifRotateBox         = 0;
-        exifSetOrientationBox = 0;
-        tagsCfgPanel          = 0;
-    }
+    SetupMetadataPriv() :
+        configGroupName("ImageViewer Settings"),
+        configEXIFRotateEntry("EXIF Rotate"),
+        configEXIFSetOrientationEntry("EXIF Set Orientation"),
 
-    QCheckBox     *exifRotateBox;
-    QCheckBox     *exifSetOrientationBox;
+        exifRotateBox(0),
+        exifSetOrientationBox(0),
+        tab(0),
+        tagsCfgPanel(0)
+        {}
 
-    KTabWidget    *tab;
+    const QString  configGroupName;
+    const QString  configEXIFRotateEntry;
+    const QString  configEXIFSetOrientationEntry;
 
-    MetadataPanel *tagsCfgPanel;
+    QCheckBox*     exifRotateBox;
+    QCheckBox*     exifSetOrientationBox;
+
+    KTabWidget*    tab;
+
+    MetadataPanel* tagsCfgPanel;
 };
 
 SetupMetadata::SetupMetadata(QWidget* parent )
@@ -87,7 +95,6 @@ SetupMetadata::SetupMetadata(QWidget* parent )
     d->tab = new KTabWidget(viewport());
     setWidget(d->tab);
     setWidgetResizable(true);
-    viewport()->setAutoFillBackground(false);
 
     QWidget *panel          = new QWidget(d->tab);
     QVBoxLayout *mainLayout = new QVBoxLayout(panel);
@@ -129,7 +136,7 @@ SetupMetadata::SetupMetadata(QWidget* parent )
                     "a standard used by most digital cameras today to store technical "
                     "information (like aperture and shutter speed) about an image.</p>"));
 
-    txt.append(i18n("<p><a href='http://en.wikipedia.org/wiki/IPTC'>IPTC</a> - "
+    txt.append(i18n("<p><a href='http://en.wikipedia.org/wiki/IPTC_Information_Interchange_Model'>IPTC</a> - "
                     "an older standard used in digital photography to store "
                     "photographer information in images.</p>"));
 
@@ -167,6 +174,12 @@ SetupMetadata::SetupMetadata(QWidget* parent )
 
     connect(exiv2LogoLabel, SIGNAL(leftClickedUrl(const QString&)),
             this, SLOT(slotProcessExiv2Url(const QString&)));
+
+    // --------------------------------------------------------
+
+    setAutoFillBackground(false);
+    viewport()->setAutoFillBackground(false);
+    d->tab->setAutoFillBackground(false);
 }
 
 SetupMetadata::~SetupMetadata()
@@ -179,23 +192,23 @@ void SetupMetadata::slotProcessExiv2Url(const QString& url)
     KToolInvocation::self()->invokeBrowser(url);
 }
 
-void SetupMetadata::applySettings()
-{
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(QString("ImageViewer Settings"));
-    group.writeEntry("EXIF Rotate",          d->exifRotateBox->isChecked());
-    group.writeEntry("EXIF Set Orientation", d->exifSetOrientationBox->isChecked());
-    config->sync();
-
-    d->tagsCfgPanel->applySettings();
-}
-
 void SetupMetadata::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(QString("ImageViewer Settings"));
-    d->exifRotateBox->setChecked(group.readEntry("EXIF Rotate", true));
-    d->exifSetOrientationBox->setChecked(group.readEntry("EXIF Set Orientation", true));
+    KConfigGroup group        = config->group(d->configGroupName);
+    d->exifRotateBox->setChecked(group.readEntry(d->configEXIFRotateEntry,                 true));
+    d->exifSetOrientationBox->setChecked(group.readEntry(d->configEXIFSetOrientationEntry, true));
+}
+
+void SetupMetadata::applySettings()
+{
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(d->configGroupName);
+    group.writeEntry(d->configEXIFRotateEntry,         d->exifRotateBox->isChecked());
+    group.writeEntry(d->configEXIFSetOrientationEntry, d->exifSetOrientationBox->isChecked());
+    config->sync();
+
+    d->tagsCfgPanel->applySettings();
 }
 
 }  // namespace ShowFoto

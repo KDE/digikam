@@ -29,12 +29,11 @@
 // KDE includes
 
 #include <kconfig.h>
-#include <kdebug.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 // Local includes
 
-#include "constants.h"
 #include "album.h"
 #include "albumdb.h"
 #include "albumsettings.h"
@@ -76,7 +75,7 @@ KIPI::ImageCollection KipiInterface::currentAlbum()
     if ( currAlbum )
     {
         return KIPI::ImageCollection(new KipiImageCollection(KipiImageCollection::AllItems,
-                                         currAlbum, 
+                                         currAlbum,
 #if KIPI_VERSION >= 0x000300
                                          hostSetting("FileExtensions").toString()));
 #else
@@ -95,7 +94,7 @@ KIPI::ImageCollection KipiInterface::currentSelection()
     if ( currAlbum )
     {
         return KIPI::ImageCollection(new KipiImageCollection(KipiImageCollection::SelectedItems,
-                                                             currAlbum, 
+                                                             currAlbum,
 #if KIPI_VERSION >= 0x000300
                                          hostSetting("FileExtensions").toString()));
 #else
@@ -162,6 +161,7 @@ void KipiInterface::refreshImages(const KUrl::List& urls)
         QString path = url.toLocalFile();
         ThumbnailLoadThread::deleteThumbnail(path);
         LoadingCacheInterface::fileChanged(path);
+        ImageAttributesWatch::instance()->fileMetadataChanged(url);
         dirs << url.directory();
     }
     foreach (const QString& dir, dirs)
@@ -188,7 +188,7 @@ bool KipiInterface::addImage( const KUrl& url, QString& errmsg )
 
     if ( url.isValid() == false )
     {
-        errmsg = i18n("Target URL %1 is not valid.",url.path());
+        errmsg = i18n("Target URL %1 is not valid.",url.toLocalFile());
         return false;
     }
 
@@ -210,7 +210,7 @@ void KipiInterface::delImage( const KUrl& url )
     KUrl rootURL(CollectionManager::instance()->albumRoot(url));
     if ( !rootURL.isParentOf(url) )
     {
-        kWarning(50003) << "URL not in the album library";
+        kWarning() << "URL not in the album library";
     }
 
     // Is there a PAlbum for this URL
@@ -224,7 +224,7 @@ void KipiInterface::delImage( const KUrl& url )
     }
     else
     {
-        kWarning(50003) << "Cannot find Parent album in the album library";
+        kWarning() << "Cannot find Parent album in the album library";
     }
 }
 
@@ -241,13 +241,13 @@ void KipiInterface::slotCurrentAlbumChanged( Album *album )
 void KipiInterface::thumbnail(const KUrl& url, int /*size*/)
 {
     // NOTE: size is not used here. Cache use the max pixmap size to store thumbs (256).
-    m_thumbLoadThread->find(url.path());
+    m_thumbLoadThread->find(url.toLocalFile());
 }
 
 void KipiInterface::thumbnails(const KUrl::List& list, int size)
 {
     for (KUrl::List::const_iterator it = list.constBegin(); it != list.constEnd(); ++it)
-        thumbnail((*it).path(), size);
+        thumbnail(*it, size);
 }
 
 void KipiInterface::slotThumbnailLoaded(const LoadingDescription& desc, const QPixmap& pix)

@@ -26,19 +26,18 @@
 
 // Qt includes
 
-#include <QWidget>
-#include <QLabel>
 #include <QCheckBox>
+#include <QLabel>
 #include <QSize>
+#include <QWidget>
 
 // KDE includes
 
-#include <kvbox.h>
-#include <klocale.h>
-#include <kdebug.h>
-#include <kiconloader.h>
 #include <kcombobox.h>
+#include <kiconloader.h>
+#include <klocale.h>
 #include <knuminput.h>
+#include <kvbox.h>
 
 // Local includes
 
@@ -97,7 +96,7 @@ BatchToolSettings Resize::defaultSettings()
     return settings;
 }
 
-void Resize::assignSettings2Widget()
+void Resize::slotAssignSettings2Widget()
 {
     m_comboBox->setCurrentIndex(settings()["LengthPreset"].toInt());
     m_useCustom->setChecked(settings()["UseCustom"].toBool());

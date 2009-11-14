@@ -23,12 +23,9 @@
 
 #include "albummodeldragdrophandler.h"
 
-// Qt includes
-
 // Local includes
 
 #include "abstractalbummodel.h"
-
 
 namespace Digikam
 {

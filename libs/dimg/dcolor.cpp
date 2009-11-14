@@ -27,10 +27,6 @@
 
 #include "dcolor.h"
 
-// KDE includes
-
-#include <kdebug.h>
-
 namespace Digikam
 {
 

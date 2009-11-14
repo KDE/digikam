@@ -27,15 +27,16 @@
 // Qt includes
 
 #include <QLabel>
+#include <QPointer>
 #include <QVBoxLayout>
 
 // KDE includes
 
-#include <kdebug.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kfiledialog.h>
 #include <kimageio.h>
+#include <kdebug.h>
 
 // LibKDcraw includes
 
@@ -138,9 +139,9 @@ void ImageDialogPreview::showPreview(const KUrl& url)
     {
         clearPreview();
         d->currentURL = url;
-        d->thumbLoadThread->find(d->currentURL.path());
+        d->thumbLoadThread->find(d->currentURL.toLocalFile());
 
-        d->metaIface.load(d->currentURL.path());
+        d->metaIface.load(d->currentURL.toLocalFile());
         PhotoInfoContainer info = d->metaIface.getPhotographInformation();
         if (!info.isEmpty())
         {
@@ -247,48 +248,49 @@ ImageDialog::ImageDialog(QWidget* parent, const KUrl& url, bool singleSelect, co
     {
         allPictures.insert(allPictures.indexOf("|"), QString(KDcrawIface::DcrawBinary::instance()->rawFiles()) + QString(" *.JPE *.TIF *.PGF"));
         patternList.removeAll(patternList[0]);
-        patternList.prepend(allPictures);
         // Added RAW file formats supported by dcraw program like a type mime.
         // Note: we cannot use here "image/x-raw" type mime from KDE because it is incomplete
         // or unavailable(see file #121242 in B.K.O).
-        patternList.append(i18n("\n%1|Camera RAW files", QString(KDcrawIface::DcrawBinary::instance()->rawFiles())));
+        patternList.prepend(i18n("\n%1|Camera RAW files", QString(KDcrawIface::DcrawBinary::instance()->rawFiles())));
+        patternList.prepend(allPictures);
     }
 #else
     allPictures.insert(allPictures.indexOf("|"), QString(KDcrawIface::KDcraw::rawFiles()) + QString(" *.JPE *.TIF *.PGF"));
     patternList.removeAll(patternList[0]);
-    patternList.prepend(allPictures);
     // Added RAW file formats supported by dcraw program like a type mime.
     // Note: we cannot use here "image/x-raw" type mime from KDE because it is incomplete
     // or unavailable(see file #121242 in B.K.O).
-    patternList.append(i18n("%1|Camera RAW files", QString(KDcrawIface::KDcraw::rawFiles())));
+    patternList.prepend(i18n("%1|Camera RAW files", QString(KDcrawIface::KDcraw::rawFiles())));
+    patternList.prepend(allPictures);
 #endif
     patternList.append(i18n("*.pgf|Progressive Graphics file"));
 
     d->fileFormats = patternList.join("\n");
 
-    kDebug(50003) << "file formats=" << d->fileFormats;
+    kDebug() << "file formats=" << d->fileFormats;
 
-    KFileDialog dlg(url, d->fileFormats, parent);
-    ImageDialogPreview *preview = new ImageDialogPreview(&dlg);
-    dlg.setPreviewWidget(preview);
-    dlg.setOperationMode(KFileDialog::Opening);
+    QPointer<KFileDialog> dlg   = new KFileDialog(url, d->fileFormats, parent);
+    ImageDialogPreview *preview = new ImageDialogPreview(dlg);
+    dlg->setPreviewWidget(preview);
+    dlg->setOperationMode(KFileDialog::Opening);
 
     if (d->singleSelect)
     {
-        dlg.setMode(KFile::File);
-        if (caption.isEmpty()) dlg.setCaption(i18n("Select an Image"));
-        else dlg.setWindowTitle(caption);
-        dlg.exec();
-        d->url = dlg.selectedUrl();
+        dlg->setMode(KFile::File);
+        if (caption.isEmpty()) dlg->setCaption(i18n("Select an Image"));
+        else dlg->setWindowTitle(caption);
+        dlg->exec();
+        d->url = dlg->selectedUrl();
     }
     else
     {
-        dlg.setMode(KFile::Files);
-        if (caption.isEmpty()) dlg.setCaption(i18n("Select Images"));
-        else dlg.setWindowTitle(caption);
-        dlg.exec();
-        d->urls = dlg.selectedUrls();
+        dlg->setMode(KFile::Files);
+        if (caption.isEmpty()) dlg->setCaption(i18n("Select Images"));
+        else dlg->setWindowTitle(caption);
+        dlg->exec();
+        d->urls = dlg->selectedUrls();
     }
+    delete dlg;
 }
 
 ImageDialog::~ImageDialog()

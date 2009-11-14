@@ -38,16 +38,15 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kglobal.h>
 #include <kio/global.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 // Local includes
 
 #include "albummanager.h"
 #include "albumsettings.h"
-#include "constants.h"
 #include "imagecategorydrawer.h"
 #include "imagecategorizedview.h"
 #include "imagedelegateoverlay.h"
@@ -322,7 +321,7 @@ void ImageDelegate::paint(QPainter * p, const QStyleOptionViewItem& option, cons
         r = d->dateRect;
         p->setFont(d->fontXtra);
         QString str = dateToString(date);
-        str = i18nc("date of image creation", "created : %1",str);
+        str = i18nc("date of image creation", "created: %1",str);
         p->drawText(r, Qt::AlignCenter, squeezedTextCached(p, r.width(), str));
     }
 
@@ -333,7 +332,7 @@ void ImageDelegate::paint(QPainter * p, const QStyleOptionViewItem& option, cons
         r = d->modDateRect;
         p->setFont(d->fontXtra);
         QString str = dateToString(date);
-        str = i18nc("date of last image modification", "modified : %1",str);
+        str = i18nc("date of last image modification", "modified: %1",str);
         p->drawText(r, Qt::AlignCenter, squeezedTextCached(p, r.width(), str));
     }
 
@@ -718,7 +717,7 @@ QPixmap ImageDelegate::thumbnailBorderPixmap(const QSize& pixSize) const
     return *cachePix;
 }
 
-QString ImageDelegate::dateToString(const QDateTime& datetime) const
+QString ImageDelegate::dateToString(const QDateTime& datetime)
 {
     return KGlobal::locale()->formatDateTime(datetime, KLocale::ShortDate, false);
 }
@@ -787,7 +786,7 @@ QString ImageDelegate::squeezedText(const QFontMetrics &fm, int width, const QSt
 
         if (letters >= 5)
         {
-            
+
             result = squeezedText;
         }
     }

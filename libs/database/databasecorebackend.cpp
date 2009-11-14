@@ -37,6 +37,7 @@
 #include <QSqlDriver>
 #include <QtCore/QRegExp>
 
+
 // KDE includes
 
 #include <kdebug.h>

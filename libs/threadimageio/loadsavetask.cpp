@@ -28,12 +28,10 @@
 
 #include <QApplication>
 
-// KDE includes
-
-#include <kdebug.h>
-
 // Local includes
 
+#include "iccmanager.h"
+#include "icctransform.h"
 #include "loadsavethread.h"
 #include "managedloadsavethread.h"
 #include "sharedloadsavethread.h"
@@ -86,14 +84,21 @@ bool LoadingTask::isShuttingDown()
 
 //---------------------------------------------------------------------------------------------------
 
+SharedLoadingTask::SharedLoadingTask(LoadSaveThread* thread, LoadingDescription description,
+                                     LoadSaveThread::AccessMode mode, LoadingTaskStatus loadingTaskStatus)
+                  : LoadingTask(thread, description, loadingTaskStatus),
+                   m_completed(false), m_accessMode(mode), m_usedProcess(0), m_resultLoadingDescription(description)
+{
+    if (m_accessMode == LoadSaveThread::AccessModeRead && needsPostProcessing())
+        m_accessMode = LoadSaveThread::AccessModeReadWrite;
+}
+
 void SharedLoadingTask::execute()
 {
     if (m_loadingTaskStatus == LoadingTaskStatusStopping)
         return;
     // send StartedLoadingEvent from each single Task, not via LoadingProcess list
     m_thread->imageStartedLoading(m_loadingDescription);
-
-    DImg img;
 
     LoadingCache *cache = LoadingCache::cache();
     {
@@ -110,9 +115,9 @@ void SharedLoadingTask::execute()
         if (cachedImg)
         {
             // image is found in image cache, loading is successful
-            img = *cachedImg;
+            m_img = *cachedImg;
             if (accessMode() == LoadSaveThread::AccessModeReadWrite)
-                img = img.copy();
+                m_img = m_img.copy();
             // continues after else clause...
         }
         else
@@ -134,16 +139,17 @@ void SharedLoadingTask::execute()
                 // has finished.
                 m_usedProcess->addListener(this);
                 // break loop when either the loading has completed, or this task is being stopped
-                while ( !m_usedProcess->completed() && m_loadingTaskStatus != LoadingTaskStatusStopping )
+                while ( m_loadingTaskStatus != LoadingTaskStatusStopping && m_usedProcess && !m_usedProcess->completed() )
                     lock.timedWait();
                 // remove listener from process
-                m_usedProcess->removeListener(this);
+                if (m_usedProcess)
+                    m_usedProcess->removeListener(this);
                 // wake up the process which is waiting until all listeners have removed themselves
                 lock.wakeAll();
                 // set to 0, as checked in setStatus
                 m_usedProcess = 0;
-                //kDebug(50003) << "SharedLoadingTask " << this << ": waited";
-                return;
+                //kDebug() << "SharedLoadingTask " << this << ": waited";
+                // m_img is now set to the result
             }
             else
             {
@@ -161,33 +167,31 @@ void SharedLoadingTask::execute()
         }
     }
 
-    if (!img.isNull())
+    if (!m_img.isNull())
     {
         // following the golden rule to avoid deadlocks, do this when CacheLock is not held
+        postProcess();
         m_thread->taskHasFinished();
-        m_thread->imageLoaded(m_loadingDescription, img);
+        m_thread->imageLoaded(m_resultLoadingDescription, m_img);
         return;
     }
 
     // load image
-    img = DImg(m_loadingDescription.filePath, this, m_loadingDescription.rawDecodingSettings);
+    m_img = DImg(m_loadingDescription.filePath, this, m_loadingDescription.rawDecodingSettings);
 
     bool isCached = false;
     {
         LoadingCache::CacheLock lock(cache);
         // put (valid) image into cache of loaded images
-        if (!img.isNull())
-            isCached = cache->putImage(m_loadingDescription.cacheKey(), new DImg(img), m_loadingDescription.filePath);
+        if (!m_img.isNull())
+            isCached = cache->putImage(m_loadingDescription.cacheKey(), new DImg(m_img), m_loadingDescription.filePath);
         // remove this from the list of loading processes in cache
         cache->removeLoadingProcess(this);
     }
 
-    // again: following the golden rule to avoid deadlocks, do this when CacheLock is not held
-    m_thread->taskHasFinished();
-
     {
         LoadingCache::CacheLock lock(cache);
-        //kDebug(50003) << "SharedLoadingTask " << this << ": image loaded, " << img.isNull();
+        //kDebug() << "SharedLoadingTask " << this << ": image loaded, " << img.isNull();
         // indicate that loading has finished so that listeners can stop waiting
         m_completed = true;
 
@@ -199,12 +203,12 @@ void SharedLoadingTask::execute()
             {
                 // If a listener requested ReadWrite access, it gets a deep copy.
                 // DImg is explicitly shared.
-                DImg copy = img.copy();
-                l->loadSaveNotifier()->imageLoaded(m_loadingDescription, copy);
+                DImg copy = m_img.copy();
+                l->setResult(m_loadingDescription, copy);
             }
             else
             {
-                l->loadSaveNotifier()->imageLoaded(m_loadingDescription, img);
+                l->setResult(m_loadingDescription, m_img);
             }
         }
 
@@ -218,6 +222,73 @@ void SharedLoadingTask::execute()
         // set to 0, as checked in setStatus
         m_usedProcess = 0;
     }
+
+    // again: following the golden rule to avoid deadlocks, do this when CacheLock is not held
+    postProcess();
+    m_thread->taskHasFinished();
+    m_thread->imageLoaded(m_loadingDescription, m_img);
+}
+
+void SharedLoadingTask::setResult(const LoadingDescription& loadingDescription, const DImg& img)
+{
+    // this is called from another process's execute while this task is waiting on m_usedProcess.
+    // Note that loadingDescription need not equal m_loadingDescription (may be superior)
+    m_resultLoadingDescription = loadingDescription;
+    // these are taken from our own description
+    m_resultLoadingDescription.postProcessingParameters = m_loadingDescription.postProcessingParameters;
+    m_img = img;
+}
+
+bool SharedLoadingTask::needsPostProcessing() const
+{
+    return m_loadingDescription.postProcessingParameters.needsProcessing();
+}
+
+void SharedLoadingTask::postProcess()
+{
+    // to receive progress info again. Should be safe now, we are alone.
+    addListener(this);
+
+    // ---- Color management ---- //
+
+    switch (m_loadingDescription.postProcessingParameters.colorManagement)
+    {
+        case LoadingDescription::NoColorConversion:
+            break;
+        case LoadingDescription::ApplyTransform:
+        {
+            IccTransform trans = m_loadingDescription.postProcessingParameters.transform();
+            trans.apply(m_img, this);
+            m_img.setIccProfile(trans.outputProfile());
+            break;
+        }
+        case LoadingDescription::ConvertForEditor:
+        {
+            IccManager manager(m_img, m_loadingDescription.filePath);
+            manager.transformDefault();
+            break;
+        }
+        case LoadingDescription::ConvertToSRGB:
+        {
+            IccManager manager(m_img, m_loadingDescription.filePath);
+            manager.transformToSRGB();
+            break;
+        }
+        case LoadingDescription::ConvertForDisplay:
+        {
+            IccManager manager(m_img, m_loadingDescription.filePath);
+            manager.transformForDisplay(m_loadingDescription.postProcessingParameters.profile());
+            break;
+        }
+        case LoadingDescription::ConvertForOutput:
+        {
+            IccManager manager(m_img, m_loadingDescription.filePath);
+            manager.transformForOutput(m_loadingDescription.postProcessingParameters.profile());
+            break;
+        }
+    }
+
+    removeListener(this);
 }
 
 void SharedLoadingTask::progressInfo(const DImg *, float progress)

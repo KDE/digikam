@@ -42,8 +42,8 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kurl.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -64,6 +64,8 @@ using namespace std;
 
 namespace Digikam
 {
+
+typedef QMap<qlonglong, Haar::SignatureData> SignatureCache;
 
 /** This class encapsulates the Haar signature in a QByteArray
  *  that can be stored as a BLOB in the database.
@@ -93,7 +95,7 @@ public:
         stream >> version;
         if (version != Version)
         {
-            kError(50003) << "Unsupported binary version of Haar Blob in database";
+            kError() << "Unsupported binary version of Haar Blob in database";
             return;
         }
 
@@ -190,7 +192,7 @@ public:
         // Getting all signatures and removing the not wanted ones is really more efficient
         // then doing X queries (where X = imageIds.count())
 
-        for (QMap<qlonglong, Haar::SignatureData>::iterator it = signatureCache->begin();
+        for (SignatureCache::iterator it = signatureCache->begin();
              it != signatureCache->end(); )
         {
             if (!imageIds.contains(it.key()))
@@ -206,7 +208,7 @@ public:
             delete signatureCache;
 
         if (cache)
-            signatureCache = new QMap<qlonglong, Haar::SignatureData>();
+            signatureCache = new SignatureCache();
 
         useSignatureCache = cache;
 
@@ -222,7 +224,7 @@ public:
         Haar::SignatureData targetSig;
 
         // reference for easier access
-        QMap<qlonglong, Haar::SignatureData> &signatureCache = *this->signatureCache;
+        SignatureCache &signatureCache = *this->signatureCache;
 
         query = access.backend()->prepareQuery(signatureQuery);
         if (!access.backend()->exec(query))
@@ -236,13 +238,13 @@ public:
         }
     }
 
-    bool                                  useSignatureCache;
-    Haar::ImageData                      *data;
-    Haar::WeightBin                      *bin;
-    QMap<qlonglong, Haar::SignatureData> *signatureCache;
-    QString                               signatureQuery;
-    QString                               signatureByAlbumRootsQuery;
-    QSet<int>                             albumRootsToSearch;
+    bool              useSignatureCache;
+    Haar::ImageData*  data;
+    Haar::WeightBin*  bin;
+    SignatureCache*   signatureCache;
+    QString           signatureQuery;
+    QString           signatureByAlbumRootsQuery;
+    QSet<int>         albumRootsToSearch;
 };
 
 HaarIface::HaarIface()
@@ -396,7 +398,7 @@ QList<qlonglong> HaarIface::bestMatchesForImageWithThreshold(qlonglong imageid, 
     else
     {
         // reference for easier access
-        QMap<qlonglong, Haar::SignatureData>& signatureCache = *d->signatureCache;
+        SignatureCache& signatureCache = *d->signatureCache;
         Haar::SignatureData& sig = signatureCache[imageid];
         return bestMatchesWithThreshold(&sig, requiredPercentage, type);
     }
@@ -468,7 +470,7 @@ QList<qlonglong> HaarIface::bestMatches(Haar::SignatureData *querySig, int numbe
 
 /*
     for (QMap<double, qlonglong>::iterator it = bestMatches.begin(); it != bestMatches.end(); ++it)
-        kDebug(50003) << it.key() << it.value();
+        kDebug() << it.key() << it.value();
 */
     return bestMatches.values();
 }
@@ -501,10 +503,10 @@ QList<qlonglong> HaarIface::bestMatchesWithThreshold(Haar::SignatureData *queryS
     // Debug output
     if (bestMatches.count() > 1)
     {
-        kDebug(50003) << "Duplicates with id and score:";
+        kDebug() << "Duplicates with id and score:";
         for (QMultiMap<double, qlonglong>::const_iterator it = bestMatches.constBegin(); it != bestMatches.constEnd(); ++it)
         {
-            kDebug(50003) << it.value() << QString::number(it.key() * 100)+QChar('%');
+            kDebug() << it.value() << QString::number(it.key() * 100)+QChar('%');
         }
     }
     // We may want to return the map itself, or a list with pairs id - percentage
@@ -538,7 +540,7 @@ QMap<qlonglong, double> HaarIface::searchDatabase(Haar::SignatureData *querySig,
     Haar::SignatureData targetSig;
 
     // reference for easier access
-    QMap<qlonglong, Haar::SignatureData> &signatureCache = *d->signatureCache;
+    SignatureCache &signatureCache = *d->signatureCache;
 
     bool filterByAlbumRoots = !d->albumRootsToSearch.isEmpty();
 

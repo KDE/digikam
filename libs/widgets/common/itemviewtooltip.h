@@ -28,8 +28,6 @@
 
 #include <QtGui/QAbstractItemView>
 
-// KDE includes
-
 // Local includes
 
 #include "ditemtooltip.h"

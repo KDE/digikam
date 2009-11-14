@@ -136,8 +136,8 @@ QImage ThumbnailCreator::loadPNG(const QString& path)
 
     unsigned char buf[PNG_BYTES_TO_CHECK];
 
-    fread(buf, 1, PNG_BYTES_TO_CHECK, f);
-    if (!png_check_sig(buf, PNG_BYTES_TO_CHECK))
+    size_t itemsRead = fread(buf, 1, PNG_BYTES_TO_CHECK, f);
+    if (itemsRead != 1 || !png_check_sig(buf, PNG_BYTES_TO_CHECK))
     {
         fclose(f);
         return qimage;

@@ -48,19 +48,8 @@ class DIGIKAM_EXPORT ImageHistogram : public QThread
 
 public:
 
-enum HistogramChannelType
-{
-    ValueChannel = 0,
-    RedChannel,
-    GreenChannel,
-    BlueChannel,
-    AlphaChannel
-};
-
-public:
-
     ImageHistogram(uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits, QObject *parent = 0);
-    ImageHistogram(const DImg& image, QObject *parent = 0);
+    explicit ImageHistogram(const DImg& image, QObject *parent = 0);
     ~ImageHistogram();
 
     /** Started computation: synchronous or threaded */
@@ -72,6 +61,7 @@ public:
     bool isCalculating();
 
     /** Methods to access the histogram data.*/
+    bool   isSixteenBit();
     bool   isValid();
     double getCount(int channel, int start, int end);
     double getMean(int channel, int start, int end);
@@ -81,6 +71,7 @@ public:
     double getMaximum(int channel);
 
     int    getHistogramSegments(void);
+    int    getMaxSegmentIndex(void);
     int    getMedian(int channel, int start, int end);
 
 Q_SIGNALS:

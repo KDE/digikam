@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="4" name="digikamimageplugin_texture" >
+<gui version="6" name="digikamimageplugin_texture" >
 
  <MenuBar>
 
@@ -8,13 +8,13 @@
   </Menu>
 
  </MenuBar>
- 
- <ToolBar name="ToolBar" >
+
+ <ToolBar name="mainToolBar" >
   <text>Main Toolbar</text>
  </ToolBar>
- 
+
  <ActionProperties>
   <Action shortcut="" name="imageplugin_texture" />
  </ActionProperties>
 
-</kpartgui>
+</gui>

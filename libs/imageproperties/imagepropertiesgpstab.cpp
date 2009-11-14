@@ -6,7 +6,7 @@
  * Date        : 2006-02-22
  * Description : a tab widget to display GPS info
  *
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,13 +42,13 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kcombobox.h>
 #include <kdialog.h>
 #include <khbox.h>
 #include <klocale.h>
 #include <ksqueezedtextlabel.h>
 #include <ktoolinvocation.h>
+#include <kdebug.h>
 
 namespace Digikam
 {
@@ -60,19 +60,20 @@ public:
 
     ImagePropertiesGPSTabPriv()
     {
-        detailsButton = 0;
-        detailsCombo  = 0;
-        map           = 0;
-        altLabel      = 0;
-        latLabel      = 0;
-        lonLabel      = 0;
-        dateLabel     = 0;
-        altitude      = 0;
-        latitude      = 0;
-        longitude     = 0;
-        date          = 0;
-        zoomInBtn     = 0;
-        zoomOutBtn    = 0;
+        detailsBtn   = 0;
+        detailsCombo = 0;
+        map          = 0;
+        altLabel     = 0;
+        latLabel     = 0;
+        lonLabel     = 0;
+        dateLabel    = 0;
+        altitude     = 0;
+        latitude     = 0;
+        longitude    = 0;
+        date         = 0;
+        zoomInBtn    = 0;
+        zoomOutBtn   = 0;
+        mapThemeBtn  = 0;
     }
 
     QLabel             *altLabel;
@@ -80,8 +81,7 @@ public:
     QLabel             *lonLabel;
     QLabel             *dateLabel;
 
-    QPushButton        *detailsButton;
-
+    QToolButton        *detailsBtn;
     QToolButton        *zoomInBtn;
     QToolButton        *zoomOutBtn;
 
@@ -93,6 +93,7 @@ public:
     KSqueezedTextLabel *date;
 
     WorldMapWidget     *map;
+    WorldMapThemeBtn   *mapThemeBtn;
 };
 
 ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
@@ -113,19 +114,26 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
     d->longitude->setAlignment(Qt::AlignRight);
     d->date->setAlignment(Qt::AlignRight);
 
+    d->map->slotSetAllowItemSelection(false);
+    d->map->slotSetAllowItemFiltering(false);
+    d->map->slotSetFocusOnAddedItems(true);
+    d->map->slotSetEnableTooltips(true);
+
     // --------------------------------------------------------
 
     QWidget* box2           = new QWidget(this);
     QHBoxLayout* box2Layout = new QHBoxLayout(box2);
 
-    d->zoomOutBtn = new QToolButton(box2);
-    d->zoomInBtn  = new QToolButton(box2);
+    d->mapThemeBtn  = new WorldMapThemeBtn(d->map, box2);
+    d->zoomOutBtn   = new QToolButton(box2);
+    d->zoomInBtn    = new QToolButton(box2);
     d->zoomOutBtn->setIcon(SmallIcon("zoom-out"));
     d->zoomInBtn->setIcon(SmallIcon("zoom-in"));
 
-    d->detailsCombo  = new KComboBox(box2);
-    d->detailsButton = new QPushButton(i18n("More Info..."), box2);
-    d->detailsButton->setMaximumHeight( fontMetrics().height()+4 );
+    d->detailsCombo = new KComboBox(box2);
+    d->detailsBtn   = new QToolButton(box2);
+    d->detailsBtn->setIcon(SmallIcon("internet-web-browser"));
+    d->detailsBtn->setToolTip(i18n("See more info on the Internet"));
     d->detailsCombo->setMaximumHeight( fontMetrics().height()+4 );
     d->detailsCombo->insertItem(MapQuest,      QString("MapQuest"));
     d->detailsCombo->insertItem(GoogleMaps,    QString("Google Maps"));
@@ -133,11 +141,12 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
     d->detailsCombo->insertItem(MultiMap,      QString("MultiMap"));
     d->detailsCombo->insertItem(OpenStreetMap, QString("OpenStreetMap"));
 
+    box2Layout->addWidget(d->mapThemeBtn);
     box2Layout->addWidget(d->zoomOutBtn);
     box2Layout->addWidget(d->zoomInBtn);
     box2Layout->addStretch(10);
     box2Layout->addWidget(d->detailsCombo);
-    box2Layout->addWidget(d->detailsButton);
+    box2Layout->addWidget(d->detailsBtn);
     box2Layout->setSpacing(0);
     box2Layout->setMargin(0);
 
@@ -158,9 +167,11 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
     layout->setSpacing(0);
     layout->setMargin(0);
 
+    readConfig();
+
     // --------------------------------------------------------
 
-    connect(d->detailsButton, SIGNAL(clicked()),
+    connect(d->detailsBtn, SIGNAL(clicked()),
             this, SLOT(slotGPSDetails()));
 
     connect(d->zoomInBtn, SIGNAL(released()),
@@ -172,7 +183,23 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
 
 ImagePropertiesGPSTab::~ImagePropertiesGPSTab()
 {
+    writeConfig();
     delete d;
+}
+
+void ImagePropertiesGPSTab::readConfig()
+{
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(QString("Image Properties SideBar"));
+    d->map->readConfig(group);
+}
+
+void ImagePropertiesGPSTab::writeConfig()
+{
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(QString("Image Properties SideBar"));
+    d->map->writeConfig(group);
+    config->sync();
 }
 
 int ImagePropertiesGPSTab::getWebGPSLocator()
@@ -250,7 +277,7 @@ void ImagePropertiesGPSTab::slotGPSDetails()
 
     }
 
-    kDebug(50003) << url;
+    kDebug() << url;
     KToolInvocation::self()->invokeBrowser(url);
 }
 
@@ -262,7 +289,7 @@ void ImagePropertiesGPSTab::setCurrentURL(const KUrl& url)
         return;
     }
 
-    DMetadata meta(url.path());
+    DMetadata meta(url.toLocalFile());
     setMetadata(meta, url);
 }
 

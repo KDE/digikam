@@ -40,7 +40,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+
 #include <kjob.h>
 #include <kio/job.h>
 #include <kio/deletejob.h>

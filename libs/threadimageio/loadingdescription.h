@@ -32,9 +32,21 @@
 namespace Digikam
 {
 
+class IccTransform;
+
 class DIGIKAM_EXPORT LoadingDescription
 {
 public:
+
+    enum ColorManagementSettings
+    {
+        NoColorConversion,
+        ApplyTransform, /// IccData is an IccTransform
+        ConvertForEditor,
+        ConvertToSRGB,
+        ConvertForDisplay, /// IccData can be the output profile
+        ConvertForOutput /// IccData is the output profile
+    };
 
     class PreviewParameters
     {
@@ -61,6 +73,30 @@ public:
         bool operator==(const PreviewParameters& other) const;
     };
 
+    class PostProcessingParameters
+    {
+    public:
+
+        PostProcessingParameters()
+        {
+            colorManagement = NoColorConversion;
+        }
+
+        bool needsProcessing() const;
+
+        void setTransform(const IccTransform& transform);
+        bool hasTransform() const;
+        IccTransform transform() const;
+        void setProfile(const IccProfile& profile);
+        bool hasProfile() const;
+        IccProfile profile() const;
+
+        ColorManagementSettings colorManagement;
+        QVariant                iccData;
+
+        bool operator==(const PostProcessingParameters& other) const;
+    };
+
     /**
      * An invalid LoadingDescription
      */
@@ -72,13 +108,15 @@ public:
      * Use this for files that are not raw files.
      * Stores only the filePath.
      */
-    explicit LoadingDescription(const QString& filePath);
+    explicit LoadingDescription(const QString& filePath,
+                                ColorManagementSettings = NoColorConversion);
 
     /**
      * For raw files:
      * Stores filePath and RawDecodingSettings
      */
-    LoadingDescription(const QString& filePath, DRawDecoding settings);
+    LoadingDescription(const QString& filePath, const DRawDecoding& settings,
+                       ColorManagementSettings = NoColorConversion);
 
     /**
      * For preview and thumbnail jobs:
@@ -92,11 +130,13 @@ public:
      *    If size is 0, DImg based loading will be used with default raw decoding settings.
      */
     LoadingDescription(const QString& filePath, int size, bool exifRotate,
+                       ColorManagementSettings = NoColorConversion,
                        PreviewParameters::PreviewType = PreviewParameters::PreviewImage);
 
     QString           filePath;
     DRawDecoding      rawDecodingSettings;
     PreviewParameters previewParameters;
+    PostProcessingParameters postProcessingParameters;
 
     /**
      * Return the cache key this description shall be stored as

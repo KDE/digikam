@@ -39,9 +39,9 @@
 #include "setupeditor.h"
 #include "setupicc.h"
 #include "setupiofiles.h"
+#include "setupmetadata.h"
 #include "setupslideshow.h"
 #include "setuptooltip.h"
-#include "setupmetadata.h"
 
 namespace ShowFoto
 {
@@ -138,6 +138,14 @@ Setup::Setup(QWidget* parent, const char* name, Setup::Page page)
     d->page_slideshow->setHeader(i18n("<qt>Slide Show Settings<br/>"
                                  "<i>Customize slideshow settings</i></qt>"));
     d->page_slideshow->setIcon(KIcon("view-presentation"));
+
+    d->editorPage->setFrameShape(QFrame::NoFrame);
+    d->metadataPage->setFrameShape(QFrame::NoFrame);
+    d->toolTipPage->setFrameShape(QFrame::NoFrame);
+    d->dcrawPage->setFrameShape(QFrame::NoFrame);
+    d->iofilesPage->setFrameShape(QFrame::NoFrame);
+    d->slideshowPage->setFrameShape(QFrame::NoFrame);
+    d->iccPage->setFrameShape(QFrame::NoFrame);
 
     connect(this, SIGNAL(okClicked()),
             this, SLOT(slotOkClicked()) );

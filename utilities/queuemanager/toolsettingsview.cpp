@@ -27,17 +27,16 @@
 // Qt includes
 
 #include <QLabel>
-#include <QString>
-#include <QScrollArea>
 #include <QPushButton>
+#include <QScrollArea>
+#include <QString>
 
 // KDE includes
 
-#include <kvbox.h>
-#include <khbox.h>
-#include <kdebug.h>
-#include <klocale.h>
 #include <kdialog.h>
+#include <khbox.h>
+#include <klocale.h>
+#include <kvbox.h>
 
 // Local includes
 
@@ -69,15 +68,15 @@ public:
         tool              = 0;
     }
 
-    QLabel      *messageView;
-    QLabel      *settingsViewIcon;
-    QLabel      *settingsViewTitle;
+    QLabel*      messageView;
+    QLabel*      settingsViewIcon;
+    QLabel*      settingsViewTitle;
 
-    QPushButton *settingsViewReset;
+    QPushButton* settingsViewReset;
 
-    QScrollArea *settingsView;
+    QScrollArea* settingsView;
 
-    BatchTool   *tool;
+    BatchTool*   tool;
 };
 
 ToolSettingsView::ToolSettingsView(QWidget *parent)

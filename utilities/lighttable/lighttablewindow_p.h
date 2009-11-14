@@ -39,6 +39,7 @@
 #include "statuszoombar.h"
 #include "lighttableview.h"
 #include "lighttablebar.h"
+#include "thumbbardock.h"
 
 namespace Digikam
 {
@@ -67,7 +68,7 @@ public:
         previewView            = 0;
         barView                = 0;
         hSplitter              = 0;
-        vSplitter              = 0;
+        barViewDock            = 0;
         syncPreviewAction      = 0;
         clearListAction        = 0;
         setItemLeftAction      = 0;
@@ -75,6 +76,7 @@ public:
         editItemAction         = 0;
         removeItemAction       = 0;
         fileDeleteAction       = 0;
+        fileDeleteFinalAction  = 0;
         slideShowAction        = 0;
         fullScreenAction       = 0;
         donateMoneyAction      = 0;
@@ -82,6 +84,7 @@ public:
         zoomTo100percents      = 0;
         zoomPlusAction         = 0;
         zoomMinusAction        = 0;
+        showThumbBarAction     = 0;
         statusProgressBar      = 0;
         leftZoomBar            = 0;
         rightZoomBar           = 0;
@@ -106,58 +109,60 @@ public:
     bool                      removeFullScreenButton;
     bool                      cancelSlideShow;
 
-    SidebarSplitter          *hSplitter;
-    QSplitter                *vSplitter;
+    SidebarSplitter*          hSplitter;
+    ThumbBarDock*             barViewDock;
 
-    KAction                  *setItemLeftAction;
-    KAction                  *setItemRightAction;
-    KAction                  *clearListAction;
-    KAction                  *editItemAction;
-    KAction                  *removeItemAction;
-    KAction                  *fileDeleteAction;
-    KAction                  *slideShowAction;
-    KAction                  *zoomPlusAction;
-    KAction                  *zoomMinusAction;
-    KAction                  *zoomTo100percents;
-    KAction                  *zoomFitToWindowAction;
-    KAction                  *fullScreenAction;
+    KAction*                  setItemLeftAction;
+    KAction*                  setItemRightAction;
+    KAction*                  clearListAction;
+    KAction*                  editItemAction;
+    KAction*                  removeItemAction;
+    KAction*                  fileDeleteAction;
+    KAction*                  fileDeleteFinalAction;
+    KAction*                  slideShowAction;
+    KAction*                  zoomPlusAction;
+    KAction*                  zoomMinusAction;
+    KAction*                  zoomTo100percents;
+    KAction*                  zoomFitToWindowAction;
+    KAction*                  fullScreenAction;
+    KToggleAction*            showThumbBarAction;
 
     // Rating actions.
-    KAction                  *star0;
-    KAction                  *star1;
-    KAction                  *star2;
-    KAction                  *star3;
-    KAction                  *star4;
-    KAction                  *star5;
+    KAction*                  star0;
+    KAction*                  star1;
+    KAction*                  star2;
+    KAction*                  star3;
+    KAction*                  star4;
+    KAction*                  star5;
 
-    KAction                  *forwardAction;
-    KAction                  *backwardAction;
-    KAction                  *firstAction;
-    KAction                  *lastAction;
-    KAction                  *donateMoneyAction;
-    KAction                  *contributeAction;
-    KAction                  *rawCameraListAction;
-    KAction                  *libsInfoAction;
-    KAction                  *dbStatAction;
+    KAction*                  forwardAction;
+    KAction*                  backwardAction;
+    KAction*                  firstAction;
+    KAction*                  lastAction;
+    KAction*                  donateMoneyAction;
+    KAction*                  contributeAction;
+    KAction*                  rawCameraListAction;
+    KAction*                  libsInfoAction;
+    KAction*                  dbStatAction;
 
-    KSelectAction            *themeMenuAction;
+    KSelectAction*            themeMenuAction;
 
-    KToggleAction            *syncPreviewAction;
-    KToggleAction            *navigateByPairAction;
-    KToggleAction            *showMenuBarAction;
-    KToggleAction            *clearOnCloseAction;
+    KToggleAction*            syncPreviewAction;
+    KToggleAction*            navigateByPairAction;
+    KToggleAction*            showMenuBarAction;
+    KToggleAction*            clearOnCloseAction;
 
-    LightTableBar            *barView;
+    LightTableBar*            barView;
 
-    LightTableView           *previewView;
+    LightTableView*           previewView;
 
-    StatusZoomBar            *leftZoomBar;
-    StatusZoomBar            *rightZoomBar;
+    StatusZoomBar*            leftZoomBar;
+    StatusZoomBar*            rightZoomBar;
 
-    StatusProgressBar        *statusProgressBar;
+    StatusProgressBar*        statusProgressBar;
 
-    ImagePropertiesSideBarDB *leftSideBar;
-    ImagePropertiesSideBarDB *rightSideBar;
+    ImagePropertiesSideBarDB* leftSideBar;
+    ImagePropertiesSideBarDB* rightSideBar;
 };
 
 }  // namespace Digikam

@@ -30,10 +30,10 @@
 #include <kactioncollection.h>
 #include <kapplication.h>
 #include <kcursor.h>
-#include <kdebug.h>
 #include <kgenericfactory.h>
 #include <klibloader.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -55,7 +55,7 @@ ImagePlugin_Perspective::ImagePlugin_Perspective(QObject *parent, const QVariant
 
     setXMLFile("digikamimageplugin_perspective_ui.rc");
 
-    kDebug(50006) << "ImagePlugin_Perspective plugin loaded";
+    kDebug() << "ImagePlugin_Perspective plugin loaded";
 }
 
 ImagePlugin_Perspective::~ImagePlugin_Perspective()

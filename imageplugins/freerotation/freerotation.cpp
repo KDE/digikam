@@ -7,7 +7,7 @@
  * Description : Free rotation threaded image filter.
  *
  * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009      by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -68,10 +68,10 @@ double FreeRotation::calculateAngle(const QPoint& p1, const QPoint& p2)
     // check for invalid points. This should have been handled by the calling method,
     // but we want to be really sure here
 
-    if ( p1.x() < 0 ||
-         p2.y() < 0 ||
-         p1.x() < 0 ||
-         p2.y() < 0 )
+    if (p1.x() < 0 ||
+        p2.y() < 0 ||
+        p1.x() < 0 ||
+        p2.y() < 0)
     {
         return 0.0;
     }
@@ -94,8 +94,8 @@ double FreeRotation::calculateAngle(const QPoint& p1, const QPoint& p2)
 
     // calculate the angle
     double angle = 0.0;
-    double ly = fabs((double)p2.y() - p1.y());
-    double lx = fabs((double)p2.x() - p1.x());
+    double ly    = fabs((double)p2.y() - p1.y());
+    double lx    = fabs((double)p2.x() - p1.x());
 
     angle = atan2(ly, lx) * 180.0 / M_PI;
     angle = ccw ? -angle : angle;
@@ -150,6 +150,10 @@ void FreeRotation::filterImage(void)
     bool sixteenBit = m_orgImage.sixteenBit();
 
     m_destImage = Digikam::DImg(nNewWidth, nNewHeight, sixteenBit, m_orgImage.hasAlpha());
+
+    if (m_destImage.isNull())
+        return;
+
     m_destImage.fill( Digikam::DColor(m_backgroundColor.rgb(), sixteenBit) );
 
     uchar *pResBits            = m_destImage.bits();

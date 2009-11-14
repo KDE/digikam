@@ -33,17 +33,16 @@
 // KDE includes
 
 #include <kdialog.h>
-#include <kdebug.h>
 #include <klocale.h>
 #include <kaction.h>
 #include <kmenu.h>
 #include <kpushbutton.h>
 #include <kmessagebox.h>
 #include <kinputdialog.h>
+#include <kdebug.h>
 
 // Local includes
 
-#include "constants.h"
 #include "album.h"
 #include "albummanager.h"
 #include "albumthumbnailloader.h"
@@ -113,6 +112,9 @@ AlbumSelectWidget::AlbumSelectWidget(QWidget *parent, PAlbum* albumToSelect)
     connect(AlbumManager::instance(), SIGNAL(signalAlbumsCleared()),
             this, SLOT(slotAlbumsCleared()));
 
+    connect(AlbumManager::instance(), SIGNAL(signalAlbumRenamed(Album*)),
+            this, SLOT(slotAlbumRenamed(Album*)));
+
     connect(d->albumsView, SIGNAL(customContextMenuRequested(const QPoint&)),
             this, SLOT(slotContextMenu()));
 
@@ -152,7 +154,7 @@ void AlbumSelectWidget::populateTreeView(const AlbumList& aList, QTreeWidget *vi
                 pitem = static_cast<TreeAlbumItem*>(album->parent()->extraData(view));
             if (!pitem)
             {
-                kWarning(50003) << "Failed to find parent for Album " << album->title();
+                kWarning() << "Failed to find parent for Album " << album->title();
                 continue;
             }
 
@@ -377,7 +379,7 @@ void AlbumSelectWidget::slotAlbumAdded(Album* album)
 
     if (!parentItem)
     {
-        kWarning(50003) << "Failed to find parent for Album "
+        kWarning() << "Failed to find parent for Album "
                         << album->title();
         return;
     }
@@ -396,6 +398,19 @@ void AlbumSelectWidget::slotAlbumDeleted(Album* album)
     TreeAlbumItem *item = (TreeAlbumItem*)(album->extraData(d->albumsView));
     if (item)
         delete item;
+}
+
+void AlbumSelectWidget::slotAlbumRenamed(Album* album)
+{
+    if (!album || album->type() != Album::PHYSICAL)
+        return;
+
+    TreeAlbumItem *item = (TreeAlbumItem*)(album->extraData(d->albumsView));
+    if (item)
+    {
+        item->setText(0, album->title());
+        emit signalAlbumRenamed();
+    }
 }
 
 void AlbumSelectWidget::slotAlbumsCleared()

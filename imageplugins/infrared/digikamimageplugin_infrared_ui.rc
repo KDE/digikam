@@ -1,19 +1,19 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="5" name="digikamimageplugin_infrared" >
+<gui version="7" name="digikamimageplugin_infrared" >
  <MenuBar>
 
   <Menu name="Filters" ><text>F&amp;ilters</text>
-   <Action name="imageplugin_infrared" /> 
+   <Action name="imageplugin_infrared" />
   </Menu>
 
  </MenuBar>
- 
- <ToolBar name="ToolBar" >
+
+ <ToolBar name="mainToolBar" >
   <text>Main Toolbar</text>
  </ToolBar>
- 
+
  <ActionProperties>
   <Action shortcut="" name="imageplugin_infrared" />
  </ActionProperties>
 
-</kpartgui>
+</gui>

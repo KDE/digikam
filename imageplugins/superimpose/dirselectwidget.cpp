@@ -35,10 +35,9 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <klocale.h>
 #include <kfiletreebranch.h>
-
+#include <kdebug.h>
 
 namespace DigikamSuperImposeImagesPlugin
 {
@@ -109,7 +108,7 @@ void DirSelectWidget::load()
 
     if ( !branch )
     {
-        kDebug(50006) << "Unable to open " << d->m_handled;
+        kDebug() << "Unable to open " << d->m_handled;
     }
     else
     {
@@ -128,8 +127,8 @@ void DirSelectWidget::setCurrentPath(KUrl currentUrl)
     if ( !currentUrl.isValid() )
        return;
 
-    QString currentPath = QDir::cleanPath(currentUrl.path());
-    currentPath = currentPath.mid(d->m_rootUrl.path().length());
+    QString currentPath = QDir::cleanPath(currentUrl.toLocalFile());
+    currentPath = currentPath.mid(d->m_rootUrl.toLocalFile().length());
     d->m_pendingPath.clear();
     d->m_handled = QString("");
     d->m_pendingPath = currentPath.split('/', QString::KeepEmptyParts);
@@ -146,12 +145,12 @@ void DirSelectWidget::setRootPath(KUrl rootUrl, KUrl currentUrl)
 {
     d->m_rootUrl = rootUrl;
     clear();
-    QString root = QDir::cleanPath(rootUrl.path());
+    QString root = QDir::cleanPath(rootUrl.toLocalFile());
 
     if (!root.endsWith('/'))
         root.append("/");
 
-    QString currentPath = QDir::cleanPath(currentUrl.isValid() ? currentUrl.path() : root);
+    QString currentPath = QDir::cleanPath(currentUrl.isValid() ? currentUrl.toLocalFile() : root);
 
     d->m_item = addBranch( rootUrl, rootUrl.fileName() );
     setDirOnlyMode( d->m_item, true );

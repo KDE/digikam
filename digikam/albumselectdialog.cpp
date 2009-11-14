@@ -34,10 +34,11 @@
 #include <QCursor>
 #include <QGridLayout>
 #include <QPixmap>
+#include <QPointer>
 
 // KDE includes
 
-#include <kdebug.h>
+
 #include <klocale.h>
 #include <kapplication.h>
 #include <kstandarddirs.h>
@@ -61,12 +62,9 @@ public:
 
     AlbumSelectDialogPrivate()
     {
-        allowRootSelection = false;
         albumSel           = 0;
         searchBar          = 0;
     }
-
-    bool               allowRootSelection;
 
     QString            newAlbumString;
 
@@ -77,12 +75,10 @@ public:
 
 AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
                                      const QString& header,
-                                     const QString& newAlbumString,
-                                     bool allowRootSelection)
+                                     const QString& newAlbumString)
                  : KDialog(parent), d(new AlbumSelectDialogPrivate)
 {
-    d->allowRootSelection = allowRootSelection;
-    d->newAlbumString     = newAlbumString;
+    d->newAlbumString = newAlbumString;
 
     setCaption(i18n("Select Album"));
     setButtons(Help|Ok|Cancel);
@@ -135,8 +131,7 @@ void AlbumSelectDialog::slotSelectionChanged()
 {
     QTreeWidgetItem* selItem = d->albumSel->albumView()->currentItem();
 
-    if ((!selItem || (selItem == d->albumSel->albumView()->topLevelItem(0))) &&
-        !d->allowRootSelection)
+    if (!selItem || (selItem == d->albumSel->albumView()->topLevelItem(0)))
     {
         enableButtonOk(false);
         return;
@@ -148,24 +143,33 @@ void AlbumSelectDialog::slotSelectionChanged()
 PAlbum* AlbumSelectDialog::selectAlbum(QWidget* parent,
                                        PAlbum* albumToSelect,
                                        const QString& header,
-                                       const QString& newAlbumString,
-                                       bool allowRootSelection )
+                                       const QString& newAlbumString)
 {
-    AlbumSelectDialog dlg(parent, albumToSelect,
-                          header, newAlbumString,
-                          allowRootSelection);
+    QPointer<AlbumSelectDialog> dlg = new AlbumSelectDialog(parent, albumToSelect, header, newAlbumString);
 
-    if (dlg.exec() != KDialog::Accepted)
-        return 0;
-
-    TreeAlbumItem* item = (TreeAlbumItem*) dlg.d->albumSel->albumView()->currentItem();
-    if ((!item || (item == dlg.d->albumSel->albumView()->topLevelItem(0))) &&
-        !allowRootSelection)
+    if (dlg->exec() != KDialog::Accepted)
     {
+        delete dlg;
         return 0;
     }
 
-    return (dynamic_cast<PAlbum*>(item->album()));
+    QTreeWidgetItem* cItem  = dlg->d->albumSel->albumView()->currentItem();
+    QTreeWidgetItem* tlItem = dlg->d->albumSel->albumView()->topLevelItem(0);
+    if (!cItem || (cItem == tlItem))
+    {
+        delete dlg;
+        return 0;
+    }
+
+    TreeAlbumItem* item = dynamic_cast<TreeAlbumItem*>(cItem);
+    PAlbum* album       = 0;
+    if (item && item->album())
+    {
+        album = dynamic_cast<PAlbum*>(item->album());
+    }
+
+    delete dlg;
+    return album;
 }
 
 }  // namespace Digikam

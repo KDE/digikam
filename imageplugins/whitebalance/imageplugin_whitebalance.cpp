@@ -28,7 +28,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <klocale.h>
 #include <kgenericfactory.h>
 #include <klibloader.h>
@@ -36,6 +35,7 @@
 #include <kactioncollection.h>
 #include <kcursor.h>
 #include <kapplication.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -50,7 +50,7 @@ ImagePlugin_WhiteBalance::ImagePlugin_WhiteBalance(QObject *parent, const QVaria
                         : Digikam::ImagePlugin(parent, "ImagePlugin_WhiteBalance")
 {
     m_whitebalanceAction = new KAction(KIcon("whitebalance"), i18n("White Balance..."), this);
-    m_whitebalanceAction->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_W));
+    m_whitebalanceAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_W));
 
     connect(m_whitebalanceAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotWhiteBalance()));
@@ -59,7 +59,7 @@ ImagePlugin_WhiteBalance::ImagePlugin_WhiteBalance(QObject *parent, const QVaria
 
     setXMLFile("digikamimageplugin_whitebalance_ui.rc");
 
-    kDebug(50006) << "ImagePlugin_WhiteBalance plugin loaded";
+    kDebug() << "ImagePlugin_WhiteBalance plugin loaded";
 }
 
 ImagePlugin_WhiteBalance::~ImagePlugin_WhiteBalance()

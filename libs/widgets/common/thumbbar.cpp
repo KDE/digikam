@@ -40,7 +40,6 @@
 #include <QPalette>
 #include <QPixmap>
 #include <QPoint>
-#include <QPointer>
 #include <QTextDocument>
 #include <QTimer>
 #include <QToolTip>
@@ -49,12 +48,12 @@
 
 #include <kapplication.h>
 #include <kcodecs.h>
-#include <kdebug.h>
 #include <kfileitem.h>
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmimetype.h>
+#include <kdebug.h>
 
 // LibKDcraw includes
 
@@ -97,6 +96,7 @@ public:
         timer           = 0;
         preloadTimer    = 0;
         toolTip         = 0;
+        orientation     = Qt::Horizontal;
     }
 
     bool                        clearing;
@@ -162,7 +162,6 @@ ThumbBarView::ThumbBarView(QWidget* parent, int orientation, bool exifRotate,
                            ThumbBarToolTipSettings settings)
             : Q3ScrollView(parent), d(new ThumbBarViewPriv)
 {
-    d->orientation     = orientation;
     d->toolTipSettings = settings;
     d->timer           = new QTimer(this);
     d->toolTipTimer    = new QTimer(this);
@@ -192,19 +191,7 @@ ThumbBarView::ThumbBarView(QWidget* parent, int orientation, bool exifRotate,
 
     setFrameStyle(QFrame::NoFrame);
     setAcceptDrops(true);
-
-    if (d->orientation == Qt::Vertical)
-    {
-        setMinimumWidth(ThumbnailSize::Small + 2*d->margin + 2*d->radius + verticalScrollBar()->sizeHint().width());
-        setMaximumWidth(d->maxTileSize + 2*d->margin + 2*d->radius + verticalScrollBar()->sizeHint().width());
-        setHScrollBarMode(Q3ScrollView::AlwaysOff);
-    }
-    else
-    {
-        setMinimumHeight(ThumbnailSize::Small + 2*d->margin + 2*d->radius + verticalScrollBar()->sizeHint().width());
-        setMaximumHeight(d->maxTileSize + 2*d->margin + 2*d->radius + horizontalScrollBar()->sizeHint().height());
-        setVScrollBarMode(Q3ScrollView::AlwaysOff);
-    }
+    setOrientation(orientation);
 }
 
 ThumbBarView::~ThumbBarView()
@@ -223,6 +210,34 @@ ThumbBarView::~ThumbBarView()
     delete d->toolTipTimer;
     delete d->toolTip;
     delete d;
+}
+
+void ThumbBarView::setOrientation(int orientation)
+{
+    if (orientation != d->orientation)
+    {
+        d->orientation = orientation;
+
+        // Reset the minimum and maximum sizes.
+        setMinimumSize(QSize(0, 0));
+        setMaximumSize(QSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX));
+
+        // Adjust minimum and maximum width to thumbnail sizes.
+        if (d->orientation == Qt::Vertical)
+        {
+            setMinimumWidth(ThumbnailSize::Small + 2*d->margin + 2*d->radius + verticalScrollBar()->sizeHint().width());
+            setMaximumWidth(d->maxTileSize + 2*d->margin + 2*d->radius + verticalScrollBar()->sizeHint().width());
+            setVScrollBarMode(Q3ScrollView::Auto);
+            setHScrollBarMode(Q3ScrollView::AlwaysOff);
+        }
+        else
+        {
+            setMinimumHeight(ThumbnailSize::Small + 2*d->margin + 2*d->radius + verticalScrollBar()->sizeHint().width());
+            setMaximumHeight(d->maxTileSize + 2*d->margin + 2*d->radius + horizontalScrollBar()->sizeHint().height());
+            setHScrollBarMode(Q3ScrollView::Auto);
+            setVScrollBarMode(Q3ScrollView::AlwaysOff);
+        }
+    }
 }
 
 void ThumbBarView::setToolTip(ThumbBarToolTip *toolTip)
@@ -470,7 +485,7 @@ bool ThumbBarView::pixmapForItem(ThumbBarItem *item, QPixmap& pix) const
         bool hasPixmap = d->thumbLoadThread->find(item->url().toLocalFile(), pix, d->maxTileSize);
         if (hasPixmap)
         {
-            kWarning(50003) << "Thumbbar: Requested thumbnail size" << d->tileSize
+            kWarning() << "Thumbbar: Requested thumbnail size" << d->tileSize
                             << "is larger than the maximum thumbnail size" << d->maxTileSize
                             << ". Returning a scaled-up image.";
             pix = pix.scaled(d->tileSize, d->tileSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
@@ -669,6 +684,11 @@ void ThumbBarView::contentsMousePressEvent(QMouseEvent* e)
     d->toolTipTimer->stop();
     slotToolTip();
 
+    if (e->button() != Qt::LeftButton)
+    {
+        return;
+    }
+
     ThumbBarItem* barItem = findItem(e->pos());
     d->dragging           = true;
     d->dragStartPos       = e->pos();
@@ -757,7 +777,7 @@ void ThumbBarView::contentsMouseReleaseEvent(QMouseEvent *e)
 {
     d->dragging = false;
     ThumbBarItem *item = findItem(e->pos());
-    if (item)
+    if (e->button() == Qt::LeftButton && item)
     {
         emit signalUrlSelected(item->url());
         emit signalItemSelected(item);

@@ -72,27 +72,27 @@ public:
 public:
 
     /** Constructor using settings to preserve aspect ratio of image. */
-    Border(Digikam::DImg *orgImage, QObject *parent=0, int orgWidth=0, int orgHeight=0,
-           QString borderPath=QString(), int borderType=SolidBorder, float borderPercent=0.1,
-           Digikam::DColor solidColor = Digikam::DColor(),
-           Digikam::DColor niepceBorderColor = Digikam::DColor(),
-           Digikam::DColor niepceLineColor = Digikam::DColor(),
-           Digikam::DColor bevelUpperLeftColor = Digikam::DColor(),
-           Digikam::DColor bevelLowerRightColor = Digikam::DColor(),
-           Digikam::DColor decorativeFirstColor = Digikam::DColor(),
-           Digikam::DColor decorativeSecondColor = Digikam::DColor());
+    explicit Border(Digikam::DImg *orgImage, QObject *parent=0, int orgWidth=0, int orgHeight=0,
+                    QString borderPath=QString(), int borderType=SolidBorder, float borderPercent=0.1,
+                    Digikam::DColor solidColor = Digikam::DColor(),
+                    Digikam::DColor niepceBorderColor = Digikam::DColor(),
+                    Digikam::DColor niepceLineColor = Digikam::DColor(),
+                    Digikam::DColor bevelUpperLeftColor = Digikam::DColor(),
+                    Digikam::DColor bevelLowerRightColor = Digikam::DColor(),
+                    Digikam::DColor decorativeFirstColor = Digikam::DColor(),
+                    Digikam::DColor decorativeSecondColor = Digikam::DColor());
 
     /** Constructor using settings to not-preserve aspect ratio of image. */
-    Border(Digikam::DImg *orgImage, QObject *parent=0, int orgWidth=0, int orgHeight=0,
-           QString borderPath=QString(), int borderType=SolidBorder,
-           int borderWidth1=100, int borderWidth2=20, int borderWidth3=20, int borderWidth4=10,
-           Digikam::DColor solidColor = Digikam::DColor(),
-           Digikam::DColor niepceBorderColor = Digikam::DColor(),
-           Digikam::DColor niepceLineColor = Digikam::DColor(),
-           Digikam::DColor bevelUpperLeftColor = Digikam::DColor(),
-           Digikam::DColor bevelLowerRightColor = Digikam::DColor(),
-           Digikam::DColor decorativeFirstColor = Digikam::DColor(),
-           Digikam::DColor decorativeSecondColor = Digikam::DColor());
+    explicit Border(Digikam::DImg *orgImage, QObject *parent=0, int orgWidth=0, int orgHeight=0,
+                    QString borderPath=QString(), int borderType=SolidBorder,
+                    int borderWidth1=100, int borderWidth2=20, int borderWidth3=20, int borderWidth4=10,
+                    Digikam::DColor solidColor = Digikam::DColor(),
+                    Digikam::DColor niepceBorderColor = Digikam::DColor(),
+                    Digikam::DColor niepceLineColor = Digikam::DColor(),
+                    Digikam::DColor bevelUpperLeftColor = Digikam::DColor(),
+                    Digikam::DColor bevelLowerRightColor = Digikam::DColor(),
+                    Digikam::DColor decorativeFirstColor = Digikam::DColor(),
+                    Digikam::DColor decorativeSecondColor = Digikam::DColor());
 
     ~Border();
 

@@ -7,8 +7,8 @@
  * Description : a widget to manage sidebar in GUI.
  *
  * Copyright (C) 2005-2006 by Joern Ahrens <joern.ahrens@kdemail.net>
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -35,13 +35,13 @@
 #include <QSplitter>
 #include <QStackedWidget>
 #include <QTimer>
+#include <QHash>
 
 // KDE includes
 
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kdebug.h>
 #include <kdeversion.h>
 #include <kglobal.h>
 #include <kiconloader.h>
@@ -54,8 +54,8 @@ class SidebarState
 
 public:
 
-    SidebarState() : activeWidget(0),size(0) {}
-    SidebarState(QWidget *w, int size) : activeWidget(w),size(size) {}
+    SidebarState() : activeWidget(0), size(0) {}
+    SidebarState(QWidget *w, int size) : activeWidget(w), size(size) {}
 
     QWidget *activeWidget;
     int      size;
@@ -79,22 +79,20 @@ public:
         restoreSize      = 0;
     }
 
-    bool             minimizedDefault;
-    bool             minimized;
-    bool             isMinimized;      // Backup of minimized status (used with Fullscreen)
+    bool                          minimizedDefault;
+    bool                          minimized;
+    bool                          isMinimized;      // Backup of minimized status (used with Fullscreen)
 
-    int              tabs;
-    int              activeTab;
-    int              dragSwitchId;
+    int                           tabs;
+    int                           activeTab;
+    int                           dragSwitchId;
+    int                           restoreSize;
 
-    int              restoreSize;
+    QStackedWidget*               stack;
+    SidebarSplitter*              splitter;
+    QTimer*                       dragSwitchTimer;
 
-    QStackedWidget  *stack;
-    SidebarSplitter *splitter;
-    QTimer          *dragSwitchTimer;
-
-    QHash<QWidget*, SidebarState>
-                     appendedTabsStateCache;
+    QHash<QWidget*, SidebarState> appendedTabsStateCache;
 };
 
 class SidebarSplitterPriv
@@ -104,18 +102,20 @@ public:
     QList<Sidebar*> sidebars;
 };
 
+// -------------------------------------------------------------------------------------
+
 Sidebar::Sidebar(QWidget *parent, SidebarSplitter *sp, KMultiTabBarPosition side, bool minimizedDefault)
        : KMultiTabBar(side, parent), d(new SidebarPriv)
 {
-    d->minimizedDefault = minimizedDefault;
-    d->stack            = new QStackedWidget(sp);
     d->splitter         = sp;
+    d->minimizedDefault = minimizedDefault;
+    d->stack            = new QStackedWidget(d->splitter);
     d->dragSwitchTimer  = new QTimer(this);
-
-    d->splitter->d->sidebars << this;
 
     connect(d->dragSwitchTimer, SIGNAL(timeout()),
             this, SLOT(slotDragSwitchTimer()));
+
+    d->splitter->d->sidebars << this;
 
     setStyle(KMultiTabBar::VSNET);
 }
@@ -137,8 +137,8 @@ void Sidebar::loadViewState()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(QString("%1").arg(objectName()));
-    int tab                   = group.readEntry("ActiveTab", 0);
-    bool minimized            = group.readEntry("Minimized", d->minimizedDefault);
+    int tab                   = group.readEntry("ActiveTab",   0);
+    bool minimized            = group.readEntry("Minimized",   d->minimizedDefault);
     d->restoreSize            = group.readEntry("RestoreSize", -1);
 
     // validate
@@ -163,8 +163,8 @@ void Sidebar::saveViewState()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(QString("%1").arg(objectName()));
-    group.writeEntry("ActiveTab", d->activeTab);
-    group.writeEntry("Minimized", d->minimized);
+    group.writeEntry("ActiveTab",   d->activeTab);
+    group.writeEntry("Minimized",   d->minimized);
     group.writeEntry("RestoreSize", d->minimized ? d->restoreSize : -1);
     config->sync();
 }
@@ -416,7 +416,14 @@ void Sidebar::slotDragSwitchTimer()
     clicked(d->dragSwitchId);
 }
 
+void Sidebar::slotSplitterBtnClicked()
+{
+    clicked(d->activeTab);
+}
+
 // -----------------------------------------------------------------------------
+
+const QString SidebarSplitter::DEFAULT_CONFIG_KEY = "SplitterState";
 
 SidebarSplitter::SidebarSplitter(QWidget *parent)
                : QSplitter(parent), d(new SidebarSplitterPriv)
@@ -441,11 +448,13 @@ SidebarSplitter::~SidebarSplitter()
     delete d;
 }
 
-void SidebarSplitter::restoreState(KConfigGroup& group, const char *key)
+void SidebarSplitter::restoreState(KConfigGroup& group)
 {
-    if (!key)
-        key = "SplitterState";
+    restoreState(group, DEFAULT_CONFIG_KEY);
+}
 
+void SidebarSplitter::restoreState(KConfigGroup& group, QString key)
+{
     if (group.hasKey(key))
     {
         QByteArray state;
@@ -454,10 +463,13 @@ void SidebarSplitter::restoreState(KConfigGroup& group, const char *key)
     }
 }
 
-void SidebarSplitter::saveState(KConfigGroup& group, const char *key)
+void SidebarSplitter::saveState(KConfigGroup& group)
 {
-    if (!key)
-        key = "SplitterState";
+    saveState(group, DEFAULT_CONFIG_KEY);
+}
+
+void SidebarSplitter::saveState(KConfigGroup& group, QString key)
+{
     group.writeEntry(key, QSplitter::saveState().toBase64());
 }
 

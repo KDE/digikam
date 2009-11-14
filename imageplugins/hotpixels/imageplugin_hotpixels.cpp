@@ -29,7 +29,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <klocale.h>
 #include <kgenericfactory.h>
 #include <klibloader.h>
@@ -37,6 +36,7 @@
 #include <kactioncollection.h>
 #include <kcursor.h>
 #include <kapplication.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -58,7 +58,7 @@ ImagePlugin_HotPixels::ImagePlugin_HotPixels(QObject *parent, const QVariantList
 
     setXMLFile("digikamimageplugin_hotpixels_ui.rc");
 
-    kDebug(50006) << "ImagePlugin_HotPixels plugin loaded";
+    kDebug() << "ImagePlugin_HotPixels plugin loaded";
 }
 
 ImagePlugin_HotPixels::~ImagePlugin_HotPixels()

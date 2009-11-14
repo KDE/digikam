@@ -39,7 +39,6 @@
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kdebug.h>
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <klocale.h>
@@ -69,14 +68,23 @@ class RainDropToolPriv
 {
 public:
 
-    RainDropToolPriv()
-    {
-        dropInput     = 0;
-        amountInput   = 0;
-        coeffInput    = 0;
-        previewWidget = 0;
-        gboxSettings  = 0;
-    }
+    RainDropToolPriv() :
+        configGroupName("raindrops Tool"),
+        configDropAdjustmentEntry("DropAdjustment"),
+        configAmountAdjustmentEntry("AmountAdjustment"),
+        configCoeffAdjustmentEntry("CoeffAdjustment"),
+
+        dropInput(0),
+        amountInput(0),
+        coeffInput(0),
+        previewWidget(0),
+        gboxSettings(0)
+        {}
+
+    const QString       configGroupName;
+    const QString       configDropAdjustmentEntry;
+    const QString       configAmountAdjustmentEntry;
+    const QString       configCoeffAdjustmentEntry;
 
     RIntNumInput*       dropInput;
     RIntNumInput*       amountInput;
@@ -105,10 +113,11 @@ RainDropTool::RainDropTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
-                                             EditorToolSettings::Ok|
-                                             EditorToolSettings::Try|
-                                             EditorToolSettings::Cancel);
+    d->gboxSettings = new EditorToolSettings;
+    d->gboxSettings->setButtons(EditorToolSettings::Default|
+                                EditorToolSettings::Ok|
+                                EditorToolSettings::Try|
+                                EditorToolSettings::Cancel);
 
 
     // -------------------------------------------------------------
@@ -174,13 +183,13 @@ void RainDropTool::renderingFinished()
 void RainDropTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("raindrops Tool");
+    KConfigGroup group = config->group(d->configGroupName);
 
     blockWidgetSignals(true);
 
-    d->dropInput->setValue(group.readEntry("DropAdjustment", d->dropInput->defaultValue()));
-    d->amountInput->setValue(group.readEntry("AmountAdjustment", d->amountInput->defaultValue()));
-    d->coeffInput->setValue(group.readEntry("CoeffAdjustment", d->coeffInput->defaultValue()));
+    d->dropInput->setValue(group.readEntry(d->configDropAdjustmentEntry,     d->dropInput->defaultValue()));
+    d->amountInput->setValue(group.readEntry(d->configAmountAdjustmentEntry, d->amountInput->defaultValue()));
+    d->coeffInput->setValue(group.readEntry(d->configCoeffAdjustmentEntry,   d->coeffInput->defaultValue()));
 
     blockWidgetSignals(false);
 }
@@ -188,10 +197,10 @@ void RainDropTool::readSettings()
 void RainDropTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("raindrops Tool");
-    group.writeEntry("DropAdjustment", d->dropInput->value());
-    group.writeEntry("AmountAdjustment", d->amountInput->value());
-    group.writeEntry("CoeffAdjustment", d->coeffInput->value());
+    KConfigGroup group = config->group(d->configGroupName);
+    group.writeEntry(d->configDropAdjustmentEntry,   d->dropInput->value());
+    group.writeEntry(d->configAmountAdjustmentEntry, d->amountInput->value());
+    group.writeEntry(d->configCoeffAdjustmentEntry,  d->coeffInput->value());
     d->previewWidget->writeSettings();
     group.sync();
 }

@@ -391,7 +391,7 @@ public:
         Year
     };
 
-    DAlbum(const QDate& date, bool root=false, Range range=Month);
+    explicit DAlbum(const QDate& date, bool root=false, Range range=Month);
     ~DAlbum();
 
     QDate date() const;
@@ -455,7 +455,7 @@ private:
  *  AlbumIterator it(album);
  *  while ( it.current() )
  *  {
- *     kDebug(50003) << "Album: " << it.current()->title();
+ *     kDebug() << "Album: " << it.current()->title();
  *     ++it;
  *  }
  * \endcode

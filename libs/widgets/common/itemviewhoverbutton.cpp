@@ -41,21 +41,19 @@
 #include <kiconeffect.h>
 #include <klocale.h>
 
-// Local includes
-
 namespace Digikam
 {
 
-ItemViewHoverButton::ItemViewHoverButton(QAbstractItemView* view) :
-    QAbstractButton(view->viewport()),
-    m_isHovered(false),
-    m_fadingValue(0),
-    m_icon(),
-    m_fadingTimeLine(0)
+ItemViewHoverButton::ItemViewHoverButton(QAbstractItemView* view)
+                   : QAbstractButton(view->viewport()),
+                     m_isHovered(false),
+                     m_fadingValue(0),
+                     m_icon(),
+                     m_fadingTimeLine(0)
 {
     const bool animate = KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects;
     const int duration = animate ? 600 : 1;
-    m_fadingTimeLine = new QTimeLine(duration, this);
+    m_fadingTimeLine   = new QTimeLine(duration, this);
     m_fadingTimeLine->setFrameRange(0, 255);
 
     setCheckable(true);
@@ -91,7 +89,8 @@ void ItemViewHoverButton::reset()
 void ItemViewHoverButton::setIndex(const QModelIndex& index)
 {
     m_index = index;
-    if (index.isValid()) {
+    if (index.isValid())
+    {
         startFading();
     }
 }
@@ -106,7 +105,8 @@ void ItemViewHoverButton::setVisible(bool visible)
     QAbstractButton::setVisible(visible);
 
     stopFading();
-    if (visible) {
+    if (visible)
+    {
         startFading();
     }
 
@@ -154,12 +154,16 @@ void ItemViewHoverButton::paintEvent(QPaintEvent* event)
     painter.drawEllipse(0, 0, width(), height());
 
     // draw the icon overlay
-    if (m_isHovered) {
+    if (m_isHovered)
+    {
         KIconEffect iconEffect;
         QPixmap activeIcon = iconEffect.apply(m_icon, KIconLoader::Desktop, KIconLoader::ActiveState);
         painter.drawPixmap(0, 0, activeIcon);
-    } else {
-        if (m_fadingValue < 255) {
+    }
+    else
+    {
+        if (m_fadingValue < 255)
+        {
             // apply an alpha mask respecting the fading value to the icon
             QPixmap icon = m_icon;
             QPixmap alphaMask(icon.width(), icon.height());
@@ -167,7 +171,9 @@ void ItemViewHoverButton::paintEvent(QPaintEvent* event)
             alphaMask.fill(color);
             icon.setAlphaChannel(alphaMask);
             painter.drawPixmap(0, 0, icon);
-        } else {
+        }
+        else
+        {
             // no fading is required
             painter.drawPixmap(0, 0, m_icon);
         }
@@ -177,7 +183,8 @@ void ItemViewHoverButton::paintEvent(QPaintEvent* event)
 void ItemViewHoverButton::setFadingValue(int value)
 {
     m_fadingValue = value;
-    if (m_fadingValue >= 255) {
+    if (m_fadingValue >= 255)
+    {
         m_fadingTimeLine->stop();
     }
     update();
@@ -213,4 +220,3 @@ void ItemViewHoverButton::stopFading()
 }
 
 } // namespace Digikam
-

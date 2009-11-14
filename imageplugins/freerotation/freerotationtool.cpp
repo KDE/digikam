@@ -37,24 +37,19 @@
 #include <QGridLayout>
 #include <QImage>
 #include <QLabel>
-#include <QLayout>
 #include <QPainter>
 #include <QPushButton>
 
 // KDE includes
 
-#include <kaboutdata.h>
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kcursor.h>
-#include <kdebug.h>
 #include <kdialog.h>
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kseparator.h>
-#include <kstandarddirs.h>
 
 // LibKDcraw includes
 
@@ -63,13 +58,13 @@
 
 // Local includes
 
-#include "rexpanderbox.h"
 #include "daboutdata.h"
 #include "dimg.h"
 #include "editortoolsettings.h"
 #include "freerotation.h"
 #include "imageiface.h"
 #include "imagewidget.h"
+#include "rexpanderbox.h"
 #include "version.h"
 
 using namespace Digikam;
@@ -82,41 +77,48 @@ class FreeRotationToolPriv
 {
 public:
 
-    FreeRotationToolPriv()
-    {
-        antialiasInput      = 0;
-        newHeightLabel      = 0;
-        newWidthLabel       = 0;
-        autoAdjustBtn       = 0;
-        autoAdjustPoint1Btn = 0;
-        autoAdjustPoint2Btn = 0;
-        expanderBox         = 0;
-        gboxSettings        = 0;
-        previewWidget       = 0;
-        autoCropCB          = 0;
-        fineAngleInput      = 0;
-        angleInput          = 0;
-    }
+    FreeRotationToolPriv() :
+        configGroupName("freerotation Tool"),
+        configAutoCropTypeEntry("Auto Crop Type"),
+        configAntiAliasingEntry("Anti Aliasing"),
 
-    QCheckBox*           antialiasInput;
+        antialiasInput(0),
+        newHeightLabel(0),
+        newWidthLabel(0),
+        autoAdjustBtn(0),
+        autoAdjustPoint1Btn(0),
+        autoAdjustPoint2Btn(0),
+        expanderBox(0),
+        gboxSettings(0),
+        previewWidget(0),
+        autoCropCB(0),
+        fineAngleInput(0),
+        angleInput(0)
+        {}
 
-    QLabel*              newHeightLabel;
-    QLabel*              newWidthLabel;
+    const QString       configGroupName;
+    const QString       configAutoCropTypeEntry;
+    const QString       configAntiAliasingEntry;
 
-    QPoint               autoAdjustPoint1;
-    QPoint               autoAdjustPoint2;
+    QCheckBox*          antialiasInput;
 
-    QPushButton*         autoAdjustBtn;
-    QPushButton*         autoAdjustPoint1Btn;
-    QPushButton*         autoAdjustPoint2Btn;
+    QLabel*             newHeightLabel;
+    QLabel*             newWidthLabel;
 
-    RExpanderBox*        expanderBox;
-    EditorToolSettings*  gboxSettings;
-    ImageWidget*         previewWidget;
+    QPoint              autoAdjustPoint1;
+    QPoint              autoAdjustPoint2;
 
-    RComboBox*           autoCropCB;
-    RDoubleNumInput*     fineAngleInput;
-    RIntNumInput*        angleInput;
+    QPushButton*        autoAdjustBtn;
+    QPushButton*        autoAdjustPoint1Btn;
+    QPushButton*        autoAdjustPoint2Btn;
+
+    RExpanderBox*       expanderBox;
+    EditorToolSettings* gboxSettings;
+    ImageWidget*        previewWidget;
+
+    RComboBox*          autoCropCB;
+    RDoubleNumInput*    fineAngleInput;
+    RIntNumInput*       angleInput;
 };
 
 FreeRotationTool::FreeRotationTool(QObject* parent)
@@ -143,10 +145,8 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     QString temp;
     Digikam::ImageIface iface(0, 0);
 
-    d->gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
-                                             EditorToolSettings::Ok|
-                                             EditorToolSettings::Cancel,
-                                             EditorToolSettings::ColorGuide);
+    d->gboxSettings = new EditorToolSettings;
+    d->gboxSettings->setTools(EditorToolSettings::ColorGuide);
 
 
     QLabel *label1   = new QLabel(i18n("New width:"));
@@ -195,30 +195,46 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     QPixmap pm1 = generateBtnPixmap(QString("1"), Qt::black);
     d->autoAdjustPoint1Btn = new QPushButton;
     d->autoAdjustPoint1Btn->setIcon(pm1);
-    d->autoAdjustPoint1Btn->setText(i18n("Click to set"));
     d->autoAdjustPoint1Btn->setSizePolicy(QSizePolicy::MinimumExpanding,
                                           QSizePolicy::MinimumExpanding);
 
     QPixmap pm2 = generateBtnPixmap(QString("2"), Qt::black);
     d->autoAdjustPoint2Btn = new QPushButton;
     d->autoAdjustPoint2Btn->setIcon(pm2);
-    d->autoAdjustPoint2Btn->setText(i18n("Click to set"));
     d->autoAdjustPoint2Btn->setSizePolicy(QSizePolicy::MinimumExpanding,
                                           QSizePolicy::MinimumExpanding);
 
+    d->autoAdjustPoint1Btn->setShortcut(QKeySequence(Qt::Key_1));
     d->autoAdjustPoint1Btn->setToolTip(btnWhatsThis);
     d->autoAdjustPoint1Btn->setWhatsThis(btnWhatsThis);
     d->autoAdjustPoint2Btn->setToolTip(btnWhatsThis);
     d->autoAdjustPoint2Btn->setWhatsThis(btnWhatsThis);
 
+    // --------------------------------------------------------
+
     // try to determine the maximum text width, to set the button minwidth
+    QPoint p;
+    setPointInvalid(p);
+    QString invalidText = generateButtonLabel(p);
+    p.setX(1); p.setY(2);
+    QString validText  = generateButtonLabel(p);
+
     QFont fnt = d->autoAdjustPoint1Btn->font();
     QFontMetrics fm(fnt);
-    int minWidth = fm.width(QString("(1234, 1234)")) + pm1.width() * 2 + 5;
+
+    const int offset = (pm1.width() * 2) + 10;
+    int minWidth1    = fm.width(invalidText) + offset;
+    int minWidth2    = fm.width(validText) + offset;
+    int minWidth     = qMax<int>(minWidth1, minWidth2);
 
     // set new minwidth
     d->autoAdjustPoint1Btn->setMinimumWidth(minWidth);
     d->autoAdjustPoint2Btn->setMinimumWidth(minWidth);
+
+    // --------------------------------------------------------
+
+    d->autoAdjustPoint1Btn->setText(invalidText);
+    d->autoAdjustPoint2Btn->setText(invalidText);
 
     d->autoAdjustBtn = new QPushButton(i18nc("Automatic Adjustment", "Adjust"));
     d->autoAdjustBtn->setSizePolicy(QSizePolicy::MinimumExpanding,
@@ -228,10 +244,10 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
 
     QWidget* manualAdjustContainer = new QWidget;
     QGridLayout *containerLayout   = new QGridLayout;
-    containerLayout->addWidget(label3,              0, 0, 1, 1);
-    containerLayout->addWidget(d->angleInput,       1, 0, 1, 1);
-    containerLayout->addWidget(label4,              2, 0, 1, 1);
-    containerLayout->addWidget(d->fineAngleInput,   3, 0, 1, 1);
+    containerLayout->addWidget(label3,            0, 0, 1, 1);
+    containerLayout->addWidget(d->angleInput,     1, 0, 1, 1);
+    containerLayout->addWidget(label4,            2, 0, 1, 1);
+    containerLayout->addWidget(d->fineAngleInput, 3, 0, 1, 1);
     containerLayout->setMargin(KDialog::marginHint());
     manualAdjustContainer->setLayout(containerLayout);
 
@@ -279,12 +295,12 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     // -------------------------------------------------------------
 
     QGridLayout* mainLayout = new QGridLayout;
-    mainLayout->addWidget(label1,               0, 0, 1, 1);
-    mainLayout->addWidget(d->newWidthLabel,     0, 1, 1, 1);
-    mainLayout->addWidget(label2,               1, 0, 1, 1);
-    mainLayout->addWidget(d->newHeightLabel,    1, 1, 1, 1);
-    mainLayout->addWidget(line,                 2, 0, 1,-1);
-    mainLayout->addWidget(d->expanderBox,       3, 0, 1,-1);
+    mainLayout->addWidget(label1,            0, 0, 1, 1);
+    mainLayout->addWidget(d->newWidthLabel,  0, 1, 1, 1);
+    mainLayout->addWidget(label2,            1, 0, 1, 1);
+    mainLayout->addWidget(d->newHeightLabel, 1, 1, 1, 1);
+    mainLayout->addWidget(line,              2, 0, 1,-1);
+    mainLayout->addWidget(d->expanderBox,    3, 0, 1,-1);
     mainLayout->setRowStretch(3, 10);
     mainLayout->setMargin(d->gboxSettings->spacingHint());
     mainLayout->setSpacing(d->gboxSettings->spacingHint());
@@ -334,12 +350,12 @@ void FreeRotationTool::slotColorGuideChanged()
 void FreeRotationTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("freerotation Tool");
+    KConfigGroup group        = config->group(d->configGroupName);
 
     blockWidgetSignals(true);
 
-    d->autoCropCB->setCurrentIndex(group.readEntry("Auto Crop Type", d->autoCropCB->defaultIndex()));
-    d->antialiasInput->setChecked(group.readEntry("Anti Aliasing", true));
+    d->autoCropCB->setCurrentIndex(group.readEntry(d->configAutoCropTypeEntry, d->autoCropCB->defaultIndex()));
+    d->antialiasInput->setChecked(group.readEntry(d->configAntiAliasingEntry, true));
     d->expanderBox->readSettings();
 
     d->angleInput->slotReset();
@@ -354,9 +370,9 @@ void FreeRotationTool::readSettings()
 void FreeRotationTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("freerotation Tool");
-    group.writeEntry("Auto Crop Type", d->autoCropCB->currentIndex());
-    group.writeEntry("Anti Aliasing", d->antialiasInput->isChecked());
+    KConfigGroup group        = config->group(d->configGroupName);
+    group.writeEntry(d->configAutoCropTypeEntry, d->autoCropCB->currentIndex());
+    group.writeEntry(d->configAntiAliasingEntry, d->antialiasInput->isChecked());
     d->previewWidget->writeSettings();
     group.sync();
 }
@@ -447,8 +463,10 @@ void FreeRotationTool::putPreviewData(void)
     d->previewWidget->updatePreview();
     QSize newSize = dynamic_cast<FreeRotation *>(filter())->getNewSize();
     QString temp;
-    d->newWidthLabel->setText(temp.setNum( newSize.width()) + i18n(" px") );
-    d->newHeightLabel->setText(temp.setNum( newSize.height()) + i18n(" px") );
+    int new_w = (newSize.width()  == -1) ? iface->originalWidth()  : newSize.width();
+    int new_h = (newSize.height() == -1) ? iface->originalHeight() : newSize.height();
+    d->newWidthLabel->setText(temp.setNum(new_w)  + i18n(" px") );
+    d->newHeightLabel->setText(temp.setNum(new_h) + i18n(" px") );
 }
 
 void FreeRotationTool::putFinalData(void)
@@ -466,25 +484,74 @@ void FreeRotationTool::renderingFinished()
     kapp->restoreOverrideCursor();
 }
 
-QString FreeRotationTool::generatePointLabel(const QPoint& p)
+QString FreeRotationTool::generateButtonLabel(const QPoint& p)
 {
-    if (!pointIsValid(p))
-        return QString(i18n("Click to set"));
+    QString clickToSet     = i18n("Click to set");
+    QString isOk           = i18nc("point has been set and is valid", "Okay");
+    bool clickToSetIsWider = clickToSet.count() >= isOk.count();
+    QString widestString   = clickToSetIsWider ? clickToSet : isOk;
+    int maxLength          = widestString.count();
+    QString label          = clickToSetIsWider ? clickToSet : centerString(clickToSet, maxLength);
 
-    QString label = QString("(%1, %2)")
-                           .arg(p.x())
-                           .arg(p.y());
+    if (pointIsValid(p))
+    {
+        label = clickToSetIsWider ? centerString(isOk, maxLength) : isOk;
+    }
     return label;
+}
+
+QString FreeRotationTool::centerString(const QString& str, int maxLength)
+{
+    QString tmp = str;
+    int max     = (maxLength == -1) ? tmp.count() : maxLength;
+
+    // fill with additional whitespace, to match the original label length and center
+    // the text, without moving the button icon
+    int diff = qAbs<int>(max - str.count());
+    if (diff > 0)
+    {
+        QString delimiter(" ");
+        int times = (diff / 2);
+
+
+#if QT_VERSION >= 0x040500
+        tmp.prepend(delimiter.repeated(times));
+        tmp.append(delimiter.repeated(times));
+#else
+        tmp.prepend(repeatString(delimiter, times));
+        tmp.append(repeatString(delimiter, times));
+#endif
+
+        diff = qAbs<int>(maxLength - tmp.count());
+        if (diff != 0)
+        {
+            // too long?
+            if (tmp.count() > maxLength)
+            {
+                tmp.chop(diff);
+            }
+            // too short?
+            else if (tmp.count() < maxLength)
+            {
+#if QT_VERSION >= 0x040500
+                tmp.append(delimiter.repeated(diff));
+#else
+                tmp.append(repeatString(delimiter, diff));
+#endif
+            }
+        }
+    }
+    return tmp;
 }
 
 void FreeRotationTool::updatePoints()
 {
     // set labels
     QString tmp;
-    tmp = generatePointLabel(d->autoAdjustPoint1);
+    tmp = generateButtonLabel(d->autoAdjustPoint1);
     d->autoAdjustPoint1Btn->setText(tmp);
 
-    tmp = generatePointLabel(d->autoAdjustPoint2);
+    tmp = generateButtonLabel(d->autoAdjustPoint2);
     d->autoAdjustPoint2Btn->setText(tmp);
 
     // set points in preview widget, don't add invalid points
@@ -505,8 +572,9 @@ void FreeRotationTool::updatePoints()
     d->previewWidget->setPoints(points, true);
 
     // enable / disable adjustment buttons
-    bool valid  = (pointIsValid(d->autoAdjustPoint1) && pointIsValid(d->autoAdjustPoint2))
-                  && (d->autoAdjustPoint1 != d->autoAdjustPoint2);
+    bool valid  = (pointIsValid(d->autoAdjustPoint1)  &&
+                   pointIsValid(d->autoAdjustPoint2)) &&
+                  (d->autoAdjustPoint1 != d->autoAdjustPoint2);
     d->autoAdjustBtn->setEnabled(valid);
 }
 
@@ -532,13 +600,22 @@ void FreeRotationTool::slotAutoAdjustP2Clicked()
 
 void FreeRotationTool::slotAutoAdjustClicked()
 {
+    // we need to check manually here if the button is enabled, because this slot can be called
+    // with an action now
+    if (!d->autoAdjustBtn->isEnabled())
+        return;
+
     double angle = calculateAutoAngle();
     if (fabs(angle) > 45.0)
     {
         if (angle < 0.0)
+        {
             angle += 90.0;
+        }
         else
+        {
             angle -= 90.0;
+        }
     }
 
     // we need to add the calculated angle to the currently set angle
@@ -587,8 +664,9 @@ double FreeRotationTool::calculateAutoAngle()
 {
     // check if all points are valid
     if (!pointIsValid(d->autoAdjustPoint1) && !pointIsValid(d->autoAdjustPoint2))
+    {
         return 0.0;
-
+    }
     return FreeRotation::calculateAngle(d->autoAdjustPoint1, d->autoAdjustPoint2);
 }
 
@@ -602,7 +680,9 @@ bool FreeRotationTool::pointIsValid(const QPoint& p)
 {
     bool valid = true;
     if (p.x() == -1 || p.y() == -1)
+    {
         valid = false;
+    }
     return valid;
 }
 
@@ -612,6 +692,16 @@ void FreeRotationTool::blockWidgetSignals(bool b)
     d->fineAngleInput->blockSignals(b);
     d->autoCropCB->blockSignals(b);
     d->antialiasInput->blockSignals(b);
+}
+
+QString FreeRotationTool::repeatString(const QString& str, int times)
+{
+    QString tmp;
+    for (int i = 0; i < times; ++i)
+    {
+        tmp.append(str);
+    }
+    return tmp;
 }
 
 }  // namespace DigikamFreeRotationImagesPlugin

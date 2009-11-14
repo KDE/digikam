@@ -31,7 +31,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kio/job.h>
 #include <kio/netaccess.h>
 #include <klocale.h>

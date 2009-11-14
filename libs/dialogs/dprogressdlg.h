@@ -49,7 +49,7 @@ class DIGIKAM_EXPORT DProgressDlg : public KDialog
 
 public:
 
-    DProgressDlg(QWidget *parent=0, const QString& caption=QString());
+    explicit DProgressDlg(QWidget *parent=0, const QString& caption=QString());
     ~DProgressDlg();
 
     void setLabel(const QString& text);

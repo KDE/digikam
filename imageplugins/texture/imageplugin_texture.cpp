@@ -29,12 +29,12 @@
 
 #include <klocale.h>
 #include <kgenericfactory.h>
-#include <kdebug.h>
 #include <klibloader.h>
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kcursor.h>
 #include <kapplication.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -57,7 +57,7 @@ ImagePlugin_Texture::ImagePlugin_Texture(QObject *parent, const QVariantList &)
 
     setXMLFile( "digikamimageplugin_texture_ui.rc" );
 
-    kDebug(50006) << "ImagePlugin_Texture plugin loaded";
+    kDebug() << "ImagePlugin_Texture plugin loaded";
 }
 
 ImagePlugin_Texture::~ImagePlugin_Texture()

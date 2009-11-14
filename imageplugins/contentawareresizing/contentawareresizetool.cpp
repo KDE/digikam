@@ -43,7 +43,6 @@
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kdebug.h>
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <klocale.h>
@@ -92,31 +91,55 @@ public:
 
 public:
 
-    ContentAwareResizeToolPriv()
-    {
-        preserveRatioBox  = 0;
-        weightMaskBox     = 0;
-        preserveSkinTones = 0;
-        previewWidget     = 0;
-        gboxSettings      = 0;
-        wInput            = 0;
-        hInput            = 0;
-        stepInput         = 0;
-        wpInput           = 0;
-        hpInput           = 0;
-        mixedRescaleInput = 0;
-        rigidityInput     = 0;
-        funcInput         = 0;
-        resizeOrderInput  = 0;
-        redMaskTool       = 0;
-        greenMaskTool     = 0;
-        eraseMaskTool     = 0;
-        maskGroup         = 0;
-        prevW             = 0;
-        prevH             = 0;
-        maskPenSize       = 0;
-        expanderBox       = 0;
-    }
+    ContentAwareResizeToolPriv() :
+        configGroupName("liquidrescale Tool"),
+        configStepEntry("Step"),
+        configSideSwitchEntry("SideSwitch"),
+        configRigidityEntry("Rigidity"),
+        configFunctionEntry("Function"),
+        configOrderEntry("Order"),
+        configMixedRescaleValueEntry("MixedRescaleValue"),
+        configBrushSizeEntry("BrushSize"),
+        configPreserveTonesEntry("PreserveTones"),
+
+        orgWidth(0),
+        orgHeight(0),
+        prevW(0),
+        prevH(0),
+        prevWP(0.0),
+        prevHP(0.0),
+        preserveRatioBox(0),
+        weightMaskBox(0),
+        preserveSkinTones(0),
+        previewWidget(0),
+        gboxSettings(0),
+        wInput(0),
+        hInput(0),
+        stepInput(0),
+        maskPenSize(0),
+        sideSwitchInput(0),
+        wpInput(0),
+        hpInput(0),
+        mixedRescaleInput(0),
+        rigidityInput(0),
+        funcInput(0),
+        resizeOrderInput(0),
+        expanderBox(0),
+        redMaskTool(0),
+        greenMaskTool(0),
+        eraseMaskTool(0),
+        maskGroup(0)
+        {}
+
+    const QString       configGroupName;
+    const QString       configStepEntry;
+    const QString       configSideSwitchEntry;
+    const QString       configRigidityEntry;
+    const QString       configFunctionEntry;
+    const QString       configOrderEntry;
+    const QString       configMixedRescaleValueEntry;
+    const QString       configBrushSizeEntry;
+    const QString       configPreserveTonesEntry;
 
     int                 orgWidth;
     int                 orgHeight;
@@ -126,35 +149,35 @@ public:
     double              prevWP;
     double              prevHP;
 
-    QCheckBox          *preserveRatioBox;
-    QCheckBox          *weightMaskBox;
-    QCheckBox          *preserveSkinTones;
+    QCheckBox*          preserveRatioBox;
+    QCheckBox*          weightMaskBox;
+    QCheckBox*          preserveSkinTones;
 
-    ImageWidget        *previewWidget;
+    ImageWidget*        previewWidget;
 
-    EditorToolSettings *gboxSettings;
+    EditorToolSettings* gboxSettings;
 
-    RIntNumInput       *wInput;
-    RIntNumInput       *hInput;
-    RIntNumInput       *stepInput;
-    RIntNumInput       *maskPenSize;
-    RIntNumInput       *sideSwitchInput;
+    RIntNumInput*       wInput;
+    RIntNumInput*       hInput;
+    RIntNumInput*       stepInput;
+    RIntNumInput*       maskPenSize;
+    RIntNumInput*       sideSwitchInput;
 
-    RDoubleNumInput    *wpInput;
-    RDoubleNumInput    *hpInput;
-    RDoubleNumInput    *mixedRescaleInput;
-    RDoubleNumInput    *rigidityInput;
+    RDoubleNumInput*    wpInput;
+    RDoubleNumInput*    hpInput;
+    RDoubleNumInput*    mixedRescaleInput;
+    RDoubleNumInput*    rigidityInput;
 
-    RComboBox          *funcInput;
-    RComboBox          *resizeOrderInput;
+    RComboBox*          funcInput;
+    RComboBox*          resizeOrderInput;
 
-    RExpanderBox       *expanderBox;
+    RExpanderBox*       expanderBox;
 
-    QToolButton        *redMaskTool;
-    QToolButton        *greenMaskTool;
-    QToolButton        *eraseMaskTool;
+    QToolButton*        redMaskTool;
+    QToolButton*        greenMaskTool;
+    QToolButton*        eraseMaskTool;
 
-    QButtonGroup       *maskGroup;
+    QButtonGroup*       maskGroup;
 };
 
 ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
@@ -172,10 +195,11 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings   = new EditorToolSettings(EditorToolSettings::Default|
-                                               EditorToolSettings::Try|
-                                               EditorToolSettings::Ok|
-                                               EditorToolSettings::Cancel);
+    d->gboxSettings = new EditorToolSettings;
+    d->gboxSettings->setButtons(EditorToolSettings::Default|
+                                EditorToolSettings::Ok|
+                                EditorToolSettings::Try|
+                                EditorToolSettings::Cancel);
 
     QGridLayout* grid = new QGridLayout(d->gboxSettings->plainPage());
 
@@ -469,19 +493,19 @@ ContentAwareResizeTool::~ContentAwareResizeTool()
 void ContentAwareResizeTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("liquidrescale Tool");
+    KConfigGroup group        = config->group(d->configGroupName);
 
     blockWidgetSignals(true);
 
     // NOTE: size settings are not restored here because they depands of image size.
-    d->stepInput->setValue(group.readEntry("Step",                      d->stepInput->defaultValue()));
-    d->stepInput->setValue(group.readEntry("SideSwitch",                d->sideSwitchInput->defaultValue()));
-    d->rigidityInput->setValue(group.readEntry("Rigidity",              d->rigidityInput->defaultValue()));
-    d->funcInput->setCurrentIndex(group.readEntry("Function",           d->funcInput->defaultIndex()));
-    d->resizeOrderInput->setCurrentIndex(group.readEntry("Order",       d->resizeOrderInput->defaultIndex()));
-    d->mixedRescaleInput->setValue(group.readEntry("MixedRescaleValue", d->mixedRescaleInput->defaultValue()));
-    d->maskPenSize->setValue(group.readEntry("BrushSize",               d->maskPenSize->defaultValue()));
-    d->preserveSkinTones->setChecked(group.readEntry("PreserveTones",   false));
+    d->stepInput->setValue(group.readEntry(d->configStepEntry,                      d->stepInput->defaultValue()));
+    d->stepInput->setValue(group.readEntry(d->configSideSwitchEntry,                d->sideSwitchInput->defaultValue()));
+    d->rigidityInput->setValue(group.readEntry(d->configRigidityEntry,              d->rigidityInput->defaultValue()));
+    d->funcInput->setCurrentIndex(group.readEntry(d->configFunctionEntry,           d->funcInput->defaultIndex()));
+    d->resizeOrderInput->setCurrentIndex(group.readEntry(d->configOrderEntry,       d->resizeOrderInput->defaultIndex()));
+    d->mixedRescaleInput->setValue(group.readEntry(d->configMixedRescaleValueEntry, d->mixedRescaleInput->defaultValue()));
+    d->maskPenSize->setValue(group.readEntry(d->configBrushSizeEntry,               d->maskPenSize->defaultValue()));
+    d->preserveSkinTones->setChecked(group.readEntry(d->configPreserveTonesEntry,   false));
     d->expanderBox->readSettings();
 
     enableContentAwareSettings(d->mixedRescaleInput->value() > 0.0);
@@ -492,17 +516,17 @@ void ContentAwareResizeTool::readSettings()
 void ContentAwareResizeTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("liquidrescale Tool");
+    KConfigGroup group        = config->group(d->configGroupName);
 
     // NOTE: size settings are not saved here because they depands of image size.
-    group.writeEntry("Step",              d->stepInput->value());
-    group.writeEntry("SideSwitch",        d->sideSwitchInput->value());
-    group.writeEntry("Rigidity",          d->rigidityInput->value());
-    group.writeEntry("Function",          d->funcInput->currentIndex());
-    group.writeEntry("Order",             d->resizeOrderInput->currentIndex());
-    group.writeEntry("MixedRescaleValue", d->mixedRescaleInput->value());
-    group.writeEntry("BrushSize",         d->maskPenSize->value());
-    group.writeEntry("PreserveTones",     d->preserveSkinTones->isChecked());
+    group.writeEntry(d->configStepEntry,              d->stepInput->value());
+    group.writeEntry(d->configSideSwitchEntry,        d->sideSwitchInput->value());
+    group.writeEntry(d->configRigidityEntry,          d->rigidityInput->value());
+    group.writeEntry(d->configFunctionEntry,          d->funcInput->currentIndex());
+    group.writeEntry(d->configOrderEntry,             d->resizeOrderInput->currentIndex());
+    group.writeEntry(d->configMixedRescaleValueEntry, d->mixedRescaleInput->value());
+    group.writeEntry(d->configBrushSizeEntry,         d->maskPenSize->value());
+    group.writeEntry(d->configPreserveTonesEntry,     d->preserveSkinTones->isChecked());
 
     d->previewWidget->writeSettings();
     group.sync();

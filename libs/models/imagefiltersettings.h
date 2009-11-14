@@ -31,6 +31,10 @@
 #include <QMap>
 #include <QString>
 
+// KDE includes
+
+#include <kurl.h>
+
 // Local includes
 
 #include "searchtextbar.h"
@@ -114,12 +118,17 @@ public:
     /// Returns if images will be filtered by these criteria at all
     bool isFiltering() const;
 
+    /// --- URL whitelist filter
+    QHash<QString,KUrl::List> urlWhitelists;
+    void setUrlWhitelist(const KUrl::List& urlList, const QString id);
+    
     /// --- Change notification ---
 
     /** Returns database fields a change in which would affect the current filtering.
      *  To find out if an image tag change affects filtering, test isFilteringByTags().
      *  The text filter will also be affected by changes in tags and album names.*/
     DatabaseFields::Set watchFlags() const;
+    
 
 };
 

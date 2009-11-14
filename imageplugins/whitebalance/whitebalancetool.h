@@ -59,7 +59,7 @@ private Q_SLOTS:
     void slotColorSelectedFromTarget(const Digikam::DColor& color);
     void slotTemperatureChanged(double temperature);
     void slotTemperaturePresetChanged(int tempPreset);
-    void slotAutoAdjustExposure(void);
+    void slotAutoAdjustExposure();
     void slotPickerColorButtonActived();
 
 private:
@@ -68,26 +68,6 @@ private:
     void writeSettings();
     void finalRendering();
     void blockWidgetSignals(bool b);
-
-private:
-
-    enum TemperaturePreset
-    {
-        Candle=0,
-        Lamp40W,
-        Lamp100W,
-        Lamp200W,
-        Sunrise,
-        StudioLamp,
-        MoonLight,
-        Neutral,
-        DaylightD50,
-        Flash,
-        Sun,
-        XeonLamp,
-        DaylightD65,
-        None
-    };
 
 private:
 

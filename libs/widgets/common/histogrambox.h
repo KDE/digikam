@@ -28,9 +28,14 @@
 
 #include <QtGui/QWidget>
 
+// KDE includes
+
+#include <kdebug.h>
+
 // Local includes
 
 #include "digikam_export.h"
+#include "globals.h"
 
 class QColor;
 
@@ -46,41 +51,15 @@ Q_OBJECT
 
 public:
 
-    enum HistogramCode
-    {
-        RGB = 0,
-        RGBA,
-        LRGB,
-        LRGBA,
-        LRGBC,
-        LRGBAC
-    };
-
-    enum HistogramScale
-    {
-        Linear = 0,
-        Logarithmic
-    };
-
-    enum ColorChannel
-    {
-        LuminosityChannel = 0,
-        RedChannel,
-        GreenChannel,
-        BlueChannel,
-        AlphaChannel,
-        ColorChannels
-    };
-
-public:
-
-    HistogramBox(QWidget* parent = 0, int histogramType = LRGB, bool selectMode = false);
+    explicit HistogramBox(QWidget* parent = 0, HistogramBoxType type = Digikam::LRGB, bool selectMode = false);
     ~HistogramBox();
 
-    HistogramWidget* histogram() const;
+    void setHistogramType(HistogramBoxType type);
 
-    void setGradientVisible(bool visible);
     void setGradientColors(const QColor& from, const QColor& to);
+    void setGradientVisible(bool visible);
+
+    HistogramWidget* histogram() const;
 
     int  channel() const;
     void setChannel(int channel);
@@ -90,8 +69,8 @@ public:
     void setColorsChannel(int color);
     void setColorsEnabled(bool enabled);
 
-    int  scale() const;
-    void setScale(int scale);
+    HistogramScale scale() const;
+    void setScale(HistogramScale scale);
 
 Q_SIGNALS:
 

@@ -105,4 +105,11 @@ int PNGSettings::getCompressionValue()
     return d->PNGcompression->value();
 }
 
+int PNGSettings::convertCompressionForLibPng(int value)
+{
+    // PNG compression slider settings : 1 - 9 ==> libpng settings : 100 - 1.
+
+    return( (int)(((1.0-100.0)/8.0) * (float)value + 100.0 - ((1.0-100.0)/8.0)) );
+}
+
 }  // namespace Digikam

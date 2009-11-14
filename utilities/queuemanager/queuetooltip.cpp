@@ -25,20 +25,19 @@
 
 // Qt includes
 
-#include <QPixmap>
-#include <QPainter>
-#include <QTextDocument>
 #include <QDateTime>
+#include <QPainter>
+#include <QPixmap>
+#include <QTextDocument>
 
 // KDE includes
 
-#include <kdebug.h>
 #include <klocale.h>
 
 // Local includes
 
-#include "queuelist.h"
 #include "albumsettings.h"
+#include "queuelist.h"
 #include "tooltipfiller.h"
 
 namespace Digikam
@@ -54,9 +53,8 @@ public:
         item = 0;
     }
 
-    QueueListView     *view;
-
-    QueueListViewItem *item;
+    QueueListView*     view;
+    QueueListViewItem* item;
 };
 
 QueueToolTip::QueueToolTip(QueueListView* view)

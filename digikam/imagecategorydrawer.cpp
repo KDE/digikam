@@ -29,7 +29,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>
 
@@ -164,7 +163,41 @@ void ImageCategoryDrawer::textForAlbum(const QModelIndex& index, QString *header
     int albumId   = index.data(ImageFilterModel::CategoryAlbumIdRole).toInt();
     PAlbum* album = AlbumManager::instance()->findPAlbum(albumId);
 
-    if (album)
+void ImageCategoryDrawer::textForFormat(const QModelIndex& index, QString *header, QString *subLine) const
+{
+    QString format = index.data(ImageFilterModel::CategoryFormatRole).toString();
+    format = ImageScanner::formatToString(format);
+
+    *header = format;
+
+    int count  = d->view->categoryRange(index).height();
+    *subLine = i18np("1 Item", "%1 Items", count);
+}
+
+void ImageCategoryDrawer::textForPAlbum(PAlbum *album, bool recursive, int count, QString *header, QString *subLine) const
+{
+    Q_UNUSED(recursive);
+    if (!album)
+        return;
+
+    QDate date = album->date();
+
+    KLocale tmpLocale(*KGlobal::locale());
+
+    tmpLocale.setDateFormat("%d"); // day of month with two digits
+    QString day = tmpLocale.formatDate(date);
+
+    tmpLocale.setDateFormat("%b"); // short form of the month
+    QString month = tmpLocale.formatDate(date);
+
+    tmpLocale.setDateFormat("%Y"); // long form of the year
+    QString year = tmpLocale.formatDate(date);
+
+    *subLine = i18ncp("%1: day of month with two digits, %2: short month name, %3: year",
+                        "Album Date: %2 %3 %4 - 1 Item", "Album Date: %2 %3 %4 - %1 Items",
+                        count, day, month, year);
+
+    if (!album->caption().isEmpty())
     {
         int count  = d->view->categoryRange(index).height();
         QDate date = album->date();
@@ -174,8 +207,25 @@ void ImageCategoryDrawer::textForAlbum(const QModelIndex& index, QString *header
         tmpLocale.setDateFormat("%d"); // day of month with two digits
         QString day = tmpLocale.formatDate(date);
 
-        tmpLocale.setDateFormat("%b"); // short form of the month
-        QString month = tmpLocale.formatDate(date);
+    if (recursive && talbum->firstChild())
+    {
+        int n=0;
+        for (AlbumIterator it(talbum); it.current(); ++it)
+            n++;
+
+        QString firstPart = i18ncp("%2: a tag title; %3: number of subtags",
+                                   "%2 including 1 subtag", "%2 including %1 subtags",
+                                   n, talbum->tagPath(false));
+
+        *subLine = i18ncp("%2: the previous string (e.g. 'Foo including 7 subtags'); %1: number of items in tag",
+                         "%2 - 1 Item", "%2 - %1 Items",
+                         count, firstPart);
+    }
+    else
+    {
+        *subLine = i18np("%2 - 1 Item", "%2 - %1 Items", count, talbum->tagPath(false));
+    }
+}
 
         tmpLocale.setDateFormat("%Y"); // long form of the year
         QString year = tmpLocale.formatDate(date);

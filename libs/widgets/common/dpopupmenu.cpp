@@ -47,7 +47,7 @@
 #include <kiconeffect.h>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
-#include <kdebug.h>
+
 
 // Local includes
 

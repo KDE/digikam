@@ -49,7 +49,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+
 #include <kcursor.h>
 #include <kiconloader.h>
 #include <kglobalsettings.h>
@@ -120,24 +120,24 @@ public:
 
     QCache<QString, QPixmap>  thumbnailBorderCache;
 
-    DRubberBand              *rubber;
+    DRubberBand*              rubber;
 
     QPoint                    dragStartPos;
 
-    QTimer                   *rearrangeTimer;
-    QTimer                   *toolTipTimer;
+    QTimer*                   rearrangeTimer;
+    QTimer*                   toolTipTimer;
 
-    IconItem                 *toolTipItem;
-    IconItem                 *currItem;
-    IconItem                 *anchorItem;
-    IconItem                 *storedVisibleItem; // store position for slotRearrange
-    IconItem                 *highlightedItem;
-    IconItem                 *ratingItem;
+    IconItem*                 toolTipItem;
+    IconItem*                 currItem;
+    IconItem*                 anchorItem;
+    IconItem*                 storedVisibleItem; // store position for slotRearrange
+    IconItem*                 highlightedItem;
+    IconItem*                 ratingItem;
 
-    IconGroupItem            *firstGroup;
-    IconGroupItem            *lastGroup;
+    IconGroupItem*            firstGroup;
+    IconGroupItem*            lastGroup;
 
-    RatingWidget             *ratingWidget;
+    RatingWidget*             ratingWidget;
 
     struct ItemContainer
     {
@@ -1406,13 +1406,37 @@ void IconView::keyPressEvent(QKeyEvent* e)
     {
         case Qt::Key_Home:
         {
-            IconItem* tmp = d->currItem;
-            d->currItem = firstItem();
-            d->anchorItem = d->currItem;
-            if (tmp)
-                tmp->repaint();
-
-            firstItem()->setSelected(true, true);
+            if (e->modifiers() & Qt::ShiftModifier)
+            {
+                IconItem* const tmp = d->currItem;
+                d->currItem = firstItem();
+                if (tmp)
+                    tmp->repaint();
+                
+                // select items: anchor until before firstItem
+                // block signals while selecting all except the firstItem
+                blockSignals(true);
+                for (IconItem* i = d->anchorItem; i && ( i != firstItem() ); i = i->prevItem())
+                {
+                    i->setSelected(true, false);
+                }
+                blockSignals(false);
+                
+                // select the firstItem with signals enabled to ensure updates
+                firstItem()->setSelected(true, false);
+            }
+            else
+            {
+                IconItem* const tmp = d->currItem;
+                d->currItem = firstItem();
+                d->anchorItem = d->currItem;
+                if (tmp)
+                    tmp->repaint();
+                
+                // select only the first item
+                firstItem()->setSelected(true, true);
+            }
+            
             ensureItemVisible(firstItem());
             handled = true;
             break;
@@ -1420,13 +1444,35 @@ void IconView::keyPressEvent(QKeyEvent* e)
 
         case Qt::Key_End:
         {
-            IconItem* tmp = d->currItem;
-            d->currItem   = lastItem();
-            d->anchorItem = d->currItem;
-            if (tmp)
-                tmp->repaint();
-
-            lastItem()->setSelected(true, true);
+            if (e->modifiers() & Qt::ShiftModifier)
+            {
+                IconItem* const tmp = d->currItem;
+                d->currItem = lastItem();
+                if (tmp)
+                    tmp->repaint();
+                
+                // select items: current until lastItem
+                // block signals while selecting all except the lastItem
+                blockSignals(true);
+                for (IconItem* i = d->anchorItem; i && ( i != lastItem() ); i = i->nextItem())
+                {
+                    i->setSelected(true, false);
+                }
+                blockSignals(false);
+                
+                // select the lastItem with signals enabled to ensure updates
+                lastItem()->setSelected(true, false);
+            }
+            else
+            {
+                IconItem* const tmp = d->currItem;
+                d->currItem = lastItem();
+                d->anchorItem = d->currItem;
+                if (tmp)
+                    tmp->repaint();
+                
+                lastItem()->setSelected(true, true);
+            }
             ensureItemVisible(lastItem());
             handled = true;
             break;

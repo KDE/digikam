@@ -34,16 +34,15 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kmenu.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
+#include <kdebug.h>
 
 // Local includes
 
-#include "constants.h"
 #include "dcursortracker.h"
 #include "themeengine.h"
 
@@ -87,7 +86,6 @@ RatingFilter::RatingFilter(QWidget* parent)
 
 RatingFilter::~RatingFilter()
 {
-    delete d->ratingTracker;
     delete d;
 }
 

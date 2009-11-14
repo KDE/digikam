@@ -28,6 +28,7 @@
 
 #include <QFrame>
 #include <QVBoxLayout>
+#include <QList>
 
 // KDE includes
 
@@ -215,23 +216,25 @@ MetadataPanel::MetadataPanel(KTabWidget* tab)
 
     d->exifViewerConfig   = new MetadataSelectorView(d->tab);
     d->exifViewerConfig->setDefaultFilter(d->defaultExifFilter);
-    d->tab->insertTab(1, d->exifViewerConfig, i18n("EXIF viewer"));
+    d->tab->addTab(d->exifViewerConfig, i18n("EXIF viewer"));
 
     d->mknoteViewerConfig = new MetadataSelectorView(d->tab);
     d->mknoteViewerConfig->setDefaultFilter(d->defaultMknoteFilter);
-    d->tab->insertTab(2, d->mknoteViewerConfig, i18n("Makernotes viewer"));
+    d->tab->addTab(d->mknoteViewerConfig, i18n("Makernotes viewer"));
 
     d->iptcViewerConfig   = new MetadataSelectorView(d->tab);
     d->iptcViewerConfig->setDefaultFilter(d->defaultIptcFilter);
-    d->tab->insertTab(3, d->iptcViewerConfig, i18n("IPTC viewer"));
+    d->tab->addTab(d->iptcViewerConfig, i18n("IPTC viewer"));
 
     d->xmpViewerConfig    = new MetadataSelectorView(d->tab);
     d->xmpViewerConfig->setDefaultFilter(d->defaultXmpFilter);
-    d->tab->insertTab(4, d->xmpViewerConfig, i18n("XMP viewer"));
+    d->tab->addTab(d->xmpViewerConfig, i18n("XMP viewer"));
 
 #if KEXIV2_VERSION < 0x010000
     d->tab->setTabBarHidden(true);
 #endif
+
+    slotTabChanged(d->tab->currentIndex());
 
     // --------------------------------------------------------
 
@@ -290,60 +293,77 @@ void MetadataPanel::applySettings()
 #endif
 }
 
-void MetadataPanel::slotTabChanged(int index)
+void MetadataPanel::slotTabChanged(int)
 {
     DMetadata meta;
     kapp->setOverrideCursor(Qt::WaitCursor);
+    kapp->processEvents();
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("Image Properties SideBar");
 
-    switch(index)
-    {
+    QWidget *tab = 0;
+    tab          = d->tab->currentWidget();
 #if KEXIV2_VERSION >= 0x010000
-        case 1:
+    if (tab == d->exifViewerConfig)
+    {
+        if (!d->exifViewerConfig->itemsCount())
         {
-            if (!d->exifViewerConfig->itemsCount())
-            {
-                d->exifViewerConfig->setTagsMap(meta.getStdExifTagsList());
-                d->exifViewerConfig->setcheckedTagsList(group.readEntry("EXIF Tags Filter", d->exifViewerConfig->defaultFilter()));
-            }
-            break;
+            d->exifViewerConfig->setTagsMap(meta.getStdExifTagsList());
+            d->exifViewerConfig->setcheckedTagsList(group.readEntry("EXIF Tags Filter", d->exifViewerConfig->defaultFilter()));
         }
-
-        case 2:
-        {
-            if (!d->mknoteViewerConfig->itemsCount())
-            {
-                d->mknoteViewerConfig->setTagsMap(meta.getMakernoteTagsList());
-                d->mknoteViewerConfig->setcheckedTagsList(group.readEntry("MAKERNOTE Tags Filter", d->mknoteViewerConfig->defaultFilter()));
-            }
-            break;
-        }
-
-        case 3:
-        {
-            if (!d->iptcViewerConfig->itemsCount())
-            {
-                d->iptcViewerConfig->setTagsMap(meta.getIptcTagsList());
-                d->iptcViewerConfig->setcheckedTagsList(group.readEntry("IPTC Tags Filter", d->iptcViewerConfig->defaultFilter()));
-            }
-            break;
-        }
-
-        case 4:
-        {
-            if (!d->xmpViewerConfig->itemsCount())
-            {
-                d->xmpViewerConfig->setTagsMap(meta.getXmpTagsList());
-                d->xmpViewerConfig->setcheckedTagsList(group.readEntry("XMP Tags Filter", d->xmpViewerConfig->defaultFilter()));
-            }
-            break;
-        }
-#endif
-        default:
-            break;
     }
+    else if (tab == d->mknoteViewerConfig)
+    {
+        if (!d->mknoteViewerConfig->itemsCount())
+        {
+            d->mknoteViewerConfig->setTagsMap(meta.getMakernoteTagsList());
+            d->mknoteViewerConfig->setcheckedTagsList(group.readEntry("MAKERNOTE Tags Filter", d->mknoteViewerConfig->defaultFilter()));
+        }
+    }
+    else if (tab == d->iptcViewerConfig)
+    {
+        if (!d->iptcViewerConfig->itemsCount())
+        {
+            d->iptcViewerConfig->setTagsMap(meta.getIptcTagsList());
+            d->iptcViewerConfig->setcheckedTagsList(group.readEntry("IPTC Tags Filter", d->iptcViewerConfig->defaultFilter()));
+        }
+    }
+    else if (tab == d->xmpViewerConfig)
+    {
+        if (!d->xmpViewerConfig->itemsCount())
+        {
+            d->xmpViewerConfig->setTagsMap(meta.getXmpTagsList());
+            d->xmpViewerConfig->setcheckedTagsList(group.readEntry("XMP Tags Filter", d->xmpViewerConfig->defaultFilter()));
+        }
+    }
+#endif
     kapp->restoreOverrideCursor();
+}
+
+QStringList MetadataPanel::getAllCheckedTags()
+{
+    QStringList checkedTags;
+    checkedTags
+        << d->exifViewerConfig->checkedTagsList()
+        << d->iptcViewerConfig->checkedTagsList()
+        << d->mknoteViewerConfig->checkedTagsList()
+        << d->xmpViewerConfig->checkedTagsList()
+    ;
+
+    return checkedTags;
+}
+
+QList<MetadataSelectorView*> MetadataPanel::viewers()
+{
+    QList<MetadataSelectorView*> viewers;
+    viewers
+        << d->exifViewerConfig
+        << d->iptcViewerConfig
+        << d->mknoteViewerConfig
+        << d->xmpViewerConfig
+    ;
+
+    return viewers;
 }
 
 }  // namespace Digikam

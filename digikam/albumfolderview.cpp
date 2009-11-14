@@ -35,14 +35,12 @@
 #include <QDropEvent>
 #include <QList>
 #include <QPixmap>
-#include <QPointer>
 
 // KDE includes
 
 #include <kaction.h>
 #include <kapplication.h>
 #include <kcalendarsystem.h>
-#include <kdebug.h>
 #include <kdeversion.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
@@ -54,6 +52,7 @@
 #include <kmenu.h>
 #include <kmessagebox.h>
 #include <kstringhandler.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -228,16 +227,12 @@ public:
 };
 
 AlbumFolderView::AlbumFolderView(QWidget *parent)
-               : FolderView(parent, "AlbumFolderView"),
-                 d(new AlbumFolderViewPriv)
+               : FolderView(parent, "AlbumFolderView"), d(new AlbumFolderViewPriv)
 {
     d->albumMan = AlbumManager::instance();
 
     addColumn(i18n("Albums"));
-    setResizeMode(Q3ListView::LastColumn);
     setRootIsDecorated(false);
-    setAllColumnsShowFocus(true);
-
     setAcceptDrops(true);
     viewport()->setAcceptDrops(true);
 
@@ -293,63 +288,115 @@ void AlbumFolderView::slotTextFolderFilterChanged(const SearchTextSettings& sett
 
     QString search       = settings.text;
     bool atleastOneMatch = false;
+    bool folderSortMode  = AlbumSettings::instance()->getAlbumSortOrder() == AlbumSettings::ByFolder;
 
-    AlbumList pList = d->albumMan->allPAlbums();
-    for (AlbumList::const_iterator it = pList.constBegin(); it != pList.constEnd(); ++it)
+    Q3ListViewItemIterator it(this);
+    while (it.current())
     {
-        PAlbum* palbum  = (PAlbum*)(*it);
-        AlbumFolderViewItem* viewItem = (AlbumFolderViewItem*) palbum->extraData(this);
+        AlbumFolderViewItem* viewItem = dynamic_cast<AlbumFolderViewItem*>(*it);
 
         if (!viewItem)
+        {
+            ++it;
             continue;
+        }
+
+        // palbum can be null when NOT using folderSortMode, so make sure that the pointer is checked
+        // whenever used in a none-folderSortMode context
+        PAlbum* palbum  = viewItem->album();
 
         // don't touch the root Album
-        if (palbum->isRoot() || palbum->isAlbumRoot())
+        if ((palbum && palbum->isRoot()) ||
+           ( folderSortMode && (!palbum || palbum->isRoot() || palbum->isAlbumRoot()) ))
         {
             viewItem->setOpen(true);
+            ++it;
             continue;
         }
 
         bool doesExpand = false;
-        bool match      = palbum->title().contains(search, settings.caseSensitive);
+        bool match      = false;
 
-        if (!match)
+        if (folderSortMode)
         {
-            // check if any of the parents match the search
-            PAlbum* parent = dynamic_cast<PAlbum*>(palbum->parent());
+            match = palbum->title().contains(search, settings.caseSensitive);
 
-            while (parent && !(parent->isRoot() || parent->isAlbumRoot()) )
+            if (!match)
             {
-                if (parent->title().contains(search, settings.caseSensitive))
-                {
-                    match = true;
-                    break;
-                }
+                // check if any of the parents match the search
+                PAlbum* parent = dynamic_cast<PAlbum*>(palbum->parent());
 
-                parent = dynamic_cast<PAlbum*>(parent->parent());
+                while (parent && !(parent->isRoot() || parent->isAlbumRoot()) )
+                {
+                    if (parent->title().contains(search, settings.caseSensitive))
+                    {
+                        match = true;
+                        break;
+                    }
+
+                    parent = dynamic_cast<PAlbum*>(parent->parent());
+                }
+            }
+
+            if (!match)
+            {
+                // check if any of the children match the search
+                if (palbum)
+                {
+                    AlbumIterator it(palbum);
+                    while (it.current())
+                    {
+                        if ((*it)->title().contains(search, settings.caseSensitive))
+                        {
+                            match      = true;
+                            doesExpand = true;
+                            break;
+                        }
+                        ++it;
+                    }
+                }
             }
         }
-
-        if (!match)
+        else
         {
-            // check if any of the children match the search
-            AlbumIterator it(palbum);
-            while (it.current())
+            if (viewItem->isGroupItem())
             {
-                if ((*it)->title().contains(search, settings.caseSensitive))
+                Q3ListViewItemIterator it2(viewItem);
+                while (it2.current())
+                {
+                    AlbumFolderViewItem* viewItem2 = dynamic_cast<AlbumFolderViewItem*>(*it2);
+
+                    if (!viewItem2)
+                    {
+                        ++it2;
+                        continue;
+                    }
+
+                    if (viewItem2->parent() == viewItem)
+                    {
+                        if (viewItem2->text(0).contains(search, settings.caseSensitive))
+                        {
+                            match      = true;
+                            doesExpand = true;
+                            break;
+                        }
+                    }
+                    ++it2;
+                }
+            }
+            else
+            {
+                if (viewItem->text(0).contains(search, settings.caseSensitive))
                 {
                     match      = true;
                     doesExpand = true;
-                    break;
                 }
-                ++it;
             }
         }
 
         if (match)
         {
             atleastOneMatch = true;
-
             viewItem->setVisible(true);
             viewItem->setOpen(doesExpand);
         }
@@ -358,8 +405,8 @@ void AlbumFolderView::slotTextFolderFilterChanged(const SearchTextSettings& sett
             viewItem->setVisible(false);
             viewItem->setOpen(false);
         }
+        ++it;
     }
-
     emit signalTextFolderFilterMatch(atleastOneMatch);
 }
 
@@ -376,8 +423,7 @@ void AlbumFolderView::slotAlbumAdded(Album *album)
     AlbumFolderViewItem* parent = findParent(palbum, failed);
     if (failed)
     {
-        kWarning(50003) << " Failed to find Album parent "
-                        << palbum->albumPath();
+        kWarning() << " Failed to find Album parent " << palbum->albumPath();
         return;
     }
 
@@ -571,6 +617,7 @@ void AlbumFolderView::slotContextMenu(Q3ListViewItem *listitem, const QPoint &, 
     cmhelper.addAction("album_new");
     cmhelper.addAction(renameAction);
     cmhelper.addAction(resetIconAction);
+    cmhelper.addAction("album_openinkonqui");
     popmenu.addSeparator();
     // --------------------------------------------------------
     cmhelper.addAction(findDuplAction);
@@ -625,7 +672,7 @@ void AlbumFolderView::albumNew(AlbumFolderViewItem *item)
     AlbumSettings* settings = AlbumSettings::instance();
     if(!settings)
     {
-        kWarning(50003) << "AlbumFolderView: Could not get Album Settings";
+        kWarning() << "AlbumFolderView: Could not get Album Settings";
         return;
     }
 

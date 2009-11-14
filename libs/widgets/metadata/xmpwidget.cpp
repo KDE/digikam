@@ -31,7 +31,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+
 #include <klocale.h>
 
 // Local includes
@@ -92,7 +92,7 @@ bool XmpWidget::loadFromURL(const KUrl& url)
     }
     else
     {
-        DMetadata metadata(url.path());
+        DMetadata metadata(url.toLocalFile());
 
         if (!metadata.hasXmp())
         {

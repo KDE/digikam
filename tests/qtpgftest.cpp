@@ -26,13 +26,13 @@
 
 // Qt includes
 
-#include <QDebug>
-#include <QImage>
 #include <QBuffer>
-#include <QFile>
-#include <QIODevice>
 #include <QByteArray>
 #include <QDataStream>
+#include <QDebug>
+#include <QFile>
+#include <QIODevice>
+#include <QImage>
 
 // Local includes
 

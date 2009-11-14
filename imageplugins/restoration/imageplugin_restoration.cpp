@@ -27,7 +27,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <klocale.h>
 #include <kgenericfactory.h>
 #include <klibloader.h>
@@ -35,6 +34,7 @@
 #include <kactioncollection.h>
 #include <kcursor.h>
 #include <kapplication.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -56,7 +56,7 @@ ImagePlugin_Restoration::ImagePlugin_Restoration(QObject *parent, const QVariant
 
     setXMLFile( "digikamimageplugin_restoration_ui.rc" );
 
-    kDebug(50006) << "ImagePlugin_Restoration plugin loaded";
+    kDebug() << "ImagePlugin_Restoration plugin loaded";
 }
 
 ImagePlugin_Restoration::~ImagePlugin_Restoration()

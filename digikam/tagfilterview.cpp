@@ -38,7 +38,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kmenu.h>
 #include <klocale.h>
 #include <kapplication.h>
@@ -50,6 +49,7 @@
 #include <kglobal.h>
 #include <kselectaction.h>
 #include <kstringhandler.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -286,7 +286,6 @@ TagFilterView::TagFilterView(QWidget* parent)
     d->timer = new QTimer(this);
 
     addColumn(i18n("Tag Filters"));
-    setResizeMode(Q3ListView::LastColumn);
     setRootIsDecorated(true);
 
     setAcceptDrops(true);
@@ -725,7 +724,7 @@ void TagFilterView::slotTagAdded(Album* album)
 
         if (!parent)
         {
-            kWarning(50003) << " Failed to find parent for Tag "
+            kWarning() << " Failed to find parent for Tag "
                             << tag->tagPath();
             return;
         }

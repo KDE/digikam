@@ -49,6 +49,7 @@ extern "C"
 #include <QComboBox>
 #include <QDBusConnection>
 #include <QDBusInterface>
+#include <QDBusReply>
 #include <QDir>
 #include <QFile>
 #include <QGroupBox>
@@ -62,7 +63,6 @@ extern "C"
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kconfig.h>
 #include <klocale.h>
 #include <kdeversion.h>
@@ -74,6 +74,7 @@ extern "C"
 #include <kdirwatch.h>
 #include <kconfiggroup.h>
 #include <kwindowsystem.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -180,16 +181,16 @@ public:
     QList<QDateTime>            dbPathModificationDateList;
     QList<QString>              dirWatchBlackList;
 
-    KIO::TransferJob           *albumListJob;
-    KIO::TransferJob           *dateListJob;
-    KIO::TransferJob           *tagListJob;
+    KIO::TransferJob*           albumListJob;
+    KIO::TransferJob*           dateListJob;
+    KIO::TransferJob*           tagListJob;
 
-    KDirWatch                  *dirWatch;
+    KDirWatch*                  dirWatch;
 
-    PAlbum                     *rootPAlbum;
-    TAlbum                     *rootTAlbum;
-    DAlbum                     *rootDAlbum;
-    SAlbum                     *rootSAlbum;
+    PAlbum*                     rootPAlbum;
+    TAlbum*                     rootTAlbum;
+    DAlbum*                     rootDAlbum;
+    SAlbum*                     rootSAlbum;
 
     QHash<int,Album *>          allAlbumsIdHash;
     QHash<PAlbumPath, PAlbum*>  albumPathHash;
@@ -197,16 +198,16 @@ public:
 
     QMultiHash<Album*, Album**> guardedPointers;
 
-    Album                      *currentAlbum;
+    Album*                      currentAlbum;
 
     bool                        changingDB;
-    QTimer                     *scanPAlbumsTimer;
-    QTimer                     *scanTAlbumsTimer;
-    QTimer                     *scanSAlbumsTimer;
-    QTimer                     *scanDAlbumsTimer;
-    QTimer                     *updatePAlbumsTimer;
-    QTimer                     *albumItemCountTimer;
-    QTimer                     *tagItemCountTimer;
+    QTimer*                     scanPAlbumsTimer;
+    QTimer*                     scanTAlbumsTimer;
+    QTimer*                     scanSAlbumsTimer;
+    QTimer*                     scanDAlbumsTimer;
+    QTimer*                     updatePAlbumsTimer;
+    QTimer*                     albumItemCountTimer;
+    QTimer*                     tagItemCountTimer;
     QSet<int>                   changedPAlbums;
 
 
@@ -707,7 +708,7 @@ bool AlbumManager::setDatabase(const QString& dbType, const QString& dbName, con
 
     if (dbLocale.isNull())
     {
-        kDebug(50003) << "No locale found in database";
+        kDebug() << "No locale found in database";
 
         // Copy an existing locale from the settings file (used < 0.8)
         // to the database.
@@ -715,7 +716,7 @@ bool AlbumManager::setDatabase(const QString& dbType, const QString& dbName, con
         KConfigGroup group = config->group("General Settings");
         if (group.hasKey("Locale"))
         {
-            kDebug(50003) << "Locale found in configfile";
+            kDebug() << "Locale found in configfile";
             dbLocale = group.readEntry("Locale", QString());
 
             // this hack is necessary, as we used to store the entire
@@ -733,7 +734,7 @@ bool AlbumManager::setDatabase(const QString& dbType, const QString& dbName, con
         }
         else
         {
-            kDebug(50003) << "No locale found in config file";
+            kDebug() << "No locale found in config file";
             dbLocale = currLocale;
 
             localeChanged = false;
@@ -778,7 +779,7 @@ bool AlbumManager::setDatabase(const QString& dbType, const QString& dbName, con
         QString locDescription;
         QStringList candidateIds, candidateDescriptions;
         CollectionManager::instance()->migrationCandidates(loc, &locDescription, &candidateIds, &candidateDescriptions);
-        kDebug(50003) << "Migration candidates for" << locDescription << ":" << candidateIds << candidateDescriptions;
+        kDebug() << "Migration candidates for" << locDescription << ":" << candidateIds << candidateDescriptions;
 
         KDialog *dialog = new KDialog;
 
@@ -894,6 +895,8 @@ bool AlbumManager::setDatabase(const QString& dbType, const QString& dbName, con
         }
     }
 
+    // -- ---------------------------------------------------------
+
 #ifdef USE_THUMBS_DB
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
@@ -925,14 +928,79 @@ bool AlbumManager::setDatabase(const QString& dbType, const QString& dbName, con
     QApplication::restoreOverrideCursor();
 #endif
 
-    QDBusInterface interface("org.kde.digikam.nepomuk.digikamnepomukservice",
-                              "/digikamnepomukservice", "org.kde.digikam.DigikamNepomukService");
-    if (interface.isValid())
+    // -- ---------------------------------------------------------
+
+#ifdef HAVE_NEPOMUK
+    if (checkNepomukService())
     {
-        interface.call(QDBus::NoBlock, "databaseChanged");
+        QDBusInterface serviceInterface("org.kde.nepomuk.services.digikamnepomukservice",
+                                        "/digikamnepomukservice", "org.kde.digikam.DigikamNepomukService");
+        kDebug() << "nepomuk service available" << serviceInterface.isValid();
+        if (serviceInterface.isValid())
+        {
+            DatabaseParameters parameters = DatabaseAccess::parameters();
+            KUrl url;
+            parameters.insertInUrl(url);
+            serviceInterface.call(QDBus::NoBlock, "setDatabase", url.url());
+        }
     }
+#endif // HAVE_NEPOMUK
 
     return true;
+}
+
+bool AlbumManager::checkNepomukService()
+{
+    bool hasNepomuk = false;
+
+#ifdef HAVE_NEPOMUK
+    QDBusInterface serviceInterface("org.kde.nepomuk.services.digikamnepomukservice",
+                                    "/digikamnepomukservice", "org.kde.digikam.DigikamNepomukService");
+
+    // already running? (normal)
+    if (serviceInterface.isValid())
+        return true;
+
+    // start service
+    QDBusInterface nepomukInterface("org.kde.NepomukServer",
+                                    "/servicemanager", "org.kde.nepomuk.ServiceManager");
+    if (!nepomukInterface.isValid())
+    {
+        kDebug() << "Nepomuk server is not reachable. Cannot start Digikam Nepomuk Service";
+        return false;
+    }
+
+    QDBusReply<QStringList> availableServicesReply = nepomukInterface.call("availableServices");
+    if (!availableServicesReply.isValid() || !availableServicesReply.value().contains("digikamnepomukservice"))
+    {
+        kDebug() << "digikamnepomukservice is not available in NepomukServer";
+        return false;
+    }
+
+    /*
+    QEventLoop loop;
+
+    if (!connect(&nepomukInterface, SIGNAL(serviceInitialized(const QString &)),
+                 &loop, SLOT(quit())))
+    {
+        kDebug() << "Could not connect to Nepomuk server signal";
+        return false;
+    }
+
+    QTimer::singleShot(1000, &loop, SLOT(quit()));
+    */
+
+    kDebug() << "Trying to start up digikamnepomukservice";
+    nepomukInterface.call(QDBus::NoBlock, "startService", "digikamnepomukservice");
+
+    /*
+    // wait (at most 1sec) for service to start up
+    loop.exec();
+    */
+    hasNepomuk = true;
+#endif // HAVE_NEPOMUK
+
+    return hasNepomuk;
 }
 
 void AlbumManager::startScan()
@@ -954,7 +1022,7 @@ void AlbumManager::startScan()
         mName = QString("Stat");
     else if (m == KDirWatch::INotify)
         mName = QString("INotify");
-    kDebug(50003) << "KDirWatch method = " << mName;
+    kDebug() << "KDirWatch method = " << mName;
 
     // connect to KDirNotify
 
@@ -1167,7 +1235,7 @@ void AlbumManager::scanPAlbums()
 
             if (!album)
             {
-                kError(50003) << "Did not find album root album in hash";
+                kError() << "Did not find album root album in hash";
                 continue;
             }
 
@@ -1189,7 +1257,7 @@ void AlbumManager::scanPAlbums()
 
             if (!parent)
             {
-                kError(50003) <<  "Could not find parent with url: "
+                kError() <<  "Could not find parent with url: "
                               << parentPath << " for: " << info.relativePath;
                 continue;
             }
@@ -1382,7 +1450,7 @@ void AlbumManager::scanTAlbums()
             }
             else
             {
-                kWarning(50003) << "Failed to find parent tag for tag "
+                kWarning() << "Failed to find parent tag for tag "
                                 << album->m_title
                                 << " with pid "
                                 << album->m_pid;
@@ -1419,7 +1487,7 @@ void AlbumManager::scanTAlbums()
         TagMap::iterator iter = tmap.find(info.pid);
         if (iter == tmap.end())
         {
-            kWarning(50003) << "Failed to find parent tag for tag "
+            kWarning() << "Failed to find parent tag for tag "
                             << info.name
                             << " with pid "
                             << info.pid;
@@ -2460,7 +2528,7 @@ void AlbumManager::slotAlbumsJobResult(KJob* job)
 
     if (job->error())
     {
-        kWarning(50003) << k_funcinfo << "Failed to list albums";
+        kWarning() << k_funcinfo << "Failed to list albums";
         return;
     }
 }
@@ -2484,7 +2552,7 @@ void AlbumManager::slotTagsJobResult(KJob* job)
 
     if (job->error())
     {
-        kWarning(50003) << k_funcinfo << "Failed to list tags";
+        kWarning() << k_funcinfo << "Failed to list tags";
         return;
     }
 }
@@ -2508,7 +2576,7 @@ void AlbumManager::slotDatesJobResult(KJob* job)
 
     if (job->error())
     {
-        kWarning(50003) << "Failed to list dates";
+        kWarning() << "Failed to list dates";
         return;
     }
 
@@ -2774,7 +2842,7 @@ void AlbumManager::slotDirWatchDirty(const QString& path)
             // check for equality
             if (modList == d->dbPathModificationDateList)
             {
-                //kDebug(50003) << "Filtering out db-file-triggered dir watch signal";
+                //kDebug() << "Filtering out db-file-triggered dir watch signal";
                 // we can skip the signal
                 return;
             }
@@ -2784,27 +2852,27 @@ void AlbumManager::slotDirWatchDirty(const QString& path)
         }
     }
 
-    kDebug(50003) << "KDirWatch detected change at" << path;
+    kDebug() << "KDirWatch detected change at" << path;
 
     slotNotifyFileChange(path);
 }
 
 void AlbumManager::slotKioFileMoved(const QString& urlFrom, const QString& urlTo)
 {
-    kDebug(50003) << urlFrom << urlTo;
+    kDebug() << urlFrom << urlTo;
     handleKioNotification(KUrl(urlFrom));
     handleKioNotification(KUrl(urlTo));
 }
 
 void AlbumManager::slotKioFilesAdded(const QString& url)
 {
-    kDebug(50003) << url;
+    kDebug() << url;
     handleKioNotification(KUrl(url));
 }
 
 void AlbumManager::slotKioFilesDeleted(const QStringList& urls)
 {
-    kDebug(50003) << urls;
+    kDebug() << urls;
     foreach (const QString& url, urls)
         handleKioNotification(KUrl(url));
 }

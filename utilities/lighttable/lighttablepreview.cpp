@@ -43,20 +43,19 @@
 #include <kapplication.h>
 #include <kcursor.h>
 #include <kdatetable.h>
-#include <kdebug.h>
 #include <kdialog.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmenu.h>
 #include <kmimetype.h>
 #include <kmimetypetrader.h>
+#include <kdebug.h>
 
 // Local includes
 
 #include "albumdb.h"
 #include "albummanager.h"
 #include "albumsettings.h"
-#include "constants.h"
 #include "contextmenuhelper.h"
 #include "ddragobjects.h"
 #include "dimg.h"
@@ -69,6 +68,7 @@
 #include "ratingpopupmenu.h"
 #include "tagspopupmenu.h"
 #include "themeengine.h"
+#include "globals.h"
 
 namespace Digikam
 {
@@ -107,18 +107,18 @@ public:
     QString            nextPath;
     QString            previousPath;
 
-    QToolButton       *cornerButton;
+    QToolButton*       cornerButton;
 
-    KPopupFrame       *panIconPopup;
+    KPopupFrame*       panIconPopup;
 
-    PanIconWidget     *panIconWidget;
+    PanIconWidget*     panIconWidget;
 
     DImg               preview;
 
     ImageInfo          imageInfo;
 
-    PreviewLoadThread *previewThread;
-    PreviewLoadThread *previewPreloadThread;
+    PreviewLoadThread* previewThread;
+    PreviewLoadThread* previewPreloadThread;
 };
 
 LightTablePreview::LightTablePreview(QWidget *parent)
@@ -138,10 +138,7 @@ LightTablePreview::LightTablePreview(QWidget *parent)
     slotThemeChanged();
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    d->cornerButton = new QToolButton(this);
-    d->cornerButton->setIcon(SmallIcon("transform-move"));
-    d->cornerButton->hide();
-    d->cornerButton->setToolTip( i18n("Pan the image"));
+    d->cornerButton = PanIconWidget::button();
     setCornerWidget(d->cornerButton);
 
     setLineWidth(5);
@@ -193,7 +190,7 @@ void LightTablePreview::setDragAndDropMessage()
                    Qt::AlignCenter|Qt::TextWordWrap,
                    i18n("Drag and drop an image here"));
         p.end();
-        setImage(pix.toImage());
+        setImage(DImg(pix.toImage()));
     }
 }
 
@@ -247,22 +244,22 @@ void LightTablePreview::setImagePath(const QString& path)
     if (!d->previewThread)
     {
         d->previewThread = new PreviewLoadThread();
+        d->previewThread->setDisplayingWidget(this);
         connect(d->previewThread, SIGNAL(signalImageLoaded(const LoadingDescription &, const DImg &)),
                 this, SLOT(slotGotImagePreview(const LoadingDescription &, const DImg&)));
     }
     if (!d->previewPreloadThread)
     {
         d->previewPreloadThread = new PreviewLoadThread();
+        d->previewPreloadThread->setDisplayingWidget(this);
         connect(d->previewPreloadThread, SIGNAL(signalImageLoaded(const LoadingDescription &, const DImg &)),
                 this, SLOT(slotNextPreload()));
     }
 
     if (d->loadFullImageSize)
-        d->previewThread->loadHighQuality(LoadingDescription(path, 0,
-                          AlbumSettings::instance()->getExifRotate()));
+        d->previewThread->loadHighQuality(path, AlbumSettings::instance()->getExifRotate());
     else
-        d->previewThread->load(LoadingDescription(path, d->previewSize,
-                          AlbumSettings::instance()->getExifRotate()));
+        d->previewThread->load(path, d->previewSize, AlbumSettings::instance()->getExifRotate());
 }
 
 void LightTablePreview::slotGotImagePreview(const LoadingDescription& description, const DImg& preview)
@@ -315,8 +312,10 @@ void LightTablePreview::slotNextPreload()
     else
         return;
 
-    d->previewPreloadThread->load(LoadingDescription(loadPath, d->previewSize,
-                                  AlbumSettings::instance()->getExifRotate()));
+    if (d->loadFullImageSize)
+        d->previewThread->loadHighQuality(loadPath, AlbumSettings::instance()->getExifRotate());
+    else
+        d->previewThread->load(loadPath, d->previewSize, AlbumSettings::instance()->getExifRotate());
 }
 
 void LightTablePreview::setImageInfo(const ImageInfo& info, const ImageInfo& previous, const ImageInfo& next)

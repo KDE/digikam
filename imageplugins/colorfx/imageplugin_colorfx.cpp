@@ -34,9 +34,9 @@
 #include <klibloader.h>
 #include <kaction.h>
 #include <kactioncollection.h>
-#include <kdebug.h>
 #include <kcursor.h>
 #include <kapplication.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -58,7 +58,7 @@ ImagePlugin_ColorFX::ImagePlugin_ColorFX(QObject *parent, const QVariantList &)
 
     setXMLFile( "digikamimageplugin_colorfx_ui.rc" );
 
-    kDebug(50006) << "ImagePlugin_ColorFX plugin loaded";
+    kDebug() << "ImagePlugin_ColorFX plugin loaded";
 }
 
 ImagePlugin_ColorFX::~ImagePlugin_ColorFX()

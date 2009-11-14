@@ -31,6 +31,7 @@
 #include <QMap>
 #include <QMenu>
 #include <QMimeData>
+#include <QPointer>
 #include <QString>
 
 // KDE includes
@@ -38,7 +39,6 @@
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kapplication.h>
-#include <kdebug.h>
 #include <klocale.h>
 #include <kmenu.h>
 #include <kmimetype.h>
@@ -65,7 +65,6 @@
 #include "queuemgrwindow.h"
 #include "ratingpopupmenu.h"
 #include "tagspopupmenu.h"
-
 #include "config-digikam.h"
 #ifdef HAVE_KDEPIMLIBS
 #include <kabc/stdaddressbook.h>
@@ -78,30 +77,29 @@ class ContextMenuHelperPriv
 {
 public:
 
-    ContextMenuHelperPriv()
-    {
-        parent              = 0;
-        gotoAlbumAction     = 0;
-        gotoDateAction      = 0;
-        setThumbnailAction  = 0;
-        stdActionCollection = 0;
-        ABCmenu             = 0;
-    }
+    ContextMenuHelperPriv() :
+        gotoAlbumAction(0),
+        gotoDateAction(0),
+        setThumbnailAction(0),
+        parent(0),
+        ABCmenu(0),
+        stdActionCollection(0)
+        {}
 
-    QAction*                      gotoAlbumAction;
-    QAction*                      gotoDateAction;
-    QAction*                      setThumbnailAction;
+    QAction*                     gotoAlbumAction;
+    QAction*                     gotoDateAction;
+    QAction*                     setThumbnailAction;
 
-    QList<qlonglong>              selectedIds;
-    KUrl::List                    selectedItems;
+    QList<qlonglong>             selectedIds;
+    KUrl::List                   selectedItems;
 
-    QMap<int, QAction*>           queueActions;
-    QMap<QString, KService::Ptr>  servicesMap;
+    QMap<int, QAction*>          queueActions;
+    QMap<QString, KService::Ptr> servicesMap;
 
-    QMenu*                        parent;
-    QMenu*                        ABCmenu;
+    QMenu*                       parent;
+    QMenu*                       ABCmenu;
 
-    KActionCollection*            stdActionCollection;
+    KActionCollection*           stdActionCollection;
 };
 
 ContextMenuHelper::ContextMenuHelper(QMenu* parent, KActionCollection* actionCollection)
@@ -187,6 +185,8 @@ void ContextMenuHelper::addServicesMenu(KUrl::List selectedItems)
     // kdebase/apps/lib/konq/konq_menuactions.cpp
 
     QStringList mimeTypes;
+    KService::List offers;
+
     foreach(const KUrl& item, d->selectedItems)
     {
         const QString mimeType = KMimeType::findByUrl(item, 0, true, true)->name();
@@ -194,32 +194,33 @@ void ContextMenuHelper::addServicesMenu(KUrl::List selectedItems)
             mimeTypes << mimeType;
     }
 
-    // Query trader
-    const QString firstMimeType = mimeTypes.takeFirst();
-    const QString constraintTemplate = "'%1' in ServiceTypes";
-    QStringList constraints;
-    foreach(const QString& mimeType, mimeTypes)
+    if (!mimeTypes.isEmpty())
     {
-        constraints << constraintTemplate.arg(mimeType);
-    }
-
-    KService::List offers = KMimeTypeTrader::self()->query(firstMimeType,
-                                                           "Application",
-                                                           constraints.join( " and "));
-
-    // remove duplicate service entries
-    QSet<QString> seenApps;
-    for (KService::List::iterator it = offers.begin(); it != offers.end();)
-    {
-        const QString appName((*it)->name());
-        if (!seenApps.contains(appName))
+        // Query trader
+        const QString firstMimeType = mimeTypes.takeFirst();
+        const QString constraintTemplate = "'%1' in ServiceTypes";
+        QStringList constraints;
+        foreach(const QString& mimeType, mimeTypes)
         {
-            seenApps.insert(appName);
-            ++it;
+            constraints << constraintTemplate.arg(mimeType);
         }
-        else
+
+        offers = KMimeTypeTrader::self()->query(firstMimeType, "Application", constraints.join( " and "));
+
+        // remove duplicate service entries
+        QSet<QString> seenApps;
+        for (KService::List::iterator it = offers.begin(); it != offers.end();)
         {
-            it = offers.erase(it);
+            const QString appName((*it)->name());
+            if (!seenApps.contains(appName))
+            {
+                seenApps.insert(appName);
+                ++it;
+            }
+            else
+            {
+                it = offers.erase(it);
+            }
         }
     }
 
@@ -272,18 +273,25 @@ void ContextMenuHelper::slotOpenWith(QAction* action)
     QString name = action ? action->data().toString() : QString();
     if (name.isEmpty())
     {
-        KOpenWithDialog dlg(list);
-        if (!dlg.exec())
+        QPointer<KOpenWithDialog> dlg = new KOpenWithDialog(list);
+        if (!dlg->exec() == KOpenWithDialog::Accepted)
+        {
+            delete dlg;
             return;
-        service = dlg.service();
+        }
+        service = dlg->service();
 
         if (!service)
         {
             // User entered a custom command
-            if (!dlg.text().isEmpty())
-                KRun::run(dlg.text(), list, d->parent);
+            if (!dlg->text().isEmpty())
+            {
+                KRun::run(dlg->text(), list, d->parent);
+            }
+            delete dlg;
             return;
         }
+        delete dlg;
     }
     else
     {
@@ -293,11 +301,15 @@ void ContextMenuHelper::slotOpenWith(QAction* action)
     KRun::run(*service, list, d->parent);
 }
 
-void ContextMenuHelper::addKipiActions()
+void ContextMenuHelper::addKipiActions(imageIds& ids)
 {
-    KAction* action = kipiRotateAction();
-    if (action)
-        d->parent->addAction(action);
+    setSelectedIds(ids);
+    if (imageIdsHaveSameCategory(ids, DatabaseItem::Image))
+    {
+        KAction* action = kipiRotateAction();
+        if (action)
+            d->parent->addAction(action);
+    }
 }
 
 KAction* ContextMenuHelper::kipiRotateAction()
@@ -320,6 +332,24 @@ KAction* ContextMenuHelper::kipiRotateAction()
         }
     }
     return 0;
+}
+
+bool ContextMenuHelper::imageIdsHaveSameCategory(const imageIds& ids, DatabaseItem::Category category)
+{
+    bool sameCategory = true;
+    QVariantList varList;
+
+    foreach (const qlonglong& id, ids)
+    {
+        varList = DatabaseAccess().db()->getImagesFields(id, DatabaseFields::Category);
+        if ( varList.isEmpty() ||
+             (DatabaseItem::Category)varList.first().toInt() != category )
+        {
+            sameCategory = false;
+            break;
+        }
+    }
+    return sameCategory;
 }
 
 void ContextMenuHelper::addAssignTagsMenu(imageIds& ids)
@@ -567,6 +597,12 @@ void ContextMenuHelper::addQueueManagerMenu()
         bqmMenu->addMenu(queueMenu);
     }
     d->parent->addMenu(bqmMenu);
+}
+
+void ContextMenuHelper::addActionCut(QObject* recv, const char* slot)
+{
+    KAction* cut = KStandardAction::cut(recv, slot, d->parent);
+    addAction(cut);
 }
 
 void ContextMenuHelper::addActionCopy(QObject* recv, const char* slot)

@@ -53,68 +53,9 @@ class DIGIKAM_EXPORT DToolTipStyleSheet
 
 public:
 
-    DToolTipStyleSheet(const QFont& font = KGlobalSettings::generalFont())
-        : maxStringLength(30)
-    {
-        unavailable = i18n("unavailable");
-
-        tipHeader   = QString("<qt><table cellspacing=\"0\" cellpadding=\"0\" width=\"250\" border=\"0\">");
-        tipFooter   = QString("</table></qt>");
-
-        headBeg     = QString("<tr bgcolor=\"%1\"><td colspan=\"2\">"
-                              "<nobr><font size=\"-1\" color=\"%2\" face=\"%3\"><center><b>")
-                              .arg(ThemeEngine::instance()->baseColor().name())
-                              .arg(ThemeEngine::instance()->textRegColor().name())
-                              .arg(font.family());
-        headEnd     = QString("</b></center></font></nobr></td></tr>");
-
-        cellBeg     = QString("<tr><td><nobr><font size=\"-1\" color=\"%1\" face=\"%2\">")
-                              .arg(ThemeEngine::instance()->textRegColor().name())
-                              .arg(font.family());
-        cellMid     = QString("</font></nobr></td><td><nobr><font size=\"-1\" color=\"%1\" face=\"%2\">")
-                              .arg(ThemeEngine::instance()->textRegColor().name())
-                              .arg(font.family());
-        cellEnd     = QString("</font></nobr></td></tr>");
-
-        cellSpecBeg = QString("<tr><td><nobr><font size=\"-1\" color=\"%1\" face=\"%2\">")
-                              .arg(ThemeEngine::instance()->textRegColor().name())
-                              .arg(font.family());
-        cellSpecMid = QString("</font></nobr></td><td><nobr><font size=\"-1\" color=\"%1\" face=\"%2\"><i>")
-                              .arg(ThemeEngine::instance()->textSpecialRegColor().name())
-                              .arg(font.family());
-        cellSpecEnd = QString("</i></font></nobr></td></tr>");
-    };
-
-    QString breakString(const QString& input)
-    {
-        QString str = input.simplified();
-        str         = Qt::escape(str);
-
-        if (str.length() <= maxStringLength)
-            return str;
-
-        QString br;
-
-        int i     = 0;
-        int count = 0;
-
-        while (i < str.length())
-        {
-            if (count >= maxStringLength && str[i].isSpace())
-            {
-                count = 0;
-                br.append("<br/>");
-            }
-            else
-            {
-                br.append(str[i]);
-            }
-
-            ++i;
-            ++count;
-        }
-        return br;
-    };
+    DToolTipStyleSheet(const QFont& font = KGlobalSettings::generalFont());
+    QString breakString(const QString& input);
+    QString elidedText(const QString& input, Qt::TextElideMode mode);
 
     const int maxStringLength;
 

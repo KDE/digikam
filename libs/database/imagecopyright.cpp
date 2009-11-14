@@ -26,7 +26,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+
 #include <klocale.h>
 #include <kglobal.h>
 
@@ -40,20 +40,69 @@
 namespace Digikam
 {
 
+class ImageCopyrightCache
+{
+public:
+
+    ImageCopyrightCache(ImageCopyright *object)
+                : object(object)
+    {
+        // set this as cache
+        object->m_cache = this;
+        // read all properties
+        infos = DatabaseAccess().db()->getImageCopyright(object->m_id, QString());
+    }
+    ~ImageCopyrightCache()
+    {
+        object->m_cache = 0;
+    }
+
+    QList<CopyrightInfo> infos;
+
+private:
+
+    ImageCopyright *object;
+};
+
 ImageCopyright::ImageCopyright(qlonglong imageid)
-              : m_id(imageid)
+              : m_id(imageid), m_cache(0)
 {
 }
 
 ImageCopyright::ImageCopyright()
-              : m_id(0)
+              : m_id(0), m_cache(0)
 {
+}
+
+ImageCopyright::ImageCopyright(const ImageCopyright& other)
+              : m_id(other.m_id), m_cache(0)
+{
+    // the cache is only short-lived, to keep complexity low
+}
+
+ImageCopyright::~ImageCopyright()
+{
+    if (m_cache)
+    {
+        delete m_cache;
+        m_cache = 0;
+    }
+}
+
+ImageCopyright &ImageCopyright::operator=(const ImageCopyright& other)
+{
+    if (m_cache)
+    {
+        delete m_cache;
+        m_cache = 0;
+    }
+    m_id = other.m_id;
+    return *this;
 }
 
 QStringList ImageCopyright::creator()
 {
-    QList<CopyrightInfo> infos = DatabaseAccess().db()->getImageCopyright(m_id, 
-         ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCreator));
+    QList<CopyrightInfo> infos = copyrightInfos(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCreator));
     QStringList list;
     foreach(const CopyrightInfo& info, infos)
     {
@@ -219,6 +268,8 @@ void ImageCopyright::removeContactInfo()
 
 void ImageCopyright::fillTemplate(Template &t)
 {
+    ImageCopyrightCache cache(this);
+
     t.setAuthors(author());
     t.setAuthorsPosition(authorsPosition());
     t.setCredit(credit());
@@ -254,6 +305,8 @@ void ImageCopyright::setFromTemplate(const Template &t)
 
 void ImageCopyright::removeAll()
 {
+    ImageCopyrightCache cache(this);
+
     removeCreators();
     removeProvider();
     removeCopyrightNotices();
@@ -264,13 +317,42 @@ void ImageCopyright::removeAll()
     removeContactInfo();
 }
 
+CopyrightInfo ImageCopyright::copyrightInfo(const QString& property)
+{
+    if (m_cache)
+    {
+        foreach (const CopyrightInfo &info, m_cache->infos)
+            if (info.property == property)
+                return info;
+    }
+    else
+    {
+        QList<CopyrightInfo> infos = DatabaseAccess().db()->getImageCopyright(m_id, property);
+        if (!infos.isEmpty())
+            return infos.first();
+    }
+    return CopyrightInfo();
+}
+
+QList<CopyrightInfo> ImageCopyright::copyrightInfos(const QString& property)
+{
+    if (m_cache)
+    {
+        QList<CopyrightInfo> infos;
+        foreach (const CopyrightInfo &info, m_cache->infos)
+            if (info.property == property)
+                infos << info;
+        return infos;
+    }
+    else
+    {
+        return DatabaseAccess().db()->getImageCopyright(m_id, property);
+    }
+}
+
 QString ImageCopyright::readSimpleProperty(const QString& property)
 {
-    QList<CopyrightInfo> infos = DatabaseAccess().db()->getImageCopyright(m_id, property);
-    if (infos.isEmpty())
-        return QString();
-    else
-        return infos.first().value;
+    return copyrightInfo(property).value;
 }
 
 void ImageCopyright::setSimpleProperty(const QString& property, const QString& value)
@@ -280,7 +362,7 @@ void ImageCopyright::setSimpleProperty(const QString& property, const QString& v
 
 QString ImageCopyright::readLanguageProperty(const QString& property, const QString& languageCode)
 {
-    QList<CopyrightInfo> infos = DatabaseAccess().db()->getImageCopyright(m_id, property);
+    QList<CopyrightInfo> infos = copyrightInfos(property);
     int index = languageMatch(infos, languageCode);
     if (index == -1)
         return QString();
@@ -291,7 +373,7 @@ QString ImageCopyright::readLanguageProperty(const QString& property, const QStr
 KExiv2Iface::KExiv2::AltLangMap ImageCopyright::readLanguageProperties(const QString& property)
 {
     KExiv2Iface::KExiv2::AltLangMap map;
-    QList<CopyrightInfo> infos = DatabaseAccess().db()->getImageCopyright(m_id, property);
+    QList<CopyrightInfo> infos = copyrightInfos(property);
     foreach (const CopyrightInfo &info, infos)
         map[info.extraValue] = info.value;
     return map;
@@ -317,11 +399,16 @@ void ImageCopyright::setLanguageProperty(const QString& property, const QString&
 
 void ImageCopyright::removeProperties(const QString& property)
 {
+    // if we have a cache, find out if anything need to be done at all
+    if (m_cache && copyrightInfo(property).isNull())
+        return;
     DatabaseAccess().db()->removeImageCopyrightProperties(m_id, property);
 }
 
 void ImageCopyright::removeLanguageProperty(const QString& property, const QString& languageCode)
 {
+    if (m_cache && copyrightInfo(property).isNull())
+        return;
     DatabaseAccess().db()->removeImageCopyrightProperties(m_id, property, languageCode);
 }
 

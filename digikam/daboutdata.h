@@ -41,7 +41,7 @@ namespace Digikam
 static inline KLocalizedString digiKamSloganFormated()
 {
     return ki18nc("This is the slogan formated string displayed in splashscreen. "
-                  "Please translate using short words else the slogan can be troncated.",
+                  "Please translate using short words else the slogan can be truncated.",
                   "<qt><font color=\"white\">"
                   "<b>Manage</b> your <b>photographs</b> like <b>a professional</b> "
                   "with the power of <b>open source</b>."
@@ -86,6 +86,14 @@ static inline void authorsRegistration(KAboutData& aboutData)
                           ki18n("Developer"),
                           "matze at welwarsky dot de");
 
+    aboutData.addAuthor ( ki18n("Julien Nardoux"),
+                          ki18n("Developer"),
+                          "Julien at narboux dot fr");
+
+    aboutData.addAuthor ( ki18n("Julien Pontabry"),
+                          ki18n("Developer"),
+                          "julien dot pontabry at ulp dot u-strasbg dot fr");
+
     aboutData.addAuthor ( ki18n("Patrick Spendrin"),
                           ki18n("Developer and Windows port"),
                           "patrick_spendrin at gmx dot de",
@@ -98,7 +106,7 @@ static inline void authorsRegistration(KAboutData& aboutData)
 
     aboutData.addAuthor ( ki18n("Renchi Raju"),
                           ki18n("Developer (2002-2005)"),
-                          "renchi at pooh dot tam dot uiuc dot edu");
+                          "renchi dot raju at gmail dot com");
 
     aboutData.addAuthor ( ki18n("Joern Ahrens"),
                           ki18n("Developer (2004-2005)"),
@@ -118,6 +126,24 @@ static inline void authorsRegistration(KAboutData& aboutData)
                           ki18n("Developer (2005-2006)"),
                           "fj dot cruz at supercable dot es",
                           "http://www.digikam.org/?q=blog/5");
+
+    aboutData.addCredit ( ki18n("Pieter Edelman"),
+                          ki18n("Developer"),
+                          "p dot edelman at gmx dot net");
+
+    aboutData.addCredit ( ki18n("Holger Foerster"),
+                          ki18n("Developer"),
+                          "hamsi2k at freenet dot de");
+
+    aboutData.addCredit ( ki18n("Michael G. Hansen"),
+                          ki18n("Developer"),
+                          "mike at mghansen dot de");
+
+    aboutData.addCredit ( ki18n("Johannes Wienke"),
+                          ki18n("Developer"),
+                          "languitar at semipol dot de",
+                          "http://de-de.facebook.com/languitar"
+                          );
 
     aboutData.addCredit ( ki18n("Risto Saukonpaa"),
                           ki18n("Design, icons, logo, banner, mockup, beta tester"),

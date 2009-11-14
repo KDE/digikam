@@ -39,7 +39,6 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kcursor.h>
-#include <kdebug.h>
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <klocale.h>
@@ -68,13 +67,20 @@ class OilPaintToolPriv
 {
 public:
 
-    OilPaintToolPriv()
-    {
-        brushSizeInput = 0;
-        smoothInput    = 0;
-        previewWidget  = 0;
-        gboxSettings   = 0;
-    }
+    OilPaintToolPriv() :
+        configGroupName("oilpaint Tool"),
+        configBrushSizeEntry("BrushSize"),
+        configSmoothAdjustmentEntry("SmoothAdjustment"),
+
+        brushSizeInput(0),
+        smoothInput(0),
+        previewWidget(0),
+        gboxSettings(0)
+        {}
+
+    const QString       configGroupName;
+    const QString       configBrushSizeEntry;
+    const QString       configSmoothAdjustmentEntry;
 
     RIntNumInput*       brushSizeInput;
     RIntNumInput*       smoothInput;
@@ -93,11 +99,13 @@ OilPaintTool::OilPaintTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
-                                             EditorToolSettings::Ok|
-                                             EditorToolSettings::Cancel|
-                                             EditorToolSettings::Try,
-                                             EditorToolSettings::PanIcon);
+    d->gboxSettings = new EditorToolSettings;
+    d->gboxSettings->setButtons(EditorToolSettings::Default|
+                                EditorToolSettings::Ok|
+                                EditorToolSettings::Cancel|
+                                EditorToolSettings::Try);
+
+    d->gboxSettings->setTools(EditorToolSettings::PanIcon);
 
     // -------------------------------------------------------------
 
@@ -153,11 +161,11 @@ void OilPaintTool::renderingFinished()
 void OilPaintTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("oilpaint Tool");
+    KConfigGroup group        = config->group(d->configGroupName);
     d->brushSizeInput->blockSignals(true);
     d->smoothInput->blockSignals(true);
-    d->brushSizeInput->setValue(group.readEntry("BrushSize", d->brushSizeInput->defaultValue()));
-    d->smoothInput->setValue(group.readEntry("SmoothAdjustment", d->smoothInput->defaultValue()));
+    d->brushSizeInput->setValue(group.readEntry(d->configBrushSizeEntry,     d->brushSizeInput->defaultValue()));
+    d->smoothInput->setValue(group.readEntry(d->configSmoothAdjustmentEntry, d->smoothInput->defaultValue()));
     d->brushSizeInput->blockSignals(false);
     d->smoothInput->blockSignals(false);
 }
@@ -165,9 +173,10 @@ void OilPaintTool::readSettings()
 void OilPaintTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("oilpaint Tool");
-    group.writeEntry("BrushSize", d->brushSizeInput->value());
-    group.writeEntry("SmoothAdjustment", d->smoothInput->value());
+    KConfigGroup group        = config->group(d->configGroupName);
+
+    group.writeEntry(d->configBrushSizeEntry,        d->brushSizeInput->value());
+    group.writeEntry(d->configSmoothAdjustmentEntry, d->smoothInput->value());
     d->previewWidget->writeSettings();
     group.sync();
 }

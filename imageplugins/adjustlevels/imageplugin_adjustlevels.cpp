@@ -31,10 +31,10 @@
 #include <kactioncollection.h>
 #include <kapplication.h>
 #include <kcursor.h>
-#include <kdebug.h>
 #include <kgenericfactory.h>
 #include <klibloader.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -49,7 +49,7 @@ ImagePlugin_AdjustLevels::ImagePlugin_AdjustLevels(QObject *parent, const QVaria
                         : Digikam::ImagePlugin(parent, "ImagePlugin_AdjustLevels")
 {
     m_levelsAction  = new KAction(KIcon("adjustlevels"), i18n("Levels Adjust..."), this);
-    m_levelsAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_L));
+    m_levelsAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_L));
     actionCollection()->addAction("imageplugin_adjustlevels", m_levelsAction );
 
     connect(m_levelsAction, SIGNAL(triggered(bool) ),
@@ -57,7 +57,7 @@ ImagePlugin_AdjustLevels::ImagePlugin_AdjustLevels(QObject *parent, const QVaria
 
     setXMLFile("digikamimageplugin_adjustlevels_ui.rc");
 
-    kDebug(50006) << "ImagePlugin_AdjustLevels plugin loaded";
+    kDebug() << "ImagePlugin_AdjustLevels plugin loaded";
 }
 
 ImagePlugin_AdjustLevels::~ImagePlugin_AdjustLevels()

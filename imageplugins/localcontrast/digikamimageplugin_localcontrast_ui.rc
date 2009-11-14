@@ -1,0 +1,20 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<gui version="7" name="digikamimageplugin_localcontrast" >
+
+ <MenuBar>
+
+  <Menu name="Enhance" ><text>Enh&amp;ance</text>
+      <Action name="imageplugin_localcontrast" />
+  </Menu>
+
+ </MenuBar>
+
+ <ToolBar name="mainToolBar" >
+  <text>Main Toolbar</text>
+ </ToolBar>
+
+ <ActionProperties>
+  <Action shortcut="" name="imageplugin_localcontrast" />
+ </ActionProperties>
+
+</gui>

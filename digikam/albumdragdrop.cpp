@@ -33,11 +33,11 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kiconloader.h>
 #include <kio/job.h>
 #include <klocale.h>
 #include <kmenu.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -363,7 +363,7 @@ QMimeData *AlbumDragDropHandler::createMimeData(const QList<Album*>& albums)
         return 0;
 
     if (albums.size() > 1)
-        kWarning(50003) << "Dragging multiple albums is not implemented";
+        kWarning() << "Dragging multiple albums is not implemented";
 
     return new DAlbumDrag(albums.first()->databaseUrl(), albums.first()->id());
 }

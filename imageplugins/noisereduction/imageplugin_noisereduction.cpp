@@ -31,10 +31,10 @@
 #include <kactioncollection.h>
 #include <kapplication.h>
 #include <kcursor.h>
-#include <kdebug.h>
 #include <kgenericfactory.h>
 #include <klibloader.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -56,7 +56,7 @@ ImagePlugin_NoiseReduction::ImagePlugin_NoiseReduction(QObject *parent, const QV
 
     setXMLFile("digikamimageplugin_noisereduction_ui.rc");
 
-    kDebug(50006) << "ImagePlugin_NoiseReduction plugin loaded";
+    kDebug() << "ImagePlugin_NoiseReduction plugin loaded";
 }
 
 ImagePlugin_NoiseReduction::~ImagePlugin_NoiseReduction()

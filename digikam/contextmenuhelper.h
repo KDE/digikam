@@ -32,6 +32,10 @@
 
 #include <kurl.h>
 
+// Local includes
+
+#include "albuminfo.h"
+
 class Q3ListViewItem;
 class QAction;
 class QMenu;
@@ -99,7 +103,7 @@ public:
      * @param actionCollection the actionCollection that should be used. If not set, the standard
      * action from DigikamApp is used
      */
-    ContextMenuHelper(QMenu* parent, KActionCollection* actionCollection = 0);
+    explicit ContextMenuHelper(QMenu* parent, KActionCollection* actionCollection = 0);
     virtual ~ContextMenuHelper();
 
     /**
@@ -137,6 +141,14 @@ public:
      * @param addDisabled if set, disabled actions are added to the menu
      */
     void addAction(QAction* action, QObject* recv, const char* slot, bool addDisabled = false);
+
+    /**
+     * Add the standard cut action and connect it to the appropriate slot
+     *
+     * @param recv the receiver of the triggered action
+     * @param slot the slot to connect the triggered action to
+     */
+    void addActionCut(QObject* recv, const char* slot);
 
     /**
      * Add the standard copy action and connect it to the appropriate slot
@@ -288,7 +300,7 @@ public:
      * This method will add some of the KIPI actions into the context menu, right now only the
      * rotation actions are added.
      */
-    void addKipiActions();
+    void addKipiActions(imageIds& ids);
 
     /**
      * Add Import KIPI actions menu.
@@ -332,6 +344,7 @@ private:
 
     void setSelectedIds(imageIds& ids);
     void setSelectedItems(KUrl::List urls);
+    bool imageIdsHaveSameCategory(const imageIds& ids, DatabaseItem::Category category);
 
 private:
 

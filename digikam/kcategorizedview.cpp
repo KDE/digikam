@@ -30,8 +30,6 @@
 #include <QScrollBar>
 #include <QPaintEvent>
 
-#include <kdebug.h>
-
 #include "kcategorydrawer.h"
 #include "kcategorizedsortfilterproxymodel.h"
 
@@ -128,7 +126,7 @@ QRect KCategorizedView::Private::visualRectInViewport(const QModelIndex &index) 
 
     QRect retRect;
     const bool leftToRightFlow = (listView->flow() == QListView::LeftToRight);
-    
+
     if (leftToRightFlow)
     {
         if (listView->layoutDirection() == Qt::LeftToRight)
@@ -1339,7 +1337,7 @@ void KCategorizedView::dragMoveEvent(QDragMoveEvent *event)
     {
         return;
     }
-    
+
     d->hovered = indexAt(event->pos());
 
 #if !defined(DOLPHIN_DRAGANDDROP)
@@ -1515,7 +1513,7 @@ QModelIndex KCategorizedView::moveCursor(CursorAction cursorAction,
                 return d->proxyModel->index(current.row() + 1, 0);
             }
 
-            if (current.row() == 0 || 
+            if (current.row() == 0 ||
                 !(d->elementsInfo[current.row()].relativeOffsetToCategory % elementsPerRow))
                 return current;
 
@@ -1716,7 +1714,7 @@ void KCategorizedView::rowsInsertedArtifficial(const QModelIndex &parent,
 
         offset = 0;
         QVector<int> rows(upperBound - k);
-        for (int i=k; i<upperBound; i++, offset++)
+        for (int i=k; i<upperBound; ++i, ++offset)
         {
             rows[offset] = i;
             struct Private::ElementInfo &elementInfo = d->elementsInfo[i];

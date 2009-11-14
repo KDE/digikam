@@ -400,7 +400,7 @@ void ImageLister::listSearch(ImageListerReceiver *receiver,
     else
         sqlQuery += " );";
 
-    kDebug(50003) << "Search query:\n" << sqlQuery << "\n" << boundValues;
+    kDebug() << "Search query:\n" << sqlQuery << "\n" << boundValues;
 
     bool executionSuccess;
     {
@@ -415,7 +415,7 @@ void ImageLister::listSearch(ImageListerReceiver *receiver,
         receiver->error(errMsg);
         return;
     }
-    kDebug(50003) << "Search result:" << values.size();
+    kDebug() << "Search result:" << values.size();
 
     QSet<int> albumRoots = albumRootsToList();
 

@@ -40,7 +40,6 @@
 #include <kactioncollection.h>
 #include <kapplication.h>
 #include <kconfig.h>
-#include <kdebug.h>
 #include <kedittoolbar.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -58,6 +57,7 @@
 #include <kxmlguifactory.h>
 #include <kpassivepopup.h>
 #include <kio/renamedialog.h>
+#include <kdebug.h>
 
 // Libkdcraw includes
 
@@ -91,11 +91,17 @@
 #include "imagedialog.h"
 #include "thumbnailsize.h"
 #include "queuemgrwindow_p.h"
+#include "sidebar.h"
+#include "uifilevalidator.h"
 
 namespace Digikam
 {
 
 QueueMgrWindow* QueueMgrWindow::m_instance = 0;
+
+const QString QueueMgrWindowPriv::TOP_SPLITTER_CONFIG_KEY = "BqmTopSplitter";
+const QString QueueMgrWindowPriv::BOTTOM_SPLITTER_CONFIG_KEY = "BqmBottomSplitter";
+const QString QueueMgrWindowPriv::VERTICAL_SPLITTER_CONFIG_KEY = "BqmVerticalSplitter";
 
 QueueMgrWindow* QueueMgrWindow::queueManagerWindow()
 {
@@ -113,6 +119,18 @@ bool QueueMgrWindow::queueManagerWindowCreated()
 QueueMgrWindow::QueueMgrWindow()
               : KXmlGuiWindow(0), d(new QueueMgrWindowPriv)
 {
+    setXMLFile("queuemgrwindowui.rc");
+
+    // --------------------------------------------------------
+
+    UiFileValidator validator(localXMLFile());
+    if (!validator.isValid())
+    {
+        validator.fixConfigFile();
+    }
+
+    // --------------------------------------------------------
+
     qRegisterMetaType<BatchToolSettings>("BatchToolSettings");
     qRegisterMetaType<BatchToolSet>("BatchToolSet");
 
@@ -182,7 +200,7 @@ void QueueMgrWindow::closeEvent(QCloseEvent* e)
 void QueueMgrWindow::setupUserArea()
 {
     QWidget* mainW     = new QWidget(this);
-    QGridLayout *grid  = new QGridLayout(mainW);
+    QVBoxLayout *mainLayout = new QVBoxLayout(mainW);
 
     // ------------------------------------------------------------------------------
 
@@ -231,18 +249,20 @@ void QueueMgrWindow::setupUserArea()
 
     // ------------------------------------------------------------------------------
 
-    grid->addWidget(queuesBox,        0, 0, 2, 1);
-    grid->addWidget(queueSettingsBox, 2, 0, 2, 1);
-    grid->addWidget(toolsBox,         2, 1, 1, 2);
-    grid->addWidget(assignBox,        0, 1, 2, 1);
-    grid->addWidget(toolSettingsBox,  0, 2, 2, 2);
-    grid->setColumnStretch(0, 5);
-    grid->setColumnStretch(1, 5);
-    grid->setColumnStretch(2, 5);
-    grid->setRowStretch(0, 100);
-    grid->setRowStretch(2, 70);
-    grid->setSpacing(0);
-    grid->setMargin(0);
+    d->topSplitter = new SidebarSplitter(mainW);
+    d->topSplitter->addWidget(queuesBox);
+    d->topSplitter->addWidget(assignBox);
+    d->topSplitter->addWidget(toolSettingsBox);
+
+    d->bottomSplitter = new SidebarSplitter(mainW);
+    d->bottomSplitter->addWidget(queueSettingsBox);
+    d->bottomSplitter->addWidget(toolsBox);
+
+    d->verticalSplitter = new SidebarSplitter(Qt::Vertical, mainW);
+    d->verticalSplitter->addWidget(d->topSplitter);
+    d->verticalSplitter->addWidget(d->bottomSplitter);
+
+    mainLayout->addWidget(d->verticalSplitter);
 
     setCentralWidget(mainW);
 }
@@ -301,11 +321,11 @@ void QueueMgrWindow::setupConnections()
 
     // -- Multithreaded interface connections -------------------------------
 
-    connect(d->thread, SIGNAL(starting(const ActionData&)),
-            this, SLOT(slotAction(const ActionData&)));
+    connect(d->thread, SIGNAL(starting(const Digikam::ActionData&)),
+            this, SLOT(slotAction(const Digikam::ActionData&)));
 
-    connect(d->thread, SIGNAL(finished(const ActionData&)),
-            this, SLOT(slotAction(const ActionData&)));
+    connect(d->thread, SIGNAL(finished(const Digikam::ActionData&)),
+            this, SLOT(slotAction(const Digikam::ActionData&)));
 
     // -- GUI connections ---------------------------------------------------
 
@@ -335,13 +355,13 @@ void QueueMgrWindow::setupActions()
     // -- Standard 'File' menu actions ---------------------------------------------
 
     d->runAction = new KAction(KIcon("media-playback-start"), i18n("Run"), this);
-    d->runAction->setShortcut(Qt::CTRL+Qt::Key_P);
+    d->runAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_P));
     d->runAction->setEnabled(false);
     connect(d->runAction, SIGNAL(triggered()), this, SLOT(slotRun()));
     actionCollection()->addAction("queuemgr_run", d->runAction);
 
     d->stopAction = new KAction(KIcon("media-playback-stop"), i18n("Stop"), this);
-    d->stopAction->setShortcut(Qt::CTRL+Qt::Key_S);
+    d->stopAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_S));
     d->stopAction->setEnabled(false);
     connect(d->stopAction, SIGNAL(triggered()), this, SLOT(slotStop()));
     actionCollection()->addAction("queuemgr_stop", d->stopAction);
@@ -355,7 +375,7 @@ void QueueMgrWindow::setupActions()
     actionCollection()->addAction("queuemgr_removequeue", d->removeQueueAction);
 
     d->removeItemsSelAction = new KAction(KIcon("list-remove"), i18n("Remove items"), this);
-    d->removeItemsSelAction->setShortcut(Qt::CTRL+Qt::Key_K);
+    d->removeItemsSelAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_K));
     d->removeItemsSelAction->setEnabled(false);
     connect(d->removeItemsSelAction, SIGNAL(triggered()), d->queuePool, SLOT(slotRemoveSelectedItems()));
     actionCollection()->addAction("queuemgr_removeitemssel", d->removeItemsSelAction);
@@ -366,7 +386,7 @@ void QueueMgrWindow::setupActions()
     actionCollection()->addAction("queuemgr_removeitemsdone", d->removeItemsDoneAction);
 
     d->clearQueueAction = new KAction(KIcon("edit-clear"), i18n("Clear Queue"), this);
-    d->clearQueueAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_K);
+    d->clearQueueAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_K));
     d->clearQueueAction->setEnabled(false);
     connect(d->clearQueueAction, SIGNAL(triggered()), d->queuePool, SLOT(slotClearList()));
     actionCollection()->addAction("queuemgr_clearlist", d->clearQueueAction);
@@ -425,11 +445,11 @@ void QueueMgrWindow::setupActions()
     connect(d->contributeAction, SIGNAL(triggered()), this, SLOT(slotContribute()));
     actionCollection()->addAction("queuemgr_contribute", d->contributeAction);
 
-    d->rawCameraListAction = new KAction(KIcon("kdcraw"), i18n("supported RAW cameras"), this);
+    d->rawCameraListAction = new KAction(KIcon("kdcraw"), i18n("Supported RAW Cameras"), this);
     connect(d->rawCameraListAction, SIGNAL(triggered()), this, SLOT(slotRawCameraList()));
     actionCollection()->addAction("queuemgr_rawcameralist", d->rawCameraListAction);
 
-    d->libsInfoAction = new KAction(KIcon("help-about"), i18n("Components info"), this);
+    d->libsInfoAction = new KAction(KIcon("help-about"), i18n("Components Information"), this);
     connect(d->libsInfoAction, SIGNAL(triggered()), this, SLOT(slotComponentsInfo()));
     actionCollection()->addAction("queuemgr_librariesinfo", d->libsInfoAction);
 
@@ -443,19 +463,12 @@ void QueueMgrWindow::setupActions()
     // Provides a menu entry that allows showing/hiding the statusbar
     createStandardStatusBarAction();
 
-    // -- Keyboard-only actions added to <MainWindow> ------------------------------
-
-//    KAction *exitFullscreenAction = new KAction(i18n("Exit Fullscreen mode"), this);
-//    actionCollection()->addAction("editorwindow_exitfullscreen", exitFullscreenAction);
-//    exitFullscreenAction->setShortcut( QKeySequence(Qt::Key_Escape) );
-//    connect(exitFullscreenAction, SIGNAL(triggered()), this, SLOT(slotEscapePressed()));
-
     // ---------------------------------------------------------------------------------
 
     d->animLogo = new DLogoAction(this);
     actionCollection()->addAction("logo_action", d->animLogo);
 
-    createGUI("queuemgrwindowui.rc");
+    createGUI(xmlFile());
 
     d->showMenuBarAction->setChecked(!menuBar()->isHidden());  // NOTE: workaround for B.K.O #171080
 }
@@ -475,6 +488,14 @@ void QueueMgrWindow::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("Batch Queue Manager Settings");
+
+    d->verticalSplitter->restoreState(group,
+                    QueueMgrWindowPriv::VERTICAL_SPLITTER_CONFIG_KEY);
+    d->bottomSplitter->restoreState(group,
+                    QueueMgrWindowPriv::BOTTOM_SPLITTER_CONFIG_KEY);
+    d->topSplitter->restoreState(group,
+                    QueueMgrWindowPriv::TOP_SPLITTER_CONFIG_KEY);
+
     // TODO
 }
 
@@ -482,6 +503,14 @@ void QueueMgrWindow::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("Batch Queue Manager Settings");
+
+    d->topSplitter->saveState(group,
+                    QueueMgrWindowPriv::TOP_SPLITTER_CONFIG_KEY);
+    d->bottomSplitter->saveState(group,
+                    QueueMgrWindowPriv::BOTTOM_SPLITTER_CONFIG_KEY);
+    d->verticalSplitter->saveState(group,
+                    QueueMgrWindowPriv::VERTICAL_SPLITTER_CONFIG_KEY);
+
     // TODO
     config->sync();
 }
@@ -967,7 +996,7 @@ void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
     if (settings.conflictRule != QueueSettings::OVERWRITE)
     {
         struct stat statBuf;
-        if (::stat(QFile::encodeName(dest.path()), &statBuf) == 0)
+        if (::stat(QFile::encodeName(dest.toLocalFile()), &statBuf) == 0)
         {
             KIO::RenameDialog dlg(this, i18n("Save Queued Image from '%1' as",
                                   url.fileName()),
@@ -1000,7 +1029,7 @@ void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
                     break;
                 }
                 default:    // Overwrite.
-                    addHistoryMessage(i18n("Item overwrited..."), DHistoryView::WarningEntry);
+                    addHistoryMessage(i18n("Item overwritten..."), DHistoryView::WarningEntry);
                     break;
             }
         }
@@ -1008,7 +1037,7 @@ void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
 
     if (!dest.isEmpty())
     {
-        if (::rename(QFile::encodeName(tmp.path()), QFile::encodeName(dest.path())) != 0)
+        if (::rename(QFile::encodeName(tmp.toLocalFile()), QFile::encodeName(dest.toLocalFile())) != 0)
         {
             if (d->currentProcessItem)
             {
@@ -1022,7 +1051,7 @@ void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
             {
                 d->currentProcessItem->setDestFileName(dest.fileName());
                 d->currentProcessItem->setDone();
-                addHistoryMessage(i18n("Item processed successfuly..."), DHistoryView::SuccessEntry);
+                addHistoryMessage(i18n("Item processed successfully..."), DHistoryView::SuccessEntry);
             }
 
             // TODO: assign attributes from original image.
@@ -1123,7 +1152,7 @@ bool QueueMgrWindow::checkTargetAlbum(int queueId)
 
     QString queueName              = d->queuePool->queueTitle(queueId);
     KUrl    processedItemsAlbumUrl = queue->settings().targetUrl;
-    kDebug(50003) << "Target album for queue " << queueName << " is: " << processedItemsAlbumUrl.path();
+    kDebug() << "Target album for queue " << queueName << " is: " << processedItemsAlbumUrl.toLocalFile();
 
     if (processedItemsAlbumUrl.isEmpty())
     {
@@ -1134,7 +1163,7 @@ bool QueueMgrWindow::checkTargetAlbum(int queueId)
         return false;
     }
 
-    QFileInfo dir(processedItemsAlbumUrl.path());
+    QFileInfo dir(processedItemsAlbumUrl.toLocalFile());
 
     if ( !dir.exists() || !dir.isWritable() )
     {

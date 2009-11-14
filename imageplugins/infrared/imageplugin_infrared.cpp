@@ -28,7 +28,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <klocale.h>
 #include <kgenericfactory.h>
 #include <klibloader.h>
@@ -36,6 +35,7 @@
 #include <kactioncollection.h>
 #include <kcursor.h>
 #include <kapplication.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -58,7 +58,7 @@ ImagePlugin_Infrared::ImagePlugin_Infrared(QObject *parent, const QVariantList &
 
     setXMLFile( "digikamimageplugin_infrared_ui.rc" );
 
-    kDebug(50006) << "ImagePlugin_Infrared plugin loaded";
+    kDebug() << "ImagePlugin_Infrared plugin loaded";
 }
 
 ImagePlugin_Infrared::~ImagePlugin_Infrared()

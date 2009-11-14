@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-
 #include "whitebalancetool.h"
 #include "whitebalancetool.moc"
 
@@ -39,6 +38,7 @@
 #include <QPixmap>
 #include <QProgressBar>
 #include <QPushButton>
+#include <QRegExp>
 #include <QTextStream>
 #include <QTimer>
 #include <QToolButton>
@@ -51,7 +51,6 @@
 #include <kcombobox.h>
 #include <kconfig.h>
 #include <kcursor.h>
-#include <kdebug.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
@@ -90,78 +89,135 @@ using namespace Digikam;
 namespace DigikamWhiteBalanceImagesPlugin
 {
 
+enum TemperaturePreset
+{
+    None        = -1,
+    Candle      = 1850,
+    Lamp40W     = 2680,
+    Lamp100W    = 2800,
+    Lamp200W    = 3000,
+    Sunrise     = 3200,
+    StudioLamp  = 3400,
+    MoonLight   = 4100,
+    Neutral     = 4750,
+    DaylightD50 = 5000,
+    Flash       = 5500,
+    Sun         = 5770,
+    XenonLamp   = 6420,
+    DaylightD65 = 6500
+};
+const int DEFAULT_TEMPERATURE = DaylightD65;
+
 class WhiteBalanceToolPriv
 {
 public:
 
-    WhiteBalanceToolPriv()
+    WhiteBalanceToolPriv() :
+        configGroupName("whitebalance Tool"),
+        configDarkInputEntry("Dark"),
+        configBlackInputEntry("Black"),
+        configMainExposureEntry("MainExposure"),
+        configFineExposureEntry("FineExposure"),
+        configGammaInputEntry("Gamma"),
+        configSaturationInputEntry("Saturation"),
+        configGreenInputEntry("Green"),
+        configTemeratureInputEntry("Temperature"),
+        configHistogramChannelEntry("Histogram Chanel"),
+        configHistogramScaleEntry("Histogram Scale"),
+
+        destinationPreviewData(0),
+        currentPreviewMode(0),
+        pickTemperature(0),
+        autoAdjustExposure(0),
+        adjTemperatureLabel(0),
+        temperaturePresetLabel(0),
+        darkLabel(0), blackLabel(0),
+        mainExposureLabel(0),
+        fineExposureLabel(0),
+        gammaLabel(0),
+        saturationLabel(0),
+        greenLabel(0),
+        exposureLabel(0),
+        temperatureLabel(0),
+        temperaturePresetCB(0),
+        temperatureInput(0),
+        darkInput(0),
+        blackInput(0),
+        mainExposureInput(0),
+        fineExposureInput(0),
+        gammaInput(0),
+        saturationInput(0),
+        greenInput(0),
+        previewWidget(0),
+        gboxSettings(0)
+        {}
+
+    const QString       configGroupName;
+    const QString       configDarkInputEntry;
+    const QString       configBlackInputEntry;
+    const QString       configMainExposureEntry;
+    const QString       configFineExposureEntry;
+    const QString       configGammaInputEntry;
+    const QString       configSaturationInputEntry;
+    const QString       configGreenInputEntry;
+    const QString       configTemeratureInputEntry;
+    const QString       configHistogramChannelEntry;
+    const QString       configHistogramScaleEntry;
+
+    uchar*              destinationPreviewData;
+
+    int                 currentPreviewMode;
+
+    QToolButton*        pickTemperature;
+    QToolButton*        autoAdjustExposure;
+
+    QLabel*             adjTemperatureLabel;
+    QLabel*             temperaturePresetLabel;
+    QLabel*             darkLabel;
+    QLabel*             blackLabel;
+    QLabel*             mainExposureLabel;
+    QLabel*             fineExposureLabel;
+    QLabel*             gammaLabel;
+    QLabel*             saturationLabel;
+    QLabel*             greenLabel;
+    QLabel*             exposureLabel;
+    QLabel*             temperatureLabel;
+
+    RComboBox*          temperaturePresetCB;
+
+    RDoubleNumInput*    temperatureInput;
+    RDoubleNumInput*    darkInput;
+    RDoubleNumInput*    blackInput;
+    RDoubleNumInput*    mainExposureInput;
+    RDoubleNumInput*    fineExposureInput;
+    RDoubleNumInput*    gammaInput;
+    RDoubleNumInput*    saturationInput;
+    RDoubleNumInput*    greenInput;
+
+    ImageWidget*        previewWidget;
+
+    EditorToolSettings* gboxSettings;
+
+public:
+
+    QString addTemperatureDescription(const QString& desc, TemperaturePreset preset)
     {
-        destinationPreviewData  = 0;
-        currentPreviewMode      = 0;
-        pickTemperature         = 0;
-        autoAdjustExposure      = 0;
-        adjTemperatureLabel     = 0;
-        temperaturePresetLabel  = 0;
-        darkLabel               = 0;
-        blackLabel              = 0;
-        mainExposureLabel       = 0;
-        fineExposureLabel       = 0;
-        gammaLabel              = 0;
-        saturationLabel         = 0;
-        greenLabel              = 0;
-        exposureLabel           = 0;
-        temperatureLabel        = 0;
-        temperaturePresetCB     = 0;
-        temperatureInput        = 0;
-        darkInput               = 0;
-        blackInput              = 0;
-        mainExposureInput       = 0;
-        fineExposureInput       = 0;
-        gammaInput              = 0;
-        saturationInput         = 0;
-        greenInput              = 0;
-        previewWidget           = 0;
-        gboxSettings            = 0;
+        int index        = temperaturePresetCB->combo()->findData((int)preset);
+        QString itemText = temperaturePresetCB->combo()->itemText(index);
+        QString tempDesc = QString("<p><b>%1</b>: %2 (%3K).</p>")
+                                  .arg(itemText)
+                                  .arg(desc)
+                                  .arg((int)preset);
+        if (preset == None)
+        {
+            tempDesc.remove(QRegExp("\\(.*\\)"));
+        }
+        return tempDesc;
     }
-
-    uchar*               destinationPreviewData;
-
-    int                  currentPreviewMode;
-
-    QToolButton*         pickTemperature;
-    QToolButton*         autoAdjustExposure;
-
-    QLabel*              adjTemperatureLabel;
-    QLabel*              temperaturePresetLabel;
-    QLabel*              darkLabel;
-    QLabel*              blackLabel;
-    QLabel*              mainExposureLabel;
-    QLabel*              fineExposureLabel;
-    QLabel*              gammaLabel;
-    QLabel*              saturationLabel;
-    QLabel*              greenLabel;
-    QLabel*              exposureLabel;
-    QLabel*              temperatureLabel;
-
-    RComboBox*           temperaturePresetCB;
-
-    RDoubleNumInput*     temperatureInput;
-    RDoubleNumInput*     darkInput;
-    RDoubleNumInput*     blackInput;
-    RDoubleNumInput*     mainExposureInput;
-    RDoubleNumInput*     fineExposureInput;
-    RDoubleNumInput*     gammaInput;
-    RDoubleNumInput*     saturationInput;
-    RDoubleNumInput*     greenInput;
-
-    ImageWidget*         previewWidget;
-
-    EditorToolSettings*  gboxSettings;
 };
 
 WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
-                : EditorTool(parent),
-                  d(new WhiteBalanceToolPriv)
+                : EditorTool(parent), d(new WhiteBalanceToolPriv)
 {
     setObjectName("whitebalance");
     setToolName(i18n("White Balance"));
@@ -179,12 +235,14 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
-                                             EditorToolSettings::Load|
-                                             EditorToolSettings::SaveAs|
-                                             EditorToolSettings::Ok|
-                                             EditorToolSettings::Cancel,
-                                             EditorToolSettings::Histogram);
+    d->gboxSettings = new EditorToolSettings;
+    d->gboxSettings->setButtons(EditorToolSettings::Default|
+                                EditorToolSettings::Load|
+                                EditorToolSettings::SaveAs|
+                                EditorToolSettings::Ok|
+                                EditorToolSettings::Cancel);
+
+    d->gboxSettings->setTools(EditorToolSettings::Histogram);
 
     // -------------------------------------------------------------
 
@@ -197,43 +255,46 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
     d->temperatureInput    = new RDoubleNumInput;
     d->temperatureInput->setDecimals(1);
     d->temperatureInput->input()->setRange(1750.0, 12000.0, 10.0);
-    d->temperatureInput->setDefaultValue(6500.0);
+    d->temperatureInput->setDefaultValue((double)DEFAULT_TEMPERATURE);
     d->temperatureInput->setWhatsThis( i18n("Set here the white balance color temperature in Kelvin."));
 
     d->temperaturePresetLabel = new QLabel(i18n("Preset:"));
     d->temperaturePresetCB    = new RComboBox;
-    d->temperaturePresetCB->addItem(i18n("Candle"));
-    d->temperaturePresetCB->addItem(i18n("40W Lamp"));
-    d->temperaturePresetCB->addItem(i18n("100W Lamp"));
-    d->temperaturePresetCB->addItem(i18n("200W Lamp"));
-    d->temperaturePresetCB->addItem(i18n("Sunrise"));
-    d->temperaturePresetCB->addItem(i18n("Studio Lamp"));
-    d->temperaturePresetCB->addItem(i18n("Moonlight"));
-    d->temperaturePresetCB->addItem(i18n("Neutral"));
-    d->temperaturePresetCB->addItem(i18n("Daylight D50"));
-    d->temperaturePresetCB->addItem(i18n("Photo Flash"));
-    d->temperaturePresetCB->addItem(i18n("Sun"));
-    d->temperaturePresetCB->addItem(i18n("Xenon Lamp"));
-    d->temperaturePresetCB->addItem(i18n("Daylight D65"));
-    d->temperaturePresetCB->addItem(i18nc("no temperature preset", "None"));
-    d->temperaturePresetCB->setDefaultIndex(DaylightD65);
-    d->temperaturePresetCB->setWhatsThis(i18n("<p>Select the white balance color temperature "
-                                              "preset to use here:</p>"
-                                              "<p><b>Candle</b>: candle light (1850K).</p>"
-                                              "<p><b>40W Lamp</b>: 40 Watt incandescent lamp (2680K).</p>"
-                                              "<p><b>100W Lamp</b>: 100 Watt incandescent lamp (2800K).</p>"
-                                              "<p><b>200W Lamp</b>: 200 Watt incandescent lamp (3000K).</p>"
-                                              "<p><b>Sunrise</b>: sunrise or sunset light (3200K).</p>"
-                                              "<p><b>Studio Lamp</b>: tungsten lamp used in photo studio or "
-                                              "light at 1 hour from dusk/dawn (3400K).</p>"
-                                              "<p><b>Moonlight</b>: moon light (4100K).</p>"
-                                              "<p><b>Neutral</b>: neutral color temperature (4750K).</p>"
-                                              "<p><b>Daylight D50</b>: sunny daylight around noon (5000K).</p>"
-                                              "<p><b>Photo Flash</b>: electronic photo flash (5500K).</p>"
-                                              "<p><b>Sun</b>: effective sun temperature (5770K).</p>"
-                                              "<p><b>Xenon Lamp</b>: xenon lamp or light arc (6420K).</p>"
-                                              "<p><b>Daylight D65</b>: overcast sky light (6500K).</p>"
-                                              "<p><b>None</b>: no preset value.</p>"));
+    d->temperaturePresetCB->combo()->addItem(i18n("40W Lamp"),                       QVariant(Lamp40W));
+    d->temperaturePresetCB->combo()->addItem(i18n("100W Lamp"),                      QVariant(Lamp100W));
+    d->temperaturePresetCB->combo()->addItem(i18n("200W Lamp"),                      QVariant(Lamp200W));
+    d->temperaturePresetCB->combo()->addItem(i18n("Candle"),                         QVariant(Candle));
+    d->temperaturePresetCB->combo()->addItem(i18n("Daylight D50"),                   QVariant(DaylightD50));
+    d->temperaturePresetCB->combo()->addItem(i18n("Daylight D65"),                   QVariant(DaylightD65));
+    d->temperaturePresetCB->combo()->addItem(i18n("Moonlight"),                      QVariant(MoonLight));
+    d->temperaturePresetCB->combo()->addItem(i18n("Neutral"),                        QVariant(Neutral));
+    d->temperaturePresetCB->combo()->addItem(i18n("Photo Flash"),                    QVariant(Flash));
+    d->temperaturePresetCB->combo()->addItem(i18n("Studio Lamp"),                    QVariant(StudioLamp));
+    d->temperaturePresetCB->combo()->addItem(i18n("Sun"),                            QVariant(Sun));
+    d->temperaturePresetCB->combo()->addItem(i18n("Sunrise"),                        QVariant(Sunrise));
+    d->temperaturePresetCB->combo()->addItem(i18n("Xenon Lamp"),                     QVariant(XenonLamp));
+    d->temperaturePresetCB->combo()->addItem(i18nc("no temperature preset", "None"), QVariant(None));
+    d->temperaturePresetCB->setDefaultIndex(d->temperaturePresetCB->combo()->findData(QVariant(DEFAULT_TEMPERATURE)));
+
+    QString toolTip = QString("<p>%1</p>")
+                              .arg(i18n("Select the white balance color temperature preset to use."));
+    toolTip += d->addTemperatureDescription(i18n("40 Watt incandescent lamp"),             Lamp40W);
+    toolTip += d->addTemperatureDescription(i18n("100 Watt incandescent lamp"),            Lamp100W);
+    toolTip += d->addTemperatureDescription(i18n("200 Watt incandescent lamp"),            Lamp200W);
+    toolTip += d->addTemperatureDescription(i18n("candle light"),                          Candle);
+    toolTip += d->addTemperatureDescription(i18n("sunny daylight around noon"),            DaylightD50);
+    toolTip += d->addTemperatureDescription(i18n("overcast sky light"),                    DaylightD65);
+    toolTip += d->addTemperatureDescription(i18n("moon light"),                            MoonLight);
+    toolTip += d->addTemperatureDescription(i18n("neutral color temperature"),             Neutral);
+    toolTip += d->addTemperatureDescription(i18n("electronic photo flash"),                Flash);
+    toolTip += d->addTemperatureDescription(i18n("tungsten lamp used in photo studio or "
+                                                 "light at 1 hour from dusk/dawn"),        StudioLamp);
+    toolTip += d->addTemperatureDescription(i18n("effective sun temperature"),             Sun);
+    toolTip += d->addTemperatureDescription(i18n("sunrise or sunset light"),               Sunrise);
+    toolTip += d->addTemperatureDescription(i18n("xenon lamp or light arc"),               XenonLamp);
+    toolTip += d->addTemperatureDescription(i18n("no preset value"),                       None);
+    d->temperaturePresetCB->setToolTip(toolTip);
+
     d->pickTemperature = new QToolButton;
     d->pickTemperature->setIcon(KIcon("color-picker-grey"));
     d->pickTemperature->setCheckable(true);
@@ -408,126 +469,28 @@ WhiteBalanceTool::~WhiteBalanceTool()
 
 void WhiteBalanceTool::slotTemperatureChanged(double temperature)
 {
-   switch ((uint) temperature)
+    int index = d->temperaturePresetCB->combo()->findData(QVariant((int)temperature));
+    if (index == -1)
     {
-        case 1850:
-            d->temperaturePresetCB->setCurrentIndex(Candle);
-            break;
-
-        case 2680:
-            d->temperaturePresetCB->setCurrentIndex(Lamp40W);
-            break;
-
-        case 2800:
-            d->temperaturePresetCB->setCurrentIndex(Lamp100W);
-            break;
-
-        case 3000:
-            d->temperaturePresetCB->setCurrentIndex(Lamp200W);
-            break;
-
-        case 3200:
-            d->temperaturePresetCB->setCurrentIndex(Sunrise);
-            break;
-
-        case 3400:
-            d->temperaturePresetCB->setCurrentIndex(StudioLamp);
-            break;
-
-        case 4100:
-            d->temperaturePresetCB->setCurrentIndex(MoonLight);
-            break;
-
-        case 4750:
-            d->temperaturePresetCB->setCurrentIndex(Neutral);
-            break;
-
-        case 5000:
-            d->temperaturePresetCB->setCurrentIndex(DaylightD50);
-            break;
-
-        case 5500:
-            d->temperaturePresetCB->setCurrentIndex(Flash);
-            break;
-
-        case 5770:
-            d->temperaturePresetCB->setCurrentIndex(Sun);
-            break;
-
-        case 6420:
-            d->temperaturePresetCB->setCurrentIndex(XeonLamp);
-            break;
-
-        case 6500:
-            d->temperaturePresetCB->setCurrentIndex(DaylightD65);
-            break;
-
-        default:
-            d->temperaturePresetCB->setCurrentIndex(None);
-            break;
+        index = d->temperaturePresetCB->combo()->findData(QVariant((int)None));
     }
+    d->temperaturePresetCB->setCurrentIndex(index);
 
     slotTimer();
 }
 
 void WhiteBalanceTool::slotTemperaturePresetChanged(int tempPreset)
 {
-   switch (tempPreset)
+    bool ok         = true;
+    int temperature = d->temperaturePresetCB->combo()->itemData(tempPreset).toInt(&ok);
+    if (!ok)
     {
-        case Candle:
-            d->temperatureInput->setValue(1850.0);
-            break;
+        temperature = DEFAULT_TEMPERATURE;
+    }
 
-        case Lamp40W:
-            d->temperatureInput->setValue(2680.0);
-            break;
-
-        case Lamp100W:
-            d->temperatureInput->setValue(2800.0);
-            break;
-
-        case Lamp200W:
-            d->temperatureInput->setValue(3000.0);
-            break;
-
-        case Sunrise:
-            d->temperatureInput->setValue(3200.0);
-            break;
-
-        case StudioLamp:
-            d->temperatureInput->setValue(3400.0);
-            break;
-
-        case MoonLight:
-            d->temperatureInput->setValue(4100.0);
-            break;
-
-        case Neutral:
-            d->temperatureInput->setValue(4750.0);
-            break;
-
-        case DaylightD50:
-            d->temperatureInput->setValue(5000.0);
-            break;
-
-        case Flash:
-            d->temperatureInput->setValue(5500.0);
-            break;
-
-        case Sun:
-            d->temperatureInput->setValue(5770.0);
-            break;
-
-        case XeonLamp:
-            d->temperatureInput->setValue(6420.0);
-            break;
-
-        case DaylightD65:
-            d->temperatureInput->setValue(6500.0);
-            break;
-
-        default: // None.
-            break;
+    if (temperature != -1)
+    {
+        d->temperatureInput->setValue((double)temperature);
     }
 
     slotEffect();
@@ -545,7 +508,7 @@ void WhiteBalanceTool::slotColorSelectedFromOriginal(const DColor& color)
     if ( d->pickTemperature->isChecked() )
     {
         DColor dc = color;
-        QColor tc          = dc.getQColor();
+        QColor tc = dc.getQColor();
         double temperatureLevel, greenLevel;
 
         WhiteBalance::autoWBAdjustementFromColor(tc, temperatureLevel, greenLevel);
@@ -555,7 +518,9 @@ void WhiteBalanceTool::slotColorSelectedFromOriginal(const DColor& color)
         d->pickTemperature->setChecked(false);
     }
     else
+    {
         return;
+    }
 
     // restore previous rendering mode.
     d->previewWidget->setRenderingPreviewMode(d->currentPreviewMode);
@@ -573,10 +538,10 @@ void WhiteBalanceTool::slotAutoAdjustExposure()
     kapp->activeWindow()->setCursor( Qt::WaitCursor );
 
     ImageIface* iface = d->previewWidget->imageIface();
-    uchar *data                = iface->getOriginalImage();
-    int width                  = iface->originalWidth();
-    int height                 = iface->originalHeight();
-    bool sb                    = iface->originalSixteenBit();
+    uchar *data       = iface->getOriginalImage();
+    int width         = iface->originalWidth();
+    int height        = iface->originalHeight();
+    bool sb           = iface->originalSixteenBit();
 
     double blackLevel;
     double exposureLevel;
@@ -595,10 +560,10 @@ void WhiteBalanceTool::slotAutoAdjustExposure()
 void WhiteBalanceTool::slotEffect()
 {
     ImageIface* iface = d->previewWidget->imageIface();
-    uchar *data                = iface->getPreviewImage();
-    int w                      = iface->previewWidth();
-    int h                      = iface->previewHeight();
-    bool sb                    = iface->previewSixteenBit();
+    uchar *data       = iface->getPreviewImage();
+    int w             = iface->previewWidth();
+    int h             = iface->previewHeight();
+    bool sb           = iface->previewSixteenBit();
 
     // Create the new empty destination image data space.
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
@@ -607,15 +572,14 @@ void WhiteBalanceTool::slotEffect()
        delete [] d->destinationPreviewData;
 
     d->destinationPreviewData = new uchar[w*h*(sb ? 8 : 4)];
-
-    double temperature  = d->temperatureInput->value();
-    double dark         = d->darkInput->value();
-    double black        = d->blackInput->value();
-    double mainExposure = d->mainExposureInput->value();
-    double fineExposure = d->fineExposureInput->value();
-    double gamma        = d->gammaInput->value();
-    double saturation   = d->saturationInput->value();
-    double green        = d->greenInput->value();
+    double temperature        = d->temperatureInput->value();
+    double dark               = d->darkInput->value();
+    double black              = d->blackInput->value();
+    double mainExposure       = d->mainExposureInput->value();
+    double fineExposure       = d->fineExposureInput->value();
+    double gamma              = d->gammaInput->value();
+    double saturation         = d->saturationInput->value();
+    double green              = d->greenInput->value();
 
     WhiteBalance wbFilter(sb);
     wbFilter.whiteBalance(data, w, h, sb,
@@ -635,12 +599,11 @@ void WhiteBalanceTool::slotEffect()
 void WhiteBalanceTool::finalRendering()
 {
     kapp->setOverrideCursor( Qt::WaitCursor );
-    ImageIface* iface = d->previewWidget->imageIface();
-    uchar *data       = iface->getOriginalImage();
-    int w             = iface->originalWidth();
-    int h             = iface->originalHeight();
-    bool sb           = iface->originalSixteenBit();
-
+    ImageIface* iface   = d->previewWidget->imageIface();
+    uchar *data         = iface->getOriginalImage();
+    int w               = iface->originalWidth();
+    int h               = iface->originalHeight();
+    bool sb             = iface->originalSixteenBit();
     double temperature  = d->temperatureInput->value();
     double dark         = d->darkInput->value();
     double black        = d->blackInput->value();
@@ -673,12 +636,12 @@ void WhiteBalanceTool::slotResetSettings()
     d->greenInput->slotReset();
     d->mainExposureInput->slotReset();
     d->saturationInput->slotReset();
+    d->temperatureInput->slotReset();
     d->temperaturePresetCB->slotReset();
     slotTemperaturePresetChanged(d->temperaturePresetCB->defaultIndex());
-    d->temperatureInput->slotReset();
 
     d->previewWidget->resetSpotPosition();
-    d->gboxSettings->histogramBox()->setChannel(EditorToolSettings::LuminosityChannel);
+    d->gboxSettings->histogramBox()->setChannel(LuminosityChannel);
     d->gboxSettings->histogramBox()->histogram()->reset();
 
     blockWidgetSignals(false);
@@ -689,20 +652,21 @@ void WhiteBalanceTool::slotResetSettings()
 void WhiteBalanceTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("whitebalance Tool");
+    KConfigGroup group        = config->group(d->configGroupName);
 
-    d->gboxSettings->histogramBox()->setChannel(group.readEntry("Histogram Channel",
-                        (int)EditorToolSettings::LuminosityChannel));
-    d->gboxSettings->histogramBox()->setScale(group.readEntry("Histogram Scale",
-                        (int)HistogramWidget::LogScaleHistogram));
+    d->gboxSettings->histogramBox()->setChannel(group.readEntry(d->configHistogramChannelEntry,
+                        (int)LuminosityChannel));
+    d->gboxSettings->histogramBox()->setScale((HistogramScale)group.readEntry(d->configHistogramScaleEntry,
+                        (int)LogScaleHistogram));
 
-    d->blackInput->setValue(group.readEntry("Black", d->blackInput->defaultValue()));
-    d->mainExposureInput->setValue(group.readEntry("MainExposure", d->mainExposureInput->defaultValue()));
-    d->fineExposureInput->setValue(group.readEntry("FineExposure", d->fineExposureInput->defaultValue()));
-    d->gammaInput->setValue(group.readEntry("Gamma", d->gammaInput->defaultValue()));
-    d->saturationInput->setValue(group.readEntry("Saturation", d->saturationInput->defaultValue()));
-    d->greenInput->setValue(group.readEntry("Green", d->greenInput->defaultValue()));
-    d->temperatureInput->setValue(group.readEntry("Temperature", d->temperatureInput->defaultValue()));
+    d->blackInput->setValue(group.readEntry(d->configDarkInputEntry,             d->darkInput->defaultValue()));
+    d->blackInput->setValue(group.readEntry(d->configBlackInputEntry,            d->blackInput->defaultValue()));
+    d->mainExposureInput->setValue(group.readEntry(d->configMainExposureEntry,   d->mainExposureInput->defaultValue()));
+    d->fineExposureInput->setValue(group.readEntry(d->configFineExposureEntry,   d->fineExposureInput->defaultValue()));
+    d->gammaInput->setValue(group.readEntry(d->configGammaInputEntry,            d->gammaInput->defaultValue()));
+    d->saturationInput->setValue(group.readEntry(d->configSaturationInputEntry,  d->saturationInput->defaultValue()));
+    d->greenInput->setValue(group.readEntry(d->configGreenInputEntry,            d->greenInput->defaultValue()));
+    d->temperatureInput->setValue(group.readEntry(d->configTemeratureInputEntry, d->temperatureInput->defaultValue()));
 
     slotTemperatureChanged(d->temperatureInput->value());
 }
@@ -710,23 +674,21 @@ void WhiteBalanceTool::readSettings()
 void WhiteBalanceTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("whitebalance Tool");
-    group.writeEntry("Histogram Channel", d->gboxSettings->histogramBox()->channel());
-    group.writeEntry("Histogram Scale", d->gboxSettings->histogramBox()->scale());
-
-    group.writeEntry("Dark", d->darkInput->value());
-    group.writeEntry("Black", d->blackInput->value());
-    group.writeEntry("MainExposure", d->mainExposureInput->value());
-    group.writeEntry("FineExposure", d->fineExposureInput->value());
-    group.writeEntry("Gamma", d->gammaInput->value());
-    group.writeEntry("Saturation", d->saturationInput->value());
-    group.writeEntry("Green", d->greenInput->value());
-    group.writeEntry("Temperature", d->temperatureInput->value());
+    KConfigGroup group        = config->group(d->configGroupName);
+    group.writeEntry(d->configHistogramChannelEntry, d->gboxSettings->histogramBox()->channel());
+    group.writeEntry(d->configHistogramScaleEntry,   (int)d->gboxSettings->histogramBox()->scale());
+    group.writeEntry(d->configDarkInputEntry,        d->darkInput->value());
+    group.writeEntry(d->configBlackInputEntry,       d->blackInput->value());
+    group.writeEntry(d->configMainExposureEntry,     d->mainExposureInput->value());
+    group.writeEntry(d->configFineExposureEntry,     d->fineExposureInput->value());
+    group.writeEntry(d->configGammaInputEntry,       d->gammaInput->value());
+    group.writeEntry(d->configSaturationInputEntry,  d->saturationInput->value());
+    group.writeEntry(d->configGreenInputEntry,       d->greenInput->value());
+    group.writeEntry(d->configTemeratureInputEntry,  d->temperatureInput->value());
     d->previewWidget->writeSettings();
     config->sync();
 }
 
-// Load all settings.
 void WhiteBalanceTool::slotLoadSettings()
 {
     KUrl loadWhiteBalanceFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
@@ -735,7 +697,7 @@ void WhiteBalanceTool::slotLoadSettings()
     if (loadWhiteBalanceFile.isEmpty())
         return;
 
-    QFile file(loadWhiteBalanceFile.path());
+    QFile file(loadWhiteBalanceFile.toLocalFile());
 
     if (file.open(QIODevice::ReadOnly))
     {
@@ -764,13 +726,14 @@ void WhiteBalanceTool::slotLoadSettings()
         slotEffect();
     }
     else
+    {
         KMessageBox::error(kapp->activeWindow(),
                            i18n("Cannot load settings from the White Color Balance text file."));
+    }
 
     file.close();
 }
 
-// Save all settings.
 void WhiteBalanceTool::slotSaveAsSettings()
 {
     KUrl saveWhiteBalanceFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
@@ -779,7 +742,7 @@ void WhiteBalanceTool::slotSaveAsSettings()
     if ( saveWhiteBalanceFile.isEmpty() )
        return;
 
-    QFile file(saveWhiteBalanceFile.path());
+    QFile file(saveWhiteBalanceFile.toLocalFile());
 
     if ( file.open(QIODevice::WriteOnly) )
     {
@@ -795,8 +758,10 @@ void WhiteBalanceTool::slotSaveAsSettings()
         stream << d->greenInput->value() << "\n";
     }
     else
+    {
         KMessageBox::error(kapp->activeWindow(),
                            i18n("Cannot save settings to the White Color Balance text file."));
+    }
 
     file.close();
 }

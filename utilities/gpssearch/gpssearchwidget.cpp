@@ -6,7 +6,7 @@
  * Date        : 2008-05-30
  * Description : a widget to search image over a map.
  *
- * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,16 +22,25 @@
  * ============================================================ */
 
 #include "gpssearchwidget.h"
+#include "gpssearchwidget.moc"
 
 // KDE includes
 
+#include <klocale.h>
 #include <kdebug.h>
 
+// Marble includes
+#ifdef HAVE_MARBLEWIDGET
+#include <marble/GeoDataLinearRing.h>
+#include <marble/GeoPainter.h>
+#endif // HAVE_MARBLEWIDGET
+
+// Local includes.
+
+#include "config-digikam.h"
 
 namespace Digikam
 {
-
-#ifdef HAVE_MARBLEWIDGET
 
 class GPSSearchWidgetPriv
 {
@@ -43,21 +52,26 @@ public:
 };
 
 GPSSearchWidget::GPSSearchWidget(QWidget *parent)
-               : MarbleWidget(parent), d(new GPSSearchWidgetPriv)
+               : WorldMapWidget(256, 256, parent), d(new GPSSearchWidgetPriv)
 {
-#ifdef MARBLE_VERSION
-    setMapThemeId("earth/srtm/srtm.dgml");
-#endif // MARBLE_VERSION
-
     // NOTE: see B.K.O #153070
     // Marble will include selection area over map canvas with KDE 4.2
     // using CTRL + right mouse button.
     // A new signal named regionSelected() will be emitted when user select an aera.
 
-    connect(this, SIGNAL(regionSelected(const QList<double>&)),
-            this, SLOT(slotNewSelectionFromMap(const QList<double>&)));
 
-    // TODO: connect marble with new selection to perform on the map when user select virtual album.
+#ifdef HAVE_MARBLEWIDGET
+    connect(marbleWidget(), SIGNAL(regionSelected(const QList<double>&)),
+            this, SLOT(slotNewSelectionFromMap(const QList<double>&)));
+    setCustomPaintFunction(markerClusterHolderCustomPaint, this);
+#endif // HAVE_MARBLEWIDGET
+
+    // allow the user to select and filter items on the map:
+    slotSetAllowItemFiltering(true);
+    slotSetAllowItemSelection(true);
+    slotSetFocusOnAddedItems(false);
+
+    // TODO: connect marble with new selection to perform on the map when the user selects a virtual album.
 }
 
 GPSSearchWidget::~GPSSearchWidget()
@@ -65,7 +79,7 @@ GPSSearchWidget::~GPSSearchWidget()
     delete d;
 }
 
-bool GPSSearchWidget::asSelection() const
+bool GPSSearchWidget::hasSelection() const
 {
     return !d->selection.isEmpty();
 }
@@ -78,7 +92,7 @@ QList<double> GPSSearchWidget::selectionCoordinates() const
 void GPSSearchWidget::setSelectionCoordinates(const QList<double>& sel)
 {
     d->selection = sel;
-    kDebug(50003) << "Set new selection area: " << d->selection;
+    kDebug() << "Set new selection area: West, North, East, South: " << d->selection;
 
     // Set selection area in marble widget.
     emit signalSetNewMapSelection(d->selection);
@@ -90,18 +104,57 @@ void GPSSearchWidget::slotNewSelectionFromMap(const QList<double>& sel)
     emit signalNewSelectionFromMap();
 }
 
-void GPSSearchWidget::slotZoomIn()
+#ifdef HAVE_MARBLEWIDGET
+/**
+ * @brief Callback that draws the selection for the current search on the map
+ * @param geoPainter Painter on which to draw on
+ * @param isBefore Whether this call is before the clusters are drawn
+ * @param yourdata Pointer to GPSSearchWidget
+ */
+void GPSSearchWidget::markerClusterHolderCustomPaint(Marble::GeoPainter* const geoPainter, const bool isBefore, void* const yourdata)
 {
-    zoomIn();
-    repaint();
-}
+    if (isBefore)
+    {
+      GPSSearchWidget* const me = reinterpret_cast<GPSSearchWidget*>(yourdata);
+      if (me->d->selection.isEmpty())
+        return;
 
-void GPSSearchWidget::slotZoomOut()
-{
-    zoomOut();
-    repaint();
-}
+      // prepare drawing of a polygon (because drawRect does not take four geo-corners...)
+      // West, North, East, South
+      const qreal lonWest = me->d->selection.at(0);
+      const qreal latNorth = me->d->selection.at(1);
+      const qreal lonEast = me->d->selection.at(2);
+      const qreal latSouth = me->d->selection.at(3);
 
+      // TODO: once support for Marble<0.8 is dropped, mark these variables as const
+      Marble::GeoDataCoordinates coordTopLeft(lonWest, latNorth, 0, Marble::GeoDataCoordinates::Degree);
+      Marble::GeoDataCoordinates coordTopRight(lonEast, latNorth, 0, Marble::GeoDataCoordinates::Degree);
+      Marble::GeoDataCoordinates coordBottomLeft(lonWest, latSouth, 0, Marble::GeoDataCoordinates::Degree);
+      Marble::GeoDataCoordinates coordBottomRight(lonEast, latSouth, 0, Marble::GeoDataCoordinates::Degree);
+      Marble::GeoDataLinearRing polyRing;
+#if MARBLE_VERSION < 0x000800
+      polyRing.append(&coordTopLeft);
+      polyRing.append(&coordTopRight);
+      polyRing.append(&coordBottomRight);
+      polyRing.append(&coordBottomLeft);
+#else // MARBLE_VERSION < 0x000800
+      polyRing << coordTopLeft << coordTopRight << coordBottomRight << coordBottomLeft;
+#endif // MARBLE_VERSION < 0x000800
+
+      geoPainter->save();
+
+      // paint the selection:
+      QPen selectionPen;
+      selectionPen.setColor(Qt::blue);
+      selectionPen.setStyle(Qt::SolidLine);
+      selectionPen.setWidth(1);
+      geoPainter->setPen(selectionPen);
+      geoPainter->setBrush(Qt::NoBrush);
+      geoPainter->drawPolygon(polyRing);
+
+      geoPainter->restore();
+    }
+}
 #endif // HAVE_MARBLEWIDGET
 
 }  // namespace Digikam

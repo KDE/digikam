@@ -32,8 +32,8 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kiconloader.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -322,7 +322,7 @@ void ImageCategorizedView::toPreviousIndex()
 
 void ImageCategorizedView::toIndex(const KUrl& url)
 {
-    QModelIndex index = d->model->indexForPath(url.path());
+    QModelIndex index = d->model->indexForPath(url.toLocalFile());
     toIndex(d->filterModel->mapFromSource(index));
 }
 
@@ -376,14 +376,14 @@ bool ImageCategorizedView::isToolTipEnabled() const
     return d->showToolTip;
 }
 
-void ImageCategorizedView::scrollToWhenAvailable(qlonglong imageId)
+void ImageCategorizedView::setCurrentWhenAvailable(qlonglong imageId)
 {
     d->scrollToItemId = imageId;
 }
 
 void ImageCategorizedView::setCurrentUrl(const KUrl& url)
 {
-    QString path = url.path();
+    QString path = url.toLocalFile();
     QModelIndex index = d->filterModel->indexForPath(path);
     if (!index.isValid())
     {
@@ -392,6 +392,28 @@ void ImageCategorizedView::setCurrentUrl(const KUrl& url)
     }
     clearSelection();
     setCurrentIndex(index);
+}
+
+void ImageCategorizedView::setSelectedUrls(const KUrl::List& urlList)
+{
+    kDebug()<<"urlList.size():"<<urlList.size();
+    QItemSelection mySelection;
+    for (KUrl::List::const_iterator it = urlList.constBegin(); it!=urlList.constEnd(); ++it)
+    {
+        const QString path = it->path();
+        const QModelIndex index = d->filterModel->indexForPath(path);
+        if (!index.isValid())
+        {
+            kWarning() << "no QModelIndex found for" << *it;
+        }
+        else
+        {
+            // TODO: is there a better way?
+            mySelection.select(index, index);
+        }
+    }
+    clearSelection();
+    selectionModel()->select(mySelection, QItemSelectionModel::Select);
 }
 
 void ImageCategorizedView::addOverlay(ImageDelegateOverlay *overlay)
@@ -417,7 +439,9 @@ void ImageCategorizedView::scrollToStoredItem()
     {
         if (d->model->hasImage(d->scrollToItemId))
         {
-            scrollTo(d->filterModel->indexForImageId(d->scrollToItemId));
+            QModelIndex index = d->filterModel->indexForImageId(d->scrollToItemId);
+            setCurrentIndex(index);
+            scrollTo(index, QAbstractItemView::PositionAtCenter);
             d->scrollToItemId = 0;
         }
     }
@@ -559,8 +583,12 @@ void ImageCategorizedView::rowsAboutToBeRemoved(const QModelIndex &parent, int s
         selected.merge(removed, QItemSelectionModel::Deselect);
         if (selected.isEmpty())
         {
-            selectionModel()->select(model()->index(start > 0 ? start - 1 : end + 1, 0),
-                                     QItemSelectionModel::SelectCurrent);
+            QModelIndex newCurrent;
+            if (end == model()->rowCount(parent) - 1)
+                newCurrent = model()->index(start - 1, 0); // last remaining, no next one left
+            else
+                newCurrent = model()->index(end + 1, 0); // next remaining
+            selectionModel()->setCurrentIndex(newCurrent, QItemSelectionModel::SelectCurrent);
         }
     }
 }

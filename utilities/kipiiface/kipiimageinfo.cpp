@@ -29,8 +29,8 @@
 // KDE includes
 
 #include <kconfig.h>
-#include <kdebug.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 // LibKIPI includes
 
@@ -38,7 +38,6 @@
 
 // Local includes
 
-#include "constants.h"
 #include "album.h"
 #include "albumdb.h"
 #include "albummanager.h"
@@ -46,6 +45,7 @@
 #include "databaseaccess.h"
 #include "dmetadata.h"
 #include "imageattributeswatch.h"
+#include "globals.h"
 
 namespace Digikam
 {
@@ -106,7 +106,7 @@ void KipiImageInfo::setTime(const QDateTime& time, KIPI::TimeSpec)
 {
     if ( !time.isValid() )
     {
-        kWarning(50003) << "Invalid datetime specified";
+        kWarning() << "Invalid datetime specified";
         return;
     }
 
@@ -286,7 +286,7 @@ int KipiImageInfo::angle()
     if (settings->getExifRotate())
     {
         //TODO: read from DB
-        DMetadata metadata(_url.path());
+        DMetadata metadata(_url.toLocalFile());
         DMetadata::ImageOrientation orientation = metadata.getImageOrientation();
 
         switch (orientation)

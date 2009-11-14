@@ -173,7 +173,7 @@ void MetadataHub::load(const ImageInfo& info)
 
     Template tref = info.metadataTemplate();
     Template t    = TemplateManager::defaultManager()->findByContents(tref);
-    kDebug(50003) << "Found Metadata Template: " << t.templateTitle();
+    //kDebug() << "Found Metadata Template: " << t.templateTitle();
 
     load(info.dateTime(), commentMap, info.rating(), t.isNull() ? tref : t);
 
@@ -189,7 +189,7 @@ void MetadataHub::load(const ImageInfo& info)
             TAlbum *album = man->findTAlbum(*it);
             if (!album)
             {
-                kWarning(50003) << "Tag id " << *it << " not found in database.";
+                kWarning() << "Tag id " << *it << " not found in database.";
                 continue;
             }
             loadedTags << album;
@@ -237,7 +237,7 @@ void MetadataHub::load(const DMetadata& metadata)
     Template tref = metadata.getMetadataTemplate();
     Template t    = TemplateManager::defaultManager()->findByContents(tref);
 
-    kDebug(50003) << "Found Metadata Template: " << t.templateTitle();
+    kDebug() << "Found Metadata Template: " << t.templateTitle();
 
     load(datetime, comments, rating, t.isNull() ? tref : t);
 
@@ -256,7 +256,7 @@ void MetadataHub::load(const DMetadata& metadata)
                 TAlbum *album = man->findTAlbum(*it);
                 if (!album)
                 {
-                    kWarning(50003) << "Tag id " << *it << " not found in database. Use NewTagsImport mode?";
+                    kWarning() << "Tag id " << *it << " not found in database. Use NewTagsImport mode?";
                     continue;
                 }
                 loadedTags << album;
@@ -951,7 +951,7 @@ void MetadataHub::setTag(int albumID, bool hasTag, Status status)
     TAlbum *album = AlbumManager::instance()->findTAlbum(albumID);
     if (!album)
     {
-        kWarning(50003) << "Tag ID " << albumID << " not found in database.";
+        kWarning() << "Tag ID " << albumID << " not found in database.";
         return;
     }
     setTag(album, hasTag, status);
@@ -964,6 +964,16 @@ void MetadataHub::resetChanged()
     d->ratingChanged   = false;
     d->templateChanged = false;
     d->tagsChanged     = false;
+}
+
+void MetadataHub::notifyTagRemoved(TAlbum *album)
+{
+    d->tags.remove(album);
+}
+
+void MetadataHub::notifyTagsCleared()
+{
+    d->tags.clear();
 }
 
 } // namespace Digikam

@@ -50,9 +50,9 @@
 
 #include <kstandarddirs.h>
 #include <kcursor.h>
-#include <kdebug.h>
 #include <kglobal.h>
 #include <kapplication.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -609,7 +609,7 @@ void PerspectiveWidget::transformAffine(Digikam::DImg *orgImage, Digikam::DImg *
                 }
                 else
                 {
-                    kDebug(50006) << "homogeneous coordinate = 0...\n";
+                    kDebug() << "homogeneous coordinate = 0...\n";
                 }
             }
 

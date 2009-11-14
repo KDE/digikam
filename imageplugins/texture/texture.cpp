@@ -76,7 +76,7 @@ void Texture::filterImage(void)
     int bytesDepth  = m_orgImage.bytesDepth();
     bool sixteenBit = m_orgImage.sixteenBit();
 
-    kDebug(50006) << "Texture File: " << m_texturePath;
+    kDebug() << "Texture File: " << m_texturePath;
     Digikam::DImg texture(m_texturePath);
     if ( texture.isNull() ) return;
 
@@ -94,9 +94,9 @@ void Texture::filterImage(void)
 
     // Apply texture.
 
-    uchar* data         = m_orgImage.bits();
-    uchar* pTeData      = textureImg.bits();
-    uchar* pOutBits     = m_destImage.bits();
+    uchar* data     = m_orgImage.bits();
+    uchar* pTeData  = textureImg.bits();
+    uchar* pOutBits = m_destImage.bits();
     uint offset;
 
     Digikam::DColor teData, transData, inData, outData;
@@ -115,9 +115,9 @@ void Texture::filterImage(void)
     {
         for (int y = 0; !m_cancel && y < h; ++y)
         {
-            offset = x*bytesDepth + (y*w*bytesDepth);
-            ptr = data + offset;
-            tptr = pTeData + offset;
+            offset = x * bytesDepth + (y * w * bytesDepth);
+            ptr    = data + offset;
+            tptr   = pTeData + offset;
 
             // Read color
             teData.setColor(tptr, sixteenBit);
@@ -142,9 +142,9 @@ void Texture::filterImage(void)
         }
 
         // Update progress bar in dialog.
-        progress = (int) (((double)x * 50.0) / w);
+        progress = (int) (((double) x * 50.0) / w);
 
-        if (progress%5 == 0)
+        if (progress % 5 == 0)
             postProgress(progress);
     }
 
@@ -154,33 +154,33 @@ void Texture::filterImage(void)
     {
         for (int y = 0; !m_cancel && y < h; ++y)
         {
-            offset = x*bytesDepth + (y*w*bytesDepth);
-            ptr = data + offset;
-            dptr = pOutBits + offset;
-            tptr = pTeData + offset;
+            offset = x * bytesDepth + (y * w * bytesDepth);
+            ptr    = data + offset;
+            dptr   = pOutBits + offset;
+            tptr   = pTeData + offset;
 
-            inData.setColor (ptr, sixteenBit);
+            inData.setColor(ptr, sixteenBit);
             outData.setColor(dptr, sixteenBit);
-            teData.setColor (tptr, sixteenBit);
+            teData.setColor(tptr, sixteenBit);
 
             if (sixteenBit)
             {
-                outData.setRed  ( intMult16 (inData.red(),   inData.red()   + intMult16(2 * teData.red(),   65535 - inData.red())   ) );
-                outData.setGreen( intMult16 (inData.green(), inData.green() + intMult16(2 * teData.green(), 65535 - inData.green()) ) );
-                outData.setBlue ( intMult16 (inData.blue(),  inData.blue()  + intMult16(2 * teData.blue(),  65535 - inData.blue())  ) );
+                outData.setRed(intMult16(inData.red(), inData.red() + intMult16(2 * teData.red(), 65535 - inData.red())));
+                outData.setGreen(intMult16(inData.green(), inData.green() + intMult16(2 * teData.green(), 65535 - inData.green())));
+                outData.setBlue(intMult16(inData.blue(), inData.blue() + intMult16(2 * teData.blue(), 65535 - inData.blue())));
             }
             else
             {
-                outData.setRed  ( intMult8  (inData.red(),   inData.red()   + intMult8(2 * teData.red(),    255 - inData.red())   ) );
-                outData.setGreen( intMult8  (inData.green(), inData.green() + intMult8(2 * teData.green(),  255 - inData.green()) ) );
-                outData.setBlue ( intMult8  (inData.blue(),  inData.blue()  + intMult8(2 * teData.blue(),   255 - inData.blue())  ) );
+                outData.setRed(intMult8(inData.red(), inData.red() + intMult8(2 * teData.red(), 255 - inData.red())));
+                outData.setGreen(intMult8(inData.green(), inData.green() + intMult8(2 * teData.green(), 255 - inData.green())));
+                outData.setBlue(intMult8(inData.blue(), inData.blue() + intMult8(2 * teData.blue(), 255 - inData.blue())));
             }
-            outData.setAlpha( inData.alpha() );
-            outData.setPixel( dptr );
+            outData.setAlpha(inData.alpha());
+            outData.setPixel(dptr);
         }
 
         // Update progress bar in dialog.
-        progress = (int) (50.0 + ((double)x * 50.0) / w);
+        progress = (int) (50.0 + ((double) x * 50.0) / w);
 
         if (progress%5 == 0)
             postProgress(progress);

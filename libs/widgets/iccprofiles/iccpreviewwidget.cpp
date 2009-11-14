@@ -36,8 +36,8 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kurl.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -65,16 +65,16 @@ ICCPreviewWidget::~ICCPreviewWidget()
 void ICCPreviewWidget::showPreview( const KUrl& url)
 {
     clearPreview();
-    QFileInfo fInfo(url.path());
+    QFileInfo fInfo(url.toLocalFile());
 
     if ( url.isLocalFile() && fInfo.isFile() && fInfo.isReadable() )
     {
-        kDebug(50003) << url << " is a readable local file";
+        kDebug() << url << " is a readable local file";
         m_iccProfileWidget->loadFromURL(url);
     }
     else
     {
-        kDebug(50003) << url << " is not a readable local file";
+        kDebug() << url << " is not a readable local file";
     }
 }
 

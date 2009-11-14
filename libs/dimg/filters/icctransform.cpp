@@ -7,7 +7,8 @@
  * Description : a class to apply ICC color correction to image.
  *
  * Copyright (C) 2005-2006 by F.J. Cruz <fj.cruz@supercable.es>
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -28,15 +29,16 @@
 
 #include <QDataStream>
 #include <QFile>
-#include <QtCore/QVarLengthArray>
+#include <QImage>
+#include <QVarLengthArray>
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kconfig.h>
 #include <kapplication.h>
 #include <kglobal.h>
 #include <kconfiggroup.h>
+#include <kdebug.h>
 
 // Lcms includes
 
@@ -45,787 +47,646 @@
 #define cmsTakeCopyright(profile) "Unknown"
 #endif // LCMS_VERSION < 114
 
+// Local includes
+
+#include "dimgloaderobserver.h"
 
 namespace Digikam
 {
 
-class IccTransformPriv
+class TransformDescription
+{
+public:
+
+    TransformDescription()
+    {
+        inputFormat    = 0;
+        outputFormat   = 0;
+        intent         = 0;
+        transformFlags = 0;
+    }
+
+    bool operator==(const TransformDescription& other)
+    {
+        return inputProfile   == other.inputProfile &&
+               inputFormat    == other.inputFormat &&
+               outputProfile  == other.outputProfile &&
+               outputFormat   == other.outputFormat &&
+               intent         == other.intent &&
+               transformFlags == other.transformFlags &&
+               proofProfile   == other.proofProfile &&
+               proofIntent    == other.proofIntent;
+    }
+
+    IccProfile inputProfile;
+    int        inputFormat;
+    IccProfile outputProfile;
+    int        outputFormat;
+    int        intent;
+    int        transformFlags;
+    IccProfile proofProfile;
+    int        proofIntent;
+};
+
+class IccTransformPriv : public QSharedData
 {
 public:
 
     IccTransformPriv()
     {
-        has_embedded_profile = false;
-        do_proof_profile     = false;
+        intent          = INTENT_PERCEPTUAL;
+        proofIntent     = INTENT_ABSOLUTE_COLORIMETRIC;
+        useBPC          = false;
+        checkGamut      = false;
+        doNotEmbed      = false;
+        checkGamutColor = QColor(126, 255, 255);
+        handle          = 0;
     }
 
-    bool       do_proof_profile;
-    bool       has_embedded_profile;
+    IccTransformPriv(const IccTransformPriv& other)
+         : QSharedData(other)
+    {
+        handle = 0;
+        operator=(other);
+    }
 
-    QByteArray embedded_profile;
-    QByteArray input_profile;
-    QByteArray output_profile;
-    QByteArray proof_profile;
+    IccTransformPriv& operator=(const IccTransformPriv& other)
+    {
+        // Attention: This is sensitive. Add any new members here.
+        // We can't use the default operator= because of handle.
+        intent             = other.intent;
+        proofIntent        = other.proofIntent;
+        useBPC             = other.useBPC;
+        checkGamut         = other.checkGamut;
+        doNotEmbed         = other.doNotEmbed;
+        checkGamutColor    = other.checkGamutColor;
+
+        embeddedProfile    = other.embeddedProfile;
+        inputProfile       = other.inputProfile;
+        outputProfile      = other.outputProfile;
+        proofProfile       = other.proofProfile;
+        builtinProfile     = other.builtinProfile;
+
+        close();
+        handle             = 0;
+        currentDescription = TransformDescription();
+
+        return *this;
+    }
+
+    ~IccTransformPriv()
+    {
+        close();
+    }
+
+    void close()
+    {
+        if (handle)
+        {
+            currentDescription = TransformDescription();
+            LcmsLock lock;
+            cmsDeleteTransform(handle);
+            handle = 0;
+        }
+    }
+
+    int        intent;
+    int        proofIntent;
+    bool       useBPC;
+    bool       checkGamut;
+    bool       doNotEmbed;
+    QColor     checkGamutColor;
+
+    IccProfile embeddedProfile;
+    IccProfile inputProfile;
+    IccProfile outputProfile;
+    IccProfile proofProfile;
+    IccProfile builtinProfile;
+
+    IccProfile& sRGB()
+    {
+        if (builtinProfile.isNull())
+            builtinProfile = IccProfile::sRGB();
+        return builtinProfile;
+    }
+
+    IccProfile& effectiveInputProfile()
+    {
+        if (!embeddedProfile.isNull())
+            return embeddedProfile;
+        else if (!inputProfile.isNull())
+            return inputProfile;
+        else
+            return sRGB();
+    }
+
+    IccProfile effectiveInputProfileConst() const
+    {
+        if (!embeddedProfile.isNull())
+            return embeddedProfile;
+        else if (!inputProfile.isNull())
+            return inputProfile;
+        else
+            return IccProfile::sRGB();
+    }
+
+    cmsHTRANSFORM        handle;
+    TransformDescription currentDescription;
 };
 
 IccTransform::IccTransform()
             : d(new IccTransformPriv)
 {
-    cmsErrorAction(LCMS_ERROR_SHOW);
+}
+
+IccTransform::IccTransform(const IccTransform& other)
+            : d(other.d)
+{
+}
+
+IccTransform& IccTransform::operator=(const IccTransform& other)
+{
+    d = other.d;
+    return *this;
 }
 
 IccTransform::~IccTransform()
 {
-    delete d;
+    // close() is done in ~IccTransformPriv
 }
 
-bool IccTransform::hasInputProfile()
+void IccTransform::init()
 {
-    return !(d->input_profile.isEmpty());
+    LcmsLock lock;
+    cmsErrorAction(LCMS_ERROR_SHOW);
 }
 
-bool IccTransform::hasOutputProfile()
+void IccTransform::setInputProfile(const IccProfile& profile)
 {
-    return !(d->output_profile.isEmpty());
+    if (profile == d->inputProfile)
+        return;
+    close();
+    d->inputProfile = profile;
 }
 
-QByteArray IccTransform::embeddedProfile() const
+void IccTransform::setEmbeddedProfile(const DImg& image)
 {
-    return d->embedded_profile;
+    IccProfile profile = image.getIccProfile();
+    if (profile == d->embeddedProfile)
+        return;
+    close();
+    d->embeddedProfile = profile;
 }
 
-QByteArray IccTransform::inputProfile() const
+void IccTransform::setOutputProfile(const IccProfile& profile)
 {
-    return d->input_profile;
+    if (profile == d->outputProfile)
+        return;
+    close();
+    d->outputProfile = profile;
 }
 
-QByteArray IccTransform::outputProfile() const
+void IccTransform::setProofProfile(const IccProfile& profile)
 {
-    return d->output_profile;
+    if (profile == d->proofProfile)
+        return;
+    close();
+    d->proofProfile = profile;
 }
 
-QByteArray IccTransform::proofProfile() const
+IccProfile IccTransform::embeddedProfile() const
 {
-    return d->proof_profile;
+    return d->embeddedProfile;
 }
 
-void IccTransform::getTransformType(bool do_proof_profile)
+IccProfile IccTransform::inputProfile() const
 {
-    if (do_proof_profile)
-    {
-        d->do_proof_profile = true;
-    }
-    else
-    {
-        d->do_proof_profile = false;
-    }
+    return d->inputProfile;
 }
 
-void IccTransform::getEmbeddedProfile(const DImg& image)
+IccProfile IccTransform::outputProfile() const
 {
-    if (!image.getICCProfil().isNull())
-    {
-        d->embedded_profile     = image.getICCProfil();
-        d->has_embedded_profile = true;
-    }
+    return d->outputProfile;
 }
 
-QString IccTransform::getProfileDescription(const QString& profile)
+IccProfile IccTransform::proofProfile() const
 {
-    cmsHPROFILE _profile = cmsOpenProfileFromFile(QFile::encodeName(profile), "r");
-    QString _description = cmsTakeProductDesc(_profile);
-    cmsCloseProfile(_profile);
-    return _description;
+    return d->proofProfile;
 }
 
-int IccTransform::getRenderingIntent()
+IccProfile IccTransform::effectiveInputProfile() const
 {
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(QString("Color Management"));
-    return group.readEntry("RenderingIntent", 0);
+    return d->effectiveInputProfileConst();
 }
 
-bool IccTransform::getUseBPC()
+static int renderingIntentToLcmsIntent(IccTransform::RenderingIntent intent)
 {
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(QString("Color Management"));
-    return group.readEntry("BPCAlgorithm", false);
-}
-
-QByteArray IccTransform::loadICCProfilFile(const QString& filePath)
-{
-    QFile file(filePath);
-    if ( !file.open(QIODevice::ReadOnly) )
-        return QByteArray();
-
-    QByteArray data;
-    data.resize(file.size());
-    QDataStream stream( &file );
-    stream.readRawData(data.data(), data.size());
-    file.close();
-    return data;
-}
-
-void IccTransform::setProfiles(const QString& input_profile, const QString& output_profile)
-{
-    d->input_profile  = loadICCProfilFile(input_profile);
-    d->output_profile = loadICCProfilFile(output_profile);
-}
-
-void IccTransform::setProfiles(const QString& input_profile, const QString& output_profile,
-                               const QString& proof_profile)
-{
-    d->input_profile  = loadICCProfilFile(input_profile);
-    d->output_profile = loadICCProfilFile(output_profile);
-    d->proof_profile  = loadICCProfilFile(proof_profile);
-}
-
-void IccTransform::setProfiles(const QString& output_profile)
-{
-    d->output_profile = loadICCProfilFile(output_profile);
-}
-
-void IccTransform::setProfiles(const QString& output_profile, const QString& proof_profile, bool forProof)
-{
-    if (forProof)
-    {
-        d->output_profile = loadICCProfilFile(output_profile);
-        d->proof_profile  = loadICCProfilFile(proof_profile);
-    }
-}
-
-QString IccTransform::getEmbeddedProfileDescriptor()
-{
-    if (d->embedded_profile.isEmpty())
-        return QString();
-
-    cmsHPROFILE tmpProfile = cmsOpenProfileFromMem(d->embedded_profile.data(),
-                                                   (DWORD)d->embedded_profile.size());
-    QString embeddedProfileDescriptor = QString(cmsTakeProductDesc(tmpProfile));
-    cmsCloseProfile(tmpProfile);
-    return embeddedProfileDescriptor;
-}
-
-QString IccTransform::getInputProfileDescriptor()
-{
-    if (d->input_profile.isEmpty()) return QString();
-    cmsHPROFILE tmpProfile = cmsOpenProfileFromMem(d->input_profile.data(), (DWORD)d->input_profile.size());
-    QString embeddedProfileDescriptor = QString(cmsTakeProductDesc(tmpProfile));
-    cmsCloseProfile(tmpProfile);
-    return embeddedProfileDescriptor;
-}
-
-QString IccTransform::getOutpoutProfileDescriptor()
-{
-    if (d->output_profile.isEmpty()) return QString();
-    cmsHPROFILE tmpProfile = cmsOpenProfileFromMem(d->output_profile.data(), (DWORD)d->output_profile.size());
-    QString embeddedProfileDescriptor = QString(cmsTakeProductDesc(tmpProfile));
-    cmsCloseProfile(tmpProfile);
-    return embeddedProfileDescriptor;
-}
-
-QString IccTransform::getProofProfileDescriptor()
-{
-    if (d->proof_profile.isEmpty()) return QString();
-    cmsHPROFILE tmpProfile = cmsOpenProfileFromMem(d->proof_profile.data(), (DWORD)d->proof_profile.size());
-    QString embeddedProfileDescriptor = QString(cmsTakeProductDesc(tmpProfile));
-    cmsCloseProfile(tmpProfile);
-    return embeddedProfileDescriptor;
-}
-
-bool IccTransform::apply(DImg& image)
-{
-    cmsHPROFILE   inprofile=0, outprofile=0, proofprofile=0;
-    cmsHTRANSFORM transform;
-    int inputFormat = 0;
-    int intent      = INTENT_PERCEPTUAL;
-
-    switch (getRenderingIntent())
-    {
-        case 0:
-            intent = INTENT_PERCEPTUAL;
-            break;
-        case 1:
-            intent = INTENT_RELATIVE_COLORIMETRIC;
-            break;
-        case 2:
-            intent = INTENT_SATURATION;
-            break;
-        case 3:
-            intent = INTENT_ABSOLUTE_COLORIMETRIC;
-            break;
-    }
-
-    //kDebug(50003) << "Intent is: " << intent;
-
-    if (d->has_embedded_profile)
-    {
-        inprofile = cmsOpenProfileFromMem(d->embedded_profile.data(),
-                                          (DWORD)d->embedded_profile.size());
-    }
-    else
-    {
-    inprofile = cmsOpenProfileFromMem(d->input_profile.data(),
-                                      (DWORD)d->input_profile.size());
-    }
-    if (inprofile == NULL)
-    {
-        kDebug(50003) << "Error: Input profile is NULL";
-        cmsCloseProfile(inprofile);
-        return false;
-    }
-
-//     if (d->has_embedded_profile)
-//     {
-//         outprofile = cmsOpenProfileFromMem(d->embedded_profile.data(),
-//                                            (DWORD)d->embedded_profile.size());
-//     }
-//     else
-//     {
-        outprofile = cmsOpenProfileFromMem(d->output_profile.data(),
-                                           (DWORD)d->output_profile.size());
-//     }
-
-    if (outprofile == NULL)
-    {
-        kDebug(50003) << "Error: Output profile is NULL";
-        cmsCloseProfile(outprofile);
-        return false;
-    }
-
-    if (!d->do_proof_profile)
-    {
-        if (image.sixteenBit())
-        {
-            if (image.hasAlpha())
-            {
-                switch (cmsGetColorSpace(inprofile))
-                {
-                     case icSigGrayData:
-                         inputFormat = TYPE_GRAYA_16;
-                         break;
-                     case icSigCmykData:
-                         inputFormat = TYPE_CMYK_16;
-                         break;
-                     default:
-                         inputFormat = TYPE_BGRA_16;
-                }
-
-                transform = cmsCreateTransform( inprofile,
-                                                inputFormat,
-                                                outprofile,
-                                                TYPE_BGRA_16,
-                                                intent,
-                                                cmsFLAGS_WHITEBLACKCOMPENSATION);
-
-                if (!transform)
-                {
-                    kDebug(50003) << "LCMS internal error: cannot create a color transform instance";
-                    return false;
-                }
-            }
-            else
-            {
-                switch (cmsGetColorSpace(inprofile))
-                {
-                     case icSigGrayData:
-                         inputFormat = TYPE_GRAY_16;
-                         break;
-                     case icSigCmykData:
-                         inputFormat = TYPE_CMYK_16;
-                         break;
-                     default:
-                         inputFormat = TYPE_BGR_16;
-                }
-
-                transform = cmsCreateTransform( inprofile,
-                                                inputFormat,
-                                                outprofile,
-                                                TYPE_BGR_16,
-                                                intent,
-                                                cmsFLAGS_WHITEBLACKCOMPENSATION);
-
-                if (!transform)
-                {
-                    kDebug(50003) << "LCMS internal error: cannot create a color transform instance";
-                    return false;
-                }
-            }
-        }
-        else
-        {
-            if (image.hasAlpha())
-            {
-                switch (cmsGetColorSpace(inprofile))
-                {
-                     case icSigGrayData:
-                         inputFormat = TYPE_GRAYA_8;
-                         break;
-                     case icSigCmykData:
-                         inputFormat = TYPE_CMYK_8;
-                         break;
-                     default:
-                         inputFormat = TYPE_BGRA_8;
-                }
-
-                transform = cmsCreateTransform( inprofile,
-                                                inputFormat,
-                                                outprofile,
-                                                TYPE_BGRA_8,
-                                                intent,
-                                                cmsFLAGS_WHITEBLACKCOMPENSATION);
-
-                if (!transform)
-                {
-                    kDebug(50003) << "LCMS internal error: cannot create a color transform instance";
-                    return false;
-                }
-            }
-            else
-            {
-                switch (cmsGetColorSpace(inprofile))
-                {
-                     case icSigGrayData:
-                         inputFormat = TYPE_GRAYA_8;
-                         break;
-                     case icSigCmykData:
-                         inputFormat = TYPE_CMYK_8;
-                         //kDebug(50003) << "input profile: cmyk no alpha";
-                         break;
-                     default:
-                         inputFormat = TYPE_BGR_8;
-                         //kDebug(50003) << "input profile: default no alpha";
-                }
-
-                transform = cmsCreateTransform(inprofile, inputFormat, outprofile,
-                                               TYPE_BGR_8, intent,
-                                               cmsFLAGS_WHITEBLACKCOMPENSATION);
-
-                if (!transform)
-                {
-                    kDebug(50003) << "LCMS internal error: cannot create a color transform instance";
-                    return false;
-                }
-            }
-        }
-    }
-    else
-    {
-        proofprofile = cmsOpenProfileFromMem(d->proof_profile.data(),
-                                             (DWORD)d->proof_profile.size());
-
-        if (proofprofile == NULL)
-        {
-            kDebug(50003) << "Error: Input profile is NULL";
-            cmsCloseProfile(inprofile);
-            cmsCloseProfile(outprofile);
-            return false;
-        }
-
-        if (image.sixteenBit())
-        {
-            if (image.hasAlpha())
-            {
-                transform = cmsCreateProofingTransform( inprofile,
-                                                        TYPE_BGRA_16,
-                                                        outprofile,
-                                                        TYPE_BGRA_16,
-                                                        proofprofile,
-                                                        INTENT_ABSOLUTE_COLORIMETRIC,
-                                                        INTENT_ABSOLUTE_COLORIMETRIC,
-                                                        cmsFLAGS_WHITEBLACKCOMPENSATION);
-
-                if (!transform)
-                {
-                    kDebug(50003) << "LCMS internal error: cannot create a color transform instance";
-                    return false;
-                }
-            }
-            else
-            {
-                transform = cmsCreateProofingTransform( inprofile,
-                                                        TYPE_BGR_16,
-                                                        outprofile,
-                                                        TYPE_BGR_16,
-                                                        proofprofile,
-                                                        INTENT_ABSOLUTE_COLORIMETRIC,
-                                                        INTENT_ABSOLUTE_COLORIMETRIC,
-                                                        cmsFLAGS_WHITEBLACKCOMPENSATION);
-
-                if (!transform)
-                {
-                    kDebug(50003) << "LCMS internal error: cannot create a color transform instance";
-                    return false;
-                }
-            }
-        }
-        else
-        {
-            if (image.hasAlpha())
-            {
-                transform = cmsCreateProofingTransform( inprofile,
-                                                        TYPE_BGR_8,
-                                                        outprofile,
-                                                        TYPE_BGR_8,
-                                                        proofprofile,
-                                                        INTENT_ABSOLUTE_COLORIMETRIC,
-                                                        INTENT_ABSOLUTE_COLORIMETRIC,
-                                                        cmsFLAGS_WHITEBLACKCOMPENSATION);
-
-                if (!transform)
-                {
-                    kDebug(50003) << "LCMS internal error: cannot create a color transform instance";
-                    return false;
-                }
-            }
-            else
-            {
-                transform = cmsCreateProofingTransform( inprofile,
-                                                        TYPE_BGR_8,
-                                                        outprofile,
-                                                        TYPE_BGR_8,
-                                                        proofprofile,
-                                                        INTENT_ABSOLUTE_COLORIMETRIC,
-                                                        INTENT_ABSOLUTE_COLORIMETRIC,
-                                                        cmsFLAGS_WHITEBLACKCOMPENSATION);
-
-                if (!transform)
-                {
-                    kDebug(50003) << "LCMS internal error: cannot create a color transform instance";
-                    return false;
-                }
-            }
-        }
-    }
-
-     // We need to work using temp pixel buffer to apply ICC transformations.
-    QVarLengthArray<uchar> transdata(image.bytesDepth());
-
-    // Always working with uchar* prevent endianess problem.
-    uchar *data = image.bits();
-
-    // We scan all image pixels one by one.
-    for (uint i=0; i < image.width()*image.height()*image.bytesDepth(); i+=image.bytesDepth())
-    {
-        // Apply ICC transformations.
-        cmsDoTransform( transform, &data[i], &transdata[0], 1);
-
-        // Copy buffer to source to update original image with ICC corrections.
-        // Alpha channel is restored in all cases.
-        memcpy (&data[i], &transdata[0], (image.bytesDepth() == 8) ? 6 : 3);
-    }
-
-    cmsDeleteTransform(transform);
-    cmsCloseProfile(inprofile);
-    cmsCloseProfile(outprofile);
-
-    if (d->do_proof_profile)
-       cmsCloseProfile(proofprofile);
-
-    return true;
-}
-
-bool IccTransform::apply( DImg& image, QByteArray& profile, int intent, bool useBPC,
-                          bool checkGamut, bool useBuiltin )
-{
-    cmsHPROFILE   inprofile=0, outprofile=0, proofprofile=0;
-    cmsHTRANSFORM transform;
-    int transformFlags = 0, inputFormat = 0;
-
     switch (intent)
     {
-        case 0:
-            intent = INTENT_PERCEPTUAL;
-            break;
-        case 1:
-            intent = INTENT_RELATIVE_COLORIMETRIC;
-            break;
-        case 2:
-            intent = INTENT_SATURATION;
-            break;
-        case 3:
-            intent = INTENT_ABSOLUTE_COLORIMETRIC;
-            break;
+        case IccTransform::Perceptual:
+            return INTENT_PERCEPTUAL;
+        case IccTransform::RelativeColorimetric:
+            return INTENT_RELATIVE_COLORIMETRIC;
+        case IccTransform::Saturation:
+            return INTENT_SATURATION;
+        case IccTransform::AbsoluteColorimetric:
+            return INTENT_ABSOLUTE_COLORIMETRIC;
+        default:
+            return INTENT_PERCEPTUAL;
+    }
+}
+
+void IccTransform::setIntent(RenderingIntent intent)
+{
+    if (intent == d->intent)
+        return;
+    d->intent = renderingIntentToLcmsIntent(intent);
+    close();
+}
+
+void IccTransform::setProofIntent(RenderingIntent intent)
+{
+    if (intent == d->proofIntent)
+        return;
+    d->proofIntent = renderingIntentToLcmsIntent(intent);
+    close();
+}
+
+void IccTransform::setUseBlackPointCompensation(bool useBPC)
+{
+    if (d->useBPC == useBPC)
+        return;
+    close();
+    d->useBPC = useBPC;
+}
+
+void IccTransform::setCheckGamut(bool checkGamut)
+{
+    if (d->checkGamut == checkGamut)
+        return;
+    close();
+    d->checkGamut = checkGamut;
+}
+
+void IccTransform::setCheckGamutMaskColor(const QColor& color)
+{
+    d->checkGamutColor = color;
+}
+
+void IccTransform::setDoNotEmbedOutputProfile(bool doNotEmbed)
+{
+    d->doNotEmbed = doNotEmbed;
+}
+
+/*
+void IccTransform::readFromConfig()
+{
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group = config->group(QString("Color Management"));
+
+    int intent = group.readEntry("RenderingIntent", 0);
+    bool useBPC = group.readEntry("BPCAlgorithm", false);
+
+    setIntent(intent);
+    setUseBlackPointCompensation(useBPC);
+}
+*/
+
+bool IccTransform::willHaveEffect()
+{
+    if (d->outputProfile.isNull())
+        return false;
+    return !d->effectiveInputProfile().isSameProfileAs(d->outputProfile);
+}
+
+TransformDescription IccTransform::getDescription(const DImg& image)
+{
+    TransformDescription description;
+
+    description.inputProfile = d->effectiveInputProfile();
+    description.outputProfile = d->outputProfile;
+    description.intent = d->intent;
+
+    if (d->useBPC)
+    {
+        description.transformFlags |= cmsFLAGS_WHITEBLACKCOMPENSATION;
     }
 
-    //kDebug(50003) << "Intent is: " << intent;
+    LcmsLock lock;
+    // Do not use TYPE_BGR_ - this implies 3 bytes per pixel, but even if !image.hasAlpha(),
+    // our image data has 4 bytes per pixel with the fourth byte filled with 0xFF.
+    if (image.sixteenBit())
+    {
+        switch (cmsGetColorSpace(description.inputProfile))
+        {
+            case icSigGrayData:
+                description.inputFormat = TYPE_GRAYA_16;
+                break;
+            case icSigCmykData:
+                description.inputFormat = TYPE_CMYK_16;
+                break;
+            default:
+                description.inputFormat = TYPE_BGRA_16;
+        }
 
-    if (!profile.isNull())
-    {
-        inprofile = cmsOpenProfileFromMem(profile.data(),
-                                          (DWORD)profile.size());
-    }
-    else if (useBuiltin)
-    {
-        inprofile = cmsCreate_sRGBProfile();
+        description.outputFormat = TYPE_BGRA_16;
     }
     else
     {
-        inprofile = cmsOpenProfileFromMem(d->input_profile.data(),
-                                          (DWORD)d->input_profile.size());
-    }
-
-     if (inprofile == NULL)
-    {
-        kDebug(50003) << "Error: Input profile is NULL";
-        return false;
-    }
-
-    outprofile = cmsOpenProfileFromMem(d->output_profile.data(),
-                                       (DWORD)d->output_profile.size());
-
-    if (outprofile == NULL)
-    {
-        kDebug(50003) << "Error: Output profile is NULL";
-        cmsCloseProfile(inprofile);
-        return false;
-    }
-
-    if (useBPC)
-    {
-        transformFlags |= cmsFLAGS_WHITEBLACKCOMPENSATION;
-    }
-
-    if (!d->do_proof_profile)
-    {
-        if (image.sixteenBit())
+        switch (cmsGetColorSpace(description.inputProfile))
         {
-            if (image.hasAlpha())
-            {
-                switch (cmsGetColorSpace(inprofile))
-                {
-                     case icSigGrayData:
-                         inputFormat = TYPE_GRAYA_16;
-                         break;
-                     case icSigCmykData:
-                         inputFormat = TYPE_CMYK_16;
-                         break;
-                     default:
-                         inputFormat = TYPE_BGRA_16;
-                }
+            case icSigGrayData:
+                description.inputFormat = TYPE_GRAYA_8;
+                break;
+            case icSigCmykData:
+                description.inputFormat = TYPE_CMYK_8;
+                break;
+            default:
+                description.inputFormat = TYPE_BGRA_8;
+        }
 
-                transform = cmsCreateTransform( inprofile,
-                                                inputFormat,
-                                                outprofile,
-                                                TYPE_BGRA_16,
-                                                intent,
-                                                transformFlags);
+        description.outputFormat = TYPE_BGRA_8;
+    }
+    return description;
+}
 
-                if (!transform)
-                {
-                    kDebug(50003) << "LCMS internal error: cannot create a color transform instance";
-                    return false;
-                }
-            }
-            else
-            {
-                switch (cmsGetColorSpace(inprofile))
-                {
-                     case icSigGrayData:
-                         inputFormat = TYPE_GRAY_16;
-                         break;
-                     case icSigCmykData:
-                         inputFormat = TYPE_CMYK_16;
-                         break;
-                     default:
-                         inputFormat = TYPE_BGR_16;
-                }
+TransformDescription IccTransform::getDescription(const QImage&)
+{
+    TransformDescription description;
 
-                transform = cmsCreateTransform( inprofile,
-                                                inputFormat,
-                                                outprofile,
-                                                TYPE_BGR_16,
-                                                intent,
-                                                transformFlags);
+    description.inputProfile  = d->effectiveInputProfile();
+    description.outputProfile = d->outputProfile;
+    description.intent        = d->intent;
 
-                if (!transform)
-                {
-                    kDebug(50003) << "LCMS internal error: cannot create a color transform instance";
-                    return false;
-                }
-            }
+    if (d->useBPC)
+    {
+        description.transformFlags |= cmsFLAGS_WHITEBLACKCOMPENSATION;
+    }
+
+    description.inputFormat  = TYPE_BGRA_8;
+    description.outputFormat = TYPE_BGRA_8;
+
+    return description;
+}
+
+TransformDescription IccTransform::getProofingDescription(const DImg& image)
+{
+    TransformDescription description = getDescription(image);
+
+    description.proofProfile = d->proofProfile;
+    description.proofIntent  = d->proofIntent;
+
+    description.transformFlags |= cmsFLAGS_SOFTPROOFING;
+    if (d->checkGamut)
+    {
+        cmsSetAlarmCodes(d->checkGamutColor.red(), d->checkGamutColor.green(), d->checkGamutColor.blue());
+        description.transformFlags |= cmsFLAGS_GAMUTCHECK;
+    }
+
+    return description;
+}
+
+bool IccTransform::open(TransformDescription& description)
+{
+    if (d->handle)
+    {
+        if (d->currentDescription == description)
+        {
+            return true;
         }
         else
         {
-            if (image.hasAlpha())
-            {
-                switch (cmsGetColorSpace(inprofile))
-                {
-                     case icSigGrayData:
-                         inputFormat = TYPE_GRAYA_8;
-                         break;
-                     case icSigCmykData:
-                         inputFormat = TYPE_CMYK_8;
-                         break;
-                     default:
-                         inputFormat = TYPE_BGRA_8;
-                }
-
-                transform = cmsCreateTransform( inprofile,
-                                                inputFormat,
-                                                outprofile,
-                                                TYPE_BGRA_8,
-                                                intent,
-                                                transformFlags);
-
-                if (!transform)
-                {
-                    kDebug(50003) << "LCMS internal error: cannot create a color transform instance";
-                    return false;
-                }
-            }
-            else
-            {
-                switch (cmsGetColorSpace(inprofile))
-                {
-                     case icSigGrayData:
-                         inputFormat = TYPE_GRAY_8;
-                         break;
-                     case icSigCmykData:
-                         inputFormat = TYPE_CMYK_8;
-                         break;
-                     default:
-                         inputFormat = TYPE_BGR_8;
-                }
-
-                transform = cmsCreateTransform( inprofile,
-                                                inputFormat,
-                                                outprofile,
-                                                TYPE_BGR_8,
-                                                intent,
-                                                transformFlags);
-
-                if (!transform)
-                {
-                    kDebug(50003) << "LCMS internal error: cannot create a color transform instance";
-                    return false;
-                }
-            }
+            close();
         }
     }
-    else
+
+    d->currentDescription = description;
+
+    LcmsLock lock;
+    d->handle = cmsCreateTransform(description.inputProfile,
+                                   description.inputFormat,
+                                   description.outputProfile,
+                                   description.outputFormat,
+                                   description.intent,
+                                   description.transformFlags);
+
+    if (!d->handle)
     {
-        proofprofile = cmsOpenProfileFromMem(d->proof_profile.data(),
-                                          (DWORD)d->proof_profile.size());
-
-        if (proofprofile == NULL)
-        {
-            kDebug(50003) << "Error: Input profile is NULL";
-            cmsCloseProfile(inprofile);
-            cmsCloseProfile(outprofile);
-            return false;
-        }
-
-        transformFlags |= cmsFLAGS_SOFTPROOFING;
-        if (checkGamut)
-        {
-            cmsSetAlarmCodes(126, 255, 255);
-            transformFlags |= cmsFLAGS_GAMUTCHECK;
-        }
-
-        if (image.sixteenBit())
-        {
-            if (image.hasAlpha())
-            {
-                transform = cmsCreateProofingTransform( inprofile,
-                                                        TYPE_BGRA_16,
-                                                        outprofile,
-                                                        TYPE_BGRA_16,
-                                                        proofprofile,
-                                                        intent,
-                                                        intent,
-                                                        transformFlags);
-
-                if (!transform)
-                {
-                    kDebug(50003) << "LCMS internal error: cannot create a color transform instance";
-                    return false;
-                }
-            }
-            else
-            {
-                transform = cmsCreateProofingTransform( inprofile,
-                                                        TYPE_BGR_16,
-                                                        outprofile,
-                                                        TYPE_BGR_16,
-                                                        proofprofile,
-                                                        intent,
-                                                        intent,
-                                                        transformFlags);
-
-                if (!transform)
-                {
-                    kDebug(50003) << "LCMS internal error: cannot create a color transform instance";
-                    return false;
-                }
-            }
-        }
-        else
-        {
-            if (image.hasAlpha())
-            {
-                transform = cmsCreateProofingTransform( inprofile,
-                                                        TYPE_BGR_8,
-                                                        outprofile,
-                                                        TYPE_BGR_8,
-                                                        proofprofile,
-                                                        intent,
-                                                        intent,
-                                                        transformFlags);
-
-                if (!transform)
-                {
-                    kDebug(50003) << "LCMS internal error: cannot create a color transform instance";
-                    return false;
-                }
-            }
-            else
-            {
-                transform = cmsCreateProofingTransform( inprofile,
-                                                        TYPE_BGR_8,
-                                                        outprofile,
-                                                        TYPE_BGR_8,
-                                                        proofprofile,
-                                                        intent,
-                                                        intent,
-                                                        transformFlags);
-
-                if (!transform)
-                {
-                    kDebug(50003) << "LCMS internal error: cannot create a color transform instance";
-                    return false;
-                }
-            }
-        }
+        kDebug() << "LCMS internal error: cannot create a color transform instance";
+        return false;
     }
-
-    //kDebug(50003) << "Transform flags are: " << transformFlags;
-
-     // We need to work using temp pixel buffer to apply ICC transformations.
-    QVarLengthArray<uchar>  transdata(image.bytesDepth());
-
-    // Always working with uchar* prevent endianess problem.
-    uchar *data = image.bits();
-
-    // We scan all image pixels one by one.
-    for (uint i=0; i < image.width()*image.height()*image.bytesDepth(); i+=image.bytesDepth())
-    {
-        // Apply ICC transformations.
-        cmsDoTransform( transform, &data[i], &transdata[0], 1);
-
-        // Copy buffer to source to update original image with ICC corrections.
-        // Alpha channel is restored in all cases.
-        memcpy (&data[i], &transdata[0], (image.bytesDepth() == 8) ? 6 : 3);
-    }
-
-    cmsDeleteTransform(transform);
-    cmsCloseProfile(inprofile);
-    cmsCloseProfile(outprofile);
-
-    if (d->do_proof_profile)
-       cmsCloseProfile(proofprofile);
 
     return true;
 }
+
+bool IccTransform::openProofing(TransformDescription& description)
+{
+    if (d->handle)
+    {
+        if (d->currentDescription == description)
+        {
+            return true;
+        }
+        else
+        {
+            close();
+        }
+    }
+
+    d->currentDescription = description;
+
+    LcmsLock lock;
+    d->handle = cmsCreateProofingTransform(description.inputProfile,
+                                           description.inputFormat,
+                                           description.outputProfile,
+                                           description.outputFormat,
+                                           description.proofProfile,
+                                           description.intent,
+                                           description.proofIntent,
+                                           description.transformFlags);
+
+    if (!d->handle)
+    {
+        kDebug() << "LCMS internal error: cannot create a color transform instance";
+        return false;
+    }
+
+    return true;
+}
+
+bool IccTransform::checkProfiles()
+{
+    if (!d->effectiveInputProfile().open())
+    {
+        kError() << "Cannot open embedded profile";
+        return false;
+    }
+
+    if (!d->outputProfile.open())
+    {
+        kError() << "Cannot open output profile";
+        return false;
+    }
+
+    if (!d->proofProfile.isNull())
+    {
+        if (!d->proofProfile.open())
+        {
+            kError() << "Cannot open proofing profile";
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool IccTransform::apply(DImg& image, DImgLoaderObserver *observer)
+{
+    if (!willHaveEffect())
+    {
+        if (!d->outputProfile.isNull() && !d->doNotEmbed)
+            image.setIccProfile(d->outputProfile);
+        return true;
+    }
+
+    if (!checkProfiles())
+        return false;
+
+    TransformDescription description;
+    if (d->proofProfile.isNull())
+    {
+        description = getDescription(image);
+        if (!open(description))
+            return false;
+    }
+    else
+    {
+        description = getProofingDescription(image);
+        if (!openProofing(description))
+            return false;
+    }
+    if (observer)
+        observer->progressInfo(&image, 0.1F);
+
+    transform(image, description, observer);
+
+    if (!d->doNotEmbed)
+        image.setIccProfile(d->outputProfile);
+
+    // if this was a RAW color image, it is no more
+    image.removeAttribute("uncalibratedColor");
+
+    return true;
+}
+
+bool IccTransform::apply(QImage& qimage)
+{
+    if (qimage.format() != QImage::Format_RGB32 &&
+        qimage.format() != QImage::Format_ARGB32 &&
+        qimage.format() != QImage::Format_ARGB32_Premultiplied)
+    {
+        kError() << "Unsupported QImage format" << qimage.format();
+        return false;
+    }
+
+    if (!willHaveEffect())
+        return true;
+
+    if (!checkProfiles())
+        return false;
+
+    TransformDescription description;
+    description = getDescription(qimage);
+    if (!open(description))
+        return false;
+
+    transform(qimage, description);
+
+    return true;
+}
+
+void IccTransform::transform(DImg& image, const TransformDescription& description, DImgLoaderObserver *observer)
+{
+    const int bytesDepth = image.bytesDepth();
+    const int pixels     = image.width() * image.height();
+    // convert ten scanlines in a batch
+    const int pixelsPerStep = image.width() * 10;
+    uchar *data             = image.bits();
+
+    // see dimgloader.cpp, granularity().
+    int granularity=1;
+    if (observer)
+        granularity = (int)(( pixels / (20 * 0.9)) / observer->granularity());
+    int checkPoint = pixels;
+
+    // it is safe to use the same input and output buffer if the format is the same
+    if (description.inputFormat == description.outputFormat)
+    {
+        for (int p=pixels; p > 0; p -= pixelsPerStep)
+        {
+            int pixelsThisStep = qMin(p, pixelsPerStep);
+            int size           = pixelsThisStep * bytesDepth;
+            LcmsLock lock;
+            cmsDoTransform(d->handle, data, data, pixelsThisStep);
+            data += size;
+            if (observer && p <= checkPoint)
+            {
+                checkPoint -= granularity;
+                observer->progressInfo(&image, 0.1 + 0.9*(1.0 - float(p)/float(pixels)));
+            }
+        }
+    }
+    else
+    {
+        QVarLengthArray<uchar> buffer(pixelsPerStep * bytesDepth);
+        for (int p=pixels; p > 0; p -= pixelsPerStep)
+        {
+            int pixelsThisStep = qMin(p, pixelsPerStep);
+            int size           = pixelsThisStep * bytesDepth;
+            LcmsLock lock;
+            memcpy(buffer.data(), data, size);
+            cmsDoTransform(d->handle, buffer.data(), data, pixelsThisStep);
+            data += size;
+            if (observer && p <= checkPoint)
+            {
+                checkPoint -= granularity;
+                observer->progressInfo(&image, 0.1 + 0.9*(1.0 - float(p)/float(pixels)));
+            }
+        }
+    }
+}
+
+void IccTransform::transform(QImage& image, const TransformDescription&)
+{
+    const int bytesDepth    = 4;
+    const int pixels        = image.width() * image.height();
+    // convert ten scanlines in a batch
+    const int pixelsPerStep = image.width() * 10;
+    uchar *data             = image.bits();
+
+    for (int p=pixels; p > 0; p -= pixelsPerStep)
+    {
+        int pixelsThisStep = qMin(p, pixelsPerStep);
+        int size           = pixelsThisStep * bytesDepth;
+        LcmsLock lock;
+        cmsDoTransform(d->handle, data, data, pixelsThisStep);
+        data += size;
+    }
+}
+
+void IccTransform::close()
+{
+    d->close();
+}
+
+/*
+void IccTransform::closeProfiles()
+{
+    d->inputProfile.close();
+    d->outputProfile.close();
+    d->proofProfile.close();
+    d->embeddedProfile.close();
+}
+*/
 
 }  // namespace Digikam

@@ -24,25 +24,21 @@
 #include "batchtoolsmanager.h"
 #include "batchtoolsmanager.moc"
 
-// KDE includes
-
-#include <kdebug.h>
-
 // Local includes
 
+#include "assigntemplate.h"
+#include "autocorrection.h"
+#include "convert2jp2.h"
 #include "convert2jpeg.h"
+#include "convert2pgf.h"
 #include "convert2png.h"
 #include "convert2tiff.h"
-#include "convert2jp2.h"
-#include "convert2pgf.h"
-#include "autocorrection.h"
-#include "resize.h"
-#include "rotate.h"
-#include "restoration.h"
 #include "flip.h"
-#include "watermark.h"
-#include "assigntemplate.h"
+#include "resize.h"
+#include "restoration.h"
+#include "rotate.h"
 #include "sharpen.h"
+#include "watermark.h"
 
 namespace Digikam
 {

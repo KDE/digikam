@@ -27,8 +27,8 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -180,7 +180,7 @@ int Album::globalID() const
         case(SEARCH):
             return m_id | (1 << 30);
         default:
-            kError(50003) << "Unknown album type";
+            kError() << "Unknown album type";
             return -1;
     }
 }

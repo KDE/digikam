@@ -7,7 +7,7 @@
  * Description : A TIFF IO file for DImg framework
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Specifications & references:
  * - TIFF 6.0  : http://partners.adobe.com/public/developer/en/tiff/TIFF6.pdf
@@ -44,8 +44,6 @@
 // files io. Uncomment this line only for debugging.
 //#define ENABLE_DEBUG_MESSAGES
 
-#include "tiffloader.h"
-
 // C ANSI includes
 extern "C"
 {
@@ -71,6 +69,7 @@ extern "C"
 #include "dimg.h"
 #include "dimgloaderobserver.h"
 #include "dmetadata.h"
+#include "tiffloader.h"     //krazy:exclude=includes
 
 namespace Digikam
 {
@@ -82,7 +81,7 @@ void TIFFLoader::dimg_tiff_warning(const char* module, const char* format, va_li
 #ifdef ENABLE_DEBUG_MESSAGES
     char message[4096];
     vsnprintf(message, 4096, format, warnings);
-    kDebug(50003) << module <<  "::" <<  message;
+    kDebug() << module <<  "::" <<  message;
 #else
     Q_UNUSED(module);
     Q_UNUSED(format);
@@ -95,7 +94,7 @@ void TIFFLoader::dimg_tiff_error(const char* module, const char* format, va_list
 #ifdef ENABLE_DEBUG_MESSAGES
     char message[4096];
     vsnprintf(message, 4096, format, errors);
-    kDebug(50003) << module << "::" << message;
+    kDebug() << module << "::" << message;
 #else
     Q_UNUSED(module);
     Q_UNUSED(format);
@@ -127,7 +126,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     TIFF* tif = TIFFOpen(QFile::encodeName(filePath), "r");
     if (!tif)
     {
-        kDebug(50003) << "Cannot open image file.";
+        kDebug() << "Cannot open image file.";
         return false;
     }
 
@@ -142,6 +141,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     uint16    bits_per_sample;
     uint16    samples_per_pixel;
     uint16    photometric;
+    uint16    planar_config;
     uint32    rows_per_strip;
     tsize_t   strip_size;
     tstrip_t  num_of_strips;
@@ -151,11 +151,12 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     TIFFGetFieldDefaulted(tif, TIFFTAG_BITSPERSAMPLE, &bits_per_sample);
     TIFFGetFieldDefaulted(tif, TIFFTAG_SAMPLESPERPIXEL, &samples_per_pixel);
+    TIFFGetFieldDefaulted(tif, TIFFTAG_PLANARCONFIG, &planar_config);
 
     if (TIFFGetFieldDefaulted(tif, TIFFTAG_ROWSPERSTRIP, &rows_per_strip) == 0
         || rows_per_strip == 0 || rows_per_strip == (unsigned int)-1)
     {
-        kWarning(50003)  << "TIFF loader: Cannot handle non-stripped images. Loading file "
+        kWarning()  << "TIFF loader: Cannot handle non-stripped images. Loading file "
                          << filePath;
         TIFFClose(tif);
         return false;
@@ -166,7 +167,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         rows_per_strip == 0 ||
         rows_per_strip > h)
     {
-        kWarning(50003) << "TIFF loader: Encountered invalid value 0 in image."
+        kWarning() << "TIFF loader: Encountered invalid value 0 in image."
                         << " bits_per_sample " << bits_per_sample
                         << " samples_per_pixel " << samples_per_pixel
                         << " rows_per_strip " << rows_per_strip
@@ -185,7 +186,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         photometric != PHOTOMETRIC_MINISBLACK &&
         m_loadFlags & LoadImageData)
     {
-        kWarning(50003) << "Can not handle image without RGB color-space: "
+        kWarning() << "Can not handle image without RGB color-space: "
                         << photometric;
         TIFFClose(tif);
         return false;
@@ -239,8 +240,6 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
     if (m_loadFlags & LoadICCData)
     {
-        QMap<int, QByteArray>& metaData = imageMetaData();
-
         uchar  *profile_data=0;
         uint32  profile_size;
 
@@ -249,7 +248,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
             QByteArray profile_rawdata;
             profile_rawdata.resize(profile_size);
             memcpy(profile_rawdata.data(), profile_data, profile_size);
-            metaData.insert(DImg::ICC, profile_rawdata);
+            imageSetIccProfile(profile_rawdata);
         }
         else
         {
@@ -277,7 +276,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
             uchar *strip = new_failureTolerant(strip_size);
             if (!data || !strip)
             {
-                kDebug(50003) << "Failed to allocate memory for TIFF image" << filePath;
+                kDebug() << "Failed to allocate memory for TIFF image" << filePath;
                 delete[] data;
                 delete[] strip;
                 TIFFClose(tif);
@@ -307,7 +306,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
                 if (bytesRead == -1)
                 {
-                    kDebug(50003) << "Failed to read strip";
+                    kDebug() << "Failed to read strip";
                     delete [] data;
                     TIFFClose(tif);
                     return false;
@@ -409,7 +408,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
             uchar *strip = new_failureTolerant(w*rows_per_strip*4);
             if (!data || !strip)
             {
-                kDebug(50003) << "Failed to allocate memory for TIFF image" << filePath;
+                kDebug() << "Failed to allocate memory for TIFF image" << filePath;
                 delete[] data;
                 delete[] strip;
                 TIFFClose(tif);
@@ -429,7 +428,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
             if (!TIFFRGBAImageOK(tif, emsg) || !TIFFRGBAImageBegin(&img, tif, 0, emsg))
             {
-                kDebug(50003) << "Failed to set up RGBA reading of image, filename "
+                kDebug() << "Failed to set up RGBA reading of image, filename "
                         << TIFFFileName(tif) <<  " error message from Libtiff: " << emsg;
                 delete [] data;
                 delete [] strip;
@@ -467,7 +466,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
                 if (TIFFRGBAImageGet(&img, (uint32*)strip, img.width, rows_to_read ) == -1)
                 {
-                    kDebug(50003) << "Failed to read image data";
+                    kDebug() << "Failed to read image data";
                     delete [] data;
                     delete [] strip;
                     TIFFClose(tif);
@@ -549,7 +548,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     TIFF *tif = TIFFOpen(QFile::encodeName(filePath), "w");
     if (!tif)
     {
-        kDebug(50003) << "Cannot open target image file.";
+        kDebug() << "Cannot open target image file.";
         return false;
     }
 
@@ -582,12 +581,12 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     else
         TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_NONE);
 
-    // Image has an alpha channel ?
+    uint16 sampleinfo[1];
     if (imageHasAlpha())
     {
-        uint16 sampleinfo[1] = { EXTRASAMPLE_UNASSALPHA };
+        sampleinfo[0] = EXTRASAMPLE_ASSOCALPHA;
         TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 4);
-        TIFFSetField(tif, TIFFTAG_EXTRASAMPLES,    EXTRASAMPLE_ASSOCALPHA, sampleinfo);
+        TIFFSetField(tif, TIFFTAG_EXTRASAMPLES,    1, sampleinfo);
     }
     else
     {
@@ -645,7 +644,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     // -------------------------------------------------------------------
     // Write ICC profile.
 
-    QByteArray profile_rawdata = m_image->getICCProfil();
+    QByteArray profile_rawdata = m_image->getIccProfile().data();
 
     if (!profile_rawdata.isEmpty())
     {
@@ -670,7 +669,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     uint8 *buf = (uint8 *)_TIFFmalloc(TIFFScanlineSize(tif));
     if (!buf)
     {
-        kDebug(50003) << "Cannot allocate memory buffer for main image.";
+        kDebug() << "Cannot allocate memory buffer for main image.";
         TIFFClose(tif);
         return false;
     }
@@ -760,7 +759,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
         if (!TIFFWriteScanline(tif, buf, y, 0))
         {
-            kDebug(50003) << "Cannot write main image to target file.";
+            kDebug() << "Cannot write main image to target file.";
             _TIFFfree(buf);
             TIFFClose(tif);
             return false;
@@ -792,7 +791,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
     if (!bufThumb)
     {
-        kDebug(50003) << "Cannot allocate memory buffer for thumbnail.";
+        kDebug() << "Cannot allocate memory buffer for thumbnail.";
         TIFFClose(tif);
         return false;
     }
@@ -813,7 +812,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
         if (!TIFFWriteScanline(tif, bufThumb, y, 0))
         {
-            kDebug(50003) << "Cannot write thumbnail to target file.";
+            kDebug() << "Cannot write thumbnail to target file.";
             _TIFFfree(bufThumb);
             TIFFClose(tif);
             return false;

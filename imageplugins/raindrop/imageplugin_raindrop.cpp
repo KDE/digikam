@@ -33,8 +33,8 @@
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kcursor.h>
-#include <kdebug.h>
 #include <kapplication.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -56,7 +56,7 @@ ImagePlugin_RainDrop::ImagePlugin_RainDrop(QObject *parent, const QVariantList &
 
     setXMLFile( "digikamimageplugin_raindrop_ui.rc" );
 
-    kDebug(50006) << "ImagePlugin_RainDrop plugin loaded";
+    kDebug() << "ImagePlugin_RainDrop plugin loaded";
 }
 
 ImagePlugin_RainDrop::~ImagePlugin_RainDrop()

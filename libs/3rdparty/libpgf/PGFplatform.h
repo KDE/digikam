@@ -25,8 +25,8 @@
 #define PGF_PGFPLATFORM_H
 
 #include <cassert>
-#include <cmath>
-#include <cstdlib>
+#include <cmath> 
+#include <cstdlib> 
 
 //-------------------------------------------------------------------------------
 // ROI support
@@ -58,6 +58,14 @@
 #define DWWIDTHREST(bytes)	((WordBytes - (bytes)%WordBytes)%WordBytes)						// DWWIDTHBITS(bytes*8) - bytes
 
 //-------------------------------------------------------------------------------
+// Min-Max macros
+//-------------------------------------------------------------------------------
+#ifndef __min
+	#define __min(x, y)		((x) <= (y) ? (x) : (y))
+	#define __max(x, y)		((x) >= (y) ? (x) : (y))
+#endif // __min
+
+//-------------------------------------------------------------------------------
 //	Defines -- Adobe image modes.
 //-------------------------------------------------------------------------------
 #define ImageModeBitmap				0
@@ -87,7 +95,7 @@
 //-------------------------------------------------------------------------------
 // WINDOWS 32
 //-------------------------------------------------------------------------------
-#if defined (WIN32) || defined (WINCE)
+#if defined(WIN32) || defined(WINCE)
 #define VC_EXTRALEAN		// Exclude rarely-used stuff from Windows headers
 
 //-------------------------------------------------------------------------------
@@ -154,9 +162,9 @@ typedef bool (__cdecl *CallbackPtr)(double percent, bool escapeAllowed, void *da
 	#ifdef _DEBUG
 		#define ASSERT(x)	assert(x)
 	#else
-		#if defined(__GNUC__)
-                        #define ASSERT(ignore)((void) 0)
-                #elif _MSC_VER >= 1300
+		#if defined(__GNUC__) 
+			#define ASSERT(ignore)((void) 0) 
+		#elif _MSC_VER >= 1300 
 			#define ASSERT		__noop
 		#else
 			#define ASSERT ((void)0)
@@ -284,35 +292,41 @@ inline OSError SetFPos(HANDLE hFile, int posMode, INT64 posOff) {
 //-------------------------------------------------------------------------------
 #ifdef __APPLE__
 #define __POSIX__ 
-#define __BIGENDIAN__
 #endif // __APPLE__
 
 
 //-------------------------------------------------------------------------------
-// LINUX
+// LINUX / GLIBC
 //-------------------------------------------------------------------------------
-#ifdef __linux__
+#if defined(__linux__) || defined(__GLIBC__)
 #define __POSIX__
 #endif /* __linux__ */
 
 
 //-------------------------------------------------------------------------------
-// POSIX *NIXes
+// NetBSD
 //-------------------------------------------------------------------------------
 #ifdef __NetBSD__
-#ifndef __POSIX__
-#define __POSIX__
-#endif
-#ifndef off64_t
-#define off64_t off_t
-#endif
-#ifndef lseek64
-#define lseek64 lseek
-#endif
-#endif
+#ifndef __POSIX__ 
+#define __POSIX__ 
+#endif 
+
+#ifndef off64_t 
+#define off64_t off_t 
+#endif 
+
+#ifndef lseek64 
+#define lseek64 lseek 
+#endif 
+
+#endif /* __NetBSD__ */
+
+
+//-------------------------------------------------------------------------------
+// POSIX *NIXes
+//-------------------------------------------------------------------------------
 
 #ifdef __POSIX__
-#include <stdlib.h>		// div(), abs(), div_t
 #include <unistd.h>
 #include <errno.h>
 #include <stdint.h>		// for int64_t and uint64_t
@@ -408,24 +422,16 @@ __inline int MulDiv(int nNumber, int nNumerator, int nDenominator) {
 #endif // __POSIX__ or WINCE
 
 
-//-------------------------------------------------------------------------------
-// Macros
-//-------------------------------------------------------------------------------
-#ifndef __min
-#define __min(x, y)		((x) <= (y) ? (x) : (y))
-#define __max(x, y)		((x) >= (y) ? (x) : (y))
-#endif // __min
-
 #ifdef __POSIX__
 //-------------------------------------------------------------------------------
 // DEBUG macros
 //-------------------------------------------------------------------------------
 #ifndef ASSERT
-#ifdef _DEBUG
-#define ASSERT(x)	assert(x)
-#else
-#define ASSERT(x)	
-#endif //_DEBUG
+	#ifdef _DEBUG
+		#define ASSERT(x)	assert(x)
+	#else
+		#define ASSERT(x)	
+	#endif //_DEBUG
 #endif //ASSERT
 
 //-------------------------------------------------------------------------------
@@ -531,10 +537,10 @@ __inline OSError SetFPos(HANDLE hFile, int posMode, INT64 posOff) {
 //-------------------------------------------------------------------------------
 //	Big Endian
 //-------------------------------------------------------------------------------
-#ifdef __BIGENDIAN__
+#ifdef __BIG_ENDIAN__ 
 
 #ifndef _lrotl
-#define _lrotl(x,n)	(((x) << ((UINT32)(n))) | ((x) >> (32 - (UINT32)(n))))
+	#define _lrotl(x,n)	(((x) << ((UINT32)(n))) | ((x) >> (32 - (UINT32)(n))))
 #endif
 
 __inline UINT16 ByteSwap(UINT16 wX) {
@@ -560,11 +566,11 @@ __inline UINT64 ByteSwap(UINT64 ui64) {
 
 #define __VAL(x) ByteSwap(x)
 
-#else //__BIGENDIAN__
+#else //__BIG_ENDIAN__ 
 
-#define __VAL(x) (x)
+	#define __VAL(x) (x)
 
-#endif //__BIGENDIAN__
+#endif //__BIG_ENDIAN__ 
  
 
 #endif //PGF_PGFPLATFORM_H

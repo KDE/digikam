@@ -39,17 +39,17 @@
 
 
 LPGAMMATABLE cdecl cmsxEstimateGamma(LPSAMPLEDCURVE X, LPSAMPLEDCURVE Y, int nResultingPoints);
-void		 cdecl cmsxCompleteLabOfPatches(LPMEASUREMENT m, SETOFPATCHES Valids, int Medium);
+void         cdecl cmsxCompleteLabOfPatches(LPMEASUREMENT m, SETOFPATCHES Valids, int Medium);
 
-void cdecl cmsxComputeLinearizationTables(LPMEASUREMENT m, 
-                                    int ColorSpace, 
+void cdecl cmsxComputeLinearizationTables(LPMEASUREMENT m,
+                                    int ColorSpace,
                                     LPGAMMATABLE Lin[3],
-									int nResultingPoints,
-									int Medium);
-                                          
-                                          
-void cdecl cmsxApplyLinearizationTable(double In[3], 
-                                       LPGAMMATABLE Gamma[3], 
+                                    int nResultingPoints,
+                                    int Medium);
+
+
+void cdecl cmsxApplyLinearizationTable(double In[3],
+                                       LPGAMMATABLE Gamma[3],
                                        double Out[3]);
 
 void cdecl cmsxApplyLinearizationGamma(WORD In[3], LPGAMMATABLE Gamma[3], WORD Out[3]);
@@ -59,7 +59,7 @@ void cdecl cmsxApplyLinearizationGamma(WORD In[3], LPGAMMATABLE Gamma[3], WORD O
 /* ------------------------------------------------------------- Implementation */
 
 
-#define EPSILON	0.00005
+#define EPSILON    0.00005
 #define LEVENBERG_MARQUARDT_ITERATE_MAX  150
 
 /* In order to track linearization tables, we use following procedure */
@@ -75,7 +75,7 @@ void cdecl cmsxApplyLinearizationGamma(WORD In[3], LPGAMMATABLE Gamma[3], WORD O
 /* After this step, RGB is converted to XYZ by a matrix multiplication */
 /* */
 /*  |X|       |R| */
-/*  |Y| = [M]·|G| */
+/*  |Y| = [M]ï¿½|G| */
 /*  |Z|       |B|    (1.0) */
 /* */
 /* In order to extract Lr,Lg,Lb tables, we are interested only on Y part  */
@@ -86,11 +86,11 @@ void cdecl cmsxApplyLinearizationGamma(WORD In[3], LPGAMMATABLE Gamma[3], WORD O
 /* */
 /*  1 = m1 * 1 + m2 * 1 + m3 * 1, so */
 /* */
-/*  m1 + m2 + m3 = 1.0		(1.2) */
+/*  m1 + m2 + m3 = 1.0        (1.2) */
 /* */
 /* We now impose that for neutral (gray) patches, RGB components must be equal */
 /* */
-/*	R = G = B = Gray  */
+/*    R = G = B = Gray  */
 /*  */
 /* So, substituting in (1.1): */
 /*  */
@@ -109,23 +109,23 @@ void cdecl cmsxApplyLinearizationGamma(WORD In[3], LPGAMMATABLE Gamma[3], WORD O
 static
 LPSAMPLEDCURVE NormalizeTo(LPSAMPLEDCURVE X, double N, BOOL lAddEndPoint)
 {
-		int i, nItems;
-		LPSAMPLEDCURVE XNorm;
-		
-		nItems = X ->nItems;
-		if (lAddEndPoint) nItems++;
+        int i, nItems;
+        LPSAMPLEDCURVE XNorm;
 
-		XNorm = cmsAllocSampledCurve(nItems);
+        nItems = X ->nItems;
+        if (lAddEndPoint) nItems++;
 
-		for (i=0; i < X ->nItems; i++) {
+        XNorm = cmsAllocSampledCurve(nItems);
 
-			XNorm ->Values[i] = X ->Values[i] / N;  			
-		}
-		
-		if (lAddEndPoint)
-			XNorm -> Values[X ->nItems] = 1.0;
+        for (i=0; i < X ->nItems; i++) {
 
-		return XNorm;	
+            XNorm ->Values[i] = X ->Values[i] / N;
+        }
+
+        if (lAddEndPoint)
+            XNorm -> Values[X ->nItems] = 1.0;
+
+        return XNorm;
 }
 
 
@@ -135,16 +135,16 @@ LPSAMPLEDCURVE NormalizeTo(LPSAMPLEDCURVE X, double N, BOOL lAddEndPoint)
 /* Our Monitor model. We assume gamma has a general expression of */
 /* */
 /*  Fn(x) = (Gain * x + offset) ^ gamma | for x >= 0 */
-/*	Fn(x) = 0							| for x < 0 */
-/*	 */
-/*	First partial derivatives are */
+/*    Fn(x) = 0                            | for x < 0 */
+/*     */
+/*    First partial derivatives are */
 /* */
 /*  dFn/dGamma  = Fn * ln(Base) */
 /*  dFn/dGain   = gamma * x * ((Gain * x + Offset) ^ (gamma -1)) */
-/*	dFn/dOffset = gamma * ((Gain * x + Offset) ^ (gamma -1)) */
+/*    dFn/dOffset = gamma * ((Gain * x + Offset) ^ (gamma -1)) */
 /* */
 
-static 
+static
 void GammaGainOffsetFn(double x, double *a, double *y, double *dyda, int /*na*/)
 {
     double Gamma,Gain,Offset;
@@ -154,33 +154,33 @@ void GammaGainOffsetFn(double x, double *a, double *y, double *dyda, int /*na*/)
     Gain   = a[1];
     Offset = a[2];
 
-    Base = Gain * x + Offset; 	
+    Base = Gain * x + Offset;
 
-	if (Base < 0) {
+    if (Base < 0) {
 
-		Base = 0.0;
-		*y = 0.0;    
-		dyda[0] = 0.0;
-		dyda[1] = 0.0;
-		dyda[2] = 0.0;
+        Base = 0.0;
+        *y = 0.0;
+        dyda[0] = 0.0;
+        dyda[1] = 0.0;
+        dyda[2] = 0.0;
 
 
-	} else {
-		
-	
-		/* The function itself */
-		*y = pow(Base, Gamma);
+    } else {
 
-		/* dyda[0] is partial derivative across Gamma */
-		dyda[0] = *y * log(Base);
-	    	    
-		/* dyda[1] is partial derivative across gain */
-		dyda[1] = (x * Gamma) * pow(Base, Gamma-1.0);
 
-		/* dyda[2] is partial derivative across offset */
-		dyda[2] =     Gamma * pow(Base, Gamma-1.0);
-	}
-} 
+        /* The function itself */
+        *y = pow(Base, Gamma);
+
+        /* dyda[0] is partial derivative across Gamma */
+        dyda[0] = *y * log(Base);
+
+        /* dyda[1] is partial derivative across gain */
+        dyda[1] = (x * Gamma) * pow(Base, Gamma-1.0);
+
+        /* dyda[2] is partial derivative across offset */
+        dyda[2] =     Gamma * pow(Base, Gamma-1.0);
+    }
+}
 
 
 /* Fit curve to our gamma-gain-offset model. */
@@ -188,46 +188,46 @@ void GammaGainOffsetFn(double x, double *a, double *y, double *dyda, int /*na*/)
 static
 BOOL OneTry(LPSAMPLEDCURVE XNorm, LPSAMPLEDCURVE YNorm, double a[])
 {
-	LCMSHANDLE h;
-	double ChiSq, OldChiSq;		
-	int i;
-	BOOL Status = true;
+    LCMSHANDLE h;
+    double ChiSq, OldChiSq;
+    int i;
+    BOOL Status = true;
 
-		/* initial guesses */
+        /* initial guesses */
 
-	    a[0] = 3.0;			/* gamma */
-	    a[1] = 4.0;			/* gain */
-	    a[2] = 6.0;			/* offset */
-		a[3] = 0.0;			/* Thereshold */
-		a[4] = 0.0;			/* Black */
-
-							
-		/* Significance = 0.02 gives good results */
-
-		h = cmsxLevenbergMarquardtInit(XNorm, YNorm,  0.02, a, 3, GammaGainOffsetFn);							
-		if (h == NULL) return false;
+        a[0] = 3.0;            /* gamma */
+        a[1] = 4.0;            /* gain */
+        a[2] = 6.0;            /* offset */
+        a[3] = 0.0;            /* Thereshold */
+        a[4] = 0.0;            /* Black */
 
 
-		OldChiSq = cmsxLevenbergMarquardtChiSq(h);
+        /* Significance = 0.02 gives good results */
 
-		for(i = 0; i < LEVENBERG_MARQUARDT_ITERATE_MAX; i++) {
+        h = cmsxLevenbergMarquardtInit(XNorm, YNorm,  0.02, a, 3, GammaGainOffsetFn);
+        if (h == NULL) return false;
 
-			if (!cmsxLevenbergMarquardtIterate(h)) {
-				Status = false;
-				break;
-			}
 
-			ChiSq = cmsxLevenbergMarquardtChiSq(h);
-		
-			if(OldChiSq != ChiSq && (OldChiSq - ChiSq) < EPSILON)
-				break;
+        OldChiSq = cmsxLevenbergMarquardtChiSq(h);
 
-			OldChiSq = ChiSq;
-		}
-		
-		cmsxLevenbergMarquardtFree(h);
+        for(i = 0; i < LEVENBERG_MARQUARDT_ITERATE_MAX; i++) {
 
-		return Status;
+            if (!cmsxLevenbergMarquardtIterate(h)) {
+                Status = false;
+                break;
+            }
+
+            ChiSq = cmsxLevenbergMarquardtChiSq(h);
+
+            if(OldChiSq != ChiSq && (OldChiSq - ChiSq) < EPSILON)
+                break;
+
+            OldChiSq = ChiSq;
+        }
+
+        cmsxLevenbergMarquardtFree(h);
+
+        return Status;
 }
 
 /* Tries to fit gamma as per IEC 61966-2.1 using Levenberg-Marquardt method */
@@ -237,36 +237,36 @@ BOOL OneTry(LPSAMPLEDCURVE XNorm, LPSAMPLEDCURVE YNorm, double a[])
 
 LPGAMMATABLE cmsxEstimateGamma(LPSAMPLEDCURVE X, LPSAMPLEDCURVE Y, int nResultingPoints)
 {
-	double a[5];
-	LPSAMPLEDCURVE XNorm, YNorm;	
-	double e, Max;
+    double a[5];
+    LPSAMPLEDCURVE XNorm, YNorm;
+    double e, Max;
 
 
-		/* Coarse approximation, to find maximum.  */
-	    /* We have only a portion of curve. It is likely */
-	    /* maximum will not fall on exactly 100. */
+        /* Coarse approximation, to find maximum.  */
+        /* We have only a portion of curve. It is likely */
+        /* maximum will not fall on exactly 100. */
 
-		if (!OneTry(X, Y, a)) 
-			return false;
+        if (!OneTry(X, Y, a))
+            return false;
 
-		/* Got parameters. Compute maximum. */
-		e = a[1]* 255.0 + a[2];
-		if (e < 0) return false;
-		Max = pow(e, a[0]);
-		
+        /* Got parameters. Compute maximum. */
+        e = a[1]* 255.0 + a[2];
+        if (e < 0) return false;
+        Max = pow(e, a[0]);
 
-		/* Normalize values to maximum */
-		XNorm = NormalizeTo(X, 255.0, false);
-		YNorm = NormalizeTo(Y, Max, false);
 
-		/* Do the final fitting  */
-		if (!OneTry(XNorm, YNorm, a))
-				return false;
-				
-		/* Type 3 = IEC 61966-2.1 (sRGB) */
+        /* Normalize values to maximum */
+        XNorm = NormalizeTo(X, 255.0, false);
+        YNorm = NormalizeTo(Y, Max, false);
+
+        /* Do the final fitting  */
+        if (!OneTry(XNorm, YNorm, a))
+                return false;
+
+        /* Type 3 = IEC 61966-2.1 (sRGB) */
         /* Y = (aX + b)^Gamma | X >= d */
         /* Y = cX             | X < d */
-		return  cmsBuildParametricGamma(nResultingPoints, 3, a);
+        return  cmsBuildParametricGamma(nResultingPoints, 3, a);
 }
 
 
@@ -284,7 +284,7 @@ void Bubble(LPSAMPLEDCURVE C, LPSAMPLEDCURVE L)
         int i, nItems;
         double tmp;
 
-		nItems = C -> nItems;
+        nItems = C -> nItems;
         do {
                 lSwapped = false;
 
@@ -293,7 +293,7 @@ void Bubble(LPSAMPLEDCURVE C, LPSAMPLEDCURVE L)
                         if (C->Values[i] > C->Values[i+1]) {
 
                                 SWAP(C->Values[i], C->Values[i+1]);
-								SWAP(L->Values[i], L->Values[i+1]);                            
+                                SWAP(L->Values[i], L->Values[i+1]);
                                 lSwapped = true;
                         }
                 }
@@ -312,11 +312,11 @@ void CheckForMonotonicSampledCurve(LPSAMPLEDCURVE t)
 {
     int n = t ->nItems;
     int i;
-	double last;
+    double last;
 
     last = t ->Values[n-1];
     for (i = n-2; i >= 0; --i) {
-        
+
         if (t ->Values[i] > last)
 
                 t ->Values[i] = last;
@@ -324,7 +324,7 @@ void CheckForMonotonicSampledCurve(LPSAMPLEDCURVE t)
                 last = t ->Values[i];
 
     }
-    
+
 }
 
 /* The main gamma inferer. Tries first by gamma-gain-offset,  */
@@ -333,54 +333,54 @@ void CheckForMonotonicSampledCurve(LPSAMPLEDCURVE t)
 static
 LPGAMMATABLE BuildGammaTable(LPSAMPLEDCURVE C, LPSAMPLEDCURVE L, int nResultingPoints)
 {
-	LPSAMPLEDCURVE Cw, Lw, Cn, Ln;
-	LPSAMPLEDCURVE out;
-	LPGAMMATABLE Result;
-	double Lmax, Lend, Cmax;
+    LPSAMPLEDCURVE Cw, Lw, Cn, Ln;
+    LPSAMPLEDCURVE out;
+    LPGAMMATABLE Result;
+    double Lmax, Lend, Cmax;
 
-	/* Try to see if it can be fitted 	 */
-	Result = cmsxEstimateGamma(C, L, nResultingPoints);  
-	if (Result)
-		return Result;
-	
+    /* Try to see if it can be fitted      */
+    Result = cmsxEstimateGamma(C, L, nResultingPoints);
+    if (Result)
+        return Result;
 
-	/* No... build curve from scratch. Since we have not */
-	/* endpoints, a coarse linear extrapolation should be */
-	/* applied in order to get the expected maximum. */
 
-	Cw = cmsDupSampledCurve(C);
-	Lw = cmsDupSampledCurve(L);
-	
-	Bubble(Cw, Lw);
+    /* No... build curve from scratch. Since we have not */
+    /* endpoints, a coarse linear extrapolation should be */
+    /* applied in order to get the expected maximum. */
+
+    Cw = cmsDupSampledCurve(C);
+    Lw = cmsDupSampledCurve(L);
+
+    Bubble(Cw, Lw);
 
     /* Get endpoint */
-	Lmax = Lw->Values[Lw ->nItems - 1];
-	Cmax = Cw->Values[Cw ->nItems - 1];
+    Lmax = Lw->Values[Lw ->nItems - 1];
+    Cmax = Cw->Values[Cw ->nItems - 1];
 
-	/* Linearly extrapolate */
-	Lend = (255 * Lmax) / Cmax;
+    /* Linearly extrapolate */
+    Lend = (255 * Lmax) / Cmax;
 
-	Ln = NormalizeTo(Lw, Lend, true);
-	Cn = NormalizeTo(Cw, 255.0, true);
+    Ln = NormalizeTo(Lw, Lend, true);
+    Cn = NormalizeTo(Cw, 255.0, true);
 
-	cmsFreeSampledCurve(Cw);
-	cmsFreeSampledCurve(Lw);
+    cmsFreeSampledCurve(Cw);
+    cmsFreeSampledCurve(Lw);
 
-	/* Add endpoint */
-	out = cmsJoinSampledCurves(Cn, Ln,  nResultingPoints);
-	
-	cmsFreeSampledCurve(Cn);
-	cmsFreeSampledCurve(Ln);
-	
-	CheckForMonotonicSampledCurve(out);
+    /* Add endpoint */
+    out = cmsJoinSampledCurves(Cn, Ln,  nResultingPoints);
 
-	cmsSmoothSampledCurve(out, nResultingPoints*4.);
-	cmsClampSampledCurve(out, 0, 1.0);			
-	
-	Result = cmsConvertSampledCurveToGamma(out, 1.0);    
+    cmsFreeSampledCurve(Cn);
+    cmsFreeSampledCurve(Ln);
 
-	cmsFreeSampledCurve(out);
-	return Result;
+    CheckForMonotonicSampledCurve(out);
+
+    cmsSmoothSampledCurve(out, nResultingPoints*4.);
+    cmsClampSampledCurve(out, 0, 1.0);
+
+    Result = cmsConvertSampledCurveToGamma(out, 1.0);
+
+    cmsFreeSampledCurve(out);
+    return Result;
 }
 
 
@@ -388,42 +388,42 @@ LPGAMMATABLE BuildGammaTable(LPSAMPLEDCURVE C, LPSAMPLEDCURVE L, int nResultingP
 
 void cmsxCompleteLabOfPatches(LPMEASUREMENT m, SETOFPATCHES Valids, int Medium)
 {
-	LPPATCH White;	
-	cmsCIEXYZ WhiteXYZ;
-	int i;
+    LPPATCH White;
+    cmsCIEXYZ WhiteXYZ;
+    int i;
 
-	if (Medium == MEDIUM_REFLECTIVE_D50)
-	{
-		WhiteXYZ.X = D50X * 100.;
-		WhiteXYZ.Y = D50Y * 100.;
-		WhiteXYZ.Z = D50Z * 100.;
-	}
-	else {
+    if (Medium == MEDIUM_REFLECTIVE_D50)
+    {
+        WhiteXYZ.X = D50X * 100.;
+        WhiteXYZ.Y = D50Y * 100.;
+        WhiteXYZ.Z = D50Z * 100.;
+    }
+    else {
 
-		White = cmsxPCollFindWhite(m, Valids, NULL);
-		if (!White) return;
+        White = cmsxPCollFindWhite(m, Valids, NULL);
+        if (!White) return;
 
-		WhiteXYZ = White ->XYZ;
-	}
+        WhiteXYZ = White ->XYZ;
+    }
 
-	/* For all patches with XYZ and without Lab, add Lab values. */
-	/* Transmissive profiles does need to locate its own white */
-	/* point for device gray. Reflective does use D50 */
+    /* For all patches with XYZ and without Lab, add Lab values. */
+    /* Transmissive profiles does need to locate its own white */
+    /* point for device gray. Reflective does use D50 */
 
-	 for (i=0; i < m -> nPatches; i++) {
+     for (i=0; i < m -> nPatches; i++) {
 
        if (Valids[i]) {
 
         LPPATCH p = m -> Patches + i;
 
-		if ((p ->dwFlags & PATCH_HAS_XYZ) && 
-			(!(p ->dwFlags & PATCH_HAS_Lab) || (Medium == MEDIUM_TRANSMISSIVE))) {
+        if ((p ->dwFlags & PATCH_HAS_XYZ) &&
+            (!(p ->dwFlags & PATCH_HAS_Lab) || (Medium == MEDIUM_TRANSMISSIVE))) {
 
-			cmsXYZ2Lab(&WhiteXYZ, &p->Lab, &p->XYZ);
-			p -> dwFlags |= PATCH_HAS_Lab;
-		}
-	   }
-	 }
+            cmsXYZ2Lab(&WhiteXYZ, &p->Lab, &p->XYZ);
+            p -> dwFlags |= PATCH_HAS_Lab;
+        }
+       }
+     }
 }
 
 
@@ -431,35 +431,35 @@ void cmsxCompleteLabOfPatches(LPMEASUREMENT m, SETOFPATCHES Valids, int Medium)
 /* exponential gamma. If gamma cannot be accurately infered, */
 /* then does build a smooth, monotonic curve that does the job. */
 
-void cmsxComputeLinearizationTables(LPMEASUREMENT m, 
-                                    int ColorSpace, 
+void cmsxComputeLinearizationTables(LPMEASUREMENT m,
+                                    int ColorSpace,
                                     LPGAMMATABLE Lin[3],
-									int nResultingPoints,
-									int Medium)                                    
-                                    
+                                    int nResultingPoints,
+                                    int Medium)
+
 {
     LPSAMPLEDCURVE R, G, B, L;
-	LPGAMMATABLE gr, gg, gb;
+    LPGAMMATABLE gr, gg, gb;
     SETOFPATCHES Neutrals;
     int nGrays;
     int i;
-	      
-	/* We need Lab for grays. */
-	cmsxCompleteLabOfPatches(m, m->Allowed, Medium);
+
+    /* We need Lab for grays. */
+    cmsxCompleteLabOfPatches(m, m->Allowed, Medium);
 
     /* Add neutrals, normalize to max */
     Neutrals = cmsxPCollBuildSet(m, false);
-    cmsxPCollPatchesNearNeutral(m, m ->Allowed, 15, Neutrals);	
+    cmsxPCollPatchesNearNeutral(m, m ->Allowed, 15, Neutrals);
 
     nGrays = cmsxPCollCountSet(m, Neutrals);
-    
-    R = cmsAllocSampledCurve(nGrays);   
+
+    R = cmsAllocSampledCurve(nGrays);
     G = cmsAllocSampledCurve(nGrays);
     B = cmsAllocSampledCurve(nGrays);
     L = cmsAllocSampledCurve(nGrays);
-            
-	nGrays = 0;
-	    
+
+    nGrays = 0;
+
     /* Collect patches    */
     for (i=0; i < m -> nPatches; i++) {
 
@@ -467,51 +467,51 @@ void cmsxComputeLinearizationTables(LPMEASUREMENT m,
 
                         LPPATCH gr = m -> Patches + i;
 
-						
+
                         R -> Values[nGrays] = gr -> Colorant.RGB[0];
                         G -> Values[nGrays] = gr -> Colorant.RGB[1];
                         B -> Values[nGrays] = gr -> Colorant.RGB[2];
-						L -> Values[nGrays] = gr -> XYZ.Y; 
-                        
+                        L -> Values[nGrays] = gr -> XYZ.Y;
+
                         nGrays++;
                 }
 
     }
 
 
-	gr = BuildGammaTable(R, L, nResultingPoints);
-	gg = BuildGammaTable(G, L, nResultingPoints);
-	gb = BuildGammaTable(B, L, nResultingPoints);
+    gr = BuildGammaTable(R, L, nResultingPoints);
+    gg = BuildGammaTable(G, L, nResultingPoints);
+    gb = BuildGammaTable(B, L, nResultingPoints);
 
-	cmsFreeSampledCurve(R);
-	cmsFreeSampledCurve(G);
-	cmsFreeSampledCurve(B);
-	cmsFreeSampledCurve(L);
+    cmsFreeSampledCurve(R);
+    cmsFreeSampledCurve(G);
+    cmsFreeSampledCurve(B);
+    cmsFreeSampledCurve(L);
 
-	if (ColorSpace == PT_Lab) {
+    if (ColorSpace == PT_Lab) {
 
-		LPGAMMATABLE Gamma3 = cmsBuildGamma(nResultingPoints, 3.0);
+        LPGAMMATABLE Gamma3 = cmsBuildGamma(nResultingPoints, 3.0);
 
-		Lin[0] = cmsJoinGammaEx(gr, Gamma3, nResultingPoints);
-		Lin[1] = cmsJoinGammaEx(gg, Gamma3, nResultingPoints);
-		Lin[2] = cmsJoinGammaEx(gb, Gamma3, nResultingPoints);
+        Lin[0] = cmsJoinGammaEx(gr, Gamma3, nResultingPoints);
+        Lin[1] = cmsJoinGammaEx(gg, Gamma3, nResultingPoints);
+        Lin[2] = cmsJoinGammaEx(gb, Gamma3, nResultingPoints);
 
-		cmsFreeGamma(gr); cmsFreeGamma(gg); cmsFreeGamma(gb);
-		cmsFreeGamma(Gamma3);
-	}
-	else {
+        cmsFreeGamma(gr); cmsFreeGamma(gg); cmsFreeGamma(gb);
+        cmsFreeGamma(Gamma3);
+    }
+    else {
 
 
-		LPGAMMATABLE Gamma1 = cmsBuildGamma(nResultingPoints, 1.0);
+        LPGAMMATABLE Gamma1 = cmsBuildGamma(nResultingPoints, 1.0);
 
-		Lin[0] = cmsJoinGammaEx(gr, Gamma1, nResultingPoints);
-		Lin[1] = cmsJoinGammaEx(gg, Gamma1, nResultingPoints);
-		Lin[2] = cmsJoinGammaEx(gb, Gamma1, nResultingPoints);
+        Lin[0] = cmsJoinGammaEx(gr, Gamma1, nResultingPoints);
+        Lin[1] = cmsJoinGammaEx(gg, Gamma1, nResultingPoints);
+        Lin[2] = cmsJoinGammaEx(gb, Gamma1, nResultingPoints);
 
-		cmsFreeGamma(gr); cmsFreeGamma(gg); cmsFreeGamma(gb);
-		cmsFreeGamma(Gamma1);
-		
-	}
+        cmsFreeGamma(gr); cmsFreeGamma(gg); cmsFreeGamma(gb);
+        cmsFreeGamma(Gamma1);
+
+    }
 
 }
 
@@ -545,9 +545,9 @@ void cmsxApplyLinearizationTable(double In[3], LPGAMMATABLE Gamma[3], double Out
 
         cmsCalcL16Params(Gamma[0] -> nEntries, &Lut16);
 
-		rw = (WORD) floor(_cmsxSaturate255To65535(In[0]) + .5);
-		gw = (WORD) floor(_cmsxSaturate255To65535(In[1]) + .5);
-		bw = (WORD) floor(_cmsxSaturate255To65535(In[2]) + .5);
+        rw = (WORD) floor(_cmsxSaturate255To65535(In[0]) + .5);
+        gw = (WORD) floor(_cmsxSaturate255To65535(In[1]) + .5);
+        bw = (WORD) floor(_cmsxSaturate255To65535(In[2]) + .5);
 
         rd = cmsLinearInterpLUT16(rw , Gamma[0] -> GammaTable, &Lut16);
         gd = cmsLinearInterpLUT16(gw,  Gamma[1] -> GammaTable, &Lut16);
@@ -557,4 +557,3 @@ void cmsxApplyLinearizationTable(double In[3], LPGAMMATABLE Gamma[3], double Out
         Out[1] = _cmsxSaturate65535To255(gd);
         Out[2] = _cmsxSaturate65535To255(bd);
 }
-

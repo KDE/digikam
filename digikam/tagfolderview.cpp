@@ -35,12 +35,12 @@
 // KDE includes
 
 #include <kapplication.h>
-#include <kdebug.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmenu.h>
 #include <kmessagebox.h>
 #include <kstringhandler.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -174,22 +174,19 @@ class TagFolderViewPriv
 
 public:
 
-    TagFolderViewPriv()
-    {
-        albumMan          = 0;
-    }
+    TagFolderViewPriv() :
+        albumMan(0)
+    {}
 
-    AlbumManager      *albumMan;
+    AlbumManager* albumMan;
 };
 
 TagFolderView::TagFolderView(QWidget *parent)
-             : FolderView(parent, "TagFolderView"),
-               d(new TagFolderViewPriv)
+             : FolderView(parent, "TagFolderView"), d(new TagFolderViewPriv)
 {
     d->albumMan = AlbumManager::instance();
 
     addColumn(i18n("Tags"));
-    setResizeMode(Q3ListView::LastColumn);
     setRootIsDecorated(false);
     setAcceptDrops(true);
     viewport()->setAcceptDrops(true);
@@ -355,7 +352,7 @@ void TagFolderView::slotAlbumAdded(Album *album)
 
         if (!parent)
         {
-            kWarning(50003) << " Failed to find parent for Tag "
+            kWarning() << " Failed to find parent for Tag "
                             << tag->title();
             return;
         }
@@ -873,7 +870,7 @@ void TagFolderView::contentsDropEvent(QDropEvent *e)
         srcAlbum = d->albumMan->findTAlbum(albumID);
         if (!srcAlbum)
         {
-            kWarning(50003) << "Could not find source album of drag";
+            kWarning() << "Could not find source album of drag";
             return;
         }
 

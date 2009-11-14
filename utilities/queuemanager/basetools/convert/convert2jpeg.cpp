@@ -26,16 +26,15 @@
 
 // Qt includes
 
-#include <QWidget>
 #include <QFileInfo>
+#include <QWidget>
 
 // KDE includes
 
-#include <kconfiggroup.h>
 #include <kconfig.h>
-#include <klocale.h>
-#include <kdebug.h>
+#include <kconfiggroup.h>
 #include <kiconloader.h>
+#include <klocale.h>
 
 // Local includes
 
@@ -75,7 +74,7 @@ BatchToolSettings Convert2JPEG::defaultSettings()
     return settings;
 }
 
-void Convert2JPEG::assignSettings2Widget()
+void Convert2JPEG::slotAssignSettings2Widget()
 {
     m_settings->setCompressionValue(settings()["Quality"].toInt());
     m_settings->setSubSamplingValue(settings()["SubSampling"].toInt());
@@ -98,7 +97,8 @@ bool Convert2JPEG::toolOperations()
 {
     if (!loadToDImg()) return false;
 
-    image().setAttribute("quality",     settings()["Quality"].toInt());
+    int JPEGCompression = JPEGSettings::convertCompressionForLibJpeg(settings()["Quality"].toInt());
+    image().setAttribute("quality",     JPEGCompression);
     image().setAttribute("subsampling", settings()["SubSampling"].toInt());
 
     return (savefromDImg());

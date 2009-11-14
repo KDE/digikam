@@ -1,20 +1,20 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="5" name="digikamimageplugin_inpainting" >
+<gui version="7" name="digikamimageplugin_inpainting" >
 
  <MenuBar>
 
   <Menu name="Enhance" ><text>Enh&amp;ance</text>
-      <Action name="imageplugin_inpainting" /> 
+      <Action name="imageplugin_inpainting" />
   </Menu>
 
  </MenuBar>
- 
- <ToolBar name="ToolBar" >
+
+ <ToolBar name="mainToolBar" >
   <text>Main Toolbar</text>
  </ToolBar>
- 
+
  <ActionProperties>
   <Action name="imageplugin_inpainting" />
  </ActionProperties>
 
-</kpartgui>
+</gui>

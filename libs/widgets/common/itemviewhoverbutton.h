@@ -29,8 +29,6 @@
 #include <QtGui/QAbstractButton>
 #include <QtGui/QAbstractItemView>
 
-// KDE includes
-
 // Local includes
 
 #include "digikam_export.h"
@@ -84,7 +82,6 @@ protected:
     QPixmap               m_icon;
     QTimeLine            *m_fadingTimeLine;
 };
-
 
 } // namespace Digikam
 

@@ -85,7 +85,7 @@ public:
         OmitRoot
     };
 
-    FolderView(QWidget *parent, const char *name = "FolderView");
+    explicit FolderView(QWidget *parent, const char *name = "FolderView");
     virtual ~FolderView();
 
     void setActive(bool val);
@@ -99,6 +99,8 @@ public:
     QPixmap  itemBasePixmapSelected() const;
 
     virtual void collapseView(CollapseMode mode = RestoreCurrentAlbum);
+    virtual void setAllowAutoCollapse(bool collapse);
+
     virtual void takeItem(Q3ListViewItem* item);
     void notifyTakeItem(Q3ListViewItem* item);
 

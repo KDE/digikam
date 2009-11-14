@@ -6,7 +6,7 @@
  * Date        : 2005-05-25
  * Description : Noise Reduction threaded image filter.
  * 
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * 
  * Original Noise Filter algorithm copyright (C) 2005 
  * Peter Heckert <peter dot heckert at arcor dot de>

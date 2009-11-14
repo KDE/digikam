@@ -258,7 +258,7 @@ void CPGFImage::Read(int level /*= 0*/, CallbackPtr cb /*= NULL*/, void *data /*
 	if (ROIisSupported() && m_header.nLevels > 0) {
 		// new encoding scheme supporting ROI
 		PGFRect rect(0, 0, m_header.width, m_header.height);
-		Read(rect, level, cb);
+		Read(rect, level, cb, data);
 		return;
 	}
 #endif
@@ -305,10 +305,11 @@ void CPGFImage::Read(int level /*= 0*/, CallbackPtr cb /*= NULL*/, void *data /*
 					(*cb)(percent, false, data);
 				}
 			}
+			// set new level: must be done before refresh callback
+			m_currentLevel--;
+
 			// now we have to refresh the display
 			if (m_cb) m_cb(m_cbArg);
-
-			m_currentLevel--;
 
 			// now update progress
 			if (cb) {
@@ -320,8 +321,8 @@ void CPGFImage::Read(int level /*= 0*/, CallbackPtr cb /*= NULL*/, void *data /*
 }
 
 //////////////////////////////////////////////////////////////////////
-// After you've written a PGF image, you can call this method followed by GetBitmap/GetYUV
-// to get a quick reconstruction (coded -> decoded image).
+/// After you've written a PGF image, you can call this method followed by GetBitmap/GetYUV
+/// to get a quick reconstruction (coded -> decoded image).
 void CPGFImage::Reconstruct() THROW_ {
 	int i;
 
@@ -419,7 +420,7 @@ void CPGFImage::Read(PGFRect& rect, int level /*= 0*/, CallbackPtr cb /*= NULL*/
 	if (m_header.nLevels == 0 || !ROIisSupported()) {
 		rect.left = rect.top = 0;
 		rect.right = m_header.width; rect.bottom = m_header.height;
-		Read(level, cb);
+		Read(level, cb, data);
 	} else {
 		ASSERT(ROIisSupported());
 		// new encoding scheme supporting ROI
@@ -481,11 +482,11 @@ void CPGFImage::Read(PGFRect& rect, int level /*= 0*/, CallbackPtr cb /*= NULL*/
 					(*cb)(percent, false, data);
 				}
 			}
+			// set new level: must be done before refresh callback
+			m_currentLevel--;
+
 			// now we have to refresh the display
 			if (m_cb) m_cb(m_cbArg);
-
-			// update level
-			m_currentLevel--;
 
 			// now update progress
 			if (cb) {
@@ -496,35 +497,6 @@ void CPGFImage::Read(PGFRect& rect, int level /*= 0*/, CallbackPtr cb /*= NULL*/
 	}
 }
 #endif
-
-//////////////////////////////////////////////////////////////////
-// Skip all image levels until end of specified level.
-// A PGF image is structered in levels, numbered between 0 and Levels() - 1.
-// Each level can be seen as a single image, containing the same content
-// as all other levels, but in a different size (width, height).
-// The image size at level i is double the size (width, height) of the image at level i+1.
-// The image at level 0 contains the original size.
-// Precondition: The PGF image has been opened with a call of Open(...).
-// It might throw an IOException.
-// @param level The image level of the last level skipped.
-void CPGFImage::Skip(int level) THROW_ {
-	ASSERT(m_currentLevel > 0 && m_currentLevel <= m_header.nLevels);
-	ASSERT(m_currentLevel > level);
-	ASSERT(level >= 0 && level < m_header.nLevels);
-	ASSERT(m_levelLength);
-	ASSERT(m_decoder);
-
-	UINT64 offset = 0;
-	for (int i=m_header.nLevels - m_currentLevel; i < m_header.nLevels - level; i++) {
-		offset += m_levelLength[i];
-	}
-
-	// skip offset bytes
-	m_decoder->Skip(offset);
-
-	// set new current level
-	m_currentLevel = level;
-}
 
 //////////////////////////////////////////////////////////////////////
 /// Return the length of all encoded headers in bytes.
@@ -712,6 +684,15 @@ BYTE CPGFImage::UsedBitsPerChannel() const {
 	} else {
 		return bpc;
 	}
+}
+
+//////////////////////////////////////////////////////////////////////
+/// Returns highest supported version
+BYTE CPGFImage::Version() const {
+	if (m_preHeader.version & Version6) return 6;
+	if (m_preHeader.version & Version5) return 5;
+	if (m_preHeader.version & Version2) return 2;
+	return 1;
 }
 
 //////////////////////////////////////////////////////////////////
@@ -1148,7 +1129,7 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 					cnt += channels;
 					yPos++;
 				}
-				buff16 += pitch16;	
+				buff16 += pitch16;
 			}
 		}
 		break;
@@ -1572,7 +1553,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 			}
 			break;
 		}
-	case ImageModeRGBColor: 
+	case ImageModeRGBColor:
 		{
 			ASSERT(m_header.channels == 3);
 			ASSERT(m_header.bpp == m_header.channels*8);
@@ -1582,40 +1563,62 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 			DataT* y = m_channel[0]; ASSERT(y);
 			DataT* u = m_channel[1]; ASSERT(u);
 			DataT* v = m_channel[2]; ASSERT(v);
+			UINT8 *buffg = &buff[channelMap[1]],
+				*buffu = &buff[channelMap[2]],
+				*buffv = &buff[channelMap[0]];
 			UINT8 g;
 			int cnt, channels = bpp/8;
-
-			for (i=0; i < h; i++) {
-				if (i%2) sampledPos -= (w + 1)/2;
-				cnt = 0;
-				for (j=0; j < w; j++) {
-					if (m_downsample) {
+			if(m_downsample){
+				for (i=0; i < h; i++) {
+					if (i%2) sampledPos -= (w + 1)/2;
+					cnt = 0;
+					for (j=0; j < w; j++) {
 						// image was downsampled
 						uAvg = u[sampledPos];
 						vAvg = v[sampledPos];
-					} else {
+						// Yuv
+						buffg[cnt] = g = Clamp(y[yPos] + YUVoffset8 - ((uAvg + vAvg ) >> 2)); // must be logical shift operator
+						buffu[cnt] = Clamp(uAvg + g);
+						buffv[cnt] = Clamp(vAvg + g);
+						yPos++;
+						cnt += channels;
+						if (j%2) sampledPos++;
+					}
+					buffg += pitch;
+					buffu += pitch;
+					buffv += pitch;
+					if (wOdd) sampledPos++;
+					if (cb) {
+						percent += dP;
+						if ((*cb)(percent, true, data)) ReturnWithError(EscapePressed);
+					}
+				}
+			}else{
+				for (i=0; i < h; i++) {
+					cnt = 0;
+					for (j = 0; j < w; j++) {
 						uAvg = u[yPos];
 						vAvg = v[yPos];
+						// Yuv
+						buffg[cnt] = g = Clamp(y[yPos] + YUVoffset8 - ((uAvg + vAvg ) >> 2)); // must be logical shift operator
+						buffu[cnt] = Clamp(uAvg + g);
+						buffv[cnt] = Clamp(vAvg + g);
+						yPos++;
+						cnt += channels;
 					}
-					// Yuv
-					buff[cnt + channelMap[1]] = g = Clamp(y[yPos] + YUVoffset8 - ((uAvg + vAvg ) >> 2)); // must be logical shift operator
-					buff[cnt + channelMap[2]] = Clamp(uAvg + g);
-					buff[cnt + channelMap[0]] = Clamp(vAvg + g);
-					yPos++; 
-					cnt += channels;
-					if (j%2) sampledPos++;
-				}
-				buff += pitch;
-				if (wOdd) sampledPos++;
+					buffg += pitch;
+					buffu += pitch;
+					buffv += pitch;
 
-				if (cb) {
-					percent += dP;
-					if ((*cb)(percent, true, data)) ReturnWithError(EscapePressed);
+					if (cb) {
+						percent += dP;
+						if ((*cb)(percent, true, data)) ReturnWithError(EscapePressed);
+					}
 				}
 			}
 			break;
 		}
-	case ImageModeRGB48: 
+	case ImageModeRGB48:
 		{
 			ASSERT(m_header.channels == 3);
 			ASSERT(m_header.bpp == 48);
@@ -2223,7 +2226,7 @@ void CPGFImage::GetYUV(int pitch, DataT* buff, BYTE bpp, int channelMap[] /*= NU
 /// @param bpp The number of bits per pixel used in image buffer.
 /// @param channelMap A integer array containing the mapping of input channel ordering to expected channel ordering.
 /// @param cb A pointer to a callback procedure. The procedure is called after each imported buffer row. If cb returns true, then it stops proceeding.
-void CPGFImage::ImportYUV(int pitch, INT16 *buff, BYTE bpp, int channelMap[] /*= NULL*/, CallbackPtr cb /*= NULL*/, void *data /*=NULL*/) THROW_ {
+void CPGFImage::ImportYUV(int pitch, DataT *buff, BYTE bpp, int channelMap[] /*= NULL*/, CallbackPtr cb /*= NULL*/, void *data /*=NULL*/) THROW_ {
 	ASSERT(buff);
 	const double dP = 1.0/m_header.height;
 	const int bits = m_header.bpp/m_header.channels;

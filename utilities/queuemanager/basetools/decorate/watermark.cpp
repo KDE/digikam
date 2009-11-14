@@ -30,26 +30,25 @@
 
 // Qt includes
 
-#include <QWidget>
-#include <QLabel>
 #include <QFontMetrics>
+#include <QLabel>
+#include <QPainter>
+#include <QPen>
 #include <QPoint>
 #include <QRect>
-#include <QPen>
-#include <QPainter>
+#include <QWidget>
 
 // KDE includes
 
-#include <kvbox.h>
-#include <klocale.h>
-#include <kdebug.h>
-#include <kiconloader.h>
-#include <kcombobox.h>
-#include <kfontcombobox.h>
 #include <kcolorbutton.h>
-#include <klineedit.h>
+#include <kcombobox.h>
 #include <kdialog.h>
+#include <kfontcombobox.h>
+#include <kiconloader.h>
+#include <klineedit.h>
+#include <klocale.h>
 #include <knuminput.h>
+#include <kvbox.h>
 
 // Local includes
 
@@ -83,15 +82,15 @@ public:
         comboBox          = 0;
     }
 
-    KLineEdit     *textEdit;
+    KLineEdit*     textEdit;
 
-    KIntNumInput  *stringLength;
+    KIntNumInput*  stringLength;
 
-    KFontComboBox *fontChooserWidget;
+    KFontComboBox* fontChooserWidget;
 
-    KColorButton  *fontColorButton;
+    KColorButton*  fontColorButton;
 
-    KComboBox     *comboBox;
+    KComboBox*     comboBox;
 };
 
 WaterMark::WaterMark(QObject* parent)
@@ -174,7 +173,7 @@ BatchToolSettings WaterMark::defaultSettings()
     return settings;
 }
 
-void WaterMark::assignSettings2Widget()
+void WaterMark::slotAssignSettings2Widget()
 {
     d->textEdit->setText(settings()["Text"].toString());
     d->fontChooserWidget->setFont(settings()["Font"].toString());

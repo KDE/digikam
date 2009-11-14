@@ -31,7 +31,6 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QDateTime>
-#include <QPointer>
 #include <QPixmap>
 #include <QCloseEvent>
 
@@ -39,7 +38,6 @@
 
 #include <kapplication.h>
 #include <kcodecs.h>
-#include <kdebug.h>
 #include <klocale.h>
 #include <kpassivepopup.h>
 
@@ -92,7 +90,7 @@ BatchThumbsGenerator::BatchThumbsGenerator(QWidget* /*parent*/, bool rebuildAll)
 
     setModal(false);
     setValue(0);
-    setCaption(i18n("Rebuild All Thumbnails"));
+    setCaption(d->rebuildAll ? i18n("Rebuild All Thumbnails") : i18n("Build Missing Thumbnails"));
     setLabel(i18n("<b>Updating thumbnails database. Please wait...</b>"));
     setButtonText(i18n("&Abort"));
     resize(600, 300);

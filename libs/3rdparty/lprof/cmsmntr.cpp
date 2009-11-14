@@ -45,7 +45,7 @@ void ClampRGB(LPVEC3 RGB)
 
     for (i=0; i < 3; i++) {
 
-        if (RGB->n[i] > 1.0)           
+        if (RGB->n[i] > 1.0)
                 RGB->n[i] = 1.0;
         if (RGB->n[i] < 0)
                 RGB->n[i] = 0;
@@ -57,36 +57,36 @@ static
 int RegressionSamplerA2B(register WORD In[], register WORD Out[], register LPVOID Cargo)
 {
     cmsCIEXYZ xyz;
-    cmsCIELab Lab;   
+    cmsCIELab Lab;
     VEC3 RGB, RGBlinear, vxyz;
     LPMONITORPROFILERDATA sys = (LPMONITORPROFILERDATA) Cargo;
-    
-    
+
+
         RGB.n[0] = _cmsxSaturate65535To255(In[0]);
         RGB.n[1] = _cmsxSaturate65535To255(In[1]);
         RGB.n[2] = _cmsxSaturate65535To255(In[2]);
 
         cmsxApplyLinearizationTable(RGB.n, sys->PreLab, RGBlinear.n);
         cmsxApplyLinearizationTable(RGBlinear.n, sys->Prelinearization, RGBlinear.n);
-        
+
         RGBlinear.n[0] /= 255.;
         RGBlinear.n[1] /= 255.;
         RGBlinear.n[2] /= 255.;
 
         MAT3eval(&vxyz, &sys->PrimariesMatrix, &RGBlinear);
-            	
-		xyz.X = vxyz.n[0];
+
+        xyz.X = vxyz.n[0];
         xyz.Y = vxyz.n[1];
         xyz.Z = vxyz.n[2];
 
         cmsxChromaticAdaptationAndNormalization(&sys ->hdr, &xyz, false);
-       
-	
+
+
        /* To PCS encoding */
-       
+
        cmsXYZ2Lab(NULL, &Lab, &xyz);
        cmsFloat2LabEncoded(Out, &Lab);
-        
+
 
     return true; /* And done witch success */
 }
@@ -99,31 +99,31 @@ int RegressionSamplerB2A(register WORD In[], register WORD Out[], register LPVOI
 {
     cmsCIELab Lab;
     cmsCIEXYZ xyz;
-    VEC3 vxyz, RGB;   
+    VEC3 vxyz, RGB;
     /* cmsJCh JCh; */
     WORD Lin[3], Llab[3];
     LPMONITORPROFILERDATA sys = (LPMONITORPROFILERDATA) Cargo;
-    double L;  
+    double L;
 
 
-		/* Pass L back to 0..0xff00 domain */
+        /* Pass L back to 0..0xff00 domain */
 
-		L = (double) (In[0] * 65280.0) / 65535.0;
-		In[0] =  (WORD) floor(L + .5);
+        L = (double) (In[0] * 65280.0) / 65535.0;
+        In[0] =  (WORD) floor(L + .5);
 
 
-	  /* To float values */
+      /* To float values */
       cmsLabEncoded2Float(&Lab, In);
       cmsLab2XYZ(NULL, &xyz, &Lab);
 
-	 
-	  cmsxChromaticAdaptationAndNormalization(&sys ->hdr, &xyz, true);
-	  vxyz.n[0] = xyz.X;
-	  vxyz.n[1] = xyz.Y;
-	  vxyz.n[2] = xyz.Z;
+
+      cmsxChromaticAdaptationAndNormalization(&sys ->hdr, &xyz, true);
+      vxyz.n[0] = xyz.X;
+      vxyz.n[1] = xyz.Y;
+      vxyz.n[2] = xyz.Z;
 
       MAT3eval(&RGB, &sys-> PrimariesMatrixRev, &vxyz);
-      
+
       /* Clamp RGB */
       ClampRGB(&RGB);
 
@@ -135,14 +135,14 @@ int RegressionSamplerB2A(register WORD In[], register WORD Out[], register LPVOI
       cmsxApplyLinearizationGamma(Lin, sys ->ReverseTables, Llab);
       cmsxApplyLinearizationGamma(Llab, sys ->PreLabRev, Out);
 
-      
+
     return true; /* And done witch success */
 }
 
 
 BOOL cmsxMonitorProfilerInit(LPMONITORPROFILERDATA sys)
-{                                
-        
+{
+
 
         if (sys == NULL) return false;
         ZeroMemory(sys, sizeof(MONITORPROFILERDATA));
@@ -150,31 +150,31 @@ BOOL cmsxMonitorProfilerInit(LPMONITORPROFILERDATA sys)
         sys->hdr.DeviceClass = icSigDisplayClass;
         sys->hdr.ColorSpace  = icSigRgbData;
         sys->hdr.PCSType     = PT_Lab;
-		sys->hdr.Medium      = MEDIUM_TRANSMISSIVE;
-		
+        sys->hdr.Medium      = MEDIUM_TRANSMISSIVE;
+
 
         /* Default values for generation */
 
         sys -> hdr.lUseCIECAM97s = false;
         sys -> hdr.CLUTPoints = 16;
-           
+
         /* Default viewing conditions  */
 
         sys -> hdr.device.Yb = 20;
         sys -> hdr.device.La = 20;
         sys -> hdr.device.surround = AVG_SURROUND;
-        sys -> hdr.device.D_value  = 1;				/* Complete adaptation */
+        sys -> hdr.device.D_value  = 1;                /* Complete adaptation */
 
 
         /* Viewing conditions of PCS */
-		cmsxInitPCSViewingConditions(&sys ->hdr);
-             
+        cmsxInitPCSViewingConditions(&sys ->hdr);
+
         strcpy(sys -> hdr.Description,  "unknown monitor");
         strcpy(sys -> hdr.Manufacturer, "little cms profiler construction set");
         strcpy(sys -> hdr.Copyright,   "No copyright, use freely");
         strcpy(sys -> hdr.Model,       "(unknown)");
 
-		sys -> hdr.ProfileVerbosityLevel = 0;
+        sys -> hdr.ProfileVerbosityLevel = 0;
 
     return true;
 }
@@ -182,14 +182,14 @@ BOOL cmsxMonitorProfilerInit(LPMONITORPROFILERDATA sys)
 
 static
 void CreatePrimaryMatrices(LPMONITORPROFILERDATA sys)
-{   
+{
     cmsCIExyY White;
     MAT3 tmp;
-    
+
 
     cmsXYZ2xyY(&White, &sys->hdr.WhitePoint);
     cmsBuildRGB2XYZtransferMatrix(&sys -> PrimariesMatrix, &White, &sys->hdr.Primaries);
-    
+
     CopyMemory(&tmp, &sys -> PrimariesMatrix, sizeof(MAT3));
     MAT3inverse(&tmp, &sys->PrimariesMatrixRev);
 
@@ -198,13 +198,13 @@ void CreatePrimaryMatrices(LPMONITORPROFILERDATA sys)
 
 static
 BOOL CreateLUTS(LPMONITORPROFILERDATA sys, LPLUT* A2B, LPLUT* B2A)
-{   
+{
     LPLUT AToB0 = cmsAllocLUT();
     LPLUT BToA0 = cmsAllocLUT();
     LPGAMMATABLE LabG;
-	cmsCIExyY xyY;
+    cmsCIExyY xyY;
 
-    
+
         cmsAlloc3DGrid(AToB0, sys->hdr.CLUTPoints, 3, 3);
         cmsAlloc3DGrid(BToA0, sys->hdr.CLUTPoints, 3, 3);
 
@@ -229,10 +229,10 @@ BOOL CreateLUTS(LPMONITORPROFILERDATA sys, LPLUT* A2B, LPLUT* B2A)
 
         cmsFreeGamma(LabG);
 
-        
+
         cmsAllocLinearTable(AToB0, sys->PreLabRev, 1);
-        cmsAllocLinearTable(BToA0, sys->PreLab,    2);    
-        
+        cmsAllocLinearTable(BToA0, sys->PreLab,    2);
+
 
         /* Set CIECAM97s parameters */
 
@@ -241,10 +241,10 @@ BOOL CreateLUTS(LPMONITORPROFILERDATA sys, LPLUT* A2B, LPLUT* B2A)
         sys -> hdr.device.whitePoint.Z = sys -> hdr.WhitePoint.Z * 100.;
 
 
-		/* Normalize White point for CIECAM97s model */
-		cmsXYZ2xyY(&xyY,  &sys -> hdr.device.whitePoint);
-		xyY.Y = 100.;
-		cmsxyY2XYZ(&sys -> hdr.device.whitePoint, &xyY);
+        /* Normalize White point for CIECAM97s model */
+        cmsXYZ2xyY(&xyY,  &sys -> hdr.device.whitePoint);
+        xyY.Y = 100.;
+        cmsxyY2XYZ(&sys -> hdr.device.whitePoint, &xyY);
 
 
         sys->hdr.hDevice = cmsCIECAM97sInit(&sys->hdr.device);
@@ -260,12 +260,12 @@ BOOL CreateLUTS(LPMONITORPROFILERDATA sys, LPLUT* A2B, LPLUT* B2A)
        cmsAddTag(sys->hdr.hProfile, icSigAToB0Tag, AToB0);
        cmsAddTag(sys->hdr.hProfile, icSigBToA0Tag, BToA0);
 
-	   /* This is the 0xff00 trick to map white at lattice point */
-	   BToA0 ->Matrix.v[0].n[0] = DOUBLE_TO_FIXED((65535.0 / 65280.0));
+       /* This is the 0xff00 trick to map white at lattice point */
+       BToA0 ->Matrix.v[0].n[0] = DOUBLE_TO_FIXED((65535.0 / 65280.0));
 
        *A2B  = AToB0;
        *B2A  = BToA0;
-                    
+
         cmsFreeGammaTriple(sys->ReverseTables);
         cmsFreeGammaTriple(sys->PreLab);
         cmsFreeGammaTriple(sys->PreLabRev);
@@ -276,7 +276,7 @@ BOOL CreateLUTS(LPMONITORPROFILERDATA sys, LPLUT* A2B, LPLUT* B2A)
 
 BOOL cmsxMonitorProfilerDo(LPMONITORPROFILERDATA sys)
 {
-                  
+
     cmsCIExyY White;
     LPLUT AToB0, BToA0;
 
@@ -285,11 +285,11 @@ BOOL cmsxMonitorProfilerDo(LPMONITORPROFILERDATA sys)
         if (!*sys -> hdr.OutputProfileFile)
                 return false;
 
-     
+
         if (sys->hdr.ReferenceSheet[0] || sys->hdr.MeasurementSheet[0]) {
 
                 if (sys->hdr.printf) {
-            
+
                     sys->hdr.printf("Loading sheets...");
 
                     if (sys->hdr.ReferenceSheet[0])
@@ -299,73 +299,73 @@ BOOL cmsxMonitorProfilerDo(LPMONITORPROFILERDATA sys)
                 }
 
 
-                if (!cmsxComputeMatrixShaper(sys -> hdr.ReferenceSheet,                                 
-                                             sys -> hdr.MeasurementSheet,  
-											 MEDIUM_TRANSMISSIVE,                                       
+                if (!cmsxComputeMatrixShaper(sys -> hdr.ReferenceSheet,
+                                             sys -> hdr.MeasurementSheet,
+                                             MEDIUM_TRANSMISSIVE,
                                              sys -> Prelinearization,
                                              &sys -> hdr.WhitePoint,
                                              &sys -> hdr.BlackPoint,
                                              &sys -> hdr.Primaries)) return false;
 
-				if (sys->hdr.printf) {
+                if (sys->hdr.printf) {
 
-					char Buffer[1024];
-					_cmsIdentifyWhitePoint(Buffer, &sys ->hdr.WhitePoint);
-					sys->hdr.printf("%s", Buffer);
+                    char Buffer[1024];
+                    _cmsIdentifyWhitePoint(Buffer, &sys ->hdr.WhitePoint);
+                    sys->hdr.printf("%s", Buffer);
 
-					sys->hdr.printf("Primaries: R:%1.2g, %1.2g  G:%1.2g, %1.2g  B:%1.2g, %1.2g", 
-							sys->hdr.Primaries.Red.x,sys->hdr.Primaries.Red.y,
-							sys->hdr.Primaries.Green.x, sys->hdr.Primaries.Green.y,
-							sys->hdr.Primaries.Blue.x, sys->hdr.Primaries.Blue.y);
-				}
+                    sys->hdr.printf("Primaries: R:%1.2g, %1.2g  G:%1.2g, %1.2g  B:%1.2g, %1.2g",
+                            sys->hdr.Primaries.Red.x,sys->hdr.Primaries.Red.y,
+                            sys->hdr.Primaries.Green.x, sys->hdr.Primaries.Green.y,
+                            sys->hdr.Primaries.Blue.x, sys->hdr.Primaries.Blue.y);
+                }
 
         }
-        
-        
+
+
         CreatePrimaryMatrices(sys);
 
-       
+
         cmsXYZ2xyY(&White, &sys->hdr.WhitePoint);
-        
+
         sys->hdr.hProfile = cmsCreateRGBProfile(&White,
-                                                &sys-> hdr.Primaries, 
+                                                &sys-> hdr.Primaries,
                                                 sys -> Prelinearization);
-     
+
         cmsSetDeviceClass(sys->hdr.hProfile, sys->hdr.DeviceClass);
 
-		if (sys -> hdr.lUseCIECAM97s) 
-			sys->hdr.PCSType = PT_Lab;
-		else
-			sys->hdr.PCSType = PT_XYZ;
-	
+        if (sys -> hdr.lUseCIECAM97s)
+            sys->hdr.PCSType = PT_Lab;
+        else
+            sys->hdr.PCSType = PT_XYZ;
+
         cmsSetPCS(sys->hdr.hProfile,  _cmsICCcolorSpace(sys->hdr.PCSType));
-               
-        if (sys -> hdr.lUseCIECAM97s) 
+
+        if (sys -> hdr.lUseCIECAM97s)
                         CreateLUTS(sys, &AToB0, &BToA0);
 
 
-		cmsxEmbedTextualInfo(&sys ->hdr);
-        
+        cmsxEmbedTextualInfo(&sys ->hdr);
+
         cmsAddTag(sys->hdr.hProfile, icSigMediaWhitePointTag,  &sys->hdr.WhitePoint);
         cmsAddTag(sys->hdr.hProfile, icSigMediaBlackPointTag, &sys->hdr.BlackPoint);
 
 
-		if (sys->hdr.ProfileVerbosityLevel >= 2) {
-									
-			cmsxEmbedCharTarget(&sys ->hdr);	
-		}
+        if (sys->hdr.ProfileVerbosityLevel >= 2) {
+
+            cmsxEmbedCharTarget(&sys ->hdr);
+        }
 
 
         _cmsSaveProfile(sys->hdr.hProfile, sys->hdr.OutputProfileFile);
         cmsCloseProfile(sys->hdr.hProfile);
-        sys->hdr.hProfile = NULL;      
-                
+        sys->hdr.hProfile = NULL;
+
 
         if (AToB0) cmsFreeLUT(AToB0);
         if (BToA0) cmsFreeLUT(BToA0);
 
         if (sys ->Prelinearization[0])
-            cmsFreeGammaTriple(sys -> Prelinearization);          
-                      
+            cmsFreeGammaTriple(sys -> Prelinearization);
+
     return true;
 }

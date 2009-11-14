@@ -37,10 +37,6 @@
 #include <QtDBus>
 #include <QThread>
 
-// KDE includes
-
-#include <kdebug.h>
-
 // Local includes
 
 #include "collectionmanager.h"
@@ -144,6 +140,7 @@ DatabaseWatch::DatabaseWatch()
 
 DatabaseWatch::~DatabaseWatch()
 {
+    delete d->adaptor;
     delete d->slaveThread;
     delete d;
 }

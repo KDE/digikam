@@ -44,7 +44,6 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kcursor.h>
-#include <kdebug.h>
 #include <kglobal.h>
 #include <khelpmenu.h>
 #include <kiconloader.h>
@@ -72,20 +71,28 @@ class PerspectiveToolPriv
 {
 public:
 
-    PerspectiveToolPriv()
-    {
-        newWidthLabel             = 0;
-        newHeightLabel            = 0;
-        topLeftAngleLabel         = 0;
-        topRightAngleLabel        = 0;
-        bottomLeftAngleLabel      = 0;
-        bottomRightAngleLabel     = 0;
-        drawWhileMovingCheckBox   = 0;
-        drawGridCheckBox          = 0;
-        inverseTransformation     = 0;
-        previewWidget             = 0;
-        gboxSettings              = 0;
-    }
+    PerspectiveToolPriv() :
+        configGroupName("perspective Tool"),
+        configDrawWhileMovingEntry("Draw While Moving"),
+        configDrawGridEntry("Draw Grid"),
+        configInverseTransformationEntry("Inverse Transformation"),
+        newWidthLabel(0),
+        newHeightLabel(0),
+        topLeftAngleLabel(0),
+        topRightAngleLabel(0),
+        bottomLeftAngleLabel(0),
+        bottomRightAngleLabel(0),
+        drawWhileMovingCheckBox(0),
+        drawGridCheckBox(0),
+        inverseTransformation(0),
+        previewWidget(0),
+        gboxSettings(0)
+        {}
+
+    const QString       configGroupName;
+    const QString       configDrawWhileMovingEntry;
+    const QString       configDrawGridEntry;
+    const QString       configInverseTransformationEntry;
 
     QLabel*             newWidthLabel;
     QLabel*             newHeightLabel;
@@ -127,10 +134,8 @@ PerspectiveTool::PerspectiveTool(QObject* parent)
     QString temp;
     Digikam::ImageIface iface(0, 0);
 
-    d->gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
-                                             EditorToolSettings::Ok|
-                                             EditorToolSettings::Cancel,
-                                             EditorToolSettings::ColorGuide);
+    d->gboxSettings = new EditorToolSettings;
+    d->gboxSettings->setTools(EditorToolSettings::ColorGuide);
 
     // -------------------------------------------------------------
 
@@ -227,10 +232,12 @@ void PerspectiveTool::readSettings()
 {
     QColor defaultGuideColor(Qt::red);
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("perspective Tool");
-    d->drawWhileMovingCheckBox->setChecked(group.readEntry("Draw While Moving", true));
-    d->drawGridCheckBox->setChecked(group.readEntry("Draw Grid", false));
-    d->inverseTransformation->setChecked(group.readEntry("Inverse Transformation", false));
+    KConfigGroup group = config->group(d->configGroupName);
+
+    d->drawWhileMovingCheckBox->setChecked(group.readEntry( d->configDrawWhileMovingEntry,       true));
+    d->drawGridCheckBox->setChecked(group.readEntry(        d->configDrawGridEntry,              false));
+    d->inverseTransformation->setChecked(group.readEntry(   d->configInverseTransformationEntry, false));
+
     d->previewWidget->slotToggleDrawWhileMoving(d->drawWhileMovingCheckBox->isChecked());
     d->previewWidget->slotToggleDrawGrid(d->drawGridCheckBox->isChecked());
 }
@@ -238,10 +245,11 @@ void PerspectiveTool::readSettings()
 void PerspectiveTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("perspective Tool");
-    group.writeEntry("Draw While Moving", d->drawWhileMovingCheckBox->isChecked());
-    group.writeEntry("Draw Grid", d->drawGridCheckBox->isChecked());
-    group.writeEntry("Inverse Transformation", d->inverseTransformation->isChecked());
+    KConfigGroup group = config->group(d->configGroupName);
+
+    group.writeEntry(d->configDrawWhileMovingEntry,       d->drawWhileMovingCheckBox->isChecked());
+    group.writeEntry(d->configDrawGridEntry,              d->drawGridCheckBox->isChecked());
+    group.writeEntry(d->configInverseTransformationEntry, d->inverseTransformation->isChecked());
     config->sync();
 }
 

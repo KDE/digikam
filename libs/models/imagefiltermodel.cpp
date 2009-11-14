@@ -30,7 +30,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+
 #include <kstringhandler.h>
 
 // Local includes
@@ -49,7 +49,6 @@ ImageFilterModelPrivate::ImageFilterModelPrivate()
     imageModel            = 0;
     version               = 0;
     lastDiscardVersion    = 0;
-    lastFilteredVersion   = 0;
     sentOut               = 0;
     sentOutForReAdd       = 0;
     updateFilterTimer     = 0;
@@ -82,8 +81,8 @@ ImageFilterModelWorker::ImageFilterModelWorker(ImageFilterModelPrivate *d)
     thread->start();
 }
 
-const int PrepareChunkSize = 100;
-const int FilterChunkSize = 2000;
+const int PrepareChunkSize = 101;
+const int FilterChunkSize = 2001;
 
 ImageFilterModel::ImageFilterModel(QObject *parent)
                 : KCategorizedSortFilterProxyModel(parent),
@@ -311,6 +310,13 @@ void ImageFilterModel::setRatingFilter(int rating, ImageFilterSettings::RatingCo
     setImageFilterSettings(d->filter);
 }
 
+void ImageFilterModel::setUrlWhitelist(const KUrl::List urlList, const QString& id)
+{
+    Q_D(ImageFilterModel);
+    d->filter.setUrlWhitelist(urlList, id);
+    setImageFilterSettings(d->filter);
+}
+
 void ImageFilterModel::setMimeTypeFilter(int mimeTypeFilter)
 {
     Q_D(ImageFilterModel);
@@ -332,8 +338,6 @@ void ImageFilterModel::setImageFilterSettings(const ImageFilterSettings& setting
     {
         QMutexLocker lock(&d->mutex);
         d->version++;
-        d->sentOut = 0;
-        // do not touch sentOutForReAdd here
         d->filter = settings;
         d->filterCopy = settings;
 
@@ -376,12 +380,12 @@ void ImageFilterModel::slotModelReset()
     Q_D(ImageFilterModel);
     {
         QMutexLocker lock(&d->mutex);
-        // cause all packages on the way to be discarded
-        d->version++;
-        d->sentOut = 0;
-        // discard all packages that are marked as send out for re-add
+        // discard all packages on the way that are marked as send out for re-add
         d->lastDiscardVersion = d->version;
         d->sentOutForReAdd = 0;
+        // discard all packages on the way
+        d->version++;
+        d->sentOut = 0;
 
         d->hasOneMatch = false;
         d->hasOneMatchForText = false;
@@ -493,11 +497,10 @@ void ImageFilterModelPrivate::packageFinished(const ImageFilterModelTodoPackage&
     if (package.isForReAdd)
         --sentOutForReAdd;
 
-    // If all packages have returned, filtered and readded,
+    // If all packages have returned, filtered and readded, and no more are expected,
     // and there is need to tell the filter result to the view, do that
-    if (sentOut == 0 && sentOutForReAdd == 0 && version != lastFilteredVersion)
+    if (sentOut == 0 && sentOutForReAdd == 0 && !imageModel->isRefreshing())
     {
-        lastFilteredVersion = version;
         q->invalidate(); // use invalidate, not invalidateFilter only. Sorting may have changed as well.
         emit q->filterMatches(hasOneMatch);
         emit q->filterMatchesForText(hasOneMatchForText);

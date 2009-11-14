@@ -51,7 +51,6 @@
 #include <kcombobox.h>
 #include <kconfig.h>
 #include <kcursor.h>
-#include <kdebug.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
@@ -90,17 +89,25 @@ class AdjustCurvesToolPriv
 {
 public:
 
-    AdjustCurvesToolPriv()
-    {
-        destinationPreviewData = 0;
-        histoSegments          = 0;
-        currentPreviewMode     = 0;
-        channelCB              = 0;
-        curvesBox              = 0;
-        previewWidget          = 0;
-        originalImage          = 0;
-        gboxSettings           = 0;
-    }
+    AdjustCurvesToolPriv() :
+        configGroupName("adjustcurves Tool"),
+        configHistogramChannelEntry("Histogram Channel"),
+        configHistogramScaleEntry("Histogram Scale"),
+        configCurveEntry("AdjustCurves"),
+        destinationPreviewData(0),
+        histoSegments(0),
+        currentPreviewMode(0),
+        channelCB(0),
+        curvesBox(0),
+        previewWidget(0),
+        originalImage(0),
+        gboxSettings(0)
+        {}
+
+    const QString        configGroupName;
+    const QString        configHistogramChannelEntry;
+    const QString        configHistogramScaleEntry;
+    const QString        configCurveEntry;
 
     uchar*               destinationPreviewData;
 
@@ -142,13 +149,15 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
-                                            EditorToolSettings::Load|
-                                            EditorToolSettings::SaveAs|
-                                            EditorToolSettings::Ok|
-                                            EditorToolSettings::Cancel,
-                                            EditorToolSettings::Histogram,
-                                            HistogramBox::LRGBA);
+    d->gboxSettings = new EditorToolSettings;
+    d->gboxSettings->setButtons(EditorToolSettings::Default|
+                                EditorToolSettings::Load|
+                                EditorToolSettings::SaveAs|
+                                EditorToolSettings::Ok|
+                                EditorToolSettings::Cancel);
+
+    d->gboxSettings->setTools( EditorToolSettings::Histogram);
+    d->gboxSettings->setHistogramType(Digikam::LRGBA);
 
     d->gboxSettings->histogramBox()->histogram()->setWhatsThis(i18n("Here you can see the target preview "
                                                   "image histogram drawing of the selected image "
@@ -226,33 +235,33 @@ void AdjustCurvesTool::slotSpotColorChanged(const DColor& color)
         case CurvesBox::BlackTonal:
         {
             // Black tonal curves point.
-            d->curvesBox->curves()->setCurvePoint(ImageHistogram::ValueChannel, 1,
+            d->curvesBox->curves()->setCurvePoint(LuminosityChannel, 1,
                     QPoint(qMax(qMax(sc.red(), sc.green()), sc.blue()), 42*d->histoSegments/256));
-            d->curvesBox->curves()->setCurvePoint(ImageHistogram::RedChannel, 1, QPoint(sc.red(), 42*d->histoSegments/256));
-            d->curvesBox->curves()->setCurvePoint(ImageHistogram::GreenChannel, 1, QPoint(sc.green(), 42*d->histoSegments/256));
-            d->curvesBox->curves()->setCurvePoint(ImageHistogram::BlueChannel, 1, QPoint(sc.blue(), 42*d->histoSegments/256));
+            d->curvesBox->curves()->setCurvePoint(RedChannel, 1, QPoint(sc.red(), 42*d->histoSegments/256));
+            d->curvesBox->curves()->setCurvePoint(GreenChannel, 1, QPoint(sc.green(), 42*d->histoSegments/256));
+            d->curvesBox->curves()->setCurvePoint(BlueChannel, 1, QPoint(sc.blue(), 42*d->histoSegments/256));
             d->curvesBox->resetPickers();
             break;
         }
         case CurvesBox::GrayTonal:
         {
             // Gray tonal curves point.
-            d->curvesBox->curves()->setCurvePoint(ImageHistogram::ValueChannel, 8,
+            d->curvesBox->curves()->setCurvePoint(LuminosityChannel, 8,
                     QPoint(qMax(qMax(sc.red(), sc.green()), sc.blue()), 128*d->histoSegments/256));
-            d->curvesBox->curves()->setCurvePoint(ImageHistogram::RedChannel, 8, QPoint(sc.red(), 128*d->histoSegments/256));
-            d->curvesBox->curves()->setCurvePoint(ImageHistogram::GreenChannel, 8, QPoint(sc.green(), 128*d->histoSegments/256));
-            d->curvesBox->curves()->setCurvePoint(ImageHistogram::BlueChannel, 8, QPoint(sc.blue(), 128*d->histoSegments/256));
+            d->curvesBox->curves()->setCurvePoint(RedChannel, 8, QPoint(sc.red(), 128*d->histoSegments/256));
+            d->curvesBox->curves()->setCurvePoint(GreenChannel, 8, QPoint(sc.green(), 128*d->histoSegments/256));
+            d->curvesBox->curves()->setCurvePoint(BlueChannel, 8, QPoint(sc.blue(), 128*d->histoSegments/256));
             d->curvesBox->resetPickers();
             break;
         }
         case CurvesBox::WhiteTonal:
         {
             // White tonal curves point.
-            d->curvesBox->curves()->setCurvePoint(ImageHistogram::ValueChannel, 15,
+            d->curvesBox->curves()->setCurvePoint(LuminosityChannel, 15,
                     QPoint(qMax(qMax(sc.red(), sc.green()), sc.blue()), 213*d->histoSegments/256));
-            d->curvesBox->curves()->setCurvePoint(ImageHistogram::RedChannel, 15, QPoint(sc.red(), 213*d->histoSegments/256));
-            d->curvesBox->curves()->setCurvePoint(ImageHistogram::GreenChannel, 15, QPoint(sc.green(), 213*d->histoSegments/256));
-            d->curvesBox->curves()->setCurvePoint(ImageHistogram::BlueChannel, 15, QPoint(sc.blue(), 213*d->histoSegments/256));
+            d->curvesBox->curves()->setCurvePoint(RedChannel, 15, QPoint(sc.red(), 213*d->histoSegments/256));
+            d->curvesBox->curves()->setCurvePoint(GreenChannel, 15, QPoint(sc.green(), 213*d->histoSegments/256));
+            d->curvesBox->curves()->setCurvePoint(BlueChannel, 15, QPoint(sc.blue(), 213*d->histoSegments/256));
             d->curvesBox->resetPickers();
             break;
         }
@@ -265,7 +274,7 @@ void AdjustCurvesTool::slotSpotColorChanged(const DColor& color)
 
     // Calculate Red, green, blue curves.
 
-    for (int i = ImageHistogram::ValueChannel ; i <= ImageHistogram::BlueChannel ; ++i)
+    for (int i = LuminosityChannel ; i <= BlueChannel ; ++i)
        d->curvesBox->curves()->curvesCalculateCurve(i);
 
     d->curvesBox->repaint();
@@ -304,7 +313,7 @@ void AdjustCurvesTool::slotEffect()
     d->destinationPreviewData = new uchar[w*h*(sb ? 8 : 4)];
 
     // Calculate the LUT to apply on the image.
-    d->curvesBox->curves()->curvesLutSetup(ImageHistogram::AlphaChannel);
+    d->curvesBox->curves()->curvesLutSetup(AlphaChannel);
 
     // Apply the LUT to the image.
     d->curvesBox->curves()->curvesLutProcess(orgData, d->destinationPreviewData, w, h);
@@ -331,7 +340,7 @@ void AdjustCurvesTool::finalRendering()
     uchar* desData = new uchar[w*h*(sb ? 8 : 4)];
 
     // Calculate the LUT to apply on the image.
-    d->curvesBox->curves()->curvesLutSetup(ImageHistogram::AlphaChannel);
+    d->curvesBox->curves()->curvesLutSetup(AlphaChannel);
 
     // Apply the LUT to the image.
     d->curvesBox->curves()->curvesLutProcess(orgData, desData, w, h);
@@ -357,16 +366,17 @@ void AdjustCurvesTool::slotScaleChanged()
 void AdjustCurvesTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("adjustcurves Tool");
+    KConfigGroup group = config->group(d->configGroupName);
 
     d->curvesBox->reset();
-    d->curvesBox->readCurveSettings(group);
+    d->curvesBox->readCurveSettings(group, d->configCurveEntry);
 
     // we need to call the set methods here, otherwise the curve will not be updated correctly
-    d->gboxSettings->histogramBox()->setChannel(group.readEntry("Histogram Channel",
-                    (int)EditorToolSettings::LuminosityChannel));
-    d->gboxSettings->histogramBox()->setScale(group.readEntry("Histogram Scale",
-                    (int)CurvesWidget::LogScaleHistogram));
+    d->gboxSettings->histogramBox()->setChannel(group.readEntry(d->configHistogramChannelEntry,
+                    (int)LuminosityChannel));
+    d->gboxSettings->histogramBox()->setScale((HistogramScale)group.readEntry(d->configHistogramScaleEntry,
+                    (int)LogScaleHistogram));
+
     d->curvesBox->setScale(d->gboxSettings->histogramBox()->scale());
     d->curvesBox->setChannel(d->gboxSettings->histogramBox()->channel());
     d->curvesBox->update();
@@ -377,11 +387,11 @@ void AdjustCurvesTool::readSettings()
 void AdjustCurvesTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("adjustcurves Tool");
-    group.writeEntry("Histogram Channel", d->gboxSettings->histogramBox()->channel());
-    group.writeEntry("Histogram Scale", d->gboxSettings->histogramBox()->scale());
+    KConfigGroup group = config->group(d->configGroupName);
+    group.writeEntry(d->configHistogramChannelEntry, d->gboxSettings->histogramBox()->channel());
+    group.writeEntry(d->configHistogramScaleEntry,   (int)d->gboxSettings->histogramBox()->scale());
 
-    d->curvesBox->writeCurveSettings(group);
+    d->curvesBox->writeCurveSettings(group, d->configCurveEntry);
     d->previewWidget->writeSettings();
 
     config->sync();

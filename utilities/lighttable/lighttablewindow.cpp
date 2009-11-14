@@ -26,17 +26,15 @@
 
 // Qt includes
 
-#include <QHBoxLayout>
 #include <QFrame>
+#include <QHBoxLayout>
 #include <QVBoxLayout>
 
 // KDE includes
-
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kapplication.h>
 #include <kconfig.h>
-#include <kdebug.h>
 #include <kedittoolbar.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -78,9 +76,11 @@
 #include "slideshow.h"
 #include "setup.h"
 #include "syncjob.h"
+#include "thumbbardock.h"
 #include "thumbnailsize.h"
 #include "lighttablepreview.h"
 #include "lighttablewindow_p.h"
+#include "uifilevalidator.h"
 
 namespace Digikam
 {
@@ -103,6 +103,18 @@ bool LightTableWindow::lightTableWindowCreated()
 LightTableWindow::LightTableWindow()
                 : KXmlGuiWindow(0), d(new LightTableWindowPriv)
 {
+    setXMLFile("lighttablewindowui.rc");
+
+    // --------------------------------------------------------
+
+    UiFileValidator validator(localXMLFile());
+    if (!validator.isValid())
+    {
+        validator.fixConfigFile();
+    }
+
+    // --------------------------------------------------------
+
     m_instance = this;
 
     setWindowFlags(Qt::Window);
@@ -147,15 +159,9 @@ void LightTableWindow::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("LightTable Settings");
-    if (group.hasKey("Vertical Splitter State"))
-    {
-        QByteArray state;
-        state = group.readEntry("Vertical Splitter State", state);
-        d->vSplitter->restoreState(QByteArray::fromBase64(state));
-    }
 
     d->hSplitter->restoreState(group, "Horizontal Splitter State");
-
+    d->barViewDock->setShouldBeVisible(group.readEntry("Show Thumbbar", true));
     d->navigateByPairAction->setChecked(group.readEntry("Navigate By Pair", false));
     slotToggleNavigateByPair();
 }
@@ -164,8 +170,8 @@ void LightTableWindow::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("LightTable Settings");
-    group.writeEntry("Vertical Splitter State", d->vSplitter->saveState().toBase64());
     d->hSplitter->saveState(group, "Horizontal Splitter State");
+    group.writeEntry("Show Thumbbar", d->barViewDock->shouldBeVisible());
     group.writeEntry("Navigate By Pair", d->navigateByPairAction->isChecked());
     group.writeEntry("Clear On Close", d->clearOnCloseAction->isChecked());
     config->sync();
@@ -195,9 +201,28 @@ void LightTableWindow::closeEvent(QCloseEvent* e)
     if (!e) return;
 
     if (d->clearOnCloseAction->isChecked()) slotClearItemsList();
+
+    // There is one nasty habit with the thumbnail bar if it is floating: it
+    // doesn't close when the parent window does, so it needs to be manually
+    // closed. If the light table is opened again, its original state needs to
+    // be restored.
+    // This only needs to be done when closing a visible window and not when
+    // destroying a closed window, since the latter case will always report that
+    // the thumbnail bar isn't visible.
+    if (isVisible())
+    {
+        d->barViewDock->hide();
+    }
+
     writeSettings();
 
     e->accept();
+}
+
+void LightTableWindow::showEvent(QShowEvent*)
+{
+    // Restore the visibility of the thumbbar and start autosaving again.
+    d->barViewDock->restoreVisibility();
 }
 
 void LightTableWindow::setupUserArea()
@@ -205,20 +230,19 @@ void LightTableWindow::setupUserArea()
     QWidget* mainW    = new QWidget(this);
     d->hSplitter      = new SidebarSplitter(Qt::Horizontal, mainW);
     QHBoxLayout *hlay = new QHBoxLayout(mainW);
-    d->leftSideBar    = new ImagePropertiesSideBarDB(mainW, d->hSplitter, KMultiTabBar::Left, true);
 
-    QWidget* centralW = new QWidget(d->hSplitter);
-    QVBoxLayout *vlay = new QVBoxLayout(centralW);
-    d->vSplitter      = new QSplitter(Qt::Vertical, centralW);
-    d->barView        = new LightTableBar(d->vSplitter, Qt::Horizontal,
-                                          AlbumSettings::instance()->getExifRotate());
-    d->previewView    = new LightTableView(d->vSplitter);
+    // The left sidebar
+    d->leftSideBar = new ImagePropertiesSideBarDB(mainW, d->hSplitter, KMultiTabBar::Left, true);
 
-    d->rightSideBar   = new ImagePropertiesSideBarDB(mainW, d->hSplitter, KMultiTabBar::Right, true);
+    // The central preview is wrapped in a KMainWindow so that the thumbnail
+    // bar can float around it.
+    KMainWindow* viewContainer = new KMainWindow(mainW, Qt::Widget);
+    d->hSplitter->addWidget(viewContainer);
+    d->previewView = new LightTableView(viewContainer);
+    viewContainer->setCentralWidget(d->previewView);
 
-    vlay->addWidget(d->vSplitter);
-    vlay->setSpacing(0);
-    vlay->setMargin(0);
+    // The right sidebar.
+    d->rightSideBar = new ImagePropertiesSideBarDB(mainW, d->hSplitter, KMultiTabBar::Right, true);
 
     hlay->addWidget(d->leftSideBar);
     hlay->addWidget(d->hSplitter);
@@ -233,11 +257,19 @@ void LightTableWindow::setupUserArea()
     d->hSplitter->setOpaqueResize(false);
     d->hSplitter->setStretchFactor(1, 10);      // set previewview+thumbbar container default size to max.
 
-    d->vSplitter->setFrameStyle( QFrame::NoFrame );
-    d->vSplitter->setFrameShadow( QFrame::Plain );
-    d->vSplitter->setFrameShape( QFrame::NoFrame );
-    d->vSplitter->setOpaqueResize(false);
-    d->vSplitter->setStretchFactor(1, 10);      // set previewview default size to max.
+    // The thumb bar is placed in a detachable/dockable widget.
+    d->barViewDock = new ThumbBarDock(viewContainer, Qt::Tool);
+    d->barViewDock->setObjectName("lighttable_thumbbar");
+    d->barView     = new LightTableBar(d->barViewDock, Qt::Horizontal,
+                                       AlbumSettings::instance()->getExifRotate());
+    d->barViewDock->setWidget(d->barView);
+    viewContainer->addDockWidget(Qt::TopDockWidgetArea, d->barViewDock);
+    d->barViewDock->setFloating(false);
+
+    // Restore the previous state. This doesn't emit the proper signals to the
+    // dock widget, so it has to be manually reinitialized.
+    viewContainer->setAutoSaveSettings("LightTable Thumbbar", true);
+    d->barViewDock->reInitialize();
 
     setCentralWidget(mainW);
 }
@@ -245,17 +277,14 @@ void LightTableWindow::setupUserArea()
 void LightTableWindow::setupStatusBar()
 {
     d->leftZoomBar = new StatusZoomBar(statusBar());
-    d->leftZoomBar->setMaximumHeight(fontMetrics().height()+2);
     statusBar()->addWidget(d->leftZoomBar, 1);
     d->leftZoomBar->setEnabled(false);
 
     d->statusProgressBar = new StatusProgressBar(statusBar());
     d->statusProgressBar->setAlignment(Qt::AlignCenter);
-    d->statusProgressBar->setMaximumHeight(fontMetrics().height()+2);
     statusBar()->addWidget(d->statusProgressBar, 100);
 
     d->rightZoomBar = new StatusZoomBar(statusBar());
-    d->rightZoomBar->setMaximumHeight(fontMetrics().height()+2);
     statusBar()->addWidget(d->rightZoomBar, 1);
     d->rightZoomBar->setEnabled(false);
 }
@@ -389,42 +418,48 @@ void LightTableWindow::setupActions()
     actionCollection()->addAction("lighttable_last", d->lastAction);
 
     d->setItemLeftAction = new KAction(KIcon("arrow-left"), i18n("On left"), this);
-    d->setItemLeftAction->setShortcut(Qt::CTRL+Qt::Key_L);
+    d->setItemLeftAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_L));
     d->setItemLeftAction->setEnabled(false);
     d->setItemLeftAction->setWhatsThis(i18n("Show item on left panel"));
     connect(d->setItemLeftAction, SIGNAL(triggered()), this, SLOT(slotSetItemLeft()));
     actionCollection()->addAction("lighttable_setitemleft", d->setItemLeftAction);
 
     d->setItemRightAction = new KAction(KIcon("arrow-right"), i18n("On right"), this);
-    d->setItemRightAction->setShortcut(Qt::CTRL+Qt::Key_R);
+    d->setItemRightAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_R));
     d->setItemRightAction->setEnabled(false);
     d->setItemRightAction->setWhatsThis(i18n("Show item on right panel"));
     connect(d->setItemRightAction, SIGNAL(triggered()), this, SLOT(slotSetItemRight()));
     actionCollection()->addAction("lighttable_setitemright", d->setItemRightAction);
 
     d->editItemAction = new KAction(KIcon("editimage"), i18n("Edit"), this);
-    d->editItemAction->setShortcut(Qt::Key_F4);
+    d->editItemAction->setShortcut(KShortcut(Qt::Key_F4));
     d->editItemAction->setEnabled(false);
     connect(d->editItemAction, SIGNAL(triggered()), this, SLOT(slotEditItem()));
     actionCollection()->addAction("lighttable_edititem", d->editItemAction);
 
     d->removeItemAction = new KAction(KIcon("list-remove"), i18n("Remove item from LightTable"), this);
-    d->removeItemAction->setShortcut(Qt::CTRL+Qt::Key_K);
+    d->removeItemAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_K));
     d->removeItemAction->setEnabled(false);
     connect(d->removeItemAction, SIGNAL(triggered()), this, SLOT(slotRemoveItem()));
     actionCollection()->addAction("lighttable_removeitem", d->removeItemAction);
 
     d->clearListAction = new KAction(KIcon("edit-clear"), i18n("Remove all items from LightTable"), this);
-    d->clearListAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_K);
+    d->clearListAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_K));
     d->clearListAction->setEnabled(false);
     connect(d->clearListAction, SIGNAL(triggered()), this, SLOT(slotClearItemsList()));
     actionCollection()->addAction("lighttable_clearlist", d->clearListAction);
 
     d->fileDeleteAction = new KAction(KIcon("user-trash"), i18n("Move to Trash"), this);
-    d->fileDeleteAction->setShortcut(Qt::Key_Delete);
+    d->fileDeleteAction->setShortcut(KShortcut(Qt::Key_Delete));
     d->fileDeleteAction->setEnabled(false);
     connect(d->fileDeleteAction, SIGNAL(triggered()), this, SLOT(slotDeleteItem()));
     actionCollection()->addAction("lighttable_filedelete", d->fileDeleteAction);
+
+    d->fileDeleteFinalAction = new KAction(KIcon("edit-delete"), i18n("Delete immediately"), this);
+    d->fileDeleteFinalAction->setShortcut(KShortcut(Qt::SHIFT + Qt::Key_Delete));
+    d->fileDeleteFinalAction->setEnabled(false);
+    connect(d->fileDeleteFinalAction, SIGNAL(triggered()), this, SLOT(slotDeleteFinalItem()));
+    actionCollection()->addAction("lighttable_filefinaldelete", d->fileDeleteFinalAction);
 
     KAction* closeAction = KStandardAction::close(this, SLOT(close()), this);
     actionCollection()->addAction("lighttable_close", closeAction);
@@ -432,21 +467,21 @@ void LightTableWindow::setupActions()
     // -- Standard 'View' menu actions ---------------------------------------------
 
     d->syncPreviewAction = new KToggleAction(KIcon("view-split-left-right"), i18n("Synchronize"), this);
-    d->syncPreviewAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_Y);
+    d->syncPreviewAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_Y));
     d->syncPreviewAction->setEnabled(false);
     d->syncPreviewAction->setWhatsThis(i18n("Synchronize preview from left and right panels"));
     connect(d->syncPreviewAction, SIGNAL(triggered()), this, SLOT(slotToggleSyncPreview()));
     actionCollection()->addAction("lighttable_syncpreview", d->syncPreviewAction);
 
     d->navigateByPairAction = new KToggleAction(KIcon("system-run"), i18n("By Pair"), this);
-    d->navigateByPairAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_P);
+    d->navigateByPairAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_P));
     d->navigateByPairAction->setEnabled(false);
     d->navigateByPairAction->setWhatsThis(i18n("Navigate by pairs with all items"));
     connect(d->navigateByPairAction, SIGNAL(triggered()), this, SLOT(slotToggleNavigateByPair()));
     actionCollection()->addAction("lighttable_navigatebypair", d->navigateByPairAction);
 
     d->clearOnCloseAction = new KToggleAction(KIcon("edit-clear"), i18n("Clear On Close"), this);
-    d->clearOnCloseAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_C);
+    d->clearOnCloseAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_C));
     d->clearOnCloseAction->setEnabled(true);
     d->clearOnCloseAction->setToolTip(i18n("Clear light table when it is closed"));
     d->clearOnCloseAction->setWhatsThis(i18n("Remove all images from the light table when it is closed"));
@@ -454,29 +489,32 @@ void LightTableWindow::setupActions()
 
     d->zoomPlusAction = KStandardAction::zoomIn(d->previewView, SLOT(slotIncreaseZoom()), this);
     d->zoomPlusAction->setEnabled(false);
-    d->zoomPlusAction->setShortcut(QKeySequence(Qt::Key_Plus));
+    d->zoomPlusAction->setShortcut(KShortcut(Qt::Key_Plus));
     actionCollection()->addAction("lighttable_zoomplus", d->zoomPlusAction);
 
     d->zoomMinusAction = KStandardAction::zoomOut(d->previewView, SLOT(slotDecreaseZoom()), this);
     d->zoomMinusAction->setEnabled(false);
-    d->zoomMinusAction->setShortcut(QKeySequence(Qt::Key_Minus));
+    d->zoomMinusAction->setShortcut(KShortcut(Qt::Key_Minus));
     actionCollection()->addAction("lighttable_zoomminus", d->zoomMinusAction);
 
     d->zoomTo100percents = new KAction(KIcon("zoom-original"), i18n("Zoom to 100%"), this);
-    d->zoomTo100percents->setShortcut(Qt::ALT+Qt::CTRL+Qt::Key_0);       // NOTE: Photoshop 7 use ALT+CTRL+0
+    d->zoomTo100percents->setShortcut(KShortcut(Qt::ALT+Qt::CTRL+Qt::Key_0));       // NOTE: Photoshop 7 use ALT+CTRL+0
     connect(d->zoomTo100percents, SIGNAL(triggered()), this, SLOT(slotZoomTo100Percents()));
     actionCollection()->addAction("lighttable_zoomto100percents", d->zoomTo100percents);
 
     d->zoomFitToWindowAction = new KToggleAction(KIcon("zoom-fit-best"), i18n("Fit to &Window"), this);
-    d->zoomFitToWindowAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_E); // NOTE: Gimp 2 use CTRL+SHIFT+E.
+    d->zoomFitToWindowAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_E)); // NOTE: Gimp 2 use CTRL+SHIFT+E.
     connect(d->zoomFitToWindowAction, SIGNAL(triggered()), this, SLOT(slotFitToWindow()));
     actionCollection()->addAction("lighttable_zoomfit2window", d->zoomFitToWindowAction);
+
+    d->showThumbBarAction = d->barViewDock->getToggleAction(this);
+    actionCollection()->addAction("lighttable_showthumbbar", d->showThumbBarAction);
 
     d->fullScreenAction = actionCollection()->addAction(KStandardAction::FullScreen,
                           "lighttable_fullscreen", this, SLOT(slotToggleFullScreen()));
 
     d->slideShowAction = new KAction(KIcon("view-presentation"), i18n("Slideshow"), this);
-    d->slideShowAction->setShortcut(Qt::Key_F9);
+    d->slideShowAction->setShortcut(KShortcut(Qt::Key_F9));
     connect(d->slideShowAction, SIGNAL(triggered()), this, SLOT(slotToggleSlideShow()));
     actionCollection()->addAction("lighttable_slideshow", d->slideShowAction);
 
@@ -512,7 +550,7 @@ void LightTableWindow::setupActions()
     connect(d->rawCameraListAction, SIGNAL(triggered()), this, SLOT(slotRawCameraList()));
     actionCollection()->addAction("lighttable_rawcameralist", d->rawCameraListAction);
 
-    d->libsInfoAction = new KAction(KIcon("help-about"), i18n("Components info"), this);
+    d->libsInfoAction = new KAction(KIcon("help-about"), i18n("Components Information"), this);
     connect(d->libsInfoAction, SIGNAL(triggered()), this, SLOT(slotComponentsInfo()));
     actionCollection()->addAction("lighttable_librariesinfo", d->libsInfoAction);
 
@@ -529,41 +567,36 @@ void LightTableWindow::setupActions()
     // -- Rating actions ---------------------------------------------------------------
 
     d->star0 = new KAction(i18n("Assign Rating \"No Stars\""), this);
-    d->star0->setShortcut(Qt::CTRL+Qt::Key_0);
+    d->star0->setShortcut(KShortcut(Qt::CTRL+Qt::Key_0));
     connect(d->star0, SIGNAL(triggered()), d->barView, SLOT(slotAssignRatingNoStar()));
     actionCollection()->addAction("lighttable_ratenostar", d->star0);
 
     d->star1 = new KAction(i18n("Assign Rating \"One Star\""), this);
-    d->star1->setShortcut(Qt::CTRL+Qt::Key_1);
+    d->star1->setShortcut(KShortcut(Qt::CTRL+Qt::Key_1));
     connect(d->star1, SIGNAL(triggered()), d->barView, SLOT(slotAssignRatingOneStar()));
     actionCollection()->addAction("lighttable_rateonestar", d->star1);
 
     d->star2 = new KAction(i18n("Assign Rating \"Two Stars\""), this);
-    d->star2->setShortcut(Qt::CTRL+Qt::Key_2);
+    d->star2->setShortcut(KShortcut(Qt::CTRL+Qt::Key_2));
     connect(d->star2, SIGNAL(triggered()), d->barView, SLOT(slotAssignRatingTwoStar()));
     actionCollection()->addAction("lighttable_ratetwostar", d->star2);
 
     d->star3 = new KAction(i18n("Assign Rating \"Three Stars\""), this);
-    d->star3->setShortcut(Qt::CTRL+Qt::Key_3);
+    d->star3->setShortcut(KShortcut(Qt::CTRL+Qt::Key_3));
     connect(d->star3, SIGNAL(triggered()), d->barView, SLOT(slotAssignRatingThreeStar()));
     actionCollection()->addAction("lighttable_ratethreestar", d->star3);
 
     d->star4 = new KAction(i18n("Assign Rating \"Four Stars\""), this);
-    d->star4->setShortcut(Qt::CTRL+Qt::Key_4);
+    d->star4->setShortcut(KShortcut(Qt::CTRL+Qt::Key_4));
     connect(d->star4, SIGNAL(triggered()), d->barView, SLOT(slotAssignRatingFourStar()));
     actionCollection()->addAction("lighttable_ratefourstar", d->star4);
 
     d->star5 = new KAction(i18n("Assign Rating \"Five Stars\""), this);
-    d->star5->setShortcut(Qt::CTRL+Qt::Key_5);
+    d->star5->setShortcut(KShortcut(Qt::CTRL+Qt::Key_5));
     connect(d->star5, SIGNAL(triggered()), d->barView, SLOT(slotAssignRatingFiveStar()));
     actionCollection()->addAction("lighttable_ratefivestar", d->star5);
 
     // -- Keyboard-only actions added to <MainWindow> ------------------------------
-
-//    KAction *exitFullscreenAction = new KAction(i18n("Exit Fullscreen mode"), this);
-//    actionCollection()->addAction("editorwindow_exitfullscreen", exitFullscreenAction);
-//    exitFullscreenAction->setShortcut( QKeySequence(Qt::Key_Escape) );
-//    connect(exitFullscreenAction, SIGNAL(triggered()), this, SLOT(slotEscapePressed()));
 
     KAction *altBackwardAction = new KAction(i18n("Previous Image"), this);
     actionCollection()->addAction("lighttable_backward_shift_space", altBackwardAction);
@@ -574,7 +607,7 @@ void LightTableWindow::setupActions()
 
     actionCollection()->addAction("logo_action", new DLogoAction(this));
 
-    createGUI("lighttablewindowui.rc");
+    createGUI(xmlFile());
 
     d->showMenuBarAction->setChecked(!menuBar()->isHidden());  // NOTE: workaround for B.K.O #171080
 }
@@ -717,24 +750,27 @@ void LightTableWindow::slotRightPreviewLoaded(bool b)
 
 void LightTableWindow::slotItemSelected(const ImageInfo& info)
 {
-    if (!info.isNull())
-    {
-        d->setItemLeftAction->setEnabled(true);
-        d->setItemRightAction->setEnabled(true);
-        d->editItemAction->setEnabled(true);
-        d->removeItemAction->setEnabled(true);
-        d->clearListAction->setEnabled(true);
-        d->fileDeleteAction->setEnabled(true);
-        d->backwardAction->setEnabled(true);
-        d->forwardAction->setEnabled(true);
-        d->firstAction->setEnabled(true);
-        d->lastAction->setEnabled(true);
-        d->syncPreviewAction->setEnabled(true);
-        d->zoomPlusAction->setEnabled(true);
-        d->zoomMinusAction->setEnabled(true);
-        d->navigateByPairAction->setEnabled(true);
-        d->slideShowAction->setEnabled(true);
+    bool hasInfo = !info.isNull();
 
+    d->setItemLeftAction->setEnabled(hasInfo);
+    d->setItemRightAction->setEnabled(hasInfo);
+    d->editItemAction->setEnabled(hasInfo);
+    d->removeItemAction->setEnabled(hasInfo);
+    d->clearListAction->setEnabled(hasInfo);
+    d->fileDeleteAction->setEnabled(hasInfo);
+    d->fileDeleteFinalAction->setEnabled(hasInfo);
+    d->backwardAction->setEnabled(hasInfo);
+    d->forwardAction->setEnabled(hasInfo);
+    d->firstAction->setEnabled(hasInfo);
+    d->lastAction->setEnabled(hasInfo);
+    d->syncPreviewAction->setEnabled(hasInfo);
+    d->zoomPlusAction->setEnabled(hasInfo);
+    d->zoomMinusAction->setEnabled(hasInfo);
+    d->navigateByPairAction->setEnabled(hasInfo);
+    d->slideShowAction->setEnabled(hasInfo);
+
+    if (hasInfo)
+    {
         LightTableBarItem* curr = dynamic_cast<LightTableBarItem*>(d->barView->findItemByInfo(info));
         if (curr)
         {
@@ -762,24 +798,6 @@ void LightTableWindow::slotItemSelected(const ImageInfo& info)
                 slotSetItemOnRightPanel(info);
             }
         }
-    }
-    else
-    {
-        d->setItemLeftAction->setEnabled(false);
-        d->setItemRightAction->setEnabled(false);
-        d->editItemAction->setEnabled(false);
-        d->removeItemAction->setEnabled(false);
-        d->clearListAction->setEnabled(false);
-        d->fileDeleteAction->setEnabled(false);
-        d->backwardAction->setEnabled(false);
-        d->forwardAction->setEnabled(false);
-        d->firstAction->setEnabled(false);
-        d->lastAction->setEnabled(false);
-        d->zoomPlusAction->setEnabled(false);
-        d->zoomMinusAction->setEnabled(false);
-        d->syncPreviewAction->setEnabled(false);
-        d->navigateByPairAction->setEnabled(false);
-        d->slideShowAction->setEnabled(false);
     }
 
     d->previewView->checkForSelection(info);
@@ -887,7 +905,7 @@ void LightTableWindow::slotSetItemLeft()
 
 void LightTableWindow::slotSetItemRight()
 {
-    if (d->barView->currentItemImageInfo().isNull())
+    if (!d->barView->currentItemImageInfo().isNull())
     {
         slotSetItemOnRightPanel(d->barView->currentItemImageInfo());
     }
@@ -931,15 +949,34 @@ void LightTableWindow::slotClearItemsList()
 
 void LightTableWindow::slotDeleteItem()
 {
-    if (!d->barView->currentItemImageInfo().isNull())
-        slotDeleteItem(d->barView->currentItemImageInfo());
+    deleteItem(false);
 }
 
 void LightTableWindow::slotDeleteItem(const ImageInfo& info)
 {
-    bool ask         = true;
-    bool permanently = false;
+    deleteItem(info, false);
+}
 
+void LightTableWindow::slotDeleteFinalItem()
+{
+    deleteItem(true);
+}
+
+void LightTableWindow::slotDeleteFinalItem(const ImageInfo& info)
+{
+    deleteItem(info, true);
+}
+
+void LightTableWindow::deleteItem(bool permanently)
+{
+    if (!d->barView->currentItemImageInfo().isNull())
+    {
+        deleteItem(d->barView->currentItemImageInfo(), permanently);
+    }
+}
+
+void LightTableWindow::deleteItem(const ImageInfo& info, bool permanently)
+{
     KUrl u = info.fileUrl();
     PAlbum *palbum = AlbumManager::instance()->findPAlbum(u.directory());
     if (!palbum)
@@ -950,27 +987,21 @@ void LightTableWindow::slotDeleteItem(const ImageInfo& info)
     KUrl fileURL = u;
 
     bool useTrash;
+    bool preselectDeletePermanently = permanently;
 
-    if (ask)
+    DeleteDialog dialog(this);
+
+    KUrl::List urlList;
+    urlList.append(u);
+    if (!dialog.confirmDeleteList(urlList,
+            DeleteDialogMode::Files,
+            preselectDeletePermanently ?
+                    DeleteDialogMode::NoChoiceDeletePermanently : DeleteDialogMode::NoChoiceTrash))
     {
-        bool preselectDeletePermanently = permanently;
-
-        DeleteDialog dialog(this);
-
-        KUrl::List urlList;
-        urlList.append(u);
-        if (!dialog.confirmDeleteList(urlList,
-             DeleteDialogMode::Files,
-             preselectDeletePermanently ?
-                     DeleteDialogMode::NoChoiceDeletePermanently : DeleteDialogMode::NoChoiceTrash))
-            return;
-
-        useTrash = !dialog.shouldDelete();
+        return;
     }
-    else
-    {
-        useTrash = !permanently;
-    }
+
+    useTrash = !dialog.shouldDelete();
 
     // trash does not like non-local URLs, put is not implemented
     if (useTrash)
@@ -1101,8 +1132,11 @@ void LightTableWindow::slotRemoveItem(const ImageInfo& info)
                     new_linfo = curr_rinfo;
                     // Set the right panel to the next image:
                     new_rinfo = next_rinfo;
-                    // set the right panel active
-                    leftPanelActive = false;
+                    // set the right panel active, but not in pair mode
+                    if (!d->navigateByPairAction->isChecked())
+                    {
+                        leftPanelActive = false;
+                    }
                 }
             }
         }

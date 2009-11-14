@@ -39,8 +39,6 @@
 
 /* #define _DEBUG  1  */
 
-
-
 /* IT8.7 / CGATS.17-200x handling */
 LCMSHANDLE      cdecl cmsxIT8Alloc(void);
 void            cdecl cmsxIT8Free(LCMSHANDLE IT8);
@@ -166,10 +164,10 @@ typedef struct {
     LPKEYVALUE    ValidKeywords;
     LPKEYVALUE    ValidSampleID;
 
-    char           FileName[MAX_PATH];  
-    int            lineno;          /* line counter for error reporting */
+    char           FileName[MAX_PATH];
+    int            lineno;             /* line counter for error reporting */
 
-	char           SheetType[MAXSTR];  /* New 1.09 */
+    char           SheetType[MAXSTR];  /* New 1.09 */
 
    } IT8, FAR* LPIT8;
 
@@ -200,8 +198,8 @@ static const KEYWORD TabKeys[] = {
 /* Predefined properties */
 static const char* PredefinedProperties[] = {
 
-            "NUMBER_OF_FIELDS",     /* Required - NUMBER OF FIELDS */
-            "NUMBER_OF_SETS",       /* Required - NUMBER OF SETS */
+            "NUMBER_OF_FIELDS",    /* Required - NUMBER OF FIELDS */
+            "NUMBER_OF_SETS",      /* Required - NUMBER OF SETS */
             "ORIGINATOR",          /* Required - Identifies the specific system, organization or individual that created the data file. */
             "CREATED",             /* Required - Indicates date of creation of the data file. */
             "DESCRIPTOR",          /* Required  - Describes the purpose or contents of the data file. */
@@ -325,7 +323,7 @@ static
 int xfilelength(int fd)
 {
 #ifdef _MSC_VER
-		return _filelength(fd);
+        return _filelength(fd);
 #else
         struct stat sb;
         if (fstat(fd, &sb) < 0)
@@ -733,7 +731,7 @@ char *AllocString(LPIT8 it8, const char* str)
     ptr = (char *) AllocChunk(it8, Size);
     if (ptr) strncpy (ptr, str, Size);
     return ptr;
-}  
+}
 
 /* Searches through linked list */
 
@@ -836,10 +834,10 @@ LCMSHANDLE cmsxIT8Alloc(void)
 
     it8 -> lineno = 1;
 
-	strcpy(it8->SheetType, "IT8.7/2");
+    strcpy(it8->SheetType, "IT8.7/2");
 
     /* Initialize predefined properties & data */
-    
+
     for (i=0; i < (int)NUMPREDEFINEDPROPS; i++)
             AddAvailableProperty(it8, PredefinedProperties[i]);
 
@@ -853,18 +851,18 @@ LCMSHANDLE cmsxIT8Alloc(void)
 
 const char* cdecl cmsxIT8GetSheetType(LCMSHANDLE hIT8)
 {
-	    LPIT8 it8 = (LPIT8) hIT8;
+        LPIT8 it8 = (LPIT8) hIT8;
 
-		return it8 ->SheetType;
+        return it8 ->SheetType;
 
 }
 
 BOOL  cmsxIT8SetSheetType(LCMSHANDLE hIT8, const char* Type)
 {
-		LPIT8 it8 = (LPIT8) hIT8;
+        LPIT8 it8 = (LPIT8) hIT8;
 
-		strncpy(it8 ->SheetType, Type, MAXSTR-1);
-		return true;
+        strncpy(it8 ->SheetType, Type, MAXSTR-1);
+        return true;
 }
 
 
@@ -952,7 +950,7 @@ BOOL SetDataFormat(LPIT8 it8, int n, const char *label)
         AllocateDataFormat(it8);
 
     if (it8->DataFormat) {
-                
+
         it8->DataFormat[n] = AllocString(it8, label);
     }
 
@@ -1014,7 +1012,7 @@ BOOL SetData(LPIT8 it8, int nSet, int nField, char *Val)
             return false;
     }
 
-            
+
     it8->Data [nSet * it8 -> nSamples + nField] = AllocString(it8, Val);
     return true;
 }
@@ -1040,7 +1038,7 @@ void WriteHeader(LPIT8 it8, FILE *fp)
 {
     LPKEYVALUE p;
 
-	WriteStr(fp, it8->SheetType);
+    WriteStr(fp, it8->SheetType);
     WriteStr(fp, "\n");
     for (p = it8->HeaderList; (p != NULL); p = p->Next)
     {
@@ -1245,10 +1243,6 @@ BOOL DataSection (LPIT8 it8)
 }
 
 
-
-
-
-
 static
 BOOL HeaderSection (LPIT8 it8)
 {
@@ -1300,12 +1294,12 @@ BOOL HeaderSection (LPIT8 it8)
 static
 BOOL ParseIT8(LPIT8 it8)
 {
-    
+
     InSymbol(it8);
 
     if (it8->sy == SIDENT) {
-			
-			strncpy(it8->SheetType, it8->id, MAXSTR-1);
+
+            strncpy(it8->SheetType, it8->id, MAXSTR-1);
             InSymbol(it8);
 
             /* if (!AddAvailableProperty(it8, it8 -> id)) return false; */
@@ -1371,13 +1365,13 @@ void CleanPatchName(char *cell)
        if (lOneNum) {
 
               sprintf(Buffer, "%d", n);
-              strcat(cleaned, Buffer);              
+              strcat(cleaned, Buffer);
        }
 
        if (strcmp(cleaned, "GS0") == 0)
               strcpy(orig, "DMIN");
-	   else
-	   if (strcmp(cleaned, "GS23") == 0)
+       else
+       if (strcmp(cleaned, "GS23") == 0)
               strcpy(orig, "DMAX");
        else
               strcpy(orig, cleaned);
@@ -1390,24 +1384,24 @@ static
 void CookPointers(LPIT8 it8)
 {
     int idField, i;
-	char* Fld;
+    char* Fld;
 
     it8 -> SampleID = 0;
     for (idField = 0; idField < it8 -> nSamples; idField++)
     {
-		Fld = it8->DataFormat[idField];
-		if (!Fld) continue;
+        Fld = it8->DataFormat[idField];
+        if (!Fld) continue;
 
         if (strcmp(Fld, "SAMPLE_ID") == 0) {
                     it8 -> SampleID = idField;
-                
-        
+
+
         for (i=0; i < it8 -> nPatches; i++) {
 
                 char *Data = GetData(it8, i, idField);
                 if (Data) {
                     char Buffer[256];
-                
+
                     strncpy(Buffer, Data, 255);
                     CleanPatchName(Buffer);
 
@@ -1418,7 +1412,7 @@ void CookPointers(LPIT8 it8)
 
                 }
                 }
-        
+
         }
     }
 
@@ -1434,9 +1428,9 @@ LCMSHANDLE cmsxIT8LoadFromMem(void *Ptr, size_t len)
     LPIT8  it8 = (LPIT8) hIT8;
 
     if (!hIT8) return NULL;
-	it8 ->FileBuffer = (char*) malloc(len + 1);
+    it8 ->FileBuffer = (char*) malloc(len + 1);
 
-	strncpy(it8 ->FileBuffer, (const char*)Ptr, len);     // C->C++ : cast
+    strncpy(it8 ->FileBuffer, (const char*)Ptr, len);     // C->C++ : cast
     strncpy(it8->FileName, "", MAX_PATH-1);
     it8-> Source = it8 -> FileBuffer;
 
@@ -1520,7 +1514,7 @@ int LocatePatch(LPIT8 it8, const char* cPatch)
     for (i=0; i < it8-> nPatches; i++) {
 
         data = GetData(it8, i, it8->SampleID);
-        
+
         if (data != NULL) {
 
                 if (stricmp(data, cPatch) == 0)
@@ -1541,10 +1535,10 @@ int LocateEmptyPatch(LPIT8 it8, const char* /*cPatch*/)
     for (i=0; i < it8-> nPatches; i++) {
 
         data = GetData(it8, i, it8->SampleID);
-        
-        if (data == NULL) 
+
+        if (data == NULL)
                     return i;
-                
+
         }
 
         return -1;
@@ -1572,7 +1566,7 @@ BOOL cmsxIT8GetDataSetByPos(LCMSHANDLE hIT8, int col, int row, char* Val, int Va
     LPIT8 it8 = (LPIT8) hIT8;
     const char *data =  GetData(it8, row, col);
 
-    if (!data) 
+    if (!data)
     {
         *Val = '\0';
         return false;
@@ -1623,8 +1617,6 @@ BOOL cmsxIT8GetDataSetDbl(LCMSHANDLE it8, const char* cPatch, const char* cSampl
         return false;
 }
 
-
-
 BOOL cmsxIT8SetDataSet(LCMSHANDLE hIT8, const char* cPatch,
                         const char* cSample,
                         char *Val)
@@ -1636,7 +1628,7 @@ BOOL cmsxIT8SetDataSet(LCMSHANDLE hIT8, const char* cPatch,
     iField = LocateSample(it8, cSample);
 
     if (iField < 0) {
-    
+
         cmsSignalError(LCMS_ERRC_ABORTED, "Couldn't find data field %s\n", cSample);
         return false;
         }
@@ -1652,7 +1644,7 @@ BOOL cmsxIT8SetDataSet(LCMSHANDLE hIT8, const char* cPatch,
 
         if (stricmp(cSample, "SAMPLE_ID") == 0)
         {
-                    
+
                 iSet   = LocateEmptyPatch(it8, cPatch);
                 if (iSet < 0) {
                         cmsSignalError(LCMS_ERRC_ABORTED, "Couldn't add more patches '%s'\n", cPatch);
@@ -1672,7 +1664,6 @@ BOOL cmsxIT8SetDataSet(LCMSHANDLE hIT8, const char* cPatch,
         return SetData(it8, iSet, iField, Val);
 }
 
-
 BOOL cmsxIT8SetDataSetDbl(LCMSHANDLE hIT8, const char* cPatch,
                         const char* cSample,
                         double Val)
@@ -1684,17 +1675,15 @@ BOOL cmsxIT8SetDataSetDbl(LCMSHANDLE hIT8, const char* cPatch,
 
 }
 
-
 const char* cmsxIT8GetPatchName(LCMSHANDLE hIT8, int nPatch, char* buffer)
 {
-		LPIT8 it8 = (LPIT8) hIT8;
-		char* Data = GetData(it8, nPatch, it8->SampleID);
-		if (!Data) return NULL;
+        LPIT8 it8 = (LPIT8) hIT8;
+        char* Data = GetData(it8, nPatch, it8->SampleID);
+        if (!Data) return NULL;
 
-		strcpy(buffer, Data);
-		return buffer;
+        strcpy(buffer, Data);
+        return buffer;
 }
-
 
 const char* cmsxIT8GenericPatchName(int nPatch, char* buffer)
 {
@@ -1724,9 +1713,6 @@ const char* cmsxIT8GenericPatchName(int nPatch, char* buffer)
     return buffer;
 }
 
-
-
-
 int cmsxIT8GenericPatchNum(const char *name)
 {
         int i;
@@ -1739,8 +1725,3 @@ int cmsxIT8GenericPatchNum(const char *name)
 
         return -1;
 }
-
-
-
-
-

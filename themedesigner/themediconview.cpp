@@ -27,9 +27,9 @@
 
 // Local includes
 
-#include "themeengine.h"
 #include "themedicongroupitem.h"
 #include "themediconitem.h"
+#include "themeengine.h"
 
 namespace Digikam
 {

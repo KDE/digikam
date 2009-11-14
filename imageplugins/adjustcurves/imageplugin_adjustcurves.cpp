@@ -30,10 +30,10 @@
 #include <kactioncollection.h>
 #include <kapplication.h>
 #include <kcursor.h>
-#include <kdebug.h>
 #include <kgenericfactory.h>
 #include <klibloader.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -54,10 +54,10 @@ ImagePlugin_AdjustCurves::ImagePlugin_AdjustCurves(QObject *parent, const QList<
             this, SLOT(slotCurvesAdjust()));
 
     // NOTE: Photoshop 7 use CTRL+M (but it's used in KDE to toogle menu bar).
-    m_curvesAction->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_M));
+    m_curvesAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_M));
     setXMLFile("digikamimageplugin_adjustcurves_ui.rc");
 
-    kDebug(50006) << "ImagePlugin_AdjustCurves plugin loaded";
+    kDebug() << "ImagePlugin_AdjustCurves plugin loaded";
 }
 
 ImagePlugin_AdjustCurves::~ImagePlugin_AdjustCurves()

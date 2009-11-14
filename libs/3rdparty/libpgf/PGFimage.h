@@ -86,8 +86,8 @@ public:
 	void ReadPreview() THROW_										{ Read(Levels() - 1); }
 
 	//////////////////////////////////////////////////////////////////////
-	// After you've written a PGF image, you can call this method followed by GetBitmap/GetYUV
-	// to get a quick reconstruction (coded -> decoded image).
+	/// After you've written a PGF image, you can call this method followed by GetBitmap/GetYUV
+	/// to get a quick reconstruction (coded -> decoded image).
 	void Reconstruct() THROW_;
 
 	//////////////////////////////////////////////////////////////////////
@@ -99,18 +99,6 @@ public:
 	/// Destroy internal data structures.
 	/// Destructor calls this method during destruction.
 	void Destroy();
-
-	//////////////////////////////////////////////////////////////////////
-	/// Skip all image levels until end of specified level.
-	/// A PGF image is structered in levels, numbered between 0 and Levels() - 1.
-	/// Each level can be seen as a single image, containing the same content
-	/// as all other levels, but in a different size (width, height).
-	/// The image size at level i is double the size (width, height) of the image at level i+1.
-	/// The image at level 0 contains the original size.
-	/// Precondition: The PGF image has been opened with a call of Open(...).
-	/// It might throw an IOException.
-	/// @param level The image level of the last level skipped.
-	void Skip(int level) THROW_;
 
 	//////////////////////////////////////////////////////////////////////
 	/// Get image data in interleaved format: (ordering of RGB data is BGR[A])
@@ -181,7 +169,7 @@ public:
 	/// @param channelMap A integer array containing the mapping of input channel ordering to expected channel ordering.
 	/// @param cb A pointer to a callback procedure. The procedure is called after each imported buffer row. If cb returns true, then it stops proceeding.
 	/// @param data Data Pointer to C++ class container to host callback procedure.
-	void ImportYUV(int pitch, INT16 *buff, BYTE bpp, int channelMap[] = NULL, CallbackPtr cb = NULL, void *data = NULL) THROW_;
+	void ImportYUV(int pitch, DataT *buff, BYTE bpp, int channelMap[] = NULL, CallbackPtr cb = NULL, void *data = NULL) THROW_;
 
 	//////////////////////////////////////////////////////////////////////
 	/// Encode and write a PGF image at current stream position.
@@ -345,16 +333,21 @@ public:
 	UINT32 ChannelHeight(int c = 0) const							{ ASSERT(c >= 0 && c < MaxChannels); return m_height[c]; }
 
 	//////////////////////////////////////////////////////////////////////
+	/// Return bits per channel.
+	/// @return Bits per channel
+	BYTE ChannelDepth() const										{ return sizeof(DataT)*8; }
+
+	//////////////////////////////////////////////////////////////////////
 	/// Return image width of channel 0 at given level in pixels.
 	/// The returned width is independent of any Read-operations and ROI.
-	/// @param c A level
+	/// @param level A level
 	/// @return Image level width in pixels
 	UINT32 Width(int level = 0) const								{ ASSERT(level >= 0); return LevelWidth(m_header.width, level); }
 
 	//////////////////////////////////////////////////////////////////////
 	/// Return image height of channel 0 at given level in pixels.
 	/// The returned height is independent of any Read-operations and ROI.
-	/// @param c A level
+	/// @param level A level
 	/// @return Image level height in pixels
 	UINT32 Height(int level = 0) const								{ ASSERT(level >= 0); return LevelHeight(m_header.height, level); }
 
@@ -395,13 +388,14 @@ public:
 	/// @return Number of bits per pixel.
 	BYTE BPP() const												{ return m_header.bpp; }
 
-#ifdef __PGFROISUPPORT__
 	//////////////////////////////////////////////////////////////////////
 	/// Return true if the pgf image supports Region Of Interest (ROI).
 	/// @return true if the pgf image supports ROI.
 	bool ROIisSupported() const										{ return (m_preHeader.version & PGFROI) != 0; }
 
-#endif
+	//////////////////////////////////////////////////////////////////////
+	/// Returns highest supported version
+	BYTE Version() const;
 
 	//class methods
 
@@ -420,7 +414,7 @@ public:
 
 	//////////////////////////////////////////////////////////////////////
 	/// Compute and return image height at given level.
-	/// @param width Original image height (at level 0)
+	/// @param height Original image height (at level 0)
 	/// @param level An image level
 	/// @return Image level height in pixels
 	static UINT32 LevelHeight(UINT32 height, int level)				{ ASSERT(level >= 0); UINT32 h = (height >> level); return ((h << level) == height) ? h : h + 1; }

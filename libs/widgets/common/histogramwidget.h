@@ -31,10 +31,15 @@
 #include <QtGui/QMouseEvent>
 #include <QtGui/QPaintEvent>
 
+// KDE includes
+
+#include <kdebug.h>
+
 // Local includes
 
 #include "dcolor.h"
 #include "digikam_export.h"
+#include "globals.h"
 
 namespace Digikam
 {
@@ -45,37 +50,6 @@ class HistogramWidgetPriv;
 class DIGIKAM_EXPORT HistogramWidget : public QWidget
 {
 Q_OBJECT
-
-public:
-
-    enum HistogramType
-    {
-        ValueHistogram = 0,       // Luminosity.
-        RedChannelHistogram,      // Red channel.
-        GreenChannelHistogram,    // Green channel.
-        BlueChannelHistogram,     // Blue channel.
-        AlphaChannelHistogram,    // Alpha channel.
-        ColorChannelsHistogram    // All color channels.
-    };
-
-    enum HistogramScale
-    {
-        LinScaleHistogram=0,      // Linear scale.
-        LogScaleHistogram         // Logarithmic scale.
-    };
-
-    enum HistogramAllColorMode
-    {
-        RedColor=0,               // Red color to foreground in All Colors Channel mode.
-        GreenColor,               // Green color to foreground in All Colors Channel mode.
-        BlueColor                 // Blue color to foreground in All Colors Channel mode.
-    };
-
-    enum HistogramRenderingType
-    {
-        FullImageHistogram=0,     // Full image histogram rendering.
-        ImageSelectionHistogram   // Image selection histogram rendering.
-    };
 
 public:
 
@@ -114,7 +88,7 @@ public:
     /** Update full image histogram data methods.*/
     void updateData(uchar *i_data, uint i_w, uint i_h,
                     bool i_sixteenBits,                        // 8 or 16 bits image.
-                    uchar *s_data=0, uint s_w=0, uint s_h=0, 
+                    uchar *s_data=0, uint s_w=0, uint s_h=0,
                     bool showProgress=true);
 
     /** Update image selection histogram data methods.*/
@@ -135,6 +109,7 @@ public:
     int             m_scaleType;           // Scale to use for drawing.
     int             m_colorType;           // Color to use for drawing in All Colors Channel mode.
     void            setRenderingType(HistogramRenderingType type);
+    ImageHistogram *currentHistogram();    // Currently rendered histogram, depending on current rendering type
 
     ImageHistogram *m_imageHistogram;      // Full image.
     ImageHistogram *m_selectionHistogram;  // Image selection.

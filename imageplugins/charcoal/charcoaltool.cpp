@@ -37,7 +37,6 @@
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kdebug.h>
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <klocale.h>
@@ -68,13 +67,21 @@ class CharcoalToolPriv
 {
 public:
 
-    CharcoalToolPriv()
-    {
-        pencilInput   = 0;
-        smoothInput   = 0;
-        previewWidget = 0;
-        gboxSettings  = 0;
-    }
+    CharcoalToolPriv() :
+        configGroupName("charcoal Tool"),
+        configPencilAdjustmentEntry("PencilAdjustment"),
+        configSmoothAdjustmentEntry("SmoothAdjustment"),
+
+        pencilInput(0),
+        smoothInput(0),
+        previewWidget(0),
+        gboxSettings(0)
+        {}
+
+
+    const QString       configGroupName;
+    const QString       configPencilAdjustmentEntry;
+    const QString       configSmoothAdjustmentEntry;
 
     RIntNumInput*       pencilInput;
     RIntNumInput*       smoothInput;
@@ -93,11 +100,13 @@ CharcoalTool::CharcoalTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
-                                             EditorToolSettings::Ok|
-                                             EditorToolSettings::Cancel|
-                                             EditorToolSettings::Try,
-                                             EditorToolSettings::PanIcon);
+    d->gboxSettings = new EditorToolSettings;
+    d->gboxSettings->setButtons(EditorToolSettings::Default|
+                                EditorToolSettings::Ok|
+                                EditorToolSettings::Cancel|
+                                EditorToolSettings::Try);
+
+    d->gboxSettings->setTools(EditorToolSettings::PanIcon);
 
     d->previewWidget = new ImagePanelWidget(470, 350, "charcoal Tool", d->gboxSettings->panIconView());
 
@@ -153,11 +162,11 @@ void CharcoalTool::renderingFinished()
 void CharcoalTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("charcoal Tool");
+    KConfigGroup group        = config->group(d->configGroupName);
     d->pencilInput->blockSignals(true);
     d->smoothInput->blockSignals(true);
-    d->pencilInput->setValue(group.readEntry("PencilAdjustment", d->pencilInput->defaultValue()));
-    d->smoothInput->setValue(group.readEntry("SmoothAdjustment", d->smoothInput->defaultValue()));
+    d->pencilInput->setValue(group.readEntry(d->configPencilAdjustmentEntry, d->pencilInput->defaultValue()));
+    d->smoothInput->setValue(group.readEntry(d->configSmoothAdjustmentEntry, d->smoothInput->defaultValue()));
     d->pencilInput->blockSignals(false);
     d->smoothInput->blockSignals(false);
 }
@@ -165,9 +174,9 @@ void CharcoalTool::readSettings()
 void CharcoalTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("charcoal Tool");
-    group.writeEntry("PencilAdjustment", d->pencilInput->value());
-    group.writeEntry("SmoothAdjustment", d->smoothInput->value());
+    KConfigGroup group        = config->group(d->configGroupName);
+    group.writeEntry(d->configPencilAdjustmentEntry, d->pencilInput->value());
+    group.writeEntry(d->configSmoothAdjustmentEntry, d->smoothInput->value());
     d->previewWidget->writeSettings();
     config->sync();
 }

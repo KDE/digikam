@@ -330,7 +330,7 @@ void AlbumIconItem::paintItem(QPainter *p)
         p->setFont(d->view->itemFontXtra());
         QString str;
         dateToString(date, str);
-        str = i18nc("date of image creation", "created : %1",str);
+        str = i18nc("date of image creation", "created: %1",str);
         p->drawText(r, Qt::AlignCenter, squeezedText(p, r.width(), str));
     }
 
@@ -342,7 +342,7 @@ void AlbumIconItem::paintItem(QPainter *p)
         p->setFont(d->view->itemFontXtra());
         QString str;
         dateToString(date, str);
-        str = i18nc("date of last image modification", "modified : %1",str);
+        str = i18nc("date of last image modification", "modified: %1",str);
         p->drawText(r, Qt::AlignCenter, squeezedText(p, r.width(), str));
     }
 

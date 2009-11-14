@@ -46,8 +46,16 @@
 
 #include <kdebug.h>
 
+// Local includes
+
+#include "globals.h"
+
 namespace Digikam
 {
+
+const int ImageCurves::NUM_POINTS = 17;
+const int ImageCurves::NUM_CHANNELS = 5;
+const int ImageCurves::MULTIPLIER_16BIT = 255;
 
 class ImageCurvesPriv
 {
@@ -56,9 +64,18 @@ public:
 
     struct _Curves
     {
-        ImageCurves::CurveType curve_type[5];     // Curve types by channels (Smooth or Free).
-        int                    points[5][17][2];  // Curve main points in Smooth mode ([channel][point id][x,y]).
-        unsigned short         curve[5][65536];   // Curve values by channels.
+        /**
+         * Curve types by channels (Smooth or Free).
+         */
+        ImageCurves::CurveType curve_type[ImageCurves::NUM_CHANNELS];
+        /**
+         * Curve main points in Smooth mode ([channel][point id][x,y])
+         */
+        int                    points[ImageCurves::NUM_CHANNELS][ImageCurves::NUM_POINTS][2];
+        /**
+         * Curve values by channels
+         */
+        unsigned short         curve[ImageCurves::NUM_CHANNELS][NUM_SEGMENTS_16BIT];
     };
 
     struct _Lut
@@ -74,6 +91,11 @@ public:
         curves = 0;
         lut    = 0;
         dirty  = false;
+    }
+
+    bool isPointEnabled(const QPoint &point)
+    {
+        return (point.x() > - 1) && (point.y() > -1);
     }
 
     // Curves data.
@@ -101,7 +123,7 @@ ImageCurves::ImageCurves(bool sixteenBit)
     d->lut        = new ImageCurvesPriv::_Lut;
     d->lut->luts  = NULL;
     d->curves     = new ImageCurvesPriv::_Curves;
-    d->segmentMax = sixteenBit ? 65535 : 255;
+    d->segmentMax = sixteenBit ? MAX_SEGMENT_16BIT : MAX_SEGMENT_8BIT;
 
     curvesReset();
 }
@@ -120,6 +142,95 @@ ImageCurves::~ImageCurves()
     delete d;
 }
 
+void ImageCurves::fillFromOtherCurvers(ImageCurves *otherCurves)
+{
+
+    kDebug() << "Filling this curve from other curve " << otherCurves;
+
+    curvesReset();
+
+    // if the other curves have the same bit depth, simply copy their data
+    if (isSixteenBits() == otherCurves->isSixteenBits())
+    {
+        kDebug() << "Both curves have same type: isSixteenBits = " << isSixteenBits();
+        for (int channel = 0; channel < NUM_CHANNELS; ++channel)
+        {
+            for (int point = 0; point < NUM_POINTS; ++point)
+            {
+                QPoint p = otherCurves->getCurvePoint(channel, point);
+                if (d->isPointEnabled(p))
+                {
+                    setCurvePoint(channel, point, p);
+                }
+            }
+        }
+    }
+    // other curve is 8 bit and this curve is 16 bit
+    else if (isSixteenBits() && !otherCurves->isSixteenBits())
+    {
+        kDebug() << "This curve is 16 bit and the other is 8 bit";
+        for (int channel = 0; channel < NUM_CHANNELS; ++channel)
+        {
+            for (int point = 0; point < NUM_POINTS; ++point)
+            {
+                QPoint p = otherCurves->getCurvePoint(channel, point);
+                if (d->isPointEnabled(p))
+                {
+                    p.setX(p.x() * MULTIPLIER_16BIT);
+                    p.setY(p.y() * MULTIPLIER_16BIT);
+                    setCurvePoint(channel, point, p);
+                }
+            }
+        }
+    }
+    // other curve is 16 bit and this is 8 bit
+    else if (!isSixteenBits() && otherCurves->isSixteenBits())
+    {
+        kDebug() << "This curve is 8 bit and the other is 16 bit";
+        for (int channel = 0; channel < NUM_CHANNELS; ++channel)
+        {
+            kDebug() << "Adopting points of channel " << channel;
+            for (int point = 0; point < NUM_POINTS; ++point)
+            {
+                QPoint p = otherCurves->getCurvePoint(channel, point);
+                kDebug() << "Point " << point << " in original is " << p;
+                if (d->isPointEnabled(p))
+                {
+                    p.setX(p.x() / MULTIPLIER_16BIT);
+                    p.setY(p.y() / MULTIPLIER_16BIT);
+                    kDebug() << "Setting curve point " << point << " to " << p;
+                    setCurvePoint(channel, point, p);
+                }
+                else
+                {
+                    kDebug() << "ignoring this point";
+                }
+            }
+        }
+    }
+    else
+    {
+        kError() << "Bad logic error, could not fill one curve into another";
+    }
+
+    kDebug() << "Updating curve types";
+
+    // adopt channel types
+    for (int channel = 0; channel < NUM_CHANNELS; ++channel)
+    {
+        kDebug() << "Curve type for channel " << channel
+                        << " is " << (int) otherCurves->getCurveType(channel);
+        setCurveType(channel, otherCurves->getCurveType(channel));
+    }
+
+    // invoke calculations once
+    for (int channel = 0; channel < NUM_CHANNELS; ++channel)
+    {
+        curvesCalculateCurve(channel);
+    }
+
+}
+
 bool ImageCurves::isDirty()
 {
     return d->dirty;
@@ -127,7 +238,7 @@ bool ImageCurves::isDirty()
 
 bool ImageCurves::isSixteenBits()
 {
-    return (d->segmentMax == 65535);
+    return (d->segmentMax == MAX_SEGMENT_16BIT);
 }
 
 void ImageCurves::curvesReset()
@@ -138,7 +249,7 @@ void ImageCurves::curvesReset()
     d->lut->nchannels = 0;
     d->dirty          = false;
 
-    for (int channel = 0 ; channel < 5 ; ++channel)
+    for (int channel = 0 ; channel < NUM_CHANNELS ; ++channel)
     {
        setCurveType(channel, CURVE_SMOOTH);
        curvesChannelReset(channel);
@@ -158,7 +269,7 @@ void ImageCurves::curvesChannelReset(int channel)
 
     // Init coordinates points to null.
 
-    for (j = 0 ; j < 17 ; ++j)
+    for (j = 0 ; j < ImageCurves::NUM_POINTS ; ++j)
     {
        d->curves->points[channel][j][0] = -1;
        d->curves->points[channel][j][1] = -1;
@@ -168,14 +279,14 @@ void ImageCurves::curvesChannelReset(int channel)
 
     d->curves->points[channel][0][0]  = 0;
     d->curves->points[channel][0][1]  = 0;
-    d->curves->points[channel][16][0] = d->segmentMax;
-    d->curves->points[channel][16][1] = d->segmentMax;
+    d->curves->points[channel][NUM_POINTS - 1][0] = d->segmentMax;
+    d->curves->points[channel][NUM_POINTS - 1][1] = d->segmentMax;
 }
 
 void ImageCurves::curvesCalculateCurve(int channel)
 {
     int i;
-    int points[17];
+    int points[NUM_POINTS];
     int num_pts;
     int p1, p2, p3, p4;
 
@@ -192,7 +303,7 @@ void ImageCurves::curvesCalculateCurve(int channel)
 
           num_pts = 0;
 
-          for (i = 0 ; i < 17 ; ++i)
+          for (i = 0 ; i < ImageCurves::NUM_POINTS ; ++i)
              if (d->curves->points[channel][i][0] != -1)
                 points[num_pts++] = i;
 
@@ -440,7 +551,7 @@ void ImageCurves::curvesLutProcess(uchar *srcPR, uchar *destPR, int w, int h)
     if (d->lut->nchannels > 3)
        lut3 = d->lut->luts[3];
 
-    if (d->segmentMax == 255)        // 8 bits image.
+    if (!isSixteenBits())        // 8 bits image.
     {
         uchar red, green, blue, alpha;
         uchar *ptr = srcPR;
@@ -513,22 +624,42 @@ void ImageCurves::curvesLutProcess(uchar *srcPR, uchar *destPR, int w, int h)
 int ImageCurves::getCurveValue(int channel, int bin)
 {
     if ( d->curves &&
-         channel>=0 && channel<5 &&
+         channel>=0 && channel<NUM_CHANNELS &&
          bin>=0 && bin<=d->segmentMax )
        return(d->curves->curve[channel][bin]);
 
     return 0;
 }
 
+QPoint ImageCurves::getDisabledValue()
+{
+    return QPoint(-1, -1);
+}
+
+bool ImageCurves::isCurvePointEnabled(int channel, int point) const
+{
+    if (d->curves && channel >= 0 && channel < NUM_CHANNELS
+                    && point >= 0 && point <= NUM_POINTS
+                    && d->curves->points[channel][point][0] >= 0
+                    && d->curves->points[channel][point][1] >= 0)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
 QPoint ImageCurves::getCurvePoint(int channel, int point)
 {
     if ( d->curves &&
-         channel>=0 && channel<5 &&
-         point>=0 && point<=17 )
+         channel>=0 && channel<NUM_CHANNELS &&
+         point>=0 && point<=NUM_POINTS )
        return(QPoint(d->curves->points[channel][point][0],
                      d->curves->points[channel][point][1]) );
 
-    return QPoint(-1, -1);
+    return getDisabledValue();
 }
 
 QPolygon ImageCurves::getCurvePoints(int channel)
@@ -536,9 +667,9 @@ QPolygon ImageCurves::getCurvePoints(int channel)
     QPolygon array(18);
 
     if ( d->curves &&
-         channel>=0 && channel<5)
+         channel>=0 && channel<NUM_CHANNELS)
     {
-        for (int j = 0 ; j <= 17 ; ++j)
+        for (int j = 0 ; j <= NUM_POINTS ; ++j)
         array.setPoint(j, getCurvePoint(channel, j));
     }
 
@@ -548,8 +679,8 @@ QPolygon ImageCurves::getCurvePoints(int channel)
 int ImageCurves::getCurvePointX(int channel, int point)
 {
     if ( d->curves &&
-         channel>=0 && channel<5 &&
-         point>=0 && point<=17 )
+         channel>=0 && channel<NUM_CHANNELS &&
+         point>=0 && point<=NUM_POINTS )
        return(d->curves->points[channel][point][0]);
 
     return(-1);
@@ -558,26 +689,26 @@ int ImageCurves::getCurvePointX(int channel, int point)
 int ImageCurves::getCurvePointY(int channel, int point)
 {
     if ( d->curves &&
-         channel>=0 && channel<5 &&
-         point>=0 && point<=17 )
+         channel>=0 && channel<NUM_CHANNELS &&
+         point>=0 && point<=NUM_POINTS )
        return(d->curves->points[channel][point][1]);
 
     return (-1);
 }
 
-int ImageCurves::getCurveType(int channel)
+ImageCurves::CurveType ImageCurves::getCurveType(int channel)
 {
     if ( d->curves &&
-         channel>=0 && channel<5 )
-       return ( d->curves->curve_type[channel] );
+         channel>=0 && channel<NUM_CHANNELS )
+       return ((ImageCurves::CurveType) d->curves->curve_type[channel] );
 
-    return (-1);
+    return CURVE_SMOOTH;
 }
 
 void ImageCurves::setCurveValue(int channel, int bin, int val)
 {
     if ( d->curves &&
-         channel>=0 && channel<5 &&
+         channel>=0 && channel<NUM_CHANNELS &&
          bin>=0 && bin<=d->segmentMax )
     {
        d->dirty = true;
@@ -588,8 +719,8 @@ void ImageCurves::setCurveValue(int channel, int bin, int val)
 void ImageCurves::setCurvePoint(int channel, int point, const QPoint& val)
 {
     if ( d->curves &&
-         channel>=0 && channel<5 &&
-         point>=0 && point<=17 &&
+         channel>=0 && channel<NUM_CHANNELS &&
+         point>=0 && point<=NUM_POINTS &&
          val.x()>=-1 && val.x()<=d->segmentMax && // x can be equal to -1
          val.y()>=0 && val.y()<=d->segmentMax)    // if the current point is disable !!!
     {
@@ -602,11 +733,11 @@ void ImageCurves::setCurvePoint(int channel, int point, const QPoint& val)
 void ImageCurves::setCurvePoints(int channel, const QPolygon& vals)
 {
     if ( d->curves &&
-         channel>=0 && channel<5 &&
+         channel>=0 && channel<NUM_CHANNELS &&
          vals.size() == 18 )
     {
         d->dirty = true;
-        for (int j = 0 ; j <= 17 ; ++j)
+        for (int j = 0 ; j <= NUM_POINTS ; ++j)
             setCurvePoint(channel, j, vals.point(j));
     }
 }
@@ -614,8 +745,8 @@ void ImageCurves::setCurvePoints(int channel, const QPolygon& vals)
 void ImageCurves::setCurvePointX(int channel, int point, int x)
 {
     if ( d->curves &&
-         channel>=0 && channel<5 &&
-         point>=0 && point<=17 &&
+         channel>=0 && channel<NUM_CHANNELS &&
+         point>=0 && point<=NUM_POINTS &&
          x>=-1 && x<=d->segmentMax) // x can be equal to -1 if the current point is disable !!!
     {
         d->dirty = true;
@@ -626,8 +757,8 @@ void ImageCurves::setCurvePointX(int channel, int point, int x)
 void ImageCurves::setCurvePointY(int channel, int point, int y)
 {
     if ( d->curves &&
-         channel>=0 && channel<5 &&
-         point>=0 && point<=17 &&
+         channel>=0 && channel<NUM_CHANNELS &&
+         point>=0 && point<=NUM_POINTS &&
          y>=0 && y<=d->segmentMax)
     {
          d->dirty = true;
@@ -638,9 +769,17 @@ void ImageCurves::setCurvePointY(int channel, int point, int y)
 void ImageCurves::setCurveType(int channel, CurveType type)
 {
     if ( d->curves &&
-         channel>=0 && channel<5 &&
+         channel>=0 && channel<NUM_CHANNELS &&
          type>=CURVE_SMOOTH && type<=CURVE_FREE )
        d->curves->curve_type[channel] = type;
+}
+
+void ImageCurves::setCurveType(ImageCurves::CurveType type)
+{
+    for (int channel = 0; channel < NUM_CHANNELS; ++channel)
+    {
+        setCurveType(channel, type);
+    }
 }
 
 bool ImageCurves::loadCurvesFromGimpCurvesFile(const KUrl& fileUrl)
@@ -651,10 +790,10 @@ bool ImageCurves::loadCurvesFromGimpCurvesFile(const KUrl& fileUrl)
     int   i, j;
     int   fields;
     char  buf[50];
-    int   index[5][17];
-    int   value[5][17];
+    int   index[NUM_CHANNELS][NUM_POINTS];
+    int   value[NUM_CHANNELS][NUM_POINTS];
 
-    file = fopen(QFile::encodeName(fileUrl.path()), "r");
+    file = fopen(QFile::encodeName(fileUrl.toLocalFile()), "r");
     if (!file)
        return false;
 
@@ -667,14 +806,14 @@ bool ImageCurves::loadCurvesFromGimpCurvesFile(const KUrl& fileUrl)
     if (strcmp (buf, "# GIMP Curves File\n") != 0)
        return false;
 
-    for (i = 0 ; i < 5 ; ++i)
+    for (i = 0 ; i < NUM_CHANNELS ; ++i)
     {
-       for (j = 0 ; j < 17 ; ++j)
+       for (j = 0 ; j < NUM_POINTS ; ++j)
        {
           fields = fscanf (file, "%d %d ", &index[i][j], &value[i][j]);
           if (fields != 2)
           {
-             kWarning(50003) <<  "Invalid Gimp curves file!";
+             kWarning() <<  "Invalid Gimp curves file!";
              fclose(file);
              return false;
           }
@@ -683,20 +822,20 @@ bool ImageCurves::loadCurvesFromGimpCurvesFile(const KUrl& fileUrl)
 
     curvesReset();
 
-    for (i = 0 ; i < 5 ; ++i)
+    for (i = 0 ; i < NUM_CHANNELS ; ++i)
     {
        d->curves->curve_type[i] = CURVE_SMOOTH;
 
-       for (j = 0 ; j < 17 ; ++j)
+       for (j = 0 ; j < NUM_POINTS ; ++j)
        {
-          d->curves->points[i][j][0] = ((d->segmentMax == 65535) && (index[i][j] !=-1) ?
-                                         index[i][j]*255 : index[i][j]);
-          d->curves->points[i][j][1] = ((d->segmentMax == 65535) && (value[i][j] !=-1) ?
-                                         value[i][j]*255 : value[i][j]);
+          d->curves->points[i][j][0] = (isSixteenBits() && (index[i][j] !=-1) ?
+                                         index[i][j]*MULTIPLIER_16BIT : index[i][j]);
+          d->curves->points[i][j][1] = (isSixteenBits() && (value[i][j] !=-1) ?
+                                         value[i][j]*MULTIPLIER_16BIT : value[i][j]);
        }
     }
 
-    for (i = 0 ; i < 5 ; ++i)
+    for (i = 0 ; i < NUM_CHANNELS ; ++i)
        curvesCalculateCurve(i);
 
     fclose(file);
@@ -711,12 +850,12 @@ bool ImageCurves::saveCurvesToGimpCurvesFile(const KUrl& fileUrl)
     int   i, j;
     int   index;
 
-    file = fopen(QFile::encodeName(fileUrl.path()), "w");
+    file = fopen(QFile::encodeName(fileUrl.toLocalFile()), "w");
 
     if (!file)
        return false;
 
-    for (i = 0 ; i < 5 ; ++i)
+    for (i = 0 ; i < NUM_CHANNELS ; ++i)
     {
        if (d->curves->curve_type[i] == CURVE_FREE)
        {
@@ -733,15 +872,15 @@ bool ImageCurves::saveCurvesToGimpCurvesFile(const KUrl& fileUrl)
 
     fprintf (file, "# GIMP Curves File\n");
 
-    for (i = 0 ; i < 5 ; ++i)
+    for (i = 0 ; i < NUM_CHANNELS ; ++i)
     {
-       for (j = 0 ; j < 17 ; ++j)
+       for (j = 0 ; j < NUM_POINTS ; ++j)
        {
           fprintf (file, "%d %d ",
-                   ((d->segmentMax == 65535) && (d->curves->points[i][j][0]!=-1) ?
-                     d->curves->points[i][j][0]/255 : d->curves->points[i][j][0]),
-                   ((d->segmentMax == 65535) && (d->curves->points[i][j][1]!=-1) ?
-                     d->curves->points[i][j][1]/255 : d->curves->points[i][j][1]));
+                   (isSixteenBits() && (d->curves->points[i][j][0]!=-1) ?
+                     d->curves->points[i][j][0]/MULTIPLIER_16BIT : d->curves->points[i][j][0]),
+                   (isSixteenBits() && (d->curves->points[i][j][1]!=-1) ?
+                     d->curves->points[i][j][1]/MULTIPLIER_16BIT : d->curves->points[i][j][1]));
 
           fprintf (file, "\n");
        }

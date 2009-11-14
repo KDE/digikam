@@ -36,6 +36,8 @@ class QString;
 namespace Digikam
 {
 class DColor;
+class IccTransform;
+class IccProfile;
 }
 
 namespace DigikamImagesPluginCore
@@ -59,7 +61,7 @@ private:
     void finalRendering();
 
     void getICCInfo(const QString&);
-    void getICCInfo(const QByteArray&);
+    void getICCInfo(const Digikam::IccProfile&);
 
     bool useBPC();
     bool doProof();
@@ -76,6 +78,8 @@ private:
 
     bool useDefaultProofProfile();
     bool useSelectedProofProfile();
+
+    bool createTransform(Digikam::IccTransform&);
 
 private Q_SLOTS:
 

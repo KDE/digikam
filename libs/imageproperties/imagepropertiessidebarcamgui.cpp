@@ -31,7 +31,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+
 #include <klocale.h>
 #include <kconfig.h>
 #include <kapplication.h>
@@ -141,7 +141,7 @@ void ImagePropertiesSideBarCamGui::itemChanged(GPItemInfo* itemInfo, const KUrl&
 
     if (exifData.isEmpty())
     {
-        d->metaData = DMetadata(d->currentURL.path());
+        d->metaData = DMetadata(d->currentURL.toLocalFile());
     }
 
     slotChangedTab(getActiveTab());

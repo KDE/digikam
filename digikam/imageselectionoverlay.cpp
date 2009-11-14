@@ -25,8 +25,6 @@
 #include "imageselectionoverlay.h"
 #include "imageselectionoverlay.moc"
 
-// Qt includes
-
 // KDE includes
 
 #include <kiconloader.h>

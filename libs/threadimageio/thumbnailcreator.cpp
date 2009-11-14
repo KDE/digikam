@@ -38,7 +38,6 @@
 
 #include <kcodecs.h>
 #include <kcomponentdata.h>
-#include <kdebug.h>
 #include <kglobal.h>
 #include <kimageio.h>
 #include <kio/global.h>
@@ -52,6 +51,7 @@
 #include <kurl.h>
 #include <kdeversion.h>
 #include <kde_file.h>
+#include <kdebug.h>
 
 // LibKDcraw includes
 
@@ -63,6 +63,9 @@
 #include "databasebackend.h"
 #include "dimg.h"
 #include "dmetadata.h"
+#include "iccmanager.h"
+#include "iccprofile.h"
+#include "iccsettings.h"
 #include "jpegutils.h"
 #include "pgfutils.h"
 #include "thumbnaildatabaseaccess.h"
@@ -160,7 +163,7 @@ QImage ThumbnailCreator::load(const QString& path)
     if (d->cachedSize <= 0)
     {
         d->error = i18n("No or invalid size specified");
-        kWarning(50003) << "No or invalid size specified";
+        kWarning() << "No or invalid size specified";
         return QImage();
     }
 
@@ -210,13 +213,13 @@ QImage ThumbnailCreator::load(const QString& path)
     if (image.isNull())
     {
         d->error = i18n("Thumbnail is null");
-        kWarning(50003) << "Thumbnail is null for " << path;
+        kWarning() << "Thumbnail is null for " << path;
         return image.qimage;
     }
 
     // Prepare for usage in digikam
     image.qimage = image.qimage.scaled(d->thumbnailSize, d->thumbnailSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-    handleAlphaChannel(image.qimage);
+    image.qimage = handleAlphaChannel(image.qimage);
 
     if (d->thumbnailStorage == ThumbnailDatabase)
     {
@@ -262,6 +265,7 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo &info)
     }
 
     QImage qimage;
+    DMetadata metadata(path);
     bool fromEmbeddedPreview = false;
     bool failedAtDImg        = false;
     bool failedAtJPEGScaled  = false;
@@ -269,8 +273,11 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo &info)
 
     // -- Get the image preview --------------------------------
 
+    IccProfile profile;
+    bool colorManage = IccSettings::instance()->isEnabled();
+
     // Try to extract Exif/IPTC preview first.
-    qimage = loadImagePreview(path);
+    qimage = loadImagePreview(metadata);
 
     QFileInfo fileInfo(path);
     // To speed-up thumb extraction, we now try to load the images by the file extension.
@@ -280,15 +287,18 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo &info)
     {
         if (ext == QString("JPEG") || ext == QString("JPG") || ext == QString("JPE"))
         {
+            if (colorManage)
+                qimage = loadWithDImg(path, &profile);
+            else
             // use jpegutils
-            loadJPEGScaled(qimage, path, d->cachedSize);
+                loadJPEGScaled(qimage, path, d->cachedSize);
             failedAtJPEGScaled = qimage.isNull();
         }
         else if (ext == QString("PNG")  ||
             ext == QString("TIFF") ||
             ext == QString("TIF"))
         {
-            qimage       = loadWithDImg(path);
+            qimage       = loadWithDImg(path, &profile);
             failedAtDImg = qimage.isNull();
         }
         else if (ext == QString("PGF"))
@@ -303,7 +313,10 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo &info)
     if (qimage.isNull())
     {
         if (KDcrawIface::KDcraw::loadEmbeddedPreview(qimage, path))
+        {
             fromEmbeddedPreview = true;
+            profile = metadata.getIccProfile();
+        }
     }
 
     if (qimage.isNull())
@@ -312,17 +325,17 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo &info)
         KDcrawIface::KDcraw::loadHalfPreview(qimage, path);
     }
 
+    // DImg-dependent loading methods: TIFF, PNG, everything supported by QImage
+    if (qimage.isNull() && !failedAtDImg)
+    {
+        qimage = loadWithDImg(path, &profile);
+    }
+
     // Try JPEG anyway
     if (qimage.isNull() && !failedAtJPEGScaled)
     {
         // use jpegutils
         loadJPEGScaled(qimage, path, d->cachedSize);
-    }
-
-    // DImg-dependent loading methods: TIFF, PNG, everything supported by QImage
-    if (qimage.isNull() && !failedAtDImg)
-    {
-        qimage = loadWithDImg(path);
     }
 
     // Try PGF anyway
@@ -335,7 +348,7 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo &info)
     if (qimage.isNull())
     {
         d->error = i18n("Cannot create thumbnail for %1", path);
-        kWarning(50003) << "Cannot create thumbnail for " << path;
+        kWarning() << "Cannot create thumbnail for " << path;
         return ThumbnailImage();
     }
 
@@ -347,30 +360,32 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo &info)
         qimage        = qimage.scaled(cheatSize, cheatSize, Qt::KeepAspectRatio, Qt::FastTransformation);
         qimage        = qimage.scaled(d->cachedSize, d->cachedSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     }
+    if (colorManage && !profile.isNull())
+    {
+        IccManager::transformToSRGB(qimage, profile);
+    }
 
     ThumbnailImage image;
     image.qimage = qimage;
-    image.exifOrientation = exifOrientation(path, fromEmbeddedPreview);
+    image.exifOrientation = exifOrientation(path, metadata, fromEmbeddedPreview);
     return image;
 }
 
-QImage ThumbnailCreator::loadWithDImg(const QString& path)
+QImage ThumbnailCreator::loadWithDImg(const QString& path, IccProfile *profile)
 {
     DImg img;
-    if (d->observer)
-        img.load(path, d->observer, d->rawSettings);
-    else
-        img.load(path);
+    img.setAttribute("scaledLoadingSize", d->cachedSize);
+    img.load(path, false, profile ? true : false, false, d->observer, d->rawSettings);
+    *profile = img.getIccProfile();
     return img.copyQImage();
 }
 
-QImage ThumbnailCreator::loadImagePreview(const QString& path)
+QImage ThumbnailCreator::loadImagePreview(const DMetadata& metadata)
 {
     QImage image;
-    DMetadata metadata(path);
     if (metadata.getImagePreview(image))
     {
-        kDebug(50003) << "Use Exif/IPTC preview extraction. Size of image: "
+        kDebug() << "Use Exif/IPTC preview extraction. Size of image: "
                       << image.width() << "x" << image.height();
     }
 
@@ -406,14 +421,13 @@ QImage ThumbnailCreator::handleAlphaChannel(const QImage& qimage)
     return qimage;
 }
 
-int ThumbnailCreator::exifOrientation(const QString& filePath, bool fromEmbeddedPreview)
+int ThumbnailCreator::exifOrientation(const QString& filePath, const DMetadata& metadata, bool fromEmbeddedPreview)
 {
     // Keep in sync with main version in loadsavethread.cpp
 
     if (DImg::fileFormat(filePath) == DImg::RAW && !fromEmbeddedPreview )
         return DMetadata::ORIENTATION_NORMAL;
 
-    DMetadata metadata(filePath);
     return metadata.getImageOrientation();
 }
 
@@ -486,7 +500,7 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
     {
         if (!writePGFImageData(image.qimage, dbInfo.data, 4))
         {
-            kWarning(50003) << "Cannot save PGF thumb in DB";
+            kWarning() << "Cannot save PGF thumb in DB";
             return;
         }
     }
@@ -497,7 +511,7 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
         image.qimage.save(&buffer, "JPEG", 90);  // Here we will use JPEG quality = 90 to reduce artifacts.
         if (dbInfo.data.isNull())
         {
-            kWarning(50003) << "Cannot save JPEG thumb in DB";
+            kWarning() << "Cannot save JPEG thumb in DB";
             return;
         }
     }
@@ -508,7 +522,7 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
         image.qimage.save(&buffer, "JP2");
         if (dbInfo.data.isNull())
         {
-            kWarning(50003) << "Cannot save JPEG2000 thumb in DB";
+            kWarning() << "Cannot save JPEG2000 thumb in DB";
             return;
         }
     }
@@ -519,7 +533,7 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
         image.qimage.save(&buffer, "PNG", 0);
         if (dbInfo.data.isNull())
         {
-            kWarning(50003) << "Cannot save JPEG2000 thumb in DB";
+            kWarning() << "Cannot save JPEG2000 thumb in DB";
             return;
         }
     }
@@ -614,7 +628,7 @@ ThumbnailImage ThumbnailCreator::loadFromDatabase(const ThumbnailInfo& info)
     {
         if (!readPGFImageData(dbInfo.data, image.qimage))
         {
-            kWarning(50003) << "Cannot load PGF thumb from DB";
+            kWarning() << "Cannot load PGF thumb from DB";
             return ThumbnailImage();
         }
     }
@@ -625,7 +639,7 @@ ThumbnailImage ThumbnailCreator::loadFromDatabase(const ThumbnailInfo& info)
         image.qimage.load(&buffer, "JPEG");
         if (dbInfo.data.isNull())
         {
-            kWarning(50003) << "Cannot load JPEG thumb from DB";
+            kWarning() << "Cannot load JPEG thumb from DB";
             return ThumbnailImage();
         }
     }
@@ -636,7 +650,7 @@ ThumbnailImage ThumbnailCreator::loadFromDatabase(const ThumbnailInfo& info)
         image.qimage.load(&buffer, "JP2");
         if (dbInfo.data.isNull())
         {
-            kWarning(50003) << "Cannot load JPEG2000 thumb from DB";
+            kWarning() << "Cannot load JPEG2000 thumb from DB";
             return ThumbnailImage();
         }
     }
@@ -647,7 +661,7 @@ ThumbnailImage ThumbnailCreator::loadFromDatabase(const ThumbnailInfo& info)
         image.qimage.load(&buffer, "PNG");
         if (dbInfo.data.isNull())
         {
-            kWarning(50003) << "Cannot load PNG thumb from DB";
+            kWarning() << "Cannot load PNG thumb from DB";
             return ThumbnailImage();
         }
     }
@@ -771,8 +785,8 @@ void ThumbnailCreator::storeFreedesktop(const ThumbnailInfo &info, const Thumbna
 
             if (ret != 0)
             {
-                kDebug(50003) << "Cannot rename thumb file (" << tempFileName << ")";
-                kDebug(50003) << "to (" << thumbPath << ")...";
+                kDebug() << "Cannot rename thumb file (" << tempFileName << ")";
+                kDebug() << "to (" << thumbPath << ")...";
             }
         }
     }

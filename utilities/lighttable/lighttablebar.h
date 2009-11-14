@@ -42,8 +42,8 @@ class LightTableBar : public ImagePreviewBar
 
 public:
 
-    LightTableBar(QWidget* parent, int orientation=Qt::Vertical, 
-                  bool exifRotate=true);
+    explicit LightTableBar(QWidget* parent, int orientation=Qt::Vertical,
+                           bool exifRotate=true);
     ~LightTableBar();
 
     void setOnLeftPanel(const ImageInfo& info);
@@ -68,7 +68,8 @@ Q_SIGNALS:
 
 private:
 
-    void viewportPaintEvent(QPaintEvent*);
+    void drawItem(ThumbBarItem *item, QPainter &p, QPixmap &tile);
+    void drawEmptyMessage(QPixmap &pixmap);
     void contentsMouseReleaseEvent(QMouseEvent*);
     void startDrag();
     void contentsDragEnterEvent(QDragEnterEvent*);

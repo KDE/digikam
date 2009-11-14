@@ -41,6 +41,7 @@
 #include <kservicetypetrader.h>
 #include <kurl.h>
 #include <kwindowsystem.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -59,6 +60,9 @@
 
 namespace Digikam
 {
+
+const QString mimeTypeCutSelection("application/x-kde-cutselection");
+const QString renameFileProperty("AdvancedRename source file");
 
 ImageViewUtilities::ImageViewUtilities(QWidget *parentWidget)
             : QObject(parentWidget)
@@ -92,34 +96,24 @@ void ImageViewUtilities::setAsAlbumThumbnail(Album *album, const ImageInfo& imag
     }
 }
 
-void ImageViewUtilities::rename(const ImageInfo& renameInfo)
+void ImageViewUtilities::rename(const KUrl& imageUrl, const QString& newName)
 {
-    if (renameInfo.isNull())
+    if (imageUrl.isEmpty() || !imageUrl.isLocalFile() || newName.isEmpty())
         return;
 
-    QFileInfo fi(renameInfo.name());
-    QString ext  = QString(".") + fi.suffix();
-    QString name = fi.fileName();
-    name.truncate(fi.fileName().length() - ext.length());
+    ImageInfo info(imageUrl.toLocalFile());
 
-    bool ok;
-
-    QString newName = KInputDialog::getText(i18n("Rename Item (%1)",fi.fileName()),
-                                            i18n("Enter new name (without extension):"),
-                                            name, &ok, m_widget);
-    if (!ok)
-        return;
-
-    KIO::CopyJob* job = DIO::rename(renameInfo, newName + ext);
+    KIO::CopyJob* job = DIO::rename(info, newName);
+    job->setProperty(renameFileProperty.toAscii(), imageUrl.toLocalFile());
 
     connect(job, SIGNAL(result(KJob*)),
             this, SLOT(slotDIOResult(KJob*)));
 
-    connect(job, SIGNAL(copyingDone(KIO::Job *, const KUrl &, const KUrl &, bool, bool)),
+    connect(job, SIGNAL(copyingDone(KIO::Job *, const KUrl &, const KUrl &, time_t, bool, bool)),
             this, SLOT(slotRenamed(KIO::Job*, const KUrl &, const KUrl&)));
 }
 
-void ImageViewUtilities::slotRenamed(KIO::Job*, const KUrl &, const KUrl&newURL)
+void ImageViewUtilities::slotRenamed(KIO::Job* job, const KUrl &, const KUrl&newURL)
 {
     // reconstruct file path from digikamalbums:// URL
     KUrl fileURL;
@@ -127,9 +121,13 @@ void ImageViewUtilities::slotRenamed(KIO::Job*, const KUrl &, const KUrl&newURL)
     fileURL.addPath(newURL.path());
 
     // refresh thumbnail
-    ThumbnailLoadThread::deleteThumbnail(fileURL.path());
+    ThumbnailLoadThread::deleteThumbnail(fileURL.toLocalFile());
     // clean LoadingCache as well - be pragmatic, do it here.
-    LoadingCacheInterface::fileChanged(fileURL.path());
+    LoadingCacheInterface::fileChanged(fileURL.toLocalFile());
+
+    // no need to check the property here, this slot is only used by the RenameThread
+    KUrl url(job->property(renameFileProperty.toAscii()).toString());
+    emit imageRenameSucceeded(url);
 }
 
 void ImageViewUtilities::deleteImages(const QList<ImageInfo>& infos, bool deletePermanently)
@@ -194,6 +192,22 @@ void ImageViewUtilities::slotDIOResult(KJob* kjob)
     KIO::Job *job = static_cast<KIO::Job*>(kjob);
     if (job->error())
     {
+        // this slot can be used by others, too.
+        // check if image renaming property is set.
+        QVariant v = job->property(renameFileProperty.toAscii());
+        if (!v.isNull())
+        {
+            if (job->error() == KIO::Job::KilledJobError)
+            {
+                emit renamingAborted();
+            }
+            else
+            {
+                KUrl url(v.toString());
+                emit imageRenameFailed(url);
+            }
+        }
+
         job->ui()->setWindow(m_widget);
         job->ui()->showErrorMessage();
     }
@@ -323,5 +337,18 @@ void ImageViewUtilities::openInEditor(const ImageInfo& info, const QList<ImageIn
     KWindowSystem::activateWindow(imview->winId());
 }
 
+void ImageViewUtilities::addIsCutSelection(QMimeData* mime, bool cut)
+{
+    const QByteArray cutSelection = cut ? "1" : "0";
+    mime->setData(mimeTypeCutSelection, cutSelection);
+}
+
+bool ImageViewUtilities::decodeIsCutSelection(const QMimeData* mime)
+{
+    QByteArray a = mime->data(mimeTypeCutSelection);
+    if (a.isEmpty())
+        return false;
+    return (a.at(0) == '1'); // true if 1
+}
 
 } // namespace Digikam

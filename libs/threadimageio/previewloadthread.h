@@ -41,14 +41,29 @@ public:
 
     /**
      * Load a preview that is optimized for fast loading.
+     * Raw decoding and color management settings will be adjusted.
      */
-    void load(LoadingDescription description);
+    void load(const QString& filePath, int size, bool exifRotate);
+
     /**
      * Load a preview with higher resolution, trading more quality
      * for less speed.
-     * In the LoadingDescription container, provide "0" as maximum size.
+     * Raw decoding and color management settings will be adjusted.
      */
-    void loadHighQuality(LoadingDescription description);
+    void loadHighQuality(const QString& filePath, bool exifRotate);
+
+    /**
+     * Load a preview. Loading description will not be touched.
+     */
+    void load(LoadingDescription description);
+
+    /// Optionally, set the displaying widget for color management
+    void setDisplayingWidget(QWidget *widget);
+
+protected:
+
+    LoadingDescription createLoadingDescription(const QString& filePath, int size, bool exifRotate);
+    QWidget *m_displayingWidget;
 };
 
 }   // namespace Digikam

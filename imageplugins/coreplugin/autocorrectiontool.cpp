@@ -27,40 +27,22 @@
 
 // Qt includes
 
-#include <QCheckBox>
-#include <QColor>
-#include <QFrame>
 #include <QGridLayout>
-#include <QGroupBox>
-#include <QHBoxLayout>
-#include <QLabel>
 #include <QListWidget>
 #include <QPixmap>
-#include <QPushButton>
-#include <QRadioButton>
-#include <QTimer>
-#include <QToolButton>
 
 // KDE includes
 
 #include <kapplication.h>
-#include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kcursor.h>
-#include <kglobal.h>
-#include <kicon.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kstandarddirs.h>
-#include <kvbox.h>
 
 // Local includes
 
-#include "colorgradientwidget.h"
 #include "dimg.h"
 #include "dimgimagefilters.h"
 #include "editortoolsettings.h"
-#include "histogrambox.h"
 #include "histogramwidget.h"
 #include "imageiface.h"
 #include "imagewidget.h"
@@ -75,21 +57,30 @@ class AutoCorrectionToolPriv
 {
 public:
 
-    AutoCorrectionToolPriv()
-    {
-        destinationPreviewData = 0;
-        correctionTools        = 0;
-        previewWidget          = 0;
-        gboxSettings           = 0;
-    }
+    AutoCorrectionToolPriv() :
+        configGroupName("autocorrection Tool"),
+        configHistogramChannelEntry("Histogram Channel"),
+        configHistogramScaleEntry("Histogram Scale"),
+        configAutoCorrectionFilterEntry("Auto Correction Filter"),
 
-    uchar*               destinationPreviewData;
+        destinationPreviewData(0),
+        correctionTools(0),
+        previewWidget(0),
+        gboxSettings(0)
+        {}
 
-    QListWidget*         correctionTools;
+    const QString       configGroupName;
+    const QString       configHistogramChannelEntry;
+    const QString       configHistogramScaleEntry;
+    const QString       configAutoCorrectionFilterEntry;
 
-    ImageWidget*         previewWidget;
-    EditorToolSettings*  gboxSettings;
-    DImg                 thumbnailImage;
+    uchar*              destinationPreviewData;
+
+    QListWidget*        correctionTools;
+
+    ImageWidget*        previewWidget;
+    EditorToolSettings* gboxSettings;
+    DImg                thumbnailImage;
 };
 
 AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
@@ -116,10 +107,8 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
     ImageIface iface(0, 0);
     d->thumbnailImage = iface.getOriginalImg()->smoothScale(128, 128, Qt::KeepAspectRatio);
 
-    d->gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
-                                             EditorToolSettings::Ok|
-                                             EditorToolSettings::Cancel,
-                                             EditorToolSettings::Histogram);
+    d->gboxSettings = new EditorToolSettings;
+    d->gboxSettings->setTools(EditorToolSettings::Histogram);
 
     // -------------------------------------------------------------
 
@@ -222,23 +211,25 @@ void AutoCorrectionTool::slotColorSelectedFromTarget(const DColor& color)
 void AutoCorrectionTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("autocorrection Tool");
+    KConfigGroup group        = config->group(d->configGroupName);
 
-    d->gboxSettings->histogramBox()->setChannel(group.readEntry("Histogram Channel",
-                        (int)EditorToolSettings::LuminosityChannel));
-    d->gboxSettings->histogramBox()->setScale(group.readEntry("Histogram Scale",
-                        (int)HistogramWidget::LogScaleHistogram));
+    d->gboxSettings->histogramBox()->setChannel(group.readEntry(d->configHistogramChannelEntry,
+                        (int)LuminosityChannel));
+    d->gboxSettings->histogramBox()->setScale((HistogramScale)group.readEntry(d->configHistogramScaleEntry,
+                        (int)LogScaleHistogram));
 
-    d->correctionTools->setCurrentRow(group.readEntry("Auto Correction Filter", (int)AutoLevelsCorrection));
+    d->correctionTools->setCurrentRow(group.readEntry(d->configAutoCorrectionFilterEntry,
+                                                      (int)AutoLevelsCorrection));
 }
 
 void AutoCorrectionTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("autocorrection Tool");
-    group.writeEntry("Histogram Channel", d->gboxSettings->histogramBox()->channel());
-    group.writeEntry("Histogram Scale", d->gboxSettings->histogramBox()->scale());
-    group.writeEntry("Auto Correction Filter", d->correctionTools->currentRow());
+    KConfigGroup group        = config->group(d->configGroupName);
+
+    group.writeEntry(d->configHistogramChannelEntry,     d->gboxSettings->histogramBox()->channel());
+    group.writeEntry(d->configHistogramScaleEntry,       (int)d->gboxSettings->histogramBox()->scale());
+    group.writeEntry(d->configAutoCorrectionFilterEntry, d->correctionTools->currentRow());
     d->previewWidget->writeSettings();
     config->sync();
 }
@@ -254,18 +245,18 @@ void AutoCorrectionTool::slotResetSettings()
 
 void AutoCorrectionTool::slotEffect()
 {
-    kapp->setOverrideCursor( Qt::WaitCursor );
+    kapp->setOverrideCursor(Qt::WaitCursor);
 
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 
     if (d->destinationPreviewData)
        delete [] d->destinationPreviewData;
 
-    ImageIface* iface        = d->previewWidget->imageIface();
+    ImageIface* iface         = d->previewWidget->imageIface();
     d->destinationPreviewData = iface->getPreviewImage();
-    int w                    = iface->previewWidth();
-    int h                    = iface->previewHeight();
-    bool sb                  = iface->previewSixteenBit();
+    int w                     = iface->previewWidth();
+    int h                     = iface->previewHeight();
+    bool sb                   = iface->previewSixteenBit();
 
     autoCorrection(d->destinationPreviewData, w, h, sb, d->correctionTools->currentRow());
 
@@ -291,10 +282,10 @@ void AutoCorrectionTool::finalRendering()
 {
     kapp->setOverrideCursor( Qt::WaitCursor );
     ImageIface* iface = d->previewWidget->imageIface();
-    uchar *data                = iface->getOriginalImage();
-    int w                      = iface->originalWidth();
-    int h                      = iface->originalHeight();
-    bool sb                    = iface->originalSixteenBit();
+    uchar *data       = iface->getOriginalImage();
+    int w             = iface->originalWidth();
+    int h             = iface->originalHeight();
+    bool sb           = iface->originalSixteenBit();
 
     if (data)
     {

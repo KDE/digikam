@@ -38,7 +38,6 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kcursor.h>
-#include <kdebug.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
 
@@ -60,20 +59,22 @@ public:
 
     FolderViewPriv()
     {
-        showTips         = false;
-        active           = false;
-        doNotCollapse    = false;
-        toolTipItem      = 0;
-        toolTipTimer     = 0;
-        dragItem         = 0;
-        oldHighlightItem = 0;
-        highlightedItem  = 0;
-        toolTip          = 0;
+        showTips          = false;
+        active            = false;
+        doNotCollapse     = false;
+        allowAutoCollapse = true;
+        toolTipItem       = 0;
+        toolTipTimer      = 0;
+        dragItem          = 0;
+        oldHighlightItem  = 0;
+        highlightedItem   = 0;
+        toolTip           = 0;
     }
 
     bool               active;
     bool               showTips;
     bool               doNotCollapse;
+    bool               allowAutoCollapse;
 
     int                itemHeight;
 
@@ -82,14 +83,14 @@ public:
 
     QPoint             dragStartPos;
 
-    QTimer            *toolTipTimer;
+    QTimer*            toolTipTimer;
 
-    Q3ListViewItem    *toolTipItem;
-    Q3ListViewItem    *dragItem;
-    Q3ListViewItem    *oldHighlightItem;
-    Q3ListViewItem    *highlightedItem;
+    Q3ListViewItem*    toolTipItem;
+    Q3ListViewItem*    dragItem;
+    Q3ListViewItem*    oldHighlightItem;
+    Q3ListViewItem*    highlightedItem;
 
-    FolderViewToolTip *toolTip;
+    FolderViewToolTip* toolTip;
 };
 
 //-----------------------------------------------------------------------------
@@ -98,7 +99,7 @@ FolderView::FolderView(QWidget *parent, const char *name)
           : Q3ListView(parent), d(new FolderViewPriv)
 {
     setObjectName(name);
-    setColumnWidthMode(0, Q3ListView::Maximum);
+    setColumnWidthMode(0, Maximum);
     setColumnAlignment(0, Qt::AlignLeft|Qt::AlignVCenter);
     setShowSortIndicator(true);
 
@@ -188,7 +189,36 @@ void FolderView::resizeEvent(QResizeEvent* e)
 {
     Q3ListView::resizeEvent(e);
 
-    int w = frameRect().width();
+    // Q3ListView (and also the Qt4 version) is not behaving the way we want it to do.
+    // We want to have a scrollbar if content doesn't fit the view, but we also want to expand the columns
+    // when the sidebar is wider than the listview content.
+    // So we need to calculate and set the columns width on our own.
+    int maxw = 0;
+    Q3ListViewItemIterator it(this);
+    while (it.current())
+    {
+        int pwidth = (*it)->pixmap(0) ? (*it)->pixmap(0)->width() : 0;
+        int w      = (*it)->width(fontMetrics(), this, 0) +
+                     pwidth + 5 + (itemMargin() * 2) +
+                     ((*it)->depth() * treeStepSize());
+
+        maxw = qMax<int>(w, maxw);
+        ++it;
+    }
+
+    if (e->size().width() > maxw)
+    {
+        setResizeMode(LastColumn);
+    }
+    else
+    {
+        setResizeMode(NoColumn);
+        setColumnWidthMode(0, Maximum);
+        setColumnWidth(0, maxw);
+        slotThemeChanged();
+    }
+
+    int w = contentsWidth();
     int h = itemHeight();
     if (d->itemRegPix.width() != w ||
         d->itemRegPix.height() != h)
@@ -526,7 +556,7 @@ bool FolderView::mouseInItemRect(Q3ListViewItem* item, int x) const
 
 void FolderView::slotThemeChanged()
 {
-    int w = frameRect().width();
+    int w = contentsWidth();
     int h = itemHeight();
 
     d->itemRegPix = ThemeEngine::instance()->listRegPixmap(w, h);
@@ -619,8 +649,18 @@ void FolderView::selectItem(int)
 {
 }
 
+void FolderView::setAllowAutoCollapse(bool collapse)
+{
+    d->allowAutoCollapse = collapse;
+}
+
 void FolderView::collapseView(CollapseMode mode)
 {
+    if (!d->allowAutoCollapse)
+    {
+        return;
+    }
+
     // collapse the whole list first
     Q3ListViewItemIterator iter(this);
     while (iter.current())

@@ -83,12 +83,11 @@ public:
         fullScreen                           = false;
         autoShowZoomToolTip                  = false;
         validIccPath                         = true;
-        cameraSolidMenu                      = 0;
+        cameraMenu                           = 0;
         usbMediaMenu                         = 0;
         cardReaderMenu                       = 0;
-        manuallyAddedCamerasMenu             = 0;
         newAction                            = 0;
-        newAlbumFromSelectionAction          = 0;
+        moveSelectionToAlbumAction           = 0;
         deleteAction                         = 0;
         imageDeletePermanentlyAction         = 0;
         imageDeletePermanentlyDirectlyAction = 0;
@@ -103,7 +102,10 @@ public:
         addFoldersAction                     = 0;
         openInKonquiAction                   = 0;
         refreshAlbumAction                   = 0;
-        syncAlbumMetadataAction              = 0;
+        writeAlbumMetadataAction             = 0;
+        readAlbumMetadataAction              = 0;
+        imageWriteMetadataAction             = 0;
+        imageReadMetadataAction              = 0;
         newTagAction                         = 0;
         deleteTagAction                      = 0;
         editTagAction                        = 0;
@@ -125,6 +127,7 @@ public:
         imageRenameAction                    = 0;
         imageDeleteAction                    = 0;
         imageSortAction                      = 0;
+        imageGroupAction                     = 0;
         imageExifOrientationActionMenu       = 0;
         selectAllAction                      = 0;
         selectNoneAction                     = 0;
@@ -169,6 +172,7 @@ public:
         manualCameraActionGroup              = 0;
         solidCameraActionGroup               = 0;
         solidUsmActionGroup                  = 0;
+        exifOrientationActionGroup           = 0;
         eventLoop                            = 0;
         albumIconViewFilter                  = 0;
         contributeAction                     = 0;
@@ -189,126 +193,131 @@ public:
     QList<QAction*>                     kipiBatchActions;
     QList<QAction*>                     kipiAlbumActions;
 
-    KActionMenu                        *cameraSolidMenu;
-    KActionMenu                        *usbMediaMenu;
-    KActionMenu                        *cardReaderMenu;
-    KActionMenu                        *manuallyAddedCamerasMenu;
+    KActionMenu*                        cameraMenu;
+    KActionMenu*                        usbMediaMenu;
+    KActionMenu*                        cardReaderMenu;
 
     KSharedConfig::Ptr                  config;
 
     // KIPI actionCollection
-    KActionCollection                  *kipipluginsActionCollection;
+    KActionCollection*                  kipipluginsActionCollection;
 
     // Album Actions
-    KAction                            *newAction;
-    KAction                            *newAlbumFromSelectionAction;
-    KAction                            *deleteAction;
-    KAction                            *imageDeletePermanentlyAction;
-    KAction                            *imageDeletePermanentlyDirectlyAction;
-    KAction                            *imageTrashDirectlyAction;
-    KToolBarPopupAction                *backwardActionMenu;
-    KToolBarPopupAction                *forwardActionMenu;
+    KAction*                            newAction;
+    KAction*                            moveSelectionToAlbumAction;
+    KAction*                            deleteAction;
+    KAction*                            imageDeletePermanentlyAction;
+    KAction*                            imageDeletePermanentlyDirectlyAction;
+    KAction*                            imageTrashDirectlyAction;
+    KToolBarPopupAction*                backwardActionMenu;
+    KToolBarPopupAction*                forwardActionMenu;
 
-    KAction                            *addImagesAction;
-    KAction                            *propsEditAction;
-    KAction                            *addFoldersAction;
-    KAction                            *openInKonquiAction;
-    KAction                            *refreshAlbumAction;
-    KAction                            *syncAlbumMetadataAction;
+    KAction*                            addImagesAction;
+    KAction*                            propsEditAction;
+    KAction*                            addFoldersAction;
+    KAction*                            openInKonquiAction;
+    KAction*                            refreshAlbumAction;
+    KAction*                            writeAlbumMetadataAction;
+    KAction*                            readAlbumMetadataAction;
 
     // Tag Actions
-    KAction                            *newTagAction;
-    KAction                            *deleteTagAction;
-    KAction                            *editTagAction;
+    KAction*                            newTagAction;
+    KAction*                            deleteTagAction;
+    KAction*                            editTagAction;
 
     // Image Actions
-    KToggleAction                      *imagePreviewAction;
-    KAction                            *imageLightTableAction;
-    KAction                            *imageAddLightTableAction;
-    KAction                            *imageAddCurrentQueueAction;
-    KAction                            *imageAddNewQueueAction;
-    KAction                            *imageViewAction;
-    KAction                            *imageFindSimilarAction;
-    KAction                            *imageSetExifOrientation1Action;
-    KAction                            *imageSetExifOrientation2Action;
-    KAction                            *imageSetExifOrientation3Action;
-    KAction                            *imageSetExifOrientation4Action;
-    KAction                            *imageSetExifOrientation5Action;
-    KAction                            *imageSetExifOrientation6Action;
-    KAction                            *imageSetExifOrientation7Action;
-    KAction                            *imageSetExifOrientation8Action;
-    KAction                            *imageRenameAction;
-    KAction                            *imageDeleteAction;
-    KActionMenu                        *imageExifOrientationActionMenu;
+    KToggleAction*                      imagePreviewAction;
+    KAction*                            imageLightTableAction;
+    KAction*                            imageAddLightTableAction;
+    KAction*                            imageAddCurrentQueueAction;
+    KAction*                            imageAddNewQueueAction;
+    KAction*                            imageViewAction;
+    KAction*                            imageWriteMetadataAction;
+    KAction*                            imageReadMetadataAction;
+    KAction*                            imageFindSimilarAction;
+    KToggleAction*                      imageSetExifOrientation1Action;
+    KToggleAction*                      imageSetExifOrientation2Action;
+    KToggleAction*                      imageSetExifOrientation3Action;
+    KToggleAction*                      imageSetExifOrientation4Action;
+    KToggleAction*                      imageSetExifOrientation5Action;
+    KToggleAction*                      imageSetExifOrientation6Action;
+    KToggleAction*                      imageSetExifOrientation7Action;
+    KToggleAction*                      imageSetExifOrientation8Action;
+    KAction*                            imageRenameAction;
+    KAction*                            imageDeleteAction;
+    KActionMenu*                        imageExifOrientationActionMenu;
 
     // Selection Actions
-    KAction                            *selectAllAction;
-    KAction                            *selectNoneAction;
-    KAction                            *selectInvertAction;
+    KAction*                            selectAllAction;
+    KAction*                            selectNoneAction;
+    KAction*                            selectInvertAction;
 
     // View Actions
-    QAction                            *fullScreenAction;
-    QAction                            *zoomPlusAction;
-    QAction                            *zoomMinusAction;
-    KAction                            *zoomFitToWindowAction;
-    KAction                            *zoomTo100percents;
-    KSelectAction                      *imageSortAction;
-    KSelectAction                      *albumSortAction;
-    KToggleAction                      *recurseAlbumsAction;
-    KToggleAction                      *recurseTagsAction;
-    KToggleAction                      *showBarAction;
-    KToggleAction                      *showMenuBarAction;
+    QAction*                            fullScreenAction;
+    QAction*                            zoomPlusAction;
+    QAction*                            zoomMinusAction;
+    KAction*                            zoomFitToWindowAction;
+    KAction*                            zoomTo100percents;
+    KSelectAction*                      imageSortAction;
+    KSelectAction*                      imageSortOrderAction;
+    KSelectAction*                      imageGroupAction;
+    KSelectAction*                      albumSortAction;
+    KToggleAction*                      recurseAlbumsAction;
+    KToggleAction*                      recurseTagsAction;
+    KToggleAction*                      showBarAction;
+    KToggleAction*                      showMenuBarAction;
 
-    KAction                            *rating0Star;
-    KAction                            *rating1Star;
-    KAction                            *rating2Star;
-    KAction                            *rating3Star;
-    KAction                            *rating4Star;
-    KAction                            *rating5Star;
+    KAction*                            rating0Star;
+    KAction*                            rating1Star;
+    KAction*                            rating2Star;
+    KAction*                            rating3Star;
+    KAction*                            rating4Star;
+    KAction*                            rating5Star;
 
     // Tools Actions
-    KActionMenu                        *slideShowAction;
-    KAction                            *slideShowAllAction;
-    KAction                            *slideShowSelectionAction;
-    KAction                            *slideShowRecursiveAction;
+    KActionMenu*                        slideShowAction;
+    KAction*                            slideShowAllAction;
+    KAction*                            slideShowSelectionAction;
+    KAction*                            slideShowRecursiveAction;
 
     // Application Actions
-    KAction                            *rawCameraListAction;
-    KAction                            *libsInfoAction;
-    KAction                            *dbStatAction;
-    KAction                            *kipiHelpAction;
-    KAction                            *donateMoneyAction;
-    KAction                            *contributeAction;
-    KSelectAction                      *themeMenuAction;
-    QAction                            *addCameraSeparatorAction;
-    QAction                            *quitAction;
-    QAction                            *tipAction;
+    KAction*                            rawCameraListAction;
+    KAction*                            libsInfoAction;
+    KAction*                            dbStatAction;
+    KAction*                            kipiHelpAction;
+    KAction*                            donateMoneyAction;
+    KAction*                            contributeAction;
+    KSelectAction*                      themeMenuAction;
+    QAction*                            addCameraSeparatorAction;
+    QAction*                            quitAction;
+    QAction*                            tipAction;
 
-    QSignalMapper                      *backwardSignalMapper;
-    QSignalMapper                      *forwardSignalMapper;
-    QActionGroup                       *manualCameraActionGroup;
-    QActionGroup                       *solidCameraActionGroup;
-    QActionGroup                       *solidUsmActionGroup;
+    QSignalMapper*                      backwardSignalMapper;
+    QSignalMapper*                      forwardSignalMapper;
+    QActionGroup*                       manualCameraActionGroup;
+    QActionGroup*                       solidCameraActionGroup;
+    QActionGroup*                       solidUsmActionGroup;
+    QActionGroup*                       exifOrientationActionGroup;
 
     QMap<QString, QPointer<CameraUI> >  cameraUIMap;
 
-    QEventLoop                         *eventLoop;
+    QEventLoop*                         eventLoop;
     QString                             solidErrorMessage;
 
-    AlbumIconViewFilter                *albumIconViewFilter;
-    SplashScreen                       *splashScreen;
-    DCOPIface                          *dcopIface;
-    ImagePluginLoader                  *imagePluginsLoader;
-    KipiInterface                      *kipiInterface;
-    DigikamView                        *view;
-    CameraList                         *cameraList;
-    TemplateManager                    *templateManager;
-    StatusZoomBar                      *statusZoomBar;
-    StatusProgressBar                  *statusProgressBar;
-    StatusNavigateBar                  *statusNavigateBar;
+    AlbumIconViewFilter*                albumIconViewFilter;
+    SplashScreen*                       splashScreen;
+    DCOPIface*                          dcopIface;
+    ImagePluginLoader*                  imagePluginsLoader;
+    KipiInterface*                      kipiInterface;
+    DigikamView*                        view;
+    CameraList*                         cameraList;
+    TemplateManager*                    templateManager;
+    StatusZoomBar*                      statusZoomBar;
+    StatusProgressBar*                  statusProgressBar;
+    StatusNavigateBar*                  statusNavigateBar;
     QString                             statusBarSelectionText;
 
-    KIPI::PluginLoader                 *kipiPluginLoader;
+    KIPI::PluginLoader*                 kipiPluginLoader;
 };
 
 }  // namespace Digikam

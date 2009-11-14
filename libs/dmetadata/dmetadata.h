@@ -46,6 +46,7 @@ using namespace KExiv2Iface;
 namespace Digikam
 {
 class Template;
+class IccProfile;
 
 class DIGIKAM_EXPORT DMetadata : public KExiv2Iface::KExiv2
 {
@@ -96,6 +97,13 @@ public:
         camera model/maker.
      */
     QString getLensDescription() const;
+
+    /** Reads an IccProfile that is described or embedded in the metadata.
+        This method does retrieve profiles embedded in the image but not the metadata,
+        e.g. embedded profiles in JPEG images.
+        Returns a null profile if no profile is found.
+     */
+    IccProfile getIccProfile() const;
 
     PhotoInfoContainer getPhotographInformation() const;
 

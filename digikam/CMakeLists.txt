@@ -59,6 +59,11 @@ INCLUDE_DIRECTORIES(
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/gpssearch
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/timeline
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/firstrun
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/common
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/subparsers
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/modifiers
                      ${CMAKE_CURRENT_SOURCE_DIR}/../digikam
 
                      # config-digikam.h
@@ -97,6 +102,7 @@ SET(digikamcore_LIB_SRCS
                         ${libthemeengine_SRCS}
                         ${libpgf_SRCS}
                         ${pgfutils_SRCS}
+                        ${libdigikamhelpers_SRCS}
 
                         # widgets and dialogs
                         ${libcommonwidgets_SRCS}
@@ -106,7 +112,7 @@ SET(digikamcore_LIB_SRCS
                         ${libdialogs_SRCS}
                         ${libimageproperties_SRCS}
 
-                        # utitilies
+                        # utilities
                         ${libslideshow_SRCS}
                         ${libdimgcanvas_SRCS}
                         ${libdimgeditorprintiface_SRCS}
@@ -116,6 +122,7 @@ SET(digikamcore_LIB_SRCS
 
 KDE4_ADD_UI_FILES(digikamcore_LIB_SRCS
                   ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/printiface/printoptionspage.ui
+                  ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/subparsers/dateparserdialogwidget.ui
                  )
 
 KDE4_ADD_KCFG_FILES(digikamcore_LIB_SRCS
@@ -132,9 +139,8 @@ TARGET_LINK_LIBRARIES(digikamcore
                       ${KDE4_KDEUI_LIBS}
                       ${KDE4_KUTILS_LIBS}
                       ${KDE4_SOLID_LIBS}
-                      ${KDE4_KDE3SUPPORT_LIBRARY}
-                      ${QT_QT3SUPPORT_LIBRARY}
                       ${QT_QTSQL_LIBRARY}
+                      ${QT_QT3SUPPORT_LIBRARY}
 
                       ${JPEG_LIBRARIES}
                       ${TIFF_LIBRARIES}
@@ -154,6 +160,10 @@ IF(MARBLEWIDGET_FOUND)
     TARGET_LINK_LIBRARIES(digikamcore ${LIBMARBLEWIDGET_LIBRARY})
 ENDIF(MARBLEWIDGET_FOUND)
 
+IF(Q_WS_X11)
+    TARGET_LINK_LIBRARIES(digikamcore ${X11_LIBRARIES})
+ENDIF(Q_WS_X11)
+
 SET_TARGET_PROPERTIES(digikamcore PROPERTIES VERSION 1.0.0 SOVERSION 1)
 IF(WIN32)
     SET_TARGET_PROPERTIES(digikamcore PROPERTIES COMPILE_FLAGS -DJPEG_STATIC)
@@ -164,8 +174,13 @@ INSTALL(TARGETS digikamcore ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 # Shared libdigikamdatabase ########################################################
 
-# Disable libsqlite2 C code warnings.
-SET_SOURCE_FILES_PROPERTIES(${libsqlite2_SRCS} PROPERTIES COMPILE_FLAGS "-w")
+# Disable libsqlite2 C code warnings plus specific flags.
+IF(WIN32)
+    SET_SOURCE_FILES_PROPERTIES(${libsqlite2_SRCS} PROPERTIES COMPILE_FLAGS "-w -D_OFF_T_ -D_OFF_T_DEFINED")
+ELSE(WIN32)
+    SET_SOURCE_FILES_PROPERTIES(${libsqlite2_SRCS} PROPERTIES COMPILE_FLAGS "-w")
+ENDIF(WIN32)
+
 # Disable libpgf warnings.
 SET_SOURCE_FILES_PROPERTIES(${libpgf_SRCS} PROPERTIES COMPILE_FLAGS "-w")
 
@@ -191,15 +206,11 @@ TARGET_LINK_LIBRARIES(digikamdatabase
                      )
 
 SET_TARGET_PROPERTIES(digikamdatabase PROPERTIES VERSION 1.0.0 SOVERSION 1 )
-IF(WIN32)
-    SET_SOURCE_FILES_PROPERTIES(${libsqlite2_SRCS} PROPERTIES COMPILE_FLAGS "-D_OFF_T_ -D_OFF_T_DEFINED")
-ENDIF(WIN32)
 INSTALL(TARGETS digikamdatabase ${INSTALL_TARGETS_DEFAULT_ARGS} )
-
 
 # digiKam nepomuk services #########################################################
 
-IF (${KDE_VERSION} VERSION_GREATER "4.2.70")
+IF (NEPOMUK_FOUND)
 
     set(digikamnepomukservices_SRCS ${libnepomukservices_SRCS} )
 
@@ -228,7 +239,7 @@ IF (${KDE_VERSION} VERSION_GREATER "4.2.70")
     TARGETS digikamnepomukservice
     DESTINATION ${PLUGIN_INSTALL_DIR})
 
-ENDIF (${KDE_VERSION} VERSION_GREATER "4.2.70")
+ENDIF (NEPOMUK_FOUND)
 
 # digiKam binary progam #########################################################
 
@@ -249,6 +260,7 @@ SET(digikam_SRCS ${libdimgimagewindow_SRCS}
                  ${libdigikamgui_SRCS}
                  ${libfirstrun_SRCS}
                  ${libtemplate_SRCS}
+                 ${libadvancedrename_SRCS}
 
                  main.cpp
     )

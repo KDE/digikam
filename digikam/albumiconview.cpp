@@ -69,7 +69,6 @@ extern "C"
 #include <kactioncollection.h>
 #include <kapplication.h>
 #include <kcalendarsystem.h>
-#include <kdebug.h>
 #include <kdeversion.h>
 #include <kglobal.h>
 #include <kiconeffect.h>
@@ -87,6 +86,7 @@ extern "C"
 #include <ktrader.h>
 #include <kurl.h>
 #include <kwindowsystem.h>
+#include <kdebug.h>
 
 // LibKDcraw includes
 
@@ -109,7 +109,6 @@ extern "C"
 #include "albumselectdialog.h"
 #include "albumsettings.h"
 #include "cameraui.h"
-#include "constants.h"
 #include "contextmenuhelper.h"
 #include "databaseaccess.h"
 #include "databasetransaction.h"
@@ -198,14 +197,14 @@ public:
 
     KUrl                             itemUrlToFind;
 
-    AlbumLister                     *imageLister;
-    Album                           *currentAlbum;
-    const AlbumSettings             *albumSettings;
+    AlbumLister*                     imageLister;
+    Album*                           currentAlbum;
+    const AlbumSettings*             albumSettings;
     QHash<int, AlbumIconGroupItem*>  albumDict;
 
     ThumbnailSize                    thumbSize;
 
-    AlbumIconViewToolTip            *toolTip;
+    AlbumIconViewToolTip*            toolTip;
 };
 
 AlbumIconView::AlbumIconView(QWidget* parent)
@@ -411,7 +410,7 @@ void AlbumIconView::slotImageListerNewItems(const ImageInfoList& itemList)
         PAlbum *album = AlbumManager::instance()->findPAlbum(it->albumId());
         if (!album)
         {
-            kWarning(50003) << "No album for item: " << it->name()
+            kWarning() << "No album for item: " << it->name()
                             << ", albumID: " << it->albumId();
             continue;
         }
@@ -514,7 +513,7 @@ void AlbumIconView::slotDoubleClicked(IconItem *item)
 {
     if (!item) return;
 
-    if (d->albumSettings->getItemRightClickAction() == AlbumSettings::ShowPreview)
+    if (d->albumSettings->getItemLeftClickAction() == AlbumSettings::ShowPreview)
     {
         // icon effect takes too much time
         //KIconEffect::visualActivate(viewport(), contentsRectToViewport(item->rect()));
@@ -1750,7 +1749,7 @@ void AlbumIconView::slotSetExifOrientation( int orientation )
 
     for( it = urlList.begin(); it != urlList.end(); ++it )
     {
-        kDebug(50003) << "Setting Exif Orientation tag to " << orientation;
+        kDebug() << "Setting Exif Orientation tag to " << orientation;
 
         DMetadata metadata((*it).toLocalFile());
         DMetadata::ImageOrientation o = (DMetadata::ImageOrientation)orientation;
@@ -2311,7 +2310,7 @@ void AlbumIconView::slotEditRatingFromItem(int rating)
     updateContents();
 }
 
-void AlbumIconView::slotNewAlbumFromSelection()
+void AlbumIconView::slotMoveSelectionToAlbum()
 {
     KUrl::List kioURLs;
     QList<qlonglong> selectedImageIDs;

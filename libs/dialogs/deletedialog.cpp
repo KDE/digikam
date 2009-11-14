@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2004 by Michael Pyne <michael.pyne@kdemail.net>
  * Copyright (C) 2006 by Ian Monroe <ian@monroe.nu>
+ * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -38,17 +39,18 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <klistwidget.h>
 #include <kiconloader.h>
 #include <kstandarddirs.h>
 #include <klocale.h>
 #include <kstdguiitem.h>
 #include <kpushbutton.h>
+#include <kdebug.h>
 
 // Local includes
 
 #include "albumsettings.h"
+#include "databaseurl.h"
 
 namespace Digikam
 {
@@ -115,10 +117,6 @@ DeleteWidget::DeleteWidget(QWidget *parent)
 
     m_doNotShowAgain = new QCheckBox(m_checkBoxStack);
     m_doNotShowAgain->setGeometry(QRect(0, 0, 100, 30));
-    m_doNotShowAgain->setToolTip(i18n("If checked, this dialog will no longer be shown, and files will "
-                                      "be directly moved to the Trash."));
-    m_doNotShowAgain->setWhatsThis(i18n("If this box is checked, this dialog will no longer be shown, "
-                                        "and files will be directly moved to the Trash."));
     m_doNotShowAgain->setText(i18n("Do not &ask again"));
 
     QVBoxLayout *vbox = new QVBoxLayout(this);
@@ -147,7 +145,7 @@ void DeleteWidget::setFiles(const KUrl::List& files)
         if( (*it).isLocalFile() ) //path is null for non-local
             m_fileList->addItem( (*it).toLocalFile() );
         else if ( (*it).protocol() == "digikamalbums")
-            m_fileList->addItem( (*it).path() );
+            m_fileList->addItem( DatabaseUrl(*it).fileUrl().toLocalFile() );
         else
             m_fileList->addItem( (*it).prettyUrl() );
     }
@@ -173,6 +171,22 @@ void DeleteWidget::setListMode(DeleteDialogMode::ListMode listMode)
 
 void DeleteWidget::updateText()
 {
+    // set "do not ask again checkbox text
+    if (m_deleteMode == DeleteDialogMode::DeletePermanently)
+    {
+        m_doNotShowAgain->setToolTip(i18n("If checked, this dialog will no longer be shown, and files will "
+                "be directly and permanently deleted."));
+        m_doNotShowAgain->setWhatsThis(i18n("If this box is checked, this dialog will no longer be shown, "
+                "and files will be directly and permanently deleted."));
+    }
+    else
+    {
+        m_doNotShowAgain->setToolTip(i18n("If checked, this dialog will no longer be shown, and files will "
+                "be directly moved to the Trash."));
+        m_doNotShowAgain->setWhatsThis(i18n("If this box is checked, this dialog will no longer be shown, "
+                "and files will be directly moved to the Trash."));
+    }
+
     switch (m_listMode)
     {
         case DeleteDialogMode::Files:
@@ -191,9 +205,9 @@ void DeleteWidget::updateText()
                 m_deleteText->setText(i18n("These items will be moved to Trash."));
                 m_warningIcon->setPixmap(KIconLoader::global()->loadIcon("user-trash-full",
                                          KIconLoader::Desktop, KIconLoader::SizeLarge));
+                m_numFiles->setText(i18np("<b>1</b> file selected.", "<b>%1</b> files selected.",
+                        m_fileList->count()));
             }
-            m_numFiles->setText(i18np("<b>1</b> file selected.", "<b>%1</b> files selected.",
-                                      m_fileList->count()));
             break;
         }
         case DeleteDialogMode::Albums:
@@ -252,7 +266,8 @@ void DeleteWidget::updateText()
 DeleteDialog::DeleteDialog(QWidget *parent)
             : KDialog(parent),
               m_saveShouldDeleteUserPreference(true),
-              m_saveDoNotShowAgain(false),
+              m_saveDoNotShowAgainTrash(false),
+              m_saveDoNotShowAgainPermanent(false),
               m_trashGuiItem(i18n("&Move to Trash"), "user-trash-full")
 {
     setButtons(User1 | Cancel);
@@ -287,6 +302,11 @@ bool DeleteDialog::confirmDeleteList(const KUrl::List& condemnedFiles,
         if (!AlbumSettings::instance()->getShowTrashDeleteDialog())
             return true;
     }
+    else if (deleteMode == DeleteDialogMode::NoChoiceDeletePermanently)
+    {
+        if (!AlbumSettings::instance()->getShowPermanentDeleteDialog())
+            return true;
+    }
     return exec() == QDialog::Accepted;
 }
 
@@ -304,10 +324,15 @@ void DeleteDialog::slotUser1Clicked()
     {
         settings->setUseTrash(!shouldDelete());
     }
-    if (m_saveDoNotShowAgain)
+    if (m_saveDoNotShowAgainTrash)
     {
-        kDebug(50003) << "setShowTrashDeleteDialog " << !m_widget->m_doNotShowAgain->isChecked();
+        kDebug() << "setShowTrashDeleteDialog " << !m_widget->m_doNotShowAgain->isChecked();
         settings->setShowTrashDeleteDialog(!m_widget->m_doNotShowAgain->isChecked());
+    }
+    if (m_saveDoNotShowAgainPermanent)
+    {
+        kDebug() << "setShowPermanentDeleteDialog " << !m_widget->m_doNotShowAgain->isChecked();
+        settings->setShowPermanentDeleteDialog(!m_widget->m_doNotShowAgain->isChecked());
     }
 
     settings->saveSettings();
@@ -337,13 +362,15 @@ void DeleteDialog::presetDeleteMode(DeleteDialogMode::DeleteMode mode)
             // access the widget directly, signals will be fired to DeleteDialog and DeleteWidget
             m_widget->m_shouldDelete->setChecked(false);
             m_widget->m_checkBoxStack->setCurrentWidget(m_widget->m_doNotShowAgain);
-            m_saveDoNotShowAgain = true;
+            m_saveDoNotShowAgainTrash = true;
             break;
         }
         case DeleteDialogMode::NoChoiceDeletePermanently:
         {
             m_widget->m_shouldDelete->setChecked(true);
-            m_widget->m_checkBoxStack->hide();
+            m_widget->m_checkBoxStack->setCurrentWidget(m_widget->m_doNotShowAgain);
+            m_saveDoNotShowAgainPermanent = true;
+//            m_widget->m_checkBoxStack->hide();
             break;
         }
         case DeleteDialogMode::UserPreference:

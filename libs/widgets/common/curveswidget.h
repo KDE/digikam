@@ -31,10 +31,15 @@
 #include <QtGui/QMouseEvent>
 #include <QtGui/QPaintEvent>
 
+// KDE includes
+
+#include <kconfiggroup.h>
+
 // Local includes
 
 #include "dcolor.h"
 #include "digikam_export.h"
+#include "globals.h"
 
 namespace Digikam
 {
@@ -45,40 +50,50 @@ class CurvesWidgetPriv;
 
 class DIGIKAM_EXPORT CurvesWidget : public QWidget
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
 
-    enum HistogramType
-    {
-        ValueHistogram = 0,       // Luminosity.
-        RedChannelHistogram,      // Red channel.
-        GreenChannelHistogram,    // Green channel.
-        BlueChannelHistogram,     // Blue channel.
-        AlphaChannelHistogram     // Alpha channel.
-    };
-
-    enum HistogramScale
-    {
-        LinScaleHistogram=0,      // Linear scale.
-        LogScaleHistogram         // Logarithmic scale.
-    };
-
-public:
-
-    CurvesWidget(int w, int h, QWidget *parent, bool readOnly=false);
+    CurvesWidget(int w, int h, QWidget* parent, bool readOnly=false);
 
     CurvesWidget(int w, int h,                         // Widget size.
-                 uchar *i_data, uint i_w, uint i_h,    // Full image info.
+                 uchar* i_data, uint i_w, uint i_h,    // Full image info.
                  bool i_sixteenBits,                   // 8 or 16 bits image.
-                 QWidget *parent=0,                    // Parent widget instance.
+                 QWidget* parent=0,                    // Parent widget instance.
                  bool readOnly=false);                 // If true : widget with full edition mode capabilities.
                                                        // If false : display curve data only without edition.
 
     ~CurvesWidget();
 
     void setup(int w, int h, bool readOnly);
-    void updateData(uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits);
+
+    /**
+     * Saves the currently created curve to the given group with prefix as a
+     * prefix for the curve point config entries.
+     *
+     * @param group group to save the curve to
+     * @param prefix prefix prepended to the point numbers in the config
+     */
+    void saveCurve(KConfigGroup& group, const QString& prefix);
+
+    /**
+     * Restores the curve tfrom the given group with prefix as a
+     * prefix for the curve point config entries.
+     *
+     * @param group group to restore the curve from
+     * @param prefix prefix prepended to the point numbers in the config
+     */
+    void restoreCurve(KConfigGroup& group, const QString& prefix);
+
+    /**
+     * Updates the image data the curve should be used for.
+     *
+     * @param i_data image data
+     * @param i_w width of the image
+     * @param i_h height of the image
+     * @param i_sicteenBits if true, the image is interpreted as having 16 bits
+     */
+    void updateData(uchar* i_data, uint i_w, uint i_h, bool i_sixteenBits);
 
     // Stop current histogram computations.
     void stopHistogramComputation();
@@ -86,18 +101,26 @@ public:
     void setDataLoading();
     void setLoadingFailed();
 
+    /**
+     * Resets the ui including the user specified curve.
+     */
     void reset();
+    /**
+     * Resets only the ui and keeps the curve.
+     */
+    void resetUI();
     void curveTypeChanged();
     void setCurveGuide(const DColor& color);
 
     ImageCurves* curves() const;
+    bool isSixteenBits();
 
 public:
 
-    int             m_channelType;     // Channel type to draw.
-    int             m_scaleType;       // Scale to use for drawing.
+    ChannelType     m_channelType;     // Channel type to draw.
+    HistogramScale  m_scaleType;       // Scale to use for drawing.
 
-    ImageHistogram *m_imageHistogram;
+    ImageHistogram* m_imageHistogram;
 
 Q_SIGNALS:
 
@@ -109,8 +132,8 @@ Q_SIGNALS:
 protected Q_SLOTS:
 
     void slotProgressTimerDone();
-    void slotCalculationStarted(const ImageHistogram *histogram);
-    void slotCalculationFinished(const ImageHistogram *histogram, bool success);
+    void slotCalculationStarted(const ImageHistogram* histogram);
+    void slotCalculationFinished(const ImageHistogram* histogram, bool success);
 
 protected:
 

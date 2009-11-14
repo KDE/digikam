@@ -24,10 +24,6 @@
 #ifndef IMAGECATEGORIZEDVIEW_H
 #define IMAGECATEGORIZEDVIEW_H
 
-// Qt includes
-
-// KDE includes
-
 // Local includes
 
 #include "imageinfo.h"
@@ -112,9 +108,11 @@ public Q_SLOTS:
 
     void setThumbnailSize(int size);
     /** Scroll the view to the given item when it becomes available */
-    void scrollToWhenAvailable(qlonglong imageId);
+    void setCurrentWhenAvailable(qlonglong imageId);
     /** Set as current item the item identified by its file url */
     void setCurrentUrl(const KUrl& url);
+    /** Set selected items identified by their file urls */
+    void setSelectedUrls(const KUrl::List& urlList);
 
 Q_SIGNALS:
 

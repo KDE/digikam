@@ -40,9 +40,9 @@ extern "C"
 
 // KDE includes
 
-#include <kdebug.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -84,13 +84,13 @@ public:
 
     KUrl            workingUrl;
 
-    BatchTool      *tool;
+    BatchTool*      tool;
 };
 
 ActionThread::ActionThread(QObject *parent)
             : QThread(parent), d(new ActionThreadPriv)
 {
-    qRegisterMetaType<ActionData>("ActionData");
+    qRegisterMetaType<ActionData>();
 }
 
 ActionThread::~ActionThread()
@@ -175,7 +175,7 @@ void ActionThread::run()
                 BatchToolSettings settings = set.settings;
                 inUrl                      = outUrl;
 
-                kDebug(50003) << "Tool Index: " << index;
+                kDebug() << "Tool Index: " << index;
 
                 ActionData ad2;
                 ad2.fileUrl = t->item.itemUrl;
@@ -239,7 +239,7 @@ void ActionThread::run()
 
             for (KUrl::List::const_iterator it = tmp2del.constBegin(); it != tmp2del.constEnd() ; ++it)
             {
-                unlink(QFile::encodeName((*it).path()));
+                unlink(QFile::encodeName((*it).toLocalFile()));
             }
         }
 

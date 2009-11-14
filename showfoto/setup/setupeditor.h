@@ -39,6 +39,15 @@ class SetupEditor : public QScrollArea
 
 public:
 
+    enum SortOrder
+    {
+        SortByDate = 0,
+        SortByName,
+        SortByFileSize
+    };
+
+public:
+
     SetupEditor(QWidget* parent = 0);
     ~SetupEditor();
 

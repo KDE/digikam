@@ -38,8 +38,8 @@
 #include "lcmsprf.h"
 
 
-BOOL cdecl cmsxComputeMatrixShaper(const char* ReferenceSheet,                              
-                             const char* MeasurementSheet,  
+BOOL cdecl cmsxComputeMatrixShaper(const char* ReferenceSheet,
+                             const char* MeasurementSheet,
                              int Medium,
                              LPGAMMATABLE TransferCurves[3],
                              LPcmsCIEXYZ WhitePoint,
@@ -63,16 +63,16 @@ void Div100(LPcmsCIEXYZ xyz)
 
 static
 BOOL ComputeWhiteAndBlackPoints(LPMEASUREMENT Linearized,
-                                LPGAMMATABLE TransferCurves[3], 
+                                LPGAMMATABLE TransferCurves[3],
                                 LPcmsCIEXYZ Black, LPcmsCIEXYZ White)
 {
 
-    double Zeroes[3], Ones[3], lmin[3], lmax[3];    
+    double Zeroes[3], Ones[3], lmin[3], lmax[3];
 
     SETOFPATCHES Neutrals = cmsxPCollBuildSet(Linearized, false);
-    
+
     cmsxPCollPatchesNearNeutral(Linearized, Linearized->Allowed,
-                                                    15, Neutrals); 
+                                                    15, Neutrals);
 
     Zeroes[0] = Zeroes[1] = Zeroes[2] = 0.0;
     Ones[0]   = Ones[1]   = Ones[2]   = 255.0;
@@ -81,16 +81,16 @@ BOOL ComputeWhiteAndBlackPoints(LPMEASUREMENT Linearized,
     cmsxApplyLinearizationTable(Zeroes,  TransferCurves, lmin);
     cmsxApplyLinearizationTable(Ones,    TransferCurves, lmax);
 
-    
+
     /* Global regression to find White & Black points */
-    if (!cmsxRegressionInterpolatorRGB(Linearized, PT_XYZ,                                       
+    if (!cmsxRegressionInterpolatorRGB(Linearized, PT_XYZ,
                                        4,
                                        true,
                                        12,
                                        lmin[0], lmin[1], lmin[2],
                                        Black)) return false;
 
-    if (!cmsxRegressionInterpolatorRGB(Linearized, PT_XYZ,                                       
+    if (!cmsxRegressionInterpolatorRGB(Linearized, PT_XYZ,
                                        4,
                                        true,
                                        12,
@@ -99,9 +99,9 @@ BOOL ComputeWhiteAndBlackPoints(LPMEASUREMENT Linearized,
 
     _cmsxClampXYZ100(White);
     _cmsxClampXYZ100(Black);
-    
+
     return true;
-    
+
 }
 
 
@@ -109,16 +109,16 @@ BOOL ComputeWhiteAndBlackPoints(LPMEASUREMENT Linearized,
 
 static
 BOOL ComputePrimary(LPMEASUREMENT Linearized,
-                    LPGAMMATABLE TransferCurves[3], 
+                    LPGAMMATABLE TransferCurves[3],
                     int n,
                     LPcmsCIExyY Primary)
 {
 
-    double Ones[3], lmax[3];    
+    double Ones[3], lmax[3];
     cmsCIEXYZ PrimXYZ;
     SETOFPATCHES SetPrimary;
     int nR;
-           
+
 
     /* At first, try to see if primaries are already in measurement */
 
@@ -130,19 +130,19 @@ BOOL ComputePrimary(LPMEASUREMENT Linearized,
     Ones[n]  = 255.0;
 
     cmsxApplyLinearizationTable(Ones,  TransferCurves, lmax);
-    
+
     /* Do incremental regression to find primaries */
-    if (!cmsxRegressionInterpolatorRGB(Linearized, PT_XYZ,                                       
+    if (!cmsxRegressionInterpolatorRGB(Linearized, PT_XYZ,
                                        4,
-                                       false, 
+                                       false,
                                        12,
-                                       lmax[0], lmax[1], lmax[2],                                   
+                                       lmax[0], lmax[1], lmax[2],
                                        &PrimXYZ)) return false;
 
     _cmsxClampXYZ100(&PrimXYZ);
     cmsXYZ2xyY(Primary, &PrimXYZ);
     return true;
-    
+
 
 }
 
@@ -157,8 +157,8 @@ double Clip(double d)
 }
 
 
-BOOL cmsxComputeMatrixShaper(const char* ReferenceSheet,                                
-                             const char* MeasurementSheet, 
+BOOL cmsxComputeMatrixShaper(const char* ReferenceSheet,
+                             const char* MeasurementSheet,
                              int Medium,
                              LPGAMMATABLE TransferCurves[3],
                              LPcmsCIEXYZ WhitePoint,
@@ -166,7 +166,7 @@ BOOL cmsxComputeMatrixShaper(const char* ReferenceSheet,
                              LPcmsCIExyYTRIPLE Primaries)
 {
 
-    MEASUREMENT Linearized;     
+    MEASUREMENT Linearized;
     cmsCIEXYZ Black, White;
     cmsCIExyYTRIPLE  PrimarySet;
     LPPATCH PatchWhite, PatchBlack;
@@ -175,7 +175,7 @@ BOOL cmsxComputeMatrixShaper(const char* ReferenceSheet,
 
     /* Load sheets */
 
-    if (!cmsxPCollBuildMeasurement(&Linearized, 
+    if (!cmsxPCollBuildMeasurement(&Linearized,
                              ReferenceSheet,
                              MeasurementSheet,
                              PATCH_HAS_XYZ|PATCH_HAS_RGB)) return false;
@@ -189,23 +189,23 @@ BOOL cmsxComputeMatrixShaper(const char* ReferenceSheet,
     /* Try to see if proper primaries, white and black already present */
     PatchWhite = cmsxPCollFindWhite(&Linearized, Linearized.Allowed, &Distance);
     if (Distance != 0)
-        PatchWhite = NULL;  
+        PatchWhite = NULL;
 
     PatchBlack = cmsxPCollFindBlack(&Linearized, Linearized.Allowed, &Distance);
     if (Distance != 0)
-        PatchBlack = NULL;  
+        PatchBlack = NULL;
 
     PatchRed = cmsxPCollFindPrimary(&Linearized, Linearized.Allowed, 0, &Distance);
     if (Distance != 0)
-        PatchRed = NULL;    
+        PatchRed = NULL;
 
     PatchGreen = cmsxPCollFindPrimary(&Linearized, Linearized.Allowed, 1, &Distance);
     if (Distance != 0)
-        PatchGreen = NULL;  
+        PatchGreen = NULL;
 
     PatchBlue = cmsxPCollFindPrimary(&Linearized, Linearized.Allowed, 2, &Distance);
     if (Distance != 0)
-        PatchBlue= NULL;    
+        PatchBlue= NULL;
 
     /* If we got primaries, then we can also get prelinearization */
     /* by  Levenberg-Marquardt. This applies on monitor profiles */
@@ -217,7 +217,7 @@ BOOL cmsxComputeMatrixShaper(const char* ReferenceSheet,
         MAT3 Mat, MatInv;
         LPSAMPLEDCURVE Xr,Yr, Xg, Yg, Xb, Yb;
         int i, nRes, cnt;
-        
+
         VEC3init(&Mat.v[0], PatchRed->XYZ.X, PatchGreen->XYZ.X, PatchBlue->XYZ.X);
         VEC3init(&Mat.v[1], PatchRed->XYZ.Y, PatchGreen->XYZ.Y, PatchBlue->XYZ.Y);
         VEC3init(&Mat.v[2], PatchRed->XYZ.Z, PatchGreen->XYZ.Z, PatchBlue->XYZ.Z);
@@ -233,7 +233,7 @@ BOOL cmsxComputeMatrixShaper(const char* ReferenceSheet,
         Yg = cmsAllocSampledCurve(nRes);
         Xb = cmsAllocSampledCurve(nRes);
         Yb = cmsAllocSampledCurve(nRes);
-                
+
         /* Convert XYZ of all patches to RGB */
         cnt = 0;
         for (i=0; i < Linearized.nPatches; i++) {
@@ -242,7 +242,7 @@ BOOL cmsxComputeMatrixShaper(const char* ReferenceSheet,
 
                 VEC3 RGBprime, XYZ;
                 LPPATCH p;
-                
+
                 p = Linearized.Patches + i;
                 XYZ.n[0] = p -> XYZ.X;
                 XYZ.n[1] = p -> XYZ.Y;
@@ -257,7 +257,7 @@ BOOL cmsxComputeMatrixShaper(const char* ReferenceSheet,
                 Yg ->Values[cnt] = Clip(RGBprime.n[1]);
 
                 Xb ->Values[cnt] = p ->Colorant.RGB[2];
-                Yb ->Values[cnt] = Clip(RGBprime.n[2]); 
+                Yb ->Values[cnt] = Clip(RGBprime.n[2]);
 
                 cnt++;
 
@@ -269,7 +269,7 @@ BOOL cmsxComputeMatrixShaper(const char* ReferenceSheet,
         TransferCurves[2] = cmsxEstimateGamma(Xb, Yb, 1024);
 
         if (WhitePoint) {
-        
+
             WhitePoint->X = PatchWhite->XYZ.X;
             WhitePoint->Y= PatchWhite ->XYZ.Y;
             WhitePoint->Z= PatchWhite ->XYZ.Z;
@@ -298,7 +298,7 @@ BOOL cmsxComputeMatrixShaper(const char* ReferenceSheet,
         cmsFreeSampledCurve(Xb);
         cmsFreeSampledCurve(Yb);
 
-        cmsxPCollFreeMeasurements(&Linearized); 
+        cmsxPCollFreeMeasurements(&Linearized);
 
         return true;
     }
@@ -307,40 +307,37 @@ BOOL cmsxComputeMatrixShaper(const char* ReferenceSheet,
 
 
     /* Compute prelinearization */
-    cmsxComputeLinearizationTables(&Linearized, PT_XYZ, TransferCurves, 1024, Medium);   
-      
+    cmsxComputeLinearizationTables(&Linearized, PT_XYZ, TransferCurves, 1024, Medium);
+
     /* Linearize measurements */
     cmsxPCollLinearizePatches(&Linearized, Linearized.Allowed, TransferCurves);
-       
+
 
     /* Endpoints */
     ComputeWhiteAndBlackPoints(&Linearized, TransferCurves, &Black, &White);
-        
+
     /* Primaries */
     ComputePrimary(&Linearized, TransferCurves, 0, &PrimarySet.Red);
     ComputePrimary(&Linearized, TransferCurves, 1, &PrimarySet.Green);
     ComputePrimary(&Linearized, TransferCurves, 2, &PrimarySet.Blue);
 
-    
+
     if (BlackPoint) {
-        *BlackPoint = Black;            
+        *BlackPoint = Black;
         Div100(BlackPoint);
     }
 
     if (WhitePoint) {
         *WhitePoint = White;
-        Div100(WhitePoint);     
+        Div100(WhitePoint);
     }
 
 
     if (Primaries) {
-        *Primaries = PrimarySet;    
+        *Primaries = PrimarySet;
     }
-    
-    cmsxPCollFreeMeasurements(&Linearized); 
-    
+
+    cmsxPCollFreeMeasurements(&Linearized);
+
     return true;
 }
-
-
-

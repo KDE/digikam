@@ -26,16 +26,15 @@
 
 // Qt includes
 
-#include <QWidget>
 #include <QFileInfo>
+#include <QWidget>
 
 // KDE includes
 
-#include <kconfiggroup.h>
 #include <kconfig.h>
-#include <klocale.h>
-#include <kdebug.h>
+#include <kconfiggroup.h>
 #include <kiconloader.h>
+#include <klocale.h>
 
 // Local includes
 
@@ -73,7 +72,7 @@ BatchToolSettings Convert2PNG::defaultSettings()
     return settings;
 }
 
-void Convert2PNG::assignSettings2Widget()
+void Convert2PNG::slotAssignSettings2Widget()
 {
     m_settings->setCompressionValue(settings()["Quality"].toInt());
 }
@@ -94,7 +93,8 @@ bool Convert2PNG::toolOperations()
 {
     if (!loadToDImg()) return false;
 
-    image().setAttribute("quality", settings()["Quality"].toInt());
+    int PNGCompression = PNGSettings::convertCompressionForLibPng(settings()["Quality"].toInt());
+    image().setAttribute("quality", PNGCompression);
 
     return (savefromDImg());
 }

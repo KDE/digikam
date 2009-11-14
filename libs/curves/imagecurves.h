@@ -49,6 +49,21 @@ class DIGIKAM_EXPORT ImageCurves
 
 public:
 
+    /**
+     * The max number of points contained in a curve.
+     */
+    const static int NUM_POINTS;
+
+    /**
+     * Number of channels in a curve.
+     */
+    const static int NUM_CHANNELS;
+
+    /**
+     * Curve points have to multiplied with this value for 16 bit images.
+     */
+    const static int MULTIPLIER_16BIT;
+
     enum CurveType
     {
         CURVE_SMOOTH = 0,            // Smooth curve type
@@ -61,6 +76,14 @@ public:
 
     ImageCurves(bool sixteenBit);
     ~ImageCurves();
+
+    /**
+     * Fills this curves with the data supplied by another curves object. This
+     * ensures that 8 and 16 bit curves are properly converted.
+     *
+     * @param otherCurves other curves object to adapt config from
+     */
+    void fillFromOtherCurvers(ImageCurves *otherCurves);
 
     // Methods for to manipulate the curves data.
 
@@ -79,6 +102,7 @@ public:
     void   setCurvePointX(int channel, int point, int x);
     void   setCurvePointY(int channel, int point, int y);
     void   setCurveType(int channel, CurveType type);
+    void   setCurveType(CurveType type);
 
     void   setCurvePoint(int channel, int point, const QPoint& val);
     void   setCurvePoints(int channel, const QPolygon& vals);
@@ -86,8 +110,10 @@ public:
     int    getCurveValue(int channel, int bin);
     int    getCurvePointX(int channel, int point);
     int    getCurvePointY(int channel, int point);
-    int    getCurveType(int channel);
+    CurveType getCurveType(int channel);
 
+    static QPoint getDisabledValue();
+    bool isCurvePointEnabled(int channel, int point) const;
     QPoint getCurvePoint(int channel, int point);
     QPolygon getCurvePoints(int channel);
 

@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="16" name="queuemgrwindow" >
+<gui version="17" name="queuemgrwindow" >
 
 <MenuBar>
 
@@ -52,7 +52,7 @@
 
 </MenuBar>
 
-<ToolBar name="ToolBar" ><text>Main Toolbar</text>
+<ToolBar name="mainToolBar" ><text>Main Toolbar</text>
      <Action name="queuemgr_run" />
      <Action name="queuemgr_stop" />
      <Separator/>

@@ -36,6 +36,7 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "icctransform.h"
 
 class QWidget;
 
@@ -48,7 +49,7 @@ class DIGIKAM_EXPORT ICCProfileInfoDlg : public KDialog
 
 public:
 
-    ICCProfileInfoDlg(QWidget *parent, const QString& profilePath, const QByteArray& profileData=QByteArray());
+    ICCProfileInfoDlg(QWidget *parent, const QString& profilePath, const IccProfile& profileData = IccProfile());
     ~ICCProfileInfoDlg();
 };
 

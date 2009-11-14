@@ -30,8 +30,8 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 namespace Digikam
 {
@@ -161,8 +161,8 @@ public:
         countryCodeMap.insert( "KAZ", i18n("Kazakhstan") );
         countryCodeMap.insert( "KEN", i18n("Kenya") );
         countryCodeMap.insert( "KIR", i18n("Kiribati") );
-        countryCodeMap.insert( "PRK", i18n("Korea") );
-        countryCodeMap.insert( "KOR", i18n("Korea") );
+        countryCodeMap.insert( "PRK", i18n("North-Korea") );
+        countryCodeMap.insert( "KOR", i18n("South-Korea") );
         countryCodeMap.insert( "KWT", i18n("Kuwait") );
         countryCodeMap.insert( "KGZ", i18n("Kyrgyz Republic") );
         countryCodeMap.insert( "LAO", i18n("Lao") );

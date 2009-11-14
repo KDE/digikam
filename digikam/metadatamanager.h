@@ -24,10 +24,6 @@
 #ifndef METADATAMANAGER_H
 #define METADATAMANAGER_H
 
-// Qt includes
-
-// KDE includes
-
 // Local includes
 
 #include "imageinfo.h"

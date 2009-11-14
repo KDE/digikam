@@ -24,6 +24,8 @@
 #ifndef RGBTOOL_H
 #define RGBTOOL_H
 
+#include <QObject>
+
 // Local includes
 
 #include "editortool.h"

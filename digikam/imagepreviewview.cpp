@@ -41,7 +41,6 @@
 #include <kapplication.h>
 #include <kcursor.h>
 #include <kdatetable.h>
-#include <kdebug.h>
 #include <kdialog.h>
 #include <kiconloader.h>
 #include <klocale.h>
@@ -109,20 +108,20 @@ public:
     QString            nextPath;
     QString            previousPath;
 
-    QToolButton       *cornerButton;
+    QToolButton*       cornerButton;
 
-    KPopupFrame       *panIconPopup;
+    KPopupFrame*       panIconPopup;
 
-    PanIconWidget     *panIconWidget;
+    PanIconWidget*     panIconWidget;
 
     DImg               preview;
 
     ImageInfo          imageInfo;
 
-    PreviewLoadThread *previewThread;
-    PreviewLoadThread *previewPreloadThread;
+    PreviewLoadThread* previewThread;
+    PreviewLoadThread* previewPreloadThread;
 
-    AlbumWidgetStack  *stack;
+    AlbumWidgetStack*  stack;
 };
 
 ImagePreviewView::ImagePreviewView(QWidget *parent, AlbumWidgetStack *stack)
@@ -140,10 +139,7 @@ ImagePreviewView::ImagePreviewView(QWidget *parent, AlbumWidgetStack *stack)
 
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    d->cornerButton = new QToolButton(this);
-    d->cornerButton->setIcon(SmallIcon("transform-move"));
-    d->cornerButton->hide();
-    d->cornerButton->setToolTip( i18n("Pan the image to a region"));
+    d->cornerButton = PanIconWidget::button();
     setCornerWidget(d->cornerButton);
 
     // ------------------------------------------------------------
@@ -229,20 +225,22 @@ void ImagePreviewView::setImagePath(const QString& path)
     if (!d->previewThread)
     {
         d->previewThread = new PreviewLoadThread();
+        d->previewThread->setDisplayingWidget(this);
         connect(d->previewThread, SIGNAL(signalImageLoaded(const LoadingDescription &, const DImg &)),
                 this, SLOT(slotGotImagePreview(const LoadingDescription &, const DImg&)));
     }
     if (!d->previewPreloadThread)
     {
         d->previewPreloadThread = new PreviewLoadThread();
+        d->previewPreloadThread->setDisplayingWidget(this);
         connect(d->previewPreloadThread, SIGNAL(signalImageLoaded(const LoadingDescription &, const DImg &)),
                 this, SLOT(slotNextPreload()));
     }
 
     if (d->loadFullImageSize)
-        d->previewThread->loadHighQuality(LoadingDescription(path, 0, AlbumSettings::instance()->getExifRotate()));
+        d->previewThread->loadHighQuality(path, AlbumSettings::instance()->getExifRotate());
     else
-        d->previewThread->load(LoadingDescription(path, d->previewSize, AlbumSettings::instance()->getExifRotate()));
+        d->previewThread->load(path, d->previewSize, AlbumSettings::instance()->getExifRotate());
 }
 
 void ImagePreviewView::slotGotImagePreview(const LoadingDescription& description, const DImg& preview)
@@ -300,11 +298,9 @@ void ImagePreviewView::slotNextPreload()
         return;
 
     if (d->loadFullImageSize)
-        d->previewThread->loadHighQuality(LoadingDescription(loadPath, 0,
-                                          AlbumSettings::instance()->getExifRotate()));
+        d->previewThread->loadHighQuality(loadPath, AlbumSettings::instance()->getExifRotate());
     else
-        d->previewPreloadThread->load(LoadingDescription(loadPath, d->previewSize,
-                                      AlbumSettings::instance()->getExifRotate()));
+        d->previewPreloadThread->load(loadPath, d->previewSize, AlbumSettings::instance()->getExifRotate());
 }
 
 void ImagePreviewView::setImageInfo(const ImageInfo & info, const ImageInfo& previous, const ImageInfo& next)
@@ -359,7 +355,7 @@ void ImagePreviewView::slotContextMenu()
     // --------------------------------------------------------
     cmhelper.addAction("image_edit");
     cmhelper.addServicesMenu(selectedItems);
-    cmhelper.addKipiActions();
+    cmhelper.addKipiActions(idList);
     popmenu.addSeparator();
     // --------------------------------------------------------
     cmhelper.addAction("image_find_similar");

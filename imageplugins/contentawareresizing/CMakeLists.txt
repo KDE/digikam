@@ -14,7 +14,7 @@ KDE4_ADD_PLUGIN(digikamimageplugin_contentawareresizing ${digikamimageplugin_con
 
 TARGET_LINK_LIBRARIES(digikamimageplugin_contentawareresizing
                       digikamcore
-                      kdcraw
+                      ${KDCRAW_LIBRARIES}
                       ${KDE4_KDECORE_LIBS}
                       ${KDE4_KDEUI_LIBS}
                       ${QT_QTCORE_LIBRARY}

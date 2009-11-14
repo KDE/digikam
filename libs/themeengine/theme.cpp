@@ -26,7 +26,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+
 
 
 namespace Digikam
@@ -136,48 +136,48 @@ Theme& Theme::operator=(const Theme& theme)
 void Theme::print()
 {
     /*
-    kDebug(50003) << "Theme :                      " << name;
+    kDebug() << "Theme :                      " << name;
 
-    kDebug(50003) << "Base Color:                  " << baseColor;
-    kDebug(50003) << "Text Regular  Color:         " << textRegColor;
-    kDebug(50003) << "Text Selected Color:         " << textSelColor;
-    kDebug(50003) << "Text Special Regular Color:  " << textSpecialRegColor;
-    kDebug(50003) << "Text Special Selected Color: " << textSpecialSelColor;
+    kDebug() << "Base Color:                  " << baseColor;
+    kDebug() << "Text Regular  Color:         " << textRegColor;
+    kDebug() << "Text Selected Color:         " << textSelColor;
+    kDebug() << "Text Special Regular Color:  " << textSpecialRegColor;
+    kDebug() << "Text Special Selected Color: " << textSpecialSelColor;
 
-    kDebug(50003) << "Banner Color:                " << bannerColor;
-    kDebug(50003) << "Banner ColorTo :             " << bannerColorTo;
-    kDebug(50003) << "Banner Bevel :               " << bannerBevel;
-    kDebug(50003) << "Banner Gradient :            " << bannerGrad;
-    kDebug(50003) << "Banner Border :              " << bannerBorder;
-    kDebug(50003) << "Banner Border Color :        " << bannerBorderColor;
+    kDebug() << "Banner Color:                " << bannerColor;
+    kDebug() << "Banner ColorTo :             " << bannerColorTo;
+    kDebug() << "Banner Bevel :               " << bannerBevel;
+    kDebug() << "Banner Gradient :            " << bannerGrad;
+    kDebug() << "Banner Border :              " << bannerBorder;
+    kDebug() << "Banner Border Color :        " << bannerBorderColor;
 
-    kDebug(50003) << "ThumbReg Color:              " << thumbRegColor;
-    kDebug(50003) << "ThumbReg ColorTo :           " << thumbRegColorTo;
-    kDebug(50003) << "ThumbReg Bevel :             " << thumbRegBevel;
-    kDebug(50003) << "ThumbReg Gradient :          " << thumbRegGrad;
-    kDebug(50003) << "ThumbReg Border :            " << thumbRegBorder;
-    kDebug(50003) << "ThumbReg Border Color :      " << thumbRegBorderColor;
+    kDebug() << "ThumbReg Color:              " << thumbRegColor;
+    kDebug() << "ThumbReg ColorTo :           " << thumbRegColorTo;
+    kDebug() << "ThumbReg Bevel :             " << thumbRegBevel;
+    kDebug() << "ThumbReg Gradient :          " << thumbRegGrad;
+    kDebug() << "ThumbReg Border :            " << thumbRegBorder;
+    kDebug() << "ThumbReg Border Color :      " << thumbRegBorderColor;
 
-    kDebug(50003) << "ThumbSel Color:              " << thumbSelColor;
-    kDebug(50003) << "ThumbSel ColorTo :           " << thumbSelColorTo;
-    kDebug(50003) << "ThumbSel Bevel :             " << thumbSelBevel;
-    kDebug(50003) << "ThumbSel Gradient :          " << thumbSelGrad;
-    kDebug(50003) << "ThumbSel Border :            " << thumbSelBorder;
-    kDebug(50003) << "ThumbSel Border Color :      " << thumbSelBorderColor;
+    kDebug() << "ThumbSel Color:              " << thumbSelColor;
+    kDebug() << "ThumbSel ColorTo :           " << thumbSelColorTo;
+    kDebug() << "ThumbSel Bevel :             " << thumbSelBevel;
+    kDebug() << "ThumbSel Gradient :          " << thumbSelGrad;
+    kDebug() << "ThumbSel Border :            " << thumbSelBorder;
+    kDebug() << "ThumbSel Border Color :      " << thumbSelBorderColor;
 
-    kDebug(50003) << "ListReg Color:              " << listRegColor;
-    kDebug(50003) << "ListReg ColorTo :           " << listRegColorTo;
-    kDebug(50003) << "ListReg Bevel :             " << listRegBevel;
-    kDebug(50003) << "ListReg Gradient :          " << listRegGrad;
-    kDebug(50003) << "ListReg Border :            " << listRegBorder;
-    kDebug(50003) << "ListReg Border Color :      " << listRegBorderColor;
+    kDebug() << "ListReg Color:              " << listRegColor;
+    kDebug() << "ListReg ColorTo :           " << listRegColorTo;
+    kDebug() << "ListReg Bevel :             " << listRegBevel;
+    kDebug() << "ListReg Gradient :          " << listRegGrad;
+    kDebug() << "ListReg Border :            " << listRegBorder;
+    kDebug() << "ListReg Border Color :      " << listRegBorderColor;
 
-    kDebug(50003) << "ListSel Color:              " << listSelColor;
-    kDebug(50003) << "ListSel ColorTo :           " << listSelColorTo;
-    kDebug(50003) << "ListSel Bevel :             " << listSelBevel;
-    kDebug(50003) << "ListSel Gradient :          " << listSelGrad;
-    kDebug(50003) << "ListSel Border :            " << listSelBorder;
-    kDebug(50003) << "ListSel Border Color :      " << listSelBorderColor;
+    kDebug() << "ListSel Color:              " << listSelColor;
+    kDebug() << "ListSel ColorTo :           " << listSelColorTo;
+    kDebug() << "ListSel Bevel :             " << listSelBevel;
+    kDebug() << "ListSel Gradient :          " << listSelGrad;
+    kDebug() << "ListSel Border :            " << listSelBorder;
+    kDebug() << "ListSel Border Color :      " << listSelBorderColor;
     */
 }
 

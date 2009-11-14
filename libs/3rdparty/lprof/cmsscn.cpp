@@ -34,14 +34,14 @@
 /* */
 /* Version 1.08a */
 
-
 #include "lcmsprf.h"
-#include <stdio.h>
+
+#include <cstdio>
 
 /* The scanner profiler */
 
 
-BOOL   cdecl cmsxScannerProfilerInit(LPSCANNERPROFILERDATA sys);                                        
+BOOL   cdecl cmsxScannerProfilerInit(LPSCANNERPROFILERDATA sys);
 BOOL   cdecl cmsxScannerProfilerDo(LPSCANNERPROFILERDATA sys);
 
 /* ------------------------------------------------------------ Implementation */
@@ -57,44 +57,43 @@ void ComputeGlobalRegression(LPSCANNERPROFILERDATA sys)
         int nTerms;
         MLRSTATISTICS Stat;
 
-		nTerms = cmsxFindOptimumNumOfTerms(&sys ->hdr, 55, &lAllOk);
+        nTerms = cmsxFindOptimumNumOfTerms(&sys ->hdr, 55, &lAllOk);
 
-  
+
         if (!lAllOk) {
-			if (sys -> hdr.printf) 
-					sys -> hdr.printf("*** WARNING: Inconsistence found, profile may be wrong. Check the target!");     
-			nTerms = 4;
-		}
+            if (sys -> hdr.printf)
+                    sys -> hdr.printf("*** WARNING: Inconsistence found, profile may be wrong. Check the target!");
+            nTerms = 4;
+        }
 
-		/* Create high terms matrix used by interpolation */
-        cmsxRegressionCreateMatrix(&sys -> hdr.m, 
-                                       sys -> hdr.m.Allowed, 
+        /* Create high terms matrix used by interpolation */
+        cmsxRegressionCreateMatrix(&sys -> hdr.m,
+                                       sys -> hdr.m.Allowed,
                                        nTerms,
                                        sys -> hdr.PCSType,
                                        &sys -> HiTerms,
                                        &Stat);
-        
-        if (sys -> hdr.printf) 
+
+        if (sys -> hdr.printf)
             sys -> hdr.printf("Global regression: %d terms, R2Adj = %g", nTerms, Stat.R2adj);
 
-		/* Create low terms matrix used by extrapolation */
-		cmsxRegressionCreateMatrix(&sys -> hdr.m, 
-                                       sys -> hdr.m.Allowed, 
+        /* Create low terms matrix used by extrapolation */
+        cmsxRegressionCreateMatrix(&sys -> hdr.m,
+                                       sys -> hdr.m.Allowed,
                                        (nTerms > 10 ? 10 : nTerms),
                                        sys -> hdr.PCSType,
                                        &sys -> LoTerms,
-                                       &Stat);        	
-		if (sys -> hdr.printf) 
+                                       &Stat);
+        if (sys -> hdr.printf)
             sys -> hdr.printf("Extrapolation: R2Adj = %g", Stat.R2adj);
 
 }
 
 
 /* Fill struct with default values */
-        
+
 BOOL cmsxScannerProfilerInit(LPSCANNERPROFILERDATA sys)
-{                                
-        
+{
 
         if (sys == NULL) return false;
         ZeroMemory(sys, sizeof(SCANNERPROFILERDATA));
@@ -102,37 +101,35 @@ BOOL cmsxScannerProfilerInit(LPSCANNERPROFILERDATA sys)
         sys->hdr.DeviceClass = icSigInputClass;
         sys->hdr.ColorSpace  = icSigRgbData;
         sys->hdr.PCSType     = PT_Lab;
-		sys->hdr.Medium      = MEDIUM_REFLECTIVE_D50;
-		
+        sys->hdr.Medium      = MEDIUM_REFLECTIVE_D50;
+
         /* Default values for generation */
 
         sys -> hdr.lUseCIECAM97s = false;
         sys -> hdr.CLUTPoints = 16;
-       
-           
+
         /* Default viewing conditions for scanner */
 
         sys -> hdr.device.Yb = 20;
         sys -> hdr.device.La = 20;
         sys -> hdr.device.surround = AVG_SURROUND;
-        sys -> hdr.device.D_value  = 1.0;			/* Complete adaptation */
+        sys -> hdr.device.D_value  = 1.0;            /* Complete adaptation */
 
 
         /* Viewing conditions of PCS */
-		cmsxInitPCSViewingConditions(&sys -> hdr);
+        cmsxInitPCSViewingConditions(&sys -> hdr);
 
 
         sys -> HiTerms = NULL;
-		sys -> LoTerms = NULL;
+        sys -> LoTerms = NULL;
 
         strcpy(sys -> hdr.Description,  "no description");
         strcpy(sys -> hdr.Manufacturer, "little cms profiler construction set");
-        strcpy(sys -> hdr.Copyright,   "No copyright, use freely");
-        strcpy(sys -> hdr.Model,       "(unknown)");
+        strcpy(sys -> hdr.Copyright,    "No copyright, use freely");
+        strcpy(sys -> hdr.Model,        "(unknown)");
 
-		sys ->lLocalConvergenceExtrapolation = false;
-		sys ->hdr.ProfileVerbosityLevel = 0;
-	
+        sys ->lLocalConvergenceExtrapolation = false;
+        sys ->hdr.ProfileVerbosityLevel = 0;
 
     return true;
 }
@@ -140,12 +137,11 @@ BOOL cmsxScannerProfilerInit(LPSCANNERPROFILERDATA sys)
 /* Auxiliar: take RGB and update gauge */
 static
 void GetRGB(LPPROFILERCOMMONDATA hdr, register WORD In[], double* r, double* g, double* b)
-{   
+{
     static int Count = 0, n_old = 0;
     double R, G, B;
     int n;
-    
-        
+
         R = _cmsxSaturate65535To255(In[0]);       /* Convert from the sheet notation */
         G = _cmsxSaturate65535To255(In[1]);       /* 0..255.0, to our notation */
         B = _cmsxSaturate65535To255(In[2]);       /* of 0..0xffff, 0xffff/255 = 257 */
@@ -166,57 +162,51 @@ void GetRGB(LPPROFILERCOMMONDATA hdr, register WORD In[], double* r, double* g, 
 
 }
 
-
-
-
-
 /* The sampler for Lab */
 static
 int RegressionSamplerLab(register WORD In[], register WORD Out[], register LPVOID Cargo)
 {
-    cmsCIEXYZ xyz;  
+    cmsCIEXYZ xyz;
     cmsCIELab Lab;
-    double r, g, b;    	
+    double r, g, b;
     LPSCANNERPROFILERDATA sys = (LPSCANNERPROFILERDATA) Cargo;
-	char code;
+    char code;
 
-        
         GetRGB(&sys->hdr, In, &r, &g, &b);
 
 
-		code = cmsxHullCheckpoint(sys->hdr.hRGBHull, 
-							      (int) floor(r + .5),
-								  (int) floor(g + .5),
-								  (int) floor(b + .5));
+        code = cmsxHullCheckpoint(sys->hdr.hRGBHull,
+                                  (int) floor(r + .5),
+                                  (int) floor(g + .5),
+                                  (int) floor(b + .5));
 
 
-		if (code == 'i') { /* Inside gamut */
+        if (code == 'i') { /* Inside gamut */
 
-			if (!cmsxRegressionRGB2Lab(r, g, b, sys -> HiTerms, &Lab)) return false;
-		}
-		else  
-		if (!sys -> lLocalConvergenceExtrapolation && code == 'o') {  /* outside gamut */
+            if (!cmsxRegressionRGB2Lab(r, g, b, sys -> HiTerms, &Lab)) return false;
+        }
+        else
+        if (!sys -> lLocalConvergenceExtrapolation && code == 'o') {  /* outside gamut */
 
-			if (!cmsxRegressionRGB2Lab(r, g, b, sys -> LoTerms, &Lab)) return false;
-		}				
-		else {	/* At gamut hull boundaries */
+            if (!cmsxRegressionRGB2Lab(r, g, b, sys -> LoTerms, &Lab)) return false;
+        }
+        else {    /* At gamut hull boundaries */
 
-			if (!cmsxRegressionInterpolatorRGB(&sys -> hdr.m,
-												PT_Lab,                                        
-												10,
-												true,
-												30,
-												r, g, b,
-												&Lab)) return false;
-		}
-		
-                       
+            if (!cmsxRegressionInterpolatorRGB(&sys -> hdr.m,
+                                                PT_Lab,
+                                                10,
+                                                true,
+                                                30,
+                                                r, g, b,
+                                                &Lab)) return false;
+        }
+
         /* Regression CAN deliver wrong values. Clamp these. */
         cmsClampLab(&Lab, 127.9961, -128, 127.9961, -128);
 
         /* Normalize */
         cmsLab2XYZ(cmsD50_XYZ(), &xyz, &Lab);
-        cmsxChromaticAdaptationAndNormalization(&sys->hdr, &xyz, false);       
+        cmsxChromaticAdaptationAndNormalization(&sys->hdr, &xyz, false);
         cmsXYZ2Lab(cmsD50_XYZ(), &Lab, &xyz);
 
         /* Clamping again, adaptation could move slightly values */
@@ -225,12 +215,8 @@ int RegressionSamplerLab(register WORD In[], register WORD Out[], register LPVOI
         /* To PCS encoding */
         cmsFloat2LabEncoded(Out, &Lab);
 
-				
     return true; /* And done with success */
 }
-
-
-
 
 
 /* The sampler for XYZ */
@@ -240,49 +226,47 @@ int RegressionSamplerXYZ(register WORD In[], register WORD Out[], register LPVOI
     cmsCIEXYZ xyz;
     double r, g, b;
     LPSCANNERPROFILERDATA sys = (LPSCANNERPROFILERDATA) Cargo;
-	char code;
+    char code;
 
       GetRGB(&sys -> hdr, In, &r, &g, &b);
 
-	    code = cmsxHullCheckpoint(sys ->hdr.hRGBHull,
-								  (int) floor(r + .5),
-								  (int) floor(g + .5),
-								  (int) floor(b + .5));
+        code = cmsxHullCheckpoint(sys ->hdr.hRGBHull,
+                                  (int) floor(r + .5),
+                                  (int) floor(g + .5),
+                                  (int) floor(b + .5));
 
-		if (code == 'i') { /* Inside gamut */
+        if (code == 'i') { /* Inside gamut */
 
-			if (!cmsxRegressionRGB2XYZ(r, g, b, sys -> HiTerms, &xyz)) return false;
-		}
-		else  
-		if (!sys -> lLocalConvergenceExtrapolation && code == 'o') {  /* outside gamut */
+            if (!cmsxRegressionRGB2XYZ(r, g, b, sys -> HiTerms, &xyz)) return false;
+        }
+        else
+        if (!sys -> lLocalConvergenceExtrapolation && code == 'o') {  /* outside gamut */
 
-			if (!cmsxRegressionRGB2XYZ(r, g, b, sys -> LoTerms, &xyz)) return false;
-		}
-				
-		else {	/* At gamut hull boundaries */
+            if (!cmsxRegressionRGB2XYZ(r, g, b, sys -> LoTerms, &xyz)) return false;
+        }
 
-			if (!cmsxRegressionInterpolatorRGB(&sys -> hdr.m,
-												PT_XYZ,                                        
-												10,
-												true,
-												30,
-												r, g, b,
-												&xyz)) return false;
-		}
-		                                        
-        
+        else {    /* At gamut hull boundaries */
+
+            if (!cmsxRegressionInterpolatorRGB(&sys -> hdr.m,
+                                                PT_XYZ,
+                                                10,
+                                                true,
+                                                30,
+                                                r, g, b,
+                                                &xyz)) return false;
+        }
+
       xyz.X /= 100.;
       xyz.Y /= 100.;
       xyz.Z /= 100.;
 
-      cmsxChromaticAdaptationAndNormalization(&sys->hdr, &xyz, false);       
-     
+      cmsxChromaticAdaptationAndNormalization(&sys->hdr, &xyz, false);
+
       /* To PCS encoding. It also claps bad values */
       cmsFloat2XYZEncoded(Out, &xyz);
-        
+
     return true; /* And done witch success */
 }
-
 
 
 /* The main scanner profiler */
@@ -292,13 +276,12 @@ BOOL cmsxScannerProfilerDo(LPSCANNERPROFILERDATA sys)
         LPLUT AToB0;
         DWORD dwNeedSamples;
 
-                   
         if (!*sys -> hdr.OutputProfileFile)
                 return false;
 
-    
+
         if (!cmsxChoosePCS(&sys->hdr))
-                return false;               
+                return false;
 
         dwNeedSamples = PATCH_HAS_RGB;
         if (sys ->hdr.PCSType == PT_Lab)
@@ -306,9 +289,9 @@ BOOL cmsxScannerProfilerDo(LPSCANNERPROFILERDATA sys)
         else
                 dwNeedSamples |= PATCH_HAS_XYZ;
 
-            
+
         if (sys->hdr.printf) {
-            
+
             sys->hdr.printf("Loading sheets...");
 
             if (sys->hdr.ReferenceSheet[0])
@@ -318,57 +301,53 @@ BOOL cmsxScannerProfilerDo(LPSCANNERPROFILERDATA sys)
         }
 
 
-        if (!cmsxPCollBuildMeasurement(&sys->hdr.m, 
-                                    sys->hdr.ReferenceSheet, 
+        if (!cmsxPCollBuildMeasurement(&sys->hdr.m,
+                                    sys->hdr.ReferenceSheet,
                                     sys->hdr.MeasurementSheet,
                                     dwNeedSamples)) return false;
 
-			
-		
+
         sys->hdr.hProfile = cmsCreateRGBProfile(NULL, NULL, NULL);
-     
 
         cmsSetDeviceClass(sys->hdr.hProfile, sys->hdr.DeviceClass);
         cmsSetColorSpace(sys->hdr.hProfile,  sys->hdr.ColorSpace);
         cmsSetPCS(sys->hdr. hProfile,  _cmsICCcolorSpace(sys->hdr.PCSType));
-    
+
         /* Save char target tag */
-		if (sys->hdr.ProfileVerbosityLevel >= 2) {
-			
-			cmsxEmbedCharTarget(&sys ->hdr);
-		}
+        if (sys->hdr.ProfileVerbosityLevel >= 2) {
+
+            cmsxEmbedCharTarget(&sys ->hdr);
+        }
 
         AToB0 = cmsAllocLUT();
 
         cmsAlloc3DGrid(AToB0, sys->hdr.CLUTPoints, 3, 3);
 
-        cmsxComputeLinearizationTables(&sys-> hdr.m, 
-                                        sys -> hdr.PCSType, 
-                                        sys -> Prelinearization, 
-										1024,
-										MEDIUM_REFLECTIVE_D50);
-                                        	
+        cmsxComputeLinearizationTables(&sys-> hdr.m,
+                                        sys -> hdr.PCSType,
+                                        sys -> Prelinearization,
+                                        1024,
+                                        MEDIUM_REFLECTIVE_D50);
+
         /* Refresh RGB of all patches. This converts all regression into */
         /* near linear RGB->Lab or XYZ */
-            
-        cmsxPCollLinearizePatches(&sys->hdr.m, sys -> hdr.m.Allowed, sys -> Prelinearization);   
 
-		cmsxComputeGamutHull(&sys->hdr);
+        cmsxPCollLinearizePatches(&sys->hdr.m, sys -> hdr.m.Allowed, sys -> Prelinearization);
+
+        cmsxComputeGamutHull(&sys->hdr);
         ComputeGlobalRegression(sys);
 
-        cmsAllocLinearTable(AToB0, sys -> Prelinearization, 1);                              
+        cmsAllocLinearTable(AToB0, sys -> Prelinearization, 1);
 
         /* Set CIECAM97s parameters */
 
         sys -> hdr.device.whitePoint.X = sys -> hdr.WhitePoint.X * 100.;
         sys -> hdr.device.whitePoint.Y = sys -> hdr.WhitePoint.Y * 100.;
         sys -> hdr.device.whitePoint.Z = sys -> hdr.WhitePoint.Z * 100.;
-	   
-		  	   
+
         sys->hdr.hDevice = cmsCIECAM97sInit(&sys->hdr.device);
         sys->hdr.hPCS    = cmsCIECAM97sInit(&sys->hdr.PCS);
 
-        
         if (sys -> hdr.PCSType == PT_Lab)
                 cmsSample3DGrid(AToB0, RegressionSamplerLab, sys, 0);
         else
@@ -380,43 +359,41 @@ BOOL cmsxScannerProfilerDo(LPSCANNERPROFILERDATA sys)
         cmsAddTag(sys->hdr.hProfile, icSigAToB0Tag, AToB0);
 
 
-	    cmsxEmbedTextualInfo(&sys -> hdr);
-       
-		cmsAddTag(sys->hdr.hProfile, icSigMediaWhitePointTag, &sys->hdr.WhitePoint);
+        cmsxEmbedTextualInfo(&sys -> hdr);
+
+        cmsAddTag(sys->hdr.hProfile, icSigMediaWhitePointTag, &sys->hdr.WhitePoint);
         cmsAddTag(sys->hdr.hProfile, icSigMediaBlackPointTag, &sys->hdr.BlackPoint);
 
 
-		/* Save primaries & gamma curves */
-		if (sys->hdr.ProfileVerbosityLevel >= 1) {
+        /* Save primaries & gamma curves */
+        if (sys->hdr.ProfileVerbosityLevel >= 1) {
 
-			cmsxEmbedMatrixShaper(&sys ->hdr);
-		}
+            cmsxEmbedMatrixShaper(&sys ->hdr);
+        }
 
         _cmsSaveProfile(sys->hdr.hProfile, sys->hdr.OutputProfileFile);
 
         cmsCloseProfile(sys->hdr.hProfile);
         sys->hdr.hProfile = NULL;
 
-        cmsxPCollFreeMeasurements(&sys->hdr.m);    
-               
+        cmsxPCollFreeMeasurements(&sys->hdr.m);
+
         cmsFreeLUT(AToB0);
-       
+
         if (sys -> HiTerms)
                 MATNfree(sys -> HiTerms);
         sys -> HiTerms = NULL;
 
 
-		if (sys -> LoTerms)
+        if (sys -> LoTerms)
                 MATNfree(sys -> LoTerms);
         sys -> LoTerms = NULL;
 
-		
-
         if (sys ->Prelinearization[0])
-            cmsFreeGammaTriple(sys -> Prelinearization);   
-		
-		if (sys ->hdr.Gamma)
-			cmsFreeGammaTriple(sys->hdr.Gamma);
-		
+            cmsFreeGammaTriple(sys -> Prelinearization);
+
+        if (sys ->hdr.Gamma)
+            cmsFreeGammaTriple(sys->hdr.Gamma);
+
     return true;
 }

@@ -28,7 +28,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <klocale.h>
 #include <kgenericfactory.h>
 #include <klibloader.h>
@@ -36,6 +35,7 @@
 #include <kactioncollection.h>
 #include <kcursor.h>
 #include <kapplication.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -58,7 +58,7 @@ ImagePlugin_Emboss::ImagePlugin_Emboss(QObject *parent, const QVariantList &)
 
     setXMLFile( "digikamimageplugin_emboss_ui.rc" );
 
-    kDebug(50006) << "ImagePlugin_Emboss plugin loaded";
+    kDebug() << "ImagePlugin_Emboss plugin loaded";
 }
 
 ImagePlugin_Emboss::~ImagePlugin_Emboss()

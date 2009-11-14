@@ -103,6 +103,9 @@ public Q_SLOTS:
     void slotSettingsChanged(const BatchToolSet&);
     void slotAssignTools(const QMap<int, QString>&);
 
+protected:
+    void keyPressEvent(QKeyEvent *event);
+
 private Q_SLOTS:
 
     void slotSelectionChanged();

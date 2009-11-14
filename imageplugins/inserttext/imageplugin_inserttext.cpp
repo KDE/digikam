@@ -27,7 +27,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <klocale.h>
 #include <kgenericfactory.h>
 #include <klibloader.h>
@@ -35,6 +34,7 @@
 #include <kactioncollection.h>
 #include <kcursor.h>
 #include <kapplication.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -49,7 +49,7 @@ ImagePlugin_InsertText::ImagePlugin_InsertText(QObject *parent, const QVariantLi
                       : Digikam::ImagePlugin(parent, "ImagePlugin_InsertText")
 {
     m_insertTextAction = new KAction(KIcon("insert-text"), i18n("Insert Text..."), this);
-    m_insertTextAction->setShortcut(QKeySequence(Qt::SHIFT+Qt::CTRL+Qt::Key_T));
+    m_insertTextAction->setShortcut(KShortcut(Qt::SHIFT+Qt::CTRL+Qt::Key_T));
 
     connect(m_insertTextAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotInsertText()));
@@ -58,7 +58,7 @@ ImagePlugin_InsertText::ImagePlugin_InsertText(QObject *parent, const QVariantLi
 
     setXMLFile("digikamimageplugin_inserttext_ui.rc");
 
-    kDebug(50006) << "ImagePlugin_InsertText plugin loaded";
+    kDebug() << "ImagePlugin_InsertText plugin loaded";
 }
 
 ImagePlugin_InsertText::~ImagePlugin_InsertText()

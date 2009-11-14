@@ -39,7 +39,6 @@
 // KDE includes
 
 #include <kcombobox.h>
-#include <kdebug.h>
 #include <kdialog.h>
 #include <kglobal.h>
 #include <khbox.h>
@@ -48,6 +47,7 @@
 #include <klistwidget.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
+#include <kdebug.h>
 
 namespace Digikam
 {
@@ -121,7 +121,7 @@ SubjectWidget::SubjectWidget(QWidget* parent)
     QString path = KGlobal::dirs()->findResource("iptcschema", "topicset.iptc-subjectcode.xml");
 
     if (!loadSubjectCodesFromXML(KUrl(path)))
-        kDebug(51001) << "Cannot load IPTC/NAA subject codes XML database";
+        kDebug() << "Cannot load IPTC/NAA subject codes XML database";
 
     // --------------------------------------------------------
 
@@ -430,7 +430,7 @@ void SubjectWidget::slotAddSubject()
 
 bool SubjectWidget::loadSubjectCodesFromXML(const KUrl& url)
 {
-    QFile xmlfile(url.path());
+    QFile xmlfile(url.toLocalFile());
 
     if (!xmlfile.open(QIODevice::ReadOnly))
         return false;

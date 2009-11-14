@@ -32,6 +32,8 @@
 
 #include <khbox.h>
 
+// Local includes
+
 #include "digikam_export.h"
 
 namespace Digikam

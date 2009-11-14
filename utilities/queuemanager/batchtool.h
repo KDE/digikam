@@ -167,11 +167,6 @@ protected:
      */
     bool isCancelled();
 
-    /** Re-implement this method to customize how all settings values must be assigned to settings widget.
-        This method is called by setSettings().
-     */
-    virtual void assignSettings2Widget()=0;
-
     /** Re-implement this method to customize all batch operations done by this tool. 
         This method is called by apply().
      */
@@ -180,6 +175,11 @@ protected:
 protected Q_SLOTS:
 
     virtual void slotSettingsChanged()=0;
+
+    /** Re-implement this method to customize how all settings values must be assigned to settings widget.
+        This method is called by setSettings().
+     */
+    virtual void slotAssignSettings2Widget()=0;
 
 private:
 

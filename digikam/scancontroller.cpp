@@ -42,11 +42,11 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kmessagebox.h>
 #include <kapplication.h>
 #include <klocale.h>
 #include <kiconloader.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -101,6 +101,7 @@ public:
         needsCompleteScan   = false;
         fileWatchInstalled  = false;
         advice              = ScanController::Success;
+        needTotalFiles      = false;
     }
 
     bool                      running;
@@ -121,10 +122,10 @@ public:
 
     bool                      fileWatchInstalled;
 
-    QEventLoop               *eventLoop;
+    QEventLoop*               eventLoop;
 
-    QTimer                   *showTimer;
-    QTimer                   *relaxedTimer;
+    QTimer*                   showTimer;
+    QTimer*                   relaxedTimer;
 
     QPixmap                   albumPix;
     QPixmap                   rootPix;
@@ -136,11 +137,13 @@ public:
 
     QDateTime                 lastHintAdded;
 
-    DProgressDlg             *progressDialog;
+    DProgressDlg*             progressDialog;
 
-    SplashScreen             *splash;
+    SplashScreen*             splash;
 
     ScanController::Advice    advice;
+
+    bool                      needTotalFiles;
 
     QPixmap albumPixmap()
     {
@@ -167,6 +170,13 @@ public:
     {
         if (errorPix.isNull())
             errorPix = KIconLoader::global()->loadIcon("dialog-error", KIconLoader::NoGroup, 32);
+        return errorPix;
+    }
+
+    QPixmap restartPixmap()
+    {
+        if (errorPix.isNull())
+            errorPix = KIconLoader::global()->loadIcon("view-refresh", KIconLoader::NoGroup, 32);
         return errorPix;
     }
 
@@ -198,7 +208,7 @@ public:
 
     ScanControllerLoadingCacheFileWatch();
 
-private slots:
+private Q_SLOTS:
 
     void slotImageChanged(const ImageChangeset& changeset);
 };
@@ -325,6 +335,7 @@ ScanController::Advice ScanController::databaseInitialization()
 {
     d->advice = Success;
     createProgressDialog();
+    setInitializationMessage();
     {
         QMutexLocker lock(&d->mutex);
         d->needsInitialization = true;
@@ -352,6 +363,10 @@ void ScanController::completeCollectionScan(SplashScreen *splash)
 {
     d->splash = splash;
     createProgressDialog();
+    // we only need to count the files in advance
+    //if we show a progress percentage in progress dialog
+    d->needTotalFiles = !d->splash;
+
     {
         QMutexLocker lock(&d->mutex);
         d->needsCompleteScan = true;
@@ -364,6 +379,7 @@ void ScanController::completeCollectionScan(SplashScreen *splash)
     d->progressDialog = 0;
     // We do not delete Splashscreen here.
     d->splash         = 0;
+    d->needTotalFiles = false;
 }
 
 void ScanController::scheduleCollectionScan(const QString& path)
@@ -499,6 +515,7 @@ void ScanController::run()
         {
             CollectionScanner scanner;
             connectCollectionScanner(&scanner);
+            scanner.setNeedFileCount(d->needTotalFiles);
             scanner.recordHints(d->albumHints);
             scanner.recordHints(d->itemHints);
             SimpleCollectionScannerObserver observer(&d->continueScan);
@@ -524,14 +541,17 @@ void ScanController::connectCollectionScanner(CollectionScanner *scanner)
 {
     scanner->setSignalsEnabled(true);
 
+    connect(scanner, SIGNAL(startCompleteScan()),
+            this, SLOT(slotStartCompleteScan()));
+
     connect(scanner, SIGNAL(totalFilesToScan(int)),
             this, SLOT(slotTotalFilesToScan(int)));
 
     connect(scanner, SIGNAL(startScanningAlbum(const QString&, const QString&)),
             this, SLOT(slotStartScanningAlbum(const QString&, const QString&)));
 
-    connect(scanner, SIGNAL(finishedScanningAlbum(const QString&, const QString&, int)),
-            this, SLOT(slotFinishedScanningAlbum(const QString&, const QString&, int)));
+    connect(scanner, SIGNAL(scannedFiles(int)),
+            this, SLOT(slotScannedFiles(int)));
 
     connect(scanner, SIGNAL(startScanningAlbumRoot(const QString&)),
             this, SLOT(slotStartScanningAlbumRoot(const QString&)));
@@ -541,15 +561,23 @@ void ScanController::connectCollectionScanner(CollectionScanner *scanner)
 
     connect(scanner, SIGNAL(startScanningAlbumRoots()),
             this, SLOT(slotStartScanningAlbumRoots()));
-
-    connect(scanner, SIGNAL(startCompleteScan()),
-            this, SLOT(slotTriggerShowProgressDialog()));
 }
 
 void ScanController::slotTotalFilesToScan(int count)
 {
     if (d->progressDialog)
         d->progressDialog->incrementMaximum(count);
+}
+
+void ScanController::slotStartCompleteScan()
+{
+    slotTriggerShowProgressDialog();
+
+    QString message = i18n("Preparing collection scan");
+    if (d->splash)
+        d->splash->message(message);
+    if (d->progressDialog)
+        d->progressDialog->addedAction(d->restartPixmap(), message);
 }
 
 void ScanController::slotStartScanningAlbum(const QString& albumRoot, const QString& album)
@@ -559,7 +587,7 @@ void ScanController::slotStartScanningAlbum(const QString& albumRoot, const QStr
         d->progressDialog->addedAction(d->albumPixmap(), ' ' + album);
 }
 
-void ScanController::slotFinishedScanningAlbum(const QString &, const QString &, int filesScanned)
+void ScanController::slotScannedFiles(int filesScanned)
 {
     if (d->progressDialog)
         d->progressDialog->advance(filesScanned);
@@ -661,6 +689,15 @@ void ScanController::slotErrorFromInitialization(const QString& errorMessage)
     KMessageBox::error(d->progressDialog, errorMessage);
 }
 
+void ScanController::setInitializationMessage()
+{
+    QString message = i18n("Initializing database");
+    if (d->splash)
+        d->splash->message(message);
+    if (d->progressDialog)
+        d->progressDialog->addedAction(d->restartPixmap(), message);
+}
+
 static AlbumCopyMoveHint hintForAlbum(const PAlbum *album, int dstAlbumRootId, const QString& relativeDstPath,
                                       const QString& albumName)
 {
@@ -700,7 +737,7 @@ void ScanController::hintAtMoveOrCopyOfAlbum(const PAlbum *album, const QString&
     CollectionLocation location = CollectionManager::instance()->locationForPath(dstPath);
     if (location.isNull())
     {
-        kWarning(50003) << "hintAtMoveOrCopyOfAlbum: Destination path" << dstPath 
+        kWarning() << "hintAtMoveOrCopyOfAlbum: Destination path" << dstPath
                         << "does not point to an available location.";
         return;
     }

@@ -41,6 +41,8 @@
 #include "digikam_export.h"
 #include "dimg.h"
 
+class QToolButton;
+
 namespace Digikam
 {
 
@@ -52,8 +54,10 @@ class DIGIKAM_EXPORT PanIconWidget : public QWidget
 
 public:
 
-    PanIconWidget(QWidget *parent=0, Qt::WidgetAttribute attribute=Qt::WA_DeleteOnClose);
+    explicit PanIconWidget(QWidget *parent=0, Qt::WidgetAttribute attribute=Qt::WA_DeleteOnClose);
     ~PanIconWidget();
+
+    static QToolButton* button();
 
     void setImage(int previewWidth, int previewHeight, const QImage& image);
     void setImage(int previewWidth, int previewHeight, const DImg& image);
@@ -67,7 +71,7 @@ public:
 
 Q_SIGNALS:
 
-    // Used with ImagePreview widget. 
+    // Used with ImagePreview widget.
     // Emit when selection have been moved with mouse.
     // 'targetDone' boolean value is used for indicate if the mouse have been released.
     void signalSelectionMoved(const QRect& rect, bool targetDone);

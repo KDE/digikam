@@ -30,11 +30,11 @@
 
 // KDE includes
 
-#include <kmessagebox.h>
+#include <kapplication.h>
+#include <kdeversion.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kdebug.h>
-#include <kapplication.h>
+#include <kmessagebox.h>
 
 // Local includes
 
@@ -48,7 +48,11 @@ QueuePool::QueuePool(QWidget *parent)
          : KTabWidget(parent)
 {
     setTabBarHidden(false);
-    setCloseButtonEnabled(true);
+#if KDE_IS_VERSION(4,3,0)
+    setTabsClosable(false);
+#else
+    setCloseButtonEnabled(false);
+#endif
     slotAddQueue();
 
     connect(this, SIGNAL(currentChanged(int)),
@@ -63,6 +67,20 @@ QueuePool::QueuePool(QWidget *parent)
 
 QueuePool::~QueuePool()
 {
+}
+
+void QueuePool::keyPressEvent(QKeyEvent *event)
+{
+
+    if (event->key() == Qt::Key_Delete)
+    {
+        slotRemoveSelectedItems();
+    }
+    else
+    {
+        KTabWidget::keyPressEvent(event);
+    }
+
 }
 
 void QueuePool::setBusy(bool b)

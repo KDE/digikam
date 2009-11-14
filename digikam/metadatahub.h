@@ -104,7 +104,7 @@ public:
     class TagStatus
     {
         public:
-            TagStatus(Status status, bool hasTag = false) : status(status), hasTag(hasTag) {};
+            explicit TagStatus(Status status, bool hasTag = false) : status(status), hasTag(hasTag) {};
             TagStatus() : status(MetadataInvalid), hasTag(false) {};
 
             Status status;
@@ -340,6 +340,14 @@ public:
         This method is less efficient internally.
     */
     QMap<int, TagStatus>   tagIDs() const;
+
+    /**
+        If you are keeping a MetadataHub over the scope of one
+        event loop run, listen to AlbumManager's signals about removal
+        of tags and call this method each time.
+    */
+    void notifyTagRemoved(TAlbum *);
+    void notifyTagsCleared();
 
     // --------------------------------------------------
 

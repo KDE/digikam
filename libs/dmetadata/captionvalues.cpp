@@ -25,7 +25,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+
 
 using namespace KExiv2Iface;
 
@@ -70,10 +70,11 @@ CaptionsMap::~CaptionsMap()
 
 void CaptionsMap::setData(const KExiv2::AltLangMap& comments,
                           const KExiv2::AltLangMap& authors,
+                          const QString &commonAuthor,
                           const KExiv2::AltLangMap& dates)
 {
     fromAltLangMap(comments);
-    setAuthorsList(authors);
+    setAuthorsList(authors, commonAuthor);
     setDatesList(dates);
 }
 
@@ -108,15 +109,15 @@ KExiv2::AltLangMap CaptionsMap::authorsList() const
     return map;
 }
 
-void CaptionsMap::setAuthorsList(const KExiv2::AltLangMap& map)
+void CaptionsMap::setAuthorsList(const KExiv2::AltLangMap& map, const QString &commonAuthor)
 {
-    for (KExiv2::AltLangMap::const_iterator it = map.constBegin(); it != map.constEnd(); ++it)
+    for (CaptionsMap::iterator it = begin(); it != end(); ++it)
     {
-        CaptionsMap::iterator val = find(it.key());
-        if (val != end())
-        {
-            (*val).author = it.value();
-        }
+        KExiv2::AltLangMap::const_iterator authorIt = map.find(it.key());
+        if (authorIt != map.constEnd())
+            (*it).author = authorIt.value();
+        else if (!commonAuthor.isNull())
+            (*it).author = commonAuthor;
     }
 }
 

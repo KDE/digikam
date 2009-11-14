@@ -41,12 +41,12 @@ namespace Digikam
 class Sharpen : public BatchTool
 {
     Q_OBJECT
-    
+
 public:
 
     Sharpen(QObject *parent=0);
     ~Sharpen();
-    
+
     BatchToolSettings defaultSettings();
 
 private:
@@ -58,11 +58,11 @@ private:
         Refocus
     };
 
-    void assignSettings2Widget();
     bool toolOperations();
 
 private Q_SLOTS:
 
+    void slotAssignSettings2Widget();
     void slotSettingsChanged();
     void slotSharpMethodChanged(int);
 

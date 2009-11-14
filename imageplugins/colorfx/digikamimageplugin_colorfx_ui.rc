@@ -1,20 +1,20 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="7" name="digikamimageplugin_colorfx" >
+<gui version="9" name="digikamimageplugin_colorfx" >
 
  <MenuBar>
 
   <Menu name="Color" ><text>&amp;Color</text>
-   <Action name="imageplugin_colorfx" /> 
+   <Action name="imageplugin_colorfx" />
   </Menu>
 
  </MenuBar>
- 
- <ToolBar name="ToolBar" >
+
+ <ToolBar name="mainToolBar" >
   <text>Main Toolbar</text>
  </ToolBar>
- 
+
  <ActionProperties>
   <Action shortcut="" name="imageplugin_colorfx" />
  </ActionProperties>
 
-</kpartgui>
+</gui>

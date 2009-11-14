@@ -31,14 +31,12 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QDateTime>
-#include <QPointer>
 #include <QCloseEvent>
 
 // KDE includes
 
 #include <kapplication.h>
 #include <kcodecs.h>
-#include <kdebug.h>
 #include <klocale.h>
 #include <kstandardguiitem.h>
 #include <kpassivepopup.h>
@@ -93,8 +91,8 @@ FingerPrintsGenerator::FingerPrintsGenerator(QWidget* /*parent*/, bool rebuildAl
 
     setModal(false);
     setValue(0);
-    setCaption(i18n("Rebuild All Fingerprints"));
-    setLabel(i18n("<b>Updating fingerprint database. Please wait...</b>"));
+    setCaption(d->rebuildAll ? i18n("Rebuild All Fingerprints") : i18n("Rebuild Changed Fingerprints"));
+    setLabel(i18n("<b>Updating fingerprints database. Please wait...</b>"));
     setButtonText(i18n("&Abort"));
     resize(600, 300);
 
@@ -141,8 +139,11 @@ void FingerPrintsGenerator::processOne()
 {
     if (d->cancel) return;
     QString path = d->allPicturesPath.first();
-    d->previewLoadThread->load(LoadingDescription(path, HaarIface::preferredSize(),
-                               AlbumSettings::instance()->getExifRotate()));
+    LoadingDescription description(path, HaarIface::preferredSize(),
+                                   AlbumSettings::instance()->getExifRotate(),
+                                   LoadingDescription::ConvertToSRGB);
+    description.rawDecodingSettings.sixteenBitsImage = false;
+    d->previewLoadThread->load(description);
 }
 
 void FingerPrintsGenerator::complete()
@@ -160,6 +161,9 @@ void FingerPrintsGenerator::complete()
 
 void FingerPrintsGenerator::slotGotImagePreview(const LoadingDescription& desc, const DImg& img)
 {
+    if (d->allPicturesPath.isEmpty())
+        return;
+
     if (d->allPicturesPath.first() != desc.filePath)
         return;
 

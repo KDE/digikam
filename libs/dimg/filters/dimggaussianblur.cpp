@@ -29,13 +29,13 @@
 /** Only print debug information on the console */
 #define cimg_debug 1
 
-// KDE includes
-
-#include <kdebug.h>
-
 // CImg includes
 
 #include "CImg.h"
+
+// KDE includes
+
+#include <kdebug.h>
 
 // Local includes
 
@@ -75,7 +75,7 @@ void DImgGaussianBlur::gaussianBlurImage(uchar *data, int width, int height, boo
 {
     if (!data || !width || !height)
     {
-       kWarning(50003) << ("DImgGaussianBlur::gaussianBlurImage: no image data available!");
+       kWarning() << ("DImgGaussianBlur::gaussianBlurImage: no image data available!");
        return;
     }
 
@@ -86,7 +86,7 @@ void DImgGaussianBlur::gaussianBlurImage(uchar *data, int width, int height, boo
        return;
     }
 
-    kDebug(50003) << "DImgGaussianBlur::Process Computation...";
+    kDebug() << "DImgGaussianBlur::Process Computation...";
 
     if (!sixteenBit)           // 8 bits image.
     {
@@ -98,7 +98,7 @@ void DImgGaussianBlur::gaussianBlurImage(uchar *data, int width, int height, boo
         img.blur(radius);
 
         // Copy CImg onto destination.
-        kDebug(50003) << "DImgGaussianBlur::Finalization...";
+        kDebug() << "DImgGaussianBlur::Finalization...";
 
         uchar *ptr = m_destImage.bits();
         for (int y = 0; y < height; ++y)
@@ -124,7 +124,7 @@ void DImgGaussianBlur::gaussianBlurImage(uchar *data, int width, int height, boo
         img.blur(radius);
 
         // Copy CImg onto destination.
-        kDebug(50003) << "DImgGaussianBlur::Finalization...";
+        kDebug() << "DImgGaussianBlur::Finalization...";
 
         unsigned short *ptr = (unsigned short *)m_destImage.bits();
         for (int y = 0; y < height; ++y)

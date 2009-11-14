@@ -33,7 +33,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kmenu.h>
 #include <klocale.h>
 #include <kurl.h>
@@ -45,6 +44,7 @@
 #include <kglobalsettings.h>
 #include <kdialog.h>
 #include <kstringhandler.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -175,9 +175,7 @@ TAlbumListView::TAlbumListView(QWidget* parent)
 {
     addColumn(i18n("Tags"));
     header()->hide();
-    setResizeMode(Q3ListView::LastColumn);
     setRootIsDecorated(true);
-
     setAcceptDrops(true);
     viewport()->setAcceptDrops(true);
 
@@ -336,7 +334,7 @@ void TAlbumListView::contentsDropEvent(QDropEvent *e)
         srcAlbum    = AlbumManager::instance()->findTAlbum(albumID);
         if (!srcAlbum)
         {
-            kWarning(50003) << "Could not find source album of drag";
+            kWarning() << "Could not find source album of drag";
             return;
         }
 

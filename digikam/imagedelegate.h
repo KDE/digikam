@@ -28,8 +28,6 @@
 
 #include <QAbstractItemDelegate>
 
-// KDE includes
-
 // Local includes
 
 #include "thumbnailsize.h"
@@ -93,6 +91,7 @@ public:
     void mouseMoved(QMouseEvent *e, const QRect& visualRect, const QModelIndex& index);
 
     static QString squeezedText(const QFontMetrics &fm, int width, const QString& text);
+    static QString dateToString(const QDateTime& datetime);
 
 Q_SIGNALS:
 
@@ -116,7 +115,6 @@ protected:
     void updateSizeRectsAndPixmaps();
 
     QPixmap ratingPixmap(int rating, bool selected) const;
-    QString dateToString(const QDateTime& datetime) const;
     QString squeezedTextCached(QPainter* p, int width, const QString& text) const;
     QPixmap thumbnailBorderPixmap(const QSize& pixSize) const;
 

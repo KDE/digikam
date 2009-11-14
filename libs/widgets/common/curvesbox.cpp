@@ -41,6 +41,7 @@
 #include <kdialog.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -49,6 +50,7 @@
 #include "editortoolsettings.h"
 #include "imagecurves.h"
 #include "imagehistogram.h"
+#include "globals.h"
 
 namespace Digikam
 {
@@ -71,7 +73,7 @@ public:
         pickerBox       = 0;
         pickerType      = 0;
         resetButton     = 0;
-        currentChannel  = EditorToolSettings::LuminosityChannel;
+        currentChannel  = LuminosityChannel;
         sixteenBit      = false;
     }
     int                  currentChannel;
@@ -317,7 +319,7 @@ void CurvesBox::slotCurveTypeChanged(int type)
     emit signalCurveTypeChanged(type);
 }
 
-void CurvesBox::setScale(int type)
+void CurvesBox::setScale(HistogramScale type)
 {
     d->curvesWidget->m_scaleType = type;
     d->curvesWidget->repaint();
@@ -329,32 +331,32 @@ void CurvesBox::setChannel(int channel)
 
     switch (channel)
     {
-        case EditorToolSettings::LuminosityChannel:
-            d->curvesWidget->m_channelType = CurvesWidget::ValueHistogram;
+        case LuminosityChannel:
+            d->curvesWidget->m_channelType = LuminosityChannel;
             d->hGradient->setColors(QColor("white"), QColor("black"));
             d->vGradient->setColors(QColor("white"), QColor("black"));
             break;
 
-        case EditorToolSettings::RedChannel:
-            d->curvesWidget->m_channelType = CurvesWidget::RedChannelHistogram;
+        case RedChannel:
+            d->curvesWidget->m_channelType = RedChannel;
             d->hGradient->setColors(QColor("red"), QColor("black"));
             d->vGradient->setColors(QColor("red"), QColor("black"));
             break;
 
-        case EditorToolSettings::GreenChannel:
-            d->curvesWidget->m_channelType = CurvesWidget::GreenChannelHistogram;
+        case GreenChannel:
+            d->curvesWidget->m_channelType = GreenChannel;
             d->hGradient->setColors(QColor("green"), QColor("black"));
             d->vGradient->setColors(QColor("green"), QColor("black"));
             break;
 
-        case EditorToolSettings::BlueChannel:
-            d->curvesWidget->m_channelType = CurvesWidget::BlueChannelHistogram;
+        case BlueChannel:
+            d->curvesWidget->m_channelType = BlueChannel;
             d->hGradient->setColors(QColor("blue"), QColor("black"));
             d->vGradient->setColors(QColor("blue"), QColor("black"));
             break;
 
-        case EditorToolSettings::AlphaChannel:
-            d->curvesWidget->m_channelType = CurvesWidget::AlphaChannelHistogram;
+        case AlphaChannel:
+            d->curvesWidget->m_channelType = AlphaChannel;
             d->hGradient->setColors(QColor("white"), QColor("black"));
             d->vGradient->setColors(QColor("white"), QColor("black"));
             break;
@@ -403,7 +405,7 @@ void CurvesBox::slotResetChannels()
 
 void CurvesBox::resetChannels()
 {
-    for (int channel = 0; channel < 5; ++channel)
+    for (int channel = 0; channel < ImageCurves::NUM_CHANNELS; ++channel)
     {
         d->curvesWidget->curves()->curvesChannelReset(channel);
     }
@@ -416,52 +418,14 @@ void CurvesBox::reset()
     d->curvesWidget->reset();
 }
 
-void CurvesBox::readCurveSettings(KConfigGroup& group)
+void CurvesBox::readCurveSettings(KConfigGroup& group, QString prefix)
 {
-    for (int i = 0 ; i < 5 ; ++i)
-    {
-        d->curvesWidget->curves()->curvesChannelReset(i);
-        d->curvesWidget->curves()->setCurveType(i,
-                (ImageCurves::CurveType)group.readEntry(QString("CurveTypeChannel%1").arg(i),
-                        (int)ImageCurves::CURVE_SMOOTH));
-
-        QPoint disable(-1, -1);
-        for (int j = 0 ; j < 17 ; ++j)
-        {
-            QPoint p = group.readEntry(QString("Channel%1Point%2").arg(i).arg(j), disable);
-
-            if (d->sixteenBit && p.x() != -1)
-            {
-                p.setX(p.x()*255);
-                p.setY(p.y()*255);
-            }
-
-            d->curvesWidget->curves()->setCurvePoint(i, j, p);
-        }
-
-        d->curvesWidget->curves()->curvesCalculateCurve(i);
-    }
+    d->curvesWidget->restoreCurve(group, prefix);
 }
 
-void CurvesBox::writeCurveSettings(KConfigGroup& group)
+void CurvesBox::writeCurveSettings(KConfigGroup& group, QString prefix)
 {
-    for (int i = 0 ; i < 5 ; ++i)
-    {
-        group.writeEntry(QString("CurveTypeChannel%1").arg(i), d->curvesWidget->curves()->getCurveType(i));
-
-        for (int j = 0 ; j < 17 ; ++j)
-        {
-            QPoint p = d->curvesWidget->curves()->getCurvePoint(i, j);
-
-            if (d->sixteenBit && p.x() != -1)
-            {
-                p.setX(p.x()/255);
-                p.setY(p.y()/255);
-            }
-
-            group.writeEntry(QString("Channel%1Point%2").arg(i).arg(j), p);
-        }
-    }
+    d->curvesWidget->saveCurve(group, prefix);
 }
 
 ImageCurves* CurvesBox::curves() const

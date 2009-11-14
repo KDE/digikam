@@ -1,5 +1,6 @@
 INSTALL(FILES histogramwidget.h
               histogrambox.h
+              histogrampainter.h
               colorgradientwidget.h 
               curveswidget.h
               curvesbox.h
@@ -15,5 +16,6 @@ INSTALL(FILES histogramwidget.h
               previewwidget.h
               searchtextbar.h
               dgradientslider.h
-         DESTINATION ${INCLUDE_INSTALL_DIR}/digikam COMPONENT Devel)
+         DESTINATION ${INCLUDE_INSTALL_DIR}/digikam COMPONENT Devel
+        )
 

@@ -38,7 +38,6 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kcursor.h>
-#include <kdebug.h>
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <klocale.h>
@@ -64,12 +63,17 @@ class BlurToolPriv
 {
 public:
 
-    BlurToolPriv()
-    {
-        radiusInput   = 0;
-        previewWidget = 0;
-        gboxSettings  = 0;
-    }
+    BlurToolPriv() :
+        configGroupName("gaussianblur Tool"),
+        configRadiusAdjustmentEntry("RadiusAdjustment"),
+
+        radiusInput(0),
+        previewWidget(0),
+        gboxSettings(0)
+        {}
+
+    const QString       configGroupName;
+    const QString       configRadiusAdjustmentEntry;
 
     RDoubleNumInput*    radiusInput;
     ImagePanelWidget*   previewWidget;
@@ -85,10 +89,8 @@ BlurTool::BlurTool(QObject* parent)
     setToolIcon(SmallIcon("blurimage"));
     setToolHelp("blursharpentool.anchor");
 
-    d->gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
-                                             EditorToolSettings::Ok|
-                                             EditorToolSettings::Cancel,
-                                             EditorToolSettings::PanIcon);
+    d->gboxSettings = new EditorToolSettings;
+    d->gboxSettings->setTools(EditorToolSettings::PanIcon);
 
     d->previewWidget = new ImagePanelWidget(470, 350, "gaussianblur Tool", d->gboxSettings->panIconView());
 
@@ -135,15 +137,15 @@ BlurTool::~BlurTool()
 void BlurTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("gaussianblur Tool");
-    d->radiusInput->setValue(group.readEntry("RadiusAdjustment", d->radiusInput->defaultValue()));
+    KConfigGroup group        = config->group(d->configGroupName);
+    d->radiusInput->setValue(group.readEntry(d->configRadiusAdjustmentEntry, d->radiusInput->defaultValue()));
 }
 
 void BlurTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("gaussianblur Tool");
-    group.writeEntry("RadiusAdjustment", d->radiusInput->value());
+    KConfigGroup group        = config->group(d->configGroupName);
+    group.writeEntry(d->configRadiusAdjustmentEntry, d->radiusInput->value());
     d->previewWidget->writeSettings();
     config->sync();
 }

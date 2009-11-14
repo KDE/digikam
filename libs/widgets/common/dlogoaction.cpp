@@ -70,11 +70,11 @@ public:
 
     int        progressCount;         // Position of animation.
 
-    QTimer    *progressTimer;
+    QTimer*    progressTimer;
 
     QPixmap    progressPixmap;
 
-    KUrlLabel *urlLabel;
+    KUrlLabel* urlLabel;
 };
 
 DLogoAction::DLogoAction(QObject* parent, bool alignOnright)
@@ -94,6 +94,7 @@ DLogoAction::DLogoAction(QObject* parent, bool alignOnright)
 
     d->alignOnright  = alignOnright;
     d->progressTimer = new QTimer(this);
+    d->progressTimer->setSingleShot(true);
 
     connect(d->progressTimer, SIGNAL(timeout()),
             this, SLOT(slotProgressTimerDone()));
@@ -135,11 +136,11 @@ void DLogoAction::slotProgressTimerDone()
     d->progressTimer->start(100);
 }
 
-QWidget* DLogoAction::createWidget(QWidget * parent)
+QWidget* DLogoAction::createWidget(QWidget* parent)
 {
     QWidget* container  = new QWidget(parent);
     QHBoxLayout* layout = new QHBoxLayout(container);
-    d->urlLabel         = new KUrlLabel(webProjectUrl().url(), QString(), parent);
+    d->urlLabel         = new KUrlLabel(webProjectUrl().url(), QString(), container);
     d->urlLabel->setMargin(0);
     d->urlLabel->setScaledContents(false);
     d->urlLabel->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
@@ -159,6 +160,12 @@ QWidget* DLogoAction::createWidget(QWidget * parent)
             this, SLOT(slotProcessUrl(const QString&)));
 
     return container;
+}
+
+void DLogoAction::deleteWidget(QWidget* widget)
+{
+    stop();
+    KAction::deleteWidget(widget);
 }
 
 void DLogoAction::slotProcessUrl(const QString& url)

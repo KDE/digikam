@@ -81,7 +81,7 @@ void DImgSharpen::sharpenImage(double radius, double sigma)
 {
     if (m_orgImage.isNull())
     {
-       kWarning(50003) << "No image data available!";
+       kWarning() << "No image data available!";
        return;
     }
 
@@ -99,7 +99,7 @@ void DImgSharpen::sharpenImage(double radius, double sigma)
 
     if((int)m_orgImage.width() < kernelWidth)
     {
-        kWarning(50003) << "Image is smaller than radius!";
+        kWarning() << "Image is smaller than radius!";
         return;
     }
 
@@ -107,7 +107,7 @@ void DImgSharpen::sharpenImage(double radius, double sigma)
 
     if(!kernel)
     {
-        kWarning(50003) << "Unable to allocate memory!";
+        kWarning() << "Unable to allocate memory!";
         return;
     }
 
@@ -142,7 +142,7 @@ bool DImgSharpen::convolveImage(const unsigned int order, const double *kernel)
 
     if((kernelWidth % 2) == 0)
     {
-        kWarning(50003) << "Kernel width must be an odd number!";
+        kWarning() << "Kernel width must be an odd number!";
         return(false);
     }
 
@@ -150,7 +150,7 @@ bool DImgSharpen::convolveImage(const unsigned int order, const double *kernel)
 
     if(!normal_kernel)
     {
-        kWarning(50003) << "Unable to allocate memory!";
+        kWarning() << "Unable to allocate memory!";
         return(false);
     }
 

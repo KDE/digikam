@@ -39,7 +39,6 @@
 #include <kaboutdata.h>
 #include <kapplication.h>
 #include <kconfig.h>
-#include <kdebug.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
@@ -74,22 +73,45 @@ class NoiseReductionToolPriv
 {
 public:
 
-    NoiseReductionToolPriv()
-    {
-        radiusInput       = 0;
-        lumToleranceInput = 0;
-        thresholdInput    = 0;
-        textureInput      = 0;
-        sharpnessInput    = 0;
-        csmoothInput      = 0;
-        lookaheadInput    = 0;
-        gammaInput        = 0;
-        dampingInput      = 0;
-        phaseInput        = 0;
-        previewWidget     = 0;
-        expanderBox       = 0;
-        gboxSettings      = 0;
-    }
+    NoiseReductionToolPriv() :
+        configGroupName("noisereduction Tool"),
+        configCsmoothAdjustmentEntry("CsmoothAdjustment"),
+        configDampingAdjustmentEntry("DampingAdjustment"),
+        configGammaAdjustmentEntry("GammaAdjustment"),
+        configLookAheadAdjustmentEntry("LookAheadAdjustment"),
+        configLumToleranceAdjustmentEntry("LumToleranceAdjustment"),
+        configPhaseAdjustmentEntry("PhaseAdjustment"),
+        configRadiusAdjustmentEntry("RadiusAdjustment"),
+        configSharpnessAdjustmentEntry("SharpnessAdjustment"),
+        configTextureAdjustmentEntry("TextureAdjustment"),
+        configThresholdAdjustmentEntry("ThresholdAdjustment"),
+
+        radiusInput(0),
+        lumToleranceInput(0),
+        thresholdInput(0),
+        textureInput(0),
+        sharpnessInput(0),
+        csmoothInput(0),
+        lookaheadInput(0),
+        gammaInput(0),
+        dampingInput(0),
+        phaseInput(0),
+        previewWidget(0),
+        expanderBox(0),
+        gboxSettings(0)
+        {}
+
+    const QString        configGroupName;
+    const QString        configCsmoothAdjustmentEntry;
+    const QString        configDampingAdjustmentEntry;
+    const QString        configGammaAdjustmentEntry;
+    const QString        configLookAheadAdjustmentEntry;
+    const QString        configLumToleranceAdjustmentEntry;
+    const QString        configPhaseAdjustmentEntry;
+    const QString        configRadiusAdjustmentEntry;
+    const QString        configSharpnessAdjustmentEntry;
+    const QString        configTextureAdjustmentEntry;
+    const QString        configThresholdAdjustmentEntry;
 
     RDoubleNumInput*     radiusInput;
     RDoubleNumInput*     lumToleranceInput;
@@ -118,13 +140,15 @@ NoiseReductionTool::NoiseReductionTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
-                                             EditorToolSettings::Ok|
-                                             EditorToolSettings::Cancel|
-                                             EditorToolSettings::Load|
-                                             EditorToolSettings::SaveAs|
-                                             EditorToolSettings::Try,
-                                             EditorToolSettings::PanIcon);
+    d->gboxSettings = new EditorToolSettings;
+    d->gboxSettings->setButtons(EditorToolSettings::Default|
+                                EditorToolSettings::Ok|
+                                EditorToolSettings::Cancel|
+                                EditorToolSettings::Load|
+                                EditorToolSettings::SaveAs|
+                                EditorToolSettings::Try);
+
+    d->gboxSettings->setTools(EditorToolSettings::PanIcon);
 
     QGridLayout* grid  = new QGridLayout( d->gboxSettings->plainPage() );
     QWidget* firstPage = new QWidget();
@@ -149,7 +173,7 @@ NoiseReductionTool::NoiseReductionTool(QObject* parent)
     QLabel *label3    = new QLabel(i18n("Threshold:"), firstPage);
     d->thresholdInput = new RDoubleNumInput(firstPage);
     d->thresholdInput->setDecimals(2);
-    d->thresholdInput->input()->setRange(0.0, 1.0, 0.01, true);
+    d->thresholdInput->input()->setRange(0.01, 1.0, 0.01, true);
     d->thresholdInput->setDefaultValue(0.08);
     d->thresholdInput->setWhatsThis(i18n("<b>Threshold</b>: use the slider for coarse adjustment, "
                                          "and the spin control for fine adjustment to control edge detection sensitivity. "
@@ -325,20 +349,20 @@ void NoiseReductionTool::renderingFinished()
 void NoiseReductionTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("noisereduction Tool");
+    KConfigGroup group        = config->group(d->configGroupName);
 
     d->expanderBox->setEnabled(false);
 
-    d->csmoothInput->setValue(group.readEntry("CsmoothAdjustment", d->csmoothInput->defaultValue()));
-    d->dampingInput->setValue(group.readEntry("DampingAdjustment", d->dampingInput->defaultValue()));
-    d->gammaInput->setValue(group.readEntry("GammaAdjustment", d->gammaInput->defaultValue()));
-    d->lookaheadInput->setValue(group.readEntry("LookAheadAdjustment", d->lookaheadInput->defaultValue()));
-    d->lumToleranceInput->setValue(group.readEntry("LumToleranceAdjustment", d->lumToleranceInput->defaultValue()));
-    d->phaseInput->setValue(group.readEntry("PhaseAdjustment", d->phaseInput->defaultValue()));
-    d->radiusInput->setValue(group.readEntry("RadiusAdjustment", d->radiusInput->defaultValue()));
-    d->sharpnessInput->setValue(group.readEntry("SharpnessAdjustment", d->sharpnessInput->defaultValue()));
-    d->textureInput->setValue(group.readEntry("TextureAdjustment", d->textureInput->defaultValue()));
-    d->thresholdInput->setValue(group.readEntry("ThresholdAdjustment", d->thresholdInput->defaultValue()));
+    d->csmoothInput->setValue(group.readEntry(d->configCsmoothAdjustmentEntry,           d->csmoothInput->defaultValue()));
+    d->dampingInput->setValue(group.readEntry(d->configDampingAdjustmentEntry,           d->dampingInput->defaultValue()));
+    d->gammaInput->setValue(group.readEntry(d->configGammaAdjustmentEntry,               d->gammaInput->defaultValue()));
+    d->lookaheadInput->setValue(group.readEntry(d->configLookAheadAdjustmentEntry,       d->lookaheadInput->defaultValue()));
+    d->lumToleranceInput->setValue(group.readEntry(d->configLumToleranceAdjustmentEntry, d->lumToleranceInput->defaultValue()));
+    d->phaseInput->setValue(group.readEntry(d->configPhaseAdjustmentEntry,               d->phaseInput->defaultValue()));
+    d->radiusInput->setValue(group.readEntry(d->configRadiusAdjustmentEntry,             d->radiusInput->defaultValue()));
+    d->sharpnessInput->setValue(group.readEntry(d->configSharpnessAdjustmentEntry,       d->sharpnessInput->defaultValue()));
+    d->textureInput->setValue(group.readEntry(d->configTextureAdjustmentEntry,           d->textureInput->defaultValue()));
+    d->thresholdInput->setValue(group.readEntry(d->configThresholdAdjustmentEntry,       d->thresholdInput->defaultValue()));
     d->expanderBox->readSettings();
 
     d->expanderBox->setEnabled(true);
@@ -347,17 +371,18 @@ void NoiseReductionTool::readSettings()
 void NoiseReductionTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("noisereduction Tool");
-    group.writeEntry("RadiusAdjustment", d->radiusInput->value());
-    group.writeEntry("LumToleranceAdjustment", d->lumToleranceInput->value());
-    group.writeEntry("ThresholdAdjustment", d->thresholdInput->value());
-    group.writeEntry("TextureAdjustment", d->textureInput->value());
-    group.writeEntry("SharpnessAdjustment", d->sharpnessInput->value());
-    group.writeEntry("CsmoothAdjustment", d->csmoothInput->value());
-    group.writeEntry("LookAheadAdjustment", d->lookaheadInput->value());
-    group.writeEntry("GammaAdjustment", d->gammaInput->value());
-    group.writeEntry("DampingAdjustment", d->dampingInput->value());
-    group.writeEntry("PhaseAdjustment", d->phaseInput->value());
+    KConfigGroup group        = config->group(d->configGroupName);
+
+    group.writeEntry(d->configRadiusAdjustmentEntry,       d->radiusInput->value());
+    group.writeEntry(d->configLumToleranceAdjustmentEntry, d->lumToleranceInput->value());
+    group.writeEntry(d->configThresholdAdjustmentEntry,    d->thresholdInput->value());
+    group.writeEntry(d->configTextureAdjustmentEntry,      d->textureInput->value());
+    group.writeEntry(d->configSharpnessAdjustmentEntry,    d->sharpnessInput->value());
+    group.writeEntry(d->configCsmoothAdjustmentEntry,      d->csmoothInput->value());
+    group.writeEntry(d->configLookAheadAdjustmentEntry,    d->lookaheadInput->value());
+    group.writeEntry(d->configGammaAdjustmentEntry,        d->gammaInput->value());
+    group.writeEntry(d->configDampingAdjustmentEntry,      d->dampingInput->value());
+    group.writeEntry(d->configPhaseAdjustmentEntry,        d->phaseInput->value());
     d->previewWidget->writeSettings();
     group.sync();
 }
@@ -437,7 +462,7 @@ void NoiseReductionTool::slotLoadSettings()
     if ( loadRestorationFile.isEmpty() )
         return;
 
-    QFile file(loadRestorationFile.path());
+    QFile file(loadRestorationFile.toLocalFile());
 
     if ( file.open(QIODevice::ReadOnly) )
     {
@@ -481,7 +506,7 @@ void NoiseReductionTool::slotSaveAsSettings()
     if ( saveRestorationFile.isEmpty() )
         return;
 
-    QFile file(saveRestorationFile.path());
+    QFile file(saveRestorationFile.toLocalFile());
 
     if ( file.open(QIODevice::WriteOnly) )
     {

@@ -38,7 +38,6 @@
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kdebug.h>
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <klocale.h>
@@ -70,13 +69,20 @@ class TextureToolPriv
 {
 public:
 
-    TextureToolPriv()
-    {
-        textureType   = 0;
-        blendGain     = 0;
-        previewWidget = 0;
-        gboxSettings  = 0;
-    }
+    TextureToolPriv():
+        configGroupName("texture Tool"),
+        configTextureTypeEntry("TextureType"),
+        configBlendGainEntry("BlendGain"),
+
+        textureType(0),
+        blendGain(0),
+        previewWidget(0),
+        gboxSettings(0)
+        {}
+
+    const QString       configGroupName;
+    const QString       configTextureTypeEntry;
+    const QString       configBlendGainEntry;
 
     RComboBox*          textureType;
     RIntNumInput*       blendGain;
@@ -94,10 +100,8 @@ TextureTool::TextureTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
-                                             EditorToolSettings::Ok|
-                                             EditorToolSettings::Cancel|
-                                             EditorToolSettings::PanIcon);
+    d->gboxSettings = new EditorToolSettings;
+    d->gboxSettings->setTools(EditorToolSettings::PanIcon);
 
     d->previewWidget = new ImagePanelWidget(470, 350, "texture Tool", d->gboxSettings->panIconView());
 
@@ -177,11 +181,11 @@ void TextureTool::renderingFinished()
 void TextureTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("texture Tool");
+    KConfigGroup group        = config->group(d->configGroupName);
     d->textureType->blockSignals(true);
     d->blendGain->blockSignals(true);
-    d->textureType->setCurrentIndex(group.readEntry("TextureType", d->textureType->defaultIndex()));
-    d->blendGain->setValue(group.readEntry("BlendGain", d->blendGain->defaultValue()));
+    d->textureType->setCurrentIndex(group.readEntry(d->configTextureTypeEntry, d->textureType->defaultIndex()));
+    d->blendGain->setValue(group.readEntry(d->configBlendGainEntry,            d->blendGain->defaultValue()));
     d->textureType->blockSignals(false);
     d->blendGain->blockSignals(false);
     slotEffect();
@@ -190,9 +194,9 @@ void TextureTool::readSettings()
 void TextureTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("texture Tool");
-    group.writeEntry("TextureType", d->textureType->currentIndex());
-    group.writeEntry("BlendGain", d->blendGain->value());
+    KConfigGroup group        = config->group(d->configGroupName);
+    group.writeEntry(d->configTextureTypeEntry, d->textureType->currentIndex());
+    group.writeEntry(d->configBlendGainEntry,   d->blendGain->value());
     d->previewWidget->writeSettings();
     group.sync();
 }

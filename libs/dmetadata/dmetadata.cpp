@@ -35,20 +35,24 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <klocale.h>
 #include <kglobal.h>
+#include <kdebug.h>
 
 // LibKDcraw includes
 
 #include <libkdcraw/dcrawinfocontainer.h>
 #include <libkdcraw/kdcraw.h>
 
+// LibKExiv2 includes
+
+#include <libkexiv2/version.h>
+
 // Local includes
 
 #include "template.h"
-#include "constants.h"
 #include "version.h"
+#include "globals.h"
 
 using namespace KExiv2Iface;
 
@@ -58,13 +62,11 @@ namespace Digikam
 DMetadata::DMetadata()
          : KExiv2Iface::KExiv2()
 {
-    registerXmpNameSpace(QString("http://ns.adobe.com/lightroom/1.0/"), QString("lr"));
 }
 
 DMetadata::DMetadata(const QString& filePath)
          : KExiv2Iface::KExiv2()
 {
-    registerXmpNameSpace(QString("http://ns.adobe.com/lightroom/1.0/"), QString("lr"));
     load(filePath);
 }
 
@@ -159,6 +161,7 @@ CaptionsMap DMetadata::getImageComments() const
     KExiv2::AltLangMap authorsMap;
     KExiv2::AltLangMap datesMap;
     KExiv2::AltLangMap commentsMap;
+    QString            commonAuthor;
 
     // In first try to get captions properties from digiKam XMP namespace
 
@@ -168,6 +171,11 @@ CaptionsMap DMetadata::getImageComments() const
         datesMap   = getXmpTagStringListLangAlt("Xmp.digiKam.CaptionsDateTimeStamps", false);
     }
 
+    // Get author name from IPTC DescriptionWriter. Private namespace above gets precedence.
+    QVariant descriptionWriter = getMetadataField(MetadataInfo::DescriptionWriter);
+    if (!descriptionWriter.isNull())
+        commonAuthor = descriptionWriter.toString();
+
     // In first, we check XMP alternative language tags to create map of values.
 
     if (hasXmp())
@@ -175,7 +183,7 @@ CaptionsMap DMetadata::getImageComments() const
         commentsMap = getXmpTagStringListLangAlt("Xmp.dc.description", false);
         if (!commentsMap.isEmpty())
         {
-            captionsMap.setData(commentsMap, authorsMap, datesMap);
+            captionsMap.setData(commentsMap, authorsMap, commonAuthor, datesMap);
             return captionsMap;
         }
 
@@ -183,7 +191,7 @@ CaptionsMap DMetadata::getImageComments() const
         if (!xmpComment.isEmpty())
         {
             commentsMap.insert(QString("x-default"), xmpComment);
-            captionsMap.setData(commentsMap, authorsMap, datesMap);
+            captionsMap.setData(commentsMap, authorsMap, commonAuthor, datesMap);
             return captionsMap;
         }
 
@@ -191,7 +199,7 @@ CaptionsMap DMetadata::getImageComments() const
         if (!xmpComment.isEmpty())
         {
             commentsMap.insert(QString("x-default"), xmpComment);
-            captionsMap.setData(commentsMap, authorsMap, datesMap);
+            captionsMap.setData(commentsMap, authorsMap, commonAuthor, datesMap);
             return captionsMap;
         }
     }
@@ -204,7 +212,7 @@ CaptionsMap DMetadata::getImageComments() const
     if (!comment.isEmpty())
     {
         commentsMap.insert(QString("x-default"), comment);
-        captionsMap.setData(commentsMap, authorsMap, datesMap);
+        captionsMap.setData(commentsMap, authorsMap, commonAuthor, datesMap);
         return captionsMap;
     }
 
@@ -216,7 +224,7 @@ CaptionsMap DMetadata::getImageComments() const
         if (!exifComment.isEmpty())
         {
             commentsMap.insert(QString("x-default"), exifComment);
-            captionsMap.setData(commentsMap, authorsMap, datesMap);
+            captionsMap.setData(commentsMap, authorsMap, commonAuthor, datesMap);
             return captionsMap;
         }
     }
@@ -229,7 +237,7 @@ CaptionsMap DMetadata::getImageComments() const
         if (!iptcComment.isEmpty() && !iptcComment.trimmed().isEmpty())
         {
             commentsMap.insert(QString("x-default"), iptcComment);
-            captionsMap.setData(commentsMap, authorsMap, datesMap);
+            captionsMap.setData(commentsMap, authorsMap, commonAuthor, datesMap);
             return captionsMap;
         }
     }
@@ -243,7 +251,7 @@ bool DMetadata::setImageComments(const CaptionsMap& comments) const
     /*if (comments.isEmpty())
           return false;*/
 
-    kDebug(50003) << getFilePath() << " ==> Comment: " << comments;
+    kDebug() << getFilePath() << " ==> Comment: " << comments;
 
     // In first, set captions properties to digiKam XMP namespace
 
@@ -422,11 +430,11 @@ bool DMetadata::setImageRating(int rating) const
 
     if (rating < RatingMin || rating > RatingMax)
     {
-        kDebug(50003) << "Rating value to write is out of range!";
+        kDebug() << "Rating value to write is out of range!";
         return false;
     }
 
-    kDebug(50003) << getFilePath() << " ==> Rating: " << rating;
+    kDebug() << getFilePath() << " ==> Rating: " << rating;
 
     if (!setProgramId())
         return false;
@@ -575,7 +583,7 @@ bool DMetadata::getImageTagsPath(QStringList& tagsPath) const
     {
         // See B.K.O #197285: LightRoom use '|' as separator.
         tagsPath = tagsPath.replaceInStrings("|", "/");
-        kDebug(50003) << "Tags Path imported from LR: " << tagsPath;
+        kDebug() << "Tags Path imported from LR: " << tagsPath;
         return true;
     }
 
@@ -631,7 +639,7 @@ bool DMetadata::setMetadataTemplate(const Template& t) const
     KExiv2::AltLangMap rightUsage = t.rightUsageTerms();
     QString instructions          = t.instructions();
 
-    kDebug(50003) << "Applying Metadata Template: " << t.templateTitle() << " :: " << authors;
+    kDebug() << "Applying Metadata Template: " << t.templateTitle() << " :: " << authors;
 
     // Set XMP tags. XMP<->IPTC Schema from Photoshop 7.0
 
@@ -671,7 +679,7 @@ bool DMetadata::setMetadataTemplate(const Template& t) const
     // Set IPTC tags.
 
     if (!setIptcTagsStringList("Iptc.Application2.Byline", 32,
-                               getIptcTagsStringList("Iptc.Application2.Byline"), 
+                               getIptcTagsStringList("Iptc.Application2.Byline"),
                                authors, false)) return false;
 
     if (!setIptcTag(authorsPosition,        32,  "Authors Title", "Iptc.Application2.BylineTitle"))         return false;
@@ -976,12 +984,44 @@ QString DMetadata::getLensDescription() const
     return lens;
 }
 
+IccProfile DMetadata::getIccProfile() const
+{
+    // Check if Exif data contains an ICC color profile.
+    QByteArray data = getExifTagData("Exif.Image.InterColorProfile");
+    if (!data.isNull())
+    {
+        kDebug() << "Found an ICC profile in Exif metadata";
+        return data;
+    }
+
+    // Else check the Exif color-space tag and use default profiles that we ship
+    switch (getImageColorWorkSpace())
+    {
+        case DMetadata::WORKSPACE_SRGB:
+        {
+            kDebug() << "Exif color-space tag is sRGB. Using default sRGB ICC profile.";
+            return IccProfile::sRGB();
+        }
+
+        case DMetadata::WORKSPACE_ADOBERGB:
+        {
+            kDebug() << "Exif color-space tag is AdobeRGB. Using default AdobeRGB ICC profile.";
+            return IccProfile::adobeRGB();
+        }
+
+        default:
+            break;
+    }
+
+    return IccProfile();
+}
+
 bool DMetadata::setIptcTag(const QString& text, int maxLength,
                            const char* debugLabel, const char* tagKey)  const
 {
     QString truncatedText = text;
     truncatedText.truncate(maxLength);
-    kDebug(50003) << getFilePath() << " ==> " << debugLabel << ": " << truncatedText;
+    kDebug() << getFilePath() << " ==> " << debugLabel << ": " << truncatedText;
     return setIptcTagString(tagKey, truncatedText);    // returns false if failed
 }
 
@@ -1578,7 +1618,7 @@ QMap<int, QString> DMetadata::possibleValuesForEnumField(MetadataInfo::Field fie
             //more: TODO?
             return map;
         default:
-            kWarning(50003) << "Unsupported field " << field << " in DMetadata::possibleValuesForEnumField";
+            kWarning() << "Unsupported field " << field << " in DMetadata::possibleValuesForEnumField";
             return map;
     }
 

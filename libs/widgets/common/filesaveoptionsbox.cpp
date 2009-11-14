@@ -149,7 +149,7 @@ void FileSaveOptionsBox::slotImageFileSelected(const QString& file)
 
 void FileSaveOptionsBox::slotImageFileFormatChanged(const QString& ext)
 {
-    kDebug(50003) << "Format selected: " << ext;
+    kDebug() << "Format selected: " << ext;
     QString format = ext.toUpper();
 
     if (format.contains("JPEG") || format.contains("JPG") || format.contains("JPE"))

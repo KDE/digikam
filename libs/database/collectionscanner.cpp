@@ -65,7 +65,9 @@ namespace Digikam
 
 class NewlyAppearedFile
 {
+
 public:
+
     NewlyAppearedFile() : albumId(0) {}
     NewlyAppearedFile(int albumId, const QString &fileName)
         : albumId(albumId), fileName(fileName) {}
@@ -86,12 +88,14 @@ inline uint qHash(const NewlyAppearedFile &file)
 
 class CollectionScannerPriv
 {
+
 public:
 
     CollectionScannerPriv()
     {
-        wantSignals = false;
-        observer    = 0;
+        wantSignals    = false;
+        needTotalFiles = false;
+        observer       = 0;
     }
 
     QSet<QString>     nameFilters;
@@ -100,6 +104,7 @@ public:
     QSet<QString>     audioFilterSet;
     QList<int>        scannedAlbums;
     bool              wantSignals;
+    bool              needTotalFiles;
 
     QDateTime         removedItemsTime;
 
@@ -135,6 +140,11 @@ CollectionScanner::~CollectionScanner()
 void CollectionScanner::setSignalsEnabled(bool on)
 {
     d->wantSignals = on;
+}
+
+void CollectionScanner::setNeedFileCount(bool on)
+{
+    d->needTotalFiles = on;
 }
 
 void CollectionScanner::recordHints(const QList<AlbumCopyMoveHint>& hints)
@@ -189,7 +199,7 @@ void CollectionScanner::completeScan()
     //TODO: Implement a mechanism to watch for album root changes while we keep this list
     QList<CollectionLocation> allLocations = CollectionManager::instance()->allAvailableLocations();
 
-    if (d->wantSignals)
+    if (d->wantSignals && d->needTotalFiles)
     {
         // count for progress info
         int count = 0;
@@ -254,8 +264,10 @@ void CollectionScanner::completeScan()
 void CollectionScanner::partialScan(const QString& filePath)
 {
     QString albumRoot = CollectionManager::instance()->albumRootPath(filePath);
+
     if (albumRoot.isNull())
         return;
+
     QString album = CollectionManager::instance()->album(filePath);
     partialScan(albumRoot, album);
 }
@@ -265,14 +277,14 @@ void CollectionScanner::partialScan(const QString& albumRoot, const QString& alb
     if (album.isEmpty())
     {
         // If you want to scan the album root, pass "/"
-        kWarning(50003) << "partialScan(QString, QString) called with empty album";
+        kWarning() << "partialScan(QString, QString) called with empty album";
         return;
     }
 
     if (DatabaseAccess().backend()->isInTransaction())
     {
         // Install ScanController::instance()->suspendCollectionScan around your DatabaseTransaction
-        kError(50003) << "Detected an active database transaction when starting a collection scan. "
+        kError() << "Detected an active database transaction when starting a collection scan. "
                          "Please report this error.";
         return;
     }
@@ -284,7 +296,7 @@ void CollectionScanner::partialScan(const QString& albumRoot, const QString& alb
 
     if (location.isNull())
     {
-        kWarning(50003) << "Did not find a CollectionLocation for album root path " << albumRoot;
+        kWarning() << "Did not find a CollectionLocation for album root path " << albumRoot;
         return;
     }
 
@@ -319,10 +331,12 @@ void CollectionScanner::partialScan(const QString& albumRoot, const QString& alb
 void CollectionScanner::scanFile(const QString& filePath, FileScanMode mode)
 {
     QFileInfo info(filePath);
-    QString dirPath = info.path(); // strip off filename
+    QString dirPath   = info.path(); // strip off filename
     QString albumRoot = CollectionManager::instance()->albumRootPath(dirPath);
+
     if (albumRoot.isNull())
         return;
+
     QString album = CollectionManager::instance()->album(dirPath);
     scanFile(albumRoot, album, info.fileName(), mode);
 }
@@ -331,14 +345,14 @@ void CollectionScanner::scanFile(const QString& albumRoot, const QString& album,
 {
     if (album.isEmpty() || fileName.isEmpty())
     {
-        kWarning(50003) << "scanFile(QString, QString, QString) called with empty album or empty filename";
+        kWarning() << "scanFile(QString, QString, QString) called with empty album or empty filename";
         return;
     }
 
     if (DatabaseAccess().backend()->isInTransaction())
     {
         // Install ScanController::instance()->suspendCollectionScan around your DatabaseTransaction
-        kError(50003) << "Detected an active database transaction when starting a collection file scan. "
+        kError() << "Detected an active database transaction when starting a collection file scan. "
                          "Please report this error.";
         return;
     }
@@ -347,7 +361,7 @@ void CollectionScanner::scanFile(const QString& albumRoot, const QString& album,
 
     if (location.isNull())
     {
-        kWarning(50003) << "Did not find a CollectionLocation for album root path " << albumRoot;
+        kWarning() << "Did not find a CollectionLocation for album root path " << albumRoot;
         return;
     }
 
@@ -356,11 +370,11 @@ void CollectionScanner::scanFile(const QString& albumRoot, const QString& album,
 
     if (!fi.exists())
     {
-        kWarning(50003) << "File given to scan does not exist" << albumRoot << album << fileName;
+        kWarning() << "File given to scan does not exist" << albumRoot << album << fileName;
         return;
     }
 
-    int albumId = checkAlbum(location, album);
+    int albumId       = checkAlbum(location, album);
     qlonglong imageId = DatabaseAccess().db()->getImageId(albumId, fileName);
 
     loadNameFilters();
@@ -404,7 +418,7 @@ void CollectionScanner::scanFile(const ImageInfo& info, FileScanMode mode)
     if (DatabaseAccess().backend()->isInTransaction())
     {
         // Install ScanController::instance()->suspendCollectionScan around your DatabaseTransaction
-        kError(50003) << "Detected an active database transaction when starting a collection file scan. "
+        kError() << "Detected an active database transaction when starting a collection file scan. "
                          "Please report this error.";
         return;
     }
@@ -549,7 +563,7 @@ int CollectionScanner::checkAlbum(const CollectionLocation& location, const QStr
         CollectionScannerHints::Album src = d->albumHints.value(CollectionScannerHints::DstPath(location.id(), album));
         if (!src.isNull())
         {
-            //kDebug(50003) << "Identified album" << src.albumId << "as source of new album" << fi.filePath();
+            //kDebug() << "Identified album" << src.albumId << "as source of new album" << fi.filePath();
             DatabaseAccess().db()->copyAlbumProperties(src.albumId, albumID);
             d->establishedSourceAlbums[albumID] = src.albumId;
         }
@@ -569,7 +583,7 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
 
     if ( !dir.exists() || !dir.isReadable() )
     {
-        kWarning(50003) << "Folder does not exist or is not readable: "
+        kWarning() << "Folder does not exist or is not readable: "
                         << dir.path();
         return;
     }
@@ -593,10 +607,18 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
     const QFileInfoList list = dir.entryInfoList(QDir::AllDirs | QDir::Files  | QDir::NoDotAndDotDot);
     QFileInfoList::const_iterator fi;
 
+    int counter = -1;
     for (fi = list.constBegin(); fi != list.constEnd(); ++fi)
     {
         if (!d->checkObserver())
             return; // return directly, do not go to cleanup code after loop!
+
+        counter++;
+        if (d->wantSignals && counter && (counter % 100 == 0))
+        {
+            emit scannedFiles(counter);
+            counter = 0;
+        }
 
         if ( fi->isFile())
         {
@@ -620,9 +642,16 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
             }
             else
             {
-                //kDebug(50003) << "Adding item " << fi->fileName();
+                //kDebug() << "Adding item " << fi->fileName();
 
                 scanNewFile(*fi, albumID);
+
+                // emit signals for scanned files with much higher granularity
+                if (d->wantSignals && counter && (counter % 2 == 0))
+                {
+                    emit scannedFiles(counter);
+                    counter = 0;
+                }
             }
         }
         else if ( fi->isDir() )
@@ -636,6 +665,9 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
             scanAlbum( location, subalbum );
         }
     }
+
+    if (d->wantSignals && counter)
+        emit scannedFiles(counter);
 
     // Mark items in the db which we did not see on disk.
     if (!itemIdSet.isEmpty())
@@ -751,6 +783,7 @@ int CollectionScanner::countItemsInFolder(const QString& directory)
 DatabaseItem::Category CollectionScanner::category(const QFileInfo& info)
 {
     QString suffix = info.suffix().toLower();
+
     if (d->imageFilterSet.contains(suffix))
         return DatabaseItem::Image;
     else if (d->audioFilterSet.contains(suffix))
@@ -835,9 +868,10 @@ bool CollectionScanner::checkDeleteRemoved()
     // Now look at time since items were removed, and the number of complete scans
     // since removed items were deleted. Values arbitrarily chosen.
     int daysPast = removedItemsTime.daysTo(now);
-    return (daysPast > 7 && completeScans > 2)
-        || (daysPast > 30 && completeScans > 0)
-        || (completeScans > 30);
+
+    return (daysPast > 7  && completeScans > 2) ||
+           (daysPast > 30 && completeScans > 0) ||
+           (completeScans > 30);
 }
 
 // ------------------------------------------------------------------------------------------
@@ -884,7 +918,7 @@ void CollectionScanner::removeStaleAlbums()
     QList<AlbumShortInfo>::const_iterator it;
     for (it = m_foldersToBeDeleted.constBegin(); it != m_foldersToBeDeleted.constEnd(); ++it)
     {
-        kDebug(50003) << "Removing album " << (*it).albumRoot + '/' + (*it).url;
+        kDebug() << "Removing album " << (*it).albumRoot + '/' + (*it).url;
         access.db()->deleteAlbum((*it).id);
     }
 }
@@ -912,7 +946,7 @@ void CollectionScanner::removeStaleFiles()
     QList< QPair<QString,int> >::const_iterator it;
     for (it = m_filesToBeDeleted.constBegin(); it != m_filesToBeDeleted.constEnd(); ++it)
     {
-        kDebug(50003) << "Removing: " << (*it).first << " in "
+        kDebug() << "Removing: " << (*it).first << " in "
                 << (*it).second;
         access.db()->deleteItem( (*it).second, (*it).first );
     }
@@ -950,7 +984,7 @@ void CollectionScanner::scan(const QString& folderPath)
 
     if (albumRoot.isNull())
     {
-        kWarning(50003) << "scanAlbums(QString): folder " << folderPath << " not found in collection.";
+        kWarning() << "scanAlbums(QString): folder " << folderPath << " not found in collection.";
         return;
     }
 
@@ -1006,8 +1040,7 @@ void CollectionScanner::scanAlbum(const QString& albumRoot, const QString& album
     QDir dir( albumRoot + album );
     if ( !dir.exists() || !dir.isReadable() )
     {
-        kWarning(50003) << "Folder does not exist or is not readable: "
-                        << dir.path();
+        kWarning() << "Folder does not exist or is not readable: " << dir.path();
         return;
     }
 
@@ -1050,7 +1083,7 @@ void CollectionScanner::scanAlbum(const QString& albumRoot, const QString& album
             }
             else
             {
-                kDebug(50003) << "Adding item " << fi->fileName();
+                kDebug() << "Adding item " << fi->fileName();
                 addItem(albumID, albumRoot, album, fi->fileName());
             }
         }
@@ -1099,7 +1132,7 @@ void CollectionScanner::updateItemsWithoutDate()
 
             if (albumID <= 0)
             {
-                kWarning(50003) << "Album ID == -1: " << albumURL;
+                kWarning() << "Album ID == -1: " << albumURL;
             }
 
             if (fi.exists())
@@ -1134,7 +1167,7 @@ int CollectionScanner::countItemsInFolder(const QString& directory)
     QFileInfoList::const_iterator fi;
     for (fi = list.constBegin(); fi != list.constEnd(); ++fi)
     {
-        if ( fi->isDir() &&
+        if ( fi->isDir()           &&
              fi->fileName() != "." &&
              fi->fileName() != "..")
         {
@@ -1150,7 +1183,6 @@ void CollectionScanner::markDatabaseAsScanned()
     DatabaseAccess access;
     access.db()->setSetting("Scanned", QDateTime::currentDateTime().toString(Qt::ISODate));
 }
-
 
 // ------------------- Tools ------------------------
 
@@ -1243,7 +1275,7 @@ void CollectionScanner::scanAlbum(const QString& albumRoot, const QString& album
 
 void CollectionScanner::scanOneAlbum(const QString& albumRoot, const QString& album)
 {
-    kDebug(50003) << "CollectionScanner::scanOneAlbum " << albumRoot << "/" << album;
+    kDebug() << "CollectionScanner::scanOneAlbum " << albumRoot << "/" << album;
     QDir dir(albumRoot + album);
     if (!dir.exists() || !dir.isReadable())
     {
@@ -1257,7 +1289,7 @@ void CollectionScanner::scanOneAlbum(const QString& albumRoot, const QString& al
 
         // get sub albums, but only direct subalbums (Album/ *, not Album/ * / *)
         currAlbumList = DatabaseAccess().db()->getSubalbumsForPath(albumRoot, album, true);
-        kDebug(50003) << "currAlbumList is " << currAlbumList;
+        kDebug() << "currAlbumList is " << currAlbumList;
 
         const QFileInfoList* infoList = dir.entryInfoList(QDir::Dirs);
         if (!infoList)
@@ -1289,7 +1321,7 @@ void CollectionScanner::scanOneAlbum(const QString& albumRoot, const QString& al
         for (QStringList::iterator it = newAlbumList.begin();
              it != newAlbumList.end(); ++it)
         {
-            kDebug(50003) << "New Album: " << *it;
+            kDebug() << "New Album: " << *it;
 
             QFileInfo fi(albumRoot + *it);
             DatabaseAccess().db()->addAlbum(albumRoot, *it, QString(), fi.lastModified().date(), QString());
@@ -1370,7 +1402,7 @@ void CollectionScanner::removeInvalidAlbums(const QString& albumRoot)
     DatabaseTransaction transaction(&access);
     for (QValueList<AlbumShortInfo>::iterator it = toBeDeleted.begin(); it != toBeDeleted.end(); ++it)
     {
-        kDebug(50003) << "Removing album " << (*it).albumRoot + '/' + (*it).url;
+        kDebug() << "Removing album " << (*it).albumRoot + '/' + (*it).url;
         access.db()->deleteAlbum((*it).id);
     }
 }

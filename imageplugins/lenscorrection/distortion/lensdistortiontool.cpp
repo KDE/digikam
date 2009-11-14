@@ -45,7 +45,6 @@
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kdebug.h>
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <klocale.h>
@@ -74,16 +73,27 @@ class LensDistortionToolPriv
 {
 public:
 
-    LensDistortionToolPriv()
-    {
-        maskPreviewLabel  = 0;
-        mainInput         = 0;
-        edgeInput         = 0;
-        rescaleInput      = 0;
-        brightenInput     = 0;
-        previewWidget     = 0;
-        gboxSettings      = 0;
-    }
+    LensDistortionToolPriv() :
+        configGroupName("lensdistortion Tool"),
+        config2ndOrderDistortionEntry("2nd Order Distortion"),
+        config4thOrderDistortionEntry("4th Order Distortion"),
+        configZoomFactorEntry("Zoom Factor"),
+        configBrightenEntry("Brighten"),
+
+        maskPreviewLabel(0),
+        mainInput(0),
+        edgeInput(0),
+        rescaleInput(0),
+        brightenInput(0),
+        previewWidget(0),
+        gboxSettings(0)
+        {}
+
+    const QString        configGroupName;
+    const QString        config2ndOrderDistortionEntry;
+    const QString        config4thOrderDistortionEntry;
+    const QString        configZoomFactorEntry;
+    const QString        configBrightenEntry;
 
     QLabel*              maskPreviewLabel;
 
@@ -113,10 +123,8 @@ LensDistortionTool::LensDistortionTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
-                                            EditorToolSettings::Ok|
-                                            EditorToolSettings::Cancel,
-                                            EditorToolSettings::ColorGuide);
+    d->gboxSettings = new EditorToolSettings;
+    d->gboxSettings->setTools(EditorToolSettings::ColorGuide);
 
     QGridLayout* gridSettings = new QGridLayout(d->gboxSettings->plainPage());
 
@@ -240,14 +248,14 @@ void LensDistortionTool::slotColorGuideChanged()
 void LensDistortionTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("lensdistortion Tool");
+    KConfigGroup group        = config->group(d->configGroupName);
 
     blockWidgetSignals(true);
 
-    d->mainInput->setValue(group.readEntry("2nd Order Distortion", d->mainInput->defaultValue()));
-    d->edgeInput->setValue(group.readEntry("4th Order Distortion", d->edgeInput->defaultValue()));
-    d->rescaleInput->setValue(group.readEntry("Zoom Factor", d->rescaleInput->defaultValue()));
-    d->brightenInput->setValue(group.readEntry("Brighten", d->brightenInput->defaultValue()));
+    d->mainInput->setValue(group.readEntry(d->config2ndOrderDistortionEntry, d->mainInput->defaultValue()));
+    d->edgeInput->setValue(group.readEntry(d->config4thOrderDistortionEntry, d->edgeInput->defaultValue()));
+    d->rescaleInput->setValue(group.readEntry(d->configZoomFactorEntry,      d->rescaleInput->defaultValue()));
+    d->brightenInput->setValue(group.readEntry(d->configBrightenEntry,       d->brightenInput->defaultValue()));
 
     blockWidgetSignals(false);
 
@@ -258,11 +266,12 @@ void LensDistortionTool::readSettings()
 void LensDistortionTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("lensdistortion Tool");
-    group.writeEntry("2nd Order Distortion", d->mainInput->value());
-    group.writeEntry("4th Order Distortion", d->edgeInput->value());
-    group.writeEntry("Zoom Factor", d->rescaleInput->value());
-    group.writeEntry("Brighten", d->brightenInput->value());
+    KConfigGroup group        = config->group(d->configGroupName);
+
+    group.writeEntry(d->config2ndOrderDistortionEntry, d->mainInput->value());
+    group.writeEntry(d->config4thOrderDistortionEntry, d->edgeInput->value());
+    group.writeEntry(d->configZoomFactorEntry,         d->rescaleInput->value());
+    group.writeEntry(d->configBrightenEntry,           d->brightenInput->value());
     d->previewWidget->writeSettings();
     config->sync();
 }

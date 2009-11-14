@@ -24,8 +24,6 @@
 #ifndef IMAGEFILTERMODEL_H
 #define IMAGEFILTERMODEL_H
 
-// Qt includes
-
 // KDE includes
 
 #include "kcategorizedsortfilterproxymodel.h"
@@ -119,6 +117,7 @@ public Q_SLOTS:
     void setCategorizationMode(ImageSortSettings::CategorizationMode mode);
     void setSortRole(ImageSortSettings::SortRole role);
     void setSortOrder(ImageSortSettings::SortOrder order);
+    void setUrlWhitelist(const KUrl::List urlList, const QString& id);
 
 Q_SIGNALS:
 

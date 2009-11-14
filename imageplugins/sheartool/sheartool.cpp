@@ -39,7 +39,6 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kcursor.h>
-#include <kdebug.h>
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <klocale.h>
@@ -70,18 +69,31 @@ class ShearToolPriv
 {
 public:
 
-    ShearToolPriv()
-    {
-        newWidthLabel   = 0;
-        newHeightLabel  = 0;
-        antialiasInput  = 0;
-        mainHAngleInput = 0;
-        mainVAngleInput = 0;
-        fineHAngleInput = 0;
-        fineVAngleInput = 0;
-        previewWidget   = 0;
-        gboxSettings    = 0;
-    }
+    ShearToolPriv() :
+        configGroupName("shear Tool"),
+        configAntiAliasingEntry("Anti Aliasing"),
+        configMainHAngleEntry("Main HAngle"),
+        configMainVAngleEntry("Main VAngle"),
+        configFineHAngleEntry("Fine HAngle"),
+        configFineVAngleEntry("Fine VAngle"),
+
+        newWidthLabel(0),
+        newHeightLabel(0),
+        antialiasInput(0),
+        mainHAngleInput(0),
+        mainVAngleInput(0),
+        fineHAngleInput(0),
+        fineVAngleInput(0),
+        previewWidget(0),
+        gboxSettings(0)
+        {}
+
+    const QString        configGroupName;
+    const QString        configAntiAliasingEntry;
+    const QString        configMainHAngleEntry;
+    const QString        configMainVAngleEntry;
+    const QString        configFineHAngleEntry;
+    const QString        configFineVAngleEntry;
 
     QLabel*              newWidthLabel;
     QLabel*              newHeightLabel;
@@ -122,10 +134,8 @@ ShearTool::ShearTool(QObject* parent)
     QString temp;
     Digikam::ImageIface iface(0, 0);
 
-    d->gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
-                                             EditorToolSettings::Ok|
-                                             EditorToolSettings::Cancel,
-                                             EditorToolSettings::ColorGuide);
+    d->gboxSettings = new EditorToolSettings;
+    d->gboxSettings->setTools(EditorToolSettings::ColorGuide);
 
     // -------------------------------------------------------------
 
@@ -234,24 +244,24 @@ void ShearTool::slotColorGuideChanged()
 void ShearTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("sheartool Tool");
-//    d->mainHAngleInput->setValue(group.readEntry("Main HAngle", d->mainHAngleInput->defaultValue()));
-//    d->mainVAngleInput->setValue(group.readEntry("Main VAngle", d->mainVAngleInput->defaultValue()));
-//    d->fineHAngleInput->setValue(group.readEntry("Fine HAngle", d->fineHAngleInput->defaultValue()));
-//    d->fineVAngleInput->setValue(group.readEntry("Fine VAngle", d->fineVAngleInput->defaultValue()));
-    d->antialiasInput->setChecked(group.readEntry("Anti Aliasing", true));
+    KConfigGroup group        = config->group(d->configGroupName);
+//    d->mainHAngleInput->setValue(group.readEntry(d->configMainHAngleEntry, d->mainHAngleInput->defaultValue()));
+//    d->mainVAngleInput->setValue(group.readEntry(d->configMainVAngleEntry, d->mainVAngleInput->defaultValue()));
+//    d->fineHAngleInput->setValue(group.readEntry(d->configFineHAngleEntry, d->fineHAngleInput->defaultValue()));
+//    d->fineVAngleInput->setValue(group.readEntry(d->configFineVAngleEntry, d->fineVAngleInput->defaultValue()));
+    d->antialiasInput->setChecked(group.readEntry(d->configAntiAliasingEntry, true));
     slotEffect();
 }
 
 void ShearTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("sheartool Tool");
-//    group.writeEntry("Main HAngle", d->mainHAngleInput->value());
-//    group.writeEntry("Main VAngle", d->mainVAngleInput->value());
-//    group.writeEntry("Fine HAngle", d->fineHAngleInput->value());
-//    group.writeEntry("Fine VAngle", d->fineVAngleInput->value());
-    group.writeEntry("Anti Aliasing", d->antialiasInput->isChecked());
+    KConfigGroup group        = config->group(d->configGroupName);
+//    group.writeEntry(d->configMainHAngleEntry, d->mainHAngleInput->value());
+//    group.writeEntry(d->configMainVAngleEntry, d->mainVAngleInput->value());
+//    group.writeEntry(d->configFineHAngleEntry, d->fineHAngleInput->value());
+//    group.writeEntry(d->configFineVAngleEntry, d->fineVAngleInput->value());
+    group.writeEntry(d->configAntiAliasingEntry, d->antialiasInput->isChecked());
     d->previewWidget->writeSettings();
     config->sync();
 }

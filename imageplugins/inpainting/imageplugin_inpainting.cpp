@@ -27,7 +27,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <klocale.h>
 #include <kgenericfactory.h>
 #include <klibloader.h>
@@ -35,6 +34,7 @@
 #include <kactioncollection.h>
 #include <kcursor.h>
 #include <kapplication.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -51,7 +51,7 @@ ImagePlugin_InPainting::ImagePlugin_InPainting(QObject *parent, const QVariantLi
                       : Digikam::ImagePlugin(parent, "ImagePlugin_InPainting")
 {
     m_inPaintingAction = new KAction(KIcon("inpainting"), i18n("In-painting..."), this);
-    m_inPaintingAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_E));
+    m_inPaintingAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_E));
     m_inPaintingAction->setWhatsThis( i18n( "This filter can be used to in-paint a part in a photo. "
                                             "To use this option, select a region to in-paint.") );
 
@@ -62,7 +62,7 @@ ImagePlugin_InPainting::ImagePlugin_InPainting(QObject *parent, const QVariantLi
 
     setXMLFile( "digikamimageplugin_inpainting_ui.rc" );
 
-    kDebug(50006) << "ImagePlugin_InPainting plugin loaded";
+    kDebug() << "ImagePlugin_InPainting plugin loaded";
 }
 
 ImagePlugin_InPainting::~ImagePlugin_InPainting()

@@ -42,12 +42,13 @@
 
 // KDE includes
 
-#include <kdebug.h>
+
 #include <klocale.h>
 #include <kiconloader.h>
 
 // Local includes
 
+#include "iccprofile.h"
 #include "lcmsprf.h"
 
 namespace Digikam
@@ -247,8 +248,8 @@ bool CIETongueWidget::setProfileData(const QByteArray& profileData)
 {
     if (!profileData.isEmpty())
     {
-        cmsHPROFILE hProfile = cmsOpenProfileFromMem((void*)profileData.data(),
-                                                    (DWORD)profileData.size());
+        LcmsLock lock;
+        cmsHPROFILE hProfile = cmsOpenProfileFromMem((void*)profileData.data(), (DWORD)profileData.size());
 
         if (!hProfile)
         {
@@ -281,7 +282,8 @@ bool CIETongueWidget::setProfileFromFile(const KUrl& file)
 {
     if (!file.isEmpty() && file.isValid())
     {
-        cmsHPROFILE hProfile = cmsOpenProfileFromFile(QFile::encodeName(file.path()), "r");
+        LcmsLock lock;
+        cmsHPROFILE hProfile = cmsOpenProfileFromFile(QFile::encodeName(file.toLocalFile()), "r");
 
         if (!hProfile)
         {
@@ -321,7 +323,7 @@ void CIETongueWidget::setProfile(cmsHPROFILE hProfile)
 
     ZeroMemory(&(d->Primaries), sizeof(cmsCIExyYTRIPLE));
 
-    if (cmsIsTag(hProfile, icSigRedColorantTag) &&
+    if (cmsIsTag(hProfile, icSigRedColorantTag)   &&
         cmsIsTag(hProfile, icSigGreenColorantTag) &&
         cmsIsTag(hProfile, icSigBlueColorantTag))
     {
@@ -385,9 +387,9 @@ void CIETongueWidget::biasedLine(int x1, int y1, int x2, int y2)
     d->painter.drawLine(x1 + d->xBias, y1, x2 + d->xBias, y2);
 }
 
-void CIETongueWidget::biasedText(int x, int y, QString Txt)
+void CIETongueWidget::biasedText(int x, int y, const QString& txt)
 {
-    d->painter.drawText(QPoint(d->xBias + x, y), Txt);
+    d->painter.drawText(QPoint(d->xBias + x, y), txt);
 }
 
 QRgb CIETongueWidget::colorByCoord(double x, double y)
@@ -494,7 +496,7 @@ void CIETongueWidget::drawTongueAxis()
 
     d->painter.setPen(qRgb(255, 255, 255));
 
-    biasedLine(0, 0,          0,          d->pxrows - 1);
+    biasedLine(0, 0,           0,           d->pxrows - 1);
     biasedLine(0, d->pxrows-1, d->pxcols-1, d->pxrows - 1);
 
     for (int y = 1; y <= 9; y += 1)

@@ -42,11 +42,12 @@
 
 #include <klocale.h>
 #include <kstandarddirs.h>
+#include <kdebug.h>
 
 // Local includes
 
-#include "constants.h"
 #include "themeengine.h"
+#include "globals.h"
 
 namespace Digikam
 {

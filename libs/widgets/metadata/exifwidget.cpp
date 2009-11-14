@@ -31,7 +31,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+
 #include <klocale.h>
 
 // Local includes
@@ -75,7 +75,7 @@ QString ExifWidget::getMetadataTitle()
 
 bool ExifWidget::loadFromURL(const KUrl& url)
 {
-    setFileName(url.path());
+    setFileName(url.toLocalFile());
 
     if (url.isEmpty())
     {
@@ -84,7 +84,7 @@ bool ExifWidget::loadFromURL(const KUrl& url)
     }
     else
     {
-        DMetadata metadata(url.path());
+        DMetadata metadata(url.toLocalFile());
 
         if (!metadata.hasExif())
         {

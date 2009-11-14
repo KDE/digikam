@@ -53,6 +53,9 @@ public:
     AltLangStrEdit *altLangStrEdit;
 
     CaptionsMap     captionsValues;
+
+    QString         lastDeletedLanguage;
+    CaptionValues   lastDeletedValues;
 };
 
 CaptionEdit::CaptionEdit(QWidget* parent)
@@ -71,21 +74,20 @@ CaptionEdit::CaptionEdit(QWidget* parent)
     setMargin(0);
     setSpacing(0);
 
-    connect(d->altLangStrEdit, SIGNAL(signalModified()),
-            this, SLOT(slotModified()));
-
     connect(d->altLangStrEdit, SIGNAL(signalSelectionChanged(const QString&)),
             this, SLOT(slotSelectionChanged(const QString&)));
 
-    connect(d->altLangStrEdit, SIGNAL(signalAddValue(const QString&, const QString&)),
+    connect(d->altLangStrEdit, SIGNAL(signalModified(const QString&, const QString&)),
+            this, SLOT(slotCaptionModified(const QString&, const QString&)));
+
+    connect(d->altLangStrEdit, SIGNAL(signalValueAdded(const QString&, const QString&)),
             this, SLOT(slotAddValue(const QString&, const QString&)));
 
-    connect(d->altLangStrEdit, SIGNAL(signalDeleteValue(const QString&)),
+    connect(d->altLangStrEdit, SIGNAL(signalValueDeleted(const QString&)),
             this, SLOT(slotDeleteValue(const QString&)));
 
     connect(d->authorEdit, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotAuthorChanged(const QString&)));
-
 }
 
 CaptionEdit::~CaptionEdit()
@@ -96,13 +98,12 @@ CaptionEdit::~CaptionEdit()
 void CaptionEdit::reset()
 {
     d->altLangStrEdit->reset();
-    d->authorEdit->clear();
-    d->captionsValues.clear();
-}
 
-void CaptionEdit::slotModified()
-{
-    emit signalModified();
+    d->authorEdit->blockSignals(true);
+    d->authorEdit->clear();
+    d->authorEdit->blockSignals(false);
+
+    d->captionsValues.clear();
 }
 
 void CaptionEdit::slotAddValue(const QString& lang, const QString& text)
@@ -111,22 +112,50 @@ void CaptionEdit::slotAddValue(const QString& lang, const QString& text)
     val.caption = text;
     val.author  = d->authorEdit->text();
     val.date    = QDateTime::currentDateTime();
+
+    // The user may have removed the text and directly entered a new one. Do not drop author then.
+    if (val.author.isEmpty() && d->lastDeletedLanguage == lang)
+    {
+        val.author = d->lastDeletedValues.author;
+        d->authorEdit->blockSignals(true);
+        d->authorEdit->setText(val.author);
+        d->authorEdit->blockSignals(false);
+    }
+    d->lastDeletedLanguage.clear();
+
     d->captionsValues.insert(lang, val);
+    emit signalModified();
+}
+
+void CaptionEdit::slotCaptionModified(const QString& lang, const QString& text)
+{
+    slotAddValue(lang, text);
 }
 
 void CaptionEdit::slotDeleteValue(const QString& lang)
 {
+    d->lastDeletedLanguage = lang;
+    d->lastDeletedValues   = d->captionsValues.value(lang);
+
     d->captionsValues.remove(lang);
+    d->authorEdit->blockSignals(true);
+    d->authorEdit->clear();
+    d->authorEdit->blockSignals(false);
+    emit signalModified();
 }
 
 void CaptionEdit::slotSelectionChanged(const QString& lang)
 {
-    QString author = d->captionsValues[lang].author;
+    QString author = d->captionsValues.value(lang).author;
+    d->authorEdit->blockSignals(true);
     d->authorEdit->setText(author);
+    d->authorEdit->blockSignals(false);
 }
 
 void CaptionEdit::setValues(const CaptionsMap& values)
 {
+    d->lastDeletedLanguage.clear();
+
     d->captionsValues = values;
     d->altLangStrEdit->setValues(d->captionsValues.toAltLangMap());
     slotSelectionChanged(d->altLangStrEdit->currentLanguageCode());
@@ -137,18 +166,13 @@ CaptionsMap& CaptionEdit::values()
     return d->captionsValues;
 }
 
-void CaptionEdit::apply()
-{
-    d->altLangStrEdit->apply();
-}
-
 void CaptionEdit::slotAuthorChanged(const QString& text)
 {
-    bool dirty = (text != d->captionsValues[d->altLangStrEdit->currentLanguageCode()].author);
-    d->altLangStrEdit->setDirty(dirty);
-
-    if (dirty)
-        emit signalModified();
+    CaptionValues captionValues = d->captionsValues.value(d->altLangStrEdit->currentLanguageCode());
+    if (text != captionValues.author)
+    {
+        d->altLangStrEdit->addCurrent();
+    }
 }
 
 }  // namespace Digikam

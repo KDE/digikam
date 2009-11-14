@@ -34,6 +34,11 @@
 #include "imageplugin.h"
 #include "digikam_export.h"
 
+namespace Digikam
+{
+    class IccProfile;
+}
+
 class ImagePlugin_CorePriv;
 
 class ImagePlugin_Core : public Digikam::ImagePlugin
@@ -47,6 +52,8 @@ public:
 
     void setEnabledSelectionActions(bool b);
     void setEnabledActions(bool b);
+
+    typedef Digikam::IccProfile IccProfile; // to make signal/slot work
 
 private Q_SLOTS:
 
@@ -67,12 +74,15 @@ private Q_SLOTS:
     void slotConvertTo8Bits();
     void slotConvertTo16Bits();
 
-    void slotColorManagement();
+    void slotConvertToColorSpace(const IccProfile&);
+    void slotUpdateColorSpaceMenu();
+    void slotProfileConversionTool();
+
+    void slotSetupICC();
 
 private:
 
     ImagePlugin_CorePriv* const d;
-
 };
 
 #endif /* IMAGEPLUGIN_CORE_H */

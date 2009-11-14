@@ -27,7 +27,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <klocale.h>
 #include <klibloader.h>
 #include <kgenericfactory.h>
@@ -35,6 +34,7 @@
 #include <kactioncollection.h>
 #include <kcursor.h>
 #include <kapplication.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -56,7 +56,7 @@ ImagePlugin_OilPaint::ImagePlugin_OilPaint(QObject *parent, const QVariantList &
 
     setXMLFile( "digikamimageplugin_oilpaint_ui.rc" );
 
-    kDebug(50006) << "ImagePlugin_OilPaint plugin loaded";
+    kDebug() << "ImagePlugin_OilPaint plugin loaded";
 }
 
 ImagePlugin_OilPaint::~ImagePlugin_OilPaint()

@@ -81,12 +81,12 @@ PGFSettings::PGFSettings(QWidget *parent)
     d->labelPGFcompression = new QLabel(i18n("PGF quality:"), this);
 
     d->PGFcompression->setWhatsThis(i18n("<p>The quality value for PGF images:</p>"
-                                         "<b>1</b>: high quality (no compression and "
-                                         "large file size)</p>"
+                                         "<p><b>1</b>: high quality (no compression and "
+                                         "large file size)<br/>"
                                          "<b>3</b>: good quality (default)<br/>"
                                          "<b>6</b>: medium quality<br/>"
-                                         "<p><b>9</b>: low quality (high compression and small "
-                                         "file size)<br/>"
+                                         "<b>9</b>: low quality (high compression and small "
+                                         "file size)</p>"
                                          "<p><b>Note: PGF is not a lossless image "
                                          "compression format when you use this setting.</b></p>"));
 

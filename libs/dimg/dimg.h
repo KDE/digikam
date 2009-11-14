@@ -42,6 +42,7 @@
 #include "drawdecoding.h"
 #include "dcolor.h"
 #include "dcolorcomposer.h"
+#include "iccprofile.h"
 
 class QString;
 
@@ -120,13 +121,13 @@ public:
 
     /** Load image using QByteArray as file path
      */
-    DImg(const QByteArray& filePath, DImgLoaderObserver *observer = 0,
-         DRawDecoding rawDecodingSettings=DRawDecoding());
+    explicit DImg(const QByteArray& filePath, DImgLoaderObserver *observer = 0,
+                  DRawDecoding rawDecodingSettings=DRawDecoding());
 
     /** Load image using QString as file path
      */
-    DImg(const QString& filePath, DImgLoaderObserver *observer = 0,
-         DRawDecoding rawDecodingSettings=DRawDecoding());
+    explicit DImg(const QString& filePath, DImgLoaderObserver *observer = 0,
+                  DRawDecoding rawDecodingSettings=DRawDecoding());
 
     /** Copy image: Creates a shallow copy that refers to the same shared data.
         The two images will be equal. Call detach() or copy() to create deep copies.
@@ -136,7 +137,7 @@ public:
     /** Copy image: Creates a copy of a QImage object. If the QImage is null, a
         null DImg will be created.
      */
-    DImg(const QImage& image);
+    explicit DImg(const QImage& image);
 
     /** Create image from data.
         If data is 0, a new buffer will be allocated, otherwise the given data will be used:
@@ -197,6 +198,10 @@ public:
     uchar*      stripImageData();
 
     bool        load(const QString& filePath, DImgLoaderObserver *observer = 0,
+                     DRawDecoding rawDecodingSettings=DRawDecoding());
+    bool        load(const QString& filePath,
+                     bool loadMetadata, bool loadICCData, bool loadUniqueHash,
+                     DImgLoaderObserver *observer = 0,
                      DRawDecoding rawDecodingSettings=DRawDecoding());
 
     bool        save(const QString& filePath, FORMAT frm, DImgLoaderObserver *observer = 0);
@@ -271,20 +276,19 @@ public:
     QByteArray getExif()      const;
     QByteArray getIptc()      const;
     QByteArray getXmp()       const;
-    QByteArray getICCProfil() const;
+    IccProfile getIccProfile()const;
     void       setComments(const QByteArray& commentsData);
     void       setExif(const QByteArray& exifData);
     void       setIptc(const QByteArray& iptcData);
     void       setXmp(const QByteArray& xmpData);
-    void       setICCProfil(const QByteArray& profile);
+    void       setIccProfile(const IccProfile& profile);
 
     QByteArray metadata(METADATA key) const;
 
-    bool       getICCProfilFromFile(const QString& filePath);
-    bool       setICCProfilToFile(const QString& filePath);
-
     void       setAttribute(const QString& key, const QVariant& value);
     QVariant   attribute(const QString& key) const;
+    bool       hasAttribute(const QString& key) const;
+    void       removeAttribute(const QString& key);
 
     void       setEmbeddedText(const QString& key, const QString& text);
     QString    embeddedText(const QString& key) const;
@@ -371,7 +375,7 @@ public:
     void       flip(FLIP direction);
 
     QPixmap    convertToPixmap();
-    QPixmap    convertToPixmap(IccTransform* monitorICCtrans);
+    QPixmap    convertToPixmap(IccTransform& monitorICCtrans);
 
     /** Return a mask image where pure white and pure black pixels are over-colored.
         This way is used to identify over and under exposed pixels.

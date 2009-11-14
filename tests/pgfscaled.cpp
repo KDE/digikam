@@ -6,7 +6,7 @@
  * Date        : 2009-02-04
  * Description : a command line tool to test PGF scaled to QImage
  *
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -20,17 +20,17 @@
  *
  * ============================================================ */
 
-// Qt includes.
+// Qt includes
 
-#include <QImage>
 #include <QFile>
 #include <QIODevice>
+#include <QImage>
 
-// KDE includes.
+// KDE includes
 
-#include "kdebug.h"
+#include <kdebug.h>
 
-// Local includes.
+// Local includes
 
 #include "pgfutils.h"
 
@@ -40,8 +40,8 @@ int main(int argc, char** argv)
 {
     if(argc != 2)
     {
-        kDebug(50003) << "pgfscaled - Load scaled version of PGF image and save to PNG";
-        kDebug(50003) << "Usage: <pgffile>";
+        kDebug() << "pgfscaled - Load scaled version of PGF image and save to PNG";
+        kDebug() << "Usage: <pgffile>";
         return -1;
     }
 
@@ -53,7 +53,7 @@ int main(int argc, char** argv)
     QFile file(fname);
     if ( !file.open(QIODevice::ReadOnly) )
     {
-        kDebug(50003) << "Cannot open PGF file to read...";
+        kDebug() << "Cannot open PGF file to read...";
         return -1;
     }
 
@@ -61,7 +61,7 @@ int main(int argc, char** argv)
 
     if (!loadPGFScaled(img, file.fileName(), 1280))
     {
-        kDebug(50003) << "loadPGFScaled failed...";
+        kDebug() << "loadPGFScaled failed...";
         return -1;
     }
     img.save(file.fileName()+QString("-scaled.png"), "PNG");

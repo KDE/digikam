@@ -26,19 +26,18 @@
 
 // Qt includes
 
-#include <QHeaderView>
-#include <QMimeData>
-#include <QMap>
-#include <QPixmap>
-#include <QPainter>
 #include <QDrag>
+#include <QHeaderView>
+#include <QMap>
+#include <QMimeData>
+#include <QPainter>
+#include <QPixmap>
 
 // KDE includes
 
-#include <klocale.h>
-#include <kdebug.h>
-#include <kiconloader.h>
 #include <kaction.h>
+#include <kiconloader.h>
+#include <klocale.h>
 #include <kmenu.h>
 
 namespace Digikam

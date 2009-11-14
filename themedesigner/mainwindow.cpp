@@ -7,7 +7,7 @@
  * Description : main digiKam theme designer window
  *
  * Copyright (C) 2005 by Renchi Raju <renchi at pooh.tam.uiuc.edu>
- * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -28,48 +28,106 @@
 // Qt includes
 
 #include <QCheckBox>
-#include <QDateTime>
 #include <QFileInfo>
-#include <QFrame>
 #include <QGridLayout>
 #include <QGroupBox>
-#include <QHBoxLayout>
 #include <QLabel>
-#include <QPushButton>
 #include <QSplitter>
-#include <QTextStream>
 #include <QVBoxLayout>
 
 // KDE includes
 
-#include <kapplication.h>
 #include <kcolorbutton.h>
-#include <kcolordialog.h>
 #include <kcombobox.h>
 #include <kfiledialog.h>
-#include <kiconloader.h>
+#include <kglobal.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kuser.h>
+#include <kstandarddirs.h>
+#include <kstandardguiitem.h>
+#include <kurl.h>
 
 // Local includes
 
 #include "albumsettings.h"
-#include "folderview.h"
 #include "folderitem.h"
-#include "themediconview.h"
+#include "folderview.h"
 #include "imagepropertiestab.h"
-#include "themeengine.h"
 #include "theme.h"
+#include "themediconview.h"
+#include "themeengine.h"
 
 namespace Digikam
 {
 
+class MainWindowPriv
+{
+public:
+
+    MainWindowPriv()
+    {
+        bevelLabel       = 0;
+        gradientLabel    = 0;
+        begColorLabel    = 0;
+        endColorLabel    = 0;
+        borderColorLabel = 0;
+        propertyCombo    = 0;
+        bevelCombo       = 0;
+        gradientCombo    = 0;
+        addBorderCheck   = 0;
+        endColorBtn      = 0;
+        begColorBtn      = 0;
+        borderColorBtn   = 0;
+        folderView       = 0;
+        iconView         = 0;
+        propView         = 0;
+        theme            = 0;
+    }
+
+    QLabel*             bevelLabel;
+    QLabel*             gradientLabel;
+    QLabel*             begColorLabel;
+    QLabel*             endColorLabel;
+    QLabel*             borderColorLabel;
+
+    QCheckBox*          addBorderCheck;
+
+    QMap<int,int>       bevelMap;
+    QMap<int,int>       bevelReverseMap;
+    QMap<int,int>       gradientMap;
+    QMap<int,int>       gradientReverseMap;
+
+    KComboBox*          propertyCombo;
+    KComboBox*          bevelCombo;
+    KComboBox*          gradientCombo;
+
+    KColorButton*       endColorBtn;
+    KColorButton*       begColorBtn;
+    KColorButton*       borderColorBtn;
+
+    FolderView*         folderView;
+    ThemedIconView*     iconView;
+    ImagePropertiesTab* propView;
+    Theme*              theme;
+};
+
 MainWindow::MainWindow()
-          : QWidget(0)
+          : KDialog(0), d(new MainWindowPriv)
 {
     setWindowTitle(i18n("digiKam Theme Designer"));
     setAttribute(Qt::WA_DeleteOnClose);
+
+    // --------------------------------------------------------
+
+    setButtons(User1|User2|Close);
+    setButtonGuiItem(User2, KStandardGuiItem::open());
+    setButtonGuiItem(User1, KStandardGuiItem::save());
+    setButtonToolTip(User2, i18n("Load theme"));
+    setButtonToolTip(User1, i18n("Save theme"));
+    setButtonToolTip(Close, i18n("Close the theme designer"));
+    setDefaultButton(Close);
+
+    // --------------------------------------------------------
 
     AlbumSettings::instance();
     AlbumSettings::instance()->readSettings();
@@ -77,181 +135,163 @@ MainWindow::MainWindow()
     // Initialize theme engine ------------------------------------
 
     ThemeEngine::instance()->scanThemes();
-    m_theme = new Theme(*(ThemeEngine::instance()->getCurrentTheme()));
+    d->theme = new Theme(*(ThemeEngine::instance()->getCurrentTheme()));
 
     // Actual views ------------------------------------------------
-
-    QGridLayout* layout = new QGridLayout(this);
 
     QSplitter* splitter = new QSplitter(this);
     splitter->setOrientation(Qt::Horizontal);
     splitter->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
 
-    m_folderView = new FolderView(splitter);
-    m_iconView   = new ThemedIconView(splitter);
-    m_propView   = new ImagePropertiesTab(splitter);
+    d->folderView = new FolderView(splitter);
+    d->iconView   = new ThemedIconView(splitter);
+    d->propView   = new ImagePropertiesTab(splitter);
 
     // Property Editor ---------------------------------------------
 
     QGroupBox *groupBox = new QGroupBox(this);
     QVBoxLayout* vlay   = new QVBoxLayout(groupBox);
 
-    QLabel* label1  = new QLabel(i18n("Property: "), groupBox);
-    m_propertyCombo = new KComboBox(groupBox);
+    QLabel* label1   = new QLabel(i18n("Property: "), groupBox);
+    d->propertyCombo = new KComboBox(groupBox);
 
-    m_bevelLabel = new QLabel(i18n("Bevel: "), groupBox);
-    m_bevelCombo = new KComboBox(groupBox);
+    d->bevelLabel = new QLabel(i18n("Bevel: "), groupBox);
+    d->bevelCombo = new KComboBox(groupBox);
 
-    m_gradientLabel = new QLabel(i18n("Gradient: "), groupBox);
-    m_gradientCombo = new KComboBox(groupBox);
+    d->gradientLabel = new QLabel(i18n("Gradient: "), groupBox);
+    d->gradientCombo = new KComboBox(groupBox);
 
-    m_begColorLabel = new QLabel(i18n("Start Color: "), groupBox);
-    m_begColorBtn   = new KColorButton(groupBox);
+    d->begColorLabel = new QLabel(i18n("Start Color: "), groupBox);
+    d->begColorBtn   = new KColorButton(groupBox);
 
-    m_endColorLabel = new QLabel(i18n("End Color: "), groupBox);
-    m_endColorBtn   = new KColorButton(groupBox);
+    d->endColorLabel = new QLabel(i18n("End Color: "), groupBox);
+    d->endColorBtn   = new KColorButton(groupBox);
 
-    m_addBorderCheck = new QCheckBox(i18n("Add Border"), groupBox);
+    d->addBorderCheck = new QCheckBox(i18n("Add Border"), groupBox);
 
-    m_borderColorLabel = new QLabel(i18n("Border Color: "), groupBox);
-    m_borderColorBtn   = new KColorButton(groupBox);
+    d->borderColorLabel = new QLabel(i18n("Border Color: "), groupBox);
+    d->borderColorBtn   = new KColorButton(groupBox);
 
     vlay->setAlignment(Qt::AlignTop);
     vlay->setSpacing(5);
     vlay->setMargin(5);
     vlay->addWidget(label1);
-    vlay->addWidget(m_propertyCombo);
-    vlay->addWidget(m_bevelLabel);
-    vlay->addWidget(m_bevelCombo);
-    vlay->addWidget(m_gradientLabel);
-    vlay->addWidget(m_gradientCombo);
-    vlay->addWidget(m_begColorLabel);
-    vlay->addWidget(m_begColorBtn);
-    vlay->addWidget(m_endColorLabel);
-    vlay->addWidget(m_endColorBtn);
-    vlay->addWidget( m_addBorderCheck );
-    vlay->addWidget(m_borderColorLabel);
-    vlay->addWidget(m_borderColorBtn);
+    vlay->addWidget(d->propertyCombo);
+    vlay->addWidget(d->bevelLabel);
+    vlay->addWidget(d->bevelCombo);
+    vlay->addWidget(d->gradientLabel);
+    vlay->addWidget(d->gradientCombo);
+    vlay->addWidget(d->begColorLabel);
+    vlay->addWidget(d->begColorBtn);
+    vlay->addWidget(d->endColorLabel);
+    vlay->addWidget(d->endColorBtn);
+    vlay->addWidget( d->addBorderCheck );
+    vlay->addWidget(d->borderColorLabel);
+    vlay->addWidget(d->borderColorBtn);
     vlay->addItem(new QSpacerItem(10, 10, QSizePolicy::Minimum, QSizePolicy::Expanding));
 
     // -------------------------------------------------------------
 
-    m_propertyCombo->insertItem(BASE, "Base");
-    m_propertyCombo->insertItem(REGULARTEXT, "Regular Text");
-    m_propertyCombo->insertItem(SELECTEDTEXT, "Selected Text");
-    m_propertyCombo->insertItem(REGULARSPECIALTEXT, "Special Regular Text");
-    m_propertyCombo->insertItem(SELECTEDSPECIALTEXT, "Special Selected Text");
-    m_propertyCombo->insertItem(BANNER, "Banner");
-    m_propertyCombo->insertItem(THUMBNAILREGULAR, "Thumbnail Regular");
-    m_propertyCombo->insertItem(THUMBNAILSELECTED, "Thumbnail Selected");
-    m_propertyCombo->insertItem(LISTVIEWREGULAR, "ListView Regular");
-    m_propertyCombo->insertItem(LISTVIEWSELECTED, "ListView Selected");
+    d->propertyCombo->insertItem(BASE, "Base");
+    d->propertyCombo->insertItem(REGULARTEXT, "Regular Text");
+    d->propertyCombo->insertItem(SELECTEDTEXT, "Selected Text");
+    d->propertyCombo->insertItem(REGULARSPECIALTEXT, "Special Regular Text");
+    d->propertyCombo->insertItem(SELECTEDSPECIALTEXT, "Special Selected Text");
+    d->propertyCombo->insertItem(BANNER, "Banner");
+    d->propertyCombo->insertItem(THUMBNAILREGULAR, "Thumbnail Regular");
+    d->propertyCombo->insertItem(THUMBNAILSELECTED, "Thumbnail Selected");
+    d->propertyCombo->insertItem(LISTVIEWREGULAR, "ListView Regular");
+    d->propertyCombo->insertItem(LISTVIEWSELECTED, "ListView Selected");
 
-    m_bevelCombo->insertItem(FLAT, "Flat");
-    m_bevelCombo->insertItem(RAISED, "Raised");
-    m_bevelCombo->insertItem(SUNKEN, "Sunken");
+    d->bevelCombo->insertItem(FLAT, "Flat");
+    d->bevelCombo->insertItem(RAISED, "Raised");
+    d->bevelCombo->insertItem(SUNKEN, "Sunken");
 
-    m_gradientCombo->insertItem(SOLID, "Solid");
-    m_gradientCombo->insertItem(HORIZONTAL, "Horizontal");
-    m_gradientCombo->insertItem(VERTICAL, "Vertical");
-    m_gradientCombo->insertItem(DIAGONAL, "Diagonal");
+    d->gradientCombo->insertItem(SOLID, "Solid");
+    d->gradientCombo->insertItem(HORIZONTAL, "Horizontal");
+    d->gradientCombo->insertItem(VERTICAL, "Vertical");
+    d->gradientCombo->insertItem(DIAGONAL, "Diagonal");
 
-    m_bevelMap[FLAT]   = Theme::FLAT;
-    m_bevelMap[RAISED] = Theme::RAISED;
-    m_bevelMap[SUNKEN] = Theme::SUNKEN;
+    d->bevelMap[FLAT]   = Theme::FLAT;
+    d->bevelMap[RAISED] = Theme::RAISED;
+    d->bevelMap[SUNKEN] = Theme::SUNKEN;
 
-    m_gradientMap[SOLID]      = Theme::SOLID;
-    m_gradientMap[HORIZONTAL] = Theme::HORIZONTAL;
-    m_gradientMap[VERTICAL]   = Theme::VERTICAL;
-    m_gradientMap[DIAGONAL]   = Theme::DIAGONAL;
+    d->gradientMap[SOLID]      = Theme::SOLID;
+    d->gradientMap[HORIZONTAL] = Theme::HORIZONTAL;
+    d->gradientMap[VERTICAL]   = Theme::VERTICAL;
+    d->gradientMap[DIAGONAL]   = Theme::DIAGONAL;
 
-    m_bevelReverseMap[Theme::FLAT]   = FLAT;
-    m_bevelReverseMap[Theme::RAISED] = RAISED;
-    m_bevelReverseMap[Theme::SUNKEN] = SUNKEN;
+    d->bevelReverseMap[Theme::FLAT]   = FLAT;
+    d->bevelReverseMap[Theme::RAISED] = RAISED;
+    d->bevelReverseMap[Theme::SUNKEN] = SUNKEN;
 
-    m_gradientReverseMap[Theme::SOLID]      = SOLID;
-    m_gradientReverseMap[Theme::HORIZONTAL] = HORIZONTAL;
-    m_gradientReverseMap[Theme::VERTICAL]   = VERTICAL;
-    m_gradientReverseMap[Theme::DIAGONAL]   = DIAGONAL;
+    d->gradientReverseMap[Theme::SOLID]      = SOLID;
+    d->gradientReverseMap[Theme::HORIZONTAL] = HORIZONTAL;
+    d->gradientReverseMap[Theme::VERTICAL]   = VERTICAL;
+    d->gradientReverseMap[Theme::DIAGONAL]   = DIAGONAL;
 
-    m_begColorBtn->setColor(Qt::black);
-    m_endColorBtn->setColor(Qt::black);
-    m_borderColorBtn->setColor(Qt::black);
-
-    // Bottom button bar -------------------------------------------------------
-
-    QHBoxLayout* buttonLayout = new QHBoxLayout();
-
-    QPushButton* loadButton = new QPushButton(this);
-    loadButton->setText(i18nc("load theme", "&Load"));
-
-    QPushButton* saveButton = new QPushButton(this);
-    saveButton->setText(i18nc("save theme", "&Save"));
-
-    QPushButton* closeButton = new QPushButton(this);
-    closeButton->setText(i18n("&Close"));
-
-    buttonLayout->setMargin(5);
-    buttonLayout->setSpacing(5);
-    buttonLayout->addItem(new QSpacerItem(10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum));
-    buttonLayout->addWidget(loadButton);
-    buttonLayout->addWidget(saveButton);
-    buttonLayout->addWidget(closeButton);
+    d->begColorBtn->setColor(Qt::black);
+    d->endColorBtn->setColor(Qt::black);
+    d->borderColorBtn->setColor(Qt::black);
 
     // ------------------------------------------------------------------------
 
-    layout->setMargin(5);
-    layout->setSpacing(5);
-    layout->addWidget(splitter,     0, 0, 1, 1);
-    layout->addWidget(groupBox,     0, 1, 1, 1);
-    layout->addLayout(buttonLayout, 1, 0, 1, 2);
+    QWidget*     mainWidget = new QWidget(this);
+    QGridLayout* mainLayout = new QGridLayout(this);
+    mainLayout->setMargin(5);
+    mainLayout->setSpacing(5);
+    mainLayout->addWidget(splitter, 0, 0, 1, 1);
+    mainLayout->addWidget(groupBox, 0, 1, 1, 1);
+    mainWidget->setLayout(mainLayout);
+
+    setMainWidget(mainWidget);
 
     // ------------------------------------------------------------------------
 
-    connect(m_propertyCombo, SIGNAL(activated(int)),
+    connect(d->propertyCombo, SIGNAL(activated(int)),
             this, SLOT(slotPropertyChanged()));
 
-    connect(m_bevelCombo, SIGNAL(activated(int)),
+    connect(d->bevelCombo, SIGNAL(activated(int)),
             this, SLOT(slotUpdateTheme()));
 
-    connect(m_gradientCombo, SIGNAL(activated(int)),
+    connect(d->gradientCombo, SIGNAL(activated(int)),
             this, SLOT(slotUpdateTheme()));
 
-    connect(m_begColorBtn, SIGNAL(changed(const QColor&)),
+    connect(d->begColorBtn, SIGNAL(changed(const QColor&)),
             this, SLOT(slotUpdateTheme()));
 
-    connect(m_endColorBtn, SIGNAL(changed(const QColor&)),
+    connect(d->endColorBtn, SIGNAL(changed(const QColor&)),
             this, SLOT(slotUpdateTheme()));
 
-    connect(m_addBorderCheck, SIGNAL(toggled(bool)),
+    connect(d->addBorderCheck, SIGNAL(toggled(bool)),
             this, SLOT(slotUpdateTheme()));
 
-    connect(m_borderColorBtn, SIGNAL(changed(const QColor&)),
+    connect(d->borderColorBtn, SIGNAL(changed(const QColor&)),
             this, SLOT(slotUpdateTheme()));
 
-    connect(loadButton, SIGNAL(clicked()),
+    connect(this, SIGNAL(user2Clicked()),
             this, SLOT(slotLoad()));
 
-    connect(saveButton, SIGNAL(clicked()),
+    connect(this, SIGNAL(user1Clicked()),
             this, SLOT(slotSave()));
 
-    connect(closeButton, SIGNAL(clicked()),
+    connect(this, SIGNAL(closeClicked()),
             this, SLOT(close()));
 
     // ------------------------------------------------------------------------
 
-    m_folderView->addColumn("My Albums");
-    m_folderView->setResizeMode(Q3ListView::LastColumn);
-    m_folderView->setRootIsDecorated(true);
+    d->folderView->addColumn("My Albums");
+    d->folderView->setResizeMode(Q3ListView::LastColumn);
+    d->folderView->setRootIsDecorated(true);
 
     KIconLoader *iconLoader = KIconLoader::global();
     for (int i=0; i<10; ++i)
     {
-        FolderItem* folderItem = new FolderItem(m_folderView, QString("Album %1").arg(i));
+        FolderItem* folderItem = new FolderItem(d->folderView, QString("Album %1").arg(i));
         folderItem->setPixmap(0, iconLoader->loadIcon("folder", KIconLoader::NoGroup, 32));
         if (i == 2)
         {
-            m_folderView->setSelected(folderItem, true);
+            d->folderView->setSelected(folderItem, true);
         }
     }
 
@@ -263,21 +303,23 @@ MainWindow::MainWindow()
 
 MainWindow::~MainWindow()
 {
-    delete m_theme;
+    delete d->theme;
 }
 
 void MainWindow::slotLoad()
 {
-    QString path = KFileDialog::getOpenFileName(KUrl(), QString(), this, QString());
+    KUrl themesUrl(KGlobal::dirs()->findResourceDir("themes", QString()));
+
+    QString path = KFileDialog::getOpenFileName(themesUrl, QString(), this, QString());
     if (path.isEmpty())
         return;
 
     QFileInfo fi(path);
-    m_theme->name     = fi.fileName();
-    m_theme->filePath = path;
+    d->theme->name     = fi.fileName();
+    d->theme->filePath = path;
 
-    ThemeEngine::instance()->setCurrentTheme(*m_theme, m_theme->name, true);
-    *m_theme = *(ThemeEngine::instance()->getCurrentTheme());
+    ThemeEngine::instance()->setCurrentTheme(*d->theme, d->theme->name, true);
+    *d->theme = *(ThemeEngine::instance()->getCurrentTheme());
     slotPropertyChanged();
 }
 
@@ -295,303 +337,303 @@ void MainWindow::slotSave()
     }
 
     QFileInfo fi(path);
-    m_theme->name     = fi.fileName();
-    m_theme->filePath = path;
+    d->theme->name     = fi.fileName();
+    d->theme->filePath = path;
 
-    ThemeEngine::instance()->setCurrentTheme(*m_theme, m_theme->name, false);
+    ThemeEngine::instance()->setCurrentTheme(*d->theme, d->theme->name, false);
     ThemeEngine::instance()->saveTheme();
 }
 
 void MainWindow::slotPropertyChanged()
 {
-    m_bevelCombo->blockSignals(true);
-    m_gradientCombo->blockSignals(true);
-    m_begColorBtn->blockSignals(true);
-    m_endColorBtn->blockSignals(true);
-    m_addBorderCheck->blockSignals(true);
-    m_borderColorBtn->blockSignals(true);
+    d->bevelCombo->blockSignals(true);
+    d->gradientCombo->blockSignals(true);
+    d->begColorBtn->blockSignals(true);
+    d->endColorBtn->blockSignals(true);
+    d->addBorderCheck->blockSignals(true);
+    d->borderColorBtn->blockSignals(true);
 
-    m_bevelCombo->setEnabled(false);
-    m_bevelLabel->setEnabled(false);
-    m_gradientCombo->setEnabled(false);
-    m_gradientLabel->setEnabled(false);
-    m_begColorBtn->setEnabled(false);
-    m_begColorLabel->setEnabled(false);
-    m_endColorBtn->setEnabled(false);
-    m_endColorLabel->setEnabled(false);
-    m_addBorderCheck->setEnabled(false);
-    m_borderColorBtn->setEnabled(false);
-    m_borderColorLabel->setEnabled(false);
+    d->bevelCombo->setEnabled(false);
+    d->bevelLabel->setEnabled(false);
+    d->gradientCombo->setEnabled(false);
+    d->gradientLabel->setEnabled(false);
+    d->begColorBtn->setEnabled(false);
+    d->begColorLabel->setEnabled(false);
+    d->endColorBtn->setEnabled(false);
+    d->endColorLabel->setEnabled(false);
+    d->addBorderCheck->setEnabled(false);
+    d->borderColorBtn->setEnabled(false);
+    d->borderColorLabel->setEnabled(false);
 
-    switch(m_propertyCombo->currentIndex())
+    switch(d->propertyCombo->currentIndex())
     {
         case(BASE):
         {
-            m_begColorLabel->setEnabled(true);
-            m_begColorBtn->setEnabled(true);
-            m_begColorBtn->setColor(m_theme->baseColor);
+            d->begColorLabel->setEnabled(true);
+            d->begColorBtn->setEnabled(true);
+            d->begColorBtn->setColor(d->theme->baseColor);
             break;
         }
         case(REGULARTEXT):
         {
-            m_begColorLabel->setEnabled(true);
-            m_begColorBtn->setEnabled(true);
-            m_begColorBtn->setColor(m_theme->textRegColor);
+            d->begColorLabel->setEnabled(true);
+            d->begColorBtn->setEnabled(true);
+            d->begColorBtn->setColor(d->theme->textRegColor);
             break;
         }
         case(SELECTEDTEXT):
         {
-            m_begColorLabel->setEnabled(true);
-            m_begColorBtn->setEnabled(true);
-            m_begColorBtn->setColor(m_theme->textSelColor);
+            d->begColorLabel->setEnabled(true);
+            d->begColorBtn->setEnabled(true);
+            d->begColorBtn->setColor(d->theme->textSelColor);
             break;
         }
         case(REGULARSPECIALTEXT):
         {
-            m_begColorLabel->setEnabled(true);
-            m_begColorBtn->setEnabled(true);
-            m_begColorBtn->setColor(m_theme->textSpecialRegColor);
+            d->begColorLabel->setEnabled(true);
+            d->begColorBtn->setEnabled(true);
+            d->begColorBtn->setColor(d->theme->textSpecialRegColor);
             break;
         }
         case(SELECTEDSPECIALTEXT):
         {
-            m_begColorLabel->setEnabled(true);
-            m_begColorBtn->setEnabled(true);
-            m_begColorBtn->setColor(m_theme->textSpecialSelColor);
+            d->begColorLabel->setEnabled(true);
+            d->begColorBtn->setEnabled(true);
+            d->begColorBtn->setColor(d->theme->textSpecialSelColor);
             break;
         }
         case(BANNER):
         {
-            m_bevelCombo->setEnabled(true);
-            m_gradientCombo->setEnabled(true);
-            m_begColorBtn->setEnabled(true);
-            m_endColorBtn->setEnabled(true);
-            m_addBorderCheck->setEnabled(true);
-            m_borderColorBtn->setEnabled(true);
-            m_bevelLabel->setEnabled(true);
-            m_gradientLabel->setEnabled(true);
-            m_begColorLabel->setEnabled(true);
-            m_endColorLabel->setEnabled(true);
-            m_borderColorLabel->setEnabled(true);
+            d->bevelCombo->setEnabled(true);
+            d->gradientCombo->setEnabled(true);
+            d->begColorBtn->setEnabled(true);
+            d->endColorBtn->setEnabled(true);
+            d->addBorderCheck->setEnabled(true);
+            d->borderColorBtn->setEnabled(true);
+            d->bevelLabel->setEnabled(true);
+            d->gradientLabel->setEnabled(true);
+            d->begColorLabel->setEnabled(true);
+            d->endColorLabel->setEnabled(true);
+            d->borderColorLabel->setEnabled(true);
 
-            m_bevelCombo->setCurrentIndex(m_bevelReverseMap[m_theme->bannerBevel]);
-            m_gradientCombo->setCurrentIndex(m_gradientReverseMap[m_theme->bannerGrad]);
+            d->bevelCombo->setCurrentIndex(d->bevelReverseMap[d->theme->bannerBevel]);
+            d->gradientCombo->setCurrentIndex(d->gradientReverseMap[d->theme->bannerGrad]);
 
-            m_begColorBtn->setColor(m_theme->bannerColor);
-            m_endColorBtn->setColor(m_theme->bannerColorTo);
+            d->begColorBtn->setColor(d->theme->bannerColor);
+            d->endColorBtn->setColor(d->theme->bannerColorTo);
 
-            m_addBorderCheck->setChecked(m_theme->bannerBorder);
-            m_borderColorBtn->setColor(m_theme->bannerBorderColor);
+            d->addBorderCheck->setChecked(d->theme->bannerBorder);
+            d->borderColorBtn->setColor(d->theme->bannerBorderColor);
 
             break;
         }
         case(THUMBNAILREGULAR):
         {
-            m_bevelCombo->setEnabled(true);
-            m_gradientCombo->setEnabled(true);
-            m_begColorBtn->setEnabled(true);
-            m_endColorBtn->setEnabled(true);
-            m_addBorderCheck->setEnabled(true);
-            m_borderColorBtn->setEnabled(true);
-            m_bevelLabel->setEnabled(true);
-            m_gradientLabel->setEnabled(true);
-            m_begColorLabel->setEnabled(true);
-            m_endColorLabel->setEnabled(true);
-            m_borderColorLabel->setEnabled(true);
+            d->bevelCombo->setEnabled(true);
+            d->gradientCombo->setEnabled(true);
+            d->begColorBtn->setEnabled(true);
+            d->endColorBtn->setEnabled(true);
+            d->addBorderCheck->setEnabled(true);
+            d->borderColorBtn->setEnabled(true);
+            d->bevelLabel->setEnabled(true);
+            d->gradientLabel->setEnabled(true);
+            d->begColorLabel->setEnabled(true);
+            d->endColorLabel->setEnabled(true);
+            d->borderColorLabel->setEnabled(true);
 
-            m_bevelCombo->setCurrentIndex(m_bevelReverseMap[m_theme->thumbRegBevel]);
-            m_gradientCombo->setCurrentIndex(m_gradientReverseMap[m_theme->thumbRegGrad]);
+            d->bevelCombo->setCurrentIndex(d->bevelReverseMap[d->theme->thumbRegBevel]);
+            d->gradientCombo->setCurrentIndex(d->gradientReverseMap[d->theme->thumbRegGrad]);
 
-            m_begColorBtn->setColor(m_theme->thumbRegColor);
-            m_endColorBtn->setColor(m_theme->thumbRegColorTo);
+            d->begColorBtn->setColor(d->theme->thumbRegColor);
+            d->endColorBtn->setColor(d->theme->thumbRegColorTo);
 
-            m_addBorderCheck->setChecked(m_theme->thumbRegBorder);
-            m_borderColorBtn->setColor(m_theme->thumbRegBorderColor);
+            d->addBorderCheck->setChecked(d->theme->thumbRegBorder);
+            d->borderColorBtn->setColor(d->theme->thumbRegBorderColor);
 
             break;
         }
         case(THUMBNAILSELECTED):
         {
-            m_bevelCombo->setEnabled(true);
-            m_gradientCombo->setEnabled(true);
-            m_begColorBtn->setEnabled(true);
-            m_endColorBtn->setEnabled(true);
-            m_addBorderCheck->setEnabled(true);
-            m_borderColorBtn->setEnabled(true);
-            m_bevelLabel->setEnabled(true);
-            m_gradientLabel->setEnabled(true);
-            m_begColorLabel->setEnabled(true);
-            m_endColorLabel->setEnabled(true);
-            m_borderColorLabel->setEnabled(true);
+            d->bevelCombo->setEnabled(true);
+            d->gradientCombo->setEnabled(true);
+            d->begColorBtn->setEnabled(true);
+            d->endColorBtn->setEnabled(true);
+            d->addBorderCheck->setEnabled(true);
+            d->borderColorBtn->setEnabled(true);
+            d->bevelLabel->setEnabled(true);
+            d->gradientLabel->setEnabled(true);
+            d->begColorLabel->setEnabled(true);
+            d->endColorLabel->setEnabled(true);
+            d->borderColorLabel->setEnabled(true);
 
-            m_bevelCombo->setCurrentIndex(m_bevelReverseMap[m_theme->thumbSelBevel]);
-            m_gradientCombo->setCurrentIndex(m_gradientReverseMap[m_theme->thumbSelGrad]);
+            d->bevelCombo->setCurrentIndex(d->bevelReverseMap[d->theme->thumbSelBevel]);
+            d->gradientCombo->setCurrentIndex(d->gradientReverseMap[d->theme->thumbSelGrad]);
 
-            m_begColorBtn->setColor(m_theme->thumbSelColor);
-            m_endColorBtn->setColor(m_theme->thumbSelColorTo);
+            d->begColorBtn->setColor(d->theme->thumbSelColor);
+            d->endColorBtn->setColor(d->theme->thumbSelColorTo);
 
-            m_addBorderCheck->setChecked(m_theme->thumbSelBorder);
-            m_borderColorBtn->setColor(m_theme->thumbSelBorderColor);
+            d->addBorderCheck->setChecked(d->theme->thumbSelBorder);
+            d->borderColorBtn->setColor(d->theme->thumbSelBorderColor);
 
             break;
         }
         case(LISTVIEWREGULAR):
         {
-            m_bevelCombo->setEnabled(true);
-            m_gradientCombo->setEnabled(true);
-            m_begColorBtn->setEnabled(true);
-            m_endColorBtn->setEnabled(true);
-            m_addBorderCheck->setEnabled(true);
-            m_borderColorBtn->setEnabled(true);
-            m_bevelLabel->setEnabled(true);
-            m_gradientLabel->setEnabled(true);
-            m_begColorLabel->setEnabled(true);
-            m_endColorLabel->setEnabled(true);
-            m_borderColorLabel->setEnabled(true);
+            d->bevelCombo->setEnabled(true);
+            d->gradientCombo->setEnabled(true);
+            d->begColorBtn->setEnabled(true);
+            d->endColorBtn->setEnabled(true);
+            d->addBorderCheck->setEnabled(true);
+            d->borderColorBtn->setEnabled(true);
+            d->bevelLabel->setEnabled(true);
+            d->gradientLabel->setEnabled(true);
+            d->begColorLabel->setEnabled(true);
+            d->endColorLabel->setEnabled(true);
+            d->borderColorLabel->setEnabled(true);
 
-            m_bevelCombo->setCurrentIndex(m_bevelReverseMap[m_theme->listRegBevel]);
-            m_gradientCombo->setCurrentIndex(m_gradientReverseMap[m_theme->listRegGrad]);
+            d->bevelCombo->setCurrentIndex(d->bevelReverseMap[d->theme->listRegBevel]);
+            d->gradientCombo->setCurrentIndex(d->gradientReverseMap[d->theme->listRegGrad]);
 
-            m_begColorBtn->setColor(m_theme->listRegColor);
-            m_endColorBtn->setColor(m_theme->listRegColorTo);
+            d->begColorBtn->setColor(d->theme->listRegColor);
+            d->endColorBtn->setColor(d->theme->listRegColorTo);
 
-            m_addBorderCheck->setChecked(m_theme->listRegBorder);
-            m_borderColorBtn->setColor(m_theme->listRegBorderColor);
+            d->addBorderCheck->setChecked(d->theme->listRegBorder);
+            d->borderColorBtn->setColor(d->theme->listRegBorderColor);
 
             break;
         }
         case(LISTVIEWSELECTED):
         {
-            m_bevelCombo->setEnabled(true);
-            m_gradientCombo->setEnabled(true);
-            m_begColorBtn->setEnabled(true);
-            m_endColorBtn->setEnabled(true);
-            m_addBorderCheck->setEnabled(true);
-            m_borderColorBtn->setEnabled(true);
-            m_bevelLabel->setEnabled(true);
-            m_gradientLabel->setEnabled(true);
-            m_begColorLabel->setEnabled(true);
-            m_endColorLabel->setEnabled(true);
-            m_borderColorLabel->setEnabled(true);
+            d->bevelCombo->setEnabled(true);
+            d->gradientCombo->setEnabled(true);
+            d->begColorBtn->setEnabled(true);
+            d->endColorBtn->setEnabled(true);
+            d->addBorderCheck->setEnabled(true);
+            d->borderColorBtn->setEnabled(true);
+            d->bevelLabel->setEnabled(true);
+            d->gradientLabel->setEnabled(true);
+            d->begColorLabel->setEnabled(true);
+            d->endColorLabel->setEnabled(true);
+            d->borderColorLabel->setEnabled(true);
 
-            m_bevelCombo->setCurrentIndex(m_bevelReverseMap[m_theme->listSelBevel]);
-            m_gradientCombo->setCurrentIndex(m_gradientReverseMap[m_theme->listSelGrad]);
+            d->bevelCombo->setCurrentIndex(d->bevelReverseMap[d->theme->listSelBevel]);
+            d->gradientCombo->setCurrentIndex(d->gradientReverseMap[d->theme->listSelGrad]);
 
-            m_begColorBtn->setColor(m_theme->listSelColor);
-            m_endColorBtn->setColor(m_theme->listSelColorTo);
+            d->begColorBtn->setColor(d->theme->listSelColor);
+            d->endColorBtn->setColor(d->theme->listSelColorTo);
 
-            m_addBorderCheck->setChecked(m_theme->listSelBorder);
-            m_borderColorBtn->setColor(m_theme->listSelBorderColor);
+            d->addBorderCheck->setChecked(d->theme->listSelBorder);
+            d->borderColorBtn->setColor(d->theme->listSelBorderColor);
 
             break;
         }
     };
 
-    m_bevelCombo->blockSignals(false);
-    m_gradientCombo->blockSignals(false);
-    m_begColorBtn->blockSignals(false);
-    m_endColorBtn->blockSignals(false);
-    m_addBorderCheck->blockSignals(false);
-    m_borderColorBtn->blockSignals(false);
+    d->bevelCombo->blockSignals(false);
+    d->gradientCombo->blockSignals(false);
+    d->begColorBtn->blockSignals(false);
+    d->endColorBtn->blockSignals(false);
+    d->addBorderCheck->blockSignals(false);
+    d->borderColorBtn->blockSignals(false);
 }
 
 void MainWindow::slotUpdateTheme()
 {
-    switch(m_propertyCombo->currentIndex())
+    switch(d->propertyCombo->currentIndex())
     {
         case(BASE):
         {
-            m_theme->baseColor = m_begColorBtn->color();
+            d->theme->baseColor = d->begColorBtn->color();
             break;
         }
         case(REGULARTEXT):
         {
-            m_theme->textRegColor = m_begColorBtn->color();
+            d->theme->textRegColor = d->begColorBtn->color();
             break;
         }
         case(SELECTEDTEXT):
         {
-            m_theme->textSelColor = m_begColorBtn->color();
+            d->theme->textSelColor = d->begColorBtn->color();
             break;
         }
         case(REGULARSPECIALTEXT):
         {
-            m_theme->textSpecialRegColor = m_begColorBtn->color();
+            d->theme->textSpecialRegColor = d->begColorBtn->color();
             break;
         }
         case(SELECTEDSPECIALTEXT):
         {
-            m_theme->textSpecialSelColor = m_begColorBtn->color();
+            d->theme->textSpecialSelColor = d->begColorBtn->color();
             break;
         }
         case(BANNER):
         {
-            m_theme->bannerBevel = (Theme::Bevel) m_bevelMap[m_bevelCombo->currentIndex()];
-            m_theme->bannerGrad  = (Theme::Gradient) m_gradientMap[m_gradientCombo->currentIndex()];
+            d->theme->bannerBevel = (Theme::Bevel) d->bevelMap[d->bevelCombo->currentIndex()];
+            d->theme->bannerGrad  = (Theme::Gradient) d->gradientMap[d->gradientCombo->currentIndex()];
 
-            m_theme->bannerColor   = m_begColorBtn->color();
-            m_theme->bannerColorTo = m_endColorBtn->color();
+            d->theme->bannerColor   = d->begColorBtn->color();
+            d->theme->bannerColorTo = d->endColorBtn->color();
 
-            m_theme->bannerBorder      = m_addBorderCheck->isChecked();
-            m_theme->bannerBorderColor = m_borderColorBtn->color();
+            d->theme->bannerBorder      = d->addBorderCheck->isChecked();
+            d->theme->bannerBorderColor = d->borderColorBtn->color();
 
             break;
         }
         case(THUMBNAILREGULAR):
         {
-            m_theme->thumbRegBevel = (Theme::Bevel) m_bevelMap[m_bevelCombo->currentIndex()];
-            m_theme->thumbRegGrad  = (Theme::Gradient) m_gradientMap[m_gradientCombo->currentIndex()];
+            d->theme->thumbRegBevel = (Theme::Bevel) d->bevelMap[d->bevelCombo->currentIndex()];
+            d->theme->thumbRegGrad  = (Theme::Gradient) d->gradientMap[d->gradientCombo->currentIndex()];
 
-            m_theme->thumbRegColor   = m_begColorBtn->color();
-            m_theme->thumbRegColorTo = m_endColorBtn->color();
+            d->theme->thumbRegColor   = d->begColorBtn->color();
+            d->theme->thumbRegColorTo = d->endColorBtn->color();
 
-            m_theme->thumbRegBorder      = m_addBorderCheck->isChecked();
-            m_theme->thumbRegBorderColor = m_borderColorBtn->color();
+            d->theme->thumbRegBorder      = d->addBorderCheck->isChecked();
+            d->theme->thumbRegBorderColor = d->borderColorBtn->color();
 
             break;
         }
         case(THUMBNAILSELECTED):
         {
-            m_theme->thumbSelBevel = (Theme::Bevel) m_bevelMap[m_bevelCombo->currentIndex()];
-            m_theme->thumbSelGrad  = (Theme::Gradient) m_gradientMap[m_gradientCombo->currentIndex()];
+            d->theme->thumbSelBevel = (Theme::Bevel) d->bevelMap[d->bevelCombo->currentIndex()];
+            d->theme->thumbSelGrad  = (Theme::Gradient) d->gradientMap[d->gradientCombo->currentIndex()];
 
-            m_theme->thumbSelColor   = m_begColorBtn->color();
-            m_theme->thumbSelColorTo = m_endColorBtn->color();
+            d->theme->thumbSelColor   = d->begColorBtn->color();
+            d->theme->thumbSelColorTo = d->endColorBtn->color();
 
-            m_theme->thumbSelBorder      = m_addBorderCheck->isChecked();
-            m_theme->thumbSelBorderColor = m_borderColorBtn->color();
+            d->theme->thumbSelBorder      = d->addBorderCheck->isChecked();
+            d->theme->thumbSelBorderColor = d->borderColorBtn->color();
 
             break;
         }
         case(LISTVIEWREGULAR):
         {
-            m_theme->listRegBevel = (Theme::Bevel) m_bevelMap[m_bevelCombo->currentIndex()];
-            m_theme->listRegGrad  = (Theme::Gradient) m_gradientMap[m_gradientCombo->currentIndex()];
+            d->theme->listRegBevel = (Theme::Bevel) d->bevelMap[d->bevelCombo->currentIndex()];
+            d->theme->listRegGrad  = (Theme::Gradient) d->gradientMap[d->gradientCombo->currentIndex()];
 
-            m_theme->listRegColor   = m_begColorBtn->color();
-            m_theme->listRegColorTo = m_endColorBtn->color();
+            d->theme->listRegColor   = d->begColorBtn->color();
+            d->theme->listRegColorTo = d->endColorBtn->color();
 
-            m_theme->listRegBorder      = m_addBorderCheck->isChecked();
-            m_theme->listRegBorderColor = m_borderColorBtn->color();
+            d->theme->listRegBorder      = d->addBorderCheck->isChecked();
+            d->theme->listRegBorderColor = d->borderColorBtn->color();
 
             break;
         }
         case(LISTVIEWSELECTED):
         {
-            m_theme->listSelBevel = (Theme::Bevel) m_bevelMap[m_bevelCombo->currentIndex()];
-            m_theme->listSelGrad  = (Theme::Gradient) m_gradientMap[m_gradientCombo->currentIndex()];
+            d->theme->listSelBevel = (Theme::Bevel) d->bevelMap[d->bevelCombo->currentIndex()];
+            d->theme->listSelGrad  = (Theme::Gradient) d->gradientMap[d->gradientCombo->currentIndex()];
 
-            m_theme->listSelColor   = m_begColorBtn->color();
-            m_theme->listSelColorTo = m_endColorBtn->color();
+            d->theme->listSelColor   = d->begColorBtn->color();
+            d->theme->listSelColorTo = d->endColorBtn->color();
 
-            m_theme->listSelBorder      = m_addBorderCheck->isChecked();
-            m_theme->listSelBorderColor = m_borderColorBtn->color();
+            d->theme->listSelBorder      = d->addBorderCheck->isChecked();
+            d->theme->listSelBorderColor = d->borderColorBtn->color();
 
             break;
         }
     };
 
-    ThemeEngine::instance()->setCurrentTheme(*m_theme, "Digikam ThemeEditor Theme");
+    ThemeEngine::instance()->setCurrentTheme(*d->theme, "Digikam ThemeEditor Theme");
 }
 
 }  // namespace Digikam

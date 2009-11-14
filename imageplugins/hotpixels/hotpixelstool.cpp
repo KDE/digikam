@@ -40,7 +40,6 @@
 #include <kaboutdata.h>
 #include <kapplication.h>
 #include <kconfig.h>
-#include <kdebug.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kimageio.h>
@@ -74,15 +73,22 @@ class HotPixelsToolPriv
 {
 public:
 
-    HotPixelsToolPriv()
-    {
-        blackFrameButton   = 0;
-        progressBar        = 0;
-        filterMethodCombo  = 0;
-        blackFrameListView = 0;
-        previewWidget      = 0;
-        gboxSettings       = 0;
-    }
+    HotPixelsToolPriv() :
+        configGroupName("hotpixels Tool"),
+        configLastBlackFrameFileEntry("Last Black Frame File"),
+        configFilterMethodEntry("Filter Method"),
+
+        blackFrameButton(0),
+        progressBar(0),
+        filterMethodCombo(0),
+        blackFrameListView(0),
+        previewWidget(0),
+        gboxSettings(0)
+        {}
+
+    const QString       configGroupName;
+    const QString       configLastBlackFrameFileEntry;
+    const QString       configFilterMethodEntry;
 
     QPushButton*        blackFrameButton;
     QProgressBar*       progressBar;
@@ -107,10 +113,11 @@ HotPixelsTool::HotPixelsTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings = new EditorToolSettings(EditorToolSettings::Ok|
-                                             EditorToolSettings::Try|
-                                             EditorToolSettings::Cancel,
-                                             EditorToolSettings::PanIcon);
+    d->gboxSettings = new EditorToolSettings;
+    d->gboxSettings->setTools(EditorToolSettings::PanIcon);
+
+    // -------------------------------------------------------------
+
     QGridLayout* grid = new QGridLayout(d->gboxSettings->plainPage());
 
     QLabel *filterMethodLabel = new QLabel(i18n("Filter:"), d->gboxSettings->plainPage());
@@ -167,9 +174,9 @@ HotPixelsTool::~HotPixelsTool()
 void HotPixelsTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("hotpixels Tool");
-    d->blackFrameURL = KUrl(group.readEntry("Last Black Frame File", QString()));
-    d->filterMethodCombo->setCurrentIndex(group.readEntry("Filter Method", d->filterMethodCombo->defaultIndex()));
+    KConfigGroup group        = config->group(d->configGroupName);
+    d->blackFrameURL          = KUrl(group.readEntry(d->configLastBlackFrameFileEntry, QString()));
+    d->filterMethodCombo->setCurrentIndex(group.readEntry(d->configFilterMethodEntry,  d->filterMethodCombo->defaultIndex()));
 
     if (d->blackFrameURL.isValid())
     {
@@ -184,6 +191,16 @@ void HotPixelsTool::readSettings()
     }
 }
 
+void HotPixelsTool::writeSettings()
+{
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(d->configGroupName);
+    group.writeEntry(d->configLastBlackFrameFileEntry, d->blackFrameURL.url());
+    group.writeEntry(d->configFilterMethodEntry,       d->filterMethodCombo->currentIndex());
+    d->previewWidget->writeSettings();
+    group.sync();
+}
+
 void HotPixelsTool::slotLoadingProgress(float v)
 {
     EditorToolIface::editorToolIface()->setToolProgress((int)(v*100));
@@ -192,16 +209,6 @@ void HotPixelsTool::slotLoadingProgress(float v)
 void HotPixelsTool::slotLoadingComplete()
 {
     EditorToolIface::editorToolIface()->setToolStopProgress();
-}
-
-void HotPixelsTool::writeSettings()
-{
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("hotpixels Tool");
-    group.writeEntry("Last Black Frame File", d->blackFrameURL.url());
-    group.writeEntry("Filter Method", d->filterMethodCombo->currentIndex());
-    d->previewWidget->writeSettings();
-    group.sync();
 }
 
 void HotPixelsTool::slotResetSettings()
@@ -246,9 +253,8 @@ void HotPixelsTool::prepareEffect()
 
     QList<HotPixel> hotPixelsRegion;
     QRect area = d->previewWidget->getOriginalImageRegionToRender();
-    QList<HotPixel>::Iterator end(d->hotPixelsList.end());
 
-    for (QList<HotPixel>::Iterator it = d->hotPixelsList.begin() ; it != end ; ++it )
+    for (QList<HotPixel>::Iterator it = d->hotPixelsList.begin() ; it != d->hotPixelsList.end() ; ++it )
     {
         HotPixel hp = (*it);
 
@@ -292,9 +298,8 @@ void HotPixelsTool::slotBlackFrame(QList<HotPixel> hpList, const KUrl& blackFram
     QPolygon pointList(d->hotPixelsList.size());
     QList <HotPixel>::Iterator it;
     int i = 0;
-    QList <HotPixel>::Iterator end(d->hotPixelsList.end());
 
-    for (it = d->hotPixelsList.begin() ; it != end ; ++it, ++i)
+    for (it = d->hotPixelsList.begin() ; it != d->hotPixelsList.end() ; ++it, ++i)
        pointList.setPoint(i, (*it).rect.center());
 
     d->previewWidget->setPanIconHighLightPoints(pointList);

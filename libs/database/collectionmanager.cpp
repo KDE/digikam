@@ -68,7 +68,7 @@ public:
 
     AlbumRootLocation(const AlbumRootInfo &info)
     {
-        kDebug(50003) << "Creating new Location " << info.specificPath << " uuid " << info.identifier;
+        kDebug() << "Creating new Location " << info.specificPath << " uuid " << info.identifier;
         m_id         = info.id;
         m_type       = (Type)info.type;
         specificPath = info.specificPath;
@@ -149,6 +149,7 @@ class SolidVolumeInfo
 
 public:
 
+    QString udi;  // Solid device UDI of the StorageAccess device
     QString path; // mount path of volume, with trailing slash
     QString uuid; // UUID as from Solid
     QString label; // volume label (think of CDs)
@@ -170,6 +171,7 @@ public:
 
     QMap<int, AlbumRootLocation *> locations;
     bool changingDB;
+    QStringList udisToWatch;
 
     // hack for Solid's threading problems
     QList<SolidVolumeInfo> actuallyListVolumes();
@@ -190,7 +192,7 @@ public:
      *  Find from a given list (usually the result of listVolumes) the volume
      *  on which the file path specified by the url is located.
      */
-    SolidVolumeInfo findVolumeForUrl(const KUrl &url, const QList<SolidVolumeInfo> volumes);
+    SolidVolumeInfo findVolumeForUrl(const KUrl &fileUrl, const QList<SolidVolumeInfo> volumes);
 
     /// Create the volume identifier for the given volume info
     static QString volumeIdentifier(const SolidVolumeInfo &info);
@@ -278,9 +280,11 @@ QList<SolidVolumeInfo> CollectionManagerPrivate::actuallyListVolumes()
 {
     QList<SolidVolumeInfo> volumes;
 
-    //kDebug(50003) << "listFromType";
+    //kDebug() << "listFromType";
     QList<Solid::Device> devices = Solid::Device::listFromType(Solid::DeviceInterface::StorageAccess);
-    //kDebug(50003) << "got listFromType";
+    //kDebug() << "got listFromType";
+
+    udisToWatch.clear();
 
     foreach(const Solid::Device& accessDevice, devices)
     {
@@ -288,7 +292,16 @@ QList<SolidVolumeInfo> CollectionManagerPrivate::actuallyListVolumes()
         if (!accessDevice.is<Solid::StorageAccess>())
             continue;
 
+        // mark as a device of principal interest
+        udisToWatch << accessDevice.udi();
+
         const Solid::StorageAccess *access = accessDevice.as<Solid::StorageAccess>();
+
+        // watch mount status (remove previous connections)
+        QObject::disconnect(access, SIGNAL(accessibilityChanged(bool, const QString&)),
+                            s, SLOT(accessibilityChanged(bool, const QString&)));
+        QObject::connect(access, SIGNAL(accessibilityChanged(bool, const QString&)),
+                         s, SLOT(accessibilityChanged(bool, const QString&)));
 
         if (!access->isAccessible())
             continue;
@@ -324,6 +337,7 @@ QList<SolidVolumeInfo> CollectionManagerPrivate::actuallyListVolumes()
         Solid::StorageVolume *volume = volumeDevice.as<Solid::StorageVolume>();
 
         SolidVolumeInfo info;
+        info.udi = accessDevice.udi();
         info.path = access->filePath();
         info.isMounted = access->isAccessible();
         if (!info.path.isEmpty() && !info.path.endsWith('/'))
@@ -479,7 +493,7 @@ SolidVolumeInfo CollectionManagerPrivate::findVolumeForLocation(const AlbumRootL
             // bail out if not provided
             if (dirHash.isNull())
             {
-                kDebug(50003) << "No directory hash specified for the non-unique Label"
+                kDebug() << "No directory hash specified for the non-unique Label"
                          << queryItem << "Resorting to returning the first match.";
                 return candidateVolumes.first();
             }
@@ -544,11 +558,11 @@ QString CollectionManagerPrivate::technicalDescription(const AlbumRootLocation *
     return QString();
 }
 
-SolidVolumeInfo CollectionManagerPrivate::findVolumeForUrl(const KUrl& url, const QList<SolidVolumeInfo> volumes)
+SolidVolumeInfo CollectionManagerPrivate::findVolumeForUrl(const KUrl& fileUrl, const QList<SolidVolumeInfo> volumes)
 {
     SolidVolumeInfo volume;
     // v.path is specified to have a trailing slash. path needs one as well.
-    QString path = url.path(KUrl::AddTrailingSlash);
+    QString path = fileUrl.toLocalFile(KUrl::AddTrailingSlash);
     int volumeMatch = 0;
 
     //FIXME: Network shares! Here we get only the volume of the mount path...
@@ -568,7 +582,7 @@ SolidVolumeInfo CollectionManagerPrivate::findVolumeForUrl(const KUrl& url, cons
 
     if (!volumeMatch)
     {
-        kError(50003) << "Failed to detect a storage volume for path " << path << " with Solid";
+        kError() << "Failed to detect a storage volume for path " << path << " with Solid";
     }
 
     return volume;
@@ -576,12 +590,19 @@ SolidVolumeInfo CollectionManagerPrivate::findVolumeForUrl(const KUrl& url, cons
 
 bool CollectionManagerPrivate::checkIfExists(const QString& filePath, QList<CollectionLocation> assumeDeleted)
 {
+    const KUrl filePathUrl = filePath;
+
     DatabaseAccess access;
     foreach (AlbumRootLocation *location, locations)
     {
-        QString locationPath = location->albumRootPath();
-        //kDebug() << filePath << locationPath;
-        if (!locationPath.isEmpty() && filePath.startsWith(locationPath))
+        const KUrl locationPathUrl = location->albumRootPath();
+        //kDebug() << filePathUrl << locationPathUrl;
+        // make sure filePathUrl is neither a child nor a parent
+        // of an existing collection
+        if (!locationPathUrl.isEmpty() &&
+              ( filePathUrl.isParentOf(locationPathUrl) ||
+                locationPathUrl.isParentOf(filePathUrl) )
+           )
         {
             bool isDeleted = false;
             foreach (const CollectionLocation& deletedLoc, assumeDeleted)
@@ -622,12 +643,12 @@ CollectionManager::CollectionManager()
     connect(Solid::DeviceNotifier::instance(),
             SIGNAL(deviceAdded(const QString &)),
             this,
-            SLOT(deviceChange(const QString &)));
+            SLOT(deviceAdded(const QString &)));
 
     connect(Solid::DeviceNotifier::instance(),
             SIGNAL(deviceRemoved(const QString &)),
             this,
-            SLOT(deviceChange(const QString &)));
+            SLOT(deviceRemoved(const QString &)));
 
     // DatabaseWatch slot is connected at construction of DatabaseWatch, which may be later.
 }
@@ -650,8 +671,8 @@ void CollectionManager::refresh()
 
 CollectionLocation CollectionManager::addLocation(const KUrl& fileUrl, const QString& label)
 {
-    kDebug(50003) << "addLocation " << fileUrl;
-    QString path = fileUrl.path(KUrl::RemoveTrailingSlash);
+    kDebug() << "addLocation " << fileUrl;
+    QString path = fileUrl.toLocalFile(KUrl::RemoveTrailingSlash);
 
     if (!locationForPath(path).isNull())
         return CollectionLocation();
@@ -678,14 +699,14 @@ CollectionLocation CollectionManager::addLocation(const KUrl& fileUrl, const QSt
         // Empty volumes indicates that Solid is not working correctly.
         if (volumes.isEmpty())
         {
-            kError(50003) << "Solid did not return any storage volumes on your system.";
-            kError(50003) << "This indicates a missing implementation or a problem with your installation";
-            kError(50003) << "On Linux, check that Solid and HAL are working correctly."
+            kError() << "Solid did not return any storage volumes on your system.";
+            kError() << "This indicates a missing implementation or a problem with your installation";
+            kError() << "On Linux, check that Solid and HAL are working correctly."
                              "Problems with RAID partitions have been reported, if you have RAID this error may be normal.";
-            kError(50003) << "On Windows, Solid may not be fully implemented, if you are running Windows this error may be normal.";
+            kError() << "On Windows, Solid may not be fully implemented, if you are running Windows this error may be normal.";
         }
         // fall back
-        kWarning(50003) << "Unable to identify a path with Solid. Adding the location with path only.";
+        kWarning() << "Unable to identify a path with Solid. Adding the location with path only.";
         ChangingDB changing(d);
         DatabaseAccess().db()->addAlbumRoot(AlbumRoot::VolumeHardWired,
                                             d->volumeIdentifier(path), "/", label);
@@ -699,8 +720,8 @@ CollectionLocation CollectionManager::addLocation(const KUrl& fileUrl, const QSt
 
 CollectionLocation CollectionManager::addNetworkLocation(const KUrl& fileUrl, const QString& label)
 {
-    kDebug(50003) << "addLocation " << fileUrl;
-    QString path = fileUrl.path(KUrl::RemoveTrailingSlash);
+    kDebug() << "addLocation " << fileUrl;
+    QString path = fileUrl.toLocalFile(KUrl::RemoveTrailingSlash);
 
     if (!locationForPath(path).isNull())
         return CollectionLocation();
@@ -717,7 +738,7 @@ CollectionLocation CollectionManager::addNetworkLocation(const KUrl& fileUrl, co
 CollectionManager::LocationCheckResult CollectionManager::checkLocation(const KUrl& fileUrl,
         QList<CollectionLocation> assumeDeleted, QString *message, QString *iconName)
 {
-    QString path = fileUrl.path(KUrl::RemoveTrailingSlash);
+    QString path = fileUrl.toLocalFile(KUrl::RemoveTrailingSlash);
 
     QDir dir(path);
     if (!dir.isReadable())
@@ -840,7 +861,7 @@ CollectionManager::LocationCheckResult CollectionManager::checkLocation(const KU
 CollectionManager::LocationCheckResult CollectionManager::checkNetworkLocation(const KUrl& fileUrl,
         QList<CollectionLocation> assumeDeleted, QString *message, QString *iconName)
 {
-    QString path = fileUrl.path(KUrl::RemoveTrailingSlash);
+    QString path = fileUrl.toLocalFile(KUrl::RemoveTrailingSlash);
 
     QDir dir(path);
     if (!dir.isReadable())
@@ -1045,7 +1066,7 @@ CollectionLocation CollectionManager::locationForAlbumRootId(int id)
 
 CollectionLocation CollectionManager::locationForAlbumRoot(const KUrl& fileUrl)
 {
-    return locationForAlbumRootPath(fileUrl.path(KUrl::RemoveTrailingSlash));
+    return locationForAlbumRootPath(fileUrl.toLocalFile(KUrl::RemoveTrailingSlash));
 }
 
 CollectionLocation CollectionManager::locationForAlbumRootPath(const QString& albumRootPath)
@@ -1062,7 +1083,7 @@ CollectionLocation CollectionManager::locationForAlbumRootPath(const QString& al
 
 CollectionLocation CollectionManager::locationForUrl(const KUrl& fileUrl)
 {
-    return locationForPath(fileUrl.path(KUrl::RemoveTrailingSlash));
+    return locationForPath(fileUrl.toLocalFile(KUrl::RemoveTrailingSlash));
 }
 
 CollectionLocation CollectionManager::locationForPath(const QString& filePath)
@@ -1071,7 +1092,7 @@ CollectionLocation CollectionManager::locationForPath(const QString& filePath)
     foreach (AlbumRootLocation *location, d->locations)
     {
         QString rootPath = location->albumRootPath();
-        //kDebug(50003) << "Testing location " << location->id() << filePath << rootPath;
+        //kDebug() << "Testing location " << location->id() << filePath << rootPath;
         if (!rootPath.isEmpty() && filePath.startsWith(rootPath))
             return *location;
     }
@@ -1082,7 +1103,7 @@ QString CollectionManager::albumRootPath(int id)
 {
     DatabaseAccess access;
     CollectionLocation *location = d->locations.value(id);
-    if (location)
+    if (location && location->status() == CollectionLocation::LocationAvailable)
     {
         return location->albumRootPath();
     }
@@ -1091,12 +1112,12 @@ QString CollectionManager::albumRootPath(int id)
 
 KUrl CollectionManager::albumRoot(const KUrl& fileUrl)
 {
-    return KUrl::fromPath(albumRootPath(fileUrl.path(KUrl::LeaveTrailingSlash)));
+    return KUrl::fromPath(albumRootPath(fileUrl.toLocalFile(KUrl::LeaveTrailingSlash)));
 }
 
 QString CollectionManager::albumRootPath(const KUrl& fileUrl)
 {
-    return albumRootPath(fileUrl.path(KUrl::LeaveTrailingSlash));
+    return albumRootPath(fileUrl.toLocalFile(KUrl::LeaveTrailingSlash));
 }
 
 QString CollectionManager::albumRootPath(const QString& filePath)
@@ -1113,7 +1134,7 @@ QString CollectionManager::albumRootPath(const QString& filePath)
 
 bool CollectionManager::isAlbumRoot(const KUrl& fileUrl)
 {
-    return isAlbumRoot(fileUrl.path(KUrl::RemoveTrailingSlash));
+    return isAlbumRoot(fileUrl.toLocalFile(KUrl::RemoveTrailingSlash));
 }
 
 bool CollectionManager::isAlbumRoot(const QString& filePath)
@@ -1129,7 +1150,7 @@ bool CollectionManager::isAlbumRoot(const QString& filePath)
 
 QString CollectionManager::album(const KUrl& fileUrl)
 {
-    return album(fileUrl.path(KUrl::RemoveTrailingSlash));
+    return album(fileUrl.toLocalFile(KUrl::RemoveTrailingSlash));
 }
 
 QString CollectionManager::album(const QString& filePath)
@@ -1159,7 +1180,7 @@ QString CollectionManager::album(const QString& filePath)
 
 QString CollectionManager::album(const CollectionLocation& location, const KUrl& fileUrl)
 {
-    return album(location, fileUrl.path(KUrl::RemoveTrailingSlash));
+    return album(location, fileUrl.toLocalFile(KUrl::RemoveTrailingSlash));
 }
 
 QString CollectionManager::album(const CollectionLocation& location, const QString& filePath)
@@ -1194,11 +1215,27 @@ QString CollectionManager::oneAlbumRootPath()
     return QString();
 }
 
-void CollectionManager::deviceChange(const QString& udi)
+void CollectionManager::deviceAdded(const QString& udi)
 {
     Solid::Device device(udi);
     if (device.is<Solid::StorageAccess>())
         updateLocations();
+}
+
+void CollectionManager::deviceRemoved(const QString& udi)
+{
+    // we can't access the Solid::Device to check because it is removed
+    DatabaseAccess access;
+    if (!d->udisToWatch.contains(udi))
+        return;
+    updateLocations();
+}
+
+void CollectionManager::accessibilityChanged(bool accessible, const QString& udi)
+{
+    Q_UNUSED(accessible);
+    Q_UNUSED(udi);
+    updateLocations();
 }
 
 void CollectionManager::updateLocations()
@@ -1290,7 +1327,7 @@ void CollectionManager::updateLocations()
             // Don't touch location->status, do not interfere with "hidden" setting
             location->available = available;
             location->setAbsolutePath(absolutePath);
-            kDebug(50003) << "location for " << absolutePath << " is available " << available;
+            kDebug() << "location for " << absolutePath << " is available " << available;
             // set the status depending on "hidden" and "available"
             location->setStatusFromFlags();
         }

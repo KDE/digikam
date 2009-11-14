@@ -28,18 +28,17 @@
 
 // Qt includes
 
-#include <QPainter>
 #include <QDragEnterEvent>
-#include <QUrl>
 #include <QFileInfo>
 #include <QHeaderView>
+#include <QPainter>
 #include <QTimer>
+#include <QUrl>
 
 // KDE includes
 
 #include <kaction.h>
 #include <kactioncollection.h>
-#include <kdebug.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmenu.h>
@@ -50,7 +49,7 @@
 #include "databasechangesets.h"
 #include "databasewatch.h"
 #include "ddragobjects.h"
-#include "manualrenameinput.h"
+#include "defaultrenameparser.h"
 #include "queuemgrwindow.h"
 #include "queuetooltip.h"
 #include "thumbnailloadthread.h"
@@ -205,17 +204,17 @@ public:
 
     bool                 showTips;
 
-    QTimer              *toolTipTimer;
+    QTimer*              toolTipTimer;
 
-    ThumbnailLoadThread *thumbLoadThread;
+    ThumbnailLoadThread* thumbLoadThread;
 
     QueueSettings        settings;
 
     AssignedBatchTools   toolsList;
 
-    QueueToolTip        *toolTip;
+    QueueToolTip*        toolTip;
 
-    QueueListViewItem   *toolTipItem;
+    QueueListViewItem*   toolTipItem;
 };
 
 QueueListView::QueueListView(QWidget *parent)
@@ -582,7 +581,7 @@ void QueueListView::slotAddItems(const ImageInfoList& list)
         if (!find)
         {
             item = new QueueListViewItem(this, info);
-            d->thumbLoadThread->find(info.fileUrl().path());
+            d->thumbLoadThread->find(info.fileUrl().toLocalFile());
         }
     }
     emit signalQueueContentsChanged();
@@ -812,6 +811,10 @@ void QueueListView::slotAssignedToolsChanged(const AssignedBatchTools& tools)
 
 void QueueListView::updateDestFileNames()
 {
+    DefaultRenameParser p;
+    QString parseString      = settings().renamingParser;
+    AssignedBatchTools tools = assignedTools();
+
     int index = 1;
     QTreeWidgetItemIterator it(this);
     while (*it)
@@ -821,23 +824,22 @@ void QueueListView::updateDestFileNames()
         {
             // Update base name using queue renaming rules.
             ImageInfo info = item->info();
-            QFileInfo fi(info.name());
-
-            QString baseName = fi.baseName();
-            if (settings().renamingRule == QueueSettings::CUSTOMIZE)
-            {
-                QString parser = settings().renamingParser;
-                QString camera = info.photoInfoContainer().make + info.photoInfoContainer().model;
-                QDateTime date = info.dateTime();
-                baseName       = ManualRenameInput::parser(parser, baseName, camera, date, index);
-            }
+            QFileInfo fi(info.filePath());
 
             // Update suffix using assigned batch tool rules.
-            AssignedBatchTools tools = assignedTools();
-            tools.itemUrl            = item->info().fileUrl();
-            QString newSuffix        = tools.targetSuffix();
+            tools.itemUrl     = item->info().fileUrl();
+            QString newSuffix = tools.targetSuffix();
+            QString newName   = QString("%1.%2").arg(fi.baseName()).arg(newSuffix);
 
-            item->setDestFileName(QString("%1.%2").arg(baseName).arg(newSuffix));
+            if (settings().renamingRule == QueueSettings::CUSTOMIZE)
+            {
+                ParseInformation parseInfo;
+                parseInfo.filePath = QString("%1/%2.%3").arg(fi.absolutePath()).arg(fi.baseName()).arg(newSuffix);
+                parseInfo.index    = index;
+                newName            = p.parse(parseString, parseInfo);
+            }
+
+            item->setDestFileName(newName);
         }
         ++it;
         ++index;

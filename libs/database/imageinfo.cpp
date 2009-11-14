@@ -31,10 +31,6 @@
 #include <QFileInfo>
 #include <QHash>
 
-// KDE includes
-
-#include <kdebug.h>
-
 // Local includes
 
 #include "albumdb.h"
@@ -435,8 +431,12 @@ QString ImageInfo::filePath() const
 
     DatabaseAccess access;
 
-    QString album = access.imageInfoCache()->albumName(access, m_data->albumId);
     QString albumRoot = CollectionManager::instance()->albumRootPath(m_data->albumRootId);
+
+    if (albumRoot.isNull())
+        return QString();
+
+    QString album = access.imageInfoCache()->albumName(access, m_data->albumId);
 
     if (album == "/")
         return albumRoot + album + m_data->name;
@@ -632,7 +632,7 @@ ImageInfo ImageInfo::copyItem(int dstAlbumID, const QString& dstFileName)
         return ImageInfo();
 
     DatabaseAccess access;
-    //kDebug(50003) << "ImageInfo::copyItem " << m_data->albumId << " " << m_data->name << " to " << dstAlbumID << " " << dstFileName;
+    //kDebug() << "ImageInfo::copyItem " << m_data->albumId << " " << m_data->name << " to " << dstAlbumID << " " << dstFileName;
 
     if (dstAlbumID == m_data->albumId && dstFileName == m_data->name)
         return (*this);

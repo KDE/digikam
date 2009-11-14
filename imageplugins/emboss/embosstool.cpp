@@ -65,12 +65,16 @@ class EmbossToolPriv
 {
 public:
 
-    EmbossToolPriv()
-    {
-        depthInput    = 0;
-        previewWidget = 0;
-        gboxSettings  = 0;
-    }
+    EmbossToolPriv() :
+        configGroupName("emboss Tool"),
+        configDepthAdjustmentEntry("DepthAdjustment"),
+        depthInput(0),
+        previewWidget(0),
+        gboxSettings(0)
+        {}
+
+    const QString       configGroupName;
+    const QString       configDepthAdjustmentEntry;
 
     RIntNumInput*       depthInput;
     ImagePanelWidget*   previewWidget;
@@ -87,10 +91,8 @@ EmbossTool::EmbossTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
-                                             EditorToolSettings::Ok|
-                                             EditorToolSettings::Cancel|
-                                             EditorToolSettings::PanIcon);
+    d->gboxSettings = new EditorToolSettings;
+    d->gboxSettings->setTools(EditorToolSettings::PanIcon);
 
     d->previewWidget = new ImagePanelWidget(470, 350, "emboss Tool", d->gboxSettings->panIconView());
 
@@ -126,6 +128,10 @@ EmbossTool::EmbossTool(QObject* parent)
 
     connect(d->depthInput, SIGNAL(valueChanged (int)),
             this, SLOT(slotTimer()));
+
+    // -------------------------------------------------------------
+
+    slotTimer();
 }
 
 EmbossTool::~EmbossTool()
@@ -141,17 +147,19 @@ void EmbossTool::renderingFinished()
 void EmbossTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("emboss Tool");
+    KConfigGroup group        = config->group(d->configGroupName);
+
     d->depthInput->blockSignals(true);
-    d->depthInput->setValue(group.readEntry("DepthAdjustment", d->depthInput->defaultValue()));
+    d->depthInput->setValue(group.readEntry(d->configDepthAdjustmentEntry, d->depthInput->defaultValue()));
     d->depthInput->blockSignals(false);
 }
 
 void EmbossTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("emboss Tool");
-    group.writeEntry("DepthAdjustment", d->depthInput->value());
+    KConfigGroup group        = config->group(d->configGroupName);
+
+    group.writeEntry(d->configDepthAdjustmentEntry, d->depthInput->value());
     d->previewWidget->writeSettings();
     group.sync();
 }

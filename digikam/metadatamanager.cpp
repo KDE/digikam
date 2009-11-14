@@ -31,20 +31,20 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 // Local includes
 
 #include "albumsettings.h"
-#include "constants.h"
 #include "databasetransaction.h"
 #include "imageattributeswatch.h"
 #include "loadingcacheinterface.h"
 #include "metadatahub.h"
 #include "scancontroller.h"
 #include "thumbnailloadthread.h"
+#include "globals.h"
 
 namespace Digikam
 {
@@ -377,7 +377,7 @@ void MetadataManagerFileWorker::writeOrientationToFiles(const QList<ImageInfo>& 
 
     foreach (const ImageInfo& info, infos)
     {
-        //kDebug(50003) << "Setting Exif Orientation tag to " << orientation;
+        //kDebug() << "Setting Exif Orientation tag to " << orientation;
 
         QString path = info.filePath();
         DMetadata metadata(path);

@@ -38,15 +38,16 @@
 #include <QTextStream>
 #include <QDate>
 #include <QTextCodec>
+
 // KDE includes
 
-#include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kuser.h>
 #include <kapplication.h>
 #include <kglobalsettings.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -420,8 +421,8 @@ bool ThemeEngine::loadTheme()
     int row, col;
     if (!xmlDoc.setContent(&themeFile, true, &error, &row, &col))
     {
-        kDebug(50003) << "Theme file: " << t->filePath;
-        kDebug(50003) << error << " :: row=" << row << " , col=" << col;
+        kDebug() << "Theme file: " << t->filePath;
+        kDebug() << error << " :: row=" << row << " , col=" << col;
         return false;
     }
 
@@ -679,7 +680,7 @@ bool ThemeEngine::loadTheme()
         t->listSelBorderColor = resource;
     }
 
-    kDebug(50003) << "Theme file loaded: " << t->filePath;
+    kDebug() << "Theme file loaded: " << t->filePath;
     return true;
 }
 

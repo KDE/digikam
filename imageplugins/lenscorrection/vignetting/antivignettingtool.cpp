@@ -41,7 +41,6 @@
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kdebug.h>
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <klocale.h>
@@ -74,18 +73,33 @@ class AntiVignettingToolPriv
 {
 public:
 
-    AntiVignettingToolPriv()
-    {
-        maskPreviewLabel  = 0;
-        brightnessInput   = 0;
-        contrastInput     = 0;
-        gammaInput        = 0;
-        densityInput      = 0;
-        powerInput        = 0;
-        radiusInput       = 0;
-        previewWidget     = 0;
-        gboxSettings      = 0;
-    }
+    AntiVignettingToolPriv() :
+        configGroupName("antivignetting Tool"),
+        configDensityAdjustmentEntry("DensityAdjustment"),
+        configPowerAdjustmentEntry("PowerAdjustment"),
+        configRadiusAdjustmentEntry("RadiusAdjustment"),
+        configBrightnessAdjustmentEntry("BrightnessAdjustment"),
+        configContrastAdjustmentEntry("ContrastAdjustment"),
+        configGammaAdjustmentEntry("GammaAdjustment"),
+
+        maskPreviewLabel(0),
+        brightnessInput(0),
+        contrastInput(0),
+        gammaInput(0),
+        densityInput(0),
+        powerInput(0),
+        radiusInput(0),
+        previewWidget(0),
+        gboxSettings(0)
+        {}
+
+    const QString       configGroupName;
+    const QString       configDensityAdjustmentEntry;
+    const QString       configPowerAdjustmentEntry;
+    const QString       configRadiusAdjustmentEntry;
+    const QString       configBrightnessAdjustmentEntry;
+    const QString       configContrastAdjustmentEntry;
+    const QString       configGammaAdjustmentEntry;
 
     QLabel*             maskPreviewLabel;
 
@@ -116,9 +130,7 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
-                                             EditorToolSettings::Ok|
-                                             EditorToolSettings::Cancel);
+    d->gboxSettings = new EditorToolSettings;
 
     // -------------------------------------------------------------
 
@@ -254,16 +266,16 @@ void AntiVignettingTool::renderingFinished()
 void AntiVignettingTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("antivignetting Tool");
+    KConfigGroup group        = config->group(d->configGroupName);
 
     blockWidgetSignals(true);
 
-    d->densityInput->setValue(group.readEntry("DensityAdjustment", d->densityInput->defaultValue()));
-    d->powerInput->setValue(group.readEntry("PowerAdjustment", d->powerInput->defaultValue()));
-    d->radiusInput->setValue(group.readEntry("RadiusAdjustment", d->radiusInput->defaultValue()));
-    d->brightnessInput->setValue(group.readEntry("BrightnessAdjustment", d->brightnessInput->defaultValue()));
-    d->contrastInput->setValue(group.readEntry("ContrastAdjustment", d->contrastInput->defaultValue()));
-    d->gammaInput->setValue(group.readEntry("GammaAdjustment", d->gammaInput->defaultValue()));
+    d->densityInput->setValue(group.readEntry(d->configDensityAdjustmentEntry,       d->densityInput->defaultValue()));
+    d->powerInput->setValue(group.readEntry(d->configPowerAdjustmentEntry,           d->powerInput->defaultValue()));
+    d->radiusInput->setValue(group.readEntry(d->configRadiusAdjustmentEntry,         d->radiusInput->defaultValue()));
+    d->brightnessInput->setValue(group.readEntry(d->configBrightnessAdjustmentEntry, d->brightnessInput->defaultValue()));
+    d->contrastInput->setValue(group.readEntry(d->configContrastAdjustmentEntry,     d->contrastInput->defaultValue()));
+    d->gammaInput->setValue(group.readEntry(d->configGammaAdjustmentEntry,           d->gammaInput->defaultValue()));
 
     blockWidgetSignals(false);
 
@@ -273,13 +285,14 @@ void AntiVignettingTool::readSettings()
 void AntiVignettingTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("antivignetting Tool");
-    group.writeEntry("DensityAdjustment", d->densityInput->value());
-    group.writeEntry("PowerAdjustment", d->powerInput->value());
-    group.writeEntry("RadiusAdjustment", d->radiusInput->value());
-    group.writeEntry("BrightnessAdjustment", d->brightnessInput->value());
-    group.writeEntry("ContrastAdjustment", d->contrastInput->value());
-    group.writeEntry("GammaAdjustment", d->gammaInput->value());
+    KConfigGroup group        = config->group(d->configGroupName);
+
+    group.writeEntry(d->configDensityAdjustmentEntry,    d->densityInput->value());
+    group.writeEntry(d->configPowerAdjustmentEntry,      d->powerInput->value());
+    group.writeEntry(d->configRadiusAdjustmentEntry,     d->radiusInput->value());
+    group.writeEntry(d->configBrightnessAdjustmentEntry, d->brightnessInput->value());
+    group.writeEntry(d->configContrastAdjustmentEntry,   d->contrastInput->value());
+    group.writeEntry(d->configGammaAdjustmentEntry,      d->gammaInput->value());
     d->previewWidget->writeSettings();
     group.sync();
 }
@@ -377,17 +390,22 @@ void AntiVignettingTool::putPreviewData()
 
 void AntiVignettingTool::putFinalData()
 {
-    ImageIface iface(0, 0);
+    kapp->setOverrideCursor( Qt::WaitCursor );
+    ImageIface* iface = d->previewWidget->imageIface();
+    DImg finalImage   = filter()->getTargetImage();
 
-    iface.putOriginalImage(i18n("Vignetting Correction"),
-                           filter()->getTargetImage().bits());
-
-    double b = (double)(d->brightnessInput->value() / 100.0);
+    double b = (double)(d->brightnessInput->value() / 250.0);
     double c = (double)(d->contrastInput->value()   / 100.0) + (double)(1.00);
     double g = d->gammaInput->value();
 
-    // Adjust Image BCG.
-    iface.setOriginalBCG(b, c, g);
+    BCGModifier cmod;
+    cmod.setGamma(g);
+    cmod.setBrightness(b);
+    cmod.setContrast(c);
+    cmod.applyBCG(finalImage);
+
+    iface->putOriginalImage(i18n("Vignetting Correction"), finalImage.bits());
+    kapp->restoreOverrideCursor();
 }
 
 void AntiVignettingTool::blockWidgetSignals(bool b)

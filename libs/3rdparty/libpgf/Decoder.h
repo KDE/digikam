@@ -101,7 +101,7 @@ public:
 	/////////////////////////////////////////////////////////////////////
 	/// Dequantization of a single value at given position in subband.
 	/// @param band A subband
-	/// @param bandPosition A valid position in subband band
+	/// @param bandPos A valid position in subband band
 	/// @param quantParam The quantization parameter
 	void DequantizeValue(CSubband* band, UINT32 bandPos, int quantParam);
 

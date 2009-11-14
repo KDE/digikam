@@ -39,7 +39,7 @@ class DIGIKAM_EXPORT MakerNoteWidget : public MetadataWidget
 
 public:
 
-    MakerNoteWidget(QWidget* parent, const char* name=0);
+    explicit MakerNoteWidget(QWidget* parent, const char* name=0);
     ~MakerNoteWidget();
 
     bool loadFromURL(const KUrl& url);

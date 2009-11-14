@@ -36,6 +36,7 @@
 
 #include "digikam_export.h"
 #include "dshareddata.h"
+#include "iccprofile.h"
 
 /** Lanczos kernel is precomputed in a table with this resolution
     The value below seems to be enough for HQ upscaling up to eight times
@@ -70,14 +71,13 @@ public:
 
     DImgPrivate()
     {
-        null              = true;
-        width             = 0;
-        height            = 0;
-        data              = 0;
-        lanczos_func	  = 0;
-        alpha             = false;
-        sixteenBit        = false;
-        isReadOnly        = false;
+        null         = true;
+        width        = 0;
+        height       = 0;
+        data         = 0;
+        lanczos_func = 0;
+        alpha        = false;
+        sixteenBit   = false;
     }
 
     ~DImgPrivate()
@@ -89,17 +89,17 @@ public:
     bool                    null;
     bool                    alpha;
     bool                    sixteenBit;
-    bool                    isReadOnly;
 
     unsigned int            width;
     unsigned int            height;
 
-    unsigned char          *data;
-    LANCZOS_DATA_TYPE	   *lanczos_func;
+    unsigned char*          data;
+    LANCZOS_DATA_TYPE*      lanczos_func;
 
     QMap<int, QByteArray>   metaData;
     QMap<QString, QVariant> attributes;
     QMap<QString, QString>  embeddedText;
+    IccProfile              iccProfile;
 };
 
 }  // namespace Digikam

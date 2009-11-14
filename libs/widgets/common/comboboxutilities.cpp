@@ -38,7 +38,6 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <klocale.h>
 
 namespace Digikam
@@ -345,7 +344,7 @@ public:
     // This line edit works like a weblink:
     // Readonly; A mouse press shows the popup; Cursor is the pointing hand.
 
-    TreeViewComboBoxLineEdit(QComboBox *box) : QLineEdit()
+    TreeViewComboBoxLineEdit(QComboBox *box) : QLineEdit(box)
     {
         m_box = box;
         setReadOnly(true);

@@ -28,10 +28,6 @@
 
 #include <QMouseEvent>
 
-// KDE includes
-
-#include <kdebug.h>
-
 // Local includes
 
 #include "albumdragdrop.h"

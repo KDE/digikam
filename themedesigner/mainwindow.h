@@ -7,7 +7,7 @@
  * Description : main digiKam theme designer window
  *
  * Copyright (C) 2005 by Renchi Raju <renchi at pooh.tam.uiuc.edu>
- * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -25,31 +25,22 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-// Qt includes
+// KDE includes
 
-#include <QWidget>
-#include <QMap>
-
-class KComboBox;
-class QCheckBox;
-class QLabel;
-class KColorButton;
+#include <kdialog.h>
 
 namespace Digikam
 {
 
-class ImagePropertiesTab;
-class FolderView;
-class ThemedIconView;
-class Theme;
+class MainWindowPriv;
 
-class MainWindow : public QWidget
+class MainWindow : public KDialog
 {
     Q_OBJECT
 
 public:
 
-    enum PROPERTY 
+    enum PROPERTY
     {
         BASE = 0,
         REGULARTEXT,
@@ -63,14 +54,14 @@ public:
         LISTVIEWSELECTED
     };
 
-    enum BEVEL 
+    enum BEVEL
     {
         FLAT = 0,
         RAISED,
         SUNKEN
     };
 
-    enum GRADIENT 
+    enum GRADIENT
     {
         SOLID = 0,
         HORIZONTAL,
@@ -92,31 +83,7 @@ private Q_SLOTS:
 
 private:
 
-    QLabel             *m_bevelLabel;
-    QLabel             *m_gradientLabel;
-    QLabel             *m_begColorLabel;
-    QLabel             *m_endColorLabel;
-    QLabel             *m_borderColorLabel;
-
-    KComboBox          *m_propertyCombo;
-    KComboBox          *m_bevelCombo;
-    KComboBox          *m_gradientCombo;
-
-    QCheckBox          *m_addBorderCheck;
-
-    QMap<int,int>       m_bevelMap;
-    QMap<int,int>       m_bevelReverseMap;
-    QMap<int,int>       m_gradientMap;
-    QMap<int,int>       m_gradientReverseMap;
-
-    KColorButton       *m_endColorBtn;
-    KColorButton       *m_begColorBtn;
-    KColorButton       *m_borderColorBtn;
-
-    FolderView         *m_folderView;
-    ThemedIconView     *m_iconView;
-    ImagePropertiesTab *m_propView;
-    Theme              *m_theme;
+    MainWindowPriv* const d;
 };
 
 }  // namespace Digikam

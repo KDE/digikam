@@ -47,14 +47,16 @@ public:
     FreeRotationTool(QObject *parent);
     ~FreeRotationTool();
 
-private Q_SLOTS:
-
-    void slotResetSettings();
-    void slotColorGuideChanged();
+public Q_SLOTS:
 
     void slotAutoAdjustP1Clicked();
     void slotAutoAdjustP2Clicked();
     void slotAutoAdjustClicked();
+
+private Q_SLOTS:
+
+    void slotResetSettings();
+    void slotColorGuideChanged();
 
 private:
 
@@ -74,7 +76,10 @@ private:
     void    setPointInvalid(QPoint& p);
     void    updatePoints();
     void    resetPoints();
-    QString generatePointLabel(const QPoint& p);
+    QString generateButtonLabel(const QPoint& p);
+
+    QString centerString(const QString& str, int maxLength = -1);
+    QString repeatString(const QString& str, int times);
 
 private:
 

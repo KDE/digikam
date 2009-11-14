@@ -34,7 +34,7 @@
 
 class KUrlLabel;
 
-namespace Digikam 
+namespace Digikam
 {
 
 class DLogoActionPriv;
@@ -45,14 +45,17 @@ class DIGIKAM_EXPORT DLogoAction : public KAction
 
 public:
 
-    DLogoAction(QObject* parent, bool alignOnright=true);
+    explicit DLogoAction(QObject* parent, bool alignOnright=true);
     ~DLogoAction();
 
     void start();
     void stop();
     bool running() const;
 
-    virtual QWidget* createWidget(QWidget* parent);
+protected:
+
+    QWidget* createWidget(QWidget* parent);
+    void     deleteWidget(QWidget* widget);
 
 private Q_SLOTS:
 

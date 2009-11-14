@@ -32,9 +32,9 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <kio/job.h>
 #include <kurl.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -84,7 +84,7 @@ void ImageInfoJob::allItemsFromAlbum(Album *album)
     ImageLister lister;
     d->job = lister.startListJob(album->databaseUrl());
 
-    connect(d->job, SIGNAL(result(KJob*)),
+    connect(d->job, SIGNAL(finished(KJob*)),
             this, SLOT(slotResult(KJob*)));
 
     connect(d->job, SIGNAL(data(KIO::Job*, const QByteArray&)),
@@ -111,7 +111,7 @@ void ImageInfoJob::slotResult(KJob* job)
 
     if (job->error())
     {
-        kWarning(50003) << "Failed to list url: " << job->errorString();
+        kWarning() << "Failed to list url: " << job->errorString();
         return;
     }
 

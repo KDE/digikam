@@ -26,16 +26,15 @@
 
 // Qt includes
 
-#include <QWidget>
 #include <QFileInfo>
+#include <QWidget>
 
 // KDE includes
 
-#include <kconfiggroup.h>
 #include <kconfig.h>
-#include <klocale.h>
-#include <kdebug.h>
+#include <kconfiggroup.h>
 #include <kiconloader.h>
+#include <klocale.h>
 
 // Local includes
 
@@ -73,7 +72,7 @@ BatchToolSettings Convert2TIFF::defaultSettings()
     return settings;
 }
 
-void Convert2TIFF::assignSettings2Widget()
+void Convert2TIFF::slotAssignSettings2Widget()
 {
     m_settings->setCompression(settings()["compress"].toBool());
 }

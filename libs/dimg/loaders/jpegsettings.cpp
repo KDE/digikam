@@ -158,4 +158,11 @@ int JPEGSettings::getSubSamplingValue()
     return d->subSamplingCB->currentIndex();
 }
 
+int JPEGSettings::convertCompressionForLibJpeg(int value)
+{
+    // JPEG quality slider settings : 1 - 100 ==> libjpeg settings : 25 - 100.
+
+    return( (int)((75.0/100.0) * (float)value + 26.0 - (75.0/100.0)) );
+}
+
 }  // namespace Digikam

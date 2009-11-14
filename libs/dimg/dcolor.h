@@ -49,7 +49,7 @@ public:
         {};
 
     /** Read value from data. Equivalent to setColor() */
-    DColor(const uchar *data, bool sixteenBit = false)
+    explicit DColor(const uchar *data, bool sixteenBit = false)
         { setColor(data, sixteenBit); }
 
     /** Initialize with given RGBA values */
@@ -58,7 +58,7 @@ public:
         {};
 
     /** Read values from QColor, convert to sixteenBit of sixteenBit is true */
-    DColor(const QColor& color, bool sixteenBit=false);
+    explicit DColor(const QColor& color, bool sixteenBit=false);
 
     // Use default copy constructor, assignment operator and destructor
 
@@ -89,6 +89,9 @@ public:
     void setSixteenBit(bool sixteenBit) { m_sixteenBit = sixteenBit; }
 
     QColor getQColor() const;
+
+    inline bool isPureGrayValue(int v) { return (m_red == v && m_green == v && m_blue == v); };
+    inline bool isPureGray()           { return ( (m_red == m_green) && (m_red == m_blue) ); };
 
     /** Convert the color values of this color to and from sixteen bit
         and set the sixteenBit value accordingly

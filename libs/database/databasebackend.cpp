@@ -22,6 +22,7 @@
  * ============================================================ */
 
 #include "databasebackend.h"
+#include "databasebackend.moc"
 #include "databasebackend_p.h"
 
 // Qt includes
@@ -35,7 +36,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+
 #include <kglobal.h>
 
 // Local includes

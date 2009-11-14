@@ -26,16 +26,15 @@
 
 // Qt includes
 
-#include <QWidget>
 #include <QLabel>
+#include <QWidget>
 
 // KDE includes
 
-#include <kvbox.h>
-#include <klocale.h>
-#include <kdebug.h>
-#include <kiconloader.h>
 #include <kcombobox.h>
+#include <kiconloader.h>
+#include <klocale.h>
+#include <kvbox.h>
 
 // Local includes
 
@@ -82,7 +81,7 @@ BatchToolSettings AutoCorrection::defaultSettings()
     return settings;
 }
 
-void AutoCorrection::assignSettings2Widget()
+void AutoCorrection::slotAssignSettings2Widget()
 {
     m_comboBox->setCurrentIndex(settings()["AutoCorrectionFilter"].toInt());
 }

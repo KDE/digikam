@@ -47,8 +47,8 @@ extern "C"
 
 // KDE includes
 
-#include <kdebug.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -1545,7 +1545,7 @@ QList<qlonglong> AlbumDB::getDirtyOrMissingFingerprints()
 
     d->db->execSql( QString("SELECT id FROM Images "
                             "LEFT JOIN ImageHaarMatrix ON Images.id=ImageHaarMatrix.imageid "
-                            " WHERE Images.status=1 AND "
+                            " WHERE Images.status=1 AND Images.category=1 AND "
                             " ( ImageHaarMatrix.imageid IS NULL "
                             "   OR Images.modificationDate != ImageHaarMatrix.modificationDate "
                             "   OR Images.uniqueHash != ImageHaarMatrix.uniqueHash ); "),
@@ -1566,7 +1566,7 @@ QStringList AlbumDB::getDirtyOrMissingFingerprintURLs()
     d->db->execSql( QString("SELECT Albums.albumRoot, Albums.relativePath, Images.name FROM Images "
                             "LEFT JOIN ImageHaarMatrix ON Images.id=ImageHaarMatrix.imageid "
                             "LEFT JOIN Albums ON Albums.id=Images.album "
-                            " WHERE Images.status=1 AND "
+                            " WHERE Images.status=1 AND Images.category=1 AND "
                             " ( ImageHaarMatrix.imageid IS NULL "
                             "   OR Images.modificationDate != ImageHaarMatrix.modificationDate "
                             "   OR Images.uniqueHash != ImageHaarMatrix.uniqueHash ); "),
@@ -1971,9 +1971,8 @@ QStringList AlbumDB::getItemNamesInAlbum(int albumID, bool recurssive)
 
     if (recurssive)
     {
-        KUrl url(getAlbumRelativePath(albumID));
         int rootId = getAlbumRootId(albumID);
-        QString path = url.path();
+        QString path = getAlbumRelativePath(albumID);
         d->db->execSql( QString("SELECT Images.name FROM Images WHERE Images.album IN "
                                 " (SELECT DISTINCT id FROM Albums "
                                 "  WHERE albumRoot=? AND (relativePath=? OR relativePath LIKE ?));"),
@@ -3142,7 +3141,7 @@ bool AlbumDB::copyAlbumProperties(int srcAlbumID, int dstAlbumID)
 
     if (values.isEmpty())
     {
-        kWarning(50003) << " src album ID " << srcAlbumID << " does not exist";
+        kWarning() << " src album ID " << srcAlbumID << " does not exist";
         return false;
     }
 

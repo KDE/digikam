@@ -28,29 +28,39 @@
 
 #include <QFrame>
 #include <QDateTime>
-#include <QDomDocument>
 #include <QList>
+#include <QToolButton>
 
 // KDE includes
 
 #include <kurl.h>
+#include <kconfiggroup.h>
 
 // Local includes
 
 #include "digikam_export.h"
+#include "loadingdescription.h"
+#include "config-digikam.h"
+#ifdef HAVE_MARBLEWIDGET
+#include "markerclusterholder.h"
+#endif // HAVE_MARBLEWIDGET
 
 namespace Digikam
 {
 
-class GPSInfo
+class DIGIKAM_EXPORT GPSInfo
 {
 public:
 
     GPSInfo()
+    : latitude(0.0),
+      longitude(0.0),
+      altitude(0.0),
+      dateTime(),
+      rating(0),
+      url(),
+      dimensions()
     {
-        latitude  = 0.0;
-        longitude = 0.0;
-        altitude  = 0.0;
     };
 
     double    latitude;
@@ -58,8 +68,9 @@ public:
     double    altitude;
 
     QDateTime dateTime;
-
+    int       rating;
     KUrl      url;
+    QSize     dimensions;
 };
 
 typedef QList<GPSInfo> GPSInfoList;
@@ -68,9 +79,17 @@ typedef QList<GPSInfo> GPSInfoList;
 
 class WorldMapWidgetPriv;
 
-class WorldMapWidget : public QFrame
+class DIGIKAM_EXPORT WorldMapWidget : public QFrame
 {
     Q_OBJECT
+
+public:
+
+    enum MapTheme
+    {
+        AtlasMap = 0,
+        OpenStreetMap
+    };
 
 public:
 
@@ -78,23 +97,88 @@ public:
     virtual ~WorldMapWidget();
 
     void   setGPSPositions(const GPSInfoList& list);
+    void   addGPSPositions(const GPSInfoList& list);
+    void   clearGPSPositions();
 
     double getLatitude();
     double getLongitude();
 
+    void   getCenterPosition(double& lat, double& lng);
+    void   setCenterPosition(double lat, double lng);
+
+    int    getZoomLevel();
+    void   setZoomLevel(int l);
+
+    void     setMapTheme(MapTheme theme);
+    MapTheme getMapTheme();
+
+    void readConfig(KConfigGroup& group);
+    void writeConfig(KConfigGroup& group);
+#ifdef HAVE_MARBLEWIDGET
+    void setCustomPaintFunction(const MarkerClusterHolder::CustomPaintFunction customPaintFunction, void* const yourdata);
+    MarkerClusterHolder* getMarkerClusterHolder() const;
+#endif // HAVE_MARBLEWIDGET
+    void setMultiMarkerSettings(const bool showSingleImages, const bool showGroupImages, const bool showHighestRatingFirst, const bool showOldestFirst, const bool showNumbers);
+    void getMultiMarkerSettings(bool* const showSingleImages, bool* const showGroupImages, bool* const showHighestRatingFirst, bool* const showOldestFirst, bool* const showNumbers) const;
+
+Q_SIGNALS:
+
+    void signalSettingsChanged();
+    void signalSelectedItems(const GPSInfoList infoList);
+    void signalSoloItems(const GPSInfoList infoList);
+
 public Q_SLOTS:
 
-    void   slotZoomIn();
-    void   slotZoomOut();
+    void slotZoomIn();
+    void slotZoomOut();
+    void slotSetSelectedImages(const GPSInfoList &infoList);
+    void slotMapMarkerSelectionChanged();
+    void slotMapMarkerSoloChanged();
+    void slotSetAllowItemSelection(const bool allow);
+    void slotSetAllowItemFiltering(const bool allow);
+    void slotSetFocusOnAddedItems(const bool doIt);
+    void slotSetEnableTooltips(const bool doIt);
+    void slotThumbnailLoaded(const LoadingDescription& loadingDescription, const QPixmap& pix);
+//#ifdef HAVE_MARBLEWIDGET
+//    MarkerClusterHolder* getMarkerClusterHolder() const;
+//#endif // HAVE_MARBLEWIDGET
+
+protected:
+
+    QWidget* marbleWidget() const;
 
 private:
 
-    QDomElement addKmlElement(QDomDocument& kmlDocument, QDomElement& target, const QString& tag);
-    QDomElement addKmlTextElement(QDomDocument& kmlDocument, QDomElement& target, const QString& tag, const QString& text);
+#ifdef HAVE_MARBLEWIDGET
+    static MarkerClusterHolder::PixmapOperations getClusterPixmap(const int clusterIndex, MarkerClusterHolder* const mch, const QSize& maxSize, void* const yourdata, QPixmap* const clusterPixmap);
+#endif // HAVE_MARBLEWIDGET
 
 private:
 
     WorldMapWidgetPriv* const d;
+};
+
+// ------------------------------------------------------------------------------
+
+class WorldMapThemeBtnPriv;
+
+class DIGIKAM_EXPORT WorldMapThemeBtn : public QToolButton
+{
+    Q_OBJECT
+
+public:
+
+    WorldMapThemeBtn(WorldMapWidget *map, QWidget *parent);
+    virtual ~WorldMapThemeBtn();
+
+private Q_SLOTS:
+
+    void slotUpdateMenu();
+    void slotMapThemeChanged(QAction*);
+
+private:
+
+    WorldMapThemeBtnPriv* const d;
 };
 
 }  // namespace Digikam

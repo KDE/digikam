@@ -148,9 +148,10 @@ CDecoder::CDecoder(CPGFStream* stream, PGFPreHeader& preHeader, PGFHeader& heade
 		count = header.nLevels*WordBytes;
 		m_stream->Read(&count, levelLength);
 
-#ifdef __BIGENDIAN__
+#ifdef __BIG_ENDIAN__ 
 		// make sure the values are correct read
-		for (int i=0; i < header.nLevels; i++) {
+		count /= WordBytes;
+		for (int i=0; i < count; i++) {
 			levelLength[i] = __VAL(levelLength[i]);
 		}
 #endif
@@ -386,23 +387,16 @@ void CDecoder::Skip(UINT64 offset) THROW_ {
 /// buffer m_value at position m_valuePos.
 /// Otherwise reads encoded data buffer and decodes it.
 /// @param band A subband
-/// @param bandPosition A valid position in subband band
+/// @param bandPos A valid position in subband band
 /// @param quantParam The quantization parameter
 void CDecoder::DequantizeValue(CSubband* band, UINT32 bandPos, int quantParam) {
-	if (m_bufferIsAvailable) {
-		band->SetData(bandPos, m_value[m_valuePos] << quantParam);
-	} else {
+	if (!m_bufferIsAvailable) {
 		DecodeBuffer();
-		band->SetData(bandPos, m_value[m_valuePos] << quantParam);
 	}
+	band->SetData(bandPos, m_value[m_valuePos] << quantParam);
 	m_valuePos++;
 	if (m_valuePos == BufferSize) {
-		if (m_bufferIsAvailable) {
-			m_bufferIsAvailable = false;
-		} else {
-			// buffer was not used
-			SkipBuffer();
-		}
+		m_bufferIsAvailable = false;
 	}
 }
 
@@ -424,6 +418,7 @@ void CDecoder::DecodeBuffer() THROW_ {
 	// read wordLen
 	count = sizeof(UINT16);
 	m_stream->Read(&count, &wordLen); ASSERT(count == sizeof(UINT16));
+	wordLen = __VAL(wordLen);
 	ASSERT(wordLen <= BufferSize);
 
 #ifdef __PGFROISUPPORT__
@@ -437,12 +432,13 @@ void CDecoder::DecodeBuffer() THROW_ {
 #endif
 
 	// read data
-	count = __VAL(wordLen)*WordBytes;
+	count = wordLen*WordBytes;
 	m_stream->Read(&count, m_codeBuffer);
 
-#ifdef __BIGENDIAN__
+#ifdef __BIG_ENDIAN__ 
 	// convert data
-	for (int i=0; i < wordLen; i++) {
+	count /= WordBytes;
+	for (int i=0; i < count; i++) {
 		m_codeBuffer[i] = __VAL(m_codeBuffer[i]);
 	}
 #endif
@@ -471,6 +467,7 @@ void CDecoder::SkipBuffer() THROW_ {
 	// read wordLen
 	count = sizeof(UINT16);
 	m_stream->Read(&count, &wordLen); ASSERT(count == sizeof(UINT16));
+	wordLen = __VAL(wordLen);
 	ASSERT(wordLen <= BufferSize);
 
 #ifdef __PGFROISUPPORT__
@@ -481,7 +478,7 @@ void CDecoder::SkipBuffer() THROW_ {
 #endif
 
 	// skip data
-	m_stream->SetPos(FSFromCurrent, __VAL(wordLen)*WordBytes);
+	m_stream->SetPos(FSFromCurrent, wordLen*WordBytes);
 }
 
 //////////////////////////////////////////////////////////////////////

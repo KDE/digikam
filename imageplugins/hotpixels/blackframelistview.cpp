@@ -99,9 +99,10 @@ void BlackFrameListViewItem::slotParsed(QList<HotPixel> hotPixels)
     setText(2, QString::number(m_hotPixels.count()));
 
     m_blackFrameDesc = QString("<p><b>" + m_blackFrameURL.fileName() + "</b>:<p>");
-    QList <HotPixel>::Iterator end(m_hotPixels.end());
-    for (QList <HotPixel>::Iterator it = m_hotPixels.begin() ; it != end ; ++it)
+    for (QList <HotPixel>::Iterator it = m_hotPixels.begin() ; it != m_hotPixels.end() ; ++it)
+    {
         m_blackFrameDesc.append( QString("[%1,%2] ").arg((*it).x()).arg((*it).y()) );
+    }
 
     emit parsed(m_hotPixels, m_blackFrameURL);
 }
@@ -123,22 +124,21 @@ QPixmap BlackFrameListViewItem::thumb(const QSize& size)
     yRatio = (float)size.height()/(float)m_image.height();
 
     //Draw hot pixels one by one
-    QList <HotPixel>::Iterator it;
-    QList <HotPixel>::Iterator end(m_hotPixels.end());
-    for (it=m_hotPixels.begin() ; it!=end ; ++it)
+    QList<HotPixel>::Iterator it;
+    for (it = m_hotPixels.begin(); it != m_hotPixels.end(); ++it)
     {
-        hpRect   = (*it).rect;
-        hpThumbX = (hpRect.x()+hpRect.width()/2)*xRatio;
-        hpThumbY = (hpRect.y()+hpRect.height()/2)*yRatio;
+        hpRect = (*it).rect;
+        hpThumbX = (hpRect.x() + hpRect.width() / 2) * xRatio;
+        hpThumbY = (hpRect.y() + hpRect.height() / 2) * yRatio;
 
         p.setPen(QPen(Qt::black));
-        p.drawLine((int)hpThumbX, (int)hpThumbY-1, (int)hpThumbX, (int)hpThumbY+1);
-        p.drawLine((int)hpThumbX-1, (int)hpThumbY, (int)hpThumbX+1, (int)hpThumbY);
+        p.drawLine((int) hpThumbX,     (int) hpThumbY - 1, (int) hpThumbX, (int) hpThumbY + 1);
+        p.drawLine((int) hpThumbX - 1, (int) hpThumbY, (int) hpThumbX + 1, (int) hpThumbY);
         p.setPen(QPen(Qt::white));
-        p.drawPoint((int)hpThumbX-1, (int)hpThumbY-1);
-        p.drawPoint((int)hpThumbX+1, (int)hpThumbY+1);
-        p.drawPoint((int)hpThumbX-1, (int)hpThumbY+1);
-        p.drawPoint((int)hpThumbX+1, (int)hpThumbY-1);
+        p.drawPoint((int) hpThumbX - 1, (int) hpThumbY - 1);
+        p.drawPoint((int) hpThumbX + 1, (int) hpThumbY + 1);
+        p.drawPoint((int) hpThumbX - 1, (int) hpThumbY + 1);
+        p.drawPoint((int) hpThumbX + 1, (int) hpThumbY - 1);
     }
 
     return thumb;

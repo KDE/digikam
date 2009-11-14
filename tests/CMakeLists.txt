@@ -1,26 +1,97 @@
 SET( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/editor
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/canvas
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/common
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/imageplugins
+INCLUDE_DIRECTORIES(
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/database
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dmetadata
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/models
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/common
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/imageplugins
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/metadata
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/common
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/modifiers
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/subparsers
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/cameragui
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/canvas
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/editor
                     ${CMAKE_CURRENT_SOURCE_DIR}/../imageplugins/freerotation
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam
+                    ${CMAKE_CURRENT_SOURCE_DIR}/..
+                    ${CMAKE_CURRENT_BINARY_DIR}/..
+                    ${GPHOTO2_INCLUDE_DIRS}
 )
 
 #------------------------------------------------------------------------
 
-SET(manualrenameinputtest_SRCS
-    manualrenameinputtest.cpp
+SET(advancedrenametest_SRCS
+    advancedrenametest.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/common/modifier.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/common/parseobject.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/common/parser.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/common/parseresults.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/common/subparser.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/common/token.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/defaultrenameparser.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/modifiers/defaultvaluemodifier.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/modifiers/firstletterofeachworduppercasemodifier.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/modifiers/lowercasemodifier.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/modifiers/rangemodifier.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/modifiers/replacemodifier.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/modifiers/trimmedmodifier.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/modifiers/uppercasemodifier.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/subparsers/cameranameparser.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/subparsers/dateparser.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/subparsers/directorynameparser.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/subparsers/filepropertiesparser.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/subparsers/metadataparser.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/subparsers/sequencenumberparser.cpp
 )
-KDE4_ADD_UNIT_TEST(manualrenameinputtest ${manualrenameinputtest_SRCS})
-TARGET_LINK_LIBRARIES(manualrenameinputtest
+KDE4_ADD_UNIT_TEST(advancedrenametest ${advancedrenametest_SRCS})
+TARGET_LINK_LIBRARIES(advancedrenametest
+                      ${KDE4_KDEUI_LIBS}
+                      ${KEXIV2_LIBRARIES}
+                      ${QT_QTGUI_LIBRARY}
+                      ${QT_QTTEST_LIBRARY}
+                      digikamdatabase
+                      digikamcore
+                      )
+
+#------------------------------------------------------------------------
+
+SET(cameranamehelper_SRCS
+    cameranamehelpertest.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/cameragui/cameranamehelper.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/cameragui/gpcamera.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/cameragui/dkcamera.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/albumsettings.cpp
+)
+KDE4_ADD_UNIT_TEST(cameranamehelpertest ${cameranamehelper_SRCS})
+TARGET_LINK_LIBRARIES(cameranamehelpertest
                       ${KDE4_KDECORE_LIBS}
                       ${QT_QTGUI_LIBRARY}
                       ${QT_QTTEST_LIBRARY}
+                      ${GPHOTO2_LIBRARIES}
                       digikamcore
+                      digikamdatabase
+                      )
+
+#------------------------------------------------------------------------
+
+SET(uifilevalidator_SRCS
+    uifilevalidatortest.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/uifilevalidator.cpp
+)
+KDE4_ADD_UNIT_TEST(uifilevalidatortest ${uifilevalidator_SRCS})
+TARGET_LINK_LIBRARIES(uifilevalidatortest
+                      ${KDE4_KDECORE_LIBS}
+                      ${QT_QTGUI_LIBRARY}
+                      ${QT_QTTEST_LIBRARY}
+                      ${GPHOTO2_LIBRARIES}
+                      digikamcore
+                      digikamdatabase
                       )
 
 #------------------------------------------------------------------------
@@ -54,5 +125,3 @@ SET(pgfscaled_SRCS pgfscaled.cpp ${libpgf_SRCS} ${pgfutils_SRCS})
 KDE4_ADD_EXECUTABLE(pgfscaled NOGUI ${pgfscaled_SRCS})
 TARGET_LINK_LIBRARIES(pgfscaled ${KDE4_KIO_LIBS} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
 
-
-add_subdirectory(imageloaders)

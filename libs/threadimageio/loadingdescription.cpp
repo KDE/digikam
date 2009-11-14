@@ -23,6 +23,10 @@
 
 #include "loadingdescription.h"
 
+// Local includes
+
+#include "icctransform.h"
+
 namespace Digikam
 {
 
@@ -33,18 +37,62 @@ bool LoadingDescription::PreviewParameters::operator==(const PreviewParameters& 
            && exifRotate == other.exifRotate;
 }
 
-LoadingDescription::LoadingDescription(const QString& filePath)
+bool LoadingDescription::PostProcessingParameters::operator==(const PostProcessingParameters& other) const
+{
+    return colorManagement == other.colorManagement;
+}
+
+bool LoadingDescription::PostProcessingParameters::needsProcessing() const
+{
+    return colorManagement != NoColorConversion;
+}
+
+void LoadingDescription::PostProcessingParameters::setTransform(const IccTransform& transform)
+{
+    iccData = QVariant::fromValue<IccTransform>(transform);
+}
+
+bool LoadingDescription::PostProcessingParameters::hasTransform() const
+{
+    return !iccData.isNull() && iccData.canConvert<IccTransform>();
+;
+}
+
+IccTransform LoadingDescription::PostProcessingParameters::transform() const
+{
+    return iccData.value<IccTransform>();
+}
+
+void LoadingDescription::PostProcessingParameters::setProfile(const IccProfile& profile)
+{
+    iccData = QVariant::fromValue<IccProfile>(profile);
+}
+
+bool LoadingDescription::PostProcessingParameters::hasProfile() const
+{
+    return !iccData.isNull() && iccData.canConvert<IccProfile>();
+}
+
+IccProfile LoadingDescription::PostProcessingParameters::profile() const
+{
+    return iccData.value<IccProfile>();
+}
+
+LoadingDescription::LoadingDescription(const QString& filePath, ColorManagementSettings cm)
                   : filePath(filePath)
 {
     rawDecodingSettings = DRawDecoding();
+    postProcessingParameters.colorManagement = cm;
 }
 
-LoadingDescription::LoadingDescription(const QString& filePath, DRawDecoding settings)
+LoadingDescription::LoadingDescription(const QString& filePath, const DRawDecoding& settings, ColorManagementSettings cm)
                   : filePath(filePath), rawDecodingSettings(settings)
 {
+    postProcessingParameters.colorManagement = cm;
 }
 
 LoadingDescription::LoadingDescription(const QString& filePath, int size, bool exifRotate,
+                                       ColorManagementSettings cm,
                                        LoadingDescription::PreviewParameters::PreviewType type)
                   : filePath(filePath)
 {
@@ -52,6 +100,7 @@ LoadingDescription::LoadingDescription(const QString& filePath, int size, bool e
     previewParameters.type       = type;
     previewParameters.size       = size;
     previewParameters.exifRotate = exifRotate;
+    postProcessingParameters.colorManagement = cm;
 }
 
 QString LoadingDescription::cacheKey() const
@@ -117,7 +166,8 @@ bool LoadingDescription::operator==(const LoadingDescription& other) const
 {
     return filePath == other.filePath &&
             rawDecodingSettings == other.rawDecodingSettings &&
-            previewParameters == other.previewParameters;
+            previewParameters == other.previewParameters &&
+            postProcessingParameters == other.postProcessingParameters;
 }
 
 bool LoadingDescription::equalsIgnoreReducedVersion(const LoadingDescription& other) const
@@ -127,18 +177,18 @@ bool LoadingDescription::equalsIgnoreReducedVersion(const LoadingDescription& ot
 
 bool LoadingDescription::equalsOrBetterThan(const LoadingDescription& other) const
 {
-    // This method is similar to operator==. But it returns true as well if other
-    // Loads a "better" version than this.
+    // This method is similar to operator==. But it returns true as well if this
+    // loads a "better" version than <other>.
     // Preview parameters must have the same size, or other has no size restriction.
-    // All raw decoding settings must be equal, only the half size parameter is allowed to vary.
+    // Comparing raw decoding settings is complicated. We allow to be loaded with optimizeTimeLoading().
 
-    DRawDecoding fullSize = other.rawDecodingSettings;
-    fullSize.halfSizeColorImage = false;
+    DRawDecoding fast = rawDecodingSettings;
+    fast.optimizeTimeLoading();
 
     return filePath == other.filePath &&
             (
              rawDecodingSettings == other.rawDecodingSettings ||
-             rawDecodingSettings == fullSize
+             fast == other.rawDecodingSettings
             ) &&
             (
              (previewParameters.size == other.previewParameters.size) ||

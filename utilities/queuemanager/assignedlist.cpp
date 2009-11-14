@@ -26,20 +26,19 @@
 
 // Qt includes
 
-#include <QPainter>
 #include <QDragEnterEvent>
-#include <QUrl>
 #include <QFileInfo>
 #include <QHeaderView>
+#include <QPainter>
+#include <QUrl>
 
 // KDE includes
 
-#include <klocale.h>
-#include <kiconloader.h>
-#include <kdebug.h>
 #include <kaction.h>
-#include <kmenu.h>
 #include <kactioncollection.h>
+#include <kiconloader.h>
+#include <klocale.h>
+#include <kmenu.h>
 
 // Local includes
 
@@ -139,6 +138,20 @@ AssignedListView::AssignedListView(QWidget *parent)
 
 AssignedListView::~AssignedListView()
 {
+}
+
+void AssignedListView::keyPressEvent(QKeyEvent *event)
+{
+
+    if (event->key() == Qt::Key_Delete)
+    {
+        slotRemoveCurrentTool();
+    }
+    else
+    {
+        QTreeWidget::keyPressEvent(event);
+    }
+
 }
 
 void AssignedListView::setBusy(bool b)

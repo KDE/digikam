@@ -27,14 +27,14 @@
 
 // Qt includes
 
+#include <QGridLayout>
 #include <QLabel>
 #include <QLayout>
-#include <QGridLayout>
+#include <QPointer>
 #include <QTreeWidget>
 
 // KDE includes
 
-#include <kdebug.h>
 #include <klineedit.h>
 #include <klocale.h>
 #include <kicondialog.h>
@@ -43,6 +43,7 @@
 #include <kiconloader.h>
 #include <kseparator.h>
 #include <kstandarddirs.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -81,15 +82,15 @@ public:
 
     bool           create;
 
-    QLabel        *topLabel;
+    QLabel*        topLabel;
 
     QString        icon;
 
-    QPushButton   *iconButton;
-    QPushButton   *resetIconButton;
+    QPushButton*   iconButton;
+    QPushButton*   resetIconButton;
 
-    TAlbum        *mainRootAlbum;
-    SearchTextBar *titleEdit;
+    TAlbum*        mainRootAlbum;
+    SearchTextBar* titleEdit;
 };
 
 TagEditDlg::TagEditDlg(QWidget *parent, TAlbum* album, bool create)
@@ -272,29 +273,31 @@ void TagEditDlg::slotTitleChanged(const QString& newtitle)
 
 bool TagEditDlg::tagEdit(QWidget *parent, TAlbum* album, QString& title, QString& icon)
 {
-    TagEditDlg dlg(parent, album);
+    QPointer<TagEditDlg> dlg = new TagEditDlg(parent, album);
 
-    bool valRet = dlg.exec();
+    bool valRet = dlg->exec();
     if (valRet == QDialog::Accepted)
     {
-        title = dlg.title();
-        icon  = dlg.icon();
+        title = dlg->title();
+        icon  = dlg->icon();
     }
 
+    delete dlg;
     return valRet;
 }
 
 bool TagEditDlg::tagCreate(QWidget *parent, TAlbum* album, QString& title, QString& icon)
 {
-    TagEditDlg dlg(parent, album, true);
+    QPointer<TagEditDlg> dlg = new TagEditDlg(parent, album, true);
 
-    bool valRet = dlg.exec();
+    bool valRet = dlg->exec();
     if (valRet == QDialog::Accepted)
     {
-        title = dlg.title();
-        icon  = dlg.icon();
+        title = dlg->title();
+        icon  = dlg->icon();
     }
 
+    delete dlg;
     return valRet;
 }
 
@@ -327,7 +330,7 @@ AlbumList TagEditDlg::createTAlbum(TAlbum *mainRootAlbum, const QString& tagStr,
                 root = mainRootAlbum;
 
             QStringList tagsList = hierarchy.split('/', QString::SkipEmptyParts);
-            kDebug(50003) << tagsList;
+            kDebug() << tagsList;
 
             if (!tagsList.isEmpty())
             {
@@ -341,7 +344,7 @@ AlbumList TagEditDlg::createTAlbum(TAlbum *mainRootAlbum, const QString& tagStr,
                     else
                         tagPath = QString("%1/%2").arg(root->tagPath()).arg(tag);
 
-                    kDebug(50003) << tag << " :: " << tagPath;
+                    kDebug() << tag << " :: " << tagPath;
 
                     if (!tag.isEmpty())
                     {
@@ -380,8 +383,9 @@ void TagEditDlg::showtagsListCreationError(QWidget* parent, const QMap<QString, 
 {
     if (!errMap.isEmpty())
     {
-        TagsListCreationErrorDialog dlg(parent, errMap);
-        dlg.exec();
+        QPointer<TagsListCreationErrorDialog> dlg = new TagsListCreationErrorDialog(parent, errMap);
+        dlg->exec();
+        delete dlg;
     }
 }
 

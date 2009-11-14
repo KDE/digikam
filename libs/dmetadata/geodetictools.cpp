@@ -6,7 +6,7 @@
  * Date        : 2008-05-05
  * Description : Geodetic tools
  *
- * Copyright (C) 2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2004-2006 by Daniele Franzoni
  * Copyright (C) 2004-2006 by Martin Desruisseaux
  * Copyright (C) 2003-2006 GeoTools Project Managment Committee (PMC), http://geotools.org
@@ -47,18 +47,18 @@ GeodeticCalculator::GeodeticCalculator(const Ellipsoid& e)
     m_semiMinorAxis = m_ellipsoid.semiMinorAxis();
 
     // constants
-    TOLERANCE_0 = 5.0e-15,
-    TOLERANCE_1 = 5.0e-14,
-    TOLERANCE_2 = 5.0e-13,
-    TOLERANCE_3 = 7.0e-3;
+    TOLERANCE_0     = 5.0e-15,
+    TOLERANCE_1     = 5.0e-14,
+    TOLERANCE_2     = 5.0e-13,
+    TOLERANCE_3     = 7.0e-3;
     TOLERANCE_CHECK = 1E-8;
 
     /* calculation of GPNHRI parameters */
-    f  = (m_semiMajorAxis-m_semiMinorAxis) / m_semiMajorAxis;
-    fo = 1.0 - f;
-    f2 = f*f;
-    f3 = f*f2;
-    f4 = f*f3;
+    f                     = (m_semiMajorAxis-m_semiMinorAxis) / m_semiMajorAxis;
+    fo                    = 1.0 - f;
+    f2                    = f*f;
+    f3                    = f*f2;
+    f4                    = f*f3;
     m_eccentricitySquared = f * (2.0-f);
 
     /* Calculation of GNPARC parameters */
@@ -83,15 +83,15 @@ GeodeticCalculator::GeodeticCalculator(const Ellipsoid& e)
     T6 = 0.1953125 * f3;
 
     const double a = f3*(1.0+2.25*f);
-    a01 = -f2*(1.0+f+f2)/4.0;
-    a02 = 0.1875*a;
-    a03 = -0.1953125*f4;
-    a21 = -a01;
-    a22 = -0.25*a;
-    a23 = 0.29296875*f4;
-    a42 = 0.03125*a;
-    a43 = 0.05859375*f4;
-    a63 = 5.0*f4/768.0;
+    a01            = -f2*(1.0+f+f2)/4.0;
+    a02            = 0.1875*a;
+    a03            = -0.1953125*f4;
+    a21            = -a01;
+    a22            = -0.25*a;
+    a23            = 0.29296875*f4;
+    a42            = 0.03125*a;
+    a43            = 0.05859375*f4;
+    a63            = 5.0*f4/768.0;
 }
 
 double GeodeticCalculator::castToAngleRange(const double alpha)
@@ -144,8 +144,8 @@ void GeodeticCalculator::setStartingGeographicPoint(double longitude, double lat
     if (!checkLongitude(&longitude) || !checkLatitude (&latitude))
         return;
     // Check passed. Now performs the changes in this object.
-    m_long1 = longitude;
-    m_lat1  = latitude;
+    m_long1            = longitude;
+    m_lat1             = latitude;
     m_destinationValid = false;
     m_directionValid   = false;
 }
@@ -155,8 +155,8 @@ void GeodeticCalculator::setDestinationGeographicPoint(double longitude, double 
     if (!checkLongitude(&longitude) || !checkLatitude (&latitude))
         return;
     // Check passed. Now performs the changes in this object.
-    m_long2 = longitude;
-    m_lat2  = latitude;
+    m_long2            = longitude;
+    m_lat2             = latitude;
     m_destinationValid = true;
     m_directionValid   = false;
 }
@@ -192,8 +192,8 @@ void GeodeticCalculator::setDirection(double azimuth, double distance)
     if (!checkOrthodromicDistance(distance))
         return;
     // Check passed. Now performs the changes in this object.
-    m_azimuth  = azimuth;
-    m_distance = distance;
+    m_azimuth          = azimuth;
+    m_distance         = distance;
     m_destinationValid = false;
     m_directionValid   = true;
 }
@@ -261,11 +261,11 @@ bool GeodeticCalculator::computeDestinationPoint()
     double SA  = CU*SF;
     double C2A = 1.0 - SA*SA;
     double X   = sqrt((1.0/fo/fo-1)*C2A+1.0) + 1.0;
-    X   = (X-2.0)/X;
+    X          = (X-2.0)/X;
     double C   = 1.0-X;
-    C   = (X*X/4.0+1.0)/C;
+    C          = (X*X/4.0+1.0)/C;
     double D   = (0.375*X*X-1.0)*X;
-    TU   = distance / fo / m_semiMajorAxis / C;
+    TU         = distance / fo / m_semiMajorAxis / C;
     double Y   = TU;
     double SY, CY, CZ, E;
 
@@ -282,16 +282,16 @@ bool GeodeticCalculator::computeDestinationPoint()
     }
     while (fabs(Y-C) > TOLERANCE_1);
 
-    BAZ  = CU*CY*CF - SU*SY;
-    C    = fo*sqrt(SA*SA+BAZ*BAZ);
-    D    = SU*CY + CU*SY*CF;
-    m_lat2 = atan2(D,C);
-    C    = CU*CY-SU*SY*CF;
-    X    = atan2(SY*SF,C);
-    C    = ((-3.0*C2A+4.0)*f+4.0)*C2A*f/16.0;
-    D    = ((E*CY*C+CZ)*SY*C+Y)*SA;
-    m_long2 = long1+X - (1.0-C)*D*f;
-    m_long2 = castToAngleRange(m_long2);
+    BAZ                = CU*CY*CF - SU*SY;
+    C                  = fo*sqrt(SA*SA+BAZ*BAZ);
+    D                  = SU*CY + CU*SY*CF;
+    m_lat2             = atan2(D,C);
+    C                  = CU*CY-SU*SY*CF;
+    X                  = atan2(SY*SF,C);
+    C                  = ((-3.0*C2A+4.0)*f+4.0)*C2A*f/16.0;
+    D                  = ((E*CY*C+CZ)*SY*C+Y)*SA;
+    m_long2            = long1+X - (1.0-C)*D*f;
+    m_long2            = castToAngleRange(m_long2);
     m_destinationValid = true;
     return true;
 }
@@ -329,7 +329,7 @@ double GeodeticCalculator::meridianArcLengthRadians(double P1, double P2)
         const double DE = sin(P2* 8.0) - sin(P1* 8.0);
         const double DF = sin(P2*10.0) - sin(P1*10.0);
         // Compute the S2 part of the series expansion
-        S2 = -DB*B/2.0 + DC*C/4.0 - DD*D/6.0 + DE*E/8.0 - DF*F/10.0;
+        S2              = -DB*B/2.0 + DC*C/4.0 - DD*D/6.0 + DE*E/8.0 - DF*F/10.0;
     }
 
     // Compute the S1 part of the series expansion
@@ -372,7 +372,7 @@ bool GeodeticCalculator::computeDirection()
     *         written by robert (sid) safford
     */
     const double dlon = castToAngleRange(long2-long1);
-    const double ss = fabs(dlon);
+    const double ss   = fabs(dlon);
     if (ss < TOLERANCE_1)
     {
         m_distance = meridianArcLengthRadians(lat1, lat2);
@@ -386,7 +386,7 @@ bool GeodeticCalculator::computeDirection()
     * as measured along the equator
     */
     // tests for antinodal difference
-    const double ESQP = m_eccentricitySquared / (1.0-m_eccentricitySquared);
+    const double ESQP   = m_eccentricitySquared / (1.0-m_eccentricitySquared);
     const double alimit = M_PI*fo;
     if (ss>=alimit &&
         lat1<TOLERANCE_3 && lat1>-TOLERANCE_3 &&
@@ -394,9 +394,9 @@ bool GeodeticCalculator::computeDirection()
     {
         // Computes an approximate AZ
         const double CONS = (M_PI-ss)/(M_PI*f);
-        double AZ = asin(CONS);
+        double AZ         = asin(CONS);
+        int iter          = 0;
         double AZ_TEMP, S, AO;
-        int iter = 0;
 
         do
         {
@@ -405,21 +405,21 @@ bool GeodeticCalculator::computeDirection()
                 //ERROR
                 return false;
             }
-            S = cos(AZ);
-            const double C2 = S*S;
+            S                 = cos(AZ);
+            const double C2   = S*S;
             // Compute new AO
-            AO = T1 + T2*C2 + T4*C2*C2 + T6*C2*C2*C2;
-            const double CS = CONS/AO;
-            S = asin(CS);
-            AZ_TEMP = AZ;
-            AZ = S;
+            AO                = T1 + T2*C2 + T4*C2*C2 + T6*C2*C2*C2;
+            const double _CS_ = CONS/AO;
+            S                 = asin(_CS_);
+            AZ_TEMP           = AZ;
+            AZ                = S;
         }
         while (fabs(S-AZ_TEMP) >= TOLERANCE_2);
 
         const double AZ1 = (dlon<0.0) ? 2.0*M_PI - S : S;
-        m_azimuth = castToAngleRange(AZ1);
+        m_azimuth        = castToAngleRange(AZ1);
         //const double AZ2 = 2.0*M_PI - AZ1;
-        S = cos(AZ1);
+        S                = cos(AZ1);
 
         // Equatorial - geodesic(S-s) SMS
         const double U2 = ESQP*S*S;
@@ -431,9 +431,9 @@ bool GeodeticCalculator::computeDirection()
                            0.046875         *U4 +
                            0.01953125       *U6 +
                            -0.01068115234375*U8;
-        S = sin(AZ1);
+        S                = sin(AZ1);
         const double SMS = m_semiMajorAxis*M_PI*(1.0 - f*fabs(S)*AO - BO*fo);
-        m_distance = m_semiMajorAxis*ss - SMS;
+        m_distance       = m_semiMajorAxis*ss - SMS;
         m_directionValid = true;
         return true;
     }
@@ -454,15 +454,15 @@ bool GeodeticCalculator::computeDirection()
             //ERROR
             return false;
         }
-        clon = cos(ab);
-        slon = sin(ab);
+        clon              = cos(ab);
+        slon              = sin(ab);
         const double csig = su1*su2 + cu1*cu2*clon;
-        ssig = sqrt(slon*cu2*slon*cu2 + (su2*cu1-su1*cu2*clon)*(su2*cu1-su1*cu2*clon));
-        sig  = atan2(ssig, csig);
-        sinalf = cu1*cu2*slon/ssig;
-        w = (1.0 - sinalf*sinalf);
-        const double t4 = w*w;
-        const double t6 = w*t4;
+        ssig              = sqrt(slon*cu2*slon*cu2 + (su2*cu1-su1*cu2*clon)*(su2*cu1-su1*cu2*clon));
+        sig               = atan2(ssig, csig);
+        sinalf            = cu1*cu2*slon/ssig;
+        w                 = (1.0 - sinalf*sinalf);
+        const double t4   = w*w;
+        const double t6   = w*t4;
 
         // the coefficents of type a
         const double ao = f+a01*w+a02*t4+a03*t6;
@@ -484,9 +484,9 @@ bool GeodeticCalculator::computeDirection()
 
         // the longitude difference
         const double s = sinalf*(ao*sig + a2*ssig*q2 + a4*r2*q4 + a6*r3*q6);
-        double xz = dlon+s;
-        xy = fabs(xz-ab);
-        ab = dlon+s;
+        double xz      = dlon+s;
+        xy             = fabs(xz-ab);
+        ab             = dlon+s;
     }
     while (xy >= TOLERANCE_1);
 
@@ -704,9 +704,9 @@ double Ellipsoid::orthodromicDistance(double x1, double y1, double x2, double y2
     *         subroutine INVER1
     */
     const int    MAX_ITERATIONS = 100;
-    const double EPS = 0.5E-13;
-    const double F   = 1/m_inverseFlattening;
-    const double R   = 1-F;
+    const double EPS            = 0.5E-13;
+    const double F              = 1/m_inverseFlattening;
+    const double R              = 1-F;
 
     double tu1 = R * sin(y1) / cos(y1);
     double tu2 = R * sin(y2) / cos(y2);
@@ -720,16 +720,16 @@ double Ellipsoid::orthodromicDistance(double x1, double y1, double x2, double y2
 
     for (int i=0; i<MAX_ITERATIONS; ++i)
     {
-        const double sx = sin(x);
-        const double cx = cos(x);
-        tu1 = cu2*sx;
-        tu2 = baz - su1*cu2*cx;
-        const double sy = sqrt(tu1*tu1 + tu2*tu2);
-        const double cy = s*cx + faz;
-        const double y = atan2(sy, cy);
-        const double SA = s*sx/sy;
+        const double sx  = sin(x);
+        const double cx  = cos(x);
+        tu1              = cu2*sx;
+        tu2              = baz - su1*cu2*cx;
+        const double sy  = sqrt(tu1*tu1 + tu2*tu2);
+        const double cy  = s*cx + faz;
+        const double y   = atan2(sy, cy);
+        const double SA  = s*sx/sy;
         const double c2a = 1 - SA*SA;
-        double cz = faz+faz;
+        double cz        = faz+faz;
         if (c2a > 0)
         {
             cz = -cz/c2a + cy;
@@ -737,8 +737,8 @@ double Ellipsoid::orthodromicDistance(double x1, double y1, double x2, double y2
         double e = cz*cz*2 - 1;
         double c = ((-3*c2a+4)*F+4)*c2a*F/16;
         double d = x;
-        x = ((e*cy*c+cz)*sy*c+y)*SA;
-        x = (1-c)*x*F + x2-x1;
+        x        = ((e*cy*c+cz)*sy*c+y)*SA;
+        x        = (1-c)*x*F + x2-x1;
 
         if (fabs(d-x) <= EPS)
         {

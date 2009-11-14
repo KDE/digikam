@@ -1,20 +1,20 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="4" name="digikamimageplugin_sheartool" >
+<gui version="6" name="digikamimageplugin_sheartool" >
 
  <MenuBar>
 
   <Menu name="Transform" ><text>Tra&amp;nsform</text>
-   <Action name="imageplugin_sheartool" /> 
+   <Action name="imageplugin_sheartool" />
   </Menu>
 
  </MenuBar>
- 
- <ToolBar name="ToolBar" >
+
+ <ToolBar name="mainToolBar" >
   <text>Main Toolbar</text>
  </ToolBar>
- 
+
  <ActionProperties>
   <Action shortcut="" name="imageplugin_sheartool" />
  </ActionProperties>
 
-</kpartgui>
+</gui>

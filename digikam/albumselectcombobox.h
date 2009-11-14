@@ -24,10 +24,6 @@
 #ifndef ALBUMSELECTCOMBOBOX_H
 #define ALBUMSELECTCOMBOBOX_H
 
-// Qt includes
-
-// KDE includes
-
 // Local includes
 
 #include "comboboxutilities.h"

@@ -40,7 +40,6 @@
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kdebug.h>
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <klocale.h>
@@ -70,17 +69,27 @@ class BlurFXToolPriv
 {
 public:
 
-    BlurFXToolPriv()
-    {
-       effectTypeLabel = 0;
-       distanceLabel   = 0;
-       levelLabel      = 0;
-       effectType      = 0;
-       distanceInput   = 0;
-       levelInput      = 0;
-       previewWidget   = 0;
-       gboxSettings    = 0;
-    }
+    BlurFXToolPriv() :
+        configGroupName("blurfx Tool"),
+        configEffectTypeEntry("EffectType"),
+        configDistanceAdjustmentEntry("DistanceAdjustment"),
+        configLevelAdjustmentEntry("LevelAdjustment"),
+
+        effectTypeLabel(0),
+        distanceLabel(0),
+        levelLabel(0),
+        effectType(0),
+        distanceInput(0),
+        levelInput(0),
+        previewWidget(0),
+        gboxSettings(0)
+        {}
+
+
+    const QString       configGroupName;
+    const QString       configEffectTypeEntry;
+    const QString       configDistanceAdjustmentEntry;
+    const QString       configLevelAdjustmentEntry;
 
     QLabel*             effectTypeLabel;
     QLabel*             distanceLabel;
@@ -106,11 +115,13 @@ BlurFXTool::BlurFXTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings = new EditorToolSettings(EditorToolSettings::Default|
-                                             EditorToolSettings::Ok|
-                                             EditorToolSettings::Cancel|
-                                             EditorToolSettings::Try,
-                                             EditorToolSettings::PanIcon);
+    d->gboxSettings = new EditorToolSettings;
+    d->gboxSettings->setButtons(EditorToolSettings::Default|
+                                EditorToolSettings::Ok|
+                                EditorToolSettings::Cancel|
+                                EditorToolSettings::Try);
+
+    d->gboxSettings->setTools(EditorToolSettings::PanIcon);
 
     d->previewWidget = new ImagePanelWidget(470, 350, "blurfx Tool", d->gboxSettings->panIconView());
 
@@ -123,7 +134,7 @@ BlurFXTool::BlurFXTool(QObject* parent)
     d->effectType->addItem(i18n("Far Blur"));
     d->effectType->addItem(i18n("Motion Blur"));
     d->effectType->addItem(i18n("Softener Blur"));
-    d->effectType->addItem(i18n("Skake Blur"));
+    d->effectType->addItem(i18n("Shake Blur"));
     d->effectType->addItem(i18n("Focus Blur"));
     d->effectType->addItem(i18n("Smart Blur"));
     d->effectType->addItem(i18n("Frost Glass"));
@@ -142,7 +153,7 @@ BlurFXTool::BlurFXTool(QObject* parent)
                                      "tones. This gives images a dreamy and glossy soft focus effect. It is ideal "
                                      "for creating romantic portraits, glamour photographs, or giving images a warm "
                                      "and subtle glow.</p>"
-                                     "<p><b>Skake Blur</b>: blurs the image by skaking randomly the pixels. "
+                                     "<p><b>Shake Blur</b>: blurs the image by shaking randomly the pixels. "
                                      "This simulates the blur of a random moving camera.</p>"
                                      "<p><b>Focus Blur</b>: blurs the image corners to reproduce the astigmatism distortion "
                                      "of a lens.</p>"
@@ -228,13 +239,13 @@ void BlurFXTool::renderingFinished()
 void BlurFXTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("blurfx Tool");
+    KConfigGroup group        = config->group(d->configGroupName);
 
     blockWidgetSignals(true);
 
-    d->effectType->setCurrentIndex(group.readEntry("EffectType", d->effectType->defaultIndex()));
-    d->distanceInput->setValue(group.readEntry("DistanceAdjustment", d->distanceInput->defaultValue()));
-    d->levelInput->setValue(group.readEntry("LevelAdjustment",d->levelInput->defaultValue()));
+    d->effectType->setCurrentIndex(group.readEntry(d->configEffectTypeEntry,     d->effectType->defaultIndex()));
+    d->distanceInput->setValue(group.readEntry(d->configDistanceAdjustmentEntry, d->distanceInput->defaultValue()));
+    d->levelInput->setValue(group.readEntry(d->configLevelAdjustmentEntry,       d->levelInput->defaultValue()));
 
     blockWidgetSignals(false);
 }
@@ -242,10 +253,11 @@ void BlurFXTool::readSettings()
 void BlurFXTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("blurfx Tool");
-    group.writeEntry("EffectType", d->effectType->currentIndex());
-    group.writeEntry("DistanceAdjustment", d->distanceInput->value());
-    group.writeEntry("LevelAdjustment", d->levelInput->value());
+    KConfigGroup group        = config->group(d->configGroupName);
+
+    group.writeEntry(d->configEffectTypeEntry,         d->effectType->currentIndex());
+    group.writeEntry(d->configDistanceAdjustmentEntry, d->distanceInput->value());
+    group.writeEntry(d->configLevelAdjustmentEntry,    d->levelInput->value());
     d->previewWidget->writeSettings();
     group.sync();
 }

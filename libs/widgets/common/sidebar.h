@@ -7,8 +7,8 @@
  * Description : a widget to manage sidebar in GUI.
  *
  * Copyright (C) 2005-2006 by Joern Ahrens <joern.ahrens@kdemail.net>
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -159,6 +159,8 @@ private Q_SLOTS:
 
     void slotDragSwitchTimer();
 
+    void slotSplitterBtnClicked();
+
 Q_SIGNALS:
 
     /**
@@ -186,25 +188,37 @@ class DIGIKAM_EXPORT SidebarSplitter : public QSplitter
 
 public:
 
+    const static QString DEFAULT_CONFIG_KEY;
+
     /**
      *  This is a QSplitter with better support for storing its state
      *  in config files, especially if Sidebars are contained in the splitter.
      */
     SidebarSplitter(QWidget *parent = 0);
-    SidebarSplitter(Qt::Orientation orientation, QWidget *parent = 0);
+    explicit SidebarSplitter(Qt::Orientation orientation, QWidget *parent = 0);
 
     ~SidebarSplitter();
 
     /**
      * Saves the splitter state to group, handling minimized sidebars correctly.
-     * If key is 0 (default), the config key will be "SplitterState".
+     * DEFAULT_CONFIG_KEY is used for storing the state.
      */
-    void saveState(KConfigGroup& group, const char *key = 0);
+    void saveState(KConfigGroup& group);
+    /**
+     * Saves the splitter state to group, handling minimized sidebars correctly.
+     * This version uses a specified key in the config group.
+     */
+    void saveState(KConfigGroup& group, QString key);
     /**
      * Restores the splitter state from group, handling minimized sidebars correctly.
-     * If key is 0 (default), the config key will be "SplitterState".
+     * DEFAULT_CONFIG_KEY is used for restoring the state.
      */
-    void restoreState(KConfigGroup& group, const char *key = 0);
+    void restoreState(KConfigGroup& group);
+    /**
+     * Restores the splitter state from group, handling minimized sidebars correctly.
+     * This version uses a specified key in the config group.
+     */
+    void restoreState(KConfigGroup& group, QString key);
 
     /**
      * Returns the value of sizes() that corresponds to the given Sidebar or splitter child widget.
@@ -217,6 +231,8 @@ public:
      */
     void setSize(Sidebar *bar, int size);
     void setSize(QWidget *widget, int size);
+
+    void addSplitterCollapserButton(QWidget* widget);
 
 private Q_SLOTS:
 

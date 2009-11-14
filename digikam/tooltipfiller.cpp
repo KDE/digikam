@@ -29,7 +29,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+
 #include <klocale.h>
 #include <kfileitem.h>
 #include <kglobal.h>
@@ -234,11 +234,26 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
         if (settings->getToolTipsShowTags())
         {
             QStringList tagPaths = AlbumManager::instance()->tagPaths(info.tagIds(), false);
+            QStringList tagNames = AlbumManager::instance()->tagNames(info.tagIds());
+            QString tags(i18n("Tags:"));
 
-            str = tagPaths.join(", ");
-            if (str.isEmpty()) str = QString("---");
-            if (str.length() > cnt.maxStringLength) str = str.left(cnt.maxStringLength-3) + "...";
-            tip += cnt.cellSpecBeg + i18n("Tags:") + cnt.cellSpecMid + str + cnt.cellSpecEnd;
+            if (tagPaths.isEmpty())
+                tip += cnt.cellSpecBeg + tags + cnt.cellSpecMid + "---" + cnt.cellSpecEnd;
+            else
+            {
+                QString title = tags;
+                QString tagText;
+                for (int i = 0; i<tagPaths.size(); i++)
+                {
+                    tagText = tagPaths[i];
+                    if (tagText.size() > cnt.maxStringLength)
+                        tagText = tagNames[i];
+                    if (tagText.size() > cnt.maxStringLength)
+                        tagText = cnt.elidedText(tagPaths[i], Qt::ElideLeft);
+                    tip += cnt.cellSpecBeg + title + cnt.cellSpecMid + tagText + cnt.cellSpecEnd;
+                    title.clear();
+                }
+            }
         }
 
         if (settings->getToolTipsShowRating())

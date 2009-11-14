@@ -29,10 +29,6 @@
 #include <QAbstractItemModel>
 #include <QAbstractItemView>
 
-// Local includes
-
-//#include "digikam_export.h"
-
 namespace Digikam
 {
 
@@ -41,6 +37,7 @@ class AbstractAlbumModel;
 
 class AlbumModelDragDropHandler : public QObject
 {
+    Q_OBJECT
 public:
 
     AlbumModelDragDropHandler(AbstractAlbumModel *model);

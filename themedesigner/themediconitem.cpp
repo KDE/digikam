@@ -26,26 +26,26 @@
 
 // Qt includes
 
+#include <QDateTime>
+#include <QFont>
+#include <QFontMetrics>
 #include <QPainter>
-#include <QPixmap>
 #include <QPalette>
 #include <QPen>
-#include <QFontMetrics>
-#include <QFont>
-#include <QDateTime>
+#include <QPixmap>
 
 // KDE includes
 
-#include <kglobal.h>
-#include <klocale.h>
 #include <kapplication.h>
+#include <kglobal.h>
 #include <kiconloader.h>
+#include <klocale.h>
 
 // Local includes
 
-#include "albumiconitem.h"
-#include "themeengine.h"
+#include "imagedelegate.h"
 #include "themediconview.h"
+#include "themeengine.h"
 
 namespace Digikam
 {
@@ -90,20 +90,20 @@ void ThemedIconItem::paintItem(QPainter* p2)
 
     r = view->itemNameRect();
     p.setFont(view->itemFontReg());
-    p.drawText(r, Qt::AlignCenter, AlbumIconItem::squeezedText(&p, r.width(), "IMG_00.JPG"));
+    p.drawText(r, Qt::AlignCenter, ImageDelegate::squeezedText(p.fontMetrics(), r.width(), "IMG_00.JPG"));
 
     p.setFont(view->itemFontCom());
     r = view->itemCommentsRect();
-    p.drawText(r, Qt::AlignCenter, AlbumIconItem::squeezedText(&p, r.width(), i18n("Photo caption")));
+    p.drawText(r, Qt::AlignCenter, ImageDelegate::squeezedText(p.fontMetrics(), r.width(), i18n("Photo caption")));
 
     p.setFont(view->itemFontXtra());
     {
-        QDateTime date = QDateTime::currentDateTime();
-        r              = view->itemDateRect();
+        const QDateTime date = QDateTime::currentDateTime();
+        r                    = view->itemDateRect();
         p.setFont(view->itemFontXtra());
         QString str;
-        AlbumIconItem::dateToString(date, str);
-        p.drawText(r, Qt::AlignCenter, AlbumIconItem::squeezedText(&p, r.width(), str));
+        str = ImageDelegate::dateToString(date);
+        p.drawText(r, Qt::AlignCenter, ImageDelegate::squeezedText(p.fontMetrics(), r.width(), str));
     }
 
     p.setFont(view->itemFontCom());
@@ -112,7 +112,7 @@ void ThemedIconItem::paintItem(QPainter* p2)
     {
         QString tags = i18n("Events, Places, Vacation");
         r            = view->itemTagRect();
-        p.drawText(r, Qt::AlignCenter, AlbumIconItem::squeezedText(&p, r.width(), tags));
+        p.drawText(r, Qt::AlignCenter, ImageDelegate::squeezedText(p.fontMetrics(), r.width(), tags));
     }
 
 

@@ -43,7 +43,7 @@
 #include "dimgimagefilters.h"
 #include "dimggaussianblur.h"
 
-namespace Digikam 
+namespace Digikam
 {
 
 DImgUnsharpMask::DImgUnsharpMask(DImg *orgImage, QObject *parent, int radius,
@@ -67,7 +67,7 @@ void DImgUnsharpMask::filterImage()
 
     if (m_orgImage.isNull())
     {
-       kWarning(50006) << "No image data available!";
+       kWarning() << "No image data available!";
        return;
     }
 

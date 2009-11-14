@@ -27,26 +27,53 @@
 
 // Local includes
 
+#include "iccmanager.h"
 #include "previewtask.h"
 
 namespace Digikam
 {
 
 PreviewLoadThread::PreviewLoadThread()
+            : m_displayingWidget(0)
 {
+}
+
+LoadingDescription PreviewLoadThread::createLoadingDescription(const QString& filePath, int size, bool exifRotate)
+{
+    LoadingDescription description(filePath, size, exifRotate);
+    description.rawDecodingSettings.optimizeTimeLoading();
+    description.rawDecodingSettings.sixteenBitsImage   = false;
+    description.rawDecodingSettings.halfSizeColorImage = true;
+
+    ICCSettingsContainer settings = IccSettings::instance()->settings();
+    if (settings.enableCM && settings.useManagedPreviews)
+    {
+        description.postProcessingParameters.colorManagement = LoadingDescription::ConvertForDisplay;
+        description.postProcessingParameters.setProfile(IccManager::displayProfile(m_displayingWidget));
+    }
+
+    return description;
+}
+
+void PreviewLoadThread::load(const QString& filePath, int size, bool exifRotate)
+{
+    load(createLoadingDescription(filePath, size, exifRotate));
+}
+
+void PreviewLoadThread::loadHighQuality(const QString& filePath, bool exifRotate)
+{
+    load(filePath, 0, exifRotate);
 }
 
 void PreviewLoadThread::load(LoadingDescription description)
 {
-    description.rawDecodingSettings.sixteenBitsImage = false;
+    // creates a PreviewLoadingTask, which uses different mechanisms than a normal loading task
     ManagedLoadSaveThread::loadPreview(description);
 }
 
-void PreviewLoadThread::loadHighQuality(LoadingDescription description)
+void PreviewLoadThread::setDisplayingWidget(QWidget *widget)
 {
-    description.rawDecodingSettings.optimizeTimeLoading();
-    description.rawDecodingSettings.sixteenBitsImage = false;
-    ManagedLoadSaveThread::load(description, LoadingModeShared, LoadingPolicyFirstRemovePrevious);
+    m_displayingWidget = widget;
 }
 
 }   // namespace Digikam

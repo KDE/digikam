@@ -53,6 +53,11 @@ public:
 
     ImageViewUtilities(QWidget *parentWidget);
 
+public:
+
+    void addIsCutSelection(QMimeData* mime, bool cut);
+    bool decodeIsCutSelection(const QMimeData *mimeData);
+
 public Q_SLOTS:
 
     void createNewAlbumForInfos(const QList<ImageInfo>& infos, Album *currentAlbum);
@@ -66,12 +71,16 @@ public Q_SLOTS:
     void notifyFileContentChanged(const KUrl::List& urls);
 
     void openInEditor(const ImageInfo& info, const QList<ImageInfo>& allInfosToOpen, Album *currentAlbum);
-    void rename(const ImageInfo& renameInfo);
+    void rename(const KUrl& imageUrl, const QString& newName);
     void setAsAlbumThumbnail(Album *album, const ImageInfo& imageInfo);
 
 Q_SIGNALS:
 
     void editorCurrentUrlChanged(const KUrl& url);
+
+    void imageRenameSucceeded(const KUrl&);
+    void imageRenameFailed(const KUrl&);
+    void renamingAborted();
 
 protected Q_SLOTS:
 

@@ -48,10 +48,10 @@ public:
 private Q_SLOTS:
 
     void slotSettingsChanged();
+    void slotAssignSettings2Widget();
 
 private:
 
-    void assignSettings2Widget();
     bool toolOperations();
 
 private:

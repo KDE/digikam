@@ -24,6 +24,10 @@
 #ifndef QUEUEMGRWINDOWPRIVATE_H
 #define QUEUEMGRWINDOWPRIVATE_H
 
+// Qt includes
+
+#include <qstring.h>
+
 // KDE includes
 
 #include <kaction.h>
@@ -32,6 +36,7 @@
 // Local includes
 
 #include "statusprogressbar.h"
+#include "sidebar.h"
 
 namespace Digikam
 {
@@ -42,6 +47,10 @@ class QueueMgrWindowPriv
 {
 
 public:
+
+    const static QString TOP_SPLITTER_CONFIG_KEY;
+    const static QString BOTTOM_SPLITTER_CONFIG_KEY;
+    const static QString VERTICAL_SPLITTER_CONFIG_KEY;
 
     QueueMgrWindowPriv()
     {
@@ -67,6 +76,9 @@ public:
         rawCameraListAction    = 0;
         libsInfoAction         = 0;
         dbStatAction           = 0;
+        topSplitter            = 0;
+        bottomSplitter         = 0;
+        verticalSplitter       = 0;
         themeMenuAction        = 0;
         contributeAction       = 0;
         assignedList           = 0;
@@ -85,60 +97,64 @@ public:
         progressPix            = SmallIcon("process-working", 22);
     }
 
-    bool                       fullScreenHideToolBar;
-    bool                       fullScreen;
-    bool                       removeFullScreenButton;
-    bool                       busy;
+    bool                   fullScreenHideToolBar;
+    bool                   fullScreen;
+    bool                   removeFullScreenButton;
+    bool                   busy;
 
-    int                        progressCount;
+    int                    progressCount;
 
-    QTimer                    *progressTimer;
+    QTimer*                progressTimer;
 
-    QPixmap                    progressPix;
+    QPixmap                progressPix;
 
-    QLabel                    *statusLabel;
+    QLabel*                statusLabel;
 
-    KAction                   *clearQueueAction;
-    KAction                   *removeItemsSelAction;
-    QAction                   *removeItemsDoneAction;
-    QAction                   *fullScreenAction;
-    QAction                   *moveUpToolAction;
-    QAction                   *moveDownToolAction;
-    QAction                   *removeToolAction;
-    QAction                   *clearToolsAction;
+    KAction*               clearQueueAction;
+    KAction*               removeItemsSelAction;
+    QAction*               removeItemsDoneAction;
+    QAction*               fullScreenAction;
+    QAction*               moveUpToolAction;
+    QAction*               moveDownToolAction;
+    QAction*               removeToolAction;
+    QAction*               clearToolsAction;
 
-    KAction                   *runAction;
-    KAction                   *stopAction;
-    KAction                   *removeQueueAction;
-    KAction                   *newQueueAction;
-    KAction                   *donateMoneyAction;
-    KAction                   *contributeAction;
-    KAction                   *rawCameraListAction;
-    KAction                   *libsInfoAction;
-    KAction                   *dbStatAction;
+    KAction*               runAction;
+    KAction*               stopAction;
+    KAction*               removeQueueAction;
+    KAction*               newQueueAction;
+    KAction*               donateMoneyAction;
+    KAction*               contributeAction;
+    KAction*               rawCameraListAction;
+    KAction*               libsInfoAction;
+    KAction*               dbStatAction;
 
-    KToggleAction             *showMenuBarAction;
+    SidebarSplitter*       topSplitter;
+    SidebarSplitter*       bottomSplitter;
+    SidebarSplitter*       verticalSplitter;
 
-    KSelectAction             *themeMenuAction;
+    KToggleAction*         showMenuBarAction;
 
-    DLogoAction               *animLogo;
-    QueueListViewItem         *currentProcessItem;
+    KSelectAction*         themeMenuAction;
 
-    AssignedListViewItem      *currentTaskItem;
+    DLogoAction*           animLogo;
+    QueueListViewItem*     currentProcessItem;
 
-    BatchToolsManager         *batchToolsMgr;
+    AssignedListViewItem*  currentTaskItem;
 
-    StatusProgressBar         *statusProgressBar;
+    BatchToolsManager*     batchToolsMgr;
 
-    ActionThread              *thread;
+    StatusProgressBar*     statusProgressBar;
 
-    ToolsView                 *toolsView;
-    ToolSettingsView          *toolSettings;
-    AssignedListView          *assignedList;
-    QueuePool                 *queuePool;
-    QueueSettingsView         *queueSettingsView;
+    ActionThread*          thread;
 
-    QueuePoolItemsList         itemsList;
+    ToolsView*             toolsView;
+    ToolSettingsView*      toolSettings;
+    AssignedListView*      assignedList;
+    QueuePool*             queuePool;
+    QueueSettingsView*     queueSettingsView;
+
+    QueuePoolItemsList     itemsList;
 };
 
 }  // namespace Digikam

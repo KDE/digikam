@@ -41,7 +41,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+
 #include <kfileitem.h>
 #include <kglobal.h>
 #include <kiconloader.h>
@@ -329,221 +329,58 @@ ImagePreviewBarItem* LightTableBar::findItemById(qlonglong id) const
     return 0;
 }
 
-void LightTableBar::viewportPaintEvent(QPaintEvent* e)
+void LightTableBar::drawItem(ThumbBarItem *item, QPainter &p, QPixmap &tile)
 {
+
+    LightTableBarItem *rItem = dynamic_cast<LightTableBarItem*>(item);
+
+    if (rItem->isOnLeftPanel())
+    {
+        QPixmap lPix = SmallIcon("arrow-left");
+        p.drawPixmap(getMargin(), getMargin(), lPix);
+    }
+    if (rItem->isOnRightPanel())
+    {
+        QPixmap rPix = SmallIcon("arrow-right");
+        p.drawPixmap(tile.width() - getMargin() - rPix.width(), getMargin(), rPix);
+    }
+
+    if (item != ratingItem())
+    {
+        int rating = rItem->info().rating();
+        QRect r    = clickToRateRect(rItem);
+
+        if (getOrientation() == Qt::Vertical)
+        {
+            r.translate(0, -rItem->position());
+        }
+        else
+        {
+            r.translate(-rItem->position(), 0);
+        }
+
+        r.setX(((r.right() - rating * ratingPixmap().width())/2) - 1);
+        r.setY(r.y()+1);
+        r.setWidth((rating * ratingPixmap().width()));
+        r.setBottom(r.bottom()+1);
+        p.drawTiledPixmap(r, ratingPixmap());
+
+    }
+
+}
+
+void LightTableBar::drawEmptyMessage(QPixmap &bgPix)
+{
+
     ThemeEngine* te = ThemeEngine::instance();
-    QRect    er(e->rect());
-    QPixmap  bgPix;
 
-    if (countItems() > 0)
-    {
-        int cy=0, cx=0, ts=0, y1=0, y2=0, x1=0, x2=0;
-        QPixmap  tile;
+    QPainter p4(&bgPix);
+    p4.setPen(QPen(te->textRegColor()));
+    p4.drawText(0, 0, bgPix.width(), bgPix.height(),
+                Qt::AlignCenter|Qt::TextWordWrap,
+                i18n("Drag and drop images here"));
+    p4.end();
 
-        if (getOrientation() == Qt::Vertical)
-        {
-            cy = viewportToContents(er.topLeft()).y();
-
-            bgPix = QPixmap(contentsRect().width(), er.height());
-
-            ts   = getTileSize() + 2*getMargin() + 2*getRadius();
-            tile = QPixmap(visibleWidth()-1, ts-1);
-
-            y1 = (cy/ts)*ts;
-            y2 = ((y1 + er.height())/ts +1)*ts;
-        }
-        else
-        {
-            cx = viewportToContents(er.topLeft()).x();
-
-            bgPix = QPixmap(er.width(), contentsRect().height());
-
-            ts   = getTileSize() + 2*getMargin() + 2*getRadius();
-            tile = QPixmap(ts-1, visibleHeight()-1);
-
-            x1 = (cx/ts)*ts;
-            x2 = ((x1 + er.width())/ts +1)*ts;
-        }
-
-        bgPix.fill(te->baseColor());
-
-        for (ThumbBarItem *item = firstItem(); item; item = item->next())
-        {
-            if (getOrientation() == Qt::Vertical)
-            {
-                if (y1 <= item->position() && item->position() <= y2)
-                {
-                    if (item == currentItem())
-                        tile = te->thumbSelPixmap(tile.width(), tile.height());
-                    else
-                        tile = te->thumbRegPixmap(tile.width(), tile.height());
-
-                    QPainter p(&tile);
-
-                    if (item == currentItem())
-                    {
-                        p.setPen(QPen(te->textSelColor(), 3));
-                        p.drawRect(1, 1, tile.width()-2, tile.height()-2);
-                    }
-                    else
-                    {
-                        p.setPen(QPen(te->textRegColor(), 1));
-                        p.drawRect(0, 0, tile.width()-1, tile.height()-1);
-                    }
-
-                    if (item == highlightedItem())
-                    {
-                        QRect r = item->rect();
-                        p.setPen(QPen(palette().color(QPalette::Highlight), 3, Qt::SolidLine));
-                        p.drawRect(1, 1, r.width()-3, r.height()-3);
-                    }
-
-                    QPixmap pix;
-                    if (pixmapForItem(item, pix))
-                    {
-                        int x = (tile.width()  - pix.width())/2;
-                        int y = (tile.height() - pix.height())/2;
-
-                        p.drawPixmap(x, y, pix);
-                        p.drawPixmap(x-3, y-3, generateFuzzyRect(QSize(pix.width()+6, pix.height()+6),
-                                                                 QColor(0, 0, 0, 128), 3));
-                        item->setTooltipRect(QRect(x, y+item->position(), pix.width(), pix.height()));
-
-
-                        LightTableBarItem *rItem = dynamic_cast<LightTableBarItem*>(item);
-
-                        if (rItem->isOnLeftPanel())
-                        {
-                            QPixmap lPix = SmallIcon("arrow-left");
-                            p.drawPixmap(getMargin(), getMargin(), lPix);
-                        }
-                        if (rItem->isOnRightPanel())
-                        {
-                            QPixmap rPix = SmallIcon("arrow-right");
-                            p.drawPixmap(tile.width() - getMargin() - rPix.width(), getMargin(), rPix);
-                        }
-
-                        if (item != ratingItem())
-                        {
-                            int rating = rItem->info().rating();
-                            QRect r    = clickToRateRect(rItem);
-                            r.translate(0, -rItem->position());
-                            r.setX(((r.right() - rating * ratingPixmap().width())/2) - 1);
-                            r.setY(r.y()+1);
-                            r.setWidth((rating * ratingPixmap().width()));
-                            r.setBottom(r.bottom()+1);
-                            p.drawTiledPixmap(r, ratingPixmap());
-                        }
-                    }
-
-                    p.end();
-
-                    QPainter p2(&bgPix);
-                    p2.drawPixmap(0, item->position() - cy, tile);
-                    p2.end();
-                }
-            }
-            else
-            {
-                if (x1 <= item->position() && item->position() <= x2)
-                {
-                    if (item == currentItem())
-                        tile = te->thumbSelPixmap(tile.width(), tile.height());
-                    else
-                        tile = te->thumbRegPixmap(tile.width(), tile.height());
-
-                    QPainter p(&tile);
-
-                    if (item == currentItem())
-                    {
-                        p.setPen(QPen(te->textSelColor(), 3));
-                        p.drawRect(1, 1, tile.width()-2, tile.height()-2);
-                    }
-                    else
-                    {
-                        p.setPen(QPen(te->textRegColor(), 1));
-                        p.drawRect(0, 0, tile.width()-1, tile.height()-1);
-                    }
-
-                    if (item == highlightedItem())
-                    {
-                        QRect r = item->rect();
-                        p.setPen(QPen(palette().color(QPalette::Highlight), 3, Qt::SolidLine));
-                        p.drawRect(1, 1, r.width()-3, r.height()-3);
-                    }
-
-                    QPixmap pix;
-                    if (pixmapForItem(item, pix))
-                    {
-                        int x = (tile.width() - pix.width())/2;
-                        int y = (tile.height()- pix.height())/2;
-                        p.drawPixmap(x, y, pix);
-                        p.drawPixmap(x-3, y-3, generateFuzzyRect(QSize(pix.width()+6, pix.height()+6),
-                                                                 QColor(0, 0, 0, 128), 3));
-                        item->setTooltipRect(QRect(x+item->position(), y, pix.width(), pix.height()));
-
-                        LightTableBarItem *rItem = dynamic_cast<LightTableBarItem*>(item);
-
-                        if (rItem->isOnLeftPanel())
-                        {
-                            QPixmap lPix = SmallIcon("arrow-left");
-                            p.drawPixmap(getMargin(), getMargin(), lPix);
-                        }
-                        if (rItem->isOnRightPanel())
-                        {
-                            QPixmap rPix = SmallIcon("arrow-right");
-                            p.drawPixmap(tile.width() - getMargin() - rPix.width(), getMargin(), rPix);
-                        }
-
-                        if (item != ratingItem())
-                        {
-                            int rating = rItem->info().rating();
-                            QRect r    = clickToRateRect(rItem);
-                            r.translate(-rItem->position(), 0);
-                            r.setX(((r.right() - rating * ratingPixmap().width())/2) - 1);
-                            r.setY(r.y()+1);
-                            r.setWidth((rating * ratingPixmap().width()));
-                            r.setBottom(r.bottom()+1);
-                            p.drawTiledPixmap(r, ratingPixmap());
-                        }
-                    }
-
-                    p.end();
-
-                    QPainter p2(&bgPix);
-                    p2.drawPixmap(item->position() - cx, 0, tile);
-                    p2.end();
-                }
-            }
-        }
-
-        QPainter p3(viewport());
-
-        if (getOrientation() == Qt::Vertical)
-            p3.drawPixmap(0, er.y(), bgPix);
-        else
-            p3.drawPixmap(er.x(), 0, bgPix);
-
-        p3.end();
-    }
-    else
-    {
-        bgPix = QPixmap(contentsRect().width(), contentsRect().height());
-        bgPix.fill(te->baseColor());
-
-        QPainter p4(&bgPix);
-        p4.setPen(QPen(te->textRegColor()));
-        p4.drawText(0, 0, bgPix.width(), bgPix.height(),
-                    Qt::AlignCenter|Qt::TextWordWrap,
-                    i18n("Drag and drop images here"));
-        p4.end();
-
-        QPainter p5(viewport());
-        p5.drawPixmap(0, 0, bgPix);
-        p5.end();
-    }
-
-    checkPreload();
 }
 
 void LightTableBar::startDrag()

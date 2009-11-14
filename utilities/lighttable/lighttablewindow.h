@@ -80,6 +80,7 @@ protected:
 private:
 
     void closeEvent(QCloseEvent* e);
+    void showEvent(QShowEvent*);
     void setupActions();
     void setupConnections();
     void setupUserArea();
@@ -90,6 +91,9 @@ private:
     void readSettings();
     void writeSettings();
     void refreshStatusBar();
+
+    void deleteItem(bool permanently);
+    void deleteItem(const ImageInfo& info, bool permanently);
 
     LightTableWindow();
 
@@ -125,6 +129,9 @@ private Q_SLOTS:
 
     void slotDeleteItem();
     void slotDeleteItem(const ImageInfo &);
+
+    void slotDeleteFinalItem();
+    void slotDeleteFinalItem(const ImageInfo &);
 
     void slotRemoveItem();
     void slotRemoveItem(const ImageInfo &);

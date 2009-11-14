@@ -47,6 +47,7 @@
 // Local includes
 
 #include "imagehistogram.h"
+#include "globals.h"
 
 namespace Digikam
 {
@@ -167,10 +168,10 @@ void ImageLevels::levelsAuto(ImageHistogram *hist)
 {
     if (!d->levels || !hist) return;
 
-    levelsChannelReset(ImageHistogram::ValueChannel);
+    levelsChannelReset(LuminosityChannel);
 
-    for (int channel = ImageHistogram::RedChannel ;
-         channel <= ImageHistogram::BlueChannel ;
+    for (int channel = RedChannel ;
+         channel <= BlueChannel ;
          ++channel)
     {
        levelsChannelAuto(hist, channel);
@@ -239,16 +240,16 @@ int ImageLevels::levelsInputFromColor(int channel, const DColor& color)
 {
     switch (channel)
     {
-       case ImageHistogram::ValueChannel:
+        case LuminosityChannel:
           return qMax (qMax (color.red(), color.green()), color.blue());
 
-       case ImageHistogram::RedChannel:
+       case RedChannel:
           return color.red();
 
-       case ImageHistogram::GreenChannel:
+       case GreenChannel:
           return color.green();
 
-       case ImageHistogram::BlueChannel:
+       case BlueChannel:
           return color.blue();
     }
 
@@ -621,7 +622,7 @@ bool ImageLevels::loadLevelsFromGimpLevelsFile(const KUrl& fileUrl)
     char    buf[50];
     char   *nptr;
 
-    file = fopen(QFile::encodeName(fileUrl.path()), "r");
+    file = fopen(QFile::encodeName(fileUrl.toLocalFile()), "r");
 
     if (!file)
        return false;
@@ -648,14 +649,14 @@ bool ImageLevels::loadLevelsFromGimpLevelsFile(const KUrl& fileUrl)
 
        if (fields != 4)
        {
-          kWarning(50003) <<  "Invalid Gimp levels file!";
+          kWarning() <<  "Invalid Gimp levels file!";
           fclose(file);
           return false;
        }
 
        if (!fgets (buf, 50, file))
        {
-          kWarning(50003) <<  "Invalid Gimp levels file!";
+          kWarning() <<  "Invalid Gimp levels file!";
           fclose(file);
           return false;
        }
@@ -664,7 +665,7 @@ bool ImageLevels::loadLevelsFromGimpLevelsFile(const KUrl& fileUrl)
 
        if (buf == nptr || errno == ERANGE)
        {
-          kWarning(50003) <<  "Invalid Gimp levels file!";
+          kWarning() <<  "Invalid Gimp levels file!";
           fclose(file);
           return false;
        }
@@ -690,7 +691,7 @@ bool ImageLevels::saveLevelsToGimpLevelsFile(const KUrl& fileUrl)
     FILE *file;
     int   i;
 
-    file = fopen(QFile::encodeName(fileUrl.path()), "w");
+    file = fopen(QFile::encodeName(fileUrl.toLocalFile()), "w");
 
     if (!file)
        return false;

@@ -31,7 +31,6 @@
 #include <kconfig.h>
 #include <klocale.h>
 #include <kapplication.h>
-#include <kdebug.h>
 #include <kglobal.h>
 #include <kconfiggroup.h>
 #include <kglobalsettings.h>
@@ -47,6 +46,7 @@
 
 // Local includes
 
+#include "config-digikam.h"
 #include "thumbnailsize.h"
 #include "mimefilter.h"
 #include "databaseaccess.h"
@@ -61,77 +61,272 @@ class AlbumSettingsPrivate
 {
 
 public:
-    bool showSplash;
-    bool useTrash;
-    bool showTrashDeleteDialog;
-    bool sidebarApplyDirectly;
-    bool scanAtStart;
-    bool iconShowName;
-    bool iconShowSize;
-    bool iconShowDate;
-    bool iconShowModDate;
-    bool iconShowComments;
-    bool iconShowResolution;
-    bool iconShowTags;
-    bool iconShowRating;
-    QFont iconviewFont;
-    bool showToolTips;
-    bool tooltipShowFileName;
-    bool tooltipShowFileDate;
-    bool tooltipShowFileSize;
-    bool tooltipShowImageType;
-    bool tooltipShowImageDim;
-    bool tooltipShowPhotoMake;
-    bool tooltipShowPhotoDate;
-    bool tooltipShowPhotoFocal;
-    bool tooltipShowPhotoExpo;
-    bool tooltipShowPhotoMode;
-    bool tooltipShowPhotoFlash;
-    bool tooltipShowPhotoWb;
-    bool tooltipShowAlbumName;
-    bool tooltipShowComments;
-    bool tooltipShowTags;
-    bool tooltipShowRating;
-    QFont toolTipsFont;
-    bool showAlbumToolTips;
-    bool tooltipShowAlbumTitle;
-    bool tooltipShowAlbumDate;
-    bool tooltipShowAlbumCollection;
-    bool tooltipShowAlbumCategory;
-    bool tooltipShowAlbumCaption;
-    bool exifRotate;
-    bool exifSetOrientation;
-    bool saveTags;
-    bool saveTemplate;
-    bool saveComments;
-    bool saveDateTime;
-    bool saveRating;
-    bool writeRawFiles;
-    bool updateFileTimeStamp;
-    bool previewLoadFullImageSize;
-    bool showThumbbar;
-    bool showFolderTreeViewItemsCount;
-    int treeThumbnailSize;
-    QFont treeviewFont;
-    int thumbnailSize;
-    int ratingFilterCond;
-    bool recursiveAlbums;
-    bool recursiveTags;
-    QString currentTheme;
-    QString databaseType;
-    //QString databaseFilePath;
-    QString databaseHostName;
-    QString databaseName;
-    QString databaseUserName;
-    QString databasePassword;
-    int databasePort;
-    QString databaseConnectoptions;
-    QStringList albumCategoryNames;
-    KSharedConfigPtr config;
-    KMultiTabBar::KMultiTabBarStyle sidebarTitleStyle;
-    AlbumSettings::AlbumSortOrder albumSortOrder;
-    int imageSortOrder;
-    AlbumSettings::ItemRightClickAction itemRightClickAction;
+    AlbumSettingsPrivate() :
+        configGroupDefault("Album Settings"),
+        configGroupExif("EXIF Settings"),
+        configGroupMetadata("Metadata Settings"),
+        configGroupNepomuk("Nepomuk Settings"),
+        configGroupGeneral("General Settings"),
+//TODO: Add database constants
+
+        configDatabaseFilePathEntry("Database File Path"),
+        configAlbumCollectionsEntry("Album Collections"),
+        configAlbumSortOrderEntry("Album Sort Order"),
+        configImageSortOrderEntry("Image Sort Order"),
+        configImageSortingEntry("Image Sorting"),
+        configImageGroupModeEntry("Image Group Mode"),
+        configItemLeftClickActionEntry("Item Left Click Action"),
+        configDefaultIconSizeEntry("Default Icon Size"),
+        configDefaultTreeIconSizeEntry("Default Tree Icon Size"),
+        configTreeViewFontEntry("TreeView Font"),
+        configThemeEntry("Theme"),
+        configSidebarTitleStyleEntry("Sidebar Title Style"),
+        configRatingFilterConditionEntry("Rating Filter Condition"),
+        configRecursiveAlbumsEntry("Recursive Albums"),
+        configRecursiveTagsEntry("Recursive Tags"),
+        configIconShowNameEntry("Icon Show Name"),
+        configIconShowResolutionEntry("Icon Show Resolution"),
+        configIconShowSizeEntry("Icon Show Size"),
+        configIconShowDateEntry("Icon Show Date"),
+        configIconShowModificationDateEntry("Icon Show Modification Date"),
+        configIconShowCommentsEntry("Icon Show Comments"),
+        configIconShowTagsEntry("Icon Show Tags"),
+        configIconShowRatingEntry("Icon Show Rating"),
+        configIconShowOverlaysEntry("Icon Show Overlays"),
+        configIconViewFontEntry("IconView Font"),
+        configToolTipsFontEntry("ToolTips Font"),
+        configShowToolTipsEntry("Show ToolTips"),
+        configToolTipsShowFileNameEntry("ToolTips Show File Name"),
+        configToolTipsShowFileDateEntry("ToolTips Show File Date"),
+        configToolTipsShowFileSizeEntry("ToolTips Show File Size"),
+        configToolTipsShowImageTypeEntry("ToolTips Show Image Type"),
+        configToolTipsShowImageDimEntry("ToolTips Show Image Dim"),
+        configToolTipsShowPhotoMakeEntry("ToolTips Show Photo Make"),
+        configToolTipsShowPhotoDateEntry("ToolTips Show Photo Date"),
+        configToolTipsShowPhotoFocalEntry("ToolTips Show Photo Focal"),
+        configToolTipsShowPhotoExpoEntry("ToolTips Show Photo Expo"),
+        configToolTipsShowPhotoModeEntry("ToolTips Show Photo Mode"),
+        configToolTipsShowPhotoFlashEntry("ToolTips Show Photo Flash"),
+        configToolTipsShowPhotoWBEntry("ToolTips Show Photo WB"),
+        configToolTipsShowAlbumNameEntry("ToolTips Show Album Name"),
+        configToolTipsShowCommentsEntry("ToolTips Show Comments"),
+        configToolTipsShowTagsEntry("ToolTips Show Tags"),
+        configToolTipsShowRatingEntry("ToolTips Show Rating"),
+        configShowAlbumToolTipsEntry("Show Album ToolTips"),
+        configToolTipsShowAlbumTitleEntry("ToolTips Show Album Title"),
+        configToolTipsShowAlbumDateEntry("ToolTips Show Album Date"),
+        configToolTipsShowAlbumCollectionEntry("ToolTips Show Album Collection"),
+        configToolTipsShowAlbumCategoryEntry("ToolTips Show Album Category"),
+        configToolTipsShowAlbumCaptionEntry("ToolTips Show Album Caption"),
+        configPreviewLoadFullImageSizeEntry("Preview Load Full Image Size"),
+        configShowThumbbarEntry("Show Thumbbar"),
+        configShowFolderTreeViewItemsCountEntry("Show Folder Tree View Items Count"),
+        configEXIFRotateEntry("EXIF Rotate"),
+        configEXIFSetOrientationEntry("EXIF Set Orientation"),
+        configSaveTagsEntry("Save Tags"),
+        configSaveTemplateEntry("Save Template"),
+        configSaveEXIFCommentsEntry("Save EXIF Comments"),
+        configSaveDateTimeEntry("Save Date Time"),
+        configSaveRatingEntry("Save Rating"),
+        configWriteRAWFilesEntry("Write RAW Files"),
+        configUpdateFileTimestampEntry("Update File Timestamp"),
+        configShowSplashEntry("Show Splash"),
+        configUseTrashEntry("Use Trash"),
+        configShowTrashDeleteDialogEntry("Show Trash Delete Dialog"),
+        configShowPermanentDeleteDialogEntry("Show Permanent Delete Dialog"),
+        configApplySidebarChangesDirectlyEntry("Apply Sidebar Changes Directly"),
+        configScanAtStartEntry("Scan At Start"),
+        configSyncNepomuktoDigikamEntry("Sync Nepomuk to Digikam"),
+        configSyncDigikamtoNepomukEntry("Sync Digikam to Nepomuk")
+        {}
+
+    const QString                       configGroupDefault;
+    const QString                       configGroupExif;
+    const QString                       configGroupMetadata;
+    const QString                       configGroupNepomuk;
+    const QString                       configGroupGeneral;
+
+    const QString                       configDatabaseFilePathEntry;
+    const QString                       configAlbumCollectionsEntry;
+    const QString                       configAlbumSortOrderEntry;
+    const QString                       configImageSortOrderEntry;
+    const QString                       configImageSortingEntry;
+    const QString                       configImageGroupModeEntry;
+    const QString                       configItemLeftClickActionEntry;
+    const QString                       configDefaultIconSizeEntry;
+    const QString                       configDefaultTreeIconSizeEntry;
+    const QString                       configTreeViewFontEntry;
+    const QString                       configThemeEntry;
+    const QString                       configSidebarTitleStyleEntry;
+    const QString                       configRatingFilterConditionEntry;
+    const QString                       configRecursiveAlbumsEntry;
+    const QString                       configRecursiveTagsEntry;
+    const QString                       configIconShowNameEntry;
+    const QString                       configIconShowResolutionEntry;
+    const QString                       configIconShowSizeEntry;
+    const QString                       configIconShowDateEntry;
+    const QString                       configIconShowModificationDateEntry;
+    const QString                       configIconShowCommentsEntry;
+    const QString                       configIconShowTagsEntry;
+    const QString                       configIconShowRatingEntry;
+    const QString                       configIconShowOverlaysEntry;
+    const QString                       configIconViewFontEntry;
+    const QString                       configToolTipsFontEntry;
+    const QString                       configShowToolTipsEntry;
+    const QString                       configToolTipsShowFileNameEntry;
+    const QString                       configToolTipsShowFileDateEntry;
+    const QString                       configToolTipsShowFileSizeEntry;
+    const QString                       configToolTipsShowImageTypeEntry;
+    const QString                       configToolTipsShowImageDimEntry;
+    const QString                       configToolTipsShowPhotoMakeEntry;
+    const QString                       configToolTipsShowPhotoDateEntry;
+    const QString                       configToolTipsShowPhotoFocalEntry;
+    const QString                       configToolTipsShowPhotoExpoEntry;
+    const QString                       configToolTipsShowPhotoModeEntry;
+    const QString                       configToolTipsShowPhotoFlashEntry;
+    const QString                       configToolTipsShowPhotoWBEntry;
+    const QString                       configToolTipsShowAlbumNameEntry;
+    const QString                       configToolTipsShowCommentsEntry;
+    const QString                       configToolTipsShowTagsEntry;
+    const QString                       configToolTipsShowRatingEntry;
+    const QString                       configShowAlbumToolTipsEntry;
+    const QString                       configToolTipsShowAlbumTitleEntry;
+    const QString                       configToolTipsShowAlbumDateEntry;
+    const QString                       configToolTipsShowAlbumCollectionEntry;
+    const QString                       configToolTipsShowAlbumCategoryEntry;
+    const QString                       configToolTipsShowAlbumCaptionEntry;
+    const QString                       configPreviewLoadFullImageSizeEntry;
+    const QString                       configShowThumbbarEntry;
+    const QString                       configShowFolderTreeViewItemsCountEntry;
+    const QString                       configEXIFRotateEntry;
+    const QString                       configEXIFSetOrientationEntry;
+    const QString                       configSaveTagsEntry;
+    const QString                       configSaveTemplateEntry;
+    const QString                       configSaveEXIFCommentsEntry;
+    const QString                       configSaveDateTimeEntry;
+    const QString                       configSaveRatingEntry;
+    const QString                       configWriteRAWFilesEntry;
+    const QString                       configUpdateFileTimestampEntry;
+    const QString                       configShowSplashEntry;
+    const QString                       configUseTrashEntry;
+    const QString                       configShowTrashDeleteDialogEntry;
+    const QString                       configShowPermanentDeleteDialogEntry;
+    const QString                       configApplySidebarChangesDirectlyEntry;
+    const QString                       configScanAtStartEntry;
+    const QString                       configSyncNepomuktoDigikamEntry;
+    const QString                       configSyncDigikamtoNepomukEntry;
+
+    // start up setting
+    bool                                showSplash;
+    // file ops settings
+    bool                                useTrash;
+    bool                                showTrashDeleteDialog;
+    bool                                showPermanentDeleteDialog;
+    // metadata setting
+    bool                                sidebarApplyDirectly;
+    // database setting
+    bool                                scanAtStart;
+
+    // icon view settings
+    bool                                iconShowName;
+    bool                                iconShowSize;
+    bool                                iconShowDate;
+    bool                                iconShowModDate;
+    bool                                iconShowComments;
+    bool                                iconShowResolution;
+    bool                                iconShowTags;
+    bool                                iconShowRating;
+    bool                                iconShowOverlays;
+
+    QFont                               iconviewFont;
+
+    // Icon-view tooltip settings
+    bool                                showToolTips;
+    bool                                tooltipShowFileName;
+    bool                                tooltipShowFileDate;
+    bool                                tooltipShowFileSize;
+    bool                                tooltipShowImageType;
+    bool                                tooltipShowImageDim;
+    bool                                tooltipShowPhotoMake;
+    bool                                tooltipShowPhotoDate;
+    bool                                tooltipShowPhotoFocal;
+    bool                                tooltipShowPhotoExpo;
+    bool                                tooltipShowPhotoMode;
+    bool                                tooltipShowPhotoFlash;
+    bool                                tooltipShowPhotoWb;
+    bool                                tooltipShowAlbumName;
+    bool                                tooltipShowComments;
+    bool                                tooltipShowTags;
+    bool                                tooltipShowRating;
+
+    QFont                               toolTipsFont;
+
+    // Folder-view tooltip settings
+    bool                                showAlbumToolTips;
+    bool                                tooltipShowAlbumTitle;
+    bool                                tooltipShowAlbumDate;
+    bool                                tooltipShowAlbumCollection;
+    bool                                tooltipShowAlbumCategory;
+    bool                                tooltipShowAlbumCaption;
+
+    // metadata settings
+    bool                                exifRotate;
+    bool                                exifSetOrientation;
+
+    bool                                saveTags;
+    bool                                saveTemplate;
+
+    bool                                saveComments;
+    bool                                saveDateTime;
+    bool                                saveRating;
+
+    bool                                writeRawFiles;
+    bool                                updateFileTimeStamp;
+
+    // preview settings
+    bool                                previewLoadFullImageSize;
+    bool                                showThumbbar;
+
+    bool                                showFolderTreeViewItemsCount;
+
+    // tree-view settings
+    int                                 treeThumbnailSize;
+    QFont                               treeviewFont;
+
+    // icon view settings
+    int                                 thumbnailSize;
+    int                                 ratingFilterCond;
+    bool                                recursiveAlbums;
+    bool                                recursiveTags;
+
+    // theme settings
+    QString                             currentTheme;
+
+    // database settings
+    QString                             databaseType;
+    QString                             databaseHostName;
+    QString                             databaseName;
+    QString                             databaseUserName;
+    QString                             databasePassword;
+    int                                 databasePort;
+    QString                             databaseConnectoptions;
+
+
+    // album settings
+    QStringList                         albumCategoryNames;
+
+    KSharedConfigPtr                    config;
+
+    KMultiTabBar::KMultiTabBarStyle     sidebarTitleStyle;
+
+    // album view settings
+    AlbumSettings::AlbumSortOrder       albumSortOrder;
+
+    // icon view settings
+    int                                 imageSortOrder;
+    int                                 imageSorting;
+    int                                 imageGroupMode;
+    AlbumSettings::ItemLeftClickAction  itemLeftClickAction;
     bool syncToDigikam;
     bool syncToNepomuk;
 };
@@ -172,7 +367,9 @@ void AlbumSettings::init()
 
     d->albumSortOrder               = AlbumSettings::ByFolder;
     d->imageSortOrder               = ImageSortSettings::SortByFileName;
-    d->itemRightClickAction         = AlbumSettings::ShowPreview;
+    d->imageSorting                 = ImageSortSettings::AscendingOrder;
+    d->imageGroupMode               = ImageSortSettings::CategoryByAlbum;
+    d->itemLeftClickAction          = AlbumSettings::ShowPreview;
 
     d->thumbnailSize                = ThumbnailSize::Medium;
     d->treeThumbnailSize            = 22;
@@ -184,6 +381,7 @@ void AlbumSettings::init()
     d->showSplash                   = true;
     d->useTrash                     = true;
     d->showTrashDeleteDialog        = true;
+    d->showPermanentDeleteDialog    = true;
     d->sidebarApplyDirectly         = false;
 
     d->iconShowName                 = false;
@@ -194,6 +392,7 @@ void AlbumSettings::init()
     d->iconShowResolution           = false;
     d->iconShowTags                 = true;
     d->iconShowRating               = true;
+    d->iconShowOverlays             = true;
     d->iconviewFont                 = KGlobalSettings::generalFont();
 
     d->toolTipsFont                 = KGlobalSettings::generalFont();
@@ -253,117 +452,114 @@ void AlbumSettings::readSettings()
 
     // ---------------------------------------------------------------------
 
-    KConfigGroup group  = config->group("Album Settings");
+    KConfigGroup group  = config->group(d->configGroupDefault);
 
-    //d->databaseFilePath = group.readEntry("Database File Path", QString());
-
-    QStringList collectionList = group.readEntry("Album Collections",QStringList());
+    QStringList collectionList = group.readEntry(d->configAlbumCollectionsEntry, QStringList());
     if (!collectionList.isEmpty())
     {
         collectionList.sort();
         d->albumCategoryNames = collectionList;
     }
 
-    d->albumSortOrder = AlbumSettings::AlbumSortOrder(group.readEntry("Album Sort Order",
-                                                      (int)AlbumSettings::ByFolder));
+    d->albumSortOrder = AlbumSettings::AlbumSortOrder(group.readEntry(d->configAlbumSortOrderEntry,
+                                                                      (int)AlbumSettings::ByFolder));
 
-    d->imageSortOrder               = group.readEntry("Image Sort Order", (int)ImageSortSettings::SortByFileName);;
+    d->imageSortOrder               = group.readEntry(d->configImageSortOrderEntry, (int)ImageSortSettings::SortByFileName);
+    d->imageSorting                 = group.readEntry(d->configImageSortingEntry,   (int)ImageSortSettings::AscendingOrder);
+    d->imageGroupMode               = group.readEntry(d->configImageGroupModeEntry, (int)ImageSortSettings::CategoryByAlbum);
 
-    d->itemRightClickAction         = AlbumSettings::ItemRightClickAction(group.readEntry(
-                                                                         "Item Right Click Action",
-                                                                          (int)AlbumSettings::ShowPreview));
+    d->itemLeftClickAction          = AlbumSettings::ItemLeftClickAction(group.readEntry( d->configItemLeftClickActionEntry,
+                                                                                     (int)AlbumSettings::ShowPreview));
 
-    d->thumbnailSize                = group.readEntry("Default Icon Size", (int)ThumbnailSize::Medium);
-    d->treeThumbnailSize            = group.readEntry("Default Tree Icon Size", 22);
-    d->treeviewFont                 = group.readEntry("TreeView Font", KGlobalSettings::generalFont());
-    d->currentTheme                 = group.readEntry("Theme", i18nc("default theme name", "Default"));
-    d->sidebarTitleStyle            = (KMultiTabBar::KMultiTabBarStyle)group.readEntry("Sidebar Title Style", (int)KMultiTabBar::VSNET);
+    d->thumbnailSize                = group.readEntry(d->configDefaultIconSizeEntry,        (int)ThumbnailSize::Medium);
+    d->treeThumbnailSize            = group.readEntry(d->configDefaultTreeIconSizeEntry,    22);
+    d->treeviewFont                 = group.readEntry(d->configTreeViewFontEntry,           KGlobalSettings::generalFont());
+    d->currentTheme                 = group.readEntry(d->configThemeEntry,                  i18nc("default theme name", "Default"));
 
-
-    d->ratingFilterCond             = group.readEntry("Rating Filter Condition",
-                                                      (int)ImageFilterSettings::GreaterEqualCondition);
-    d->recursiveAlbums              = group.readEntry("Recursive Albums", false);
-    d->recursiveTags                = group.readEntry("Recursive Tags", true);
+    d->sidebarTitleStyle            = (KMultiTabBar::KMultiTabBarStyle)group.readEntry(d->configSidebarTitleStyleEntry,
+                                                                                       (int)KMultiTabBar::VSNET);
 
 
-    d->iconShowName                 = group.readEntry("Icon Show Name",              false);
-    d->iconShowResolution           = group.readEntry("Icon Show Resolution",        false);
-    d->iconShowSize                 = group.readEntry("Icon Show Size",              false);
-    d->iconShowDate                 = group.readEntry("Icon Show Date",              true);
-    d->iconShowModDate              = group.readEntry("Icon Show Modification Date", true);
-    d->iconShowComments             = group.readEntry("Icon Show Comments",          true);
-    d->iconShowTags                 = group.readEntry("Icon Show Tags",              true);
-    d->iconShowRating               = group.readEntry("Icon Show Rating",            true);
-    d->iconviewFont                 = group.readEntry("IconView Font", KGlobalSettings::generalFont());
+    d->ratingFilterCond             = group.readEntry(d->configRatingFilterConditionEntry, (int)ImageFilterSettings::GreaterEqualCondition);
+    d->recursiveAlbums              = group.readEntry(d->configRecursiveAlbumsEntry,       false);
+    d->recursiveTags                = group.readEntry(d->configRecursiveTagsEntry,         true);
 
-    d->toolTipsFont                 = group.readEntry("ToolTips Font",             KGlobalSettings::generalFont());
-    d->showToolTips                 = group.readEntry("Show ToolTips",             false);
-    d->tooltipShowFileName          = group.readEntry("ToolTips Show File Name",   true);
-    d->tooltipShowFileDate          = group.readEntry("ToolTips Show File Date",   false);
-    d->tooltipShowFileSize          = group.readEntry("ToolTips Show File Size",   false);
-    d->tooltipShowImageType         = group.readEntry("ToolTips Show Image Type",  false);
-    d->tooltipShowImageDim          = group.readEntry("ToolTips Show Image Dim",   true);
-    d->tooltipShowPhotoMake         = group.readEntry("ToolTips Show Photo Make",  true);
-    d->tooltipShowPhotoDate         = group.readEntry("ToolTips Show Photo Date",  true);
-    d->tooltipShowPhotoFocal        = group.readEntry("ToolTips Show Photo Focal", true);
-    d->tooltipShowPhotoExpo         = group.readEntry("ToolTips Show Photo Expo",  true);
-    d->tooltipShowPhotoMode         = group.readEntry("ToolTips Show Photo Mode",  true);
-    d->tooltipShowPhotoFlash        = group.readEntry("ToolTips Show Photo Flash", false);
-    d->tooltipShowPhotoWb           = group.readEntry("ToolTips Show Photo WB",    false);
-    d->tooltipShowAlbumName         = group.readEntry("ToolTips Show Album Name",  false);
-    d->tooltipShowComments          = group.readEntry("ToolTips Show Comments",    true);
-    d->tooltipShowTags              = group.readEntry("ToolTips Show Tags",        true);
-    d->tooltipShowRating            = group.readEntry("ToolTips Show Rating",      true);
 
-    d->showAlbumToolTips            = group.readEntry("Show Album ToolTips",            false);
-    d->tooltipShowAlbumTitle        = group.readEntry("ToolTips Show Album Title",      true);
-    d->tooltipShowAlbumDate         = group.readEntry("ToolTips Show Album Date",       true);
-    d->tooltipShowAlbumCollection   = group.readEntry("ToolTips Show Album Collection", true);
-    d->tooltipShowAlbumCategory     = group.readEntry("ToolTips Show Album Category",   true);
-    d->tooltipShowAlbumCaption      = group.readEntry("ToolTips Show Album Caption",    true);
+    d->iconShowName                 = group.readEntry(d->configIconShowNameEntry,             false);
+    d->iconShowResolution           = group.readEntry(d->configIconShowResolutionEntry,       false);
+    d->iconShowSize                 = group.readEntry(d->configIconShowSizeEntry,             false);
+    d->iconShowDate                 = group.readEntry(d->configIconShowDateEntry,             true);
+    d->iconShowModDate              = group.readEntry(d->configIconShowModificationDateEntry, true);
+    d->iconShowComments             = group.readEntry(d->configIconShowCommentsEntry,         true);
+    d->iconShowTags                 = group.readEntry(d->configIconShowTagsEntry,             true);
+    d->iconShowRating               = group.readEntry(d->configIconShowRatingEntry,           true);
+    d->iconShowOverlays             = group.readEntry(d->configIconShowOverlaysEntry,         true);
+    d->iconviewFont                 = group.readEntry(d->configIconViewFontEntry,             KGlobalSettings::generalFont());
 
-    d->previewLoadFullImageSize     = group.readEntry("Preview Load Full Image Size", false);
-    d->showThumbbar                 = group.readEntry("Show Thumbbar",                true);
+    d->toolTipsFont                 = group.readEntry(d->configToolTipsFontEntry,           KGlobalSettings::generalFont());
+    d->showToolTips                 = group.readEntry(d->configShowToolTipsEntry,           false);
+    d->tooltipShowFileName          = group.readEntry(d->configToolTipsShowFileNameEntry,   true);
+    d->tooltipShowFileDate          = group.readEntry(d->configToolTipsShowFileDateEntry,   false);
+    d->tooltipShowFileSize          = group.readEntry(d->configToolTipsShowFileSizeEntry,   false);
+    d->tooltipShowImageType         = group.readEntry(d->configToolTipsShowImageTypeEntry,  false);
+    d->tooltipShowImageDim          = group.readEntry(d->configToolTipsShowImageDimEntry,   true);
+    d->tooltipShowPhotoMake         = group.readEntry(d->configToolTipsShowPhotoMakeEntry,  true);
+    d->tooltipShowPhotoDate         = group.readEntry(d->configToolTipsShowPhotoDateEntry,  true);
+    d->tooltipShowPhotoFocal        = group.readEntry(d->configToolTipsShowPhotoFocalEntry, true);
+    d->tooltipShowPhotoExpo         = group.readEntry(d->configToolTipsShowPhotoExpoEntry,  true);
+    d->tooltipShowPhotoMode         = group.readEntry(d->configToolTipsShowPhotoModeEntry,  true);
+    d->tooltipShowPhotoFlash        = group.readEntry(d->configToolTipsShowPhotoFlashEntry, false);
+    d->tooltipShowPhotoWb           = group.readEntry(d->configToolTipsShowPhotoWBEntry,    false);
+    d->tooltipShowAlbumName         = group.readEntry(d->configToolTipsShowAlbumNameEntry,  false);
+    d->tooltipShowComments          = group.readEntry(d->configToolTipsShowCommentsEntry,   true);
+    d->tooltipShowTags              = group.readEntry(d->configToolTipsShowTagsEntry,       true);
+    d->tooltipShowRating            = group.readEntry(d->configToolTipsShowRatingEntry,     true);
 
-    d->showFolderTreeViewItemsCount = group.readEntry("Show Folder Tree View Items Count", false);
+    d->showAlbumToolTips            = group.readEntry(d->configShowAlbumToolTipsEntry,            false);
+    d->tooltipShowAlbumTitle        = group.readEntry(d->configToolTipsShowAlbumTitleEntry,       true);
+    d->tooltipShowAlbumDate         = group.readEntry(d->configToolTipsShowAlbumDateEntry,        true);
+    d->tooltipShowAlbumCollection   = group.readEntry(d->configToolTipsShowAlbumCollectionEntry,  true);
+    d->tooltipShowAlbumCategory     = group.readEntry(d->configToolTipsShowAlbumCategoryEntry,    true);
+    d->tooltipShowAlbumCaption      = group.readEntry(d->configToolTipsShowAlbumCaptionEntry,     true);
 
-    // ---------------------------------------------------------------------
+    d->previewLoadFullImageSize     = group.readEntry(d->configPreviewLoadFullImageSizeEntry,     false);
+    d->showThumbbar                 = group.readEntry(d->configShowThumbbarEntry,                 true);
 
-    group = config->group("EXIF Settings");
-
-    d->exifRotate         = group.readEntry("EXIF Rotate", true);
-    d->exifSetOrientation = group.readEntry("EXIF Set Orientation", true);
+    d->showFolderTreeViewItemsCount = group.readEntry(d->configShowFolderTreeViewItemsCountEntry, false);
 
     // ---------------------------------------------------------------------
 
-    group = config->group("Metadata Settings");
+    group = config->group(d->configGroupExif);
 
-    d->saveTags               = group.readEntry("Save Tags", false);
-    d->saveTemplate           = group.readEntry("Save Template", false);
-
-    d->saveComments           = group.readEntry("Save EXIF Comments", false);
-    d->saveDateTime           = group.readEntry("Save Date Time", false);
-    d->saveRating             = group.readEntry("Save Rating", false);
-
-    d->writeRawFiles          = group.readEntry("Write RAW Files", false);
-    d->updateFileTimeStamp    = group.readEntry("Update File Timestamp", false);
+    d->exifRotate         = group.readEntry(d->configEXIFRotateEntry,         true);
+    d->exifSetOrientation = group.readEntry(d->configEXIFSetOrientationEntry, true);
 
     // ---------------------------------------------------------------------
 
-    group = config->group("General Settings");
+    group = config->group(d->configGroupMetadata);
 
-    d->showSplash            = group.readEntry("Show Splash", true);
-    d->useTrash              = group.readEntry("Use Trash", true);
-    d->showTrashDeleteDialog = group.readEntry("Show Trash Delete Dialog", true);
-    d->sidebarApplyDirectly  = group.readEntry("Apply Sidebar Changes Directly", false);
-    d->scanAtStart           = group.readEntry("Scan At Start", true);
+    d->saveTags               = group.readEntry(d->configSaveTagsEntry,     false);
+    d->saveTemplate           = group.readEntry(d->configSaveTemplateEntry, false);
+
+    d->saveComments           = group.readEntry(d->configSaveEXIFCommentsEntry, false);
+    d->saveDateTime           = group.readEntry(d->configSaveDateTimeEntry,     false);
+    d->saveRating             = group.readEntry(d->configSaveRatingEntry,       false);
+
+    d->writeRawFiles          = group.readEntry(d->configWriteRAWFilesEntry,       false);
+    d->updateFileTimeStamp    = group.readEntry(d->configUpdateFileTimestampEntry, false);
 
     // ---------------------------------------------------------------------
 
-    group = config->group("Nepomuk Settings");
+    group = config->group(d->configGroupGeneral);
 
-    d->syncToDigikam         = group.readEntry("Sync Nepomuk to Digikam", false);
-    d->syncToNepomuk         = group.readEntry("Sync Digikam to Nepomuk", false);
+    d->showSplash                = group.readEntry(d->configShowSplashEntry,                  true);
+    d->useTrash                  = group.readEntry(d->configUseTrashEntry,                    true);
+    d->showTrashDeleteDialog     = group.readEntry(d->configShowTrashDeleteDialogEntry,       true);
+    d->showPermanentDeleteDialog = group.readEntry(d->configShowPermanentDeleteDialogEntry,   true);
+    d->sidebarApplyDirectly      = group.readEntry(d->configApplySidebarChangesDirectlyEntry, false);
+    d->scanAtStart               = group.readEntry(d->configScanAtStartEntry,                 true);
+
+    // ---------------------------------------------------------------------
 
     group = config->group("Database Settings");
     d->databaseType             = group.readEntry("Database Type");
@@ -373,6 +569,11 @@ void AlbumSettings::readSettings()
     d->databaseUserName         = group.readEntry("Database Username");
     d->databasePassword         = group.readEntry("Database Password");
     d->databaseConnectoptions   = group.readEntry("Database Connectoptions");
+
+
+#ifdef HAVE_NEPOMUK
+
+    group = config->group(d->configGroupNepomuk);
 
     /*
      * Check if a old digikam instance was running before and have left an database entry.
@@ -385,6 +586,11 @@ void AlbumSettings::readSettings()
         d->databaseName=oldDatabaseFilePath;
     }
 
+    d->syncToDigikam         = group.readEntry(d->configSyncNepomuktoDigikamEntry, false);
+    d->syncToNepomuk         = group.readEntry(d->configSyncDigikamtoNepomukEntry, false);
+
+#endif // HAVE_NEPOMUK
+
     emit setupChanged();
     emit recurseSettingsChanged();
     emit nepomukSettingsChanged();
@@ -396,100 +602,97 @@ void AlbumSettings::saveSettings()
 
     // ---------------------------------------------------------------------
 
-    KConfigGroup group = config->group("Album Settings");
+    KConfigGroup group = config->group(d->configGroupDefault);
 
-    //group.writeEntry("Database File Path", d->databaseFilePath);
-    group.writeEntry("Album Collections", d->albumCategoryNames);
-    group.writeEntry("Album Sort Order", (int)d->albumSortOrder);
-    group.writeEntry("Image Sort Order", (int)d->imageSortOrder);
-    group.writeEntry("Item Right Click Action", (int)d->itemRightClickAction);
-    group.writeEntry("Default Icon Size", QString::number(d->thumbnailSize));
-    group.writeEntry("Default Tree Icon Size", QString::number(d->treeThumbnailSize));
-    group.writeEntry("TreeView Font", d->treeviewFont);
-    group.writeEntry("Rating Filter Condition", d->ratingFilterCond);
-    group.writeEntry("Recursive Albums", d->recursiveAlbums);
-    group.writeEntry("Recursive Tags", d->recursiveTags);
-    group.writeEntry("Theme", d->currentTheme);
-    group.writeEntry("Sidebar Title Style", (int)d->sidebarTitleStyle);
+//    group.writeEntry(d->configDatabaseFilePathEntry,             d->databaseFilePath);
+    group.writeEntry(d->configAlbumCollectionsEntry,             d->albumCategoryNames);
+    group.writeEntry(d->configAlbumSortOrderEntry,               (int)d->albumSortOrder);
+    group.writeEntry(d->configImageSortOrderEntry,               (int)d->imageSortOrder);
+    group.writeEntry(d->configImageSortingEntry,                 (int)d->imageSorting);
+    group.writeEntry(d->configImageGroupModeEntry,               (int)d->imageGroupMode);
+    group.writeEntry(d->configItemLeftClickActionEntry,          (int)d->itemLeftClickAction);
+    group.writeEntry(d->configDefaultIconSizeEntry,              QString::number(d->thumbnailSize));
+    group.writeEntry(d->configDefaultTreeIconSizeEntry,          QString::number(d->treeThumbnailSize));
+    group.writeEntry(d->configTreeViewFontEntry,                 d->treeviewFont);
+    group.writeEntry(d->configRatingFilterConditionEntry,        d->ratingFilterCond);
+    group.writeEntry(d->configRecursiveAlbumsEntry,              d->recursiveAlbums);
+    group.writeEntry(d->configRecursiveTagsEntry,                d->recursiveTags);
+    group.writeEntry(d->configThemeEntry,                        d->currentTheme);
+    group.writeEntry(d->configSidebarTitleStyleEntry,            (int)d->sidebarTitleStyle);
 
-    group.writeEntry("Icon Show Name", d->iconShowName);
-    group.writeEntry("Icon Show Resolution", d->iconShowResolution);
-    group.writeEntry("Icon Show Size", d->iconShowSize);
-    group.writeEntry("Icon Show Date", d->iconShowDate);
-    group.writeEntry("Icon Show Modification Date", d->iconShowModDate);
-    group.writeEntry("Icon Show Comments", d->iconShowComments);
-    group.writeEntry("Icon Show Tags", d->iconShowTags);
-    group.writeEntry("Icon Show Rating", d->iconShowRating);
-    group.writeEntry("IconView Font", d->iconviewFont);
+    group.writeEntry(d->configIconShowNameEntry,                 d->iconShowName);
+    group.writeEntry(d->configIconShowResolutionEntry,           d->iconShowResolution);
+    group.writeEntry(d->configIconShowSizeEntry,                 d->iconShowSize);
+    group.writeEntry(d->configIconShowDateEntry,                 d->iconShowDate);
+    group.writeEntry(d->configIconShowModificationDateEntry,     d->iconShowModDate);
+    group.writeEntry(d->configIconShowCommentsEntry,             d->iconShowComments);
+    group.writeEntry(d->configIconShowTagsEntry,                 d->iconShowTags);
+    group.writeEntry(d->configIconShowRatingEntry,               d->iconShowRating);
+    group.writeEntry(d->configIconShowOverlaysEntry,             d->iconShowOverlays);
+    group.writeEntry(d->configIconViewFontEntry,                 d->iconviewFont);
 
-    group.writeEntry("ToolTips Font",             d->toolTipsFont);
-    group.writeEntry("Show ToolTips",             d->showToolTips);
-    group.writeEntry("ToolTips Show File Name",   d->tooltipShowFileName);
-    group.writeEntry("ToolTips Show File Date",   d->tooltipShowFileDate);
-    group.writeEntry("ToolTips Show File Size",   d->tooltipShowFileSize);
-    group.writeEntry("ToolTips Show Image Type",  d->tooltipShowImageType);
-    group.writeEntry("ToolTips Show Image Dim",   d->tooltipShowImageDim);
-    group.writeEntry("ToolTips Show Photo Make",  d->tooltipShowPhotoMake);
-    group.writeEntry("ToolTips Show Photo Date",  d->tooltipShowPhotoDate);
-    group.writeEntry("ToolTips Show Photo Focal", d->tooltipShowPhotoFocal);
-    group.writeEntry("ToolTips Show Photo Expo",  d->tooltipShowPhotoExpo);
-    group.writeEntry("ToolTips Show Photo Mode",  d->tooltipShowPhotoMode);
-    group.writeEntry("ToolTips Show Photo Flash", d->tooltipShowPhotoFlash);
-    group.writeEntry("ToolTips Show Photo WB",    d->tooltipShowPhotoWb);
-    group.writeEntry("ToolTips Show Album Name",  d->tooltipShowAlbumName);
-    group.writeEntry("ToolTips Show Comments",    d->tooltipShowComments);
-    group.writeEntry("ToolTips Show Tags",        d->tooltipShowTags);
-    group.writeEntry("ToolTips Show Rating",      d->tooltipShowRating);
+    group.writeEntry(d->configToolTipsFontEntry,                 d->toolTipsFont);
+    group.writeEntry(d->configShowToolTipsEntry,                 d->showToolTips);
+    group.writeEntry(d->configToolTipsShowFileNameEntry,         d->tooltipShowFileName);
+    group.writeEntry(d->configToolTipsShowFileDateEntry,         d->tooltipShowFileDate);
+    group.writeEntry(d->configToolTipsShowFileSizeEntry,         d->tooltipShowFileSize);
+    group.writeEntry(d->configToolTipsShowImageTypeEntry,        d->tooltipShowImageType);
+    group.writeEntry(d->configToolTipsShowImageDimEntry,         d->tooltipShowImageDim);
+    group.writeEntry(d->configToolTipsShowPhotoMakeEntry,        d->tooltipShowPhotoMake);
+    group.writeEntry(d->configToolTipsShowPhotoDateEntry,        d->tooltipShowPhotoDate);
+    group.writeEntry(d->configToolTipsShowPhotoFocalEntry,       d->tooltipShowPhotoFocal);
+    group.writeEntry(d->configToolTipsShowPhotoExpoEntry,        d->tooltipShowPhotoExpo);
+    group.writeEntry(d->configToolTipsShowPhotoModeEntry,        d->tooltipShowPhotoMode);
+    group.writeEntry(d->configToolTipsShowPhotoFlashEntry,       d->tooltipShowPhotoFlash);
+    group.writeEntry(d->configToolTipsShowPhotoWBEntry,          d->tooltipShowPhotoWb);
+    group.writeEntry(d->configToolTipsShowAlbumNameEntry,        d->tooltipShowAlbumName);
+    group.writeEntry(d->configToolTipsShowCommentsEntry,         d->tooltipShowComments);
+    group.writeEntry(d->configToolTipsShowTagsEntry,             d->tooltipShowTags);
+    group.writeEntry(d->configToolTipsShowRatingEntry,           d->tooltipShowRating);
 
-    group.writeEntry("Show Album ToolTips",            d->showAlbumToolTips);
-    group.writeEntry("ToolTips Show Album Title",      d->tooltipShowAlbumTitle);
-    group.writeEntry("ToolTips Show Album Date",       d->tooltipShowAlbumDate);
-    group.writeEntry("ToolTips Show Album Collection", d->tooltipShowAlbumCollection);
-    group.writeEntry("ToolTips Show Album Category",   d->tooltipShowAlbumCategory);
-    group.writeEntry("ToolTips Show Album Caption",    d->tooltipShowAlbumCaption);
+    group.writeEntry(d->configShowAlbumToolTipsEntry,            d->showAlbumToolTips);
+    group.writeEntry(d->configToolTipsShowAlbumTitleEntry,       d->tooltipShowAlbumTitle);
+    group.writeEntry(d->configToolTipsShowAlbumDateEntry,        d->tooltipShowAlbumDate);
+    group.writeEntry(d->configToolTipsShowAlbumCollectionEntry,  d->tooltipShowAlbumCollection);
+    group.writeEntry(d->configToolTipsShowAlbumCategoryEntry,    d->tooltipShowAlbumCategory);
+    group.writeEntry(d->configToolTipsShowAlbumCaptionEntry,     d->tooltipShowAlbumCaption);
 
-    group.writeEntry("Preview Load Full Image Size", d->previewLoadFullImageSize);
-    group.writeEntry("Show Thumbbar",                d->showThumbbar);
+    group.writeEntry(d->configPreviewLoadFullImageSizeEntry,     d->previewLoadFullImageSize);
+    group.writeEntry(d->configShowThumbbarEntry,                 d->showThumbbar);
 
-    group.writeEntry("Show Folder Tree View Items Count", d->showFolderTreeViewItemsCount);
-
-    // ---------------------------------------------------------------------
-
-    group = config->group("EXIF Settings");
-
-    group.writeEntry("EXIF Rotate", d->exifRotate);
-    group.writeEntry("EXIF Set Orientation", d->exifSetOrientation);
+    group.writeEntry(d->configShowFolderTreeViewItemsCountEntry, d->showFolderTreeViewItemsCount);
 
     // ---------------------------------------------------------------------
 
-    group = config->group("Metadata Settings");
+    group = config->group(d->configGroupExif);
 
-    group.writeEntry("Save Tags", d->saveTags);
-    group.writeEntry("Save Template", d->saveTemplate);
-
-    group.writeEntry("Save EXIF Comments", d->saveComments);
-    group.writeEntry("Save Date Time", d->saveDateTime);
-    group.writeEntry("Save Rating", d->saveRating);
-
-    group.writeEntry("Write RAW Files", d->writeRawFiles);
-    group.writeEntry("Update File Timestamp", d->updateFileTimeStamp);
+    group.writeEntry(d->configEXIFRotateEntry, d->exifRotate);
+    group.writeEntry(d->configEXIFSetOrientationEntry, d->exifSetOrientation);
 
     // ---------------------------------------------------------------------
 
-    group = config->group("General Settings");
+    group = config->group(d->configGroupMetadata);
 
-    group.writeEntry("Show Splash", d->showSplash);
-    group.writeEntry("Use Trash", d->useTrash);
-    group.writeEntry("Show Trash Delete Dialog", d->showTrashDeleteDialog);
-    group.writeEntry("Apply Sidebar Changes Directly", d->sidebarApplyDirectly);
-    group.writeEntry("Scan At Start", d->scanAtStart);
+    group.writeEntry(d->configSaveTagsEntry,            d->saveTags);
+    group.writeEntry(d->configSaveTemplateEntry,        d->saveTemplate);
+
+    group.writeEntry(d->configSaveEXIFCommentsEntry,    d->saveComments);
+    group.writeEntry(d->configSaveDateTimeEntry,        d->saveDateTime);
+    group.writeEntry(d->configSaveRatingEntry,          d->saveRating);
+
+    group.writeEntry(d->configWriteRAWFilesEntry,       d->writeRawFiles);
+    group.writeEntry(d->configUpdateFileTimestampEntry, d->updateFileTimeStamp);
 
     // ---------------------------------------------------------------------
 
-    group = config->group("Nepomuk Settings");
+    group = config->group(d->configGroupGeneral);
 
-    group.writeEntry("Sync Nepomuk to Digikam", d->syncToDigikam);
-    group.writeEntry("Sync Digikam to Nepomuk", d->syncToNepomuk);
+    group.writeEntry(d->configShowSplashEntry,                  d->showSplash);
+    group.writeEntry(d->configUseTrashEntry,                    d->useTrash);
+    group.writeEntry(d->configShowTrashDeleteDialogEntry,       d->showTrashDeleteDialog);
+    group.writeEntry(d->configShowPermanentDeleteDialogEntry,   d->showPermanentDeleteDialog);
+    group.writeEntry(d->configApplySidebarChangesDirectlyEntry, d->sidebarApplyDirectly);
+    group.writeEntry(d->configScanAtStartEntry,                 d->scanAtStart);
 
     // ---------------------------------------------------------------------
     group = config->group("Database Settings");
@@ -500,6 +703,16 @@ void AlbumSettings::saveSettings()
     group.writeEntry("Database Username", d->databaseUserName);
     group.writeEntry("Database Password", d->databasePassword);
     group.writeEntry("Database Connectoptions", d->databaseConnectoptions);
+
+    // ---------------------------------------------------------------------
+#ifdef HAVE_NEPOMUK
+
+    group = config->group(d->configGroupNepomuk);
+
+    group.writeEntry(d->configSyncNepomuktoDigikamEntry, d->syncToDigikam);
+    group.writeEntry(d->configSyncDigikamtoNepomukEntry, d->syncToNepomuk);
+
+#endif // HAVE_NEPOMUK
 
     config->sync();
 }
@@ -584,14 +797,34 @@ int AlbumSettings::getImageSortOrder() const
     return d->imageSortOrder;
 }
 
-void AlbumSettings::setItemRightClickAction(const ItemRightClickAction action)
+void AlbumSettings::setImageSorting(int sorting)
 {
-    d->itemRightClickAction = action;
+    d->imageSorting = sorting;
 }
 
-AlbumSettings::ItemRightClickAction AlbumSettings::getItemRightClickAction() const
+int AlbumSettings::getImageSorting() const
 {
-    return d->itemRightClickAction;
+    return d->imageSorting;
+}
+
+void AlbumSettings::setImageGroupMode(int mode)
+{
+    d->imageGroupMode = mode;
+}
+
+int AlbumSettings::getImageGroupMode() const
+{
+    return d->imageGroupMode;
+}
+
+void AlbumSettings::setItemLeftClickAction(const ItemLeftClickAction action)
+{
+    d->itemLeftClickAction = action;
+}
+
+AlbumSettings::ItemLeftClickAction AlbumSettings::getItemLeftClickAction() const
+{
+    return d->itemLeftClickAction;
 }
 
 QString AlbumSettings::getImageFileFilter() const
@@ -799,6 +1032,16 @@ void AlbumSettings::setIconShowRating(bool val)
 bool AlbumSettings::getIconShowRating() const
 {
     return d->iconShowRating;
+}
+
+void AlbumSettings::setIconShowOverlays(bool val)
+{
+    d->iconShowOverlays = val;
+}
+
+bool AlbumSettings::getIconShowOverlays() const
+{
+    return d->iconShowOverlays;
 }
 
 void AlbumSettings::setExifRotate(bool val)
@@ -1171,6 +1414,16 @@ bool AlbumSettings::getShowTrashDeleteDialog() const
     return d->showTrashDeleteDialog;
 }
 
+void AlbumSettings::setShowPermanentDeleteDialog(bool val)
+{
+    d->showPermanentDeleteDialog = val;
+}
+
+bool AlbumSettings::getShowPermanentDeleteDialog() const
+{
+    return d->showPermanentDeleteDialog;
+}
+
 void AlbumSettings::setApplySidebarChangesDirectly(bool val)
 {
     d->sidebarApplyDirectly= val;
@@ -1201,6 +1454,23 @@ bool AlbumSettings::showToolTipsIsValid() const
             d->tooltipShowComments   ||
             d->tooltipShowTags       ||
             d->tooltipShowRating)
+           return true;
+    }
+
+    return false;
+}
+
+bool AlbumSettings::showAlbumToolTipsIsValid() const
+{
+    if (d->showAlbumToolTips)
+    {
+        if (
+            d->tooltipShowAlbumTitle      ||
+            d->tooltipShowAlbumDate       ||
+            d->tooltipShowAlbumCollection ||
+            d->tooltipShowAlbumCaption    ||
+            d->tooltipShowAlbumCategory
+           )
            return true;
     }
 

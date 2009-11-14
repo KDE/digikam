@@ -24,11 +24,8 @@
 
 #include "databasethumbnailinfoprovider.h"
 
-// Qt includes
-
 // KDE includes
 
-#include <kdebug.h>
 #include <kurl.h>
 
 // Local includes

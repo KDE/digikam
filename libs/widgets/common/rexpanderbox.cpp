@@ -39,7 +39,6 @@
 // KDE includes
 
 #include <kseparator.h>
-#include <kdebug.h>
 #include <kglobalsettings.h>
 #include <kdialog.h>
 #include <klocale.h>
@@ -468,12 +467,15 @@ RExpanderBox::RExpanderBox(QWidget *parent)
 {
     setFrameStyle(QFrame::NoFrame);
     setWidgetResizable(true);
-    viewport()->setAutoFillBackground(false);
     QWidget *main = new QWidget(viewport());
     d->vbox       = new QVBoxLayout(main);
     d->vbox->setMargin(0);
     d->vbox->setSpacing(KDialog::spacingHint());
     setWidget(main);
+
+    viewport()->setAutoFillBackground(false);
+    setAutoFillBackground(false);
+    main->setAutoFillBackground(false);
 }
 
 RExpanderBox::~RExpanderBox()

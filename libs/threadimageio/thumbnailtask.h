@@ -45,9 +45,14 @@ public:
     ThumbnailLoadingTask(LoadSaveThread* thread, LoadingDescription description);
 
     virtual void execute();
+    virtual void setResult(const LoadingDescription& loadingDescription, const QImage& qimage);
+    virtual void postProcess();
 
 private:
 
+    virtual void setResult(const LoadingDescription&, const DImg&) {};
+
+    QImage            m_qimage;
     ThumbnailCreator *m_creator;
 };
 

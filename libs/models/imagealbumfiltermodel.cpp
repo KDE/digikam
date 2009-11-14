@@ -26,7 +26,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+
 #include <kstringhandler.h>
 
 // Local includes

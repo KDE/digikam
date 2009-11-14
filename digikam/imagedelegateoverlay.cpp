@@ -29,22 +29,17 @@
 #include <QEvent>
 #include <QMouseEvent>
 
-// KDE includes
-
-#include <kdebug.h>
-
 // Local includes
 
 #include "imagecategorizedview.h"
 #include "imagedelegate.h"
 #include "itemviewhoverbutton.h"
 
-
 namespace Digikam
 {
 
 ImageDelegateOverlay::ImageDelegateOverlay(QObject *parent)
-                    : QObject(parent)
+                    : QObject(parent), m_view(0), m_delegate(0)
 {
 }
 
@@ -140,6 +135,9 @@ void AbstractWidgetDelegateOverlay::setActive(bool active)
         connect(m_view->model(), SIGNAL(rowsRemoved(const QModelIndex&, int, int)),
                 this, SLOT(slotRowsRemoved(const QModelIndex&, int, int)));
 
+        connect(m_view->model(), SIGNAL(layoutChanged()),
+                this, SLOT(slotLayoutChanged()));
+
         connect(m_view->model(), SIGNAL(modelReset()),
                 this, SLOT(slotReset()));
 
@@ -188,6 +186,11 @@ void AbstractWidgetDelegateOverlay::slotViewportEntered()
 }
 
 void AbstractWidgetDelegateOverlay::slotRowsRemoved(const QModelIndex &, int, int)
+{
+    hide();
+}
+
+void AbstractWidgetDelegateOverlay::slotLayoutChanged()
 {
     hide();
 }
