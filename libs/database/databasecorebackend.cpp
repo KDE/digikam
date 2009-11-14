@@ -340,6 +340,13 @@ bool DatabaseCoreBackendPrivate::checkConnectionError()
             case DatabaseCoreBackend::AbortQueries:
                 return false;
         }
+    }else
+    {
+        //TODO check if it's better to use an own error handler for kio slaves.
+        // But for now, close only the database in the hope, that the next
+        // access will be successfull.
+        closeDatabaseForThread();
+
     }
     return false;
 }
