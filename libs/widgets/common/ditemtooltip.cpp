@@ -146,8 +146,8 @@ public:
     QPixmap     corners[4];
 };
 
-DItemToolTip::DItemToolTip()
-            : QFrame(0), d(new DItemToolTipPriv)
+DItemToolTip::DItemToolTip(QWidget *parent)
+            : QFrame(parent), d(new DItemToolTipPriv)
 {
     hide();
 

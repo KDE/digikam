@@ -39,7 +39,6 @@
 
 // Local includes
 
-#include "albumfolderview.h"
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "album.h"
@@ -54,19 +53,15 @@ public:
 
     FolderViewToolTipPriv()
     {
-        view       = 0;
         folderItem = 0;
     }
 
-    FolderView *view;
-
-    FolderItem *folderItem;
+    PAlbum *folderItem;
 };
 
-FolderViewToolTip::FolderViewToolTip(FolderView* view)
-                 : DItemToolTip(), d(new FolderViewToolTipPriv)
+FolderViewToolTip::FolderViewToolTip(QWidget *parent)
+                 : DItemToolTip(parent), d(new FolderViewToolTipPriv)
 {
-    d->view = view;
 }
 
 FolderViewToolTip::~FolderViewToolTip()
@@ -74,11 +69,10 @@ FolderViewToolTip::~FolderViewToolTip()
     delete d;
 }
 
-void FolderViewToolTip::setFolderItem(FolderItem* folderItem)
+void FolderViewToolTip::setAlbum(PAlbum *album)
 {
-    AlbumFolderViewItem *item = dynamic_cast<AlbumFolderViewItem*>(folderItem);
-    if (item)
-        d->folderItem = folderItem;
+    if (album)
+        d->folderItem = album;
     else
         d->folderItem = 0;
 
@@ -100,27 +94,20 @@ QRect FolderViewToolTip::repositionRect()
 {
     if (!d->folderItem) return QRect();
 
-    QRect rect = d->view->itemRect(dynamic_cast<Q3ListViewItem*>(d->folderItem));
-    rect.moveTopLeft(d->view->viewport()->mapToGlobal(rect.topLeft()));
-    return rect;
+    //QRect rect = d->view->itemRect(dynamic_cast<Q3ListViewItem*>(d->folderItem));
+    //rect.moveTopLeft(d->view->viewport()->mapToGlobal(rect.topLeft()));
+    //return rect;
+    return QRect();
 }
 
 QString FolderViewToolTip::tipContents()
 {
-    if (d->folderItem)
-    {
-        // NOTE: For the moment only Physical Album Tooltips are supported.
-        //       Extend to all virtual album types when album metadata will
-        //       be the same everywhere (comments, rating, date, etc.)
-        AlbumFolderViewItem *item = dynamic_cast<AlbumFolderViewItem*>(d->folderItem);
-        if (item)
-        {
-            PAlbum *album = item->album();
-            if (album && !album->isRoot() && !album->isAlbumRoot())
-                return ToolTipFiller::albumTipContents(album, item->isOpen() ? item->count()
-                                                                     : item->countRecursive());
-        }
-    }
+//    if (d->folderItem && !d->folderItem->isRoot()
+//                    && !d->folderItem->isAlbumRoot())
+//    {
+//        return ToolTipFiller::albumTipContents(d->folderItem,
+//                        item->isOpen() ? item->count() : item->countRecursive());
+//    }
     return QString();
 }
 

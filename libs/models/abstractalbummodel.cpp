@@ -610,6 +610,18 @@ QVariant AbstractCountingAlbumModel::albumData(Album *album, int role) const
     return AbstractSpecificAlbumModel::albumData(album, role);
 }
 
+int AbstractCountingAlbumModel::albumCount(Album *album) const
+{
+    QHash<int, int>::const_iterator it = m_countHashReady.constFind(album->id());
+    if (it != m_countHashReady.constEnd())
+    {
+        return it.value();
+    }
+
+    return -1;
+
+}
+
 QString AbstractCountingAlbumModel::albumName(Album *album) const
 {
     return album->title();

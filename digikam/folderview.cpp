@@ -63,12 +63,12 @@ public:
         active            = false;
         doNotCollapse     = false;
         allowAutoCollapse = true;
-        toolTipItem       = 0;
-        toolTipTimer      = 0;
+        //toolTipItem       = 0;
+        //toolTipTimer      = 0;
         dragItem          = 0;
         oldHighlightItem  = 0;
         highlightedItem   = 0;
-        toolTip           = 0;
+        //toolTip           = 0;
     }
 
     bool               active;
@@ -83,14 +83,14 @@ public:
 
     QPoint             dragStartPos;
 
-    QTimer*            toolTipTimer;
+    //QTimer*            toolTipTimer;
 
-    Q3ListViewItem*    toolTipItem;
+    //Q3ListViewItem*    toolTipItem;
     Q3ListViewItem*    dragItem;
     Q3ListViewItem*    oldHighlightItem;
     Q3ListViewItem*    highlightedItem;
 
-    FolderViewToolTip* toolTip;
+    //FolderViewToolTip* toolTip;
 };
 
 //-----------------------------------------------------------------------------
@@ -103,8 +103,8 @@ FolderView::FolderView(QWidget *parent, const char *name)
     setColumnAlignment(0, Qt::AlignLeft|Qt::AlignVCenter);
     setShowSortIndicator(true);
 
-    d->toolTipTimer = new QTimer(this);
-    d->toolTip      = new FolderViewToolTip(this);
+    //d->toolTipTimer = new QTimer(this);
+    //d->toolTip      = new FolderViewToolTip(this);
 
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
@@ -118,33 +118,33 @@ FolderView::FolderView(QWidget *parent, const char *name)
     connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotTreeViewFontChanged()));
 
-    connect(d->toolTipTimer, SIGNAL(timeout()),
-            this, SLOT(slotToolTip()));
+    //connect(d->toolTipTimer, SIGNAL(timeout()),
+    //        this, SLOT(slotToolTip()));
 
     slotTreeViewFontChanged();
 }
 
 FolderView::~FolderView()
 {
-    delete d->toolTipTimer;
-    delete d->toolTip;
+    //delete d->toolTipTimer;
+    //delete d->toolTip;
     delete d;
 }
 
 void FolderView::setEnableToolTips(bool val)
 {
     d->showTips = val;
-    if (!val)
-    {
-        d->toolTipItem = 0;
-        d->toolTipTimer->stop();
-        slotToolTip();
-    }
+//    if (!val)
+//    {
+//        d->toolTipItem = 0;
+//        d->toolTipTimer->stop();
+//        slotToolTip();
+//    }
 }
 
 void FolderView::slotToolTip()
 {
-    d->toolTip->setFolderItem(dynamic_cast<FolderItem*>(d->toolTipItem));
+    //d->toolTip->setFolderItem(dynamic_cast<FolderItem*>(d->toolTipItem));
 }
 
 void FolderView::setActive(bool val)
@@ -250,12 +250,12 @@ void FolderView::takeItem(Q3ListViewItem* item)
 
 void FolderView::notifyTakeItem(Q3ListViewItem* item)
 {
-    if (d->toolTipItem == item)
-    {
-        d->toolTipItem = 0;
-        d->toolTipTimer->stop();
-        slotToolTip();
-    }
+//    if (d->toolTipItem == item)
+//    {
+//        d->toolTipItem = 0;
+//        d->toolTipTimer->stop();
+//        slotToolTip();
+//    }
 
     if (d->highlightedItem == item)
         d->highlightedItem = 0;
@@ -270,8 +270,8 @@ void FolderView::leaveEvent(QEvent* e)
     }
 
     // hide tooltip
-    d->toolTipItem = 0;
-    d->toolTipTimer->stop();
+    //d->toolTipItem = 0;
+    //d->toolTipTimer->stop();
     slotToolTip();
 
     Q3ListView::leaveEvent(e);
@@ -286,7 +286,7 @@ void FolderView::contentsMouseMoveEvent(QMouseEvent *e)
         QPoint vp            = contentsToViewport(e->pos());
         Q3ListViewItem *item = itemAt(vp);
 
-        if(d->showTips)
+        /*if(d->showTips)
         {
             if (!isActiveWindow())
             {
@@ -316,7 +316,7 @@ void FolderView::contentsMouseMoveEvent(QMouseEvent *e)
                 d->toolTipTimer->stop();
                 slotToolTip();
             }
-        }
+        }*/
 
         if(KGlobalSettings::changeCursorOverIcon())
         {
@@ -342,8 +342,8 @@ void FolderView::contentsMouseMoveEvent(QMouseEvent *e)
         return;
     }
 
-    d->toolTipItem = 0;
-    d->toolTipTimer->stop();
+    //d->toolTipItem = 0;
+    //d->toolTipTimer->stop();
     slotToolTip();
 
     if(d->dragItem &&
@@ -362,8 +362,8 @@ void FolderView::contentsMouseMoveEvent(QMouseEvent *e)
 void FolderView::contentsMousePressEvent(QMouseEvent *e)
 {
     // hide tooltip
-    d->toolTipItem = 0;
-    d->toolTipTimer->stop();
+    //d->toolTipItem = 0;
+    //d->toolTipTimer->stop();
     slotToolTip();
 
     QPoint vp            = contentsToViewport(e->pos());
@@ -424,8 +424,8 @@ void FolderView::contentsWheelEvent(QWheelEvent* e)
 {
     e->accept();
 
-    d->toolTipItem = 0;
-    d->toolTipTimer->stop();
+    //d->toolTipItem = 0;
+    //d->toolTipTimer->stop();
     slotToolTip();
     viewport()->update();
 

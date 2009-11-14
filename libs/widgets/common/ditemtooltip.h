@@ -77,7 +77,7 @@ class DIGIKAM_EXPORT DItemToolTip : public QFrame
 
 public:
 
-    DItemToolTip();
+    DItemToolTip(QWidget *parent = 0);
     virtual ~DItemToolTip();
 
 protected:

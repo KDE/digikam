@@ -47,6 +47,7 @@ class AlbumFolderViewNew: public AlbumTreeView
 Q_OBJECT
 public:
     AlbumFolderViewNew(QWidget *parent, AlbumModificationHelper *albumModificationHelper);
+    ~AlbumFolderViewNew();
 
     /**
      * Returns the album on that the last context menu was triggered.
@@ -57,13 +58,38 @@ public:
     PAlbum *lastContextMenuAlbum() const;
 
 Q_SIGNALS:
+
+    /**
+     * Emitted if a find duplicates search shall be invoked on the given album.
+     *
+     * @param album the album to find duplicates in
+     */
     void signalFindDuplicatesInAlbum(Album *album);
 
 public Q_SLOTS:
+
+    /**
+     * Selects the given album.
+     *
+     * @param album album to select
+     */
     void slotSelectAlbum(Album *album);
 
 private:
+
+    /**
+     * Creates the context menu.
+     *
+     * @param event event that requested the menu
+     */
     void contextMenuEvent(QContextMenuEvent *event);
+
+    /**
+     * Re-implemented to handle custom tool tips.
+     *
+     * @param event event to process.
+     */
+    bool viewportEvent(QEvent *event);
 
 private Q_SLOTS:
     void slotAlbumSelected(const QModelIndex &index);
@@ -100,7 +126,7 @@ class Album;
 class PAlbum;
 class AlbumFolderViewPriv;
 
-class AlbumFolderViewItem : public FolderItem
+/*class AlbumFolderViewItem : public FolderItem
 {
 public:
 
@@ -210,7 +236,7 @@ private:
 private:
 
     AlbumFolderViewPriv* const d;
-};
+};*/
 
 }  // namespace Digikam
 

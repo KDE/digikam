@@ -227,6 +227,13 @@ public Q_SLOTS:
      *  Can connect to QTreeView's collapsed() signal. */
     void includeChildrenCount(const QModelIndex& index);
 
+    /**
+     * Returns the number of included items for this album.
+     *
+     * @return positive value or -1 if unknown
+     */
+    virtual int albumCount(Album *album) const;
+
 protected:
 
     /// need to implement in subclass
