@@ -894,7 +894,6 @@ bool DatabaseCoreBackend::execBatch(SqlQuery& query)
 
 SqlQuery DatabaseCoreBackend::prepareQuery(const QString& sql)
 {
-    Q_D(DatabaseCoreBackend);
     SqlQuery query = getQuery();
     query.prepare(sql);
     return query;
@@ -902,7 +901,6 @@ SqlQuery DatabaseCoreBackend::prepareQuery(const QString& sql)
 
 SqlQuery DatabaseCoreBackend::copyQuery(const SqlQuery& old)
 {
-    Q_D(DatabaseCoreBackend);
     SqlQuery query = getQuery();
     kDebug(50003) << "Last query was ["<<old.lastQuery()<<"]";
     query.prepare(old.lastQuery());

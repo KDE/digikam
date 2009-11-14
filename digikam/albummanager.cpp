@@ -655,59 +655,33 @@ bool AlbumManager::setDatabase(const QString& dbType, const QString& dbName, con
     ScanController::instance()->resumeCollectionScan();
 
     ScanController::Advice advice = ScanController::AbortImmediately;
-//    bool abort=false;
-//    do{
-        QString databaseName = AlbumSettings::instance()->getDatabaseName();
-        QString filePath;
-        if (AlbumSettings::instance()->getDatabaseType()=="QSQLITE"){
-            databaseName = databaseName + '/' + "digikam4.db";
-            databaseName = QDir::cleanPath(databaseName);
+    QString databaseName = AlbumSettings::instance()->getDatabaseName();
+    QString thumbnailDatabaseName;
 
+    if (AlbumSettings::instance()->getDatabaseType()=="QSQLITE"
+        || AlbumSettings::instance()->getDatabaseType().isEmpty())
+    {
+        if (AlbumSettings::instance()->getDatabaseType().isEmpty())
+        {
+            AlbumSettings::instance()->setDatabaseType("QSQLITE");
+            databaseName = dbName;
         }
+        QString databasePath = databaseName;
+        databaseName = QDir::cleanPath(databasePath + '/' + "digikam4.db");
+        thumbnailDatabaseName = QDir::cleanPath(databasePath + '/' + "thumbnails-digikam.db");
+    }
 
-        DatabaseAccess::setParameters(DatabaseParameters::parametersFromConfig(AlbumSettings::instance()->getDatabaseType(),
-                                                                               databaseName,
-                                                                               AlbumSettings::instance()->getDatabaseHostName(),
-                                                                               AlbumSettings::instance()->getDatabasePort(),
-                                                                               AlbumSettings::instance()->getDatabaseUserName(),
-                                                                               AlbumSettings::instance()->getDatabasePassword(),
-                                                                               AlbumSettings::instance()->getDatabaseConnectoptions()),
-                                          DatabaseAccess::MainApplication);
-        /*
-         * If there are no settings for the database, just use the SQLite default setting.
-         */
-        if (AlbumSettings::instance()->getDatabaseType().isEmpty()){
-            DatabaseAccess::setParameters(DatabaseParameters::parametersForSQLiteDefaultFile(dbName),
-                                          DatabaseAccess::MainApplication);
-        }
-        DatabaseGUIErrorHandler *handler = new DatabaseGUIErrorHandler(DatabaseAccess::parameters());
-        DatabaseAccess::initDatabaseErrorHandler(handler);
-        advice = ScanController::instance()->databaseInitialization();
-//        if (advice==ScanController::ContinueWithoutDatabase){
-//            QApplication::restoreOverrideCursor();
-//            int result = KMessageBox::warningYesNoCancel(0, i18n("Error while opening the database."
-//                                                                 "<p>Error was: %1</p>", DatabaseAccess().lastError()), i18n("Database Connection Error"),
-//                    KGuiItem(i18n("Retry")),
-//                    KGuiItem(i18n("DB Setup")),
-//                    KGuiItem(i18n("Abort")));
-//
-//            if (result == KMessageBox::Cancel)
-//            {
-//                advice = ScanController::AbortImmediately;
-//            }else if (result == KMessageBox::No)
-//            {
-//                if ( Setup::execSinglePage(0, Setup::DatabasePage) == false)
-//                {
-//                    abort=true;
-//                }
-//            }
-//            QApplication::setOverrideCursor(Qt::WaitCursor);
-//        }else
-//        {
-//            // In this case the user can't do anything and we must abort
-//            abort=true;
-//        }
-//    }while(abort==false && advice==ScanController::ContinueWithoutDatabase);
+    DatabaseAccess::setParameters(DatabaseParameters::parametersFromConfig(AlbumSettings::instance()->getDatabaseType(),
+                                                                           databaseName,
+                                                                           AlbumSettings::instance()->getDatabaseHostName(),
+                                                                           AlbumSettings::instance()->getDatabasePort(),
+                                                                           AlbumSettings::instance()->getDatabaseUserName(),
+                                                                           AlbumSettings::instance()->getDatabasePassword(),
+                                                                           AlbumSettings::instance()->getDatabaseConnectoptions()),
+                                  DatabaseAccess::MainApplication);
+    DatabaseGUIErrorHandler *handler = new DatabaseGUIErrorHandler(DatabaseAccess::parameters());
+    DatabaseAccess::initDatabaseErrorHandler(handler);
+    advice = ScanController::instance()->databaseInitialization();
 
     kDebug(50003) << "Database initialization done.";
 
@@ -743,6 +717,40 @@ bool AlbumManager::setDatabase(const QString& dbType, const QString& dbName, con
             return false;
     }
 
+    /*
+    bool abort=false;
+    do
+    {
+        if (advice==ScanController::ContinueWithoutDatabase)
+        {
+            QApplication::restoreOverrideCursor();
+            int result = KMessageBox::warningYesNoCancel(0, i18n("Error while opening the database."
+                                                                "<p>Error was: %1</p>",
+                                                                DatabaseAccess().lastError()),
+                                                            i18n("Database Connection Error"),
+                                                        KGuiItem(i18n("Retry")),
+                                                        KGuiItem(i18n("DB Setup")),
+                                                        KGuiItem(i18n("Abort")));
+
+            if (result == KMessageBox::Cancel)
+            {
+                advice = ScanController::AbortImmediately;
+            }else if (result == KMessageBox::No)
+            {
+                if ( Setup::execSinglePage(0, Setup::DatabasePage) == false)
+                {
+                    abort=true;
+                }
+            }
+            QApplication::setOverrideCursor(Qt::WaitCursor);
+        }
+        else
+        {
+            // In this case the user can't do anything and we must abort
+            abort=true;
+        }
+    } while(abort==false && advice==ScanController::ContinueWithoutDatabase);
+    */
     // -- Locale Checking ---------------------------------------------------------
 
     QString currLocale(QTextCodec::codecForLocale()->name());
@@ -945,18 +953,13 @@ bool AlbumManager::setDatabase(const QString& dbType, const QString& dbName, con
 #ifdef USE_THUMBS_DB
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
-    ThumbnailDatabaseAccess::setParameters(DatabaseParameters::parametersFromConfig(AlbumSettings::instance()->getDatabaseType(),
-            AlbumSettings::instance()->getDatabaseName(),
-            AlbumSettings::instance()->getDatabaseHostName(),
-            AlbumSettings::instance()->getDatabasePort(),
-            AlbumSettings::instance()->getDatabaseUserName(),
-            AlbumSettings::instance()->getDatabasePassword(),
-            AlbumSettings::instance()->getDatabaseConnectoptions()));
-
-    ThumbnailDatabaseAccess::initDatabaseErrorHandler(handler);
+    if (AlbumSettings::instance()->getDatabaseType()=="QSQLITE")
+    {
+        d->dirWatchBlackList << "thumbnails-digikam.db" << "thumbnails-digikam.db-journal";
+    }
 
     ThumbnailLoadThread::initializeThumbnailDatabase(AlbumSettings::instance()->getDatabaseType(),
-            AlbumSettings::instance()->getDatabaseName(),
+            thumbnailDatabaseName,
             AlbumSettings::instance()->getDatabaseHostName(),
             AlbumSettings::instance()->getDatabasePort(),
             AlbumSettings::instance()->getDatabaseUserName(),
@@ -964,11 +967,7 @@ bool AlbumManager::setDatabase(const QString& dbType, const QString& dbName, con
             AlbumSettings::instance()->getDatabaseConnectoptions(),
             new DatabaseThumbnailInfoProvider());
 
-    if (AlbumSettings::instance()->getDatabaseType()=="QSQLITE"){
-        // Initialize thumbnail database
-        QFileInfo thumbFile(d->dbName, "thumbnails-digikam.db");
-        d->dirWatchBlackList << "thumbnails-digikam.db" << "thumbnails-digikam.db-journal";
-    }
+    ThumbnailDatabaseAccess::initDatabaseErrorHandler(handler);
 
     QApplication::restoreOverrideCursor();
 #endif
