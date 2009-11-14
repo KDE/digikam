@@ -3,7 +3,11 @@ Note : see also KDE4PORT TODO list
 ------------------------------------------------------------------------------------
 post 1.0.0 mvc merge
 ------------------------------------------------------------------------------------
- * use the custom tooltip in the AlbumFolderView
+ * use the custom tooltip in the AlbumFolderView (old code in FolderViewToolTip)
+ * sorting albums by something else than name (date, category)
+ * Port different tag views to MVC pattern
+ 
+ * Create a general interface for sidebar widgets
 
 ------------------------------------------------------------------------------------
 1.0.0 TODO LIST

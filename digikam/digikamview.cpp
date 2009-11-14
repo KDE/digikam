@@ -146,6 +146,7 @@ public:
         cancelSlideShow       = false;
         useAlbumHistory       = false;
         thumbSize             = ThumbnailSize::Medium;
+        optionAlbumViewPrefix = "AlbumView";
     }
 
     QString userPresentableAlbumTitle(const QString& album);
@@ -195,6 +196,9 @@ public:
     TagFilterView*            tagFilterView;
     FuzzySearchView*          fuzzySearchView;
     GPSSearchView*            gpsSearchView;
+
+    QString optionAlbumViewPrefix;
+
 };
 
 DigikamView::DigikamView(QWidget *parent)
@@ -306,6 +310,7 @@ void DigikamView::applySettings()
     AlbumSettings *settings = AlbumSettings::instance();
     d->albumWidgetStack->applySettings();
 
+    // TODO update
     //d->folderView->setEnableToolTips(settings->getShowAlbumToolTips());
     refreshView();
 }
@@ -626,6 +631,8 @@ void DigikamView::loadViewState()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("MainWindow");
 
+    d->folderView->loadViewState(group, d->optionAlbumViewPrefix);
+
     // Restore the splitter
     d->splitter->restoreState(group);
 
@@ -641,6 +648,8 @@ void DigikamView::saveViewState()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("MainWindow");
+
+    d->folderView->saveViewState(group, d->optionAlbumViewPrefix);
 
     // Save the splitter states.
     d->splitter->saveState(group);
@@ -732,7 +741,7 @@ void DigikamView::slotSortAlbums(int order)
     if (!settings)
         return;
     settings->setAlbumSortOrder((AlbumSettings::AlbumSortOrder) order);
-    // TODO sorting by anyting else then the name is currently not supported by the model
+    // TODO sorting by anything else then the name is currently not supported by the model
     //d->folderView->resort();
 }
 

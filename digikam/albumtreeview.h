@@ -28,6 +28,9 @@
 
 #include <QTreeView>
 
+// KDE includes
+#include <kconfiggroup.h>
+
 // Local includes
 
 #include "albummodel.h"
@@ -137,14 +140,32 @@ protected:
     virtual void middleButtonPressed(Album *a);
 };
 
+class AlbumTreeViewPriv;
 class AlbumTreeView : public AbstractCheckableAlbumTreeView
 {
+    Q_OBJECT
 public:
 
     AlbumTreeView(QWidget *parent = 0);
+    virtual ~AlbumTreeView();
     AlbumModel *albumModel() const;
     PAlbum *currentAlbum() const;
     PAlbum *albumForIndex(const QModelIndex &index) const;
+
+    virtual void loadViewState(KConfigGroup &group, QString prefix = QString());
+    virtual void saveViewState(KConfigGroup &group, QString prefix = QString());
+
+private Q_SLOTS:
+    void slotFixRowsInserted(const QModelIndex &index, int start, int end);
+
+private:
+
+    void saveState(const QModelIndex &index, QStringList &selection,
+                    QStringList &expansion);
+    void restoreState(const QModelIndex &index);
+
+    AlbumTreeViewPriv *d;
+
 };
 
 class TagTreeView : public AbstractCheckableAlbumTreeView
