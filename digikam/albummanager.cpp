@@ -1667,7 +1667,7 @@ TAlbum* AlbumManager::findTAlbum(int id) const
 
 SAlbum* AlbumManager::findSAlbum(int id) const
 {
-    if (!d->rootTAlbum)
+    if (!d->rootSAlbum)
         return 0;
 
     int gid = d->rootSAlbum->globalID() + id;
