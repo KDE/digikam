@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "gpconfigdlg.h"
+// #include "gpconfigdlg.h"
 #include "gpconfigdlg.moc"
 
 // Qt includes

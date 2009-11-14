@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "noisereductiontool.h"
+// #include "noisereductiontool.h"
 #include "noisereductiontool.moc"
 
 // Qt includes

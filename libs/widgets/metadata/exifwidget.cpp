@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "exifwidget.h"
+// #include "exifwidget.h"
 #include "exifwidget.moc"
 
 // Qt includes

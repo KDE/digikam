@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "batchsyncmetadata.h"
+// #include "batchsyncmetadata.h"
 #include "batchsyncmetadata.moc"
 
 // Qt includes

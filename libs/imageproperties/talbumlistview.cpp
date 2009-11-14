@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "talbumlistview.h"
+// #include "talbumlistview.h"
 #include "talbumlistview.moc"
 
 // Qt includes

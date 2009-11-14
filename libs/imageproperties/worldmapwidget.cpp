@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "worldmapwidget.h"
+// #include "worldmapwidget.h"
 #include "worldmapwidget.moc"
 
 // Qt includes

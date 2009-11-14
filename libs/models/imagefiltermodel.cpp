@@ -21,11 +21,11 @@
  *
  * ============================================================ */
 
-#include "imagefiltermodel.h"
+// #include "imagefiltermodel.h"
 #include "imagefiltermodel.moc"
-#include "imagefiltermodelpriv.h"
+// #include "imagefiltermodelpriv.h"
 #include "imagefiltermodelpriv.moc"
-#include "imagefiltermodelthreads.h"
+// #include "imagefiltermodelthreads.h"
 #include "imagefiltermodelthreads.moc"
 
 // KDE includes

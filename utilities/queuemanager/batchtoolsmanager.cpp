@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "batchtoolsmanager.h"
+// #include "batchtoolsmanager.h"
 #include "batchtoolsmanager.moc"
 
 // Local includes

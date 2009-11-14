@@ -33,7 +33,7 @@
 
 // Local includes.
 
-#include "msgtextedit.h"
+// #include "msgtextedit.h"
 #include "msgtextedit.moc"
 
 namespace Digikam

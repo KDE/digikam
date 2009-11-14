@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "albumiconviewfilter.h"
+// #include "albumiconviewfilter.h"
 #include "albumiconviewfilter.moc"
 
 // KDE includes

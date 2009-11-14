@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "imageregionwidget.h"
+// #include "imageregionwidget.h"
 #include "imageregionwidget.moc"
 
 // C++ includes

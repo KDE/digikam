@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "editorwindow.h"
+//#include "editorwindow.h"
 #include "editorwindow_p.h"
 #include "editorwindow.moc"
 

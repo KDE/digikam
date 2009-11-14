@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "imageinfocache.h"
+// #include "imageinfocache.h"
 #include "imageinfocache.moc"
 
 // Local includes

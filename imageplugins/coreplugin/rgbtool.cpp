@@ -22,7 +22,7 @@
  * ============================================================ */
 
 
-#include "rgbtool.h"
+// #include "rgbtool.h"
 #include "rgbtool.moc"
 
 // Qt includes

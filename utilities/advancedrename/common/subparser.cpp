@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "subparser.h"
+// #include "subparser.h"
 #include "subparser.moc"
 
 // KDE includes

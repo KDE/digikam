@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "freerotationtest.h"
+// #include "freerotationtest.h"
 #include "freerotationtest.moc"
 
 // C++ includes

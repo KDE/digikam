@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "metadatamanager.h"
+// #include "metadatamanager.h"
 #include "metadatamanager.moc"
 #include "metadatamanager_p.moc"
 

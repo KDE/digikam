@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "albumthumbnailloader.h"
+// #include "albumthumbnailloader.h"
 #include "albumthumbnailloader.moc"
 
 // C++ includes

@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "imageplugin_restoration.h"
+// #include "imageplugin_restoration.h"
 #include "imageplugin_restoration.moc"
 
 // KDE includes

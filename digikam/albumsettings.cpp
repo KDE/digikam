@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "albumsettings.h"
+// #include "albumsettings.h"
 #include "albumsettings.moc"
 
 // KDE includes

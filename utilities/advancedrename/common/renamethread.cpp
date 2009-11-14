@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "renamethread.h"
+// #include "renamethread.h"
 #include "renamethread.moc"
 
 // Qt includes

@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "toolbar.h"
+// #include "toolbar.h"
 #include "toolbar.moc"
 
 // Qt includes

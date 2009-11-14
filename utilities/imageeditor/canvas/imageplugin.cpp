@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "imageplugin.h"
+// #include "imageplugin.h"
 #include "imageplugin.moc"
 
 // Local includes

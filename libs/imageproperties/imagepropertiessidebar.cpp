@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "imagepropertiessidebar.h"
+// #include "imagepropertiessidebar.h"
 #include "imagepropertiessidebar.moc"
 
 // Qt includes

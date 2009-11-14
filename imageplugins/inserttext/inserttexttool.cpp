@@ -23,7 +23,7 @@
  * ============================================================ */
 
 
-#include "inserttexttool.h"
+// #include "inserttexttool.h"
 #include "inserttexttool.moc"
 
 // Qt includes

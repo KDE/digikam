@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "imagealbumfiltermodel.h"
+// #include "imagealbumfiltermodel.h"
 #include "imagealbumfiltermodel.moc"
 
 // KDE includes

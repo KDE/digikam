@@ -24,7 +24,7 @@
  * ============================================================ */
 
 
-#include "superimposewidget.h"
+// #include "superimposewidget.h"
 #include "superimposewidget.moc"
 
 // C++ includes

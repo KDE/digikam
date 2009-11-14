@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "dimgthreadedfilter.h"
+// #include "dimgthreadedfilter.h"
 #include "dimgthreadedfilter.moc"
 
 // Qt includes

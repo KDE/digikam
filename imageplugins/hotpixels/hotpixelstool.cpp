@@ -24,7 +24,7 @@
  * ============================================================ */
 
 
-#include "hotpixelstool.h"
+// #include "hotpixelstool.h"
 #include "hotpixelstool.moc"
 
 // Qt includes

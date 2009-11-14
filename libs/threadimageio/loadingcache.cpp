@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "loadingcache.h"
+// #include "loadingcache.h"
 #include "loadingcache.moc"
 
 // Qt includes

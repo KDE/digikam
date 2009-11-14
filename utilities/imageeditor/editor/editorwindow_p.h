@@ -25,6 +25,10 @@
 #ifndef EDITORWINDOWPRIVATE_H
 #define EDITORWINDOWPRIVATE_H
 
+// Qt includes
+
+#include <QList>
+
 class QToolButton;
 class QLabel;
 class QWidgetAction;

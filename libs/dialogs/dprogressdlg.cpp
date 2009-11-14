@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "dprogressdlg.h"
+// #include "dprogressdlg.h"
 #include "dprogressdlg.moc"
 
 // Qt includes

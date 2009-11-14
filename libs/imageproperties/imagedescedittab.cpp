@@ -24,7 +24,7 @@
  *
  * ============================================================ */
 
-#include "imagedescedittab.h"
+// #include "imagedescedittab.h"
 #include "imagedescedittab.moc"
 
 // Qt includes

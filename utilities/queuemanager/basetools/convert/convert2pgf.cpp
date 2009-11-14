@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "convert2pgf.h"
+// #include "convert2pgf.h"
 #include "convert2pgf.moc"
 
 // Qt includes

@@ -22,7 +22,7 @@
  * ============================================================ */
 
 
-#include "imageplugin_oilpaint.h"
+// #include "imageplugin_oilpaint.h"
 #include "imageplugin_oilpaint.moc"
 
 // KDE includes

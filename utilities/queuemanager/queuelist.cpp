@@ -23,7 +23,7 @@
 
 #define ICONSIZE 64
 
-#include "queuelist.h"
+// #include "queuelist.h"
 #include "queuelist.moc"
 
 // Qt includes

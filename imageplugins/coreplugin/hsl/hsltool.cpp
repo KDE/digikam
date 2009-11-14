@@ -23,7 +23,7 @@
  * ============================================================ */
 
 
-#include "hsltool.h"
+// #include "hsltool.h"
 #include "hsltool.moc"
 
 // Qt includes

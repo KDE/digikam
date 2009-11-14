@@ -24,7 +24,7 @@
  *
  * ============================================================ */
 
-#include "digikamapp.h"
+// #include "digikamapp.h"
 #include "digikamapp.moc"
 
 // Qt includes

@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "canvas.h"
+// #include "canvas.h"
 #include "canvas.moc"
 
 // C++ includes

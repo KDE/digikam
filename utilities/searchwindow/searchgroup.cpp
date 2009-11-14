@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "searchgroup.h"
+// #include "searchgroup.h"
 #include "searchgroup.moc"
 
 // Qt includes

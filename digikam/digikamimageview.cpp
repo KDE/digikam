@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "digikamimageview.h"
+// #include "digikamimageview.h"
 #include "digikamimageview.moc"
 #include "digikamimageview_p.h"
 

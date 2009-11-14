@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "dgradientslider.h"
+// #include "dgradientslider.h"
 #include "dgradientslider.moc"
 
 // Qt includes

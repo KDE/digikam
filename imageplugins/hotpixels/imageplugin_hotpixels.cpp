@@ -24,7 +24,7 @@
  * ============================================================ */
 
 
-#include "imageplugin_hotpixels.h"
+// #include "imageplugin_hotpixels.h"
 #include "imageplugin_hotpixels.moc"
 
 // KDE includes

@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "searchview.h"
+// #include "searchview.h"
 #include "searchview.moc"
 
 // Qt includes

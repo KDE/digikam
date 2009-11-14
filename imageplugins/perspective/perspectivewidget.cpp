@@ -25,7 +25,7 @@
  *
  * ============================================================ */
 
-#include "perspectivewidget.h"
+// #include "perspectivewidget.h"
 #include "perspectivewidget.moc"
 
 // C++ includes

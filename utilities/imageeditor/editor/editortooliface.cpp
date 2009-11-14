@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "editortooliface.h"
+// #include "editortooliface.h"
 #include "editortooliface.moc"
 
 // Qt includes

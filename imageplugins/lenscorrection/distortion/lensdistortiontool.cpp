@@ -23,7 +23,7 @@
  * ============================================================ */
 
 
-#include "lensdistortiontool.h"
+// #include "lensdistortiontool.h"
 #include "lensdistortiontool.moc"
 
 // C++ includes

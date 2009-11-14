@@ -25,7 +25,7 @@
  *
  * ============================================================ */
 
-#include "deletedialog.h"
+// #include "deletedialog.h"
 #include "deletedialog.moc"
 
 // Qt includes

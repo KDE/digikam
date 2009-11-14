@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "convert2jpeg.h"
+// #include "convert2jpeg.h"
 #include "convert2jpeg.moc"
 
 // Qt includes

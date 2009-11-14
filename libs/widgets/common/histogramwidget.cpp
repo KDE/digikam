@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "histogramwidget.h"
+// #include "histogramwidget.h"
 #include "histogramwidget.moc"
 
 // Qt includes

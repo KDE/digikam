@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "adjustlevelstool.h"
+// #include "adjustlevelstool.h"
 #include "adjustlevelstool.moc"
 
 // C++ includes

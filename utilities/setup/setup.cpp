@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "setup.h"
+// #include "setup.h"
 #include "setup.moc"
 
 // Qt includes

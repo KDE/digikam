@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "autocorrection.h"
+// #include "autocorrection.h"
 #include "autocorrection.moc"
 
 // Qt includes

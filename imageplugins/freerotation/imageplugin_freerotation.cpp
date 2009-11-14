@@ -23,7 +23,7 @@
  * ============================================================ */
 
 
-#include "imageplugin_freerotation.h"
+// #include "imageplugin_freerotation.h"
 #include "imageplugin_freerotation.moc"
 
 // KDE includes

@@ -24,7 +24,7 @@
  *
  * ============================================================ */
 
-#include "renamecustomizer.h"
+// #include "renamecustomizer.h"
 #include "renamecustomizer.moc"
 
 // Qt includes

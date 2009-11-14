@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "dirselectwidget.h"
+// #include "dirselectwidget.h"
 #include "dirselectwidget.moc"
 
 // Qt includes

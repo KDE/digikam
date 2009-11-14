@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "dhistoryview.h"
+// #include "dhistoryview.h"
 #include "dhistoryview.moc"
 
 // Qt includes

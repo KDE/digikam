@@ -24,7 +24,7 @@
  *
  * ============================================================ */
 
-#include "albumiconview.h"
+// #include "albumiconview.h"
 #include "albumiconview.moc"
 
 // C ANSI includes

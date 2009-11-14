@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "dfontselect.h"
+// #include "dfontselect.h"
 #include "dfontselect.moc"
 
 // Qt includes

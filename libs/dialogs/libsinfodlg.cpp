@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "libsinfodlg.h"
+// #include "libsinfodlg.h"
 #include "libsinfodlg.moc"
 
 // Qt includes

@@ -23,7 +23,7 @@
  * ============================================================ */
 
 
-#include "imageplugin_infrared.h"
+// #include "imageplugin_infrared.h"
 #include "imageplugin_infrared.moc"
 
 // KDE includes

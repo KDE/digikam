@@ -22,7 +22,7 @@
  * ============================================================ */
 
 
-#include "imageplugin_adjustlevels.h"
+// #include "imageplugin_adjustlevels.h"
 #include "imageplugin_adjustlevels.moc"
 
 // KDE includes

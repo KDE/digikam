@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "subjectwidget.h"
+// #include "subjectwidget.h"
 #include "subjectwidget.moc"
 
 // Qt includes

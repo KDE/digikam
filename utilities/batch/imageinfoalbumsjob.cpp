@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "imageinfoalbumsjob.h"
+// #include "imageinfoalbumsjob.h"
 #include "imageinfoalbumsjob.moc"
 
 // Qt includes

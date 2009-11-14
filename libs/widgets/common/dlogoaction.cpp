@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "dlogoaction.h"
+// #include "dlogoaction.h"
 #include "dlogoaction.moc"
 
 // C++ includes

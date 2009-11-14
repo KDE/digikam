@@ -25,7 +25,7 @@
 #define THUMB_WIDTH 150
 
 
-#include "blackframelistview.h"
+// #include "blackframelistview.h"
 #include "blackframelistview.moc"
 
 // Qt includes

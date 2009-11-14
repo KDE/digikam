@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "filepropertiesparser.h"
+// #include "filepropertiesparser.h"
 #include "filepropertiesparser.moc"
 
 // Qt includes

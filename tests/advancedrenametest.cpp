@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "advancedrenametest.h"
+// #include "advancedrenametest.h"
 #include "advancedrenametest.moc"
 
 // KDE includes

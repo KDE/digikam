@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "setupcollections.h"
+// #include "setupcollections.h"
 #include "setupcollections.moc"
 
 // Qt includes

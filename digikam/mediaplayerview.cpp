@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "mediaplayerview.h"
+// #include "mediaplayerview.h"
 #include "mediaplayerview.moc"
 
 // Qt includes

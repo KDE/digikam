@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "tagfilterview.h"
+// #include "tagfilterview.h"
 #include "tagfilterview.moc"
 
 // Qt includes

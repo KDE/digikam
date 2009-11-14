@@ -24,7 +24,7 @@
  *
  * ============================================================ */
 
-#include "imagehistogram.h"
+// #include "imagehistogram.h"
 #include "imagehistogram.moc"
 
 // C++ includes

@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "imagethumbnailmodel.h"
+// #include "imagethumbnailmodel.h"
 #include "imagethumbnailmodel.moc"
 
 // Qt includes

@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "watermark.h"
+// #include "watermark.h"
 #include "watermark.moc"
 
 // C++ includes

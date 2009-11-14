@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "imageplugin_contentawareresizing.h"
+// #include "imageplugin_contentawareresizing.h"
 #include "imageplugin_contentawareresizing.moc"
 
 // KDE includes

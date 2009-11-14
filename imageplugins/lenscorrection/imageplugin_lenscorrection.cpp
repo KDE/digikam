@@ -21,7 +21,7 @@
  * ============================================================ */
 
 
-#include "imageplugin_lenscorrection.h"
+// #include "imageplugin_lenscorrection.h"
 #include "imageplugin_lenscorrection.moc"
 
 // KDE includes

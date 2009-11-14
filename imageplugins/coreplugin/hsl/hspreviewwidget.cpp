@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "hspreviewwidget.h"
+// #include "hspreviewwidget.h"
 #include "hspreviewwidget.moc"
 
 // Qt includes

@@ -23,7 +23,7 @@
  * ============================================================ */
 
 
-#include "imageplugin_charcoal.h"
+// #include "imageplugin_charcoal.h"
 #include "imageplugin_charcoal.moc"
 
 // KDE includes

@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "rotate.h"
+// #include "rotate.h"
 #include "rotate.moc"
 
 // Qt includes

@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "imageplugin_inpainting.h"
+// #include "imageplugin_inpainting.h"
 #include "imageplugin_inpainting.moc"
 
 // KDE includes

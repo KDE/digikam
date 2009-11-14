@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "convert2jp2.h"
+// #include "convert2jp2.h"
 #include "convert2jp2.moc"
 
 // Qt includes

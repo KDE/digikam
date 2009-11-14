@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "histogrambox.h"
+// #include "histogrambox.h"
 #include "histogrambox.moc"
 
 // Qt includes

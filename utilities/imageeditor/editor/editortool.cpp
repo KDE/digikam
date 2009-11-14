@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "editortool.h"
+// #include "editortool.h"
 #include "editortool.moc"
 
 // Qt includes

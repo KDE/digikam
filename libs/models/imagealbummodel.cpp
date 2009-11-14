@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "imagealbummodel.h"
+// #include "imagealbummodel.h"
 #include "imagealbummodel.moc"
 
 // Qt includes

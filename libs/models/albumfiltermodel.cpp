@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "albumfiltermodel.h"
+// #include "albumfiltermodel.h"
 #include "albumfiltermodel.moc"
 
 // Qt includes

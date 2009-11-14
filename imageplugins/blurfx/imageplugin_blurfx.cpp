@@ -22,7 +22,7 @@
  * ============================================================ */
 
 
-#include "imageplugin_blurfx.h"
+// #include "imageplugin_blurfx.h"
 #include "imageplugin_blurfx.moc"
 
 // KDE includes

@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "ratiocroptool.h"
+// #include "ratiocroptool.h"
 #include "ratiocroptool.moc"
 
 // Qt includes

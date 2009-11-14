@@ -25,7 +25,7 @@
 
 #define ICONSIZE 64
 
-#include "findduplicatesview.h"
+// #include "findduplicatesview.h"
 #include "findduplicatesview.moc"
 
 // Qt includes

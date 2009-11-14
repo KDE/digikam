@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "collectionpage.h"
+// #include "collectionpage.h"
 #include "collectionpage.moc"
 
 // Qt includes

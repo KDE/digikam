@@ -22,7 +22,7 @@
  * ============================================================ */
 
 
-#include "imageplugin_texture.h"
+// #include "imageplugin_texture.h"
 #include "imageplugin_texture.moc"
 
 // KDE includes

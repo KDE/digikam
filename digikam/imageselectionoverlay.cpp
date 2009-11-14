@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "imageselectionoverlay.h"
+// #include "imageselectionoverlay.h"
 #include "imageselectionoverlay.moc"
 
 // KDE includes

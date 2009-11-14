@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "imageinfojob.h"
+// #include "imageinfojob.h"
 #include "imageinfojob.moc"
 
 // Qt includes

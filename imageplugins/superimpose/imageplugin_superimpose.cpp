@@ -24,7 +24,7 @@
  * ============================================================ */
 
 
-#include "imageplugin_superimpose.h"
+// #include "imageplugin_superimpose.h"
 #include "imageplugin_superimpose.moc"
 
 // KDE includes

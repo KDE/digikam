@@ -22,7 +22,7 @@
  * ============================================================ */
 
 
-#include "imageplugin_noisereduction.h"
+// #include "imageplugin_noisereduction.h"
 #include "imageplugin_noisereduction.moc"
 
 // KDE includes

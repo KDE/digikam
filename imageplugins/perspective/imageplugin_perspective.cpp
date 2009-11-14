@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "imageplugin_perspective.h"
+// #include "imageplugin_perspective.h"
 #include "imageplugin_perspective.moc"
 
 // KDE includes

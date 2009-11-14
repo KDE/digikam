@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "setup.h"
+// #include "setup.h"
 #include "setup.moc"
 
 // KDE includes

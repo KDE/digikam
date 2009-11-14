@@ -25,7 +25,7 @@
  * ============================================================ */
 
 
-#include "imageplugin_distortionfx.h"
+// #include "imageplugin_distortionfx.h"
 #include "imageplugin_distortionfx.moc"
 
 // KDE includes

@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "colorcorrectiondlg.h"
+// #include "colorcorrectiondlg.h"
 #include "colorcorrectiondlg.moc"
 
 // Qt includes

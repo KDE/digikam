@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "iccprofilescombobox.h"
+// #include "iccprofilescombobox.h"
 #include "iccprofilescombobox.moc"
 
 // Qt includes

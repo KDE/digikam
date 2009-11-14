@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "sharpen.h"
+// #include "sharpen.h"
 #include "sharpen.moc"
 
 // Qt includes

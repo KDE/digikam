@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "batchthumbsgenerator.h"
+// #include "batchthumbsgenerator.h"
 #include "batchthumbsgenerator.moc"
 
 // Qt includes

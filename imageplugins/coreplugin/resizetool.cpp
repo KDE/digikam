@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "resizetool.h"
+// #include "resizetool.h"
 #include "resizetool.moc"
 
 // C++ includes

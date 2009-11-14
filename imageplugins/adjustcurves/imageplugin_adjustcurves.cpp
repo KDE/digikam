@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "imageplugin_adjustcurves.h"
+// #include "imageplugin_adjustcurves.h"
 #include "imageplugin_adjustcurves.moc"
 
 // KDE includes

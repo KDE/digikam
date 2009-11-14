@@ -18,7 +18,7 @@
  *
  * ============================================================ */
 
-#include "klensfun.h"
+// #include "klensfun.h"
 #include "klensfun.moc"
 
 // Qt includes

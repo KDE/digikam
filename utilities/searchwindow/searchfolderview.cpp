@@ -24,7 +24,7 @@
  *
  * ============================================================ */
 
-#include "searchfolderview.h"
+// #include "searchfolderview.h"
 #include "searchfolderview.moc"
 
 // Qt includes

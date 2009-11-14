@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "setupdcraw.h"
+// #include "setupdcraw.h"
 #include "setupdcraw.moc"
 
 // Qt includes

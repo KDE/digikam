@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "albumtreeview.h"
+// #include "albumtreeview.h"
 #include "albumtreeview.moc"
 
 // Qt includes

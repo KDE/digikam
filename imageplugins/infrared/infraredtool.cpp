@@ -24,7 +24,7 @@
  * ============================================================ */
 
 
-#include "infraredtool.h"
+// #include "infraredtool.h"
 #include "infraredtool.moc"
 
 // Qt includes
