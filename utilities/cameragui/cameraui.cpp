@@ -439,12 +439,6 @@ void CameraUI::setupActions()
     d->lockAction = new KAction(KIcon("object-locked"), i18n("Toggle Lock"), this);
     connect(d->lockAction, SIGNAL(triggered()), this, SLOT(slotToggleLock()));
     actionCollection()->addAction("cameraui_imagelock", d->lockAction);
-    
-    // -------------------------------------------------------------------------
-
-    d->markAsDownloadedAction = new KAction(KIcon("dialog-ok"), i18n("Mark as downloaded"), this);
-    connect(d->markAsDownloadedAction, SIGNAL(triggered()), this, SLOT(slotMarkAsDownloaded()));
-    actionCollection()->addAction("cameraui_imagemarkasdownloaded", d->markAsDownloadedAction);
 
     // -------------------------------------------------------------------------
 
@@ -970,21 +964,21 @@ void CameraUI::slotBusy(bool val)
         // d->renameCustomizer->restoreFocus();
 
         d->uploadAction->setEnabled(d->controller->cameraUploadSupport());
+        d->downloadSelectedAction->setEnabled(true);
+        d->downloadDelSelectedAction->setEnabled(d->controller->cameraDeleteSupport());
         d->downloadAllAction->setEnabled(true);
         d->downloadDelAllAction->setEnabled(d->controller->cameraDeleteSupport());
+        d->deleteSelectedAction->setEnabled(d->controller->cameraDeleteSupport());
         d->deleteAllAction->setEnabled(d->controller->cameraDeleteSupport());
         d->selectAllAction->setEnabled(true);
         d->selectNoneAction->setEnabled(true);
         d->selectInvertAction->setEnabled(true);
         d->selectNewItemsAction->setEnabled(true);
         d->selectLockedItemsAction->setEnabled(true);
+        d->lockAction->setEnabled(true);
         d->cameraInfoAction->setEnabled(true);
         d->cameraCaptureAction->setEnabled(d->controller->cameraCaptureImageSupport());
 
-        // selection-dependent update of lockAction, markAsDownloadedAction,
-        // downloadSelectedAction, downloadDelSelectedAction, deleteSelectedAction
-        slotNewSelection(d->view->countSelected()>0);
-        
         d->anim->stop();
         d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, i18n("Ready"));
 
@@ -1028,10 +1022,8 @@ void CameraUI::slotBusy(bool val)
         d->selectNewItemsAction->setEnabled(false);
         d->selectLockedItemsAction->setEnabled(false);
         d->lockAction->setEnabled(false);
-        d->markAsDownloadedAction->setEnabled(false);
         d->cameraInfoAction->setEnabled(false);
         d->cameraCaptureAction->setEnabled(false);
-        d->imageViewAction->setEnabled(false);
     }
 }
 
@@ -1786,25 +1778,6 @@ void CameraUI::slotSkipped(const QString& folder, const QString& file)
     d->statusProgressBar->setProgressValue(curr+1);
 }
 
-void CameraUI::slotMarkAsDownloaded()
-{
-    for (IconItem* item = d->view->firstItem(); item;
-         item = item->nextItem())
-    {
-        CameraIconItem* iconItem = static_cast<CameraIconItem*>(item);
-        if (iconItem->isSelected())
-        {
-            iconItem->setDownloaded(GPItemInfo::DownloadedYes);
-            
-            DownloadHistory::setDownloaded(d->controller->cameraMD5ID(),
-                iconItem->itemInfo()->name,
-                iconItem->itemInfo()->size,
-                iconItem->itemInfo()->mtime);
-        }
-    }
-}
-
-
 void CameraUI::slotToggleLock()
 {
     int count = 0;
@@ -2039,33 +2012,20 @@ void CameraUI::slotNewSelection(bool hasSelection)
 {
     if (!d->controller) return;
 
-    d->downloadSelectedAction->setEnabled(hasSelection);
-    d->downloadDelSelectedAction->setEnabled(hasSelection && d->controller->cameraDeleteSupport());
-    d->deleteSelectedAction->setEnabled(hasSelection && d->controller->cameraDeleteSupport());
-    d->imageViewAction->setEnabled(hasSelection);
-    d->lockAction->setEnabled(hasSelection);
-    
-    if (hasSelection)
+    if (!d->renameCustomizer->useDefault())
     {
-        // only enable "Mark as downloaded" if at least one
-        // selected image has not been downloaded
-        bool haveNotDownloadedItem = false;
-        for (IconItem* item = d->view->firstItem(); item;
-            item = item->nextItem())
-        {
-            const CameraIconItem* const iconItem = static_cast<CameraIconItem*>(item);
-            if (iconItem->isSelected())
-            {
-                haveNotDownloadedItem = !iconItem->isDownloaded();
-                if (haveNotDownloadedItem)
-                    break;
-            }
-        }
-        
-        d->markAsDownloadedAction->setEnabled(haveNotDownloadedItem);
+        d->downloadSelectedAction->setEnabled(hasSelection);
+        d->downloadDelSelectedAction->setEnabled(hasSelection & d->controller->cameraDeleteSupport());
+        d->deleteSelectedAction->setEnabled(hasSelection & d->controller->cameraDeleteSupport());
+        d->imageViewAction->setEnabled(hasSelection);
     }
     else
-        d->markAsDownloadedAction->setEnabled(false);
+    {
+        d->downloadSelectedAction->setEnabled(hasSelection);
+        d->downloadDelSelectedAction->setEnabled(hasSelection & d->controller->cameraDeleteSupport());
+        d->deleteSelectedAction->setEnabled(hasSelection & d->controller->cameraDeleteSupport());
+        d->imageViewAction->setEnabled(hasSelection);
+    }
 
     unsigned long fSize = 0;
     unsigned long dSize = 0;
@@ -2076,6 +2036,11 @@ void CameraUI::slotNewSelection(bool hasSelection)
 void CameraUI::slotItemsSelected(CameraIconItem* item, bool selected)
 {
     if (!d->controller) return;
+
+    d->downloadSelectedAction->setEnabled(selected);
+    d->downloadDelSelectedAction->setEnabled(selected & d->controller->cameraDeleteSupport());
+    d->deleteSelectedAction->setEnabled(selected & d->controller->cameraDeleteSupport());
+    d->imageViewAction->setEnabled(selected);
 
     if (selected)
     {
@@ -2093,9 +2058,6 @@ void CameraUI::slotItemsSelected(CameraIconItem* item, bool selected)
     }
     else
         d->rightSideBar->slotNoCurrentItem();
-    
-    // update availability of actions
-    slotNewSelection(d->view->countSelected()>0);
 }
 
 bool CameraUI::createAutoAlbum(const KUrl& parentURL, const QString& sub,

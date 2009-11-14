@@ -101,7 +101,6 @@ public:
         selectNewItemsAction      = 0;
         selectLockedItemsAction   = 0;
         uploadAction              = 0;
-        markAsDownloadedAction    = 0;
         lockAction                = 0;
         donateMoneyAction         = 0;
         cameraCancelAction        = 0;
@@ -177,7 +176,6 @@ public:
     KAction*                      selectNewItemsAction;
     KAction*                      selectNoneAction;
     KAction*                      uploadAction;
-    KAction*                      markAsDownloadedAction;
     KToggleAction*                lastPhotoFirstAction;
     KToggleAction*                showMenuBarAction;
     KToggleAction*                showLogAction;

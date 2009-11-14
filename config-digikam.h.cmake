@@ -19,4 +19,14 @@
 /* Define to 1 if you want to use the experimental thumbnails database */
 #cmakedefine USE_THUMBS_DB 1
 
+/* Define to 1 if you have Nepomuk shared libraries installed */
+#cmakedefine HAVE_NEPOMUK 1
+
+
+/* debug area codes */
+#define AREACODE_GENERAL      ${AREA_CODE_GENERAL}
+#define AREACODE_KIOSLAVES    ${AREA_CODE_KIOSLAVES}
+#define AREACODE_SHOWFOTO     ${AREA_CODE_SHOWFOTO}
+#define AREACODE_IMAGEPLUGINS ${AREA_CODE_IMAGEPLUGINS}
+
 #endif /* CONFIG_DIGIKAM_H */

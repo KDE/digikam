@@ -324,6 +324,7 @@ DigikamApp::~DigikamApp()
     KDcrawIface::DcrawBinary::cleanUp();
 #endif
     m_instance = 0;
+
     delete d;
 }
 
@@ -907,7 +908,7 @@ void DigikamApp::setupActions()
     // -----------------------------------------------------------
 
     d->imageSortAction = new KSelectAction(i18n("&Sort Images"), this);
-    d->imageSortAction->setWhatsThis(i18n("Sort Albums' contents."));
+    d->imageSortAction->setWhatsThis(i18n("The value by which the images in one album are sorted in the thumbnail view"));
     QSignalMapper *imageSortMapper = new QSignalMapper(this);
     connect(imageSortMapper, SIGNAL(mapped(int)), d->view, SLOT(slotSortImages(int)));
     actionCollection()->addAction("image_sort", d->imageSortAction);

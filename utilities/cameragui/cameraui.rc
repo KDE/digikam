@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="27" name="cameraui" >
+<gui version="26" name="cameraui" >
 
 <MenuBar>
 
@@ -35,7 +35,6 @@
         <Action name="cameraui_imagedeleteall" />
         <Separator />
         <Action name="cameraui_imageupload"/>
-        <Action name="cameraui_imagemarkasdownloaded" />
         <Separator />
         <Action name="cameraui_imagelock" />
     </Menu>
