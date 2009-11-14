@@ -631,12 +631,12 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint&)
 
     // --------------------------------------------------------
 
-    QAction *choice = cmhelper.exec(QCursor::pos());
+/*    QAction *choice = cmhelper.exec(QCursor::pos());
     if (choice)
     {
         if (choice == viewAction)
             emit signalPreviewItem(iconItem);
-    }
+    }*/
 }
 
 void AlbumIconView::slotCopy()

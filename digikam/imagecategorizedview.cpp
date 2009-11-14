@@ -809,7 +809,6 @@ void ImageCategorizedView::paste()
 void ImageCategorizedView::contextMenuEvent(QContextMenuEvent* event)
 {
     userInteraction();
-    qDebug() << ">>>>>>>>>>>>>>>>>>>mousePressEventD";
     QModelIndex index = indexAt(event->pos());
     if (index.isValid())
     {
@@ -825,7 +824,6 @@ void ImageCategorizedView::mousePressEvent(QMouseEvent *event)
     userInteraction();
     const QModelIndex index = indexAt(event->pos());
 
-    qDebug() << "<<<<<<<<<<<<<<<<<<<<mousePressEventC";
     // Clear selection on click on empty area. Standard behavior, but not done by QAbstractItemView for some reason.
     Qt::KeyboardModifiers modifiers = event->modifiers();
     const Qt::MouseButton button = event->button();
@@ -834,7 +832,6 @@ void ImageCategorizedView::mousePressEvent(QMouseEvent *event)
     const bool controlKeyPressed = modifiers & Qt::ControlModifier;
     if (!index.isValid() && !rightButtonPressed && !shiftKeyPressed && !controlKeyPressed)
         clearSelection();
-    qDebug() << rightButtonPressed << shiftKeyPressed << controlKeyPressed;
     
     // store event for entered(), clicked(), activated() signal handlers
     if(!rightButtonPressed)
