@@ -29,6 +29,7 @@
 #include "searchfolderview.h"
 #include "searchtabheader.h"
 #include "fuzzysearchview.h"
+#include "fuzzysearchfolderview.h"
 
 namespace Digikam
 {
@@ -58,6 +59,7 @@ AlbumFolderViewSideBarWidget::AlbumFolderViewSideBarWidget(QWidget *parent,
 
     d->albumFolderView = new AlbumFolderViewNew(this, model, d->albumModificationHelper);
     d->searchTextBar   = new SearchTextBar(this, "DigikamViewFolderSearchBar");
+    d->searchTextBar->setModel(model);
 
     layout->addWidget(d->albumFolderView);
     layout->addWidget(d->searchTextBar);
@@ -542,6 +544,13 @@ void FuzzySearchSideBarWidget::applySettings()
 
 void FuzzySearchSideBarWidget::changeAlbumFromHistory(Album *album)
 {
+    Q3ListViewItem *item = (Q3ListViewItem*) album->extraData(
+                    d->fuzzySearchView->folderView());
+    if (!item)
+        return;
+
+    d->fuzzySearchView->folderView()->setSelected(item, true);
+    d->fuzzySearchView->folderView()->ensureItemVisible(item);
 }
 
 QPixmap FuzzySearchSideBarWidget::getIcon()

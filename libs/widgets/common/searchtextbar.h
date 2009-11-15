@@ -24,6 +24,9 @@
 #ifndef SEARCH_TEXT_BAR_H
 #define SEARCH_TEXT_BAR_H
 
+// QT includes
+#include <qabstractitemmodel.h>
+
 // KDE includes
 
 #include <klineedit.h>
@@ -65,6 +68,14 @@ public:
     void setTextQueryCompletion(bool b);
     bool hasTextQueryCompletion() const;
 
+    /**
+     * If the given model is != null, the model is used to populate the
+     * completion for this text field.
+     *
+     * @param model to fill from or null for manual mode
+     */
+    void setModel(QAbstractItemModel *model);
+
     void setCaseSensitive(bool b);
     bool hasCaseSensitive() const;
 
@@ -82,10 +93,18 @@ public Q_SLOTS:
 private Q_SLOTS:
 
     void slotTextChanged(const QString&);
+    void slotRowsInserted(const QModelIndex &parent, int start, int end);
+    void slotRowsRemoved(const QModelIndex &parent, int start, int end);
+    void slotDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
+    void slotModelReset();
 
 private:
 
     void contextMenuEvent(QContextMenuEvent* e);
+    void connectToModel(QAbstractItemModel *model);
+    void disconnectFromModel(QAbstractItemModel *model);
+    void sync(QAbstractItemModel *model);
+    void sync(QAbstractItemModel *model, const QModelIndex &index);
 
 private:
 

@@ -765,12 +765,6 @@ void DigikamView::slotAlbumAdded(Album *album)
     {
         switch (album->type())
         {
-            case Album::PHYSICAL:
-            {
-                // TODO update, port to mvc
-                //d->folderSearchBar->completionObject()->addItem(album->title());
-                break;
-            }
             case Album::TAG:
             {
                 // TODO update, port to mvc
@@ -821,12 +815,6 @@ void DigikamView::slotAlbumDeleted(Album *album)
     {
         switch (album->type())
         {
-            case Album::PHYSICAL:
-            {
-                // TODO update, move to model view
-                //d->folderSearchBar->completionObject()->removeItem(album->title());
-                break;
-            }
             case Album::TAG:
             {
                 // TODO update, move to model view
@@ -868,12 +856,6 @@ void DigikamView::slotAlbumRenamed(Album *album)
     {
         switch (album->type())
         {
-            case Album::PHYSICAL:
-            {
-                // TODO move to model view
-                //d->folderSearchBar->completionObject()->addItem(album->title());
-                break;
-            }
             case Album::TAG:
             {
                 // TODO port to mvc
@@ -935,7 +917,6 @@ void DigikamView::slotAlbumsCleared()
     emit signalAlbumSelected(false);
 
     // TODO update, port to model view
-    //d->folderSearchBar->completionObject()->clear();
     //d->tagSearchBar->completionObject()->clear();
     //d->timeLineView->searchBar()->completionObject()->clear();
     //d->searchSearchBar->completionObject()->clear();
@@ -969,7 +950,6 @@ void DigikamView::slotAlbumHistoryForward(int steps)
 }
 
 // TODO update, use SideBarWidget instead of QWidget
-// TODO update, move this handling to the subclasses
 void DigikamView::changeAlbumFromHistory(Album *album, QWidget *widget)
 {
     if (album && widget)
@@ -980,25 +960,8 @@ void DigikamView::changeAlbumFromHistory(Album *album, QWidget *widget)
         if (sideBarWidget)
         {
             sideBarWidget->changeAlbumFromHistory(album);
+            slotLeftSidebarChangedTab(widget);
         }
-
-        // TODO update, old code
-        Q3ListViewItem *item = 0;
-
-        // Check if widget is a vbox used to host folderview, tagview or searchview.
-        // B.K.O 202886: DateFolderView is also a KVBox widget, so we need to check for that in here, too.
-        if (FuzzySearchView *v = dynamic_cast<FuzzySearchView*>(widget))
-        {
-            item = (Q3ListViewItem*) album->extraData(v->folderView());
-            if (!item)
-                return;
-
-            v->folderView()->setSelected(item, true);
-            v->folderView()->ensureItemVisible(item);
-        }
-
-        // TODO update, use a method that notifies the other tabs what is active now
-        d->leftSideBar->setActiveTab(widget);
 
         d->parent->enableAlbumBackwardHistory(d->useAlbumHistory && !d->albumHistory->isBackwardEmpty());
         d->parent->enableAlbumForwardHistory(d->useAlbumHistory && !d->albumHistory->isForwardEmpty());

@@ -50,10 +50,13 @@ public:
     {
         textQueryCompletion = false;
         hasCaseSensitive    = true;
+        model               = 0;
     }
 
     bool               textQueryCompletion;
     bool               hasCaseSensitive;
+
+    QAbstractItemModel *model;
 
     SearchTextSettings settings;
 };
@@ -68,6 +71,7 @@ SearchTextBar::SearchTextBar(QWidget *parent, const char* name, const QString& m
 
     KCompletion *kcom = new KCompletion;
     kcom->setOrder(KCompletion::Sorted);
+    kcom->setIgnoreCase(true);
     setCompletionObject(kcom, true);
     setAutoDeleteCompletionObject(true);
     setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum));
@@ -102,6 +106,127 @@ void SearchTextBar::setTextQueryCompletion(bool b)
 bool SearchTextBar::hasTextQueryCompletion() const
 {
     return d->textQueryCompletion;
+}
+
+void SearchTextBar::setModel(QAbstractItemModel *model)
+{
+
+    kDebug() << "Got now model " << model;
+
+    // first release old model
+    if (d->model)
+    {
+        disconnectFromModel(d->model);
+        completionObject()->clear();
+    }
+
+    d->model = model;
+
+    // connect to the new model
+    if (model)
+    {
+        connectToModel(d->model);
+
+        // do an initial sync wit the new model
+        sync(d->model);
+    }
+
+}
+
+void SearchTextBar::connectToModel(QAbstractItemModel *model)
+{
+    connect(model, SIGNAL(rowsInserted(const QModelIndex&, int, int)),
+            this, SLOT(slotRowsInserted(const QModelIndex&, int, int)));
+    connect(model, SIGNAL(rowsRemoved(const QModelIndex&, int, int)),
+            this, SLOT(slotRowsRemoved(const QModelIndex&, int, int)));
+    connect(model, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex &)),
+            this, SLOT(slotDataChanged(const QModelIndex&, const QModelIndex &)));
+    connect(model, SIGNAL(modelReset()),
+            this, SLOT(slotModelReset()));
+
+}
+
+void SearchTextBar::slotRowsInserted(const QModelIndex &parent, int start, int end)
+{
+    kDebug() << "rowInserted in parent " << parent << ", start = " << start
+             << ", end = " << end;
+
+    for (int i = start; i <= end; ++i)
+    {
+        const QModelIndex child = d->model->index(i, 0, parent);
+        sync(d->model, child);
+    }
+}
+
+void SearchTextBar::slotRowsRemoved(const QModelIndex &parent, int start, int end)
+{
+    kDebug() << "rows of parent " << parent << " removed, start = " << start
+             << ", end = " << end;
+    for (int i = start; i <= end; ++i)
+    {
+        // TODO this doesn't work, itemText contains no, or wrong album names
+        // maybe that is caused by the model because the album is already
+        // deleted when I want to access the name?
+        QString itemText = d->model->index(i, 0, parent).data().value<QString> ();
+        kDebug() << "Removing item " << itemText;
+        completionObject()->removeItem(itemText);
+    }
+}
+
+void SearchTextBar::slotModelReset()
+{
+    kDebug() << "model reset, resync";
+    sync(d->model);
+}
+
+void SearchTextBar::slotDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight)
+{
+    Q_UNUSED(topLeft);
+    Q_UNUSED(bottomRight);
+
+    kDebug() << "data changed, resync";
+
+    // TODO what if data changes? arguments don't help here because
+    // it does not provide the old text value. Complete resync?
+    // FIXME this is realllly a performance issue
+    sync(d->model);
+
+}
+
+void SearchTextBar::disconnectFromModel(QAbstractItemModel *model)
+{
+    disconnect(model);
+}
+
+void SearchTextBar::sync(QAbstractItemModel *model)
+{
+
+    kDebug() << "Starting sync with model " << model
+             << ", rowCount for parent: " << model->rowCount();
+
+    clear();
+
+    for (int i = 0; i < model->rowCount(); ++i)
+    {
+        const QModelIndex index = model->index(i, 0);
+        sync(model, index);
+    }
+
+}
+
+void SearchTextBar::sync(QAbstractItemModel *model, const QModelIndex &index)
+{
+
+    QString itemName = index.data(Qt::DisplayRole).value<QString> ();
+    kDebug() << "sync adding item '" << itemName << "'";
+    completionObject()->addItem(itemName);
+
+    for (int i = 0; i < model->rowCount(index); ++i)
+    {
+        const QModelIndex child = model->index(i, 0, index);
+        sync(model, child);
+    }
+
 }
 
 void SearchTextBar::setCaseSensitive(bool b)

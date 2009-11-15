@@ -442,9 +442,15 @@ void AlbumTreeView::loadViewState(KConfigGroup &configGroup, QString prefix)
         restoreState(index);
     }
 
+    // TODO do we really need this. I would say this code should only be
+    // called if the albums are loaded completely. Otherwise you have to think
+    // about what happens every time you pop up an album.
+
     // and the watch the model for new items added
-    connect(model(), SIGNAL(rowsInserted(QModelIndex, int, int)),
-                     SLOT(slotFixRowsInserted(QModelIndex, int, int)), Qt::QueuedConnection );
+    //connect(model(), SIGNAL(rowsInserted(QModelIndex, int, int)),
+    //                 SLOT(slotFixRowsInserted(QModelIndex, int, int)), Qt::QueuedConnection);
+
+    // TODO also restore the sorting order
 
 }
 
