@@ -36,6 +36,7 @@
 #include <QImage>
 #include <QLabel>
 #include <QListView>
+#include <QProcess>
 #include <QSplitter>
 #include <QString>
 #include <QTimer>
@@ -1218,6 +1219,28 @@ void DigikamView::slotAlbumOpenInKonqui()
     PAlbum* palbum = dynamic_cast<PAlbum*>(album);
 
     new KRun(KUrl(palbum->folderPath()), this); // KRun will delete itself.
+}
+
+void DigikamView::slotAlbumOpenInTerminal()
+{
+    Album *album = d->albumManager->currentAlbum();
+    if (!album || album->type() != Album::PHYSICAL)
+        return;
+
+    PAlbum* palbum = dynamic_cast<PAlbum*>(album);
+    
+    const QString terminalApp("konsole");
+    QStringList args;
+    args << "--workdir" << palbum->folderPath();
+    const bool success = QProcess::startDetached(terminalApp, args);
+    
+    if (!success)
+    {
+        KMessageBox::error(this,
+            i18n("Can not start the \"konsole\" application.\n"
+                 "Please make sure that it is installed and in your path."),
+            windowTitle()/*i18n("Open Album in Terminal")*/);
+    }
 }
 
 void DigikamView::slotAlbumRefresh()

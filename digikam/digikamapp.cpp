@@ -742,6 +742,13 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
+    d->openInTerminalAction = new KAction(KIcon("utilities-terminal"), i18n("Open in Terminal"), this);
+    connect(d->openInTerminalAction, SIGNAL(triggered()), d->view, SLOT(slotAlbumOpenInTerminal()));
+    actionCollection()->addAction("album_openinterminal", d->openInTerminalAction);
+
+    // -----------------------------------------------------------
+
+
     d->newTagAction = new KAction(KIcon("tag-new"), i18nc("new tag", "N&ew..."), this);
     connect(d->newTagAction, SIGNAL(triggered()), d->view, SLOT(slotNewTag()));
     actionCollection()->addAction("tag_new", d->newTagAction);
@@ -1227,6 +1234,7 @@ void DigikamApp::setupActions()
     d->addImagesAction->setEnabled(false);
     d->propsEditAction->setEnabled(false);
     d->openInKonquiAction->setEnabled(false);
+    d->openInTerminalAction->setEnabled(false);
 
     d->imageViewAction->setEnabled(false);
     d->imagePreviewAction->setEnabled(false);
@@ -1313,6 +1321,7 @@ void DigikamApp::slotAlbumSelected(bool val)
         d->addImagesAction->setEnabled(false);
         d->propsEditAction->setEnabled(false);
         d->openInKonquiAction->setEnabled(false);
+        d->openInTerminalAction->setEnabled(false);
         d->newAction->setEnabled(false);
         d->addFoldersAction->setEnabled(false);
         d->writeAlbumMetadataAction->setEnabled(true);
@@ -1325,6 +1334,7 @@ void DigikamApp::slotAlbumSelected(bool val)
         d->addImagesAction->setEnabled(false);
         d->propsEditAction->setEnabled(false);
         d->openInKonquiAction->setEnabled(false);
+        d->openInTerminalAction->setEnabled(false);
         d->newAction->setEnabled(false);
         d->addFoldersAction->setEnabled(false);
         d->writeAlbumMetadataAction->setEnabled(false);
@@ -1343,6 +1353,7 @@ void DigikamApp::slotAlbumSelected(bool val)
         d->addImagesAction->setEnabled(isNormalAlbum || isAlbumRoot);
         d->propsEditAction->setEnabled(isNormalAlbum);
         d->openInKonquiAction->setEnabled(true);
+        d->openInTerminalAction->setEnabled(true);
         d->newAction->setEnabled(isNormalAlbum || isAlbumRoot);
         d->addFoldersAction->setEnabled(isNormalAlbum || isAlbumRoot);
         d->writeAlbumMetadataAction->setEnabled(isNormalAlbum || isAlbumRoot);
