@@ -44,6 +44,7 @@
 #include <kdeversion.h>
 #include <kcalendarsystem.h>
 #include <kconfiggroup.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -287,7 +288,10 @@ void DateFolderView::slotAlbumDeleted(Album* a)
 void DateFolderView::slotSelectionChanged()
 {
     if (!d->active)
+    {
+        kDebug() << "Not active, returning without action";
         return;
+    }
 
     d->monthview->setActive(false);
 

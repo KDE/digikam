@@ -69,18 +69,16 @@ public:
     virtual void saveViewState(KConfigGroup &group) = 0;
 
     /**
+     * This method is invoked when the application settings should be (re-)
+     * applied to this widget.
+     */
+    virtual void applySettings() = 0;
+
+    /**
      * This is called on this widget when the history requires to move back to
      * the specified album
      */
     virtual void changeAlbumFromHistory(Album *album) = 0;
-
-    /**
-     * This method is called when the user wants to go to a special album and
-     * item in this. The widget can react on this.
-     *
-     * @param info requested image and album
-     */
-    virtual void gotoAlbumAndItem(const ImageInfo &info) = 0;
 
     /**
      * Must be implemented and return the icon that shall be visible for this
@@ -96,6 +94,14 @@ public:
      * @return localized title string
      */
     virtual QString getCaption() = 0;
+
+Q_SIGNALS:
+
+    /**
+     * This signal can be emitted if this sidebar widget wants to be the one
+     * that is active.
+     */
+    void requestActiveTab(SideBarWidget*);
 
 };
 

@@ -59,6 +59,11 @@ public:
      */
     PAlbum *lastContextMenuAlbum() const;
 
+    /**
+     * Sets whether this widget shall display tool tips or not.
+     */
+    void setEnableToolTips(bool enable);
+
 Q_SIGNALS:
 
     /**

@@ -6,10 +6,11 @@ post 1.0.0 mvc merge
  * use the custom tooltip in the AlbumFolderView (old code in FolderViewToolTip)
  * sorting albums by something else than name (date, category)
  * Port different tag views to MVC pattern
- 
- * Create a general interface for sidebar widgets
  * therefore move all models to a central object and only stick views on them
  * port search bars to model view concept
+ * decide which additional sidebar handling code currently placed in digikamview
+   should be moved to the sidebar class directly
+ * slotGotoAlbumAndItem doesn't work
 
 ------------------------------------------------------------------------------------
 1.0.0 TODO LIST

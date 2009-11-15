@@ -60,6 +60,10 @@ public:
 
     void setActive(bool val);
 
+public Q_SLOTS:
+    void slotDigikamViewNoCurrentItem();
+    void slotDigikamViewImageSelected(const ImageInfoList &selectedImage, bool hasPrevious, bool hasNext, const ImageInfoList &allImages);
+
 private:
 
     void readConfig();
@@ -81,9 +85,6 @@ private Q_SLOTS:
     void slotSelectionChanged();
 
     void slotItemsInfo(const ImageInfoList&);
-    
-    void slotDigikamViewNoCurrentItem();
-    void slotDigikamViewImageSelected(const ImageInfoList &selectedImage, bool hasPrevious, bool hasNext, const ImageInfoList &allImages);
     
     void slotMapSelectedItems(const GPSInfoList& gpsList);
     void slotMapSoloItems(const GPSInfoList& gpsList);

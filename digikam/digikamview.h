@@ -41,6 +41,7 @@
 #include "searchtextbar.h"
 #include "imageinfo.h"
 #include "digikammodelcollection.h"
+#include "sidebarwidget.h"
 
 namespace Digikam
 {
@@ -185,6 +186,8 @@ private:
     void connectBatchSyncMetadata(BatchSyncMetadata *syncMetadata);
 
 private Q_SLOTS:
+
+    void slotLeftSideBarActivate(SideBarWidget *widget);
 
     void slotAllAlbumsLoaded();
 

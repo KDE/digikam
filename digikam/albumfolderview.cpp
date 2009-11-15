@@ -50,12 +50,13 @@ class AlbumFolderViewNewPriv
 {
 
 public:
-    AlbumFolderViewNewPriv() : lastContextMenuAlbum(0)
+    AlbumFolderViewNewPriv() : lastContextMenuAlbum(0), enableToolTips(false)
     {
     }
 
     AlbumModificationHelper *albumModificationHelper;
     PAlbum *lastContextMenuAlbum;
+    bool enableToolTips;
 
 };
 
@@ -83,6 +84,11 @@ AlbumFolderViewNew::~AlbumFolderViewNew()
 PAlbum* AlbumFolderViewNew::lastContextMenuAlbum() const
 {
     return d->lastContextMenuAlbum;
+}
+
+void AlbumFolderViewNew::setEnableToolTips(bool enable)
+{
+    d->enableToolTips = enable;
 }
 
 void AlbumFolderViewNew::contextMenuEvent(QContextMenuEvent *event)
@@ -177,7 +183,9 @@ void AlbumFolderViewNew::contextMenuEvent(QContextMenuEvent *event)
 bool AlbumFolderViewNew::viewportEvent(QEvent *event)
 {
 
-    if (event->type() != QEvent::ToolTip)
+    // let the base class handle the event if the extended tool tips aren't
+    // requested by the user or the event is not related to tool tips at all
+    if (!d->enableToolTips || event->type() != QEvent::ToolTip)
     {
         return AlbumTreeView::viewportEvent(event);
     }
