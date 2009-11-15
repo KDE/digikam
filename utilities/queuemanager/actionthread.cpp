@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// #include "actionthread.h"
 #include "actionthread.moc"
 
 // C ANSI includes

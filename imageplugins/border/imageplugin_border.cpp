@@ -23,7 +23,6 @@
  * ============================================================ */
 
 
-// #include "imageplugin_border.h"
 #include "imageplugin_border.moc"
 
 // KDE includes

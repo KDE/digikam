@@ -20,7 +20,6 @@
  *
  * ============================================================ */
 
-// #include "markerclusterholder.h"
 #include "markerclusterholder.moc"
 
 // Qt includes

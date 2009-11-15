@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// #include "replacemodifier.h"
 #include "replacemodifier.moc"
 
 // Qt includes

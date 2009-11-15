@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// #include "metadataselector.h"
 #include "metadataselector.moc"
 
 // Qt includes

@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// #include "dbusydlg.h"
 #include "dbusydlg.moc"
 
 // Qt includes

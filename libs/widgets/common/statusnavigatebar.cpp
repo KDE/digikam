@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// #include "statusnavigatebar.h"
 #include "statusnavigatebar.moc"
 
 // Qt includes

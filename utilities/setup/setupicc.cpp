@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-// #include "setupicc.h"
 #include "setupicc.moc"
 
 // Qt includes

@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-// #include "kdatepickerpopup.h"
 #include "kdatepickerpopup.moc"
 
 // Qt includes

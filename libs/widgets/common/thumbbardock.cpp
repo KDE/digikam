@@ -25,7 +25,6 @@
  *
  * ============================================================ */
 
-// #include "thumbbardock.h"
 #include "thumbbardock.moc"
 
 namespace Digikam

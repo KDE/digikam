@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// #include "convert2tiff.h"
 #include "convert2tiff.moc"
 
 // Qt includes

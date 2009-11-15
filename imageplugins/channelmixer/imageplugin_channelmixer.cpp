@@ -22,7 +22,6 @@
  * ============================================================ */
 
 
-// #include "imageplugin_channelmixer.h"
 #include "imageplugin_channelmixer.moc"
 
 // KDE includes

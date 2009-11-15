@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// #include "imagepropertiescolorstab.h"
 #include "imagepropertiescolorstab.moc"
 
 // C++ includes

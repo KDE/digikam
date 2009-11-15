@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// #include "perspectivetool.h"
 #include "perspectivetool.moc"
 
 // Qt includes

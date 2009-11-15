@@ -24,7 +24,6 @@
 
 #define MAXSTRINGLEN 80
 
-// #include "slideshow.h"
 #include "slideshow.moc"
 
 // Qt includes

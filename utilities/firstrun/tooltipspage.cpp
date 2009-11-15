@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// #include "tooltipspage.h"
 #include "tooltipspage.moc"
 
 // Qt includes

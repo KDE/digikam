@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// #include "tageditdlg.h"
 #include "tageditdlg.moc"
 
 // Qt includes

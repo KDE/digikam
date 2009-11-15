@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-// #include "digikamimageview_p.h"
 #include "digikamimageview_p.moc"
 
 namespace Digikam

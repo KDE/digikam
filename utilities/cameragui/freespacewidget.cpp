@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// #include "freespacewidget.h"
 #include "freespacewidget.moc"
 
 // C++ includes

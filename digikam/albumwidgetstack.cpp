@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// #include "albumwidgetstack.h"
 #include "albumwidgetstack.moc"
 
 // Qt includes

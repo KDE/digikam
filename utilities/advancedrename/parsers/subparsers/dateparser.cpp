@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// #include "dateparser.h"
 #include "dateparser.moc"
 
 // Qt includes

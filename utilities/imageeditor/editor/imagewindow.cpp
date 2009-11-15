@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// #include "imagewindow.h"
 #include "imagewindow.moc"
 
 // C++ includes

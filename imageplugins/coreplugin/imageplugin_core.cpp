@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// #include "imageplugin_core.h"
 #include "imageplugin_core.moc"
 
 // KDE includes

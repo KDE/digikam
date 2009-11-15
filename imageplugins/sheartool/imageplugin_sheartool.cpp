@@ -22,7 +22,6 @@
  * ============================================================ */
 
 
-// #include "imageplugin_sheartool.h"
 #include "imageplugin_sheartool.moc"
 
 // KDE includes

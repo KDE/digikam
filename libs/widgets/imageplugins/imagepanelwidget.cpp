@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// #include "imagepanelwidget.h"
 #include "imagepanelwidget.moc"
 
 // Qt includes

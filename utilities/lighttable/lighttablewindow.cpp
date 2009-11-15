@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// #include "lighttablewindow.h"
 #include "lighttablewindow.moc"
 
 // Qt includes

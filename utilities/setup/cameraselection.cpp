@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// #include "cameraselection.h"
 #include "cameraselection.moc"
 
 // Qt includes

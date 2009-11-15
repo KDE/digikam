@@ -22,7 +22,6 @@
  * ============================================================ */
 
 
-// #include "imageplugin_raindrop.h"
 #include "imageplugin_raindrop.moc"
 
 // KDE includes

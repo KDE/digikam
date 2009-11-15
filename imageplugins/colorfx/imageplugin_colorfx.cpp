@@ -24,7 +24,6 @@
  * ============================================================ */
 
 
-// #include "imageplugin_colorfx.h"
 #include "imageplugin_colorfx.moc"
 
 // KDE includes

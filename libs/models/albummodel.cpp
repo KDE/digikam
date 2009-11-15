@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// #include "albummodel.h"
 #include "albummodel.moc"
 
 // KDE includes

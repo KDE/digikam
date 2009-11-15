@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// #include "thumbnailloadthread.h"
 #include "thumbnailloadthread.moc"
 
 // Qt includes

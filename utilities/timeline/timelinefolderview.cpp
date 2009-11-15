@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// #include "timelinefolderview.h"
 #include "timelinefolderview.moc"
 
 // Qt includes

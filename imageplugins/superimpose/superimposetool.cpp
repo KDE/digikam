@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-// #include "superimposetool.h"
 #include "superimposetool.moc"
 
 // Qt includes

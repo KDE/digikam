@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-// #include "folderview.h"
 #include "folderview.moc"
 
 // Qt includes

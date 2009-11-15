@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-// #include "cameraiconview.h"
 #include "cameraiconview.moc"
 
 // Qt includes

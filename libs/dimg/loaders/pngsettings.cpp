@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// #include "pngsettings.h"
 #include "pngsettings.moc"
 
 // Qt includes

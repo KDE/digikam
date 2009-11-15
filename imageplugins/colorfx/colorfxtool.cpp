@@ -24,7 +24,6 @@
  * ============================================================ */
 
 
-// #include "colorfxtool.h"
 #include "colorfxtool.moc"
 
 // Qt includes

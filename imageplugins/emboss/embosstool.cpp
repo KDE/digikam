@@ -24,7 +24,6 @@
  * ============================================================ */
 
 
-// #include "embosstool.h"
 #include "embosstool.moc"
 
 // Qt includes

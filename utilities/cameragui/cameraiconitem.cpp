@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// #include "cameraiconitem.h"
 #include "cameraiconitem.moc"
 
 // Qt includes

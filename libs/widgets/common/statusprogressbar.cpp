@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// #include "statusprogressbar.h"
 #include "statusprogressbar.moc"
 
 // Qt includes

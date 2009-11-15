@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// #include "metadatawidget.h"
 #include "metadatawidget.moc"
 
 // Qt includes

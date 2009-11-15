@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// #include "ratingpopupmenu.h"
 #include "ratingpopupmenu.moc"
 
 // Qt includes

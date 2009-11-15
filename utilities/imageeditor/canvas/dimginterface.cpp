@@ -28,7 +28,6 @@
 #define BCOL     0xAA
 
 
-// #include "dimginterface.h"
 #include "dimginterface.moc"
 
 // C++ includes

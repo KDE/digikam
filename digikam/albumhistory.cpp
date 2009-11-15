@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// #include "albumhistory.h"
 #include "albumhistory.moc"
 
 // Qt includes

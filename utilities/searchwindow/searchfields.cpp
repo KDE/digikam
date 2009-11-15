@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// #include "searchfields.h"
 #include "searchfields.moc"
 
 // C++ includes

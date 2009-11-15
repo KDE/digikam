@@ -24,7 +24,6 @@
  * ============================================================ */
 
 
-// #include "freerotationtool.h"
 #include "freerotationtool.moc"
 
 // C++ includes

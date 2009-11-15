@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// #include "paniconwidget.h"
 #include "paniconwidget.moc"
 
 // C++ includes

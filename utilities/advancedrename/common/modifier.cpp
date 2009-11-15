@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// #include "modifier.h"
 #include "modifier.moc"
 
 namespace Digikam

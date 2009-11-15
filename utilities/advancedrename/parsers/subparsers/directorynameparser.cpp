@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// #include "directorynameparser.h"
 #include "directorynameparser.moc"
 
 // Qt includes

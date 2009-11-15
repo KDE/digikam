@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// #include "imageguidewidget.h"
 #include "imageguidewidget.moc"
 
 // Qt includes

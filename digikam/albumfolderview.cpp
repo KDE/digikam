@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-// #include "albumfolderview.h"
 #include "albumfolderview.moc"
 
 // Qt includes

@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// #include "setupplugins.h"
 #include "setupplugins.moc"
 
 // Qt includes

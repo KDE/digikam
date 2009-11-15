@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// #include "statuszoombar.h"
 #include "statuszoombar.moc"
 
 // Qt includes

@@ -24,7 +24,6 @@
  *
  * ============================================================ */
 
-// #include "kdateedit.h"
 #include "kdateedit.moc"
 
 // Qt includes

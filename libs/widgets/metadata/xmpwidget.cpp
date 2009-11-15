@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// #include "xmpwidget.h"
 #include "xmpwidget.moc"
 
 // Qt includes

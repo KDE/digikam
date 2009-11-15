@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// #include "datefolderview.h"
 #include "datefolderview.moc"
 
 // Qt includes

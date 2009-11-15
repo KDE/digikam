@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// #include "sketchwidget.h"
 #include "sketchwidget.moc"
 
 // Qt includes

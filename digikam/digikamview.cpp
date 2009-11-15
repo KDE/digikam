@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// #include "digikamview.h"
 #include "digikamview.moc"
 
 // Qt includes

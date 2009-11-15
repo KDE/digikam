@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// #include "gpssearchwidget.h"
 #include "gpssearchwidget.moc"
 
 // KDE includes

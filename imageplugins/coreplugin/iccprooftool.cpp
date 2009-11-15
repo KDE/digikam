@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-// #include "iccprooftool.h"
 #include "iccprooftool.moc"
 
 // Qt includes

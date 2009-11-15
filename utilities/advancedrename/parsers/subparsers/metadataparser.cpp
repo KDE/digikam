@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// #include "metadataparser.h"
 #include "metadataparser.moc"
 
 // Qt includes

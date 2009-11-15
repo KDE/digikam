@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// #include "infodlg.h"
 #include "infodlg.moc"
 
 // Qt includes

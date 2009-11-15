@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// #include "cameraitempropertiestab.h"
 #include "cameraitempropertiestab.moc"
 
 // Qt includes

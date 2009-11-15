@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-// #include "cameraui.h"
 #include "cameraui.moc"
 
 // Qt includes

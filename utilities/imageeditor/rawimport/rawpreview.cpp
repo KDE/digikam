@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// #include "rawpreview.h"
 #include "rawpreview.moc"
 
 // Qt includes

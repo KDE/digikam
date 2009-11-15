@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// #include "batchalbumssyncmetadata.h"
 #include "batchalbumssyncmetadata.moc"
 
 // Qt includes

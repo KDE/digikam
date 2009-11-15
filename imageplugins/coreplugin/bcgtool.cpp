@@ -24,7 +24,6 @@
  * ============================================================ */
 
 
-// #include "bcgtool.h"
 #include "bcgtool.moc"
 
 // Qt includes

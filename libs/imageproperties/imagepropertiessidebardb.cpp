@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-// #include "imagepropertiessidebardb.h"
 #include "imagepropertiessidebardb.moc"
 
 // Qt includes

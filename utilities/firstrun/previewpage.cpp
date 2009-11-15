@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// #include "previewpage.h"
 #include "previewpage.moc"
 
 // Qt includes

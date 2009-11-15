@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-// #include "kipiinterface.h"
 #include "kipiinterface.moc"
 
 // KDE includes

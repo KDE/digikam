@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// #include "imagepropertiesmetadatatab.h"
 #include "imagepropertiesmetadatatab.moc"
 
 // Qt includes

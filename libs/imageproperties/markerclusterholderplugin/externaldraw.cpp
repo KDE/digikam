@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// #include "externaldraw.h"
 #include "externaldraw.moc"
 
 // Marble includes

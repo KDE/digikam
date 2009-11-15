@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// #include "inpaintingtool.h"
 #include "inpaintingtool.moc"
 
 // C++ includes

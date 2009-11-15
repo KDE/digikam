@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// #include "imagepreviewview.h"
 #include "imagepreviewview.moc"
 
 // Qt includes

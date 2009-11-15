@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// #include "fingerprintsgenerator.h"
 #include "fingerprintsgenerator.moc"
 
 // Qt includes

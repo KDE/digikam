@@ -24,7 +24,6 @@
 
 #define RECT_EXTENSION 300
 
-// #include "iconview.h"
 #include "iconview.moc"
 
 // C++ includes

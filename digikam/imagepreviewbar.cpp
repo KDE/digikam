@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// #include "imagepreviewbar.h"
 #include "imagepreviewbar.moc"
 
 // Qt includes

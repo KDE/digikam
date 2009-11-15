@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// #include "searchtabheader.h"
 #include "searchtabheader.moc"
 
 // Qt includes

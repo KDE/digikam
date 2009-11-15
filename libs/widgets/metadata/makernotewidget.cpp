@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// #include "makernotewidget.h"
 #include "makernotewidget.moc"
 
 // Qt includes

@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// #include "imagecategorizedview.h"
 #include "imagecategorizedview.moc"
 
 // Qt includes

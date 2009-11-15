@@ -23,7 +23,6 @@
  * ============================================================ */
 
 
-// #include "imageplugin_whitebalance.h"
 #include "imageplugin_whitebalance.moc"
 
 // KDE includes

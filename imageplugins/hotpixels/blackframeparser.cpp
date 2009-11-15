@@ -37,7 +37,6 @@
     ((((n) / DENOM_SQRT) * (m) + ((n) % DENOM_SQRT) * (m) / DENOM_SQRT) / DENOM_SQRT)
 
 
-// #include "blackframeparser.h"
 #include "blackframeparser.moc"
 
 // Qt includes

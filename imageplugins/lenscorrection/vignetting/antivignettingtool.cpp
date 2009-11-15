@@ -23,7 +23,6 @@
  * ============================================================ */
 
 
-// #include "antivignettingtool.h"
 #include "antivignettingtool.moc"
 
 // Qt includes

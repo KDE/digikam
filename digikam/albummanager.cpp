@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-// #include "albummanager.h"
 #include "albummanager.moc"
 
 // C ANSI includes

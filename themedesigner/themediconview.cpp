@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// #include "themediconview.h"
 #include "themediconview.moc"
 
 // Local includes

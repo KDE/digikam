@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// #include "advancedrenamedialog.h"
 #include "advancedrenamedialog.moc"
 
 // Qt includes

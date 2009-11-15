@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// #include "jpegsettings.h"
 #include "jpegsettings.moc"
 
 // Qt includes

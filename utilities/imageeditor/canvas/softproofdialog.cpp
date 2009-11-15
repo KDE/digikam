@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// #include "softproofdialog.h"
 #include "softproofdialog.moc"
 
 // Qt includes

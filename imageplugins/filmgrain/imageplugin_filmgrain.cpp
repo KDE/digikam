@@ -23,7 +23,6 @@
  * ============================================================ */
 
 
-// #include "imageplugin_filmgrain.h"
 #include "imageplugin_filmgrain.moc"
 
 // KDE includes

@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// #include "setupslideshow.h"
 #include "setupslideshow.moc"
 
 // Qt includes

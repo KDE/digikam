@@ -22,7 +22,6 @@
  * ============================================================ */
 
 
-// #include "imageplugin_inserttext.h"
 #include "imageplugin_inserttext.moc"
 
 // KDE includes

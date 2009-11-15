@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// #include "digikamnepomukservice.h"
 #include "digikamnepomukservice.moc"
 
 // Qt includes

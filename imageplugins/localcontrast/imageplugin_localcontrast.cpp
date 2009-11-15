@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// #include "imageplugin_localcontrast.h"
 #include "imageplugin_localcontrast.moc"
 
 // KDE includes

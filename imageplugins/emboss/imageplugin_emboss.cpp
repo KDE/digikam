@@ -23,7 +23,6 @@
  * ============================================================ */
 
 
-// #include "imageplugin_emboss.h"
 #include "imageplugin_emboss.moc"
 
 // KDE includes

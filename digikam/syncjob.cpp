@@ -29,7 +29,6 @@
  *
  * ============================================================ */
 
-// #include "syncjob.h"
 #include "syncjob.moc"
 
 // Qt includes

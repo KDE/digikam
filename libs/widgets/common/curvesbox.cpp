@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// #include "curvesbox.h"
 #include "curvesbox.moc"
 
 // Qt includes

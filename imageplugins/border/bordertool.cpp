@@ -24,7 +24,6 @@
  * ============================================================ */
 
 
-// #include "bordertool.h"
 #include "bordertool.moc"
 
 // Qt includes

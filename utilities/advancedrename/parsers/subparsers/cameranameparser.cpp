@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// #include "cameranameparser.h"
 #include "cameranameparser.moc"
 
 // KDE includes

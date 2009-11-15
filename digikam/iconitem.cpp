@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// #include "iconitem.h"
 #include "iconitem.moc"
 
 // Qt includes

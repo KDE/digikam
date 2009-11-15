@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// #include "searchwindow.h"
 #include "searchwindow.moc"
 
 // Qt includes

@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-// #include "thumbbar.h"
 #include "thumbbar.moc"
 
 // C++ includes

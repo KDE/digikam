@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// #include "metadatapanel.h"
 #include "metadatapanel.moc"
 
 // Qt includes

@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// #include "resize.h"
 #include "resize.moc"
 
 // Qt includes

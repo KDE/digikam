@@ -26,7 +26,6 @@
  *
  * ============================================================ */
 
-// #include "showfoto.h"
 #include "showfoto.moc"
 
 // C ANSI includes

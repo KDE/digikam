@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// #include "setupmetadata.h"
 #include "setupmetadata.moc"
 
 // Qt includes

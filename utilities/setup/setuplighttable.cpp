@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-// #include "setuplighttable.h"
 #include "setuplighttable.moc"
 
 // Qt includes

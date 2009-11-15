@@ -20,7 +20,6 @@
  *
  * ============================================================ */
 
-// #include "greycstorationwidget.h"
 #include "greycstorationwidget.moc"
 
 // Qt includes
