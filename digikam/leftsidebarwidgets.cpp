@@ -38,7 +38,8 @@ public:
     SearchTextBar *searchTextBar;
 };
 
-AlbumFolderViewSideBarWidget::AlbumFolderViewSideBarWidget(QWidget *parent) :
+AlbumFolderViewSideBarWidget::AlbumFolderViewSideBarWidget(QWidget *parent,
+                AlbumModel *model) :
     SideBarWidget(parent), d(new AlbumFolderViewSideBarWidgetPriv)
 {
 
@@ -46,7 +47,7 @@ AlbumFolderViewSideBarWidget::AlbumFolderViewSideBarWidget(QWidget *parent) :
 
     QVBoxLayout *layout = new QVBoxLayout(this);
 
-    d->albumFolderView = new AlbumFolderViewNew(this, d->albumModificationHelper);
+    d->albumFolderView = new AlbumFolderViewNew(this, model, d->albumModificationHelper);
     d->searchTextBar   = new SearchTextBar(this, "DigikamViewFolderSearchBar");
 
     layout->addWidget(d->albumFolderView);

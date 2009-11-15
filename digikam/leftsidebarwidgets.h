@@ -13,6 +13,7 @@
 
 // Local includes
 #include "sidebarwidget.h"
+#include "albummodel.h"
 
 namespace Digikam
 {
@@ -27,7 +28,7 @@ class AlbumFolderViewSideBarWidget : public SideBarWidget
 {
     Q_OBJECT
 public:
-    AlbumFolderViewSideBarWidget(QWidget *parent);
+    AlbumFolderViewSideBarWidget(QWidget *parent, AlbumModel *model);
     virtual ~AlbumFolderViewSideBarWidget();
 
     void setActive(bool active);

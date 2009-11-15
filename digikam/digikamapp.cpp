@@ -229,6 +229,8 @@ DigikamApp::DigikamApp()
 
     d->templateManager = new TemplateManager(this, KStandardDirs::locateLocal("appdata", "template.xml"));
 
+    d->modelCollection = new DigikamModelCollection;
+
     setupView();
     setupStatusBar();
     setupAccelerators();
@@ -319,6 +321,8 @@ DigikamApp::~DigikamApp()
     KDcrawIface::DcrawBinary::cleanUp();
 #endif
     m_instance = 0;
+
+    delete d->modelCollection;
 
     delete d;
 }
@@ -490,7 +494,7 @@ void DigikamApp::setupView()
     if(d->splashScreen)
         d->splashScreen->message(i18n("Initializing Main View"));
 
-    d->view = new DigikamView(this);
+    d->view = new DigikamView(this, d->modelCollection);
     setCentralWidget(d->view);
     d->view->applySettings();
 

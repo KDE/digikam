@@ -1120,6 +1120,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikamapp.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikamimageview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikamimageview_p.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikammodelcollection.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikamview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/dio.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/folderitem.cpp

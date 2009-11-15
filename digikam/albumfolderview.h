@@ -48,7 +48,7 @@ class AlbumFolderViewNew: public AlbumTreeView
 {
 Q_OBJECT
 public:
-    AlbumFolderViewNew(QWidget *parent, AlbumModificationHelper *albumModificationHelper);
+    AlbumFolderViewNew(QWidget *parent, AlbumModel *model, AlbumModificationHelper *albumModificationHelper);
     ~AlbumFolderViewNew();
 
     /**

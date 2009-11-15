@@ -350,8 +350,8 @@ public:
 
 };
 
-AlbumTreeView::AlbumTreeView(QWidget *parent)
-    : AbstractCheckableAlbumTreeView(new AlbumModel(AlbumModel::IncludeRootAlbum), parent),
+AlbumTreeView::AlbumTreeView(AlbumModel *model, QWidget *parent)
+    : AbstractCheckableAlbumTreeView(model, parent),
       d(new AlbumTreeViewPriv)
 {
     albumModel()->setDragDropHandler(new AlbumDragDropHandler(albumModel()));

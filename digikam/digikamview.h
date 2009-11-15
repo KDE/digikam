@@ -40,6 +40,7 @@
 
 #include "searchtextbar.h"
 #include "imageinfo.h"
+#include "digikammodelcollection.h"
 
 namespace Digikam
 {
@@ -56,7 +57,7 @@ class DigikamView : public KHBox
 
 public:
 
-    DigikamView(QWidget *parent);
+    DigikamView(QWidget *parent, DigikamModelCollection *modelCollection);
     ~DigikamView();
 
     void applySettings();

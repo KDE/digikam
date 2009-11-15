@@ -59,8 +59,9 @@ public:
 
 };
 
-AlbumFolderViewNew::AlbumFolderViewNew(QWidget *parent, AlbumModificationHelper *albumModificationHelper) :
-    AlbumTreeView(parent), d(new AlbumFolderViewNewPriv)
+AlbumFolderViewNew::AlbumFolderViewNew(QWidget *parent, AlbumModel *model,
+                AlbumModificationHelper *albumModificationHelper) :
+    AlbumTreeView(model, parent), d(new AlbumFolderViewNewPriv)
 {
 
     d->albumModificationHelper = albumModificationHelper;

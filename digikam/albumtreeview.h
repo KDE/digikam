@@ -146,7 +146,7 @@ class AlbumTreeView : public AbstractCheckableAlbumTreeView
     Q_OBJECT
 public:
 
-    AlbumTreeView(QWidget *parent = 0);
+    AlbumTreeView(AlbumModel *model, QWidget *parent = 0);
     virtual ~AlbumTreeView();
     AlbumModel *albumModel() const;
     PAlbum *currentAlbum() const;

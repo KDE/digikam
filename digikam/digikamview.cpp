@@ -146,6 +146,7 @@ public:
         useAlbumHistory       = false;
         thumbSize             = ThumbnailSize::Medium;
         optionAlbumViewPrefix = "AlbumView";
+        modelCollection       = 0;
     }
 
     QString userPresentableAlbumTitle(const QString& album);
@@ -197,12 +198,15 @@ public:
 
     QList<SideBarWidget*> leftSideBarWidgets;
 
+    DigikamModelCollection *modelCollection;
+
 };
 
-DigikamView::DigikamView(QWidget *parent)
+DigikamView::DigikamView(QWidget *parent, DigikamModelCollection *modelCollection)
            : KHBox(parent), d(new DigikamViewPriv)
 {
     d->parent       = static_cast<DigikamApp*>(parent);
+    d->modelCollection = modelCollection;
     d->albumManager = AlbumManager::instance();
 
     d->albumModificationHelper = new AlbumModificationHelper(this, this);
@@ -230,12 +234,12 @@ DigikamView::DigikamView(QWidget *parent)
     d->rightSideBar->setObjectName("Digikam Right Sidebar");
 
     // album folder view
-    AlbumFolderViewSideBarWidget *albumSideBarWidget = new AlbumFolderViewSideBarWidget(this);
+    AlbumFolderViewSideBarWidget *albumSideBarWidget =
+                    new AlbumFolderViewSideBarWidget(this,
+                                    d->modelCollection->getAlbumModel());
     d->leftSideBarWidgets << albumSideBarWidget;
     connect(albumSideBarWidget, SIGNAL(signalFindDuplicatesInAlbum(Album*)),
             this, SLOT(slotNewDuplicatesSearch(Album*)));
-    connect(d->iconView, SIGNAL(gotoAlbumAndImageRequested(const ImageInfo&)),
-            albumSideBarWidget, SLOT(slotGotoAlbumAndItem(const ImageInfo&)));
 
     // Tags sidebar tab contents.
     d->tagBox        = new KVBox(this);
@@ -745,14 +749,12 @@ void DigikamView::slotSortAlbums(int order)
 
 void DigikamView::slotNewAlbum()
 {
-    // TODO update, use central model collection for the model
-    //d->albumModificationHelper->slotAlbumNew(d->folderView->);
+    d->albumModificationHelper->slotAlbumNew(d->albumManager->currentPAlbum());
 }
 
 void DigikamView::slotDeleteAlbum()
 {
-    // TODO update, use central model collection for the model
-    //d->albumModificationHelper->slotAlbumDelete(d->folderView->lastContextMenuAlbum());
+    d->albumModificationHelper->slotAlbumDelete(d->albumManager->currentPAlbum());
 }
 
 void DigikamView::slotNewTag()
@@ -800,7 +802,7 @@ void DigikamView::slotAlbumAdded(Album *album)
         {
             case Album::PHYSICAL:
             {
-                // TODO update, port
+                // TODO update, port to mvc
                 //d->folderSearchBar->completionObject()->addItem(album->title());
                 break;
             }
@@ -1398,8 +1400,7 @@ void DigikamView::slotZoomFactorChanged(double zoom)
 
 void DigikamView::slotAlbumPropsEdit()
 {
-    // TODO update, use central model store
-    // d->albumModificationHelper->slotAlbumEdit(d->folderView->lastContextMenuAlbum());
+    d->albumModificationHelper->slotAlbumEdit(d->albumManager->currentPAlbum());
 }
 
 void DigikamView::connectBatchSyncMetadata(BatchSyncMetadata *syncMetadata)
@@ -1411,7 +1412,7 @@ void DigikamView::connectBatchSyncMetadata(BatchSyncMetadata *syncMetadata)
             d->parent, SLOT(slotProgressValue(int)));
 
     //connect(syncMetadata, SIGNAL(signalComplete()),
-      //      this, SLOT(slotAlbumSyncPicturesMetadataDone()));
+    //      this, SLOT(slotAlbumSyncPicturesMetadataDone()));
 
     connect(d->parent, SIGNAL(signalCancelButtonPressed()),
             syncMetadata, SLOT(slotAbort()));
@@ -1686,13 +1687,20 @@ void DigikamView::slotMoveSelectionToAlbum()
 
 void DigikamView::slotLeftSidebarChangedTab(QWidget* w)
 {
+
+    // TODO update, temporary cast
+    SideBarWidget *widget = dynamic_cast<SideBarWidget*> (w);
+    foreach(SideBarWidget *sideBarWidget, d->leftSideBarWidgets)
+    {
+        bool active = (widget && (widget == sideBarWidget));
+        sideBarWidget->setActive(active);
+    }
+
     // setActive means that selection changes are propagated, nothing more.
     // Additionally, when it is set to true, the selectionChanged signal will be emitted.
     // So this is the place which causes the behavior that when the left sidebar
     // tab is changed, the current album is changed as well.
     d->dateFolderView->setActive(w == d->dateFolderView);
-    // TODO update
-    //d->folderView->setActive(w == d->folderBox);
     d->tagFolderView->setActive(w == d->tagBox);
     d->searchFolderView->setActive(w == d->searchBox);
     d->timeLineView->setActive(w == d->timeLineView);

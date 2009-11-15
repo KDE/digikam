@@ -47,6 +47,11 @@ AlbumModel::AlbumModel(RootAlbumBehavior rootBehavior, QObject *parent)
     setupThumbnailLoading();
 }
 
+AlbumModel::~AlbumModel()
+{
+
+}
+
 PAlbum *AlbumModel::albumForIndex(const QModelIndex& index) const
 {
     return static_cast<PAlbum*>(AbstractCheckableAlbumModel::albumForIndex(index));
