@@ -186,6 +186,7 @@ public:
     bool execDBAction(const databaseAction &action, QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
     bool execDBAction(const databaseAction &action, const QMap<QString, QVariant>& bindingMap,
                       QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
+    QSqlQuery execDBActionQuery(const databaseAction &action, const QMap<QString, QVariant>& bindingMap);
 
     /**
      * Executes the SQL statement, and write the returned data into the values list.

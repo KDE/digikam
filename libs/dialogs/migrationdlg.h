@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-11-14
- * Description : database setup tab
+ * Description : database migration dialog
  *
  * Copyright (C) 2009 by Holger Foerster <Hamsi2k at freenet dot de>
  *
@@ -21,43 +21,40 @@
  *
  * ============================================================ */
 
-#ifndef SETUPDATABASE_H
-#define SETUPDATABASE_H
+#ifndef MIGRATIONDLG_H
+#define MIGRATIONDLG_H
 
-// Qt includes
+// KDE includes
+#include <kdialog.h>
 
-#include <QScrollArea>
-
-class QString;
-
-class KPageDialog;
-class KUrl;
+// Local includes
+#include "digikam_export.h"
+#include "databasewidget.h"
 
 namespace Digikam
 {
 
-class SetupDatabasePriv;
 
-class SetupDatabase : public QScrollArea
+class DIGIKAM_EXPORT MigrationDlg : public KDialog
 {
     Q_OBJECT
 
 public:
 
-    explicit SetupDatabase(KPageDialog* dialog, QWidget* parent=0);
-    ~SetupDatabase();
+    MigrationDlg(QWidget* parent);
+    ~MigrationDlg();
 
-    void applySettings();
-
-private:
-
-    void readSettings();
+private Q_SLOTS:
 
 private:
 
-    SetupDatabasePriv* const d;
+//    MigrationDlgPriv* const d;
+    DatabaseWidget *fromDatabaseWidget;
+    DatabaseWidget *toDatabaseWidget;
+
+    void setupMainArea();
 };
 
 }  // namespace Digikam
 
-#endif // SETUPDATABASE_H
+#endif  // MIGRATIONDLG_H

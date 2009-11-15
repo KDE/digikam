@@ -184,6 +184,7 @@ private Q_SLOTS:
     void slotConfToolbars();
     void slotToggleFullScreen();
 
+    void slotDatabaseMigration();
     void slotDatabaseRescan();
     void slotRebuildThumbnails();
     void slotWriteMetadataToAllImages();

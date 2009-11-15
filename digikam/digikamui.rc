@@ -88,6 +88,7 @@
         <Action name="light_table" />
         <Action name="queue_manager" />
       <Separator/>
+      	<Action name="database_migration" />
         <Action name="database_rescan" />
         <Action name="thumbnails_rebuild" />
         <Action name="fingerprints_rebuild" />

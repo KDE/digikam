@@ -307,7 +307,111 @@
                                   DELETE FROM FilePaths WHERE FilePaths.thumbId = OLD.id; 
                                  END;</statement></dbaction>
 
+			<!-- Migration Statements -->
+			<dbaction name="Migrate_Read_AlbumRoots" mode="query"><statement mode="query">
+				SELECT id, label, status, type, identifier, specificPath FROM AlbumRoots;
+			</statement></dbaction>
+			<dbaction name="Migrate_Write_AlbumRoots" mode="transaction"><statement mode="query">
+				INSERT INTO AlbumRoots (id, label, status, type, identifier, specificPath) VALUES (:id, :label, :status, :type, :identifier, :specificPath);
+			</statement></dbaction>
 			
+			<dbaction name="Migrate_Read_Albums" mode="query"><statement mode="query">
+				SELECT id, albumRoot, relativePath, date, caption, collection, icon FROM Albums;
+			</statement></dbaction>
+			<dbaction name="Migrate_Write_Albums" mode="transaction"><statement mode="query">
+				INSERT INTO Albums (id, albumRoot, relativePath, date, caption, collection, icon) VALUES (:id, :albumRoot, :relativePath, :date, :caption, :collection, :icon);
+			</statement></dbaction>
+			<dbaction name="Migrate_Read_Images" mode="query"><statement mode="query">
+				SELECT id, album, name, status, category, modificationDate, fileSize, uniquieHash FROM Images;
+			</statement></dbaction>
+			<dbaction name="Migrate_Write_Images" mode="transaction"><statement mode="query">
+				INSERT INTO Images (id, album, name, status, category, modificationDate, fileSize, uniquieHash) VALUES (:id, :album, :name, :status, :category, :modificationDate, :fileSize, :uniquieHash);
+			</statement></dbaction>
+			
+			<dbaction name="Migrate_Read_ImageHaarMatrix" mode="query"><statement mode="query">
+				SELECT imageid, modificationDate, uniqueHash, matrix FROM ImageHaarMatrix;
+			</statement></dbaction>
+			<dbaction name="Migrate_Write_ImageHaarMatrix" mode="transaction"><statement mode="query">
+				INSERT INTO ImageHaarMatrix (imageid, modificationDate, uniqueHash, matrix) VALUES (:imageid, :modificationDate, :uniqueHash, :matrix);
+			</statement></dbaction>
+			
+			<dbaction name="Migrate_Read_ImageInformation" mode="query"><statement mode="query">
+				SELECT imageid, rating, creationDate, digitizationDate, orientation, width, height, format, colorDepth, colorModel FROM ImageInformation;
+			</statement></dbaction>
+			<dbaction name="Migrate_Write_ImageInformation" mode="transaction"><statement mode="query">
+				INSERT INTO ImageInformation (imageid, rating, creationDate, digitizationDate, orientation, width, height, format, colorDepth, colorModel) VALUES (:imageid, :rating, :creationDate, :digitizationDate, :orientation, :width, :height, :format, :colorDepth, :colorModel);
+			</statement></dbaction>
+			
+			<dbaction name="Migrate_Read_ImageMetadate" mode="query"><statement mode="query">
+				SELECT imageid, make, model, lens, aperture, focalLength, focalLength35, exposureTime, exposureProgram, exposureMode, sensitivity, flash, whiteBalance, whiteBalanceColorTemperature, meteringMode, subjectDistance, subjectDistanceCategory FROM ImageMetadata;
+			</statement></dbaction>
+			<dbaction name="Migrate_Write_ImageMetadate" mode="transaction"><statement mode="query">
+				INSERT INTO ImageMetadate (imageid, make, model, lens, aperture, focalLength, focalLength35, exposureTime, exposureProgram, exposureMode, sensitivity, flash, whiteBalance, whiteBalanceColorTemperature, meteringMode, subjectDistance, subjectDistanceCategory) VALUES (:imageid, :make, :model, :lens, :aperture, :focalLength, :focalLength35, :exposureTime, :exposureProgram, :exposureMode, :sensitivity, :flash, :whiteBalance, :whiteBalanceColorTemperature, :meteringMode, :subjectDistance, :subjectDistanceCategory);
+			</statement></dbaction>			
+
+			<dbaction name="Migrate_Read_ImagePositions" mode="query"><statement mode="query">
+				SELECT  imageid, latitude, latitudeNumber, longitude, longitudeNumber, altitude, orientation, tilt, roll, accuracy, description FROM ImagePositions;
+			</statement></dbaction>
+			<dbaction name="Migrate_Write_ImagePositions" mode="transaction"><statement mode="query">
+				INSERT INTO ImagePositions (imageid, latitude, latitudeNumber, longitude, longitudeNumber, altitude, orientation, tilt, roll, accuracy, description) VALUES (:imageid, :latitude, :latitudeNumber, :longitude, :longitudeNumber, :altitude, :orientation, :tilt, :roll, :accuracy, :description);
+			</statement></dbaction>
+			
+			<dbaction name="Migrate_Read_ImageComments" mode="query"><statement mode="query">
+				SELECT  id, imageid, type, language, author, date, comment FROM ImageComments;
+			</statement></dbaction>
+			<dbaction name="Migrate_Write_ImageComments" mode="transaction"><statement mode="query">
+				INSERT INTO ImageComments (id, imageid, type, language, author, date, comment) VALUES (:id, :imageid, :type, :language, :author, :date, :comment);
+			</statement></dbaction>
+			
+			<dbaction name="Migrate_Read_ImageCopyright" mode="query"><statement mode="query">
+				SELECT  id, imageid, property, value, extraValue FROM ImageCopyright;
+			</statement></dbaction>
+			<dbaction name="Migrate_Write_ImageCopyright" mode="transaction"><statement mode="query">
+				INSERT INTO ImageCopyright (id, imageid, property, value, extraValue) VALUES (:id, :imageid, query:value, :extraValue);
+			</statement></dbaction>
+			
+			<dbaction name="Migrate_Read_Tags" mode="query"><statement mode="query">
+				SELECT  id, pid, name, icon, iconkde FROM Tags;
+			</statement></dbaction>
+			<dbaction name="Migrate_Write_Tags" mode="transaction"><statement mode="query">
+				INSERT INTO Tags (id, pid, name, icon, iconkde) VALUES (:id, :pid, :name, :icon, :iconkde);
+			</statement></dbaction>
+			
+			<dbaction name="Migrate_Read_ImageTags" mode="query"><statement mode="query">
+				SELECT  imageid, tagid FROM ImageTags;
+			</statement></dbaction>
+			<dbaction name="Migrate_Write_ImageTags" mode="transaction"><statement mode="query">
+				INSERT INTO ImageTags (imageid, tagid) VALUES (:imageid, :tagid);
+			</statement></dbaction>
+			
+			<dbaction name="Migrate_Read_ImageProperties" mode="query"><statement mode="query">
+				SELECT  imageid, property, value FROM ImageProperties;
+			</statement></dbaction>
+			<dbaction name="Migrate_Write_ImageProperties" mode="transaction"><statement mode="query">
+				INSERT INTO ImageProperties (imageid, property, value) VALUES (:imageid, :property, :value);
+			</statement></dbaction>
+			
+			<dbaction name="Migrate_Read_Searches" mode="query"><statement mode="query">
+				SELECT  id, type, name, query FROM Searches;
+			</statement></dbaction>
+			<dbaction name="Migrate_Write_Searches" mode="transaction"><statement mode="query">
+				INSERT INTO Searches (id, type, name, query) VALUES (:id, :type, :name, :query);
+			</statement></dbaction>
+			
+			<dbaction name="Migrate_Read_DownloadHistory" mode="query"><statement mode="query">
+				SELECT id, identifier, filename, filesize, filedate FROM DownloadHistory;
+			</statement></dbaction>
+			<dbaction name="Migrate_Write_DownloadHistory" mode="transaction"><statement mode="query">
+				INSERT INTO DownloadHistory (id, identifier, filename, filesize, filedate) VALUES (:id, :identifier, :filename, :filesize, :filedate);
+			</statement></dbaction>
+			
+			<dbaction name="Migrate_Read_Settings" mode="query"><statement mode="query">
+				SELECT keyword, value FROM Settings;
+			</statement></dbaction>
+ 			<dbaction name="Migrate_Write_Settings" mode="transaction"><statement mode="query">
+				INSERT INTO Settings (keyword, value) VALUES (keyword, value);
+			</statement></dbaction>
+						
 		</dbactions>
 	</database>
 	
@@ -651,7 +755,111 @@
                               DELETE FROM UniqueHashes WHERE UniqueHashes.thumbId = OLD.id; 
                               DELETE FROM FilePaths WHERE FilePaths.thumbId = OLD.id; 
                              END;</statement></dbaction>
-			 				 
+			<!-- Migration Statements -->
+			<dbaction name="Migrate_Read_AlbumRoots" mode="transaction"><statement mode="query">
+				SELECT id, label, status, type, identifier, specificPath FROM AlbumRoots;
+			</statement></dbaction>
+			<dbaction name="Migrate_Write_AlbumRoots" mode="transaction"><statement mode="query">
+				INSERT INTO AlbumRoots (id, label, status, type, identifier, specificPath) VALUES (:id, :label, :status, :type, :identifier, :specificPath);
+			</statement></dbaction>
+			
+			<dbaction name="Migrate_Read_Albums" mode="transaction"><statement mode="query">
+				SELECT id, albumRoot, relativePath, date, caption, collection, icon FROM Albums;
+			</statement></dbaction>
+			<dbaction name="Migrate_Write_Albums" mode="transaction"><statement mode="query">
+				INSERT INTO Albums (id, albumRoot, relativePath, date, caption, collection, icon) VALUES (:id, :albumRoot, :relativePath, :date, :caption, :collection, :icon);
+			</statement></dbaction>
+			<dbaction name="Migrate_Read_Images" mode="transaction"><statement mode="query">
+				SELECT id, album, name, status, category, modificationDate, fileSize, uniquieHash FROM Images;
+			</statement></dbaction>
+			<dbaction name="Migrate_Write_Images" mode="transaction"><statement mode="query">
+				INSERT INTO Images (id, album, name, status, category, modificationDate, fileSize, uniquieHash) VALUES (:id, :album, :name, :status, :category, :modificationDate, :fileSize, :uniquieHash);
+			</statement></dbaction>
+			
+			<dbaction name="Migrate_Read_ImageHaarMatrix" mode="transaction"><statement mode="query">
+				SELECT imageid, modificationDate, uniqueHash, matrix FROM ImageHaarMatrix;
+			</statement></dbaction>
+			<dbaction name="Migrate_Write_ImageHaarMatrix" mode="transaction"><statement mode="query">
+				INSERT INTO ImageHaarMatrix (imageid, modificationDate, uniqueHash, matrix) VALUES (:imageid, :modificationDate, :uniqueHash, :matrix);
+			</statement></dbaction>
+			
+			<dbaction name="Migrate_Read_ImageInformation" mode="transaction"><statement mode="query">
+				SELECT imageid, rating, creationDate, digitizationDate, orientation, width, height, format, colorDepth, colorModel FROM ImageInformation;
+			</statement></dbaction>
+			<dbaction name="Migrate_Write_ImageInformation" mode="transaction"><statement mode="query">
+				INSERT INTO ImageInformation (imageid, rating, creationDate, digitizationDate, orientation, width, height, format, colorDepth, colorModel) VALUES (:imageid, :rating, :creationDate, :digitizationDate, :orientation, :width, :height, :format, :colorDepth, :colorModel);
+			</statement></dbaction>
+			
+			<dbaction name="Migrate_Read_ImageMetadate" mode="transaction"><statement mode="query">
+				SELECT imageid, make, model, lens, aperture, focalLength, focalLength35, exposureTime, exposureProgram, exposureMode, sensitivity, flash, whiteBalance, whiteBalanceColorTemperature, meteringMode, subjectDistance, subjectDistanceCategory FROM ImageMetadata;
+			</statement></dbaction>
+			<dbaction name="Migrate_Write_ImageMetadate" mode="transaction"><statement mode="query">
+				INSERT INTO ImageMetadate (imageid, make, model, lens, aperture, focalLength, focalLength35, exposureTime, exposureProgram, exposureMode, sensitivity, flash, whiteBalance, whiteBalanceColorTemperature, meteringMode, subjectDistance, subjectDistanceCategory) VALUES (:imageid, :make, :model, :lens, :aperture, :focalLength, :focalLength35, :exposureTime, :exposureProgram, :exposureMode, :sensitivity, :flash, :whiteBalance, :whiteBalanceColorTemperature, :meteringMode, :subjectDistance, :subjectDistanceCategory);
+			</statement></dbaction>			
+
+			<dbaction name="Migrate_Read_ImagePositions" mode="transaction"><statement mode="query">
+				SELECT  imageid, latitude, latitudeNumber, longitude, longitudeNumber, altitude, orientation, tilt, roll, accuracy, description FROM ImagePositions;
+			</statement></dbaction>
+			<dbaction name="Migrate_Write_ImagePositions" mode="transaction"><statement mode="query">
+				INSERT INTO ImagePositions (imageid, latitude, latitudeNumber, longitude, longitudeNumber, altitude, orientation, tilt, roll, accuracy, description) VALUES (:imageid, :latitude, :latitudeNumber, :longitude, :longitudeNumber, :altitude, :orientation, :tilt, :roll, :accuracy, :description);
+			</statement></dbaction>
+			
+			<dbaction name="Migrate_Read_ImageComments" mode="transaction"><statement mode="query">
+				SELECT  id, imageid, type, language, author, date, comment FROM ImageComments;
+			</statement></dbaction>
+			<dbaction name="Migrate_Write_ImageComments" mode="transaction"><statement mode="query">
+				INSERT INTO ImageComments (id, imageid, type, language, author, date, comment) VALUES (:id, :imageid, :type, :language, :author, :date, :comment);
+			</statement></dbaction>
+			
+			<dbaction name="Migrate_Read_ImageCopyright" mode="transaction"><statement mode="query">
+				SELECT  id, imageid, property, value, extraValue FROM ImageCopyright;
+			</statement></dbaction>
+			<dbaction name="Migrate_Write_ImageCopyright" mode="transaction"><statement mode="query">
+				INSERT INTO ImageCopyright (id, imageid, property, value, extraValue) VALUES (:id, :imageid, :property, :value, :extraValue);
+			</statement></dbaction>
+			
+			<dbaction name="Migrate_Read_Tags" mode="transaction"><statement mode="query">
+				SELECT  id, pid, name, icon, iconkde FROM Tags;
+			</statement></dbaction>
+			<dbaction name="Migrate_Write_Tags" mode="transaction"><statement mode="query">
+				INSERT INTO Tags (id, pid, name, icon, iconkde) VALUES (:id, :pid, :name, :icon, :iconkde);
+			</statement></dbaction>
+			
+			<dbaction name="Migrate_Read_ImageTags" mode="transaction"><statement mode="query">
+				SELECT  imageid, tagid FROM ImageTags;
+			</statement></dbaction>
+			<dbaction name="Migrate_Write_ImageTags" mode="transaction"><statement mode="query">
+				INSERT INTO ImageTags (imageid, tagid) VALUES (:imageid, :tagid);
+			</statement></dbaction>
+			
+			<dbaction name="Migrate_Read_ImageProperties" mode="transaction"><statement mode="query">
+				SELECT  imageid, property, value FROM ImageProperties;
+			</statement></dbaction>
+			<dbaction name="Migrate_Write_ImageProperties" mode="transaction"><statement mode="query">
+				INSERT INTO ImageProperties (imageid, property, value) VALUES (:imageid, :property, :value);
+			</statement></dbaction>
+			
+			<dbaction name="Migrate_Read_Searches" mode="transaction"><statement mode="query">
+				SELECT  id, type, name, query FROM Searches;
+			</statement></dbaction>
+			<dbaction name="Migrate_Write_Searches" mode="transaction"><statement mode="query">
+				INSERT INTO Searches (id, type, name, query) VALUES (:id, :type, :name, :query);
+			</statement></dbaction>
+			
+			<dbaction name="Migrate_Read_DownloadHistory" mode="transaction"><statement mode="query">
+				SELECT id, identifier, filename, filesize, filedate FROM DownloadHistory;
+			</statement></dbaction>
+			<dbaction name="Migrate_Write_DownloadHistory" mode="transaction"><statement mode="query">
+				INSERT INTO DownloadHistory (id, identifier, filename, filesize, filedate) VALUES (:id, :identifier, :filename, :filesize, :filedate);
+			</statement></dbaction>
+			
+			<dbaction name="Migrate_Read_Settings" mode="transaction"><statement mode="query">
+				SELECT keyword, value FROM Settings;
+			</statement></dbaction>
+ 			<dbaction name="Migrate_Write_Settings" mode="transaction"><statement mode="query">
+				INSERT INTO Settings (keyword, value) VALUES (keyword, value);
+			</statement></dbaction>			 				 
+						 				 
 		</dbactions>
 	</database>
 </databaseconfig>

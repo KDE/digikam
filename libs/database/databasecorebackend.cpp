@@ -449,6 +449,36 @@ bool DatabaseCoreBackend::execDBAction(const databaseAction &action, const QMap<
     return returnResult;
 }
 
+QSqlQuery DatabaseCoreBackend::execDBActionQuery(const databaseAction &action, const QMap<QString, QVariant>& bindingMap)
+{
+    Q_D(DatabaseCoreBackend);
+
+    QSqlDatabase db = d->databaseForThread();
+
+#ifdef DATABASCOREBACKEND_DEBUG
+    kDebug(50003) << "Executing DBAction ["<<  action.m_Name  <<"]";
+#endif
+
+    QSqlQuery result;
+    foreach (databaseActionElement actionElement, action.m_DBActionElements)
+    {
+        if (actionElement.m_Mode==QString("query"))
+        {
+            result = execQuery(actionElement.m_Statement, bindingMap);
+        }
+        else
+        {
+            kError() << "Error, only DBActions with mode 'query' are allowed at this call!";
+        }
+        if (result.lastError().number()!=0)
+        {
+            kDebug(50003) << "Error while executing DBAction ["<<  action.m_Name  <<"] Statement ["<<actionElement.m_Statement<<"]";
+            break;
+        }
+    }
+    return result;
+}
+
 void DatabaseCoreBackend::setDatabaseErrorHandler(DatabaseErrorHandler *handler)
 {
     Q_D(DatabaseCoreBackend);

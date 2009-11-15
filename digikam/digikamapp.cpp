@@ -66,6 +66,7 @@
 #include <kstandardaction.h>
 #include <kstandarddirs.h>
 #include <kstandardshortcut.h>
+#include <migrationdlg.h>
 #include <ktip.h>
 #include <ktoggleaction.h>
 #include <ktogglefullscreenaction.h>
@@ -1177,6 +1178,12 @@ void DigikamApp::setupActions()
     bqmAction->setShortcut(KShortcut(Qt::Key_B));
     connect(bqmAction, SIGNAL(triggered()), d->view, SLOT(slotQueueMgr()));
     actionCollection()->addAction("queue_manager", bqmAction);
+
+    // -----------------------------------------------------------
+
+    KAction *databaseMigrationAction = new KAction(KIcon("view-refresh"), i18n("Database Migration"), this);
+    connect(databaseMigrationAction, SIGNAL(triggered()), this, SLOT(slotDatabaseMigration()));
+    actionCollection()->addAction("database_migration", databaseMigrationAction);
 
     // -----------------------------------------------------------
 
@@ -2460,6 +2467,12 @@ void DigikamApp::slotThemeChanged()
         index = themes.indexOf(i18n("Default"));
 
     d->themeMenuAction->setCurrentItem(index);
+}
+
+void DigikamApp::slotDatabaseMigration()
+{
+    MigrationDlg dlg(this);
+    dlg.exec();
 }
 
 void DigikamApp::slotDatabaseRescan()
