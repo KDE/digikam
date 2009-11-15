@@ -1144,6 +1144,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/kdateedit.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/kdatepickerpopup.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/kdatetimeedit.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/leftsidebarwidgets.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/mediaplayerview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/metadatahub.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/metadatamanager.cpp
@@ -1153,6 +1154,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/ratingpopupmenu.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/ratingwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/scancontroller.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/sidebarwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/syncjob.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tageditdlg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagfilterview.cpp

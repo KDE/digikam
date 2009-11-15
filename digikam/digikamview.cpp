@@ -105,6 +105,8 @@
 #include "thumbnailsize.h"
 #include "timelinefolderview.h"
 #include "timelineview.h"
+#include "sidebarwidget.h"
+#include "leftsidebarwidgets.h"
 
 namespace Digikam
 {
@@ -115,11 +117,9 @@ public:
 
     DigikamViewPriv()
     {
-        folderBox             = 0;
         tagBox                = 0;
         searchBox             = 0;
         tagFilterBox          = 0;
-        folderSearchBar       = 0;
         tagSearchBar          = 0;
         searchSearchBar       = 0;
         tagFilterSearchBar    = 0;
@@ -127,7 +127,6 @@ public:
         splitter              = 0;
         parent                = 0;
         iconView              = 0;
-        folderView            = 0;
         albumManager          = 0;
         albumHistory          = 0;
         leftSideBar           = 0;
@@ -165,12 +164,10 @@ public:
     QTimer*                   selectionTimer;
     QTimer*                   thumbSizeTimer;
 
-    KVBox*                    folderBox;
     KVBox*                    tagBox;
     KVBox*                    searchBox;
     KVBox*                    tagFilterBox;
 
-    SearchTextBar*            folderSearchBar;
     SearchTextBar*            tagSearchBar;
     SearchTextBar*            searchSearchBar;
     SearchTextBar*            tagFilterSearchBar;
@@ -178,7 +175,6 @@ public:
     DigikamApp*               parent;
 
     DigikamImageView*         iconView;
-    AlbumFolderViewNew*       folderView;
     AlbumManager*             albumManager;
     AlbumHistory*             albumHistory;
     AlbumWidgetStack*         albumWidgetStack;
@@ -198,6 +194,8 @@ public:
     GPSSearchView*            gpsSearchView;
 
     QString optionAlbumViewPrefix;
+
+    QList<SideBarWidget*> leftSideBarWidgets;
 
 };
 
@@ -231,13 +229,13 @@ DigikamView::DigikamView(QWidget *parent)
     d->rightSideBar = new ImagePropertiesSideBarDB(this, d->splitter, KMultiTabBar::Right, true);
     d->rightSideBar->setObjectName("Digikam Right Sidebar");
 
-    // To the left.
-    // Folders sidebar tab contents.
-    d->folderBox       = new KVBox(this);
-    d->folderView      = new AlbumFolderViewNew(d->folderBox, d->albumModificationHelper);
-    d->folderSearchBar = new SearchTextBar(d->folderBox, "DigikamViewFolderSearchBar");
-    d->folderBox->setSpacing(KDialog::spacingHint());
-    d->folderBox->setMargin(0);
+    // album folder view
+    AlbumFolderViewSideBarWidget *albumSideBarWidget = new AlbumFolderViewSideBarWidget(this);
+    d->leftSideBarWidgets << albumSideBarWidget;
+    connect(albumSideBarWidget, SIGNAL(signalFindDuplicatesInAlbum(Album*)),
+            this, SLOT(slotNewDuplicatesSearch(Album*)));
+    connect(d->iconView, SIGNAL(gotoAlbumAndImageRequested(const ImageInfo&)),
+            albumSideBarWidget, SLOT(slotGotoAlbumAndItem(const ImageInfo&)));
 
     // Tags sidebar tab contents.
     d->tagBox        = new KVBox(this);
@@ -263,7 +261,13 @@ DigikamView::DigikamView(QWidget *parent)
     d->gpsSearchView    = new GPSSearchView(this);
 #endif
 
-    d->leftSideBar->appendTab(d->folderBox, SmallIcon("folder-image"), i18n("Albums"));
+
+    foreach(SideBarWidget *leftWidget, d->leftSideBarWidgets)
+    {
+        d->leftSideBar->appendTab(leftWidget, leftWidget->getIcon(),
+                        leftWidget->getCaption());
+    }
+
     d->leftSideBar->appendTab(d->dateFolderView, SmallIcon("view-calendar-list"), i18n("Calendar"));
     d->leftSideBar->appendTab(d->tagBox, SmallIcon("tag"), i18n("Tags"));
     d->leftSideBar->appendTab(d->timeLineView, SmallIcon("player-time"), i18n("Timeline"));
@@ -400,9 +404,6 @@ void DigikamView::setupConnections()
     connect(d->iconView, SIGNAL(previewRequested(const ImageInfo &)),
             this, SLOT(slotTogglePreviewMode(const ImageInfo &)));
 
-    connect(d->iconView, SIGNAL(gotoAlbumAndImageRequested(const ImageInfo&)),
-            this, SLOT(slotGotoAlbumAndItem(const ImageInfo&)));
-
     connect(d->iconView, SIGNAL(gotoDateAndImageRequested(const ImageInfo&)),
             this, SLOT(slotGotoDateAndItem(const ImageInfo&)));
 
@@ -475,9 +476,6 @@ void DigikamView::setupConnections()
 
     // -- Filter Bars Connections ---------------------------------
 
-    connect(d->folderSearchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
-            d->folderView->albumFilterModel(), SLOT(setSearchTextSettings(const SearchTextSettings&)));
-
     connect(d->tagSearchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
             d->tagFolderView, SLOT(slotTextTagFilterChanged(const SearchTextSettings&)));
 
@@ -486,12 +484,6 @@ void DigikamView::setupConnections()
 
     connect(d->tagFilterSearchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
             d->tagFilterView, SLOT(slotTextTagFilterChanged(const SearchTextSettings&)));
-
-    connect(d->folderView->albumFilterModel(), SIGNAL(hasSearchResult(bool)),
-            d->folderSearchBar, SLOT(slotSearchResult(bool)));
-
-    connect(d->folderView, SIGNAL(signalFindDuplicatesInAlbum(Album*)),
-            this, SLOT(slotNewDuplicatesSearch(Album*)));
 
     connect(d->tagFolderView, SIGNAL(signalFindDuplicatesInTag(Album*)),
             this, SLOT(slotNewDuplicatesSearch(Album*)));
@@ -631,7 +623,10 @@ void DigikamView::loadViewState()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("MainWindow");
 
-    d->folderView->loadViewState(group, d->optionAlbumViewPrefix);
+    foreach(SideBarWidget *widget, d->leftSideBarWidgets)
+    {
+        widget->loadViewState(group);
+    }
 
     // Restore the splitter
     d->splitter->restoreState(group);
@@ -649,7 +644,10 @@ void DigikamView::saveViewState()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("MainWindow");
 
-    d->folderView->saveViewState(group, d->optionAlbumViewPrefix);
+    foreach(SideBarWidget *widget, d->leftSideBarWidgets)
+    {
+        widget->saveViewState(group);
+    }
 
     // Save the splitter states.
     d->splitter->saveState(group);
@@ -747,12 +745,14 @@ void DigikamView::slotSortAlbums(int order)
 
 void DigikamView::slotNewAlbum()
 {
-    d->albumModificationHelper->slotAlbumNew(d->folderView->lastContextMenuAlbum());
+    // TODO update, use central model collection for the model
+    //d->albumModificationHelper->slotAlbumNew(d->folderView->);
 }
 
 void DigikamView::slotDeleteAlbum()
 {
-    d->albumModificationHelper->slotAlbumDelete(d->folderView->lastContextMenuAlbum());
+    // TODO update, use central model collection for the model
+    //d->albumModificationHelper->slotAlbumDelete(d->folderView->lastContextMenuAlbum());
 }
 
 void DigikamView::slotNewTag()
@@ -800,7 +800,8 @@ void DigikamView::slotAlbumAdded(Album *album)
         {
             case Album::PHYSICAL:
             {
-                d->folderSearchBar->completionObject()->addItem(album->title());
+                // TODO update, port
+                //d->folderSearchBar->completionObject()->addItem(album->title());
                 break;
             }
             case Album::TAG:
@@ -853,7 +854,8 @@ void DigikamView::slotAlbumDeleted(Album *album)
         {
             case Album::PHYSICAL:
             {
-                d->folderSearchBar->completionObject()->removeItem(album->title());
+                // TODO update, move to model view
+                //d->folderSearchBar->completionObject()->removeItem(album->title());
                 break;
             }
             case Album::TAG:
@@ -897,7 +899,8 @@ void DigikamView::slotAlbumRenamed(Album *album)
         {
             case Album::PHYSICAL:
             {
-                d->folderSearchBar->completionObject()->addItem(album->title());
+                // TODO move to model view
+                //d->folderSearchBar->completionObject()->addItem(album->title());
                 break;
             }
             case Album::TAG:
@@ -956,7 +959,8 @@ void DigikamView::slotAlbumsCleared()
 {
     emit signalAlbumSelected(false);
 
-    d->folderSearchBar->completionObject()->clear();
+    // TODO update, port to model view
+    //d->folderSearchBar->completionObject()->clear();
 
     d->tagSearchBar->completionObject()->clear();
     d->tagFilterSearchBar->completionObject()->clear();
@@ -989,21 +993,28 @@ void DigikamView::slotAlbumHistoryForward(int steps)
     changeAlbumFromHistory(album, widget);
 }
 
+// TODO update, use SideBarWidget instead of QWidget
+// TODO update, move this handling to the subclasses
 void DigikamView::changeAlbumFromHistory(Album *album, QWidget *widget)
 {
     if (album && widget)
     {
+
+        // TODO update, temporary casting until signature is changd
+        SideBarWidget *sideBarWidget = dynamic_cast<SideBarWidget*> (widget);
+        if (sideBarWidget)
+        {
+            sideBarWidget->changeAlbumFromHistory(album);
+        }
+
+        // TODO update, old code
         Q3ListViewItem *item = 0;
 
         // Check if widget is a vbox used to host folderview, tagview or searchview.
         // B.K.O 202886: DateFolderView is also a KVBox widget, so we need to check for that in here, too.
         if (KVBox *v = dynamic_cast<KVBox*>(widget))
         {
-            if (v == d->folderBox)
-            {
-                d->folderView->slotSelectAlbum(album);
-            }
-            else if (v == d->tagBox)
+            if (v == d->tagBox)
             {
                 item = (Q3ListViewItem*) album->extraData(d->tagFolderView);
                 if (!item)
@@ -1048,6 +1059,7 @@ void DigikamView::changeAlbumFromHistory(Album *album, QWidget *widget)
             v->folderView()->ensureItemVisible(item);
         }
 
+        // TODO update, check this code too
         d->leftSideBar->setActiveTab(widget);
 
         d->parent->enableAlbumBackwardHistory(d->useAlbumHistory && !d->albumHistory->isBackwardEmpty());
@@ -1099,15 +1111,12 @@ void DigikamView::slotGotoAlbumAndItem(const ImageInfo& imageInfo)
 {
     emit signalNoCurrentItem();
 
+    foreach(SideBarWidget *widget, d->leftSideBarWidgets)
+    {
+        widget->gotoAlbumAndItem(imageInfo);
+    }
+
     Album* album = dynamic_cast<Album*>(AlbumManager::instance()->findPAlbum(imageInfo.albumId()));
-
-    // Change the current album in list view.
-    d->folderView->slotSelectAlbum(album);
-
-    // Change to (physical) Album view.
-    // Note, that this also opens the side bar if it is closed; this is
-    // considered as a feature, because it highlights that the view was changed.
-    d->leftSideBar->setActiveTab(d->folderBox);
 
     // Set the activate item url to find in the Album View after
     // all items have be reloaded.
@@ -1116,6 +1125,7 @@ void DigikamView::slotGotoAlbumAndItem(const ImageInfo& imageInfo)
     // And finally toggle album manager to handle album history and
     // reload all items.
     d->albumManager->setCurrentAlbum(album);
+
 }
 
 void DigikamView::slotGotoDateAndItem(const ImageInfo& imageInfo)
@@ -1388,7 +1398,8 @@ void DigikamView::slotZoomFactorChanged(double zoom)
 
 void DigikamView::slotAlbumPropsEdit()
 {
-    d->albumModificationHelper->slotAlbumEdit(d->folderView->lastContextMenuAlbum());
+    // TODO update, use central model store
+    // d->albumModificationHelper->slotAlbumEdit(d->folderView->lastContextMenuAlbum());
 }
 
 void DigikamView::connectBatchSyncMetadata(BatchSyncMetadata *syncMetadata)

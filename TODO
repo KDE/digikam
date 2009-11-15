@@ -8,6 +8,8 @@ post 1.0.0 mvc merge
  * Port different tag views to MVC pattern
  
  * Create a general interface for sidebar widgets
+ * therefore move all models to a central object and only stick views on them
+ * port search bars to model view concept
 
 ------------------------------------------------------------------------------------
 1.0.0 TODO LIST
