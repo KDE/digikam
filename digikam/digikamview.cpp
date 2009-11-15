@@ -1228,12 +1228,12 @@ void DigikamView::slotAlbumOpenInTerminal()
         return;
 
     PAlbum* palbum = dynamic_cast<PAlbum*>(album);
-    
+
     const QString terminalApp("konsole");
     QStringList args;
     args << "--workdir" << palbum->folderPath();
     const bool success = QProcess::startDetached(terminalApp, args);
-    
+
     if (!success)
     {
         KMessageBox::error(this,
