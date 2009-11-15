@@ -265,10 +265,7 @@ void AutoCorrectionTool::slotResetSettings()
 
     // Read Exif information ...
     DImg      *img = d->previewWidget->imageIface()->getOriginalImg();
-    DMetadata  meta;
-    meta.setExif(img->getExif());
-    meta.setIptc(img->getIptc());
-    meta.setXmp(img->getXmp());
+    DMetadata  meta(img->getMetadata());
     d->cameraSelector->findFromMetadata(meta);
 
     d->gboxSettings->blockSignals(false);

@@ -99,10 +99,7 @@ bool AssignTemplate::toolOperations()
 
     QString title = settings()["TemplateTitle"].toString();
 
-    DMetadata meta;
-    meta.setExif(image().getExif());
-    meta.setIptc(image().getIptc());
-    meta.setXmp(image().getXmp());
+    DMetadata meta(image().getMetadata());
 
     if (title == Template::removeTemplateTitle())
     {
@@ -119,9 +116,7 @@ bool AssignTemplate::toolOperations()
         meta.setMetadataTemplate(t);
     }
 
-    image().setExif(meta.getExif());
-    image().setIptc(meta.getIptc());
-    image().setXmp(meta.getXmp());
+    image().setMetadata(meta.data());
 
     return (savefromDImg());
 }

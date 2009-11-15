@@ -146,9 +146,7 @@ public:
     QPixmap               convertToPixmap(DImg& img);
 
     IccProfile            getEmbeddedICC();
-    QByteArray            getExif();
-    QByteArray            getIptc();
-    QByteArray            getXmp();
+    KExiv2Data            getMetadata();
 
     ICCSettingsContainer *getICCSettings();
 

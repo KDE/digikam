@@ -145,9 +145,7 @@ public:
 
     /** Original image metadata.*/
     IccProfile getOriginalIccProfile();
-    QByteArray getExifFromOriginalImage();
-    QByteArray getIptcFromOriginalImage();
-    QByteArray getXmpFromOriginalImage();
+    KExiv2Data getOriginalMetadata();
 
     /** Get photograph information from original image.*/
     PhotoInfoContainer getPhotographInformation() const;

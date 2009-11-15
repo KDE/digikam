@@ -172,7 +172,7 @@ void ImagePropertiesSideBarCamGui::slotChangedTab(QWidget* tab)
     if (tab == d->cameraItemTab && !d->dirtyCameraItemTab)
     {
         d->cameraItemTab->setCurrentItem(d->itemInfo,
-                                         d->cameraItem->getDownloadName(), d->metaData.getExif(),
+                                         d->cameraItem->getDownloadName(), d->metaData.getExifEncoded(),
                                          d->currentURL);
 
         d->dirtyCameraItemTab = true;

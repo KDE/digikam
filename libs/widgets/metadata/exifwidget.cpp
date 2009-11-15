@@ -149,7 +149,7 @@ void ExifWidget::slotSaveMetadataToFile()
 {
     KUrl url = saveMetadataToFile(i18n("EXIF File to Save"),
                                   QString("*.exif|"+i18n("EXIF binary Files (*.exif)")));
-    storeMetadataToFile(url, getMetadata().getExif());
+    storeMetadataToFile(url, getMetadata().getExifEncoded());
 }
 
 }  // namespace Digikam

@@ -348,27 +348,14 @@ IccProfile ImageIface::getOriginalIccProfile()
     return DImgInterface::defaultInterface()->getEmbeddedICC();
 }
 
-QByteArray ImageIface::getExifFromOriginalImage()
+KExiv2Data ImageIface::getOriginalMetadata()
 {
-    return DImgInterface::defaultInterface()->getExif();
-}
-
-QByteArray ImageIface::getIptcFromOriginalImage()
-{
-    return DImgInterface::defaultInterface()->getIptc();
-}
-
-QByteArray ImageIface::getXmpFromOriginalImage()
-{
-    return DImgInterface::defaultInterface()->getXmp();
+    return DImgInterface::defaultInterface()->getImg()->getMetadata();
 }
 
 PhotoInfoContainer ImageIface::getPhotographInformation() const
 {
-    DMetadata meta;
-    meta.setExif(DImgInterface::defaultInterface()->getExif());
-    meta.setIptc(DImgInterface::defaultInterface()->getIptc());
-    meta.setXmp(DImgInterface::defaultInterface()->getXmp());
+    DMetadata meta(DImgInterface::defaultInterface()->getImg()->getMetadata());
     return meta.getPhotographInformation();
 }
 
