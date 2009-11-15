@@ -67,7 +67,9 @@ AbstractAlbumTreeView::AbstractAlbumTreeView(AbstractSpecificAlbumModel *model, 
     m_checkOnMiddleClick  = false;
 
     m_albumModel       = model;
-    m_albumModel->setParent(this); // cannot be done before QObject constructor of this is called
+    // TODO marcel, why do we need this? This makes using one model for
+    // different views impossible
+    //m_albumModel->setParent(this); // cannot be done before QObject constructor of this is called
     m_albumFilterModel = new AlbumFilterModel(this);
 
     connect(m_albumFilterModel, SIGNAL(filterChanged()),
