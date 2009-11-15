@@ -108,15 +108,15 @@ public:
     QColor      guideColor;
     QColor      paintColor;
 
-    QPixmap    *pixmap;
-    QPixmap    *maskPixmap;
-    QPixmap    *previewPixmap;
+    QPixmap*    pixmap;
+    QPixmap*    maskPixmap;
+    QPixmap*    previewPixmap;
 
     QCursor     maskCursor;
 
     QPoint      lastPoint;
 
-    ImageIface *iface;
+    ImageIface* iface;
 
     DImg        preview;
 };
