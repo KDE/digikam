@@ -38,6 +38,7 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "dmetadatadata.h"
 #include "dshareddata.h"
 #include "drawdecoding.h"
 #include "dcolor.h"
@@ -72,15 +73,6 @@ public:
         RAW,
         PPM,
         QIMAGE
-    };
-
-    enum METADATA
-    {
-        COM=0,  // JFIF comments section data.
-        EXIF,   // EXIF meta-data.
-        IPTC,   // IPTC meta-data.
-        ICC,    // ICC  color profile.
-        XMP     // XMP  meta-data
     };
 
     enum ANGLE
@@ -272,18 +264,10 @@ public:
 
     /** Metadata manipulation methods
      */
-    QByteArray getComments()  const;
-    QByteArray getExif()      const;
-    QByteArray getIptc()      const;
-    QByteArray getXmp()       const;
-    IccProfile getIccProfile()const;
-    void       setComments(const QByteArray& commentsData);
-    void       setExif(const QByteArray& exifData);
-    void       setIptc(const QByteArray& iptcData);
-    void       setXmp(const QByteArray& xmpData);
+    KExiv2Data getMetadata() const;
+    IccProfile getIccProfile() const;
+    void       setMetadata(const KExiv2Data& data);
     void       setIccProfile(const IccProfile& profile);
-
-    QByteArray metadata(METADATA key) const;
 
     void       setAttribute(const QString& key, const QVariant& value);
     QVariant   attribute(const QString& key) const;
