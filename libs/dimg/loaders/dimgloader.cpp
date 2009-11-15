@@ -109,11 +109,6 @@ int DImgLoader::imageBytesDepth()
     return m_image->bytesDepth();
 }
 
-QMap<int, QByteArray>& DImgLoader::imageMetaData()
-{
-    return m_image->m_priv->metaData;
-}
-
 void DImgLoader::imageSetIccProfile(const IccProfile& profile)
 {
     m_image->setIccProfile(profile);
@@ -169,24 +164,14 @@ bool DImgLoader::readMetadata(const QString& filePath, DImg::FORMAT /*ff*/)
     if (! (m_loadFlags & LoadMetadata || m_loadFlags & LoadUniqueHash) )
         return false;
 
-    QMap<int, QByteArray>& imageMetadata = imageMetaData();
-    imageMetadata.clear();
-
     DMetadata metaDataFromFile;
     if (!metaDataFromFile.load(filePath))
+    {
+        m_image->setMetadata(KExiv2Data());
         return false;
+    }
 
-    // Do not insert null data into metaData map:
-    // Even if byte array is null, if there is a key in the map, it will
-    // be interpreted as "There was data, so write it again to the file".
-    if (!metaDataFromFile.getComments().isNull())
-        imageMetadata.insert(DImg::COM, metaDataFromFile.getComments());
-    if (!metaDataFromFile.getExif().isNull())
-        imageMetadata.insert(DImg::EXIF, metaDataFromFile.getExif());
-    if (!metaDataFromFile.getIptc().isNull())
-        imageMetadata.insert(DImg::IPTC, metaDataFromFile.getIptc());
-    if (!metaDataFromFile.getXmp().isNull())
-        imageMetadata.insert(DImg::XMP, metaDataFromFile.getXmp());
+    m_image->setMetadata(metaDataFromFile.data());
 
     return true;
 }
@@ -194,17 +179,13 @@ bool DImgLoader::readMetadata(const QString& filePath, DImg::FORMAT /*ff*/)
 bool DImgLoader::saveMetadata(const QString& filePath)
 {
     DMetadata metaDataToFile(filePath);
-    metaDataToFile.setComments(m_image->getComments());
-    metaDataToFile.setExif(m_image->getExif());
-    metaDataToFile.setIptc(m_image->getIptc());
-    metaDataToFile.setXmp(m_image->getXmp());
+    metaDataToFile.setData(m_image->getMetadata());
     return metaDataToFile.applyChanges();
 }
 
 bool DImgLoader::checkExifWorkingColorSpace()
 {
-    DMetadata metaData;
-    metaData.setExif(m_image->getExif());
+    DMetadata metaData(m_image->getMetadata());
     IccProfile profile = metaData.getIccProfile();
     if (!profile.isNull())
     {
@@ -221,11 +202,12 @@ QByteArray DImgLoader::uniqueHash(const QString& filePath, const DImg& img, bool
     if (loadMetadata)
     {
         DMetadata metaDataFromFile(filePath);
-        bv = metaDataFromFile.getExif();
+        bv = metaDataFromFile.getExifEncoded();
     }
     else
     {
-        bv = img.getExif();
+        DMetadata metaDataFromImage(img.getMetadata());
+        bv = metaDataFromImage.getExifEncoded();
     }
 
     // Create the unique ID
