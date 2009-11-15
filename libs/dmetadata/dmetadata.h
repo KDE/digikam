@@ -32,9 +32,11 @@
 // LibKExiv2 includes
 
 #include <libkexiv2/kexiv2.h>
+#include <libkexiv2/version.h>
 
 // Local includes
 
+#include "dmetadatadata.h"
 #include "dimg.h"
 #include "captionvalues.h"
 #include "photoinfocontainer.h"
@@ -55,6 +57,7 @@ public:
 
     DMetadata();
     DMetadata(const QString& filePath);
+    DMetadata(const KExiv2Data& data);
     ~DMetadata();
 
     /** Re-implemented from libKexiv2 to use dcraw identify method if Exiv2 failed. */
@@ -199,6 +202,15 @@ public:
     // End: Pushed to libkexiv2 for KDE4.4
     //------------------------------------------------------------------------------------------------
 
+    //------------------------------------------------------------------------------------------------
+    // Compatibility for < KDE 4.4.
+    #if KEXIV2_VERSION < 0x010000
+    KExiv2Data data() const;
+    void setData(const KExiv2Data& data);
+    QByteArray getExifEncoded(bool addExifHeader=false) const { return getExif(addExifHeader); }
+    #endif
+    // End: Compatibility for < KDE 4.4
+    //------------------------------------------------------------------------------------------------
 private:
 
     bool setProgramId(bool on=true) const;
