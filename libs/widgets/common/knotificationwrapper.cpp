@@ -58,9 +58,11 @@ void KNotificationWrapper(const QString& eventId, const QString& message,
         QPixmap logoPixmap = pixmap;
         if (logoPixmap.isNull())
         {
+            // FIXME: this logo is a LITTLE bit too big, it takes 1/3 of my screen in the notification message,
+            //        screen resolution: 1440x900 px   :-)
             logoPixmap = QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"));
         }
-            
+
         if (eventId.isEmpty())
         {
             KNotification::event(KNotification::Notification, message, logoPixmap, widget);
