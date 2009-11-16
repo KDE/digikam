@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-#include "fingerprintsgenerator.h"
 #include "fingerprintsgenerator.moc"
 
 // Qt includes
@@ -39,7 +38,6 @@
 #include <kcodecs.h>
 #include <klocale.h>
 #include <kstandardguiitem.h>
-#include <kpassivepopup.h>
 
 // Local includes
 
@@ -52,6 +50,7 @@
 #include "haar.h"
 #include "haariface.h"
 #include "previewloadthread.h"
+#include "knotificationwrapper.h"
 
 namespace Digikam
 {
@@ -155,7 +154,8 @@ void FingerPrintsGenerator::complete()
     setButtonGuiItem(KStandardGuiItem::ok());
     setButtonText(i18n("&Close"));
     // Pop-up a message to bring user when all is done.
-    KPassivePopup::message(windowTitle(), i18n("Update of fingerprint database complete."), this);
+    KNotificationWrapper("", i18n("Update of fingerprint database complete."),
+                         this, windowTitle());
     emit signalRebuildAllFingerPrintsDone();
 }
 

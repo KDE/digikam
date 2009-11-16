@@ -293,11 +293,11 @@ void ImageScanner::updateImageInformation()
 
     DatabaseAccess access;
     access.db()->changeImageInformation(m_scanInfo.id, infos,
-                                                    DatabaseFields::Width
-                                                    | DatabaseFields::Height
-                                                    | DatabaseFields::Format
-                                                    | DatabaseFields::ColorDepth
-                                                    | DatabaseFields::ColorModel);
+                                                    DatabaseFields::Width      |
+                                                    DatabaseFields::Height     |
+                                                    DatabaseFields::Format     |
+                                                    DatabaseFields::ColorDepth |
+                                                    DatabaseFields::ColorModel);
 }
 
 static MetadataFields allImageMetadataFields()
@@ -489,7 +489,7 @@ void ImageScanner::scanVideoFile()
           << detectVideoFormat();
 
     DatabaseAccess().db()->addImageInformation(m_scanInfo.id, infos,
-                                               DatabaseFields::Rating |
+                                               DatabaseFields::Rating       |
                                                DatabaseFields::CreationDate |
                                                DatabaseFields::Format);
 
@@ -521,7 +521,7 @@ void ImageScanner::scanAudioFile()
           << detectAudioFormat();
 
     DatabaseAccess().db()->addImageInformation(m_scanInfo.id, infos,
-                                               DatabaseFields::Rating |
+                                               DatabaseFields::Rating       |
                                                DatabaseFields::CreationDate |
                                                DatabaseFields::Format);
 }
@@ -807,19 +807,19 @@ void ImageScanner::fillCommonContainer(qlonglong imageid, ImageCommonContainer *
     {
         DatabaseAccess access;
         imagesFields = access.db()->getImagesFields(imageid,
-                                           DatabaseFields::Name |
+                                           DatabaseFields::Name             |
                                            DatabaseFields::ModificationDate |
                                            DatabaseFields::FileSize);
 
         imageInformationFields = access.db()->getImageInformation(imageid,
-                                           DatabaseFields::Rating |
-                                           DatabaseFields::CreationDate |
+                                           DatabaseFields::Rating           |
+                                           DatabaseFields::CreationDate     |
                                            DatabaseFields::DigitizationDate |
-                                           DatabaseFields::Orientation |
-                                           DatabaseFields::Width |
-                                           DatabaseFields::Height |
-                                           DatabaseFields::Format |
-                                           DatabaseFields::ColorDepth |
+                                           DatabaseFields::Orientation      |
+                                           DatabaseFields::Width            |
+                                           DatabaseFields::Height           |
+                                           DatabaseFields::Format           |
+                                           DatabaseFields::ColorDepth       |
                                            DatabaseFields::ColorModel);
     }
 

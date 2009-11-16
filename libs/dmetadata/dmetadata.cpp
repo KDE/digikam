@@ -44,10 +44,6 @@
 #include <libkdcraw/dcrawinfocontainer.h>
 #include <libkdcraw/kdcraw.h>
 
-// LibKExiv2 includes
-
-#include <libkexiv2/version.h>
-
 // Local includes
 
 #include "template.h"

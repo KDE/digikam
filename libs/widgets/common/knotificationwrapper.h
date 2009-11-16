@@ -3,10 +3,11 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2009-08-08
- * Description : a camera name parser class
+ * Date        : 2008-07-03
+ * Description : A wrapper around KNotification which uses
+ *               KPassivePopup if KNotify is unavailable
  *
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009 by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,34 +22,26 @@
  *
  * ============================================================ */
 
-#ifndef CAMERANAMEPARSER_H
-#define CAMERANAMEPARSER_H
-
-// Qt includes
+#ifndef KNOTIFICATIONWRAPPER_H
+#define KNOTIFICATIONWRAPPER_H
 
 #include <QString>
+#include <QPixmap>
+
+class QWidget;
 
 // Local includes
 
-#include "subparser.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
 
-class CameraNameParser : public SubParser
-{
-    Q_OBJECT
-
-public:
-
-    CameraNameParser();
-    ~CameraNameParser() {};
-
-protected:
-
-    virtual void parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results);
-};
+void DIGIKAM_EXPORT KNotificationWrapper(const QString& eventId, const QString& message,
+                                         QWidget* const widget, const QString& windowTitle,
+                                         const QPixmap& pixmap = QPixmap());
 
 } // namespace Digikam
 
-#endif /* CAMERANAMEPARSER_H */
+#endif /* KNOTIFICATIONWRAPPER_H */
+

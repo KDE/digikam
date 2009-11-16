@@ -3,8 +3,8 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2009-09-02
- * Description : a directory name parser class
+ * Date        : 2009-08-08
+ * Description : an option to provide file information to the parser
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -21,13 +21,11 @@
  *
  * ============================================================ */
 
-#include "directorynameparser.h"
-#include "directorynameparser.moc"
+#include "filepropertiesoption.moc"
 
 // Qt includes
 
 #include <QFileInfo>
-#include <QString>
 
 // KDE includes
 
@@ -37,49 +35,42 @@
 namespace Digikam
 {
 
-DirectoryNameParser::DirectoryNameParser()
-                   : SubParser(i18n("Directory"), i18n("Add the directory name"), SmallIcon("folder"))
+FilePropertiesOption::FilePropertiesOption()
+                    : Option(i18n("File"), i18n("Add file properties"), SmallIcon("folder-image"))
 {
-    setUseTokenMenu(false);
+    addTokenDescription("[file]", i18nc("image filename", "Name"),
+             i18n("Filename"));
 
-    addTokenDescription("[dir]", i18nc("Directory name", "Current"),
-            i18n("Directory name"));
+    addTokenDescription("[ext]", i18nc("image extension", "Extension"),
+             i18n("File extension, prepend with a '.' character, to modify the real file extension"));
 
-    addTokenDescription("[dir.]", i18nc("directory name", "Parent Directory Name"),
-            i18n("Directory name of the parent, additional '.' characters move up "
-                 "in the directory hierarchy"));
-
-    setRegExp("\\[dir(\\.*)\\]");
+    setRegExp("(\\[file\\]|(\\.?)\\[ext\\])");
 }
 
-void DirectoryNameParser::parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results)
+void FilePropertiesOption::parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results)
 {
     QFileInfo fi(info.filePath);
-    QStringList folders = fi.absolutePath().split('/', QString::SkipEmptyParts);
 
     QRegExp reg = regExp();
-    reg.setMinimal(true);
-
-    int folderCount = folders.count();
+    reg.setCaseSensitivity(Qt::CaseInsensitive);
 
     // --------------------------------------------------------
 
     QString tmp;
     PARSE_LOOP_START(parseString, reg)
     {
-        int matchedLength = reg.cap(1).length();
-
-        if (matchedLength == 0)
+        if (reg.cap(1) == QString("[file]"))
         {
-            tmp = folders.last();
+            tmp = fi.baseName();
         }
-        else if (matchedLength > (folderCount - 1))
+        else if (reg.cap(1) == QString("[ext]"))
         {
-            tmp.clear();
+                tmp = fi.suffix();
         }
-        else
+        else if (reg.cap(1) == QString(".[ext]"))
         {
-            tmp = folders[folderCount - matchedLength - 1];
+            tmp = "." + fi.suffix();
+            info.useFileExtension = false;
         }
     }
     PARSE_LOOP_END(parseString, reg, tmp, results)

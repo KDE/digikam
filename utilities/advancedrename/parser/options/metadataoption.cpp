@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-08-08
- * Description : a metadata parser class
+ * Description : an option to provide metadata information to the parser
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -21,8 +21,7 @@
  *
  * ============================================================ */
 
-#include "metadataparser.h"
-#include "metadataparser.moc"
+#include "metadataoption.moc"
 
 // Qt includes
 
@@ -53,11 +52,11 @@
 namespace Digikam
 {
 
-class MetadataParserDialogPriv
+class MetadataOptionDialogPriv
 {
 public:
 
-    MetadataParserDialogPriv() :
+    MetadataOptionDialogPriv() :
         metadataPanel(0),
         separatorLineEdit(0)
     {}
@@ -68,8 +67,8 @@ public:
 
 // --------------------------------------------------------
 
-MetadataParserDialog::MetadataParserDialog()
-                    : KDialog(0), d(new MetadataParserDialogPriv)
+MetadataOptionDialog::MetadataOptionDialog()
+                    : KDialog(0), d(new MetadataOptionDialogPriv)
 {
     setCaption(i18n("Add Metadata Keywords"));
 
@@ -143,26 +142,25 @@ MetadataParserDialog::MetadataParserDialog()
     resize(450, 450);
 }
 
-MetadataParserDialog::~MetadataParserDialog()
+MetadataOptionDialog::~MetadataOptionDialog()
 {
     delete d;
 }
 
-QStringList MetadataParserDialog::checkedTags() const
+QStringList MetadataOptionDialog::checkedTags() const
 {
     return d->metadataPanel->getAllCheckedTags();
 }
 
-QString MetadataParserDialog::separator() const
+QString MetadataOptionDialog::separator() const
 {
     return d->separatorLineEdit->text();
 }
 
 // --------------------------------------------------------
 
-MetadataParser::MetadataParser()
-              : SubParser(i18n("Metadata..."),
-                          i18n("Add metadata fields from Exif, IPTC and XMP"))
+MetadataOption::MetadataOption()
+              : Option(i18n("Metadata..."), i18n("Add metadata fields from Exif, IPTC and XMP"))
 {
     // metadataedit icon can be missing if KIPI plugins are not installed, load different icon in this case
     QIcon icon = KIconLoader::global()->loadIcon("metadataedit", KIconLoader::Small, 0,
@@ -179,13 +177,13 @@ MetadataParser::MetadataParser()
     setRegExp("\\[meta:\\s*(.*)\\s*\\s*\\]");
 }
 
-void MetadataParser::slotTokenTriggered(const QString& token)
+void MetadataOption::slotTokenTriggered(const QString& token)
 {
     Q_UNUSED(token)
 
     QStringList tags;
 
-    QPointer<MetadataParserDialog> dlg = new MetadataParserDialog;
+    QPointer<MetadataOptionDialog> dlg = new MetadataOptionDialog;
 
     if (dlg->exec() == KDialog::Accepted)
     {
@@ -207,7 +205,7 @@ void MetadataParser::slotTokenTriggered(const QString& token)
     delete dlg;
 }
 
-void MetadataParser::parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results)
+void MetadataOption::parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results)
 {
     QRegExp reg = regExp();
     reg.setMinimal(true);
@@ -223,7 +221,7 @@ void MetadataParser::parseOperation(const QString& parseString, ParseInformation
     PARSE_LOOP_END(parseString, reg, tmp, results)
 }
 
-QString MetadataParser::parseMetadata(const QString& token, ParseInformation& info)
+QString MetadataOption::parseMetadata(const QString& token, ParseInformation& info)
 {
     QString tmp;
     QString keyword = token.toLower();

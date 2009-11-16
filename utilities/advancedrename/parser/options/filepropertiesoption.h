@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-08-08
- * Description : a metadata parser class
+ * Description : an option to provide file information to the parser
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -21,68 +21,35 @@
  *
  * ============================================================ */
 
-#ifndef METADATAPARSER_H
-#define METADATAPARSER_H
+#ifndef FILEPROPERTIESOPTION_H
+#define FILEPROPERTIESOPTION_H
 
 // Qt includes
 
+#include <QObject>
 #include <QString>
-#include <QStringList>
-
-// KDE includes
-
-#include <kdialog.h>
 
 // Local includes
 
-#include "subparser.h"
+#include "option.h"
 
 namespace Digikam
 {
 
-class MetadataParserDialogPriv;
-
-class MetadataParserDialog : public KDialog
+class FilePropertiesOption : public Option
 {
     Q_OBJECT
 
 public:
 
-    MetadataParserDialog();
-    ~MetadataParserDialog();
-
-    QStringList checkedTags() const;
-    QString     separator()   const;
-
-private:
-
-    MetadataParserDialogPriv* const d;
-};
-
-// --------------------------------------------------------
-
-class MetadataParser : public SubParser
-{
-    Q_OBJECT
-
-public:
-
-    MetadataParser();
-    ~MetadataParser() {};
+    FilePropertiesOption();
+    ~FilePropertiesOption() {};
 
 protected:
 
     virtual void parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results);
-
-private Q_SLOTS:
-
-    void slotTokenTriggered(const QString& token);
-
-private:
-
-    QString parseMetadata(const QString& token, ParseInformation& info);
 };
 
 } // namespace Digikam
 
-#endif /* METADATAPARSER_H */
+#endif /* FILEPROPERTIESOPTION_H */

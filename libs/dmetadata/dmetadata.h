@@ -95,8 +95,8 @@ public:
 
     /** Return a string with Lens mounted on the front of camera.
         There no standard Exif tag for Lens information.
-        Camera makernotes and Xmp tags are parsed. 
-        Take a care : lens information are not standardized and string content is not homogeneous between 
+        Camera makernotes and Xmp tags are parsed.
+        Take a care : lens information are not standardized and string content is not homogeneous between
         camera model/maker.
      */
     QString getLensDescription() const;
