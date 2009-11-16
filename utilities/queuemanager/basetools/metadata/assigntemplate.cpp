@@ -118,7 +118,11 @@ bool AssignTemplate::toolOperations()
         meta.setMetadataTemplate(t);
     }
 
+#if KEXIV2_VERSION >= 0x010000
+    image().setExif(meta.getExifEncoded());
+#else
     image().setExif(meta.getExif());
+#endif
     image().setIptc(meta.getIptc());
     image().setXmp(meta.getXmp());
 
