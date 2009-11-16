@@ -87,7 +87,7 @@ QString ImagePlugin::actionCategory() const
 
     if (!d || d->actionCategory.isNull() || d->actionCategory.isEmpty())
     {
-        return QString();
+        return QString("__INVALID__");
     }
     return d->actionCategory;
 }
