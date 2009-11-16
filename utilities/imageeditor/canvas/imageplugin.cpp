@@ -85,7 +85,7 @@ QString ImagePlugin::actionCategory() const
     // I will add an extra check here to see if the crash disappears.
     // In general I would say this is a Qt bug?
 
-    if (!d || d->actionCategory.isEmpty())
+    if (!d || d->actionCategory.isNull() || d->actionCategory.isEmpty())
     {
         return QString();
     }
