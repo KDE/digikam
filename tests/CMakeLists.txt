@@ -11,9 +11,9 @@ INCLUDE_DIRECTORIES(
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/metadata
                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename
                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/common
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/modifiers
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/subparsers
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/modifiers
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options
                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/cameragui
                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/canvas
                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/editor
@@ -29,25 +29,25 @@ INCLUDE_DIRECTORIES(
 SET(advancedrenametest_SRCS
     advancedrenametest.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/common/modifier.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/common/option.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/common/parseobject.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/common/parser.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/common/parseresults.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/common/subparser.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/common/token.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/defaultrenameparser.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/modifiers/defaultvaluemodifier.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/modifiers/firstletterofeachworduppercasemodifier.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/modifiers/lowercasemodifier.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/modifiers/rangemodifier.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/modifiers/replacemodifier.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/modifiers/trimmedmodifier.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/modifiers/uppercasemodifier.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/subparsers/cameranameparser.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/subparsers/dateparser.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/subparsers/directorynameparser.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/subparsers/filepropertiesparser.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/subparsers/metadataparser.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/subparsers/sequencenumberparser.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/defaultrenameparser.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/modifiers/defaultvaluemodifier.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/modifiers/firstletterofeachworduppercasemodifier.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/modifiers/lowercasemodifier.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/modifiers/rangemodifier.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/modifiers/replacemodifier.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/modifiers/trimmedmodifier.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/modifiers/uppercasemodifier.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options/cameranameoption.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options/dateoption.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options/directorynameoption.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options/filepropertiesoption.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options/metadataoption.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options/sequencenumberoption.cpp
 )
 KDE4_ADD_UNIT_TEST(advancedrenametest ${advancedrenametest_SRCS})
 TARGET_LINK_LIBRARIES(advancedrenametest

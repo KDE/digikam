@@ -21,8 +21,7 @@
  *
  * ============================================================ */
 
-#include "subparser.h"
-#include "subparser.moc"
+#include "option.moc"
 
 // KDE includes
 
@@ -42,11 +41,11 @@
 namespace Digikam
 {
 
-class SubParserPriv
+class OptionPriv
 {
 public:
 
-    SubParserPriv() :
+    OptionPriv() :
         useModifiers(true)
     {}
 
@@ -57,8 +56,8 @@ public:
     ModifierList modifiers;
 };
 
-SubParser::SubParser(const QString& name, const QString& description, const QIcon& icon)
-         : ParseObject(name, icon), d(new SubParserPriv)
+Option::Option(const QString& name, const QString& description, const QIcon& icon)
+         : ParseObject(name, icon), d(new OptionPriv)
 {
     setDescription(description);
 
@@ -71,7 +70,7 @@ SubParser::SubParser(const QString& name, const QString& description, const QIco
     registerModifier(new ReplaceModifier());
 }
 
-SubParser::~SubParser()
+Option::~Option()
 {
     foreach (Modifier* modifier, d->modifiers)
     {
@@ -83,7 +82,7 @@ SubParser::~SubParser()
     delete d;
 }
 
-void SubParser::registerModifier(Modifier* modifier)
+void Option::registerModifier(Modifier* modifier)
 {
     if (!modifier)
     {
@@ -98,22 +97,22 @@ void SubParser::registerModifier(Modifier* modifier)
     d->modifiers.append(modifier);
 }
 
-void SubParser::setUseModifiers(bool value)
+void Option::setUseModifiers(bool value)
 {
     d->useModifiers = value;
 }
 
-bool SubParser::useModifiers() const
+bool Option::useModifiers() const
 {
     return d->useModifiers;
 }
 
-ModifierList SubParser::modifiers() const
+ModifierList Option::modifiers() const
 {
     return d->modifiers;
 }
 
-void SubParser::parse(const QString& parseString, ParseInformation& info)
+void Option::parse(const QString& parseString, ParseInformation& info)
 {
     d->parseResults.clear();
     d->modifierResults.clear();
@@ -130,12 +129,12 @@ void SubParser::parse(const QString& parseString, ParseInformation& info)
     }
 }
 
-ParseResults SubParser::parseResults()
+ParseResults Option::parseResults()
 {
     return d->parseResults;
 }
 
-ParseResults SubParser::modifiedResults()
+ParseResults Option::modifiedResults()
 {
     if (d->modifierResults.isEmpty() || !d->useModifiers)
     {
@@ -144,7 +143,7 @@ ParseResults SubParser::modifiedResults()
     return d->modifierResults;
 }
 
-ParseResults SubParser::applyModifiers(const QString& parseString, ParseResults& results)
+ParseResults Option::applyModifiers(const QString& parseString, ParseResults& results)
 {
     ParseResults tmp = results;
 

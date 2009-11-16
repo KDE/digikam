@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-#include "imagepanelwidget.h"
 #include "imagepanelwidget.moc"
 
 // Qt includes
@@ -75,13 +74,13 @@ public:
 
     QString             settingsSection;
 
-    QButtonGroup       *separateView;
+    QButtonGroup*       separateView;
 
-    QWidget            *previewWidget;
-    QWidget            *sepaBBox;
+    QWidget*            previewWidget;
+    QWidget*            sepaBBox;
 
-    ImageRegionWidget  *imageRegionWidget;
-    ImagePanIconWidget *imagePanIconWidget;
+    ImageRegionWidget*  imageRegionWidget;
+    ImagePanIconWidget* imagePanIconWidget;
 };
 
 ImagePanelWidget::ImagePanelWidget(uint w, uint h, const QString& settingsSection,

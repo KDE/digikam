@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "editorwindow.h"
+//#include "editorwindow.h"
 #include "editorwindow_p.h"
 #include "editorwindow.moc"
 
@@ -804,9 +804,11 @@ void EditorWindow::loadImagePlugins()
 
             // add actions to imagepluginsActionCollection
 #if KDE_IS_VERSION(4,1,68)
-            if (!plugin->actionCategory().isEmpty())
+            QString categoryStr = plugin->actionCategory();
+
+            if (categoryStr != QString("__INVALID__") && !categoryStr.isEmpty())
             {
-                KActionCategory *category = new KActionCategory(plugin->actionCategory(), d->imagepluginsActionCollection);
+                KActionCategory *category = new KActionCategory(categoryStr, d->imagepluginsActionCollection);
                 foreach (QAction* action, plugin->actionCollection()->actions())
                 {
                     category->addAction(action->objectName(), action);

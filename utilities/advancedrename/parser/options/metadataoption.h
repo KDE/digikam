@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-08-08
- * Description : a sequence number parser class
+ * Description : an option to provide metadata information to the parser
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -21,12 +21,14 @@
  *
  * ============================================================ */
 
-#ifndef SEQUENCENUMBERPARSER_H
-#define SEQUENCENUMBERPARSER_H
+#ifndef METADATAOPTION_H
+#define METADATAOPTION_H
 
 // Qt includes
 
+#include <QObject>
 #include <QString>
+#include <QStringList>
 
 // KDE includes
 
@@ -34,41 +36,40 @@
 
 // Local includes
 
-#include "subparser.h"
+#include "option.h"
 
 namespace Digikam
 {
 
-class SequenceNumberDialogPriv;
+class MetadataOptionDialogPriv;
 
-class SequenceNumberDialog : public KDialog
+class MetadataOptionDialog : public KDialog
 {
     Q_OBJECT
 
 public:
 
-    SequenceNumberDialog();
-    ~SequenceNumberDialog();
+    MetadataOptionDialog();
+    ~MetadataOptionDialog();
 
-    int digits() const;
-    int start()  const;
-    int step()   const;
+    QStringList checkedTags() const;
+    QString     separator()   const;
 
 private:
 
-    SequenceNumberDialogPriv* const d;
+    MetadataOptionDialogPriv* const d;
 };
 
 // --------------------------------------------------------
 
-class SequenceNumberParser : public SubParser
+class MetadataOption : public Option
 {
     Q_OBJECT
 
 public:
 
-    SequenceNumberParser();
-    ~SequenceNumberParser() {};
+    MetadataOption();
+    ~MetadataOption() {};
 
 protected:
 
@@ -78,8 +79,11 @@ private Q_SLOTS:
 
     void slotTokenTriggered(const QString& token);
 
+private:
+
+    QString parseMetadata(const QString& token, ParseInformation& info);
 };
 
 } // namespace Digikam
 
-#endif /* SEQUENCENUMBERPARSER_H */
+#endif /* METADATAOPTION_H */

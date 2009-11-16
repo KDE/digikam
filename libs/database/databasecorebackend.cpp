@@ -48,7 +48,7 @@ namespace Digikam
 {
 
 DatabaseCoreBackendPrivate::DatabaseCoreBackendPrivate(DatabaseCoreBackend *backend)
-            : q(backend)
+                          : q(backend)
 {
 
     status          = DatabaseCoreBackend::Unavailable;

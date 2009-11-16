@@ -49,9 +49,9 @@ INCLUDE_DIRECTORIES(
                      ../utilities/timeline
                      ../utilities/advancedrename
                      ../utilities/advancedrename/common
-                     ../utilities/advancedrename/parsers
-                     ../utilities/advancedrename/parsers/subparsers
-                     ../utilities/advancedrename/parsers/modifiers
+                     ../utilities/advancedrename/parser
+                     ../utilities/advancedrename/parser/options
+                     ../utilities/advancedrename/parser/modifiers
                      ../utilities/queuemanager
                      ../utilities/queuemanager/basetools/convert
                      ../utilities/queuemanager/basetools/enhance

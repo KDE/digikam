@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-#include "imageplugin.h"
 #include "imageplugin.moc"
 
 // Local includes
@@ -80,6 +79,16 @@ void ImagePlugin::slotToolDone()
 
 QString ImagePlugin::actionCategory() const
 {
+    // FIXME: crash on 64bit systems?
+    // According to bug #214718 digiKam crashes when using QString::isEmpty() on the returned string.
+    // But shouldn't the string be valid when the Priv class is created?
+    // I will add an extra check here to see if the crash disappears.
+    // In general I would say this is a Qt bug?
+
+    if (!d || d->actionCategory.isNull() || d->actionCategory.isEmpty())
+    {
+        return QString("__INVALID__");
+    }
     return d->actionCategory;
 }
 

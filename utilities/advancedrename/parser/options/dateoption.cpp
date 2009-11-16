@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-08-08
- * Description : a date parser class
+ * Description : an option to provide date information to the parser
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -21,8 +21,7 @@
  *
  * ============================================================ */
 
-#include "dateparser.h"
-#include "dateparser.moc"
+#include "dateoption.moc"
 
 // Qt includes
 
@@ -36,7 +35,7 @@
 
 // Local includes
 
-#include "ui_dateparserdialogwidget.h"
+#include "ui_dateoptiondialogwidget.h"
 
 namespace Digikam
 {
@@ -92,8 +91,8 @@ QVariant DateFormat::formatType(QString identifier)
 
 // --------------------------------------------------------
 
-DateParserDialog::DateParserDialog(QWidget* parent)
-                : KDialog(parent), ui(new Ui::DateParserDialogWidget)
+DateOptionDialog::DateOptionDialog(QWidget* parent)
+                : KDialog(parent), ui(new Ui::DateOptionDialogWidget)
 {
     ui->setupUi(mainWidget());
     setWindowTitle(i18n("Add Date & Time"));
@@ -119,12 +118,12 @@ DateParserDialog::DateParserDialog(QWidget* parent)
     slotDateFormatChanged(ui->dateFormatPicker->currentIndex());
 }
 
-DateParserDialog::~DateParserDialog()
+DateOptionDialog::~DateOptionDialog()
 {
     delete ui;
 }
 
-QString DateParserDialog::formattedDateTime(const QDateTime& date)
+QString DateOptionDialog::formattedDateTime(const QDateTime& date)
 {
     if (ui->dateFormatPicker->currentIndex() == DateFormat::Custom)
     {
@@ -147,7 +146,7 @@ QString DateParserDialog::formattedDateTime(const QDateTime& date)
     return tmp;
 }
 
-void DateParserDialog::slotDateFormatChanged(int index)
+void DateOptionDialog::slotDateFormatChanged(int index)
 {
     ui->customFormatInput->setEnabled(index == DateFormat::Custom);
 
@@ -157,12 +156,12 @@ void DateParserDialog::slotDateFormatChanged(int index)
     updateExampleLabel();
 }
 
-void DateParserDialog::slotCustomFormatChanged(const QString&)
+void DateOptionDialog::slotCustomFormatChanged(const QString&)
 {
     updateExampleLabel();
 }
 
-void DateParserDialog::updateExampleLabel()
+void DateOptionDialog::updateExampleLabel()
 {
     QString tmp = QString("example: %1").arg(formattedDateTime(QDateTime::currentDateTime()));
     ui->exampleLabel->setText(tmp);
@@ -170,9 +169,9 @@ void DateParserDialog::updateExampleLabel()
 
 // --------------------------------------------------------
 
-DateParser::DateParser()
-          : SubParser(i18n("Date && Time..."), i18n("Add date and time information"),
-                      SmallIcon("view-pim-calendar"))
+DateOption::DateOption()
+          : Option(i18n("Date && Time..."), i18n("Add date and time information"),
+                        SmallIcon("view-pim-calendar"))
 {
     setUseTokenMenu(false);
 
@@ -188,7 +187,7 @@ DateParser::DateParser()
     setRegExp("\\[date(:.*)?\\]");
 }
 
-void DateParser::parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results)
+void DateOption::parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results)
 {
     QRegExp reg = regExp();
     reg.setMinimal(true);
@@ -226,12 +225,12 @@ void DateParser::parseOperation(const QString& parseString, ParseInformation& in
     PARSE_LOOP_END(parseString, reg, tmp, results)
 }
 
-void DateParser::slotTokenTriggered(const QString& token)
+void DateOption::slotTokenTriggered(const QString& token)
 {
     Q_UNUSED(token)
 
     QString tokenStr      = QString("[date:%1]");
-    DateParserDialog* dlg = new DateParserDialog;
+    DateOptionDialog* dlg = new DateOptionDialog;
     QVariant v;
     DateFormat df;
     QString tmp;

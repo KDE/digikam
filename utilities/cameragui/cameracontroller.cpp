@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-#include "cameracontroller.h"
 #include "cameracontroller.moc"
 
 // C ANSI includes
@@ -504,7 +503,7 @@ void CameraController::executeCommand(CameraCommand *cmd)
             emit signalDownloaded(folder, file, GPItemInfo::DownloadStarted);
 
             KUrl tempURL(dest);
-            tempURL      = tempURL.upUrl();
+            tempURL = tempURL.upUrl();
             tempURL.addPath(QString(".digikam-camera-tmp1-%1").arg(getpid()).append(file));
             kDebug() << "Downloading: " << file << " using (" << tempURL << ")";
             QString temp = tempURL.toLocalFile();

@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-#include "imagepropertiessidebarcamgui.h"
 #include "imagepropertiessidebarcamgui.moc"
 
 // Qt includes
@@ -172,7 +171,12 @@ void ImagePropertiesSideBarCamGui::slotChangedTab(QWidget* tab)
     if (tab == d->cameraItemTab && !d->dirtyCameraItemTab)
     {
         d->cameraItemTab->setCurrentItem(d->itemInfo,
-                                         d->cameraItem->getDownloadName(), d->metaData.getExif(),
+                                         d->cameraItem->getDownloadName(),
+#if KEXIV2_VERSION >= 0x01000
+                                         d->metaData.getExifEncoded(),
+#else
+                                         d->metaData.getExif(),
+#endif
                                          d->currentURL);
 
         d->dirtyCameraItemTab = true;

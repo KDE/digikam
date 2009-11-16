@@ -3,8 +3,8 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2009-08-11
- * Description : the default parser for manual rename, includes all subparsers
+ * Date        : 2009-09-02
+ * Description : an option to provide directory information to the parser
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -21,36 +21,36 @@
  *
  * ============================================================ */
 
-#include "defaultrenameparser.h"
+#ifndef DIRECTORYNAMEOPTION_H
+#define DIRECTORYNAMEOPTION_H
 
-// LibKExiv2 includes
+// Qt includes
 
-#include <libkexiv2/version.h>
+#include <QObject>
 
 // Local includes
 
-#include "cameranameparser.h"
-#include "dateparser.h"
-#include "directorynameparser.h"
-#include "filepropertiesparser.h"
-#include "metadataparser.h"
-#include "sequencenumberparser.h"
+#include "option.h"
+
+class QString;
 
 namespace Digikam
 {
 
-DefaultRenameParser::DefaultRenameParser()
-                   : Parser()
+class DirectoryNameOption : public Option
 {
-    registerSubParser(new FilePropertiesParser());
-    registerSubParser(new DirectoryNameParser());
-    registerSubParser(new CameraNameParser());
-    registerSubParser(new SequenceNumberParser());
-    registerSubParser(new DateParser());
+    Q_OBJECT
 
-#if KEXIV2_VERSION >= 0x010000
-    registerSubParser(new MetadataParser());
-#endif
-}
+public:
 
-}  // namespace Digikam
+    DirectoryNameOption();
+    ~DirectoryNameOption() {};
+
+protected:
+
+    virtual void parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results);
+};
+
+} // namespace Digikam
+
+#endif /* DIRECTORYNAMEOPTION_H */

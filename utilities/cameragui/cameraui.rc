@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="26" name="cameraui" >
+<gui version="27" name="cameraui" >
 
 <MenuBar>
 

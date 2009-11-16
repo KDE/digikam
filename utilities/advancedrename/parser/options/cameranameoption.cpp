@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-08-08
- * Description : a camera name parser class
+ * Description : an option to provide camera information to the parser
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -21,8 +21,7 @@
  *
  * ============================================================ */
 
-#include "cameranameparser.h"
-#include "cameranameparser.moc"
+#include "cameranameoption.moc"
 
 // KDE includes
 
@@ -36,15 +35,15 @@
 namespace Digikam
 {
 
-CameraNameParser::CameraNameParser()
-                : SubParser(i18n("Camera"), i18n("Add the camera name"), SmallIcon("camera-photo"))
+CameraNameOption::CameraNameOption()
+                : Option(i18n("Camera"), i18n("Add the camera name"), SmallIcon("camera-photo"))
 {
     addTokenDescription("[cam]", i18n("Camera Name"), i18n("Camera name"));
 
     setRegExp("\\[cam\\]");
 }
 
-void CameraNameParser::parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results)
+void CameraNameOption::parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results)
 {
     QRegExp reg = regExp();
     reg.setCaseSensitivity(Qt::CaseInsensitive);

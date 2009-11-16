@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-#include "cameraui.h"
 #include "cameraui.moc"
 
 // Qt includes
@@ -72,7 +71,6 @@
 #include <kmenu.h>
 #include <kmenubar.h>
 #include <kmessagebox.h>
-#include <kpassivepopup.h>
 #include <kshortcutsdialog.h>
 #include <kstandarddirs.h>
 #include <kstatusbar.h>
@@ -130,6 +128,7 @@
 #include "cameraui_p.h"
 #include "cameranamehelper.h"
 #include "uifilevalidator.h"
+#include "knotificationwrapper.h"
 
 namespace Digikam
 {
@@ -1757,7 +1756,7 @@ void CameraUI::slotDownloaded(const QString& folder, const QString& file, int st
         else
         {
             // Pop-up a message to bring user when all is done.
-            KPassivePopup::message(windowTitle(), i18n("Download is completed..."), this);
+            KNotificationWrapper("", i18n("Download is completed..."), this, windowTitle());
         }
     }
 }

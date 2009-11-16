@@ -589,7 +589,11 @@ bool jpegConvert(const QString& src, const QString& dest, const QString& documen
         meta.setExifTagString("Exif.Image.DocumentName", documentName);
 
         // Store new Exif/IPTC data into image.
+#if KEXIV2_VERSION >= 0x010000
+        image.setExif(meta.getExifEncoded());
+#else
         image.setExif(meta.getExif());
+#endif
         image.setIptc(meta.getIptc());
         image.setXmp(meta.getXmp());
 

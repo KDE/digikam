@@ -27,8 +27,6 @@
 #define GCOL     0xAA
 #define BCOL     0xAA
 
-
-#include "dimginterface.h"
 #include "dimginterface.moc"
 
 // C++ includes
@@ -575,8 +573,15 @@ void DImgInterface::readMetadataFromFile(const QString& file)
     //      put both in a common place.
     if (!meta.getComments().isNull())
         d->image.setComments(meta.getComments());
+
+#if KEXIV2_VERSION >= 0x010000
+    if (!meta.getExifEncoded().isNull())
+        d->image.setExif(meta.getExifEncoded());
+#else
     if (!meta.getExif().isNull())
         d->image.setExif(meta.getExif());
+#endif
+
     if (!meta.getIptc().isNull())
         d->image.setIptc(meta.getIptc());
     if (!meta.getXmp().isNull())

@@ -181,8 +181,15 @@ bool DImgLoader::readMetadata(const QString& filePath, DImg::FORMAT /*ff*/)
     // be interpreted as "There was data, so write it again to the file".
     if (!metaDataFromFile.getComments().isNull())
         imageMetadata.insert(DImg::COM, metaDataFromFile.getComments());
+
+#if KEXIV2_VERSION >= 0x010000
+    if (!metaDataFromFile.getExifEncoded().isNull())
+        imageMetadata.insert(DImg::EXIF, metaDataFromFile.getExifEncoded());
+#else
     if (!metaDataFromFile.getExif().isNull())
         imageMetadata.insert(DImg::EXIF, metaDataFromFile.getExif());
+#endif
+
     if (!metaDataFromFile.getIptc().isNull())
         imageMetadata.insert(DImg::IPTC, metaDataFromFile.getIptc());
     if (!metaDataFromFile.getXmp().isNull())
@@ -221,7 +228,11 @@ QByteArray DImgLoader::uniqueHash(const QString& filePath, const DImg& img, bool
     if (loadMetadata)
     {
         DMetadata metaDataFromFile(filePath);
+#if KEXIV2_VERSION >= 0x010000
+        bv = metaDataFromFile.getExifEncoded();
+#else
         bv = metaDataFromFile.getExif();
+#endif
     }
     else
     {

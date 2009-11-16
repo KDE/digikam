@@ -113,6 +113,7 @@ public Q_SLOTS:
     void slotDeleteAlbum();
     void slotAlbumPropsEdit();
     void slotAlbumOpenInKonqui();
+    void slotAlbumOpenInTerminal();
     void slotAlbumRefresh();
     void slotAlbumHistoryBack(int steps=1);
     void slotAlbumHistoryForward(int steps=1);

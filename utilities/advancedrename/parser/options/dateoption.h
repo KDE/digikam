@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-08-08
- * Description : a date parser class
+ * Description : an option to provide date information to the parser
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -21,11 +21,12 @@
  *
  * ============================================================ */
 
-#ifndef DATEPARSER_H
-#define DATEPARSER_H
+#ifndef DATEOPTION_H
+#define DATEOPTION_H
 
 // Qt includes
 
+#include <QObject>
 #include <QString>
 #include <QDialog>
 
@@ -35,11 +36,11 @@
 
 // Local includes
 
-#include "subparser.h"
+#include "option.h"
 
 namespace Ui
 {
-    class DateParserDialogWidget;
+    class DateOptionDialogWidget;
 }
 
 namespace Digikam
@@ -77,16 +78,16 @@ private:
 
 // --------------------------------------------------------
 
-class DateParserDialog : public KDialog
+class DateOptionDialog : public KDialog
 {
     Q_OBJECT
 
 public:
 
-    DateParserDialog(QWidget* parent = 0);
-    ~DateParserDialog();
+    DateOptionDialog(QWidget* parent = 0);
+    ~DateOptionDialog();
 
-    Ui::DateParserDialogWidget* const ui;
+    Ui::DateOptionDialogWidget* const ui;
 
 private Q_SLOTS:
 
@@ -99,14 +100,14 @@ private:
     void    updateExampleLabel();
 };
 
-class DateParser : public SubParser
+class DateOption : public Option
 {
     Q_OBJECT
 
 public:
 
-    DateParser();
-    ~DateParser() {};
+    DateOption();
+    ~DateOption() {};
 
 protected:
 
@@ -119,4 +120,4 @@ private Q_SLOTS:
 
 } // namespace Digikam
 
-#endif /* DATEPARSER_H */
+#endif /* DATEOPTION_H */
