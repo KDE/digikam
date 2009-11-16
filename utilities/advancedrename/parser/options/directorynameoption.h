@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-09-02
- * Description : a directory name parser class
+ * Description : an option to provide directory information to the parser
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
