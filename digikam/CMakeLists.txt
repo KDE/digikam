@@ -61,9 +61,9 @@ INCLUDE_DIRECTORIES(
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/firstrun
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/common
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/subparsers
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/modifiers
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/modifiers
                      ${CMAKE_CURRENT_SOURCE_DIR}/../digikam
 
                      # config-digikam.h
@@ -122,7 +122,7 @@ SET(digikamcore_LIB_SRCS
 
 KDE4_ADD_UI_FILES(digikamcore_LIB_SRCS
                   ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/printiface/printoptionspage.ui
-                  ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parsers/subparsers/dateparserdialogwidget.ui
+                  ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options/dateoptiondialogwidget.ui
                  )
 
 KDE4_ADD_KCFG_FILES(digikamcore_LIB_SRCS

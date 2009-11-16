@@ -3,8 +3,8 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2009-08-11
- * Description : the default parser for manual rename, includes all subparsers
+ * Date        : 2009-08-08
+ * Description : a camera name parser class
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -21,36 +21,35 @@
  *
  * ============================================================ */
 
-#include "defaultrenameparser.h"
+#ifndef CAMERANAMEOPTION_H
+#define CAMERANAMEOPTION_H
 
-// LibKExiv2 includes
+// Qt includes
 
-#include <libkexiv2/version.h>
+#include <QObject>
+#include <QString>
 
 // Local includes
 
-#include "cameranameparser.h"
-#include "dateparser.h"
-#include "directorynameparser.h"
-#include "filepropertiesparser.h"
-#include "metadataparser.h"
-#include "sequencenumberparser.h"
+#include "option.h"
 
 namespace Digikam
 {
 
-DefaultRenameParser::DefaultRenameParser()
-                   : Parser()
+class CameraNameOption : public Option
 {
-    registerSubParser(new FilePropertiesParser());
-    registerSubParser(new DirectoryNameParser());
-    registerSubParser(new CameraNameParser());
-    registerSubParser(new SequenceNumberParser());
-    registerSubParser(new DateParser());
+    Q_OBJECT
 
-#if KEXIV2_VERSION >= 0x010000
-    registerSubParser(new MetadataParser());
-#endif
-}
+public:
 
-}  // namespace Digikam
+    CameraNameOption();
+    ~CameraNameOption() {};
+
+protected:
+
+    virtual void parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results);
+};
+
+} // namespace Digikam
+
+#endif /* CAMERANAMEOPTION_H */

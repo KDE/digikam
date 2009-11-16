@@ -34,13 +34,13 @@
 
 #include "parseinformation.h"
 #include "parseresults.h"
-#include "subparser.h"
+#include "option.h"
 #include "modifier.h"
 
 namespace Digikam
 {
 
-class SubParser;
+class Option;
 class Modifier;
 class ParserPriv;
 
@@ -63,8 +63,8 @@ public:
 
     QString       parse(const QString& parseString, ParseInformation& info);
 
-    SubParserList subParsers() const;
-    ModifierList  modifiers()  const;
+    OptionsList   options()   const;
+    ModifierList  modifiers() const;
 
     bool          tokenAtPosition(Type type, const QString& parseString, int pos);
     bool          tokenAtPosition(Type type, const QString& parseString, int pos, int& start, int& length);
@@ -78,7 +78,7 @@ public:
 
 protected:
 
-    void registerSubParser(SubParser* parser);
+    void registerOption(Option* parser);
 
 private:
 

@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "sequencenumberparser.moc"
+#include "sequencenumberoption.moc"
 
 // Qt includes
 
@@ -42,12 +42,11 @@ class SequenceNumberDialogPriv
 {
 public:
 
-    SequenceNumberDialogPriv()
-    {
-        digits = 0;
-        start  = 0;
-        step   = 0;
-    }
+    SequenceNumberDialogPriv() :
+        digits(0),
+        start(0),
+        step(0)
+    {}
 
     KIntNumInput* digits;
     KIntNumInput* start;
@@ -119,9 +118,9 @@ int SequenceNumberDialog::step()   const
 
 // --------------------------------------------------------
 
-SequenceNumberParser::SequenceNumberParser()
-                    : SubParser(i18nc("Sequence Number", "Number..."), i18n("Add a sequence number"),
-                                SmallIcon("accessories-calculator"))
+SequenceNumberOption::SequenceNumberOption()
+                    : Option(i18nc("Sequence Number", "Number..."), i18n("Add a sequence number"),
+                                   SmallIcon("accessories-calculator"))
 {
     setUseTokenMenu(false);
 
@@ -137,7 +136,7 @@ SequenceNumberParser::SequenceNumberParser()
     setRegExp("(#+)(\\[\\s*(\\d+)\\s*,?\\s*(\\d+)?\\s*\\])?");
 }
 
-void SequenceNumberParser::slotTokenTriggered(const QString& token)
+void SequenceNumberOption::slotTokenTriggered(const QString& token)
 {
     Q_UNUSED(token)
 
@@ -169,7 +168,7 @@ void SequenceNumberParser::slotTokenTriggered(const QString& token)
     emit signalTokenTriggered(tmp);
 }
 
-void SequenceNumberParser::parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results)
+void SequenceNumberOption::parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results)
 {
     QRegExp reg = regExp();
     int slength = 0;

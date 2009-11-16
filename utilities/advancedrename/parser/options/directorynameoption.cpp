@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "directorynameparser.moc"
+#include "directorynameoption.moc"
 
 // Qt includes
 
@@ -36,8 +36,8 @@
 namespace Digikam
 {
 
-DirectoryNameParser::DirectoryNameParser()
-                   : SubParser(i18n("Directory"), i18n("Add the directory name"), SmallIcon("folder"))
+DirectoryNameOption::DirectoryNameOption()
+                   : Option(i18n("Directory"), i18n("Add the directory name"), SmallIcon("folder"))
 {
     setUseTokenMenu(false);
 
@@ -51,7 +51,7 @@ DirectoryNameParser::DirectoryNameParser()
     setRegExp("\\[dir(\\.*)\\]");
 }
 
-void DirectoryNameParser::parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results)
+void DirectoryNameOption::parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results)
 {
     QFileInfo fi(info.filePath);
     QStringList folders = fi.absolutePath().split('/', QString::SkipEmptyParts);

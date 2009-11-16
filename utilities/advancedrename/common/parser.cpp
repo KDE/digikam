@@ -35,7 +35,7 @@ class ParserPriv
 public:
 
     ParserPriv() {}
-    SubParserList subparsers;
+    OptionsList options;
 };
 
 // --------------------------------------------------------
@@ -47,11 +47,11 @@ Parser::Parser()
 
 Parser::~Parser()
 {
-    foreach (SubParser* subparser, d->subparsers)
+    foreach (Option* option, d->options)
     {
-        delete subparser;
+        delete option;
     }
-    d->subparsers.clear();
+    d->options.clear();
 
     delete d;
 }
@@ -66,22 +66,22 @@ bool Parser::stringIsValid(const QString& str)
     return true;
 }
 
-SubParserList Parser::subParsers() const
+OptionsList Parser::options() const
 {
-    return d->subparsers;
+    return d->options;
 }
 
 ModifierList Parser::modifiers() const
 {
     ModifierList modifierList;
-    if (!d->subparsers.isEmpty())
+    if (!d->options.isEmpty())
     {
-        modifierList = d->subparsers.first()->modifiers();
+        modifierList = d->options.first()->modifiers();
     }
     return modifierList;
 }
 
-void Parser::registerSubParser(SubParser* parser)
+void Parser::registerOption(Option* parser)
 {
     if (!parser)
     {
@@ -93,7 +93,7 @@ void Parser::registerSubParser(SubParser* parser)
         return;
     }
 
-    d->subparsers.append(parser);
+    d->options.append(parser);
 }
 
 ParseResults Parser::parseResults(const QString& parseString)
@@ -130,20 +130,20 @@ QString Parser::parseOperation(const QString& parseString, ParseInformation& inf
         return fi.fileName();
     }
 
-    if (!d->subparsers.isEmpty())
+    if (!d->options.isEmpty())
     {
-        foreach (SubParser* parser, d->subparsers)
+        foreach (Option* option, d->options)
         {
-            parser->parse(parseString, info);
+            option->parse(parseString, info);
 
             ParseResults r;
             if (modify)
             {
-                r = parser->modifiedResults();
+                r = option->modifiedResults();
             }
             else
             {
-                r = parser->parseResults();
+                r = option->parseResults();
             }
 
             results.append(r);

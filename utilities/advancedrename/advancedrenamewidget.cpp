@@ -218,7 +218,7 @@ void AdvancedRenameWidget::createToolTip()
         // --------------------------------------------------------
 
         TOOLTIP_HEADER(i18n("Renaming Options"));
-        TOOLTIP_ENTRIES(SubParser, d->parser->subParsers());
+        TOOLTIP_ENTRIES(Option, d->parser->options());
 
         tooltip += QString("<tr></tr>");
 
@@ -253,7 +253,7 @@ void AdvancedRenameWidget::slotUpdateTrackerPos()
 
 void AdvancedRenameWidget::setControlWidgets(ControlWidgets mask)
 {
-    bool enable       = d->parser && !(d->parser->subParsers().isEmpty());
+    bool enable       = d->parser && !(d->parser->options().isEmpty());
     bool enableModBtn = enable && !(d->parser->modifiers().isEmpty());
 
     d->renameInput->setEnabled(enable);
@@ -277,10 +277,10 @@ void AdvancedRenameWidget::registerParserControls()
        QAction* action            = 0;
        DynamicLayout* layout      = new DynamicLayout(KDialog::marginHint(), KDialog::marginHint());
 
-       foreach (SubParser* subparser, d->parser->subParsers())
+       foreach (Option* option, d->parser->options())
        {
-           btn    = subparser->registerButton(this);
-           action = subparser->registerMenu(tokenToolBtnMenu);
+           btn    = option->registerButton(this);
+           action = option->registerMenu(tokenToolBtnMenu);
 
            if (!btn || !action)
            {
@@ -288,11 +288,11 @@ void AdvancedRenameWidget::registerParserControls()
            }
 
            // set button tooltip
-           btn->setToolTip(subparser->description());
+           btn->setToolTip(option->description());
 
            layout->addWidget(btn);
 
-           connect(subparser, SIGNAL(signalTokenTriggered(const QString&)),
+           connect(option, SIGNAL(signalTokenTriggered(const QString&)),
                    d->renameInput, SLOT(slotAddToken(const QString&)));
        }
 

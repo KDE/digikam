@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-08-08
- * Description : a sequence number parser class
+ * Description : a camera name parser class
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -21,65 +21,41 @@
  *
  * ============================================================ */
 
-#ifndef SEQUENCENUMBERPARSER_H
-#define SEQUENCENUMBERPARSER_H
-
-// Qt includes
-
-#include <QString>
+#include "cameranameoption.moc"
 
 // KDE includes
 
-#include <kdialog.h>
+#include <kiconloader.h>
+#include <klocale.h>
 
 // Local includes
 
-#include "subparser.h"
+#include "parser.h"
 
 namespace Digikam
 {
 
-class SequenceNumberDialogPriv;
-
-class SequenceNumberDialog : public KDialog
+CameraNameOption::CameraNameOption()
+                : Option(i18n("Camera"), i18n("Add the camera name"), SmallIcon("camera-photo"))
 {
-    Q_OBJECT
+    addTokenDescription("[cam]", i18n("Camera Name"), i18n("Camera name"));
 
-public:
+    setRegExp("\\[cam\\]");
+}
 
-    SequenceNumberDialog();
-    ~SequenceNumberDialog();
-
-    int digits() const;
-    int start()  const;
-    int step()   const;
-
-private:
-
-    SequenceNumberDialogPriv* const d;
-};
-
-// --------------------------------------------------------
-
-class SequenceNumberParser : public SubParser
+void CameraNameOption::parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results)
 {
-    Q_OBJECT
+    QRegExp reg = regExp();
+    reg.setCaseSensitivity(Qt::CaseInsensitive);
 
-public:
+    // --------------------------------------------------------
 
-    SequenceNumberParser();
-    ~SequenceNumberParser() {};
-
-protected:
-
-    virtual void parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results);
-
-private Q_SLOTS:
-
-    void slotTokenTriggered(const QString& token);
-
-};
+    QString tmp;
+    PARSE_LOOP_START(parseString, reg)
+    {
+        tmp = Parser::stringIsValid(info.cameraName) ? info.cameraName : QString();
+    }
+    PARSE_LOOP_END(parseString, reg, tmp, results)
+}
 
 } // namespace Digikam
-
-#endif /* SEQUENCENUMBERPARSER_H */

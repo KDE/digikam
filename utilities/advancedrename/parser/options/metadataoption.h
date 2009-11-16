@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-08-08
- * Description : a date parser class
+ * Description : a metadata parser class
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -21,13 +21,14 @@
  *
  * ============================================================ */
 
-#ifndef DATEPARSER_H
-#define DATEPARSER_H
+#ifndef METADATAOPTION_H
+#define METADATAOPTION_H
 
 // Qt includes
 
+#include <QObject>
 #include <QString>
-#include <QDialog>
+#include <QStringList>
 
 // KDE includes
 
@@ -35,78 +36,40 @@
 
 // Local includes
 
-#include "subparser.h"
-
-namespace Ui
-{
-    class DateParserDialogWidget;
-}
+#include "option.h"
 
 namespace Digikam
 {
 
-class DateFormat
+class MetadataOptionDialogPriv;
+
+class MetadataOptionDialog : public KDialog
 {
+    Q_OBJECT
+
 public:
 
-    DateFormat();
-    ~DateFormat() {};
+    MetadataOptionDialog();
+    ~MetadataOptionDialog();
 
-    typedef QPair<QString, QVariant> DateFormatDescriptor;
-    typedef QList<DateFormatDescriptor> DateFormatMap;
-    enum Type
-    {
-        Standard = 0,
-        ISO,
-        FullText,
-        Locale,
-        Custom
-    };
-
-    QString  identifier(Type type);
-
-    QVariant formatType(Type type);
-    QVariant formatType(QString identifier);
-
-    DateFormatMap& map() { return m_map; };
+    QStringList checkedTags() const;
+    QString     separator()   const;
 
 private:
 
-    DateFormatMap m_map;
+    MetadataOptionDialogPriv* const d;
 };
 
 // --------------------------------------------------------
 
-class DateParserDialog : public KDialog
+class MetadataOption : public Option
 {
     Q_OBJECT
 
 public:
 
-    DateParserDialog(QWidget* parent = 0);
-    ~DateParserDialog();
-
-    Ui::DateParserDialogWidget* const ui;
-
-private Q_SLOTS:
-
-    void slotDateFormatChanged(int);
-    void slotCustomFormatChanged(const QString&);
-
-private:
-
-    QString formattedDateTime(const QDateTime& date);
-    void    updateExampleLabel();
-};
-
-class DateParser : public SubParser
-{
-    Q_OBJECT
-
-public:
-
-    DateParser();
-    ~DateParser() {};
+    MetadataOption();
+    ~MetadataOption() {};
 
 protected:
 
@@ -115,8 +78,12 @@ protected:
 private Q_SLOTS:
 
     void slotTokenTriggered(const QString& token);
+
+private:
+
+    QString parseMetadata(const QString& token, ParseInformation& info);
 };
 
 } // namespace Digikam
 
-#endif /* DATEPARSER_H */
+#endif /* METADATAOPTION_H */

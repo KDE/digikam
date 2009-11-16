@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SUBPARSER_H
-#define SUBPARSER_H
+#ifndef OPTION_H
+#define OPTION_H
 
 // Local includes
 
@@ -33,16 +33,16 @@
 namespace Digikam
 {
 
-class SubParserPriv;
+class OptionPriv;
 
-class SubParser : public ParseObject
+class Option : public ParseObject
 {
     Q_OBJECT
 
 public:
 
-    SubParser(const QString& name, const QString& description, const QIcon& icon = QIcon());
-    virtual ~SubParser();
+    Option(const QString& name, const QString& description, const QIcon& icon = QIcon());
+    virtual ~Option();
 
     ModifierList modifiers() const;
 
@@ -76,11 +76,11 @@ private:
 
 private:
 
-    SubParserPriv* const d;
+    OptionPriv* const d;
 };
 
-typedef QList<SubParser*> SubParserList;
+typedef QList<Option*> OptionsList;
 
 } // namespace Digikam
 
-#endif /* SUBPARSER_H */
+#endif /* OPTION_H */

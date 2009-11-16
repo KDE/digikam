@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>DateParserDialogWidget</class>
- <widget class="QWidget" name="DateParserDialogWidget">
+ <class>DateOptionDialogWidget</class>
+ <widget class="QWidget" name="DateOptionDialogWidget">
   <property name="geometry">
    <rect>
     <x>0</x>

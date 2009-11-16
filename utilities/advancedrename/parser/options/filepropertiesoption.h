@@ -3,8 +3,8 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2009-09-02
- * Description : a directory name parser class
+ * Date        : 2009-08-08
+ * Description : a file properties parser class
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -21,26 +21,29 @@
  *
  * ============================================================ */
 
-#ifndef DIRECTORYNAMEPARSER_H
-#define DIRECTORYNAMEPARSER_H
+#ifndef FILEPROPERTIESOPTION_H
+#define FILEPROPERTIESOPTION_H
+
+// Qt includes
+
+#include <QObject>
+#include <QString>
 
 // Local includes
 
-#include "subparser.h"
-
-class QString;
+#include "option.h"
 
 namespace Digikam
 {
 
-class DirectoryNameParser : public SubParser
+class FilePropertiesOption : public Option
 {
     Q_OBJECT
 
 public:
 
-    DirectoryNameParser();
-    ~DirectoryNameParser() {};
+    FilePropertiesOption();
+    ~FilePropertiesOption() {};
 
 protected:
 
@@ -49,4 +52,4 @@ protected:
 
 } // namespace Digikam
 
-#endif /* DIRECTORYNAMEPARSER_H */
+#endif /* FILEPROPERTIESOPTION_H */

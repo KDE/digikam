@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-08-08
- * Description : a camera name parser class
+ * Description : a file properties parser class
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -21,30 +21,36 @@
  *
  * ============================================================ */
 
-#include "cameranameparser.moc"
+#include "filepropertiesoption.moc"
+
+// Qt includes
+
+#include <QFileInfo>
 
 // KDE includes
 
 #include <kiconloader.h>
 #include <klocale.h>
 
-// Local includes
-
-#include "parser.h"
-
 namespace Digikam
 {
 
-CameraNameParser::CameraNameParser()
-                : SubParser(i18n("Camera"), i18n("Add the camera name"), SmallIcon("camera-photo"))
+FilePropertiesOption::FilePropertiesOption()
+                    : Option(i18n("File"), i18n("Add file properties"), SmallIcon("folder-image"))
 {
-    addTokenDescription("[cam]", i18n("Camera Name"), i18n("Camera name"));
+    addTokenDescription("[file]", i18nc("image filename", "Name"),
+             i18n("Filename"));
 
-    setRegExp("\\[cam\\]");
+    addTokenDescription("[ext]", i18nc("image extension", "Extension"),
+             i18n("File extension, prepend with a '.' character, to modify the real file extension"));
+
+    setRegExp("(\\[file\\]|(\\.?)\\[ext\\])");
 }
 
-void CameraNameParser::parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results)
+void FilePropertiesOption::parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results)
 {
+    QFileInfo fi(info.filePath);
+
     QRegExp reg = regExp();
     reg.setCaseSensitivity(Qt::CaseInsensitive);
 
@@ -53,7 +59,19 @@ void CameraNameParser::parseOperation(const QString& parseString, ParseInformati
     QString tmp;
     PARSE_LOOP_START(parseString, reg)
     {
-        tmp = Parser::stringIsValid(info.cameraName) ? info.cameraName : QString();
+        if (reg.cap(1) == QString("[file]"))
+        {
+            tmp = fi.baseName();
+        }
+        else if (reg.cap(1) == QString("[ext]"))
+        {
+                tmp = fi.suffix();
+        }
+        else if (reg.cap(1) == QString(".[ext]"))
+        {
+            tmp = "." + fi.suffix();
+            info.useFileExtension = false;
+        }
     }
     PARSE_LOOP_END(parseString, reg, tmp, results)
 }
