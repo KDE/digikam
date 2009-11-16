@@ -293,11 +293,11 @@ void ImageScanner::updateImageInformation()
 
     DatabaseAccess access;
     access.db()->changeImageInformation(m_scanInfo.id, infos,
-                                                    DatabaseFields::Width
-                                                    | DatabaseFields::Height
-                                                    | DatabaseFields::Format
-                                                    | DatabaseFields::ColorDepth
-                                                    | DatabaseFields::ColorModel);
+                                                    DatabaseFields::Width      |
+                                                    DatabaseFields::Height     |
+                                                    DatabaseFields::Format     |
+                                                    DatabaseFields::ColorDepth |
+                                                    DatabaseFields::ColorModel);
 }
 
 static MetadataFields allImageMetadataFields()
@@ -489,7 +489,7 @@ void ImageScanner::scanVideoFile()
           << detectVideoFormat();
 
     DatabaseAccess().db()->addImageInformation(m_scanInfo.id, infos,
-                                               DatabaseFields::Rating |
+                                               DatabaseFields::Rating       |
                                                DatabaseFields::CreationDate |
                                                DatabaseFields::Format);
 
@@ -521,7 +521,7 @@ void ImageScanner::scanAudioFile()
           << detectAudioFormat();
 
     DatabaseAccess().db()->addImageInformation(m_scanInfo.id, infos,
-                                               DatabaseFields::Rating |
+                                               DatabaseFields::Rating       |
                                                DatabaseFields::CreationDate |
                                                DatabaseFields::Format);
 }
@@ -538,7 +538,13 @@ void ImageScanner::loadFromDisk()
     if (m_hasMetadata)
     {
         m_img.setComments(m_metadata.getComments());
+
+#if KEXIV2_VERSION >= 0x010000
+        m_img.setExif(m_metadata.getExifEncoded());
+#else
         m_img.setExif(m_metadata.getExif());
+#endif
+
         m_img.setIptc(m_metadata.getIptc());
         m_img.setXmp(m_metadata.getXmp());
     }
@@ -810,19 +816,19 @@ void ImageScanner::fillCommonContainer(qlonglong imageid, ImageCommonContainer *
     {
         DatabaseAccess access;
         imagesFields = access.db()->getImagesFields(imageid,
-                                           DatabaseFields::Name |
+                                           DatabaseFields::Name             |
                                            DatabaseFields::ModificationDate |
                                            DatabaseFields::FileSize);
 
         imageInformationFields = access.db()->getImageInformation(imageid,
-                                           DatabaseFields::Rating |
-                                           DatabaseFields::CreationDate |
+                                           DatabaseFields::Rating           |
+                                           DatabaseFields::CreationDate     |
                                            DatabaseFields::DigitizationDate |
-                                           DatabaseFields::Orientation |
-                                           DatabaseFields::Width |
-                                           DatabaseFields::Height |
-                                           DatabaseFields::Format |
-                                           DatabaseFields::ColorDepth |
+                                           DatabaseFields::Orientation      |
+                                           DatabaseFields::Width            |
+                                           DatabaseFields::Height           |
+                                           DatabaseFields::Format           |
+                                           DatabaseFields::ColorDepth       |
                                            DatabaseFields::ColorModel);
     }
 

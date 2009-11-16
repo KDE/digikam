@@ -2212,7 +2212,11 @@ void DImg::updateMetadata(const QString& destMimeType, const QString& originalFi
         meta.setImageOrientation(DMetadata::ORIENTATION_NORMAL);
 
     // Store new Exif/IPTC/XMP data into image.
-    setExif(meta.getExif());
+#if KEXIV2_VERSION >= 0x010000
+        setExif(meta.getExifEncoded());
+#else
+        setExif(meta.getExif());
+#endif
     setIptc(meta.getIptc());
     setXmp(meta.getXmp());
 }
