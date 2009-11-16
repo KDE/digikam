@@ -682,8 +682,15 @@ bool MetadataHub::write(DImg& image, WriteMode writeMode, const MetadataWriteSet
         // be interpreted as "There was data, so write it again to the file".
         if (metadata.hasComments())
             image.setComments(metadata.getComments());
+
+#if KEXIV2_VERSION >= 0x010000
+        if (metadata.hasExif())
+            image.setExif(metadata.getExifEncoded());
+#else
         if (metadata.hasExif())
             image.setExif(metadata.getExif());
+#endif
+        
         if (metadata.hasIptc())
             image.setIptc(metadata.getIptc());
         if (metadata.hasXmp())
