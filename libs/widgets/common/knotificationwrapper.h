@@ -36,11 +36,11 @@ class QWidget;
 
 namespace Digikam
 {
-    
+
 void DIGIKAM_EXPORT KNotificationWrapper(const QString& eventId, const QString& message,
-                          QWidget* const widget, const QString& windowTitle,
-                          const QPixmap& pixmap = QPixmap());
-    
+                                         QWidget* const widget, const QString& windowTitle,
+                                         const QPixmap& pixmap = QPixmap());
+
 } // namespace Digikam
 
 #endif /* KNOTIFICATIONWRAPPER_H */

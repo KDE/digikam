@@ -31,7 +31,7 @@
 
 // KDE includes
 
-#include <kstandarddirs.h>
+#include <kiconloader.h>
 #include <knotification.h>
 #include <kpassivepopup.h>
 
@@ -58,9 +58,7 @@ void KNotificationWrapper(const QString& eventId, const QString& message,
         QPixmap logoPixmap = pixmap;
         if (logoPixmap.isNull())
         {
-            // FIXME: this logo is a LITTLE bit too big, it takes 1/3 of my screen in the notification message,
-            //        screen resolution: 1440x900 px   :-)
-            logoPixmap = QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"));
+            logoPixmap = QPixmap(SmallIcon("digikam"));
         }
 
         if (eventId.isEmpty())
@@ -74,5 +72,4 @@ void KNotificationWrapper(const QString& eventId, const QString& message,
     }
 }
 
-} /* Digikam */
-
+} // namespace Digikam
