@@ -31,6 +31,11 @@ public:
     virtual ~DigikamModelCollection();
 
     AlbumModel *getAlbumModel() const;
+    TagModel *getTagModel() const;
+    SearchModel *getTimlineSearchModel() const;
+    SearchModel *getNormalSearchModel() const;
+    SearchModel *getFuzzySearchModel() const;
+    SearchModel *getMapSearchModel() const;
 
 private:
     DigikamModelCollectionPriv *d;

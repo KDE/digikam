@@ -139,7 +139,7 @@ class TimelineSideBarWidget : public SideBarWidget
 {
     Q_OBJECT
 public:
-    TimelineSideBarWidget(QWidget *parent);
+    TimelineSideBarWidget(QWidget *parent, SearchModel *searchModel);
     virtual ~TimelineSideBarWidget();
 
     void setActive(bool active);
@@ -165,7 +165,7 @@ class SearchSideBarWidget : public SideBarWidget
 {
     Q_OBJECT
 public:
-    SearchSideBarWidget(QWidget *parent);
+    SearchSideBarWidget(QWidget *parent, SearchModel *searchModel);
     virtual ~SearchSideBarWidget();
 
     void setActive(bool active);
@@ -194,7 +194,7 @@ class FuzzySearchSideBarWidget : public SideBarWidget
 {
     Q_OBJECT
 public:
-    FuzzySearchSideBarWidget(QWidget *parent);
+    FuzzySearchSideBarWidget(QWidget *parent, SearchModel *searchModel);
     virtual ~FuzzySearchSideBarWidget();
 
     void setActive(bool active);
@@ -220,7 +220,7 @@ private:
 #ifdef HAVE_MARBLEWIDGET
 class GPSSearchSideBarWidgetPriv;
 /**
- * SideBarWidget for the fuzzy search.
+ * SideBarWidget for the gps search.
  *
  * @author jwienke
  */
@@ -228,7 +228,7 @@ class GPSSearchSideBarWidget : public SideBarWidget
 {
     Q_OBJECT
 public:
-    GPSSearchSideBarWidget(QWidget *parent);
+    GPSSearchSideBarWidget(QWidget *parent, SearchModel *searchModel);
     virtual ~GPSSearchSideBarWidget();
 
     void setActive(bool active);

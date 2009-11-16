@@ -61,6 +61,8 @@ public:
     SearchTextSettings settings;
 };
 
+// TODO the model code could also be placed in a subclass of KCompletion...
+
 SearchTextBar::SearchTextBar(QWidget *parent, const char* name, const QString& msg)
              : KLineEdit(parent), d(new SearchTextBarPriv)
 {
@@ -123,7 +125,7 @@ void SearchTextBar::setModel(QAbstractItemModel *model)
     d->model = model;
 
     // connect to the new model
-    if (model)
+    if (d->model)
     {
         connectToModel(d->model);
 
@@ -204,7 +206,7 @@ void SearchTextBar::sync(QAbstractItemModel *model)
     kDebug() << "Starting sync with model " << model
              << ", rowCount for parent: " << model->rowCount();
 
-    clear();
+    completionObject()->clear();
 
     for (int i = 0; i < model->rowCount(); ++i)
     {
@@ -262,8 +264,6 @@ void SearchTextBar::slotTextChanged(const QString& text)
 void SearchTextBar::slotSearchResult(bool match)
 {
 
-    kDebug() << "match = " << match;
-
     if (text().isEmpty())
     {
         setPalette(QPalette());
@@ -277,10 +277,6 @@ void SearchTextBar::slotSearchResult(bool match)
     pal.setColor(QPalette::Active, QPalette::Text, Qt::black);
     setPalette(pal);
 
-    // If search result match the text query, we put the text
-    // in auto-completion history.
-    if (d->textQueryCompletion && match)
-        completionObject()->addItem(text());
 }
 
 void SearchTextBar::contextMenuEvent(QContextMenuEvent* e)

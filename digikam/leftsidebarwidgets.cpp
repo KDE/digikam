@@ -157,6 +157,7 @@ TagViewSideBarWidget::TagViewSideBarWidget(QWidget *parent,
 
     d->tagFolderView = new TagFolderView(this);
     d->tagSearchBar  = new SearchTextBar(this, "DigikamViewTagSearchBar");
+    d->tagSearchBar->setModel(model);
 
     layout->addWidget(d->tagFolderView);
     layout->addWidget(d->tagSearchBar);
@@ -332,15 +333,17 @@ public:
     }
 
     TimeLineView *timeLineView;
+    SearchModel *searchModel;
 };
 
-TimelineSideBarWidget::TimelineSideBarWidget(QWidget *parent) :
+TimelineSideBarWidget::TimelineSideBarWidget(QWidget *parent, SearchModel *searchModel) :
     SideBarWidget(parent), d(new TimelineSideBarWidgetPriv)
 {
 
     QVBoxLayout *layout = new QVBoxLayout(this);
 
     d->timeLineView = new TimeLineView(this);
+    d->timeLineView->searchBar()->setModel(searchModel);
 
     layout->addWidget(d->timeLineView);
 
@@ -404,17 +407,21 @@ public:
     SearchTextBar*            searchSearchBar;
     SearchFolderView*         searchFolderView;
     SearchTabHeader*          searchTabHeader;
+    SearchModel *searchModel;
 };
 
-SearchSideBarWidget::SearchSideBarWidget(QWidget *parent) :
+SearchSideBarWidget::SearchSideBarWidget(QWidget *parent, SearchModel *searchModel) :
     SideBarWidget(parent), d(new SearchSideBarWidgetPriv)
 {
+
+    d->searchModel = searchModel;
 
     QVBoxLayout *layout = new QVBoxLayout(this);
 
     d->searchTabHeader  = new SearchTabHeader(this);
     d->searchFolderView = new SearchFolderView(this);
     d->searchSearchBar  = new SearchTextBar(this, "DigikamViewSearchSearchBar");
+    d->searchSearchBar->setModel(searchModel);
 
     layout->addWidget(d->searchTabHeader);
     layout->addWidget(d->searchFolderView);
@@ -502,13 +509,17 @@ public:
     }
 
     FuzzySearchView*          fuzzySearchView;
+    SearchModel *searchModel;
 };
 
-FuzzySearchSideBarWidget::FuzzySearchSideBarWidget(QWidget *parent) :
+FuzzySearchSideBarWidget::FuzzySearchSideBarWidget(QWidget *parent, SearchModel *searchModel) :
     SideBarWidget(parent), d(new FuzzySearchSideBarWidgetPriv)
 {
 
+    d->searchModel = searchModel;
+
     d->fuzzySearchView  = new FuzzySearchView(this);
+    d->fuzzySearchView->searchBar()->setModel(searchModel);
 
     QVBoxLayout *layout = new QVBoxLayout(this);
 
@@ -593,13 +604,17 @@ public:
     }
 
     GPSSearchView*            gpsSearchView;
+    SearchModel *searchModel;
 };
 
-GPSSearchSideBarWidget::GPSSearchSideBarWidget(QWidget *parent) :
+GPSSearchSideBarWidget::GPSSearchSideBarWidget(QWidget *parent, SearchModel *searchModel) :
     SideBarWidget(parent), d(new GPSSearchSideBarWidgetPriv)
 {
 
+    d->searchModel = searchModel;
+
     d->gpsSearchView    = new GPSSearchView(this);
+    d->gpsSearchView->searchBar()->setModel(searchModel);
 
     QVBoxLayout *layout = new QVBoxLayout(this);
 

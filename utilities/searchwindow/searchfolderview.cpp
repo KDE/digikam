@@ -36,6 +36,7 @@
 
 // KDE includes
 
+#include <kdebug.h>
 #include <kdeversion.h>
 #include <kglobal.h>
 #include <kiconloader.h>
@@ -183,6 +184,9 @@ void SearchFolderView::slotTextSearchFilterChanged(const SearchTextSettings& set
 
 void SearchFolderView::slotSelectSearch(SAlbum *salbum)
 {
+
+    kDebug() << "should select search album " << salbum;
+
     if (!salbum)
     {
         clearSelection();
@@ -192,12 +196,17 @@ void SearchFolderView::slotSelectSearch(SAlbum *salbum)
     SearchFolderItem* viewItem = (SearchFolderItem*) salbum->extraData(this);
     if (viewItem)
     {
+        kDebug() << "found view item, selecting";
 /*        if (viewItem->isSelected())
             slotSelectionChanged();
         else
             setSelected(viewItem, true);*/
         clearSelection();
         setSelected(viewItem, true);
+    }
+    else
+    {
+        kDebug() << "no view item for this search";
     }
 }
 
@@ -232,6 +241,8 @@ void SearchFolderView::slotAlbumAdded(Album* a)
 
     SAlbum* album = (SAlbum*)a;
 
+    kDebug() << "New search album added " << album << " with name " << album->title();
+
     // Check if this is an SAlbum dedicated to the Date Search View
     // used with TimeLine. In this case, SAlbum is not displayed here, but in TimeLineFolderView.
     if (!album->isNormalSearch())
@@ -243,8 +254,13 @@ void SearchFolderView::slotAlbumAdded(Album* a)
 
     if (album->title() == currentSearchViewSearchName())
     {
+        kDebug() << "This is the current album";
         m_currentSearchViewSearchItem = item;
         item->setCurrentSearchViewSearchTitle();
+    }
+    else
+    {
+        kDebug() << "This is not the current album";
     }
 }
 

@@ -170,20 +170,20 @@ public:
 SearchTabHeader::SearchTabHeader(QWidget *parent)
                : QWidget(parent), d(new SearchTabHeaderPriv)
 {
-    QVBoxLayout *mainLayout = new QVBoxLayout;
+    QVBoxLayout *mainLayout = new QVBoxLayout(this);
     setLayout(mainLayout);
 
     // upper part
-    d->newSearchWidget = new QGroupBox;
+    d->newSearchWidget = new QGroupBox(this);
     mainLayout->addWidget(d->newSearchWidget);
 
     // lower part
-    d->lowerArea = new QStackedLayout;
+    d->lowerArea = new QStackedLayout(this);
     mainLayout->addLayout(d->lowerArea);
 
-    d->saveAsWidget       = new QGroupBox;
-    d->editSimpleWidget   = new QGroupBox;
-    d->editAdvancedWidget = new QGroupBox;
+    d->saveAsWidget       = new QGroupBox(this);
+    d->editSimpleWidget   = new QGroupBox(this);
+    d->editAdvancedWidget = new QGroupBox(this);
     d->lowerArea->addWidget(d->saveAsWidget);
     d->lowerArea->addWidget(d->editSimpleWidget);
     d->lowerArea->addWidget(d->editAdvancedWidget);
@@ -193,13 +193,13 @@ SearchTabHeader::SearchTabHeader(QWidget *parent)
     // upper part
 
     d->newSearchWidget->setTitle(i18n("New Search"));
-    QGridLayout *grid1   = new QGridLayout;
-    QLabel *searchLabel  = new QLabel(i18n("Search:"));
-    d->keywordEdit       = new KeywordLineEdit;
+    QGridLayout *grid1   = new QGridLayout(this);
+    QLabel *searchLabel  = new QLabel(i18n("Search:"), this);
+    d->keywordEdit       = new KeywordLineEdit(this);
     d->keywordEdit->setClearButtonShown(true);
     d->keywordEdit->setClickMessage(i18n("Enter keywords here..."));
 
-    d->advancedEditLabel = new QPushButton(i18n("Advanced Search..."));
+    d->advancedEditLabel = new QPushButton(i18n("Advanced Search..."), this);
 
     grid1->addWidget(searchLabel,          0, 0);
     grid1->addWidget(d->keywordEdit,       0, 1);
@@ -215,12 +215,12 @@ SearchTabHeader::SearchTabHeader(QWidget *parent)
 
     d->saveAsWidget->setTitle(i18n("Save Current Search"));
 
-    QHBoxLayout *hbox1 = new QHBoxLayout;
-    d->saveNameEdit    = new KLineEdit;
+    QHBoxLayout *hbox1 = new QHBoxLayout(this);
+    d->saveNameEdit    = new KLineEdit(this);
     d->saveNameEdit->setWhatsThis(i18n("Enter a name for the current search to save it in the "
                                        "\"Searches\" view"));
 
-    d->saveButton      = new QToolButton;
+    d->saveButton      = new QToolButton(this);
     d->saveButton->setIcon(SmallIcon("document-save"));
     d->saveButton->setToolTip(i18n("Save current search to a new virtual Album"));
     d->saveButton->setWhatsThis(i18n("If you press this button, the current search "
@@ -239,10 +239,10 @@ SearchTabHeader::SearchTabHeader(QWidget *parent)
     // lower part, variant 2
     d->editSimpleWidget->setTitle(i18n("Edit Stored Search"));
 
-    QVBoxLayout *vbox1       = new QVBoxLayout;
-    d->storedKeywordEditName = new KSqueezedTextLabel;
+    QVBoxLayout *vbox1       = new QVBoxLayout(this);
+    d->storedKeywordEditName = new KSqueezedTextLabel(this);
     d->storedKeywordEditName->setTextElideMode(Qt::ElideRight);
-    d->storedKeywordEdit     = new KLineEdit;
+    d->storedKeywordEdit     = new KLineEdit(this);
 
     vbox1->addWidget(d->storedKeywordEditName);
     vbox1->addWidget(d->storedKeywordEdit);
@@ -256,11 +256,11 @@ SearchTabHeader::SearchTabHeader(QWidget *parent)
     // lower part, variant 3
     d->editAdvancedWidget->setTitle(i18n("Edit Stored Search"));
 
-    QVBoxLayout *vbox2 = new QVBoxLayout;
+    QVBoxLayout *vbox2 = new QVBoxLayout(this);
 
-    d->storedAdvancedEditName = new KSqueezedTextLabel;
+    d->storedAdvancedEditName = new KSqueezedTextLabel(this);
     d->storedAdvancedEditName->setTextElideMode(Qt::ElideRight);
-    d->storedAdvancedEditLabel = new QPushButton(i18n("Edit..."));
+    d->storedAdvancedEditLabel = new QPushButton(i18n("Edit..."), this);
 
     vbox2->addWidget(d->storedAdvancedEditName);
     vbox2->addWidget(d->storedAdvancedEditLabel);
@@ -409,10 +409,16 @@ void SearchTabHeader::newAdvancedSearch()
 void SearchTabHeader::keywordChanged()
 {
     QString keywords = d->keywordEdit->text();
+    kDebug() << "keywords changed to '" << keywords << "'";
     if (d->oldKeywordContent == keywords)
+    {
+        kDebug() << "same keywords as before, ignoring...";
         return;
+    }
     else
+    {
         d->oldKeywordContent = keywords;
+    }
 
     setCurrentSearch(DatabaseSearch::KeywordSearch, queryFromKeywords(keywords));
 }
@@ -437,8 +443,11 @@ void SearchTabHeader::saveSearch()
 
     QString name = d->saveNameEdit->text();
 
+    kDebug() << "name = " << name;
+
     if (name.isEmpty() || !d->currentAlbum)
     {
+        kDebug() << "no current album, returning";
         // passive popup
         return;
     }

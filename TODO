@@ -7,7 +7,6 @@ post 1.0.0 mvc merge
  * sorting albums by something else than name (date, category)
  * Port different tag views to MVC pattern
  * therefore move all models to a central object and only stick views on them
- * port search bars to model view concept
  * decide which additional sidebar handling code currently placed in digikamview
    should be moved to the sidebar class directly
  * slotGotoAlbumAndItem doesn't work
