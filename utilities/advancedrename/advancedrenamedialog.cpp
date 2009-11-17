@@ -30,9 +30,9 @@
 #include <QGridLayout>
 #include <QHeaderView>
 #include <QMoveEvent>
+#include <QSet>
 #include <QString>
 #include <QTreeWidget>
-#include <QSet>
 
 // KDE includes
 

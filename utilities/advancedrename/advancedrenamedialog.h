@@ -84,8 +84,8 @@ private:
 
 // --------------------------------------------------------
 
-typedef QPair<KUrl, QString>      NewNameInfo;
-typedef QList<NewNameInfo>        NewNamesList;
+typedef QPair<KUrl, QString> NewNameInfo;
+typedef QList<NewNameInfo>   NewNamesList;
 
 class AdvancedRenameDialogPriv;
 

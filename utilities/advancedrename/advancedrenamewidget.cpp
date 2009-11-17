@@ -448,9 +448,9 @@ void AdvancedRenameWidget::writeSettings()
 
     // remove duplicate entries and save pattern history, omit empty strings
     QString pattern = d->renameInput->lineEdit()->text();
-    group.writeEntry(d->configExpandedStateEntry, (d->optionsLabel) ?
-                                                   d->optionsLabel->isExpanded() :
-                                                   d->configExpandedStateDefault);
+    group.writeEntry(d->configExpandedStateEntry, d->optionsLabel
+                                                  ? d->optionsLabel->isExpanded()
+                                                  : d->configExpandedStateDefault);
 }
 
 }  // namespace Digikam

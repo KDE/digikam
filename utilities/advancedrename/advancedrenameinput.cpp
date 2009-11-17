@@ -34,9 +34,9 @@
 // KDE includes
 
 #include <kapplication.h>
-#include <klocale.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
+#include <klocale.h>
 
 namespace Digikam
 {
