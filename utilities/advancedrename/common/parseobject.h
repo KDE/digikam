@@ -45,7 +45,10 @@ class ParseObjectPriv;
  * Macro definitions:
  *
  * PARSE_LOOP_START and PARSE_LOOP_END can be used when parsing
- * a token with a regular expression.
+ * a token with a regular expression (this is the default by now, so you always need
+ * to use these macros).
+ *
+ * See 'dummyoption' class or other implementation for example code.
  */
 #define PARSE_LOOP_START(PARSESTRING_, REGEXP_)                              \
         {                                                                    \
