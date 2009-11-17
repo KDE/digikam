@@ -36,9 +36,9 @@ namespace Digikam
 {
 
 DummyOption::DummyOption()
-                    : Option(i18n("<BUTTON TEXT>"),
-                             i18n("<TOOLTIP TEXT FOR BUTTON>"),
-                             SmallIcon("<ICON>"))
+           : Option(i18n("<BUTTON TEXT>"),
+                    i18n("<TOOLTIP TEXT FOR BUTTON>"),
+                    SmallIcon("<ICON>"))
 {
     /*
      * Example initialization
