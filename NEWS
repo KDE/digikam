@@ -11,9 +11,10 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 002 ==> 161295 : Allow inclusion of original filename in custom filename.
 003 ==> 201661 : More options for file renaming when importing images.
 004 ==> 213804 : Batch operation into a new folder, then move them back into this folder, confuses thumbnails.
-005 ==> 204640 : Add an option to "Mark images as imported"
+005 ==> 204640 : Add an option to "Mark images as imported".
 006 ==> 214855 : Embedded ICC profiles are not properly read.
-007 ==> 
+007 ==> 212105 : Crash in MarkerClusterHolder destructor.
+008 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta6 - Release date: 2009-11-08
