@@ -38,6 +38,11 @@
 #include <kconfiggroup.h>
 #include <klocale.h>
 
+// const variables
+
+const int INVALID         = -1;
+const int DEFAULT_TIMEOUT = 500;
+
 namespace Digikam
 {
 
@@ -49,9 +54,9 @@ public:
         userIsTyping(false),
         userIsHighlighting(false),
         tokenMarked(false),
-        selectionStart(-1),
-        selectionLength(-1),
-        curCursorPos(-1),
+        selectionStart(INVALID),
+        selectionLength(INVALID),
+        curCursorPos(INVALID),
         parseTimer(0),
         parser(0),
         selectionType(Parser::Text)
@@ -87,7 +92,7 @@ AdvancedRenameLineEdit::AdvancedRenameLineEdit(QWidget* parent)
     // --------------------------------------------------------
 
     d->parseTimer = new QTimer(this);
-    d->parseTimer->setInterval(500);
+    d->parseTimer->setInterval(DEFAULT_TIMEOUT);
     d->parseTimer->setSingleShot(true);
 
     // --------------------------------------------------------
@@ -247,7 +252,7 @@ void AdvancedRenameLineEdit::setTokenSelected(bool selected)
 
 bool AdvancedRenameLineEdit::selectionIsValid()
 {
-    return (d->selectionStart != -1  && d->selectionLength != -1);
+    return (d->selectionStart != INVALID  && d->selectionLength != INVALID);
 }
 
 bool AdvancedRenameLineEdit::tokenIsSelected()
@@ -281,8 +286,8 @@ void AdvancedRenameLineEdit::slotCursorPositionChanged(int oldPos, int newPos)
 void AdvancedRenameLineEdit::resetSelection()
 {
     d->tokenMarked     = false;
-    d->selectionStart  = -1;
-    d->selectionLength = -1;
+    d->selectionStart  = INVALID;
+    d->selectionLength = INVALID;
     d->selectionType   = Parser::Text;
     setSelectionColor(Parser::Text);
     emit signalTokenMarked(d->tokenMarked);
