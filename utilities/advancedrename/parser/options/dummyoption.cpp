@@ -43,17 +43,19 @@ DummyOption::DummyOption()
     /*
      * Example initialization
      *
-     * Use addTokenDescription() to at least provide one entry in the tooltip for the AdvancedRename utility.
-     * It is possible to call this method more than one time, to provide additional token information.
+     * Use addTokenDescription() to provide at least one entry in the tooltip for the AdvancedRename utility.
+     * It is possible to call this method more than one time, to have additional token information.
+     * If you want to add parameters to your rename option, enclose them in pipe characters, to have them
+     * properly marked in the tooltip, e.g.
+     *
+     * addTokenDescription("[myoption:|parameter|]", i18nc("my rename option", "MyOption"),
      *
      * Use setRegExp() to define the regular expression that identifies the parse option and its parameters
+     */
 
-    addTokenDescription("[file]", i18nc("image filename", "Name"),
-             i18n("Filename"));
-
+    addTokenDescription("[myoption]", i18nc("my rename option", "MyOption"),
     setRegExp("<PARSING REGEXP>");
 
-     */
 }
 
 void DummyOption::parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results)
@@ -82,17 +84,16 @@ void DummyOption::parseOperation(const QString& parseString, ParseInformation& i
          * THE REAL PARSING HAPPENS IN HERE
          *
          * For example:
-
-               if (reg.cap(1) == QString("[myoption]"))
-               {
-                   tmp = doSomething();
-               }
-               else
-               {
-                   tmp = QString();
-               }
-
          */
+
+        if (reg.cap(1) == QString("[myoption]"))
+        {
+            tmp = doSomething();
+        }
+        else
+        {
+            tmp = QString();
+        }
     }
     PARSE_LOOP_END(parseString, reg, tmp, results)
 }
