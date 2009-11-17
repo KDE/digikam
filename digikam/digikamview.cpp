@@ -1236,7 +1236,7 @@ void DigikamView::slotAlbumOpenInTerminal()
     if (!success)
     {
         KMessageBox::error(this,
-            i18n("Can not start the \"konsole\" application.\n"
+            i18n("Cannot start the \"konsole\" application.\n"
                  "Please make sure that it is installed and in your path."),
             windowTitle()/*i18n("Open Album in Terminal")*/);
     }
