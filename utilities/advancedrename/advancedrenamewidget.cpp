@@ -187,7 +187,6 @@ void AdvancedRenameWidget::createToolTip()
 #define TOOLTIP_ENTRIES(type, data)                                                            \
     do                                                                                         \
     {                                                                                          \
-                                                                                               \
         foreach (type* t, data)                                                                \
         {                                                                                      \
             foreach (Token* token, t->tokens())                                                \
