@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-08-11
- * Description : the default parser for manual rename, includes all subparsers
+ * Description : the default parser for the AdvancedRename utility, includes all subparsers
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
