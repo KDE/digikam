@@ -261,6 +261,7 @@ SET(digikam_SRCS ${libdimgimagewindow_SRCS}
                  ${libfirstrun_SRCS}
                  ${libtemplate_SRCS}
                  ${libadvancedrename_SRCS}
+                 ${libdatabaseui_SRCS}
 
                  main.cpp
     )

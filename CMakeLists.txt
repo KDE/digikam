@@ -672,7 +672,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/thumbbardock.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/thumbbartooltip.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/visibilitycontroller.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/databasewidget.cpp
        )
 
     SET(libiccprofileswidgets_SRCS
@@ -908,7 +907,12 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/searchxml.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/schemaupdater.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/upgradedb_sqlite2tosqlite3.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlquery.cpp                
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlquery.cpp
+       )
+
+    SET(libdatabaseui_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/databasewidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/migrationdlg.cpp
        )
 
     SET(pgfutils_SRCS
@@ -1166,8 +1170,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/treefolderitem.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/welcomepageview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/databaseerrorhandler.cpp
-        
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/migrationdlg.cpp
        )
 
     SET(libdigikamhelpers_SRCS
