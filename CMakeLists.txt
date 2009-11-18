@@ -65,7 +65,7 @@ FIND_PACKAGE(Kexiv2)
 FIND_PACKAGE(Kipi)
 
 IF(ENABLE_GPHOTO2)
-    MACRO_OPTIONAL_FIND_PACKAGE(Gphoto2)
+    FIND_PACKAGE(Gphoto2)
 ENDIF(ENABLE_GPHOTO2)
 
 # Check KDcraw version installed to compile fine.
