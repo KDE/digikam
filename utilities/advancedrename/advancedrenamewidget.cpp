@@ -168,9 +168,10 @@ void AdvancedRenameWidget::createToolTip()
     QRegExp optionsRegExp("\\|(.*)\\|");
     optionsRegExp.setMinimal(true);
 
+
 #define MARK_OPTIONS(str)                                                                      \
-    str.replace(optionsRegExp, "<i><font color=\"%1\">\\1</font></i>")                         \
-                               .arg(ThemeEngine::instance()->textSpecialRegColor().name())
+        str.replace(optionsRegExp, QString("<i><font color=\"%1\">\\1</font></i>")             \
+           .arg(ThemeEngine::instance()->textSpecialRegColor().name()))
 
 #define TOOLTIP_HEADER(str)                                                                    \
     do                                                                                         \
