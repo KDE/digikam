@@ -30,7 +30,10 @@
 // Local includes
 
 #include "cameranamehelper.h"
+
+#ifdef HAVE_GPHOTO2
 #include "gpcamera.h"
+#endif
 
 using namespace Digikam;
 
@@ -71,7 +74,7 @@ void CameraNameHelperTest::testStaticCreateName()
     QCOMPARE(CameraNameHelper::createCameraName(vendor, product, mode, autoDetect), result);
 }
 
-#ifdef ENABLE_GPHOTO2
+#ifdef HAVE_GPHOTO2
 void CameraNameHelperTest::testCameraNameFromGPCamera()
 {
     int count = 0;

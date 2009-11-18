@@ -38,7 +38,7 @@ class CameraNameHelperTest : public QObject
 
 private Q_SLOTS:
 
-#ifdef ENABLE_GPHOTO2
+#ifdef HAVE_GPHOTO2
     void testCameraNameFromGPCamera();
 #endif
 
