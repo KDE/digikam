@@ -23,8 +23,10 @@
 #ifndef DMETADATADATA_H
 #define DMETADATADATA_H
 
-#include <libkexiv2/kexiv2data.h>
 #include <libkexiv2/version.h>
+#if KEXIV2_VERSION >= 0x010000
+#include <libkexiv2/kexiv2data.h>
+#endif
 
 namespace Digikam
 {
@@ -32,6 +34,7 @@ namespace Digikam
 #if KEXIV2_VERSION >= 0x010000
 typedef KExiv2Iface::KExiv2Data KExiv2Data;
 #else
+// Compatibility with KDE < 4.4, emulating a KEXiv2Data container.
 class KEXIV2_EXPORT KExiv2Data
 {
 public:
