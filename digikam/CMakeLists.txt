@@ -181,8 +181,8 @@ ELSE(WIN32)
     SET_SOURCE_FILES_PROPERTIES(${libsqlite2_SRCS} PROPERTIES COMPILE_FLAGS "-w")
 ENDIF(WIN32)
 
-# Disable libpgf warnings.
-SET_SOURCE_FILES_PROPERTIES(${libpgf_SRCS} PROPERTIES COMPILE_FLAGS "-w")
+## Disable libpgf warnings.
+#SET_SOURCE_FILES_PROPERTIES(${libpgf_SRCS} PROPERTIES COMPILE_FLAGS "-w")
 
 SET(digikamdatabase_LIB_SRCS ${libdatabase_SRCS}
                              ${libhaar_SRCS}
