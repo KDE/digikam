@@ -39,6 +39,13 @@
 
 #include <kdebug.h>
 
+// libkexiv2 includes
+
+#include <libkexiv2/version.h>
+#if KEXIV2_VERSION >= 0x010000
+#include <libkexiv2/kexiv2previews.h>
+#endif
+
 // LibKDcraw includes
 
 #include <libkdcraw/kdcraw.h>
@@ -159,6 +166,22 @@ void PreviewLoadingTask::execute()
     if (size)
     {
         // First the QImage-dependent loading methods
+
+        // check embedded previews
+        #if KEXIV2_VERSION >= 0x010000
+        KExiv2Iface::KExiv2Previews previews(m_loadingDescription.filePath);
+        // Only check the first and largest preview
+        if (!previews.isEmpty())
+        {
+            // require at least half preview size
+            if (qMax(previews.width(), previews.height()) >= size / 2)
+            {
+                qimage = previews.image();
+                if (!qimage.isNull())
+                    fromEmbeddedPreview = true;
+            }
+        }
+        #else
         // Trying to load with dcraw: RAW files.
         if (KDcrawIface::KDcraw::loadEmbeddedPreview(qimage, m_loadingDescription.filePath))
         {
@@ -168,6 +191,7 @@ void PreviewLoadingTask::execute()
             else
                 fromEmbeddedPreview = true;
         }
+        #endif
 
         if (qimage.isNull())
         {
@@ -214,13 +238,31 @@ void PreviewLoadingTask::execute()
     }
     else
     {
-        //TODO: Use Exiv2's PreviewManager
         KDcrawIface::DcrawInfoContainer dcrawIdentify;
-        if (KDcrawIface::KDcraw::rawFileIdentify(dcrawIdentify, m_loadingDescription.filePath)
-            && dcrawIdentify.isDecodable)
+        if (KDcrawIface::KDcraw::rawFileIdentify(dcrawIdentify, m_loadingDescription.filePath))
         {
+            #if KEXIV2_VERSION >= 0x010000
+            // Check if full-size preview is available
+            {
+                KExiv2Iface::KExiv2Previews previews(m_loadingDescription.filePath);
+                // Only check the first and largest preview
+                if (!previews.isEmpty())
+                {
+                    // discard if smaller than half preview
+                    int acceptableWidth = lround(dcrawIdentify.imageSize.width() * 0.5);
+                    int acceptableHeight = lround(dcrawIdentify.imageSize.height() * 0.5);
+                    if (previews.width() >= acceptableWidth &&  previews.height() >= acceptableHeight)
+                    {
+                        qimage = previews.image();
+                        if (!qimage.isNull())
+                            fromEmbeddedPreview = true;
+                    }
+                }
+            }
+            #else
             // Trying to load with dcraw: RAW files.
-            if (KDcrawIface::KDcraw::loadEmbeddedPreview(qimage, m_loadingDescription.filePath))
+            if (qimage.isNull() && dcrawIdentify.isDecodable &&
+                KDcrawIface::KDcraw::loadEmbeddedPreview(qimage, m_loadingDescription.filePath))
             {
                 // discard if smaller than half preview
                 if (qMax(qimage.width(), qimage.height()) < dcrawIdentify.imageSize.width() / 2)
@@ -228,6 +270,7 @@ void PreviewLoadingTask::execute()
                 else
                     fromEmbeddedPreview = true;
             }
+            #endif
 
             if (qimage.isNull())
             {
@@ -352,7 +395,7 @@ bool PreviewLoadingTask::loadImagePreview(QImage& image, const QString& path)
     DMetadata metadata(path);
     if (metadata.getImagePreview(image))
     {
-        kDebug() << "Use Exif/IPTC preview extraction. Size of image: "
+        kDebug(50003) << "Use Exif/IPTC preview extraction. Size of image: "
                       << image.width() << "x" << image.height();
         return true;
     }
