@@ -62,8 +62,6 @@ FIND_PACKAGE(Jasper)
 FIND_PACKAGE(Kdcraw)
 FIND_PACKAGE(Kexiv2)
 FIND_PACKAGE(Kipi)
-MACRO_OPTIONAL_FIND_PACKAGE(Gphoto2)
-MACRO_BOOL_TO_01(GPHOTO2_FOUND HAVE_GPHOTO2)
 
 # Check KDcraw version installed to compile fine.
 IF(NOT WIN32)
@@ -93,6 +91,9 @@ ENDIF(NOT WIN32)
 
 # ==================================================================================================
 # Optional dependencies
+
+MACRO_OPTIONAL_FIND_PACKAGE(Gphoto2)
+MACRO_BOOL_TO_01(GPHOTO2_FOUND HAVE_GPHOTO2)
 
 MACRO_OPTIONAL_FIND_PACKAGE(KdepimLibs)
 MACRO_BOOL_TO_01(KDEPIMLIBS_FOUND HAVE_KDEPIMLIBS)
