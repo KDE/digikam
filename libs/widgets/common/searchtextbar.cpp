@@ -54,6 +54,7 @@ public:
 
     bool               textQueryCompletion;
     bool               hasCaseSensitive;
+    bool               highlightOnCompletion;
 
     QAbstractItemModel *model;
 
@@ -107,6 +108,11 @@ void SearchTextBar::setTextQueryCompletion(bool b)
 bool SearchTextBar::hasTextQueryCompletion() const
 {
     return d->textQueryCompletion;
+}
+
+void SearchTextBar::setHighlightOnCompletion(bool highlight)
+{
+    d->highlightOnCompletion = highlight;
 }
 
 void SearchTextBar::setModel(QAbstractItemModel *model)
@@ -254,6 +260,11 @@ void SearchTextBar::slotTextChanged(const QString& text)
 {
     if (text.isEmpty())
         setPalette(QPalette());
+
+    if (d->highlightOnCompletion)
+    {
+        slotSearchResult(!completionObject()->allMatches(text).empty());
+    }
 
     d->settings.text = text;
 

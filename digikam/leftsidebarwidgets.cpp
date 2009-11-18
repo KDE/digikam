@@ -59,6 +59,7 @@ AlbumFolderViewSideBarWidget::AlbumFolderViewSideBarWidget(QWidget *parent,
 
     d->albumFolderView = new AlbumFolderViewNew(this, model, d->albumModificationHelper);
     d->searchTextBar   = new SearchTextBar(this, "DigikamViewFolderSearchBar");
+    d->searchTextBar->setHighlightOnCompletion(true);
     d->searchTextBar->setModel(model);
 
     layout->addWidget(d->albumFolderView);
@@ -67,8 +68,6 @@ AlbumFolderViewSideBarWidget::AlbumFolderViewSideBarWidget(QWidget *parent,
     // setup connection
     connect(d->searchTextBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
             d->albumFolderView->albumFilterModel(), SLOT(setSearchTextSettings(const SearchTextSettings&)));
-    connect(d->albumFolderView->albumFilterModel(), SIGNAL(hasSearchResult(bool)),
-            d->searchTextBar, SLOT(slotSearchResult(bool)));
 
     connect(d->albumFolderView, SIGNAL(signalFindDuplicatesInAlbum(Album*)),
             this, SIGNAL(signalFindDuplicatesInAlbum(Album*)));
@@ -157,6 +156,7 @@ TagViewSideBarWidget::TagViewSideBarWidget(QWidget *parent,
 
     d->tagFolderView = new TagFolderView(this);
     d->tagSearchBar  = new SearchTextBar(this, "DigikamViewTagSearchBar");
+    d->tagSearchBar->setHighlightOnCompletion(true);
     d->tagSearchBar->setModel(model);
 
     layout->addWidget(d->tagFolderView);
@@ -166,8 +166,6 @@ TagViewSideBarWidget::TagViewSideBarWidget(QWidget *parent,
             d->tagFolderView, SLOT(slotTextTagFilterChanged(const SearchTextSettings&)));
     connect(d->tagFolderView, SIGNAL(signalFindDuplicatesInTag(Album*)),
             this, SIGNAL(signalFindDuplicatesInAlbum(Album*)));
-    connect(d->tagFolderView, SIGNAL(signalTextTagFilterMatch(bool)),
-            d->tagSearchBar, SLOT(slotSearchResult(bool)));
 
     // TODO update, legacy signal passing
     connect(d->tagFolderView, SIGNAL(signalProgressBarMode(int, const QString&)),
@@ -421,6 +419,7 @@ SearchSideBarWidget::SearchSideBarWidget(QWidget *parent, SearchModel *searchMod
     d->searchTabHeader  = new SearchTabHeader(this);
     d->searchFolderView = new SearchFolderView(this);
     d->searchSearchBar  = new SearchTextBar(this, "DigikamViewSearchSearchBar");
+    d->searchSearchBar->setHighlightOnCompletion(true);
     d->searchSearchBar->setModel(searchModel);
 
     layout->addWidget(d->searchTabHeader);
@@ -432,9 +431,6 @@ SearchSideBarWidget::SearchSideBarWidget(QWidget *parent, SearchModel *searchMod
 
     connect(d->searchFolderView, SIGNAL(newSearch()),
             d->searchTabHeader, SLOT(newAdvancedSearch()));
-
-    connect(d->searchFolderView, SIGNAL(signalTextSearchFilterMatch(bool)),
-            d->searchSearchBar, SLOT(slotSearchResult(bool)));
 
     connect(d->searchFolderView, SIGNAL(editSearch(SAlbum *)),
             d->searchTabHeader, SLOT(editSearch(SAlbum *)));

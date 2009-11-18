@@ -67,6 +67,7 @@ public:
 
     void setTextQueryCompletion(bool b);
     bool hasTextQueryCompletion() const;
+    void setHighlightOnCompletion(bool highlight);
 
     /**
      * If the given model is != null, the model is used to populate the
@@ -87,8 +88,7 @@ Q_SIGNALS:
     void signalSearchTextSettings(const SearchTextSettings& settings);
 
 public Q_SLOTS:
-
-    void slotSearchResult(bool);
+    void slotSearchResult(bool match);
 
 private Q_SLOTS:
 
