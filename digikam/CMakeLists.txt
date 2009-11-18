@@ -214,7 +214,7 @@ IF (NEPOMUK_FOUND)
 
     SET(digikamnepomukservices_SRCS ${libnepomukservices_SRCS} )
 
-    kde4_add_plugin(digikamnepomukservice ${digikamnepomukservices_SRCS})
+    KDE4_ADD_PLUGIN(digikamnepomukservice ${digikamnepomukservices_SRCS})
 
     TARGET_LINK_LIBRARIES(digikamnepomukservice
                           ${KDE4_KIO_LIBS}
