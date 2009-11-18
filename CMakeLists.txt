@@ -45,6 +45,11 @@ SET(AREA_CODE_SHOWFOTO      "50005")
 SET(AREA_CODE_IMAGEPLUGINS  "50006")
 ADD_DEFINITIONS(-DKDE_DEFAULT_DEBUG_AREA=${AREA_CODE_GENERAL})
 
+MACRO(SET_DEBUG_AREA_CODE _areacode)
+    REMOVE_DEFINITIONS(-DKDE_DEFAULT_DEBUG_AREA=${AREA_CODE_GENERAL})
+    ADD_DEFINITIONS(-DKDE_DEFAULT_DEBUG_AREA=${_areacode})
+ENDMACRO(SET_DEBUG_AREA_CODE)
+
 # ==================================================================================================
 # Dependencies
 
