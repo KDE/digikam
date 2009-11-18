@@ -1764,7 +1764,7 @@ void CameraUI::slotDownloaded(const QString& folder, const QString& file, int st
         else
         {
             // Pop-up a message to bring user when all is done.
-            KNotificationWrapper("", i18n("Download is completed..."), this, windowTitle());
+            KNotificationWrapper("cameradownloaded", i18n("Download is completed..."), this, windowTitle());
         }
     }
 }

@@ -1,0 +1,19 @@
+[Global]
+IconName=digikam
+Comment=digiKam
+
+[Event/cameradownloaded]
+Name=Download complete
+Comment=A download from a camera or other devices has finished.
+Action=Popup
+
+[Event/batchqueuecompleted]
+Name=Batch queue completed
+Comment=A queue in the batch queue manager has been completed.
+Action=Popup
+
+[Event/fingerprintscompleted]
+Name=Update of fingerprint database complete
+Comment=The update of the fingerprint database has been completed.
+Action=Popup
+
