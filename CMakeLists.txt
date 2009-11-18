@@ -103,7 +103,9 @@ SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_P
 # Check MarbleWidget library for geolocation.
 MACRO_OPTIONAL_FIND_PACKAGE(MarbleWidget)
 MACRO_BOOL_TO_01(MARBLEWIDGET_FOUND HAVE_MARBLEWIDGET)
-INCLUDE(libs/imageproperties/markerclusterholderplugin/CheckPluginBuildable.cmake)
+IF (MARBLEWIDGET_FOUND)
+    INCLUDE(libs/imageproperties/markerclusterholderplugin/CheckPluginBuildable.cmake)
+ENDIF (MARBLEWIDGET_FOUND)
 
 # Check LensFun library for lens correction tool.
 MACRO_OPTIONAL_FIND_PACKAGE(LensFun)
