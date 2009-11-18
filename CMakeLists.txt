@@ -25,14 +25,6 @@ SET(DIGIKAM_RELEASE_DATE "2009-11-29")
 SET(DIGIKAM_SUFFIX_VERSION "-rc")
 
 # ==================================================================================================
-# debug area codes
-SET(AREA_CODE_GENERAL       "50003")
-SET(AREA_CODE_KIOSLAVES     "50004")
-SET(AREA_CODE_SHOWFOTO      "50005")
-SET(AREA_CODE_IMAGEPLUGINS  "50006")
-ADD_DEFINITIONS(-DKDE_DEFAULT_DEBUG_AREA=${AREA_CODE_GENERAL})
-
-# ==================================================================================================
 # Set env. variables accordingly.
 
 SET(DIGIKAM_VERSION_SHORT
@@ -42,6 +34,17 @@ SET(DIGIKAM_VERSION_SHORT
 SET(DIGIKAM_VERSION_STRING
     "${DIGIKAM_VERSION_SHORT}${DIGIKAM_SUFFIX_VERSION}"
    )
+
+# ==================================================================================================
+# Debug area codes
+# These codes will be set for every project specific path automatically, so
+# that you can use kDebug() without any usage of the area code throughout the
+# digiKam code base.
+SET(AREA_CODE_GENERAL       "50003")
+SET(AREA_CODE_KIOSLAVES     "50004")
+SET(AREA_CODE_SHOWFOTO      "50005")
+SET(AREA_CODE_IMAGEPLUGINS  "50006")
+ADD_DEFINITIONS(-DKDE_DEFAULT_DEBUG_AREA=${AREA_CODE_GENERAL})
 
 # ==================================================================================================
 # Dependencies
