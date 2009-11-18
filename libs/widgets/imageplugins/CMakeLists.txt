@@ -1,7 +1,7 @@
-install( FILES imageregionwidget.h 
+INSTALL( FILES imageregionwidget.h
                imagepaniconwidget.h
                imageguidewidget.h
-               imagewidget.h  
-               imagepanelwidget.h 
+               imagewidget.h
+               imagepanelwidget.h
          DESTINATION ${INCLUDE_INSTALL_DIR}/digikam COMPONENT Devel)
 

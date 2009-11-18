@@ -212,30 +212,30 @@ INSTALL(TARGETS digikamdatabase ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 IF (NEPOMUK_FOUND)
 
-    set(digikamnepomukservices_SRCS ${libnepomukservices_SRCS} )
+    SET(digikamnepomukservices_SRCS ${libnepomukservices_SRCS} )
 
     kde4_add_plugin(digikamnepomukservice ${digikamnepomukservices_SRCS})
 
-    target_link_libraries(digikamnepomukservice
-                        ${KDE4_KIO_LIBS}
-                        ${KDE4_SOLID_LIBS}
-                        ${KIPI_LIBRARIES}
-                        ${KEXIV2_LIBRARIES}
-                        ${KDCRAW_LIBRARIES}
-                        ${QT_QTSQL_LIBRARY}
-                        ${SOPRANO_CLIENT_LIBRARIES}
-                        ${SOPRANO_LIBRARIES}
-                        ${KDE4_KDEUI_LIBS}
-                        ${KDE4_KIO_LIBS}
-                        ${NEPOMUK_LIBRARIES}
-                        digikamcore
-                        digikamdatabase
-                        )
+    TARGET_LINK_LIBRARIES(digikamnepomukservice
+                          ${KDE4_KIO_LIBS}
+                          ${KDE4_SOLID_LIBS}
+                          ${KIPI_LIBRARIES}
+                          ${KEXIV2_LIBRARIES}
+                          ${KDCRAW_LIBRARIES}
+                          ${QT_QTSQL_LIBRARY}
+                          ${SOPRANO_CLIENT_LIBRARIES}
+                          ${SOPRANO_LIBRARIES}
+                          ${KDE4_KDEUI_LIBS}
+                          ${KDE4_KIO_LIBS}
+                          ${NEPOMUK_LIBRARIES}
+                          digikamcore
+                          digikamdatabase
+                         )
 
-    install(
+    INSTALL(
     FILES ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/nepomuk/digikamnepomukservice.desktop
     DESTINATION ${SERVICES_INSTALL_DIR})
-    install(
+    INSTALL(
     TARGETS digikamnepomukservice
     DESTINATION ${PLUGIN_INSTALL_DIR})
 
