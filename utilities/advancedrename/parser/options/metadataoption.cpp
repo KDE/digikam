@@ -230,7 +230,7 @@ QString MetadataOption::parseMetadata(const QString& token, ParseInformation& in
         return tmp;
     }
 
-    DMetadata meta(info.filePath);
+    DMetadata meta(info.fileUrl.toLocalFile());
     if (!meta.isEmpty())
     {
         KExiv2::MetaDataMap dataMap;

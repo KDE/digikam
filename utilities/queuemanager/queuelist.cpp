@@ -41,6 +41,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmenu.h>
+#include <kurl.h>
 
 // Local includes
 
@@ -833,9 +834,9 @@ void QueueListView::updateDestFileNames()
             if (settings().renamingRule == QueueSettings::CUSTOMIZE)
             {
                 ParseInformation parseInfo;
-                parseInfo.filePath = QString("%1/%2.%3").arg(fi.absolutePath()).arg(fi.baseName()).arg(newSuffix);
-                parseInfo.index    = index;
-                newName            = p.parse(parseString, parseInfo);
+                parseInfo.fileUrl = KUrl(QString("%1/%2.%3").arg(fi.absolutePath()).arg(fi.baseName()).arg(newSuffix));
+                parseInfo.index   = index;
+                newName           = p.parse(parseString, parseInfo);
             }
 
             item->setDestFileName(newName);

@@ -232,7 +232,7 @@ void AdvancedRenameDialog::slotParseStringChanged(const QString& parseString)
         AdvancedRenameListItem* item = dynamic_cast<AdvancedRenameListItem*>((*it));
         if (item)
         {
-            ParseInformation parseInfo(item->imageUrl());
+            ParseInformation parseInfo(ImageInfo(item->imageUrl()));
             parseInfo.index = index;
 
             QString newName = d->advancedRenameWidget->parse(parseInfo);

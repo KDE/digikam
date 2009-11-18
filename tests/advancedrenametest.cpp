@@ -56,7 +56,7 @@ void AdvancedRenameWidgetTest::testFileNameToken()
     DefaultRenameParser parser;
 
     ParseInformation info;
-    info.filePath   = filename;
+    info.fileUrl = filename;
 
     QString parsed = parser.parse(parseString, info);
     QCOMPARE(parsed, result);
@@ -89,7 +89,7 @@ void AdvancedRenameWidgetTest::testFileExtensionToken()
     DefaultRenameParser parser;
 
     ParseInformation info;
-    info.filePath   = filename;
+    info.fileUrl   = filename;
 
     QString parsed = parser.parse(parseString, info);
     QCOMPARE(parsed, result);
@@ -118,7 +118,7 @@ void AdvancedRenameWidgetTest::testDirectoryNameToken()
     DefaultRenameParser parser;
 
     ParseInformation info;
-    info.filePath   = filename;
+    info.fileUrl   = filename;
 
     QString parsed = parser.parse(parseString, info);
     QCOMPARE(parsed, result);
@@ -160,7 +160,7 @@ void AdvancedRenameWidgetTest::testNumberToken()
     DefaultRenameParser parser;
 
     ParseInformation info;
-    info.filePath = QString("myimage_1234.jpg");
+    info.fileUrl = QString("myimage_1234.jpg");
     info.index = index;
 
     QString parsed = parser.parse(parseString, info);
@@ -191,7 +191,7 @@ void AdvancedRenameWidgetTest::testTrimmedModifier()
     DefaultRenameParser parser;
 
     ParseInformation info;
-    info.filePath   = filename;
+    info.fileUrl   = filename;
 
     QString parsed = parser.parse(parseString, info);
     QCOMPARE(parsed, result);
@@ -223,7 +223,7 @@ void AdvancedRenameWidgetTest::testFirstLetterOfEachWordUppercaseModifier()
     DefaultRenameParser parser;
 
     ParseInformation info;
-    info.filePath   = filename;
+    info.fileUrl   = filename;
 
     QString parsed = parser.parse(parseString, info);
     QCOMPARE(parsed, result);
@@ -253,7 +253,7 @@ void AdvancedRenameWidgetTest::testChainedModifiers()
     DefaultRenameParser parser;
 
     ParseInformation info;
-    info.filePath   = filename;
+    info.fileUrl   = filename;
 
     QString parsed = parser.parse(parseString, info);
     QCOMPARE(parsed, result);
@@ -290,7 +290,7 @@ void AdvancedRenameWidgetTest::testUppercaseModifier()
     DefaultRenameParser parser;
 
     ParseInformation info;
-    info.filePath   = filename;
+    info.fileUrl   = filename;
 
     QString parsed = parser.parse(parseString, info);
     QCOMPARE(parsed, result);
@@ -336,7 +336,7 @@ void AdvancedRenameWidgetTest::testRangeModifier()
     DefaultRenameParser parser;
 
     ParseInformation info;
-    info.filePath = filename;
+    info.fileUrl = filename;
 
     QString parsed = parser.parse(parseString, info);
     QCOMPARE(parsed, result);
@@ -369,7 +369,7 @@ void AdvancedRenameWidgetTest::testDefaultValueModifier()
     DefaultRenameParser parser;
 
     ParseInformation info;
-    info.filePath   = filename;
+    info.fileUrl   = filename;
     info.cameraName = camera;
 
     QString parsed = parser.parse(parseString, info);
@@ -385,9 +385,6 @@ void AdvancedRenameWidgetTest::testLowercaseModifier_data()
     QString fileName("myfilename001.jpg");
 
     QTest::newRow("myfilename001.jpg") << QString("[file]%") << fileName << QString("myfilename001.jpg");
-
-    QTest::newRow("myfilename001.jpg(token in filename)") << QString("[file]%") << QString("mYfilenAme0%01.jpg")
-                                                          << QString("myfilename0%01.jpg");
 
     QTest::newRow("my image.jpg") << QString("[file]%") << QString("MY image.jpg")
                                   << QString("my image.jpg");
@@ -405,7 +402,7 @@ void AdvancedRenameWidgetTest::testLowercaseModifier()
     DefaultRenameParser parser;
 
     ParseInformation info;
-    info.filePath = filename;
+    info.fileUrl = filename;
 
     QString parsed = parser.parse(parseString, info);
     QCOMPARE(parsed, result);
@@ -456,7 +453,7 @@ void AdvancedRenameWidgetTest::testCameraToken()
     DefaultRenameParser parser;
 
     ParseInformation info;
-    info.filePath   = filename;
+    info.fileUrl    = filename;
     info.cameraName = cameraName;
     info.dateTime   = cameraDate;
     info.index      = index;
@@ -473,7 +470,7 @@ void AdvancedRenameWidgetTest::testEmptyParseString()
     DefaultRenameParser parser;
 
     ParseInformation info;
-    info.filePath   = filename;
+    info.fileUrl    = filename;
     info.cameraName = QString();
     info.index      = 1;
     info.dateTime   = curdate;

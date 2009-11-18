@@ -49,7 +49,7 @@ FilePropertiesOption::FilePropertiesOption()
 
 void FilePropertiesOption::parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results)
 {
-    QFileInfo fi(info.filePath);
+    QFileInfo fi(info.fileUrl.toLocalFile());
 
     QRegExp reg = regExp();
     reg.setCaseSensitivity(Qt::CaseInsensitive);

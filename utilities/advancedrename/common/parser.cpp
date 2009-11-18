@@ -123,7 +123,7 @@ QString Parser::parse(const QString& parseString, ParseInformation& info)
 QString Parser::parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results,
                                bool modify)
 {
-    QFileInfo fi(info.filePath);
+    QFileInfo fi(info.fileUrl.toLocalFile());
 
     if (!stringIsValid(parseString))
     {
