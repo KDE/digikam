@@ -72,6 +72,7 @@
 #include <klocale.h>
 #include <kmenubar.h>
 #include <kmessagebox.h>
+#include <knotifyconfigwidget.h>
 #include <kprotocolinfo.h>
 #include <kselectaction.h>
 #include <kservice.h>
@@ -542,9 +543,10 @@ void EditorWindow::setupStandardActions()
     d->showMenuBarAction = KStandardAction::showMenubar(this, SLOT(slotShowMenuBar()), actionCollection());
     d->showMenuBarAction->setChecked(!menuBar()->isHidden());  // NOTE: workaround for B.K.O #171080
 
-    KStandardAction::keyBindings(this, SLOT(slotEditKeys()),           actionCollection());
-    KStandardAction::configureToolbars(this, SLOT(slotConfToolbars()), actionCollection());
-    KStandardAction::preferences(this, SLOT(slotSetup()),              actionCollection());
+    KStandardAction::keyBindings(this,            SLOT(slotEditKeys()),          actionCollection());
+    KStandardAction::configureToolbars(this,      SLOT(slotConfToolbars()),      actionCollection());
+    KStandardAction::configureNotifications(this, SLOT(slotConfNotifications()), actionCollection());
+    KStandardAction::preferences(this,            SLOT(slotSetup()),             actionCollection());
 
     // ---------------------------------------------------------------------------------
 
@@ -698,6 +700,11 @@ void EditorWindow::slotConfToolbars()
             this, SLOT(slotNewToolbarConfig()));
 
     dlg.exec();
+}
+
+void EditorWindow::slotConfNotifications()
+{
+    KNotifyConfigWidget::configure(this);
 }
 
 void EditorWindow::slotNewToolbarConfig()

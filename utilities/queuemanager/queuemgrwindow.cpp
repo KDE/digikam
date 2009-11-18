@@ -44,6 +44,7 @@
 #include <klocale.h>
 #include <kmenubar.h>
 #include <kmessagebox.h>
+#include <knotifyconfigwidget.h>
 #include <kselectaction.h>
 #include <kshortcutsdialog.h>
 #include <kstandardaction.h>
@@ -420,9 +421,10 @@ void QueueMgrWindow::setupActions()
 
     d->showMenuBarAction = KStandardAction::showMenubar(this, SLOT(slotShowMenuBar()), actionCollection());
 
-    KStandardAction::keyBindings(this, SLOT(slotEditKeys()),           actionCollection());
-    KStandardAction::configureToolbars(this, SLOT(slotConfToolbars()), actionCollection());
-    KStandardAction::preferences(this, SLOT(slotSetup()),              actionCollection());
+    KStandardAction::keyBindings(this,            SLOT(slotEditKeys()),          actionCollection());
+    KStandardAction::configureToolbars(this,      SLOT(slotConfToolbars()),      actionCollection());
+    KStandardAction::configureNotifications(this, SLOT(slotConfNotifications()), actionCollection());
+    KStandardAction::preferences(this,            SLOT(slotSetup()),             actionCollection());
 
     // ---------------------------------------------------------------------------------
 
@@ -712,6 +714,11 @@ void QueueMgrWindow::slotConfToolbars()
             this, SLOT(slotNewToolbarConfig()));
 
     dlg.exec();
+}
+
+void QueueMgrWindow::slotConfNotifications()
+{
+    KNotifyConfigWidget::configure(this);
 }
 
 void QueueMgrWindow::slotNewToolbarConfig()

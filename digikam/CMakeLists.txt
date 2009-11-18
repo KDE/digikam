@@ -136,6 +136,7 @@ TARGET_LINK_LIBRARIES(digikamcore
                       ${KDE4_KIO_LIBS}
                       ${KDE4_KFILE_LIBS}
                       ${KDE4_KHTML_LIBS}
+                      ${KDE4_KNOTIFYCONFIG_LIBRARY}
                       ${KDE4_KDEUI_LIBS}
                       ${KDE4_KUTILS_LIBS}
                       ${KDE4_SOLID_LIBS}
@@ -276,6 +277,7 @@ TARGET_LINK_LIBRARIES(digikam
                       ${KDE4_PHONON_LIBS}
                       ${KDE4_KHTML_LIBS}
                       ${KDE4_KUTILS_LIBS}
+                      ${KDE4_KNOTIFYCONFIG_LIBRARY}
                       ${KDE4_SOLID_LIBS}
                       ${KIPI_LIBRARIES}
                       ${KEXIV2_LIBRARIES}
