@@ -33,9 +33,9 @@ namespace Digikam
 LowerCaseModifier::LowerCaseModifier()
                  : Modifier(i18n("Lowercase"), i18n("Convert to lowercase"))
 {
-    addTokenDescription(QString("%"), i18n("Lowercase"), description());
+    addTokenDescription(QString("{lower}"), i18n("Lowercase"), description());
 
-    setRegExp("\\%");
+    setRegExp("\\{lower\\}");
 }
 
 QString LowerCaseModifier::modifyOperation(const QString& parseString, const QString& result)
