@@ -81,7 +81,7 @@ void Highlighter::setupHighlightingGrammar(Parser* parser)
         QRegExp r = option->regExp();
         r.setMinimal(true);
         rule.pattern = r;
-        rule.format = optionFormat;
+        rule.format  = optionFormat;
         highlightingRules.append(rule);
     }
 
