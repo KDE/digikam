@@ -68,15 +68,15 @@ private:
 
     struct HighlightingRule
     {
-        QRegExp pattern;
+        QRegExp         pattern;
         QTextCharFormat format;
     };
     QVector<HighlightingRule> highlightingRules;
 
-    QTextCharFormat optionFormat;
-    QTextCharFormat parameterFormat;
-    QTextCharFormat modifierFormat;
-    QTextCharFormat quotationFormat;
+    QTextCharFormat           optionFormat;
+    QTextCharFormat           parameterFormat;
+    QTextCharFormat           modifierFormat;
+    QTextCharFormat           quotationFormat;
 };
 
 }  // namespace Digikam
