@@ -26,6 +26,8 @@
 #include <libkexiv2/version.h>
 #if KEXIV2_VERSION >= 0x010000
 #include <libkexiv2/kexiv2data.h>
+#else
+#include <libkexiv2/libkexiv2_export.h>
 #endif
 
 namespace Digikam
