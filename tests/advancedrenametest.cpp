@@ -240,8 +240,8 @@ void AdvancedRenameWidgetTest::testChainedModifiers_data()
     QTest::newRow("[file]*&")    << QString("[file]*&")    << fileName << QString("MYFILENAME001.jpg");
     QTest::newRow("[file]{3-}*") << QString("[file]{3-}*") << fileName << QString("Filename001.jpg");
 
-    QTest::newRow("[file]{3-}{\"name\",\"age\"}*") << QString("[file]{3-}{\"name\",\"age\"}*")
-                                                   << fileName << QString("Fileage001.jpg");
+    QTest::newRow("[file]{3-}{r:\"name\",\"age\"}*") << QString("[file]{3-}{r:\"name\",\"age\"}*")
+                                                     << fileName << QString("Fileage001.jpg");
 }
 
 void AdvancedRenameWidgetTest::testChainedModifiers()
@@ -352,10 +352,10 @@ void AdvancedRenameWidgetTest::testDefaultValueModifier_data()
     QString fileName("DSC1234.jpg");
     QDateTime curdate = QDateTime::currentDateTime();
 
-    QTest::newRow("[cam]_[file]") << QString("[cam]{\"Unknown\"}_[file]") << fileName << QString("Canon Powershot A80")
+    QTest::newRow("[cam]_[file]") << QString("[cam]{d:\"Unknown\"}_[file]") << fileName << QString("Canon Powershot A80")
                                   << QString("Canon Powershot A80_DSC1234.jpg");
 
-    QTest::newRow("[cam]{\"Unknown\"}_[file]") << QString("[cam]{\"Unknown\"}_[file]") << fileName << QString()
+    QTest::newRow("[cam]{\"Unknown\"}_[file]") << QString("[cam]{d:\"Unknown\"}_[file]") << fileName << QString()
                                                << QString("Unknown_DSC1234.jpg");
 }
 

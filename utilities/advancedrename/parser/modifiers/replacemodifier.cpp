@@ -102,9 +102,9 @@ ReplaceModifier::ReplaceModifier()
                : Modifier(i18nc("Replace text", "Replace..."), i18n("Replace text"),
                           SmallIcon("document-edit"))
 {
-    addTokenDescription(QString("{\"|old|\", \"|new|\"}"), i18n("Replace"), description());
+    addTokenDescription(QString("{r:\"|old|\", \"|new|\"}"), i18n("Replace"), description());
 
-    setRegExp("\\{\\s*\"(.+)\"\\s*,\\s*\"(.*)\"\\s*\\}");
+    setRegExp("\\{r:\"(.+)\",\"(.*)\"\\}");
 }
 
 void ReplaceModifier::slotTokenTriggered(const QString& token)
@@ -120,7 +120,7 @@ void ReplaceModifier::slotTokenTriggered(const QString& token)
         QString newStr = dlg->destination();
         if (!oldStr.isEmpty())
         {
-            tmp = QString("{\"%1\",\"%2\"}").arg(oldStr).arg(newStr);
+            tmp = QString("{r:\"%1\",\"%2\"}").arg(oldStr).arg(newStr);
         }
     }
     delete dlg;

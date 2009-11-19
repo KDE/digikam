@@ -118,17 +118,17 @@ AdvancedRenameWidget::~AdvancedRenameWidget()
 
 QString AdvancedRenameWidget::text() const
 {
-    return d->renameInput->lineEdit()->text();
+    return d->renameInput->text();
 }
 
 void AdvancedRenameWidget::setText(const QString& text)
 {
-    d->renameInput->lineEdit()->setText(text);
+    d->renameInput->setText(text);
 }
 
 void AdvancedRenameWidget::clearText()
 {
-    d->renameInput->lineEdit()->clear();
+    d->renameInput->clearText();
 }
 
 void AdvancedRenameWidget::setTooltipAlignment(Qt::Alignment alignment)
@@ -155,7 +155,7 @@ QString AdvancedRenameWidget::parse(ParseInformation& info) const
         return QString();
     }
 
-    QString parseString = d->renameInput->lineEdit()->text();
+    QString parseString = d->renameInput->text();
 
     QString parsed;
     parsed = d->parser->parse(parseString, info);
@@ -228,7 +228,8 @@ void AdvancedRenameWidget::createToolTip()
         // --------------------------------------------------------
 
         tooltip += QString("</table></qt>");
-        tooltip += QString("<font size=\"-1\">%1</font>").arg(d->renameInput->lineEdit()->toolTip());
+        tooltip += i18n("<p>Modifiers can be applied to every renaming option. <br/>"
+                        "They are applied in the order you assign them. It is possible to chain modifiers.</p>");
 
         d->tooltipTracker->setText(tooltip);
     }
@@ -308,7 +309,7 @@ void AdvancedRenameWidget::registerParserControls()
            }
 
            connect(modifier, SIGNAL(signalTokenTriggered(const QString&)),
-                   d->renameInput, SLOT(slotAddModifier(const QString&)));
+                   d->renameInput, SLOT(slotAddToken(const QString&)));
        }
 
        // --------------------------------------------------------
@@ -419,6 +420,9 @@ void AdvancedRenameWidget::setupWidgets()
     connect(d->renameInput, SIGNAL(signalTokenMarked(bool)),
             this, SLOT(slotTokenMarked(bool)));
 
+    connect(d->renameInput, SIGNAL(signalReturnPressed()),
+            this, SIGNAL(signalReturnPressed()));
+
     slotTokenMarked(false);
     readSettings();
 }
@@ -448,7 +452,7 @@ void AdvancedRenameWidget::writeSettings()
     KConfigGroup group        = config->group(d->configGroupName);
 
     // remove duplicate entries and save pattern history, omit empty strings
-    QString pattern = d->renameInput->lineEdit()->text();
+    QString pattern = d->renameInput->text();
     group.writeEntry(d->configExpandedStateEntry, d->optionsLabel
                                                   ? d->optionsLabel->isExpanded()
                                                   : d->configExpandedStateDefault);

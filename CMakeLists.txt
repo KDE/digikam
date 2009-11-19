@@ -1072,6 +1072,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/parseresults.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/renamethread.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/token.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/highlighter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/defaultrenameparser.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/modifiers/defaultvaluemodifier.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/modifiers/firstletterofeachworduppercasemodifier.cpp

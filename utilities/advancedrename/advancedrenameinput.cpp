@@ -25,23 +25,25 @@
 
 // Qt includes
 
-#include <QFocusEvent>
-#include <QMouseEvent>
-#include <QPalette>
+#include <QFontMetrics>
+#include <QLayout>
+#include <QTextEdit>
 #include <QTimer>
-#include <QToolButton>
 
 // KDE includes
 
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
+#include <kdialog.h>
 #include <klocale.h>
 
-// const variables
+// Local includes
 
-const int INVALID         = -1;
-const int DEFAULT_TIMEOUT = 500;
+#include "comboboxutilities.h"
+#include "defaultrenameparser.h"
+#include "highlighter.h"
+#include "parser.h"
 
 namespace Digikam
 {
@@ -51,48 +53,29 @@ class AdvancedRenameLineEditPriv
 public:
 
     AdvancedRenameLineEditPriv() :
-        userIsTyping(false),
-        userIsHighlighting(false),
-        tokenMarked(false),
-        selectionStart(INVALID),
-        selectionLength(INVALID),
-        curCursorPos(INVALID),
         parseTimer(0),
-        parser(0),
-        selectionType(Parser::Text)
+        parser(0)
     {}
 
-    bool          userIsTyping;
-    bool          userIsHighlighting;
-    bool          tokenMarked;
-
-    int           selectionStart;
-    int           selectionLength;
-    int           curCursorPos;
-
-    QTimer*       parseTimer;
-    Parser*       parser;
-
-    Parser::Type  selectionType;
+    QTimer* parseTimer;
+    Parser* parser;
 };
 
 AdvancedRenameLineEdit::AdvancedRenameLineEdit(QWidget* parent)
-                      : KLineEdit(parent), d(new AdvancedRenameLineEditPriv)
+                      : QTextEdit(parent), d(new AdvancedRenameLineEditPriv)
 {
-    d->curCursorPos = cursorPosition();
-
+    setLineWrapMode(QTextEdit::NoWrap);
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setFrameStyle(QFrame::NoFrame);
+    setAutoFillBackground(false);
+    setPalette(kapp->palette());
     setFocusPolicy(Qt::StrongFocus);
-    setClearButtonShown(true);
-    setClickMessage(i18n("Enter renaming string"));
-    setToolTip(i18n("<p>Hold CTRL and move the mouse over the line edit widget to highlight token words.<br/>"
-                    "Hold SHIFT and move the mouse to highlight a token and its modifiers.<br/>"
-                    "To mark a token, press the left mouse button while it is highlighted."
-                    "</p>"));
 
     // --------------------------------------------------------
 
     d->parseTimer = new QTimer(this);
-    d->parseTimer->setInterval(DEFAULT_TIMEOUT);
+    d->parseTimer->setInterval(500);
     d->parseTimer->setSingleShot(true);
 
     // --------------------------------------------------------
@@ -100,11 +83,11 @@ AdvancedRenameLineEdit::AdvancedRenameLineEdit(QWidget* parent)
     connect(d->parseTimer, SIGNAL(timeout()),
             this, SLOT(slotParseTimer()));
 
-    connect(this, SIGNAL(textChanged(const QString&)),
+    connect(this, SIGNAL(textChanged()),
             this, SLOT(slotTextChanged()));
 
-    connect(this, SIGNAL(cursorPositionChanged(int, int)),
-            this, SLOT(slotCursorPositionChanged(int, int)));
+    connect(this, SIGNAL(cursorPositionChanged()),
+            this, SLOT(slotCursorPositionChanged()));
 }
 
 AdvancedRenameLineEdit::~AdvancedRenameLineEdit()
@@ -120,249 +103,61 @@ void AdvancedRenameLineEdit::setParser(Parser* parser)
     }
 }
 
-void AdvancedRenameLineEdit::mouseMoveEvent(QMouseEvent* e)
+Parser* AdvancedRenameLineEdit::parser()
 {
-    KLineEdit::mouseMoveEvent(e);
-    int pos = cursorPositionAt(e->pos());
-
-    if (e->modifiers() == Qt::ControlModifier)
-    {
-        searchAndHighlightTokens(Parser::Token, pos);
-    }
-    else if (e->modifiers() & Qt::ShiftModifier)
-    {
-        searchAndHighlightTokens(Parser::TokenAndModifiers, pos);
-    }
-    else if (d->tokenMarked)
-    {
-        d->userIsHighlighting = false;
-    }
-    else if (d->userIsHighlighting)
-    {
-        deselect();
-        d->userIsHighlighting  = false;
-        resetSelection();
-        setCursorPosition(d->curCursorPos);
-    }
+    return d->parser;
 }
 
-void AdvancedRenameLineEdit::mousePressEvent(QMouseEvent* e)
+void AdvancedRenameLineEdit::keyPressEvent(QKeyEvent* e)
 {
-    if ((e->modifiers() == Qt::ControlModifier) || (e->modifiers() & Qt::ShiftModifier))
+    if (e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return)
     {
-        if (e->button() == Qt::LeftButton)
-        {
-            if (d->userIsTyping)
-            {
-                return;
-            }
-            setTokenSelected(selectionIsValid());
-        }
+        emit signalReturnPressed();
     }
     else
     {
-        setCursorPosition(cursorPositionAt(e->pos()));
-        d->curCursorPos = cursorPosition();
-        resetSelection();
-        KLineEdit::mousePressEvent(e);
+        QTextEdit::keyPressEvent(e);
     }
-}
-
-void AdvancedRenameLineEdit::leaveEvent(QEvent* e)
-{
-    rememberSelection();
-    KLineEdit::leaveEvent(e);
-}
-
-void AdvancedRenameLineEdit::focusInEvent(QFocusEvent* e)
-{
-    KLineEdit::focusInEvent(e);
-
-    if (tokenIsSelected())
-    {
-        setSelection(d->selectionStart, d->selectionLength);
-    }
-}
-
-void AdvancedRenameLineEdit::focusOutEvent(QFocusEvent* e)
-{
-    rememberSelection();
-    KLineEdit::focusOutEvent(e);
-}
-
-void AdvancedRenameLineEdit::rememberSelection()
-{
-    if ((hasSelectedText() && d->selectionType == Parser::Text) ||
-        (hasSelectedText() && (d->selectionType ==Parser::Token || d->selectionType == Parser::TokenAndModifiers)
-                           && tokenIsSelected()))
-    {
-        d->selectionStart  = selectionStart();
-        d->selectionLength = selectedText().count();
-        d->tokenMarked     = true;
-    }
-    else
-    {
-        deselect();
-        resetSelection();
-        setCursorPosition(d->curCursorPos);
-    }
-}
-
-void AdvancedRenameLineEdit::searchAndHighlightTokens(Parser::Type type, int pos)
-{
-    if (d->userIsTyping)
-    {
-        return;
-    }
-
-    if (!d->userIsHighlighting)
-    {
-        d->curCursorPos  = cursorPosition();
-        d->userIsHighlighting = true;
-    }
-
-    int start;
-    int length;
-
-    bool found = d->parser->tokenAtPosition(type, text(), pos, start, length);
-
-    if (found)
-    {
-        deselect();
-        setSelection(start, length);
-
-        d->selectionStart  = start;
-        d->selectionLength = length;
-
-        d->selectionType = type;
-        setSelectionColor(type);
-    }
-    else
-    {
-        deselect();
-        resetSelection();
-    }
-}
-
-void AdvancedRenameLineEdit::setTokenSelected(bool selected)
-{
-    d->tokenMarked = selected;
-    emit signalTokenMarked(d->tokenMarked);
-}
-
-bool AdvancedRenameLineEdit::selectionIsValid()
-{
-    return (d->selectionStart != INVALID  && d->selectionLength != INVALID);
-}
-
-bool AdvancedRenameLineEdit::tokenIsSelected()
-{
-    return (selectionIsValid() && d->tokenMarked);
 }
 
 void AdvancedRenameLineEdit::slotTextChanged()
 {
-    d->userIsTyping = true;
     d->parseTimer->start();
 }
 
 void AdvancedRenameLineEdit::slotParseTimer()
 {
-    d->userIsTyping = false;
-    emit signalTextChanged(text());
+    emit signalTextChanged(toPlainText());
 }
 
-void AdvancedRenameLineEdit::slotCursorPositionChanged(int oldPos, int newPos)
+void AdvancedRenameLineEdit::slotCursorPositionChanged()
 {
-    Q_UNUSED(oldPos)
+    bool found = false;
 
-    if (d->userIsTyping)
+    if (d->parser)
     {
-        d->curCursorPos = newPos;
-    }
-    resetSelection();
-}
+        int start           = -1;
+        int length          = -1;
+        QString parseString = toPlainText();
+        int pos             = textCursor().position();
+        found               = d->parser->tokenAtPosition(Parser::Token,
+                                                         parseString, pos, start, length);
+        found               = found & (start + length) == pos;
 
-void AdvancedRenameLineEdit::resetSelection()
-{
-    d->tokenMarked     = false;
-    d->selectionStart  = INVALID;
-    d->selectionLength = INVALID;
-    d->selectionType   = Parser::Text;
-    setSelectionColor(Parser::Text);
-    emit signalTokenMarked(d->tokenMarked);
-}
-
-void AdvancedRenameLineEdit::slotAddToken(const QString& token)
-{
-    if (!token.isEmpty())
-    {
-        if (tokenIsSelected())
+        if (!found)
         {
-            setSelection(d->selectionStart, d->selectionLength);
-        }
-
-        if (hasSelectedText())
-        {
-            del();
-            resetSelection();
-        }
-
-        int cursorPos = cursorPosition();
-        QString tmp   = text();
-        tmp.insert(cursorPos, token);
-        setText(tmp);
-        setCursorPosition(cursorPos + token.count());
-    }
-    setFocus();
-}
-
-void AdvancedRenameLineEdit::slotAddModifier(const QString& token)
-{
-    if (!token.isEmpty())
-    {
-        if (tokenIsSelected())
-        {
-            int cursorPos = cursorPosition();
-            QString tmp   = text();
-            tmp.insert(cursorPos, token);
-            setText(tmp);
-            setCursorPosition(cursorPos + token.count());
+            found = d->parser->tokenAtPosition(Parser::TokenAndModifiers,
+                                               parseString, pos, start, length);
+            found = found & (start + length) == pos;
         }
     }
-    setFocus();
+    emit signalTokenMarked(found);
 }
 
-void AdvancedRenameLineEdit::setSelectionColor(Parser::Type type)
+void AdvancedRenameLineEdit::slotSetText(const QString& text)
 {
-    QPalette p = palette();
-
-    switch (type)
-    {
-        case Parser::Token:
-        {
-            p.setColor(QPalette::Active,   QPalette::Highlight,       Qt::red);
-            p.setColor(QPalette::Active,   QPalette::HighlightedText, Qt::white);
-            p.setColor(QPalette::Inactive, QPalette::Highlight,       Qt::red);
-            p.setColor(QPalette::Inactive, QPalette::HighlightedText, Qt::white);
-            break;
-        }
-        case Parser::TokenAndModifiers:
-        {
-            p.setColor(QPalette::Active,   QPalette::Highlight,       Qt::yellow);
-            p.setColor(QPalette::Active,   QPalette::HighlightedText, Qt::black);
-            p.setColor(QPalette::Inactive, QPalette::Highlight,       Qt::yellow);
-            p.setColor(QPalette::Inactive, QPalette::HighlightedText, Qt::black);
-            break;
-        }
-        case Parser::Text:
-        default:
-        {
-            p = kapp->palette();
-            break;
-        }
-    }
-    setPalette(p);
+    clear();
+    setPlainText(text);
 }
 
 // --------------------------------------------------------
@@ -377,7 +172,8 @@ public:
 
         maxVisibleItems(10),
         maxHistoryItems(20),
-        lineEdit(0)
+        lineEdit(0),
+        highlighter(0)
         {}
 
     const QString           configGroupName;
@@ -389,6 +185,7 @@ public:
     QStringList             patternHistory;
 
     AdvancedRenameLineEdit* lineEdit;
+    Highlighter*            highlighter;
 };
 
 // --------------------------------------------------------
@@ -401,17 +198,40 @@ AdvancedRenameInput::AdvancedRenameInput(QWidget* parent)
     setEditable(true);
     setMaxVisibleItems(d->maxVisibleItems);
     setMaxCount(d->maxHistoryItems);
-
     setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLength);
 
-    d->lineEdit = new AdvancedRenameLineEdit(this);
-    setLineEdit(d->lineEdit);
+    d->lineEdit          = new AdvancedRenameLineEdit(this);
+    ProxyLineEdit* proxy = new ProxyLineEdit(this);
+    proxy->setAutoFillBackground(false);
+    if (proxy->layout())
+    {
+        proxy->layout()->setMargin(KDialog::marginHint());
+    }
+    proxy->setWidget(d->lineEdit);
+
+    setLineEdit(proxy);
+
+    // FIXME: set the height of the QTextEdit properly, this is very hackish!!!!
+
+    // try setting the minimal needed height
+    QFontMetrics fm = kapp->fontMetrics();
+    setMinimumHeight(fm.height() + (4 * KDialog::marginHint()));
+
+    // --------------------------------------------------------
 
     connect(d->lineEdit, SIGNAL(signalTextChanged(const QString&)),
             this, SIGNAL(signalTextChanged(const QString&)));
 
     connect(d->lineEdit, SIGNAL(signalTokenMarked(bool)),
             this, SIGNAL(signalTokenMarked(bool)));
+
+    connect(d->lineEdit, SIGNAL(signalReturnPressed()),
+            this, SIGNAL(signalReturnPressed()));
+
+    connect(this, SIGNAL(currentIndexChanged(const QString&)),
+            d->lineEdit, SLOT(slotSetText(const QString&)));
+
+    // --------------------------------------------------------
 
     readSettings();
 }
@@ -425,16 +245,30 @@ AdvancedRenameInput::~AdvancedRenameInput()
 void AdvancedRenameInput::setParser(Parser* parser)
 {
     d->lineEdit->setParser(parser);
+
+    delete d->highlighter;
+    d->highlighter = new Highlighter(d->lineEdit, parser);
 }
 
-void AdvancedRenameInput::slotAddToken(const QString& str)
+void AdvancedRenameInput::setText(const QString& text)
 {
-    d->lineEdit->slotAddToken(str);
+    d->lineEdit->setPlainText(text);
 }
 
-void AdvancedRenameInput::slotAddModifier(const QString& str)
+void AdvancedRenameInput::clearText()
 {
-    d->lineEdit->slotAddModifier(str);
+    d->lineEdit->clear();
+}
+
+QString AdvancedRenameInput::text() const
+{
+    return d->lineEdit->toPlainText();
+}
+
+void AdvancedRenameInput::slotAddToken(const QString& token)
+{
+    d->lineEdit->insertPlainText(token);
+    d->lineEdit->setFocus();
 }
 
 void AdvancedRenameInput::readSettings()
@@ -454,7 +288,7 @@ void AdvancedRenameInput::writeSettings()
     KConfigGroup group        = config->group(d->configGroupName);
 
     // remove duplicate entries and save pattern history, omit empty strings
-    QString pattern = d->lineEdit->text();
+    QString pattern = d->lineEdit->toPlainText();
     d->patternHistory.removeAll(pattern);
     d->patternHistory.removeAll(QString(""));
     d->patternHistory.prepend(pattern);

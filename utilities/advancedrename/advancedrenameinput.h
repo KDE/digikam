@@ -27,6 +27,7 @@
 // Qt includes
 
 #include <QWidget>
+#include <QTextEdit>
 
 // KDE includes
 
@@ -39,13 +40,14 @@
 
 class QMouseEvent;
 class QFocusEvent;
+class QKeyEvent;
 
 namespace Digikam
 {
 
 class AdvancedRenameLineEditPriv;
 
-class AdvancedRenameLineEdit : public KLineEdit
+class AdvancedRenameLineEdit : public QTextEdit
 {
     Q_OBJECT
 
@@ -54,42 +56,28 @@ public:
     AdvancedRenameLineEdit(QWidget* parent = 0);
     ~AdvancedRenameLineEdit();
 
-    void setParser(Parser* parser);
+    void    setParser(Parser* parser);
+    Parser* parser();
 
 public Q_SLOTS:
 
-    void slotAddToken(const QString&);
-    void slotAddModifier(const QString&);
+    void slotSetText(const QString&);
+    void slotCursorPositionChanged();
 
 Q_SIGNALS:
 
     void signalTextChanged(const QString&);
     void signalTokenMarked(bool);
+    void signalReturnPressed();
 
 protected:
 
-    virtual void mouseMoveEvent(QMouseEvent* e);
-    virtual void mousePressEvent(QMouseEvent* e);
-    virtual void leaveEvent(QEvent* e);
-    virtual void focusInEvent(QFocusEvent* e);
-    virtual void focusOutEvent(QFocusEvent* e);
+    virtual void keyPressEvent(QKeyEvent* e);
 
 private Q_SLOTS:
 
     void slotTextChanged();
     void slotParseTimer();
-    void slotCursorPositionChanged(int, int);
-
-private:
-
-    void setTokenSelected(bool selected);
-    bool selectionIsValid();
-    bool tokenIsSelected();
-    void searchAndHighlightTokens(Parser::Type type, int pos);
-
-    void setSelectionColor(Parser::Type type);
-    void rememberSelection();
-    void resetSelection();
 
 private:
 
@@ -111,15 +99,19 @@ public:
 
     void setParser(Parser* parser);
 
+    QString text() const;
+    void    setText(const QString& text);
+    void    clearText();
+
 Q_SIGNALS:
 
     void signalTextChanged(const QString&);
     void signalTokenMarked(bool);
+    void signalReturnPressed();
 
 public Q_SLOTS:
 
     void slotAddToken(const QString&);
-    void slotAddModifier(const QString&);
 
 private:
 

@@ -208,6 +208,9 @@ AdvancedRenameDialog::AdvancedRenameDialog(QWidget* parent)
     connect(d->advancedRenameWidget, SIGNAL(signalTextChanged(const QString&)),
             this, SLOT(slotParseStringChanged(const QString&)));
 
+    connect(d->advancedRenameWidget, SIGNAL(signalReturnPressed()),
+            this, SLOT(slotReturnPressed()));
+
     connect(this, SIGNAL(signalWindowHasMoved()),
             d->advancedRenameWidget, SLOT(slotUpdateTrackerPos()));
 
@@ -219,6 +222,14 @@ AdvancedRenameDialog::~AdvancedRenameDialog()
 {
     writeSettings();
     delete d;
+}
+
+void AdvancedRenameDialog::slotReturnPressed()
+{
+    if (isButtonEnabled(Ok))
+    {
+        accept();
+    }
 }
 
 void AdvancedRenameDialog::slotParseStringChanged(const QString& parseString)

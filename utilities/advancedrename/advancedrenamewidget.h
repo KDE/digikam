@@ -76,6 +76,7 @@ public:
 Q_SIGNALS:
 
     void signalTextChanged(const QString&);
+    void signalReturnPressed();
 
 public Q_SLOTS:
 
