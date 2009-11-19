@@ -15,7 +15,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 006 ==> 214855 : Embedded ICC profiles are not properly read.
 007 ==> 212105 : Crash in MarkerClusterHolder destructor.
 008 ==> 213758 : Crash when start program.
-009 ==> 
+009 ==> 214718 : digiKam Crashed when trying to Edit photo.
+010 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta6 - Release date: 2009-11-08
