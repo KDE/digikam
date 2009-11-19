@@ -26,94 +26,121 @@
 #define TAGFOLDERVIEW_H
 
 // Qt includes
-
-#include <QDropEvent>
-#include <QPixmap>
+#include <qtreeview.h>
 
 // Local includes
-
-#include "searchtextbar.h"
-#include "folderview.h"
-
-class QDropEvent;
-class QDrag;
+#include "albumtreeview.h"
 
 namespace Digikam
 {
 
-class Album;
-class TAlbum;
-class TagFolderViewItem;
-class TagFolderViewPriv;
-
-class TagFolderView : public FolderView
+class TagFolderViewNewPriv;
+class TagFolderViewNew: public TagTreeView
 {
-    Q_OBJECT
-
+Q_OBJECT
 public:
-
-    TagFolderView(QWidget *parent);
-    ~TagFolderView();
-
-    void tagNew();
-    void tagEdit();
-    void tagDelete();
-
-    void selectItem(int id);
-
-    void refresh();
-
-Q_SIGNALS:
-
-    void signalProgressBarMode(int, const QString&);
-    void signalProgressValue(int);
-    void signalTextTagFilterMatch(bool);
-    void signalFindDuplicatesInTag(Album*);
-
-public Q_SLOTS:
-
-    void slotTextTagFilterChanged(const SearchTextSettings&);
-
-protected:
-
-    void contentsDropEvent(QDropEvent *e);
-    bool acceptDrop(const QDropEvent *e) const;
+    TagFolderViewNew(QWidget *parent, TagModel *model);
+    virtual ~TagFolderViewNew();
 
 private Q_SLOTS:
-
-    void slotAlbumAdded(Album*);
-    void slotSelectionChanged();
-    void slotAlbumDeleted(Album*);
-    void slotAlbumRenamed(Album*);
-    void slotAlbumsCleared();
-    void slotAlbumIconChanged(Album* album);
-    void slotAlbumMoved(TAlbum* tag, TAlbum* newParent);
-    void slotContextMenu(Q3ListViewItem*, const QPoint&, int);
-    void slotGotThumbnailFromIcon(Album *album, const QPixmap& thumbnail);
-    void slotThumbnailLost(Album *album);
-    void slotReloadThumbnails();
-    void slotRefresh(const QMap<int, int>&);
-    void slotAssignTags(int tagId, const QList<int>& imageIDs);
-    void slotTagNewFromABCMenu(const QString&);
-
-Q_SIGNALS: // private
-
-    void assignTags(int tagId, const QList<int>& imageIDs);
+    void slotTagSelected(const QModelIndex&);
 
 private:
+    TagFolderViewNewPriv *d;
 
-    void tagNew(TagFolderViewItem *item, const QString& _title=QString(),
-                const QString& _icon=QString() );
-    void tagEdit(TagFolderViewItem *item);
-    void tagDelete(TagFolderViewItem *item);
-    void setTagThumbnail(TAlbum *album);
-    QDrag* makeDragObject();
-
-private:
-
-    TagFolderViewPriv* const d;
 };
 
-}  // namespace Digikam
+}
+
+//// Qt includes
+//
+//#include <QDropEvent>
+//#include <QPixmap>
+//
+//// Local includes
+//
+//#include "searchtextbar.h"
+//#include "folderview.h"
+//
+//class QDropEvent;
+//class QDrag;
+//
+//namespace Digikam
+//{
+//
+//class Album;
+//class TAlbum;
+//class TagFolderViewItem;
+//class TagFolderViewPriv;
+//
+//class TagFolderView : public FolderView
+//{
+//    Q_OBJECT
+//
+//public:
+//
+//    TagFolderView(QWidget *parent);
+//    ~TagFolderView();
+//
+//    void tagNew();
+//    void tagEdit();
+//    void tagDelete();
+//
+//    void selectItem(int id);
+//
+//    void refresh();
+//
+//Q_SIGNALS:
+//
+//    void signalProgressBarMode(int, const QString&);
+//    void signalProgressValue(int);
+//    void signalTextTagFilterMatch(bool);
+//    void signalFindDuplicatesInTag(Album*);
+//
+//public Q_SLOTS:
+//
+//    void slotTextTagFilterChanged(const SearchTextSettings&);
+//
+//protected:
+//
+//    void contentsDropEvent(QDropEvent *e);
+//    bool acceptDrop(const QDropEvent *e) const;
+//
+//private Q_SLOTS:
+//
+//    void slotAlbumAdded(Album*);
+//    void slotSelectionChanged();
+//    void slotAlbumDeleted(Album*);
+//    void slotAlbumRenamed(Album*);
+//    void slotAlbumsCleared();
+//    void slotAlbumIconChanged(Album* album);
+//    void slotAlbumMoved(TAlbum* tag, TAlbum* newParent);
+//    void slotContextMenu(Q3ListViewItem*, const QPoint&, int);
+//    void slotGotThumbnailFromIcon(Album *album, const QPixmap& thumbnail);
+//    void slotThumbnailLost(Album *album);
+//    void slotReloadThumbnails();
+//    void slotRefresh(const QMap<int, int>&);
+//    void slotAssignTags(int tagId, const QList<int>& imageIDs);
+//    void slotTagNewFromABCMenu(const QString&);
+//
+//Q_SIGNALS: // private
+//
+//    void assignTags(int tagId, const QList<int>& imageIDs);
+//
+//private:
+//
+//    void tagNew(TagFolderViewItem *item, const QString& _title=QString(),
+//                const QString& _icon=QString() );
+//    void tagEdit(TagFolderViewItem *item);
+//    void tagDelete(TagFolderViewItem *item);
+//    void setTagThumbnail(TAlbum *album);
+//    QDrag* makeDragObject();
+//
+//private:
+//
+//    TagFolderViewPriv* const d;
+//};
+//
+//}  // namespace Digikam
 
 #endif // TAGFOLDERVIEW_H

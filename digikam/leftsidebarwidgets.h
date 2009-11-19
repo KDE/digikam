@@ -75,19 +75,12 @@ public:
     QString getCaption();
 
     // TODO update, mainly legacy methods while not on mvc
-    void refresh();
     void selectItem(int itemId);
 
     // TODO update, legacy signals
 Q_SIGNALS:
     void signalProgressBarMode(int, const QString&);
     void signalProgressValue(int);
-
-    // TODO update, legacy slots
-public Q_SLOTS:
-    void slotNewTag();
-    void slotDeleteTag();
-    void slotEditTag();
 
 Q_SIGNALS:
     void signalFindDuplicatesInAlbum(Album*);

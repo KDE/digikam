@@ -216,11 +216,7 @@ bool AlbumFolderViewNew::viewportEvent(QEvent *event)
 
 void AlbumFolderViewNew::slotAlbumSelected(const QModelIndex &index)
 {
-
-    kDebug() << "slotAlbumSelected: " << index;
-
     AlbumManager::instance()->setCurrentAlbum(albumForIndex(index));
-
 }
 
 void AlbumFolderViewNew::slotSelectAlbum(Album *album)

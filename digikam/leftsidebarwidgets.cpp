@@ -90,12 +90,12 @@ void AlbumFolderViewSideBarWidget::setActive(bool active)
 
 void AlbumFolderViewSideBarWidget::loadViewState(KConfigGroup &group)
 {
-    d->albumFolderView->loadViewState(group);
+    d->albumFolderView->loadViewState(group, "AlbumFolderView");
 }
 
 void AlbumFolderViewSideBarWidget::saveViewState(KConfigGroup &group)
 {
-    d->albumFolderView->saveViewState(group);
+    d->albumFolderView->saveViewState(group, "AlbumFolderView");
 }
 
 void AlbumFolderViewSideBarWidget::applySettings()
@@ -142,7 +142,7 @@ public:
 
     TagModel *tagModel;
     SearchTextBar *tagSearchBar;
-    TagFolderView *tagFolderView;
+    TagFolderViewNew *tagFolderView;
 };
 
 TagViewSideBarWidget::TagViewSideBarWidget(QWidget *parent,
@@ -154,7 +154,7 @@ TagViewSideBarWidget::TagViewSideBarWidget(QWidget *parent,
 
     QVBoxLayout *layout = new QVBoxLayout(this);
 
-    d->tagFolderView = new TagFolderView(this);
+    d->tagFolderView = new TagFolderViewNew(this, model);
     d->tagSearchBar  = new SearchTextBar(this, "DigikamViewTagSearchBar");
     d->tagSearchBar->setHighlightOnCompletion(true);
     d->tagSearchBar->setModel(model);
@@ -163,15 +163,16 @@ TagViewSideBarWidget::TagViewSideBarWidget(QWidget *parent,
     layout->addWidget(d->tagSearchBar);
 
     connect(d->tagSearchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
-            d->tagFolderView, SLOT(slotTextTagFilterChanged(const SearchTextSettings&)));
-    connect(d->tagFolderView, SIGNAL(signalFindDuplicatesInTag(Album*)),
-            this, SIGNAL(signalFindDuplicatesInAlbum(Album*)));
+            d->tagFolderView, SLOT(setSearchTextSettings(const SearchTextSettings&)));
+    // TODO update
+    //connect(d->tagFolderView, SIGNAL(signalFindDuplicatesInTag(Album*)),
+    //        this, SIGNAL(signalFindDuplicatesInAlbum(Album*)));
 
     // TODO update, legacy signal passing
-    connect(d->tagFolderView, SIGNAL(signalProgressBarMode(int, const QString&)),
-            this, SIGNAL(signalProgressBarMode(int, const QString&)));
-    connect(d->tagFolderView, SIGNAL(signalProgressValue(int)),
-            this, SIGNAL(signalProgressValue(int)));
+    //connect(d->tagFolderView, SIGNAL(signalProgressBarMode(int, const QString&)),
+    //        this, SIGNAL(signalProgressBarMode(int, const QString&)));
+    //connect(d->tagFolderView, SIGNAL(signalProgressValue(int)),
+    //        this, SIGNAL(signalProgressValue(int)));
 
 }
 
@@ -182,15 +183,21 @@ TagViewSideBarWidget::~TagViewSideBarWidget()
 
 void TagViewSideBarWidget::setActive(bool active)
 {
-    d->tagFolderView->setActive(active);
+    if (active)
+    {
+        AlbumManager::instance()->setCurrentAlbum(
+                        d->tagFolderView->currentAlbum());
+    }
 }
 
 void TagViewSideBarWidget::loadViewState(KConfigGroup &group)
 {
+    d->tagFolderView->loadViewState(group, "TagFolderView");
 }
 
 void TagViewSideBarWidget::saveViewState(KConfigGroup &group)
 {
+    d->tagFolderView->saveViewState(group, "TagFolderView");
 }
 
 void TagViewSideBarWidget::applySettings()
@@ -199,12 +206,12 @@ void TagViewSideBarWidget::applySettings()
 
 void TagViewSideBarWidget::changeAlbumFromHistory(Album *album)
 {
-    Q3ListViewItem *item = (Q3ListViewItem*) album->extraData(d->tagFolderView);
-    if (!item)
-        return;
-
-    d->tagFolderView->setSelected(item, true);
-    d->tagFolderView->ensureItemVisible(item);
+    // TODO, update
+    //Q3ListViewItem *item = (Q3ListViewItem*) album->extraData(d->tagFolderView);
+    //if (!item)
+    //    return;
+    //d->tagFolderView->setSelected(item, true);
+    //d->tagFolderView->ensureItemVisible(item);
 }
 
 QPixmap TagViewSideBarWidget::getIcon()
@@ -217,30 +224,11 @@ QString TagViewSideBarWidget::getCaption()
     return i18n("Tags");
 }
 
-void TagViewSideBarWidget::refresh()
-{
-    d->tagFolderView->refresh();
-}
-
 void TagViewSideBarWidget::selectItem(int tagID)
 {
+    // TODO update
     // Set the current tag in the tag folder view.
-    d->tagFolderView->selectItem(tagID);
-}
-
-void TagViewSideBarWidget::slotNewTag()
-{
-    d->tagFolderView->tagNew();
-}
-
-void TagViewSideBarWidget::slotDeleteTag()
-{
-    d->tagFolderView->tagDelete();
-}
-
-void TagViewSideBarWidget::slotEditTag()
-{
-    d->tagFolderView->tagEdit();
+    //d->tagFolderView->selectItem(tagID);
 }
 
 // -----------------------------------------------------------------------------

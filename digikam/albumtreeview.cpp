@@ -305,10 +305,34 @@ void AbstractCountingAlbumTreeView::slotRowsInserted(const QModelIndex& parent, 
 
 // --------------------------------------- //
 
+struct State
+{
+    State() :
+        selected(false), expanded(false), currentIndex(false)
+    {
+    }
+    bool selected;
+    bool expanded;
+    bool currentIndex;
+};
+
+class AbstractCheckableAlbumTreeViewPriv
+{
+
+public:
+    QMap<int, State> statesByAlbumId;
+
+};
+
 AbstractCheckableAlbumTreeView::AbstractCheckableAlbumTreeView(AbstractCheckableAlbumModel *model, QWidget *parent)
-    : AbstractCountingAlbumTreeView(model, parent)
+    : AbstractCountingAlbumTreeView(model, parent), d(new AbstractCheckableAlbumTreeViewPriv)
 {
     m_checkOnMiddleClick  = true;
+}
+
+AbstractCheckableAlbumTreeView::~AbstractCheckableAlbumTreeView()
+{
+    delete d;
 }
 
 AbstractCheckableAlbumModel *AbstractCheckableAlbumTreeView::checkableModel() const
@@ -327,68 +351,7 @@ void AbstractCheckableAlbumTreeView::middleButtonPressed(Album *a)
         static_cast<AbstractCheckableAlbumModel*>(m_albumModel)->toggleChecked(a);
 }
 
-// --------------------------------------- //
-
-struct State
-{
-    State() :
-        selected(false), expanded(false), currentIndex(false)
-    {
-    }
-    bool selected;
-    bool expanded;
-    bool currentIndex;
-};
-
-class AlbumTreeViewPriv
-{
-
-public:
-    QMap<int, State> statesByAlbumId;
-
-};
-
-AlbumTreeView::AlbumTreeView(AlbumModel *model, QWidget *parent)
-    : AbstractCheckableAlbumTreeView(model, parent),
-      d(new AlbumTreeViewPriv)
-{
-    albumModel()->setDragDropHandler(new AlbumDragDropHandler(albumModel()));
-
-    connect(AlbumManager::instance(), SIGNAL(signalPAlbumsDirty(const QMap<int, int>&)),
-             m_albumModel, SLOT(setCountMap(const QMap<int, int>&)));
-
-    expand(m_albumFilterModel->rootAlbumIndex());
-    setRootIsDecorated(false);
-
-    setDragEnabled(true);
-    setAcceptDrops(true);
-    setDropIndicatorShown(false);
-    setAutoExpandDelay(300);
-}
-
-AlbumTreeView::~AlbumTreeView()
-{
-    delete d;
-}
-
-AlbumModel *AlbumTreeView::albumModel() const
-{
-    return dynamic_cast<AlbumModel*>(m_albumModel);
-}
-
-PAlbum* AlbumTreeView::currentAlbum() const
-{
-    return dynamic_cast<PAlbum*> (m_albumModel->albumForIndex(
-                    m_albumFilterModel->mapToSource(currentIndex())));
-}
-
-PAlbum *AlbumTreeView::albumForIndex(const QModelIndex &index) const
-{
-    return dynamic_cast<PAlbum*> (m_albumModel->albumForIndex(
-                    m_albumFilterModel->mapToSource(index)));
-}
-
-void AlbumTreeView::loadViewState(KConfigGroup &configGroup, QString prefix)
+void AbstractCheckableAlbumTreeView::loadViewState(KConfigGroup &configGroup, QString prefix)
 {
 
     kDebug() << "Loading view state from " << configGroup.name();
@@ -453,7 +416,7 @@ void AlbumTreeView::loadViewState(KConfigGroup &configGroup, QString prefix)
 
 }
 
-void AlbumTreeView::restoreState(const QModelIndex &index)
+void AbstractCheckableAlbumTreeView::restoreState(const QModelIndex &index)
 {
 
     Album *album = albumFilterModel()->albumForIndex(index);
@@ -488,7 +451,7 @@ void AlbumTreeView::restoreState(const QModelIndex &index)
 
 }
 
-void AlbumTreeView::slotFixRowsInserted(const QModelIndex &index, int start, int end)
+void AbstractCheckableAlbumTreeView::slotFixRowsInserted(const QModelIndex &index, int start, int end)
 {
 
     kDebug() << "slot rowInserted called";
@@ -500,7 +463,7 @@ void AlbumTreeView::slotFixRowsInserted(const QModelIndex &index, int start, int
     }
 }
 
-void AlbumTreeView::saveViewState(KConfigGroup &configGroup, QString prefix)
+void AbstractCheckableAlbumTreeView::saveViewState(KConfigGroup &configGroup, QString prefix)
 {
 
     QStringList selection, expansion;
@@ -523,7 +486,7 @@ void AlbumTreeView::saveViewState(KConfigGroup &configGroup, QString prefix)
 
 }
 
-void AlbumTreeView::saveState(const QModelIndex &index, QStringList &selection,
+void AbstractCheckableAlbumTreeView::saveState(const QModelIndex &index, QStringList &selection,
                 QStringList &expansion)
 {
     const QString cfgKey = QString::number(albumFilterModel()->albumForIndex(
@@ -539,8 +502,48 @@ void AlbumTreeView::saveState(const QModelIndex &index, QStringList &selection,
     }
 }
 
-TagTreeView::TagTreeView(QWidget *parent)
-    : AbstractCheckableAlbumTreeView(new TagModel(AlbumModel::IncludeRootAlbum), parent)
+// --------------------------------------- //
+
+AlbumTreeView::AlbumTreeView(AlbumModel *model, QWidget *parent)
+    : AbstractCheckableAlbumTreeView(model, parent)
+{
+    albumModel()->setDragDropHandler(new AlbumDragDropHandler(albumModel()));
+
+    connect(AlbumManager::instance(), SIGNAL(signalPAlbumsDirty(const QMap<int, int>&)),
+             m_albumModel, SLOT(setCountMap(const QMap<int, int>&)));
+
+    expand(m_albumFilterModel->rootAlbumIndex());
+    setRootIsDecorated(false);
+
+    setDragEnabled(true);
+    setAcceptDrops(true);
+    setDropIndicatorShown(false);
+    setAutoExpandDelay(300);
+}
+
+AlbumTreeView::~AlbumTreeView()
+{
+}
+
+AlbumModel *AlbumTreeView::albumModel() const
+{
+    return dynamic_cast<AlbumModel*>(m_albumModel);
+}
+
+PAlbum* AlbumTreeView::currentAlbum() const
+{
+    return dynamic_cast<PAlbum*> (m_albumModel->albumForIndex(
+                    m_albumFilterModel->mapToSource(currentIndex())));
+}
+
+PAlbum *AlbumTreeView::albumForIndex(const QModelIndex &index) const
+{
+    return dynamic_cast<PAlbum*> (m_albumModel->albumForIndex(
+                    m_albumFilterModel->mapToSource(index)));
+}
+
+TagTreeView::TagTreeView(TagModel *model, QWidget *parent)
+    : AbstractCheckableAlbumTreeView(model, parent)
 {
     connect(AlbumManager::instance(), SIGNAL(signalTAlbumsDirty(const QMap<int, int>&)),
              m_albumModel, SLOT(setCountMap(const QMap<int, int>&)));
@@ -552,6 +555,18 @@ TagTreeView::TagTreeView(QWidget *parent)
 TagModel *TagTreeView::albumModel() const
 {
     return static_cast<TagModel*>(m_albumModel);
+}
+
+TAlbum* TagTreeView::currentAlbum() const
+{
+    return dynamic_cast<TAlbum*> (m_albumModel->albumForIndex(
+                    m_albumFilterModel->mapToSource(currentIndex())));
+}
+
+TAlbum *TagTreeView::albumForIndex(const QModelIndex &index) const
+{
+    return dynamic_cast<TAlbum*> (m_albumModel->albumForIndex(
+                    m_albumFilterModel->mapToSource(index)));
 }
 
 SearchTreeView::SearchTreeView(QWidget *parent)

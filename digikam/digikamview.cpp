@@ -323,7 +323,6 @@ void DigikamView::refreshView()
     d->rightSideBar->refreshTagsView();
 
     // TODO update, legacy code while not on mvc
-    d->tagViewSideBar->refresh();
     d->dateViewSideBar->refresh();
 }
 
@@ -732,19 +731,19 @@ void DigikamView::slotDeleteAlbum()
 void DigikamView::slotNewTag()
 {
     // TODO update, use a helper object for this like albummodificationhelper
-    d->tagViewSideBar->slotNewTag();
+    //d->tagViewSideBar->slotNewTag();
 }
 
 void DigikamView::slotDeleteTag()
 {
     // TODO update, use a helper object for this like albummodificationhelper
-    d->tagViewSideBar->slotDeleteTag();
+    //d->tagViewSideBar->slotDeleteTag();
 }
 
 void DigikamView::slotEditTag()
 {
     // TODO update, use a helper object for this like albummodificationhelper
-    d->tagViewSideBar->slotEditTag();
+    //d->tagViewSideBar->slotEditTag();
 }
 
 void DigikamView::slotNewKeywordSearch()
@@ -787,14 +786,8 @@ void DigikamView::slotAlbumRenamed(Album *album)
             case Album::TAG:
             {
                 // TODO port to mvc
-                //d->tagFolderView->setAllowAutoCollapse(false);
                 d->tagFilterView->setAllowAutoCollapse(false);
-
-                //d->tagFolderView->slotTextTagFilterChanged(d->tagSearchBar->searchTextSettings());
-
                 d->tagFilterView->slotTextTagFilterChanged(d->tagFilterSearchBar->searchTextSettings());
-
-                //d->tagFolderView->setAllowAutoCollapse(true);
                 d->tagFilterView->setAllowAutoCollapse(true);
                 break;
             }

@@ -120,14 +120,16 @@ private Q_SLOTS:
     void updateShowCountState(const QModelIndex& index, bool recurse);
 };
 
+class AbstractCheckableAlbumTreeViewPriv;
 class AbstractCheckableAlbumTreeView : public AbstractCountingAlbumTreeView
 {
-
+Q_OBJECT
 public:
 
     /// Models of these view _can_ be checkable, they need _not_. You need to enable it on the model.
 
     explicit AbstractCheckableAlbumTreeView(AbstractCheckableAlbumModel *model, QWidget *parent = 0);
+    virtual ~AbstractCheckableAlbumTreeView();
 
     /// Manage check state through the model directly
     AbstractCheckableAlbumModel *checkableModel() const;
@@ -135,9 +137,24 @@ public:
     /// Enable checking on middle mouse button click (default: on)
     void setCheckOnMiddleClick(bool doThat);
 
+    virtual void loadViewState(KConfigGroup &group, QString prefix = QString());
+    virtual void saveViewState(KConfigGroup &group, QString prefix = QString());
+
 protected:
 
     virtual void middleButtonPressed(Album *a);
+
+private:
+    void saveState(const QModelIndex &index, QStringList &selection,
+                    QStringList &expansion);
+    void restoreState(const QModelIndex &index);
+
+private Q_SLOTS:
+    void slotFixRowsInserted(const QModelIndex &index, int start, int end);
+
+private:
+    AbstractCheckableAlbumTreeViewPriv *d;
+
 };
 
 class AlbumTreeViewPriv;
@@ -152,28 +169,16 @@ public:
     PAlbum *currentAlbum() const;
     PAlbum *albumForIndex(const QModelIndex &index) const;
 
-    virtual void loadViewState(KConfigGroup &group, QString prefix = QString());
-    virtual void saveViewState(KConfigGroup &group, QString prefix = QString());
-
-private Q_SLOTS:
-    void slotFixRowsInserted(const QModelIndex &index, int start, int end);
-
-private:
-
-    void saveState(const QModelIndex &index, QStringList &selection,
-                    QStringList &expansion);
-    void restoreState(const QModelIndex &index);
-
-    AlbumTreeViewPriv *d;
-
 };
 
 class TagTreeView : public AbstractCheckableAlbumTreeView
 {
 public:
 
-    TagTreeView(QWidget *parent = 0);
+    TagTreeView(TagModel *model, QWidget *parent = 0);
     TagModel *albumModel() const;
+    TAlbum *currentAlbum() const;
+    TAlbum *albumForIndex(const QModelIndex &index) const;
 };
 
 class SearchTreeView : public AbstractAlbumTreeView
