@@ -4,7 +4,7 @@ Comment=digiKam
 
 [Event/cameradownloaded]
 Name=Download complete
-Comment=A download from a camera or other devices has finished.
+Comment=A download from a camera or other device has finished.
 Action=Popup
 
 [Event/batchqueuecompleted]
