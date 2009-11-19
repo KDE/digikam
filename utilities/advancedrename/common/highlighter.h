@@ -45,7 +45,7 @@ public:
     enum Colors
     {
         OptionColorBackground   = Qt::red,
-        ModifierColorBackground = Qt::green,
+        ModifierColorBackground = Qt::darkGreen,
         QuotedTextColor         = Qt::blue,
         OptionColorForeground   = Qt::white,
         ModifierColorForeground = Qt::black

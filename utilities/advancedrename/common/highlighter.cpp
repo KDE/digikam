@@ -89,7 +89,6 @@ void Highlighter::setupHighlightingGrammar(Parser* parser)
 
     modifierFormat.setForeground((Qt::GlobalColor)ModifierColorBackground);
     modifierFormat.setFontWeight(QFont::Bold);
-    modifierFormat.setFontItalic(true);
 
     if (!parser->options().isEmpty())
     {
@@ -107,6 +106,7 @@ void Highlighter::setupHighlightingGrammar(Parser* parser)
     // --------------------------------------------------------
 
     quotationFormat.setForeground((Qt::GlobalColor)QuotedTextColor);
+    quotationFormat.setFontItalic(true);
     rule.pattern = QRegExp("\".*\"");
     rule.pattern.setMinimal(true);
     rule.format = quotationFormat;
