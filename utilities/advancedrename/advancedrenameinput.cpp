@@ -79,6 +79,9 @@ AdvancedRenameLineEdit::AdvancedRenameLineEdit(QWidget* parent)
     viewport()->setAutoFillBackground(false);
     setAutoFillBackground(false);
 
+    QFontMetrics fm = fontMetrics();
+    setMinimumHeight(fm.height());
+
     // --------------------------------------------------------
 
     d->parseTimer = new QTimer(this);
@@ -209,22 +212,10 @@ AdvancedRenameInput::AdvancedRenameInput(QWidget* parent)
 
     d->lineEdit          = new AdvancedRenameLineEdit(this);
     ProxyLineEdit* proxy = new ProxyLineEdit(this);
-    if (proxy->layout())
-    {
-        proxy->layout()->setMargin(KDialog::marginHint());
-    }
     proxy->setWidget(d->lineEdit);
 
     setLineEdit(proxy);
     proxy->setAutoFillBackground(false);
-
-    // --------------------------------------------------------
-
-    // FIXME: set the height of the QTextEdit properly, this is very hackish!!!!
-
-    // try setting the minimal needed height
-    QFontMetrics fm = kapp->fontMetrics();
-    setMinimumHeight(fm.height() + (4 * KDialog::marginHint()));
 
     // --------------------------------------------------------
 
