@@ -79,7 +79,7 @@ ParseObjectDialog::ParseObjectDialog(ParseObject* parent)
     QGridLayout* headerLayout = new QGridLayout(this);
     headerLayout->addWidget(d->dialogIcon,        0, 0, 1, 1);
     headerLayout->addWidget(d->dialogTitle,       0, 1, 1, 1);
-    headerLayout->addWidget(d->dialogDescription, 1, 1, 1, 1);
+    headerLayout->addWidget(d->dialogDescription, 1, 0, 1,-1);
     headerLayout->setColumnStretch(1, 10);
     header->setLayout(headerLayout);
 
