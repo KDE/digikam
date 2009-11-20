@@ -74,7 +74,7 @@ void Highlighter::setupHighlightingGrammar(Parser* parser)
     // --------------------------------------------------------
 
     optionFormat.setForeground((Qt::GlobalColor)OptionColorBackground);
-    optionFormat.setFontWeight(QFont::Bold);
+//    optionFormat.setFontWeight(QFont::Bold);
 
     foreach (Option* option, parser->options())
     {
@@ -88,7 +88,7 @@ void Highlighter::setupHighlightingGrammar(Parser* parser)
     // --------------------------------------------------------
 
     modifierFormat.setForeground((Qt::GlobalColor)ModifierColorBackground);
-    modifierFormat.setFontWeight(QFont::Bold);
+//    modifierFormat.setFontWeight(QFont::Bold);
 
     if (!parser->options().isEmpty())
     {
