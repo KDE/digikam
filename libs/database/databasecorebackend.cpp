@@ -900,13 +900,27 @@ bool DatabaseCoreBackend::execBatch(SqlQuery& query)
 
 SqlQuery DatabaseCoreBackend::prepareQuery(const QString& sql)
 {
-    SqlQuery query = getQuery();
-    bool result = query.prepare(sql);
-    if (!result)
+    Q_D(DatabaseCoreBackend);
+    int retries=0;
+    forever
     {
-        kDebug(50003) << "Prepare failed! Details: " << query.lastError();
+        SqlQuery query = getQuery();
+        if (query.prepare(sql))
+            return query;
+        else
+        {
+            kDebug(50003) << "Prepare failed! Details: " << query.lastError();
+            if (queryErrorHandling(query, retries++))
+            {
+                // TODO reopen the database
+                d->closeDatabaseForThread();
+                query = copyQuery(query);
+                continue;
+            }
+            else
+                return query;
+        }
     }
-    return query;
 }
 
 SqlQuery DatabaseCoreBackend::copyQuery(const SqlQuery& old)
