@@ -207,7 +207,6 @@ AdvancedRenameInput::AdvancedRenameInput(QWidget* parent)
 
     d->lineEdit          = new AdvancedRenameLineEdit(this);
     ProxyLineEdit* proxy = new ProxyLineEdit(this);
-    proxy->setAutoFillBackground(false);
     if (proxy->layout())
     {
         proxy->layout()->setMargin(KDialog::marginHint());
@@ -216,11 +215,18 @@ AdvancedRenameInput::AdvancedRenameInput(QWidget* parent)
 
     setLineEdit(proxy);
 
+    // --------------------------------------------------------
+
     // FIXME: set the height of the QTextEdit properly, this is very hackish!!!!
 
     // try setting the minimal needed height
     QFontMetrics fm = kapp->fontMetrics();
     setMinimumHeight(fm.height() + (4 * KDialog::marginHint()));
+
+    // --------------------------------------------------------
+
+    d->lineEdit->setAutoFillBackground(false);
+    proxy->setAutoFillBackground(false);
 
     // --------------------------------------------------------
 
@@ -274,6 +280,7 @@ void AdvancedRenameInput::slotAddToken(const QString& token)
 {
     d->lineEdit->insertPlainText(token);
     d->lineEdit->setFocus();
+    d->lineEdit->ensureCursorVisible();
 }
 
 void AdvancedRenameInput::readSettings()
