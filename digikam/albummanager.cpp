@@ -651,8 +651,7 @@ bool AlbumManager::setDatabase(const QString& dbType, const QString& dbName, con
     // -- Database initialization -------------------------------------------------
 
     QString databaseName = AlbumSettings::instance()->getDatabaseName();
-    //TODO Use a own database for thumbnails. For the first shoot, we merge it to the main db.
-    QString thumbnailDatabaseName = databaseName;
+    QString thumbnailDatabaseName = AlbumSettings::instance()->getDatabaseNameThumbnails();
 
     // SQLite specifics
     if (AlbumSettings::instance()->getDatabaseType().isEmpty())

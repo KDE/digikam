@@ -114,6 +114,7 @@ void SetupDatabase::applySettings()
         {
             settings->setDatabaseType(d->databaseWidget->databaseType->currentText());
             settings->setDatabaseName(newPath);
+            settings->setDatabaseNameThumbnails(newPath);
 
             // clear other fields
             settings->setDatabaseConnectoptions("");
@@ -127,6 +128,7 @@ void SetupDatabase::applySettings()
     }else{
         settings->setDatabaseType(d->databaseWidget->databaseType->currentText());
         settings->setDatabaseName(d->databaseWidget->databaseName->text());
+        settings->setDatabaseNameThumbnails(d->databaseWidget->databaseNameThumbnails->text());
         settings->setDatabaseConnectoptions(d->databaseWidget->connectionOptions->text());
         settings->setDatabaseHostName(d->databaseWidget->hostName->text());
         settings->setDatabasePort(d->databaseWidget->hostPort->text().toInt());

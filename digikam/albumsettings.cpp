@@ -71,6 +71,7 @@ public:
         configGroupDatabase("Database Settings"),
         configDatabaseType("Database Type"),
         configDatabaseName("Database Name"),
+        configDatabaseNameThumbnails("Database Name Thumbnails"),
         configDatabaseHostName("Database Hostname"),
         configDatabasePort("Database Port"),
         configDatabaseUsername("Database Username"),
@@ -157,6 +158,7 @@ public:
     const QString                       configGroupDatabase;
     const QString                       configDatabaseType;
     const QString                       configDatabaseName;
+    const QString                       configDatabaseNameThumbnails;
     const QString                       configDatabaseHostName;
     const QString                       configDatabasePort;
     const QString                       configDatabaseUsername;
@@ -323,6 +325,7 @@ public:
     QString                             databaseType;
     QString                             databaseHostName;
     QString                             databaseName;
+    QString                             databaseNameThumbnails;
     QString                             databaseUserName;
     QString                             databasePassword;
     int                                 databasePort;
@@ -581,6 +584,7 @@ void AlbumSettings::readSettings()
     group = config->group(d->configGroupDatabase);
     d->databaseType             = group.readEntry(d->configDatabaseType);
     d->databaseName             = group.readEntry(d->configDatabaseName);
+    d->databaseNameThumbnails   = group.readEntry(d->configDatabaseNameThumbnails);
     d->databaseHostName         = group.readEntry(d->configDatabaseHostName);
     d->databasePort             = group.readEntry(d->configDatabasePort).toInt();
     d->databaseUserName         = group.readEntry(d->configDatabaseUsername);
@@ -601,6 +605,7 @@ void AlbumSettings::readSettings()
     {
         d->databaseType="QSQLITE";
         d->databaseName=oldDatabaseFilePath;
+        d->databaseNameThumbnails=oldDatabaseFilePath;
     }
 
     d->syncToDigikam         = group.readEntry(d->configSyncNepomuktoDigikamEntry, false);
@@ -716,6 +721,7 @@ void AlbumSettings::saveSettings()
     group = config->group(d->configGroupDatabase);
     group.writeEntry(d->configDatabaseType, d->databaseType);
     group.writeEntry(d->configDatabaseName, d->databaseName);
+    group.writeEntry(d->configDatabaseNameThumbnails, d->databaseNameThumbnails);
     group.writeEntry(d->configDatabaseHostName, d->databaseHostName);
     group.writeEntry(d->configDatabasePort, d->databasePort);
     group.writeEntry(d->configDatabaseUsername, d->databaseUserName);
@@ -1589,6 +1595,11 @@ QString AlbumSettings::getDatabaseName() const
     return d->databaseName;
 }
 
+QString AlbumSettings::getDatabaseNameThumbnails() const
+{
+    return d->databaseNameThumbnails;
+}
+
 QString AlbumSettings::getDatabaseHostName() const
 {
     return d->databaseHostName;
@@ -1617,6 +1628,11 @@ void AlbumSettings::setDatabaseConnectoptions(const QString &connectoptions)
 void AlbumSettings::setDatabaseName(const QString &databaseName)
 {
     d->databaseName = databaseName;
+}
+
+void AlbumSettings::setDatabaseNameThumbnails(const QString &databaseNameThumbnails)
+{
+    d->databaseNameThumbnails = databaseNameThumbnails;
 }
 
 void AlbumSettings::setDatabaseHostName(const QString &hostName)

@@ -71,8 +71,10 @@ namespace Digikam
 
         QLabel *databaseTypeLabel        = new QLabel(i18n("Type"));
         databaseType                  = new QComboBox();
-        QLabel *databaseNameLabel        = new QLabel(i18n("Name"));
+        QLabel *databaseNameLabel        = new QLabel(i18n("Schema Name"));
         databaseName                  = new QLineEdit();
+        QLabel *databaseNameThumbnailsLabel = new QLabel(i18n("Thumbnails Schema Name"));
+        databaseNameThumbnails        = new QLineEdit();
         QLabel *hostNameLabel            = new QLabel(i18n("Host Name"));
         hostName                      = new QLineEdit();
         QLabel *hostPortLabel            = new QLabel(i18n("Port"));
@@ -105,6 +107,7 @@ namespace Digikam
         expertSettinglayout->addRow(hostNameLabel, hostName);
         expertSettinglayout->addRow(hostPortLabel, hostPort);
         expertSettinglayout->addRow(databaseNameLabel, databaseName);
+        expertSettinglayout->addRow(databaseNameThumbnailsLabel, databaseNameThumbnails);
         expertSettinglayout->addRow(userNameLabel, userName);
         expertSettinglayout->addRow(passwordLabel, password);
         expertSettinglayout->addRow(connectionOptionsLabel, connectionOptions);

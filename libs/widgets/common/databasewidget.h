@@ -59,6 +59,7 @@ public:
     QLabel                  *databasePathLabel;
     QComboBox               *databaseType;
     QLineEdit               *databaseName;
+    QLineEdit               *databaseNameThumbnails;
     QLineEdit               *hostName;
     QSpinBox                *hostPort;
     QLineEdit               *connectionOptions;
