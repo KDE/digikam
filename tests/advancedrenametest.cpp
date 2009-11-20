@@ -205,13 +205,17 @@ void AdvancedRenameWidgetTest::testFirstLetterOfEachWordUppercaseModifier_data()
 
     QString fileName("myfilename001.jpg");
 
-    QTest::newRow("[file]*")      << QString("[file]*")  << fileName                << QString("Myfilename001.jpg");
-    QTest::newRow("[file]**")     << QString("[file]**") << fileName                << QString("Myfilename001.jpg");
-    QTest::newRow("my image.jpg") << QString("[file]*")  << QString("my image.jpg") << QString("My Image.jpg");
-    QTest::newRow("my_image.jpg") << QString("[file]*")  << QString("my_image.jpg") << QString("My_Image.jpg");
+    QTest::newRow("[file]{firstupper}") << QString("[file]{firstupper}")
+                                        << fileName << QString("Myfilename001.jpg");
 
-    QTest::newRow("[file]*(token in filename)") << QString("[file]*") << QString("myfilename*001.jpg")
-                                                << QString("Myfilename*001.jpg");
+    QTest::newRow("[file]{firstupper}{firstupper}") << QString("[file]{firstupper}{firstupper}")
+                                                    << fileName << QString("Myfilename001.jpg");
+
+    QTest::newRow("my image.jpg") << QString("[file]{firstupper}")
+                                  << QString("my image.jpg") << QString("My Image.jpg");
+
+    QTest::newRow("my_image.jpg") << QString("[file]{firstupper}")
+                                  << QString("my_image.jpg") << QString("My_Image.jpg");
 }
 
 void AdvancedRenameWidgetTest::testFirstLetterOfEachWordUppercaseModifier()
@@ -237,11 +241,11 @@ void AdvancedRenameWidgetTest::testChainedModifiers_data()
 
     QString fileName("myfilename001.jpg");
 
-    QTest::newRow("[file]*{upper}")    << QString("[file]*{upper}")    << fileName << QString("MYFILENAME001.jpg");
-    QTest::newRow("[file]{3-}*")       << QString("[file]{3-}*")       << fileName << QString("Filename001.jpg");
+    QTest::newRow("[file]*{upper}") << QString("[file]{firstupper}{upper}") << fileName << QString("MYFILENAME001.jpg");
+    QTest::newRow("[file]{3-}*")    << QString("[file]{3-}{firstupper}")    << fileName << QString("Filename001.jpg");
 
-    QTest::newRow("[file]{3-}{r:\"name\",\"age\"}*") << QString("[file]{3-}{r:\"name\",\"age\"}*")
-                                                     << fileName << QString("Fileage001.jpg");
+    QTest::newRow("[file]{3-}{r:\"name\",\"age\"}{firstupper}") << QString("[file]{3-}{r:\"name\",\"age\"}{firstupper}")
+                                                                << fileName << QString("Fileage001.jpg");
 }
 
 void AdvancedRenameWidgetTest::testChainedModifiers()
