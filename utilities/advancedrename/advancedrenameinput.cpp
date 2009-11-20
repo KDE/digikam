@@ -73,9 +73,11 @@ AdvancedRenameLineEdit::AdvancedRenameLineEdit(QWidget* parent)
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setFrameStyle(QFrame::NoFrame);
-    setAutoFillBackground(false);
     setPalette(kapp->palette());
     setFocusPolicy(Qt::StrongFocus);
+
+    viewport()->setAutoFillBackground(false);
+    setAutoFillBackground(false);
 
     // --------------------------------------------------------
 
@@ -214,6 +216,7 @@ AdvancedRenameInput::AdvancedRenameInput(QWidget* parent)
     proxy->setWidget(d->lineEdit);
 
     setLineEdit(proxy);
+    proxy->setAutoFillBackground(false);
 
     // --------------------------------------------------------
 
@@ -222,11 +225,6 @@ AdvancedRenameInput::AdvancedRenameInput(QWidget* parent)
     // try setting the minimal needed height
     QFontMetrics fm = kapp->fontMetrics();
     setMinimumHeight(fm.height() + (4 * KDialog::marginHint()));
-
-    // --------------------------------------------------------
-
-    d->lineEdit->setAutoFillBackground(false);
-    proxy->setAutoFillBackground(false);
 
     // --------------------------------------------------------
 
