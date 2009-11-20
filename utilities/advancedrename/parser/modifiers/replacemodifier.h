@@ -46,8 +46,9 @@ public:
     ReplaceDialog();
     ~ReplaceDialog();
 
-    QString source()      const;
-    QString destination() const;
+    QString source()        const;
+    QString destination()   const;
+    bool    caseSensitive() const;
 
 private:
 
