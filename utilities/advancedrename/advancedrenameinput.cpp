@@ -130,6 +130,11 @@ void AdvancedRenameLineEdit::keyPressEvent(QKeyEvent* e)
     }
 }
 
+void AdvancedRenameLineEdit::wheelEvent(QWheelEvent* e)
+{
+    e->setAccepted(false);
+}
+
 void AdvancedRenameLineEdit::slotTextChanged()
 {
     d->parseTimer->start();

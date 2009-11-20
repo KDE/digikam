@@ -73,6 +73,7 @@ Q_SIGNALS:
 protected:
 
     virtual void keyPressEvent(QKeyEvent* e);
+    virtual void wheelEvent(QWheelEvent* e);
 
 private Q_SLOTS:
 
