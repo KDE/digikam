@@ -237,7 +237,7 @@ AdvancedRenameInput::AdvancedRenameInput(QWidget* parent)
     connect(d->lineEdit, SIGNAL(signalReturnPressed()),
             this, SIGNAL(signalReturnPressed()));
 
-    connect(this, SIGNAL(currentIndexChanged(const QString&)),
+    connect(this, SIGNAL(activated(const QString&)),
             d->lineEdit, SLOT(slotSetText(const QString&)));
 
     // --------------------------------------------------------
