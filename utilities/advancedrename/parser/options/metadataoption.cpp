@@ -67,10 +67,10 @@ public:
 
 // --------------------------------------------------------
 
-MetadataOptionDialog::MetadataOptionDialog()
-                    : KDialog(0), d(new MetadataOptionDialogPriv)
+MetadataOptionDialog::MetadataOptionDialog(ParseObject* parent)
+                    : ParseObjectDialog(parent), d(new MetadataOptionDialogPriv)
 {
-    setCaption(i18n("Add Metadata Keywords"));
+//    setCaption(i18n("Add Metadata Keywords"));
 
     QWidget* mainWidget  = new QWidget;
     KTabWidget* tab      = new KTabWidget;
@@ -138,7 +138,7 @@ MetadataOptionDialog::MetadataOptionDialog()
 
     // --------------------------------------------------------
 
-    setMainWidget(mainWidget);
+    setSettingsWidget(mainWidget);
     resize(450, 450);
 }
 
@@ -163,8 +163,8 @@ MetadataOption::MetadataOption()
               : Option(i18n("Metadata..."), i18n("Add metadata fields from Exif, IPTC and XMP"))
 {
     // metadataedit icon can be missing if KIPI plugins are not installed, load different icon in this case
-    QIcon icon = KIconLoader::global()->loadIcon("metadataedit", KIconLoader::Small, 0,
-                                                 KIconLoader::DefaultState, QStringList(), 0L, true);
+    QPixmap icon = KIconLoader::global()->loadIcon("metadataedit", KIconLoader::Small, 0,
+                                                   KIconLoader::DefaultState, QStringList(), 0L, true);
     if (icon.isNull())
     {
         icon = SmallIcon("editimage");
@@ -172,7 +172,7 @@ MetadataOption::MetadataOption()
     setIcon(icon);
 
     addTokenDescription("[meta:|keycode|]", i18n("Metadata"),
-             i18n("Add metadata (use the quick access dialog for keycodes)"));
+                        i18n("Add metadata (use the quick access dialog for keycodes)"));
 
     setRegExp("\\[meta:\\s*(.*)\\s*\\s*\\]");
 }
@@ -183,7 +183,7 @@ void MetadataOption::slotTokenTriggered(const QString& token)
 
     QStringList tags;
 
-    QPointer<MetadataOptionDialog> dlg = new MetadataOptionDialog;
+    QPointer<MetadataOptionDialog> dlg = new MetadataOptionDialog(this);
 
     if (dlg->exec() == KDialog::Accepted)
     {

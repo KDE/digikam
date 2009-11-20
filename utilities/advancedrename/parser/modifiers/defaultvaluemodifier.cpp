@@ -38,12 +38,13 @@
 namespace Digikam
 {
 
-DefaultValueDialog::DefaultValueDialog()
-                  : KDialog(0)
+DefaultValueDialog::DefaultValueDialog(ParseObject* parent)
+                  : ParseObjectDialog(parent)
 {
     QString defaultValueStr = i18n("Default Value");
 
-    setCaption(defaultValueStr);
+//    setDialogTitle(defaultValueStr);
+//    setDialogDescription(i18n("what is this here? Shitty shit?"));
 
     QLabel* srcLabel = new QLabel(defaultValueStr + ':');
     valueInput       = new KLineEdit(this);
@@ -60,7 +61,7 @@ DefaultValueDialog::DefaultValueDialog()
     mainLayout->setRowStretch(1, 10);
     mainWidget->setLayout(mainLayout);
 
-    setMainWidget(mainWidget);
+    setSettingsWidget(mainWidget);
 
     valueInput->setFocus();
 }
@@ -87,7 +88,7 @@ void DefaultValueModifier::slotTokenTriggered(const QString& token)
 
     QString tmp;
 
-    QPointer<DefaultValueDialog> dlg = new DefaultValueDialog;
+    QPointer<DefaultValueDialog> dlg = new DefaultValueDialog(this);
     if (dlg->exec() == KDialog::Accepted)
     {
         QString valueStr = dlg->valueInput->text();

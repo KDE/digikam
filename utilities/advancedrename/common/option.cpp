@@ -56,8 +56,8 @@ public:
     ModifierList modifiers;
 };
 
-Option::Option(const QString& name, const QString& description, const QIcon& icon)
-         : ParseObject(name, icon), d(new OptionPriv)
+Option::Option(const QString& name, const QString& description, const QPixmap& icon)
+      : ParseObject(name, icon), d(new OptionPriv)
 {
     setDescription(description);
 

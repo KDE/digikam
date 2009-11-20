@@ -91,11 +91,11 @@ QVariant DateFormat::formatType(QString identifier)
 
 // --------------------------------------------------------
 
-DateOptionDialog::DateOptionDialog(QWidget* parent)
-                : KDialog(parent), ui(new Ui::DateOptionDialogWidget)
+DateOptionDialog::DateOptionDialog(ParseObject* parent)
+                : ParseObjectDialog(parent), ui(new Ui::DateOptionDialogWidget)
 {
-    ui->setupUi(mainWidget());
-    setWindowTitle(i18n("Add Date & Time"));
+    QWidget* mainWidget = new QWidget(this);
+    ui->setupUi(mainWidget);
 
     // fill the date format combobox
     DateFormat df;
@@ -116,6 +116,10 @@ DateOptionDialog::DateOptionDialog(QWidget* parent)
 
     ui->dateFormatPicker->setCurrentIndex(DateFormat::Standard);
     slotDateFormatChanged(ui->dateFormatPicker->currentIndex());
+
+    // --------------------------------------------------------
+
+    setSettingsWidget(mainWidget);
 }
 
 DateOptionDialog::~DateOptionDialog()
@@ -170,8 +174,9 @@ void DateOptionDialog::updateExampleLabel()
 // --------------------------------------------------------
 
 DateOption::DateOption()
-          : Option(i18n("Date && Time..."), i18n("Add date and time information"),
-                        SmallIcon("view-pim-calendar"))
+          : Option(i18n("Date && Time..."),
+                   i18n("Add date and time information"),
+                   SmallIcon("view-pim-calendar"))
 {
     setUseTokenMenu(false);
 
@@ -230,7 +235,7 @@ void DateOption::slotTokenTriggered(const QString& token)
     Q_UNUSED(token)
 
     QString tokenStr      = QString("[date:%1]");
-    DateOptionDialog* dlg = new DateOptionDialog;
+    DateOptionDialog* dlg = new DateOptionDialog(this);
     QVariant v;
     DateFormat df;
     QString tmp;

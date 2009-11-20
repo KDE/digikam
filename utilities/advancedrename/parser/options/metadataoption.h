@@ -37,19 +37,20 @@
 // Local includes
 
 #include "option.h"
+#include "parseobjectdialog.h"
 
 namespace Digikam
 {
 
 class MetadataOptionDialogPriv;
 
-class MetadataOptionDialog : public KDialog
+class MetadataOptionDialog : public ParseObjectDialog
 {
     Q_OBJECT
 
 public:
 
-    MetadataOptionDialog();
+    MetadataOptionDialog(ParseObject* parent);
     ~MetadataOptionDialog();
 
     QStringList checkedTags() const;

@@ -31,19 +31,20 @@
 // Local includes
 
 #include "modifier.h"
+#include "parseobjectdialog.h"
 
 namespace Digikam
 {
 
 class ReplaceDialogPriv;
 
-class ReplaceDialog : public KDialog
+class ReplaceDialog : public ParseObjectDialog
 {
     Q_OBJECT
 
 public:
 
-    ReplaceDialog();
+    ReplaceDialog(ParseObject* parent);
     ~ReplaceDialog();
 
     QString source()        const;

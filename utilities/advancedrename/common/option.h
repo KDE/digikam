@@ -41,7 +41,7 @@ class Option : public ParseObject
 
 public:
 
-    Option(const QString& name, const QString& description, const QIcon& icon = QIcon());
+    Option(const QString& name, const QString& description, const QPixmap& icon = QPixmap());
     virtual ~Option();
 
     ModifierList modifiers() const;

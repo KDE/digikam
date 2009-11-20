@@ -36,19 +36,20 @@
 // Local includes
 
 #include "option.h"
+#include "parseobjectdialog.h"
 
 namespace Digikam
 {
 
 class SequenceNumberDialogPriv;
 
-class SequenceNumberDialog : public KDialog
+class SequenceNumberDialog : public ParseObjectDialog
 {
     Q_OBJECT
 
 public:
 
-    SequenceNumberDialog();
+    SequenceNumberDialog(ParseObject* parent);
     ~SequenceNumberDialog();
 
     int digits() const;

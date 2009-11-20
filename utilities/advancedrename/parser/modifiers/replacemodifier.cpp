@@ -36,6 +36,10 @@
 #include <klineedit.h>
 #include <klocale.h>
 
+
+#include "parseobjectdialog.h"
+
+
 namespace Digikam
 {
 
@@ -55,12 +59,10 @@ public:
     QCheckBox* caseSensitive;
 };
 
-ReplaceDialog::ReplaceDialog()
-             : KDialog(0), d(new ReplaceDialogPriv)
+ReplaceDialog::ReplaceDialog(ParseObject* parent)
+             : ParseObjectDialog(parent), d(new ReplaceDialogPriv)
 {
-    QString replace = i18nc("Replace text", "Replace");
-
-    setCaption(replace);
+    QString replace    = i18nc("Replace text", "Replace");
 
     QLabel* srcLabel   = new QLabel(replace + ':');
     d->source          = new KLineEdit(this);
@@ -83,7 +85,7 @@ ReplaceDialog::ReplaceDialog()
     mainLayout->setRowStretch(3, 10);
     mainWidget->setLayout(mainLayout);
 
-    setMainWidget(mainWidget);
+    setSettingsWidget(mainWidget);
 
     d->source->setFocus();
 }
@@ -111,7 +113,7 @@ bool ReplaceDialog::caseSensitive() const
 // --------------------------------------------------------
 
 ReplaceModifier::ReplaceModifier()
-               : Modifier(i18nc("Replace text", "Replace..."), i18n("Replace text"),
+               : Modifier(i18nc("Replace text", "Replace..."), i18n("Replace strings in a renaming option"),
                           SmallIcon("document-edit"))
 {
     setUseTokenMenu(false);
@@ -129,7 +131,7 @@ void ReplaceModifier::slotTokenTriggered(const QString& token)
 
     QString tmp;
 
-    QPointer<ReplaceDialog> dlg = new ReplaceDialog;
+    QPointer<ReplaceDialog> dlg = new ReplaceDialog(this);
     if (dlg->exec() == KDialog::Accepted)
     {
         QString oldStr = dlg->source();

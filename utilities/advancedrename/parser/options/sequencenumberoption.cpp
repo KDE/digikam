@@ -28,6 +28,7 @@
 #include <QGridLayout>
 #include <QGroupBox>
 #include <QLabel>
+#include <QPointer>
 
 // KDE includes
 
@@ -55,10 +56,10 @@ public:
 
 // --------------------------------------------------------
 
-SequenceNumberDialog::SequenceNumberDialog()
-                    : KDialog(0), d(new SequenceNumberDialogPriv)
+SequenceNumberDialog::SequenceNumberDialog(ParseObject* parent)
+                    : ParseObjectDialog(parent), d(new SequenceNumberDialogPriv)
 {
-    setCaption(i18n("Add sequence number"));
+//    setCaption(i18n("Add sequence number"));
 
     d->digits = new KIntNumInput;
     d->start  = new KIntNumInput;
@@ -93,7 +94,7 @@ SequenceNumberDialog::SequenceNumberDialog()
     mainLayout->addWidget(gbox,        1, 0, 1,-1);
     w->setLayout(mainLayout);
 
-    setMainWidget(w);
+    setSettingsWidget(w);
 }
 
 SequenceNumberDialog::~SequenceNumberDialog()
@@ -140,7 +141,7 @@ void SequenceNumberOption::slotTokenTriggered(const QString& token)
 {
     Q_UNUSED(token)
 
-    SequenceNumberDialog* dlg = new SequenceNumberDialog;
+    QPointer<SequenceNumberDialog> dlg = new SequenceNumberDialog(this);
 
     QString tmp;
     if (dlg->exec() == KDialog::Accepted)

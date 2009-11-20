@@ -38,13 +38,9 @@
 namespace Digikam
 {
 
-RangeDialog::RangeDialog()
-             : KDialog(0), startInput(0), stopInput(0), toTheEndCheckBox(0)
+RangeDialog::RangeDialog(ParseObject* parent)
+             : ParseObjectDialog(parent), startInput(0), stopInput(0), toTheEndCheckBox(0)
 {
-    setCaption("Specify a text range", "Range");
-
-    // --------------------------------------------------------
-
     const int minRange = 1;
     const int maxRange = 999999;
 
@@ -74,7 +70,7 @@ RangeDialog::RangeDialog()
     mainLayout->setRowStretch(3, 10);
     mainWidget->setLayout(mainLayout);
 
-    setMainWidget(mainWidget);
+    setSettingsWidget(mainWidget);
 
     // --------------------------------------------------------
 
@@ -96,7 +92,7 @@ void RangeDialog::slotToTheEndChecked(bool checked)
 // --------------------------------------------------------
 
 RangeModifier::RangeModifier()
-             : Modifier(i18n("Range..."), i18n("Add only a specific range of a string"),
+             : Modifier(i18n("Range..."), i18n("Add only a specific range of a renaming option"),
                         SmallIcon("measure"))
 {
     setUseTokenMenu(false);
@@ -113,7 +109,7 @@ void RangeModifier::slotTokenTriggered(const QString& token)
 
     QString tmp;
 
-    QPointer<RangeDialog> dlg = new RangeDialog;
+    QPointer<RangeDialog> dlg = new RangeDialog(this);
     if (dlg->exec() == KDialog::Accepted)
     {
         int start = dlg->startInput->value();

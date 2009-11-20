@@ -3,8 +3,9 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2009-09-18
- * Description : a modifier for displaying only a range of a token result
+ * Date        : 2009-11-20
+ * Description : a dialog that can be used to display a configuration dialog for
+ *               a parse object
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -21,62 +22,42 @@
  *
  * ============================================================ */
 
-#ifndef RANGEMODIFIER_H
-#define RANGEMODIFIER_H
+#ifndef PARSEOBJECTDIALOG_H
+#define PARSEOBJECTDIALOG_H
 
 // KDE includes
 
 #include <kdialog.h>
 
-// Local includes
-
-#include "modifier.h"
-#include "parseobjectdialog.h"
-
-class QCheckBox;
-class QGroupBox;
-class KIntNumInput;
-
 namespace Digikam
 {
 
-class RangeDialogPriv;
+class ParseObject;
 
-class RangeDialog : public ParseObjectDialog
+class ParseObjectDialogPriv;
+
+class ParseObjectDialog : public KDialog
 {
     Q_OBJECT
 
 public:
 
-    RangeDialog(ParseObject* parent);
-    ~RangeDialog();
+    ParseObjectDialog(ParseObject* parent);
+    virtual ~ParseObjectDialog();
 
-    KIntNumInput* startInput;
-    KIntNumInput* stopInput;
-    QCheckBox*    toTheEndCheckBox;
+    void setSettingsWidget(QWidget* settingsWidget);
 
-private Q_SLOTS:
+private:
 
-    void slotToTheEndChecked(bool checked);
-};
+    void setDialogTitle(const QString& title);
+    void setDialogDescription(const QString& description);
+    void setDialogIcon(const QPixmap& pixmap);
 
-// --------------------------------------------------------
+private:
 
-class RangeModifier : public Modifier
-{
-    Q_OBJECT
-
-public:
-
-    RangeModifier();
-    virtual QString modifyOperation(const QString& parseString, const QString& result);
-
-private Q_SLOTS:
-
-    void slotTokenTriggered(const QString& token);
+    ParseObjectDialogPriv* const d;
 };
 
 } // namespace Digikam
 
-
-#endif /* RANGEMODIFIER_H */
+#endif /* PARSEOBJECTDIALOG_H */
