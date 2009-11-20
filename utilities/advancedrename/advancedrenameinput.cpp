@@ -65,6 +65,7 @@ AdvancedRenameLineEdit::AdvancedRenameLineEdit(QWidget* parent)
                       : QTextEdit(parent), d(new AdvancedRenameLineEditPriv)
 {
     setLineWrapMode(QTextEdit::NoWrap);
+    setWordWrapMode(QTextOption::NoWrap);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setFrameStyle(QFrame::NoFrame);
