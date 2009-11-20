@@ -380,7 +380,7 @@ void AdvancedRenameWidget::setupWidgets()
     d->modifierToolButton = new QToolButton;
     d->modifierToolButton->setPopupMode(QToolButton::InstantPopup);
     d->modifierToolButton->setIcon(SmallIcon("document-edit"));
-    d->modifierToolButton->setToolTip(i18n("Quickly add a modifier to the marked token"));
+    d->modifierToolButton->setToolTip(i18n("Quickly add a modifier to a renaming option"));
 
     // --------------------------------------------------------
 
