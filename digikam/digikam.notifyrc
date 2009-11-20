@@ -1,19 +1,61 @@
 [Global]
 IconName=digikam
 Comment=digiKam
+Comment[da]=digiKam
+Comment[en_GB]=digiKam
+Comment[pt]=digiKam
+Comment[pt_BR]=digiKam
+Comment[sv]=Digikam
+Comment[uk]=digiKam
+Comment[x-test]=xxdigiKamxx
 
 [Event/cameradownloaded]
 Name=Download complete
+Name[da]=Download gennemført
+Name[en_GB]=Download complete
+Name[pt]=Transferência completa
+Name[pt_BR]=Transferência concluída
+Name[sv]=Nerladdning klar
+Name[uk]=Звантаження завершено
+Name[x-test]=xxDownload completexx
 Comment=A download from a camera or other device has finished.
 Action=Popup
 
 [Event/batchqueuecompleted]
 Name=Batch queue completed
+Name[da]=Batch-kø gennemført
+Name[en_GB]=Batch queue completed
+Name[pt]=Fila de espera completa
+Name[pt_BR]=Fila de espera concluída
+Name[sv]=Bakgrundskön är klar
+Name[uk]=Всі завдання з черги виконано
+Name[x-test]=xxBatch queue completedxx
 Comment=A queue in the batch queue manager has been completed.
+Comment[da]=En kø i håndteringen af batch-kø er blevet gennemført.
+Comment[en_GB]=A queue in the batch queue manager has been completed.
+Comment[pt]=Terminou com sucesso uma fila de espera no gestor de operações em lote.
+Comment[pt_BR]=Uma fila de espera no gerenciador de operações em lote foi concluída.
+Comment[sv]=En kö i bakgrundshanteringen av köer är klar.
+Comment[uk]=Виконання завдань з черги пакетної обробки завершено.
+Comment[x-test]=xxA queue in the batch queue manager has been completed.xx
 Action=Popup
 
 [Event/fingerprintscompleted]
 Name=Update of fingerprint database complete
+Name[da]=Opdatering af fingeraftryk-database gennemført
+Name[en_GB]=Update of fingerprint database complete
+Name[pt]=Actualização da base de dados de impressões digitais completa
+Name[pt_BR]=Atualização do banco de dados de impressões digitais concluída
+Name[sv]=b>Uppdatering av fingeravtrycksdatabasen klar
+Name[uk]=Оновлення бази даних відбитків завершено.
+Name[x-test]=xxUpdate of fingerprint database completexx
 Comment=The update of the fingerprint database has been completed.
+Comment[da]=Opdateringen af fingeraftryk-databasen er blevet gennemført.
+Comment[en_GB]=The update of the fingerprint database has been completed.
+Comment[pt]=Terminou com sucesso a actualização da base de dados de impressões digitais.
+Comment[pt_BR]=A atualização do banco de dados de impressões digitais foi concluída.
+Comment[sv]=Uppdateringen av fingeravtrycksdatabasen är klar.
+Comment[uk]=Оновлення бази даних відбитків завершено.
+Comment[x-test]=xxThe update of the fingerprint database has been completed.xx
 Action=Popup
 
