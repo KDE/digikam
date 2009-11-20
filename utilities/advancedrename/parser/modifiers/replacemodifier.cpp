@@ -102,9 +102,11 @@ ReplaceModifier::ReplaceModifier()
                : Modifier(i18nc("Replace text", "Replace..."), i18n("Replace text"),
                           SmallIcon("document-edit"))
 {
-    addTokenDescription(QString("{r:\"|old|\", \"|new|\"}"), i18n("Replace"), description());
+    addTokenDescription(QString("{r:\"|old|\", \"|new|\"}"),  i18n("Replace"), description());
+    addTokenDescription(QString("{ri:\"|old|\", \"|new|\"}"), i18n("Replace (case insensitive)"),
+                                                              i18n("Replace text (case insensitive)"));
 
-    setRegExp("\\{r:\"(.+)\",\"(.*)\"\\}");
+    setRegExp("\\{r(i)?:\"(.+)\",\"(.*)\"\\}");
 }
 
 void ReplaceModifier::slotTokenTriggered(const QString& token)
@@ -136,11 +138,14 @@ QString ReplaceModifier::modifyOperation(const QString& parseString, const QStri
     pos     = reg.indexIn(parseString, pos);
     if (pos > -1)
     {
-        QString original    = reg.cap(1);
-        QString replacement = reg.cap(2);
+        QString original    = reg.cap(2);
+        QString replacement = reg.cap(3);
+        QString _result     = result;
 
-        QString _result = result;
-        _result.replace(original, replacement);
+        Qt::CaseSensitivity caseType = (!reg.cap(1).isEmpty() && reg.cap(1).count() == 1)
+                                       ? Qt::CaseInsensitive
+                                       : Qt::CaseSensitive;
+        _result.replace(original, replacement, caseType);
         return _result;
     }
     return QString();
