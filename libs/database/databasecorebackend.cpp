@@ -126,6 +126,13 @@ QSqlDatabase DatabaseCoreBackendPrivate::databaseForThread()
         QObject::connect(thread, SIGNAL(finished()),
                             q, SLOT(slotThreadFinished()));
     }
+#ifdef DATABASCOREBACKEND_DEBUG
+    else
+    {
+        kDebug(50003) << "Database ["<< connectionName(thread) <<"] already open for thread ["<< thread <<"].";
+    }
+#endif
+
     return db;
 }
 
@@ -167,7 +174,8 @@ bool DatabaseCoreBackendPrivate::open(QSqlDatabase& db)
 
     bool success = db.open();
 
-    if (success==false){
+    if (success==false)
+    {
         kDebug(50003) << "Error while opening the database. Error was <" << db.lastError() << ">";
     }
 
@@ -398,17 +406,17 @@ databaseAction DatabaseCoreBackend::getDBAction(const QString &actionName)
     return d->parameters.m_DatabaseConfigs[d->parameters.databaseType].m_SQLStatements[actionName];
 }
 
-bool DatabaseCoreBackend::execDBAction(const databaseAction &action, QList<QVariant>* values, QVariant *lastInsertId)
+DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDBAction(const databaseAction &action, QList<QVariant>* values, QVariant *lastInsertId)
 {
     return execDBAction(action, QMap<QString, QVariant>(), values, lastInsertId);
 }
 
-bool DatabaseCoreBackend::execDBAction(const databaseAction &action, const QMap<QString, QVariant>& bindingMap,
+DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDBAction(const databaseAction &action, const QMap<QString, QVariant>& bindingMap,
                                        QList<QVariant>* values, QVariant *lastInsertId)
 {
     Q_D(DatabaseCoreBackend);
 
-    bool returnResult = true;
+    DatabaseCoreBackend::QueryState returnResult = DatabaseCoreBackend::NoErrors;
     QSqlDatabase db = d->databaseForThread();
 
 #ifdef DATABASCOREBACKEND_DEBUG
@@ -423,7 +431,7 @@ bool DatabaseCoreBackend::execDBAction(const databaseAction &action, const QMap<
 
     foreach (databaseActionElement actionElement, action.m_DBActionElements)
     {
-        bool result;
+        DatabaseCoreBackend::QueryState result;
         if (actionElement.m_Mode==QString("query"))
         {
             result = execSql(actionElement.m_Statement, bindingMap, values, lastInsertId);
@@ -432,7 +440,7 @@ bool DatabaseCoreBackend::execDBAction(const databaseAction &action, const QMap<
         {
             result = execDirectSql(actionElement.m_Statement);
         }
-        if (result)
+        if (result==DatabaseCoreBackend::NoErrors)
         {
             if (wrapInTransaction)
                 db.commit();
@@ -525,7 +533,7 @@ bool DatabaseCoreBackend::open(const DatabaseParameters& parameters)
     {
         if (!database.isOpen())
         {
-            kDebug(50003) << "Error while opening the database. Error was [" <<  query.driver()->lastError() << "]. Trying again.";
+            kDebug(50003) << "Error while opening the database. Error was [" <<  query.lastError() << "]. Trying again.";
             if (queryErrorHandling(query, retries++))
             {
                 // TODO reopen the database
@@ -610,24 +618,9 @@ DatabaseCoreBackend::QueryState DatabaseCoreBackend::handleQueryResult(SqlQuery 
 {
     if (!query.isActive())
     {
-        if (query.driver()->lastError().type() == QSqlError::ConnectionError)
+        if (query.lastError().type() == QSqlError::ConnectionError)
         {
             return DatabaseCoreBackend::ConnectionError;
-        }
-
-        // check if there is an connection error
-        if (query.driver()->lastError().number() == -1)
-        {
-            Q_D(DatabaseCoreBackend);
-            kDebug(50003) << "Detected unknown error. Trying to re-open the database.";
-            d->closeDatabaseForThread();
-            QSqlDatabase db = d->databaseForThread();
-            if (!db.isOpen())
-            {
-                kDebug(50003) << "Error while opening the database. Details: ["<< db.lastError() <<"]";
-                return DatabaseCoreBackend::ConnectionError;
-            }else
-                return DatabaseCoreBackend::SQLError;
         }
     }
         if (lastInsertId)
@@ -797,24 +790,8 @@ bool DatabaseCoreBackend::queryErrorHandling(const SqlQuery& query, int retries)
 {
     Q_D(DatabaseCoreBackend);
 
-    // check if there is an connection error
-    if (query.driver()->lastError().number() == -1)
-    {
-        kDebug(50003) << "Detected unknown error. Trying to re-open the database.";
-        d->closeDatabaseForThread();
-        QSqlDatabase db = d->databaseForThread();
-        if (!db.isOpen())
-        {
-            kDebug(50003) << "Error while opening the database. Details: ["<< db.lastError() <<"]";
-            if (d->checkConnectionError())
-                return true;
-            else
-                return false;
-        }else
-            return true;
-    }
-    kDebug(50003) << "Detected error type [" << query.driver()->lastError().type() << "]";
-    if (query.driver()->lastError().type() == QSqlError::ConnectionError || query.driver()->lastError().number()==2006)
+    kDebug(50003) << "Detected error type [" << query.lastError().type() << "]";
+    if (query.lastError().type() == QSqlError::ConnectionError || query.lastError().number()==2006)
     {
         if (d->checkConnectionError())
             return true;
@@ -873,7 +850,7 @@ bool DatabaseCoreBackend::exec(SqlQuery& query)
 #ifdef DATABASCOREBACKEND_DEBUG
         kDebug(50003) << "Trying to query ["<<query.lastQuery()<<"]";
 #endif
-        if (query.lastQuery().isEmpty() || query.exec())
+        if (query.exec())
             break;
         else
         {
@@ -884,7 +861,6 @@ bool DatabaseCoreBackend::exec(SqlQuery& query)
                 // TODO reopen the database
                 d->closeDatabaseForThread();
                 query = copyQuery(query);
-                kDebug(50003) << "New created query. IsOpen():" <<  query.driver()->isOpen();
                 continue;
             }
             else
@@ -925,7 +901,11 @@ bool DatabaseCoreBackend::execBatch(SqlQuery& query)
 SqlQuery DatabaseCoreBackend::prepareQuery(const QString& sql)
 {
     SqlQuery query = getQuery();
-    query.prepare(sql);
+    bool result = query.prepare(sql);
+    if (!result)
+    {
+        kDebug(50003) << "Prepare failed! Details: " << query.lastError();
+    }
     return query;
 }
 
@@ -965,24 +945,9 @@ DatabaseCoreBackend::QueryState DatabaseCoreBackend::beginTransaction()
         if (!db.transaction())
         {
             d->decrementTransactionCount();
-            if (db.driver()->lastError().type() == QSqlError::ConnectionError)
+            if (db.lastError().type() == QSqlError::ConnectionError)
                    {
                        return DatabaseCoreBackend::ConnectionError;
-                   }
-
-                   // check if there is an connection error
-                   if (db.driver()->lastError().number() == -1)
-                   {
-                       Q_D(DatabaseCoreBackend);
-                       kDebug(50003) << "Detected unknown error. Trying to re-open the database.";
-                       d->closeDatabaseForThread();
-                       QSqlDatabase db = d->databaseForThread();
-                       if (!db.isOpen())
-                       {
-                           kDebug(50003) << "Error while opening the database. Details: ["<< db.lastError() <<"]";
-                           return DatabaseCoreBackend::ConnectionError;
-                       }else
-                           return DatabaseCoreBackend::SQLError;
                    }
         }
         d->isInTransaction = true;
@@ -999,24 +964,9 @@ DatabaseCoreBackend::QueryState DatabaseCoreBackend::commitTransaction()
         if (!db.commit())
         {
             d->incrementTransactionCount();
-            if (db.driver()->lastError().type() == QSqlError::ConnectionError)
+            if (db.lastError().type() == QSqlError::ConnectionError)
                    {
                        return DatabaseCoreBackend::ConnectionError;
-                   }
-
-                   // check if there is an connection error
-                   if (db.driver()->lastError().number() == -1)
-                   {
-                       Q_D(DatabaseCoreBackend);
-                       kDebug(50003) << "Detected unknown error. Trying to re-open the database.";
-                       d->closeDatabaseForThread();
-                       QSqlDatabase db = d->databaseForThread();
-                       if (!db.isOpen())
-                       {
-                           kDebug(50003) << "Error while opening the database. Details: ["<< db.lastError() <<"]";
-                           return DatabaseCoreBackend::ConnectionError;
-                       }else
-                           return DatabaseCoreBackend::SQLError;
                    }
         }
         d->isInTransaction = false;

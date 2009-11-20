@@ -183,8 +183,8 @@ public:
      * TODO: API docs
      */
     databaseAction getDBAction(const QString &actionName);
-    bool execDBAction(const databaseAction &action, QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
-    bool execDBAction(const databaseAction &action, const QMap<QString, QVariant>& bindingMap,
+    QueryState execDBAction(const databaseAction &action, QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
+    QueryState execDBAction(const databaseAction &action, const QMap<QString, QVariant>& bindingMap,
                       QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
     QSqlQuery execDBActionQuery(const databaseAction &action, const QMap<QString, QVariant>& bindingMap);
 
