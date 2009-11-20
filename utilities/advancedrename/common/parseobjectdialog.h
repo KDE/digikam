@@ -4,8 +4,8 @@
  * http://www.digikam.org
  *
  * Date        : 2009-11-20
- * Description : a dialog that can be used to display a configuration dialog for
- *               a parse object
+ * Description : a dialog that can be used to display a configuration
+ *               dialog for a parse object
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
