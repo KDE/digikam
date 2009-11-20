@@ -80,7 +80,7 @@ AdvancedRenameLineEdit::AdvancedRenameLineEdit(QWidget* parent)
     setAutoFillBackground(false);
 
     QFontMetrics fm = fontMetrics();
-    setMinimumHeight(fm.height());
+    setFixedHeight(fm.height());
 
     // --------------------------------------------------------
 
