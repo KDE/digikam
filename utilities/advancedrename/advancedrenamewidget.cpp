@@ -73,9 +73,7 @@ public:
         renameInput(0),
         parser(0),
         optionsLabel(0),
-        controlWidgetsMask(AdvancedRenameWidget::TokenButtons  |
-                           AdvancedRenameWidget::ToolTipButton |
-                           AdvancedRenameWidget::ModifierToolButton)
+        controlWidgetsMask(AdvancedRenameWidget::DefaultControls)
     {}
 
     const QString        configGroupName;
