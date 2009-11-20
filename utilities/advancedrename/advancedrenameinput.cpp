@@ -29,6 +29,7 @@
 #include <QLayout>
 #include <QTextEdit>
 #include <QTimer>
+#include <QScrollBar>
 
 // KDE includes
 
@@ -37,6 +38,7 @@
 #include <kconfiggroup.h>
 #include <kdialog.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -57,10 +59,12 @@ class AdvancedRenameLineEditPriv
 public:
 
     AdvancedRenameLineEditPriv() :
+        verticalSliderPosition(INVALID),
         parseTimer(0),
         parser(0)
     {}
 
+    int     verticalSliderPosition;
     QTimer* parseTimer;
     Parser* parser;
 };
@@ -87,6 +91,15 @@ AdvancedRenameLineEdit::AdvancedRenameLineEdit(QWidget* parent)
     d->parseTimer = new QTimer(this);
     d->parseTimer->setInterval(500);
     d->parseTimer->setSingleShot(true);
+
+    // --------------------------------------------------------
+
+    // layout widget correctly by setting a dummy text and calling ensureCursorVisible().
+    // Save the scrollbar position now, to avoid scrolling of the text when selecting with the mouse
+    setPlainText("DUMMY TEXT");
+    ensureCursorVisible();
+    d->verticalSliderPosition = verticalScrollBar()->value();
+    clear();
 
     // --------------------------------------------------------
 
@@ -143,6 +156,18 @@ void AdvancedRenameLineEdit::slotTextChanged()
 void AdvancedRenameLineEdit::slotParseTimer()
 {
     emit signalTextChanged(toPlainText());
+}
+
+void AdvancedRenameLineEdit::scrollContentsBy(int dx, int dy)
+{
+    Q_UNUSED(dx)
+    Q_UNUSED(dy)
+
+    if (d->verticalSliderPosition != INVALID)
+    {
+        verticalScrollBar()->setValue(d->verticalSliderPosition);
+    }
+    viewport()->update();
 }
 
 void AdvancedRenameLineEdit::slotCursorPositionChanged()

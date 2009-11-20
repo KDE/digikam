@@ -74,6 +74,7 @@ protected:
 
     virtual void keyPressEvent(QKeyEvent* e);
     virtual void wheelEvent(QWheelEvent* e);
+    virtual void scrollContentsBy(int dx, int dy);
 
 private Q_SLOTS:
 
