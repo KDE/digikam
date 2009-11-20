@@ -168,6 +168,10 @@ void AdvancedRenameLineEdit::slotSetText(const QString& text)
 {
     clear();
     setPlainText(text);
+    QTextCursor cursor = textCursor();
+    cursor.movePosition(QTextCursor::EndOfLine);
+    setTextCursor(cursor);
+    setFocus();
 }
 
 // --------------------------------------------------------
@@ -184,7 +188,7 @@ public:
         maxHistoryItems(20),
         lineEdit(0),
         highlighter(0)
-        {}
+    {}
 
     const QString           configGroupName;
     const QString           configPatternHistoryListEntry;
