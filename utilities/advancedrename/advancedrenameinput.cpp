@@ -38,12 +38,10 @@
 #include <kconfiggroup.h>
 #include <kdialog.h>
 #include <klocale.h>
-#include <kdebug.h>
 
 // Local includes
 
 #include "comboboxutilities.h"
-#include "defaultrenameparser.h"
 #include "highlighter.h"
 #include "parser.h"
 
