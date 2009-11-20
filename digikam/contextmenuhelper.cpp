@@ -519,7 +519,11 @@ void ContextMenuHelper::addGotoMenu(imageIds& ids)
     d->gotoDateAction  = new QAction(SmallIcon("view-calendar-month"), i18n("Date"),  this);
 
     // the currently selected image is always the first item
-    ImageInfo item(d->selectedIds.first());
+    ImageInfo item;
+    if (!d->selectedIds.isEmpty())
+    {
+        item = ImageInfo(d->selectedIds.first());
+    }
 
     KMenu *gotoMenu  = new KMenu(d->parent);
     gotoMenu->addAction(d->gotoAlbumAction);
