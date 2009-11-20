@@ -154,7 +154,7 @@ void FingerPrintsGenerator::complete()
     setButtonGuiItem(KStandardGuiItem::ok());
     setButtonText(i18n("&Close"));
     // Pop-up a message to bring user when all is done.
-    KNotificationWrapper("", i18n("Update of fingerprint database complete."),
+    KNotificationWrapper("fingerprintscompleted", i18n("Update of fingerprint database complete."),
                          this, windowTitle());
     emit signalRebuildAllFingerPrintsDone();
 }

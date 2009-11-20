@@ -27,6 +27,10 @@
 
 #include <kdebug.h>
 
+// const variables
+
+const int INVALID = -1;
+
 namespace Digikam
 {
 
@@ -86,7 +90,7 @@ int ParseResults::offset(const ResultsKey& key)
         ResultsKey key = keyAtApproximatePosition(pos);
         return ((key.first + key.second) - pos);
     }
-    return -1;
+    return INVALID;
 }
 
 ParseResults::ResultsKey ParseResults::keyAtPosition(int pos)
@@ -154,12 +158,12 @@ bool ParseResults::isEmpty()
 
 ParseResults::ResultsKey ParseResults::createInvalidKey()
 {
-    return ResultsKey(-1, -1);
+    return ResultsKey(INVALID, INVALID);
 }
 
 bool ParseResults::keyIsValid(const ResultsKey& key)
 {
-    if (key.first == -1 || key.second == -1)
+    if (key.first == INVALID || key.second == INVALID)
     {
         return false;
     }

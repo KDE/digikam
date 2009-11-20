@@ -274,7 +274,7 @@ CameraSelection::CameraSelection( QWidget* parent )
 
     // Initialize  --------------------------------------------------
 
-#ifndef ENABLE_GPHOTO2
+#ifndef HAVE_GPHOTO2
     // If digiKam is compiled without Gphoto2 support, we hide widgets relevant.
     d->listView->hide();
     d->searchBar->hide();
@@ -283,7 +283,7 @@ CameraSelection::CameraSelection( QWidget* parent )
 #else
     getCameraList();
     getSerialPortList();
-#endif /* ENABLE_GPHOTO2 */
+#endif /* HAVE_GPHOTO2 */
 
     kapp->restoreOverrideCursor();
 }

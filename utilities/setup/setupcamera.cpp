@@ -213,11 +213,11 @@ SetupCamera::SetupCamera( QWidget* parent )
     gphotoLogoLabel->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-gphoto.png")));
     gphotoLogoLabel->setToolTip(i18n("Visit Gphoto project website"));
 
-#ifndef ENABLE_GPHOTO2
+#ifndef HAVE_GPHOTO2
     // If digiKam is compiled without Gphoto2 support, we hide widgets relevant.
     d->autoDetectButton->hide();
     gphotoLogoLabel->hide();
-#endif /* ENABLE_GPHOTO2 */
+#endif /* HAVE_GPHOTO2 */
 
     // -------------------------------------------------------------
 

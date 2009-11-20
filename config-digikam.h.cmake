@@ -10,8 +10,8 @@
 /* Define to 1 if you have LensFun shared library installed */
 #cmakedefine HAVE_LENSFUN 1
 
-/* Define to 1 if GPhoto2 shared library support is enabled */
-#cmakedefine ENABLE_GPHOTO2 1
+/* Define to 1 if GPhoto2 shared library is installed */
+#cmakedefine HAVE_GPHOTO2 1
 
 /* Define to 1 if an external liblqr-1 shared library have been found */
 #cmakedefine USE_EXT_LIBLQR-1 1

@@ -53,7 +53,7 @@ DirectoryNameOption::DirectoryNameOption()
 
 void DirectoryNameOption::parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results)
 {
-    QFileInfo fi(info.filePath);
+    QFileInfo fi(info.fileUrl.toLocalFile());
     QStringList folders = fi.absolutePath().split('/', QString::SkipEmptyParts);
 
     QRegExp reg = regExp();

@@ -25,6 +25,7 @@
 
 // Qt includes
 
+#include <QCheckBox>
 #include <QGridLayout>
 #include <QLabel>
 #include <QPointer>
@@ -44,12 +45,14 @@ public:
 
     ReplaceDialogPriv()
     {
-        source      = 0;
-        destination = 0;
+        source        = 0;
+        destination   = 0;
+        caseSensitive = 0;
     }
 
     KLineEdit* source;
     KLineEdit* destination;
+    QCheckBox* caseSensitive;
 };
 
 ReplaceDialog::ReplaceDialog()
@@ -59,21 +62,25 @@ ReplaceDialog::ReplaceDialog()
 
     setCaption(replace);
 
-    QLabel* srcLabel = new QLabel(replace + ':');
-    d->source        = new KLineEdit(this);
+    QLabel* srcLabel   = new QLabel(replace + ':');
+    d->source          = new KLineEdit(this);
 
-    QLabel* dstLabel = new QLabel(i18nc("Replace text with", "With:"));
-    d->destination   = new KLineEdit(this);
+    QLabel* dstLabel   = new QLabel(i18nc("Replace text with", "With:"));
+    d->destination     = new KLineEdit(this);
+
+    d->caseSensitive   = new QCheckBox(i18n("Case sensitive"));
+    d->caseSensitive->setChecked(true);
 
     QWidget*     mainWidget = new QWidget(this);
     QGridLayout* mainLayout = new QGridLayout(this);
-    mainLayout->addWidget(srcLabel,       0, 0);
-    mainLayout->addWidget(d->source,      0, 1);
-    mainLayout->addWidget(dstLabel,       1, 0);
-    mainLayout->addWidget(d->destination, 1, 1);
+    mainLayout->addWidget(d->caseSensitive, 0, 0, 1,-1);
+    mainLayout->addWidget(srcLabel,         1, 0, 1, 1);
+    mainLayout->addWidget(d->source,        1, 1, 1, 1);
+    mainLayout->addWidget(dstLabel,         2, 0, 1, 1);
+    mainLayout->addWidget(d->destination,   2, 1, 1, 1);
     mainLayout->setSpacing(KDialog::spacingHint());
     mainLayout->setMargin(KDialog::spacingHint());
-    mainLayout->setRowStretch(2, 10);
+    mainLayout->setRowStretch(3, 10);
     mainWidget->setLayout(mainLayout);
 
     setMainWidget(mainWidget);
@@ -96,15 +103,24 @@ QString ReplaceDialog::destination() const
     return d->destination->text();
 }
 
+bool ReplaceDialog::caseSensitive() const
+{
+    return d->caseSensitive->isChecked();
+}
+
 // --------------------------------------------------------
 
 ReplaceModifier::ReplaceModifier()
                : Modifier(i18nc("Replace text", "Replace..."), i18n("Replace text"),
                           SmallIcon("document-edit"))
 {
-    addTokenDescription(QString("{\"|old|\", \"|new|\"}"), i18n("Replace"), description());
+    setUseTokenMenu(false);
 
-    setRegExp("\\{\\s*\"(.+)\"\\s*,\\s*\"(.*)\"\\s*\\}");
+    addTokenDescription(QString("{r:\"|old|\", \"|new|\"}"),  i18n("Replace"), description());
+    addTokenDescription(QString("{ri:\"|old|\", \"|new|\"}"), i18n("Replace (case insensitive)"),
+                                                              i18n("Replace text (case insensitive)"));
+
+    setRegExp("\\{r(i)?:\"(.+)\",\"(.*)\"\\}");
 }
 
 void ReplaceModifier::slotTokenTriggered(const QString& token)
@@ -120,7 +136,14 @@ void ReplaceModifier::slotTokenTriggered(const QString& token)
         QString newStr = dlg->destination();
         if (!oldStr.isEmpty())
         {
-            tmp = QString("{\"%1\",\"%2\"}").arg(oldStr).arg(newStr);
+            if (dlg->caseSensitive())
+            {
+                tmp = QString("{r:\"%1\",\"%2\"}").arg(oldStr).arg(newStr);
+            }
+            else
+            {
+                tmp = QString("{ri:\"%1\",\"%2\"}").arg(oldStr).arg(newStr);
+            }
         }
     }
     delete dlg;
@@ -136,11 +159,14 @@ QString ReplaceModifier::modifyOperation(const QString& parseString, const QStri
     pos     = reg.indexIn(parseString, pos);
     if (pos > -1)
     {
-        QString original    = reg.cap(1);
-        QString replacement = reg.cap(2);
+        QString original    = reg.cap(2);
+        QString replacement = reg.cap(3);
+        QString _result     = result;
 
-        QString _result = result;
-        _result.replace(original, replacement);
+        Qt::CaseSensitivity caseType = (!reg.cap(1).isEmpty() && reg.cap(1).count() == 1)
+                                       ? Qt::CaseInsensitive
+                                       : Qt::CaseSensitive;
+        _result.replace(original, replacement, caseType);
         return _result;
     }
     return QString();

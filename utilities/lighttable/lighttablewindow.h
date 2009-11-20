@@ -152,6 +152,7 @@ private Q_SLOTS:
     void slotContribute();
     void slotEditKeys();
     void slotConfToolbars();
+    void slotConfNotifications();
     void slotShowMenuBar();
     void slotNewToolbarConfig();
     void slotSetup();

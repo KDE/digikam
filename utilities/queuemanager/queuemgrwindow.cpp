@@ -44,6 +44,7 @@
 #include <klocale.h>
 #include <kmenubar.h>
 #include <kmessagebox.h>
+#include <knotifyconfigwidget.h>
 #include <kselectaction.h>
 #include <kshortcutsdialog.h>
 #include <kstandardaction.h>
@@ -420,9 +421,10 @@ void QueueMgrWindow::setupActions()
 
     d->showMenuBarAction = KStandardAction::showMenubar(this, SLOT(slotShowMenuBar()), actionCollection());
 
-    KStandardAction::keyBindings(this, SLOT(slotEditKeys()),           actionCollection());
-    KStandardAction::configureToolbars(this, SLOT(slotConfToolbars()), actionCollection());
-    KStandardAction::preferences(this, SLOT(slotSetup()),              actionCollection());
+    KStandardAction::keyBindings(this,            SLOT(slotEditKeys()),          actionCollection());
+    KStandardAction::configureToolbars(this,      SLOT(slotConfToolbars()),      actionCollection());
+    KStandardAction::configureNotifications(this, SLOT(slotConfNotifications()), actionCollection());
+    KStandardAction::preferences(this,            SLOT(slotSetup()),             actionCollection());
 
     // ---------------------------------------------------------------------------------
 
@@ -714,6 +716,11 @@ void QueueMgrWindow::slotConfToolbars()
     dlg.exec();
 }
 
+void QueueMgrWindow::slotConfNotifications()
+{
+    KNotifyConfigWidget::configure(this);
+}
+
 void QueueMgrWindow::slotNewToolbarConfig()
 {
     applyMainWindowSettings(KGlobal::config()->group("Batch Queue Manager Settings"));
@@ -870,7 +877,7 @@ void QueueMgrWindow::processOne()
     if (d->itemsList.empty())
     {
         // Pop-up a message to bring user when all is done.
-        KNotificationWrapper("", i18n("Batch queue is completed..."),
+        KNotificationWrapper("batchqueuecompleted", i18n("Batch queue is completed..."),
                              this, windowTitle());
         processingAborted();
         return;

@@ -192,6 +192,7 @@ int DynamicLayout::reLayout(const QRect &rect, bool testOnly) const
     // --------------------------------------------------------
 
     int buttonWidth     = d->minItemWidth + d->spaceX;
+    buttonWidth         = (buttonWidth == 0) ? 1 : buttonWidth;
 
     int maxButtonsInRow = (effectiveRect.width() - d->spaceX) / buttonWidth;
     if (maxButtonsInRow < d->minColumns)
@@ -199,6 +200,7 @@ int DynamicLayout::reLayout(const QRect &rect, bool testOnly) const
         maxButtonsInRow = d->minColumns;
     }
 
+    maxButtonsInRow     = (maxButtonsInRow == 0) ? d->minColumns : maxButtonsInRow;
     int maxButtonWidth  = d->minItemWidth + (
             (effectiveRect.width() - (maxButtonsInRow * buttonWidth)) / maxButtonsInRow );
 
