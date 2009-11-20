@@ -45,6 +45,10 @@
 #include "highlighter.h"
 #include "parser.h"
 
+// const variables
+
+const int INVALID = -1;
+
 namespace Digikam
 {
 
@@ -137,8 +141,8 @@ void AdvancedRenameLineEdit::slotCursorPositionChanged()
 
     if (d->parser)
     {
-        int start           = -1;
-        int length          = -1;
+        int start           = INVALID;
+        int length          = INVALID;
         QString parseString = toPlainText();
         int pos             = textCursor().position();
         found               = d->parser->tokenAtPosition(Parser::Token,
