@@ -102,7 +102,9 @@ public:
 
     QString text() const;
     void    setText(const QString& text);
+
     void    clearText();
+    void    clearTextAndHistory();
 
 Q_SIGNALS:
 

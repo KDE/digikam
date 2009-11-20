@@ -269,6 +269,12 @@ void AdvancedRenameInput::clearText()
     d->lineEdit->clear();
 }
 
+void AdvancedRenameInput::clearTextAndHistory()
+{
+    d->lineEdit->clear();
+    clear();
+}
+
 QString AdvancedRenameInput::text() const
 {
     return d->lineEdit->toPlainText();

@@ -137,7 +137,7 @@ void AdvancedRenameWidget::setTooltipAlignment(Qt::Alignment alignment)
 
 void AdvancedRenameWidget::clear()
 {
-    d->renameInput->clear();
+    d->renameInput->clearTextAndHistory();
 }
 
 void AdvancedRenameWidget::slotHideToolTipTracker()
