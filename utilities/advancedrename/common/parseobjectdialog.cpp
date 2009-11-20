@@ -26,10 +26,11 @@
 
 // Qt includes
 
-#include <QLabel>
 #include <QFrame>
-#include <QWidget>
 #include <QGridLayout>
+#include <QLabel>
+#include <QRegExp>
+#include <QWidget>
 
 // KDE includes
 
@@ -100,7 +101,7 @@ void ParseObjectDialog::setDialogTitle(const QString& title)
 {
     // remove ellipsis and "&&" from the string
     QString _title = title;
-    _title.remove("...").replace("&&", "&");
+    _title.remove(QRegExp("\\.{3,}")).replace("&&", "&");
 
     d->dialogTitle->setText(QString("<b>%1</b>").arg(_title));
     setCaption(_title);
