@@ -651,7 +651,8 @@ bool AlbumManager::setDatabase(const QString& dbType, const QString& dbName, con
     // -- Database initialization -------------------------------------------------
 
     QString databaseName = AlbumSettings::instance()->getDatabaseName();
-    QString thumbnailDatabaseName;
+    //TODO Use a own database for thumbnails. For the first shoot, we merge it to the main db.
+    QString thumbnailDatabaseName = databaseName;
 
     // SQLite specifics
     if (AlbumSettings::instance()->getDatabaseType().isEmpty())
@@ -665,7 +666,6 @@ bool AlbumManager::setDatabase(const QString& dbType, const QString& dbName, con
         databaseName = QDir::cleanPath(databasePath + '/' + "digikam4.db");
         thumbnailDatabaseName = QDir::cleanPath(databasePath + '/' + "thumbnails-digikam.db");
     }
-
     DatabaseAccess::setParameters(DatabaseParameters::parametersFromConfig(AlbumSettings::instance()->getDatabaseType(),
                                                                            databaseName,
                                                                            AlbumSettings::instance()->getDatabaseHostName(),
