@@ -61,7 +61,7 @@ public:
 
 public Q_SLOTS:
 
-    void slotSetText(const QString&);
+    void slotSetHistoryItem(const QString&);
     void slotCursorPositionChanged();
 
 Q_SIGNALS:
