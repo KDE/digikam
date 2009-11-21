@@ -26,12 +26,14 @@
 // KDE includes
 
 #include <klocale.h>
+#include <kiconloader.h>
 
 namespace Digikam
 {
 
 TrimmedModifier::TrimmedModifier()
-               : Modifier(i18n("Trimmed"), i18n("Remove leading, trailing and extra whitespace"))
+               : Modifier(i18n("Trimmed"), i18n("Remove leading, trailing and extra whitespace"),
+                          SmallIcon("edit-cut"))
 {
     addTokenDescription(QString("{trim}"), i18n("Trimmed"), description());
 
