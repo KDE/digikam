@@ -68,9 +68,9 @@ void DImgWaveletsNR::filterImage()
 
     int j = 0;
 
-    for (int y = 0; y < height; y++)
+    for (int y = 0; !m_cancel && (y < height); y++)
     {
-        for (int x = 0; x < width; x++)
+        for (int x = 0; !m_cancel && (x < width); x++)
         {
             col          = m_orgImage.getPixelColor(x, y);
             m_fimg[0][j] = col.red()   / clip;
@@ -85,24 +85,27 @@ void DImgWaveletsNR::filterImage()
 
     // do colour model conversion sRGB[0,1] -> whatever.
 
-    if (m_colourMode == MODE_YCBCR)
+    if (!m_cancel)
     {
-        srgb2ycbcr(m_fimg, width * height);
-    }
-    else if (m_colourMode == MODE_LAB)
-    {
-        srgb2lab(m_fimg, width * height);
-    }
-    else if (m_colourMode == MODE_RGB)
-    {
-	// Nothing to do.
+        if (m_colourMode == MODE_YCBCR)
+        {
+            srgb2ycbcr(m_fimg, width * height);
+        }
+        else if (m_colourMode == MODE_LAB)
+        {
+            srgb2lab(m_fimg, width * height);
+        }
+        else if (m_colourMode == MODE_RGB)
+        {
+        // Nothing to do.
+        }
     }
 
     postProgress( 20 );
 
     // denoise the channels individually 
 
-    for (int c = 0; c < 4; c++)
+    for (int c = 0; !m_cancel && (c < 4); c++)
     {
         m_buffer[0] = m_fimg[c];
 
@@ -118,24 +121,27 @@ void DImgWaveletsNR::filterImage()
 
     // Retransform the image data 
 
-    if (m_colourMode == MODE_YCBCR)
+    if (!m_cancel)
     {
-        ycbcr2srgb(m_fimg, width * height);
-    }
-    else if (m_colourMode == MODE_LAB)
-    {
-        lab2srgb(m_fimg, width * height);
-    }
-    else if (m_colourMode == MODE_RGB)
-    {
-	// Nothing to do.
+        if (m_colourMode == MODE_YCBCR)
+        {
+            ycbcr2srgb(m_fimg, width * height);
+        }
+        else if (m_colourMode == MODE_LAB)
+        {
+            lab2srgb(m_fimg, width * height);
+        }
+        else if (m_colourMode == MODE_RGB)
+        {
+        // Nothing to do.
+        }
     }
 
     postProgress( 80 );
 
     // clip the values 
 
-    for (int c = 0; c < 4; c++)
+    for (int c = 0; !m_cancel && (c < 4); c++)
     {
         for (int i = 0; i < width * height; i++)
         {
@@ -149,7 +155,7 @@ void DImgWaveletsNR::filterImage()
 
     j = 0;
 
-    for (int y = 0; y < height; y++)
+    for (int y = 0; !m_cancel && (y < height); y++)
     {
         for (int x = 0; x < width; x++)
         {
@@ -188,10 +194,10 @@ void DImgWaveletsNR::waveletDenoise(float *fimg[3], unsigned int width, unsigned
     temp  = new float[qMax(width, height)];
     hpass = 0;
 
-    for (lev = 0; lev < 5; lev++)
+    for (lev = 0; !m_cancel && (lev < 5); lev++)
     {
         lpass = ((lev & 1) + 1);
-        for (row = 0; row < height; row++)
+        for (row = 0; !m_cancel && (row < height); row++)
         {
             hatTransform(temp, fimg[hpass] + row * width, 1, width, 1 << lev);
             for (col = 0; col < width; col++)
@@ -200,7 +206,7 @@ void DImgWaveletsNR::waveletDenoise(float *fimg[3], unsigned int width, unsigned
             }
         }
 
-        for (col = 0; col < width; col++)
+        for (col = 0; !m_cancel && (col < width); col++)
         {
             hatTransform(temp, fimg[lpass] + col, width, height, 1 << lev);
             for (row = 0; row < height; row++)
@@ -211,14 +217,14 @@ void DImgWaveletsNR::waveletDenoise(float *fimg[3], unsigned int width, unsigned
 
         thold = 5.0 / (1 << 6) * exp (-2.6 * sqrt (lev + 1)) * 0.8002 / exp (-2.6);
 
-        /* initialize stdev values for all intensities */
+        // initialize stdev values for all intensities
 
         stdev[0]   = stdev[1]   = stdev[2]   = stdev[3]   = stdev[4]   = 0.0;
         samples[0] = samples[1] = samples[2] = samples[3] = samples[4] = 0;
 
-        /* calculate stdevs for all intensities */
+        // calculate stdevs for all intensities
 
-        for (i = 0; i < size; i++)
+        for (i = 0; !m_cancel && (i < size); i++)
         {
             fimg[hpass][i] -= fimg[lpass][i];
 
@@ -258,9 +264,9 @@ void DImgWaveletsNR::waveletDenoise(float *fimg[3], unsigned int width, unsigned
         stdev[3] = sqrt(stdev[3] / (samples[3] + 1));
         stdev[4] = sqrt(stdev[4] / (samples[4] + 1));
 
-        /* do thresholding */
+        // do thresholding
 
-        for (i = 0; i < size; i++)
+        for (i = 0; !m_cancel && (i < size); i++)
         {
             if (fimg[lpass][i] > 0.8)
             {
@@ -297,7 +303,7 @@ void DImgWaveletsNR::waveletDenoise(float *fimg[3], unsigned int width, unsigned
         hpass = lpass;
     }
 
-    for (i = 0; i < size; i++)
+    for (i = 0; !m_cancel && (i < size); i++)
         fimg[0][i] = fimg[0][i] + fimg[lpass][i];
 
     delete [] temp;
