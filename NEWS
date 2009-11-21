@@ -3,7 +3,7 @@ digiKam 1.0.0-rc - Release date: 2009-11-29
 
 NEW FEATURES:
 
-
+ImageEditor    : New tool to remove noise using wavelets.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
@@ -17,7 +17,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 008 ==> 213758 : Crash when start program.
 009 ==> 214718 : digiKam Crashed when trying to Edit photo.
 010 ==> 215314 : If initialized the program crashes.
-011 ==>
+011 ==> 116061 : Possibility to blur chroma without touching luma.
+012 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta6 - Release date: 2009-11-08
