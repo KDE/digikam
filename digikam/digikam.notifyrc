@@ -19,6 +19,12 @@ Name[sv]=Nerladdning klar
 Name[uk]=Звантаження завершено
 Name[x-test]=xxDownload completexx
 Comment=A download from a camera or other device has finished.
+Comment[en_GB]=A download from a camera or other device has finished.
+Comment[pt]=Terminou a transferência de uma máquina fotográfica ou outro dispositivo.
+Comment[pt_BR]=A transferência de uma câmera ou outro dispositivo foi concluída.
+Comment[sv]=En nerladdning från en kamera eller annan enhet är klar.
+Comment[uk]=Звантаження даних з фотоапарата або іншого пристрою завершено.
+Comment[x-test]=xxA download from a camera or other device has finished.xx
 Action=Popup
 
 [Event/batchqueuecompleted]
