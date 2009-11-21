@@ -55,10 +55,10 @@
 
 #include "daboutdata.h"
 #include "dimg.h"
+#include "dimgwaveletsnr.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imagepanelwidget.h"
-#include "noisereduction.h"
 #include "version.h"
 
 using namespace KDcrawIface;
@@ -201,7 +201,7 @@ void NoiseReductionTool::prepareEffect()
     double so  = d->softnessInput->value();
     DImg image = d->previewWidget->getOriginalRegionImage();
 
-    setFilter(dynamic_cast<DImgThreadedFilter*>(new NoiseReduction(&image, this, th, so)));
+    setFilter(dynamic_cast<DImgThreadedFilter*>(new DImgWaveletsNR(&image, this, th, so)));
 }
 
 void NoiseReductionTool::prepareFinal()
@@ -213,7 +213,7 @@ void NoiseReductionTool::prepareFinal()
     double so = d->softnessInput->value();
 
     ImageIface iface(0, 0);
-    setFilter(dynamic_cast<DImgThreadedFilter *>(new NoiseReduction(iface.getOriginalImg(), this, th, so)));
+    setFilter(dynamic_cast<DImgThreadedFilter *>(new DImgWaveletsNR(iface.getOriginalImg(), this, th, so)));
 }
 
 void NoiseReductionTool::putPreviewData()

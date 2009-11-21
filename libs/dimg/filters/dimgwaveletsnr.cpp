@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2005-05-25
- * Description : Noise Reduction threaded image filter.
+ * Description : Wavelets Noise Reduction threaded image filter.
  *
  * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2008 by Marco Rossini <marco dot rossini at gmx dot net>
@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "noisereduction.h"
+#include "dimgwaveletsnr.h"
 
 // C++ includes
 
@@ -34,13 +34,11 @@
 #include "dcolor.h"
 #include "dimgimagefilters.h"
 
-using namespace Digikam;
-
-namespace DigikamNoiseReductionImagesPlugin
+namespace Digikam
 {
 
-NoiseReduction::NoiseReduction(DImg *orgImage, QObject *parent, double threshold, double softness)
-              : DImgThreadedFilter(orgImage, parent, "NoiseReduction")
+DImgWaveletsNR::DImgWaveletsNR(DImg *orgImage, QObject *parent, double threshold, double softness)
+              : DImgThreadedFilter(orgImage, parent, "DImgWaveletsNR")
 {
     m_threshold  = threshold;
     m_softness   = softness;
@@ -49,7 +47,7 @@ NoiseReduction::NoiseReduction(DImg *orgImage, QObject *parent, double threshold
     initFilter();
 }
 
-void NoiseReduction::filterImage()
+void DImgWaveletsNR::filterImage()
 {
     DColor col;
     int    progress;
@@ -178,7 +176,7 @@ void NoiseReduction::filterImage()
 
 // -- Wavelets denoise methods -----------------------------------------------------------
 
-void NoiseReduction::waveletDenoise(float *fimg[3], unsigned int width, unsigned int height, 
+void DImgWaveletsNR::waveletDenoise(float *fimg[3], unsigned int width, unsigned int height, 
                                     float threshold, double softness)
 {
     float        *temp, thold;
@@ -305,7 +303,7 @@ void NoiseReduction::waveletDenoise(float *fimg[3], unsigned int width, unsigned
     delete [] temp;
 }
 
-void NoiseReduction::hatTransform (float *temp, float *base, int st, int size, int sc)
+void DImgWaveletsNR::hatTransform (float *temp, float *base, int st, int size, int sc)
 {
     int i;
 
@@ -321,7 +319,7 @@ void NoiseReduction::hatTransform (float *temp, float *base, int st, int size, i
 
 // -- Color Space conversion methods --------------------------------------------------
 
-void NoiseReduction::srgb2ycbcr(float** fimg, int size)
+void DImgWaveletsNR::srgb2ycbcr(float** fimg, int size)
 {
     /* using JPEG conversion here - expecting all channels to be
      * in [0:255] range */
@@ -339,7 +337,7 @@ void NoiseReduction::srgb2ycbcr(float** fimg, int size)
     }
 }
 
-void NoiseReduction::ycbcr2srgb(float** fimg, int size)
+void DImgWaveletsNR::ycbcr2srgb(float** fimg, int size)
 {
     /* using JPEG conversion here - expecting all channels to be
     * in [0:255] range */
@@ -357,7 +355,7 @@ void NoiseReduction::ycbcr2srgb(float** fimg, int size)
     }
 }
 
-void NoiseReduction::srgb2xyz(float** fimg, int size)
+void DImgWaveletsNR::srgb2xyz(float** fimg, int size)
 {
     /* fimg in [0:1], sRGB */
     int   i;
@@ -387,7 +385,7 @@ void NoiseReduction::srgb2xyz(float** fimg, int size)
     }
 }
 
-void NoiseReduction::xyz2srgb(float** fimg, int size)
+void DImgWaveletsNR::xyz2srgb(float** fimg, int size)
 {
     int   i;
     float r, g, b;
@@ -419,7 +417,7 @@ void NoiseReduction::xyz2srgb(float** fimg, int size)
     }
 }
 
-void NoiseReduction::lab2srgb(float** fimg, int size)
+void DImgWaveletsNR::lab2srgb(float** fimg, int size)
 {
     int   i;
     float x, y, z;
@@ -460,7 +458,7 @@ void NoiseReduction::lab2srgb(float** fimg, int size)
     xyz2srgb(fimg, size);
 }
 
-void NoiseReduction::srgb2lab(float** fimg, int size)
+void DImgWaveletsNR::srgb2lab(float** fimg, int size)
 {
     int   i;
     float l, a, b;
@@ -515,4 +513,4 @@ void NoiseReduction::srgb2lab(float** fimg, int size)
     }
 }
 
-}  // namespace DigikamNoiseReductionImagesPlugin
+}  // namespace Digikam

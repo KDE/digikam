@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2005-05-25
- * Description : Noise Reduction threaded image filter.
+ * Description : Wavelets Noise Reduction threaded image filter.
  * 
  * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * 
@@ -21,8 +21,8 @@
  * 
  * ============================================================ */
   
-#ifndef NOISE_REDUCTION_H
-#define NOISE_REDUCTION_H
+#ifndef DIMGWAVELETSNR_H
+#define DIMGWAVELETSNR_H
 
 // C++ includes
 
@@ -30,14 +30,13 @@
 
 // Local includes
 
+#include "digikam_export.h"
 #include "dimgthreadedfilter.h"
 
-using namespace Digikam;
-
-namespace DigikamNoiseReductionImagesPlugin
+namespace Digikam
 {
 
-class NoiseReduction : public DImgThreadedFilter
+class DIGIKAM_EXPORT DImgWaveletsNR : public DImgThreadedFilter
 {
 
 public:
@@ -51,8 +50,8 @@ public:
 
 public:
 
-    NoiseReduction(DImg *orgImage, QObject *parent, double threshold, double softness);
-    ~NoiseReduction(){};
+    DImgWaveletsNR(DImg *orgImage, QObject *parent, double threshold, double softness);
+    ~DImgWaveletsNR(){};
 
 private:
 
@@ -80,6 +79,6 @@ private:
     float*    m_buffer[3];
 };
 
-}  // namespace DigikamNoiseReductionImagesPlugin
+}  // namespace Digikam
 
-#endif /* NOISE_REDUCTION_H */
+#endif /* DIMGWAVELETSNR_H */
