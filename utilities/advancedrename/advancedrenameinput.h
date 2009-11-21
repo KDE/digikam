@@ -31,11 +31,11 @@
 
 // KDE includes
 
-#include <klineedit.h>
 #include <kcombobox.h>
 
 // Local includes
 
+#include "comboboxutilities.h"
 #include "parser.h"
 
 class QMouseEvent;
@@ -44,6 +44,23 @@ class QKeyEvent;
 
 namespace Digikam
 {
+
+class AdvancedRenameLineEditProxy : public ProxyLineEdit
+{
+    Q_OBJECT
+
+public:
+
+    AdvancedRenameLineEditProxy(QWidget* parent);
+    virtual void setWidget(QWidget *widget);
+
+protected:
+
+    virtual void mousePressEvent(QMouseEvent* event);
+    virtual void mouseReleaseEvent(QMouseEvent* event);
+};
+
+// --------------------------------------------------------
 
 class AdvancedRenameLineEditPriv;
 
@@ -104,9 +121,6 @@ public:
     QString text() const;
     void    setText(const QString& text);
 
-    void    clearText();
-    void    clearTextAndHistory();
-
 Q_SIGNALS:
 
     void signalTextChanged(const QString&);
@@ -116,6 +130,8 @@ Q_SIGNALS:
 public Q_SLOTS:
 
     void slotAddToken(const QString&);
+    void clearText();
+    void clearTextAndHistory();
 
 private:
 

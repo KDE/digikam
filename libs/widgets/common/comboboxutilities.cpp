@@ -44,7 +44,7 @@ namespace Digikam
 
 
 ProxyLineEdit::ProxyLineEdit(QWidget *parent)
-             : QLineEdit(parent),
+             : KLineEdit(parent),
                m_widget(0)
 {
     m_layout = new QVBoxLayout;
@@ -54,6 +54,9 @@ ProxyLineEdit::ProxyLineEdit(QWidget *parent)
 
     // unset text edit cursor
     unsetCursor();
+
+    // unset clear button per default
+    setClearButtonShown(false);
 }
 
 void ProxyLineEdit::setWidget(QWidget *widget)
@@ -67,7 +70,7 @@ void ProxyLineEdit::setWidget(QWidget *widget)
 
 /**
  * We just re-implement all relevant QWidget event handlers and call
- * the QWidget implementation, not the QLineEdit one.
+ * the QWidget implementation, not the KLineEdit one.
  */
 void ProxyLineEdit::mousePressEvent(QMouseEvent *event)
 {
@@ -236,9 +239,9 @@ bool StayPoppedUpComboBox::eventFilter(QObject *o, QEvent *e)
     // and then dispatching it to its destination.
     if (o == m_view || o == m_view->viewport())
     {
-        switch (e->type()) 
+        switch (e->type())
         {
-            case QEvent::MouseButtonRelease: 
+            case QEvent::MouseButtonRelease:
             {
                 QMouseEvent *m = static_cast<QMouseEvent *>(e);
                 if (m_view->isVisible() && m_view->rect().contains(m->pos()))

@@ -41,7 +41,6 @@
 
 // Local includes
 
-#include "comboboxutilities.h"
 #include "highlighter.h"
 #include "parser.h"
 
@@ -51,6 +50,52 @@ const int INVALID = -1;
 
 namespace Digikam
 {
+
+AdvancedRenameLineEditProxy::AdvancedRenameLineEditProxy(QWidget* parent)
+                           : ProxyLineEdit(parent)
+{
+    setClearButtonShown(true);
+}
+
+void AdvancedRenameLineEditProxy::setWidget(QWidget *widget)
+{
+    if (m_widget)
+    {
+        delete m_widget;
+    }
+
+    if (m_layout)
+    {
+        delete m_layout;
+    }
+
+    m_widget = widget;
+    m_widget->setParent(this);
+
+    QWidget* placeholder = new QWidget(this);
+    placeholder->setFixedHeight(1);
+    placeholder->setFixedWidth(clearButtonUsedSize().width());
+
+    QGridLayout* mainLayout = new QGridLayout(this);
+    mainLayout->addWidget(m_widget,    0, 0, 1, 1);
+    mainLayout->addWidget(placeholder, 0, 1, 1, 1);
+    mainLayout->setSpacing(0);
+    mainLayout->setMargin(0);
+    setLayout(mainLayout);
+    updateGeometry();
+}
+
+void AdvancedRenameLineEditProxy::mousePressEvent(QMouseEvent* event)
+{
+    KLineEdit::mousePressEvent(event);
+}
+
+void AdvancedRenameLineEditProxy::mouseReleaseEvent(QMouseEvent* event)
+{
+    KLineEdit::mouseReleaseEvent(event);
+}
+
+// --------------------------------------------------------
 
 class AdvancedRenameLineEditPriv
 {
@@ -242,14 +287,22 @@ AdvancedRenameInput::AdvancedRenameInput(QWidget* parent)
     setMaxCount(d->maxHistoryItems);
     setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLength);
 
-    d->lineEdit          = new AdvancedRenameLineEdit(this);
-    ProxyLineEdit* proxy = new ProxyLineEdit(this);
+//    ProxyLineEdit* proxy = new ProxyLineEdit(this);
+
+    d->lineEdit                        = new AdvancedRenameLineEdit(this);
+    AdvancedRenameLineEditProxy* proxy = new AdvancedRenameLineEditProxy(this);
     proxy->setWidget(d->lineEdit);
 
     setLineEdit(proxy);
     proxy->setAutoFillBackground(false);
 
     // --------------------------------------------------------
+
+    connect(proxy, SIGNAL(clearButtonClicked()),
+            this, SLOT(clearText()));
+
+    connect(d->lineEdit, SIGNAL(signalTextChanged(const QString&)),
+            proxy, SLOT(setText(const QString&)));
 
     connect(d->lineEdit, SIGNAL(signalTextChanged(const QString&)),
             this, SIGNAL(signalTextChanged(const QString&)));
