@@ -127,7 +127,8 @@ bool NoiseReduction::toolOperations()
 
     DImgWaveletsNR wnr(&image(), 0L, th, so);
     wnr.startFilterDirectly();
-    image() = wnr.getTargetImage();
+    DImg trg = wnr.getTargetImage();
+    image().putImageData(trg.bits());
 
     return (savefromDImg());
 }
