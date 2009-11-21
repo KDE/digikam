@@ -848,7 +848,7 @@ bool DatabaseCoreBackend::exec(SqlQuery& query)
     forever
     {
 #ifdef DATABASCOREBACKEND_DEBUG
-        kDebug(50003) << "Trying to query ["<<query.lastQuery()<<"]";
+        kDebug(50003) << "Trying to query ["<<query.lastQuery()<<"] values ["<< query.boundValues() <<"]";
 #endif
         if (query.exec())
             break;
