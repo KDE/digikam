@@ -24,6 +24,10 @@
 #ifndef PARSEOBJECT_H
 #define PARSEOBJECT_H
 
+// Qt includes
+
+#include <QPixmap>
+
 // Local includes
 
 #include "parseinformation.h"
@@ -31,7 +35,6 @@
 #include "token.h"
 
 class QAction;
-class QIcon;
 class QMenu;
 class QPushButton;
 class QString;
@@ -74,7 +77,7 @@ class ParseObject : public QObject
 
 public:
 
-    ParseObject(const QString& name, const QIcon& icon);
+    ParseObject(const QString& name, const QPixmap& icon);
     virtual ~ParseObject();
 
     QRegExp regExp() const;
@@ -83,8 +86,8 @@ public:
     void    setDescription(const QString& desc);
     QString description() const;
 
-    QIcon   icon() const;
-    void    setIcon(const QIcon& icon);
+    QPixmap icon() const;
+    void    setIcon(const QPixmap& pixmap);
 
     /**
      * @return a list of all registered tokens

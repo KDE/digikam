@@ -38,6 +38,7 @@
 #include "rotate.h"
 #include "sharpen.h"
 #include "watermark.h"
+#include "noisereduction.h"
 
 namespace Digikam
 {
@@ -69,6 +70,7 @@ BatchToolsManager::BatchToolsManager(QObject* parent)
     registerTool(new WaterMark(this));
     registerTool(new AssignTemplate(this));
     registerTool(new Sharpen(this));
+    registerTool(new NoiseReduction(this));
 }
 
 BatchToolsManager::~BatchToolsManager()

@@ -28,6 +28,7 @@
 #include <QGridLayout>
 #include <QGroupBox>
 #include <QLabel>
+#include <QPointer>
 
 // KDE includes
 
@@ -38,82 +39,48 @@
 namespace Digikam
 {
 
-class SequenceNumberDialogPriv
+SequenceNumberDialog::SequenceNumberDialog(ParseObject* parent)
+                    : ParseObjectDialog(parent),
+                      digits(0), start(0), step(0)
 {
-public:
-
-    SequenceNumberDialogPriv() :
-        digits(0),
-        start(0),
-        step(0)
-    {}
-
-    KIntNumInput* digits;
-    KIntNumInput* start;
-    KIntNumInput* step;
-};
-
-// --------------------------------------------------------
-
-SequenceNumberDialog::SequenceNumberDialog()
-                    : KDialog(0), d(new SequenceNumberDialogPriv)
-{
-    setCaption(i18n("Add sequence number"));
-
-    d->digits = new KIntNumInput;
-    d->start  = new KIntNumInput;
-    d->step   = new KIntNumInput;
+    digits = new KIntNumInput(this);
+    start  = new KIntNumInput(this);
+    step   = new KIntNumInput(this);
 
     QLabel* digitsLabel = new QLabel(i18nc("number of digits", "Digits:"));
     QLabel* startLabel  = new QLabel(i18nc("start of sequence number range", "Start:"));
     QLabel* stepLabel   = new QLabel(i18nc("stepping used for sequence number range", "Step:"));
 
-    d->digits->setRange(1, 999999, 1);
-    d->digits->setSliderEnabled(false);
+    digits->setRange(1, 999999, 1);
+    digits->setSliderEnabled(false);
 
-    d->start->setRange(1, 999999, 1);
-    d->start->setSliderEnabled(false);
+    start->setRange(1, 999999, 1);
+    start->setSliderEnabled(false);
 
-    d->step->setRange(1, 999999, 1);
-    d->step->setSliderEnabled(false);
+    step->setRange(1, 999999, 1);
+    step->setSliderEnabled(false);
 
     QGroupBox* gbox         = new QGroupBox(i18n("Custom Range"));
-    QGridLayout* gboxLayout = new QGridLayout;
+    QGridLayout* gboxLayout = new QGridLayout(this);
     gboxLayout->addWidget(startLabel, 0, 0);
-    gboxLayout->addWidget(d->start,   0, 1);
+    gboxLayout->addWidget(start,      0, 1);
     gboxLayout->addWidget(stepLabel,  1, 0);
-    gboxLayout->addWidget(d->step,    1, 1);
+    gboxLayout->addWidget(step,       1, 1);
     gboxLayout->setRowStretch(2, 10);
     gbox->setLayout(gboxLayout);
 
-    QWidget* w              = new QWidget;
-    QGridLayout* mainLayout = new QGridLayout;
+    QWidget* w              = new QWidget(this);
+    QGridLayout* mainLayout = new QGridLayout(this);
     mainLayout->addWidget(digitsLabel, 0, 0, 1, 1);
-    mainLayout->addWidget(d->digits,   0, 1, 1, 1);
+    mainLayout->addWidget(digits,      0, 1, 1, 1);
     mainLayout->addWidget(gbox,        1, 0, 1,-1);
     w->setLayout(mainLayout);
 
-    setMainWidget(w);
+    setSettingsWidget(w);
 }
 
 SequenceNumberDialog::~SequenceNumberDialog()
 {
-    delete d;
-}
-
-int SequenceNumberDialog::digits() const
-{
-    return d->digits->value();
-}
-
-int SequenceNumberDialog::start()  const
-{
-    return d->start->value();
-}
-
-int SequenceNumberDialog::step()   const
-{
-    return d->step->value();
 }
 
 // --------------------------------------------------------
@@ -140,23 +107,23 @@ void SequenceNumberOption::slotTokenTriggered(const QString& token)
 {
     Q_UNUSED(token)
 
-    SequenceNumberDialog* dlg = new SequenceNumberDialog;
+    QPointer<SequenceNumberDialog> dlg = new SequenceNumberDialog(this);
 
     QString tmp;
     if (dlg->exec() == KDialog::Accepted)
     {
-        int _digits = dlg->digits();
-        int _start  = dlg->start();
-        int _step   = dlg->step();
+        int digits = dlg->digits->value();
+        int start  = dlg->start->value();
+        int step   = dlg->step->value();
 
-        tmp = QString("%1").arg("#", _digits, QChar('#'));
-        if (_start > 1)
+        tmp = QString("%1").arg("#", digits, QChar('#'));
+        if (start > 1)
         {
-            tmp.append(QString("[%1").arg(QString::number(_start)));
+            tmp.append(QString("[%1").arg(QString::number(start)));
 
-            if (_step > 1)
+            if (step > 1)
             {
-                tmp.append(QString(",%1").arg(QString::number(_step)));
+                tmp.append(QString(",%1").arg(QString::number(step)));
             }
 
             tmp.append(QChar(']'));

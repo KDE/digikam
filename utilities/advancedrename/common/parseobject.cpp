@@ -26,7 +26,6 @@
 // Qt includes
 
 #include <QAction>
-#include <QIcon>
 #include <QMenu>
 #include <QPushButton>
 #include <QRegExp>
@@ -55,13 +54,13 @@ public:
     bool         useTokenMenu;
 
     QString      description;
-    QIcon        icon;
+    QPixmap      icon;
     QRegExp      regExp;
 
     TokenList    tokens;
 };
 
-ParseObject::ParseObject(const QString& name, const QIcon& icon)
+ParseObject::ParseObject(const QString& name, const QPixmap& icon)
            : QObject(0), d(new ParseObjectPriv)
 {
     setObjectName(name);
@@ -79,12 +78,12 @@ ParseObject::~ParseObject()
     delete d;
 }
 
-void ParseObject::setIcon(const QIcon& icon)
+void ParseObject::setIcon(const QPixmap& pixmap)
 {
-    d->icon = icon;
+    d->icon = pixmap;
 }
 
-QIcon ParseObject::icon() const
+QPixmap ParseObject::icon() const
 {
     return d->icon;
 }

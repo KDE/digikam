@@ -24,29 +24,24 @@
 #ifndef DEFAULTVALUEMODIFIER_H
 #define DEFAULTVALUEMODIFIER_H
 
-// KDE includes
-
-#include <kdialog.h>
-
 // Local includes
 
 #include "modifier.h"
+#include "parseobjectdialog.h"
 
 class KLineEdit;
 
 namespace Digikam
 {
 
-class DefaultValueDialog : public KDialog
+class DefaultValueDialog : public ParseObjectDialog
 {
     Q_OBJECT
 
 public:
 
-    DefaultValueDialog();
+    DefaultValueDialog(ParseObject* parent);
     ~DefaultValueDialog();
-
-public:
 
     KLineEdit* valueInput;
 };

@@ -509,17 +509,28 @@ void ContextMenuHelper::addAlbumActions()
 void ContextMenuHelper::addGotoMenu(imageIds& ids)
 {
     if (d->gotoAlbumAction && d->gotoDateAction)
+    {
         return;
+    }
     setSelectedIds(ids);
+
+    // the currently selected image is always the first item
+    ImageInfo item;
+    if (!d->selectedIds.isEmpty())
+    {
+        item = ImageInfo(d->selectedIds.first());
+    }
+
+    if (item.isNull())
+    {
+        return;
+    }
 
     // when more then one item is selected, don't add the menu
     if (d->selectedIds.count() > 1) return;
 
     d->gotoAlbumAction = new QAction(SmallIcon("folder-image"),        i18n("Album"), this);
     d->gotoDateAction  = new QAction(SmallIcon("view-calendar-month"), i18n("Date"),  this);
-
-    // the currently selected image is always the first item
-    ImageInfo item(d->selectedIds.first());
 
     KMenu *gotoMenu  = new KMenu(d->parent);
     gotoMenu->addAction(d->gotoAlbumAction);

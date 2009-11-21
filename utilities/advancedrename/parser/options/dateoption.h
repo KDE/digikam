@@ -30,12 +30,9 @@
 #include <QString>
 #include <QDialog>
 
-// KDE includes
-
-#include <kdialog.h>
-
 // Local includes
 
+#include "parseobjectdialog.h"
 #include "option.h"
 
 namespace Ui
@@ -78,13 +75,13 @@ private:
 
 // --------------------------------------------------------
 
-class DateOptionDialog : public KDialog
+class DateOptionDialog : public ParseObjectDialog
 {
     Q_OBJECT
 
 public:
 
-    DateOptionDialog(QWidget* parent = 0);
+    DateOptionDialog(ParseObject* parent);
     ~DateOptionDialog();
 
     Ui::DateOptionDialogWidget* const ui;

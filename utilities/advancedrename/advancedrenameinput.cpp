@@ -29,6 +29,7 @@
 #include <QLayout>
 #include <QTextEdit>
 #include <QTimer>
+#include <QScrollBar>
 
 // KDE includes
 
@@ -40,8 +41,6 @@
 
 // Local includes
 
-#include "comboboxutilities.h"
-#include "defaultrenameparser.h"
 #include "highlighter.h"
 #include "parser.h"
 
@@ -52,15 +51,63 @@ const int INVALID = -1;
 namespace Digikam
 {
 
+AdvancedRenameLineEditProxy::AdvancedRenameLineEditProxy(QWidget* parent)
+                           : ProxyLineEdit(parent)
+{
+    setClearButtonShown(true);
+}
+
+void AdvancedRenameLineEditProxy::setWidget(QWidget *widget)
+{
+    if (m_widget)
+    {
+        delete m_widget;
+    }
+
+    if (m_layout)
+    {
+        delete m_layout;
+    }
+
+    m_widget = widget;
+    m_widget->setParent(this);
+
+    QWidget* placeholder = new QWidget(this);
+    placeholder->setFixedHeight(1);
+    placeholder->setFixedWidth(clearButtonUsedSize().width());
+
+    QGridLayout* mainLayout = new QGridLayout(this);
+    mainLayout->addWidget(m_widget,    0, 0, 1, 1);
+    mainLayout->addWidget(placeholder, 0, 1, 1, 1);
+    mainLayout->setSpacing(0);
+    mainLayout->setMargin(0);
+    setLayout(mainLayout);
+    updateGeometry();
+}
+
+void AdvancedRenameLineEditProxy::mousePressEvent(QMouseEvent* event)
+{
+    KLineEdit::mousePressEvent(event);
+}
+
+void AdvancedRenameLineEditProxy::mouseReleaseEvent(QMouseEvent* event)
+{
+    KLineEdit::mouseReleaseEvent(event);
+}
+
+// --------------------------------------------------------
+
 class AdvancedRenameLineEditPriv
 {
 public:
 
     AdvancedRenameLineEditPriv() :
+        verticalSliderPosition(INVALID),
         parseTimer(0),
         parser(0)
     {}
 
+    int     verticalSliderPosition;
     QTimer* parseTimer;
     Parser* parser;
 };
@@ -87,6 +134,15 @@ AdvancedRenameLineEdit::AdvancedRenameLineEdit(QWidget* parent)
     d->parseTimer = new QTimer(this);
     d->parseTimer->setInterval(500);
     d->parseTimer->setSingleShot(true);
+
+    // --------------------------------------------------------
+
+    // layout widget correctly by setting a dummy text and calling ensureCursorVisible().
+    // Save the scrollbar position now, to avoid scrolling of the text when selecting with the mouse
+    setPlainText("DUMMY TEXT");
+    ensureCursorVisible();
+    d->verticalSliderPosition = verticalScrollBar()->value();
+    clear();
 
     // --------------------------------------------------------
 
@@ -130,6 +186,11 @@ void AdvancedRenameLineEdit::keyPressEvent(QKeyEvent* e)
     }
 }
 
+void AdvancedRenameLineEdit::wheelEvent(QWheelEvent* e)
+{
+    e->setAccepted(false);
+}
+
 void AdvancedRenameLineEdit::slotTextChanged()
 {
     d->parseTimer->start();
@@ -138,6 +199,18 @@ void AdvancedRenameLineEdit::slotTextChanged()
 void AdvancedRenameLineEdit::slotParseTimer()
 {
     emit signalTextChanged(toPlainText());
+}
+
+void AdvancedRenameLineEdit::scrollContentsBy(int dx, int dy)
+{
+    Q_UNUSED(dx)
+    Q_UNUSED(dy)
+
+    if (d->verticalSliderPosition != INVALID)
+    {
+        verticalScrollBar()->setValue(d->verticalSliderPosition);
+    }
+    viewport()->update();
 }
 
 void AdvancedRenameLineEdit::slotCursorPositionChanged()
@@ -214,14 +287,20 @@ AdvancedRenameInput::AdvancedRenameInput(QWidget* parent)
     setMaxCount(d->maxHistoryItems);
     setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLength);
 
-    d->lineEdit          = new AdvancedRenameLineEdit(this);
-    ProxyLineEdit* proxy = new ProxyLineEdit(this);
+    AdvancedRenameLineEditProxy* proxy = new AdvancedRenameLineEditProxy(this);
+    d->lineEdit                        = new AdvancedRenameLineEdit(this);
     proxy->setWidget(d->lineEdit);
 
     setLineEdit(proxy);
     proxy->setAutoFillBackground(false);
 
     // --------------------------------------------------------
+
+    connect(proxy, SIGNAL(clearButtonClicked()),
+            this, SLOT(clearText()));
+
+    connect(d->lineEdit, SIGNAL(signalTextChanged(const QString&)),
+            proxy, SLOT(setText(const QString&)));
 
     connect(d->lineEdit, SIGNAL(signalTextChanged(const QString&)),
             this, SIGNAL(signalTextChanged(const QString&)));
@@ -262,6 +341,12 @@ void AdvancedRenameInput::setText(const QString& text)
 void AdvancedRenameInput::clearText()
 {
     d->lineEdit->clear();
+}
+
+void AdvancedRenameInput::clearTextAndHistory()
+{
+    d->lineEdit->clear();
+    clear();
 }
 
 QString AdvancedRenameInput::text() const

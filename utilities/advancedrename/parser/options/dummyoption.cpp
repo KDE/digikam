@@ -6,7 +6,7 @@
  * Date        : 200X-XX-XX
  * Description : an option to provide <FILL IN PURPOSE> information to the parser
  *
- * Copyright (C) 2009 by <YOUR NAME AND MAIL ADRESS>
+ * Copyright (C) 2009 by YOUR NAME <YOUR MAIL ADDRESS>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

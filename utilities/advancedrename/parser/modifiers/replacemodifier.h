@@ -24,35 +24,29 @@
 #ifndef REPLACEMODIFIER_H
 #define REPLACEMODIFIER_H
 
-// KDE includes
-
-#include <kdialog.h>
-
 // Local includes
 
 #include "modifier.h"
+#include "parseobjectdialog.h"
+
+class QCheckBox;
+class KLineEdit;
 
 namespace Digikam
 {
 
-class ReplaceDialogPriv;
-
-class ReplaceDialog : public KDialog
+class ReplaceDialog : public ParseObjectDialog
 {
     Q_OBJECT
 
 public:
 
-    ReplaceDialog();
+    ReplaceDialog(ParseObject* parent);
     ~ReplaceDialog();
 
-    QString source()        const;
-    QString destination()   const;
-    bool    caseSensitive() const;
-
-private:
-
-    ReplaceDialogPriv* const d;
+    KLineEdit* source;
+    KLineEdit* destination;
+    QCheckBox* caseSensitive;
 };
 
 // --------------------------------------------------------

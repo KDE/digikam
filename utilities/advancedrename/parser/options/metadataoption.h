@@ -26,38 +26,31 @@
 
 // Qt includes
 
-#include <QObject>
 #include <QString>
-#include <QStringList>
-
-// KDE includes
-
-#include <kdialog.h>
 
 // Local includes
 
 #include "option.h"
+#include "parseobjectdialog.h"
+
+class KLineEdit;
 
 namespace Digikam
 {
 
-class MetadataOptionDialogPriv;
+class MetadataPanel;
 
-class MetadataOptionDialog : public KDialog
+class MetadataOptionDialog : public ParseObjectDialog
 {
     Q_OBJECT
 
 public:
 
-    MetadataOptionDialog();
+    MetadataOptionDialog(ParseObject* parent);
     ~MetadataOptionDialog();
 
-    QStringList checkedTags() const;
-    QString     separator()   const;
-
-private:
-
-    MetadataOptionDialogPriv* const d;
+    MetadataPanel* metadataPanel;
+    KLineEdit*     separatorLineEdit;
 };
 
 // --------------------------------------------------------
