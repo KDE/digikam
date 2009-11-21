@@ -287,10 +287,8 @@ AdvancedRenameInput::AdvancedRenameInput(QWidget* parent)
     setMaxCount(d->maxHistoryItems);
     setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLength);
 
-//    ProxyLineEdit* proxy = new ProxyLineEdit(this);
-
-    d->lineEdit                        = new AdvancedRenameLineEdit(this);
     AdvancedRenameLineEditProxy* proxy = new AdvancedRenameLineEditProxy(this);
+    d->lineEdit                        = new AdvancedRenameLineEdit(this);
     proxy->setWidget(d->lineEdit);
 
     setLineEdit(proxy);
