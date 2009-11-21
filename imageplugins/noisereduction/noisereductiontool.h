@@ -54,8 +54,6 @@ private:
 
 private Q_SLOTS:
 
-    void slotSaveAsSettings();
-    void slotLoadSettings();
     void slotResetSettings();
 
 private:
