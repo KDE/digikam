@@ -39,7 +39,8 @@ namespace Digikam
 {
 
 RangeDialog::RangeDialog(ParseObject* parent)
-             : ParseObjectDialog(parent), startInput(0), stopInput(0), toTheEndCheckBox(0)
+             : ParseObjectDialog(parent),
+               startInput(0), stopInput(0), toTheEndCheckBox(0)
 {
     const int minRange = 1;
     const int maxRange = 999999;

@@ -24,10 +24,6 @@
 #ifndef DEFAULTVALUEMODIFIER_H
 #define DEFAULTVALUEMODIFIER_H
 
-// KDE includes
-
-#include <kdialog.h>
-
 // Local includes
 
 #include "modifier.h"
@@ -46,8 +42,6 @@ public:
 
     DefaultValueDialog(ParseObject* parent);
     ~DefaultValueDialog();
-
-public:
 
     KLineEdit* valueInput;
 };

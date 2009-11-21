@@ -36,50 +36,35 @@
 #include <klineedit.h>
 #include <klocale.h>
 
+// Local includes
 
 #include "parseobjectdialog.h"
-
 
 namespace Digikam
 {
 
-class ReplaceDialogPriv
-{
-public:
-
-    ReplaceDialogPriv()
-    {
-        source        = 0;
-        destination   = 0;
-        caseSensitive = 0;
-    }
-
-    KLineEdit* source;
-    KLineEdit* destination;
-    QCheckBox* caseSensitive;
-};
-
 ReplaceDialog::ReplaceDialog(ParseObject* parent)
-             : ParseObjectDialog(parent), d(new ReplaceDialogPriv)
+             : ParseObjectDialog(parent),
+               source(0), destination(0), caseSensitive(0)
 {
-    QString replace    = i18nc("Replace text", "Replace");
+    QString replace  = i18nc("Replace text", "Replace");
 
-    QLabel* srcLabel   = new QLabel(replace + ':');
-    d->source          = new KLineEdit(this);
+    QLabel* srcLabel = new QLabel(replace + ':');
+    source           = new KLineEdit(this);
 
-    QLabel* dstLabel   = new QLabel(i18nc("Replace text with", "With:"));
-    d->destination     = new KLineEdit(this);
+    QLabel* dstLabel = new QLabel(i18nc("Replace text with", "With:"));
+    destination      = new KLineEdit(this);
 
-    d->caseSensitive   = new QCheckBox(i18n("Case sensitive"));
-    d->caseSensitive->setChecked(true);
+    caseSensitive    = new QCheckBox(i18n("Case sensitive"));
+    caseSensitive->setChecked(true);
 
     QWidget*     mainWidget = new QWidget(this);
     QGridLayout* mainLayout = new QGridLayout(this);
-    mainLayout->addWidget(d->caseSensitive, 0, 0, 1,-1);
-    mainLayout->addWidget(srcLabel,         1, 0, 1, 1);
-    mainLayout->addWidget(d->source,        1, 1, 1, 1);
-    mainLayout->addWidget(dstLabel,         2, 0, 1, 1);
-    mainLayout->addWidget(d->destination,   2, 1, 1, 1);
+    mainLayout->addWidget(caseSensitive, 0, 0, 1,-1);
+    mainLayout->addWidget(srcLabel,      1, 0, 1, 1);
+    mainLayout->addWidget(source,        1, 1, 1, 1);
+    mainLayout->addWidget(dstLabel,      2, 0, 1, 1);
+    mainLayout->addWidget(destination,   2, 1, 1, 1);
     mainLayout->setSpacing(KDialog::spacingHint());
     mainLayout->setMargin(KDialog::spacingHint());
     mainLayout->setRowStretch(3, 10);
@@ -87,27 +72,11 @@ ReplaceDialog::ReplaceDialog(ParseObject* parent)
 
     setSettingsWidget(mainWidget);
 
-    d->source->setFocus();
+    source->setFocus();
 }
 
 ReplaceDialog::~ReplaceDialog()
 {
-    delete d;
-}
-
-QString ReplaceDialog::source() const
-{
-    return d->source->text();
-}
-
-QString ReplaceDialog::destination() const
-{
-    return d->destination->text();
-}
-
-bool ReplaceDialog::caseSensitive() const
-{
-    return d->caseSensitive->isChecked();
 }
 
 // --------------------------------------------------------
@@ -134,11 +103,11 @@ void ReplaceModifier::slotTokenTriggered(const QString& token)
     QPointer<ReplaceDialog> dlg = new ReplaceDialog(this);
     if (dlg->exec() == KDialog::Accepted)
     {
-        QString oldStr = dlg->source();
-        QString newStr = dlg->destination();
+        QString oldStr = dlg->source->text();
+        QString newStr = dlg->destination->text();
         if (!oldStr.isEmpty())
         {
-            if (dlg->caseSensitive())
+            if (dlg->caseSensitive->isChecked())
             {
                 tmp = QString("{r:\"%1\",\"%2\"}").arg(oldStr).arg(newStr);
             }

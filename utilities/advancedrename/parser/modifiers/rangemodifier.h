@@ -24,10 +24,6 @@
 #ifndef RANGEMODIFIER_H
 #define RANGEMODIFIER_H
 
-// KDE includes
-
-#include <kdialog.h>
-
 // Local includes
 
 #include "modifier.h"
@@ -39,8 +35,6 @@ class KIntNumInput;
 
 namespace Digikam
 {
-
-class RangeDialogPriv;
 
 class RangeDialog : public ParseObjectDialog
 {

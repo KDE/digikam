@@ -39,12 +39,10 @@ namespace Digikam
 {
 
 DefaultValueDialog::DefaultValueDialog(ParseObject* parent)
-                  : ParseObjectDialog(parent)
+                  : ParseObjectDialog(parent),
+                    valueInput(0)
 {
     QString defaultValueStr = i18n("Default Value");
-
-//    setDialogTitle(defaultValueStr);
-//    setDialogDescription(i18n("what is this here? Shitty shit?"));
 
     QLabel* srcLabel = new QLabel(defaultValueStr + ':');
     valueInput       = new KLineEdit(this);

@@ -24,24 +24,15 @@
 #ifndef SEQUENCENUMBEROPTION_H
 #define SEQUENCENUMBEROPTION_H
 
-// Qt includes
-
-#include <QObject>
-#include <QString>
-
-// KDE includes
-
-#include <kdialog.h>
-
 // Local includes
 
 #include "option.h"
 #include "parseobjectdialog.h"
 
+class KIntNumInput;
+
 namespace Digikam
 {
-
-class SequenceNumberDialogPriv;
 
 class SequenceNumberDialog : public ParseObjectDialog
 {
@@ -52,13 +43,9 @@ public:
     SequenceNumberDialog(ParseObject* parent);
     ~SequenceNumberDialog();
 
-    int digits() const;
-    int start()  const;
-    int step()   const;
-
-private:
-
-    SequenceNumberDialogPriv* const d;
+    KIntNumInput* digits;
+    KIntNumInput* start;
+    KIntNumInput* step;
 };
 
 // --------------------------------------------------------

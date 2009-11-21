@@ -30,10 +30,6 @@
 #include <QString>
 #include <QDialog>
 
-// KDE includes
-
-#include <kdialog.h>
-
 // Local includes
 
 #include "parseobjectdialog.h"
