@@ -26,6 +26,7 @@
 // Qt includes
 
 #include <QDateTime>
+#include <QPointer>
 #include <QTimer>
 
 // KDE includes
@@ -235,7 +236,7 @@ void DateOption::slotTokenTriggered(const QString& token)
     Q_UNUSED(token)
 
     QString tokenStr      = QString("[date:%1]");
-    DateOptionDialog* dlg = new DateOptionDialog(this);
+    QPointer<DateOptionDialog> dlg = new DateOptionDialog(this);
     QVariant v;
     DateFormat df;
     QString tmp;
