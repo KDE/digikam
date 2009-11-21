@@ -3,8 +3,9 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2009-09-14
- * Description : trimmed token modifier
+ * Date        : 2009-11-20
+ * Description : a dialog that can be used to display a configuration
+ *               dialog for a parse object
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -21,28 +22,42 @@
  *
  * ============================================================ */
 
-#include "trimmedmodifier.h"
+#ifndef PARSEOBJECTDIALOG_H
+#define PARSEOBJECTDIALOG_H
 
 // KDE includes
 
-#include <klocale.h>
+#include <kdialog.h>
 
 namespace Digikam
 {
 
-TrimmedModifier::TrimmedModifier()
-               : Modifier(i18n("Trimmed"), i18n("Remove leading, trailing and extra whitespace"))
+class ParseObject;
+
+class ParseObjectDialogPriv;
+
+class ParseObjectDialog : public KDialog
 {
-    addTokenDescription(QString("{trim}"), i18n("Trimmed"), description());
+    Q_OBJECT
 
-    setRegExp("\\{trim\\}");
-}
+public:
 
-QString TrimmedModifier::modifyOperation(const QString& parseString, const QString& result)
-{
-    Q_UNUSED(parseString)
+    ParseObjectDialog(ParseObject* parent);
+    virtual ~ParseObjectDialog();
 
-    return result.simplified();
-}
+    void setSettingsWidget(QWidget* settingsWidget);
+
+private:
+
+    void setDialogTitle(const QString& title);
+    void setDialogDescription(const QString& description);
+    void setDialogIcon(const QPixmap& pixmap);
+
+private:
+
+    ParseObjectDialogPriv* const d;
+};
 
 } // namespace Digikam
+
+#endif /* PARSEOBJECTDIALOG_H */

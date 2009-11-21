@@ -182,6 +182,7 @@ private Q_SLOTS:
     void slotShowMenuBar();
     void slotEditKeys();
     void slotConfToolbars();
+    void slotConfNotifications();
     void slotToggleFullScreen();
 
     void slotDatabaseMigration();

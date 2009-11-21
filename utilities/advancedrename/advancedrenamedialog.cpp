@@ -30,9 +30,9 @@
 #include <QGridLayout>
 #include <QHeaderView>
 #include <QMoveEvent>
+#include <QSet>
 #include <QString>
 #include <QTreeWidget>
-#include <QSet>
 
 // KDE includes
 
@@ -208,6 +208,9 @@ AdvancedRenameDialog::AdvancedRenameDialog(QWidget* parent)
     connect(d->advancedRenameWidget, SIGNAL(signalTextChanged(const QString&)),
             this, SLOT(slotParseStringChanged(const QString&)));
 
+    connect(d->advancedRenameWidget, SIGNAL(signalReturnPressed()),
+            this, SLOT(slotReturnPressed()));
+
     connect(this, SIGNAL(signalWindowHasMoved()),
             d->advancedRenameWidget, SLOT(slotUpdateTrackerPos()));
 
@@ -221,6 +224,14 @@ AdvancedRenameDialog::~AdvancedRenameDialog()
     delete d;
 }
 
+void AdvancedRenameDialog::slotReturnPressed()
+{
+    if (isButtonEnabled(Ok))
+    {
+        accept();
+    }
+}
+
 void AdvancedRenameDialog::slotParseStringChanged(const QString& parseString)
 {
     d->newNamesList.clear();
@@ -232,7 +243,7 @@ void AdvancedRenameDialog::slotParseStringChanged(const QString& parseString)
         AdvancedRenameListItem* item = dynamic_cast<AdvancedRenameListItem*>((*it));
         if (item)
         {
-            ParseInformation parseInfo(item->imageUrl());
+            ParseInformation parseInfo(ImageInfo(item->imageUrl()));
             parseInfo.index = index;
 
             QString newName = d->advancedRenameWidget->parse(parseInfo);

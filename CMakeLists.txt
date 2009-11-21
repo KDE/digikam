@@ -1,6 +1,5 @@
 PROJECT(digikam)
 
-OPTION(ENABLE_GPHOTO2 "Build digiKam with libgphoto2 support (default=ON)" ON)
 OPTION(ENABLE_THEMEDESIGNER "Build digiKam theme designer (default=OFF)" OFF)
 OPTION(ENABLE_THUMBS_DB "Build digiKam with thumbnails database support (default=ON)" ON)
 
@@ -25,14 +24,6 @@ SET(DIGIKAM_RELEASE_DATE "2009-11-29")
 SET(DIGIKAM_SUFFIX_VERSION "-rc")
 
 # ==================================================================================================
-# debug area codes
-SET(AREA_CODE_GENERAL       "50003")
-SET(AREA_CODE_KIOSLAVES     "50004")
-SET(AREA_CODE_SHOWFOTO      "50005")
-SET(AREA_CODE_IMAGEPLUGINS  "50006")
-ADD_DEFINITIONS(-DKDE_DEFAULT_DEBUG_AREA=${AREA_CODE_GENERAL})
-
-# ==================================================================================================
 # Set env. variables accordingly.
 
 SET(DIGIKAM_VERSION_SHORT
@@ -44,27 +35,38 @@ SET(DIGIKAM_VERSION_STRING
    )
 
 # ==================================================================================================
+# Debug area codes
+# These codes will be set for every project specific path automatically, so
+# that you can use kDebug() without any usage of the area code throughout the
+# digiKam code base.
+SET(AREA_CODE_GENERAL       "50003")
+SET(AREA_CODE_KIOSLAVES     "50004")
+SET(AREA_CODE_SHOWFOTO      "50005")
+SET(AREA_CODE_IMAGEPLUGINS  "50006")
+ADD_DEFINITIONS(-DKDE_DEFAULT_DEBUG_AREA=${AREA_CODE_GENERAL})
+
+MACRO(SET_DEBUG_AREA_CODE _areacode)
+    REMOVE_DEFINITIONS(-DKDE_DEFAULT_DEBUG_AREA=${AREA_CODE_GENERAL})
+    ADD_DEFINITIONS(-DKDE_DEFAULT_DEBUG_AREA=${_areacode})
+ENDMACRO(SET_DEBUG_AREA_CODE)
+
+# ==================================================================================================
 # Dependencies
 
 FIND_PACKAGE(KDE4 REQUIRED)
 INCLUDE(KDE4Defaults)
 INCLUDE(MacroLibrary)
-INCLUDE(MacroOptionalAddSubdirectory)
 
 INCLUDE(FindPackageHandleStandardArgs)
 
-MACRO_OPTIONAL_FIND_PACKAGE(LCMS)
-MACRO_OPTIONAL_FIND_PACKAGE(JPEG)
-MACRO_OPTIONAL_FIND_PACKAGE(PNG)
-MACRO_OPTIONAL_FIND_PACKAGE(TIFF)
-MACRO_OPTIONAL_FIND_PACKAGE(Jasper)
-MACRO_OPTIONAL_FIND_PACKAGE(Kdcraw)
-MACRO_OPTIONAL_FIND_PACKAGE(Kexiv2)
-MACRO_OPTIONAL_FIND_PACKAGE(Kipi)
-
-IF(ENABLE_GPHOTO2)
-    MACRO_OPTIONAL_FIND_PACKAGE(Gphoto2)
-ENDIF(ENABLE_GPHOTO2)
+FIND_PACKAGE(LCMS)
+FIND_PACKAGE(JPEG)
+FIND_PACKAGE(PNG)
+FIND_PACKAGE(TIFF)
+FIND_PACKAGE(Jasper)
+FIND_PACKAGE(Kdcraw)
+FIND_PACKAGE(Kexiv2)
+FIND_PACKAGE(Kipi)
 
 # Check KDcraw version installed to compile fine.
 IF(NOT WIN32)
@@ -95,6 +97,9 @@ ENDIF(NOT WIN32)
 # ==================================================================================================
 # Optional dependencies
 
+MACRO_OPTIONAL_FIND_PACKAGE(Gphoto2)
+MACRO_BOOL_TO_01(GPHOTO2_FOUND HAVE_GPHOTO2)
+
 MACRO_OPTIONAL_FIND_PACKAGE(KdepimLibs)
 MACRO_BOOL_TO_01(KDEPIMLIBS_FOUND HAVE_KDEPIMLIBS)
 
@@ -103,7 +108,9 @@ SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_P
 # Check MarbleWidget library for geolocation.
 MACRO_OPTIONAL_FIND_PACKAGE(MarbleWidget)
 MACRO_BOOL_TO_01(MARBLEWIDGET_FOUND HAVE_MARBLEWIDGET)
-INCLUDE(libs/imageproperties/markerclusterholderplugin/CheckPluginBuildable.cmake)
+IF (MARBLEWIDGET_FOUND)
+    INCLUDE(libs/imageproperties/markerclusterholderplugin/CheckPluginBuildable.cmake)
+ENDIF (MARBLEWIDGET_FOUND)
 
 # Check LensFun library for lens correction tool.
 MACRO_OPTIONAL_FIND_PACKAGE(LensFun)
@@ -120,9 +127,6 @@ MACRO_BOOL_TO_01(ENABLE_THUMBS_DB USE_THUMBS_DB)
 IF (${KDE_VERSION} VERSION_GREATER "4.2.70")
     MACRO_OPTIONAL_FIND_PACKAGE(Nepomuk)
     MACRO_BOOL_TO_01(NEPOMUK_FOUND HAVE_NEPOMUK)
-ELSE (${KDE_VERSION} VERSION_GREATER "4.2.70")
-    SET(NEPOMUK_FOUND FALSE)
-    SET(HAVE_NEPOMUK 0)
 ENDIF (${KDE_VERSION} VERSION_GREATER "4.2.70")
 
 # Set config file depending of optional dependencies
@@ -227,32 +231,29 @@ ELSE(KDCRAW_FOR_DIGIKAM)
     MESSAGE(STATUS "")
 ENDIF(KDCRAW_FOR_DIGIKAM)
 
-IF(ENABLE_GPHOTO2)
-    IF(GPHOTO2_FOUND)
-        EXEC_PROGRAM(gphoto2-config ARGS --version RETURN_VALUE _return_VALUE OUTPUT_VARIABLE GPHOTO2_VERSION)
-        STRING(REPLACE "libgphoto2" "" GPHOTO2_VERSION "${GPHOTO2_VERSION}")
-        MACRO_ENSURE_VERSION("2.4.0" "${GPHOTO2_VERSION}" VERSION_GPHOTO2)
-        IF(VERSION_GPHOTO2)
-            MESSAGE(STATUS " libgphoto2 library found............ YES")
-        ELSE(VERSION_GPHOTO2)
-            MESSAGE(STATUS " libgphoto2 library found............ NO")
-            MESSAGE(STATUS " Install libgphoto2 > 2.4.0")
-            MESSAGE(STATUS " Or disable GPhoto2 support using CMake flag")
-            SET(GPHOTO2_FOUND false)
-        ENDIF(VERSION_GPHOTO2)
-    ELSE(GPHOTO2_FOUND)
-        MESSAGE(STATUS " libgphoto2 library found............ NO")
-        MESSAGE(STATUS "")
-        MESSAGE(WARNING " digiKam needs libgphoto2. You need to install libgphoto2 first")
-        MESSAGE(STATUS " libgphoto2 website is at http://www.gphoto.org")
-        MESSAGE(STATUS "")
-    ENDIF(GPHOTO2_FOUND)
-    MACRO_LOG_FEATURE(GPHOTO2_FOUND "libgphoto2" "libgphoto2 is needed to build digikam" "http://www.gphoto.org/" FALSE "" "")
-ELSE(ENABLE_GPHOTO2)
+# ================================================================
+
+IF(GPHOTO2_FOUND)
+    EXEC_PROGRAM(gphoto2-config ARGS --version RETURN_VALUE _return_VALUE OUTPUT_VARIABLE GPHOTO2_VERSION)
+    STRING(REPLACE "libgphoto2" "" GPHOTO2_VERSION "${GPHOTO2_VERSION}")
+    MACRO_ENSURE_VERSION("2.4.0" "${GPHOTO2_VERSION}" VERSION_GPHOTO2)
+    IF(VERSION_GPHOTO2)
+        SET(GPHOTO2_FOUND true)
+    ELSE(VERSION_GPHOTO2)
+        SET(GPHOTO2_FOUND false)
+    ENDIF(VERSION_GPHOTO2)
+ENDIF(GPHOTO2_FOUND)
+
+IF(GPHOTO2_FOUND)
+    MESSAGE(STATUS " libgphoto2 library found............ YES (optional)")
+ELSE(GPHOTO2_FOUND)
+    MESSAGE(STATUS " libgphoto2 library found............ NO  (optional)")
     MESSAGE(STATUS "")
     MESSAGE(STATUS " digiKam will be compiled without GPhoto2 support.")
     MESSAGE(STATUS "")
-ENDIF(ENABLE_GPHOTO2)
+ENDIF(GPHOTO2_FOUND)
+
+# ================================================================
 
 IF(KDEPIMLIBS_FOUND)
     MESSAGE(STATUS " libkdepimlibs library found......... YES (optional)")
@@ -316,18 +317,8 @@ ENDIF(GLIB2_FOUND)
 
 
 IF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND JASPER_FOUND AND KDCRAW_FOR_DIGIKAM AND KEXIV2_FOUND AND KIPI_FOUND)
-    IF(ENABLE_GPHOTO2)
-        IF(GPHOTO2_FOUND)
-            MESSAGE(STATUS " digiKam will be compiled............ YES")
-            SET(DIGIKAM_CAN_BE_COMPILED true)
-        ELSE(GPHOTO2_FOUND)
-            MESSAGE(ERROR " digiKam will be compiled............ NO  (Look README file for more details about dependencies)")
-            SET(DIGIKAM_CAN_BE_COMPILED false)
-        ENDIF(GPHOTO2_FOUND)
-    ELSE(ENABLE_GPHOTO2)
-        MESSAGE(STATUS " digiKam will be compiled............ YES")
-        SET(DIGIKAM_CAN_BE_COMPILED true)
-    ENDIF(ENABLE_GPHOTO2)
+    MESSAGE(STATUS " digiKam will be compiled............ YES")
+    SET(DIGIKAM_CAN_BE_COMPILED true)
 ELSE(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND AND JASPER_FOUND AND KDCRAW_FOR_DIGIKAM AND KEXIV2_FOUND AND KIPI_FOUND)
     MESSAGE(FATAL_ERROR " digiKam will be compiled............ NO  (Look README file for more details about dependencies)")
     SET(DIGIKAM_CAN_BE_COMPILED false)
@@ -1085,10 +1076,12 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/modifier.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/option.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/parseobject.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/parseobjectdialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/parser.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/parseresults.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/renamethread.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/token.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/highlighter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/defaultrenameparser.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/modifiers/defaultvaluemodifier.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/modifiers/firstletterofeachworduppercasemodifier.cpp

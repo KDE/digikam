@@ -3,10 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2009-09-14
- * Description : trimmed token modifier
+ * Date        : 200X-XX-XX
+ * Description : an option to provide <FILL IN PURPOSE> information to the parser
  *
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009 by YOUR NAME <YOUR MAIL ADDRESS>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,28 +21,35 @@
  *
  * ============================================================ */
 
-#include "trimmedmodifier.h"
+#ifndef DUMMYOPTION_H
+#define DUMMYOPTION_H
 
-// KDE includes
+// Qt includes
 
-#include <klocale.h>
+#include <QObject>
+#include <QString>
+
+// Local includes
+
+#include "option.h"
 
 namespace Digikam
 {
 
-TrimmedModifier::TrimmedModifier()
-               : Modifier(i18n("Trimmed"), i18n("Remove leading, trailing and extra whitespace"))
+class DummyOption : public Option
 {
-    addTokenDescription(QString("{trim}"), i18n("Trimmed"), description());
+    Q_OBJECT
 
-    setRegExp("\\{trim\\}");
-}
+public:
 
-QString TrimmedModifier::modifyOperation(const QString& parseString, const QString& result)
-{
-    Q_UNUSED(parseString)
+    DummyOption();
+    ~DummyOption() {};
 
-    return result.simplified();
-}
+protected:
+
+    virtual void parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results);
+};
 
 } // namespace Digikam
+
+#endif /* DUMMYOPTION_H */

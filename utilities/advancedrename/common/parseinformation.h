@@ -47,7 +47,7 @@ public:
     {};
 
     ParseInformation(const ImageInfo& info) :
-        filePath(info.filePath()),
+        fileUrl(info.fileUrl()),
         cameraName(info.photoInfoContainer().make + ' ' + info.photoInfoContainer().model),
         dateTime(info.dateTime()),
         index(1),
@@ -56,13 +56,13 @@ public:
 
     bool isValid()
     {
-        QFileInfo fi(filePath);
+        QFileInfo fi(fileUrl.toLocalFile());
         return fi.isReadable();
     };
 
 public:
 
-    QString   filePath;
+    KUrl      fileUrl;
     QString   cameraName;
     QDateTime dateTime;
     int       index;

@@ -52,7 +52,9 @@ public:
         TokenButtons       = 0x2,
         TokenToolButton    = 0x4,
         ModifierButtons    = 0x8,
-        ModifierToolButton = 0x10
+        ModifierToolButton = 0x10,
+
+        DefaultControls    = TokenButtons | ToolTipButton | ModifierToolButton
     };
     Q_DECLARE_FLAGS(ControlWidgets, ControlWidget)
 
@@ -76,6 +78,7 @@ public:
 Q_SIGNALS:
 
     void signalTextChanged(const QString&);
+    void signalReturnPressed();
 
 public Q_SLOTS:
 

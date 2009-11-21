@@ -89,16 +89,14 @@ void RenameThread::run()
     while (d->running)
     {
         NewNameInfo info;
+        QMutexLocker lock(&d->mutex);
+        if (!d->todo.isEmpty())
         {
-            QMutexLocker lock(&d->mutex);
-            if (!d->todo.isEmpty())
-            {
-                info = d->todo.takeFirst();
-            }
-            else
-            {
-                d->condVar.wait(&d->mutex);
-            }
+            info = d->todo.takeFirst();
+        }
+        else
+        {
+            d->condVar.wait(&d->mutex);
         }
 
         if (!info.first.isEmpty() && !info.second.isEmpty())

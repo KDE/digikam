@@ -52,38 +52,22 @@
 namespace Digikam
 {
 
-class MetadataOptionDialogPriv
+MetadataOptionDialog::MetadataOptionDialog(ParseObject* parent)
+                    : ParseObjectDialog(parent),
+                      metadataPanel(0), separatorLineEdit(0)
 {
-public:
-
-    MetadataOptionDialogPriv() :
-        metadataPanel(0),
-        separatorLineEdit(0)
-    {}
-
-    MetadataPanel* metadataPanel;
-    KLineEdit*     separatorLineEdit;
-};
-
-// --------------------------------------------------------
-
-MetadataOptionDialog::MetadataOptionDialog()
-                    : KDialog(0), d(new MetadataOptionDialogPriv)
-{
-    setCaption(i18n("Add Metadata Keywords"));
-
-    QWidget* mainWidget  = new QWidget;
-    KTabWidget* tab      = new KTabWidget;
-    d->metadataPanel     = new MetadataPanel(tab);
+    QWidget* mainWidget  = new QWidget(this);
+    KTabWidget* tab      = new KTabWidget(this);
+    metadataPanel        = new MetadataPanel(tab);
     QLabel *customLabel  = new QLabel(i18n("Keyword separator:"));
-    d->separatorLineEdit = new KLineEdit;
-    d->separatorLineEdit->setText("_");
+    separatorLineEdit    = new KLineEdit(this);
+    separatorLineEdit->setText("_");
 
     // --------------------------------------------------------
 
     // We only need the "SearchBar" and "ClearBtn" control elements.
     // Also we need to reset the default selections
-    foreach (MetadataSelectorView* viewer, d->metadataPanel->viewers())
+    foreach (MetadataSelectorView* viewer, metadataPanel->viewers())
     {
         viewer->setControlElements(MetadataSelectorView::SearchBar |
                                    MetadataSelectorView::ClearBtn);
@@ -105,7 +89,6 @@ MetadataOptionDialog::MetadataOptionDialog()
         {
             makerNotesTabIndex = i;
         }
-
     }
 
     if (makerNotesTabIndex != -1)
@@ -119,7 +102,7 @@ MetadataOptionDialog::MetadataOptionDialog()
     QHBoxLayout *customLayout = new QHBoxLayout;
     customLayout->addWidget(customLabel);
     customLayout->addStretch(10);
-    customLayout->addWidget(d->separatorLineEdit);
+    customLayout->addWidget(separatorLineEdit);
     customGBox->setLayout(customLayout);
 
     // --------------------------------------------------------
@@ -138,23 +121,12 @@ MetadataOptionDialog::MetadataOptionDialog()
 
     // --------------------------------------------------------
 
-    setMainWidget(mainWidget);
+    setSettingsWidget(mainWidget);
     resize(450, 450);
 }
 
 MetadataOptionDialog::~MetadataOptionDialog()
 {
-    delete d;
-}
-
-QStringList MetadataOptionDialog::checkedTags() const
-{
-    return d->metadataPanel->getAllCheckedTags();
-}
-
-QString MetadataOptionDialog::separator() const
-{
-    return d->separatorLineEdit->text();
 }
 
 // --------------------------------------------------------
@@ -163,8 +135,8 @@ MetadataOption::MetadataOption()
               : Option(i18n("Metadata..."), i18n("Add metadata fields from Exif, IPTC and XMP"))
 {
     // metadataedit icon can be missing if KIPI plugins are not installed, load different icon in this case
-    QIcon icon = KIconLoader::global()->loadIcon("metadataedit", KIconLoader::Small, 0,
-                                                 KIconLoader::DefaultState, QStringList(), 0L, true);
+    QPixmap icon = KIconLoader::global()->loadIcon("metadataedit", KIconLoader::Small, 0,
+                                                   KIconLoader::DefaultState, QStringList(), 0L, true);
     if (icon.isNull())
     {
         icon = SmallIcon("editimage");
@@ -172,7 +144,7 @@ MetadataOption::MetadataOption()
     setIcon(icon);
 
     addTokenDescription("[meta:|keycode|]", i18n("Metadata"),
-             i18n("Add metadata (use the quick access dialog for keycodes)"));
+                        i18n("Add metadata (use the quick access dialog for keycodes)"));
 
     setRegExp("\\[meta:\\s*(.*)\\s*\\s*\\]");
 }
@@ -183,11 +155,11 @@ void MetadataOption::slotTokenTriggered(const QString& token)
 
     QStringList tags;
 
-    QPointer<MetadataOptionDialog> dlg = new MetadataOptionDialog;
+    QPointer<MetadataOptionDialog> dlg = new MetadataOptionDialog(this);
 
     if (dlg->exec() == KDialog::Accepted)
     {
-        QStringList checkedTags = dlg->checkedTags();
+        QStringList checkedTags = dlg->metadataPanel->getAllCheckedTags();
 
         foreach (const QString& tag, checkedTags)
         {
@@ -198,7 +170,7 @@ void MetadataOption::slotTokenTriggered(const QString& token)
 
     if (!tags.isEmpty())
     {
-        QString tokenStr = tags.join(dlg->separator());
+        QString tokenStr = tags.join(dlg->separatorLineEdit->text());
         emit signalTokenTriggered(tokenStr);
     }
 
@@ -230,7 +202,7 @@ QString MetadataOption::parseMetadata(const QString& token, ParseInformation& in
         return tmp;
     }
 
-    DMetadata meta(info.filePath);
+    DMetadata meta(info.fileUrl.toLocalFile());
     if (!meta.isEmpty())
     {
         KExiv2::MetaDataMap dataMap;

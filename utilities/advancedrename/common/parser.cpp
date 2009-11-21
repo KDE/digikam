@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-08-11
- * Description : the main parser object for manual rename
+ * Description : the main parser object for the AdvancedRename utility
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -123,7 +123,7 @@ QString Parser::parse(const QString& parseString, ParseInformation& info)
 QString Parser::parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results,
                                bool modify)
 {
-    QFileInfo fi(info.filePath);
+    QFileInfo fi(info.fileUrl.toLocalFile());
 
     if (!stringIsValid(parseString))
     {

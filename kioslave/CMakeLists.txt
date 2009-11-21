@@ -1,3 +1,4 @@
+SET_DEBUG_AREA_CODE(${AREA_CODE_KIOSLAVES})
 
 INCLUDE_DIRECTORIES(../digikam
                     ../libs/dmetadata 

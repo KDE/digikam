@@ -39,9 +39,14 @@ namespace Digikam
 {
 
 /**
- * @param eventId Event id for this notification, KNotification::Notification
- *                is used if this is empty
- * @param message Message to display
+ * @brief Show a notification using KNotify, or KPassivePopup if KNotify is unavailable
+ * @param eventId     Event id for this notification, KNotification::Notification
+ *                    is used if this is empty. Events have to be configured in
+ *                    digikam.notifyrc
+ * @param message     Message to display
+ * @param widget      Widget which owns the notification
+ * @param windowTitle Title of the notification window (only used for KPassivePopup)
+ * @param pixmap      Pixmap to show in the notification, in addition to the digikam logo.
  */
 void KNotificationWrapper(const QString& eventId, const QString& message,
                           QWidget* const widget, const QString& windowTitle,
@@ -49,25 +54,29 @@ void KNotificationWrapper(const QString& eventId, const QString& message,
 {
     // TODO: this detection is not perfect because KNotify may never be started
     //       because we never try, but at least we get notifications in any case
+    //       In a regular KDE session, KNotify should be running already.
     if (!QDBusConnection::sessionBus().interface()->isServiceRegistered("org.kde.knotify"))
     {
         KPassivePopup::message(windowTitle, message, widget);
     }
     else
     {
-        QPixmap logoPixmap = pixmap;
-        if (logoPixmap.isNull())
-        {
-            logoPixmap = QPixmap(SmallIcon("digikam"));
-        }
-
         if (eventId.isEmpty())
         {
+            // no event id given, we need to provide a logo here:
+            QPixmap logoPixmap = pixmap;
+            if (logoPixmap.isNull())
+            {
+                logoPixmap = QPixmap(SmallIcon("digikam"));
+            }
+
             KNotification::event(KNotification::Notification, message, logoPixmap, widget);
         }
         else
         {
-            KNotification::event(eventId, message, logoPixmap, widget);
+            // even if pixmap is empty, a digikam logo is taken from
+            // digikam.notifyrc
+            KNotification::event(eventId, message, pixmap, widget);
         }
     }
 }

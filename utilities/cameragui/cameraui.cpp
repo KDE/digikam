@@ -71,6 +71,7 @@
 #include <kmenu.h>
 #include <kmenubar.h>
 #include <kmessagebox.h>
+#include <knotifyconfigwidget.h>
 #include <kshortcutsdialog.h>
 #include <kstandarddirs.h>
 #include <kstatusbar.h>
@@ -480,9 +481,10 @@ void CameraUI::setupActions()
 
     d->showMenuBarAction = KStandardAction::showMenubar(this, SLOT(slotShowMenuBar()), actionCollection());
 
-    KStandardAction::keyBindings(this, SLOT(slotEditKeys()),           actionCollection());
-    KStandardAction::configureToolbars(this, SLOT(slotConfToolbars()), actionCollection());
-    KStandardAction::preferences(this, SLOT(slotSetup()),              actionCollection());
+    KStandardAction::keyBindings(this,            SLOT(slotEditKeys()),          actionCollection());
+    KStandardAction::configureToolbars(this,      SLOT(slotConfToolbars()),      actionCollection());
+    KStandardAction::configureNotifications(this, SLOT(slotConfNotifications()), actionCollection());
+    KStandardAction::preferences(this,            SLOT(slotSetup()),             actionCollection());
 
     // ---------------------------------------------------------------------------------
 
@@ -1756,7 +1758,7 @@ void CameraUI::slotDownloaded(const QString& folder, const QString& file, int st
         else
         {
             // Pop-up a message to bring user when all is done.
-            KNotificationWrapper("", i18n("Download is completed..."), this, windowTitle());
+            KNotificationWrapper("cameradownloaded", i18n("Download is completed..."), this, windowTitle());
         }
     }
 }
@@ -2154,6 +2156,11 @@ void CameraUI::slotConfToolbars()
             this, SLOT(slotNewToolbarConfig()));
 
     dlg.exec();
+}
+
+void CameraUI::slotConfNotifications()
+{
+    KNotifyConfigWidget::configure(this);
 }
 
 void CameraUI::slotNewToolbarConfig()

@@ -136,6 +136,7 @@ TARGET_LINK_LIBRARIES(digikamcore
                       ${KDE4_KIO_LIBS}
                       ${KDE4_KFILE_LIBS}
                       ${KDE4_KHTML_LIBS}
+                      ${KDE4_KNOTIFYCONFIG_LIBRARY}
                       ${KDE4_KDEUI_LIBS}
                       ${KDE4_KUTILS_LIBS}
                       ${KDE4_SOLID_LIBS}
@@ -181,8 +182,8 @@ ELSE(WIN32)
     SET_SOURCE_FILES_PROPERTIES(${libsqlite2_SRCS} PROPERTIES COMPILE_FLAGS "-w")
 ENDIF(WIN32)
 
-# Disable libpgf warnings.
-SET_SOURCE_FILES_PROPERTIES(${libpgf_SRCS} PROPERTIES COMPILE_FLAGS "-w")
+## Disable libpgf warnings.
+#SET_SOURCE_FILES_PROPERTIES(${libpgf_SRCS} PROPERTIES COMPILE_FLAGS "-w")
 
 SET(digikamdatabase_LIB_SRCS ${libdatabase_SRCS}
                              ${libhaar_SRCS}
@@ -212,30 +213,30 @@ INSTALL(TARGETS digikamdatabase ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 IF (NEPOMUK_FOUND)
 
-    set(digikamnepomukservices_SRCS ${libnepomukservices_SRCS} )
+    SET(digikamnepomukservices_SRCS ${libnepomukservices_SRCS} )
 
-    kde4_add_plugin(digikamnepomukservice ${digikamnepomukservices_SRCS})
+    KDE4_ADD_PLUGIN(digikamnepomukservice ${digikamnepomukservices_SRCS})
 
-    target_link_libraries(digikamnepomukservice
-                        ${KDE4_KIO_LIBS}
-                        ${KDE4_SOLID_LIBS}
-                        ${KIPI_LIBRARIES}
-                        ${KEXIV2_LIBRARIES}
-                        ${KDCRAW_LIBRARIES}
-                        ${QT_QTSQL_LIBRARY}
-                        ${SOPRANO_CLIENT_LIBRARIES}
-                        ${SOPRANO_LIBRARIES}
-                        ${KDE4_KDEUI_LIBS}
-                        ${KDE4_KIO_LIBS}
-                        ${NEPOMUK_LIBRARIES}
-                        digikamcore
-                        digikamdatabase
-                        )
+    TARGET_LINK_LIBRARIES(digikamnepomukservice
+                          ${KDE4_KIO_LIBS}
+                          ${KDE4_SOLID_LIBS}
+                          ${KIPI_LIBRARIES}
+                          ${KEXIV2_LIBRARIES}
+                          ${KDCRAW_LIBRARIES}
+                          ${QT_QTSQL_LIBRARY}
+                          ${SOPRANO_CLIENT_LIBRARIES}
+                          ${SOPRANO_LIBRARIES}
+                          ${KDE4_KDEUI_LIBS}
+                          ${KDE4_KIO_LIBS}
+                          ${NEPOMUK_LIBRARIES}
+                          digikamcore
+                          digikamdatabase
+                         )
 
-    install(
+    INSTALL(
     FILES ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/nepomuk/digikamnepomukservice.desktop
     DESTINATION ${SERVICES_INSTALL_DIR})
-    install(
+    INSTALL(
     TARGETS digikamnepomukservice
     DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -277,6 +278,7 @@ TARGET_LINK_LIBRARIES(digikam
                       ${KDE4_PHONON_LIBS}
                       ${KDE4_KHTML_LIBS}
                       ${KDE4_KUTILS_LIBS}
+                      ${KDE4_KNOTIFYCONFIG_LIBRARY}
                       ${KDE4_SOLID_LIBS}
                       ${KIPI_LIBRARIES}
                       ${KEXIV2_LIBRARIES}
@@ -305,4 +307,5 @@ INSTALL(TARGETS digikam ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 INSTALL(FILES digikam.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
 INSTALL(FILES digikamui.rc DESTINATION ${DATA_INSTALL_DIR}/digikam)
+INSTALL(FILES digikam.notifyrc DESTINATION ${DATA_INSTALL_DIR}/digikam)
 INSTALL(FILES digikam_export.h DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)

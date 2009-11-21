@@ -1,0 +1,9 @@
+ADDING NEW OPTIONS:
+
+Just copy the 'dummyoption' class in here and change it to your needs.
+A little explanation has been added to the class.
+Take a look at all the other option classes to see how they work.
+
+After you implemented your new rename option, you need to register it with one of the parsers.
+Right now only one parser exists, it is called 'DefaultRenameParser' and can be found in
+'utilities/advancedrename/parser/'

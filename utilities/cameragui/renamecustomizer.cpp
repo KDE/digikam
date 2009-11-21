@@ -195,7 +195,7 @@ QString RenameCustomizer::newName(const QString& fileName, const QDateTime& date
     if (d->renameCustom->isChecked())
     {
         ParseInformation parseInfo;
-        parseInfo.filePath   = fileName;
+        parseInfo.fileUrl    = fileName;
         parseInfo.cameraName = cameraName;
         parseInfo.dateTime   = dateTime;
         parseInfo.index      = index;

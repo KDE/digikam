@@ -56,7 +56,7 @@ void AdvancedRenameWidgetTest::testFileNameToken()
     DefaultRenameParser parser;
 
     ParseInformation info;
-    info.filePath   = filename;
+    info.fileUrl = filename;
 
     QString parsed = parser.parse(parseString, info);
     QCOMPARE(parsed, result);
@@ -76,8 +76,8 @@ void AdvancedRenameWidgetTest::testFileExtensionToken_data()
     QTest::newRow("[ext]_lala_####") << QString("[ext]_lala_####") << filename << QString("jpg_lala_0001.jpg");
     QTest::newRow("[ext]_lala_####[ext]") << QString("[ext]_lala_####[ext]") << filename << QString("jpg_lala_0001jpg.jpg");
     QTest::newRow("[ext]_lala_####.[ext]") << QString("[ext]_lala_####.[ext]") << filename << QString("jpg_lala_0001.jpg");
-    QTest::newRow("[ext]_lala_####.[ext]&") << QString("[ext]_lala_####.[ext]&") << filename << QString("jpg_lala_0001.JPG");
-    QTest::newRow("[ext]_lala_####[ext]&") << QString("[ext]_lala_####[ext]&") << filename << QString("jpg_lala_0001JPG.jpg");
+    QTest::newRow("[ext]_lala_####.[ext]{upper}") << QString("[ext]_lala_####.[ext]{upper}") << filename << QString("jpg_lala_0001.JPG");
+    QTest::newRow("[ext]_lala_####[ext]{upper}") << QString("[ext]_lala_####[ext]{upper}") << filename << QString("jpg_lala_0001JPG.jpg");
 }
 
 void AdvancedRenameWidgetTest::testFileExtensionToken()
@@ -89,7 +89,7 @@ void AdvancedRenameWidgetTest::testFileExtensionToken()
     DefaultRenameParser parser;
 
     ParseInformation info;
-    info.filePath   = filename;
+    info.fileUrl   = filename;
 
     QString parsed = parser.parse(parseString, info);
     QCOMPARE(parsed, result);
@@ -118,7 +118,7 @@ void AdvancedRenameWidgetTest::testDirectoryNameToken()
     DefaultRenameParser parser;
 
     ParseInformation info;
-    info.filePath   = filename;
+    info.fileUrl   = filename;
 
     QString parsed = parser.parse(parseString, info);
     QCOMPARE(parsed, result);
@@ -160,7 +160,7 @@ void AdvancedRenameWidgetTest::testNumberToken()
     DefaultRenameParser parser;
 
     ParseInformation info;
-    info.filePath = QString("myimage_1234.jpg");
+    info.fileUrl = QString("myimage_1234.jpg");
     info.index = index;
 
     QString parsed = parser.parse(parseString, info);
@@ -175,11 +175,11 @@ void AdvancedRenameWidgetTest::testTrimmedModifier_data()
 
     QString fileName("myfilename001.jpg");
 
-    QTest::newRow("01") << QString("[file]!") << QString("myfilename001 .jpg")  << fileName;
-    QTest::newRow("02") << QString("[file]!") << QString(" myfilename001 .jpg") << fileName;
+    QTest::newRow("01") << QString("[file]{trim}") << QString("myfilename001 .jpg")  << fileName;
+    QTest::newRow("02") << QString("[file]{trim}") << QString(" myfilename001 .jpg") << fileName;
 
-    QTest::newRow("03") << QString("[file]!") << QString("       myfilename001      .jpg")    << fileName;
-    QTest::newRow("04") << QString("[file]!") << QString("        myfilename    001    .jpg") << QString("myfilename 001.jpg");
+    QTest::newRow("03") << QString("[file]{trim}") << QString("       myfilename001      .jpg")    << fileName;
+    QTest::newRow("04") << QString("[file]{trim}") << QString("        myfilename    001    .jpg") << QString("myfilename 001.jpg");
 }
 
 void AdvancedRenameWidgetTest::testTrimmedModifier()
@@ -191,7 +191,7 @@ void AdvancedRenameWidgetTest::testTrimmedModifier()
     DefaultRenameParser parser;
 
     ParseInformation info;
-    info.filePath   = filename;
+    info.fileUrl   = filename;
 
     QString parsed = parser.parse(parseString, info);
     QCOMPARE(parsed, result);
@@ -205,13 +205,17 @@ void AdvancedRenameWidgetTest::testFirstLetterOfEachWordUppercaseModifier_data()
 
     QString fileName("myfilename001.jpg");
 
-    QTest::newRow("[file]*")      << QString("[file]*")  << fileName                << QString("Myfilename001.jpg");
-    QTest::newRow("[file]**")     << QString("[file]**") << fileName                << QString("Myfilename001.jpg");
-    QTest::newRow("my image.jpg") << QString("[file]*")  << QString("my image.jpg") << QString("My Image.jpg");
-    QTest::newRow("my_image.jpg") << QString("[file]*")  << QString("my_image.jpg") << QString("My_Image.jpg");
+    QTest::newRow("[file]{firstupper}") << QString("[file]{firstupper}")
+                                        << fileName << QString("Myfilename001.jpg");
 
-    QTest::newRow("[file]*(token in filename)") << QString("[file]*") << QString("myfilename*001.jpg")
-                                                << QString("Myfilename*001.jpg");
+    QTest::newRow("[file]{firstupper}{firstupper}") << QString("[file]{firstupper}{firstupper}")
+                                                    << fileName << QString("Myfilename001.jpg");
+
+    QTest::newRow("my image.jpg") << QString("[file]{firstupper}")
+                                  << QString("my image.jpg") << QString("My Image.jpg");
+
+    QTest::newRow("my_image.jpg") << QString("[file]{firstupper}")
+                                  << QString("my_image.jpg") << QString("My_Image.jpg");
 }
 
 void AdvancedRenameWidgetTest::testFirstLetterOfEachWordUppercaseModifier()
@@ -223,7 +227,7 @@ void AdvancedRenameWidgetTest::testFirstLetterOfEachWordUppercaseModifier()
     DefaultRenameParser parser;
 
     ParseInformation info;
-    info.filePath   = filename;
+    info.fileUrl   = filename;
 
     QString parsed = parser.parse(parseString, info);
     QCOMPARE(parsed, result);
@@ -237,11 +241,11 @@ void AdvancedRenameWidgetTest::testChainedModifiers_data()
 
     QString fileName("myfilename001.jpg");
 
-    QTest::newRow("[file]*&")    << QString("[file]*&")    << fileName << QString("MYFILENAME001.jpg");
-    QTest::newRow("[file]{3-}*") << QString("[file]{3-}*") << fileName << QString("Filename001.jpg");
+    QTest::newRow("[file]*{upper}") << QString("[file]{firstupper}{upper}") << fileName << QString("MYFILENAME001.jpg");
+    QTest::newRow("[file]{3-}*")    << QString("[file]{3-}{firstupper}")    << fileName << QString("Filename001.jpg");
 
-    QTest::newRow("[file]{3-}{\"name\",\"age\"}*") << QString("[file]{3-}{\"name\",\"age\"}*")
-                                                   << fileName << QString("Fileage001.jpg");
+    QTest::newRow("[file]{3-}{r:\"name\",\"age\"}{firstupper}") << QString("[file]{3-}{r:\"name\",\"age\"}{firstupper}")
+                                                                << fileName << QString("Fileage001.jpg");
 }
 
 void AdvancedRenameWidgetTest::testChainedModifiers()
@@ -253,7 +257,7 @@ void AdvancedRenameWidgetTest::testChainedModifiers()
     DefaultRenameParser parser;
 
     ParseInformation info;
-    info.filePath   = filename;
+    info.fileUrl   = filename;
 
     QString parsed = parser.parse(parseString, info);
     QCOMPARE(parsed, result);
@@ -267,17 +271,17 @@ void AdvancedRenameWidgetTest::testUppercaseModifier_data()
 
     QString fileName("myfilename001.jpg");
 
-    QTest::newRow("myfilename001.jpg")  << QString("[file]&") << fileName << QString("MYFILENAME001.jpg");
-    QTest::newRow("my/filename001.jpg") << QString("[file]&") << QString("my/filename001.jpg")
+    QTest::newRow("myfilename001.jpg")  << QString("[file]{upper}") << fileName << QString("MYFILENAME001.jpg");
+    QTest::newRow("my/filename001.jpg") << QString("[file]{upper}") << QString("my/filename001.jpg")
                                         << QString("FILENAME001.jpg");
 
-    QTest::newRow("myfilename001.jpg(token in filename)") << QString("[file]&") << QString("myfilename0&01.jpg")
+    QTest::newRow("myfilename001.jpg(token in filename)") << QString("[file]{upper}") << QString("myfilename0&01.jpg")
                                                           << QString("MYFILENAME0&01.jpg");
 
-    QTest::newRow("my image.jpg") << QString("[file]&") << QString("my image.jpg")
+    QTest::newRow("my image.jpg") << QString("[file]{upper}") << QString("my image.jpg")
                                   << QString("MY IMAGE.jpg");
 
-    QTest::newRow("my_image.jpg") << QString("[file]&") << QString("my_image.jpg")
+    QTest::newRow("my_image.jpg") << QString("[file]{upper}") << QString("my_image.jpg")
                                   << QString("MY_IMAGE.jpg");
 }
 
@@ -290,7 +294,7 @@ void AdvancedRenameWidgetTest::testUppercaseModifier()
     DefaultRenameParser parser;
 
     ParseInformation info;
-    info.filePath   = filename;
+    info.fileUrl   = filename;
 
     QString parsed = parser.parse(parseString, info);
     QCOMPARE(parsed, result);
@@ -336,7 +340,7 @@ void AdvancedRenameWidgetTest::testRangeModifier()
     DefaultRenameParser parser;
 
     ParseInformation info;
-    info.filePath = filename;
+    info.fileUrl = filename;
 
     QString parsed = parser.parse(parseString, info);
     QCOMPARE(parsed, result);
@@ -352,10 +356,10 @@ void AdvancedRenameWidgetTest::testDefaultValueModifier_data()
     QString fileName("DSC1234.jpg");
     QDateTime curdate = QDateTime::currentDateTime();
 
-    QTest::newRow("[cam]_[file]") << QString("[cam]{\"Unknown\"}_[file]") << fileName << QString("Canon Powershot A80")
+    QTest::newRow("[cam]_[file]") << QString("[cam]{d:\"Unknown\"}_[file]") << fileName << QString("Canon Powershot A80")
                                   << QString("Canon Powershot A80_DSC1234.jpg");
 
-    QTest::newRow("[cam]{\"Unknown\"}_[file]") << QString("[cam]{\"Unknown\"}_[file]") << fileName << QString()
+    QTest::newRow("[cam]{\"Unknown\"}_[file]") << QString("[cam]{d:\"Unknown\"}_[file]") << fileName << QString()
                                                << QString("Unknown_DSC1234.jpg");
 }
 
@@ -369,7 +373,7 @@ void AdvancedRenameWidgetTest::testDefaultValueModifier()
     DefaultRenameParser parser;
 
     ParseInformation info;
-    info.filePath   = filename;
+    info.fileUrl   = filename;
     info.cameraName = camera;
 
     QString parsed = parser.parse(parseString, info);
@@ -384,15 +388,12 @@ void AdvancedRenameWidgetTest::testLowercaseModifier_data()
 
     QString fileName("myfilename001.jpg");
 
-    QTest::newRow("myfilename001.jpg") << QString("[file]%") << fileName << QString("myfilename001.jpg");
+    QTest::newRow("myfilename001.jpg") << QString("[file]{lower}") << fileName << QString("myfilename001.jpg");
 
-    QTest::newRow("myfilename001.jpg(token in filename)") << QString("[file]%") << QString("mYfilenAme0%01.jpg")
-                                                          << QString("myfilename0%01.jpg");
-
-    QTest::newRow("my image.jpg") << QString("[file]%") << QString("MY image.jpg")
+    QTest::newRow("my image.jpg") << QString("[file]{lower}") << QString("MY image.jpg")
                                   << QString("my image.jpg");
 
-    QTest::newRow("my_image.jpg") << QString("[file]%") << QString("mY_Image.jpg")
+    QTest::newRow("my_image.jpg") << QString("[file]{lower}") << QString("mY_Image.jpg")
                                   << QString("my_image.jpg");
 }
 
@@ -405,7 +406,7 @@ void AdvancedRenameWidgetTest::testLowercaseModifier()
     DefaultRenameParser parser;
 
     ParseInformation info;
-    info.filePath = filename;
+    info.fileUrl = filename;
 
     QString parsed = parser.parse(parseString, info);
     QCOMPARE(parsed, result);
@@ -456,7 +457,7 @@ void AdvancedRenameWidgetTest::testCameraToken()
     DefaultRenameParser parser;
 
     ParseInformation info;
-    info.filePath   = filename;
+    info.fileUrl    = filename;
     info.cameraName = cameraName;
     info.dateTime   = cameraDate;
     info.index      = index;
@@ -473,7 +474,7 @@ void AdvancedRenameWidgetTest::testEmptyParseString()
     DefaultRenameParser parser;
 
     ParseInformation info;
-    info.filePath   = filename;
+    info.fileUrl    = filename;
     info.cameraName = QString();
     info.index      = 1;
     info.dateTime   = curdate;
@@ -489,6 +490,6 @@ void AdvancedRenameWidgetTest::testEmptyParseString()
     QCOMPARE(parsed, QString("myfilename001.jpg"));
 
     // the following is not invalid
-    parsed = parser.parse(QString("  [file]%_##"), info);
+    parsed = parser.parse(QString("  [file]{lower}_##"), info);
     QCOMPARE(parsed, QString("  myfilename001_01.jpg"));
 }

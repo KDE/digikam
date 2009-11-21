@@ -26,6 +26,7 @@
 // Qt includes
 
 #include <QDateTime>
+#include <QPointer>
 #include <QTimer>
 
 // KDE includes
@@ -91,11 +92,11 @@ QVariant DateFormat::formatType(QString identifier)
 
 // --------------------------------------------------------
 
-DateOptionDialog::DateOptionDialog(QWidget* parent)
-                : KDialog(parent), ui(new Ui::DateOptionDialogWidget)
+DateOptionDialog::DateOptionDialog(ParseObject* parent)
+                : ParseObjectDialog(parent), ui(new Ui::DateOptionDialogWidget)
 {
-    ui->setupUi(mainWidget());
-    setWindowTitle(i18n("Add Date & Time"));
+    QWidget* mainWidget = new QWidget(this);
+    ui->setupUi(mainWidget);
 
     // fill the date format combobox
     DateFormat df;
@@ -116,6 +117,10 @@ DateOptionDialog::DateOptionDialog(QWidget* parent)
 
     ui->dateFormatPicker->setCurrentIndex(DateFormat::Standard);
     slotDateFormatChanged(ui->dateFormatPicker->currentIndex());
+
+    // --------------------------------------------------------
+
+    setSettingsWidget(mainWidget);
 }
 
 DateOptionDialog::~DateOptionDialog()
@@ -170,8 +175,9 @@ void DateOptionDialog::updateExampleLabel()
 // --------------------------------------------------------
 
 DateOption::DateOption()
-          : Option(i18n("Date && Time..."), i18n("Add date and time information"),
-                        SmallIcon("view-pim-calendar"))
+          : Option(i18n("Date && Time..."),
+                   i18n("Add date and time information"),
+                   SmallIcon("view-pim-calendar"))
 {
     setUseTokenMenu(false);
 
@@ -229,11 +235,12 @@ void DateOption::slotTokenTriggered(const QString& token)
 {
     Q_UNUSED(token)
 
-    QString tokenStr      = QString("[date:%1]");
-    DateOptionDialog* dlg = new DateOptionDialog;
     QVariant v;
     DateFormat df;
-    QString tmp;
+    QString dateString;
+
+    QString tokenStr               = QString("[date:%1]");
+    QPointer<DateOptionDialog> dlg = new DateOptionDialog(this);
 
     if (dlg->exec() == KDialog::Accepted)
     {
@@ -251,11 +258,11 @@ void DateOption::slotTokenTriggered(const QString& token)
 
             if (v.type() == QVariant::String)
             {
-                tmp = date.toString(v.toString());
+                dateString = date.toString(v.toString());
             }
             else
             {
-                tmp = date.toString((Qt::DateFormat)v.toInt());
+                dateString = date.toString((Qt::DateFormat)v.toInt());
             }
         }
         else        // use predefined keywords for date formatting
@@ -263,22 +270,22 @@ void DateOption::slotTokenTriggered(const QString& token)
             switch (index)
             {
                 case DateFormat::Standard:
-                    tmp = tokenStr.arg(QString(""));
-                    tmp.remove(':');
+                    dateString = tokenStr.arg(QString(""));
+                    dateString.remove(':');
                     break;
                 case DateFormat::Custom:
-                    tmp = tokenStr.arg(dlg->ui->customFormatInput->text());
+                    dateString = tokenStr.arg(dlg->ui->customFormatInput->text());
                     break;
                 default:
                     QString identifier = df.identifier((DateFormat::Type) index);
-                    tmp = tokenStr.arg(identifier);
+                    dateString         = tokenStr.arg(identifier);
                     break;
             }
         }
     }
 
     delete dlg;
-    emit signalTokenTriggered(tmp);
+    emit signalTokenTriggered(dateString);
 }
 
 } // namespace Digikam

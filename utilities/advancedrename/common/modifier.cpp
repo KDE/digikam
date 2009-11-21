@@ -26,7 +26,7 @@
 namespace Digikam
 {
 
-Modifier::Modifier(const QString& name, const QString& description, const QIcon& icon)
+Modifier::Modifier(const QString& name, const QString& description, const QPixmap& icon)
         : ParseObject(name, icon)
 {
     setDescription(description);

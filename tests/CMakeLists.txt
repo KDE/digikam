@@ -31,6 +31,7 @@ SET(advancedrenametest_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/common/modifier.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/common/option.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/common/parseobject.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/common/parseobjectdialog.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/common/parser.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/common/parseresults.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/common/token.cpp

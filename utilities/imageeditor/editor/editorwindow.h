@@ -205,6 +205,7 @@ protected Q_SLOTS:
     void slotAboutToShowRedoMenu();
 
     void slotConfToolbars();
+    void slotConfNotifications();
     void slotNewToolbarConfig();
 
     void slotToggleFullScreen();

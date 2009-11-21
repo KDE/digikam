@@ -45,7 +45,7 @@
 #include "rawcameradlg.h"
 #include "dbstatdlg.h"
 
-#ifdef ENABLE_GPHOTO2
+#ifdef HAVE_GPHOTO2
 
 // LibGphoto2 includes
 
@@ -54,7 +54,7 @@ extern "C"
 #include <gphoto2-version.h>
 }
 
-#endif /* ENABLE_GPHOTO2 */
+#endif /* HAVE_GPHOTO2 */
 
 namespace Digikam
 {
@@ -64,9 +64,9 @@ static inline void showDigikamComponentsInfo()
     // Set digiKam specific components info list.
     QMap<QString, QString> list;
 
-#ifdef ENABLE_GPHOTO2
+#ifdef HAVE_GPHOTO2
     list.insert(i18n("LibGphoto2"), QString(gp_library_version(GP_VERSION_SHORT)[0]));
-#endif /* ENABLE_GPHOTO2 */
+#endif /* HAVE_GPHOTO2 */
 
     list.insert(i18n("LibKipi"),    KIPI::Interface::version());
 

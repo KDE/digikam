@@ -24,13 +24,10 @@
 #ifndef RANGEMODIFIER_H
 #define RANGEMODIFIER_H
 
-// KDE includes
-
-#include <kdialog.h>
-
 // Local includes
 
 #include "modifier.h"
+#include "parseobjectdialog.h"
 
 class QCheckBox;
 class QGroupBox;
@@ -39,15 +36,13 @@ class KIntNumInput;
 namespace Digikam
 {
 
-class RangeDialogPriv;
-
-class RangeDialog : public KDialog
+class RangeDialog : public ParseObjectDialog
 {
     Q_OBJECT
 
 public:
 
-    RangeDialog();
+    RangeDialog(ParseObject* parent);
     ~RangeDialog();
 
     KIntNumInput* startInput;

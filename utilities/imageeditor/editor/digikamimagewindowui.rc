@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="32" name="digikamimagewindow" >
+<gui version="33" name="digikamimagewindow" >
 
 <MenuBar>
 
@@ -93,6 +93,7 @@
         <Action name="theme_menu" />
         <Action name="options_configure_keybinding"/>
         <Action name="options_configure_toolbars"/>
+        <Action name="options_configure_notifications"/>
         <Action name="options_configure" />
     </Menu>
 
