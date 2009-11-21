@@ -93,8 +93,6 @@ void AlbumFolderViewNew::setEnableToolTips(bool enable)
 void AlbumFolderViewNew::contextMenuEvent(QContextMenuEvent *event)
 {
 
-    Q_UNUSED(event);
-
     PAlbum *album = dynamic_cast<PAlbum*> (albumFilterModel()->albumForIndex(
                     indexAt(event->pos())));
     if (!album)

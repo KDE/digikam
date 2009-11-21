@@ -49,11 +49,11 @@ public:
 };
 
 AlbumFolderViewSideBarWidget::AlbumFolderViewSideBarWidget(QWidget *parent,
-                AlbumModel *model) :
+                AlbumModel *model, AlbumModificationHelper *albumModificationHelper) :
     SideBarWidget(parent), d(new AlbumFolderViewSideBarWidgetPriv)
 {
 
-    d->albumModificationHelper = new AlbumModificationHelper(this, this);
+    d->albumModificationHelper = albumModificationHelper;
 
     QVBoxLayout *layout = new QVBoxLayout(this);
 
@@ -143,18 +143,20 @@ public:
     TagModel *tagModel;
     SearchTextBar *tagSearchBar;
     TagFolderViewNew *tagFolderView;
+    TagModificationHelper *tagModificationHelper;
 };
 
 TagViewSideBarWidget::TagViewSideBarWidget(QWidget *parent,
-                TagModel *model) :
+                TagModel *model, TagModificationHelper *tagModificationHelper) :
     SideBarWidget(parent), d(new TagViewSideBarWidgetPriv)
 {
 
     d->tagModel = model;
+    d->tagModificationHelper = tagModificationHelper;
 
     QVBoxLayout *layout = new QVBoxLayout(this);
 
-    d->tagFolderView = new TagFolderViewNew(this, model);
+    d->tagFolderView = new TagFolderViewNew(this, model, tagModificationHelper);
     d->tagSearchBar  = new SearchTextBar(this, "DigikamViewTagSearchBar");
     d->tagSearchBar->setHighlightOnCompletion(true);
     d->tagSearchBar->setModel(model);
@@ -164,15 +166,8 @@ TagViewSideBarWidget::TagViewSideBarWidget(QWidget *parent,
 
     connect(d->tagSearchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
             d->tagFolderView, SLOT(setSearchTextSettings(const SearchTextSettings&)));
-    // TODO update
-    //connect(d->tagFolderView, SIGNAL(signalFindDuplicatesInTag(Album*)),
-    //        this, SIGNAL(signalFindDuplicatesInAlbum(Album*)));
-
-    // TODO update, legacy signal passing
-    //connect(d->tagFolderView, SIGNAL(signalProgressBarMode(int, const QString&)),
-    //        this, SIGNAL(signalProgressBarMode(int, const QString&)));
-    //connect(d->tagFolderView, SIGNAL(signalProgressValue(int)),
-    //        this, SIGNAL(signalProgressValue(int)));
+    connect(d->tagFolderView, SIGNAL(signalFindDuplicatesInAlbum(Album*)),
+            this, SIGNAL(signalFindDuplicatesInAlbum(Album*)));
 
 }
 
@@ -206,12 +201,7 @@ void TagViewSideBarWidget::applySettings()
 
 void TagViewSideBarWidget::changeAlbumFromHistory(Album *album)
 {
-    // TODO, update
-    //Q3ListViewItem *item = (Q3ListViewItem*) album->extraData(d->tagFolderView);
-    //if (!item)
-    //    return;
-    //d->tagFolderView->setSelected(item, true);
-    //d->tagFolderView->ensureItemVisible(item);
+    d->tagFolderView->slotSelectAlbum(album);
 }
 
 QPixmap TagViewSideBarWidget::getIcon()
@@ -224,11 +214,9 @@ QString TagViewSideBarWidget::getCaption()
     return i18n("Tags");
 }
 
-void TagViewSideBarWidget::selectItem(int tagID)
+void TagViewSideBarWidget::slotSelectAlbum(Album *album)
 {
-    // TODO update
-    // Set the current tag in the tag folder view.
-    //d->tagFolderView->selectItem(tagID);
+    d->tagFolderView->slotSelectAlbum(album);
 }
 
 // -----------------------------------------------------------------------------

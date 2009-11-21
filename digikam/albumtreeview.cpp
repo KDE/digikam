@@ -39,6 +39,7 @@
 #include "albummodeldragdrophandler.h"
 #include "albumsettings.h"
 #include "albumthumbnailloader.h"
+#include "tagdragdrop.h"
 
 namespace Digikam
 {
@@ -545,11 +546,18 @@ PAlbum *AlbumTreeView::albumForIndex(const QModelIndex &index) const
 TagTreeView::TagTreeView(TagModel *model, QWidget *parent)
     : AbstractCheckableAlbumTreeView(model, parent)
 {
+    albumModel()->setDragDropHandler(new TagDragDropHandler(albumModel()));
+
     connect(AlbumManager::instance(), SIGNAL(signalTAlbumsDirty(const QMap<int, int>&)),
              m_albumModel, SLOT(setCountMap(const QMap<int, int>&)));
 
     expand(m_albumFilterModel->rootAlbumIndex());
     setRootIsDecorated(false);
+
+    setDragEnabled(true);
+    setAcceptDrops(true);
+    setDropIndicatorShown(false);
+    setAutoExpandDelay(300);
 }
 
 TagModel *TagTreeView::albumModel() const

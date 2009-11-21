@@ -173,12 +173,17 @@ public:
 
 class TagTreeView : public AbstractCheckableAlbumTreeView
 {
+    Q_OBJECT
 public:
 
     TagTreeView(TagModel *model, QWidget *parent = 0);
     TagModel *albumModel() const;
     TAlbum *currentAlbum() const;
     TAlbum *albumForIndex(const QModelIndex &index) const;
+
+Q_SIGNALS:
+    void assignTags(int tagId, const QList<int>& imageIDs);
+
 };
 
 class SearchTreeView : public AbstractAlbumTreeView

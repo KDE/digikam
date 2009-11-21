@@ -1641,6 +1641,11 @@ PAlbum* AlbumManager::currentPAlbum() const
     return dynamic_cast<PAlbum*> (d->currentAlbum);
 }
 
+TAlbum* AlbumManager::currentTAlbum() const
+{
+    return dynamic_cast<TAlbum*> (d->currentAlbum);
+}
+
 PAlbum* AlbumManager::findPAlbum(const KUrl& url) const
 {
     CollectionLocation location = CollectionManager::instance()->locationForUrl(url);

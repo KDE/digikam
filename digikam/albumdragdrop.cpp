@@ -71,7 +71,7 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView *view, QDropEvent *e, con
 
         PAlbum *droppedAlbum = AlbumManager::instance()->findPAlbum(albumId);
 
-        // TODO: Copy?
+        // TODO Copy?
         KMenu popMenu(view);
         popMenu.addTitle(SmallIcon("digikam"), i18n("My Albums"));
         QAction *moveAction = popMenu.addAction(SmallIcon("go-jump"), i18n("&Move Here"));

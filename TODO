@@ -10,6 +10,7 @@ post 1.0.0 mvc merge
  * decide which additional sidebar handling code currently placed in digikamview
    should be moved to the sidebar class directly
  * slotGotoAlbumAndItem doesn't work
+ * background tag assigning should be moved to some manager from TagModificationHelper
 
 ------------------------------------------------------------------------------------
 1.0.0 TODO LIST

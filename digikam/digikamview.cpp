@@ -108,6 +108,7 @@
 #include "timelineview.h"
 #include "sidebarwidget.h"
 #include "leftsidebarwidgets.h"
+#include "tagmodificationhelper.h"
 
 namespace Digikam
 {
@@ -179,6 +180,7 @@ public:
     AlbumWidgetStack*         albumWidgetStack;
 
     AlbumModificationHelper*  albumModificationHelper;
+    TagModificationHelper*    tagModificationHelper;
 
     Sidebar*                  leftSideBar;
     ImagePropertiesSideBarDB* rightSideBar;
@@ -201,6 +203,11 @@ DigikamView::DigikamView(QWidget *parent, DigikamModelCollection *modelCollectio
     d->albumManager = AlbumManager::instance();
 
     d->albumModificationHelper = new AlbumModificationHelper(this, this);
+    d->tagModificationHelper = new TagModificationHelper(this, this);
+    connect(d->tagModificationHelper, SIGNAL(signalProgressBarMode(int, const QString&)),
+            d->parent, SLOT(slotProgressBarMode(int, const QString&)));
+    connect(d->tagModificationHelper, SIGNAL(signalProgressValue(int)),
+            d->parent, SLOT(slotProgressValue(int)));
 
     d->splitter = new SidebarSplitter;
     d->splitter->setFrameStyle( QFrame::NoFrame );
@@ -226,7 +233,8 @@ DigikamView::DigikamView(QWidget *parent, DigikamModelCollection *modelCollectio
 
     // album folder view
     d->albumFolderSideBar = new AlbumFolderViewSideBarWidget(d->leftSideBar,
-                                    d->modelCollection->getAlbumModel());
+                                    d->modelCollection->getAlbumModel(),
+                                    d->albumModificationHelper);
     d->leftSideBarWidgets << d->albumFolderSideBar;
     connect(d->albumFolderSideBar, SIGNAL(signalFindDuplicatesInAlbum(Album*)),
             this, SLOT(slotNewDuplicatesSearch(Album*)));
@@ -239,8 +247,10 @@ DigikamView::DigikamView(QWidget *parent, DigikamModelCollection *modelCollectio
 
     // Tags sidebar tab contents.
     d->tagViewSideBar = new TagViewSideBarWidget(d->leftSideBar,
-                    d->modelCollection->getTagModel());
+                    d->modelCollection->getTagModel(), d->tagModificationHelper);
     d->leftSideBarWidgets << d->tagViewSideBar;
+    connect(d->tagViewSideBar, SIGNAL(signalFindDuplicatesInAlbum(Album*)),
+            this, SLOT(slotNewDuplicatesSearch(Album*)));
 
     // timeline side bar
     d->timelineSideBar = new TimelineSideBarWidget(d->leftSideBar,
@@ -447,12 +457,6 @@ void DigikamView::setupConnections()
     connect(d->tagFilterView, SIGNAL(signalProgressValue(int)),
             d->parent, SLOT(slotProgressValue(int)));
 
-    // TODO update, these two connects are legacy as long as we are not on mvc there
-    connect(d->tagViewSideBar, SIGNAL(signalProgressBarMode(int, const QString&)),
-            d->parent, SLOT(slotProgressBarMode(int, const QString&)));
-    connect(d->tagViewSideBar, SIGNAL(signalProgressValue(int)),
-            d->parent, SLOT(slotProgressValue(int)));
-
     connect(d->fuzzySearchSideBar, SIGNAL(signalUpdateFingerPrints()),
             d->parent, SLOT(slotRebuildFingerPrints()));
 
@@ -477,9 +481,6 @@ void DigikamView::setupConnections()
 
     connect(d->tagFilterSearchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
             d->tagFilterView, SLOT(slotTextTagFilterChanged(const SearchTextSettings&)));
-
-    connect(d->tagViewSideBar, SIGNAL(signalFindDuplicatesInAlbum(Album*)),
-            this, SLOT(slotNewDuplicatesSearch(Album*)));
 
     connect(d->tagFilterView, SIGNAL(signalTextTagFilterMatch(bool)),
             d->tagFilterSearchBar, SLOT(slotSearchResult(bool)));
@@ -720,6 +721,7 @@ void DigikamView::slotSortAlbums(int order)
 
 void DigikamView::slotNewAlbum()
 {
+    // TODO use the selection model of the view instead
     d->albumModificationHelper->slotAlbumNew(d->albumManager->currentPAlbum());
 }
 
@@ -730,20 +732,17 @@ void DigikamView::slotDeleteAlbum()
 
 void DigikamView::slotNewTag()
 {
-    // TODO update, use a helper object for this like albummodificationhelper
-    //d->tagViewSideBar->slotNewTag();
+    d->tagModificationHelper->slotTagNew(d->albumManager->currentTAlbum());
 }
 
 void DigikamView::slotDeleteTag()
 {
-    // TODO update, use a helper object for this like albummodificationhelper
-    //d->tagViewSideBar->slotDeleteTag();
+    d->tagModificationHelper->slotTagDelete(d->albumManager->currentTAlbum());
 }
 
 void DigikamView::slotEditTag()
 {
-    // TODO update, use a helper object for this like albummodificationhelper
-    //d->tagViewSideBar->slotEditTag();
+    d->tagModificationHelper->slotTagEdit(d->albumManager->currentTAlbum());
 }
 
 void DigikamView::slotNewKeywordSearch()
@@ -859,7 +858,7 @@ void DigikamView::changeAlbumFromHistory(Album *album, QWidget *widget)
     if (album && widget)
     {
 
-        // TODO update, temporary casting until signature is changd
+        // TODO update, temporary casting until signature is changed
         SideBarWidget *sideBarWidget = dynamic_cast<SideBarWidget*> (widget);
         if (sideBarWidget)
         {
@@ -968,8 +967,16 @@ void DigikamView::slotGotoTagAndItem(int tagID)
     slotLeftSideBarActivate(d->tagViewSideBar);
 
     // Set the current tag in the tag folder view.
-    // TODO update, legacy call
-    d->tagViewSideBar->selectItem(tagID);
+    // TODO this slot should use a TAlbum pointer directly
+    TAlbum *tag = AlbumManager::instance()->findTAlbum(tagID);
+    if (tag)
+    {
+        d->tagViewSideBar->slotSelectAlbum(tag);
+    }
+    else
+    {
+        kError() << "Could not find a tag album for tag id " << tagID;
+    }
 
     // Set the activate item url to find in the Tag View after
     // all items have be reloaded.
@@ -1422,7 +1429,7 @@ void DigikamView::slotImageAddToNewQueue()
     }
     else
     {
-        //FIXME.
+        // FIXME
         ImageInfoList list;
         ImageInfo info = d->albumWidgetStack->imagePreviewView()->getImageInfo();
         list.append(info);

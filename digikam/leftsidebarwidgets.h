@@ -17,6 +17,8 @@
 #include "imagealbumfiltermodel.h"
 #include "gpssearchfolderview.h"
 #include "gpssearchview.h"
+#include "tagmodificationhelper.h"
+#include "albummodificationhelper.h"
 
 namespace Digikam
 {
@@ -31,7 +33,8 @@ class AlbumFolderViewSideBarWidget : public SideBarWidget
 {
     Q_OBJECT
 public:
-    AlbumFolderViewSideBarWidget(QWidget *parent, AlbumModel *model);
+    AlbumFolderViewSideBarWidget(QWidget *parent, AlbumModel *model,
+                                 AlbumModificationHelper *albumModificationHelper);
     virtual ~AlbumFolderViewSideBarWidget();
 
     void setActive(bool active);
@@ -63,7 +66,8 @@ class TagViewSideBarWidget : public SideBarWidget
 {
     Q_OBJECT
 public:
-    TagViewSideBarWidget(QWidget *parent, TagModel *model);
+    TagViewSideBarWidget(QWidget *parent, TagModel *model,
+                         TagModificationHelper *tagModificationHelper);
     virtual ~TagViewSideBarWidget();
 
     void setActive(bool active);
@@ -74,15 +78,14 @@ public:
     QPixmap getIcon();
     QString getCaption();
 
-    // TODO update, mainly legacy methods while not on mvc
-    void selectItem(int itemId);
+public Q_SLOTS:
+    void slotSelectAlbum(Album *album);
 
     // TODO update, legacy signals
 Q_SIGNALS:
     void signalProgressBarMode(int, const QString&);
     void signalProgressValue(int);
 
-Q_SIGNALS:
     void signalFindDuplicatesInAlbum(Album*);
 
 private:
