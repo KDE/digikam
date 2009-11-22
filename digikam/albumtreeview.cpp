@@ -378,9 +378,10 @@ void AbstractCheckableAlbumTreeView::loadViewState(KConfigGroup &configGroup, QS
     {
         bool validId;
         int id = key.toInt(&validId);
-        if (!validId)
-            continue;
-        d->statesByAlbumId[id].selected = true;
+        if (validId)
+        {
+            d->statesByAlbumId[id].selected = true;
+        }
     }
 
     const QStringList expansion = configGroup.readEntry(prefix + d->configSuffixExpansion,
@@ -389,9 +390,10 @@ void AbstractCheckableAlbumTreeView::loadViewState(KConfigGroup &configGroup, QS
     {
         bool validId;
         int id = key.toInt(&validId);
-        if (!validId)
-            continue;
-        d->statesByAlbumId[id].expanded = true;
+        if (validId)
+        {
+            d->statesByAlbumId[id].expanded = true;
+        }
     }
 
     const QString key = configGroup.readEntry(prefix + d->configSuffixCurrentIndex, QString());
