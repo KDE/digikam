@@ -27,7 +27,6 @@
 
 #include <QFontMetrics>
 #include <QLayout>
-#include <QTextEdit>
 #include <QTimer>
 #include <QScrollBar>
 
@@ -115,7 +114,7 @@ public:
 AdvancedRenameLineEdit::AdvancedRenameLineEdit(QWidget* parent)
                       : KTextEdit(parent), d(new AdvancedRenameLineEditPriv)
 {
-    setLineWrapMode(QTextEdit::NoWrap);
+    setLineWrapMode(KTextEdit::NoWrap);
     setWordWrapMode(QTextOption::NoWrap);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -182,7 +181,7 @@ void AdvancedRenameLineEdit::keyPressEvent(QKeyEvent* e)
     }
     else
     {
-        QTextEdit::keyPressEvent(e);
+        KTextEdit::keyPressEvent(e);
     }
 }
 
