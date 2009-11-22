@@ -346,7 +346,7 @@ void CameraIconView::slotUpdateDownloadNames(bool hasSelection)
     viewport()->setUpdatesEnabled(false);
 
     // NOTE: see B.K.O #182352: ordering of item count must be adapted sort of icon view,
-    // since items are ordered from the most rescent to the older one.
+    // since items are ordered from the most recent to the older one.
     bool revOrder=!d->cameraUI->chronologicOrder();
     // Camera items selection.
 
@@ -397,7 +397,7 @@ QString CameraIconView::getTemplatedName(const GPItemInfo* itemInfo, int positio
     QFileInfo fi;
     fi.setFile(QDir(itemInfo->folder), itemInfo->name);
 
-    return d->renamer->newName(fi.absoluteFilePath(), itemInfo->mtime, position+1);
+    return d->renamer->newName(fi.absoluteFilePath(), itemInfo->mtime, position + 1);
 }
 
 QString CameraIconView::getCasedName(const RenameCustomizer::Case ccase, const GPItemInfo* itemInfo)
