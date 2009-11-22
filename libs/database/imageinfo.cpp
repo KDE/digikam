@@ -131,9 +131,11 @@ ImageInfo::ImageInfo(const KUrl& url)
     if (location.isNull())
     {
         m_data = 0;
+        qWarning() << "No location could be retrieved for url" << url; 
         return;
     }
-    QString album = CollectionManager::instance()->album(url.directory());
+    KUrl _url(url.directory());
+    QString album = CollectionManager::instance()->album(_url.toLocalFile());
     QString name  = url.fileName();
 
     /*
@@ -156,6 +158,7 @@ ImageInfo::ImageInfo(const KUrl& url)
     if (!info.id)
     {
         m_data = 0;
+        qWarning() << "No itemShortInfo could be retrieved from the database for image" << name; 
         return;
     }
 
