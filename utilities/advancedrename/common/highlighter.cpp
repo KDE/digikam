@@ -103,6 +103,7 @@ void Highlighter::setupHighlightingGrammar(Parser* parser)
     quotationFormat.setForeground((Qt::GlobalColor)QuotedTextColor);
     quotationFormat.setFontItalic(true);
     rule.pattern = QRegExp("\".*\"");
+    rule.pattern.setMinimal(true);
     rule.format = quotationFormat;
     highlightingRules.append(rule);
 
