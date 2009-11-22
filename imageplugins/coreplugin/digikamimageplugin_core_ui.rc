@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="10" name="digikamimageplugin_core" >
+<gui version="11" name="digikamimageplugin_core" >
 
  <MenuBar>
 
@@ -26,6 +26,8 @@
    <Menu name="Enhance"><text>Enh&amp;ance</text>
      <Action name="implugcore_sharpen" />
      <Action name="implugcore_blur" />
+     <Action name="implugcore_noisereduction" />
+  </Menu>
     <Separator />
     <Action name="implugcore_redeye" />
   </Menu>

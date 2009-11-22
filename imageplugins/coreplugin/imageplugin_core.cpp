@@ -51,6 +51,7 @@
 #include "profileconversiontool.h"
 #include "resizetool.h"
 #include "blurtool.h"
+#include "noisereductiontool.h"
 #include "ratiocroptool.h"
 #include "sharpentool.h"
 #include "redeyetool.h"
@@ -81,6 +82,7 @@ public:
         blurAction(0),
         convertTo8Bits(0),
         convertTo16Bits(0),
+        noiseReductionAction(0),
         profileMenuAction(0)
         {}
 
@@ -97,6 +99,7 @@ public:
     KAction*               blurAction;
     KAction*               convertTo8Bits;
     KAction*               convertTo16Bits;
+    KAction*               noiseReductionAction;
     IccProfilesMenuAction* profileMenuAction;
 };
 
@@ -105,7 +108,7 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QVariantList &)
                   d(new ImagePlugin_CorePriv)
 {
     //-------------------------------
-    // Fix and Colors menu actions
+    // Colors menu actions
 
     d->blurAction = new KAction(KIcon("blurimage"), i18n("Blur..."), this);
     actionCollection()->addAction("implugcore_blur", d->blurAction );
@@ -184,6 +187,15 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QVariantList &)
     slotUpdateColorSpaceMenu();
 
     //-------------------------------
+    // Enhance menu actions
+
+    d->noiseReductionAction  = new KAction(KIcon("noisereduction"), i18n("Noise Reduction..."), this);
+    actionCollection()->addAction("imgplugcore_noisereduction", d->noiseReductionAction );
+
+    connect(d->noiseReductionAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotNoiseReduction()));
+
+    //-------------------------------
     // Filters menu actions.
 
     d->BWAction = new KAction(KIcon("bwtonal"), i18n("Black && White..."), this);
@@ -238,6 +250,7 @@ void ImagePlugin_Core::setEnabledActions(bool b)
     d->aspectRatioCropAction->setEnabled(b);
     d->resizeAction->setEnabled(b);
     d->profileMenuAction->setEnabled(b);
+    d->noiseReductionAction->setEnabled(b);
 }
 
 void ImagePlugin_Core::slotInvert()
@@ -353,7 +366,6 @@ void ImagePlugin_Core::slotColorManagement()
 
 void ImagePlugin_Core::slotConvertToColorSpace(const IccProfile& profile)
 {
-    kDebug() << "";
     ImageIface iface(0, 0);
 
     if (iface.getOriginalIccProfile().isNull())
@@ -450,5 +462,11 @@ void ImagePlugin_Core::slotRatioCrop()
 void ImagePlugin_Core::slotResize()
 {
     ResizeTool *tool = new ResizeTool(this);
+    loadTool(tool);
+}
+
+void ImagePlugin_Core::slotNoiseReduction()
+{
+    NoiseReductionTool *tool = new NoiseReductionTool(this);
     loadTool(tool);
 }

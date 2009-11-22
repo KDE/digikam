@@ -64,7 +64,7 @@
 using namespace KDcrawIface;
 using namespace Digikam;
 
-namespace DigikamNoiseReductionImagesPlugin
+namespace DigikamImagesPluginCore
 {
 
 class NoiseReductionToolPriv
@@ -227,4 +227,4 @@ void NoiseReductionTool::putFinalData()
     iface.putOriginalImage(i18n("Noise Reduction"), filter()->getTargetImage().bits());
 }
 
-}  // namespace DigikamNoiseReductionImagesPlugin
+}  // namespace DigikamImagesPluginCore

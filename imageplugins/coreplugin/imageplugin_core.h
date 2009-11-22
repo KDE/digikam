@@ -59,25 +59,24 @@ private Q_SLOTS:
 
     void slotBlur();
     void slotSharpen();
+    void slotNoiseReduction();
+    void slotRedEye();
+
     void slotBCG();
     void slotRGB();
     void slotHSL();
     void slotAutoCorrection();
     void slotInvert();
-
     void slotBW();
+    void slotConvertTo8Bits();
+    void slotConvertTo16Bits();
+    void slotConvertToColorSpace(const IccProfile&);
+    void slotProfileConversionTool();
 
-    void slotRedEye();
     void slotRatioCrop();
     void slotResize();
 
-    void slotConvertTo8Bits();
-    void slotConvertTo16Bits();
-
-    void slotConvertToColorSpace(const IccProfile&);
     void slotUpdateColorSpaceMenu();
-    void slotProfileConversionTool();
-
     void slotSetupICC();
 
 private:

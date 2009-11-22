@@ -28,7 +28,7 @@
 
 #include "editortool.h"
 
-namespace DigikamNoiseReductionImagesPlugin
+namespace DigikamImagesPluginCore
 {
 
 class NoiseReductionToolPriv;
@@ -61,6 +61,6 @@ private:
     NoiseReductionToolPriv* const d;
 };
 
-}  // namespace DigikamNoiseReductionImagesPlugin
+}  // namespace DigikamImagesPluginCore
 
 #endif /* NOISEREDUCTIONTOOL_H */
