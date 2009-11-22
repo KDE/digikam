@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="11" name="digikamimageplugin_core" >
+<gui version="12" name="digikamimageplugin_core" >
 
  <MenuBar>
 
@@ -16,42 +16,42 @@
       <Action name="implugcore_invert" />
       <Action name="implugcore_blackwhite" />
       <Menu name="Depth"><text>&amp;Depth</text>
-        <Action name="implugcore_convertto8bits" />
-        <Action name="implugcore_convertto16bits" />
+          <Action name="implugcore_convertto8bits" />
+          <Action name="implugcore_convertto16bits" />
       </Menu>
       <Separator />
       <Action name="implugcore_colormanagement" />
       <Separator />
    </Menu>
    <Menu name="Enhance"><text>Enh&amp;ance</text>
-     <Action name="implugcore_sharpen" />
-     <Action name="implugcore_blur" />
-     <Action name="implugcore_noisereduction" />
+      <Action name="implugcore_sharpen" />
+      <Action name="implugcore_blur" />
+      <Action name="implugcore_noisereduction" />
   </Menu>
-    <Separator />
-    <Action name="implugcore_redeye" />
+      <Separator />
+      <Action name="implugcore_redeye" />
   </Menu>
 
   <Menu name="Transform" ><text>Tra&amp;nsform</text>
-   <Action name="implugcore_resize" />
-   <Action name="implugcore_ratiocrop" />
+      <Action name="implugcore_resize" />
+      <Action name="implugcore_ratiocrop" />
   </Menu>
 
   <Menu name="Filters" ><text>F&amp;ilters</text>
-    <Action name="imageplugin_infrared" />
-    <Action name="imageplugin_filmgrain" />
-    <Action name="imageplugin_oilpaint" />
-    <Action name="imageplugin_charcoal" />
-    <Action name="imageplugin_emboss" />
-    <Action name="imageplugin_distortionfx" />
-    <Action name="imageplugin_blurfx" />
-    <Action name="imageplugin_raindrop" />
+      <Action name="imageplugin_infrared" />
+      <Action name="imageplugin_filmgrain" />
+      <Action name="imageplugin_oilpaint" />
+      <Action name="imageplugin_charcoal" />
+      <Action name="imageplugin_emboss" />
+      <Action name="imageplugin_distortionfx" />
+      <Action name="imageplugin_blurfx" />
+      <Action name="imageplugin_raindrop" />
   </Menu>
 
  </MenuBar>
 
  <ToolBar name="mainToolBar" >
-  <text>Main Toolbar</text>
+      <text>Main Toolbar</text>
  </ToolBar>
 
  <ActionProperties/>
