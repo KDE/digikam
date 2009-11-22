@@ -321,7 +321,22 @@ class AbstractCheckableAlbumTreeViewPriv
 {
 
 public:
+    AbstractCheckableAlbumTreeViewPriv() :
+        configSuffixSelection("Selection"),
+        configSuffixExpansion("Expansion"),
+        configSuffixCurrentIndex("CurrentIndex"),
+        configSuffixSortColumn("SortColumn"),
+        configSuffixSortOrder("SortOrder")
+    {
+    }
+
     QMap<int, State> statesByAlbumId;
+
+    const QString configSuffixSelection;
+    const QString configSuffixExpansion;
+    const QString configSuffixCurrentIndex;
+    const QString configSuffixSortColumn;
+    const QString configSuffixSortOrder;
 
 };
 
@@ -357,7 +372,7 @@ void AbstractCheckableAlbumTreeView::loadViewState(KConfigGroup &configGroup, QS
 
     kDebug() << "Loading view state from " << configGroup.name();
 
-    const QStringList selection = configGroup.readEntry(prefix + "Selection",
+    const QStringList selection = configGroup.readEntry(prefix + d->configSuffixSelection,
                     QStringList());
     foreach(const QString &key, selection)
     {
@@ -368,7 +383,7 @@ void AbstractCheckableAlbumTreeView::loadViewState(KConfigGroup &configGroup, QS
         d->statesByAlbumId[id].selected = true;
     }
 
-    const QStringList expansion = configGroup.readEntry(prefix + "Expansion",
+    const QStringList expansion = configGroup.readEntry(prefix + d->configSuffixExpansion,
                     QStringList());
     foreach( const QString &key, expansion )
     {
@@ -379,7 +394,7 @@ void AbstractCheckableAlbumTreeView::loadViewState(KConfigGroup &configGroup, QS
         d->statesByAlbumId[id].expanded = true;
     }
 
-    const QString key = configGroup.readEntry(prefix + "CurrentIndex", QString());
+    const QString key = configGroup.readEntry(prefix + d->configSuffixCurrentIndex, QString());
     bool validId;
     const int id = key.toInt(&validId);
     if (validId)
@@ -413,7 +428,9 @@ void AbstractCheckableAlbumTreeView::loadViewState(KConfigGroup &configGroup, QS
     //connect(model(), SIGNAL(rowsInserted(QModelIndex, int, int)),
     //                 SLOT(slotFixRowsInserted(QModelIndex, int, int)), Qt::QueuedConnection);
 
-    // TODO also restore the sorting order
+    // also restore the sorting order
+    sortByColumn(configGroup.readEntry(prefix + d->configSuffixSortColumn, 0),
+                 (Qt::SortOrder) configGroup.readEntry(prefix + d->configSuffixSortOrder, (int) Qt::AscendingOrder));
 
 }
 
@@ -481,9 +498,11 @@ void AbstractCheckableAlbumTreeView::saveViewState(KConfigGroup &configGroup, QS
         currentIndex = QString::number(selectedAlbum->id());
     }
 
-    configGroup.writeEntry(prefix + "Selection", selection);
-    configGroup.writeEntry(prefix + "Expansion", expansion);
-    configGroup.writeEntry(prefix + "CurrentIndex", currentIndex);
+    configGroup.writeEntry(prefix + d->configSuffixSelection, selection);
+    configGroup.writeEntry(prefix + d->configSuffixExpansion, expansion);
+    configGroup.writeEntry(prefix + d->configSuffixCurrentIndex, currentIndex);
+    configGroup.writeEntry(prefix + d->configSuffixSortColumn, albumFilterModel()->sortColumn());
+    configGroup.writeEntry(prefix + d->configSuffixSortOrder, (int) albumFilterModel()->sortOrder());
 
 }
 
