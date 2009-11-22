@@ -54,8 +54,8 @@ namespace Digikam
 NoiseReduction::NoiseReduction(QObject* parent)
               : BatchTool("NoiseReduction", BaseTool, parent)
 {
-    setToolTitle(i18n("NoiseReduction"));
-    setToolDescription(i18n("A tool to remove photographs noise using wavelets."));
+    setToolTitle(i18n("Noise Reduction"));
+    setToolDescription(i18n("A tool to remove photograph noise using wavelets."));
     setToolIcon(KIcon(SmallIcon("noisereduction")));
 
     KVBox *vbox      = new KVBox;
@@ -65,7 +65,7 @@ NoiseReduction::NoiseReduction(QObject* parent)
     m_thresholdInput->setDecimals(2);
     m_thresholdInput->input()->setRange(0.0, 10.0, 0.1, true);
     m_thresholdInput->setDefaultValue(1.2);
-    m_thresholdInput->setWhatsThis(i18n("<b>Threshold</b>: Adjusts the threshold for denoising of "
+    m_thresholdInput->setWhatsThis(i18n("<b>Threshold</b>: Adjusts the threshold for denoising "
                                          "the image in a range from 0.0 (none) to 10.0. "
                                          "The threshold is the value below which everything is considered noise."));
 
