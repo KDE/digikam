@@ -27,10 +27,11 @@
 // Qt includes
 
 #include <QContextMenuEvent>
-#include <QMenu>
-#include <QColor>
-#include <QPalette>
-#include <QString>
+#include <qmenu.h>
+#include <qcolor.h>
+#include <qpalette.h>
+#include <qstring.h>
+#include <qmap.h>
 
 // KDE includes
 
@@ -53,6 +54,11 @@ public:
         model               = 0;
     }
 
+    inline static QString itemName(const QModelIndex &index)
+    {
+        return index.data(Qt::DisplayRole).value<QString> ();
+    }
+
     bool               textQueryCompletion;
     bool               hasCaseSensitive;
     bool               highlightOnCompletion;
@@ -60,6 +66,14 @@ public:
     QAbstractItemModel *model;
 
     SearchTextSettings settings;
+
+    /**
+     * This map maps model indexes to their current text representation in the
+     * completion object. This is needed because if data changes in on index,
+     * the old text value is not known anymore, so that it cannot be removed
+     * from the completion object.
+     */
+    QMap<QModelIndex, QString> indexToTextMap;
 };
 
 // TODO the model code could also be placed in a subclass of KCompletion...
@@ -125,6 +139,7 @@ void SearchTextBar::setModel(QAbstractItemModel *model)
     if (d->model)
     {
         disconnectFromModel(d->model);
+        d->indexToTextMap.clear();
         completionObject()->clear();
     }
 
@@ -172,12 +187,18 @@ void SearchTextBar::slotRowsRemoved(const QModelIndex &parent, int start, int en
              << ", end = " << end;
     for (int i = start; i <= end; ++i)
     {
-        // TODO this doesn't work, itemText contains no, or wrong album names
-        // maybe that is caused by the model because the album is already
-        // deleted when I want to access the name?
-        QString itemText = d->model->index(i, 0, parent).data().value<QString> ();
-        kDebug() << "Removing item " << itemText;
-        completionObject()->removeItem(itemText);
+        QModelIndex index = d->model->index(i, 0, parent);
+        if (d->indexToTextMap.contains(index))
+        {
+            QString itemName = d->indexToTextMap[index];
+            completionObject()->removeItem(itemName);
+            d->indexToTextMap.remove(index);
+        }
+        else
+        {
+            kWarning() << "indexToTextMap seems to be out of sync with the model. "
+                     << "There is no entry for model index " << index;
+        }
     }
 }
 
@@ -192,12 +213,30 @@ void SearchTextBar::slotDataChanged(const QModelIndex &topLeft, const QModelInde
     Q_UNUSED(topLeft);
     Q_UNUSED(bottomRight);
 
-    kDebug() << "data changed, resync";
-
-    // TODO what if data changes? arguments don't help here because
-    // it does not provide the old text value. Complete resync?
-    // FIXME this is realllly a performance issue
-    sync(d->model);
+    for (int row = topLeft.row(); row <= bottomRight.row(); ++row)
+    {
+        if (!d->model->hasIndex(row, topLeft.column(), topLeft.parent()))
+        {
+            kError() << "Got wrong change event for index with row " << row
+                     << ", column " << topLeft.column()
+                     << " and parent " << topLeft.parent()
+                     << " in model " << d->model << ". Ignoring it.";
+            continue;
+        }
+        QModelIndex index = d->model->index(row, topLeft.column(), topLeft.parent());
+        QString itemName = SearchTextBarPriv::itemName(index);
+        if (d->indexToTextMap.contains(index))
+        {
+            completionObject()->removeItem(d->indexToTextMap[index]);
+            completionObject()->addItem(itemName);
+        }
+        else
+        {
+            kError() << "indexToTextMap did not contain an entry for index "
+                     << index;
+        }
+        d->indexToTextMap[index] = itemName;
+    }
 
 }
 
@@ -213,6 +252,7 @@ void SearchTextBar::sync(QAbstractItemModel *model)
              << ", rowCount for parent: " << model->rowCount();
 
     completionObject()->clear();
+    d->indexToTextMap.clear();
 
     for (int i = 0; i < model->rowCount(); ++i)
     {
@@ -225,9 +265,10 @@ void SearchTextBar::sync(QAbstractItemModel *model)
 void SearchTextBar::sync(QAbstractItemModel *model, const QModelIndex &index)
 {
 
-    QString itemName = index.data(Qt::DisplayRole).value<QString> ();
-    kDebug() << "sync adding item '" << itemName << "'";
+    QString itemName = SearchTextBarPriv::itemName(index);
+    kDebug() << "sync adding item '" << itemName << "' for index " << index;
     completionObject()->addItem(itemName);
+    d->indexToTextMap.insert(index, itemName);
 
     for (int i = 0; i < model->rowCount(index); ++i)
     {
