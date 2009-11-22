@@ -191,7 +191,6 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QVariantList &)
 
     d->noiseReductionAction = new KAction(KIcon("noisereduction"), i18n("Noise Reduction..."), this);
     actionCollection()->addAction("implugcore_noisereduction", d->noiseReductionAction );
-
     connect(d->noiseReductionAction, SIGNAL(triggered(bool)),
             this, SLOT(slotNoiseReduction()));
 
