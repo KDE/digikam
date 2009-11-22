@@ -20,7 +20,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 009 ==> 214718 : digiKam Crashed when trying to Edit photo.
 010 ==> 215314 : If initialized the program crashes.
 011 ==> 116061 : Possibility to blur chroma without touching luma.
-012 ==> 
+012 ==> 215645 : File save as in image editor crashes digiKam.
+013 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta6 - Release date: 2009-11-08
