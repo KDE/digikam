@@ -113,7 +113,7 @@ public:
 };
 
 AdvancedRenameLineEdit::AdvancedRenameLineEdit(QWidget* parent)
-                      : QTextEdit(parent), d(new AdvancedRenameLineEditPriv)
+                      : KTextEdit(parent), d(new AdvancedRenameLineEditPriv)
 {
     setLineWrapMode(QTextEdit::NoWrap);
     setWordWrapMode(QTextOption::NoWrap);

@@ -27,11 +27,11 @@
 // Qt includes
 
 #include <QWidget>
-#include <QTextEdit>
 
 // KDE includes
 
 #include <kcombobox.h>
+#include <ktextedit.h>
 
 // Local includes
 
@@ -64,7 +64,7 @@ protected:
 
 class AdvancedRenameLineEditPriv;
 
-class AdvancedRenameLineEdit : public QTextEdit
+class AdvancedRenameLineEdit : public KTextEdit
 {
     Q_OBJECT
 
