@@ -111,6 +111,10 @@ void Highlighter::setupHighlightingGrammar(Parser* parser)
     rule.pattern.setMinimal(true);
     rule.format = quotationFormat;
     highlightingRules.append(rule);
+
+    // --------------------------------------------------------
+
+    parameterFormat = quotationFormat;
 }
 
 } // namespace Digikam
