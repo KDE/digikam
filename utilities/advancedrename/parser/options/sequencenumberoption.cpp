@@ -154,8 +154,8 @@ void SequenceNumberOption::parseOperation(const QString& parseString, ParseInfor
         start   = reg.cap(3).isEmpty() ? 1 : reg.cap(3).toInt();
         step    = reg.cap(4).isEmpty() ? 1 : reg.cap(4).toInt();
 
-        number = start + ((index - 1) * step);
-        tmp    = QString("%1").arg(number, slength, 10, QChar('0'));
+        number  = start + ((index - 1) * step);
+        tmp     = QString("%1").arg(number, slength, 10, QChar('0'));
     }
     PARSE_LOOP_END(parseString, reg, tmp, results)
 }
