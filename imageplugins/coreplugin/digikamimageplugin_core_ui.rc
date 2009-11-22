@@ -1,18 +1,14 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="12" name="digikamimageplugin_core" >
+<gui version="13" name="digikamimageplugin_core" >
 
  <MenuBar>
 
    <Menu name="Color"><text>&amp;Color</text>
       <Action name="implugcore_autocorrection" />
-      <Action name="imageplugin_whitebalance" />
       <Action name="implugcore_bcg" />
       <Action name="implugcore_hsl" />
-      <Action name="imageplugin_colorfx" />
       <Action name="implugcore_rgb" />
       <Separator />
-      <Action name="imageplugin_adjustcurves" />
-      <Action name="imageplugin_adjustlevels" />
       <Action name="implugcore_invert" />
       <Action name="implugcore_blackwhite" />
       <Menu name="Depth"><text>&amp;Depth</text>
@@ -35,17 +31,6 @@
   <Menu name="Transform" ><text>Tra&amp;nsform</text>
       <Action name="implugcore_resize" />
       <Action name="implugcore_ratiocrop" />
-  </Menu>
-
-  <Menu name="Filters" ><text>F&amp;ilters</text>
-      <Action name="imageplugin_infrared" />
-      <Action name="imageplugin_filmgrain" />
-      <Action name="imageplugin_oilpaint" />
-      <Action name="imageplugin_charcoal" />
-      <Action name="imageplugin_emboss" />
-      <Action name="imageplugin_distortionfx" />
-      <Action name="imageplugin_blurfx" />
-      <Action name="imageplugin_raindrop" />
   </Menu>
 
  </MenuBar>
