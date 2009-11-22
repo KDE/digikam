@@ -39,6 +39,7 @@
 
 // Local includes
 #include "digikam_export.h"
+#include "albumsettings.h"
 
 namespace Digikam
 {
@@ -69,6 +70,9 @@ public:
     QLineEdit               *password;
 
     QGroupBox               *expertSettings;
+
+public:
+    void setParametersFromSettings(const AlbumSettings *settings);
 
 public Q_SLOTS:
 

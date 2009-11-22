@@ -50,7 +50,6 @@
 // Local includes
 
 #include "databasebackend.h"
-#include "albumdb.h"
 #include "databasetransaction.h"
 #include "upgradedb_sqlite2tosqlite3.h"
 #include "collectionmanager.h"
@@ -72,9 +71,21 @@ int SchemaUpdater::filterSettingsVersion()
     return 3;
 }
 
-SchemaUpdater::SchemaUpdater(DatabaseAccess *access)
+const QString SchemaUpdater::getLastErrorMessage()
 {
-    m_access         = access;
+    return m_LastErrorMessage;
+}
+
+void SchemaUpdater::setDatabaseAccess(DatabaseAccess *access)
+{
+    m_access=access;
+}
+
+SchemaUpdater::SchemaUpdater(AlbumDB *albumDB, DatabaseBackend *backend, DatabaseParameters parameters)
+{
+    m_Backend         = backend;
+    m_AlbumDB         = albumDB;
+    m_Parameters      = parameters;
     m_currentVersion = 0;
     m_observer       = 0;
     m_setError       = false;
@@ -88,7 +99,7 @@ bool SchemaUpdater::update()
     if (m_observer && !m_observer->continueQuery())
         return false;
     // even on failure, try to set current version - it may have incremented
-    m_access->db()->setSetting("DBVersion",QString::number(m_currentVersion));
+    m_AlbumDB->setSetting("DBVersion",QString::number(m_currentVersion));
     if (!success)
         return false;
     updateFilterSettings();
@@ -107,13 +118,13 @@ void SchemaUpdater::setObserver(InitializationObserver *observer)
 bool SchemaUpdater::startUpdates()
 {
     // First step: do we have an empty database?
-    QStringList tables = m_access->backend()->tables();
+    QStringList tables = m_Backend->tables();
 
     if (tables.contains("Albums"))
     {
         // Find out schema version of db file
-        QString version = m_access->db()->getSetting("DBVersion");
-        QString versionRequired = m_access->db()->getSetting("DBVersionRequired");
+        QString version = m_AlbumDB->getSetting("DBVersion");
+        QString versionRequired = m_AlbumDB->getSetting("DBVersionRequired");
         kDebug() << "Have a database structure version " << version;
 
         // We absolutely require the DBVersion setting
@@ -127,7 +138,7 @@ bool SchemaUpdater::startUpdates()
                     "The current database schema version cannot be verified. "
                     "Try to start with an empty database. "
                                    );
-            m_access->setLastError(errorMsg);
+            m_LastErrorMessage=errorMsg;
             if (m_observer)
             {
                 m_observer->error(errorMsg);
@@ -156,7 +167,7 @@ bool SchemaUpdater::startUpdates()
                             "(This means this digiKam version is too old, or the database format is to recent) "
                             "Please use the more recent version of digikam that you used before. "
                                        );
-                m_access->setLastError(errorMsg);
+                m_LastErrorMessage=errorMsg;
                 if (m_observer)
                 {
                     m_observer->error(errorMsg);
@@ -186,10 +197,9 @@ bool SchemaUpdater::startUpdates()
         // Version 4 writes "4", and from now on version x writes "x".
         // Version 5 includes the schema changes from 0.9 to 0.10
 
-        DatabaseParameters parameters = m_access->parameters();
-        if (parameters.isSQLite())
+        if (m_Parameters.isSQLite())
         {
-            QFileInfo currentDBFile(parameters.databaseName);
+            QFileInfo currentDBFile(m_Parameters.databaseName);
             QFileInfo digikam3DB(currentDBFile.dir(), "digikam3.db");
             QFileInfo digikamDB(currentDBFile.dir(), "digikam.db");
 
@@ -216,8 +226,8 @@ bool SchemaUpdater::startUpdates()
         if (!createDatabase() || !createFilterSettings())
         {
             QString errorMsg = i18n("Failed to create tables in database.\n ")
-                                    + m_access->backend()->lastError();
-            m_access->setLastError(errorMsg);
+                                    + m_Backend->lastError();
+            m_LastErrorMessage=errorMsg;
             if (m_observer)
             {
                 m_observer->error(errorMsg);
@@ -237,9 +247,9 @@ bool SchemaUpdater::makeUpdates()
     {
         if (m_currentVersion < 5)
         {
-            if (!m_access->backend()->beginTransaction())
+            if (!m_Backend->beginTransaction())
             {
-                QFileInfo currentDBFile(m_access->parameters().databaseName);
+                QFileInfo currentDBFile(m_Parameters.databaseName);
                 QString errorMsg = i18n("Failed to open a database transaction on your database file \"%1\". "
                                         "This is unusual. Please check that you can access the file and no "
                                         "other process has currently locked the file. "
@@ -251,7 +261,7 @@ bool SchemaUpdater::makeUpdates()
             }
             if (!updateV4toV5())
             {
-                m_access->backend()->rollbackTransaction();
+                m_Backend->rollbackTransaction();
                 if (m_observer)
                 {
                     // error or cancelled?
@@ -261,7 +271,7 @@ bool SchemaUpdater::makeUpdates()
                     }
                     else if (!m_setError)
                     {
-                        QFileInfo currentDBFile(m_access->parameters().databaseName);
+                        QFileInfo currentDBFile(m_Parameters.databaseName);
                         QString errorMsg = i18n("The schema updating process from version 4 to 5 failed, "
                                                 "caused by an error that we did not expect. "
                                                 "You can try to discard your old database and start with an empty one. "
@@ -277,15 +287,15 @@ bool SchemaUpdater::makeUpdates()
                 return false;
             }
             kDebug() << "Success updating to v5";
-            m_access->backend()->commitTransaction();
+            m_Backend->commitTransaction();
             // REMOVE BEFORE FINAL VERSION
-            m_access->db()->setSetting("preAlpha010Update1", "true");
-            m_access->db()->setSetting("preAlpha010Update2", "true");
-            m_access->db()->setSetting("preAlpha010Update3", "true");
+            m_AlbumDB->setSetting("preAlpha010Update1", "true");
+            m_AlbumDB->setSetting("preAlpha010Update2", "true");
+            m_AlbumDB->setSetting("preAlpha010Update3", "true");
             // END REMOVE
             // REMOVE BEFORE NEXT SCHEMA UPDATE
-            m_access->db()->setSetting("beta010Update1", "true");
-            m_access->db()->setSetting("beta010Update2", "true");
+            m_AlbumDB->setSetting("beta010Update1", "true");
+            m_AlbumDB->setSetting("beta010Update2", "true");
             // END REMOVE
         }
         // add future updates here
@@ -336,12 +346,12 @@ bool SchemaUpdater::createFilterSettings()
     QStringList defaultImageFilter, defaultVideoFilter, defaultAudioFilter;
     defaultFilterSettings(defaultImageFilter, defaultVideoFilter, defaultAudioFilter);
 
-    m_access->db()->setFilterSettings(defaultImageFilter, defaultVideoFilter, defaultAudioFilter);
-    m_access->db()->setSetting("FilterSettingsVersion", QString::number(filterSettingsVersion()));
+    m_AlbumDB->setFilterSettings(defaultImageFilter, defaultVideoFilter, defaultAudioFilter);
+    m_AlbumDB->setSetting("FilterSettingsVersion", QString::number(filterSettingsVersion()));
 #if KDCRAW_VERSION < 0x000400
-    m_access->db()->setSetting("DcrawFilterSettingsVersion", QString::number(KDcrawIface::DcrawBinary::rawFilesVersion()));
+    m_AlbumDB->setSetting("DcrawFilterSettingsVersion", QString::number(KDcrawIface::DcrawBinary::rawFilesVersion()));
 #else
-    m_access->db()->setSetting("DcrawFilterSettingsVersion", QString::number(KDcrawIface::KDcraw::rawFilesVersion()));
+    m_AlbumDB->setSetting("DcrawFilterSettingsVersion", QString::number(KDcrawIface::KDcraw::rawFilesVersion()));
 #endif
 
     return true;
@@ -349,8 +359,8 @@ bool SchemaUpdater::createFilterSettings()
 
 bool SchemaUpdater::updateFilterSettings()
 {
-    QString filterVersion = m_access->db()->getSetting("FilterSettingsVersion");
-    QString dcrawFilterVersion = m_access->db()->getSetting("DcrawFilterSettingsVersion");
+    QString filterVersion = m_AlbumDB->getSetting("FilterSettingsVersion");
+    QString dcrawFilterVersion = m_AlbumDB->getSetting("DcrawFilterSettingsVersion");
 
     if (
          filterVersion.toInt() < filterSettingsVersion() ||
@@ -373,13 +383,13 @@ bool SchemaUpdater::createDatabase()
          && createTriggersV5())
     {
         // REMOVE BEFORE ALPHA VERSION
-        m_access->db()->setSetting("preAlpha010Update1", "true");
-        m_access->db()->setSetting("preAlpha010Update2", "true");
-        m_access->db()->setSetting("preAlpha010Update3", "true");
+        m_AlbumDB->setSetting("preAlpha010Update1", "true");
+        m_AlbumDB->setSetting("preAlpha010Update2", "true");
+        m_AlbumDB->setSetting("preAlpha010Update3", "true");
         // END REMOVE
         // REMOVE BEFORE NEXT SCHEMA UPDATE
-        m_access->db()->setSetting("beta010Update1", "true");
-        m_access->db()->setSetting("beta010Update2", "true");
+        m_AlbumDB->setSetting("beta010Update1", "true");
+        m_AlbumDB->setSetting("beta010Update2", "true");
         // END REMOVE
         m_currentVersion = 5;
         return true;
@@ -390,7 +400,7 @@ bool SchemaUpdater::createDatabase()
 
 bool SchemaUpdater::createTablesV5()
 {
-    if (DatabaseCoreBackend::NoErrors!=m_access->backend()->execDBAction(m_access->backend()->getDBAction(QString("CreateDB"))))
+    if (DatabaseCoreBackend::NoErrors!=m_Backend->execDBAction(m_Backend->getDBAction(QString("CreateDB"))))
     {
         return false;
     }
@@ -401,9 +411,9 @@ bool SchemaUpdater::createIndicesV5()
 {
     // TODO: see which more indices are needed
     // create indices
-    m_access->backend()->execDBAction(m_access->backend()->getDBAction("CreateIdx1"));
-    m_access->backend()->execDBAction(m_access->backend()->getDBAction("CreateIdx2"));
-    m_access->backend()->execDBAction(m_access->backend()->getDBAction("CreateIdx3"));
+    m_Backend->execDBAction(m_Backend->getDBAction("CreateIdx1"));
+    m_Backend->execDBAction(m_Backend->getDBAction("CreateIdx2"));
+    m_Backend->execDBAction(m_Backend->getDBAction("CreateIdx3"));
 
     return true;
 }
@@ -413,7 +423,7 @@ bool SchemaUpdater::createTriggersV5()
     // Triggers for deletion
 
     // if AlbumRoot has been deleted
-    m_access->backend()->execDBAction(m_access->backend()->getDBAction(QString("CreateTriggerV5_1")));
+    m_Backend->execDBAction(m_Backend->getDBAction(QString("CreateTriggerV5_1")));
 
 
             /*
@@ -424,8 +434,8 @@ bool SchemaUpdater::createTriggersV5()
             "END;"); */
 /*
     // if Album has been deleted
-  m_access->backend()->execDBAction(m_access->backend()->getDBAction(QString("CreateTriggerV5_2")));
-    m_access->backend()->execSql("CREATE TRIGGER delete_album DELETE ON Albums\n"
+  m_Backend->execDBAction(m_Backend->getDBAction(QString("CreateTriggerV5_2")));
+    m_Backend->execSql("CREATE TRIGGER delete_album DELETE ON Albums\n"
             "BEGIN\n"
             " DELETE FROM Images\n"
             "   WHERE Images.album = OLD.id;\n"
@@ -433,8 +443,8 @@ bool SchemaUpdater::createTriggersV5()
 */
     // if Image has been deleted
     // NOTE: For update to v6, merge in beta010Update1
-    m_access->backend()->execDBAction(m_access->backend()->getDBAction(QString("CreateTriggerV5_3")));
-/*    m_access->backend()->execSql(
+    m_Backend->execDBAction(m_Backend->getDBAction(QString("CreateTriggerV5_3")));
+/*    m_Backend->execSql(
             "CREATE TRIGGER delete_image DELETE ON Images\n"
             "BEGIN\n"
             "  DELETE FROM ImageTags\n"
@@ -460,8 +470,8 @@ bool SchemaUpdater::createTriggersV5()
             "END;");
 */
     // trigger: delete from ImageTags if Tag has been deleted
-    m_access->backend()->execDBAction(m_access->backend()->getDBAction(QString("CreateTriggerV5_4")));
-/*    m_access->backend()->execSql(
+    m_Backend->execDBAction(m_Backend->getDBAction(QString("CreateTriggerV5_4")));
+/*    m_Backend->execSql(
             "CREATE TRIGGER delete_tag DELETE ON Tags\n"
             "BEGIN\n"
             "  DELETE FROM ImageTags WHERE tagid=OLD.id;\n"
@@ -471,8 +481,8 @@ bool SchemaUpdater::createTriggersV5()
     // Triggers maintaining the TagTree (which is used when listing images by tags)
 
     // trigger: insert into TagsTree if Tag has been added
-    m_access->backend()->execDBAction(m_access->backend()->getDBAction(QString("CreateTriggerV5_5")));
-/*    m_access->backend()->execSql(
+    m_Backend->execDBAction(m_Backend->getDBAction(QString("CreateTriggerV5_5")));
+/*    m_Backend->execSql(
             "CREATE TRIGGER insert_tagstree AFTER INSERT ON Tags\n"
             "BEGIN\n"
             "  INSERT INTO TagsTree\n"
@@ -482,8 +492,8 @@ bool SchemaUpdater::createTriggersV5()
             "END;");
 */
     // trigger: delete from TagsTree if Tag has been deleted
-    m_access->backend()->execDBAction(m_access->backend()->getDBAction(QString("CreateTriggerV5_6")));
-/*    m_access->backend()->execSql(
+    m_Backend->execDBAction(m_Backend->getDBAction(QString("CreateTriggerV5_6")));
+/*    m_Backend->execSql(
             "CREATE TRIGGER delete_tagstree DELETE ON Tags\n"
             "BEGIN\n"
             " DELETE FROM Tags\n"
@@ -495,8 +505,8 @@ bool SchemaUpdater::createTriggersV5()
             "END;");
 */
     // trigger: delete from TagsTree if Tag has been deleted
-    m_access->backend()->execDBAction(m_access->backend()->getDBAction(QString("CreateTriggerV5_7")));
-/*    m_access->backend()->execSql(
+    m_Backend->execDBAction(m_Backend->getDBAction(QString("CreateTriggerV5_7")));
+/*    m_Backend->execSql(
             "CREATE TRIGGER move_tagstree UPDATE OF pid ON Tags\n"
             "BEGIN\n"
             "  DELETE FROM TagsTree\n"
@@ -526,7 +536,7 @@ bool SchemaUpdater::copyV3toV4(const QString& digikam3DBPath, const QString& cur
     if (m_observer)
         m_observer->moreSchemaUpdateSteps(2);
 
-    m_access->backend()->close();
+    m_Backend->close();
 
     // We cannot use KIO here because KIO only works from the main thread
     QFile oldFile(digikam3DBPath);
@@ -541,7 +551,7 @@ bool SchemaUpdater::copyV3toV4(const QString& digikam3DBPath, const QString& cur
                                 "Please make sure that the file can be copied, "
                                 "or delete it.",
                                 digikam3DBPath, currentDBPath, oldFile.errorString());
-        m_access->setLastError(errorMsg);
+        m_LastErrorMessage=errorMsg;
         if (m_observer)
         {
             m_observer->error(errorMsg);
@@ -552,7 +562,7 @@ bool SchemaUpdater::copyV3toV4(const QString& digikam3DBPath, const QString& cur
     if (m_observer)
         m_observer->schemaUpdateProgress(i18n("Copied database file"));
 
-    if (!m_access->backend()->open(m_access->parameters()))
+    if (!m_Backend->open(m_Parameters))
     {
         QString errorMsg = i18n("The old database file (\"%1\") has been copied "
                                 "to the new location (\"%2\") but it cannot be opened. "
@@ -560,7 +570,7 @@ bool SchemaUpdater::copyV3toV4(const QString& digikam3DBPath, const QString& cur
                                 "starting with an empty database. ",
                                 digikam3DBPath, currentDBPath);
 
-        m_access->setLastError(errorMsg);
+        m_LastErrorMessage=errorMsg;
         if (m_observer)
         {
             m_observer->error(errorMsg);
@@ -590,7 +600,7 @@ bool SchemaUpdater::updateV2toV4(const QString& sqlite2DBPath)
         QString errorMsg = i18n("Could not update from the old SQLite2 file (\"%1\"). "
                                 "Please delete this file and try again, "
                                 "starting with an empty database. ", sqlite2DBPath);
-        m_access->setLastError(errorMsg);
+        m_LastErrorMessage=errorMsg;
         if (m_observer)
         {
             m_observer->error(errorMsg);
@@ -640,27 +650,27 @@ bool SchemaUpdater::updateV4toV5()
     // We operator on an SQLite3 database under a transaction (which will be rolled back on error)
 
     // --- Make space for new tables ---
-    if (!m_access->backend()->execSql(QString("ALTER TABLE Albums RENAME TO AlbumsV3;")))
+    if (!m_Backend->execSql(QString("ALTER TABLE Albums RENAME TO AlbumsV3;")))
         return false;
 
-    if (!m_access->backend()->execSql(QString("ALTER TABLE Images RENAME TO ImagesV3;")))
+    if (!m_Backend->execSql(QString("ALTER TABLE Images RENAME TO ImagesV3;")))
         return false;
 
-    if (!m_access->backend()->execSql(QString("ALTER TABLE Searches RENAME TO SearchesV3;")))
+    if (!m_Backend->execSql(QString("ALTER TABLE Searches RENAME TO SearchesV3;")))
         return false;
 
     kDebug() << "Moved tables";
     // --- Drop some triggers and indices ---
 
     // Don't check for errors here. The "IF EXISTS" clauses seem not supported in SQLite
-    m_access->backend()->execSql(QString("DROP TRIGGER delete_album;"));
-    m_access->backend()->execSql(QString("DROP TRIGGER delete_image;"));
-    m_access->backend()->execSql(QString("DROP TRIGGER delete_tag;"));
-    m_access->backend()->execSql(QString("DROP TRIGGER insert_tagstree;"));
-    m_access->backend()->execSql(QString("DROP TRIGGER delete_tagstree;"));
-    m_access->backend()->execSql(QString("DROP TRIGGER move_tagstree;"));
-    m_access->backend()->execSql(QString("DROP INDEX dir_index;"));
-    m_access->backend()->execSql(QString("DROP INDEX tag_index;"));
+    m_Backend->execSql(QString("DROP TRIGGER delete_album;"));
+    m_Backend->execSql(QString("DROP TRIGGER delete_image;"));
+    m_Backend->execSql(QString("DROP TRIGGER delete_tag;"));
+    m_Backend->execSql(QString("DROP TRIGGER insert_tagstree;"));
+    m_Backend->execSql(QString("DROP TRIGGER delete_tagstree;"));
+    m_Backend->execSql(QString("DROP TRIGGER move_tagstree;"));
+    m_Backend->execSql(QString("DROP INDEX dir_index;"));
+    m_Backend->execSql(QString("DROP INDEX tag_index;"));
 
     if (m_observer)
     {
@@ -695,7 +705,7 @@ bool SchemaUpdater::updateV4toV5()
         QString errorMsg = i18n("No album library path has been found in the configuration file. "
                                 "Giving up the schema updating process. "
                                 "Please try with an empty database, or repair your configuration.");
-        m_access->setLastError(errorMsg);
+        m_LastErrorMessage=errorMsg;
         m_setError = true;
         if (m_observer)
         {
@@ -717,7 +727,7 @@ bool SchemaUpdater::updateV4toV5()
                                 "In any case, you can seek advice from the digikam-devel@kde.org mailing list. "
                                 "The database updating process will now be aborted because we do not want "
                                 "to create a new database based on false assumptions from a broken installation.");
-        m_access->setLastError(errorMsg);
+        m_LastErrorMessage=errorMsg;
         m_setError = true;
         if (m_observer)
         {
@@ -737,7 +747,7 @@ bool SchemaUpdater::updateV4toV5()
 
     // --- With the album root, populate albums ---
 
-    if (!m_access->backend()->execSql(QString(
+    if (!m_Backend->execSql(QString(
                     "REPLACE INTO Albums "
                     " (id, albumRoot, relativePath, date, caption, collection, icon) "
                     "SELECT id, ?, url, date, caption, collection, icon "
@@ -757,7 +767,7 @@ bool SchemaUpdater::updateV4toV5()
 
     // --- Add images ---
 
-    if (!m_access->backend()->execSql(QString(
+    if (!m_Backend->execSql(QString(
                     "REPLACE INTO Images "
                     " (id, album, name, status, category, modificationDate, fileSize, uniqueHash) "
                     "SELECT id, dirid, name, ?, ?, NULL, NULL, NULL"
@@ -768,7 +778,7 @@ bool SchemaUpdater::updateV4toV5()
          return false;
 
     // remove orphan images that would not be removed by CollectionScanner
-    m_access->backend()->execSql(QString("DELETE FROM Images WHERE album NOT IN (SELECT id FROM Albums);"));
+    m_Backend->execSql(QString("DELETE FROM Images WHERE album NOT IN (SELECT id FROM Albums);"));
 
     if (m_observer)
     {
@@ -781,7 +791,7 @@ bool SchemaUpdater::updateV4toV5()
 
     // --- Port searches ---
 
-    if (!m_access->backend()->execSql(QString(
+    if (!m_Backend->execSql(QString(
                     "REPLACE INTO Searches "
                     " (id, type, name, query) "
                     "SELECT id, ?, name, url"
@@ -790,7 +800,7 @@ bool SchemaUpdater::updateV4toV5()
        )
          return false;
 
-    SearchInfo::List sList = m_access->db()->scanSearches();
+    SearchInfo::List sList = m_AlbumDB->scanSearches();
 
     for (SearchInfo::List::const_iterator it = sList.constBegin(); it != sList.constEnd(); ++it)
     {
@@ -805,15 +815,15 @@ bool SchemaUpdater::updateV4toV5()
 
         if (url.queryItem("type") == QString("datesearch"))
         {
-            m_access->db()->updateSearch((*it).id, DatabaseSearch::TimeLineSearch, name, query);
+            m_AlbumDB->updateSearch((*it).id, DatabaseSearch::TimeLineSearch, name, query);
         }
         else if (url.queryItem("1.key") == "keyword")
         {
-            m_access->db()->updateSearch((*it).id, DatabaseSearch::KeywordSearch, name, query);
+            m_AlbumDB->updateSearch((*it).id, DatabaseSearch::KeywordSearch, name, query);
         }
         else
         {
-            m_access->db()->updateSearch((*it).id, DatabaseSearch::AdvancedSearch, name, query);
+            m_AlbumDB->updateSearch((*it).id, DatabaseSearch::AdvancedSearch, name, query);
         }
     }
 
@@ -844,7 +854,7 @@ bool SchemaUpdater::updateV4toV5()
     configVideoFilter.subtract(defaultVideoFilter.toSet());
     configAudioFilter.subtract(defaultAudioFilter.toSet());
 
-    m_access->db()->setUserFilterSettings(configImageFilter.toList(), configVideoFilter.toList(), configAudioFilter.toList());
+    m_AlbumDB->setUserFilterSettings(configImageFilter.toList(), configVideoFilter.toList(), configAudioFilter.toList());
     kDebug() << "Set initial filter settings with user settings" << configImageFilter;
 
     if (m_observer)
@@ -874,7 +884,7 @@ bool SchemaUpdater::updateV4toV5()
     // --- Port date, comment and rating (_after_ the scan) ---
 
     // Port ImagesV3.date -> ImageInformation.creationDate
-    if (!m_access->backend()->execSql(QString(
+    if (!m_Backend->execSql(QString(
                     "UPDATE ImageInformation SET "
                     " creationDate=(SELECT datetime FROM ImagesV3 WHERE ImagesV3.id=ImageInformation.imageid) "
                     "WHERE imageid IN (SELECT id FROM ImagesV3);"
@@ -893,13 +903,13 @@ bool SchemaUpdater::updateV4toV5()
     // Port ImagesV3.comment to ImageComments
 
     // An author of NULL will inhibt the UNIQUE restriction to take effect (but #189080). Work around.
-    m_access->backend()->execSql(QString(
+    m_Backend->execSql(QString(
                     "DELETE FROM ImageComments WHERE "
                     "type=? AND language=? AND author IS NULL "
                     "AND imageid IN ( SELECT id FROM ImagesV3 ); "),
                     (int)DatabaseComment::Comment, QString("x-default"));
 
-    if (!m_access->backend()->execSql(QString(
+    if (!m_Backend->execSql(QString(
                     "REPLACE INTO ImageComments "
                     " (imageid, type, language, comment) "
                     "SELECT id, ?, ?, caption FROM ImagesV3;"
@@ -916,7 +926,7 @@ bool SchemaUpdater::updateV4toV5()
     }
 
     // Port rating storage in ImageProperties to ImageInformation
-    if (!m_access->backend()->execSql(QString(
+    if (!m_Backend->execSql(QString(
                     "UPDATE ImageInformation SET "
                     " rating=(SELECT value FROM ImageProperties "
                     "         WHERE ImageInformation.imageid=ImageProperties.imageid AND ImageProperties.property=?) "
@@ -926,8 +936,8 @@ bool SchemaUpdater::updateV4toV5()
        )
          return false;
 
-    m_access->backend()->execSql(QString("DELETE FROM ImageProperties WHERE property=?;"), QString("Rating"));
-    m_access->backend()->execSql(QString("UPDATE ImageInformation SET rating=0 WHERE rating<0;"));
+    m_Backend->execSql(QString("DELETE FROM ImageProperties WHERE property=?;"), QString("Rating"));
+    m_Backend->execSql(QString("UPDATE ImageInformation SET rating=0 WHERE rating<0;"));
 
     if (m_observer)
     {
@@ -938,9 +948,9 @@ bool SchemaUpdater::updateV4toV5()
 
     // --- Drop old tables ---
 
-    m_access->backend()->execSql(QString("DROP TABLE ImagesV3;"));
-    m_access->backend()->execSql(QString("DROP TABLE AlbumsV3;"));
-    m_access->backend()->execSql(QString("DROP TABLE SearchesV3;"));
+    m_Backend->execSql(QString("DROP TABLE ImagesV3;"));
+    m_Backend->execSql(QString("DROP TABLE AlbumsV3;"));
+    m_Backend->execSql(QString("DROP TABLE SearchesV3;"));
 
     if (m_observer)
         m_observer->schemaUpdateProgress(i18n("Dropped v3 tables"));
@@ -952,14 +962,14 @@ bool SchemaUpdater::updateV4toV5()
 
 void SchemaUpdater::preAlpha010Update1()
 {
-    QString hasUpdate = m_access->db()->getSetting("preAlpha010Update1");
+    QString hasUpdate = m_AlbumDB->getSetting("preAlpha010Update1");
     if (!hasUpdate.isNull())
         return;
 
-    if (!m_access->backend()->execSql(QString("ALTER TABLE Searches RENAME TO SearchesV3;")))
+    if (!m_Backend->execSql(QString("ALTER TABLE Searches RENAME TO SearchesV3;")))
         return;
 
-    if ( !m_access->backend()->execSql(
+    if ( !m_Backend->execSql(
                    QString( "CREATE TABLE IF NOT EXISTS Searches  \n"
                             " (id INTEGER PRIMARY KEY, \n"
                             "  type INTEGER, \n"
@@ -967,7 +977,7 @@ void SchemaUpdater::preAlpha010Update1()
                             "  query TEXT NOT NULL);" ) ))
         return;
 
-    if (!m_access->backend()->execSql(QString(
+    if (!m_Backend->execSql(QString(
                     "REPLACE INTO Searches "
                     " (id, type, name, query) "
                     "SELECT id, ?, name, url"
@@ -976,7 +986,7 @@ void SchemaUpdater::preAlpha010Update1()
        )
          return;
 
-    SearchInfo::List sList = m_access->db()->scanSearches();
+    SearchInfo::List sList = m_AlbumDB->scanSearches();
 
     for (SearchInfo::List::const_iterator it = sList.constBegin(); it != sList.constEnd(); ++it)
     {
@@ -987,35 +997,35 @@ void SchemaUpdater::preAlpha010Update1()
 
         if (url.queryItem("type") == QString("datesearch"))
         {
-            m_access->db()->updateSearch((*it).id, DatabaseSearch::TimeLineSearch, (*it).name, query);
+            m_AlbumDB->updateSearch((*it).id, DatabaseSearch::TimeLineSearch, (*it).name, query);
         }
         else if (url.queryItem("1.key") == "keyword")
         {
-            m_access->db()->updateSearch((*it).id, DatabaseSearch::KeywordSearch, (*it).name, query);
+            m_AlbumDB->updateSearch((*it).id, DatabaseSearch::KeywordSearch, (*it).name, query);
         }
         else
         {
-            m_access->db()->updateSearch((*it).id, DatabaseSearch::AdvancedSearch, (*it).name, query);
+            m_AlbumDB->updateSearch((*it).id, DatabaseSearch::AdvancedSearch, (*it).name, query);
         }
     }
 
-    m_access->backend()->execSql(QString("DROP TABLE SearchesV3;"));
+    m_Backend->execSql(QString("DROP TABLE SearchesV3;"));
 
-    m_access->db()->setSetting("preAlpha010Update1", "true");
+    m_AlbumDB->setSetting("preAlpha010Update1", "true");
 }
 
 void SchemaUpdater::preAlpha010Update2()
 {
-    QString hasUpdate = m_access->db()->getSetting("preAlpha010Update2");
+    QString hasUpdate = m_AlbumDB->getSetting("preAlpha010Update2");
     if (!hasUpdate.isNull())
         return;
 
-    if (!m_access->backend()->execSql(QString("ALTER TABLE ImagePositions RENAME TO ImagePositionsTemp;")))
+    if (!m_Backend->execSql(QString("ALTER TABLE ImagePositions RENAME TO ImagePositionsTemp;")))
         return;
-    if (!m_access->backend()->execSql(QString("ALTER TABLE ImageMetadata RENAME TO ImageMetadataTemp;")))
+    if (!m_Backend->execSql(QString("ALTER TABLE ImageMetadata RENAME TO ImageMetadataTemp;")))
         return;
 
-    m_access->backend()->execSql(
+    m_Backend->execSql(
                     QString("CREATE TABLE ImagePositions\n"
                             " (imageid INTEGER PRIMARY KEY,\n"
                             "  latitude TEXT,\n"
@@ -1029,7 +1039,7 @@ void SchemaUpdater::preAlpha010Update2()
                             "  accuracy REAL,\n"
                             "  description TEXT);") );
 
-    m_access->backend()->execSql(QString(
+    m_Backend->execSql(QString(
                     "REPLACE INTO ImagePositions "
                     " (imageid, latitude, latitudeNumber, longitude, longitudeNumber, "
                     "  altitude, orientation, tilt, roll, accuracy, description) "
@@ -1037,7 +1047,7 @@ void SchemaUpdater::preAlpha010Update2()
                     "  altitude, orientation, tilt, roll, 0, description "
                     " FROM ImagePositionsTemp;"));
 
-    m_access->backend()->execSql(
+    m_Backend->execSql(
                     QString("CREATE TABLE ImageMetadata\n"
                             " (imageid INTEGER PRIMARY KEY,\n"
                             "  make TEXT,\n"
@@ -1057,7 +1067,7 @@ void SchemaUpdater::preAlpha010Update2()
                             "  subjectDistance REAL,\n"
                             "  subjectDistanceCategory INTEGER);") );
 
-    m_access->backend()->execSql( QString("INSERT INTO ImageMetadata "
+    m_Backend->execSql( QString("INSERT INTO ImageMetadata "
                             " (imageid, make, model, lens, aperture, focalLength, focalLength35, "
                             "  exposureTime, exposureProgram, exposureMode, sensitivity, flash, whiteBalance, "
                             "  whiteBalanceColorTemperature, meteringMode, subjectDistance, subjectDistanceCategory) "
@@ -1066,20 +1076,20 @@ void SchemaUpdater::preAlpha010Update2()
                             "  whiteBalanceColorTemperature, meteringMode, subjectDistance, subjectDistanceCategory "
                             "FROM ImageMetadataTemp;"));
 
-    m_access->backend()->execSql(QString("DROP TABLE ImagePositionsTemp;"));
-    m_access->backend()->execSql(QString("DROP TABLE ImageMetadataTemp;"));
+    m_Backend->execSql(QString("DROP TABLE ImagePositionsTemp;"));
+    m_Backend->execSql(QString("DROP TABLE ImageMetadataTemp;"));
 
-    m_access->db()->setSetting("preAlpha010Update2", "true");
+    m_AlbumDB->setSetting("preAlpha010Update2", "true");
 }
 
 void SchemaUpdater::preAlpha010Update3()
 {
-    QString hasUpdate = m_access->db()->getSetting("preAlpha010Update3");
+    QString hasUpdate = m_AlbumDB->getSetting("preAlpha010Update3");
     if (!hasUpdate.isNull())
         return;
 
-    m_access->backend()->execSql(QString("DROP TABLE ImageCopyright;"));
-    m_access->backend()->execSql(
+    m_Backend->execSql(QString("DROP TABLE ImageCopyright;"));
+    m_Backend->execSql(
                     QString("CREATE TABLE ImageCopyright\n"
                             " (imageid INTEGER,\n"
                             "  property TEXT,\n"
@@ -1088,18 +1098,18 @@ void SchemaUpdater::preAlpha010Update3()
                             "  UNIQUE(imageid, property, value, extraValue));")
                                 );
 
-    m_access->db()->setSetting("preAlpha010Update3", "true");
+    m_AlbumDB->setSetting("preAlpha010Update3", "true");
 }
 
 void SchemaUpdater::beta010Update1()
 {
-    QString hasUpdate = m_access->db()->getSetting("beta010Update1");
+    QString hasUpdate = m_AlbumDB->getSetting("beta010Update1");
     if (!hasUpdate.isNull())
         return;
 
     // if Image has been deleted
-    m_access->backend()->execSql("DROP TRIGGER delete_image;");
-    m_access->backend()->execSql(
+    m_Backend->execSql("DROP TRIGGER delete_image;");
+    m_Backend->execSql(
             "CREATE TRIGGER delete_image DELETE ON Images\n"
             "BEGIN\n"
             "  DELETE FROM ImageTags\n"
@@ -1125,19 +1135,19 @@ void SchemaUpdater::beta010Update1()
             "END;");
 
 
-    m_access->db()->setSetting("beta010Update1", "true");
+    m_AlbumDB->setSetting("beta010Update1", "true");
 }
 
 void SchemaUpdater::beta010Update2()
 {
-    QString hasUpdate = m_access->db()->getSetting("beta010Update2");
+    QString hasUpdate = m_AlbumDB->getSetting("beta010Update2");
     if (!hasUpdate.isNull())
         return;
 
     // force rescan and creation of ImageInformation entry for videos and audio
-    m_access->backend()->execSql("DELETE FROM Images WHERE category=2 OR category=3;");
+    m_Backend->execSql("DELETE FROM Images WHERE category=2 OR category=3;");
 
-    m_access->db()->setSetting("beta010Update2", "true");
+    m_AlbumDB->setSetting("beta010Update2", "true");
 }
 
 // ---------- Legacy code ------------
@@ -1145,7 +1155,7 @@ void SchemaUpdater::beta010Update2()
 
 bool SchemaUpdater::createTablesV3()
 {
-    if (!m_access->backend()->execSql( QString("CREATE TABLE Albums\n"
+    if (!m_Backend->execSql( QString("CREATE TABLE Albums\n"
                             " (id INTEGER PRIMARY KEY,\n"
                             "  url TEXT NOT NULL UNIQUE,\n"
                             "  date DATE NOT NULL,\n"
@@ -1156,7 +1166,7 @@ bool SchemaUpdater::createTablesV3()
         return false;
     }
 
-    if (!m_access->backend()->execSql( QString("CREATE TABLE Tags\n"
+    if (!m_Backend->execSql( QString("CREATE TABLE Tags\n"
                             " (id INTEGER PRIMARY KEY,\n"
                             "  pid INTEGER,\n"
                             "  name TEXT NOT NULL,\n"
@@ -1167,7 +1177,7 @@ bool SchemaUpdater::createTablesV3()
         return false;
     }
 
-    if (!m_access->backend()->execSql( QString("CREATE TABLE TagsTree\n"
+    if (!m_Backend->execSql( QString("CREATE TABLE TagsTree\n"
                             " (id INTEGER NOT NULL,\n"
                             "  pid INTEGER NOT NULL,\n"
                             "  UNIQUE (id, pid));") ))
@@ -1175,7 +1185,7 @@ bool SchemaUpdater::createTablesV3()
         return false;
     }
 
-    if (!m_access->backend()->execSql( QString("CREATE TABLE Images\n"
+    if (!m_Backend->execSql( QString("CREATE TABLE Images\n"
                             " (id INTEGER PRIMARY KEY,\n"
                             "  name TEXT NOT NULL,\n"
                             "  dirid INTEGER NOT NULL,\n"
@@ -1187,7 +1197,7 @@ bool SchemaUpdater::createTablesV3()
     }
 
 
-    if (!m_access->backend()->execSql( QString("CREATE TABLE ImageTags\n"
+    if (!m_Backend->execSql( QString("CREATE TABLE ImageTags\n"
                             " (imageid INTEGER NOT NULL,\n"
                             "  tagid INTEGER NOT NULL,\n"
                             "  UNIQUE (imageid, tagid));") ))
@@ -1195,7 +1205,7 @@ bool SchemaUpdater::createTablesV3()
         return false;
     }
 
-    if (!m_access->backend()->execSql( QString("CREATE TABLE ImageProperties\n"
+    if (!m_Backend->execSql( QString("CREATE TABLE ImageProperties\n"
                             " (imageid  INTEGER NOT NULL,\n"
                             "  property TEXT    NOT NULL,\n"
                             "  value    TEXT    NOT NULL,\n"
@@ -1204,7 +1214,7 @@ bool SchemaUpdater::createTablesV3()
         return false;
     }
 
-    if ( !m_access->backend()->execSql( QString( "CREATE TABLE Searches  \n"
+    if ( !m_Backend->execSql( QString( "CREATE TABLE Searches  \n"
                             " (id INTEGER PRIMARY KEY, \n"
                             "  name TEXT NOT NULL UNIQUE, \n"
                             "  url  TEXT NOT NULL);" ) ) )
@@ -1212,7 +1222,7 @@ bool SchemaUpdater::createTablesV3()
         return false;
     }
 
-    if (!m_access->backend()->execSql( QString("CREATE TABLE Settings         \n"
+    if (!m_Backend->execSql( QString("CREATE TABLE Settings         \n"
                             "(keyword TEXT NOT NULL UNIQUE,\n"
                             " value TEXT);") ))
     {
@@ -1221,14 +1231,14 @@ bool SchemaUpdater::createTablesV3()
 
     // TODO: see which more indices are needed
     // create indices
-    m_access->backend()->execSql("CREATE INDEX dir_index ON Images    (dirid);");
-    m_access->backend()->execSql("CREATE INDEX tag_index ON ImageTags (tagid);");
+    m_Backend->execSql("CREATE INDEX dir_index ON Images    (dirid);");
+    m_Backend->execSql("CREATE INDEX tag_index ON ImageTags (tagid);");
 
     // create triggers
 
     // trigger: delete from Images/ImageTags/ImageProperties
     // if Album has been deleted
-    m_access->backend()->execSql("CREATE TRIGGER delete_album DELETE ON Albums\n"
+    m_Backend->execSql("CREATE TRIGGER delete_album DELETE ON Albums\n"
             "BEGIN\n"
             " DELETE FROM ImageTags\n"
             "   WHERE imageid IN (SELECT id FROM Images WHERE dirid=OLD.id);\n"
@@ -1240,7 +1250,7 @@ bool SchemaUpdater::createTablesV3()
 
     // trigger: delete from ImageTags/ImageProperties
     // if Image has been deleted
-    m_access->backend()->execSql("CREATE TRIGGER delete_image DELETE ON Images\n"
+    m_Backend->execSql("CREATE TRIGGER delete_image DELETE ON Images\n"
             "BEGIN\n"
             "  DELETE FROM ImageTags\n"
             "    WHERE imageid=OLD.id;\n"
@@ -1253,13 +1263,13 @@ bool SchemaUpdater::createTablesV3()
             "END;");
 
     // trigger: delete from ImageTags if Tag has been deleted
-    m_access->backend()->execSql("CREATE TRIGGER delete_tag DELETE ON Tags\n"
+    m_Backend->execSql("CREATE TRIGGER delete_tag DELETE ON Tags\n"
             "BEGIN\n"
             "  DELETE FROM ImageTags WHERE tagid=OLD.id;\n"
             "END;");
 
     // trigger: insert into TagsTree if Tag has been added
-    m_access->backend()->execSql("CREATE TRIGGER insert_tagstree AFTER INSERT ON Tags\n"
+    m_Backend->execSql("CREATE TRIGGER insert_tagstree AFTER INSERT ON Tags\n"
             "BEGIN\n"
             "  INSERT INTO TagsTree\n"
             "    SELECT NEW.id, NEW.pid\n"
@@ -1268,7 +1278,7 @@ bool SchemaUpdater::createTablesV3()
             "END;");
 
     // trigger: delete from TagsTree if Tag has been deleted
-    m_access->backend()->execSql("CREATE TRIGGER delete_tagstree DELETE ON Tags\n"
+    m_Backend->execSql("CREATE TRIGGER delete_tagstree DELETE ON Tags\n"
             "BEGIN\n"
             " DELETE FROM Tags\n"
             "   WHERE id  IN (SELECT id FROM TagsTree WHERE pid=OLD.id);\n"
@@ -1279,7 +1289,7 @@ bool SchemaUpdater::createTablesV3()
             "END;");
 
     // trigger: delete from TagsTree if Tag has been deleted
-    m_access->backend()->execSql("CREATE TRIGGER move_tagstree UPDATE OF pid ON Tags\n"
+    m_Backend->execSql("CREATE TRIGGER move_tagstree UPDATE OF pid ON Tags\n"
             "BEGIN\n"
             "  DELETE FROM TagsTree\n"
             "    WHERE\n"

@@ -25,6 +25,7 @@
 
 // KDE includes
 #include <klocale.h>
+#include <kdebug.h>
 #include <kglobalsettings.h>
 
 // QT includes
@@ -229,5 +230,32 @@ namespace Digikam
         }
         //TODO create an Enable button slot, if the path is vald
 //        d->mainDialog->enableButtonOk(dbOk);
+    }
+
+    void DatabaseWidget::setParametersFromSettings(const AlbumSettings *settings)
+    {
+        originalDbPath = settings->getDatabaseFilePath();
+        originalDbType = settings->getDatabaseType();
+        databasePathEdit->setUrl(settings->getDatabaseFilePath());
+
+        databaseName->setText(settings->getDatabaseName());
+        hostName->setText(settings->getDatabaseHostName());
+        hostPort->setValue(settings->getDatabasePort());
+        connectionOptions->setText(settings->getDatabaseConnectoptions());
+
+        userName->setText(settings->getDatabaseUserName());
+
+        password->setText(settings->getDatabasePassword());
+
+        /* Now set the type according the database type from the settings.
+         * If no item is found, ignore the setting.
+         */
+        for (int i=0; i<databaseType->count(); i++){
+            kDebug(50003) << "Comparing comboboxentry on index ["<< i <<"] [" << databaseType->itemText(i) << "] with ["<< settings->getDatabaseType() << "]";
+            if (databaseType->itemText(i)==settings->getDatabaseType()){
+                databaseType->setCurrentIndex(i);
+                setDatabaseInputFields(databaseType->itemText(i));
+            }
+        }
     }
 }

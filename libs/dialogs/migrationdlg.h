@@ -45,6 +45,7 @@ public:
     ~MigrationDlg();
 
 private Q_SLOTS:
+    void performCopy();
 
 private:
 
@@ -53,6 +54,7 @@ private:
     DatabaseWidget *toDatabaseWidget;
 
     void setupMainArea();
+    void dataInit();
 };
 
 }  // namespace Digikam

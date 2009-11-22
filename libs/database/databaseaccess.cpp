@@ -251,10 +251,13 @@ bool DatabaseAccess::checkReadyForUse(InitializationObserver *observer)
     d->initializing = true;
 
     // update schema
-    SchemaUpdater updater(&access);
+    SchemaUpdater updater(access.db(), access.backend(), access.parameters());
+    updater.setDatabaseAccess(&access);
+
     updater.setObserver(observer);
     if (!d->backend->initSchema(&updater))
     {
+        access.setLastError(updater.getLastErrorMessage());
         d->initializing = false;
         return false;
     }

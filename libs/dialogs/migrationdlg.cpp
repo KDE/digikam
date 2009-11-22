@@ -29,13 +29,17 @@
 #include <qprogressbar.h>
 #include <qwidget.h>
 #include <qlist.h>
+#include <qsqlquery.h>
+#include <qmap.h>
 
 // KDE includes
 #include <klocale.h>
+#include <kdebug.h>
 
 // Local includes
-#include "databasewidget.h"
+#include "albumsettings.h"
 #include "databaseaccess.h"
+#include "databasewidget.h"
 #include "databasebackend.h"
 #include "databaseparameters.h"
 
@@ -68,9 +72,19 @@ namespace Digikam
         layout->addWidget(progressBar, 1, 0, 1,3);
 
         setMainWidget(mainWidget);
+        dataInit();
 
+        connect(migrateBtn, SIGNAL(clicked()), this, SLOT(performCopy()));
+    }
 
-        DatabaseAccess     toDBAccess;
+    void MigrationDlg::dataInit()
+    {
+        fromDatabaseWidget->setParametersFromSettings(AlbumSettings::instance());
+        toDatabaseWidget->setParametersFromSettings(AlbumSettings::instance());
+    }
+
+    void MigrationDlg::performCopy()
+    {
         DatabaseParameters toDBParameters;
         toDBParameters.readConfig();
         toDBParameters.connectOptions = toDatabaseWidget->connectionOptions->text();
@@ -80,10 +94,10 @@ namespace Digikam
         toDBParameters.password       = toDatabaseWidget->password->text();
         toDBParameters.port           = toDatabaseWidget->hostPort->text().toInt();
         toDBParameters.userName       = toDatabaseWidget->userName->text();
-        toDBAccess.setParameters(toDBParameters);
+        DatabaseLocking toLocking;
+        DatabaseBackend toDBbackend(&toLocking);
+        toDBbackend.open(toDBParameters);
 
-
-        DatabaseAccess     fromDBAccess;
         DatabaseParameters fromDBParameters;
         fromDBParameters.readConfig();
         fromDBParameters.connectOptions = fromDatabaseWidget->connectionOptions->text();
@@ -93,14 +107,36 @@ namespace Digikam
         fromDBParameters.password       = fromDatabaseWidget->password->text();
         fromDBParameters.port           = fromDatabaseWidget->hostPort->text().toInt();
         fromDBParameters.userName       = fromDatabaseWidget->userName->text();
-        fromDBAccess.setParameters(fromDBParameters);
+        DatabaseLocking fromLocking;
+        DatabaseBackend fromDBbackend(&fromLocking);
+        fromDBbackend.open(fromDBParameters);
 
-        // now perform the action
 
-        // AlbumRoots
-        QList<QVariant> result;
-        fromDBAccess.backend()->execDBAction(fromDBAccess.backend()->getDBAction("Migrate_Read_AlbumRoots"), &result);
+        // first create the schema
 
-//        fromDBAccess.backend()->getDBAction();
+        // now perform the copy action
+        QMap<QString, QVariant> bindingMap;
+        QList<QString> columnNames;
+        QSqlQuery result = fromDBbackend.execDBActionQuery(fromDBbackend.getDBAction("Migrate_Read_AlbumRoots"), bindingMap) ;
+
+        int columnCount = result.record().count();
+        for (int i=0; i<columnCount; i++)
+        {
+            kDebug(50003) << "Column: ["<< result.record().fieldName(i) << "]";
+            columnNames.append(result.record().fieldName(i));
+        }
+
+        while (result.next()) {
+            // read the values from the fromDB into a hash
+            QMap<QString, QVariant> tempBindingMap;
+            int i=0;
+            foreach (QString columnName, columnNames)
+            {
+                kDebug(50003) << "Column: ["<< columnName << "] value ["<<result.value(i++)<<"]";
+                tempBindingMap.insert(columnName, result.value(i));
+            }
+            // insert the previous requested values to the toDB
+            toDBbackend.execDBActionQuery(fromDBbackend.getDBAction("Migrate_Write_AlbumRoots"), tempBindingMap);
+        }
     }
 }
