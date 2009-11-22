@@ -53,7 +53,7 @@ DummyOption::DummyOption()
      * Use setRegExp() to define the regular expression that identifies the parse option and its parameters
      */
 
-    addTokenDescription("[myoption]", i18nc("my rename option", "MyOption"),
+    addTokenDescription("[myoption]", i18nc("my rename option", "MyOption"), i18n("my option description"));
     setRegExp("<PARSING REGEXP>");
 
 }
