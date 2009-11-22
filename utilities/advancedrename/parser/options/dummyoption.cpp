@@ -54,19 +54,23 @@ DummyOption::DummyOption()
      */
 
     addTokenDescription("[myoption]", i18nc("my rename option", "MyOption"), i18n("my option description"));
-    setRegExp("<PARSING REGEXP>");
 
-}
+    // --------------------------------------------------------
 
-void DummyOption::parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results)
-{
-    QRegExp reg = regExp();
+    QRegExp reg("<PARSING REGEXP>");
 
     // decide if the regexp is case sensitive
     reg.setCaseSensitivity(Qt::CaseInsensitive);
 
     // decide if the regexp matching is greedy
     reg.setMinimal(false);
+
+    setRegExp(reg);
+}
+
+void DummyOption::parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results)
+{
+    QRegExp reg = regExp();
 
     // --------------------------------------------------------
 
