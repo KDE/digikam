@@ -51,7 +51,6 @@ void Highlighter::highlightBlock(const QString& text)
     foreach (const HighlightingRule &rule, highlightingRules)
     {
         QRegExp expression(rule.pattern);
-        expression.setMinimal(true);
         int index = expression.indexIn(text);
         while (index >= 0)
         {
@@ -78,7 +77,6 @@ void Highlighter::setupHighlightingGrammar(Parser* parser)
     foreach (Option* option, parser->options())
     {
         QRegExp r = option->regExp();
-        r.setMinimal(true);
         rule.pattern = r;
         rule.format  = optionFormat;
         highlightingRules.append(rule);
@@ -94,7 +92,6 @@ void Highlighter::setupHighlightingGrammar(Parser* parser)
         foreach (Modifier* modifier, option->modifiers())
         {
             QRegExp r = modifier->regExp();
-            r.setMinimal(true);
             rule.pattern = r;
             rule.format  = modifierFormat;
             highlightingRules.append(rule);
@@ -106,7 +103,6 @@ void Highlighter::setupHighlightingGrammar(Parser* parser)
     quotationFormat.setForeground((Qt::GlobalColor)QuotedTextColor);
     quotationFormat.setFontItalic(true);
     rule.pattern = QRegExp("\".*\"");
-    rule.pattern.setMinimal(true);
     rule.format = quotationFormat;
     highlightingRules.append(rule);
 

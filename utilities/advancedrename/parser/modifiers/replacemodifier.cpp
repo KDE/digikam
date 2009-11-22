@@ -91,7 +91,9 @@ ReplaceModifier::ReplaceModifier()
     addTokenDescription(QString("{ri:\"|old|\", \"|new|\"}"), i18n("Replace (case insensitive)"),
                                                               i18n("Replace text (case insensitive)"));
 
-    setRegExp("\\{r(i)?:\"(.+)\",\"(.*)\"\\}");
+    QRegExp reg("\\{r(i)?:\"(.+)\",\"(.*)\"\\}");
+    reg.setMinimal(true);
+    setRegExp(reg);
 }
 
 void ReplaceModifier::slotTokenTriggered(const QString& token)
@@ -125,9 +127,8 @@ void ReplaceModifier::slotTokenTriggered(const QString& token)
 QString ReplaceModifier::modifyOperation(const QString& parseString, const QString& result)
 {
     QRegExp reg = regExp();
-
-    int pos = 0;
-    pos     = reg.indexIn(parseString, pos);
+    int pos     = 0;
+    pos         = reg.indexIn(parseString, pos);
     if (pos > -1)
     {
         QString original    = reg.cap(2);

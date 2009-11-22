@@ -77,7 +77,9 @@ DefaultValueModifier::DefaultValueModifier()
 {
     addTokenDescription(QString("{d:\"|default|\"}"), i18nc("default value", "Default"), description());
 
-    setRegExp("\\{d:\"(.+)\"\\}");
+    QRegExp reg("\\{d:\"(.+)\"\\}");
+    reg.setMinimal(true);
+    setRegExp(reg);
 }
 
 void DefaultValueModifier::slotTokenTriggered(const QString& token)
@@ -108,10 +110,8 @@ QString DefaultValueModifier::modifyOperation(const QString& parseString, const 
     }
 
     QRegExp reg = regExp();
-    reg.setMinimal(true);
-
-    int pos = 0;
-    pos     = reg.indexIn(parseString, pos);
+    int pos     = 0;
+    pos         = reg.indexIn(parseString, pos);
     if (pos > -1)
     {
         QString defaultStr = reg.cap(1).isEmpty() ? QString() : reg.cap(1);

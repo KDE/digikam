@@ -35,7 +35,9 @@ LowerCaseModifier::LowerCaseModifier()
 {
     addTokenDescription(QString("{lower}"), i18n("Lowercase"), description());
 
-    setRegExp("\\{lower\\}");
+    QRegExp reg("\\{lower\\}");
+    reg.setMinimal(true);
+    setRegExp(reg);
 }
 
 QString LowerCaseModifier::modifyOperation(const QString& parseString, const QString& result)

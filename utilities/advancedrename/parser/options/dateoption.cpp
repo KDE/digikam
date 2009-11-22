@@ -190,13 +190,14 @@ DateOption::DateOption()
     addTokenDescription("[date:|format|]", i18n("Date && Time (custom format)"),
              i18n("Date and time") + " (" +  dateFormatLink + ')');
 
-    setRegExp("\\[date(:.*)?\\]");
+    QRegExp reg("\\[date(:.*)?\\]");
+    reg.setMinimal(true);
+    setRegExp(reg);
 }
 
 void DateOption::parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results)
 {
     QRegExp reg = regExp();
-    reg.setMinimal(true);
 
     // --------------------------------------------------------
 

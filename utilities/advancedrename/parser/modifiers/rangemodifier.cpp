@@ -101,7 +101,9 @@ RangeModifier::RangeModifier()
     addTokenDescription(QString("{|from| - |to|}"), i18n("Range"),
              i18n("Extract a specific range (if omitted, '|to|' = end of string)"));
 
-    setRegExp("\\{\\s*(\\d+)\\s*(-\\s*((-1|\\d+)\\s*)?)?\\}");
+    QRegExp reg("\\{\\s*(\\d+)\\s*(-\\s*((-1|\\d+)\\s*)?)?\\}");
+    reg.setMinimal(true);
+    setRegExp(reg);
 }
 
 void RangeModifier::slotTokenTriggered(const QString& token)
@@ -134,9 +136,8 @@ void RangeModifier::slotTokenTriggered(const QString& token)
 QString RangeModifier::modifyOperation(const QString& parseString, const QString& result)
 {
     QRegExp reg = regExp();
-
-    int pos = 0;
-    pos     = reg.indexIn(parseString, pos);
+    int pos     = 0;
+    pos         = reg.indexIn(parseString, pos);
     if (pos > -1)
     {
         /*

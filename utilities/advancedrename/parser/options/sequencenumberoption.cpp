@@ -100,7 +100,8 @@ SequenceNumberOption::SequenceNumberOption()
     addTokenDescription("#[|start|,|step|]", i18n("Sequence Number (start, step)"),
              i18n( "Sequence number (custom start + step)"));
 
-    setRegExp("(#+)(\\[\\s*(\\d+)\\s*,?\\s*(\\d+)?\\s*\\])?");
+    QRegExp reg("(#+)(\\[\\s*(\\d+)\\s*,?\\s*(\\d+)?\\s*\\])?");
+    setRegExp(reg);
 }
 
 void SequenceNumberOption::slotTokenTriggered(const QString& token)

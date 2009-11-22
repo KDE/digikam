@@ -103,9 +103,9 @@ QRegExp ParseObject::regExp() const
     return d->regExp;
 }
 
-void ParseObject::setRegExp(const QString& regExp)
+void ParseObject::setRegExp(const QRegExp& regExp)
 {
-    d->regExp = QRegExp(regExp);
+    d->regExp = regExp;
 }
 
 QPushButton* ParseObject::createButton(const QString& name, const QIcon& icon)

@@ -145,7 +145,9 @@ MetadataOption::MetadataOption()
 
     addTokenDescription("[meta:|key|]", i18n("Metadata"), i18n("Add metadata information"));
 
-    setRegExp("\\[meta:\\s*(.*)\\s*\\s*\\]");
+    QRegExp reg("\\[meta:\\s*(.*)\\s*\\s*\\]");
+    reg.setMinimal(true);
+    setRegExp(reg);
 }
 
 void MetadataOption::slotTokenTriggered(const QString& token)
@@ -179,7 +181,6 @@ void MetadataOption::slotTokenTriggered(const QString& token)
 void MetadataOption::parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results)
 {
     QRegExp reg = regExp();
-    reg.setMinimal(true);
 
     // --------------------------------------------------------
 

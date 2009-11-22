@@ -81,7 +81,7 @@ public:
     virtual ~ParseObject();
 
     QRegExp regExp() const;
-    void    setRegExp(const QString& regExp);
+    void    setRegExp(const QRegExp& regExp);
 
     void    setDescription(const QString& desc);
     QString description() const;
