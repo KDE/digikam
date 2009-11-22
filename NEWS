@@ -3,8 +3,9 @@ digiKam 1.0.0-rc - Release date: 2009-11-29
 
 NEW FEATURES:
 
-General        : Syntax highlighting and history management for AdvancedRename utility
-ImageEditor    : New tool to remove noise using wavelets.
+General        : Syntax highlighting and history management for AdvancedRename utility.
+ImageEditor    : New tool to remove noise using wavelets working in luminance (YCrCb color space).
+BatchQueueMgr  : New tool to remove noise using wavelets working in luminance (YCrCb color space).
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
