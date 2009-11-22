@@ -672,29 +672,7 @@ bool MetadataHub::write(DImg& image, WriteMode writeMode, const MetadataWriteSet
     DMetadata metadata;
     metadata.setData(image.getMetadata());
 
-    if (write(metadata, writeMode, settings))
-    {
-        // Do not insert null data into metaData map:
-        // Even if byte array is null, if there is a key in the map, it will
-        // be interpreted as "There was data, so write it again to the file".
-        if (metadata.hasComments())
-            image.getMetadata().imageComments = metadata.getComments();
-
-#if KEXIV2_VERSION >= 0x010000
-        if (metadata.hasExif())
-            image.setExif(metadata.getExifEncoded());
-#else
-        if (metadata.hasExif())
-            image.getMetadata().exifData = metadata.getExif();
-#endif
-        
-        if (metadata.hasIptc())
-            image.getMetadata().iptcData = metadata.getIptc();
-        if (metadata.hasXmp())
-            image.getMetadata().xmpData = metadata.getXmp();
-        return true;
-    }
-    return false;
+    return write(metadata, writeMode, settings);
 }
 
 bool MetadataHub::willWriteMetadata(WriteMode writeMode, const MetadataWriteSettings& settings) const

@@ -115,13 +115,7 @@ bool AssignTemplate::toolOperations()
         meta.setMetadataTemplate(t);
     }
 
-#if KEXIV2_VERSION >= 0x010000
-    image().setExif(meta.getExifEncoded());
-#else
-    image().getMetadata().exifData=meta.getExif();
-#endif
-    image().getMetadata().iptcData=meta.getIptc();
-    image().getMetadata().xmpData=meta.getXmp();
+    image().setMetadata(meta.data());
 
     return (savefromDImg());
 }
