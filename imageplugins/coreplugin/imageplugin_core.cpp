@@ -110,23 +110,6 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QVariantList &)
     //-------------------------------
     // Colors menu actions
 
-    d->blurAction = new KAction(KIcon("blurimage"), i18n("Blur..."), this);
-    actionCollection()->addAction("implugcore_blur", d->blurAction );
-    connect(d->blurAction, SIGNAL(triggered(bool) ),
-            this, SLOT(slotBlur()));
-
-    d->sharpenAction = new KAction(KIcon("sharpenimage"), i18n("Sharpen..."), this);
-    actionCollection()->addAction("implugcore_sharpen", d->sharpenAction );
-    connect(d->sharpenAction, SIGNAL(triggered(bool) ),
-            this, SLOT(slotSharpen()));
-
-    d->redeyeAction = new KAction(KIcon("redeyes"), i18n("Red Eye..."), this);
-    d->redeyeAction->setWhatsThis( i18n( "This filter can be used to correct red eyes in a photo. "
-                                        "Select a region including the eyes to use this option.") );
-    actionCollection()->addAction("implugcore_redeye", d->redeyeAction );
-    connect(d->redeyeAction, SIGNAL(triggered(bool) ),
-            this, SLOT(slotRedEye()));
-
     d->BCGAction = new KAction(KIcon("contrast"), i18n("Brightness/Contrast/Gamma..."), this);
     actionCollection()->addAction("implugcore_bcg", d->BCGAction );
     connect(d->BCGAction, SIGNAL(triggered(bool) ),
@@ -189,8 +172,25 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QVariantList &)
     //-------------------------------
     // Enhance menu actions
 
-    d->noiseReductionAction  = new KAction(KIcon("noisereduction"), i18n("Noise Reduction..."), this);
-    actionCollection()->addAction("imgplugcore_noisereduction", d->noiseReductionAction );
+    d->blurAction = new KAction(KIcon("blurimage"), i18n("Blur..."), this);
+    actionCollection()->addAction("implugcore_blur", d->blurAction );
+    connect(d->blurAction, SIGNAL(triggered(bool) ),
+            this, SLOT(slotBlur()));
+
+    d->sharpenAction = new KAction(KIcon("sharpenimage"), i18n("Sharpen..."), this);
+    actionCollection()->addAction("implugcore_sharpen", d->sharpenAction );
+    connect(d->sharpenAction, SIGNAL(triggered(bool) ),
+            this, SLOT(slotSharpen()));
+
+    d->redeyeAction = new KAction(KIcon("redeyes"), i18n("Red Eye..."), this);
+    d->redeyeAction->setWhatsThis( i18n( "This filter can be used to correct red eyes in a photo. "
+                                        "Select a region including the eyes to use this option.") );
+    actionCollection()->addAction("implugcore_redeye", d->redeyeAction );
+    connect(d->redeyeAction, SIGNAL(triggered(bool) ),
+            this, SLOT(slotRedEye()));
+
+    d->noiseReductionAction = new KAction(KIcon("noisereduction"), i18n("Noise Reduction..."), this);
+    actionCollection()->addAction("implugcore_noisereduction", d->noiseReductionAction );
 
     connect(d->noiseReductionAction, SIGNAL(triggered(bool)),
             this, SLOT(slotNoiseReduction()));
