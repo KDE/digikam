@@ -19,6 +19,7 @@ Name[sv]=Nerladdning klar
 Name[uk]=Звантаження завершено
 Name[x-test]=xxDownload completexx
 Comment=A download from a camera or other device has finished.
+Comment[da]=Et download fra et kamera eller anden enhed er gennemført.
 Comment[en_GB]=A download from a camera or other device has finished.
 Comment[pt]=Terminou a transferência de uma máquina fotográfica ou outro dispositivo.
 Comment[pt_BR]=A transferência de uma câmera ou outro dispositivo foi concluída.
