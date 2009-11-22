@@ -26,6 +26,7 @@
 // Qt includes
 
 #include <QFrame>
+#include <QHBoxLayout>
 #include <QImage>
 #include <QLabel>
 #include <QLayout>
@@ -70,6 +71,14 @@ public:
         saveBtn(0),
         zoomInBtn(0),
         zoomOutBtn(0),
+#ifdef HAVE_MARBLEWIDGET
+#if MARBLE_VERSION >= 0x000800
+        panBtn(0),
+        filterBtn(0),
+        selectBtn(0),
+        clusterZoomBtn(0),
+#endif // MARBLE_VERSION >= 0x000800
+#endif // HAVE_MARBLEWIDGET
         nameEdit(0),
         imageInfoJob(),
         searchGPSBar(0),
@@ -82,6 +91,14 @@ public:
     QToolButton*         saveBtn;
     QToolButton*         zoomInBtn;
     QToolButton*         zoomOutBtn;
+#ifdef HAVE_MARBLEWIDGET
+#if MARBLE_VERSION >= 0x000800
+    QToolButton*         panBtn;
+    QToolButton*         filterBtn;
+    QToolButton*         selectBtn;
+    QToolButton*         clusterZoomBtn;
+#endif // MARBLE_VERSION >= 0x000800
+#endif // HAVE_MARBLEWIDGET
 
     KLineEdit*           nameEdit;
 
@@ -138,12 +155,39 @@ GPSSearchView::GPSSearchView(QWidget *parent)
     d->zoomOutBtn->setIcon(SmallIcon("zoom-out"));
     d->zoomInBtn->setIcon(SmallIcon("zoom-in"));
 
-    d->nameEdit = new KLineEdit(hbox);
+#ifdef HAVE_MARBLEWIDGET
+#if MARBLE_VERSION >= 0x000800
+    d->panBtn = new QToolButton(hbox);
+    d->panBtn->setDefaultAction(d->gpsSearchWidget->getMouseModeAction(MarkerClusterHolder::MouseModePan));
+    d->filterBtn = new QToolButton(hbox);
+    d->filterBtn->setDefaultAction(d->gpsSearchWidget->getMouseModeAction(MarkerClusterHolder::MouseModeFilter));
+    d->selectBtn = new QToolButton(hbox);
+    d->selectBtn->setDefaultAction(d->gpsSearchWidget->getMouseModeAction(MarkerClusterHolder::MouseModeSelect));
+    d->clusterZoomBtn = new QToolButton(hbox);
+    d->clusterZoomBtn->setDefaultAction(d->gpsSearchWidget->getMouseModeAction(MarkerClusterHolder::MouseModeZoomCluster));
+
+    QHBoxLayout* boxLayout = qobject_cast<QHBoxLayout*>(hbox->layout());
+    if (boxLayout)
+        boxLayout->addStretch();
+    
+    KHBox *hbox2 = new KHBox(this);
+    hbox2->setMargin(0);
+    hbox2->setSpacing(KDialog::spacingHint());
+#else
+    KHBox *hbox2 = hbox;
+#endif // MARBLE_VERSION >= 0x000800
+#endif // HAVE_MARBLEWIDGET
+
+#ifndef HAVE_MARBLEWIDGET
+    KHBox *hbox2 = hbox;
+#endif // HAVE_MARBLEWIDGET
+    
+    d->nameEdit = new KLineEdit(hbox2);
     d->nameEdit->setClearButtonShown(true);
     d->nameEdit->setWhatsThis(i18n("Enter the name of the current map search to save in the "
                                    "\"My Map Searches\" view."));
 
-    d->saveBtn  = new QToolButton(hbox);
+    d->saveBtn  = new QToolButton(hbox2);
     d->saveBtn->setIcon(SmallIcon("document-save"));
     d->saveBtn->setEnabled(false);
     d->saveBtn->setToolTip(i18n("Save current map search to a new virtual album."));
@@ -166,6 +210,11 @@ GPSSearchView::GPSSearchView(QWidget *parent)
     QVBoxLayout* const vlayTop = new QVBoxLayout(frameTop);
     vlayTop->addWidget(mapPanel);
     vlayTop->addWidget(hbox);
+#ifdef HAVE_MARBLEWIDGET
+#if MARBLE_VERSION >= 0x000800
+    vlayTop->addWidget(hbox2);
+#endif // MARBLE_VERSION >= 0x000800
+#endif // HAVE_MARBLEWIDGET
     vlayTop->setStretchFactor(mapPanel, 10);
     vlayTop->setMargin(0);
     vlayTop->setSpacing(KDialog::spacingHint());

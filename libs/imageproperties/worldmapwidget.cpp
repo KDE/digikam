@@ -361,6 +361,8 @@ void WorldMapWidget::setMapTheme(MapTheme theme)
     }
 #endif // MARBLE_VERSION
 
+    d->marbleWidget->setShowCompass(false);
+    d->marbleWidget->setShowOverviewMap(false);
 #endif // HAVE_MARBLEWIDGET
 }
 
@@ -702,6 +704,38 @@ WorldMapWidget::MapTheme WorldMapWidget::getMapTheme()
 {
     return d->mapTheme;
 }
+
+#ifdef HAVE_MARBLEWIDGET
+#if MARBLE_VERSION >= 0x000800
+QAction* WorldMapWidget::getMouseModeAction(const MarkerClusterHolder::MouseMode mouseMode)
+{
+    QAction* const action = d->markerClusterHolder->getMouseModeAction(mouseMode);
+    switch (mouseMode)
+    {
+        case MarkerClusterHolder::MouseModePan:
+            action->setToolTip(i18n("Pan mode"));
+            action->setIcon(SmallIcon("transform-move"));
+            break;
+
+        case MarkerClusterHolder::MouseModeFilter:
+            action->setToolTip(i18n("Filter images"));
+            action->setIcon(SmallIcon("view-filter"));
+            break;
+
+        case MarkerClusterHolder::MouseModeSelect:
+            action->setToolTip(i18n("Select images"));
+            action->setIcon(SmallIcon("edit-select"));
+            break;
+
+        case MarkerClusterHolder::MouseModeZoomCluster:
+            action->setToolTip(i18n("Zoom into a group"));
+            action->setIcon(SmallIcon("page-zoom"));
+            break;
+    }
+    return action;
+}
+#endif // MARBLE_VERSION >= 0x000800
+#endif // HAVE_MARBLEWIDGET
 
 class WorldMapThemeBtnPriv
 {

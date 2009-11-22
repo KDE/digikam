@@ -112,9 +112,10 @@ void GPSSearchWidget::slotNewSelectionFromMap(const QList<double>& sel)
  */
 void GPSSearchWidget::markerClusterHolderCustomPaint(Marble::GeoPainter* const geoPainter, const bool isBefore, void* const yourdata)
 {
+    GPSSearchWidget* const me = reinterpret_cast<GPSSearchWidget*>(yourdata);
+
     if (isBefore)
     {
-      GPSSearchWidget* const me = reinterpret_cast<GPSSearchWidget*>(yourdata);
       if (me->d->selection.isEmpty())
         return;
 
@@ -152,6 +153,49 @@ void GPSSearchWidget::markerClusterHolderCustomPaint(Marble::GeoPainter* const g
       geoPainter->drawPolygon(polyRing);
 
       geoPainter->restore();
+    }
+    else if ( !isBefore && me->d->selection.isEmpty() )
+    {
+        geoPainter->save();
+        
+        // no selection has been made, tell the user how to make one:
+        const QString selectionHowto = i18n("Use CTRL+left mouse button to select a search area.");
+
+        // determine the maximum width for the text:
+        // TODO: make sure the text fits at all!
+        const int rectangleMargin = 6;
+        const int rectanglePadding = 3;
+        const int maxWidth = me->width() - 2 * (rectangleMargin+rectanglePadding);
+
+        QFont myFont = geoPainter->font();
+        myFont.setPointSize(myFont.pointSize()+2);
+        geoPainter->setFont(myFont);
+        
+        QPen textPen;
+        textPen.setColor(Qt::black);
+        textPen.setStyle(Qt::SolidLine);
+        textPen.setWidth(1);
+        geoPainter->setPen(textPen);
+        geoPainter->setBrush(Qt::NoBrush);
+        const QRect textRectInitial = QRect(0, 0, maxWidth, 0);
+        QRect textRect = geoPainter->boundingRect(textRectInitial, Qt::TextWordWrap, selectionHowto);
+        const int textWidth = textRect.width();
+
+        // center the rectangle horizontally:
+        textRect.translate( (rectangleMargin+rectanglePadding) + ( (maxWidth-textWidth) / 2 ),
+                            (rectangleMargin+rectanglePadding));
+
+        // draw the background:
+        geoPainter->setPen(Qt::NoPen);
+        geoPainter->setBrush(QColor::fromRgb(0xff, 0xff, 0xff, 0xC0));
+        const QRect backgroundRectangle = textRect.adjusted(-rectanglePadding, -rectanglePadding, rectanglePadding, rectanglePadding);
+        geoPainter->drawRoundedRect(backgroundRectangle, rectanglePadding, rectanglePadding);
+
+        geoPainter->setPen(textPen);
+        geoPainter->setBrush(Qt::NoBrush);
+        geoPainter->drawText(textRect, Qt::AlignHCenter | Qt::TextWordWrap, selectionHowto, &textRect);
+
+        geoPainter->restore();
     }
 }
 #endif // HAVE_MARBLEWIDGET

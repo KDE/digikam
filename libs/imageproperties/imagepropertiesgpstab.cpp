@@ -73,6 +73,12 @@ public:
         zoomInBtn    = 0;
         zoomOutBtn   = 0;
         mapThemeBtn  = 0;
+#ifdef HAVE_MARBLEWIDGET
+#if MARBLE_VERSION >= 0x000800
+        panBtn       = 0;
+        clusterZoomBtn = 0;
+#endif // MARBLE_VERSION >= 0x000800
+#endif // HAVE_MARBLEWIDGET
     }
 
     QLabel             *altLabel;
@@ -83,6 +89,12 @@ public:
     QToolButton        *detailsBtn;
     QToolButton        *zoomInBtn;
     QToolButton        *zoomOutBtn;
+#ifdef HAVE_MARBLEWIDGET
+#if MARBLE_VERSION >= 0x000800
+    QToolButton        *panBtn;
+    QToolButton        *clusterZoomBtn;
+#endif // MARBLE_VERSION >= 0x000800
+#endif // HAVE_MARBLEWIDGET
 
     QComboBox          *detailsCombo;
 
@@ -128,6 +140,14 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
     d->zoomInBtn    = new QToolButton(box2);
     d->zoomOutBtn->setIcon(SmallIcon("zoom-out"));
     d->zoomInBtn->setIcon(SmallIcon("zoom-in"));
+#ifdef HAVE_MARBLEWIDGET
+#if MARBLE_VERSION >= 0x000800
+    d->panBtn = new QToolButton(box2);
+    d->panBtn->setDefaultAction(d->map->getMouseModeAction(MarkerClusterHolder::MouseModePan));
+    d->clusterZoomBtn = new QToolButton(box2);
+    d->clusterZoomBtn->setDefaultAction(d->map->getMouseModeAction(MarkerClusterHolder::MouseModeZoomCluster));
+#endif // MARBLE_VERSION >= 0x000800
+#endif // HAVE_MARBLEWIDGET
 
     d->detailsCombo = new KComboBox(box2);
     d->detailsBtn   = new QToolButton(box2);
@@ -143,6 +163,12 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
     box2Layout->addWidget(d->mapThemeBtn);
     box2Layout->addWidget(d->zoomOutBtn);
     box2Layout->addWidget(d->zoomInBtn);
+#ifdef HAVE_MARBLEWIDGET
+#if MARBLE_VERSION >= 0x000800
+    box2Layout->addWidget(d->panBtn);
+    box2Layout->addWidget(d->clusterZoomBtn);
+#endif // MARBLE_VERSION >= 0x000800
+#endif // HAVE_MARBLEWIDGET
     box2Layout->addStretch(10);
     box2Layout->addWidget(d->detailsCombo);
     box2Layout->addWidget(d->detailsBtn);

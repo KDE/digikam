@@ -45,6 +45,8 @@
 #include "markerclusterholder.h"
 #endif // HAVE_MARBLEWIDGET
 
+class QAction;
+
 namespace Digikam
 {
 
@@ -117,6 +119,9 @@ public:
 #ifdef HAVE_MARBLEWIDGET
     void setCustomPaintFunction(const MarkerClusterHolder::CustomPaintFunction customPaintFunction, void* const yourdata);
     MarkerClusterHolder* getMarkerClusterHolder() const;
+#if MARBLE_VERSION >= 0x000800
+    QAction* getMouseModeAction(const MarkerClusterHolder::MouseMode mouseMode);
+#endif // MARBLE_VERSION >= 0x000800
 #endif // HAVE_MARBLEWIDGET
     void setMultiMarkerSettings(const bool showSingleImages, const bool showGroupImages, const bool showHighestRatingFirst, const bool showOldestFirst, const bool showNumbers);
     void getMultiMarkerSettings(bool* const showSingleImages, bool* const showGroupImages, bool* const showHighestRatingFirst, bool* const showOldestFirst, bool* const showNumbers) const;
