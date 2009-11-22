@@ -57,6 +57,7 @@ static const char* ObsoleteImagePluginsList[] =
      "digikamimageplugin_despeckle",      // Renamed "Noise Reduction" since 0.9.2.
      "digikamimageplugin_antivignetting", // Merged with "Lens Correction" since 0.10.0.
      "digikamimageplugin_lensdistortion", // Merged with "Lens Correction" since 0.10.0.
+     "digikamimageplugin_noisereduction", // Merged to core plugin since 1.0.0-rc.
      "-1"
 };
 
