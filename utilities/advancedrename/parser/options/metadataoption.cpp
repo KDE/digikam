@@ -25,11 +25,10 @@
 
 // Qt includes
 
+#include <QGridLayout>
 #include <QGroupBox>
-#include <QHBoxLayout>
 #include <QLabel>
 #include <QPointer>
-#include <QVBoxLayout>
 
 // KDE includes
 
@@ -98,15 +97,6 @@ MetadataOptionDialog::MetadataOptionDialog(ParseObject* parent)
 
     // --------------------------------------------------------
 
-    QGroupBox* customGBox     = new QGroupBox(i18n("Settings"));
-    QHBoxLayout *customLayout = new QHBoxLayout;
-    customLayout->addWidget(customLabel);
-    customLayout->addStretch(10);
-    customLayout->addWidget(separatorLineEdit);
-    customGBox->setLayout(customLayout);
-
-    // --------------------------------------------------------
-
     QGroupBox* keywordsGBox    = new QGroupBox(i18n("Metadata Keywords"));
     QVBoxLayout* keywordLayout = new QVBoxLayout;
     keywordLayout->addWidget(tab);
@@ -114,9 +104,10 @@ MetadataOptionDialog::MetadataOptionDialog(ParseObject* parent)
 
     // --------------------------------------------------------
 
-    QVBoxLayout* mainLayout = new QVBoxLayout;
-    mainLayout->addWidget(customGBox);
-    mainLayout->addWidget(keywordsGBox);
+    QGridLayout* mainLayout = new QGridLayout(this);
+    mainLayout->addWidget(customLabel,       0, 0, 1, 1);
+    mainLayout->addWidget(separatorLineEdit, 0, 1, 1, 1);
+    mainLayout->addWidget(keywordsGBox,      1, 0, 1,-1);
     mainWidget->setLayout(mainLayout);
 
     // --------------------------------------------------------
