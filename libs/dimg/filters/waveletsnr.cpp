@@ -215,7 +215,7 @@ void WaveletsNR::waveletDenoise(float *fimg[3], unsigned int width, unsigned int
             }
         }
 
-        thold = 5.0 / (1 << 6) * exp (-2.6 * sqrt (lev + 1)) * 0.8002 / exp (-2.6);
+        thold = 5.0 / (1 << 6) * exp (-2.6 * sqrt (lev + 1.0)) * 0.8002 / exp (-2.6);
 
         // initialize stdev values for all intensities
 
@@ -370,9 +370,9 @@ void WaveletsNR::srgb2xyz(float** fimg, int size)
     for (i = 0; i < size; i++)
     {
         /* scaling and gamma correction (approximate) */
-        fimg[0][i] = pow(fimg[0][i], 2.2);
-        fimg[1][i] = pow(fimg[1][i], 2.2);
-        fimg[2][i] = pow(fimg[2][i], 2.2);
+        fimg[0][i] = pow(fimg[0][i], (float)2.2);
+        fimg[1][i] = pow(fimg[1][i], (float)2.2);
+        fimg[2][i] = pow(fimg[2][i], (float)2.2);
 
         /* matrix RGB -> XYZ, with D65 reference white (www.brucelindbloom.com) */
         x = 0.412424  * fimg[0][i] + 0.357579 * fimg[1][i] + 0.180464  * fimg[2][i];
@@ -413,9 +413,9 @@ void WaveletsNR::xyz2srgb(float** fimg, int size)
         */
 
         /* scaling and gamma correction (approximate) */
-        r = r < 0 ? 0 : pow(r, 1.0 / 2.2);
-        g = g < 0 ? 0 : pow(g, 1.0 / 2.2);
-        b = b < 0 ? 0 : pow(b, 1.0 / 2.2);
+        r = r < 0 ? 0 : pow(r, (float)(1.0 / 2.2));
+        g = g < 0 ? 0 : pow(g, (float)(1.0 / 2.2));
+        b = b < 0 ? 0 : pow(b, (float)(1.0 / 2.2));
 
         fimg[0][i] = r;
         fimg[1][i] = g;
@@ -480,31 +480,31 @@ void WaveletsNR::srgb2lab(float** fimg, int size)
         fimg[2][i] /= 1.08883;
 
         /* scale */
-        if (fimg[0][i] > 216 / 24389.0)
+        if (fimg[0][i] > 216.0 / 24389.0)
         {
-            fimg[0][i] = pow(fimg[0][i], 1 / 3.0);
+            fimg[0][i] = pow(fimg[0][i], (float)(1.0 / 3.0));
         }
         else
         {
-            fimg[0][i] = (24389 * fimg[0][i] / 27.0 + 16) / 116.0;
+            fimg[0][i] = (24389.0 * fimg[0][i] / 27.0 + 16.0) / 116.0;
         }
 
-        if (fimg[1][i] > 216 / 24389.0)
+        if (fimg[1][i] > 216.0 / 24389.0)
         {
-            fimg[1][i] = pow(fimg[1][i], 1 / 3.0);
+            fimg[1][i] = pow(fimg[1][i], (float)(1.0 / 3.0));
         }
         else
         {
-            fimg[1][i] = (24389 * fimg[1][i] / 27.0 + 16) / 116.0;
+            fimg[1][i] = (24389 * fimg[1][i] / 27.0 + 16.0) / 116.0;
         }
 
-        if (fimg[2][i] > 216 / 24389.0)
+        if (fimg[2][i] > 216.0 / 24389.0)
         {
-            fimg[2][i] = pow(fimg[2][i], 1 / 3.0);
+            fimg[2][i] = (float)pow(fimg[2][i], (float)(1.0 / 3.0));
         }
         else
         {
-            fimg[2][i] = (24389 * fimg[2][i] / 27.0 + 16) / 116.0;
+            fimg[2][i] = (24389.0 * fimg[2][i] / 27.0 + 16.0) / 116.0;
         }
 
         l          = 116 * fimg[1][i]  - 16;
