@@ -512,7 +512,7 @@ QString SAlbum::query() const
     return m_query;
 }
 
-DatabaseSearch::Type SAlbum::type() const
+DatabaseSearch::Type SAlbum::searchType() const
 {
     return m_type;
 }

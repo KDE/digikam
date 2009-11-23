@@ -466,7 +466,7 @@ void SearchTabHeader::saveSearch()
         oldAlbum = AlbumManager::instance()->findSAlbum(name);
     }
 
-    SAlbum *newAlbum = AlbumManager::instance()->createSAlbum(name, d->currentAlbum->type(),
+    SAlbum *newAlbum = AlbumManager::instance()->createSAlbum(name, d->currentAlbum->searchType(),
                                                               d->currentAlbum->query());
     emit searchShallBeSelected(newAlbum);
 }

@@ -423,7 +423,7 @@ public:
 
     DatabaseUrl          databaseUrl() const;
     QString              query() const;
-    DatabaseSearch::Type type() const;
+    DatabaseSearch::Type searchType() const;
     bool                 isNormalSearch() const;
     bool                 isAdvancedSearch() const;
     bool                 isKeywordSearch() const;
