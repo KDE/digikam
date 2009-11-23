@@ -57,6 +57,25 @@ void Highlighter::highlightBlock(const QString& text)
             int length = expression.matchedLength();
             setFormat(index, length, rule.format);
 
+            // highlight parameters in options and modifiers
+            if ((rule.type == OptionPattern)
+                && expression.numCaptures() > 0 && !expression.cap(1).isEmpty())
+            {
+                QString fullmatched  = expression.cap(0);
+                QString parameters   = expression.cap(1);
+                if (parameters.startsWith(':'))
+                {
+                    parameters.remove(0, 1);
+                    int pindex = fullmatched.indexOf(parameters);
+                    while (pindex >= 0)
+                    {
+                        int plength = parameters.length();
+                        setFormat(index + pindex, plength, parameterFormat);
+                        pindex = fullmatched.indexOf(parameters, pindex + plength);
+                    }
+                }
+            }
+
             // hightlight quoted text in options and modifiers
             if ((rule.type == OptionPattern || rule.type == ModifierPattern)
                 && expression.numCaptures() > 0)

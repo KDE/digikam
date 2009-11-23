@@ -117,7 +117,7 @@ MetadataOption::MetadataOption()
 
     addTokenDescription("[meta:|key|]", i18n("Metadata"), i18n("Add metadata information"));
 
-    QRegExp reg("\\[meta:(.*)\\]");
+    QRegExp reg("\\[meta(:(.*))\\]");
     reg.setMinimal(true);
     setRegExp(reg);
 }
@@ -159,7 +159,7 @@ void MetadataOption::parseOperation(const QString& parseString, ParseInformation
     QString tmp;
     PARSE_LOOP_START(parseString, reg)
     {
-        QString keyword = reg.cap(1);
+        QString keyword = reg.cap(2);
         tmp = parseMetadata(keyword, info);
     }
     PARSE_LOOP_END(parseString, reg, tmp, results)
