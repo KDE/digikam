@@ -114,6 +114,8 @@ public:
     void     setMapTheme(MapTheme theme);
     MapTheme getMapTheme();
 
+    QAction* getZoomAction(const bool zoomIn);
+
     void readConfig(KConfigGroup& group);
     void writeConfig(KConfigGroup& group);
 #ifdef HAVE_MARBLEWIDGET
@@ -136,6 +138,7 @@ public Q_SLOTS:
 
     void slotZoomIn();
     void slotZoomOut();
+    void slotZoomChanged(int zoom);
     void slotSetSelectedImages(const GPSInfoList &infoList);
     void slotMapMarkerSelectionChanged();
     void slotMapMarkerSoloChanged();

@@ -158,8 +158,9 @@ GPSSearchView::GPSSearchView(QWidget *parent)
     d->mapThemeBtn = new WorldMapThemeBtn(d->gpsSearchWidget, hbox);
     d->zoomOutBtn  = new QToolButton(hbox);
     d->zoomInBtn   = new QToolButton(hbox);
-    d->zoomOutBtn->setIcon(SmallIcon("zoom-out"));
-    d->zoomInBtn->setIcon(SmallIcon("zoom-in"));
+    
+    d->zoomOutBtn->setDefaultAction(d->gpsSearchWidget->getZoomAction(false));
+    d->zoomInBtn->setDefaultAction(d->gpsSearchWidget->getZoomAction(true));
 
 #ifdef HAVE_MARBLEWIDGET
 #if MARBLE_VERSION >= 0x000800
@@ -271,12 +272,6 @@ GPSSearchView::GPSSearchView(QWidget *parent)
 
     connect(d->gpsSearchWidget, SIGNAL(signalSoloItems(const GPSInfoList)),
             this, SLOT(slotMapSoloItems(const GPSInfoList&)));
-
-    connect(d->zoomInBtn, SIGNAL(released()),
-            d->gpsSearchWidget, SLOT(slotZoomIn()));
-
-    connect(d->zoomOutBtn, SIGNAL(released()),
-            d->gpsSearchWidget, SLOT(slotZoomOut()));
 
     connect(&d->imageInfoJob, SIGNAL(signalItemsInfo(const ImageInfoList&)),
             this, SLOT(slotItemsInfo(const ImageInfoList&)));

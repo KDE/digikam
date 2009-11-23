@@ -138,8 +138,8 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
     d->mapThemeBtn  = new WorldMapThemeBtn(d->map, box2);
     d->zoomOutBtn   = new QToolButton(box2);
     d->zoomInBtn    = new QToolButton(box2);
-    d->zoomOutBtn->setIcon(SmallIcon("zoom-out"));
-    d->zoomInBtn->setIcon(SmallIcon("zoom-in"));
+    d->zoomOutBtn->setDefaultAction(d->map->getZoomAction(false));
+    d->zoomInBtn->setDefaultAction(d->map->getZoomAction(true));
 #ifdef HAVE_MARBLEWIDGET
 #if MARBLE_VERSION >= 0x000800
     d->panBtn = new QToolButton(box2);
@@ -198,12 +198,6 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
 
     connect(d->detailsBtn, SIGNAL(clicked()),
             this, SLOT(slotGPSDetails()));
-
-    connect(d->zoomInBtn, SIGNAL(released()),
-            d->map, SLOT(slotZoomIn()));
-
-    connect(d->zoomOutBtn, SIGNAL(released()),
-            d->map, SLOT(slotZoomOut()));
 }
 
 ImagePropertiesGPSTab::~ImagePropertiesGPSTab()
