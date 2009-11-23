@@ -26,7 +26,6 @@
 // Qt includes
 
 #include <QGridLayout>
-#include <QGroupBox>
 #include <QLabel>
 #include <QPointer>
 
@@ -86,17 +85,10 @@ MetadataOptionDialog::MetadataOptionDialog(ParseObject* parent)
 
     // --------------------------------------------------------
 
-    QGroupBox* keywordsGBox    = new QGroupBox(i18n("Metadata Keywords"));
-    QVBoxLayout* keywordLayout = new QVBoxLayout;
-    keywordLayout->addWidget(tab);
-    keywordsGBox->setLayout(keywordLayout);
-
-    // --------------------------------------------------------
-
     QGridLayout* mainLayout = new QGridLayout(this);
     mainLayout->addWidget(customLabel,       0, 0, 1, 1);
     mainLayout->addWidget(separatorLineEdit, 0, 1, 1, 1);
-    mainLayout->addWidget(keywordsGBox,      1, 0, 1,-1);
+    mainLayout->addWidget(tab,               1, 0, 1,-1);
     mainWidget->setLayout(mainLayout);
 
     // --------------------------------------------------------
