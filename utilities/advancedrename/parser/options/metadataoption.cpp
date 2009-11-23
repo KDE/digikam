@@ -76,23 +76,12 @@ MetadataOptionDialog::MetadataOptionDialog(ParseObject* parent)
 
     // --------------------------------------------------------
 
-    // remove "Viewer" string from tabs, remove "Makernotes" tab completely for now
-    int makerNotesTabIndex = -1;
+    // remove "Viewer" string from tabs
     for (int i = 0; i < tab->count(); ++i)
     {
         QString text = tab->tabText(i);
         text.remove("viewer", Qt::CaseInsensitive);
         tab->setTabText(i, text.simplified());
-
-        if (text.toLower().contains("makernotes"))
-        {
-            makerNotesTabIndex = i;
-        }
-    }
-
-    if (makerNotesTabIndex != -1)
-    {
-        tab->removeTab(makerNotesTabIndex);
     }
 
     // --------------------------------------------------------
