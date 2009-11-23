@@ -56,6 +56,20 @@ void Highlighter::highlightBlock(const QString& text)
         {
             int length = expression.matchedLength();
             setFormat(index, length, rule.format);
+
+            if ((rule.type == OptionPattern || rule.type == ModifierPattern)
+                && expression.numCaptures() > 0)
+            {
+                QRegExp quotationExp = quotationRule.pattern;
+                QString fullmatched  = expression.cap(0);
+                int qindex           = quotationExp.indexIn(fullmatched);
+                while (qindex >= 0)
+                {
+                    int qlength = quotationExp.matchedLength();
+                    setFormat(index + qindex, qlength, quotationFormat);
+                    qindex = quotationExp.indexIn(fullmatched, qindex + qlength);
+                }
+            }
             index = expression.indexIn(text, index + length);
         }
     }
@@ -72,11 +86,12 @@ void Highlighter::setupHighlightingGrammar(Parser* parser)
 
     // --------------------------------------------------------
 
-    optionFormat.setForeground((Qt::GlobalColor)OptionColorBackground);
+    optionFormat.setForeground((Qt::GlobalColor)OptionColor);
 
     foreach (Option* option, parser->options())
     {
-        QRegExp r = option->regExp();
+        QRegExp r    = option->regExp();
+        rule.type    = OptionPattern;
         rule.pattern = r;
         rule.format  = optionFormat;
         highlightingRules.append(rule);
@@ -84,14 +99,15 @@ void Highlighter::setupHighlightingGrammar(Parser* parser)
 
     // --------------------------------------------------------
 
-    modifierFormat.setForeground((Qt::GlobalColor)ModifierColorBackground);
+    modifierFormat.setForeground((Qt::GlobalColor)ModifierColor);
 
     if (!parser->options().isEmpty())
     {
         Option* option = parser->options().first();
         foreach (Modifier* modifier, option->modifiers())
         {
-            QRegExp r = modifier->regExp();
+            QRegExp r    = modifier->regExp();
+            rule.type    = ModifierPattern;
             rule.pattern = r;
             rule.format  = modifierFormat;
             highlightingRules.append(rule);
@@ -102,14 +118,15 @@ void Highlighter::setupHighlightingGrammar(Parser* parser)
 
     quotationFormat.setForeground((Qt::GlobalColor)QuotedTextColor);
     quotationFormat.setFontItalic(true);
-    rule.pattern = QRegExp("\".*\"");
-    rule.pattern.setMinimal(true);
-    rule.format = quotationFormat;
-    highlightingRules.append(rule);
+    quotationRule.pattern = QRegExp("\".*\"");
+    quotationRule.pattern.setMinimal(true);
+    quotationRule.format = quotationFormat;
+    quotationRule.type   = QuotedTextPattern;
 
     // --------------------------------------------------------
 
-    parameterFormat = quotationFormat;
+    parameterFormat.setForeground((Qt::GlobalColor)ParameterColor);
+    parameterFormat.setFontItalic(true);
 }
 
 } // namespace Digikam

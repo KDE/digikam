@@ -44,11 +44,18 @@ public:
 
     enum Colors
     {
-        OptionColorBackground   = Qt::red,
-        ModifierColorBackground = Qt::darkGreen,
-        QuotedTextColor         = Qt::blue,
-        OptionColorForeground   = Qt::white,
-        ModifierColorForeground = Qt::black
+        OptionColor     = Qt::red,
+        ModifierColor   = Qt::darkGreen,
+        QuotedTextColor = Qt::blue,
+        ParameterColor  = Qt::darkYellow
+    };
+
+    enum PatternType
+    {
+        OptionPattern = 0,
+        ModifierPattern,
+        QuotedTextPattern,
+        ParameterPattern
     };
 
 public:
@@ -68,15 +75,18 @@ private:
 
     struct HighlightingRule
     {
+        PatternType     type;
         QRegExp         pattern;
         QTextCharFormat format;
     };
-    QVector<HighlightingRule> highlightingRules;
 
-    QTextCharFormat           optionFormat;
-    QTextCharFormat           parameterFormat;
-    QTextCharFormat           modifierFormat;
-    QTextCharFormat           quotationFormat;
+    QVector<HighlightingRule> highlightingRules;
+    HighlightingRule          quotationRule;
+
+    QTextCharFormat optionFormat;
+    QTextCharFormat parameterFormat;
+    QTextCharFormat modifierFormat;
+    QTextCharFormat quotationFormat;
 };
 
 }  // namespace Digikam
