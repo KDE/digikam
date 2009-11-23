@@ -37,8 +37,8 @@
 namespace Digikam
 {
 
-DImgWaveletsNR::DImgWaveletsNR(DImg *orgImage, QObject *parent, double threshold, double softness)
-              : DImgThreadedFilter(orgImage, parent, "DImgWaveletsNR")
+WaveletsNR::WaveletsNR(DImg *orgImage, QObject *parent, double threshold, double softness)
+          : DImgThreadedFilter(orgImage, parent, "WaveletsNR")
 {
     m_threshold  = threshold;
     m_softness   = softness;
@@ -47,7 +47,7 @@ DImgWaveletsNR::DImgWaveletsNR(DImg *orgImage, QObject *parent, double threshold
     initFilter();
 }
 
-void DImgWaveletsNR::filterImage()
+void WaveletsNR::filterImage()
 {
     DColor col;
     int    progress;
@@ -103,7 +103,7 @@ void DImgWaveletsNR::filterImage()
 
     postProgress( 20 );
 
-    // denoise the channels individually 
+    // denoise the channels individually
 
     for (int c = 0; !m_cancel && (c < 4); c++)
     {
@@ -119,7 +119,7 @@ void DImgWaveletsNR::filterImage()
         }
     }
 
-    // Retransform the image data 
+    // Retransform the image data
 
     if (!m_cancel)
     {
@@ -139,7 +139,7 @@ void DImgWaveletsNR::filterImage()
 
     postProgress( 80 );
 
-    // clip the values 
+    // clip the values
 
     for (int c = 0; !m_cancel && (c < 4); c++)
     {
@@ -182,7 +182,7 @@ void DImgWaveletsNR::filterImage()
 
 // -- Wavelets denoise methods -----------------------------------------------------------
 
-void DImgWaveletsNR::waveletDenoise(float *fimg[3], unsigned int width, unsigned int height, 
+void WaveletsNR::waveletDenoise(float *fimg[3], unsigned int width, unsigned int height,
                                     float threshold, double softness)
 {
     float        *temp, thold;
@@ -309,7 +309,7 @@ void DImgWaveletsNR::waveletDenoise(float *fimg[3], unsigned int width, unsigned
     delete [] temp;
 }
 
-void DImgWaveletsNR::hatTransform (float *temp, float *base, int st, int size, int sc)
+void WaveletsNR::hatTransform (float *temp, float *base, int st, int size, int sc)
 {
     int i;
 
@@ -325,14 +325,14 @@ void DImgWaveletsNR::hatTransform (float *temp, float *base, int st, int size, i
 
 // -- Color Space conversion methods --------------------------------------------------
 
-void DImgWaveletsNR::srgb2ycbcr(float** fimg, int size)
+void WaveletsNR::srgb2ycbcr(float** fimg, int size)
 {
     /* using JPEG conversion here - expecting all channels to be
      * in [0:255] range */
     int i;
     float y, cb, cr;
 
-    for (i = 0; i < size; i++) 
+    for (i = 0; i < size; i++)
     {
         y          =  0.2990 * fimg[0][i] + 0.5870 * fimg[1][i] + 0.1140 * fimg[2][i];
         cb         = -0.1687 * fimg[0][i] - 0.3313 * fimg[1][i] + 0.5000 * fimg[2][i] + 0.5;
@@ -343,7 +343,7 @@ void DImgWaveletsNR::srgb2ycbcr(float** fimg, int size)
     }
 }
 
-void DImgWaveletsNR::ycbcr2srgb(float** fimg, int size)
+void WaveletsNR::ycbcr2srgb(float** fimg, int size)
 {
     /* using JPEG conversion here - expecting all channels to be
     * in [0:255] range */
@@ -361,7 +361,7 @@ void DImgWaveletsNR::ycbcr2srgb(float** fimg, int size)
     }
 }
 
-void DImgWaveletsNR::srgb2xyz(float** fimg, int size)
+void WaveletsNR::srgb2xyz(float** fimg, int size)
 {
     /* fimg in [0:1], sRGB */
     int   i;
@@ -391,7 +391,7 @@ void DImgWaveletsNR::srgb2xyz(float** fimg, int size)
     }
 }
 
-void DImgWaveletsNR::xyz2srgb(float** fimg, int size)
+void WaveletsNR::xyz2srgb(float** fimg, int size)
 {
     int   i;
     float r, g, b;
@@ -423,7 +423,7 @@ void DImgWaveletsNR::xyz2srgb(float** fimg, int size)
     }
 }
 
-void DImgWaveletsNR::lab2srgb(float** fimg, int size)
+void WaveletsNR::lab2srgb(float** fimg, int size)
 {
     int   i;
     float x, y, z;
@@ -464,7 +464,7 @@ void DImgWaveletsNR::lab2srgb(float** fimg, int size)
     xyz2srgb(fimg, size);
 }
 
-void DImgWaveletsNR::srgb2lab(float** fimg, int size)
+void WaveletsNR::srgb2lab(float** fimg, int size)
 {
     int   i;
     float l, a, b;

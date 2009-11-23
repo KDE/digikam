@@ -44,7 +44,7 @@
 // Local includes
 
 #include "dimg.h"
-#include "dimgwaveletsnr.h"
+#include "waveletsnr.h"
 
 using namespace KDcrawIface;
 
@@ -59,7 +59,7 @@ NoiseReduction::NoiseReduction(QObject* parent)
     setToolIcon(KIcon(SmallIcon("noisereduction")));
 
     KVBox *vbox      = new KVBox;
-    
+
     new QLabel(i18n("Threshold:"), vbox);
     m_thresholdInput = new RDoubleNumInput(vbox);
     m_thresholdInput->setDecimals(2);
@@ -99,8 +99,8 @@ NoiseReduction::~NoiseReduction()
 BatchToolSettings NoiseReduction::defaultSettings()
 {
     BatchToolSettings settings;
-    settings.insert("NRThreshold",  (double)1.2);
-    settings.insert("NRSoftness", (double)0.1);
+    settings.insert("NRThreshold", (double)1.2);
+    settings.insert("NRSoftness",  (double)0.1);
     return settings;
 }
 
@@ -125,7 +125,7 @@ bool NoiseReduction::toolOperations()
     double th = settings()["NRThreshold"].toDouble();
     double so = settings()["NRSoftness"].toDouble();
 
-    DImgWaveletsNR wnr(&image(), 0L, th, so);
+    WaveletsNR wnr(&image(), 0L, th, so);
     wnr.startFilterDirectly();
     DImg trg = wnr.getTargetImage();
     image().putImageData(trg.bits());
