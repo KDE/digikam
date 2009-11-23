@@ -78,7 +78,7 @@ public:
 
 public Q_SLOTS:
 
-    void slotSetHistoryItem(const QString&);
+    void slotSetText(const QString&);
     void slotCursorPositionChanged();
 
 Q_SIGNALS:
