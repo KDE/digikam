@@ -36,7 +36,7 @@
 
 using namespace KDcrawIface;
 
-namespace DigikamImagesPluginCore
+namespace Digikam
 {
 
 class NoiseReductionSettingsPriv
@@ -94,14 +94,14 @@ NoiseReductionSettings::~NoiseReductionSettings()
     delete d;
 }
 
-RDoubleNumInput* NoiseReductionSettings::thresholdInput()
+RDoubleNumInput* NoiseReductionSettings::thresholdInput() const
 {
     return d->thresholdInput;
 }
 
-RDoubleNumInput* NoiseReductionSettings::softnessInput()
+RDoubleNumInput* NoiseReductionSettings::softnessInput() const
 {
     return d->softnessInput;
 }
-    
-}  // namespace DigikamImagesPluginCore
+
+}  // namespace Digikam

@@ -32,14 +32,18 @@
 
 #include <libkdcraw/rnuminput.h>
 
+// Local includes
+
+#include "digikam_export.h"
+
 using namespace KDcrawIface;
 
-namespace DigikamImagesPluginCore
+namespace Digikam
 {
 
 class NoiseReductionSettingsPriv;
 
-class NoiseReductionSettings : public QWidget
+class DIGIKAM_EXPORT NoiseReductionSettings : public QWidget
 {
     Q_OBJECT
 
@@ -48,14 +52,14 @@ public:
     NoiseReductionSettings(QWidget* parent);
     ~NoiseReductionSettings();
 
-    RDoubleNumInput* thresholdInput();
-    RDoubleNumInput* softnessInput();
+    RDoubleNumInput* thresholdInput() const;
+    RDoubleNumInput* softnessInput() const;
 
 private:
 
     NoiseReductionSettingsPriv* const d;
 };
 
-}  // namespace DigikamImagesPluginCore
+}  // namespace Digikam
 
 #endif /* NOISEREDUCTIONTOOL_H */
