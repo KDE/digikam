@@ -63,7 +63,7 @@ void Highlighter::highlightBlock(const QString& text)
             {
                 QString fullmatched  = expression.cap(0);
                 QString parameters   = expression.cap(1);
-                if (!parameters.isEmpty() && parameters.startsWith(':'))
+                if (parameters.startsWith(':'))
                 {
                     parameters.remove(0, 1);
                     if (!parameters.isEmpty())
