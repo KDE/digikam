@@ -15,7 +15,7 @@ Options should be enclosed in [ ] characters:
 
     [option]
 
-If a renaming option takes additional parameters, they should be append by a colon:
+If a renaming option takes additional parameters, they should be appended by a colon:
 
     [option:parameters]
 
@@ -28,7 +28,7 @@ Modifiers should be enclosed in { } characters:
 
     {modifier}
 
-If a modifier takes additional parameters, they should be append by a colon:
+If a modifier takes additional parameters, they should be appended by a colon:
 
     {modifier:parameters}
 
