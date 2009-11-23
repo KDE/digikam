@@ -37,16 +37,11 @@
 #include <kurllabel.h>
 #include <kvbox.h>
 
-// LibKDcraw includes
-
-#include <libkdcraw/rnuminput.h>
-
 // Local includes
 
 #include "dimg.h"
 #include "waveletsnr.h"
-
-using namespace KDcrawIface;
+#include "noisereductionsettings.h"
 
 namespace Digikam
 {
@@ -58,37 +53,13 @@ NoiseReduction::NoiseReduction(QObject* parent)
     setToolDescription(i18n("A tool to remove photograph noise using wavelets."));
     setToolIcon(KIcon(SmallIcon("noisereduction")));
 
-    KVBox *vbox      = new KVBox;
-
-    new QLabel(i18n("Threshold:"), vbox);
-    m_thresholdInput = new RDoubleNumInput(vbox);
-    m_thresholdInput->setDecimals(2);
-    m_thresholdInput->input()->setRange(0.0, 10.0, 0.1, true);
-    m_thresholdInput->setDefaultValue(1.2);
-    m_thresholdInput->setWhatsThis(i18n("<b>Threshold</b>: Adjusts the threshold for denoising "
-                                         "the image in a range from 0.0 (none) to 10.0. "
-                                         "The threshold is the value below which everything is considered noise."));
-
-    // -------------------------------------------------------------
-
-    new QLabel(i18n("Softness:"), vbox);
-    m_softnessInput = new RDoubleNumInput(vbox);
-    m_softnessInput->setDecimals(1);
-    m_softnessInput->input()->setRange(0.0, 1.0, 0.1, true);
-    m_softnessInput->setDefaultValue(0.1);
-    m_softnessInput->setWhatsThis(i18n("<b>Softness</b>: This adjusts the softness of the thresholding "
-                                        "(soft as opposed to hard thresholding). The higher the softness "
-                                        "the more noise remains in the image."));
-
-    QLabel *space = new QLabel(vbox);
+    KVBox *vbox    = new KVBox;
+    m_settingsView = new NoiseReductionSettings(vbox);
+    QLabel *space  = new QLabel(vbox);
     vbox->setStretchFactor(space, 10);
-
     setSettingsWidget(vbox);
 
-    connect(m_thresholdInput, SIGNAL(valueChanged(double)),
-            this, SLOT(slotSettingsChanged()));
-
-    connect(m_softnessInput, SIGNAL(valueChanged(double)),
+    connect(m_settingsView, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotSettingsChanged()));
 }
 
@@ -106,15 +77,15 @@ BatchToolSettings NoiseReduction::defaultSettings()
 
 void NoiseReduction::slotAssignSettings2Widget()
 {
-    m_thresholdInput->setValue(settings()["NRThreshold"].toDouble());
-    m_softnessInput->setValue(settings()["NRSoftness"].toDouble());
+    m_settingsView->thresholdInput()->setValue(settings()["NRThreshold"].toDouble());
+    m_settingsView->softnessInput()->setValue(settings()["NRSoftness"].toDouble());
 }
 
 void NoiseReduction::slotSettingsChanged()
 {
     BatchToolSettings settings;
-    settings.insert("NRThreshold", (double)m_thresholdInput->value());
-    settings.insert("NRSoftness",  (double)m_softnessInput->value());
+    settings.insert("NRThreshold", (double)m_settingsView->thresholdInput()->value());
+    settings.insert("NRSoftness",  (double)m_settingsView->softnessInput()->value());
     setSettings(settings);
 }
 

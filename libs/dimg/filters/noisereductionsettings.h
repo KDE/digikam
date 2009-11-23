@@ -55,6 +55,10 @@ public:
     RDoubleNumInput* thresholdInput() const;
     RDoubleNumInput* softnessInput() const;
 
+Q_SIGNALS:
+
+    void signalSettingsChanged();
+
 private:
 
     NoiseReductionSettingsPriv* const d;

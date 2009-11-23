@@ -29,13 +29,10 @@
 #include "batchtool.h"
 
 
-namespace KDcrawIface
-{
-    class RDoubleNumInput;
-}
-
 namespace Digikam
 {
+
+class NoiseReductionSettings;
 
 class NoiseReduction : public BatchTool
 {
@@ -59,9 +56,7 @@ private Q_SLOTS:
 
 private:
 
-    KDcrawIface::RDoubleNumInput* m_softnessInput;
-    KDcrawIface::RDoubleNumInput* m_thresholdInput;
-
+    NoiseReductionSettings* m_settingsView;
 };
 
 }  // namespace Digikam

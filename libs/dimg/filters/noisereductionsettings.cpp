@@ -87,6 +87,12 @@ NoiseReductionSettings::NoiseReductionSettings(QWidget* parent)
     grid->setRowStretch(2, 10);
     grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(KDialog::spacingHint());
+
+    connect(d->thresholdInput, SIGNAL(valueChanged(double)),
+            this, SIGNAL(signalSettingsChanged()));
+
+    connect(d->softnessInput, SIGNAL(valueChanged(double)),
+            this, SIGNAL(signalSettingsChanged()));
 }
 
 NoiseReductionSettings::~NoiseReductionSettings()
