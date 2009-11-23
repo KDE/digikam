@@ -148,8 +148,7 @@ void NoiseReductionTool::writeSettings()
 
 void NoiseReductionTool::slotResetSettings()
 {
-    d->nrSettings->thresholdInput()->slotReset();
-    d->nrSettings->softnessInput()->slotReset();
+    d->nrSettings->resetToDefault();
 }
 
 void NoiseReductionTool::prepareEffect()

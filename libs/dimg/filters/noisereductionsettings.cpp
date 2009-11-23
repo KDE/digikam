@@ -110,4 +110,10 @@ RDoubleNumInput* NoiseReductionSettings::softnessInput() const
     return d->softnessInput;
 }
 
+void NoiseReductionSettings::resetToDefault()
+{
+    d->thresholdInput->slotReset();
+    d->softnessInput->slotReset();
+}
+
 }  // namespace Digikam

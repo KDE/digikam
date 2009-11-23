@@ -70,8 +70,8 @@ NoiseReduction::~NoiseReduction()
 BatchToolSettings NoiseReduction::defaultSettings()
 {
     BatchToolSettings settings;
-    settings.insert("NRThreshold", (double)1.2);
-    settings.insert("NRSoftness",  (double)0.1);
+    settings.insert("NRThreshold", (double)m_settingsView->thresholdInput()->defaultValue());
+    settings.insert("NRSoftness",  (double)m_settingsView->softnessInput()->defaultValue());
     return settings;
 }
 
