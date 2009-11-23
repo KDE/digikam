@@ -79,7 +79,7 @@ void Highlighter::highlightBlock(const QString& text)
                 }
             }
 
-            // hightlight quoted text in options and modifiers
+            // highlight quoted text in options and modifiers
             if ((rule.type == OptionPattern || rule.type == ModifierPattern)
                 && expression.numCaptures() > 0)
             {
