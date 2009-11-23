@@ -45,11 +45,8 @@ class OptionPriv
 {
 public:
 
-    OptionPriv() :
-        useModifiers(true)
+    OptionPriv()
     {}
-
-    bool         useModifiers;
 
     ParseResults parseResults;
     ParseResults modifierResults;
@@ -97,16 +94,6 @@ void Option::registerModifier(Modifier* modifier)
     d->modifiers.append(modifier);
 }
 
-void Option::setUseModifiers(bool value)
-{
-    d->useModifiers = value;
-}
-
-bool Option::useModifiers() const
-{
-    return d->useModifiers;
-}
-
 ModifierList Option::modifiers() const
 {
     return d->modifiers;
@@ -119,13 +106,9 @@ void Option::parse(const QString& parseString, ParseInformation& info)
 
     parseOperation(parseString, info, d->parseResults);
 
-    if (d->useModifiers)
+    if (!d->modifiers.isEmpty())
     {
         d->modifierResults = applyModifiers(parseString, d->parseResults);
-    }
-    else
-    {
-        d->modifierResults.clear();
     }
 }
 
@@ -136,7 +119,7 @@ ParseResults Option::parseResults()
 
 ParseResults Option::modifiedResults()
 {
-    if (d->modifierResults.isEmpty() || !d->useModifiers)
+    if (d->modifierResults.isEmpty())
     {
         return d->parseResults;
     }

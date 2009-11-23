@@ -49,13 +49,6 @@ public:
     ParseResults parseResults();
     ParseResults modifiedResults();
 
-    /**
-     * Use this method to define whether the parser should use modifiers or not
-     * @param value boolean parameter to allow modifiers
-     */
-    void setUseModifiers(bool value);
-    bool useModifiers() const;
-
 public Q_SLOTS:
 
     virtual void parse(const QString& parseString, ParseInformation& info);
