@@ -42,6 +42,8 @@ public:
     QString actionCategory;
 };
 
+// --------------------------------------------------------
+
 ImagePlugin::ImagePlugin(QObject *parent, const char* name)
            : QObject(parent), d(new ImagePluginPriv())
 {
@@ -95,7 +97,7 @@ QString ImagePlugin::actionCategory() const
 void ImagePlugin::setActionCategory(const QString& name)
 {
     // only set once
-    if (d->actionCategory.isEmpty())
+    if (d && d->actionCategory.isEmpty())
     {
         d->actionCategory = name;
     }
