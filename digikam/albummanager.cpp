@@ -2161,11 +2161,17 @@ bool AlbumManager::moveTAlbum(TAlbum* album, TAlbum *newParent, QString& errMsg)
         return false;
     }
 
-    ChangingDB changing(d);
-    DatabaseAccess().db()->setTagParentID(album->id(), newParent->id());
+    emit signalAlbumAboutToBeDeleted(album);
     if (album->parent())
         album->parent()->removeChild(album);
+    album->setParent(0);
+    emit signalAlbumDeleted(album);
+
+    emit signalAlbumAboutToBeAdded(album, newParent, newParent ? newParent->lastChild() : 0);
+    ChangingDB changing(d);
+    DatabaseAccess().db()->setTagParentID(album->id(), newParent->id());
     album->setParent(newParent);
+    emit signalAlbumAdded(album);
 
     emit signalTAlbumMoved(album, newParent);
 
