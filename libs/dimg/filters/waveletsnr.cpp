@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "dimgwaveletsnr.h"
+#include "waveletsnr.h"
 
 // C++ includes
 
