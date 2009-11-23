@@ -127,14 +127,20 @@ GPSSearchView::GPSSearchView(QWidget *parent)
     QFrame *mapPanel   = new QFrame(this);
     QVBoxLayout *vlay2 = new QVBoxLayout(mapPanel);
     d->gpsSearchWidget = new GPSSearchWidget(mapPanel);
-    d->gpsSearchWidget->setWhatsThis(i18n("To perform a search over the map, use CTRL+left mouse button "
-                                          "to draw a rectangle where you want to find items.\n\n"
-                                          "Once you have found items, click on an item using "
-                                          "SHIFT+left mouse button to select it, "
-                                          "click using CTRL+left mouse button to filter using an item "
-                                          "(add SHIFT to filter using multiple items) and click "
-                                          "using CTRL+right mouse button to zoom into an item."
-                                          ));
+    QString gpsWhatsThisText = i18n("To perform a search over the map, use CTRL+left mouse button "
+                                 "to draw a rectangle where you want to find items.");
+
+#ifdef HAVE_MARBLEWIDGET
+#if MARBLE_VERSION >= 0x000800
+    gpsWhatsThisText        += i18n("\n\nOnce you have found items, click on an item using "
+                                   "SHIFT+left mouse button to select it, "
+                                   "click using CTRL+left mouse button to filter using an item "
+                                   "(add SHIFT to filter using multiple items) and click "
+                                   "using CTRL+right mouse button to zoom into an item.");
+#endif // MARBLE_VERSION >= 0x000800
+#endif // HAVE_MARBLEWIDGET
+
+    d->gpsSearchWidget->setWhatsThis(gpsWhatsThisText);
 
     mapPanel->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     mapPanel->setLineWidth(style()->pixelMetric(QStyle::PM_DefaultFrameWidth));
