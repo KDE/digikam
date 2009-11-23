@@ -296,7 +296,7 @@ AdvancedRenameInput::AdvancedRenameInput(QWidget* parent)
     // --------------------------------------------------------
 
     connect(proxy, SIGNAL(clearButtonClicked()),
-            this, SLOT(clearText()));
+            this, SLOT(slotClearButtonPressed()));
 
     connect(d->lineEdit, SIGNAL(signalTextChanged(const QString&)),
             proxy, SLOT(setText(const QString&)));
@@ -337,15 +337,26 @@ void AdvancedRenameInput::setText(const QString& text)
     d->lineEdit->setPlainText(text);
 }
 
-void AdvancedRenameInput::clearText()
+void AdvancedRenameInput::slotClearText()
 {
     d->lineEdit->clear();
 }
 
-void AdvancedRenameInput::clearTextAndHistory()
+void AdvancedRenameInput::slotClearTextAndHistory()
 {
     d->lineEdit->clear();
     clear();
+}
+
+void AdvancedRenameInput::slotSetFocus()
+{
+    d->lineEdit->setFocus();
+}
+
+void AdvancedRenameInput::slotClearButtonPressed()
+{
+    slotClearText();
+    slotSetFocus();
 }
 
 QString AdvancedRenameInput::text() const

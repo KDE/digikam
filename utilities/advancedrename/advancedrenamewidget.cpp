@@ -126,7 +126,7 @@ void AdvancedRenameWidget::setText(const QString& text)
 
 void AdvancedRenameWidget::clearText()
 {
-    d->renameInput->clearText();
+    d->renameInput->slotClearText();
 }
 
 void AdvancedRenameWidget::setTooltipAlignment(Qt::Alignment alignment)
@@ -137,7 +137,7 @@ void AdvancedRenameWidget::setTooltipAlignment(Qt::Alignment alignment)
 
 void AdvancedRenameWidget::clear()
 {
-    d->renameInput->clearTextAndHistory();
+    d->renameInput->slotClearTextAndHistory();
 }
 
 void AdvancedRenameWidget::slotHideToolTipTracker()
@@ -434,7 +434,7 @@ void AdvancedRenameWidget::slotTokenMarked(bool marked)
 
 void AdvancedRenameWidget::focusLineEdit()
 {
-    d->renameInput->setFocus();
+    d->renameInput->slotSetFocus();
 }
 
 void AdvancedRenameWidget::readSettings()

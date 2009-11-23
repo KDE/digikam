@@ -130,8 +130,13 @@ Q_SIGNALS:
 public Q_SLOTS:
 
     void slotAddToken(const QString&);
-    void clearText();
-    void clearTextAndHistory();
+    void slotClearText();
+    void slotClearTextAndHistory();
+    void slotSetFocus();
+
+private Q_SLOTS:
+
+    void slotClearButtonPressed();
 
 private:
 
