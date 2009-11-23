@@ -57,6 +57,7 @@ void Highlighter::highlightBlock(const QString& text)
             int length = expression.matchedLength();
             setFormat(index, length, rule.format);
 
+            // hightlight quoted text in options and modifiers
             if ((rule.type == OptionPattern || rule.type == ModifierPattern)
                 && expression.numCaptures() > 0)
             {
