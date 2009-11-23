@@ -48,7 +48,7 @@
 
 #include "daboutdata.h"
 #include "dimg.h"
-#include "dimgwaveletsnr.h"
+#include "waveletsnr.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imagepanelwidget.h"
