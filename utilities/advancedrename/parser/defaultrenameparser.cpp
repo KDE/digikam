@@ -4,8 +4,8 @@
  * http://www.digikam.org
  *
  * Date        : 2009-08-11
- * Description : the default parser for the AdvancedRename utility, includes all
- *               renaming options
+ * Description : the default parser for the AdvancedRename utility,
+ *               includes all renaming options
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
