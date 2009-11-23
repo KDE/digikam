@@ -3,9 +3,9 @@
 ------------------------------------------------------------------------------
 
 When creating new options or modifiers for a parser, you should follow
-the following naming conventions. It is possible to completely ignore
+this naming convention. It is possible to completely ignore
 these suggestions, the basic highlighting should still work.
-Nevertheless it would be nice to have options and modifiers look the same.
+Nevertheless it would be nice to have options and modifiers look equal.
 
 -------------------------
 
