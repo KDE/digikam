@@ -112,7 +112,7 @@ MetadataOptionDialog::~MetadataOptionDialog()
 // --------------------------------------------------------
 
 MetadataOption::MetadataOption()
-              : Option(i18n("Metadata..."), i18n("Add metadata fields from Exif, IPTC and XMP"))
+              : Option(i18n("Metadata..."), i18n("Add metadata information from Exif, IPTC and XMP"))
 {
     // metadataedit icon can be missing if KIPI plugins are not installed, load different icon in this case
     QPixmap icon = KIconLoader::global()->loadIcon("metadataedit", KIconLoader::Small, 0,
