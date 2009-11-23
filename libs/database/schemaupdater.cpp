@@ -590,7 +590,7 @@ bool SchemaUpdater::updateV2toV4(const QString& sqlite2DBPath)
     if (m_observer)
         m_observer->moreSchemaUpdateSteps(1);
 
-    if (upgradeDB_Sqlite2ToSqlite3(*m_access, sqlite2DBPath))
+    if (upgradeDB_Sqlite2ToSqlite3(m_AlbumDB, m_Backend, sqlite2DBPath))
     {
         m_currentVersion = 4;
         return true;

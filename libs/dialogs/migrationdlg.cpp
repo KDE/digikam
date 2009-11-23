@@ -42,6 +42,7 @@
 #include "databasewidget.h"
 #include "databasebackend.h"
 #include "databaseparameters.h"
+#include "schemaupdater.h"
 
 namespace Digikam
 {
@@ -113,6 +114,8 @@ namespace Digikam
 
 
         // first create the schema
+        AlbumDB       albumDB(&toDBbackend);
+        SchemaUpdater updater(&albumDB, &toDBbackend, toDBParameters);
 
         // now perform the copy action
         QMap<QString, QVariant> bindingMap;

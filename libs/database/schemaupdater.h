@@ -40,7 +40,7 @@ namespace Digikam
 class DatabaseAccess;
 class InitializationObserver;
 
-class SchemaUpdater
+class DIGIKAM_DATABASE_EXPORT SchemaUpdater
 {
 public:
 

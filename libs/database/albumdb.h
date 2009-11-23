@@ -1110,7 +1110,7 @@ public:
     static QStringList imageCommentsFieldList(DatabaseFields::ImageComments fields);
     static void addBoundValuePlaceholders(QString& query, int count);
 
-private:
+public:
 
     friend class Digikam::DatabaseAccess;
 
