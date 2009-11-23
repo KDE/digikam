@@ -179,7 +179,11 @@ ParseResults Option::applyModifiers(const QString& parseString, ParseResults& re
                 QString token                 = results.token(key);
                 QString result                = results.result(key);
 
-                QString modResult             = mod->modify(modToken, result);
+                QString modResult;
+                if (mod)
+                {
+                    modResult = mod->modify(modToken, result);
+                }
 
                 // update result
                 ParseResults::ResultsKey   kResult = key;
