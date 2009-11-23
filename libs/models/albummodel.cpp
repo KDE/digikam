@@ -155,7 +155,7 @@ bool SearchModel::filterAlbum(Album *album) const
         else if (m_searchType == -2)
             return true;
         else
-            return salbum->type() == (DatabaseSearch::Type)m_searchType;
+            return salbum->searchType() == (DatabaseSearch::Type)m_searchType;
     }
     return false;
 }

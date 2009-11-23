@@ -1495,7 +1495,7 @@ void AlbumManager::scanSAlbums()
         {
             SAlbum *album = oldSearches[info.id];
             if (info.name != album->title()
-                || info.type != album->type()
+                || info.type != album->searchType()
                 || info.query != album->query())
             {
                 QString oldName = album->title();
@@ -1527,8 +1527,8 @@ void AlbumManager::scanSAlbums()
     foreach (const SearchInfo& info, newSearches)
     {
         SAlbum* album = new SAlbum(info.name, info.id);
-        emit signalAlbumAboutToBeAdded(album, d->rootSAlbum, d->rootSAlbum->lastChild());
         album->setSearch(info.type, info.query);
+        emit signalAlbumAboutToBeAdded(album, d->rootSAlbum, d->rootSAlbum->lastChild());
         album->setParent(d->rootSAlbum);
         d->allAlbumsIdHash[album->globalID()] = album;
         emit signalAlbumAdded(album);
@@ -2342,7 +2342,7 @@ bool AlbumManager::updateSAlbum(SAlbum* album, const QString& changedQuery,
         return false;
 
     QString newName = changedName.isNull() ? album->title() : changedName;
-    DatabaseSearch::Type newType = (type == DatabaseSearch::UndefinedType) ? album->type() : type;
+    DatabaseSearch::Type newType = (type == DatabaseSearch::UndefinedType) ? album->searchType() : type;
 
     ChangingDB changing(d);
     DatabaseAccess().db()->updateSearch(album->id(), newType, newName, changedQuery);
