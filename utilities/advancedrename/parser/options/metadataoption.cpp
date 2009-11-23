@@ -117,7 +117,7 @@ MetadataOption::MetadataOption()
 
     addTokenDescription("[meta:|key|]", i18n("Metadata"), i18n("Add metadata information"));
 
-    QRegExp reg("\\[meta:\\s*(.*)\\s*\\s*\\]");
+    QRegExp reg("\\[meta:(.*)\\]");
     reg.setMinimal(true);
     setRegExp(reg);
 }
