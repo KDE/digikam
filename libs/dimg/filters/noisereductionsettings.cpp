@@ -301,12 +301,12 @@ WaveletsNRContainer NoiseReductionSettings::settings() const
     settings.thresholds[0] = d->thrLumInput->value();
     settings.thresholds[1] = d->thrCrInput->value();
     settings.thresholds[2] = d->thrCbInput->value();
-    settings.softness[0]   = 10.0 - d->softLumInput->value();
-    settings.softness[1]   = 10.0 - d->softCrInput->value();
-    settings.softness[2]   = 10.0 - d->softCbInput->value();
+    settings.softness[0]   = 1.0 - d->softLumInput->value();
+    settings.softness[1]   = 1.0 - d->softCrInput->value();
+    settings.softness[2]   = 1.0 - d->softCbInput->value();
     settings.advanced      = d->advancedBox->isChecked();
     settings.leadThreshold = d->thresholdInput->value();
-    settings.leadSoftness  = 10.0 - d->softnessInput->value();
+    settings.leadSoftness  = 1.0 - d->softnessInput->value();
     return settings;
 }
 
@@ -315,12 +315,12 @@ void NoiseReductionSettings::setSettings(const WaveletsNRContainer& settings)
     d->thrLumInput->setValue(settings.thresholds[0]);
     d->thrCrInput->setValue(settings.thresholds[1]);
     d->thrCbInput->setValue(settings.thresholds[2]);
-    d->softLumInput->setValue(10.0 - settings.softness[0]); 
-    d->softCrInput->setValue(10.0 - settings.softness[1]);
-    d->softCbInput->setValue(10.0 - settings.softness[2]);
+    d->softLumInput->setValue(1.0 - settings.softness[0]); 
+    d->softCrInput->setValue(1.0 - settings.softness[1]);
+    d->softCbInput->setValue(1.0 - settings.softness[2]);
     d->advancedBox->setChecked(settings.advanced);
     d->thresholdInput->setValue(settings.leadThreshold);
-    d->softnessInput->setValue(10.0 - settings.leadSoftness);
+    d->softnessInput->setValue(1.0 - settings.leadSoftness);
 }
 
 void NoiseReductionSettings::resetToDefault()
@@ -342,12 +342,12 @@ WaveletsNRContainer NoiseReductionSettings::defaultSettings() const
     settings.thresholds[0] = d->thrLumInput->defaultValue();
     settings.thresholds[1] = d->thrCrInput->defaultValue();
     settings.thresholds[2] = d->thrCbInput->defaultValue();
-    settings.softness[0]   = 10.0 - d->softLumInput->defaultValue();
-    settings.softness[1]   = 10.0 - d->softCrInput->defaultValue();
-    settings.softness[2]   = 10.0 - d->softCbInput->defaultValue();
+    settings.softness[0]   = 1.0 - d->softLumInput->defaultValue();
+    settings.softness[1]   = 1.0 - d->softCrInput->defaultValue();
+    settings.softness[2]   = 1.0 - d->softCbInput->defaultValue();
     settings.advanced      = false;
     settings.leadThreshold = d->thresholdInput->defaultValue();
-    settings.leadSoftness  = 10.0 - d->softnessInput->defaultValue();
+    settings.leadSoftness  = 1.0 - d->softnessInput->defaultValue();
     return settings;
 }
 
