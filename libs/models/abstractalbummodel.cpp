@@ -98,6 +98,10 @@ QVariant AbstractAlbumModel::albumData(Album *a, int role) const
             return a->type();
         case AlbumPointerRole:
             return QVariant::fromValue(a);
+        case AlbumIdRole:
+            return a->id();
+        case AlbumGlobalIdRole:
+            return a->globalID();
     }
     return QVariant();
 }
