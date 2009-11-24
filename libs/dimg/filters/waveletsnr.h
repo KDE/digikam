@@ -37,6 +37,8 @@
 namespace Digikam
 {
 
+class WaveletsNRPriv;
+
 class DIGIKAM_EXPORT WaveletsNRContainer
 {
 
@@ -72,7 +74,7 @@ class DIGIKAM_EXPORT WaveletsNR : public DImgThreadedFilter
 public:
 
     WaveletsNR(DImg* orgImage, QObject* parent, const WaveletsNRContainer& settings);
-    ~WaveletsNR(){};
+    ~WaveletsNR();
 
 private:
 
@@ -92,11 +94,8 @@ private:
     void xyz2srgb(float** fimg, int size);
 
 private:
-
-    float*              m_fimg[3];
-    float*              m_buffer[3];
-
-    WaveletsNRContainer m_settings;
+    
+    WaveletsNRPriv* const d;
 };
 
 }  // namespace Digikam

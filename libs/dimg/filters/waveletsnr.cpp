@@ -38,11 +38,36 @@
 namespace Digikam
 {
 
-WaveletsNR::WaveletsNR(DImg *orgImage, QObject *parent, const WaveletsNRContainer& settings)
-          : DImgThreadedFilter(orgImage, parent, "WaveletsNR")
+class WaveletsNRPriv
 {
-    m_settings = settings;
+public:
+
+    WaveletsNRPriv()
+    {
+        for (int c = 0 ; c < 3; c++)
+        {
+            fimg[c]   = 0;
+            buffer[c] = 0;
+        }
+    }
+
+    float*              fimg[3];
+    float*              buffer[3];
+
+    WaveletsNRContainer settings;  
+};
+  
+WaveletsNR::WaveletsNR(DImg *orgImage, QObject *parent, const WaveletsNRContainer& settings)
+          : DImgThreadedFilter(orgImage, parent, "WaveletsNR"),
+            d(new WaveletsNRPriv)
+{
+    d->settings = settings;
     initFilter();
+}
+
+WaveletsNR::~WaveletsNR()
+{
+    delete d;
 }
 
 void WaveletsNR::filterImage()
@@ -57,10 +82,10 @@ void WaveletsNR::filterImage()
     // Allocate buffers.
 
     for (int c = 0; c < 3; c++)
-        m_fimg[c] = new float[width * height];
+        d->fimg[c] = new float[width * height];
 
-    m_buffer[1] = new float[width * height];
-    m_buffer[2] = new float[width * height];
+    d->buffer[1] = new float[width * height];
+    d->buffer[2] = new float[width * height];
 
     // Read the full image and convert pixel values to float [0,1].
 
@@ -71,9 +96,9 @@ void WaveletsNR::filterImage()
         for (int x = 0; !m_cancel && (x < width); x++)
         {
             col          = m_orgImage.getPixelColor(x, y);
-            m_fimg[0][j] = col.red()   / clip;
-            m_fimg[1][j] = col.green() / clip;
-            m_fimg[2][j] = col.blue()  / clip;
+            d->fimg[0][j] = col.red()   / clip;
+            d->fimg[1][j] = col.green() / clip;
+            d->fimg[2][j] = col.blue()  / clip;
             j++;
         }
     }
@@ -84,7 +109,7 @@ void WaveletsNR::filterImage()
 
     if (!m_cancel)
     {
-        srgb2ycbcr(m_fimg, width * height);
+        srgb2ycbcr(d->fimg, width * height);
     }
 
     postProgress( 20 );
@@ -93,11 +118,11 @@ void WaveletsNR::filterImage()
 
     for (int c = 0; !m_cancel && (c < 3); c++)
     {
-        m_buffer[0] = m_fimg[c];
+        d->buffer[0] = d->fimg[c];
 
-        if (m_settings.thresholds[c] > 0.0)
+        if (d->settings.thresholds[c] > 0.0)
         {
-            waveletDenoise(m_buffer, width, height, m_settings.thresholds[c], m_settings.softness[c]);
+            waveletDenoise(d->buffer, width, height, d->settings.thresholds[c], d->settings.softness[c]);
 
             progress = (int) (30.0 + ((double)c * 60.0) / 4);
             if ( progress%5 == 0 )
@@ -109,7 +134,7 @@ void WaveletsNR::filterImage()
 
     if (!m_cancel)
     {
-        ycbcr2srgb(m_fimg, width * height);
+        ycbcr2srgb(d->fimg, width * height);
     }
 
     postProgress( 80 );
@@ -120,7 +145,7 @@ void WaveletsNR::filterImage()
     {
         for (int i = 0; i < width * height; i++)
         {
-            m_fimg[c][i] = qBound(0.0F, m_fimg[c][i] * clip, clip);
+            d->fimg[c][i] = qBound(0.0F, d->fimg[c][i] * clip, clip);
         }
     }
 
@@ -134,9 +159,9 @@ void WaveletsNR::filterImage()
     {
         for (int x = 0; x < width; x++)
         {
-            col.setRed(   (int)(m_fimg[0][j] + 0.5) );
-            col.setGreen( (int)(m_fimg[1][j] + 0.5) );
-            col.setBlue(  (int)(m_fimg[2][j] + 0.5) );
+            col.setRed(   (int)(d->fimg[0][j] + 0.5) );
+            col.setGreen( (int)(d->fimg[1][j] + 0.5) );
+            col.setBlue(  (int)(d->fimg[2][j] + 0.5) );
             col.setAlpha( m_orgImage.getPixelColor(x, y).alpha() );
             j++;
 
@@ -149,10 +174,10 @@ void WaveletsNR::filterImage()
     // Free buffers.
 
     for (int c = 0; c < 3; c++)
-        delete [] m_fimg[c];
+        delete [] d->fimg[c];
 
-    delete [] m_buffer[1];
-    delete [] m_buffer[2];
+    delete [] d->buffer[1];
+    delete [] d->buffer[2];
 }
 
 // -- Wavelets denoise methods -----------------------------------------------------------
