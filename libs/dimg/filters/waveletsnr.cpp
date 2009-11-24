@@ -5,6 +5,7 @@
  *
  * Date        : 2005-05-25
  * Description : Wavelets Noise Reduction threaded image filter.
+ *               This filter work in YCrCb color space.
  *
  * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2008 by Marco Rossini <marco dot rossini at gmx dot net>
@@ -37,13 +38,10 @@
 namespace Digikam
 {
 
-WaveletsNR::WaveletsNR(DImg *orgImage, QObject *parent, double threshold, double softness)
+WaveletsNR::WaveletsNR(DImg *orgImage, QObject *parent, const WaveletsNRContainer& settings)
           : DImgThreadedFilter(orgImage, parent, "WaveletsNR")
 {
-    m_threshold  = threshold;
-    m_softness   = softness;
-    m_colourMode = MODE_YCBCR;
-
+    m_settings = settings;
     initFilter();
 }
 
@@ -83,35 +81,24 @@ void WaveletsNR::filterImage()
 
     postProgress( 10 );
 
-    // do colour model conversion sRGB[0,1] -> whatever.
+    // do colour model conversion sRGB[0,1] -> YCrCb.
 
     if (!m_cancel)
     {
-        if (m_colourMode == MODE_YCBCR)
-        {
-            srgb2ycbcr(m_fimg, width * height);
-        }
-        else if (m_colourMode == MODE_LAB)
-        {
-            srgb2lab(m_fimg, width * height);
-        }
-        else if (m_colourMode == MODE_RGB)
-        {
-        // Nothing to do.
-        }
+        srgb2ycbcr(m_fimg, width * height);
     }
 
     postProgress( 20 );
 
     // denoise the channels individually
 
-    for (int c = 0; !m_cancel && (c < 4); c++)
+    for (int c = 0; !m_cancel && (c < 3); c++)
     {
         m_buffer[0] = m_fimg[c];
 
-        if (m_threshold > 0.0)
+        if (m_settings.thresholds[c] > 0.0)
         {
-            waveletDenoise(m_buffer, width, height, m_threshold, m_softness);
+            waveletDenoise(m_buffer, width, height, m_settings.thresholds[c], m_settings.softness[c]);
 
             progress = (int) (30.0 + ((double)c * 60.0) / 4);
             if ( progress%5 == 0 )
@@ -119,29 +106,18 @@ void WaveletsNR::filterImage()
         }
     }
 
-    // Retransform the image data
+    // Retransform the image data to sRGB[0,1].
 
     if (!m_cancel)
     {
-        if (m_colourMode == MODE_YCBCR)
-        {
-            ycbcr2srgb(m_fimg, width * height);
-        }
-        else if (m_colourMode == MODE_LAB)
-        {
-            lab2srgb(m_fimg, width * height);
-        }
-        else if (m_colourMode == MODE_RGB)
-        {
-        // Nothing to do.
-        }
+        ycbcr2srgb(m_fimg, width * height);
     }
 
     postProgress( 80 );
 
     // clip the values
 
-    for (int c = 0; !m_cancel && (c < 4); c++)
+    for (int c = 0; !m_cancel && (c < 3); c++)
     {
         for (int i = 0; i < width * height; i++)
         {

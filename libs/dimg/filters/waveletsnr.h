@@ -5,6 +5,7 @@
  *
  * Date        : 2005-05-25
  * Description : Wavelets Noise Reduction threaded image filter.
+ *               This filter work in YCrCb color space.
  *
  * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -36,21 +37,41 @@
 namespace Digikam
 {
 
+class DIGIKAM_EXPORT WaveletsNRContainer
+{
+
+public:
+
+    WaveletsNRContainer()
+    {
+        advanced      = false;
+        thresholds[0] = 1.2;     // Y
+        thresholds[1] = 1.2;     // Cr
+        thresholds[2] = 1.2;     // Cb
+        softness[0]   = 0.1;     // Y
+        softness[1]   = 0.1;     // Cr
+        softness[2]   = 0.1;     // Cb
+    };
+
+    ~WaveletsNRContainer(){};
+
+public:
+
+    bool   advanced;         // If false thresholds and softness values are the same for Y, Cr, and Cb
+                             // else, each chanel has a dedicated value.
+
+    double thresholds[3];    // Y, Cr, Cb thresholds.
+    double softness[3];      // Y, Cr, Cb softness.
+};
+
+// --------------------------------------------------------------------------
+
 class DIGIKAM_EXPORT WaveletsNR : public DImgThreadedFilter
 {
 
 public:
 
-    enum ColorMode
-    {
-        MODE_YCBCR=0,
-        MODE_LAB,
-        MODE_RGB
-    };
-
-public:
-
-    WaveletsNR(DImg *orgImage, QObject *parent, double threshold, double softness);
+    WaveletsNR(DImg* orgImage, QObject* parent, const WaveletsNRContainer& settings);
     ~WaveletsNR(){};
 
 private:
@@ -63,6 +84,8 @@ private:
 
     void srgb2ycbcr(float** fimg, int size);
     void ycbcr2srgb(float** fimg, int size);
+
+    // Methods not used.
     void srgb2lab(float** fimg, int size);
     void lab2srgb(float** fimg, int size);
     void srgb2xyz(float** fimg, int size);
@@ -70,13 +93,10 @@ private:
 
 private:
 
-    ColorMode m_colourMode;
+    float*              m_fimg[4];
+    float*              m_buffer[3];
 
-    double    m_threshold;
-    double    m_softness;
-
-    float*    m_fimg[4];
-    float*    m_buffer[3];
+    WaveletsNRContainer m_settings;
 };
 
 }  // namespace Digikam

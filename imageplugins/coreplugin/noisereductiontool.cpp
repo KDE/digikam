@@ -156,11 +156,16 @@ void NoiseReductionTool::prepareEffect()
     d->nrSettings->thresholdInput()->setEnabled(false);
     d->nrSettings->softnessInput()->setEnabled(false);
 
-    double th  = d->nrSettings->thresholdInput()->value();
-    double so  = d->nrSettings->softnessInput()->value();
     DImg image = d->previewWidget->getOriginalRegionImage();
+    WaveletsNRContainer prm;
+    prm.thresholds[0] = d->nrSettings->thresholdInput()->value();
+    prm.thresholds[1] = d->nrSettings->thresholdInput()->value();
+    prm.thresholds[2] = d->nrSettings->thresholdInput()->value();
+    prm.softness[0]   = d->nrSettings->softnessInput()->value();
+    prm.softness[1]   = d->nrSettings->softnessInput()->value();
+    prm.softness[2]   = d->nrSettings->softnessInput()->value();
 
-    setFilter(dynamic_cast<DImgThreadedFilter*>(new WaveletsNR(&image, this, th, so)));
+    setFilter(dynamic_cast<DImgThreadedFilter*>(new WaveletsNR(&image, this, prm)));
 }
 
 void NoiseReductionTool::prepareFinal()
@@ -168,11 +173,16 @@ void NoiseReductionTool::prepareFinal()
     d->nrSettings->thresholdInput()->setEnabled(false);
     d->nrSettings->softnessInput()->setEnabled(false);
 
-    double th = d->nrSettings->thresholdInput()->value();
-    double so = d->nrSettings->softnessInput()->value();
+    WaveletsNRContainer prm;
+    prm.thresholds[0] = d->nrSettings->thresholdInput()->value();
+    prm.thresholds[1] = d->nrSettings->thresholdInput()->value();
+    prm.thresholds[2] = d->nrSettings->thresholdInput()->value();
+    prm.softness[0]   = d->nrSettings->softnessInput()->value();
+    prm.softness[1]   = d->nrSettings->softnessInput()->value();
+    prm.softness[2]   = d->nrSettings->softnessInput()->value();
 
     ImageIface iface(0, 0);
-    setFilter(dynamic_cast<DImgThreadedFilter*>(new WaveletsNR(iface.getOriginalImg(), this, th, so)));
+    setFilter(dynamic_cast<DImgThreadedFilter*>(new WaveletsNR(iface.getOriginalImg(), this, prm)));
 }
 
 void NoiseReductionTool::putPreviewData()

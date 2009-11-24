@@ -93,10 +93,15 @@ bool NoiseReduction::toolOperations()
 {
     if (!loadToDImg()) return false;
 
-    double th = settings()["NRThreshold"].toDouble();
-    double so = settings()["NRSoftness"].toDouble();
+    WaveletsNRContainer prm;
+    prm.thresholds[0] = settings()["NRThreshold"].toDouble();
+    prm.thresholds[1] = settings()["NRThreshold"].toDouble();
+    prm.thresholds[2] = settings()["NRThreshold"].toDouble();
+    prm.softness[0]   = settings()["NRSoftness"].toDouble();
+    prm.softness[1]   = settings()["NRSoftness"].toDouble();
+    prm.softness[2]   = settings()["NRSoftness"].toDouble();
 
-    WaveletsNR wnr(&image(), 0L, th, so);
+    WaveletsNR wnr(&image(), 0L, prm);
     wnr.startFilterDirectly();
     DImg trg = wnr.getTargetImage();
     image().putImageData(trg.bits());
