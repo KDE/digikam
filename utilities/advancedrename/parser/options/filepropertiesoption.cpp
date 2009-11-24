@@ -45,7 +45,6 @@ FilePropertiesOption::FilePropertiesOption()
              i18n("File extension, prepend with a '.' character, to modify the real file extension"));
 
     QRegExp reg("(\\[file\\]|(\\.?)\\[ext\\])");
-    reg.setCaseSensitivity(Qt::CaseInsensitive);
     reg.setMinimal(true);
     setRegExp(reg);
 }

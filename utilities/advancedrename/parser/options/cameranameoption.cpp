@@ -41,7 +41,6 @@ CameraNameOption::CameraNameOption()
     addTokenDescription("[cam]", i18n("Camera Name"), i18n("Camera name"));
 
     QRegExp reg("\\[cam\\]");
-    reg.setCaseSensitivity(Qt::CaseInsensitive);
     reg.setMinimal(true);
     setRegExp(reg);
 }
