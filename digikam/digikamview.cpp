@@ -288,7 +288,7 @@ DigikamView::DigikamView(QWidget *parent, DigikamModelCollection *modelCollectio
     d->tagFilterBox       = new KVBox(this);
     d->tagFilterView      = new TagFilterView(d->tagFilterBox);
     d->tagFilterSearchBar = new SearchTextBar(d->tagFilterBox, "DigikamViewTagFilterSearchBar");
-    d->tagFilterSearchBar->setModel(d->modelCollection->getTagModel());
+    d->tagFilterSearchBar->setModel(d->modelCollection->getTagModel(), AbstractAlbumModel::AlbumIdRole);
     d->tagFilterBox->setSpacing(KDialog::spacingHint());
     d->tagFilterBox->setMargin(0);
 

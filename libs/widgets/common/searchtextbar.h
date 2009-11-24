@@ -74,8 +74,9 @@ public:
      * completion for this text field.
      *
      * @param model to fill from or null for manual mode
+     * @param uniqueIdRole a role for which the model will return a unique integer for each entry
      */
-    void setModel(QAbstractItemModel *model);
+    void setModel(QAbstractItemModel *model, int uniqueIdRole);
 
     void setCaseSensitive(bool b);
     bool hasCaseSensitive() const;
@@ -94,7 +95,7 @@ private Q_SLOTS:
 
     void slotTextChanged(const QString&);
     void slotRowsInserted(const QModelIndex &parent, int start, int end);
-    void slotRowsRemoved(const QModelIndex &parent, int start, int end);
+    void slotRowsAboutToBeRemoved(const QModelIndex &parent, int start, int end);
     void slotDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
     void slotModelReset();
 

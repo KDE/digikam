@@ -52,6 +52,7 @@ public:
         textQueryCompletion = false;
         hasCaseSensitive    = true;
         model               = 0;
+        uniqueIdRole        = Qt::DisplayRole;
     }
 
     inline static QString itemName(const QModelIndex &index)
@@ -63,6 +64,8 @@ public:
     bool               hasCaseSensitive;
     bool               highlightOnCompletion;
 
+    int                uniqueIdRole;
+
     QAbstractItemModel *model;
 
     SearchTextSettings settings;
@@ -73,7 +76,8 @@ public:
      * the old text value is not known anymore, so that it cannot be removed
      * from the completion object.
      */
-    QMap<QModelIndex, QString> indexToTextMap;
+    //TODO: if we want to use models that return unique strings but not integer, add support
+    QMap<int, QString> idToTextMap;
 };
 
 // TODO the model code could also be placed in a subclass of KCompletion...
@@ -130,7 +134,7 @@ void SearchTextBar::setHighlightOnCompletion(bool highlight)
     d->highlightOnCompletion = highlight;
 }
 
-void SearchTextBar::setModel(QAbstractItemModel *model)
+void SearchTextBar::setModel(QAbstractItemModel *model, int uniqueIdRole)
 {
 
     kDebug() << "Got now model " << model;
@@ -139,11 +143,12 @@ void SearchTextBar::setModel(QAbstractItemModel *model)
     if (d->model)
     {
         disconnectFromModel(d->model);
-        d->indexToTextMap.clear();
+        d->idToTextMap.clear();
         completionObject()->clear();
     }
 
     d->model = model;
+    d->uniqueIdRole = uniqueIdRole;
 
     // connect to the new model
     if (d->model)
@@ -160,8 +165,8 @@ void SearchTextBar::connectToModel(QAbstractItemModel *model)
 {
     connect(model, SIGNAL(rowsInserted(const QModelIndex&, int, int)),
             this, SLOT(slotRowsInserted(const QModelIndex&, int, int)));
-    connect(model, SIGNAL(rowsRemoved(const QModelIndex&, int, int)),
-            this, SLOT(slotRowsRemoved(const QModelIndex&, int, int)));
+    connect(model, SIGNAL(rowsAboutToBeRemoved(const QModelIndex&, int, int)),
+            this, SLOT(slotRowsAboutToBeRemoved(const QModelIndex&, int, int)));
     connect(model, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex &)),
             this, SLOT(slotDataChanged(const QModelIndex&, const QModelIndex &)));
     connect(model, SIGNAL(modelReset()),
@@ -181,22 +186,25 @@ void SearchTextBar::slotRowsInserted(const QModelIndex &parent, int start, int e
     }
 }
 
-void SearchTextBar::slotRowsRemoved(const QModelIndex &parent, int start, int end)
+void SearchTextBar::slotRowsAboutToBeRemoved(const QModelIndex &parent, int start, int end)
 {
     kDebug() << "rows of parent " << parent << " removed, start = " << start
              << ", end = " << end;
     for (int i = start; i <= end; ++i)
     {
         QModelIndex index = d->model->index(i, 0, parent);
-        if (d->indexToTextMap.contains(index))
+        if (!index.isValid())
+            continue;
+        int id = index.data(d->uniqueIdRole).toInt();
+        if (d->idToTextMap.contains(id))
         {
-            QString itemName = d->indexToTextMap[index];
+            QString itemName = d->idToTextMap[id];
             completionObject()->removeItem(itemName);
-            d->indexToTextMap.remove(index);
+            d->idToTextMap.remove(id);
         }
         else
         {
-            kWarning() << "indexToTextMap seems to be out of sync with the model. "
+            kWarning() << "idToTextMap seems to be out of sync with the model. "
                      << "There is no entry for model index " << index;
         }
     }
@@ -223,19 +231,24 @@ void SearchTextBar::slotDataChanged(const QModelIndex &topLeft, const QModelInde
                      << " in model " << d->model << ". Ignoring it.";
             continue;
         }
+
         QModelIndex index = d->model->index(row, topLeft.column(), topLeft.parent());
+        if (!index.isValid())
+            continue;
+
+        int id = index.data(d->uniqueIdRole).toInt();
         QString itemName = SearchTextBarPriv::itemName(index);
-        if (d->indexToTextMap.contains(index))
+        if (d->idToTextMap.contains(id))
         {
-            completionObject()->removeItem(d->indexToTextMap[index]);
+            completionObject()->removeItem(d->idToTextMap.value(id));
             completionObject()->addItem(itemName);
         }
         else
         {
-            kError() << "indexToTextMap did not contain an entry for index "
+            kError() << "idToTextMap did not contain an entry for index "
                      << index;
         }
-        d->indexToTextMap[index] = itemName;
+        d->idToTextMap[id] = itemName;
     }
 
 }
@@ -252,7 +265,7 @@ void SearchTextBar::sync(QAbstractItemModel *model)
              << ", rowCount for parent: " << model->rowCount();
 
     completionObject()->clear();
-    d->indexToTextMap.clear();
+    d->idToTextMap.clear();
 
     for (int i = 0; i < model->rowCount(); ++i)
     {
@@ -268,7 +281,7 @@ void SearchTextBar::sync(QAbstractItemModel *model, const QModelIndex &index)
     QString itemName = SearchTextBarPriv::itemName(index);
     kDebug() << "sync adding item '" << itemName << "' for index " << index;
     completionObject()->addItem(itemName);
-    d->indexToTextMap.insert(index, itemName);
+    d->idToTextMap.insert(index.data(d->uniqueIdRole).toInt(), itemName);
 
     for (int i = 0; i < model->rowCount(index); ++i)
     {

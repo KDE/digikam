@@ -60,7 +60,7 @@ AlbumFolderViewSideBarWidget::AlbumFolderViewSideBarWidget(QWidget *parent,
     d->albumFolderView = new AlbumFolderViewNew(this, model, d->albumModificationHelper);
     d->searchTextBar   = new SearchTextBar(this, "DigikamViewFolderSearchBar");
     d->searchTextBar->setHighlightOnCompletion(true);
-    d->searchTextBar->setModel(model);
+    d->searchTextBar->setModel(model, AbstractAlbumModel::AlbumIdRole);
 
     layout->addWidget(d->albumFolderView);
     layout->addWidget(d->searchTextBar);
@@ -159,7 +159,7 @@ TagViewSideBarWidget::TagViewSideBarWidget(QWidget *parent,
     d->tagFolderView = new TagFolderViewNew(this, model, tagModificationHelper);
     d->tagSearchBar  = new SearchTextBar(this, "DigikamViewTagSearchBar");
     d->tagSearchBar->setHighlightOnCompletion(true);
-    d->tagSearchBar->setModel(model);
+    d->tagSearchBar->setModel(model, AbstractAlbumModel::AlbumIdRole);
 
     layout->addWidget(d->tagFolderView);
     layout->addWidget(d->tagSearchBar);
@@ -317,7 +317,7 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget *parent, SearchModel *searc
     QVBoxLayout *layout = new QVBoxLayout(this);
 
     d->timeLineView = new TimeLineView(this);
-    d->timeLineView->searchBar()->setModel(searchModel);
+    d->timeLineView->searchBar()->setModel(searchModel, AbstractAlbumModel::AlbumIdRole);
 
     layout->addWidget(d->timeLineView);
 
@@ -396,7 +396,7 @@ SearchSideBarWidget::SearchSideBarWidget(QWidget *parent, SearchModel *searchMod
     d->searchFolderView = new SearchFolderView(this);
     d->searchSearchBar  = new SearchTextBar(this, "DigikamViewSearchSearchBar");
     d->searchSearchBar->setHighlightOnCompletion(true);
-    d->searchSearchBar->setModel(searchModel);
+    d->searchSearchBar->setModel(searchModel, AbstractAlbumModel::AlbumIdRole);
 
     layout->addWidget(d->searchTabHeader);
     layout->addWidget(d->searchFolderView);
@@ -491,7 +491,7 @@ FuzzySearchSideBarWidget::FuzzySearchSideBarWidget(QWidget *parent, SearchModel 
     d->searchModel = searchModel;
 
     d->fuzzySearchView  = new FuzzySearchView(this);
-    d->fuzzySearchView->searchBar()->setModel(searchModel);
+    d->fuzzySearchView->searchBar()->setModel(searchModel, AbstractAlbumModel::AlbumIdRole);
 
     QVBoxLayout *layout = new QVBoxLayout(this);
 
@@ -586,7 +586,7 @@ GPSSearchSideBarWidget::GPSSearchSideBarWidget(QWidget *parent, SearchModel *sea
     d->searchModel = searchModel;
 
     d->gpsSearchView    = new GPSSearchView(this);
-    d->gpsSearchView->searchBar()->setModel(searchModel);
+    d->gpsSearchView->searchBar()->setModel(searchModel, AbstractAlbumModel::AlbumIdRole);
 
     QVBoxLayout *layout = new QVBoxLayout(this);
 
