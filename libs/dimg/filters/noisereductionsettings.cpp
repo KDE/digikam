@@ -244,6 +244,24 @@ NoiseReductionSettings::NoiseReductionSettings(QWidget* parent)
 
     connect(d->softnessInput, SIGNAL(valueChanged(double)),
             this, SIGNAL(signalSettingsChanged()));
+
+    connect(d->thrLumInput, SIGNAL(valueChanged(double)),
+            this, SIGNAL(signalSettingsChanged()));
+
+    connect(d->softLumInput, SIGNAL(valueChanged(double)),
+            this, SIGNAL(signalSettingsChanged()));
+
+    connect(d->thrCrInput, SIGNAL(valueChanged(double)),
+            this, SIGNAL(signalSettingsChanged()));
+
+    connect(d->softCrInput, SIGNAL(valueChanged(double)),
+            this, SIGNAL(signalSettingsChanged()));
+
+    connect(d->thrCbInput, SIGNAL(valueChanged(double)),
+            this, SIGNAL(signalSettingsChanged()));
+
+    connect(d->softCbInput, SIGNAL(valueChanged(double)),
+            this, SIGNAL(signalSettingsChanged()));
             
     connect(d->advancedBox, SIGNAL(toggled(bool)),
             this, SLOT(slotAdvancedEnabled(bool)));           
@@ -268,6 +286,12 @@ void NoiseReductionSettings::resetToDefault()
 {
     d->thresholdInput->slotReset();
     d->softnessInput->slotReset();
+    d->thrLumInput->slotReset();
+    d->softLumInput->slotReset();
+    d->thrCrInput->slotReset();
+    d->softCrInput->slotReset();
+    d->thrCbInput->slotReset();
+    d->softCbInput->slotReset();
 }
 
 void NoiseReductionSettings::slotAdvancedEnabled(bool b)
