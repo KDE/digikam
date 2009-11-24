@@ -62,6 +62,17 @@ WaveletsNR::WaveletsNR(DImg *orgImage, QObject *parent, const WaveletsNRContaine
             d(new WaveletsNRPriv)
 {
     d->settings = settings;
+
+    if (d->settings.advanced)
+    {
+        d->settings.thresholds[0] = d->settings.leadThreshold;     // Y
+        d->settings.thresholds[1] = d->settings.leadThreshold;     // Cr
+        d->settings.thresholds[2] = d->settings.leadThreshold;     // Cb
+        d->settings.softness[0]   = d->settings.leadSoftness;      // Y
+        d->settings.softness[1]   = d->settings.leadSoftness;      // Cr
+        d->settings.softness[2]   = d->settings.leadSoftness;      // Cb
+    }
+    
     initFilter();
 }
 

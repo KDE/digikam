@@ -66,16 +66,12 @@ public:
 
     NoiseReductionToolPriv() :
         configGroupName("noisereduction Tool"),
-        configSoftnessAdjustmentEntry("SoftnessInputAdjustment"),
-        configThresholdAdjustmentEntry("ThresholdAdjustment"),
         nrSettings(0),
         previewWidget(0),
         gboxSettings(0)
         {}
 
     const QString          configGroupName;
-    const QString          configSoftnessAdjustmentEntry;
-    const QString          configThresholdAdjustmentEntry;
 
     NoiseReductionSettings* nrSettings;
     ImagePanelWidget*       previewWidget;
@@ -116,8 +112,7 @@ NoiseReductionTool::~NoiseReductionTool()
 
 void NoiseReductionTool::renderingFinished()
 {
-    d->nrSettings->thresholdInput()->setEnabled(true);
-    d->nrSettings->softnessInput()->setEnabled(true);
+    d->nrSettings->setEnabled(true);
 }
 
 void NoiseReductionTool::readSettings()
@@ -125,14 +120,9 @@ void NoiseReductionTool::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
 
-    d->nrSettings->thresholdInput()->blockSignals(true);
-    d->nrSettings->softnessInput()->blockSignals(true);
-
-    d->nrSettings->thresholdInput()->setValue(group.readEntry(d->configThresholdAdjustmentEntry, d->nrSettings->thresholdInput()->defaultValue()));
-    d->nrSettings->softnessInput()->setValue(group.readEntry(d->configSoftnessAdjustmentEntry,   d->nrSettings->softnessInput()->defaultValue()));
-
-    d->nrSettings->thresholdInput()->blockSignals(false);
-    d->nrSettings->softnessInput()->blockSignals(false);
+    d->nrSettings->blockSignals(true);
+    d->nrSettings->readSettings(group);
+    d->nrSettings->blockSignals(false);
 }
 
 void NoiseReductionTool::writeSettings()
@@ -140,8 +130,7 @@ void NoiseReductionTool::writeSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
 
-    group.writeEntry(d->configThresholdAdjustmentEntry, d->nrSettings->thresholdInput()->value());
-    group.writeEntry(d->configSoftnessAdjustmentEntry,  d->nrSettings->softnessInput()->value());
+    d->nrSettings->saveSettings(group);
     d->previewWidget->writeSettings();
     group.sync();
 }
@@ -153,33 +142,19 @@ void NoiseReductionTool::slotResetSettings()
 
 void NoiseReductionTool::prepareEffect()
 {
-    d->nrSettings->thresholdInput()->setEnabled(false);
-    d->nrSettings->softnessInput()->setEnabled(false);
+    d->nrSettings->setEnabled(false);
 
     DImg image = d->previewWidget->getOriginalRegionImage();
-    WaveletsNRContainer prm;
-    prm.thresholds[0] = d->nrSettings->thresholdInput()->value();
-    prm.thresholds[1] = d->nrSettings->thresholdInput()->value();
-    prm.thresholds[2] = d->nrSettings->thresholdInput()->value();
-    prm.softness[0]   = d->nrSettings->softnessInput()->value();
-    prm.softness[1]   = d->nrSettings->softnessInput()->value();
-    prm.softness[2]   = d->nrSettings->softnessInput()->value();
+    WaveletsNRContainer prm = d->nrSettings->settings();
 
     setFilter(dynamic_cast<DImgThreadedFilter*>(new WaveletsNR(&image, this, prm)));
 }
 
 void NoiseReductionTool::prepareFinal()
 {
-    d->nrSettings->thresholdInput()->setEnabled(false);
-    d->nrSettings->softnessInput()->setEnabled(false);
+    d->nrSettings->setEnabled(false);
 
-    WaveletsNRContainer prm;
-    prm.thresholds[0] = d->nrSettings->thresholdInput()->value();
-    prm.thresholds[1] = d->nrSettings->thresholdInput()->value();
-    prm.thresholds[2] = d->nrSettings->thresholdInput()->value();
-    prm.softness[0]   = d->nrSettings->softnessInput()->value();
-    prm.softness[1]   = d->nrSettings->softnessInput()->value();
-    prm.softness[2]   = d->nrSettings->softnessInput()->value();
+    WaveletsNRContainer prm = d->nrSettings->settings();
 
     ImageIface iface(0, 0);
     setFilter(dynamic_cast<DImgThreadedFilter*>(new WaveletsNR(iface.getOriginalImg(), this, prm)));

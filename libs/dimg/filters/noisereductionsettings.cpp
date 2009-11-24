@@ -35,6 +35,10 @@
 #include <kdialog.h>
 #include <klocale.h>
 
+// LibKDcraw includes
+
+#include <libkdcraw/rnuminput.h>
+
 // Local includes
 
 #include "rexpanderbox.h"
@@ -49,6 +53,15 @@ class NoiseReductionSettingsPriv
 public:
 
     NoiseReductionSettingsPriv() :
+        configThresholdAdjustmentEntry("ThresholdAdjustment"),
+        configSoftnessAdjustmentEntry("SoftnessAdjustment"),
+        configAdvancedAdjustmentEntry("AdvancedAdjustment"),
+        configThrLumInputAdjustmentEntry("ThrLumAdjustment"),
+        configSoftLumInputAdjustmentEntry("SoftLumAdjustment"),
+        configThrCrInputAdjustmentEntry("ThrCrAdjustment"),
+        configSoftCrInputAdjustmentEntry("SoftCrAdjustment"),
+        configThrCbInputAdjustmentEntry("ThrCbAdjustment"),
+        configSoftCbInputAdjustmentEntry("SoftCbAdjustment"),
         advancedBox(0),
         generalBox(0),
         luminanceBox(0),
@@ -64,6 +77,16 @@ public:
         thrCbInput(0),
         softCbInput(0)
         {}
+
+    const QString    configThresholdAdjustmentEntry;
+    const QString    configSoftnessAdjustmentEntry;
+    const QString    configAdvancedAdjustmentEntry;
+    const QString    configThrLumInputAdjustmentEntry;
+    const QString    configSoftLumInputAdjustmentEntry;
+    const QString    configThrCrInputAdjustmentEntry;
+    const QString    configSoftCrInputAdjustmentEntry;
+    const QString    configThrCbInputAdjustmentEntry;
+    const QString    configSoftCbInputAdjustmentEntry;
 
     QCheckBox*       advancedBox;
 
@@ -272,28 +295,18 @@ NoiseReductionSettings::~NoiseReductionSettings()
     delete d;
 }
 
-RDoubleNumInput* NoiseReductionSettings::thresholdInput() const
-{
-    return d->thresholdInput;
-}
-
-RDoubleNumInput* NoiseReductionSettings::softnessInput() const
-{
-    return d->softnessInput;
-}
-
 WaveletsNRContainer NoiseReductionSettings::settings() const
 {
     WaveletsNRContainer settings;
     settings.thresholds[0] = d->thrLumInput->value();
     settings.thresholds[1] = d->thrCrInput->value();
     settings.thresholds[2] = d->thrCbInput->value();
-    settings.softness[0]   = d->softLumInput->value();
-    settings.softness[1]   = d->softCrInput->value();
-    settings.softness[2]   = d->softCbInput->value();
+    settings.softness[0]   = 10.0 - d->softLumInput->value();
+    settings.softness[1]   = 10.0 - d->softCrInput->value();
+    settings.softness[2]   = 10.0 - d->softCbInput->value();
     settings.advanced      = d->advancedBox->isChecked();
     settings.leadThreshold = d->thresholdInput->value();
-    settings.leadSoftness  = d->softnessInput->value();
+    settings.leadSoftness  = 10.0 - d->softnessInput->value();
     return settings;
 }
 
@@ -302,12 +315,12 @@ void NoiseReductionSettings::setSettings(const WaveletsNRContainer& settings)
     d->thrLumInput->setValue(settings.thresholds[0]);
     d->thrCrInput->setValue(settings.thresholds[1]);
     d->thrCbInput->setValue(settings.thresholds[2]);
-    d->softLumInput->setValue(settings.softness[0]); 
-    d->softCrInput->setValue(settings.softness[1]);
-    d->softCbInput->setValue(settings.softness[2]);
+    d->softLumInput->setValue(10.0 - settings.softness[0]); 
+    d->softCrInput->setValue(10.0 - settings.softness[1]);
+    d->softCbInput->setValue(10.0 - settings.softness[2]);
     d->advancedBox->setChecked(settings.advanced);
     d->thresholdInput->setValue(settings.leadThreshold);
-    d->softnessInput->setValue(settings.leadSoftness);
+    d->softnessInput->setValue(10.0 - settings.leadSoftness);
 }
 
 void NoiseReductionSettings::resetToDefault()
@@ -323,10 +336,57 @@ void NoiseReductionSettings::resetToDefault()
     d->advancedBox->setChecked(false);
 }
 
+WaveletsNRContainer NoiseReductionSettings::defaultSettings() const
+{
+    WaveletsNRContainer settings;
+    settings.thresholds[0] = d->thrLumInput->defaultValue();
+    settings.thresholds[1] = d->thrCrInput->defaultValue();
+    settings.thresholds[2] = d->thrCbInput->defaultValue();
+    settings.softness[0]   = 10.0 - d->softLumInput->defaultValue();
+    settings.softness[1]   = 10.0 - d->softCrInput->defaultValue();
+    settings.softness[2]   = 10.0 - d->softCbInput->defaultValue();
+    settings.advanced      = false;
+    settings.leadThreshold = d->thresholdInput->defaultValue();
+    settings.leadSoftness  = 10.0 - d->softnessInput->defaultValue();
+    return settings;
+}
+
 void NoiseReductionSettings::slotAdvancedEnabled(bool b)
 {
     d->generalBox->setEnabled(!b);
     d->advExpanderBox->setEnabled(b);
 }
+
+void NoiseReductionSettings::readSettings(KConfigGroup& group)
+{
+    WaveletsNRContainer settings;
+    WaveletsNRContainer defaultPrm = defaultSettings();
+
+    settings.thresholds[0] = group.readEntry(d->configThrLumInputAdjustmentEntry,  defaultPrm.thresholds[0]);
+    settings.thresholds[1] = group.readEntry(d->configThrCrInputAdjustmentEntry,   defaultPrm.thresholds[1]);
+    settings.thresholds[2] = group.readEntry(d->configThrCbInputAdjustmentEntry,   defaultPrm.thresholds[2]); 
+    settings.softness[0]   = group.readEntry(d->configSoftLumInputAdjustmentEntry, defaultPrm.softness[0]);
+    settings.softness[1]   = group.readEntry(d->configSoftCrInputAdjustmentEntry,  defaultPrm.softness[1]);
+    settings.softness[2]   = group.readEntry(d->configSoftCbInputAdjustmentEntry,  defaultPrm.softness[2]);
+    settings.advanced      = group.readEntry(d->configAdvancedAdjustmentEntry,     defaultPrm.advanced);
+    settings.leadThreshold = group.readEntry(d->configThresholdAdjustmentEntry,    defaultPrm.leadThreshold);
+    settings.leadSoftness  = group.readEntry(d->configSoftnessAdjustmentEntry,     defaultPrm.leadSoftness);
+    setSettings(settings);
+}
+
+void NoiseReductionSettings::saveSettings(KConfigGroup& group)
+{
+    WaveletsNRContainer prm;
     
+    group.writeEntry(d->configThrLumInputAdjustmentEntry,  prm.thresholds[0]);
+    group.writeEntry(d->configThrCrInputAdjustmentEntry,   prm.thresholds[1]);
+    group.writeEntry(d->configThrCbInputAdjustmentEntry,   prm.thresholds[2]);
+    group.writeEntry(d->configSoftLumInputAdjustmentEntry, prm.softness[0]);
+    group.writeEntry(d->configSoftCrInputAdjustmentEntry,  prm.softness[1]);
+    group.writeEntry(d->configSoftCbInputAdjustmentEntry,  prm.softness[2]);
+    group.writeEntry(d->configAdvancedAdjustmentEntry,     prm.advanced);
+    group.writeEntry(d->configThresholdAdjustmentEntry,    prm.leadThreshold);
+    group.writeEntry(d->configSoftnessAdjustmentEntry,     prm.leadSoftness);
+}
+
 }  // namespace Digikam

@@ -28,16 +28,14 @@
 
 #include <QWidget>
 
-// LibKDcraw includes
+// KDE includes
 
-#include <libkdcraw/rnuminput.h>
+#include <kconfig.h>
 
 // Local includes
 
 #include "digikam_export.h"
 #include "waveletsnr.h"
-
-using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -53,13 +51,15 @@ public:
     NoiseReductionSettings(QWidget* parent);
     ~NoiseReductionSettings();
 
-    RDoubleNumInput* thresholdInput() const;
-    RDoubleNumInput* softnessInput() const;
-
+    WaveletsNRContainer defaultSettings() const;
     void resetToDefault();
 
     WaveletsNRContainer settings() const;
     void setSettings(const WaveletsNRContainer& settings);
+
+    void readSettings(KConfigGroup& group);
+    void saveSettings(KConfigGroup& group);
+
 
 Q_SIGNALS:
 
