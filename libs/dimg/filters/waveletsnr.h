@@ -25,10 +25,6 @@
 #ifndef WAVELETS_NR_H
 #define WAVELETS_NR_H
 
-// C++ includes
-
-#include <cmath>
-
 // Local includes
 
 #include "digikam_export.h"
