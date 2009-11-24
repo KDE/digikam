@@ -56,7 +56,7 @@ void WaveletsNR::filterImage()
 
     // Allocate buffers.
 
-    for (int c = 0; c < 4; c++)
+    for (int c = 0; c < 3; c++)
         m_fimg[c] = new float[width * height];
 
     m_buffer[1] = new float[width * height];
@@ -74,7 +74,6 @@ void WaveletsNR::filterImage()
             m_fimg[0][j] = col.red()   / clip;
             m_fimg[1][j] = col.green() / clip;
             m_fimg[2][j] = col.blue()  / clip;
-            m_fimg[3][j] = col.alpha() / clip;
             j++;
         }
     }
@@ -138,7 +137,7 @@ void WaveletsNR::filterImage()
             col.setRed(   (int)(m_fimg[0][j] + 0.5) );
             col.setGreen( (int)(m_fimg[1][j] + 0.5) );
             col.setBlue(  (int)(m_fimg[2][j] + 0.5) );
-            col.setAlpha( (int)(m_fimg[3][j] + 0.5) );
+            col.setAlpha( m_orgImage.getPixelColor(x, y).alpha() );
             j++;
 
             m_destImage.setPixelColor(x, y, col);
@@ -149,7 +148,7 @@ void WaveletsNR::filterImage()
 
     // Free buffers.
 
-    for (int c = 0; c < 4; c++)
+    for (int c = 0; c < 3; c++)
         delete [] m_fimg[c];
 
     delete [] m_buffer[1];
@@ -158,8 +157,8 @@ void WaveletsNR::filterImage()
 
 // -- Wavelets denoise methods -----------------------------------------------------------
 
-void WaveletsNR::waveletDenoise(float *fimg[3], unsigned int width, unsigned int height,
-                                    float threshold, double softness)
+void WaveletsNR::waveletDenoise(float* fimg[3], unsigned int width, unsigned int height,
+                                float threshold, double softness)
 {
     float        *temp, thold;
     unsigned int i, lev, lpass, hpass, size, col, row;
@@ -285,7 +284,7 @@ void WaveletsNR::waveletDenoise(float *fimg[3], unsigned int width, unsigned int
     delete [] temp;
 }
 
-void WaveletsNR::hatTransform (float *temp, float *base, int st, int size, int sc)
+void WaveletsNR::hatTransform (float* temp, float *base, int st, int size, int sc)
 {
     int i;
 

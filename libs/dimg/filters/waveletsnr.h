@@ -78,9 +78,9 @@ private:
 
     void filterImage();
 
-    void waveletDenoise(float *fimg[3], unsigned int width, unsigned int height,
+    void waveletDenoise(float* fimg[3], unsigned int width, unsigned int height,
                         float threshold, double softness);
-    inline void hatTransform(float *temp, float *base, int st, int size, int sc);
+    inline void hatTransform(float* temp, float *base, int st, int size, int sc);
 
     void srgb2ycbcr(float** fimg, int size);
     void ycbcr2srgb(float** fimg, int size);
@@ -93,7 +93,7 @@ private:
 
 private:
 
-    float*              m_fimg[4];
+    float*              m_fimg[3];
     float*              m_buffer[3];
 
     WaveletsNRContainer m_settings;
