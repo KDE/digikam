@@ -60,6 +60,10 @@ public:
 Q_SIGNALS:
 
     void signalSettingsChanged();
+    
+private Q_SLOTS:
+    
+    void slotAdvancedEnabled(bool);
 
 private:
 
