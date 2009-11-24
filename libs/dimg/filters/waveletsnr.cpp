@@ -63,7 +63,7 @@ WaveletsNR::WaveletsNR(DImg *orgImage, QObject *parent, const WaveletsNRContaine
 {
     d->settings = settings;
 
-    if (d->settings.advanced)
+    if (!d->settings.advanced)
     {
         d->settings.thresholds[0] = d->settings.leadThreshold;     // Y
         d->settings.thresholds[1] = d->settings.leadThreshold;     // Cr
