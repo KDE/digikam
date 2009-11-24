@@ -35,7 +35,6 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kurllabel.h>
-#include <kvbox.h>
 
 // Local includes
 
@@ -53,11 +52,9 @@ NoiseReduction::NoiseReduction(QObject* parent)
     setToolDescription(i18n("A tool to remove photograph noise using wavelets."));
     setToolIcon(KIcon(SmallIcon("noisereduction")));
 
-    KVBox *vbox    = new KVBox;
-    m_settingsView = new NoiseReductionSettings(vbox);
-    QLabel *space  = new QLabel(vbox);
-    vbox->setStretchFactor(space, 10);
-    setSettingsWidget(vbox);
+    QWidget *box   = new QWidget;
+    m_settingsView = new NoiseReductionSettings(box);
+    setSettingsWidget(box);
 
     connect(m_settingsView, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotSettingsChanged()));

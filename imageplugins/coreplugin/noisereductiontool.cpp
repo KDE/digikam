@@ -99,7 +99,7 @@ NoiseReductionTool::NoiseReductionTool(QObject* parent)
                                 EditorToolSettings::Try);
 
     d->gboxSettings->setTools(EditorToolSettings::PanIcon);
-    d->nrSettings = new NoiseReductionSettings(d->gboxSettings);
+    d->nrSettings = new NoiseReductionSettings(d->gboxSettings->plainPage());
 
     setToolSettings(d->gboxSettings);
 

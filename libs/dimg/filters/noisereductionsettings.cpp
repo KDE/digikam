@@ -56,7 +56,7 @@ NoiseReductionSettings::NoiseReductionSettings(QWidget* parent)
                       : QWidget(parent),
                         d(new NoiseReductionSettingsPriv)
 {
-    QGridLayout* grid = new QGridLayout(this);
+    QGridLayout* grid = new QGridLayout(parent);
 
     // -------------------------------------------------------------
 
