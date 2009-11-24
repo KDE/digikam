@@ -35,6 +35,7 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "waveletsnr.h"
 
 using namespace KDcrawIface;
 
@@ -56,6 +57,9 @@ public:
     RDoubleNumInput* softnessInput() const;
 
     void resetToDefault();
+
+    WaveletsNRContainer settings() const;
+    void setSettings(const WaveletsNRContainer& settings);
 
 Q_SIGNALS:
 

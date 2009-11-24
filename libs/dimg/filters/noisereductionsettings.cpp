@@ -282,6 +282,34 @@ RDoubleNumInput* NoiseReductionSettings::softnessInput() const
     return d->softnessInput;
 }
 
+WaveletsNRContainer NoiseReductionSettings::settings() const
+{
+    WaveletsNRContainer settings;
+    settings.thresholds[0] = d->thrLumInput->value();
+    settings.thresholds[1] = d->thrCrInput->value();
+    settings.thresholds[2] = d->thrCbInput->value();
+    settings.softness[0]   = d->softLumInput->value();
+    settings.softness[1]   = d->softCrInput->value();
+    settings.softness[2]   = d->softCbInput->value();
+    settings.advanced      = d->advancedBox->isChecked();
+    settings.leadThreshold = d->thresholdInput->value();
+    settings.leadSoftness  = d->softnessInput->value();
+    return settings;
+}
+
+void NoiseReductionSettings::setSettings(const WaveletsNRContainer& settings)
+{
+    d->thrLumInput->setValue(settings.thresholds[0]);
+    d->thrCrInput->setValue(settings.thresholds[1]);
+    d->thrCbInput->setValue(settings.thresholds[2]);
+    d->softLumInput->setValue(settings.softness[0]); 
+    d->softCrInput->setValue(settings.softness[1]);
+    d->softCbInput->setValue(settings.softness[2]);
+    d->advancedBox->setChecked(settings.advanced);
+    d->thresholdInput->setValue(settings.leadThreshold);
+    d->softnessInput->setValue(settings.leadSoftness);
+}
+
 void NoiseReductionSettings::resetToDefault()
 {
     d->thresholdInput->slotReset();
@@ -292,6 +320,7 @@ void NoiseReductionSettings::resetToDefault()
     d->softCrInput->slotReset();
     d->thrCbInput->slotReset();
     d->softCbInput->slotReset();
+    d->advancedBox->setChecked(false);
 }
 
 void NoiseReductionSettings::slotAdvancedEnabled(bool b)

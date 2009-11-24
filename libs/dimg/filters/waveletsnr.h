@@ -42,6 +42,8 @@ public:
 
     WaveletsNRContainer()
     {
+        leadThreshold = 1.2;     
+        leadSoftness  = 0.1;    
         advanced      = false;
         thresholds[0] = 1.2;     // Y
         thresholds[1] = 1.2;     // Cr
@@ -55,9 +57,18 @@ public:
 
 public:
 
-    bool   advanced;         // If false thresholds and softness values are the same for Y, Cr, and Cb
-                             // else, each chanel has a dedicated value.
+    /** If false thresholds and softness values are the same for Y, Cr, and Cb
+        else, each chanel has a dedicated value.
+     */
+    bool   advanced;         
+    
+    /** General settings if advanced is false
+     */
+    double leadThreshold;
+    double leadSoftness;
 
+    /** Separated values per chanel
+     */
     double thresholds[3];    // Y, Cr, Cb thresholds.
     double softness[3];      // Y, Cr, Cb softness.
 };
