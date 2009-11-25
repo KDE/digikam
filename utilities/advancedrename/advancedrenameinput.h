@@ -27,11 +27,11 @@
 // Qt includes
 
 #include <QWidget>
-#include <QTextEdit>
 
 // KDE includes
 
 #include <kcombobox.h>
+#include <ktextedit.h>
 
 // Local includes
 
@@ -64,7 +64,7 @@ protected:
 
 class AdvancedRenameLineEditPriv;
 
-class AdvancedRenameLineEdit : public QTextEdit
+class AdvancedRenameLineEdit : public KTextEdit
 {
     Q_OBJECT
 
@@ -78,7 +78,7 @@ public:
 
 public Q_SLOTS:
 
-    void slotSetHistoryItem(const QString&);
+    void slotSetText(const QString&);
     void slotCursorPositionChanged();
 
 Q_SIGNALS:
@@ -130,8 +130,13 @@ Q_SIGNALS:
 public Q_SLOTS:
 
     void slotAddToken(const QString&);
-    void clearText();
-    void clearTextAndHistory();
+    void slotClearText();
+    void slotClearTextAndHistory();
+    void slotSetFocus();
+
+private Q_SLOTS:
+
+    void slotClearButtonPressed();
 
 private:
 

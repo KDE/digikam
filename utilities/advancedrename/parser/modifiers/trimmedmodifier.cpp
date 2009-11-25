@@ -37,7 +37,9 @@ TrimmedModifier::TrimmedModifier()
 {
     addTokenDescription(QString("{trim}"), i18n("Trimmed"), description());
 
-    setRegExp("\\{trim\\}");
+    QRegExp reg("\\{trim\\}");
+    reg.setMinimal(true);
+    setRegExp(reg);
 }
 
 QString TrimmedModifier::modifyOperation(const QString& parseString, const QString& result)

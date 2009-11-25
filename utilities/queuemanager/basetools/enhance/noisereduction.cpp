@@ -35,18 +35,12 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kurllabel.h>
-#include <kvbox.h>
-
-// LibKDcraw includes
-
-#include <libkdcraw/rnuminput.h>
 
 // Local includes
 
 #include "dimg.h"
-#include "dimgwaveletsnr.h"
-
-using namespace KDcrawIface;
+#include "waveletsnr.h"
+#include "noisereductionsettings.h"
 
 namespace Digikam
 {
@@ -54,41 +48,15 @@ namespace Digikam
 NoiseReduction::NoiseReduction(QObject* parent)
               : BatchTool("NoiseReduction", BaseTool, parent)
 {
-    setToolTitle(i18n("NoiseReduction"));
-    setToolDescription(i18n("A tool to remove photographs noise using wavelets."));
+    setToolTitle(i18n("Noise Reduction"));
+    setToolDescription(i18n("A tool to remove photograph noise using wavelets."));
     setToolIcon(KIcon(SmallIcon("noisereduction")));
 
-    KVBox *vbox      = new KVBox;
-    
-    new QLabel(i18n("Threshold:"), vbox);
-    m_thresholdInput = new RDoubleNumInput(vbox);
-    m_thresholdInput->setDecimals(2);
-    m_thresholdInput->input()->setRange(0.0, 10.0, 0.1, true);
-    m_thresholdInput->setDefaultValue(1.2);
-    m_thresholdInput->setWhatsThis(i18n("<b>Threshold</b>: Adjusts the threshold for denoising of "
-                                         "the image in a range from 0.0 (none) to 10.0. "
-                                         "The threshold is the value below which everything is considered noise."));
+    QWidget *box   = new QWidget;
+    m_settingsView = new NoiseReductionSettings(box);
+    setSettingsWidget(box);
 
-    // -------------------------------------------------------------
-
-    new QLabel(i18n("Softness:"), vbox);
-    m_softnessInput = new RDoubleNumInput(vbox);
-    m_softnessInput->setDecimals(1);
-    m_softnessInput->input()->setRange(0.0, 1.0, 0.1, true);
-    m_softnessInput->setDefaultValue(0.1);
-    m_softnessInput->setWhatsThis(i18n("<b>Softness</b>: This adjusts the softness of the thresholding "
-                                        "(soft as opposed to hard thresholding). The higher the softness "
-                                        "the more noise remains in the image."));
-
-    QLabel *space = new QLabel(vbox);
-    vbox->setStretchFactor(space, 10);
-
-    setSettingsWidget(vbox);
-
-    connect(m_thresholdInput, SIGNAL(valueChanged(double)),
-            this, SLOT(slotSettingsChanged()));
-
-    connect(m_softnessInput, SIGNAL(valueChanged(double)),
+    connect(m_settingsView, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotSettingsChanged()));
 }
 
@@ -98,34 +66,71 @@ NoiseReduction::~NoiseReduction()
 
 BatchToolSettings NoiseReduction::defaultSettings()
 {
-    BatchToolSettings settings;
-    settings.insert("NRThreshold",  (double)1.2);
-    settings.insert("NRSoftness", (double)0.1);
-    return settings;
+    BatchToolSettings prm;
+    WaveletsNRContainer defaultPrm = m_settingsView->defaultSettings();
+
+    prm.insert("LeadThreshold", (double)defaultPrm.leadThreshold);
+    prm.insert("LeadSoftness",  (double)defaultPrm.leadSoftness);
+    prm.insert("Advanced",      (bool)defaultPrm.advanced);
+    prm.insert("YThreshold",    (double)defaultPrm.thresholds[0]);
+    prm.insert("CrThreshold",   (double)defaultPrm.thresholds[1]);
+    prm.insert("CbThreshold",   (double)defaultPrm.thresholds[2]);
+    prm.insert("YSoftness",     (double)defaultPrm.softness[0]);
+    prm.insert("CrSoftness",    (double)defaultPrm.softness[1]);
+    prm.insert("CbSoftness",    (double)defaultPrm.softness[2]);
+
+    return prm;
 }
 
 void NoiseReduction::slotAssignSettings2Widget()
 {
-    m_thresholdInput->setValue(settings()["NRThreshold"].toDouble());
-    m_softnessInput->setValue(settings()["NRSoftness"].toDouble());
+    WaveletsNRContainer prm;
+    prm.leadThreshold = settings()["LeadThreshold"].toDouble();
+    prm.leadSoftness  = settings()["LeadSoftness"].toDouble();
+    prm.advanced      = settings()["Advanced"].toBool();
+    prm.thresholds[0] = settings()["YThreshold"].toDouble();
+    prm.thresholds[1] = settings()["CrThreshold"].toDouble();
+    prm.thresholds[2] = settings()["CbThreshold"].toDouble();
+    prm.softness[0]   = settings()["YSoftness"].toDouble();
+    prm.softness[1]   = settings()["CrSoftness"].toDouble();
+    prm.softness[2]   = settings()["CbSoftness"].toDouble();
+    m_settingsView->setSettings(prm);
 }
 
 void NoiseReduction::slotSettingsChanged()
 {
-    BatchToolSettings settings;
-    settings.insert("NRThreshold", (double)m_thresholdInput->value());
-    settings.insert("NRSoftness",  (double)m_softnessInput->value());
-    setSettings(settings);
+    BatchToolSettings prm;
+    WaveletsNRContainer currentPrm = m_settingsView->settings();
+
+    prm.insert("LeadThreshold", (double)currentPrm.leadThreshold);
+    prm.insert("LeadSoftness",  (double)currentPrm.leadSoftness);
+    prm.insert("Advanced",      (bool)currentPrm.advanced);
+    prm.insert("YThreshold",    (double)currentPrm.thresholds[0]);
+    prm.insert("CrThreshold",   (double)currentPrm.thresholds[1]);
+    prm.insert("CbThreshold",   (double)currentPrm.thresholds[2]);
+    prm.insert("YSoftness",     (double)currentPrm.softness[0]);
+    prm.insert("CrSoftness",    (double)currentPrm.softness[1]);
+    prm.insert("CbSoftness",    (double)currentPrm.softness[2]);
+
+    setSettings(prm);
 }
 
 bool NoiseReduction::toolOperations()
 {
     if (!loadToDImg()) return false;
 
-    double th = settings()["NRThreshold"].toDouble();
-    double so = settings()["NRSoftness"].toDouble();
+    WaveletsNRContainer prm;
+    prm.leadThreshold = settings()["LeadThreshold"].toDouble();
+    prm.leadSoftness  = settings()["LeadSoftness"].toDouble();
+    prm.advanced      = settings()["Advanced"].toBool();
+    prm.thresholds[0] = settings()["YThreshold"].toDouble();
+    prm.thresholds[1] = settings()["CrThreshold"].toDouble();
+    prm.thresholds[2] = settings()["CbThreshold"].toDouble();
+    prm.softness[0]   = settings()["YSoftness"].toDouble();
+    prm.softness[1]   = settings()["CrSoftness"].toDouble();
+    prm.softness[2]   = settings()["CbSoftness"].toDouble();
 
-    DImgWaveletsNR wnr(&image(), 0L, th, so);
+    WaveletsNR wnr(&image(), 0L, prm);
     wnr.startFilterDirectly();
     DImg trg = wnr.getTargetImage();
     image().putImageData(trg.bits());

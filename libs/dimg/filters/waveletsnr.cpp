@@ -5,6 +5,7 @@
  *
  * Date        : 2005-05-25
  * Description : Wavelets Noise Reduction threaded image filter.
+ *               This filter work in YCrCb color space.
  *
  * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2008 by Marco Rossini <marco dot rossini at gmx dot net>
@@ -22,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "dimgwaveletsnr.h"
+#include "waveletsnr.h"
 
 // C++ includes
 
@@ -37,17 +38,40 @@
 namespace Digikam
 {
 
-DImgWaveletsNR::DImgWaveletsNR(DImg *orgImage, QObject *parent, double threshold, double softness)
-              : DImgThreadedFilter(orgImage, parent, "DImgWaveletsNR")
+class WaveletsNRPriv
 {
-    m_threshold  = threshold;
-    m_softness   = softness;
-    m_colourMode = MODE_YCBCR;
+public:
 
+    WaveletsNRPriv()
+    {
+        for (int c = 0 ; c < 3; c++)
+        {
+            fimg[c]   = 0;
+            buffer[c] = 0;
+        }
+    }
+
+    float*              fimg[3];
+    float*              buffer[3];
+
+    WaveletsNRContainer settings;  
+};
+  
+WaveletsNR::WaveletsNR(DImg *orgImage, QObject *parent, const WaveletsNRContainer& settings)
+          : DImgThreadedFilter(orgImage, parent, "WaveletsNR"),
+            d(new WaveletsNRPriv)
+{
+    d->settings = settings;
+   
     initFilter();
 }
 
-void DImgWaveletsNR::filterImage()
+WaveletsNR::~WaveletsNR()
+{
+    delete d;
+}
+
+void WaveletsNR::filterImage()
 {
     DColor col;
     int    progress;
@@ -58,11 +82,11 @@ void DImgWaveletsNR::filterImage()
 
     // Allocate buffers.
 
-    for (int c = 0; c < 4; c++)
-        m_fimg[c] = new float[width * height];
+    for (int c = 0; c < 3; c++)
+        d->fimg[c] = new float[width * height];
 
-    m_buffer[1] = new float[width * height];
-    m_buffer[2] = new float[width * height];
+    d->buffer[1] = new float[width * height];
+    d->buffer[2] = new float[width * height];
 
     // Read the full image and convert pixel values to float [0,1].
 
@@ -72,46 +96,34 @@ void DImgWaveletsNR::filterImage()
     {
         for (int x = 0; !m_cancel && (x < width); x++)
         {
-            col          = m_orgImage.getPixelColor(x, y);
-            m_fimg[0][j] = col.red()   / clip;
-            m_fimg[1][j] = col.green() / clip;
-            m_fimg[2][j] = col.blue()  / clip;
-            m_fimg[3][j] = col.alpha() / clip;
+            col           = m_orgImage.getPixelColor(x, y);
+            d->fimg[0][j] = col.red()   / clip;
+            d->fimg[1][j] = col.green() / clip;
+            d->fimg[2][j] = col.blue()  / clip;
             j++;
         }
     }
 
     postProgress( 10 );
 
-    // do colour model conversion sRGB[0,1] -> whatever.
+    // do colour model conversion sRGB[0,1] -> YCrCb.
 
     if (!m_cancel)
     {
-        if (m_colourMode == MODE_YCBCR)
-        {
-            srgb2ycbcr(m_fimg, width * height);
-        }
-        else if (m_colourMode == MODE_LAB)
-        {
-            srgb2lab(m_fimg, width * height);
-        }
-        else if (m_colourMode == MODE_RGB)
-        {
-        // Nothing to do.
-        }
+        srgb2ycbcr(d->fimg, width * height);
     }
 
     postProgress( 20 );
 
-    // denoise the channels individually 
+    // denoise the channels individually
 
-    for (int c = 0; !m_cancel && (c < 4); c++)
+    for (int c = 0; !m_cancel && (c < 3); c++)
     {
-        m_buffer[0] = m_fimg[c];
+        d->buffer[0] = d->fimg[c];
 
-        if (m_threshold > 0.0)
+        if (d->settings.thresholds[c] > 0.0)
         {
-            waveletDenoise(m_buffer, width, height, m_threshold, m_softness);
+            waveletDenoise(d->buffer, width, height, d->settings.thresholds[c], d->settings.softness[c]);
 
             progress = (int) (30.0 + ((double)c * 60.0) / 4);
             if ( progress%5 == 0 )
@@ -119,33 +131,22 @@ void DImgWaveletsNR::filterImage()
         }
     }
 
-    // Retransform the image data 
+    // Retransform the image data to sRGB[0,1].
 
     if (!m_cancel)
     {
-        if (m_colourMode == MODE_YCBCR)
-        {
-            ycbcr2srgb(m_fimg, width * height);
-        }
-        else if (m_colourMode == MODE_LAB)
-        {
-            lab2srgb(m_fimg, width * height);
-        }
-        else if (m_colourMode == MODE_RGB)
-        {
-        // Nothing to do.
-        }
+        ycbcr2srgb(d->fimg, width * height);
     }
 
     postProgress( 80 );
 
-    // clip the values 
+    // clip the values
 
-    for (int c = 0; !m_cancel && (c < 4); c++)
+    for (int c = 0; !m_cancel && (c < 3); c++)
     {
         for (int i = 0; i < width * height; i++)
         {
-            m_fimg[c][i] = qBound(0.0F, m_fimg[c][i] * clip, clip);
+            d->fimg[c][i] = qBound(0.0F, d->fimg[c][i] * clip, clip);
         }
     }
 
@@ -159,10 +160,10 @@ void DImgWaveletsNR::filterImage()
     {
         for (int x = 0; x < width; x++)
         {
-            col.setRed(   (int)(m_fimg[0][j] + 0.5) );
-            col.setGreen( (int)(m_fimg[1][j] + 0.5) );
-            col.setBlue(  (int)(m_fimg[2][j] + 0.5) );
-            col.setAlpha( (int)(m_fimg[3][j] + 0.5) );
+            col.setRed(   (int)(d->fimg[0][j] + 0.5) );
+            col.setGreen( (int)(d->fimg[1][j] + 0.5) );
+            col.setBlue(  (int)(d->fimg[2][j] + 0.5) );
+            col.setAlpha( m_orgImage.getPixelColor(x, y).alpha() );
             j++;
 
             m_destImage.setPixelColor(x, y, col);
@@ -173,19 +174,19 @@ void DImgWaveletsNR::filterImage()
 
     // Free buffers.
 
-    for (int c = 0; c < 4; c++)
-        delete [] m_fimg[c];
+    for (int c = 0; c < 3; c++)
+        delete [] d->fimg[c];
 
-    delete [] m_buffer[1];
-    delete [] m_buffer[2];
+    delete [] d->buffer[1];
+    delete [] d->buffer[2];
 }
 
 // -- Wavelets denoise methods -----------------------------------------------------------
 
-void DImgWaveletsNR::waveletDenoise(float *fimg[3], unsigned int width, unsigned int height, 
-                                    float threshold, double softness)
+void WaveletsNR::waveletDenoise(float* fimg[3], unsigned int width, unsigned int height,
+                                float threshold, double softness)
 {
-    float        *temp, thold;
+    float        *temp=0, thold;
     unsigned int i, lev, lpass, hpass, size, col, row;
     double       stdev[5];
     unsigned int samples[5];
@@ -215,7 +216,7 @@ void DImgWaveletsNR::waveletDenoise(float *fimg[3], unsigned int width, unsigned
             }
         }
 
-        thold = 5.0 / (1 << 6) * exp (-2.6 * sqrt (lev + 1)) * 0.8002 / exp (-2.6);
+        thold = 5.0 / (1 << 6) * exp (-2.6 * sqrt (lev + 1.0)) * 0.8002 / exp (-2.6);
 
         // initialize stdev values for all intensities
 
@@ -309,7 +310,7 @@ void DImgWaveletsNR::waveletDenoise(float *fimg[3], unsigned int width, unsigned
     delete [] temp;
 }
 
-void DImgWaveletsNR::hatTransform (float *temp, float *base, int st, int size, int sc)
+void WaveletsNR::hatTransform (float* temp, float* base, int st, int size, int sc)
 {
     int i;
 
@@ -325,14 +326,13 @@ void DImgWaveletsNR::hatTransform (float *temp, float *base, int st, int size, i
 
 // -- Color Space conversion methods --------------------------------------------------
 
-void DImgWaveletsNR::srgb2ycbcr(float** fimg, int size)
+void WaveletsNR::srgb2ycbcr(float** fimg, int size)
 {
-    /* using JPEG conversion here - expecting all channels to be
-     * in [0:255] range */
+    /* using JPEG conversion here - expecting all channels to be in [0:255] range */
     int i;
     float y, cb, cr;
 
-    for (i = 0; i < size; i++) 
+    for (i = 0; i < size; i++)
     {
         y          =  0.2990 * fimg[0][i] + 0.5870 * fimg[1][i] + 0.1140 * fimg[2][i];
         cb         = -0.1687 * fimg[0][i] - 0.3313 * fimg[1][i] + 0.5000 * fimg[2][i] + 0.5;
@@ -343,10 +343,9 @@ void DImgWaveletsNR::srgb2ycbcr(float** fimg, int size)
     }
 }
 
-void DImgWaveletsNR::ycbcr2srgb(float** fimg, int size)
+void WaveletsNR::ycbcr2srgb(float** fimg, int size)
 {
-    /* using JPEG conversion here - expecting all channels to be
-    * in [0:255] range */
+    /* using JPEG conversion here - expecting all channels to be in [0:255] range */
     int   i;
     float r, g, b;
 
@@ -361,7 +360,7 @@ void DImgWaveletsNR::ycbcr2srgb(float** fimg, int size)
     }
 }
 
-void DImgWaveletsNR::srgb2xyz(float** fimg, int size)
+void WaveletsNR::srgb2xyz(float** fimg, int size)
 {
     /* fimg in [0:1], sRGB */
     int   i;
@@ -370,9 +369,9 @@ void DImgWaveletsNR::srgb2xyz(float** fimg, int size)
     for (i = 0; i < size; i++)
     {
         /* scaling and gamma correction (approximate) */
-        fimg[0][i] = pow(fimg[0][i], 2.2);
-        fimg[1][i] = pow(fimg[1][i], 2.2);
-        fimg[2][i] = pow(fimg[2][i], 2.2);
+        fimg[0][i] = pow(fimg[0][i], (float)2.2);
+        fimg[1][i] = pow(fimg[1][i], (float)2.2);
+        fimg[2][i] = pow(fimg[2][i], (float)2.2);
 
         /* matrix RGB -> XYZ, with D65 reference white (www.brucelindbloom.com) */
         x = 0.412424  * fimg[0][i] + 0.357579 * fimg[1][i] + 0.180464  * fimg[2][i];
@@ -391,7 +390,7 @@ void DImgWaveletsNR::srgb2xyz(float** fimg, int size)
     }
 }
 
-void DImgWaveletsNR::xyz2srgb(float** fimg, int size)
+void WaveletsNR::xyz2srgb(float** fimg, int size)
 {
     int   i;
     float r, g, b;
@@ -413,9 +412,9 @@ void DImgWaveletsNR::xyz2srgb(float** fimg, int size)
         */
 
         /* scaling and gamma correction (approximate) */
-        r = r < 0 ? 0 : pow(r, 1.0 / 2.2);
-        g = g < 0 ? 0 : pow(g, 1.0 / 2.2);
-        b = b < 0 ? 0 : pow(b, 1.0 / 2.2);
+        r = r < 0 ? 0 : pow(r, (float)(1.0 / 2.2));
+        g = g < 0 ? 0 : pow(g, (float)(1.0 / 2.2));
+        b = b < 0 ? 0 : pow(b, (float)(1.0 / 2.2));
 
         fimg[0][i] = r;
         fimg[1][i] = g;
@@ -423,7 +422,7 @@ void DImgWaveletsNR::xyz2srgb(float** fimg, int size)
     }
 }
 
-void DImgWaveletsNR::lab2srgb(float** fimg, int size)
+void WaveletsNR::lab2srgb(float** fimg, int size)
 {
     int   i;
     float x, y, z;
@@ -464,7 +463,7 @@ void DImgWaveletsNR::lab2srgb(float** fimg, int size)
     xyz2srgb(fimg, size);
 }
 
-void DImgWaveletsNR::srgb2lab(float** fimg, int size)
+void WaveletsNR::srgb2lab(float** fimg, int size)
 {
     int   i;
     float l, a, b;
@@ -480,31 +479,31 @@ void DImgWaveletsNR::srgb2lab(float** fimg, int size)
         fimg[2][i] /= 1.08883;
 
         /* scale */
-        if (fimg[0][i] > 216 / 24389.0)
+        if (fimg[0][i] > 216.0 / 24389.0)
         {
-            fimg[0][i] = pow(fimg[0][i], 1 / 3.0);
+            fimg[0][i] = pow(fimg[0][i], (float)(1.0 / 3.0));
         }
         else
         {
-            fimg[0][i] = (24389 * fimg[0][i] / 27.0 + 16) / 116.0;
+            fimg[0][i] = (24389.0 * fimg[0][i] / 27.0 + 16.0) / 116.0;
         }
 
-        if (fimg[1][i] > 216 / 24389.0)
+        if (fimg[1][i] > 216.0 / 24389.0)
         {
-            fimg[1][i] = pow(fimg[1][i], 1 / 3.0);
+            fimg[1][i] = pow(fimg[1][i], (float)(1.0 / 3.0));
         }
         else
         {
-            fimg[1][i] = (24389 * fimg[1][i] / 27.0 + 16) / 116.0;
+            fimg[1][i] = (24389 * fimg[1][i] / 27.0 + 16.0) / 116.0;
         }
 
-        if (fimg[2][i] > 216 / 24389.0)
+        if (fimg[2][i] > 216.0 / 24389.0)
         {
-            fimg[2][i] = pow(fimg[2][i], 1 / 3.0);
+            fimg[2][i] = (float)pow(fimg[2][i], (float)(1.0 / 3.0));
         }
         else
         {
-            fimg[2][i] = (24389 * fimg[2][i] / 27.0 + 16) / 116.0;
+            fimg[2][i] = (24389.0 * fimg[2][i] / 27.0 + 16.0) / 116.0;
         }
 
         l          = 116 * fimg[1][i]  - 16;

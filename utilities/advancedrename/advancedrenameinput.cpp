@@ -27,7 +27,6 @@
 
 #include <QFontMetrics>
 #include <QLayout>
-#include <QTextEdit>
 #include <QTimer>
 #include <QScrollBar>
 
@@ -113,9 +112,9 @@ public:
 };
 
 AdvancedRenameLineEdit::AdvancedRenameLineEdit(QWidget* parent)
-                      : QTextEdit(parent), d(new AdvancedRenameLineEditPriv)
+                      : KTextEdit(parent), d(new AdvancedRenameLineEditPriv)
 {
-    setLineWrapMode(QTextEdit::NoWrap);
+    setLineWrapMode(KTextEdit::NoWrap);
     setWordWrapMode(QTextOption::NoWrap);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -182,7 +181,7 @@ void AdvancedRenameLineEdit::keyPressEvent(QKeyEvent* e)
     }
     else
     {
-        QTextEdit::keyPressEvent(e);
+        KTextEdit::keyPressEvent(e);
     }
 }
 
@@ -237,7 +236,7 @@ void AdvancedRenameLineEdit::slotCursorPositionChanged()
     emit signalTokenMarked(found);
 }
 
-void AdvancedRenameLineEdit::slotSetHistoryItem(const QString& text)
+void AdvancedRenameLineEdit::slotSetText(const QString& text)
 {
     clear();
     setPlainText(text);
@@ -297,7 +296,7 @@ AdvancedRenameInput::AdvancedRenameInput(QWidget* parent)
     // --------------------------------------------------------
 
     connect(proxy, SIGNAL(clearButtonClicked()),
-            this, SLOT(clearText()));
+            this, SLOT(slotClearButtonPressed()));
 
     connect(d->lineEdit, SIGNAL(signalTextChanged(const QString&)),
             proxy, SLOT(setText(const QString&)));
@@ -312,7 +311,7 @@ AdvancedRenameInput::AdvancedRenameInput(QWidget* parent)
             this, SIGNAL(signalReturnPressed()));
 
     connect(this, SIGNAL(activated(const QString&)),
-            d->lineEdit, SLOT(slotSetHistoryItem(const QString&)));
+            d->lineEdit, SLOT(slotSetText(const QString&)));
 
     // --------------------------------------------------------
 
@@ -335,18 +334,30 @@ void AdvancedRenameInput::setParser(Parser* parser)
 
 void AdvancedRenameInput::setText(const QString& text)
 {
-    d->lineEdit->setPlainText(text);
+    d->lineEdit->slotSetText(text);
 }
 
-void AdvancedRenameInput::clearText()
+void AdvancedRenameInput::slotClearText()
 {
     d->lineEdit->clear();
 }
 
-void AdvancedRenameInput::clearTextAndHistory()
+void AdvancedRenameInput::slotClearTextAndHistory()
 {
     d->lineEdit->clear();
     clear();
+}
+
+void AdvancedRenameInput::slotSetFocus()
+{
+    d->lineEdit->setFocus();
+    d->lineEdit->ensureCursorVisible();
+}
+
+void AdvancedRenameInput::slotClearButtonPressed()
+{
+    slotClearText();
+    slotSetFocus();
 }
 
 QString AdvancedRenameInput::text() const
@@ -357,8 +368,7 @@ QString AdvancedRenameInput::text() const
 void AdvancedRenameInput::slotAddToken(const QString& token)
 {
     d->lineEdit->insertPlainText(token);
-    d->lineEdit->setFocus();
-    d->lineEdit->ensureCursorVisible();
+    slotSetFocus();
 }
 
 void AdvancedRenameInput::readSettings()

@@ -31,7 +31,8 @@ namespace Digikam
 {
 
 Token::Token(const QString& id, const QString& alias, const QString& description)
-     : QObject(0), m_id(id), m_alias(alias), m_description(description)
+     : QObject(0),
+       m_id(id), m_alias(alias), m_description(description)
 {
     m_action = new QAction(m_alias, this);
 

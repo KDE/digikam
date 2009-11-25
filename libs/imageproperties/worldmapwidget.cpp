@@ -31,6 +31,7 @@
 
 // KDE includes
 
+#include <kaction.h>
 #include <klocale.h>
 #include <kmenu.h>
 #include <kiconloader.h>
@@ -107,6 +108,8 @@ public:
       multiMarkerShowHighestRatingFirst(false),
       multiMarkerShowOldestFirst(false),
       multiMarkerShowNumbers(false),
+      actionZoomIn(0),
+      actionZoomOut(0),
 #ifdef HAVE_MARBLEWIDGET
       marbleWidget(0),
       markerClusterHolder(0),
@@ -125,6 +128,8 @@ public:
     bool                     multiMarkerShowHighestRatingFirst;
     bool                     multiMarkerShowOldestFirst;
     bool                     multiMarkerShowNumbers;
+    QAction*                 actionZoomIn;
+    QAction*                 actionZoomOut;
 
 #ifdef HAVE_MARBLEWIDGET
     MarbleSubClassWidget*    marbleWidget;
@@ -145,6 +150,18 @@ WorldMapWidget::WorldMapWidget(int w, int h, QWidget *parent)
     setMinimumHeight(h);
     setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     setLineWidth(style()->pixelMetric(QStyle::PM_DefaultFrameWidth));
+
+    d->actionZoomIn = new KAction(this);
+    d->actionZoomIn->setIcon(SmallIcon("zoom-in"));
+    d->actionZoomIn->setToolTip(i18n("Zoom in"));
+    connect(d->actionZoomIn, SIGNAL(triggered()),
+            this, SLOT(slotZoomIn()));
+
+    d->actionZoomOut = new KAction(this);
+    d->actionZoomOut->setIcon(SmallIcon("zoom-out"));
+    d->actionZoomOut->setToolTip(i18n("Zoom out"));
+    connect(d->actionZoomOut, SIGNAL(triggered()),
+            this, SLOT(slotZoomOut()));
 
 #ifdef HAVE_MARBLEWIDGET
     d->marbleWidget = new MarbleSubClassWidget(this);
@@ -167,6 +184,11 @@ WorldMapWidget::WorldMapWidget(int w, int h, QWidget *parent)
     connect(d->thumbnailLoadThreadBuncher, SIGNAL(timeout()),
             d->marbleWidget, SLOT(update()));
 
+    connect(d->marbleWidget, SIGNAL(zoomChanged(int)),
+            this, SLOT(slotZoomChanged(int)));
+
+    slotZoomChanged(d->marbleWidget->zoom());
+
 #if MARBLE_VERSION < 0x000800
     d->marbleWidget->setDownloadUrl("http://download.kde.org/apps/marble/");
 #endif // MARBLE_VERSION < 0x000800
@@ -175,6 +197,9 @@ WorldMapWidget::WorldMapWidget(int w, int h, QWidget *parent)
     d->marbleWidget = new QLabel(this);
     d->marbleWidget->setText(i18n("Geolocation using Marble not available"));
     d->marbleWidget->setWordWrap(true);
+
+    // disable the zoom buttons
+    slotZoomChanged(0);
 #endif // HAVE_MARBLEWIDGET
 
     QVBoxLayout *vlay = new QVBoxLayout(this);
@@ -266,6 +291,30 @@ void WorldMapWidget::slotZoomOut()
     d->marbleWidget->zoomOut();
     d->marbleWidget->repaint();
 #endif // HAVE_MARBLEWIDGET
+}
+
+void WorldMapWidget::slotZoomChanged(int zoom)
+{
+#ifdef HAVE_MARBLEWIDGET
+    d->actionZoomOut->setEnabled(zoom > d->marbleWidget->minimumZoom());
+    d->actionZoomIn->setEnabled(zoom < d->marbleWidget->maximumZoom());
+#else
+    Q_UNUSED(zoom);
+    d->actionZoomOut->setEnabled(false);
+    d->actionZoomIn->setEnabled(false);
+#endif // HAVE_MARBLEWIDGET
+}
+
+QAction* WorldMapWidget::getZoomAction(const bool zoomIn)
+{
+    if (zoomIn)
+    {
+        return d->actionZoomIn;
+    }
+    else
+    {
+        return d->actionZoomOut;
+    }
 }
 
 void WorldMapWidget::getCenterPosition(double& lat, double& lng)
@@ -361,6 +410,8 @@ void WorldMapWidget::setMapTheme(MapTheme theme)
     }
 #endif // MARBLE_VERSION
 
+    d->marbleWidget->setShowCompass(false);
+    d->marbleWidget->setShowOverviewMap(false);
 #endif // HAVE_MARBLEWIDGET
 }
 
@@ -703,6 +754,38 @@ WorldMapWidget::MapTheme WorldMapWidget::getMapTheme()
     return d->mapTheme;
 }
 
+#ifdef HAVE_MARBLEWIDGET
+#if MARBLE_VERSION >= 0x000800
+QAction* WorldMapWidget::getMouseModeAction(const MarkerClusterHolder::MouseMode mouseMode)
+{
+    QAction* const action = d->markerClusterHolder->getMouseModeAction(mouseMode);
+    switch (mouseMode)
+    {
+        case MarkerClusterHolder::MouseModePan:
+            action->setToolTip(i18n("Pan mode"));
+            action->setIcon(SmallIcon("transform-move"));
+            break;
+
+        case MarkerClusterHolder::MouseModeFilter:
+            action->setToolTip(i18n("Filter images"));
+            action->setIcon(SmallIcon("view-filter"));
+            break;
+
+        case MarkerClusterHolder::MouseModeSelect:
+            action->setToolTip(i18n("Select images"));
+            action->setIcon(SmallIcon("edit-select"));
+            break;
+
+        case MarkerClusterHolder::MouseModeZoomCluster:
+            action->setToolTip(i18n("Zoom into a group"));
+            action->setIcon(SmallIcon("page-zoom"));
+            break;
+    }
+    return action;
+}
+#endif // MARBLE_VERSION >= 0x000800
+#endif // HAVE_MARBLEWIDGET
+
 class WorldMapThemeBtnPriv
 {
 
@@ -787,6 +870,10 @@ WorldMapThemeBtn::WorldMapThemeBtn(WorldMapWidget *map, QWidget *parent)
 
     connect(d->map, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotUpdateMenu()));
+
+#ifndef HAVE_MARBLEWIDGET
+    setEnabled(false);
+#endif // HAVE_MARBLEWIDGET
 }
 
 WorldMapThemeBtn::~WorldMapThemeBtn()

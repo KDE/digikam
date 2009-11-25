@@ -114,7 +114,7 @@ QString CameraNameHelper::extractCameraNameToken(const QString& cameraName, int 
 
     capturedTexts = cameraName.split(" (");
 
-    // TODO: Right now we just assume that a camera name has no parantheses in it
+    // TODO: Right now we just assume that a camera name has no parentheses in it
     //       There is a testcase (CameraNameHelperTest::testCameraNameFromGPCamera) that
     //       checks all camera names delivered by gphoto2. At the moment all seems to be fine.
     if (!capturedTexts.isEmpty())

@@ -25,11 +25,9 @@
 
 // Qt includes
 
-#include <QGroupBox>
-#include <QHBoxLayout>
+#include <QGridLayout>
 #include <QLabel>
 #include <QPointer>
-#include <QVBoxLayout>
 
 // KDE includes
 
@@ -77,46 +75,20 @@ MetadataOptionDialog::MetadataOptionDialog(ParseObject* parent)
 
     // --------------------------------------------------------
 
-    // remove "Viewer" string from tabs, remove "Makernotes" tab completely for now
-    int makerNotesTabIndex = -1;
+    // remove "Viewer" string from tabs
     for (int i = 0; i < tab->count(); ++i)
     {
         QString text = tab->tabText(i);
         text.remove("viewer", Qt::CaseInsensitive);
         tab->setTabText(i, text.simplified());
-
-        if (text.toLower().contains("makernotes"))
-        {
-            makerNotesTabIndex = i;
-        }
-    }
-
-    if (makerNotesTabIndex != -1)
-    {
-        tab->removeTab(makerNotesTabIndex);
     }
 
     // --------------------------------------------------------
 
-    QGroupBox* customGBox     = new QGroupBox(i18n("Settings"));
-    QHBoxLayout *customLayout = new QHBoxLayout;
-    customLayout->addWidget(customLabel);
-    customLayout->addStretch(10);
-    customLayout->addWidget(separatorLineEdit);
-    customGBox->setLayout(customLayout);
-
-    // --------------------------------------------------------
-
-    QGroupBox* keywordsGBox    = new QGroupBox(i18n("Metadata Keywords"));
-    QVBoxLayout* keywordLayout = new QVBoxLayout;
-    keywordLayout->addWidget(tab);
-    keywordsGBox->setLayout(keywordLayout);
-
-    // --------------------------------------------------------
-
-    QVBoxLayout* mainLayout = new QVBoxLayout;
-    mainLayout->addWidget(customGBox);
-    mainLayout->addWidget(keywordsGBox);
+    QGridLayout* mainLayout = new QGridLayout(this);
+    mainLayout->addWidget(customLabel,       0, 0, 1, 1);
+    mainLayout->addWidget(separatorLineEdit, 0, 1, 1, 1);
+    mainLayout->addWidget(tab,               1, 0, 1,-1);
     mainWidget->setLayout(mainLayout);
 
     // --------------------------------------------------------
@@ -132,7 +104,7 @@ MetadataOptionDialog::~MetadataOptionDialog()
 // --------------------------------------------------------
 
 MetadataOption::MetadataOption()
-              : Option(i18n("Metadata..."), i18n("Add metadata fields from Exif, IPTC and XMP"))
+              : Option(i18n("Metadata..."), i18n("Add metadata information from Exif, IPTC and XMP"))
 {
     // metadataedit icon can be missing if KIPI plugins are not installed, load different icon in this case
     QPixmap icon = KIconLoader::global()->loadIcon("metadataedit", KIconLoader::Small, 0,
@@ -143,10 +115,11 @@ MetadataOption::MetadataOption()
     }
     setIcon(icon);
 
-    addTokenDescription("[meta:|keycode|]", i18n("Metadata"),
-                        i18n("Add metadata (use the quick access dialog for keycodes)"));
+    addTokenDescription("[meta:|key|]", i18n("Metadata"), i18n("Add metadata information"));
 
-    setRegExp("\\[meta:\\s*(.*)\\s*\\s*\\]");
+    QRegExp reg("\\[meta(:(.*))\\]");
+    reg.setMinimal(true);
+    setRegExp(reg);
 }
 
 void MetadataOption::slotTokenTriggered(const QString& token)
@@ -180,14 +153,13 @@ void MetadataOption::slotTokenTriggered(const QString& token)
 void MetadataOption::parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results)
 {
     QRegExp reg = regExp();
-    reg.setMinimal(true);
 
     // --------------------------------------------------------
 
     QString tmp;
     PARSE_LOOP_START(parseString, reg)
     {
-        QString keyword = reg.cap(1);
+        QString keyword = reg.cap(2);
         tmp = parseMetadata(keyword, info);
     }
     PARSE_LOOP_END(parseString, reg, tmp, results)

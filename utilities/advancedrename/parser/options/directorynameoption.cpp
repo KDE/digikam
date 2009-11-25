@@ -48,7 +48,9 @@ DirectoryNameOption::DirectoryNameOption()
             i18n("Directory name of the parent, additional '.' characters move up "
                  "in the directory hierarchy"));
 
-    setRegExp("\\[dir(\\.*)\\]");
+    QRegExp reg("\\[dir(\\.*)\\]");
+    reg.setMinimal(true);
+    setRegExp(reg);
 }
 
 void DirectoryNameOption::parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results)
@@ -56,9 +58,7 @@ void DirectoryNameOption::parseOperation(const QString& parseString, ParseInform
     QFileInfo fi(info.fileUrl.toLocalFile());
     QStringList folders = fi.absolutePath().split('/', QString::SkipEmptyParts);
 
-    QRegExp reg = regExp();
-    reg.setMinimal(true);
-
+    QRegExp reg     = regExp();
     int folderCount = folders.count();
 
     // --------------------------------------------------------

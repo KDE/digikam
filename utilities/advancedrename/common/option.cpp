@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-08-08
- * Description : an abstract subparser class
+ * Description : an abstract option class
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -45,11 +45,8 @@ class OptionPriv
 {
 public:
 
-    OptionPriv() :
-        useModifiers(true)
+    OptionPriv()
     {}
-
-    bool         useModifiers;
 
     ParseResults parseResults;
     ParseResults modifierResults;
@@ -65,9 +62,9 @@ Option::Option(const QString& name, const QString& description, const QPixmap& i
     registerModifier(new UpperCaseModifier());
     registerModifier(new FirstLetterEachWordUpperCaseModifier());
     registerModifier(new TrimmedModifier());
-    registerModifier(new RangeModifier());
     registerModifier(new DefaultValueModifier());
     registerModifier(new ReplaceModifier());
+    registerModifier(new RangeModifier());
 }
 
 Option::~Option()
@@ -97,16 +94,6 @@ void Option::registerModifier(Modifier* modifier)
     d->modifiers.append(modifier);
 }
 
-void Option::setUseModifiers(bool value)
-{
-    d->useModifiers = value;
-}
-
-bool Option::useModifiers() const
-{
-    return d->useModifiers;
-}
-
 ModifierList Option::modifiers() const
 {
     return d->modifiers;
@@ -119,13 +106,9 @@ void Option::parse(const QString& parseString, ParseInformation& info)
 
     parseOperation(parseString, info, d->parseResults);
 
-    if (d->useModifiers)
+    if (!d->modifiers.isEmpty())
     {
         d->modifierResults = applyModifiers(parseString, d->parseResults);
-    }
-    else
-    {
-        d->modifierResults.clear();
     }
 }
 
@@ -136,7 +119,7 @@ ParseResults Option::parseResults()
 
 ParseResults Option::modifiedResults()
 {
-    if (d->modifierResults.isEmpty() || !d->useModifiers)
+    if (d->modifierResults.isEmpty())
     {
         return d->parseResults;
     }
@@ -196,7 +179,11 @@ ParseResults Option::applyModifiers(const QString& parseString, ParseResults& re
                 QString token                 = results.token(key);
                 QString result                = results.result(key);
 
-                QString modResult             = mod->modify(modToken, result);
+                QString modResult;
+                if (mod)
+                {
+                    modResult = mod->modify(modToken, result);
+                }
 
                 // update result
                 ParseResults::ResultsKey   kResult = key;

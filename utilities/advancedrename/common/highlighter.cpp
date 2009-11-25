@@ -51,12 +51,48 @@ void Highlighter::highlightBlock(const QString& text)
     foreach (const HighlightingRule &rule, highlightingRules)
     {
         QRegExp expression(rule.pattern);
-        expression.setMinimal(true);
         int index = expression.indexIn(text);
         while (index >= 0)
         {
             int length = expression.matchedLength();
             setFormat(index, length, rule.format);
+
+            // highlight parameters in options
+            if ((rule.type == OptionPattern)
+                && expression.numCaptures() > 0 && !expression.cap(1).isEmpty())
+            {
+                QString fullmatched  = expression.cap(0);
+                QString parameters   = expression.cap(1);
+                if (parameters.startsWith(':'))
+                {
+                    parameters.remove(0, 1);
+                    if (!parameters.isEmpty())
+                    {
+                        int pindex = fullmatched.indexOf(parameters);
+                        while (pindex >= 0)
+                        {
+                            int plength = parameters.length();
+                            setFormat(index + pindex, plength, parameterFormat);
+                            pindex = fullmatched.indexOf(parameters, pindex + plength);
+                        }
+                    }
+                }
+            }
+
+            // highlight quoted text in options and modifiers
+            if ((rule.type == OptionPattern || rule.type == ModifierPattern)
+                && expression.numCaptures() > 0)
+            {
+                QRegExp quotationExp = quotationRule.pattern;
+                QString fullmatched  = expression.cap(0);
+                int qindex           = quotationExp.indexIn(fullmatched);
+                while (qindex >= 0)
+                {
+                    int qlength = quotationExp.matchedLength();
+                    setFormat(index + qindex, qlength, quotationFormat);
+                    qindex = quotationExp.indexIn(fullmatched, qindex + qlength);
+                }
+            }
             index = expression.indexIn(text, index + length);
         }
     }
@@ -73,13 +109,12 @@ void Highlighter::setupHighlightingGrammar(Parser* parser)
 
     // --------------------------------------------------------
 
-    optionFormat.setForeground((Qt::GlobalColor)OptionColorBackground);
-//    optionFormat.setFontWeight(QFont::Bold);
+    optionFormat.setForeground((Qt::GlobalColor)OptionColor);
 
     foreach (Option* option, parser->options())
     {
-        QRegExp r = option->regExp();
-        r.setMinimal(true);
+        QRegExp r    = option->regExp();
+        rule.type    = OptionPattern;
         rule.pattern = r;
         rule.format  = optionFormat;
         highlightingRules.append(rule);
@@ -87,16 +122,15 @@ void Highlighter::setupHighlightingGrammar(Parser* parser)
 
     // --------------------------------------------------------
 
-    modifierFormat.setForeground((Qt::GlobalColor)ModifierColorBackground);
-//    modifierFormat.setFontWeight(QFont::Bold);
+    modifierFormat.setForeground((Qt::GlobalColor)ModifierColor);
 
     if (!parser->options().isEmpty())
     {
         Option* option = parser->options().first();
         foreach (Modifier* modifier, option->modifiers())
         {
-            QRegExp r = modifier->regExp();
-            r.setMinimal(true);
+            QRegExp r    = modifier->regExp();
+            rule.type    = ModifierPattern;
             rule.pattern = r;
             rule.format  = modifierFormat;
             highlightingRules.append(rule);
@@ -107,10 +141,15 @@ void Highlighter::setupHighlightingGrammar(Parser* parser)
 
     quotationFormat.setForeground((Qt::GlobalColor)QuotedTextColor);
     quotationFormat.setFontItalic(true);
-    rule.pattern = QRegExp("\".*\"");
-    rule.pattern.setMinimal(true);
-    rule.format = quotationFormat;
-    highlightingRules.append(rule);
+    quotationRule.pattern = QRegExp("\".*\"");
+    quotationRule.pattern.setMinimal(true);
+    quotationRule.format = quotationFormat;
+    quotationRule.type   = QuotedTextPattern;
+
+    // --------------------------------------------------------
+
+    parameterFormat.setForeground((Qt::GlobalColor)ParameterColor);
+    parameterFormat.setFontItalic(true);
 }
 
 } // namespace Digikam

@@ -36,9 +36,9 @@ namespace Digikam
 {
 
 DummyOption::DummyOption()
-           : Option(i18n("<BUTTON TEXT>"),
-                    i18n("<TOOLTIP TEXT FOR BUTTON>"),
-                    SmallIcon("<ICON>"))
+           : Option(i18n("BUTTON TEXT"),
+                    i18n("TOOLTIP TEXT FOR BUTTON"),
+                    SmallIcon("ICON"))
 {
     /*
      * Example initialization
@@ -53,20 +53,24 @@ DummyOption::DummyOption()
      * Use setRegExp() to define the regular expression that identifies the parse option and its parameters
      */
 
-    addTokenDescription("[myoption]", i18nc("my rename option", "MyOption"),
-    setRegExp("<PARSING REGEXP>");
+    addTokenDescription("[myoption]", i18nc("my rename option", "MyOption"), i18n("my option description"));
 
-}
+    // --------------------------------------------------------
 
-void DummyOption::parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results)
-{
-    QRegExp reg = regExp();
+    QRegExp reg("<PARSING REGEXP>");
 
     // decide if the regexp is case sensitive
     reg.setCaseSensitivity(Qt::CaseInsensitive);
 
     // decide if the regexp matching is greedy
     reg.setMinimal(false);
+
+    setRegExp(reg);
+}
+
+void DummyOption::parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results)
+{
+    QRegExp reg = regExp();
 
     // --------------------------------------------------------
 
@@ -89,10 +93,6 @@ void DummyOption::parseOperation(const QString& parseString, ParseInformation& i
         if (reg.cap(1) == QString("[myoption]"))
         {
             tmp = doSomething();
-        }
-        else
-        {
-            tmp = QString();
         }
     }
     PARSE_LOOP_END(parseString, reg, tmp, results)

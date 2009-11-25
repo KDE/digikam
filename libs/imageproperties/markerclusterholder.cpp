@@ -27,6 +27,8 @@
 #include <QMouseEvent>
 #include <QToolTip>
 #include <QPointer>
+#include <QAction>
+#include <QActionGroup>
 
 // Marble includes
 
@@ -87,8 +89,13 @@ public:
     MarkerClusterHolder::CustomPaintFunction     customPaintFunction;
     void*                                        customPaintFunctionData;
 
-// externaldraw plugin only supported on version 0.8 or higher
 #if MARBLE_VERSION >= 0x000800
+    QActionGroup*                                mouseModeActionGroup;
+    QAction*                                     mouseModeActionPan;
+    QAction*                                     mouseModeActionFilter;
+    QAction*                                     mouseModeActionSelect;
+    QAction*                                     mouseModeActionZoomCluster;
+
     QPointer<Marble::ExternalDrawPlugin>         externalDrawPlugin;
 #endif // MARBLE_VERSION >= 0x000800
 
@@ -96,30 +103,34 @@ public:
     MarkerClusterHolderPrivate(Marble::MarbleWidget* parameterMarbleWidget)
         : marbleWidget(parameterMarbleWidget)
     {
-          clusters                  = QList<MarkerClusterHolder::ClusterInfo>();
-          markers                   = QList<MarkerClusterHolder::MarkerInfo>();
-          lastZoom                  = -1;
-          lastCenterLatitude        = marbleWidget->centerLatitude();
-          lastCenterLongitude       = marbleWidget->centerLongitude();
-          lastMapProjection         = marbleWidget->projection();
-          lastWidgetSize            = marbleWidget->size();
-          markerCountDirty          = true;
-          autoRedrawOnMarkerAdd     = true;
-          clusterStateDirty         = false;
-          haveAnySoloMarkers        = false;
-          markerDataEqual           = 0;
-          markerDataEqualData       = 0;
-          allowSelection            = true;
-          allowFiltering            = true;
-          tooltipFunction           = 0;
-          tooltipFunctionData       = 0;
-          clusterPixmapFunction     = 0;
-          clusterPixmapFunctionData = 0;
-          customPaintFunction       = 0;
-          customPaintFunctionData   = 0;
-// externaldraw plugin only supported on version 0.8 or higher
+          clusters                   = QList<MarkerClusterHolder::ClusterInfo>();
+          markers                    = QList<MarkerClusterHolder::MarkerInfo>();
+          lastZoom                   = -1;
+          lastCenterLatitude         = marbleWidget->centerLatitude();
+          lastCenterLongitude        = marbleWidget->centerLongitude();
+          lastMapProjection          = marbleWidget->projection();
+          lastWidgetSize             = marbleWidget->size();
+          markerCountDirty           = true;
+          autoRedrawOnMarkerAdd      = true;
+          clusterStateDirty          = false;
+          haveAnySoloMarkers         = false;
+          markerDataEqual            = 0;
+          markerDataEqualData        = 0;
+          allowSelection             = true;
+          allowFiltering             = true;
+          tooltipFunction            = 0;
+          tooltipFunctionData        = 0;
+          clusterPixmapFunction      = 0;
+          clusterPixmapFunctionData  = 0;
+          customPaintFunction        = 0;
+          customPaintFunctionData    = 0;
 #if MARBLE_VERSION >= 0x000800
-          externalDrawPlugin        = 0;
+          mouseModeActionGroup       = 0;
+          mouseModeActionPan         = 0;
+          mouseModeActionFilter      = 0;
+          mouseModeActionSelect      = 0;
+          mouseModeActionZoomCluster = 0;
+          externalDrawPlugin         = 0;
 #endif // MARBLE_VERSION >= 0x000800
     }
 
@@ -151,7 +162,6 @@ MarkerClusterHolder::MarkerClusterHolder(Marble::MarbleWidget* const marbleWidge
 {
     d->marbleWidget->installEventFilter(this);
 
-    // externaldraw plugin is only supported on version 0.8 or higher
 #if MARBLE_VERSION >= 0x000800
     // try to find the ExternalDrawPlugin
     d->externalDrawPlugin = Marble::ExternalDrawPlugin::findPluginInstance(d->marbleWidget);
@@ -159,7 +169,26 @@ MarkerClusterHolder::MarkerClusterHolder(Marble::MarbleWidget* const marbleWidge
     {
         d->externalDrawPlugin->setRenderCallback(ExternalDrawCallback, this);
     }
+
+    // create the MouseMode actions:
+    d->mouseModeActionGroup       = new QActionGroup(this);
+    d->mouseModeActionGroup->setExclusive(true);
+    d->mouseModeActionPan         = new QAction(this);
+    d->mouseModeActionPan->setCheckable(true);
+    d->mouseModeActionGroup->addAction(d->mouseModeActionPan);
+    d->mouseModeActionFilter      = new QAction(this);
+    d->mouseModeActionFilter->setCheckable(true);
+    d->mouseModeActionGroup->addAction(d->mouseModeActionFilter);
+    d->mouseModeActionSelect      = new QAction(this);
+    d->mouseModeActionSelect->setCheckable(true);
+    d->mouseModeActionGroup->addAction(d->mouseModeActionSelect);
+    d->mouseModeActionZoomCluster = new QAction(this);
+    d->mouseModeActionZoomCluster->setCheckable(true);
+    d->mouseModeActionGroup->addAction(d->mouseModeActionZoomCluster);
+
+    d->mouseModeActionPan->setChecked(true);
 #endif // MARBLE_VERSION >= 0x000800
+    
 }
 
 MarkerClusterHolder::~MarkerClusterHolder()
@@ -1122,6 +1151,7 @@ bool MarkerClusterHolder::eventFilter(QObject *obj, QEvent *event)
     const bool shiftPressed                      = currentModifiers & Qt::ShiftModifier;
     const bool controlPressed                    = currentModifiers & Qt::ControlModifier;
     const bool leftButtonPressed                 = mouseEvent->button()==Qt::LeftButton;
+    const bool rightButtonPressed                = mouseEvent->button()==Qt::RightButton;
 #endif // MARBLE_VERSION >= 0x000800
 
     bool doFilterEvent = false;
@@ -1151,67 +1181,118 @@ bool MarkerClusterHolder::eventFilter(QObject *obj, QEvent *event)
     }
     // event filter for mouse clicks does not work reliably in <0.8, no idea why...
 #if MARBLE_VERSION >= 0x000800
-    else if ((event->type() == QEvent::MouseButtonPress) &&
-             (controlPressed || shiftPressed) && leftButtonPressed && (mouseEvent->button() == Qt::LeftButton))
+    else if ( ( event->type() == QEvent::MouseButtonPress ) &&
+             ( leftButtonPressed || rightButtonPressed ) )
     {
-        const QPoint mousePos = mouseEvent->pos();
-        int clusterIndex      = findClusterAt(mousePos);
-
-        if (clusterIndex >= 0)
+        // determine the effective mouse mode given from the mouse mode selected
+        // using the MouseModeActions and the keyboard modifiers:
+        MouseMode mouseMode = getMouseMode();
+        if ( leftButtonPressed )
         {
-            const ClusterInfo cluster = d->clusters.at(clusterIndex);
-            doFilterEvent             = true;
-
-            if (d->allowSelection && shiftPressed && !controlPressed)
+            switch (mouseMode)
             {
-                // determine how to change the state:
-                ClusterInfo::PartialState selectionState = cluster.selected;
+                case MouseModePan:
+                    if ( d->allowSelection && shiftPressed && !controlPressed )
+                        mouseMode = MouseModeSelect;
+                    else if ( controlPressed && d->allowFiltering )
+                        mouseMode = MouseModeFilter;
 
-                if ((selectionState == ClusterInfo::PartialNone) || (selectionState == ClusterInfo::PartialSome))
-                {
-                    setSelectedMarkers(cluster.markerIndices, true, false);
-                }
-                else
-                {
-                    setSelectedMarkers(cluster.markerIndices, false, false);
-                }
-                emit(signalSelectionChanged());
-            }
-            else if (d->allowFiltering&&controlPressed)
-            {
-                // control: interaction with filtering
-                // if shift is pressed: allow selection of multiple filter clusters
-                const bool doResetOtherClusters = !shiftPressed;
+                    break;
 
-                ClusterInfo::PartialState soloState = cluster.solo;
-                if ((soloState==ClusterInfo::PartialNone)||(soloState==ClusterInfo::PartialSome))
-                {
-                    // mark all markers in the cluster as solo:
-                    setSoloMarkers(cluster.markerIndices, true, doResetOtherClusters);
-                }
-                else if (soloState==ClusterInfo::PartialAll)
-                {
-                    // mark all markers in the cluster as not solo:
-                    setSoloMarkers(cluster.markerIndices, false, doResetOtherClusters);
-                }
-                emit(signalSoloChanged());
+                case MouseModeFilter:
+                    if ( !d->allowFiltering )
+                        mouseMode = MouseModePan;
+                    break;
+
+                case MouseModeSelect:
+                    if ( !d->allowSelection )
+                        mouseMode = MouseModePan;
+                    break;
+
+                default:
+                    break;
             }
         }
-    }
-    else if ((event->type() == QEvent::MouseButtonPress) &&
-             controlPressed && (mouseEvent->button() == Qt::RightButton))
-    {
-        // mouse was double clicked, check whether it was above a cluster:
-        const QPoint mousePos  = mouseEvent->pos();
-        const int clusterIndex = findClusterAt(mousePos);
-
-        if (clusterIndex>=0)
+        else if ( rightButtonPressed )
         {
-            doFilterEvent = true;
+            switch (mouseMode)
+            {
+                case MouseModePan:
+                    if ( controlPressed )
+                        mouseMode = MouseModeZoomCluster;
 
-            // zoom into the cluster:
-            zoomIntoCluster(d->clusters.at(clusterIndex));
-            // warning: the clusterIndex is invalid now!
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        if ( mouseMode != MouseModePan )
+        {
+            const QPoint mousePos = mouseEvent->pos();
+            int clusterIndex      = findClusterAt(mousePos);
+
+            if (clusterIndex >= 0)
+            {
+                const ClusterInfo cluster = d->clusters.at(clusterIndex);
+                doFilterEvent             = true;
+
+                switch (mouseMode)
+                {
+                    case MouseModeSelect:
+                    {
+                        // determine how to change the state:
+                        ClusterInfo::PartialState selectionState = cluster.selected;
+
+                        if ((selectionState == ClusterInfo::PartialNone) || (selectionState == ClusterInfo::PartialSome))
+                        {
+                            setSelectedMarkers(cluster.markerIndices, true, false);
+                        }
+                        else
+                        {
+                            setSelectedMarkers(cluster.markerIndices, false, false);
+                        }
+                        emit(signalSelectionChanged());
+
+                        break;
+                    }
+                    
+
+                    case MouseModeFilter:
+                    {
+                        // if shift is pressed: allow selection of multiple filter clusters
+                        const bool doResetOtherClusters = !shiftPressed;
+
+                        ClusterInfo::PartialState soloState = cluster.solo;
+                        if ((soloState==ClusterInfo::PartialNone)||(soloState==ClusterInfo::PartialSome))
+                        {
+                            // mark all markers in the cluster as solo:
+                            setSoloMarkers(cluster.markerIndices, true, doResetOtherClusters);
+                        }
+                        else if (soloState==ClusterInfo::PartialAll)
+                        {
+                            // mark all markers in the cluster as not solo:
+                            setSoloMarkers(cluster.markerIndices, false, doResetOtherClusters);
+                        }
+                        emit(signalSoloChanged());
+
+                        break;
+                    }
+
+                    case MouseModeZoomCluster:
+                        zoomIntoCluster(d->clusters.at(clusterIndex));
+
+                        break;
+
+                        // keep the compiler happy ;-)
+                    case MouseModePan:
+                        break;
+                        
+                    default:
+                        break;
+                }
+            }
         }
     }
 #endif // MARBLE_VERSION >= 0x000800
@@ -1419,6 +1500,50 @@ MarkerClusterHolder::ClusterInfo& MarkerClusterHolder::cluster(const int cluster
 MarkerClusterHolder::MarkerInfo& MarkerClusterHolder::marker(const int markerIndex)
 {
     return d->markers[markerIndex];
+}
+
+#if MARBLE_VERSION >= 0x000800
+QAction* MarkerClusterHolder::getMouseModeAction(const MarkerClusterHolder::MouseMode mouseMode) const
+{
+    switch (mouseMode)
+    {
+        case MarkerClusterHolder::MouseModePan:
+            return d->mouseModeActionPan;
+            break;
+
+        case MarkerClusterHolder::MouseModeFilter:
+            return d->mouseModeActionFilter;
+            break;
+
+        case MarkerClusterHolder::MouseModeSelect:
+            return d->mouseModeActionSelect;
+            break;
+
+        case MarkerClusterHolder::MouseModeZoomCluster:
+            return d->mouseModeActionZoomCluster;
+            break;
+    }
+    return 0;
+}
+#endif // MARBLE_VERSION >= 0x000800
+
+
+MarkerClusterHolder::MouseMode MarkerClusterHolder::getMouseMode() const
+{
+#if MARBLE_VERSION >= 0x000800
+    const QAction* const checkedAction = d->mouseModeActionGroup->checkedAction();
+
+    if (checkedAction==d->mouseModeActionFilter)
+        return MouseModeFilter;
+
+    if (checkedAction==d->mouseModeActionSelect)
+        return MouseModeSelect;
+
+    if (checkedAction==d->mouseModeActionZoomCluster)
+        return MouseModeZoomCluster;
+#endif // MARBLE_VERSION >= 0x000800
+    
+    return MouseModePan;
 }
 
 } // namespace Digikam

@@ -35,7 +35,9 @@ UpperCaseModifier::UpperCaseModifier()
 {
     addTokenDescription(QString("{upper}"), i18n("Uppercase"), description());
 
-    setRegExp("\\{upper\\}");
+    QRegExp reg("\\{upper\\}");
+    reg.setMinimal(true);
+    setRegExp(reg);
 }
 
 QString UpperCaseModifier::modifyOperation(const QString& parseString, const QString& result)
