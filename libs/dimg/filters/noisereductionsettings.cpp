@@ -321,6 +321,7 @@ void NoiseReductionSettings::setSettings(const WaveletsNRContainer& settings)
     d->advancedBox->setChecked(settings.advanced);
     d->thresholdInput->setValue(settings.leadThreshold);
     d->softnessInput->setValue(1.0 - settings.leadSoftness);
+    slotAdvancedEnabled(settings.advanced);
 }
 
 void NoiseReductionSettings::resetToDefault()
@@ -334,6 +335,7 @@ void NoiseReductionSettings::resetToDefault()
     d->thrCbInput->slotReset();
     d->softCbInput->slotReset();
     d->advancedBox->setChecked(false);
+    slotAdvancedEnabled(false);
 }
 
 WaveletsNRContainer NoiseReductionSettings::defaultSettings() const

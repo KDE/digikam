@@ -43,14 +43,14 @@ public:
     WaveletsNRContainer()
     {
         leadThreshold = 1.2;     
-        leadSoftness  = 0.1;    
+        leadSoftness  = 0.9;    
         advanced      = false;
         thresholds[0] = 1.2;     // Y
         thresholds[1] = 1.2;     // Cr
         thresholds[2] = 1.2;     // Cb
-        softness[0]   = 0.1;     // Y
-        softness[1]   = 0.1;     // Cr
-        softness[2]   = 0.1;     // Cb
+        softness[0]   = 0.9;     // Y
+        softness[1]   = 0.9;     // Cr
+        softness[2]   = 0.9;     // Cb
     };
 
     ~WaveletsNRContainer(){};
