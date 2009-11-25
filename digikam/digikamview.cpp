@@ -750,11 +750,6 @@ void DigikamView::slotAlbumRenamed(Album *album)
                     // TODO update, port to mvc
                     //d->searchFolderView->slotTextSearchFilterChanged(d->searchSearchBar->searchTextSettings());
                 }
-                else if (salbum->isTimelineSearch())
-                {
-                    // TODO update, port to mvc
-                    //d->timeLineView->folderView()->slotTextSearchFilterChanged(d->timeLineView->searchBar()->searchTextSettings());
-                }
                 else if (salbum->isHaarSearch())
                 {
                     // TODO update, port to mvc
