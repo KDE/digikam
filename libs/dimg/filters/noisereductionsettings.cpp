@@ -303,24 +303,6 @@ NoiseReductionSettings::~NoiseReductionSettings()
     delete d;
 }
 
-void NoiseReductionSettings::slotLeadSettingsChanged()
-{
-    if (!d->advancedBox->isChecked())
-    {
-        blockSignals(true);
-        WaveletsNRContainer prm = settings();
-        d->thrLumInput->setValue(prm.leadThreshold);
-        d->thrCrInput->setValue(prm.leadThreshold);
-        d->thrCbInput->setValue(prm.leadThreshold);
-        d->softLumInput->setValue(1.0 - prm.leadSoftness); 
-        d->softCrInput->setValue(1.0 - prm.leadSoftness);
-        d->softCbInput->setValue(1.0 - prm.leadSoftness);
-        blockSignals(false);
-    }
-
-    emit signalSettingsChanged();
-}
-
 WaveletsNRContainer NoiseReductionSettings::settings() const
 {
     WaveletsNRContainer prm;
@@ -393,6 +375,22 @@ void NoiseReductionSettings::slotAdvancedEnabled(bool b)
     d->advExpanderBox->setEnabled(b);
 
     if (!b) slotLeadSettingsChanged();
+}
+
+void NoiseReductionSettings::slotLeadSettingsChanged()
+{
+    if (!d->advancedBox->isChecked())
+    {
+        WaveletsNRContainer prm = settings();
+        d->thrLumInput->setValue(prm.leadThreshold);
+        d->thrCrInput->setValue(prm.leadThreshold);
+        d->thrCbInput->setValue(prm.leadThreshold);
+        d->softLumInput->setValue(1.0 - prm.leadSoftness); 
+        d->softCrInput->setValue(1.0 - prm.leadSoftness);
+        d->softCbInput->setValue(1.0 - prm.leadSoftness);
+    }
+
+    emit signalSettingsChanged();
 }
 
 void NoiseReductionSettings::readSettings(KConfigGroup& group)
