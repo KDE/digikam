@@ -155,7 +155,7 @@ NoiseReductionSettings::NoiseReductionSettings(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    d->advancedBox      = new QCheckBox(i18n("Advanced adjustements"));
+    d->advancedBox      = new QCheckBox(i18n("Advanced adjustments"));
     d->advExpanderBox   = new RExpanderBox;
     d->advExpanderBox->setObjectName("Advanced Settings Expander");
 
