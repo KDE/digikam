@@ -92,6 +92,8 @@ NoiseReductionTool::NoiseReductionTool(QObject* parent)
     d->gboxSettings->setButtons(EditorToolSettings::Default|
                                 EditorToolSettings::Ok|
                                 EditorToolSettings::Cancel|
+                                EditorToolSettings::Load|
+                                EditorToolSettings::SaveAs|
                                 EditorToolSettings::Try);
 
     d->gboxSettings->setTools(EditorToolSettings::PanIcon);
@@ -130,7 +132,7 @@ void NoiseReductionTool::writeSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
 
-    d->nrSettings->saveSettings(group);
+    d->nrSettings->writeSettings(group);
     d->previewWidget->writeSettings();
     group.sync();
 }
@@ -169,6 +171,16 @@ void NoiseReductionTool::putFinalData()
 {
     ImageIface iface(0, 0);
     iface.putOriginalImage(i18n("Noise Reduction"), filter()->getTargetImage().bits());
+}
+
+void NoiseReductionTool::slotLoadSettings()
+{
+    d->nrSettings->loadSettings();
+}
+
+void NoiseReductionTool::slotSaveAsSettings()
+{
+    d->nrSettings->saveAsSettings();
 }
 
 }  // namespace DigikamImagesPluginCore
