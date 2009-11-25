@@ -46,9 +46,9 @@ TagDragDropHandler::TagDragDropHandler(TagModel *model)
 {
 }
 
-bool TagDragDropHandler::dropEvent(QAbstractItemView *view, QDropEvent *e, const QModelIndex& droppedOn)
+bool TagDragDropHandler::dropEvent(QAbstractItemView *view, const QDropEvent *e, const QModelIndex& droppedOn)
 {
-    if(accepts(e->mimeData(), droppedOn) == Qt::IgnoreAction)
+    if(accepts(e, droppedOn) == Qt::IgnoreAction)
         return false;
 
     TAlbum *destAlbum = model()->albumForIndex(droppedOn);
@@ -103,8 +103,7 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView *view, QDropEvent *e, const
 
         return true;
     }
-
-    if (DItemDrag::canDecode(e->mimeData()))
+    else if (DItemDrag::canDecode(e->mimeData()))
     {
         TAlbum *srcAlbum;
 
@@ -187,23 +186,26 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView *view, QDropEvent *e, const
         {
             emit assignTags(destAlbum->id(), imageIDs);
         }
+
+        return true;
     }
+
+    return false;
 }
 
-Qt::DropAction TagDragDropHandler::accepts(const QMimeData *data, const QModelIndex& dropIndex)
+Qt::DropAction TagDragDropHandler::accepts(const QDropEvent *e, const QModelIndex& dropIndex)
 {
 
     TAlbum *destAlbum = model()->albumForIndex(dropIndex);
 
-    int droppedId = 0;
-    if (!DTagDrag::decode(data, droppedId))
-        return Qt::IgnoreAction;
-
-    TAlbum *droppedAlbum = AlbumManager::instance()->findTAlbum(droppedId);
-
     // TODO update, list supporting...
-    if(DTagDrag::canDecode(data)/* || DTagListDrag::canDecode(data) */)
+    if(DTagDrag::canDecode(e->mimeData())/* || DTagListDrag::canDecode(data) */)
     {
+        int droppedId = 0;
+        if (!DTagDrag::decode(e->mimeData(), droppedId))
+            return Qt::IgnoreAction;
+
+        TAlbum *droppedAlbum = AlbumManager::instance()->findTAlbum(droppedId);
 
         // Allow dragging on empty space when the itemDrag isn't already at root level
         if (!droppedAlbum && destAlbum->parent()->isRoot())
@@ -223,8 +225,7 @@ Qt::DropAction TagDragDropHandler::accepts(const QMimeData *data, const QModelIn
 
         return Qt::MoveAction;
     }
-
-    if (DItemDrag::canDecode(data) && destAlbum && destAlbum->parent())
+    else if (DItemDrag::canDecode(e->mimeData()) && destAlbum && destAlbum->parent())
     {
         // Only other possibility is image items being dropped
         // And allow this only if there is a Tag to be dropped
@@ -266,6 +267,7 @@ QMimeData *TagDragDropHandler::createMimeData(const QList<Album*>& albums)
 //            ids << album->id();
 //        }
 //        return new DTagListDrag(id);
+        return 0;
     }
 }
 
