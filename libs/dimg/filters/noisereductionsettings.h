@@ -58,7 +58,10 @@ public:
     void setSettings(const WaveletsNRContainer& settings);
 
     void readSettings(KConfigGroup& group);
-    void saveSettings(KConfigGroup& group);
+    void writeSettings(KConfigGroup& group);
+    
+    void loadSettings();
+    void saveAsSettings();
 
 Q_SIGNALS:
 

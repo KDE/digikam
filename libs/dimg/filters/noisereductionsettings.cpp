@@ -28,12 +28,21 @@
 #include <QGridLayout>
 #include <QLabel>
 #include <QString>
+#include <QFile>
+#include <QTextStream>
 #include <QCheckBox>
 
 // KDE includes
 
+#include <kurl.h>
 #include <kdialog.h>
 #include <klocale.h>
+#include <kapplication.h>
+#include <kfiledialog.h>
+#include <kglobal.h>
+#include <kglobalsettings.h>
+#include <kmessagebox.h>
+#include <kstandarddirs.h>
 
 // LibKDcraw includes
 
@@ -399,7 +408,7 @@ void NoiseReductionSettings::readSettings(KConfigGroup& group)
     setSettings(prm);
 }
 
-void NoiseReductionSettings::saveSettings(KConfigGroup& group)
+void NoiseReductionSettings::writeSettings(KConfigGroup& group)
 {
     WaveletsNRContainer prm;
     
@@ -412,6 +421,86 @@ void NoiseReductionSettings::saveSettings(KConfigGroup& group)
     group.writeEntry(d->configAdvancedAdjustmentEntry,     prm.advanced);
     group.writeEntry(d->configThresholdAdjustmentEntry,    prm.leadThreshold);
     group.writeEntry(d->configSoftnessAdjustmentEntry,     prm.leadSoftness);
+}
+
+void NoiseReductionSettings::loadSettings()
+{
+    KUrl loadRestorationFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
+                               QString( "*" ), kapp->activeWindow(),
+                               QString( i18n("Photograph Noise Reduction Settings File to Load")) );
+    if ( loadRestorationFile.isEmpty() )
+        return;
+
+    QFile file(loadRestorationFile.toLocalFile());
+
+    if ( file.open(QIODevice::ReadOnly) )
+    {
+        QTextStream stream( &file );
+        if ( stream.readLine() != "# Photograph Wavelets Noise Reduction Configuration File" )
+        {
+            KMessageBox::error(kapp->activeWindow(),
+                               i18n("\"%1\" is not a Photograph Noise Reduction settings text file.",
+                                    loadRestorationFile.fileName()));
+            file.close();
+            return;
+        }
+
+        blockSignals(true);
+        
+        d->thresholdInput->setValue( stream.readLine().toDouble() );
+        d->softnessInput->setValue( stream.readLine().toDouble() );
+        d->advancedBox->setChecked( (bool)stream.readLine().toInt() );
+        
+        d->thrLumInput->setValue( stream.readLine().toDouble() );
+        d->softLumInput->setValue( stream.readLine().toDouble() );
+        d->thrCrInput->setValue( stream.readLine().toDouble() );
+        d->softCrInput->setValue( stream.readLine().toDouble() );
+        d->thrCbInput->setValue( stream.readLine().toDouble() );
+        d->softCbInput->setValue( stream.readLine().toDouble() );
+        
+        slotAdvancedEnabled(d->advancedBox->isChecked());
+
+        blockSignals(false);
+    }
+    else
+    {
+        KMessageBox::error(kapp->activeWindow(), i18n("Cannot load settings from the Photograph Noise Reduction text file."));
+    }
+
+    file.close();
+}
+
+void NoiseReductionSettings::saveAsSettings()
+{
+    KUrl saveRestorationFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
+                               QString( "*" ), kapp->activeWindow(),
+                               QString( i18n("Photograph Noise Reduction Settings File to Save")) );
+    if ( saveRestorationFile.isEmpty() )
+        return;
+
+    QFile file(saveRestorationFile.toLocalFile());
+
+    if ( file.open(QIODevice::WriteOnly) )
+    {
+        QTextStream stream( &file );
+        stream << "# Photograph Wavelets Noise Reduction Configuration File\n";
+        stream << d->thresholdInput->value()  << "\n";
+        stream << d->softnessInput->value()   << "\n";
+        stream << d->advancedBox->isChecked() << "\n";
+
+        stream << d->thrLumInput->value()     << "\n";
+        stream << d->softLumInput->value()    << "\n";
+        stream << d->thrCrInput->value()      << "\n";
+        stream << d->softCrInput->value()     << "\n";
+        stream << d->thrCbInput->value()      << "\n";
+        stream << d->softCbInput->value()     << "\n";
+    }
+    else
+    {
+        KMessageBox::error(kapp->activeWindow(), i18n("Cannot save settings to the Photograph Noise Reduction text file."));
+    }
+
+    file.close();
 }
 
 }  // namespace Digikam
