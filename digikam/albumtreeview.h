@@ -39,6 +39,8 @@
 namespace Digikam
 {
 
+class AbstractAlbumTreeViewPriv;
+
 class AbstractAlbumTreeView : public QTreeView
 {
     Q_OBJECT
@@ -46,6 +48,7 @@ class AbstractAlbumTreeView : public QTreeView
 public:
 
     explicit AbstractAlbumTreeView(AbstractSpecificAlbumModel *model, QWidget *parent = 0);
+    ~AbstractAlbumTreeView();
 
     AbstractSpecificAlbumModel *albumModel() const;
     AlbumFilterModel *albumFilterModel() const;
@@ -58,6 +61,9 @@ public:
      *  Suitable for mouse click positions.
      */
     QModelIndex indexVisuallyAt(const QPoint& p);
+
+    virtual void loadViewState(KConfigGroup &group, QString prefix = QString());
+    virtual void saveViewState(KConfigGroup &group, QString prefix = QString());
 
 public Q_SLOTS:
 
@@ -102,7 +108,17 @@ protected:
 
 private:
 
-    bool     m_expandOnSingleClick;
+    void saveState(const QModelIndex &index, QStringList &selection,
+                    QStringList &expansion);
+    void restoreState(const QModelIndex &index);
+
+private Q_SLOTS:
+
+    void slotFixRowsInserted(const QModelIndex &index, int start, int end);
+
+private:
+
+    AbstractAlbumTreeViewPriv *d;
 };
 
 class AbstractCountingAlbumTreeView : public AbstractAlbumTreeView
@@ -122,7 +138,6 @@ private Q_SLOTS:
     void updateShowCountState(const QModelIndex& index, bool recurse);
 };
 
-class AbstractCheckableAlbumTreeViewPriv;
 class AbstractCheckableAlbumTreeView : public AbstractCountingAlbumTreeView
 {
 Q_OBJECT
@@ -131,7 +146,6 @@ public:
     /// Models of these view _can_ be checkable, they need _not_. You need to enable it on the model.
 
     explicit AbstractCheckableAlbumTreeView(AbstractCheckableAlbumModel *model, QWidget *parent = 0);
-    virtual ~AbstractCheckableAlbumTreeView();
 
     /// Manage check state through the model directly
     AbstractCheckableAlbumModel *checkableModel() const;
@@ -139,24 +153,9 @@ public:
     /// Enable checking on middle mouse button click (default: on)
     void setCheckOnMiddleClick(bool doThat);
 
-    virtual void loadViewState(KConfigGroup &group, QString prefix = QString());
-    virtual void saveViewState(KConfigGroup &group, QString prefix = QString());
-
 protected:
 
     virtual void middleButtonPressed(Album *a);
-
-private:
-    void saveState(const QModelIndex &index, QStringList &selection,
-                    QStringList &expansion);
-    void restoreState(const QModelIndex &index);
-
-private Q_SLOTS:
-    void slotFixRowsInserted(const QModelIndex &index, int start, int end);
-
-private:
-    AbstractCheckableAlbumTreeViewPriv *d;
-
 };
 
 class AlbumTreeViewPriv;

@@ -60,10 +60,46 @@ static QList<A*> selectedAlbums(QItemSelectionModel *selModel, AlbumFilterModel 
     return albums;
 }
 
-AbstractAlbumTreeView::AbstractAlbumTreeView(AbstractSpecificAlbumModel *model, QWidget *parent)
-    : QTreeView(parent)
+struct State
 {
-    m_expandOnSingleClick = true;
+    State() :
+        selected(false), expanded(false), currentIndex(false)
+    {
+    }
+    bool selected;
+    bool expanded;
+    bool currentIndex;
+};
+
+class AbstractAlbumTreeViewPriv
+{
+
+public:
+    AbstractAlbumTreeViewPriv() :
+        configSuffixSelection("Selection"),
+        configSuffixExpansion("Expansion"),
+        configSuffixCurrentIndex("CurrentIndex"),
+        configSuffixSortColumn("SortColumn"),
+        configSuffixSortOrder("SortOrder")
+    {
+        expandOnSingleClick = true;
+    }
+
+    bool expandOnSingleClick;
+
+    QMap<int, State> statesByAlbumId;
+
+    const QString configSuffixSelection;
+    const QString configSuffixExpansion;
+    const QString configSuffixCurrentIndex;
+    const QString configSuffixSortColumn;
+    const QString configSuffixSortOrder;
+
+};
+
+AbstractAlbumTreeView::AbstractAlbumTreeView(AbstractSpecificAlbumModel *model, QWidget *parent)
+    : QTreeView(parent), d(new AbstractAlbumTreeViewPriv)
+{
     m_checkOnMiddleClick  = false;
 
     m_albumModel       = model;
@@ -86,6 +122,11 @@ AbstractAlbumTreeView::AbstractAlbumTreeView(AbstractSpecificAlbumModel *model, 
              this, SLOT(slotCurrentChanged()));
 }
 
+AbstractAlbumTreeView::~AbstractAlbumTreeView()
+{
+    delete d;
+}
+
 AbstractSpecificAlbumModel *AbstractAlbumTreeView::albumModel() const
 {
     return m_albumModel;
@@ -98,7 +139,7 @@ AlbumFilterModel *AbstractAlbumTreeView::albumFilterModel() const
 
 void AbstractAlbumTreeView::setSelectOnSingleClick(bool doThat)
 {
-    m_expandOnSingleClick = doThat;
+    d->expandOnSingleClick = doThat;
 }
 
 QModelIndex AbstractAlbumTreeView::indexVisuallyAt(const QPoint& p)
@@ -177,7 +218,7 @@ void AbstractAlbumTreeView::slotSelectionChanged()
 
 void AbstractAlbumTreeView::mousePressEvent(QMouseEvent *e)
 {
-    if (m_expandOnSingleClick && e->button() == Qt::LeftButton)
+    if (d->expandOnSingleClick && e->button() == Qt::LeftButton)
     {
         QModelIndex index = indexVisuallyAt(e->pos());
         if (index.isValid())
@@ -276,130 +317,7 @@ void AbstractAlbumTreeView::dropEvent(QDropEvent *e)
     }
 }
 
-// --------------------------------------- //
-
-AbstractCountingAlbumTreeView::AbstractCountingAlbumTreeView(AbstractCountingAlbumModel *model, QWidget *parent)
-    : AbstractAlbumTreeView(model, parent)
-{
-    connect(this, SIGNAL(expanded(const QModelIndex &)),
-             this, SLOT(slotExpanded(const QModelIndex &)));
-
-    connect(this, SIGNAL(collapsed(const QModelIndex &)),
-             this, SLOT(slotCollapsed(const QModelIndex &)));
-
-    connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
-             this, SLOT(slotSetShowCount()));
-
-    connect(m_albumFilterModel, SIGNAL(rowsInserted(const QModelIndex &, int, int)),
-             this, SLOT(slotRowsInserted(const QModelIndex &, int, int)));
-
-    slotSetShowCount();
-
-    // Initialize expanded/collapsed showCount state
-    updateShowCountState(QModelIndex(), true);
-}
-
-void AbstractCountingAlbumTreeView::updateShowCountState(const QModelIndex& index, bool recurse)
-{
-    if (isExpanded(index))
-        slotExpanded(index);
-    else
-        slotCollapsed(index);
-
-    if (recurse)
-    {
-        int rows = m_albumFilterModel->rowCount(index);
-        for (int i=0; i<rows; ++i)
-            updateShowCountState(m_albumFilterModel->index(i, 0, index), true);
-    }
-}
-
-void AbstractCountingAlbumTreeView::slotCollapsed(const QModelIndex& index)
-{
-    static_cast<AbstractCountingAlbumModel*>(m_albumModel)->includeChildrenCount(m_albumFilterModel->mapToSource(index));
-}
-
-void AbstractCountingAlbumTreeView::slotExpanded(const QModelIndex& index)
-{
-    static_cast<AbstractCountingAlbumModel*>(m_albumModel)->excludeChildrenCount(m_albumFilterModel->mapToSource(index));
-}
-
-void AbstractCountingAlbumTreeView::slotSetShowCount()
-{
-    static_cast<AbstractCountingAlbumModel*>(m_albumModel)->setShowCount(AlbumSettings::instance()->getShowFolderTreeViewItemsCount());
-}
-
-void AbstractCountingAlbumTreeView::slotRowsInserted(const QModelIndex& parent, int start, int end)
-{
-    // initialize showCount state when items are added
-    for (int i=start; i<=end; ++i)
-        updateShowCountState(m_albumFilterModel->index(i, 0, parent), false);
-}
-
-// --------------------------------------- //
-
-struct State
-{
-    State() :
-        selected(false), expanded(false), currentIndex(false)
-    {
-    }
-    bool selected;
-    bool expanded;
-    bool currentIndex;
-};
-
-class AbstractCheckableAlbumTreeViewPriv
-{
-
-public:
-    AbstractCheckableAlbumTreeViewPriv() :
-        configSuffixSelection("Selection"),
-        configSuffixExpansion("Expansion"),
-        configSuffixCurrentIndex("CurrentIndex"),
-        configSuffixSortColumn("SortColumn"),
-        configSuffixSortOrder("SortOrder")
-    {
-    }
-
-    QMap<int, State> statesByAlbumId;
-
-    const QString configSuffixSelection;
-    const QString configSuffixExpansion;
-    const QString configSuffixCurrentIndex;
-    const QString configSuffixSortColumn;
-    const QString configSuffixSortOrder;
-
-};
-
-AbstractCheckableAlbumTreeView::AbstractCheckableAlbumTreeView(AbstractCheckableAlbumModel *model, QWidget *parent)
-    : AbstractCountingAlbumTreeView(model, parent), d(new AbstractCheckableAlbumTreeViewPriv)
-{
-    m_checkOnMiddleClick  = true;
-}
-
-AbstractCheckableAlbumTreeView::~AbstractCheckableAlbumTreeView()
-{
-    delete d;
-}
-
-AbstractCheckableAlbumModel *AbstractCheckableAlbumTreeView::checkableModel() const
-{
-    return static_cast<AbstractCheckableAlbumModel*>(m_albumModel);
-}
-
-void AbstractCheckableAlbumTreeView::setCheckOnMiddleClick(bool doThat)
-{
-    m_checkOnMiddleClick = doThat;
-}
-
-void AbstractCheckableAlbumTreeView::middleButtonPressed(Album *a)
-{
-    if (static_cast<AbstractCheckableAlbumModel*>(m_albumModel)->isCheckable())
-        static_cast<AbstractCheckableAlbumModel*>(m_albumModel)->toggleChecked(a);
-}
-
-void AbstractCheckableAlbumTreeView::loadViewState(KConfigGroup &configGroup, QString prefix)
+void AbstractAlbumTreeView::loadViewState(KConfigGroup &configGroup, QString prefix)
 {
 
     kDebug() << "Loading view state from " << configGroup.name();
@@ -468,7 +386,7 @@ void AbstractCheckableAlbumTreeView::loadViewState(KConfigGroup &configGroup, QS
 
 }
 
-void AbstractCheckableAlbumTreeView::restoreState(const QModelIndex &index)
+void AbstractAlbumTreeView::restoreState(const QModelIndex &index)
 {
 
     Album *album = albumFilterModel()->albumForIndex(index);
@@ -503,7 +421,7 @@ void AbstractCheckableAlbumTreeView::restoreState(const QModelIndex &index)
 
 }
 
-void AbstractCheckableAlbumTreeView::slotFixRowsInserted(const QModelIndex &index, int start, int end)
+void AbstractAlbumTreeView::slotFixRowsInserted(const QModelIndex &index, int start, int end)
 {
 
     kDebug() << "slot rowInserted called";
@@ -515,7 +433,7 @@ void AbstractCheckableAlbumTreeView::slotFixRowsInserted(const QModelIndex &inde
     }
 }
 
-void AbstractCheckableAlbumTreeView::saveViewState(KConfigGroup &configGroup, QString prefix)
+void AbstractAlbumTreeView::saveViewState(KConfigGroup &configGroup, QString prefix)
 {
 
     QStringList selection, expansion;
@@ -540,7 +458,7 @@ void AbstractCheckableAlbumTreeView::saveViewState(KConfigGroup &configGroup, QS
 
 }
 
-void AbstractCheckableAlbumTreeView::saveState(const QModelIndex &index, QStringList &selection,
+void AbstractAlbumTreeView::saveState(const QModelIndex &index, QStringList &selection,
                 QStringList &expansion)
 {
     const QString cfgKey = QString::number(albumFilterModel()->albumForIndex(
@@ -554,6 +472,90 @@ void AbstractCheckableAlbumTreeView::saveState(const QModelIndex &index, QString
         const QModelIndex child = model()->index(i, 0, index);
         saveState(child, selection, expansion);
     }
+}
+
+// --------------------------------------- //
+
+AbstractCountingAlbumTreeView::AbstractCountingAlbumTreeView(AbstractCountingAlbumModel *model, QWidget *parent)
+    : AbstractAlbumTreeView(model, parent)
+{
+    connect(this, SIGNAL(expanded(const QModelIndex &)),
+             this, SLOT(slotExpanded(const QModelIndex &)));
+
+    connect(this, SIGNAL(collapsed(const QModelIndex &)),
+             this, SLOT(slotCollapsed(const QModelIndex &)));
+
+    connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
+             this, SLOT(slotSetShowCount()));
+
+    connect(m_albumFilterModel, SIGNAL(rowsInserted(const QModelIndex &, int, int)),
+             this, SLOT(slotRowsInserted(const QModelIndex &, int, int)));
+
+    slotSetShowCount();
+
+    // Initialize expanded/collapsed showCount state
+    updateShowCountState(QModelIndex(), true);
+}
+
+void AbstractCountingAlbumTreeView::updateShowCountState(const QModelIndex& index, bool recurse)
+{
+    if (isExpanded(index))
+        slotExpanded(index);
+    else
+        slotCollapsed(index);
+
+    if (recurse)
+    {
+        int rows = m_albumFilterModel->rowCount(index);
+        for (int i=0; i<rows; ++i)
+            updateShowCountState(m_albumFilterModel->index(i, 0, index), true);
+    }
+}
+
+void AbstractCountingAlbumTreeView::slotCollapsed(const QModelIndex& index)
+{
+    static_cast<AbstractCountingAlbumModel*>(m_albumModel)->includeChildrenCount(m_albumFilterModel->mapToSource(index));
+}
+
+void AbstractCountingAlbumTreeView::slotExpanded(const QModelIndex& index)
+{
+    static_cast<AbstractCountingAlbumModel*>(m_albumModel)->excludeChildrenCount(m_albumFilterModel->mapToSource(index));
+}
+
+void AbstractCountingAlbumTreeView::slotSetShowCount()
+{
+    static_cast<AbstractCountingAlbumModel*>(m_albumModel)->setShowCount(AlbumSettings::instance()->getShowFolderTreeViewItemsCount());
+}
+
+void AbstractCountingAlbumTreeView::slotRowsInserted(const QModelIndex& parent, int start, int end)
+{
+    // initialize showCount state when items are added
+    for (int i=start; i<=end; ++i)
+        updateShowCountState(m_albumFilterModel->index(i, 0, parent), false);
+}
+
+// --------------------------------------- //
+
+AbstractCheckableAlbumTreeView::AbstractCheckableAlbumTreeView(AbstractCheckableAlbumModel *model, QWidget *parent)
+    : AbstractCountingAlbumTreeView(model, parent)
+{
+    m_checkOnMiddleClick  = true;
+}
+
+AbstractCheckableAlbumModel *AbstractCheckableAlbumTreeView::checkableModel() const
+{
+    return static_cast<AbstractCheckableAlbumModel*>(m_albumModel);
+}
+
+void AbstractCheckableAlbumTreeView::setCheckOnMiddleClick(bool doThat)
+{
+    m_checkOnMiddleClick = doThat;
+}
+
+void AbstractCheckableAlbumTreeView::middleButtonPressed(Album *a)
+{
+    if (static_cast<AbstractCheckableAlbumModel*>(m_albumModel)->isCheckable())
+        static_cast<AbstractCheckableAlbumModel*>(m_albumModel)->toggleChecked(a);
 }
 
 // --------------------------------------- //
