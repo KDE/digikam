@@ -94,6 +94,8 @@ QVariant AbstractAlbumModel::albumData(Album *a, int role) const
         case Qt::DecorationRole:
             // reimplement in subclasses
             return decorationRole(a);
+        case AlbumTitleRole:
+            return a->title();
         case AlbumTypeRole:
             return a->type();
         case AlbumPointerRole:

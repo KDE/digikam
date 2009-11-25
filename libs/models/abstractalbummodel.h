@@ -67,14 +67,16 @@ public:
 
     enum AlbumDataRole
     {
+        /// Returns the album title. Principally the same as display role, but without any additions.
+        AlbumTitleRole = Qt::UserRole,
         /// Returns the Album::Type of the associated album
-        AlbumTypeRole = Qt::UserRole,
+        AlbumTypeRole = Qt::UserRole + 1,
         /// Returns a pointer to the associated Album object
-        AlbumPointerRole = Qt::UserRole + 1,
+        AlbumPointerRole = Qt::UserRole + 2,
         /// Returns the id of the associated Album object
-        AlbumIdRole = Qt::UserRole + 2,
+        AlbumIdRole = Qt::UserRole + 3,
         /// Returns the global id (unique across all album types)
-        AlbumGlobalIdRole = Qt::UserRole + 3
+        AlbumGlobalIdRole = Qt::UserRole + 4
     };
 
     /**
