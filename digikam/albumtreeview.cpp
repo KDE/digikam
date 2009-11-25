@@ -204,9 +204,41 @@ void AbstractAlbumTreeView::middleButtonPressed(Album *)
     // reimplement if needed
 }
 
+void AbstractAlbumTreeView::startDrag(Qt::DropActions supportedActions)
+{
+    QModelIndexList indexes = selectedIndexes();
+    if (indexes.count() > 0) {
+        QMimeData *data = m_albumFilterModel->mimeData(indexes);
+        if (!data)
+            return;
+        QStyleOptionViewItem option = viewOptions();
+        option.rect = viewport()->rect();
+        QPixmap pixmap = /*m_delegate->*/pixmapForDrag(option, indexes);
+        QDrag *drag = new QDrag(this);
+        drag->setPixmap(pixmap);
+        drag->setMimeData(data);
+        drag->exec(supportedActions);
+    }
+}
+
+//TODO: Move to delegate, when we have one.
+//      Copy code from image delegate for creating icons when dragging multiple items
+QPixmap AbstractAlbumTreeView::pixmapForDrag(const QStyleOptionViewItem&, QList<QModelIndex> indexes)
+{
+    if (indexes.isEmpty())
+        return QPixmap();
+
+    QVariant decoration = indexes.first().data(Qt::DecorationRole);
+    return decoration.value<QPixmap>();
+}
+
 void AbstractAlbumTreeView::dragEnterEvent(QDragEnterEvent *e)
 {
-    QTreeView::dragEnterEvent(e);
+    AlbumModelDragDropHandler *handler = m_albumModel->dragDropHandler();
+    if (handler && handler->acceptsMimeData(e->mimeData()))
+        e->accept();
+    else
+        e->ignore();
 }
 
 void AbstractAlbumTreeView::dragMoveEvent(QDragMoveEvent *e)
@@ -216,7 +248,7 @@ void AbstractAlbumTreeView::dragMoveEvent(QDragMoveEvent *e)
     if (handler)
     {
         QModelIndex index = indexVisuallyAt(e->pos());
-        Qt::DropAction action = handler->accepts(e->mimeData(), m_albumFilterModel->mapToSource(index));
+        Qt::DropAction action = handler->accepts(e, m_albumFilterModel->mapToSource(index));
         if (action == Qt::IgnoreAction)
             e->ignore();
         else

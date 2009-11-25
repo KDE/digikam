@@ -86,12 +86,14 @@ protected:
     bool checkExpandedState(const QModelIndex& index);
     void mousePressEvent(QMouseEvent *e);
 
+    void startDrag(Qt::DropActions supportedActions);
     void dragEnterEvent(QDragEnterEvent *e);
     void dragMoveEvent(QDragMoveEvent *e);
     void dragLeaveEvent(QDragLeaveEvent * e);
     void dropEvent(QDropEvent *e);
 
     virtual void middleButtonPressed(Album *a);
+    virtual QPixmap pixmapForDrag(const QStyleOptionViewItem& option, QList<QModelIndex> indexes);
 
     AbstractSpecificAlbumModel *m_albumModel;
     AlbumFilterModel           *m_albumFilterModel;
