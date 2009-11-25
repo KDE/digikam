@@ -62,17 +62,7 @@ WaveletsNR::WaveletsNR(DImg *orgImage, QObject *parent, const WaveletsNRContaine
             d(new WaveletsNRPriv)
 {
     d->settings = settings;
-
-    if (!d->settings.advanced)
-    {
-        d->settings.thresholds[0] = d->settings.leadThreshold;     // Y
-        d->settings.thresholds[1] = d->settings.leadThreshold;     // Cr
-        d->settings.thresholds[2] = d->settings.leadThreshold;     // Cb
-        d->settings.softness[0]   = d->settings.leadSoftness;      // Y
-        d->settings.softness[1]   = d->settings.leadSoftness;      // Cr
-        d->settings.softness[2]   = d->settings.leadSoftness;      // Cb
-    }
-    
+   
     initFilter();
 }
 
@@ -106,7 +96,7 @@ void WaveletsNR::filterImage()
     {
         for (int x = 0; !m_cancel && (x < width); x++)
         {
-            col          = m_orgImage.getPixelColor(x, y);
+            col           = m_orgImage.getPixelColor(x, y);
             d->fimg[0][j] = col.red()   / clip;
             d->fimg[1][j] = col.green() / clip;
             d->fimg[2][j] = col.blue()  / clip;
@@ -196,7 +186,7 @@ void WaveletsNR::filterImage()
 void WaveletsNR::waveletDenoise(float* fimg[3], unsigned int width, unsigned int height,
                                 float threshold, double softness)
 {
-    float        *temp, thold;
+    float        *temp=0, thold;
     unsigned int i, lev, lpass, hpass, size, col, row;
     double       stdev[5];
     unsigned int samples[5];
@@ -320,7 +310,7 @@ void WaveletsNR::waveletDenoise(float* fimg[3], unsigned int width, unsigned int
     delete [] temp;
 }
 
-void WaveletsNR::hatTransform (float* temp, float *base, int st, int size, int sc)
+void WaveletsNR::hatTransform (float* temp, float* base, int st, int size, int sc)
 {
     int i;
 
@@ -338,8 +328,7 @@ void WaveletsNR::hatTransform (float* temp, float *base, int st, int size, int s
 
 void WaveletsNR::srgb2ycbcr(float** fimg, int size)
 {
-    /* using JPEG conversion here - expecting all channels to be
-     * in [0:255] range */
+    /* using JPEG conversion here - expecting all channels to be in [0:255] range */
     int i;
     float y, cb, cr;
 
@@ -356,8 +345,7 @@ void WaveletsNR::srgb2ycbcr(float** fimg, int size)
 
 void WaveletsNR::ycbcr2srgb(float** fimg, int size)
 {
-    /* using JPEG conversion here - expecting all channels to be
-    * in [0:255] range */
+    /* using JPEG conversion here - expecting all channels to be in [0:255] range */
     int   i;
     float r, g, b;
 

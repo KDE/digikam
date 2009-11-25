@@ -60,7 +60,6 @@ public:
     void readSettings(KConfigGroup& group);
     void saveSettings(KConfigGroup& group);
 
-
 Q_SIGNALS:
 
     void signalSettingsChanged();
@@ -68,6 +67,7 @@ Q_SIGNALS:
 private Q_SLOTS:
     
     void slotAdvancedEnabled(bool);
+    void slotLeadSettingsChanged();
 
 private:
 

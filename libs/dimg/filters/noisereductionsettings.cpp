@@ -63,7 +63,7 @@ public:
         configThrCbInputAdjustmentEntry("ThrCbAdjustment"),
         configSoftCbInputAdjustmentEntry("SoftCbAdjustment"),
         advancedBox(0),
-        generalBox(0),
+        leadBox(0),
         luminanceBox(0),
         chrominanceRedBox(0),
         chrominanceBlueBox(0),
@@ -90,7 +90,7 @@ public:
 
     QCheckBox*       advancedBox;
 
-    QWidget*         generalBox;
+    QWidget*         leadBox;
     QWidget*         luminanceBox;
     QWidget*         chrominanceRedBox;
     QWidget*         chrominanceBlueBox;
@@ -115,11 +115,11 @@ NoiseReductionSettings::NoiseReductionSettings(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    d->generalBox       = new QWidget;
-    QGridLayout* genLay = new QGridLayout(d->generalBox);
+    d->leadBox          = new QWidget;
+    QGridLayout* genLay = new QGridLayout(d->leadBox);
         
-    QLabel *label1      = new QLabel(i18n("Threshold:"), d->generalBox);
-    d->thresholdInput   = new RDoubleNumInput(d->generalBox);
+    QLabel *label1      = new QLabel(i18n("Threshold:"), d->leadBox);
+    d->thresholdInput   = new RDoubleNumInput(d->leadBox);
     d->thresholdInput->setDecimals(2);
     d->thresholdInput->input()->setRange(0.0, 10.0, 0.1, true);
     d->thresholdInput->setDefaultValue(1.2);
@@ -127,11 +127,11 @@ NoiseReductionSettings::NoiseReductionSettings(QWidget* parent)
                                          "the image in a range from 0.0 (none) to 10.0. "
                                          "The threshold is the value below which everything is considered noise."));
 
-    QLabel *label2      = new QLabel(i18n("Softness:"), d->generalBox);
-    d->softnessInput    = new RDoubleNumInput(d->generalBox);
+    QLabel *label2      = new QLabel(i18n("Softness:"), d->leadBox);
+    d->softnessInput    = new RDoubleNumInput(d->leadBox);
     d->softnessInput->setDecimals(1);
     d->softnessInput->input()->setRange(0.0, 1.0, 0.1, true);
-    d->softnessInput->setDefaultValue(0.1);
+    d->softnessInput->setDefaultValue(0.9);
     d->softnessInput->setWhatsThis(i18n("<b>Softness</b>: This adjusts the softness of the thresholding "
                                         "(soft as opposed to hard thresholding). The higher the softness "
                                         "the more noise remains in the image."));
@@ -147,7 +147,6 @@ NoiseReductionSettings::NoiseReductionSettings(QWidget* parent)
     // -------------------------------------------------------------
                                         
     d->advancedBox      = new QCheckBox(i18n("Advanced adjustements"));                                        
-
     d->advExpanderBox   = new RExpanderBox;
     d->advExpanderBox->setObjectName("Advanced Settings Expander");
 
@@ -169,7 +168,7 @@ NoiseReductionSettings::NoiseReductionSettings(QWidget* parent)
     d->softLumInput     = new RDoubleNumInput(d->luminanceBox);
     d->softLumInput->setDecimals(1);
     d->softLumInput->input()->setRange(0.0, 1.0, 0.1, true);
-    d->softLumInput->setDefaultValue(0.1);
+    d->softLumInput->setDefaultValue(0.9);
 /*    d->softLumInput->setWhatsThis(i18n("<b>Softness</b>: This adjusts the softness of the thresholding "
                                         "(soft as opposed to hard thresholding). The higher the softness "
                                         "the more noise remains in the image."));*/
@@ -200,7 +199,7 @@ NoiseReductionSettings::NoiseReductionSettings(QWidget* parent)
     d->softCrInput       = new RDoubleNumInput(d->chrominanceRedBox);
     d->softCrInput->setDecimals(1);
     d->softCrInput->input()->setRange(0.0, 1.0, 0.1, true);
-    d->softCrInput->setDefaultValue(0.1);
+    d->softCrInput->setDefaultValue(0.9);
 /*    d->softCrInput->setWhatsThis(i18n("<b>Softness</b>: This adjusts the softness of the thresholding "
                                         "(soft as opposed to hard thresholding). The higher the softness "
                                         "the more noise remains in the image."));*/
@@ -231,7 +230,7 @@ NoiseReductionSettings::NoiseReductionSettings(QWidget* parent)
     d->softCbInput       = new RDoubleNumInput(d->chrominanceBlueBox);
     d->softCbInput->setDecimals(1);
     d->softCbInput->input()->setRange(0.0, 1.0, 0.1, true);
-    d->softCbInput->setDefaultValue(0.1);
+    d->softCbInput->setDefaultValue(0.9);
 /*    d->softCbInput->setWhatsThis(i18n("<b>Softness</b>: This adjusts the softness of the thresholding "
                                         "(soft as opposed to hard thresholding). The higher the softness "
                                         "the more noise remains in the image."));*/
@@ -253,7 +252,7 @@ NoiseReductionSettings::NoiseReductionSettings(QWidget* parent)
         
     // -------------------------------------------------------------
 
-    grid->addWidget(d->generalBox,     0, 0, 1, 2);
+    grid->addWidget(d->leadBox,        0, 0, 1, 2);
     grid->addWidget(d->advancedBox,    1, 0, 1, 2);
     grid->addWidget(d->advExpanderBox, 2, 0, 1, 2);
     grid->setRowStretch(3, 10);
@@ -263,10 +262,10 @@ NoiseReductionSettings::NoiseReductionSettings(QWidget* parent)
     // -------------------------------------------------------------
         
     connect(d->thresholdInput, SIGNAL(valueChanged(double)),
-            this, SIGNAL(signalSettingsChanged()));
+            this, SLOT(slotLeadSettingsChanged()));
 
     connect(d->softnessInput, SIGNAL(valueChanged(double)),
-            this, SIGNAL(signalSettingsChanged()));
+            this, SLOT(slotLeadSettingsChanged()));
 
     connect(d->thrLumInput, SIGNAL(valueChanged(double)),
             this, SIGNAL(signalSettingsChanged()));
@@ -295,19 +294,39 @@ NoiseReductionSettings::~NoiseReductionSettings()
     delete d;
 }
 
+void NoiseReductionSettings::slotLeadSettingsChanged()
+{
+    if (!d->advancedBox->isChecked())
+    {
+        blockSignals(true);
+        WaveletsNRContainer prm = settings();
+        d->thrLumInput->setValue(prm.leadThreshold);
+        d->thrCrInput->setValue(prm.leadThreshold);
+        d->thrCbInput->setValue(prm.leadThreshold);
+        d->softLumInput->setValue(1.0 - prm.leadSoftness); 
+        d->softCrInput->setValue(1.0 - prm.leadSoftness);
+        d->softCbInput->setValue(1.0 - prm.leadSoftness);
+        blockSignals(false);
+    }
+  
+    emit signalSettingsChanged();
+}
+
 WaveletsNRContainer NoiseReductionSettings::settings() const
 {
-    WaveletsNRContainer settings;
-    settings.thresholds[0] = d->thrLumInput->value();
-    settings.thresholds[1] = d->thrCrInput->value();
-    settings.thresholds[2] = d->thrCbInput->value();
-    settings.softness[0]   = 1.0 - d->softLumInput->value();
-    settings.softness[1]   = 1.0 - d->softCrInput->value();
-    settings.softness[2]   = 1.0 - d->softCbInput->value();
-    settings.advanced      = d->advancedBox->isChecked();
-    settings.leadThreshold = d->thresholdInput->value();
-    settings.leadSoftness  = 1.0 - d->softnessInput->value();
-    return settings;
+    WaveletsNRContainer prm;
+    
+    prm.thresholds[0] = d->thrLumInput->value();
+    prm.thresholds[1] = d->thrCrInput->value();
+    prm.thresholds[2] = d->thrCbInput->value();
+    prm.softness[0]   = 1.0 - d->softLumInput->value();
+    prm.softness[1]   = 1.0 - d->softCrInput->value();
+    prm.softness[2]   = 1.0 - d->softCbInput->value();
+    prm.advanced      = d->advancedBox->isChecked();
+    prm.leadThreshold = d->thresholdInput->value();
+    prm.leadSoftness  = 1.0 - d->softnessInput->value();
+    
+    return prm;
 }
 
 void NoiseReductionSettings::setSettings(const WaveletsNRContainer& settings)
@@ -340,40 +359,44 @@ void NoiseReductionSettings::resetToDefault()
 
 WaveletsNRContainer NoiseReductionSettings::defaultSettings() const
 {
-    WaveletsNRContainer settings;
-    settings.thresholds[0] = d->thrLumInput->defaultValue();
-    settings.thresholds[1] = d->thrCrInput->defaultValue();
-    settings.thresholds[2] = d->thrCbInput->defaultValue();
-    settings.softness[0]   = 1.0 - d->softLumInput->defaultValue();
-    settings.softness[1]   = 1.0 - d->softCrInput->defaultValue();
-    settings.softness[2]   = 1.0 - d->softCbInput->defaultValue();
-    settings.advanced      = false;
-    settings.leadThreshold = d->thresholdInput->defaultValue();
-    settings.leadSoftness  = 1.0 - d->softnessInput->defaultValue();
-    return settings;
+    WaveletsNRContainer prm;
+    
+    prm.thresholds[0] = d->thrLumInput->defaultValue();
+    prm.thresholds[1] = d->thrCrInput->defaultValue();
+    prm.thresholds[2] = d->thrCbInput->defaultValue();
+    prm.softness[0]   = 1.0 - d->softLumInput->defaultValue();
+    prm.softness[1]   = 1.0 - d->softCrInput->defaultValue();
+    prm.softness[2]   = 1.0 - d->softCbInput->defaultValue();
+    prm.advanced      = false;
+    prm.leadThreshold = d->thresholdInput->defaultValue();
+    prm.leadSoftness  = 1.0 - d->softnessInput->defaultValue();
+    
+    return prm;
 }
 
 void NoiseReductionSettings::slotAdvancedEnabled(bool b)
 {
-    d->generalBox->setEnabled(!b);
+    d->leadBox->setEnabled(!b);
     d->advExpanderBox->setEnabled(b);
+    
+    if (!b) slotLeadSettingsChanged();
 }
 
 void NoiseReductionSettings::readSettings(KConfigGroup& group)
 {
-    WaveletsNRContainer settings;
+    WaveletsNRContainer prm;
     WaveletsNRContainer defaultPrm = defaultSettings();
 
-    settings.thresholds[0] = group.readEntry(d->configThrLumInputAdjustmentEntry,  defaultPrm.thresholds[0]);
-    settings.thresholds[1] = group.readEntry(d->configThrCrInputAdjustmentEntry,   defaultPrm.thresholds[1]);
-    settings.thresholds[2] = group.readEntry(d->configThrCbInputAdjustmentEntry,   defaultPrm.thresholds[2]); 
-    settings.softness[0]   = group.readEntry(d->configSoftLumInputAdjustmentEntry, defaultPrm.softness[0]);
-    settings.softness[1]   = group.readEntry(d->configSoftCrInputAdjustmentEntry,  defaultPrm.softness[1]);
-    settings.softness[2]   = group.readEntry(d->configSoftCbInputAdjustmentEntry,  defaultPrm.softness[2]);
-    settings.advanced      = group.readEntry(d->configAdvancedAdjustmentEntry,     defaultPrm.advanced);
-    settings.leadThreshold = group.readEntry(d->configThresholdAdjustmentEntry,    defaultPrm.leadThreshold);
-    settings.leadSoftness  = group.readEntry(d->configSoftnessAdjustmentEntry,     defaultPrm.leadSoftness);
-    setSettings(settings);
+    prm.thresholds[0] = group.readEntry(d->configThrLumInputAdjustmentEntry,  defaultPrm.thresholds[0]);
+    prm.thresholds[1] = group.readEntry(d->configThrCrInputAdjustmentEntry,   defaultPrm.thresholds[1]);
+    prm.thresholds[2] = group.readEntry(d->configThrCbInputAdjustmentEntry,   defaultPrm.thresholds[2]); 
+    prm.softness[0]   = group.readEntry(d->configSoftLumInputAdjustmentEntry, defaultPrm.softness[0]);
+    prm.softness[1]   = group.readEntry(d->configSoftCrInputAdjustmentEntry,  defaultPrm.softness[1]);
+    prm.softness[2]   = group.readEntry(d->configSoftCbInputAdjustmentEntry,  defaultPrm.softness[2]);
+    prm.advanced      = group.readEntry(d->configAdvancedAdjustmentEntry,     defaultPrm.advanced);
+    prm.leadThreshold = group.readEntry(d->configThresholdAdjustmentEntry,    defaultPrm.leadThreshold);
+    prm.leadSoftness  = group.readEntry(d->configSoftnessAdjustmentEntry,     defaultPrm.leadSoftness);
+    setSettings(prm);
 }
 
 void NoiseReductionSettings::saveSettings(KConfigGroup& group)
