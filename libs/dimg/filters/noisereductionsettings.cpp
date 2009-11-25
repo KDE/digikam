@@ -103,7 +103,7 @@ public:
     QWidget*         luminanceBox;
     QWidget*         chrominanceRedBox;
     QWidget*         chrominanceBlueBox;
-    
+
     RExpanderBox*    advExpanderBox;
 
     RDoubleNumInput* thresholdInput;
@@ -126,7 +126,7 @@ NoiseReductionSettings::NoiseReductionSettings(QWidget* parent)
 
     d->leadBox          = new QWidget;
     QGridLayout* genLay = new QGridLayout(d->leadBox);
-        
+
     QLabel *label1      = new QLabel(i18n("Threshold:"), d->leadBox);
     d->thresholdInput   = new RDoubleNumInput(d->leadBox);
     d->thresholdInput->setDecimals(2);
@@ -154,8 +154,8 @@ NoiseReductionSettings::NoiseReductionSettings(QWidget* parent)
     genLay->setMargin(KDialog::spacingHint());
 
     // -------------------------------------------------------------
-                                        
-    d->advancedBox      = new QCheckBox(i18n("Advanced adjustements"));                                        
+
+    d->advancedBox      = new QCheckBox(i18n("Advanced adjustements"));
     d->advExpanderBox   = new RExpanderBox;
     d->advExpanderBox->setObjectName("Advanced Settings Expander");
 
@@ -163,7 +163,7 @@ NoiseReductionSettings::NoiseReductionSettings(QWidget* parent)
 
     d->luminanceBox     = new QWidget(d->advExpanderBox);
     QGridLayout* lumLay = new QGridLayout(d->luminanceBox);
-    
+
     QLabel *label3      = new QLabel(i18n("Threshold:"), d->luminanceBox);
     d->thrLumInput      = new RDoubleNumInput(d->luminanceBox);
     d->thrLumInput->setDecimals(2);
@@ -194,7 +194,7 @@ NoiseReductionSettings::NoiseReductionSettings(QWidget* parent)
 
     d->chrominanceRedBox = new QWidget(d->advExpanderBox);
     QGridLayout* cRedLay = new QGridLayout(d->chrominanceRedBox);
-    
+
     QLabel *label5       = new QLabel(i18n("Threshold:"), d->chrominanceRedBox);
     d->thrCrInput        = new RDoubleNumInput(d->chrominanceRedBox);
     d->thrCrInput->setDecimals(2);
@@ -225,9 +225,9 @@ NoiseReductionSettings::NoiseReductionSettings(QWidget* parent)
 
     d->chrominanceBlueBox = new QWidget(d->advExpanderBox);
     QGridLayout* cBlueLay = new QGridLayout(d->chrominanceBlueBox);
-    
-    QLabel *label7       = new QLabel(i18n("Threshold:"), d->chrominanceBlueBox);
-    d->thrCbInput        = new RDoubleNumInput(d->chrominanceBlueBox);
+
+    QLabel *label7        = new QLabel(i18n("Threshold:"), d->chrominanceBlueBox);
+    d->thrCbInput         = new RDoubleNumInput(d->chrominanceBlueBox);
     d->thrCbInput->setDecimals(2);
     d->thrCbInput->input()->setRange(0.0, 10.0, 0.1, true);
     d->thrCbInput->setDefaultValue(1.2);
@@ -235,8 +235,8 @@ NoiseReductionSettings::NoiseReductionSettings(QWidget* parent)
                                          "the image in a range from 0.0 (none) to 10.0. "
                                          "The threshold is the value below which everything is considered noise."));*/
 
-    QLabel *label8       = new QLabel(i18n("Softness:"), d->chrominanceBlueBox);
-    d->softCbInput       = new RDoubleNumInput(d->chrominanceBlueBox);
+    QLabel *label8        = new QLabel(i18n("Softness:"), d->chrominanceBlueBox);
+    d->softCbInput        = new RDoubleNumInput(d->chrominanceBlueBox);
     d->softCbInput->setDecimals(1);
     d->softCbInput->input()->setRange(0.0, 1.0, 0.1, true);
     d->softCbInput->setDefaultValue(0.9);
@@ -258,7 +258,7 @@ NoiseReductionSettings::NoiseReductionSettings(QWidget* parent)
     d->advExpanderBox->addItem(d->chrominanceRedBox,  i18n("Chrominance Red"),  QString("ChrominanceRed"),  true);
     d->advExpanderBox->addItem(d->chrominanceBlueBox, i18n("Chrominance Blue"), QString("ChrominanceBlue"), true);
     d->advExpanderBox->addStretch();
-        
+
     // -------------------------------------------------------------
 
     grid->addWidget(d->leadBox,        0, 0, 1, 2);
@@ -269,7 +269,7 @@ NoiseReductionSettings::NoiseReductionSettings(QWidget* parent)
     grid->setSpacing(KDialog::spacingHint());
 
     // -------------------------------------------------------------
-        
+
     connect(d->thresholdInput, SIGNAL(valueChanged(double)),
             this, SLOT(slotLeadSettingsChanged()));
 
@@ -293,9 +293,9 @@ NoiseReductionSettings::NoiseReductionSettings(QWidget* parent)
 
     connect(d->softCbInput, SIGNAL(valueChanged(double)),
             this, SIGNAL(signalSettingsChanged()));
-            
+
     connect(d->advancedBox, SIGNAL(toggled(bool)),
-            this, SLOT(slotAdvancedEnabled(bool)));           
+            this, SLOT(slotAdvancedEnabled(bool)));
 }
 
 NoiseReductionSettings::~NoiseReductionSettings()
@@ -317,14 +317,14 @@ void NoiseReductionSettings::slotLeadSettingsChanged()
         d->softCbInput->setValue(1.0 - prm.leadSoftness);
         blockSignals(false);
     }
-  
+
     emit signalSettingsChanged();
 }
 
 WaveletsNRContainer NoiseReductionSettings::settings() const
 {
     WaveletsNRContainer prm;
-    
+
     prm.thresholds[0] = d->thrLumInput->value();
     prm.thresholds[1] = d->thrCrInput->value();
     prm.thresholds[2] = d->thrCbInput->value();
@@ -334,12 +334,13 @@ WaveletsNRContainer NoiseReductionSettings::settings() const
     prm.advanced      = d->advancedBox->isChecked();
     prm.leadThreshold = d->thresholdInput->value();
     prm.leadSoftness  = 1.0 - d->softnessInput->value();
-    
+
     return prm;
 }
 
 void NoiseReductionSettings::setSettings(const WaveletsNRContainer& settings)
 {
+    blockSignals(true);
     d->thrLumInput->setValue(settings.thresholds[0]);
     d->thrCrInput->setValue(settings.thresholds[1]);
     d->thrCbInput->setValue(settings.thresholds[2]);
@@ -350,10 +351,12 @@ void NoiseReductionSettings::setSettings(const WaveletsNRContainer& settings)
     d->thresholdInput->setValue(settings.leadThreshold);
     d->softnessInput->setValue(1.0 - settings.leadSoftness);
     slotAdvancedEnabled(settings.advanced);
+    blockSignals(false);
 }
 
 void NoiseReductionSettings::resetToDefault()
 {
+    blockSignals(true);
     d->thresholdInput->slotReset();
     d->softnessInput->slotReset();
     d->thrLumInput->slotReset();
@@ -364,12 +367,13 @@ void NoiseReductionSettings::resetToDefault()
     d->softCbInput->slotReset();
     d->advancedBox->setChecked(false);
     slotAdvancedEnabled(false);
+    blockSignals(false);
 }
 
 WaveletsNRContainer NoiseReductionSettings::defaultSettings() const
 {
     WaveletsNRContainer prm;
-    
+
     prm.thresholds[0] = d->thrLumInput->defaultValue();
     prm.thresholds[1] = d->thrCrInput->defaultValue();
     prm.thresholds[2] = d->thrCbInput->defaultValue();
@@ -379,7 +383,7 @@ WaveletsNRContainer NoiseReductionSettings::defaultSettings() const
     prm.advanced      = false;
     prm.leadThreshold = d->thresholdInput->defaultValue();
     prm.leadSoftness  = 1.0 - d->softnessInput->defaultValue();
-    
+
     return prm;
 }
 
@@ -387,7 +391,7 @@ void NoiseReductionSettings::slotAdvancedEnabled(bool b)
 {
     d->leadBox->setEnabled(!b);
     d->advExpanderBox->setEnabled(b);
-    
+
     if (!b) slotLeadSettingsChanged();
 }
 
@@ -411,7 +415,7 @@ void NoiseReductionSettings::readSettings(KConfigGroup& group)
 void NoiseReductionSettings::writeSettings(KConfigGroup& group)
 {
     WaveletsNRContainer prm;
-    
+
     group.writeEntry(d->configThrLumInputAdjustmentEntry,  prm.thresholds[0]);
     group.writeEntry(d->configThrCrInputAdjustmentEntry,   prm.thresholds[1]);
     group.writeEntry(d->configThrCbInputAdjustmentEntry,   prm.thresholds[2]);
@@ -446,18 +450,18 @@ void NoiseReductionSettings::loadSettings()
         }
 
         blockSignals(true);
-        
+
         d->thresholdInput->setValue( stream.readLine().toDouble() );
         d->softnessInput->setValue( stream.readLine().toDouble() );
         d->advancedBox->setChecked( (bool)stream.readLine().toInt() );
-        
+
         d->thrLumInput->setValue( stream.readLine().toDouble() );
         d->softLumInput->setValue( stream.readLine().toDouble() );
         d->thrCrInput->setValue( stream.readLine().toDouble() );
         d->softCrInput->setValue( stream.readLine().toDouble() );
         d->thrCbInput->setValue( stream.readLine().toDouble() );
         d->softCbInput->setValue( stream.readLine().toDouble() );
-        
+
         slotAdvancedEnabled(d->advancedBox->isChecked());
 
         blockSignals(false);

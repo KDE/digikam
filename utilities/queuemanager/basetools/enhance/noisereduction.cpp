@@ -66,20 +66,20 @@ NoiseReduction::~NoiseReduction()
 
 BatchToolSettings NoiseReduction::defaultSettings()
 {
-    BatchToolSettings settings;
-    WaveletsNRContainer prm = m_settingsView->defaultSettings();
+    BatchToolSettings prm;
+    WaveletsNRContainer defaultPrm = m_settingsView->defaultSettings();
 
-    settings.insert("LeadThreshold", (double)prm.leadThreshold);
-    settings.insert("LeadSoftness",  (double)prm.leadSoftness);
-    settings.insert("Advanced",      (bool)prm.advanced);
-    settings.insert("YThreshold",    (double)prm.thresholds[0]);
-    settings.insert("CrThreshold",   (double)prm.thresholds[1]);
-    settings.insert("CbThreshold",   (double)prm.thresholds[2]);
-    settings.insert("YSoftness",     (double)prm.softness[0]);
-    settings.insert("CrSoftness",    (double)prm.softness[1]);
-    settings.insert("CbSoftness",    (double)prm.softness[2]);
+    prm.insert("LeadThreshold", (double)defaultPrm.leadThreshold);
+    prm.insert("LeadSoftness",  (double)defaultPrm.leadSoftness);
+    prm.insert("Advanced",      (bool)defaultPrm.advanced);
+    prm.insert("YThreshold",    (double)defaultPrm.thresholds[0]);
+    prm.insert("CrThreshold",   (double)defaultPrm.thresholds[1]);
+    prm.insert("CbThreshold",   (double)defaultPrm.thresholds[2]);
+    prm.insert("YSoftness",     (double)defaultPrm.softness[0]);
+    prm.insert("CrSoftness",    (double)defaultPrm.softness[1]);
+    prm.insert("CbSoftness",    (double)defaultPrm.softness[2]);
 
-    return settings;
+    return prm;
 }
 
 void NoiseReduction::slotAssignSettings2Widget()
@@ -99,20 +99,20 @@ void NoiseReduction::slotAssignSettings2Widget()
 
 void NoiseReduction::slotSettingsChanged()
 {
-    BatchToolSettings settings;
-    WaveletsNRContainer prm = m_settingsView->settings();
+    BatchToolSettings prm;
+    WaveletsNRContainer currentPrm = m_settingsView->settings();
 
-    settings.insert("LeadThreshold", (double)prm.leadThreshold);
-    settings.insert("LeadSoftness",  (double)prm.leadSoftness);
-    settings.insert("Advanced",      (bool)prm.advanced);
-    settings.insert("YThreshold",    (double)prm.thresholds[0]);
-    settings.insert("CrThreshold",   (double)prm.thresholds[1]);
-    settings.insert("CbThreshold",   (double)prm.thresholds[2]);
-    settings.insert("YSoftness",     (double)prm.softness[0]);
-    settings.insert("CrSoftness",    (double)prm.softness[1]);
-    settings.insert("CbSoftness",    (double)prm.softness[2]);
+    prm.insert("LeadThreshold", (double)currentPrm.leadThreshold);
+    prm.insert("LeadSoftness",  (double)currentPrm.leadSoftness);
+    prm.insert("Advanced",      (bool)currentPrm.advanced);
+    prm.insert("YThreshold",    (double)currentPrm.thresholds[0]);
+    prm.insert("CrThreshold",   (double)currentPrm.thresholds[1]);
+    prm.insert("CbThreshold",   (double)currentPrm.thresholds[2]);
+    prm.insert("YSoftness",     (double)currentPrm.softness[0]);
+    prm.insert("CrSoftness",    (double)currentPrm.softness[1]);
+    prm.insert("CbSoftness",    (double)currentPrm.softness[2]);
 
-    setSettings(settings);
+    setSettings(prm);
 }
 
 bool NoiseReduction::toolOperations()
