@@ -62,7 +62,7 @@ WaveletsNR::WaveletsNR(DImg *orgImage, QObject *parent, const WaveletsNRContaine
             d(new WaveletsNRPriv)
 {
     d->settings = settings;
-   
+
     initFilter();
 }
 
@@ -329,10 +329,9 @@ void WaveletsNR::hatTransform (float* temp, float* base, int st, int size, int s
 void WaveletsNR::srgb2ycbcr(float** fimg, int size)
 {
     /* using JPEG conversion here - expecting all channels to be in [0:255] range */
-    int i;
     float y, cb, cr;
 
-    for (i = 0; i < size; i++)
+    for (int i = 0; i < size; i++)
     {
         y          =  0.2990 * fimg[0][i] + 0.5870 * fimg[1][i] + 0.1140 * fimg[2][i];
         cb         = -0.1687 * fimg[0][i] - 0.3313 * fimg[1][i] + 0.5000 * fimg[2][i] + 0.5;
@@ -346,10 +345,9 @@ void WaveletsNR::srgb2ycbcr(float** fimg, int size)
 void WaveletsNR::ycbcr2srgb(float** fimg, int size)
 {
     /* using JPEG conversion here - expecting all channels to be in [0:255] range */
-    int   i;
     float r, g, b;
 
-    for (i = 0; i < size; i++)
+    for (int i = 0; i < size; i++)
     {
         r          = fimg[0][i] + 1.40200 * (fimg[2][i] - 0.5);
         g          = fimg[0][i] - 0.34414 * (fimg[1][i] - 0.5) - 0.71414 * (fimg[2][i] - 0.5);
@@ -363,10 +361,9 @@ void WaveletsNR::ycbcr2srgb(float** fimg, int size)
 void WaveletsNR::srgb2xyz(float** fimg, int size)
 {
     /* fimg in [0:1], sRGB */
-    int   i;
     float x, y, z;
 
-    for (i = 0; i < size; i++)
+    for (int i = 0; i < size; i++)
     {
         /* scaling and gamma correction (approximate) */
         fimg[0][i] = pow(fimg[0][i], (float)2.2);
@@ -392,10 +389,9 @@ void WaveletsNR::srgb2xyz(float** fimg, int size)
 
 void WaveletsNR::xyz2srgb(float** fimg, int size)
 {
-    int   i;
     float r, g, b;
 
-    for (i = 0; i < size; i++)
+    for (int i = 0; i < size; i++)
     {
         /* matrix RGB -> XYZ, with D65 reference white (www.brucelindbloom.com) */
         r = 3.24071   * fimg[0][i] - 1.53726  * fimg[1][i] - 0.498571  * fimg[2][i];
@@ -424,10 +420,9 @@ void WaveletsNR::xyz2srgb(float** fimg, int size)
 
 void WaveletsNR::lab2srgb(float** fimg, int size)
 {
-    int   i;
     float x, y, z;
 
-    for (i = 0; i < size; i++)
+    for (int i = 0; i < size; i++)
     {
         /* convert back to normal LAB */
         fimg[0][i] = (fimg[0][i] - 0 * 16 * 27 / 24389.0) * 116;
@@ -465,12 +460,11 @@ void WaveletsNR::lab2srgb(float** fimg, int size)
 
 void WaveletsNR::srgb2lab(float** fimg, int size)
 {
-    int   i;
     float l, a, b;
 
     srgb2xyz(fimg, size);
 
-    for (i = 0; i < size; i++)
+    for (int i = 0; i < size; i++)
     {
         /* reference white */
         fimg[0][i] /= 0.95047;

@@ -42,8 +42,8 @@ public:
 
     WaveletsNRContainer()
     {
-        leadThreshold = 1.2;     
-        leadSoftness  = 0.9;    
+        leadThreshold = 1.2;
+        leadSoftness  = 0.9;
         advanced      = false;
         thresholds[0] = 1.2;     // Y
         thresholds[1] = 1.2;     // Cr
@@ -60,8 +60,8 @@ public:
     /** If false thresholds and softness values are the same for Y, Cr, and Cb
         else, each chanel has a dedicated value.
      */
-    bool   advanced;         
-    
+    bool   advanced;
+
     /** General settings if advanced is false
      */
     double leadThreshold;
@@ -101,7 +101,7 @@ private:
     void xyz2srgb(float** fimg, int size);
 
 private:
-    
+
     WaveletsNRPriv* const d;
 };
 
