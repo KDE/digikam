@@ -2166,6 +2166,7 @@ bool AlbumManager::moveTAlbum(TAlbum* album, TAlbum *newParent, QString& errMsg)
         album->parent()->removeChild(album);
     album->setParent(0);
     emit signalAlbumDeleted(album);
+    emit signalAlbumHasBeenDeleted(album);
 
     emit signalAlbumAboutToBeAdded(album, newParent, newParent ? newParent->lastChild() : 0);
     ChangingDB changing(d);
