@@ -48,8 +48,6 @@ public:
     ~FuzzySearchFolderView();
 
     void searchDelete(SAlbum* album);
-    static QString currentFuzzySketchSearchName();
-    static QString currentFuzzyImageSearchName();
 
 Q_SIGNALS:
 

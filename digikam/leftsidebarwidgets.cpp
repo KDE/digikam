@@ -10,11 +10,18 @@
 
 // QT includes
 #include <qlayout.h>
+#include <qlabel.h>
+#include <qbuttongroup.h>
 
 // KDE includes
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kdebug.h>
+#include <kcombobox.h>
+#include <ksqueezedtextlabel.h>
+#include <kicon.h>
+#include <kdialog.h>
+#include <kinputdialog.h>
 
 // Local includes
 #include "albumfolderview.h"
@@ -24,12 +31,13 @@
 #include "albummanager.h"
 #include "tagfolderview.h"
 #include "datefolderview.h"
-#include "timelineview.h"
 #include "timelinefolderview.h"
+#include "timelinewidget.h"
 #include "searchfolderview.h"
 #include "searchtabheader.h"
 #include "fuzzysearchview.h"
 #include "fuzzysearchfolderview.h"
+#include "searchxml.h"
 
 namespace Digikam
 {
@@ -302,24 +310,224 @@ class TimelineSideBarWidgetPriv
 {
 public:
     TimelineSideBarWidgetPriv() :
-        timeLineView(0)
-    {
-    }
+        configGroupName("TimeLine SideBar"),
+        configHistogramTimeUnitEntry("Histogram TimeUnit"),
+        configHistogramScaleEntry("Histogram Scale"),
+        configCursorPositionEntry("Cursor Position"),
 
-    TimeLineView *timeLineView;
-    SearchModel *searchModel;
+        scaleBG(0),
+        cursorCountLabel(0),
+        scrollBar(0),
+        timer(0),
+        resetButton(0),
+        saveButton(0),
+        timeUnitCB(0),
+        nameEdit(0),
+        cursorDateLabel(0),
+        searchDateBar(0),
+        timeLineFolderView(0),
+        timeLineWidget(0),
+        searchModel(0)
+    {}
+
+
+    const QString       configGroupName;
+    const QString       configHistogramTimeUnitEntry;
+    const QString       configHistogramScaleEntry;
+    const QString       configCursorPositionEntry;
+
+    QButtonGroup*       scaleBG;
+    QLabel*             cursorCountLabel;
+    QScrollBar*         scrollBar;
+    QTimer*             timer;
+    QToolButton*        resetButton;
+    QToolButton*        saveButton;
+
+    KComboBox*          timeUnitCB;
+    KLineEdit*          nameEdit;
+    KSqueezedTextLabel* cursorDateLabel;
+
+    SearchTextBar*      searchDateBar;
+    TimeLineFolderViewNew* timeLineFolderView;
+    TimeLineWidget*     timeLineWidget;
+
+    SearchModel*        searchModel;
 };
 
 TimelineSideBarWidget::TimelineSideBarWidget(QWidget *parent, SearchModel *searchModel) :
     SideBarWidget(parent), d(new TimelineSideBarWidgetPriv)
 {
 
-    QVBoxLayout *layout = new QVBoxLayout(this);
+    d->timer = new QTimer(this);
+    setAttribute(Qt::WA_DeleteOnClose);
 
-    d->timeLineView = new TimeLineView(this);
-    d->timeLineView->searchBar()->setModel(searchModel, AbstractAlbumModel::AlbumIdRole);
+    QVBoxLayout *vlay = new QVBoxLayout(this);
+    QFrame *panel     = new QFrame(this);
+    panel->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
+    panel->setLineWidth(1);
 
-    layout->addWidget(d->timeLineView);
+    QGridLayout *grid = new QGridLayout(panel);
+
+    // ---------------------------------------------------------------
+
+    QWidget *hbox1    = new QWidget(panel);
+    QHBoxLayout *hlay = new QHBoxLayout(hbox1);
+
+    QLabel *label1 = new QLabel(i18n("Time Unit:"), hbox1);
+    d->timeUnitCB  = new KComboBox(hbox1);
+    d->timeUnitCB->addItem(i18n("Day"),   TimeLineWidget::Day);
+    d->timeUnitCB->addItem(i18n("Week"),  TimeLineWidget::Week);
+    d->timeUnitCB->addItem(i18n("Month"), TimeLineWidget::Month);
+    d->timeUnitCB->addItem(i18n("Year"),  TimeLineWidget::Year);
+    d->timeUnitCB->setCurrentIndex((int)TimeLineWidget::Month);
+    d->timeUnitCB->setFocusPolicy(Qt::NoFocus);
+    d->timeUnitCB->setWhatsThis(i18n("<p>Select the histogram time unit.</p>"
+                                     "<p>You can change the graph decade to zoom in or zoom out over time.</p>"));
+
+    QWidget *scaleBox  = new QWidget(hbox1);
+    QHBoxLayout *hlay2 = new QHBoxLayout(scaleBox);
+    d->scaleBG         = new QButtonGroup(scaleBox);
+    d->scaleBG->setExclusive(true);
+    scaleBox->setWhatsThis( i18n("<p>Select the histogram scale.</p>"
+                                  "<p>If the date's maximal counts are small, you can use the linear scale.</p>"
+                                  "<p>Logarithmic scale can be used when the maximal counts are big; "
+                                  "if it is used, all values (small and large) will be visible on the "
+                                  "graph.</p>"));
+
+    QToolButton *linHistoButton = new QToolButton(scaleBox);
+    linHistoButton->setToolTip( i18n( "Linear" ) );
+    linHistoButton->setIcon(KIcon("view-object-histogram-linear"));
+    linHistoButton->setCheckable(true);
+    d->scaleBG->addButton(linHistoButton, TimeLineWidget::LinScale);
+
+    QToolButton *logHistoButton = new QToolButton(scaleBox);
+    logHistoButton->setToolTip( i18n( "Logarithmic" ) );
+    logHistoButton->setIcon(KIcon("view-object-histogram-logarithmic"));
+    logHistoButton->setCheckable(true);
+    d->scaleBG->addButton(logHistoButton, TimeLineWidget::LogScale);
+
+    hlay2->setMargin(0);
+    hlay2->setSpacing(0);
+    hlay2->addWidget(linHistoButton);
+    hlay2->addWidget(logHistoButton);
+
+    hlay->setMargin(0);
+    hlay->setSpacing(KDialog::spacingHint());
+    hlay->addWidget(label1);
+    hlay->addWidget(d->timeUnitCB);
+    hlay->addItem(new QSpacerItem(10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum));
+    hlay->addWidget(scaleBox);
+
+    // ---------------------------------------------------------------
+
+    d->timeLineWidget = new TimeLineWidget(panel);
+    d->scrollBar      = new QScrollBar(panel);
+    d->scrollBar->setOrientation(Qt::Horizontal);
+    d->scrollBar->setMinimum(0);
+    d->scrollBar->setSingleStep(1);
+
+    d->cursorDateLabel  = new KSqueezedTextLabel(0, panel);
+    d->cursorCountLabel = new QLabel(panel);
+    d->cursorCountLabel->setAlignment(Qt::AlignRight);
+
+    // ---------------------------------------------------------------
+
+    KHBox *hbox2 = new KHBox(panel);
+    hbox2->setMargin(0);
+    hbox2->setSpacing(KDialog::spacingHint());
+
+    d->resetButton = new QToolButton(hbox2);
+    d->resetButton->setIcon(SmallIcon("document-revert"));
+    d->resetButton->setToolTip(i18n("Clear current selection"));
+    d->resetButton->setWhatsThis(i18n("If you press this button, the current date selection on the time-line will be cleared."));
+    d->nameEdit    = new KLineEdit(hbox2);
+    d->nameEdit->setClearButtonShown(true);
+    d->nameEdit->setWhatsThis(i18n("Enter the name of the current dates search to save in the "
+                                   "\"My Date Searches\" view"));
+
+    d->saveButton  = new QToolButton(hbox2);
+    d->saveButton->setIcon(SmallIcon("document-save"));
+    d->saveButton->setEnabled(false);
+    d->saveButton->setToolTip(i18n("Save current selection to a new virtual Album"));
+    d->saveButton->setWhatsThis(i18n("If you press this button, the dates selected on the time-line will be "
+                                     "saved to a new search virtual Album using the name set on the left."));
+
+    // ---------------------------------------------------------------
+
+    grid->addWidget(hbox1,               0, 0, 1, 4);
+    grid->addWidget(d->cursorDateLabel,  1, 0, 1, 3);
+    grid->addWidget(d->cursorCountLabel, 1, 3, 1, 1);
+    grid->addWidget(d->timeLineWidget,   2, 0, 1, 4);
+    grid->addWidget(d->scrollBar,        3, 0, 1, 4);
+    grid->addWidget(hbox2,               4, 0, 1, 4);
+    grid->setColumnStretch(2, 10);
+    grid->setMargin(KDialog::spacingHint());
+    grid->setSpacing(KDialog::spacingHint());
+
+    // ---------------------------------------------------------------
+
+    d->timeLineFolderView = new TimeLineFolderViewNew(this, searchModel);
+    d->searchDateBar      = new SearchTextBar(this, "TimeLineViewSearchDateBar");
+    d->searchDateBar->setModel(searchModel, AbstractAlbumModel::AlbumIdRole);
+
+    vlay->addWidget(panel);
+    vlay->addWidget(d->timeLineFolderView);
+    vlay->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(),
+                                  QSizePolicy::Minimum, QSizePolicy::Minimum));
+    vlay->addWidget(d->searchDateBar);
+    vlay->setMargin(0);
+    vlay->setSpacing(0);
+
+    // ---------------------------------------------------------------
+
+    connect(AlbumManager::instance(), SIGNAL(signalDatesMapDirty(const QMap<QDateTime, int>&)),
+            d->timeLineWidget, SLOT(slotDatesMap(const QMap<QDateTime, int>&)));
+
+    // TODO update
+    //connect(d->timeLineFolderView, SIGNAL(signalAlbumSelected(SAlbum*)),
+    //        this, SLOT(slotAlbumSelected(SAlbum*)));
+
+    //connect(d->timeLineFolderView, SIGNAL(signalRenameAlbum(SAlbum*)),
+    //        this, SLOT(slotRenameAlbum(SAlbum*)));
+
+    connect(d->searchDateBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
+            d->timeLineFolderView, SLOT(setSearchTextSettings(const SearchTextSettings&)));
+
+    connect(d->timeUnitCB, SIGNAL(activated(int)),
+            this, SLOT(slotTimeUnitChanged(int)));
+
+    connect(d->scaleBG, SIGNAL(buttonReleased(int)),
+            this, SLOT(slotScaleChanged(int)));
+
+    connect(d->timeLineWidget, SIGNAL(signalDateMapChanged()),
+            this, SLOT(slotInit()));
+
+    connect(d->timeLineWidget, SIGNAL(signalCursorPositionChanged()),
+            this, SLOT(slotCursorPositionChanged()));
+
+    connect(d->timeLineWidget, SIGNAL(signalSelectionChanged()),
+            this, SLOT(slotSelectionChanged()));
+
+    connect(d->timeLineWidget, SIGNAL(signalRefDateTimeChanged()),
+            this, SLOT(slotRefDateTimeChanged()));
+
+    connect(d->timer, SIGNAL(timeout()),
+            this, SLOT(slotUpdateCurrentDateSearchAlbum()));
+
+    connect(d->resetButton, SIGNAL(clicked()),
+            this, SLOT(slotResetSelection()));
+
+    connect(d->saveButton, SIGNAL(clicked()),
+            this, SLOT(slotSaveSelection()));
+
+    connect(d->scrollBar, SIGNAL(valueChanged(int)),
+            this, SLOT(slotScrollBarValueChanged(int)));
+
+    connect(d->nameEdit, SIGNAL(textChanged(const QString&)),
+            this, SLOT(slotCheckAboutSelection()));
+
+    connect(d->nameEdit, SIGNAL(returnPressed(const QString&)),
+            d->saveButton, SLOT(animateClick()));
 
 }
 
@@ -328,32 +536,90 @@ TimelineSideBarWidget::~TimelineSideBarWidget()
     delete d;
 }
 
+void TimelineSideBarWidget::slotInit()
+{
+    // Date Maps are loaded from AlbumManager to TimeLineWidget after than GUI is initialized.
+    // AlbumManager query Date KIO slave to stats items from database and it can take a while.
+    // We waiting than TimeLineWidget is ready before to set last config from users.
+
+    // TODO update...
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(d->configGroupName);
+    loadViewState(group);
+
+    disconnect(d->timeLineWidget, SIGNAL(signalDateMapChanged()),
+               this, SLOT(slotInit()));
+
+    connect(d->timeLineWidget, SIGNAL(signalDateMapChanged()),
+            this, SLOT(slotCursorPositionChanged()));
+}
+
 void TimelineSideBarWidget::setActive(bool active)
 {
-    d->timeLineView->setActive(active);
+    // TODO update
+//    if (d->timeLineFolderView->selectedItem())
+//    {
+//        d->timeLineFolderView->setActive(val);
+//    }
+//    else if (val)
+//    {
+//        int totalCount = 0;
+//        DateRangeList list = d->timeLineWidget->selectedDateRange(totalCount);
+//        if (list.isEmpty())
+//        {
+//            AlbumManager::instance()->setCurrentAlbum(0);
+//        }
+//        else
+//        {
+//            AlbumList sList = AlbumManager::instance()->allSAlbums();
+//            for (AlbumList::const_iterator it = sList.constBegin(); it != sList.constEnd(); ++it)
+//            {
+//                SAlbum* salbum = (SAlbum*)(*it);
+//                if (salbum->title() == d->timeLineFolderView->currentTimeLineSearchName())
+//                    AlbumManager::instance()->setCurrentAlbum(salbum);
+//            }
+//        }
+//    }
 }
 
-void TimelineSideBarWidget::loadViewState(KConfigGroup &group)
+// TODO update, what about these groups...
+void TimelineSideBarWidget::loadViewState(KConfigGroup& /*group*/)
 {
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(d->configGroupName);
+
+    d->timeUnitCB->setCurrentIndex(group.readEntry(d->configHistogramTimeUnitEntry, (int)TimeLineWidget::Month));
+    slotTimeUnitChanged(d->timeUnitCB->currentIndex());
+
+    int id = group.readEntry(d->configHistogramScaleEntry, (int)TimeLineWidget::LinScale);
+    if ( d->scaleBG->button( id ) )
+       d->scaleBG->button( id )->setChecked(true);
+    slotScaleChanged(d->scaleBG->checkedId());
+
+    QDateTime now = QDateTime::currentDateTime();
+    d->timeLineWidget->setCursorDateTime(group.readEntry(d->configCursorPositionEntry, now));
+    d->timeLineWidget->setCurrentIndex(d->timeLineWidget->indexForCursorDateTime());
 }
 
-void TimelineSideBarWidget::saveViewState(KConfigGroup &group)
+void TimelineSideBarWidget::saveViewState(KConfigGroup& /*group*/)
 {
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(d->configGroupName);
+
+    group.writeEntry(d->configHistogramTimeUnitEntry, d->timeUnitCB->currentIndex());
+    group.writeEntry(d->configHistogramScaleEntry,    d->scaleBG->checkedId());
+    group.writeEntry(d->configCursorPositionEntry,    d->timeLineWidget->cursorDateTime());
+    group.sync();
 }
 
 void TimelineSideBarWidget::applySettings()
 {
+    // nothing to do here right now
 }
 
 void TimelineSideBarWidget::changeAlbumFromHistory(Album *album)
 {
-    Q3ListViewItem *item = (Q3ListViewItem*) album->extraData(d->timeLineView->folderView());
-    if (!item)
-        return;
-
-    d->timeLineView->folderView()->setSelected(item, true);
-    d->timeLineView->folderView()->ensureItemVisible(item);
-
+    d->timeLineFolderView->slotSelectAlbum(album);
 }
 
 QPixmap TimelineSideBarWidget::getIcon()
@@ -364,6 +630,217 @@ QPixmap TimelineSideBarWidget::getIcon()
 QString TimelineSideBarWidget::getCaption()
 {
     return i18n("Timeline");
+}
+
+void TimelineSideBarWidget::slotRefDateTimeChanged()
+{
+    d->scrollBar->blockSignals(true);
+    d->scrollBar->setMaximum(d->timeLineWidget->totalIndex()-1);
+    d->scrollBar->setValue(d->timeLineWidget->indexForRefDateTime()-1);
+    d->scrollBar->blockSignals(false);
+}
+
+void TimelineSideBarWidget::slotTimeUnitChanged(int mode)
+{
+    d->timeLineWidget->setTimeUnit((TimeLineWidget::TimeUnit)mode);
+}
+
+void TimelineSideBarWidget::slotScrollBarValueChanged(int val)
+{
+    d->timeLineWidget->setCurrentIndex(val);
+}
+
+void TimelineSideBarWidget::slotScaleChanged(int mode)
+{
+    d->timeLineWidget->setScaleMode((TimeLineWidget::ScaleMode)mode);
+}
+
+void TimelineSideBarWidget::slotCursorPositionChanged()
+{
+    QString txt;
+    int val = d->timeLineWidget->cursorInfo(txt);
+    d->cursorDateLabel->setText(txt);
+    d->cursorCountLabel->setText(QString::number(val));
+}
+
+void TimelineSideBarWidget::slotSelectionChanged()
+{
+    d->timer->setSingleShot(true);
+    d->timer->start(100);
+}
+
+/** Called from d->timer event.*/
+void TimelineSideBarWidget::slotUpdateCurrentDateSearchAlbum()
+{
+    slotCheckAboutSelection();
+    createNewDateSearchAlbum(SAlbum::getTemporaryTitle(DatabaseSearch::TimeLineSearch));
+}
+
+void TimelineSideBarWidget::slotSaveSelection()
+{
+    QString name = d->nameEdit->text();
+    if (!checkName(name))
+        return;
+    createNewDateSearchAlbum(name);
+}
+
+void TimelineSideBarWidget::createNewDateSearchAlbum(const QString& name)
+{
+    int totalCount = 0;
+    QDateTime start, end;
+    DateRangeList list = d->timeLineWidget->selectedDateRange(totalCount);
+
+    AlbumManager::instance()->setCurrentAlbum(0);
+
+    if (list.isEmpty())
+        return;
+
+    d->timeLineFolderView->blockSignals(true);
+    d->timeLineFolderView->clearSelection();
+    d->timeLineFolderView->blockSignals(false);
+
+    // Create an XML search query for the list of date ranges
+
+    SearchXmlWriter writer;
+
+    // for each range, write a group with two fields
+    for (int i=0; i<list.size(); ++i)
+    {
+        writer.writeGroup();
+        writer.writeField("creationdate", SearchXml::GreaterThan);
+        writer.writeValue(list[i].first);
+        writer.finishField();
+        writer.writeField("creationdate", SearchXml::LessThan);
+        writer.writeValue(list[i].second);
+        writer.finishField();
+        writer.finishGroup();
+    }
+    writer.finish();
+
+    kDebug() << "Date search XML:\n" << writer.xml();
+
+    SAlbum* album = AlbumManager::instance()->createSAlbum(name, DatabaseSearch::TimeLineSearch, writer.xml());
+    AlbumManager::instance()->setCurrentAlbum(album);
+}
+
+void TimelineSideBarWidget::slotAlbumSelected(SAlbum* salbum)
+{
+    if (!salbum)
+    {
+        slotResetSelection();
+        return;
+    }
+
+    SearchXmlReader reader(salbum->query());
+
+    // The timeline query consists of groups, with two date time fields each
+    DateRangeList list;
+    while (!reader.atEnd())
+    {
+        // read groups
+        if (reader.readNext() == SearchXml::Group)
+        {
+            QDateTime start, end;
+            int numberOfFields = 0;
+            while (!reader.atEnd())
+            {
+                // read fields
+                reader.readNext();
+
+                if (reader.isEndElement())
+                    break;
+
+                if (reader.isFieldElement())
+                {
+                    if (numberOfFields == 0)
+                        start = reader.valueToDateTime();
+                    else if (numberOfFields == 1)
+                        end = reader.valueToDateTime();
+                    ++numberOfFields;
+                }
+            }
+            if (numberOfFields)
+                list << DateRange(start, end);
+        }
+    }
+
+    d->timeLineWidget->setSelectedDateRange(list);
+    AlbumManager::instance()->setCurrentAlbum(salbum);
+}
+
+void TimelineSideBarWidget::slotResetSelection()
+{
+    d->timeLineWidget->slotResetSelection();
+    slotCheckAboutSelection();
+    AlbumManager::instance()->setCurrentAlbum(0);
+}
+
+bool TimelineSideBarWidget::checkName(QString& name)
+{
+    bool checked = checkAlbum(name);
+
+    while (!checked)
+    {
+        QString label = i18n( "Search name already exists.\n"
+                              "Please enter a new name:" );
+        bool ok;
+        QString newTitle = KInputDialog::getText(i18n("Name exists"), label, name, &ok, this);
+        if (!ok) return false;
+
+        name    = newTitle;
+        checked = checkAlbum(name);
+    }
+
+    return true;
+}
+
+bool TimelineSideBarWidget::checkAlbum(const QString& name) const
+{
+    const AlbumList list = AlbumManager::instance()->allSAlbums();
+
+    for (AlbumList::ConstIterator it = list.constBegin() ; it != list.constEnd() ; ++it)
+    {
+        SAlbum *album = (SAlbum*)(*it);
+        if ( album->title() == name )
+            return false;
+    }
+    return true;
+}
+
+void TimelineSideBarWidget::slotCheckAboutSelection()
+{
+    int totalCount     = 0;
+    DateRangeList list = d->timeLineWidget->selectedDateRange(totalCount);
+    if (!list.isEmpty())
+    {
+        d->nameEdit->setEnabled(true);
+
+        if (!d->nameEdit->text().isEmpty())
+            d->saveButton->setEnabled(true);
+    }
+    else
+    {
+        d->nameEdit->setEnabled(false);
+        d->saveButton->setEnabled(false);
+    }
+}
+
+void TimelineSideBarWidget::slotRenameAlbum(SAlbum* salbum)
+{
+    if (!salbum) return;
+
+    QString oldName(salbum->title());
+    bool    ok;
+
+    QString name = KInputDialog::getText(i18n("Rename Album (%1)",oldName),
+                                          i18n("Enter new album name:"),
+                                          oldName, &ok, this);
+
+    if (!ok || name == oldName || name.isEmpty()) return;
+
+    if (!checkName(name)) return;
+
+    AlbumManager::instance()->updateSAlbum(salbum, salbum->query(), name);
 }
 
 // -----------------------------------------------------------------------------
@@ -395,7 +872,6 @@ SearchSideBarWidget::SearchSideBarWidget(QWidget *parent, SearchModel *searchMod
     d->searchTabHeader  = new SearchTabHeader(this);
     d->searchFolderView = new SearchFolderView(this);
     d->searchSearchBar  = new SearchTextBar(this, "DigikamViewSearchSearchBar");
-    d->searchSearchBar->setHighlightOnCompletion(true);
     d->searchSearchBar->setModel(searchModel, AbstractAlbumModel::AlbumIdRole);
 
     layout->addWidget(d->searchTabHeader);
@@ -498,7 +974,7 @@ FuzzySearchSideBarWidget::FuzzySearchSideBarWidget(QWidget *parent, SearchModel 
     layout->addWidget(d->fuzzySearchView);
 
     connect(d->fuzzySearchView, SIGNAL(signalUpdateFingerPrints()),
-            this, SIGNAL(sginalRebuildFingerPrints()));
+            this, SIGNAL(signalUpdateFingerPrints()));
     connect(d->fuzzySearchView, SIGNAL(signalGenerateFingerPrintsFirstTime()),
             this, SIGNAL(signalGenerateFingerPrintsFirstTime()));
 

@@ -59,8 +59,6 @@ public:
 
     void searchDelete(SAlbum* album);
 
-    static QString currentSearchViewSearchName();
-
 Q_SIGNALS:
 
     void newSearch();

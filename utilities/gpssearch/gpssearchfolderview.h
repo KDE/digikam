@@ -46,7 +46,6 @@ public:
     ~GPSSearchFolderView();
 
     void searchDelete(SAlbum* album);
-    static QString currentGPSSearchName();
 
 Q_SIGNALS:
 

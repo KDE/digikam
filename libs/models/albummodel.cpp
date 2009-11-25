@@ -28,6 +28,7 @@
 #include <kcalendarsystem.h>
 #include <kglobal.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -150,6 +151,11 @@ bool SearchModel::filterAlbum(Album *album) const
     if (AbstractSpecificAlbumModel::filterAlbum(album))
     {
         SAlbum *salbum = static_cast<SAlbum*>(album);
+        if (!salbum)
+        {
+            return false;
+        }
+
         if (m_searchType == -1)
             return salbum->isNormalSearch();
         else if (m_searchType == -2)

@@ -147,6 +147,27 @@ public:
     QString getCaption();
 
 private:
+    void createNewDateSearchAlbum(const QString& name);
+    bool checkName(QString& name);
+    bool checkAlbum(const QString& name) const;
+
+private Q_SLOTS:
+
+    void slotInit();
+    void slotScrollBarValueChanged(int);
+    void slotRefDateTimeChanged();
+    void slotScaleChanged(int);
+    void slotTimeUnitChanged(int);
+    void slotCursorPositionChanged();
+    void slotSelectionChanged();
+    void slotResetSelection();
+    void slotSaveSelection();
+    void slotUpdateCurrentDateSearchAlbum();
+    void slotAlbumSelected(SAlbum*);
+    void slotCheckAboutSelection();
+    void slotRenameAlbum(SAlbum*);
+
+private:
     TimelineSideBarWidgetPriv *d;
 
 };

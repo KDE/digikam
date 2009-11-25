@@ -344,7 +344,7 @@ void SearchTabHeader::selectedSearchChanged(SAlbum *album)
     {
         d->lowerArea->setEnabled(true);
 
-        if (album->title() == SearchFolderView::currentSearchViewSearchName())
+        if (album->title() == SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch))
         {
             d->lowerArea->setCurrentWidget(d->saveAsWidget);
             if (album->isKeywordSearch())
@@ -424,7 +424,7 @@ void SearchTabHeader::keywordChanged()
 
 void SearchTabHeader::editCurrentAdvancedSearch()
 {
-    SAlbum *album = AlbumManager::instance()->findSAlbum(SearchFolderView::currentSearchViewSearchName());
+    SAlbum *album = AlbumManager::instance()->findSAlbum(SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch));
     SearchWindow *window = searchWindow();
     if (album)
         window->readSearch(album->id(), album->query());
@@ -523,16 +523,16 @@ void SearchTabHeader::advancedSearchEdited(int id, const QString& query)
 
 void SearchTabHeader::setCurrentSearch(DatabaseSearch::Type type, const QString& query, bool selectCurrentAlbum)
 {
-    SAlbum *album = AlbumManager::instance()->findSAlbum(SearchFolderView::currentSearchViewSearchName());
+    SAlbum *album = AlbumManager::instance()->findSAlbum(SAlbum::getTemporaryTitle(DatabaseSearch::KeywordSearch));
     if (album)
     {
         AlbumManager::instance()->updateSAlbum(album, query,
-                                               SearchFolderView::currentSearchViewSearchName(),
+                                               SAlbum::getTemporaryTitle(DatabaseSearch::KeywordSearch),
                                                type);
     }
     else
     {
-        album = AlbumManager::instance()->createSAlbum(SearchFolderView::currentSearchViewSearchName(),
+        album = AlbumManager::instance()->createSAlbum(SAlbum::getTemporaryTitle(DatabaseSearch::KeywordSearch),
                                                        type, query);
     }
     if (selectCurrentAlbum)

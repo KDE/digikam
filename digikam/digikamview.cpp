@@ -27,88 +27,40 @@
 
 // Qt includes
 
-#include <QApplication>
-#include <QDir>
-#include <QDockWidget>
-#include <QEvent>
-#include <QFileInfo>
-#include <QFrame>
-#include <QImage>
-#include <QLabel>
-#include <QListView>
 #include <QProcess>
-#include <QSplitter>
-#include <QString>
-#include <QTimer>
-#include <QTreeView>
 
 // KDE includes
 
 #include <kapplication.h>
-#include <kconfig.h>
-#include <kconfiggroup.h>
 #include <kdebug.h>
 #include <kdialog.h>
-#include <kglobal.h>
-#include <kiconloader.h>
-#include <klocale.h>
 #include <kmessagebox.h>
-#include <kpushbutton.h>
 #include <krun.h>
-#include <kstandarddirs.h>
 #include <kvbox.h>
-
-// LibKDcraw includes
-
-#include <libkdcraw/rawfiles.h>
 
 // Local includes
 
-#include "album.h"
-#include "albumfolderview.h"
 #include "albumhistory.h"
 #include "albumiconviewfilter.h"
-#include "albummanager.h"
-#include "albummodel.h"
-#include "albummodificationhelper.h"
 #include "albumsettings.h"
 #include "albumwidgetstack.h"
 #include "batchsyncmetadata.h"
-#include "collectionmanager.h"
-#include "config-digikam.h"
-#include "datefolderview.h"
 #include "digikamapp.h"
 #include "digikamimageview.h"
-#include "dio.h"
-#include "dmetadata.h"
-#include "fuzzysearchfolderview.h"
-#include "fuzzysearchview.h"
-#include "gpssearchfolderview.h"
-#include "gpssearchview.h"
-#include "imagealbumfiltermodel.h"
 #include "imagealbummodel.h"
 #include "imageinfoalbumsjob.h"
 #include "imagepreviewview.h"
 #include "imagepropertiessidebardb.h"
 #include "imageviewutilities.h"
+#include "leftsidebarwidgets.h"
 #include "loadingcacheinterface.h"
 #include "metadatamanager.h"
 #include "queuemgrwindow.h"
 #include "scancontroller.h"
-#include "searchfolderview.h"
-#include "searchtabheader.h"
 #include "sidebar.h"
 #include "slideshow.h"
 #include "statusprogressbar.h"
 #include "tagfilterview.h"
-#include "tagfolderview.h"
-#include "themeengine.h"
-#include "thumbnailsize.h"
-#include "timelinefolderview.h"
-#include "timelineview.h"
-#include "sidebarwidget.h"
-#include "leftsidebarwidgets.h"
-#include "tagmodificationhelper.h"
 
 namespace Digikam
 {
@@ -159,13 +111,13 @@ public:
 
     // left side bar
     AlbumFolderViewSideBarWidget *albumFolderSideBar;
-    TagViewSideBarWidget *tagViewSideBar;
-    DateFolderViewSideBarWidget *dateViewSideBar;
-    TimelineSideBarWidget *timelineSideBar;
-    SearchSideBarWidget *searchSideBar;
-    FuzzySearchSideBarWidget *fuzzySearchSideBar;
+    TagViewSideBarWidget         *tagViewSideBar;
+    DateFolderViewSideBarWidget  *dateViewSideBar;
+    TimelineSideBarWidget        *timelineSideBar;
+    SearchSideBarWidget          *searchSideBar;
+    FuzzySearchSideBarWidget     *fuzzySearchSideBar;
 #ifdef HAVE_MARBLEWIDGET
-    GPSSearchSideBarWidget *gpsSearchSideBar;
+    GPSSearchSideBarWidget       *gpsSearchSideBar;
 #endif
 
     KVBox*                    tagFilterBox;
@@ -863,7 +815,7 @@ void DigikamView::changeAlbumFromHistory(Album *album, QWidget *widget)
         if (sideBarWidget)
         {
             sideBarWidget->changeAlbumFromHistory(album);
-            slotLeftSidebarChangedTab(widget);
+            slotLeftSideBarActivate(sideBarWidget);
         }
 
         d->parent->enableAlbumBackwardHistory(d->useAlbumHistory && !d->albumHistory->isBackwardEmpty());
@@ -898,23 +850,22 @@ void DigikamView::getForwardHistory(QStringList& titles)
 
 QString DigikamViewPriv::userPresentableAlbumTitle(const QString& title)
 {
-    if (title == FuzzySearchFolderView::currentFuzzySketchSearchName())
+    if (title == SAlbum::getTemporaryHaarTitle(DatabaseSearch::HaarSketchSearch))
         return i18n("Fuzzy Sketch Search");
-    else if (title == FuzzySearchFolderView::currentFuzzyImageSearchName())
+    else if (title == SAlbum::getTemporaryHaarTitle(DatabaseSearch::HaarImageSearch))
         return i18n("Fuzzy Image Search");
-    else if (title == GPSSearchFolderView::currentGPSSearchName())
+    else if (title == SAlbum::getTemporaryTitle(DatabaseSearch::MapSearch))
         return i18n("Map Search");
-    else if (title == SearchFolderView::currentSearchViewSearchName())
+    else if (title == SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch) ||
+             title == SAlbum::getTemporaryTitle(DatabaseSearch::KeywordSearch))
         return i18n("Last Search");
-    else if (title == TimeLineFolderView::currentTimeLineSearchName())
+    else if (title == SAlbum::getTemporaryTitle(DatabaseSearch::TimeLineSearch))
         return i18n("Timeline");
     return title;
 }
 
 void DigikamView::slotGotoAlbumAndItem(const ImageInfo& imageInfo)
 {
-
-    kDebug() << "called";
 
     emit signalNoCurrentItem();
 
@@ -1717,7 +1668,7 @@ void DigikamView::slotOrientationChangeFailed(const QStringList& failedFileNames
 
 void DigikamView::slotLeftSideBarActivate(SideBarWidget *widget)
 {
-    slotLeftSidebarChangedTab(widget);
+    d->leftSideBar->setActiveTab(widget);
 }
 
 }  // namespace Digikam

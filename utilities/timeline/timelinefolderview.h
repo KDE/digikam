@@ -25,52 +25,68 @@
 #define TIMELINEFOLDERVIEW_H
 
 // Local includes
-
-#include "searchtextbar.h"
-#include "folderview.h"
+#include "albumtreeview.h"
 
 namespace Digikam
 {
 
-class Album;
-class SAlbum;
-class TimeLineFolderItem;
-
-class TimeLineFolderView : public FolderView
+class TimeLineFolderViewNew : public SearchTreeView
 {
     Q_OBJECT
-
 public:
+    TimeLineFolderViewNew(QWidget *parent, SearchModel *searchModel);
+    virtual ~TimeLineFolderViewNew();
 
-    TimeLineFolderView(QWidget* parent);
-    ~TimeLineFolderView();
-
-    void searchDelete(SAlbum* album);
-    static QString currentTimeLineSearchName();
-
-Q_SIGNALS:
-
-    void signalTextSearchFilterMatch(bool);
-    void signalAlbumSelected(SAlbum*);
-    void signalRenameAlbum(SAlbum*);
-
-public Q_SLOTS:
-
-    void slotTextSearchFilterChanged(const SearchTextSettings&);
-
-private Q_SLOTS:
-
-    void slotAlbumAdded(Album* album);
-    void slotAlbumDeleted(Album* album);
-    void slotAlbumRenamed(Album* album);
-    void slotSelectionChanged();
-    void slotContextMenu(Q3ListViewItem*, const QPoint&, int);
-
-protected:
-
-    void selectItem(int id);
 };
 
-}  // namespace Digikam
+}
+
+//// Local includes
+//
+//#include "searchtextbar.h"
+//#include "folderview.h"
+//
+//namespace Digikam
+//{
+//
+//class Album;
+//class SAlbum;
+//class TimeLineFolderItem;
+//
+//class TimeLineFolderView : public FolderView
+//{
+//    Q_OBJECT
+//
+//public:
+//
+//    TimeLineFolderView(QWidget* parent);
+//    ~TimeLineFolderView();
+//
+//    void searchDelete(SAlbum* album);
+//
+//Q_SIGNALS:
+//
+//    void signalTextSearchFilterMatch(bool);
+//    void signalAlbumSelected(SAlbum*);
+//    void signalRenameAlbum(SAlbum*);
+//
+//public Q_SLOTS:
+//
+//    void slotTextSearchFilterChanged(const SearchTextSettings&);
+//
+//private Q_SLOTS:
+//
+//    void slotAlbumAdded(Album* album);
+//    void slotAlbumDeleted(Album* album);
+//    void slotAlbumRenamed(Album* album);
+//    void slotSelectionChanged();
+//    void slotContextMenu(Q3ListViewItem*, const QPoint&, int);
+//
+//protected:
+//
+//    void selectItem(int id);
+//};
+//
+//}  // namespace Digikam
 
 #endif /* TIMELINEFOLDERVIEW_H */

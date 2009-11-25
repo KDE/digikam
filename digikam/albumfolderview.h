@@ -73,15 +73,6 @@ Q_SIGNALS:
      */
     void signalFindDuplicatesInAlbum(Album *album);
 
-public Q_SLOTS:
-
-    /**
-     * Selects the given album.
-     *
-     * @param album album to select
-     */
-    void slotSelectAlbum(Album *album);
-
 private:
 
     /**

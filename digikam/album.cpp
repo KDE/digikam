@@ -560,6 +560,56 @@ bool SAlbum::isDuplicatesSearch() const
     return m_type == DatabaseSearch::DuplicatesSearch;
 }
 
+bool SAlbum::isTemporarySearch() const
+{
+
+    if (isHaarSearch()) {
+        return (title() == getTemporaryHaarTitle(DatabaseSearch::HaarImageSearch)) ||
+                title() == getTemporaryHaarTitle(DatabaseSearch::HaarSketchSearch);
+    }
+
+    return (title() == getTemporaryTitle(m_type));
+
+}
+
+QString SAlbum::getTemporaryTitle(DatabaseSearch::Type type, DatabaseSearch::HaarSearchType haarType)
+{
+
+    switch(type)
+    {
+    case DatabaseSearch::TimeLineSearch:
+        return "_Current_Time_Line_Search_";
+    case DatabaseSearch::HaarSearch:
+        return getTemporaryHaarTitle(haarType);
+    case DatabaseSearch::MapSearch:
+        return "_Current_Map_Search_";
+    case DatabaseSearch::KeywordSearch:
+    case DatabaseSearch::AdvancedSearch:
+    case DatabaseSearch::LegacyUrlSearch:
+        return "_Current_Search_View_Search_";
+    case DatabaseSearch::DuplicatesSearch:
+        return "_Current_Duplicates_Search_";
+    default:
+        kError() << "Untreated temporary search type " << type;
+        return "_Current_Unknown_Search_";
+    }
+
+}
+
+QString SAlbum::getTemporaryHaarTitle(DatabaseSearch::HaarSearchType haarType)
+{
+    switch(haarType)
+    {
+    case DatabaseSearch::HaarImageSearch:
+        return "_Current_Fuzzy_Image_Search_";
+    case DatabaseSearch::HaarSketchSearch:
+        return "_Current_Fuzzy_Sketch_Search_";
+    default:
+        kError() << "Untreated temporary haar search type " << haarType;
+        return "_Current_Unknown_Haar_Search_";
+    }
+}
+
 // --------------------------------------------------------------------------
 
 AlbumIterator::AlbumIterator(Album *album)

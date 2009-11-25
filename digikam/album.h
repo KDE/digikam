@@ -432,6 +432,35 @@ public:
     bool                 isMapSearch() const;
     bool                 isDuplicatesSearch() const;
 
+    /**
+     * Indicates whether this album is a temporary search or not.
+     *
+     * @return true if this is á temporary search album, else false
+     */
+    bool                 isTemporarySearch() const;
+
+    /**
+     * Returns the title of search albums that is used to to mark them as a
+     * temporary search that isn't saved officially yet and is only used for
+     * viewing purposes.
+     *
+     * @param type type of the search to get the temporary title for
+     * @param haarType there are several haar searches, so that this search type
+     *                 needs a special handling
+     * @return string that identifies this album uniquely as an unsaved search
+     */
+    static QString getTemporaryTitle(DatabaseSearch::Type type,
+                                     DatabaseSearch::HaarSearchType haarType = DatabaseSearch::HaarImageSearch);
+
+    /**
+     * Returns the title for a temporary haar search depending on the sub-type
+     * used for this search
+     *
+     * @param haarType type of the haar search to get the name for
+     * @return string that identifies this album uniquely as an unsaved search
+     */
+    static QString getTemporaryHaarTitle(DatabaseSearch::HaarSearchType haarType);
+
 private:
 
     void setSearch(DatabaseSearch::Type type, const QString& query);

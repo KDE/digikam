@@ -124,16 +124,6 @@ FuzzySearchFolderView::~FuzzySearchFolderView()
     saveViewState();
 }
 
-QString FuzzySearchFolderView::currentFuzzySketchSearchName()
-{
-    return QString("_Current_Fuzzy_Sketch_Search_");
-}
-
-QString FuzzySearchFolderView::currentFuzzyImageSearchName()
-{
-    return QString("_Current_Fuzzy_Image_Search_");
-}
-
 void FuzzySearchFolderView::slotTextSearchFilterChanged(const SearchTextSettings& settings)
 {
     QString search       = settings.text;
@@ -170,8 +160,7 @@ void FuzzySearchFolderView::searchDelete(SAlbum* album)
     if (!album)
         return;
 
-    if (album->title() == currentFuzzySketchSearchName() ||
-        album->title() == currentFuzzyImageSearchName())
+    if (album->isTemporarySearch())
         return;
 
     // Make sure that a complicated search is not deleted accidentally
@@ -202,10 +191,10 @@ void FuzzySearchFolderView::slotAlbumAdded(Album* a)
     FuzzySearchFolderItem* item = new FuzzySearchFolderItem(this, salbum);
     item->setPixmap(0, SmallIcon("tools-wizard", AlbumSettings::instance()->getTreeViewIconSize()));
 
-    if (salbum->title() == currentFuzzySketchSearchName())
+    if (salbum->title() == SAlbum::getTemporaryHaarTitle(DatabaseSearch::HaarSketchSearch))
         item->setText(0, i18n("Current Fuzzy Sketch Search"));
 
-    if (salbum->title() == currentFuzzyImageSearchName())
+    if (salbum->title() == SAlbum::getTemporaryHaarTitle(DatabaseSearch::HaarImageSearch))
         item->setText(0, i18n("Current Fuzzy Image Search"));
 }
 
@@ -291,8 +280,7 @@ void FuzzySearchFolderView::slotContextMenu(Q3ListViewItem* item, const QPoint&,
     QAction *renSearch = popmenu.addAction(SmallIcon("edit-rename"), i18n("Rename..."));
     QAction *delSearch = popmenu.addAction(SmallIcon("edit-delete"), i18n("Delete"));
 
-    if (sItem->album()->title() == currentFuzzySketchSearchName() ||
-        sItem->album()->title() == currentFuzzyImageSearchName())
+    if (sItem->album()->isTemporarySearch())
     {
         renSearch->setEnabled(false);
         delSearch->setEnabled(false);

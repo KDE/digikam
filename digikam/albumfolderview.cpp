@@ -217,12 +217,4 @@ void AlbumFolderViewNew::slotAlbumSelected(const QModelIndex &index)
     AlbumManager::instance()->setCurrentAlbum(albumForIndex(index));
 }
 
-void AlbumFolderViewNew::slotSelectAlbum(Album *album)
-{
-    kDebug() << "Selecting album " << album;
-    setCurrentIndex(albumFilterModel()->mapFromSource(
-                    albumModel()->indexForAlbum(album)));
-    AlbumManager::instance()->setCurrentAlbum(album);
-}
-
 }

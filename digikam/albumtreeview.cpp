@@ -206,6 +206,13 @@ void AbstractAlbumTreeView::setSearchTextSettings(const SearchTextSettings& sett
     m_albumFilterModel->setSearchTextSettings(settings);
 }
 
+void AbstractAlbumTreeView::slotSelectAlbum(Album *album)
+{
+    setCurrentIndex(albumFilterModel()->mapFromSource(
+                    albumModel()->indexForAlbum(album)));
+    AlbumManager::instance()->setCurrentAlbum(album);
+}
+
 void AbstractAlbumTreeView::slotCurrentChanged()
 {
     emit currentAlbumChanged(currentAlbum<Album>(selectionModel(), m_albumFilterModel));
@@ -632,9 +639,13 @@ TAlbum *TagTreeView::albumForIndex(const QModelIndex &index) const
                     m_albumFilterModel->mapToSource(index)));
 }
 
-SearchTreeView::SearchTreeView(QWidget *parent)
-    : AbstractAlbumTreeView(new SearchModel, parent)
+SearchTreeView::SearchTreeView(QWidget *parent, SearchModel *searchModel)
+    : AbstractAlbumTreeView(searchModel, parent)
 {
+
+    expand(m_albumFilterModel->rootAlbumIndex());
+    setRootIsDecorated(false);
+
 }
 
 SearchModel *SearchTreeView::albumModel() const

@@ -1058,7 +1058,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
 
     SET(libtimeline_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/timeline/timelinefolderview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/timeline/timelineview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/timeline/timelinewidget.cpp
        )
 

@@ -47,9 +47,6 @@ public:
 Q_SIGNALS:
     void signalFindDuplicatesInAlbum(Album*);
 
-public Q_SLOTS:
-    void slotSelectAlbum(Album *album);
-
 private Q_SLOTS:
     void slotTagSelected(const QModelIndex&);
 

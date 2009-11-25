@@ -79,10 +79,10 @@ public:
 
         SearchFolderItem *item = static_cast<SearchFolderItem*>(i);
 
-        if (m_album->title() == SearchFolderView::currentSearchViewSearchName())
+        if (m_album->title() == SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch))
             return -1;
 
-        if (item->m_album->title() == SearchFolderView::currentSearchViewSearchName())
+        if (item->m_album->title() == SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch))
             return 1;
 
         return text(0).localeAwareCompare(i->text(0));
@@ -228,11 +228,6 @@ void SearchFolderView::searchDelete(SAlbum* album)
     AlbumManager::instance()->deleteSAlbum(album);
 }
 
-QString SearchFolderView::currentSearchViewSearchName()
-{
-    return QString("_Current_Search_View_Search_");
-}
-
 void SearchFolderView::slotAlbumAdded(Album* a)
 {
     if (!a || a->type() != Album::SEARCH)
@@ -251,7 +246,7 @@ void SearchFolderView::slotAlbumAdded(Album* a)
     item->setPixmap(0, SmallIcon("edit-find", AlbumSettings::instance()->getTreeViewIconSize()));
     m_lastAddedItem = item;
 
-    if (album->title() == currentSearchViewSearchName())
+    if (album->isTemporarySearch())
     {
         kDebug() << "This is the current album";
         m_currentSearchViewSearchItem = item;

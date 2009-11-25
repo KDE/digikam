@@ -145,14 +145,5 @@ void TagFolderViewNew::slotTagSelected(const QModelIndex &index)
     AlbumManager::instance()->setCurrentAlbum(albumForIndex(index));
 }
 
-// TODO copied code from albumfolderview
-void TagFolderViewNew::slotSelectAlbum(Album *album)
-{
-    kDebug() << "Selecting album " << album;
-    setCurrentIndex(albumFilterModel()->mapFromSource(
-                    albumModel()->indexForAlbum(album)));
-    AlbumManager::instance()->setCurrentAlbum(album);
-}
-
 }
 

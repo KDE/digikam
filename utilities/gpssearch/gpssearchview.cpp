@@ -305,7 +305,7 @@ void GPSSearchView::slotSaveGPSSAlbum()
 void GPSSearchView::slotSelectionChanged()
 {
     slotCheckNameEditGPSConditions();
-    createNewGPSSearchAlbum(GPSSearchFolderView::currentGPSSearchName());
+    createNewGPSSearchAlbum(SAlbum::getTemporaryTitle(DatabaseSearch::MapSearch));
 }
 
 void GPSSearchView::createNewGPSSearchAlbum(const QString& name)
@@ -438,7 +438,7 @@ void GPSSearchView::slotRenameAlbum(SAlbum* salbum)
 {
     if (!salbum) return;
 
-    if (salbum->title() == GPSSearchFolderView::currentGPSSearchName())
+    if (salbum->isTemporarySearch())
         return;
 
     QString oldName(salbum->title());

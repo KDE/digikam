@@ -291,15 +291,16 @@ void ImageCategoryDrawer::textForSAlbum(SAlbum *salbum, int count, QString *head
 {
     QString title = salbum->title();
 
-    if (title == FuzzySearchFolderView::currentFuzzySketchSearchName())
+    if (title == SAlbum::getTemporaryHaarTitle(DatabaseSearch::HaarSketchSearch))
         title = i18n("Fuzzy Sketch Search");
-    else if (title == FuzzySearchFolderView::currentFuzzyImageSearchName())
+    else if (title == SAlbum::getTemporaryHaarTitle(DatabaseSearch::HaarImageSearch))
         title = i18n("Fuzzy Image Search");
-    else if (title == GPSSearchFolderView::currentGPSSearchName())
+    else if (title == SAlbum::getTemporaryTitle(DatabaseSearch::MapSearch))
         title = i18n("Map Search");
-    else if (title == SearchFolderView::currentSearchViewSearchName())
+    else if (title == SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch) ||
+             title == SAlbum::getTemporaryTitle(DatabaseSearch::KeywordSearch))
         title = i18n("Current Search");
-    else if (title == TimeLineFolderView::currentTimeLineSearchName())
+    else if (title == SAlbum::getTemporaryTitle(DatabaseSearch::TimeLineSearch))
         title = i18n("Search By Time Line");
 
     *header = title;

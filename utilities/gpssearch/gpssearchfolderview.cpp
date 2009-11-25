@@ -124,11 +124,6 @@ GPSSearchFolderView::~GPSSearchFolderView()
     saveViewState();
 }
 
-QString GPSSearchFolderView::currentGPSSearchName()
-{
-    return QString("_Current_Map_Search_");
-}
-
 void GPSSearchFolderView::slotTextSearchFilterChanged(const SearchTextSettings& settings)
 {
     QString search       = settings.text;
@@ -142,7 +137,7 @@ void GPSSearchFolderView::slotTextSearchFilterChanged(const SearchTextSettings& 
 
         if (salbum->title().contains(search, settings.caseSensitive) &&
             salbum->isHaarSearch() &&
-            salbum->title() != currentGPSSearchName())
+            salbum->title() != SAlbum::getTemporaryTitle(DatabaseSearch::MapSearch))
         {
             atleastOneMatch = true;
 
@@ -166,7 +161,7 @@ void GPSSearchFolderView::searchDelete(SAlbum* album)
     if (!album)
         return;
 
-    if (album->title() == currentGPSSearchName())
+    if (album->isTemporarySearch())
         return;
 
     // Make sure that a complicated search is not deleted accidentally
@@ -197,7 +192,7 @@ void GPSSearchFolderView::slotAlbumAdded(Album* a)
     GPSSearchFolderItem* item = new GPSSearchFolderItem(this, salbum);
     item->setPixmap(0, SmallIcon("applications-internet", AlbumSettings::instance()->getTreeViewIconSize()));
 
-    if (salbum->title() == currentGPSSearchName())
+    if (salbum->title() == SAlbum::getTemporaryTitle(DatabaseSearch::MapSearch))
         item->setText(0, i18n("Current Map Search"));
 }
 
@@ -281,7 +276,7 @@ void GPSSearchFolderView::slotContextMenu(Q3ListViewItem* item, const QPoint&, i
     {
         QAction *renSearch = new QAction(SmallIcon("edit-rename"), i18n("Rename..."), this);
         QAction *delSearch = new QAction(SmallIcon("edit-delete"), i18n("Delete"), this);
-        bool enable        = sItem->album()->title() != currentGPSSearchName();
+        bool enable        = sItem->album()->title() != SAlbum::getTemporaryTitle(DatabaseSearch::MapSearch);
         renSearch->setEnabled(enable);
         delSearch->setEnabled(enable);
 

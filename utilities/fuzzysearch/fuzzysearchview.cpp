@@ -56,6 +56,7 @@
 // Local includes
 
 #include "album.h"
+#include "albuminfo.h"
 #include "albummanager.h"
 #include "albumdb.h"
 #include "databaseaccess.h"
@@ -688,8 +689,7 @@ void FuzzySearchView::slotRenameAlbum(SAlbum* salbum)
 {
     if (!salbum) return;
 
-    if (salbum->title() == FuzzySearchFolderView::currentFuzzySketchSearchName() ||
-        salbum->title() == FuzzySearchFolderView::currentFuzzyImageSearchName())
+    if (salbum->isTemporarySearch())
         return;
 
     QString oldName(salbum->title());
@@ -793,7 +793,7 @@ void FuzzySearchView::slotDirtySketch()
 void FuzzySearchView::slotTimerSketchDone()
 {
     slotCheckNameEditSketchConditions();
-    createNewFuzzySearchAlbumFromSketch(FuzzySearchFolderView::currentFuzzySketchSearchName());
+    createNewFuzzySearchAlbumFromSketch(SAlbum::getTemporaryHaarTitle(DatabaseSearch::HaarSketchSearch));
 }
 
 void FuzzySearchView::createNewFuzzySearchAlbumFromSketch(const QString& name)
@@ -871,7 +871,7 @@ void FuzzySearchView::dropEvent(QDropEvent *e)
 
         setCurrentImage(imageIDs.first());
         slotCheckNameEditImageConditions();
-        createNewFuzzySearchAlbumFromImage(FuzzySearchFolderView::currentFuzzyImageSearchName());
+        createNewFuzzySearchAlbumFromImage(SAlbum::getTemporaryHaarTitle(DatabaseSearch::HaarImageSearch));
         d->tabWidget->setCurrentIndex((int)FuzzySearchViewPriv::SIMILARS);
 
         e->acceptProposedAction();
@@ -916,7 +916,7 @@ void FuzzySearchView::setImageInfo(const ImageInfo& info)
 {
     setCurrentImage(info);
     slotCheckNameEditImageConditions();
-    createNewFuzzySearchAlbumFromImage(FuzzySearchFolderView::currentFuzzyImageSearchName());
+    createNewFuzzySearchAlbumFromImage(SAlbum::getTemporaryHaarTitle(DatabaseSearch::HaarImageSearch));
     d->tabWidget->setCurrentIndex((int)FuzzySearchViewPriv::SIMILARS);
 }
 

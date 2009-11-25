@@ -69,6 +69,13 @@ public Q_SLOTS:
 
     void setSearchTextSettings(const SearchTextSettings& settings);
 
+    /**
+     * Selects the given album.
+     *
+     * @param album album to select
+     */
+    void slotSelectAlbum(Album *album);
+
 Q_SIGNALS:
 
     /// Emitted when the currently selected album changes
@@ -191,7 +198,7 @@ class SearchTreeView : public AbstractAlbumTreeView
 {
 public:
 
-    SearchTreeView(QWidget *parent = 0);
+    SearchTreeView(QWidget *parent, SearchModel *searchModel);
     SearchModel *albumModel() const;
 };
 
