@@ -43,12 +43,12 @@ DummyOption::DummyOption()
     /*
      * Example initialization
      *
-     * Use addTokenDescription() to provide at least one entry in the tooltip for the AdvancedRename utility.
+     * Use addToken() to provide at least one entry in the tooltip for the AdvancedRename utility.
      * It is possible to call this method more than one time, to have additional token information.
      * If you want to add parameters to your rename option, enclose them in pipe characters, to have them
      * properly marked in the tooltip, e.g.
      *
-     * addTokenDescription("[myoption:|parameter|]", i18nc("my rename option", "MyOption"),
+     * addToken("[myoption:|parameter|]", i18nc("my rename option", "MyOption"),
      *
      * Use setRegExp() to define the regular expression that identifies the parse option and its parameters
      */
