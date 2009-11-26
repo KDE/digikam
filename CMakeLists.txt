@@ -402,11 +402,13 @@ IF(DIGIKAM_CAN_BE_COMPILED)
                         ${KDE4_INCLUDES}
                         ${QT_INCLUDES}
                         ${GPHOTO2_INCLUDE_DIRS}
-                        ${SOPRANO_INCLUDE_DIR}
-                        ${NEPOMUK_INCLUDE_DIR}
                         ${CMAKE_CURRENT_SOURCE_DIR}/digikam
                         ${CMAKE_CURRENT_BINARY_DIR}/digikam
                        )
+
+    IF(NEPOMUK_FOUND)
+        INCLUDE_DIRECTORIES(${SOPRANO_INCLUDE_DIR} ${NEPOMUK_INCLUDE_DIR})
+    ENDIF(NEPOMUK_FOUND)
 
     IF(MARBLEWIDGET_FOUND)
         INCLUDE_DIRECTORIES(${LIBMARBLEWIDGET_INCLUDE_DIR})
