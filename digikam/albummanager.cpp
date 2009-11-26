@@ -973,8 +973,12 @@ void AlbumManager::startScan()
     insertTAlbum(d->rootTAlbum, 0);
 
     d->rootSAlbum = new SAlbum(i18n("My Searches"), 0, true);
+    emit signalAlbumAboutToBeAdded(d->rootSAlbum, 0, 0);
+    emit signalAlbumAdded(d->rootSAlbum);
 
     d->rootDAlbum = new DAlbum(QDate(), true);
+    emit signalAlbumAboutToBeAdded(d->rootDAlbum, 0, 0);
+    emit signalAlbumAdded(d->rootDAlbum);
 
     // create albums for album roots
     QList<CollectionLocation> locations = CollectionManager::instance()->allAvailableLocations();
@@ -2316,7 +2320,7 @@ SAlbum* AlbumManager::createSAlbum(const QString& name, DatabaseSearch::Type typ
     {
         album->setSearch(type, query);
         DatabaseAccess access;
-        access.db()->updateSearch(album->id(), album->m_type, name, query);
+        access.db()->updateSearch(album->id(), album->m_searchType, name, query);
         return album;
     }
 

@@ -26,6 +26,7 @@
 
 // KDE includes
 
+#include <kdebug.h>
 #include <klocale.h>
 #include <kglobal.h>
 
@@ -337,6 +338,12 @@ void AbstractAlbumModel::slotAlbumAboutToBeAdded(Album *album, Album *parent, Al
     if (!filterAlbum(album))
         return;
 
+    if (album->isRoot() && d->rootBehavior == IgnoreRootAlbum)
+    {
+        d->rootAlbum = album;
+        return;
+    }
+
     // start inserting operation
     int row = prev ? d->findIndexAsChild(prev)+1 : 0;
     QModelIndex parentIndex = indexForAlbum(parent);
@@ -356,7 +363,6 @@ void AbstractAlbumModel::slotAlbumAdded(Album *album)
 {
     if (d->addingAlbum == album)
     {
-
         bool isRoot = d->addingAlbum == d->rootAlbum;
         d->addingAlbum = 0;
         endInsertRows();
@@ -369,6 +375,13 @@ void AbstractAlbumModel::slotAlbumAboutToBeDeleted(Album *album)
 {
     if (!filterAlbum(album))
         return;
+
+    if (album->isRoot() && d->rootBehavior == IgnoreRootAlbum)
+    {
+        albumCleared(album);
+        d->rootAlbum = 0;
+        return;
+    }
 
     // begin removing operation
     int row = d->findIndexAsChild(album);

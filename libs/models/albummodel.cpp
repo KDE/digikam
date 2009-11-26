@@ -148,13 +148,12 @@ QVariant SearchModel::albumData(Album *a, int role) const
 
 bool SearchModel::filterAlbum(Album *album) const
 {
-    if (AbstractSpecificAlbumModel::filterAlbum(album))
+    if (album && AbstractSpecificAlbumModel::filterAlbum(album))
     {
+        if (album->isRoot())
+            return true;
+
         SAlbum *salbum = static_cast<SAlbum*>(album);
-        if (!salbum)
-        {
-            return false;
-        }
 
         if (m_searchType == -1)
             return salbum->isNormalSearch();
