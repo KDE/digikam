@@ -87,7 +87,9 @@ ReplaceModifier::ReplaceModifier()
 {
     setUseTokenMenu(false);
 
-    addTokenDescription(QString("{r:\"|old|\", \"|new|\"}"),  i18n("Replace"), description());
+    addTokenDescription(QString("{r:\"|old|\", \"|new|\"}"),  i18n("Replace"),
+                                                              i18n("Replace text"));
+
     addTokenDescription(QString("{ri:\"|old|\", \"|new|\"}"), i18n("Replace (case insensitive)"),
                                                               i18n("Replace text (case insensitive)"));
 
