@@ -63,7 +63,7 @@ QString TooltipCreator::tooltip()
 
     tooltip += tableStart();
     tooltip += createSection(i18n("Renaming Options"), parser->options());
-    tooltip += createSection(i18n("Modifiers"),        parser->modifiers());
+    tooltip += createSection(i18n("Modifiers"),        parser->modifiers(), true);
     tooltip += tableEnd();
 
     tooltip += i18n("<p><i>Modifiers can be applied to every renaming option. <br/>"
@@ -132,13 +132,17 @@ QString TooltipCreator::createEntries(const QList<T*> &data)
 }
 
 template <class T>
-QString TooltipCreator::createSection(const QString& sectionName, const QList<T*> &data)
+QString TooltipCreator::createSection(const QString& sectionName, const QList<T*> &data, bool lastSection)
 {
     QString tmp;
 
     tmp += createHeader(sectionName);
     tmp += createEntries(data);
-    tmp += QString("<tr></tr>");
+
+    if (!lastSection)
+    {
+        tmp += QString("<tr></tr>");
+    }
 
     return tmp;
 }
