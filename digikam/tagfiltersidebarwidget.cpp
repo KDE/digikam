@@ -9,6 +9,7 @@
 
 // Qt includes
 #include <qlayout.h>
+#include <qcheckbox.h>
 
 // KDE includes
 #include <kselectaction.h>
@@ -32,8 +33,8 @@ public:
     {
     }
 
-    // TODO update, implement this
     ImageFilterSettings::MatchingCondition matchingCond;
+    // TODO update, implement this
     TagFilterView::RestoreTagFilters    restoreTagFilters;
 
     TagModel *tagFilterModel;
@@ -173,6 +174,8 @@ public:
     TagModel *tagFilterModel;
     TagModificationHelper *tagModificationHelper;
 
+    QCheckBox *withoutTagCheckBox;
+
 };
 
 TagFilterSideBarWidget::TagFilterSideBarWidget(QWidget *parent,
@@ -188,9 +191,12 @@ TagFilterSideBarWidget::TagFilterSideBarWidget(QWidget *parent,
     d->tagFilterSearchBar = new SearchTextBar(this, "DigikamViewTagFilterSearchBar");
     d->tagFilterSearchBar->setModel(tagFilterModel, AbstractAlbumModel::AlbumIdRole);
 
+    d->withoutTagCheckBox = new QCheckBox(i18n("Not Tagged"), this);
+
     QVBoxLayout *layout = new QVBoxLayout(this);
 
     layout->addWidget(d->tagFilterView);
+    layout->addWidget(d->withoutTagCheckBox);
     layout->addWidget(d->tagFilterSearchBar);
 
     // connection
@@ -202,6 +208,9 @@ TagFilterSideBarWidget::TagFilterSideBarWidget(QWidget *parent,
 
     connect(d->tagFilterView, SIGNAL(matchingConditionChanged(const ImageFilterSettings::MatchingCondition&)),
             this, SLOT(slotMatchingConditionChanged(const ImageFilterSettings::MatchingCondition&)));
+
+    connect(d->withoutTagCheckBox, SIGNAL(stateChanged(int)),
+            this, SLOT(slotWithoutTagChanged(int)));
 
 }
 
@@ -226,20 +235,34 @@ void TagFilterSideBarWidget::slotCheckedTagsChanged(const QList<TAlbum*> &tags)
     filterChanged();
 }
 
+void TagFilterSideBarWidget::slotWithoutTagChanged(int newState)
+{
+
+    bool showUntagged = newState == Qt::Checked;
+    d->tagFilterView->setEnabled(!showUntagged);
+    d->tagFilterSearchBar->setEnabled(!showUntagged);
+
+    filterChanged();
+}
+
 void TagFilterSideBarWidget::filterChanged()
 {
 
+    bool showUntagged = d->withoutTagCheckBox->checkState() == Qt::Checked;
+
     QList<int> tagIds;
-    foreach(TAlbum *tag, d->tagFilterView->getCheckedTags())
+    if (!showUntagged)
     {
-        if (tag)
+        foreach(TAlbum *tag, d->tagFilterView->getCheckedTags())
         {
-            tagIds << tag->id();
+            if (tag)
+            {
+                tagIds << tag->id();
+            }
         }
     }
 
-    // TODO enalbe without tags argument
-    emit tagFilterChanged(tagIds, d->tagFilterView->getMatchingCondition(), false);
+    emit tagFilterChanged(tagIds, d->tagFilterView->getMatchingCondition(), showUntagged);
 
 }
 

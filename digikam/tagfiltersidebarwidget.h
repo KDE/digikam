@@ -88,6 +88,7 @@ private Q_SLOTS:
 
     void slotMatchingConditionChanged(const ImageFilterSettings::MatchingCondition &condition);
     void slotCheckedTagsChanged(const QList<TAlbum*> &tags);
+    void slotWithoutTagChanged(int newState);
 
 private:
     void filterChanged();
