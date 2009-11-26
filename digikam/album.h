@@ -468,7 +468,7 @@ private:
 private:
 
     QString              m_query;
-    DatabaseSearch::Type m_type;
+    DatabaseSearch::Type m_searchType;
 
     friend class AlbumManager;
 };

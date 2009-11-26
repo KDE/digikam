@@ -487,7 +487,7 @@ DatabaseUrl DAlbum::databaseUrl() const
 
 SAlbum::SAlbum(const QString& title, int id, bool root)
       : Album(Album::SEARCH, id, root),
-        m_type(DatabaseSearch::UndefinedType)
+        m_searchType(DatabaseSearch::UndefinedType)
 {
     setTitle(title);
 }
@@ -498,7 +498,7 @@ SAlbum::~SAlbum()
 
 void SAlbum::setSearch(DatabaseSearch::Type type, const QString& query)
 {
-    m_type  = type;
+    m_searchType  = type;
     m_query = query;
 }
 
@@ -514,12 +514,12 @@ QString SAlbum::query() const
 
 DatabaseSearch::Type SAlbum::searchType() const
 {
-    return m_type;
+    return m_searchType;
 }
 
 bool SAlbum::isNormalSearch() const
 {
-    switch (m_type)
+    switch (m_searchType)
     {
         case DatabaseSearch::KeywordSearch:
         case DatabaseSearch::AdvancedSearch:
@@ -532,32 +532,32 @@ bool SAlbum::isNormalSearch() const
 
 bool SAlbum::isAdvancedSearch() const
 {
-    return m_type == DatabaseSearch::AdvancedSearch;
+    return m_searchType == DatabaseSearch::AdvancedSearch;
 }
 
 bool SAlbum::isKeywordSearch() const
 {
-    return m_type == DatabaseSearch::KeywordSearch;
+    return m_searchType == DatabaseSearch::KeywordSearch;
 }
 
 bool SAlbum::isTimelineSearch() const
 {
-    return m_type == DatabaseSearch::TimeLineSearch;
+    return m_searchType == DatabaseSearch::TimeLineSearch;
 }
 
 bool SAlbum::isHaarSearch() const
 {
-    return m_type == DatabaseSearch::HaarSearch;
+    return m_searchType == DatabaseSearch::HaarSearch;
 }
 
 bool SAlbum::isMapSearch() const
 {
-    return m_type == DatabaseSearch::MapSearch;
+    return m_searchType == DatabaseSearch::MapSearch;
 }
 
 bool SAlbum::isDuplicatesSearch() const
 {
-    return m_type == DatabaseSearch::DuplicatesSearch;
+    return m_searchType == DatabaseSearch::DuplicatesSearch;
 }
 
 bool SAlbum::isTemporarySearch() const
@@ -568,7 +568,7 @@ bool SAlbum::isTemporarySearch() const
                 title() == getTemporaryHaarTitle(DatabaseSearch::HaarSketchSearch);
     }
 
-    return (title() == getTemporaryTitle(m_type));
+    return (title() == getTemporaryTitle(m_searchType));
 
 }
 
