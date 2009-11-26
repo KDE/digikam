@@ -583,8 +583,8 @@ IF(DIGIKAM_CAN_BE_COMPILED)
        )
 
     IF(MSVC)
-	SET(libjpegutils_SRCS
-    	    ${libjpegutils_SRCS}
+    SET(libjpegutils_SRCS
+            ${libjpegutils_SRCS}
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils/jpegwin.cpp
            )
     ENDIF(MSVC)
@@ -1068,6 +1068,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/advancedrenameinput.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/advancedrenamewidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/dynamiclayout.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/highlighter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/modifier.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/option.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/parseobject.cpp
@@ -1076,7 +1077,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/parseresults.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/renamethread.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/token.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/highlighter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/tooltipcreator.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/defaultrenameparser.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/modifiers/defaultvaluemodifier.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/modifiers/firstletterofeachworduppercasemodifier.cpp
