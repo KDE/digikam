@@ -48,7 +48,10 @@ private:
     QString createHeader(const QString& str);
 
     template <class T>
-    QString createEntries(QList<T*> &data);
+    QString createEntries(const QList<T*> &data);
+
+    template <class T>
+    QString createSection(const QString& sectionName, const QList<T*> &data);
 
 private:
 

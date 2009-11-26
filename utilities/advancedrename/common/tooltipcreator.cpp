@@ -62,24 +62,13 @@ QString TooltipCreator::tooltip()
     QString tooltip;
     tooltip += QString("<qt><table cellspacing=\"0\" cellpadding=\"0\" border=\"0\">");
 
-    // --------------------------------------------------------
-
-    tooltip += createHeader(i18n("Renaming Options"));
-    OptionsList op = parser->options();
-    tooltip += createEntries(op);
-
-    tooltip += QString("<tr></tr>");
-
-    tooltip += createHeader(i18n("Modifiers"));
-    ModifierList mod = parser->modifiers();
-    tooltip += createEntries(mod);
-
-    // --------------------------------------------------------
+    tooltip += createSection(i18n("Renaming Options"), parser->options());
+    tooltip += createSection(i18n("Modifiers"), parser->modifiers());
 
     tooltip += QString("</table></qt>");
     tooltip += i18n("<p><i>Modifiers can be applied to every renaming option. <br/>"
-            "It is possible to assign multiple modifiers to an option, "
-            "they are applied in the order you assign them.</i></p>");
+                    "It is possible to assign multiple modifiers to an option, "
+                    "they are applied in the order you assign them.</i></p>");
 
     return tooltip;
 }
@@ -99,17 +88,18 @@ QString TooltipCreator::markOption(const QString& str)
 QString TooltipCreator::createHeader(const QString& str)
 {
     QString tmp;
-    tmp += QString("<tr bgcolor=\"%1\"><td colspan=\"2\">"
-                   "<nobr><font color=\"%2\"><center><b>")
-                   .arg(ThemeEngine::instance()->baseColor().name())
-                   .arg(ThemeEngine::instance()->textRegColor().name());
-    tmp += QString(str);
-    tmp += QString("</b></center></font></nobr></td></tr>");
+    QString templateStr = QString("<tr bgcolor=\"%1\"><td colspan=\"2\">"
+                                  "<nobr><font color=\"%2\"><center><b>%3"
+                                  "</b></center></font></nobr></td></tr>")
+                                  .arg(ThemeEngine::instance()->baseColor().name())
+                                  .arg(ThemeEngine::instance()->textRegColor().name());
+
+    tmp += templateStr.arg(str);
     return tmp;
 }
 
 template <class T>
-QString TooltipCreator::createEntries(QList<T*> &data)
+QString TooltipCreator::createEntries(const QList<T*> &data)
 {
     QString tmp;
 
@@ -127,6 +117,18 @@ QString TooltipCreator::createEntries(QList<T*> &data)
                            .arg(markOption(token->description()));
         }
     }
+
+    return tmp;
+}
+
+template <class T>
+QString TooltipCreator::createSection(const QString& sectionName, const QList<T*> &data)
+{
+    QString tmp;
+
+    tmp += createHeader(sectionName);
+    tmp += createEntries(data);
+    tmp += QString("<tr></tr>");
 
     return tmp;
 }
