@@ -226,8 +226,9 @@ void AdvancedRenameWidget::createToolTip()
         // --------------------------------------------------------
 
         tooltip += QString("</table></qt>");
-        tooltip += i18n("<p>Modifiers can be applied to every renaming option. <br/>"
-                        "They are applied in the order you assign them. It is possible to chain modifiers.</p>");
+        tooltip += i18n("<p><i>Modifiers can be applied to every renaming option. <br/>"
+                        "It is possible to assign multiple modifiers to an option, "
+                        "they are applied in the order you assign them.</i></p>");
 
         d->tooltipTracker->setText(tooltip);
     }
