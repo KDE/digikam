@@ -39,12 +39,9 @@ namespace Digikam
 DirectoryNameOption::DirectoryNameOption()
                    : Option(i18n("Directory"), i18n("Add the directory name"), SmallIcon("folder"))
 {
-    addToken("[dir]", i18nc("Directory name", "Current"),
-            i18n("Directory name"));
-
-    addToken("[dir.]", i18nc("directory name", "Parent Directory Name"),
-            i18n("Directory name of the parent, additional '.' characters move up "
-                 "in the directory hierarchy"));
+    addToken("[dir]",  i18n("Directory name"));
+    addToken("[dir.]", i18n("Directory name of the parent, additional '.' characters move up "
+                            "in the directory hierarchy"));
 
     QRegExp reg("\\[dir(\\.*)\\]");
     reg.setMinimal(true);

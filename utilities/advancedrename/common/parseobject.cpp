@@ -186,14 +186,14 @@ QAction* ParseObject::registerMenu(QMenu* parent)
     return action;
 }
 
-bool ParseObject::addToken(const QString& id, const QString& alias, const QString& description)
+bool ParseObject::addToken(const QString& id, const QString& description)
 {
-    if (id.isEmpty() || alias.isEmpty() || description.isEmpty())
+    if (id.isEmpty() || description.isEmpty())
     {
         return false;
     }
 
-    Token* token = new Token(id, alias, description);
+    Token* token = new Token(id, description);
     if (!token)
     {
         return false;

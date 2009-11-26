@@ -89,14 +89,9 @@ SequenceNumberOption::SequenceNumberOption()
                     : Option(i18nc("Sequence Number", "Number..."), i18n("Add a sequence number"),
                                    SmallIcon("accessories-calculator"))
 {
-    addToken("#", i18n("Sequence Number"),
-             i18n("Sequence number"));
-
-    addToken("#[|start|]", i18n("Sequence Number (start)"),
-             i18n("Sequence number (custom start)"));
-
-    addToken("#[|start|,|step|]", i18n("Sequence Number (start, step)"),
-             i18n( "Sequence number (custom start + step)"));
+    addToken("#",                 i18n("Sequence number"));
+    addToken("#[|start|]",        i18n("Sequence number (custom start)"));
+    addToken("#[|start|,|step|]", i18n("Sequence number (custom start + step)"));
 
     QRegExp reg("(#+)(\\[\\s*(\\d+)\\s*,?\\s*(\\d+)?\\s*\\])?");
     setRegExp(reg);

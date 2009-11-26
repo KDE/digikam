@@ -41,11 +41,10 @@ class Token : public QObject
 
 public:
 
-    Token(const QString& id, const QString& alias, const QString& description);
+    Token(const QString& id, const QString& description);
     ~Token();
 
     QString  id()          { return m_id; };
-    QString  alias()       { return m_alias; };
     QString  description() { return m_description; };
     QAction* action()      { return m_action; };
 
@@ -60,7 +59,6 @@ private Q_SLOTS:
 private:
 
     QString  m_id;
-    QString  m_alias;
     QString  m_description;
     QAction* m_action;
 };
