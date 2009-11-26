@@ -179,8 +179,6 @@ DateOption::DateOption()
                    i18n("Add date and time information"),
                    SmallIcon("view-pim-calendar"))
 {
-    setUseTokenMenu(false);
-
     addTokenDescription("[date]", i18n("Date && Time"),
              i18n("Date and time (standard format)"));
 

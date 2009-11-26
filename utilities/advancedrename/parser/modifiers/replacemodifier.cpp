@@ -85,8 +85,6 @@ ReplaceModifier::ReplaceModifier()
                : Modifier(i18nc("Replace text", "Replace..."), i18n("Replace text in a renaming option"),
                           SmallIcon("document-edit"))
 {
-    setUseTokenMenu(false);
-
     addTokenDescription(QString("{r:\"|old|\", \"|new|\"}"),  i18nc("Replace text", "Replace"),
                                                               i18n("Replace text"));
 

@@ -115,8 +115,8 @@ public:
     QAction* registerMenu(QMenu* parent);
 
     /**
-     * If multiple tokens have been assigned to a parser, a menu will be created.
-     * If you do not want a menu for every defined token, set this method to 'false' and
+     * If multiple tokens have been assigned to a parseobject, a menu will be created.
+     * If you want to display a menu for every defined token, set this method to 'true' and
      * re-implement the @see slotTokenTriggered method.
      * @param value boolean parameter to set token menu usage
      */

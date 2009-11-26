@@ -89,8 +89,6 @@ SequenceNumberOption::SequenceNumberOption()
                     : Option(i18nc("Sequence Number", "Number..."), i18n("Add a sequence number"),
                                    SmallIcon("accessories-calculator"))
 {
-    setUseTokenMenu(false);
-
     addTokenDescription("#", i18n("Sequence Number"),
              i18n("Sequence number"));
 

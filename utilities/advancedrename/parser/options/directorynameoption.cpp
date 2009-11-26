@@ -39,8 +39,6 @@ namespace Digikam
 DirectoryNameOption::DirectoryNameOption()
                    : Option(i18n("Directory"), i18n("Add the directory name"), SmallIcon("folder"))
 {
-    setUseTokenMenu(false);
-
     addTokenDescription("[dir]", i18nc("Directory name", "Current"),
             i18n("Directory name"));
 

@@ -96,8 +96,6 @@ RangeModifier::RangeModifier()
              : Modifier(i18n("Range..."), i18n("Add only a specific range of a renaming option"),
                         SmallIcon("measure"))
 {
-    setUseTokenMenu(false);
-
     addTokenDescription(QString("{|from| - |to|}"), i18n("Range"),
              i18n("Extract a specific range (if omitted, '|to|' = end of string)"));
 

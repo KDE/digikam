@@ -38,6 +38,8 @@ namespace Digikam
 FilePropertiesOption::FilePropertiesOption()
                     : Option(i18n("File"), i18n("Add file properties"), SmallIcon("folder-image"))
 {
+    setUseTokenMenu(true);
+
     addTokenDescription("[file]", i18nc("image filename", "Name"),
              i18n("Filename"));
 

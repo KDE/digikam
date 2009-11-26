@@ -46,7 +46,7 @@ public:
     ParseObjectPriv() :
         buttonRegistered(false),
         menuRegistered(false),
-        useTokenMenu(true)
+        useTokenMenu(false)
     {}
 
     bool         buttonRegistered;
