@@ -177,7 +177,7 @@ SearchTabHeader::SearchTabHeader(QWidget *parent)
     mainLayout->addWidget(d->newSearchWidget);
 
     // lower part
-    d->lowerArea = new QStackedLayout(this);
+    d->lowerArea = new QStackedLayout;
     mainLayout->addLayout(d->lowerArea);
 
     d->saveAsWidget       = new QGroupBox(this);
@@ -192,7 +192,7 @@ SearchTabHeader::SearchTabHeader(QWidget *parent)
     // upper part
 
     d->newSearchWidget->setTitle(i18n("New Search"));
-    QGridLayout *grid1   = new QGridLayout(this);
+    QGridLayout *grid1   = new QGridLayout;
     QLabel *searchLabel  = new QLabel(i18n("Search:"), this);
     d->keywordEdit       = new KeywordLineEdit(this);
     d->keywordEdit->setClearButtonShown(true);
@@ -214,7 +214,7 @@ SearchTabHeader::SearchTabHeader(QWidget *parent)
 
     d->saveAsWidget->setTitle(i18n("Save Current Search"));
 
-    QHBoxLayout *hbox1 = new QHBoxLayout(this);
+    QHBoxLayout *hbox1 = new QHBoxLayout;
     d->saveNameEdit    = new KLineEdit(this);
     d->saveNameEdit->setWhatsThis(i18n("Enter a name for the current search to save it in the "
                                        "\"Searches\" view"));
@@ -238,7 +238,7 @@ SearchTabHeader::SearchTabHeader(QWidget *parent)
     // lower part, variant 2
     d->editSimpleWidget->setTitle(i18n("Edit Stored Search"));
 
-    QVBoxLayout *vbox1       = new QVBoxLayout(this);
+    QVBoxLayout *vbox1       = new QVBoxLayout;
     d->storedKeywordEditName = new KSqueezedTextLabel(this);
     d->storedKeywordEditName->setTextElideMode(Qt::ElideRight);
     d->storedKeywordEdit     = new KLineEdit(this);
@@ -255,7 +255,7 @@ SearchTabHeader::SearchTabHeader(QWidget *parent)
     // lower part, variant 3
     d->editAdvancedWidget->setTitle(i18n("Edit Stored Search"));
 
-    QVBoxLayout *vbox2 = new QVBoxLayout(this);
+    QVBoxLayout *vbox2 = new QVBoxLayout;
 
     d->storedAdvancedEditName = new KSqueezedTextLabel(this);
     d->storedAdvancedEditName->setTextElideMode(Qt::ElideRight);
