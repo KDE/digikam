@@ -44,14 +44,16 @@ public:
 
 private:
 
+    // common methods
     QString markOption(const QString& str);
-    QString createHeader(const QString& str);
+    QString tableStart();
+    QString tableEnd();
 
-    template <class T>
-    QString createEntries(const QList<T*> &data);
 
-    template <class T>
-    QString createSection(const QString& sectionName, const QList<T*> &data);
+    // parse object related methods
+    template <class T> QString createEntries(const QList<T*> &data);
+    template <class T> QString createSection(const QString& sectionName, const QList<T*> &data);
+                       QString createHeader(const QString& str);
 
 private:
 

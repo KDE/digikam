@@ -60,17 +60,27 @@ QString TooltipCreator::tooltip()
     }
 
     QString tooltip;
-    tooltip += QString("<qt><table cellspacing=\"0\" cellpadding=\"0\" border=\"0\">");
 
+    tooltip += tableStart();
     tooltip += createSection(i18n("Renaming Options"), parser->options());
     tooltip += createSection(i18n("Modifiers"),        parser->modifiers());
+    tooltip += tableEnd();
 
-    tooltip += QString("</table></qt>");
     tooltip += i18n("<p><i>Modifiers can be applied to every renaming option. <br/>"
                     "It is possible to assign multiple modifiers to an option, "
                     "they are applied in the order you assign them.</i></p>");
 
     return tooltip;
+}
+
+QString TooltipCreator::tableStart()
+{
+    return QString("<qt><table cellspacing=\"0\" cellpadding=\"0\" border=\"0\">");
+}
+
+QString TooltipCreator::tableEnd()
+{
+    return QString("</table></qt>");
 }
 
 QString TooltipCreator::markOption(const QString& str)
