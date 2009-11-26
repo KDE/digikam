@@ -22,7 +22,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 011 ==> 116061 : Possibility to blur chroma without touching luma.
 012 ==> 215645 : File save as in image editor crashes digiKam.
 013 ==> 212967 : Click on photo in geolocation view should open the photo.
-014 ==> 
+014 ==> 215733 : After move to new disk: all Album-categories and Album-preview missing.
+015 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta6 - Release date: 2009-11-08
