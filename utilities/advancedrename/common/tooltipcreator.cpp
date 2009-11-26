@@ -63,7 +63,7 @@ QString TooltipCreator::tooltip()
     tooltip += QString("<qt><table cellspacing=\"0\" cellpadding=\"0\" border=\"0\">");
 
     tooltip += createSection(i18n("Renaming Options"), parser->options());
-    tooltip += createSection(i18n("Modifiers"), parser->modifiers());
+    tooltip += createSection(i18n("Modifiers"),        parser->modifiers());
 
     tooltip += QString("</table></qt>");
     tooltip += i18n("<p><i>Modifiers can be applied to every renaming option. <br/>"
@@ -81,7 +81,7 @@ QString TooltipCreator::markOption(const QString& str)
     optionsRegExp.setMinimal(true);
 
     tmp.replace(optionsRegExp, QString("<i><font color=\"%1\">\\1</font></i>")
-                               .arg(ThemeEngine::instance()->textSpecialRegColor().name()));
+                                       .arg(ThemeEngine::instance()->textSpecialRegColor().name()));
     return tmp;
 }
 
