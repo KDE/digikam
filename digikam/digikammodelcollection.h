@@ -32,6 +32,7 @@ public:
 
     AlbumModel *getAlbumModel() const;
     TagModel *getTagModel() const;
+    TagModel *getTagFilterModel() const;
     SearchModel *getTimlineSearchModel() const;
     SearchModel *getNormalSearchModel() const;
     SearchModel *getFuzzySearchModel() const;

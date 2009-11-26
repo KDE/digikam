@@ -15,6 +15,7 @@ class DigikamModelCollectionPriv
 public:
     AlbumModel *albumModel;
     TagModel *tagModel;
+    TagModel *tagFilterModel;
     SearchModel *timelineSearchModel;
     SearchModel *normalSearchModel;
     SearchModel *fuzzySearchModel;
@@ -28,6 +29,9 @@ DigikamModelCollection::DigikamModelCollection() :
     d->albumModel = new AlbumModel(AlbumModel::IncludeRootAlbum);
 
     d->tagModel = new TagModel();
+
+    d->tagFilterModel = new TagModel();
+    d->tagFilterModel->setCheckable(true);
 
     d->timelineSearchModel = new SearchModel();
     d->timelineSearchModel->setSearchType(DatabaseSearch::TimeLineSearch);
@@ -47,6 +51,7 @@ DigikamModelCollection::~DigikamModelCollection()
 {
     delete d->timelineSearchModel;
     delete d->tagModel;
+    delete d->tagFilterModel;
     delete d->albumModel;
     delete d->normalSearchModel;
     delete d->fuzzySearchModel;
@@ -63,6 +68,11 @@ AlbumModel *DigikamModelCollection::getAlbumModel() const
 TagModel *DigikamModelCollection::getTagModel() const
 {
     return d->tagModel;
+}
+
+TagModel *DigikamModelCollection::getTagFilterModel() const
+{
+    return d->tagFilterModel;
 }
 
 SearchModel *DigikamModelCollection::getTimlineSearchModel() const

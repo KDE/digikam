@@ -83,9 +83,11 @@ public:
         configSuffixSortOrder("SortOrder")
     {
         expandOnSingleClick = true;
+        selectAlbumOnClick = false;
     }
 
     bool expandOnSingleClick;
+    bool selectAlbumOnClick;
 
     QMap<int, State> statesByAlbumId;
 
@@ -137,9 +139,14 @@ AlbumFilterModel *AbstractAlbumTreeView::albumFilterModel() const
     return m_albumFilterModel;
 }
 
-void AbstractAlbumTreeView::setSelectOnSingleClick(bool doThat)
+void AbstractAlbumTreeView::setExpandOnSingleClick(bool doThat)
 {
     d->expandOnSingleClick = doThat;
+}
+
+void AbstractAlbumTreeView::setSelectAlbumOnClick(bool selectOnClick)
+{
+    d->selectAlbumOnClick = selectOnClick;
 }
 
 QModelIndex AbstractAlbumTreeView::indexVisuallyAt(const QPoint& p)
@@ -235,6 +242,12 @@ void AbstractAlbumTreeView::mousePressEvent(QMouseEvent *e)
             bool expanded = isExpanded(index);
             if (index == currentIndex() || !expanded)
                 setExpanded(index, !expanded);
+
+            if (d->selectAlbumOnClick)
+            {
+                AlbumManager::instance()->setCurrentAlbum(m_albumModel->albumForIndex(
+                                m_albumFilterModel->mapToSource(index)));
+            }
         }
     }
     else if (m_checkOnMiddleClick && e->button() == Qt::MidButton)
@@ -605,10 +618,13 @@ PAlbum *AlbumTreeView::albumForIndex(const QModelIndex &index) const
                     m_albumFilterModel->mapToSource(index)));
 }
 
-TagTreeView::TagTreeView(TagModel *model, QWidget *parent)
+TagTreeView::TagTreeView(TagModel *model, TagModificationHelper *tagModificationHelper, QWidget *parent)
     : AbstractCheckableAlbumTreeView(model, parent)
 {
     albumModel()->setDragDropHandler(new TagDragDropHandler(albumModel()));
+    connect(albumModel()->dragDropHandler(), SIGNAL(assignTags(int, const QList<int>&)),
+            tagModificationHelper, SLOT(slotAssignTags(int, const QList<int>&)),
+            Qt::QueuedConnection);
 
     connect(AlbumManager::instance(), SIGNAL(signalTAlbumsDirty(const QMap<int, int>&)),
              m_albumModel, SLOT(setCountMap(const QMap<int, int>&)));

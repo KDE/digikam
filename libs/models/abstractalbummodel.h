@@ -307,7 +307,21 @@ public:
     QList<Album *> checkedAlbums() const;
 
     /// Resets the checked state of all albums to Qt::Unchecked
-    void resetCheckedAlbums();
+    void resetAllCheckedAlbums();
+    /// Resets the checked state of all albums under the given parent
+    void resetCheckedAlbums(QModelIndex parent = QModelIndex());
+    /// Resets the checked state of all parents of the child including it.
+    void resetCheckedParentAlbums(QModelIndex &child);
+    /// Checks all albums beneath the given parent
+    void checkAllAlbums(QModelIndex parent = QModelIndex());
+    // Checks all parent albums starting at the child, including it.
+    void checkAllParentAlbums(QModelIndex &child);
+    /// Inverts the checked state of all albums under the given parent.
+    void invertCheckedAlbums(QModelIndex parent = QModelIndex());
+    /// Sets the checked state recursively for all children of and the given album.
+    void setCheckStateForChildren(Album *album, Qt::CheckState state);
+    /// Sets the checked state recursively for all parents of and the given album.
+    void setCheckStateForParents(Album *album, Qt::CheckState state);
 
 Q_SIGNALS:
 
@@ -319,12 +333,15 @@ protected:
 
     virtual QVariant albumData(Album *a, int role) const;
     virtual Qt::ItemFlags flags(const QModelIndex& index) const;
-    virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
+    virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
 
     virtual void albumCleared(Album *album);
     virtual void allAlbumsCleared();
 
 private:
+
+    void setDataForParents(QModelIndex &child, const QVariant& value, int role = Qt::EditRole);
+    void setDataForChildren(QModelIndex &parent, const QVariant& value, int role = Qt::EditRole);
 
     Qt::ItemFlags                 m_extraFlags;
     QHash<Album*, Qt::CheckState> m_checkedAlbums;

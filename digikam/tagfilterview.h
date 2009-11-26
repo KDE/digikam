@@ -9,6 +9,7 @@
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009 by Johannes Wienke <languitar at semipol dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -26,32 +27,17 @@
 #ifndef TAGFILTERVIEW_H
 #define TAGFILTERVIEW_H
 
-// Qt includes
-
-#include <QPixmap>
-#include <QDropEvent>
-#include <QMouseEvent>
-
 // Local includes
-
-#include "searchtextbar.h"
 #include "imagefiltersettings.h"
-#include "folderview.h"
-
-class QDrag;
+#include "tagfolderview.h"
 
 namespace Digikam
 {
 
-class Album;
-class TAlbum;
-class TagFilterViewItem;
-class TagFilterViewPrivate;
-
-class TagFilterView : public FolderView
+class TagFilterViewNewPriv;
+class TagFilterViewNew : public TagFolderViewNew
 {
     Q_OBJECT
-
 public:
 
     enum ToggleAutoTags
@@ -68,81 +54,56 @@ public:
         OnRestoreTagFilters
     };
 
-public:
+    TagFilterViewNew(QWidget *parent, TagModel *tagModel,
+                     TagModificationHelper *tagModificationHelper);
+    virtual ~TagFilterViewNew();
 
-    TagFilterView(QWidget* parent);
-    ~TagFilterView();
-
-    void stateChanged(TagFilterViewItem*);
-
-    void refresh();
+    virtual void loadViewState(KConfigGroup &group, QString prefix = QString());
+    virtual void saveViewState(KConfigGroup &group, QString prefix = QString());
 
 Q_SIGNALS:
 
-    void signalProgressBarMode(int, const QString&);
-    void signalProgressValue(int);
-    void signalTextTagFilterMatch(bool);
-
-    void tagFilterChanged(const QList<int>& tags, ImageFilterSettings::MatchingCondition matchingCond,
+    /**
+     * Emitted if the selected filter has changed.
+     *
+     * @param tags a list of selected tag ids
+     * @param matchingcondition condition to join the seleted tags
+     * @param showUnTagged if this is true, only photos without a tag shall be
+     *                     shown
+     */
+    void tagFilterChanged(const QList<int>& tags,
+                          ImageFilterSettings::MatchingCondition matchingCond,
                           bool showUnTagged);
 
 public Q_SLOTS:
 
-    void slotTextTagFilterChanged(const SearchTextSettings&);
-
-    /** Reset all active tag filters */
+    /**
+     * Resets the whole tag filter.
+     */
     void slotResetTagFilters();
-
-protected:
-
-
-    bool acceptDrop(const QDropEvent *e) const;
-    void contentsDropEvent(QDropEvent *e);
 
 private Q_SLOTS:
 
-    void slotTagAdded(Album* album);
-    void slotTagMoved(TAlbum* tag, TAlbum* newParent);
-    void slotTagRenamed(Album* album);
-    void slotTagDeleted(Album* album);
-    void slotClear();
-    void slotAlbumIconChanged(Album* album);
-    void slotTimeOut();
-    void slotContextMenu(Q3ListViewItem*, const QPoint&, int);
-    void slotABCContextMenu();
-    void slotGotThumbnailFromIcon(Album *album, const QPixmap& thumbnail);
-    void slotThumbnailLost(Album *album);
-    void slotReloadThumbnails();
-    void slotRefresh(const QMap<int, int>&);
-    void slotAssignTags(int tagId, const QList<int>& imageIDs);
-
-Q_SIGNALS: // private
-
-    void assignTags(int tagId, const QList<int>& imageIDs);
+    /**
+     * Called if the check state of a single item changes. Wraps this to an
+     * event that is more useful for filtering tags.
+     */
+    void slotCheckStateChange(Album *album, Qt::CheckState state);
 
 private:
+    virtual void addCustomContextMenuActions(ContextMenuHelper &cmh, TAlbum *tag);
+    virtual void handleCustomContextMenuAction(QAction *action, TAlbum *tag);
 
-    void triggerChange();
-    void tagNew(TagFilterViewItem* item, const QString& _title=QString(),
-                const QString& _icon=QString());
-    void tagEdit(TagFilterViewItem* item);
-    void tagDelete(TagFilterViewItem* item);
-    void setTagThumbnail(TAlbum *album);
-    void toggleChildTags(TagFilterViewItem* tItem, bool b);
-    void toggleParentTags(TagFilterViewItem* tItem, bool b);
-    QDrag* makeDragObject();
-
-    void loadViewState();
-    void saveViewState();
-
-    void saveTagFilters();
-    void loadTagFilters();
+    /**
+     * Notifies that the filter changed.
+     */
+    void filterChanged();
 
 private:
+    TagFilterViewNewPriv *d;
 
-    TagFilterViewPrivate* const d;
 };
 
-}  // namespace Digikam
+}
 
 #endif /* TAGFILTERVIEW_H */

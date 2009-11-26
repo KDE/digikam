@@ -133,6 +133,16 @@ void ContextMenuHelper::addAction(QAction* action, bool addDisabled)
         d->parent->addAction(action);
 }
 
+void ContextMenuHelper::addSubMenu(KMenu *subMenu)
+{
+    d->parent->addMenu(subMenu);
+}
+
+void ContextMenuHelper::addSeparator()
+{
+    d->parent->addSeparator();
+}
+
 void ContextMenuHelper::addAction(QAction* action, QObject* recv, const char* slot,
                                   bool addDisabled)
 {

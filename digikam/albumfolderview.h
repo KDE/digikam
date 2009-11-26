@@ -89,9 +89,6 @@ private:
      */
     bool viewportEvent(QEvent *event);
 
-private Q_SLOTS:
-    void slotAlbumSelected(const QModelIndex &index);
-
 private:
     AlbumFolderViewNewPriv *d;
 

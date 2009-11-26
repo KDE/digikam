@@ -47,32 +47,49 @@ namespace Digikam
 class TagFolderViewNewPriv
 {
 public:
+    TagFolderViewNewPriv() :
+        model(0),
+        tagModificationHelper(0),
+        resetIconAction(0),
+        findDuplAction(0),
+        selectOnContextMenu(true)
+    {
+
+    }
+
     TagModel *model;
     TagModificationHelper *tagModificationHelper;
+
+    QAction *resetIconAction;
+    QAction *findDuplAction;
+
+    bool selectOnContextMenu;
 };
 
 TagFolderViewNew::TagFolderViewNew(QWidget *parent, TagModel *model,
                                    TagModificationHelper *tagModificationHelper) :
-    TagTreeView(model, parent), d(new TagFolderViewNewPriv)
+    TagTreeView(model, tagModificationHelper, parent), d(new TagFolderViewNewPriv)
 {
 
     d->model = model;
     d->tagModificationHelper = tagModificationHelper;
 
+    d->resetIconAction = new QAction(SmallIcon("view-refresh"), i18n("Reset Tag Icon"), this);
+    d->findDuplAction = new QAction(SmallIcon("tools-wizard"), i18n("Find Duplicates..."), this);
+
     setSortingEnabled(true);
-
-    connect(this, SIGNAL(clicked(const QModelIndex&)),
-            this, SLOT(slotTagSelected(const QModelIndex&)));
-
-    connect(this, SIGNAL(assignTags(int, const QList<int>&)),
-            d->tagModificationHelper, SLOT(slotAssignTags(int, const QList<int>&)),
-            Qt::QueuedConnection);
+    setSelectAlbumOnClick(true);
 
 }
 
 TagFolderViewNew::~TagFolderViewNew()
 {
     delete d;
+}
+
+void TagFolderViewNew::setSelectOnContextMenu(bool select)
+{
+    d->selectOnContextMenu = select;
 }
 
 void TagFolderViewNew::contextMenuEvent(QContextMenuEvent *event)
@@ -91,17 +108,11 @@ void TagFolderViewNew::contextMenuEvent(QContextMenuEvent *event)
     // Otherwise most of the actions in the context menu will not be enabled
     // because they are provided by the global action collection. That in turn
     // is controlled by the selected album
-    slotSelectAlbum(tag);
-
-    // temporary actions --------------------------------------
-
-    QAction *resetIconAction = new QAction(SmallIcon("view-refresh"), i18n("Reset Tag Icon"), this);
-    QAction *findDuplAction  = new QAction(SmallIcon("tools-wizard"), i18n("Find Duplicates..."), this);
-
-    if (tag->isRoot())
+    if(d->selectOnContextMenu)
     {
-        resetIconAction->setEnabled(false);
+        slotSelectAlbum(tag);
     }
+
     // --------------------------------------------------------
 
     KMenu popmenu(this);
@@ -110,8 +121,7 @@ void TagFolderViewNew::contextMenuEvent(QContextMenuEvent *event)
 
     cmhelper.addAction("tag_new");
     cmhelper.addCreateTagFromAddressbookMenu();
-    cmhelper.addAction(resetIconAction);
-    cmhelper.addAction(findDuplAction);
+    addCustomContextMenuActions(cmhelper, tag);
     popmenu.addSeparator();
     // --------------------------------------------------------
     cmhelper.addAction("tag_delete");
@@ -121,28 +131,53 @@ void TagFolderViewNew::contextMenuEvent(QContextMenuEvent *event)
 
     // special action handling --------------------------------
 
-    // TODO update, what is this?
-    //connect(&cmhelper, SIGNAL(signalAddNewTagFromABCMenu(const QString&)),
-    //        this, SLOT(slotTagNewFromABCMenu(const QString&)));
+    connect(&cmhelper, SIGNAL(signalAddNewTagFromABCMenu(const QString&)),
+            this, SLOT(slotTagNewFromABCMenu(const QString&)));
 
     QAction* choice = cmhelper.exec(QCursor::pos());
-    if (choice)
-    {
-        if (choice == resetIconAction)
-        {
-            QString errMsg;
-            AlbumManager::instance()->updateTAlbumIcon(tag, "tag", 0, errMsg);
-        }
-        else if (choice == findDuplAction)
-        {
-            emit signalFindDuplicatesInAlbum(tag);
-        }
-    }
+    handleCustomContextMenuAction(choice, tag);
+
 }
 
-void TagFolderViewNew::slotTagSelected(const QModelIndex &index)
+void TagFolderViewNew::addCustomContextMenuActions(ContextMenuHelper &cmh, TAlbum *tag)
 {
-    AlbumManager::instance()->setCurrentAlbum(albumForIndex(index));
+    cmh.addAction(d->resetIconAction);
+    cmh.addAction(d->findDuplAction);
+
+    d->resetIconAction->setEnabled(!tag->isRoot());
+}
+
+void TagFolderViewNew::slotTagNewFromABCMenu(const QString &personName)
+{
+
+    TAlbum *parent = currentAlbum();
+    if (!parent)
+    {
+        return;
+    }
+
+    d->tagModificationHelper->slotTagNew(parent, personName, "tag-people");
+
+}
+
+void TagFolderViewNew::handleCustomContextMenuAction(QAction *action, TAlbum *tag)
+{
+
+    if (!tag || !action)
+    {
+        return;
+    }
+
+    if (action == d->resetIconAction)
+    {
+        QString errMsg;
+        AlbumManager::instance()->updateTAlbumIcon(tag, "tag", 0, errMsg);
+    }
+    else if (action == d->findDuplAction)
+    {
+        emit signalFindDuplicatesInAlbum(tag);
+    }
+
 }
 
 }

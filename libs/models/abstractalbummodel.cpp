@@ -716,7 +716,7 @@ QList<Album *> AbstractCheckableAlbumModel::checkedAlbums() const
     return m_checkedAlbums.keys(Qt::Checked);
 }
 
-void AbstractCheckableAlbumModel::resetCheckedAlbums()
+void AbstractCheckableAlbumModel::resetAllCheckedAlbums()
 {
     QList<Album *> oldChecked = m_checkedAlbums.keys();
     m_checkedAlbums.clear();
@@ -726,6 +726,77 @@ void AbstractCheckableAlbumModel::resetCheckedAlbums()
         emit dataChanged(index, index);
         emit checkStateChanged(album, Qt::Unchecked);
     }
+}
+
+void AbstractCheckableAlbumModel::setDataForChildren(QModelIndex &parent, const QVariant& value, int role)
+{
+    setData(parent, value, role);
+    for (int row = 0; row < rowCount(parent); ++row)
+    {
+        QModelIndex childIndex = index(row, 0, parent);
+        setDataForChildren(childIndex, value, role);
+    }
+}
+
+void AbstractCheckableAlbumModel::resetCheckedAlbums(QModelIndex parent)
+{
+
+    if (parent == rootAlbumIndex())
+    {
+        resetAllCheckedAlbums();
+        return;
+    }
+
+    setDataForChildren(parent, Qt::Unchecked, Qt::CheckStateRole);
+}
+
+void AbstractCheckableAlbumModel::setDataForParents(QModelIndex &child, const QVariant& value, int role)
+{
+    QModelIndex current = child;
+    while (current.isValid()) {
+        setData(current, value, role);
+        current = parent(current);
+    }
+}
+
+void AbstractCheckableAlbumModel::resetCheckedParentAlbums(QModelIndex &child)
+{
+    setDataForParents(child, Qt::Unchecked, Qt::CheckStateRole);
+}
+
+void AbstractCheckableAlbumModel::checkAllParentAlbums(QModelIndex &child)
+{
+    setDataForParents(child, Qt::Checked, Qt::CheckStateRole);
+}
+
+void AbstractCheckableAlbumModel::checkAllAlbums(QModelIndex parent)
+{
+    setDataForChildren(parent, Qt::Checked, Qt::CheckStateRole);
+}
+
+void AbstractCheckableAlbumModel::invertCheckedAlbums(QModelIndex parent)
+{
+    Album *album = albumForIndex(parent);
+    if (album)
+    {
+        toggleChecked(album);
+    }
+    for (int row = 0; row < rowCount(parent); ++row)
+    {
+        invertCheckedAlbums(index(row, 0, parent));
+    }
+}
+
+void AbstractCheckableAlbumModel::setCheckStateForChildren(Album *album, Qt::CheckState state)
+{
+    QModelIndex parent = indexForAlbum(album);
+    setDataForChildren(parent, state, Qt::CheckStateRole);
+}
+
+void AbstractCheckableAlbumModel::setCheckStateForParents(Album *album, Qt::CheckState state)
+{
+    QModelIndex parent = indexForAlbum(album);
+    setDataForParents(parent, state, Qt::CheckStateRole);
 }
 
 QVariant AbstractCheckableAlbumModel::albumData(Album *a, int role) const

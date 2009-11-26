@@ -115,7 +115,7 @@ public:
         revertBtn                  = 0;
         recentTagsMapper           = 0;
         newTagEdit                 = 0;
-        toggleAutoTags             = TagFilterView::NoToggleAuto;
+        toggleAutoTags             = TagFilterViewNew::NoToggleAuto;
         lastSelectedWidget         = 0;
         templateSelector           = 0;
         templateViewer             = 0;
@@ -157,7 +157,7 @@ public:
 
     RatingWidget                  *ratingWidget;
 
-    TagFilterView::ToggleAutoTags  toggleAutoTags;
+    TagFilterViewNew::ToggleAutoTags  toggleAutoTags;
 
     MetadataHub                    hub;
 };
@@ -400,8 +400,8 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
 
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(QString("Tag List View"));
-    d->toggleAutoTags         = (TagFilterView::ToggleAutoTags)(group.readEntry("Toggle Auto Tags",
-                                                               (int)TagFilterView::NoToggleAuto));
+    d->toggleAutoTags         = (TagFilterViewNew::ToggleAutoTags)(group.readEntry("Toggle Auto Tags",
+                                                                  (int)TagFilterViewNew::NoToggleAuto));
     KConfigGroup group2       = config->group("Image Properties SideBar");
     d->tabWidget->setCurrentIndex(group2.readEntry("ImageDescEditTab Tab",
                                   (int)ImageDescEditTabPriv::DESCRIPTIONS));
@@ -427,7 +427,8 @@ ImageDescEditTab::~ImageDescEditTab()
 
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(QString("Tag List View"));
-    group.writeEntry("Toggle Auto Tags", (int)(d->toggleAutoTags));
+    // TODO update
+    //group.writeEntry("Toggle Auto Tags", (int)(d->toggleAutoTags));
     group.sync();
     KConfigGroup group2       = config->group("Image Properties SideBar");
     group2.writeEntry("ImageDescEditTab Tab", d->tabWidget->currentIndex());
@@ -779,22 +780,22 @@ void ImageDescEditTab::populateTags()
 
 void ImageDescEditTab::slotItemStateChanged(TAlbumCheckListItem *item)
 {
-    TagFilterView::ToggleAutoTags oldAutoTags = d->toggleAutoTags;
+    TagFilterViewNew::ToggleAutoTags oldAutoTags = d->toggleAutoTags;
 
     switch(d->toggleAutoTags)
     {
-        case TagFilterView::Children:
-            d->toggleAutoTags = TagFilterView::NoToggleAuto;
+        case TagFilterViewNew::Children:
+            d->toggleAutoTags = TagFilterViewNew::NoToggleAuto;
             toggleChildTags(item->album(), item->isOn());
             d->toggleAutoTags = oldAutoTags;
             break;
-        case TagFilterView::Parents:
-            d->toggleAutoTags = TagFilterView::NoToggleAuto;
+        case TagFilterViewNew::Parents:
+            d->toggleAutoTags = TagFilterViewNew::NoToggleAuto;
             toggleParentTags(item->album(), item->isOn());
             d->toggleAutoTags = oldAutoTags;
             break;
-        case TagFilterView::ChildrenAndParents:
-            d->toggleAutoTags = TagFilterView::NoToggleAuto;
+        case TagFilterViewNew::ChildrenAndParents:
+            d->toggleAutoTags = TagFilterViewNew::NoToggleAuto;
             toggleChildTags(item->album(), item->isOn());
             toggleParentTags(item->album(), item->isOn());
             d->toggleAutoTags = oldAutoTags;
@@ -1005,10 +1006,10 @@ void ImageDescEditTab::slotRightButtonClicked(Q3ListViewItem *item, const QPoint
     QAction *toggleParentsAction  = toggleAutoAction->addAction(i18n("Parents"));
     QAction *toggleBothAction     = toggleAutoAction->addAction(i18n("Both"));
 
-    toggleNoneAction->setChecked(d->toggleAutoTags == TagFilterView::NoToggleAuto);
-    toggleChildrenAction->setChecked(d->toggleAutoTags == TagFilterView::Children);
-    toggleParentsAction->setChecked(d->toggleAutoTags == TagFilterView::Parents);
-    toggleBothAction->setChecked(d->toggleAutoTags == TagFilterView::ChildrenAndParents);
+    toggleNoneAction->setChecked(d->toggleAutoTags == TagFilterViewNew::NoToggleAuto);
+    toggleChildrenAction->setChecked(d->toggleAutoTags == TagFilterViewNew::Children);
+    toggleParentsAction->setChecked(d->toggleAutoTags == TagFilterViewNew::Parents);
+    toggleBothAction->setChecked(d->toggleAutoTags == TagFilterViewNew::ChildrenAndParents);
 
     popmenu.addAction(toggleAutoAction);
 
@@ -1021,7 +1022,7 @@ void ImageDescEditTab::slotRightButtonClicked(Q3ListViewItem *item, const QPoint
                                        i18nc("Edit Tag Properties", "Properties..."));
     }
 
-    TagFilterView::ToggleAutoTags oldAutoTags = d->toggleAutoTags;
+    TagFilterViewNew::ToggleAutoTags oldAutoTags = d->toggleAutoTags;
 
     QAction *choice = popmenu.exec((QCursor::pos()));
 
@@ -1048,7 +1049,7 @@ void ImageDescEditTab::slotRightButtonClicked(Q3ListViewItem *item, const QPoint
         }
         else if (choice == selectAllTagsAction)     // Select All Tags.
         {
-            d->toggleAutoTags = TagFilterView::NoToggleAuto;
+            d->toggleAutoTags = TagFilterViewNew::NoToggleAuto;
             Q3ListViewItemIterator it(d->tagsView, Q3ListViewItemIterator::NotChecked);
             while (it.current())
             {
@@ -1061,7 +1062,7 @@ void ImageDescEditTab::slotRightButtonClicked(Q3ListViewItem *item, const QPoint
         }
         else if (choice == deselectAllTagsAction)    // Deselect All Tags.
         {
-            d->toggleAutoTags = TagFilterView::NoToggleAuto;
+            d->toggleAutoTags = TagFilterViewNew::NoToggleAuto;
             Q3ListViewItemIterator it(d->tagsView, Q3ListViewItemIterator::Checked);
             while (it.current())
             {
@@ -1074,7 +1075,7 @@ void ImageDescEditTab::slotRightButtonClicked(Q3ListViewItem *item, const QPoint
         }
         else if (choice == invertAction)             // Invert All Tags Selection.
         {
-            d->toggleAutoTags = TagFilterView::NoToggleAuto;
+            d->toggleAutoTags = TagFilterViewNew::NoToggleAuto;
             Q3ListViewItemIterator it(d->tagsView);
             while (it.current())
             {
@@ -1087,7 +1088,7 @@ void ImageDescEditTab::slotRightButtonClicked(Q3ListViewItem *item, const QPoint
         }
         else if (choice == selectChildrenAction)     // Select Child Tags.
         {
-            d->toggleAutoTags = TagFilterView::NoToggleAuto;
+            d->toggleAutoTags = TagFilterViewNew::NoToggleAuto;
             toggleChildTags(album, true);
             TAlbumCheckListItem *item = (TAlbumCheckListItem*)album->extraData(d->tagsView);
             item->setOn(true);
@@ -1095,7 +1096,7 @@ void ImageDescEditTab::slotRightButtonClicked(Q3ListViewItem *item, const QPoint
         }
         else if (choice == deselectChildrenAction)   // Deselect Child Tags.
         {
-            d->toggleAutoTags = TagFilterView::NoToggleAuto;
+            d->toggleAutoTags = TagFilterViewNew::NoToggleAuto;
             toggleChildTags(album, false);
             TAlbumCheckListItem *item = (TAlbumCheckListItem*)album->extraData(d->tagsView);
             item->setOn(false);
@@ -1103,7 +1104,7 @@ void ImageDescEditTab::slotRightButtonClicked(Q3ListViewItem *item, const QPoint
         }
         else if (choice == selectParentsAction)     // Select Parent Tags.
         {
-            d->toggleAutoTags = TagFilterView::NoToggleAuto;
+            d->toggleAutoTags = TagFilterViewNew::NoToggleAuto;
             toggleParentTags(album, true);
             TAlbumCheckListItem *item = (TAlbumCheckListItem*)album->extraData(d->tagsView);
             item->setOn(true);
@@ -1111,7 +1112,7 @@ void ImageDescEditTab::slotRightButtonClicked(Q3ListViewItem *item, const QPoint
         }
         else if (choice == deselectParentsAction)   // Deselect Parent Tags.
         {
-            d->toggleAutoTags = TagFilterView::NoToggleAuto;
+            d->toggleAutoTags = TagFilterViewNew::NoToggleAuto;
             toggleParentTags(album, false);
             TAlbumCheckListItem *item = (TAlbumCheckListItem*)album->extraData(d->tagsView);
             item->setOn(false);
@@ -1119,19 +1120,19 @@ void ImageDescEditTab::slotRightButtonClicked(Q3ListViewItem *item, const QPoint
         }
         else if (choice == toggleNoneAction)        // No toggle auto tags.
         {
-            d->toggleAutoTags = TagFilterView::NoToggleAuto;
+            d->toggleAutoTags = TagFilterViewNew::NoToggleAuto;
         }
         else if (choice == toggleChildrenAction)    // Toggle auto Children tags.
         {
-            d->toggleAutoTags = TagFilterView::Children;
+            d->toggleAutoTags = TagFilterViewNew::Children;
         }
         else if (choice == toggleParentsAction)     // Toggle auto Parents tags.
         {
-            d->toggleAutoTags = TagFilterView::Parents;
+            d->toggleAutoTags = TagFilterViewNew::Parents;
         }
         else if (choice == toggleBothAction)        // Toggle auto Children and Parents tags.
         {
-            d->toggleAutoTags = TagFilterView::ChildrenAndParents;
+            d->toggleAutoTags = TagFilterViewNew::ChildrenAndParents;
         }
         else                                        // ABC menu
         {

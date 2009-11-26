@@ -67,7 +67,7 @@ AlbumFolderViewNew::AlbumFolderViewNew(QWidget *parent, AlbumModel *model,
     d->albumModificationHelper = albumModificationHelper;
 
     setSortingEnabled(true);
-    setDragEnabled(true);
+    setSelectAlbumOnClick(true);
 
     // connections
     connect(this, SIGNAL(clicked(const QModelIndex&)),
@@ -210,11 +210,6 @@ bool AlbumFolderViewNew::viewportEvent(QEvent *event)
 
     return true;
 
-}
-
-void AlbumFolderViewNew::slotAlbumSelected(const QModelIndex &index)
-{
-    AlbumManager::instance()->setCurrentAlbum(albumForIndex(index));
 }
 
 }

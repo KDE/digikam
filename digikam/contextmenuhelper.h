@@ -44,6 +44,7 @@ class QString;
 
 class KAction;
 class KActionCollection;
+class KMenu;
 
 namespace Digikam
 {
@@ -128,6 +129,10 @@ public:
      * @param addDisabled if set, disabled actions are added to the menu
      */
     void addAction(QAction* action, bool addDisabled = false);
+
+    void addSubMenu(KMenu *subMenu);
+
+    void addSeparator();
 
     /**
      * Add a temporary action and assign it to a custom slot.

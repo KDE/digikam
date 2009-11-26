@@ -35,6 +35,8 @@
 namespace Digikam
 {
 
+class ContextMenuHelper;
+
 class TagFolderViewNewPriv;
 class TagFolderViewNew: public TagTreeView
 {
@@ -44,11 +46,49 @@ public:
                      TagModificationHelper *tagModificationHelper);
     virtual ~TagFolderViewNew();
 
+    /**
+     * Sets whether to select the album under the mouse cursor on a context menu
+     * request (so that the album is shown using the album manager) or not
+     *
+     * Defaults to true.
+     *
+     * @param select true if a context menu request shall select the album
+     */
+    void setSelectOnContextMenu(bool select);
+
 Q_SIGNALS:
     void signalFindDuplicatesInAlbum(Album*);
 
+protected:
+
+    /**
+     * Hook method to add custom actions to the generated context menu.
+     *
+     * The default implementation adds actions to reset the tag icon and to
+     * find duplicates in a tag album. If you want to use these actions,
+     * remember to call this class' implementation of this method and
+     * the handleCustomContextMenuAction in your derived class.
+     *
+     * @param cmh helper object to create the context menu
+     * @param tag tag on which the context menu will be created. May be null if
+     *            it is requested on no tag entry
+     */
+    virtual void addCustomContextMenuActions(ContextMenuHelper &cmh, TAlbum *tag);
+
+    /**
+     * Hook method to handle the custom context menu actions that were added
+     * with addCustomContextMenuActions.
+     *
+     * @param action the action that was chosen by the user, may be null if none
+     *               of the custom actions were selected
+     * @param tag the tag on which the context menur was requested. May be null
+     *            of there was no
+     */
+    virtual void handleCustomContextMenuAction(QAction *action, TAlbum *tag);
+
 private Q_SLOTS:
-    void slotTagSelected(const QModelIndex&);
+
+    void slotTagNewFromABCMenu(const QString &personName);
 
 private:
 

@@ -137,7 +137,7 @@ public:
     Sidebar*                  leftSideBar;
     ImagePropertiesSideBarDB* rightSideBar;
 
-    TagFilterView*            tagFilterView;
+    TagFilterViewNew*            tagFilterView;
 
     QString optionAlbumViewPrefix;
 
@@ -238,9 +238,9 @@ DigikamView::DigikamView(QWidget *parent, DigikamModelCollection *modelCollectio
 
     // Tags Filter sidebar tab contents.
     d->tagFilterBox       = new KVBox(this);
-    d->tagFilterView      = new TagFilterView(d->tagFilterBox);
+    d->tagFilterView      = new TagFilterViewNew(d->tagFilterBox, d->modelCollection->getTagFilterModel(), d->tagModificationHelper);
     d->tagFilterSearchBar = new SearchTextBar(d->tagFilterBox, "DigikamViewTagFilterSearchBar");
-    d->tagFilterSearchBar->setModel(d->modelCollection->getTagModel(), AbstractAlbumModel::AlbumIdRole);
+    d->tagFilterSearchBar->setModel(d->modelCollection->getTagFilterModel(), AbstractAlbumModel::AlbumIdRole);
     d->tagFilterBox->setSpacing(KDialog::spacingHint());
     d->tagFilterBox->setMargin(0);
 
@@ -281,7 +281,6 @@ void DigikamView::applySettings()
 
 void DigikamView::refreshView()
 {
-    d->tagFilterView->refresh();
     d->rightSideBar->refreshTagsView();
 
     // TODO update, legacy code while not on mvc
@@ -403,12 +402,6 @@ void DigikamView::setupConnections()
     connect(d->rightSideBar, SIGNAL(signalProgressValue(int)),
             d->parent, SLOT(slotProgressValue(int)));
 
-    connect(d->tagFilterView, SIGNAL(signalProgressBarMode(int, const QString&)),
-            d->parent, SLOT(slotProgressBarMode(int, const QString&)));
-
-    connect(d->tagFilterView, SIGNAL(signalProgressValue(int)),
-            d->parent, SLOT(slotProgressValue(int)));
-
     connect(d->fuzzySearchSideBar, SIGNAL(signalUpdateFingerPrints()),
             d->parent, SLOT(slotRebuildFingerPrints()));
 
@@ -431,11 +424,9 @@ void DigikamView::setupConnections()
 
     // -- Filter Bars Connections ---------------------------------
 
+    // TODO update, use proper sidebar widget
     connect(d->tagFilterSearchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
-            d->tagFilterView, SLOT(slotTextTagFilterChanged(const SearchTextSettings&)));
-
-    connect(d->tagFilterView, SIGNAL(signalTextTagFilterMatch(bool)),
-            d->tagFilterSearchBar, SLOT(slotSearchResult(bool)));
+            d->tagFilterView, SLOT(setSearchTextSettings(const SearchTextSettings&)));
 
     connect(d->tagFilterView,
             SIGNAL(tagFilterChanged(const QList<int>&, ImageFilterSettings::MatchingCondition, bool)),
@@ -728,50 +719,7 @@ void DigikamView::slotAlbumDeleted(Album *album)
 
 void DigikamView::slotAlbumRenamed(Album *album)
 {
-    // display changed names
-
-    if (!album->isRoot())
-    {
-        switch (album->type())
-        {
-            case Album::TAG:
-            {
-                // TODO port to mvc
-                d->tagFilterView->setAllowAutoCollapse(false);
-                d->tagFilterView->slotTextTagFilterChanged(d->tagFilterSearchBar->searchTextSettings());
-                d->tagFilterView->setAllowAutoCollapse(true);
-                break;
-            }
-            case Album::SEARCH:
-            {
-                SAlbum* salbum = (SAlbum*)(album);
-                if (salbum->isNormalSearch() || salbum->isKeywordSearch() || salbum->isAdvancedSearch())
-                {
-                    // TODO update, port to mvc
-                    //d->searchFolderView->slotTextSearchFilterChanged(d->searchSearchBar->searchTextSettings());
-                }
-                else if (salbum->isHaarSearch())
-                {
-                    // TODO update, port to mvc
-                    //d->fuzzySearchView->folderView()->slotTextSearchFilterChanged(d->fuzzySearchView->searchBar()->searchTextSettings());
-                }
-#ifdef HAVE_MARBLEWIDGET
-                else if (salbum->isMapSearch())
-                {
-                    // TODO update, mvc
-                    //d->gpsSearchView->folderView()->slotTextSearchFilterChanged(d->gpsSearchView->searchBar()->searchTextSettings());
-                }
-#endif
-
-                break;
-            }
-            default:
-            {
-                // Nothing to do with Album::DATE
-                break;
-            }
-        }
-    }
+    Q_UNUSED(album);
 }
 
 void DigikamView::slotAlbumsCleared()

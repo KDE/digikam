@@ -35,6 +35,7 @@
 
 #include "albummodel.h"
 #include "albumfiltermodel.h"
+#include "tagmodificationhelper.h"
 
 namespace Digikam
 {
@@ -54,7 +55,15 @@ public:
     AlbumFilterModel *albumFilterModel() const;
 
     /// Enable expanding of tree items on single click on the item (default: on)
-    void setSelectOnSingleClick(bool doThat);
+    void setExpandOnSingleClick(bool doThat);
+
+    /**
+     * Sets whether to select an album on click via the album manager or not.
+     *
+     * @param selectOnClick if true, a click on an item automatically sets this
+     *                      item as the current album in the album manager
+     */
+    void setSelectAlbumOnClick(bool selectOnClick);
 
     /** This is a combination of indexAt() checked with visualRect().
      *  p must be in the viewport currently. Decoration will not be included.
@@ -184,7 +193,7 @@ class TagTreeView : public AbstractCheckableAlbumTreeView
     Q_OBJECT
 public:
 
-    TagTreeView(TagModel *model, QWidget *parent = 0);
+    TagTreeView(TagModel *model, TagModificationHelper *tagModificationHelper, QWidget *parent = 0);
     TagModel *albumModel() const;
     TAlbum *currentAlbum() const;
     TAlbum *albumForIndex(const QModelIndex &index) const;
