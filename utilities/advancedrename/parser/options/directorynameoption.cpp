@@ -39,10 +39,10 @@ namespace Digikam
 DirectoryNameOption::DirectoryNameOption()
                    : Option(i18n("Directory"), i18n("Add the directory name"), SmallIcon("folder"))
 {
-    addTokenDescription("[dir]", i18nc("Directory name", "Current"),
+    addToken("[dir]", i18nc("Directory name", "Current"),
             i18n("Directory name"));
 
-    addTokenDescription("[dir.]", i18nc("directory name", "Parent Directory Name"),
+    addToken("[dir.]", i18nc("directory name", "Parent Directory Name"),
             i18n("Directory name of the parent, additional '.' characters move up "
                  "in the directory hierarchy"));
 

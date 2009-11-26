@@ -179,13 +179,13 @@ DateOption::DateOption()
                    i18n("Add date and time information"),
                    SmallIcon("view-pim-calendar"))
 {
-    addTokenDescription("[date]", i18n("Date && Time"),
+    addToken("[date]", i18n("Date && Time"),
              i18n("Date and time (standard format)"));
 
-    addTokenDescription("[date:|key|]", i18n("Date && Time (key)"),
+    addToken("[date:|key|]", i18n("Date && Time (key)"),
              i18n("Date and time (|key| = ISO/Text/Locale)"));
 
-    addTokenDescription("[date:|format|]", i18n("Date && Time (custom format)"),
+    addToken("[date:|format|]", i18n("Date && Time (custom format)"),
              i18n("Date and time") + " (" +  dateFormatLink + ')');
 
     QRegExp reg("\\[date(:.*)?\\]");

@@ -33,7 +33,7 @@ namespace Digikam
 UpperCaseModifier::UpperCaseModifier()
                  : Modifier(i18n("Uppercase"), i18n("Convert to uppercase"))
 {
-    addTokenDescription(QString("{upper}"), i18n("Uppercase"), description());
+    addToken(QString("{upper}"), i18n("Uppercase"), description());
 
     QRegExp reg("\\{upper\\}");
     reg.setMinimal(true);
