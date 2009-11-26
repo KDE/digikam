@@ -1155,6 +1155,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/syncjob.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagdragdrop.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tageditdlg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagfiltersidebarwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagfilterview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagfolderview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagmodificationhelper.cpp

@@ -36,7 +36,6 @@
 #include <kdialog.h>
 #include <kmessagebox.h>
 #include <krun.h>
-#include <kvbox.h>
 
 // Local includes
 
@@ -60,7 +59,7 @@
 #include "sidebar.h"
 #include "slideshow.h"
 #include "statusprogressbar.h"
-#include "tagfilterview.h"
+#include "tagfiltersidebarwidget.h"
 
 namespace Digikam
 {
@@ -71,8 +70,6 @@ public:
 
     DigikamViewPriv()
     {
-        tagFilterBox          = 0;
-        tagFilterSearchBar    = 0;
         dockArea              = 0;
         splitter              = 0;
         parent                = 0;
@@ -81,7 +78,6 @@ public:
         albumHistory          = 0;
         leftSideBar           = 0;
         rightSideBar          = 0;
-        tagFilterView         = 0;
         albumWidgetStack      = 0;
         selectionTimer        = 0;
         thumbSizeTimer        = 0;
@@ -120,10 +116,6 @@ public:
     GPSSearchSideBarWidget       *gpsSearchSideBar;
 #endif
 
-    KVBox*                    tagFilterBox;
-
-    SearchTextBar*            tagFilterSearchBar;
-
     DigikamApp*               parent;
 
     DigikamImageView*         iconView;
@@ -137,7 +129,7 @@ public:
     Sidebar*                  leftSideBar;
     ImagePropertiesSideBarDB* rightSideBar;
 
-    TagFilterViewNew*            tagFilterView;
+    TagFilterSideBarWidget *tagFilterWidget;
 
     QString optionAlbumViewPrefix;
 
@@ -237,14 +229,8 @@ DigikamView::DigikamView(QWidget *parent, DigikamModelCollection *modelCollectio
     // To the right.
 
     // Tags Filter sidebar tab contents.
-    d->tagFilterBox       = new KVBox(this);
-    d->tagFilterView      = new TagFilterViewNew(d->tagFilterBox, d->modelCollection->getTagFilterModel(), d->tagModificationHelper);
-    d->tagFilterSearchBar = new SearchTextBar(d->tagFilterBox, "DigikamViewTagFilterSearchBar");
-    d->tagFilterSearchBar->setModel(d->modelCollection->getTagFilterModel(), AbstractAlbumModel::AlbumIdRole);
-    d->tagFilterBox->setSpacing(KDialog::spacingHint());
-    d->tagFilterBox->setMargin(0);
-
-    d->rightSideBar->appendTab(d->tagFilterBox, SmallIcon("tag-assigned"), i18n("Tag Filters"));
+    d->tagFilterWidget = new TagFilterSideBarWidget(d->rightSideBar, d->modelCollection->getTagFilterModel(), d->tagModificationHelper);
+    d->rightSideBar->appendTab(d->tagFilterWidget, SmallIcon("tag-assigned"), i18n("Tag Filters"));
 
     d->selectionTimer = new QTimer(this);
     d->selectionTimer->setSingleShot(true);
@@ -424,11 +410,7 @@ void DigikamView::setupConnections()
 
     // -- Filter Bars Connections ---------------------------------
 
-    // TODO update, use proper sidebar widget
-    connect(d->tagFilterSearchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
-            d->tagFilterView, SLOT(setSearchTextSettings(const SearchTextSettings&)));
-
-    connect(d->tagFilterView,
+    connect(d->tagFilterWidget,
             SIGNAL(tagFilterChanged(const QList<int>&, ImageFilterSettings::MatchingCondition, bool)),
             d->iconView->imageFilterModel(),
             SLOT(setTagFilter(const QList<int>&, ImageFilterSettings::MatchingCondition, bool)));
@@ -534,7 +516,7 @@ void DigikamView::connectIconViewFilter(AlbumIconViewFilter *filter)
             filter, SLOT(slotFilterSettingsChanged(const ImageFilterSettings&)));
 
     connect(filter, SIGNAL(resetTagFilters()),
-            d->tagFilterView, SLOT(slotResetTagFilters()));
+            d->tagFilterWidget, SLOT(slotResetTagFilters()));
 }
 
 void DigikamView::loadViewState()
