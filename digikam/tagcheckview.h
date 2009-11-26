@@ -34,8 +34,8 @@
 namespace Digikam
 {
 
-class TagFilterViewNewPriv;
-class TagFilterViewNew : public TagFolderViewNew
+class TagCheckViewPriv;
+class TagCheckView : public TagFolderViewNew
 {
     Q_OBJECT
 public:
@@ -48,39 +48,34 @@ public:
         ChildrenAndParents
     };
 
-    enum RestoreTagFilters
-    {
-        OffRestoreTagFilters = 0,
-        OnRestoreTagFilters
-    };
-
-    TagFilterViewNew(QWidget *parent, TagModel *tagModel,
+    TagCheckView(QWidget *parent, TagModel *tagModel,
                      TagModificationHelper *tagModificationHelper);
-    virtual ~TagFilterViewNew();
+    virtual ~TagCheckView();
 
     virtual void loadViewState(KConfigGroup &group, QString prefix = QString());
     virtual void saveViewState(KConfigGroup &group, QString prefix = QString());
 
+    QList<TAlbum*> getCheckedTags() const;
+
 Q_SIGNALS:
 
     /**
-     * Emitted if the selected filter has changed.
+     * Emitted if the checked tags have changed.
      *
      * @param tags a list of selected tag ids
-     * @param matchingcondition condition to join the seleted tags
-     * @param showUnTagged if this is true, only photos without a tag shall be
-     *                     shown
      */
-    void tagFilterChanged(const QList<int>& tags,
-                          ImageFilterSettings::MatchingCondition matchingCond,
-                          bool showUnTagged);
+    void checkedTagsChanged(const QList<TAlbum*> &tags);
 
 public Q_SLOTS:
 
     /**
      * Resets the whole tag filter.
      */
-    void slotResetTagFilters();
+    void slotResetCheckState();
+
+protected:
+    virtual void addCustomContextMenuActions(ContextMenuHelper &cmh, TAlbum *tag);
+    virtual void handleCustomContextMenuAction(QAction *action, TAlbum *tag);
 
 private Q_SLOTS:
 
@@ -91,16 +86,7 @@ private Q_SLOTS:
     void slotCheckStateChange(Album *album, Qt::CheckState state);
 
 private:
-    virtual void addCustomContextMenuActions(ContextMenuHelper &cmh, TAlbum *tag);
-    virtual void handleCustomContextMenuAction(QAction *action, TAlbum *tag);
-
-    /**
-     * Notifies that the filter changed.
-     */
-    void filterChanged();
-
-private:
-    TagFilterViewNewPriv *d;
+    TagCheckViewPriv *d;
 
 };
 

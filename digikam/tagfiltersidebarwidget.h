@@ -13,12 +13,46 @@
 
 // Local includes
 #include "imagefiltersettings.h"
+#include "tagcheckview.h"
 
 namespace Digikam
 {
 
 class TagModel;
 class TagModificationHelper;
+
+class TagFilterViewPriv;
+class TagFilterView : public TagCheckView
+{
+    Q_OBJECT
+public:
+
+    enum RestoreTagFilters
+    {
+        OffRestoreTagFilters = 0,
+        OnRestoreTagFilters
+    };
+
+    TagFilterView(QWidget *parent, TagModel *tagFilterModel,
+                  TagModificationHelper *tagModificationHelper);
+    virtual ~TagFilterView();
+
+    virtual void loadViewState(KConfigGroup &group, QString prefix = QString());
+    virtual void saveViewState(KConfigGroup &group, QString prefix = QString());
+
+    ImageFilterSettings::MatchingCondition getMatchingCondition() const;
+
+Q_SIGNALS:
+    void matchingConditionChanged(const ImageFilterSettings::MatchingCondition &condition);
+
+protected:
+    virtual void addCustomContextMenuActions(ContextMenuHelper &cmh, TAlbum *tag);
+    virtual void handleCustomContextMenuAction(QAction *action, TAlbum *tag);
+
+private:
+    TagFilterViewPriv *d;
+
+};
 
 class TagFilterSideBarWidgetPriv;
 class TagFilterSideBarWidget : public QWidget
@@ -49,6 +83,14 @@ public Q_SLOTS:
      * Resets all selected tag filters.
      */
     void slotResetTagFilters();
+
+private Q_SLOTS:
+
+    void slotMatchingConditionChanged(const ImageFilterSettings::MatchingCondition &condition);
+    void slotCheckedTagsChanged(const QList<TAlbum*> &tags);
+
+private:
+    void filterChanged();
 
 private:
     TagFilterSideBarWidgetPriv *d;

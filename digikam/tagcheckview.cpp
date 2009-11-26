@@ -24,7 +24,7 @@
  *
  * ============================================================ */
 
-#include "tagfilterview.moc"
+#include "tagcheckview.moc"
 
 // Qt includes
 #include <qaction.h>
@@ -36,24 +36,20 @@
 
 // Local includes
 #include "contextmenuhelper.h"
-#include "tagfilterview.h"
 
 namespace Digikam
 {
 
-class TagFilterViewNewPriv
+class TagCheckViewPriv
 {
 public:
-    TagFilterViewNewPriv() :
-        matchingCond(ImageFilterSettings::OrCondition)
+    TagCheckViewPriv() :
+        toggleAutoTags(TagCheckView::NoToggleAuto)
     {
     }
 
-    // TODO update, implement this
-    TagFilterViewNew::RestoreTagFilters    restoreTagFilters;
-    TagFilterViewNew::ToggleAutoTags       toggleAutoTags;
 
-    ImageFilterSettings::MatchingCondition matchingCond;
+    TagCheckView::ToggleAutoTags       toggleAutoTags;
 
     KMenu *selectTagsMenu;
     QAction *selectAllTagsAction;
@@ -69,18 +65,12 @@ public:
     QAction *toggleChildrenAction;
     QAction *toggleParentsAction;
     QAction *toggleBothAction;
-    KSelectAction *matchingCondAction;
-    QAction *orBetweenAction;
-    QAction *andBetweenAction;
-    KSelectAction *restoreTagFiltersAction;
-    QAction *onRestoreTagFiltersAction;
-    QAction *offRestoreTagFiltersAction;
 };
 
-TagFilterViewNew::TagFilterViewNew(QWidget *parent, TagModel *tagModel,
+TagCheckView::TagCheckView(QWidget *parent, TagModel *tagModel,
                                    TagModificationHelper *tagModificationHelper) :
                 TagFolderViewNew(parent, tagModel, tagModificationHelper),
-                d(new TagFilterViewNewPriv)
+                d(new TagCheckViewPriv)
 {
 
     setSelectAlbumOnClick(false);
@@ -109,30 +99,22 @@ TagFilterViewNew::TagFilterViewNew(QWidget *parent, TagModel *tagModel,
     d->toggleParentsAction  = d->toggleAutoAction->addAction(i18nc("toggle parent tag", "Parents"));
     d->toggleBothAction     = d->toggleAutoAction->addAction(i18nc("toggle child and parent tags", "Both"));
 
-    d->matchingCondAction = new KSelectAction(i18n("Matching Condition"), this);
-    d->orBetweenAction = d->matchingCondAction->addAction(i18n("Or Between Tags"));
-    d->andBetweenAction = d->matchingCondAction->addAction(i18n("And Between Tags"));
-
-    d->restoreTagFiltersAction = new KSelectAction(i18n("Restore Tag Filters"), this);
-    d->onRestoreTagFiltersAction = d->restoreTagFiltersAction->addAction(i18n("On"));
-    d->offRestoreTagFiltersAction = d->restoreTagFiltersAction->addAction(i18n("Off"));
-
     connect(albumModel(), SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
             this, SLOT(slotCheckStateChange(Album*, Qt::CheckState)));
 
 }
 
-TagFilterViewNew::~TagFilterViewNew()
+TagCheckView::~TagCheckView()
 {
     delete d;
 }
 
-void TagFilterViewNew::slotResetTagFilters()
+void TagCheckView::slotResetCheckState()
 {
     albumModel()->resetAllCheckedAlbums();
 }
 
-void TagFilterViewNew::slotCheckStateChange(Album *album, Qt::CheckState state)
+void TagCheckView::slotCheckStateChange(Album *album, Qt::CheckState state)
 {
 
     Q_UNUSED(album);
@@ -158,62 +140,49 @@ void TagFilterViewNew::slotCheckStateChange(Album *album, Qt::CheckState state)
     }
     albumModel()->blockSignals(false);
 
-    filterChanged();
+    emit checkedTagsChanged(getCheckedTags());
 
 }
 
-void TagFilterViewNew::filterChanged()
-{
-
-    // TODO update, untagged does not work right now
-
-    QList<int> tagIds;
-    foreach(Album *album, albumModel()->checkedAlbums())
-    {
-        TAlbum *tag = dynamic_cast<TAlbum*> (album);
-        if (tag)
-        {
-            tagIds << tag->id();
-        }
-    }
-
-    emit tagFilterChanged(tagIds, d->matchingCond, false);
-
-}
-
-void TagFilterViewNew::loadViewState(KConfigGroup &group, QString prefix)
+void TagCheckView::loadViewState(KConfigGroup &group, QString prefix)
 {
     TagFolderViewNew::loadViewState(group, prefix);
 
     // TODO update
 //    KSharedConfig::Ptr config = KGlobal::config();
 //    KConfigGroup group = config->group(objectName());
-//    d->matchingCond = (ImageFilterSettings::MatchingCondition)
-//                      (group.readEntry("Matching Condition", (int)ImageFilterSettings::OrCondition));
-//
 //    d->toggleAutoTags    = (ToggleAutoTags)
 //                           (group.readEntry("Toggle Auto Tags", (int)NoToggleAuto));
-//
-//    d->restoreTagFilters = (RestoreTagFilters)
-//                           (group.readEntry("Restore Tag Filters", (int)OffRestoreTagFilters));
 }
 
-void TagFilterViewNew::saveViewState(KConfigGroup &group, QString prefix)
+void TagCheckView::saveViewState(KConfigGroup &group, QString prefix)
 {
     TagFolderViewNew::saveViewState(group, prefix);
 
     // TODO update
 //    KSharedConfig::Ptr config = KGlobal::config();
 //    KConfigGroup group        = config->group(objectName());
-//    group.writeEntry("Matching Condition",  (int)(d->matchingCond));
 //    group.writeEntry("Toggle Auto Tags",    (int)(d->toggleAutoTags));
-//    group.writeEntry("Restore Tag Filters", (int)(d->restoreTagFilters));
 //    saveTagFilters();
 //    config->sync();
 
 }
 
-void TagFilterViewNew::addCustomContextMenuActions(ContextMenuHelper &cmh, TAlbum *tag)
+QList<TAlbum*> TagCheckView::getCheckedTags() const
+{
+    QList<TAlbum*> tags;
+    foreach(Album *album, albumModel()->checkedAlbums())
+    {
+        TAlbum *tag = dynamic_cast<TAlbum*> (album);
+        if (tag)
+        {
+            tags << tag;
+        }
+    }
+    return tags;
+}
+
+void TagCheckView::addCustomContextMenuActions(ContextMenuHelper &cmh, TAlbum *tag)
 {
     TagFolderViewNew::addCustomContextMenuActions(cmh, tag);
 
@@ -236,28 +205,14 @@ void TagFilterViewNew::addCustomContextMenuActions(ContextMenuHelper &cmh, TAlbu
 
     cmh.addAction(d->toggleAutoAction);
 
-    d->toggleNoneAction->setChecked(d->toggleAutoTags == TagFilterViewNew::NoToggleAuto);
-    d->toggleChildrenAction->setChecked(d->toggleAutoTags == TagFilterViewNew::Children);
-    d->toggleParentsAction->setChecked(d->toggleAutoTags == TagFilterViewNew::Parents);
-    d->toggleBothAction->setChecked(d->toggleAutoTags == TagFilterViewNew::ChildrenAndParents);
-
-    // matching condition
-
-    cmh.addAction(d->matchingCondAction);
-
-    d->orBetweenAction->setChecked(d->matchingCond == ImageFilterSettings::OrCondition);
-    d->andBetweenAction->setChecked(d->matchingCond != ImageFilterSettings::OrCondition);
-
-    // restoring
-
-    cmh.addAction(d->restoreTagFiltersAction);
-
-    d->onRestoreTagFiltersAction->setChecked(d->restoreTagFilters == OnRestoreTagFilters);
-    d->offRestoreTagFiltersAction->setChecked(d->restoreTagFilters != OnRestoreTagFilters);
+    d->toggleNoneAction->setChecked(d->toggleAutoTags == TagCheckView::NoToggleAuto);
+    d->toggleChildrenAction->setChecked(d->toggleAutoTags == TagCheckView::Children);
+    d->toggleParentsAction->setChecked(d->toggleAutoTags == TagCheckView::Parents);
+    d->toggleBothAction->setChecked(d->toggleAutoTags == TagCheckView::ChildrenAndParents);
 
 }
 
-void TagFilterViewNew::handleCustomContextMenuAction(QAction *action, TAlbum *tag)
+void TagCheckView::handleCustomContextMenuAction(QAction *action, TAlbum *tag)
 {
     TagFolderViewNew::handleCustomContextMenuAction(action, tag);
 
@@ -312,30 +267,6 @@ void TagFilterViewNew::handleCustomContextMenuAction(QAction *action, TAlbum *ta
     else if (action == d->toggleBothAction)        // Toggle auto Children and Parents tags.
     {
         toggleRestore = ChildrenAndParents;
-    }
-    else if (action == d->orBetweenAction)         // Or Between Tags.
-    {
-        d->matchingCond = ImageFilterSettings::OrCondition;
-        filterChanged();
-    }
-    else if (action == d->andBetweenAction)        // And Between Tags.
-    {
-        d->matchingCond = ImageFilterSettings::AndCondition;
-        filterChanged();
-    }
-    else if (action == d->onRestoreTagFiltersAction)        // Restore TagFilters ON.
-    {
-        d->restoreTagFilters = TagFilterViewNew::OnRestoreTagFilters;
-        filterChanged();
-    }
-    else if (action == d->offRestoreTagFiltersAction)        // Restore TagFilters OFF.
-    {
-        d->restoreTagFilters = TagFilterViewNew::OffRestoreTagFilters;
-        filterChanged();
-    }
-    else
-    {
-        kWarning() << "Did not handle action " << action;
     }
     d->toggleAutoTags = toggleRestore;
 
