@@ -165,9 +165,11 @@ void AdvancedRenameWidget::createToolTip()
 {
     if (d->parser)
     {
-        TooltipCreator creator(d->parser);
-        QString tooltip = creator.tooltip();
-        d->tooltipTracker->setText(tooltip);
+        d->tooltipTracker->setText(TooltipCreator(d->parser).tooltip());
+    }
+    else
+    {
+        d->tooltipTracker->clear();
     }
 }
 
