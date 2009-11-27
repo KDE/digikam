@@ -33,7 +33,7 @@ namespace Digikam
 
 UniqueModifier::UniqueModifier()
               : Modifier(i18nc("unique value for duplicate strings", "Unique"),
-                         i18n("Add a suffix number to have unique values"),
+                         i18n("Add a suffix number to have unique strings on duplicate values"),
                          SmallIcon("button_more"))
 {
     addToken("{unique}", description());
