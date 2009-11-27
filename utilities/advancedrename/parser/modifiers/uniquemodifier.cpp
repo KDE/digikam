@@ -23,53 +23,13 @@
 
 #include "uniquemodifier.moc"
 
-// Qt includes
-
-#include <QGridLayout>
-#include <QLabel>
-#include <QPointer>
-
 // KDE includes
 
 #include <kiconloader.h>
-#include <klineedit.h>
 #include <klocale.h>
-#include <kdebug.h>
 
 namespace Digikam
 {
-
-//UniqueDialog::UniqueDialog(ParseObject* parent)
-//                  : ParseObjectDialog(parent),
-//                    valueInput(0)
-//{
-//    QString defaultValueStr = i18n("Unique Value");
-//
-//    QLabel* srcLabel = new QLabel(defaultValueStr + ':');
-//    valueInput       = new KLineEdit(this);
-//    valueInput->setToolTip(i18n("<p>Set a unique value for empty strings.<br/>"
-//                                "When applied to a renaming option, "
-//                                "an empty string will be replaced by the value you specify here.</p>"));
-//
-//    QWidget*     mainWidget = new QWidget(this);
-//    QGridLayout* mainLayout = new QGridLayout(this);
-//    mainLayout->addWidget(srcLabel,   0, 0);
-//    mainLayout->addWidget(valueInput, 0, 1);
-//    mainLayout->setSpacing(KDialog::spacingHint());
-//    mainLayout->setMargin(KDialog::spacingHint());
-//    mainLayout->setRowStretch(1, 10);
-//    mainWidget->setLayout(mainLayout);
-//
-//    setSettingsWidget(mainWidget);
-//
-//    valueInput->setFocus();
-//}
-//
-//UniqueDialog::~UniqueDialog()
-//{
-//}
-
-// --------------------------------------------------------
 
 UniqueModifier::UniqueModifier()
               : Modifier(i18nc("unique value for duplicate strings", "Unique"),
@@ -107,25 +67,5 @@ void UniqueModifier::reset()
 {
     cache.clear();
 }
-
-//void UniqueModifier::slotTokenTriggered(const QString& token)
-//{
-//    Q_UNUSED(token)
-//
-//    QString tmp;
-//
-//    QPointer<UniqueDialog> dlg = new UniqueDialog(this);
-//    if (dlg->exec() == KDialog::Accepted)
-//    {
-//        QString valueStr = dlg->valueInput->text();
-//        if (!valueStr.isEmpty())
-//        {
-//            tmp = QString("{u:\"%1\"}").arg(valueStr);
-//        }
-//    }
-//    delete dlg;
-//
-//    emit signalTokenTriggered(tmp);
-//}
 
 } // namespace Digikam

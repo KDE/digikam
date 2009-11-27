@@ -31,26 +31,11 @@
 // Local includes
 
 #include "modifier.h"
-#include "parseobjectdialog.h"
 
 class KLineEdit;
 
 namespace Digikam
 {
-
-//class UniqueDialog : public ParseObjectDialog
-//{
-//    Q_OBJECT
-//
-//public:
-//
-//    UniqueDialog(ParseObject* parent);
-//    ~UniqueDialog();
-//
-//    KLineEdit* valueInput;
-//};
-
-// --------------------------------------------------------
 
 class UniqueModifier : public Modifier
 {
@@ -60,12 +45,8 @@ public:
 
     UniqueModifier();
     virtual QString modifyOperation(const QString& parseString, const QString& result);
+    virtual void    reset();
 
-    virtual void reset();
-
-//private Q_SLOTS:
-//
-//    void slotTokenTriggered(const QString& token);
 
 private:
 
@@ -73,6 +54,5 @@ private:
 };
 
 } // namespace Digikam
-
 
 #endif /* UNIQUEMODIFIER_H */
