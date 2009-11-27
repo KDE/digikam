@@ -4,7 +4,8 @@
  * http://www.digikam.org
  *
  * Date        : 2009-11-27
- * Description : a modifier for setting an additional string to a renaming option
+ * Description : A modifier for appending a suffix number to a renaming option.
+ *               This guarantees a unique string for duplicate values.
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
