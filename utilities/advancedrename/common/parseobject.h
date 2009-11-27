@@ -81,8 +81,8 @@ public:
     QRegExp regExp() const;
     void    setRegExp(const QRegExp& regExp);
 
-    void    setDescription(const QString& desc);
     QString description() const;
+    void    setDescription(const QString& desc);
 
     QPixmap icon() const;
     void    setIcon(const QPixmap& pixmap);
@@ -118,8 +118,8 @@ public:
      * re-implement the @see slotTokenTriggered method.
      * @param value boolean parameter to set token menu usage
      */
-    void setUseTokenMenu(bool value);
     bool useTokenMenu() const;
+    void setUseTokenMenu(bool value);
 
     bool isValid() const;
 
