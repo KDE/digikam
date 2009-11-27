@@ -70,8 +70,6 @@ public:
 private:
 
     QStringList cache;
-    int         counter;
-    const int   MAXCOUNT;
 };
 
 } // namespace Digikam

@@ -73,17 +73,39 @@ namespace Digikam
 
 UniqueModifier::UniqueModifier()
               : Modifier(i18nc("unique value for duplicate strings", "Unique"),
-                         i18n("Add a prefix number to have unique values"),
-                         SmallIcon("button_more")),
-                counter(0),
-                MAXCOUNT(2)
+                         i18n("Add a suffix number to have unique values"),
+                         SmallIcon("button_more"))
 {
-//    addToken("{u:\"|unique|\"}", description());
     addToken("{unique}", description());
 
     QRegExp reg("\\{unique\\}");
     reg.setMinimal(true);
     setRegExp(reg);
+}
+
+QString UniqueModifier::modifyOperation(const QString& parseString, const QString& result)
+{
+    cache << result;
+
+    QRegExp reg = regExp();
+    int pos     = 0;
+    pos         = reg.indexIn(parseString, pos);
+    if (pos > -1)
+    {
+        if (cache.count(result) > 1)
+        {
+            QString tmp  = result;
+            int test     = cache.count(result) - 1;
+            tmp         += QString("_%1").arg(QString::number(test));
+            return tmp;
+        }
+    }
+    return result;
+}
+
+void UniqueModifier::reset()
+{
+    cache.clear();
 }
 
 //void UniqueModifier::slotTokenTriggered(const QString& token)
@@ -105,34 +127,5 @@ UniqueModifier::UniqueModifier()
 //
 //    emit signalTokenTriggered(tmp);
 //}
-
-QString UniqueModifier::modifyOperation(const QString& parseString, const QString& result)
-{
-    if (cache.count(result) < MAXCOUNT)
-    {
-        cache << result;
-    }
-
-    QRegExp reg = regExp();
-    int pos     = 0;
-    pos         = reg.indexIn(parseString, pos);
-    if (pos > -1)
-    {
-        if (cache.count(result) >= MAXCOUNT)
-        {
-            ++counter;
-            QString tmp  = result;
-            tmp         += QString("_%1").arg(QString::number(counter));
-            return tmp;
-        }
-    }
-    return result;
-}
-
-void UniqueModifier::reset()
-{
-    cache.clear();
-    counter = 0;
-}
 
 } // namespace Digikam
