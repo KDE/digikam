@@ -37,6 +37,7 @@
 #include "trimmedmodifier.h"
 #include "uppercasemodifier.h"
 #include "defaultvaluemodifier.h"
+#include "uniquemodifier.h"
 
 namespace Digikam
 {
@@ -63,6 +64,7 @@ Option::Option(const QString& name, const QString& description, const QPixmap& i
     registerModifier(new FirstLetterEachWordUpperCaseModifier());
     registerModifier(new TrimmedModifier());
     registerModifier(new DefaultValueModifier());
+    registerModifier(new UniqueModifier());
     registerModifier(new ReplaceModifier());
     registerModifier(new RangeModifier());
 }

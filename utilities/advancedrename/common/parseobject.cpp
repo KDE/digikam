@@ -254,4 +254,8 @@ bool ParseObject::isValid() const
     return (!d->tokens.isEmpty() && !d->regExp.isEmpty() && d->regExp.isValid());
 }
 
+void ParseObject::reset()
+{
+}
+
 } // namespace Digikam

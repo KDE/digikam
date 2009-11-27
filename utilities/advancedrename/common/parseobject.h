@@ -123,6 +123,8 @@ public:
 
     bool isValid() const;
 
+    virtual void reset();
+
 Q_SIGNALS:
 
     void signalTokenTriggered(const QString&);

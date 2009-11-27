@@ -71,6 +71,15 @@ void Parser::init(const ParseSettings& info)
 void Parser::reset()
 {
     init(ParseSettings());
+    foreach (Option* option, d->options)
+    {
+        option->reset();
+
+        foreach (Modifier* modifier, option->modifiers())
+        {
+            modifier->reset();
+        }
+    }
 }
 
 bool Parser::stringIsValid(const QString& str)
