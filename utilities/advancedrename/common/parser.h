@@ -93,5 +93,4 @@ private:
 
 }  // namespace Digikam
 
-
 #endif /* PARSER_H */
