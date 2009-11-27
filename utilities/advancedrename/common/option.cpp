@@ -48,8 +48,8 @@ public:
     OptionPriv()
     {}
 
-    ParseResults parseResults;
-    ParseResults modifierResults;
+    ParseResults parsedResults;
+    ParseResults modifiedResults;
     ModifierList modifiers;
 };
 
@@ -101,19 +101,19 @@ ModifierList Option::modifiers() const
 
 void Option::parse(const QString& parseString, ParseInformation& info, bool modify)
 {
-    d->parseResults.clear();
-    d->modifierResults.clear();
+    d->parsedResults.clear();
+    d->modifiedResults.clear();
 
-    parseOperation(parseString, info, d->parseResults);
+    parseOperation(parseString, info, d->parsedResults);
     if (modify)
     {
-        d->modifierResults = applyModifiers(parseString, d->parseResults);
+        d->modifiedResults = applyModifiers(parseString, d->parsedResults);
     }
 }
 
-ParseResults Option::results(bool modified)
+ParseResults Option::results(bool modify)
 {
-    return (modified ? d->modifierResults : d->parseResults);
+    return (modify ? d->modifiedResults : d->parsedResults);
 }
 
 ParseResults Option::applyModifiers(const QString& parseString, ParseResults& results)

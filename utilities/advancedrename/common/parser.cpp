@@ -96,12 +96,12 @@ void Parser::registerOption(Option* parser)
     d->options.append(parser);
 }
 
-ParseResults Parser::results(const QString& parseString, bool modified)
+ParseResults Parser::results(const QString& parseString, bool modify)
 {
     ParseResults results;
     ParseInformation info;
 
-    parseOperation(parseString, info, results, modified);
+    parseOperation(parseString, info, results, modify);
     return results;
 }
 

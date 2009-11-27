@@ -45,7 +45,7 @@ public:
     virtual ~Option();
 
     ModifierList modifiers() const;
-    ParseResults results(bool modified = true);
+    ParseResults results(bool modify = true);
 
 public Q_SLOTS:
 
