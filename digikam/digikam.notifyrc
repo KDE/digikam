@@ -80,3 +80,12 @@ Comment[uk]=Оновлення бази даних відбитків завер
 Comment[x-test]=xxThe update of the fingerprint database has been completed.xx
 Action=Popup
 
+[Event/batchthumbscompleted]
+Name=Update of thumbnails database complete
+Comment=The update of the thumbnails database has been completed.
+Action=Popup
+
+[Event/batchalbumssyncmetadatacompleted]
+Name=Synchronization of images' metadata with database completed
+Comment=The synchronization of the images' metadata with the database has been completed.
+Action=Popup

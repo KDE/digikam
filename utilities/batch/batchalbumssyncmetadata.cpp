@@ -116,7 +116,8 @@ void BatchAlbumsSyncMetadata::parseAlbum()
         setTitle(i18n("Duration: %1",t.toString()));
         setButtonText(i18n("&Close"));
         // Pop-up a message to bring user when all is done.
-        KNotificationWrapper("", i18n("Images' metadata synchronization with database is done."),
+        KNotificationWrapper("batchalbumssyncmetadatacompleted",
+                             i18n("Images' metadata synchronization with database is done."),
                              this, windowTitle());
         advance(1);
         abort();
