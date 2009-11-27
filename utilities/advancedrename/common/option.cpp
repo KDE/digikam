@@ -81,12 +81,7 @@ Option::~Option()
 
 void Option::registerModifier(Modifier* modifier)
 {
-    if (!modifier)
-    {
-        return;
-    }
-
-    if (!modifier->isValid())
+    if (!modifier || !modifier->isValid())
     {
         return;
     }
