@@ -43,7 +43,7 @@ public:
 
     ParseInformation() :
         index(1),
-        useFileExtension(true)
+        useOriginalFileExtension(true)
     {};
 
     ParseInformation(const ImageInfo& info) :
@@ -51,7 +51,7 @@ public:
         cameraName(info.photoInfoContainer().make + ' ' + info.photoInfoContainer().model),
         dateTime(info.dateTime()),
         index(1),
-        useFileExtension(true)
+        useOriginalFileExtension(true)
     {};
 
     bool isValid()
@@ -66,7 +66,7 @@ public:
     QString   cameraName;
     QDateTime dateTime;
     int       index;
-    bool      useFileExtension;
+    bool      useOriginalFileExtension;
 };
 
 } // namespace Digikam
