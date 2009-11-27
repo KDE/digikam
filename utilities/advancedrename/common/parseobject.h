@@ -47,10 +47,8 @@ class ParseObjectPriv;
 /*
  * Macro definitions:
  *
- * PARSE_LOOP_START and PARSE_LOOP_END can be used when parsing
- * a token with a regular expression (this is the default by now, so you always need
- * to use these macros).
- *
+ * PARSE_LOOP_START and PARSE_LOOP_END must be used when parsing
+ * a token.
  * See 'dummyoption' class or other implementation for example code.
  */
 #define PARSE_LOOP_START(PARSESTRING_, REGEXP_)                              \
@@ -62,9 +60,9 @@ class ParseObjectPriv;
                 if (POS_ > -1)                                               \
                 {
 
-#define PARSE_LOOP_END(PARSESTRING_, REGEXP_, PARSED_, RESULTS_)             \
+#define PARSE_LOOP_END(PARSESTRING_, REGEXP_, PARSEDVAL_, RESULTS_)          \
             ParseResults::ResultsKey   k(POS_, REGEXP_.cap(0).count());      \
-            ParseResults::ResultsValue v(REGEXP_.cap(0), PARSED_);           \
+            ParseResults::ResultsValue v(REGEXP_.cap(0), PARSEDVAL_);        \
             RESULTS_.addEntry(k, v);                                         \
             POS_ += REGEXP_.matchedLength();                                 \
                 }                                                            \
