@@ -55,8 +55,8 @@ QString UniqueModifier::modifyOperation(const QString& parseString, const QStrin
         if (cache.count(result) > 1)
         {
             QString tmp  = result;
-            int test     = cache.count(result) - 1;
-            tmp         += QString("_%1").arg(QString::number(test));
+            int index    = cache.count(result) - 1;
+            tmp         += QString("_%1").arg(QString::number(index));
             return tmp;
         }
     }
