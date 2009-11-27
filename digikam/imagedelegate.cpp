@@ -456,6 +456,7 @@ void ImageDelegate::setDefaultViewOptions(const QStyleOptionViewItem& option)
 {
     d->font = option.font;
     d->categoryDrawer->setDefaultViewOptions(option);
+    invalidatePaintingCache();
 }
 
 void ImageDelegate::slotThemeChanged()
