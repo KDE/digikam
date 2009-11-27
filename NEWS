@@ -23,7 +23,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 012 ==> 215645 : File save as in image editor crashes digiKam.
 013 ==> 212967 : Click on photo in geolocation view should open the photo.
 014 ==> 215733 : After move to new disk: all Album-categories and Album-preview missing.
-015 ==> 
+015 ==> 215715 : Wrong numbering when importing photos.
+016 ==>
 
 *********************************************************************************************************
 digiKam 1.0.0-beta6 - Release date: 2009-11-08

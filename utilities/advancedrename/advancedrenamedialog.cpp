@@ -43,6 +43,7 @@
 
 #include "advancedrenamewidget.h"
 #include "parseinformation.h"
+#include "parser.h"
 
 namespace Digikam
 {
@@ -235,8 +236,8 @@ void AdvancedRenameDialog::slotReturnPressed()
 void AdvancedRenameDialog::slotParseStringChanged(const QString& parseString)
 {
     d->newNamesList.clear();
+    d->advancedRenameWidget->parser()->init();
 
-    int index = 1;
     QTreeWidgetItemIterator it(d->listView);
     while (*it)
     {
@@ -244,15 +245,15 @@ void AdvancedRenameDialog::slotParseStringChanged(const QString& parseString)
         if (item)
         {
             ParseInformation parseInfo(ImageInfo(item->imageUrl()));
-            parseInfo.index = index;
 
             QString newName = d->advancedRenameWidget->parse(parseInfo);
             item->setNewName(newName);
             d->newNamesList << NewNameInfo(item->imageUrl(), newName);
-            ++index;
         }
         ++it;
     }
+
+    d->advancedRenameWidget->parser()->reset();
 
     bool enableBtn = !parseString.isEmpty() && checkNewNames();
     enableButton(Ok, enableBtn);

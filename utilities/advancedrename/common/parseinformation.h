@@ -42,7 +42,7 @@ class ParseInformation
 public:
 
     ParseInformation() :
-        index(1),
+        startIndex(1),
         useOriginalFileExtension(true)
     {};
 
@@ -50,7 +50,7 @@ public:
         fileUrl(info.fileUrl()),
         cameraName(info.photoInfoContainer().make + ' ' + info.photoInfoContainer().model),
         dateTime(info.dateTime()),
-        index(1),
+        startIndex(1),
         useOriginalFileExtension(true)
     {};
 
@@ -65,7 +65,8 @@ public:
     KUrl      fileUrl;
     QString   cameraName;
     QDateTime dateTime;
-    int       index;
+    int       startIndex;
+    int       currentIndex;
     bool      useOriginalFileExtension;
 };
 

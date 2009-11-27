@@ -127,42 +127,31 @@ void AdvancedRenameWidgetTest::testDirectoryNameToken()
 void AdvancedRenameWidgetTest::testNumberToken_data()
 {
     QTest::addColumn<QString>("parseString");
-    QTest::addColumn<int>("index");
     QTest::addColumn<QString>("result");
 
     // filename is "myimage_1234.jpg", it is not defined in here to avoid typing it into the results all the time.
     // it will be defined in the test method
 
-    QTest::newRow("#")                      << QString("#")                      << 1  << QString("1.jpg");
-    QTest::newRow("# (index:20)")           << QString("#")                      << 20 << QString("20.jpg");
-    QTest::newRow("##")                     << QString("##")                     << 2  << QString("02.jpg");
-    QTest::newRow("###")                    << QString("###")                    << 4  << QString("004.jpg");
-    QTest::newRow("### (index:40)")         << QString("###")                    << 40 << QString("040.jpg");
-    QTest::newRow("###_bla_##")             << QString("###_bla_##")             << 10 << QString("010_bla_10.jpg");
-    QTest::newRow("####[2,3]")              << QString("####[2,3]")              << 1  << QString("0002.jpg");
-    QTest::newRow("####[2,3](10)")          << QString("####[2,3]")              << 10 << QString("0029.jpg");
-    QTest::newRow("####[ 2, 3]")            << QString("####[ 2, 3]")            << 10 << QString("0029.jpg");
-    QTest::newRow("####[2,3]_bla_## ###")   << QString("####[2,3]_bla_## ###")   << 1  << QString("0002_bla_01 001.jpg");
-    QTest::newRow("####[2, 3]_bla_## ###")  << QString("####[2, 3]_bla_## ###")  << 1  << QString("0002_bla_01 001.jpg");
-    QTest::newRow("####[ 2, 3]_bla_## ###") << QString("####[ 2, 3]_bla_## ###") << 1  << QString("0002_bla_01 001.jpg");
-    QTest::newRow("###[100]_bla")           << QString("###[100]_bla")           << 1  << QString("100_bla.jpg");
-    QTest::newRow("###[100,]_bla")          << QString("###[100,]_bla")          << 1  << QString("100_bla.jpg");
-    QTest::newRow("###[100,   ]_bla")       << QString("###[100,   ]_bla")       << 1  << QString("100_bla.jpg");
-    QTest::newRow("###[100   ,   ]_bla")    << QString("###[100   ,   ]_bla")    << 1  << QString("100_bla.jpg");
+    QTest::newRow("#")                      << QString("#")                      << QString("1.jpg");
+    QTest::newRow("####[2,3]")              << QString("####[2,3]")              << QString("0002.jpg");
+    QTest::newRow("####[2,3]_bla_## ###")   << QString("####[2,3]_bla_## ###")   << QString("0002_bla_01 001.jpg");
+    QTest::newRow("####[2, 3]_bla_## ###")  << QString("####[2, 3]_bla_## ###")  << QString("0002_bla_01 001.jpg");
+    QTest::newRow("####[ 2, 3]_bla_## ###") << QString("####[ 2, 3]_bla_## ###") << QString("0002_bla_01 001.jpg");
+    QTest::newRow("###[100]_bla")           << QString("###[100]_bla")           << QString("100_bla.jpg");
+    QTest::newRow("###[100,]_bla")          << QString("###[100,]_bla")          << QString("100_bla.jpg");
+    QTest::newRow("###[100,   ]_bla")       << QString("###[100,   ]_bla")       << QString("100_bla.jpg");
+    QTest::newRow("###[100   ,   ]_bla")    << QString("###[100   ,   ]_bla")    << QString("100_bla.jpg");
 }
 
 void AdvancedRenameWidgetTest::testNumberToken()
 {
     QFETCH(QString,   parseString);
-    QFETCH(int,       index);
     QFETCH(QString,   result);
 
     DefaultRenameParser parser;
 
     ParseInformation info;
-    info.fileUrl = QString("myimage_1234.jpg");
-    info.index = index;
-
+    info.fileUrl   = QString("myimage_1234.jpg");
     QString parsed = parser.parse(parseString, info);
     QCOMPARE(parsed, result);
 }
@@ -454,7 +443,7 @@ void AdvancedRenameWidgetTest::testCameraToken()
     info.fileUrl    = filename;
     info.cameraName = cameraName;
     info.dateTime   = cameraDate;
-    info.index      = index;
+    info.currentIndex      = index;
 
     QString parsed = parser.parse(parseString, info);
     QCOMPARE(parsed, result);
@@ -470,7 +459,7 @@ void AdvancedRenameWidgetTest::testEmptyParseString()
     ParseInformation info;
     info.fileUrl    = filename;
     info.cameraName = QString();
-    info.index      = 1;
+    info.currentIndex      = 1;
     info.dateTime   = curdate;
 
     // test for empty parser string

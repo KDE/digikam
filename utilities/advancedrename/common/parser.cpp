@@ -34,8 +34,13 @@ class ParserPriv
 {
 public:
 
-    ParserPriv() {}
-    OptionsList options;
+    ParserPriv() :
+        counter(0)
+    {}
+
+    ParseInformation settings;
+    OptionsList      options;
+    int              counter;
 };
 
 // --------------------------------------------------------
@@ -43,6 +48,7 @@ public:
 Parser::Parser()
       : d(new ParserPriv)
 {
+    init();
 }
 
 Parser::~Parser()
@@ -54,6 +60,18 @@ Parser::~Parser()
     d->options.clear();
 
     delete d;
+}
+
+void Parser::init(const ParseInformation& info)
+{
+    d->settings = info;
+    d->counter  = 1;
+}
+
+void Parser::reset()
+{
+    init(ParseInformation());
+    d->counter  = 1;
 }
 
 bool Parser::stringIsValid(const QString& str)
@@ -111,8 +129,7 @@ QString Parser::parse(const QString& parseString, ParseInformation& info)
     return parseOperation(parseString, info, results);
 }
 
-QString Parser::parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results,
-                               bool modify)
+QString Parser::parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results, bool modify)
 {
     QFileInfo fi(info.fileUrl.toLocalFile());
 
@@ -120,6 +137,9 @@ QString Parser::parseOperation(const QString& parseString, ParseInformation& inf
     {
         return fi.fileName();
     }
+
+    info.startIndex   = d->settings.startIndex;
+    info.currentIndex = d->counter++;
 
     if (!d->options.isEmpty())
     {

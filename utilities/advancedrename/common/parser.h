@@ -61,6 +61,9 @@ public:
     Parser();
     virtual ~Parser();
 
+    void          init(const ParseInformation& info = ParseInformation());
+    void          reset();
+
     QString       parse(const QString& parseString, ParseInformation& info);
 
     OptionsList   options()   const;

@@ -439,7 +439,7 @@ void CameraUI::setupActions()
     d->lockAction = new KAction(KIcon("object-locked"), i18n("Toggle Lock"), this);
     connect(d->lockAction, SIGNAL(triggered()), this, SLOT(slotToggleLock()));
     actionCollection()->addAction("cameraui_imagelock", d->lockAction);
-    
+
     // -------------------------------------------------------------------------
 
     d->markAsDownloadedAction = new KAction(KIcon("dialog-ok"), i18n("Mark as downloaded"), this);
@@ -985,7 +985,7 @@ void CameraUI::slotBusy(bool val)
         // selection-dependent update of lockAction, markAsDownloadedAction,
         // downloadSelectedAction, downloadDelSelectedAction, deleteSelectedAction
         slotNewSelection(d->view->countSelected()>0);
-        
+
         d->anim->stop();
         d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, i18n("Ready"));
 
@@ -1796,7 +1796,7 @@ void CameraUI::slotMarkAsDownloaded()
         if (iconItem->isSelected())
         {
             iconItem->setDownloaded(GPItemInfo::DownloadedYes);
-            
+
             DownloadHistory::setDownloaded(d->controller->cameraMD5ID(),
                 iconItem->itemInfo()->name,
                 iconItem->itemInfo()->size,
@@ -2045,7 +2045,7 @@ void CameraUI::slotNewSelection(bool hasSelection)
     d->deleteSelectedAction->setEnabled(hasSelection && d->controller->cameraDeleteSupport());
     d->imageViewAction->setEnabled(hasSelection);
     d->lockAction->setEnabled(hasSelection);
-    
+
     if (hasSelection)
     {
         // only enable "Mark as downloaded" if at least one
@@ -2062,7 +2062,7 @@ void CameraUI::slotNewSelection(bool hasSelection)
                     break;
             }
         }
-        
+
         d->markAsDownloadedAction->setEnabled(haveNotDownloadedItem);
     }
     else
@@ -2094,7 +2094,7 @@ void CameraUI::slotItemsSelected(CameraIconItem* item, bool selected)
     }
     else
         d->rightSideBar->slotNoCurrentItem();
-    
+
     // update availability of actions
     slotNewSelection(d->view->countSelected()>0);
 }

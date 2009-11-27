@@ -67,10 +67,12 @@ public:
      */
     void    clear();
 
-    void setParser(Parser* parser);
-    void setControlWidgets(ControlWidgets mask);
+    void    setParser(Parser* parser);
+    Parser* parser();
 
     QString parse(ParseInformation& info) const;
+
+    void setControlWidgets(ControlWidgets mask);
 
     void setTooltipAlignment(Qt::Alignment alignment);
     void focusLineEdit();

@@ -234,7 +234,7 @@ void CameraIconView::addItem(const GPItemInfo& info)
     {
         if (!d->renamer->useDefault())
         {
-            downloadName = getTemplatedName( &info, d->itemDict.count() );
+            downloadName = getTemplatedName(&info);
         }
         else
         {
@@ -337,7 +337,7 @@ void CameraIconView::slotUpdateDownloadNames(bool hasSelection)
     if (d->renamer)
     {
         useDefault = d->renamer->useDefault();
-        startIndex = d->renamer->startIndex() -1;
+        startIndex = d->renamer->startIndex();
     }
 
     bool convertLossLessJpeg = d->cameraUI->convertLosslessJpegFiles();
@@ -350,6 +350,9 @@ void CameraIconView::slotUpdateDownloadNames(bool hasSelection)
     bool revOrder=!d->cameraUI->chronologicOrder();
     // Camera items selection.
 
+    // reset the start index
+    d->renamer->setStartIndex(startIndex);
+
     for (IconItem* item = (revOrder?lastItem():firstItem()); item; (revOrder?item = item->prevItem():item=item->nextItem()))
     {
         QString downloadName;
@@ -358,11 +361,13 @@ void CameraIconView::slotUpdateDownloadNames(bool hasSelection)
         if ( (hasSelection && item->isSelected()) || !hasSelection)
         {
             if (!useDefault)
-                downloadName = getTemplatedName( viewItem->itemInfo(), startIndex );
+            {
+                downloadName = getTemplatedName( viewItem->itemInfo());
+            }
             else
+            {
                 downloadName = getCasedName( d->renamer->changeCase(), viewItem->itemInfo() );
-
-            ++startIndex;
+            }
         }
 
         if (convertLossLessJpeg && !downloadName.isEmpty())
@@ -392,12 +397,12 @@ QString CameraIconView::defaultDownloadName(CameraIconItem *viewItem)
     return getCasedName( renamecase, viewItem->itemInfo() );
 }
 
-QString CameraIconView::getTemplatedName(const GPItemInfo* itemInfo, int position)
+QString CameraIconView::getTemplatedName(const GPItemInfo* itemInfo)
 {
     QFileInfo fi;
     fi.setFile(QDir(itemInfo->folder), itemInfo->name);
 
-    return d->renamer->newName(fi.absoluteFilePath(), itemInfo->mtime, position + 1);
+    return d->renamer->newName(fi.absoluteFilePath(), itemInfo->mtime);
 }
 
 QString CameraIconView::getCasedName(const RenameCustomizer::Case ccase, const GPItemInfo* itemInfo)

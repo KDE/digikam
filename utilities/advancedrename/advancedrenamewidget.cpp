@@ -257,6 +257,11 @@ void AdvancedRenameWidget::registerParserControls()
    }
 }
 
+Parser* AdvancedRenameWidget::parser()
+{
+    return d->parser;
+}
+
 void AdvancedRenameWidget::setParser(Parser* parser)
 {
     if (!parser)
