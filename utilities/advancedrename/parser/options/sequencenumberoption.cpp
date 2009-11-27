@@ -87,7 +87,7 @@ SequenceNumberDialog::~SequenceNumberDialog()
 
 SequenceNumberOption::SequenceNumberOption()
                     : Option(i18nc("Sequence Number", "Number..."), i18n("Add a sequence number"),
-                                   SmallIcon("accessories-calculator"))
+                             SmallIcon("accessories-calculator"))
 {
     addToken("#",                 i18n("Sequence number"));
     addToken("#[|start|]",        i18n("Sequence number (custom start)"));
