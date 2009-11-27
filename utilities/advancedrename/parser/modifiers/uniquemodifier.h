@@ -47,7 +47,6 @@ public:
     virtual QString modifyOperation(const QString& parseString, const QString& result);
     virtual void    reset();
 
-
 private:
 
     QStringList cache;
