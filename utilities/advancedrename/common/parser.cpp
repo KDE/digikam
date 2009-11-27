@@ -71,7 +71,6 @@ void Parser::init(const ParseInformation& info)
 void Parser::reset()
 {
     init(ParseInformation());
-    d->counter  = 1;
 }
 
 bool Parser::stringIsValid(const QString& str)
