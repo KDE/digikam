@@ -32,7 +32,7 @@
 namespace Digikam
 {
 
-class ParseInformation;
+class ParseSettings;
 class Parser;
 class AdvancedRenameWidgetPriv;
 
@@ -70,7 +70,7 @@ public:
     void    setParser(Parser* parser);
     Parser* parser();
 
-    QString parse(ParseInformation& info) const;
+    QString parse(ParseSettings& info) const;
 
     void setControlWidgets(ControlWidgets mask);
 

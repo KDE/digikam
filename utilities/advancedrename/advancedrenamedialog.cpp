@@ -42,7 +42,7 @@
 // Local includes
 
 #include "advancedrenamewidget.h"
-#include "parseinformation.h"
+#include "parsesettings.h"
 #include "parser.h"
 
 namespace Digikam
@@ -244,7 +244,7 @@ void AdvancedRenameDialog::slotParseStringChanged(const QString& parseString)
         AdvancedRenameListItem* item = dynamic_cast<AdvancedRenameListItem*>((*it));
         if (item)
         {
-            ParseInformation parseInfo(ImageInfo(item->imageUrl()));
+            ParseSettings parseInfo(ImageInfo(item->imageUrl()));
 
             QString newName = d->advancedRenameWidget->parse(parseInfo);
             item->setNewName(newName);

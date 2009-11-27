@@ -188,7 +188,7 @@ DateOption::DateOption()
     setRegExp(reg);
 }
 
-void DateOption::parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results)
+void DateOption::parseOperation(const QString& parseString, ParseSettings& info, ParseResults& results)
 {
     QRegExp reg = regExp();
 

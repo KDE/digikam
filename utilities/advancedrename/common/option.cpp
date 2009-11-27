@@ -94,7 +94,7 @@ ModifierList Option::modifiers() const
     return d->modifiers;
 }
 
-void Option::parse(const QString& parseString, ParseInformation& info, bool modify)
+void Option::parse(const QString& parseString, ParseSettings& info, bool modify)
 {
     d->parsedResults.clear();
     d->modifiedResults.clear();

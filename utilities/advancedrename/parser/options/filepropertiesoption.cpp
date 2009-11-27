@@ -50,7 +50,7 @@ FilePropertiesOption::FilePropertiesOption()
     setRegExp(reg);
 }
 
-void FilePropertiesOption::parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results)
+void FilePropertiesOption::parseOperation(const QString& parseString, ParseSettings& info, ParseResults& results)
 {
     QFileInfo fi(info.fileUrl.toLocalFile());
 

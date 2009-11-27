@@ -32,7 +32,7 @@
 
 // Local includes
 
-#include "parseinformation.h"
+#include "parsesettings.h"
 #include "parseresults.h"
 #include "option.h"
 #include "modifier.h"
@@ -61,10 +61,10 @@ public:
     Parser();
     virtual ~Parser();
 
-    void          init(const ParseInformation& info = ParseInformation());
+    void          init(const ParseSettings& info = ParseSettings());
     void          reset();
 
-    QString       parse(const QString& parseString, ParseInformation& info);
+    QString       parse(const QString& parseString, ParseSettings& info);
 
     OptionsList   options()   const;
     ModifierList  modifiers() const;
@@ -86,7 +86,7 @@ protected:
 private:
 
     ParseResults results(const QString& parseString, bool modify = true);
-    QString      parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results,
+    QString      parseOperation(const QString& parseString, ParseSettings& info, ParseResults& results,
                                 bool modify = true);
 
 private:

@@ -38,7 +38,7 @@ public:
         counter(0)
     {}
 
-    ParseInformation settings;
+    ParseSettings settings;
     OptionsList      options;
     int              counter;
 };
@@ -62,7 +62,7 @@ Parser::~Parser()
     delete d;
 }
 
-void Parser::init(const ParseInformation& info)
+void Parser::init(const ParseSettings& info)
 {
     d->settings = info;
     d->counter  = 1;
@@ -70,7 +70,7 @@ void Parser::init(const ParseInformation& info)
 
 void Parser::reset()
 {
-    init(ParseInformation());
+    init(ParseSettings());
 }
 
 bool Parser::stringIsValid(const QString& str)
@@ -116,19 +116,19 @@ void Parser::registerOption(Option* parser)
 ParseResults Parser::results(const QString& parseString, bool modify)
 {
     ParseResults results;
-    ParseInformation info;
+    ParseSettings info;
 
     parseOperation(parseString, info, results, modify);
     return results;
 }
 
-QString Parser::parse(const QString& parseString, ParseInformation& info)
+QString Parser::parse(const QString& parseString, ParseSettings& info)
 {
     ParseResults results;
     return parseOperation(parseString, info, results);
 }
 
-QString Parser::parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results, bool modify)
+QString Parser::parseOperation(const QString& parseString, ParseSettings& info, ParseResults& results, bool modify)
 {
     QFileInfo fi(info.fileUrl.toLocalFile());
 

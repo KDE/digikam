@@ -30,7 +30,7 @@
 
 // Local includes
 
-#include "parseinformation.h"
+#include "parsesettings.h"
 #include "parseresults.h"
 #include "token.h"
 

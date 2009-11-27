@@ -44,7 +44,7 @@
 // Local includes
 
 #include "dcursortracker.h"
-#include "parseinformation.h"
+#include "parsesettings.h"
 #include "parser.h"
 #include "advancedrenamewidget.h"
 
@@ -181,7 +181,7 @@ int RenameCustomizer::startIndex() const
 
 void RenameCustomizer::setStartIndex(int startIndex)
 {
-    ParseInformation settings;
+    ParseSettings settings;
     settings.startIndex = startIndex;
     d->startIndex       = startIndex;
     d->advancedRenameWidget->parser()->init(settings);
@@ -198,7 +198,7 @@ QString RenameCustomizer::newName(const QString& fileName, const QDateTime& date
 
     if (d->renameCustom->isChecked())
     {
-        ParseInformation parseInfo;
+        ParseSettings parseInfo;
         parseInfo.fileUrl    = fileName;
         parseInfo.cameraName = cameraName;
         parseInfo.dateTime   = dateTime;

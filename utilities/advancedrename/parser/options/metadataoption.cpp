@@ -152,7 +152,7 @@ void MetadataOption::slotTokenTriggered(const QString& token)
     delete dlg;
 }
 
-void MetadataOption::parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results)
+void MetadataOption::parseOperation(const QString& parseString, ParseSettings& info, ParseResults& results)
 {
     QRegExp reg = regExp();
 
@@ -167,7 +167,7 @@ void MetadataOption::parseOperation(const QString& parseString, ParseInformation
     PARSE_LOOP_END(parseString, reg, tmp, results)
 }
 
-QString MetadataOption::parseMetadata(const QString& token, ParseInformation& info)
+QString MetadataOption::parseMetadata(const QString& token, ParseSettings& info)
 {
     QString tmp;
     QString keyword = token.toLower();

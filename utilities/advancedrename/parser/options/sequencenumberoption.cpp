@@ -129,7 +129,7 @@ void SequenceNumberOption::slotTokenTriggered(const QString& token)
     emit signalTokenTriggered(tmp);
 }
 
-void SequenceNumberOption::parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results)
+void SequenceNumberOption::parseOperation(const QString& parseString, ParseSettings& info, ParseResults& results)
 {
     QRegExp reg = regExp();
     int slength = 0;

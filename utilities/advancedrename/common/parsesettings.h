@@ -37,16 +37,16 @@
 namespace Digikam
 {
 
-class ParseInformation
+class ParseSettings
 {
 public:
 
-    ParseInformation() :
+    ParseSettings() :
         startIndex(1),
         useOriginalFileExtension(true)
     {};
 
-    ParseInformation(const ImageInfo& info) :
+    ParseSettings(const ImageInfo& info) :
         fileUrl(info.fileUrl()),
         cameraName(info.photoInfoContainer().make + ' ' + info.photoInfoContainer().model),
         dateTime(info.dateTime()),

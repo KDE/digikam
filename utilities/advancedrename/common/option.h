@@ -49,11 +49,11 @@ public:
 
 public Q_SLOTS:
 
-    virtual void parse(const QString& parseString, ParseInformation& info, bool modify = true);
+    virtual void parse(const QString& parseString, ParseSettings& info, bool modify = true);
 
 protected:
 
-    virtual void parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results) = 0;
+    virtual void parseOperation(const QString& parseString, ParseSettings& info, ParseResults& results) = 0;
 
     /**
      * register a modifier to the parser class

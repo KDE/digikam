@@ -45,7 +45,7 @@ CameraNameOption::CameraNameOption()
     setRegExp(reg);
 }
 
-void CameraNameOption::parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results)
+void CameraNameOption::parseOperation(const QString& parseString, ParseSettings& info, ParseResults& results)
 {
     QRegExp reg = regExp();
 

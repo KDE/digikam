@@ -48,7 +48,7 @@ DirectoryNameOption::DirectoryNameOption()
     setRegExp(reg);
 }
 
-void DirectoryNameOption::parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results)
+void DirectoryNameOption::parseOperation(const QString& parseString, ParseSettings& info, ParseResults& results)
 {
     QFileInfo fi(info.fileUrl.toLocalFile());
     QStringList folders = fi.absolutePath().split('/', QString::SkipEmptyParts);
