@@ -115,6 +115,8 @@ MetadataOption::MetadataOption()
     }
     setIcon(icon);
 
+    // --------------------------------------------------------
+
     addToken("[meta:|key|]", i18n("Add metadata information"));
 
     QRegExp reg("\\[meta(:(.*))\\]");
