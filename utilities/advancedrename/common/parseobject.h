@@ -133,9 +133,10 @@ protected:
      * add a token to the parser, every parser should at least assign one token object
      * @param id the token id string (used for parsing)
      * @param description the description of the token (used for example in the tooltip)
+     * @param actionName[optional] the name of the token action (only used when the token menu is displayed)
      * @return
      */
-    bool addToken(const QString& id, const QString& description);
+    bool addToken(const QString& id, const QString& description, const QString& actionName = QString());
 
 protected Q_SLOTS:
 

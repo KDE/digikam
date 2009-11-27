@@ -186,7 +186,7 @@ QAction* ParseObject::registerMenu(QMenu* parent)
     return action;
 }
 
-bool ParseObject::addToken(const QString& id, const QString& description)
+bool ParseObject::addToken(const QString& id, const QString& description, const QString& actionName)
 {
     if (id.isEmpty() || description.isEmpty())
     {
@@ -197,6 +197,11 @@ bool ParseObject::addToken(const QString& id, const QString& description)
     if (!token)
     {
         return false;
+    }
+
+    if (!actionName.isEmpty())
+    {
+        token->action()->setText(actionName);
     }
 
     connect(token, SIGNAL(signalTokenTriggered(const QString&)),

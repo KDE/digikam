@@ -40,8 +40,10 @@ FilePropertiesOption::FilePropertiesOption()
 {
     setUseTokenMenu(true);
 
-    addToken("[file]", i18n("Filename"));
-    addToken("[ext]",  i18n("File extension, prepend with a '.' character, to modify the real file extension"));
+    addToken("[file]", i18n("Filename"),
+             i18nc("File name", "Name"));
+    addToken("[ext]",  i18n("File extension, prepend with a '.' character, to modify the real file extension"),
+             i18nc("File extension", "Extension"));
 
     QRegExp reg("(\\[file\\]|(\\.?)\\[ext\\])");
     reg.setMinimal(true);
