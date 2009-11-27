@@ -82,8 +82,7 @@ protected:
 
 private:
 
-    ParseResults parseResults(const QString& parseString);
-    ParseResults modifierResults(const QString& parseString);
+    ParseResults results(const QString& parseString, bool modified = true);
     QString      parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results,
                                 bool modify = true);
 

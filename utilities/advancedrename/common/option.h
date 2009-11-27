@@ -45,13 +45,11 @@ public:
     virtual ~Option();
 
     ModifierList modifiers() const;
-
-    ParseResults parseResults();
-    ParseResults modifiedResults();
+    ParseResults results(bool modified = true);
 
 public Q_SLOTS:
 
-    virtual void parse(const QString& parseString, ParseInformation& info);
+    virtual void parse(const QString& parseString, ParseInformation& info, bool modify = true);
 
 protected:
 

@@ -96,21 +96,12 @@ void Parser::registerOption(Option* parser)
     d->options.append(parser);
 }
 
-ParseResults Parser::parseResults(const QString& parseString)
+ParseResults Parser::results(const QString& parseString, bool modified)
 {
     ParseResults results;
     ParseInformation info;
 
-    parseOperation(parseString, info, results, false);
-    return results;
-}
-
-ParseResults Parser::modifierResults(const QString& parseString)
-{
-    ParseResults results;
-    ParseInformation info;
-
-    parseOperation(parseString, info, results, true);
+    parseOperation(parseString, info, results, modified);
     return results;
 }
 
@@ -134,18 +125,9 @@ QString Parser::parseOperation(const QString& parseString, ParseInformation& inf
     {
         foreach (Option* option, d->options)
         {
-            option->parse(parseString, info);
+            option->parse(parseString, info, modify);
 
-            ParseResults r;
-            if (modify)
-            {
-                r = option->modifiedResults();
-            }
-            else
-            {
-                r = option->parseResults();
-            }
-
+            ParseResults r = option->results(modify);
             results.append(r);
         }
     }
@@ -181,21 +163,21 @@ bool Parser::tokenAtPosition(Type type, const QString& parseString, int pos, int
 {
     bool found = false;
 
-    ParseResults results;
+    ParseResults r;
 
     switch (type)
     {
         case Token:
-            results = parseResults(parseString);
+            r = results(parseString, false);
             break;
         case TokenAndModifiers:
-            results = modifierResults(parseString);
+            r = results(parseString, true);
             break;
         default:
             break;
     }
 
-    ParseResults::ResultsKey key = results.keyAtApproximatePosition(pos);
+    ParseResults::ResultsKey key = r.keyAtApproximatePosition(pos);
     start  = key.first;
     length = key.second;
 

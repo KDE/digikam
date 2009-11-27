@@ -99,44 +99,34 @@ ModifierList Option::modifiers() const
     return d->modifiers;
 }
 
-void Option::parse(const QString& parseString, ParseInformation& info)
+void Option::parse(const QString& parseString, ParseInformation& info, bool modify)
 {
     d->parseResults.clear();
     d->modifierResults.clear();
 
     parseOperation(parseString, info, d->parseResults);
-
-    if (!d->modifiers.isEmpty())
+    if (modify)
     {
         d->modifierResults = applyModifiers(parseString, d->parseResults);
     }
 }
 
-ParseResults Option::parseResults()
+ParseResults Option::results(bool modified)
 {
-    return d->parseResults;
-}
-
-ParseResults Option::modifiedResults()
-{
-    if (d->modifierResults.isEmpty())
-    {
-        return d->parseResults;
-    }
-    return d->modifierResults;
+    return (modified ? d->modifierResults : d->parseResults);
 }
 
 ParseResults Option::applyModifiers(const QString& parseString, ParseResults& results)
 {
-    ParseResults tmp = results;
+    if (results.isEmpty() || d->modifiers.isEmpty())
+    {
+        return results;
+    }
 
+    ParseResults modifiedResults = results;
     ParseResults modifiers;
     QMap<ParseResults::ResultsKey, Modifier*> modifierCallbackMap;
 
-    if (results.isEmpty())
-    {
-        return tmp;
-    }
 
     // fill modifiers ParseResults with all possible modifier tokens
     foreach (Modifier* modifier, d->modifiers)
@@ -195,9 +185,9 @@ ParseResults Option::applyModifiers(const QString& parseString, ParseResults& re
                 kModifier.second += diff;
                 ParseResults::ResultsValue vModifier(modToken, modResult);
 
-                tmp.deleteEntry(kModifier);
+                modifiedResults.deleteEntry(kModifier);
                 kModifier.second += modToken.count();
-                tmp.addEntry(kModifier, vModifier);
+                modifiedResults.addEntry(kModifier, vModifier);
 
                 // set position to the next possible token
                 pos  += mkey.second;
@@ -209,7 +199,7 @@ ParseResults Option::applyModifiers(const QString& parseString, ParseResults& re
             }
         }
     }
-    return tmp;
+    return modifiedResults;
 }
 
 } // namespace Digikam
