@@ -30,14 +30,14 @@
 
 // Local includes
 
+#include "defaultvaluemodifier.h"
 #include "firstletterofeachworduppercasemodifier.h"
 #include "lowercasemodifier.h"
 #include "rangemodifier.h"
 #include "replacemodifier.h"
 #include "trimmedmodifier.h"
-#include "uppercasemodifier.h"
-#include "defaultvaluemodifier.h"
 #include "uniquemodifier.h"
+#include "uppercasemodifier.h"
 
 namespace Digikam
 {
