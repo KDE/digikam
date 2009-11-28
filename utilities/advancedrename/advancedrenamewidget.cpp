@@ -327,8 +327,8 @@ void AdvancedRenameWidget::setupWidgets()
     delete layout();
     QGridLayout* mainLayout = new QGridLayout;
     mainLayout->addWidget(d->renameInput,         0, 0, 1, 1);
-    mainLayout->addWidget(d->tooltipToggleButton, 0, 1, 1, 1);
-    mainLayout->addWidget(d->modifierToolButton,  0, 2, 1, 1);
+    mainLayout->addWidget(d->modifierToolButton,  0, 1, 1, 1);
+    mainLayout->addWidget(d->tooltipToggleButton, 0, 2, 1, 1);
     mainLayout->addWidget(d->optionsLabel,        1, 0, 1,-1);
     mainLayout->setColumnStretch(0, 10);
     mainLayout->setMargin(0);
