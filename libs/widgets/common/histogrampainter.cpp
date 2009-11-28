@@ -49,7 +49,6 @@ public:
         widgetToInitFrom(0),
         scale(LogScaleHistogram),
         channelType(LuminosityChannel),
-        mainColorChannel(ColorChannelsRed),
         highlightSelection(false),
         selectionMin(0.0),
         selectionMax(0.0),
@@ -203,123 +202,143 @@ public:
         endSegment   = ((x + 1) * histogram->getHistogramSegments()) / drawWidth;
     }
 
-    void renderSingleColorLine(QPixmap& bufferPixmap, QPainter& p1,
-                               const int& x, const double& max, const int& startSegment,
-                               const int& endSegment, const bool& highlight)
+    void renderSingleColorLine(QPixmap& bufferPixmap, QPainter& p1)
     {
-        double value = 0.0;
-        calculateSegmentMaxSingleColor(value, startSegment, endSegment);
+        p1.save();
+        int wWidth  = bufferPixmap.width();
+        int wHeight = bufferPixmap.height();
+        double max  = calculateMax();
 
-        int lineHeight = scaleToPixmapHeight(value, bufferPixmap.height(), max);
+        QPainterPath curvePath;
+        curvePath.moveTo(0, wHeight);
 
-        if (highlight)
+        int yPrev = 0;
+
+        for (int x = 0 ; x < wWidth ; ++x)
         {
-            p1.setPen(QPen(palette.color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
-            p1.drawLine(x, bufferPixmap.height(), x, 0);
-            p1.setPen(QPen(palette.color(QPalette::Active, QPalette::Background), 1, Qt::SolidLine));
-            p1.drawLine(x, bufferPixmap.height(), x, bufferPixmap.height() - lineHeight);
+            // calculate histogram segments included in this single pixel line
+            int startSegment = 0;
+            int endSegment   = 0;
+            calculateSegementsForIndex(x, wWidth, startSegment, endSegment);
+
+            double value = 0.0;
+            calculateSegmentMaxSingleColor(value, startSegment, endSegment);
+
+            int y = scaleToPixmapHeight(value, bufferPixmap.height(), max);
+            if (x > 0)
+            {
+                (y > yPrev) ? curvePath.lineTo(x, wHeight - yPrev) : curvePath.lineTo(x - 1, wHeight - y);
+            }
+            curvePath.lineTo(x, wHeight - y);
+            yPrev = y;
         }
-        else
+        curvePath.lineTo(wWidth, wHeight);
+
+        p1.fillPath(curvePath, QBrush(palette.color(QPalette::Active, QPalette::Foreground), Qt::SolidPattern));
+        if (highlightSelection)
         {
-            p1.setPen(QPen(palette.color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
-            p1.drawLine(x, bufferPixmap.height(), x, bufferPixmap.height() - lineHeight);
-            p1.setPen(QPen(palette.color(QPalette::Active, QPalette::Background), 1, Qt::SolidLine));
-            p1.drawLine(x, bufferPixmap.height() - lineHeight, x, 0);
+            p1.setClipRect(selectionMin * wWidth, 0, selectionMax * wWidth - selectionMin * wWidth, wHeight);
+            p1.fillRect(selectionMin * wWidth, 0, selectionMax * wWidth - selectionMin * wWidth, wHeight,
+                        QBrush(palette.color(QPalette::Active, QPalette::Foreground), Qt::SolidPattern));
+            p1.fillPath(curvePath, QBrush(palette.color(QPalette::Active, QPalette::Background), Qt::SolidPattern));
         }
+
+        p1.restore();
     }
 
-    void renderMultiColorLine(QPixmap& bufferPixmap, QPainter& p1,
-                              const int& x, const double& max, const int& startSegment,
-                              const int& endSegment, const bool& highlight)
+    void renderMultiColorLine(QPixmap& bufferPixmap, QPainter& p1)
     {
-        double valueR = 0.0;
-        double valueG = 0.0;
-        double valueB = 0.0;
-        calculateSegmentMaxMultiColor(valueR, valueG, valueB, startSegment, endSegment);
+        p1.save();
+ 
+        int wWidth  = bufferPixmap.width();
+        int wHeight = bufferPixmap.height();
 
-        int lineHeightR = scaleToPixmapHeight(valueR, bufferPixmap.height(), max);
-        int lineHeightG = scaleToPixmapHeight(valueG, bufferPixmap.height(), max);
-        int lineHeightB = scaleToPixmapHeight(valueB, bufferPixmap.height(), max);
+        QImage bb(wWidth, wHeight, QImage::Format_RGB32);
+        QPainter p2;
+        p2.begin(&bb);
+        p2.initFrom(widgetToInitFrom);
 
-        if (highlight)
+        double max  = calculateMax();
+
+        QPainterPath curveRed, curveGreen, curveBlue;
+        curveRed.moveTo(0, wHeight);
+        curveGreen.moveTo(0, wHeight);
+        curveBlue.moveTo(0, wHeight);
+
+        int yrPrev = 0;
+        int ygPrev = 0;
+        int ybPrev = 0;
+
+        for (int x = 0 ; x < wWidth ; ++x)
         {
-            p1.setPen(QPen(palette.color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
-            p1.drawLine(x, bufferPixmap.height(), x, 0);
-            p1.setPen(QPen(palette.color(QPalette::Active, QPalette::Background), 1, Qt::SolidLine));
+            // calculate histogram segments included in this single pixel line
+            int startSegment = 0;
+            int endSegment   = 0;
+            calculateSegementsForIndex(x, wWidth, startSegment, endSegment);
 
-            // Witch color must be used on the foreground with all colors channel mode?
-            switch (mainColorChannel)
+            double valueR = 0.0;
+            double valueG = 0.0;
+            double valueB = 0.0;
+            calculateSegmentMaxMultiColor(valueR, valueG, valueB, startSegment, endSegment);
+
+            int yr = scaleToPixmapHeight(valueR, bufferPixmap.height(), max);
+            int yg = scaleToPixmapHeight(valueG, bufferPixmap.height(), max);
+            int yb = scaleToPixmapHeight(valueB, bufferPixmap.height(), max);
+
+            if (x > 0)
             {
-                case ColorChannelsRed:
-                    p1.drawLine(x, bufferPixmap.height(), x, bufferPixmap.height() - lineHeightR);
-                    break;
+                (yr > yrPrev) ? curveRed.lineTo(x, wHeight - yrPrev) : curveRed.lineTo(x - 1, wHeight - yr);
+                (yg > ygPrev) ? curveGreen.lineTo(x, wHeight - ygPrev) : curveGreen.lineTo(x - 1, wHeight - yg);
+                (yb > ybPrev) ? curveBlue.lineTo(x, wHeight - ybPrev) : curveBlue.lineTo(x - 1, wHeight - yb);
+            }        
+            curveRed.lineTo(x, wHeight - yr);
+            curveGreen.lineTo(x, wHeight - yg);
+            curveBlue.lineTo(x, wHeight - yb);
 
-                case ColorChannelsGreen:
-                    p1.drawLine(x, bufferPixmap.height(), x, bufferPixmap.height() - lineHeightG);
-                    break;
-
-                default:
-                    p1.drawLine(x, bufferPixmap.height(), x, bufferPixmap.height() - lineHeightB);
-                    break;
-            }
+            yrPrev = yr;
+            ygPrev = yg;
+            ybPrev = yb;
         }
-        else
+        curveRed.lineTo(wWidth, wHeight);
+        curveGreen.lineTo(wWidth, wHeight);
+        curveBlue.lineTo(wWidth, wHeight);
+
+        p2.fillRect(0, 0, wWidth, wHeight, palette.color(QPalette::Active, QPalette::Background));
+        p2.fillPath(curveBlue, QBrush(Qt::black, Qt::SolidPattern));
+        p2.fillPath(curveRed, QBrush(Qt::black, Qt::SolidPattern));
+        p2.fillPath(curveGreen, QBrush(Qt::black, Qt::SolidPattern));
+
+        p2.setCompositionMode(QPainter::CompositionMode_Screen);
+        p2.setPen(QPen(QColor(63, 63, 255), 1, Qt::SolidLine));
+        p2.setBrush(QBrush(QColor(0, 0, 192), Qt::SolidPattern));
+        p2.drawPath(curveBlue);
+        p2.setPen(QPen(QColor(255, 63, 63), 1, Qt::SolidLine));
+        p2.setBrush(QBrush(QColor(192, 0, 0), Qt::SolidPattern));
+        p2.drawPath(curveRed);
+        p2.setPen(QPen(QColor(63, 255, 63), 1, Qt::SolidLine));
+        p2.setBrush(QBrush(QColor(0, 192, 0), Qt::SolidPattern));
+        p2.drawPath(curveGreen);
+
+        // Highlight
+        if (highlightSelection)
         {
-            // Which color must be used on the foreground with all colors channel mode?
-            switch (mainColorChannel)
-            {
-                case ColorChannelsRed:
-                    p1.setPen(QPen(Qt::green, 1, Qt::SolidLine));
-                    p1.drawLine(x, bufferPixmap.height(), x, bufferPixmap.height() - lineHeightG);
-                    p1.setPen(QPen(Qt::blue, 1, Qt::SolidLine));
-                    p1.drawLine(x, bufferPixmap.height(), x, bufferPixmap.height() - lineHeightB);
-                    p1.setPen(QPen(Qt::red, 1, Qt::SolidLine));
-                    p1.drawLine(x, bufferPixmap.height(), x, bufferPixmap.height() - lineHeightR);
-
-                    p1.setPen(QPen(palette.color(QPalette::Active, QPalette::Background), 1, Qt::SolidLine));
-                    p1.drawLine(x, bufferPixmap.height() - qMax(qMax(lineHeightR, lineHeightG), lineHeightB), x, 0);
-                    p1.setPen(QPen(palette.color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
-                    p1.drawLine(x, bufferPixmap.height() - lineHeightG -1, x, bufferPixmap.height() - lineHeightG);
-                    p1.drawLine(x, bufferPixmap.height() - lineHeightB -1, x, bufferPixmap.height() - lineHeightB);
-                    p1.drawLine(x, bufferPixmap.height() - lineHeightR -1, x, bufferPixmap.height() - lineHeightR);
-
-                break;
-
-                case ColorChannelsGreen:
-                    p1.setPen(QPen(Qt::blue, 1, Qt::SolidLine));
-                    p1.drawLine(x, bufferPixmap.height(), x, bufferPixmap.height() - lineHeightB);
-                    p1.setPen(QPen(Qt::red, 1, Qt::SolidLine));
-                    p1.drawLine(x, bufferPixmap.height(), x, bufferPixmap.height() - lineHeightR);
-                    p1.setPen(QPen(Qt::green, 1, Qt::SolidLine));
-                    p1.drawLine(x, bufferPixmap.height(), x, bufferPixmap.height() - lineHeightG);
-
-                    p1.setPen(QPen(palette.color(QPalette::Active, QPalette::Background), 1, Qt::SolidLine));
-                    p1.drawLine(x, bufferPixmap.height() - qMax(qMax(lineHeightR, lineHeightG), lineHeightB), x, 0);
-                    p1.setPen(QPen(palette.color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
-                    p1.drawLine(x, bufferPixmap.height() - lineHeightB -1, x, bufferPixmap.height() - lineHeightB);
-                    p1.drawLine(x, bufferPixmap.height() - lineHeightR -1, x, bufferPixmap.height() - lineHeightR);
-                    p1.drawLine(x, bufferPixmap.height() - lineHeightG -1, x, bufferPixmap.height() - lineHeightG);
-
-                break;
-
-                default:
-                    p1.setPen(QPen(Qt::red, 1, Qt::SolidLine));
-                    p1.drawLine(x, bufferPixmap.height(), x, bufferPixmap.height() - lineHeightR);
-                    p1.setPen(QPen(Qt::green, 1, Qt::SolidLine));
-                    p1.drawLine(x, bufferPixmap.height(), x, bufferPixmap.height() - lineHeightG);
-                    p1.setPen(QPen(Qt::blue, 1, Qt::SolidLine));
-                    p1.drawLine(x, bufferPixmap.height(), x, bufferPixmap.height() - lineHeightB);
-
-                    p1.setPen(QPen(palette.color(QPalette::Active, QPalette::Background), 1, Qt::SolidLine));
-                    p1.drawLine(x, bufferPixmap.height() - qMax(qMax(lineHeightR, lineHeightG), lineHeightB), x, 0);
-                    p1.setPen(QPen(palette.color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
-                    p1.drawLine(x, bufferPixmap.height() - lineHeightR -1, x, bufferPixmap.height() - lineHeightR);
-                    p1.drawLine(x, bufferPixmap.height() - lineHeightG -1, x, bufferPixmap.height() - lineHeightG);
-                    p1.drawLine(x, bufferPixmap.height() - lineHeightB -1, x, bufferPixmap.height() - lineHeightB);
-
-                break;
-            }
+            p2.setClipRect(selectionMin * wWidth, 0, selectionMax * wWidth - selectionMin * wWidth, wHeight);
+            p2.setCompositionMode(QPainter::CompositionMode_Source);
+            p2.fillRect(selectionMin * wWidth, 0, selectionMax * wWidth - selectionMin * wWidth, wHeight,
+                        palette.color(QPalette::Active, QPalette::Foreground));
+            p2.fillPath(curveBlue, QBrush(Qt::black, Qt::SolidPattern));
+            p2.fillPath(curveRed, QBrush(Qt::black, Qt::SolidPattern));
+            p2.fillPath(curveGreen, QBrush(Qt::black, Qt::SolidPattern));
+            p2.setCompositionMode(QPainter::CompositionMode_Screen);
+            p2.fillPath(curveBlue, QBrush(QColor(0, 0, 255), Qt::SolidPattern));
+            p2.fillPath(curveRed, QBrush(QColor(255, 0, 0), Qt::SolidPattern));
+            p2.fillPath(curveGreen, QBrush(QColor(0, 255, 0), Qt::SolidPattern));
+            p2.setClipRect(0, 0, wWidth, wHeight);
         }
+        p2.end();
+        p1.drawImage(0, 0, bb);
+
+        p1.restore();
     }
 
     void renderXGrid(QPixmap& bufferPixmap, QPainter& p1)
@@ -371,25 +390,7 @@ public:
 
             case ColorChannels:
             {
-                switch(mainColorChannel)
-                {
-                    case ColorChannelsRed:
-                        guidePos = colorGuide.red();
-                        break;
-
-                    case ColorChannelsGreen:
-                        guidePos = colorGuide.green();
-                        break;
-
-                    case ColorChannelsBlue:
-                        guidePos = colorGuide.blue();
-                        break;
-
-                    default:
-                        kWarning() << "Untreated channel " << mainColorChannel;
-                        guidePos = colorGuide.red();
-                        break;
-                }
+                guidePos = qMax(qMax(colorGuide.red(), colorGuide.green()), colorGuide.blue());
                 break;
             }
 
@@ -440,7 +441,6 @@ public:
     // rendering settings
     HistogramScale    scale;
     ChannelType       channelType;
-    ColorChannelsType mainColorChannel;
     bool              highlightSelection;
     double            selectionMin;
     double            selectionMax;
@@ -472,11 +472,6 @@ void HistogramPainter::setScale(HistogramScale scale)
 void HistogramPainter::setChannelType(ChannelType channelType)
 {
     d->channelType = channelType;
-}
-
-void HistogramPainter::setMainColorChannel(ColorChannelsType mainColorChannel)
-{
-    d->mainColorChannel = mainColorChannel;
 }
 
 void HistogramPainter::setHighlightSelection(bool highlightSelection)
@@ -532,7 +527,6 @@ void HistogramPainter::render(QPixmap& bufferPixmap)
 
     int wWidth  = bufferPixmap.width();
     int wHeight = bufferPixmap.height();
-    double max  = d->calculateMax();
 
     d->painter.begin(&bufferPixmap);
     if (d->widgetToInitFrom)
@@ -544,28 +538,14 @@ void HistogramPainter::render(QPixmap& bufferPixmap)
     // clear background
     d->painter.fillRect(0, 0, wWidth, wHeight, d->palette.color(QPalette::Active, QPalette::Background));
 
-    // draw histogram pixel line by pixel line (on x axis)
-    for (int x = 0 ; x < wWidth ; ++x)
+    // decide how to render the line
+    if (d->channelType == ColorChannels)
     {
-        // calculate histogram segments included in this single pixel line
-        int startSegment = 0;
-        int endSegment   = 0;
-        d->calculateSegementsForIndex(x, bufferPixmap.width(), startSegment, endSegment);
-
-        // decide whether the current line shall be highlighted as being in the selection
-        const bool highlight = d->highlightSelection &&
-                               (x >= (int) (d->selectionMin * bufferPixmap.width())) &&
-                               (x <= (int) (d->selectionMax * bufferPixmap.width()));
-
-        // decide how to render the line
-        if (d->channelType == ColorChannels)
-        {
-            d->renderMultiColorLine(bufferPixmap, d->painter, x, max, startSegment, endSegment, highlight);
-        }
-        else
-        {
-            d->renderSingleColorLine(bufferPixmap, d->painter, x, max, startSegment, endSegment, highlight);
-        }
+        d->renderMultiColorLine(bufferPixmap, d->painter);
+    }
+    else
+    {
+        d->renderSingleColorLine(bufferPixmap, d->painter);
     }
 
     if (d->showXGrid)

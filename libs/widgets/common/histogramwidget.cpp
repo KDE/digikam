@@ -192,7 +192,6 @@ void HistogramWidget::setup(int w, int h, bool selectMode, bool showProgress, bo
 {
     m_channelType        = LuminosityChannel;
     m_scaleType          = LogScaleHistogram;
-    m_colorType          = ColorChannelsRed;
     d->statisticsVisible = statisticsVisible;
     d->selectMode        = selectMode;
     d->showProgress      = showProgress;
@@ -573,7 +572,6 @@ void HistogramWidget::paintEvent(QPaintEvent*)
     d->histogramPainter->setHistogram(histogram);
 
     d->histogramPainter->setChannelType(static_cast<ChannelType>(m_channelType));
-    d->histogramPainter->setMainColorChannel(static_cast<ColorChannelsType>(m_colorType));
     d->histogramPainter->setScale(static_cast<HistogramScale>(m_scaleType));
     d->histogramPainter->setSelection(d->xmin, d->xmax);
     d->histogramPainter->setHighlightSelection(d->selectMode);

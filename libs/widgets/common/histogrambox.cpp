@@ -64,21 +64,16 @@ public:
         linHistoButton  = 0;
         logHistoButton  = 0;
         channelCB       = 0;
-        colorsCB        = 0;
         hGradient       = 0;
         histogramWidget = 0;
-        colorsLabel     = 0;
     }
 
     QButtonGroup*        scaleBG;
-
-    QLabel*              colorsLabel;
 
     QToolButton*         linHistoButton;
     QToolButton*         logHistoButton;
 
     KComboBox*           channelCB;
-    KComboBox*           colorsCB;
 
     ColorGradientWidget* hGradient;
     HistogramWidget*     histogramWidget;
@@ -119,20 +114,6 @@ HistogramBox::HistogramBox(QWidget *parent, HistogramBoxType type, bool selectMo
     d->scaleBG->setExclusive(true);
     d->logHistoButton->setChecked(true);
 
-    d->colorsLabel = new QLabel(i18n("Colors:"), this);
-    d->colorsLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    d->colorsCB = new KComboBox(this);
-    d->colorsCB->addItem(i18nc("the red channel for colors histogram mode",     "Red"));
-    d->colorsCB->addItem(i18nc("the green channel for colors histogram mode",   "Green"));
-    d->colorsCB->addItem(i18nc("the blue channel for colors histogram mode",    "Blue"));
-    d->colorsCB->setEnabled(false);
-    d->colorsCB->setWhatsThis(i18n("<p>Select the main color displayed with Colors Channel mode here:</p>"
-                                   "<p><b>Red</b>: Draw the red image channel in the foreground.<br/>"
-                                   "<b>Green</b>: Draw the green image channel in the foreground.<br/>"
-                                   "<b>Blue</b>: Draw the blue image channel in the foreground.</p>"));
-    d->colorsLabel->hide();
-    d->colorsCB->hide();
-
     QWidget *histoBox = new QWidget;
     QVBoxLayout *histoBoxLayout = new QVBoxLayout;
 
@@ -154,8 +135,6 @@ HistogramBox::HistogramBox(QWidget *parent, HistogramBoxType type, bool selectMo
     mainLayout->addWidget(channelLabel,   0, 0, 1, 1);
     mainLayout->addWidget(d->channelCB,   0, 1, 1, 1);
     mainLayout->addWidget(scaleBox,       0, 3, 1, 2);
-    mainLayout->addWidget(d->colorsLabel, 1, 0, 1, 1);
-    mainLayout->addWidget(d->colorsCB,    1, 1, 1, 1);
     mainLayout->addWidget(histoBox,       2, 0, 1, 5);
     mainLayout->setColumnStretch(2, 10);
     mainLayout->setSpacing(5);
@@ -171,17 +150,11 @@ HistogramBox::HistogramBox(QWidget *parent, HistogramBoxType type, bool selectMo
     connect(d->channelCB, SIGNAL(activated(int)),
             this, SIGNAL(signalChannelChanged()));
 
-    connect(d->colorsCB, SIGNAL(activated(int)),
-            this, SIGNAL(signalColorsChanged()));
-
     connect(d->scaleBG, SIGNAL(buttonReleased(int)),
             this, SIGNAL(signalScaleChanged()));
 
     connect(d->channelCB, SIGNAL(activated(int)),
             this, SLOT(slotChannelChanged()));
-
-    connect(d->colorsCB, SIGNAL(activated(int)),
-            this, SLOT(slotColorsChanged()));
 
     connect(d->scaleBG, SIGNAL(buttonReleased(int)),
             this, SLOT(slotScaleChanged()));
@@ -222,23 +195,6 @@ void HistogramBox::setChannelEnabled(bool enabled)
     d->channelCB->setEnabled(enabled);
 }
 
-void HistogramBox::setColorsEnabled(bool enabled)
-{
-    d->colorsCB->setEnabled(enabled);
-}
-
-int HistogramBox::colorsChannel() const
-{
-    return d->colorsCB->currentIndex();
-}
-
-void HistogramBox::setColorsChannel(int color)
-{
-    d->colorsCB->setCurrentIndex(color);
-    slotColorsChanged();
-    emit signalColorsChanged();
-}
-
 HistogramScale HistogramBox::scale() const
 {
     return static_cast<HistogramScale>(d->scaleBG->checkedId());
@@ -263,37 +219,31 @@ void HistogramBox::slotChannelChanged()
         case LuminosityChannel:
             d->histogramWidget->m_channelType = LuminosityChannel;
             setGradientColors(QColor("black"), QColor("white"));
-            setColorsEnabled(false);
             break;
 
         case RedChannel:
             d->histogramWidget->m_channelType = RedChannel;
             setGradientColors(QColor("black"), QColor("red"));
-            setColorsEnabled(false);
             break;
 
         case GreenChannel:
             d->histogramWidget->m_channelType = GreenChannel;
             setGradientColors(QColor("black"), QColor("green"));
-            setColorsEnabled(false);
             break;
 
         case BlueChannel:
             d->histogramWidget->m_channelType = BlueChannel;
             setGradientColors(QColor("black"), QColor("blue"));
-            setColorsEnabled(false);
             break;
 
         case AlphaChannel:
             d->histogramWidget->m_channelType = AlphaChannel;
             setGradientColors(QColor("black"), QColor("white"));
-            setColorsEnabled(false);
             break;
 
         case ColorChannels:
             d->histogramWidget->m_channelType = ColorChannels;
             setGradientColors(QColor("black"), QColor("white"));
-            setColorsEnabled(true);
             break;
     }
 
@@ -303,26 +253,6 @@ void HistogramBox::slotChannelChanged()
 void HistogramBox::slotScaleChanged()
 {
     d->histogramWidget->m_scaleType = scale();
-    d->histogramWidget->repaint();
-}
-
-void HistogramBox::slotColorsChanged()
-{
-    switch (colorsChannel())
-    {
-        case ColorChannelsGreen:
-            d->histogramWidget->m_colorType = ColorChannelsGreen;
-            break;
-
-        case ColorChannelsBlue:
-            d->histogramWidget->m_colorType = ColorChannelsBlue;
-            break;
-
-        default: // Red.
-            d->histogramWidget->m_colorType = ColorChannelsRed;
-            break;
-    }
-
     d->histogramWidget->repaint();
 }
 
@@ -459,10 +389,6 @@ void HistogramBox::setHistogramType(HistogramBoxType type)
         default:
             break;
     }
-
-    bool showColorWidgets = (type == LRGBC || type == LRGBAC);
-    d->colorsLabel->setVisible(showColorWidgets);
-    d->colorsCB->setVisible(showColorWidgets);
 
     d->channelCB->setWhatsThis(channelCBDescr);
 }
