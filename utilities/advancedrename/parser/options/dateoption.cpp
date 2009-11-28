@@ -98,6 +98,11 @@ DateOptionDialog::DateOptionDialog(ParseObject* parent)
     QWidget* mainWidget = new QWidget(this);
     ui->setupUi(mainWidget);
 
+    // set the datePicker and timePicker to the current local datetime
+    QDateTime currentDateTime = QDateTime::currentDateTime();
+    ui->datePicker->setDate(currentDateTime.date());
+    ui->timePicker->setTime(currentDateTime.time());
+
     // fill the date format combobox
     DateFormat df;
     foreach (const DateFormat::DateFormatDescriptor& desc, df.map())
