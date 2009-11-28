@@ -283,6 +283,10 @@ void AdvancedRenameWidget::setupWidgets()
      */
     delete d->renameInput;
     d->renameInput = new AdvancedRenameInput;
+    d->renameInput->setToolTip(i18n("<p>Enter your renaming pattern here. Use the access buttons to quickly add renaming "
+                                    "options and modifiers. For further explanations, use the information toolbutton.</p>"));
+
+    // --------------------------------------------------------
 
     delete d->tooltipToggleButton;
     d->tooltipToggleButton = new QToolButton;
