@@ -66,9 +66,12 @@ QString TooltipCreator::tooltip()
     tooltip += createSection(i18n("Modifiers"),        parser->modifiers(), true);
     tooltip += tableEnd();
 
-    tooltip += i18n("<p><i>Modifiers can be applied to every renaming option. <br/>"
-                    "It is possible to assign multiple modifiers to an option, "
-                    "they are applied in the order you assign them.</i></p>");
+    if (!parser->modifiers().isEmpty())
+    {
+        tooltip += i18n("<p><i>Modifiers can be applied to every renaming option. <br/>"
+                        "It is possible to assign multiple modifiers to an option, "
+                        "they are applied in the order you assign them.</i></p>");
+    }
 
     return tooltip;
 }
@@ -134,6 +137,11 @@ QString TooltipCreator::createEntries(const QList<T*> &data)
 template <class T>
 QString TooltipCreator::createSection(const QString& sectionName, const QList<T*> &data, bool lastSection)
 {
+    if (data.isEmpty())
+    {
+        return QString();
+    }
+
     QString tmp;
 
     tmp += createHeader(sectionName);
