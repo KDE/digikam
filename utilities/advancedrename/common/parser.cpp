@@ -39,8 +39,8 @@ public:
     {}
 
     ParseSettings settings;
-    OptionsList      options;
-    int              counter;
+    OptionsList   options;
+    int           counter;
 };
 
 // --------------------------------------------------------
@@ -107,19 +107,14 @@ ModifierList Parser::modifiers() const
     return modifierList;
 }
 
-void Parser::registerOption(Option* parser)
+void Parser::registerOption(Option* option)
 {
-    if (!parser)
+    if (!option || !option->isValid())
     {
         return;
     }
 
-    if (!parser->isValid())
-    {
-        return;
-    }
-
-    d->options.append(parser);
+    d->options.append(option);
 }
 
 ParseResults Parser::results(const QString& parseString, bool modify)

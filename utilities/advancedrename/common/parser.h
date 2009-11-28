@@ -81,7 +81,7 @@ public:
 
 protected:
 
-    void registerOption(Option* parser);
+    void registerOption(Option* option);
 
 private:
 
