@@ -54,6 +54,7 @@ public:
 
     QString    result(const ResultsKey& key);
     QString    token(const ResultsKey& key);
+
     int        offset(const ResultsKey& key);
 
     ResultsKey keyAtPosition(int pos);
@@ -63,8 +64,9 @@ public:
     bool       hasKeyAtApproximatePosition(int pos);
 
     bool       isEmpty();
-    void       clear();
+
     void       append(ParseResults& results);
+    void       clear();
 
     QString    replaceTokens(const QString& markedString);
 
