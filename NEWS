@@ -25,7 +25,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 014 ==> 215733 : After move to new disk: all Album-categories and Album-preview missing.
 015 ==> 215715 : Wrong numbering when importing photos.
 016 ==> 216316 : "Icon view font" setting does not work.
-017 ==> 
+017 ==> 211559 : Batch queue manager crash after run pressed.
+018 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta6 - Release date: 2009-11-08
