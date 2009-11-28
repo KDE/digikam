@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef PARSEINFORMATION_H
-#define PARSEINFORMATION_H
+#ifndef PARSESETTINGS_H
+#define PARSESETTINGS_H
 
 // Qt includes
 
@@ -72,4 +72,4 @@ public:
 
 } // namespace Digikam
 
-#endif /* PARSEINFORMATION_H */
+#endif /* PARSESETTINGS_H */
