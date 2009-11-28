@@ -222,13 +222,13 @@ void AdvancedRenameLineEdit::slotCursorPositionChanged()
         int length          = INVALID;
         QString parseString = toPlainText();
         int pos             = textCursor().position();
-        found               = d->parser->tokenAtPosition(Parser::Token,
+        found               = d->parser->tokenAtPosition(Parser::OptionToken,
                                                          parseString, pos, start, length);
         found               = found && ( (start + length) == pos );
 
         if (!found)
         {
-            found = d->parser->tokenAtPosition(Parser::TokenAndModifiers,
+            found = d->parser->tokenAtPosition(Parser::OptionModifiersToken,
                                                parseString, pos, start, length);
             found = found && ( (start + length) == pos );
         }

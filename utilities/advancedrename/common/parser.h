@@ -49,11 +49,11 @@ class Parser
 
 public:
 
-    enum Type
+    enum TokenType
     {
-        Token = 0,
-        TokenAndModifiers,
-        Text
+        OptionToken = 0,
+        OptionModifiersToken,
+        TextToken
     };
 
 public:
@@ -69,8 +69,8 @@ public:
     OptionsList   options()   const;
     ModifierList  modifiers() const;
 
-    bool          tokenAtPosition(Type type, const QString& parseString, int pos);
-    bool          tokenAtPosition(Type type, const QString& parseString, int pos, int& start, int& length);
+    bool          tokenAtPosition(TokenType type, const QString& parseString, int pos);
+    bool          tokenAtPosition(TokenType type, const QString& parseString, int pos, int& start, int& length);
 
     /**
      * check if the given parse string is valid

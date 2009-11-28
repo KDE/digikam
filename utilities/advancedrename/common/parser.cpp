@@ -180,14 +180,14 @@ QString Parser::parseOperation(const QString& parseString, ParseSettings& settin
     return newname;
 }
 
-bool Parser::tokenAtPosition(Type type, const QString& parseString, int pos)
+bool Parser::tokenAtPosition(TokenType type, const QString& parseString, int pos)
 {
     int start;
     int length;
     return tokenAtPosition(type, parseString, pos, start, length);
 }
 
-bool Parser::tokenAtPosition(Type type, const QString& parseString, int pos, int& start, int& length)
+bool Parser::tokenAtPosition(TokenType type, const QString& parseString, int pos, int& start, int& length)
 {
     bool found = false;
 
@@ -195,10 +195,10 @@ bool Parser::tokenAtPosition(Type type, const QString& parseString, int pos, int
 
     switch (type)
     {
-        case Token:
+        case OptionToken:
             r = results(parseString, false);
             break;
-        case TokenAndModifiers:
+        case OptionModifiersToken:
             r = results(parseString, true);
             break;
         default:
