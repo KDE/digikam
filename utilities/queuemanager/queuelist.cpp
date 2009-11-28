@@ -832,9 +832,9 @@ void QueueListView::updateDestFileNames()
 
             if (settings().renamingRule == QueueSettings::CUSTOMIZE)
             {
-                ParseSettings parseInfo(info);
-                parseInfo.fileUrl = KUrl(QString("%1/%2.%3").arg(fi.absolutePath()).arg(fi.baseName()).arg(newSuffix));
-                newName           = p.parse(parseString, parseInfo);
+                ParseSettings settings(info);
+                settings.fileUrl = KUrl(QString("%1/%2.%3").arg(fi.absolutePath()).arg(fi.baseName()).arg(newSuffix));
+                newName          = p.parse(parseString, settings);
             }
 
             item->setDestFileName(newName);

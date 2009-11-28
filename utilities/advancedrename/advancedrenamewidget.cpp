@@ -146,7 +146,7 @@ void AdvancedRenameWidget::slotHideToolTipTracker()
     slotToolTipButtonToggled(false);
 }
 
-QString AdvancedRenameWidget::parse(ParseSettings& info) const
+QString AdvancedRenameWidget::parse(ParseSettings& settings) const
 {
     if (!d->parser)
     {
@@ -156,7 +156,7 @@ QString AdvancedRenameWidget::parse(ParseSettings& info) const
     QString parseString = d->renameInput->text();
 
     QString parsed;
-    parsed = d->parser->parse(parseString, info);
+    parsed = d->parser->parse(parseString, settings);
 
     return parsed;
 }

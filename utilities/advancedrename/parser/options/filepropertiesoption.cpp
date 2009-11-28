@@ -50,9 +50,9 @@ FilePropertiesOption::FilePropertiesOption()
     setRegExp(reg);
 }
 
-void FilePropertiesOption::parseOperation(const QString& parseString, ParseSettings& info, ParseResults& results)
+void FilePropertiesOption::parseOperation(const QString& parseString, ParseSettings& settings, ParseResults& results)
 {
-    QFileInfo fi(info.fileUrl.toLocalFile());
+    QFileInfo fi(settings.fileUrl.toLocalFile());
 
     QRegExp reg = regExp();
 
@@ -72,7 +72,7 @@ void FilePropertiesOption::parseOperation(const QString& parseString, ParseSetti
         else if (reg.cap(1) == QString(".[ext]"))
         {
             tmp = "." + fi.suffix();
-            info.useOriginalFileExtension = false;
+            settings.useOriginalFileExtension = false;
         }
     }
     PARSE_LOOP_END(parseString, reg, tmp, results)

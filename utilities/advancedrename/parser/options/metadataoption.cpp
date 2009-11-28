@@ -152,7 +152,7 @@ void MetadataOption::slotTokenTriggered(const QString& token)
     delete dlg;
 }
 
-void MetadataOption::parseOperation(const QString& parseString, ParseSettings& info, ParseResults& results)
+void MetadataOption::parseOperation(const QString& parseString, ParseSettings& settings, ParseResults& results)
 {
     QRegExp reg = regExp();
 
@@ -162,12 +162,12 @@ void MetadataOption::parseOperation(const QString& parseString, ParseSettings& i
     PARSE_LOOP_START(parseString, reg)
     {
         QString keyword = reg.cap(2);
-        tmp = parseMetadata(keyword, info);
+        tmp = parseMetadata(keyword, settings);
     }
     PARSE_LOOP_END(parseString, reg, tmp, results)
 }
 
-QString MetadataOption::parseMetadata(const QString& token, ParseSettings& info)
+QString MetadataOption::parseMetadata(const QString& token, ParseSettings& settings)
 {
     QString tmp;
     QString keyword = token.toLower();
@@ -176,7 +176,7 @@ QString MetadataOption::parseMetadata(const QString& token, ParseSettings& info)
         return tmp;
     }
 
-    DMetadata meta(info.fileUrl.toLocalFile());
+    DMetadata meta(settings.fileUrl.toLocalFile());
     if (!meta.isEmpty())
     {
         KExiv2::MetaDataMap dataMap;

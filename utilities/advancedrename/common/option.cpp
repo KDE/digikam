@@ -96,12 +96,12 @@ ModifierList Option::modifiers() const
     return d->modifiers;
 }
 
-void Option::parse(const QString& parseString, ParseSettings& info, bool modify)
+void Option::parse(const QString& parseString, ParseSettings& settings, bool modify)
 {
     d->parsedResults.clear();
     d->modifiedResults.clear();
 
-    parseOperation(parseString, info, d->parsedResults);
+    parseOperation(parseString, settings, d->parsedResults);
     if (modify)
     {
         d->modifiedResults = applyModifiers(parseString, d->parsedResults);

@@ -62,9 +62,9 @@ Parser::~Parser()
     delete d;
 }
 
-void Parser::init(const ParseSettings& info)
+void Parser::init(const ParseSettings& settings)
 {
-    d->settings = info;
+    d->settings = settings;
     d->counter  = 1;
 }
 
@@ -124,36 +124,36 @@ void Parser::registerOption(Option* parser)
 
 ParseResults Parser::results(const QString& parseString, bool modify)
 {
-    ParseResults results;
-    ParseSettings info;
+    ParseResults  results;
+    ParseSettings settings;
 
-    parseOperation(parseString, info, results, modify);
+    parseOperation(parseString, settings, results, modify);
     return results;
 }
 
-QString Parser::parse(const QString& parseString, ParseSettings& info)
+QString Parser::parse(const QString& parseString, ParseSettings& settings)
 {
     ParseResults results;
-    return parseOperation(parseString, info, results);
+    return parseOperation(parseString, settings, results);
 }
 
-QString Parser::parseOperation(const QString& parseString, ParseSettings& info, ParseResults& results, bool modify)
+QString Parser::parseOperation(const QString& parseString, ParseSettings& settings, ParseResults& results, bool modify)
 {
-    QFileInfo fi(info.fileUrl.toLocalFile());
+    QFileInfo fi(settings.fileUrl.toLocalFile());
 
     if (!stringIsValid(parseString))
     {
         return fi.fileName();
     }
 
-    info.startIndex   = d->settings.startIndex;
-    info.currentIndex = d->counter++;
+    settings.startIndex   = d->settings.startIndex;
+    settings.currentIndex = d->counter++;
 
     if (!d->options.isEmpty())
     {
         foreach (Option* option, d->options)
         {
-            option->parse(parseString, info, modify);
+            option->parse(parseString, settings, modify);
 
             ParseResults r = option->results(modify);
             results.append(r);
@@ -172,7 +172,7 @@ QString Parser::parseOperation(const QString& parseString, ParseSettings& info, 
         return fi.fileName();
     }
 
-    if (info.useOriginalFileExtension)
+    if (settings.useOriginalFileExtension)
     {
         newname.append('.').append(fi.suffix());
     }

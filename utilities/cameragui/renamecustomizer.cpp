@@ -198,12 +198,12 @@ QString RenameCustomizer::newName(const QString& fileName, const QDateTime& date
 
     if (d->renameCustom->isChecked())
     {
-        ParseSettings parseInfo;
-        parseInfo.fileUrl    = fileName;
-        parseInfo.cameraName = cameraName;
-        parseInfo.dateTime   = dateTime;
+        ParseSettings settings;
+        settings.fileUrl    = fileName;
+        settings.cameraName = cameraName;
+        settings.dateTime   = dateTime;
 
-        name = d->advancedRenameWidget->parse(parseInfo);
+        name = d->advancedRenameWidget->parse(settings);
     }
 
     return name;

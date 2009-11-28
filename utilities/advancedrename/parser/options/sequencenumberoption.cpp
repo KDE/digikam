@@ -129,14 +129,14 @@ void SequenceNumberOption::slotTokenTriggered(const QString& token)
     emit signalTokenTriggered(tmp);
 }
 
-void SequenceNumberOption::parseOperation(const QString& parseString, ParseSettings& info, ParseResults& results)
+void SequenceNumberOption::parseOperation(const QString& parseString, ParseSettings& settings, ParseResults& results)
 {
     QRegExp reg = regExp();
     int slength = 0;
     int start   = 0;
     int step    = 0;
     int number  = 0;
-    int index   = info.currentIndex;
+    int index   = settings.currentIndex;
 
     // --------------------------------------------------------
 
@@ -144,7 +144,7 @@ void SequenceNumberOption::parseOperation(const QString& parseString, ParseSetti
     PARSE_LOOP_START(parseString, reg)
     {
         slength = reg.cap(1).length();
-        start   = reg.cap(3).isEmpty() ? info.startIndex : reg.cap(3).toInt();
+        start   = reg.cap(3).isEmpty() ? settings.startIndex : reg.cap(3).toInt();
         step    = reg.cap(4).isEmpty() ? 1 : reg.cap(4).toInt();
 
         number  = start + ((index - 1) * step);

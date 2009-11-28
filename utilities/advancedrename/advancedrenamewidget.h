@@ -70,7 +70,7 @@ public:
     void    setParser(Parser* parser);
     Parser* parser();
 
-    QString parse(ParseSettings& info) const;
+    QString parse(ParseSettings& settings) const;
 
     void setControlWidgets(ControlWidgets mask);
 

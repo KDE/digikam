@@ -188,7 +188,7 @@ DateOption::DateOption()
     setRegExp(reg);
 }
 
-void DateOption::parseOperation(const QString& parseString, ParseSettings& info, ParseResults& results)
+void DateOption::parseOperation(const QString& parseString, ParseSettings& settings, ParseResults& results)
 {
     QRegExp reg = regExp();
 
@@ -208,17 +208,17 @@ void DateOption::parseOperation(const QString& parseString, ParseSettings& info,
         QVariant v = df.formatType(token);
         if (v.isNull())
         {
-            tmp = info.dateTime.toString(token);
+            tmp = settings.dateTime.toString(token);
         }
         else
         {
             if (v.type() == QVariant::String)
             {
-                tmp = info.dateTime.toString(v.toString());
+                tmp = settings.dateTime.toString(v.toString());
             }
             else
             {
-                tmp = info.dateTime.toString((Qt::DateFormat)v.toInt());
+                tmp = settings.dateTime.toString((Qt::DateFormat)v.toInt());
             }
         }
     }

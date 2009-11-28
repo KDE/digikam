@@ -61,10 +61,10 @@ public:
     Parser();
     virtual ~Parser();
 
-    void          init(const ParseSettings& info = ParseSettings());
+    void          init(const ParseSettings& settings = ParseSettings());
     void          reset();
 
-    QString       parse(const QString& parseString, ParseSettings& info);
+    QString       parse(const QString& parseString, ParseSettings& settings);
 
     OptionsList   options()   const;
     ModifierList  modifiers() const;
@@ -86,7 +86,7 @@ protected:
 private:
 
     ParseResults results(const QString& parseString, bool modify = true);
-    QString      parseOperation(const QString& parseString, ParseSettings& info, ParseResults& results,
+    QString      parseOperation(const QString& parseString, ParseSettings& settings, ParseResults& results,
                                 bool modify = true);
 
 private:
