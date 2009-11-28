@@ -144,15 +144,12 @@ QString Parser::parseOperation(const QString& parseString, ParseSettings& settin
     settings.startIndex   = d->settings.startIndex;
     settings.currentIndex = d->counter++;
 
-    if (!d->options.isEmpty())
+    foreach (Option* option, d->options)
     {
-        foreach (Option* option, d->options)
-        {
-            option->parse(parseString, settings, modify);
+        option->parse(parseString, settings, modify);
 
-            ParseResults r = option->results(modify);
-            results.append(r);
-        }
+        ParseResults r = option->results(modify);
+        results.append(r);
     }
 
     QString parsed;
