@@ -63,8 +63,8 @@ Option::Option(const QString& name, const QString& description, const QPixmap& i
     registerModifier(new UpperCaseModifier());
     registerModifier(new FirstLetterEachWordUpperCaseModifier());
     registerModifier(new TrimmedModifier());
-    registerModifier(new DefaultValueModifier());
     registerModifier(new UniqueModifier());
+    registerModifier(new DefaultValueModifier());
     registerModifier(new ReplaceModifier());
     registerModifier(new RangeModifier());
 }
