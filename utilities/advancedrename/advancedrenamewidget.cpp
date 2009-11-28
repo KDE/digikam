@@ -288,7 +288,7 @@ void AdvancedRenameWidget::setupWidgets()
     d->tooltipToggleButton = new QToolButton;
     d->tooltipToggleButton->setCheckable(true);
     d->tooltipToggleButton->setIcon(SmallIcon("dialog-information"));
-    d->tooltipToggleButton->setToolTip(i18n("Show help"));
+    d->tooltipToggleButton->setToolTip(i18n("Show a list of all available options"));
 
     // --------------------------------------------------------
 
@@ -307,7 +307,9 @@ void AdvancedRenameWidget::setupWidgets()
     d->modifierToolButton = new QToolButton;
     d->modifierToolButton->setPopupMode(QToolButton::InstantPopup);
     d->modifierToolButton->setIcon(SmallIcon("document-edit"));
-    d->modifierToolButton->setToolTip(i18n("Quickly add a modifier to a renaming option"));
+    d->modifierToolButton->setToolTip(i18n("<p>Add a modifier to a renaming option. "
+                                           "To activate this button, place the cursor behind a renaming option "
+                                           "or an already assigned modifier.</p>"));
 
     // --------------------------------------------------------
 
