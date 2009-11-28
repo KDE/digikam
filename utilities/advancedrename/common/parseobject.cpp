@@ -198,7 +198,11 @@ bool ParseObject::addToken(const QString& id, const QString& description, const 
     {
         return false;
     }
-    token->action()->setText(actionName.isEmpty() ? id : actionName);
+
+    if (!actionName.isEmpty())
+    {
+        token->action()->setText(actionName);
+    }
 
     connect(token, SIGNAL(signalTokenTriggered(const QString&)),
             this, SLOT(slotTokenTriggered(const QString&)));

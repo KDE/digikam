@@ -35,6 +35,8 @@ Token::Token(const QString& id, const QString& description)
        m_id(id), m_description(description)
 {
     m_action = new QAction(this);
+    m_action->setText(id);
+    m_action->setToolTip(description);
 
     connect(m_action, SIGNAL(triggered()), this, SLOT(slotTriggered()));
 }
