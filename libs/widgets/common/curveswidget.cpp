@@ -225,7 +225,8 @@ public:
         int wHeight = pm.height();
 
         // Drawing curves.
-        int curvePrevVal = 0;
+        QPainterPath curvePath;
+        curvePath.moveTo(0, wHeight);
         for (int x = 0 ; x < wWidth; ++x)
         {
 
@@ -233,16 +234,16 @@ public:
             int i = (x * q->m_imageHistogram->getHistogramSegments()) / wWidth;
 
             int curveVal = curves->getCurveValue(q->m_channelType, i);
-
-            p1.save();
-            p1.setRenderHint(QPainter::Antialiasing);
-            p1.setPen(QPen(q->palette().color(QPalette::Active, QPalette::Link), 2, Qt::SolidLine));
-            p1.drawLine(x - 1, wHeight - ((curvePrevVal * wHeight) / q->m_imageHistogram->getHistogramSegments()),
-                        x,     wHeight - ((curveVal * wHeight) / q->m_imageHistogram->getHistogramSegments()));
-
-            p1.restore();
-            curvePrevVal = curveVal;
+            curvePath.lineTo(x, wHeight - ((curveVal * wHeight) / q->m_imageHistogram->getHistogramSegments()));
         }
+        curvePath.lineTo(wWidth, wHeight);
+
+        p1.save();
+        p1.setRenderHint(QPainter::Antialiasing);
+        p1.setPen(QPen(q->palette().color(QPalette::Active, QPalette::Link), 2, Qt::SolidLine));
+        p1.drawPath(curvePath);
+        p1.restore();
+
 
         // Drawing curves points.
         if (!readOnlyMode && curves->getCurveType(q->m_channelType) == ImageCurves::CURVE_SMOOTH)
