@@ -34,7 +34,7 @@ namespace Digikam
 
 UniqueModifier::UniqueModifier()
               : Modifier(i18nc("unique value for duplicate strings", "Unique"),
-                         i18n("Add a suffix number to have unique strings on duplicate values"),
+                         i18n("Add a suffix number to have unique strings in duplicate values"),
                          SmallIcon("button_more"))
 {
     addToken("{unique}", description());
@@ -55,9 +55,9 @@ QString UniqueModifier::modifyOperation(const QString& parseString, const QStrin
     {
         if (cache.count(result) > 1)
         {
-            QString tmp  = result;
-            int index    = cache.count(result) - 1;
-            tmp         += QString("_%1").arg(QString::number(index));
+            QString tmp = result;
+            int index   = cache.count(result) - 1;
+            tmp        += QString("_%1").arg(QString::number(index));
             return tmp;
         }
     }
