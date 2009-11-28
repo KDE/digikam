@@ -152,24 +152,23 @@ QString Parser::parseOperation(const QString& parseString, ParseSettings& settin
         results.append(r);
     }
 
-    QString parsed;
+    QString newName;
     if (modify)
     {
-        parsed = results.replaceTokens(parseString);
+        newName = results.replaceTokens(parseString);
     }
 
-    QString newname = parsed;
-    if (newname.isEmpty())
+    if (newName.isEmpty())
     {
         return fi.fileName();
     }
 
     if (settings.useOriginalFileExtension)
     {
-        newname.append('.').append(fi.suffix());
+        newName.append('.').append(fi.suffix());
     }
 
-    return newname;
+    return newName;
 }
 
 bool Parser::tokenAtPosition(TokenType type, const QString& parseString, int pos)
