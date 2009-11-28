@@ -37,7 +37,9 @@ namespace Digikam
 {
 
 DirectoryNameOption::DirectoryNameOption()
-                   : Option(i18n("Directory"), i18n("Add the directory name"), SmallIcon("folder"))
+                   : Option(i18nc("renaming option for directory related information",
+                                  "Directory"),
+                            i18n("Add the directory name"), SmallIcon("folder"))
 {
     addToken("[dir]",  i18n("Directory name"));
     addToken("[dir.]", i18n("Directory name of the parent, additional '.' characters move up "
