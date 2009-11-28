@@ -26,7 +26,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 015 ==> 215715 : Wrong numbering when importing photos.
 016 ==> 216316 : "Icon view font" setting does not work.
 017 ==> 211559 : Batch queue manager crash after run pressed.
-018 ==> 
+018 ==> 200124 : Crashed after clicking cancel for the "Scan for files" device dialog.
+019 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta6 - Release date: 2009-11-08
