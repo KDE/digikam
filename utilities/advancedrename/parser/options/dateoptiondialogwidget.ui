@@ -16,7 +16,7 @@
      <item row="0" column="0">
       <widget class="QLabel" name="label_3">
        <property name="text">
-        <string>Date source:</string>
+        <string comment="the source of the date (image, system etc...)">Source:</string>
        </property>
        <property name="buddy">
         <cstring>dateFormatPicker</cstring>
@@ -29,7 +29,7 @@
      <item row="1" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>Date format:</string>
+        <string comment="the format of the date">Format:</string>
        </property>
        <property name="buddy">
         <cstring>dateFormatPicker</cstring>
@@ -60,7 +60,7 @@
         </font>
        </property>
        <property name="text">
-        <string comment="KDE::DoNotExtract">TextLabel</string>
+        <string notr="true" comment="KDE::DoNotExtract">placeholder</string>
        </property>
       </widget>
      </item>
@@ -70,7 +70,7 @@
         <bool>true</bool>
        </property>
        <property name="text">
-        <string comment="KDE::DoNotExtract">TextLabel</string>
+        <string notr="true" comment="KDE::DoNotExtract">placeholder</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
