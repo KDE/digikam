@@ -124,7 +124,7 @@ DateOptionDialog::DateOptionDialog(ParseObject* parent)
     ui->dateFormatLink->setTextInteractionFlags(Qt::LinksAccessibleByMouse|Qt::LinksAccessibleByKeyboard);
     ui->dateFormatLink->setText(dateFormatLink);
 
-    ui->customFormatInput->setClickMessage(i18n("Enter custom date format"));
+    ui->customFormatInput->setClickMessage(i18n("Enter custom format"));
 
     // --------------------------------------------------------
 
