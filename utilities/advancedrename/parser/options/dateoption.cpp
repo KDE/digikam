@@ -98,10 +98,7 @@ DateOptionDialog::DateOptionDialog(ParseObject* parent)
     QWidget* mainWidget = new QWidget(this);
     ui->setupUi(mainWidget);
 
-    // set the datePicker and timePicker to the current local datetime
-    QDateTime currentDateTime = QDateTime::currentDateTime();
-    ui->datePicker->setDate(currentDateTime.date());
-    ui->timePicker->setTime(currentDateTime.time());
+    // --------------------------------------------------------
 
     // fill the date source combobox
     ui->dateSourcePicker->addItem(i18nc("Get date information from the image", "Image"),
@@ -117,11 +114,19 @@ DateOptionDialog::DateOptionDialog(ParseObject* parent)
     {
         ui->dateFormatPicker->addItem(desc.first);
     }
+
+    // set the datePicker and timePicker to the current local datetime
+    QDateTime currentDateTime = QDateTime::currentDateTime();
+    ui->datePicker->setDate(currentDateTime.date());
+    ui->timePicker->setTime(currentDateTime.time());
+
     ui->dateFormatLink->setOpenExternalLinks(true);
     ui->dateFormatLink->setTextInteractionFlags(Qt::LinksAccessibleByMouse|Qt::LinksAccessibleByKeyboard);
     ui->dateFormatLink->setText(dateFormatLink);
 
     ui->customFormatInput->setClickMessage(i18n("Enter custom date format"));
+
+    // --------------------------------------------------------
 
     connect(ui->dateSourcePicker, SIGNAL(currentIndexChanged(int)),
             this, SLOT(slotDateSourceChanged(int)));
@@ -131,6 +136,8 @@ DateOptionDialog::DateOptionDialog(ParseObject* parent)
 
     connect(ui->customFormatInput, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotCustomFormatChanged(const QString&)));
+
+    // --------------------------------------------------------
 
     ui->dateFormatPicker->setCurrentIndex(DateFormat::Standard);
     slotDateFormatChanged(ui->dateFormatPicker->currentIndex());
