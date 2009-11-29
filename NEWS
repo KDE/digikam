@@ -29,7 +29,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 018 ==> 200124 : Crashed after clicking cancel for the "Scan for files" device dialog.
 019 ==> 216502 : Import errors are not reported.
 020 ==> 205001 : MapSearch: Merge overlapping markers to clusters.
-021 ==> 
+021 ==> 216652 : Wrong max calculation in histogram view.
+022 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta6 - Release date: 2009-11-08
