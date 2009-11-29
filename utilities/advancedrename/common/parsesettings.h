@@ -41,18 +41,19 @@ class ParseSettings
 {
 public:
 
-    ParseSettings() :
-        startIndex(1),
-        useOriginalFileExtension(true)
-    {};
+    // default ctors
+    ParseSettings() { init(); };
+    ParseSettings(const QString& _parseString) :
+        parseString(_parseString)
+    { init(); };
 
-    ParseSettings(const ImageInfo& info) :
-        fileUrl(info.fileUrl()),
-        cameraName(info.photoInfoContainer().make + ' ' + info.photoInfoContainer().model),
-        dateTime(info.dateTime()),
-        startIndex(1),
-        useOriginalFileExtension(true)
-    {};
+    // ImageInfo ctors
+    ParseSettings(const ImageInfo& info) { init(info); };
+    ParseSettings(const QString& _parseString, const ImageInfo& info) :
+        parseString(_parseString)
+    { init(info); };
+
+    // --------------------------------------------------------
 
     bool isValid()
     {
@@ -64,10 +65,28 @@ public:
 
     KUrl      fileUrl;
     QString   cameraName;
+    QString   parseString;
     QDateTime dateTime;
     int       startIndex;
     int       currentIndex;
     bool      useOriginalFileExtension;
+
+private:
+
+    void init()
+    {
+        startIndex               = 1;
+        useOriginalFileExtension = true;
+    };
+
+    void init(const ImageInfo& info)
+    {
+        init();
+
+        fileUrl    = info.fileUrl();
+        cameraName = info.photoInfoContainer().make + ' ' + info.photoInfoContainer().model;
+        dateTime   = info.dateTime();
+    }
 };
 
 } // namespace Digikam
