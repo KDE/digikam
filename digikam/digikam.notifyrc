@@ -82,10 +82,22 @@ Action=Popup
 
 [Event/batchthumbscompleted]
 Name=Update of thumbnails database complete
+Name[pt]=A actualização da base de dados de impressões digitais terminou
+Name[pt_BR]=Atualização do banco de dados de miniaturas concluída
+Name[uk]=Оновлення бази даних мініатюр завершено
 Comment=The update of the thumbnails database has been completed.
+Comment[pt]=Terminou com sucesso a actualização da base de dados de impressões digitais.
+Comment[pt_BR]=A atualização do banco de dados de miniaturas foi concluída.
+Comment[uk]=Оновлення бази даних мініатюр завершено.
 Action=Popup
 
 [Event/batchalbumssyncmetadatacompleted]
 Name=Synchronization of images' metadata with database completed
+Name[pt]=A sincronização dos meta-dados das imagens com a base de dados terminou
+Name[pt_BR]=Sincronização dos metadados das imagens com o banco de dados concluída
+Name[uk]=Синхронізацію метаданих зображень з базою даних завершено
 Comment=The synchronization of the images' metadata with the database has been completed.
+Comment[pt]=A sincronização dos meta-dados da imagens com a base de dados terminou com sucesso.
+Comment[pt_BR]=A sincronização dos metadados das imagens com o banco de dados foi concluída.
+Comment[uk]=Синхронізацію метаданих зображень з базою даних завершено.
 Action=Popup
