@@ -179,7 +179,6 @@ void AdvancedRenameLineEdit::keyPressEvent(QKeyEvent* e)
     if (e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return)
     {
         emit signalReturnPressed();
-        return;
     }
     // the keys "Up, Down, PageUp, PageDown" should be send to the QComboBox
     else if (e->key() == Qt::Key_Up     || e->key() == Qt::Key_Down    ||
