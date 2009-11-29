@@ -78,6 +78,7 @@ public:
                 max = qMax(qMax(histogram->getMaximum(RedChannel),
                                 histogram->getMaximum(GreenChannel)),
                                 histogram->getMaximum(BlueChannel));
+                break;
             default:
                 kError() << "Untreated channel type " << channelType << ". Using luminosity as default.";
                 max = histogram->getMaximum(LuminosityChannel);
