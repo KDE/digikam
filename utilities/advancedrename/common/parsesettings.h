@@ -42,16 +42,26 @@ class ParseSettings
 public:
 
     // default ctors
-    ParseSettings() { init(); };
+    ParseSettings()
+    {
+        init();
+    };
     ParseSettings(const QString& _parseString) :
         parseString(_parseString)
-    { init(); };
+    {
+        init();
+    };
 
     // ImageInfo ctors
-    ParseSettings(const ImageInfo& info) { init(info); };
+    ParseSettings(const ImageInfo& info)
+    {
+        init(info);
+    };
     ParseSettings(const QString& _parseString, const ImageInfo& info) :
         parseString(_parseString)
-    { init(info); };
+    {
+        init(info);
+    };
 
     // --------------------------------------------------------
 
