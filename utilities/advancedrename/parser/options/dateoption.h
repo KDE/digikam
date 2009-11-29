@@ -81,13 +81,25 @@ class DateOptionDialog : public ParseObjectDialog
 
 public:
 
+    enum DateSource
+    {
+        FromImage = 0,
+        CurrentDateTime,
+        FixedDateTime
+    };
+
+public:
+
     DateOptionDialog(ParseObject* parent);
     ~DateOptionDialog();
 
     Ui::DateOptionDialogWidget* const ui;
 
+    DateSource dateSource();
+
 private Q_SLOTS:
 
+    void slotDateSourceChanged(int);
     void slotDateFormatChanged(int);
     void slotCustomFormatChanged(const QString&);
 
@@ -96,6 +108,8 @@ private:
     QString formattedDateTime(const QDateTime& date);
     void    updateExampleLabel();
 };
+
+// --------------------------------------------------------
 
 class DateOption : public Option
 {

@@ -103,6 +103,11 @@ DateOptionDialog::DateOptionDialog(ParseObject* parent)
     ui->datePicker->setDate(currentDateTime.date());
     ui->timePicker->setTime(currentDateTime.time());
 
+    // fill the date source combobox
+    ui->dateSourcePicker->addItem(i18n("From Image"),   QVariant(FromImage));
+//    ui->dateSourcePicker->addItem(i18n("Current Date"), QVariant(CurrentDateTime));
+    ui->dateSourcePicker->addItem(i18n("Fixed Date"),   QVariant(FixedDateTime));
+
     // fill the date format combobox
     DateFormat df;
     foreach (const DateFormat::DateFormatDescriptor& desc, df.map())
@@ -114,6 +119,10 @@ DateOptionDialog::DateOptionDialog(ParseObject* parent)
     ui->dateFormatLink->setText(dateFormatLink);
 
     ui->customFormatInput->setClickMessage(i18n("Enter custom date format"));
+
+    connect(ui->dateSourcePicker, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(slotDateSourceChanged(int)));
+
     connect(ui->dateFormatPicker, SIGNAL(currentIndexChanged(int)),
             this, SLOT(slotDateFormatChanged(int)));
 
@@ -131,6 +140,15 @@ DateOptionDialog::DateOptionDialog(ParseObject* parent)
 DateOptionDialog::~DateOptionDialog()
 {
     delete ui;
+}
+
+DateOptionDialog::DateSource DateOptionDialog::dateSource()
+{
+    QVariant v = ui->dateSourcePicker->itemData(ui->dateSourcePicker->currentIndex());
+    bool ok    = true;
+    int choice = v.toInt(&ok);
+
+    return (DateSource)choice;
 }
 
 QString DateOptionDialog::formattedDateTime(const QDateTime& date)
@@ -154,6 +172,14 @@ QString DateOptionDialog::formattedDateTime(const QDateTime& date)
         tmp = date.toString((Qt::DateFormat)v.toInt());
     }
     return tmp;
+}
+
+void DateOptionDialog::slotDateSourceChanged(int index)
+{
+    Q_UNUSED(index)
+
+    DateSource choice = dateSource();
+    ui->fixedDateContainer->setEnabled( (choice == FixedDateTime) );
 }
 
 void DateOptionDialog::slotDateFormatChanged(int index)
@@ -246,7 +272,7 @@ void DateOption::slotTokenTriggered(const QString& token)
         int index = dlg->ui->dateFormatPicker->currentIndex();
 
         // use custom date format?
-        if (dlg->ui->fixedDateBtn->isChecked())
+        if (dlg->dateSource() == DateOptionDialog::FixedDateTime)
         {
             QDateTime date;
             date.setDate(dlg->ui->datePicker->date());

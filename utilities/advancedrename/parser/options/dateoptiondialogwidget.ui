@@ -6,14 +6,27 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>257</width>
-    <height>522</height>
+    <width>307</width>
+    <height>534</height>
    </rect>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_3" stretch="0,0,0,10">
+  <layout class="QVBoxLayout" name="verticalLayout_3" stretch="0,0,0,0,10">
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
+    <layout class="QGridLayout" name="gridLayout" columnstretch="10,0">
+     <item row="0" column="0">
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Date source:</string>
+       </property>
+       <property name="buddy">
+        <cstring>dateFormatPicker</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="KComboBox" name="dateSourcePicker"/>
+     </item>
+     <item row="1" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
         <string>Date format:</string>
@@ -23,24 +36,17 @@
        </property>
       </widget>
      </item>
-     <item>
+     <item row="1" column="1">
       <widget class="KComboBox" name="dateFormatPicker"/>
      </item>
     </layout>
-   </item>
-   <item>
-    <widget class="KLineEdit" name="customFormatInput">
-     <property name="enabled">
-      <bool>false</bool>
-     </property>
-    </widget>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
       <widget class="QLabel" name="exampleLabel">
        <property name="enabled">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
@@ -61,7 +67,7 @@
      <item>
       <widget class="QLabel" name="dateFormatLink">
        <property name="enabled">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
        <property name="text">
         <string comment="KDE::DoNotExtract">TextLabel</string>
@@ -74,34 +80,31 @@
     </layout>
    </item>
    <item>
-    <widget class="QGroupBox" name="groupBox_3">
-     <property name="title">
-      <string comment="source to read date information from">Source</string>
+    <widget class="KLineEdit" name="customFormatInput">
+     <property name="enabled">
+      <bool>false</bool>
      </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="Line" name="line">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QWidget" name="widget_3" native="true">
      <layout class="QVBoxLayout" name="verticalLayout_2">
-      <item>
-       <widget class="QRadioButton" name="fromImageBtn">
-        <property name="text">
-         <string>From Image</string>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QRadioButton" name="fixedDateBtn">
-        <property name="text">
-         <string>Fixed Date</string>
-        </property>
-       </widget>
-      </item>
       <item>
        <widget class="QWidget" name="fixedDateContainer" native="true">
         <property name="enabled">
          <bool>false</bool>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout">
+         <property name="margin">
+          <number>0</number>
+         </property>
          <item>
           <widget class="KDatePicker" name="datePicker"/>
          </item>
@@ -111,9 +114,6 @@
             <widget class="QLabel" name="label">
              <property name="text">
               <string>Time:</string>
-             </property>
-             <property name="buddy">
-              <cstring>timePicker</cstring>
              </property>
             </widget>
            </item>
@@ -148,29 +148,11 @@
   </customwidget>
  </customwidgets>
  <tabstops>
+  <tabstop>dateSourcePicker</tabstop>
   <tabstop>dateFormatPicker</tabstop>
   <tabstop>customFormatInput</tabstop>
-  <tabstop>fromImageBtn</tabstop>
-  <tabstop>fixedDateBtn</tabstop>
   <tabstop>timePicker</tabstop>
  </tabstops>
  <resources/>
- <connections>
-  <connection>
-   <sender>fixedDateBtn</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>fixedDateContainer</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>42</x>
-     <y>147</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>52</x>
-     <y>163</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>
