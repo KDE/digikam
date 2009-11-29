@@ -183,6 +183,9 @@ AdvancedRenameDialog::AdvancedRenameDialog(QWidget* parent)
     d->listView->setHeaderLabels(QStringList() << i18n("Current Name") << i18n("New Name"));
     d->listView->header()->setResizeMode(0, QHeaderView::Stretch);
     d->listView->header()->setResizeMode(1, QHeaderView::Stretch);
+    d->listView->setWhatsThis(i18n("This list shows the results for your renaming pattern. Red items indicate a "
+                                   "a name collision, either because the new name is equal to the current name, "
+                                   "or because the name has already been assigned to another item."));
 
     // --------------------------------------------------------
 
