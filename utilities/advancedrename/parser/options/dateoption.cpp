@@ -104,9 +104,12 @@ DateOptionDialog::DateOptionDialog(ParseObject* parent)
     ui->timePicker->setTime(currentDateTime.time());
 
     // fill the date source combobox
-    ui->dateSourcePicker->addItem(i18n("From Image"),   QVariant(FromImage));
-//    ui->dateSourcePicker->addItem(i18n("Current Date"), QVariant(CurrentDateTime));
-    ui->dateSourcePicker->addItem(i18n("Fixed Date"),   QVariant(FixedDateTime));
+    ui->dateSourcePicker->addItem(i18nc("Get date information from the image", "Image"),
+                                  QVariant(FromImage));
+//    ui->dateSourcePicker->addItem(i18nc("Get date information from the current date", "Current Date"),
+//                                  QVariant(CurrentDateTime));
+    ui->dateSourcePicker->addItem(i18nc("Set a fixed date", "Fixed Date"),
+                                  QVariant(FixedDateTime));
 
     // fill the date format combobox
     DateFormat df;
