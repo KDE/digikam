@@ -194,10 +194,12 @@ void DateOptionDialog::slotDateSourceChanged(int index)
 
 void DateOptionDialog::slotDateFormatChanged(int index)
 {
-    ui->customFormatInput->setEnabled(index == DateFormat::Custom);
+    bool custom = (index == DateFormat::Custom);
 
-    ui->dateFormatLink->setEnabled(index == DateFormat::Custom);
-    ui->dateFormatLink->setVisible(index == DateFormat::Custom);
+    ui->customFormatInput->setEnabled(custom);
+
+    ui->dateFormatLink->setEnabled(custom);
+    ui->dateFormatLink->setVisible(custom);
 
     updateExampleLabel();
 }
