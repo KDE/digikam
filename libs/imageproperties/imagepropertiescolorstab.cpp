@@ -325,9 +325,6 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
     connect(d->histogramBox, SIGNAL(signalScaleChanged()),
             this, SLOT(slotScaleChanged()));
 
-    connect(d->histogramBox, SIGNAL(signalColorsChanged()),
-            this, SLOT(slotColorsChanged()));
-
     // -------------------------------------------------------------
 
     connect(d->minInterv, SIGNAL(valueChanged (int)),
