@@ -80,6 +80,7 @@ public:
     int       startIndex;
     int       currentIndex;
     bool      useOriginalFileExtension;
+    bool      applyModifiers;
 
 private:
 
@@ -87,6 +88,7 @@ private:
     {
         startIndex               = 1;
         useOriginalFileExtension = true;
+        applyModifiers           = true;
     };
 
     void init(const ImageInfo& info)
