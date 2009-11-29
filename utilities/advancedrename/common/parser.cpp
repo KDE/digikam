@@ -85,11 +85,7 @@ void Parser::reset()
 bool Parser::stringIsValid(const QString& str)
 {
     QRegExp invalidString("^\\s*$");
-    if (str.isEmpty() || invalidString.exactMatch(str))
-    {
-        return false;
-    }
-    return true;
+    return (!str.isEmpty() && !invalidString.exactMatch(str));
 }
 
 OptionsList Parser::options() const
