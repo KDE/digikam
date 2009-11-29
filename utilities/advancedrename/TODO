@@ -1,0 +1,22 @@
+TODO list for AdvancedRename utility
+------------------------------------
+
+General:
+
+    - Actually extending the parser is quite easy, but maybe a more plugin-based approach would be even better.
+
+Parsing:
+
+    - Do not parse modifier tokens when they are placed incorrectly.
+      Right now they are inserted as normal text, but it would be better to completely remove them from the parsed name.
+
+    - Try to detect faulty rename pattern strings. In this case, deactivate the rename dialog's OK button.
+
+Syntax Highlighting:
+
+    - Do not parse modifier tokens when they are placed incorrectly.
+      Instead mark them with a red background color.
+
+    - Be smarter when detecting parameters. Right now we need to make sure that the first matching group
+      in the RegExp contains the parameters. But sometimes it is not possible to enclose the parameters with
+      the first matching group.
