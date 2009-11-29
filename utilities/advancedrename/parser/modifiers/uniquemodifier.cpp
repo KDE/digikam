@@ -46,21 +46,18 @@ UniqueModifier::UniqueModifier()
 
 QString UniqueModifier::modifyOperation(const QString& parseString, const QString& result)
 {
+    Q_UNUSED(parseString)
+
     cache << result;
 
-    QRegExp reg = regExp();
-    int pos     = 0;
-    pos         = reg.indexIn(parseString, pos);
-    if (pos > -1)
+    if (cache.count(result) > 1)
     {
-        if (cache.count(result) > 1)
-        {
-            QString tmp = result;
-            int index   = cache.count(result) - 1;
-            tmp        += QString("_%1").arg(QString::number(index));
-            return tmp;
-        }
+        QString tmp = result;
+        int index   = cache.count(result) - 1;
+        tmp        += QString("_%1").arg(QString::number(index));
+        return tmp;
     }
+
     return result;
 }
 
