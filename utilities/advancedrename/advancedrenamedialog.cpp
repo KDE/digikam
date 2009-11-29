@@ -348,7 +348,7 @@ void AdvancedRenameDialog::writeSettings()
 bool AdvancedRenameDialog::checkNewNames()
 {
     QSet<QString> tmpNewNames;
-    bool valid = true;
+    bool ok = true;
 
     QTreeWidgetItemIterator it(d->listView);
     while (*it)
@@ -356,14 +356,15 @@ bool AdvancedRenameDialog::checkNewNames()
         AdvancedRenameListItem* item = dynamic_cast<AdvancedRenameListItem*>((*it));
         if (item)
         {
-            valid = valid && (!item->isInvalid()) && ( !tmpNewNames.contains(item->newName()) );
+            bool valid = !item->isInvalid() && ( !tmpNewNames.contains(item->newName()) );
+            ok         = ok && valid;
             item->markInvalid(!valid);
             tmpNewNames << item->newName();
         }
         ++it;
     }
 
-    return valid;
+    return ok;
 }
 
 }  // namespace Digikam
