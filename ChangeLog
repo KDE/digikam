@@ -1,3 +1,3072 @@
+1.0.0-rc 2009-11-30
+--------------------------------------------------------------------------------
+
+2009-11-30 06:32  cgilles
+
+	* NEWS: update
+
+2009-11-30 02:26  sengels
+
+	* tests/CMakeLists.txt: some fixes for the tests to get to a
+	  building digikam again
+
+2009-11-29 21:48  cgilles
+
+	* NEWS: update
+
+2009-11-29 20:21  mghansen
+
+	* NEWS: Update news.
+	  
+	  BUG: 205001
+
+2009-11-29 17:59  aclemens
+
+	* utilities/advancedrename/common/parsesettings.h: add new option
+	  for future parse processing
+
+2009-11-29 17:30  aclemens
+
+	* utilities/advancedrename/common/parsesettings.h: polish
+
+2009-11-29 17:24  aclemens
+
+	* utilities/advancedrename/common/parsesettings.h: code cleanup, in
+	  the future I will make the parse() method easier, it only will
+	  take the ParseSettings class. This will make modifiers a little
+	  bit more
+	  flexible I guess. Also Options and Modifiers will share the same
+	  interface...
+
+2009-11-29 16:47  aclemens
+
+	* utilities/advancedrename/TODO: Add TODO
+
+2009-11-29 16:36  aclemens
+
+	* utilities/advancedrename/common/modifier.cpp,
+	  utilities/advancedrename/common/modifier.h: polish
+
+2009-11-29 14:30  aclemens
+
+	* utilities/advancedrename/parser/modifiers/uniquemodifier.cpp:
+	  UniqueModifier takes no parameters, no need to use a regexp here
+	  in that case
+
+2009-11-29 14:17  aclemens
+
+	* utilities/advancedrename/common/parseresults.cpp: cleanup code
+
+2009-11-29 13:56  aclemens
+
+	* utilities/advancedrename/common/parser.cpp: cleanup code
+
+2009-11-29 13:28  cgilles
+
+	* libs/widgets/common/histogrampainter.cpp: fix max histogram value
+	  BUGS: 216652
+
+2009-11-29 13:13  aclemens
+
+	* utilities/advancedrename/advancedrenameinput.cpp: huh? how come
+	  this has been added? must be my auto-completion somehow :D
+
+2009-11-29 13:09  aclemens
+
+	* utilities/advancedrename/advancedrenameinput.cpp: Behave more
+	  like a "real" QComboBox with a QLineEdit: send the events for the
+	  keys "Up, Down, PageUp, PageDown" to the QComboBox, to scroll
+	  through the
+	  pattern history.
+
+2009-11-29 11:39  aclemens
+
+	* utilities/advancedrename/parser/options/dateoption.cpp: shorten
+	  the click message a little bit
+
+2009-11-29 11:32  aclemens
+
+	* utilities/advancedrename/parser/options/dateoptiondialogwidget.ui:
+	  Re-layout the DateOptionDialog
+
+2009-11-29 11:31  aclemens
+
+	* utilities/advancedrename/parser/options/dateoption.cpp: simplify
+	  code
+
+2009-11-29 11:14  aclemens
+
+	* utilities/advancedrename/parser/options/dateoption.cpp: Make the
+	  link to the Qt datetime documentation translatable
+
+2009-11-29 11:14  aclemens
+
+	* utilities/advancedrename/parser/options/dateoption.cpp: polish
+
+2009-11-29 11:14  aclemens
+
+	* utilities/advancedrename/parser/options/dateoptiondialogwidget.ui:
+	  Add comments to strings in UI file, mark some of them as "not
+	  translatable",
+	  their text will be set later in the code.
+
+2009-11-29 11:14  aclemens
+
+	* utilities/advancedrename/parser/options/dateoption.cpp: Change
+	  i18n
+
+2009-11-29 11:08  scripty
+
+	* digikam/digikam.notifyrc: SVN_SILENT made messages (.desktop
+	  file)
+
+2009-11-29 10:57  aclemens
+
+	* utilities/advancedrename/parser/options/dateoption.cpp,
+	  utilities/advancedrename/parser/options/dateoption.h,
+	  utilities/advancedrename/parser/options/dateoptiondialogwidget.ui:
+	  Re-layout DateOptionDialog to save some vertical space. Add new
+	  option to be
+	  able to set the current datetime (but currently deactivated, need
+	  to add more
+	  logic and tests).
+
+2009-11-29 10:17  aclemens
+
+	* libs/imageproperties/imagepropertiescolorstab.cpp: fix connect()
+	  error: signalColorsChanged() has been removed
+
+2009-11-29 08:52  cgilles
+
+	* tips: big update of tips of days before strings freeze
+
+2009-11-29 01:16  aclemens
+
+	* utilities/advancedrename/advancedrenamedialog.cpp: add whatsThis
+	  message
+
+2009-11-29 01:06  aclemens
+
+	* utilities/advancedrename/advancedrenamedialog.cpp: fix error
+	  handling: only mark the invalid names, not every name after the
+	  first
+	  invalid item.
+
+2009-11-28 21:09  aclemens
+
+	* utilities/advancedrename/common/parseobject.cpp,
+	  utilities/advancedrename/common/token.cpp: cleanup code
+
+2009-11-28 20:50  aclemens
+
+	* utilities/advancedrename/advancedrenamewidget.cpp: add tooltip
+
+2009-11-28 20:08  aclemens
+
+	* utilities/advancedrename/advancedrenamewidget.cpp: move the info
+	  button to the right
+
+2009-11-28 20:08  aclemens
+
+	* utilities/advancedrename/advancedrenamewidget.cpp: polish
+	  tooltips
+
+2009-11-28 20:08  aclemens
+
+	* utilities/advancedrename/advancedrenamewidget.cpp,
+	  utilities/advancedrename/advancedrenamewidget.h: Cleanup code,
+	  the tokenToolButton is not used anymore
+
+2009-11-28 18:28  aclemens
+
+	* utilities/advancedrename/parser/options/dateoption.cpp: set
+	  datePicker and timePicker to the current datetime
+
+2009-11-28 13:58  cgilles
+
+	* NEWS: update
+
+2009-11-28 13:34  cgilles
+
+	* libs/imageproperties/imagepropertiescolorstab.cpp,
+	  libs/widgets/common/histogrambox.cpp,
+	  libs/widgets/common/histogrambox.h,
+	  libs/widgets/common/histogrampainter.cpp,
+	  libs/widgets/common/histogrampainter.h,
+	  libs/widgets/common/histogramwidget.cpp,
+	  libs/widgets/common/histogramwidget.h: Patch from Jens Muller
+	  about to use same histogram rendering in All color mode than
+	  Gimp, photoshop, LightRoom, etc...
+
+2009-11-28 12:17  aclemens
+
+	* utilities/advancedrename/common/parser.cpp: code cleanup
+
+2009-11-28 12:17  aclemens
+
+	* utilities/advancedrename/common/parser.cpp: No need to check for
+	  non-empty options list, foreach will not operate on an
+	  empty list anyway
+
+2009-11-28 12:02  aclemens
+
+	* utilities/advancedrename/common/tooltipcreator.cpp: If a section
+	  doesn't contain any data, don't render it in the tooltip
+
+2009-11-28 12:02  aclemens
+
+	* utilities/advancedrename/common/parseresults.h: polish
+
+2009-11-28 11:41  aclemens
+
+	* utilities/advancedrename/common/parser.cpp,
+	  utilities/advancedrename/common/parser.h: polish
+
+2009-11-28 11:41  aclemens
+
+	* utilities/advancedrename/advancedrenameinput.cpp,
+	  utilities/advancedrename/common/parser.cpp,
+	  utilities/advancedrename/common/parser.h: change enum TokenType
+
+2009-11-28 11:17  aclemens
+
+	* utilities/advancedrename/common/parsesettings.h: polish
+
+2009-11-28 11:17  aclemens
+
+	* utilities/advancedrename/common/parsesettings.h: fix include
+	  guard
+
+2009-11-28 10:37  aclemens
+
+	* utilities/advancedrename/parser/options/dateoptiondialogwidget.ui:
+	  polish
+
+2009-11-28 10:33  aclemens
+
+	* utilities/advancedrename/parser/options/dateoptiondialogwidget.ui,
+	  utilities/advancedrename/parser/options/directorynameoption.cpp:
+	  fix i18n issues
+
+2009-11-28 09:36  cgilles
+
+	* libs/widgets/common/curveswidget.cpp: apply patch from Jens
+	  Muller to use QPainterPath
+
+2009-11-28 09:17  aclemens
+
+	* utilities/advancedrename/parser/modifiers/uniquemodifier.cpp:
+	  polish
+
+2009-11-28 09:16  cgilles
+
+	* NEWS: update
+
+2009-11-28 08:41  cgilles
+
+	* NEWS: update
+
+2009-11-28 08:02  aclemens
+
+	* utilities/advancedrename/advancedrenamedialog.cpp,
+	  utilities/advancedrename/advancedrenamewidget.cpp,
+	  utilities/advancedrename/advancedrenamewidget.h,
+	  utilities/advancedrename/common/option.cpp,
+	  utilities/advancedrename/common/option.h,
+	  utilities/advancedrename/common/parser.cpp,
+	  utilities/advancedrename/common/parser.h,
+	  utilities/advancedrename/parser/options/cameranameoption.cpp,
+	  utilities/advancedrename/parser/options/cameranameoption.h,
+	  utilities/advancedrename/parser/options/dateoption.cpp,
+	  utilities/advancedrename/parser/options/dateoption.h,
+	  utilities/advancedrename/parser/options/directorynameoption.cpp,
+	  utilities/advancedrename/parser/options/directorynameoption.h,
+	  utilities/advancedrename/parser/options/dummyoption.cpp,
+	  utilities/advancedrename/parser/options/dummyoption.h,
+	  utilities/advancedrename/parser/options/filepropertiesoption.cpp,
+	  utilities/advancedrename/parser/options/filepropertiesoption.h,
+	  utilities/advancedrename/parser/options/metadataoption.cpp,
+	  utilities/advancedrename/parser/options/metadataoption.h,
+	  utilities/advancedrename/parser/options/sequencenumberoption.cpp,
+	  utilities/advancedrename/parser/options/sequencenumberoption.h,
+	  utilities/cameragui/renamecustomizer.cpp,
+	  utilities/queuemanager/queuelist.cpp: polish
+
+2009-11-28 08:02  aclemens
+
+	* utilities/queuemanager/queuelist.cpp: Fix datetime parsing in BQM
+
+2009-11-28 08:02  aclemens
+
+	* utilities/advancedrename/common/option.cpp: polish
+
+2009-11-28 08:02  aclemens
+
+	* utilities/advancedrename/common/option.cpp: change order of
+	  modifiers in toolbutton menu
+
+2009-11-27 22:03  mwiesweg
+
+	* NEWS, digikam/digikamimageview.cpp, digikam/imagedelegate.cpp:
+	  Take font setting into account for icon view
+	  
+	  BUG: 216316
+
+2009-11-27 21:27  aclemens
+
+	* utilities/advancedrename/parser/modifiers/uniquemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/uniquemodifier.h:
+	  polish
+
+2009-11-27 20:59  aclemens
+
+	* utilities/advancedrename/parser/modifiers/uniquemodifier.h:
+	  polish
+
+2009-11-27 20:52  mghansen
+
+	* utilities/gpssearch/gpssearchview.cpp: Comment out excessive
+	  kDebug.
+
+2009-11-27 20:12  mghansen
+
+	* digikam/digikam.notifyrc,
+	  utilities/batch/batchalbumssyncmetadata.cpp,
+	  utilities/batch/batchthumbsgenerator.cpp: Add notifyrc-entries
+	  for Batch Thumbnail Generator and Batch Database Synchronization.
+
+2009-11-27 19:48  aclemens
+
+	* utilities/advancedrename/parser/modifiers/uniquemodifier.cpp: Fix
+	  testcode variable names... ;-)
+
+2009-11-27 19:48  aclemens
+
+	* utilities/advancedrename/parser/modifiers/uniquemodifier.cpp:
+	  polish i18n
+
+2009-11-27 19:48  aclemens
+
+	* utilities/advancedrename/parser/modifiers/uniquemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/uniquemodifier.h: This
+	  modifier will not use a settings dialog at the moment...
+
+2009-11-27 19:40  aclemens
+
+	* utilities/advancedrename/parser/modifiers/uniquemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/uniquemodifier.h: fix
+	  logic in UniqueModifier
+
+2009-11-27 18:38  mwiesweg
+
+	* libs/widgets/common/dlogoaction.cpp: When the widget is deleted,
+	  urlLabel will be deleted.
+	  So it should be set to 0 here, shouldn't it?
+	  
+	  CCBUG: 213896
+
+2009-11-27 18:05  mwiesweg
+
+	* digikam/folderview.cpp: Ensure that all stored pointers to items
+	  are reset when removed.
+	  This was not done for two of four.
+	  
+	  CCBUG: 216392
+
+2009-11-27 17:43  aclemens
+
+	* CMakeLists.txt, tests/CMakeLists.txt,
+	  utilities/advancedrename/common/option.cpp,
+	  utilities/advancedrename/common/parseobject.cpp,
+	  utilities/advancedrename/common/parseobject.h,
+	  utilities/advancedrename/common/parser.cpp,
+	  utilities/advancedrename/parser/modifiers/uniquemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/uniquemodifier.h: Add
+	  experimental modifier: 'Unique'.
+	  I'm not totally sure how to handle this, maybe I need to
+	  restructure the parser
+	  in the future to hold information about all files that should be
+	  renamed. Right
+	  now it only renames one file after the other (which is actually a
+	  good thing,
+	  but may be problematic in some cases).
+	  
+	  This modifier will allow to have unique values from a renaming
+	  option, by
+	  adding a number prefix if necessary.
+	  The problem at the moment: I can not reset the modifier for every
+	  renaming
+	  option, so if you use it more than once, the counter just
+	  increases.
+	  
+	  I will add a little demo video on my Youtube account to show how
+	  it works.
+	  
+	  bdbrot,
+	  what do you think? Is this enough for you?
+	  I explicitly implemented it as a modifier so it can be attached
+	  to any renaming
+	  option, not only the date field.
+	  
+	  Andi
+	  
+	  CCBUG:208920
+
+2009-11-27 15:20  aclemens
+
+	* tests/advancedrenametest.cpp,
+	  utilities/advancedrename/advancedrenamedialog.cpp,
+	  utilities/advancedrename/advancedrenamewidget.cpp,
+	  utilities/advancedrename/advancedrenamewidget.h,
+	  utilities/advancedrename/common/option.cpp,
+	  utilities/advancedrename/common/option.h,
+	  utilities/advancedrename/common/parseinformation.h,
+	  utilities/advancedrename/common/parseobject.h,
+	  utilities/advancedrename/common/parser.cpp,
+	  utilities/advancedrename/common/parser.h,
+	  utilities/advancedrename/common/parsesettings.h,
+	  utilities/advancedrename/parser/options/cameranameoption.cpp,
+	  utilities/advancedrename/parser/options/cameranameoption.h,
+	  utilities/advancedrename/parser/options/dateoption.cpp,
+	  utilities/advancedrename/parser/options/dateoption.h,
+	  utilities/advancedrename/parser/options/directorynameoption.cpp,
+	  utilities/advancedrename/parser/options/directorynameoption.h,
+	  utilities/advancedrename/parser/options/dummyoption.cpp,
+	  utilities/advancedrename/parser/options/dummyoption.h,
+	  utilities/advancedrename/parser/options/filepropertiesoption.cpp,
+	  utilities/advancedrename/parser/options/filepropertiesoption.h,
+	  utilities/advancedrename/parser/options/metadataoption.cpp,
+	  utilities/advancedrename/parser/options/metadataoption.h,
+	  utilities/advancedrename/parser/options/sequencenumberoption.cpp,
+	  utilities/advancedrename/parser/options/sequencenumberoption.h,
+	  utilities/cameragui/renamecustomizer.cpp,
+	  utilities/queuemanager/queuelist.cpp: ParseInformation =>
+	  ParseSettings
+
+2009-11-27 15:01  aclemens
+
+	* utilities/advancedrename/common/parser.cpp: polish
+
+2009-11-27 15:00  aclemens
+
+	* NEWS, tests/advancedrenametest.cpp,
+	  utilities/advancedrename/advancedrenamedialog.cpp,
+	  utilities/advancedrename/advancedrenamedialog.h,
+	  utilities/advancedrename/advancedrenamewidget.cpp,
+	  utilities/advancedrename/advancedrenamewidget.h,
+	  utilities/advancedrename/common/parseinformation.h,
+	  utilities/advancedrename/common/parser.cpp,
+	  utilities/advancedrename/common/parser.h,
+	  utilities/advancedrename/parser/options/sequencenumberoption.cpp,
+	  utilities/cameragui/cameraiconview.cpp,
+	  utilities/cameragui/cameraiconview.h,
+	  utilities/cameragui/cameraui.cpp,
+	  utilities/cameragui/renamecustomizer.cpp,
+	  utilities/cameragui/renamecustomizer.h,
+	  utilities/queuemanager/queuelist.cpp: Change the way the parser
+	  handles numbering. An internal counter is used to
+	  number the images, with an additional startIndex parameter used
+	  by CameraUI to
+	  set a different start than 1.
+	  
+	  CameraUI increases the number / index while it has not been
+	  closed, which is a
+	  good / normal behavior. So when you select three images, download
+	  them and
+	  select different ones later on from the same camera device, the
+	  next index
+	  will be 4.
+	  
+	  Resetting this counter manually was not possible the way the
+	  rename parser
+	  worked before.
+	  
+	  Now the parser can be initialized with a ParseInformation object,
+	  that can have
+	  a custom startIndex parameter.
+	  
+	  BUG:215715
+
+2009-11-27 11:55  aclemens
+
+	* utilities/advancedrename/common/parseobject.cpp: set id() as
+	  actionName if no custom name was defined
+
+2009-11-27 11:31  aclemens
+
+	* utilities/advancedrename/common/parseobject.cpp,
+	  utilities/advancedrename/common/parseobject.h,
+	  utilities/advancedrename/parser/options/filepropertiesoption.cpp:
+	  The alias name I removed before was actually used once: in the
+	  FilePropertiesOption :-)
+	  But most of the time it is not needed, so addToken() will have it
+	  as an
+	  optional parameter now.
+
+2009-11-27 11:20  aclemens
+
+	* utilities/advancedrename/common/parseinformation.h,
+	  utilities/advancedrename/common/parser.cpp,
+	  utilities/advancedrename/parser/options/filepropertiesoption.cpp:
+	  rename "useFileExtension" => "useOriginalFileExtension", to make
+	  it more clear
+	  what is meant by that variable
+
+2009-11-27 10:48  aclemens
+
+	* utilities/advancedrename/common/parseobject.h: polish
+
+2009-11-27 10:46  aclemens
+
+	* utilities/advancedrename/common/parseobject.h: polish
+
+2009-11-27 10:44  aclemens
+
+	* utilities/advancedrename/common/parseobject.h: polish
+
+2009-11-27 10:34  aclemens
+
+	* utilities/advancedrename/common/option.cpp: cleanup code
+
+2009-11-27 10:29  aclemens
+
+	* utilities/advancedrename/common/parser.h: polish
+
+2009-11-27 10:28  aclemens
+
+	* utilities/advancedrename/common/option.cpp,
+	  utilities/advancedrename/common/option.h,
+	  utilities/advancedrename/common/parser.cpp,
+	  utilities/advancedrename/common/parser.h: polish
+
+2009-11-27 10:28  aclemens
+
+	* utilities/advancedrename/common/option.cpp,
+	  utilities/advancedrename/common/option.h,
+	  utilities/advancedrename/common/parser.cpp,
+	  utilities/advancedrename/common/parser.h: Cleanup API
+
+2009-11-27 09:25  aclemens
+
+	* utilities/advancedrename/parser/options/metadataoption.cpp:
+	  polish
+
+2009-11-27 09:24  aclemens
+
+	* utilities/advancedrename/parser/options/sequencenumberoption.cpp:
+	  polish
+
+2009-11-26 22:07  cgilles
+
+	* NEWS: update
+
+2009-11-26 20:58  aclemens
+
+	* utilities/advancedrename/common/parseobject.cpp,
+	  utilities/advancedrename/common/parseobject.h,
+	  utilities/advancedrename/common/token.cpp,
+	  utilities/advancedrename/common/token.h,
+	  utilities/advancedrename/parser/modifiers/defaultvaluemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/firstletterofeachworduppercasemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/lowercasemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/rangemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/replacemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/trimmedmodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/uppercasemodifier.cpp,
+	  utilities/advancedrename/parser/options/cameranameoption.cpp,
+	  utilities/advancedrename/parser/options/dateoption.cpp,
+	  utilities/advancedrename/parser/options/directorynameoption.cpp,
+	  utilities/advancedrename/parser/options/filepropertiesoption.cpp,
+	  utilities/advancedrename/parser/options/metadataoption.cpp,
+	  utilities/advancedrename/parser/options/sequencenumberoption.cpp:
+	  Remove the alias attribute from a token. It is not needed and I
+	  think it never
+	  will be. This way to code is more readable and clear.
+
+2009-11-26 20:04  aclemens
+
+	* utilities/advancedrename/parser/options/dummyoption.cpp: fix
+	  description
+
+2009-11-26 20:03  aclemens
+
+	* utilities/advancedrename/parser/modifiers/defaultvaluemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/firstletterofeachworduppercasemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/lowercasemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/rangemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/replacemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/trimmedmodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/uppercasemodifier.cpp:
+	  cleanup code
+
+2009-11-26 20:03  aclemens
+
+	* utilities/advancedrename/common/parseobject.cpp,
+	  utilities/advancedrename/common/parseobject.h,
+	  utilities/advancedrename/parser/modifiers/defaultvaluemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/firstletterofeachworduppercasemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/lowercasemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/rangemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/replacemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/trimmedmodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/uppercasemodifier.cpp,
+	  utilities/advancedrename/parser/options/cameranameoption.cpp,
+	  utilities/advancedrename/parser/options/dateoption.cpp,
+	  utilities/advancedrename/parser/options/directorynameoption.cpp,
+	  utilities/advancedrename/parser/options/dummyoption.cpp,
+	  utilities/advancedrename/parser/options/filepropertiesoption.cpp,
+	  utilities/advancedrename/parser/options/metadataoption.cpp,
+	  utilities/advancedrename/parser/options/sequencenumberoption.cpp:
+	  ParseObject::addTokenDescription() => ParseObject::addToken()
+
+2009-11-26 18:40  sengels
+
+	* CMakeLists.txt: only include if nepomuk is found
+
+2009-11-26 15:42  aclemens
+
+	* utilities/advancedrename/advancedrenamewidget.cpp: polish
+
+2009-11-26 15:29  aclemens
+
+	* utilities/advancedrename/common/tooltipcreator.cpp,
+	  utilities/advancedrename/common/tooltipcreator.h: Do not add an
+	  empty table row for the last section
+
+2009-11-26 15:23  aclemens
+
+	* utilities/advancedrename/common/tooltipcreator.cpp,
+	  utilities/advancedrename/common/tooltipcreator.h: cleanup code
+
+2009-11-26 15:15  aclemens
+
+	* utilities/advancedrename/common/tooltipcreator.cpp: polish
+
+2009-11-26 15:12  aclemens
+
+	* utilities/advancedrename/common/tooltipcreator.cpp,
+	  utilities/advancedrename/common/tooltipcreator.h: polish /
+	  simplify code
+
+2009-11-26 14:24  aclemens
+
+	* CMakeLists.txt,
+	  utilities/advancedrename/advancedrenamewidget.cpp,
+	  utilities/advancedrename/common/tooltipcreator.cpp,
+	  utilities/advancedrename/common/tooltipcreator.h: Add
+	  TooltipCreator class to avoid macros in
+	  AdvancedRenameWidget::createToolTip()
+
+2009-11-26 13:17  aclemens
+
+	* utilities/advancedrename/advancedrenamewidget.cpp: polish tooltip
+
+2009-11-26 12:41  aclemens
+
+	* utilities/advancedrename/common/parseobject.cpp,
+	  utilities/advancedrename/common/parseobject.h,
+	  utilities/advancedrename/parser/modifiers/rangemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/replacemodifier.cpp,
+	  utilities/advancedrename/parser/options/dateoption.cpp,
+	  utilities/advancedrename/parser/options/directorynameoption.cpp,
+	  utilities/advancedrename/parser/options/filepropertiesoption.cpp,
+	  utilities/advancedrename/parser/options/sequencenumberoption.cpp:
+	  Change default behavior for multiple assigned tokens: A menu
+	  should only
+	  displayed when explicitly set, no need to disable it when it is
+	  NOT wanted.
+
+2009-11-26 12:35  aclemens
+
+	* utilities/advancedrename/parser/modifiers/replacemodifier.cpp:
+	  polish
+
+2009-11-26 12:33  aclemens
+
+	* utilities/advancedrename/parser/modifiers/replacemodifier.cpp:
+	  polish i18n
+
+2009-11-26 07:26  jnarboux
+
+	* utilities/lighttable/lighttablepreview.cpp,
+	  utilities/lighttable/lighttablewindow_p.h,
+	  utilities/setup/setuplighttable.cpp: add an option to the
+	  lighttable to keep current zoom ratio for new loaded pictures
+
+2009-11-25 13:50  cgilles
+
+	* libs/dimg/filters/noisereductionsettings.h,
+	  libs/dimg/filters/waveletsnr.cpp, libs/dimg/filters/waveletsnr.h:
+	  polish
+
+2009-11-25 13:35  cgilles
+
+	* libs/dimg/filters/noisereductionsettings.cpp: fix crash into BQM,
+	  with infinite signal/slot loop
+
+2009-11-25 13:11  aclemens
+
+	* utilities/cameragui/cameranamehelper.cpp: typo
+
+2009-11-25 13:07  coles
+
+	* libs/dimg/filters/noisereductionsettings.cpp: Corrected typo:
+	  adjustements -> adjustments.
+
+2009-11-25 12:18  cgilles
+
+	* libs/dimg/filters/noisereductionsettings.cpp,
+	  utilities/queuemanager/basetools/enhance/noisereduction.cpp:
+	  polish
+
+2009-11-25 11:07  scripty
+
+	* digikam/digikam.desktop, digikam/digikam.notifyrc,
+	  showfoto/showfoto.desktop: SVN_SILENT made messages (.desktop
+	  file)
+
+2009-11-25 09:59  cgilles
+
+	* imageplugins/coreplugin/noisereductiontool.cpp,
+	  imageplugins/coreplugin/noisereductiontool.h: restore load/saveas
+	  features
+
+2009-11-25 09:54  cgilles
+
+	* libs/dimg/filters/noisereductionsettings.cpp,
+	  libs/dimg/filters/noisereductionsettings.h: add new methods to
+	  load/saveas to/from settings files
+
+2009-11-25 09:17  cgilles
+
+	* libs/dimg/filters/noisereductionsettings.cpp,
+	  libs/dimg/filters/noisereductionsettings.h,
+	  libs/dimg/filters/waveletsnr.cpp: polish
+
+2009-11-25 08:55  cgilles
+
+	* libs/dimg/filters/noisereductionsettings.cpp,
+	  libs/dimg/filters/waveletsnr.h: polish
+
+2009-11-24 22:47  cgilles
+
+	* libs/dimg/filters/waveletsnr.cpp: wrong logic
+
+2009-11-24 22:43  cgilles
+
+	* libs/dimg/filters/noisereductionsettings.cpp: wrong value
+
+2009-11-24 22:36  cgilles
+
+	* imageplugins/coreplugin/noisereductiontool.cpp,
+	  libs/dimg/filters/noisereductionsettings.cpp,
+	  libs/dimg/filters/noisereductionsettings.h,
+	  libs/dimg/filters/waveletsnr.cpp,
+	  utilities/queuemanager/basetools/enhance/noisereduction.cpp:
+	  Wavelets NR settings management is fully implemented
+
+2009-11-24 19:19  cgilles
+
+	* libs/dimg/filters/noisereductionsettings.cpp,
+	  libs/dimg/filters/noisereductionsettings.h,
+	  libs/dimg/filters/waveletsnr.h: get/set settings implemented
+
+2009-11-24 18:48  cgilles
+
+	* libs/dimg/filters/noisereductionsettings.cpp: implement reset and
+	  change values signals
+
+2009-11-24 18:11  cgilles
+
+	* libs/dimg/filters/waveletsnr.h: polish
+
+2009-11-24 18:09  cgilles
+
+	* libs/dimg/filters/waveletsnr.cpp, libs/dimg/filters/waveletsnr.h:
+	  using d private internal class
+
+2009-11-24 16:04  cgilles
+
+	* libs/dimg/filters/noisereductionsettings.cpp,
+	  libs/dimg/filters/noisereductionsettings.h: set gui to adjust
+	  YCRCB NR settings per chanel. Not yet suitable as well in tools.
+
+2009-11-24 13:46  aclemens
+
+	* tests/advancedrenametest.cpp,
+	  utilities/advancedrename/parser/options/cameranameoption.cpp,
+	  utilities/advancedrename/parser/options/filepropertiesoption.cpp:
+	  Be strict: tokens should be entered correctly, CaseSensitivity is
+	  mandatory
+
+2009-11-24 13:40  aclemens
+
+	* utilities/advancedrename/README,
+	  utilities/advancedrename/parser/README: This file belongs in
+	  here...
+
+2009-11-24 11:40  cgilles
+
+	* imageplugins/coreplugin/noisereductiontool.cpp,
+	  libs/dimg/filters/noisereductionsettings.cpp,
+	  utilities/queuemanager/basetools/enhance/noisereduction.cpp: fix
+	  layout
+
+2009-11-24 11:18  cgilles
+
+	* libs/dimg/filters/waveletsnr.cpp, libs/dimg/filters/waveletsnr.h:
+	  polish
+
+2009-11-24 10:59  cgilles
+
+	* imageplugins/coreplugin/noisereductiontool.cpp,
+	  libs/dimg/filters/waveletsnr.cpp, libs/dimg/filters/waveletsnr.h,
+	  utilities/queuemanager/basetools/enhance/noisereduction.cpp:
+	  introduce Wavelets NR settings container
+
+2009-11-24 10:27  scripty
+
+	* digikam/digikam.notifyrc: SVN_SILENT made messages (.desktop
+	  file)
+
+2009-11-24 10:16  aclemens
+
+	* digikam/digikamview.cpp: polish... remove second FIXME, otherwise
+	  we have two entries in Eclipse or
+	  other IDEs that show these labels as tasks
+
+2009-11-23 22:04  cgilles
+
+	* imageplugins/coreplugin/noisereductiontool.cpp,
+	  libs/dimg/filters/noisereductionsettings.cpp,
+	  libs/dimg/filters/noisereductionsettings.h,
+	  utilities/queuemanager/basetools/enhance/noisereduction.cpp:
+	  polish
+
+2009-11-23 20:55  aclemens
+
+	* utilities/advancedrename/README: polish
+
+2009-11-23 20:54  aclemens
+
+	* utilities/advancedrename/README: polish
+
+2009-11-23 20:51  aclemens
+
+	* utilities/advancedrename/README: Add README for naming
+	  conventions in advancedrename
+
+2009-11-23 20:28  aclemens
+
+	* utilities/advancedrename/common/highlighter.cpp: if it starts
+	  with ":", it can't be empty ;-) no need to check for empty string
+	  in this case
+
+2009-11-23 20:26  aclemens
+
+	* utilities/advancedrename/common/highlighter.cpp: typo
+
+2009-11-23 20:16  sengels
+
+	* libs/dimg/filters/waveletsnr.cpp: some fixes for picky picky
+	  compiler
+
+2009-11-23 20:13  aclemens
+
+	* utilities/advancedrename/common/highlighter.cpp: Avoid infinite
+	  loop if parameter string is empty
+
+2009-11-23 20:05  aclemens
+
+	* utilities/advancedrename/common/highlighter.cpp,
+	  utilities/advancedrename/parser/options/metadataoption.cpp:
+	  Highlight parameters in options in a different color as well, for
+	  example in
+	  [date] and [meta] options...
+
+2009-11-23 19:47  aclemens
+
+	* utilities/advancedrename/common/highlighter.cpp: polish
+
+2009-11-23 19:26  aclemens
+
+	* utilities/advancedrename/common/highlighter.cpp,
+	  utilities/advancedrename/common/highlighter.h: Only highlight
+	  quoted text in an option or modifier token
+
+2009-11-23 19:26  aclemens
+
+	* utilities/advancedrename/parser/options/metadataoption.cpp:
+	  polish regex
+
+2009-11-23 17:46  aclemens
+
+	* utilities/advancedrename/parser/defaultrenameparser.cpp,
+	  utilities/advancedrename/parser/defaultrenameparser.h: polish
+
+2009-11-23 17:45  aclemens
+
+	* utilities/advancedrename/common/option.cpp,
+	  utilities/advancedrename/common/option.h,
+	  utilities/advancedrename/parser/defaultrenameparser.cpp,
+	  utilities/advancedrename/parser/defaultrenameparser.h: polish
+
+2009-11-23 17:43  aclemens
+
+	* utilities/advancedrename/common/option.cpp: Change modifier
+	  order: range is rarely used, move it to the end of the list
+
+2009-11-23 17:39  aclemens
+
+	* utilities/advancedrename/common/option.cpp: be paranoid here:
+	  normally this code is not reached when no modifier was
+	  attached to a renaming option, but you never know ;-)
+	  Check for a valid modifier pointer in the modifierCallbackMap
+
+2009-11-23 17:15  aclemens
+
+	* utilities/advancedrename/common/option.cpp,
+	  utilities/advancedrename/common/option.h: I don't want any
+	  limitations in here, remove old code that should be avoided.
+	  Modifiers can and should be used for every renaming option, that
+	  is what
+	  differs us from most batch renamers out there. Setting limits
+	  here doesn't make
+	  sense.
+
+2009-11-23 17:03  aclemens
+
+	* utilities/advancedrename/common/token.cpp: polish
+
+2009-11-23 16:58  aclemens
+
+	* utilities/advancedrename/common/parseresults.h: polish
+
+2009-11-23 15:08  mghansen
+
+	* libs/imageproperties/imagepropertiesgpstab.cpp,
+	  libs/imageproperties/worldmapwidget.cpp,
+	  libs/imageproperties/worldmapwidget.h,
+	  utilities/gpssearch/gpssearchview.cpp: Disable zoom buttons when
+	  maximum/minimum zoom is reached or if there is no Marble support.
+
+2009-11-23 13:26  aclemens
+
+	* utilities/advancedrename/advancedrenameinput.cpp,
+	  utilities/advancedrename/advancedrenameinput.h: ensure focus when
+	  AdvancedRenameInput widget is initialized
+
+2009-11-23 13:19  aclemens
+
+	* utilities/advancedrename/parser/options/metadataoption.cpp: no
+	  need to have a groupbox around the metadatapanel
+
+2009-11-23 13:19  aclemens
+
+	* utilities/advancedrename/parser/options/metadataoption.cpp: fix
+	  i18n
+
+2009-11-23 12:56  aclemens
+
+	* utilities/advancedrename/parser/options/metadataoption.cpp: Do
+	  not hide Makernotes anymore for MetadataOption dialog in
+	  advancedrename ...
+
+2009-11-23 12:53  mghansen
+
+	* utilities/gpssearch/gpssearchview.cpp: Remove description of
+	  mouse interaction from "What's This" for KDE 4.2.
+
+2009-11-23 11:49  aclemens
+
+	* utilities/advancedrename/advancedrenameinput.cpp,
+	  utilities/advancedrename/advancedrenameinput.h,
+	  utilities/advancedrename/advancedrenamewidget.cpp: Set focus when
+	  clear button has been clicked, rename slots
+
+2009-11-23 09:16  aclemens
+
+	* utilities/advancedrename/parser/options/metadataoption.cpp:
+	  Cleanup MetadataOptionDialog, remove unneeded QGroupBox
+
+2009-11-23 09:16  aclemens
+
+	* utilities/advancedrename/common/parseobjectdialog.cpp: Use a line
+	  as a separator between header and content, a frame looks weird in
+	  some places when we already added groupboxes, like in the
+	  metadataoptiondialog
+
+2009-11-23 08:58  aclemens
+
+	* imageplugins/adjustcurves/imageplugin_adjustcurves.h: polish
+
+2009-11-23 08:58  aclemens
+
+	* utilities/imageeditor/canvas/imageplugin.cpp: Hmm this bug is
+	  really weird... I don't understand it. Be even more paranoid
+	  and check for existing private class when setting the
+	  actionCategory string.
+
+2009-11-23 08:01  cgilles
+
+	* libs/dimg/filters/CMakeLists.txt: compile
+
+2009-11-23 07:59  cgilles
+
+	* libs/dimg/filters/noisereductionsettings.cpp,
+	  libs/dimg/filters/noisereductionsettings.h,
+	  utilities/queuemanager/basetools/enhance/noisereduction.cpp,
+	  utilities/queuemanager/basetools/enhance/noisereduction.h:
+	  factorize : use common NR settings widget everywhere
+
+2009-11-23 07:45  cgilles
+
+	* libs/dimg/filters/waveletsnr.cpp: compile
+
+2009-11-23 07:44  cgilles
+
+	* CMakeLists.txt, imageplugins/coreplugin/noisereductiontool.cpp,
+	  libs/dimg/filters/dimgwaveletsnr.cpp,
+	  libs/dimg/filters/dimgwaveletsnr.h,
+	  libs/dimg/filters/waveletsnr.cpp, libs/dimg/filters/waveletsnr.h:
+	  rename class file
+
+2009-11-23 07:42  cgilles
+
+	* imageplugins/coreplugin/noisereductiontool.cpp,
+	  libs/dimg/filters/dimgwaveletsnr.cpp,
+	  libs/dimg/filters/dimgwaveletsnr.h,
+	  utilities/queuemanager/basetools/enhance/noisereduction.cpp:
+	  rename DImg NR class without DImg prefix
+
+2009-11-23 07:38  cgilles
+
+	* CMakeLists.txt, imageplugins/coreplugin/CMakeLists.txt,
+	  imageplugins/coreplugin/noisereductionsettings.cpp,
+	  imageplugins/coreplugin/noisereductionsettings.h,
+	  libs/dimg/filters/noisereductionsettings.cpp,
+	  libs/dimg/filters/noisereductionsettings.h: move noise reduction
+	  settings widget to digiKam core
+
+2009-11-22 23:00  cgilles
+
+	* imageplugins/coreplugin/CMakeLists.txt,
+	  imageplugins/coreplugin/noisereductionsettings.cpp,
+	  imageplugins/coreplugin/noisereductionsettings.h,
+	  imageplugins/coreplugin/noisereductiontool.cpp: prepare to
+	  factoring
+
+2009-11-22 21:54  aclemens
+
+	* utilities/advancedrename/advancedrenameinput.cpp,
+	  utilities/advancedrename/parser/options/dummyoption.cpp: fix some
+	  krazy2 warnings
+
+2009-11-22 21:44  aclemens
+
+	* utilities/advancedrename/advancedrenameinput.cpp,
+	  utilities/advancedrename/advancedrenameinput.h: When ever
+	  possible, use the K counterpart of Qt classes
+
+2009-11-22 18:28  aclemens
+
+	* utilities/advancedrename/parser/options/sequencenumberoption.cpp:
+	  polish
+
+2009-11-22 18:28  aclemens
+
+	* utilities/cameragui/cameraiconview.cpp: polish
+
+2009-11-22 16:18  mghansen
+
+	* NEWS, libs/imageproperties/imagepropertiesgpstab.cpp,
+	  libs/imageproperties/markerclusterholder.cpp,
+	  libs/imageproperties/markerclusterholder.h,
+	  libs/imageproperties/worldmapwidget.cpp,
+	  libs/imageproperties/worldmapwidget.h,
+	  utilities/gpssearch/gpssearchview.cpp,
+	  utilities/gpssearch/gpssearchwidget.cpp: GPSSearch: Add buttons
+	  to change the mouse mode to pan, filter, select or zoom into
+	  group.
+	  
+	  If no search area has been selected on the map, show a message
+	  inviting the user to define one.
+	  
+	  BUG: 212967
+
+2009-11-22 15:22  aclemens
+
+	* utilities/advancedrename/parser/options/dummyoption.cpp: fix
+	  dummyoption class
+
+2009-11-22 14:07  aclemens
+
+	* utilities/advancedrename/common/highlighter.cpp: Fix syntax
+	  highlighting for chained modifiers with textual parameters
+
+2009-11-22 13:35  coles
+
+	* utilities/queuemanager/basetools/enhance/noisereduction.cpp:
+	  Proof-reading:
+	  - photographs noise -> photograph noise. It either needs an
+	  apostrophe (i.e. photographs' noise), in which case photographs'
+	  is an adjective describing noise; or to be written as 'photograph
+	  noise', a compound noun. I went for the latter, as it's more
+	  common idiomatic usage.
+	  - NoiseReduction -> Noise Reduction. English is far more
+	  reluctant than German to make one-word über-nouns.
+	  - 'denoising of the image' -> 'denoising the image'. As with
+	  'driving the car', &c. The other solution, retaining the of, is
+	  to add 'the' before it, i.e. 'the denoising of the image' -
+	  closer to other languages, but not idiomatic English.
+	  
+	  Bien cordialement,
+	  
+	  Andrew
+
+2009-11-22 13:03  aclemens
+
+	* imageplugins/coreplugin/digikamimageplugin_core_ui.rc: fix rc
+	  file for core plugin
+
+2009-11-22 11:59  aclemens
+
+	* utilities/advancedrename/common/highlighter.cpp,
+	  utilities/advancedrename/common/parseobject.cpp,
+	  utilities/advancedrename/common/parseobject.h,
+	  utilities/advancedrename/parser/modifiers/defaultvaluemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/firstletterofeachworduppercasemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/lowercasemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/rangemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/replacemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/trimmedmodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/uppercasemodifier.cpp,
+	  utilities/advancedrename/parser/options/cameranameoption.cpp,
+	  utilities/advancedrename/parser/options/dateoption.cpp,
+	  utilities/advancedrename/parser/options/directorynameoption.cpp,
+	  utilities/advancedrename/parser/options/filepropertiesoption.cpp,
+	  utilities/advancedrename/parser/options/metadataoption.cpp,
+	  utilities/advancedrename/parser/options/sequencenumberoption.cpp:
+	  Fix syntax highlighting: define QRegExp::setMinimal in the
+	  constructor of a
+	  parseobject, if needed. This way the regexp is set up correctly
+	  for syntax
+	  highlighting as well.
+	  ParseObject::setRegExp() takes a QRegExp object now, not a
+	  QString.
+
+2009-11-22 11:59  aclemens
+
+	* utilities/advancedrename/common/highlighter.cpp: polish
+
+2009-11-22 11:59  aclemens
+
+	* utilities/advancedrename/common/highlighter.cpp: Add missing
+	  parameterFormat rule
+
+2009-11-22 11:42  cgilles
+
+	* imageplugins/coreplugin/digikamimageplugin_core_ui.rc: why all
+	  other plugins action are there ?
+
+2009-11-22 11:18  cgilles
+
+	* imageplugins/coreplugin/imageplugin_core.cpp: polish
+
+2009-11-22 11:09  cgilles
+
+	* imageplugins/coreplugin/imageplugin_core.cpp: wrong action name
+
+2009-11-22 11:00  cgilles
+
+	* imageplugins/coreplugin/digikamimageplugin_core_ui.rc: polish
+
+2009-11-22 10:46  scripty
+
+	* digikam/digikam.notifyrc: SVN_SILENT made messages (.desktop
+	  file)
+
+2009-11-22 10:38  cgilles
+
+	* utilities/imageeditor/canvas/imagepluginloader.cpp: disable
+	  loding of noise reduction plugin
+
+2009-11-22 10:36  cgilles
+
+	* imageplugins/noisereduction: rm
+
+2009-11-22 10:35  cgilles
+
+	* imageplugins/CMakeLists.txt,
+	  imageplugins/coreplugin/CMakeLists.txt,
+	  imageplugins/coreplugin/digikamimageplugin_core_ui.rc,
+	  imageplugins/coreplugin/imageplugin_core.cpp,
+	  imageplugins/coreplugin/imageplugin_core.h,
+	  imageplugins/coreplugin/noisereductiontool.cpp,
+	  imageplugins/coreplugin/noisereductiontool.h,
+	  imageplugins/noisereduction/noisereductiontool.cpp,
+	  imageplugins/noisereduction/noisereductiontool.h: move noise
+	  reduction tool to image plugin core
+
+2009-11-22 09:53  cgilles
+
+	* NEWS: update
+
+2009-11-22 09:38  cgilles
+
+	* NEWS: update
+
+2009-11-22 02:45  aclemens
+
+	* utilities/advancedrename/parser/options/metadataoption.cpp:
+	  cleanup token description
+
+2009-11-22 02:45  aclemens
+
+	* utilities/advancedrename/parser/options/dummyoption.cpp: Fix
+	  DummyOption example code
+
+2009-11-22 01:26  aclemens
+
+	* digikam/digikamapp.cpp: Remove KIPI batch rename plugin from
+	  digiKam, it is confusing to have two tools
+	  that do the same...
+
+2009-11-22 01:15  sengels
+
+	* libs/database/imageinfo.cpp: add some warnings in case image
+	  informations cannot be retrieved from the database
+	  path->toLocalFile workaround
+
+2009-11-22 01:09  aclemens
+
+	* NEWS: update
+
+2009-11-21 18:28  aclemens
+
+	* utilities/advancedrename/parser/modifiers/trimmedmodifier.cpp:
+	  Use an icon for the TrimmedModifier
+
+2009-11-21 16:35  cgilles
+
+	* utilities/queuemanager/basetools/enhance/noisereduction.cpp:
+	  polish
+
+2009-11-21 16:24  cgilles
+
+	* CMakeLists.txt,
+	  utilities/queuemanager/basetools/enhance/noisereduction.cpp,
+	  utilities/queuemanager/basetools/enhance/noisereduction.h,
+	  utilities/queuemanager/batchtoolsmanager.cpp: add Wavelets Noise
+	  reduction tool to Batch Queue Manager
+
+2009-11-21 14:17  cgilles
+
+	* libs/dimg/filters/dimgwaveletsnr.cpp: filter is now cancelable
+
+2009-11-21 14:00  cgilles
+
+	* CMakeLists.txt, imageplugins/noisereduction/CMakeLists.txt,
+	  imageplugins/noisereduction/noisereduction.cpp,
+	  imageplugins/noisereduction/noisereduction.h,
+	  imageplugins/noisereduction/noisereductiontool.cpp,
+	  libs/dimg/filters/CMakeLists.txt,
+	  libs/dimg/filters/dimgwaveletsnr.cpp,
+	  libs/dimg/filters/dimgwaveletsnr.h: move wavelets noise reduction
+	  class to digiKam core
+
+2009-11-21 13:40  aclemens
+
+	* utilities/advancedrename/advancedrenameinput.cpp: polish
+
+2009-11-21 13:32  aclemens
+
+	* libs/widgets/common/comboboxutilities.cpp,
+	  libs/widgets/common/comboboxutilities.h,
+	  utilities/advancedrename/advancedrenameinput.cpp,
+	  utilities/advancedrename/advancedrenameinput.h: Continuing with
+	  funny hacks for the AdvancedRenameInput widget:
+	  ProxyLineEdit is now derived from KLineEdit, to have a
+	  clearButton.
+	  AdvancedRenameLineEditProxy is derived from this class and the
+	  QTextEdit widget
+	  is inserted here.
+	  To make the clearButton work, the text is inserted twice: in the
+	  QTextEdit and
+	  KLineEdit widget.
+	  The KlineEdit (proxy) widget however will not display the text,
+	  since its
+	  paintEvent() is set to QWidget::paintEvent(), and this simply
+	  doesn't display
+	  anything.
+	  It seems to work fine.
+	  
+	  Marcel,
+	  I had to derive ProxyLineEdit from KLineEdit for this, I hope
+	  this is ok?
+	  I don't see problems, but maybe you know some issues?
+	  If so I will copy the ProxyLineEdit class and make my own.
+	  
+	  CCMAIL:marcel.wiesweg@gmx.de
+
+2009-11-21 13:03  cgilles
+
+	* NEWS: update
+
+2009-11-21 12:58  cgilles
+
+	* imageplugins/noisereduction/imageplugin_noisereduction.cpp,
+	  imageplugins/noisereduction/imageplugin_noisereduction.h,
+	  imageplugins/noisereduction/noisereduction.cpp,
+	  imageplugins/noisereduction/noisereduction.h,
+	  imageplugins/noisereduction/noisereductiontool.cpp,
+	  imageplugins/noisereduction/noisereductiontool.h: new Noise
+	  Reduction tool for image editor based on Wavelets theory.
+	  This tool is really better than old one based on dcamnoise2 tool.
+	  It work on YcBrCr color space instead RGB
+	  BUG: 116061
+
+2009-11-21 11:29  aclemens
+
+	* utilities/advancedrename/parser/options/dateoption.cpp: polish
+
+2009-11-21 11:23  aclemens
+
+	* utilities/advancedrename/parser/options/dummyoption.cpp,
+	  utilities/advancedrename/parser/options/dummyoption.h: polish
+	  header
+
+2009-11-21 11:23  aclemens
+
+	* utilities/advancedrename/parser/options/dateoption.cpp: fix
+	  possible crashy code, use QPointer for dialogs
+
+2009-11-21 11:13  aclemens
+
+	* utilities/advancedrename/parser/modifiers/defaultvaluemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/defaultvaluemodifier.h,
+	  utilities/advancedrename/parser/modifiers/rangemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/rangemodifier.h,
+	  utilities/advancedrename/parser/modifiers/replacemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/replacemodifier.h,
+	  utilities/advancedrename/parser/options/dateoption.h,
+	  utilities/advancedrename/parser/options/metadataoption.cpp,
+	  utilities/advancedrename/parser/options/metadataoption.h,
+	  utilities/advancedrename/parser/options/sequencenumberoption.cpp,
+	  utilities/advancedrename/parser/options/sequencenumberoption.h:
+	  No need to have private classes and accessor methods for these
+	  simple dialogs.
+
+2009-11-21 10:55  scripty
+
+	* digikam/digikam.notifyrc: SVN_SILENT made messages (.desktop
+	  file)
+
+2009-11-20 23:42  aclemens
+
+	* utilities/advancedrename/common/parseobjectdialog.cpp,
+	  utilities/advancedrename/common/parseobjectdialog.h: polish
+
+2009-11-20 23:40  aclemens
+
+	* utilities/advancedrename/common/parseobjectdialog.cpp: polish
+	  layout
+
+2009-11-20 23:35  aclemens
+
+	* utilities/advancedrename/common/parseobjectdialog.cpp: Use
+	  QRegExp for removing ellipsis
+
+2009-11-20 23:18  aclemens
+
+	* CMakeLists.txt, tests/CMakeLists.txt,
+	  utilities/advancedrename/common/modifier.cpp,
+	  utilities/advancedrename/common/modifier.h,
+	  utilities/advancedrename/common/option.cpp,
+	  utilities/advancedrename/common/option.h,
+	  utilities/advancedrename/common/parseobject.cpp,
+	  utilities/advancedrename/common/parseobject.h,
+	  utilities/advancedrename/common/parseobjectdialog.cpp,
+	  utilities/advancedrename/common/parseobjectdialog.h,
+	  utilities/advancedrename/parser/modifiers/defaultvaluemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/defaultvaluemodifier.h,
+	  utilities/advancedrename/parser/modifiers/rangemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/rangemodifier.h,
+	  utilities/advancedrename/parser/modifiers/replacemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/replacemodifier.h,
+	  utilities/advancedrename/parser/options/dateoption.cpp,
+	  utilities/advancedrename/parser/options/dateoption.h,
+	  utilities/advancedrename/parser/options/metadataoption.cpp,
+	  utilities/advancedrename/parser/options/metadataoption.h,
+	  utilities/advancedrename/parser/options/sequencenumberoption.cpp,
+	  utilities/advancedrename/parser/options/sequencenumberoption.h:
+	  Add ParseObjectDialog to have a unified look for the settings
+	  dialog of a parse
+	  option.
+	  In the future it would be nice to generate the dialog with a
+	  Factory, by only
+	  providing the needed options, the input widgets should be
+	  generated
+	  automatically then.
+
+2009-11-20 20:47  cgilles
+
+	* NEWS: update
+
+2009-11-20 19:24  aclemens
+
+	* utilities/advancedrename/advancedrenameinput.cpp: polish
+
+2009-11-20 15:56  aclemens
+
+	* utilities/advancedrename/common/highlighter.cpp: Do not make
+	  keywords bold. Actually I like the bold syntax highlighting, but
+	  we
+	  don't use bold font anywhere else in line input widgets, so I
+	  remove the flag
+	  for now.
+
+2009-11-20 15:23  aclemens
+
+	* utilities/advancedrename/advancedrenameinput.cpp,
+	  utilities/advancedrename/advancedrenameinput.h: Another funny
+	  hack to make QTextEdit behave like a normal QLineEdit in a
+	  QComboBox: We seem to be unable to prevent scrolling of the
+	  content, so we need
+	  to set a fixed slider position.
+	  Fill the widget with some dummy text, then call
+	  ensureCursorVisible(), save the
+	  slider position and remove the text again.
+	  Whenever a scrollContentsBy() event is occurring, reset the
+	  slider with the
+	  fixed position.
+	  
+	  Works under Linux, need to test it in Windows now... ;-)
+
+2009-11-20 14:42  aclemens
+
+	* digikam/contextmenuhelper.cpp: Re-arrange code: If ImageInfo is
+	  null, do not add a goto menu
+
+2009-11-20 14:35  aclemens
+
+	* digikam/contextmenuhelper.cpp: This is always a pitfall:
+	  QList::first() will crash if the list is empty, it
+	  simply doesn't do a check.
+
+2009-11-20 14:30  aclemens
+
+	* utilities/advancedrename/advancedrenameinput.cpp,
+	  utilities/advancedrename/advancedrenameinput.h,
+	  utilities/advancedrename/advancedrenamewidget.cpp: Fix
+	  singleFileMode: since we don't add a QLineEdit widget to the
+	  combobox but a
+	  QTextEdit, the QComboBox::clear() method is not working the way
+	  we want it to.
+	  Create our own method and wrap it in
+	  AdvancedRenameWidget::clear()
+
+2009-11-20 13:47  aclemens
+
+	* utilities/advancedrename/advancedrenameinput.cpp,
+	  utilities/advancedrename/advancedrenameinput.h: Fix scrolling of
+	  the QTextEdit, at least when using the mouse wheel.
+	  Set the QWheelEvent to setAccepted(false) and therefore let the
+	  QComboBox
+	  handle the event later on.
+	  This way the text will not scroll, and the prev / next history
+	  item of the
+	  combobox is filled in.
+	  
+	  Scrolling is still seen when selecting text with the mouse and
+	  moving the
+	  cursor up or down.
+	  I guess this needs to be handled in the mousePressEvent...?
+
+2009-11-20 10:35  scripty
+
+	* digikam/digikam.notifyrc: SVN_SILENT made messages (.desktop
+	  file)
+
+2009-11-20 10:22  aclemens
+
+	* utilities/advancedrename/advancedrenameinput.cpp,
+	  utilities/advancedrename/advancedrenameinput.h: rename
+	  slotSetText() => slotSetHistoryItem()
+
+2009-11-20 10:21  aclemens
+
+	* utilities/advancedrename/advancedrenameinput.cpp: Set the cursor
+	  to the end of the line if an history entry was selected
+
+2009-11-20 09:57  aclemens
+
+	* utilities/advancedrename/advancedrenameinput.cpp: setFixedHeight,
+	  not setMinimumHeight
+
+2009-11-20 09:52  aclemens
+
+	* utilities/advancedrename/advancedrenameinput.cpp: Fix height and
+	  painting problem (I hope), I need to test this under Windows.
+	  Still some little glitches:
+	  When selecting text with the mouse, you are able to slightly
+	  scroll the text, I
+	  don't know how to fix that at the moment.
+
+2009-11-20 09:31  aclemens
+
+	* utilities/advancedrename/advancedrenameinput.cpp: Fix selection:
+	  always set the currently activated combobox item, otherwise it
+	  is not possible to choose the first history item from the
+	  combobox if it was
+	  highlighted.
+
+2009-11-20 09:31  aclemens
+
+	* utilities/advancedrename/advancedrenameinput.cpp: Fix background
+	  rendering in BQM for AdvancedRenameInput widget
+
+2009-11-20 09:20  aclemens
+
+	* utilities/advancedrename/advancedrenamewidget.cpp: Change tooltip
+	  for modifier quick access button: we no longer select tokens
+
+2009-11-20 09:20  aclemens
+
+	* utilities/advancedrename/advancedrenamewidget.cpp,
+	  utilities/advancedrename/advancedrenamewidget.h: Add
+	  "DefaultControls" widget mask option
+
+2009-11-20 09:07  aclemens
+
+	* utilities/advancedrename/advancedrenameinput.cpp: ensure the
+	  cursor is visible when adding tokens to the parse string with the
+	  quick access buttons
+
+2009-11-20 08:59  aclemens
+
+	* utilities/advancedrename/advancedrenameinput.cpp: avoid magic
+	  numbers
+
+2009-11-20 08:57  aclemens
+
+	* utilities/advancedrename/advancedrenameinput.cpp: disable
+	  wrapping for words, too
+
+2009-11-20 00:43  aclemens
+
+	* tests/advancedrenametest.cpp,
+	  utilities/advancedrename/parser/modifiers/firstletterofeachworduppercasemodifier.cpp:
+	  Forgot to rename the FirstLetterEachWordUpperCaseModifier to a
+	  more verbose
+	  token
+
+2009-11-20 00:26  aclemens
+
+	* utilities/advancedrename/parser/modifiers/replacemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/replacemodifier.h: Add
+	  checkbox for case sensitive settings in replace modifier dialog
+
+2009-11-20 00:15  aclemens
+
+	* utilities/advancedrename/parser/modifiers/replacemodifier.cpp:
+	  Add replace case insensitive option to modifier
+
+2009-11-19 23:55  aclemens
+
+	* tests/advancedrenametest.cpp,
+	  utilities/advancedrename/parser/modifiers/lowercasemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/trimmedmodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/uppercasemodifier.cpp:
+	  Be more verbose, it is easier to read, especially when modifiers
+	  are chained.
+	  Now with syntax highlighting and the modifier input buttons, it
+	  really doesn't
+	  matter.
+
+2009-11-19 23:21  aclemens
+
+	* utilities/advancedrename/common/dynamiclayout.cpp: Be paranoid:
+	  avoid dividing by zero....
+
+2009-11-19 23:06  aclemens
+
+	* utilities/advancedrename/common/highlighter.h: polish
+
+2009-11-19 20:57  aclemens
+
+	* utilities/advancedrename/common/highlighter.cpp: polish
+
+2009-11-19 20:56  aclemens
+
+	* utilities/advancedrename/common/highlighter.cpp,
+	  utilities/advancedrename/common/highlighter.h: Change
+	  highlighting rules
+
+2009-11-19 20:36  aclemens
+
+	* utilities/advancedrename/advancedrenameinput.cpp: fix logic
+
+2009-11-19 20:36  aclemens
+
+	* CMakeLists.txt, tests/advancedrenametest.cpp,
+	  utilities/advancedrename/advancedrenamedialog.cpp,
+	  utilities/advancedrename/advancedrenamedialog.h,
+	  utilities/advancedrename/advancedrenameinput.cpp,
+	  utilities/advancedrename/advancedrenameinput.h,
+	  utilities/advancedrename/advancedrenamewidget.cpp,
+	  utilities/advancedrename/advancedrenamewidget.h,
+	  utilities/advancedrename/common/highlighter.cpp,
+	  utilities/advancedrename/common/highlighter.h,
+	  utilities/advancedrename/parser/modifiers/defaultvaluemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/replacemodifier.cpp:
+	  Add Syntax Highlighting to AdvancedRename utility. Selecting
+	  tokens has been
+	  removed again, I guess nobody would have used it anyway.
+	  Since I had to embed an QTextEdit into a ProxyLineEdit and then
+	  into a
+	  QComboBox, it is possible that something is not working correctly
+	  anymore ;-)
+	  
+	  Could you please check if the widget behaves normally?
+	  Does it look normal?
+	  I have size issues with it, see the FIXME comment in
+	  AdvancedRenameInput.
+	  Any ideas how to solve this?
+	  
+	  Do you know if the clear-button from KLineEdit is a single class
+	  somewhere, so
+	  that I can embed it next to the QTextEdit again?
+	  Right now you have to select the text manually to remove it.
+	  
+	  CCMAIL:digikam-devel@kde.org
+
+2009-11-19 17:44  coles
+
+	* digikam/digikam.notifyrc: Minor proof-reading change: need to
+	  refer to a single other device, not plural.
+
+2009-11-19 15:34  cgilles
+
+	* NEWS: update
+
+2009-11-18 23:20  aclemens
+
+	* utilities/advancedrename/common/renamethread.cpp: Fix wrong
+	  locking... thanks Patrick
+
+2009-11-18 21:52  aclemens
+
+	* utilities/advancedrename/parsers: remove left overs
+
+2009-11-18 19:49  aclemens
+
+	* utilities/advancedrename/advancedrenamewidget.cpp: fix warnings
+
+2009-11-18 18:17  aclemens
+
+	* CMakeLists.txt, imageplugins/CMakeLists.txt,
+	  kioslave/CMakeLists.txt, showfoto/CMakeLists.txt: Add a cmake
+	  macro to set the area code
+
+2009-11-18 15:32  mghansen
+
+	* digikam/CMakeLists.txt, digikam/digikamapp.cpp,
+	  digikam/digikamapp.h, digikam/digikamui.rc,
+	  utilities/cameragui/cameraui.cpp, utilities/cameragui/cameraui.h,
+	  utilities/cameragui/cameraui.rc,
+	  utilities/imageeditor/editor/digikamimagewindowui.rc,
+	  utilities/imageeditor/editor/editorwindow.cpp,
+	  utilities/imageeditor/editor/editorwindow.h,
+	  utilities/lighttable/lighttablewindow.cpp,
+	  utilities/lighttable/lighttablewindow.h,
+	  utilities/lighttable/lighttablewindowui.rc,
+	  utilities/queuemanager/queuemgrwindow.cpp,
+	  utilities/queuemanager/queuemgrwindow.h,
+	  utilities/queuemanager/queuemgrwindowui.rc: Add a "Configure
+	  Notifications" entry to the Settings menu.
+
+2009-11-18 15:29  aclemens
+
+	* tests/advancedrenametest.cpp,
+	  utilities/advancedrename/advancedrenamedialog.cpp,
+	  utilities/advancedrename/common/parseinformation.h,
+	  utilities/advancedrename/common/parser.cpp,
+	  utilities/advancedrename/parser/options/directorynameoption.cpp,
+	  utilities/advancedrename/parser/options/filepropertiesoption.cpp,
+	  utilities/advancedrename/parser/options/metadataoption.cpp,
+	  utilities/cameragui/renamecustomizer.cpp,
+	  utilities/queuemanager/queuelist.cpp: AdvancedRename is not
+	  working at all under windows, these changes have no
+	  effect for Linux, but I hope that the windows version will work
+	  now.
+
+2009-11-18 14:21  mghansen
+
+	* digikam/CMakeLists.txt, digikam/digikam.notifyrc,
+	  libs/widgets/common/knotificationwrapper.cpp,
+	  utilities/batch/fingerprintsgenerator.cpp,
+	  utilities/cameragui/cameraui.cpp,
+	  utilities/queuemanager/queuemgrwindow.cpp: Better integration
+	  into the notification framework using digikam.notifyrc file.
+	  Digikam's notifications can now be configured in the
+	  SystemSettings.
+
+2009-11-18 14:18  aclemens
+
+	* digikam/CMakeLists.txt: polish
+
+2009-11-18 14:17  aclemens
+
+	* digikam/CMakeLists.txt,
+	  imageplugins/texture/patterns/CMakeLists.txt,
+	  libs/curves/CMakeLists.txt, libs/whitebalance/CMakeLists.txt,
+	  libs/widgets/iccprofiles/CMakeLists.txt,
+	  libs/widgets/imageplugins/CMakeLists.txt,
+	  utilities/hotplug/CMakeLists.txt,
+	  utilities/scripts/CMakeLists.txt: Since we mostly use uppercase
+	  CMake keywords, we should decide for one syntax
+	  now. I'll change everything to uppercase now.
+
+2009-11-18 14:17  aclemens
+
+	* digikam/CMakeLists.txt: Do we really need this twice? We have
+	  defined this somewhere above in the
+	  CMakeLists file
+
+2009-11-18 13:33  aclemens
+
+	* CMakeLists.txt: Actually this ELSE clause is not needed,
+	  MACRO_BOOL_TO_01 will set HAVE_NEPOMUK
+	  to 0
+
+2009-11-18 13:22  aclemens
+
+	* tests/cameranamehelpertest.cpp, tests/cameranamehelpertest.h: the
+	  header file and always compile the GPCamera test, but if no
+	  GPHOTO2 was
+	  found, implement the test case empty (it will return true by
+	  default).
+
+2009-11-18 13:08  aclemens
+
+	* CMakeLists.txt: Only include if marblewidget is found
+
+2009-11-18 13:05  aclemens
+
+	* CMakeLists.txt: polish: move gphoto2 into the optional section
+
+2009-11-18 12:52  aclemens
+
+	* CMakeLists.txt, README, config-digikam.h.cmake,
+	  digikam/componentsinfo.h, project/bootstrap.bat,
+	  tests/cameranamehelpertest.cpp, tests/cameranamehelpertest.h,
+	  utilities/cameragui/gpcamera.cpp,
+	  utilities/setup/cameraselection.cpp,
+	  utilities/setup/setupcamera.cpp: Simplify GPHOTO2 handling in
+	  cmake: remove the ENABLE_GPHOTO2 flag and use
+	  MACRO_OPTIONAL_FIND_PACKAGE instead. If the package is found, it
+	  will be
+	  enabled, if not, support is turned off.
+	  Since it is optional now, users still can control the build with
+	  the
+	  WITH_Gphoto2 flag.
+	  I will commit it and test it under windows now.
+
+2009-11-18 12:02  aclemens
+
+	* CMakeLists.txt: Use FIND_PACKAGE for Gphoto2 instead of
+	  MACRO_OPTIONAL_FIND_PACKAGE to avoid
+	  having two config variables... one would be called
+	  ENABLE_GPHOTO2, the other
+	  WITH_Gphoto2 which is not necessary and doesn't work anyway.
+
+2009-11-18 11:50  aclemens
+
+	* CMakeLists.txt: Cleanup cmake: All these packages are needed and
+	  are NOT optional, so providing
+	  cmake switches for them doesn't make sense.
+	  If you disable an option, compile will fail. Use FIND_PACKAGE
+	  instead.
+
+2009-11-18 11:38  scripty
+
+	* imageplugins/adjustcurves/digikamimageplugin_adjustcurves.desktop,
+	  imageplugins/adjustlevels/digikamimageplugin_adjustlevels.desktop,
+	  imageplugins/blurfx/digikamimageplugin_blurfx.desktop,
+	  imageplugins/border/digikamimageplugin_border.desktop,
+	  imageplugins/channelmixer/digikamimageplugin_channelmixer.desktop,
+	  imageplugins/charcoal/digikamimageplugin_charcoal.desktop,
+	  imageplugins/colorfx/digikamimageplugin_colorfx.desktop,
+	  imageplugins/contentawareresizing/digikamimageplugin_contentawareresizing.desktop,
+	  imageplugins/coreplugin/digikamimageplugin_core.desktop,
+	  imageplugins/distortionfx/digikamimageplugin_distortionfx.desktop,
+	  imageplugins/emboss/digikamimageplugin_emboss.desktop,
+	  imageplugins/filmgrain/digikamimageplugin_filmgrain.desktop,
+	  imageplugins/freerotation/digikamimageplugin_freerotation.desktop,
+	  imageplugins/hotpixels/digikamimageplugin_hotpixels.desktop,
+	  imageplugins/infrared/digikamimageplugin_infrared.desktop,
+	  imageplugins/inpainting/digikamimageplugin_inpainting.desktop,
+	  imageplugins/inserttext/digikamimageplugin_inserttext.desktop,
+	  imageplugins/lenscorrection/digikamimageplugin_lenscorrection.desktop,
+	  imageplugins/localcontrast/digikamimageplugin_localcontrast.desktop,
+	  imageplugins/noisereduction/digikamimageplugin_noisereduction.desktop,
+	  imageplugins/oilpaint/digikamimageplugin_oilpaint.desktop,
+	  imageplugins/perspective/digikamimageplugin_perspective.desktop,
+	  imageplugins/raindrop/digikamimageplugin_raindrop.desktop,
+	  imageplugins/restoration/digikamimageplugin_restoration.desktop,
+	  imageplugins/sheartool/digikamimageplugin_sheartool.desktop,
+	  imageplugins/superimpose/digikamimageplugin_superimpose.desktop,
+	  imageplugins/texture/digikamimageplugin_texture.desktop,
+	  imageplugins/whitebalance/digikamimageplugin_whitebalance.desktop,
+	  kioslave/digikamalbums.protocol, kioslave/digikamdates.protocol,
+	  kioslave/digikamsearch.protocol, kioslave/digikamtags.protocol,
+	  utilities/nepomuk/digikamnepomukservice.desktop: SVN_SILENT made
+	  messages (.desktop file)
+
+2009-11-18 11:19  aclemens
+
+	* CMakeLists.txt: This macro is already included by MacroLibrary
+
+2009-11-18 10:41  aclemens
+
+	* CMakeLists.txt: polish
+
+2009-11-17 21:01  cgilles
+
+	* NEWS: update
+
+2009-11-17 20:42  cgilles
+
+	* NEWS: update
+
+2009-11-17 20:05  aclemens
+
+	* utilities/advancedrename/advancedrenameinput.cpp,
+	  utilities/advancedrename/common/parseresults.cpp: remove magic
+	  numbers
+
+2009-11-17 20:05  aclemens
+
+	* utilities/advancedrename/advancedrenamedialog.cpp,
+	  utilities/advancedrename/advancedrenamedialog.h,
+	  utilities/advancedrename/advancedrenameinput.cpp,
+	  utilities/advancedrename/advancedrenamewidget.cpp: polish
+
+2009-11-17 18:40  cgilles
+
+	* NEWS: update
+
+2009-11-17 18:07  coles
+
+	* digikam/digikamview.cpp: Minor proof-reading change: can not ->
+	  cannot.
+
+2009-11-17 15:22  aclemens
+
+	* utilities/advancedrename/parser/options/dummyoption.cpp: polish
+
+2009-11-17 12:35  aclemens
+
+	* utilities/advancedrename/advancedrenamewidget.cpp: polish
+
+2009-11-17 12:28  aclemens
+
+	* utilities/advancedrename/common/parseobject.h: polish
+
+2009-11-17 12:21  aclemens
+
+	* utilities/advancedrename/parser/options/dummyoption.cpp: polish
+
+2009-11-17 12:16  aclemens
+
+	* utilities/advancedrename/parser/options/README: Add more
+	  information
+
+2009-11-17 12:14  aclemens
+
+	* utilities/advancedrename/parser/options/README,
+	  utilities/advancedrename/parser/options/dummyoption.cpp,
+	  utilities/advancedrename/parser/options/dummyoption.h: Add a
+	  dummyoption class with some explanation in the source code to add
+	  new
+	  options for the AdvancedRename utility
+
+2009-11-17 11:28  aclemens
+
+	* utilities/advancedrename/common/parser.cpp,
+	  utilities/advancedrename/common/parser.h,
+	  utilities/advancedrename/parser/defaultrenameparser.cpp,
+	  utilities/advancedrename/parser/defaultrenameparser.h: Fix header
+	  description
+
+2009-11-16 22:32  cgilles
+
+	* digikam/metadatahub.cpp: fix depreciate
+
+2009-11-16 22:25  cgilles
+
+	* utilities/queuemanager/basetools/metadata/assigntemplate.cpp: fix
+	  depreciate
+
+2009-11-16 17:43  aclemens
+
+	* utilities/advancedrename/parser/options/cameranameoption.cpp,
+	  utilities/advancedrename/parser/options/cameranameoption.h,
+	  utilities/advancedrename/parser/options/dateoption.cpp,
+	  utilities/advancedrename/parser/options/dateoption.h,
+	  utilities/advancedrename/parser/options/directorynameoption.cpp,
+	  utilities/advancedrename/parser/options/directorynameoption.h,
+	  utilities/advancedrename/parser/options/filepropertiesoption.cpp,
+	  utilities/advancedrename/parser/options/filepropertiesoption.h,
+	  utilities/advancedrename/parser/options/metadataoption.cpp,
+	  utilities/advancedrename/parser/options/metadataoption.h,
+	  utilities/advancedrename/parser/options/sequencenumberoption.cpp,
+	  utilities/advancedrename/parser/options/sequencenumberoption.h:
+	  polish copyright header description
+
+2009-11-16 15:16  cgilles
+
+	* libs/widgets/common/knotificationwrapper.cpp,
+	  libs/widgets/common/knotificationwrapper.h: polish
+
+2009-11-16 11:39  aclemens
+
+	* utilities/imageeditor/canvas/imageplugin.cpp,
+	  utilities/imageeditor/editor/editorwindow.cpp: Better set a
+	  string to avoid an empty string object.
+	  This ensures to always have some content returned from
+	  ImagePlugin::actionCategory(), either __INVALID__ or an valid
+	  category name.
+	  If this works for 64bit, it must be a Qt error, right?
+
+2009-11-16 11:28  cgilles
+
+	* libs/imageproperties/imagepropertiessidebarcamgui.cpp: fix
+	  depreciate
+
+2009-11-16 11:28  aclemens
+
+	* libs/widgets/common/knotificationwrapper.cpp: Add a note: logo
+	  much too big in notification message
+	  
+	  CCMAIL:mike@mghansen.de
+
+2009-11-16 11:25  cgilles
+
+	* libs/database/imagescanner.cpp, libs/dimg/dimg.cpp,
+	  libs/dimg/loaders/dimgloader.cpp,
+	  libs/widgets/metadata/exifwidget.cpp,
+	  libs/widgets/metadata/makernotewidget.cpp,
+	  utilities/imageeditor/canvas/dimginterface.cpp: fix depreciate
+
+2009-11-16 11:22  aclemens
+
+	* utilities/imageeditor/canvas/imageplugin.cpp: check for isNull()
+	  as well
+
+2009-11-16 11:12  cgilles
+
+	* libs/jpegutils/jpegutils.cpp: fix depreciate
+
+2009-11-16 11:12  cgilles
+
+	* libs/dmetadata/dmetadata.cpp, libs/dmetadata/dmetadata.h: move
+	  version header call to dmetadata.h
+
+2009-11-16 10:48  aclemens
+
+	* CMakeLists.txt, digikam/CMakeLists.txt, tests/CMakeLists.txt,
+	  themedesigner/CMakeLists.txt,
+	  utilities/advancedrename/advancedrenamewidget.cpp,
+	  utilities/advancedrename/common/option.cpp,
+	  utilities/advancedrename/common/option.h,
+	  utilities/advancedrename/common/parser.cpp,
+	  utilities/advancedrename/common/parser.h,
+	  utilities/advancedrename/common/subparser.cpp,
+	  utilities/advancedrename/common/subparser.h,
+	  utilities/advancedrename/parser,
+	  utilities/advancedrename/parser/defaultrenameparser.cpp,
+	  utilities/advancedrename/parser/defaultrenameparser.h,
+	  utilities/advancedrename/parser/modifiers,
+	  utilities/advancedrename/parser/modifiers/defaultvaluemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/defaultvaluemodifier.h,
+	  utilities/advancedrename/parser/modifiers/firstletterofeachworduppercasemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/firstletterofeachworduppercasemodifier.h,
+	  utilities/advancedrename/parser/modifiers/lowercasemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/lowercasemodifier.h,
+	  utilities/advancedrename/parser/modifiers/rangemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/rangemodifier.h,
+	  utilities/advancedrename/parser/modifiers/replacemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/replacemodifier.h,
+	  utilities/advancedrename/parser/modifiers/trimmedmodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/trimmedmodifier.h,
+	  utilities/advancedrename/parser/modifiers/uppercasemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/uppercasemodifier.h,
+	  utilities/advancedrename/parser/options,
+	  utilities/advancedrename/parser/options/cameranameoption.cpp,
+	  utilities/advancedrename/parser/options/cameranameoption.h,
+	  utilities/advancedrename/parser/options/dateoption.cpp,
+	  utilities/advancedrename/parser/options/dateoption.h,
+	  utilities/advancedrename/parser/options/dateoptiondialogwidget.ui,
+	  utilities/advancedrename/parser/options/directorynameoption.cpp,
+	  utilities/advancedrename/parser/options/directorynameoption.h,
+	  utilities/advancedrename/parser/options/filepropertiesoption.cpp,
+	  utilities/advancedrename/parser/options/filepropertiesoption.h,
+	  utilities/advancedrename/parser/options/metadataoption.cpp,
+	  utilities/advancedrename/parser/options/metadataoption.h,
+	  utilities/advancedrename/parser/options/sequencenumberoption.cpp,
+	  utilities/advancedrename/parser/options/sequencenumberoption.h,
+	  utilities/advancedrename/parsers/defaultrenameparser.cpp,
+	  utilities/advancedrename/parsers/defaultrenameparser.h,
+	  utilities/advancedrename/parsers/modifiers/defaultvaluemodifier.cpp,
+	  utilities/advancedrename/parsers/modifiers/defaultvaluemodifier.h,
+	  utilities/advancedrename/parsers/modifiers/firstletterofeachworduppercasemodifier.cpp,
+	  utilities/advancedrename/parsers/modifiers/firstletterofeachworduppercasemodifier.h,
+	  utilities/advancedrename/parsers/modifiers/lowercasemodifier.cpp,
+	  utilities/advancedrename/parsers/modifiers/lowercasemodifier.h,
+	  utilities/advancedrename/parsers/modifiers/rangemodifier.cpp,
+	  utilities/advancedrename/parsers/modifiers/rangemodifier.h,
+	  utilities/advancedrename/parsers/modifiers/replacemodifier.cpp,
+	  utilities/advancedrename/parsers/modifiers/replacemodifier.h,
+	  utilities/advancedrename/parsers/modifiers/trimmedmodifier.cpp,
+	  utilities/advancedrename/parsers/modifiers/trimmedmodifier.h,
+	  utilities/advancedrename/parsers/modifiers/uppercasemodifier.cpp,
+	  utilities/advancedrename/parsers/modifiers/uppercasemodifier.h,
+	  utilities/advancedrename/parsers/subparsers/cameranameparser.cpp,
+	  utilities/advancedrename/parsers/subparsers/cameranameparser.h,
+	  utilities/advancedrename/parsers/subparsers/dateparser.cpp,
+	  utilities/advancedrename/parsers/subparsers/dateparser.h,
+	  utilities/advancedrename/parsers/subparsers/dateparserdialogwidget.ui,
+	  utilities/advancedrename/parsers/subparsers/directorynameparser.cpp,
+	  utilities/advancedrename/parsers/subparsers/directorynameparser.h,
+	  utilities/advancedrename/parsers/subparsers/filepropertiesparser.cpp,
+	  utilities/advancedrename/parsers/subparsers/filepropertiesparser.h,
+	  utilities/advancedrename/parsers/subparsers/metadataparser.cpp,
+	  utilities/advancedrename/parsers/subparsers/metadataparser.h,
+	  utilities/advancedrename/parsers/subparsers/sequencenumberparser.cpp,
+	  utilities/advancedrename/parsers/subparsers/sequencenumberparser.h:
+	  relayout AdvancedRename utility (again :-))
+
+2009-11-16 10:06  aclemens
+
+	* utilities/imageeditor/canvas/imageplugin.cpp: Temporary check to
+	  test if the private class and therefore the string object is
+	  missing.
+	  
+	  CCBUG:214718
+
+2009-11-15 15:02  aclemens
+
+	* libs/widgets/imageplugins/imageguidewidget.cpp,
+	  libs/widgets/imageplugins/imagepanelwidget.cpp: polish
+
+2009-11-15 15:01  aclemens
+
+	* digikam/albumdragdrop.cpp, digikam/albumfolderview.cpp,
+	  digikam/albumhistory.cpp, digikam/albumiconview.cpp,
+	  digikam/albumiconviewfilter.cpp, digikam/albumlister.cpp,
+	  digikam/albummanager.cpp, digikam/albumpropsedit.cpp,
+	  digikam/albumselectcombobox.cpp, digikam/albumselectdialog.cpp,
+	  digikam/albumselectwidget.cpp, digikam/albumsettings.cpp,
+	  digikam/albumthumbnailloader.cpp, digikam/albumtreeview.cpp,
+	  digikam/albumwidgetstack.cpp, digikam/contextmenuhelper.cpp,
+	  digikam/datefolderview.cpp, digikam/digikamapp.cpp,
+	  digikam/digikamimageview.cpp, digikam/digikamimageview_p.cpp,
+	  digikam/digikamview.cpp, digikam/folderview.cpp,
+	  digikam/iconitem.cpp, digikam/iconview.cpp,
+	  digikam/imageattributeswatch.cpp,
+	  digikam/imagecategorizedview.cpp, digikam/imagedelegate.cpp,
+	  digikam/imagedelegateoverlay.cpp, digikam/imagedragdrop.cpp,
+	  digikam/imagepreviewbar.cpp, digikam/imagepreviewview.cpp,
+	  digikam/imageratingoverlay.cpp, digikam/imagerotationoverlay.cpp,
+	  digikam/imageselectionoverlay.cpp,
+	  digikam/imageviewutilities.cpp, digikam/kdateedit.cpp,
+	  digikam/kdatepickerpopup.cpp, digikam/kdatetimeedit.cpp,
+	  digikam/mediaplayerview.cpp, digikam/metadatamanager.cpp,
+	  digikam/mimefilter.cpp, digikam/monthwidget.cpp,
+	  digikam/ratingfilter.cpp, digikam/ratingpopupmenu.cpp,
+	  digikam/ratingwidget.cpp, digikam/syncjob.cpp,
+	  digikam/tageditdlg.cpp, digikam/tagfilterview.cpp,
+	  digikam/tagfolderview.cpp, digikam/tagspopupmenu.cpp,
+	  digikam/welcomepageview.cpp,
+	  imageplugins/adjustcurves/adjustcurvestool.cpp,
+	  imageplugins/adjustcurves/imageplugin_adjustcurves.cpp,
+	  imageplugins/adjustlevels/adjustlevelstool.cpp,
+	  imageplugins/adjustlevels/imageplugin_adjustlevels.cpp,
+	  imageplugins/blurfx/blurfxtool.cpp,
+	  imageplugins/blurfx/imageplugin_blurfx.cpp,
+	  imageplugins/border/bordertool.cpp,
+	  imageplugins/border/imageplugin_border.cpp,
+	  imageplugins/channelmixer/channelmixertool.cpp,
+	  imageplugins/channelmixer/imageplugin_channelmixer.cpp,
+	  imageplugins/charcoal/charcoaltool.cpp,
+	  imageplugins/charcoal/imageplugin_charcoal.cpp,
+	  imageplugins/colorfx/colorfxtool.cpp,
+	  imageplugins/colorfx/imageplugin_colorfx.cpp,
+	  imageplugins/contentawareresizing/contentawareresizetool.cpp,
+	  imageplugins/contentawareresizing/imageplugin_contentawareresizing.cpp,
+	  imageplugins/coreplugin/autocorrectiontool.cpp,
+	  imageplugins/coreplugin/bcgtool.cpp,
+	  imageplugins/coreplugin/blurtool.cpp,
+	  imageplugins/coreplugin/bwsepiatool.cpp,
+	  imageplugins/coreplugin/hsl/hsltool.cpp,
+	  imageplugins/coreplugin/hsl/hspreviewwidget.cpp,
+	  imageplugins/coreplugin/iccprooftool.cpp,
+	  imageplugins/coreplugin/imageplugin_core.cpp,
+	  imageplugins/coreplugin/profileconversiontool.cpp,
+	  imageplugins/coreplugin/ratiocrop/imageselectionwidget.cpp,
+	  imageplugins/coreplugin/ratiocrop/ratiocroptool.cpp,
+	  imageplugins/coreplugin/redeyetool.cpp,
+	  imageplugins/coreplugin/resizetool.cpp,
+	  imageplugins/coreplugin/rgbtool.cpp,
+	  imageplugins/coreplugin/sharpentool.cpp,
+	  imageplugins/distortionfx/distortionfxtool.cpp,
+	  imageplugins/distortionfx/imageplugin_distortionfx.cpp,
+	  imageplugins/emboss/embosstool.cpp,
+	  imageplugins/emboss/imageplugin_emboss.cpp,
+	  imageplugins/filmgrain/filmgraintool.cpp,
+	  imageplugins/filmgrain/imageplugin_filmgrain.cpp,
+	  imageplugins/freerotation/freerotationtool.cpp,
+	  imageplugins/freerotation/imageplugin_freerotation.cpp,
+	  imageplugins/hotpixels/blackframelistview.cpp,
+	  imageplugins/hotpixels/blackframeparser.cpp,
+	  imageplugins/hotpixels/hotpixelstool.cpp,
+	  imageplugins/hotpixels/imageplugin_hotpixels.cpp,
+	  imageplugins/infrared/imageplugin_infrared.cpp,
+	  imageplugins/infrared/infraredtool.cpp,
+	  imageplugins/inpainting/imageplugin_inpainting.cpp,
+	  imageplugins/inpainting/inpaintingtool.cpp,
+	  imageplugins/inserttext/imageplugin_inserttext.cpp,
+	  imageplugins/inserttext/inserttexttool.cpp,
+	  imageplugins/inserttext/inserttextwidget.cpp,
+	  imageplugins/lenscorrection/autocorrection/autocorrectiontool.cpp,
+	  imageplugins/lenscorrection/autocorrection/klensfun.cpp,
+	  imageplugins/lenscorrection/distortion/lensdistortiontool.cpp,
+	  imageplugins/lenscorrection/imageplugin_lenscorrection.cpp,
+	  imageplugins/lenscorrection/vignetting/antivignettingtool.cpp,
+	  imageplugins/localcontrast/imageplugin_localcontrast.cpp,
+	  imageplugins/localcontrast/localcontrasttool.cpp,
+	  imageplugins/noisereduction/imageplugin_noisereduction.cpp,
+	  imageplugins/noisereduction/noisereductiontool.cpp,
+	  imageplugins/oilpaint/imageplugin_oilpaint.cpp,
+	  imageplugins/oilpaint/oilpainttool.cpp,
+	  imageplugins/perspective/imageplugin_perspective.cpp,
+	  imageplugins/perspective/perspectivetool.cpp,
+	  imageplugins/perspective/perspectivewidget.cpp,
+	  imageplugins/raindrop/imageplugin_raindrop.cpp,
+	  imageplugins/raindrop/raindroptool.cpp,
+	  imageplugins/restoration/imageplugin_restoration.cpp,
+	  imageplugins/restoration/restorationtool.cpp,
+	  imageplugins/sheartool/imageplugin_sheartool.cpp,
+	  imageplugins/sheartool/sheartool.cpp,
+	  imageplugins/superimpose/dirselectwidget.cpp,
+	  imageplugins/superimpose/imageplugin_superimpose.cpp,
+	  imageplugins/superimpose/superimposetool.cpp,
+	  imageplugins/superimpose/superimposewidget.cpp,
+	  imageplugins/texture/imageplugin_texture.cpp,
+	  imageplugins/texture/texturetool.cpp,
+	  imageplugins/whitebalance/imageplugin_whitebalance.cpp,
+	  imageplugins/whitebalance/whitebalancetool.cpp,
+	  kioslave/digikamalbums.cpp, libs/database/collectionscanner.cpp,
+	  libs/database/databasebackend.cpp,
+	  libs/database/imageinfocache.cpp, libs/dialogs/dbusydlg.cpp,
+	  libs/dialogs/deletedialog.cpp, libs/dialogs/dprogressdlg.cpp,
+	  libs/dialogs/imagedialog.cpp, libs/dialogs/infodlg.cpp,
+	  libs/dialogs/libsinfodlg.cpp, libs/dialogs/rawcameradlg.cpp,
+	  libs/dimg/filters/dimgthreadedfilter.cpp,
+	  libs/dimg/loaders/jp2ksettings.cpp,
+	  libs/dimg/loaders/jpegsettings.cpp,
+	  libs/dimg/loaders/pgfsettings.cpp,
+	  libs/dimg/loaders/pngsettings.cpp,
+	  libs/dimg/loaders/rawloader.cpp,
+	  libs/dimg/loaders/tiffsettings.cpp,
+	  libs/greycstoration/greycstorationwidget.cpp,
+	  libs/histogram/imagehistogram.cpp,
+	  libs/imageproperties/cameraitempropertiestab.cpp,
+	  libs/imageproperties/captionedit.cpp,
+	  libs/imageproperties/imagedescedittab.cpp,
+	  libs/imageproperties/imagepropertiescolorstab.cpp,
+	  libs/imageproperties/imagepropertiesgpstab.cpp,
+	  libs/imageproperties/imagepropertiesmetadatatab.cpp,
+	  libs/imageproperties/imagepropertiessidebar.cpp,
+	  libs/imageproperties/imagepropertiessidebarcamgui.cpp,
+	  libs/imageproperties/imagepropertiessidebardb.cpp,
+	  libs/imageproperties/imagepropertiestab.cpp,
+	  libs/imageproperties/markerclusterholder.cpp,
+	  libs/imageproperties/markerclusterholderplugin/externaldraw.cpp,
+	  libs/imageproperties/talbumlistview.cpp,
+	  libs/imageproperties/worldmapwidget.cpp,
+	  libs/models/abstractalbummodel.cpp,
+	  libs/models/albumfiltermodel.cpp, libs/models/albummodel.cpp,
+	  libs/models/imagealbumfiltermodel.cpp,
+	  libs/models/imagealbummodel.cpp,
+	  libs/models/imagefiltermodel.cpp, libs/models/imagemodel.cpp,
+	  libs/models/imagethumbnailmodel.cpp,
+	  libs/template/altlangstredit.cpp, libs/template/msgtextedit.cpp,
+	  libs/template/subjectedit.cpp, libs/template/subjectwidget.cpp,
+	  libs/template/templatelist.cpp,
+	  libs/template/templatemanager.cpp,
+	  libs/template/templateselector.cpp,
+	  libs/template/templateviewer.cpp,
+	  libs/themeengine/themeengine.cpp,
+	  libs/threadimageio/loadingcache.cpp,
+	  libs/threadimageio/loadsavethread.cpp,
+	  libs/threadimageio/previewloadthread.cpp,
+	  libs/threadimageio/thumbnailloadthread.cpp,
+	  libs/widgets/common/colorgradientwidget.cpp,
+	  libs/widgets/common/comboboxutilities.cpp,
+	  libs/widgets/common/curvesbox.cpp,
+	  libs/widgets/common/curveswidget.cpp,
+	  libs/widgets/common/dcursortracker.cpp,
+	  libs/widgets/common/dfontselect.cpp,
+	  libs/widgets/common/dgradientslider.cpp,
+	  libs/widgets/common/dhistoryview.cpp,
+	  libs/widgets/common/dlogoaction.cpp,
+	  libs/widgets/common/filesaveoptionsbox.cpp,
+	  libs/widgets/common/histogrambox.cpp,
+	  libs/widgets/common/histogrampainter.cpp,
+	  libs/widgets/common/histogramwidget.cpp,
+	  libs/widgets/common/itemviewhoverbutton.cpp,
+	  libs/widgets/common/paniconwidget.cpp,
+	  libs/widgets/common/previewwidget.cpp,
+	  libs/widgets/common/rexpanderbox.cpp,
+	  libs/widgets/common/searchtextbar.cpp,
+	  libs/widgets/common/sidebar.cpp,
+	  libs/widgets/common/splashscreen.cpp,
+	  libs/widgets/common/statusled.cpp,
+	  libs/widgets/common/statusnavigatebar.cpp,
+	  libs/widgets/common/statusprogressbar.cpp,
+	  libs/widgets/common/statuszoombar.cpp,
+	  libs/widgets/common/thumbbar.cpp,
+	  libs/widgets/common/thumbbardock.cpp,
+	  libs/widgets/common/visibilitycontroller.cpp,
+	  libs/widgets/iccprofiles/cietonguewidget.cpp,
+	  libs/widgets/iccprofiles/iccpreviewwidget.cpp,
+	  libs/widgets/iccprofiles/iccprofilescombobox.cpp,
+	  libs/widgets/iccprofiles/iccprofilewidget.cpp,
+	  libs/widgets/imageplugins/imageguidewidget.cpp,
+	  libs/widgets/imageplugins/imagepanelwidget.cpp,
+	  libs/widgets/imageplugins/imagepaniconwidget.cpp,
+	  libs/widgets/imageplugins/imageregionwidget.cpp,
+	  libs/widgets/imageplugins/imagewidget.cpp,
+	  libs/widgets/metadata/exifwidget.cpp,
+	  libs/widgets/metadata/iptcwidget.cpp,
+	  libs/widgets/metadata/makernotewidget.cpp,
+	  libs/widgets/metadata/mdkeylistviewitem.cpp,
+	  libs/widgets/metadata/metadatalistview.cpp,
+	  libs/widgets/metadata/metadatapanel.cpp,
+	  libs/widgets/metadata/metadataselector.cpp,
+	  libs/widgets/metadata/metadatawidget.cpp,
+	  libs/widgets/metadata/xmpwidget.cpp, showfoto/setup/setup.cpp,
+	  showfoto/setup/setupeditor.cpp, showfoto/setup/setupmetadata.cpp,
+	  showfoto/setup/setuptooltip.cpp, showfoto/showfoto.cpp,
+	  tests/advancedrenametest.cpp, tests/cameranamehelpertest.cpp,
+	  tests/freerotationtest.cpp, tests/uifilevalidatortest.cpp,
+	  themedesigner/mainwindow.cpp, themedesigner/themediconview.cpp,
+	  utilities/advancedrename/advancedrenamedialog.cpp,
+	  utilities/advancedrename/advancedrenameinput.cpp,
+	  utilities/advancedrename/advancedrenamewidget.cpp,
+	  utilities/advancedrename/common/modifier.cpp,
+	  utilities/advancedrename/common/parseobject.cpp,
+	  utilities/advancedrename/common/renamethread.cpp,
+	  utilities/advancedrename/common/subparser.cpp,
+	  utilities/advancedrename/common/token.cpp,
+	  utilities/advancedrename/parsers/modifiers/defaultvaluemodifier.cpp,
+	  utilities/advancedrename/parsers/modifiers/rangemodifier.cpp,
+	  utilities/advancedrename/parsers/modifiers/replacemodifier.cpp,
+	  utilities/advancedrename/parsers/subparsers/cameranameparser.cpp,
+	  utilities/advancedrename/parsers/subparsers/dateparser.cpp,
+	  utilities/advancedrename/parsers/subparsers/directorynameparser.cpp,
+	  utilities/advancedrename/parsers/subparsers/filepropertiesparser.cpp,
+	  utilities/advancedrename/parsers/subparsers/metadataparser.cpp,
+	  utilities/advancedrename/parsers/subparsers/sequencenumberparser.cpp,
+	  utilities/batch/batchalbumssyncmetadata.cpp,
+	  utilities/batch/batchsyncmetadata.cpp,
+	  utilities/batch/batchthumbsgenerator.cpp,
+	  utilities/batch/fingerprintsgenerator.cpp,
+	  utilities/batch/imageinfoalbumsjob.cpp,
+	  utilities/batch/imageinfojob.cpp,
+	  utilities/cameragui/cameracontroller.cpp,
+	  utilities/cameragui/camerafolderdialog.cpp,
+	  utilities/cameragui/camerafolderview.cpp,
+	  utilities/cameragui/camerahistoryupdater.cpp,
+	  utilities/cameragui/cameraiconitem.cpp,
+	  utilities/cameragui/cameraiconview.cpp,
+	  utilities/cameragui/cameraui.cpp,
+	  utilities/cameragui/capturedlg.cpp,
+	  utilities/cameragui/capturewidget.cpp,
+	  utilities/cameragui/freespacewidget.cpp,
+	  utilities/cameragui/gpconfigdlg.cpp,
+	  utilities/cameragui/renamecustomizer.cpp,
+	  utilities/firstrun/assistantdlg.cpp,
+	  utilities/firstrun/collectionpage.cpp,
+	  utilities/firstrun/metadatapage.cpp,
+	  utilities/firstrun/openfilepage.cpp,
+	  utilities/firstrun/previewpage.cpp,
+	  utilities/firstrun/rawpage.cpp,
+	  utilities/firstrun/tooltipspage.cpp,
+	  utilities/fuzzysearch/findduplicatesview.cpp,
+	  utilities/fuzzysearch/fuzzysearchfolderview.cpp,
+	  utilities/fuzzysearch/fuzzysearchview.cpp,
+	  utilities/fuzzysearch/sketchwidget.cpp,
+	  utilities/gpssearch/gpssearchfolderview.cpp,
+	  utilities/gpssearch/gpssearchview.cpp,
+	  utilities/gpssearch/gpssearchwidget.cpp,
+	  utilities/imageeditor/canvas/canvas.cpp,
+	  utilities/imageeditor/canvas/colorcorrectiondlg.cpp,
+	  utilities/imageeditor/canvas/dimginterface.cpp,
+	  utilities/imageeditor/canvas/iccsettings.cpp,
+	  utilities/imageeditor/canvas/imageplugin.cpp,
+	  utilities/imageeditor/canvas/softproofdialog.cpp,
+	  utilities/imageeditor/editor/editorstackview.cpp,
+	  utilities/imageeditor/editor/editortool.cpp,
+	  utilities/imageeditor/editor/editortooliface.cpp,
+	  utilities/imageeditor/editor/editortoolsettings.cpp,
+	  utilities/imageeditor/editor/imagewindow.cpp,
+	  utilities/imageeditor/rawimport/rawimport.cpp,
+	  utilities/imageeditor/rawimport/rawpreview.cpp,
+	  utilities/imageeditor/rawimport/rawsettingsbox.cpp,
+	  utilities/kipiiface/kipiimagecollectionselector.cpp,
+	  utilities/kipiiface/kipiinterface.cpp,
+	  utilities/kipiiface/kipiuploadwidget.cpp,
+	  utilities/lighttable/lighttablebar.cpp,
+	  utilities/lighttable/lighttablepreview.cpp,
+	  utilities/lighttable/lighttableview.cpp,
+	  utilities/lighttable/lighttablewindow.cpp,
+	  utilities/nepomuk/digikamnepomukservice.cpp,
+	  utilities/queuemanager/actionthread.cpp,
+	  utilities/queuemanager/assignedlist.cpp,
+	  utilities/queuemanager/basetools/convert/convert2jp2.cpp,
+	  utilities/queuemanager/basetools/convert/convert2jpeg.cpp,
+	  utilities/queuemanager/basetools/convert/convert2pgf.cpp,
+	  utilities/queuemanager/basetools/convert/convert2png.cpp,
+	  utilities/queuemanager/basetools/convert/convert2tiff.cpp,
+	  utilities/queuemanager/basetools/decorate/watermark.cpp,
+	  utilities/queuemanager/basetools/enhance/autocorrection.cpp,
+	  utilities/queuemanager/basetools/enhance/restoration.cpp,
+	  utilities/queuemanager/basetools/enhance/sharpen.cpp,
+	  utilities/queuemanager/basetools/metadata/assigntemplate.cpp,
+	  utilities/queuemanager/basetools/transform/flip.cpp,
+	  utilities/queuemanager/basetools/transform/resize.cpp,
+	  utilities/queuemanager/basetools/transform/rotate.cpp,
+	  utilities/queuemanager/batchtool.cpp,
+	  utilities/queuemanager/batchtoolsmanager.cpp,
+	  utilities/queuemanager/queuelist.cpp,
+	  utilities/queuemanager/queuemgrwindow.cpp,
+	  utilities/queuemanager/queuepool.cpp,
+	  utilities/queuemanager/queuesettingsview.cpp,
+	  utilities/queuemanager/toolsettingsview.cpp,
+	  utilities/queuemanager/toolslistview.cpp,
+	  utilities/queuemanager/toolsview.cpp,
+	  utilities/searchwindow/choicesearchutilities.cpp,
+	  utilities/searchwindow/ratingsearchutilities.cpp,
+	  utilities/searchwindow/searchfieldgroup.cpp,
+	  utilities/searchwindow/searchfields.cpp,
+	  utilities/searchwindow/searchfolderview.cpp,
+	  utilities/searchwindow/searchgroup.cpp,
+	  utilities/searchwindow/searchtabheader.cpp,
+	  utilities/searchwindow/searchutilities.cpp,
+	  utilities/searchwindow/searchview.cpp,
+	  utilities/searchwindow/searchwindow.cpp,
+	  utilities/setup/cameralist.cpp,
+	  utilities/setup/cameraselection.cpp, utilities/setup/setup.cpp,
+	  utilities/setup/setupalbumview.cpp,
+	  utilities/setup/setupcamera.cpp,
+	  utilities/setup/setupcategory.cpp,
+	  utilities/setup/setupcollections.cpp,
+	  utilities/setup/setupdcraw.cpp, utilities/setup/setupeditor.cpp,
+	  utilities/setup/setupicc.cpp, utilities/setup/setupiofiles.cpp,
+	  utilities/setup/setuplighttable.cpp,
+	  utilities/setup/setupmetadata.cpp, utilities/setup/setupmime.cpp,
+	  utilities/setup/setupplugins.cpp,
+	  utilities/setup/setupslideshow.cpp,
+	  utilities/setup/setuptemplate.cpp,
+	  utilities/setup/setuptooltip.cpp,
+	  utilities/slideshow/slideshow.cpp,
+	  utilities/slideshow/toolbar.cpp,
+	  utilities/timeline/timelinefolderview.cpp,
+	  utilities/timeline/timelineview.cpp,
+	  utilities/timeline/timelinewidget.cpp: Remove commented lines,
+	  all compiles fine under windows, too
+
+2009-11-15 11:09  mghansen
+
+	* digikam/digikamview.cpp: polish
+
+2009-11-15 11:01  mghansen
+
+	* digikam/digikamapp.cpp, digikam/digikamapp_p.h,
+	  digikam/digikamui.rc, digikam/digikamview.cpp,
+	  digikam/digikamview.h: Add an "Open in terminal" action to the
+	  Album menu.
+
+2009-11-14 23:34  toma
+
+	* digikam/albummanager.cpp: Fix typo
+
+2009-11-14 22:56  mghansen
+
+	* utilities/cameragui/camerafolderdialog.cpp: Properly set up Ok
+	  button in CameraFolderDialog
+
+2009-11-14 16:10  aclemens
+
+	* digikam/albumdragdrop.cpp, digikam/albumfolderview.cpp,
+	  digikam/albumhistory.cpp, digikam/albumiconview.cpp,
+	  digikam/albumiconviewfilter.cpp, digikam/albumlister.cpp,
+	  digikam/albummanager.cpp, digikam/albumpropsedit.cpp,
+	  digikam/albumselectcombobox.cpp, digikam/albumselectdialog.cpp,
+	  digikam/albumselectwidget.cpp, digikam/albumsettings.cpp,
+	  digikam/albumthumbnailloader.cpp, digikam/albumtreeview.cpp,
+	  digikam/albumwidgetstack.cpp, digikam/contextmenuhelper.cpp,
+	  digikam/datefolderview.cpp, digikam/digikamapp.cpp,
+	  digikam/digikamimageview.cpp, digikam/digikamimageview_p.cpp,
+	  digikam/digikamview.cpp, digikam/folderview.cpp,
+	  digikam/iconitem.cpp, digikam/iconview.cpp,
+	  digikam/imageattributeswatch.cpp,
+	  digikam/imagecategorizedview.cpp, digikam/imagedelegate.cpp,
+	  digikam/imagedelegateoverlay.cpp, digikam/imagedragdrop.cpp,
+	  digikam/imagepreviewbar.cpp, digikam/imagepreviewview.cpp,
+	  digikam/imageratingoverlay.cpp, digikam/imagerotationoverlay.cpp,
+	  digikam/imageselectionoverlay.cpp,
+	  digikam/imageviewutilities.cpp, digikam/kdateedit.cpp,
+	  digikam/kdatepickerpopup.cpp, digikam/kdatetimeedit.cpp,
+	  digikam/mediaplayerview.cpp, digikam/metadatamanager.cpp,
+	  digikam/mimefilter.cpp, digikam/monthwidget.cpp,
+	  digikam/ratingfilter.cpp, digikam/ratingpopupmenu.cpp,
+	  digikam/ratingwidget.cpp, digikam/syncjob.cpp,
+	  digikam/tageditdlg.cpp, digikam/tagfilterview.cpp,
+	  digikam/tagfolderview.cpp, digikam/tagspopupmenu.cpp,
+	  digikam/welcomepageview.cpp,
+	  imageplugins/adjustcurves/adjustcurvestool.cpp,
+	  imageplugins/adjustcurves/imageplugin_adjustcurves.cpp,
+	  imageplugins/adjustlevels/adjustlevelstool.cpp,
+	  imageplugins/adjustlevels/imageplugin_adjustlevels.cpp,
+	  imageplugins/blurfx/blurfxtool.cpp,
+	  imageplugins/blurfx/imageplugin_blurfx.cpp,
+	  imageplugins/border/bordertool.cpp,
+	  imageplugins/border/imageplugin_border.cpp,
+	  imageplugins/channelmixer/channelmixertool.cpp,
+	  imageplugins/channelmixer/imageplugin_channelmixer.cpp,
+	  imageplugins/charcoal/charcoaltool.cpp,
+	  imageplugins/charcoal/imageplugin_charcoal.cpp,
+	  imageplugins/colorfx/colorfxtool.cpp,
+	  imageplugins/colorfx/imageplugin_colorfx.cpp,
+	  imageplugins/contentawareresizing/contentawareresizetool.cpp,
+	  imageplugins/contentawareresizing/imageplugin_contentawareresizing.cpp,
+	  imageplugins/coreplugin/autocorrectiontool.cpp,
+	  imageplugins/coreplugin/bcgtool.cpp,
+	  imageplugins/coreplugin/blurtool.cpp,
+	  imageplugins/coreplugin/bwsepiatool.cpp,
+	  imageplugins/coreplugin/hsl/hsltool.cpp,
+	  imageplugins/coreplugin/hsl/hspreviewwidget.cpp,
+	  imageplugins/coreplugin/iccprooftool.cpp,
+	  imageplugins/coreplugin/imageplugin_core.cpp,
+	  imageplugins/coreplugin/profileconversiontool.cpp,
+	  imageplugins/coreplugin/ratiocrop/imageselectionwidget.cpp,
+	  imageplugins/coreplugin/ratiocrop/ratiocroptool.cpp,
+	  imageplugins/coreplugin/redeyetool.cpp,
+	  imageplugins/coreplugin/resizetool.cpp,
+	  imageplugins/coreplugin/rgbtool.cpp,
+	  imageplugins/coreplugin/sharpentool.cpp,
+	  imageplugins/distortionfx/distortionfxtool.cpp,
+	  imageplugins/distortionfx/imageplugin_distortionfx.cpp,
+	  imageplugins/emboss/embosstool.cpp,
+	  imageplugins/emboss/imageplugin_emboss.cpp,
+	  imageplugins/filmgrain/filmgraintool.cpp,
+	  imageplugins/filmgrain/imageplugin_filmgrain.cpp,
+	  imageplugins/freerotation/freerotationtool.cpp,
+	  imageplugins/freerotation/imageplugin_freerotation.cpp,
+	  imageplugins/hotpixels/blackframelistview.cpp,
+	  imageplugins/hotpixels/blackframeparser.cpp,
+	  imageplugins/hotpixels/hotpixelstool.cpp,
+	  imageplugins/hotpixels/imageplugin_hotpixels.cpp,
+	  imageplugins/infrared/imageplugin_infrared.cpp,
+	  imageplugins/infrared/infraredtool.cpp,
+	  imageplugins/inpainting/imageplugin_inpainting.cpp,
+	  imageplugins/inpainting/inpaintingtool.cpp,
+	  imageplugins/inserttext/imageplugin_inserttext.cpp,
+	  imageplugins/inserttext/inserttexttool.cpp,
+	  imageplugins/inserttext/inserttextwidget.cpp,
+	  imageplugins/lenscorrection/autocorrection/autocorrectiontool.cpp,
+	  imageplugins/lenscorrection/autocorrection/klensfun.cpp,
+	  imageplugins/lenscorrection/distortion/lensdistortiontool.cpp,
+	  imageplugins/lenscorrection/imageplugin_lenscorrection.cpp,
+	  imageplugins/lenscorrection/vignetting/antivignettingtool.cpp,
+	  imageplugins/localcontrast/imageplugin_localcontrast.cpp,
+	  imageplugins/localcontrast/localcontrasttool.cpp,
+	  imageplugins/noisereduction/imageplugin_noisereduction.cpp,
+	  imageplugins/noisereduction/noisereductiontool.cpp,
+	  imageplugins/oilpaint/imageplugin_oilpaint.cpp,
+	  imageplugins/oilpaint/oilpainttool.cpp,
+	  imageplugins/perspective/imageplugin_perspective.cpp,
+	  imageplugins/perspective/perspectivetool.cpp,
+	  imageplugins/perspective/perspectivewidget.cpp,
+	  imageplugins/raindrop/imageplugin_raindrop.cpp,
+	  imageplugins/raindrop/raindroptool.cpp,
+	  imageplugins/restoration/imageplugin_restoration.cpp,
+	  imageplugins/restoration/restorationtool.cpp,
+	  imageplugins/sheartool/imageplugin_sheartool.cpp,
+	  imageplugins/sheartool/sheartool.cpp,
+	  imageplugins/superimpose/dirselectwidget.cpp,
+	  imageplugins/superimpose/imageplugin_superimpose.cpp,
+	  imageplugins/superimpose/superimposetool.cpp,
+	  imageplugins/superimpose/superimposewidget.cpp,
+	  imageplugins/texture/imageplugin_texture.cpp,
+	  imageplugins/texture/texturetool.cpp,
+	  imageplugins/whitebalance/imageplugin_whitebalance.cpp,
+	  imageplugins/whitebalance/whitebalancetool.cpp,
+	  kioslave/digikamalbums.cpp, libs/database/collectionscanner.cpp,
+	  libs/database/databasebackend.cpp,
+	  libs/database/databasecorebackend.cpp,
+	  libs/database/imageinfocache.cpp, libs/dialogs/dbusydlg.cpp,
+	  libs/dialogs/deletedialog.cpp, libs/dialogs/dprogressdlg.cpp,
+	  libs/dialogs/imagedialog.cpp, libs/dialogs/infodlg.cpp,
+	  libs/dialogs/libsinfodlg.cpp, libs/dialogs/rawcameradlg.cpp,
+	  libs/dimg/filters/dimgthreadedfilter.cpp,
+	  libs/dimg/loaders/jp2ksettings.cpp,
+	  libs/dimg/loaders/jpegsettings.cpp,
+	  libs/dimg/loaders/pgfsettings.cpp,
+	  libs/dimg/loaders/pngsettings.cpp,
+	  libs/dimg/loaders/rawloader.cpp,
+	  libs/dimg/loaders/tiffsettings.cpp,
+	  libs/greycstoration/greycstorationwidget.cpp,
+	  libs/histogram/imagehistogram.cpp,
+	  libs/imageproperties/cameraitempropertiestab.cpp,
+	  libs/imageproperties/captionedit.cpp,
+	  libs/imageproperties/imagedescedittab.cpp,
+	  libs/imageproperties/imagepropertiescolorstab.cpp,
+	  libs/imageproperties/imagepropertiesgpstab.cpp,
+	  libs/imageproperties/imagepropertiesmetadatatab.cpp,
+	  libs/imageproperties/imagepropertiessidebar.cpp,
+	  libs/imageproperties/imagepropertiessidebarcamgui.cpp,
+	  libs/imageproperties/imagepropertiessidebardb.cpp,
+	  libs/imageproperties/imagepropertiestab.cpp,
+	  libs/imageproperties/markerclusterholder.cpp,
+	  libs/imageproperties/markerclusterholderplugin/externaldraw.cpp,
+	  libs/imageproperties/talbumlistview.cpp,
+	  libs/imageproperties/worldmapwidget.cpp,
+	  libs/models/abstractalbummodel.cpp,
+	  libs/models/albumfiltermodel.cpp, libs/models/albummodel.cpp,
+	  libs/models/imagealbumfiltermodel.cpp,
+	  libs/models/imagealbummodel.cpp,
+	  libs/models/imagefiltermodel.cpp, libs/models/imagemodel.cpp,
+	  libs/models/imagethumbnailmodel.cpp,
+	  libs/template/altlangstredit.cpp, libs/template/msgtextedit.cpp,
+	  libs/template/subjectedit.cpp, libs/template/subjectwidget.cpp,
+	  libs/template/templatelist.cpp,
+	  libs/template/templatemanager.cpp,
+	  libs/template/templateselector.cpp,
+	  libs/template/templateviewer.cpp,
+	  libs/themeengine/themeengine.cpp,
+	  libs/threadimageio/loadingcache.cpp,
+	  libs/threadimageio/loadsavethread.cpp,
+	  libs/threadimageio/previewloadthread.cpp,
+	  libs/threadimageio/thumbnailloadthread.cpp,
+	  libs/widgets/common/colorgradientwidget.cpp,
+	  libs/widgets/common/comboboxutilities.cpp,
+	  libs/widgets/common/curvesbox.cpp,
+	  libs/widgets/common/curveswidget.cpp,
+	  libs/widgets/common/dcursortracker.cpp,
+	  libs/widgets/common/dfontselect.cpp,
+	  libs/widgets/common/dgradientslider.cpp,
+	  libs/widgets/common/dhistoryview.cpp,
+	  libs/widgets/common/dlogoaction.cpp,
+	  libs/widgets/common/filesaveoptionsbox.cpp,
+	  libs/widgets/common/histogrambox.cpp,
+	  libs/widgets/common/histogrampainter.cpp,
+	  libs/widgets/common/histogramwidget.cpp,
+	  libs/widgets/common/itemviewhoverbutton.cpp,
+	  libs/widgets/common/paniconwidget.cpp,
+	  libs/widgets/common/previewwidget.cpp,
+	  libs/widgets/common/rexpanderbox.cpp,
+	  libs/widgets/common/searchtextbar.cpp,
+	  libs/widgets/common/sidebar.cpp,
+	  libs/widgets/common/splashscreen.cpp,
+	  libs/widgets/common/statusled.cpp,
+	  libs/widgets/common/statusnavigatebar.cpp,
+	  libs/widgets/common/statusprogressbar.cpp,
+	  libs/widgets/common/statuszoombar.cpp,
+	  libs/widgets/common/thumbbar.cpp,
+	  libs/widgets/common/thumbbardock.cpp,
+	  libs/widgets/common/visibilitycontroller.cpp,
+	  libs/widgets/iccprofiles/cietonguewidget.cpp,
+	  libs/widgets/iccprofiles/iccpreviewwidget.cpp,
+	  libs/widgets/iccprofiles/iccprofilescombobox.cpp,
+	  libs/widgets/iccprofiles/iccprofilewidget.cpp,
+	  libs/widgets/imageplugins/imageguidewidget.cpp,
+	  libs/widgets/imageplugins/imagepanelwidget.cpp,
+	  libs/widgets/imageplugins/imagepaniconwidget.cpp,
+	  libs/widgets/imageplugins/imageregionwidget.cpp,
+	  libs/widgets/imageplugins/imagewidget.cpp,
+	  libs/widgets/metadata/exifwidget.cpp,
+	  libs/widgets/metadata/iptcwidget.cpp,
+	  libs/widgets/metadata/makernotewidget.cpp,
+	  libs/widgets/metadata/mdkeylistviewitem.cpp,
+	  libs/widgets/metadata/metadatalistview.cpp,
+	  libs/widgets/metadata/metadatapanel.cpp,
+	  libs/widgets/metadata/metadataselector.cpp,
+	  libs/widgets/metadata/metadatawidget.cpp,
+	  libs/widgets/metadata/xmpwidget.cpp, showfoto/setup/setup.cpp,
+	  showfoto/setup/setupeditor.cpp, showfoto/setup/setupmetadata.cpp,
+	  showfoto/setup/setuptooltip.cpp, showfoto/showfoto.cpp,
+	  tests/advancedrenametest.cpp, tests/cameranamehelpertest.cpp,
+	  tests/freerotationtest.cpp, tests/uifilevalidatortest.cpp,
+	  themedesigner/mainwindow.cpp, themedesigner/themediconview.cpp,
+	  utilities/advancedrename/advancedrenamedialog.cpp,
+	  utilities/advancedrename/advancedrenameinput.cpp,
+	  utilities/advancedrename/advancedrenamewidget.cpp,
+	  utilities/advancedrename/common/modifier.cpp,
+	  utilities/advancedrename/common/parseobject.cpp,
+	  utilities/advancedrename/common/renamethread.cpp,
+	  utilities/advancedrename/common/subparser.cpp,
+	  utilities/advancedrename/common/token.cpp,
+	  utilities/advancedrename/parsers/modifiers/defaultvaluemodifier.cpp,
+	  utilities/advancedrename/parsers/modifiers/rangemodifier.cpp,
+	  utilities/advancedrename/parsers/modifiers/replacemodifier.cpp,
+	  utilities/advancedrename/parsers/subparsers/cameranameparser.cpp,
+	  utilities/advancedrename/parsers/subparsers/dateparser.cpp,
+	  utilities/advancedrename/parsers/subparsers/directorynameparser.cpp,
+	  utilities/advancedrename/parsers/subparsers/filepropertiesparser.cpp,
+	  utilities/advancedrename/parsers/subparsers/metadataparser.cpp,
+	  utilities/advancedrename/parsers/subparsers/sequencenumberparser.cpp,
+	  utilities/batch/batchalbumssyncmetadata.cpp,
+	  utilities/batch/batchsyncmetadata.cpp,
+	  utilities/batch/batchthumbsgenerator.cpp,
+	  utilities/batch/fingerprintsgenerator.cpp,
+	  utilities/batch/imageinfoalbumsjob.cpp,
+	  utilities/batch/imageinfojob.cpp,
+	  utilities/cameragui/cameracontroller.cpp,
+	  utilities/cameragui/camerafolderdialog.cpp,
+	  utilities/cameragui/camerafolderview.cpp,
+	  utilities/cameragui/camerahistoryupdater.cpp,
+	  utilities/cameragui/cameraiconitem.cpp,
+	  utilities/cameragui/cameraiconview.cpp,
+	  utilities/cameragui/cameraui.cpp,
+	  utilities/cameragui/capturedlg.cpp,
+	  utilities/cameragui/capturewidget.cpp,
+	  utilities/cameragui/freespacewidget.cpp,
+	  utilities/cameragui/gpconfigdlg.cpp,
+	  utilities/cameragui/renamecustomizer.cpp,
+	  utilities/firstrun/assistantdlg.cpp,
+	  utilities/firstrun/collectionpage.cpp,
+	  utilities/firstrun/metadatapage.cpp,
+	  utilities/firstrun/openfilepage.cpp,
+	  utilities/firstrun/previewpage.cpp,
+	  utilities/firstrun/rawpage.cpp,
+	  utilities/firstrun/tooltipspage.cpp,
+	  utilities/fuzzysearch/findduplicatesview.cpp,
+	  utilities/fuzzysearch/fuzzysearchfolderview.cpp,
+	  utilities/fuzzysearch/fuzzysearchview.cpp,
+	  utilities/fuzzysearch/sketchwidget.cpp,
+	  utilities/gpssearch/gpssearchfolderview.cpp,
+	  utilities/gpssearch/gpssearchview.cpp,
+	  utilities/gpssearch/gpssearchwidget.cpp,
+	  utilities/imageeditor/canvas/canvas.cpp,
+	  utilities/imageeditor/canvas/colorcorrectiondlg.cpp,
+	  utilities/imageeditor/canvas/dimginterface.cpp,
+	  utilities/imageeditor/canvas/iccsettings.cpp,
+	  utilities/imageeditor/canvas/imageplugin.cpp,
+	  utilities/imageeditor/canvas/softproofdialog.cpp,
+	  utilities/imageeditor/editor/editorstackview.cpp,
+	  utilities/imageeditor/editor/editortool.cpp,
+	  utilities/imageeditor/editor/editortooliface.cpp,
+	  utilities/imageeditor/editor/editortoolsettings.cpp,
+	  utilities/imageeditor/editor/editorwindow.cpp,
+	  utilities/imageeditor/editor/editorwindow_p.h,
+	  utilities/imageeditor/editor/imagewindow.cpp,
+	  utilities/imageeditor/rawimport/rawimport.cpp,
+	  utilities/imageeditor/rawimport/rawpreview.cpp,
+	  utilities/imageeditor/rawimport/rawsettingsbox.cpp,
+	  utilities/kipiiface/kipiimagecollectionselector.cpp,
+	  utilities/kipiiface/kipiinterface.cpp,
+	  utilities/kipiiface/kipiuploadwidget.cpp,
+	  utilities/lighttable/lighttablebar.cpp,
+	  utilities/lighttable/lighttablepreview.cpp,
+	  utilities/lighttable/lighttableview.cpp,
+	  utilities/lighttable/lighttablewindow.cpp,
+	  utilities/nepomuk/digikamnepomukservice.cpp,
+	  utilities/queuemanager/actionthread.cpp,
+	  utilities/queuemanager/assignedlist.cpp,
+	  utilities/queuemanager/basetools/convert/convert2jp2.cpp,
+	  utilities/queuemanager/basetools/convert/convert2jpeg.cpp,
+	  utilities/queuemanager/basetools/convert/convert2pgf.cpp,
+	  utilities/queuemanager/basetools/convert/convert2png.cpp,
+	  utilities/queuemanager/basetools/convert/convert2tiff.cpp,
+	  utilities/queuemanager/basetools/decorate/watermark.cpp,
+	  utilities/queuemanager/basetools/enhance/autocorrection.cpp,
+	  utilities/queuemanager/basetools/enhance/restoration.cpp,
+	  utilities/queuemanager/basetools/enhance/sharpen.cpp,
+	  utilities/queuemanager/basetools/metadata/assigntemplate.cpp,
+	  utilities/queuemanager/basetools/transform/flip.cpp,
+	  utilities/queuemanager/basetools/transform/resize.cpp,
+	  utilities/queuemanager/basetools/transform/rotate.cpp,
+	  utilities/queuemanager/batchtool.cpp,
+	  utilities/queuemanager/batchtoolsmanager.cpp,
+	  utilities/queuemanager/queuelist.cpp,
+	  utilities/queuemanager/queuemgrwindow.cpp,
+	  utilities/queuemanager/queuepool.cpp,
+	  utilities/queuemanager/queuesettingsview.cpp,
+	  utilities/queuemanager/toolsettingsview.cpp,
+	  utilities/queuemanager/toolslistview.cpp,
+	  utilities/queuemanager/toolsview.cpp,
+	  utilities/searchwindow/choicesearchutilities.cpp,
+	  utilities/searchwindow/ratingsearchutilities.cpp,
+	  utilities/searchwindow/searchfieldgroup.cpp,
+	  utilities/searchwindow/searchfields.cpp,
+	  utilities/searchwindow/searchfolderview.cpp,
+	  utilities/searchwindow/searchgroup.cpp,
+	  utilities/searchwindow/searchtabheader.cpp,
+	  utilities/searchwindow/searchutilities.cpp,
+	  utilities/searchwindow/searchview.cpp,
+	  utilities/searchwindow/searchwindow.cpp,
+	  utilities/setup/cameralist.cpp,
+	  utilities/setup/cameraselection.cpp, utilities/setup/setup.cpp,
+	  utilities/setup/setupalbumview.cpp,
+	  utilities/setup/setupcamera.cpp,
+	  utilities/setup/setupcategory.cpp,
+	  utilities/setup/setupcollections.cpp,
+	  utilities/setup/setupdcraw.cpp, utilities/setup/setupeditor.cpp,
+	  utilities/setup/setupicc.cpp, utilities/setup/setupiofiles.cpp,
+	  utilities/setup/setuplighttable.cpp,
+	  utilities/setup/setupmetadata.cpp, utilities/setup/setupmime.cpp,
+	  utilities/setup/setupplugins.cpp,
+	  utilities/setup/setupslideshow.cpp,
+	  utilities/setup/setuptemplate.cpp,
+	  utilities/setup/setuptooltip.cpp,
+	  utilities/slideshow/slideshow.cpp,
+	  utilities/slideshow/toolbar.cpp,
+	  utilities/timeline/timelinefolderview.cpp,
+	  utilities/timeline/timelineview.cpp,
+	  utilities/timeline/timelinewidget.cpp: As Gilles suggested, do
+	  not include the header file if a moc is also included.
+	  Gilles, please test this under Windows.
+	  
+	  If it is working fine, we can remove the commented includes
+	  completely.
+
+2009-11-14 14:10  sengels
+
+	* digikam/albumiconview.cpp: do not disable contextmenu
+
+2009-11-14 13:54  sengels
+
+	* digikam/albumiconview.cpp, digikam/imagecategorizedview.cpp:
+	  revert debug output
+
+2009-11-14 13:10  sengels
+
+	* digikam/imagecategorizedview.cpp: do not open preview if
+	  rightClick happens
+
+2009-11-14 12:58  mghansen
+
+	* CMakeLists.txt, libs/widgets/common/CMakeLists.txt,
+	  libs/widgets/common/knotificationwrapper.cpp,
+	  libs/widgets/common/knotificationwrapper.h,
+	  utilities/batch/batchalbumssyncmetadata.cpp,
+	  utilities/batch/batchthumbsgenerator.cpp,
+	  utilities/batch/fingerprintsgenerator.cpp,
+	  utilities/cameragui/cameraui.cpp,
+	  utilities/queuemanager/queuemgrwindow.cpp: Replace KPassivePopup
+	  with KNotification through a wrapper.
+
+2009-11-14 12:57  mghansen
+
+	* project/ImageAnnotation.odt: Updates
+
+2009-11-14 11:08  mghansen
+
+	* utilities/cameragui/cameraui.rc: Increment version number of the
+	  gui.
+
+2009-11-13 22:34  mghansen
+
+	* NEWS: Add news entry
+
+2009-11-13 22:17  mghansen
+
+	* utilities/cameragui/cameraui.cpp, utilities/cameragui/cameraui.h,
+	  utilities/cameragui/cameraui.rc,
+	  utilities/cameragui/cameraui_p.h: Add a "Mark as downloaded"
+	  action to the camera download ui and fix availability of "Toggle
+	  Lock" action.
+	  
+	  BUG: 204640
+
+2009-11-13 17:32  jwienke
+
+	* digikam/album.h, digikam/albumpropsedit.h,
+	  digikam/albumselectwidget.h, digikam/albumtreeview.h,
+	  digikam/contextmenuhelper.h, digikam/folderview.h,
+	  digikam/iconview.h, digikam/imagepreviewbar.h,
+	  digikam/kcategorizedview.cpp, digikam/kdateedit.h,
+	  digikam/kdatepickerpopup.h, digikam/metadatahub.h,
+	  imageplugins/blurfx/blurfx.h, imageplugins/border/border.h,
+	  imageplugins/charcoal/charcoal.h,
+	  imageplugins/coreplugin/hsl/hspreviewwidget.h,
+	  imageplugins/distortionfx/distortionfxtool.h,
+	  imageplugins/emboss/emboss.h, imageplugins/filmgrain/filmgrain.h,
+	  imageplugins/freerotation/freerotation.h,
+	  imageplugins/infrared/infrared.h,
+	  imageplugins/lenscorrection/distortion/lensdistortion.h,
+	  imageplugins/lenscorrection/vignetting/antivignetting.h,
+	  imageplugins/oilpaint/oilpaint.h,
+	  imageplugins/raindrop/raindrop.h,
+	  imageplugins/sheartool/sheartool.h,
+	  imageplugins/superimpose/dirselectwidget.h,
+	  imageplugins/texture/texture.h,
+	  libs/database/imageextendedproperties.cpp,
+	  libs/dialogs/dbusydlg.h, libs/dialogs/dprogressdlg.h,
+	  libs/dimg/dcolor.h, libs/dimg/dimg.h,
+	  libs/dimg/filters/dimggaussianblur.h,
+	  libs/dimg/filters/dimgrefocus.h, libs/dimg/filters/dimgsharpen.h,
+	  libs/dimg/filters/dimgunsharpmask.h,
+	  libs/dimg/filters/iccprofile.cpp, libs/dimg/loaders/rawloader.h,
+	  libs/histogram/imagehistogram.h,
+	  libs/imageproperties/captionedit.cpp,
+	  libs/imageproperties/imagepropertiestxtlabel.h,
+	  libs/models/albummodel.h,
+	  libs/models/albummodeldragdrophandler.h,
+	  libs/template/altlangstredit.cpp,
+	  libs/template/templatepanel.cpp,
+	  libs/widgets/common/dlogoaction.h,
+	  libs/widgets/common/histogrambox.h,
+	  libs/widgets/common/paniconwidget.h,
+	  libs/widgets/common/rexpanderbox.h,
+	  libs/widgets/common/sidebar.h, libs/widgets/common/thumbbar.h,
+	  libs/widgets/common/thumbbardock.h,
+	  libs/widgets/iccprofiles/iccprofilewidget.h,
+	  libs/widgets/imageplugins/imagewidget.h,
+	  libs/widgets/metadata/exifwidget.h,
+	  libs/widgets/metadata/iptcwidget.h,
+	  libs/widgets/metadata/makernotewidget.h,
+	  libs/widgets/metadata/metadatawidget.h,
+	  libs/widgets/metadata/xmpwidget.h, showfoto/setup/setup.h,
+	  utilities/advancedrename/common/dynamiclayout.h,
+	  utilities/batch/batchsyncmetadata.h,
+	  utilities/batch/batchthumbsgenerator.h,
+	  utilities/imageeditor/canvas/iccmanager.h,
+	  utilities/imageeditor/canvas/imageplugin.h,
+	  utilities/imageeditor/canvas/imagepluginloader.h,
+	  utilities/imageeditor/canvas/undoaction.h,
+	  utilities/imageeditor/editor/imageiface.h,
+	  utilities/imageeditor/rawimport/rawpostprocessing.h,
+	  utilities/kipiiface/kipiimagecollectionselector.h,
+	  utilities/kipiiface/kipiinterface.h,
+	  utilities/kipiiface/kipiuploadwidget.h,
+	  utilities/lighttable/lighttablebar.h,
+	  utilities/lighttable/lighttablepreview.cpp,
+	  utilities/searchwindow/searchview.h,
+	  utilities/setup/setupcollections.h, utilities/setup/setupicc.h:
+	  Fix a lot of krazy warnings with explicit constructors etc.
+
+2009-11-13 12:58  mghansen
+
+	* project/ImageAnnotation.odt: Add a proposal image.
+
+2009-11-13 12:32  mwiesweg
+
+	* digikam/metadatahub.cpp, digikam/metadatahub.h,
+	  libs/imageproperties/imagedescedittab.cpp: Ensure removed tags
+	  are not kept in map and later accessed when keeping a MetadataHub
+	  
+	  CCBUG: 214340
+
+2009-11-13 12:06  mwiesweg
+
+	* libs/models/imagealbummodel.cpp: Ensure that d->currentAlbum is
+	  valid all times
+	  
+	  CCBUG: 213916
+
+2009-11-13 10:28  scripty
+
+	* digikam/digikam.desktop,
+	  imageplugins/localcontrast/digikamimageplugin_localcontrast.desktop,
+	  utilities/nepomuk/digikamnepomukservice.desktop: SVN_SILENT made
+	  messages (.desktop file)
+
+2009-11-12 23:39  lure
+
+	* libs/3rdparty/libpgf/PGFplatform.h: Fix build on GNU/kFreeBSD
+	  Patch from Cyril Brulebois - thanks!
+	  CCMAIL: <kibi@debian.org>
+
+2009-11-12 22:42  jwienke
+
+	* digikam/imagepreviewbar.cpp, digikam/imagepreviewbar.h,
+	  utilities/lighttable/lighttablebar.cpp,
+	  utilities/lighttable/lighttablebar.h: avoid code duplication
+
+2009-11-12 21:55  jwienke
+
+	* imageplugins/coreplugin/ratiocrop/imageselectionwidget.cpp,
+	  imageplugins/coreplugin/ratiocrop/imageselectionwidget.h: avoid
+	  code duplication
+
+2009-11-12 21:33  jwienke
+
+	* utilities/timeline/timelinewidget.cpp,
+	  utilities/timeline/timelinewidget.h: avoid code duplication
+
+2009-11-12 18:22  mghansen
+
+	* project/ImageAnnotation.odt: Add contact options for people
+	  without svn access.
+
+2009-11-12 18:14  mghansen
+
+	* project/ImageAnnotation.odt: Document for discussing ideas for
+	  image annotation and face recognition.
+	  
+	  CCBUG: 146288
+	  CCBUG: 146337
+
+2009-11-12 11:25  aclemens
+
+	* utilities/advancedrename/advancedrenameinput.cpp: polish
+
+2009-11-12 11:25  aclemens
+
+	* utilities/advancedrename/advancedrenameinput.cpp: polish
+
+2009-11-12 11:25  aclemens
+
+	* utilities/advancedrename/advancedrenameinput.cpp,
+	  utilities/advancedrename/advancedrenameinput.h: simplify code
+
+2009-11-12 11:25  aclemens
+
+	* utilities/advancedrename/advancedrenameinput.cpp,
+	  utilities/advancedrename/advancedrenameinput.h: Fix modifier
+	  button handling
+
+2009-11-11 13:27  aclemens
+
+	* utilities/advancedrename/advancedrenamewidget.cpp,
+	  utilities/advancedrename/parsers/modifiers/defaultvaluemodifier.cpp,
+	  utilities/advancedrename/parsers/modifiers/rangemodifier.cpp,
+	  utilities/advancedrename/parsers/modifiers/replacemodifier.cpp,
+	  utilities/advancedrename/parsers/subparsers/dateparser.cpp,
+	  utilities/advancedrename/parsers/subparsers/metadataparser.cpp,
+	  utilities/advancedrename/parsers/subparsers/sequencenumberparser.cpp:
+	  Mark options in a different color for the tooltip
+
+2009-11-11 12:51  aclemens
+
+	* utilities/advancedrename/parsers/modifiers/defaultvaluemodifier.cpp:
+	  polish
+
+2009-11-11 12:51  aclemens
+
+	* utilities/advancedrename/parsers/modifiers/defaultvaluemodifier.cpp:
+	  Add tooltip to DefaultValueDialog
+
+2009-11-11 10:46  aclemens
+
+	* utilities/advancedrename/parsers/modifiers/replacemodifier.cpp:
+	  Accidentally deleted the icon for ReplaceModifier
+
+2009-11-11 10:46  aclemens
+
+	* utilities/advancedrename/parsers/modifiers/defaultvaluemodifier.cpp:
+	  set different icon for DefaultValueModifier
+
+2009-11-11 10:40  aclemens
+
+	* utilities/advancedrename/parsers/modifiers/defaultvaluemodifier.cpp,
+	  utilities/advancedrename/parsers/modifiers/replacemodifier.cpp,
+	  utilities/advancedrename/parsers/subparsers/filepropertiesparser.cpp:
+	  polish
+
+2009-11-11 10:30  aclemens
+
+	* utilities/advancedrename/parsers/modifiers/defaultvaluemodifier.cpp,
+	  utilities/advancedrename/parsers/modifiers/replacemodifier.cpp:
+	  polish
+
+2009-11-11 10:30  aclemens
+
+	* CMakeLists.txt, tests/CMakeLists.txt,
+	  tests/advancedrenametest.cpp, tests/advancedrenametest.h,
+	  utilities/advancedrename/common/modifier.cpp,
+	  utilities/advancedrename/common/subparser.cpp,
+	  utilities/advancedrename/parsers/modifiers/defaultvaluemodifier.cpp,
+	  utilities/advancedrename/parsers/modifiers/defaultvaluemodifier.h:
+	  Add new DefaultValueModifier. When parsing, renaming options can
+	  return empty
+	  strings, for example for unknown camera names or missing metadata
+	  fields.
+	  The DefaultValueModifier lets you set an default value for empty
+	  parse results.
+	  
+	  Example:
+	  
+	  filename = "DSC1234.jpg"
+	  cameraname = ""
+	  
+	  "[cam]_[file] => "_DSC1234.jpg"
+	  
+	  "[cam]{"NikonD50"}_[file] => "NikonD50_DSC1234.jpg"
+
+2009-11-10 12:25  aclemens
+
+	* utilities/advancedrename/common/dynamiclayout.cpp: polish
+
+2009-11-10 12:25  aclemens
+
+	* utilities/advancedrename/common/dynamiclayout.cpp: Fix dynamic
+	  layout: if all buttons fit into one row, do not scale them.
+	  This is especially needed when using toolbuttons instead of
+	  pushbuttons in
+	  future layouts
+
+2009-11-09 22:25  cgilles
+
+	* NEWS: update
+
+2009-11-09 16:22  pieteredelman
+
+	* digikam/albumwidgetstack.cpp,
+	  utilities/lighttable/lighttablewindow.cpp: Make thumbnail bar in
+	  editor en lighttable docked by default instead of floating.
+	  
+	  CCBUGS: 203594
+
+2009-11-09 10:04  aclemens
+
+	* NEWS: update
+
+2009-11-09 09:52  aclemens
+
+	* NEWS: update
+
+2009-11-09 09:38  aclemens
+
+	* NEWS: update
+
+2009-11-09 09:38  aclemens
+
+	* digikam/digikamview.cpp, digikam/folderview.cpp,
+	  digikam/folderview.h: Fix collapsing of folderview on tag or
+	  album rename.
+	  
+	  BUG:213805
+
+2009-11-09 09:38  aclemens
+
+	* digikam/tagfolderview.cpp: polish
+
+2009-11-09 09:23  cgilles
+
+	* CMakeLists.txt, NEWS: 1.0.0-rc is now open for commits
+
+2009-11-09 07:24  cgilles
+
+	* ChangeLog: prepare 1.0.0-beta6
+
 1.0.0-beta6 2009-11-08
 --------------------------------------------------------------------------------
 
