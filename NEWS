@@ -1,4 +1,15 @@
 *********************************************************************************************************
+digiKam 1.0.0 - Release date: 2009-12-20
+
+NEW FEATURES:
+
+
+BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+
+001 ==> 216791 : Select next instead of privious picture when deleting a picture.
+002 ==> 
+
+*********************************************************************************************************
 digiKam 1.0.0-rc - Release date: 2009-11-29
 
 NEW FEATURES:
