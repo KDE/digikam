@@ -31,7 +31,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 020 ==> 205001 : MapSearch: Merge overlapping markers to clusters.
 021 ==> 216652 : Wrong max calculation in histogram view.
 022 ==> 197896 : When importing photos from a camera they are not diplayed in alphabetical order.
-023 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta6 - Release date: 2009-11-08
