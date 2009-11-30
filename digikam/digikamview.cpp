@@ -172,7 +172,7 @@ DigikamView::DigikamView(QWidget *parent, DigikamModelCollection *modelCollectio
 
     d->iconView = d->albumWidgetStack->imageIconView();
 
-    d->rightSideBar = new ImagePropertiesSideBarDB(this, d->splitter, KMultiTabBar::Right, true);
+    d->rightSideBar = new ImagePropertiesSideBarDB(this, d->splitter, d->tagModificationHelper, KMultiTabBar::Right, true);
     d->rightSideBar->setObjectName("Digikam Right Sidebar");
 
     // album folder view

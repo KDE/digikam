@@ -28,9 +28,9 @@ DigikamModelCollection::DigikamModelCollection() :
 {
     d->albumModel = new AlbumModel(AlbumModel::IncludeRootAlbum);
 
-    d->tagModel = new TagModel();
+    d->tagModel = new TagModel(AbstractAlbumModel::IgnoreRootAlbum);
 
-    d->tagFilterModel = new TagModel();
+    d->tagFilterModel = new TagModel(AbstractAlbumModel::IgnoreRootAlbum);
     d->tagFilterModel->setCheckable(true);
 
     d->timelineSearchModel = new SearchModel();

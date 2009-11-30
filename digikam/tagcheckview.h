@@ -57,6 +57,9 @@ public:
 
     QList<TAlbum*> getCheckedTags() const;
 
+    ToggleAutoTags getToggleAutoTags() const;
+    void setToggleAutoTags(ToggleAutoTags toggle);
+
 Q_SIGNALS:
 
     /**

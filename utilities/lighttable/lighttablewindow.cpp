@@ -81,6 +81,8 @@
 #include "lighttablepreview.h"
 #include "lighttablewindow_p.h"
 #include "uifilevalidator.h"
+#include "albummodel.h"
+#include "tagmodificationhelper.h"
 
 namespace Digikam
 {
@@ -104,6 +106,9 @@ LightTableWindow::LightTableWindow()
                 : KXmlGuiWindow(0), d(new LightTableWindowPriv)
 {
     setXMLFile("lighttablewindowui.rc");
+
+    // TODO who handles progress indications here?
+    d->tagModificationHelper = new TagModificationHelper(this, this);
 
     // --------------------------------------------------------
 
@@ -232,7 +237,7 @@ void LightTableWindow::setupUserArea()
     QHBoxLayout *hlay = new QHBoxLayout(mainW);
 
     // The left sidebar
-    d->leftSideBar = new ImagePropertiesSideBarDB(mainW, d->hSplitter, KMultiTabBar::Left, true);
+    d->leftSideBar = new ImagePropertiesSideBarDB(mainW, d->hSplitter, d->tagModificationHelper, KMultiTabBar::Left, true);
 
     // The central preview is wrapped in a KMainWindow so that the thumbnail
     // bar can float around it.
@@ -242,7 +247,7 @@ void LightTableWindow::setupUserArea()
     viewContainer->setCentralWidget(d->previewView);
 
     // The right sidebar.
-    d->rightSideBar = new ImagePropertiesSideBarDB(mainW, d->hSplitter, KMultiTabBar::Right, true);
+    d->rightSideBar = new ImagePropertiesSideBarDB(mainW, d->hSplitter, d->tagModificationHelper, KMultiTabBar::Right, true);
 
     hlay->addWidget(d->leftSideBar);
     hlay->addWidget(d->hSplitter);

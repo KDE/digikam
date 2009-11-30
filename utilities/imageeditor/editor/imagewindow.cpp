@@ -113,6 +113,8 @@
 #include "thumbbardock.h"
 #include "globals.h"
 #include "uifilevalidator.h"
+#include "albummodel.h"
+#include "tagmodificationhelper.h"
 
 namespace Digikam
 {
@@ -168,6 +170,8 @@ public:
     ThumbBarDock*             thumbBarDock;
 
     ImagePropertiesSideBarDB* rightSideBar;
+
+    TagModificationHelper *tagModificationHelper;
 };
 
 ImageWindow* ImageWindow::m_instance = 0;
@@ -189,6 +193,9 @@ ImageWindow::ImageWindow()
            : EditorWindow("Image Editor"), d(new ImageWindowPriv)
 {
     setXMLFile("digikamimagewindowui.rc");
+
+    // TODO who handles progress indications here?
+    d->tagModificationHelper = new TagModificationHelper(this, this);
 
     // --------------------------------------------------------
 
@@ -358,7 +365,7 @@ void ImageWindow::setupUserArea()
 
     m_splitter->setStretchFactor(0, 10);      // set Canvas default size to max.
 
-    d->rightSideBar = new ImagePropertiesSideBarDB(widget, m_splitter, KMultiTabBar::Right, true);
+    d->rightSideBar = new ImagePropertiesSideBarDB(widget, m_splitter, d->tagModificationHelper, KMultiTabBar::Right, true);
     d->rightSideBar->setObjectName("ImageEditor Right Sidebar");
 
     hlay->addWidget(m_splitter);

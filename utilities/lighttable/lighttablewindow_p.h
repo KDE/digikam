@@ -40,6 +40,8 @@
 #include "lighttableview.h"
 #include "lighttablebar.h"
 #include "thumbbardock.h"
+#include "albummodel.h"
+#include "tagmodificationhelper.h"
 
 namespace Digikam
 {
@@ -100,6 +102,7 @@ public:
         contributeAction       = 0;
         showMenuBarAction      = 0;
         clearOnCloseAction     = 0;
+        tagModificationHelper  = 0;
     }
 
     bool                      autoLoadOnRightPanel;
@@ -163,6 +166,8 @@ public:
 
     ImagePropertiesSideBarDB* leftSideBar;
     ImagePropertiesSideBarDB* rightSideBar;
+
+    TagModificationHelper*    tagModificationHelper;
 };
 
 }  // namespace Digikam

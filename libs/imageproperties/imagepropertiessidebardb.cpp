@@ -83,11 +83,12 @@ public:
 };
 
 ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget *parent, SidebarSplitter *splitter,
+                                                   TagModificationHelper *tagModificationHelper,
                                                    KMultiTabBarPosition side, bool mimimizedDefault)
                         : ImagePropertiesSideBar(parent, splitter, side, mimimizedDefault),
                           d(new ImagePropertiesSideBarDBPriv)
 {
-    d->desceditTab = new ImageDescEditTab(parent);
+    d->desceditTab = new ImageDescEditTab(parent, tagModificationHelper);
 
     appendTab(d->desceditTab, SmallIcon("imagecomment"), i18n("Caption/Tags"));
 
@@ -439,7 +440,8 @@ void ImagePropertiesSideBarDB::slotAssignRatingFiveStar()
 
 void ImagePropertiesSideBarDB::refreshTagsView()
 {
-    d->desceditTab->refreshTagsView();
+    // TODO update, do we still need this method?
+    //d->desceditTab->refreshTagsView();
 }
 
 void ImagePropertiesSideBarDB::setImagePropertiesInformation(const KUrl& url)

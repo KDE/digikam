@@ -68,7 +68,7 @@ public:
 };
 
 TagCheckView::TagCheckView(QWidget *parent, TagModel *tagModel,
-                                   TagModificationHelper *tagModificationHelper) :
+                           TagModificationHelper *tagModificationHelper) :
                 TagFolderViewNew(parent, tagModel, tagModificationHelper),
                 d(new TagCheckViewPriv)
 {
@@ -180,6 +180,16 @@ QList<TAlbum*> TagCheckView::getCheckedTags() const
         }
     }
     return tags;
+}
+
+TagCheckView::ToggleAutoTags TagCheckView::getToggleAutoTags() const
+{
+    return d->toggleAutoTags;
+}
+
+void TagCheckView::setToggleAutoTags(TagCheckView::ToggleAutoTags toggle)
+{
+    d->toggleAutoTags = toggle;
 }
 
 void TagCheckView::addCustomContextMenuActions(ContextMenuHelper &cmh, TAlbum *tag)

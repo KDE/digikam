@@ -42,12 +42,12 @@
 #include "searchtextbar.h"
 #include "imageinfolist.h"
 #include "albummanager.h"
-
-class Q3ListViewItem;
+#include "tagmodificationhelper.h"
+#include "albummodel.h"
+#include "metadatahub.h"
 
 namespace Digikam
 {
-class TAlbumCheckListItem;
 class ImageInfo;
 class ImageDescEditTabPriv;
 
@@ -57,14 +57,13 @@ class ImageDescEditTab : public KVBox
 
 public:
 
-    ImageDescEditTab(QWidget *parent);
+    ImageDescEditTab(QWidget *parent, TagModificationHelper *tagModificationHelper);
     ~ImageDescEditTab();
 
     void assignRating(int rating);
     void setItem(const ImageInfo& info = ImageInfo());
     void setItems(const ImageInfoList& infos);
     void populateTags();
-    void refreshTagsView();
 
 Q_SIGNALS:
 
@@ -80,6 +79,9 @@ protected:
 
 private:
 
+    void initializeTags(QModelIndex &parent);
+    void setTagState(TAlbum *tag, MetadataHub::TagStatus status);
+
     void setInfos(const ImageInfoList& infos);
     void focusLastSelectedWidget();
 
@@ -90,15 +92,6 @@ private:
     void updateTemplate();
     void updateRecentTags();
 
-    void tagNew(TAlbum* parAlbum, const QString& _title=QString(), const QString& _icon=QString()) const;
-    void tagEdit(TAlbum* album);
-    void tagDelete(TAlbum *album);
-
-    void toggleChildTags(TAlbum *album, bool b);
-    void toggleParentTags(TAlbum *album, bool b);
-
-    void setTagThumbnail(TAlbum *album);
-
     bool singleSelection() const;
     void setMetadataWidgetStatus(int status, QWidget *widget);
     void reloadForMetadataChange(qlonglong imageId);
@@ -106,29 +99,15 @@ private:
 private Q_SLOTS:
 
     void slotApplyAllChanges();
-    void slotCreateNewTag();
     void slotRevertAllChanges();
     void slotChangingItems();
-    void slotItemStateChanged(TAlbumCheckListItem *);
+    void slotTagsSearchChanged(const SearchTextSettings& settings);
+    void slotTagStateChanged(Album *album, Qt::CheckState checkState);
     void slotCommentChanged();
     void slotDateTimeChanged(const QDateTime& dateTime);
     void slotRatingChanged(int rating);
     void slotTemplateSelected();
     void slotModified();
-    void slotRightButtonClicked(Q3ListViewItem*, const QPoint &, int);
-    void slotTagsSearchChanged(const SearchTextSettings&);
-
-    void slotAlbumAdded(Album* a);
-    void slotAlbumDeleted(Album* a);
-    void slotAlbumIconChanged(Album* a);
-    void slotAlbumRenamed(Album* a);
-    void slotAlbumsCleared();
-    void slotAlbumMoved(TAlbum* tag, TAlbum* newParent);
-
-    void slotABCContextMenu();
-    void slotGotThumbnailFromIcon(Album *album, const QPixmap& thumbnail);
-    void slotThumbnailLost(Album *album);
-    void slotReloadThumbnails();
 
     void slotImageTagsChanged(qlonglong imageId);
     void slotImagesChanged(int albumId);
