@@ -29,63 +29,38 @@
 
 // Qt includes
 
-#include <QLabel>
 #include <QToolButton>
 #include <QPushButton>
-#include <QIcon>
-#include <QKeyEvent>
 #include <QGridLayout>
-#include <QPixmap>
-#include <QEvent>
+#include <qscrollarea.h>
 #include <QSignalMapper>
 
 // KDE includes
 
 #include <kmenu.h>
-#include <klocale.h>
-#include <kurl.h>
-#include <kcursor.h>
 #include <kapplication.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
-#include <kconfig.h>
-#include <klineedit.h>
 #include <kdialog.h>
-#include <kglobal.h>
-#include <kselectaction.h>
-#include <kvbox.h>
 #include <ktabwidget.h>
 #include <kdebug.h>
 
 // Local includes
 
 #include "captionedit.h"
-#include "dmetadata.h"
 #include "kdatetimeedit.h"
-#include "albumiconitem.h"
-#include "albumdb.h"
-#include "album.h"
 #include "albumsettings.h"
 #include "albumlister.h"
 #include "albumthumbnailloader.h"
 #include "collectionscanner.h"
 #include "databasetransaction.h"
-#include "tageditdlg.h"
-#include "tagcheckview.h"
 #include "ratingwidget.h"
 #include "scancontroller.h"
-#include "talbumlistview.h"
 #include "tagcheckview.h"
 #include "templateselector.h"
 #include "templateviewer.h"
-#include "imageinfo.h"
 #include "imageattributeswatch.h"
-#include "metadatahub.h"
 #include "statusprogressbar.h"
-#include "config-digikam.h"
-#ifdef HAVE_KDEPIMLIBS
-#include <kabc/stdaddressbook.h>
-#endif // HAVE_KDEPIMLIBS
 
 namespace Digikam
 {
@@ -112,7 +87,6 @@ public:
         dateTimeEdit               = 0;
         tagCheckView               = 0;
         ratingWidget               = 0;
-        ABCMenu                    = 0;
         assignedTagsBtn            = 0;
         applyBtn                   = 0;
         revertBtn                  = 0;
@@ -135,7 +109,6 @@ public:
     QToolButton                   *assignedTagsBtn;
     QToolButton                   *revertBtn;
 
-    KMenu                         *ABCMenu;
     KMenu                         *moreMenu;
 
     QSignalMapper                 *recentTagsMapper;
@@ -1086,114 +1059,8 @@ void ImageDescEditTab::slotTagsSearchChanged(const SearchTextSettings& settings)
 
 void ImageDescEditTab::slotAssignedTagsToggled(bool t)
 {
-    // TODO update, implement this in the tree view directly
-//
-//    Q3ListViewItemIterator it(d->tagsView);
-//    while (it.current())
-//    {
-//        it.current()->setOpen(t);
-//        it.current()->setVisible(true);
-//        ++it;
-//    }
-//
-//    //TODO: this will destroy name filtering. Unify in one method.
-//    it = d->tagsView;
-//    while (it.current())
-//    {
-//        TAlbumCheckListItem* item = dynamic_cast<TAlbumCheckListItem*>(it.current());
-//        TAlbum *tag               = item->album();
-//        if (tag)
-//        {
-//            if (!tag->isRoot())
-//            {
-//                if (t)
-//                {
-//                    MetadataHub::TagStatus status = d->hub.tagStatus(item->album());
-//                    bool tagAssigned = (status == MetadataHub::MetadataAvailable && status.hasTag)
-//                                        || status == MetadataHub::MetadataDisjoint;
-//                    item->setVisible(tagAssigned);
-//
-//                    if (tagAssigned)
-//                    {
-//                        Album* parent = tag->parent();
-//                        while (parent && !parent->isRoot())
-//                        {
-//                            TAlbumCheckListItem *pitem = (TAlbumCheckListItem*)parent->extraData(d->tagsView);
-//                            pitem->setVisible(true);
-//                            parent = parent->parent();
-//                        }
-//                    }
-//                }
-//                else
-//                {
-//                    item->setVisible(true);
-//                }
-//            }
-//        }
-//        ++it;
-//    }
-//
-//    // correct visibilities afterwards:
-//    // As QListViewItem::setVisible works recursively on all it's children
-//    // we have to correct this
-//    if (t)
-//    {
-//        it = d->tagsView;
-//        while (it.current())
-//        {
-//            TAlbumCheckListItem* item = dynamic_cast<TAlbumCheckListItem*>(it.current());
-//            TAlbum *tag               = item->album();
-//            if (tag)
-//            {
-//                if (!tag->isRoot())
-//                {
-//                    // only if the current item is not marked as tagged, check all children
-//                    MetadataHub::TagStatus status = d->hub.tagStatus(item->album());
-//                    bool tagAssigned = (status == MetadataHub::MetadataAvailable && status.hasTag)
-//                                        || status == MetadataHub::MetadataDisjoint;
-//                    if (!tagAssigned)
-//                    {
-//                        bool somethingIsSet         = false;
-//                        Q3ListViewItem* nextSibling  = (*it)->nextSibling();
-//                        Q3ListViewItemIterator tmpIt = it;
-//                        ++tmpIt;
-//                        while (*tmpIt != nextSibling )
-//                        {
-//                            TAlbumCheckListItem* tmpItem = dynamic_cast<TAlbumCheckListItem*>(tmpIt.current());
-//                            MetadataHub::TagStatus tmpStatus = d->hub.tagStatus(tmpItem->album());
-//                            bool tmpTagAssigned = (tmpStatus == MetadataHub::MetadataAvailable && tmpStatus.hasTag)
-//                                                || tmpStatus == MetadataHub::MetadataDisjoint;
-//                            if(tmpTagAssigned)
-//                            {
-//                                somethingIsSet = true;
-//                            }
-//                            ++tmpIt;
-//                        }
-//                        if (!somethingIsSet)
-//                        {
-//                            item->setVisible(false);
-//                        }
-//                    }
-//                }
-//            }
-//            ++it;
-//        }
-//    }
-//
-//    TAlbum *root                  = AlbumManager::instance()->findTAlbum(0);
-//    TAlbumCheckListItem *rootItem = (TAlbumCheckListItem*)(root->extraData(d->tagsView));
-//    if (rootItem)
-//    {
-//        if (t)
-//        {
-//            rootItem->setText(0, i18n("Assigned Tags"));
-//        }
-//        else
-//        {
-//            rootItem->setText(0, root->title());
-//        }
-//        rootItem->setOpen(true);
-//    }
+    d->tagCheckView->checkableAlbumFilterModel()->setFilterChecked(t);
+    d->tagCheckView->checkableAlbumFilterModel()->setFilterPartiallyChecked(t);
 }
 
 void ImageDescEditTab::focusLastSelectedWidget()

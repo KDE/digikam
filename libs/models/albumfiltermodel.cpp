@@ -7,6 +7,7 @@
  * Description : Qt Model for Albums - filter model
  *
  * Copyright (C) 2008-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009 by Johannes Wienke <languitar at semipol dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -113,6 +114,11 @@ AlbumFilterModel::MatchResult AlbumFilterModel::matches(const QModelIndex& index
     return matches(sourceAlbumModel()->albumForIndex(mapToSource(index)));
 }
 
+bool AlbumFilterModel::rawMatches(Album *album) const
+{
+    return album->title().contains(m_settings.text, m_settings.caseSensitive);
+}
+
 AlbumFilterModel::MatchResult AlbumFilterModel::matches(Album *album) const
 {
     if (!album)
@@ -123,7 +129,7 @@ AlbumFilterModel::MatchResult AlbumFilterModel::matches(Album *album) const
     if (album->isRoot() || (palbum && palbum->isAlbumRoot()))
         return SpecialMatch;
 
-    if (album->title().contains(m_settings.text, m_settings.caseSensitive))
+    if (rawMatches(album))
         return TitleMatch;
 
     // check if any of the parents match the search
@@ -132,7 +138,7 @@ AlbumFilterModel::MatchResult AlbumFilterModel::matches(Album *album) const
 
     while (parent && !(parent->isRoot() || (pparent && pparent->isAlbumRoot()) ) )
     {
-        if (parent->title().contains(m_settings.text, m_settings.caseSensitive))
+        if (rawMatches(parent))
             return ParentMatch;
 
         parent = parent->parent();
@@ -142,7 +148,7 @@ AlbumFilterModel::MatchResult AlbumFilterModel::matches(Album *album) const
     AlbumIterator it(album);
     while (it.current())
     {
-        if ((*it)->title().contains(m_settings.text, m_settings.caseSensitive))
+        if (rawMatches(*it))
             return ChildMatch;
         ++it;
     }
@@ -169,6 +175,70 @@ bool AlbumFilterModel::lessThan(const QModelIndex& left, const QModelIndex& righ
         return KStringHandler::naturalCompare(valLeft.toString(), valRight.toString(), sortCaseSensitivity()) < 0;
     else
         return QSortFilterProxyModel::lessThan(left, right);
+}
+
+// -----------------------------------------------------------------------------
+
+CheckableAlbumFilterModel::CheckableAlbumFilterModel(QObject *parent) :
+                AlbumFilterModel(parent), m_filterChecked(false),
+                m_filterPartiallyChecked(false)
+{
+}
+
+void CheckableAlbumFilterModel::setSourceCheckableAlbumModel(AbstractCheckableAlbumModel *source)
+{
+    setSourceModel(source);
+}
+
+AbstractCheckableAlbumModel *CheckableAlbumFilterModel::sourceAlbumModel() const
+{
+    return dynamic_cast<AbstractCheckableAlbumModel*> (sourceModel());
+}
+
+void CheckableAlbumFilterModel::setFilterChecked(bool filter)
+{
+    m_filterChecked = filter;
+    invalidateFilter();
+    emit filterChanged();
+}
+
+void CheckableAlbumFilterModel::setFilterPartiallyChecked(bool filter)
+{
+    m_filterPartiallyChecked = filter;
+    invalidateFilter();
+    emit filterChanged();
+}
+
+bool CheckableAlbumFilterModel::isFiltering() const
+{
+    return AlbumFilterModel::isFiltering() || m_filterChecked
+                    || m_filterPartiallyChecked;
+}
+
+bool CheckableAlbumFilterModel::rawMatches(Album *album) const
+{
+
+    bool accepted = AlbumFilterModel::rawMatches(album);
+
+    if (!m_filterChecked && !m_filterPartiallyChecked)
+    {
+        return accepted;
+    }
+
+    Qt::CheckState state = sourceAlbumModel()->checkState(album);
+
+    bool stateAccepted = false;
+    if (m_filterPartiallyChecked)
+    {
+        stateAccepted |= state == Qt::PartiallyChecked;
+    }
+    if (m_filterChecked)
+    {
+        stateAccepted |= state == Qt::Checked;
+    }
+
+    return accepted && stateAccepted;
+
 }
 
 } // namespace Digikam

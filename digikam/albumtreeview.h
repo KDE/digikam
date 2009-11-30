@@ -117,6 +117,8 @@ protected:
     virtual void middleButtonPressed(Album *a);
     virtual QPixmap pixmapForDrag(const QStyleOptionViewItem& option, QList<QModelIndex> indexes);
 
+    void setAlbumFilterModel(AlbumFilterModel *filterModel);
+
     AbstractSpecificAlbumModel *m_albumModel;
     AlbumFilterModel           *m_albumFilterModel;
 
@@ -165,6 +167,7 @@ public:
 
     /// Manage check state through the model directly
     AbstractCheckableAlbumModel *checkableModel() const;
+    CheckableAlbumFilterModel *checkableAlbumFilterModel() const;
 
     /// Enable checking on middle mouse button click (default: on)
     void setCheckOnMiddleClick(bool doThat);

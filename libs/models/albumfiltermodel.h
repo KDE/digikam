@@ -7,6 +7,7 @@
  * Description : Qt Model for Albums - filter model
  *
  * Copyright (C) 2008-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009 by Johannes Wienke <languitar at semipol dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -52,8 +53,8 @@ public:
     QModelIndex indexForAlbum(Album *album) const;
     QModelIndex rootAlbumIndex() const;
 
-    /// Returns if the set search text settings will result in any filtering
-    bool isFiltering() const;
+    /// Returns if the the filters will result in any filtering
+    virtual bool isFiltering() const;
     SearchTextSettings searchTextSettings() const;
 
     /** Returns if the filter matches this album (same logic as filterAcceptsRow).
@@ -83,15 +84,52 @@ Q_SIGNALS:
 
 protected:
 
+    /**
+     * This method provides the basic match checking algorithm. It can be
+     * overridden to provide custom filtering.
+     *
+     * @param album album to tell if it matches the filter criteria or not.
+     */
+    virtual bool rawMatches(Album *album) const;
+
     // use setSourceAlbumModel please
     virtual void setSourceModel(QAbstractItemModel* model);
 
-    bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const;
-    bool lessThan(const QModelIndex& left, const QModelIndex& right) const;
+    virtual bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const;
+    virtual bool lessThan(const QModelIndex& left, const QModelIndex& right) const;
 
 protected:
 
     SearchTextSettings m_settings;
+};
+
+/**
+ * Filter model for checkable album models that allows more filtering options
+ * based on check state.
+ */
+class CheckableAlbumFilterModel : public AlbumFilterModel
+{
+    Q_OBJECT
+public:
+    CheckableAlbumFilterModel(QObject *parent = 0);
+
+    void setSourceCheckableAlbumModel(AbstractCheckableAlbumModel *source);
+    AbstractCheckableAlbumModel *sourceAlbumModel() const;
+
+    void setFilterChecked(bool filter);
+    void setFilterPartiallyChecked(bool filter);
+
+    virtual bool isFiltering() const;
+
+protected:
+
+    virtual bool rawMatches(Album *album) const;
+
+    void setSourceAlbumModel(AbstractAlbumModel *source);
+
+    bool m_filterChecked;
+    bool m_filterPartiallyChecked;
+
 };
 
 } // namespace Digikam

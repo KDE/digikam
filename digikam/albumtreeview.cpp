@@ -100,22 +100,21 @@ public:
 };
 
 AbstractAlbumTreeView::AbstractAlbumTreeView(AbstractSpecificAlbumModel *model, QWidget *parent)
-    : QTreeView(parent), d(new AbstractAlbumTreeViewPriv)
+    : QTreeView(parent), m_albumModel(0), m_albumFilterModel(0),
+      d(new AbstractAlbumTreeViewPriv)
 {
     m_checkOnMiddleClick  = false;
 
     m_albumModel       = model;
-    m_albumFilterModel = new AlbumFilterModel(this);
-
-    connect(m_albumFilterModel, SIGNAL(filterChanged()),
-             this, SLOT(slotFilterChanged()));
+    AlbumFilterModel *filterModel = new AlbumFilterModel(this);
+    filterModel->setSourceAlbumModel(model);
+    setAlbumFilterModel(filterModel);
 
     if (!m_albumModel->rootAlbum())
+    {
         connect(m_albumModel, SIGNAL(rootAlbumAvailable()),
                  this, SLOT(slotRootAlbumAvailable()));
-
-    m_albumFilterModel->setSourceAlbumModel(m_albumModel);
-    setModel(m_albumFilterModel);
+    }
 
     connect(selectionModel(), SIGNAL(currentChanged(const QModelIndex&, const QModelIndex &)),
              this, SLOT(slotCurrentChanged()));
@@ -127,6 +126,23 @@ AbstractAlbumTreeView::AbstractAlbumTreeView(AbstractSpecificAlbumModel *model, 
 AbstractAlbumTreeView::~AbstractAlbumTreeView()
 {
     delete d;
+}
+
+void AbstractAlbumTreeView::setAlbumFilterModel(AlbumFilterModel *filterModel)
+{
+
+    if (m_albumFilterModel)
+    {
+        disconnect(m_albumFilterModel);
+    }
+
+    m_albumFilterModel = filterModel;
+
+    connect(m_albumFilterModel, SIGNAL(filterChanged()),
+             this, SLOT(slotFilterChanged()));
+
+    setModel(m_albumFilterModel);
+
 }
 
 AbstractSpecificAlbumModel *AbstractAlbumTreeView::albumModel() const
@@ -560,11 +576,19 @@ AbstractCheckableAlbumTreeView::AbstractCheckableAlbumTreeView(AbstractCheckable
     : AbstractCountingAlbumTreeView(model, parent)
 {
     m_checkOnMiddleClick  = true;
+    CheckableAlbumFilterModel *filterModel = new CheckableAlbumFilterModel(this);
+    filterModel->setSourceCheckableAlbumModel(model);
+    setAlbumFilterModel(filterModel);
 }
 
 AbstractCheckableAlbumModel *AbstractCheckableAlbumTreeView::checkableModel() const
 {
-    return static_cast<AbstractCheckableAlbumModel*>(m_albumModel);
+    return dynamic_cast<AbstractCheckableAlbumModel*>(m_albumModel);
+}
+
+CheckableAlbumFilterModel *AbstractCheckableAlbumTreeView::checkableAlbumFilterModel() const
+{
+    return dynamic_cast<CheckableAlbumFilterModel*> (m_albumFilterModel);
 }
 
 void AbstractCheckableAlbumTreeView::setCheckOnMiddleClick(bool doThat)
