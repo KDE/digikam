@@ -12,7 +12,7 @@ SET(DIGIKAM_MINOR_VERSION "0")
 SET(DIGIKAM_PATCH_VERSION "0")
 
 #digiKam release date
-SET(DIGIKAM_RELEASE_DATE "2009-11-29")
+SET(DIGIKAM_RELEASE_DATE "2009-12-20")
 
 # Suffix to add at end of version string. Usual values are:
 # "-svn"   : alpha code unstable from svn. Do not use in production
@@ -21,7 +21,7 @@ SET(DIGIKAM_RELEASE_DATE "2009-11-29")
 # "-beta3" : beta3 release.
 # "-rc"    : release candidate.
 # ""       : final release. Can be used in production.
-SET(DIGIKAM_SUFFIX_VERSION "-rc")
+SET(DIGIKAM_SUFFIX_VERSION "")
 
 # ==================================================================================================
 # Set env. variables accordingly.
@@ -402,11 +402,13 @@ IF(DIGIKAM_CAN_BE_COMPILED)
                         ${KDE4_INCLUDES}
                         ${QT_INCLUDES}
                         ${GPHOTO2_INCLUDE_DIRS}
-                        ${SOPRANO_INCLUDE_DIR}
-                        ${NEPOMUK_INCLUDE_DIR}
                         ${CMAKE_CURRENT_SOURCE_DIR}/digikam
                         ${CMAKE_CURRENT_BINARY_DIR}/digikam
                        )
+
+    IF(NEPOMUK_FOUND)
+        INCLUDE_DIRECTORIES(${SOPRANO_INCLUDE_DIR} ${NEPOMUK_INCLUDE_DIR})
+    ENDIF(NEPOMUK_FOUND)
 
     IF(MARBLEWIDGET_FOUND)
         INCLUDE_DIRECTORIES(${LIBMARBLEWIDGET_INCLUDE_DIR})
@@ -583,8 +585,8 @@ IF(DIGIKAM_CAN_BE_COMPILED)
        )
 
     IF(MSVC)
-	SET(libjpegutils_SRCS
-    	    ${libjpegutils_SRCS}
+    SET(libjpegutils_SRCS
+            ${libjpegutils_SRCS}
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils/jpegwin.cpp
            )
     ENDIF(MSVC)
@@ -1066,6 +1068,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/advancedrenameinput.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/advancedrenamewidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/dynamiclayout.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/highlighter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/modifier.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/option.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/parseobject.cpp
@@ -1074,7 +1077,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/parseresults.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/renamethread.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/token.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/highlighter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/tooltipcreator.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/defaultrenameparser.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/modifiers/defaultvaluemodifier.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/modifiers/firstletterofeachworduppercasemodifier.cpp
@@ -1082,6 +1085,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/modifiers/rangemodifier.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/modifiers/replacemodifier.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/modifiers/trimmedmodifier.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/modifiers/uniquemodifier.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/modifiers/uppercasemodifier.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options/cameranameoption.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options/dateoption.cpp

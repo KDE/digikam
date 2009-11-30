@@ -38,9 +38,9 @@
 #include "comboboxutilities.h"
 #include "parser.h"
 
-class QMouseEvent;
 class QFocusEvent;
 class QKeyEvent;
+class QMouseEvent;
 
 namespace Digikam
 {

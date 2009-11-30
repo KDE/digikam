@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-09-14
- * Description : a token result modifier class
+ * Description : a class to manipulate the results of an renaming options
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -21,6 +21,7 @@
  *
  * ============================================================ */
 
+
 #include "modifier.moc"
 
 namespace Digikam
@@ -32,9 +33,13 @@ Modifier::Modifier(const QString& name, const QString& description, const QPixma
     setDescription(description);
 }
 
-QString Modifier::modify(const QString& parseString, const QString& result)
+QString Modifier::modify(const ParseSettings& settings, const QString& str2Modify)
 {
-    return modifyOperation(parseString, result);
+    if (settings.parseString.isEmpty())
+    {
+        return QString();
+    }
+    return modifyOperation(settings, str2Modify);
 }
 
 } // namespace Digikam

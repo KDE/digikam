@@ -3,8 +3,8 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2009-09-12
- * Description : parse information class
+ * Date        : 2009-09-14
+ * Description : a class to build the tooltip for a renameparser and its options
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -21,54 +21,45 @@
  *
  * ============================================================ */
 
-#ifndef PARSEINFORMATION_H
-#define PARSEINFORMATION_H
+#ifndef TOOLTIPCREATOR_H
+#define TOOLTIPCREATOR_H
 
 // Qt includes
 
-#include <QDateTime>
-#include <QFileInfo>
 #include <QString>
-
-// Local includes
-
-#include "imageinfo.h"
 
 namespace Digikam
 {
 
-class ParseInformation
+class Parser;
+
+class TooltipCreator
 {
 public:
 
-    ParseInformation() :
-        index(1),
-        useFileExtension(true)
-    {};
+    TooltipCreator(Parser* parser);
+    virtual ~TooltipCreator();
 
-    ParseInformation(const ImageInfo& info) :
-        fileUrl(info.fileUrl()),
-        cameraName(info.photoInfoContainer().make + ' ' + info.photoInfoContainer().model),
-        dateTime(info.dateTime()),
-        index(1),
-        useFileExtension(true)
-    {};
+    QString tooltip();
 
-    bool isValid()
-    {
-        QFileInfo fi(fileUrl.toLocalFile());
-        return fi.isReadable();
-    };
+private:
 
-public:
+    // common methods
+    QString markOption(const QString& str);
+    QString tableStart();
+    QString tableEnd();
 
-    KUrl      fileUrl;
-    QString   cameraName;
-    QDateTime dateTime;
-    int       index;
-    bool      useFileExtension;
+
+    // parse object related methods
+    template <class T> QString createEntries(const QList<T*> &data);
+    template <class T> QString createSection(const QString& sectionName, const QList<T*> &data, bool lastSection = false);
+                       QString createHeader(const QString& str);
+
+private:
+
+    Parser* const parser;
 };
 
 } // namespace Digikam
 
-#endif /* PARSEINFORMATION_H */
+#endif /* TOOLTIPCREATOR_H */

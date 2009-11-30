@@ -26,14 +26,14 @@
 
 // Qt includes
 
+#include <QDialog>
 #include <QObject>
 #include <QString>
-#include <QDialog>
 
 // Local includes
 
-#include "parseobjectdialog.h"
 #include "option.h"
+#include "parseobjectdialog.h"
 
 namespace Ui
 {
@@ -81,13 +81,25 @@ class DateOptionDialog : public ParseObjectDialog
 
 public:
 
+    enum DateSource
+    {
+        FromImage = 0,
+        CurrentDateTime,
+        FixedDateTime
+    };
+
+public:
+
     DateOptionDialog(ParseObject* parent);
     ~DateOptionDialog();
 
     Ui::DateOptionDialogWidget* const ui;
 
+    DateSource dateSource();
+
 private Q_SLOTS:
 
+    void slotDateSourceChanged(int);
     void slotDateFormatChanged(int);
     void slotCustomFormatChanged(const QString&);
 
@@ -96,6 +108,8 @@ private:
     QString formattedDateTime(const QDateTime& date);
     void    updateExampleLabel();
 };
+
+// --------------------------------------------------------
 
 class DateOption : public Option
 {
@@ -108,7 +122,7 @@ public:
 
 protected:
 
-    virtual void parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results);
+    virtual void parseOperation(const QString& parseString, ParseSettings& settings, ParseResults& results);
 
 private Q_SLOTS:
 

@@ -442,6 +442,8 @@ void CameraUI::setupActions()
 
     // -------------------------------------------------------------------------
 
+    // -------------------------------------------------------------------------
+
     d->deleteSelectedAction = new KAction(KIcon("edit-delete"), i18n("Delete Selected"), this);
     connect(d->deleteSelectedAction, SIGNAL(triggered()), this, SLOT(slotDeleteSelected()));
     actionCollection()->addAction("cameraui_imagedeleteselected", d->deleteSelectedAction);
@@ -979,6 +981,10 @@ void CameraUI::slotBusy(bool val)
         d->lockAction->setEnabled(true);
         d->cameraInfoAction->setEnabled(true);
         d->cameraCaptureAction->setEnabled(d->controller->cameraCaptureImageSupport());
+
+        // selection-dependent update of lockAction, markAsDownloadedAction,
+        // downloadSelectedAction, downloadDelSelectedAction, deleteSelectedAction
+        slotNewSelection(d->view->countSelected()>0);
 
         d->anim->stop();
         d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, i18n("Ready"));
@@ -1779,6 +1785,25 @@ void CameraUI::slotSkipped(const QString& folder, const QString& file)
     d->statusProgressBar->setProgressValue(curr+1);
 }
 
+void CameraUI::slotMarkAsDownloaded()
+{
+    for (IconItem* item = d->view->firstItem(); item;
+         item = item->nextItem())
+    {
+        CameraIconItem* iconItem = static_cast<CameraIconItem*>(item);
+        if (iconItem->isSelected())
+        {
+            iconItem->setDownloaded(GPItemInfo::DownloadedYes);
+
+            DownloadHistory::setDownloaded(d->controller->cameraMD5ID(),
+                iconItem->itemInfo()->name,
+                iconItem->itemInfo()->size,
+                iconItem->itemInfo()->mtime);
+        }
+    }
+}
+
+
 void CameraUI::slotToggleLock()
 {
     int count = 0;
@@ -2013,12 +2038,30 @@ void CameraUI::slotNewSelection(bool hasSelection)
 {
     if (!d->controller) return;
 
-    if (!d->renameCustomizer->useDefault())
+    d->downloadSelectedAction->setEnabled(hasSelection);
+    d->downloadDelSelectedAction->setEnabled(hasSelection && d->controller->cameraDeleteSupport());
+    d->deleteSelectedAction->setEnabled(hasSelection && d->controller->cameraDeleteSupport());
+    d->imageViewAction->setEnabled(hasSelection);
+    d->lockAction->setEnabled(hasSelection);
+
+    if (hasSelection)
     {
-        d->downloadSelectedAction->setEnabled(hasSelection);
-        d->downloadDelSelectedAction->setEnabled(hasSelection & d->controller->cameraDeleteSupport());
-        d->deleteSelectedAction->setEnabled(hasSelection & d->controller->cameraDeleteSupport());
-        d->imageViewAction->setEnabled(hasSelection);
+        // only enable "Mark as downloaded" if at least one
+        // selected image has not been downloaded
+        bool haveNotDownloadedItem = false;
+        for (IconItem* item = d->view->firstItem(); item;
+            item = item->nextItem())
+        {
+            const CameraIconItem* const iconItem = static_cast<CameraIconItem*>(item);
+            if (iconItem->isSelected())
+            {
+                haveNotDownloadedItem = !iconItem->isDownloaded();
+                if (haveNotDownloadedItem)
+                    break;
+            }
+        }
+
+        d->markAsDownloadedAction->setEnabled(haveNotDownloadedItem);
     }
     else
     {
@@ -2059,6 +2102,9 @@ void CameraUI::slotItemsSelected(CameraIconItem* item, bool selected)
     }
     else
         d->rightSideBar->slotNoCurrentItem();
+
+    // update availability of actions
+    slotNewSelection(d->view->countSelected()>0);
 }
 
 bool CameraUI::createAutoAlbum(const KUrl& parentURL, const QString& sub,

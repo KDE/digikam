@@ -49,6 +49,11 @@ QList<ParseResults::ResultsKey> ParseResults::keys() const
     return m_results.keys();
 }
 
+bool ParseResults::hasKey(const ResultsKey& key)
+{
+    return keys().contains(key);
+}
+
 QList<ParseResults::ResultsValue> ParseResults::values() const
 {
     return m_results.values();
@@ -109,11 +114,7 @@ ParseResults::ResultsKey ParseResults::keyAtPosition(int pos)
 bool ParseResults::hasKeyAtPosition(int pos)
 {
     ResultsKey key = keyAtPosition(pos);
-    if (keyIsValid(key))
-    {
-        return true;
-    }
-    return false;
+    return keyIsValid(key);
 }
 
 ParseResults::ResultsKey ParseResults::keyAtApproximatePosition(int pos)
@@ -134,11 +135,7 @@ ParseResults::ResultsKey ParseResults::keyAtApproximatePosition(int pos)
 bool ParseResults::hasKeyAtApproximatePosition(int pos)
 {
     ResultsKey key = keyAtApproximatePosition(pos);
-    if (keyIsValid(key))
-    {
-        return true;
-    }
-    return false;
+    return keyIsValid(key);
 }
 
 void ParseResults::clear()
@@ -163,11 +160,7 @@ ParseResults::ResultsKey ParseResults::createInvalidKey()
 
 bool ParseResults::keyIsValid(const ResultsKey& key)
 {
-    if (key.first == INVALID || key.second == INVALID)
-    {
-        return false;
-    }
-    return true;
+    return (key.first != INVALID && key.second != INVALID);
 }
 
 QString ParseResults::replaceTokens(const QString& markedString)

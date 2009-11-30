@@ -1,4 +1,18 @@
 *********************************************************************************************************
+digiKam 1.0.0 - Release date: 2009-12-20
+
+NEW FEATURES:
+
+
+BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+
+001 ==> 216791 : Select next instead of privious picture when deleting a picture.
+002 ==> 216726 : Turn off ratings on thumbnails in view mode.
+003 ==> 207083 : Image Editor shows full-sized file properties after saving.
+004 ==> 208227 : ImagePosition does not always reflect contents of GPS Exif-Tags.
+005 ==> 
+
+*********************************************************************************************************
 digiKam 1.0.0-rc - Release date: 2009-11-29
 
 NEW FEATURES:
@@ -22,7 +36,15 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 011 ==> 116061 : Possibility to blur chroma without touching luma.
 012 ==> 215645 : File save as in image editor crashes digiKam.
 013 ==> 212967 : Click on photo in geolocation view should open the photo.
-014 ==> 
+014 ==> 215733 : After move to new disk: all Album-categories and Album-preview missing.
+015 ==> 215715 : Wrong numbering when importing photos.
+016 ==> 216316 : "Icon view font" setting does not work.
+017 ==> 211559 : Batch queue manager crash after run pressed.
+018 ==> 200124 : Crashed after clicking cancel for the "Scan for files" device dialog.
+019 ==> 216502 : Import errors are not reported.
+020 ==> 205001 : MapSearch: Merge overlapping markers to clusters.
+021 ==> 216652 : Wrong max calculation in histogram view.
+022 ==> 197896 : When importing photos from a camera they are not diplayed in alphabetical order.
 
 *********************************************************************************************************
 digiKam 1.0.0-beta6 - Release date: 2009-11-08

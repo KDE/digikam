@@ -30,8 +30,8 @@
 
 // Local includes
 
-#include "parseinformation.h"
 #include "parseresults.h"
+#include "parsesettings.h"
 #include "token.h"
 
 class QAction;
@@ -47,28 +47,26 @@ class ParseObjectPriv;
 /*
  * Macro definitions:
  *
- * PARSE_LOOP_START and PARSE_LOOP_END can be used when parsing
- * a token with a regular expression (this is the default by now, so you always need
- * to use these macros).
- *
- * See 'dummyoption' class or other implementation for example code.
+ * PARSE_LOOP_START and PARSE_LOOP_END must be used when parsing
+ * a token.
+ * See 'DummyOption' class or other implementation for example code.
  */
-#define PARSE_LOOP_START(PARSESTRING_, REGEXP_)                              \
-        {                                                                    \
-            int POS_ = 0;                                                    \
-            while (POS_ > -1)                                                \
-            {                                                                \
-                POS_ = REGEXP_.indexIn(PARSESTRING_, POS_);                  \
-                if (POS_ > -1)                                               \
+#define PARSE_LOOP_START(PARSESTRING_, REGEXP_)                         \
+        {                                                               \
+            int POS_ = 0;                                               \
+            while (POS_ > -1)                                           \
+            {                                                           \
+                POS_ = REGEXP_.indexIn(PARSESTRING_, POS_);             \
+                if (POS_ > -1)                                          \
                 {
 
-#define PARSE_LOOP_END(PARSESTRING_, REGEXP_, PARSED_, RESULTS_)             \
-            ParseResults::ResultsKey   k(POS_, REGEXP_.cap(0).count());      \
-            ParseResults::ResultsValue v(REGEXP_.cap(0), PARSED_);           \
-            RESULTS_.addEntry(k, v);                                         \
-            POS_ += REGEXP_.matchedLength();                                 \
-                }                                                            \
-            }                                                                \
+#define PARSE_LOOP_END(PARSESTRING_, REGEXP_, PARSEDVAL_, RESULTS_)     \
+            ParseResults::ResultsKey   k(POS_, REGEXP_.cap(0).count()); \
+            ParseResults::ResultsValue v(REGEXP_.cap(0), PARSEDVAL_);   \
+            RESULTS_.addEntry(k, v);                                    \
+            POS_ += REGEXP_.matchedLength();                            \
+                }                                                       \
+            }                                                           \
         }
 
 class ParseObject : public QObject
@@ -83,8 +81,8 @@ public:
     QRegExp regExp() const;
     void    setRegExp(const QRegExp& regExp);
 
-    void    setDescription(const QString& desc);
     QString description() const;
+    void    setDescription(const QString& desc);
 
     QPixmap icon() const;
     void    setIcon(const QPixmap& pixmap);
@@ -115,15 +113,17 @@ public:
     QAction* registerMenu(QMenu* parent);
 
     /**
-     * If multiple tokens have been assigned to a parser, a menu will be created.
-     * If you do not want a menu for every defined token, set this method to 'false' and
+     * If multiple tokens have been assigned to a parseobject, a menu will be created.
+     * If you want to display a menu for every defined token, set this method to 'true' and
      * re-implement the @see slotTokenTriggered method.
      * @param value boolean parameter to set token menu usage
      */
-    void setUseTokenMenu(bool value);
     bool useTokenMenu() const;
+    void setUseTokenMenu(bool value);
 
     bool isValid() const;
+
+    virtual void reset();
 
 Q_SIGNALS:
 
@@ -134,11 +134,11 @@ protected:
     /**
      * add a token to the parser, every parser should at least assign one token object
      * @param id the token id string (used for parsing)
-     * @param name an alias name for the token (used for button and action text)
-     * @param description the description of the token (used for example in the AdvancedRenameWidget for the tooltip)
+     * @param description the description of the token (used for example in the tooltip)
+     * @param actionName[optional] the name of the token action (only used when the token menu is displayed)
      * @return
      */
-    bool addTokenDescription(const QString& id, const QString& name, const QString& description);
+    bool addToken(const QString& id, const QString& description, const QString& actionName = QString());
 
 protected Q_SLOTS:
 

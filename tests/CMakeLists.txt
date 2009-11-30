@@ -42,6 +42,7 @@ SET(advancedrenametest_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/modifiers/rangemodifier.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/modifiers/replacemodifier.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/modifiers/trimmedmodifier.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/modifiers/uniquemodifier.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/modifiers/uppercasemodifier.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options/cameranameoption.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options/dateoption.cpp
@@ -71,10 +72,11 @@ SET(cameranamehelper_SRCS
 )
 KDE4_ADD_UNIT_TEST(cameranamehelpertest ${cameranamehelper_SRCS})
 TARGET_LINK_LIBRARIES(cameranamehelpertest
-                      ${KDE4_KDECORE_LIBS}
+                      ${KDE4_KDEUI_LIBS}
                       ${QT_QTGUI_LIBRARY}
                       ${QT_QTTEST_LIBRARY}
                       ${GPHOTO2_LIBRARIES}
+                      ${KDCRAW_LIBRARIES}
                       digikamcore
                       digikamdatabase
                       )
@@ -83,8 +85,8 @@ TARGET_LINK_LIBRARIES(cameranamehelpertest
 
 SET(uifilevalidator_SRCS
     uifilevalidatortest.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/uifilevalidator.cpp
 )
+
 KDE4_ADD_UNIT_TEST(uifilevalidatortest ${uifilevalidator_SRCS})
 TARGET_LINK_LIBRARIES(uifilevalidatortest
                       ${KDE4_KDECORE_LIBS}

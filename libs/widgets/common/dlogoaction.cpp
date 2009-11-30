@@ -164,6 +164,7 @@ QWidget* DLogoAction::createWidget(QWidget* parent)
 void DLogoAction::deleteWidget(QWidget* widget)
 {
     stop();
+    d->urlLabel = 0;
     KAction::deleteWidget(widget);
 }
 

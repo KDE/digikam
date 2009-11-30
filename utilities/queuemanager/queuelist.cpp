@@ -815,7 +815,6 @@ void QueueListView::updateDestFileNames()
     QString parseString      = settings().renamingParser;
     AssignedBatchTools tools = assignedTools();
 
-    int index = 1;
     QTreeWidgetItemIterator it(this);
     while (*it)
     {
@@ -833,16 +832,15 @@ void QueueListView::updateDestFileNames()
 
             if (settings().renamingRule == QueueSettings::CUSTOMIZE)
             {
-                ParseInformation parseInfo;
-                parseInfo.fileUrl = KUrl(QString("%1/%2.%3").arg(fi.absolutePath()).arg(fi.baseName()).arg(newSuffix));
-                parseInfo.index   = index;
-                newName           = p.parse(parseString, parseInfo);
+                ParseSettings settings(info);
+                settings.parseString = parseString;
+                settings.fileUrl     = KUrl(QString("%1/%2.%3").arg(fi.absolutePath()).arg(fi.baseName()).arg(newSuffix));
+                newName              = p.parse(settings);
             }
 
             item->setDestFileName(newName);
         }
         ++it;
-        ++index;
     }
 }
 

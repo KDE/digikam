@@ -87,18 +87,11 @@ SequenceNumberDialog::~SequenceNumberDialog()
 
 SequenceNumberOption::SequenceNumberOption()
                     : Option(i18nc("Sequence Number", "Number..."), i18n("Add a sequence number"),
-                                   SmallIcon("accessories-calculator"))
+                             SmallIcon("accessories-calculator"))
 {
-    setUseTokenMenu(false);
-
-    addTokenDescription("#", i18n("Sequence Number"),
-             i18n("Sequence number"));
-
-    addTokenDescription("#[|start|]", i18n("Sequence Number (start)"),
-             i18n("Sequence number (custom start)"));
-
-    addTokenDescription("#[|start|,|step|]", i18n("Sequence Number (start, step)"),
-             i18n( "Sequence number (custom start + step)"));
+    addToken("#",                 i18n("Sequence number"));
+    addToken("#[|start|]",        i18n("Sequence number (custom start)"));
+    addToken("#[|start|,|step|]", i18n("Sequence number (custom start + step)"));
 
     QRegExp reg("(#+)(\\[\\s*(\\d+)\\s*,?\\s*(\\d+)?\\s*\\])?");
     setRegExp(reg);
@@ -136,14 +129,14 @@ void SequenceNumberOption::slotTokenTriggered(const QString& token)
     emit signalTokenTriggered(tmp);
 }
 
-void SequenceNumberOption::parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results)
+void SequenceNumberOption::parseOperation(const QString& parseString, ParseSettings& settings, ParseResults& results)
 {
     QRegExp reg = regExp();
     int slength = 0;
     int start   = 0;
     int step    = 0;
     int number  = 0;
-    int index   = info.index;
+    int index   = settings.currentIndex;
 
     // --------------------------------------------------------
 
@@ -151,7 +144,7 @@ void SequenceNumberOption::parseOperation(const QString& parseString, ParseInfor
     PARSE_LOOP_START(parseString, reg)
     {
         slength = reg.cap(1).length();
-        start   = reg.cap(3).isEmpty() ? 1 : reg.cap(3).toInt();
+        start   = reg.cap(3).isEmpty() ? settings.startIndex : reg.cap(3).toInt();
         step    = reg.cap(4).isEmpty() ? 1 : reg.cap(4).toInt();
 
         number  = start + ((index - 1) * step);

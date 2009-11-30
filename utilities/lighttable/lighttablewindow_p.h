@@ -111,6 +111,7 @@ public:
     bool                      fullScreen;
     bool                      removeFullScreenButton;
     bool                      cancelSlideShow;
+    bool                      zoomFixed;
 
     SidebarSplitter*          hSplitter;
     ThumbBarDock*             barViewDock;

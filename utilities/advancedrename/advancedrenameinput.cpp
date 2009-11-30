@@ -27,8 +27,8 @@
 
 #include <QFontMetrics>
 #include <QLayout>
-#include <QTimer>
 #include <QScrollBar>
+#include <QTimer>
 
 // KDE includes
 
@@ -175,9 +175,16 @@ Parser* AdvancedRenameLineEdit::parser()
 
 void AdvancedRenameLineEdit::keyPressEvent(QKeyEvent* e)
 {
+    // avoid newline
     if (e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return)
     {
         emit signalReturnPressed();
+    }
+    // the keys "Up, Down, PageUp, PageDown" should be send to the QComboBox
+    else if (e->key() == Qt::Key_Up     || e->key() == Qt::Key_Down    ||
+             e->key() == Qt::Key_PageUp || e->key() == Qt::Key_PageDown)
+    {
+        e->setAccepted(false);
     }
     else
     {
@@ -218,18 +225,19 @@ void AdvancedRenameLineEdit::slotCursorPositionChanged()
 
     if (d->parser)
     {
-        int start           = INVALID;
-        int length          = INVALID;
-        QString parseString = toPlainText();
-        int pos             = textCursor().position();
-        found               = d->parser->tokenAtPosition(Parser::Token,
-                                                         parseString, pos, start, length);
-        found               = found && ( (start + length) == pos );
+        ParseSettings settings;
+        settings.parseString = toPlainText();
+        int start            = INVALID;
+        int length           = INVALID;
+        int pos              = textCursor().position();
+        found                = d->parser->tokenAtPosition(Parser::OptionToken,
+                                                          settings, pos, start, length);
+        found                = found && ( (start + length) == pos );
 
         if (!found)
         {
-            found = d->parser->tokenAtPosition(Parser::TokenAndModifiers,
-                                               parseString, pos, start, length);
+            found = d->parser->tokenAtPosition(Parser::OptionModifiersToken,
+                                               settings, pos, start, length);
             found = found && ( (start + length) == pos );
         }
     }

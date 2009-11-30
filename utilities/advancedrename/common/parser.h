@@ -32,16 +32,16 @@
 
 // Local includes
 
-#include "parseinformation.h"
-#include "parseresults.h"
-#include "option.h"
 #include "modifier.h"
+#include "option.h"
+#include "parseresults.h"
+#include "parsesettings.h"
 
 namespace Digikam
 {
 
-class Option;
 class Modifier;
+class Option;
 class ParserPriv;
 
 class Parser
@@ -49,11 +49,11 @@ class Parser
 
 public:
 
-    enum Type
+    enum TokenType
     {
-        Token = 0,
-        TokenAndModifiers,
-        Text
+        OptionToken = 0,
+        OptionModifiersToken,
+        TextToken
     };
 
 public:
@@ -61,31 +61,34 @@ public:
     Parser();
     virtual ~Parser();
 
-    QString       parse(const QString& parseString, ParseInformation& info);
+    void          init(const ParseSettings& settings);
+    void          reset();
+
+    QString       parse(ParseSettings& settings);
 
     OptionsList   options()   const;
     ModifierList  modifiers() const;
 
-    bool          tokenAtPosition(Type type, const QString& parseString, int pos);
-    bool          tokenAtPosition(Type type, const QString& parseString, int pos, int& start, int& length);
+    bool          tokenAtPosition(TokenType type, ParseSettings& settings, int pos);
+    bool          tokenAtPosition(TokenType type, ParseSettings& settings, int pos, int& start, int& length);
 
     /**
      * check if the given parse string is valid
      * @param str the parse string
      * @return true if valid / can be parsed
      */
-    static bool stringIsValid(const QString& str);
+    static bool parseStringIsValid(const QString& str);
 
 protected:
 
-    void registerOption(Option* parser);
+    void registerOption(Option* option);
+    void registerModifier(Modifier* modifier);
 
 private:
 
-    ParseResults parseResults(const QString& parseString);
-    ParseResults modifierResults(const QString& parseString);
-    QString      parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results,
-                                bool modify = true);
+    ParseResults results(ParseSettings& settings);
+    QString      parseOperation(ParseSettings& settings);
+    void         applyModifiers(const QString& parseString, ParseResults& results);
 
 private:
 
@@ -93,6 +96,5 @@ private:
 };
 
 }  // namespace Digikam
-
 
 #endif /* PARSER_H */

@@ -75,7 +75,7 @@ DefaultValueModifier::DefaultValueModifier()
                                i18n("Set a default value for empty strings"),
                                SmallIcon("edit-undo"))
 {
-    addTokenDescription(QString("{d:\"|default|\"}"), i18nc("default value", "Default"), description());
+    addToken("{d:\"|default|\"}", description());
 
     QRegExp reg("\\{d:\"(.+)\"\\}");
     reg.setMinimal(true);
@@ -102,16 +102,16 @@ void DefaultValueModifier::slotTokenTriggered(const QString& token)
     emit signalTokenTriggered(tmp);
 }
 
-QString DefaultValueModifier::modifyOperation(const QString& parseString, const QString& result)
+QString DefaultValueModifier::modifyOperation(const ParseSettings& settings, const QString& str2Modify)
 {
-    if (!result.isEmpty())
+    if (!str2Modify.isEmpty())
     {
-        return result;
+        return str2Modify;
     }
 
     QRegExp reg = regExp();
     int pos     = 0;
-    pos         = reg.indexIn(parseString, pos);
+    pos         = reg.indexIn(settings.parseString, pos);
     if (pos > -1)
     {
         QString defaultStr = reg.cap(1).isEmpty() ? QString() : reg.cap(1);

@@ -128,6 +128,7 @@ ImageViewUtilities *DigikamImageView::utilities() const
 void DigikamImageView::slotSetupChanged()
 {
     setToolTipEnabled(AlbumSettings::instance()->showToolTipsIsValid());
+    setFont(AlbumSettings::instance()->getIconViewFont());
 
     d->updateOverlays();
 

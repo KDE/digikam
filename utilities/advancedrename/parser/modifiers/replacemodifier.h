@@ -29,8 +29,8 @@
 #include "modifier.h"
 #include "parseobjectdialog.h"
 
-class QCheckBox;
 class KLineEdit;
+class QCheckBox;
 
 namespace Digikam
 {
@@ -58,7 +58,7 @@ class ReplaceModifier : public Modifier
 public:
 
     ReplaceModifier();
-    virtual QString modifyOperation(const QString& parseString, const QString& result);
+    virtual QString modifyOperation(const ParseSettings& settings, const QString& str2Modify);
 
 private Q_SLOTS:
 

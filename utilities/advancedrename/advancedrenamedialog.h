@@ -47,6 +47,8 @@ class QTreeWidget;
 namespace Digikam
 {
 
+class Parser;
+
 class AdvancedRenameListItemPriv;
 
 class AdvancedRenameListItem : public QTreeWidgetItem

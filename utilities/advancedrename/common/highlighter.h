@@ -27,8 +27,8 @@
 // Qt includes
 
 #include <QSyntaxHighlighter>
-#include <QVector>
 #include <QTextCharFormat>
+#include <QVector>
 
 class QTextEdit;
 

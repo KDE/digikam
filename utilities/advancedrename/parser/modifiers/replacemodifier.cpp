@@ -82,14 +82,11 @@ ReplaceDialog::~ReplaceDialog()
 // --------------------------------------------------------
 
 ReplaceModifier::ReplaceModifier()
-               : Modifier(i18nc("Replace text", "Replace..."), i18n("Replace strings in a renaming option"),
+               : Modifier(i18nc("Replace text", "Replace..."), i18n("Replace text in a renaming option"),
                           SmallIcon("document-edit"))
 {
-    setUseTokenMenu(false);
-
-    addTokenDescription(QString("{r:\"|old|\", \"|new|\"}"),  i18n("Replace"), description());
-    addTokenDescription(QString("{ri:\"|old|\", \"|new|\"}"), i18n("Replace (case insensitive)"),
-                                                              i18n("Replace text (case insensitive)"));
+    addToken("{r:\"|old|\", \"|new|\"}",  i18n("Replace text"));
+    addToken("{ri:\"|old|\", \"|new|\"}", i18n("Replace text (case insensitive)"));
 
     QRegExp reg("\\{r(i)?:\"(.+)\",\"(.*)\"\\}");
     reg.setMinimal(true);
@@ -124,16 +121,16 @@ void ReplaceModifier::slotTokenTriggered(const QString& token)
     emit signalTokenTriggered(tmp);
 }
 
-QString ReplaceModifier::modifyOperation(const QString& parseString, const QString& result)
+QString ReplaceModifier::modifyOperation(const ParseSettings& settings, const QString& str2Modify)
 {
     QRegExp reg = regExp();
     int pos     = 0;
-    pos         = reg.indexIn(parseString, pos);
+    pos         = reg.indexIn(settings.parseString, pos);
     if (pos > -1)
     {
         QString original    = reg.cap(2);
         QString replacement = reg.cap(3);
-        QString _result     = result;
+        QString _result     = str2Modify;
 
         Qt::CaseSensitivity caseType = (!reg.cap(1).isEmpty() && reg.cap(1).count() == 1)
                                        ? Qt::CaseInsensitive

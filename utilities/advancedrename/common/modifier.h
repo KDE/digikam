@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-09-14
- * Description : a token result modifier class
+ * Description : a class to manipulate the results of an renaming options
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -26,8 +26,8 @@
 
 // Qt includes
 
-#include <QPixmap>
 #include <QList>
+#include <QPixmap>
 #include <QString>
 
 // Local includes
@@ -48,11 +48,11 @@ public:
     Modifier(const QString& name, const QString& description, const QPixmap& icon = QPixmap());
     virtual ~Modifier() {};
 
-    virtual QString modify(const QString& parseString, const QString& result);
+    QString modify(const ParseSettings& settings, const QString& str2Modify);
 
 protected:
 
-    virtual QString modifyOperation(const QString& parseString, const QString& result) = 0;
+    virtual QString modifyOperation(const ParseSettings& settings, const QString& str2Modify) = 0;
 };
 
 typedef QList<Modifier*> ModifierList;

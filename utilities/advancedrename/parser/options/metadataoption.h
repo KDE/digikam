@@ -66,7 +66,7 @@ public:
 
 protected:
 
-    virtual void parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results);
+    virtual void parseOperation(const QString& parseString, ParseSettings& settings, ParseResults& results);
 
 private Q_SLOTS:
 
@@ -74,7 +74,7 @@ private Q_SLOTS:
 
 private:
 
-    QString parseMetadata(const QString& token, ParseInformation& info);
+    QString parseMetadata(const QString& token, ParseSettings& settings);
 };
 
 } // namespace Digikam

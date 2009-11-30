@@ -33,18 +33,17 @@ namespace Digikam
 LowerCaseModifier::LowerCaseModifier()
                  : Modifier(i18n("Lowercase"), i18n("Convert to lowercase"))
 {
-    addTokenDescription(QString("{lower}"), i18n("Lowercase"), description());
+    addToken("{lower}", description());
 
     QRegExp reg("\\{lower\\}");
     reg.setMinimal(true);
     setRegExp(reg);
 }
 
-QString LowerCaseModifier::modifyOperation(const QString& parseString, const QString& result)
+QString LowerCaseModifier::modifyOperation(const ParseSettings& settings, const QString& str2Modify)
 {
-    Q_UNUSED(parseString)
-
-    return result.toLower();
+    Q_UNUSED(settings);
+    return str2Modify.toLower();
 }
 
 } // namespace Digikam

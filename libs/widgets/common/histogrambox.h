@@ -65,24 +65,18 @@ public:
     void setChannel(int channel);
     void setChannelEnabled(bool enabled);
 
-    int  colorsChannel() const;
-    void setColorsChannel(int color);
-    void setColorsEnabled(bool enabled);
-
     HistogramScale scale() const;
     void setScale(HistogramScale scale);
 
 Q_SIGNALS:
 
     void signalChannelChanged();
-    void signalColorsChanged();
     void signalScaleChanged();
 
 public Q_SLOTS:
 
     void slotChannelChanged();
     void slotScaleChanged();
-    void slotColorsChanged();
 
 private:
 

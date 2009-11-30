@@ -7,7 +7,7 @@
 <img src="hicolor/32x32/apps/digikam.png">
 </td>
 <td>
-... that digiKam supports <b>Drag'n'Drop</b>? So you can easily move images from Konqueror to digiKam or from digiKam to K3b simply by using "Drag'n'Drop".
+... that digiKam supports <b>Drag'n'Drop</b>? So you can easily move images from Dolphin to digiKam or from digiKam to K3b simply by using "Drag'n'Drop".
 </td>
 </tr>
 </table>
@@ -41,7 +41,7 @@
 <img src="hicolor/32x32/apps/digikam.png">
 </td>
 <td>
-... that you can view the <b>Exif</b>, <b>MakerNotes</b>, and <b>IPTC</b> photo information by using the <b>Metadata</b> sidebar tab?
+... that you can view the <b>Exif</b>, <b>MakerNotes</b>, <b>IPTC</b> and <b>XMP</b> photo information by using the <b>Metadata</b> sidebar tab on the right side?
 </td>
 </tr>
 </table>
@@ -75,7 +75,7 @@
 <img src="hicolor/32x32/apps/digikam.png">
 </td>
 <td>
-... that albums in digiKam are folders in your Album Library? So you can easily import your photos by simply copying those folders to your Album Library.
+... that albums in digiKam are folders in your Collection? So you can easily import your photos by simply copying those folders to your Collection.
 </td>
 </tr>
 </table>
@@ -126,7 +126,7 @@
 <img src="hicolor/32x32/apps/digikam.png">
 </td>
 <td>
-... that digiKam has multiple plugins with extra features like <b>HTML export</b>, <b>Archive to CD</b>, <b>Slideshow</b>,... and many more? You can even write your own! Find more information at <a href="http://extragear.kde.org/apps/kipi">this site</a>.
+... that digiKam has multiple Tools available from kipi-plugins project with extra features like <b>HTML export</b>, <b>Flickr Export</b>, <b>OpenGL Slideshow</b>,... and many more? You can even write your own! Find more information at <a href="http://www.digikam.org">this site</a>.
 </td>
 </tr>
 </table>
@@ -141,7 +141,7 @@
 <tr>
 <td><img src="hicolor/32x32/apps/digikam.png"></td>
 <td>
-... that you have direct access to the KDE Gamma Configuration using Tools -> Gamma Adjustment?
+... that you can use remote computer repository as images Collection? Go to Setup dialog and Collection section for details.
 </td>
 </tr>
 </table>
@@ -158,7 +158,7 @@
 <img src="hicolor/32x32/apps/digikam.png">
 </td>
 <td>
-... that you can print images using the Print Wizard? You can start it using Album -> Export -> Print Wizard.
+... that you can print images using the Print Wizard? You can start it using Image -> Print Wizard.
 </td>
 </tr>
 </table>
@@ -174,7 +174,7 @@
 <td><img src="hicolor/32x32/apps/digikam.png">
 </td>
 <td>
-... that you can save your images with the new <b>PNG</b> file format instead of the old <b>TIFF</b> format and get good compression without losing image quality?
+... that you can save your images as <b>PNG</b> file format instead <b>TIFF</b> format and get good compression without losing image quality and metadata?
 </td>
 </tr>
 </table>
@@ -241,7 +241,7 @@
 <img src="hicolor/32x32/apps/digikam.png">
 </td>
 <td>
-... that you can edit the comments of the current image opened in the digiKam image editor by using the <b>Comments and Tags</b> sidebar tab?
+... that you can edit multiples language comments of the current image opened in the digiKam image editor by using the <b>Caption/Tags</b> sidebar tab?
 </td>
 </tr>
 </table>
@@ -259,6 +259,40 @@
 </td>
 <td>
 ... that you could use &lt;Page Down&gt; and &lt;Page Up&gt; on your keyboard to switch between photos in the image editor?
+</td>
+</tr>
+</table>
+</p>
+</html>
+</tip>
+
+<tip category="Digikam|ImageEditor">
+<html>
+<p>
+<table border="0" cellpadding="0" cellspacing="10" align="center">
+<tr>
+<td>
+<img src="hicolor/32x32/apps/digikam.png">
+</td>
+<td>
+... that you can Import RAW files in Image Editor which support a lots of options for advanced users?
+</td>
+</tr>
+</table>
+</p>
+</html>
+</tip>
+
+<tip category="Digikam|ImageEditor">
+<html>
+<p>
+<table border="0" cellpadding="0" cellspacing="10" align="center">
+<tr>
+<td>
+<img src="hicolor/32x32/apps/digikam.png">
+</td>
+<td>
+... that Image Editor support 16 bits color depth image to be able to edit RAW files in high quality ?
 </td>
 </tr>
 </table>

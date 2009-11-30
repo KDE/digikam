@@ -26,8 +26,8 @@
 
 // Qt includes
 
-#include <QPair>
 #include <QMap>
+#include <QPair>
 #include <QString>
 
 namespace Digikam
@@ -52,8 +52,11 @@ public:
     QList<ResultsKey>   keys()   const;
     QList<ResultsValue> values() const;
 
+    bool       hasKey(const ResultsKey& key);
+
     QString    result(const ResultsKey& key);
     QString    token(const ResultsKey& key);
+
     int        offset(const ResultsKey& key);
 
     ResultsKey keyAtPosition(int pos);
@@ -63,8 +66,9 @@ public:
     bool       hasKeyAtApproximatePosition(int pos);
 
     bool       isEmpty();
-    void       clear();
+
     void       append(ParseResults& results);
+    void       clear();
 
     QString    replaceTokens(const QString& markedString);
 
@@ -74,8 +78,6 @@ private:
 
     ResultsKey createInvalidKey();
     bool       keyIsValid(const ResultsKey& key);
-
-public:
 
     ResultsMap  m_results;
 };

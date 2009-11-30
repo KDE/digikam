@@ -536,7 +536,7 @@ void GPSSearchView::slotDigikamViewImageSelected(const ImageInfoList &selectedIm
             gps.rating    = inf.rating();
             gps.url       = inf.fileUrl();
             list << gps;
-            kDebug()<<gps.url;
+//             kDebug()<<gps.url;
         }
     }
 

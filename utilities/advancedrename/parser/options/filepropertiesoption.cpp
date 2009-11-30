@@ -38,20 +38,21 @@ namespace Digikam
 FilePropertiesOption::FilePropertiesOption()
                     : Option(i18n("File"), i18n("Add file properties"), SmallIcon("folder-image"))
 {
-    addTokenDescription("[file]", i18nc("image filename", "Name"),
-             i18n("Filename"));
+    setUseTokenMenu(true);
 
-    addTokenDescription("[ext]", i18nc("image extension", "Extension"),
-             i18n("File extension, prepend with a '.' character, to modify the real file extension"));
+    addToken("[file]", i18n("Filename"),
+             i18nc("File name", "Name"));
+    addToken("[ext]",  i18n("File extension, prepend with a '.' character, to modify the real file extension"),
+             i18nc("File extension", "Extension"));
 
     QRegExp reg("(\\[file\\]|(\\.?)\\[ext\\])");
     reg.setMinimal(true);
     setRegExp(reg);
 }
 
-void FilePropertiesOption::parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results)
+void FilePropertiesOption::parseOperation(const QString& parseString, ParseSettings& settings, ParseResults& results)
 {
-    QFileInfo fi(info.fileUrl.toLocalFile());
+    QFileInfo fi(settings.fileUrl.toLocalFile());
 
     QRegExp reg = regExp();
 
@@ -71,7 +72,7 @@ void FilePropertiesOption::parseOperation(const QString& parseString, ParseInfor
         else if (reg.cap(1) == QString(".[ext]"))
         {
             tmp = "." + fi.suffix();
-            info.useFileExtension = false;
+            settings.useOriginalFileExtension = false;
         }
     }
     PARSE_LOOP_END(parseString, reg, tmp, results)

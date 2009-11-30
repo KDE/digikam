@@ -30,11 +30,13 @@
 namespace Digikam
 {
 
-Token::Token(const QString& id, const QString& alias, const QString& description)
+Token::Token(const QString& id, const QString& description)
      : QObject(0),
-       m_id(id), m_alias(alias), m_description(description)
+       m_id(id), m_description(description)
 {
-    m_action = new QAction(m_alias, this);
+    m_action = new QAction(this);
+    m_action->setText(id);
+    m_action->setToolTip(description);
 
     connect(m_action, SIGNAL(triggered()), this, SLOT(slotTriggered()));
 }

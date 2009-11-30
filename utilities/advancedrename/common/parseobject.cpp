@@ -46,7 +46,7 @@ public:
     ParseObjectPriv() :
         buttonRegistered(false),
         menuRegistered(false),
-        useTokenMenu(true)
+        useTokenMenu(false)
     {}
 
     bool         buttonRegistered;
@@ -186,17 +186,22 @@ QAction* ParseObject::registerMenu(QMenu* parent)
     return action;
 }
 
-bool ParseObject::addTokenDescription(const QString& id, const QString& name, const QString& description)
+bool ParseObject::addToken(const QString& id, const QString& description, const QString& actionName)
 {
-    if (id.isEmpty() || name.isEmpty() || description.isEmpty())
+    if (id.isEmpty() || description.isEmpty())
     {
         return false;
     }
 
-    Token* token = new Token(id, name, description);
+    Token* token = new Token(id, description);
     if (!token)
     {
         return false;
+    }
+
+    if (!actionName.isEmpty())
+    {
+        token->action()->setText(actionName);
     }
 
     connect(token, SIGNAL(signalTokenTriggered(const QString&)),
@@ -251,6 +256,10 @@ bool ParseObject::tokenAtPosition(ParseResults& results, int pos, int& start, in
 bool ParseObject::isValid() const
 {
     return (!d->tokens.isEmpty() && !d->regExp.isEmpty() && d->regExp.isValid());
+}
+
+void ParseObject::reset()
+{
 }
 
 } // namespace Digikam

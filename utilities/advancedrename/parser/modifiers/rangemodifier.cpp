@@ -96,12 +96,9 @@ RangeModifier::RangeModifier()
              : Modifier(i18n("Range..."), i18n("Add only a specific range of a renaming option"),
                         SmallIcon("measure"))
 {
-    setUseTokenMenu(false);
+    addToken("{|from| - |to|}", i18n("Extract a specific range (if omitted, '|to|' = end of string)"));
 
-    addTokenDescription(QString("{|from| - |to|}"), i18n("Range"),
-             i18n("Extract a specific range (if omitted, '|to|' = end of string)"));
-
-    QRegExp reg("\\{\\s*(\\d+)\\s*(-\\s*((-1|\\d+)\\s*)?)?\\}");
+    QRegExp reg("\\{(\\d+)(-((-1|\\d+))?)?\\}");
     reg.setMinimal(true);
     setRegExp(reg);
 }
@@ -133,11 +130,11 @@ void RangeModifier::slotTokenTriggered(const QString& token)
     emit signalTokenTriggered(tmp);
 }
 
-QString RangeModifier::modifyOperation(const QString& parseString, const QString& result)
+QString RangeModifier::modifyOperation(const ParseSettings& settings, const QString& str2Modify)
 {
-    QRegExp reg = regExp();
-    int pos     = 0;
-    pos         = reg.indexIn(parseString, pos);
+    QRegExp reg    = regExp();
+    int pos        = 0;
+    pos            = reg.indexIn(settings.parseString, pos);
     if (pos > -1)
     {
         /*
@@ -178,12 +175,12 @@ QString RangeModifier::modifyOperation(const QString& parseString, const QString
          * replace the string according to the given range
          */
 
-        if (start > result.count())
+        if (start > str2Modify.count())
         {
             return QString();
         }
 
-        if (stop > result.count())
+        if (stop > str2Modify.count())
         {
             stop = -1;
         }
@@ -201,13 +198,13 @@ QString RangeModifier::modifyOperation(const QString& parseString, const QString
 
         if (stop == -1)
         {
-            stop = result.count() - 1;
+            stop = str2Modify.count() - 1;
         }
 
         QString tmp;
         for (int i = start; i <= stop; ++i)
         {
-            tmp.append(result.at(i));
+            tmp.append(str2Modify.at(i));
         }
         return tmp;
     }

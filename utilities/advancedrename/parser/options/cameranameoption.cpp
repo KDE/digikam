@@ -38,14 +38,14 @@ namespace Digikam
 CameraNameOption::CameraNameOption()
                 : Option(i18n("Camera"), i18n("Add the camera name"), SmallIcon("camera-photo"))
 {
-    addTokenDescription("[cam]", i18n("Camera Name"), i18n("Camera name"));
+    addToken("[cam]", i18n("Camera name"));
 
     QRegExp reg("\\[cam\\]");
     reg.setMinimal(true);
     setRegExp(reg);
 }
 
-void CameraNameOption::parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results)
+void CameraNameOption::parseOperation(const QString& parseString, ParseSettings& settings, ParseResults& results)
 {
     QRegExp reg = regExp();
 
@@ -54,7 +54,7 @@ void CameraNameOption::parseOperation(const QString& parseString, ParseInformati
     QString tmp;
     PARSE_LOOP_START(parseString, reg)
     {
-        tmp = Parser::stringIsValid(info.cameraName) ? info.cameraName : QString();
+        tmp = Parser::parseStringIsValid(settings.cameraName) ? settings.cameraName : QString();
     }
     PARSE_LOOP_END(parseString, reg, tmp, results)
 }

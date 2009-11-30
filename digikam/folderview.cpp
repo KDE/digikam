@@ -258,6 +258,10 @@ void FolderView::notifyTakeItem(Q3ListViewItem* item)
 
     if (d->highlightedItem == item)
         d->highlightedItem = 0;
+    if (d->dragItem == item)
+        d->dragItem = 0;
+    if (d->oldHighlightItem == item)
+        d->oldHighlightItem = 0;
 }
 
 void FolderView::leaveEvent(QEvent* e)
