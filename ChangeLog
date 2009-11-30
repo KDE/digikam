@@ -1,6 +1,63 @@
 1.0.0-rc 2009-11-30
 --------------------------------------------------------------------------------
 
+2009-11-30 10:47  aclemens
+
+    * tests/advancedrenametest.cpp, tests/advancedrenametest.h: add
+      unit test for UniqueModifier
+
+2009-11-30 10:47  aclemens
+
+    * tests/advancedrenametest.cpp,
+      utilities/advancedrename/advancedrenamedialog.cpp,
+      utilities/advancedrename/advancedrenameinput.cpp,
+      utilities/advancedrename/advancedrenamewidget.cpp,
+      utilities/advancedrename/common/highlighter.cpp,
+      utilities/advancedrename/common/modifier.cpp,
+      utilities/advancedrename/common/modifier.h,
+      utilities/advancedrename/common/option.cpp,
+      utilities/advancedrename/common/option.h,
+      utilities/advancedrename/common/parser.cpp,
+      utilities/advancedrename/common/parser.h,
+      utilities/advancedrename/common/parseresults.cpp,
+      utilities/advancedrename/common/parseresults.h,
+      utilities/advancedrename/common/parsesettings.h,
+      utilities/advancedrename/parser/defaultrenameparser.cpp,
+      utilities/advancedrename/parser/modifiers/defaultvaluemodifier.cpp,
+      utilities/advancedrename/parser/modifiers/defaultvaluemodifier.h,
+      utilities/advancedrename/parser/modifiers/firstletterofeachworduppercasemodifier.cpp,
+      utilities/advancedrename/parser/modifiers/firstletterofeachworduppercasemodifier.h,
+      utilities/advancedrename/parser/modifiers/lowercasemodifier.cpp,
+      utilities/advancedrename/parser/modifiers/lowercasemodifier.h,
+      utilities/advancedrename/parser/modifiers/rangemodifier.cpp,
+      utilities/advancedrename/parser/modifiers/rangemodifier.h,
+      utilities/advancedrename/parser/modifiers/replacemodifier.cpp,
+      utilities/advancedrename/parser/modifiers/replacemodifier.h,
+      utilities/advancedrename/parser/modifiers/trimmedmodifier.cpp,
+      utilities/advancedrename/parser/modifiers/trimmedmodifier.h,
+      utilities/advancedrename/parser/modifiers/uniquemodifier.cpp,
+      utilities/advancedrename/parser/modifiers/uniquemodifier.h,
+      utilities/advancedrename/parser/modifiers/uppercasemodifier.cpp,
+      utilities/advancedrename/parser/modifiers/uppercasemodifier.h,
+      utilities/advancedrename/parser/options/cameranameoption.cpp,
+      utilities/queuemanager/queuelist.cpp: Change parsing in
+      advancedrename utility. Modifiers are now registered in the
+      main parser, and not in the Options class. Modifiers will receive
+      the combined
+      ParseResults object now, so they have full control / visibility
+      of all parsed
+      tokens.
+      This is especially needed for the UniqueModifier, so that the
+      number suffix is added
+      correctly when a renaming option exists more than once
+      (e.g. [dir]{unique}_test_[dir]{unique} ).
+
+      The porting is not done yet, but the parser is still working ;-)
+
+2009-11-30 10:34  nlecureuil
+
+    * ChangeLog: prepare 1.0.0-rc
+
 2009-11-30 06:32  cgilles
 
 	* NEWS: update
