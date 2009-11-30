@@ -105,10 +105,10 @@ void AdvancedRenameWidgetTest::testDirectoryNameToken_data()
 
     QString filename("/mnt/data/photos/2009/digikam_tests/myfile001.jpg");
 
-    QTest::newRow("[dir]")        << QString("[dir]")        << filename << QString("digikam_tests.jpg");
-    QTest::newRow("[dir.]")       << QString("[dir.]")       << filename << QString("2009.jpg");
-    QTest::newRow("[dir.]_[dir]") << QString("[dir.]_[dir]") << filename << QString("2009_digikam_tests.jpg");
-    QTest::newRow("[dir.....]")   << QString("[dir.....]")   << filename << QString("myfile001.jpg");
+    QTest::newRow("[dir]")          << QString("[dir]")          << filename << QString("digikam_tests.jpg");
+    QTest::newRow("[dir.]")         << QString("[dir.]")         << filename << QString("2009.jpg");
+    QTest::newRow("[dir.]_[dir]")   << QString("[dir.]_[dir]")   << filename << QString("2009_digikam_tests.jpg");
+    QTest::newRow("[dir.......]")   << QString("[dir.......]")   << filename << QString("myfile001.jpg");
 }
 
 void AdvancedRenameWidgetTest::testDirectoryNameToken()
