@@ -26,15 +26,15 @@
 
 // Qt includes
 
-#include <QtGui/QWidget>
 #include <QtCore/QString>
+#include <QtGui/QWidget>
 
 namespace Digikam
 {
 
+class AdvancedRenameWidgetPriv;
 class ParseSettings;
 class Parser;
-class AdvancedRenameWidgetPriv;
 
 class AdvancedRenameWidget : public QWidget
 {

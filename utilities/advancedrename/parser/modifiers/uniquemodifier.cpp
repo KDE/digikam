@@ -26,9 +26,9 @@
 
 // KDE includes
 
+#include <kdebug.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kdebug.h>
 
 namespace Digikam
 {
@@ -45,22 +45,20 @@ UniqueModifier::UniqueModifier()
     setRegExp(reg);
 }
 
-QString UniqueModifier::modifyOperation(const ParseSettings& settings)
+QString UniqueModifier::modifyOperation(const ParseSettings& settings, const QString& str2Modify)
 {
-    ParseResults::ResultsKey key = settings.results.currentKey();
-    ParseResults results         = settings.results;
+    ParseResults::ResultsKey key = settings.currentResultsKey;
+    cache[key] << str2Modify;
 
-    cache[key] << settings.result2Modify;
-
-    if (cache[key].count(settings.result2Modify) > 1)
+    if (cache[key].count(str2Modify) > 1)
     {
-        QString tmp = settings.result2Modify;
-        int index   = cache[key].count(settings.result2Modify) - 1;
+        QString tmp = str2Modify;
+        int index   = cache[key].count(str2Modify) - 1;
         tmp        += QString("_%1").arg(QString::number(index));
         return tmp;
     }
 
-    return settings.result2Modify;
+    return str2Modify;
 }
 
 void UniqueModifier::reset()

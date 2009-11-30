@@ -32,16 +32,16 @@
 
 // Local includes
 
-#include "parsesettings.h"
-#include "parseresults.h"
-#include "option.h"
 #include "modifier.h"
+#include "option.h"
+#include "parseresults.h"
+#include "parsesettings.h"
 
 namespace Digikam
 {
 
-class Option;
 class Modifier;
+class Option;
 class ParserPriv;
 
 class Parser
@@ -86,8 +86,8 @@ protected:
 
 private:
 
-    ParseResults results(ParseSettings& settings, bool modify = true);
-    QString      parseOperation(ParseSettings& settings, ParseResults& results, bool modify = true);
+    ParseResults results(ParseSettings& settings);
+    QString      parseOperation(ParseSettings& settings);
     void         applyModifiers(const QString& parseString, ParseResults& results);
 
 private:

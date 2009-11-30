@@ -30,8 +30,8 @@
 
 // Local includes
 
-#include "parsesettings.h"
 #include "parseresults.h"
+#include "parsesettings.h"
 #include "token.h"
 
 class QAction;

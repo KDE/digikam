@@ -42,8 +42,8 @@
 // Local includes
 
 #include "advancedrenamewidget.h"
-#include "parsesettings.h"
 #include "parser.h"
+#include "parsesettings.h"
 
 namespace Digikam
 {

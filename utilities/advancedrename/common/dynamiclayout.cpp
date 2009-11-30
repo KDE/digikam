@@ -25,9 +25,9 @@
 
 // Qt includes
 
+#include <QLayoutItem>
 #include <QList>
 #include <QRect>
-#include <QLayoutItem>
 
 // KDE includes
 
@@ -47,16 +47,16 @@ public:
         spaceY(0),
         minItemWidth(0),
         minColumns(2)
-        {}
+    {}
 
-    int                  hSpace;
-    int                  vSpace;
-    int                  spaceX;
-    int                  spaceY;
-    int                  minItemWidth;
-    const int            minColumns;
+    int                 hSpace;
+    int                 vSpace;
+    int                 spaceX;
+    int                 spaceY;
+    int                 minItemWidth;
+    const int           minColumns;
 
-    QList<QLayoutItem*>  itemList;
+    QList<QLayoutItem*> itemList;
 };
 
 // --------------------------------------------------------

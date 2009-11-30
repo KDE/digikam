@@ -130,7 +130,7 @@ void RangeModifier::slotTokenTriggered(const QString& token)
     emit signalTokenTriggered(tmp);
 }
 
-QString RangeModifier::modifyOperation(const ParseSettings& settings)
+QString RangeModifier::modifyOperation(const ParseSettings& settings, const QString& str2Modify)
 {
     QRegExp reg    = regExp();
     int pos        = 0;
@@ -175,12 +175,12 @@ QString RangeModifier::modifyOperation(const ParseSettings& settings)
          * replace the string according to the given range
          */
 
-        if (start > settings.result2Modify.count())
+        if (start > str2Modify.count())
         {
             return QString();
         }
 
-        if (stop > settings.result2Modify.count())
+        if (stop > str2Modify.count())
         {
             stop = -1;
         }
@@ -198,13 +198,13 @@ QString RangeModifier::modifyOperation(const ParseSettings& settings)
 
         if (stop == -1)
         {
-            stop = settings.result2Modify.count() - 1;
+            stop = str2Modify.count() - 1;
         }
 
         QString tmp;
         for (int i = start; i <= stop; ++i)
         {
-            tmp.append(settings.result2Modify.at(i));
+            tmp.append(str2Modify.at(i));
         }
         return tmp;
     }

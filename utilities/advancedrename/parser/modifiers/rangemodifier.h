@@ -29,9 +29,9 @@
 #include "modifier.h"
 #include "parseobjectdialog.h"
 
+class KIntNumInput;
 class QCheckBox;
 class QGroupBox;
-class KIntNumInput;
 
 namespace Digikam
 {
@@ -63,7 +63,7 @@ class RangeModifier : public Modifier
 public:
 
     RangeModifier();
-    virtual QString modifyOperation(const ParseSettings& settings);
+    virtual QString modifyOperation(const ParseSettings& settings, const QString& str2Modify);
 
 private Q_SLOTS:
 

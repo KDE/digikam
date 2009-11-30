@@ -59,23 +59,6 @@ QList<ParseResults::ResultsValue> ParseResults::values() const
     return m_results.values();
 }
 
-bool ParseResults::setCurrentKey(const ResultsKey& key)
-{
-
-    if (keyIsValid(key) && hasKey(key))
-    {
-        m_currentKey = key;
-        return true;
-    }
-    m_currentKey = createInvalidKey();
-    return false;
-}
-
-ParseResults::ResultsKey ParseResults::currentKey() const
-{
-    return m_currentKey;
-}
-
 QString ParseResults::result(const ResultsKey& key)
 {
     if (m_results.isEmpty())

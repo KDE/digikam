@@ -102,11 +102,11 @@ void DefaultValueModifier::slotTokenTriggered(const QString& token)
     emit signalTokenTriggered(tmp);
 }
 
-QString DefaultValueModifier::modifyOperation(const ParseSettings& settings)
+QString DefaultValueModifier::modifyOperation(const ParseSettings& settings, const QString& str2Modify)
 {
-    if (!settings.result2Modify.isEmpty())
+    if (!str2Modify.isEmpty())
     {
-        return settings.result2Modify;
+        return str2Modify;
     }
 
     QRegExp reg = regExp();

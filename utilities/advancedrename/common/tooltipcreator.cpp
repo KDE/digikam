@@ -33,10 +33,10 @@
 
 // Local includes
 
-#include "themeengine.h"
-#include "parser.h"
-#include "option.h"
 #include "modifier.h"
+#include "option.h"
+#include "parser.h"
+#include "themeengine.h"
 
 using namespace Digikam;
 

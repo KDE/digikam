@@ -124,29 +124,27 @@ void Parser::registerModifier(Modifier* modifier)
     d->modifiers.append(modifier);
 }
 
-ParseResults Parser::results(ParseSettings& settings, bool modify)
+ParseResults Parser::results(ParseSettings& settings)
 {
-    ParseResults  results;
-    parseOperation(settings, results, modify);
-    return results;
+    parseOperation(settings);
+    return settings.results;
 }
 
 QString Parser::parse(ParseSettings& settings)
 {
-    ParseResults results;
-    return parseOperation(settings, results);
+    return parseOperation(settings);
 }
 
-QString Parser::parseOperation(ParseSettings& settings, ParseResults& results, bool modify)
+QString Parser::parseOperation(ParseSettings& settings)
 {
-    const QString parseString = settings.parseString;
-
     QFileInfo fi(settings.fileUrl.toLocalFile());
 
-    if (!parseStringIsValid(parseString))
+    if (!parseStringIsValid(settings.parseString))
     {
         return fi.fileName();
     }
+
+    ParseResults results;
 
     settings.startIndex   = d->globalSettings.startIndex;
     settings.currentIndex = d->counter++;
@@ -158,11 +156,12 @@ QString Parser::parseOperation(ParseSettings& settings, ParseResults& results, b
     }
 
     QString newName;
-    if (modify)
+    if (settings.applyModifiers)
     {
-        applyModifiers(parseString, results);
-        newName = results.replaceTokens(parseString);
+        applyModifiers(settings.parseString, results);
+        newName = results.replaceTokens(settings.parseString);
     }
+    settings.results = results;
 
     if (newName.isEmpty())
     {
@@ -193,10 +192,12 @@ bool Parser::tokenAtPosition(TokenType type, ParseSettings& settings, int pos, i
     switch (type)
     {
         case OptionToken:
-            r = results(settings, false);
+            settings.applyModifiers = false;
+            r = results(settings);
             break;
         case OptionModifiersToken:
-            r = results(settings, true);
+            settings.applyModifiers = true;
+            r = results(settings);
             break;
         default:
             break;
@@ -221,12 +222,17 @@ void Parser::applyModifiers(const QString& parseString, ParseResults& results)
     }
 
     ParseSettings settings;
-    settings.results             = results;
-    ParseResults modifiedResults = results;
-    ParseResults modifiers;
-    QMap<ParseResults::ResultsKey, Modifier*> modifierCallbackMap;
+    settings.results = results;
 
-    // fill modifiers ParseResults with all possible modifier tokens
+    // appliedModifiers holds all the modified parse results
+    ParseResults appliedModifiers = results;
+
+    // modifierResults holds all the modifiers found in the parse string
+    ParseResults modifierResults;
+
+    // modifierMap maps the actual modifier objects to the entries in the modifierResults structure
+    QMap<ParseResults::ResultsKey, Modifier*> modifierMap;
+
     foreach (Modifier* modifier, d->modifiers)
     {
         QRegExp regExp = modifier->regExp();
@@ -239,15 +245,16 @@ void Parser::applyModifiers(const QString& parseString, ParseResults& results)
                 ParseResults::ResultsKey   k(pos, regExp.matchedLength());
                 ParseResults::ResultsValue v(regExp.cap(0), QString());
 
-                modifiers.addEntry(k, v);
-                modifierCallbackMap.insert(k, modifier);
+                modifierResults.addEntry(k, v);
+                modifierMap.insert(k, modifier);
 
                 pos += regExp.matchedLength();
             }
         }
     }
 
-    // Check for valid modifiers (they must appear directly after a token) and apply the modification to the token result.
+    // Check for valid modifiers (they must appear directly after an option) and apply the modification to the option
+    // parse result.
     // We need to create a second ParseResults object with modified keys, otherwise the final parsing step will not
     // remove the modifier tokens from the result.
 
@@ -257,23 +264,21 @@ void Parser::applyModifiers(const QString& parseString, ParseResults& results)
         int diff = 0;
         for (int pos = off; pos < parseString.count();)
         {
-            if (modifiers.hasKeyAtPosition(pos))
+            if (modifierResults.hasKeyAtPosition(pos))
             {
-                ParseResults::ResultsKey mkey = modifiers.keyAtPosition(pos);
-                Modifier* mod                 = modifierCallbackMap[mkey];
-                QString modToken              = modifiers.token(mkey);
+                ParseResults::ResultsKey mkey = modifierResults.keyAtPosition(pos);
+                Modifier* mod                 = modifierMap[mkey];
+                QString modToken              = modifierResults.token(mkey);
 
                 QString token                 = results.token(key);
-                QString result                = results.result(key);
+                QString str2Modify            = results.result(key);
 
                 QString modResult;
                 if (mod)
                 {
-                    settings.parseString   = modToken;
-                    settings.result2Modify = result;
-                    settings.results.setCurrentKey(key);
-
-                    modResult = mod->modify(settings);
+                    settings.parseString       = modToken;
+                    settings.currentResultsKey = key;
+                    modResult = mod->modify(settings, str2Modify);
                 }
 
                 // update result
@@ -286,9 +291,9 @@ void Parser::applyModifiers(const QString& parseString, ParseResults& results)
                 kModifier.second += diff;
                 ParseResults::ResultsValue vModifier(modToken, modResult);
 
-                modifiedResults.deleteEntry(kModifier);
+                appliedModifiers.deleteEntry(kModifier);
                 kModifier.second += modToken.count();
-                modifiedResults.addEntry(kModifier, vModifier);
+                appliedModifiers.addEntry(kModifier, vModifier);
 
                 // set position to the next possible token
                 pos  += mkey.second;
@@ -300,7 +305,7 @@ void Parser::applyModifiers(const QString& parseString, ParseResults& results)
             }
         }
     }
-    results = modifiedResults;
+    results = appliedModifiers;
 }
 
 }  // namespace Digikam

@@ -26,8 +26,8 @@
 
 // Qt includes
 
-#include <QPixmap>
 #include <QList>
+#include <QPixmap>
 #include <QString>
 
 // Local includes
@@ -48,11 +48,11 @@ public:
     Modifier(const QString& name, const QString& description, const QPixmap& icon = QPixmap());
     virtual ~Modifier() {};
 
-    QString modify(const ParseSettings& settings);
+    QString modify(const ParseSettings& settings, const QString& str2Modify);
 
 protected:
 
-    virtual QString modifyOperation(const ParseSettings& settings) = 0;
+    virtual QString modifyOperation(const ParseSettings& settings, const QString& str2Modify) = 0;
 };
 
 typedef QList<Modifier*> ModifierList;

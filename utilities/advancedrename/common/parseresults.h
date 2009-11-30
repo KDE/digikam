@@ -26,8 +26,8 @@
 
 // Qt includes
 
-#include <QPair>
 #include <QMap>
+#include <QPair>
 #include <QString>
 
 namespace Digikam
@@ -53,9 +53,6 @@ public:
     QList<ResultsValue> values() const;
 
     bool       hasKey(const ResultsKey& key);
-
-    bool       setCurrentKey(const ResultsKey& key);
-    ResultsKey currentKey() const;
 
     QString    result(const ResultsKey& key);
     QString    token(const ResultsKey& key);
@@ -83,7 +80,6 @@ private:
     bool       keyIsValid(const ResultsKey& key);
 
     ResultsMap  m_results;
-    ResultsKey  m_currentKey;
 };
 
 } // namespace Digikam

@@ -74,18 +74,18 @@ public:
 
 public:
 
-    KUrl         fileUrl;
-    QString      cameraName;
-    QDateTime    dateTime;
+    KUrl                     fileUrl;
+    QString                  cameraName;
+    QDateTime                dateTime;
 
-    QString      parseString;
-    QString      result2Modify;
-    ParseResults results;
+    QString                  parseString;
+    ParseResults             results;
+    ParseResults::ResultsKey currentResultsKey;
 
-    int          startIndex;
-    int          currentIndex;
-    bool         useOriginalFileExtension;
-    bool         applyModifiers;
+    int                      startIndex;
+    int                      currentIndex;
+    bool                     useOriginalFileExtension;
+    bool                     applyModifiers;
 
 private:
 

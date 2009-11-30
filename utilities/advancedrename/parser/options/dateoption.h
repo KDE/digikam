@@ -26,14 +26,14 @@
 
 // Qt includes
 
+#include <QDialog>
 #include <QObject>
 #include <QString>
-#include <QDialog>
 
 // Local includes
 
-#include "parseobjectdialog.h"
 #include "option.h"
+#include "parseobjectdialog.h"
 
 namespace Ui
 {

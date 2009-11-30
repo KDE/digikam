@@ -55,7 +55,7 @@ class DefaultValueModifier : public Modifier
 public:
 
     DefaultValueModifier();
-    virtual QString modifyOperation(const ParseSettings& settings);
+    virtual QString modifyOperation(const ParseSettings& settings, const QString& str2Modify);
 
 private Q_SLOTS:
 

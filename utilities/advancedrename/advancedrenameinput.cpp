@@ -27,8 +27,8 @@
 
 #include <QFontMetrics>
 #include <QLayout>
-#include <QTimer>
 #include <QScrollBar>
+#include <QTimer>
 
 // KDE includes
 

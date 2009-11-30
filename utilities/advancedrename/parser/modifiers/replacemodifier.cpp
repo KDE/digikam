@@ -121,7 +121,7 @@ void ReplaceModifier::slotTokenTriggered(const QString& token)
     emit signalTokenTriggered(tmp);
 }
 
-QString ReplaceModifier::modifyOperation(const ParseSettings& settings)
+QString ReplaceModifier::modifyOperation(const ParseSettings& settings, const QString& str2Modify)
 {
     QRegExp reg = regExp();
     int pos     = 0;
@@ -130,7 +130,7 @@ QString ReplaceModifier::modifyOperation(const ParseSettings& settings)
     {
         QString original    = reg.cap(2);
         QString replacement = reg.cap(3);
-        QString _result     = settings.result2Modify;
+        QString _result     = str2Modify;
 
         Qt::CaseSensitivity caseType = (!reg.cap(1).isEmpty() && reg.cap(1).count() == 1)
                                        ? Qt::CaseInsensitive

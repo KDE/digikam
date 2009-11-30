@@ -53,6 +53,9 @@ namespace Digikam
 DefaultRenameParser::DefaultRenameParser()
                    : Parser()
 {
+    /*
+     * RENAMING OPTIONS
+     */
     registerOption(new FilePropertiesOption());
     registerOption(new DirectoryNameOption());
     registerOption(new CameraNameOption());
@@ -65,6 +68,9 @@ DefaultRenameParser::DefaultRenameParser()
 
     // --------------------------------------------------------
 
+    /*
+     * MODIFIERS
+     */
     registerModifier(new LowerCaseModifier());
     registerModifier(new UpperCaseModifier());
     registerModifier(new FirstLetterEachWordUpperCaseModifier());

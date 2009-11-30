@@ -40,9 +40,10 @@ UpperCaseModifier::UpperCaseModifier()
     setRegExp(reg);
 }
 
-QString UpperCaseModifier::modifyOperation(const ParseSettings& settings)
+QString UpperCaseModifier::modifyOperation(const ParseSettings& settings, const QString& str2Modify)
 {
-    return settings.result2Modify.toUpper();
+    Q_UNUSED(settings);
+    return str2Modify.toUpper();
 }
 
 } // namespace Digikam
