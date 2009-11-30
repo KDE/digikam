@@ -297,6 +297,45 @@ void AdvancedRenameWidgetTest::testUppercaseModifier()
     QCOMPARE(parsed, result);
 }
 
+void AdvancedRenameWidgetTest::testUniqueModifier()
+{
+    DefaultRenameParser parser;
+
+    ParseSettings settings;
+    settings.fileUrl     = QString("myfile001.jpg");
+    settings.cameraName  = QString("Nikon D50");
+    settings.parseString = QString("[file]{unique}_T[date:hhmmss]{unique}_[cam]{unique}");
+
+    QStringList validResults;
+    validResults << "myfile001_T100012_Nikon D50.jpg";
+    validResults << "myfile001_1_T100012_1_Nikon D50_1.jpg";
+    validResults << "myfile001_2_T214536_Nikon D50_2.jpg";
+    validResults << "myfile001_3_T214536_1_Nikon D50_3.jpg";
+    validResults << "myfile001_4_T214536_2_Nikon D50_4.jpg";
+
+    QTime t1;
+    t1.setHMS(10, 00, 12);
+
+    QTime t2;
+    t2.setHMS(21, 45, 36);
+
+    QDateTime date = QDateTime::currentDateTime();
+    date.setTime(t1);
+    settings.dateTime = date;
+
+    QStringList results;
+    results << parser.parse(settings);
+    results << parser.parse(settings);
+    date.setTime(t2);
+    settings.dateTime = date;
+    results << parser.parse(settings);
+    results << parser.parse(settings);
+    results << parser.parse(settings);
+
+    QCOMPARE(results, validResults);
+
+}
+
 void AdvancedRenameWidgetTest::testRangeModifier_data()
 {
     QTest::addColumn<QString>("parseString");
