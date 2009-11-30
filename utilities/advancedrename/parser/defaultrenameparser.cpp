@@ -30,12 +30,22 @@
 
 // Local includes
 
+
 #include "cameranameoption.h"
 #include "dateoption.h"
 #include "directorynameoption.h"
 #include "filepropertiesoption.h"
 #include "metadataoption.h"
 #include "sequencenumberoption.h"
+
+#include "defaultvaluemodifier.h"
+#include "firstletterofeachworduppercasemodifier.h"
+#include "lowercasemodifier.h"
+#include "rangemodifier.h"
+#include "replacemodifier.h"
+#include "trimmedmodifier.h"
+#include "uniquemodifier.h"
+#include "uppercasemodifier.h"
 
 namespace Digikam
 {
@@ -52,6 +62,17 @@ DefaultRenameParser::DefaultRenameParser()
 #if KEXIV2_VERSION >= 0x010000
     registerOption(new MetadataOption());
 #endif
+
+    // --------------------------------------------------------
+
+    registerModifier(new LowerCaseModifier());
+    registerModifier(new UpperCaseModifier());
+    registerModifier(new FirstLetterEachWordUpperCaseModifier());
+    registerModifier(new TrimmedModifier());
+    registerModifier(new UniqueModifier());
+    registerModifier(new DefaultValueModifier());
+    registerModifier(new ReplaceModifier());
+    registerModifier(new RangeModifier());
 }
 
 }  // namespace Digikam

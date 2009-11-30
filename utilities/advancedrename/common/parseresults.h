@@ -52,6 +52,11 @@ public:
     QList<ResultsKey>   keys()   const;
     QList<ResultsValue> values() const;
 
+    bool       hasKey(const ResultsKey& key);
+
+    bool       setCurrentKey(const ResultsKey& key);
+    ResultsKey currentKey() const;
+
     QString    result(const ResultsKey& key);
     QString    token(const ResultsKey& key);
 
@@ -77,9 +82,8 @@ private:
     ResultsKey createInvalidKey();
     bool       keyIsValid(const ResultsKey& key);
 
-public:
-
     ResultsMap  m_results;
+    ResultsKey  m_currentKey;
 };
 
 } // namespace Digikam

@@ -48,11 +48,11 @@ public:
     Modifier(const QString& name, const QString& description, const QPixmap& icon = QPixmap());
     virtual ~Modifier() {};
 
-    virtual QString modify(const QString& parseString, const QString& result);
+    QString modify(const ParseSettings& settings);
 
 protected:
 
-    virtual QString modifyOperation(const QString& parseString, const QString& result) = 0;
+    virtual QString modifyOperation(const ParseSettings& settings) = 0;
 };
 
 typedef QList<Modifier*> ModifierList;

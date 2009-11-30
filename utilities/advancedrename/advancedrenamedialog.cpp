@@ -239,7 +239,7 @@ void AdvancedRenameDialog::slotReturnPressed()
 void AdvancedRenameDialog::slotParseStringChanged(const QString& parseString)
 {
     d->newNamesList.clear();
-    d->advancedRenameWidget->parser()->init();
+    d->advancedRenameWidget->parser()->reset();
 
     QTreeWidgetItemIterator it(d->listView);
     while (*it)
@@ -255,8 +255,6 @@ void AdvancedRenameDialog::slotParseStringChanged(const QString& parseString)
         }
         ++it;
     }
-
-    d->advancedRenameWidget->parser()->reset();
 
     bool enableBtn = !parseString.isEmpty() && checkNewNames();
     enableButton(Ok, enableBtn);

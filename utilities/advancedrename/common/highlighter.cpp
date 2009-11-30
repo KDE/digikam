@@ -124,17 +124,13 @@ void Highlighter::setupHighlightingGrammar(Parser* parser)
 
     modifierFormat.setForeground((Qt::GlobalColor)ModifierColor);
 
-    if (!parser->options().isEmpty())
+    foreach (Modifier* modifier, parser->modifiers())
     {
-        Option* option = parser->options().first();
-        foreach (Modifier* modifier, option->modifiers())
-        {
-            QRegExp r    = modifier->regExp();
-            rule.type    = ModifierPattern;
-            rule.pattern = r;
-            rule.format  = modifierFormat;
-            highlightingRules.append(rule);
-        }
+        QRegExp r    = modifier->regExp();
+        rule.type    = ModifierPattern;
+        rule.pattern = r;
+        rule.format  = modifierFormat;
+        highlightingRules.append(rule);
     }
 
     // --------------------------------------------------------

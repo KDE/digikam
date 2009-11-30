@@ -61,33 +61,34 @@ public:
     Parser();
     virtual ~Parser();
 
-    void          init(const ParseSettings& settings = ParseSettings());
+    void          init(const ParseSettings& settings);
     void          reset();
 
-    QString       parse(const QString& parseString, ParseSettings& settings);
+    QString       parse(ParseSettings& settings);
 
     OptionsList   options()   const;
     ModifierList  modifiers() const;
 
-    bool          tokenAtPosition(TokenType type, const QString& parseString, int pos);
-    bool          tokenAtPosition(TokenType type, const QString& parseString, int pos, int& start, int& length);
+    bool          tokenAtPosition(TokenType type, ParseSettings& settings, int pos);
+    bool          tokenAtPosition(TokenType type, ParseSettings& settings, int pos, int& start, int& length);
 
     /**
      * check if the given parse string is valid
      * @param str the parse string
      * @return true if valid / can be parsed
      */
-    static bool stringIsValid(const QString& str);
+    static bool parseStringIsValid(const QString& str);
 
 protected:
 
     void registerOption(Option* option);
+    void registerModifier(Modifier* modifier);
 
 private:
 
-    ParseResults results(const QString& parseString, bool modify = true);
-    QString      parseOperation(const QString& parseString, ParseSettings& settings, ParseResults& results,
-                                bool modify = true);
+    ParseResults results(ParseSettings& settings, bool modify = true);
+    QString      parseOperation(ParseSettings& settings, ParseResults& results, bool modify = true);
+    void         applyModifiers(const QString& parseString, ParseResults& results);
 
 private:
 

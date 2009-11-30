@@ -33,9 +33,13 @@ Modifier::Modifier(const QString& name, const QString& description, const QPixma
     setDescription(description);
 }
 
-QString Modifier::modify(const QString& parseString, const QString& result)
+QString Modifier::modify(const ParseSettings& settings)
 {
-    return modifyOperation(parseString, result);
+    if (settings.parseString.isEmpty())
+    {
+        return QString();
+    }
+    return modifyOperation(settings);
 }
 
 } // namespace Digikam

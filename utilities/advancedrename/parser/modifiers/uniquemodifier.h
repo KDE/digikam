@@ -32,6 +32,7 @@
 // Local includes
 
 #include "modifier.h"
+#include "parseresults.h"
 
 class KLineEdit;
 
@@ -45,12 +46,13 @@ class UniqueModifier : public Modifier
 public:
 
     UniqueModifier();
-    virtual QString modifyOperation(const QString& parseString, const QString& result);
+    virtual QString modifyOperation(const ParseSettings& settings);
     virtual void    reset();
 
 private:
 
-    QStringList cache;
+//    QStringList cache;
+    QMap<ParseResults::ResultsKey, QStringList> cache;
 };
 
 } // namespace Digikam

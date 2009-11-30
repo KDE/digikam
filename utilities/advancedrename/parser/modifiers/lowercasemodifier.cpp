@@ -40,11 +40,9 @@ LowerCaseModifier::LowerCaseModifier()
     setRegExp(reg);
 }
 
-QString LowerCaseModifier::modifyOperation(const QString& parseString, const QString& result)
+QString LowerCaseModifier::modifyOperation(const ParseSettings& settings)
 {
-    Q_UNUSED(parseString)
-
-    return result.toLower();
+    return settings.result2Modify.toLower();
 }
 
 } // namespace Digikam

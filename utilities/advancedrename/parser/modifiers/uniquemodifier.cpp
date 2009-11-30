@@ -28,6 +28,7 @@
 
 #include <kiconloader.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 namespace Digikam
 {
@@ -44,21 +45,22 @@ UniqueModifier::UniqueModifier()
     setRegExp(reg);
 }
 
-QString UniqueModifier::modifyOperation(const QString& parseString, const QString& result)
+QString UniqueModifier::modifyOperation(const ParseSettings& settings)
 {
-    Q_UNUSED(parseString)
+    ParseResults::ResultsKey key = settings.results.currentKey();
+    ParseResults results         = settings.results;
 
-    cache << result;
+    cache[key] << settings.result2Modify;
 
-    if (cache.count(result) > 1)
+    if (cache[key].count(settings.result2Modify) > 1)
     {
-        QString tmp = result;
-        int index   = cache.count(result) - 1;
+        QString tmp = settings.result2Modify;
+        int index   = cache[key].count(settings.result2Modify) - 1;
         tmp        += QString("_%1").arg(QString::number(index));
         return tmp;
     }
 
-    return result;
+    return settings.result2Modify;
 }
 
 void UniqueModifier::reset()

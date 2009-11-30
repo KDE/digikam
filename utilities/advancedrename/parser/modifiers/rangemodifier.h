@@ -63,7 +63,7 @@ class RangeModifier : public Modifier
 public:
 
     RangeModifier();
-    virtual QString modifyOperation(const QString& parseString, const QString& result);
+    virtual QString modifyOperation(const ParseSettings& settings);
 
 private Q_SLOTS:
 

@@ -42,11 +42,9 @@ TrimmedModifier::TrimmedModifier()
     setRegExp(reg);
 }
 
-QString TrimmedModifier::modifyOperation(const QString& parseString, const QString& result)
+QString TrimmedModifier::modifyOperation(const ParseSettings& settings)
 {
-    Q_UNUSED(parseString)
-
-    return result.simplified();
+    return settings.result2Modify.simplified();
 }
 
 } // namespace Digikam

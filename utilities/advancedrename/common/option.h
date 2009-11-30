@@ -28,7 +28,6 @@
 
 #include "parseobject.h"
 #include "parseresults.h"
-#include "modifier.h"
 
 namespace Digikam
 {
@@ -44,26 +43,11 @@ public:
     Option(const QString& name, const QString& description, const QPixmap& icon = QPixmap());
     virtual ~Option();
 
-    ModifierList modifiers() const;
-    ParseResults results(bool modify = true);
-
-public Q_SLOTS:
-
-    virtual void parse(const QString& parseString, ParseSettings& settings, bool modify = true);
+    ParseResults parse(ParseSettings& settings);
 
 protected:
 
     virtual void parseOperation(const QString& parseString, ParseSettings& settings, ParseResults& results) = 0;
-
-    /**
-     * register a modifier to the parser class
-     * @param modifier the modifier to add to the parser
-     */
-    void registerModifier(Modifier* modifier);
-
-private:
-
-    ParseResults applyModifiers(const QString& parseString, ParseResults& results);
 
 private:
 

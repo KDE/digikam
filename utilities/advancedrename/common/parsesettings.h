@@ -33,6 +33,7 @@
 // Local includes
 
 #include "imageinfo.h"
+#include "parseresults.h"
 
 namespace Digikam
 {
@@ -73,14 +74,18 @@ public:
 
 public:
 
-    KUrl      fileUrl;
-    QString   cameraName;
-    QString   parseString;
-    QDateTime dateTime;
-    int       startIndex;
-    int       currentIndex;
-    bool      useOriginalFileExtension;
-    bool      applyModifiers;
+    KUrl         fileUrl;
+    QString      cameraName;
+    QDateTime    dateTime;
+
+    QString      parseString;
+    QString      result2Modify;
+    ParseResults results;
+
+    int          startIndex;
+    int          currentIndex;
+    bool         useOriginalFileExtension;
+    bool         applyModifiers;
 
 private:
 

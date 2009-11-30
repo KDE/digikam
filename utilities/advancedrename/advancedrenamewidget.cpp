@@ -151,10 +151,10 @@ QString AdvancedRenameWidget::parse(ParseSettings& settings) const
         return QString();
     }
 
-    QString parseString = d->renameInput->text();
+    settings.parseString = d->renameInput->text();
 
     QString parsed;
-    parsed = d->parser->parse(parseString, settings);
+    parsed = d->parser->parse(settings);
 
     return parsed;
 }

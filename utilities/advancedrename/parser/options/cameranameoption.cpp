@@ -54,7 +54,7 @@ void CameraNameOption::parseOperation(const QString& parseString, ParseSettings&
     QString tmp;
     PARSE_LOOP_START(parseString, reg)
     {
-        tmp = Parser::stringIsValid(settings.cameraName) ? settings.cameraName : QString();
+        tmp = Parser::parseStringIsValid(settings.cameraName) ? settings.cameraName : QString();
     }
     PARSE_LOOP_END(parseString, reg, tmp, results)
 }

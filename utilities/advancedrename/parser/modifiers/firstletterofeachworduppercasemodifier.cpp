@@ -41,11 +41,9 @@ FirstLetterEachWordUpperCaseModifier::FirstLetterEachWordUpperCaseModifier()
     setRegExp(reg);
 }
 
-QString FirstLetterEachWordUpperCaseModifier::modifyOperation(const QString& parseString, const QString& result)
+QString FirstLetterEachWordUpperCaseModifier::modifyOperation(const ParseSettings& settings)
 {
-    Q_UNUSED(parseString)
-
-    QString tmp = result.toLower();
+    QString tmp = settings.result2Modify.toLower();
 
     if (tmp[0].isLetter())
     {
