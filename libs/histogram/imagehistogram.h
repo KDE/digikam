@@ -68,7 +68,7 @@ public:
     double getPixels();
     double getStdDev(int channel, int start, int end);
     double getValue(int channel, int bin);
-    double getMaximum(int channel);
+    double getMaximum(int channel, int start, int end);
 
     int    getHistogramSegments(void);
     int    getMaxSegmentIndex(void);

@@ -35,6 +35,10 @@
 #include "kdebug.h"
 #include "klocale.h"
 
+#define HISTOGRAM_CALC_CUTOFF_MIN 0.1
+#define HISTOGRAM_CALC_CUTOFF_MAX 0.9
+#define HISTOGRAM_CALC_CUTOFF_HEIGHT 0.8
+
 namespace Digikam
 {
 
@@ -64,32 +68,59 @@ public:
 
     double calculateMax()
     {
+        int segments = histogram->getHistogramSegments();
+        int startSeg = HISTOGRAM_CALC_CUTOFF_MIN * (segments-1);
+        int endSeg = HISTOGRAM_CALC_CUTOFF_MAX * (segments-1);
         double max = 0.0;
-        switch (channelType)
-        {
-            case GreenChannel:
-            case BlueChannel:
-            case RedChannel:
-            case AlphaChannel:
-            case LuminosityChannel:
-                max = histogram->getMaximum(channelType);
-                break;
-            case ColorChannels:
-                max = qMax(qMax(histogram->getMaximum(RedChannel),
-                                histogram->getMaximum(GreenChannel)),
-                                histogram->getMaximum(BlueChannel));
-                break;
-            default:
-                kError() << "Untreated channel type " << channelType << ". Using luminosity as default.";
-                max = histogram->getMaximum(LuminosityChannel);
-                break;
-        }
 
         switch (scale)
         {
             case LinScaleHistogram:
+                switch (channelType)
+                {
+                    case GreenChannel:
+                    case BlueChannel:
+                    case RedChannel:
+                    case AlphaChannel:
+                    case LuminosityChannel:
+                        max = qMin(histogram->getMaximum(channelType, startSeg, endSeg) / HISTOGRAM_CALC_CUTOFF_HEIGHT,
+                                   histogram->getMaximum(channelType, 0, segments - 1));
+                        break;
+                    case ColorChannels:
+                        max = qMin(qMax(qMax(histogram->getMaximum(RedChannel, startSeg, endSeg),
+                                             histogram->getMaximum(GreenChannel, startSeg, endSeg)),
+                                             histogram->getMaximum(BlueChannel, startSeg, endSeg)) / HISTOGRAM_CALC_CUTOFF_HEIGHT,
+                                   qMax(qMax(histogram->getMaximum(RedChannel, 0, segments - 1),
+                                             histogram->getMaximum(GreenChannel, 0, segments - 1)),
+                                             histogram->getMaximum(BlueChannel, 0, segments - 1)));
+                        break;
+                    default:
+                        kError() << "Untreated channel type " << channelType << ". Using luminosity as default.";
+                        max = qMin(histogram->getMaximum(LuminosityChannel, startSeg, endSeg) / HISTOGRAM_CALC_CUTOFF_HEIGHT,
+                                   histogram->getMaximum(LuminosityChannel, 0, segments - 1));
+                        break;
+                }
                 break;
             case LogScaleHistogram:
+                switch (channelType)
+                {
+                    case GreenChannel:
+                    case BlueChannel:
+                    case RedChannel:
+                    case AlphaChannel:
+                    case LuminosityChannel:
+                        max = histogram->getMaximum(channelType, 0, segments - 1);
+                        break;
+                    case ColorChannels:
+                        max = qMax(qMax(histogram->getMaximum(RedChannel, 0, segments - 1),
+                                        histogram->getMaximum(GreenChannel, 0, segments - 1)),
+                                        histogram->getMaximum(BlueChannel, 0, segments - 1));
+                        break;
+                    default:
+                        kError() << "Untreated channel type " << channelType << ". Using luminosity as default.";
+                        max = histogram->getMaximum(LuminosityChannel, 0, segments - 1);
+                        break;
+                }
                 if (max > 0.0)
                 {
                     max = log(max);
@@ -105,7 +136,6 @@ public:
         }
 
         return max;
-
     }
 
     void calculateSegmentMaxSingleColor(double& maxValue, const int& startSegment, const int& endSegment)
@@ -208,7 +238,7 @@ public:
         p1.save();
         int wWidth  = bufferPixmap.width();
         int wHeight = bufferPixmap.height();
-        double max  = calculateMax();
+        double max  = 1.05 * calculateMax();
 
         QPainterPath curvePath;
         curvePath.moveTo(0, wHeight);
@@ -259,7 +289,7 @@ public:
         p2.begin(&bb);
         p2.initFrom(widgetToInitFrom);
 
-        double max  = calculateMax();
+        double max  = 1.05 * calculateMax();
 
         QPainterPath curveRed, curveGreen, curveBlue;
         curveRed.moveTo(0, wHeight);
