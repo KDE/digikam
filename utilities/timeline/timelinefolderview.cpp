@@ -34,6 +34,10 @@ namespace Digikam
 TimeLineFolderViewNew::TimeLineFolderViewNew(QWidget *parent, SearchModel *searchModel) :
                 SearchTreeView(parent, searchModel)
 {
+
+    setSortingEnabled(true);
+    setSelectAlbumOnClick(true);
+
 }
 
 TimeLineFolderViewNew::~TimeLineFolderViewNew()
