@@ -12,7 +12,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 004 ==> 208227 : ImagePosition does not always reflect contents of GPS Exif-Tags.
 005 ==> 209199 : digiKam crash during fingerprint scan.
 006 ==> 214227 : digiKam 0.10.0 not listing photos in chronological order.
-007 ==> 
+007 ==> 144155 : Wrong(?) histogram y-axis when blown-out over/underexposure.
+008 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-rc - Release date: 2009-11-29
