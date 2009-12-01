@@ -575,6 +575,14 @@ void HistogramWidget::paintEvent(QPaintEvent*)
     d->histogramPainter->setScale(static_cast<HistogramScale>(m_scaleType));
     d->histogramPainter->setSelection(d->xmin, d->xmax);
     d->histogramPainter->setHighlightSelection(d->selectMode);
+    if (d->guideVisible == true)
+    {
+        d->histogramPainter->enableHistogramGuideByColor(d->colorGuide);
+    }
+    else
+    {
+        d->histogramPainter->disableHistogramGuide();
+    }
 
     // A QPixmap is used to enable the double buffering.
     QPixmap bufferPixmap(size());
