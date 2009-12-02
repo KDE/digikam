@@ -14,8 +14,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 006 ==> 214227 : digiKam 0.10.0 not listing photos in chronological order.
 007 ==> 144155 : Wrong(?) histogram y-axis when blown-out over/underexposure.
 008 ==> 196917 : Problem with "sticky" tooltips in album view.
-009 ==> 216998 : histogram color guide is not shown [patch].
-010 ==> 
+009 ==> 216998 : Histogram color guide is not shown [patch].
+010 ==> 216967 : Marble plugin won't compile and subsequent crashes.
+011 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-rc - Release date: 2009-11-29
