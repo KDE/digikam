@@ -113,16 +113,28 @@ public:
     QAction* registerMenu(QMenu* parent);
 
     /**
+     * Returns true if a token menu is used.
+     */
+    bool useTokenMenu() const;
+
+    /**
      * If multiple tokens have been assigned to a parseobject, a menu will be created.
      * If you want to display a menu for every defined token, set this method to 'true' and
      * re-implement the @see slotTokenTriggered method.
      * @param value boolean parameter to set token menu usage
      */
-    bool useTokenMenu() const;
     void setUseTokenMenu(bool value);
 
+    /**
+     * Checks the validity of the parse object
+     * @return true if valid
+     */
     bool isValid() const;
 
+    /**
+     * Resets the parser to its initial state. This method also resets the internal counter that is used
+     * for sequence numbers.
+     */
     virtual void reset();
 
 Q_SIGNALS:
