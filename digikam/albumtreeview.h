@@ -117,7 +117,7 @@ protected:
     virtual void middleButtonPressed(Album *a);
     virtual QPixmap pixmapForDrag(const QStyleOptionViewItem& option, QList<QModelIndex> indexes);
 
-    void setAlbumFilterModel(AlbumFilterModel *filterModel);
+    virtual void setAlbumFilterModel(AlbumFilterModel *filterModel);
 
     AbstractSpecificAlbumModel *m_albumModel;
     AlbumFilterModel           *m_albumFilterModel;
@@ -146,6 +146,10 @@ class AbstractCountingAlbumTreeView : public AbstractAlbumTreeView
 public:
 
     explicit AbstractCountingAlbumTreeView(AbstractCountingAlbumModel *model, QWidget *parent = 0);
+
+protected:
+
+    virtual void setAlbumFilterModel(AlbumFilterModel *filterModel);
 
 private Q_SLOTS:
 

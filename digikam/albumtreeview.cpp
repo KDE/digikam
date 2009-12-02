@@ -524,13 +524,18 @@ AbstractCountingAlbumTreeView::AbstractCountingAlbumTreeView(AbstractCountingAlb
     connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
              this, SLOT(slotSetShowCount()));
 
-    connect(m_albumFilterModel, SIGNAL(rowsInserted(const QModelIndex &, int, int)),
-             this, SLOT(slotRowsInserted(const QModelIndex &, int, int)));
-
     slotSetShowCount();
 
     // Initialize expanded/collapsed showCount state
     updateShowCountState(QModelIndex(), true);
+}
+
+void AbstractCountingAlbumTreeView::setAlbumFilterModel(AlbumFilterModel *filterModel)
+{
+    AbstractAlbumTreeView::setAlbumFilterModel(filterModel);
+
+    connect(m_albumFilterModel, SIGNAL(rowsInserted(const QModelIndex &, int, int)),
+             this, SLOT(slotRowsInserted(const QModelIndex &, int, int)));
 }
 
 void AbstractCountingAlbumTreeView::updateShowCountState(const QModelIndex& index, bool recurse)
