@@ -57,8 +57,8 @@ void Highlighter::highlightBlock(const QString& text)
             int length = expression.matchedLength();
             setFormat(index, length, rule.format);
 
-            // highlight parameters in options
-            if ((rule.type == OptionPattern)
+            // highlight parameters in options and modifiers
+            if ((rule.type == OptionPattern || rule.type == ModifierPattern)
                 && expression.numCaptures() > 0 && !expression.cap(1).isEmpty())
             {
                 QString fullmatched  = expression.cap(0);
