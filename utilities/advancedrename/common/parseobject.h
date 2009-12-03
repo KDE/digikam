@@ -75,6 +75,7 @@ class ParseObject : public QObject
 
 public:
 
+    ParseObject(const QString& name);
     ParseObject(const QString& name, const QPixmap& icon);
     virtual ~ParseObject();
 

@@ -56,6 +56,12 @@ public:
     TokenList    tokens;
 };
 
+ParseObject::ParseObject(const QString& name)
+           : QObject(0), d(new ParseObjectPriv)
+{
+    setObjectName(name);
+}
+
 ParseObject::ParseObject(const QString& name, const QPixmap& icon)
            : QObject(0), d(new ParseObjectPriv)
 {
