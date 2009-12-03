@@ -44,13 +44,9 @@ class ParseObjectPriv
 public:
 
     ParseObjectPriv() :
-        buttonRegistered(false),
-        menuRegistered(false),
         useTokenMenu(false)
     {}
 
-    bool         buttonRegistered;
-    bool         menuRegistered;
     bool         useTokenMenu;
 
     QString      description;
@@ -149,7 +145,6 @@ QPushButton* ParseObject::registerButton(QWidget* parent)
     }
     button->setParent(parent);
 
-    d->buttonRegistered = button ? true : false;
     return button;
 }
 
@@ -180,7 +175,6 @@ QAction* ParseObject::registerMenu(QMenu* parent)
     {
         action->setText(objectName());
         action->setIcon(d->icon);
-        d->menuRegistered = true;
     }
 
     return action;
