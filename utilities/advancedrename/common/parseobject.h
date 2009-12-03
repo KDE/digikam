@@ -94,20 +94,18 @@ public:
 
     /**
      * Register a button in the parent object. By calling this method, a new button for the parser
-     * object will be created and all necessary connections will be setup. A button can only be registered once.
-     * @see registerMenu
-     *
-     * @param parent the parent object the button will be registered for
+     * object will be created and all necessary connections will be setup.
+
+     * @param  parent the parent object the button will be registered for
      * @return a pointer to the newly created button
      */
     QPushButton* registerButton(QWidget* parent);
 
     /**
      * Register a menu action in the parent object. By calling this method, a new action for the parser
-     * object will be created and all necessary connections will be setup. An action can only be registered once.
-     * @see registerButton
+     * object will be created and all necessary connections will be setup.
      *
-     * @param parent the parent object the action will be registered for
+     * @param  parent the parent object the action will be registered for
      * @return a pointer to the newly created action
      */
     QAction* registerMenu(QMenu* parent);
