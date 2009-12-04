@@ -77,8 +77,8 @@ public Q_SLOTS:
     void slotResetCheckState();
 
 protected:
-    virtual void addCustomContextMenuActions(ContextMenuHelper &cmh, TAlbum *tag);
-    virtual void handleCustomContextMenuAction(QAction *action, TAlbum *tag);
+    virtual void addCustomContextMenuActions(ContextMenuHelper &cmh, Album *album);
+    virtual void handleCustomContextMenuAction(QAction *action, Album *album);
 
 private Q_SLOTS:
 

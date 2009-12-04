@@ -46,8 +46,8 @@ Q_SIGNALS:
     void matchingConditionChanged(const ImageFilterSettings::MatchingCondition &condition);
 
 protected:
-    virtual void addCustomContextMenuActions(ContextMenuHelper &cmh, TAlbum *tag);
-    virtual void handleCustomContextMenuAction(QAction *action, TAlbum *tag);
+    virtual void addCustomContextMenuActions(ContextMenuHelper &cmh, Album *album);
+    virtual void handleCustomContextMenuAction(QAction *action, Album *album);
 
 private:
     TagFilterViewPriv *d;

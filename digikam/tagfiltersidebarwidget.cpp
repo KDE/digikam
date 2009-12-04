@@ -106,9 +106,9 @@ ImageFilterSettings::MatchingCondition TagFilterView::getMatchingCondition() con
     return d->matchingCond;
 }
 
-void TagFilterView::addCustomContextMenuActions(ContextMenuHelper &cmh, TAlbum *tag)
+void TagFilterView::addCustomContextMenuActions(ContextMenuHelper &cmh, Album *album)
 {
-    TagCheckView::addCustomContextMenuActions(cmh, tag);
+    TagCheckView::addCustomContextMenuActions(cmh, album);
 
     // matching condition
 
@@ -126,9 +126,9 @@ void TagFilterView::addCustomContextMenuActions(ContextMenuHelper &cmh, TAlbum *
 
 }
 
-void TagFilterView::handleCustomContextMenuAction(QAction *action, TAlbum *tag)
+void TagFilterView::handleCustomContextMenuAction(QAction *action, Album *album)
 {
-    TagCheckView::handleCustomContextMenuAction(action, tag);
+    TagCheckView::handleCustomContextMenuAction(action, album);
 
     if (!action)
     {

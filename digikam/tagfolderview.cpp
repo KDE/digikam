@@ -51,8 +51,7 @@ public:
         model(0),
         tagModificationHelper(0),
         resetIconAction(0),
-        findDuplAction(0),
-        selectOnContextMenu(true)
+        findDuplAction(0)
     {
 
     }
@@ -63,7 +62,6 @@ public:
     QAction *resetIconAction;
     QAction *findDuplAction;
 
-    bool selectOnContextMenu;
 };
 
 TagFolderViewNew::TagFolderViewNew(QWidget *parent, TagModel *model,
@@ -79,6 +77,7 @@ TagFolderViewNew::TagFolderViewNew(QWidget *parent, TagModel *model,
 
     setSortingEnabled(true);
     setSelectAlbumOnClick(true);
+    setEnableContextMenu(true);
 
 }
 
@@ -87,64 +86,34 @@ TagFolderViewNew::~TagFolderViewNew()
     delete d;
 }
 
-void TagFolderViewNew::setSelectOnContextMenu(bool select)
+QString TagFolderViewNew::contextMenuTitle() const
 {
-    d->selectOnContextMenu = select;
+    return i18n("My Tags");
 }
 
-void TagFolderViewNew::contextMenuEvent(QContextMenuEvent *event)
+void TagFolderViewNew::addCustomContextMenuActions(ContextMenuHelper &cmh, Album *album)
 {
 
-    // TODO update, copied from album folder view...
-    TAlbum *tag = dynamic_cast<TAlbum*> (albumFilterModel()->albumForIndex(
-                    indexAt(event->pos())));
+    TAlbum *tag = dynamic_cast<TAlbum*> (album);
     if (!tag)
     {
-        kDebug() << "No tag album clicked, displaying no context menu";
         return;
     }
 
-    // we need to switch to the selected album here also on right click.
-    // Otherwise most of the actions in the context menu will not be enabled
-    // because they are provided by the global action collection. That in turn
-    // is controlled by the selected album
-    if(d->selectOnContextMenu)
-    {
-        slotSelectAlbum(tag);
-    }
-
-    // --------------------------------------------------------
-
-    KMenu popmenu(this);
-    popmenu.addTitle(SmallIcon("digikam"), i18n("My Tags"));
-    ContextMenuHelper cmhelper(&popmenu);
-
-    cmhelper.addAction("tag_new");
-    cmhelper.addCreateTagFromAddressbookMenu();
-    addCustomContextMenuActions(cmhelper, tag);
-    popmenu.addSeparator();
-    // --------------------------------------------------------
-    cmhelper.addAction("tag_delete");
-    popmenu.addSeparator();
-    // --------------------------------------------------------
-    cmhelper.addAction("tag_edit");
-
-    // special action handling --------------------------------
-
-    connect(&cmhelper, SIGNAL(signalAddNewTagFromABCMenu(const QString&)),
-            this, SLOT(slotTagNewFromABCMenu(const QString&)));
-
-    QAction* choice = cmhelper.exec(QCursor::pos());
-    handleCustomContextMenuAction(choice, tag);
-
-}
-
-void TagFolderViewNew::addCustomContextMenuActions(ContextMenuHelper &cmh, TAlbum *tag)
-{
+    cmh.addAction("tag_new");
+    cmh.addCreateTagFromAddressbookMenu();
     cmh.addAction(d->resetIconAction);
     cmh.addAction(d->findDuplAction);
+    cmh.addSeparator();
+    cmh.addAction("tag_delete");
+    cmh.addSeparator();
+    cmh.addAction("tag_edit");
+
+    connect(&cmh, SIGNAL(signalAddNewTagFromABCMenu(const QString&)),
+            this, SLOT(slotTagNewFromABCMenu(const QString&)));
 
     d->resetIconAction->setEnabled(!tag->isRoot());
+
 }
 
 void TagFolderViewNew::slotTagNewFromABCMenu(const QString &personName)
@@ -160,8 +129,14 @@ void TagFolderViewNew::slotTagNewFromABCMenu(const QString &personName)
 
 }
 
-void TagFolderViewNew::handleCustomContextMenuAction(QAction *action, TAlbum *tag)
+void TagFolderViewNew::handleCustomContextMenuAction(QAction *action, Album *album)
 {
+
+    TAlbum *tag = dynamic_cast<TAlbum*> (album);
+    if (!tag)
+    {
+        return;
+    }
 
     if (!tag || !action)
     {

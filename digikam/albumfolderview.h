@@ -65,14 +65,13 @@ Q_SIGNALS:
      */
     void signalFindDuplicatesInAlbum(Album *album);
 
-private:
+protected:
 
-    /**
-     * Creates the context menu.
-     *
-     * @param event event that requested the menu
-     */
-    void contextMenuEvent(QContextMenuEvent *event);
+    virtual QString contextMenuTitle() const;
+    virtual void addCustomContextMenuActions(ContextMenuHelper &cmh, Album *album);
+    virtual void handleCustomContextMenuAction(QAction *action, Album *album);
+
+private:
 
     /**
      * Re-implemented to handle custom tool tips.

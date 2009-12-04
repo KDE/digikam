@@ -58,6 +58,10 @@ public:
     AlbumModificationHelper *albumModificationHelper;
     bool enableToolTips;
 
+    QAction *renameAction;
+    QAction *resetIconAction;
+    QAction *findDuplAction;
+
 };
 
 AlbumFolderViewNew::AlbumFolderViewNew(QWidget *parent, AlbumModel *model,
@@ -67,8 +71,13 @@ AlbumFolderViewNew::AlbumFolderViewNew(QWidget *parent, AlbumModel *model,
 
     d->albumModificationHelper = albumModificationHelper;
 
+    d->renameAction    = new QAction(SmallIcon("edit-rename"), i18n("Rename..."), this);
+    d->resetIconAction = new QAction(SmallIcon("view-refresh"), i18n("Reset Album Icon"), this);
+    d->findDuplAction  = new QAction(SmallIcon("tools-wizard"), i18n("Find Duplicates..."), this);
+
     setSortingEnabled(true);
     setSelectAlbumOnClick(true);
+    setEnableContextMenu(true);
 
     // connections
     connect(this, SIGNAL(clicked(const QModelIndex&)),
@@ -86,86 +95,67 @@ void AlbumFolderViewNew::setEnableToolTips(bool enable)
     d->enableToolTips = enable;
 }
 
-void AlbumFolderViewNew::contextMenuEvent(QContextMenuEvent *event)
+QString AlbumFolderViewNew::contextMenuTitle() const
+{
+    return i18n("My Albums");
+}
+
+void AlbumFolderViewNew::addCustomContextMenuActions(ContextMenuHelper &cmh, Album *a)
 {
 
-    PAlbum *album = dynamic_cast<PAlbum*> (albumFilterModel()->albumForIndex(
-                    indexAt(event->pos())));
-    if (!album)
+    PAlbum *album = dynamic_cast<PAlbum*> (a);
+    if (!a)
     {
-        kDebug() << "No album clicked, displaying no context menu";
         return;
     }
 
-    // we need to switch to the selected album here also on right click.
-    // Otherwise most of the actions in the context menu will not be enabled
-    // because they are provided by the global action collection. That in turn
-    // is controlled by the selected album
-    slotSelectAlbum(album);
+    d->renameAction->setEnabled(!album->isAlbumRoot());
 
-    // ensure that we are not working on the album root that doesn't allow
-    // anything else than collections
-    kDebug() << "context menu requested at album " << album->title();
-    if (album->isRoot())
+    // --------------------------------------------------------
+
+    cmh.addAction("album_new");
+    cmh.addAction(d->renameAction);
+    cmh.addAction(d->resetIconAction);
+    cmh.addAction("album_openinkonqui");
+    cmh.addSeparator();
+    // --------------------------------------------------------
+    cmh.addAction(d->findDuplAction);
+    cmh.addImportMenu();
+    cmh.addExportMenu();
+    cmh.addBatchMenu();
+    cmh.addAlbumActions();
+    cmh.addSeparator();
+    // --------------------------------------------------------
+    cmh.addAction("album_delete");
+    cmh.addSeparator();
+    // --------------------------------------------------------
+    cmh.addAction("album_propsEdit");
+
+}
+
+void AlbumFolderViewNew::handleCustomContextMenuAction(QAction *action, Album *a)
+{
+
+    PAlbum *album = dynamic_cast<PAlbum*> (a);
+
+    if (!action || !album)
     {
-        kDebug() << "returning because there is no album or album is root";
         return;
     }
 
-    // temporary actions  -------------------------------------
-
-    QAction *renameAction    = new QAction(SmallIcon("edit-rename"), i18n("Rename..."), this);
-    QAction *resetIconAction = new QAction(SmallIcon("view-refresh"), i18n("Reset Album Icon"), this);
-    QAction *findDuplAction  = new QAction(SmallIcon("tools-wizard"), i18n("Find Duplicates..."), this);
-
-    if (album->isAlbumRoot())
+    if (action == d->resetIconAction)
     {
-        renameAction->setEnabled(false);
+        QString err;
+        AlbumManager::instance()->updatePAlbumIcon(album, 0, err);
     }
-
-    // --------------------------------------------------------
-
-    KMenu popmenu(this);
-    popmenu.addTitle(SmallIcon("digikam"), i18n("My Albums"));
-    ContextMenuHelper cmhelper(&popmenu);
-
-    cmhelper.addAction("album_new");
-    cmhelper.addAction(renameAction);
-    cmhelper.addAction(resetIconAction);
-    cmhelper.addAction("album_openinkonqui");
-    popmenu.addSeparator();
-    // --------------------------------------------------------
-    cmhelper.addAction(findDuplAction);
-    cmhelper.addImportMenu();
-    cmhelper.addExportMenu();
-    cmhelper.addBatchMenu();
-    cmhelper.addAlbumActions();
-    popmenu.addSeparator();
-    // --------------------------------------------------------
-    cmhelper.addAction("album_delete");
-    popmenu.addSeparator();
-    // --------------------------------------------------------
-    cmhelper.addAction("album_propsEdit");
-
-    // special action handling --------------------------------
-
-    QAction* choice = cmhelper.exec(QCursor::pos());
-    if (choice)
+    else if (action == d->renameAction)
     {
-        if (choice == resetIconAction)
-        {
-            QString err;
-            AlbumManager::instance()->updatePAlbumIcon(album, 0, err);
-        }
-        else if (choice == renameAction)
-        {
-            d->albumModificationHelper->slotAlbumRename(album);
-        }
-        else if (choice == findDuplAction)
-        {
-            kDebug() << "emitting signal for finding duplicates";
-            emit signalFindDuplicatesInAlbum(album);
-        }
+        d->albumModificationHelper->slotAlbumRename(album);
+    }
+    else if (action == d->findDuplAction)
+    {
+        kDebug() << "emitting signal for finding duplicates";
+        emit signalFindDuplicatesInAlbum(album);
     }
 
 }

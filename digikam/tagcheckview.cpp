@@ -192,9 +192,15 @@ void TagCheckView::setToggleAutoTags(TagCheckView::ToggleAutoTags toggle)
     d->toggleAutoTags = toggle;
 }
 
-void TagCheckView::addCustomContextMenuActions(ContextMenuHelper &cmh, TAlbum *tag)
+void TagCheckView::addCustomContextMenuActions(ContextMenuHelper &cmh, Album *album)
 {
-    TagFolderViewNew::addCustomContextMenuActions(cmh, tag);
+    TagFolderViewNew::addCustomContextMenuActions(cmh, album);
+
+    TAlbum *tag = dynamic_cast<TAlbum*> (album);
+    if (!tag)
+    {
+        return;
+    }
 
     cmh.addSeparator();
 
@@ -222,9 +228,11 @@ void TagCheckView::addCustomContextMenuActions(ContextMenuHelper &cmh, TAlbum *t
 
 }
 
-void TagCheckView::handleCustomContextMenuAction(QAction *action, TAlbum *tag)
+void TagCheckView::handleCustomContextMenuAction(QAction *action, Album *album)
 {
-    TagFolderViewNew::handleCustomContextMenuAction(action, tag);
+    TagFolderViewNew::handleCustomContextMenuAction(action, album);
+
+    TAlbum *tag = dynamic_cast<TAlbum*> (album);
 
     if (!action || !tag)
     {

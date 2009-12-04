@@ -40,6 +40,8 @@
 namespace Digikam
 {
 
+class ContextMenuHelper;
+
 class AbstractAlbumTreeViewPriv;
 
 class AbstractAlbumTreeView : public QTreeView
@@ -67,6 +69,25 @@ public:
      *                      item as the current album in the album manager
      */
     void setSelectAlbumOnClick(bool selectOnClick);
+
+    /**
+     * Determines the global decision to show a popup menu or not. More detailed
+     * decision at which position a menu can be shown and where not can be made
+     * by implementing showContextMenuAt.
+     *
+     * @param enable if true, a context menu can be shown
+     */
+    void setEnableContextMenu(bool enable);
+
+    /**
+     * Sets whether to select the album under the mouse cursor on a context menu
+     * request (so that the album is shown using the album manager) or not
+     *
+     * Defaults to true.
+     *
+     * @param select true if a context menu request shall select the album
+     */
+    void setSelectOnContextMenu(bool select);
 
     /** This is a combination of indexAt() checked with visualRect().
      *  p must be in the viewport currently. Decoration will not be included.
@@ -108,6 +129,57 @@ protected Q_SLOTS:
 
 protected:
 
+    // context menu handling
+
+    /**
+     * Hook method to implement that determines if a context menu shall be
+     * displayed for the given event at the position coded in the event.
+     *
+     * @param event context menu event to react on
+     * @param albumForEvent the album at the mouse position or null if there is
+     *                      no album at that position
+     * @return true if a context menu shall be displayed at the event
+     *         coordinates, else false
+     */
+    virtual bool showContextMenuAt(QContextMenuEvent *event, Album *albumForEvent);
+
+    /**
+     * Hook method that can be implemented to return a special icon used for the
+     * context menu.
+     *
+     * @return the icon for the context menu
+     */
+    virtual QPixmap contextMenuIcon() const;
+
+    /**
+     * Hook method to implement that returns the title for the context menu.
+     *
+     * @return title for the context menu
+     */
+    virtual QString contextMenuTitle() const;
+
+    /**
+     * Hook method to add custom actions to the generated context menu.
+     *
+     * @param cmh helper object to create the context menu
+     * @param album tag on which the context menu will be created. May be null if
+     *              it is requested on no tag entry
+     */
+    virtual void addCustomContextMenuActions(ContextMenuHelper &cmh, Album *album);
+
+    /**
+     * Hook method to handle the custom context menu actions that were added
+     * with addCustomContextMenuActions.
+     *
+     * @param action the action that was chosen by the user, may be null if none
+     *               of the custom actions were selected
+     * @param album the tag on which the context menu was requested. May be null
+     *              if there was no
+     */
+    virtual void handleCustomContextMenuAction(QAction *action, Album *album);
+
+    // other stuff
+
     bool checkExpandedState(const QModelIndex& index);
     void mousePressEvent(QMouseEvent *e);
 
@@ -132,6 +204,13 @@ private:
     void saveState(const QModelIndex &index, QStringList &selection,
                     QStringList &expansion);
     void restoreState(const QModelIndex &index);
+
+    /**
+     * Creates the context menu.
+     *
+     * @param event event that requested the menu
+     */
+    void contextMenuEvent(QContextMenuEvent *event);
 
 private Q_SLOTS:
 

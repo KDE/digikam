@@ -31,6 +31,8 @@
 // KDE includes
 
 #include <kdebug.h>
+#include <kiconloader.h>
+#include <kmenu.h>
 
 // Local includes
 
@@ -39,6 +41,7 @@
 #include "albummodeldragdrophandler.h"
 #include "albumsettings.h"
 #include "albumthumbnailloader.h"
+#include "contextmenuhelper.h"
 #include "tagdragdrop.h"
 
 namespace Digikam
@@ -84,10 +87,14 @@ public:
     {
         expandOnSingleClick = true;
         selectAlbumOnClick = false;
+        selectOnContextMenu = true;
+        enableContextMenu = false;
     }
 
     bool expandOnSingleClick;
     bool selectAlbumOnClick;
+    bool selectOnContextMenu;
+    bool enableContextMenu;
 
     QMap<int, State> statesByAlbumId;
 
@@ -510,6 +517,79 @@ void AbstractAlbumTreeView::saveState(const QModelIndex &index, QStringList &sel
         const QModelIndex child = model()->index(i, 0, index);
         saveState(child, selection, expansion);
     }
+}
+
+void AbstractAlbumTreeView::setEnableContextMenu(bool enable)
+{
+    d->enableContextMenu = enable;
+}
+
+bool AbstractAlbumTreeView::showContextMenuAt(QContextMenuEvent *event, Album *albumForEvent)
+{
+    Q_UNUSED(event);
+    return albumForEvent;
+}
+
+QPixmap AbstractAlbumTreeView::contextMenuIcon() const
+{
+    return SmallIcon("digikam");
+}
+
+QString AbstractAlbumTreeView::contextMenuTitle() const
+{
+    return i18n("Context menu");
+}
+
+void AbstractAlbumTreeView::contextMenuEvent(QContextMenuEvent *event)
+{
+
+    if (!d->enableContextMenu)
+    {
+        return;
+    }
+
+    Album *album = albumFilterModel()->albumForIndex(
+                    indexAt(event->pos()));
+
+    if (!showContextMenuAt(event, album))
+    {
+        return;
+    }
+
+    // switch to the sekected album if need
+    if(d->selectOnContextMenu && album)
+    {
+        slotSelectAlbum(album);
+    }
+
+    // --------------------------------------------------------
+
+    KMenu popmenu(this);
+    popmenu.addTitle(contextMenuIcon(), contextMenuTitle());
+    ContextMenuHelper cmhelper(&popmenu);
+
+    addCustomContextMenuActions(cmhelper, album);
+
+    QAction* choice = cmhelper.exec(QCursor::pos());
+    handleCustomContextMenuAction(choice, album);
+
+}
+
+void AbstractAlbumTreeView::setSelectOnContextMenu(bool select)
+{
+    d->selectOnContextMenu = select;
+}
+
+void AbstractAlbumTreeView::addCustomContextMenuActions(ContextMenuHelper &cmh, Album *album)
+{
+    Q_UNUSED(cmh);
+    Q_UNUSED(album);
+}
+
+void AbstractAlbumTreeView::handleCustomContextMenuAction(QAction *action, Album *album)
+{
+    Q_UNUSED(action);
+    Q_UNUSED(album);
 }
 
 // --------------------------------------- //

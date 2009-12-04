@@ -46,20 +46,12 @@ public:
                      TagModificationHelper *tagModificationHelper);
     virtual ~TagFolderViewNew();
 
-    /**
-     * Sets whether to select the album under the mouse cursor on a context menu
-     * request (so that the album is shown using the album manager) or not
-     *
-     * Defaults to true.
-     *
-     * @param select true if a context menu request shall select the album
-     */
-    void setSelectOnContextMenu(bool select);
-
 Q_SIGNALS:
     void signalFindDuplicatesInAlbum(Album*);
 
 protected:
+
+    QString contextMenuTitle() const;
 
     /**
      * Hook method to add custom actions to the generated context menu.
@@ -70,10 +62,10 @@ protected:
      * the handleCustomContextMenuAction in your derived class.
      *
      * @param cmh helper object to create the context menu
-     * @param tag tag on which the context menu will be created. May be null if
-     *            it is requested on no tag entry
+     * @param album tag on which the context menu will be created. May be null if
+     *              it is requested on no tag entry
      */
-    virtual void addCustomContextMenuActions(ContextMenuHelper &cmh, TAlbum *tag);
+    virtual void addCustomContextMenuActions(ContextMenuHelper &cmh, Album *album);
 
     /**
      * Hook method to handle the custom context menu actions that were added
@@ -81,23 +73,14 @@ protected:
      *
      * @param action the action that was chosen by the user, may be null if none
      *               of the custom actions were selected
-     * @param tag the tag on which the context menur was requested. May be null
-     *            of there was no
+     * @param album the tag on which the context menu was requested. May be null
+     *              if there was no
      */
-    virtual void handleCustomContextMenuAction(QAction *action, TAlbum *tag);
+    virtual void handleCustomContextMenuAction(QAction *action, Album *album);
 
 private Q_SLOTS:
 
     void slotTagNewFromABCMenu(const QString &personName);
-
-private:
-
-    /**
-     * Creates the context menu.
-     *
-     * @param event event that requested the menu
-     */
-    void contextMenuEvent(QContextMenuEvent *event);
 
 private:
     TagFolderViewNewPriv *d;
