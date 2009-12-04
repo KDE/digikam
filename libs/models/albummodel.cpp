@@ -113,6 +113,11 @@ void SearchModel::setReplaceNames(QHash<QString, QString> replaceNames)
     m_replaceNames = replaceNames;
 }
 
+void SearchModel::addReplaceName(const QString& technicalName, const QString& userVisibleName)
+{
+    m_replaceNames.insert(technicalName, userVisibleName);
+}
+
 void SearchModel::setPixmap(const QPixmap& pix)
 {
     m_pixmap = pix;
@@ -120,7 +125,7 @@ void SearchModel::setPixmap(const QPixmap& pix)
 
 QVariant SearchModel::albumData(Album *a, int role) const
 {
-    if (role == Qt::DisplayRole)
+    if (role == Qt::DisplayRole || role == AlbumTitleRole)
     {
         QString name = a->title();
         return m_replaceNames.value(name, name);
