@@ -132,6 +132,42 @@ protected:
 
 };
 
+/**
+ * Filter model for searches that can filter by search type
+ */
+class SearchFilterModel : public AlbumFilterModel
+{
+public:
+
+    SearchFilterModel(QObject *parent = 0);
+    void setSourceSearchModel(SearchModel *source);
+    SearchModel *sourceSearchModel() const;
+
+    /** Set the DatabaseSearch::Type. */
+    void setFilterSearchType(DatabaseSearch::Type);
+    void listAllSearches();
+    void listNormalSearches();
+    void listTimelineSearches();
+    void listHaarSearches();
+    void listMapSearches();
+    void listDuplicatesSearches();
+
+    /** Sets if temporary search albums shall be listed */
+    void setListTemporarySearches(bool list);
+
+    virtual bool isFiltering() const;
+
+protected:
+
+    virtual bool rawMatches(Album *album) const;
+    void setSourceAlbumModel(AbstractAlbumModel *source);
+
+    void setTypeFilter(int type);
+    
+    int                     m_searchType;
+    bool                    m_listTemporary;
+};
+
 } // namespace Digikam
 
 #endif // ALBUMFILTERMODEL_H

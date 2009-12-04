@@ -195,6 +195,11 @@ AbstractCheckableAlbumModel *CheckableAlbumFilterModel::sourceAlbumModel() const
     return dynamic_cast<AbstractCheckableAlbumModel*> (sourceModel());
 }
 
+void CheckableAlbumFilterModel::setSourceAlbumModel(AbstractAlbumModel *source)
+{
+    AlbumFilterModel::setSourceAlbumModel(source);
+}
+
 void CheckableAlbumFilterModel::setFilterChecked(bool filter)
 {
     m_filterChecked = filter;
@@ -239,6 +244,107 @@ bool CheckableAlbumFilterModel::rawMatches(Album *album) const
 
     return accepted && stateAccepted;
 
+}
+
+
+// -----------------------------------------------------------------------------
+
+SearchFilterModel::SearchFilterModel(QObject *parent)
+            : AlbumFilterModel(parent), m_searchType(-1)
+{
+}
+
+void SearchFilterModel::setSourceSearchModel(SearchModel *source)
+{
+    setSourceModel(source);
+}
+
+SearchModel *SearchFilterModel::sourceSearchModel() const
+{
+    return dynamic_cast<SearchModel*> (sourceModel());
+}
+
+void SearchFilterModel::setFilterSearchType(DatabaseSearch::Type type)
+{
+    setTypeFilter(type);
+}
+
+void SearchFilterModel::listNormalSearches()
+{
+    setTypeFilter(-1);
+}
+
+void SearchFilterModel::listAllSearches()
+{
+    setTypeFilter(-2);
+}
+
+void SearchFilterModel::listTimelineSearches()
+{
+    setTypeFilter(DatabaseSearch::TimeLineSearch);
+}
+
+void SearchFilterModel::listHaarSearches()
+{
+    setTypeFilter(DatabaseSearch::HaarSearch);
+}
+
+void SearchFilterModel::listMapSearches()
+{
+    setTypeFilter(DatabaseSearch::MapSearch);
+}
+
+void SearchFilterModel::listDuplicatesSearches()
+{
+    setTypeFilter(DatabaseSearch::DuplicatesSearch);
+}
+
+void SearchFilterModel::setTypeFilter(int type)
+{
+    m_searchType = type;
+    invalidateFilter();
+    emit filterChanged();
+}
+
+void SearchFilterModel::setListTemporarySearches(bool list)
+{
+    m_listTemporary = list;
+    invalidateFilter();
+    emit filterChanged();
+}
+
+bool SearchFilterModel::isFiltering() const
+{
+    return m_searchType != -2 || !m_listTemporary;
+}
+
+bool SearchFilterModel::rawMatches(Album *album) const
+{
+    SAlbum *salbum = static_cast<SAlbum*>(album);
+
+    if (m_searchType == -1)
+    {
+        if (!salbum->isNormalSearch())
+            return false;
+    }
+    else if (m_searchType == -2)
+    {
+    }
+    else
+    {
+        if (salbum->searchType() != (DatabaseSearch::Type)m_searchType)
+            return false;
+    }
+
+    if (!m_listTemporary && salbum->isTemporarySearch())
+        return false;
+
+    return true;
+}
+
+void SearchFilterModel::setSourceAlbumModel(AbstractAlbumModel *source)
+{
+    AlbumFilterModel::setSourceAlbumModel(source);
 }
 
 } // namespace Digikam
