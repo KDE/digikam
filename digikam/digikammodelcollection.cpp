@@ -26,7 +26,7 @@ DigikamModelCollection::DigikamModelCollection() :
 {
     d->albumModel = new AlbumModel(AlbumModel::IncludeRootAlbum);
 
-    d->tagModel = new TagModel(AbstractAlbumModel::IgnoreRootAlbum);
+    d->tagModel = new TagModel(AbstractAlbumModel::IncludeRootAlbum);
 
     d->tagFilterModel = new TagModel(AbstractAlbumModel::IgnoreRootAlbum);
     d->tagFilterModel->setCheckable(true);

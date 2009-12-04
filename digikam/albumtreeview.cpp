@@ -686,7 +686,8 @@ TagTreeView::TagTreeView(TagModel *model, TagModificationHelper *tagModification
              m_albumModel, SLOT(setCountMap(const QMap<int, int>&)));
 
     expand(m_albumFilterModel->rootAlbumIndex());
-    setRootIsDecorated(false);
+    if (m_albumModel->rootAlbumBehavior() == AbstractAlbumModel::IncludeRootAlbum)
+        setRootIsDecorated(false);
 
     setDragEnabled(true);
     setAcceptDrops(true);
