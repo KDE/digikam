@@ -108,21 +108,6 @@ SAlbum *SearchModel::albumForIndex(const QModelIndex& index) const
     return static_cast<SAlbum*>(AbstractSpecificAlbumModel::albumForIndex(index));
 }
 
-void SearchModel::setSearchType(DatabaseSearch::Type type)
-{
-    m_searchType = type;
-}
-
-void SearchModel::listNormalSearches()
-{
-    m_searchType = -1;
-}
-
-void SearchModel::listAllSearches()
-{
-    m_searchType = -2;
-}
-
 void SearchModel::setReplaceNames(QHash<QString, QString> replaceNames)
 {
     m_replaceNames = replaceNames;
@@ -144,25 +129,6 @@ QVariant SearchModel::albumData(Album *a, int role) const
         return m_pixmap;
 
     return AbstractSpecificAlbumModel::albumData(a, role);
-}
-
-bool SearchModel::filterAlbum(Album *album) const
-{
-    if (album && AbstractSpecificAlbumModel::filterAlbum(album))
-    {
-        if (album->isRoot())
-            return true;
-
-        SAlbum *salbum = static_cast<SAlbum*>(album);
-
-        if (m_searchType == -1)
-            return salbum->isNormalSearch();
-        else if (m_searchType == -2)
-            return true;
-        else
-            return salbum->searchType() == (DatabaseSearch::Type)m_searchType;
-    }
-    return false;
 }
 
 // ------------------------------------------------------------------

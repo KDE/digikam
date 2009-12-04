@@ -75,11 +75,6 @@ public:
 
     SAlbum *albumForIndex(const QModelIndex& index) const;
 
-    /** Set the DatabaseSearch::Type. */
-    void setSearchType(DatabaseSearch::Type type);
-    void listNormalSearches();
-    void listAllSearches();
-
     /** Set a hash of internal names (key) that shall be replaced by a user-visible string (value) */
     void setReplaceNames(QHash<QString, QString> replaceNames);
 
@@ -89,11 +84,9 @@ public:
 protected:
 
     virtual QVariant albumData(Album *a, int role) const;
-    virtual bool filterAlbum(Album *album) const;
 
 protected:
 
-    int                     m_searchType;
     QPixmap                 m_pixmap;
     QHash<QString, QString> m_replaceNames;
 };
