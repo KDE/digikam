@@ -48,7 +48,10 @@ class AbstractAlbumTreeView : public QTreeView
 
 public:
 
-    explicit AbstractAlbumTreeView(AbstractSpecificAlbumModel *model, QWidget *parent = 0);
+    /// Constructs an album model. If you supply 0 for filterModel, call setAlbumFilterModel afterwards.
+    explicit AbstractAlbumTreeView(AbstractSpecificAlbumModel *model,
+                                   AlbumFilterModel *filterModel,
+                                   QWidget *parent = 0);
     ~AbstractAlbumTreeView();
 
     AbstractSpecificAlbumModel *albumModel() const;
@@ -117,7 +120,7 @@ protected:
     virtual void middleButtonPressed(Album *a);
     virtual QPixmap pixmapForDrag(const QStyleOptionViewItem& option, QList<QModelIndex> indexes);
 
-    virtual void setAlbumFilterModel(AlbumFilterModel *filterModel);
+    void setAlbumFilterModel(AlbumFilterModel *filterModel);
 
     AbstractSpecificAlbumModel *m_albumModel;
     AlbumFilterModel           *m_albumFilterModel;
@@ -145,11 +148,14 @@ class AbstractCountingAlbumTreeView : public AbstractAlbumTreeView
 
 public:
 
+    explicit AbstractCountingAlbumTreeView(AbstractCountingAlbumModel *model,
+                                           AlbumFilterModel *filterModel,
+                                           QWidget *parent = 0);
     explicit AbstractCountingAlbumTreeView(AbstractCountingAlbumModel *model, QWidget *parent = 0);
 
 protected:
 
-    virtual void setAlbumFilterModel(AlbumFilterModel *filterModel);
+    void setAlbumFilterModel(AlbumFilterModel *filterModel);
 
 private Q_SLOTS:
 
@@ -158,6 +164,10 @@ private Q_SLOTS:
     void slotSetShowCount();
     void slotRowsInserted(const QModelIndex& parent, int start, int end);
     void updateShowCountState(const QModelIndex& index, bool recurse);
+
+private:
+
+    void setupConnections();
 };
 
 class AbstractCheckableAlbumTreeView : public AbstractCountingAlbumTreeView
@@ -167,6 +177,9 @@ public:
 
     /// Models of these view _can_ be checkable, they need _not_. You need to enable it on the model.
 
+    explicit AbstractCheckableAlbumTreeView(AbstractCheckableAlbumModel *model,
+                                            CheckableAlbumFilterModel *filterModel,
+                                            QWidget *parent = 0);
     explicit AbstractCheckableAlbumTreeView(AbstractCheckableAlbumModel *model, QWidget *parent = 0);
 
     /// Manage check state through the model directly
@@ -216,6 +229,7 @@ public:
 
     SearchTreeView(QWidget *parent, SearchModel *searchModel);
     SearchModel *albumModel() const;
+    SearchFilterModel *albumFilterModel() const;
 };
 
 class DateAlbumTreeView : public AbstractCountingAlbumTreeView
