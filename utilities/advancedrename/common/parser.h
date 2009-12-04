@@ -87,7 +87,6 @@ protected:
 private:
 
     ParseResults results(ParseSettings& settings);
-    QString      parseOperation(ParseSettings& settings);
     void         applyModifiers(const QString& parseString, ParseResults& results);
 
 private:
