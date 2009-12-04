@@ -14,7 +14,7 @@ Parsing:
 
 Syntax Highlighting:
 
-    - Do not parse modifier tokens when they are placed incorrectly.
+    - Do not highlight modifier tokens when they are placed incorrectly.
       Instead mark them with a red background color.
 
     - Be smarter when detecting parameters. Right now we need to make sure that the first matching group
