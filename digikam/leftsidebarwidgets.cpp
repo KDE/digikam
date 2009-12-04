@@ -68,7 +68,7 @@ AlbumFolderViewSideBarWidget::AlbumFolderViewSideBarWidget(QWidget *parent,
     d->albumFolderView = new AlbumFolderViewNew(this, model, d->albumModificationHelper);
     d->searchTextBar   = new SearchTextBar(this, "DigikamViewFolderSearchBar");
     d->searchTextBar->setHighlightOnCompletion(true);
-    d->searchTextBar->setModel(model, AbstractAlbumModel::AlbumIdRole);
+    d->searchTextBar->setModel(model, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
 
     layout->addWidget(d->albumFolderView);
     layout->addWidget(d->searchTextBar);
@@ -167,7 +167,7 @@ TagViewSideBarWidget::TagViewSideBarWidget(QWidget *parent,
     d->tagFolderView = new TagFolderViewNew(this, model, tagModificationHelper);
     d->tagSearchBar  = new SearchTextBar(this, "DigikamViewTagSearchBar");
     d->tagSearchBar->setHighlightOnCompletion(true);
-    d->tagSearchBar->setModel(model, AbstractAlbumModel::AlbumIdRole);
+    d->tagSearchBar->setModel(model, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
 
     layout->addWidget(d->tagFolderView);
     layout->addWidget(d->tagSearchBar);
@@ -468,7 +468,7 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget *parent, SearchModel *searc
 
     d->timeLineFolderView = new TimeLineFolderViewNew(this, searchModel);
     d->searchDateBar      = new SearchTextBar(this, "TimeLineViewSearchDateBar");
-    d->searchDateBar->setModel(searchModel, AbstractAlbumModel::AlbumIdRole);
+    d->searchDateBar->setModel(searchModel, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
 
     vlay->addWidget(panel);
     vlay->addWidget(d->timeLineFolderView);
@@ -872,7 +872,7 @@ SearchSideBarWidget::SearchSideBarWidget(QWidget *parent, SearchModel *searchMod
     d->searchTabHeader  = new SearchTabHeader(this);
     d->searchFolderView = new SearchFolderView(this);
     d->searchSearchBar  = new SearchTextBar(this, "DigikamViewSearchSearchBar");
-    d->searchSearchBar->setModel(searchModel, AbstractAlbumModel::AlbumIdRole);
+    d->searchSearchBar->setModel(searchModel, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
 
     layout->addWidget(d->searchTabHeader);
     layout->addWidget(d->searchFolderView);
@@ -967,7 +967,7 @@ FuzzySearchSideBarWidget::FuzzySearchSideBarWidget(QWidget *parent, SearchModel 
     d->searchModel = searchModel;
 
     d->fuzzySearchView  = new FuzzySearchView(this);
-    d->fuzzySearchView->searchBar()->setModel(searchModel, AbstractAlbumModel::AlbumIdRole);
+    d->fuzzySearchView->searchBar()->setModel(searchModel, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
 
     QVBoxLayout *layout = new QVBoxLayout(this);
 
@@ -1062,7 +1062,7 @@ GPSSearchSideBarWidget::GPSSearchSideBarWidget(QWidget *parent, SearchModel *sea
     d->searchModel = searchModel;
 
     d->gpsSearchView    = new GPSSearchView(this);
-    d->gpsSearchView->searchBar()->setModel(searchModel, AbstractAlbumModel::AlbumIdRole);
+    d->gpsSearchView->searchBar()->setModel(searchModel, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
 
     QVBoxLayout *layout = new QVBoxLayout(this);
 
