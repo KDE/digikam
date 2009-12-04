@@ -56,23 +56,23 @@ QString DirectoryNameOption::parseOperation(const QRegExp& regExp, ParseSettings
     QStringList folders = fi.absolutePath().split('/', QString::SkipEmptyParts);
     int folderCount     = folders.count();
 
-    QString tmp;
+    QString result;
     int matchedLength = regExp.cap(1).length();
 
     if (matchedLength == 0)
     {
-        tmp = folders.last();
+        result = folders.last();
     }
     else if (matchedLength > (folderCount - 1))
     {
-        tmp.clear();
+        result.clear();
     }
     else
     {
-        tmp = folders[folderCount - matchedLength - 1];
+        result = folders[folderCount - matchedLength - 1];
     }
 
-    return tmp;
+    return result;
 }
 
 } // namespace Digikam

@@ -57,14 +57,14 @@ QString UniqueModifier::modifyOperation(const ParseSettings& settings, const QSt
     {
         if (cache[key].count(str2Modify) > 1)
         {
-            QString tmp = str2Modify;
-            int index   = cache[key].count(str2Modify) - 1;
+            QString result = str2Modify;
+            int index      = cache[key].count(str2Modify) - 1;
 
             bool ok     = true;
             int slength = reg.cap(2).toInt(&ok);
             slength     = (slength == 0 || !ok) ? 1 : slength;
-            tmp        += QString("_%1").arg(index, slength, 10, QChar('0'));
-            return tmp;
+            result     += QString("_%1").arg(index, slength, 10, QChar('0'));
+            return result;
         }
     }
 

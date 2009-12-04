@@ -107,7 +107,7 @@ void RangeModifier::slotTokenTriggered(const QString& token)
 {
     Q_UNUSED(token)
 
-    QString tmp;
+    QString result;
 
     QPointer<RangeDialog> dlg = new RangeDialog(this);
     if (dlg->exec() == KDialog::Accepted)
@@ -117,17 +117,17 @@ void RangeModifier::slotTokenTriggered(const QString& token)
 
         if (dlg->toTheEndCheckBox->isChecked())
         {
-            tmp = QString("{%1-}").arg(QString::number(start));
+            result = QString("{%1-}").arg(QString::number(start));
         }
         else
         {
-            tmp = QString("{%1-%2}").arg(QString::number(start))
+            result = QString("{%1-%2}").arg(QString::number(start))
                                     .arg(QString::number(stop));
         }
     }
     delete dlg;
 
-    emit signalTokenTriggered(tmp);
+    emit signalTokenTriggered(result);
 }
 
 QString RangeModifier::modifyOperation(const ParseSettings& settings, const QString& str2Modify)
@@ -201,12 +201,12 @@ QString RangeModifier::modifyOperation(const ParseSettings& settings, const QStr
             stop = str2Modify.count() - 1;
         }
 
-        QString tmp;
+        QString result;
         for (int i = start; i <= stop; ++i)
         {
-            tmp.append(str2Modify.at(i));
+            result.append(str2Modify.at(i));
         }
-        return tmp;
+        return result;
     }
     return QString();
 }

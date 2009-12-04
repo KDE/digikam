@@ -154,20 +154,20 @@ void MetadataOption::slotTokenTriggered(const QString& token)
 
 QString MetadataOption::parseOperation(const QRegExp& regExp, ParseSettings& settings)
 {
-    QString tmp;
+    QString result;
     QString keyword = regExp.cap(2);
-    tmp = parseMetadata(keyword, settings);
+    result = parseMetadata(keyword, settings);
 
-    return tmp;
+    return result;
 }
 
 QString MetadataOption::parseMetadata(const QString& token, ParseSettings& settings)
 {
-    QString tmp;
+    QString result;
     QString keyword = token.toLower();
     if (keyword.isEmpty())
     {
-        return tmp;
+        return result;
     }
 
     DMetadata meta(settings.fileUrl.toLocalFile());
@@ -191,12 +191,12 @@ QString MetadataOption::parseMetadata(const QString& token, ParseSettings& setti
         {
             if (key.toLower().contains(keyword))
             {
-                tmp = dataMap[key];
+                result = dataMap[key];
                 break;
             }
         }
     }
-    return tmp;
+    return result;
 }
 
 } // namespace Digikam

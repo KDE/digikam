@@ -172,16 +172,16 @@ QString DateOptionDialog::formattedDateTime(const QDateTime& date)
     QVariant v;
 
     v = df.formatType((DateFormat::Type)ui->dateFormatPicker->currentIndex());
-    QString tmp;
+    QString result;
     if (v.type() == QVariant::String)
     {
-        tmp = date.toString(v.toString());
+        result = date.toString(v.toString());
     }
     else
     {
-        tmp = date.toString((Qt::DateFormat)v.toInt());
+        result = date.toString((Qt::DateFormat)v.toInt());
     }
-    return tmp;
+    return result;
 }
 
 void DateOptionDialog::slotDateSourceChanged(int index)
@@ -211,8 +211,8 @@ void DateOptionDialog::slotCustomFormatChanged(const QString&)
 
 void DateOptionDialog::updateExampleLabel()
 {
-    QString tmp = QString("example: %1").arg(formattedDateTime(QDateTime::currentDateTime()));
-    ui->exampleLabel->setText(tmp);
+    QString result = QString("example: %1").arg(formattedDateTime(QDateTime::currentDateTime()));
+    ui->exampleLabel->setText(result);
 }
 
 // --------------------------------------------------------
@@ -233,7 +233,7 @@ DateOption::DateOption()
 
 QString DateOption::parseOperation(const QRegExp& regExp, ParseSettings& settings)
 {
-    QString tmp;
+    QString result;
     DateFormat df;
 
     QString token = regExp.cap(1);
@@ -245,21 +245,21 @@ QString DateOption::parseOperation(const QRegExp& regExp, ParseSettings& setting
     QVariant v = df.formatType(token);
     if (v.isNull())
     {
-        tmp = settings.dateTime.toString(token);
+        result = settings.dateTime.toString(token);
     }
     else
     {
         if (v.type() == QVariant::String)
         {
-            tmp = settings.dateTime.toString(v.toString());
+            result = settings.dateTime.toString(v.toString());
         }
         else
         {
-            tmp = settings.dateTime.toString((Qt::DateFormat)v.toInt());
+            result = settings.dateTime.toString((Qt::DateFormat)v.toInt());
         }
     }
 
-    return tmp;
+    return result;
 }
 
 void DateOption::slotTokenTriggered(const QString& token)

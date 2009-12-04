@@ -97,7 +97,7 @@ void ReplaceModifier::slotTokenTriggered(const QString& token)
 {
     Q_UNUSED(token)
 
-    QString tmp;
+    QString result;
 
     QPointer<ReplaceDialog> dlg = new ReplaceDialog(this);
     if (dlg->exec() == KDialog::Accepted)
@@ -108,17 +108,17 @@ void ReplaceModifier::slotTokenTriggered(const QString& token)
         {
             if (dlg->caseSensitive->isChecked())
             {
-                tmp = QString("{r:\"%1\",\"%2\"}").arg(oldStr).arg(newStr);
+                result = QString("{r:\"%1\",\"%2\"}").arg(oldStr).arg(newStr);
             }
             else
             {
-                tmp = QString("{ri:\"%1\",\"%2\"}").arg(oldStr).arg(newStr);
+                result = QString("{ri:\"%1\",\"%2\"}").arg(oldStr).arg(newStr);
             }
         }
     }
     delete dlg;
 
-    emit signalTokenTriggered(tmp);
+    emit signalTokenTriggered(result);
 }
 
 QString ReplaceModifier::modifyOperation(const ParseSettings& settings, const QString& str2Modify)

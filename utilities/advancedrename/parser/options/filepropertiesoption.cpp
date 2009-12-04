@@ -54,22 +54,22 @@ QString FilePropertiesOption::parseOperation(const QRegExp& regExp, ParseSetting
 {
     QFileInfo fi(settings.fileUrl.toLocalFile());
 
-    QString tmp;
+    QString result;
     if (regExp.cap(1) == QString("[file]"))
     {
-        tmp = fi.baseName();
+        result = fi.baseName();
     }
     else if (regExp.cap(1) == QString("[ext]"))
     {
-        tmp = fi.suffix();
+        result = fi.suffix();
     }
     else if (regExp.cap(1) == QString(".[ext]"))
     {
-        tmp = "." + fi.suffix();
+        result = "." + fi.suffix();
         settings.useOriginalFileExtension = false;
     }
 
-    return tmp;
+    return result;
 }
 
 } // namespace Digikam

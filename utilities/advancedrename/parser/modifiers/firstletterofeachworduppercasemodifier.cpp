@@ -45,26 +45,26 @@ QString FirstLetterEachWordUpperCaseModifier::modifyOperation(const ParseSetting
 {
     Q_UNUSED(settings);
 
-    QString tmp = str2Modify.toLower();
+    QString result = str2Modify.toLower();
 
-    if (tmp[0].isLetter())
+    if (result[0].isLetter())
     {
-        tmp[0] = tmp[0].toUpper();
+        result[0] = result[0].toUpper();
     }
 
-    for (int i = 0; i < tmp.length(); ++i)
+    for (int i = 0; i < result.length(); ++i)
     {
-        if ( tmp[i + 1].isLetter()  &&
-            !tmp[i].isLetter()      &&
-             tmp[i] != '\''         &&
-             tmp[i] != '?'          &&
-             tmp[i] != '`'
+        if ( result[i + 1].isLetter()  &&
+            !result[i].isLetter()      &&
+             result[i] != '\''         &&
+             result[i] != '?'          &&
+             result[i] != '`'
         )
         {
-            tmp[i + 1] = tmp[i + 1].toUpper();
+            result[i + 1] = result[i + 1].toUpper();
         }
     }
-    return tmp;
+    return result;
 }
 
 } // namespace Digikam
