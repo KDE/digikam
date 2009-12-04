@@ -118,6 +118,9 @@ public:
     /// Return the index corresponding to the root album. If the policy is IgnoreRootAlbum, this is an invalid index. */
     QModelIndex rootAlbumIndex() const;
 
+    /// Returns the root album behavior set for this model
+    RootAlbumBehavior rootAlbumBehavior() const;
+
     /// Returns the Album::Type of the contained albums
     Album::Type albumType() const;
 
