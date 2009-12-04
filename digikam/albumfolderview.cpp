@@ -49,12 +49,13 @@ class AlbumFolderViewNewPriv
 {
 
 public:
-    AlbumFolderViewNewPriv() : lastContextMenuAlbum(0), enableToolTips(false)
+    AlbumFolderViewNewPriv() :
+        albumModificationHelper(0),
+        enableToolTips(false)
     {
     }
 
     AlbumModificationHelper *albumModificationHelper;
-    PAlbum *lastContextMenuAlbum;
     bool enableToolTips;
 
 };
@@ -78,11 +79,6 @@ AlbumFolderViewNew::AlbumFolderViewNew(QWidget *parent, AlbumModel *model,
 AlbumFolderViewNew::~AlbumFolderViewNew()
 {
     delete d;
-}
-
-PAlbum* AlbumFolderViewNew::lastContextMenuAlbum() const
-{
-    return d->lastContextMenuAlbum;
 }
 
 void AlbumFolderViewNew::setEnableToolTips(bool enable)
@@ -113,11 +109,8 @@ void AlbumFolderViewNew::contextMenuEvent(QContextMenuEvent *event)
     if (album->isRoot())
     {
         kDebug() << "returning because there is no album or album is root";
-        // if collection/date return
-        d->lastContextMenuAlbum = 0;
         return;
     }
-    d->lastContextMenuAlbum = album;
 
     // temporary actions  -------------------------------------
 

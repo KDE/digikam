@@ -52,14 +52,6 @@ public:
     ~AlbumFolderViewNew();
 
     /**
-     * Returns the album on that the last context menu was triggered.
-     *
-     * @return album for which the last context menu was triggered or null if it
-     *         wasn't triggered on a real album.
-     */
-    PAlbum *lastContextMenuAlbum() const;
-
-    /**
      * Sets whether this widget shall display tool tips or not.
      */
     void setEnableToolTips(bool enable);
