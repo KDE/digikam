@@ -52,18 +52,15 @@ public:
         textQueryCompletion = false;
         hasCaseSensitive    = true;
         model               = 0;
+        displayRole         = Qt::DisplayRole;
         uniqueIdRole        = Qt::DisplayRole;
-    }
-
-    inline static QString itemName(const QModelIndex &index)
-    {
-        return index.data(Qt::DisplayRole).value<QString> ();
     }
 
     bool               textQueryCompletion;
     bool               hasCaseSensitive;
     bool               highlightOnCompletion;
 
+    int                displayRole;
     int                uniqueIdRole;
 
     QAbstractItemModel *model;
@@ -134,7 +131,7 @@ void SearchTextBar::setHighlightOnCompletion(bool highlight)
     d->highlightOnCompletion = highlight;
 }
 
-void SearchTextBar::setModel(QAbstractItemModel *model, int uniqueIdRole)
+void SearchTextBar::setModel(QAbstractItemModel *model, int uniqueIdRole, int displayRole)
 {
 
     kDebug() << "Got now model " << model;
@@ -148,6 +145,7 @@ void SearchTextBar::setModel(QAbstractItemModel *model, int uniqueIdRole)
     }
 
     d->model = model;
+    d->displayRole = displayRole;
     d->uniqueIdRole = uniqueIdRole;
 
     // connect to the new model
@@ -237,7 +235,7 @@ void SearchTextBar::slotDataChanged(const QModelIndex &topLeft, const QModelInde
             continue;
 
         int id = index.data(d->uniqueIdRole).toInt();
-        QString itemName = SearchTextBarPriv::itemName(index);
+        QString itemName = index.data(d->displayRole).toString();
         if (d->idToTextMap.contains(id))
         {
             completionObject()->removeItem(d->idToTextMap.value(id));
@@ -278,7 +276,7 @@ void SearchTextBar::sync(QAbstractItemModel *model)
 void SearchTextBar::sync(QAbstractItemModel *model, const QModelIndex &index)
 {
 
-    QString itemName = SearchTextBarPriv::itemName(index);
+    QString itemName = index.data(d->displayRole).toString();
     kDebug() << "sync adding item '" << itemName << "' for index " << index;
     completionObject()->addItem(itemName);
     d->idToTextMap.insert(index.data(d->uniqueIdRole).toInt(), itemName);

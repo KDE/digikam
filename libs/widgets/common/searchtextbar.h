@@ -75,8 +75,9 @@ public:
      *
      * @param model to fill from or null for manual mode
      * @param uniqueIdRole a role for which the model will return a unique integer for each entry
+     * @param displayRole the role to retrieve the text for completion, default is Qt::DisplayRole.
      */
-    void setModel(QAbstractItemModel *model, int uniqueIdRole);
+    void setModel(QAbstractItemModel *model, int uniqueIdRole, int displayRole = Qt::DisplayRole);
 
     void setCaseSensitive(bool b);
     bool hasCaseSensitive() const;
