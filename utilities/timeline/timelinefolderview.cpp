@@ -35,6 +35,8 @@ TimeLineFolderViewNew::TimeLineFolderViewNew(QWidget *parent, SearchModel *searc
                 SearchTreeView(parent, searchModel)
 {
 
+    albumFilterModel()->listTimelineSearches();
+    albumFilterModel()->setListTemporarySearches(false);
     setSortingEnabled(true);
     setSelectAlbumOnClick(true);
 

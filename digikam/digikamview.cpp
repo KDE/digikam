@@ -198,22 +198,22 @@ DigikamView::DigikamView(QWidget *parent, DigikamModelCollection *modelCollectio
 
     // timeline side bar
     d->timelineSideBar = new TimelineSideBarWidget(d->leftSideBar,
-                    d->modelCollection->getTimlineSearchModel());
+                    d->modelCollection->getSearchModel());
     d->leftSideBarWidgets << d->timelineSideBar;
 
     // Search sidebar tab contents.
     d->searchSideBar = new SearchSideBarWidget(d->leftSideBar,
-                    d->modelCollection->getNormalSearchModel());
+                    d->modelCollection->getSearchModel());
     d->leftSideBarWidgets << d->searchSideBar;
 
     // Fuzzy search
     d->fuzzySearchSideBar = new FuzzySearchSideBarWidget(d->leftSideBar,
-                    d->modelCollection->getFuzzySearchModel());
+                    d->modelCollection->getSearchModel());
     d->leftSideBarWidgets << d->fuzzySearchSideBar;
 
 #ifdef HAVE_MARBLEWIDGET
     d->gpsSearchSideBar = new GPSSearchSideBarWidget(d->leftSideBar,
-                    d->modelCollection->getMapSearchModel());
+                    d->modelCollection->getSearchModel());
     d->leftSideBarWidgets << d->gpsSearchSideBar;
 #endif
 

@@ -12,15 +12,13 @@ namespace Digikam
 
 class DigikamModelCollectionPriv
 {
-public:
-    AlbumModel *albumModel;
-    TagModel *tagModel;
-    TagModel *tagFilterModel;
-    SearchModel *timelineSearchModel;
-    SearchModel *normalSearchModel;
-    SearchModel *fuzzySearchModel;
-    SearchModel *mapSearchModel;
 
+public:
+
+    AlbumModel  *albumModel;
+    TagModel    *tagModel;
+    TagModel    *tagFilterModel;
+    SearchModel *searchModel;
 };
 
 DigikamModelCollection::DigikamModelCollection() :
@@ -33,29 +31,15 @@ DigikamModelCollection::DigikamModelCollection() :
     d->tagFilterModel = new TagModel(AbstractAlbumModel::IgnoreRootAlbum);
     d->tagFilterModel->setCheckable(true);
 
-    d->timelineSearchModel = new SearchModel();
-    d->timelineSearchModel->setSearchType(DatabaseSearch::TimeLineSearch);
-
-    d->normalSearchModel = new SearchModel();
-    d->normalSearchModel->listNormalSearches();
-
-    d->fuzzySearchModel = new SearchModel();
-    d->fuzzySearchModel->setSearchType(DatabaseSearch::HaarSearch);
-
-    d->mapSearchModel = new SearchModel();
-    d->mapSearchModel->setSearchType(DatabaseSearch::MapSearch);
-
+    d->searchModel = new SearchModel();
 }
 
 DigikamModelCollection::~DigikamModelCollection()
 {
-    delete d->timelineSearchModel;
     delete d->tagModel;
     delete d->tagFilterModel;
     delete d->albumModel;
-    delete d->normalSearchModel;
-    delete d->fuzzySearchModel;
-    delete d->mapSearchModel;
+    delete d->searchModel;
 
     delete d;
 }
@@ -75,24 +59,9 @@ TagModel *DigikamModelCollection::getTagFilterModel() const
     return d->tagFilterModel;
 }
 
-SearchModel *DigikamModelCollection::getTimlineSearchModel() const
+SearchModel *DigikamModelCollection::getSearchModel() const
 {
-    return d->timelineSearchModel;
-}
-
-SearchModel *DigikamModelCollection::getNormalSearchModel() const
-{
-    return d->normalSearchModel;
-}
-
-SearchModel *DigikamModelCollection::getFuzzySearchModel() const
-{
-    return d->fuzzySearchModel;
-}
-
-SearchModel *DigikamModelCollection::getMapSearchModel() const
-{
-    return d->mapSearchModel;
+    return d->searchModel;
 }
 
 }
