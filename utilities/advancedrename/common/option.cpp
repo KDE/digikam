@@ -69,7 +69,6 @@ ParseResults Option::parse(ParseSettings& settings)
     const QRegExp reg          = regExp();
     const QString& parseString = settings.parseString;
 
-
     int pos = 0;
     while (pos > -1)
     {
