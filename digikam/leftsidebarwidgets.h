@@ -19,6 +19,7 @@
 #include "gpssearchview.h"
 #include "tagmodificationhelper.h"
 #include "albummodificationhelper.h"
+#include "searchmodificationhelper.h"
 
 namespace Digikam
 {
@@ -135,7 +136,8 @@ class TimelineSideBarWidget : public SideBarWidget
 {
     Q_OBJECT
 public:
-    TimelineSideBarWidget(QWidget *parent, SearchModel *searchModel);
+    TimelineSideBarWidget(QWidget *parent, SearchModel *searchModel,
+                          SearchModificationHelper *searchModificationHelper);
     virtual ~TimelineSideBarWidget();
 
     void setActive(bool active);
@@ -145,11 +147,6 @@ public:
     void changeAlbumFromHistory(Album *album);
     QPixmap getIcon();
     QString getCaption();
-
-private:
-    void createNewDateSearchAlbum(const QString& name);
-    bool checkName(QString& name);
-    bool checkAlbum(const QString& name) const;
 
 private Q_SLOTS:
 
@@ -165,7 +162,6 @@ private Q_SLOTS:
     void slotUpdateCurrentDateSearchAlbum();
     void slotAlbumSelected(SAlbum*);
     void slotCheckAboutSelection();
-    void slotRenameAlbum(SAlbum*);
 
 private:
     TimelineSideBarWidgetPriv *d;

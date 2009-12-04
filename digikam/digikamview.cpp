@@ -125,6 +125,7 @@ public:
 
     AlbumModificationHelper*  albumModificationHelper;
     TagModificationHelper*    tagModificationHelper;
+    SearchModificationHelper* searchModificationHelper;
 
     Sidebar*                  leftSideBar;
     ImagePropertiesSideBarDB* rightSideBar;
@@ -152,6 +153,7 @@ DigikamView::DigikamView(QWidget *parent, DigikamModelCollection *modelCollectio
             d->parent, SLOT(slotProgressBarMode(int, const QString&)));
     connect(d->tagModificationHelper, SIGNAL(signalProgressValue(int)),
             d->parent, SLOT(slotProgressValue(int)));
+    d->searchModificationHelper = new SearchModificationHelper(this, this);
 
     d->splitter = new SidebarSplitter;
     d->splitter->setFrameStyle( QFrame::NoFrame );
@@ -198,7 +200,8 @@ DigikamView::DigikamView(QWidget *parent, DigikamModelCollection *modelCollectio
 
     // timeline side bar
     d->timelineSideBar = new TimelineSideBarWidget(d->leftSideBar,
-                    d->modelCollection->getSearchModel());
+                    d->modelCollection->getSearchModel(),
+                    d->searchModificationHelper);
     d->leftSideBarWidgets << d->timelineSideBar;
 
     // Search sidebar tab contents.

@@ -7,6 +7,7 @@
  * Description : Searches dates folder view used by timeline
  *
  * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009 by Johannes Wienke <languitar at semipol dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -26,67 +27,28 @@
 
 // Local includes
 #include "albumtreeview.h"
+#include "searchmodificationhelper.h"
 
 namespace Digikam
 {
 
+class TimeLineFolderViewNewPriv;
 class TimeLineFolderViewNew : public SearchTreeView
 {
     Q_OBJECT
 public:
-    TimeLineFolderViewNew(QWidget *parent, SearchModel *searchModel);
+    TimeLineFolderViewNew(QWidget *parent, SearchModel *searchModel,
+                          SearchModificationHelper *searchModificationHelper);
     virtual ~TimeLineFolderViewNew();
+
+private:
+    void contextMenuEvent(QContextMenuEvent *event);
+
+private:
+    TimeLineFolderViewNewPriv *d;
 
 };
 
 }
-
-//// Local includes
-//
-//#include "searchtextbar.h"
-//#include "folderview.h"
-//
-//namespace Digikam
-//{
-//
-//class Album;
-//class SAlbum;
-//class TimeLineFolderItem;
-//
-//class TimeLineFolderView : public FolderView
-//{
-//    Q_OBJECT
-//
-//public:
-//
-//    TimeLineFolderView(QWidget* parent);
-//    ~TimeLineFolderView();
-//
-//    void searchDelete(SAlbum* album);
-//
-//Q_SIGNALS:
-//
-//    void signalTextSearchFilterMatch(bool);
-//    void signalAlbumSelected(SAlbum*);
-//    void signalRenameAlbum(SAlbum*);
-//
-//public Q_SLOTS:
-//
-//    void slotTextSearchFilterChanged(const SearchTextSettings&);
-//
-//private Q_SLOTS:
-//
-//    void slotAlbumAdded(Album* album);
-//    void slotAlbumDeleted(Album* album);
-//    void slotAlbumRenamed(Album* album);
-//    void slotSelectionChanged();
-//    void slotContextMenu(Q3ListViewItem*, const QPoint&, int);
-//
-//protected:
-//
-//    void selectItem(int id);
-//};
-//
-//}  // namespace Digikam
 
 #endif /* TIMELINEFOLDERVIEW_H */

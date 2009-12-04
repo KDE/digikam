@@ -327,7 +327,8 @@ public:
         searchDateBar(0),
         timeLineFolderView(0),
         timeLineWidget(0),
-        searchModel(0)
+        searchModel(0),
+        searchModificationHelper(0)
     {}
 
 
@@ -352,11 +353,16 @@ public:
     TimeLineWidget*     timeLineWidget;
 
     SearchModel*        searchModel;
+
+    SearchModificationHelper *searchModificationHelper;
 };
 
-TimelineSideBarWidget::TimelineSideBarWidget(QWidget *parent, SearchModel *searchModel) :
+TimelineSideBarWidget::TimelineSideBarWidget(QWidget *parent, SearchModel *searchModel,
+                                             SearchModificationHelper *searchModificationHelper) :
     SideBarWidget(parent), d(new TimelineSideBarWidgetPriv)
 {
+
+    d->searchModificationHelper = searchModificationHelper;
 
     d->timer = new QTimer(this);
     setAttribute(Qt::WA_DeleteOnClose);
@@ -466,9 +472,11 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget *parent, SearchModel *searc
 
     // ---------------------------------------------------------------
 
-    d->timeLineFolderView = new TimeLineFolderViewNew(this, searchModel);
+    d->timeLineFolderView = new TimeLineFolderViewNew(this, searchModel,
+                                                      searchModificationHelper);
     d->searchDateBar      = new SearchTextBar(this, "TimeLineViewSearchDateBar");
-    d->searchDateBar->setModel(searchModel, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
+    d->searchDateBar->setModel(searchModel, AbstractAlbumModel::AlbumIdRole,
+                               AbstractAlbumModel::AlbumTitleRole);
 
     vlay->addWidget(panel);
     vlay->addWidget(d->timeLineFolderView);
@@ -486,9 +494,6 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget *parent, SearchModel *searc
     // TODO update
     //connect(d->timeLineFolderView, SIGNAL(signalAlbumSelected(SAlbum*)),
     //        this, SLOT(slotAlbumSelected(SAlbum*)));
-
-    //connect(d->timeLineFolderView, SIGNAL(signalRenameAlbum(SAlbum*)),
-    //        this, SLOT(slotRenameAlbum(SAlbum*)));
 
     connect(d->searchDateBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
             d->timeLineFolderView, SLOT(setSearchTextSettings(const SearchTextSettings&)));
@@ -673,54 +678,18 @@ void TimelineSideBarWidget::slotSelectionChanged()
 void TimelineSideBarWidget::slotUpdateCurrentDateSearchAlbum()
 {
     slotCheckAboutSelection();
-    createNewDateSearchAlbum(SAlbum::getTemporaryTitle(DatabaseSearch::TimeLineSearch));
+    int totalCount = 0;
+    DateRangeList dateRanges = d->timeLineWidget->selectedDateRange(totalCount);
+    d->searchModificationHelper->slotCreateTimeLineSearch(SAlbum::getTemporaryTitle(DatabaseSearch::TimeLineSearch),
+                                                          dateRanges, true);
 }
 
 void TimelineSideBarWidget::slotSaveSelection()
 {
     QString name = d->nameEdit->text();
-    if (!checkName(name))
-        return;
-    createNewDateSearchAlbum(name);
-}
-
-void TimelineSideBarWidget::createNewDateSearchAlbum(const QString& name)
-{
     int totalCount = 0;
-    QDateTime start, end;
-    DateRangeList list = d->timeLineWidget->selectedDateRange(totalCount);
-
-    AlbumManager::instance()->setCurrentAlbum(0);
-
-    if (list.isEmpty())
-        return;
-
-    d->timeLineFolderView->blockSignals(true);
-    d->timeLineFolderView->clearSelection();
-    d->timeLineFolderView->blockSignals(false);
-
-    // Create an XML search query for the list of date ranges
-
-    SearchXmlWriter writer;
-
-    // for each range, write a group with two fields
-    for (int i=0; i<list.size(); ++i)
-    {
-        writer.writeGroup();
-        writer.writeField("creationdate", SearchXml::GreaterThan);
-        writer.writeValue(list[i].first);
-        writer.finishField();
-        writer.writeField("creationdate", SearchXml::LessThan);
-        writer.writeValue(list[i].second);
-        writer.finishField();
-        writer.finishGroup();
-    }
-    writer.finish();
-
-    kDebug() << "Date search XML:\n" << writer.xml();
-
-    SAlbum* album = AlbumManager::instance()->createSAlbum(name, DatabaseSearch::TimeLineSearch, writer.xml());
-    AlbumManager::instance()->setCurrentAlbum(album);
+    DateRangeList dateRanges = d->timeLineWidget->selectedDateRange(totalCount);
+    d->searchModificationHelper->slotCreateTimeLineSearch(name, dateRanges);
 }
 
 void TimelineSideBarWidget::slotAlbumSelected(SAlbum* salbum)
@@ -775,38 +744,6 @@ void TimelineSideBarWidget::slotResetSelection()
     AlbumManager::instance()->setCurrentAlbum(0);
 }
 
-bool TimelineSideBarWidget::checkName(QString& name)
-{
-    bool checked = checkAlbum(name);
-
-    while (!checked)
-    {
-        QString label = i18n( "Search name already exists.\n"
-                              "Please enter a new name:" );
-        bool ok;
-        QString newTitle = KInputDialog::getText(i18n("Name exists"), label, name, &ok, this);
-        if (!ok) return false;
-
-        name    = newTitle;
-        checked = checkAlbum(name);
-    }
-
-    return true;
-}
-
-bool TimelineSideBarWidget::checkAlbum(const QString& name) const
-{
-    const AlbumList list = AlbumManager::instance()->allSAlbums();
-
-    for (AlbumList::ConstIterator it = list.constBegin() ; it != list.constEnd() ; ++it)
-    {
-        SAlbum *album = (SAlbum*)(*it);
-        if ( album->title() == name )
-            return false;
-    }
-    return true;
-}
-
 void TimelineSideBarWidget::slotCheckAboutSelection()
 {
     int totalCount     = 0;
@@ -823,24 +760,6 @@ void TimelineSideBarWidget::slotCheckAboutSelection()
         d->nameEdit->setEnabled(false);
         d->saveButton->setEnabled(false);
     }
-}
-
-void TimelineSideBarWidget::slotRenameAlbum(SAlbum* salbum)
-{
-    if (!salbum) return;
-
-    QString oldName(salbum->title());
-    bool    ok;
-
-    QString name = KInputDialog::getText(i18n("Rename Album (%1)",oldName),
-                                          i18n("Enter new album name:"),
-                                          oldName, &ok, this);
-
-    if (!ok || name == oldName || name.isEmpty()) return;
-
-    if (!checkName(name)) return;
-
-    AlbumManager::instance()->updateSAlbum(salbum, salbum->query(), name);
 }
 
 // -----------------------------------------------------------------------------
