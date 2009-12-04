@@ -50,32 +50,26 @@ FilePropertiesOption::FilePropertiesOption()
     setRegExp(reg);
 }
 
-void FilePropertiesOption::parseOperation(const QString& parseString, ParseSettings& settings, ParseResults& results)
+QString FilePropertiesOption::parseOperation(const QRegExp& regExp, ParseSettings& settings)
 {
     QFileInfo fi(settings.fileUrl.toLocalFile());
 
-    QRegExp reg = regExp();
-
-    // --------------------------------------------------------
-
     QString tmp;
-    PARSE_LOOP_START(parseString, reg)
+    if (regExp.cap(1) == QString("[file]"))
     {
-        if (reg.cap(1) == QString("[file]"))
-        {
-            tmp = fi.baseName();
-        }
-        else if (reg.cap(1) == QString("[ext]"))
-        {
-                tmp = fi.suffix();
-        }
-        else if (reg.cap(1) == QString(".[ext]"))
-        {
-            tmp = "." + fi.suffix();
-            settings.useOriginalFileExtension = false;
-        }
+        tmp = fi.baseName();
     }
-    PARSE_LOOP_END(parseString, reg, tmp, results)
+    else if (regExp.cap(1) == QString("[ext]"))
+    {
+        tmp = fi.suffix();
+    }
+    else if (regExp.cap(1) == QString(".[ext]"))
+    {
+        tmp = "." + fi.suffix();
+        settings.useOriginalFileExtension = false;
+    }
+
+    return tmp;
 }
 
 } // namespace Digikam

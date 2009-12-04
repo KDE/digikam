@@ -48,7 +48,7 @@ public:
 
 protected:
 
-    virtual void parseOperation(const QString& parseString, ParseSettings& settings, ParseResults& results);
+    virtual QString parseOperation(const QRegExp& regExp, ParseSettings& settings);
 };
 
 } // namespace Digikam

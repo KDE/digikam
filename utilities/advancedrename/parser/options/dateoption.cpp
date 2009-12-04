@@ -231,41 +231,35 @@ DateOption::DateOption()
     setRegExp(reg);
 }
 
-void DateOption::parseOperation(const QString& parseString, ParseSettings& settings, ParseResults& results)
+QString DateOption::parseOperation(const QRegExp& regExp, ParseSettings& settings)
 {
-    QRegExp reg = regExp();
-
-    // --------------------------------------------------------
-
     QString tmp;
-    PARSE_LOOP_START(parseString, reg)
+    DateFormat df;
+
+    QString token = regExp.cap(1);
+    if (!token.isEmpty())
     {
-        DateFormat df;
+        token.remove(0, 1);
+    }
 
-        QString token = reg.cap(1);
-        if (!token.isEmpty())
+    QVariant v = df.formatType(token);
+    if (v.isNull())
+    {
+        tmp = settings.dateTime.toString(token);
+    }
+    else
+    {
+        if (v.type() == QVariant::String)
         {
-            token.remove(0, 1);
-        }
-
-        QVariant v = df.formatType(token);
-        if (v.isNull())
-        {
-            tmp = settings.dateTime.toString(token);
+            tmp = settings.dateTime.toString(v.toString());
         }
         else
         {
-            if (v.type() == QVariant::String)
-            {
-                tmp = settings.dateTime.toString(v.toString());
-            }
-            else
-            {
-                tmp = settings.dateTime.toString((Qt::DateFormat)v.toInt());
-            }
+            tmp = settings.dateTime.toString((Qt::DateFormat)v.toInt());
         }
     }
-    PARSE_LOOP_END(parseString, reg, tmp, results)
+
+    return tmp;
 }
 
 void DateOption::slotTokenTriggered(const QString& token)

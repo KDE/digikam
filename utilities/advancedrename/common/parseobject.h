@@ -44,31 +44,6 @@ namespace Digikam
 
 class ParseObjectPriv;
 
-/*
- * Macro definitions:
- *
- * PARSE_LOOP_START and PARSE_LOOP_END must be used when parsing
- * a token.
- * See 'DummyOption' class or other implementation for example code.
- */
-#define PARSE_LOOP_START(PARSESTRING_, REGEXP_)                         \
-        {                                                               \
-            int POS_ = 0;                                               \
-            while (POS_ > -1)                                           \
-            {                                                           \
-                POS_ = REGEXP_.indexIn(PARSESTRING_, POS_);             \
-                if (POS_ > -1)                                          \
-                {
-
-#define PARSE_LOOP_END(PARSESTRING_, REGEXP_, PARSEDVAL_, RESULTS_)     \
-            ParseResults::ResultsKey   k(POS_, REGEXP_.cap(0).count()); \
-            ParseResults::ResultsValue v(REGEXP_.cap(0), PARSEDVAL_);   \
-            RESULTS_.addEntry(k, v);                                    \
-            POS_ += REGEXP_.matchedLength();                            \
-                }                                                       \
-            }                                                           \
-        }
-
 class ParseObject : public QObject
 {
     Q_OBJECT

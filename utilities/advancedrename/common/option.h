@@ -29,6 +29,8 @@
 #include "parseobject.h"
 #include "parseresults.h"
 
+class QRegExp;
+
 namespace Digikam
 {
 
@@ -48,7 +50,7 @@ public:
 
 protected:
 
-    virtual void parseOperation(const QString& parseString, ParseSettings& settings, ParseResults& results) = 0;
+    virtual QString parseOperation(const QRegExp& regExp, ParseSettings& settings) = 0;
 
 private:
 

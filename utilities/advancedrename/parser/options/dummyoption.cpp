@@ -68,7 +68,7 @@ DummyOption::DummyOption()
     setRegExp(reg);
 }
 
-void DummyOption::parseOperation(const QString& parseString, ParseSettings& settings, ParseResults& results)
+void DummyOption::parseOperation(const QRegExp& regExp, ParseSettings& settings)
 {
     QRegExp reg = regExp();
 
