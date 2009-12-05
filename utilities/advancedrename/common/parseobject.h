@@ -56,7 +56,7 @@ public:
 
     /**
      * returns the currently assigned regExp object. Note that it is returned as a const ref, meaning
-     * that if you use it in a your custom parse operation, the main parse method has already searched for the pattern
+     * that if you use it in your custom parse operation, the main parse method has already searched for the pattern
      * and filled in the results of this search, so that you can use QRegExp::cap() immediately, you don't have to search
      * on your own.
      *
