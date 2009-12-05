@@ -1,6 +1,7 @@
 [Global]
 IconName=digikam
 Comment=digiKam
+Comment[cs]=digiKam
 Comment[da]=digiKam
 Comment[en_GB]=digiKam
 Comment[es]=digiKam
@@ -16,6 +17,7 @@ Comment[x-test]=xxdigiKamxx
 
 [Event/cameradownloaded]
 Name=Download complete
+Name[cs]=Stahování dokončeno
 Name[da]=Download gennemført
 Name[en_GB]=Download complete
 Name[es]=Descarga completa
@@ -29,6 +31,7 @@ Name[sv]=Nerladdning klar
 Name[uk]=Звантаження завершено
 Name[x-test]=xxDownload completexx
 Comment=A download from a camera or other device has finished.
+Comment[cs]=Stahování z fotoaparátu nebo jiného zařízení bylo dokončeno.
 Comment[da]=Et download fra et kamera eller anden enhed er gennemført.
 Comment[en_GB]=A download from a camera or other device has finished.
 Comment[es]=Ha terminado una descarga desde una cámara u otro dispositivo.
@@ -45,6 +48,7 @@ Action=Popup
 
 [Event/batchqueuecompleted]
 Name=Batch queue completed
+Name[cs]=Zpracování dávky dokončeno
 Name[da]=Batch-kø gennemført
 Name[en_GB]=Batch queue completed
 Name[es]=Cola de trabajos completa
@@ -58,6 +62,7 @@ Name[sv]=Bakgrundskön är klar
 Name[uk]=Всі завдання з черги виконано
 Name[x-test]=xxBatch queue completedxx
 Comment=A queue in the batch queue manager has been completed.
+Comment[cs]=Zpracování fronty ve Správci pro dávkové zpracování bylo dokončeno.
 Comment[da]=En kø i håndteringen af batch-kø er blevet gennemført.
 Comment[en_GB]=A queue in the batch queue manager has been completed.
 Comment[es]=Se ha completado una cola del gestor de colas de trabajos.
@@ -74,6 +79,7 @@ Action=Popup
 
 [Event/fingerprintscompleted]
 Name=Update of fingerprint database complete
+Name[cs]=Aktualizace databáze otisků dokončena
 Name[da]=Opdatering af fingeraftryk-database gennemført
 Name[en_GB]=Update of fingerprint database complete
 Name[et]=Sõrmejälgede andmebaas on uuendatud
@@ -86,6 +92,7 @@ Name[sv]=Uppdatering av fingeravtrycksdatabasen klar
 Name[uk]=Оновлення бази даних відбитків завершено.
 Name[x-test]=xxUpdate of fingerprint database completexx
 Comment=The update of the fingerprint database has been completed.
+Comment[cs]=Aktualizace databáze otisků byla dokončena.
 Comment[da]=Opdateringen af fingeraftryk-databasen er blevet gennemført.
 Comment[en_GB]=The update of the fingerprint database has been completed.
 Comment[et]=Sõrmejälgede andmebaas on uuendatud.
@@ -101,6 +108,7 @@ Action=Popup
 
 [Event/batchthumbscompleted]
 Name=Update of thumbnails database complete
+Name[cs]=Aktualizace databáze náhledů dokončena
 Name[da]=Opdatering af miniaturedatabase gennemført
 Name[en_GB]=Update of thumbnails database complete
 Name[es]=Actualización de la base de datos de miniaturas completa
@@ -112,6 +120,7 @@ Name[sv]=Uppdatering av miniatyrbildsdatabasen klar
 Name[uk]=Оновлення бази даних мініатюр завершено
 Name[x-test]=xxUpdate of thumbnails database completexx
 Comment=The update of the thumbnails database has been completed.
+Comment[cs]=Aktualizace databáze náhledů byla dokončena.
 Comment[da]=Opdateringen af miniaturedatabasen er blevet gennemført.
 Comment[en_GB]=The update of the thumbnails database has been completed.
 Comment[es]=Se ha completado la actualización de la base de datos de miniaturas.
@@ -126,6 +135,7 @@ Action=Popup
 
 [Event/batchalbumssyncmetadatacompleted]
 Name=Synchronization of images' metadata with database completed
+Name[cs]=Synchronizace metadat obrázků s databází dokončena
 Name[da]=Synkronisering af billeders metadata med databasen gennemført
 Name[en_GB]=Synchronisation of images' metadata with database completed
 Name[es]=Sincronización de metadatos de imágenes con la base de datos completa
@@ -137,6 +147,7 @@ Name[sv]=Synkronisering av bildernas metadata med databasen klar
 Name[uk]=Синхронізацію метаданих зображень з базою даних завершено
 Name[x-test]=xxSynchronization of images' metadata with database completedxx
 Comment=The synchronization of the images' metadata with the database has been completed.
+Comment[cs]=Synchronizace metadat obrázků s databází byla dokončena.
 Comment[da]=Opdateringen af billedernes metadata med databasen er blevet gennemført.
 Comment[en_GB]=The synchronisation of the images' metadata with the database has been completed.
 Comment[es]=Se ha completado la sincronización de metadatos de imágenes con la base de datos.
