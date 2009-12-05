@@ -1,10 +1,6 @@
 TODO list for AdvancedRename utility
 ------------------------------------
 
-Parsing:
-
-    - Try to detect faulty rename pattern strings. In this case, deactivate the rename dialog's OK button.
-
 Syntax Highlighting:
 
     - Be smarter when detecting parameters. Right now we need to make sure that the first matching group
