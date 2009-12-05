@@ -164,6 +164,12 @@ QString Parser::parse(ParseSettings& settings)
     }
     settings.results = results;
 
+    // remove invalid modifiers from the new name
+    foreach (const Modifier* mod, d->modifiers)
+    {
+        newName.remove(mod->regExp());
+    }
+
     if (newName.isEmpty())
     {
         return fi.fileName();

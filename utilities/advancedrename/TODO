@@ -3,9 +3,6 @@ TODO list for AdvancedRename utility
 
 Parsing:
 
-    - Do not parse modifier tokens when they are placed incorrectly.
-      Right now they are inserted as normal text, but it would be better to completely remove them from the parsed name.
-
     - Try to detect faulty rename pattern strings. In this case, deactivate the rename dialog's OK button.
 
 Syntax Highlighting:
