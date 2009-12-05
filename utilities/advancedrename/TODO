@@ -1,10 +1,6 @@
 TODO list for AdvancedRename utility
 ------------------------------------
 
-General:
-
-    - Actually extending the parser is quite easy, but maybe a more plugin-based approach would be even better.
-
 Parsing:
 
     - Do not parse modifier tokens when they are placed incorrectly.
