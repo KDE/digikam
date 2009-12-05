@@ -123,11 +123,6 @@ AbstractAlbumTreeView::AbstractAlbumTreeView(AbstractSpecificAlbumModel *model, 
                  this, SLOT(slotRootAlbumAvailable()));
     }
 
-    connect(selectionModel(), SIGNAL(currentChanged(const QModelIndex&, const QModelIndex &)),
-             this, SLOT(slotCurrentChanged()));
-
-    connect(selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection &)),
-             this, SLOT(slotCurrentChanged()));
 }
 
 AbstractAlbumTreeView::~AbstractAlbumTreeView()
@@ -145,6 +140,11 @@ void AbstractAlbumTreeView::setAlbumFilterModel(AlbumFilterModel *filterModel)
         disconnect(m_albumFilterModel);
     }
 
+    if (selectionModel())
+    {
+        disconnect(selectionModel());
+    }
+
     m_albumFilterModel = filterModel;
     m_albumFilterModel->setSourceAlbumModel(m_albumModel);
 
@@ -152,6 +152,13 @@ void AbstractAlbumTreeView::setAlbumFilterModel(AlbumFilterModel *filterModel)
              this, SLOT(slotFilterChanged()));
 
     setModel(m_albumFilterModel);
+
+    connect(selectionModel(), SIGNAL(currentChanged(const QModelIndex&, const QModelIndex &)),
+             this, SLOT(slotCurrentChanged()));
+
+    connect(selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection &)),
+             this, SLOT(slotCurrentChanged()));
+
 }
 
 AbstractSpecificAlbumModel *AbstractAlbumTreeView::albumModel() const

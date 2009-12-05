@@ -79,10 +79,6 @@ AlbumSelectionTreeView::AlbumSelectionTreeView(QWidget *parent, AlbumModel *mode
     setSelectAlbumOnClick(true);
     setEnableContextMenu(true);
 
-    // connections
-    connect(this, SIGNAL(clicked(const QModelIndex&)),
-            this, SLOT(slotAlbumSelected(const QModelIndex&)));
-
 }
 
 AlbumSelectionTreeView::~AlbumSelectionTreeView()

@@ -68,8 +68,8 @@ public Q_SLOTS:
     /**
      * Creates one ore more new tags under the given parent. If only the parent
      * is given, then a dialog is shown to create new tags. Else, if also a
-     * title and optionally an icon are given, then these values will be
-     * suggested in the dialog.
+     * title and optionally an icon are given, then these values will be used
+     * directly to create the tag.
      *
      * @param parent parent tag album under which to create the new tags. May be
      *               0 to use the root album

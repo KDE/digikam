@@ -176,7 +176,7 @@ private Q_SLOTS:
     void slotResetSelection();
     void slotSaveSelection();
     void slotUpdateCurrentDateSearchAlbum();
-    void slotAlbumSelected(SAlbum*);
+    void slotAlbumSelected(Album*);
     void slotCheckAboutSelection();
 
 private:

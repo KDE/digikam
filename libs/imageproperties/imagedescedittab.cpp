@@ -769,6 +769,16 @@ void ImageDescEditTab::slotModified()
     d->revertBtn->setEnabled(true);
 }
 
+void ImageDescEditTab::slotCreateNewTag()
+{
+    if (d->newTagEdit->text().isEmpty())
+    {
+        return;
+    }
+    d->tagModificationHelper->slotTagNew(d->tagCheckView->currentAlbum(),
+                                         d->newTagEdit->text());
+}
+
 void ImageDescEditTab::assignRating(int rating)
 {
     d->ratingWidget->setRating(rating);

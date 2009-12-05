@@ -68,7 +68,6 @@ EditableSearchTreeView::EditableSearchTreeView(QWidget *parent,
     d->renSearch = new QAction(SmallIcon("edit-rename"), i18n("Rename..."), this);
     d->delSearch = new QAction(SmallIcon("edit-delete"), i18n("Delete"), this);
 
-    albumFilterModel()->setListTemporarySearches(false);
     setSortingEnabled(true);
     setSelectAlbumOnClick(true);
     setEnableContextMenu(true);

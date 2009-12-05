@@ -490,6 +490,7 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget *parent, SearchModel *searc
     d->timeLineFolderView = new EditableSearchTreeView(this, searchModel,
                                                       searchModificationHelper);
     d->timeLineFolderView->albumFilterModel()->listTimelineSearches();
+    d->timeLineFolderView->albumFilterModel()->setListTemporarySearches(false);
     d->searchDateBar      = new SearchTextBar(this, "TimeLineViewSearchDateBar");
     d->searchDateBar->setModel(searchModel, AbstractAlbumModel::AlbumIdRole,
                                AbstractAlbumModel::AlbumTitleRole);
@@ -507,9 +508,8 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget *parent, SearchModel *searc
     connect(AlbumManager::instance(), SIGNAL(signalDatesMapDirty(const QMap<QDateTime, int>&)),
             d->timeLineWidget, SLOT(slotDatesMap(const QMap<QDateTime, int>&)));
 
-    // TODO update
-    //connect(d->timeLineFolderView, SIGNAL(signalAlbumSelected(SAlbum*)),
-    //        this, SLOT(slotAlbumSelected(SAlbum*)));
+    connect(d->timeLineFolderView, SIGNAL(currentAlbumChanged(Album*)),
+            this, SLOT(slotAlbumSelected(Album*)));
 
     connect(d->searchDateBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
             d->timeLineFolderView, SLOT(setSearchTextSettings(const SearchTextSettings&)));
@@ -689,8 +689,11 @@ void TimelineSideBarWidget::slotSaveSelection()
     d->searchModificationHelper->slotCreateTimeLineSearch(name, dateRanges);
 }
 
-void TimelineSideBarWidget::slotAlbumSelected(SAlbum* salbum)
+void TimelineSideBarWidget::slotAlbumSelected(Album* album)
 {
+
+    SAlbum *salbum = dynamic_cast<SAlbum*> (album);
+
     if (!salbum)
     {
         slotResetSelection();
@@ -719,19 +722,24 @@ void TimelineSideBarWidget::slotAlbumSelected(SAlbum* salbum)
                 if (reader.isFieldElement())
                 {
                     if (numberOfFields == 0)
+                    {
                         start = reader.valueToDateTime();
+                    }
                     else if (numberOfFields == 1)
+                    {
                         end = reader.valueToDateTime();
+                    }
                     ++numberOfFields;
                 }
             }
             if (numberOfFields)
+            {
                 list << DateRange(start, end);
+            }
         }
     }
 
     d->timeLineWidget->setSelectedDateRange(list);
-    AlbumManager::instance()->setCurrentAlbum(salbum);
 }
 
 void TimelineSideBarWidget::slotResetSelection()
