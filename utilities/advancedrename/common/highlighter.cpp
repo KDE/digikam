@@ -152,6 +152,11 @@ void Highlighter::setupHighlightingGrammar(Parser* parser)
 
     parameterFormat.setForeground(Qt::darkYellow);
     parameterFormat.setFontItalic(true);
+
+    // --------------------------------------------------------
+
+    faultyModifierFormat.setForeground(Qt::white);
+    faultyModifierFormat.setBackground(Qt::red);
 }
 
 } // namespace Digikam

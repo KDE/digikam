@@ -77,6 +77,7 @@ private:
     QTextCharFormat parameterFormat;
     QTextCharFormat modifierFormat;
     QTextCharFormat quotationFormat;
+    QTextCharFormat faultyModifierFormat;
 };
 
 }  // namespace Digikam
