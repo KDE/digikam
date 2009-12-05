@@ -104,20 +104,16 @@ void DefaultValueModifier::slotTokenTriggered(const QString& token)
 
 QString DefaultValueModifier::modifyOperation(const ParseSettings& settings, const QString& str2Modify)
 {
+    Q_UNUSED(settings);
+
     if (!str2Modify.isEmpty())
     {
         return str2Modify;
     }
 
-    QRegExp reg = regExp();
-    int pos     = 0;
-    pos         = reg.indexIn(settings.parseString, pos);
-    if (pos > -1)
-    {
-        QString defaultStr = reg.cap(1).isEmpty() ? QString() : reg.cap(1);
-        return defaultStr;
-    }
-    return QString();
+    const QRegExp& reg = regExp();
+    QString defaultStr = reg.cap(1).isEmpty() ? QString() : reg.cap(1);
+    return defaultStr;
 }
 
 } // namespace Digikam

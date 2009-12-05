@@ -100,7 +100,7 @@ QString ParseObject::description() const
     return d->description;
 }
 
-QRegExp ParseObject::regExp() const
+QRegExp& ParseObject::regExp() const
 {
     return d->regExp;
 }

@@ -50,14 +50,15 @@ DirectoryNameOption::DirectoryNameOption()
     setRegExp(reg);
 }
 
-QString DirectoryNameOption::parseOperation(const QRegExp& regExp, ParseSettings& settings)
+QString DirectoryNameOption::parseOperation(ParseSettings& settings)
 {
     QFileInfo fi(settings.fileUrl.toLocalFile());
     QStringList folders = fi.absolutePath().split('/', QString::SkipEmptyParts);
     int folderCount     = folders.count();
+    const QRegExp& reg  = regExp();
 
     QString result;
-    int matchedLength = regExp.cap(1).length();
+    int matchedLength = reg.cap(1).length();
 
     if (matchedLength == 0)
     {

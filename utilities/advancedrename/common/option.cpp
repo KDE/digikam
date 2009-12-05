@@ -66,7 +66,7 @@ Option::~Option()
 ParseResults Option::parse(ParseSettings& settings)
 {
     d->parsedResults.clear();
-    const QRegExp reg          = regExp();
+    const QRegExp& reg         = regExp();
     const QString& parseString = settings.parseString;
 
     int pos = 0;
@@ -75,7 +75,7 @@ ParseResults Option::parse(ParseSettings& settings)
         pos = reg.indexIn(parseString, pos);
         if (pos > -1)
         {
-            QString result = parseOperation(reg, settings);
+            QString result = parseOperation(settings);
 
             ParseResults::ResultsKey   k(pos, reg.cap(0).count());
             ParseResults::ResultsValue v(reg.cap(0), result);

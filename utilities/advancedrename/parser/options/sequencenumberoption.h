@@ -61,7 +61,7 @@ public:
 
 protected:
 
-    virtual QString parseOperation(const QRegExp& regExp, ParseSettings& settings);
+    virtual QString parseOperation(ParseSettings& settings);
 
 private Q_SLOTS:
 

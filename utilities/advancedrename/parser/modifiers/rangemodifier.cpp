@@ -132,83 +132,80 @@ void RangeModifier::slotTokenTriggered(const QString& token)
 
 QString RangeModifier::modifyOperation(const ParseSettings& settings, const QString& str2Modify)
 {
-    QRegExp reg    = regExp();
-    int pos        = 0;
-    pos            = reg.indexIn(settings.parseString, pos);
-    if (pos > -1)
+    Q_UNUSED(settings);
+
+    const QRegExp& reg = regExp();
+
+    /*
+     * extract range parameters
+     */
+
+    bool ok = false;
+
+    // if the start parameter can not be extracted, set it to 1
+    int start = reg.cap(1).simplified().toInt(&ok);
+    if (!ok)
     {
-        /*
-         * extract range parameters
-         */
-
-        bool ok = false;
-
-        // if the start parameter can not be extracted, set it to 1
-        int start = reg.cap(1).simplified().toInt(&ok);
-        if (!ok)
-        {
-            start = 1;
-        }
-
-        // If no range is defined at all ({start}), set stop = start.
-        // If the stop parameter is omitted ({start-}), set stop = -1 (end of string)
-        ok = false;
-        int stop;
-        if (!reg.cap(2).isEmpty())
-        {
-            ok   = true;
-            stop = (reg.cap(3).isEmpty()) ? -1 : reg.cap(4).simplified().toInt(&ok);
-        }
-        else
-        {
-            stop = start;
-        }
-
-        if (!ok)
-        {
-            stop = start;
-        }
-
-        // --------------------------------------------------------
-
-        /*
-         * replace the string according to the given range
-         */
-
-        if (start > str2Modify.count())
-        {
-            return QString();
-        }
-
-        if (stop > str2Modify.count())
-        {
-            stop = -1;
-        }
-
-        --start;
-        if (stop != -1)
-        {
-            --stop;
-        }
-
-        if ((start < 0) || (stop < -1))
-        {
-            return QString();
-        }
-
-        if (stop == -1)
-        {
-            stop = str2Modify.count() - 1;
-        }
-
-        QString result;
-        for (int i = start; i <= stop; ++i)
-        {
-            result.append(str2Modify.at(i));
-        }
-        return result;
+        start = 1;
     }
-    return QString();
+
+    // If no range is defined at all ({start}), set stop = start.
+    // If the stop parameter is omitted ({start-}), set stop = -1 (end of string)
+    ok = false;
+    int stop;
+    if (!reg.cap(2).isEmpty())
+    {
+        ok   = true;
+        stop = (reg.cap(3).isEmpty()) ? -1 : reg.cap(4).simplified().toInt(&ok);
+    }
+    else
+    {
+        stop = start;
+    }
+
+    if (!ok)
+    {
+        stop = start;
+    }
+
+    // --------------------------------------------------------
+
+    /*
+     * replace the string according to the given range
+     */
+
+    if (start > str2Modify.count())
+    {
+        return QString();
+    }
+
+    if (stop > str2Modify.count())
+    {
+        stop = -1;
+    }
+
+    --start;
+    if (stop != -1)
+    {
+        --stop;
+    }
+
+    if ((start < 0) || (stop < -1))
+    {
+        return QString();
+    }
+
+    if (stop == -1)
+    {
+        stop = str2Modify.count() - 1;
+    }
+
+    QString result;
+    for (int i = start; i <= stop; ++i)
+    {
+        result.append(str2Modify.at(i));
+    }
+    return result;
 }
 
 } // namespace Digikam

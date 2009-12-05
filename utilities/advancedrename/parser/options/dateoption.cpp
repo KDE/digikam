@@ -231,12 +231,14 @@ DateOption::DateOption()
     setRegExp(reg);
 }
 
-QString DateOption::parseOperation(const QRegExp& regExp, ParseSettings& settings)
+QString DateOption::parseOperation(ParseSettings& settings)
 {
     QString result;
     DateFormat df;
 
-    QString token = regExp.cap(1);
+    const QRegExp& reg = regExp();
+
+    QString token = reg.cap(1);
     if (!token.isEmpty())
     {
         token.remove(0, 1);

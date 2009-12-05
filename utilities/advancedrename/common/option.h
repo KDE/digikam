@@ -50,7 +50,7 @@ public:
 
 protected:
 
-    virtual QString parseOperation(const QRegExp& regExp, ParseSettings& settings) = 0;
+    virtual QString parseOperation(ParseSettings& settings) = 0;
 
 private:
 

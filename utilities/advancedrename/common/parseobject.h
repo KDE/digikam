@@ -54,8 +54,27 @@ public:
     ParseObject(const QString& name, const QPixmap& icon);
     virtual ~ParseObject();
 
-    QRegExp regExp() const;
-    void    setRegExp(const QRegExp& regExp);
+    /**
+     * returns the currently assigned regExp object. Note that it is returned as a const ref, meaning
+     * that if you use it in a your custom parse operation, the main parse method has already searched for the pattern
+     * and filled in the results of this search, so that you can use QRegExp::cap() immediately, you don't have to search
+     * on your own.
+     *
+     * For example when implementing the Option::parseOperation() method, get the regExp object with
+     *
+     *      const QRegExp& reg = regExp();
+     *
+     * and immediately fetch possible matches with
+     *
+     *      const QString& param1 = reg.cap(1);
+     *
+     * @see Option
+     * @see Modifier
+     *
+     * @return a const ref to the assigned regexp object
+     */
+    QRegExp& regExp() const;
+    void     setRegExp(const QRegExp& regExp);
 
     QString description() const;
     void    setDescription(const QString& desc);

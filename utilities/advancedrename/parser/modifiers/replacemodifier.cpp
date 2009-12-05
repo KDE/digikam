@@ -123,22 +123,18 @@ void ReplaceModifier::slotTokenTriggered(const QString& token)
 
 QString ReplaceModifier::modifyOperation(const ParseSettings& settings, const QString& str2Modify)
 {
-    QRegExp reg = regExp();
-    int pos     = 0;
-    pos         = reg.indexIn(settings.parseString, pos);
-    if (pos > -1)
-    {
-        QString original    = reg.cap(2);
-        QString replacement = reg.cap(3);
-        QString _result     = str2Modify;
+    Q_UNUSED(settings);
 
-        Qt::CaseSensitivity caseType = (!reg.cap(1).isEmpty() && reg.cap(1).count() == 1)
-                                       ? Qt::CaseInsensitive
-                                       : Qt::CaseSensitive;
-        _result.replace(original, replacement, caseType);
-        return _result;
-    }
-    return QString();
+    const QRegExp& reg  = regExp();
+    QString original    = reg.cap(2);
+    QString replacement = reg.cap(3);
+    QString result      = str2Modify;
+
+    Qt::CaseSensitivity caseType = (!reg.cap(1).isEmpty() && reg.cap(1).count() == 1)
+                                     ? Qt::CaseInsensitive
+                                     : Qt::CaseSensitive;
+    result.replace(original, replacement, caseType);
+    return result;
 }
 
 } // namespace Digikam

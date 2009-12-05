@@ -129,7 +129,7 @@ void SequenceNumberOption::slotTokenTriggered(const QString& token)
     emit signalTokenTriggered(result);
 }
 
-QString SequenceNumberOption::parseOperation(const QRegExp& regExp, ParseSettings& settings)
+QString SequenceNumberOption::parseOperation(ParseSettings& settings)
 {
     int slength = 0;
     int start   = 0;
@@ -140,12 +140,13 @@ QString SequenceNumberOption::parseOperation(const QRegExp& regExp, ParseSetting
     // --------------------------------------------------------
 
     QString result;
-    slength = regExp.cap(1).length();
-    start   = regExp.cap(3).isEmpty() ? settings.startIndex : regExp.cap(3).toInt();
-    step    = regExp.cap(4).isEmpty() ? 1 : regExp.cap(4).toInt();
+    const QRegExp& reg = regExp();
+    slength            = reg.cap(1).length();
+    start              = reg.cap(3).isEmpty() ? settings.startIndex : reg.cap(3).toInt();
+    step               = reg.cap(4).isEmpty() ? 1 : reg.cap(4).toInt();
 
-    number  = start + ((index - 1) * step);
-    result  = QString("%1").arg(number, slength, 10, QChar('0'));
+    number             = start + ((index - 1) * step);
+    result             = QString("%1").arg(number, slength, 10, QChar('0'));
 
     return result;
 }
