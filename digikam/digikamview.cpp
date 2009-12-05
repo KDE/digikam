@@ -211,7 +211,8 @@ DigikamView::DigikamView(QWidget *parent, DigikamModelCollection *modelCollectio
 
     // Fuzzy search
     d->fuzzySearchSideBar = new FuzzySearchSideBarWidget(d->leftSideBar,
-                    d->modelCollection->getSearchModel());
+                    d->modelCollection->getSearchModel(),
+                    d->searchModificationHelper);
     d->leftSideBarWidgets << d->fuzzySearchSideBar;
 
 #ifdef HAVE_MARBLEWIDGET

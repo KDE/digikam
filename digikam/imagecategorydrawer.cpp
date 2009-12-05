@@ -37,7 +37,6 @@
 
 #include "album.h"
 #include "albummanager.h"
-#include "fuzzysearchfolderview.h"
 #include "gpssearchfolderview.h"
 #include "imagealbummodel.h"
 #include "imagecategorizedview.h"

@@ -48,6 +48,14 @@ DigikamModelCollection::DigikamModelCollection() :
     d->tagFilterModel->setCheckable(true);
 
     d->searchModel = new SearchModel();
+    d->searchModel->addReplaceName(
+                    SAlbum::getTemporaryTitle(DatabaseSearch::HaarSearch,
+                                    DatabaseSearch::HaarImageSearch), i18n(
+                                    "Current Fuzzy Image Search"));
+    d->searchModel->addReplaceName(SAlbum::getTemporaryTitle(
+                    DatabaseSearch::HaarSearch,
+                    DatabaseSearch::HaarSketchSearch), i18n(
+                    "Current Fuzzy Sketch Search"));
 }
 
 DigikamModelCollection::~DigikamModelCollection()

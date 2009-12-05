@@ -34,7 +34,10 @@
 // Local includes
 
 #include "albummanager.h"
+#include "haariface.h"
+#include "imageinfo.h"
 #include "searchxml.h"
+#include "sketchwidget.h"
 
 namespace Digikam
 {
@@ -188,6 +191,76 @@ void SearchModificationHelper::slotCreateTimeLineSearch(const QString &desiredNa
 
     SAlbum* album = AlbumManager::instance()->createSAlbum(name, DatabaseSearch::TimeLineSearch, writer.xml());
     AlbumManager::instance()->setCurrentAlbum(album);
+
+}
+
+void SearchModificationHelper::slotCreateFuzzySearchFromSketch(
+                const QString& proposedName, SketchWidget *sketchWidget,
+                unsigned int numberOfResults, bool overwriteIfExisting)
+{
+
+    if (sketchWidget->isClear())
+    {
+        return;
+    }
+
+    QString name = proposedName;
+    if (!overwriteIfExisting && !checkName(name))
+    {
+        return;
+    }
+
+    // We query database here
+
+    HaarIface haarIface;
+    SearchXmlWriter writer;
+
+    writer.writeGroup();
+    writer.writeField("similarity", SearchXml::Like);
+    writer.writeAttribute("type", "signature");         // we pass a signature
+    writer.writeAttribute("numberofresults", QString::number(numberOfResults));
+    writer.writeAttribute("sketchtype", "handdrawn");
+    writer.writeValue(haarIface.signatureAsText(sketchWidget->sketchImage()));
+    sketchWidget->sketchImageToXML(writer);
+    writer.finishField();
+    writer.finishGroup();
+
+    SAlbum* salbum = AlbumManager::instance()->createSAlbum(name, DatabaseSearch::HaarSearch, writer.xml());
+    AlbumManager::instance()->setCurrentAlbum(salbum);
+
+}
+
+void SearchModificationHelper::slotCreateFuzzySearchFromImage(
+                const QString &proposedName, const ImageInfo &image,
+                float threshold, bool overwriteIfExisting)
+{
+
+    if (image.isNull())
+    {
+        return;
+    }
+
+    QString name = proposedName;
+    if (!overwriteIfExisting && !checkName(name))
+    {
+        return;
+    }
+
+    // We query database here
+
+    SearchXmlWriter writer;
+
+    writer.writeGroup();
+    writer.writeField("similarity", SearchXml::Like);
+    writer.writeAttribute("type", "imageid");
+    writer.writeAttribute("threshold", QString::number(threshold));
+    writer.writeAttribute("sketchtype", "scanned");
+    writer.writeValue(image.id());
+    writer.finishField();
+    writer.finishGroup();
+
+    SAlbum* salbum = AlbumManager::instance()->createSAlbum(name, DatabaseSearch::HaarSearch, writer.xml());
+    AlbumManager::instance()->setCurrentAlbum(salbum);
 
 }
 

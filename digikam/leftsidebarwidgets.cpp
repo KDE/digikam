@@ -45,7 +45,6 @@
 #include "albumsettings.h"
 #include "datefolderview.h"
 #include "editablesearchtreeview.h"
-#include "fuzzysearchfolderview.h"
 #include "fuzzysearchview.h"
 #include "searchfolderview.h"
 #include "searchtabheader.h"
@@ -882,16 +881,18 @@ public:
 
     FuzzySearchView*          fuzzySearchView;
     SearchModel *searchModel;
+    SearchModificationHelper *searchModificationHelper;
 };
 
-FuzzySearchSideBarWidget::FuzzySearchSideBarWidget(QWidget *parent, SearchModel *searchModel) :
+FuzzySearchSideBarWidget::FuzzySearchSideBarWidget(QWidget *parent,
+                SearchModel *searchModel,
+                SearchModificationHelper *searchModificationHelper) :
     SideBarWidget(parent), d(new FuzzySearchSideBarWidgetPriv)
 {
 
     d->searchModel = searchModel;
 
-    d->fuzzySearchView  = new FuzzySearchView(this);
-    d->fuzzySearchView->searchBar()->setModel(searchModel, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
+    d->fuzzySearchView  = new FuzzySearchView(searchModel, searchModificationHelper, this);
 
     QVBoxLayout *layout = new QVBoxLayout(this);
 
@@ -911,6 +912,13 @@ FuzzySearchSideBarWidget::~FuzzySearchSideBarWidget()
 
 void FuzzySearchSideBarWidget::setActive(bool active)
 {
+    kDebug() << "active = " << active;
+    d->fuzzySearchView->setActive(active);
+    if (active)
+    {
+        AlbumManager::instance()->setCurrentAlbum(
+                        d->fuzzySearchView->currentAlbum());
+    }
 }
 
 void FuzzySearchSideBarWidget::loadViewState(KConfigGroup &group)
@@ -927,13 +935,8 @@ void FuzzySearchSideBarWidget::applySettings()
 
 void FuzzySearchSideBarWidget::changeAlbumFromHistory(Album *album)
 {
-    Q3ListViewItem *item = (Q3ListViewItem*) album->extraData(
-                    d->fuzzySearchView->folderView());
-    if (!item)
-        return;
-
-    d->fuzzySearchView->folderView()->setSelected(item, true);
-    d->fuzzySearchView->folderView()->ensureItemVisible(item);
+    SAlbum *salbum = dynamic_cast<SAlbum*> (album);
+    d->fuzzySearchView->setCurrentAlbum(salbum);
 }
 
 QPixmap FuzzySearchSideBarWidget::getIcon()

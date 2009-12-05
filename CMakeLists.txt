@@ -1045,7 +1045,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
        )
 
     SET(libfuzzysearch_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/fuzzysearch/fuzzysearchfolderview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/fuzzysearch/fuzzysearchview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/fuzzysearch/findduplicatesview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/fuzzysearch/findduplicatesalbumitem.cpp

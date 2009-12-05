@@ -35,6 +35,9 @@
 namespace Digikam
 {
 
+class SketchWidget;
+class ImageInfo;
+
 /**
  * Range of a contiguous dates selection <start date, end date>.
  */
@@ -102,6 +105,36 @@ public Q_SLOTS:
     void slotCreateTimeLineSearch(const QString &desiredName,
                                   const DateRangeList &dateRanges,
                                   bool overwriteIfExisting = false);
+
+    /**
+     * Creates a new fuzzy search based on a sketch created by the user.
+     *
+     * @param name name of the new sketch search
+     * @param sketchWidget the widget containing the sketch of the user
+     * @param numberOfResults max number of results to display
+     * @param overwriteIfExisting if true, an existing search with the desired
+     *                            name will be overwritten without prompting the
+     *                            user for a new name
+     */
+    void slotCreateFuzzySearchFromSketch(const QString& name,
+                                         SketchWidget *sketchWidget,
+                                         unsigned int numberOfResults,
+                                         bool overwriteIfExisting = false);
+
+    /**
+     * Creates a new fuzzy search for finding similar photos based on one photo.
+     *
+     * @param name of the new search
+     * @param image image to base this search on
+     * @param threshold threshold for image search, 0 <= threshold <= 1
+     * @param overwriteIfExisting if true, an existing search with the desired
+     *                            name will be overwritten without prompting the
+     *                            user for a new name
+     */
+    void slotCreateFuzzySearchFromImage(const QString &name,
+                                        const ImageInfo &image,
+                                        float threshold,
+                                        bool overwriteIfExisting = false);
 
 private:
 

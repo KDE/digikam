@@ -52,8 +52,8 @@ public:
 
     SearchModificationHelper *searchModificationHelper;
 
-    QAction *renSearch;
-    QAction *delSearch;
+    QAction *renameSearchAction;
+    QAction *deleteSearchAction;
 
 };
 
@@ -65,8 +65,8 @@ EditableSearchTreeView::EditableSearchTreeView(QWidget *parent,
 
     d->searchModificationHelper = searchModificationHelper;
 
-    d->renSearch = new QAction(SmallIcon("edit-rename"), i18n("Rename..."), this);
-    d->delSearch = new QAction(SmallIcon("edit-delete"), i18n("Delete"), this);
+    d->renameSearchAction = new QAction(SmallIcon("edit-rename"), i18n("Rename..."), this);
+    d->deleteSearchAction = new QAction(SmallIcon("edit-delete"), i18n("Delete"), this);
 
     setSortingEnabled(true);
     setSelectAlbumOnClick(true);
@@ -87,10 +87,20 @@ QString EditableSearchTreeView::contextMenuTitle() const
 void EditableSearchTreeView::addCustomContextMenuActions(ContextMenuHelper &cmh, Album *album)
 {
 
-    Q_UNUSED(album);
+    SAlbum *searchAlbum = dynamic_cast<SAlbum*> (album);
 
-    cmh.addAction(d->renSearch);
-    cmh.addAction(d->delSearch);
+    // disable actions if there is no album or the album is a temporary search
+    bool activate = false;
+    if (searchAlbum)
+    {
+        activate = !searchAlbum->isTemporarySearch();
+    }
+
+    d->renameSearchAction->setEnabled(activate);
+    d->deleteSearchAction->setEnabled(activate);
+
+    cmh.addAction(d->renameSearchAction);
+    cmh.addAction(d->deleteSearchAction);
 
 }
 
@@ -104,11 +114,11 @@ void EditableSearchTreeView::handleCustomContextMenuAction(QAction *action, Albu
         return;
     }
 
-    if (action == d->renSearch)
+    if (action == d->renameSearchAction)
     {
         d->searchModificationHelper->slotSearchRename(searchAlbum);
     }
-    else if (action == d->delSearch)
+    else if (action == d->deleteSearchAction)
     {
         d->searchModificationHelper->slotSearchDelete(searchAlbum);
     }

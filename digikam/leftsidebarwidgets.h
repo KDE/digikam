@@ -223,7 +223,8 @@ class FuzzySearchSideBarWidget : public SideBarWidget
 {
     Q_OBJECT
 public:
-    FuzzySearchSideBarWidget(QWidget *parent, SearchModel *searchModel);
+    FuzzySearchSideBarWidget(QWidget *parent, SearchModel *searchModel,
+                    SearchModificationHelper *searchModificationHelper);
     virtual ~FuzzySearchSideBarWidget();
 
     void setActive(bool active);
