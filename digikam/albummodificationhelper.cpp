@@ -21,24 +21,23 @@
  *
  * ============================================================ */
 
-#include "albummodificationhelper.h"
 #include "albummodificationhelper.moc"
 
 // KDE includes
 #include <kdebug.h>
+#include <kinputdialog.h>
+#include <kio/jobuidelegate.h>
+#include <klocale.h>
 #include <kmessagebox.h>
 #include <kurl.h>
-#include <kio/jobuidelegate.h>
-#include <kinputdialog.h>
-#include <klocale.h>
 
 // Local includes
+#include "albummanager.h"
+#include "albumpropsedit.h"
 #include "albumsettings.h"
 #include "collectionmanager.h"
-#include "albumpropsedit.h"
-#include "albummanager.h"
-#include "dio.h"
 #include "deletedialog.h"
+#include "dio.h"
 
 namespace Digikam
 {

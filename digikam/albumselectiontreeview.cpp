@@ -28,19 +28,19 @@
 
 // QT includes
 #include <qaction.h>
+#include <qevent.h>
 #include <qsortfilterproxymodel.h>
 #include <qtooltip.h>
-#include <qevent.h>
 
 // KDE includes
 #include <kdebug.h>
-#include <kmenu.h>
 #include <kiconloader.h>
+#include <kmenu.h>
 
 // Local includes
+#include "albummanager.h"
 #include "contextmenuhelper.h"
 #include "tooltipfiller.h"
-#include "albummanager.h"
 
 namespace Digikam
 {

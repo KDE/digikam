@@ -25,9 +25,9 @@
 #define DIGIKAMMODELCOLLECTION_H
 
 // Local includes
-#include "albummodel.h"
-#include "albumfiltermodel.h"
 #include "abstractalbummodel.h"
+#include "albumfiltermodel.h"
+#include "albummodel.h"
 
 namespace Digikam
 {

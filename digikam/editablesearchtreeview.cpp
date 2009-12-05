@@ -32,8 +32,8 @@
 // KDE includes
 
 #include <kdebug.h>
-#include <kmenu.h>
 #include <kiconloader.h>
+#include <kmenu.h>
 
 // Local includes
 

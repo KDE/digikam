@@ -24,20 +24,20 @@
 #include "tagmodificationhelper.moc"
 
 // KDE includes
-#include <kmessagebox.h>
-#include <klocale.h>
 #include <kapplication.h>
+#include <klocale.h>
+#include <kmessagebox.h>
 
 // Local includes
 #include "album.h"
 #include "albumdb.h"
-#include "tageditdlg.h"
-#include "statusprogressbar.h"
 #include "albumlister.h"
-#include "scancontroller.h"
 #include "databasetransaction.h"
-#include "metadatahub.h"
 #include "imageinfo.h"
+#include "metadatahub.h"
+#include "scancontroller.h"
+#include "statusprogressbar.h"
+#include "tageditdlg.h"
 
 namespace Digikam
 {

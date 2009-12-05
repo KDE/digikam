@@ -25,8 +25,8 @@
 #define SIDEBARWIDGET_H
 
 // QT includes
-#include <qwidget.h>
 #include <qpixmap.h>
+#include <qwidget.h>
 
 // KDE includes
 #include <kconfiggroup.h>

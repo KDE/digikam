@@ -25,11 +25,11 @@
 
 // KDE includes
 
-#include <kmessagebox.h>
-#include <klocale.h>
-#include <kstandardguiitem.h>
-#include <kinputdialog.h>
 #include <kdebug.h>
+#include <kinputdialog.h>
+#include <klocale.h>
+#include <kmessagebox.h>
+#include <kstandardguiitem.h>
 
 // Local includes
 

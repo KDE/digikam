@@ -24,35 +24,35 @@
 #include "leftsidebarwidgets.moc"
 
 // QT includes
-#include <qlayout.h>
-#include <qlabel.h>
 #include <qbuttongroup.h>
+#include <qlabel.h>
+#include <qlayout.h>
 
 // KDE includes
-#include <klocale.h>
-#include <kiconloader.h>
-#include <kdebug.h>
 #include <kcombobox.h>
-#include <ksqueezedtextlabel.h>
-#include <kicon.h>
+#include <kdebug.h>
 #include <kdialog.h>
+#include <kicon.h>
+#include <kiconloader.h>
 #include <kinputdialog.h>
+#include <klocale.h>
+#include <ksqueezedtextlabel.h>
 
 // Local includes
+#include "albummanager.h"
+#include "albummodificationhelper.h"
 #include "albumselectiontreeview.h"
 #include "albumsettings.h"
-#include "searchtextbar.h"
-#include "albummodificationhelper.h"
-#include "albummanager.h"
-#include "tagfolderview.h"
 #include "datefolderview.h"
-#include "timelinewidget.h"
+#include "editablesearchtreeview.h"
+#include "fuzzysearchfolderview.h"
+#include "fuzzysearchview.h"
 #include "searchfolderview.h"
 #include "searchtabheader.h"
-#include "fuzzysearchview.h"
-#include "fuzzysearchfolderview.h"
+#include "searchtextbar.h"
 #include "searchxml.h"
-#include "editablesearchtreeview.h"
+#include "tagfolderview.h"
+#include "timelinewidget.h"
 
 namespace Digikam
 {

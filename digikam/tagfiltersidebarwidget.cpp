@@ -24,8 +24,8 @@
 #include "tagfiltersidebarwidget.moc"
 
 // Qt includes
-#include <qlayout.h>
 #include <qcheckbox.h>
+#include <qlayout.h>
 
 // KDE includes
 #include <kselectaction.h>

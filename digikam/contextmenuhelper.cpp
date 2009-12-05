@@ -38,14 +38,14 @@
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kapplication.h>
+#include <kfileitem.h>
 #include <klocale.h>
 #include <kmenu.h>
 #include <kmimetype.h>
 #include <kmimetypetrader.h>
-#include <kstandardaction.h>
 #include <kopenwithdialog.h>
 #include <krun.h>
-#include <kfileitem.h>
+#include <kstandardaction.h>
 
 // LibKIPI includes
 
@@ -57,6 +57,7 @@
 #include "album.h"
 #include "albumdb.h"
 #include "albummanager.h"
+#include "config-digikam.h"
 #include "databaseaccess.h"
 #include "digikamapp.h"
 #include "imageinfo.h"
@@ -64,7 +65,6 @@
 #include "queuemgrwindow.h"
 #include "ratingpopupmenu.h"
 #include "tagspopupmenu.h"
-#include "config-digikam.h"
 #ifdef HAVE_KDEPIMLIBS
 #include <kabc/stdaddressbook.h>
 #endif // HAVE_KDEPIMLIBS

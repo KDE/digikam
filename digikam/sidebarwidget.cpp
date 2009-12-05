@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-#include "sidebarwidget.h"
 #include "sidebarwidget.moc"
 
 namespace Digikam

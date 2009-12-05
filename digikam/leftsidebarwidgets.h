@@ -28,14 +28,14 @@
 #include <kconfiggroup.h>
 
 // Local includes
-#include "sidebarwidget.h"
 #include "albummodel.h"
-#include "imagealbumfiltermodel.h"
+#include "albummodificationhelper.h"
 #include "gpssearchfolderview.h"
 #include "gpssearchview.h"
-#include "tagmodificationhelper.h"
-#include "albummodificationhelper.h"
+#include "imagealbumfiltermodel.h"
 #include "searchmodificationhelper.h"
+#include "sidebarwidget.h"
+#include "tagmodificationhelper.h"
 
 namespace Digikam
 {

@@ -28,10 +28,11 @@
 #include <QDropEvent>
 
 // KDE includes
+
+#include <kdebug.h>
 #include <klocale.h>
 #include <kmenu.h>
 #include <kmessagebox.h>
-#include <kdebug.h>
 
 // Local includes
 
