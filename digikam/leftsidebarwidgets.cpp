@@ -489,6 +489,7 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget *parent, SearchModel *searc
 
     d->timeLineFolderView = new EditableSearchTreeView(this, searchModel,
                                                       searchModificationHelper);
+    d->timeLineFolderView->albumFilterModel()->listTimelineSearches();
     d->searchDateBar      = new SearchTextBar(this, "TimeLineViewSearchDateBar");
     d->searchDateBar->setModel(searchModel, AbstractAlbumModel::AlbumIdRole,
                                AbstractAlbumModel::AlbumTitleRole);
@@ -576,30 +577,11 @@ void TimelineSideBarWidget::slotInit()
 
 void TimelineSideBarWidget::setActive(bool active)
 {
-    // TODO update
-//    if (d->timeLineFolderView->selectedItem())
-//    {
-//        d->timeLineFolderView->setActive(val);
-//    }
-//    else if (val)
-//    {
-//        int totalCount = 0;
-//        DateRangeList list = d->timeLineWidget->selectedDateRange(totalCount);
-//        if (list.isEmpty())
-//        {
-//            AlbumManager::instance()->setCurrentAlbum(0);
-//        }
-//        else
-//        {
-//            AlbumList sList = AlbumManager::instance()->allSAlbums();
-//            for (AlbumList::const_iterator it = sList.constBegin(); it != sList.constEnd(); ++it)
-//            {
-//                SAlbum* salbum = (SAlbum*)(*it);
-//                if (salbum->title() == d->timeLineFolderView->currentTimeLineSearchName())
-//                    AlbumManager::instance()->setCurrentAlbum(salbum);
-//            }
-//        }
-//    }
+    if (active)
+    {
+        AlbumManager::instance()->setCurrentAlbum(
+                        d->timeLineFolderView->currentAlbum());
+    }
 }
 
 // TODO update, what about these groups...

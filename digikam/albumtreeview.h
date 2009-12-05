@@ -320,6 +320,7 @@ public:
     SearchTreeView(QWidget *parent, SearchModel *searchModel);
     SearchModel *albumModel() const;
     SearchFilterModel *albumFilterModel() const;
+    SAlbum *currentAlbum() const;
 };
 
 class DateAlbumTreeView : public AbstractCountingAlbumTreeView

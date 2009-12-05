@@ -811,6 +811,12 @@ SearchFilterModel *SearchTreeView::albumFilterModel() const
     return static_cast<SearchFilterModel*>(m_albumFilterModel);
 }
 
+SAlbum* SearchTreeView::currentAlbum() const
+{
+    return dynamic_cast<SAlbum*> (m_albumModel->albumForIndex(
+                    m_albumFilterModel->mapToSource(currentIndex())));
+}
+
 DateAlbumTreeView::DateAlbumTreeView(QWidget *parent)
     : AbstractCountingAlbumTreeView(new DateAlbumModel, parent)
 {
