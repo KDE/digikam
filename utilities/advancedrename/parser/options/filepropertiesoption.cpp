@@ -53,18 +53,19 @@ FilePropertiesOption::FilePropertiesOption()
 QString FilePropertiesOption::parseOperation(ParseSettings& settings)
 {
     QFileInfo fi(settings.fileUrl.toLocalFile());
-    const QRegExp& reg = regExp();
+    const QRegExp& reg   = regExp();
+    const QString& token = reg.cap(1);
 
     QString result;
-    if (reg.cap(1) == QString("[file]"))
+    if (token == QString("[file]"))
     {
         result = fi.baseName();
     }
-    else if (reg.cap(1) == QString("[ext]"))
+    else if (token == QString("[ext]"))
     {
         result = fi.suffix();
     }
-    else if (reg.cap(1) == QString(".[ext]"))
+    else if (token == QString(".[ext]"))
     {
         result = "." + fi.suffix();
         settings.useOriginalFileExtension = false;
