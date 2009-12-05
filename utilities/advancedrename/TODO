@@ -14,9 +14,6 @@ Parsing:
 
 Syntax Highlighting:
 
-    - Do not highlight modifier tokens when they are placed incorrectly.
-      Instead mark them with a red background color.
-
     - Be smarter when detecting parameters. Right now we need to make sure that the first matching group
       in the RegExp contains the parameters. But sometimes it is not possible to enclose the parameters with
       the first matching group.

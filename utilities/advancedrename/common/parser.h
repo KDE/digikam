@@ -72,6 +72,8 @@ public:
     bool          tokenAtPosition(TokenType type, ParseSettings& settings, int pos);
     bool          tokenAtPosition(TokenType type, ParseSettings& settings, int pos, int& start, int& length);
 
+    ParseResults  invalidModifiers(ParseSettings& settings);
+
     /**
      * check if the given parse string is valid
      * @param str the parse string
@@ -87,7 +89,14 @@ protected:
 private:
 
     ParseResults results(ParseSettings& settings);
-    void         applyModifiers(const QString& parseString, ParseResults& results);
+
+    /**
+     * Applies modifiers to the given ParseResults.
+     * @param   parseString     the parse string to analyze
+     * @param   results         the ParseResults object the modifiers should be applied to
+     * @return  a ParseResults object with invalid modifiers (modifiers that have a wrong position in the parse string)
+     */
+    ParseResults applyModifiers(const QString& parseString, ParseResults& results);
 
 private:
 
