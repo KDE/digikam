@@ -40,7 +40,7 @@ UniqueModifier::UniqueModifier()
 {
     addToken("{unique}", description());
 
-    QRegExp reg("\\{unique\\}");
+    QRegExp reg("\\{unique(:(\\d+))?\\}");
     reg.setMinimal(true);
     setRegExp(reg);
 }
@@ -50,12 +50,17 @@ QString UniqueModifier::modifyOperation(const ParseSettings& settings, const QSt
     ParseResults::ResultsKey key = settings.currentResultsKey;
     cache[key] << str2Modify;
 
+    const QRegExp& reg = regExp();
     if (cache[key].count(str2Modify) > 1)
     {
-        QString tmp = str2Modify;
-        int index   = cache[key].count(str2Modify) - 1;
-        tmp        += QString("_%1").arg(QString::number(index));
-        return tmp;
+        QString result = str2Modify;
+        int index      = cache[key].count(str2Modify) - 1;
+
+        bool ok     = true;
+        int slength = reg.cap(2).toInt(&ok);
+        slength     = (slength == 0 || !ok) ? 1 : slength;
+        result     += QString("_%1").arg(index, slength, 10, QChar('0'));
+        return result;
     }
 
     return str2Modify;

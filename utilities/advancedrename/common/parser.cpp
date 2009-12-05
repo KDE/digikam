@@ -126,16 +126,11 @@ void Parser::registerModifier(Modifier* modifier)
 
 ParseResults Parser::results(ParseSettings& settings)
 {
-    parseOperation(settings);
+    parse(settings);
     return settings.results;
 }
 
 QString Parser::parse(ParseSettings& settings)
-{
-    return parseOperation(settings);
-}
-
-QString Parser::parseOperation(ParseSettings& settings)
 {
     QFileInfo fi(settings.fileUrl.toLocalFile());
 

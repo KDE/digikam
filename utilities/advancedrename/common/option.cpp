@@ -23,6 +23,10 @@
 
 #include "option.moc"
 
+// Qt includes
+
+#include <QRegExp>
+
 // KDE includes
 
 #include <kiconloader.h>
@@ -41,6 +45,12 @@ public:
     ParseResults parsedResults;
 };
 
+Option::Option(const QString& name, const QString& description)
+      : ParseObject(name), d(new OptionPriv)
+{
+    setDescription(description);
+}
+
 Option::Option(const QString& name, const QString& description, const QPixmap& icon)
       : ParseObject(name, icon), d(new OptionPriv)
 {
@@ -56,9 +66,23 @@ Option::~Option()
 ParseResults Option::parse(ParseSettings& settings)
 {
     d->parsedResults.clear();
-
+    const QRegExp& reg         = regExp();
     const QString& parseString = settings.parseString;
-    parseOperation(parseString, settings, d->parsedResults);
+
+    int pos = 0;
+    while (pos > -1)
+    {
+        pos = reg.indexIn(parseString, pos);
+        if (pos > -1)
+        {
+            QString result = parseOperation(settings);
+
+            ParseResults::ResultsKey   k(pos, reg.cap(0).count());
+            ParseResults::ResultsValue v(reg.cap(0), result);
+            d->parsedResults.addEntry(k, v);
+            pos += reg.matchedLength();
+        }
+    }
 
     return d->parsedResults;
 }

@@ -152,28 +152,23 @@ void MetadataOption::slotTokenTriggered(const QString& token)
     delete dlg;
 }
 
-void MetadataOption::parseOperation(const QString& parseString, ParseSettings& settings, ParseResults& results)
+QString MetadataOption::parseOperation(ParseSettings& settings)
 {
-    QRegExp reg = regExp();
+    QString result;
+    const QRegExp& reg  = regExp();
+    QString keyword     = reg.cap(2);
+    result = parseMetadata(keyword, settings);
 
-    // --------------------------------------------------------
-
-    QString tmp;
-    PARSE_LOOP_START(parseString, reg)
-    {
-        QString keyword = reg.cap(2);
-        tmp = parseMetadata(keyword, settings);
-    }
-    PARSE_LOOP_END(parseString, reg, tmp, results)
+    return result;
 }
 
 QString MetadataOption::parseMetadata(const QString& token, ParseSettings& settings)
 {
-    QString tmp;
+    QString result;
     QString keyword = token.toLower();
     if (keyword.isEmpty())
     {
-        return tmp;
+        return result;
     }
 
     DMetadata meta(settings.fileUrl.toLocalFile());
@@ -197,12 +192,12 @@ QString MetadataOption::parseMetadata(const QString& token, ParseSettings& setti
         {
             if (key.toLower().contains(keyword))
             {
-                tmp = dataMap[key];
+                result = dataMap[key];
                 break;
             }
         }
     }
-    return tmp;
+    return result;
 }
 
 } // namespace Digikam

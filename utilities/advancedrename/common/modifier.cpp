@@ -27,6 +27,12 @@
 namespace Digikam
 {
 
+Modifier::Modifier(const QString& name, const QString& description)
+        : ParseObject(name)
+{
+    setDescription(description);
+}
+
 Modifier::Modifier(const QString& name, const QString& description, const QPixmap& icon)
         : ParseObject(name, icon)
 {
@@ -39,7 +45,24 @@ QString Modifier::modify(const ParseSettings& settings, const QString& str2Modif
     {
         return QString();
     }
-    return modifyOperation(settings, str2Modify);
+
+    const QRegExp& reg         = regExp();
+    const QString& parseString = settings.parseString;
+
+    QString result;
+
+    int pos = 0;
+    while (pos > -1)
+    {
+        pos = reg.indexIn(parseString, pos);
+        if (pos > -1)
+        {
+            result += modifyOperation(settings, str2Modify);
+            pos += reg.matchedLength();
+        }
+    }
+
+    return result;
 }
 
 } // namespace Digikam

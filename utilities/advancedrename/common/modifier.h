@@ -27,7 +27,6 @@
 // Qt includes
 
 #include <QList>
-#include <QPixmap>
 #include <QString>
 
 // Local includes
@@ -45,7 +44,8 @@ class Modifier : public ParseObject
 
 public:
 
-    Modifier(const QString& name, const QString& description, const QPixmap& icon = QPixmap());
+    Modifier(const QString& name, const QString& description);
+    Modifier(const QString& name, const QString& description, const QPixmap& icon);
     virtual ~Modifier() {};
 
     QString modify(const ParseSettings& settings, const QString& str2Modify);

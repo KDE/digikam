@@ -306,12 +306,18 @@ void AdvancedRenameWidgetTest::testUniqueModifier()
     settings.cameraName  = QString("Nikon D50");
     settings.parseString = QString("[file]{unique}_T[date:hhmmss]{unique}_[cam]{unique}");
 
+#define DIGITS_STR(VALUE, DIGITS) QString("%1").arg(VALUE, DIGITS, 10, QChar('0'))
+
     QStringList validResults;
-    validResults << "myfile001_T100012_Nikon D50.jpg";
-    validResults << "myfile001_1_T100012_1_Nikon D50_1.jpg";
-    validResults << "myfile001_2_T214536_Nikon D50_2.jpg";
-    validResults << "myfile001_3_T214536_1_Nikon D50_3.jpg";
-    validResults << "myfile001_4_T214536_2_Nikon D50_4.jpg";
+    validResults << QString("myfile001_T100012_Nikon D50.jpg");
+    validResults << QString("myfile001_%1_T100012_%2_Nikon D50_%3.jpg")
+            .arg(DIGITS_STR(1, 1)).arg(DIGITS_STR(1, 1)).arg(DIGITS_STR(1, 1));
+    validResults << QString("myfile001_%1_T214536_Nikon D50_%2.jpg")
+            .arg(DIGITS_STR(2, 1)).arg(DIGITS_STR(2, 1));
+    validResults << QString("myfile001_%1_T214536_%2_Nikon D50_%3.jpg")
+            .arg(DIGITS_STR(3, 1)).arg(DIGITS_STR(1, 1)).arg(DIGITS_STR(3, 1));
+    validResults << QString("myfile001_%1_T214536_%2_Nikon D50_%3.jpg")
+            .arg(DIGITS_STR(4, 1)).arg(DIGITS_STR(2, 1)).arg(DIGITS_STR(4, 1));
 
     QTime t1;
     t1.setHMS(10, 00, 12);
@@ -334,6 +340,35 @@ void AdvancedRenameWidgetTest::testUniqueModifier()
 
     QCOMPARE(results, validResults);
 
+    // --------------------------------------------------------
+
+    settings.parseString = QString("[file]{unique:2}_T[date:hhmmss]{unique}_[cam]{unique:4}");
+    results.clear();
+    validResults.clear();
+    parser.reset();
+    date.setTime(t1);
+    settings.dateTime = date;
+    validResults << QString("myfile001_T100012_Nikon D50.jpg");
+    validResults << QString("myfile001_%1_T100012_%2_Nikon D50_%3.jpg")
+            .arg(DIGITS_STR(1, 2)).arg(DIGITS_STR(1, 1)).arg(DIGITS_STR(1, 4));
+    validResults << QString("myfile001_%1_T214536_Nikon D50_%2.jpg")
+            .arg(DIGITS_STR(2, 2)).arg(DIGITS_STR(2, 4));
+    validResults << QString("myfile001_%1_T214536_%2_Nikon D50_%3.jpg")
+            .arg(DIGITS_STR(3, 2)).arg(DIGITS_STR(1, 1)).arg(DIGITS_STR(3, 4));
+    validResults << QString("myfile001_%1_T214536_%2_Nikon D50_%3.jpg")
+            .arg(DIGITS_STR(4, 2)).arg(DIGITS_STR(2, 1)).arg(DIGITS_STR(4, 4));
+
+    results << parser.parse(settings);
+    results << parser.parse(settings);
+    date.setTime(t2);
+    settings.dateTime = date;
+    results << parser.parse(settings);
+    results << parser.parse(settings);
+    results << parser.parse(settings);
+
+    QCOMPARE(results, validResults);
+
+#undef DIGITS_STR
 }
 
 void AdvancedRenameWidgetTest::testRangeModifier_data()

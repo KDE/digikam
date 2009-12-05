@@ -265,7 +265,7 @@ public:
         configPatternHistoryListEntry("Pattern History List"),
 
         maxVisibleItems(10),
-        maxHistoryItems(20),
+        maxHistoryItems(30),
         lineEdit(0),
         highlighter(0)
     {}

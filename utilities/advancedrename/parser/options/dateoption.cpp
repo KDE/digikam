@@ -172,16 +172,16 @@ QString DateOptionDialog::formattedDateTime(const QDateTime& date)
     QVariant v;
 
     v = df.formatType((DateFormat::Type)ui->dateFormatPicker->currentIndex());
-    QString tmp;
+    QString result;
     if (v.type() == QVariant::String)
     {
-        tmp = date.toString(v.toString());
+        result = date.toString(v.toString());
     }
     else
     {
-        tmp = date.toString((Qt::DateFormat)v.toInt());
+        result = date.toString((Qt::DateFormat)v.toInt());
     }
-    return tmp;
+    return result;
 }
 
 void DateOptionDialog::slotDateSourceChanged(int index)
@@ -211,8 +211,8 @@ void DateOptionDialog::slotCustomFormatChanged(const QString&)
 
 void DateOptionDialog::updateExampleLabel()
 {
-    QString tmp = QString("example: %1").arg(formattedDateTime(QDateTime::currentDateTime()));
-    ui->exampleLabel->setText(tmp);
+    QString result = QString("example: %1").arg(formattedDateTime(QDateTime::currentDateTime()));
+    ui->exampleLabel->setText(result);
 }
 
 // --------------------------------------------------------
@@ -231,41 +231,37 @@ DateOption::DateOption()
     setRegExp(reg);
 }
 
-void DateOption::parseOperation(const QString& parseString, ParseSettings& settings, ParseResults& results)
+QString DateOption::parseOperation(ParseSettings& settings)
 {
-    QRegExp reg = regExp();
+    QString result;
+    DateFormat df;
 
-    // --------------------------------------------------------
+    const QRegExp& reg = regExp();
 
-    QString tmp;
-    PARSE_LOOP_START(parseString, reg)
+    QString token = reg.cap(1);
+    if (!token.isEmpty())
     {
-        DateFormat df;
+        token.remove(0, 1);
+    }
 
-        QString token = reg.cap(1);
-        if (!token.isEmpty())
+    QVariant v = df.formatType(token);
+    if (v.isNull())
+    {
+        result = settings.dateTime.toString(token);
+    }
+    else
+    {
+        if (v.type() == QVariant::String)
         {
-            token.remove(0, 1);
-        }
-
-        QVariant v = df.formatType(token);
-        if (v.isNull())
-        {
-            tmp = settings.dateTime.toString(token);
+            result = settings.dateTime.toString(v.toString());
         }
         else
         {
-            if (v.type() == QVariant::String)
-            {
-                tmp = settings.dateTime.toString(v.toString());
-            }
-            else
-            {
-                tmp = settings.dateTime.toString((Qt::DateFormat)v.toInt());
-            }
+            result = settings.dateTime.toString((Qt::DateFormat)v.toInt());
         }
     }
-    PARSE_LOOP_END(parseString, reg, tmp, results)
+
+    return result;
 }
 
 void DateOption::slotTokenTriggered(const QString& token)

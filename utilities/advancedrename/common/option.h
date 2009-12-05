@@ -29,6 +29,8 @@
 #include "parseobject.h"
 #include "parseresults.h"
 
+class QRegExp;
+
 namespace Digikam
 {
 
@@ -40,14 +42,15 @@ class Option : public ParseObject
 
 public:
 
-    Option(const QString& name, const QString& description, const QPixmap& icon = QPixmap());
+    Option(const QString& name, const QString& description);
+    Option(const QString& name, const QString& description, const QPixmap& icon);
     virtual ~Option();
 
     ParseResults parse(ParseSettings& settings);
 
 protected:
 
-    virtual void parseOperation(const QString& parseString, ParseSettings& settings, ParseResults& results) = 0;
+    virtual QString parseOperation(ParseSettings& settings) = 0;
 
 private:
 

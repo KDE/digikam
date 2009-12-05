@@ -45,18 +45,9 @@ CameraNameOption::CameraNameOption()
     setRegExp(reg);
 }
 
-void CameraNameOption::parseOperation(const QString& parseString, ParseSettings& settings, ParseResults& results)
+QString CameraNameOption::parseOperation(ParseSettings& settings)
 {
-    QRegExp reg = regExp();
-
-    // --------------------------------------------------------
-
-    QString tmp;
-    PARSE_LOOP_START(parseString, reg)
-    {
-        tmp = Parser::parseStringIsValid(settings.cameraName) ? settings.cameraName : QString();
-    }
-    PARSE_LOOP_END(parseString, reg, tmp, results)
+    return Parser::parseStringIsValid(settings.cameraName) ? settings.cameraName : QString();
 }
 
 } // namespace Digikam

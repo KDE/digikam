@@ -42,24 +42,6 @@ class Highlighter : public QSyntaxHighlighter
 
 public:
 
-    enum Colors
-    {
-        OptionColor     = Qt::red,
-        ModifierColor   = Qt::darkGreen,
-        QuotedTextColor = Qt::blue,
-        ParameterColor  = Qt::darkYellow
-    };
-
-    enum PatternType
-    {
-        OptionPattern = 0,
-        ModifierPattern,
-        QuotedTextPattern,
-        ParameterPattern
-    };
-
-public:
-
     Highlighter(QTextEdit* parent, Parser* parser);
     virtual ~Highlighter();
 
@@ -72,6 +54,14 @@ private:
     void setupHighlightingGrammar(Parser* parser);
 
 private:
+
+    enum PatternType
+    {
+        OptionPattern = 0,
+        ModifierPattern,
+        QuotedTextPattern,
+        ParameterPattern
+    };
 
     struct HighlightingRule
     {
@@ -87,6 +77,7 @@ private:
     QTextCharFormat parameterFormat;
     QTextCharFormat modifierFormat;
     QTextCharFormat quotationFormat;
+    QTextCharFormat faultyModifierFormat;
 };
 
 }  // namespace Digikam

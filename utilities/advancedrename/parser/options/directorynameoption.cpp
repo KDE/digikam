@@ -50,35 +50,30 @@ DirectoryNameOption::DirectoryNameOption()
     setRegExp(reg);
 }
 
-void DirectoryNameOption::parseOperation(const QString& parseString, ParseSettings& settings, ParseResults& results)
+QString DirectoryNameOption::parseOperation(ParseSettings& settings)
 {
     QFileInfo fi(settings.fileUrl.toLocalFile());
     QStringList folders = fi.absolutePath().split('/', QString::SkipEmptyParts);
+    int folderCount     = folders.count();
+    const QRegExp& reg  = regExp();
 
-    QRegExp reg     = regExp();
-    int folderCount = folders.count();
+    QString result;
+    int matchedLength = reg.cap(1).length();
 
-    // --------------------------------------------------------
-
-    QString tmp;
-    PARSE_LOOP_START(parseString, reg)
+    if (matchedLength == 0)
     {
-        int matchedLength = reg.cap(1).length();
-
-        if (matchedLength == 0)
-        {
-            tmp = folders.last();
-        }
-        else if (matchedLength > (folderCount - 1))
-        {
-            tmp.clear();
-        }
-        else
-        {
-            tmp = folders[folderCount - matchedLength - 1];
-        }
+        result = folders.last();
     }
-    PARSE_LOOP_END(parseString, reg, tmp, results)
+    else if (matchedLength > (folderCount - 1))
+    {
+        result.clear();
+    }
+    else
+    {
+        result = folders[folderCount - matchedLength - 1];
+    }
+
+    return result;
 }
 
 } // namespace Digikam

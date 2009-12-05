@@ -57,41 +57,47 @@ void Highlighter::highlightBlock(const QString& text)
             int length = expression.matchedLength();
             setFormat(index, length, rule.format);
 
-            // highlight parameters in options
-            if ((rule.type == OptionPattern)
-                && expression.numCaptures() > 0 && !expression.cap(1).isEmpty())
+            switch (rule.type)
             {
-                QString fullmatched  = expression.cap(0);
-                QString parameters   = expression.cap(1);
-                if (parameters.startsWith(':'))
+                case OptionPattern:
+                case ModifierPattern:
                 {
-                    parameters.remove(0, 1);
-                    if (!parameters.isEmpty())
+                    // highlight parameters in options and modifiers
+                    if (expression.numCaptures() > 0 && !expression.cap(1).isEmpty())
                     {
-                        int pindex = fullmatched.indexOf(parameters);
-                        while (pindex >= 0)
+                        QString fullmatched  = expression.cap(0);
+                        QString parameters   = expression.cap(1);
+                        if (parameters.startsWith(':'))
                         {
-                            int plength = parameters.length();
-                            setFormat(index + pindex, plength, parameterFormat);
-                            pindex = fullmatched.indexOf(parameters, pindex + plength);
+                            parameters.remove(0, 1);
+                            if (!parameters.isEmpty())
+                            {
+                                int pindex = fullmatched.indexOf(parameters);
+                                while (pindex >= 0)
+                                {
+                                    int plength = parameters.length();
+                                    setFormat(index + pindex, plength, parameterFormat);
+                                    pindex = fullmatched.indexOf(parameters, pindex + plength);
+                                }
+                            }
+                        }
+                    }
+
+                    if (expression.numCaptures() > 0)
+                    {
+                        // highlight quoted text in options and modifiers
+                        QRegExp quotationExp = quotationRule.pattern;
+                        QString fullmatched  = expression.cap(0);
+                        int qindex           = quotationExp.indexIn(fullmatched);
+                        while (qindex >= 0)
+                        {
+                            int qlength = quotationExp.matchedLength();
+                            setFormat(index + qindex, qlength, quotationFormat);
+                            qindex = quotationExp.indexIn(fullmatched, qindex + qlength);
                         }
                     }
                 }
-            }
-
-            // highlight quoted text in options and modifiers
-            if ((rule.type == OptionPattern || rule.type == ModifierPattern)
-                && expression.numCaptures() > 0)
-            {
-                QRegExp quotationExp = quotationRule.pattern;
-                QString fullmatched  = expression.cap(0);
-                int qindex           = quotationExp.indexIn(fullmatched);
-                while (qindex >= 0)
-                {
-                    int qlength = quotationExp.matchedLength();
-                    setFormat(index + qindex, qlength, quotationFormat);
-                    qindex = quotationExp.indexIn(fullmatched, qindex + qlength);
-                }
+                default: break;
             }
             index = expression.indexIn(text, index + length);
         }
@@ -109,7 +115,7 @@ void Highlighter::setupHighlightingGrammar(Parser* parser)
 
     // --------------------------------------------------------
 
-    optionFormat.setForeground((Qt::GlobalColor)OptionColor);
+    optionFormat.setForeground(Qt::red);
 
     foreach (Option* option, parser->options())
     {
@@ -122,7 +128,7 @@ void Highlighter::setupHighlightingGrammar(Parser* parser)
 
     // --------------------------------------------------------
 
-    modifierFormat.setForeground((Qt::GlobalColor)ModifierColor);
+    modifierFormat.setForeground(Qt::darkGreen);
 
     foreach (Modifier* modifier, parser->modifiers())
     {
@@ -135,7 +141,7 @@ void Highlighter::setupHighlightingGrammar(Parser* parser)
 
     // --------------------------------------------------------
 
-    quotationFormat.setForeground((Qt::GlobalColor)QuotedTextColor);
+    quotationFormat.setForeground(Qt::blue);
     quotationFormat.setFontItalic(true);
     quotationRule.pattern = QRegExp("\".*\"");
     quotationRule.pattern.setMinimal(true);
@@ -144,8 +150,13 @@ void Highlighter::setupHighlightingGrammar(Parser* parser)
 
     // --------------------------------------------------------
 
-    parameterFormat.setForeground((Qt::GlobalColor)ParameterColor);
+    parameterFormat.setForeground(Qt::darkYellow);
     parameterFormat.setFontItalic(true);
+
+    // --------------------------------------------------------
+
+    faultyModifierFormat.setForeground(Qt::white);
+    faultyModifierFormat.setBackground(Qt::red);
 }
 
 } // namespace Digikam

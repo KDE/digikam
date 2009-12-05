@@ -165,7 +165,7 @@ bool ParseResults::keyIsValid(const ResultsKey& key)
 
 QString ParseResults::replaceTokens(const QString& markedString)
 {
-    QString tmp;
+    QString result;
 
     for (int i = 0; i < markedString.count();)
     {
@@ -173,16 +173,16 @@ QString ParseResults::replaceTokens(const QString& markedString)
         {
             ResultsKey key     = keyAtPosition(i);
             ResultsValue value = m_results.value(key);
-            tmp.append(value.second);
+            result.append(value.second);
             i += key.second;
         }
         else
         {
-            tmp.append(markedString[i]);
+            result.append(markedString[i]);
             ++i;
         }
     }
-    return tmp;
+    return result;
 }
 
 void ParseResults::debug()

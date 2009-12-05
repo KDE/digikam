@@ -510,42 +510,43 @@ double ImageHistogram::getValue(int channel, int bin)
     return value;
 }
 
-double ImageHistogram::getMaximum(int channel)
+double ImageHistogram::getMaximum(int channel, int start, int end)
 {
     double max = 0.0;
     int    x;
 
-    if ( !d->histogram )
+    if ( !d->histogram || start < 0 ||
+        end > d->histoSegments-1 || start > end )
         return 0.0;
 
     switch(channel)
     {
        case LuminosityChannel:
-          for (x = 0 ; x < d->histoSegments ; ++x)
+          for (x = start ; x < end ; ++x)
              if (d->histogram[x].value > max)
                 max = d->histogram[x].value;
           break;
 
        case RedChannel:
-          for (x = 0 ; x < d->histoSegments ; ++x)
+          for (x = start ; x < end ; ++x)
              if (d->histogram[x].red > max)
                 max = d->histogram[x].red;
           break;
 
        case GreenChannel:
-          for (x = 0 ; x < d->histoSegments ; ++x)
+          for (x = start ; x < end ; ++x)
              if (d->histogram[x].green > max)
                 max = d->histogram[x].green;
           break;
 
        case BlueChannel:
-          for (x = 0 ; x < d->histoSegments ; ++x)
+          for (x = start ; x < end ; ++x)
              if (d->histogram[x].blue > max)
                 max = d->histogram[x].blue;
           break;
 
        case AlphaChannel:
-          for (x = 0 ; x < d->histoSegments ; ++x)
+          for (x = start ; x < end ; ++x)
              if (d->histogram[x].alpha > max)
                 max = d->histogram[x].alpha;
           break;
