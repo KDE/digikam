@@ -44,6 +44,17 @@ class ContextMenuHelper;
 
 class AbstractAlbumTreeViewPriv;
 
+/**
+ * Base class for all tree views that display Album-based content provided by an
+ * AbstractSpecificAlbumModel. This class enables various utility functions like
+ * selecting albums on mouse actions or providing an infrastructure for
+ * displaying a context menu for albums.
+ *
+ * Context menu handling is implemented as template methods with hook methods
+ * that can be implemented by subclasses to provide a custom behaviour. In
+ * default mode no context menu is shown at all. It must be enabled via a call
+ * to setEnableContextMenu.
+ */
 class AbstractAlbumTreeView : public QTreeView
 {
     Q_OBJECT

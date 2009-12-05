@@ -24,7 +24,7 @@
  *
  * ============================================================ */
 
-#include "albumfolderview.moc"
+#include "albumselectiontreeview.moc"
 
 // QT includes
 #include <qaction.h>
@@ -45,11 +45,11 @@
 namespace Digikam
 {
 
-class AlbumFolderViewNewPriv
+class AlbumSelectionTreeViewPriv
 {
 
 public:
-    AlbumFolderViewNewPriv() :
+    AlbumSelectionTreeViewPriv() :
         albumModificationHelper(0),
         enableToolTips(false)
     {
@@ -64,9 +64,9 @@ public:
 
 };
 
-AlbumFolderViewNew::AlbumFolderViewNew(QWidget *parent, AlbumModel *model,
+AlbumSelectionTreeView::AlbumSelectionTreeView(QWidget *parent, AlbumModel *model,
                 AlbumModificationHelper *albumModificationHelper) :
-    AlbumTreeView(model, parent), d(new AlbumFolderViewNewPriv)
+    AlbumTreeView(model, parent), d(new AlbumSelectionTreeViewPriv)
 {
 
     d->albumModificationHelper = albumModificationHelper;
@@ -85,22 +85,22 @@ AlbumFolderViewNew::AlbumFolderViewNew(QWidget *parent, AlbumModel *model,
 
 }
 
-AlbumFolderViewNew::~AlbumFolderViewNew()
+AlbumSelectionTreeView::~AlbumSelectionTreeView()
 {
     delete d;
 }
 
-void AlbumFolderViewNew::setEnableToolTips(bool enable)
+void AlbumSelectionTreeView::setEnableToolTips(bool enable)
 {
     d->enableToolTips = enable;
 }
 
-QString AlbumFolderViewNew::contextMenuTitle() const
+QString AlbumSelectionTreeView::contextMenuTitle() const
 {
     return i18n("My Albums");
 }
 
-void AlbumFolderViewNew::addCustomContextMenuActions(ContextMenuHelper &cmh, Album *a)
+void AlbumSelectionTreeView::addCustomContextMenuActions(ContextMenuHelper &cmh, Album *a)
 {
 
     PAlbum *album = dynamic_cast<PAlbum*> (a);
@@ -133,7 +133,7 @@ void AlbumFolderViewNew::addCustomContextMenuActions(ContextMenuHelper &cmh, Alb
 
 }
 
-void AlbumFolderViewNew::handleCustomContextMenuAction(QAction *action, Album *a)
+void AlbumSelectionTreeView::handleCustomContextMenuAction(QAction *action, Album *a)
 {
 
     PAlbum *album = dynamic_cast<PAlbum*> (a);
@@ -160,7 +160,7 @@ void AlbumFolderViewNew::handleCustomContextMenuAction(QAction *action, Album *a
 
 }
 
-bool AlbumFolderViewNew::viewportEvent(QEvent *event)
+bool AlbumSelectionTreeView::viewportEvent(QEvent *event)
 {
 
     // let the base class handle the event if the extended tool tips aren't

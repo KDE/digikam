@@ -1059,7 +1059,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
        )
 
     SET(libtimeline_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/timeline/timelinefolderview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/timeline/timelinewidget.cpp
        )
 
@@ -1098,7 +1097,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     SET(libdigikamgui_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumdragdrop.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumfolderview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumhistory.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumiconviewfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumlister.cpp
@@ -1107,6 +1105,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumpropsedit.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumselectcombobox.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumselectdialog.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumselectiontreeview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumselectwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumsettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumthumbnailloader.cpp
@@ -1122,6 +1121,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikammodelcollection.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikamview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/dio.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/editablesearchtreeview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/folderitem.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/folderview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/folderviewtooltip.cpp

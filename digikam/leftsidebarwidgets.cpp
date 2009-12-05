@@ -1,11 +1,26 @@
-/*
- * leftsidebarwidgets.cpp
+/* ============================================================
  *
- *  Created on: 14.11.2009
- *      Author: languitar
- */
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2000-12-05
+ * Description : left sidebar widgets
+ *
+ * Copyright (C) 2009 by Johannes Wienke <languitar at semipol dot de>
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * ============================================================ */
 
-#include "leftsidebarwidgets.h"
 #include "leftsidebarwidgets.moc"
 
 // QT includes
@@ -24,20 +39,20 @@
 #include <kinputdialog.h>
 
 // Local includes
-#include "albumfolderview.h"
+#include "albumselectiontreeview.h"
 #include "albumsettings.h"
 #include "searchtextbar.h"
 #include "albummodificationhelper.h"
 #include "albummanager.h"
 #include "tagfolderview.h"
 #include "datefolderview.h"
-#include "timelinefolderview.h"
 #include "timelinewidget.h"
 #include "searchfolderview.h"
 #include "searchtabheader.h"
 #include "fuzzysearchview.h"
 #include "fuzzysearchfolderview.h"
 #include "searchxml.h"
+#include "editablesearchtreeview.h"
 
 namespace Digikam
 {
@@ -52,7 +67,7 @@ public:
     }
 
     AlbumModificationHelper *albumModificationHelper;
-    AlbumFolderViewNew *albumFolderView;
+    AlbumSelectionTreeView *albumFolderView;
     SearchTextBar *searchTextBar;
 };
 
@@ -65,7 +80,7 @@ AlbumFolderViewSideBarWidget::AlbumFolderViewSideBarWidget(QWidget *parent,
 
     QVBoxLayout *layout = new QVBoxLayout(this);
 
-    d->albumFolderView = new AlbumFolderViewNew(this, model, d->albumModificationHelper);
+    d->albumFolderView = new AlbumSelectionTreeView(this, model, d->albumModificationHelper);
     d->searchTextBar   = new SearchTextBar(this, "DigikamViewFolderSearchBar");
     d->searchTextBar->setHighlightOnCompletion(true);
     d->searchTextBar->setModel(model, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
@@ -349,7 +364,7 @@ public:
     KSqueezedTextLabel* cursorDateLabel;
 
     SearchTextBar*      searchDateBar;
-    TimeLineFolderViewNew* timeLineFolderView;
+    EditableSearchTreeView* timeLineFolderView;
     TimeLineWidget*     timeLineWidget;
 
     SearchModel*        searchModel;
@@ -472,7 +487,7 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget *parent, SearchModel *searc
 
     // ---------------------------------------------------------------
 
-    d->timeLineFolderView = new TimeLineFolderViewNew(this, searchModel,
+    d->timeLineFolderView = new EditableSearchTreeView(this, searchModel,
                                                       searchModificationHelper);
     d->searchDateBar      = new SearchTextBar(this, "TimeLineViewSearchDateBar");
     d->searchDateBar->setModel(searchModel, AbstractAlbumModel::AlbumIdRole,

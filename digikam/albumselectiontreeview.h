@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef ALBUMFOLDERVIEW_H
-#define ALBUMFOLDERVIEW_H
+#ifndef ALBUMSELECTIONTREEVIEW_H
+#define ALBUMSELECTIONTREEVIEW_H
 
 // QT includes
 #include <qtreeview.h>
@@ -37,19 +37,20 @@
 
 namespace Digikam {
 
-class AlbumFolderViewNewPriv;
+class AlbumSelectionTreeViewPriv;
 
 /**
- * Basic album view based on a AlbumTreeView.
+ * Alubm tree view used in the left sidebar to select PAlbums and perform
+ * operations on them via a context menu.
  *
  * @author jwienke
  */
-class AlbumFolderViewNew: public AlbumTreeView
+class AlbumSelectionTreeView: public AlbumTreeView
 {
 Q_OBJECT
 public:
-    AlbumFolderViewNew(QWidget *parent, AlbumModel *model, AlbumModificationHelper *albumModificationHelper);
-    ~AlbumFolderViewNew();
+    AlbumSelectionTreeView(QWidget *parent, AlbumModel *model, AlbumModificationHelper *albumModificationHelper);
+    ~AlbumSelectionTreeView();
 
     /**
      * Sets whether this widget shall display tool tips or not.
@@ -81,10 +82,10 @@ private:
     bool viewportEvent(QEvent *event);
 
 private:
-    AlbumFolderViewNewPriv *d;
+    AlbumSelectionTreeViewPriv *d;
 
 };
 
 }  // namespace Digikam
 
-#endif // ALBUMFOLDERVIEW_H
+#endif // ALBUMSELECTIONTREEVIEW_H

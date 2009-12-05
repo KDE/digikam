@@ -14,6 +14,7 @@ post 1.0.0 mvc merge
  * searchtextbar in tagcheckview for image properties doesn't highlight
  * let various modification helpers inherit from a common base class to avoid
    duplicate renaming code etc.
+ * Restoring view states is mostly a stub.
 
 ------------------------------------------------------------------------------------
 1.0.0 TODO LIST
