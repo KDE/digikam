@@ -12,7 +12,8 @@ post 1.0.0 mvc merge
  * think about where to create the tag modification helper for the sidebar in editor and lighttable.
  * connect searchtextbar directly to albumfiltermodel, to avoid indirect communication via treeviews
  * searchtextbar in tagcheckview for image properties doesn't highlight
- * plus and minus buttons missing for tags because of IgnoreRootAlbum
+ * let various modification helpers inherit from a common base class to avoid
+   duplicate renaming code etc.
 
 ------------------------------------------------------------------------------------
 1.0.0 TODO LIST
