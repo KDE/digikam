@@ -115,7 +115,7 @@ void Highlighter::setupHighlightingGrammar(Parser* parser)
 
     // --------------------------------------------------------
 
-    optionFormat.setForeground((Qt::GlobalColor)OptionColor);
+    optionFormat.setForeground(Qt::red);
 
     foreach (Option* option, parser->options())
     {
@@ -128,7 +128,7 @@ void Highlighter::setupHighlightingGrammar(Parser* parser)
 
     // --------------------------------------------------------
 
-    modifierFormat.setForeground((Qt::GlobalColor)ModifierColor);
+    modifierFormat.setForeground(Qt::darkGreen);
 
     foreach (Modifier* modifier, parser->modifiers())
     {
@@ -141,7 +141,7 @@ void Highlighter::setupHighlightingGrammar(Parser* parser)
 
     // --------------------------------------------------------
 
-    quotationFormat.setForeground((Qt::GlobalColor)QuotedTextColor);
+    quotationFormat.setForeground(Qt::blue);
     quotationFormat.setFontItalic(true);
     quotationRule.pattern = QRegExp("\".*\"");
     quotationRule.pattern.setMinimal(true);
@@ -150,7 +150,7 @@ void Highlighter::setupHighlightingGrammar(Parser* parser)
 
     // --------------------------------------------------------
 
-    parameterFormat.setForeground((Qt::GlobalColor)ParameterColor);
+    parameterFormat.setForeground(Qt::darkYellow);
     parameterFormat.setFontItalic(true);
 }
 
