@@ -47,7 +47,6 @@
 #include "imagescanner.h"
 #include "searchfolderview.h"
 #include "themeengine.h"
-#include "timelinefolderview.h"
 
 namespace Digikam
 {
