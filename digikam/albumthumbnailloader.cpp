@@ -235,7 +235,11 @@ QPixmap AlbumThumbnailLoader::getTagThumbnailDirectly(TAlbum *album, bool blendI
         }
         else
         {
-            return loadIcon(album->icon(), size);
+            QPixmap pixmap = loadIcon(album->icon(), size);
+            if (blendIcon)
+                return blendIcons(getStandardTagIcon(), pixmap);
+            else
+                return pixmap;
         }
     }
 
