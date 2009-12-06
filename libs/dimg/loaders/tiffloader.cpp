@@ -829,7 +829,8 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
     imageSetAttribute("savedformat", "TIFF");
 
-    saveMetadata(filePath);
+// See B.K.O #211758: disable tiff metadata update until we found where is the problem exactly.
+//    saveMetadata(filePath);
 
     return true;
 }
