@@ -138,6 +138,8 @@ protected Q_SLOTS:
     void slotCurrentChanged();
     void slotSelectionChanged();
 
+    void albumSettingsChanged();
+
 protected:
 
     // context menu handling

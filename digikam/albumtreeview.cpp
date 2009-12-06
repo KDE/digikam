@@ -26,7 +26,8 @@
 // Qt includes
 
 #include <QMouseEvent>
-#include <qscrollbar.h>
+#include <QScrollBar>
+#include <QStyledItemDelegate>
 
 // KDE includes
 
@@ -74,6 +75,45 @@ struct State
     bool currentIndex;
 };
 
+class AlbumTreeViewDelegate : public QStyledItemDelegate
+{
+public:
+    AlbumTreeViewDelegate(AbstractAlbumTreeView *treeView = 0)
+                : QStyledItemDelegate(treeView),
+                  m_treeView(treeView), m_height(0)
+    {
+        updateHeight();
+    }
+
+    virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
+    {
+        QSize size = QStyledItemDelegate::sizeHint(option, index);
+        size.setHeight(qMax(size.height(), m_height));
+        return size;
+    }
+
+    void updateHeight()
+    {
+        int h = qMax(AlbumThumbnailLoader::instance()->thumbnailSize() + 2, m_treeView->fontMetrics().height());
+        if (h % 2 > 0)
+            ++h;
+        setHeight(h);
+    }
+
+    void setHeight(int height)
+    {
+        if (m_height == height)
+            return;
+        m_height = height;
+        emit sizeHintChanged(QModelIndex());
+    }
+
+protected:
+
+    AbstractAlbumTreeView *m_treeView;
+    int m_height;
+};
+
 class AbstractAlbumTreeViewPriv
 {
 
@@ -85,11 +125,14 @@ public:
         configSuffixSortColumn("SortColumn"),
         configSuffixSortOrder("SortOrder")
     {
+        delegate            = 0;
         expandOnSingleClick = true;
         selectAlbumOnClick = false;
         selectOnContextMenu = true;
         enableContextMenu = false;
     }
+
+    AlbumTreeViewDelegate *delegate;
 
     bool expandOnSingleClick;
     bool selectAlbumOnClick;
@@ -112,6 +155,10 @@ AbstractAlbumTreeView::AbstractAlbumTreeView(AbstractSpecificAlbumModel *model, 
 {
     m_checkOnMiddleClick  = false;
 
+    d->delegate = new AlbumTreeViewDelegate(this);
+    setItemDelegate(d->delegate);
+    setUniformRowHeights(true);
+
     m_albumModel       = model;
 
     if (filterModel)
@@ -123,6 +170,8 @@ AbstractAlbumTreeView::AbstractAlbumTreeView(AbstractSpecificAlbumModel *model, 
                  this, SLOT(slotRootAlbumAvailable()));
     }
 
+    connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
+             this, SLOT(albumSettingsChanged()));
 }
 
 AbstractAlbumTreeView::~AbstractAlbumTreeView()
@@ -597,6 +646,11 @@ void AbstractAlbumTreeView::handleCustomContextMenuAction(QAction *action, Album
 {
     Q_UNUSED(action);
     Q_UNUSED(album);
+}
+
+void AbstractAlbumTreeView::albumSettingsChanged()
+{
+    d->delegate->updateHeight();
 }
 
 // --------------------------------------- //
