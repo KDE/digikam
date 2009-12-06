@@ -182,6 +182,9 @@ ImageCategorizedView::ImageCategorizedView(QWidget *parent)
     LoadingCacheInterface::connectToSignalFileChanged(this,
             SLOT(slotFileChanged(const QString &)));
 
+    connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+            this, SLOT(slotThemeChanged()));
+
     updateDelegateSizes();
     addSelectionOverlay();
 
