@@ -312,25 +312,38 @@ void DigikamImageView::insertSelectedToLightTable(bool addTo)
     // If addTo is false, the light table will be emptied before adding
     // the images.
     ImageInfoList imageInfoList = selectedImageInfos();
-    d->utilities->insertToLightTable(imageInfoList, imageInfoList.first(), addTo);
+
+    if (!imageInfoList.isEmpty())
+    {
+        d->utilities->insertToLightTable(imageInfoList, imageInfoList.first(), addTo);
+    }
 }
 
 void DigikamImageView::insertSelectedToCurrentQueue()
 {
     ImageInfoList imageInfoList = selectedImageInfos();
-    d->utilities->insertToQueueManager(imageInfoList, imageInfoList.first(), false);
+    if (!imageInfoList.isEmpty())
+    {
+        d->utilities->insertToQueueManager(imageInfoList, imageInfoList.first(), false);
+    }
 }
 
 void DigikamImageView::insertSelectedToNewQueue()
 {
     ImageInfoList imageInfoList = selectedImageInfos();
-    d->utilities->insertToQueueManager(imageInfoList, imageInfoList.first(), true);
+    if (!imageInfoList.isEmpty())
+    {
+        d->utilities->insertToQueueManager(imageInfoList, imageInfoList.first(), true);
+    }
 }
 
 void DigikamImageView::insertSelectedToExistingQueue(int queueid)
 {
     ImageInfoList imageInfoList = selectedImageInfos();
-    d->utilities->insertSilentToQueueManager(imageInfoList, imageInfoList.first(), queueid);
+    if (!imageInfoList.isEmpty())
+    {
+        d->utilities->insertSilentToQueueManager(imageInfoList, imageInfoList.first(), queueid);
+    }
 }
 
 void DigikamImageView::deleteSelected(bool permanently)
