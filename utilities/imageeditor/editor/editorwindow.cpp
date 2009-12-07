@@ -937,7 +937,9 @@ void EditorWindow::applyStandardSettings()
         }
     }
     else
+    {
         m_IOFileSettings->rawDecodingSettings.outputColorSpace = DRawDecoding::SRGB;
+    }
 
     m_IOFileSettings->rawDecodingSettings.sixteenBitsImage        = group.readEntry("SixteenBitsImage", false);
     m_IOFileSettings->rawDecodingSettings.whiteBalance            = (DRawDecoding::WhiteBalance)group.readEntry("WhiteBalance",
