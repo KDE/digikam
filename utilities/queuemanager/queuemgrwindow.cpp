@@ -69,6 +69,7 @@
 
 // Local includes
 
+#include "drawdecoding.h"
 #include "batchtoolsmanager.h"
 #include "actionthread.h"
 #include "queuepool.h"
@@ -89,10 +90,11 @@
 #include "imagewindow.h"
 #include "imagedialog.h"
 #include "thumbnailsize.h"
-#include "queuemgrwindow_p.h"
+#include "iccsettings.h"
 #include "sidebar.h"
 #include "uifilevalidator.h"
 #include "knotificationwrapper.h"
+#include "queuemgrwindow_p.h"
 
 namespace Digikam
 {
@@ -520,10 +522,61 @@ void QueueMgrWindow::applySettings()
 {
     AlbumSettings *settings   = AlbumSettings::instance();
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("Batch Queue Manager Settings");
 
     d->thread->setExifSetOrientation(settings->getExifSetOrientation());
     d->queuePool->setEnableToolTips(settings->getShowToolTips());
+
+    // -- RAW images decoding settings ------------------------------------------------------
+
+    //  Here, we will use Image Editor Raw decoding settings with BQM, to process Raw demosaicing.
+    KConfigGroup group = config->group("ImageViewer Settings");
+
+    // If digiKam Color Management is enable, no need to correct color of decoded RAW image,
+    // else, sRGB color workspace will be used.
+
+    DRawDecoding         rawDecodingSettings;
+    ICCSettingsContainer ICCSettings = IccSettings::instance()->settings();
+
+    if (ICCSettings.enableCM)
+    {
+        if (ICCSettings.defaultUncalibratedBehavior & ICCSettingsContainer::AutomaticColors)
+        {
+            rawDecodingSettings.outputColorSpace = DRawDecoding::CUSTOMOUTPUTCS;
+            rawDecodingSettings.outputProfile    = ICCSettings.workspaceProfile;
+        }
+        else
+        {
+            rawDecodingSettings.outputColorSpace = DRawDecoding::RAWCOLOR;
+        }
+    }
+    else
+    {
+        rawDecodingSettings.outputColorSpace = DRawDecoding::SRGB;
+    }
+
+    rawDecodingSettings.sixteenBitsImage        = group.readEntry("SixteenBitsImage", false);
+    rawDecodingSettings.whiteBalance            = (DRawDecoding::WhiteBalance)group.readEntry("WhiteBalance",
+                                                                    (int)DRawDecoding::CAMERA);
+    rawDecodingSettings.customWhiteBalance      = group.readEntry("CustomWhiteBalance", 6500);
+    rawDecodingSettings.customWhiteBalanceGreen = group.readEntry("CustomWhiteBalanceGreen", 1.0);
+    rawDecodingSettings.RGBInterpolate4Colors   = group.readEntry("RGBInterpolate4Colors", false);
+    rawDecodingSettings.DontStretchPixels       = group.readEntry("DontStretchPixels", false);
+    rawDecodingSettings.enableNoiseReduction    = group.readEntry("EnableNoiseReduction", false);
+    rawDecodingSettings.unclipColors            = group.readEntry("UnclipColors", 0);
+    rawDecodingSettings.RAWQuality              = (DRawDecoding::DecodingQuality)
+                                                                    group.readEntry("RAWQuality",
+                                                                    (int)DRawDecoding::BILINEAR);
+    rawDecodingSettings.NRThreshold             = group.readEntry("NRThreshold", 100);
+    rawDecodingSettings.enableCACorrection      = group.readEntry("EnableCACorrection", false);
+    rawDecodingSettings.caMultiplier[0]         = group.readEntry("caRedMultiplier", 1.0);
+    rawDecodingSettings.caMultiplier[1]         = group.readEntry("caBlueMultiplier", 1.0);
+    rawDecodingSettings.brightness              = group.readEntry("RAWBrightness", 1.0);
+    rawDecodingSettings.medianFilterPasses      = group.readEntry("MedianFilterPasses", 0);
+#if KDCRAW_VERSION >= 0x000500
+    rawDecodingSettings.autoBrightness          = group.readEntry("AutoBrightness", true);
+#endif
+
+    d->thread->setRawDecodingSettings(rawDecodingSettings);
 }
 
 void QueueMgrWindow::refreshStatusBar()

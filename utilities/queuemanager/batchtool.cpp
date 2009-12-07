@@ -74,6 +74,8 @@ public:
 
     DImg                       image;
 
+    DRawDecoding               rawDecodingSettings;
+
     BatchToolSettings          settings;
 
     BatchToolObserver*         observer;
@@ -225,6 +227,16 @@ bool BatchTool::getExifSetOrientation() const
     return d->exifSetOrientation;
 }
 
+void BatchTool::setRawDecodingSettings(const DRawDecoding& settings)
+{
+    d->rawDecodingSettings = settings;
+}
+
+DRawDecoding BatchTool::getRawDecodingSettings() const
+{
+    return d->rawDecodingSettings;
+}
+
 void BatchTool::setWorkingUrl(const KUrl& workingUrl)
 {
     d->workingUrl = workingUrl;
@@ -289,7 +301,7 @@ bool BatchTool::loadToDImg()
 {
     if (!d->image.isNull()) return true;
 
-    return d->image.load(inputUrl().toLocalFile(), d->observer);
+    return d->image.load(inputUrl().toLocalFile(), d->observer, getRawDecodingSettings());
 }
 
 bool BatchTool::savefromDImg()
