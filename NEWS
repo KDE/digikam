@@ -19,7 +19,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 011 ==> 217096 : Imageplugins lenscorrection: lens combobox not sorted by alphabetically order [patch].
 012 ==> 214707 : No "picture not saved" warning when some tool active.
 013 ==> 214718 : digiKam Crashed when trying to Edit photo.
-014 ==> 
+014 ==> 135845 : Scrolling thumb view is very slow.
+015 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-rc - Release date: 2009-11-29
