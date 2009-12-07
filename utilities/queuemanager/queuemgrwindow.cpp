@@ -99,8 +99,8 @@ namespace Digikam
 
 QueueMgrWindow* QueueMgrWindow::m_instance = 0;
 
-const QString QueueMgrWindowPriv::TOP_SPLITTER_CONFIG_KEY = "BqmTopSplitter";
-const QString QueueMgrWindowPriv::BOTTOM_SPLITTER_CONFIG_KEY = "BqmBottomSplitter";
+const QString QueueMgrWindowPriv::TOP_SPLITTER_CONFIG_KEY      = "BqmTopSplitter";
+const QString QueueMgrWindowPriv::BOTTOM_SPLITTER_CONFIG_KEY   = "BqmBottomSplitter";
 const QString QueueMgrWindowPriv::VERTICAL_SPLITTER_CONFIG_KEY = "BqmVerticalSplitter";
 
 QueueMgrWindow* QueueMgrWindow::queueManagerWindow()
@@ -199,7 +199,7 @@ void QueueMgrWindow::closeEvent(QCloseEvent* e)
 
 void QueueMgrWindow::setupUserArea()
 {
-    QWidget* mainW     = new QWidget(this);
+    QWidget* mainW          = new QWidget(this);
     QVBoxLayout *mainLayout = new QVBoxLayout(mainW);
 
     // ------------------------------------------------------------------------------
