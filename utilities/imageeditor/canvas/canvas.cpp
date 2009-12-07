@@ -403,6 +403,11 @@ bool Canvas::isReadOnly()
     return d->im->isReadOnly();
 }
 
+bool Canvas::hasChangesToSave()
+{
+    return d->im->hasChangesToSave();
+}
+
 QRect Canvas::getSelectedArea()
 {
     int x, y, w, h;

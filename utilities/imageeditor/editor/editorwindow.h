@@ -146,6 +146,7 @@ protected:
     void loadImagePlugins();
 
     bool promptForOverWrite();
+    virtual bool hasChangesToSave();
     enum SaveOrSaveAs
     {
         AskIfNeeded,
@@ -268,6 +269,7 @@ private Q_SLOTS:
     void slotShowMenuBar();
     void slotCloseTool();
     void slotKioMoveFinished(KJob *job);
+    void slotUndoStateChanged(bool, bool, bool);
 
 private:
 

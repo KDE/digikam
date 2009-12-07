@@ -565,6 +565,11 @@ void DImgInterface::setModified()
     emit signalUndoStateChanged(d->undoMan->anyMoreUndo(), d->undoMan->anyMoreRedo(), !d->undoMan->isAtOrigin());
 }
 
+bool DImgInterface::hasChangesToSave()
+{
+    return !d->undoMan->isAtOrigin();
+}
+
 void DImgInterface::readMetadataFromFile(const QString& file)
 {
     DMetadata meta(file);
