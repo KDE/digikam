@@ -248,10 +248,6 @@ void AdvancedRenameDialog::slotParseStringChanged(const QString& parseString)
         if (item)
         {
             ParseSettings settings(ImageInfo(item->imageUrl()));
-            if (d->singleFileMode)
-            {
-                settings.useOriginalFileExtension = false;
-            }
 
             QString newName = d->advancedRenameWidget->parse(settings);
             item->setNewName(newName);
@@ -283,7 +279,7 @@ void AdvancedRenameDialog::slotAddImages(const KUrl::List& urls)
     if (itemCount == 1)
     {
         QFileInfo info(urls.first().toLocalFile());
-        d->advancedRenameWidget->setText(info.fileName());
+        d->advancedRenameWidget->setText(info.baseName());
         d->advancedRenameWidget->focusLineEdit();
         d->singleFileModeOldFilename = info.fileName();
     }

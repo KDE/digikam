@@ -51,19 +51,6 @@ public:
 
     void applySettings();
 
-    /**
-     * Tries to discover a file format that has options to change based on a
-     * filename.
-     *
-     * @param filename file name to discover the desired format from
-     * @param fallback fallback format to return if no format could be
-     *                 discovered based on the filename
-     * @return file format guessed from the file name or the given fallback
-     *         format if no format could be guessed based on the file name
-     */
-    DImg::FORMAT discoverFormat(const QString &filename,
-    		                    DImg::FORMAT fallback = DImg::NONE);
-
 public Q_SLOTS:
 
     void slotImageFileFormatChanged(const QString&);

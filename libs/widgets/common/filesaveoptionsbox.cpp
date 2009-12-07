@@ -146,43 +146,24 @@ void FileSaveOptionsBox::slotImageFileSelected(const QString& file)
     slotImageFileFormatChanged(format);
 }
 
-DImg::FORMAT FileSaveOptionsBox::discoverFormat(const QString &filename,
-		                                        DImg::FORMAT fallback)
-{
-    QStringList splitParts = filename.split('.');
-    QString ext;
-    if (splitParts.size() < 2)
-    {
-    	kDebug() << "filename '" << filename
-    			 << "' does not contain an extension separated by a point.";
-    	ext = filename;
-    }
-    else
-    {
-    	ext = splitParts.at(splitParts.size() - 1);
-    }
-
-    ext = ext.toUpper();
-
-    if (ext.contains("JPEG") || ext.contains("JPG") || ext.contains("JPE"))
-        return DImg::JPEG;
-    else if (ext.contains("PNG"))
-        return DImg::PNG;
-    else if (ext.contains("TIFF") || ext.contains("TIF"))
-        return DImg::TIFF;
-    else if (ext.contains("JP2") || ext.contains("JPX") || ext.contains("JPC") ||
-             ext.contains("PGX") || ext.contains("J2K"))
-        return DImg::JP2K;
-    else if (ext.contains("PGF"))
-        return DImg::PGF;
-    else
-        return fallback;
-}
-
 void FileSaveOptionsBox::slotImageFileFormatChanged(const QString& ext)
 {
     kDebug() << "Format selected: " << ext;
-    setCurrentIndex(DImg::NONE);
+    QString format = ext.toUpper();
+
+    if (format.contains("JPEG") || format.contains("JPG") || format.contains("JPE"))
+        setCurrentIndex(DImg::JPEG);
+    else if (format.contains("PNG"))
+        setCurrentIndex(DImg::PNG);
+    else if (format.contains("TIFF") || format.contains("TIF"))
+        setCurrentIndex(DImg::TIFF);
+    else if (format.contains("JP2") || format.contains("JPX") || format.contains("JPC") ||
+             format.contains("PGX") || format.contains("J2K"))
+        setCurrentIndex(DImg::JP2K);
+    else if (format.contains("PGF"))
+        setCurrentIndex(DImg::PGF);
+    else
+        setCurrentIndex(DImg::NONE);
 }
 
 void FileSaveOptionsBox::applySettings()
