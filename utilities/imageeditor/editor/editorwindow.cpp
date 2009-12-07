@@ -87,6 +87,7 @@
 #include <ktoolbar.h>
 #include <ktoolbarpopupaction.h>
 #include <ktoolinvocation.h>
+#include <kurlcombobox.h>
 #include <kwindowsystem.h>
 #include <kxmlguifactory.h>
 #include <kdeversion.h>
@@ -1826,6 +1827,10 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
 
     connect(imageFileSaveDialog, SIGNAL(fileSelected(const QString &)),
             options, SLOT(slotImageFileSelected(const QString&)));
+
+    QComboBox *box = imageFileSaveDialog->locationEdit();
+    connect(box, SIGNAL(editTextChanged(const QString&)),
+    		options, SLOT(slotImageFileFormatChanged(const QString&)));
 
     ImageDialogPreview *preview = new ImageDialogPreview(imageFileSaveDialog);
     imageFileSaveDialog->setPreviewWidget(preview);

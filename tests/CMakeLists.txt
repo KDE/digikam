@@ -110,6 +110,19 @@ TARGET_LINK_LIBRARIES(freerotationtest
                       ${QT_QTTEST_LIBRARY}
                       digikamcore
                       )
+                      
+#------------------------------------------------------------------------
+
+SET(filesaveoptionsboxtest_SRCS
+    filesaveoptionsboxtest.cpp
+)
+KDE4_ADD_UNIT_TEST(filesaveoptionsboxtest ${filesaveoptionsboxtest_SRCS})
+TARGET_LINK_LIBRARIES(filesaveoptionsboxtest
+                      ${KDE4_KDECORE_LIBS}
+                      ${QT_QTGUI_LIBRARY}
+                      ${QT_QTTEST_LIBRARY}
+                      digikamcore
+                      )
 
 #------------------------------------------------------------------------
 
