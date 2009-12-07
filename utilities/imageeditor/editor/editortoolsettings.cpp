@@ -129,7 +129,6 @@ public:
     RIntNumInput*        guideSize;
 };
 
-//EditorToolSettings::EditorToolSettings(int buttonMask, int toolMask, int histogramType, QWidget *parent)
 EditorToolSettings::EditorToolSettings(QWidget *parent)
                   : QScrollArea(parent), d(new EditorToolSettingsPriv)
 {
@@ -268,9 +267,6 @@ EditorToolSettings::EditorToolSettings(QWidget *parent)
 
     connect(d->histogramBox, SIGNAL(signalChannelChanged()),
             this, SIGNAL(signalChannelChanged()));
-
-    connect(d->histogramBox, SIGNAL(signalColorsChanged()),
-            this, SIGNAL(signalColorsChanged()));
 
     connect(d->histogramBox, SIGNAL(signalScaleChanged()),
             this, SIGNAL(signalScaleChanged()));
