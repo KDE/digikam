@@ -45,8 +45,8 @@ class AssignedListViewItem : public QTreeWidgetItem
 
 public:
 
-    AssignedListViewItem(QTreeWidget *parent, const BatchToolSet& set);
-    AssignedListViewItem(QTreeWidget *parent, QTreeWidgetItem* preceding, const BatchToolSet& set);
+    AssignedListViewItem(QTreeWidget* parent, const BatchToolSet& set);
+    AssignedListViewItem(QTreeWidget* parent, QTreeWidgetItem* preceding, const BatchToolSet& set);
     virtual ~AssignedListViewItem();
 
     void setToolSet(const BatchToolSet& set);
@@ -72,7 +72,7 @@ class AssignedListView : public QTreeWidget
 
 public:
 
-    AssignedListView(QWidget *parent);
+    AssignedListView(QWidget* parent);
     ~AssignedListView();
 
     int assignedCount();
@@ -104,7 +104,8 @@ public Q_SLOTS:
     void slotAssignTools(const QMap<int, QString>&);
 
 protected:
-    void keyPressEvent(QKeyEvent *event);
+
+    void keyPressEvent(QKeyEvent* event);
 
 private Q_SLOTS:
 
@@ -115,7 +116,7 @@ private:
 
     int toolIndex(BatchTool* tool);
     AssignedListViewItem* findTool(const BatchToolSet& set);
-    void assignTools(const QMap<int, QString>& map, AssignedListViewItem *preceding);
+    void assignTools(const QMap<int, QString>& map, AssignedListViewItem* preceding);
 
     Qt::DropActions supportedDropActions() const;
     QStringList mimeTypes() const;
