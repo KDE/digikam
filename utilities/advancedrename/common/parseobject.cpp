@@ -142,7 +142,7 @@ QPushButton* ParseObject::registerButton(QWidget* parent)
         menu->addActions(actions);
         button->setMenu(menu);
     }
-    else
+    else if (!d->tokens.isEmpty())
     {
         Token* token = d->tokens.first();
         connect(button, SIGNAL(clicked()),
@@ -171,7 +171,7 @@ QAction* ParseObject::registerMenu(QMenu* parent)
         menu->addActions(actions);
         action = parent->addMenu(menu);
     }
-    else
+    else if (!d->tokens.isEmpty())
     {
         action = d->tokens.first()->action();
         parent->insertAction(0, action);
