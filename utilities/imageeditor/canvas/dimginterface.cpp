@@ -225,7 +225,7 @@ void DImgInterface::slotLoadRawFromTool()
 
 void DImgInterface::slotLoadRaw()
 {
-    kDebug() << d->nextRawDescription.rawDecodingSettings;
+//    kDebug() << d->nextRawDescription.rawDecodingSettings;
     load(d->nextRawDescription);
     d->nextRawDescription = LoadingDescription();
 }
