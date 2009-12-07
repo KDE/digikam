@@ -17,8 +17,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 009 ==> 216998 : Histogram color guide is not shown [patch].
 010 ==> 216967 : Marble plugin won't compile and subsequent crashes.
 011 ==> 217096 : Imageplugins lenscorrection: lens combobox not sorted by alphabetically order [patch].
-012 ==> 214707 : no "picture not saved" warning when some tool active.
-013 ==>
+012 ==> 214707 : No "picture not saved" warning when some tool active.
+013 ==> 214718 : digiKam Crashed when trying to Edit photo.
+014 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-rc - Release date: 2009-11-29
