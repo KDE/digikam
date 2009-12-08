@@ -101,10 +101,6 @@ namespace Digikam
 
 QueueMgrWindow* QueueMgrWindow::m_instance = 0;
 
-const QString QueueMgrWindowPriv::TOP_SPLITTER_CONFIG_KEY      = "BqmTopSplitter";
-const QString QueueMgrWindowPriv::BOTTOM_SPLITTER_CONFIG_KEY   = "BqmBottomSplitter";
-const QString QueueMgrWindowPriv::VERTICAL_SPLITTER_CONFIG_KEY = "BqmVerticalSplitter";
-
 QueueMgrWindow* QueueMgrWindow::queueManagerWindow()
 {
     if (!m_instance)
@@ -492,12 +488,9 @@ void QueueMgrWindow::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("Batch Queue Manager Settings");
 
-    d->verticalSplitter->restoreState(group,
-                    QueueMgrWindowPriv::VERTICAL_SPLITTER_CONFIG_KEY);
-    d->bottomSplitter->restoreState(group,
-                    QueueMgrWindowPriv::BOTTOM_SPLITTER_CONFIG_KEY);
-    d->topSplitter->restoreState(group,
-                    QueueMgrWindowPriv::TOP_SPLITTER_CONFIG_KEY);
+    d->verticalSplitter->restoreState(group, d->VERTICAL_SPLITTER_CONFIG_KEY);
+    d->bottomSplitter->restoreState(group, d->BOTTOM_SPLITTER_CONFIG_KEY);
+    d->topSplitter->restoreState(group, d->TOP_SPLITTER_CONFIG_KEY);
 
     // TODO
 }
@@ -507,12 +500,9 @@ void QueueMgrWindow::writeSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("Batch Queue Manager Settings");
 
-    d->topSplitter->saveState(group,
-                    QueueMgrWindowPriv::TOP_SPLITTER_CONFIG_KEY);
-    d->bottomSplitter->saveState(group,
-                    QueueMgrWindowPriv::BOTTOM_SPLITTER_CONFIG_KEY);
-    d->verticalSplitter->saveState(group,
-                    QueueMgrWindowPriv::VERTICAL_SPLITTER_CONFIG_KEY);
+    d->topSplitter->saveState(group, d->TOP_SPLITTER_CONFIG_KEY);
+    d->bottomSplitter->saveState(group, d->BOTTOM_SPLITTER_CONFIG_KEY);
+    d->verticalSplitter->saveState(group, d->VERTICAL_SPLITTER_CONFIG_KEY);
 
     // TODO
     config->sync();
