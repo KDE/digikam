@@ -30,7 +30,6 @@
 // Local includes
 #include "albummodel.h"
 #include "albummodificationhelper.h"
-#include "gpssearchfolderview.h"
 #include "gpssearchview.h"
 #include "imagealbumfiltermodel.h"
 #include "searchmodificationhelper.h"
@@ -259,7 +258,7 @@ class GPSSearchSideBarWidget : public SideBarWidget
 {
     Q_OBJECT
 public:
-    GPSSearchSideBarWidget(QWidget *parent, SearchModel *searchModel);
+    GPSSearchSideBarWidget(QWidget *parent, SearchModel *searchModel, SearchModificationHelper *searchModificationHelper);
     virtual ~GPSSearchSideBarWidget();
 
     void setActive(bool active);

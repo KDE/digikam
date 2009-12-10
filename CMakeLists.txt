@@ -1052,7 +1052,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
        )
 
     SET(libgpssearch_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/gpssearch/gpssearchfolderview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/gpssearch/gpssearchview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/gpssearch/gpssearchwidget.cpp
        )

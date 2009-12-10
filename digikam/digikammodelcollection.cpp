@@ -58,6 +58,8 @@ DigikamModelCollection::DigikamModelCollection() :
                     "Current Fuzzy Sketch Search"));
     d->searchModel->addReplaceName(SAlbum::getTemporaryTitle(
                     DatabaseSearch::AdvancedSearch), i18n("Current Search"));
+    d->searchModel->addReplaceName(SAlbum::getTemporaryTitle(
+                    DatabaseSearch::MapSearch), i18n("Current Map Search"));
 }
 
 DigikamModelCollection::~DigikamModelCollection()

@@ -7,6 +7,7 @@
  * Description : GPS search sidebar tab contents.
  *
  * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009 by Johannes Wienke <languitar at semipol dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -31,14 +32,15 @@
 #include <QLabel>
 #include <QLayout>
 #include <QPushButton>
+#include <QSplitter>
 #include <QStyle>
 #include <QToolButton>
-#include <QSplitter>
 
 // KDE includes
 
 #include <kapplication.h>
 #include <kconfig.h>
+#include <kdebug.h>
 #include <kdialog.h>
 #include <khbox.h>
 #include <kiconloader.h>
@@ -46,18 +48,17 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
-#include <kdebug.h>
 
 // Local includes
 
 #include "album.h"
 #include "albummanager.h"
+#include "editablesearchtreeview.h"
+#include "gpssearchwidget.h"
 #include "imageinfo.h"
 #include "imageinfojob.h"
-#include "searchxml.h"
 #include "searchtextbar.h"
-#include "gpssearchwidget.h"
-#include "gpssearchfolderview.h"
+#include "searchxml.h"
 
 namespace Digikam
 {
@@ -82,7 +83,7 @@ public:
         nameEdit(0),
         imageInfoJob(),
         searchGPSBar(0),
-        gpsSearchFolderView(0),
+        searchTreeView(0),
         splitter(0),
         gpsSearchWidget(0),
         mapThemeBtn(0)
@@ -106,7 +107,7 @@ public:
 
     SearchTextBar*       searchGPSBar;
 
-    GPSSearchFolderView* gpsSearchFolderView;
+    EditableSearchTreeView *searchTreeView;
 
     QSplitter*           splitter;
 
@@ -114,7 +115,8 @@ public:
     WorldMapThemeBtn*    mapThemeBtn;
 };
 
-GPSSearchView::GPSSearchView(QWidget *parent)
+GPSSearchView::GPSSearchView(QWidget *parent, SearchModel *searchModel,
+                SearchModificationHelper *searchModificationHelper)
              : QWidget(parent), d(new GPSSearchViewPriv)
 {
     setAttribute(Qt::WA_DeleteOnClose);
@@ -205,8 +207,11 @@ GPSSearchView::GPSSearchView(QWidget *parent)
 
     // ---------------------------------------------------------------
 
-    d->gpsSearchFolderView = new GPSSearchFolderView(this);
-    d->searchGPSBar        = new SearchTextBar(this, "GPSSearchViewSearchGPSBar");
+    d->searchTreeView = new EditableSearchTreeView(this, searchModel, searchModificationHelper);
+    d->searchTreeView->albumFilterModel()->setFilterSearchType(DatabaseSearch::MapSearch);
+    d->searchTreeView->albumFilterModel()->setListTemporarySearches(true);
+    d->searchGPSBar   = new SearchTextBar(this, "GPSSearchViewSearchGPSBar");
+    d->searchGPSBar->setModel(searchModel, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
 
     // ---------------------------------------------------------------
 
@@ -227,7 +232,7 @@ GPSSearchView::GPSSearchView(QWidget *parent)
     vlayTop->setSpacing(KDialog::spacingHint());
     QFrame* const frameBottom = new QFrame(d->splitter);
     QVBoxLayout* const vlayBottom = new QVBoxLayout(frameBottom);
-    vlayBottom->addWidget(d->gpsSearchFolderView);
+    vlayBottom->addWidget(d->searchTreeView);
     vlayBottom->addWidget(d->searchGPSBar);
     vlayBottom->setMargin(0);
     vlayBottom->setSpacing(KDialog::spacingHint());
@@ -243,17 +248,11 @@ GPSSearchView::GPSSearchView(QWidget *parent)
 
     // ---------------------------------------------------------------
 
-    connect(d->gpsSearchFolderView, SIGNAL(signalAlbumSelected(SAlbum*)),
-            this, SLOT(slotAlbumSelected(SAlbum*)));
-
-    connect(d->gpsSearchFolderView, SIGNAL(signalRenameAlbum(SAlbum*)),
-            this, SLOT(slotRenameAlbum(SAlbum*)));
-
-    connect(d->gpsSearchFolderView, SIGNAL(signalTextSearchFilterMatch(bool)),
-            d->searchGPSBar, SLOT(slotSearchResult(bool)));
+    connect(d->searchTreeView, SIGNAL(currentAlbumChanged(Album*)),
+            this, SLOT(slotAlbumSelected(Album*)));
 
     connect(d->searchGPSBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
-            d->gpsSearchFolderView, SLOT(slotTextSearchFilterChanged(const SearchTextSettings&)));
+            d->searchTreeView, SLOT(setSearchTextSettings(const SearchTextSettings&)));
 
     connect(d->saveBtn, SIGNAL(clicked()),
             this, SLOT(slotSaveGPSSAlbum()));
@@ -316,16 +315,6 @@ void GPSSearchView::writeConfig()
     config->sync();
 }
 
-GPSSearchFolderView* GPSSearchView::folderView() const
-{
-    return d->gpsSearchFolderView;
-}
-
-SearchTextBar* GPSSearchView::searchBar() const
-{
-    return d->searchGPSBar;
-}
-
 void GPSSearchView::setActive(bool val)
 {
     if (!val)
@@ -333,9 +322,11 @@ void GPSSearchView::setActive(bool val)
         // make sure we reset the custom filters set by the MarkerClusterer:
         emit(signalMapSoloItems(KUrl::List(), "gpssearch"));
     }
-    if (d->gpsSearchFolderView->selectedItem())
+
+    if (val && d->searchTreeView->currentAlbum())
     {
-        d->gpsSearchFolderView->setActive(val);
+        AlbumManager::instance()->setCurrentAlbum(
+                        d->searchTreeView->currentAlbum());
     }
     else if (val)
     {
@@ -387,17 +378,19 @@ void GPSSearchView::createNewGPSSearchAlbum(const QString& name)
     SAlbum* salbum = AlbumManager::instance()->createSAlbum(name, DatabaseSearch::MapSearch, writer.xml());
     AlbumManager::instance()->setCurrentAlbum(salbum);
     d->imageInfoJob.allItemsFromAlbum(salbum);
+    d->searchTreeView->slotSelectAlbum(salbum);
 }
 
-void GPSSearchView::slotAlbumSelected(SAlbum* salbum)
+void GPSSearchView::slotAlbumSelected(Album* a)
 {
+
+    SAlbum *salbum = dynamic_cast<SAlbum*> (a);
+
     if (!salbum)
         return;
 
     // clear positions shown on the map:
     d->gpsSearchWidget->clearGPSPositions();
-
-    AlbumManager::instance()->setCurrentAlbum(salbum);
 
     SearchXmlReader reader(salbum->query());
     reader.readToFirstField();
@@ -482,27 +475,6 @@ void GPSSearchView::slotCheckNameEditGPSConditions()
         d->nameEdit->setEnabled(false);
         d->saveBtn->setEnabled(false);
     }
-}
-
-void GPSSearchView::slotRenameAlbum(SAlbum* salbum)
-{
-    if (!salbum) return;
-
-    if (salbum->isTemporarySearch())
-        return;
-
-    QString oldName(salbum->title());
-    bool    ok;
-
-    QString name = KInputDialog::getText(i18n("Rename Album (%1)",oldName),
-                                         i18n("Enter new album name:"),
-                                         oldName, &ok, this);
-
-    if (!ok || name == oldName || name.isEmpty()) return;
-
-    if (!checkName(name)) return;
-
-    AlbumManager::instance()->updateSAlbum(salbum, salbum->query(), name);
 }
 
 /**

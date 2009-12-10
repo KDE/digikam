@@ -218,7 +218,8 @@ DigikamView::DigikamView(QWidget *parent, DigikamModelCollection *modelCollectio
 
 #ifdef HAVE_MARBLEWIDGET
     d->gpsSearchSideBar = new GPSSearchSideBarWidget(d->leftSideBar,
-                    d->modelCollection->getSearchModel());
+                    d->modelCollection->getSearchModel(),
+                    d->searchModificationHelper);
     d->leftSideBarWidgets << d->gpsSearchSideBar;
 #endif
 

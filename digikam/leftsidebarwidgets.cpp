@@ -830,6 +830,11 @@ SearchSideBarWidget::~SearchSideBarWidget()
 
 void SearchSideBarWidget::setActive(bool active)
 {
+    if (active)
+    {
+        AlbumManager::instance()->setCurrentAlbum(
+                        d->searchTreeView->currentAlbum());
+    }
 }
 
 void SearchSideBarWidget::loadViewState(KConfigGroup &group)
@@ -982,14 +987,13 @@ public:
     SearchModel *searchModel;
 };
 
-GPSSearchSideBarWidget::GPSSearchSideBarWidget(QWidget *parent, SearchModel *searchModel) :
+GPSSearchSideBarWidget::GPSSearchSideBarWidget(QWidget *parent, SearchModel *searchModel, SearchModificationHelper *searchModificationHelper) :
     SideBarWidget(parent), d(new GPSSearchSideBarWidgetPriv)
 {
 
     d->searchModel = searchModel;
 
-    d->gpsSearchView    = new GPSSearchView(this);
-    d->gpsSearchView->searchBar()->setModel(searchModel, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
+    d->gpsSearchView    = new GPSSearchView(this, searchModel, searchModificationHelper);
 
     QVBoxLayout *layout = new QVBoxLayout(this);
 
@@ -1010,6 +1014,7 @@ GPSSearchSideBarWidget::~GPSSearchSideBarWidget()
 
 void GPSSearchSideBarWidget::setActive(bool active)
 {
+    d->gpsSearchView->setActive(active);
 }
 
 void GPSSearchSideBarWidget::loadViewState(KConfigGroup &group)
