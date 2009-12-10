@@ -317,12 +317,17 @@ Q_SIGNALS:
 
 class SearchTreeView : public AbstractAlbumTreeView
 {
+    Q_OBJECT
 public:
 
     SearchTreeView(QWidget *parent, SearchModel *searchModel);
     SearchModel *albumModel() const;
     SearchFilterModel *albumFilterModel() const;
     SAlbum *currentAlbum() const;
+
+public Q_SLOTS:
+    void slotSelectSAlbum(SAlbum *salbum);
+
 };
 
 class DateAlbumTreeView : public AbstractCountingAlbumTreeView

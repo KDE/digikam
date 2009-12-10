@@ -194,7 +194,8 @@ class SearchSideBarWidget : public SideBarWidget
 {
     Q_OBJECT
 public:
-    SearchSideBarWidget(QWidget *parent, SearchModel *searchModel);
+    SearchSideBarWidget(QWidget *parent, SearchModel *searchModel,
+                        SearchModificationHelper *searchModeificationHelper);
     virtual ~SearchSideBarWidget();
 
     void setActive(bool active);

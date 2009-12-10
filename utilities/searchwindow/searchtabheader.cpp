@@ -327,13 +327,18 @@ SearchWindow *SearchTabHeader::searchWindow()
     return d->searchWindow;
 }
 
-void SearchTabHeader::selectedSearchChanged(SAlbum *album)
+void SearchTabHeader::selectedSearchChanged(Album *a)
 {
+
+    SAlbum *album = dynamic_cast<SAlbum*> (a);
+
     // Signal from SearchFolderView that a search has been selected.
 
     // Don't check on d->currentAlbum == album, rather update status (which may have changed on same album)
 
     d->currentAlbum = album;
+
+    kDebug() << "changing to SAlbum " << album;
 
     if (!album)
     {
@@ -535,8 +540,11 @@ void SearchTabHeader::setCurrentSearch(DatabaseSearch::Type type, const QString&
         album = AlbumManager::instance()->createSAlbum(SAlbum::getTemporaryTitle(DatabaseSearch::KeywordSearch),
                                                        type, query);
     }
+
     if (selectCurrentAlbum)
+    {
         emit searchShallBeSelected(album);
+    }
 }
 
 QString SearchTabHeader::queryFromKeywords(const QString& keywords)

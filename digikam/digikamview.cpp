@@ -206,7 +206,8 @@ DigikamView::DigikamView(QWidget *parent, DigikamModelCollection *modelCollectio
 
     // Search sidebar tab contents.
     d->searchSideBar = new SearchSideBarWidget(d->leftSideBar,
-                    d->modelCollection->getSearchModel());
+                    d->modelCollection->getSearchModel(),
+                    d->searchModificationHelper);
     d->leftSideBarWidgets << d->searchSideBar;
 
     // Fuzzy search

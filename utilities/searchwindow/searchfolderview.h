@@ -9,6 +9,7 @@
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009 by Johannes Wienke <languitar at semipol dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -28,73 +29,66 @@
 
 // Local includes
 
-#include "searchtextbar.h"
-#include "folderview.h"
-
-class KUrl;
+#include "editablesearchtreeview.h"
 
 namespace Digikam
 {
 
-class Album;
-class SAlbum;
-class SearchFolderItem;
+class NormalSearchTreeViewPriv;
 
-class SearchFolderView : public FolderView
+/**
+ * Tree view for all saved "normal" searches. Allows editing and creating
+ * searches in the context menu.
+ *
+ * @author jwienke
+ */
+class NormalSearchTreeView: public EditableSearchTreeView
 {
     Q_OBJECT
-
 public:
 
-    SearchFolderView(QWidget* parent);
-    ~SearchFolderView();
+    /**
+     * Constructor.
+     *
+     * @param parent qt parent
+     * @param searchModel the model this view should act on
+     * @param searchModificationHelper the modification helper object used to
+     *                                 perform operations on the displayed
+     *                                 searches
+     */
+    NormalSearchTreeView(QWidget *parent, SearchModel *searchModel,
+                         SearchModificationHelper *searchModificationHelper);
 
-    /*
-    void quickSearchNew();
-    void extendedSearchNew();
-
-    void quickSearchEdit(SAlbum* album);
-    void extendedSearchEdit(SAlbum* album);
-    */
-
-    void searchDelete(SAlbum* album);
+    /**
+     * Destructor.
+     */
+    virtual ~NormalSearchTreeView();
 
 Q_SIGNALS:
 
+    /**
+     * Emitted of a new search shall be created.
+     */
     void newSearch();
+
+    /**
+     * Emitted if the given search shall be edited.
+     *
+     * @param album search to edit
+     */
     void editSearch(SAlbum *album);
-    void selectedSearchChanged(SAlbum *album);
-
-    void signalTextSearchFilterMatch(bool);
-
-public Q_SLOTS:
-
-    void slotTextSearchFilterChanged(const SearchTextSettings&);
-    void slotSelectSearch(SAlbum *album);
-
-private Q_SLOTS:
-
-    void slotAlbumAdded(Album* album);
-    void slotAlbumDeleted(Album* album);
-    void slotSelectionChanged();
-    void slotContextMenu(Q3ListViewItem*, const QPoint&, int);
-    void slotDoubleClicked(Q3ListViewItem*, const QPoint&, int);
 
 protected:
 
-    void selectItem(int id);
+    virtual void addCustomContextMenuActions(ContextMenuHelper &cmh,
+                                             Album *album);
+    virtual void handleCustomContextMenuAction(QAction *action, Album *album);
 
 private:
+    NormalSearchTreeViewPriv *d;
 
-    bool checkName(KUrl& url);
-    bool checkAlbum(const QString& name) const;
-
-private:
-
-    SearchFolderItem* m_lastAddedItem;
-    SearchFolderItem* m_currentSearchViewSearchItem;
 };
 
-}  // namespace Digikam
+}
 
 #endif /* SEARCHFOLDERVIEW_H */

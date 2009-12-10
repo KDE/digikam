@@ -878,6 +878,11 @@ SAlbum* SearchTreeView::currentAlbum() const
                     m_albumFilterModel->mapToSource(currentIndex())));
 }
 
+void SearchTreeView::slotSelectSAlbum(SAlbum *salbum)
+{
+    slotSelectAlbum(salbum);
+}
+
 DateAlbumTreeView::DateAlbumTreeView(QWidget *parent)
     : AbstractCountingAlbumTreeView(new DateAlbumModel, parent)
 {

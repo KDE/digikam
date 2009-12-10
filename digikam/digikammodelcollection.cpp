@@ -56,6 +56,8 @@ DigikamModelCollection::DigikamModelCollection() :
                     DatabaseSearch::HaarSearch,
                     DatabaseSearch::HaarSketchSearch), i18n(
                     "Current Fuzzy Sketch Search"));
+    d->searchModel->addReplaceName(SAlbum::getTemporaryTitle(
+                    DatabaseSearch::AdvancedSearch), i18n("Current Search"));
 }
 
 DigikamModelCollection::~DigikamModelCollection()

@@ -773,18 +773,20 @@ class SearchSideBarWidgetPriv
 public:
     SearchSideBarWidgetPriv() :
         searchSearchBar(0),
-        searchFolderView(0),
+        searchTreeView(0),
         searchTabHeader(0)
     {
     }
 
     SearchTextBar*            searchSearchBar;
-    SearchFolderView*         searchFolderView;
+    NormalSearchTreeView*     searchTreeView;
     SearchTabHeader*          searchTabHeader;
     SearchModel *searchModel;
 };
 
-SearchSideBarWidget::SearchSideBarWidget(QWidget *parent, SearchModel *searchModel) :
+SearchSideBarWidget::SearchSideBarWidget(QWidget *parent,
+                SearchModel *searchModel,
+                SearchModificationHelper *searchModeificationHelper) :
     SideBarWidget(parent), d(new SearchSideBarWidgetPriv)
 {
 
@@ -793,28 +795,31 @@ SearchSideBarWidget::SearchSideBarWidget(QWidget *parent, SearchModel *searchMod
     QVBoxLayout *layout = new QVBoxLayout(this);
 
     d->searchTabHeader  = new SearchTabHeader(this);
-    d->searchFolderView = new SearchFolderView(this);
+    d->searchTreeView   = new NormalSearchTreeView(this, searchModel,
+                                                   searchModeificationHelper);
+    d->searchTreeView->albumFilterModel()->listNormalSearches();
+    d->searchTreeView->albumFilterModel()->setListTemporarySearches(true);
     d->searchSearchBar  = new SearchTextBar(this, "DigikamViewSearchSearchBar");
     d->searchSearchBar->setModel(searchModel, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
 
     layout->addWidget(d->searchTabHeader);
-    layout->addWidget(d->searchFolderView);
+    layout->addWidget(d->searchTreeView);
     layout->addWidget(d->searchSearchBar);
 
     connect(d->searchSearchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
-            d->searchFolderView, SLOT(slotTextSearchFilterChanged(const SearchTextSettings&)));
+            d->searchTreeView, SLOT(setSearchTextSettings(const SearchTextSettings&)));
 
-    connect(d->searchFolderView, SIGNAL(newSearch()),
+    connect(d->searchTreeView, SIGNAL(newSearch()),
             d->searchTabHeader, SLOT(newAdvancedSearch()));
 
-    connect(d->searchFolderView, SIGNAL(editSearch(SAlbum *)),
-            d->searchTabHeader, SLOT(editSearch(SAlbum *)));
+    connect(d->searchTreeView, SIGNAL(editSearch(SAlbum*)),
+            d->searchTabHeader, SLOT(editSearch(SAlbum*)));
 
-    connect(d->searchFolderView, SIGNAL(selectedSearchChanged(SAlbum *)),
-            d->searchTabHeader, SLOT(selectedSearchChanged(SAlbum *)));
+    connect(d->searchTreeView, SIGNAL(currentAlbumChanged(Album*)),
+            d->searchTabHeader, SLOT(selectedSearchChanged(Album*)));
 
-    connect(d->searchTabHeader, SIGNAL(searchShallBeSelected(SAlbum *)),
-            d->searchFolderView, SLOT(slotSelectSearch(SAlbum *)));
+    connect(d->searchTabHeader, SIGNAL(searchShallBeSelected(SAlbum*)),
+            d->searchTreeView, SLOT(slotSelectSAlbum(SAlbum*)));
 
 }
 
@@ -841,12 +846,7 @@ void SearchSideBarWidget::applySettings()
 
 void SearchSideBarWidget::changeAlbumFromHistory(Album *album)
 {
-    Q3ListViewItem *item = (Q3ListViewItem*) album->extraData(d->searchFolderView);
-    if (!item)
-        return;
-
-    d->searchFolderView->setSelected(item, true);
-    d->searchFolderView->ensureItemVisible(item);
+    d->searchTreeView->slotSelectAlbum(album);
 }
 
 QPixmap SearchSideBarWidget::getIcon()
