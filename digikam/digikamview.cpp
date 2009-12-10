@@ -186,8 +186,8 @@ DigikamView::DigikamView(QWidget *parent, DigikamModelCollection *modelCollectio
             this, SLOT(slotNewDuplicatesSearch(Album*)));
 
     // date view
-    // TODO update, use correct model
-    d->dateViewSideBar = new DateFolderViewSideBarWidget(d->leftSideBar, 0,
+    d->dateViewSideBar = new DateFolderViewSideBarWidget(d->leftSideBar,
+                    d->modelCollection->getDateAlbumModel(),
                     d->iconView->imageFilterModel());
     d->leftSideBarWidgets << d->dateViewSideBar;
 
@@ -274,9 +274,6 @@ void DigikamView::applySettings()
 void DigikamView::refreshView()
 {
     d->rightSideBar->refreshTagsView();
-
-    // TODO update, legacy code while not on mvc
-    d->dateViewSideBar->refresh();
 }
 
 void DigikamView::setupConnections()

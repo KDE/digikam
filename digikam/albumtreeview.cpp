@@ -883,8 +883,8 @@ void SearchTreeView::slotSelectSAlbum(SAlbum *salbum)
     slotSelectAlbum(salbum);
 }
 
-DateAlbumTreeView::DateAlbumTreeView(QWidget *parent)
-    : AbstractCountingAlbumTreeView(new DateAlbumModel, parent)
+DateAlbumTreeView::DateAlbumTreeView(QWidget *parent, DateAlbumModel *dateAlbumModel)
+    : AbstractCountingAlbumTreeView(dateAlbumModel, parent)
 {
     connect(AlbumManager::instance(), SIGNAL(signalDAlbumsDirty(const QMap<YearMonth, int>&)),
              m_albumModel, SLOT(setYearMonthMap(const QMap<YearMonth, int>&)));
@@ -893,6 +893,18 @@ DateAlbumTreeView::DateAlbumTreeView(QWidget *parent)
 DateAlbumModel *DateAlbumTreeView::albumModel() const
 {
     return static_cast<DateAlbumModel*>(m_albumModel);
+}
+
+DAlbum* DateAlbumTreeView::currentAlbum() const
+{
+    return dynamic_cast<DAlbum*> (m_albumModel->albumForIndex(
+                    m_albumFilterModel->mapToSource(currentIndex())));
+}
+
+DAlbum *DateAlbumTreeView::albumForIndex(const QModelIndex &index) const
+{
+    return dynamic_cast<DAlbum*> (m_albumModel->albumForIndex(
+                    m_albumFilterModel->mapToSource(index)));
 }
 
 }

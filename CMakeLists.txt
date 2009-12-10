@@ -1120,8 +1120,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikamview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/dio.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/editablesearchtreeview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/folderitem.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/folderview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/folderviewtooltip.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/icongroupitem.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/iconitem.cpp

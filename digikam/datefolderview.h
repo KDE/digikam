@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009 by Johannes Wienke <languitar at semipol dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -40,36 +41,23 @@ namespace Digikam
 class Album;
 class DateFolderViewPriv;
 class DAlbum;
+class DateAlbumModel;
 class ImageFilterModel;
 
-class DateFolderView : public KVBox
+class DateFolderView: public KVBox
 {
-    Q_OBJECT
+Q_OBJECT
 
 public:
 
-    DateFolderView(QWidget* parent);
+    DateFolderView(QWidget* parent, DateAlbumModel *dateAlbumModel);
     ~DateFolderView();
 
     void setImageModel(ImageFilterModel *model);
 
     void setActive(bool val);
 
-    void setSelected(Q3ListViewItem *item);
-
     void gotoDate(const QDate& dt);
-
-    void refresh();
-
-private Q_SLOTS:
-
-    void slotAllDAlbumsLoaded();
-    void slotAlbumAdded(Album* album);
-    void slotAlbumDeleted(Album* album);
-    void slotSelectionChanged();
-    void slotRefresh(const QMap<YearMonth, int>&);
-
-private:
 
     /**
      * load the last view state from disk
@@ -81,13 +69,20 @@ private:
      */
     void saveViewState();
 
-    Q3ListViewItem *findRootItemByYear(const QString& year);
+private Q_SLOTS:
+
+    void slotSelectionChanged(Album *selectedAlbum);
+
+private:
+
+    // TODO update, what is this?
+    //Q3ListViewItem *findRootItemByYear(const QString& year);
 
 private:
 
     DateFolderViewPriv* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* DATEFOLDERVIEW_H */

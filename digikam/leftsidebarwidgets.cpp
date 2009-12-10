@@ -27,6 +27,7 @@
 #include <qbuttongroup.h>
 #include <qlabel.h>
 #include <qlayout.h>
+#include <qscrollbar.h>
 
 // KDE includes
 #include <kcombobox.h>
@@ -261,7 +262,7 @@ DateFolderViewSideBarWidget::DateFolderViewSideBarWidget(QWidget *parent,
 
     QVBoxLayout *layout = new QVBoxLayout(this);
 
-    d->dateFolderView = new DateFolderView(this);
+    d->dateFolderView = new DateFolderView(this, model);
     d->dateFolderView->setImageModel(imageFilterModel);
 
     layout->addWidget(d->dateFolderView);
@@ -292,20 +293,12 @@ void DateFolderViewSideBarWidget::applySettings()
 
 void DateFolderViewSideBarWidget::changeAlbumFromHistory(Album *album)
 {
-    Q3ListViewItem *item = (Q3ListViewItem*) album->extraData(d->dateFolderView);
-    if (!item)
-        return;
-    d->dateFolderView->setSelected(item);
+    // TODO update, implement this
 }
 
 void DateFolderViewSideBarWidget::gotoDate(const QDate &date)
 {
     d->dateFolderView->gotoDate(date);
-}
-
-void DateFolderViewSideBarWidget::refresh()
-{
-    d->dateFolderView->refresh();
 }
 
 QPixmap DateFolderViewSideBarWidget::getIcon()

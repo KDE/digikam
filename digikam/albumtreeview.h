@@ -334,8 +334,10 @@ class DateAlbumTreeView : public AbstractCountingAlbumTreeView
 {
 public:
 
-    DateAlbumTreeView(QWidget *parent = 0);
+    DateAlbumTreeView(QWidget *parent, DateAlbumModel *dateAlbumModel);
     DateAlbumModel *albumModel() const;
+    DAlbum *currentAlbum() const;
+    DAlbum *albumForIndex(const QModelIndex &index) const;
 };
 
 

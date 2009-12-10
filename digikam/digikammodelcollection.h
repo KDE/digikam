@@ -50,6 +50,7 @@ public:
     TagModel *getTagModel() const;
     TagModel *getTagFilterModel() const;
     SearchModel *getSearchModel() const;
+    DateAlbumModel *getDateAlbumModel() const;
 
 private:
     DigikamModelCollectionPriv *d;

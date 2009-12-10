@@ -23,6 +23,14 @@
 
 #include "digikammodelcollection.h"
 
+// KDE includes
+
+#include <kiconloader.h>
+
+// Local settings
+
+#include "albumsettings.h"
+
 namespace Digikam
 {
 
@@ -31,10 +39,11 @@ class DigikamModelCollectionPriv
 
 public:
 
-    AlbumModel  *albumModel;
-    TagModel    *tagModel;
-    TagModel    *tagFilterModel;
-    SearchModel *searchModel;
+    AlbumModel     *albumModel;
+    TagModel       *tagModel;
+    TagModel       *tagFilterModel;
+    SearchModel    *searchModel;
+    DateAlbumModel *dateAlbumModel;
 };
 
 DigikamModelCollection::DigikamModelCollection() :
@@ -60,6 +69,17 @@ DigikamModelCollection::DigikamModelCollection() :
                     DatabaseSearch::AdvancedSearch), i18n("Current Search"));
     d->searchModel->addReplaceName(SAlbum::getTemporaryTitle(
                     DatabaseSearch::MapSearch), i18n("Current Map Search"));
+
+    d->dateAlbumModel = new DateAlbumModel();
+    // TODO update, register on album setting changes to change the size
+    d->dateAlbumModel->setPixmaps(
+                    SmallIcon(
+                                    "view-calendar-list",
+                                    AlbumSettings::instance()->getTreeViewIconSize()),
+                    SmallIcon(
+                                    "view-calendar-month",
+                                    AlbumSettings::instance()->getTreeViewIconSize()));
+
 }
 
 DigikamModelCollection::~DigikamModelCollection()
@@ -68,6 +88,7 @@ DigikamModelCollection::~DigikamModelCollection()
     delete d->tagFilterModel;
     delete d->albumModel;
     delete d->searchModel;
+    delete d->dateAlbumModel;
 
     delete d;
 }
@@ -90,6 +111,11 @@ TagModel *DigikamModelCollection::getTagFilterModel() const
 SearchModel *DigikamModelCollection::getSearchModel() const
 {
     return d->searchModel;
+}
+
+DateAlbumModel *DigikamModelCollection::getDateAlbumModel() const
+{
+    return d->dateAlbumModel;
 }
 
 }

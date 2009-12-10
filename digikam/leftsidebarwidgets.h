@@ -133,9 +133,6 @@ public:
 
     void gotoDate(const QDate &date);
 
-    // TODO update, mainly legacy methods while not on mvc
-    void refresh();
-
 private:
     DateFolderViewSideBarWidgetPriv *d;
 
