@@ -12,9 +12,11 @@ post 1.0.0 mvc merge
  * think about where to create the tag modification helper for the sidebar in editor and lighttable.
  * connect searchtextbar directly to albumfiltermodel, to avoid indirect communication via treeviews
  * searchtextbar in tagcheckview for image properties doesn't highlight
+ * disable (default) highlighting of the searchtextbar if no model is specified
  * let various modification helpers inherit from a common base class to avoid
    duplicate renaming code etc.
  * Restoring view states is mostly a stub.
+ * let day selection widget in DateFolderView work on the model directly 
 
 ------------------------------------------------------------------------------------
 1.0.0 TODO LIST
