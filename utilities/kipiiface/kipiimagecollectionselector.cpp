@@ -49,7 +49,6 @@
 #include "albumthumbnailloader.h"
 #include "treefolderitem.h"
 #include "searchfolderview.h"
-#include "gpssearchfolderview.h"
 #include "kipiinterface.h"
 #include "kipiimagecollection.h"
 
