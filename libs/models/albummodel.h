@@ -24,6 +24,10 @@
 #ifndef ALBUMMODEL_H
 #define ALBUMMODEL_H
 
+// Qt includes
+
+#include <qdatetime.h>
+
 // Local includes
 
 #include "abstractalbummodel.h"
@@ -105,6 +109,17 @@ public:
     DateAlbumModel(QObject *parent = 0);
 
     DAlbum *albumForIndex(const QModelIndex& index) const;
+
+    /**
+     * Finds an album index based on a date. The given date is therefore
+     * normalized to year-month-form. The day is ignored. This means the
+     * returned index always points to a month DAlbum.
+     *
+     * @param date date to search for (year and month)
+     * @return model index corresponding to the album with the given date or an
+     *         empty index if not found
+     */
+    QModelIndex monthIndexForDate(const QDate &date) const;
 
     /** Set pixmaps for the DecorationRole */
     void setPixmaps(const QPixmap& forYearAlbums, const QPixmap& forMonthAlbums);

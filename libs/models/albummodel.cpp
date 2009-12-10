@@ -150,6 +150,42 @@ DAlbum *DateAlbumModel::albumForIndex(const QModelIndex& index) const
     return static_cast<DAlbum*>(AbstractCountingAlbumModel::albumForIndex(index));
 }
 
+QModelIndex DateAlbumModel::monthIndexForDate(const QDate &date) const
+{
+
+    // iterate over all years
+    for (int yearIndex = 0; yearIndex < rowCount(); ++yearIndex)
+    {
+        QModelIndex year = index(yearIndex, 0);
+        DAlbum *yearAlbum = albumForIndex(year);
+
+        // do not search through months if we are sure, that the year already
+        // does not match
+        if (yearAlbum && (yearAlbum->range() == DAlbum::Year)
+                      && (yearAlbum->date().year() != date.year()))
+        {
+            continue;
+        }
+
+        // search the album with the correct month
+        for (int monthIndex = 0; monthIndex < rowCount(year); ++monthIndex)
+        {
+            QModelIndex month = index(monthIndex, 0, year);
+            DAlbum *monthAlbum = albumForIndex(month);
+            if (monthAlbum && (monthAlbum->range() == DAlbum::Month)
+                           && (monthAlbum->date().year() == date.year())
+                           && (monthAlbum->date().month() == date.month()))
+            {
+                return month;
+            }
+        }
+
+    }
+
+    return QModelIndex();
+
+}
+
 void DateAlbumModel::setPixmaps(const QPixmap& forYearAlbums, const QPixmap& forMonthAlbums)
 {
     m_yearPixmap = forYearAlbums;

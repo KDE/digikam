@@ -16,7 +16,9 @@ post 1.0.0 mvc merge
  * let various modification helpers inherit from a common base class to avoid
    duplicate renaming code etc.
  * Restoring view states is mostly a stub.
- * let day selection widget in DateFolderView work on the model directly 
+ * let day selection widget in DateFolderView work on the model directly
+ * DEFINITELY clean up the project structure. It's absolutely not obvious which
+   file depends on which atm
 
 ------------------------------------------------------------------------------------
 1.0.0 TODO LIST

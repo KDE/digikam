@@ -33,15 +33,14 @@
 // Local includes
 
 #include "albummanager.h"
-#include "folderitem.h"
 
 namespace Digikam
 {
 
 class Album;
-class DateFolderViewPriv;
 class DAlbum;
 class DateAlbumModel;
+class DateFolderViewPriv;
 class ImageFilterModel;
 
 class DateFolderView: public KVBox
@@ -59,6 +58,8 @@ public:
 
     void gotoDate(const QDate& dt);
 
+    void changeAlbumFromHistory(SAlbum *album);
+
     /**
      * load the last view state from disk
      */
@@ -72,11 +73,6 @@ public:
 private Q_SLOTS:
 
     void slotSelectionChanged(Album *selectedAlbum);
-
-private:
-
-    // TODO update, what is this?
-    //Q3ListViewItem *findRootItemByYear(const QString& year);
 
 private:
 

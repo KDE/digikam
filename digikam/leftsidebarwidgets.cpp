@@ -293,7 +293,7 @@ void DateFolderViewSideBarWidget::applySettings()
 
 void DateFolderViewSideBarWidget::changeAlbumFromHistory(Album *album)
 {
-    // TODO update, implement this
+    d->dateFolderView->changeAlbumFromHistory(dynamic_cast<SAlbum*> (album));
 }
 
 void DateFolderViewSideBarWidget::gotoDate(const QDate &date)
