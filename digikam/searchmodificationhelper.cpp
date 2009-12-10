@@ -194,20 +194,20 @@ void SearchModificationHelper::slotCreateTimeLineSearch(const QString &desiredNa
 
 }
 
-void SearchModificationHelper::slotCreateFuzzySearchFromSketch(
+SAlbum *SearchModificationHelper::createFuzzySearchFromSketch(
                 const QString& proposedName, SketchWidget *sketchWidget,
                 unsigned int numberOfResults, bool overwriteIfExisting)
 {
 
     if (sketchWidget->isClear())
     {
-        return;
+        return 0;
     }
 
     QString name = proposedName;
     if (!overwriteIfExisting && !checkName(name))
     {
-        return;
+        return 0;
     }
 
     // We query database here
@@ -225,25 +225,36 @@ void SearchModificationHelper::slotCreateFuzzySearchFromSketch(
     writer.finishField();
     writer.finishGroup();
 
-    SAlbum* salbum = AlbumManager::instance()->createSAlbum(name, DatabaseSearch::HaarSearch, writer.xml());
+    SAlbum* salbum = AlbumManager::instance()->createSAlbum(name,
+                    DatabaseSearch::HaarSearch, writer.xml());
     AlbumManager::instance()->setCurrentAlbum(salbum);
+
+    return salbum;
 
 }
 
-void SearchModificationHelper::slotCreateFuzzySearchFromImage(
+void SearchModificationHelper::slotCreateFuzzySearchFromSketch(
+                const QString& proposedName, SketchWidget *sketchWidget,
+                unsigned int numberOfResults, bool overwriteIfExisting)
+{
+    createFuzzySearchFromSketch(proposedName, sketchWidget, numberOfResults,
+                    overwriteIfExisting);
+}
+
+SAlbum *SearchModificationHelper::createFuzzySearchFromImage(
                 const QString &proposedName, const ImageInfo &image,
                 float threshold, bool overwriteIfExisting)
 {
 
     if (image.isNull())
     {
-        return;
+        return 0;
     }
 
     QString name = proposedName;
     if (!overwriteIfExisting && !checkName(name))
     {
-        return;
+        return 0;
     }
 
     // We query database here
@@ -259,9 +270,20 @@ void SearchModificationHelper::slotCreateFuzzySearchFromImage(
     writer.finishField();
     writer.finishGroup();
 
-    SAlbum* salbum = AlbumManager::instance()->createSAlbum(name, DatabaseSearch::HaarSearch, writer.xml());
+    SAlbum* salbum = AlbumManager::instance()->createSAlbum(name,
+                    DatabaseSearch::HaarSearch, writer.xml());
     AlbumManager::instance()->setCurrentAlbum(salbum);
 
+    return salbum;
+
+}
+
+void SearchModificationHelper::slotCreateFuzzySearchFromImage(
+                const QString &proposedName, const ImageInfo &image,
+                float threshold, bool overwriteIfExisting)
+{
+    createFuzzySearchFromImage(proposedName, image, threshold,
+                    overwriteIfExisting);
 }
 
 }

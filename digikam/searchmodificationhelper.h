@@ -74,6 +74,24 @@ public:
      */
     virtual ~SearchModificationHelper();
 
+    /**
+     * @see slotCreateFuzzySearchFromSketch()
+     * @return the newly created album
+     */
+    SAlbum *createFuzzySearchFromSketch(const QString& name,
+                                        SketchWidget *sketchWidget,
+                                        unsigned int numberOfResults,
+                                        bool overwriteIfExisting = false);
+
+    /*
+     * @see slotCreateFuzzySearchFromImage()
+     * @return the newly created album
+     */
+    SAlbum *createFuzzySearchFromImage(const QString &name,
+                                       const ImageInfo &image,
+                                       float threshold,
+                                       bool overwriteIfExisting = false);
+
 public Q_SLOTS:
 
     /**
@@ -107,7 +125,8 @@ public Q_SLOTS:
                                   bool overwriteIfExisting = false);
 
     /**
-     * Creates a new fuzzy search based on a sketch created by the user.
+     * Creates a new fuzzy search based on a sketch created by the user and
+     * selects it in the AlbumManager after creation.
      *
      * @param name name of the new sketch search
      * @param sketchWidget the widget containing the sketch of the user
@@ -122,7 +141,8 @@ public Q_SLOTS:
                                          bool overwriteIfExisting = false);
 
     /**
-     * Creates a new fuzzy search for finding similar photos based on one photo.
+     * Creates a new fuzzy search for finding similar photos based on one photo
+     * and selects it in the album manager after creation.
      *
      * @param name of the new search
      * @param image image to base this search on

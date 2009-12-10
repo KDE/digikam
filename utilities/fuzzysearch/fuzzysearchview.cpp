@@ -745,10 +745,9 @@ void FuzzySearchView::slotTimerSketchDone()
 void FuzzySearchView::createNewFuzzySearchAlbumFromSketch(const QString& name, bool force)
 {
     AlbumManager::instance()->setCurrentAlbum(0);
-    d->searchModificationHelper->slotCreateFuzzySearchFromSketch(name, d->sketchWidget, d->resultsSketch->value(), force);
-
-    // TODO update, how do i provide the new album here?
-    //d->sketchSAlbum = salbum;
+    d->sketchSAlbum = d->searchModificationHelper->createFuzzySearchFromSketch(
+                    name, d->sketchWidget, d->resultsSketch->value(), force);
+    d->searchTreeView->slotSelectAlbum(d->sketchSAlbum);
 }
 
 void FuzzySearchView::slotClearSketch()
@@ -855,14 +854,13 @@ void FuzzySearchView::slotThumbnailLoaded(const LoadingDescription& desc, const 
                                              Qt::SmoothTransformation));
 }
 
-void FuzzySearchView::createNewFuzzySearchAlbumFromImage(const QString& name, bool force)
+void FuzzySearchView::createNewFuzzySearchAlbumFromImage(const QString& name,
+                bool force)
 {
     AlbumManager::instance()->setCurrentAlbum(0);
-
-    d->searchModificationHelper->slotCreateFuzzySearchFromImage(name, d->imageInfo, d->levelImage->value() / 100.0, force);
-
-    // TODO update, how to do this?
-    // d->imageSAlbum = salbum;
+    d->imageSAlbum = d->searchModificationHelper->createFuzzySearchFromImage(
+                    name, d->imageInfo, d->levelImage->value() / 100.0, force);
+    d->searchTreeView->slotSelectAlbum(d->imageSAlbum);
 }
 
 void FuzzySearchView::slotCheckNameEditImageConditions()
