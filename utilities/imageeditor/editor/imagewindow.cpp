@@ -774,17 +774,9 @@ void ImageWindow::slotChanged()
     }
 }
 
-void ImageWindow::slotUndoStateChanged(bool moreUndo, bool moreRedo, bool canSave)
+bool ImageWindow::hasChangesToSave()
 {
-    m_revertAction->setEnabled(canSave);
-    m_undoAction->setEnabled(moreUndo);
-    m_redoAction->setEnabled(moreRedo);
-
-    if (d->allowSaving)
-        m_saveAction->setEnabled(canSave);
-
-    if (!moreUndo)
-        m_rotatedOrFlipped = false;
+    return EditorWindow::hasChangesToSave() && d->allowSaving;
 }
 
 void ImageWindow::slotAssignTag(int tagID)

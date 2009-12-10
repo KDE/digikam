@@ -134,7 +134,14 @@ void DImgThreadedFilter::startFilterDirectly()
     {
         emit started();
 
-        filterImage();
+        try {
+            filterImage();
+        } catch (std::bad_alloc &ex) {
+            //TODO: User notification
+            kError() << "Caught out-of-memory exception! Aborting operation" << ex.what();
+            emit finished(false);
+            return;
+        }
 
         emit finished(!m_cancel);
     }

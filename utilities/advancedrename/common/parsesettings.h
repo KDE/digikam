@@ -80,6 +80,7 @@ public:
 
     QString                  parseString;
     ParseResults             results;
+    ParseResults             invalidModifiers;
     ParseResults::ResultsKey currentResultsKey;
 
     int                      startIndex;

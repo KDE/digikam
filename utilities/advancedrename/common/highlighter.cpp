@@ -35,11 +35,11 @@
 namespace Digikam
 {
 
-Highlighter::Highlighter(QTextEdit* parent, Parser* parser)
-           : QSyntaxHighlighter(parent)
+Highlighter::Highlighter(QTextEdit* parent, Parser* _parser)
+           : QSyntaxHighlighter(parent), parser(_parser)
 
 {
-    setupHighlightingGrammar(parser);
+    setupHighlightingGrammar();
 }
 
 Highlighter::~Highlighter()
@@ -102,9 +102,18 @@ void Highlighter::highlightBlock(const QString& text)
             index = expression.indexIn(text, index + length);
         }
     }
+
+    // mark invalid modifiers in the parse string
+    ParseSettings settings;
+    settings.parseString = text;
+    ParseResults invalid = parser->invalidModifiers(settings);
+    foreach (const ParseResults::ResultsKey& key, invalid.keys())
+    {
+        setFormat(key.first, key.second, errorFormat);
+    }
 }
 
-void Highlighter::setupHighlightingGrammar(Parser* parser)
+void Highlighter::setupHighlightingGrammar()
 {
     if (!parser)
     {
@@ -155,8 +164,8 @@ void Highlighter::setupHighlightingGrammar(Parser* parser)
 
     // --------------------------------------------------------
 
-    faultyModifierFormat.setForeground(Qt::white);
-    faultyModifierFormat.setBackground(Qt::red);
+    errorFormat.setForeground(Qt::white);
+    errorFormat.setBackground(Qt::red);
 }
 
 } // namespace Digikam

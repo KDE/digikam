@@ -50,6 +50,7 @@
 
 #include "dimg.h"
 #include "dimgloaderobserver.h"
+#include "dmetadata.h"
 #include "jp2kloader.h"
 
 namespace Digikam
@@ -90,6 +91,22 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     }
 
     fclose(file);
+
+    imageSetAttribute("format", "JP2K");
+    if (!(m_loadFlags & LoadImageData) && !(m_loadFlags & LoadICCData))
+    {
+        // libjasper will load the full image in memory already when calling jas_image_decode.
+        // This is bad when scanning. See bugs 215458 and 195583.
+        //FIXME: Use Exiv2 or OpenJPEG to extract this info
+        DMetadata metadata(filePath);
+        QSize size = metadata.getImageDimensions();
+        if (size.isValid())
+        {
+            imageWidth() = size.width();
+            imageHeight() = size.height();
+        }
+        return true;
+    }
 
     // -------------------------------------------------------------------
     // Initialize JPEG 2000 API.

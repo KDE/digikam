@@ -130,6 +130,12 @@ ParseResults Parser::results(ParseSettings& settings)
     return settings.results;
 }
 
+ParseResults Parser::invalidModifiers(ParseSettings& settings)
+{
+    parse(settings);
+    return settings.invalidModifiers;
+}
+
 QString Parser::parse(ParseSettings& settings)
 {
     QFileInfo fi(settings.fileUrl.toLocalFile());
@@ -153,10 +159,16 @@ QString Parser::parse(ParseSettings& settings)
     QString newName;
     if (settings.applyModifiers)
     {
-        applyModifiers(settings.parseString, results);
-        newName = results.replaceTokens(settings.parseString);
+        settings.invalidModifiers = applyModifiers(settings.parseString, results);
+        newName                   = results.replaceTokens(settings.parseString);
     }
     settings.results = results;
+
+    // remove invalid modifiers from the new name
+    foreach (const Modifier* mod, d->modifiers)
+    {
+        newName.remove(mod->regExp());
+    }
 
     if (newName.isEmpty())
     {
@@ -209,11 +221,11 @@ bool Parser::tokenAtPosition(TokenType type, ParseSettings& settings, int pos, i
     return found;
 }
 
-void Parser::applyModifiers(const QString& parseString, ParseResults& results)
+ParseResults Parser::applyModifiers(const QString& parseString, ParseResults& results)
 {
     if (results.isEmpty() || d->modifiers.isEmpty())
     {
-        return;
+        return ParseResults();
     }
 
     ParseSettings settings;
@@ -293,6 +305,9 @@ void Parser::applyModifiers(const QString& parseString, ParseResults& results)
                 // set position to the next possible token
                 pos  += mkey.second;
                 diff += mkey.second;
+
+                // remove assigned modifier from modifierResults
+                modifierResults.deleteEntry(mkey);
             }
             else
             {
@@ -301,6 +316,8 @@ void Parser::applyModifiers(const QString& parseString, ParseResults& results)
         }
     }
     results = appliedModifiers;
+
+    return modifierResults;
 }
 
 }  // namespace Digikam

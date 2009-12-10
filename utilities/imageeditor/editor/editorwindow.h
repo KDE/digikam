@@ -146,6 +146,7 @@ protected:
     void loadImagePlugins();
 
     bool promptForOverWrite();
+    virtual bool hasChangesToSave();
     enum SaveOrSaveAs
     {
         AskIfNeeded,
@@ -268,6 +269,7 @@ private Q_SLOTS:
     void slotShowMenuBar();
     void slotCloseTool();
     void slotKioMoveFinished(KJob *job);
+    void slotUndoStateChanged(bool, bool, bool);
 
 private:
 
@@ -322,12 +324,14 @@ private:
      * Sets the format to use in the saving context. Therefore multiple sources
      * are used starting with the extension found in the save dialog.
      *
-     * @param filterExtension extension extracted from the save dialog
+     * @param filter filter selected in the dialog
      * @param targetUrl target url selected for the file to save
+     * @param autoFilter filter that indicates automatic format selection
      * @return true if a valid extension could be found, else false
      */
-    bool selectValidSavingFormat(const QString& filterExtension,
-                                 const KUrl& targetUrl);
+    bool selectValidSavingFormat(const QString& filter,
+                                 const KUrl& targetUrl,
+                                 const QString &autoFilter);
 
     void movingSaveFileFinished(bool successful);
 

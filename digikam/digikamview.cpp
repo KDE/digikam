@@ -1325,7 +1325,10 @@ void DigikamView::slotImageAddToExistingQueue(int queueid)
     else
         list << d->albumWidgetStack->imagePreviewView()->getImageInfo();
 
-    d->iconView->utilities()->insertSilentToQueueManager(list, list.first(), queueid);
+    if (!list.isEmpty())
+    {
+        d->iconView->utilities()->insertSilentToQueueManager(list, list.first(), queueid);
+    }
 }
 
 void DigikamView::slotImageRename()

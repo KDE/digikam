@@ -48,11 +48,10 @@ class QueueMgrWindowPriv
 
 public:
 
-    const static QString TOP_SPLITTER_CONFIG_KEY;
-    const static QString BOTTOM_SPLITTER_CONFIG_KEY;
-    const static QString VERTICAL_SPLITTER_CONFIG_KEY;
-
-    QueueMgrWindowPriv()
+    QueueMgrWindowPriv() :
+        TOP_SPLITTER_CONFIG_KEY("BqmTopSplitter"),
+        BOTTOM_SPLITTER_CONFIG_KEY("BqmBottomSplitter"),
+        VERTICAL_SPLITTER_CONFIG_KEY("BqmVerticalSplitter")
     {
         fullScreenHideToolBar  = false;
         fullScreen             = false;
@@ -155,6 +154,10 @@ public:
     QueueSettingsView*     queueSettingsView;
 
     QueuePoolItemsList     itemsList;
+
+    const QString          TOP_SPLITTER_CONFIG_KEY;
+    const QString          BOTTOM_SPLITTER_CONFIG_KEY;
+    const QString          VERTICAL_SPLITTER_CONFIG_KEY;
 };
 
 }  // namespace Digikam

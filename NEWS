@@ -17,7 +17,15 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 009 ==> 216998 : Histogram color guide is not shown [patch].
 010 ==> 216967 : Marble plugin won't compile and subsequent crashes.
 011 ==> 217096 : Imageplugins lenscorrection: lens combobox not sorted by alphabetically order [patch].
-012 ==> 
+012 ==> 214707 : No "picture not saved" warning when some tool active.
+013 ==> 214718 : digiKam Crashed when trying to Edit photo.
+014 ==> 135845 : Scrolling thumb view is very slow.
+015 ==> 217766 : Cannot change file extension in "Rename" dialog.
+016 ==> 217768 : "Rename" dialog does not present the original name for editing.
+017 ==> 217598 : Detect image type to save according to extension.
+018 ==> 205341 : digiKam get mixed up with windows path. need of head '/' before C:/
+019 ==> 214502 : Pictures in new folder are not displayed.
+020 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-rc - Release date: 2009-11-29

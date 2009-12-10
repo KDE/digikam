@@ -51,7 +51,7 @@ protected:
 
 private:
 
-    void setupHighlightingGrammar(Parser* parser);
+    void setupHighlightingGrammar();
 
 private:
 
@@ -77,7 +77,9 @@ private:
     QTextCharFormat parameterFormat;
     QTextCharFormat modifierFormat;
     QTextCharFormat quotationFormat;
-    QTextCharFormat faultyModifierFormat;
+    QTextCharFormat errorFormat;
+
+    Parser* const parser;
 };
 
 }  // namespace Digikam

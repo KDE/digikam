@@ -98,6 +98,7 @@ private:
     bool save();
     bool saveAs();
     KUrl saveDestinationUrl();
+    bool hasChangesToSave();
 
     void saveIsComplete();
     void saveAsIsComplete();
@@ -128,7 +129,6 @@ private Q_SLOTS:
     void slotTrashCurrentItemDirectly();
 
     void slotChanged();
-    void slotUndoStateChanged(bool, bool, bool);
     void slotUpdateItemInfo();
 
     void slotContextMenu();

@@ -708,6 +708,8 @@ void ThumbnailCreator::storeFreedesktop(const ThumbnailInfo &info, const Thumbna
             int ret = 0;
             Q_ASSERT(!tempFileName.isEmpty());
 
+            temp.close();
+
             #if KDE_IS_VERSION(4,2,85)
             // KDE 4.3.0
             ret = KDE::rename(QFile::encodeName(tempFileName),
