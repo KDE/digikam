@@ -3,7 +3,7 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2000-12-05
+ * Date        : 2009-12-05
  * Description : collection of basic models used for views in digikam
  *
  * Copyright (C) 2009 by Johannes Wienke <languitar at semipol dot de>
@@ -24,6 +24,10 @@
 #ifndef DIGIKAMMODELCOLLECTION_H
 #define DIGIKAMMODELCOLLECTION_H
 
+// Qt includes
+
+#include <qobject.h>
+
 // Local includes
 #include "abstractalbummodel.h"
 #include "albumfiltermodel.h"
@@ -40,8 +44,9 @@ class DigikamModelCollectionPriv;
  *
  * @author jwienke
  */
-class DigikamModelCollection
+class DigikamModelCollection: public QObject
 {
+    Q_OBJECT
 public:
     DigikamModelCollection();
     virtual ~DigikamModelCollection();
@@ -51,6 +56,10 @@ public:
     TagModel *getTagFilterModel() const;
     SearchModel *getSearchModel() const;
     DateAlbumModel *getDateAlbumModel() const;
+
+private Q_SLOTS:
+
+    void albumSettingsChanged();
 
 private:
     DigikamModelCollectionPriv *d;

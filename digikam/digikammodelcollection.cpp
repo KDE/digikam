@@ -3,7 +3,7 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2000-12-05
+ * Date        : 2009-12-05
  * Description : collection of basic models used for views in digikam
  *
  * Copyright (C) 2009 by Johannes Wienke <languitar at semipol dot de>
@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "digikammodelcollection.h"
+#include "digikammodelcollection.moc"
 
 // KDE includes
 
@@ -71,14 +71,11 @@ DigikamModelCollection::DigikamModelCollection() :
                     DatabaseSearch::MapSearch), i18n("Current Map Search"));
 
     d->dateAlbumModel = new DateAlbumModel();
-    // TODO update, register on album setting changes to change the size
-    d->dateAlbumModel->setPixmaps(
-                    SmallIcon(
-                                    "view-calendar-list",
-                                    AlbumSettings::instance()->getTreeViewIconSize()),
-                    SmallIcon(
-                                    "view-calendar-month",
-                                    AlbumSettings::instance()->getTreeViewIconSize()));
+    // set icons initially
+    albumSettingsChanged();
+
+    connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
+            this, SLOT(albumSettingsChanged()));
 
 }
 
@@ -116,6 +113,17 @@ SearchModel *DigikamModelCollection::getSearchModel() const
 DateAlbumModel *DigikamModelCollection::getDateAlbumModel() const
 {
     return d->dateAlbumModel;
+}
+
+void DigikamModelCollection::albumSettingsChanged()
+{
+    d->dateAlbumModel->setPixmaps(
+                    SmallIcon(
+                                    "view-calendar-list",
+                                    AlbumSettings::instance()->getTreeViewIconSize()),
+                    SmallIcon(
+                                    "view-calendar-month",
+                                    AlbumSettings::instance()->getTreeViewIconSize()));
 }
 
 }
