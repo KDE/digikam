@@ -45,7 +45,7 @@ class AlbumFolderViewSideBarWidgetPriv;
  *
  * @author jwienke
  */
-class AlbumFolderViewSideBarWidget : public SideBarWidget
+class AlbumFolderViewSideBarWidget : public SidebarWidget
 {
     Q_OBJECT
 public:
@@ -78,7 +78,7 @@ class TagViewSideBarWidgetPriv;
  *
  * @author jwienke
  */
-class TagViewSideBarWidget : public SideBarWidget
+class TagViewSideBarWidget : public SidebarWidget
 {
     Q_OBJECT
 public:
@@ -115,7 +115,7 @@ class DateFolderViewSideBarWidgetPriv;
  *
  * @author jwienke
  */
-class DateFolderViewSideBarWidget : public SideBarWidget
+class DateFolderViewSideBarWidget : public SidebarWidget
 {
     Q_OBJECT
 public:
@@ -144,7 +144,7 @@ class TimelineSideBarWidgetPriv;
  *
  * @author jwienke
  */
-class TimelineSideBarWidget : public SideBarWidget
+class TimelineSideBarWidget : public SidebarWidget
 {
     Q_OBJECT
 public:
@@ -186,7 +186,7 @@ class SearchSideBarWidgetPriv;
  *
  * @author jwienke
  */
-class SearchSideBarWidget : public SideBarWidget
+class SearchSideBarWidget : public SidebarWidget
 {
     Q_OBJECT
 public:
@@ -216,7 +216,7 @@ class FuzzySearchSideBarWidgetPriv;
  *
  * @author jwienke
  */
-class FuzzySearchSideBarWidget : public SideBarWidget
+class FuzzySearchSideBarWidget : public SidebarWidget
 {
     Q_OBJECT
 public:
@@ -251,7 +251,7 @@ class GPSSearchSideBarWidgetPriv;
  *
  * @author jwienke
  */
-class GPSSearchSideBarWidget : public SideBarWidget
+class GPSSearchSideBarWidget : public SidebarWidget
 {
     Q_OBJECT
 public:

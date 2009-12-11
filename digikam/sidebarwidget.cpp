@@ -26,11 +26,11 @@
 namespace Digikam
 {
 
-SideBarWidget::SideBarWidget(QWidget *parent) : QWidget(parent)
+SidebarWidget::SidebarWidget(QWidget *parent) : QWidget(parent)
 {
 }
 
-SideBarWidget::~SideBarWidget()
+SidebarWidget::~SidebarWidget()
 {
 }
 

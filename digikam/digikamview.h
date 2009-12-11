@@ -188,7 +188,7 @@ private:
 
 private Q_SLOTS:
 
-    void slotLeftSideBarActivate(SideBarWidget *widget);
+    void slotLeftSideBarActivate(SidebarWidget *widget);
 
     void slotAllAlbumsLoaded();
 

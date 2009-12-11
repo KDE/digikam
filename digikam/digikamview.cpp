@@ -134,7 +134,7 @@ public:
 
     QString optionAlbumViewPrefix;
 
-    QList<SideBarWidget*> leftSideBarWidgets;
+    QList<SidebarWidget*> leftSideBarWidgets;
 
     DigikamModelCollection *modelCollection;
 
@@ -224,12 +224,12 @@ DigikamView::DigikamView(QWidget *parent, DigikamModelCollection *modelCollectio
 #endif
 
 
-    foreach(SideBarWidget *leftWidget, d->leftSideBarWidgets)
+    foreach(SidebarWidget *leftWidget, d->leftSideBarWidgets)
     {
         d->leftSideBar->appendTab(leftWidget, leftWidget->getIcon(),
                         leftWidget->getCaption());
-        connect(leftWidget, SIGNAL(requestActiveTab(SideBarWidget*)),
-                this, SLOT(slotLeftSideBarActivate(SideBarWidget*)));
+        connect(leftWidget, SIGNAL(requestActiveTab(SidebarWidget*)),
+                this, SLOT(slotLeftSideBarActivate(SidebarWidget*)));
     }
 
     // To the right.
@@ -263,7 +263,7 @@ void DigikamView::applySettings()
 {
     d->albumWidgetStack->applySettings();
 
-    foreach(SideBarWidget *sidebarWidget, d->leftSideBarWidgets)
+    foreach(SidebarWidget *sidebarWidget, d->leftSideBarWidgets)
     {
         sidebarWidget->applySettings();
     }
@@ -527,7 +527,7 @@ void DigikamView::loadViewState()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("MainWindow");
 
-    foreach(SideBarWidget *widget, d->leftSideBarWidgets)
+    foreach(SidebarWidget *widget, d->leftSideBarWidgets)
     {
         widget->loadViewState(group);
     }
@@ -548,7 +548,7 @@ void DigikamView::saveViewState()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("MainWindow");
 
-    foreach(SideBarWidget *widget, d->leftSideBarWidgets)
+    foreach(SidebarWidget *widget, d->leftSideBarWidgets)
     {
         widget->saveViewState(group);
     }
@@ -739,7 +739,7 @@ void DigikamView::changeAlbumFromHistory(Album *album, QWidget *widget)
     {
 
         // TODO update, temporary casting until signature is changed
-        SideBarWidget *sideBarWidget = dynamic_cast<SideBarWidget*> (widget);
+        SidebarWidget *sideBarWidget = dynamic_cast<SidebarWidget*> (widget);
         if (sideBarWidget)
         {
             sideBarWidget->changeAlbumFromHistory(album);
@@ -1403,8 +1403,8 @@ void DigikamView::slotLeftSidebarChangedTab(QWidget* w)
 {
 
     // TODO update, temporary cast
-    SideBarWidget *widget = dynamic_cast<SideBarWidget*> (w);
-    foreach(SideBarWidget *sideBarWidget, d->leftSideBarWidgets)
+    SidebarWidget *widget = dynamic_cast<SidebarWidget*> (w);
+    foreach(SidebarWidget *sideBarWidget, d->leftSideBarWidgets)
     {
         bool active = (widget && (widget == sideBarWidget));
         sideBarWidget->setActive(active);
@@ -1597,7 +1597,7 @@ void DigikamView::slotOrientationChangeFailed(const QStringList& failedFileNames
     }
 }
 
-void DigikamView::slotLeftSideBarActivate(SideBarWidget *widget)
+void DigikamView::slotLeftSideBarActivate(SidebarWidget *widget)
 {
     d->leftSideBar->setActiveTab(widget);
 }

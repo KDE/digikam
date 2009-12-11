@@ -44,7 +44,7 @@ namespace Digikam
  *
  * @author jwienke
  */
-class SideBarWidget: public QWidget
+class SidebarWidget: public QWidget
 {
 Q_OBJECT
 public:
@@ -54,12 +54,12 @@ public:
      *
      * @param parent parent of this widget, may be null
      */
-    SideBarWidget(QWidget *parent);
+    SidebarWidget(QWidget *parent);
 
     /**
      * Destructor.
      */
-    virtual ~SideBarWidget();
+    virtual ~SidebarWidget();
 
     /**
      * This method is called if the visible sidebar widget is changed.
@@ -117,7 +117,7 @@ Q_SIGNALS:
      * This signal can be emitted if this sidebar widget wants to be the one
      * that is active.
      */
-    void requestActiveTab(SideBarWidget*);
+    void requestActiveTab(SidebarWidget*);
 
 };
 

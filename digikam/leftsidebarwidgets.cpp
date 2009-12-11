@@ -73,7 +73,7 @@ public:
 
 AlbumFolderViewSideBarWidget::AlbumFolderViewSideBarWidget(QWidget *parent,
                 AlbumModel *model, AlbumModificationHelper *albumModificationHelper) :
-    SideBarWidget(parent), d(new AlbumFolderViewSideBarWidgetPriv)
+    SidebarWidget(parent), d(new AlbumFolderViewSideBarWidgetPriv)
 {
 
     d->albumModificationHelper = albumModificationHelper;
@@ -171,7 +171,7 @@ public:
 
 TagViewSideBarWidget::TagViewSideBarWidget(QWidget *parent,
                 TagModel *model, TagModificationHelper *tagModificationHelper) :
-    SideBarWidget(parent), d(new TagViewSideBarWidgetPriv)
+    SidebarWidget(parent), d(new TagViewSideBarWidgetPriv)
 {
 
     d->tagModel = model;
@@ -257,7 +257,7 @@ public:
 
 DateFolderViewSideBarWidget::DateFolderViewSideBarWidget(QWidget *parent,
                 DateAlbumModel *model, ImageAlbumFilterModel *imageFilterModel) :
-    SideBarWidget(parent), d(new DateFolderViewSideBarWidgetPriv)
+    SidebarWidget(parent), d(new DateFolderViewSideBarWidgetPriv)
 {
 
     QVBoxLayout *layout = new QVBoxLayout(this);
@@ -366,7 +366,7 @@ public:
 
 TimelineSideBarWidget::TimelineSideBarWidget(QWidget *parent, SearchModel *searchModel,
                                              SearchModificationHelper *searchModificationHelper) :
-    SideBarWidget(parent), d(new TimelineSideBarWidgetPriv)
+    SidebarWidget(parent), d(new TimelineSideBarWidgetPriv)
 {
 
     d->searchModificationHelper = searchModificationHelper;
@@ -780,7 +780,7 @@ public:
 SearchSideBarWidget::SearchSideBarWidget(QWidget *parent,
                 SearchModel *searchModel,
                 SearchModificationHelper *searchModeificationHelper) :
-    SideBarWidget(parent), d(new SearchSideBarWidgetPriv)
+    SidebarWidget(parent), d(new SearchSideBarWidgetPriv)
 {
 
     d->searchModel = searchModel;
@@ -885,7 +885,7 @@ public:
 FuzzySearchSideBarWidget::FuzzySearchSideBarWidget(QWidget *parent,
                 SearchModel *searchModel,
                 SearchModificationHelper *searchModificationHelper) :
-    SideBarWidget(parent), d(new FuzzySearchSideBarWidgetPriv)
+    SidebarWidget(parent), d(new FuzzySearchSideBarWidgetPriv)
 {
 
     d->searchModel = searchModel;
@@ -981,7 +981,7 @@ public:
 };
 
 GPSSearchSideBarWidget::GPSSearchSideBarWidget(QWidget *parent, SearchModel *searchModel, SearchModificationHelper *searchModificationHelper) :
-    SideBarWidget(parent), d(new GPSSearchSideBarWidgetPriv)
+    SidebarWidget(parent), d(new GPSSearchSideBarWidgetPriv)
 {
 
     d->searchModel = searchModel;
