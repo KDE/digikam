@@ -148,6 +148,7 @@ void SetupDatabase::readSettings()
     d->databaseWidget->databasePathEdit->setUrl(settings->getDatabaseFilePath());
 
     d->databaseWidget->databaseName->setText(settings->getDatabaseName());
+    d->databaseWidget->databaseNameThumbnails->setText(settings->getDatabaseNameThumbnails());
     d->databaseWidget->hostName->setText(settings->getDatabaseHostName());
     d->databaseWidget->hostPort->setValue(settings->getDatabasePort());
     d->databaseWidget->connectionOptions->setText(settings->getDatabaseConnectoptions());

@@ -24,15 +24,38 @@
 #ifndef MIGRATIONDLG_H
 #define MIGRATIONDLG_H
 
+// QT includes
+#include <QThread>
+#include <QProgressBar>
+
 // KDE includes
 #include <kdialog.h>
 
 // Local includes
 #include "digikam_export.h"
 #include "databasewidget.h"
+#include "databasebackend.h"
+#include "databasecopymanager.h"
 
 namespace Digikam
 {
+
+class DIGIKAM_EXPORT DatabaseCopyThread : public QThread
+{
+        Q_OBJECT
+
+        public:
+            DatabaseCopyThread(QWidget* parent);
+            bool stop;
+            void run();
+
+            void init(DatabaseParameters *fromDatabaseWidget, DatabaseParameters *toDatabaseWidget);
+            DatabaseCopyManager copyManager;
+
+        private:
+            DatabaseParameters *fromDatabaseWidget;
+            DatabaseParameters *toDatabaseWidget;
+};
 
 
 class DIGIKAM_EXPORT MigrationDlg : public KDialog
@@ -46,12 +69,21 @@ public:
 
 private Q_SLOTS:
     void performCopy();
+    void unlockInputFields();
+    void lockInputFields();
+
+    void handleStepStarted(QString stepName);
+    void handleSuccessfullyFinish();
+    void handleFailureFinish(QString errorMsg);
 
 private:
 
 //    MigrationDlgPriv* const d;
     DatabaseWidget *fromDatabaseWidget;
     DatabaseWidget *toDatabaseWidget;
+    QPushButton    *migrateButton;
+    QProgressBar   *progressBar;
+    DatabaseCopyThread *thread;
 
     void setupMainArea();
     void dataInit();

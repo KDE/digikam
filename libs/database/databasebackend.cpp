@@ -47,8 +47,8 @@
 namespace Digikam
 {
 
-DatabaseBackend::DatabaseBackend(DatabaseLocking *locking)
-               : DatabaseCoreBackend("digikamDatabase-", locking, *new DatabaseBackendPrivate(this))
+DatabaseBackend::DatabaseBackend(DatabaseLocking *locking, const QString &backendName)
+               : DatabaseCoreBackend(backendName, locking, *new DatabaseBackendPrivate(this))
 {
 }
 

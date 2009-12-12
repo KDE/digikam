@@ -308,6 +308,10 @@
                                  END;</statement></dbaction>
 
 			<!-- Migration Statements -->
+			<dbaction name="Migrate_Cleanup_DB" mode="query"><statement mode="query">
+				DROP TABLE AlbumRoots, Albums, DownloadHistory, FilePaths, ImageComments, ImageCopyright, ImageHaarMatrix, ImageInformation, ImageMetadata, ImagePositions, ImageProperties, ImageTags, Images, Searches, Settings, Tags, TagsTree, Thumbnails, UniqueHashes;
+			</statement></dbaction>
+			
 			<dbaction name="Migrate_Read_AlbumRoots" mode="query"><statement mode="query">
 				SELECT id, label, status, type, identifier, specificPath FROM AlbumRoots;
 			</statement></dbaction>
@@ -322,10 +326,10 @@
 				INSERT INTO Albums (id, albumRoot, relativePath, date, caption, collection, icon) VALUES (:id, :albumRoot, :relativePath, :date, :caption, :collection, :icon);
 			</statement></dbaction>
 			<dbaction name="Migrate_Read_Images" mode="query"><statement mode="query">
-				SELECT id, album, name, status, category, modificationDate, fileSize, uniquieHash FROM Images;
+				SELECT id, album, name, status, category, modificationDate, fileSize, uniqueHash FROM Images;
 			</statement></dbaction>
 			<dbaction name="Migrate_Write_Images" mode="transaction"><statement mode="query">
-				INSERT INTO Images (id, album, name, status, category, modificationDate, fileSize, uniquieHash) VALUES (:id, :album, :name, :status, :category, :modificationDate, :fileSize, :uniquieHash);
+				INSERT INTO Images (id, album, name, status, category, modificationDate, fileSize, uniqueHash) VALUES (:id, :album, :name, :status, :category, :modificationDate, :fileSize, :uniqueHash);
 			</statement></dbaction>
 			
 			<dbaction name="Migrate_Read_ImageHaarMatrix" mode="query"><statement mode="query">
@@ -409,7 +413,7 @@
 				SELECT keyword, value FROM Settings;
 			</statement></dbaction>
  			<dbaction name="Migrate_Write_Settings" mode="transaction"><statement mode="query">
-				INSERT INTO Settings (keyword, value) VALUES (keyword, value);
+				INSERT INTO Settings (keyword, value) VALUES (:keyword, :value);
 			</statement></dbaction>
 						
 		</dbactions>
@@ -756,6 +760,10 @@
                               DELETE FROM FilePaths WHERE FilePaths.thumbId = OLD.id; 
                              END;</statement></dbaction>
 			<!-- Migration Statements -->
+			<dbaction name="Migrate_Cleanup_DB" mode="query"><statement mode="query">
+				DROP TABLE AlbumRoots, Albums, DownloadHistory, FilePaths, ImageComments, ImageCopyright, ImageHaarMatrix, ImageInformation, ImageMetadata, ImagePositions, ImageProperties, ImageTags, Images, Searches, Settings, Tags, TagsTree, Thumbnails, UniqueHashes;
+			</statement></dbaction>
+			
 			<dbaction name="Migrate_Read_AlbumRoots" mode="transaction"><statement mode="query">
 				SELECT id, label, status, type, identifier, specificPath FROM AlbumRoots;
 			</statement></dbaction>
@@ -770,10 +778,10 @@
 				INSERT INTO Albums (id, albumRoot, relativePath, date, caption, collection, icon) VALUES (:id, :albumRoot, :relativePath, :date, :caption, :collection, :icon);
 			</statement></dbaction>
 			<dbaction name="Migrate_Read_Images" mode="transaction"><statement mode="query">
-				SELECT id, album, name, status, category, modificationDate, fileSize, uniquieHash FROM Images;
+				SELECT id, album, name, status, category, modificationDate, fileSize, uniqueHash FROM Images;
 			</statement></dbaction>
 			<dbaction name="Migrate_Write_Images" mode="transaction"><statement mode="query">
-				INSERT INTO Images (id, album, name, status, category, modificationDate, fileSize, uniquieHash) VALUES (:id, :album, :name, :status, :category, :modificationDate, :fileSize, :uniquieHash);
+				INSERT INTO Images (id, album, name, status, category, modificationDate, fileSize, uniqueHash) VALUES (:id, :album, :name, :status, :category, :modificationDate, :fileSize, :uniqueHash);
 			</statement></dbaction>
 			
 			<dbaction name="Migrate_Read_ImageHaarMatrix" mode="transaction"><statement mode="query">
@@ -821,9 +829,15 @@
 			<dbaction name="Migrate_Read_Tags" mode="transaction"><statement mode="query">
 				SELECT  id, pid, name, icon, iconkde FROM Tags;
 			</statement></dbaction>
-			<dbaction name="Migrate_Write_Tags" mode="transaction"><statement mode="query">
-				INSERT INTO Tags (id, pid, name, icon, iconkde) VALUES (:id, :pid, :name, :icon, :iconkde);
-			</statement></dbaction>
+			<dbaction name="Migrate_Write_Tags" mode="transaction">
+				<statement mode="plain">LOCK TABLE Tags WRITE;</statement>
+				<statement mode="query">SELECT @myLeft := lft FROM Tags WHERE id = :pid;</statement>
+				<statement mode="query">SELECT @myLeft := IF (@myLeft is null, 0, @myLeft);</statement>
+				<statement mode="query">UPDATE Tags SET rgt = rgt + 2 WHERE rgt > @myLeft;</statement>
+				<statement mode="query">UPDATE Tags SET lft = lft + 2 WHERE lft > @myLeft;</statement>
+				<statement mode="query">INSERT INTO Tags(id, pid, name, icon, iconkde, lft, rgt) VALUES(:id, :pid, :name, :icon, :iconkde, @myLeft + 1, @myLeft + 2);</statement>
+				<statement mode="plain">UNLOCK TABLES;</statement>
+			</dbaction>
 			
 			<dbaction name="Migrate_Read_ImageTags" mode="transaction"><statement mode="query">
 				SELECT  imageid, tagid FROM ImageTags;
@@ -857,7 +871,7 @@
 				SELECT keyword, value FROM Settings;
 			</statement></dbaction>
  			<dbaction name="Migrate_Write_Settings" mode="transaction"><statement mode="query">
-				INSERT INTO Settings (keyword, value) VALUES (keyword, value);
+				INSERT INTO Settings (keyword, value) VALUES (:keyword, :value);
 			</statement></dbaction>			 				 
 						 				 
 		</dbactions>

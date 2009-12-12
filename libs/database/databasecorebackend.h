@@ -307,6 +307,13 @@ public:
      */
     QString lastError();
 
+    /**
+     * Returns the last error that occurred on this database.
+     * Use DatabaseAccess::lastError for errors presented to the user.
+     * It may be empty.
+     */
+    QSqlError lastSQLError();
+
 /*
     Qt SQL driver supported features
     SQLITE3:

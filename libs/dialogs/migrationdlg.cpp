@@ -31,10 +31,12 @@
 #include <qlist.h>
 #include <qsqlquery.h>
 #include <qmap.h>
+#include <qsqlerror.h>
 
 // KDE includes
 #include <klocale.h>
 #include <kdebug.h>
+#include <kmessagebox.h>
 
 // Local includes
 #include "albumsettings.h"
@@ -43,9 +45,26 @@
 #include "databasebackend.h"
 #include "databaseparameters.h"
 #include "schemaupdater.h"
+#include "databasecopymanager.h"
+
 
 namespace Digikam
 {
+    DatabaseCopyThread::DatabaseCopyThread(QWidget *parent) : QThread(parent)
+    {
+    }
+
+    void DatabaseCopyThread::run()
+    {
+        copyManager.copyDatabases(fromDatabaseWidget, toDatabaseWidget);
+    }
+
+    void DatabaseCopyThread::init(DatabaseParameters *fromDatabaseWidget, DatabaseParameters *toDatabaseWidget)
+    {
+        this->fromDatabaseWidget=fromDatabaseWidget;
+        this->toDatabaseWidget=toDatabaseWidget;
+    }
+
     MigrationDlg::MigrationDlg(QWidget* parent): KDialog(parent)
     {
         setupMainArea();
@@ -58,24 +77,60 @@ namespace Digikam
 
     void MigrationDlg::setupMainArea()
     {
+        thread                          = new DatabaseCopyThread(this);
         fromDatabaseWidget              = new DatabaseWidget(this);
         toDatabaseWidget                = new DatabaseWidget(this);
-        QPushButton *migrateBtn         = new QPushButton(i18n("Migrate ->"), this);
-        QProgressBar *progressBar       = new QProgressBar();
+        migrateButton                   = new QPushButton(i18n("Migrate ->"), this);
+        progressBar                     = new QProgressBar();
+        progressBar->setTextVisible(true);
+        progressBar->setRange(0,14);
 
         QWidget *mainWidget     = new QWidget;
         QGridLayout *layout     = new QGridLayout;
         mainWidget->setLayout(layout);
 
         layout->addWidget(fromDatabaseWidget, 0,0);
-        layout->addWidget(migrateBtn,0,1);
+        layout->addWidget(migrateButton,0,1);
         layout->addWidget(toDatabaseWidget, 0, 2);
         layout->addWidget(progressBar, 1, 0, 1,3);
 
         setMainWidget(mainWidget);
         dataInit();
 
-        connect(migrateBtn, SIGNAL(clicked()), this, SLOT(performCopy()));
+        connect(migrateButton, SIGNAL(clicked()), this, SLOT(performCopy()));
+    }
+
+    void MigrationDlg::performCopy()
+    {
+        DatabaseParameters *toDBParameters = new DatabaseParameters();
+        toDBParameters->readConfig();
+        toDBParameters->connectOptions = toDatabaseWidget->connectionOptions->text();
+        toDBParameters->databaseName   = toDatabaseWidget->databaseName->text();
+        toDBParameters->databaseType   = toDatabaseWidget->databaseType->currentText();
+        toDBParameters->hostName       = toDatabaseWidget->hostName->text();
+        toDBParameters->password       = toDatabaseWidget->password->text();
+        toDBParameters->port           = toDatabaseWidget->hostPort->text().toInt();
+        toDBParameters->userName       = toDatabaseWidget->userName->text();
+
+        DatabaseParameters *fromDBParameters = new DatabaseParameters();
+        fromDBParameters->readConfig();
+        fromDBParameters->connectOptions = fromDatabaseWidget->connectionOptions->text();
+        fromDBParameters->databaseName   = fromDatabaseWidget->databaseName->text();
+        fromDBParameters->databaseType   = fromDatabaseWidget->databaseType->currentText();
+        fromDBParameters->hostName       = fromDatabaseWidget->hostName->text();
+        fromDBParameters->password       = fromDatabaseWidget->password->text();
+        fromDBParameters->port           = fromDatabaseWidget->hostPort->text().toInt();
+        fromDBParameters->userName       = fromDatabaseWidget->userName->text();
+
+        thread->init(fromDBParameters, toDBParameters);
+
+        // connect signal handlers
+        this->connect(&(thread->copyManager), SIGNAL(finishedSuccessfully()), SLOT(handleSuccessfullyFinish()));
+        this->connect(&(thread->copyManager), SIGNAL(finishedFailure(QString)), SLOT(handleFailureFinish(QString)));
+        this->connect(&(thread->copyManager), SIGNAL(stepStarted(QString)), SLOT(handleStepStarted(QString)));
+
+        lockInputFields();
+        thread->start();
     }
 
     void MigrationDlg::dataInit()
@@ -84,62 +139,36 @@ namespace Digikam
         toDatabaseWidget->setParametersFromSettings(AlbumSettings::instance());
     }
 
-    void MigrationDlg::performCopy()
+    void MigrationDlg::unlockInputFields()
     {
-        DatabaseParameters toDBParameters;
-        toDBParameters.readConfig();
-        toDBParameters.connectOptions = toDatabaseWidget->connectionOptions->text();
-        toDBParameters.databaseName   = toDatabaseWidget->databaseName->text();
-        toDBParameters.databaseType   = toDatabaseWidget->databaseType->currentText();
-        toDBParameters.hostName       = toDatabaseWidget->hostName->text();
-        toDBParameters.password       = toDatabaseWidget->password->text();
-        toDBParameters.port           = toDatabaseWidget->hostPort->text().toInt();
-        toDBParameters.userName       = toDatabaseWidget->userName->text();
-        DatabaseLocking toLocking;
-        DatabaseBackend toDBbackend(&toLocking);
-        toDBbackend.open(toDBParameters);
+        fromDatabaseWidget->setEnabled(true);
+        toDatabaseWidget->setEnabled(true);
+        migrateButton->setEnabled(true);
+        progressBar->setValue(0);
+    }
 
-        DatabaseParameters fromDBParameters;
-        fromDBParameters.readConfig();
-        fromDBParameters.connectOptions = fromDatabaseWidget->connectionOptions->text();
-        fromDBParameters.databaseName   = fromDatabaseWidget->databaseName->text();
-        fromDBParameters.databaseType   = fromDatabaseWidget->databaseType->currentText();
-        fromDBParameters.hostName       = fromDatabaseWidget->hostName->text();
-        fromDBParameters.password       = fromDatabaseWidget->password->text();
-        fromDBParameters.port           = fromDatabaseWidget->hostPort->text().toInt();
-        fromDBParameters.userName       = fromDatabaseWidget->userName->text();
-        DatabaseLocking fromLocking;
-        DatabaseBackend fromDBbackend(&fromLocking);
-        fromDBbackend.open(fromDBParameters);
+    void MigrationDlg::lockInputFields()
+    {
+         fromDatabaseWidget->setEnabled(false);
+         toDatabaseWidget->setEnabled(false);
+         migrateButton->setEnabled(false);
+    }
 
+    void MigrationDlg::handleSuccessfullyFinish()
+    {
+        KMessageBox::information(this, i18n("Database copied successfully") );
+        unlockInputFields();
+    }
 
-        // first create the schema
-        AlbumDB       albumDB(&toDBbackend);
-        SchemaUpdater updater(&albumDB, &toDBbackend, toDBParameters);
+    void MigrationDlg::handleFailureFinish(QString errorMsg)
+    {
+        KMessageBox::error(this, errorMsg );
+        unlockInputFields();
+    }
 
-        // now perform the copy action
-        QMap<QString, QVariant> bindingMap;
-        QList<QString> columnNames;
-        QSqlQuery result = fromDBbackend.execDBActionQuery(fromDBbackend.getDBAction("Migrate_Read_AlbumRoots"), bindingMap) ;
-
-        int columnCount = result.record().count();
-        for (int i=0; i<columnCount; i++)
-        {
-            kDebug(50003) << "Column: ["<< result.record().fieldName(i) << "]";
-            columnNames.append(result.record().fieldName(i));
-        }
-
-        while (result.next()) {
-            // read the values from the fromDB into a hash
-            QMap<QString, QVariant> tempBindingMap;
-            int i=0;
-            foreach (QString columnName, columnNames)
-            {
-                kDebug(50003) << "Column: ["<< columnName << "] value ["<<result.value(i++)<<"]";
-                tempBindingMap.insert(columnName, result.value(i));
-            }
-            // insert the previous requested values to the toDB
-            toDBbackend.execDBActionQuery(fromDBbackend.getDBAction("Migrate_Write_AlbumRoots"), tempBindingMap);
-        }
+    void MigrationDlg::handleStepStarted(QString stepName)
+    {
+        int progressBarValue = progressBar->value();
+        progressBar->setValue(++progressBarValue);
     }
 }

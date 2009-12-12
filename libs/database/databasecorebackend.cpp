@@ -20,6 +20,7 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
+
 /*
 #ifndef DATABASCOREBACKEND_DEBUG
 #define DATABASCOREBACKEND_DEBUG
@@ -110,7 +111,6 @@ void DatabaseCoreBackendPrivate::init(const QString &name, DatabaseLocking *l)
 // The main class' open/close methods only interact with the "firstDatabase" object.
 // When another thread requests a DB, a new connection is opened and closed at
 // finishing of the thread.
-
 QSqlDatabase DatabaseCoreBackendPrivate::databaseForThread()
 {
     QThread *thread = QThread::currentThread();
@@ -124,7 +124,7 @@ QSqlDatabase DatabaseCoreBackendPrivate::databaseForThread()
            kDebug(50003) << "Error while opening the database. Details: [" << db.lastError() << "]";
 
         QObject::connect(thread, SIGNAL(finished()),
-                            q, SLOT(slotThreadFinished()));
+                            q, SLOT(slotThreadFinished(additionalID)));
     }
 #ifdef DATABASCOREBACKEND_DEBUG
     else
@@ -476,11 +476,11 @@ QSqlQuery DatabaseCoreBackend::execDBActionQuery(const databaseAction &action, c
         }
         else
         {
-            kError() << "Error, only DBActions with mode 'query' are allowed at this call!";
+            kDebug(50003) << "Error, only DBActions with mode 'query' are allowed at this call!";
         }
-        if (result.lastError().number()!=0)
+        if (result.lastError().isValid() && result.lastError().number()!=0)
         {
-            kDebug(50003) << "Error while executing DBAction ["<<  action.m_Name  <<"] Statement ["<<actionElement.m_Statement<<"]";
+            kDebug(50003) << "Error while executing DBAction ["<<  action.m_Name  <<"] Statement ["<<actionElement.m_Statement<<"] Errornr. [" << result.lastError() << "]";
             break;
         }
     }
@@ -755,7 +755,7 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QMap<QString, 
     if (!bindingMap.isEmpty())
     {
 #ifdef DATABASCOREBACKEND_DEBUG
-        kDebug(50003)<<"Prepare statement ["<< preparedString <<"]";
+        kDebug(50003)<<"Prepare statement ["<< preparedString <<"] with binding map ["<< bindingMap <<"]";
 #endif
         QRegExp identifierRegExp(":[A-Za-z0-9]+");
         int pos=0;
@@ -831,7 +831,10 @@ DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDirectSql(const QString
                 continue;
             }
             else
+            {
+
                 return DatabaseCoreBackend::SQLError;
+            }
         }
     }
     return DatabaseCoreBackend::NoErrors;
@@ -1006,6 +1009,12 @@ QStringList DatabaseCoreBackend::tables()
 {
     Q_D(DatabaseCoreBackend);
     return d->databaseForThread().tables();
+}
+
+QSqlError DatabaseCoreBackend::lastSQLError()
+{
+    Q_D(DatabaseCoreBackend);
+    return d->databaseForThread().lastError();
 }
 
 QString DatabaseCoreBackend::lastError()
