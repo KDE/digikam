@@ -50,9 +50,12 @@
 
 // KDE includes
 
+#include <kdeversion.h>
 #include <kaboutdata.h>
 #include <kaction.h>
+#if KDE_IS_VERSION(4,1,68)
 #include <kactioncategory.h>
+#endif
 #include <kactioncollection.h>
 #include <kactionmenu.h>
 #include <kapplication.h>
@@ -90,7 +93,6 @@
 #include <kurlcombobox.h>
 #include <kwindowsystem.h>
 #include <kxmlguifactory.h>
-#include <kdeversion.h>
 #include <kde_file.h>
 #include <kio/copyjob.h>
 #include <kdebug.h>
