@@ -254,7 +254,7 @@ void ImagePropertiesGPSTab::slotGPSDetails()
             url.append(val.setNum(d->map->getLatitude(), 'g', 12));
             url.append(",");
             url.append(val.setNum(d->map->getLongitude(), 'g', 12));
-            url.append("&spn=0.05,0.05&t=h&om=1&hl=en");
+            url.append("&spn=0.05,0.05&t=h&om=1");
             break;
         }
 
