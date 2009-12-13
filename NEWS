@@ -26,7 +26,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 018 ==> 205341 : digiKam get mixed up with windows path. need of head '/' before C:/
 019 ==> 214502 : Pictures in new folder are not displayed.
 020 ==> 217515 : Empty album after interrupting fingerprint generation.
-021 ==> 
+021 ==> 218456 : Right click on raw image caused unexpected crash.
+022 ==>
 
 
 *********************************************************************************************************
