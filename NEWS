@@ -28,7 +28,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 020 ==> 217515 : Empty album after interrupting fingerprint generation.
 021 ==> 218456 : Right click on raw image caused unexpected crash.
 022 ==> 216392 : digiKam crashed during moving of an empty folder.
-023 ==> 
+023 ==> 214641 : Pictures are displayed partial after editing EXIF comment.
+024 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-rc - Release date: 2009-11-29
