@@ -34,7 +34,7 @@
 namespace DigikamLocalContrastImagesPlugin
 {
 
-typedef void (*ToneMappingCallbackPtr)(void *data, int progress);
+typedef void (*ToneMappingCallbackPtr)(void* data, int progress);
 
 class ToneMappingParameters
 {
@@ -44,10 +44,10 @@ public:
     ToneMappingParameters();
     ~ToneMappingParameters();
 
-    void     setCancel(bool *b);
+    void     setCancel(bool* b);
     bool     cancel();
 
-    void     setProgressCallBackFunction(void *data=0, ToneMappingCallbackPtr cb=0);
+    void     setProgressCallBackFunction(void* data=0, ToneMappingCallbackPtr cb=0);
     void     postProgress(int progress);
 
     REALTYPE get_power(int nstage);
@@ -56,12 +56,13 @@ public:
     REALTYPE get_unsharp_mask_power();
     REALTYPE get_unsharp_mask_blur();
 
-    void     save_parameters(const char *filename);
-    bool     load_parameters(const char *filename);
+    void     save_parameters(const char* filename);
+    bool     load_parameters(const char* filename);
 
 public:
 
     bool  info_fast_mode;
+    
     bool  stretch_contrast;
 
     int   low_saturation;
@@ -89,12 +90,12 @@ private:
 
     /** To cancel computation from user interface.
     */
-    bool*                  info_cancel;
+    bool*                  m_cancel;
 
     /** For progress CallBack method from User interface
      */
-    ToneMappingCallbackPtr info_callBack;
-    void*                  info_data;
+    ToneMappingCallbackPtr m_callBack;
+    void*                  m_data;
 };
 
 } // namespace DigikamNoiseReductionImagesPlugin

@@ -46,14 +46,14 @@ namespace DigikamLocalContrastImagesPlugin
 
 ToneMappingParameters::ToneMappingParameters()
 {
-    info_cancel      = 0;
+    m_cancel         = 0;
     info_fast_mode   = true;
     high_saturation  = 100;
     low_saturation   = 100;
     stretch_contrast = true;
     function_id      = 0;
-    info_callBack    = 0;
-    info_data        = 0;
+    m_callBack       = 0;
+    m_data           = 0;
 
     for (int i = 0 ; i < TONEMAPPING_MAX_STAGES ; i++)
     {
@@ -74,32 +74,32 @@ ToneMappingParameters::~ToneMappingParameters()
 
 bool ToneMappingParameters::cancel()
 {
-    if (info_cancel)
-        return *info_cancel;
+    if (m_cancel)
+        return *m_cancel;
 
     return false;
 }
 
-void ToneMappingParameters::setCancel(bool *b)
+void ToneMappingParameters::setCancel(bool* b)
 {
-    info_cancel = b;
+    m_cancel = b;
 }
 
-void ToneMappingParameters::setProgressCallBackFunction(void *data, ToneMappingCallbackPtr cb)
+void ToneMappingParameters::setProgressCallBackFunction(void* data, ToneMappingCallbackPtr cb)
 {
-    info_callBack = cb;
-    info_data     = data;
+    m_callBack = cb;
+    m_data     = data;
 }
 
 void ToneMappingParameters::postProgress(int progress)
 {
-    info_callBack(info_data, progress);
+    m_callBack(m_data, progress);
 }
 
 REALTYPE ToneMappingParameters::get_power(int nstage)
 {
     REALTYPE power = stage[nstage].power;
-    power          = (REALTYPE)(pow(power/100.0,1.5)*100.0);
+    power          = (REALTYPE)(pow(power/100.0, 1.5)*100.0);
     return power;
 }
 
@@ -111,7 +111,7 @@ REALTYPE ToneMappingParameters::get_blur(int nstage)
 REALTYPE ToneMappingParameters::get_unsharp_mask_power()
 {
     REALTYPE power = unsharp_mask.power;
-    power          = (REALTYPE)(pow(power/100.0,3.0)*10.0);
+    power          = (REALTYPE)(pow(power/100.0, 3.0)*10.0);
     return power;
 }
 
