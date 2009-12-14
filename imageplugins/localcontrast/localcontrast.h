@@ -32,7 +32,7 @@
 // Local includes
 
 #include "dimgthreadedfilter.h"
-#include "ToneMappingParameters.h"
+#include "tonemappingparameters.h"
 
 using namespace Digikam;
 

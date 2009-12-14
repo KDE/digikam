@@ -30,7 +30,7 @@
 
 // Local includes.
 
-#include "ToneMappingParameters.h"
+#include "tonemappingparameters.h"
 
 namespace DigikamLocalContrastImagesPlugin
 {

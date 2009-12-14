@@ -30,7 +30,7 @@
 
 // Tonemapping includes
 
-#include "ToneMappingFloat.h"
+#include "tonemappingfloat.h"
 
 namespace DigikamLocalContrastImagesPlugin
 {

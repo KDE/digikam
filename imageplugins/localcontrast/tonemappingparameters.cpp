@@ -35,7 +35,7 @@
 
 // Local includes.
 
-#include "ToneMappingParameters.h"
+#include "tonemappingparameters.h"
 
 #ifdef Q_CC_MSVC
 	#pragma warning ( disable : 4800 )	// forcing value to bool 'true' or 'false' (performance warning)
