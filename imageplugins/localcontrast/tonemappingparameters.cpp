@@ -44,16 +44,36 @@
 namespace DigikamLocalContrastImagesPlugin
 {
 
+class ToneMappingParametersPriv
+{
+public:
+
+    ToneMappingParametersPriv()
+    {
+        cancel   = 0;
+        data     = 0;
+        callBack = 0;
+    };
+
+    /** To cancel computation from user interface.
+    */
+    bool*                  cancel;
+
+    /** For progress CallBack method from User interface
+     */
+    ToneMappingCallbackPtr callBack;
+    void*                  data;  
+};  
+    
 ToneMappingParameters::ToneMappingParameters()
 {
-    m_cancel         = 0;
+    d = new ToneMappingParametersPriv;
+    
     info_fast_mode   = true;
     high_saturation  = 100;
     low_saturation   = 100;
     stretch_contrast = true;
     function_id      = 0;
-    m_callBack       = 0;
-    m_data           = 0;
 
     for (int i = 0 ; i < TONEMAPPING_MAX_STAGES ; i++)
     {
@@ -70,30 +90,37 @@ ToneMappingParameters::ToneMappingParameters()
 
 ToneMappingParameters::~ToneMappingParameters()
 {
+    delete d;
+}
+
+ToneMappingParameters& ToneMappingParameters::operator=(const ToneMappingParameters& prm)
+{
+    d = prm.d;
+    return *this;
 }
 
 bool ToneMappingParameters::cancel()
 {
-    if (m_cancel)
-        return *m_cancel;
+    if (d->cancel)
+        return *d->cancel;
 
     return false;
 }
 
 void ToneMappingParameters::setCancel(bool* b)
 {
-    m_cancel = b;
+    d->cancel = b;
 }
 
 void ToneMappingParameters::setProgressCallBackFunction(void* data, ToneMappingCallbackPtr cb)
 {
-    m_callBack = cb;
-    m_data     = data;
+    d->callBack = cb;
+    d->data     = data;
 }
 
 void ToneMappingParameters::postProgress(int progress)
 {
-    m_callBack(m_data, progress);
+    d->callBack(d->data, progress);
 }
 
 REALTYPE ToneMappingParameters::get_power(int nstage)

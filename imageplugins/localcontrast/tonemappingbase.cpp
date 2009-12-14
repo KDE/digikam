@@ -140,7 +140,7 @@ bool ToneMappingBase::load_parameters(const char *filename)
     return true;
 }
 
-void ToneMappingBase::apply_parameters(ToneMappingParameters inpar)
+void ToneMappingBase::apply_parameters(const ToneMappingParameters& inpar)
 {
     par = inpar;
     set_low_saturation(par.low_saturation);

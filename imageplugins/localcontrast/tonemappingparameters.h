@@ -36,6 +36,8 @@ namespace DigikamLocalContrastImagesPlugin
 
 typedef void (*ToneMappingCallbackPtr)(void* data, int progress);
 
+class ToneMappingParametersPriv;
+
 class ToneMappingParameters
 {
 
@@ -44,6 +46,8 @@ public:
     ToneMappingParameters();
     ~ToneMappingParameters();
 
+    ToneMappingParameters& operator=(const ToneMappingParameters& prm);
+    
     void     setCancel(bool* b);
     bool     cancel();
 
@@ -61,13 +65,13 @@ public:
 
 public:
 
-    bool  info_fast_mode;
+    bool info_fast_mode;
     
-    bool  stretch_contrast;
+    bool stretch_contrast;
 
-    int   low_saturation;
-    int   high_saturation;
-    int   function_id;
+    int  low_saturation;
+    int  high_saturation;
+    int  function_id;
 
     struct
     {
@@ -88,14 +92,7 @@ public:
 
 private:
 
-    /** To cancel computation from user interface.
-    */
-    bool*                  m_cancel;
-
-    /** For progress CallBack method from User interface
-     */
-    ToneMappingCallbackPtr m_callBack;
-    void*                  m_data;
+    ToneMappingParametersPriv* d;
 };
 
 } // namespace DigikamNoiseReductionImagesPlugin
