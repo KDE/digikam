@@ -45,12 +45,12 @@ public:
 
     REALTYPE func(REALTYPE x1,REALTYPE x2);
 
-    virtual void set_blur(int nstage, REALTYPE value);      //1..5000
-    virtual void set_power(int nstage, REALTYPE value);     //0..100.0
-    virtual void set_low_saturation(int value);             //0..100
-    virtual void set_high_saturation(int value);            //0..100
+    virtual void set_blur(int nstage, REALTYPE value);      // 1..5000
+    virtual void set_power(int nstage, REALTYPE value);     // 0..100.0
+    virtual void set_low_saturation(int value);             // 0..100
+    virtual void set_high_saturation(int value);            // 0..100
     virtual void set_stretch_contrast(bool value);
-    virtual void set_function_id (int value);               //0..1
+    virtual void set_function_id (int value);               // 0..1
 
     void set_enabled(int nstage, bool enabled)
     {
@@ -172,11 +172,13 @@ public:
 
 protected:
 
-    REALTYPE preview_zoom;//used for zoom on previews
+    // used for zoom on previews
+    REALTYPE              preview_zoom;
+
     ToneMappingParameters par;
 
-    //preprocessed values
-    REALTYPE current_process_power_value;
+    // preprocessed values
+    REALTYPE              current_process_power_value;
 };
 
 } // namespace DigikamNoiseReductionImagesPlugin
