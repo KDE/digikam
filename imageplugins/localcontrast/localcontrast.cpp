@@ -30,8 +30,6 @@
 
 // Tonemapping includes
 
-#include "ToneMappingBase.h"
-#include "ToneMappingInt.h"
 #include "ToneMappingFloat.h"
 
 namespace DigikamLocalContrastImagesPlugin
@@ -79,17 +77,6 @@ LocalContrast::~LocalContrast()
 
 void LocalContrast::filterImage()
 {
-/*
-    if(d->par->info_fast_mode)
-    {
-        // fast mode
-    }
-    else
-    {
-        // no fast mode
-    }
-*/
-
     progressCallback(0);
 
     d->tonemappingFloat = new ToneMappingFloat();
