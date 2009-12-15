@@ -37,6 +37,7 @@ Name[uk]=ImagePlugin_Emboss
 Name[vi]=ImagePlugin_Emboss
 Name[x-test]=xxImagePlugin_Embossxx
 Name[zh_CN]=ImagePlugin_Emboss
+Name[zh_TW]=影像外掛程式_浮雕
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
@@ -78,6 +79,7 @@ Comment[uk]=Додаток для створення ефекту рельєфн
 Comment[vi]=Bổ sung hiệu ứng chạm nổi ảnh cho digiKam
 Comment[x-test]=xxEmboss image effect plugin for digiKamxx
 Comment[zh_CN]=digiKam 浮雕图像效果插件
+Comment[zh_TW]=digiKam 的浮雕影像效果外掛程式
 
 X-KDE-Library=digikamimageplugin_emboss
 author=Gilles Caulier, caulier dot gilles at gmail dot com

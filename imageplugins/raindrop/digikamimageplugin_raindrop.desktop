@@ -37,7 +37,7 @@ Name[uk]=ImagePlugin_RainDrop
 Name[vi]=ImagePlugin_RainDrop
 Name[x-test]=xxImagePlugin_RainDropxx
 Name[zh_CN]=ImagePlugin_RainDrop
-Name[zh_TW]=影像特效_雨滴
+Name[zh_TW]=影像外掛程式_雨滴
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
@@ -80,7 +80,7 @@ Comment[uk]=Додаток для створення ефекту крапель
 Comment[vi]=Bổ sung hiệu ứng ảnh giọt mưa cho digiKam
 Comment[x-test]=xxRain dropping image effect plugin for digiKamxx
 Comment[zh_CN]=digiKam 雨滴图像效果插件
-Comment[zh_TW]=digiKam 使用的雨滴特效外掛程式
+Comment[zh_TW]=digiKam 的雨滴影像效果外掛程式
 
 X-KDE-Library=digikamimageplugin_raindrop
 author=Gilles Caulier, caulier dot gilles at gmail dot com

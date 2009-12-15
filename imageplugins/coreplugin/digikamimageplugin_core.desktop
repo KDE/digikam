@@ -38,6 +38,7 @@ Name[uk]=ImagePlugin_Core
 Name[vi]=ImagePlugin_Core
 Name[x-test]=xxImagePlugin_Corexx
 Name[zh_CN]=ImagePlugin_Core
+Name[zh_TW]=影像外掛程式_核心
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
@@ -80,6 +81,7 @@ Comment[uk]=Основний додаток зображень digiKam
 Comment[vi]=Bổ sung ảnh lõi digiKam
 Comment[x-test]=xxdigiKam Core Image Pluginxx
 Comment[zh_CN]=digiKam 核心图像插件
+Comment[zh_TW]=digiKam 的核心影像外掛程式
 
 X-KDE-Library=digikamimageplugin_core
 author=Caulier Gilles, caulier dot gilles at gmail dot com

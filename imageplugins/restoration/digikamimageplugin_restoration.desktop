@@ -37,7 +37,7 @@ Name[uk]=ImagePlugin_Restoration
 Name[vi]=ImagePlugin_Restoration
 Name[x-test]=xxImagePlugin_Restorationxx
 Name[zh_CN]=ImagePlugin_Restoration
-Name[zh_TW]=影像特效_恢復
+Name[zh_TW]=影像外掛程式_修復
 
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
@@ -81,7 +81,7 @@ Comment[uk]=Додаток відновлення фотографій для di
 Comment[vi]=Bổ sung phục hồi ảnh chụp cho digiKam
 Comment[x-test]=xxdigiKam plugin to restore a photographxx
 Comment[zh_CN]=digiKam 照片还原插件
-Comment[zh_TW]=可用於恢復圖像的 digiKam 外掛程式
+Comment[zh_TW]=修復相片的 digiKam 外掛程式
 
 X-KDE-Library=digikamimageplugin_restoration
 author=Gilles Caulier, caulier dot gilles at gmail dot com

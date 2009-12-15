@@ -37,6 +37,7 @@ Name[uk]=ImagePlugin_InsertText
 Name[vi]=ImagePlugin_InsertText
 Name[x-test]=xxImagePlugin_InsertTextxx
 Name[zh_CN]=ImagePlugin_InsertText
+Name[zh_TW]=影像外掛程式_插入文字
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
@@ -77,6 +78,7 @@ Comment[uk]=Додаток вставляння тексту до зображе
 Comment[vi]=Bổ sung chèn văn bản vào ảnh cho digiKam
 Comment[x-test]=xxInsert text to image plugin for digiKamxx
 Comment[zh_CN]=digiKam 插入文字插件
+Comment[zh_TW]=digiKam 插入文字到影像的外掛程式
 
 X-KDE-Library=digikamimageplugin_inserttext
 author=Gilles Caulier, caulier dot gilles at gmail dot com

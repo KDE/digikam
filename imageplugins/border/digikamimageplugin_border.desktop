@@ -38,6 +38,7 @@ Name[uk]=ImagePlugin_Border
 Name[vi]=ImagePlugin_Border
 Name[x-test]=xxImagePlugin_Borderxx
 Name[zh_CN]=ImagePlugin_Border
+Name[zh_TW]=影像外掛程式_邊框
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
@@ -81,6 +82,7 @@ Comment[uk]=Додаток digiKam для додавання рамки до з�
 Comment[vi]=Bổ sung thêm viền trên ảnh cho digiKam
 Comment[x-test]=xxAdd border to image plugin for digiKamxx
 Comment[zh_CN]=digiKam 添加图像边框插件
+Comment[zh_TW]=digiKam 的影像加入邊框外掛程式
 
 X-KDE-Library=digikamimageplugin_border
 author=Gilles Caulier, caulier dot gilles at gmail dot com

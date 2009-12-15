@@ -19,6 +19,7 @@ Name[sv]=Bildinsticksprogram lokal kontrast
 Name[tr]=GörüntüEklentisi_YerelKarşıtlık
 Name[uk]=ImagePlugin_LocalContrast
 Name[x-test]=xxImagePlugin_LocalContrastxx
+Name[zh_TW]=影像外掛程式_局部對比
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
@@ -42,6 +43,7 @@ Comment[sv]=Digikam insticksprogram för lokal kontrast
 Comment[tr]=DigiKam için yerel karşıtlık eklentisi
 Comment[uk]=Додаток виправлення локальної контрастності для digiKam
 Comment[x-test]=xxLocal contrast plugin for Digikamxx
+Comment[zh_TW]=digiKam 的局部對比外掛程式
 
 X-KDE-Library=digikamimageplugin_localcontrast
 author=Pontabry Julien, julien dot pontabry at gmail dot com

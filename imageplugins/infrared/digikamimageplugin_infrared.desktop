@@ -37,6 +37,7 @@ Name[uk]=ImagePlugin_Infrared
 Name[vi]=ImagePlugin_Infrared
 Name[x-test]=xxImagePlugin_Infraredxx
 Name[zh_CN]=ImagePlugin_Infrared
+Name[zh_TW]=影像外掛程式_紅外線
 
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
@@ -79,6 +80,7 @@ Comment[uk]=Додаток імітації інфрачервоної плів�
 Comment[vi]=Bổ sung mô phỏng mảng thuốc hồng ngoại cho digiKam
 Comment[x-test]=xxSimulate infrared film plugin for digiKamxx
 Comment[zh_CN]=digiKam 红外胶片模拟插件
+Comment[zh_TW]=digiKam 的模擬紅外線底片外掛程式
 
 X-KDE-Library=digikamimageplugin_infrared
 author=Gilles Caulier, caulier dot gilles at gmail dot com

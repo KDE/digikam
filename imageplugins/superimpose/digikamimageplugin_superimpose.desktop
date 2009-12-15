@@ -37,7 +37,7 @@ Name[uk]=ImagePlugin_SuperImpose
 Name[vi]=ImagePlugin_SuperImpose
 Name[x-test]=xxImagePlugin_SuperImposexx
 Name[zh_CN]=ImagePlugin_SuperImpose
-Name[zh_TW]=影像特效_重疊
+Name[zh_TW]=影像外掛程式_疊加
 
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
@@ -79,7 +79,7 @@ Comment[uk]=Додаток накладання шаблону для digiKam
 Comment[vi]=Bổ sung đặt biểu mẫu trên cho digiKam
 Comment[x-test]=xxTemplate superimpose plugin for digiKamxx
 Comment[zh_CN]=digiKam 模板叠加插件
-Comment[zh_TW]=digiKam 使用的樣板重疊特效外掛程式
+Comment[zh_TW]=digiKam 的範本疊加外掛程式
 
 X-KDE-Library=digikamimageplugin_superimpose
 author=Gilles Caulier, caulier dot gilles at gmail dot com

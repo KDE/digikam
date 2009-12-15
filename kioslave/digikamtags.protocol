@@ -51,5 +51,6 @@ Description[uk]=Додаток протоколів міток digikam
 Description[vi]=kioslave thẻ digiKam
 Description[x-test]=xxdigikam tags kioslavexx
 Description[zh_CN]=digikam 标记 kioslave
+Description[zh_TW]=digikam 標籤 kioslave
 Class=:local
 Icon=digikam

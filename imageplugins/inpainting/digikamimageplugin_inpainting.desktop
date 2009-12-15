@@ -36,6 +36,7 @@ Name[uk]=ImagePlugin_InPainting
 Name[vi]=ImagePlugin_InPainting
 Name[x-test]=xxImagePlugin_InPaintingxx
 Name[zh_CN]=ImagePlugin_InPainting
+Name[zh_TW]=影像外掛程式_修補
 
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
@@ -76,6 +77,7 @@ Comment[uk]=Додаток замальовування фотографії д�
 Comment[vi]=Bổ sung sơn vào ảnh chụp cho digiKam
 Comment[x-test]=xxdigiKam plugin to inpaint a photographxx
 Comment[zh_CN]=digiKam 去除照片瑕疵插件
+Comment[zh_TW]=修補相片的 digiKam 外掛程式
 
 X-KDE-Library=digikamimageplugin_inpainting
 author=Gilles Caulier, caulier dot gilles at gmail dot com

@@ -38,6 +38,7 @@ Name[uk]=ImagePlugin_BlurFX
 Name[vi]=ImagePlugin_BlurFX
 Name[x-test]=xxImagePlugin_BlurFXxx
 Name[zh_CN]=ImagePlugin_BlurFX
+Name[zh_TW]=影像外掛程式_模糊效果
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
@@ -81,6 +82,7 @@ Comment[uk]=Додаток спеціальних ефектів розмива�
 Comment[vi]=Bổ sung hiệu ứng đặc biệt che mờ cho digiKam
 Comment[x-test]=xxBlur special effects plugin for digiKamxx
 Comment[zh_CN]=digiKam 模糊化特效插件
+Comment[zh_TW]=digiKam 的模糊特效外掛程式
 
 X-KDE-Library=digikamimageplugin_blurfx
 author=Gilles Caulier, caulier dot gilles at gmail dot com

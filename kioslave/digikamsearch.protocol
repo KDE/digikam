@@ -43,5 +43,6 @@ Description[uk]=Додаток протоколів пошуку digiKam
 Description[vi]=kioslave tìm kiếm digiKam
 Description[x-test]=xxdigiKam search kioslavexx
 Description[zh_CN]=digiKam 搜索 kioslave
+Description[zh_TW]=digiKam 搜尋 kioslave
 Class=:local
 Icon=digikam

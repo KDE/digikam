@@ -38,6 +38,7 @@ Name[uk]=ImagePlugin_AdjustCurves
 Name[vi]=ImagePlugin_AdjustCurves
 Name[x-test]=xxImagePlugin_AdjustCurvesxx
 Name[zh_CN]=ImagePlugin_AdjustCurves
+Name[zh_TW]=影像外掛程式_調整曲線
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
@@ -81,6 +82,7 @@ Comment[uk]=Додаток виправлення гістограми крив�
 Comment[vi]=Bổ sung biểu đồ tần xuất điều chỉnh đường cong ảnh cho digiKam
 Comment[x-test]=xxImage histogram adjust curves plugin for digiKamxx
 Comment[zh_CN]=digiKam 图像直方图曲线调整插件
+Comment[zh_TW]=digiKam 的影像分佈圖調整曲線外掛程式
 
 X-KDE-Library=digikamimageplugin_adjustcurves
 author=Caulier Gilles, caulier dot gilles at gmail dot com

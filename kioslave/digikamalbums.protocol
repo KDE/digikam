@@ -50,5 +50,6 @@ Description[uk]=Додаток протоколів альбомів digiKam
 Description[vi]=kioslave tập ảnh digiKam
 Description[x-test]=xxdigiKam albums kioslavexx
 Description[zh_CN]=digiKam 相册 kioslave
+Description[zh_TW]=digiKam 相簿 kioslave
 Class=:local
 Icon=digikam

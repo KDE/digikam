@@ -38,6 +38,7 @@ Name[uk]=ImagePlugin_DistortionFX
 Name[vi]=ImagePlugin_DistortionFX
 Name[x-test]=xxImagePlugin_DistortionFXxx
 Name[zh_CN]=ImagePlugin_DistortionFX
+Name[zh_TW]=影像外掛程式_扭曲效果
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
@@ -78,6 +79,7 @@ Comment[uk]=Додаток спеціальних ефектів спотвор�
 Comment[vi]=Bổ sung hiệu ứng đặc biệt méo mó ảnh cho digiKam
 Comment[x-test]=xxDistortion special effects plugin for digiKamxx
 Comment[zh_CN]=digiKam 扭曲特效插件
+Comment[zh_TW]=digiKam 的扭曲特特效外掛程式
 
 X-KDE-Library=digikamimageplugin_distortionfx
 author=Caulier Gilles, caulier dot gilles at gmail dot com
