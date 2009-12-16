@@ -799,7 +799,7 @@ void SlideShow::inhibitScreenSaver()
 {
     QDBusMessage message = QDBusMessage::createMethodCall( "org.freedesktop.ScreenSaver", "/ScreenSaver",
                                                            "org.freedesktop.ScreenSaver", "Inhibit" );
-    message << QString( "Okular" );
+    message << QString( "digiKam" );
     message << i18nc( "Reason for inhibiting the screensaver activation, when the presentation mode is active", "Giving a presentation" );
 
     QDBusReply<uint> reply = QDBusConnection::sessionBus().call( message );
