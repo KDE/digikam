@@ -32,7 +32,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 024 ==> 213444 : digiKam crashed after closing a window.
 025 ==> 218890 : Histogram max calculation range [patch].
 026 ==> 218192 : Image Editor blocks re-saving.
-027 ==> 
+027 ==> 218163 : RAW file import settings are lost after import.
+028 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-rc - Release date: 2009-11-29
