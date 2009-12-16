@@ -573,6 +573,7 @@ bool DImg::save(const QString& filePath, const QString& format, DImgLoaderObserv
     if (frm == "JPEG" || frm == "JPG" || frm == "JPE")
     {
         JPEGLoader loader(this);
+        setAttribute("savedformat-isreadonly", loader.isReadOnly());
         return loader.save(filePath, observer);
     }
     else if (frm == "PNG")
