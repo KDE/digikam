@@ -35,7 +35,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 027 ==> 218163 : RAW file import settings are lost after import.
 028 ==> 218889 : Inconsistent ui element sizing.
 029 ==> 180675 : digiKam-doc 0.9.5 missing doc/pt_digikam & doc/pt_showfoto.
-030 ==> 
+030 ==> 210969 : Crash when saving images in editor.
+031 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-rc - Release date: 2009-11-29
