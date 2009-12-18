@@ -1590,7 +1590,13 @@ void EditorWindow::finishSaving(bool success)
 void EditorWindow::setupTempSaveFile(const KUrl & url)
 {
 
+#ifdef _WIN32
+    KUrl parent(url.directory(KUrl::AppendTrailingSlash)); 
+    QString tempDir = parent.toLocalFile();
+#else
     QString tempDir = url.directory(KUrl::AppendTrailingSlash);
+#endif
+
     // use magic file extension which tells the digikamalbums ioslave to ignore the file
     m_savingContext->saveTempFile = new KTemporaryFile();
     // if the destination url is on local file system, try to set the temp file
