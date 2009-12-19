@@ -38,7 +38,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 030 ==> 210969 : Crash when saving images in editor.
 031 ==> 202278 : BQM: sharpen tool resets EXIF orientation.
 032 ==> 210211 : digiKam doesn't update metadata of files already in database, sync only writes db->file not db<->file.
-033 ==> 
+033 ==> 213806 : Next image is not displayed after rating an image.
+034 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-rc - Release date: 2009-11-29
