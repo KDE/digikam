@@ -834,7 +834,7 @@ bool GPCamera::getThumbnail(const QString& folder, const QString& itemName, QIma
                                    cfile, d->status->context);
     if (errorCode != GP_OK)
     {
-        kDebug() << "Failed to get camera item!";
+        kDebug() << "Failed to get camera item!" << folder << itemName;
         printGphotoErrorDescription(errorCode);
         gp_file_unref(cfile);
         delete d->status;
@@ -848,7 +848,7 @@ bool GPCamera::getThumbnail(const QString& folder, const QString& itemName, QIma
     errorCode = gp_file_get_data_and_size(cfile, &data, &size);
     if (errorCode != GP_OK)
     {
-        kDebug() << "Failed to get thumbnail from camera item!";
+        kDebug() << "Failed to get thumbnail from camera item!" << folder << itemName;
         printGphotoErrorDescription(errorCode);
         gp_file_unref(cfile);
         return false;
@@ -857,7 +857,7 @@ bool GPCamera::getThumbnail(const QString& folder, const QString& itemName, QIma
     thumbnail.loadFromData((const uchar*) data, (uint) size);
 
     gp_file_unref(cfile);
-    return true;
+    return !thumbnail.isNull();
 #else
     Q_UNUSED(folder);
     Q_UNUSED(itemName);
