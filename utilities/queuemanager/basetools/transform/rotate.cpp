@@ -68,6 +68,8 @@ Rotate::Rotate(QObject* parent)
 
     setSettingsWidget(vbox);
 
+    setNeedResetExifOrientation(true);
+
     connect(m_comboBox, SIGNAL(activated(int)),
             this, SLOT(slotSettingsChanged()));
 

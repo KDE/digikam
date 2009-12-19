@@ -50,14 +50,16 @@ public:
 
     BatchToolPriv()
     {
-        settingsWidget     = 0;
-        exifSetOrientation = true;
-        cancel             = false;
-        last               = false;
-        observer           = 0;
+        settingsWidget         = 0;
+        exifResetOrientation   = false;
+        exifCanEditOrientation = true;
+        cancel                 = false;
+        last                   = false;
+        observer               = 0;
     }
 
-    bool                       exifSetOrientation;
+    bool                       exifResetOrientation;
+    bool                       exifCanEditOrientation;
     bool                       cancel;
     bool                       last;
 
@@ -217,14 +219,24 @@ DImg BatchTool::imageData() const
     return d->image;
 }
 
-void BatchTool::setExifSetOrientation(bool set)
+void BatchTool::setNeedResetExifOrientation(bool set)
 {
-    d->exifSetOrientation = set;
+    d->exifResetOrientation = set;
 }
 
-bool BatchTool::getExifSetOrientation() const
+bool BatchTool::getNeedResetExifOrientation() const
 {
-    return d->exifSetOrientation;
+    return d->exifResetOrientation;
+}
+
+void BatchTool::setResetExifOrientationAllowed(bool set)
+{
+    d->exifCanEditOrientation = set;
+}
+
+bool BatchTool::getResetExifOrientationAllowed() const
+{
+    return d->exifCanEditOrientation;
 }
 
 void BatchTool::setRawDecodingSettings(const DRawDecoding& settings)
@@ -313,11 +325,12 @@ bool BatchTool::savefromDImg()
     {
         // In case of output support is not set for ex. with all tool which do not convert to new format.
         DImg::FORMAT format = (DImg::FORMAT)(d->image.attribute("detectedFileFormat").toInt());
-        d->image.updateMetadata(DImg::formatToMimeType(format), QString(), getExifSetOrientation());
+        d->image.updateMetadata(DImg::formatToMimeType(format), QString(),
+                                getResetExifOrientationAllowed() && getNeedResetExifOrientation());
         return( d->image.save(outputUrl().toLocalFile(), format, d->observer) );
     }
 
-    d->image.updateMetadata(frm, QString(), getExifSetOrientation());
+    d->image.updateMetadata(frm, QString(), getResetExifOrientationAllowed() && getNeedResetExifOrientation());
     bool b   = d->image.save(outputUrl().toLocalFile(), frm, d->observer);
     d->image = DImg();
     return b;
