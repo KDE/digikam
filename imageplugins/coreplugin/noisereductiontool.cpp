@@ -71,7 +71,7 @@ public:
         gboxSettings(0)
         {}
 
-    const QString          configGroupName;
+    const QString           configGroupName;
 
     NoiseReductionSettings* nrSettings;
     ImagePanelWidget*       previewWidget;
@@ -143,7 +143,7 @@ void NoiseReductionTool::prepareEffect()
 {
     d->nrSettings->setEnabled(false);
 
-    DImg image = d->previewWidget->getOriginalRegionImage();
+    DImg image              = d->previewWidget->getOriginalRegionImage();
     WaveletsNRContainer prm = d->nrSettings->settings();
 
     setFilter(dynamic_cast<DImgThreadedFilter*>(new WaveletsNR(&image, this, prm)));
