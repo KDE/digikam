@@ -297,10 +297,10 @@ public:
         This fix Iptc preview, Exif thumbnail, image size information, etc.
         'destMimeType' is destination type mime. In some case, any metadata are not updated by the same way.
         'originalFileName' is original file name. Can be empty.
-        'setExifOrientationTag' is used to force Exif orientation flag to normal.
+        'resetExifOrientationTag' is used to force Exif orientation flag to normal.
      */
     void       updateMetadata(const QString& destMimeType, const QString& originalFileName,
-                              bool setExifOrientationTag);
+                              bool resetExifOrientationTag);
 
     /** Return a deep copy of full image
       */
