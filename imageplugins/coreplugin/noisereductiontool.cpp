@@ -121,10 +121,7 @@ void NoiseReductionTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
-
-    d->nrSettings->blockSignals(true);
     d->nrSettings->readSettings(group);
-    d->nrSettings->blockSignals(false);
 }
 
 void NoiseReductionTool::writeSettings()
