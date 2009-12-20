@@ -43,7 +43,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 035 ==> 216808 : Settings are not saved in NoiseReduction tool.
 036 ==> 213798 : Selection after "move selection to folder" retains previous selection.
 037 ==> 215743 : Endianness bug loading 16 bits raw images.
-038 ==> 
+038 ==> 215752 : Endianness bug saving 16 bits images [patch].
+039 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-rc - Release date: 2009-11-29
