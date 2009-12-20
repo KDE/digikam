@@ -42,7 +42,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 034 ==> 211563 : Batch Queue Manager : only one shot.
 035 ==> 216808 : Settings are not saved in NoiseReduction tool.
 036 ==> 213798 : Selection after "move selection to folder" retains previous selection.
-037 ==> 
+037 ==> 215743 : Endianness bug loading 16 bits raw images.
+038 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-rc - Release date: 2009-11-29
