@@ -9,10 +9,6 @@ Syntax Highlighting:
 
 Modifiers:
 
-    -CaseModifier:     - Remove LowerCase, UpperCase and FirstLetterModifier and merge them in a CaseModifier.
-                         This has actually been done already in a local branch, but I can't commit it due to the
-                         string freeze. Just merge it into trunk after string freeze is over.
-
     - ReplaceModifier: Add RegExp support
 
     - UniqueModifier:  - Add parameters to the tooltip (after string freeze is over)
