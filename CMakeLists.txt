@@ -1081,14 +1081,12 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/token.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/tooltipcreator.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/defaultrenameparser.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/modifiers/casemodifier.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/modifiers/defaultvaluemodifier.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/modifiers/firstletterofeachworduppercasemodifier.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/modifiers/lowercasemodifier.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/modifiers/rangemodifier.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/modifiers/replacemodifier.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/modifiers/trimmedmodifier.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/modifiers/uniquemodifier.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/modifiers/uppercasemodifier.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options/cameranameoption.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options/dateoption.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options/directorynameoption.cpp
