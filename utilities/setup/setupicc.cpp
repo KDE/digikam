@@ -775,7 +775,11 @@ void SetupICC::slotClickedIn()
 
 void SetupICC::slotClickedMonitor()
 {
-    IccProfile profile = d->monitorProfilesKC->currentProfile();
+    IccProfile profile;
+    if (IccSettings::instance()->monitorProfileFromSystem())
+        profile = IccSettings::instance()->monitorProfile();
+    else
+        profile = d->monitorProfilesKC->currentProfile();
     if (!profile.isNull())
        profileInfo(profile);
 }
