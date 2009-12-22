@@ -187,6 +187,9 @@ DigikamApp::DigikamApp()
     if(d->splashScreen)
         d->splashScreen->message(i18n("Scan Albums"));
 
+    AlbumManager* man = AlbumManager::instance();
+    man->setDatabase(QString("SOMETHINGELSE"), QString("SOME"), QString("SOME"), -1, false, QString("SOME"));
+
     // set database error handler
 //    DatabaseAccess access;
 //    DatabaseGUIErrorHandler guiErrorHandler;
@@ -324,9 +327,23 @@ DigikamApp::~DigikamApp()
 #if KDCRAW_VERSION < 0x000400
     KDcrawIface::DcrawBinary::cleanUp();
 #endif
+
+    // close database server
+    if (dbServer!=0 && AlbumSettings::instance()->getInternalDatabaseServer())
+    {
+        dbServer->stopDatabaseProcess();
+    }
+
     m_instance = 0;
 
     delete d;
+}
+
+
+void DigikamApp::startInternalDatabase()
+{
+    dbServer=new DatabaseServer(this);
+    dbServer->startDatabaseProcess();
 }
 
 DigikamApp* DigikamApp::instance()

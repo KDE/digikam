@@ -133,10 +133,10 @@ QByteArray DatabaseParameters::hash() const
     return md5.hexDigest();
 }
 
-DatabaseParameters DatabaseParameters::parametersFromConfig(const QString &databaseType, const QString &databaseName,
-                                                            const QString &databaseHostName, int databasePort,
-                                                            const QString &databaseUserName, const QString &databaseUserPassword,
-                                                            const QString &databaseConnectOptions)
+DatabaseParameters DatabaseParameters::parametersFromConfig(const QString databaseType, const QString databaseName,
+                                                            const QString databaseHostName, int databasePort,
+                                                            const QString databaseUserName, const QString databaseUserPassword,
+                                                            const QString databaseConnectOptions)
 {
 	DatabaseParameters parameters;
 

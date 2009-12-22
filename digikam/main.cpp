@@ -143,17 +143,17 @@ int main(int argc, char *argv[])
 
     // Check if SQLite Qt4 plugin is available.
 
-    if (!QSqlDatabase::isDriverAvailable("QSQLITE"))
+    if (!QSqlDatabase::isDriverAvailable("QSQLITE") || !QSqlDatabase::isDriverAvailable("QMYSQL"))
     {
 	if (QSqlDatabase::drivers().isEmpty())
 	{
-            KMessageBox::error(0, i18n("Run-time Qt4 SQLite database plugin is not available - "
+            KMessageBox::error(0, i18n("Run-time Qt4 SQLite or MySQL database plugin is not available - "
                                        "please install it.\n"
                                        "There is no database plugin installed on your computer."));
 	}
 	else
 	{
-            KMessageBox::errorList(0, i18n("Run-time Qt4 SQLite database plugin is not available - "
+            KMessageBox::errorList(0, i18n("Run-time Qt4 SQLite or MySQL database plugin is not available - "
                                            "please install it.\n"
                                            "Database plugins installed on your computer are listed below:"),
                                    QSqlDatabase::drivers());
@@ -163,10 +163,11 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    // initialize database
-    AlbumManager* man = AlbumManager::instance();
-    if (!man->setDatabase("QSQLITE", dbName, QString(), -1, priorityDbPath, firstAlbumPath))
-        return 1;
+//TODO is this really needed?
+//    // initialize database
+//    AlbumManager* man = AlbumManager::instance();
+//    if (!man->setDatabase("QSQLITE", dbName, QString(), -1, priorityDbPath, firstAlbumPath))
+//        return 1;
 
     DigikamApp *digikam = new DigikamApp();
 

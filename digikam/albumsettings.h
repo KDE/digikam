@@ -337,6 +337,9 @@ public:
     QString getDatabaseUserName() const;
     void setDatabaseUserName(const QString &userName);
 
+    bool getInternalDatabaseServer() const;
+    void setInternalDatabaseServer(const bool useInternalDBServer);
+
 private:
 
     friend class AlbumSettingsCreator;

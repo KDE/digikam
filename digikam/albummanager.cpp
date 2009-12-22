@@ -96,6 +96,7 @@ extern "C"
 #include "upgradedb_sqlite2tosqlite3.h"
 #include "config-digikam.h"
 #include "setupcollections.h"
+#include "digikamapp.h"
 
 namespace Digikam
 {
@@ -569,6 +570,13 @@ void AlbumManager::changeDatabase(const QString& dbType, const QString& dbName, 
 
 bool AlbumManager::setDatabase(const QString& dbType, const QString& dbName, const QString& dbHostName, int dbPort, bool priority, const QString& suggestedAlbumRoot)
 {
+
+    // ensure, embedded database is loaded
+    if (AlbumSettings::instance()->getInternalDatabaseServer())
+    {
+        DigikamApp::instance()->startInternalDatabase();
+    }
+
     if (dbName.isEmpty())
         return false;
 
@@ -665,14 +673,28 @@ bool AlbumManager::setDatabase(const QString& dbType, const QString& dbName, con
         databaseName = QDir::cleanPath(databasePath + '/' + "digikam4.db");
         thumbnailDatabaseName = QDir::cleanPath(databasePath + '/' + "thumbnails-digikam.db");
     }
-    DatabaseAccess::setParameters(DatabaseParameters::parametersFromConfig(AlbumSettings::instance()->getDatabaseType(),
-                                                                           databaseName,
-                                                                           AlbumSettings::instance()->getDatabaseHostName(),
-                                                                           AlbumSettings::instance()->getDatabasePort(),
-                                                                           AlbumSettings::instance()->getDatabaseUserName(),
-                                                                           AlbumSettings::instance()->getDatabasePassword(),
-                                                                           AlbumSettings::instance()->getDatabaseConnectoptions()),
-                                                                           DatabaseAccess::MainApplication);
+    if (AlbumSettings::instance()->getInternalDatabaseServer())
+    {
+        const QString miscDir     = KStandardDirs::locateLocal("data", "digikam/db_misc");
+        DatabaseAccess::setParameters(DatabaseParameters::parametersFromConfig(QString("QMYSQL"),
+                                                                               QString("digikam"),
+                                                                               QString(""),
+                                                                               -1,
+                                                                               QString(""),
+                                                                               QString(""),
+                                                                               QString::fromLatin1("UNIX_SOCKET=%1/mysql.socket").arg(miscDir)),
+                                                                               DatabaseAccess::MainApplication);
+    }else
+    {
+        DatabaseAccess::setParameters(DatabaseParameters::parametersFromConfig(AlbumSettings::instance()->getDatabaseType(),
+                                                                               databaseName,
+                                                                               AlbumSettings::instance()->getDatabaseHostName(),
+                                                                               AlbumSettings::instance()->getDatabasePort(),
+                                                                               AlbumSettings::instance()->getDatabaseUserName(),
+                                                                               AlbumSettings::instance()->getDatabasePassword(),
+                                                                               AlbumSettings::instance()->getDatabaseConnectoptions()),
+                                                                               DatabaseAccess::MainApplication);
+    }
 
     DatabaseGUIErrorHandler *handler = new DatabaseGUIErrorHandler(DatabaseAccess::parameters());
     DatabaseAccess::initDatabaseErrorHandler(handler);

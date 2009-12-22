@@ -69,6 +69,7 @@ public:
         //TODO: Add database constants
 
         configGroupDatabase("Database Settings"),
+        configInternalDatabaseServer("Internal Database Server"),
         configDatabaseType("Database Type"),
         configDatabaseName("Database Name"),
         configDatabaseNameThumbnails("Database Name Thumbnails"),
@@ -156,6 +157,7 @@ public:
     const QString                       configGroupGeneral;
 
     const QString                       configGroupDatabase;
+    const QString                       configInternalDatabaseServer;
     const QString                       configDatabaseType;
     const QString                       configDatabaseName;
     const QString                       configDatabaseNameThumbnails;
@@ -322,6 +324,7 @@ public:
     QString                             currentTheme;
 
     // database settings
+    bool                                internalDatabaseServer;
     QString                             databaseType;
     QString                             databaseHostName;
     QString                             databaseName;
@@ -582,6 +585,7 @@ void AlbumSettings::readSettings()
     // ---------------------------------------------------------------------
 
     group = config->group(d->configGroupDatabase);
+    d->internalDatabaseServer   = group.readEntry(d->configInternalDatabaseServer, false); //TODO When using mysql as default set the default value to <true>
     d->databaseType             = group.readEntry(d->configDatabaseType);
     d->databaseName             = group.readEntry(d->configDatabaseName);
     d->databaseNameThumbnails   = group.readEntry(d->configDatabaseNameThumbnails);
@@ -719,6 +723,7 @@ void AlbumSettings::saveSettings()
     // ---------------------------------------------------------------------
 
     group = config->group(d->configGroupDatabase);
+    group.writeEntry(d->configInternalDatabaseServer, d->internalDatabaseServer);
     group.writeEntry(d->configDatabaseType, d->databaseType);
     group.writeEntry(d->configDatabaseName, d->databaseName);
     group.writeEntry(d->configDatabaseNameThumbnails, d->databaseNameThumbnails);
@@ -1620,6 +1625,11 @@ QString AlbumSettings::getDatabaseUserName() const
     return d->databaseUserName;
 }
 
+bool AlbumSettings::getInternalDatabaseServer() const
+{
+    return d->internalDatabaseServer;
+}
+
 void AlbumSettings::setDatabaseConnectoptions(const QString &connectoptions)
 {
     d->databaseConnectoptions = connectoptions;
@@ -1655,5 +1665,9 @@ void AlbumSettings::setDatabaseUserName(const QString &userName)
     d->databaseUserName = userName;
 }
 
+void AlbumSettings::setInternalDatabaseServer(const bool useInternalDBServer)
+{
+    d->internalDatabaseServer = useInternalDBServer;
+}
 
 }  // namespace Digikam

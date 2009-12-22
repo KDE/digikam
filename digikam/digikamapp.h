@@ -44,6 +44,7 @@
 // Local includes
 
 #include "albumlister.h"
+#include "databaseserver.h"
 #include "digikam_export.h"
 
 class KAction;
@@ -89,6 +90,8 @@ public:
     void enableZoomMinusAction(bool val);
     void enableAlbumBackwardHistory(bool enable);
     void enableAlbumForwardHistory(bool enable);
+
+    void startInternalDatabase();
 
     DigikamView *view() const;
     AlbumIconViewFilter *iconViewFilter() const;
@@ -215,6 +218,7 @@ private:
     DigikamAppPriv* const d;
 
     static DigikamApp *m_instance;
+    DatabaseServer    *dbServer;
 };
 
 }  // namespace Digikam
