@@ -84,6 +84,7 @@ protected:
 
     virtual ItemViewHoverButton *createButton();
     virtual void updateButton(const QModelIndex& index);
+    virtual bool checkIndex(const QModelIndex& index) const;
 
 private Q_SLOTS:
 
@@ -109,6 +110,7 @@ protected:
 
     virtual ItemViewHoverButton *createButton();
     virtual void updateButton(const QModelIndex& index);
+    virtual bool checkIndex(const QModelIndex& index) const;
 
 private Q_SLOTS:
 

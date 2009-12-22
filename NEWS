@@ -7,5 +7,6 @@ NEW FEATURES:
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
-001 ==> 219559 :  Crash when opening editor.
-002 ==> 
+001 ==> 219559 : Crash when opening editor.
+002 ==> 217860 : Icon view movie thumbnail rotation overlay buttons.
+003 ==> 

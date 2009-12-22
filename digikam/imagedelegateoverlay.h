@@ -110,9 +110,13 @@ protected:
     /// Returns the widget to be used as parent for your widget created in createWidget()
     QWidget *parentWidget() const;
 
+    /** Return true here if you want to show the overlay for the given index.
+     *  The default implementation returns true. */
+    virtual bool checkIndex(const QModelIndex& index) const;
+
 protected Q_SLOTS:
 
-    /** Default implementation shows or hides the widget if index is valid or not valid */
+    /** Default implementation shows the widget iff the index is valid and checkIndex returns true. */
     virtual void slotEntered(const QModelIndex& index);
     /** Default implementations of these three slots call hide() */
     virtual void slotReset();

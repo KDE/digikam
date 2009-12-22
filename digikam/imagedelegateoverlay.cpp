@@ -175,8 +175,13 @@ void AbstractWidgetDelegateOverlay::slotReset()
 void AbstractWidgetDelegateOverlay::slotEntered(const QModelIndex& index)
 {
     hide();
-    if (index.isValid())
+    if (index.isValid() && checkIndex(index))
         m_widget->show();
+}
+
+bool AbstractWidgetDelegateOverlay::checkIndex(const QModelIndex& index) const
+{
+    return true;
 }
 
 void AbstractWidgetDelegateOverlay::slotViewportEntered()
@@ -277,7 +282,7 @@ void HoverButtonDelegateOverlay::slotEntered(const QModelIndex& index)
 {
     AbstractWidgetDelegateOverlay::slotEntered(index);
 
-    if (index.isValid())
+    if (index.isValid() && checkIndex(index))
     {
         button()->setIndex(index);
         updateButton(index);
