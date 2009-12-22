@@ -96,7 +96,7 @@ RangeModifier::RangeModifier()
              : Modifier(i18n("Range..."), i18n("Add only a specific range of a renaming option"),
                         SmallIcon("measure"))
 {
-    addToken("{|from| - |to|}", i18n("Extract a specific range (if omitted, '|to|' = end of string)"));
+    addToken("{||from|| - ||to||}", i18n("Extract a specific range (if omitted, '||to||' = end of string)"));
 
     QRegExp reg("\\{(\\d+)(-((-1|\\d+))?)?\\}");
     reg.setMinimal(true);

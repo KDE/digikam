@@ -85,8 +85,8 @@ ReplaceModifier::ReplaceModifier()
                : Modifier(i18nc("Replace text", "Replace..."), i18n("Replace text in a renaming option"),
                           SmallIcon("document-edit"))
 {
-    addToken("{r:\"|old|\", \"|new|\"}",  i18n("Replace text"));
-    addToken("{ri:\"|old|\", \"|new|\"}", i18n("Replace text (case insensitive)"));
+    addToken("{r:\"||old||\", \"||new||\"}",  i18n("Replace text"));
+    addToken("{ri:\"||old||\", \"||new||\"}", i18n("Replace text (case insensitive)"));
 
     QRegExp reg("\\{r(i)?:\"(.+)\",\"(.*)\"\\}");
     reg.setMinimal(true);
