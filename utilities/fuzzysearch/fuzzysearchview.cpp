@@ -206,10 +206,11 @@ FuzzySearchView::FuzzySearchView(SearchModel *searchModel,
     d->folderView            = new KVBox();
     d->searchTreeView        = new EditableSearchTreeView(d->folderView, searchModel,
                                                           searchModificationHelper);
-    d->searchTreeView->albumFilterModel()->listHaarSearches();
-    d->searchTreeView->albumFilterModel()->setListTemporarySearches(true);
+    d->searchTreeView->filteredModel()->listHaarSearches();
+    d->searchTreeView->filteredModel()->setListTemporarySearches(true);
     d->searchFuzzyBar        = new SearchTextBar(d->folderView, "FuzzySearchViewSearchFuzzyBar");
-    d->searchFuzzyBar->setModel(searchModel, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
+    d->searchFuzzyBar->setModel(d->searchTreeView->filteredModel(),
+                                AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
     d->folderView->setSpacing(KDialog::spacingHint());
     d->folderView->setMargin(0);
 

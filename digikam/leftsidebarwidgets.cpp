@@ -481,10 +481,11 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget *parent, SearchModel *searc
 
     d->timeLineFolderView = new EditableSearchTreeView(this, searchModel,
                                                       searchModificationHelper);
-    d->timeLineFolderView->albumFilterModel()->listTimelineSearches();
-    d->timeLineFolderView->albumFilterModel()->setListTemporarySearches(false);
+    d->timeLineFolderView->filteredModel()->listTimelineSearches();
+    d->timeLineFolderView->filteredModel()->setListTemporarySearches(false);
     d->searchDateBar      = new SearchTextBar(this, "TimeLineViewSearchDateBar");
-    d->searchDateBar->setModel(searchModel, AbstractAlbumModel::AlbumIdRole,
+    d->searchDateBar->setModel(d->timeLineFolderView->filteredModel(),
+                               AbstractAlbumModel::AlbumIdRole,
                                AbstractAlbumModel::AlbumTitleRole);
 
     vlay->addWidget(panel);
@@ -790,10 +791,11 @@ SearchSideBarWidget::SearchSideBarWidget(QWidget *parent,
     d->searchTabHeader  = new SearchTabHeader(this);
     d->searchTreeView   = new NormalSearchTreeView(this, searchModel,
                                                    searchModeificationHelper);
-    d->searchTreeView->albumFilterModel()->listNormalSearches();
-    d->searchTreeView->albumFilterModel()->setListTemporarySearches(true);
+    d->searchTreeView->filteredModel()->listNormalSearches();
+    d->searchTreeView->filteredModel()->setListTemporarySearches(true);
     d->searchSearchBar  = new SearchTextBar(this, "DigikamViewSearchSearchBar");
-    d->searchSearchBar->setModel(searchModel, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
+    d->searchSearchBar->setModel(d->searchTreeView->filteredModel(),
+                                 AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
 
     layout->addWidget(d->searchTabHeader);
     layout->addWidget(d->searchTreeView);

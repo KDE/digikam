@@ -208,10 +208,10 @@ GPSSearchView::GPSSearchView(QWidget *parent, SearchModel *searchModel,
     // ---------------------------------------------------------------
 
     d->searchTreeView = new EditableSearchTreeView(this, searchModel, searchModificationHelper);
-    d->searchTreeView->albumFilterModel()->setFilterSearchType(DatabaseSearch::MapSearch);
-    d->searchTreeView->albumFilterModel()->setListTemporarySearches(true);
+    d->searchTreeView->filteredModel()->setFilterSearchType(DatabaseSearch::MapSearch);
+    d->searchTreeView->filteredModel()->setListTemporarySearches(true);
     d->searchGPSBar   = new SearchTextBar(this, "GPSSearchViewSearchGPSBar");
-    d->searchGPSBar->setModel(searchModel, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
+    d->searchGPSBar->setModel(d->searchTreeView->filteredModel(), AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
 
     // ---------------------------------------------------------------
 
