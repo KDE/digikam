@@ -72,9 +72,9 @@ public:
         tabs(0),
         activeTab(-1),
         dragSwitchId(-1),
+        restoreSize(0),
         stack(0),
         dragSwitchTimer(0),
-        restoreSize(0),
         optionActiveTabEntry("ActiveTab"),
         optionMinimizedEntry("Minimized"),
         optionRestoreSizeEntry("RestoreSize")
