@@ -29,6 +29,7 @@
 
 // Local includes
 #include "imagefiltersettings.h"
+#include "statesavingobject.h"
 #include "tagcheckview.h"
 
 namespace Digikam
@@ -110,7 +111,7 @@ class TagFilterSideBarWidgetPriv;
  *
  * @author jwienke
  */
-class TagFilterSideBarWidget : public QWidget
+class TagFilterSideBarWidget : public QWidget, public StateSavingObject
 {
     Q_OBJECT
 public:
@@ -129,6 +130,10 @@ public:
      * Destructor.
      */
     virtual ~TagFilterSideBarWidget();
+
+    virtual void setConfigGroup(KConfigGroup group);
+    virtual void doLoadState();
+    virtual void doSaveState();
 
 Q_SIGNALS:
 

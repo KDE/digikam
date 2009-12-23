@@ -197,8 +197,10 @@ public:
 TagFilterSideBarWidget::TagFilterSideBarWidget(QWidget *parent,
                 TagModel *tagFilterModel,
                 TagModificationHelper *tagModificationHelper) :
-    QWidget(parent), d(new TagFilterSideBarWidgetPriv)
+    QWidget(parent), StateSavingObject(this), d(new TagFilterSideBarWidgetPriv)
 {
+
+    setObjectName("TagFilter Sidebar");
 
     d->tagFilterModel = tagFilterModel;
     d->tagModificationHelper = tagModificationHelper;
@@ -280,6 +282,22 @@ void TagFilterSideBarWidget::filterChanged()
 
     emit tagFilterChanged(tagIds, d->tagFilterView->getMatchingCondition(), showUntagged);
 
+}
+
+void TagFilterSideBarWidget::setConfigGroup(KConfigGroup group)
+{
+    StateSavingObject::setConfigGroup(group);
+    d->tagFilterView->setConfigGroup(group);
+}
+
+void TagFilterSideBarWidget::doLoadState()
+{
+    d->tagFilterView->loadState();
+}
+
+void TagFilterSideBarWidget::doSaveState()
+{
+    d->tagFilterView->saveState();
 }
 
 }

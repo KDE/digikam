@@ -151,9 +151,12 @@ public:
      * Define a prefix that will be used for every entry in the config group.
      * The default prefix is empty.
      *
+     * You can re-implement this method to pass the prefix set here to child
+     * objects. Don't forget to call this method in your implementation.
+     *
      * @param prefix prefix to use for the config entries
      */
-    void setEntryPrefix(const QString &prefix);
+    virtual void setEntryPrefix(const QString &prefix);
 
     /**
      * Invokes loading the class' state.

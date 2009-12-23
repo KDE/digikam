@@ -44,10 +44,12 @@ class TagCheckViewPriv
 {
 public:
     TagCheckViewPriv() :
+        configToggleAutoTagsEntry("Toggle Auto Tags"),
         toggleAutoTags(TagCheckView::NoToggleAuto)
     {
     }
 
+    const QString configToggleAutoTagsEntry;
 
     TagCheckView::ToggleAutoTags       toggleAutoTags;
 
@@ -148,23 +150,18 @@ void TagCheckView::doLoadState()
 {
     TagFolderViewNew::doLoadState();
 
-    // TODO update
-//    KSharedConfig::Ptr config = KGlobal::config();
-//    KConfigGroup group = config->group(objectName());
-//    d->toggleAutoTags    = (ToggleAutoTags)
-//                           (group.readEntry("Toggle Auto Tags", (int)NoToggleAuto));
+    KConfigGroup group = getConfigGroup();
+    d->toggleAutoTags  = (ToggleAutoTags)
+                         (group.readEntry(entryName(d->configToggleAutoTagsEntry), (int)NoToggleAuto));
 }
 
 void TagCheckView::doSaveState()
 {
     TagFolderViewNew::doSaveState();
 
-    // TODO update
-//    KSharedConfig::Ptr config = KGlobal::config();
-//    KConfigGroup group        = config->group(objectName());
-//    group.writeEntry("Toggle Auto Tags",    (int)(d->toggleAutoTags));
-//    saveTagFilters();
-//    config->sync();
+    KConfigGroup group = getConfigGroup();
+    group.writeEntry(entryName(d->configToggleAutoTagsEntry), (int)(d->toggleAutoTags));
+    group.sync();
 
 }
 

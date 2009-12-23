@@ -530,6 +530,8 @@ void DigikamView::loadViewState()
         widget->loadState();
     }
 
+    d->tagFilterWidget->loadState();
+
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("MainWindow");
 
@@ -542,6 +544,7 @@ void DigikamView::loadViewState()
     d->dockArea->restoreState(QByteArray::fromBase64(thumbbarState));
 
     d->initialAlbumID = group.readEntry("InitialAlbumID", 0);
+
 }
 
 void DigikamView::saveViewState()
@@ -553,6 +556,8 @@ void DigikamView::saveViewState()
     {
         widget->saveState();
     }
+
+    d->tagFilterWidget->saveState();
 
     // Save the splitter states.
     d->splitter->saveState(group);
