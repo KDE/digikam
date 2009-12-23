@@ -252,6 +252,8 @@ void StateSavingObjectTest::testRecursiveChildrenLoading()
 
     QCOMPARE(directChild1->getStateSavingDepth(), StateSavingObject::RECURSIVE);
 
+    delete parentSaver;
+
 }
 
 void StateSavingObjectTest::testRecursiveChildrenSaving()
@@ -289,5 +291,7 @@ void StateSavingObjectTest::testRecursiveChildrenSaving()
     QCOMPARE(indirectStatelessChild->numSaveCalls(), desiredCalls);
 
     QCOMPARE(directChild1->getStateSavingDepth(), StateSavingObject::RECURSIVE);
+
+    delete parentSaver;
 
 }
