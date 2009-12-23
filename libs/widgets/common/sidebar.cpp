@@ -65,17 +65,20 @@ class SidebarPriv
 
 public:
 
-    SidebarPriv()
+    SidebarPriv() :
+        minimizedDefault(false),
+        minimized(false),
+        isMinimized(false),
+        tabs(0),
+        activeTab(-1),
+        dragSwitchId(-1),
+        stack(0),
+        dragSwitchTimer(0),
+        restoreSize(0),
+        optionActiveTabEntry("ActiveTab"),
+        optionMinimizedEntry("Minimized"),
+        optionRestoreSizeEntry("RestoreSize")
     {
-        minimizedDefault = false;
-        minimized        = false;
-        isMinimized      = false;
-        tabs             = 0;
-        activeTab        = -1;
-        dragSwitchId     = -1;
-        stack            = 0;
-        dragSwitchTimer  = 0;
-        restoreSize      = 0;
     }
 
     bool                          minimizedDefault;
@@ -92,6 +95,11 @@ public:
     QTimer*                       dragSwitchTimer;
 
     QHash<QWidget*, SidebarState> appendedTabsStateCache;
+
+    const QString optionActiveTabEntry;
+    const QString optionMinimizedEntry;
+    const QString optionRestoreSizeEntry;
+
 };
 
 class SidebarSplitterPriv
@@ -135,9 +143,9 @@ SidebarSplitter* Sidebar::splitter() const
 void Sidebar::doLoadState()
 {
     KConfigGroup group        = getConfigGroup();
-    int tab                   = group.readEntry("ActiveTab",   0);
-    bool minimized            = group.readEntry("Minimized",   d->minimizedDefault);
-    d->restoreSize            = group.readEntry("RestoreSize", -1);
+    int tab                   = group.readEntry(entryName(d->optionActiveTabEntry),   0);
+    bool minimized            = group.readEntry(entryName(d->optionMinimizedEntry),   d->minimizedDefault);
+    d->restoreSize            = group.readEntry(entryName(d->optionRestoreSizeEntry), -1);
 
     // validate
     if(tab >= d->tabs || tab < 0)
@@ -160,9 +168,9 @@ void Sidebar::doLoadState()
 void Sidebar::doSaveState()
 {
     KConfigGroup group        = getConfigGroup();
-    group.writeEntry("ActiveTab",   d->activeTab);
-    group.writeEntry("Minimized",   d->minimized);
-    group.writeEntry("RestoreSize", d->minimized ? d->restoreSize : -1);
+    group.writeEntry(entryName(d->optionActiveTabEntry),   d->activeTab);
+    group.writeEntry(entryName(d->optionMinimizedEntry),   d->minimized);
+    group.writeEntry(entryName(d->optionRestoreSizeEntry), d->minimized ? d->restoreSize : -1);
 }
 
 void Sidebar::backup()
