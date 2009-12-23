@@ -77,7 +77,8 @@ public:
 };
 
 DateFolderView::DateFolderView(QWidget* parent, DateAlbumModel *dateAlbumModel)
-              : KVBox(parent), d(new DateFolderViewPriv)
+              : KVBox(parent), StateSavingObject(this),
+                d(new DateFolderViewPriv)
 {
     setObjectName("DateFolderView");
 
@@ -92,7 +93,7 @@ DateFolderView::DateFolderView(QWidget* parent, DateAlbumModel *dateAlbumModel)
 
 DateFolderView::~DateFolderView()
 {
-    saveViewState();
+    saveState();
     delete d;
 }
 
@@ -144,14 +145,20 @@ void DateFolderView::slotSelectionChanged(Album *selectedAlbum)
     }
 }
 
-void DateFolderView::loadViewState()
+void DateFolderView::setConfigGroup(KConfigGroup group)
 {
-    // TODO update, call tree view method
+    StateSavingObject::setConfigGroup(group);
+    d->dateTreeView->setConfigGroup(group);
 }
 
-void DateFolderView::saveViewState()
+void DateFolderView::doLoadState()
 {
-    // TODO update, call tree view method
+    d->dateTreeView->loadState();
+}
+
+void DateFolderView::doSaveState()
+{
+    d->dateTreeView->saveState();
 }
 
 void DateFolderView::gotoDate(const QDate& dt)

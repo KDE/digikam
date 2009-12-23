@@ -29,6 +29,10 @@
 
 #include <QScrollArea>
 
+// Local includs
+
+#include "statesavingobject.h"
+
 class QDragEnterEvent;
 class QDropEvent;
 class QPixmap;
@@ -46,14 +50,14 @@ class SearchModel;
 class SearchModificationHelper;
 class SearchTextBar;
 
-class FuzzySearchView : public QScrollArea
+class FuzzySearchView : public QScrollArea, public StateSavingObject
 {
     Q_OBJECT
 
 public:
 
     FuzzySearchView(SearchModel *searchModel,
-                    SearchModificationHelper *earchModificationHelper,
+                    SearchModificationHelper *searchModificationHelper,
                     QWidget *parent = 0);
     ~FuzzySearchView();
 
@@ -65,8 +69,9 @@ public:
 
     void newDuplicatesSearch(Album*);
 
-    void readConfig();
-    void writeConfig();
+    virtual void setConfigGroup(KConfigGroup group);
+    void doLoadState();
+    void doSaveState();
 
 Q_SIGNALS:
 

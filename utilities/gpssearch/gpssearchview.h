@@ -31,6 +31,7 @@
 
 // local includes
 
+#include "statesavingobject.h"
 #include "worldmapwidget.h"
 
 class QDragEnterEvent;
@@ -50,7 +51,7 @@ class GPSSearchViewPriv;
 class SearchModel;
 class SearchModificationHelper;
 
-class GPSSearchView : public QWidget
+class GPSSearchView : public QWidget, public StateSavingObject
 {
     Q_OBJECT
 
@@ -64,8 +65,9 @@ public:
 
     void changeAlbumFromHistory(SAlbum *album);
 
-    void readConfig();
-    void writeConfig();
+    virtual void setConfigGroup(KConfigGroup group);
+    void doLoadState();
+    void doSaveState();
 
 public Q_SLOTS:
     void slotDigikamViewNoCurrentItem();

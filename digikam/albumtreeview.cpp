@@ -426,6 +426,7 @@ void AbstractAlbumTreeView::doLoadState()
 
     const QStringList selection = configGroup.readEntry(entryName(d->configSelectionEntry),
                     QStringList());
+    kDebug() << "selection: " << selection;
     foreach(const QString &key, selection)
     {
         bool validId;
@@ -438,6 +439,7 @@ void AbstractAlbumTreeView::doLoadState()
 
     const QStringList expansion = configGroup.readEntry(entryName(d->configExpansionEntry),
                     QStringList());
+    kDebug() << "expansion: " << expansion;
     foreach( const QString &key, expansion )
     {
         bool validId;
@@ -449,6 +451,7 @@ void AbstractAlbumTreeView::doLoadState()
     }
 
     const QString key = configGroup.readEntry(entryName(d->configCurrentIndexEntry), QString());
+    kDebug() << "currentIndey: " << key;
     bool validId;
     const int id = key.toInt(&validId);
     if (validId)
@@ -467,20 +470,19 @@ void AbstractAlbumTreeView::doLoadState()
 
 
     // initial restore run, for everything already loaded
-    kDebug() << "initial restore run";
+    kDebug() << "initial restore run with " << model()->rowCount() << " rows";
     for (int i = 0; i < model()->rowCount(); ++i)
     {
         const QModelIndex index = model()->index(i, 0);
         restoreState(index);
     }
 
-    // TODO do we really need this. I would say this code should only be
-    // called if the albums are loaded completely. Otherwise you have to think
-    // about what happens every time you pop up an album.
-
-    // and the watch the model for new items added
-    //connect(model(), SIGNAL(rowsInserted(QModelIndex, int, int)),
-    //                 SLOT(slotFixRowsInserted(QModelIndex, int, int)), Qt::QueuedConnection);
+    if (!d->statesByAlbumId.empty())
+    {
+        // and the watch the model for new items added
+        connect(model(), SIGNAL(rowsInserted(QModelIndex, int, int)),
+                         SLOT(slotFixRowsInserted(QModelIndex, int, int)), Qt::QueuedConnection);
+    }
 
     // also restore the sorting order
     sortByColumn(configGroup.readEntry(entryName(d->configSortColumnEntry), 0),
@@ -502,12 +504,30 @@ void AbstractAlbumTreeView::restoreState(const QModelIndex &index)
                  << ", expanded = " << state.expanded
                  << ", currentIndex = " << state.currentIndex << ")";
         if (state.selected)
+        {
             selectionModel()->select(index, QItemSelectionModel::Select
                             | QItemSelectionModel::Rows);
+        }
         if (state.expanded)
+        {
             setExpanded(index, true);
+        }
         if (state.currentIndex)
+        {
             setCurrentIndex(index);
+        }
+
+        // remove this state so that we don't get in trouble later in case the
+        // same album id is reused again
+        d->statesByAlbumId.remove(album->id());
+
+        if (d->statesByAlbumId.empty())
+        {
+            // disconnect if not needed anymore
+            disconnect(model(), SIGNAL(rowsInserted(QModelIndex, int, int)),
+                       this, SLOT(slotFixRowsInserted(QModelIndex, int, int)));
+        }
+
     }
     else
     {
@@ -526,7 +546,8 @@ void AbstractAlbumTreeView::restoreState(const QModelIndex &index)
 void AbstractAlbumTreeView::slotFixRowsInserted(const QModelIndex &index, int start, int end)
 {
 
-    kDebug() << "slot rowInserted called";
+    kDebug() << "slot rowInserted called with index = " << index
+             << ", start = " << start << ", end = " << end;
 
     for (int i = start; i <= end; ++i)
     {
@@ -553,6 +574,10 @@ void AbstractAlbumTreeView::doSaveState()
     {
         currentIndex = QString::number(selectedAlbum->id());
     }
+
+    kDebug() << "selection: " << selection;
+    kDebug() << "expansion: " << expansion;
+    kDebug() << "currentIndex: " << currentIndex;
 
     configGroup.writeEntry(entryName(d->configSelectionEntry), selection);
     configGroup.writeEntry(entryName(d->configExpansionEntry), expansion);

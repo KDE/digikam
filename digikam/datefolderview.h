@@ -33,6 +33,7 @@
 // Local includes
 
 #include "albummanager.h"
+#include "statesavingobject.h"
 
 namespace Digikam
 {
@@ -43,7 +44,7 @@ class DateAlbumModel;
 class DateFolderViewPriv;
 class ImageFilterModel;
 
-class DateFolderView: public KVBox
+class DateFolderView: public KVBox, public StateSavingObject
 {
 Q_OBJECT
 
@@ -60,15 +61,10 @@ public:
 
     void changeAlbumFromHistory(SAlbum *album);
 
-    /**
-     * load the last view state from disk
-     */
-    void loadViewState();
+    virtual void setConfigGroup(KConfigGroup group);
 
-    /**
-     * writes the view state to disk
-     */
-    void saveViewState();
+    void doLoadState();
+    void doSaveState();
 
 private Q_SLOTS:
 

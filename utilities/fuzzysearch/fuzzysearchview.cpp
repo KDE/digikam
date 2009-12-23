@@ -91,36 +91,55 @@ public:
         DUPLICATES
     };
 
-    FuzzySearchViewPriv()
+    FuzzySearchViewPriv() :
+        configTabEntry("FuzzySearch Tab"),
+        configPenSketchSizeEntry("Pen Sketch Size"),
+        configResultSketchItemsEntry("Result Sketch items"),
+        configPenSketchHueEntry("Pen Sketch Hue"),
+        configPenSketchSaturationEntry("Pen Sketch Saturation"),
+        configPenSkethValueEntry("Pen Sketch Value"),
+        configSimilarsThresholdEntry("Similars Threshold"),
+        // initially be active to update sketch panel when the search list is restored
+        active(true),
+        fingerprintsChecked(false),
+        resetButton(0),
+        saveBtnSketch(0),
+        undoBtnSketch(0),
+        redoBtnSketch(0),
+        saveBtnImage(0),
+        penSize(0),
+        resultsSketch(0),
+        levelImage(0),
+        imageWidget(0),
+        timerSketch(0),
+        timerImage(0),
+        folderView(0),
+        nameEditSketch(0),
+        nameEditImage(0),
+        tabWidget(0),
+        hsSelector(0),
+        vSelector(0),
+        labelFile(0),
+        labelFolder(0),
+        searchFuzzyBar(0),
+        searchTreeView(0),
+        sketchWidget(0),
+        thumbLoadThread(0),
+        findDuplicatesPanel(0),
+        imageSAlbum(0),
+        sketchSAlbum(0),
+        searchModel(0),
+        searchModificationHelper(0)
     {
-        sketchWidget          = 0;
-        hsSelector            = 0;
-        vSelector             = 0;
-        penSize               = 0;
-        resultsSketch         = 0;
-        levelImage            = 0;
-        resetButton           = 0;
-        saveBtnSketch         = 0;
-        undoBtnSketch         = 0;
-        redoBtnSketch         = 0;
-        saveBtnImage          = 0;
-        nameEditSketch        = 0;
-        nameEditImage         = 0;
-        searchFuzzyBar        = 0;
-        searchTreeView        = 0;
-        tabWidget             = 0;
-        thumbLoadThread       = 0;
-        imageSAlbum           = 0;
-        sketchSAlbum          = 0;
-        folderView            = 0;
-        timerSketch           = 0;
-        timerImage            = 0;
-        findDuplicatesPanel   = 0;
-        searchModel           = 0;
-        searchModificationHelper = 0;
-        active                = false;
-        fingerprintsChecked   = false;
     }
+
+    const QString configTabEntry;
+    const QString configPenSketchSizeEntry;
+    const QString configResultSketchItemsEntry;
+    const QString configPenSketchHueEntry;
+    const QString configPenSketchSaturationEntry;
+    const QString configPenSkethValueEntry;
+    const QString configSimilarsThresholdEntry;
 
     bool                    active;
     bool                    fingerprintsChecked;
@@ -178,7 +197,8 @@ public:
 FuzzySearchView::FuzzySearchView(SearchModel *searchModel,
                 SearchModificationHelper *searchModificationHelper,
                 QWidget *parent)
-               : QScrollArea(parent), d(new FuzzySearchViewPriv)
+               : QScrollArea(parent), StateSavingObject(this),
+                 d(new FuzzySearchViewPriv)
 {
     d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
 
@@ -518,19 +538,24 @@ void FuzzySearchView::newDuplicatesSearch(Album* album)
     d->tabWidget->setCurrentIndex(FuzzySearchViewPriv::DUPLICATES);
 }
 
-void FuzzySearchView::readConfig()
+void FuzzySearchView::setConfigGroup(KConfigGroup group)
 {
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(QString("FuzzySearch SideBar"));
+    StateSavingObject::setConfigGroup(group);
+    d->searchTreeView->setConfigGroup(group);
+}
 
-    d->tabWidget->setCurrentIndex(group.readEntry("FuzzySearch Tab",
+void FuzzySearchView::doLoadState()
+{
+    KConfigGroup group = getConfigGroup();
+
+    d->tabWidget->setCurrentIndex(group.readEntry(entryName(d->configTabEntry),
                                   (int)FuzzySearchViewPriv::SKETCH));
-    d->penSize->setValue(group.readEntry("Pen Sketch Size", 10));
-    d->resultsSketch->setValue(group.readEntry("Result Sketch items", 10));
-    d->hsSelector->setHue(group.readEntry("Pen Sketch Hue", 180));
-    d->hsSelector->setSaturation(group.readEntry("Pen Sketch Saturation", 128));
-    d->vSelector->setValue(group.readEntry("Pen Sketch Value", 255));
-    d->levelImage->setValue(group.readEntry("Similars Threshold", 90));
+    d->penSize->setValue(group.readEntry(entryName(d->configPenSketchSizeEntry), 10));
+    d->resultsSketch->setValue(group.readEntry(entryName(d->configResultSketchItemsEntry), 10));
+    d->hsSelector->setHue(group.readEntry(entryName(d->configPenSketchHueEntry), 180));
+    d->hsSelector->setSaturation(group.readEntry(entryName(d->configPenSketchSaturationEntry), 128));
+    d->vSelector->setValue(group.readEntry(entryName(d->configPenSkethValueEntry), 255));
+    d->levelImage->setValue(group.readEntry(entryName(d->configSimilarsThresholdEntry), 90));
     d->hsSelector->updateContents();
 
     QColor col;
@@ -540,19 +565,21 @@ void FuzzySearchView::readConfig()
     setColor(col);
 
     d->sketchWidget->setPenWidth(d->penSize->value());
+
+    d->searchTreeView->loadState();
 }
 
-void FuzzySearchView::writeConfig()
+void FuzzySearchView::doSaveState()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(QString("FuzzySearch SideBar"));
-    group.writeEntry("FuzzySearch Tab",        d->tabWidget->currentIndex());
-    group.writeEntry("Pen Sketch Size",        d->penSize->value());
-    group.writeEntry("Result Sketch items",    d->resultsSketch->value());
-    group.writeEntry("Pen Sketch Hue",         d->hsSelector->hue());
-    group.writeEntry("Pen Sketch Saturation",  d->hsSelector->saturation());
-    group.writeEntry("Pen Sketch Value",       d->vSelector->value());
-    group.writeEntry("Similars Threshold",     d->levelImage->value());
+    KConfigGroup group = getConfigGroup();
+    group.writeEntry(entryName(d->configTabEntry),                 d->tabWidget->currentIndex());
+    group.writeEntry(entryName(d->configPenSketchSizeEntry),       d->penSize->value());
+    group.writeEntry(entryName(d->configResultSketchItemsEntry),   d->resultsSketch->value());
+    group.writeEntry(entryName(d->configPenSketchHueEntry),        d->hsSelector->hue());
+    group.writeEntry(entryName(d->configPenSketchSaturationEntry), d->hsSelector->saturation());
+    group.writeEntry(entryName(d->configPenSkethValueEntry),       d->vSelector->value());
+    group.writeEntry(entryName(d->configSimilarsThresholdEntry),   d->levelImage->value());
+    d->searchTreeView->saveState();
     group.sync();
 }
 

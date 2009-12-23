@@ -76,6 +76,8 @@ AlbumFolderViewSideBarWidget::AlbumFolderViewSideBarWidget(QWidget *parent,
     SidebarWidget(parent), d(new AlbumFolderViewSideBarWidgetPriv)
 {
 
+    setObjectName("AlbumFolderView Sidebar");
+
     d->albumModificationHelper = albumModificationHelper;
 
     QVBoxLayout *layout = new QVBoxLayout(this);
@@ -88,8 +90,6 @@ AlbumFolderViewSideBarWidget::AlbumFolderViewSideBarWidget(QWidget *parent,
 
     layout->addWidget(d->albumFolderView);
     layout->addWidget(d->searchTextBar);
-
-    setStateSavingDepth(StateSavingObject::RECURSIVE);
 
     // setup connection
     connect(d->searchTextBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
@@ -116,10 +116,12 @@ void AlbumFolderViewSideBarWidget::setActive(bool active)
 
 void AlbumFolderViewSideBarWidget::doLoadState()
 {
+    d->albumFolderView->loadState();
 }
 
 void AlbumFolderViewSideBarWidget::doSaveState()
 {
+    d->albumFolderView->saveState();
 }
 
 void AlbumFolderViewSideBarWidget::applySettings()
@@ -191,8 +193,6 @@ TagViewSideBarWidget::TagViewSideBarWidget(QWidget *parent,
     layout->addWidget(d->tagFolderView);
     layout->addWidget(d->tagSearchBar);
 
-    setStateSavingDepth(StateSavingObject::RECURSIVE);
-
     connect(d->tagSearchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
             d->tagFolderView, SLOT(setSearchTextSettings(const SearchTextSettings&)));
     connect(d->tagFolderView, SIGNAL(signalFindDuplicatesInAlbum(Album*)),
@@ -216,10 +216,12 @@ void TagViewSideBarWidget::setActive(bool active)
 
 void TagViewSideBarWidget::doLoadState()
 {
+    d->tagFolderView->loadState();
 }
 
 void TagViewSideBarWidget::doSaveState()
 {
+    d->tagFolderView->saveState();
 }
 
 void TagViewSideBarWidget::applySettings()
@@ -264,14 +266,15 @@ DateFolderViewSideBarWidget::DateFolderViewSideBarWidget(QWidget *parent,
     SidebarWidget(parent), d(new DateFolderViewSideBarWidgetPriv)
 {
 
+    setObjectName("DateFolderView Sidebar");
+
     QVBoxLayout *layout = new QVBoxLayout(this);
 
     d->dateFolderView = new DateFolderView(this, model);
+    d->dateFolderView->setConfigGroup(getConfigGroup());
     d->dateFolderView->setImageModel(imageFilterModel);
 
     layout->addWidget(d->dateFolderView);
-
-    setStateSavingDepth(StateSavingObject::RECURSIVE);
 
 }
 
@@ -287,10 +290,12 @@ void DateFolderViewSideBarWidget::setActive(bool active)
 
 void DateFolderViewSideBarWidget::doLoadState()
 {
+    d->dateFolderView->loadState();
 }
 
 void DateFolderViewSideBarWidget::doSaveState()
 {
+    d->dateFolderView->saveState();
 }
 
 void DateFolderViewSideBarWidget::applySettings()
@@ -373,7 +378,7 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget *parent, SearchModel *searc
     SidebarWidget(parent), d(new TimelineSideBarWidgetPriv)
 {
 
-    setObjectName("TimeLine SideBar");
+    setObjectName("TimeLine Sidebar");
 
     d->searchModificationHelper = searchModificationHelper;
 
@@ -487,6 +492,7 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget *parent, SearchModel *searc
 
     d->timeLineFolderView = new EditableSearchTreeView(this, searchModel,
                                                       searchModificationHelper);
+    d->timeLineFolderView->setConfigGroup(getConfigGroup());
     d->timeLineFolderView->filteredModel()->listTimelineSearches();
     d->timeLineFolderView->filteredModel()->setListTemporarySearches(false);
     d->searchDateBar      = new SearchTextBar(this, "TimeLineViewSearchDateBar");
@@ -549,7 +555,7 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget *parent, SearchModel *searc
     connect(d->nameEdit, SIGNAL(returnPressed(const QString&)),
             d->saveButton, SLOT(animateClick()));
 
-    setStateSavingDepth(StateSavingObject::RECURSIVE);
+
 
 }
 
@@ -584,6 +590,7 @@ void TimelineSideBarWidget::setActive(bool active)
 
 void TimelineSideBarWidget::doLoadState()
 {
+
     KConfigGroup group = getConfigGroup();
 
     d->timeUnitCB->setCurrentIndex(group.readEntry(d->configHistogramTimeUnitEntry, (int)TimeLineWidget::Month));
@@ -597,16 +604,24 @@ void TimelineSideBarWidget::doLoadState()
     QDateTime now = QDateTime::currentDateTime();
     d->timeLineWidget->setCursorDateTime(group.readEntry(d->configCursorPositionEntry, now));
     d->timeLineWidget->setCurrentIndex(d->timeLineWidget->indexForCursorDateTime());
+
+    d->timeLineFolderView->loadState();
+
 }
 
 void TimelineSideBarWidget::doSaveState()
 {
+
     KConfigGroup group = getConfigGroup();
 
     group.writeEntry(d->configHistogramTimeUnitEntry, d->timeUnitCB->currentIndex());
     group.writeEntry(d->configHistogramScaleEntry,    d->scaleBG->checkedId());
     group.writeEntry(d->configCursorPositionEntry,    d->timeLineWidget->cursorDateTime());
+
+    d->timeLineFolderView->saveState();
+
     group.sync();
+
 }
 
 void TimelineSideBarWidget::applySettings()
@@ -806,8 +821,6 @@ SearchSideBarWidget::SearchSideBarWidget(QWidget *parent,
     layout->addWidget(d->searchTreeView);
     layout->addWidget(d->searchSearchBar);
 
-    setStateSavingDepth(StateSavingObject::RECURSIVE);
-
     connect(d->searchSearchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
             d->searchTreeView, SLOT(setSearchTextSettings(const SearchTextSettings&)));
 
@@ -841,10 +854,12 @@ void SearchSideBarWidget::setActive(bool active)
 
 void SearchSideBarWidget::doLoadState()
 {
+    d->searchTreeView->loadState();
 }
 
 void SearchSideBarWidget::doSaveState()
 {
+    d->searchTreeView->saveState();
 }
 
 void SearchSideBarWidget::applySettings()
@@ -902,6 +917,7 @@ FuzzySearchSideBarWidget::FuzzySearchSideBarWidget(QWidget *parent,
     d->searchModel = searchModel;
 
     d->fuzzySearchView  = new FuzzySearchView(searchModel, searchModificationHelper, this);
+    d->fuzzySearchView->setConfigGroup(getConfigGroup());
 
     QVBoxLayout *layout = new QVBoxLayout(this);
 
@@ -932,12 +948,12 @@ void FuzzySearchSideBarWidget::setActive(bool active)
 
 void FuzzySearchSideBarWidget::doLoadState()
 {
-    d->fuzzySearchView->readConfig();
+    d->fuzzySearchView->loadState();
 }
 
 void FuzzySearchSideBarWidget::doSaveState()
 {
-    d->fuzzySearchView->writeConfig();
+    d->fuzzySearchView->saveState();
 }
 
 void FuzzySearchSideBarWidget::applySettings()
@@ -1001,7 +1017,8 @@ GPSSearchSideBarWidget::GPSSearchSideBarWidget(QWidget *parent, SearchModel *sea
 
     d->searchModel = searchModel;
 
-    d->gpsSearchView    = new GPSSearchView(this, searchModel, searchModificationHelper);
+    d->gpsSearchView = new GPSSearchView(this, searchModel, searchModificationHelper);
+    d->gpsSearchView->setConfigGroup(getConfigGroup());
 
     QVBoxLayout *layout = new QVBoxLayout(this);
 
@@ -1027,12 +1044,12 @@ void GPSSearchSideBarWidget::setActive(bool active)
 
 void GPSSearchSideBarWidget::doLoadState()
 {
-    d->gpsSearchView->readConfig();
+    d->gpsSearchView->loadState();
 }
 
 void GPSSearchSideBarWidget::doSaveState()
 {
-    d->gpsSearchView->writeConfig();
+    d->gpsSearchView->saveState();
 }
 
 void GPSSearchSideBarWidget::applySettings()

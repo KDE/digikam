@@ -69,6 +69,7 @@ class GPSSearchViewPriv
 public:
 
     GPSSearchViewPriv() :
+        configSplitterStateEntry("SplitterState"),
         saveBtn(0),
         zoomInBtn(0),
         zoomOutBtn(0),
@@ -88,6 +89,8 @@ public:
         gpsSearchWidget(0),
         mapThemeBtn(0)
     {}
+
+    const QString configSplitterStateEntry;
 
     QToolButton*         saveBtn;
     QToolButton*         zoomInBtn;
@@ -117,7 +120,8 @@ public:
 
 GPSSearchView::GPSSearchView(QWidget *parent, SearchModel *searchModel,
                 SearchModificationHelper *searchModificationHelper)
-             : QWidget(parent), d(new GPSSearchViewPriv)
+             : QWidget(parent), StateSavingObject(this),
+               d(new GPSSearchViewPriv)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setAcceptDrops(true);
@@ -283,15 +287,20 @@ GPSSearchView::~GPSSearchView()
     delete d;
 }
 
-void GPSSearchView::readConfig()
+void GPSSearchView::setConfigGroup(KConfigGroup group)
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    StateSavingObject::setConfigGroup(group);
+    d->searchTreeView->setConfigGroup(group);
+}
 
-    KConfigGroup group        = config->group(QString("GPSSearch SideBar"));
+void GPSSearchView::doLoadState()
+{
 
-    if (group.hasKey("SplitterState"))
+    KConfigGroup group = getConfigGroup();
+
+    if (group.hasKey(entryName(d->configSplitterStateEntry)))
     {
-        const QByteArray splitterState = QByteArray::fromBase64(group.readEntry(QString("SplitterState"), QByteArray()));
+        const QByteArray splitterState = QByteArray::fromBase64(group.readEntry(entryName(d->configSplitterStateEntry), QByteArray()));
         if (!splitterState.isEmpty())
         {
             d->splitter->restoreState(splitterState);
@@ -299,17 +308,18 @@ void GPSSearchView::readConfig()
     }
 
     d->gpsSearchWidget->readConfig(group);
+    d->searchTreeView->loadState();
 }
 
-void GPSSearchView::writeConfig()
+void GPSSearchView::doSaveState()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(QString("GPSSearch SideBar"));
+    KConfigGroup group = getConfigGroup();
 
-    group.writeEntry(QString("SplitterState"), d->splitter->saveState().toBase64());
+    group.writeEntry(entryName(d->configSplitterStateEntry), d->splitter->saveState().toBase64());
     d->gpsSearchWidget->writeConfig(group);
+    d->searchTreeView->saveState();
 
-    config->sync();
+    group.sync();
 }
 
 void GPSSearchView::setActive(bool val)
