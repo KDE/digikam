@@ -321,13 +321,19 @@ class SearchTreeView : public AbstractAlbumTreeView
 public:
 
     SearchTreeView(QWidget *parent, SearchModel *searchModel);
+    /// Note: not filtered by search type
     SearchModel *albumModel() const;
-    SearchFilterModel *albumFilterModel() const;
+    /// Contains only the searches with appropriate type - prefer to albumModel()
+    SearchFilterModel *filteredModel() const;
     SAlbum *currentAlbum() const;
 
 public Q_SLOTS:
+
     void slotSelectSAlbum(SAlbum *salbum);
 
+protected:
+
+    SearchFilterModel *m_filteredModel;
 };
 
 class DateAlbumTreeView : public AbstractCountingAlbumTreeView

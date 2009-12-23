@@ -296,8 +296,7 @@ void AbstractAlbumTreeView::setSearchTextSettings(const SearchTextSettings& sett
 
 void AbstractAlbumTreeView::slotSelectAlbum(Album *album)
 {
-    setCurrentIndex(albumFilterModel()->mapFromSource(
-                    albumModel()->indexForAlbum(album)));
+    setCurrentIndex(albumFilterModel()->indexForAlbum(album));
     AlbumManager::instance()->setCurrentAlbum(album);
 }
 
@@ -326,8 +325,7 @@ void AbstractAlbumTreeView::mousePressEvent(QMouseEvent *e)
 
             if (d->selectAlbumOnClick)
             {
-                AlbumManager::instance()->setCurrentAlbum(m_albumModel->albumForIndex(
-                                m_albumFilterModel->mapToSource(index)));
+                AlbumManager::instance()->setCurrentAlbum(m_albumFilterModel->albumForIndex(index));
             }
         }
     }
@@ -390,7 +388,7 @@ void AbstractAlbumTreeView::dragMoveEvent(QDragMoveEvent *e)
     if (handler)
     {
         QModelIndex index = indexVisuallyAt(e->pos());
-        Qt::DropAction action = handler->accepts(e, m_albumFilterModel->mapToSource(index));
+        Qt::DropAction action = handler->accepts(e, m_albumFilterModel->mapToSourceAlbumModel(index));
         if (action == Qt::IgnoreAction)
             e->ignore();
         else
@@ -413,7 +411,7 @@ void AbstractAlbumTreeView::dropEvent(QDropEvent *e)
     if (handler)
     {
         QModelIndex index = indexVisuallyAt(e->pos());
-        if (handler->dropEvent(this, e, m_albumFilterModel->mapToSource(index)))
+        if (handler->dropEvent(this, e, m_albumFilterModel->mapToSourceAlbumModel(index)))
             e->accept();
     }
 }
@@ -716,12 +714,12 @@ void AbstractCountingAlbumTreeView::updateShowCountState(const QModelIndex& inde
 
 void AbstractCountingAlbumTreeView::slotCollapsed(const QModelIndex& index)
 {
-    static_cast<AbstractCountingAlbumModel*>(m_albumModel)->includeChildrenCount(m_albumFilterModel->mapToSource(index));
+    static_cast<AbstractCountingAlbumModel*>(m_albumModel)->includeChildrenCount(m_albumFilterModel->mapToSourceAlbumModel(index));
 }
 
 void AbstractCountingAlbumTreeView::slotExpanded(const QModelIndex& index)
 {
-    static_cast<AbstractCountingAlbumModel*>(m_albumModel)->excludeChildrenCount(m_albumFilterModel->mapToSource(index));
+    static_cast<AbstractCountingAlbumModel*>(m_albumModel)->excludeChildrenCount(m_albumFilterModel->mapToSourceAlbumModel(index));
 }
 
 void AbstractCountingAlbumTreeView::slotSetShowCount()
@@ -805,14 +803,12 @@ AlbumModel *AlbumTreeView::albumModel() const
 
 PAlbum* AlbumTreeView::currentAlbum() const
 {
-    return dynamic_cast<PAlbum*> (m_albumModel->albumForIndex(
-                    m_albumFilterModel->mapToSource(currentIndex())));
+    return dynamic_cast<PAlbum*> (m_albumFilterModel->albumForIndex(currentIndex()));
 }
 
 PAlbum *AlbumTreeView::albumForIndex(const QModelIndex &index) const
 {
-    return dynamic_cast<PAlbum*> (m_albumModel->albumForIndex(
-                    m_albumFilterModel->mapToSource(index)));
+    return dynamic_cast<PAlbum*> (m_albumFilterModel->albumForIndex(index));
 }
 
 TagTreeView::TagTreeView(TagModel *model, TagModificationHelper *tagModificationHelper, QWidget *parent)
@@ -843,21 +839,24 @@ TagModel *TagTreeView::albumModel() const
 
 TAlbum* TagTreeView::currentAlbum() const
 {
-    return dynamic_cast<TAlbum*> (m_albumModel->albumForIndex(
-                    m_albumFilterModel->mapToSource(currentIndex())));
+    return dynamic_cast<TAlbum*> (m_albumFilterModel->albumForIndex(currentIndex()));
 }
 
 TAlbum *TagTreeView::albumForIndex(const QModelIndex &index) const
 {
-    return dynamic_cast<TAlbum*> (m_albumModel->albumForIndex(
-                    m_albumFilterModel->mapToSource(index)));
+    return dynamic_cast<TAlbum*> (m_albumFilterModel->albumForIndex(index));
 }
 
 SearchTreeView::SearchTreeView(QWidget *parent, SearchModel *searchModel)
     : AbstractAlbumTreeView(searchModel, 0, parent)
 {
-    SearchFilterModel *filterModel = new SearchFilterModel(this);
-    setAlbumFilterModel(filterModel);
+    m_filteredModel = new SearchFilterModel(this);
+    m_filteredModel->setSourceSearchModel(searchModel);
+
+    AlbumFilterModel *albumFilterModel = new AlbumFilterModel(this);
+    setAlbumFilterModel(albumFilterModel);
+    albumFilterModel->setSourceAlbumModel(m_filteredModel);
+
     expand(m_albumFilterModel->rootAlbumIndex());
     setRootIsDecorated(false);
 }
@@ -867,15 +866,14 @@ SearchModel *SearchTreeView::albumModel() const
     return static_cast<SearchModel*>(m_albumModel);
 }
 
-SearchFilterModel *SearchTreeView::albumFilterModel() const
+SearchFilterModel *SearchTreeView::filteredModel() const
 {
-    return static_cast<SearchFilterModel*>(m_albumFilterModel);
+    return m_filteredModel;
 }
 
 SAlbum* SearchTreeView::currentAlbum() const
 {
-    return dynamic_cast<SAlbum*> (m_albumModel->albumForIndex(
-                    m_albumFilterModel->mapToSource(currentIndex())));
+    return dynamic_cast<SAlbum*> (m_albumFilterModel->albumForIndex(currentIndex()));
 }
 
 void SearchTreeView::slotSelectSAlbum(SAlbum *salbum)
@@ -897,14 +895,12 @@ DateAlbumModel *DateAlbumTreeView::albumModel() const
 
 DAlbum* DateAlbumTreeView::currentAlbum() const
 {
-    return dynamic_cast<DAlbum*> (m_albumModel->albumForIndex(
-                    m_albumFilterModel->mapToSource(currentIndex())));
+    return dynamic_cast<DAlbum*> (m_albumFilterModel->albumForIndex(currentIndex()));
 }
 
 DAlbum *DateAlbumTreeView::albumForIndex(const QModelIndex &index) const
 {
-    return dynamic_cast<DAlbum*> (m_albumModel->albumForIndex(
-                    m_albumFilterModel->mapToSource(index)));
+    return dynamic_cast<DAlbum*> (m_albumFilterModel->albumForIndex(index));
 }
 
 }
