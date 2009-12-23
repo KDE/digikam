@@ -252,10 +252,19 @@ void ImageScanner::scanImageInformation()
     QVariantList metadataInfos = m_metadata.getMetadataFields(fields);
     QSize size = m_img.size();
 
+    DatabaseFields::ImageInformation dbFields = DatabaseFields::ImageInformationAll;
+
     // creation date: fall back to file system property
     if (metadataInfos[1].isNull() || !metadataInfos[1].toDateTime().isValid())
     {
         metadataInfos[1] = creationDateFromFilesystem(m_fileInfo);
+    }
+
+    // Rating: overwrite only if set in metadata
+    if (metadataInfos[0].isNull() || metadataInfos[0].toInt() == -1)
+    {
+        dbFields &= ~DatabaseFields::Rating;
+        metadataInfos.removeAt(0);
     }
 
     QVariantList infos;
@@ -266,7 +275,7 @@ void ImageScanner::scanImageInformation()
           << m_img.originalBitDepth()
           << m_img.originalColorModel();
 
-    DatabaseAccess().db()->addImageInformation(m_scanInfo.id, infos);
+    DatabaseAccess().db()->addImageInformation(m_scanInfo.id, infos, dbFields);
 }
 
 static bool hasValidField(const QVariantList &list)
