@@ -690,15 +690,6 @@ MarkerClusterHolder::PixmapOperations WorldMapWidget::getClusterPixmap(const int
     bool havePixmap = me->d->thumbnailLoadThread->find(gpsInfo.url.path() , *clusterPixmap, maxOfWidths);
     if (havePixmap)
     {
-        // temporary workaround for BKO 217702: thumbnails for movies are too big
-        // The thumbnail returned for movies by ThumbnailLoadThread::find is too big.
-        // Once this is fixed, this check can be removed.
-        const QSize clusterPixmapSize = clusterPixmap->size();
-        if ((clusterPixmapSize.height()>maxOfWidths)||(clusterPixmapSize.width()>maxOfWidths))
-        {
-            *clusterPixmap = clusterPixmap->scaled(maxOfWidths, maxOfWidths, Qt::KeepAspectRatio);
-        }
-
         pixmapOperations|= MarkerClusterHolder::PixmapValid;
         return pixmapOperations;
     }
