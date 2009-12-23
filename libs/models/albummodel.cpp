@@ -118,9 +118,34 @@ void SearchModel::addReplaceName(const QString& technicalName, const QString& us
     m_replaceNames.insert(technicalName, userVisibleName);
 }
 
-void SearchModel::setPixmap(const QPixmap& pix)
+void SearchModel::setPixmapForNormalSearches(const QPixmap& pix)
 {
-    m_pixmap = pix;
+    m_pixmaps.insert(-1, pix);
+}
+
+void SearchModel::setDefaultPixmap(const QPixmap& pix)
+{
+    m_pixmaps.insert(-2, pix);
+}
+
+void SearchModel::setPixmapForTimelineSearches(const QPixmap& pix)
+{
+    m_pixmaps.insert(DatabaseSearch::TimeLineSearch, pix);
+}
+
+void SearchModel::setPixmapForHaarSearches(const QPixmap& pix)
+{
+    m_pixmaps.insert(DatabaseSearch::HaarSearch, pix);
+}
+
+void SearchModel::setPixmapForMapSearches(const QPixmap& pix)
+{
+    m_pixmaps.insert(DatabaseSearch::MapSearch, pix);
+}
+
+void SearchModel::setPixmapForDuplicatesSearches(const QPixmap& pix)
+{
+    m_pixmaps.insert(DatabaseSearch::DuplicatesSearch, pix);
 }
 
 QVariant SearchModel::albumData(Album *a, int role) const
@@ -131,7 +156,19 @@ QVariant SearchModel::albumData(Album *a, int role) const
         return m_replaceNames.value(name, name);
     }
     else if (role == Qt::DecorationRole)
-        return m_pixmap;
+    {
+        SAlbum *salbum = static_cast<SAlbum*>(a);
+        QPixmap pixmap = m_pixmaps.value(salbum->searchType());
+        if (pixmap.isNull() && salbum->isNormalSearch())
+        {
+            pixmap = m_pixmaps.value(-1);
+        }
+        if (pixmap.isNull())
+        {
+            pixmap = m_pixmaps.value(-2);
+        }
+        return pixmap;
+    }
 
     return AbstractSpecificAlbumModel::albumData(a, role);
 }

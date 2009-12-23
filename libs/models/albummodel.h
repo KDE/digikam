@@ -84,8 +84,13 @@ public:
     void setReplaceNames(QHash<QString, QString> replaceNames);
     void addReplaceName(const QString& technicalName, const QString& userVisibleName);
 
-    /** Set a pixmap for the DecorationRole */
-    void setPixmap(const QPixmap& pix);
+    /** Set pixmaps for the DecorationRole */
+    void setPixmapForNormalSearches(const QPixmap& pix);
+    void setDefaultPixmap(const QPixmap& pix);
+    void setPixmapForTimelineSearches(const QPixmap& pix);
+    void setPixmapForHaarSearches(const QPixmap& pix);
+    void setPixmapForMapSearches(const QPixmap& pix);
+    void setPixmapForDuplicatesSearches(const QPixmap& pix);
 
 protected:
 
@@ -93,8 +98,8 @@ protected:
 
 protected:
 
-    QPixmap                 m_pixmap;
-    QHash<QString, QString> m_replaceNames;
+    QHash<int, QPixmap>      m_pixmaps;
+    QHash<QString, QString>  m_replaceNames;
 };
 
 // ------------------------------------------------------------------
