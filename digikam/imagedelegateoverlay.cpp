@@ -181,6 +181,7 @@ void AbstractWidgetDelegateOverlay::slotEntered(const QModelIndex& index)
 
 bool AbstractWidgetDelegateOverlay::checkIndex(const QModelIndex& index) const
 {
+    Q_UNUSED(index);
     return true;
 }
 
