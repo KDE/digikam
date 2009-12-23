@@ -50,9 +50,12 @@
 
 // KDE includes
 
+#include <kdeversion.h>
 #include <kaboutdata.h>
 #include <kaction.h>
+#if KDE_IS_VERSION(4,1,68)
 #include <kactioncategory.h>
+#endif
 #include <kactioncollection.h>
 #include <kactionmenu.h>
 #include <kapplication.h>
@@ -90,7 +93,6 @@
 #include <kurlcombobox.h>
 #include <kwindowsystem.h>
 #include <kxmlguifactory.h>
-#include <kdeversion.h>
 #include <kde_file.h>
 #include <kio/copyjob.h>
 #include <kdebug.h>
@@ -1588,7 +1590,13 @@ void EditorWindow::finishSaving(bool success)
 void EditorWindow::setupTempSaveFile(const KUrl & url)
 {
 
+#ifdef _WIN32
+    KUrl parent(url.directory(KUrl::AppendTrailingSlash)); 
+    QString tempDir = parent.toLocalFile();
+#else
     QString tempDir = url.directory(KUrl::AppendTrailingSlash);
+#endif
+
     // use magic file extension which tells the digikamalbums ioslave to ignore the file
     m_savingContext->saveTempFile = new KTemporaryFile();
     // if the destination url is on local file system, try to set the temp file

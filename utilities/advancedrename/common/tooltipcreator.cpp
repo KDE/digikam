@@ -90,7 +90,7 @@ QString TooltipCreator::markOption(const QString& str)
 {
     QString result = str;
 
-    QRegExp optionsRegExp("\\|(.*)\\|");
+    QRegExp optionsRegExp("\\|\\|(.*)\\|\\|");
     optionsRegExp.setMinimal(true);
 
     result.replace(optionsRegExp, QString("<i><font color=\"%1\">\\1</font></i>")

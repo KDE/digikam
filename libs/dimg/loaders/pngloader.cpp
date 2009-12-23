@@ -440,24 +440,27 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
         cleanupData->freeLines();
 
-        // Swap bytes in 16 bits/color/pixel for DImg
-
-        if (m_sixteenBit)
+        if (QSysInfo::ByteOrder == QSysInfo::LittleEndian)
         {
-            uchar ptr[8];   // One pixel to swap
+            // Swap bytes in 16 bits/color/pixel for DImg
 
-            for (int p = 0; p < width*height*8; p+=8)
+            if (m_sixteenBit)
             {
-                memcpy (&ptr[0], &data[p], 8);  // Current pixel
+                uchar ptr[8];   // One pixel to swap
 
-                data[ p ] = ptr[1];  // Blue
-                data[p+1] = ptr[0];
-                data[p+2] = ptr[3];  // Green
-                data[p+3] = ptr[2];
-                data[p+4] = ptr[5];  // Red
-                data[p+5] = ptr[4];
-                data[p+6] = ptr[7];  // Alpha
-                data[p+7] = ptr[6];
+                for (int p = 0; p < width*height*8; p+=8)
+                {
+                    memcpy (&ptr[0], &data[p], 8);  // Current pixel
+
+                    data[ p ] = ptr[1];  // Blue
+                    data[p+1] = ptr[0];
+                    data[p+2] = ptr[3];  // Green
+                    data[p+3] = ptr[2];
+                    data[p+4] = ptr[5];  // Red
+                    data[p+5] = ptr[4];
+                    data[p+6] = ptr[7];  // Alpha
+                    data[p+7] = ptr[6];
+                }
             }
         }
     }
@@ -853,46 +856,59 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
         j = 0;
 
-        for (x = 0; x < imageWidth()*imageBytesDepth(); x+=imageBytesDepth())
+        if (QSysInfo::ByteOrder == QSysInfo::LittleEndian)
         {
-            if (imageSixteenBit())
+            for (x = 0; x < imageWidth()*imageBytesDepth(); x+=imageBytesDepth())
             {
-                if (imageHasAlpha())
+                if (imageSixteenBit())
                 {
-                    data[j++] = ptr[x+1];  // Blue
-                    data[j++] = ptr[ x ];
-                    data[j++] = ptr[x+3];  // Green
-                    data[j++] = ptr[x+2];
-                    data[j++] = ptr[x+5];  // Red
-                    data[j++] = ptr[x+4];
-                    data[j++] = ptr[x+7];  // Alpha
-                    data[j++] = ptr[x+6];
+                    if (imageHasAlpha())
+                    {
+                        data[j++] = ptr[x+1];  // Blue
+                        data[j++] = ptr[ x ];
+                        data[j++] = ptr[x+3];  // Green
+                        data[j++] = ptr[x+2];
+                        data[j++] = ptr[x+5];  // Red
+                        data[j++] = ptr[x+4];
+                        data[j++] = ptr[x+7];  // Alpha
+                        data[j++] = ptr[x+6];
+                    }
+                    else
+                    {
+                        data[j++] = ptr[x+1];  // Blue
+                        data[j++] = ptr[ x ];
+                        data[j++] = ptr[x+3];  // Green
+                        data[j++] = ptr[x+2];
+                        data[j++] = ptr[x+5];  // Red
+                        data[j++] = ptr[x+4];
+                    }
                 }
                 else
                 {
-                    data[j++] = ptr[x+1];  // Blue
-                    data[j++] = ptr[ x ];
-                    data[j++] = ptr[x+3];  // Green
-                    data[j++] = ptr[x+2];
-                    data[j++] = ptr[x+5];  // Red
-                    data[j++] = ptr[x+4];
+                    if (imageHasAlpha())
+                    {
+                        data[j++] = ptr[ x ];  // Blue
+                        data[j++] = ptr[x+1];  // Green
+                        data[j++] = ptr[x+2];  // Red
+                        data[j++] = ptr[x+3];  // Alpha
+                    }
+                    else
+                    {
+                        data[j++] = ptr[ x ];  // Blue
+                        data[j++] = ptr[x+1];  // Green
+                        data[j++] = ptr[x+2];  // Red
+                    }
                 }
             }
-            else
+        }
+        else
+        {
+            int bytes = (imageSixteenBit() ? 2:1) * (imageHasAlpha() ? 4:3);
+
+            for (x = 0; x < imageWidth()*imageBytesDepth(); x+=imageBytesDepth())
             {
-                if (imageHasAlpha())
-                {
-                    data[j++] = ptr[ x ];  // Blue
-                    data[j++] = ptr[x+1];  // Green
-                    data[j++] = ptr[x+2];  // Red
-                    data[j++] = ptr[x+3];  // Alpha
-                }
-                else
-                {
-                    data[j++] = ptr[ x ];  // Blue
-                    data[j++] = ptr[x+1];  // Green
-                    data[j++] = ptr[x+2];  // Red
-                }
+                memcpy(data+j, ptr+x, bytes);
+                j += bytes;
             }
         }
 

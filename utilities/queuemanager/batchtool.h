@@ -122,13 +122,21 @@ public:
      */
     bool savefromDImg();
 
-    /** Set-up Exif orientation tag needs to be fixed during tool operations.
+    /** Set that the Exif orientation flag is allowed be reset to NORMAL after tool operation
      */
-    void setExifSetOrientation(bool set);
+    void setResetExifOrientationAllowed(bool reset);
 
-    /** Return true if Exif orientation tag will be fixed during tool operations.
+    /** Returns true if the Exif orientation tag is allowed to be reset after tool operation
      */
-    bool getExifSetOrientation() const;
+    bool getResetExifOrientationAllowed() const;
+
+    /** Set that the Exif orientation flag should be reset to NORMAL after tool operation
+     */
+    void setNeedResetExifOrientation(bool reset);
+
+    /** Returns true if the Exif orientation tag should be reset after tool operation
+     */
+    bool getNeedResetExifOrientation() const;
 
     /** Set-up RAW decoding settings no use during tool operations.
      */

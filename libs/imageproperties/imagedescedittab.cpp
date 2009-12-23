@@ -167,7 +167,6 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, TagModificationHelper *tagMo
     KHBox *dateBox  = new KHBox(captionTagsArea);
     new QLabel(i18n("Date:"), dateBox);
     d->dateTimeEdit = new KDateTimeEdit(dateBox, "datepicker");
-    d->dateTimeEdit->setMaximumHeight( fontMetrics().height()+4 );
 
     KHBox *ratingBox = new KHBox(captionTagsArea);
     new QLabel(i18n("Rating:"), ratingBox);
@@ -217,20 +216,17 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, TagModificationHelper *tagMo
 
     d->revertBtn = new QToolButton(buttonsBox);
     d->revertBtn->setIcon(SmallIcon("document-revert"));
-    d->revertBtn->setMaximumHeight( fontMetrics().height()+4 );
     d->revertBtn->setToolTip( i18n("Revert all changes"));
     d->revertBtn->setEnabled(false);
 
     d->applyBtn = new QPushButton(i18n("Apply"), buttonsBox);
     d->applyBtn->setIcon(SmallIcon("dialog-ok-apply"));
-    d->applyBtn->setMaximumHeight( fontMetrics().height()+4 );
     d->applyBtn->setEnabled(false);
     d->applyBtn->setToolTip( i18n("Apply all changes to images"));
     buttonsBox->setStretchFactor(d->applyBtn, 10);
 
     d->moreButton = new QPushButton(i18n("More"), buttonsBox);
     d->moreMenu   = new KMenu(captionTagsArea);
-    d->moreButton->setMaximumHeight( fontMetrics().height()+4 );
     d->moreButton->setMenu(d->moreMenu);
 
     // --------------------------------------------------

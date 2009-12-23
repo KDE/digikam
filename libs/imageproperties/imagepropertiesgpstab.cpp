@@ -153,7 +153,6 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* parent)
     d->detailsBtn   = new QToolButton(box2);
     d->detailsBtn->setIcon(SmallIcon("internet-web-browser"));
     d->detailsBtn->setToolTip(i18n("See more info on the Internet"));
-    d->detailsCombo->setMaximumHeight( fontMetrics().height()+4 );
     d->detailsCombo->insertItem(MapQuest,      QString("MapQuest"));
     d->detailsCombo->insertItem(GoogleMaps,    QString("Google Maps"));
     d->detailsCombo->insertItem(MsnMaps,       QString("MSN Maps"));
@@ -254,7 +253,7 @@ void ImagePropertiesGPSTab::slotGPSDetails()
             url.append(val.setNum(d->map->getLatitude(), 'g', 12));
             url.append(",");
             url.append(val.setNum(d->map->getLongitude(), 'g', 12));
-            url.append("&spn=0.05,0.05&t=h&om=1&hl=en");
+            url.append("&spn=0.05,0.05&t=h&om=1");
             break;
         }
 

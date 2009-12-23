@@ -90,6 +90,17 @@ public:
                 !curveAdjust.isEmpty());
     }
 
+    bool operator==(const DRawDecoding& other) const
+    {
+        return lightness     == other.lightness &&
+               contrast      == other.contrast &&
+               gamma         == other.gamma &&
+               saturation    == other.saturation &&
+               exposureComp  == other.exposureComp &&
+               curveAdjust   == other.curveAdjust &&
+               levelsAdjust  == other.levelsAdjust;
+    }
+
 public:
 
     /** Lightness correction value.

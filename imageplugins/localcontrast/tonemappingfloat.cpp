@@ -30,7 +30,7 @@
 
 // Local includes.
 
-#include "ToneMappingFloat.h"
+#include "tonemappingfloat.h"
 
 namespace DigikamLocalContrastImagesPlugin
 {
@@ -93,9 +93,9 @@ void ToneMappingFloat::process_rgb_image(REALTYPE *img, int sizex, int sizey)
 
                 REALTYPE blur   = blurimage[i];
 
-                REALTYPE dest_r = func(src_r,blur);
-                REALTYPE dest_g = func(src_g,blur);
-                REALTYPE dest_b = func(src_b,blur);
+                REALTYPE dest_r = func(src_r, blur);
+                REALTYPE dest_g = func(src_g, blur);
+                REALTYPE dest_b = func(src_b, blur);
 
                 img[pos]        = dest_r;
                 img[pos+1]      = dest_g;
@@ -104,6 +104,7 @@ void ToneMappingFloat::process_rgb_image(REALTYPE *img, int sizex, int sizey)
                 pos += 3;
             }
         }
+
         par.postProgress(30 + nstage*10);
     }
 
@@ -341,7 +342,8 @@ void ToneMappingFloat::stretch_contrast(REALTYPE *data, int datasize)
     //first, we compute the histogram
     unsigned int histogram[histogram_size];
 
-    for (unsigned int i=0 ; i < histogram_size ; i++) histogram[i] = 0;
+    for (unsigned int i=0 ; i < histogram_size ; i++)
+	histogram[i] = 0;
 
     for (unsigned int i=0 ; !par.cancel() && (i < (unsigned int)datasize) ; i++)
     {
@@ -352,7 +354,8 @@ void ToneMappingFloat::stretch_contrast(REALTYPE *data, int datasize)
     }
 
     //I want to strip the lowest and upper 0.1 procents (in the histogram) of the pixels
-    int          min = 0,max = 255;
+    int          min         = 0;
+    int          max         = 255;
     unsigned int desired_sum = datasize/1000;
     unsigned int sum_min     = 0;
     unsigned int sum_max     = 0;
@@ -370,6 +373,7 @@ void ToneMappingFloat::stretch_contrast(REALTYPE *data, int datasize)
     for (int i = histogram_size-1 ; !par.cancel() && (i >= 0) ; i--)
     {
         sum_max += histogram[i];
+
         if (sum_max > desired_sum)
         {
             max = i;
@@ -391,8 +395,12 @@ void ToneMappingFloat::stretch_contrast(REALTYPE *data, int datasize)
         //stretch the contrast
         REALTYPE x = data[i];
         x          = (x-min_src_val)/(max_src_val-min_src_val);
-        if (x < 0.0) x = 0.0;
-        if (x > 1.0) x = 1.0;
+
+        if (x < 0.0)
+    	    x = 0.0;
+        if (x > 1.0)
+    	    x = 1.0;
+
         data[i]    = x;
     }
 }

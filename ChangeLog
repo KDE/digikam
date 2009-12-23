@@ -1,3 +1,972 @@
+1.0.0 2009-12-20
+--------------------------------------------------------------------------------
+
+2009-12-20 21:39  cgilles
+
+    * NEWS: update
+
+2009-12-20 21:09  cgilles
+
+    * utilities/firstrun/startscanpage.cpp: polish
+
+2009-12-20 17:16  cgilles
+
+    * NEWS: update
+
+2009-12-20 17:15  cgilles
+
+    * NEWS: update
+
+2009-12-20 15:31  mwiesweg
+
+    * NEWS, libs/dimg/loaders/pngloader.cpp: Fix PNG saving on big
+      endian,
+      patch from pochini@shiny.it
+
+      BUG: 215752
+
+2009-12-20 15:11  mwiesweg
+
+    * NEWS, libs/dimg/loaders/rawloader.cpp: Fix 16bit raw loading on
+      big endian.
+      Patch from pochini@shiny.it slightly modified.
+
+      BUG: 215743
+
+2009-12-20 07:48  cgilles
+
+    * NEWS: update
+
+2009-12-19 20:49  cgilles
+
+    * NEWS: update
+
+2009-12-19 20:48  cgilles
+
+    * libs/dimg/filters/noisereductionsettings.cpp: save settings in NR
+      reduction tool
+      BUGS: 216808
+
+2009-12-19 20:38  cgilles
+
+    * utilities/imageeditor/editor/editortool.cpp: why 2 calls there ?
+
+2009-12-19 20:13  cgilles
+
+    * imageplugins/coreplugin/noisereductiontool.cpp: polish
+
+2009-12-19 18:56  woebbe
+
+    * utilities/cameragui/gpcamera.cpp: getThumbnail():
+      - don't return true if no (valid) image is loaded (for some
+      reason
+      gp_file_get_data_and_size() sometimes returns 0 here for data and
+      size)
+      - put the name of the photo in the debug output
+
+2009-12-19 18:32  cgilles
+
+    * NEWS: update
+
+2009-12-19 18:12  cgilles
+
+    * imageplugins/coreplugin/noisereductiontool.cpp: no need to block
+      there
+
+2009-12-19 17:58  cgilles
+
+    * NEWS: update
+
+2009-12-19 17:55  cgilles
+
+    * NEWS: update
+
+2009-12-19 16:18  mwiesweg
+
+    * libs/dimg/drawdecoding.h: Implement operator== for DRawDecoding.
+
+      CCBUG: 211681
+
+2009-12-19 15:04  mwiesweg
+
+    * NEWS, utilities/queuemanager/actionthread.cpp,
+      utilities/queuemanager/actionthread.h,
+      utilities/queuemanager/basetools/transform/flip.cpp,
+      utilities/queuemanager/basetools/transform/rotate.cpp,
+      utilities/queuemanager/batchtool.cpp,
+      utilities/queuemanager/batchtool.h,
+      utilities/queuemanager/queuemgrwindow.cpp: There were two
+      different settings merged in one:
+      - the user allows to edit the exif orientation - from digikam
+      settings
+      - the tool needs to reset the flag - only flip and rotate need
+      that.
+      Treat this distinctly, so that not all images processed by BQM
+      have their orientation reset.
+
+      BUG: 202278
+
+2009-12-19 15:03  mwiesweg
+
+    * libs/dimg/dimg.cpp, libs/dimg/dimg.h: Only be more precise with
+      parameter name
+
+2009-12-18 16:09  mghansen
+
+    * project/ImageAnnotation.odt: Update XMP.
+
+2009-12-18 14:17  cgilles
+
+    * NEWS: update
+
+2009-12-18 14:16  cgilles
+
+    * utilities/imageeditor/editor/editorwindow.cpp: apply patch #39131
+      BUGS: 210969
+
+2009-12-17 19:45  cgilles
+
+    * NEWS: update
+
+2009-12-17 09:47  cgilles
+
+    * showfoto/showfoto.cpp: polish
+
+2009-12-16 22:20  cgilles
+
+    * NEWS: update
+
+2009-12-16 22:19  cgilles
+
+    * libs/imageproperties/imagedescedittab.cpp,
+      libs/imageproperties/imagepropertiesgpstab.cpp: fix gui sizing
+      BUGS: 218889
+
+2009-12-16 22:08  cgilles
+
+    * NEWS: update
+
+2009-12-16 21:27  mwiesweg
+
+    * utilities/slideshow/slideshow.cpp: Yes, we did copy that...
+
+2009-12-16 20:42  mwiesweg
+
+    * NEWS, libs/dimg/dimg.cpp: Dont know why, but the readonly
+      attribute was simply not set when saving to JPEG.
+      All other format worked.
+
+      BUG: 218192
+
+2009-12-16 07:16  cgilles
+
+    * NEWS: update
+
+2009-12-16 07:14  cgilles
+
+    * libs/histogram/imagehistogram.cpp,
+      libs/histogram/imagehistogram.h: apply patch from Jens Mueller to
+      fix alpha range and max histogram calculation
+      BUGS: 2188+0
+
+2009-12-15 17:39  mwiesweg
+
+    * digikam/digikamimageview.cpp: Read font settings at startup as
+      well
+
+      CCBUG: 216316
+
+2009-12-15 16:45  mwiesweg
+
+    * libs/widgets/common/dfontselect.cpp: Start dialog with previously
+      selected font
+
+      CCBUG: 216316
+
+2009-12-15 12:04  cgilles
+
+    * NEWS: update
+
+2009-12-15 10:11  scripty
+
+    * digikam/digikam.desktop, digikam/digikam.notifyrc,
+      imageplugins/adjustcurves/digikamimageplugin_adjustcurves.desktop,
+      imageplugins/adjustlevels/digikamimageplugin_adjustlevels.desktop,
+      imageplugins/blurfx/digikamimageplugin_blurfx.desktop,
+      imageplugins/border/digikamimageplugin_border.desktop,
+      imageplugins/channelmixer/digikamimageplugin_channelmixer.desktop,
+      imageplugins/charcoal/digikamimageplugin_charcoal.desktop,
+      imageplugins/colorfx/digikamimageplugin_colorfx.desktop,
+      imageplugins/contentawareresizing/digikamimageplugin_contentawareresizing.desktop,
+      imageplugins/coreplugin/digikamimageplugin_core.desktop,
+      imageplugins/distortionfx/digikamimageplugin_distortionfx.desktop,
+      imageplugins/emboss/digikamimageplugin_emboss.desktop,
+      imageplugins/filmgrain/digikamimageplugin_filmgrain.desktop,
+      imageplugins/freerotation/digikamimageplugin_freerotation.desktop,
+      imageplugins/hotpixels/digikamimageplugin_hotpixels.desktop,
+      imageplugins/infrared/digikamimageplugin_infrared.desktop,
+      imageplugins/inpainting/digikamimageplugin_inpainting.desktop,
+      imageplugins/inserttext/digikamimageplugin_inserttext.desktop,
+      imageplugins/lenscorrection/digikamimageplugin_lenscorrection.desktop,
+      imageplugins/localcontrast/digikamimageplugin_localcontrast.desktop,
+      imageplugins/oilpaint/digikamimageplugin_oilpaint.desktop,
+      imageplugins/perspective/digikamimageplugin_perspective.desktop,
+      imageplugins/raindrop/digikamimageplugin_raindrop.desktop,
+      imageplugins/restoration/digikamimageplugin_restoration.desktop,
+      imageplugins/sheartool/digikamimageplugin_sheartool.desktop,
+      imageplugins/superimpose/digikamimageplugin_superimpose.desktop,
+      imageplugins/texture/digikamimageplugin_texture.desktop,
+      imageplugins/whitebalance/digikamimageplugin_whitebalance.desktop,
+      kioslave/digikamalbums.protocol, kioslave/digikamdates.protocol,
+      kioslave/digikamsearch.protocol, kioslave/digikamtags.protocol,
+      showfoto/showfoto.desktop,
+      utilities/imageeditor/editor/digikamimageplugin.desktop,
+      utilities/nepomuk/digikamnepomukservice.desktop: SVN_SILENT made
+      messages (.desktop file)
+
+2009-12-14 10:54  scripty
+
+    * digikam/digikam.notifyrc,
+      imageplugins/localcontrast/digikamimageplugin_localcontrast.desktop:
+      SVN_SILENT made messages (.desktop file)
+
+2009-12-14 10:43  cgilles
+
+    * imageplugins/localcontrast/tonemappingbase.cpp,
+      imageplugins/localcontrast/tonemappingbase.h,
+      imageplugins/localcontrast/tonemappingparameters.cpp,
+      imageplugins/localcontrast/tonemappingparameters.h: polish
+
+2009-12-14 10:20  cgilles
+
+    * imageplugins/localcontrast/tonemappingbase.h: polish
+
+2009-12-14 10:15  cgilles
+
+    * imageplugins/localcontrast/tonemappingparameters.cpp,
+      imageplugins/localcontrast/tonemappingparameters.h: polish
+
+2009-12-14 10:09  cgilles
+
+    * imageplugins/localcontrast/CMakeLists.txt,
+      imageplugins/localcontrast/ToneMappingBase.cpp,
+      imageplugins/localcontrast/ToneMappingBase.h,
+      imageplugins/localcontrast/ToneMappingFloat.cpp,
+      imageplugins/localcontrast/ToneMappingFloat.h,
+      imageplugins/localcontrast/ToneMappingInt.cpp,
+      imageplugins/localcontrast/ToneMappingInt.h,
+      imageplugins/localcontrast/ToneMappingParameters.cpp,
+      imageplugins/localcontrast/ToneMappingParameters.h,
+      imageplugins/localcontrast/localcontrast.cpp,
+      imageplugins/localcontrast/localcontrast.h,
+      imageplugins/localcontrast/localcontrasttool.h,
+      imageplugins/localcontrast/tonemappingbase.cpp,
+      imageplugins/localcontrast/tonemappingbase.h,
+      imageplugins/localcontrast/tonemappingfloat.cpp,
+      imageplugins/localcontrast/tonemappingfloat.h,
+      imageplugins/localcontrast/tonemappingint.cpp,
+      imageplugins/localcontrast/tonemappingint.h,
+      imageplugins/localcontrast/tonemappingparameters.cpp,
+      imageplugins/localcontrast/tonemappingparameters.h: polish
+
+2009-12-14 10:01  cgilles
+
+    * imageplugins/localcontrast/ToneMappingFloat.cpp,
+      imageplugins/localcontrast/localcontrast.cpp: polish
+
+2009-12-13 18:24  cgilles
+
+    * NEWS: update
+
+2009-12-13 18:20  cgilles
+
+    * NEWS: update
+
+2009-12-13 10:20  scripty
+
+    * digikam/digikam.notifyrc,
+      imageplugins/adjustcurves/digikamimageplugin_adjustcurves.desktop,
+      imageplugins/adjustlevels/digikamimageplugin_adjustlevels.desktop,
+      imageplugins/blurfx/digikamimageplugin_blurfx.desktop,
+      imageplugins/border/digikamimageplugin_border.desktop,
+      imageplugins/channelmixer/digikamimageplugin_channelmixer.desktop,
+      imageplugins/charcoal/digikamimageplugin_charcoal.desktop,
+      imageplugins/colorfx/digikamimageplugin_colorfx.desktop,
+      imageplugins/contentawareresizing/digikamimageplugin_contentawareresizing.desktop,
+      imageplugins/coreplugin/digikamimageplugin_core.desktop,
+      imageplugins/distortionfx/digikamimageplugin_distortionfx.desktop,
+      imageplugins/emboss/digikamimageplugin_emboss.desktop,
+      imageplugins/filmgrain/digikamimageplugin_filmgrain.desktop,
+      imageplugins/freerotation/digikamimageplugin_freerotation.desktop,
+      imageplugins/hotpixels/digikamimageplugin_hotpixels.desktop,
+      imageplugins/infrared/digikamimageplugin_infrared.desktop,
+      imageplugins/inpainting/digikamimageplugin_inpainting.desktop,
+      imageplugins/inserttext/digikamimageplugin_inserttext.desktop,
+      imageplugins/oilpaint/digikamimageplugin_oilpaint.desktop,
+      imageplugins/perspective/digikamimageplugin_perspective.desktop,
+      imageplugins/raindrop/digikamimageplugin_raindrop.desktop,
+      imageplugins/restoration/digikamimageplugin_restoration.desktop,
+      imageplugins/superimpose/digikamimageplugin_superimpose.desktop,
+      imageplugins/texture/digikamimageplugin_texture.desktop,
+      imageplugins/whitebalance/digikamimageplugin_whitebalance.desktop,
+      kioslave/digikamalbums.protocol, kioslave/digikamdates.protocol,
+      kioslave/digikamsearch.protocol, kioslave/digikamtags.protocol,
+      utilities/imageeditor/editor/digikamimageplugin.desktop:
+      SVN_SILENT made messages (.desktop file)
+
+2009-12-13 08:20  aclemens
+
+    * NEWS: update
+
+2009-12-12 20:09  mghansen
+
+    * libs/imageproperties/worldmapwidget.cpp,
+      project/ImageAnnotation.odt: Temporary workaround for BKO 217702:
+      Thumbnails for movies are returned too big, therefore resize them
+      manually if necessary.
+
+      CCBUG: 217702
+
+2009-12-12 19:28  mghansen
+
+    * libs/imageproperties/imagepropertiesgpstab.cpp: Remove language
+      code from link to Google Maps, this way the language will be
+      detected in the browser.
+
+      CCBUG: 147921
+
+2009-12-12 19:07  aclemens
+
+    * utilities/imageeditor/editor/editorwindow.cpp: Fix compile for
+      older KDE versions
+
+2009-12-11 17:53  cgilles
+
+    * NEWS: update
+
+2009-12-11 15:28  mwiesweg
+
+    * libs/database/collectionmanager.cpp: Make UUID comparison
+      (usually hexadecimal) case insensitive
+
+      CCBUG: 217515
+
+2009-12-10 21:28  jwienke
+
+    * HACKING: alias for finding defect connections
+
+2009-12-10 21:22  cgilles
+
+    * NEWS: update
+
+2009-12-10 21:14  cgilles
+
+    * NEWS: update
+
+2009-12-10 11:12  scripty
+
+    * digikam/digikam.notifyrc: SVN_SILENT made messages (.desktop
+      file)
+
+2009-12-08 08:07  cgilles
+
+    * utilities/queuemanager/queuemgrwindow.cpp: add rule to not change
+      settings from config panel when BQM is busy
+
+2009-12-08 07:59  cgilles
+
+    * utilities/queuemanager/queuemgrwindow.cpp,
+      utilities/queuemanager/queuemgrwindow_p.h: do not use static
+      member, use d private internal class instead
+
+2009-12-07 22:58  cgilles
+
+    * NEWS: update
+
+2009-12-07 22:54  jwienke
+
+    * libs/widgets/common/filesaveoptionsbox.cpp,
+      libs/widgets/common/filesaveoptionsbox.h, tests/CMakeLists.txt,
+      tests/filesaveoptionsboxtest.cpp, tests/filesaveoptionsboxtest.h,
+      utilities/imageeditor/editor/editorwindow.cpp,
+      utilities/imageeditor/editor/editorwindow.h: Detect save file
+      type based on file name of "all images" filter is selected.
+      Otherwise use filter type.
+
+      BUG: 217598
+
+2009-12-07 22:40  aclemens
+
+    * utilities/advancedrename/advancedrenamedialog.cpp,
+      utilities/advancedrename/common/parseobject.cpp: Fix crashy code:
+      QList::first() should only be used when you are sure that the
+      list is not empty.
+
+2009-12-07 22:07  cgilles
+
+    * utilities/imageeditor/canvas/dimginterface.cpp: compile with old
+      version of libkdcraw
+
+2009-12-07 22:01  cgilles
+
+    * utilities/imageeditor/rawimport/rawsettingsbox.cpp: polish
+
+2009-12-07 21:46  cgilles
+
+    * utilities/queuemanager/actionthread.cpp,
+      utilities/queuemanager/actionthread.h,
+      utilities/queuemanager/batchtool.cpp,
+      utilities/queuemanager/batchtool.h,
+      utilities/queuemanager/queuemgrwindow.cpp: use default Image
+      Editor Raw decoding setings with Batch Queue Manager to demosaic
+      Raw images in queues processing
+      CCBUGS: 215657
+
+2009-12-07 21:30  aclemens
+
+    * NEWS: update
+
+2009-12-07 21:27  aclemens
+
+    * utilities/advancedrename/advancedrenamedialog.cpp: And again...:
+      Fix singleFileMode file extension handling
+
+2009-12-07 21:26  aclemens
+
+    * libs/widgets/common/filesaveoptionsbox.cpp,
+      libs/widgets/common/filesaveoptionsbox.h, tests/CMakeLists.txt,
+      utilities/advancedrename/advancedrenamedialog.cpp,
+      utilities/imageeditor/editor/editorwindow.cpp: AAAhhh, Johannes's
+      patch was still in my working branch... :D
+      Revert "Oopps, I could swear I added this code before, but maybe
+      it was lost in some"
+
+      This reverts commit 9e7094e5766d1d67dc2d9a4e2605ec181e1aa6b2.
+
+2009-12-07 21:23  aclemens
+
+    * libs/widgets/common/filesaveoptionsbox.cpp,
+      libs/widgets/common/filesaveoptionsbox.h, tests/CMakeLists.txt,
+      utilities/advancedrename/advancedrenamedialog.cpp,
+      utilities/imageeditor/editor/editorwindow.cpp: Oopps, I could
+      swear I added this code before, but maybe it was lost in some
+      revert again.
+      In singleFileMode, set the parser to
+      useOriginalFileExtension=false and set the
+      full filename in the input widget.
+
+2009-12-07 21:07  cgilles
+
+    * utilities/imageeditor/editor/editorwindow.cpp: polish
+
+2009-12-07 21:02  cgilles
+
+    * utilities/imageeditor/editor/editorwindow.cpp: polish
+
+2009-12-07 20:43  cgilles
+
+    * utilities/queuemanager/assignedlist.h: polish
+
+2009-12-07 20:37  cgilles
+
+    * utilities/queuemanager/queuemgrwindow.cpp: polish
+
+2009-12-07 20:20  cgilles
+
+    * NEWS: update
+
+2009-12-07 20:09  cgilles
+
+    * utilities/imageeditor/editor/editortoolsettings.cpp: this signal
+      is obsolete now
+
+2009-12-07 19:35  cgilles
+
+    * NEWS: update
+
+2009-12-07 18:16  mwiesweg
+
+    * libs/dimg/loaders/jp2kloader.cpp: Disable scanning of images with
+      libjasper.
+      This means that width, height, and color format will not be
+      available.
+      At least width and height are available from exiv2, but
+      Image::pixelWidth()
+      and pixelHeight() are not used in libkexiv2.
+      So for now, the dimensions are only avaiable for when there is
+      Exif information.
+
+      CCBUG: 215458
+      CCBUG: 195583
+
+2009-12-07 17:42  mwiesweg
+
+    * libs/dimg/filters/dimgthreadedfilter.cpp: Span a safety net
+      around all DImgThreadedFilters to catch out-of-memory conditions.
+      I remember such reports to happen more than once.
+      TODO is user notification about failure.
+
+      CCBUG: 214837
+
+2009-12-07 17:22  cgilles
+
+    * utilities/imageeditor/canvas/dimginterface.cpp: factoring
+
+2009-12-07 16:45  mwiesweg
+
+    * NEWS, showfoto/showfoto.cpp, showfoto/showfoto.h,
+      utilities/imageeditor/canvas/canvas.cpp,
+      utilities/imageeditor/canvas/canvas.h,
+      utilities/imageeditor/canvas/dimginterface.cpp,
+      utilities/imageeditor/canvas/dimginterface.h,
+      utilities/imageeditor/editor/editorwindow.cpp,
+      utilities/imageeditor/editor/editorwindow.h,
+      utilities/imageeditor/editor/imagewindow.cpp,
+      utilities/imageeditor/editor/imagewindow.h: To find out if an
+      image needs to be saved when goint to the next one, we relied
+      on the save action to be enabled. But when an image plugin is
+      loaded, all standard
+      actions are disabled, so changes could silently be discarded.
+      As a solution, implement a method hasChangedToSave() and use
+      that.
+      At the same time, consolidate slotUndoStateChange from
+      ImageWindow and Showfoto to common base class.
+
+      BUG: 214707
+
+2009-12-06 21:04  aclemens
+
+    * utilities/searchwindow/searchview.cpp: fix possible crashy code?
+
+2009-12-06 20:53  cgilles
+
+    * libs/dimg/loaders/tiffloader.cpp: idem in digiKam TIFFF writter
+      CCBUGS: 211758
+
+2009-12-06 16:35  mwiesweg
+
+    * digikam/imagecategorizedview.cpp: Missing connection - ensure the
+      icon view is repainted after theme change
+      has taken effect
+
+2009-12-06 16:34  mwiesweg
+
+    * libs/threadimageio/thumbnailcreator.cpp: Close file before
+      moving. According to bug report seems to be necessary for
+      Windows.
+      Note: With thumbs db the default, this code is not much used.
+
+      BUG: 189742
+
+2009-12-06 10:37  aclemens
+
+    * digikam/digikamimageview.cpp, digikam/digikamview.cpp: This code
+      is crashy... never use QList::first() without checking for an
+      empty
+      list.
+
+2009-12-05 15:35  aclemens
+
+    * utilities/advancedrename/TODO: update
+
+2009-12-05 14:16  aclemens
+
+    * utilities/advancedrename/TODO: This point is useless now, because
+      I mark invalid modifiers in the parse string
+      and remove them from the new name... no need to abort renaming
+      completely here
+
+2009-12-05 14:10  aclemens
+
+    * utilities/advancedrename/TODO,
+      utilities/advancedrename/common/parser.cpp: Remove invalid
+      modifiers from the parsed name. This only works for known
+      modifiers of course, something like '{uuupper}' will still be a
+      part of the new
+      name, since it is treated as normal text.
+
+2009-12-05 14:07  jwienke
+
+    * utilities/setup/setupicc.cpp: Fix bad html markup in string.
+      Sorry for the string change after string freeze.
+
+      CCMAIL: kde-i18n@kde.org
+
+2009-12-05 14:03  aclemens
+
+    * utilities/advancedrename/TODO: Hmm no I will not do that... :-)
+
+2009-12-05 13:34  aclemens
+
+    * utilities/advancedrename/TODO,
+      utilities/advancedrename/common/highlighter.cpp,
+      utilities/advancedrename/common/highlighter.h,
+      utilities/advancedrename/common/parser.cpp,
+      utilities/advancedrename/common/parser.h,
+      utilities/advancedrename/common/parsesettings.h: Mark invalid
+      modifiers in the parse string.
+
+2009-12-05 12:49  aclemens
+
+    * utilities/advancedrename/common/highlighter.cpp,
+      utilities/advancedrename/common/highlighter.h: Add color rule
+      "faultyModifierFormat", it will be used some day for modifiers
+      that have been added at the wrong position in the parse string.
+
+2009-12-05 12:49  aclemens
+
+    * utilities/advancedrename/common/highlighter.cpp,
+      utilities/advancedrename/common/highlighter.h: Remove enum
+      "Colors", it is not needed anymore (it was used externally
+      before).
+      Also move the enum "PatternType" into the private section of the
+      class, it
+      doesn't need to be public.
+
+2009-12-05 12:39  aclemens
+
+    * utilities/advancedrename/advancedrenameinput.cpp: Increase the
+      maxVisibleItems value to 30
+
+2009-12-05 11:33  aclemens
+
+    * utilities/advancedrename/TODO: make subversion happy, add newline
+
+2009-12-05 11:31  aclemens
+
+    * utilities/advancedrename/TODO: update
+
+2009-12-05 11:09  aclemens
+
+    * utilities/advancedrename/README,
+      utilities/advancedrename/parser/README: move READNE into main
+      folder
+
+2009-12-05 11:09  aclemens
+
+    * utilities/advancedrename/parser/options/filepropertiesoption.cpp:
+      polish
+
+2009-12-05 10:23  scripty
+
+    * digikam/digikam.notifyrc,
+      imageplugins/adjustcurves/digikamimageplugin_adjustcurves.desktop,
+      imageplugins/adjustlevels/digikamimageplugin_adjustlevels.desktop,
+      imageplugins/blurfx/digikamimageplugin_blurfx.desktop,
+      imageplugins/channelmixer/digikamimageplugin_channelmixer.desktop,
+      imageplugins/charcoal/digikamimageplugin_charcoal.desktop,
+      imageplugins/colorfx/digikamimageplugin_colorfx.desktop,
+      imageplugins/emboss/digikamimageplugin_emboss.desktop,
+      imageplugins/filmgrain/digikamimageplugin_filmgrain.desktop,
+      imageplugins/freerotation/digikamimageplugin_freerotation.desktop,
+      imageplugins/hotpixels/digikamimageplugin_hotpixels.desktop,
+      imageplugins/infrared/digikamimageplugin_infrared.desktop,
+      imageplugins/inpainting/digikamimageplugin_inpainting.desktop,
+      imageplugins/inserttext/digikamimageplugin_inserttext.desktop,
+      imageplugins/localcontrast/digikamimageplugin_localcontrast.desktop,
+      imageplugins/perspective/digikamimageplugin_perspective.desktop,
+      imageplugins/restoration/digikamimageplugin_restoration.desktop,
+      imageplugins/sheartool/digikamimageplugin_sheartool.desktop,
+      kioslave/digikamtags.protocol, showfoto/showfoto.desktop,
+      utilities/hotplug/digikam-gphoto2-camera.desktop.cmake,
+      utilities/imageeditor/editor/digikamimageplugin.desktop,
+      utilities/nepomuk/digikamnepomukservice.desktop: SVN_SILENT made
+      messages (.desktop file)
+
+2009-12-05 09:35  aclemens
+
+    * utilities/advancedrename/common/parseobject.h: polish
+
+2009-12-05 09:32  aclemens
+
+    * utilities/advancedrename/common/modifier.cpp,
+      utilities/advancedrename/common/option.cpp,
+      utilities/advancedrename/common/option.h,
+      utilities/advancedrename/common/parseobject.cpp,
+      utilities/advancedrename/common/parseobject.h,
+      utilities/advancedrename/parser/modifiers/defaultvaluemodifier.cpp,
+      utilities/advancedrename/parser/modifiers/rangemodifier.cpp,
+      utilities/advancedrename/parser/modifiers/replacemodifier.cpp,
+      utilities/advancedrename/parser/modifiers/uniquemodifier.cpp,
+      utilities/advancedrename/parser/options/cameranameoption.cpp,
+      utilities/advancedrename/parser/options/cameranameoption.h,
+      utilities/advancedrename/parser/options/dateoption.cpp,
+      utilities/advancedrename/parser/options/dateoption.h,
+      utilities/advancedrename/parser/options/directorynameoption.cpp,
+      utilities/advancedrename/parser/options/directorynameoption.h,
+      utilities/advancedrename/parser/options/filepropertiesoption.cpp,
+      utilities/advancedrename/parser/options/filepropertiesoption.h,
+      utilities/advancedrename/parser/options/metadataoption.cpp,
+      utilities/advancedrename/parser/options/metadataoption.h,
+      utilities/advancedrename/parser/options/sequencenumberoption.cpp,
+      utilities/advancedrename/parser/options/sequencenumberoption.h:
+      Make ParseObject::regExp() return a const ref, so that the main
+      parse methods
+      in the Option and Modifier class can manipulate it directly and
+      the custom
+      parseOperation() methods can access the results, without
+      searching on their
+      own.
+
+2009-12-04 21:58  aclemens
+
+    * utilities/advancedrename/common/parseresults.cpp,
+      utilities/advancedrename/common/tooltipcreator.cpp,
+      utilities/advancedrename/parser/modifiers/defaultvaluemodifier.cpp,
+      utilities/advancedrename/parser/modifiers/firstletterofeachworduppercasemodifier.cpp,
+      utilities/advancedrename/parser/modifiers/rangemodifier.cpp,
+      utilities/advancedrename/parser/modifiers/replacemodifier.cpp,
+      utilities/advancedrename/parser/modifiers/uniquemodifier.cpp,
+      utilities/advancedrename/parser/options/dateoption.cpp,
+      utilities/advancedrename/parser/options/directorynameoption.cpp,
+      utilities/advancedrename/parser/options/filepropertiesoption.cpp,
+      utilities/advancedrename/parser/options/metadataoption.cpp,
+      utilities/advancedrename/parser/options/sequencenumberoption.cpp:
+      polish
+
+2009-12-04 21:44  aclemens
+
+    * utilities/advancedrename/common/parser.cpp,
+      utilities/advancedrename/common/parser.h: The parse() method had
+      checks in the past, but they have been removed now and
+      put somewhere else. This makes the old parse()/parseOperation()
+      combination
+      useless.
+      Rename parseOperation() => parse()
+
+2009-12-04 21:19  aclemens
+
+    * utilities/advancedrename/common/option.cpp: polish
+
+2009-12-04 21:19  aclemens
+
+    * utilities/advancedrename/parser/options/README,
+      utilities/advancedrename/parser/options/dummyoption.cpp,
+      utilities/advancedrename/parser/options/dummyoption.h: get rid of
+      dummyoption, actually it is useless...
+
+2009-12-04 21:19  aclemens
+
+    * utilities/advancedrename/common/option.cpp,
+      utilities/advancedrename/common/option.h,
+      utilities/advancedrename/common/parseobject.h,
+      utilities/advancedrename/parser/options/cameranameoption.cpp,
+      utilities/advancedrename/parser/options/cameranameoption.h,
+      utilities/advancedrename/parser/options/dateoption.cpp,
+      utilities/advancedrename/parser/options/dateoption.h,
+      utilities/advancedrename/parser/options/directorynameoption.cpp,
+      utilities/advancedrename/parser/options/directorynameoption.h,
+      utilities/advancedrename/parser/options/dummyoption.cpp,
+      utilities/advancedrename/parser/options/dummyoption.h,
+      utilities/advancedrename/parser/options/filepropertiesoption.cpp,
+      utilities/advancedrename/parser/options/filepropertiesoption.h,
+      utilities/advancedrename/parser/options/metadataoption.cpp,
+      utilities/advancedrename/parser/options/metadataoption.h,
+      utilities/advancedrename/parser/options/sequencenumberoption.cpp,
+      utilities/advancedrename/parser/options/sequencenumberoption.h:
+      Get rid of the PARSE_LOOP_* macros
+
+2009-12-04 20:28  aclemens
+
+    * utilities/advancedrename/TODO: fix TODO
+
+2009-12-04 20:28  aclemens
+
+    * utilities/advancedrename/TODO: update ToDo
+
+2009-12-03 22:48  aclemens
+
+    * utilities/advancedrename/common/highlighter.cpp: use switch
+      statement
+
+2009-12-03 22:33  aclemens
+
+    * utilities/advancedrename/common/highlighter.cpp: Also highlight
+      parameters in modifier tokens
+
+2009-12-03 20:55  aclemens
+
+    * utilities/advancedrename/common/modifier.cpp,
+      utilities/advancedrename/common/modifier.h,
+      utilities/advancedrename/common/option.cpp,
+      utilities/advancedrename/common/option.h,
+      utilities/advancedrename/common/parseobject.cpp,
+      utilities/advancedrename/common/parseobject.h: I don't like
+      having constructors that assign a variable in the parameter list,
+      e.g. (Modifier(const QString& name, const QString& description,
+      const QPixmap& icon = QPixmap()))
+
+      Introduce a second constructor to set an optional icon. This also
+      removes an
+      include statement in the header... which is always good :-)
+
+2009-12-03 20:55  aclemens
+
+    * utilities/advancedrename/common/parseobject.h: polish
+
+2009-12-03 20:55  aclemens
+
+    * utilities/advancedrename/common/parseobject.cpp: remove old code
+      that is not used anymore
+
+2009-12-02 20:31  aclemens
+
+    * utilities/advancedrename/common/parseobject.h: polish
+
+2009-12-02 20:23  jwienke
+
+    * NEWS, imageplugins/lenscorrection/autocorrection/klensfun.cpp:
+      Applied Jens' patch to sort lenses alphabetically in lensfun
+      plugin.
+
+      Thanks for the patch.
+
+      BUG: 217096
+
+2009-12-02 19:58  aclemens
+
+    * tests/advancedrenametest.cpp: Add unittests for digits parameter
+      for the UniqueModifier
+
+2009-12-02 19:29  aclemens
+
+    * utilities/advancedrename/parser/modifiers/uniquemodifier.cpp:
+      Well if you want to have a feedback saved in the OK variable, you
+      need to
+      assign it ;-)
+
+2009-12-02 19:27  aclemens
+
+    * utilities/advancedrename/parser/modifiers/uniquemodifier.cpp:
+      Make digits count a parameter for the UniqueModifier.
+
+2009-12-02 12:08  scripty
+
+    * digikam/digikam.notifyrc: SVN_SILENT made messages (.desktop
+      file)
+
+2009-12-02 04:30  cgilles
+
+    * NEWS: update
+
+2009-12-01 22:52  jwienke
+
+    * NEWS, libs/widgets/common/histogramwidget.cpp: Applied Jens' fix
+      that re-enables the color guide in the histogram. Thanks for the
+      patch.
+
+      BUG: 216998
+
+2009-12-01 13:04  cgilles
+
+    * NEWS: update
+
+2009-12-01 11:19  scripty
+
+    * digikam/digikam.notifyrc: SVN_SILENT made messages (.desktop
+      file)
+
+2009-12-01 09:44  cgilles
+
+    * NEWS: update
+
+2009-12-01 09:43  cgilles
+
+    * libs/histogram/imagehistogram.cpp,
+      libs/histogram/imagehistogram.h,
+      libs/widgets/common/histogrampainter.cpp: Apply patch from Jens
+      Mueller about to adapt histogram scale when image is over/under
+      exposed.
+      Sound like a good way to display a suitable histogram in this
+      situation
+      BUGS: 144155
+
+2009-12-01 08:54  cgilles
+
+    * NEWS: update
+
+2009-11-30 22:22  cgilles
+
+    * NEWS: update
+
+2009-11-30 20:50  cgilles
+
+    * NEWS: update
+
+2009-11-30 20:48  cgilles
+
+    * NEWS: update
+
+2009-11-30 15:57  aclemens
+
+    * tests/advancedrenametest.cpp: This test failed under Windows
+      because it was written in a way that the parser will return the
+      "/" folder for the directory name. This concept fails on MS
+      because there still is the drive letter that can be returned.
+      Move some steps up in the hierarchy to avoid the failing of this
+      test on MS.
+
+2009-11-30 13:51  cgilles
+
+    * CMakeLists.txt: YES !!!
+      digiKam 1.0.0 final release is in the way
+      release date is planed to 20 december 2009
+
+2009-11-30 13:32  aclemens
+
+    * utilities/advancedrename/advancedrenamedialog.cpp,
+      utilities/advancedrename/advancedrenameinput.cpp,
+      utilities/advancedrename/advancedrenameinput.h,
+      utilities/advancedrename/advancedrenamewidget.h,
+      utilities/advancedrename/common/dynamiclayout.cpp,
+      utilities/advancedrename/common/highlighter.h,
+      utilities/advancedrename/common/modifier.cpp,
+      utilities/advancedrename/common/modifier.h,
+      utilities/advancedrename/common/parseobject.h,
+      utilities/advancedrename/common/parser.cpp,
+      utilities/advancedrename/common/parser.h,
+      utilities/advancedrename/common/parseresults.cpp,
+      utilities/advancedrename/common/parseresults.h,
+      utilities/advancedrename/common/parsesettings.h,
+      utilities/advancedrename/common/tooltipcreator.cpp,
+      utilities/advancedrename/parser/defaultrenameparser.cpp,
+      utilities/advancedrename/parser/modifiers/defaultvaluemodifier.cpp,
+      utilities/advancedrename/parser/modifiers/defaultvaluemodifier.h,
+      utilities/advancedrename/parser/modifiers/firstletterofeachworduppercasemodifier.cpp,
+      utilities/advancedrename/parser/modifiers/firstletterofeachworduppercasemodifier.h,
+      utilities/advancedrename/parser/modifiers/lowercasemodifier.cpp,
+      utilities/advancedrename/parser/modifiers/lowercasemodifier.h,
+      utilities/advancedrename/parser/modifiers/rangemodifier.cpp,
+      utilities/advancedrename/parser/modifiers/rangemodifier.h,
+      utilities/advancedrename/parser/modifiers/replacemodifier.cpp,
+      utilities/advancedrename/parser/modifiers/replacemodifier.h,
+      utilities/advancedrename/parser/modifiers/trimmedmodifier.cpp,
+      utilities/advancedrename/parser/modifiers/trimmedmodifier.h,
+      utilities/advancedrename/parser/modifiers/uniquemodifier.cpp,
+      utilities/advancedrename/parser/modifiers/uniquemodifier.h,
+      utilities/advancedrename/parser/modifiers/uppercasemodifier.cpp,
+      utilities/advancedrename/parser/modifiers/uppercasemodifier.h,
+      utilities/advancedrename/parser/options/dateoption.h: Finish
+      porting the new parsing method. I hope I will not need to change
+      this
+      again in the near future ;-)
+
+2009-11-30 13:27  cgilles
+
+    * NEWS: update
+
+2009-11-30 12:35  scripty
+
+    * digikam/digikam.notifyrc,
+      imageplugins/contentawareresizing/digikamimageplugin_contentawareresizing.desktop,
+      imageplugins/inserttext/digikamimageplugin_inserttext.desktop,
+      imageplugins/whitebalance/digikamimageplugin_whitebalance.desktop:
+      SVN_SILENT made messages (.desktop file)
+
+2009-11-30 11:18  nlecureuil
+
+    * ChangeLog: Update Changelog
+
 1.0.0-rc 2009-11-30
 --------------------------------------------------------------------------------
 
@@ -74,7 +1043,7 @@
 2009-11-29 20:21  mghansen
 
 	* NEWS: Update news.
-	  
+
 	  BUG: 205001
 
 2009-11-29 17:59  aclemens
@@ -366,7 +1335,7 @@
 
 	* NEWS, digikam/digikamimageview.cpp, digikam/imagedelegate.cpp:
 	  Take font setting into account for icon view
-	  
+
 	  BUG: 216316
 
 2009-11-27 21:27  aclemens
@@ -419,7 +1388,7 @@
 	* libs/widgets/common/dlogoaction.cpp: When the widget is deleted,
 	  urlLabel will be deleted.
 	  So it should be set to 0 here, shouldn't it?
-	  
+
 	  CCBUG: 213896
 
 2009-11-27 18:05  mwiesweg
@@ -427,7 +1396,7 @@
 	* digikam/folderview.cpp: Ensure that all stored pointers to items
 	  are reset when removed.
 	  This was not done for two of four.
-	  
+
 	  CCBUG: 216392
 
 2009-11-27 17:43  aclemens
@@ -447,7 +1416,7 @@
 	  now it only renames one file after the other (which is actually a
 	  good thing,
 	  but may be problematic in some cases).
-	  
+
 	  This modifier will allow to have unique values from a renaming
 	  option, by
 	  adding a number prefix if necessary.
@@ -455,18 +1424,18 @@
 	  renaming
 	  option, so if you use it more than once, the counter just
 	  increases.
-	  
+
 	  I will add a little demo video on my Youtube account to show how
 	  it works.
-	  
+
 	  bdbrot,
 	  what do you think? Is this enough for you?
 	  I explicitly implemented it as a modifier so it can be attached
 	  to any renaming
 	  option, not only the date field.
-	  
+
 	  Andi
-	  
+
 	  CCBUG:208920
 
 2009-11-27 15:20  aclemens
@@ -525,7 +1494,7 @@
 	  number the images, with an additional startIndex parameter used
 	  by CameraUI to
 	  set a different start than 1.
-	  
+
 	  CameraUI increases the number / index while it has not been
 	  closed, which is a
 	  good / normal behavior. So when you select three images, download
@@ -533,15 +1502,15 @@
 	  select different ones later on from the same camera device, the
 	  next index
 	  will be 4.
-	  
+
 	  Resetting this counter manually was not possible the way the
 	  rename parser
 	  worked before.
-	  
+
 	  Now the parser can be initialized with a ParseInformation object,
 	  that can have
 	  a custom startIndex parameter.
-	  
+
 	  BUG:215715
 
 2009-11-27 11:55  aclemens
@@ -1145,10 +2114,10 @@
 	  utilities/gpssearch/gpssearchwidget.cpp: GPSSearch: Add buttons
 	  to change the mouse mode to pan, filter, select or zoom into
 	  group.
-	  
+
 	  If no search area has been selected on the map, show a message
 	  inviting the user to define one.
-	  
+
 	  BUG: 212967
 
 2009-11-22 15:22  aclemens
@@ -1176,9 +2145,9 @@
 	  'driving the car', &c. The other solution, retaining the of, is
 	  to add 'the' before it, i.e. 'the denoising of the image' -
 	  closer to other languages, but not idiomatic English.
-	  
+
 	  Bien cordialement,
-	  
+
 	  Andrew
 
 2009-11-22 13:03  aclemens
@@ -1357,13 +2326,13 @@
 	  doesn't display
 	  anything.
 	  It seems to work fine.
-	  
+
 	  Marcel,
 	  I had to derive ProxyLineEdit from KLineEdit for this, I hope
 	  this is ok?
 	  I don't see problems, but maybe you know some issues?
 	  If so I will copy the ProxyLineEdit class and make my own.
-	  
+
 	  CCMAIL:marcel.wiesweg@gmx.de
 
 2009-11-21 13:03  cgilles
@@ -1497,7 +2466,7 @@
 	  Whenever a scrollContentsBy() event is occurring, reset the
 	  slider with the
 	  fixed position.
-	  
+
 	  Works under Linux, need to test it in Windows now... ;-)
 
 2009-11-20 14:42  aclemens
@@ -1534,7 +2503,7 @@
 	  This way the text will not scroll, and the prev / next history
 	  item of the
 	  combobox is filled in.
-	  
+
 	  Scrolling is still seen when selecting text with the mouse and
 	  moving the
 	  cursor up or down.
@@ -1684,18 +2653,18 @@
 	  into a
 	  QComboBox, it is possible that something is not working correctly
 	  anymore ;-)
-	  
+
 	  Could you please check if the widget behaves normally?
 	  Does it look normal?
 	  I have size issues with it, see the FIXME comment in
 	  AdvancedRenameInput.
 	  Any ideas how to solve this?
-	  
+
 	  Do you know if the clear-button from KLineEdit is a single class
 	  somewhere, so
 	  that I can embed it next to the QTextEdit again?
 	  Right now you have to select the text manually to remove it.
-	  
+
 	  CCMAIL:digikam-devel@kde.org
 
 2009-11-19 17:44  coles
@@ -2006,7 +2975,7 @@
 
 	* libs/widgets/common/knotificationwrapper.cpp: Add a note: logo
 	  much too big in notification message
-	  
+
 	  CCMAIL:mike@mghansen.de
 
 2009-11-16 11:25  cgilles
@@ -2110,7 +3079,7 @@
 	* utilities/imageeditor/canvas/imageplugin.cpp: Temporary check to
 	  test if the private class and therefore the string object is
 	  missing.
-	  
+
 	  CCBUG:214718
 
 2009-11-15 15:02  aclemens
@@ -2799,7 +3768,7 @@
 	  utilities/timeline/timelinewidget.cpp: As Gilles suggested, do
 	  not include the header file if a moc is also included.
 	  Gilles, please test this under Windows.
-	  
+
 	  If it is working fine, we can remove the commented includes
 	  completely.
 
@@ -2849,7 +3818,7 @@
 	  utilities/cameragui/cameraui_p.h: Add a "Mark as downloaded"
 	  action to the camera download ui and fix availability of "Toggle
 	  Lock" action.
-	  
+
 	  BUG: 204640
 
 2009-11-13 17:32  jwienke
@@ -2928,14 +3897,14 @@
 	* digikam/metadatahub.cpp, digikam/metadatahub.h,
 	  libs/imageproperties/imagedescedittab.cpp: Ensure removed tags
 	  are not kept in map and later accessed when keeping a MetadataHub
-	  
+
 	  CCBUG: 214340
 
 2009-11-13 12:06  mwiesweg
 
 	* libs/models/imagealbummodel.cpp: Ensure that d->currentAlbum is
 	  valid all times
-	  
+
 	  CCBUG: 213916
 
 2009-11-13 10:28  scripty
@@ -2977,7 +3946,7 @@
 
 	* project/ImageAnnotation.odt: Document for discussing ideas for
 	  image annotation and face recognition.
-	  
+
 	  CCBUG: 146288
 	  CCBUG: 146337
 
@@ -3058,14 +4027,14 @@
 	  fields.
 	  The DefaultValueModifier lets you set an default value for empty
 	  parse results.
-	  
+
 	  Example:
-	  
+
 	  filename = "DSC1234.jpg"
 	  cameraname = ""
-	  
+
 	  "[cam]_[file] => "_DSC1234.jpg"
-	  
+
 	  "[cam]{"NikonD50"}_[file] => "NikonD50_DSC1234.jpg"
 
 2009-11-10 12:25  aclemens
@@ -3089,7 +4058,7 @@
 	* digikam/albumwidgetstack.cpp,
 	  utilities/lighttable/lighttablewindow.cpp: Make thumbnail bar in
 	  editor en lighttable docked by default instead of floating.
-	  
+
 	  CCBUGS: 203594
 
 2009-11-09 10:04  aclemens
@@ -3109,7 +4078,7 @@
 	* digikam/digikamview.cpp, digikam/folderview.cpp,
 	  digikam/folderview.h: Fix collapsing of folderview on tag or
 	  album rename.
-	  
+
 	  BUG:213805
 
 2009-11-09 09:38  aclemens

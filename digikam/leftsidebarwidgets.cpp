@@ -89,6 +89,8 @@ AlbumFolderViewSideBarWidget::AlbumFolderViewSideBarWidget(QWidget *parent,
     layout->addWidget(d->albumFolderView);
     layout->addWidget(d->searchTextBar);
 
+    setStateSavingDepth(StateSavingObject::RECURSIVE);
+
     // setup connection
     connect(d->searchTextBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
             d->albumFolderView->albumFilterModel(), SLOT(setSearchTextSettings(const SearchTextSettings&)));
@@ -114,12 +116,10 @@ void AlbumFolderViewSideBarWidget::setActive(bool active)
 
 void AlbumFolderViewSideBarWidget::doLoadState()
 {
-    d->albumFolderView->loadState();
 }
 
 void AlbumFolderViewSideBarWidget::doSaveState()
 {
-    d->albumFolderView->saveState();
 }
 
 void AlbumFolderViewSideBarWidget::applySettings()
@@ -191,6 +191,8 @@ TagViewSideBarWidget::TagViewSideBarWidget(QWidget *parent,
     layout->addWidget(d->tagFolderView);
     layout->addWidget(d->tagSearchBar);
 
+    setStateSavingDepth(StateSavingObject::RECURSIVE);
+
     connect(d->tagSearchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
             d->tagFolderView, SLOT(setSearchTextSettings(const SearchTextSettings&)));
     connect(d->tagFolderView, SIGNAL(signalFindDuplicatesInAlbum(Album*)),
@@ -214,12 +216,10 @@ void TagViewSideBarWidget::setActive(bool active)
 
 void TagViewSideBarWidget::doLoadState()
 {
-    d->tagFolderView->loadState();
 }
 
 void TagViewSideBarWidget::doSaveState()
 {
-    d->tagFolderView->saveState();
 }
 
 void TagViewSideBarWidget::applySettings()
@@ -271,6 +271,8 @@ DateFolderViewSideBarWidget::DateFolderViewSideBarWidget(QWidget *parent,
 
     layout->addWidget(d->dateFolderView);
 
+    setStateSavingDepth(StateSavingObject::RECURSIVE);
+
 }
 
 DateFolderViewSideBarWidget::~DateFolderViewSideBarWidget()
@@ -285,12 +287,10 @@ void DateFolderViewSideBarWidget::setActive(bool active)
 
 void DateFolderViewSideBarWidget::doLoadState()
 {
-    d->dateFolderView->loadViewState();
 }
 
 void DateFolderViewSideBarWidget::doSaveState()
 {
-    d->dateFolderView->saveViewState();
 }
 
 void DateFolderViewSideBarWidget::applySettings()
@@ -549,6 +549,8 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget *parent, SearchModel *searc
     connect(d->nameEdit, SIGNAL(returnPressed(const QString&)),
             d->saveButton, SLOT(animateClick()));
 
+    setStateSavingDepth(StateSavingObject::RECURSIVE);
+
 }
 
 TimelineSideBarWidget::~TimelineSideBarWidget()
@@ -804,6 +806,8 @@ SearchSideBarWidget::SearchSideBarWidget(QWidget *parent,
     layout->addWidget(d->searchTreeView);
     layout->addWidget(d->searchSearchBar);
 
+    setStateSavingDepth(StateSavingObject::RECURSIVE);
+
     connect(d->searchSearchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
             d->searchTreeView, SLOT(setSearchTextSettings(const SearchTextSettings&)));
 
@@ -837,12 +841,10 @@ void SearchSideBarWidget::setActive(bool active)
 
 void SearchSideBarWidget::doLoadState()
 {
-    d->searchTreeView->loadState();
 }
 
 void SearchSideBarWidget::doSaveState()
 {
-    d->searchTreeView->saveState();
 }
 
 void SearchSideBarWidget::applySettings()

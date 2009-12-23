@@ -683,8 +683,8 @@ void ColorCorrectionDlg::readSettings()
         if (settings.lastMissingProfileBehavior == ICCSettingsContainer::NoColorManagement)
         {
             d->imageSRGB->setChecked(true); //?
-            d->thirdCheckBox->setChecked(true);
-            d->thirdCheckBox->setFocus();
+            d->thirdOption->setChecked(true);
+            d->thirdOption->setFocus();
         }
         else
         {

@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-09-14
- * Description : uppercase modifier
+ * Description : modifier to change the case of a renaming option
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -21,29 +21,31 @@
  *
  * ============================================================ */
 
-#include "uppercasemodifier.h"
+#ifndef CASEMODIFIER_H
+#define CASEMODIFIER_H
 
-// KDE includes
+// Local includes
 
-#include <klocale.h>
+#include "modifier.h"
 
 namespace Digikam
 {
 
-UpperCaseModifier::UpperCaseModifier()
-                 : Modifier(i18n("Uppercase"), i18n("Convert to uppercase"))
+class CaseModifier : public Modifier
 {
-    addToken("{upper}", description());
+public:
 
-    QRegExp reg("\\{upper\\}");
-    reg.setMinimal(true);
-    setRegExp(reg);
-}
+    CaseModifier();
+    virtual QString modifyOperation(const ParseSettings& settings, const QString& str2Modify);
 
-QString UpperCaseModifier::modifyOperation(const ParseSettings& settings, const QString& str2Modify)
-{
-    Q_UNUSED(settings);
-    return str2Modify.toUpper();
-}
+private:
+
+    QString firstupper(const QString& str2Modify);
+    QString lower(const QString& str2Modify);
+    QString upper(const QString& str2Modify);
+};
 
 } // namespace Digikam
+
+
+#endif /* CASEMODIFIER_H */

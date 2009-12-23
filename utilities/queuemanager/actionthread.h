@@ -53,7 +53,7 @@ public:
     ~ActionThread();
 
     void setWorkingUrl(const KUrl& workingUrl);
-    void setExifSetOrientation(bool set);
+    void setResetExifOrientationAllowed(bool set);
     void setRawDecodingSettings(const DRawDecoding& settings);
 
     void processFile(const AssignedBatchTools& item);

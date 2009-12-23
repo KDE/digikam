@@ -573,6 +573,7 @@ bool DImg::save(const QString& filePath, const QString& format, DImgLoaderObserv
     if (frm == "JPEG" || frm == "JPG" || frm == "JPE")
     {
         JPEGLoader loader(this);
+        setAttribute("savedformat-isreadonly", loader.isReadOnly());
         return loader.save(filePath, observer);
     }
     else if (frm == "PNG")
@@ -2157,7 +2158,7 @@ QByteArray DImg::getUniqueHash(const QString& filePath)
     return DImgLoader::uniqueHash(filePath, DImg(), true);
 }
 
-void DImg::updateMetadata(const QString& destMimeType, const QString& originalFileName, bool setExifOrientationTag)
+void DImg::updateMetadata(const QString& destMimeType, const QString& originalFileName, bool resetExifOrientationTag)
 {
     // Get image Exif/IPTC data.
     DMetadata meta;
@@ -2208,7 +2209,7 @@ void DImg::updateMetadata(const QString& destMimeType, const QString& originalFi
         meta.setExifTagString("Exif.Image.DocumentName", originalFileName);
 
     // Update Exif Orientation tag if necessary.
-    if(setExifOrientationTag)
+    if(resetExifOrientationTag)
         meta.setImageOrientation(DMetadata::ORIENTATION_NORMAL);
 
     // Store new Exif/IPTC/XMP data into image.

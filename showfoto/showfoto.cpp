@@ -403,14 +403,14 @@ void ShowFoto::setupUserArea()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("ImageViewer Settings");
 
-    QWidget* widget = new QWidget(this);
+    QWidget* widget   = new QWidget(this);
     QHBoxLayout *hlay = new QHBoxLayout(widget);
     m_splitter        = new Digikam::SidebarSplitter(widget);
 
     KMainWindow* viewContainer = new KMainWindow(widget, Qt::Widget);
     m_splitter->addWidget(viewContainer);
-    m_stackView = new Digikam::EditorStackView(viewContainer);
-    m_canvas    = new Digikam::Canvas(m_stackView);
+    m_stackView                = new Digikam::EditorStackView(viewContainer);
+    m_canvas                   = new Digikam::Canvas(m_stackView);
     viewContainer->setCentralWidget(m_stackView);
 
     m_splitter->setStretchFactor(1, 10);      // set Canvas default size to max.

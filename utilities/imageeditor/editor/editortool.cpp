@@ -399,7 +399,6 @@ void EditorToolThreaded::slotOk()
 
     d->currentRenderingMode = EditorToolThreaded::FinalRendering;
     kDebug() << "Final " << toolName() << " started...";
-    writeSettings();
 
     toolSettings()->enableButton(EditorToolSettings::Ok,      false);
     toolSettings()->enableButton(EditorToolSettings::SaveAs,  false);

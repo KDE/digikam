@@ -138,11 +138,11 @@ bool DFontSelect::event(QEvent* e)
 
 void DFontSelect::slotOpenFontDialog()
 {
-    QFont font;
-    const int result = KFontDialog::getFont(font, KFontChooser::NoDisplayFlags, this);
+    QFont f = font();
+    const int result = KFontDialog::getFont(f, KFontChooser::NoDisplayFlags, this);
     if (result == KFontDialog::Accepted)
     {
-        d->font = font;
+        d->font = f;
         d->modeCombo->setFont(d->font);
         emit signalFontChanged();
     }

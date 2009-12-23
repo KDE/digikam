@@ -516,7 +516,7 @@ void QueueMgrWindow::applySettings()
     AlbumSettings *settings   = AlbumSettings::instance();
     KSharedConfig::Ptr config = KGlobal::config();
 
-    d->thread->setExifSetOrientation(settings->getExifSetOrientation());
+    d->thread->setResetExifOrientationAllowed(settings->getExifSetOrientation());
     d->queuePool->setEnableToolTips(settings->getShowToolTips());
 
     // -- RAW images decoding settings ------------------------------------------------------
