@@ -117,6 +117,11 @@ DateAlbumModel *DigikamModelCollection::getDateAlbumModel() const
 
 void DigikamModelCollection::albumSettingsChanged()
 {
+    d->searchModel->setPixmapForMapSearches(SmallIcon("applications-internet", AlbumSettings::instance()->getTreeViewIconSize()));
+    d->searchModel->setPixmapForHaarSearches(SmallIcon("tools-wizard", AlbumSettings::instance()->getTreeViewIconSize()));
+    d->searchModel->setPixmapForNormalSearches(SmallIcon("edit-find", AlbumSettings::instance()->getTreeViewIconSize()));
+    d->searchModel->setPixmapForTimelineSearches(SmallIcon("chronometer", AlbumSettings::instance()->getTreeViewIconSize()));
+
     d->dateAlbumModel->setPixmaps(
                     SmallIcon(
                                     "view-calendar-list",

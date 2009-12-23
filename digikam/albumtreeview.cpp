@@ -811,6 +811,8 @@ PAlbum *AlbumTreeView::albumForIndex(const QModelIndex &index) const
     return dynamic_cast<PAlbum*> (m_albumFilterModel->albumForIndex(index));
 }
 
+// --------------------------------------- //
+
 TagTreeView::TagTreeView(TagModel *model, TagModificationHelper *tagModificationHelper, QWidget *parent)
     : AbstractCheckableAlbumTreeView(model, parent)
 {
@@ -847,6 +849,8 @@ TAlbum *TagTreeView::albumForIndex(const QModelIndex &index) const
     return dynamic_cast<TAlbum*> (m_albumFilterModel->albumForIndex(index));
 }
 
+// --------------------------------------- //
+
 SearchTreeView::SearchTreeView(QWidget *parent, SearchModel *searchModel)
     : AbstractAlbumTreeView(searchModel, 0, parent)
 {
@@ -880,6 +884,8 @@ void SearchTreeView::slotSelectSAlbum(SAlbum *salbum)
 {
     slotSelectAlbum(salbum);
 }
+
+// --------------------------------------- //
 
 DateAlbumTreeView::DateAlbumTreeView(QWidget *parent, DateAlbumModel *dateAlbumModel)
     : AbstractCountingAlbumTreeView(dateAlbumModel, parent)
