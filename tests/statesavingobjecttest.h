@@ -43,6 +43,10 @@ private Q_SLOTS:
     void testGroupName();
     void testPrefixUsage();
     void testDirectCalling();
+    void testDirectChildrenLoading();
+    void testDirectChildrenSaving();
+    void testRecursiveChildrenLoading();
+    void testRecursiveChildrenSaving();
 
 };
 
@@ -51,7 +55,7 @@ class StubStateSaver: public QObject, public Digikam::StateSavingObject
 {
 Q_OBJECT
 public:
-    StubStateSaver();
+    StubStateSaver(QObject *parent = 0);
     virtual ~StubStateSaver();
 
     KConfigGroup getGroup();
@@ -62,6 +66,9 @@ public:
 
     bool loadCalled();
     bool saveCalled();
+
+    unsigned int numLoadCalls();
+    unsigned int numSaveCalls();
 
 private:
     StubStateSaverPriv *d;

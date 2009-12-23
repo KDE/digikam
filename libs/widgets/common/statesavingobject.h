@@ -67,11 +67,45 @@ class StateSavingObjectPriv;
  * generally be a good idea to make the config more readable and recognizable.
  * By default this prefix is empty.
  *
+ * This class also supports recursive saving / loading invocations based on the
+ * QT object hierarchy. As default, calls to loadState() or saveState() only
+ * invoke the doLoadState() or doStateSave() method of the called instance.
+ * This behavoiur can be changed with setStateSavingDepth() to automatically
+ * call children of the instance. Various modes are supported as documented in
+ * StateSavingDepth.
+ *
  * @author jwienke
  */
 class DIGIKAM_EXPORT StateSavingObject
 {
 public:
+
+    /**
+     * This enum defines the "depth" of the StateSavingObject#loadState() and
+     * StateSavingObject#saveState() methods.
+     */
+    enum StateSavingDepth
+    {
+
+        /**
+         * Only the instance the saving / restoring was invoked on is
+         * saved / restored.
+         */
+        INSTANCE,
+
+        /**
+         * The instance itself and all direct children of this instance implementing
+         * StateSavingObject are saved / restored.
+         */
+        DIRECT_CHILDREN,
+
+        /**
+         * The instance and all children in the complete hierarchy are saved /
+         * restored.
+         */
+        RECURSIVE
+
+    };
 
     /**
      * Constructor. Must be called after any QObject-based constructor.
@@ -85,6 +119,21 @@ public:
      * Destructor.
      */
     virtual ~StateSavingObject();
+
+    /**
+     * Returns the depth used for state saving or loading. Default is
+     * StateSavingDepth::INSTANCE.
+     *
+     * @return state saving / restoring depth
+     */
+    StateSavingDepth getStateSavingDepth() const;
+
+    /**
+     * Sets the depth used for state saving or loading.
+     *
+     * @param depth new depth to use
+     */
+    void setStateSavingDepth(StateSavingDepth depth);
 
     /**
      * Sets a dedicated config group that will be used to store and reload

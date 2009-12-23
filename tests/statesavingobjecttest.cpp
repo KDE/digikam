@@ -23,6 +23,10 @@
 
 #include "statesavingobjecttest.moc"
 
+// Qt includes
+
+#include <qbuffer.h>
+
 // KDE includes
 
 #include <kconfiggroup.h>
@@ -42,17 +46,17 @@ class StubStateSaverPriv
 public:
 
     StubStateSaverPriv() :
-        loadCalled(false),
-        saveCalled(false)
+        loadCalls(0),
+        saveCalls(0)
     {
     }
 
-    bool loadCalled;
-    bool saveCalled;
+    unsigned int loadCalls;
+    unsigned int saveCalls;
 };
 
-StubStateSaver::StubStateSaver()
-    : QObject(0), StateSavingObject(this), d(new StubStateSaverPriv)
+StubStateSaver::StubStateSaver(QObject *parent)
+    : QObject(parent), StateSavingObject(this), d(new StubStateSaverPriv)
 {
 }
 
@@ -73,22 +77,32 @@ QString StubStateSaver::getEntryKey(QString base)
 
 void StubStateSaver::doLoadState()
 {
-    d->loadCalled = true;
+    d->loadCalls++;
 }
 
 void StubStateSaver::doSaveState()
 {
-    d->saveCalled = true;
+    d->saveCalls++;
 }
 
 bool StubStateSaver::loadCalled()
 {
-    return d->loadCalled;
+    return d->loadCalls > 0;
 }
 
 bool StubStateSaver::saveCalled()
 {
-    return d->saveCalled;
+    return d->saveCalls > 0;
+}
+
+unsigned int StubStateSaver::numLoadCalls()
+{
+    return d->loadCalls;
+}
+
+unsigned int StubStateSaver::numSaveCalls()
+{
+    return d->saveCalls;
 }
 
 // -----------------------------------------------------------------------------
@@ -147,5 +161,133 @@ void StateSavingObjectTest::testDirectCalling()
     saver.saveState();
     QVERIFY(saver.saveCalled());
     QVERIFY(!saver.loadCalled());
+
+}
+
+void StateSavingObjectTest::testDirectChildrenLoading()
+{
+
+    StubStateSaver *parentSaver = new StubStateSaver(0);
+    StubStateSaver *directChild1 = new StubStateSaver(parentSaver);
+    StubStateSaver *directChild2 = new StubStateSaver(parentSaver);
+    StubStateSaver *indirectChild = new StubStateSaver(directChild1);
+
+    parentSaver->setStateSavingDepth(StateSavingObject::DIRECT_CHILDREN);
+
+    parentSaver->loadState();
+
+    QVERIFY(parentSaver->loadCalled());
+    QVERIFY(directChild1->loadCalled());
+    QVERIFY(directChild2->loadCalled());
+    QVERIFY(!indirectChild->loadCalled());
+
+    QVERIFY(!parentSaver->saveCalled());
+    QVERIFY(!directChild1->saveCalled());
+    QVERIFY(!directChild2->saveCalled());
+    QVERIFY(!indirectChild->saveCalled());
+
+    delete parentSaver;
+
+}
+
+void StateSavingObjectTest::testDirectChildrenSaving()
+{
+
+    StubStateSaver *parentSaver = new StubStateSaver(0);
+    StubStateSaver *directChild1 = new StubStateSaver(parentSaver);
+    StubStateSaver *directChild2 = new StubStateSaver(parentSaver);
+    StubStateSaver *indirectChild = new StubStateSaver(directChild1);
+
+    parentSaver->setStateSavingDepth(StateSavingObject::DIRECT_CHILDREN);
+
+    parentSaver->saveState();
+
+    QVERIFY(parentSaver->saveCalled());
+    QVERIFY(directChild1->saveCalled());
+    QVERIFY(directChild2->saveCalled());
+    QVERIFY(!indirectChild->saveCalled());
+
+    QVERIFY(!parentSaver->loadCalled());
+    QVERIFY(!directChild1->loadCalled());
+    QVERIFY(!directChild2->loadCalled());
+    QVERIFY(!indirectChild->loadCalled());
+
+    delete parentSaver;
+
+}
+
+void StateSavingObjectTest::testRecursiveChildrenLoading()
+{
+
+    StubStateSaver *parentSaver = new StubStateSaver(0);
+    StubStateSaver *directChild1 = new StubStateSaver(parentSaver);
+    StubStateSaver *directChild2 = new StubStateSaver(parentSaver);
+    StubStateSaver *indirectChild1 = new StubStateSaver(directChild1);
+    StubStateSaver *indirectChild2 = new StubStateSaver(directChild2);
+    StubStateSaver *indirectChild3 = new StubStateSaver(directChild2);
+    QBuffer *directChildStateless = new QBuffer(parentSaver);
+    StubStateSaver *indirectStatelessChild = new StubStateSaver(directChildStateless);
+
+    parentSaver->setStateSavingDepth(StateSavingObject::RECURSIVE);
+    directChild1->setStateSavingDepth(StateSavingObject::RECURSIVE);
+
+    parentSaver->loadState();
+
+    QVERIFY(parentSaver->loadCalled());
+    QVERIFY(directChild1->loadCalled());
+    QVERIFY(directChild2->loadCalled());
+    QVERIFY(indirectChild1->loadCalled());
+    QVERIFY(indirectChild2->loadCalled());
+    QVERIFY(indirectChild3->loadCalled());
+    QVERIFY(indirectStatelessChild->loadCalled());
+
+    const unsigned int desiredCalls = 1;
+    QCOMPARE(parentSaver->numLoadCalls(), desiredCalls);
+    QCOMPARE(directChild1->numLoadCalls(), desiredCalls);
+    QCOMPARE(directChild2->numLoadCalls(), desiredCalls);
+    QCOMPARE(indirectChild1->numLoadCalls(), desiredCalls);
+    QCOMPARE(indirectChild2->numLoadCalls(), desiredCalls);
+    QCOMPARE(indirectChild3->numLoadCalls(), desiredCalls);
+    QCOMPARE(indirectStatelessChild->numLoadCalls(), desiredCalls);
+
+    QCOMPARE(directChild1->getStateSavingDepth(), StateSavingObject::RECURSIVE);
+
+}
+
+void StateSavingObjectTest::testRecursiveChildrenSaving()
+{
+
+    StubStateSaver *parentSaver = new StubStateSaver(0);
+    StubStateSaver *directChild1 = new StubStateSaver(parentSaver);
+    StubStateSaver *directChild2 = new StubStateSaver(parentSaver);
+    StubStateSaver *indirectChild1 = new StubStateSaver(directChild1);
+    StubStateSaver *indirectChild2 = new StubStateSaver(directChild2);
+    StubStateSaver *indirectChild3 = new StubStateSaver(directChild2);
+    QBuffer *directChildStateless = new QBuffer(parentSaver);
+    StubStateSaver *indirectStatelessChild = new StubStateSaver(directChildStateless);
+
+    parentSaver->setStateSavingDepth(StateSavingObject::RECURSIVE);
+    directChild1->setStateSavingDepth(StateSavingObject::RECURSIVE);
+
+    parentSaver->saveState();
+
+    QVERIFY(parentSaver->saveCalled());
+    QVERIFY(directChild1->saveCalled());
+    QVERIFY(directChild2->saveCalled());
+    QVERIFY(indirectChild1->saveCalled());
+    QVERIFY(indirectChild2->saveCalled());
+    QVERIFY(indirectChild3->saveCalled());
+    QVERIFY(indirectStatelessChild->saveCalled());
+
+    const unsigned int desiredCalls = 1;
+    QCOMPARE(parentSaver->numSaveCalls(), desiredCalls);
+    QCOMPARE(directChild1->numSaveCalls(), desiredCalls);
+    QCOMPARE(directChild2->numSaveCalls(), desiredCalls);
+    QCOMPARE(indirectChild1->numSaveCalls(), desiredCalls);
+    QCOMPARE(indirectChild2->numSaveCalls(), desiredCalls);
+    QCOMPARE(indirectChild3->numSaveCalls(), desiredCalls);
+    QCOMPARE(indirectStatelessChild->numSaveCalls(), desiredCalls);
+
+    QCOMPARE(directChild1->getStateSavingDepth(), StateSavingObject::RECURSIVE);
 
 }
