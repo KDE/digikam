@@ -65,6 +65,9 @@ public:
 
     void newDuplicatesSearch(Album*);
 
+    void readConfig();
+    void writeConfig();
+
 Q_SIGNALS:
 
     void signalUpdateFingerPrints();
@@ -102,9 +105,6 @@ private:
 
     void setCurrentImage(qlonglong imageid);
     void setCurrentImage(const ImageInfo& info);
-
-    void readConfig();
-    void writeConfig();
 
     void createNewFuzzySearchAlbumFromSketch(const QString& name, bool force = false);
     void createNewFuzzySearchAlbumFromImage(const QString& name, bool force = false);

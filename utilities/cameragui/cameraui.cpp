@@ -329,7 +329,7 @@ void CameraUI::setupUserArea()
     d->advBox->addStretch();
 
     d->rightSideBar->appendTab(d->advBox, SmallIcon("configure"), i18n("Settings"));
-    d->rightSideBar->loadViewState();
+    d->rightSideBar->loadState();
 
     // -------------------------------------------------------------------------
 

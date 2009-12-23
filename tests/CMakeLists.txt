@@ -99,6 +99,21 @@ TARGET_LINK_LIBRARIES(uifilevalidatortest
 
 #------------------------------------------------------------------------
 
+SET(statesavingobject_SRCS
+    statesavingobjecttest.cpp
+)
+
+KDE4_ADD_UNIT_TEST(statesavingobjecttest ${statesavingobject_SRCS})
+TARGET_LINK_LIBRARIES(statesavingobjecttest
+                      ${KDE4_KDECORE_LIBS}
+                      ${QT_QTGUI_LIBRARY}
+                      ${QT_QTTEST_LIBRARY}
+                      ${GPHOTO2_LIBRARIES}
+                      digikamcore
+                      )
+
+#------------------------------------------------------------------------
+
 SET(freerotationtest_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/../imageplugins/freerotation/freerotation.cpp
     freerotationtest.cpp

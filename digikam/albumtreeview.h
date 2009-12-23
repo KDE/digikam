@@ -35,6 +35,7 @@
 
 #include "albummodel.h"
 #include "albumfiltermodel.h"
+#include "statesavingobject.h"
 #include "tagmodificationhelper.h"
 
 namespace Digikam
@@ -55,7 +56,7 @@ class AbstractAlbumTreeViewPriv;
  * default mode no context menu is shown at all. It must be enabled via a call
  * to setEnableContextMenu.
  */
-class AbstractAlbumTreeView : public QTreeView
+class AbstractAlbumTreeView : public QTreeView, public StateSavingObject
 {
     Q_OBJECT
 
@@ -106,8 +107,8 @@ public:
      */
     QModelIndex indexVisuallyAt(const QPoint& p);
 
-    virtual void loadViewState(KConfigGroup &group, QString prefix = QString());
-    virtual void saveViewState(KConfigGroup &group, QString prefix = QString());
+    virtual void doLoadState();
+    virtual void doSaveState();
 
 public Q_SLOTS:
 
@@ -214,7 +215,7 @@ protected:
 
 private:
 
-    void saveState(const QModelIndex &index, QStringList &selection,
+    void saveStateRecursive(const QModelIndex &index, QStringList &selection,
                     QStringList &expansion);
     void restoreState(const QModelIndex &index);
 

@@ -1,0 +1,156 @@
+/* ============================================================
+ *
+ * This file is a part of digikam project
+ * http://www.digikam.org
+ *
+ * Date        : 2009-20-12
+ * Description : Interface class for objects that can store their state.
+ *
+ * Copyright (C) 2009 by Johannes Wienke <languitar at semipol dot de>
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * ============================================================ */
+
+#ifndef STATESAVINGOBJECT_H
+#define STATESAVINGOBJECT_H
+
+// Qt includes
+
+#include <qobject.h>
+
+// KDE includes
+
+#include <kconfiggroup.h>
+
+// Local includes
+
+#include "digikam_export.h"
+
+namespace Digikam
+{
+
+class StateSavingObjectPriv;
+
+/**
+ * An interface-like class with utility methods and a general public interface
+ * to support state saving and restoring for objects via KConfig. Use this class
+ * as a Mixin.
+ *
+ * The public interface for loading and saving state is implemented designed as
+ * template methods. To store ore restore the state of a class, inherit from
+ * this class via multiple inheritance and implement doLoadState() and
+ * doSaveState(). In these methods always use the protected method
+ * getConfigGroup() to access a config group. Also always use the entryName()
+ * method for generating keys in the config (for prefixes, see below).
+ *
+ * Ensure that this class is inherited after a QObject-based class and pass
+ * "this" as constructor argument.
+ *
+ * By default a config group based on Qt's object name of the class is used.
+ * This behaviour can be changed by setting a dedicated config group via
+ * setConfigGroup(). This is useful for to externally control the config group
+ * and shouldn't be used inside the implementing class.
+ *
+ * Additionally to setting the config group, also a prefix for each config group
+ * entry can be defined via setEntryPrefix(). This may be usefull if multiple
+ * instances of the same class shall be stored in the same config group or can
+ * generally be a good idea to make the config more readable and recognizable.
+ * By default this prefix is empty.
+ *
+ * @author jwienke
+ */
+class DIGIKAM_EXPORT StateSavingObject
+{
+public:
+
+    /**
+     * Constructor. Must be called after any QObject-based constructor.
+     *
+     * @param host self-reference to access the object name, simply pass "this"
+     *             as argument
+     */
+    StateSavingObject(QObject *host);
+
+    /**
+     * Destructor.
+     */
+    virtual ~StateSavingObject();
+
+    /**
+     * Sets a dedicated config group that will be used to store and reload
+     * the state from. If this method is not called, a group based on the
+     * object name is used.
+     *
+     * You can re-implement this method to pass the group set here to child
+     * objects. Don't forget to call this method in your implementation.
+     *
+     * @param group config group to use for state saving and restoring
+     */
+    virtual void setConfigGroup(KConfigGroup group);
+
+    /**
+     * Define a prefix that will be used for every entry in the config group.
+     * The default prefix is empty.
+     *
+     * @param prefix prefix to use for the config entries
+     */
+    void setEntryPrefix(const QString &prefix);
+
+    /**
+     * Invokes loading the class' state.
+     */
+    void loadState();
+
+    /**
+     * Implement this hook method for state loading. Use getConfigGroup() and
+     * entryName() for the implementation.
+     */
+    virtual void doLoadState() = 0;
+
+    /**
+     * Invokes saving the class' state.
+     */
+    void saveState();
+
+    /**
+     * Implement this hook method for state saving. Use getConfigGroup() and
+     * entryName() for the implementation.
+     */
+    virtual void doSaveState() = 0;
+
+protected:
+
+    /**
+     * Returns the config group that must be used for state saving and loading.
+     *
+     * @return config group for state saving and loading
+     */
+    KConfigGroup getConfigGroup();
+
+    /**
+     * Always use this method to create config group entry names. This allows
+     * to manipulate the entry keys externally by eg. setting a prefix.
+     *
+     * @param base original name planned for the config group entry
+     * @return entry name after manipulating it with externally set parameters
+     */
+    QString entryName(const QString &base);
+
+private:
+    StateSavingObjectPriv *d;
+
+};
+
+}
+
+#endif /* STATESAVINGOBJECT_H */

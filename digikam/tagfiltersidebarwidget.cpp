@@ -89,9 +89,9 @@ TagFilterView::~TagFilterView()
     delete d;
 }
 
-void TagFilterView::loadViewState(KConfigGroup &group, QString prefix)
+void TagFilterView::doLoadState()
 {
-    TagCheckView::loadViewState(group, prefix);
+    TagCheckView::doLoadState();
 
     // TODO update
 //    KSharedConfig::Ptr config = KGlobal::config();
@@ -103,9 +103,9 @@ void TagFilterView::loadViewState(KConfigGroup &group, QString prefix)
 //                           (group.readEntry("Restore Tag Filters", (int)OffRestoreTagFilters));
 }
 
-void TagFilterView::saveViewState(KConfigGroup &group, QString prefix)
+void TagFilterView::doSaveState()
 {
-    TagCheckView::saveViewState(group, prefix);
+    TagCheckView::doSaveState();
 
     // TODO update
 //    KSharedConfig::Ptr config = KGlobal::config();

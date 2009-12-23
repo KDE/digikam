@@ -39,6 +39,8 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "statesavingobject.h"
+
 
 class QSplitter;
 
@@ -52,7 +54,7 @@ class SidebarSplitterPriv;
 /**
  * This class handles a sidebar view
  */
-class DIGIKAM_EXPORT Sidebar : public KMultiTabBar
+class DIGIKAM_EXPORT Sidebar : public KMultiTabBar, public StateSavingObject
 {
     Q_OBJECT
 
@@ -111,7 +113,7 @@ public:
     /**
      * load the last view state from disk
      */
-    void loadViewState();
+    void doLoadState();
 
     /**
      * hide sidebar and backup minimized state.
@@ -141,12 +143,13 @@ public:
      */
     bool isExpanded();
 
-private:
-
     /**
      * save the view state to disk
      */
-    void saveViewState();
+    void doSaveState();
+
+private:
+
     bool eventFilter(QObject *o, QEvent *e);
     void switchTabAndStackToTab(int tab);
 

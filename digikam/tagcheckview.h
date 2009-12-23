@@ -52,8 +52,8 @@ public:
                      TagModificationHelper *tagModificationHelper);
     virtual ~TagCheckView();
 
-    virtual void loadViewState(KConfigGroup &group, QString prefix = QString());
-    virtual void saveViewState(KConfigGroup &group, QString prefix = QString());
+    virtual void doLoadState();
+    virtual void doSaveState();
 
     QList<TAlbum*> getCheckedTags() const;
 

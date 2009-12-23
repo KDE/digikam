@@ -243,7 +243,7 @@ ImageWindow::ImageWindow()
 
     //-------------------------------------------------------------
 
-    d->rightSideBar->loadViewState();
+    d->rightSideBar->loadState();
     d->rightSideBar->populateTags();
     slotSidebarTabTitleStyleChanged();
 }

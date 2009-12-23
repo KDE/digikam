@@ -139,8 +139,8 @@ LightTableWindow::LightTableWindow()
 
     //-------------------------------------------------------------
 
-    d->leftSideBar->loadViewState();
-    d->rightSideBar->loadViewState();
+    d->leftSideBar->loadState();
+    d->rightSideBar->loadState();
     d->leftSideBar->populateTags();
     d->rightSideBar->populateTags();
     slotSidebarTabTitleStyleChanged();

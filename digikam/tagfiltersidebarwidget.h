@@ -74,8 +74,8 @@ public:
      */
     virtual ~TagFilterView();
 
-    virtual void loadViewState(KConfigGroup &group, QString prefix = QString());
-    virtual void saveViewState(KConfigGroup &group, QString prefix = QString());
+    virtual void doLoadState();
+    virtual void doSaveState();
 
     /**
      * Returns the currently selected matching conditions for tags selected by

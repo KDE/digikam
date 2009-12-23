@@ -104,7 +104,7 @@ public:
 // -------------------------------------------------------------------------------------
 
 Sidebar::Sidebar(QWidget *parent, SidebarSplitter *sp, KMultiTabBarPosition side, bool minimizedDefault)
-       : KMultiTabBar(side, parent), d(new SidebarPriv)
+       : KMultiTabBar(side, parent), StateSavingObject(this), d(new SidebarPriv)
 {
     d->splitter         = sp;
     d->minimizedDefault = minimizedDefault;
@@ -121,7 +121,7 @@ Sidebar::Sidebar(QWidget *parent, SidebarSplitter *sp, KMultiTabBarPosition side
 
 Sidebar::~Sidebar()
 {
-    saveViewState();
+    saveState();
     if (d->splitter)
         d->splitter->d->sidebars.removeAll(this);
     delete d;
@@ -132,10 +132,9 @@ SidebarSplitter* Sidebar::splitter() const
     return d->splitter;
 }
 
-void Sidebar::loadViewState()
+void Sidebar::doLoadState()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(QString("%1").arg(objectName()));
+    KConfigGroup group        = getConfigGroup();
     int tab                   = group.readEntry("ActiveTab",   0);
     bool minimized            = group.readEntry("Minimized",   d->minimizedDefault);
     d->restoreSize            = group.readEntry("RestoreSize", -1);
@@ -158,14 +157,12 @@ void Sidebar::loadViewState()
     clicked(tab);
 }
 
-void Sidebar::saveViewState()
+void Sidebar::doSaveState()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(QString("%1").arg(objectName()));
+    KConfigGroup group        = getConfigGroup();
     group.writeEntry("ActiveTab",   d->activeTab);
     group.writeEntry("Minimized",   d->minimized);
     group.writeEntry("RestoreSize", d->minimized ? d->restoreSize : -1);
-    config->sync();
 }
 
 void Sidebar::backup()

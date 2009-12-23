@@ -524,13 +524,14 @@ void DigikamView::connectIconViewFilter(AlbumIconViewFilter *filter)
 
 void DigikamView::loadViewState()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("MainWindow");
 
     foreach(SidebarWidget *widget, d->leftSideBarWidgets)
     {
-        widget->loadViewState(group);
+        widget->loadState();
     }
+
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group("MainWindow");
 
     // Restore the splitter
     d->splitter->restoreState(group);
@@ -550,7 +551,7 @@ void DigikamView::saveViewState()
 
     foreach(SidebarWidget *widget, d->leftSideBarWidgets)
     {
-        widget->saveViewState(group);
+        widget->saveState();
     }
 
     // Save the splitter states.
@@ -627,8 +628,8 @@ void DigikamView::slotAllAlbumsLoaded()
                this, SLOT(slotAllAlbumsLoaded()));
 
     loadViewState();
-    d->leftSideBar->loadViewState();
-    d->rightSideBar->loadViewState();
+    d->leftSideBar->loadState();
+    d->rightSideBar->loadState();
     d->rightSideBar->populateTags();
 
     // now that all albums have been loaded, activate the albumHistory

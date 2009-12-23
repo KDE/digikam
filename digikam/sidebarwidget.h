@@ -25,16 +25,20 @@
 #define SIDEBARWIDGET_H
 
 // QT includes
+
 #include <qpixmap.h>
 #include <qwidget.h>
 
 // KDE includes
+
 #include <kconfiggroup.h>
 #include <kiconloader.h>
 
 // Local includes
+
 #include "album.h"
 #include "imageinfo.h"
+#include "statesavingobject.h"
 
 namespace Digikam
 {
@@ -44,7 +48,7 @@ namespace Digikam
  *
  * @author jwienke
  */
-class SidebarWidget: public QWidget
+class SidebarWidget: public QWidget, public StateSavingObject
 {
 Q_OBJECT
 public:
@@ -68,21 +72,6 @@ public:
      *        widget is active
      */
     virtual void setActive(bool active) = 0;
-
-    /**
-     * This method must be implemented to restore the last state of the sidebar
-     * widget from the config.
-     *
-     * @param group config group to use to restore from
-     */
-    virtual void loadViewState(KConfigGroup &group) = 0;
-
-    /**
-     * This method must be implemented to store the current state.
-     *
-     * @param group config croup to store state to
-     */
-    virtual void saveViewState(KConfigGroup &group) = 0;
 
     /**
      * This method is invoked when the application settings should be (re-)

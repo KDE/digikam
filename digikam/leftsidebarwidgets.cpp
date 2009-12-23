@@ -81,6 +81,7 @@ AlbumFolderViewSideBarWidget::AlbumFolderViewSideBarWidget(QWidget *parent,
     QVBoxLayout *layout = new QVBoxLayout(this);
 
     d->albumFolderView = new AlbumSelectionTreeView(this, model, d->albumModificationHelper);
+    d->albumFolderView->setConfigGroup(getConfigGroup());
     d->searchTextBar   = new SearchTextBar(this, "DigikamViewFolderSearchBar");
     d->searchTextBar->setHighlightOnCompletion(true);
     d->searchTextBar->setModel(model, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
@@ -111,14 +112,14 @@ void AlbumFolderViewSideBarWidget::setActive(bool active)
     }
 }
 
-void AlbumFolderViewSideBarWidget::loadViewState(KConfigGroup &group)
+void AlbumFolderViewSideBarWidget::doLoadState()
 {
-    d->albumFolderView->loadViewState(group, "AlbumFolderView");
+    d->albumFolderView->loadState();
 }
 
-void AlbumFolderViewSideBarWidget::saveViewState(KConfigGroup &group)
+void AlbumFolderViewSideBarWidget::doSaveState()
 {
-    d->albumFolderView->saveViewState(group, "AlbumFolderView");
+    d->albumFolderView->saveState();
 }
 
 void AlbumFolderViewSideBarWidget::applySettings()
@@ -174,12 +175,15 @@ TagViewSideBarWidget::TagViewSideBarWidget(QWidget *parent,
     SidebarWidget(parent), d(new TagViewSideBarWidgetPriv)
 {
 
+    setObjectName("TagView Sidebar");
+
     d->tagModel = model;
     d->tagModificationHelper = tagModificationHelper;
 
     QVBoxLayout *layout = new QVBoxLayout(this);
 
     d->tagFolderView = new TagFolderViewNew(this, model, tagModificationHelper);
+    d->tagFolderView->setConfigGroup(getConfigGroup());
     d->tagSearchBar  = new SearchTextBar(this, "DigikamViewTagSearchBar");
     d->tagSearchBar->setHighlightOnCompletion(true);
     d->tagSearchBar->setModel(model, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
@@ -208,14 +212,14 @@ void TagViewSideBarWidget::setActive(bool active)
     }
 }
 
-void TagViewSideBarWidget::loadViewState(KConfigGroup &group)
+void TagViewSideBarWidget::doLoadState()
 {
-    d->tagFolderView->loadViewState(group, "TagFolderView");
+    d->tagFolderView->loadState();
 }
 
-void TagViewSideBarWidget::saveViewState(KConfigGroup &group)
+void TagViewSideBarWidget::doSaveState()
 {
-    d->tagFolderView->saveViewState(group, "TagFolderView");
+    d->tagFolderView->saveState();
 }
 
 void TagViewSideBarWidget::applySettings()
@@ -279,12 +283,14 @@ void DateFolderViewSideBarWidget::setActive(bool active)
     d->dateFolderView->setActive(active);
 }
 
-void DateFolderViewSideBarWidget::loadViewState(KConfigGroup &group)
+void DateFolderViewSideBarWidget::doLoadState()
 {
+    d->dateFolderView->loadViewState();
 }
 
-void DateFolderViewSideBarWidget::saveViewState(KConfigGroup &group)
+void DateFolderViewSideBarWidget::doSaveState()
 {
+    d->dateFolderView->saveViewState();
 }
 
 void DateFolderViewSideBarWidget::applySettings()
@@ -317,7 +323,6 @@ class TimelineSideBarWidgetPriv
 {
 public:
     TimelineSideBarWidgetPriv() :
-        configGroupName("TimeLine SideBar"),
         configHistogramTimeUnitEntry("Histogram TimeUnit"),
         configHistogramScaleEntry("Histogram Scale"),
         configCursorPositionEntry("Cursor Position"),
@@ -339,7 +344,6 @@ public:
     {}
 
 
-    const QString       configGroupName;
     const QString       configHistogramTimeUnitEntry;
     const QString       configHistogramScaleEntry;
     const QString       configCursorPositionEntry;
@@ -368,6 +372,8 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget *parent, SearchModel *searc
                                              SearchModificationHelper *searchModificationHelper) :
     SidebarWidget(parent), d(new TimelineSideBarWidgetPriv)
 {
+
+    setObjectName("TimeLine SideBar");
 
     d->searchModificationHelper = searchModificationHelper;
 
@@ -556,10 +562,7 @@ void TimelineSideBarWidget::slotInit()
     // AlbumManager query Date KIO slave to stats items from database and it can take a while.
     // We waiting than TimeLineWidget is ready before to set last config from users.
 
-    // TODO update...
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(d->configGroupName);
-    loadViewState(group);
+    loadState();
 
     disconnect(d->timeLineWidget, SIGNAL(signalDateMapChanged()),
                this, SLOT(slotInit()));
@@ -577,11 +580,9 @@ void TimelineSideBarWidget::setActive(bool active)
     }
 }
 
-// TODO update, what about these groups...
-void TimelineSideBarWidget::loadViewState(KConfigGroup& /*group*/)
+void TimelineSideBarWidget::doLoadState()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(d->configGroupName);
+    KConfigGroup group = getConfigGroup();
 
     d->timeUnitCB->setCurrentIndex(group.readEntry(d->configHistogramTimeUnitEntry, (int)TimeLineWidget::Month));
     slotTimeUnitChanged(d->timeUnitCB->currentIndex());
@@ -596,10 +597,9 @@ void TimelineSideBarWidget::loadViewState(KConfigGroup& /*group*/)
     d->timeLineWidget->setCurrentIndex(d->timeLineWidget->indexForCursorDateTime());
 }
 
-void TimelineSideBarWidget::saveViewState(KConfigGroup& /*group*/)
+void TimelineSideBarWidget::doSaveState()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(d->configGroupName);
+    KConfigGroup group = getConfigGroup();
 
     group.writeEntry(d->configHistogramTimeUnitEntry, d->timeUnitCB->currentIndex());
     group.writeEntry(d->configHistogramScaleEntry,    d->scaleBG->checkedId());
@@ -784,6 +784,8 @@ SearchSideBarWidget::SearchSideBarWidget(QWidget *parent,
     SidebarWidget(parent), d(new SearchSideBarWidgetPriv)
 {
 
+    setObjectName("Search Sidebar");
+
     d->searchModel = searchModel;
 
     QVBoxLayout *layout = new QVBoxLayout(this);
@@ -791,6 +793,7 @@ SearchSideBarWidget::SearchSideBarWidget(QWidget *parent,
     d->searchTabHeader  = new SearchTabHeader(this);
     d->searchTreeView   = new NormalSearchTreeView(this, searchModel,
                                                    searchModeificationHelper);
+    d->searchTreeView->setConfigGroup(getConfigGroup());
     d->searchTreeView->filteredModel()->listNormalSearches();
     d->searchTreeView->filteredModel()->setListTemporarySearches(true);
     d->searchSearchBar  = new SearchTextBar(this, "DigikamViewSearchSearchBar");
@@ -832,12 +835,14 @@ void SearchSideBarWidget::setActive(bool active)
     }
 }
 
-void SearchSideBarWidget::loadViewState(KConfigGroup &group)
+void SearchSideBarWidget::doLoadState()
 {
+    d->searchTreeView->loadState();
 }
 
-void SearchSideBarWidget::saveViewState(KConfigGroup &group)
+void SearchSideBarWidget::doSaveState()
 {
+    d->searchTreeView->saveState();
 }
 
 void SearchSideBarWidget::applySettings()
@@ -890,6 +895,8 @@ FuzzySearchSideBarWidget::FuzzySearchSideBarWidget(QWidget *parent,
     SidebarWidget(parent), d(new FuzzySearchSideBarWidgetPriv)
 {
 
+    setObjectName("Fuzzy Search Sidebar");
+
     d->searchModel = searchModel;
 
     d->fuzzySearchView  = new FuzzySearchView(searchModel, searchModificationHelper, this);
@@ -921,12 +928,14 @@ void FuzzySearchSideBarWidget::setActive(bool active)
     }
 }
 
-void FuzzySearchSideBarWidget::loadViewState(KConfigGroup &group)
+void FuzzySearchSideBarWidget::doLoadState()
 {
+    d->fuzzySearchView->readConfig();
 }
 
-void FuzzySearchSideBarWidget::saveViewState(KConfigGroup &group)
+void FuzzySearchSideBarWidget::doSaveState()
 {
+    d->fuzzySearchView->writeConfig();
 }
 
 void FuzzySearchSideBarWidget::applySettings()
@@ -986,6 +995,8 @@ GPSSearchSideBarWidget::GPSSearchSideBarWidget(QWidget *parent, SearchModel *sea
     SidebarWidget(parent), d(new GPSSearchSideBarWidgetPriv)
 {
 
+    setObjectName("GPS Search Sidebar");
+
     d->searchModel = searchModel;
 
     d->gpsSearchView    = new GPSSearchView(this, searchModel, searchModificationHelper);
@@ -1012,12 +1023,14 @@ void GPSSearchSideBarWidget::setActive(bool active)
     d->gpsSearchView->setActive(active);
 }
 
-void GPSSearchSideBarWidget::loadViewState(KConfigGroup &group)
+void GPSSearchSideBarWidget::doLoadState()
 {
+    d->gpsSearchView->readConfig();
 }
 
-void GPSSearchSideBarWidget::saveViewState(KConfigGroup &group)
+void GPSSearchSideBarWidget::doSaveState()
 {
+    d->gpsSearchView->writeConfig();
 }
 
 void GPSSearchSideBarWidget::applySettings()
@@ -1026,6 +1039,7 @@ void GPSSearchSideBarWidget::applySettings()
 
 void GPSSearchSideBarWidget::changeAlbumFromHistory(Album *album)
 {
+    d->gpsSearchView->changeAlbumFromHistory(dynamic_cast<SAlbum*> (album));
 }
 
 QPixmap GPSSearchSideBarWidget::getIcon()
@@ -1043,7 +1057,6 @@ void GPSSearchSideBarWidget::slotDigikamViewNoCurrentItem()
     d->gpsSearchView->slotDigikamViewNoCurrentItem();
 }
 
-// TODO what are the variable names?
 void GPSSearchSideBarWidget::slotDigikamViewImageSelected(const ImageInfoList &selectedImage, bool hasPrevious, bool hasNext, const ImageInfoList &allImages)
 {
     d->gpsSearchView->slotDigikamViewImageSelected(selectedImage, hasPrevious, hasNext, allImages);

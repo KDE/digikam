@@ -244,8 +244,6 @@ GPSSearchView::GPSSearchView(QWidget *parent, SearchModel *searchModel,
 
     vlay->addWidget(d->splitter);
 
-    readConfig();
-
     // ---------------------------------------------------------------
 
     connect(d->searchTreeView, SIGNAL(currentAlbumChanged(Album*)),
@@ -282,7 +280,6 @@ GPSSearchView::GPSSearchView(QWidget *parent, SearchModel *searchModel,
 
 GPSSearchView::~GPSSearchView()
 {
-    writeConfig();
     delete d;
 }
 
@@ -332,6 +329,11 @@ void GPSSearchView::setActive(bool val)
     {
         // TODO
     }
+}
+
+void GPSSearchView::changeAlbumFromHistory(SAlbum *album)
+{
+    d->searchTreeView->slotSelectSAlbum(album);
 }
 
 void GPSSearchView::slotSaveGPSSAlbum()

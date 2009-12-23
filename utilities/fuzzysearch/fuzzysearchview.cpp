@@ -231,7 +231,6 @@ FuzzySearchView::FuzzySearchView(SearchModel *searchModel,
 
     // ---------------------------------------------------------------
 
-    readConfig();
     setupConnections();
 
     // ---------------------------------------------------------------
@@ -492,7 +491,6 @@ void FuzzySearchView::setupConnections()
 
 FuzzySearchView::~FuzzySearchView()
 {
-    writeConfig();
     delete d->timerSketch;
     delete d->timerImage;
     delete d;

@@ -119,11 +119,11 @@ class AbstractAlbumTreeViewPriv
 
 public:
     AbstractAlbumTreeViewPriv() :
-        configSuffixSelection("Selection"),
-        configSuffixExpansion("Expansion"),
-        configSuffixCurrentIndex("CurrentIndex"),
-        configSuffixSortColumn("SortColumn"),
-        configSuffixSortOrder("SortOrder")
+        configSelectionEntry("Selection"),
+        configExpansionEntry("Expansion"),
+        configCurrentIndexEntry("CurrentIndex"),
+        configSortColumnEntry("SortColumn"),
+        configSortOrderEntry("SortOrder")
     {
         delegate            = 0;
         expandOnSingleClick = true;
@@ -141,16 +141,17 @@ public:
 
     QMap<int, State> statesByAlbumId;
 
-    const QString configSuffixSelection;
-    const QString configSuffixExpansion;
-    const QString configSuffixCurrentIndex;
-    const QString configSuffixSortColumn;
-    const QString configSuffixSortOrder;
+    const QString configSelectionEntry;
+    const QString configExpansionEntry;
+    const QString configCurrentIndexEntry;
+    const QString configSortColumnEntry;
+    const QString configSortOrderEntry;
 
 };
 
 AbstractAlbumTreeView::AbstractAlbumTreeView(AbstractSpecificAlbumModel *model, AlbumFilterModel *filterModel, QWidget *parent)
-    : QTreeView(parent), m_albumModel(0), m_albumFilterModel(0),
+    : QTreeView(parent), StateSavingObject(this),
+      m_albumModel(0), m_albumFilterModel(0),
       d(new AbstractAlbumTreeViewPriv)
 {
     m_checkOnMiddleClick  = false;
@@ -416,12 +417,14 @@ void AbstractAlbumTreeView::dropEvent(QDropEvent *e)
     }
 }
 
-void AbstractAlbumTreeView::loadViewState(KConfigGroup &configGroup, QString prefix)
+void AbstractAlbumTreeView::doLoadState()
 {
+
+    KConfigGroup configGroup = getConfigGroup();
 
     kDebug() << "Loading view state from " << configGroup.name();
 
-    const QStringList selection = configGroup.readEntry(prefix + d->configSuffixSelection,
+    const QStringList selection = configGroup.readEntry(entryName(d->configSelectionEntry),
                     QStringList());
     foreach(const QString &key, selection)
     {
@@ -433,7 +436,7 @@ void AbstractAlbumTreeView::loadViewState(KConfigGroup &configGroup, QString pre
         }
     }
 
-    const QStringList expansion = configGroup.readEntry(prefix + d->configSuffixExpansion,
+    const QStringList expansion = configGroup.readEntry(entryName(d->configExpansionEntry),
                     QStringList());
     foreach( const QString &key, expansion )
     {
@@ -445,7 +448,7 @@ void AbstractAlbumTreeView::loadViewState(KConfigGroup &configGroup, QString pre
         }
     }
 
-    const QString key = configGroup.readEntry(prefix + d->configSuffixCurrentIndex, QString());
+    const QString key = configGroup.readEntry(entryName(d->configCurrentIndexEntry), QString());
     bool validId;
     const int id = key.toInt(&validId);
     if (validId)
@@ -480,8 +483,8 @@ void AbstractAlbumTreeView::loadViewState(KConfigGroup &configGroup, QString pre
     //                 SLOT(slotFixRowsInserted(QModelIndex, int, int)), Qt::QueuedConnection);
 
     // also restore the sorting order
-    sortByColumn(configGroup.readEntry(prefix + d->configSuffixSortColumn, 0),
-                 (Qt::SortOrder) configGroup.readEntry(prefix + d->configSuffixSortOrder, (int) Qt::AscendingOrder));
+    sortByColumn(configGroup.readEntry(entryName(d->configSortColumnEntry), 0),
+                 (Qt::SortOrder) configGroup.readEntry(entryName(d->configSortOrderEntry), (int) Qt::AscendingOrder));
 
 }
 
@@ -532,14 +535,16 @@ void AbstractAlbumTreeView::slotFixRowsInserted(const QModelIndex &index, int st
     }
 }
 
-void AbstractAlbumTreeView::saveViewState(KConfigGroup &configGroup, QString prefix)
+void AbstractAlbumTreeView::doSaveState()
 {
+
+    KConfigGroup configGroup = getConfigGroup();
 
     QStringList selection, expansion;
     for (int i = 0; i < model()->rowCount(); ++i)
     {
         const QModelIndex index = model()->index(i, 0);
-        saveState(index, selection, expansion);
+        saveStateRecursive(index, selection, expansion);
     }
 
     Album *selectedAlbum = albumFilterModel()->albumForIndex(selectionModel()->currentIndex());
@@ -549,15 +554,15 @@ void AbstractAlbumTreeView::saveViewState(KConfigGroup &configGroup, QString pre
         currentIndex = QString::number(selectedAlbum->id());
     }
 
-    configGroup.writeEntry(prefix + d->configSuffixSelection, selection);
-    configGroup.writeEntry(prefix + d->configSuffixExpansion, expansion);
-    configGroup.writeEntry(prefix + d->configSuffixCurrentIndex, currentIndex);
-    configGroup.writeEntry(prefix + d->configSuffixSortColumn, albumFilterModel()->sortColumn());
-    configGroup.writeEntry(prefix + d->configSuffixSortOrder, (int) albumFilterModel()->sortOrder());
+    configGroup.writeEntry(entryName(d->configSelectionEntry), selection);
+    configGroup.writeEntry(entryName(d->configExpansionEntry), expansion);
+    configGroup.writeEntry(entryName(d->configCurrentIndexEntry), currentIndex);
+    configGroup.writeEntry(entryName(d->configSortColumnEntry), albumFilterModel()->sortColumn());
+    configGroup.writeEntry(entryName(d->configSortOrderEntry), (int) albumFilterModel()->sortOrder());
 
 }
 
-void AbstractAlbumTreeView::saveState(const QModelIndex &index, QStringList &selection,
+void AbstractAlbumTreeView::saveStateRecursive(const QModelIndex &index, QStringList &selection,
                 QStringList &expansion)
 {
     const QString cfgKey = QString::number(albumFilterModel()->albumForIndex(
@@ -569,7 +574,7 @@ void AbstractAlbumTreeView::saveState(const QModelIndex &index, QStringList &sel
     for (int i = 0; i < model()->rowCount(index); ++i)
     {
         const QModelIndex child = model()->index(i, 0, index);
-        saveState(child, selection, expansion);
+        saveStateRecursive(child, selection, expansion);
     }
 }
 

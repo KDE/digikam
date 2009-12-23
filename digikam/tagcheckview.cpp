@@ -144,9 +144,9 @@ void TagCheckView::slotCheckStateChange(Album *album, Qt::CheckState state)
 
 }
 
-void TagCheckView::loadViewState(KConfigGroup &group, QString prefix)
+void TagCheckView::doLoadState()
 {
-    TagFolderViewNew::loadViewState(group, prefix);
+    TagFolderViewNew::doLoadState();
 
     // TODO update
 //    KSharedConfig::Ptr config = KGlobal::config();
@@ -155,9 +155,9 @@ void TagCheckView::loadViewState(KConfigGroup &group, QString prefix)
 //                           (group.readEntry("Toggle Auto Tags", (int)NoToggleAuto));
 }
 
-void TagCheckView::saveViewState(KConfigGroup &group, QString prefix)
+void TagCheckView::doSaveState()
 {
-    TagFolderViewNew::saveViewState(group, prefix);
+    TagFolderViewNew::doSaveState();
 
     // TODO update
 //    KSharedConfig::Ptr config = KGlobal::config();

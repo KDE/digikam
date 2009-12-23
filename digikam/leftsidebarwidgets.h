@@ -54,8 +54,8 @@ public:
     virtual ~AlbumFolderViewSideBarWidget();
 
     void setActive(bool active);
-    void loadViewState(KConfigGroup &group);
-    void saveViewState(KConfigGroup &group);
+    void doLoadState();
+    void doSaveState();
     void applySettings();
     void changeAlbumFromHistory(Album *album);
     QPixmap getIcon();
@@ -87,8 +87,8 @@ public:
     virtual ~TagViewSideBarWidget();
 
     void setActive(bool active);
-    void loadViewState(KConfigGroup &group);
-    void saveViewState(KConfigGroup &group);
+    void doLoadState();
+    void doSaveState();
     void applySettings();
     void changeAlbumFromHistory(Album *album);
     QPixmap getIcon();
@@ -124,8 +124,8 @@ public:
     virtual ~DateFolderViewSideBarWidget();
 
     void setActive(bool active);
-    void loadViewState(KConfigGroup &group);
-    void saveViewState(KConfigGroup &group);
+    void doLoadState();
+    void doSaveState();
     void applySettings();
     void changeAlbumFromHistory(Album *album);
     QPixmap getIcon();
@@ -153,8 +153,8 @@ public:
     virtual ~TimelineSideBarWidget();
 
     void setActive(bool active);
-    void loadViewState(KConfigGroup &group);
-    void saveViewState(KConfigGroup &group);
+    void doLoadState();
+    void doSaveState();
     void applySettings();
     void changeAlbumFromHistory(Album *album);
     QPixmap getIcon();
@@ -195,8 +195,8 @@ public:
     virtual ~SearchSideBarWidget();
 
     void setActive(bool active);
-    void loadViewState(KConfigGroup &group);
-    void saveViewState(KConfigGroup &group);
+    void doLoadState();
+    void doSaveState();
     void applySettings();
     void changeAlbumFromHistory(Album *album);
     QPixmap getIcon();
@@ -225,8 +225,8 @@ public:
     virtual ~FuzzySearchSideBarWidget();
 
     void setActive(bool active);
-    void loadViewState(KConfigGroup &group);
-    void saveViewState(KConfigGroup &group);
+    void doLoadState();
+    void doSaveState();
     void applySettings();
     void changeAlbumFromHistory(Album *album);
     QPixmap getIcon();
@@ -259,8 +259,8 @@ public:
     virtual ~GPSSearchSideBarWidget();
 
     void setActive(bool active);
-    void loadViewState(KConfigGroup &group);
-    void saveViewState(KConfigGroup &group);
+    void doLoadState();
+    void doSaveState();
     void applySettings();
     void changeAlbumFromHistory(Album *album);
     QPixmap getIcon();

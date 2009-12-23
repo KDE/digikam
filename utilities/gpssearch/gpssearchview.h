@@ -62,14 +62,17 @@ public:
 
     void setActive(bool val);
 
+    void changeAlbumFromHistory(SAlbum *album);
+
+    void readConfig();
+    void writeConfig();
+
 public Q_SLOTS:
     void slotDigikamViewNoCurrentItem();
     void slotDigikamViewImageSelected(const ImageInfoList &selectedImage, bool hasPrevious, bool hasNext, const ImageInfoList &allImages);
 
 private:
 
-    void readConfig();
-    void writeConfig();
 
     bool checkName(QString& name);
     bool checkAlbum(const QString& name) const;
