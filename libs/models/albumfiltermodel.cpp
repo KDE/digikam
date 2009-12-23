@@ -43,6 +43,7 @@ namespace Digikam
 AlbumFilterModel::AlbumFilterModel(QObject *parent)
     : QSortFilterProxyModel(parent)
 {
+    m_chainedModel = 0;
     setDynamicSortFilter(true);
 }
 
@@ -80,6 +81,13 @@ SearchTextSettings AlbumFilterModel::searchTextSettings() const
 
 void AlbumFilterModel::setSourceAlbumModel(AbstractAlbumModel *source)
 {
+    m_chainedModel = 0;
+    setSourceModel(source);
+}
+
+void AlbumFilterModel::setSourceAlbumModel(AlbumFilterModel *source)
+{
+    m_chainedModel = source;
     setSourceModel(source);
 }
 
@@ -91,12 +99,21 @@ void AlbumFilterModel::setSourceModel(QAbstractItemModel* model)
 
 AbstractAlbumModel *AlbumFilterModel::sourceAlbumModel() const
 {
+    if (m_chainedModel)
+        return m_chainedModel->sourceAlbumModel();
     return static_cast<AbstractAlbumModel*>(sourceModel());
+}
+
+QModelIndex AlbumFilterModel::mapToSourceAlbumModel(const QModelIndex& index) const
+{
+    if (m_chainedModel)
+        return m_chainedModel->mapToSourceAlbumModel(mapToSource(index));
+    return mapToSource(index);
 }
 
 Album *AlbumFilterModel::albumForIndex(const QModelIndex& index) const
 {
-    return sourceAlbumModel()->albumForIndex(mapToSource(index));
+    return sourceAlbumModel()->albumForIndex(mapToSourceAlbumModel(index));
 }
 
 QModelIndex AlbumFilterModel::indexForAlbum(Album *album) const
@@ -111,7 +128,7 @@ QModelIndex AlbumFilterModel::rootAlbumIndex() const
 
 AlbumFilterModel::MatchResult AlbumFilterModel::matches(const QModelIndex& index) const
 {
-    return matches(sourceAlbumModel()->albumForIndex(mapToSource(index)));
+    return matches(sourceAlbumModel()->albumForIndex(mapToSourceAlbumModel(index)));
 }
 
 bool AlbumFilterModel::rawMatches(Album *album) const

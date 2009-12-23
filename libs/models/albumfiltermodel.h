@@ -46,8 +46,10 @@ public:
     AlbumFilterModel(QObject *parent = 0);
 
     void setSourceAlbumModel(AbstractAlbumModel *source);
+    void setSourceAlbumModel(AlbumFilterModel *source);
 
     AbstractAlbumModel *sourceAlbumModel() const;
+    QModelIndex mapToSourceAlbumModel(const QModelIndex& index) const;
 
     Album *albumForIndex(const QModelIndex& index) const;
     QModelIndex indexForAlbum(Album *album) const;
@@ -101,6 +103,7 @@ protected:
 protected:
 
     SearchTextSettings m_settings;
+    AlbumFilterModel  *m_chainedModel;
 };
 
 /**
