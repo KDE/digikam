@@ -212,6 +212,7 @@ protected:
     AlbumFilterModel           *m_albumFilterModel;
 
     bool     m_checkOnMiddleClick;
+    bool     m_restoreCheckState;
 
 private:
 
@@ -263,6 +264,7 @@ private:
     void setupConnections();
 };
 
+class AbstractCheckableAlbumTreeViewPriv;
 class AbstractCheckableAlbumTreeView : public AbstractCountingAlbumTreeView
 {
 Q_OBJECT
@@ -275,6 +277,8 @@ public:
                                             QWidget *parent = 0);
     explicit AbstractCheckableAlbumTreeView(AbstractCheckableAlbumModel *model, QWidget *parent = 0);
 
+    virtual ~AbstractCheckableAlbumTreeView();
+
     /// Manage check state through the model directly
     AbstractCheckableAlbumModel *checkableModel() const;
     CheckableAlbumFilterModel *checkableAlbumFilterModel() const;
@@ -282,9 +286,39 @@ public:
     /// Enable checking on middle mouse button click (default: on)
     void setCheckOnMiddleClick(bool doThat);
 
+    /**
+     * Tells if the check state is restored while loading / saving state.
+     *
+     * TODO tristate not supported right now
+     *
+     * @return true if restoring check state is active
+     */
+    bool isRestoreCheckState() const;
+
+    /**
+     * Set whether to restore check state or not.
+     *
+     * @param restore if true, restore check state
+     */
+    void setRestoreCheckState(bool restore);
+
+    virtual void doLoadState();
+    virtual void doSaveState();
+
 protected:
 
     virtual void middleButtonPressed(Album *a);
+
+private Q_SLOTS:
+
+    void slotRowsAddedCheckState(QModelIndex index, int start, int end);
+
+private:
+
+    void restoreCheckState(const QModelIndex &index);
+
+    AbstractCheckableAlbumTreeViewPriv *d;
+
 };
 
 class AlbumTreeViewPriv;

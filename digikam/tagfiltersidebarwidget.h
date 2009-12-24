@@ -51,16 +51,6 @@ class TagFilterView : public TagCheckView
 public:
 
     /**
-     * Possible states determining how the last tag filter is restored after
-     * restarting the application.
-     */
-    enum RestoreTagFilters
-    {
-        OffRestoreTagFilters = 0,
-        OnRestoreTagFilters
-    };
-
-    /**
      * Constructor.
      *
      * @param parent parent for qt parent child mechanism

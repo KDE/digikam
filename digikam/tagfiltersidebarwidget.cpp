@@ -45,16 +45,13 @@ public:
 
     TagFilterViewPriv() :
         configMatchingConditionEntry("Matching Condition"),
-        matchingCond(ImageFilterSettings::OrCondition),
-        restoreTagFilters(TagFilterView::OffRestoreTagFilters)
+        matchingCond(ImageFilterSettings::OrCondition)
     {
     }
 
     const QString configMatchingConditionEntry;
 
     ImageFilterSettings::MatchingCondition matchingCond;
-    // TODO update, implement this
-    TagFilterView::RestoreTagFilters    restoreTagFilters;
 
     TagModel *tagFilterModel;
     TagModificationHelper *tagModificationHelper;
@@ -101,10 +98,6 @@ void TagFilterView::doLoadState()
                       (group.readEntry(entryName(d->configMatchingConditionEntry), (int)ImageFilterSettings::OrCondition));
     emit matchingConditionChanged(d->matchingCond);
 
-    // TODO update
-    //d->restoreTagFilters = (RestoreTagFilters)
-    //                       (group.readEntry("Restore Tag Filters", (int)OffRestoreTagFilters));
-
 }
 
 void TagFilterView::doSaveState()
@@ -113,8 +106,6 @@ void TagFilterView::doSaveState()
 
     KConfigGroup group = getConfigGroup();
     group.writeEntry(entryName(d->configMatchingConditionEntry),  (int)(d->matchingCond));
-    // TODO update
-//    group.writeEntry("Restore Tag Filters", (int)(d->restoreTagFilters));
     group.sync();
 
 }
@@ -139,8 +130,8 @@ void TagFilterView::addCustomContextMenuActions(ContextMenuHelper &cmh, Album *a
 
     cmh.addAction(d->restoreTagFiltersAction);
 
-    d->onRestoreTagFiltersAction->setChecked(d->restoreTagFilters == OnRestoreTagFilters);
-    d->offRestoreTagFiltersAction->setChecked(d->restoreTagFilters != OnRestoreTagFilters);
+    d->onRestoreTagFiltersAction->setChecked(isRestoreCheckState());
+    d->offRestoreTagFiltersAction->setChecked(!isRestoreCheckState());
 
 }
 
@@ -165,11 +156,11 @@ void TagFilterView::handleCustomContextMenuAction(QAction *action, Album *album)
     }
     else if (action == d->onRestoreTagFiltersAction)        // Restore TagFilters ON.
     {
-        d->restoreTagFilters = OnRestoreTagFilters;
+        setRestoreCheckState(true);
     }
     else if (action == d->offRestoreTagFiltersAction)        // Restore TagFilters OFF.
     {
-        d->restoreTagFilters = OffRestoreTagFilters;
+        setRestoreCheckState(false);
     }
 
 }

@@ -766,20 +766,46 @@ void AbstractCountingAlbumTreeView::slotRowsInserted(const QModelIndex& parent, 
 
 // --------------------------------------- //
 
+class AbstractCheckableAlbumTreeViewPriv
+{
+public:
+
+    AbstractCheckableAlbumTreeViewPriv() :
+        configCheckedAlbumsEntry("Checked"),
+        configRestoreCheckedEntry("RestoreChecked")
+    {
+    }
+
+    const QString configCheckedAlbumsEntry;
+    const QString configRestoreCheckedEntry;
+
+    QList<int> checkedAlbumIds;
+
+};
+
 AbstractCheckableAlbumTreeView::AbstractCheckableAlbumTreeView(AbstractCheckableAlbumModel *model,
                                                                CheckableAlbumFilterModel *filterModel, QWidget *parent)
-    : AbstractCountingAlbumTreeView(model, filterModel, parent)
+    : AbstractCountingAlbumTreeView(model, filterModel, parent),
+      d(new AbstractCheckableAlbumTreeViewPriv)
 {
-    m_checkOnMiddleClick  = true;
+    m_checkOnMiddleClick = true;
+    m_restoreCheckState  = false;
 }
 
 AbstractCheckableAlbumTreeView::AbstractCheckableAlbumTreeView(AbstractCheckableAlbumModel *model, QWidget *parent)
-    : AbstractCountingAlbumTreeView(model, 0, parent)
+    : AbstractCountingAlbumTreeView(model, 0, parent),
+      d(new AbstractCheckableAlbumTreeViewPriv)
 {
-    m_checkOnMiddleClick  = true;
+    m_checkOnMiddleClick = true;
+    m_restoreCheckState  = false;
 
     CheckableAlbumFilterModel *filterModel = new CheckableAlbumFilterModel(this);
     setAlbumFilterModel(filterModel);
+}
+
+AbstractCheckableAlbumTreeView::~AbstractCheckableAlbumTreeView()
+{
+    delete d;
 }
 
 AbstractCheckableAlbumModel *AbstractCheckableAlbumTreeView::checkableModel() const
@@ -801,6 +827,123 @@ void AbstractCheckableAlbumTreeView::middleButtonPressed(Album *a)
 {
     if (static_cast<AbstractCheckableAlbumModel*>(m_albumModel)->isCheckable())
         static_cast<AbstractCheckableAlbumModel*>(m_albumModel)->toggleChecked(a);
+}
+
+bool AbstractCheckableAlbumTreeView::isRestoreCheckState() const
+{
+    return m_restoreCheckState;
+}
+
+void AbstractCheckableAlbumTreeView::setRestoreCheckState(bool restore)
+{
+    m_restoreCheckState = restore;
+}
+
+void AbstractCheckableAlbumTreeView::doLoadState()
+{
+    AbstractCountingAlbumTreeView::doLoadState();
+
+    KConfigGroup group = getConfigGroup();
+
+    m_restoreCheckState = group.readEntry(entryName(d->configRestoreCheckedEntry), false);
+
+    if (!m_restoreCheckState || !checkableModel()->isCheckable())
+    {
+        return;
+    }
+
+    QStringList checkedAlbums = group.readEntry(entryName(
+                    d->configCheckedAlbumsEntry), QStringList());
+
+    d->checkedAlbumIds.clear();
+    foreach(const QString &albumId, checkedAlbums)
+    {
+        bool ok;
+        int id = albumId.toInt(&ok);
+        if (ok)
+        {
+            d->checkedAlbumIds << id;
+        }
+    }
+
+    // initially sync with the albums that are already in the model
+    for (int i = 0; i < checkableModel()->rowCount(); ++i)
+    {
+        const QModelIndex index = checkableModel()->index(i, 0);
+        restoreCheckState(index);
+    }
+
+    // wait for missing albums in the background
+    if (!d->checkedAlbumIds.empty())
+    {
+        // and the watch the model for new items added
+        connect(checkableModel(), SIGNAL(rowsInserted(QModelIndex, int, int)),
+                this,  SLOT(slotRowsAddedCheckState(QModelIndex, int, int)), Qt::QueuedConnection);
+    }
+
+}
+
+void AbstractCheckableAlbumTreeView::slotRowsAddedCheckState(QModelIndex index, int start, int end)
+{
+    for (int i = start; i <= end; ++i)
+    {
+        const QModelIndex child = checkableModel()->index(i, 0, index);
+        restoreCheckState(child);
+    }
+}
+
+void AbstractCheckableAlbumTreeView::restoreCheckState(const QModelIndex &index)
+{
+
+    Album *album = checkableModel()->albumForIndex(index);
+    if (album)
+    {
+
+        if (d->checkedAlbumIds.contains(album->id()))
+        {
+            checkableModel()->setCheckState(album, Qt::Checked);
+            d->checkedAlbumIds.removeOne(album->id());
+            if (d->checkedAlbumIds.empty())
+            {
+                // disconnect if not needed anymore
+                disconnect(model(), SIGNAL(rowsInserted(QModelIndex, int, int)),
+                           this, SLOT(slotRowsAddedCheckState(QModelIndex, int, int)));
+            }
+        }
+
+    }
+
+    // recurse children
+    for (int i = 0; i < checkableModel()->rowCount(index); ++i)
+    {
+        const QModelIndex child = checkableModel()->index(i, 0, index);
+        restoreCheckState(child);
+    }
+
+}
+
+void AbstractCheckableAlbumTreeView::doSaveState()
+{
+    AbstractCountingAlbumTreeView::doSaveState();
+
+    KConfigGroup group = getConfigGroup();
+
+    group.writeEntry(entryName(d->configRestoreCheckedEntry), m_restoreCheckState);
+
+    if (!m_restoreCheckState || !checkableModel()->isCheckable())
+    {
+        return;
+    }
+
+    QList<Album*> checkedAlbums = checkableModel()->checkedAlbums();
+    QStringList checkedIds;
+    foreach(Album* album, checkedAlbums)
+    {
+        checkedIds << QString::number(album->id());
+    }
+
+    group.writeEntry(entryName(d->configCheckedAlbumsEntry), checkedIds);
+
 }
 
 // --------------------------------------- //
