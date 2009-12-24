@@ -44,10 +44,13 @@ class TagFilterViewPriv
 public:
 
     TagFilterViewPriv() :
+        configMatchingConditionEntry("Matching Condition"),
         matchingCond(ImageFilterSettings::OrCondition),
         restoreTagFilters(TagFilterView::OffRestoreTagFilters)
     {
     }
+
+    const QString configMatchingConditionEntry;
 
     ImageFilterSettings::MatchingCondition matchingCond;
     // TODO update, implement this
@@ -93,27 +96,26 @@ void TagFilterView::doLoadState()
 {
     TagCheckView::doLoadState();
 
+    KConfigGroup group = getConfigGroup();
+    d->matchingCond = (ImageFilterSettings::MatchingCondition)
+                      (group.readEntry(entryName(d->configMatchingConditionEntry), (int)ImageFilterSettings::OrCondition));
+    emit matchingConditionChanged(d->matchingCond);
+
     // TODO update
-//    KSharedConfig::Ptr config = KGlobal::config();
-//    KConfigGroup group = config->group(objectName());
-//    d->matchingCond = (ImageFilterSettings::MatchingCondition)
-//                      (group.readEntry("Matching Condition", (int)ImageFilterSettings::OrCondition));
-//
-//    d->restoreTagFilters = (RestoreTagFilters)
-//                           (group.readEntry("Restore Tag Filters", (int)OffRestoreTagFilters));
+    //d->restoreTagFilters = (RestoreTagFilters)
+    //                       (group.readEntry("Restore Tag Filters", (int)OffRestoreTagFilters));
+
 }
 
 void TagFilterView::doSaveState()
 {
     TagCheckView::doSaveState();
 
+    KConfigGroup group = getConfigGroup();
+    group.writeEntry(entryName(d->configMatchingConditionEntry),  (int)(d->matchingCond));
     // TODO update
-//    KSharedConfig::Ptr config = KGlobal::config();
-//    KConfigGroup group        = config->group(objectName());
-//    group.writeEntry("Matching Condition",  (int)(d->matchingCond));
 //    group.writeEntry("Restore Tag Filters", (int)(d->restoreTagFilters));
-//    saveTagFilters();
-//    config->sync();
+    group.sync();
 
 }
 
