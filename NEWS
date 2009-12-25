@@ -10,4 +10,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 001 ==> 219559 : Crash when opening editor.
 002 ==> 217860 : Icon view movie thumbnail rotation overlay buttons.
 003 ==> 217702 : GPS widget movie preview too big.
-003 ==>
+004 ==> 147621 : Refocus needs to be available under Batch Operations for sharpening options.
+005 ==> 
