@@ -390,7 +390,25 @@ void ImageDelegate::paint(QPainter * p, const QStyleOptionViewItem& option, cons
 
 QPixmap ImageDelegate::pixmapForDrag(const QStyleOptionViewItem& option, const QList<QModelIndex>& indexes) const
 {
-    QPixmap icon(DesktopIcon("image-jp2", 48));
+    QPixmap icon;
+
+    if (indexes.count() == 1)
+    {
+        QVariant thumbData = indexes.first().data(ImageModel::ThumbnailRole);
+        if (!thumbData.isNull())
+        {
+            icon = thumbData.value<QPixmap>();
+            if (qMax(icon.width(), icon.height()) > KIconLoader::SizeMedium)
+                icon = icon.scaled(KIconLoader::SizeMedium, KIconLoader::SizeMedium,
+                                   Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        }
+    }
+
+    if (icon.isNull())
+    {
+        QPixmap icon(DesktopIcon("image-jp2", KIconLoader::SizeMedium));
+    }
+
     int w = icon.width();
     int h = icon.height();
 

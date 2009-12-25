@@ -1034,7 +1034,7 @@ void ImageCategorizedView::startDrag(Qt::DropActions supportedActions)
         QDrag *drag = new QDrag(this);
         drag->setPixmap(pixmap);
         drag->setMimeData(data);
-        drag->exec(supportedActions);
+        drag->exec(supportedActions, Qt::IgnoreAction);
     }
 }
 
