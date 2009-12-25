@@ -240,4 +240,49 @@ const ItemCopyMoveHint& ItemCopyMoveHint::operator>>(QDBusArgument& argument) co
     return *this;
 }
 
+ItemChangeHint::ItemChangeHint()
+{
+}
+
+ItemChangeHint::ItemChangeHint(QList<qlonglong> ids, ChangeType type)
+    : m_ids(ids), m_type(type)
+{
+}
+
+QList<qlonglong> ItemChangeHint::ids() const
+{
+    return m_ids;
+}
+
+bool ItemChangeHint::isId(qlonglong id) const
+{
+    return m_ids.contains(id);
+}
+
+ItemChangeHint::ChangeType ItemChangeHint::changeType() const
+{
+    return m_type;
+}
+
+ItemChangeHint& ItemChangeHint::operator<<(const QDBusArgument& argument)
+{
+    argument.beginStructure();
+    int type;
+    argument >> m_ids
+             >> type;
+    argument.endStructure();
+    m_type = (ChangeType)type;
+    return *this;
+}
+
+const ItemChangeHint& ItemChangeHint::operator>>(QDBusArgument& argument) const
+{
+    argument.beginStructure();
+    argument << m_ids
+             << (int)m_type;
+    argument.endStructure();
+    return *this;
+}
+
+
 } // namespace Digikam

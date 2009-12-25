@@ -173,11 +173,47 @@ protected:
 };
 
 
+// ---------------------------------------------------------------------------
+
+class DIGIKAM_DATABASE_EXPORT ItemChangeHint
+{
+public:
+
+    /** An ItemCopyMoveHint describes a list of existing items that
+     *  should be updated although the modification date may not have changed.
+     */
+
+    enum ChangeType
+    {
+        ItemModified, /// treat as if modification date changed
+        ItemRescan    /// reread metadata
+    };
+
+    ItemChangeHint();
+    ItemChangeHint(QList<qlonglong> srcIds, ChangeType type = ItemModified);
+
+    QList<qlonglong> ids() const;
+    bool isId(qlonglong id) const;
+    ChangeType changeType() const;
+    bool isModified() const { return changeType() == ItemModified; }
+    bool needsRescan() const { return changeType() == ItemRescan; }
+
+    ItemChangeHint& operator<<(const QDBusArgument& argument);
+    const ItemChangeHint& operator>>(QDBusArgument& argument) const;
+
+protected:
+
+    QList<qlonglong>  m_ids;
+    ChangeType        m_type;
+};
+
+
 inline uint qHash(const Digikam::AlbumCopyMoveHint& hint) { return hint.qHash(); }
 
 } // namespace Digikam
 
 DECLARE_METATYPE_FOR_DBUS(Digikam::AlbumCopyMoveHint)
 DECLARE_METATYPE_FOR_DBUS(Digikam::ItemCopyMoveHint)
+DECLARE_METATYPE_FOR_DBUS(Digikam::ItemChangeHint)
 
 #endif // COLLECTIONSCANNERHINTS_H
