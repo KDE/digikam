@@ -49,6 +49,7 @@ class CollectionScannerObserver;
 class CollectionScannerPriv;
 class ImageInfo;
 class ItemCopyMoveHint;
+class ItemChangeHint;
 
 class DIGIKAM_DATABASE_EXPORT CollectionScanner : public QObject
 {
@@ -131,6 +132,7 @@ public:
      */
     void recordHints(const QList<AlbumCopyMoveHint>& hint);
     void recordHints(const QList<ItemCopyMoveHint>& hint);
+    void recordHints(const QList<ItemChangeHint>& hint);
 
     /**
      * Utility method:
