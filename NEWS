@@ -12,4 +12,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 003 ==> 217702 : GPS widget movie preview too big.
 004 ==> 147621 : Refocus needs to be available under Batch Operations for sharpening options.
 005 ==> 207710 : Crash while loading large file.
-006 ==> 
+006 ==> 186642 : Crashes in image restoration tool.
+007 ==> 
