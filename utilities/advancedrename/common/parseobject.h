@@ -125,8 +125,7 @@ public:
     bool isValid() const;
 
     /**
-     * Resets the parser to its initial state. This method also resets the internal counter that is used
-     * for sequence numbers.
+     * Resets the parser to its initial state
      */
     virtual void reset();
 
