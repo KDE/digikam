@@ -145,6 +145,11 @@ public:
     void hintAtMoveOrCopyOfItems(const QList<qlonglong> ids, const PAlbum *dstAlbum, QStringList itemNames);
     void hintAtMoveOrCopyOfItem(qlonglong id, const PAlbum *dstAlbum, QString itemName);
 
+    /** Hint at the fact that an item may have changed, although its modification date may not have changed.
+     *  Note that a scan of the containing directory will need to be triggered nonetheless for the hints to take effect. */
+     void hintAtModificationOfItems(const QList<qlonglong> ids);
+     void hintAtModificationOfItem(qlonglong id);
+
 Q_SIGNALS:
 
     void databaseInitialized(bool success);

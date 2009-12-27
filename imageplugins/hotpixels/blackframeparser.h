@@ -74,8 +74,8 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 
-    void slotLoadingProgress(const LoadingDescription&, float);
-    void slotLoadImageFromUrlComplete(const LoadingDescription&, const DImg&);
+    void slotLoadingProgress(const LoadingDescription&, float v);
+    void slotLoadImageFromUrlComplete(const LoadingDescription&, const DImg& img);
 
 private:
 

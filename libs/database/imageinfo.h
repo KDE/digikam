@@ -285,7 +285,7 @@ public:
 
     /**
      * Copy database information of this item to a newly created item
-     * @param  dstAlbum    destination album
+     * @param  dstAlbumID  destination album id
      * @param  dstFileName new filename
      * @return an ImageInfo object of the new item
      */

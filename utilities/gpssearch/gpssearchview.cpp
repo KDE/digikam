@@ -499,7 +499,7 @@ void GPSSearchView::slotDigikamViewNoCurrentItem()
 
 /**
  * @brief Slot which gets called when the user selects images in the icon view
- * @param selectedImages List of selected images
+ * @param selectedImage List of selected images
  */
 void GPSSearchView::slotDigikamViewImageSelected(const ImageInfoList &selectedImage, bool hasPrevious, bool hasNext, const ImageInfoList &allImages)
 {

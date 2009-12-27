@@ -92,7 +92,7 @@ public:
 
     /**
       * This method will draw a new category represented by index
-      * @param index  on the rect specified by @p option.rect, with
+      * @p index on the rect specified by @p option.rect, with
       * painter @p painter
       */
     void drawNewCategory(const QModelIndex &index,

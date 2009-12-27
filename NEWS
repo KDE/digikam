@@ -3,11 +3,21 @@ digiKam 1.1.0 - Release date: 2010-01-31
 
 NEW FEATURES:
 
-
+AdvancedRename:  The ReplaceModifier has regular expressions support now.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 219559 : Crash when opening editor.
 002 ==> 217860 : Icon view movie thumbnail rotation overlay buttons.
 003 ==> 217702 : GPS widget movie preview too big.
-003 ==>
+004 ==> 147621 : Refocus needs to be available under Batch Operations for sharpening options.
+005 ==> 207710 : Crash while loading large file.
+006 ==> 186642 : Crashes in image restoration tool.
+007 ==> 212105 : Crash in MarkerClusterHolder destructor.
+008 ==> 197434 : Crash when trying to access camera card via USB. Menu Import/USB Storage/USB Flash Reader.
+009 ==> 220203 : ICC profile visualize widget does not resize [patch].
+010 ==> 220260 : Rename Tool filename with multiple ".".
+011 ==> 215986 : SegFault when syncing large database.
+012 ==> 219908 : Drag and Drop photo to folder: let user choose to copy or move.
+013 ==> 220131 : Ctrl + Scroll Wheel triggers two different actions.
+014 ==> 

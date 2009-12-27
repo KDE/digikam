@@ -35,7 +35,6 @@ namespace Digikam
     
 /**
 * CMat:
-* @radius: Radius of the matrix.
 *
 * Centered matrix. This is a square matrix where
 * the indices range from [-radius, radius].
@@ -44,16 +43,27 @@ namespace Digikam
 **/
 typedef struct
 {
-    int     radius;                // Radius of the matrix 
-    int     row_stride;            // Size of one row = 2 * radius + 1 
-    double *data;                  // Contents of matrix 
-    double *center;                // Points to element with index (0, 0) 
+    /**
+     * Radius of the matrix.
+     */
+    int     radius;
+    /**
+     * Size of one row = 2 * radius + 1
+     */
+    int     row_stride;
+    /**
+     * Contents of matrix
+     */
+    double *data;
+    /**
+     * Points to element with index (0, 0)
+     */
+    double *center;
 }
 CMat;
 
 /**
 * Mat:
-* @rows: Number of rows in the matrix.
 *
 * Normal matrix type. Indices range from
 * [0, rows -1 ] and [0, cols - 1].
@@ -61,9 +71,18 @@ CMat;
 **/
 typedef struct
 {
-    int     rows;                  // Number of rows in the matrix 
-    int     cols;                  // Number of columns in the matrix 
-    double *data;                  // Content of the matrix 
+    /**
+     * Number of rows in the matrix.
+     */
+    int     rows;
+    /**
+     * Number of columns in the matrix
+     */
+    int     cols;
+    /**
+     * Content of the matrix
+     */
+    double *data;
 }
 Mat;
 
@@ -72,7 +91,7 @@ class RefocusMatrix
 
 public: 
 
-    static void fill_matrix (CMat * matrix, const int m, double f (int, int, double), const double fun_arg);
+    static void fill_matrix (CMat * matrix, const int m, double f (const int, const int, const double), const double fun_arg);
     
     static void fill_matrix2 (CMat * matrix, const int m, 
                               double f (const int, const int, const double, const double), 

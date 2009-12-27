@@ -181,6 +181,8 @@ IF (${KDE_VERSION} VERSION_GREATER "4.2.70")
     MACRO_BOOL_TO_01(NEPOMUK_FOUND HAVE_NEPOMUK)
 ENDIF (${KDE_VERSION} VERSION_GREATER "4.2.70")
 
+MACRO_OPTIONAL_FIND_PACKAGE(Doxygen)
+
 # Set config file depending of optional dependencies
 
 CONFIGURE_FILE(config-digikam.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-digikam.h)
@@ -277,7 +279,7 @@ IF(GLIB2_FOUND)
     IF(LQR-1_FOUND)
         MESSAGE(STATUS " liblqr-1 library found................... YES (optional)")
     ELSE(LQR-1_FOUND)
-        MESSAGE(STATUS " liblqr-1 library found.................. NO  (optional - internal version used instead)")
+        MESSAGE(STATUS " liblqr-1 library found................... NO  (optional - internal version used instead)")
     ENDIF(LQR-1_FOUND)
 ELSE(GLIB2_FOUND)
     MESSAGE(STATUS " libglib2 library found................... NO  (optional)")
@@ -286,6 +288,15 @@ ELSE(GLIB2_FOUND)
     MESSAGE(STATUS "")
 ENDIF(GLIB2_FOUND)
 
+IF(DOXYGEN_FOUND)
+    MESSAGE(STATUS " Doxygen found............................ YES (optional)")
+ELSE(DOXYGEN_FOUND)
+    MESSAGE(STATUS " Doxygen found............................ NO  (optional)")
+    MESSAGE(STATUS "")
+    MESSAGE(STATUS " You will not be able to to generate the API documentation.")
+    MESSAGE(STATUS " This does not affect building digiKam in any way.")
+    MESSAGE(STATUS "")
+ENDIF(DOXYGEN_FOUND)
 
 IF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND JASPER_FOUND AND KDCRAW_FOR_DIGIKAM AND KEXIV2_FOUND AND KIPI_FOUND)
     MESSAGE(STATUS " digiKam will be compiled................. YES")
@@ -1050,6 +1061,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/defaultrenameparser.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/modifiers/casemodifier.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/modifiers/defaultvaluemodifier.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/modifiers/fillmodifier.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/modifiers/rangemodifier.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/modifiers/replacemodifier.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/modifiers/trimmedmodifier.cpp
@@ -1162,3 +1174,20 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     ENDIF(NOT WIN32)
 
 ENDIF(DIGIKAM_CAN_BE_COMPILED)
+
+# ==================================================================================================
+# API documentation generation
+
+IF(DOXYGEN_FOUND)
+
+    SET(API_DIR ${CMAKE_BINARY_DIR}/api)
+    SET(SOURCE_DIR ${CMAKE_SOURCE_DIR})
+    SET(DOXYFILE ${CMAKE_BINARY_DIR}/Doxyfile)
+    SET(WARNFILE ${CMAKE_BINARY_DIR}/doxygen-warn.log)
+    
+    CONFIGURE_FILE(Doxyfile.in ${DOXYFILE})
+    
+    ADD_CUSTOM_TARGET(doc ${DOXYGEN_EXECUTABLE} ${DOXYFILE}
+                      WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
+                       
+ENDIF(DOXYGEN_FOUND)

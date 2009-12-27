@@ -9,8 +9,4 @@ Syntax Highlighting:
 
 Modifiers:
 
-    - ReplaceModifier: Add RegExp support
-
-    - UniqueModifier:  - Add parameters to the tooltip (after string freeze is over)
-                       - Auto-detect needed digits (I already have something in mind, but it might not be added due to
-                         the string freeze
+    - UniqueModifier:  - Auto-detect needed digits

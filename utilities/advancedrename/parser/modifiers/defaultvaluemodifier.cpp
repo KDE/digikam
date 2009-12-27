@@ -75,9 +75,9 @@ DefaultValueModifier::DefaultValueModifier()
                                i18n("Set a default value for empty strings"),
                                SmallIcon("edit-undo"))
 {
-    addToken("{d:\"||default||\"}", description());
+    addToken("{default:\"||value||\"}", description());
 
-    QRegExp reg("\\{d:\"(.+)\"\\}");
+    QRegExp reg("\\{default:\"(.+)\"\\}");
     reg.setMinimal(true);
     setRegExp(reg);
 }
@@ -94,7 +94,7 @@ void DefaultValueModifier::slotTokenTriggered(const QString& token)
         QString valueStr = dlg->valueInput->text();
         if (!valueStr.isEmpty())
         {
-            result = QString("{d:\"%1\"}").arg(valueStr);
+            result = QString("{default:\"%1\"}").arg(valueStr);
         }
     }
     delete dlg;

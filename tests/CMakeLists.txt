@@ -47,6 +47,7 @@ SET(advancedrenametest_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/defaultrenameparser.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/modifiers/casemodifier.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/modifiers/defaultvaluemodifier.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/modifiers/fillmodifier.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/modifiers/rangemodifier.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/modifiers/replacemodifier.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/modifiers/trimmedmodifier.cpp
@@ -132,7 +133,7 @@ TARGET_LINK_LIBRARIES(freerotationtest
                       ${QT_QTTEST_LIBRARY}
                       digikamcore
                       )
-                      
+
 #------------------------------------------------------------------------
 
 SET(filesaveoptionsboxtest_SRCS

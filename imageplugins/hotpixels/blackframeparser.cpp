@@ -92,7 +92,7 @@ void BlackFrameParser::parseBlackFrame(const KUrl& url)
 
 void BlackFrameParser::slotLoadingProgress(const LoadingDescription&, float v)
 {
-    emit signalLoadingProgress(v);
+   emit signalLoadingProgress(v);
 }
 
 void BlackFrameParser::slotLoadImageFromUrlComplete(const LoadingDescription&, const DImg& img)

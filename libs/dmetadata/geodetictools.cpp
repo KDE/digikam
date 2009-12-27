@@ -340,8 +340,8 @@ double GeodeticCalculator::meridianArcLengthRadians(double P1, double P2)
 
 /**
 * Computes the azimuth and orthodromic distance from the
-* {@linkplain #getStartingGeographicPoint starting point} and the
-* {@linkplain #getDestinationGeographicPoint destination point}.
+* startingGeographicPoint() and the
+* destinationGeographicPoint().
 */
 bool GeodeticCalculator::computeDirection()
 {

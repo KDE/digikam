@@ -87,7 +87,7 @@ class A
 {
 public: // aligned to left
 ...
-private slots: // aligned to left
+private Q_SLOTS: // aligned to left
 
 
 Follow a consistent order in defining these attributes. The recommended
@@ -294,8 +294,12 @@ To generate API documentation, you need to install:
 - Doxygen program (http://www.doxygen.org).
 - Dot program (http://www.graphviz.org)
 
-Go to 'project' sub-folder and just run doxygen binary program. A new subfolder
-named 'api' will be create. Warning, this can take a while.
+After cmake generated a Makefile you can call 'make doc'. A new subfolder named
+'api' will be create in the program's binary dir.
+Warning, this can take a while.
+
+For finding documentation errors, doxygen generates a warning log file at the
+cmake binary dir called 'doxygen-warn.log'.
 
 ========================================================================
 Speed up the code-compile-test cycle

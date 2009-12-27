@@ -3,8 +3,8 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2009-09-18
- * Description : a modifier for replacing text in a token result
+ * Date        : 2009-09-14
+ * Description : trimmed token modifier
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -21,44 +21,49 @@
  *
  * ============================================================ */
 
-#ifndef REPLACEMODIFIER_H
-#define REPLACEMODIFIER_H
+#ifndef FILLMODIFIER_H
+#define FILLMODIFIER_H
 
 // Local includes
 
 #include "modifier.h"
 #include "parseobjectdialog.h"
 
+class KIntNumInput;
 class KLineEdit;
-class QCheckBox;
+class KComboBox;
 
 namespace Digikam
 {
-
-class ReplaceDialog : public ParseObjectDialog
+class FillDialog : public ParseObjectDialog
 {
     Q_OBJECT
 
 public:
 
-    ReplaceDialog(ParseObject* parent);
-    ~ReplaceDialog();
+    FillDialog(ParseObject* parent);
+    ~FillDialog();
 
-    KLineEdit* source;
-    KLineEdit* destination;
-    QCheckBox* caseSensitive;
-    QCheckBox* isRegExp;
+    enum Alignment
+    {
+        Left = 0,
+        Right
+    };
+
+    KLineEdit*    charInput;
+    KIntNumInput* digitsInput;
+    KComboBox*    alignBox;
 };
 
 // --------------------------------------------------------
 
-class ReplaceModifier : public Modifier
+class FillModifier : public Modifier
 {
     Q_OBJECT
 
 public:
 
-    ReplaceModifier();
+    FillModifier();
     virtual QString modifyOperation(const ParseSettings& settings, const QString& str2Modify);
 
 private Q_SLOTS:
@@ -69,4 +74,4 @@ private Q_SLOTS:
 } // namespace Digikam
 
 
-#endif /* REPLACEMODIFIER_H */
+#endif /* FILLMODIFIER_H */
