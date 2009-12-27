@@ -36,9 +36,11 @@
 
 // Local includes
 
+#include "albumdb.h"
 #include "albummanager.h"
 #include "albummodel.h"
 #include "albumthumbnailloader.h"
+#include "collectionlocation.h"
 #include "collectionmanager.h"
 #include "config-digikam.h"
 #include "loadingcacheinterface.h"
@@ -82,6 +84,10 @@ void AlbumModelTest::initTestCase()
                     QDir::temp().absoluteFilePath(tempSuffix), false,
                     QDir::temp().absoluteFilePath(tempSuffix));
     QVERIFY2(dbChangeGood, "Could not set temp album db");
+    QList<CollectionLocation> locs = CollectionManager::instance()->allAvailableLocations();
+    QVERIFY2(locs.size(), "Failed to auto-create one collection in setDatabase");
+    int albumID = DatabaseAccess().db()->addAlbum(locs.first().id(), "/", QString(), QDate::currentDate(), QString());
+    QVERIFY2(albumID > 0, "Failed to add album belonging to default collection");
 
     AlbumManager::instance()->startScan();
 
