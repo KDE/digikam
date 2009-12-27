@@ -47,6 +47,7 @@ public:
     KLineEdit* source;
     KLineEdit* destination;
     QCheckBox* caseSensitive;
+    QCheckBox* isRegExp;
 };
 
 // --------------------------------------------------------

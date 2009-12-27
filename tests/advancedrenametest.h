@@ -57,6 +57,9 @@ private Q_SLOTS:
      */
     void testUniqueModifier();
 
+    void testReplaceModifier();
+    void testReplaceModifier_data();
+
     void testRangeModifier();
     void testRangeModifier_data();
 

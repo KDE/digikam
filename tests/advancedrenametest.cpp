@@ -372,6 +372,52 @@ void AdvancedRenameWidgetTest::testUniqueModifier()
 #undef DIGITS_STR
 }
 
+void AdvancedRenameWidgetTest::testReplaceModifier_data()
+{
+    QTest::addColumn<QString>("parseString");
+    QTest::addColumn<QString>("filename");
+    QTest::addColumn<QString>("result");
+
+    QString fileName("DSC1234.jpg");
+
+    QTest::newRow("[file]{replace:\"DSC\",\"AAA\"}")
+       << QString("[file]{replace:\"DSC\",\"AAA\"}") << fileName << QString("AAA1234.jpg");
+
+    QTest::newRow("[file]{replace:\"Dsc\",\"AAA\"}")
+       << QString("[file]{replace:\"Dsc\",\"AAA\"}") << fileName << QString("DSC1234.jpg");
+
+    QTest::newRow("[file]{replace:\"Dsc\",\"AAA\",i}")
+       << QString("[file]{replace:\"Dsc\",\"AAA\",i}") << fileName << QString("AAA1234.jpg");
+
+    QTest::newRow("[file]{replace:\"Dsc\",\"AAA\",ri}")
+       << QString("[file]{replace:\"Dsc\",\"AAA\",ri}") << fileName << QString("AAA1234.jpg");
+
+    QTest::newRow("[file]{replace:\"Dsc\",\"AAA\",ir}")
+       << QString("[file]{replace:\"Dsc\",\"AAA\",ir}") << fileName << QString("AAA1234.jpg");
+
+    QTest::newRow("[file]{replace:\"D.C\",\"AAA\"}")
+       << QString("[file]{replace:\"D.C\",\"AAA\"}") << fileName << QString("DSC1234.jpg");
+
+    QTest::newRow("[file]{replace:\"D.C\",\"AAA\",r}")
+       << QString("[file]{replace:\"D.C\",\"AAA\",r}") << fileName << QString("AAA1234.jpg");
+}
+
+void AdvancedRenameWidgetTest::testReplaceModifier()
+{
+    QFETCH(QString,   parseString);
+    QFETCH(QString,   filename);
+    QFETCH(QString,   result);
+
+    DefaultRenameParser parser;
+
+    ParseSettings settings;
+    settings.fileUrl     = filename;
+    settings.parseString = parseString;
+
+    QString parsed = parser.parse(settings);
+    QCOMPARE(parsed, result);
+}
+
 void AdvancedRenameWidgetTest::testRangeModifier_data()
 {
     QTest::addColumn<QString>("parseString");
