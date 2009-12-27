@@ -171,7 +171,7 @@ bool AbstractAlbumModel::hasChildren(const QModelIndex& parent) const
 
 QModelIndex AbstractAlbumModel::index(int row, int column, const QModelIndex& parent) const
 {
-    if (column != 0)
+    if (column != 0 || row < 0)
         return QModelIndex();
 
     if (parent.isValid())
