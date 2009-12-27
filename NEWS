@@ -18,4 +18,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 009 ==> 220203 : ICC profile visualize widget does not resize [patch].
 010 ==> 220260 : Rename Tool filename with multiple ".".
 011 ==> 215986 : SegFault when syncing large database.
-012 ==> 
+012 ==> 219908 : Drag and Drop photo to folder: let user choose to copy or move.
+013 ==> 
