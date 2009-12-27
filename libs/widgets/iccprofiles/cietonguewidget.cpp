@@ -824,6 +824,11 @@ void CIETongueWidget::paintEvent(QPaintEvent*)
     p.drawPixmap(0, 0, d->pixmap);
 }
 
+void CIETongueWidget::resizeEvent(QResizeEvent * event)
+{
+    d->needUpdatePixmap = true;
+}
+
 void CIETongueWidget::slotProgressTimerDone()
 {
     update();
