@@ -353,6 +353,9 @@ void DigikamView::setupConnections()
     connect(d->iconView, SIGNAL(previewRequested(const ImageInfo &)),
             this, SLOT(slotTogglePreviewMode(const ImageInfo &)));
 
+    connect(d->iconView, SIGNAL(gotoAlbumAndImageRequested(const ImageInfo&)),
+            this, SLOT(slotGotoAlbumAndItem(const ImageInfo&)));
+
     connect(d->iconView, SIGNAL(gotoDateAndImageRequested(const ImageInfo&)),
             this, SLOT(slotGotoDateAndItem(const ImageInfo&)));
 
@@ -800,6 +803,8 @@ QString DigikamViewPriv::userPresentableAlbumTitle(const QString& title)
 
 void DigikamView::slotGotoAlbumAndItem(const ImageInfo& imageInfo)
 {
+
+    kDebug() << "going to " << imageInfo;
 
     emit signalNoCurrentItem();
 
