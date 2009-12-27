@@ -59,7 +59,7 @@ QString FilePropertiesOption::parseOperation(ParseSettings& settings)
     QString result;
     if (token == QString("[file]"))
     {
-        result = fi.baseName();
+        result = fi.completeBaseName();
     }
     else if (token == QString("[ext]"))
     {
