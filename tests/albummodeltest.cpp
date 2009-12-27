@@ -162,7 +162,7 @@ void AlbumModelTest::cleanup()
              << AlbumManager::instance()->allPAlbums();
 
 
-    // remove all palbums
+    // remove all palbums' directories
     foreach (Album* album, AlbumManager::instance()->allPAlbums())
     {
         PAlbum *palbum = dynamic_cast<PAlbum*> (album);
@@ -170,13 +170,16 @@ void AlbumModelTest::cleanup()
         {
             continue;
         }
-        qDebug() << "deleting palbum: " << palbum->folderPath();
+        qDebug() << "deleting directory: " << palbum->folderPath();
         KUrl u;
         u.setProtocol("file");
         u.setPath(palbum->folderPath());
         KIO::NetAccess::del(u, 0);
     }
+    // take over changes to database
+    ScanController::instance()->completeCollectionScan();
 
+    // reread from database
     AlbumManager::instance()->refresh();
 
 }
