@@ -9,5 +9,4 @@ Syntax Highlighting:
 
 Modifiers:
 
-    - UniqueModifier:  - Auto-detect needed digits (I already have something in mind, but it might not be added due to
-                         the string freeze
+    - UniqueModifier:  - Auto-detect needed digits
