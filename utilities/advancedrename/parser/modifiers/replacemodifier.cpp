@@ -85,10 +85,10 @@ ReplaceModifier::ReplaceModifier()
                : Modifier(i18nc("Replace text", "Replace..."), i18n("Replace text in a renaming option"),
                           SmallIcon("document-edit"))
 {
-    addToken("{r:\"||old||\", \"||new||\"}",  i18n("Replace text (||old|| and ||new|| can be regular expressions)"));
-    addToken("{ri:\"||old||\", \"||new||\"}", i18n("Replace text (case insensitive)"));
+    addToken("{replace:\"||old||\", \"||new||\"}",   i18n("Replace text (||old|| and ||new|| can be regular expressions)"));
+    addToken("{replace:\"||old||\", \"||new||\",i}", i18n("Replace text (case insensitive)"));
 
-    QRegExp reg("\\{r(i)?:\"(.*)\",\"(.*)\"\\}");
+    QRegExp reg("\\{replace:\"(.*)\",\"(.*)\"(,i)?\\}");
     reg.setMinimal(true);
     setRegExp(reg);
 }
@@ -108,11 +108,11 @@ void ReplaceModifier::slotTokenTriggered(const QString& token)
         {
             if (dlg->caseSensitive->isChecked())
             {
-                result = QString("{r:\"%1\",\"%2\"}").arg(oldStr).arg(newStr);
+                result = QString("{replace:\"%1\",\"%2\"}").arg(oldStr).arg(newStr);
             }
             else
             {
-                result = QString("{ri:\"%1\",\"%2\"}").arg(oldStr).arg(newStr);
+                result = QString("{replace:\"%1\",\"%2\",i}").arg(oldStr).arg(newStr);
             }
         }
     }
@@ -126,13 +126,11 @@ QString ReplaceModifier::modifyOperation(const ParseSettings& settings, const QS
     Q_UNUSED(settings);
 
     const QRegExp& reg  = regExp();
-    QString original    = reg.cap(2);
-    QString replacement = reg.cap(3);
+    QString original    = reg.cap(1);
+    QString replacement = reg.cap(2);
     QString result      = str2Modify;
 
-    Qt::CaseSensitivity caseType = (!reg.cap(1).isEmpty() && reg.cap(1).count() == 1)
-                                     ? Qt::CaseInsensitive
-                                     : Qt::CaseSensitive;
+    Qt::CaseSensitivity caseType = (reg.cap(3) == QString(",i")) ? Qt::CaseInsensitive : Qt::CaseSensitive;
     QRegExp ro(original);
     ro.setCaseSensitivity(caseType);
     result.replace(ro, replacement);
