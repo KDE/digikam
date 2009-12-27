@@ -53,6 +53,7 @@ public:
     /**
      * Create a TransferJob for the "special" method of one of the database ioslaves,
      * referenced by the URL.
+     * @param url url referencing the database ioslave
      * @param extraValue If -1, nothing is sent. If it takes another value,
      *                   this value will be sent as a second parameter.
      */
@@ -96,6 +97,7 @@ public:
 
     /**
      * Execute the search specified by search XML
+     * @param receiver receiver for the searches
      * @param xml SearchXml describing the query
      * @param limit limit the count of the result set. If limit = 0, then no limit is set.
      */
@@ -105,8 +107,8 @@ public:
 
     /**
      * Execute the search specified by search XML describing a Haar search
+     * @param receiver receiver for the searches
      * @param xml SearchXml describing the query
-     * @param limit limit the count of the result set. If limit = 0, then no limit is set.
      */
     void listHaarSearch(ImageListerReceiver *receiver,
                         const QString& xml);

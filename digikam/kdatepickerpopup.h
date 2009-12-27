@@ -74,7 +74,6 @@ class KDatePickerPopup: public KMenu
        @param items List of all desirable items, separated with a bitwise OR.
        @param date Initial date of datepicker-widget.
        @param parent The object's parent.
-       @param name The object's name.
     */
     explicit KDatePickerPopup( Items items = DatePicker, const QDate& date = QDate::currentDate(),
                                QWidget *parent = 0 );

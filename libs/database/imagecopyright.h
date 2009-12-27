@@ -76,14 +76,14 @@ public:
      *  This is IPTC By-line.
      *  This is DC creator.
      *  This is dc:creator in XMP.
-     *  "Contains preferably the name of the person who created the content of this news object, a
+     *  &ldquo;Contains preferably the name of the person who created the content of this news object, a
      *  photographer for photos, a graphic artist for graphics, or a writer for textual news. If it is not
      *  appropriate to add the name of a person the name of a company or organization could be
      *  applied as well.
      *  Aligning with IIM notions IPTC Core intents to have only one creator for this news object
      *  despite the underlying XMP property dc:creator allows for more than one item to be
      *  included. If there are more than one item in this array the first one should be considered as
-     *  the IPTC Core Creator value."
+     *  the IPTC Core Creator value.&rdquo;
      */
      QStringList creator();
      QStringList author() { return creator(); }
@@ -104,7 +104,7 @@ public:
      *  This is Photoshop Credit.
      *  This is IPTC Credit.
      *  This is photoshop:Credit in XMP
-     *  "Identifies the provider of the news object, who is not necessarily the owner/creator."
+     *  &ldquo;Identifies the provider of the news object, who is not necessarily the owner/creator.&rdquo;
      */
     QString provider();
     QString credit() { return provider(); }
@@ -119,10 +119,10 @@ public:
      *  This is IPTC Copyright Notice.
      *  This is DC Rights.
      *  This is dc:rights in XMP.
-     *  " Contains any necessary copyright notice for claiming the intellectual property for this news
+     *  &ldquo; Contains any necessary copyright notice for claiming the intellectual property for this news
      *    object and should identify the current owner of the copyright for the news object. Other
      *    entities like the creator of the news object may be added. Notes on usage rights should be
-     *    provided in "Rights usage terms". "
+     *    provided in &lsquo;Rights usage terms&rsquo;. &rdquo;
      *  Note on language matching:
      *  You can specify a language code.
      *  If the requested language is not available, the entry with default
@@ -136,7 +136,7 @@ public:
     KExiv2Iface::KExiv2::AltLangMap allCopyrightNotices();
 
     /** Sets the copyright notice. If you supply a null QString as language code,
-     *  this is regarded as an entry for the default language ("x-default").
+     *  this is regarded as an entry for the default language (&ldquo;x-default&rdquo;).
      *  The ReplaceMode determines how existing entries are handled.
      */
     void setCopyrightNotice(const QString& notice, const QString& languageCode = QString(),
@@ -151,7 +151,7 @@ public:
      *  This has no equivalent in Photoshop, IPTC, or DC.
      *  This is xmpRights:UsageTerms in XMP.
      *  Language matching is done as with copyrightNotice().
-     *  "Free text instructions on how this news object can be legally used."
+     *  &ldquo;Free text instructions on how this news object can be legally used.&rdquo;
      */
     QString rightsUsageTerms(const QString& languageCode = QString());
     KExiv2Iface::KExiv2::AltLangMap allRightsUsageTerms();
@@ -165,11 +165,11 @@ public:
      *  This is Photoshop Source.
      *  This is IPTC Source.
      *  This is photoshop::Source in XMP.
-     *  " Identifies the original owner of the copyright for the intellectual content of the news object.
+     *  &ldquo; Identifies the original owner of the copyright for the intellectual content of the news object.
      *    This could be an agency, a member of an agency or an individual. Source could be
      *    different from Creator and from the entities in the CopyrightNotice.
      *    As the original owner can not change the content of this property should never be changed
-     *    or deleted after the information is entered following the news object's initial creation."
+     *    or deleted after the information is entered following the news object's initial creation.&rdquo;
      */
     QString source();
     void setSource(const QString& source);
@@ -180,9 +180,9 @@ public:
      *  This is Photoshop AuthorsPosition.
      *  This is IPTC By-line Title.
      *  This is photoshop:AuthorsPosition in XMP.
-     *  " Contains the job title of the person who created the content of this news object. As this is
+     *  &ldquo; Contains the job title of the person who created the content of this news object. As this is
      *    sort of a qualifier the Creator element has to be filled in as mandatory prerequisite for
-     *    using Creator's Jobtitle."
+     *    using Creator's Jobtitle.&rdquo;
      */
     QString creatorJobTitle();
     QString authorsPosition() { return creatorJobTitle(); }
@@ -198,12 +198,12 @@ public:
      *  This is Photoshop Instructions.
      *  This is IPTC Special Instruction.
      *  This is photoshop:Instructions in XMP.
-     *  " Any of a number of instructions from the provider or creator to the receiver of the news
+     *  &ldquo; Any of a number of instructions from the provider or creator to the receiver of the news
      *    object which might include any of the following: embargoes (NewsMagazines OUT) and
-     *    other restrictions not covered by the "Rights Usage Terms" field; information regarding the
+     *    other restrictions not covered by the &lsquo;Rights Usage Terms&rsquo; field; information regarding the
      *    original means of capture (scanning notes, colorspace info) or other specific text
      *    information that the user may need for accurate reproduction; additional permissions or
-     *    credits required when publishing. "
+     *    credits required when publishing. &rdquo;
      */
     QString instructions();
     void setInstructions(const QString& instructions);
@@ -211,8 +211,8 @@ public:
 
     /** Returns the creator's contact info.
      *  This is Iptc4xmpCore:CreatorContactInfo in XMP.
-     *  "  The creator's contact information provides all necessary information to get in contact with
-     *     the creator of this news object and comprises a set of sub-properties for proper addressing."
+     *  &ldquo;  The creator's contact information provides all necessary information to get in contact with
+     *     the creator of this news object and comprises a set of sub-properties for proper addressing.&rdquo;
      */
     IptcCoreContactInfo contactInfo();
     void setContactInfo(const IptcCoreContactInfo &info);

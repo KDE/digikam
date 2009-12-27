@@ -54,19 +54,18 @@ namespace Digikam
 {
 
     /**
-    The  following  table  gives  the  CIE  color  matching  functions
-    \bar{x}(\lambda),  \bar{y}(\lambda),  and   \bar{z}(\lambda),   for
-    wavelengths  \lambda  at 5 nanometer increments from 380 nm through
-    780 nm.  This table is used in conjunction with  Planck's  law  for
-    the  energy spectrum of a black body at a given temperature to plot
-    the black body curve on the CIE chart.
+    The following table gives the CIE  color matching functions
+    \f$\bar{x}(\lambda)\f$, \f$\bar{y}(\lambda)\f$, and
+    \f$\bar{z}(\lambda)\f$, for wavelengths \f$\lambda\f$ at 5 nanometer
+    increments from 380 nm through 780 nm. This table is used in conjunction
+    with Planck's law for the energy spectrum of a black body at a given
+    temperature to plot the black body curve on the CIE chart.
 
-    The following table gives the  spectral  chromaticity  co-ordinates
-    x(\lambda) and y(\lambda) for wavelengths in 5 nanometer increments
-    from 380 nm through  780  nm.   These  co-ordinates  represent  the
+    The following table gives the spectral chromaticity co-ordinates
+    \f$x(\lambda)\f$ and \f$y(\lambda)\f$ for wavelengths in 5 nanometer
+    increments from 380 nm through 780 nm. These coordinates represent the
     position in the CIE x-y space of pure spectral colors of the given
-    wavelength, and  thus  define  the  outline  of  the  CIE  "tongue"
-    diagram.
+    wavelength, and thus define the outline of the CIE "tongue" diagram.
     */
     static const double spectral_chromaticity[81][3] =
     {
@@ -826,6 +825,7 @@ void CIETongueWidget::paintEvent(QPaintEvent*)
 
 void CIETongueWidget::resizeEvent(QResizeEvent * event)
 {
+    Q_UNUSED(event);
     d->needUpdatePixmap = true;
 }
 

@@ -1952,11 +1952,11 @@ void AlbumDB::removeTagsFromItems(QList<qlonglong> imageIDs, QList<int> tagIDs)
     d->db->recordChangeset(ImageTagChangeset(imageIDs, tagIDs, ImageTagChangeset::Removed));
 }
 
-QStringList AlbumDB::getItemNamesInAlbum(int albumID, bool recurssive)
+QStringList AlbumDB::getItemNamesInAlbum(int albumID, bool recursive)
 {
     QList<QVariant> values;
 
-    if (recurssive)
+    if (recursive)
     {
         int rootId = getAlbumRootId(albumID);
         QString path = getAlbumRelativePath(albumID);
