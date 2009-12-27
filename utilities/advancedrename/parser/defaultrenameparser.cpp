@@ -73,9 +73,9 @@ DefaultRenameParser::DefaultRenameParser()
     registerModifier(new CaseModifier());
     registerModifier(new TrimmedModifier());
     registerModifier(new UniqueModifier());
-    registerModifier(new FillModifier());
     registerModifier(new DefaultValueModifier());
     registerModifier(new ReplaceModifier());
+    registerModifier(new FillModifier());
     registerModifier(new RangeModifier());
 }
 
