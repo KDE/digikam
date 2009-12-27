@@ -148,7 +148,6 @@ QString ReplaceModifier::modifyOperation(const ParseSettings& settings, const QS
                                    ? Qt::CaseInsensitive
                                    : Qt::CaseSensitive;
 
-
     QRegExp ro(original);
     ro.setCaseSensitivity(caseType);
 
