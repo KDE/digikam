@@ -103,7 +103,7 @@ void AlbumModelTest::cleanupTestCase()
     AlbumThumbnailLoader::instance()->cleanUp();
     LoadingCacheInterface::cleanUp();
 
-    QDir::temp().rmdir(tempSuffix);
+    KIO::NetAccess::del(KUrl::fromPath(tempSuffix), 0);
 }
 
 void AlbumModelTest::init()
