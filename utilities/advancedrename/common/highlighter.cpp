@@ -82,20 +82,6 @@ void Highlighter::highlightBlock(const QString& text)
                             }
                         }
                     }
-
-                    if (expression.numCaptures() > 0)
-                    {
-                        // highlight quoted text in options and modifiers
-                        QRegExp quotationExp = quotationRule.pattern;
-                        QString fullmatched  = expression.cap(0);
-                        int qindex           = quotationExp.indexIn(fullmatched);
-                        while (qindex >= 0)
-                        {
-                            int qlength = quotationExp.matchedLength();
-                            setFormat(index + qindex, qlength, quotationFormat);
-                            qindex = quotationExp.indexIn(fullmatched, qindex + qlength);
-                        }
-                    }
                 }
                 default: break;
             }
@@ -110,6 +96,19 @@ void Highlighter::highlightBlock(const QString& text)
     foreach (const ParseResults::ResultsKey& key, invalid.keys())
     {
         setFormat(key.first, key.second, errorFormat);
+    }
+
+    // highlight quoted text in options and modifiers
+    {
+        QRegExp expression(quotationRule.pattern);
+        int index = expression.indexIn(text);
+        while (index >= 0)
+        {
+            QString fullmatched  = expression.cap(0);
+            int qlength = expression.matchedLength();
+            setFormat(index, qlength, quotationFormat);
+            index = expression.indexIn(text, index + qlength);
+        }
     }
 }
 
