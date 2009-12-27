@@ -88,7 +88,7 @@ ReplaceModifier::ReplaceModifier()
     addToken("{r:\"||old||\", \"||new||\"}",  i18n("Replace text (||old|| and ||new|| can be regular expressions)"));
     addToken("{ri:\"||old||\", \"||new||\"}", i18n("Replace text (case insensitive)"));
 
-    QRegExp reg("\\{r(i)?:\"(.+)\",\"(.*)\"\\}");
+    QRegExp reg("\\{r(i)?:\"(.*)\",\"(.*)\"\\}");
     reg.setMinimal(true);
     setRegExp(reg);
 }
