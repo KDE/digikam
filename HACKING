@@ -294,8 +294,9 @@ To generate API documentation, you need to install:
 - Doxygen program (http://www.doxygen.org).
 - Dot program (http://www.graphviz.org)
 
-Go to 'project' sub-folder and just run doxygen binary program. A new subfolder
-named 'api' will be create. Warning, this can take a while.
+After cmake generated a Makefile you can call 'make doc'. A new subfolder named
+'api' will be create in the program's binary dir.
+Warning, this can take a while.
 
 ========================================================================
 Speed up the code-compile-test cycle
