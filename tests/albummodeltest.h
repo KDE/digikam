@@ -36,8 +36,13 @@ public:
     virtual ~AlbumModelTest();
 
 private Q_SLOTS:
+
     void initTestCase();
     void cleanupTestCase();
+
+    void init();
+    void cleanup();
+
     void testPAlbumModel();
     void testDAlbumModel();
     void testTAlbumModel();
@@ -45,6 +50,7 @@ private Q_SLOTS:
 
 private:
 
+    QString dbPath;
     QString tempSuffix;
 
 };
