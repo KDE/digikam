@@ -85,7 +85,7 @@ ReplaceModifier::ReplaceModifier()
                : Modifier(i18nc("Replace text", "Replace..."), i18n("Replace text in a renaming option"),
                           SmallIcon("document-edit"))
 {
-    addToken("{r:\"||old||\", \"||new||\"}",  i18n("Replace text"));
+    addToken("{r:\"||old||\", \"||new||\"}",  i18n("Replace text (||old|| and ||new|| can be regular expressions)"));
     addToken("{ri:\"||old||\", \"||new||\"}", i18n("Replace text (case insensitive)"));
 
     QRegExp reg("\\{r(i)?:\"(.+)\",\"(.*)\"\\}");
@@ -133,7 +133,9 @@ QString ReplaceModifier::modifyOperation(const ParseSettings& settings, const QS
     Qt::CaseSensitivity caseType = (!reg.cap(1).isEmpty() && reg.cap(1).count() == 1)
                                      ? Qt::CaseInsensitive
                                      : Qt::CaseSensitive;
-    result.replace(original, replacement, caseType);
+    QRegExp ro(original);
+    ro.setCaseSensitivity(caseType);
+    result.replace(ro, replacement);
     return result;
 }
 
