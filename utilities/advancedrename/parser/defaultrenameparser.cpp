@@ -40,6 +40,7 @@
 
 #include "casemodifier.h"
 #include "defaultvaluemodifier.h"
+#include "fillmodifier.h"
 #include "rangemodifier.h"
 #include "replacemodifier.h"
 #include "trimmedmodifier.h"
@@ -72,6 +73,7 @@ DefaultRenameParser::DefaultRenameParser()
     registerModifier(new CaseModifier());
     registerModifier(new TrimmedModifier());
     registerModifier(new UniqueModifier());
+    registerModifier(new FillModifier());
     registerModifier(new DefaultValueModifier());
     registerModifier(new ReplaceModifier());
     registerModifier(new RangeModifier());
