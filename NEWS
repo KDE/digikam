@@ -17,4 +17,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 008 ==> 197434 : Crash when trying to access camera card via USB. Menu Import/USB Storage/USB Flash Reader.
 009 ==> 220203 : ICC profile visualize widget does not resize [patch].
 010 ==> 220260 : Rename Tool filename with multiple ".".
-011 ==>
+011 ==> 215986 : SegFault when syncing large database.
+012 ==> 
