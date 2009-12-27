@@ -26,10 +26,10 @@
 // Qt includes
 
 #include <QGridLayout>
+#include <QLabel>
 #include <QPointer>
 #include <QRegExp>
 #include <QRegExpValidator>
-#include <QLabel>
 
 // KDE includes
 
@@ -48,6 +48,8 @@ FillDialog::FillDialog(ParseObject* parent)
     QLabel* digitsLabel = new QLabel(i18nc("Length of the string", "Length:"), this);
     digitsInput = new KIntNumInput(this);
     digitsInput->setMinimum(1);
+    digitsInput->setMaximum(300);
+    digitsInput->setValue(1);
 
     QLabel* charLabel = new QLabel(i18nc("character to fill string with", "Character:"), this);
     QRegExp validateReg("\\w{1}");
@@ -66,10 +68,10 @@ FillDialog::FillDialog(ParseObject* parent)
     QGridLayout* mainLayout = new QGridLayout(this);
     mainLayout->addWidget(digitsLabel, 0, 0, 1, 1);
     mainLayout->addWidget(digitsInput, 0, 1, 1, 1);
-    mainLayout->addWidget(charLabel,   1, 0, 1, 1);
-    mainLayout->addWidget(charInput,   1, 1, 1, 1);
-    mainLayout->addWidget(alignLabel,  2, 0, 1, 1);
-    mainLayout->addWidget(alignBox,    2, 1, 1, 1);
+    mainLayout->addWidget(alignLabel,  1, 0, 1, 1);
+    mainLayout->addWidget(alignBox,    1, 1, 1, 1);
+    mainLayout->addWidget(charLabel,   2, 0, 1, 1);
+    mainLayout->addWidget(charInput,   2, 1, 1, 1);
     mainLayout->setSpacing(KDialog::spacingHint());
     mainLayout->setMargin(KDialog::spacingHint());
     mainLayout->setRowStretch(3, 10);
@@ -138,7 +140,7 @@ void FillModifier::slotTokenTriggered(const QString& token)
     QString result;
     QString alignStr;
     QString charStr;
-    int     length;
+    int     length = 1;
 
     QPointer<FillDialog> dlg = new FillDialog(this);
     if (dlg->exec() == KDialog::Accepted)
