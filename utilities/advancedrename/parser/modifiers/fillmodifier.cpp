@@ -99,8 +99,8 @@ FillModifier::FillModifier()
     QString tooltipB = QString("%1 %2").arg(description())
                                        .arg(i18n("(||char|| = fill with a custom character)"));
 
-    addToken("{fill:||n||,||align||}",          tooltipA);
-    addToken("{fill:||n||,||align||,||char||}", tooltipB);
+    addToken("{fill:||n||,||align||}",              tooltipA);
+    addToken("{fill:||n||,||align||,\"||char||\"}", tooltipB);
 
     QRegExp reg("\\{fill:(\\d+)(,([lr]{1}))?(,\"(\\w)?\")?\\}");
     reg.setMinimal(true);
@@ -112,9 +112,9 @@ QString FillModifier::modifyOperation(const ParseSettings& settings, const QStri
     Q_UNUSED(settings);
 
     QString result;
-    QRegExp reg       = regExp();
-    QString alignstr  = reg.cap(3);
-    QString charstr   = reg.cap(5);
+    QRegExp reg      = regExp();
+    QString alignstr = reg.cap(3);
+    QString charstr  = reg.cap(5);
 
     bool ok;
     int length = reg.cap(1).toInt(&ok);
@@ -172,6 +172,7 @@ void FillModifier::slotTokenTriggered(const QString& token)
         result.append(options);
     }
     result.append('}');
+
     emit signalTokenTriggered(result);
 }
 
