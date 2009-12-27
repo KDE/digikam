@@ -86,11 +86,12 @@ void AlbumModelTest::initTestCase()
     QVERIFY2(dbChangeGood, "Could not set temp album db");
     QList<CollectionLocation> locs = CollectionManager::instance()->allAvailableLocations();
     QVERIFY2(locs.size(), "Failed to auto-create one collection in setDatabase");
-    int albumID = DatabaseAccess().db()->addAlbum(locs.first().id(), "/", QString(), QDate::currentDate(), QString());
-    QVERIFY2(albumID > 0, "Failed to add album belonging to default collection");
 
+    ScanController::instance()->completeCollectionScan();
     AlbumManager::instance()->startScan();
 
+    QVERIFY2(AlbumManager::instance()->allPAlbums().size() == 2,
+             "Failed to scan empty directory and have one root and one album root album");
 }
 
 void AlbumModelTest::cleanupTestCase()
@@ -111,16 +112,25 @@ void AlbumModelTest::init()
 
     // physical albums
 
+    // create two of them by creating directories and scanning
+    QDir dir(dbPath);
+    dir.mkdir("root0");
+    dir.mkdir("root1");
+
+    ScanController::instance()->completeCollectionScan();
+    AlbumManager::instance()->refresh();
+
+    QVERIFY2(AlbumManager::instance()->allPAlbums().size() == 4,
+             "Failed to scan directory and have two albums");
+
     QString error;
     QString category = "dummy category";
-    PAlbum *palbumRoot0 = AlbumManager::instance()->createPAlbum(dbPath,
-                    "root0", "root album 0", QDate::currentDate(), category,
-                    error);
-    QVERIFY2(palbumRoot0, QString(QString("Error creating PAlbum for test: ") + error).toAscii());
-    PAlbum *palbumRoot1 = AlbumManager::instance()->createPAlbum(dbPath,
-                    "root1", "root album 1", QDate::currentDate(), category,
-                    error);
-    QVERIFY2(palbumRoot1, QString(QString("Error creating PAlbum for test: ") + error).toAscii());
+    PAlbum *palbumRoot0 = AlbumManager::instance()->findPAlbum(KUrl::fromPath(dbPath + "/root0"));
+    QVERIFY2(palbumRoot0, "Error having PAlbum root0 in AlbumManager");
+    PAlbum *palbumRoot1 = AlbumManager::instance()->findPAlbum(KUrl::fromPath(dbPath + "/root1"));
+    QVERIFY2(palbumRoot1, "Error having PAlbum root1 in AlbumManager");
+
+    // Create some more through AlbumManager
     PAlbum *palbumRoot2 = AlbumManager::instance()->createPAlbum(dbPath,
                     "root2", "root album 2", QDate::currentDate(), category,
                     error);
@@ -144,8 +154,6 @@ void AlbumModelTest::init()
                     palbumRoot1, sameName, "root 1 child 0",
                     QDate::currentDate(), category, error);
     QVERIFY2(palbumChild0Root1, QString(QString("Error creating PAlbum for test: ") + error).toAscii());
-
-    AlbumManager::instance()->refresh();
 
     qDebug() << "AlbumManager now knows these PAlbums: "
              << AlbumManager::instance()->allPAlbums();
