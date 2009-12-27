@@ -894,6 +894,7 @@ void ImageCategorizedView::wheelEvent(QWheelEvent* event)
         else if (delta < 0)
             emit zoomOutStep();
         event->accept();
+        return;
     }
 
     KCategorizedView::wheelEvent(event);

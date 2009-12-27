@@ -19,4 +19,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 010 ==> 220260 : Rename Tool filename with multiple ".".
 011 ==> 215986 : SegFault when syncing large database.
 012 ==> 219908 : Drag and Drop photo to folder: let user choose to copy or move.
-013 ==> 
+013 ==> 220131 : Ctrl + Scroll Wheel triggers two different actions.
+014 ==> 
