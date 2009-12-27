@@ -14,4 +14,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 005 ==> 207710 : Crash while loading large file.
 006 ==> 186642 : Crashes in image restoration tool.
 007 ==> 212105 : Crash in MarkerClusterHolder destructor.
-008 ==> 
+008 ==> 197434 : Crash when trying to access camera card via USB. Menu Import/USB Storage/USB Flash Reader.
+009 ==> 
