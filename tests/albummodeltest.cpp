@@ -50,6 +50,8 @@
 
 using namespace Digikam;
 
+const QString IMAGE_PATH(KDESRCDIR"albummodeltestimages");
+
 QTEST_KDEMAIN(AlbumModelTest, GUI)
 
 AlbumModelTest::AlbumModelTest() :
@@ -184,6 +186,28 @@ void AlbumModelTest::init()
     safeCreateTAlbum(talbumRoot1, sameName, talbumChild0Root1);
 
     qDebug() << "created tags";
+
+    // add some images for having date albums
+
+    QDir imageDir(IMAGE_PATH);
+    imageDir.setNameFilters(QStringList("*.jpg"));
+    QStringList imageFiles = imageDir.entryList();
+
+    qDebug() << "copying images " << imageFiles << " to "
+                    << palbumChild0Root0->fileUrl();
+
+    foreach (const QString &imageFile, imageFiles)
+    {
+        QString src = IMAGE_PATH + "/" + imageFile;
+        QString dst = palbumChild0Root0->fileUrl().toLocalFile() + "/" + imageFile;
+        bool copied = QFile::copy(src, dst);
+        QVERIFY2(copied, "Test images must be copied");
+    }
+
+    ScanController::instance()->completeCollectionScan();
+    AlbumManager::instance()->refresh();
+
+    qDebug() << "date albums: " << AlbumManager::instance()->allDAlbums();
 
 }
 
