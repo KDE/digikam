@@ -103,7 +103,9 @@ void AlbumModelTest::cleanupTestCase()
     AlbumThumbnailLoader::instance()->cleanUp();
     LoadingCacheInterface::cleanUp();
 
-    KIO::NetAccess::del(KUrl::fromPath(tempSuffix), 0);
+    KUrl deleteUrl = KUrl::fromPath(dbPath);
+    KIO::NetAccess::del(deleteUrl, 0);
+    qDebug() << "deleted test folder " << deleteUrl;
 }
 
 void AlbumModelTest::init()
