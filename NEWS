@@ -21,4 +21,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 012 ==> 219908 : Drag and Drop photo to folder: let user choose to copy or move.
 013 ==> 220131 : Ctrl + Scroll Wheel triggers two different actions.
 014 ==> 198697 : Images are not sorted in the Import window.
-015 ==> 
+015 ==> 220398 : Downloaded/deleted all from SD card, went to other Digikam window, browsed two folders, closed windows, crashed.
+016 ==> 
