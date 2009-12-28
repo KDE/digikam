@@ -28,9 +28,15 @@
 
 #include <QtCore/QObject>
 
+namespace Digikam
+{
+class PAlbum;
+class TAlbum;
+}
+
 class AlbumModelTest: public QObject
 {
-    Q_OBJECT
+Q_OBJECT
 public:
     AlbumModelTest();
     virtual ~AlbumModelTest();
@@ -48,10 +54,30 @@ private Q_SLOTS:
     void testTAlbumModel();
     void testSAlbumModel();
 
+    void deletePAlbum(Digikam::PAlbum *album);
+
 private:
 
     QString dbPath;
     QString tempSuffix;
+
+    const QString albumCategory;
+
+    Digikam::PAlbum *palbumRoot0;
+    Digikam::PAlbum *palbumRoot1;
+    Digikam::PAlbum *palbumRoot2;
+    Digikam::PAlbum *palbumChild0Root0;
+    Digikam::PAlbum *palbumChild1Root0;
+    Digikam::PAlbum *palbumChild2Root0;
+    Digikam::PAlbum *palbumChild0Root1;
+
+    Digikam::TAlbum *rootTag;
+    Digikam::TAlbum *talbumRoot0;
+    Digikam::TAlbum *talbumRoot1;
+    Digikam::TAlbum *talbumChild0Root0;
+    Digikam::TAlbum *talbumChild1Root0;
+    Digikam::TAlbum *talbumChild0Child1Root0;
+    Digikam::TAlbum *talbumChild0Root1;
 
 };
 

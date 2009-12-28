@@ -52,7 +52,8 @@ using namespace Digikam;
 
 QTEST_KDEMAIN(AlbumModelTest, GUI)
 
-AlbumModelTest::AlbumModelTest()
+AlbumModelTest::AlbumModelTest() :
+    albumCategory("DummyCategory")
 {
 }
 
@@ -84,14 +85,15 @@ void AlbumModelTest::initTestCase()
                     QDir::temp().absoluteFilePath(tempSuffix), false,
                     QDir::temp().absoluteFilePath(tempSuffix));
     QVERIFY2(dbChangeGood, "Could not set temp album db");
-    QList<CollectionLocation> locs = CollectionManager::instance()->allAvailableLocations();
+    QList<CollectionLocation> locs =
+                    CollectionManager::instance()->allAvailableLocations();
     QVERIFY2(locs.size(), "Failed to auto-create one collection in setDatabase");
 
     ScanController::instance()->completeCollectionScan();
     AlbumManager::instance()->startScan();
 
     QVERIFY2(AlbumManager::instance()->allPAlbums().size() == 2,
-             "Failed to scan empty directory and have one root and one album root album");
+                    "Failed to scan empty directory and have one root and one album root album");
 }
 
 void AlbumModelTest::cleanupTestCase()
@@ -108,6 +110,25 @@ void AlbumModelTest::cleanupTestCase()
     qDebug() << "deleted test folder " << deleteUrl;
 }
 
+// Qt test doesn't use exceptions, so using assertion macros in methods called
+// from a test slot doesn't stop the test method and may result in inconsistent
+// data or segfaults. Therefore use macros for these functions.
+
+#define safeCreatePAlbum(parent, name, result) \
+{ \
+    QString error; \
+    result = AlbumManager::instance()->createPAlbum(parent, name, name, \
+                    QDate::currentDate(), albumCategory, error); \
+    QVERIFY2(result, QString(QString("Error creating PAlbum for test: ") + error).toAscii()); \
+}
+
+#define safeCreateTAlbum(parent, name, result) \
+{ \
+    QString error; \
+    result = AlbumManager::instance()->createTAlbum(parent, name, "", error); \
+    QVERIFY2(result, QString(QString("Error creating TAlbum for test: ") + error).toAscii()); \
+}
+
 void AlbumModelTest::init()
 {
     // insert some test data
@@ -122,44 +143,56 @@ void AlbumModelTest::init()
     ScanController::instance()->completeCollectionScan();
     AlbumManager::instance()->refresh();
 
-    QVERIFY2(AlbumManager::instance()->allPAlbums().size() == 4,
-             "Failed to scan directory and have two albums");
+    QCOMPARE(AlbumManager::instance()->allPAlbums().size(), 4);
 
     QString error;
-    QString category = "dummy category";
-    PAlbum *palbumRoot0 = AlbumManager::instance()->findPAlbum(KUrl::fromPath(dbPath + "/root0"));
+    palbumRoot0 = AlbumManager::instance()->findPAlbum(KUrl::fromPath(dbPath
+                    + "/root0"));
     QVERIFY2(palbumRoot0, "Error having PAlbum root0 in AlbumManager");
-    PAlbum *palbumRoot1 = AlbumManager::instance()->findPAlbum(KUrl::fromPath(dbPath + "/root1"));
+    palbumRoot1 = AlbumManager::instance()->findPAlbum(KUrl::fromPath(dbPath
+                    + "/root1"));
     QVERIFY2(palbumRoot1, "Error having PAlbum root1 in AlbumManager");
 
     // Create some more through AlbumManager
-    PAlbum *palbumRoot2 = AlbumManager::instance()->createPAlbum(dbPath,
-                    "root2", "root album 2", QDate::currentDate(), category,
-                    error);
+    palbumRoot2 = AlbumManager::instance()->createPAlbum(dbPath, "root2",
+                    "root album 2", QDate::currentDate(), albumCategory, error);
     QVERIFY2(palbumRoot2, QString(QString("Error creating PAlbum for test: ") + error).toAscii());
 
-    PAlbum *palbumChild0Root0 = AlbumManager::instance()->createPAlbum(
-                    palbumRoot0, "root0child0", "root 0 child 0",
-                    QDate::currentDate(), category, error);
-    QVERIFY2(palbumChild0Root0, QString(QString("Error creating PAlbum for test: ") + error).toAscii());
-    PAlbum *palbumChild1Root0 = AlbumManager::instance()->createPAlbum(
-                    palbumRoot0, "root0child1", "root 0 child 1",
-                    QDate::currentDate(), category, error);
-    QVERIFY2(palbumChild1Root0, QString(QString("Error creating PAlbum for test: ") + error).toAscii());
-    QString sameName = "sameName";
-    PAlbum *palbumChild2Root0 = AlbumManager::instance()->createPAlbum(
-                    palbumRoot0, sameName, "root 0 child 2",
-                    QDate::currentDate(), category, error);
-    QVERIFY2(palbumChild2Root0, QString(QString("Error creating PAlbum for test: ") + error).toAscii());
+    safeCreatePAlbum(palbumRoot0, "root0child0", palbumChild0Root0);
+    safeCreatePAlbum(palbumRoot0, "root0child1", palbumChild1Root0);
+    const QString sameName = "sameName Album";
+    safeCreatePAlbum(palbumRoot0, sameName, palbumChild2Root0);
 
-    PAlbum *palbumChild0Root1 = AlbumManager::instance()->createPAlbum(
-                    palbumRoot1, sameName, "root 1 child 0",
-                    QDate::currentDate(), category, error);
-    QVERIFY2(palbumChild0Root1, QString(QString("Error creating PAlbum for test: ") + error).toAscii());
+    safeCreatePAlbum(palbumRoot1, sameName, palbumChild0Root1);
 
     qDebug() << "AlbumManager now knows these PAlbums: "
-             << AlbumManager::instance()->allPAlbums();
+                    << AlbumManager::instance()->allPAlbums();
 
+    // tags
+
+    rootTag = AlbumManager::instance()->findTAlbum(0);
+    QVERIFY(rootTag);
+
+    safeCreateTAlbum(rootTag, "root0", talbumRoot0);
+    safeCreateTAlbum(rootTag, "root1", talbumRoot1);
+
+    safeCreateTAlbum(talbumRoot0, "child0 root 0", talbumChild0Root0);
+    safeCreateTAlbum(talbumRoot0, "child1 root 0", talbumChild1Root0);
+
+    safeCreateTAlbum(talbumChild1Root0, sameName, talbumChild0Child1Root0);
+
+    safeCreateTAlbum(talbumRoot1, sameName, talbumChild0Root1);
+
+    qDebug() << "created tags";
+
+}
+
+void AlbumModelTest::deletePAlbum(PAlbum *album)
+{
+    KUrl u;
+    u.setProtocol("file");
+    u.setPath(album->folderPath());
+    KIO::NetAccess::del(u, 0);
 }
 
 void AlbumModelTest::cleanup()
@@ -168,30 +201,29 @@ void AlbumModelTest::cleanup()
 
     AlbumManager::instance()->refresh();
 
-    qDebug() << "AlbumManager removes these PAlbums: "
-             << AlbumManager::instance()->allPAlbums();
-
-
     // remove all palbums' directories
-    foreach (Album* album, AlbumManager::instance()->allPAlbums())
-    {
-        PAlbum *palbum = dynamic_cast<PAlbum*> (album);
-        if (palbum->isRoot() || palbum->isAlbumRoot())
-        {
-            continue;
-        }
-        qDebug() << "deleting directory: " << palbum->folderPath()
-                 << " for album " << palbum->title();
-        KUrl u;
-        u.setProtocol("file");
-        u.setPath(palbum->folderPath());
-        KIO::NetAccess::del(u, 0);
-    }
+    deletePAlbum(palbumRoot0);
+    deletePAlbum(palbumRoot1);
+    deletePAlbum(palbumRoot2);
+
     // take over changes to database
     ScanController::instance()->completeCollectionScan();
 
     // reread from database
     AlbumManager::instance()->refresh();
+
+    // root + one collection
+    QCOMPARE(AlbumManager::instance()->allPAlbums().size(), 2);
+
+    // remove all tags
+
+    QString error;
+    bool removed = AlbumManager::instance()->deleteTAlbum(talbumRoot0, error);
+    QVERIFY2(removed, QString("Error removing a tag: " + error).toAscii());
+    removed = AlbumManager::instance()->deleteTAlbum(talbumRoot1, error);
+    QVERIFY2(removed, QString("Error removing a tag: " + error).toAscii());
+
+    QCOMPARE(AlbumManager::instance()->allTAlbums().size(), 1);
 
 }
 
@@ -220,10 +252,17 @@ void AlbumModelTest::testDAlbumModel()
 
 void AlbumModelTest::testTAlbumModel()
 {
+
     TagModel *albumModel = new TagModel();
     ModelTest *test = new ModelTest(albumModel, 0);
     delete test;
     delete albumModel;
+
+    albumModel = new TagModel(AbstractAlbumModel::IgnoreRootAlbum);
+    test = new ModelTest(albumModel, 0);
+    delete test;
+    delete albumModel;
+
 }
 
 void AlbumModelTest::testSAlbumModel()
