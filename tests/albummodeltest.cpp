@@ -176,11 +176,12 @@ void AlbumModelTest::cleanup()
     foreach (Album* album, AlbumManager::instance()->allPAlbums())
     {
         PAlbum *palbum = dynamic_cast<PAlbum*> (album);
-        if (palbum->isAlbumRoot())
+        if (palbum->isRoot() || palbum->isAlbumRoot())
         {
             continue;
         }
-        qDebug() << "deleting directory: " << palbum->folderPath();
+        qDebug() << "deleting directory: " << palbum->folderPath()
+                 << " for album " << palbum->title();
         KUrl u;
         u.setProtocol("file");
         u.setPath(palbum->folderPath());
