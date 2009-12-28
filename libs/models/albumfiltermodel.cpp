@@ -53,20 +53,28 @@ void AlbumFilterModel::setSearchTextSettings(const SearchTextSettings& settings)
     invalidateFilter();
     emit filterChanged();
 
-    // find out if this setting has some results or not
-    int validRows = 0;
-    // for every collection we got
-    for(int i = 0; i < rowCount(rootAlbumIndex()); ++i)
+    if (sourceAlbumModel()->albumType() == Album::PHYSICAL)
     {
-        QModelIndex collectionIndex = index(i, 0, rootAlbumIndex());
-        // count the number of rows
-        validRows += rowCount(collectionIndex);
+        // find out if this setting has some results or not
+        int validRows = 0;
+        // for every collection we got
+        for(int i = 0; i < rowCount(rootAlbumIndex()); ++i)
+        {
+            QModelIndex collectionIndex = index(i, 0, rootAlbumIndex());
+            // count the number of rows
+            validRows += rowCount(collectionIndex);
+        }
+        bool hasResult = validRows > 0;
+        kDebug() << "new search text settings: " << settings.text
+                << ": hasResult = " << hasResult << ", validRows = "
+                << validRows;
+        emit hasSearchResult(hasResult);
     }
-    bool hasResult = validRows > 0;
-    kDebug() << "new search text settings: " << settings.text
-             << ": hasResult = " << hasResult << ", validRows = "
-             << validRows;
-    emit hasSearchResult(hasResult);
+    else
+    {
+        QModelIndex head = rootAlbumIndex(); // either root, or invalid, thus toplevel
+        emit hasSearchResult(rowCount(head));
+    }
 }
 
 bool AlbumFilterModel::isFiltering() const
@@ -126,18 +134,14 @@ QModelIndex AlbumFilterModel::rootAlbumIndex() const
     return mapFromSource(sourceAlbumModel()->rootAlbumIndex());
 }
 
-AlbumFilterModel::MatchResult AlbumFilterModel::matches(const QModelIndex& index) const
+bool AlbumFilterModel::rawMatches(const QModelIndex& index, Album *) const
 {
-    return matches(sourceAlbumModel()->albumForIndex(mapToSourceAlbumModel(index)));
+    return index.data(Qt::DisplayRole).toString().contains(m_settings.text, m_settings.caseSensitive);
 }
 
-bool AlbumFilterModel::rawMatches(Album *album) const
+AlbumFilterModel::MatchResult AlbumFilterModel::matches(const QModelIndex& source_index) const
 {
-    return album->title().contains(m_settings.text, m_settings.caseSensitive);
-}
-
-AlbumFilterModel::MatchResult AlbumFilterModel::matches(Album *album) const
-{
+    Album *album = sourceAlbumModel()->albumForIndex(source_index);
     if (!album)
         return NoMatch;
 
@@ -146,7 +150,7 @@ AlbumFilterModel::MatchResult AlbumFilterModel::matches(Album *album) const
     if (album->isRoot() || (palbum && palbum->isAlbumRoot()))
         return SpecialMatch;
 
-    if (rawMatches(album))
+    if (rawMatches(source_index, album))
         return TitleMatch;
 
     // check if any of the parents match the search
@@ -155,7 +159,7 @@ AlbumFilterModel::MatchResult AlbumFilterModel::matches(Album *album) const
 
     while (parent && !(parent->isRoot() || (pparent && pparent->isAlbumRoot()) ) )
     {
-        if (rawMatches(parent))
+        if (rawMatches(sourceAlbumModel()->indexForAlbum(parent), parent))
             return ParentMatch;
 
         parent = parent->parent();
@@ -165,7 +169,7 @@ AlbumFilterModel::MatchResult AlbumFilterModel::matches(Album *album) const
     AlbumIterator it(album);
     while (it.current())
     {
-        if (rawMatches(*it))
+        if (rawMatches(sourceAlbumModel()->indexForAlbum(*it), *it))
             return ChildMatch;
         ++it;
     }
@@ -175,11 +179,10 @@ AlbumFilterModel::MatchResult AlbumFilterModel::matches(Album *album) const
 
 bool AlbumFilterModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
 {
-    QModelIndex index = sourceAlbumModel()->index(source_row, 0, source_parent);
-    Album *album = sourceAlbumModel()->albumForIndex(index);
-    if (!album)
-        return false;
-    MatchResult result = matches(album);
+    QModelIndex index = sourceModel()->index(source_row, 0, source_parent);
+    if (m_chainedModel)
+        index = m_chainedModel->mapToSourceAlbumModel(index);
+    MatchResult result = matches(index);
     return result;
 }
 
@@ -237,10 +240,10 @@ bool CheckableAlbumFilterModel::isFiltering() const
                     || m_filterPartiallyChecked;
 }
 
-bool CheckableAlbumFilterModel::rawMatches(Album *album) const
+bool CheckableAlbumFilterModel::rawMatches(const QModelIndex& source_index, Album *album) const
 {
 
-    bool accepted = AlbumFilterModel::rawMatches(album);
+    bool accepted = AlbumFilterModel::rawMatches(source_index, album);
 
     if (!m_filterChecked && !m_filterPartiallyChecked)
     {
@@ -335,8 +338,11 @@ bool SearchFilterModel::isFiltering() const
     return m_searchType != -2 || !m_listTemporary;
 }
 
-bool SearchFilterModel::rawMatches(Album *album) const
+bool SearchFilterModel::rawMatches(const QModelIndex& source_index, Album *album) const
 {
+    if (!AlbumFilterModel::rawMatches(source_index, album))
+        return false;
+
     SAlbum *salbum = static_cast<SAlbum*>(album);
 
     if (m_searchType == -1)

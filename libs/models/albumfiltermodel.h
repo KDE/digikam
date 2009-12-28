@@ -72,8 +72,7 @@ public:
         ChildMatch,
         SpecialMatch
     };
-    MatchResult matches(Album *album) const;
-    MatchResult matches(const QModelIndex& index) const;
+    MatchResult matches(const QModelIndex& source_index) const;
 
 public Q_SLOTS:
 
@@ -91,8 +90,9 @@ protected:
      * overridden to provide custom filtering.
      *
      * @param album album to tell if it matches the filter criteria or not.
+     * @param index the corresponding index.
      */
-    virtual bool rawMatches(Album *album) const;
+    virtual bool rawMatches(const QModelIndex& source_index, Album *album) const;
 
     // use setSourceAlbumModel please
     virtual void setSourceModel(QAbstractItemModel* model);
@@ -126,7 +126,7 @@ public:
 
 protected:
 
-    virtual bool rawMatches(Album *album) const;
+    virtual bool rawMatches(const QModelIndex& index, Album *album) const;
 
     void setSourceAlbumModel(AbstractAlbumModel *source);
 
@@ -162,7 +162,7 @@ public:
 
 protected:
 
-    virtual bool rawMatches(Album *album) const;
+    virtual bool rawMatches(const QModelIndex& index, Album *album) const;
     void setSourceAlbumModel(AbstractAlbumModel *source);
 
     void setTypeFilter(int type);
