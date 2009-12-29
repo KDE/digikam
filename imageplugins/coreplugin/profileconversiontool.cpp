@@ -89,7 +89,7 @@ public:
     EditorToolSettings*      gboxSettings;
 
     IccProfile               currentProfile;
-    QCache<QString, QString> favoriteProfiles;
+    QCache<QString, bool>    favoriteProfiles;
 
     IccTransform             transform;
 
@@ -241,7 +241,7 @@ void ProfileConversionTool::slotProfileChanged()
 {
     d->gboxSettings->enableButton(EditorToolSettings::Ok, !d->profilesBox->currentProfile().isNull());
     updateTransform();
-    d->favoriteProfiles.insert(d->profilesBox->currentProfile().filePath(), 0);
+    d->favoriteProfiles.insert(d->profilesBox->currentProfile().filePath(), new bool(true));
     slotTimer();
 }
 
@@ -254,7 +254,7 @@ void ProfileConversionTool::readSettings()
     QStringList lastProfiles = group.readPathEntry(d->configRecentlyUsedProfilesEntry, QStringList());
 
     foreach (const QString &path, lastProfiles)
-        d->favoriteProfiles.insert(path, 0);
+        d->favoriteProfiles.insert(path, new bool(true));
 }
 
 void ProfileConversionTool::writeSettings()
