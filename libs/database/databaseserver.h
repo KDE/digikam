@@ -40,6 +40,7 @@ class DIGIKAM_EXPORT DatabaseServer : public QLocalServer
         void startDatabaseProcess();
         void createDatabase();
         void stopDatabaseProcess();
+        bool isRunning();
 
     private:
         QProcess *mDatabaseProcess;

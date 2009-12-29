@@ -435,7 +435,7 @@ void AlbumManager::checkDatabaseDirsAfterFirstRun(const QString& dbPath, const Q
     }
 }
 
-void AlbumManager::changeDatabase(const QString& dbType, const QString& dbName, const QString& dbHostName, int dbPort)
+void AlbumManager::changeDatabase(const QString& dbType, const QString& dbName, const QString& dbThumbnailsName, const QString& dbHostName, int dbPort, const QString &dbUser, const QString &dbPasswd, const QString &dbConnectOptions, bool internalServer)
 {
     // if there is no file at the new place, copy old one
     DatabaseParameters params = DatabaseAccess::parameters();
@@ -559,7 +559,7 @@ void AlbumManager::changeDatabase(const QString& dbType, const QString& dbName, 
             }
     }
 
-    if (setDatabase(dbType, dbName, dbHostName, dbPort, false))
+    if (setDatabase(dbType, dbName, dbThumbnailsName, dbHostName, dbPort, dbUser, dbPasswd, dbConnectOptions, internalServer, false))
     {
         QApplication::setOverrideCursor(Qt::WaitCursor);
         startScan();
@@ -568,13 +568,15 @@ void AlbumManager::changeDatabase(const QString& dbType, const QString& dbName, 
     }
 }
 
-bool AlbumManager::setDatabase(const QString& dbType, const QString& dbName, const QString& dbHostName, int dbPort, bool priority, const QString& suggestedAlbumRoot)
+bool AlbumManager::setDatabase(const QString dbType, const QString dbName, const QString dbThumbnailsName, const QString dbHostName, int dbPort, const QString dbUser, const QString dbPasswd, const QString dbConnectOptions, bool internalServer, bool priority, const QString suggestedAlbumRoot)
 {
-
     // ensure, embedded database is loaded
-    if (AlbumSettings::instance()->getInternalDatabaseServer())
+    if (internalServer)
     {
         DigikamApp::instance()->startInternalDatabase();
+    }else
+    {
+        DigikamApp::instance()->stopInternalDatabase();
     }
 
     if (dbName.isEmpty())
@@ -658,8 +660,8 @@ bool AlbumManager::setDatabase(const QString& dbType, const QString& dbName, con
 
     // -- Database initialization -------------------------------------------------
 
-    QString databaseName = AlbumSettings::instance()->getDatabaseName();
-    QString thumbnailDatabaseName = AlbumSettings::instance()->getDatabaseNameThumbnails();
+    QString databaseName = dbName;
+    QString thumbnailDatabaseName = dbThumbnailsName;
 
     // SQLite specifics
     if (AlbumSettings::instance()->getDatabaseType().isEmpty())
@@ -673,28 +675,15 @@ bool AlbumManager::setDatabase(const QString& dbType, const QString& dbName, con
         databaseName = QDir::cleanPath(databasePath + '/' + "digikam4.db");
         thumbnailDatabaseName = QDir::cleanPath(databasePath + '/' + "thumbnails-digikam.db");
     }
-    if (AlbumSettings::instance()->getInternalDatabaseServer())
-    {
-        const QString miscDir     = KStandardDirs::locateLocal("data", "digikam/db_misc");
-        DatabaseAccess::setParameters(DatabaseParameters::parametersFromConfig(QString("QMYSQL"),
-                                                                               QString("digikam"),
-                                                                               QString(""),
-                                                                               -1,
-                                                                               QString(""),
-                                                                               QString(""),
-                                                                               QString::fromLatin1("UNIX_SOCKET=%1/mysql.socket").arg(miscDir)),
-                                                                               DatabaseAccess::MainApplication);
-    }else
-    {
-        DatabaseAccess::setParameters(DatabaseParameters::parametersFromConfig(AlbumSettings::instance()->getDatabaseType(),
-                                                                               databaseName,
-                                                                               AlbumSettings::instance()->getDatabaseHostName(),
-                                                                               AlbumSettings::instance()->getDatabasePort(),
-                                                                               AlbumSettings::instance()->getDatabaseUserName(),
-                                                                               AlbumSettings::instance()->getDatabasePassword(),
-                                                                               AlbumSettings::instance()->getDatabaseConnectoptions()),
-                                                                               DatabaseAccess::MainApplication);
-    }
+    kDebug(50003) << "Using database settings: DBType ["<< dbType <<"] DBName ["<< dbName <<"] DBThumbnailsName ["<< dbThumbnailsName <<"] DBHostName ["<< dbHostName <<"] DBPort ["<< dbPort <<"] DBUser ["<< dbUser <<"] DBConnectOptions ["<< dbConnectOptions <<"]";
+    DatabaseAccess::setParameters(DatabaseParameters::parametersFromConfig(dbType,
+                                                                           databaseName,
+                                                                           dbHostName,
+                                                                           dbPort,
+                                                                           dbUser,
+                                                                           dbPasswd,
+                                                                           dbConnectOptions),
+                                                                           DatabaseAccess::MainApplication);
 
     DatabaseGUIErrorHandler *handler = new DatabaseGUIErrorHandler(DatabaseAccess::parameters());
     DatabaseAccess::initDatabaseErrorHandler(handler);
@@ -972,18 +961,18 @@ bool AlbumManager::setDatabase(const QString& dbType, const QString& dbName, con
 #ifdef USE_THUMBS_DB
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
-    if (AlbumSettings::instance()->getDatabaseType()=="QSQLITE")
+    if (dbType=="QSQLITE")
     {
         d->dirWatchBlackList << "thumbnails-digikam.db" << "thumbnails-digikam.db-journal";
     }
 
-    ThumbnailLoadThread::initializeThumbnailDatabase(AlbumSettings::instance()->getDatabaseType(),
+    ThumbnailLoadThread::initializeThumbnailDatabase(dbType,
             thumbnailDatabaseName,
-            AlbumSettings::instance()->getDatabaseHostName(),
-            AlbumSettings::instance()->getDatabasePort(),
-            AlbumSettings::instance()->getDatabaseUserName(),
-            AlbumSettings::instance()->getDatabasePassword(),
-            AlbumSettings::instance()->getDatabaseConnectoptions(),
+            dbHostName,
+            dbPort,
+            dbUser,
+            dbPasswd,
+            dbConnectOptions,
             new DatabaseThumbnailInfoProvider());
 
     ThumbnailDatabaseAccess::initDatabaseErrorHandler(handler);

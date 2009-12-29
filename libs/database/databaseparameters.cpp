@@ -143,17 +143,6 @@ DatabaseParameters DatabaseParameters::parametersFromConfig(const QString databa
     // only the database name is needed
 	parameters.readConfig();
 
-	/*
-	// now set default database entries according the default values
-	parameters.databaseType 	= parameters.m_DatabaseConfigs[parameters.m_DefaultDatabase].m_DatabaseID;
-	parameters.databaseName 	= parameters.m_DatabaseConfigs[parameters.m_DefaultDatabase].m_DatabaseName;
-	parameters.hostName     	= parameters.m_DatabaseConfigs[parameters.m_DefaultDatabase].m_HostName;
-	parameters.userName     	= parameters.m_DatabaseConfigs[parameters.m_DefaultDatabase].m_UserName;
-	parameters.password     	= parameters.m_DatabaseConfigs[parameters.m_DefaultDatabase].m_Password;
-	parameters.port         	= parameters.m_DatabaseConfigs[parameters.m_DefaultDatabase].m_Port.toInt();
-	parameters.connectOptions 	= parameters.m_DatabaseConfigs[parameters.m_DefaultDatabase].m_ConnectOptions;
-	*/
-
 	parameters.databaseType     = databaseType;
     parameters.databaseName     = databaseName;
     parameters.hostName         = databaseHostName;
@@ -208,6 +197,9 @@ void DatabaseParameters::removeFromUrl(KUrl& url)
     url.removeQueryItem("password");
 }
 
+/*
+ * TODO: Remove database specific connection settings. Only statements are needed.
+ */
 void DatabaseParameters::readConfig(){    
 	    QString filepath = KStandardDirs::locate("data", "digikam/database/dbconfig.xml");
         QFile file(filepath);
@@ -272,6 +264,9 @@ void DatabaseParameters::readConfig(){
 #endif
      }
 
+/*
+ * TODO: Remove database specific connection settings. Only statements are needed.
+ */
 databaseconfigelement DatabaseParameters::readDatabase(QDomElement &databaseElement){
 	databaseconfigelement l_Element;
 	l_Element.m_DatabaseID="Unidentified";

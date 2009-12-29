@@ -187,8 +187,8 @@ DigikamApp::DigikamApp()
     if(d->splashScreen)
         d->splashScreen->message(i18n("Scan Albums"));
 
-    AlbumManager* man = AlbumManager::instance();
-    man->setDatabase(QString("SOMETHINGELSE"), QString("SOME"), QString("SOME"), -1, false, QString("SOME"));
+    dbServer=0;
+    AlbumManager::instance()->setDatabase(AlbumSettings::instance()->getDatabaseType(), AlbumSettings::instance()->getDatabaseName(), AlbumSettings::instance()->getDatabaseNameThumbnails(), AlbumSettings::instance()->getDatabaseHostName(), AlbumSettings::instance()->getDatabasePort(), AlbumSettings::instance()->getDatabaseUserName(), AlbumSettings::instance()->getDatabasePassword(), AlbumSettings::instance()->getDatabaseConnectoptions(), AlbumSettings::instance()->getInternalDatabaseServer(), true);
 
     // set database error handler
 //    DatabaseAccess access;
@@ -331,7 +331,7 @@ DigikamApp::~DigikamApp()
     // close database server
     if (dbServer!=0 && AlbumSettings::instance()->getInternalDatabaseServer())
     {
-        dbServer->stopDatabaseProcess();
+        stopInternalDatabase();
     }
 
     m_instance = 0;
@@ -342,9 +342,26 @@ DigikamApp::~DigikamApp()
 
 void DigikamApp::startInternalDatabase()
 {
-    dbServer=new DatabaseServer(this);
-    dbServer->startDatabaseProcess();
+    if (dbServer==0)
+    {
+        dbServer=new DatabaseServer(this);
+    }
+    if (!dbServer->isRunning())
+    {
+        dbServer->startDatabaseProcess();
+    }
 }
+
+void DigikamApp::stopInternalDatabase()
+{
+    if (dbServer!=0 && dbServer->isRunning())
+    {
+        dbServer->stopDatabaseProcess();
+        dbServer->~QLocalServer();
+        dbServer=0;
+    }
+}
+
 
 DigikamApp* DigikamApp::instance()
 {
@@ -2175,7 +2192,7 @@ void DigikamApp::slotSetupChanged()
 
     if (!AlbumManager::instance()->databaseEqual(AlbumSettings::instance()->getDatabaseType(), AlbumSettings::instance()->getDatabaseName(), AlbumSettings::instance()->getDatabaseHostName(), AlbumSettings::instance()->getDatabasePort()))
     {
-        AlbumManager::instance()->changeDatabase(AlbumSettings::instance()->getDatabaseType(), AlbumSettings::instance()->getDatabaseName(), AlbumSettings::instance()->getDatabaseHostName(), AlbumSettings::instance()->getDatabasePort());
+        AlbumManager::instance()->changeDatabase(AlbumSettings::instance()->getDatabaseType(), AlbumSettings::instance()->getDatabaseName(),  AlbumSettings::instance()->getDatabaseNameThumbnails(), AlbumSettings::instance()->getDatabaseHostName(), AlbumSettings::instance()->getDatabasePort(), AlbumSettings::instance()->getDatabaseUserName(), AlbumSettings::instance()->getDatabasePassword(), AlbumSettings::instance()->getDatabaseConnectoptions(), AlbumSettings::instance()->getInternalDatabaseServer());
     }
 
     if(AlbumSettings::instance()->getShowFolderTreeViewItemsCount())

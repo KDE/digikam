@@ -33,6 +33,7 @@
 #include <kglobal.h>
 #include <kconfiggroup.h>
 #include <kglobalsettings.h>
+#include <kstandarddirs.h>
 
 // LibKDcraw includes
 
@@ -594,6 +595,22 @@ void AlbumSettings::readSettings()
     d->databaseUserName         = group.readEntry(d->configDatabaseUsername);
     d->databasePassword         = group.readEntry(d->configDatabasePassword);
     d->databaseConnectoptions   = group.readEntry(d->configDatabaseConnectOptions);
+
+    // Additional semantic checks for the database section.
+    // If the internal server should be started, then the connection options must be reset
+    if (d->internalDatabaseServer)
+    {
+        const QString miscDir     = KStandardDirs::locateLocal("data", "digikam/db_misc");
+        d->databaseType=QString("QMYSQL");
+        d->databaseName=QString("digikam");
+        d->databaseNameThumbnails=QString("digikam");
+        d->databaseHostName=QString("");
+        d->databasePort=-1;
+        d->databaseUserName=QString("root");
+        d->databasePassword=QString("");
+        d->databaseConnectoptions=QString::fromLatin1("UNIX_SOCKET=%1/mysql.socket").arg(miscDir);
+    }
+
 
 
 #ifdef HAVE_NEPOMUK

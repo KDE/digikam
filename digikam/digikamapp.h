@@ -92,6 +92,7 @@ public:
     void enableAlbumForwardHistory(bool enable);
 
     void startInternalDatabase();
+    void stopInternalDatabase();
 
     DigikamView *view() const;
     AlbumIconViewFilter *iconViewFilter() const;

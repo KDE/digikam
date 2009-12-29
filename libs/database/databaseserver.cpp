@@ -41,13 +41,20 @@
 
 DatabaseServer::DatabaseServer(QObject *parent=0):QLocalServer(parent)
 {
+    mDatabaseProcess=0;
     internalDBName="digikam";
 }
 
+/*
+ * Starts the database management server.
+ * TODO: Ensure that no other digikam dbms is running. Reusing this instance instead start a new one.
+ * Maybe this can be done by DBUS communication or an PID file.
+ */
 void DatabaseServer::startDatabaseProcess()
 {
   // QString filepath = KStandardDirs::locate("data", "digikam/database/dbconfig.xml");
 
+  //TODO Move the database command outside of the code to the dbconfig.xml file
   const QString mysqldPath("/usr/sbin/mysqld");
   if ( mysqldPath.isEmpty() )
     kDebug(50003) << "No path to mysqld set in server configuration!";
@@ -65,6 +72,12 @@ void DatabaseServer::startDatabaseProcess()
   const QString miscDir     = KStandardDirs::locateLocal("data", "digikam/db_misc");
   const QString fileDataDir = KStandardDirs::locateLocal("data", "digikam/file_db_data");
 
+  /*
+   * TODO Move the database command outside of the code to the dbconfig.xml file.
+   * Offer a variable to the dataDir. E.g. the command definition in the config file has to be: /usr/bin/mysql_install_db --user=digikam --datadir=$dataDir$
+   */
+  const QString mysqlInitCmd("/usr/bin/mysql_install_db --user=digikam --datadir="+dataDir);
+
   if (!dirs.exists(akDir))
   {
       dirs.makeDir(akDir);
@@ -81,11 +94,6 @@ void DatabaseServer::startDatabaseProcess()
   {
       dirs.makeDir(miscDir);
   }
-
-  // generate config file
-//  const QString globalConfig = XdgBaseDirs::findResourceFile( "config", QLatin1String( "Digikam/mysql-global.conf" ) );
-//  const QString localConfig  = XdgBaseDirs::findResourceFile( "config", QLatin1String( "Digikam/mysql-local.conf" ) );
-//  const QString actualConfig = XdgBaseDirs::saveDir( "data", QLatin1String( "Digikam" ) ) + QLatin1String("/mysql.conf");
 
     const QString globalConfig = KStandardDirs::locate("data", "digikam/database/mysql-global.conf");
     const QString localConfig  = KStandardDirs::locate("data", "digikam/database/mysql-local.conf");
@@ -164,6 +172,19 @@ void DatabaseServer::startDatabaseProcess()
   arguments << QString::fromLatin1( "--datadir=%1/" ).arg( dataDir );
   arguments << QString::fromLatin1( "--socket=%1/mysql.socket" ).arg( miscDir );
 
+
+  // init db
+  if (!QFile(dataDir+QDir::separator()+"mysql").exists())
+  {
+      QProcess initProcess(this);
+      initProcess.start( mysqlInitCmd );
+      if ( !initProcess.waitForFinished()) {
+        kDebug(50003) << "Could not start database init command!";
+        kDebug(50003) << "executable:" << mysqlInitCmd;
+        kDebug(50003) << "process error:" << initProcess.errorString();
+      }
+  }
+
   mDatabaseProcess = new QProcess( this );
   mDatabaseProcess->start( mysqldPath, arguments );
   if ( !mDatabaseProcess->waitForStarted() ) {
@@ -177,6 +198,7 @@ void DatabaseServer::startDatabaseProcess()
   {
     QSqlDatabase db = QSqlDatabase::addDatabase( "QMYSQL", initCon );
     db.setConnectOptions(QString::fromLatin1("UNIX_SOCKET=%1/mysql.socket").arg(miscDir));
+    db.setUserName(QString("root"));
     db.setDatabaseName( QString() ); // might not exist yet, then connecting to the actual db will fail
     if ( !db.isValid() )
       kDebug(50003) << "Invalid database object during database server startup";
@@ -205,7 +227,7 @@ void DatabaseServer::startDatabaseProcess()
           kDebug(50003) << "Query error:" << query.lastError().text();
           kDebug(50003) << "Database error:" << db.lastError().text();
           kDebug(50003) << "Trying to create database now...";
-          if ( !query.exec( QLatin1String( "CREATE DATABASE Digikam" ) ) ) {
+          if ( !query.exec( QLatin1String( "CREATE DATABASE digikam" ) ) ) {
             kDebug(50003) << "Failed to create database";
             kDebug(50003) << "Query error:" << query.lastError().text();
             kDebug(50003) << "Database error:" << db.lastError().text();
@@ -220,6 +242,9 @@ void DatabaseServer::startDatabaseProcess()
   QSqlDatabase::removeDatabase( initCon );
 }
 
+/*
+ * Creates the initial database for the internal server instance.
+ */
 void DatabaseServer::createDatabase()
 {
   const QLatin1String initCon( "initConnection" );
@@ -248,10 +273,29 @@ void DatabaseServer::createDatabase()
   QSqlDatabase::removeDatabase( initCon );
 }
 
+/*
+ * Terminates the databaser server process.
+ * TODO: Ensure that no other digikam application is using this dbms. Keep the server alive.
+ * Maybe this can be done by DBUS communication or an PID file.
+ */
 void DatabaseServer::stopDatabaseProcess()
 {
   if ( !mDatabaseProcess )
     return;
   mDatabaseProcess->terminate();
   mDatabaseProcess->waitForFinished();
+  mDatabaseProcess->~QProcess();
+  mDatabaseProcess=0;
+}
+
+/*
+ * Returns true if the server process is running.
+ */
+bool DatabaseServer::isRunning()
+{
+    if (mDatabaseProcess==0)
+    {
+        return false;
+    }
+    return mDatabaseProcess->state()==QProcess::Running;
 }
