@@ -97,6 +97,19 @@ public:
         bool operator==(const PostProcessingParameters& other) const;
     };
 
+    enum RawDecodingHint
+    {
+        /// The raw decoding options passed are taken from default, hardcoded settings
+        RawDecodingDefaultSettings,
+        /// The raw decoding options passed are taken from global settings
+        RawDecodingGlobalSettings,
+        /// The raw decoding options may be customly edited by the user
+        RawDecodingCustomSettings,
+        /// The raw decoding options are hardcoded settings optimized for loading time
+        /// The halfSizeColorImage and 16bit settings can be adjusted separately
+        RawDecodingTimeOptimized
+    };
+
     /**
      * An invalid LoadingDescription
      */
@@ -105,17 +118,16 @@ public:
     }
 
     /**
-     * Use this for files that are not raw files.
-     * Stores only the filePath.
+     * Use this for full loading of non-raw files
      */
     explicit LoadingDescription(const QString& filePath,
                                 ColorManagementSettings = NoColorConversion);
 
     /**
-     * For raw files:
-     * Stores filePath and RawDecodingSettings
+     * Use this for full loading of raw files
      */
     LoadingDescription(const QString& filePath, const DRawDecoding& settings,
+                       RawDecodingHint rawDecodingHint = RawDecodingCustomSettings,
                        ColorManagementSettings = NoColorConversion);
 
     /**
@@ -128,6 +140,7 @@ public:
      * Raw files / preview jobs:
      *    If size is not 0, the embedded preview will be loaded if available.
      *    If size is 0, DImg based loading will be used with default raw decoding settings.
+     *    You can also adjust raw decoding settings and hint in this case.
      */
     LoadingDescription(const QString& filePath, int size, bool exifRotate,
                        ColorManagementSettings = NoColorConversion,
@@ -135,13 +148,19 @@ public:
 
     QString           filePath;
     DRawDecoding      rawDecodingSettings;
+    RawDecodingHint   rawDecodingHint;
     PreviewParameters previewParameters;
     PostProcessingParameters postProcessingParameters;
 
     /**
-     * Return the cache key this description shall be stored as
+     * Return the cache key for this description
      */
     QString             cacheKey() const;
+    /**
+     * For some RAW images, the same cache key is not enough to say it is the correct result.
+     * You must check the raw decoding settings in this case.
+     */
+    bool                needCheckRawDecoding() const;
     /**
      * Return all possible cache keys, starting with the best choice,
      * for which a result may be found in the cache for this description.
