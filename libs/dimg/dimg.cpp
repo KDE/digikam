@@ -816,6 +816,14 @@ DImg::FORMAT DImg::fileFormat() const
         return NONE;
 }
 
+DRawDecoding DImg::rawDecodingSettings() const
+{
+    if (m_priv->attributes.contains("rawDecodingSettings"))
+        return m_priv->attributes.value("rawDecodingSettings").value<DRawDecoding>();
+    else
+        return DRawDecoding();
+}
+
 QByteArray DImg::getComments() const
 {
     return metadata(COM);
