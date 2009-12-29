@@ -26,4 +26,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 017 ==> 220423 : Ctrl + scrool doesn't work in editor when some tool open [patch].
 018 ==> 220399 : Crash in color space conversion.
 019 ==> 192461 : 16-bit TIFF render as 3x3 black & white mosaic [patch].
-020 ==> 
+020 ==> 217442 : Crash add tag to photo.
+021 ==> 
