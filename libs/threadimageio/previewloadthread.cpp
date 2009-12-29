@@ -40,9 +40,13 @@ PreviewLoadThread::PreviewLoadThread()
 LoadingDescription PreviewLoadThread::createLoadingDescription(const QString& filePath, int size, bool exifRotate)
 {
     LoadingDescription description(filePath, size, exifRotate);
-    description.rawDecodingSettings.optimizeTimeLoading();
-    description.rawDecodingSettings.sixteenBitsImage   = false;
-    description.rawDecodingSettings.halfSizeColorImage = true;
+    if (DImg::fileFormat(filePath) == DImg::RAW)
+    {
+        description.rawDecodingSettings.optimizeTimeLoading();
+        description.rawDecodingSettings.sixteenBitsImage   = false;
+        description.rawDecodingSettings.halfSizeColorImage = true;
+        description.rawDecodingHint = LoadingDescription::RawDecodingTimeOptimized;
+    }
 
     ICCSettingsContainer settings = IccSettings::instance()->settings();
     if (settings.enableCM && settings.useManagedPreviews)

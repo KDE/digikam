@@ -189,23 +189,30 @@ void DImgInterface::setDisplayingWidget(QWidget *widget)
 
 void DImgInterface::load(const QString& filename, IOFileSettingsContainer *iofileSettings)
 {
-    LoadingDescription description(filename, iofileSettings->rawDecodingSettings, LoadingDescription::ConvertForEditor);
+    LoadingDescription description(filename, LoadingDescription::ConvertForEditor);
 
-    if (iofileSettings->useRAWImport && DImg::fileFormat(filename) == DImg::RAW)
+    if (DImg::fileFormat(filename) == DImg::RAW)
     {
-        d->nextRawDescription = description;
+        description = LoadingDescription(filename, iofileSettings->rawDecodingSettings,
+                                         LoadingDescription::RawDecodingGlobalSettings,
+                                         LoadingDescription::ConvertForEditor);
 
-        RawImport *rawImport = new RawImport(KUrl(filename), this);
-        EditorToolIface::editorToolIface()->loadTool(rawImport);
+        if (iofileSettings->useRAWImport)
+        {
+            d->nextRawDescription = description;
 
-        connect(rawImport, SIGNAL(okClicked()),
-                this, SLOT(slotLoadRawFromTool()));
+            RawImport *rawImport = new RawImport(KUrl(filename), this);
+            EditorToolIface::editorToolIface()->loadTool(rawImport);
 
-        connect(rawImport, SIGNAL(cancelClicked()),
-                this, SLOT(slotLoadRaw()));
+            connect(rawImport, SIGNAL(okClicked()),
+                    this, SLOT(slotLoadRawFromTool()));
 
-        d->thread->stopLoading();
-        return;
+                    connect(rawImport, SIGNAL(cancelClicked()),
+                            this, SLOT(slotLoadRaw()));
+
+                            d->thread->stopLoading();
+                            return;
+        }
     }
     else
     {
@@ -219,7 +226,10 @@ void DImgInterface::slotLoadRawFromTool()
 {
     RawImport *rawImport = dynamic_cast<RawImport*>(EditorToolIface::editorToolIface()->currentTool());
     if (rawImport)
+    {
         d->nextRawDescription.rawDecodingSettings = rawImport->rawDecodingSettings();
+        d->nextRawDescription.rawDecodingHint     = LoadingDescription::RawDecodingCustomSettings;
+    }
     slotLoadRaw();
 }
 
@@ -557,6 +567,8 @@ void DImgInterface::switchToLastSaved(const QString& newFilename)
     QVariant readonly = d->image.attribute("savedformat-isreadonly");
     if (!readonly.isNull())
         d->image.setAttribute("isreadonly", readonly.toBool());
+
+    d->image.removeAttribute("rawDecodingSettings");
 }
 
 void DImgInterface::setModified()
