@@ -23,4 +23,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 014 ==> 198697 : Images are not sorted in the Import window.
 015 ==> 220398 : Downloaded/deleted all from SD card, went to other Digikam window, browsed two folders, closed windows, crashed.
 016 ==> 215473 : Remember openend albums after closing digikam.
-017 ==> 
+017 ==> 220423 : Ctrl + scrool doesn't work in editor when some tool open [patch].
+018 ==> 
