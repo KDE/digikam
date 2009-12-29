@@ -26,6 +26,7 @@
 
 // Qt includes
 
+#include <kdebug.h>
 #include <QApplication>
 
 // Local includes
@@ -107,9 +108,22 @@ void SharedLoadingTask::execute()
         // find possible cached images
         DImg *cachedImg = 0;
         QStringList lookupKeys = m_loadingDescription.lookupCacheKeys();
-        for ( QStringList::Iterator it = lookupKeys.begin(); it != lookupKeys.end(); ++it ) {
-            if ( (cachedImg = cache->retrieveImage(*it)) )
-                break;
+        foreach (const QString& key, lookupKeys)
+        {
+            if ( (cachedImg = cache->retrieveImage(key)) )
+            {
+                if (m_loadingDescription.needCheckRawDecoding())
+                {
+                    if (cachedImg->rawDecodingSettings() == m_loadingDescription.rawDecodingSettings)
+                        break;
+                    else
+                        cachedImg = 0;
+                }
+                else
+                {
+                    break;
+                }
+            }
         }
 
         if (cachedImg)
