@@ -28,4 +28,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 019 ==> 192461 : 16-bit TIFF render as 3x3 black & white mosaic [patch].
 020 ==> 217442 : Crash add tag to photo.
 021 ==> 211681 : Raw import tool decoding twice.
-022 ==> 
+022 ==> 216134 : Batch Mode does not generate 16 bit tif [patch].
+023 ==>
+
