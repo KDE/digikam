@@ -293,6 +293,11 @@ Album *AbstractAlbumModel::albumForIndex(const QModelIndex& index) const
     return static_cast<Album*>(index.internalPointer());
 }
 
+Album *AbstractAlbumModel::retrieveAlbum(const QModelIndex& index)
+{
+    return index.data(AbstractAlbumModel::AlbumPointerRole).value<Album*>();
+}
+
 Album *AbstractAlbumModel::rootAlbum() const
 {
     return d->rootAlbum;

@@ -114,6 +114,11 @@ public:
         the album is not contained in this model. */
     QModelIndex indexForAlbum(Album *album) const;
 
+    /** Returns the album represented by the index. In contrast to albumForIndex(),
+     *  the index can be from any proxy model, as long as an AbstractAlbumModel is at the end.
+     */
+    static Album *retrieveAlbum(const QModelIndex& index);
+
     Album *rootAlbum() const;
     /// Return the index corresponding to the root album. If the policy is IgnoreRootAlbum, this is an invalid index. */
     QModelIndex rootAlbumIndex() const;
