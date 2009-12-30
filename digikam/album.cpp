@@ -572,6 +572,37 @@ bool SAlbum::isTemporarySearch() const
 
 }
 
+QString SAlbum::displayTitle() const
+{
+    if (isTemporarySearch())
+    {
+        switch(m_searchType)
+        {
+            case DatabaseSearch::TimeLineSearch:
+                return i18n("Current Timeline Search");
+            case DatabaseSearch::HaarSearch:
+            {
+                if (title() == getTemporaryHaarTitle(DatabaseSearch::HaarImageSearch))
+                    return i18n("Current Fuzzy Image Search");
+                else if (title() == getTemporaryHaarTitle(DatabaseSearch::HaarSketchSearch))
+                    return i18n("Current Fuzzy Sketch Search");
+                break;
+            }
+            case DatabaseSearch::MapSearch:
+                return i18n("Current Map Search");
+            case DatabaseSearch::KeywordSearch:
+            case DatabaseSearch::AdvancedSearch:
+            case DatabaseSearch::LegacyUrlSearch:
+                return i18n("Current Search");
+            case DatabaseSearch::DuplicatesSearch:
+                return i18n("Current Duplicates Search");
+            case DatabaseSearch::UndefinedType:
+                break;
+        }
+    }
+    return title();
+}
+
 QString SAlbum::getTemporaryTitle(DatabaseSearch::Type type, DatabaseSearch::HaarSearchType haarType)
 {
 
