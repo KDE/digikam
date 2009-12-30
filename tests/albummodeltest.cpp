@@ -205,7 +205,15 @@ void AlbumModelTest::init()
     }
 
     ScanController::instance()->completeCollectionScan();
-    AlbumManager::instance()->refresh();
+
+    if (AlbumManager::instance()->allDAlbums().count() <= 1)
+    {
+        qDebug() << "Waiting for AlbumManager and the IOSlave to create DAlbums - there is a timer waiting for 5 seconds.";
+        QEventLoop loop;
+        connect(AlbumManager::instance(), SIGNAL(signalAllDAlbumsLoaded()),
+                &loop, SLOT(quit()));
+        loop.exec();
+    }
 
     qDebug() << "date albums: " << AlbumManager::instance()->allDAlbums();
 
