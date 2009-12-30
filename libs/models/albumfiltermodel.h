@@ -50,7 +50,9 @@ public:
 
     AbstractAlbumModel *sourceAlbumModel() const;
     QModelIndex mapToSourceAlbumModel(const QModelIndex& index) const;
+    QModelIndex mapFromSourceAlbumModel(const QModelIndex& index) const;
 
+    /// Convenience methods
     Album *albumForIndex(const QModelIndex& index) const;
     QModelIndex indexForAlbum(Album *album) const;
     QModelIndex rootAlbumIndex() const;
@@ -59,20 +61,21 @@ public:
     virtual bool isFiltering() const;
     SearchTextSettings searchTextSettings() const;
 
-    /** Returns if the filter matches this album (same logic as filterAcceptsRow).
-        An album matches if the search text settings are found in a parent album's title,
-        in the album's title or in a child album's title, or if it is a special album (root)
-        that is never filtered out. */
     enum MatchResult
     {
-        /// Can use as bool value if match/no match only is needed
+        /// This enum can be used as a boolean value if match/no match only is needed
         NoMatch = 0,
         TitleMatch,
         ParentMatch,
         ChildMatch,
         SpecialMatch
     };
-    MatchResult matches(const QModelIndex& source_index) const;
+    /**
+     * Returns the MatchResult of an index of this model.
+     * Never returns NoMatch for a valid index, because in this case,
+     * the index would rather be filtered out.
+     **/
+    MatchResult matchResult(const QModelIndex& index) const;
 
 public Q_SLOTS:
 
@@ -86,13 +89,20 @@ Q_SIGNALS:
 protected:
 
     /**
-     * This method provides the basic match checking algorithm. It can be
-     * overridden to provide custom filtering.
+     * Returns if the filter matches this album (same logic as filterAcceptsRow).
+     * An album matches if the search text settings are found in a parent album's title,
+     * in the album's title or in a child album's title, or if it is a special album (root)
+     * that is never filtered out.
+     **/
+    MatchResult matchResult(Album *album) const;
+    /**
+     * This method provides the basic match checking algorithm.
+     * Return true if this single album matches the current criteria.
+     * This method can be overridden to provide custom filtering.
      *
      * @param album album to tell if it matches the filter criteria or not.
-     * @param index the corresponding index.
      */
-    virtual bool rawMatches(const QModelIndex& source_index, Album *album) const;
+    virtual bool matches(Album *album) const;
 
     // use setSourceAlbumModel please
     virtual void setSourceModel(QAbstractItemModel* model);
@@ -126,7 +136,7 @@ public:
 
 protected:
 
-    virtual bool rawMatches(const QModelIndex& index, Album *album) const;
+    virtual bool matches(Album *album) const;
 
     void setSourceAlbumModel(AbstractAlbumModel *source);
 
@@ -162,7 +172,7 @@ public:
 
 protected:
 
-    virtual bool rawMatches(const QModelIndex& index, Album *album) const;
+    virtual bool matches(Album *album) const;
     void setSourceAlbumModel(AbstractAlbumModel *source);
 
     void setTypeFilter(int type);

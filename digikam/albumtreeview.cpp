@@ -262,8 +262,7 @@ void AbstractAlbumTreeView::slotFilterChanged()
         return;
     }
 
-    bool hasAnyMatch = checkExpandedState(QModelIndex());
-    emit filteringDone(hasAnyMatch);
+    checkExpandedState(QModelIndex());
 }
 
 void AbstractAlbumTreeView::slotRootAlbumAvailable()
@@ -275,7 +274,8 @@ bool AbstractAlbumTreeView::checkExpandedState(const QModelIndex& index)
 {
     bool anyMatch = false;
 
-    AlbumFilterModel::MatchResult result = m_albumFilterModel->matches(index);
+    QModelIndex source_index = m_albumFilterModel->mapToSource(index);
+    AlbumFilterModel::MatchResult result = m_albumFilterModel->matchResult(source_index);
     if (result == AlbumFilterModel::ChildMatch)
         expand(index);
     anyMatch = result;
@@ -499,10 +499,10 @@ void AbstractAlbumTreeView::restoreState(const QModelIndex &index)
 
         Digikam::State state = d->statesByAlbumId[album->id()];
 
-        kDebug() << "Trying to restore state of album " << album->title()
+        /*kDebug() << "Trying to restore state of album " << album->title()
                  << ": state(selected = " << state.selected
                  << ", expanded = " << state.expanded
-                 << ", currentIndex = " << state.currentIndex << ")";
+                 << ", currentIndex = " << state.currentIndex << ")";*/
         if (state.selected)
         {
             selectionModel()->select(index, QItemSelectionModel::Select

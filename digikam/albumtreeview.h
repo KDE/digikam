@@ -127,8 +127,6 @@ Q_SIGNALS:
     void currentAlbumChanged(Album *currentAlbum);
     /// Emitted when the current selection changes. Use currentChanged unless in multi-selection mode.
     void selectedAlbumsChanged(QList<Album*> selectedAlbums);
-    /// Emitted when search text settings have been changed
-    void filteringDone(bool atLeastOneMatch);
 
 protected Q_SLOTS:
 

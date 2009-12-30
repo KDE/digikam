@@ -119,29 +119,42 @@ QModelIndex AlbumFilterModel::mapToSourceAlbumModel(const QModelIndex& index) co
     return mapToSource(index);
 }
 
+QModelIndex AlbumFilterModel::mapFromSourceAlbumModel(const QModelIndex& albummodel_index) const
+{
+    if (m_chainedModel)
+        return mapFromSource(m_chainedModel->mapFromSourceAlbumModel(albummodel_index));
+    return mapFromSource(albummodel_index);
+}
+
 Album *AlbumFilterModel::albumForIndex(const QModelIndex& index) const
 {
-    return sourceAlbumModel()->albumForIndex(mapToSourceAlbumModel(index));
+    return AbstractAlbumModel::retrieveAlbum(index);
 }
 
 QModelIndex AlbumFilterModel::indexForAlbum(Album *album) const
 {
-    return mapFromSource(sourceAlbumModel()->indexForAlbum(album));
+    return mapFromSourceAlbumModel(sourceAlbumModel()->indexForAlbum(album));
 }
 
 QModelIndex AlbumFilterModel::rootAlbumIndex() const
 {
-    return mapFromSource(sourceAlbumModel()->rootAlbumIndex());
+    return mapFromSourceAlbumModel(sourceAlbumModel()->rootAlbumIndex());
 }
 
-bool AlbumFilterModel::rawMatches(const QModelIndex& index, Album *) const
+bool AlbumFilterModel::matches(Album *album) const
 {
-    return index.data(Qt::DisplayRole).toString().contains(m_settings.text, m_settings.caseSensitive);
+    QModelIndex index = indexForAlbum(album);
+    QString displayTitle = index.data(Qt::DisplayRole).toString();
+    return displayTitle.contains(m_settings.text, m_settings.caseSensitive);
 }
 
-AlbumFilterModel::MatchResult AlbumFilterModel::matches(const QModelIndex& source_index) const
+AlbumFilterModel::MatchResult AlbumFilterModel::matchResult(const QModelIndex& index) const
 {
-    Album *album = sourceAlbumModel()->albumForIndex(source_index);
+    return matchResult(albumForIndex(index));
+}
+
+AlbumFilterModel::MatchResult AlbumFilterModel::matchResult(Album *album) const
+{
     if (!album)
         return NoMatch;
 
@@ -150,7 +163,7 @@ AlbumFilterModel::MatchResult AlbumFilterModel::matches(const QModelIndex& sourc
     if (album->isRoot() || (palbum && palbum->isAlbumRoot()))
         return SpecialMatch;
 
-    if (rawMatches(source_index, album))
+    if (matches(album))
         return TitleMatch;
 
     // check if any of the parents match the search
@@ -159,7 +172,7 @@ AlbumFilterModel::MatchResult AlbumFilterModel::matches(const QModelIndex& sourc
 
     while (parent && !(parent->isRoot() || (pparent && pparent->isAlbumRoot()) ) )
     {
-        if (rawMatches(sourceAlbumModel()->indexForAlbum(parent), parent))
+        if (matches(parent))
             return ParentMatch;
 
         parent = parent->parent();
@@ -169,7 +182,7 @@ AlbumFilterModel::MatchResult AlbumFilterModel::matches(const QModelIndex& sourc
     AlbumIterator it(album);
     while (it.current())
     {
-        if (rawMatches(sourceAlbumModel()->indexForAlbum(*it), *it))
+        if (matches(*it))
             return ChildMatch;
         ++it;
     }
@@ -180,9 +193,8 @@ AlbumFilterModel::MatchResult AlbumFilterModel::matches(const QModelIndex& sourc
 bool AlbumFilterModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
 {
     QModelIndex index = sourceModel()->index(source_row, 0, source_parent);
-    if (m_chainedModel)
-        index = m_chainedModel->mapToSourceAlbumModel(index);
-    MatchResult result = matches(index);
+    Album *album = AbstractAlbumModel::retrieveAlbum(index);
+    MatchResult result = matchResult(album);
     return result;
 }
 
@@ -240,10 +252,10 @@ bool CheckableAlbumFilterModel::isFiltering() const
                     || m_filterPartiallyChecked;
 }
 
-bool CheckableAlbumFilterModel::rawMatches(const QModelIndex& source_index, Album *album) const
+bool CheckableAlbumFilterModel::matches(Album *album) const
 {
 
-    bool accepted = AlbumFilterModel::rawMatches(source_index, album);
+    bool accepted = AlbumFilterModel::matches(album);
 
     if (!m_filterChecked && !m_filterPartiallyChecked)
     {
@@ -338,9 +350,9 @@ bool SearchFilterModel::isFiltering() const
     return m_searchType != -2 || !m_listTemporary;
 }
 
-bool SearchFilterModel::rawMatches(const QModelIndex& source_index, Album *album) const
+bool SearchFilterModel::matches(Album *album) const
 {
-    if (!AlbumFilterModel::rawMatches(source_index, album))
+    if (!AlbumFilterModel::matches(album))
         return false;
 
     SAlbum *salbum = static_cast<SAlbum*>(album);
