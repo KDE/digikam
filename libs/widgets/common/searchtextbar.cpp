@@ -100,7 +100,7 @@ SearchTextBar::SearchTextBar(QWidget *parent, const char* name, const QString& m
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(name + QString(" Search Text Tool"));
     setCompletionMode((KGlobalSettings::Completion)group.readEntry("AutoCompletionMode",
-                      (int)KGlobalSettings::CompletionAuto));
+                      (int)KGlobalSettings::completionMode()));
     d->settings.caseSensitive = (Qt::CaseSensitivity)group.readEntry("CaseSensitive", 
                                                                      (int)Qt::CaseInsensitive);
 }
@@ -109,7 +109,10 @@ SearchTextBar::~SearchTextBar()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(objectName() + QString(" Search Text Tool"));
-    group.writeEntry("AutoCompletionMode", (int)completionMode());
+    if (completionMode() != KGlobalSettings::completionMode())
+        group.writeEntry("AutoCompletionMode", (int)completionMode());
+    else
+        group.deleteEntry("AutoCompletionMode");
     group.writeEntry("CaseSensitive",      (int)d->settings.caseSensitive);
     group.sync();
 
