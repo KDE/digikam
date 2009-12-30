@@ -454,6 +454,9 @@ void FuzzySearchView::setupConnections()
     connect(d->searchFuzzyBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
             d->searchTreeView, SLOT(setSearchTextSettings(const SearchTextSettings&)));
 
+    connect(d->searchTreeView->albumFilterModel(), SIGNAL(hasSearchResult(bool)),
+            d->searchFuzzyBar, SLOT(slotSearchResult(bool)));
+
     connect(d->hsSelector, SIGNAL(valueChanged(int, int)),
             this, SLOT(slotHSChanged(int, int)));
 

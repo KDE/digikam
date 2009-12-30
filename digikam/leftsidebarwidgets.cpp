@@ -95,6 +95,9 @@ AlbumFolderViewSideBarWidget::AlbumFolderViewSideBarWidget(QWidget *parent,
     connect(d->searchTextBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
             d->albumFolderView->albumFilterModel(), SLOT(setSearchTextSettings(const SearchTextSettings&)));
 
+    connect(d->albumFolderView->albumFilterModel(), SIGNAL(hasSearchResult(bool)),
+            d->searchTextBar, SLOT(slotSearchResult(bool)));
+
     connect(d->albumFolderView, SIGNAL(signalFindDuplicatesInAlbum(Album*)),
             this, SIGNAL(signalFindDuplicatesInAlbum(Album*)));
 
@@ -195,6 +198,8 @@ TagViewSideBarWidget::TagViewSideBarWidget(QWidget *parent,
 
     connect(d->tagSearchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
             d->tagFolderView, SLOT(setSearchTextSettings(const SearchTextSettings&)));
+    connect(d->tagFolderView->albumFilterModel(), SIGNAL(hasSearchResult(bool)),
+            d->tagSearchBar, SLOT(slotSearchResult(bool)));
     connect(d->tagFolderView, SIGNAL(signalFindDuplicatesInAlbum(Album*)),
             this, SIGNAL(signalFindDuplicatesInAlbum(Album*)));
 
@@ -519,6 +524,9 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget *parent, SearchModel *searc
     connect(d->searchDateBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
             d->timeLineFolderView, SLOT(setSearchTextSettings(const SearchTextSettings&)));
 
+    connect(d->timeLineFolderView->albumFilterModel(), SIGNAL(hasSearchResult(bool)),
+            d->searchDateBar, SLOT(slotSearchResult(bool)));
+
     connect(d->timeUnitCB, SIGNAL(activated(int)),
             this, SLOT(slotTimeUnitChanged(int)));
 
@@ -823,6 +831,9 @@ SearchSideBarWidget::SearchSideBarWidget(QWidget *parent,
 
     connect(d->searchSearchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
             d->searchTreeView, SLOT(setSearchTextSettings(const SearchTextSettings&)));
+
+    connect(d->searchTreeView->albumFilterModel(), SIGNAL(hasSearchResult(bool)),
+            d->searchSearchBar, SLOT(slotSearchResult(bool)));
 
     connect(d->searchTreeView, SIGNAL(newSearch()),
             d->searchTabHeader, SLOT(newAdvancedSearch()));
