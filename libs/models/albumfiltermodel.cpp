@@ -143,8 +143,14 @@ QModelIndex AlbumFilterModel::rootAlbumIndex() const
 
 bool AlbumFilterModel::matches(Album *album) const
 {
-    QModelIndex index = indexForAlbum(album);
-    QString displayTitle = index.data(Qt::DisplayRole).toString();
+    // We want to work on the visual representation, so we use model data with AlbumTitleRole,
+    // not a direct Album method.
+    // We use direct source's index, not our index,
+    // because if the item is currently filtered out, we won't have an index for this album.
+    QModelIndex source_index = sourceAlbumModel()->indexForAlbum(album);
+    if (m_chainedModel)
+        source_index = m_chainedModel->mapFromSourceAlbumModel(source_index);
+    QString displayTitle = source_index.data(AbstractAlbumModel::AlbumTitleRole).toString();
     return displayTitle.contains(m_settings.text, m_settings.caseSensitive);
 }
 
