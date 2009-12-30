@@ -51,6 +51,8 @@ private Q_SLOTS:
 
     void testPAlbumModel();
     void testDAlbumModel();
+    void testDAlbumCount();
+    void testDAlbumContainsAlbums();
     void testTAlbumModel();
     void testSAlbumModel();
 
