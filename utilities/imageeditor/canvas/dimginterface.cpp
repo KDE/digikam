@@ -484,7 +484,7 @@ void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iof
         mimeType = getImageFormat();
 
     kDebug() << "Saving to :" << QFile::encodeName(fileName).data() << " ("
-                  << mimeType << ")";
+             << mimeType << ")";
 
     // JPEG file format.
     if ( mimeType.toUpper() == QString("JPG") || mimeType.toUpper() == QString("JPEG") ||
