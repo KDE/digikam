@@ -152,8 +152,10 @@ QVariant SearchModel::albumData(Album *a, int role) const
 {
     if (role == Qt::DisplayRole || role == AlbumTitleRole)
     {
-        QString name = a->title();
-        return m_replaceNames.value(name, name);
+        SAlbum *salbum = static_cast<SAlbum*>(a);
+        QString title = a->title();
+        QString displayTitle = salbum->displayTitle();
+        return m_replaceNames.value(title, displayTitle);
     }
     else if (role == Qt::DecorationRole)
     {

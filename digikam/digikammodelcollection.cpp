@@ -57,18 +57,8 @@ DigikamModelCollection::DigikamModelCollection() :
     d->tagFilterModel->setCheckable(true);
 
     d->searchModel = new SearchModel();
-    d->searchModel->addReplaceName(
-                    SAlbum::getTemporaryTitle(DatabaseSearch::HaarSearch,
-                                    DatabaseSearch::HaarImageSearch), i18n(
-                                    "Current Fuzzy Image Search"));
-    d->searchModel->addReplaceName(SAlbum::getTemporaryTitle(
-                    DatabaseSearch::HaarSearch,
-                    DatabaseSearch::HaarSketchSearch), i18n(
-                    "Current Fuzzy Sketch Search"));
-    d->searchModel->addReplaceName(SAlbum::getTemporaryTitle(
-                    DatabaseSearch::AdvancedSearch), i18n("Current Search"));
-    d->searchModel->addReplaceName(SAlbum::getTemporaryTitle(
-                    DatabaseSearch::MapSearch), i18n("Current Map Search"));
+    //d->searchModel->addReplaceName(SAlbum::getTemporaryTitle(
+      //              DatabaseSearch::AdvancedSearch), i18n("Current Search"));
 
     d->dateAlbumModel = new DateAlbumModel();
     // set icons initially
