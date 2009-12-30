@@ -463,7 +463,9 @@ void ImageScanner::scanTags()
 
 void ImageScanner::scanVideoFile()
 {
-    //TODO
+    /**
+    * @todo
+    */
 
     QVariantList metadataInfos;
 
@@ -522,7 +524,9 @@ void ImageScanner::scanVideoFile()
 
 void ImageScanner::scanAudioFile()
 {
-    //TODO
+    /**
+    * @todo
+    */
 
     QVariantList infos;
     infos << -1
