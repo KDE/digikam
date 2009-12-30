@@ -94,7 +94,7 @@ SearchTextBar::SearchTextBar(QWidget *parent, const char* name, const QString& m
     setAutoDeleteCompletionObject(true);
     setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum));
 
-    connect(this, SIGNAL(textChanged(const QString&)),
+    connect(this, SIGNAL(userTextChanged(const QString&)),
             this, SLOT(slotTextChanged(const QString&)));
 
     KSharedConfig::Ptr config = KGlobal::config();
@@ -316,7 +316,7 @@ void SearchTextBar::slotTextChanged(const QString& text)
 
     if (d->highlightOnCompletion)
     {
-        slotSearchResult(!completionObject()->allMatches(text).empty());
+        //slotSearchResult(!completionObject()->allMatches(text).empty());
     }
 
     d->settings.text = text;
@@ -327,7 +327,7 @@ void SearchTextBar::slotTextChanged(const QString& text)
 void SearchTextBar::slotSearchResult(bool match)
 {
 
-    if (text().isEmpty())
+    if (userText().isEmpty())
     {
         setPalette(QPalette());
         return;
