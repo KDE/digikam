@@ -39,53 +39,32 @@
 #include <klocale.h>
 #include <knuminput.h>
 
+// Local includes
+
+#include "ui_fillmodifierdialogwidget.h"
+
 namespace Digikam
 {
 FillDialog::FillDialog(ParseObject* parent)
-          : ParseObjectDialog(parent),
-            charInput(0), digitsInput(0)
+          : ParseObjectDialog(parent), ui(new Ui::FillModifierDialogWidget())
 {
-    QLabel* digitsLabel = new QLabel(i18nc("Length of the string", "Length:"), this);
-    digitsInput = new KIntNumInput(this);
-    digitsInput->setMinimum(1);
-    digitsInput->setMaximum(300);
-    digitsInput->setValue(1);
+    QWidget* mainWidget = new QWidget(this);
+    ui->setupUi(mainWidget);
 
-    QLabel* charLabel = new QLabel(i18nc("character to fill string with", "Character:"), this);
     QRegExp validateReg("\\w{1}");
     QRegExpValidator* validator = new QRegExpValidator(validateReg, this);
-    charInput = new KLineEdit(this);
-    charInput->setValidator(validator);
+    ui->charInput->setValidator(validator);
 
-    QLabel* alignLabel = new QLabel(i18n("Alignment:"), this);
-    alignBox = new KComboBox(this);
-    alignBox->insertItem(Left,  "Left");
-    alignBox->insertItem(Right, "Right");
-
-    // --------------------------------------------------------
-
-    QWidget*     mainWidget = new QWidget(this);
-    QGridLayout* mainLayout = new QGridLayout(this);
-    mainLayout->addWidget(digitsLabel, 0, 0, 1, 1);
-    mainLayout->addWidget(digitsInput, 0, 1, 1, 1);
-    mainLayout->addWidget(alignLabel,  1, 0, 1, 1);
-    mainLayout->addWidget(alignBox,    1, 1, 1, 1);
-    mainLayout->addWidget(charLabel,   2, 0, 1, 1);
-    mainLayout->addWidget(charInput,   2, 1, 1, 1);
-    mainLayout->setSpacing(KDialog::spacingHint());
-    mainLayout->setMargin(KDialog::spacingHint());
-    mainLayout->setRowStretch(3, 10);
-    mainWidget->setLayout(mainLayout);
+    ui->alignBox->insertItem(Left,  "Left");
+    ui->alignBox->insertItem(Right, "Right");
 
     setSettingsWidget(mainWidget);
-
-    // --------------------------------------------------------
-
-    digitsInput->setFocus();
+    ui->digitsInput->setFocus();
 }
 
 FillDialog::~FillDialog()
 {
+    delete ui;
 }
 
 // --------------------------------------------------------
@@ -145,9 +124,9 @@ void FillModifier::slotTokenTriggered(const QString& token)
     QPointer<FillDialog> dlg = new FillDialog(this);
     if (dlg->exec() == KDialog::Accepted)
     {
-        alignStr = (dlg->alignBox->currentIndex() == FillDialog::Left) ? QString('l') : QString('r');
-        length   = dlg->digitsInput->value();
-        charStr  = dlg->charInput->text();
+        alignStr = (dlg->ui->alignBox->currentIndex() == FillDialog::Left) ? QString('l') : QString('r');
+        length   = dlg->ui->digitsInput->value();
+        charStr  = dlg->ui->charInput->text();
     }
     delete dlg;
 
