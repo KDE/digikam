@@ -60,6 +60,8 @@ private Q_SLOTS:
 
 private:
 
+    void ensureItemCounts();
+
     QString dbPath;
     QString tempSuffix;
 

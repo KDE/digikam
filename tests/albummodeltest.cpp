@@ -207,13 +207,7 @@ void AlbumModelTest::init()
     ScanController::instance()->completeCollectionScan();
 
     if (AlbumManager::instance()->allDAlbums().count() <= 1)
-    {
-        qDebug() << "Waiting for AlbumManager and the IOSlave to create DAlbums - there is a timer waiting for 5 seconds.";
-        QEventLoop loop;
-        connect(AlbumManager::instance(), SIGNAL(signalAllDAlbumsLoaded()),
-                &loop, SLOT(quit()));
-        loop.exec();
-    }
+        ensureItemCounts();
 
     qDebug() << "date albums: " << AlbumManager::instance()->allDAlbums();
 
@@ -235,6 +229,17 @@ void AlbumModelTest::init()
     QVERIFY(rootFromList);
     QVERIFY(rootFromList == rootFromAlbumManager);
 
+}
+
+void AlbumModelTest::ensureItemCounts()
+{
+    qDebug() << "Waiting for AlbumManager and the IOSlave to create DAlbums...";
+    // trigger listing job
+    AlbumManager::instance()->prepareItemCounts();
+    QEventLoop loop;
+    connect(AlbumManager::instance(), SIGNAL(signalAllDAlbumsLoaded()),
+            &loop, SLOT(quit()));
+    loop.exec();
 }
 
 void AlbumModelTest::deletePAlbum(PAlbum *album)
@@ -295,6 +300,7 @@ void AlbumModelTest::testPAlbumModel()
 void AlbumModelTest::testDAlbumModel()
 {
     DateAlbumModel *albumModel = new DateAlbumModel();
+    ensureItemCounts();
     ModelTest *test = new ModelTest(albumModel, 0);
     delete test;
     delete albumModel;
@@ -304,10 +310,12 @@ void AlbumModelTest::testDAlbumContainsAlbums()
 {
 
     DateAlbumModel *albumModel = new DateAlbumModel();
+    ensureItemCounts();
 
     QVERIFY(albumModel->rootAlbum());
 
-    QVERIFY(albumModel->albumForIndex(albumModel->rootAlbumIndex()));
+    // DateAlbumModel is currently hardcoded to IgnoreRootAlbum
+    //QVERIFY(albumModel->albumForIndex(albumModel->rootAlbumIndex()));
 
     foreach (Album *album, AlbumManager::instance()->allDAlbums())
     {
@@ -370,6 +378,7 @@ void AlbumModelTest::testDAlbumCount()
 {
     DateAlbumModel *albumModel = new DateAlbumModel();
     albumModel->setShowCount(true);
+    ensureItemCounts();
 
     qDebug() << "iterating over root indices";
 
