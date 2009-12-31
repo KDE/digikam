@@ -26,8 +26,6 @@
 // Qt includes
 
 #include <QCheckBox>
-#include <QGridLayout>
-#include <QLabel>
 #include <QPointer>
 
 // KDE includes
@@ -39,48 +37,24 @@
 // Local includes
 
 #include "parseobjectdialog.h"
+#include "ui_replacemodifierdialogwidget.h"
 
 namespace Digikam
 {
 
 ReplaceDialog::ReplaceDialog(ParseObject* parent)
-             : ParseObjectDialog(parent),
-               source(0), destination(0), caseSensitive(0)
+             : ParseObjectDialog(parent), ui(new Ui::ReplaceModifierDialogWidget())
 {
-    QString replace  = i18nc("Replace text", "Replace");
-
-    QLabel* srcLabel = new QLabel(replace + ':');
-    source           = new KLineEdit(this);
-
-    QLabel* dstLabel = new QLabel(i18nc("Replace text with", "With:"));
-    destination      = new KLineEdit(this);
-
-    caseSensitive    = new QCheckBox(i18n("Case sensitive"));
-    caseSensitive->setChecked(false);
-
-    isRegExp         = new QCheckBox(i18n("Regular Expression"));
-    isRegExp->setChecked(false);
-
-    QWidget*     mainWidget = new QWidget(this);
-    QGridLayout* mainLayout = new QGridLayout(this);
-    mainLayout->addWidget(caseSensitive, 0, 0, 1,-1);
-    mainLayout->addWidget(isRegExp,      1, 0, 1,-1);
-    mainLayout->addWidget(srcLabel,      2, 0, 1, 1);
-    mainLayout->addWidget(source,        2, 1, 1, 1);
-    mainLayout->addWidget(dstLabel,      3, 0, 1, 1);
-    mainLayout->addWidget(destination,   3, 1, 1, 1);
-    mainLayout->setSpacing(KDialog::spacingHint());
-    mainLayout->setMargin(KDialog::spacingHint());
-    mainLayout->setRowStretch(4, 10);
-    mainWidget->setLayout(mainLayout);
-
+    QWidget* mainWidget = new QWidget(this);
+    ui->setupUi(mainWidget);
     setSettingsWidget(mainWidget);
 
-    source->setFocus();
+    ui->source->setFocus();
 }
 
 ReplaceDialog::~ReplaceDialog()
 {
+    delete ui;
 }
 
 // --------------------------------------------------------
@@ -106,18 +80,18 @@ void ReplaceModifier::slotTokenTriggered(const QString& token)
     QPointer<ReplaceDialog> dlg = new ReplaceDialog(this);
     if (dlg->exec() == KDialog::Accepted)
     {
-        QString oldStr = dlg->source->text();
-        QString newStr = dlg->destination->text();
+        QString oldStr = dlg->ui->source->text();
+        QString newStr = dlg->ui->destination->text();
         if (!oldStr.isEmpty())
         {
             QString options;
 
-            if (dlg->isRegExp->isChecked())
+            if (dlg->ui->isRegExp->isChecked())
             {
                 options.append('r');
             }
 
-            if (!dlg->caseSensitive->isChecked())
+            if (!dlg->ui->caseSensitive->isChecked())
             {
                 options.append('i');
             }
