@@ -974,10 +974,12 @@ void AlbumManager::startScan()
 
     d->rootSAlbum = new SAlbum(i18n("My Searches"), 0, true);
     emit signalAlbumAboutToBeAdded(d->rootSAlbum, 0, 0);
+    d->allAlbumsIdHash[d->rootSAlbum->globalID()] = d->rootSAlbum;
     emit signalAlbumAdded(d->rootSAlbum);
 
     d->rootDAlbum = new DAlbum(QDate(), true);
     emit signalAlbumAboutToBeAdded(d->rootDAlbum, 0, 0);
+    d->allAlbumsIdHash[d->rootDAlbum->globalID()] = d->rootDAlbum;
     emit signalAlbumAdded(d->rootDAlbum);
 
     // create albums for album roots
