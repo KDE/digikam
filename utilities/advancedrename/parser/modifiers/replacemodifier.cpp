@@ -48,7 +48,6 @@ ReplaceDialog::ReplaceDialog(ParseObject* parent)
     QWidget* mainWidget = new QWidget(this);
     ui->setupUi(mainWidget);
     setSettingsWidget(mainWidget);
-
     ui->source->setFocus();
 }
 

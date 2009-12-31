@@ -49,6 +49,7 @@ SequenceNumberDialog::SequenceNumberDialog(ParseObject* parent)
     QWidget* mainWidget = new QWidget(this);
     ui->setupUi(mainWidget);
     setSettingsWidget(mainWidget);
+    ui->digits->setFocus();
 }
 
 SequenceNumberDialog::~SequenceNumberDialog()
