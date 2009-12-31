@@ -49,22 +49,14 @@ FilePropertiesOption::FilePropertiesOption()
     addToken("[user]", i18n("Owner of the file"),
              i18nc("Owner of the file", "Owner"));
 
-    addToken("[userid]", i18n("Owner ID of the file"),
-             i18nc("Owner id of the file", "Owner ID"));
-
     addToken("[group]", i18n("Group of the file"),
              i18nc("Group of the file", "Group"));
-
-    addToken("[groupid]", i18n("Group ID of the file"),
-             i18nc("Group id of the file", "Group ID"));
 
     QString regExpStr;
     regExpStr.append('(');
     regExpStr.append(escapeToken("[file]")).append('|');
     regExpStr.append(escapeToken("[user]")).append('|');
-    regExpStr.append(escapeToken("[userid]")).append('|');
     regExpStr.append(escapeToken("[group]")).append('|');
-    regExpStr.append(escapeToken("[groupid]")).append('|');
     regExpStr.append("(\\.?)").append(escapeToken("[ext]"));
     regExpStr.append(')');
 
@@ -88,17 +80,9 @@ QString FilePropertiesOption::parseOperation(ParseSettings& settings)
     {
         result = fi.owner();
     }
-    else if (token == QString("[userid]"))
-    {
-        result = QString::number(fi.ownerId());
-    }
     else if (token == QString("[group]"))
     {
         result = fi.group();
-    }
-    else if (token == QString("[groupid]"))
-    {
-        result = QString::number(fi.groupId());
     }
     else if (token == QString("[ext]"))
     {
