@@ -49,11 +49,11 @@ FilePropertiesOption::FilePropertiesOption()
     addToken("[user]", i18n("Owner of the file"),
              i18nc("Owner of the file", "Owner"));
 
-    addToken("[group]", i18n("Group of the file"),
-             i18nc("Group of the file", "Group"));
-
     addToken("[userid]", i18n("Owner ID of the file"),
              i18nc("Owner id of the file", "Owner ID"));
+
+    addToken("[group]", i18n("Group of the file"),
+             i18nc("Group of the file", "Group"));
 
     addToken("[groupid]", i18n("Group ID of the file"),
              i18nc("Group id of the file", "Group ID"));
