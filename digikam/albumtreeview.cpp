@@ -1063,8 +1063,6 @@ void SearchTreeView::slotSelectSAlbum(SAlbum *salbum)
 DateAlbumTreeView::DateAlbumTreeView(QWidget *parent, DateAlbumModel *dateAlbumModel)
     : AbstractCountingAlbumTreeView(dateAlbumModel, parent)
 {
-    connect(AlbumManager::instance(), SIGNAL(signalDAlbumsDirty(const QMap<YearMonth, int>&)),
-             m_albumModel, SLOT(setYearMonthMap(const QMap<YearMonth, int>&)));
 }
 
 DateAlbumModel *DateAlbumTreeView::albumModel() const

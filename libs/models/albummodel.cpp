@@ -182,6 +182,8 @@ DateAlbumModel::DateAlbumModel(QObject *parent)
                                          AlbumManager::instance()->findDAlbum(0),
                                          IgnoreRootAlbum, parent)
 {
+    connect(AlbumManager::instance(), SIGNAL(signalDAlbumsDirty(const QMap<YearMonth, int>&)),
+            this, SLOT(setYearMonthMap(const QMap<YearMonth, int>&)));
 }
 
 DAlbum *DateAlbumModel::albumForIndex(const QModelIndex& index) const
