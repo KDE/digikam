@@ -30,5 +30,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 021 ==> 211681 : Raw import tool decoding twice.
 022 ==> 216134 : Batch Mode does not generate 16 bit tif [patch].
 023 ==> 220454 : Over-Exposure and Under-Exposure indicators do not work correctly in White Balance dialogue [patch].
-024 ==> 220708 : digiKam crashes on startup (segmentation fault, glibc, invalid pointer on free()) [qFree, QString::free, QString::operator=].
-025 ==> 
+024 ==> 220708 : digiKam crashes on startup segmentation fault, glibc, invalid pointer on free()) [qFree, QString::free, QString::operator=].
+025 ==> 220889 : Problem with color management.
+026 ==> 
