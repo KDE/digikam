@@ -3,10 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2004-08-24
- * Description : a plugin to reduce CCD noise.
+ * Date        : 2009-11-21
+ * Description : Wavelets Noise Reduction batch tool.
  *
- * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,38 +21,44 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEPLUGIN_NOISEREDUCTION_H
-#define IMAGEPLUGIN_NOISEREDUCTION_H
-
-// Qt includes
-
-#include <QVariant>
+#ifndef NOISEREDUCTION_H
+#define NOISEREDUCTION_H
 
 // Local includes
 
-#include "imageplugin.h"
-#include "digikam_export.h"
+#include "batchtool.h"
 
-class KAction;
 
-class ImagePlugin_NoiseReduction : public Digikam::ImagePlugin
+namespace Digikam
+{
+
+class NoiseReductionSettings;
+
+class NoiseReduction : public BatchTool
 {
     Q_OBJECT
 
 public:
 
-    ImagePlugin_NoiseReduction(QObject *parent, const QVariantList& args);
-    ~ImagePlugin_NoiseReduction();
+    NoiseReduction(QObject* parent=0);
+    ~NoiseReduction();
 
-    void setEnabledActions(bool enable);
-
-private Q_SLOTS:
-
-    void slotNoiseReduction();
+    BatchToolSettings defaultSettings();
 
 private:
 
-    KAction *m_noiseReductionAction;
+    bool toolOperations();
+
+private Q_SLOTS:
+
+    void slotAssignSettings2Widget();
+    void slotSettingsChanged();
+
+private:
+
+    NoiseReductionSettings* m_settingsView;
 };
 
-#endif /* IMAGEPLUGIN_NOISEREDUCTION_H */
+}  // namespace Digikam
+
+#endif /* NOISEREDUCTION_H */

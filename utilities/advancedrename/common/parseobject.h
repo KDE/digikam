@@ -81,7 +81,7 @@ public:
     virtual ~ParseObject();
 
     QRegExp regExp() const;
-    void    setRegExp(const QString& regExp);
+    void    setRegExp(const QRegExp& regExp);
 
     void    setDescription(const QString& desc);
     QString description() const;
@@ -115,8 +115,8 @@ public:
     QAction* registerMenu(QMenu* parent);
 
     /**
-     * If multiple tokens have been assigned to a parser, a menu will be created.
-     * If you do not want a menu for every defined token, set this method to 'false' and
+     * If multiple tokens have been assigned to a parseobject, a menu will be created.
+     * If you want to display a menu for every defined token, set this method to 'true' and
      * re-implement the @see slotTokenTriggered method.
      * @param value boolean parameter to set token menu usage
      */
@@ -134,11 +134,10 @@ protected:
     /**
      * add a token to the parser, every parser should at least assign one token object
      * @param id the token id string (used for parsing)
-     * @param name an alias name for the token (used for button and action text)
-     * @param description the description of the token (used for example in the AdvancedRenameWidget for the tooltip)
+     * @param description the description of the token (used for example in the tooltip)
      * @return
      */
-    bool addTokenDescription(const QString& id, const QString& name, const QString& description);
+    bool addToken(const QString& id, const QString& description);
 
 protected Q_SLOTS:
 

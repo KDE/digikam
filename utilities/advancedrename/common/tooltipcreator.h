@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-09-14
- * Description : trimmed token modifier
+ * Description : a class to build the tooltip for a renameparser and its options
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -21,32 +21,45 @@
  *
  * ============================================================ */
 
-#include "trimmedmodifier.h"
+#ifndef TOOLTIPCREATOR_H
+#define TOOLTIPCREATOR_H
 
-// KDE includes
+// Qt includes
 
-#include <klocale.h>
-#include <kiconloader.h>
+#include <QString>
 
 namespace Digikam
 {
 
-TrimmedModifier::TrimmedModifier()
-               : Modifier(i18n("Trimmed"), i18n("Remove leading, trailing and extra whitespace"),
-                          SmallIcon("edit-cut"))
+class Parser;
+
+class TooltipCreator
 {
-    addToken("{trim}", description());
+public:
 
-    QRegExp reg("\\{trim\\}");
-    reg.setMinimal(true);
-    setRegExp(reg);
-}
+    TooltipCreator(Parser* parser);
+    virtual ~TooltipCreator();
 
-QString TrimmedModifier::modifyOperation(const QString& parseString, const QString& result)
-{
-    Q_UNUSED(parseString)
+    QString tooltip();
 
-    return result.simplified();
-}
+private:
+
+    // common methods
+    QString markOption(const QString& str);
+    QString tableStart();
+    QString tableEnd();
+
+
+    // parse object related methods
+    template <class T> QString createEntries(const QList<T*> &data);
+    template <class T> QString createSection(const QString& sectionName, const QList<T*> &data, bool lastSection = false);
+                       QString createHeader(const QString& str);
+
+private:
+
+    Parser* const parser;
+};
 
 } // namespace Digikam
+
+#endif /* TOOLTIPCREATOR_H */

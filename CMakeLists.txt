@@ -402,11 +402,13 @@ IF(DIGIKAM_CAN_BE_COMPILED)
                         ${KDE4_INCLUDES}
                         ${QT_INCLUDES}
                         ${GPHOTO2_INCLUDE_DIRS}
-                        ${SOPRANO_INCLUDE_DIR}
-                        ${NEPOMUK_INCLUDE_DIR}
                         ${CMAKE_CURRENT_SOURCE_DIR}/digikam
                         ${CMAKE_CURRENT_BINARY_DIR}/digikam
                        )
+
+    IF(NEPOMUK_FOUND)
+        INCLUDE_DIRECTORIES(${SOPRANO_INCLUDE_DIR} ${NEPOMUK_INCLUDE_DIR})
+    ENDIF(NEPOMUK_FOUND)
 
     IF(MARBLEWIDGET_FOUND)
         INCLUDE_DIRECTORIES(${LIBMARBLEWIDGET_INCLUDE_DIR})
@@ -524,6 +526,8 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/icctransformfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/dimgimagefilters.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/colormodifier.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/waveletsnr.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/noisereductionsettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/dimggaussianblur.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/dimgsharpen.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/dimgthreadedfilter.cpp
@@ -581,8 +585,8 @@ IF(DIGIKAM_CAN_BE_COMPILED)
        )
 
     IF(MSVC)
-	SET(libjpegutils_SRCS
-    	    ${libjpegutils_SRCS}
+    SET(libjpegutils_SRCS
+            ${libjpegutils_SRCS}
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils/jpegwin.cpp
            )
     ENDIF(MSVC)
@@ -1007,6 +1011,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/enhance/autocorrection.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/enhance/restoration.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/enhance/sharpen.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/enhance/noisereduction.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/transform/rotate.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/transform/flip.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/transform/resize.cpp
@@ -1075,6 +1080,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/advancedrenameinput.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/advancedrenamewidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/dynamiclayout.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/highlighter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/modifier.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/option.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/parseobject.cpp
@@ -1083,7 +1089,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/parseresults.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/renamethread.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/token.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/highlighter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/tooltipcreator.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/defaultrenameparser.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/modifiers/defaultvaluemodifier.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/modifiers/firstletterofeachworduppercasemodifier.cpp

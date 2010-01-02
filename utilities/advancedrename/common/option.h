@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-08-08
- * Description : an abstract subparser class
+ * Description : an abstract option class
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -48,13 +48,6 @@ public:
 
     ParseResults parseResults();
     ParseResults modifiedResults();
-
-    /**
-     * Use this method to define whether the parser should use modifiers or not
-     * @param value boolean parameter to allow modifiers
-     */
-    void setUseModifiers(bool value);
-    bool useModifiers() const;
 
 public Q_SLOTS:
 

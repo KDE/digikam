@@ -27,10 +27,13 @@
 // Qt includes
 
 #include <QtGui/QLabel>
-#include <QtGui/QLineEdit>
 #include <QtGui/QListView>
 #include <QtGui/QComboBox>
 #include <QtCore/QPersistentModelIndex>
+
+// KDE includes
+
+#include <klineedit.h>
 
 // Local includes
 
@@ -42,7 +45,7 @@ class QTreeView;
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT ProxyLineEdit : public QLineEdit
+class DIGIKAM_EXPORT ProxyLineEdit : public KLineEdit
 {
     Q_OBJECT
 
@@ -58,31 +61,31 @@ public:
 
     ProxyLineEdit(QWidget *parent = 0);
     /// After constructing, set the actual widget here
-    void setWidget(QWidget *widget);
+    virtual void setWidget(QWidget *widget);
 
 protected:
 
-    void mousePressEvent(QMouseEvent *event);
-    void mouseMoveEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
-    void mouseDoubleClickEvent(QMouseEvent *event);
-    void keyPressEvent(QKeyEvent *event);
-    void focusInEvent(QFocusEvent *event);
-    void focusOutEvent(QFocusEvent *event);
-    void paintEvent(QPaintEvent *event);
-    void dragEnterEvent(QDragEnterEvent *event);
-    void dragMoveEvent(QDragMoveEvent *e);
-    void dragLeaveEvent(QDragLeaveEvent *e);
-    void dropEvent(QDropEvent *event);
-    void changeEvent(QEvent *event);
-    void contextMenuEvent(QContextMenuEvent *event);
-    void inputMethodEvent(QInputMethodEvent *event);
+    virtual void mousePressEvent(QMouseEvent* event);
+    virtual void mouseMoveEvent(QMouseEvent* event);
+    virtual void mouseReleaseEvent(QMouseEvent* event);
+    virtual void mouseDoubleClickEvent(QMouseEvent* event);
+    virtual void keyPressEvent(QKeyEvent* event);
+    virtual void focusInEvent(QFocusEvent* event);
+    virtual void focusOutEvent(QFocusEvent* event);
+    virtual void paintEvent(QPaintEvent* event);
+    virtual void dragEnterEvent(QDragEnterEvent* event);
+    virtual void dragMoveEvent(QDragMoveEvent* e);
+    virtual void dragLeaveEvent(QDragLeaveEvent* e);
+    virtual void dropEvent(QDropEvent* event);
+    virtual void changeEvent(QEvent* event);
+    virtual void contextMenuEvent(QContextMenuEvent* event);
+    virtual void inputMethodEvent(QInputMethodEvent* event);
 
     QSize minimumSizeHint() const;
-    QSize sizeHint() const;
+    QSize sizeHint()        const;
 
-    QWidget     *m_widget;
-    QVBoxLayout *m_layout;
+    QWidget*     m_widget;
+    QVBoxLayout* m_layout;
 };
 
 // -------------------------------------------------------------------------

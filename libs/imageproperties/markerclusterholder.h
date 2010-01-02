@@ -50,6 +50,14 @@ public:
 
     typedef QList<int> QIntList;
 
+    enum MouseMode
+    {
+        MouseModePan = 1,
+        MouseModeFilter = 2,
+        MouseModeSelect = 3,
+        MouseModeZoomCluster = 4
+    };
+
     /**
      * @brief Information about a marker
      */
@@ -379,6 +387,11 @@ public:
     void setCustomPaintFunction(const CustomPaintFunction customPaintFunction, void* const yourdata);
     ClusterInfo& cluster(const int clusterIndex);
     MarkerInfo& marker(const int markerIndex);
+    void setMouseMode(const MouseMode mode);
+    MouseMode getMouseMode() const;
+#if MARBLE_VERSION >= 0x000800
+    QAction* getMouseModeAction(const MarkerClusterHolder::MouseMode mouseMode) const;
+#endif // MARBLE_VERSION >= 0x000800
 
 protected:
 

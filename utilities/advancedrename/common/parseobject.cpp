@@ -46,7 +46,7 @@ public:
     ParseObjectPriv() :
         buttonRegistered(false),
         menuRegistered(false),
-        useTokenMenu(true)
+        useTokenMenu(false)
     {}
 
     bool         buttonRegistered;
@@ -103,9 +103,9 @@ QRegExp ParseObject::regExp() const
     return d->regExp;
 }
 
-void ParseObject::setRegExp(const QString& regExp)
+void ParseObject::setRegExp(const QRegExp& regExp)
 {
-    d->regExp = QRegExp(regExp);
+    d->regExp = regExp;
 }
 
 QPushButton* ParseObject::createButton(const QString& name, const QIcon& icon)
@@ -186,14 +186,14 @@ QAction* ParseObject::registerMenu(QMenu* parent)
     return action;
 }
 
-bool ParseObject::addTokenDescription(const QString& id, const QString& name, const QString& description)
+bool ParseObject::addToken(const QString& id, const QString& description)
 {
-    if (id.isEmpty() || name.isEmpty() || description.isEmpty())
+    if (id.isEmpty() || description.isEmpty())
     {
         return false;
     }
 
-    Token* token = new Token(id, name, description);
+    Token* token = new Token(id, description);
     if (!token)
     {
         return false;

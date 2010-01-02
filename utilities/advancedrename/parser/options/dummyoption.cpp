@@ -36,37 +36,41 @@ namespace Digikam
 {
 
 DummyOption::DummyOption()
-           : Option(i18n("<BUTTON TEXT>"),
-                    i18n("<TOOLTIP TEXT FOR BUTTON>"),
-                    SmallIcon("<ICON>"))
+           : Option(i18n("BUTTON TEXT"),
+                    i18n("TOOLTIP TEXT FOR BUTTON"),
+                    SmallIcon("ICON"))
 {
     /*
      * Example initialization
      *
-     * Use addTokenDescription() to provide at least one entry in the tooltip for the AdvancedRename utility.
+     * Use addToken() to provide at least one entry in the tooltip for the AdvancedRename utility.
      * It is possible to call this method more than one time, to have additional token information.
      * If you want to add parameters to your rename option, enclose them in pipe characters, to have them
      * properly marked in the tooltip, e.g.
      *
-     * addTokenDescription("[myoption:|parameter|]", i18nc("my rename option", "MyOption"),
+     * addToken("[myoption:|parameter|]", i18nc("my rename option", "MyOption"),
      *
      * Use setRegExp() to define the regular expression that identifies the parse option and its parameters
      */
 
-    addTokenDescription("[myoption]", i18nc("my rename option", "MyOption"),
-    setRegExp("<PARSING REGEXP>");
+    addToken("[myoption]", i18nc("my rename option", "MyOption"), i18n("my option description"));
 
-}
+    // --------------------------------------------------------
 
-void DummyOption::parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results)
-{
-    QRegExp reg = regExp();
+    QRegExp reg("<PARSING REGEXP>");
 
     // decide if the regexp is case sensitive
     reg.setCaseSensitivity(Qt::CaseInsensitive);
 
     // decide if the regexp matching is greedy
     reg.setMinimal(false);
+
+    setRegExp(reg);
+}
+
+void DummyOption::parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results)
+{
+    QRegExp reg = regExp();
 
     // --------------------------------------------------------
 
@@ -89,10 +93,6 @@ void DummyOption::parseOperation(const QString& parseString, ParseInformation& i
         if (reg.cap(1) == QString("[myoption]"))
         {
             tmp = doSomething();
-        }
-        else
-        {
-            tmp = QString();
         }
     }
     PARSE_LOOP_END(parseString, reg, tmp, results)

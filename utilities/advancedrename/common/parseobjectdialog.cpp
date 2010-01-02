@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-11-20
- * Description : a dialog that can be used to display a configuration 
+ * Description : a dialog that can be used to display a configuration
  *               dialog for a parse object
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
@@ -57,7 +57,7 @@ public:
     QLabel*  dialogTitle;
     QLabel*  dialogDescription;
     QLabel*  dialogIcon;
-    QFrame*  settingsWidget;
+    QWidget* settingsWidget;
 };
 
 ParseObjectDialog::ParseObjectDialog(ParseObject* parent)
@@ -75,11 +75,16 @@ ParseObjectDialog::ParseObjectDialog(ParseObject* parent)
     d->dialogDescription->setAlignment(Qt::AlignHCenter);
     d->dialogDescription->setWordWrap(true);
 
+    QFrame* line = new QFrame(this);
+    line->setFrameShape(QFrame::HLine);
+    line->setFrameShadow(QFrame::Sunken);
+
     QWidget* header           = new QWidget(this);
     QGridLayout* headerLayout = new QGridLayout(this);
     headerLayout->addWidget(d->dialogIcon,        0, 0, 1, 1);
     headerLayout->addWidget(d->dialogTitle,       0, 1, 1, 1);
     headerLayout->addWidget(d->dialogDescription, 1, 0, 1,-1);
+    headerLayout->addWidget(line,                 2, 0, 1,-1);
     headerLayout->setColumnStretch(1, 10);
     header->setLayout(headerLayout);
 
@@ -124,11 +129,12 @@ void ParseObjectDialog::setSettingsWidget(QWidget* settingsWidget)
         delete d->settingsWidget;
     }
 
-    d->settingsWidget = new QFrame(this);
+    d->settingsWidget = new QWidget(this);
     QGridLayout* l    = new QGridLayout(this);
     l->addWidget(settingsWidget);
+    l->setSpacing(0);
+    l->setMargin(0);
     d->settingsWidget->setLayout(l);
-    d->settingsWidget->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
     mainWidget()->layout()->addWidget(d->settingsWidget);
 }
 

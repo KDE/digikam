@@ -3,7 +3,9 @@ digiKam 1.0.0-rc - Release date: 2009-11-29
 
 NEW FEATURES:
 
-ImageEditor    : New tool to remove noise using wavelets.
+General        : Syntax highlighting and history management for AdvancedRename utility.
+ImageEditor    : New tool to remove noise using wavelets working in luminance (YCrCb color space).
+BatchQueueMgr  : New tool to remove noise using wavelets working in luminance (YCrCb color space).
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
@@ -18,7 +20,10 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 009 ==> 214718 : digiKam Crashed when trying to Edit photo.
 010 ==> 215314 : If initialized the program crashes.
 011 ==> 116061 : Possibility to blur chroma without touching luma.
-012 ==> 
+012 ==> 215645 : File save as in image editor crashes digiKam.
+013 ==> 212967 : Click on photo in geolocation view should open the photo.
+014 ==> 215733 : After move to new disk: all Album-categories and Album-preview missing.
+015 ==> 
 
 *********************************************************************************************************
 digiKam 1.0.0-beta6 - Release date: 2009-11-08

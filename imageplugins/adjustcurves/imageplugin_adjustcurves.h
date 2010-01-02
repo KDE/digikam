@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-12-01
- * Description : image histogram adjust curves. 
+ * Description : image histogram adjust curves.
  *
  * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -48,7 +48,7 @@ private Q_SLOTS:
 
 private:
 
-    KAction *m_curvesAction;
+    KAction* m_curvesAction;
 };
 
 #endif /* IMAGEPLUGIN_ADJUSTCURVES_H */

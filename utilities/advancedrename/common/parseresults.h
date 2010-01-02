@@ -37,14 +37,14 @@ class ParseResults
 {
 public:
 
-    typedef QPair<int, int>                 ResultsKey;
-    typedef QPair<QString, QString>         ResultsValue;
-    typedef QMap<ResultsKey, ResultsValue>  ResultsMap;
+    typedef QPair<int, int>                ResultsKey;
+    typedef QPair<QString, QString>        ResultsValue;
+    typedef QMap<ResultsKey, ResultsValue> ResultsMap;
 
 public:
 
-    ParseResults()   {};
-    ~ParseResults()  {};
+    ParseResults()  {};
+    ~ParseResults() {};
 
     void addEntry(const ResultsKey& key, const ResultsValue& value);
     void deleteEntry(const ResultsKey& key);
@@ -52,9 +52,9 @@ public:
     QList<ResultsKey>   keys()   const;
     QList<ResultsValue> values() const;
 
-    QString result(const ResultsKey& key);
-    QString token(const ResultsKey& key);
-    int     offset(const ResultsKey& key);
+    QString    result(const ResultsKey& key);
+    QString    token(const ResultsKey& key);
+    int        offset(const ResultsKey& key);
 
     ResultsKey keyAtPosition(int pos);
     bool       hasKeyAtPosition(int pos);
@@ -62,13 +62,13 @@ public:
     ResultsKey keyAtApproximatePosition(int pos);
     bool       hasKeyAtApproximatePosition(int pos);
 
-    bool isEmpty();
-    void clear();
-    void append(ParseResults& results);
+    bool       isEmpty();
+    void       clear();
+    void       append(ParseResults& results);
 
-    QString replaceTokens(const QString& markedString);
+    QString    replaceTokens(const QString& markedString);
 
-    void debug();
+    void       debug();
 
 private:
 

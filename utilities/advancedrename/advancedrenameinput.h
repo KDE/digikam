@@ -27,15 +27,15 @@
 // Qt includes
 
 #include <QWidget>
-#include <QTextEdit>
 
 // KDE includes
 
-#include <klineedit.h>
 #include <kcombobox.h>
+#include <ktextedit.h>
 
 // Local includes
 
+#include "comboboxutilities.h"
 #include "parser.h"
 
 class QMouseEvent;
@@ -45,9 +45,26 @@ class QKeyEvent;
 namespace Digikam
 {
 
+class AdvancedRenameLineEditProxy : public ProxyLineEdit
+{
+    Q_OBJECT
+
+public:
+
+    AdvancedRenameLineEditProxy(QWidget* parent);
+    virtual void setWidget(QWidget *widget);
+
+protected:
+
+    virtual void mousePressEvent(QMouseEvent* event);
+    virtual void mouseReleaseEvent(QMouseEvent* event);
+};
+
+// --------------------------------------------------------
+
 class AdvancedRenameLineEditPriv;
 
-class AdvancedRenameLineEdit : public QTextEdit
+class AdvancedRenameLineEdit : public KTextEdit
 {
     Q_OBJECT
 
@@ -61,7 +78,7 @@ public:
 
 public Q_SLOTS:
 
-    void slotSetHistoryItem(const QString&);
+    void slotSetText(const QString&);
     void slotCursorPositionChanged();
 
 Q_SIGNALS:
@@ -104,9 +121,6 @@ public:
     QString text() const;
     void    setText(const QString& text);
 
-    void    clearText();
-    void    clearTextAndHistory();
-
 Q_SIGNALS:
 
     void signalTextChanged(const QString&);
@@ -116,6 +130,13 @@ Q_SIGNALS:
 public Q_SLOTS:
 
     void slotAddToken(const QString&);
+    void slotClearText();
+    void slotClearTextAndHistory();
+    void slotSetFocus();
+
+private Q_SLOTS:
+
+    void slotClearButtonPressed();
 
 private:
 

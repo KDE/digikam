@@ -38,13 +38,14 @@ namespace Digikam
 FilePropertiesOption::FilePropertiesOption()
                     : Option(i18n("File"), i18n("Add file properties"), SmallIcon("folder-image"))
 {
-    addTokenDescription("[file]", i18nc("image filename", "Name"),
-             i18n("Filename"));
+    setUseTokenMenu(true);
 
-    addTokenDescription("[ext]", i18nc("image extension", "Extension"),
-             i18n("File extension, prepend with a '.' character, to modify the real file extension"));
+    addToken("[file]", i18n("Filename"));
+    addToken("[ext]",  i18n("File extension, prepend with a '.' character, to modify the real file extension"));
 
-    setRegExp("(\\[file\\]|(\\.?)\\[ext\\])");
+    QRegExp reg("(\\[file\\]|(\\.?)\\[ext\\])");
+    reg.setMinimal(true);
+    setRegExp(reg);
 }
 
 void FilePropertiesOption::parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results)
@@ -52,7 +53,6 @@ void FilePropertiesOption::parseOperation(const QString& parseString, ParseInfor
     QFileInfo fi(info.fileUrl.toLocalFile());
 
     QRegExp reg = regExp();
-    reg.setCaseSensitivity(Qt::CaseInsensitive);
 
     // --------------------------------------------------------
 

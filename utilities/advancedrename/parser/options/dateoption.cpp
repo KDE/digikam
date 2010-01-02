@@ -179,24 +179,18 @@ DateOption::DateOption()
                    i18n("Add date and time information"),
                    SmallIcon("view-pim-calendar"))
 {
-    setUseTokenMenu(false);
+    addToken("[date]",          i18n("Date and time (standard format)"));
+    addToken("[date:|key|]",    i18n("Date and time (|key| = ISO/Text/Locale)"));
+    addToken("[date:|format|]", i18n("Date and time") + " (" +  dateFormatLink + ')');
 
-    addTokenDescription("[date]", i18n("Date && Time"),
-             i18n("Date and time (standard format)"));
-
-    addTokenDescription("[date:|key|]", i18n("Date && Time (key)"),
-             i18n("Date and time (|key| = ISO/Text/Locale)"));
-
-    addTokenDescription("[date:|format|]", i18n("Date && Time (custom format)"),
-             i18n("Date and time") + " (" +  dateFormatLink + ')');
-
-    setRegExp("\\[date(:.*)?\\]");
+    QRegExp reg("\\[date(:.*)?\\]");
+    reg.setMinimal(true);
+    setRegExp(reg);
 }
 
 void DateOption::parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results)
 {
     QRegExp reg = regExp();
-    reg.setMinimal(true);
 
     // --------------------------------------------------------
 

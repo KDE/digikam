@@ -82,16 +82,15 @@ ReplaceDialog::~ReplaceDialog()
 // --------------------------------------------------------
 
 ReplaceModifier::ReplaceModifier()
-               : Modifier(i18nc("Replace text", "Replace..."), i18n("Replace strings in a renaming option"),
+               : Modifier(i18nc("Replace text", "Replace..."), i18n("Replace text in a renaming option"),
                           SmallIcon("document-edit"))
 {
-    setUseTokenMenu(false);
+    addToken("{r:\"|old|\", \"|new|\"}",  i18n("Replace text"));
+    addToken("{ri:\"|old|\", \"|new|\"}", i18n("Replace text (case insensitive)"));
 
-    addTokenDescription(QString("{r:\"|old|\", \"|new|\"}"),  i18n("Replace"), description());
-    addTokenDescription(QString("{ri:\"|old|\", \"|new|\"}"), i18n("Replace (case insensitive)"),
-                                                              i18n("Replace text (case insensitive)"));
-
-    setRegExp("\\{r(i)?:\"(.+)\",\"(.*)\"\\}");
+    QRegExp reg("\\{r(i)?:\"(.+)\",\"(.*)\"\\}");
+    reg.setMinimal(true);
+    setRegExp(reg);
 }
 
 void ReplaceModifier::slotTokenTriggered(const QString& token)
@@ -125,9 +124,8 @@ void ReplaceModifier::slotTokenTriggered(const QString& token)
 QString ReplaceModifier::modifyOperation(const QString& parseString, const QString& result)
 {
     QRegExp reg = regExp();
-
-    int pos = 0;
-    pos     = reg.indexIn(parseString, pos);
+    int pos     = 0;
+    pos         = reg.indexIn(parseString, pos);
     if (pos > -1)
     {
         QString original    = reg.cap(2);

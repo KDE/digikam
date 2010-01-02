@@ -432,12 +432,6 @@ void AdvancedRenameWidgetTest::testCameraToken_data()
     QTest::newRow("[cam]")    << QString("[cam]") << filename << camname << curdate << 1
                               << camname_ext;
 
-    QTest::newRow("[Cam]")    << QString("[Cam]") << filename << camname << curdate << 1
-                              << camname_ext;
-
-    QTest::newRow("[CAM]")    << QString("[CAM]") << filename << camname << curdate << 1
-                              << camname_ext;
-
     QTest::newRow("[ cam ]")  << QString("[ cam ]") << filename << camname << curdate << 1
                               << QString("[ cam ].jpg");
 

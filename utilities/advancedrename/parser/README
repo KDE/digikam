@@ -1,0 +1,58 @@
+------------------------------------------------------------------------------
+ 1. NAMING CONVENTIONS FOR SYNTAX HIGHLIGHTING
+------------------------------------------------------------------------------
+
+When creating new options or modifiers for a parser, you should follow
+this naming convention. It is possible to completely ignore
+these suggestions, the basic highlighting should still work.
+Nevertheless it would be nice to have options and modifiers look equal.
+
+-------------------------
+
+ 1.1 Options
+
+Options should be enclosed in [ ] characters:
+
+    [option]
+
+If a renaming option takes additional parameters, they should be appended by a colon:
+
+    [option:parameters]
+
+
+-------------------------
+
+ 1.2 Modifiers
+
+Modifiers should be enclosed in { } characters:
+
+    {modifier}
+
+If a modifier takes additional parameters, they should be appended by a colon:
+
+    {modifier:parameters}
+
+
+-------------------------
+
+ 1.3 Textual parameters
+
+When using strings as parameters for either options or modifiers, enclose them in
+double-quote characters:
+
+    "quoted text"
+
+------------------------------------------------------------------------------
+ 2. REGULAR EXPRESSIONS CONVENTIONS
+------------------------------------------------------------------------------
+
+To highlight parameters correctly in an option or modifier, whenever possible,
+try to enclose the whole optional parameter list with a parentheses, including the
+colon, to make it the first matching group in the regular expression. For example:
+
+    QRegExp reg("\\[date(:(.*))\\]");
+        or
+    QRegExp reg("\\[date(:.*)?\\]");
+
+ The syntax highlighter tries to extract the first matching group and applies a
+ different color to it.
