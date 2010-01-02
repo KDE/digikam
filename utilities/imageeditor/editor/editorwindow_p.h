@@ -29,6 +29,7 @@
 
 #include <QList>
 
+class QDialog;
 class QToolButton;
 class QLabel;
 class QWidgetAction;
@@ -84,6 +85,7 @@ public:
         selectAllAction              = 0;
         selectNoneAction             = 0;
         waitingLoop                  = 0;
+        currentWindowModalDialog     = 0;
         undoSignalMapper             = 0;
         redoSignalMapper             = 0;
         rawCameraListAction          = 0;
@@ -137,6 +139,7 @@ public:
     QSignalMapper*             redoSignalMapper;
 
     QEventLoop*                waitingLoop;
+    QDialog*                   currentWindowModalDialog;
 
     KToggleAction*             zoomFitToWindowAction;
     KToggleAction*             viewCMViewAction;
