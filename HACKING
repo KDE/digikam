@@ -256,6 +256,35 @@ The resulting callgrind.out files need to be viewed with the kcachegrind program
 
 kcachegrind callgrind.out.16693.1
 
+========================================================================
+Unit Testing / Automated Testing
+========================================================================
+
+Unit Testing is great way to ensure that software units (in OOP this normally
+means classes) work as expected. Wikipedia gives a good introduction to
+Unit Testing:
+http://en.wikipedia.org/wiki/Unit_testing
+It is also worth to follow most of these rules while writing unit tests:
+http://geosoft.no/development/unittesting.html
+
+The digiKam test suite is located under tests and will be compiled if
+KDE4_BUILD_TESTS is set to ON in the CMake call. After compiling the soruce code
+the tests can be executed via
+
+make test
+
+The console output while running the tests is stored in
+Testing/Temporary/LastTest.log
+in the CMake binary dir.
+
+All tests are simple binaries that can be executed separately if needed.
+
+To see kdebug messages during testing you need to setup kdebug once again for a
+special testing environment used while running the unit tests. This can be done
+via
+
+KDEHOME=$HOME/.kde-unit-test kdebugdialog 
+
 =========================================================================
 Checking for corrupt Qt signal slot connection
 =========================================================================
@@ -265,6 +294,8 @@ Use this alias for running digikam:
 alias digikamdbg="digikam 2>&1 | tee - /tmp/digikam.out; echo -e \"\n\n\nPossible connection errors:\n\n\"; cat /tmp/digikam.out | grep -A2 'Object::connect'"
 
 It will print a list of connection warnings after terminating the program.
+Moreover the complete console log of the last session is stored in
+/tmp/digikam.out.
 
 =================================================================================
 API Documentation Validation, User Documentation Validation, Source Code Checking
