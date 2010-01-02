@@ -49,16 +49,19 @@ namespace Digikam
 {
 
 ImageScanner::ImageScanner(const QFileInfo& info, const ItemScanInfo& scanInfo)
-            : m_fileInfo(info), m_scanInfo(scanInfo)
+            : m_hasImage(false), m_hasMetadata(false),
+              m_fileInfo(info), m_scanInfo(scanInfo), m_scanMode(ModifiedScan)
 {
 }
 
 ImageScanner::ImageScanner(const QFileInfo& info)
-            : m_fileInfo(info)
+            : m_hasImage(false), m_hasMetadata(false),
+              m_fileInfo(info), m_scanMode(ModifiedScan)
 {
 }
 
 ImageScanner::ImageScanner(qlonglong imageid)
+            : m_hasImage(false), m_hasMetadata(false), m_scanMode(ModifiedScan)
 {
     ItemShortInfo shortInfo;
     {
@@ -81,7 +84,8 @@ void ImageScanner::setCategory(DatabaseItem::Category category)
 void ImageScanner::fileModified()
 {
     loadFromDisk();
-    updateHardInfos();
+    updateImage();
+    scanFile(ModifiedScan);
 }
 
 void ImageScanner::newFile(int albumId)
@@ -89,21 +93,21 @@ void ImageScanner::newFile(int albumId)
     loadFromDisk();
     addImage(albumId);
     if (!scanFromIdenticalFile())
-        scanFile();
+        scanFile(NewScan);
 }
 
 void ImageScanner::newFileFullScan(int albumId)
 {
     loadFromDisk();
     addImage(albumId);
-    scanFile();
+    scanFile(NewScan);
 }
 
 void ImageScanner::rescan()
 {
     loadFromDisk();
     updateImage();
-    scanFile();
+    scanFile(Rescan);
 }
 
 void ImageScanner::copiedFrom(int albumId, qlonglong srcId)
@@ -115,68 +119,7 @@ void ImageScanner::copiedFrom(int albumId, qlonglong srcId)
         // check if we can establish identity
         if (!scanFromIdenticalFile())
             // scan newly
-            scanFile();
-}
-
-void ImageScanner::addImage(int albumId)
-{
-    // there is a limit here for file size <2TB
-    m_scanInfo.albumID          = albumId;
-    m_scanInfo.itemName         = m_fileInfo.fileName();
-    m_scanInfo.status           = DatabaseItem::Visible;
-
-    // category is set by setCategory
-    m_scanInfo.modificationDate = m_fileInfo.lastModified();
-    int fileSize                = (int)m_fileInfo.size();
-
-    // the QByteArray is an ASCII hex string
-    m_scanInfo.uniqueHash       = uniqueHash();
-
-    kDebug() << "Adding new item" << m_fileInfo.filePath();
-    m_scanInfo.id               = DatabaseAccess().db()->addItem(m_scanInfo.albumID, m_scanInfo.itemName,
-                                                                 m_scanInfo.status, m_scanInfo.category,
-                                                                 m_scanInfo.modificationDate, fileSize,
-                                                                 m_scanInfo.uniqueHash);
-}
-
-void ImageScanner::updateImage()
-{
-    // part from addImage()
-    m_scanInfo.modificationDate = m_fileInfo.lastModified();
-    int fileSize                = (int)m_fileInfo.size();
-    m_scanInfo.uniqueHash       = uniqueHash();
-
-    DatabaseAccess().db()->updateItem(m_scanInfo.id, m_scanInfo.category,
-                                      m_scanInfo.modificationDate, fileSize, m_scanInfo.uniqueHash);
-}
-
-void ImageScanner::scanFile()
-{
-    if (m_scanInfo.category == DatabaseItem::Image)
-    {
-        scanImageInformation();
-        if (m_hasMetadata)
-        {
-            scanImageMetadata();
-            scanImagePosition();
-            scanImageComments();
-            scanImageCopyright();
-            scanIPTCCore();
-            scanTags();
-        }
-    }
-    else if (m_scanInfo.category == DatabaseItem::Video)
-    {
-        scanVideoFile();
-    }
-    else if (m_scanInfo.category == DatabaseItem::Audio)
-    {
-        scanAudioFile();
-    }
-    else if (m_scanInfo.category == DatabaseItem::Other)
-    {
-        // unsupported
-    }
+            scanFile(NewScan);
 }
 
 bool lessThanForIdentity(const ItemScanInfo &a, const ItemScanInfo &b)
@@ -236,46 +179,136 @@ bool ImageScanner::copyFromSource(qlonglong srcId)
     return true;
 }
 
-void ImageScanner::updateHardInfos()
+void ImageScanner::prepareImage()
 {
-    updateImage();
-    updateImageInformation();
+    m_scanInfo.itemName         = m_fileInfo.fileName();
+    m_scanInfo.modificationDate = m_fileInfo.lastModified();
+    // category is set by setCategory
+
+    // the QByteArray is an ASCII hex string
+    m_scanInfo.uniqueHash       = uniqueHash();
+}
+
+void ImageScanner::addImage(int albumId)
+{
+    prepareImage();
+
+    // there is a limit here for file size <2TB
+    int fileSize                = (int)m_fileInfo.size();
+    m_scanInfo.albumID          = albumId;
+    m_scanInfo.status           = DatabaseItem::Visible;
+
+    kDebug() << "Adding new item" << m_fileInfo.filePath();
+    m_scanInfo.id               = DatabaseAccess().db()->addItem(m_scanInfo.albumID, m_scanInfo.itemName,
+                                                                 m_scanInfo.status, m_scanInfo.category,
+                                                                 m_scanInfo.modificationDate, fileSize,
+                                                                 m_scanInfo.uniqueHash);
+}
+
+void ImageScanner::updateImage()
+{
+    prepareImage();
+    int fileSize = (int)m_fileInfo.size();
+
+    DatabaseAccess().db()->updateItem(m_scanInfo.id, m_scanInfo.category,
+                                      m_scanInfo.modificationDate, fileSize, m_scanInfo.uniqueHash);
+}
+
+void ImageScanner::scanFile(ScanMode mode)
+{
+    m_scanMode = mode;
+
+    if (m_scanMode == ModifiedScan)
+    {
+        if (m_scanInfo.category == DatabaseItem::Image)
+        {
+            scanImageInformation();
+        }
+    }
+    else
+    {
+        if (m_scanInfo.category == DatabaseItem::Image)
+        {
+            scanImageInformation();
+            if (m_hasMetadata)
+            {
+                scanImageMetadata();
+                scanImagePosition();
+                scanImageComments();
+                scanImageCopyright();
+                scanIPTCCore();
+                scanTags();
+            }
+        }
+        else if (m_scanInfo.category == DatabaseItem::Video)
+        {
+            scanVideoFile();
+        }
+        else if (m_scanInfo.category == DatabaseItem::Audio)
+        {
+            scanAudioFile();
+        }
+        else if (m_scanInfo.category == DatabaseItem::Other)
+        {
+            // unsupported
+        }
+    }
 }
 
 void ImageScanner::scanImageInformation()
 {
-    MetadataFields fields;
-    fields << MetadataInfo::Rating
-           << MetadataInfo::CreationDate
-           << MetadataInfo::DigitizationDate
-           << MetadataInfo::Orientation;
-    QVariantList metadataInfos = m_metadata.getMetadataFields(fields);
-    QSize size = m_img.size();
-
     DatabaseFields::ImageInformation dbFields = DatabaseFields::ImageInformationAll;
-
-    // creation date: fall back to file system property
-    if (metadataInfos[1].isNull() || !metadataInfos[1].toDateTime().isValid())
-    {
-        metadataInfos[1] = creationDateFromFilesystem(m_fileInfo);
-    }
-
-    // Rating: overwrite only if set in metadata
-    if (metadataInfos[0].isNull() || metadataInfos[0].toInt() == -1)
-    {
-        dbFields &= ~DatabaseFields::Rating;
-        metadataInfos.removeAt(0);
-    }
-
     QVariantList infos;
-    infos << metadataInfos
-          << size.width()
+
+    if (m_scanMode == NewScan || m_scanMode == Rescan)
+    {
+        MetadataFields fields;
+        fields << MetadataInfo::Rating
+               << MetadataInfo::CreationDate
+               << MetadataInfo::DigitizationDate
+               << MetadataInfo::Orientation;
+        QVariantList metadataInfos = m_metadata.getMetadataFields(fields);
+
+        // creation date: fall back to file system property
+        if (metadataInfos[1].isNull() || !metadataInfos[1].toDateTime().isValid())
+        {
+            metadataInfos[1] = creationDateFromFilesystem(m_fileInfo);
+        }
+
+        // Some fields should only be overwritten if set in metadata
+        if (m_scanMode == Rescan)
+        {
+            if (metadataInfos[0].isNull() || metadataInfos[0].toInt() == -1)
+            {
+                dbFields &= ~DatabaseFields::Rating;
+                metadataInfos.removeAt(0);
+            }
+        }
+
+        infos << metadataInfos;
+    }
+
+    QSize size = m_img.size();
+    infos << size.width()
           << size.height()
           << detectFormat()
           << m_img.originalBitDepth()
           << m_img.originalColorModel();
 
-    DatabaseAccess().db()->addImageInformation(m_scanInfo.id, infos, dbFields);
+    if (m_scanMode == NewScan)
+        DatabaseAccess().db()->addImageInformation(m_scanInfo.id, infos, dbFields);
+    else if (m_scanMode == Rescan)
+        DatabaseAccess().db()->changeImageInformation(m_scanInfo.id, infos, dbFields);
+    else // ModifiedScan
+    {
+        // Does _not_ update rating and orientation!
+        DatabaseAccess().db()->changeImageInformation(m_scanInfo.id, infos,
+                                                        DatabaseFields::Width      |
+                                                        DatabaseFields::Height     |
+                                                        DatabaseFields::Format     |
+                                                        DatabaseFields::ColorDepth |
+                                                        DatabaseFields::ColorModel);
+    }
 }
 
 static bool hasValidField(const QVariantList &list)
@@ -287,26 +320,6 @@ static bool hasValidField(const QVariantList &list)
             return true;
     }
     return false;
-}
-
-void ImageScanner::updateImageInformation()
-{
-    QSize size = m_img.size();
-
-    QVariantList infos;
-    infos << size.width()
-          << size.height()
-          << detectFormat()
-          << m_img.originalBitDepth()
-          << m_img.originalColorModel();
-
-    DatabaseAccess access;
-    access.db()->changeImageInformation(m_scanInfo.id, infos,
-                                                    DatabaseFields::Width      |
-                                                    DatabaseFields::Height     |
-                                                    DatabaseFields::Format     |
-                                                    DatabaseFields::ColorDepth |
-                                                    DatabaseFields::ColorModel);
 }
 
 static MetadataFields allImageMetadataFields()
@@ -404,6 +417,7 @@ void ImageScanner::scanImageCopyright()
         return;
 
     ImageCopyright copyright(m_scanInfo.id);
+    // It is not clear if removeAll() should be called if m_scanMode == Rescan
     copyright.removeAll();
     copyright.setFromTemplate(t);
 }
@@ -463,7 +477,9 @@ void ImageScanner::scanTags()
 
 void ImageScanner::scanVideoFile()
 {
-    //TODO
+    /**
+    * @todo
+    */
 
     QVariantList metadataInfos;
 
@@ -522,7 +538,9 @@ void ImageScanner::scanVideoFile()
 
 void ImageScanner::scanAudioFile()
 {
-    //TODO
+    /**
+    * @todo
+    */
 
     QVariantList infos;
     infos << -1

@@ -35,9 +35,10 @@ TrimmedModifier::TrimmedModifier()
                : Modifier(i18n("Trimmed"), i18n("Remove leading, trailing and extra whitespace"),
                           SmallIcon("edit-cut"))
 {
-    addToken("{trim}", description());
+    QString token = "{trim}";
+    addToken(token, description());
 
-    QRegExp reg("\\{trim\\}");
+    QRegExp reg(escapeToken(token));
     reg.setMinimal(true);
     setRegExp(reg);
 }

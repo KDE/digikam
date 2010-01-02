@@ -42,10 +42,25 @@ FilePropertiesOption::FilePropertiesOption()
 
     addToken("[file]", i18n("Filename"),
              i18nc("File name", "Name"));
-    addToken("[ext]",  i18n("File extension, prepend with a '.' character, to modify the real file extension"),
+
+    addToken("[ext]", i18n("File extension, prepend with a '.' character, to modify the real file extension"),
              i18nc("File extension", "Extension"));
 
-    QRegExp reg("(\\[file\\]|(\\.?)\\[ext\\])");
+    addToken("[user]", i18n("Owner of the file"),
+             i18nc("Owner of the file", "Owner"));
+
+    addToken("[group]", i18n("Group of the file"),
+             i18nc("Group of the file", "Group"));
+
+    QString regExpStr;
+    regExpStr.append('(');
+    regExpStr.append(escapeToken("[file]")).append('|');
+    regExpStr.append(escapeToken("[user]")).append('|');
+    regExpStr.append(escapeToken("[group]")).append('|');
+    regExpStr.append("(\\.?)").append(escapeToken("[ext]"));
+    regExpStr.append(')');
+
+    QRegExp reg(regExpStr);
     reg.setMinimal(true);
     setRegExp(reg);
 }
@@ -60,6 +75,14 @@ QString FilePropertiesOption::parseOperation(ParseSettings& settings)
     if (token == QString("[file]"))
     {
         result = fi.completeBaseName();
+    }
+    else if (token == QString("[user]"))
+    {
+        result = fi.owner();
+    }
+    else if (token == QString("[group]"))
+    {
+        result = fi.group();
     }
     else if (token == QString("[ext]"))
     {

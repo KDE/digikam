@@ -20,4 +20,20 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 011 ==> 215986 : SegFault when syncing large database.
 012 ==> 219908 : Drag and Drop photo to folder: let user choose to copy or move.
 013 ==> 220131 : Ctrl + Scroll Wheel triggers two different actions.
-014 ==> 
+014 ==> 198697 : Images are not sorted in the Import window.
+015 ==> 220398 : Downloaded/deleted all from SD card, went to other Digikam window, browsed two folders, closed windows, crashed.
+016 ==> 215473 : Remember openend albums after closing digikam.
+017 ==> 220423 : Ctrl + scrool doesn't work in editor when some tool open [patch].
+018 ==> 220399 : Crash in color space conversion.
+019 ==> 192461 : 16-bit TIFF render as 3x3 black & white mosaic [patch].
+020 ==> 217442 : Crash add tag to photo.
+021 ==> 211681 : Raw import tool decoding twice.
+022 ==> 216134 : Batch Mode does not generate 16 bit tif [patch].
+023 ==> 220454 : Over-Exposure and Under-Exposure indicators do not work correctly in White Balance dialogue [patch].
+024 ==> 220708 : digiKam crashes on startup segmentation fault, glibc, invalid pointer on free()) [qFree, QString::free, QString::operator=].
+025 ==> 220889 : Problem with color management.
+026 ==> 200392 : Slideshow displays "Headline" field as "image caption" and has no way to display "Caption" field.
+027 ==> 220202 : "Write Metadata to images" only modifies the first 201 files in any directory (album).
+028 ==> 219149 : digikam: Save window in editor lock main browse window.
+029 ==> 
+

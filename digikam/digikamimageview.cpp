@@ -258,7 +258,9 @@ void DigikamImageView::showContextMenu(QContextMenuEvent* event)
     KAction *paste        = KStandardAction::paste(this, SLOT(paste()), 0);
     const QMimeData *data = kapp->clipboard()->mimeData(QClipboard::Clipboard);
 
-    //TODO
+    /**
+    * @todo
+    */
     if(!data || !KUrl::List::canDecode(data))
         paste->setEnabled(false);
 

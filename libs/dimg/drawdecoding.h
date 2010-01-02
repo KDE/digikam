@@ -29,6 +29,7 @@
 // Qt includes
 
 #include <QList>
+#include <QMetaType>
 #include <QPolygon>
 
 // LibKDcraw includes
@@ -133,5 +134,7 @@ public:
 };
 
 }  // namespace Digikam
+
+Q_DECLARE_METATYPE(Digikam::DRawDecoding)
 
 #endif /* DRAW_DECODING_H */

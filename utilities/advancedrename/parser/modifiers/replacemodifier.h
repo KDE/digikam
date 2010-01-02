@@ -32,6 +32,11 @@
 class KLineEdit;
 class QCheckBox;
 
+namespace Ui
+{
+    class ReplaceModifierDialogWidget;
+}
+
 namespace Digikam
 {
 
@@ -44,10 +49,7 @@ public:
     ReplaceDialog(ParseObject* parent);
     ~ReplaceDialog();
 
-    KLineEdit* source;
-    KLineEdit* destination;
-    QCheckBox* caseSensitive;
-    QCheckBox* isRegExp;
+    Ui::ReplaceModifierDialogWidget* const ui;
 };
 
 // --------------------------------------------------------

@@ -252,6 +252,11 @@ public:
      */
     FORMAT      fileFormat() const;
 
+    /** Returns the DRawDecoding options that this DImg was loaded with.
+     *  If this is not a RAW image or no options were specified, returns DRawDecoding().
+     */
+    DRawDecoding rawDecodingSettings() const;
+
     /** Access a single pixel of the image.
         These functions add some safety checks and then use the methods from DColor.
         In optimized code working directly on the data,

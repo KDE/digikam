@@ -23,6 +23,10 @@
 
 #include "advancedrenametest.moc"
 
+// Qt includes
+
+#include <QFileInfo>
+
 // KDE includes
 
 #include <qtest_kde.h>
@@ -94,6 +98,48 @@ void AdvancedRenameWidgetTest::testFileExtensionToken()
     settings.parseString = parseString;
 
     QString parsed = parser.parse(settings);
+    QCOMPARE(parsed, result);
+}
+
+void AdvancedRenameWidgetTest::testFileOwnerToken()
+{
+    DefaultRenameParser parser;
+
+    ParseSettings settings;
+    settings.fileUrl     = KUrl(KDESRCDIR"/test.png");
+    settings.parseString = "[user]";
+
+    QFileInfo fi(settings.fileUrl.toLocalFile());
+    QVERIFY(fi.exists());
+    QVERIFY(fi.isReadable());
+
+    QString userName = fi.owner();
+    QVERIFY(!userName.isEmpty());
+
+    QString result = userName + ".png";
+    QString parsed = parser.parse(settings);
+
+    QCOMPARE(parsed, result);
+}
+
+void AdvancedRenameWidgetTest::testFileGroupToken()
+{
+    DefaultRenameParser parser;
+
+    ParseSettings settings;
+    settings.fileUrl     = KUrl(KDESRCDIR"/test.png");
+    settings.parseString = "[group]";
+
+    QFileInfo fi(settings.fileUrl.toLocalFile());
+    QVERIFY(fi.exists());
+    QVERIFY(fi.isReadable());
+
+    QString groupName = fi.group();
+    QVERIFY(!groupName.isEmpty());
+
+    QString result = groupName + ".png";
+    QString parsed = parser.parse(settings);
+
     QCOMPARE(parsed, result);
 }
 

@@ -458,7 +458,7 @@ void ImagePropertiesColorsTab::loadImageFromUrl(const KUrl& url)
 
         DRawDecoding rawDecodingSettings = DRawDecoding();
         rawDecodingSettings.optimizeTimeLoading();
-        desc = LoadingDescription(desc.filePath, rawDecodingSettings);
+        desc = LoadingDescription(desc.filePath, rawDecodingSettings, LoadingDescription::RawDecodingTimeOptimized);
     }
 
     if (d->currentLoadingDescription.equalsOrBetterThan(desc))

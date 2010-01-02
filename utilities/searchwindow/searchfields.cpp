@@ -121,8 +121,10 @@ SearchField *SearchField::createField(const QString& name, SearchFieldGroup *par
     }
     else if (name == "notag")
     {
-        //TODO: Merge a "Not tagged" field into TagModel together with AND/OR control for checked tags
-        // and logical connections (AND and Not Tagged checked => all other tags disabled)
+        /**
+        * @todo Merge a "Not tagged" field into TagModel together with AND/OR control
+        * for checked tags and logical connections (AND and Not Tagged checked => all other tags disabled)
+        */
         SearchFieldCheckBox *field = new SearchFieldCheckBox(parent);
         field->setFieldName(name);
         field->setText(i18n("Tags"), i18n("Image has no tags"));
@@ -394,7 +396,9 @@ SearchField *SearchField::createField(const QString& name, SearchFieldGroup *par
     }
     else if (name == "flashmode")
     {//choice
-        //TODO: This is a bitmask, and gives some more information
+        /**
+        * @todo This is a bitmask, and gives some more information
+        */
         SearchFieldChoice *field = new SearchFieldChoice(parent);
         field->setFieldName(name);
         field->setText(i18n("Flash"), i18n("Flash mode"));
@@ -1095,9 +1099,11 @@ void SearchFieldRangeInt::write(SearchXmlWriter& writer)
         }
         else
         {
-            //TODO: This condition is never met.
-            // Right value is either displayed empty (minimum, greater than left)
-            // or one step larger than left
+            /**
+            * @todo : This condition is never met.
+            * Right value is either displayed empty (minimum, greater than left)
+            * or one step larger than left
+            */
             writer.writeField(m_name, SearchXml::Equal);
             if (m_reciprocal)
                 writer.writeValue(m_firstBox->fractionMagicValue());

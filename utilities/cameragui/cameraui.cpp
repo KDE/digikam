@@ -447,6 +447,7 @@ void CameraUI::setupActions()
     d->deleteSelectedAction = new KAction(KIcon("edit-delete"), i18n("Delete Selected"), this);
     connect(d->deleteSelectedAction, SIGNAL(triggered()), this, SLOT(slotDeleteSelected()));
     actionCollection()->addAction("cameraui_imagedeleteselected", d->deleteSelectedAction);
+    d->deleteSelectedAction->setShortcut(KShortcut(Qt::Key_Delete));
     d->deleteSelectedAction->setEnabled(false);
 
     // -------------------------------------------------------------------------

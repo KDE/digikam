@@ -29,9 +29,10 @@
 #include "modifier.h"
 #include "parseobjectdialog.h"
 
-class KIntNumInput;
-class KLineEdit;
-class KComboBox;
+namespace Ui
+{
+    class FillModifierDialogWidget;
+}
 
 namespace Digikam
 {
@@ -50,9 +51,7 @@ public:
         Right
     };
 
-    KLineEdit*    charInput;
-    KIntNumInput* digitsInput;
-    KComboBox*    alignBox;
+    Ui::FillModifierDialogWidget* const ui;
 };
 
 // --------------------------------------------------------

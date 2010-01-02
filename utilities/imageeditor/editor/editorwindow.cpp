@@ -1240,6 +1240,11 @@ bool EditorWindow::hasChangesToSave()
 
 bool EditorWindow::promptUserSave(const KUrl& url, SaveOrSaveAs saveOrSaveAs, bool allowCancel)
 {
+    if (d->currentWindowModalDialog)
+    {
+        d->currentWindowModalDialog->reject();
+    }
+
     if (hasChangesToSave())
     {
         // if window is minimized, show it
@@ -1823,7 +1828,8 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
 
     // prepare the save dialog
     FileSaveOptionsBox *options      = new FileSaveOptionsBox();
-    KFileDialog *imageFileSaveDialog = new KFileDialog(m_savingContext->srcURL.isLocalFile() ?
+    QPointer<KFileDialog> imageFileSaveDialog
+                                     = new KFileDialog(m_savingContext->srcURL.isLocalFile() ?
                                                        m_savingContext->srcURL : KUrl(QDir::homePath()),
                                                        QString(),
                                                        this,
@@ -1832,7 +1838,6 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
 
     ImageDialogPreview *preview = new ImageDialogPreview(imageFileSaveDialog);
     imageFileSaveDialog->setPreviewWidget(preview);
-    imageFileSaveDialog->setModal(false);
     imageFileSaveDialog->setOperationMode(KFileDialog::Saving);
     imageFileSaveDialog->setMode(KFile::File);
     imageFileSaveDialog->setCaption(i18n("New Image File Name"));
@@ -1862,7 +1867,21 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
     imageFileSaveDialog->setSelection(fileName);
 
     // Start dialog and check if canceled.
-    if (imageFileSaveDialog->exec() != KFileDialog::Accepted)
+    int result;
+    if (d->currentWindowModalDialog)
+    {
+        // go application-modal - we will create utter confusion if descending into more than one window-modal dialog
+        imageFileSaveDialog->setModal(true);
+        result = imageFileSaveDialog->exec();
+    }
+    else
+    {
+        imageFileSaveDialog->setWindowModality(Qt::WindowModal);
+        d->currentWindowModalDialog = imageFileSaveDialog;
+        result = imageFileSaveDialog->exec();
+        d->currentWindowModalDialog = 0;
+    }
+    if (result != KFileDialog::Accepted || !imageFileSaveDialog)
     {
        return false;
     }
