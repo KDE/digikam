@@ -32,4 +32,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 023 ==> 220454 : Over-Exposure and Under-Exposure indicators do not work correctly in White Balance dialogue [patch].
 024 ==> 220708 : digiKam crashes on startup segmentation fault, glibc, invalid pointer on free()) [qFree, QString::free, QString::operator=].
 025 ==> 220889 : Problem with color management.
-026 ==> 
+026 ==> 200392 : Slideshow displays "Headline" field as "image caption" and has no way to display "Caption" field.
+027 ==> 
+
