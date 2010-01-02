@@ -135,15 +135,22 @@ public:
 
 protected:
 
-    void scanFile();
-    void updateHardInfos();
+    enum ScanMode
+    {
+        NewScan,
+        ModifiedScan,
+        Rescan
+    };
+
+    bool scanFromIdenticalFile();
+    bool copyFromSource(qlonglong src);
 
     void addImage(int albumId);
     void updateImage();
-    bool scanFromIdenticalFile();
-    bool copyFromSource(qlonglong src);
+
+    void scanFile(ScanMode mode);
+
     void scanImageInformation();
-    void updateImageInformation();
     void scanImageMetadata();
     void scanImagePosition();
     void scanImageComments();
@@ -153,6 +160,7 @@ protected:
     void scanVideoFile();
     void scanAudioFile();
 
+    void prepareImage();
     void loadFromDisk();
     QString uniqueHash();
     QString detectFormat();
@@ -169,6 +177,7 @@ protected:
     DMetadata    m_metadata;
     DImg         m_img;
     ItemScanInfo m_scanInfo;
+    ScanMode     m_scanMode;
 };
 
 } // namespace Digikam
