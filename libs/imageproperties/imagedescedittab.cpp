@@ -287,6 +287,8 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, TagModificationHelper *tagMo
             this, SLOT(slotTagsSearchChanged(const SearchTextSettings&)));
     connect(d->tagsSearchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
             d->tagCheckView, SLOT(setSearchTextSettings(const SearchTextSettings&)));
+    connect(d->tagCheckView->albumFilterModel(), SIGNAL(hasSearchResult(bool)),
+            d->tagsSearchBar, SLOT(slotSearchResult(bool)));
 
     connect(d->assignedTagsBtn, SIGNAL(toggled(bool)),
             this, SLOT(slotAssignedTagsToggled(bool)));
