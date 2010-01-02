@@ -39,6 +39,7 @@ UniqueModifier::UniqueModifier()
                          SmallIcon("button_more"))
 {
     addToken("{unique}", description());
+    addToken("{unique:||n||}", i18n("Add a suffix number, ||n|| specifies the number of digits to use"));
 
     QRegExp reg("\\{unique(:(\\d+))?\\}");
     reg.setMinimal(true);

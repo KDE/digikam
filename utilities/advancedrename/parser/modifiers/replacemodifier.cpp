@@ -26,8 +26,6 @@
 // Qt includes
 
 #include <QCheckBox>
-#include <QGridLayout>
-#include <QLabel>
 #include <QPointer>
 
 // KDE includes
@@ -39,44 +37,23 @@
 // Local includes
 
 #include "parseobjectdialog.h"
+#include "ui_replacemodifierdialogwidget.h"
 
 namespace Digikam
 {
 
 ReplaceDialog::ReplaceDialog(ParseObject* parent)
-             : ParseObjectDialog(parent),
-               source(0), destination(0), caseSensitive(0)
+             : ParseObjectDialog(parent), ui(new Ui::ReplaceModifierDialogWidget())
 {
-    QString replace  = i18nc("Replace text", "Replace");
-
-    QLabel* srcLabel = new QLabel(replace + ':');
-    source           = new KLineEdit(this);
-
-    QLabel* dstLabel = new QLabel(i18nc("Replace text with", "With:"));
-    destination      = new KLineEdit(this);
-
-    caseSensitive    = new QCheckBox(i18n("Case sensitive"));
-    caseSensitive->setChecked(true);
-
-    QWidget*     mainWidget = new QWidget(this);
-    QGridLayout* mainLayout = new QGridLayout(this);
-    mainLayout->addWidget(caseSensitive, 0, 0, 1,-1);
-    mainLayout->addWidget(srcLabel,      1, 0, 1, 1);
-    mainLayout->addWidget(source,        1, 1, 1, 1);
-    mainLayout->addWidget(dstLabel,      2, 0, 1, 1);
-    mainLayout->addWidget(destination,   2, 1, 1, 1);
-    mainLayout->setSpacing(KDialog::spacingHint());
-    mainLayout->setMargin(KDialog::spacingHint());
-    mainLayout->setRowStretch(3, 10);
-    mainWidget->setLayout(mainLayout);
-
+    QWidget* mainWidget = new QWidget(this);
+    ui->setupUi(mainWidget);
     setSettingsWidget(mainWidget);
-
-    source->setFocus();
+    ui->source->setFocus();
 }
 
 ReplaceDialog::~ReplaceDialog()
 {
+    delete ui;
 }
 
 // --------------------------------------------------------
@@ -85,10 +62,10 @@ ReplaceModifier::ReplaceModifier()
                : Modifier(i18nc("Replace text", "Replace..."), i18n("Replace text in a renaming option"),
                           SmallIcon("document-edit"))
 {
-    addToken("{r:\"|old|\", \"|new|\"}",  i18n("Replace text"));
-    addToken("{ri:\"|old|\", \"|new|\"}", i18n("Replace text (case insensitive)"));
+    addToken("{replace:\"||old||\", \"||new||\",||options||}",
+             i18n("Replace text (||options||: ||r|| = regular expression, ||i|| = ignore case)"));
 
-    QRegExp reg("\\{r(i)?:\"(.+)\",\"(.*)\"\\}");
+    QRegExp reg("\\{replace:\"(.*)\",\"(.*)\"(,(r|ri|ir|i))?\\}");
     reg.setMinimal(true);
     setRegExp(reg);
 }
@@ -102,18 +79,28 @@ void ReplaceModifier::slotTokenTriggered(const QString& token)
     QPointer<ReplaceDialog> dlg = new ReplaceDialog(this);
     if (dlg->exec() == KDialog::Accepted)
     {
-        QString oldStr = dlg->source->text();
-        QString newStr = dlg->destination->text();
+        QString oldStr = dlg->ui->source->text();
+        QString newStr = dlg->ui->destination->text();
         if (!oldStr.isEmpty())
         {
-            if (dlg->caseSensitive->isChecked())
+            QString options;
+
+            if (dlg->ui->isRegExp->isChecked())
             {
-                result = QString("{r:\"%1\",\"%2\"}").arg(oldStr).arg(newStr);
+                options.append('r');
             }
-            else
+
+            if (!dlg->ui->caseSensitive->isChecked())
             {
-                result = QString("{ri:\"%1\",\"%2\"}").arg(oldStr).arg(newStr);
+                options.append('i');
             }
+
+            if (!options.isEmpty())
+            {
+                options.prepend(',');
+            }
+
+            result = QString("{replace:\"%1\",\"%2\"%3}").arg(oldStr).arg(newStr).arg(options);
         }
     }
     delete dlg;
@@ -126,14 +113,25 @@ QString ReplaceModifier::modifyOperation(const ParseSettings& settings, const QS
     Q_UNUSED(settings);
 
     const QRegExp& reg  = regExp();
-    QString original    = reg.cap(2);
-    QString replacement = reg.cap(3);
+    QString original    = reg.cap(1);
+    QString replacement = reg.cap(2);
     QString result      = str2Modify;
+    QString options     = reg.cap(4);
+    Qt::CaseSensitivity caseType = (!options.isEmpty() && options.contains('i'))
+                                   ? Qt::CaseInsensitive
+                                   : Qt::CaseSensitive;
 
-    Qt::CaseSensitivity caseType = (!reg.cap(1).isEmpty() && reg.cap(1).count() == 1)
-                                     ? Qt::CaseInsensitive
-                                     : Qt::CaseSensitive;
-    result.replace(original, replacement, caseType);
+    QRegExp ro(original);
+    ro.setCaseSensitivity(caseType);
+
+    if (!options.isEmpty() && options.contains('r'))
+    {
+        result.replace(ro, replacement);
+    }
+    else
+    {
+        result.replace(original, replacement, caseType);
+    }
     return result;
 }
 

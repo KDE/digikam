@@ -74,9 +74,22 @@ void PreviewLoadingTask::execute()
         // lookupCacheKeys returns "best first". Prepend the cache key to make the list "fastest first":
         // Scaling a full version takes longer!
         lookupKeys.push_front(m_loadingDescription.cacheKey());
-        for ( QStringList::Iterator it = lookupKeys.begin(); it != lookupKeys.end(); ++it ) {
-            if ( (cachedImg = cache->retrieveImage(*it)) )
-                break;
+        foreach (const QString& key, lookupKeys)
+        {
+            if ( (cachedImg = cache->retrieveImage(key)) )
+            {
+                if (m_loadingDescription.needCheckRawDecoding())
+                {
+                    if (cachedImg->rawDecodingSettings() == m_loadingDescription.rawDecodingSettings)
+                        break;
+                    else
+                        cachedImg = 0;
+                }
+                else
+                {
+                    break;
+                }
+            }
         }
 
         if (cachedImg)

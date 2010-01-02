@@ -117,13 +117,7 @@ bool LoadingCache::putImage(const QString& cacheKey, DImg *img, const QString& f
 {
     bool successfulyInserted;
 
-    // use size of image as cache cost, take care for wrapped preview QImages
     int cost = img->numBytes();
-    QVariant attribute(img->attribute("previewQImage"));
-    if (attribute.isValid())
-    {
-        cost = attribute.value<QImage>().numBytes();
-    }
 
     successfulyInserted = d->imageCache.insert(cacheKey, img, cost);
 

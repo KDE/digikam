@@ -69,7 +69,7 @@ namespace DImgScale
         int      xup_yup;
     } DImgScaleInfo;
 
-    uint**   dimgCalcYPoints(uint *src, int sw, int sh, int dh);
+    uint**   dimgCalcYPoints(unsigned int *src, int sw, int sh, int dh);
     ullong** dimgCalcYPoints16(ullong *src, int sw, int sh, int dh);
     int*     dimgCalcXPoints(int sw, int dw);
     int*     dimgCalcApoints(int s, int d, int up);

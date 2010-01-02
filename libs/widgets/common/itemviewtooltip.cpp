@@ -110,9 +110,6 @@ void ItemViewToolTip::hideEvent(QHideEvent *)
 
 bool ItemViewToolTip::eventFilter(QObject *o, QEvent *e)
 {
-    if (!isVisible())
-        return false;
-
     switch (e->type())
     {
         #ifdef Q_WS_MAC

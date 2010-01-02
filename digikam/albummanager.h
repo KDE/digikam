@@ -238,7 +238,7 @@ public:
 
     /**
      * @return a SAlbum with given name, or 0 if not found
-     * @param tagPath the name of the search
+     * @param name the name of the search
      */
     SAlbum*   findSAlbum(const QString& name) const;
     //@}
@@ -260,7 +260,6 @@ public:
      * @param name    the name of the new album
      * @param caption the caption for the new album
      * @param date    the date for the new album
-     * @param collection the collection for the new album
      * @param errMsg  this will contain the error message describing why the
      * operation failed
      */
@@ -281,6 +280,8 @@ public:
     /**
      * Overloaded method. Here you can supply a collection location (which
      * must be available).
+     *
+     * @param location the collection for the new album
      */
     PAlbum* createPAlbum(const CollectionLocation& location, const QString& name,
                          const QString& caption, const QDate& date,
@@ -338,7 +339,7 @@ public:
     /**
      * A list of tag paths is supplied.
      * If no corresponding TAlbum exists, a new one will be created.
-     * @param tagPath A list of tag paths
+     * @param tagPaths A list of tag paths
      * @returns A list of all TAlbums for the list (already existing or newly created)
     */
     AlbumList findOrCreateTAlbums(const QStringList& tagPaths);
@@ -401,6 +402,7 @@ public:
     /**
      * @return A list with the tag paths for a list of tag IDs.
      * @param tagIDs list of tag album IDs
+     * @param leadingSlash if <code>true</code> return tags with a leading slash
      */
     QStringList tagPaths(const QList<int>& tagIDs, bool leadingSlash=true) const;
 
@@ -433,9 +435,9 @@ public:
      * \note the signalAlbumAdded will be fired before this function returns. Its
      * recommended to connect to that signal to get notification of new album added
      * @return the newly created SAlbum or an existing SAlbum with same name
-     * @param url    the url of the album
-     * @param simple indicates whether the Search album is of simple type or
-     * extended type
+     * @param name  name for the new search
+     * @param type  the type of the search
+     * @param query search query to use
      */
     SAlbum* createSAlbum(const QString& name, DatabaseSearch::Type type, const QString& query);
 
@@ -443,7 +445,7 @@ public:
      * Update the url for a SAlbum
      * @return true if the operation succeeds, false otherwise
      * @param album the album to update
-     * @param query the new query data of the album
+     * @param changedQuery the new query data of the album
      * @param changedName a new name, or null to keep the current name
      * @param type a new type, or UndefinedType to keep the current type
      */

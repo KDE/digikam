@@ -29,9 +29,10 @@
 #include "modifier.h"
 #include "parseobjectdialog.h"
 
-class KIntNumInput;
-class QCheckBox;
-class QGroupBox;
+namespace Ui
+{
+    class RangeModifierDialogWidget;
+}
 
 namespace Digikam
 {
@@ -45,9 +46,7 @@ public:
     RangeDialog(ParseObject* parent);
     ~RangeDialog();
 
-    KIntNumInput* startInput;
-    KIntNumInput* stopInput;
-    QCheckBox*    toTheEndCheckBox;
+    Ui::RangeModifierDialogWidget* const ui;
 
 private Q_SLOTS:
 

@@ -42,8 +42,8 @@ public:
 
     /**
      * translate:
-     * @x: Translation in X direction.
-     * @y: Translation in Y direction.
+     * @param x Translation in X direction.
+     * @param y Translation in Y direction.
      *
      * Translates the matrix by x and y.
      */
@@ -51,8 +51,8 @@ public:
 
     /**
     * scale:
-    * @x: X scale factor.
-    * @y: Y scale factor.
+    * @param x X scale factor.
+    * @param y Y scale factor.
     *
     * Scales the matrix by x and y
     */
@@ -67,7 +67,7 @@ public:
 
     /**
     * multiply:
-    * @matrix: The other input matrix.
+    * @param matrix1 The other input matrix.
     *
     * Multiplies this matrix with another matrix
     */
@@ -75,10 +75,10 @@ public:
 
     /**
     * transformPoint:
-    * @x: The source X coordinate.
-    * @y: The source Y coordinate.
-    * @newx: The transformed X coordinate.
-    * @newy: The transformed Y coordinate.
+    * @param x The source X coordinate.
+    * @param y The source Y coordinate.
+    * @param newx The transformed X coordinate.
+    * @param newy The transformed Y coordinate.
     *
     * Transforms a point in 2D as specified by the transformation matrix.
     */

@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-09-14
- * Description : first letter of each word uppercase modifier
+ * Description : modifier to change the case of a renaming option
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef FIRSTLETTEROFEACHWORDUPPERCASEMODIFIER_H
-#define FIRSTLETTEROFEACHWORDUPPERCASEMODIFIER_H
+#ifndef CASEMODIFIER_H
+#define CASEMODIFIER_H
 
 // Local includes
 
@@ -31,15 +31,21 @@
 namespace Digikam
 {
 
-class FirstLetterEachWordUpperCaseModifier : public Modifier
+class CaseModifier : public Modifier
 {
 public:
 
-    FirstLetterEachWordUpperCaseModifier();
+    CaseModifier();
     virtual QString modifyOperation(const ParseSettings& settings, const QString& str2Modify);
+
+private:
+
+    QString firstupper(const QString& str2Modify);
+    QString lower(const QString& str2Modify);
+    QString upper(const QString& str2Modify);
 };
 
 } // namespace Digikam
 
 
-#endif /* FIRSTLETTEROFEACHWORDUPPERCASEMODIFIER_H */
+#endif /* CASEMODIFIER_H */

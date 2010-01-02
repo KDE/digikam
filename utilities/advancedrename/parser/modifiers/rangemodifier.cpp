@@ -35,59 +35,35 @@
 #include <klocale.h>
 #include <knuminput.h>
 
+// Local includes
+
+#include "ui_rangemodifierdialogwidget.h"
+
 namespace Digikam
 {
 
 RangeDialog::RangeDialog(ParseObject* parent)
-             : ParseObjectDialog(parent),
-               startInput(0), stopInput(0), toTheEndCheckBox(0)
+           : ParseObjectDialog(parent), ui(new Ui::RangeModifierDialogWidget())
 {
-    const int minRange = 1;
-    const int maxRange = 999999;
+    QWidget* mainWidget = new QWidget(this);
+    ui->setupUi(mainWidget);
+    setSettingsWidget(mainWidget);
+    ui->startInput->setFocus();
 
-    startInput = new KIntNumInput(this);
-    startInput->setMinimum(minRange);
-    startInput->setMaximum(maxRange);
-    startInput->setLabel(i18nc("Beginning of the text range", "From:"));
-
-    stopInput = new KIntNumInput(this);
-    stopInput->setMinimum(minRange);
-    stopInput->setMaximum(maxRange);
-    stopInput->setLabel(i18nc("end of the text range", "To:"));
-
-    toTheEndCheckBox = new QCheckBox(i18nc("range is specified until the end of the string", "to the end"));
-    toTheEndCheckBox->setChecked(true);
     slotToTheEndChecked(true);
 
-    // --------------------------------------------------------
-
-    QWidget*     mainWidget = new QWidget(this);
-    QGridLayout* mainLayout = new QGridLayout(this);
-    mainLayout->addWidget(startInput,          0, 0);
-    mainLayout->addWidget(toTheEndCheckBox,    1, 0);
-    mainLayout->addWidget(stopInput,           2, 0);
-    mainLayout->setSpacing(KDialog::spacingHint());
-    mainLayout->setMargin(KDialog::spacingHint());
-    mainLayout->setRowStretch(3, 10);
-    mainWidget->setLayout(mainLayout);
-
-    setSettingsWidget(mainWidget);
-
-    // --------------------------------------------------------
-
-    startInput->setFocus();
-
-    connect(toTheEndCheckBox, SIGNAL(toggled(bool)),
+    connect(ui->toTheEndCheckBox, SIGNAL(toggled(bool)),
             this, SLOT(slotToTheEndChecked(bool)));
 }
 
 RangeDialog::~RangeDialog()
 {
+    delete ui;
 }
 
 void RangeDialog::slotToTheEndChecked(bool checked)
 {
-    stopInput->setEnabled(!checked);
+    ui->stopInput->setEnabled(!checked);
 }
 
 // --------------------------------------------------------
@@ -96,7 +72,7 @@ RangeModifier::RangeModifier()
              : Modifier(i18n("Range..."), i18n("Add only a specific range of a renaming option"),
                         SmallIcon("measure"))
 {
-    addToken("{|from| - |to|}", i18n("Extract a specific range (if omitted, '|to|' = end of string)"));
+    addToken("{||from|| - ||to||}", i18n("Extract a specific range (if omitted, '||to||' = end of string)"));
 
     QRegExp reg("\\{(\\d+)(-((-1|\\d+))?)?\\}");
     reg.setMinimal(true);
@@ -112,17 +88,17 @@ void RangeModifier::slotTokenTriggered(const QString& token)
     QPointer<RangeDialog> dlg = new RangeDialog(this);
     if (dlg->exec() == KDialog::Accepted)
     {
-        int start = dlg->startInput->value();
-        int stop  = dlg->stopInput->value();
+        int start = dlg->ui->startInput->value();
+        int stop  = dlg->ui->stopInput->value();
 
-        if (dlg->toTheEndCheckBox->isChecked())
+        if (dlg->ui->toTheEndCheckBox->isChecked())
         {
             result = QString("{%1-}").arg(QString::number(start));
         }
         else
         {
             result = QString("{%1-%2}").arg(QString::number(start))
-                                    .arg(QString::number(stop));
+                                       .arg(QString::number(stop));
         }
     }
     delete dlg;

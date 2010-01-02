@@ -43,6 +43,10 @@ private Q_SLOTS:
     void testFileExtensionToken();
     void testFileExtensionToken_data();
 
+    void testFileOwnerToken();
+
+    void testFileGroupToken();
+
     void testDirectoryNameToken();
     void testDirectoryNameToken_data();
 
@@ -56,6 +60,12 @@ private Q_SLOTS:
      * MODIFIER TESTS
      */
     void testUniqueModifier();
+
+    void testFillModifier();
+    void testFillModifier_data();
+
+    void testReplaceModifier();
+    void testReplaceModifier_data();
 
     void testRangeModifier();
     void testRangeModifier_data();

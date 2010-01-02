@@ -31,6 +31,8 @@
 // Local includes
 
 #include "imagecategorizedview.h"
+#include "imageinfo.h"
+#include "imagemodel.h"
 #include "itemviewhoverbutton.h"
 
 namespace Digikam
@@ -123,6 +125,12 @@ void ImageRotateLeftOverlay::slotClicked()
     }
 }
 
+bool ImageRotateLeftOverlay::checkIndex(const QModelIndex& index) const
+{
+    ImageInfo info = ImageModel::retrieveImageInfo(index);
+    return info.category() == DatabaseItem::Image;
+}
+
 // --------------------------------------------------------------------
 
 ImageRotateRightOverlay::ImageRotateRightOverlay(QObject *parent)
@@ -166,6 +174,12 @@ void ImageRotateRightOverlay::slotClicked()
         selModel->setCurrentIndex(index, QItemSelectionModel::Current);
         emit signalRotateRight();
     }
+}
+
+bool ImageRotateRightOverlay::checkIndex(const QModelIndex& index) const
+{
+    ImageInfo info = ImageModel::retrieveImageInfo(index);
+    return info.category() == DatabaseItem::Image;
 }
 
 } // namespace Digikam

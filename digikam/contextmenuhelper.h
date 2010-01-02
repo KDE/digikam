@@ -205,7 +205,6 @@ public:
      * The menu will be titled "Open With...".
      *
      * @param selectedItems the list of selected items
-     * @param servicesMap a reference to a map that will be filled with the detected services
      */
     void addServicesMenu(KUrl::List selectedItems);
 

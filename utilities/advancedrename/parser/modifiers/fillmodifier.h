@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-09-14
- * Description : uppercase modifier
+ * Description : trimmed token modifier
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -21,29 +21,56 @@
  *
  * ============================================================ */
 
-#include "uppercasemodifier.h"
+#ifndef FILLMODIFIER_H
+#define FILLMODIFIER_H
 
-// KDE includes
+// Local includes
 
-#include <klocale.h>
+#include "modifier.h"
+#include "parseobjectdialog.h"
+
+namespace Ui
+{
+    class FillModifierDialogWidget;
+}
 
 namespace Digikam
 {
-
-UpperCaseModifier::UpperCaseModifier()
-                 : Modifier(i18n("Uppercase"), i18n("Convert to uppercase"))
+class FillDialog : public ParseObjectDialog
 {
-    addToken("{upper}", description());
+    Q_OBJECT
 
-    QRegExp reg("\\{upper\\}");
-    reg.setMinimal(true);
-    setRegExp(reg);
-}
+public:
 
-QString UpperCaseModifier::modifyOperation(const ParseSettings& settings, const QString& str2Modify)
+    FillDialog(ParseObject* parent);
+    ~FillDialog();
+
+    enum Alignment
+    {
+        Left = 0,
+        Right
+    };
+
+    Ui::FillModifierDialogWidget* const ui;
+};
+
+// --------------------------------------------------------
+
+class FillModifier : public Modifier
 {
-    Q_UNUSED(settings);
-    return str2Modify.toUpper();
-}
+    Q_OBJECT
+
+public:
+
+    FillModifier();
+    virtual QString modifyOperation(const ParseSettings& settings, const QString& str2Modify);
+
+private Q_SLOTS:
+
+    void slotTokenTriggered(const QString& token);
+};
 
 } // namespace Digikam
+
+
+#endif /* FILLMODIFIER_H */

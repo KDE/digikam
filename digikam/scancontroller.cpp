@@ -134,6 +134,7 @@ public:
 
     QList<AlbumCopyMoveHint>  albumHints;
     QList<ItemCopyMoveHint>   itemHints;
+    QList<ItemChangeHint>     itemChangeHints;
 
     QDateTime                 lastHintAdded;
 
@@ -189,6 +190,7 @@ public:
         {
             itemHints.clear();
             albumHints.clear();
+            itemChangeHints.clear();
         }
         if (setAccessTime)
             lastHintAdded = current;
@@ -414,6 +416,7 @@ void ScanController::scanFileDirectly(const QString& filePath)
 
     CollectionScanner scanner;
     scanner.recordHints(d->itemHints);
+    scanner.recordHints(d->itemChangeHints);
     scanner.scanFile(filePath);
 
     resumeCollectionScan();
@@ -518,6 +521,7 @@ void ScanController::run()
             scanner.setNeedFileCount(d->needTotalFiles);
             scanner.recordHints(d->albumHints);
             scanner.recordHints(d->itemHints);
+            scanner.recordHints(d->itemChangeHints);
             SimpleCollectionScannerObserver observer(&d->continueScan);
             scanner.setObserver(&observer);
             scanner.completeScan();
@@ -528,6 +532,7 @@ void ScanController::run()
             CollectionScanner scanner;
             scanner.recordHints(d->albumHints);
             scanner.recordHints(d->itemHints);
+            scanner.recordHints(d->itemChangeHints);
             //connectCollectionScanner(&scanner);
             SimpleCollectionScannerObserver observer(&d->continuePartialScan);
             scanner.setObserver(&observer);
@@ -775,6 +780,24 @@ void ScanController::hintAtMoveOrCopyOfItem(qlonglong id, const PAlbum *dstAlbum
     QMutexLocker lock(&d->mutex);
     d->garbageCollectHints(true);
     d->itemHints << hint;
+}
+
+void ScanController::hintAtModificationOfItems(const QList<qlonglong> ids)
+{
+    ItemChangeHint hint(ids, ItemChangeHint::ItemModified);
+
+    QMutexLocker lock(&d->mutex);
+    d->garbageCollectHints(true);
+    d->itemChangeHints << hint;
+}
+
+void ScanController::hintAtModificationOfItem(qlonglong id)
+{
+    ItemChangeHint hint(QList<qlonglong>() << id, ItemChangeHint::ItemModified);
+
+    QMutexLocker lock(&d->mutex);
+    d->garbageCollectHints(true);
+    d->itemChangeHints << hint;
 }
 
 // --------------------------------------------------- //

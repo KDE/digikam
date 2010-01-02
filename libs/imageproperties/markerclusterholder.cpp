@@ -1332,6 +1332,7 @@ bool MarkerClusterHolder::markersEqual(const MarkerInfo& one, const MarkerInfo& 
 /**
  * @brief Sets the comparison function for the marker user data
  * @param compareFunction Function which compares the user data parts of two markers
+ * @param yourdata user data passed into the function
  */
 void MarkerClusterHolder::setMarkerDataEqualFunction(const MarkerDataEqualFunction compareFunction, void* const yourdata)
 {
@@ -1367,6 +1368,7 @@ void MarkerClusterHolder::setAllowSelection(const bool allow)
  * Set this to zero to disable tooltips
  *
  * @param newTooltipFunction Function which returns the tooltip text for a given cluster
+ * @param yourdata user data passed into the function
  */
 void MarkerClusterHolder::setTooltipFunction(TooltipFunction newTooltipFunction, void* const yourdata)
 {

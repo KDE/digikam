@@ -91,7 +91,7 @@ public:
      * @param i_data image data
      * @param i_w width of the image
      * @param i_h height of the image
-     * @param i_sicteenBits if true, the image is interpreted as having 16 bits
+     * @param i_sixteenBits if true, the image is interpreted as having 16 bits
      */
     void updateData(uchar* i_data, uint i_w, uint i_h, bool i_sixteenBits);
 

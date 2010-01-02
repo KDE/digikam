@@ -130,9 +130,6 @@ public:
     /**
      * Add a new album to the database with the given attributes
      * @param type The type of the album root
-     * @param absolutePath The last absolute path in the file system.
-     *                     The usage of this parameter is up to the CollectionManager
-     * @param uuid         The volume UUID of the volume this album root is contained on.
      * @param specificPath The path specific to volume
      * @param label        An (optional) user-visible label
      * @returns the album root id of the newly created root
@@ -155,6 +152,7 @@ public:
     /**
      * Changes the label of the specified album root
      * @param rootId the id of the album root
+     * @param newLabel new label for the album root
      */
     void setAlbumRootLabel(int rootId, const QString& newLabel);
 
@@ -436,8 +434,9 @@ public:
 
     /**
      * Add a new search to the database with the given attributes
+     * @param type       search type
      * @param name       name of the search
-     * @param url        url of the search
+     * @param query      search query to use
      * @return the id of the album added or -1 if it failed
      */
     int addSearch(DatabaseSearch::Type type, const QString& name, const QString& query);
@@ -445,8 +444,8 @@ public:
     /**
      * Updates Search with new attributes
      * @param searchID   the id of the search
-     * @param name       name of the search
-     * @param url        url of the search
+     * @param type       type of the search
+     * @param query      database query of the search
      */
     void updateSearch(int searchID, DatabaseSearch::Type type,
                       const QString& name, const QString& query);
@@ -527,7 +526,7 @@ public:
 
     /**
      * Get the imageId of the item
-     * @param albumId the albumID of the item
+     * @param albumID the albumID of the item
      * @param name the name of the item
      * @return the ImageId for the item, or -1 if it does not exist
      */
@@ -550,7 +549,7 @@ public:
      * @param recursive perform a recursive folder hierarchy parsing
      * @return It returns a QStringList with the filenames.
      */
-    QStringList getItemNamesInAlbum(int albumID, bool recurssive=false);
+    QStringList getItemNamesInAlbum(int albumID, bool recursive=false);
 
     /**
      * Returns an ItemScanInfo object for each item in the album
@@ -562,6 +561,7 @@ public:
      * Given a albumID, get a list of the url of all items in the album
      * NOTE: Uses the CollectionManager
      * @param  albumID the id of the album
+     * @param  order   order for the returned items to use
      * @return a list of urls for the items in the album. The urls are the
      * absolute path of the items
      */
@@ -793,7 +793,7 @@ public:
      * source, language and author will be overwritten.
      * @param imageID  The imageID of the image
      * @param comment  The comment string
-     * @param source   The source of the comment
+     * @param type     The type of the comment
      * @param language Information about the language of the comment. A null string shall be used
      *                 if language information is not available from the source, or if
      *                 the comment is in the default language.

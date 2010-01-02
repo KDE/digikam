@@ -50,7 +50,7 @@ public:
 
 private:
 
-    void inplace_blur_8bit_process(unsigned char *data, int sizex, int sizey, float blur);
+    void inplace_blur_8bit_process(unsigned char *data, int sizex, int sizey, REALTYPE blur);
     inline unsigned char fast_func(unsigned char x1, unsigned char x2)
     {
         return current_func_lookup_table[(((int)x1)<<8)+x2];

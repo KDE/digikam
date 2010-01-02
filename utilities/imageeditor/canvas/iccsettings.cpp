@@ -202,11 +202,13 @@ IccProfile IccSettingsPriv::profileFromWindowSystem(QWidget *widget)
                     &nitems,
                     &bytes_after,
                     (unsigned char **) &str) == Success
+            && nitems
                 )
     {
         QByteArray bytes = QByteArray::fromRawData((char*)str, (quint32)nitems);
 
-        profile = bytes;
+        if (!bytes.isEmpty())
+            profile = bytes;
         kDebug() << "Found X.org XICC monitor profile" << profile.description();
     }
     //else

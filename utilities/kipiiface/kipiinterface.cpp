@@ -155,14 +155,19 @@ void KipiInterface::refreshImages(const KUrl::List& urls)
 
     // Hard Refresh
     QSet<QString> dirs;
+    QList<qlonglong> ids;
     foreach (const KUrl& url, urls)
     {
+        ImageInfo info(url);
+        if (!info.isNull())
+            ids << info.id();
         QString path = url.toLocalFile();
         ThumbnailLoadThread::deleteThumbnail(path);
         LoadingCacheInterface::fileChanged(path);
         ImageAttributesWatch::instance()->fileMetadataChanged(url);
         dirs << url.directory();
     }
+    ScanController::instance()->hintAtModificationOfItems(ids);
     foreach (const QString& dir, dirs)
         ScanController::instance()->scheduleCollectionScan(dir);
 

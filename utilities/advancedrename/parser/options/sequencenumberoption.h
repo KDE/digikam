@@ -31,6 +31,11 @@
 
 class KIntNumInput;
 
+namespace Ui
+{
+    class SequenceNumberOptionDialogWidget;
+}
+
 namespace Digikam
 {
 
@@ -43,9 +48,7 @@ public:
     SequenceNumberDialog(ParseObject* parent);
     ~SequenceNumberDialog();
 
-    KIntNumInput* digits;
-    KIntNumInput* start;
-    KIntNumInput* step;
+    Ui::SequenceNumberOptionDialogWidget* const ui;
 };
 
 // --------------------------------------------------------

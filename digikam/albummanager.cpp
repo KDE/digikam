@@ -2799,7 +2799,9 @@ void AlbumManager::slotTagChange(const TagChangeset& changeset)
             break;
         case TagChangeset::Renamed:
         case TagChangeset::IconChanged:
-            //TODO
+            /**
+             * @todo
+             */
             break;
         case TagChangeset::Unknown:
             break;

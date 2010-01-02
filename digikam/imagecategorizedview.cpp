@@ -894,6 +894,7 @@ void ImageCategorizedView::wheelEvent(QWheelEvent* event)
         else if (delta < 0)
             emit zoomOutStep();
         event->accept();
+        return;
     }
 
     KCategorizedView::wheelEvent(event);
@@ -1034,7 +1035,7 @@ void ImageCategorizedView::startDrag(Qt::DropActions supportedActions)
         QDrag *drag = new QDrag(this);
         drag->setPixmap(pixmap);
         drag->setMimeData(data);
-        drag->exec(supportedActions);
+        drag->exec(supportedActions, Qt::IgnoreAction);
     }
 }
 

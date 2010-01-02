@@ -431,6 +431,7 @@ void ImagePlugin_Core::slotSetupICC()
 void ImagePlugin_Core::slotProfileConversionTool()
 {
     ProfileConversionTool *tool = new ProfileConversionTool(this);
+    connect(tool, SIGNAL(okClicked()), this, SLOT(slotUpdateColorSpaceMenu()));
     loadTool(tool);
 }
 

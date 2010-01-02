@@ -35,6 +35,31 @@ class QAction;
 namespace Digikam
 {
 
+/**
+ * @brief %Token is the smallest parsing unit in AdvancedRename utility
+ *
+ * The %Token class represents the smallest parsing unit for the Parser class. Every string you enter as a renaming pattern
+ * is a combination of tokens and literal text. For example
+ * @code
+ * "[file]{upper}_###_abc.[ext]{lower}"
+ * @endcode
+ * is composed of five tokens
+ * @code
+ * [file]
+ * {upper}
+ * ###
+ * .[ext]
+ * {lower}
+ * @endcode
+ * and two literals
+ * @code
+ * _
+ * _abc
+ * @endcode
+ * A ParseObject must assign at least one token object, to make parsing work. More than one token can be assigned to a %ParseObject.
+ * @see ParseObject::addToken()
+ *
+ */
 class Token : public QObject
 {
     Q_OBJECT
@@ -44,16 +69,38 @@ public:
     Token(const QString& id, const QString& description);
     ~Token();
 
+    /**
+     * @return The ID of the token. This is the actual token string, for example
+     * @code
+     * "[file]"
+     * @endcode
+     * This id will be emitted as a signal by slotTriggered().
+     */
     QString  id()          { return m_id; };
+
+    /**
+     * @return The description of the token. It can be used for example in the tooltip of the AdvancedRenameWidget.
+     */
     QString  description() { return m_description; };
+
+    /**
+     * @return The action of the token. This action can be connected to a button or menu item. If triggered, high-level classes
+     * like AdvancedRenameWidget can connect to the signal and display the emitted text in the line edit input widget.
+     */
     QAction* action()      { return m_action; };
 
 Q_SIGNALS:
 
+    /**
+     * This signal is emitted when the action of the token is triggered.
+     */
     void signalTokenTriggered(const QString&);
 
 private Q_SLOTS:
 
+    /**
+     * This slot will emit signalTokenTriggered() when the action of the token is triggered.
+     */
     void slotTriggered();
 
 private:

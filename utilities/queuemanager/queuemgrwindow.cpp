@@ -511,7 +511,7 @@ void QueueMgrWindow::writeSettings()
 void QueueMgrWindow::applySettings()
 {
     // Do not apply general settings from config panel if BQM is busy.
-    if (!d->busy) return;
+    if (d->busy) return;
 
     AlbumSettings *settings   = AlbumSettings::instance();
     KSharedConfig::Ptr config = KGlobal::config();

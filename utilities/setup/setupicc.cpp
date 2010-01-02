@@ -278,10 +278,14 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
                                             "and to which color space it shall be transformed for editing.</p>"));
 
     d->defaultSRGBMissing = new QRadioButton(i18n("Assume it is using the sRGB color space (Internet standard)"));
-    //TODO d->defaultSRGBMissing->setWhatsThis( i18n("<p></p>"));
+    /**
+     * @todo d->defaultSRGBMissing->setWhatsThis( i18n("<p></p>"));
+     */
 
     d->defaultSRGBConvert = new QCheckBox(i18n("and convert it to the working color space"));
-    //TODO d->defaultSRGBConvert->setWhatsThis( i18n("<p></p>"));
+    /**
+     * @todo d->defaultSRGBConvert->setWhatsThis( i18n("<p></p>"));
+     */
     d->defaultSRGBConvert->setChecked(true);
 
     QGridLayout *gridRgb = new QGridLayout;
@@ -290,10 +294,14 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     gridRgb->setColumnMinimumWidth(0, 10);
 
     d->defaultWSMissing  = new QRadioButton(i18n("Assume it is using the working color space"));
-    //TODO d->defaultWSMissing->setWhatsThis( i18n("<p></p>"));
+    /**
+     * @todo d->defaultWSMissing->setWhatsThis( i18n("<p></p>"));
+     */
 
     d->defaultInputMissing = new QRadioButton(i18n("Convert it from default input color space to working space"));
-    //TODO d->defaultWSMissing->setWhatsThis( i18n("<p></p>"));
+    /**
+     * @todo d->defaultWSMissing->setWhatsThis( i18n("<p></p>"));
+     */
 
     vlayMissing->addLayout(hboxMP);
     vlayMissing->addWidget(d->defaultAskMissing);
@@ -316,13 +324,19 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     hboxRF->addWidget(rawBehaviorLabel, 10);
 
     d->defaultAskRaw   = new QRadioButton(i18n("Ask for the input profile"));
-    //TODO d->defaultAskRaw->setWhatsThis( i18n("<p></p>"));
+    /**
+    * @todo d->defaultAskRaw->setWhatsThis( i18n("<p></p>"));
+    */
 
     d->defaultGuessRaw = new QRadioButton(i18n("Automatic color correction"));
-    //TODO d->defaultGuessRaw->setWhatsThis( i18n("<p></p>"));
+    /**
+    * @todo d->defaultGuessRaw->setWhatsThis( i18n("<p></p>"));
+    */
 
     d->defaultInputRaw = new QRadioButton(i18n("Convert it from the default input profile"));
-    //TODO d->defaultSRGBMissing->setWhatsThis( i18n("<p></p>"));
+    /**
+    * @todo d->defaultSRGBMissing->setWhatsThis( i18n("<p></p>"));
+    */
 
     d->defaultGuessRaw->setChecked(true);
 
@@ -369,7 +383,9 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
 
     d->managedPreviews = new QCheckBox;
     d->managedPreviews->setText(i18n("Use color managed view for previews and thumbnails"));
-    //TODO d->managedPreview->setWhatsThis( i18n("") );
+    /**
+    * @todo d->managedPreview->setWhatsThis( i18n("") );
+    */
 
     gridView->addWidget(monitorIcon,            0, 0);
     gridView->addWidget(monitorProfiles,        0, 1, 1, 2);
@@ -775,7 +791,11 @@ void SetupICC::slotClickedIn()
 
 void SetupICC::slotClickedMonitor()
 {
-    IccProfile profile = d->monitorProfilesKC->currentProfile();
+    IccProfile profile;
+    if (IccSettings::instance()->monitorProfileFromSystem())
+        profile = IccSettings::instance()->monitorProfile();
+    else
+        profile = d->monitorProfilesKC->currentProfile();
     if (!profile.isNull())
        profileInfo(profile);
 }

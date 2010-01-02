@@ -69,7 +69,7 @@ public:
      * @param minimizedDefault hide the sidebar when the program is started the first time.
      */
     Sidebar(QWidget *parent, SidebarSplitter *sp, KMultiTabBarPosition side=KMultiTabBar::Left,
-            bool mimimizedDefault=false);
+            bool minimizedDefault=false);
 
     virtual ~Sidebar();
 

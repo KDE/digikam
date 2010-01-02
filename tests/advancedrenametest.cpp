@@ -23,6 +23,10 @@
 
 #include "advancedrenametest.moc"
 
+// Qt includes
+
+#include <QFileInfo>
+
 // KDE includes
 
 #include <qtest_kde.h>
@@ -94,6 +98,48 @@ void AdvancedRenameWidgetTest::testFileExtensionToken()
     settings.parseString = parseString;
 
     QString parsed = parser.parse(settings);
+    QCOMPARE(parsed, result);
+}
+
+void AdvancedRenameWidgetTest::testFileOwnerToken()
+{
+    DefaultRenameParser parser;
+
+    ParseSettings settings;
+    settings.fileUrl     = KUrl(KDESRCDIR"/test.png");
+    settings.parseString = "[user]";
+
+    QFileInfo fi(settings.fileUrl.toLocalFile());
+    QVERIFY(fi.exists());
+    QVERIFY(fi.isReadable());
+
+    QString userName = fi.owner();
+    QVERIFY(!userName.isEmpty());
+
+    QString result = userName + ".png";
+    QString parsed = parser.parse(settings);
+
+    QCOMPARE(parsed, result);
+}
+
+void AdvancedRenameWidgetTest::testFileGroupToken()
+{
+    DefaultRenameParser parser;
+
+    ParseSettings settings;
+    settings.fileUrl     = KUrl(KDESRCDIR"/test.png");
+    settings.parseString = "[group]";
+
+    QFileInfo fi(settings.fileUrl.toLocalFile());
+    QVERIFY(fi.exists());
+    QVERIFY(fi.isReadable());
+
+    QString groupName = fi.group();
+    QVERIFY(!groupName.isEmpty());
+
+    QString result = groupName + ".png";
+    QString parsed = parser.parse(settings);
+
     QCOMPARE(parsed, result);
 }
 
@@ -239,8 +285,9 @@ void AdvancedRenameWidgetTest::testChainedModifiers_data()
     QTest::newRow("[file]*{upper}") << QString("[file]{firstupper}{upper}") << fileName << QString("MYFILENAME001.jpg");
     QTest::newRow("[file]{3-}*")    << QString("[file]{3-}{firstupper}")    << fileName << QString("Filename001.jpg");
 
-    QTest::newRow("[file]{3-}{r:\"name\",\"age\"}{firstupper}") << QString("[file]{3-}{r:\"name\",\"age\"}{firstupper}")
-                                                                << fileName << QString("Fileage001.jpg");
+    QTest::newRow("[file]{3-}{replace:\"name\",\"age\"}{firstupper}")
+            << QString("[file]{3-}{replace:\"name\",\"age\"}{firstupper}")
+            << fileName << QString("Fileage001.jpg");
 }
 
 void AdvancedRenameWidgetTest::testChainedModifiers()
@@ -371,6 +418,95 @@ void AdvancedRenameWidgetTest::testUniqueModifier()
 #undef DIGITS_STR
 }
 
+void AdvancedRenameWidgetTest::testFillModifier_data()
+{
+    QTest::addColumn<QString>("parseString");
+    QTest::addColumn<QString>("filename");
+    QTest::addColumn<QString>("result");
+
+    QString fileName("DSC1234.jpg");
+
+    QTest::newRow("[file]{fill:12}")
+       << QString("[file]{fill:12}") << fileName << QString("DSC1234_____.jpg");
+
+    QTest::newRow("[file]{fill:12,l}")
+       << QString("[file]{fill:12,l}") << fileName << QString("DSC1234_____.jpg");
+
+    QTest::newRow("[file]{fill:12,r}")
+       << QString("[file]{fill:12,r}") << fileName << QString("_____DSC1234.jpg");
+
+    QTest::newRow("[file]{fill:1}")
+       << QString("[file]{fill:1}")  << fileName << fileName;
+
+    QTest::newRow("[file]{fill:12,l,\"x\"}")
+       << QString("[file]{fill:12,l,\"x\"}") << fileName << QString("DSC1234xxxxx.jpg");
+
+    QTest::newRow("[file]{fill:12,r,\"x\"}")
+       << QString("[file]{fill:12,r,\"x\"}") << fileName << QString("xxxxxDSC1234.jpg");
+}
+
+void AdvancedRenameWidgetTest::testFillModifier()
+{
+    QFETCH(QString,   parseString);
+    QFETCH(QString,   filename);
+    QFETCH(QString,   result);
+
+    DefaultRenameParser parser;
+
+    ParseSettings settings;
+    settings.fileUrl     = filename;
+    settings.parseString = parseString;
+
+    QString parsed = parser.parse(settings);
+    QCOMPARE(parsed, result);
+}
+
+void AdvancedRenameWidgetTest::testReplaceModifier_data()
+{
+    QTest::addColumn<QString>("parseString");
+    QTest::addColumn<QString>("filename");
+    QTest::addColumn<QString>("result");
+
+    QString fileName("DSC1234.jpg");
+
+    QTest::newRow("[file]{replace:\"DSC\",\"AAA\"}")
+       << QString("[file]{replace:\"DSC\",\"AAA\"}") << fileName << QString("AAA1234.jpg");
+
+    QTest::newRow("[file]{replace:\"Dsc\",\"AAA\"}")
+       << QString("[file]{replace:\"Dsc\",\"AAA\"}") << fileName << QString("DSC1234.jpg");
+
+    QTest::newRow("[file]{replace:\"Dsc\",\"AAA\",i}")
+       << QString("[file]{replace:\"Dsc\",\"AAA\",i}") << fileName << QString("AAA1234.jpg");
+
+    QTest::newRow("[file]{replace:\"Dsc\",\"AAA\",ri}")
+       << QString("[file]{replace:\"Dsc\",\"AAA\",ri}") << fileName << QString("AAA1234.jpg");
+
+    QTest::newRow("[file]{replace:\"Dsc\",\"AAA\",ir}")
+       << QString("[file]{replace:\"Dsc\",\"AAA\",ir}") << fileName << QString("AAA1234.jpg");
+
+    QTest::newRow("[file]{replace:\"D.C\",\"AAA\"}")
+       << QString("[file]{replace:\"D.C\",\"AAA\"}") << fileName << QString("DSC1234.jpg");
+
+    QTest::newRow("[file]{replace:\"D.C\",\"AAA\",r}")
+       << QString("[file]{replace:\"D.C\",\"AAA\",r}") << fileName << QString("AAA1234.jpg");
+}
+
+void AdvancedRenameWidgetTest::testReplaceModifier()
+{
+    QFETCH(QString,   parseString);
+    QFETCH(QString,   filename);
+    QFETCH(QString,   result);
+
+    DefaultRenameParser parser;
+
+    ParseSettings settings;
+    settings.fileUrl     = filename;
+    settings.parseString = parseString;
+
+    QString parsed = parser.parse(settings);
+    QCOMPARE(parsed, result);
+}
+
 void AdvancedRenameWidgetTest::testRangeModifier_data()
 {
     QTest::addColumn<QString>("parseString");
@@ -412,10 +548,10 @@ void AdvancedRenameWidgetTest::testDefaultValueModifier_data()
     QString fileName("DSC1234.jpg");
     QDateTime curdate = QDateTime::currentDateTime();
 
-    QTest::newRow("[cam]_[file]") << QString("[cam]{d:\"Unknown\"}_[file]") << fileName << QString("Canon Powershot A80")
+    QTest::newRow("[cam]_[file]") << QString("[cam]{default:\"Unknown\"}_[file]") << fileName << QString("Canon Powershot A80")
                                   << QString("Canon Powershot A80_DSC1234.jpg");
 
-    QTest::newRow("[cam]{\"Unknown\"}_[file]") << QString("[cam]{d:\"Unknown\"}_[file]") << fileName << QString()
+    QTest::newRow("[cam]{\"Unknown\"}_[file]") << QString("[cam]{default:\"Unknown\"}_[file]") << fileName << QString()
                                                << QString("Unknown_DSC1234.jpg");
 }
 

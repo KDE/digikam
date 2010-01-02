@@ -125,10 +125,17 @@ public:
     bool isValid() const;
 
     /**
-     * Resets the parser to its initial state. This method also resets the internal counter that is used
-     * for sequence numbers.
+     * Resets the parser to its initial state
      */
     virtual void reset();
+
+    /**
+     * Escape the token characters to make them work in regular expressions
+     *
+     * @param token token to be escaped
+     * @return A token with escaped characters. This token can then be used in a regular expression
+     */
+    static QString escapeToken(const QString& token);
 
 Q_SIGNALS:
 
@@ -140,7 +147,7 @@ protected:
      * add a token to the parser, every parser should at least assign one token object
      * @param id the token id string (used for parsing)
      * @param description the description of the token (used for example in the tooltip)
-     * @param actionName[optional] the name of the token action (only used when the token menu is displayed)
+     * @param actionName [optional] the name of the token action (only used when the token menu is displayed)
      * @return
      */
     bool addToken(const QString& id, const QString& description, const QString& actionName = QString());

@@ -124,7 +124,7 @@ void CameraHistoryUpdater::sendBusy(bool val)
     emit signalBusy(val);
 }
 
-void CameraHistoryUpdater::addItems(const QByteArray& id, QMultiMap<QDateTime, GPItemInfo>& map)
+void CameraHistoryUpdater::addItems(const QByteArray& id, CHUpdateItemMap& map)
 {
     if (map.empty())
         return;

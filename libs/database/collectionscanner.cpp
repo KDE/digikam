@@ -112,6 +112,8 @@ public:
     QHash<NewlyAppearedFile, qlonglong>
                       itemHints;
     QHash<int,int>    establishedSourceAlbums;
+    QSet<int>         modifiedItemHints;
+    QSet<int>         rescanItemHints;
 
     CollectionScannerObserver *observer;
 
@@ -161,6 +163,21 @@ void CollectionScanner::recordHints(const QList<ItemCopyMoveHint>& hints)
         QStringList dstNames = hint.dstNames();
         for(int i=0;i<ids.size();++i)
             d->itemHints[NewlyAppearedFile(hint.albumIdDst(), dstNames[i])] = ids[i];
+    }
+}
+
+void CollectionScanner::recordHints(const QList<ItemChangeHint>& hints)
+{
+    foreach(const ItemChangeHint& hint, hints)
+    {
+        QList<qlonglong> ids = hint.ids();
+        for(int i=0;i<ids.size();++i)
+        {
+            if (hint.isModified())
+                d->modifiedItemHints << ids[i];
+            else
+                d->rescanItemHints << ids[i];
+        }
     }
 }
 
@@ -685,9 +702,15 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
 void CollectionScanner::scanFileNormal(const QFileInfo& fi, const ItemScanInfo& scanInfo)
 {
     // if the date is null, this signals a full rescan
-    if (scanInfo.modificationDate.isNull())
+    if (scanInfo.modificationDate.isNull() || d->rescanItemHints.contains(scanInfo.id))
     {
+        d->rescanItemHints.remove(scanInfo.id);
         rescanFile(fi, scanInfo);
+    }
+    else if (d->modifiedItemHints.contains(scanInfo.id))
+    {
+        d->modifiedItemHints.remove(scanInfo.id);
+        scanModifiedFile(fi, scanInfo);
     }
     else
     {

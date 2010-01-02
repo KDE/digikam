@@ -807,6 +807,14 @@ DImg::FORMAT DImg::fileFormat() const
         return NONE;
 }
 
+DRawDecoding DImg::rawDecodingSettings() const
+{
+    if (m_priv->attributes.contains("rawDecodingSettings"))
+        return m_priv->attributes.value("rawDecodingSettings").value<DRawDecoding>();
+    else
+        return DRawDecoding();
+}
+
 IccProfile DImg::getIccProfile() const
 {
     return m_priv->iccProfile;
@@ -1536,70 +1544,64 @@ QImage DImg::pureColorMask(ExposureSettingsContainer *expoSettings)
     // --------------------------------------------------------
 
     uint dim    = m_priv->width * m_priv->height;
-    uint*  sptr = (uint*)m_priv->data;
     uchar* dptr = bits;
 
-    if (under && over)
+    if (sixteenBit())
     {
+        ushort*  sptr = (ushort*)m_priv->data;
+
         for (uint i = 0; i < dim; ++i)
         {
-            int s_red   = qRed(*sptr);
-            int s_green = qGreen(*sptr);
-            int s_blue  = qBlue(*sptr);
+            int s_blue  = *sptr++;
+            int s_green = *sptr++;
+            int s_red   = *sptr++;
+            sptr++;
 
-            if ((s_red == 0) && (s_green == 0) && (s_blue == 0))
+            if ((under) && (s_red == 0) && (s_green == 0) && (s_blue == 0))
             {
-                dptr[0] = u_blue;
-                dptr[1] = u_green;
-                dptr[2] = u_red;
-                dptr[3] = 0xFF;
+                    dptr[0] = u_blue;
+                    dptr[1] = u_green;
+                    dptr[2] = u_red;
+                    dptr[3] = 0xFF;
             }
 
-            if ((s_red == max) && (s_green == max) && (s_blue == max))
+            if ((over) && (s_red == max) && (s_green == max) && (s_blue == max))
             {
-                dptr[0] = o_blue;
-                dptr[1] = o_green;
-                dptr[2] = o_red;
-                dptr[3] = 0xFF;
+                    dptr[0] = o_blue;
+                    dptr[1] = o_green;
+                    dptr[2] = o_red;
+                    dptr[3] = 0xFF;
+            }
+
+            dptr += 4;
+        }
+    }
+    else
+    {
+       uint*  sptr = (uint*)m_priv->data;
+
+       for (uint i = 0; i < dim; ++i)
+        {
+            if ((under) && (qRed(*sptr) == 0) && (qGreen(*sptr) == 0) && (qBlue(*sptr) == 0))
+            {
+                    dptr[0] = u_blue;
+                    dptr[1] = u_green;
+                    dptr[2] = u_red;
+                    dptr[3] = 0xFF;
+            }
+
+            if ((over) && (qRed(*sptr) == max) && (qGreen(*sptr) == max) && (qBlue(*sptr) == max))
+            {
+                    dptr[0] = o_blue;
+                    dptr[1] = o_green;
+                    dptr[2] = o_red;
+                    dptr[3] = 0xFF;
             }
 
             dptr += 4;
             ++sptr;
         }
     }
-    else if (under)
-    {
-        for (uint i = 0; i < dim; ++i)
-        {
-            if ((qRed(*sptr) == 0) && (qGreen(*sptr) == 0) && (qBlue(*sptr) == 0))
-            {
-                dptr[0] = u_blue;
-                dptr[1] = u_green;
-                dptr[2] = u_red;
-                dptr[3] = 0xFF;
-            }
-
-            dptr += 4;
-            ++sptr;
-        }
-    }
-    else        // over-exposure
-    {
-        for (uint i = 0; i < dim; ++i)
-        {
-            if ((qRed(*sptr) == max) && (qGreen(*sptr) == max) && (qBlue(*sptr) == max))
-            {
-                dptr[0] = o_blue;
-                dptr[1] = o_green;
-                dptr[2] = o_red;
-                dptr[3] = 0xFF;
-            }
-
-            dptr += 4;
-            ++sptr;
-        }
-    }
-
     return img;
 }
 

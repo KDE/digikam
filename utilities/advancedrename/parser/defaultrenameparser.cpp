@@ -38,14 +38,13 @@
 #include "metadataoption.h"
 #include "sequencenumberoption.h"
 
+#include "casemodifier.h"
 #include "defaultvaluemodifier.h"
-#include "firstletterofeachworduppercasemodifier.h"
-#include "lowercasemodifier.h"
+#include "fillmodifier.h"
 #include "rangemodifier.h"
 #include "replacemodifier.h"
 #include "trimmedmodifier.h"
 #include "uniquemodifier.h"
-#include "uppercasemodifier.h"
 
 namespace Digikam
 {
@@ -71,13 +70,12 @@ DefaultRenameParser::DefaultRenameParser()
     /*
      * MODIFIERS
      */
-    registerModifier(new LowerCaseModifier());
-    registerModifier(new UpperCaseModifier());
-    registerModifier(new FirstLetterEachWordUpperCaseModifier());
+    registerModifier(new CaseModifier());
     registerModifier(new TrimmedModifier());
     registerModifier(new UniqueModifier());
     registerModifier(new DefaultValueModifier());
     registerModifier(new ReplaceModifier());
+    registerModifier(new FillModifier());
     registerModifier(new RangeModifier());
 }
 

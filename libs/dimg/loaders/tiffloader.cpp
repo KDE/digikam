@@ -312,40 +312,19 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                     return false;
                 }
 
+                if ((planar_config == PLANARCONFIG_SEPARATE) &&
+                    (st % (num_of_strips / samples_per_pixel)) == 0)
+                {
+                    offset = 0;
+                }
+
                 ushort *stripPtr = (ushort*)(strip);
                 ushort *dataPtr  = (ushort*)(data + offset);
                 ushort *p;
 
                 // tiff data is read as BGR or ABGR or Greyscale
 
-                if (samples_per_pixel == 3)
-                {
-                    for (int i=0; i < bytesRead/6; ++i)
-                    {
-                        p = dataPtr;
-
-                        // See B.K.O #148037 : take a care about byte order with Motorola computers.
-                        if (QSysInfo::ByteOrder == QSysInfo::BigEndian)     // PPC
-                        {
-                            p[3] = *stripPtr++;
-                            p[0] = *stripPtr++;
-                            p[1] = *stripPtr++;
-                            p[2] = 0xFFFF;
-                        }
-                        else
-                        {
-                            p[2] = *stripPtr++;
-                            p[1] = *stripPtr++;
-                            p[0] = *stripPtr++;
-                            p[3] = 0xFFFF;
-                        }
-
-                        dataPtr += 4;
-                    }
-
-                    offset += bytesRead/6 * 8;
-                }
-                else if (samples_per_pixel == 1)   // See B.K.O #148400: Greyscale pictures only have _one_ sample per pixel
+                if (samples_per_pixel == 1)   // See B.K.O #148400: Greyscale pictures only have _one_ sample per pixel
                 {
                     for (int i=0; i < bytesRead/2; ++i)
                     {
@@ -372,7 +351,79 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 
                     offset += bytesRead*4;         // The _byte_offset in the data array is, of course, four times bytesRead
                 }
-                else
+                else if ((samples_per_pixel == 3) && (planar_config == PLANARCONFIG_CONTIG))
+                {
+                    for (int i=0; i < bytesRead/6; ++i)
+                    {
+                        p = dataPtr;
+
+                        // See B.K.O #148037 : take a care about byte order with Motorola computers.
+                        if (QSysInfo::ByteOrder == QSysInfo::BigEndian)     // PPC
+                        {
+                            p[3] = *stripPtr++;
+                            p[0] = *stripPtr++;
+                            p[1] = *stripPtr++;
+                            p[2] = 0xFFFF;
+                        }
+                        else
+                        {
+                            p[2] = *stripPtr++;
+                            p[1] = *stripPtr++;
+                            p[0] = *stripPtr++;
+                            p[3] = 0xFFFF;
+                        }
+
+                        dataPtr += 4;
+                    }
+
+                    offset += bytesRead/6 * 8;
+                }
+                else if ((samples_per_pixel == 3) && (planar_config == PLANARCONFIG_SEPARATE))
+                {
+                    for (int i=0; i < bytesRead/2; ++i)
+                    {
+                        p = dataPtr;
+
+                        // See B.K.O #148037 : take a care about byte order with Motorola computers.
+                        if (QSysInfo::ByteOrder == QSysInfo::BigEndian)     // PPC
+                        {
+                            switch ((st / (num_of_strips / samples_per_pixel)))
+                            {
+                                case 0:
+                                    p[3] = *stripPtr++;
+                                    p[2] = 0xFFFF;
+                                    break;
+                                case 1:
+                                    p[0] = *stripPtr++;
+                                    break;
+                                case 2:
+                                    p[1] = *stripPtr++;
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            switch ((st / (num_of_strips / samples_per_pixel)))
+                            {
+                                case 0:
+                                    p[2] = *stripPtr++;
+                                    p[3] = 0xFFFF;
+                                    break;
+                                case 1:
+                                    p[1] = *stripPtr++;
+                                    break;
+                                case 2:
+                                    p[0] = *stripPtr++;
+                                    break;
+                            }
+                         }
+
+                        dataPtr += 4;
+                    }
+
+                    offset += bytesRead/2 * 8;
+                }
+                else if ((samples_per_pixel == 4) && (planar_config == PLANARCONFIG_CONTIG))
                 {
                     for (int i=0; i < bytesRead/8; ++i)
                     {
@@ -397,6 +448,55 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
                     }
 
                     offset += bytesRead;
+                }
+                else if ((samples_per_pixel == 4) && (planar_config == PLANARCONFIG_SEPARATE))
+                {
+                    for (int i=0; i < bytesRead/2; ++i)
+                    {
+                        p = dataPtr;
+
+                        // See B.K.O #148037 : take a care about byte order with Motorola computers.
+                        if (QSysInfo::ByteOrder == QSysInfo::BigEndian)     // PPC
+                        {
+                            switch ((st / (num_of_strips / samples_per_pixel)))
+                            {
+                                case 0:
+                                    p[3] = *stripPtr++;
+                                    break;
+                                case 1:
+                                    p[0] = *stripPtr++;
+                                    break;
+                                case 2:
+                                    p[1] = *stripPtr++;
+                                    break;
+                                case 3:
+                                    p[2] = *stripPtr++;
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            switch ((st / (num_of_strips / samples_per_pixel)))
+                            {
+                                case 0:
+                                    p[2] = *stripPtr++;
+                                    break;
+                                case 1:
+                                    p[1] = *stripPtr++;
+                                    break;
+                                case 2:
+                                    p[0] = *stripPtr++;
+                                    break;
+                                case 3:
+                                    p[3] = *stripPtr++;
+                                    break;
+                            }
+                         }
+
+                        dataPtr += 4;
+                    }
+
+                    offset += bytesRead/2 * 8;
                 }
             }
 

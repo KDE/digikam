@@ -120,7 +120,7 @@ public:
          *
          * This function has to be implemented by the client application
          *
-         * @return The user data which was stored in @m_data
+         * @return The user data which was stored in m_data
          */
         template<class yourtype> yourtype data() const
         {
