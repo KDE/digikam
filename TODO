@@ -11,7 +11,6 @@ post 1.0.0 mvc merge
  * think about where to create the tag modification helper for the sidebar in editor and lighttable.
  * connect searchtextbar directly to albumfiltermodel, to avoid indirect communication via treeviews
  * searchtextbar in tagcheckview for image properties doesn't highlight
- * disable (default) highlighting of the searchtextbar if no model is specified
  * let day selection widget in DateFolderView work on the model directly
  * DEFINITELY clean up the project structure. It's absolutely not obvious which
    file depends on which atm
