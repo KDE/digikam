@@ -71,7 +71,7 @@ protected Q_SLOTS:
 private Q_SLOTS:
 
     void slotStart();
-    void slotAlbumParsed(const ImageInfoList&);
+    void slotAlbumItemsInfo(const ImageInfoList&);
     void slotComplete();
 
 private:

@@ -50,6 +50,14 @@
 namespace Digikam
 {
 
+enum BatchAlbumsStatus
+{
+    NotRunning,
+    LoadingAlbum,
+    ReceivingImageInfos,
+    CompletedAlbum
+};
+
 class BatchAlbumsSyncMetadataPriv
 {
 public:
@@ -58,8 +66,7 @@ public:
     {
         cancel       = false;
         imageInfoJob = 0;
-        palbumList   = AlbumManager::instance()->allPAlbums();
-        duration.start();
+        status       = NotRunning;
     }
 
     bool                 cancel;
@@ -70,6 +77,7 @@ public:
 
     AlbumList            palbumList;
     AlbumList::Iterator  albumsIt;
+    BatchAlbumsStatus    status;
 };
 
 BatchAlbumsSyncMetadata::BatchAlbumsSyncMetadata(QWidget* /*parent*/)
@@ -83,7 +91,13 @@ BatchAlbumsSyncMetadata::BatchAlbumsSyncMetadata(QWidget* /*parent*/)
     setLabel(i18n("<b>Syncing the metadata of all images with the digiKam database. Please wait...</b>"));
     setButtonText(i18n("&Abort"));
     resize(600, 300);
-    QTimer::singleShot(500, this, SLOT(slotStart()));
+    QTimer::singleShot(0, this, SLOT(slotStart()));
+
+    connect(d->imageInfoJob, SIGNAL(signalItemsInfo(const ImageInfoList&)),
+            this, SLOT(slotAlbumItemsInfo(const ImageInfoList&)));
+
+    connect(d->imageInfoJob, SIGNAL(signalCompleted()),
+            this, SLOT(slotComplete()));
 }
 
 BatchAlbumsSyncMetadata::~BatchAlbumsSyncMetadata()
@@ -93,14 +107,11 @@ BatchAlbumsSyncMetadata::~BatchAlbumsSyncMetadata()
 
 void BatchAlbumsSyncMetadata::slotStart()
 {
+    d->palbumList   = AlbumManager::instance()->allPAlbums();
+    d->duration.start();
+
     setTitle(i18n("Parsing all albums"));
     setMaximum(d->palbumList.count());
-
-    connect(d->imageInfoJob, SIGNAL(signalItemsInfo(const ImageInfoList&)),
-            this, SLOT(slotAlbumParsed(const ImageInfoList&)));
-
-    connect(d->imageInfoJob, SIGNAL(signalCompleted()),
-            this, SLOT(slotComplete()));
 
     d->albumsIt = d->palbumList.begin();
     parseAlbum();
@@ -108,6 +119,12 @@ void BatchAlbumsSyncMetadata::slotStart()
 
 void BatchAlbumsSyncMetadata::parseAlbum()
 {
+    if (d->status == CompletedAlbum)
+    {
+        advance(1);
+        d->albumsIt++;
+    }
+
     if (d->albumsIt == d->palbumList.end())     // All is done.
     {
         QTime t;
@@ -121,48 +138,46 @@ void BatchAlbumsSyncMetadata::parseAlbum()
                              this, windowTitle());
         advance(1);
         abort();
+        return;
     }
-    else if (!(*d->albumsIt)->isRoot())
+
+    if ((*d->albumsIt)->isRoot())
     {
-        d->imageInfoJob->allItemsFromAlbum(*d->albumsIt);
-        kDebug() << "Sync Items from Album :" << (*d->albumsIt)->databaseUrl().directory();
-    }
-    else
-    {
-        d->albumsIt++;
+        d->status = CompletedAlbum;
         parseAlbum();
+        return;
     }
+
+    d->status = LoadingAlbum;
+    d->imageInfoJob->allItemsFromAlbum(*d->albumsIt);
+    kDebug() << "Sync Items from Album :" << (*d->albumsIt)->title();
 }
 
-void BatchAlbumsSyncMetadata::slotAlbumParsed(const ImageInfoList& list)
+void BatchAlbumsSyncMetadata::slotAlbumItemsInfo(const ImageInfoList& list)
 {
-    QPixmap pix = KIconLoader::global()->loadIcon("folder-image", KIconLoader::NoGroup, 32);
-
-    ImageInfoList imageInfoList = list;
-
-    if (!imageInfoList.isEmpty())
+    if (d->status == LoadingAlbum)
     {
-        addedAction(pix, imageInfoList.first().fileUrl().directory());
-
-        foreach(const ImageInfo& info, imageInfoList)
+        d->status = ReceivingImageInfos;
+        if (!list.isEmpty())
         {
-            MetadataHub fileHub;
-            // read in from database
-            fileHub.load(info);
-            // write out to file DMetadata
-            fileHub.write(info.filePath());
+            QPixmap pix = KIconLoader::global()->loadIcon("folder-image", KIconLoader::NoGroup, 32);
+            addedAction(pix, list.first().fileUrl().directory());
         }
     }
 
-    advance(1);
-    d->albumsIt++;
-    parseAlbum();
+    foreach(const ImageInfo& info, list)
+    {
+        MetadataHub fileHub;
+        // read in from database
+        fileHub.load(info);
+        // write out to file DMetadata
+        fileHub.write(info.filePath());
+    }
 }
 
 void BatchAlbumsSyncMetadata::slotComplete()
 {
-    advance(1);
-    d->albumsIt++;
+    d->status = CompletedAlbum;
     parseAlbum();
 }
 

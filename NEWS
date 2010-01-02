@@ -33,5 +33,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 024 ==> 220708 : digiKam crashes on startup segmentation fault, glibc, invalid pointer on free()) [qFree, QString::free, QString::operator=].
 025 ==> 220889 : Problem with color management.
 026 ==> 200392 : Slideshow displays "Headline" field as "image caption" and has no way to display "Caption" field.
-027 ==> 
+027 ==> 220202 : "Write Metadata to images" only modifies the first 201 files in any directory (album).
+028 ==> 
 
