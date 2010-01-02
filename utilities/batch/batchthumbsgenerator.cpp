@@ -164,7 +164,7 @@ void BatchThumbsGenerator::complete()
     setTitle(i18n("Duration: %1", t.toString()));
     setButtonText(i18n("&Close"));
     // Pop-up a message to bring user when all is done.
-    KNotificationWrapper("", i18n("The thumbnails database has been updated."),
+    KNotificationWrapper("batchthumbscompleted", i18n("The thumbnails database has been updated."),
                          this, windowTitle());
     emit signalRebuildAllThumbsDone();
 }

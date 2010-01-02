@@ -42,7 +42,8 @@
 // Local includes
 
 #include "advancedrenamewidget.h"
-#include "parseinformation.h"
+#include "parser.h"
+#include "parsesettings.h"
 
 namespace Digikam
 {
@@ -182,6 +183,9 @@ AdvancedRenameDialog::AdvancedRenameDialog(QWidget* parent)
     d->listView->setHeaderLabels(QStringList() << i18n("Current Name") << i18n("New Name"));
     d->listView->header()->setResizeMode(0, QHeaderView::Stretch);
     d->listView->header()->setResizeMode(1, QHeaderView::Stretch);
+    d->listView->setWhatsThis(i18n("This list shows the results for your renaming pattern. Red items indicate a "
+                                   "a name collision, either because the new name is equal to the current name, "
+                                   "or because the name has already been assigned to another item."));
 
     // --------------------------------------------------------
 
@@ -235,21 +239,19 @@ void AdvancedRenameDialog::slotReturnPressed()
 void AdvancedRenameDialog::slotParseStringChanged(const QString& parseString)
 {
     d->newNamesList.clear();
+    d->advancedRenameWidget->parser()->reset();
 
-    int index = 1;
     QTreeWidgetItemIterator it(d->listView);
     while (*it)
     {
         AdvancedRenameListItem* item = dynamic_cast<AdvancedRenameListItem*>((*it));
         if (item)
         {
-            ParseInformation parseInfo(ImageInfo(item->imageUrl()));
-            parseInfo.index = index;
+            ParseSettings settings(ImageInfo(item->imageUrl()));
 
-            QString newName = d->advancedRenameWidget->parse(parseInfo);
+            QString newName = d->advancedRenameWidget->parse(settings);
             item->setNewName(newName);
             d->newNamesList << NewNameInfo(item->imageUrl(), newName);
-            ++index;
         }
         ++it;
     }
@@ -347,7 +349,7 @@ void AdvancedRenameDialog::writeSettings()
 bool AdvancedRenameDialog::checkNewNames()
 {
     QSet<QString> tmpNewNames;
-    bool valid = true;
+    bool ok = true;
 
     QTreeWidgetItemIterator it(d->listView);
     while (*it)
@@ -355,14 +357,15 @@ bool AdvancedRenameDialog::checkNewNames()
         AdvancedRenameListItem* item = dynamic_cast<AdvancedRenameListItem*>((*it));
         if (item)
         {
-            valid = valid && (!item->isInvalid()) && ( !tmpNewNames.contains(item->newName()) );
+            bool valid = !item->isInvalid() && ( !tmpNewNames.contains(item->newName()) );
+            ok         = ok && valid;
             item->markInvalid(!valid);
             tmpNewNames << item->newName();
         }
         ++it;
     }
 
-    return valid;
+    return ok;
 }
 
 }  // namespace Digikam

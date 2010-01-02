@@ -103,54 +103,52 @@ void SequenceNumberOption::slotTokenTriggered(const QString& token)
 
     QPointer<SequenceNumberDialog> dlg = new SequenceNumberDialog(this);
 
-    QString tmp;
+    QString result;
     if (dlg->exec() == KDialog::Accepted)
     {
         int digits = dlg->digits->value();
         int start  = dlg->start->value();
         int step   = dlg->step->value();
 
-        tmp = QString("%1").arg("#", digits, QChar('#'));
+        result = QString("%1").arg("#", digits, QChar('#'));
         if (start > 1)
         {
-            tmp.append(QString("[%1").arg(QString::number(start)));
+            result.append(QString("[%1").arg(QString::number(start)));
 
             if (step > 1)
             {
-                tmp.append(QString(",%1").arg(QString::number(step)));
+                result.append(QString(",%1").arg(QString::number(step)));
             }
 
-            tmp.append(QChar(']'));
+            result.append(QChar(']'));
         }
     }
 
     delete dlg;
 
-    emit signalTokenTriggered(tmp);
+    emit signalTokenTriggered(result);
 }
 
-void SequenceNumberOption::parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results)
+QString SequenceNumberOption::parseOperation(ParseSettings& settings)
 {
-    QRegExp reg = regExp();
     int slength = 0;
     int start   = 0;
     int step    = 0;
     int number  = 0;
-    int index   = info.index;
+    int index   = settings.currentIndex;
 
     // --------------------------------------------------------
 
-    QString tmp;
-    PARSE_LOOP_START(parseString, reg)
-    {
-        slength = reg.cap(1).length();
-        start   = reg.cap(3).isEmpty() ? 1 : reg.cap(3).toInt();
-        step    = reg.cap(4).isEmpty() ? 1 : reg.cap(4).toInt();
+    QString result;
+    const QRegExp& reg = regExp();
+    slength            = reg.cap(1).length();
+    start              = reg.cap(3).isEmpty() ? settings.startIndex : reg.cap(3).toInt();
+    step               = reg.cap(4).isEmpty() ? 1 : reg.cap(4).toInt();
 
-        number  = start + ((index - 1) * step);
-        tmp     = QString("%1").arg(number, slength, 10, QChar('0'));
-    }
-    PARSE_LOOP_END(parseString, reg, tmp, results)
+    number             = start + ((index - 1) * step);
+    result             = QString("%1").arg(number, slength, 10, QChar('0'));
+
+    return result;
 }
 
 } // namespace Digikam

@@ -55,10 +55,11 @@ void AdvancedRenameWidgetTest::testFileNameToken()
 
     DefaultRenameParser parser;
 
-    ParseInformation info;
-    info.fileUrl = filename;
+    ParseSettings settings;
+    settings.fileUrl     = filename;
+    settings.parseString = parseString;
 
-    QString parsed = parser.parse(parseString, info);
+    QString parsed = parser.parse(settings);
     QCOMPARE(parsed, result);
 }
 
@@ -88,10 +89,11 @@ void AdvancedRenameWidgetTest::testFileExtensionToken()
 
     DefaultRenameParser parser;
 
-    ParseInformation info;
-    info.fileUrl   = filename;
+    ParseSettings settings;
+    settings.fileUrl     = filename;
+    settings.parseString = parseString;
 
-    QString parsed = parser.parse(parseString, info);
+    QString parsed = parser.parse(settings);
     QCOMPARE(parsed, result);
 }
 
@@ -103,10 +105,10 @@ void AdvancedRenameWidgetTest::testDirectoryNameToken_data()
 
     QString filename("/mnt/data/photos/2009/digikam_tests/myfile001.jpg");
 
-    QTest::newRow("[dir]")        << QString("[dir]")        << filename << QString("digikam_tests.jpg");
-    QTest::newRow("[dir.]")       << QString("[dir.]")       << filename << QString("2009.jpg");
-    QTest::newRow("[dir.]_[dir]") << QString("[dir.]_[dir]") << filename << QString("2009_digikam_tests.jpg");
-    QTest::newRow("[dir.....]")   << QString("[dir.....]")   << filename << QString("myfile001.jpg");
+    QTest::newRow("[dir]")          << QString("[dir]")          << filename << QString("digikam_tests.jpg");
+    QTest::newRow("[dir.]")         << QString("[dir.]")         << filename << QString("2009.jpg");
+    QTest::newRow("[dir.]_[dir]")   << QString("[dir.]_[dir]")   << filename << QString("2009_digikam_tests.jpg");
+    QTest::newRow("[dir.......]")   << QString("[dir.......]")   << filename << QString("myfile001.jpg");
 }
 
 void AdvancedRenameWidgetTest::testDirectoryNameToken()
@@ -117,53 +119,44 @@ void AdvancedRenameWidgetTest::testDirectoryNameToken()
 
     DefaultRenameParser parser;
 
-    ParseInformation info;
-    info.fileUrl   = filename;
+    ParseSettings settings;
+    settings.fileUrl     = filename;
+    settings.parseString = parseString;
 
-    QString parsed = parser.parse(parseString, info);
+    QString parsed = parser.parse(settings);
     QCOMPARE(parsed, result);
 }
 
 void AdvancedRenameWidgetTest::testNumberToken_data()
 {
     QTest::addColumn<QString>("parseString");
-    QTest::addColumn<int>("index");
     QTest::addColumn<QString>("result");
 
     // filename is "myimage_1234.jpg", it is not defined in here to avoid typing it into the results all the time.
     // it will be defined in the test method
 
-    QTest::newRow("#")                      << QString("#")                      << 1  << QString("1.jpg");
-    QTest::newRow("# (index:20)")           << QString("#")                      << 20 << QString("20.jpg");
-    QTest::newRow("##")                     << QString("##")                     << 2  << QString("02.jpg");
-    QTest::newRow("###")                    << QString("###")                    << 4  << QString("004.jpg");
-    QTest::newRow("### (index:40)")         << QString("###")                    << 40 << QString("040.jpg");
-    QTest::newRow("###_bla_##")             << QString("###_bla_##")             << 10 << QString("010_bla_10.jpg");
-    QTest::newRow("####[2,3]")              << QString("####[2,3]")              << 1  << QString("0002.jpg");
-    QTest::newRow("####[2,3](10)")          << QString("####[2,3]")              << 10 << QString("0029.jpg");
-    QTest::newRow("####[ 2, 3]")            << QString("####[ 2, 3]")            << 10 << QString("0029.jpg");
-    QTest::newRow("####[2,3]_bla_## ###")   << QString("####[2,3]_bla_## ###")   << 1  << QString("0002_bla_01 001.jpg");
-    QTest::newRow("####[2, 3]_bla_## ###")  << QString("####[2, 3]_bla_## ###")  << 1  << QString("0002_bla_01 001.jpg");
-    QTest::newRow("####[ 2, 3]_bla_## ###") << QString("####[ 2, 3]_bla_## ###") << 1  << QString("0002_bla_01 001.jpg");
-    QTest::newRow("###[100]_bla")           << QString("###[100]_bla")           << 1  << QString("100_bla.jpg");
-    QTest::newRow("###[100,]_bla")          << QString("###[100,]_bla")          << 1  << QString("100_bla.jpg");
-    QTest::newRow("###[100,   ]_bla")       << QString("###[100,   ]_bla")       << 1  << QString("100_bla.jpg");
-    QTest::newRow("###[100   ,   ]_bla")    << QString("###[100   ,   ]_bla")    << 1  << QString("100_bla.jpg");
+    QTest::newRow("#")                      << QString("#")                      << QString("1.jpg");
+    QTest::newRow("####[2,3]")              << QString("####[2,3]")              << QString("0002.jpg");
+    QTest::newRow("####[2,3]_bla_## ###")   << QString("####[2,3]_bla_## ###")   << QString("0002_bla_01 001.jpg");
+    QTest::newRow("####[2, 3]_bla_## ###")  << QString("####[2, 3]_bla_## ###")  << QString("0002_bla_01 001.jpg");
+    QTest::newRow("####[ 2, 3]_bla_## ###") << QString("####[ 2, 3]_bla_## ###") << QString("0002_bla_01 001.jpg");
+    QTest::newRow("###[100]_bla")           << QString("###[100]_bla")           << QString("100_bla.jpg");
+    QTest::newRow("###[100,]_bla")          << QString("###[100,]_bla")          << QString("100_bla.jpg");
+    QTest::newRow("###[100,   ]_bla")       << QString("###[100,   ]_bla")       << QString("100_bla.jpg");
+    QTest::newRow("###[100   ,   ]_bla")    << QString("###[100   ,   ]_bla")    << QString("100_bla.jpg");
 }
 
 void AdvancedRenameWidgetTest::testNumberToken()
 {
     QFETCH(QString,   parseString);
-    QFETCH(int,       index);
     QFETCH(QString,   result);
 
     DefaultRenameParser parser;
 
-    ParseInformation info;
-    info.fileUrl = QString("myimage_1234.jpg");
-    info.index = index;
-
-    QString parsed = parser.parse(parseString, info);
+    ParseSettings settings;
+    settings.fileUrl     = QString("myimage_1234.jpg");
+    settings.parseString = parseString;
+    QString parsed    = parser.parse(settings);
     QCOMPARE(parsed, result);
 }
 
@@ -190,10 +183,11 @@ void AdvancedRenameWidgetTest::testTrimmedModifier()
 
     DefaultRenameParser parser;
 
-    ParseInformation info;
-    info.fileUrl   = filename;
+    ParseSettings settings;
+    settings.fileUrl     = filename;
+    settings.parseString = parseString;
 
-    QString parsed = parser.parse(parseString, info);
+    QString parsed = parser.parse(settings);
     QCOMPARE(parsed, result);
 }
 
@@ -226,10 +220,11 @@ void AdvancedRenameWidgetTest::testFirstLetterOfEachWordUppercaseModifier()
 
     DefaultRenameParser parser;
 
-    ParseInformation info;
-    info.fileUrl   = filename;
+    ParseSettings settings;
+    settings.fileUrl     = filename;
+    settings.parseString = parseString;
 
-    QString parsed = parser.parse(parseString, info);
+    QString parsed = parser.parse(settings);
     QCOMPARE(parsed, result);
 }
 
@@ -256,10 +251,11 @@ void AdvancedRenameWidgetTest::testChainedModifiers()
 
     DefaultRenameParser parser;
 
-    ParseInformation info;
-    info.fileUrl   = filename;
+    ParseSettings settings;
+    settings.fileUrl     = filename;
+    settings.parseString = parseString;
 
-    QString parsed = parser.parse(parseString, info);
+    QString parsed = parser.parse(settings);
     QCOMPARE(parsed, result);
 }
 
@@ -293,11 +289,86 @@ void AdvancedRenameWidgetTest::testUppercaseModifier()
 
     DefaultRenameParser parser;
 
-    ParseInformation info;
-    info.fileUrl   = filename;
+    ParseSettings settings;
+    settings.fileUrl     = filename;
+    settings.parseString = parseString;
 
-    QString parsed = parser.parse(parseString, info);
+    QString parsed = parser.parse(settings);
     QCOMPARE(parsed, result);
+}
+
+void AdvancedRenameWidgetTest::testUniqueModifier()
+{
+    DefaultRenameParser parser;
+
+    ParseSettings settings;
+    settings.fileUrl     = QString("myfile001.jpg");
+    settings.cameraName  = QString("Nikon D50");
+    settings.parseString = QString("[file]{unique}_T[date:hhmmss]{unique}_[cam]{unique}");
+
+#define DIGITS_STR(VALUE, DIGITS) QString("%1").arg(VALUE, DIGITS, 10, QChar('0'))
+
+    QStringList validResults;
+    validResults << QString("myfile001_T100012_Nikon D50.jpg");
+    validResults << QString("myfile001_%1_T100012_%2_Nikon D50_%3.jpg")
+            .arg(DIGITS_STR(1, 1)).arg(DIGITS_STR(1, 1)).arg(DIGITS_STR(1, 1));
+    validResults << QString("myfile001_%1_T214536_Nikon D50_%2.jpg")
+            .arg(DIGITS_STR(2, 1)).arg(DIGITS_STR(2, 1));
+    validResults << QString("myfile001_%1_T214536_%2_Nikon D50_%3.jpg")
+            .arg(DIGITS_STR(3, 1)).arg(DIGITS_STR(1, 1)).arg(DIGITS_STR(3, 1));
+    validResults << QString("myfile001_%1_T214536_%2_Nikon D50_%3.jpg")
+            .arg(DIGITS_STR(4, 1)).arg(DIGITS_STR(2, 1)).arg(DIGITS_STR(4, 1));
+
+    QTime t1;
+    t1.setHMS(10, 00, 12);
+
+    QTime t2;
+    t2.setHMS(21, 45, 36);
+
+    QDateTime date = QDateTime::currentDateTime();
+    date.setTime(t1);
+    settings.dateTime = date;
+
+    QStringList results;
+    results << parser.parse(settings);
+    results << parser.parse(settings);
+    date.setTime(t2);
+    settings.dateTime = date;
+    results << parser.parse(settings);
+    results << parser.parse(settings);
+    results << parser.parse(settings);
+
+    QCOMPARE(results, validResults);
+
+    // --------------------------------------------------------
+
+    settings.parseString = QString("[file]{unique:2}_T[date:hhmmss]{unique}_[cam]{unique:4}");
+    results.clear();
+    validResults.clear();
+    parser.reset();
+    date.setTime(t1);
+    settings.dateTime = date;
+    validResults << QString("myfile001_T100012_Nikon D50.jpg");
+    validResults << QString("myfile001_%1_T100012_%2_Nikon D50_%3.jpg")
+            .arg(DIGITS_STR(1, 2)).arg(DIGITS_STR(1, 1)).arg(DIGITS_STR(1, 4));
+    validResults << QString("myfile001_%1_T214536_Nikon D50_%2.jpg")
+            .arg(DIGITS_STR(2, 2)).arg(DIGITS_STR(2, 4));
+    validResults << QString("myfile001_%1_T214536_%2_Nikon D50_%3.jpg")
+            .arg(DIGITS_STR(3, 2)).arg(DIGITS_STR(1, 1)).arg(DIGITS_STR(3, 4));
+    validResults << QString("myfile001_%1_T214536_%2_Nikon D50_%3.jpg")
+            .arg(DIGITS_STR(4, 2)).arg(DIGITS_STR(2, 1)).arg(DIGITS_STR(4, 4));
+
+    results << parser.parse(settings);
+    results << parser.parse(settings);
+    date.setTime(t2);
+    settings.dateTime = date;
+    results << parser.parse(settings);
+    results << parser.parse(settings);
+    results << parser.parse(settings);
+
+    QCOMPARE(results, validResults);
+
+#undef DIGITS_STR
 }
 
 void AdvancedRenameWidgetTest::testRangeModifier_data()
@@ -309,26 +380,10 @@ void AdvancedRenameWidgetTest::testRangeModifier_data()
     QString fileName("DSC1234.jpg");
     QDateTime curdate = QDateTime::currentDateTime();
 
-    QTest::newRow("[file]{1}")  << QString("[file]{1}") << fileName
-                                << QString("D.jpg");
-
-    QTest::newRow("[file]{3 }")  << QString("[file]{3 }") << fileName
-                                 << QString("C.jpg");
-
-    QTest::newRow("[file]{ 3 }")  << QString("[file]{ 3 }") << fileName
-                                  << QString("C.jpg");
-
-    QTest::newRow("[file]{ 3}")  << QString("[file]{ 3}") << fileName
-                                 << QString("C.jpg");
-
-    QTest::newRow("[file]{1-3}")  << QString("[file]{1-3}") << fileName
-                                  << QString("DSC.jpg");
-
-    QTest::newRow("[file]{ 1 - 3 }")  << QString("[file]{ 1 - 3 }") << fileName
-                                      << QString("DSC.jpg");
-
-    QTest::newRow("[file]{3-}")  << QString("[file]{3-}") << fileName
-                                 << QString("C1234.jpg");
+    QTest::newRow("[file]{1}")    << QString("[file]{1}")   << fileName << QString("D.jpg");
+    QTest::newRow("[file]{3}")    << QString("[file]{3}")   << fileName << QString("C.jpg");
+    QTest::newRow("[file]{1-3}")  << QString("[file]{1-3}") << fileName << QString("DSC.jpg");
+    QTest::newRow("[file]{3-}")   << QString("[file]{3-}")  << fileName << QString("C1234.jpg");
 }
 
 void AdvancedRenameWidgetTest::testRangeModifier()
@@ -339,10 +394,11 @@ void AdvancedRenameWidgetTest::testRangeModifier()
 
     DefaultRenameParser parser;
 
-    ParseInformation info;
-    info.fileUrl = filename;
+    ParseSettings settings;
+    settings.fileUrl     = filename;
+    settings.parseString = parseString;
 
-    QString parsed = parser.parse(parseString, info);
+    QString parsed = parser.parse(settings);
     QCOMPARE(parsed, result);
 }
 
@@ -372,11 +428,12 @@ void AdvancedRenameWidgetTest::testDefaultValueModifier()
 
     DefaultRenameParser parser;
 
-    ParseInformation info;
-    info.fileUrl   = filename;
-    info.cameraName = camera;
+    ParseSettings settings;
+    settings.fileUrl     = filename;
+    settings.parseString = parseString;
+    settings.cameraName  = camera;
 
-    QString parsed = parser.parse(parseString, info);
+    QString parsed = parser.parse(settings);
     QCOMPARE(parsed, result);
 }
 
@@ -405,10 +462,11 @@ void AdvancedRenameWidgetTest::testLowercaseModifier()
 
     DefaultRenameParser parser;
 
-    ParseInformation info;
-    info.fileUrl = filename;
+    ParseSettings settings;
+    settings.fileUrl     = filename;
+    settings.parseString = parseString;
 
-    QString parsed = parser.parse(parseString, info);
+    QString parsed = parser.parse(settings);
     QCOMPARE(parsed, result);
 }
 
@@ -418,7 +476,6 @@ void AdvancedRenameWidgetTest::testCameraToken_data()
     QTest::addColumn<QString>("filename");
     QTest::addColumn<QString>("cameraName");
     QTest::addColumn<QDateTime>("cameraDate");
-    QTest::addColumn<int>("index");
     QTest::addColumn<QString>("result");
 
     QString filename("myfile001.jpg");
@@ -426,17 +483,10 @@ void AdvancedRenameWidgetTest::testCameraToken_data()
     QString camname_ext("Nikon D50.jpg");
     QDateTime curdate = QDateTime::currentDateTime();
 
-    QTest::newRow("   ")      << QString("[cam]") << filename << QString("   ") << curdate << 1
-                              << QString("myfile001.jpg");
-
-    QTest::newRow("[cam]")    << QString("[cam]") << filename << camname << curdate << 1
-                              << camname_ext;
-
-    QTest::newRow("[ cam ]")  << QString("[ cam ]") << filename << camname << curdate << 1
-                              << QString("[ cam ].jpg");
-
-    QTest::newRow("[camcam]") << QString("[camcam]") << filename << camname << curdate << 1
-                              << QString("[camcam].jpg");
+    QTest::newRow("   ")      << QString("[cam]")    << filename << QString("   ") << curdate << QString("myfile001.jpg");
+    QTest::newRow("[cam]")    << QString("[cam]")    << filename << camname        << curdate << camname_ext;
+    QTest::newRow("[ cam ]")  << QString("[ cam ]")  << filename << camname        << curdate << QString("[ cam ].jpg");
+    QTest::newRow("[camcam]") << QString("[camcam]") << filename << camname        << curdate << QString("[camcam].jpg");
 }
 
 void AdvancedRenameWidgetTest::testCameraToken()
@@ -445,18 +495,17 @@ void AdvancedRenameWidgetTest::testCameraToken()
     QFETCH(QString,   filename);
     QFETCH(QString,   cameraName);
     QFETCH(QDateTime, cameraDate);
-    QFETCH(int,       index);
     QFETCH(QString,   result);
 
     DefaultRenameParser parser;
 
-    ParseInformation info;
-    info.fileUrl    = filename;
-    info.cameraName = cameraName;
-    info.dateTime   = cameraDate;
-    info.index      = index;
+    ParseSettings settings;
+    settings.fileUrl      = filename;
+    settings.parseString  = parseString;
+    settings.cameraName   = cameraName;
+    settings.dateTime     = cameraDate;
 
-    QString parsed = parser.parse(parseString, info);
+    QString parsed = parser.parse(settings);
     QCOMPARE(parsed, result);
 }
 
@@ -467,23 +516,22 @@ void AdvancedRenameWidgetTest::testEmptyParseString()
 
     DefaultRenameParser parser;
 
-    ParseInformation info;
-    info.fileUrl    = filename;
-    info.cameraName = QString();
-    info.index      = 1;
-    info.dateTime   = curdate;
+    ParseSettings settings;
+    settings.fileUrl      = filename;
+    settings.cameraName   = QString();
+    settings.dateTime     = curdate;
 
     // test for empty parser string
-    QString parsed = parser.parse(QString(), info);
+    settings.parseString.clear();
+    QString parsed = parser.parse(settings);
     QCOMPARE(parsed, QString("myfilename001.jpg"));
 
-    parsed = parser.parse(QString(""), info);
-    QCOMPARE(parsed, QString("myfilename001.jpg"));
-
-    parsed = parser.parse(QString("   "), info);
+    settings.parseString = QString("   ");
+    parsed = parser.parse(settings);
     QCOMPARE(parsed, QString("myfilename001.jpg"));
 
     // the following is not invalid
-    parsed = parser.parse(QString("  [file]{lower}_##"), info);
+    settings.parseString = QString("  [file]{lower}_##");
+    parsed = parser.parse(settings);
     QCOMPARE(parsed, QString("  myfilename001_01.jpg"));
 }

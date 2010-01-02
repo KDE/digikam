@@ -23,20 +23,14 @@
 
 #include "option.moc"
 
+// Qt includes
+
+#include <QRegExp>
+
 // KDE includes
 
 #include <kiconloader.h>
 #include <klocale.h>
-
-// Local includes
-
-#include "firstletterofeachworduppercasemodifier.h"
-#include "lowercasemodifier.h"
-#include "rangemodifier.h"
-#include "replacemodifier.h"
-#include "trimmedmodifier.h"
-#include "uppercasemodifier.h"
-#include "defaultvaluemodifier.h"
 
 namespace Digikam
 {
@@ -48,168 +42,49 @@ public:
     OptionPriv()
     {}
 
-    ParseResults parseResults;
-    ParseResults modifierResults;
-    ModifierList modifiers;
+    ParseResults parsedResults;
 };
+
+Option::Option(const QString& name, const QString& description)
+      : ParseObject(name), d(new OptionPriv)
+{
+    setDescription(description);
+}
 
 Option::Option(const QString& name, const QString& description, const QPixmap& icon)
       : ParseObject(name, icon), d(new OptionPriv)
 {
     setDescription(description);
-
-    registerModifier(new LowerCaseModifier());
-    registerModifier(new UpperCaseModifier());
-    registerModifier(new FirstLetterEachWordUpperCaseModifier());
-    registerModifier(new TrimmedModifier());
-    registerModifier(new DefaultValueModifier());
-    registerModifier(new ReplaceModifier());
-    registerModifier(new RangeModifier());
 }
 
 Option::~Option()
 {
-    foreach (Modifier* modifier, d->modifiers)
-    {
-        delete modifier;
-    }
-
-    d->modifiers.clear();
-
     delete d;
 }
 
-void Option::registerModifier(Modifier* modifier)
+
+ParseResults Option::parse(ParseSettings& settings)
 {
-    if (!modifier)
+    d->parsedResults.clear();
+    const QRegExp& reg         = regExp();
+    const QString& parseString = settings.parseString;
+
+    int pos = 0;
+    while (pos > -1)
     {
-        return;
-    }
-
-    if (!modifier->isValid())
-    {
-        return;
-    }
-
-    d->modifiers.append(modifier);
-}
-
-ModifierList Option::modifiers() const
-{
-    return d->modifiers;
-}
-
-void Option::parse(const QString& parseString, ParseInformation& info)
-{
-    d->parseResults.clear();
-    d->modifierResults.clear();
-
-    parseOperation(parseString, info, d->parseResults);
-
-    if (!d->modifiers.isEmpty())
-    {
-        d->modifierResults = applyModifiers(parseString, d->parseResults);
-    }
-}
-
-ParseResults Option::parseResults()
-{
-    return d->parseResults;
-}
-
-ParseResults Option::modifiedResults()
-{
-    if (d->modifierResults.isEmpty())
-    {
-        return d->parseResults;
-    }
-    return d->modifierResults;
-}
-
-ParseResults Option::applyModifiers(const QString& parseString, ParseResults& results)
-{
-    ParseResults tmp = results;
-
-    ParseResults modifiers;
-    QMap<ParseResults::ResultsKey, Modifier*> modifierCallbackMap;
-
-    if (results.isEmpty())
-    {
-        return tmp;
-    }
-
-    // fill modifiers ParseResults with all possible modifier tokens
-    foreach (Modifier* modifier, d->modifiers)
-    {
-        QRegExp regExp = modifier->regExp();
-        regExp.setMinimal(true);
-        int pos = 0;
-        while (pos > -1)
+        pos = reg.indexIn(parseString, pos);
+        if (pos > -1)
         {
-            pos = regExp.indexIn(parseString, pos);
-            if (pos > -1)
-            {
-                ParseResults::ResultsKey   k(pos, regExp.matchedLength());
-                ParseResults::ResultsValue v(regExp.cap(0), QString());
+            QString result = parseOperation(settings);
 
-                modifiers.addEntry(k, v);
-                modifierCallbackMap.insert(k, modifier);
-
-                pos += regExp.matchedLength();
-            }
+            ParseResults::ResultsKey   k(pos, reg.cap(0).count());
+            ParseResults::ResultsValue v(reg.cap(0), result);
+            d->parsedResults.addEntry(k, v);
+            pos += reg.matchedLength();
         }
     }
 
-    // Check for valid modifiers (they must appear directly after a token) and apply the modification to the token result.
-    // We need to create a second ParseResults object with modified keys, otherwise the final parsing step will not
-    // remove the modifier tokens from the result.
-
-    foreach (const ParseResults::ResultsKey& key, results.keys())
-    {
-        int off  = results.offset(key);
-        int diff = 0;
-        for (int pos = off; pos < parseString.count();)
-        {
-            if (modifiers.hasKeyAtPosition(pos))
-            {
-                ParseResults::ResultsKey mkey = modifiers.keyAtPosition(pos);
-                Modifier* mod                 = modifierCallbackMap[mkey];
-                QString modToken              = modifiers.token(mkey);
-
-                QString token                 = results.token(key);
-                QString result                = results.result(key);
-
-                QString modResult;
-                if (mod)
-                {
-                    modResult = mod->modify(modToken, result);
-                }
-
-                // update result
-                ParseResults::ResultsKey   kResult = key;
-                ParseResults::ResultsValue vResult(token, modResult);
-                results.addEntry(kResult, vResult);
-
-                // update modifier map
-                ParseResults::ResultsKey kModifier = key;
-                kModifier.second += diff;
-                ParseResults::ResultsValue vModifier(modToken, modResult);
-
-                tmp.deleteEntry(kModifier);
-                kModifier.second += modToken.count();
-                tmp.addEntry(kModifier, vModifier);
-
-                // set position to the next possible token
-                pos  += mkey.second;
-                diff += mkey.second;
-            }
-            else
-            {
-                break;
-            }
-        }
-    }
-    return tmp;
+    return d->parsedResults;
 }
 
 } // namespace Digikam

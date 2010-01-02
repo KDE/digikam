@@ -97,7 +97,7 @@ void ReplaceModifier::slotTokenTriggered(const QString& token)
 {
     Q_UNUSED(token)
 
-    QString tmp;
+    QString result;
 
     QPointer<ReplaceDialog> dlg = new ReplaceDialog(this);
     if (dlg->exec() == KDialog::Accepted)
@@ -108,37 +108,33 @@ void ReplaceModifier::slotTokenTriggered(const QString& token)
         {
             if (dlg->caseSensitive->isChecked())
             {
-                tmp = QString("{r:\"%1\",\"%2\"}").arg(oldStr).arg(newStr);
+                result = QString("{r:\"%1\",\"%2\"}").arg(oldStr).arg(newStr);
             }
             else
             {
-                tmp = QString("{ri:\"%1\",\"%2\"}").arg(oldStr).arg(newStr);
+                result = QString("{ri:\"%1\",\"%2\"}").arg(oldStr).arg(newStr);
             }
         }
     }
     delete dlg;
 
-    emit signalTokenTriggered(tmp);
+    emit signalTokenTriggered(result);
 }
 
-QString ReplaceModifier::modifyOperation(const QString& parseString, const QString& result)
+QString ReplaceModifier::modifyOperation(const ParseSettings& settings, const QString& str2Modify)
 {
-    QRegExp reg = regExp();
-    int pos     = 0;
-    pos         = reg.indexIn(parseString, pos);
-    if (pos > -1)
-    {
-        QString original    = reg.cap(2);
-        QString replacement = reg.cap(3);
-        QString _result     = result;
+    Q_UNUSED(settings);
 
-        Qt::CaseSensitivity caseType = (!reg.cap(1).isEmpty() && reg.cap(1).count() == 1)
-                                       ? Qt::CaseInsensitive
-                                       : Qt::CaseSensitive;
-        _result.replace(original, replacement, caseType);
-        return _result;
-    }
-    return QString();
+    const QRegExp& reg  = regExp();
+    QString original    = reg.cap(2);
+    QString replacement = reg.cap(3);
+    QString result      = str2Modify;
+
+    Qt::CaseSensitivity caseType = (!reg.cap(1).isEmpty() && reg.cap(1).count() == 1)
+                                     ? Qt::CaseInsensitive
+                                     : Qt::CaseSensitive;
+    result.replace(original, replacement, caseType);
+    return result;
 }
 
 } // namespace Digikam

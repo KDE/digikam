@@ -86,14 +86,6 @@ public:
     void setChannelType(ChannelType channelType);
 
     /**
-     * Sets the main color channel to paint if channel type is set to paint all
-     * color channels at once.
-     *
-     * @param mainColorChannel main color channel
-     */
-    void setMainColorChannel(ColorChannelsType mainColorChannel);
-
-    /**
      * Decide whether to highlight a specified selection in the histogram or
      * not. The selection must be defined with setHighlightSelection.
      *

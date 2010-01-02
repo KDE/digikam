@@ -44,7 +44,8 @@
 // Local includes
 
 #include "dcursortracker.h"
-#include "parseinformation.h"
+#include "parsesettings.h"
+#include "parser.h"
 #include "advancedrenamewidget.h"
 
 namespace Digikam
@@ -180,10 +181,13 @@ int RenameCustomizer::startIndex() const
 
 void RenameCustomizer::setStartIndex(int startIndex)
 {
-    d->startIndex = startIndex;
+    ParseSettings settings;
+    settings.startIndex = startIndex;
+    d->startIndex       = startIndex;
+    d->advancedRenameWidget->parser()->init(settings);
 }
 
-QString RenameCustomizer::newName(const QString& fileName, const QDateTime& dateTime, int index) const
+QString RenameCustomizer::newName(const QString& fileName, const QDateTime& dateTime) const
 {
 
     if (d->renameDefault->isChecked())
@@ -194,13 +198,12 @@ QString RenameCustomizer::newName(const QString& fileName, const QDateTime& date
 
     if (d->renameCustom->isChecked())
     {
-        ParseInformation parseInfo;
-        parseInfo.fileUrl    = fileName;
-        parseInfo.cameraName = cameraName;
-        parseInfo.dateTime   = dateTime;
-        parseInfo.index      = index;
+        ParseSettings settings;
+        settings.fileUrl    = fileName;
+        settings.cameraName = cameraName;
+        settings.dateTime   = dateTime;
 
-        name = d->advancedRenameWidget->parse(parseInfo);
+        name = d->advancedRenameWidget->parse(settings);
     }
 
     return name;

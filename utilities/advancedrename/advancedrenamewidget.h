@@ -26,15 +26,15 @@
 
 // Qt includes
 
-#include <QtGui/QWidget>
 #include <QtCore/QString>
+#include <QtGui/QWidget>
 
 namespace Digikam
 {
 
-class ParseInformation;
-class Parser;
 class AdvancedRenameWidgetPriv;
+class ParseSettings;
+class Parser;
 
 class AdvancedRenameWidget : public QWidget
 {
@@ -50,10 +50,7 @@ public:
         None               = 0x0,
         ToolTipButton      = 0x1,
         TokenButtons       = 0x2,
-        TokenToolButton    = 0x4,
-        ModifierButtons    = 0x8,
-        ModifierToolButton = 0x10,
-
+        ModifierToolButton = 0x4,
         DefaultControls    = TokenButtons | ToolTipButton | ModifierToolButton
     };
     Q_DECLARE_FLAGS(ControlWidgets, ControlWidget)
@@ -67,10 +64,12 @@ public:
      */
     void    clear();
 
-    void setParser(Parser* parser);
-    void setControlWidgets(ControlWidgets mask);
+    void    setParser(Parser* parser);
+    Parser* parser();
 
-    QString parse(ParseInformation& info) const;
+    QString parse(ParseSettings& settings) const;
+
+    void setControlWidgets(ControlWidgets mask);
 
     void setTooltipAlignment(Qt::Alignment alignment);
     void focusLineEdit();

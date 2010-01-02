@@ -33,10 +33,10 @@
 
 // Local includes
 
-#include "themeengine.h"
-#include "parser.h"
-#include "option.h"
 #include "modifier.h"
+#include "option.h"
+#include "parser.h"
+#include "themeengine.h"
 
 using namespace Digikam;
 
@@ -66,9 +66,12 @@ QString TooltipCreator::tooltip()
     tooltip += createSection(i18n("Modifiers"),        parser->modifiers(), true);
     tooltip += tableEnd();
 
-    tooltip += i18n("<p><i>Modifiers can be applied to every renaming option. <br/>"
-                    "It is possible to assign multiple modifiers to an option, "
-                    "they are applied in the order you assign them.</i></p>");
+    if (!parser->modifiers().isEmpty())
+    {
+        tooltip += i18n("<p><i>Modifiers can be applied to every renaming option. <br/>"
+                        "It is possible to assign multiple modifiers to an option, "
+                        "they are applied in the order you assign them.</i></p>");
+    }
 
     return tooltip;
 }
@@ -85,66 +88,71 @@ QString TooltipCreator::tableEnd()
 
 QString TooltipCreator::markOption(const QString& str)
 {
-    QString tmp = str;
+    QString result = str;
 
     QRegExp optionsRegExp("\\|(.*)\\|");
     optionsRegExp.setMinimal(true);
 
-    tmp.replace(optionsRegExp, QString("<i><font color=\"%1\">\\1</font></i>")
-                                       .arg(ThemeEngine::instance()->textSpecialRegColor().name()));
-    return tmp;
+    result.replace(optionsRegExp, QString("<i><font color=\"%1\">\\1</font></i>")
+                                          .arg(ThemeEngine::instance()->textSpecialRegColor().name()));
+    return result;
 }
 
 QString TooltipCreator::createHeader(const QString& str)
 {
-    QString tmp;
+    QString result;
     QString templateStr = QString("<tr bgcolor=\"%1\"><td colspan=\"2\">"
                                   "<nobr><font color=\"%2\"><center><b>%3"
                                   "</b></center></font></nobr></td></tr>")
                                   .arg(ThemeEngine::instance()->baseColor().name())
                                   .arg(ThemeEngine::instance()->textRegColor().name());
 
-    tmp += templateStr.arg(str);
-    return tmp;
+    result += templateStr.arg(str);
+    return result;
 }
 
 template <class T>
 QString TooltipCreator::createEntries(const QList<T*> &data)
 {
-    QString tmp;
+    QString result;
 
     foreach (T* t, data)
     {
         foreach (Token* token, t->tokens())
         {
-            tmp += QString("<tr>"
-                           "<td bgcolor=\"%1\">"
-                           "<font color=\"%2\"><b>&nbsp;%3&nbsp;</b></font></td>"
-                           "<td>&nbsp;%4&nbsp;</td></tr>")
-                           .arg(ThemeEngine::instance()->baseColor().name())
-                           .arg(ThemeEngine::instance()->textRegColor().name())
-                           .arg(markOption(token->id()))
-                           .arg(markOption(token->description()));
+            result += QString("<tr>"
+                              "<td bgcolor=\"%1\">"
+                              "<font color=\"%2\"><b>&nbsp;%3&nbsp;</b></font></td>"
+                              "<td>&nbsp;%4&nbsp;</td></tr>")
+                              .arg(ThemeEngine::instance()->baseColor().name())
+                              .arg(ThemeEngine::instance()->textRegColor().name())
+                              .arg(markOption(token->id()))
+                              .arg(markOption(token->description()));
         }
     }
 
-    return tmp;
+    return result;
 }
 
 template <class T>
 QString TooltipCreator::createSection(const QString& sectionName, const QList<T*> &data, bool lastSection)
 {
-    QString tmp;
+    if (data.isEmpty())
+    {
+        return QString();
+    }
 
-    tmp += createHeader(sectionName);
-    tmp += createEntries(data);
+    QString result;
+
+    result += createHeader(sectionName);
+    result += createEntries(data);
 
     if (!lastSection)
     {
-        tmp += QString("<tr></tr>");
+        result += QString("<tr></tr>");
     }
 
-    return tmp;
+    return result;
 }
 
 } // namespace Digikam

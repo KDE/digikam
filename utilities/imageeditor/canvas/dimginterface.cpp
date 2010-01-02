@@ -220,12 +220,12 @@ void DImgInterface::slotLoadRawFromTool()
     RawImport *rawImport = dynamic_cast<RawImport*>(EditorToolIface::editorToolIface()->currentTool());
     if (rawImport)
         d->nextRawDescription.rawDecodingSettings = rawImport->rawDecodingSettings();
-    load(d->nextRawDescription);
-    d->nextRawDescription = LoadingDescription();
+    slotLoadRaw();
 }
 
 void DImgInterface::slotLoadRaw()
 {
+    kDebug() << d->nextRawDescription.rawDecodingSettings;
     load(d->nextRawDescription);
     d->nextRawDescription = LoadingDescription();
 }
@@ -563,6 +563,11 @@ void DImgInterface::setModified()
 {
     emit signalModified();
     emit signalUndoStateChanged(d->undoMan->anyMoreUndo(), d->undoMan->anyMoreRedo(), !d->undoMan->isAtOrigin());
+}
+
+bool DImgInterface::hasChangesToSave()
+{
+    return !d->undoMan->isAtOrigin();
 }
 
 void DImgInterface::readMetadataFromFile(const QString& file)

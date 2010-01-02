@@ -44,13 +44,9 @@ class ParseObjectPriv
 public:
 
     ParseObjectPriv() :
-        buttonRegistered(false),
-        menuRegistered(false),
         useTokenMenu(false)
     {}
 
-    bool         buttonRegistered;
-    bool         menuRegistered;
     bool         useTokenMenu;
 
     QString      description;
@@ -59,6 +55,12 @@ public:
 
     TokenList    tokens;
 };
+
+ParseObject::ParseObject(const QString& name)
+           : QObject(0), d(new ParseObjectPriv)
+{
+    setObjectName(name);
+}
 
 ParseObject::ParseObject(const QString& name, const QPixmap& icon)
            : QObject(0), d(new ParseObjectPriv)
@@ -98,7 +100,7 @@ QString ParseObject::description() const
     return d->description;
 }
 
-QRegExp ParseObject::regExp() const
+QRegExp& ParseObject::regExp() const
 {
     return d->regExp;
 }
@@ -149,7 +151,6 @@ QPushButton* ParseObject::registerButton(QWidget* parent)
     }
     button->setParent(parent);
 
-    d->buttonRegistered = button ? true : false;
     return button;
 }
 
@@ -180,13 +181,12 @@ QAction* ParseObject::registerMenu(QMenu* parent)
     {
         action->setText(objectName());
         action->setIcon(d->icon);
-        d->menuRegistered = true;
     }
 
     return action;
 }
 
-bool ParseObject::addToken(const QString& id, const QString& description)
+bool ParseObject::addToken(const QString& id, const QString& description, const QString& actionName)
 {
     if (id.isEmpty() || description.isEmpty())
     {
@@ -197,6 +197,11 @@ bool ParseObject::addToken(const QString& id, const QString& description)
     if (!token)
     {
         return false;
+    }
+
+    if (!actionName.isEmpty())
+    {
+        token->action()->setText(actionName);
     }
 
     connect(token, SIGNAL(signalTokenTriggered(const QString&)),
@@ -251,6 +256,10 @@ bool ParseObject::tokenAtPosition(ParseResults& results, int pos, int& start, in
 bool ParseObject::isValid() const
 {
     return (!d->tokens.isEmpty() && !d->regExp.isEmpty() && d->regExp.isValid());
+}
+
+void ParseObject::reset()
+{
 }
 
 } // namespace Digikam

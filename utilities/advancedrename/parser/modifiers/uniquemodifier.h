@@ -3,8 +3,9 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2009-09-14
- * Description : uppercase modifier
+ * Date        : 2009-11-27
+ * Description : A modifier for appending a suffix number to a renaming option.
+ *               This guarantees a unique string for duplicate values.
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -21,29 +22,39 @@
  *
  * ============================================================ */
 
-#include "uppercasemodifier.h"
+#ifndef UNIQUEMODIFIER_H
+#define UNIQUEMODIFIER_H
 
-// KDE includes
+// Qt includes
 
-#include <klocale.h>
+#include <qstringlist.h>
+
+// Local includes
+
+#include "modifier.h"
+#include "parseresults.h"
+
+class KLineEdit;
 
 namespace Digikam
 {
 
-UpperCaseModifier::UpperCaseModifier()
-                 : Modifier(i18n("Uppercase"), i18n("Convert to uppercase"))
+class UniqueModifier : public Modifier
 {
-    addToken("{upper}", description());
+    Q_OBJECT
 
-    QRegExp reg("\\{upper\\}");
-    reg.setMinimal(true);
-    setRegExp(reg);
-}
+public:
 
-QString UpperCaseModifier::modifyOperation(const ParseSettings& settings, const QString& str2Modify)
-{
-    Q_UNUSED(settings);
-    return str2Modify.toUpper();
-}
+    UniqueModifier();
+    virtual QString modifyOperation(const ParseSettings& settings, const QString& str2Modify);
+    virtual void    reset();
+
+private:
+
+//    QStringList cache;
+    QMap<ParseResults::ResultsKey, QStringList> cache;
+};
 
 } // namespace Digikam
+
+#endif /* UNIQUEMODIFIER_H */

@@ -107,6 +107,7 @@ public:
     // If current image file format is only available in read only,
     // typically all RAW image file formats.
     bool  isReadOnly();
+    bool  hasChangesToSave();
 
     void  resizeImage(int w, int h);
 

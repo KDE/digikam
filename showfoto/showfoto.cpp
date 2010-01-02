@@ -652,17 +652,6 @@ void ShowFoto::slotChanged()
     }
 }
 
-void ShowFoto::slotUndoStateChanged(bool moreUndo, bool moreRedo, bool canSave)
-{
-    m_revertAction->setEnabled(canSave);
-    m_undoAction->setEnabled(moreUndo);
-    m_redoAction->setEnabled(moreRedo);
-    m_saveAction->setEnabled(canSave);
-
-    if (!moreUndo)
-        m_rotatedOrFlipped = false;
-}
-
 void ShowFoto::toggleActions(bool val)
 {
     toggleStandardActions(val);

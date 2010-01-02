@@ -27,8 +27,8 @@
 // Qt includes
 
 #include <QSyntaxHighlighter>
-#include <QVector>
 #include <QTextCharFormat>
+#include <QVector>
 
 class QTextEdit;
 
@@ -42,24 +42,6 @@ class Highlighter : public QSyntaxHighlighter
 
 public:
 
-    enum Colors
-    {
-        OptionColor     = Qt::red,
-        ModifierColor   = Qt::darkGreen,
-        QuotedTextColor = Qt::blue,
-        ParameterColor  = Qt::darkYellow
-    };
-
-    enum PatternType
-    {
-        OptionPattern = 0,
-        ModifierPattern,
-        QuotedTextPattern,
-        ParameterPattern
-    };
-
-public:
-
     Highlighter(QTextEdit* parent, Parser* parser);
     virtual ~Highlighter();
 
@@ -69,9 +51,17 @@ protected:
 
 private:
 
-    void setupHighlightingGrammar(Parser* parser);
+    void setupHighlightingGrammar();
 
 private:
+
+    enum PatternType
+    {
+        OptionPattern = 0,
+        ModifierPattern,
+        QuotedTextPattern,
+        ParameterPattern
+    };
 
     struct HighlightingRule
     {
@@ -87,6 +77,9 @@ private:
     QTextCharFormat parameterFormat;
     QTextCharFormat modifierFormat;
     QTextCharFormat quotationFormat;
+    QTextCharFormat errorFormat;
+
+    Parser* const parser;
 };
 
 }  // namespace Digikam

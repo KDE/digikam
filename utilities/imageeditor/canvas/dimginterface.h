@@ -85,6 +85,7 @@ public:
     void   setUndoManagerOrigin();
     void   updateUndoState();
     void   resetImage();
+    bool   hasChangesToSave();
 
     void   zoom(double val);
 

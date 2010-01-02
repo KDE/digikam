@@ -86,7 +86,7 @@ void DefaultValueModifier::slotTokenTriggered(const QString& token)
 {
     Q_UNUSED(token)
 
-    QString tmp;
+    QString result;
 
     QPointer<DefaultValueDialog> dlg = new DefaultValueDialog(this);
     if (dlg->exec() == KDialog::Accepted)
@@ -94,30 +94,26 @@ void DefaultValueModifier::slotTokenTriggered(const QString& token)
         QString valueStr = dlg->valueInput->text();
         if (!valueStr.isEmpty())
         {
-            tmp = QString("{d:\"%1\"}").arg(valueStr);
+            result = QString("{d:\"%1\"}").arg(valueStr);
         }
     }
     delete dlg;
 
-    emit signalTokenTriggered(tmp);
+    emit signalTokenTriggered(result);
 }
 
-QString DefaultValueModifier::modifyOperation(const QString& parseString, const QString& result)
+QString DefaultValueModifier::modifyOperation(const ParseSettings& settings, const QString& str2Modify)
 {
-    if (!result.isEmpty())
+    Q_UNUSED(settings);
+
+    if (!str2Modify.isEmpty())
     {
-        return result;
+        return str2Modify;
     }
 
-    QRegExp reg = regExp();
-    int pos     = 0;
-    pos         = reg.indexIn(parseString, pos);
-    if (pos > -1)
-    {
-        QString defaultStr = reg.cap(1).isEmpty() ? QString() : reg.cap(1);
-        return defaultStr;
-    }
-    return QString();
+    const QRegExp& reg = regExp();
+    QString defaultStr = reg.cap(1).isEmpty() ? QString() : reg.cap(1);
+    return defaultStr;
 }
 
 } // namespace Digikam

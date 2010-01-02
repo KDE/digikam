@@ -25,8 +25,8 @@
 
 // KDE includes
 
-#include <klocale.h>
 #include <kiconloader.h>
+#include <klocale.h>
 
 namespace Digikam
 {
@@ -42,11 +42,10 @@ TrimmedModifier::TrimmedModifier()
     setRegExp(reg);
 }
 
-QString TrimmedModifier::modifyOperation(const QString& parseString, const QString& result)
+QString TrimmedModifier::modifyOperation(const ParseSettings& settings, const QString& str2Modify)
 {
-    Q_UNUSED(parseString)
-
-    return result.simplified();
+    Q_UNUSED(settings);
+    return str2Modify.simplified();
 }
 
 } // namespace Digikam

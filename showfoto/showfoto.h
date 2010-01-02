@@ -110,7 +110,6 @@ private Q_SLOTS:
     void slotDeleteCurrentItem();
 
     void slotChanged();
-    void slotUndoStateChanged(bool, bool, bool);
     void slotUpdateItemInfo();
 
     void slotDeleteCurrentItemResult(KJob*);

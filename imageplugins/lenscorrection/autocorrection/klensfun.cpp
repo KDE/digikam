@@ -144,9 +144,6 @@ KLFDeviceSelector::KLFDeviceSelector(QWidget *parent)
     m_exifUsage->setCheckState(Qt::Unchecked);
     m_exifUsage->setWhatsThis(i18n("Set this option to try to guess the right camera/lens settings "
                                    "from the image metadata (as Exif or XMP)."));
-    m_make->combo()->setInsertPolicy(KComboBox::InsertAlphabetically);
-    m_model->combo()->setInsertPolicy(KComboBox::InsertAlphabetically);
-    m_lens->combo()->setInsertPolicy(KComboBox::InsertAlphabetically);
 
     QLabel *focalLabel = new QLabel(i18n("Focal Length:"), this);
     QLabel *aperLabel  = new QLabel(i18n("Aperture:"), this);
@@ -404,6 +401,8 @@ void KLFDeviceSelector::slotUpdateCombos()
 
        ++it;
     }
+    m_make->combo()->model()->sort(0, Qt::AscendingOrder);
+    m_model->combo()->model()->sort(0, Qt::AscendingOrder);
 
     // Fill Lens list for current Maker & Model
     slotUpdateLensCombo();
@@ -431,6 +430,7 @@ void KLFDeviceSelector::slotUpdateLensCombo()
         m_lens->combo()->addItem((*lenses)->Model, b);
         ++lenses;
     }
+    m_lens->combo()->model()->sort(0, Qt::AscendingOrder);
 
     emit(signalLensSettingsChanged());
 }

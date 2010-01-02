@@ -65,7 +65,6 @@ public:
         configExpandedStateDefault(true),
 
         tooltipToggleButton(0),
-        tokenToolButton(0),
         modifierToolButton(0),
         btnContainer(0),
         tooltipTrackerAlignment(Qt::AlignLeft),
@@ -81,7 +80,6 @@ public:
     bool                 configExpandedStateDefault;
 
     QToolButton*         tooltipToggleButton;
-    QToolButton*         tokenToolButton;
     QToolButton*         modifierToolButton;
 
     QWidget*             btnContainer;
@@ -146,17 +144,17 @@ void AdvancedRenameWidget::slotHideToolTipTracker()
     slotToolTipButtonToggled(false);
 }
 
-QString AdvancedRenameWidget::parse(ParseInformation& info) const
+QString AdvancedRenameWidget::parse(ParseSettings& settings) const
 {
     if (!d->parser)
     {
         return QString();
     }
 
-    QString parseString = d->renameInput->text();
+    settings.parseString = d->renameInput->text();
 
     QString parsed;
-    parsed = d->parser->parse(parseString, info);
+    parsed = d->parser->parse(settings);
 
     return parsed;
 }
@@ -191,7 +189,6 @@ void AdvancedRenameWidget::setControlWidgets(ControlWidgets mask)
 
     d->renameInput->setEnabled(enable);
     d->optionsLabel->setVisible(enable && (mask & TokenButtons));
-    d->tokenToolButton->setVisible(enable && (mask & TokenToolButton));
     d->modifierToolButton->setVisible(enableModBtn && (mask & ModifierToolButton));
     d->tooltipToggleButton->setVisible(enable && (mask & ToolTipButton));
 
@@ -204,7 +201,6 @@ void AdvancedRenameWidget::registerParserControls()
    {
        setupWidgets();
 
-       QMenu* tokenToolBtnMenu    = new QMenu(d->tokenToolButton);
        QMenu* modifierToolBtnMenu = new QMenu(d->modifierToolButton);
        QPushButton* btn           = 0;
        QAction* action            = 0;
@@ -212,10 +208,9 @@ void AdvancedRenameWidget::registerParserControls()
 
        foreach (Option* option, d->parser->options())
        {
-           btn    = option->registerButton(this);
-           action = option->registerMenu(tokenToolBtnMenu);
+           btn = option->registerButton(this);
 
-           if (!btn || !action)
+           if (!btn)
            {
                continue;
            }
@@ -249,12 +244,16 @@ void AdvancedRenameWidget::registerParserControls()
        d->btnContainer->setLayout(layout);
        setMinimumWidth(d->btnContainer->layout()->sizeHint().width());
 
-       d->tokenToolButton->setMenu(tokenToolBtnMenu);
        d->modifierToolButton->setMenu(modifierToolBtnMenu);
 
        d->renameInput->setParser(d->parser);
        createToolTip();
    }
+}
+
+Parser* AdvancedRenameWidget::parser()
+{
+    return d->parser;
 }
 
 void AdvancedRenameWidget::setParser(Parser* parser)
@@ -284,12 +283,16 @@ void AdvancedRenameWidget::setupWidgets()
      */
     delete d->renameInput;
     d->renameInput = new AdvancedRenameInput;
+    d->renameInput->setToolTip(i18n("<p>Enter your renaming pattern here. Use the access buttons to quickly add renaming "
+                                    "options and modifiers. For further explanations, use the information toolbutton.</p>"));
+
+    // --------------------------------------------------------
 
     delete d->tooltipToggleButton;
     d->tooltipToggleButton = new QToolButton;
     d->tooltipToggleButton->setCheckable(true);
     d->tooltipToggleButton->setIcon(SmallIcon("dialog-information"));
-    d->tooltipToggleButton->setToolTip(i18n("Show help"));
+    d->tooltipToggleButton->setToolTip(i18n("Show a list of all available options"));
 
     // --------------------------------------------------------
 
@@ -304,17 +307,13 @@ void AdvancedRenameWidget::setupWidgets()
 
     // --------------------------------------------------------
 
-    delete d->tokenToolButton;
-    d->tokenToolButton = new QToolButton;
-    d->tokenToolButton->setPopupMode(QToolButton::InstantPopup);
-    d->tokenToolButton->setIcon(SmallIcon("list-add"));
-    d->tokenToolButton->setToolTip(i18n("Quickly add a renaming option"));
-
     delete d->modifierToolButton;
     d->modifierToolButton = new QToolButton;
     d->modifierToolButton->setPopupMode(QToolButton::InstantPopup);
     d->modifierToolButton->setIcon(SmallIcon("document-edit"));
-    d->modifierToolButton->setToolTip(i18n("Quickly add a modifier to a renaming option"));
+    d->modifierToolButton->setToolTip(i18n("<p>Add a modifier to a renaming option. "
+                                           "To activate this button, place the cursor behind a renaming option "
+                                           "or an already assigned modifier.</p>"));
 
     // --------------------------------------------------------
 
@@ -332,9 +331,8 @@ void AdvancedRenameWidget::setupWidgets()
     delete layout();
     QGridLayout* mainLayout = new QGridLayout;
     mainLayout->addWidget(d->renameInput,         0, 0, 1, 1);
-    mainLayout->addWidget(d->tooltipToggleButton, 0, 1, 1, 1);
-    mainLayout->addWidget(d->tokenToolButton,     0, 2, 1, 1);
-    mainLayout->addWidget(d->modifierToolButton,  0, 3, 1, 1);
+    mainLayout->addWidget(d->modifierToolButton,  0, 1, 1, 1);
+    mainLayout->addWidget(d->tooltipToggleButton, 0, 2, 1, 1);
     mainLayout->addWidget(d->optionsLabel,        1, 0, 1,-1);
     mainLayout->setColumnStretch(0, 10);
     mainLayout->setMargin(0);

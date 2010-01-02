@@ -30,8 +30,8 @@
 
 // Local includes
 
-#include "parseinformation.h"
 #include "parseresults.h"
+#include "parsesettings.h"
 #include "token.h"
 
 class QAction;
@@ -44,47 +44,40 @@ namespace Digikam
 
 class ParseObjectPriv;
 
-/*
- * Macro definitions:
- *
- * PARSE_LOOP_START and PARSE_LOOP_END can be used when parsing
- * a token with a regular expression (this is the default by now, so you always need
- * to use these macros).
- *
- * See 'dummyoption' class or other implementation for example code.
- */
-#define PARSE_LOOP_START(PARSESTRING_, REGEXP_)                              \
-        {                                                                    \
-            int POS_ = 0;                                                    \
-            while (POS_ > -1)                                                \
-            {                                                                \
-                POS_ = REGEXP_.indexIn(PARSESTRING_, POS_);                  \
-                if (POS_ > -1)                                               \
-                {
-
-#define PARSE_LOOP_END(PARSESTRING_, REGEXP_, PARSED_, RESULTS_)             \
-            ParseResults::ResultsKey   k(POS_, REGEXP_.cap(0).count());      \
-            ParseResults::ResultsValue v(REGEXP_.cap(0), PARSED_);           \
-            RESULTS_.addEntry(k, v);                                         \
-            POS_ += REGEXP_.matchedLength();                                 \
-                }                                                            \
-            }                                                                \
-        }
-
 class ParseObject : public QObject
 {
     Q_OBJECT
 
 public:
 
+    ParseObject(const QString& name);
     ParseObject(const QString& name, const QPixmap& icon);
     virtual ~ParseObject();
 
-    QRegExp regExp() const;
-    void    setRegExp(const QRegExp& regExp);
+    /**
+     * returns the currently assigned regExp object. Note that it is returned as a const ref, meaning
+     * that if you use it in your custom parse operation, the main parse method has already searched for the pattern
+     * and filled in the results of this search, so that you can use QRegExp::cap() immediately, you don't have to search
+     * on your own.
+     *
+     * For example when implementing the Option::parseOperation() method, get the regExp object with
+     *
+     *      const QRegExp& reg = regExp();
+     *
+     * and immediately fetch possible matches with
+     *
+     *      const QString& param1 = reg.cap(1);
+     *
+     * @see Option
+     * @see Modifier
+     *
+     * @return a const ref to the assigned regexp object
+     */
+    QRegExp& regExp() const;
+    void     setRegExp(const QRegExp& regExp);
 
-    void    setDescription(const QString& desc);
     QString description() const;
+    void    setDescription(const QString& desc);
 
     QPixmap icon() const;
     void    setIcon(const QPixmap& pixmap);
@@ -96,23 +89,26 @@ public:
 
     /**
      * Register a button in the parent object. By calling this method, a new button for the parser
-     * object will be created and all necessary connections will be setup. A button can only be registered once.
-     * @see registerMenu
-     *
-     * @param parent the parent object the button will be registered for
+     * object will be created and all necessary connections will be setup.
+
+     * @param  parent the parent object the button will be registered for
      * @return a pointer to the newly created button
      */
     QPushButton* registerButton(QWidget* parent);
 
     /**
      * Register a menu action in the parent object. By calling this method, a new action for the parser
-     * object will be created and all necessary connections will be setup. An action can only be registered once.
-     * @see registerButton
+     * object will be created and all necessary connections will be setup.
      *
-     * @param parent the parent object the action will be registered for
+     * @param  parent the parent object the action will be registered for
      * @return a pointer to the newly created action
      */
     QAction* registerMenu(QMenu* parent);
+
+    /**
+     * Returns true if a token menu is used.
+     */
+    bool useTokenMenu() const;
 
     /**
      * If multiple tokens have been assigned to a parseobject, a menu will be created.
@@ -121,9 +117,18 @@ public:
      * @param value boolean parameter to set token menu usage
      */
     void setUseTokenMenu(bool value);
-    bool useTokenMenu() const;
 
+    /**
+     * Checks the validity of the parse object
+     * @return true if valid
+     */
     bool isValid() const;
+
+    /**
+     * Resets the parser to its initial state. This method also resets the internal counter that is used
+     * for sequence numbers.
+     */
+    virtual void reset();
 
 Q_SIGNALS:
 
@@ -135,9 +140,10 @@ protected:
      * add a token to the parser, every parser should at least assign one token object
      * @param id the token id string (used for parsing)
      * @param description the description of the token (used for example in the tooltip)
+     * @param actionName[optional] the name of the token action (only used when the token menu is displayed)
      * @return
      */
-    bool addToken(const QString& id, const QString& description);
+    bool addToken(const QString& id, const QString& description, const QString& actionName = QString());
 
 protected Q_SLOTS:
 

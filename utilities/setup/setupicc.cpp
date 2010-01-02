@@ -391,7 +391,7 @@ SetupICC::SetupICC(QWidget* parent, KPageDialog* dialog )
     d->inProfilesKC->setWhatsThis(i18n("<p>This is the default color profile for your input device "
                                        "(that is your camera - or your scanner). A camera input profile "
                                        "is recommended for correct conversion of RAW images in 16bit. "
-                                       "Some of the options about loading behavior above refer to this profile.</b>"));
+                                       "Some of the options about loading behavior above refer to this profile.</p>"));
 
     d->infoInProfiles    = new QPushButton;
     d->infoInProfiles->setIcon(SmallIcon("dialog-information"));

@@ -34,8 +34,14 @@ class ParserPriv
 {
 public:
 
-    ParserPriv() {}
-    OptionsList options;
+    ParserPriv() :
+        counter(0)
+    {}
+
+    ParseSettings globalSettings;
+    OptionsList   options;
+    ModifierList  modifiers;
+    int           counter;
 };
 
 // --------------------------------------------------------
@@ -43,6 +49,7 @@ public:
 Parser::Parser()
       : d(new ParserPriv)
 {
+    init(ParseSettings());
 }
 
 Parser::~Parser()
@@ -53,17 +60,38 @@ Parser::~Parser()
     }
     d->options.clear();
 
+    foreach (Modifier* modifier, d->modifiers)
+    {
+        delete modifier;
+    }
+    d->modifiers.clear();
+
     delete d;
 }
 
-bool Parser::stringIsValid(const QString& str)
+void Parser::init(const ParseSettings& settings)
+{
+    d->globalSettings = settings;
+    d->counter  = 1;
+}
+
+void Parser::reset()
+{
+    init(ParseSettings());
+    foreach (Option* option, d->options)
+    {
+        option->reset();
+    }
+    foreach (Modifier* modifier, d->modifiers)
+    {
+        modifier->reset();
+    }
+}
+
+bool Parser::parseStringIsValid(const QString& str)
 {
     QRegExp invalidString("^\\s*$");
-    if (str.isEmpty() || invalidString.exactMatch(str))
-    {
-        return false;
-    }
-    return true;
+    return (!str.isEmpty() && !invalidString.exactMatch(str));
 }
 
 OptionsList Parser::options() const
@@ -73,129 +101,116 @@ OptionsList Parser::options() const
 
 ModifierList Parser::modifiers() const
 {
-    ModifierList modifierList;
-    if (!d->options.isEmpty())
-    {
-        modifierList = d->options.first()->modifiers();
-    }
-    return modifierList;
+    return d->modifiers;
 }
 
-void Parser::registerOption(Option* parser)
+void Parser::registerOption(Option* option)
 {
-    if (!parser)
+    if (!option || !option->isValid())
     {
         return;
     }
 
-    if (!parser->isValid())
+    d->options.append(option);
+}
+
+void Parser::registerModifier(Modifier* modifier)
+{
+    if (!modifier || !modifier->isValid())
     {
         return;
     }
 
-    d->options.append(parser);
+    d->modifiers.append(modifier);
 }
 
-ParseResults Parser::parseResults(const QString& parseString)
+ParseResults Parser::results(ParseSettings& settings)
 {
-    ParseResults results;
-    ParseInformation info;
-
-    parseOperation(parseString, info, results, false);
-    return results;
+    parse(settings);
+    return settings.results;
 }
 
-ParseResults Parser::modifierResults(const QString& parseString)
+ParseResults Parser::invalidModifiers(ParseSettings& settings)
 {
-    ParseResults results;
-    ParseInformation info;
-
-    parseOperation(parseString, info, results, true);
-    return results;
+    parse(settings);
+    return settings.invalidModifiers;
 }
 
-QString Parser::parse(const QString& parseString, ParseInformation& info)
+QString Parser::parse(ParseSettings& settings)
 {
-    ParseResults results;
-    return parseOperation(parseString, info, results);
-}
+    QFileInfo fi(settings.fileUrl.toLocalFile());
 
-QString Parser::parseOperation(const QString& parseString, ParseInformation& info, ParseResults& results,
-                               bool modify)
-{
-    QFileInfo fi(info.fileUrl.toLocalFile());
-
-    if (!stringIsValid(parseString))
+    if (!parseStringIsValid(settings.parseString))
     {
         return fi.fileName();
     }
 
-    if (!d->options.isEmpty())
+    ParseResults results;
+
+    settings.startIndex   = d->globalSettings.startIndex;
+    settings.currentIndex = d->counter++;
+
+    foreach (Option* option, d->options)
     {
-        foreach (Option* option, d->options)
-        {
-            option->parse(parseString, info);
-
-            ParseResults r;
-            if (modify)
-            {
-                r = option->modifiedResults();
-            }
-            else
-            {
-                r = option->parseResults();
-            }
-
-            results.append(r);
-        }
+        ParseResults r = option->parse(settings);
+        results.append(r);
     }
 
-    QString parsed;
-    if (modify)
+    QString newName;
+    if (settings.applyModifiers)
     {
-        parsed = results.replaceTokens(parseString);
+        settings.invalidModifiers = applyModifiers(settings.parseString, results);
+        newName                   = results.replaceTokens(settings.parseString);
+    }
+    settings.results = results;
+
+    // remove invalid modifiers from the new name
+    foreach (const Modifier* mod, d->modifiers)
+    {
+        newName.remove(mod->regExp());
     }
 
-    QString newname = parsed;
-    if (newname.isEmpty())
+    if (newName.isEmpty())
     {
         return fi.fileName();
     }
 
-    if (info.useFileExtension)
+    if (settings.useOriginalFileExtension)
     {
-        newname.append('.').append(fi.suffix());
+        newName.append('.').append(fi.suffix());
     }
 
-    return newname;
+    return newName;
 }
 
-bool Parser::tokenAtPosition(Type type, const QString& parseString, int pos)
+bool Parser::tokenAtPosition(TokenType type, ParseSettings& settings, int pos)
 {
     int start;
     int length;
-    return tokenAtPosition(type, parseString, pos, start, length);
+    return tokenAtPosition(type, settings, pos, start, length);
 }
 
-bool Parser::tokenAtPosition(Type type, const QString& parseString, int pos, int& start, int& length)
+bool Parser::tokenAtPosition(TokenType type, ParseSettings& settings, int pos, int& start, int& length)
 {
     bool found = false;
 
-    ParseResults results;
+    ParseResults r;
 
     switch (type)
     {
-        case Token:
-            results = parseResults(parseString);
+        case OptionToken:
+            settings.applyModifiers = false;
+            r = results(settings);
             break;
-        case TokenAndModifiers:
-            results = modifierResults(parseString);
+        case OptionModifiersToken:
+            settings.applyModifiers = true;
+            r = results(settings);
             break;
         default:
             break;
     }
 
-    ParseResults::ResultsKey key = results.keyAtApproximatePosition(pos);
+    ParseResults::ResultsKey key = r.keyAtApproximatePosition(pos);
     start  = key.first;
     length = key.second;
 
@@ -204,6 +219,105 @@ bool Parser::tokenAtPosition(Type type, const QString& parseString, int pos, int
         found = true;
     }
     return found;
+}
+
+ParseResults Parser::applyModifiers(const QString& parseString, ParseResults& results)
+{
+    if (results.isEmpty() || d->modifiers.isEmpty())
+    {
+        return ParseResults();
+    }
+
+    ParseSettings settings;
+    settings.results = results;
+
+    // appliedModifiers holds all the modified parse results
+    ParseResults appliedModifiers = results;
+
+    // modifierResults holds all the modifiers found in the parse string
+    ParseResults modifierResults;
+
+    // modifierMap maps the actual modifier objects to the entries in the modifierResults structure
+    QMap<ParseResults::ResultsKey, Modifier*> modifierMap;
+
+    foreach (Modifier* modifier, d->modifiers)
+    {
+        QRegExp regExp = modifier->regExp();
+        int pos = 0;
+        while (pos > -1)
+        {
+            pos = regExp.indexIn(parseString, pos);
+            if (pos > -1)
+            {
+                ParseResults::ResultsKey   k(pos, regExp.matchedLength());
+                ParseResults::ResultsValue v(regExp.cap(0), QString());
+
+                modifierResults.addEntry(k, v);
+                modifierMap.insert(k, modifier);
+
+                pos += regExp.matchedLength();
+            }
+        }
+    }
+
+    // Check for valid modifiers (they must appear directly after an option) and apply the modification to the option
+    // parse result.
+    // We need to create a second ParseResults object with modified keys, otherwise the final parsing step will not
+    // remove the modifier tokens from the result.
+
+    foreach (const ParseResults::ResultsKey& key, results.keys())
+    {
+        int off  = results.offset(key);
+        int diff = 0;
+        for (int pos = off; pos < parseString.count();)
+        {
+            if (modifierResults.hasKeyAtPosition(pos))
+            {
+                ParseResults::ResultsKey mkey = modifierResults.keyAtPosition(pos);
+                Modifier* mod                 = modifierMap[mkey];
+                QString modToken              = modifierResults.token(mkey);
+
+                QString token                 = results.token(key);
+                QString str2Modify            = results.result(key);
+
+                QString modResult;
+                if (mod)
+                {
+                    settings.parseString       = modToken;
+                    settings.currentResultsKey = key;
+                    modResult = mod->modify(settings, str2Modify);
+                }
+
+                // update result
+                ParseResults::ResultsKey   kResult = key;
+                ParseResults::ResultsValue vResult(token, modResult);
+                results.addEntry(kResult, vResult);
+
+                // update modifier map
+                ParseResults::ResultsKey kModifier = key;
+                kModifier.second += diff;
+                ParseResults::ResultsValue vModifier(modToken, modResult);
+
+                appliedModifiers.deleteEntry(kModifier);
+                kModifier.second += modToken.count();
+                appliedModifiers.addEntry(kModifier, vModifier);
+
+                // set position to the next possible token
+                pos  += mkey.second;
+                diff += mkey.second;
+
+                // remove assigned modifier from modifierResults
+                modifierResults.deleteEntry(mkey);
+            }
+            else
+            {
+                break;
+            }
+        }
+    }
+    results = appliedModifiers;
+
+    return modifierResults;
 }
 
 }  // namespace Digikam

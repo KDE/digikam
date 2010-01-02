@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-//#include "editorwindow.h"
 #include "editorwindow_p.h"
 #include "editorwindow.moc"
 
@@ -937,7 +936,9 @@ void EditorWindow::applyStandardSettings()
         }
     }
     else
+    {
         m_IOFileSettings->rawDecodingSettings.outputColorSpace = DRawDecoding::SRGB;
+    }
 
     m_IOFileSettings->rawDecodingSettings.sixteenBitsImage        = group.readEntry("SixteenBitsImage", false);
     m_IOFileSettings->rawDecodingSettings.whiteBalance            = (DRawDecoding::WhiteBalance)group.readEntry("WhiteBalance",
@@ -1217,9 +1218,26 @@ bool EditorWindow::promptForOverWrite()
 
 }
 
+void EditorWindow::slotUndoStateChanged(bool moreUndo, bool moreRedo, bool canSave)
+{
+    m_revertAction->setEnabled(canSave);
+    m_undoAction->setEnabled(moreUndo);
+    m_redoAction->setEnabled(moreRedo);
+    m_saveAction->setEnabled(hasChangesToSave());
+
+    if (!moreUndo)
+        m_rotatedOrFlipped = false;
+}
+
+bool EditorWindow::hasChangesToSave()
+{
+    // virtual, can be extended by subclasses
+    return m_canvas->hasChangesToSave();
+}
+
 bool EditorWindow::promptUserSave(const KUrl& url, SaveOrSaveAs saveOrSaveAs, bool allowCancel)
 {
-    if (m_saveAction->isEnabled())
+    if (hasChangesToSave())
     {
         // if window is minimized, show it
         if (isMinimized())
