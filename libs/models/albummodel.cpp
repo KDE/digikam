@@ -258,32 +258,41 @@ Album* DateAlbumModel::albumForId(int id) const
 
 void DateAlbumModel::setYearMonthMap(const QMap<YearMonth, int>& yearMonthMap)
 {
+
     AlbumIterator it(rootAlbum());
 
+    QMap<int, int> albumToCountMap;
     while (it.current())
     {
         DAlbum *dalbum = static_cast<DAlbum*>(*it);
         QDate date = dalbum->date();
 
-        if (dalbum->range() == DAlbum::Month)
+        switch (dalbum->range())
         {
-            QMap<YearMonth, int>::const_iterator it2 = yearMonthMap.constFind(YearMonth(date.year(), date.month()));
-            if ( it2 != yearMonthMap.constEnd() )
-                setCount(*it, it2.value());
-        }
-        else
-        {
-            int count = 0;
-            for ( QMap<YearMonth, int>::const_iterator it2 = yearMonthMap.constBegin();
-                    it2 != yearMonthMap.constEnd(); ++it2 )
+        case DAlbum::Month:
             {
-                if (it2.key().first == date.year())
-                    count += it2.value();
+                QMap<YearMonth, int>::const_iterator it2 = yearMonthMap.constFind(YearMonth(date.year(), date.month()));
+                if ( it2 != yearMonthMap.constEnd() )
+                {
+                    albumToCountMap.insert((*it)->id(), it2.value());
+                }
+                break;
             }
-            setCount(*it, count);
+        case DAlbum::Year:
+            // a year itself cannot contain images and therefore always has count 0
+            albumToCountMap.insert((*it)->id(), 0);
+            break;
+        default:
+            kError() << "Untreated DAlbum range " << dalbum->range();
+            albumToCountMap.insert((*it)->id(), 0);
+            break;
         }
+
         ++it;
     }
+
+    setCountMap(albumToCountMap);
+
 }
 
 } // namespace Digikam

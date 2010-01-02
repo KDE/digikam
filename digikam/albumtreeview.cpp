@@ -1063,6 +1063,11 @@ void SearchTreeView::slotSelectSAlbum(SAlbum *salbum)
 DateAlbumTreeView::DateAlbumTreeView(QWidget *parent, DateAlbumModel *dateAlbumModel)
     : AbstractCountingAlbumTreeView(dateAlbumModel, parent)
 {
+    // this view should always show the inclusive counts
+    disconnect(this, SIGNAL(expanded(const QModelIndex &)),
+               this, SLOT(slotExpanded(const QModelIndex &)));
+    disconnect(this, SIGNAL(collapsed(const QModelIndex &)),
+               this, SLOT(slotCollapsed(const QModelIndex &)));
 }
 
 DateAlbumModel *DateAlbumTreeView::albumModel() const

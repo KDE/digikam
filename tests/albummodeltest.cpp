@@ -25,14 +25,14 @@
 
 // Qt includes
 
-#include <qdebug.h>
 #include <qdir.h>
 #include <qtest.h>
 
 // KDE includes
 
-#include <qtest_kde.h>
+#include <kdebug.h>
 #include <kio/netaccess.h>
+#include <qtest_kde.h>
 
 // Local includes
 
@@ -77,7 +77,7 @@ void AlbumModelTest::initTestCase()
 
     QDir::temp().mkdir(tempSuffix);
 
-    qDebug() << "Using database path for test: " << dbPath;
+    kDebug() << "Using database path for test: " << dbPath;
 
     // use a testing database
     AlbumManager::instance();
@@ -109,7 +109,7 @@ void AlbumModelTest::cleanupTestCase()
 
     KUrl deleteUrl = KUrl::fromPath(dbPath);
     KIO::NetAccess::del(deleteUrl, 0);
-    qDebug() << "deleted test folder " << deleteUrl;
+    kDebug() << "deleted test folder " << deleteUrl;
 }
 
 // Qt test doesn't use exceptions, so using assertion macros in methods called
@@ -167,7 +167,7 @@ void AlbumModelTest::init()
 
     safeCreatePAlbum(palbumRoot1, sameName, palbumChild0Root1);
 
-    qDebug() << "AlbumManager now knows these PAlbums: "
+    kDebug() << "AlbumManager now knows these PAlbums: "
                     << AlbumManager::instance()->allPAlbums();
 
     // tags
@@ -185,7 +185,7 @@ void AlbumModelTest::init()
 
     safeCreateTAlbum(talbumRoot1, sameName, talbumChild0Root1);
 
-    qDebug() << "created tags";
+    kDebug() << "created tags";
 
     // add some images for having date albums
 
@@ -193,7 +193,7 @@ void AlbumModelTest::init()
     imageDir.setNameFilters(QStringList("*.jpg"));
     QStringList imageFiles = imageDir.entryList();
 
-    qDebug() << "copying images " << imageFiles << " to "
+    kDebug() << "copying images " << imageFiles << " to "
                     << palbumChild0Root0->fileUrl();
 
     foreach (const QString &imageFile, imageFiles)
@@ -209,13 +209,13 @@ void AlbumModelTest::init()
     if (AlbumManager::instance()->allDAlbums().count() <= 1)
         ensureItemCounts();
 
-    qDebug() << "date albums: " << AlbumManager::instance()->allDAlbums();
+    kDebug() << "date albums: " << AlbumManager::instance()->allDAlbums();
 
     // root + 2 years + 2 and 3 months per year = 8
     QCOMPARE(AlbumManager::instance()->allDAlbums().size(), 8);
     // ensure that there is a root date album
     DAlbum *rootFromAlbumManager = AlbumManager::instance()->findDAlbum(0);
-    //QVERIFY(rootFromAlbumManager);
+    QVERIFY(rootFromAlbumManager);
     DAlbum *rootFromList = 0;
     foreach(Album *album, AlbumManager::instance()->allDAlbums())
     {
@@ -233,7 +233,7 @@ void AlbumModelTest::init()
 
 void AlbumModelTest::ensureItemCounts()
 {
-    qDebug() << "Waiting for AlbumManager and the IOSlave to create DAlbums...";
+    kDebug() << "Waiting for AlbumManager and the IOSlave to create DAlbums...";
     // trigger listing job
     AlbumManager::instance()->prepareItemCounts();
     QEventLoop loop;
@@ -314,21 +314,21 @@ void AlbumModelTest::testDAlbumContainsAlbums()
 
     QVERIFY(albumModel->rootAlbum());
 
-    // DateAlbumModel is currently hardcoded to IgnoreRootAlbum
-    //QVERIFY(albumModel->albumForIndex(albumModel->rootAlbumIndex()));
-
     foreach (Album *album, AlbumManager::instance()->allDAlbums())
     {
 
         DAlbum *dAlbum = dynamic_cast<DAlbum*> (album);
         QVERIFY(dAlbum);
 
-        qDebug() << "checking album for date " << dAlbum->date() << ", range = " << dAlbum->range();
+        kDebug() << "checking album for date " << dAlbum->date() << ", range = " << dAlbum->range();
 
         QModelIndex index = albumModel->indexForAlbum(dAlbum);
-        QVERIFY(index.isValid());
+        if (!dAlbum->isRoot())
+        {
+            QVERIFY(index.isValid());
+        }
 
-        if (!dAlbum->date().isValid())
+        if (dAlbum->isRoot())
         {
             // root album
             QVERIFY(dAlbum->isRoot());
@@ -351,20 +351,21 @@ void AlbumModelTest::testDAlbumContainsAlbums()
         {
             QCOMPARE(albumModel->rowCount(index), 0);
         }
-        else if (dAlbum->range() == DAlbum::Month && dAlbum->date().year() == 2003 && dAlbum->date().month() == 3)
+        else if (dAlbum->range() == DAlbum::Month && dAlbum->date().year() == 2009 && dAlbum->date().month() == 3)
         {
             QCOMPARE(albumModel->rowCount(index), 0);
         }
-        else if (dAlbum->range() == DAlbum::Month && dAlbum->date().year() == 2003 && dAlbum->date().month() == 4)
+        else if (dAlbum->range() == DAlbum::Month && dAlbum->date().year() == 2009 && dAlbum->date().month() == 4)
         {
             QCOMPARE(albumModel->rowCount(index), 0);
         }
-        else if (dAlbum->range() == DAlbum::Month && dAlbum->date().year() == 2003 && dAlbum->date().month() == 5)
+        else if (dAlbum->range() == DAlbum::Month && dAlbum->date().year() == 2009 && dAlbum->date().month() == 5)
         {
             QCOMPARE(albumModel->rowCount(index), 0);
         }
         else
         {
+            kError() << "Unexpected album: " << dAlbum->title();
             QFAIL("Unexpected album returned from model");
         }
 
@@ -380,7 +381,7 @@ void AlbumModelTest::testDAlbumCount()
     albumModel->setShowCount(true);
     ensureItemCounts();
 
-    qDebug() << "iterating over root indices";
+    kDebug() << "iterating over root indices";
 
     // check year albums
     for (int yearRow = 0; yearRow < albumModel->rowCount(albumModel->rootAlbumIndex()); ++yearRow) {
@@ -395,6 +396,7 @@ void AlbumModelTest::testDAlbumCount()
         {
 
             const int imagesInYear = 7;
+            albumModel->includeChildrenCount(yearIndex);
             QCOMPARE(albumModel->albumCount(yearDAlbum), imagesInYear);
             albumModel->excludeChildrenCount(yearIndex);
             QCOMPARE(albumModel->albumCount(yearDAlbum), 0);
@@ -404,8 +406,8 @@ void AlbumModelTest::testDAlbumCount()
             for (int monthRow = 0; monthRow < albumModel->rowCount(yearIndex); ++monthRow)
             {
 
-                QModelIndex monthIndex = albumModel->index(monthRow, 0);
-                DAlbum *monthDAlbum = albumModel->albumForIndex(yearIndex);
+                QModelIndex monthIndex = albumModel->index(monthRow, 0, yearIndex);
+                DAlbum *monthDAlbum = albumModel->albumForIndex(monthIndex);
                 QVERIFY(monthDAlbum);
 
                 QVERIFY(monthDAlbum->range() == DAlbum::Month);
@@ -414,20 +416,22 @@ void AlbumModelTest::testDAlbumCount()
                 if (monthDAlbum->date().month() == 3)
                 {
                     const int imagesInMonth = 3;
-                    QCOMPARE(albumModel->albumCount(yearDAlbum), imagesInMonth);
-                    albumModel->excludeChildrenCount(yearIndex);
-                    QCOMPARE(albumModel->albumCount(yearDAlbum), imagesInMonth);
-                    albumModel->includeChildrenCount(yearIndex);
-                    QCOMPARE(albumModel->albumCount(yearDAlbum), imagesInMonth);
+                    albumModel->includeChildrenCount(monthIndex);
+                    QCOMPARE(albumModel->albumCount(monthDAlbum), imagesInMonth);
+                    albumModel->excludeChildrenCount(monthIndex);
+                    QCOMPARE(albumModel->albumCount(monthDAlbum), imagesInMonth);
+                    albumModel->includeChildrenCount(monthIndex);
+                    QCOMPARE(albumModel->albumCount(monthDAlbum), imagesInMonth);
                 }
                 else if(monthDAlbum->date().month() == 4)
                 {
                     const int imagesInMonth = 4;
-                    QCOMPARE(albumModel->albumCount(yearDAlbum), imagesInMonth);
-                    albumModel->excludeChildrenCount(yearIndex);
-                    QCOMPARE(albumModel->albumCount(yearDAlbum), imagesInMonth);
-                    albumModel->includeChildrenCount(yearIndex);
-                    QCOMPARE(albumModel->albumCount(yearDAlbum), imagesInMonth);
+                    albumModel->includeChildrenCount(monthIndex);
+                    QCOMPARE(albumModel->albumCount(monthDAlbum), imagesInMonth);
+                    albumModel->excludeChildrenCount(monthIndex);
+                    QCOMPARE(albumModel->albumCount(monthDAlbum), imagesInMonth);
+                    albumModel->includeChildrenCount(monthIndex);
+                    QCOMPARE(albumModel->albumCount(monthDAlbum), imagesInMonth);
                 }
                 else
                 {
@@ -441,6 +445,7 @@ void AlbumModelTest::testDAlbumCount()
         {
 
             const int imagesInYear = 5;
+            albumModel->includeChildrenCount(yearIndex);
             QCOMPARE(albumModel->albumCount(yearDAlbum), imagesInYear);
             albumModel->excludeChildrenCount(yearIndex);
             QCOMPARE(albumModel->albumCount(yearDAlbum), 0);
@@ -450,8 +455,8 @@ void AlbumModelTest::testDAlbumCount()
             for (int monthRow = 0; monthRow < albumModel->rowCount(yearIndex); ++monthRow)
             {
 
-                QModelIndex monthIndex = albumModel->index(monthRow, 0);
-                DAlbum *monthDAlbum = albumModel->albumForIndex(yearIndex);
+                QModelIndex monthIndex = albumModel->index(monthRow, 0, yearIndex);
+                DAlbum *monthDAlbum = albumModel->albumForIndex(monthIndex);
                 QVERIFY(monthDAlbum);
 
                 QVERIFY(monthDAlbum->range() == DAlbum::Month);
@@ -460,29 +465,32 @@ void AlbumModelTest::testDAlbumCount()
                 if (monthDAlbum->date().month() == 3)
                 {
                     const int imagesInMonth = 2;
-                    QCOMPARE(albumModel->albumCount(yearDAlbum), imagesInMonth);
-                    albumModel->excludeChildrenCount(yearIndex);
-                    QCOMPARE(albumModel->albumCount(yearDAlbum), imagesInMonth);
-                    albumModel->includeChildrenCount(yearIndex);
-                    QCOMPARE(albumModel->albumCount(yearDAlbum), imagesInMonth);
+                    albumModel->includeChildrenCount(monthIndex);
+                    QCOMPARE(albumModel->albumCount(monthDAlbum), imagesInMonth);
+                    albumModel->excludeChildrenCount(monthIndex);
+                    QCOMPARE(albumModel->albumCount(monthDAlbum), imagesInMonth);
+                    albumModel->includeChildrenCount(monthIndex);
+                    QCOMPARE(albumModel->albumCount(monthDAlbum), imagesInMonth);
                 }
                 else if(monthDAlbum->date().month() == 4)
                 {
                     const int imagesInMonth = 2;
-                    QCOMPARE(albumModel->albumCount(yearDAlbum), imagesInMonth);
-                    albumModel->excludeChildrenCount(yearIndex);
-                    QCOMPARE(albumModel->albumCount(yearDAlbum), imagesInMonth);
-                    albumModel->includeChildrenCount(yearIndex);
-                    QCOMPARE(albumModel->albumCount(yearDAlbum), imagesInMonth);
+                    albumModel->includeChildrenCount(monthIndex);
+                    QCOMPARE(albumModel->albumCount(monthDAlbum), imagesInMonth);
+                    albumModel->excludeChildrenCount(monthIndex);
+                    QCOMPARE(albumModel->albumCount(monthDAlbum), imagesInMonth);
+                    albumModel->includeChildrenCount(monthIndex);
+                    QCOMPARE(albumModel->albumCount(monthDAlbum), imagesInMonth);
                 }
                 else if(monthDAlbum->date().month() == 5)
                 {
                     const int imagesInMonth = 1;
-                    QCOMPARE(albumModel->albumCount(yearDAlbum), imagesInMonth);
-                    albumModel->excludeChildrenCount(yearIndex);
-                    QCOMPARE(albumModel->albumCount(yearDAlbum), imagesInMonth);
-                    albumModel->includeChildrenCount(yearIndex);
-                    QCOMPARE(albumModel->albumCount(yearDAlbum), imagesInMonth);
+                    albumModel->includeChildrenCount(monthIndex);
+                    QCOMPARE(albumModel->albumCount(monthDAlbum), imagesInMonth);
+                    albumModel->excludeChildrenCount(monthIndex);
+                    QCOMPARE(albumModel->albumCount(monthDAlbum), imagesInMonth);
+                    albumModel->includeChildrenCount(monthIndex);
+                    QCOMPARE(albumModel->albumCount(monthDAlbum), imagesInMonth);
                 }
                 else
                 {
@@ -494,7 +502,7 @@ void AlbumModelTest::testDAlbumCount()
         }
         else
         {
-            QFAIL("Received unexpectd album from model");
+            QFAIL("Received unexpected album from model");
         }
 
     }
