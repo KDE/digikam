@@ -445,7 +445,7 @@ SolidVolumeInfo CollectionManagerPrivate::findVolumeForLocation(const AlbumRootL
     {
         foreach (const SolidVolumeInfo& volume, volumes)
         {
-            if (volume.uuid == queryItem)
+            if (volume.uuid.compare(queryItem, Qt::CaseInsensitive) == 0)
                 return volume;
         }
         return SolidVolumeInfo();

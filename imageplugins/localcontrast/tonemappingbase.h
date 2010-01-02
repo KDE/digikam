@@ -30,7 +30,7 @@
 
 // Local includes.
 
-#include "ToneMappingParameters.h"
+#include "tonemappingparameters.h"
 
 namespace DigikamLocalContrastImagesPlugin
 {
@@ -44,14 +44,11 @@ public:
     virtual ~ToneMappingBase();
 
     REALTYPE func(REALTYPE x1,REALTYPE x2);
+    void     apply_parameters(const ToneMappingParameters& inpar);
 
-    virtual void set_blur(int nstage, REALTYPE value);      //1..5000
-    virtual void set_power(int nstage, REALTYPE value);     //0..100.0
-    virtual void set_low_saturation(int value);             //0..100
-    virtual void set_high_saturation(int value);            //0..100
-    virtual void set_stretch_contrast(bool value);
-    virtual void set_function_id (int value);               //0..1
-
+    void save_parameters(const char *filename);
+    bool load_parameters(const char *filename);
+        
     void set_enabled(int nstage, bool enabled)
     {
         par.stage[nstage].enabled=enabled;
@@ -87,11 +84,7 @@ public:
         if (value > 100) value = 100;
         par.unsharp_mask.threshold = value;
     };
-
-    virtual void process_8bit_rgb_image(unsigned char *img, int sizex, int sizey)=0;
-    virtual void update_preprocessed_values()=0;
-    void apply_parameters(ToneMappingParameters inpar);
-
+        
     ToneMappingParameters get_parameters()
     {
         return par;
@@ -162,21 +155,30 @@ public:
         current_process_power_value = par.get_power(nstage);
     };
 
-    void save_parameters(const char *filename);
-    bool load_parameters(const char *filename);
-
     void set_preview_zoom(REALTYPE val)
     {
         if ((val > 0.001) && (val < 1000.0)) preview_zoom = val;
     };
 
+    virtual void set_blur(int nstage, REALTYPE value);      // 1..5000
+    virtual void set_power(int nstage, REALTYPE value);     // 0..100.0
+    virtual void set_low_saturation(int value);             // 0..100
+    virtual void set_high_saturation(int value);            // 0..100
+    virtual void set_stretch_contrast(bool value);
+    virtual void set_function_id (int value);               // 0..1
+
+    virtual void process_8bit_rgb_image(unsigned char *img, int sizex, int sizey)=0;
+    virtual void update_preprocessed_values()=0;
+    
 protected:
 
-    REALTYPE preview_zoom;//used for zoom on previews
+    // used for zoom on previews
+    REALTYPE              preview_zoom;
+
     ToneMappingParameters par;
 
-    //preprocessed values
-    REALTYPE current_process_power_value;
+    // preprocessed values
+    REALTYPE              current_process_power_value;
 };
 
 } // namespace DigikamNoiseReductionImagesPlugin

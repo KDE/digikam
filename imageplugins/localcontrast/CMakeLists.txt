@@ -2,10 +2,10 @@
 SET(digikamimageplugin_localcontrast_PART_SRCS imageplugin_localcontrast.cpp
                                                localcontrast.cpp
                                                localcontrasttool.cpp
-                                               ToneMappingBase.cpp
-                                               ToneMappingFloat.cpp
-                                               ToneMappingInt.cpp
-                                               ToneMappingParameters.cpp
+                                               tonemappingbase.cpp
+                                               tonemappingfloat.cpp
+                                               tonemappingint.cpp
+                                               tonemappingparameters.cpp
     )
 
 KDE4_ADD_PLUGIN(digikamimageplugin_localcontrast ${digikamimageplugin_localcontrast_PART_SRCS})

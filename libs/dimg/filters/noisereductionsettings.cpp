@@ -34,6 +34,7 @@
 
 // KDE includes
 
+#include <kdebug.h>
 #include <kurl.h>
 #include <kdialog.h>
 #include <klocale.h>
@@ -326,7 +327,7 @@ void NoiseReductionSettings::setSettings(const WaveletsNRContainer& settings)
     d->thrLumInput->setValue(settings.thresholds[0]);
     d->thrCrInput->setValue(settings.thresholds[1]);
     d->thrCbInput->setValue(settings.thresholds[2]);
-    d->softLumInput->setValue(1.0 - settings.softness[0]); 
+    d->softLumInput->setValue(1.0 - settings.softness[0]);
     d->softCrInput->setValue(1.0 - settings.softness[1]);
     d->softCbInput->setValue(1.0 - settings.softness[2]);
     d->advancedBox->setChecked(settings.advanced);
@@ -385,7 +386,7 @@ void NoiseReductionSettings::slotLeadSettingsChanged()
         d->thrLumInput->setValue(prm.leadThreshold);
         d->thrCrInput->setValue(prm.leadThreshold);
         d->thrCbInput->setValue(prm.leadThreshold);
-        d->softLumInput->setValue(1.0 - prm.leadSoftness); 
+        d->softLumInput->setValue(1.0 - prm.leadSoftness);
         d->softCrInput->setValue(1.0 - prm.leadSoftness);
         d->softCbInput->setValue(1.0 - prm.leadSoftness);
     }
@@ -412,7 +413,7 @@ void NoiseReductionSettings::readSettings(KConfigGroup& group)
 
 void NoiseReductionSettings::writeSettings(KConfigGroup& group)
 {
-    WaveletsNRContainer prm;
+    WaveletsNRContainer prm = settings();
 
     group.writeEntry(d->configThrLumInputAdjustmentEntry,  prm.thresholds[0]);
     group.writeEntry(d->configThrCrInputAdjustmentEntry,   prm.thresholds[1]);

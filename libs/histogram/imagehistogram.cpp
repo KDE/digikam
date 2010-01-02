@@ -6,7 +6,7 @@
  * Date        : 2004-07-21
  * Description : image histogram manipulation methods.
  *
- * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Some code parts are inspired from gimp 2.0
  * Copyright (C) 1995 Spencer Kimball and Peter Mattis
@@ -78,19 +78,19 @@ public:
     }
 
     /** The histogram data.*/
-    struct double_packet *histogram;
+    struct double_packet* histogram;
     bool                  valid;
 
     /** Image information.*/
-    uchar   *imageData;
-    uint     imageWidth;
-    uint     imageHeight;
+    uchar*                imageData;
+    uint                  imageWidth;
+    uint                  imageHeight;
 
     /** Numbers of histogram segments depending of image bytes depth*/
-    int      histoSegments;
+    int                   histoSegments;
 
     /** Used to stop thread during calculations.*/
-    bool     runningFlag;
+    bool                  runningFlag;
 };
 
 ImageHistogram::ImageHistogram(const DImg& image, QObject *parent)
@@ -522,31 +522,31 @@ double ImageHistogram::getMaximum(int channel, int start, int end)
     switch(channel)
     {
        case LuminosityChannel:
-          for (x = start ; x < end ; ++x)
+          for (x = start ; x <= end ; ++x)
              if (d->histogram[x].value > max)
                 max = d->histogram[x].value;
           break;
 
        case RedChannel:
-          for (x = start ; x < end ; ++x)
+          for (x = start ; x <= end ; ++x)
              if (d->histogram[x].red > max)
                 max = d->histogram[x].red;
           break;
 
        case GreenChannel:
-          for (x = start ; x < end ; ++x)
+          for (x = start ; x <= end ; ++x)
              if (d->histogram[x].green > max)
                 max = d->histogram[x].green;
           break;
 
        case BlueChannel:
-          for (x = start ; x < end ; ++x)
+          for (x = start ; x <= end ; ++x)
              if (d->histogram[x].blue > max)
                 max = d->histogram[x].blue;
           break;
 
        case AlphaChannel:
-          for (x = start ; x < end ; ++x)
+          for (x = start ; x <= end ; ++x)
              if (d->histogram[x].alpha > max)
                 max = d->histogram[x].alpha;
           break;

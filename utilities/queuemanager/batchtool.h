@@ -41,6 +41,7 @@
 // Local includes
 
 #include "dimg.h"
+#include "drawdecoding.h"
 
 class QWidget;
 
@@ -103,37 +104,53 @@ public:
     void setLastChainedTool(bool last);
     bool isLastChainedTool() const;
 
-    /** Set output url using input url content + annotation based on time stamp + file 
+    /** Set output url using input url content + annotation based on time stamp + file
         extension defined by outputSuffix().
         if outputSuffix() return null, file extension is the same than original.
      */
     void setOutputUrlFromInputUrl();
 
-    /** Load image data using input Url set by setInputUrl() to instance of internal 
+    /** Load image data using input Url set by setInputUrl() to instance of internal
         DImg container.
      */
     bool loadToDImg();
 
     /** Save image data from instance of internal DImg container using :
         - output Url set by setOutputUrl() or setOutputUrlFromInputUrl()
-        - output file format set by outputSuffix(). If this one is empty, 
+        - output file format set by outputSuffix(). If this one is empty,
           format of original image is used instead.
      */
     bool savefromDImg();
 
-    /** Set-up Exif orientation tag needs to be fixed during tool operations.
+    /** Set that the Exif orientation flag is allowed be reset to NORMAL after tool operation
      */
-    void setExifSetOrientation(bool set);
+    void setResetExifOrientationAllowed(bool reset);
 
-    /** Return true if Exif orientation tag will be fixed during tool operations.
+    /** Returns true if the Exif orientation tag is allowed to be reset after tool operation
      */
-    bool getExifSetOrientation() const;
+    bool getResetExifOrientationAllowed() const;
+
+    /** Set that the Exif orientation flag should be reset to NORMAL after tool operation
+     */
+    void setNeedResetExifOrientation(bool reset);
+
+    /** Returns true if the Exif orientation tag should be reset after tool operation
+     */
+    bool getNeedResetExifOrientation() const;
+
+    /** Set-up RAW decoding settings no use during tool operations.
+     */
+    void setRawDecodingSettings(const DRawDecoding& settings);
+
+    /** Return RAW decoding settings used during tool operations.
+     */
+    DRawDecoding getRawDecodingSettings() const;
 
     /** Apply all change to perform by this tool. This method call customized toolOperations().
      */
     bool apply();
 
-    /** Re-implement this method is you want customize cancelization of tool, for ex. to call 
+    /** Re-implement this method is you want customize cancelization of tool, for ex. to call
         a dedicated method to kill sub-threads parented to this tool instance.
         Unforget to call parent BatchTool::cancel() method in you customized implementation.
      */
@@ -167,7 +184,7 @@ protected:
      */
     bool isCancelled();
 
-    /** Re-implement this method to customize all batch operations done by this tool. 
+    /** Re-implement this method to customize all batch operations done by this tool.
         This method is called by apply().
      */
     virtual bool toolOperations()=0;

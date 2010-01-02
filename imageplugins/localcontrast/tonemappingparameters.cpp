@@ -35,7 +35,7 @@
 
 // Local includes.
 
-#include "ToneMappingParameters.h"
+#include "tonemappingparameters.h"
 
 #ifdef Q_CC_MSVC
 	#pragma warning ( disable : 4800 )	// forcing value to bool 'true' or 'false' (performance warning)
@@ -44,16 +44,36 @@
 namespace DigikamLocalContrastImagesPlugin
 {
 
+class ToneMappingParametersPriv
+{
+public:
+
+    ToneMappingParametersPriv()
+    {
+        cancel   = 0;
+        data     = 0;
+        callBack = 0;
+    };
+
+    /** To cancel computation from user interface.
+    */
+    bool*                  cancel;
+
+    /** For progress CallBack method from User interface
+     */
+    ToneMappingCallbackPtr callBack;
+    void*                  data;  
+};  
+    
 ToneMappingParameters::ToneMappingParameters()
 {
-    info_cancel      = 0;
+    d = new ToneMappingParametersPriv;
+    
     info_fast_mode   = true;
     high_saturation  = 100;
     low_saturation   = 100;
     stretch_contrast = true;
     function_id      = 0;
-    info_callBack    = 0;
-    info_data        = 0;
 
     for (int i = 0 ; i < TONEMAPPING_MAX_STAGES ; i++)
     {
@@ -70,36 +90,43 @@ ToneMappingParameters::ToneMappingParameters()
 
 ToneMappingParameters::~ToneMappingParameters()
 {
+    delete d;
+}
+
+ToneMappingParameters& ToneMappingParameters::operator=(const ToneMappingParameters& prm)
+{
+    d = prm.d;
+    return *this;
 }
 
 bool ToneMappingParameters::cancel()
 {
-    if (info_cancel)
-        return *info_cancel;
+    if (d->cancel)
+        return *d->cancel;
 
     return false;
 }
 
-void ToneMappingParameters::setCancel(bool *b)
+void ToneMappingParameters::setCancel(bool* b)
 {
-    info_cancel = b;
+    d->cancel = b;
 }
 
-void ToneMappingParameters::setProgressCallBackFunction(void *data, ToneMappingCallbackPtr cb)
+void ToneMappingParameters::setProgressCallBackFunction(void* data, ToneMappingCallbackPtr cb)
 {
-    info_callBack = cb;
-    info_data     = data;
+    d->callBack = cb;
+    d->data     = data;
 }
 
 void ToneMappingParameters::postProgress(int progress)
 {
-    info_callBack(info_data, progress);
+    d->callBack(d->data, progress);
 }
 
 REALTYPE ToneMappingParameters::get_power(int nstage)
 {
     REALTYPE power = stage[nstage].power;
-    power          = (REALTYPE)(pow(power/100.0,1.5)*100.0);
+    power          = (REALTYPE)(pow(power/100.0, 1.5)*100.0);
     return power;
 }
 
@@ -111,7 +138,7 @@ REALTYPE ToneMappingParameters::get_blur(int nstage)
 REALTYPE ToneMappingParameters::get_unsharp_mask_power()
 {
     REALTYPE power = unsharp_mask.power;
-    power          = (REALTYPE)(pow(power/100.0,3.0)*10.0);
+    power          = (REALTYPE)(pow(power/100.0, 3.0)*10.0);
     return power;
 }
 

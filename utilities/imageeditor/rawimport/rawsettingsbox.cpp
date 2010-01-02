@@ -478,8 +478,6 @@ void RawSettingsBox::readSettings()
     histogramBox()->setScale((HistogramScale)group.readEntry(d->optionHistogramScaleEntry,
                     (int) LogScaleHistogram));
 
-//    d->colorsCB->setCurrentIndex(group.readEntry("Histogram Color", (int)RawSettingsBoxPriv::AllColorsRed));
-
     d->decodingSettingsBox->setSixteenBits(group.readEntry(
                     d->optionDecodeSixteenBitEntry, false));
     d->decodingSettingsBox->setWhiteBalance(
@@ -563,7 +561,6 @@ void RawSettingsBox::writeSettings()
 
     group.writeEntry(d->optionHistogramChannelEntry, histogramBox()->channel());
     group.writeEntry(d->optionHistogramScaleEntry, (int)histogramBox()->scale());
-//    group.writeEntry("Histogram Color",            d->colorsCB->currentIndex());
 
     group.writeEntry(d->optionDecodeSixteenBitEntry,
                     d->decodingSettingsBox->sixteenBits());

@@ -36,13 +36,14 @@
 
 #include <kapplication.h>
 #include <kconfig.h>
+#include <kdebug.h>
 #include <kdialog.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kimageio.h>
 #include <klocale.h>
 #include <knuminput.h>
-#include <kdebug.h>
+#include <kurlcombobox.h>
 
 // Local includes
 
@@ -68,6 +69,7 @@ public:
         TIFFOptions     = 0;
         JPEG2000Options = 0;
         PGFOptions      = 0;
+        dialog          = 0;
     }
 
     QWidget      *noneOptions;
@@ -85,6 +87,10 @@ public:
     JP2KSettings *JPEG2000Options;
 
     PGFSettings  *PGFOptions;
+
+    KFileDialog  *dialog;
+
+    QString      autoFilter;
 };
 
 FileSaveOptionsBox::FileSaveOptionsBox(QWidget *parent)
@@ -140,30 +146,135 @@ FileSaveOptionsBox::~FileSaveOptionsBox()
     delete d;
 }
 
+void FileSaveOptionsBox::setDialog(KFileDialog *dialog)
+{
+
+    if (d->dialog)
+    {
+        disconnect(d->dialog);
+    }
+
+    d->dialog = dialog;
+
+    kDebug() << "set dialog to " << dialog;
+
+    // TODO handle these connections based on the selected filter
+    connect(d->dialog, SIGNAL(filterChanged(const QString&)),
+            this, SLOT(slotFilterChanged(const QString&)));
+
+    connect(d->dialog, SIGNAL(fileSelected(const QString &)),
+            this, SLOT(slotImageFileSelected(const QString&)));
+
+}
+
+void FileSaveOptionsBox::slotFilterChanged(const QString &newFilter)
+{
+
+    kDebug() << "filter changed to '" << newFilter << "'";
+
+    if (!d->dialog)
+    {
+        kWarning() << "I need a dialog for working correctly. "
+                   << "Set one with setDialog.";
+    }
+
+    // if the new filter is the auto filter and we shall use the auto filter
+    if (!d->autoFilter.isEmpty() && d->autoFilter == newFilter)
+    {
+        kDebug() << "use automatic extension detection";
+        // use the user provided file name for guessing the desired file format
+        connect(d->dialog->locationEdit(), SIGNAL(editTextChanged(const QString&)),
+                this, SLOT(slotImageFileFormatChanged(const QString&)));
+        slotImageFileFormatChanged(d->dialog->locationEdit()->currentText());
+    }
+    else
+    {
+        kDebug() << "use manual extension detection";
+        // don't use the file name provided by the user any more
+        disconnect(d->dialog->locationEdit(), SIGNAL(editTextChanged(const QString&)),
+                   this, SLOT(slotImageFileFormatChanged(const QString&)));
+        slotImageFileFormatChanged(newFilter);
+    }
+
+}
+
+void FileSaveOptionsBox::setAutoFilter(const QString &autoFilter)
+{
+
+    kDebug() << "new auto filter is '" << autoFilter << "'";
+
+    d->autoFilter = autoFilter;
+
+    if (!d->dialog)
+    {
+        kWarning() << "I need a dialog for working correctly. "
+                   << "Set one with setDialog.";
+        return;
+    }
+
+    slotFilterChanged(d->dialog->currentFilter());
+
+}
+
 void FileSaveOptionsBox::slotImageFileSelected(const QString& file)
 {
-    QString format = QImageReader::imageFormat(file);
-    slotImageFileFormatChanged(format);
+    kDebug() << "called for filename " << file;
+    if (d->autoFilter.isEmpty())
+    {
+        QString format = QImageReader::imageFormat(file);
+        slotImageFileFormatChanged(format);
+    }
+}
+
+DImg::FORMAT FileSaveOptionsBox::discoverFormat(const QString &filename,
+                DImg::FORMAT fallback)
+{
+
+    kDebug() << "Trying to discover format based on filename '" << filename
+             << "', fallback = " << fallback;
+
+    QStringList splitParts = filename.split('.');
+    QString ext;
+    if (splitParts.size() < 2)
+    {
+        kDebug() << "filename '" << filename
+    			 << "' does not contain an extension separated by a point.";
+    	ext = filename;
+    }
+    else
+    {
+    	ext = splitParts.at(splitParts.size() - 1);
+    }
+
+    ext = ext.toUpper();
+
+    DImg::FORMAT format = fallback;
+
+    if (ext.contains("JPEG") || ext.contains("JPG") || ext.contains("JPE"))
+        format = DImg::JPEG;
+    else if (ext.contains("PNG"))
+        format = DImg::PNG;
+    else if (ext.contains("TIFF") || ext.contains("TIF"))
+        format = DImg::TIFF;
+    else if (ext.contains("JP2") || ext.contains("JPX") || ext.contains("JPC") ||
+             ext.contains("PGX") || ext.contains("J2K"))
+        format = DImg::JP2K;
+    else if (ext.contains("PGF"))
+        format = DImg::PGF;
+    else
+    {
+        kWarning() << "Using fallback format " << fallback;
+    }
+
+    kDebug() << "Discovered format: " << format;
+
+    return format;
 }
 
 void FileSaveOptionsBox::slotImageFileFormatChanged(const QString& ext)
 {
     kDebug() << "Format selected: " << ext;
-    QString format = ext.toUpper();
-
-    if (format.contains("JPEG") || format.contains("JPG") || format.contains("JPE"))
-        setCurrentIndex(DImg::JPEG);
-    else if (format.contains("PNG"))
-        setCurrentIndex(DImg::PNG);
-    else if (format.contains("TIFF") || format.contains("TIF"))
-        setCurrentIndex(DImg::TIFF);
-    else if (format.contains("JP2") || format.contains("JPX") || format.contains("JPC") ||
-             format.contains("PGX") || format.contains("J2K"))
-        setCurrentIndex(DImg::JP2K);
-    else if (format.contains("PGF"))
-        setCurrentIndex(DImg::PGF);
-    else
-        setCurrentIndex(DImg::NONE);
+    setCurrentIndex(discoverFormat(ext, DImg::NONE));
 }
 
 void FileSaveOptionsBox::applySettings()

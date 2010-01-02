@@ -50,9 +50,12 @@
 
 // KDE includes
 
+#include <kdeversion.h>
 #include <kaboutdata.h>
 #include <kaction.h>
+#if KDE_IS_VERSION(4,1,68)
 #include <kactioncategory.h>
+#endif
 #include <kactioncollection.h>
 #include <kactionmenu.h>
 #include <kapplication.h>
@@ -87,9 +90,9 @@
 #include <ktoolbar.h>
 #include <ktoolbarpopupaction.h>
 #include <ktoolinvocation.h>
+#include <kurlcombobox.h>
 #include <kwindowsystem.h>
 #include <kxmlguifactory.h>
-#include <kdeversion.h>
 #include <kde_file.h>
 #include <kio/copyjob.h>
 #include <kdebug.h>
@@ -1587,7 +1590,13 @@ void EditorWindow::finishSaving(bool success)
 void EditorWindow::setupTempSaveFile(const KUrl & url)
 {
 
+#ifdef _WIN32
+    KUrl parent(url.directory(KUrl::AppendTrailingSlash)); 
+    QString tempDir = parent.toLocalFile();
+#else
     QString tempDir = url.directory(KUrl::AppendTrailingSlash);
+#endif
+
     // use magic file extension which tells the digikamalbums ioslave to ignore the file
     m_savingContext->saveTempFile = new KTemporaryFile();
     // if the destination url is on local file system, try to set the temp file
@@ -1644,14 +1653,10 @@ void EditorWindow::startingSave(const KUrl& url)
 QStringList EditorWindow::getWritingFilters()
 {
 
-    // begin with the filtersa KImageIO supports
+    // begin with the filters KImageIO supports
     QString pattern             = KImageIO::pattern(KImageIO::Writing);
     QStringList writablePattern = pattern.split(QChar('\n'));
     kDebug() << "KImageIO offered pattern: " << writablePattern;
-
-    // remove "all images" type
-    // XXX bad assumption that this is always the first type in the list
-    writablePattern.removeFirst();
 
     // append custom file types
     writablePattern.append(QString("*.jp2|") + i18n("JPEG 2000 image"));
@@ -1704,11 +1709,10 @@ QString EditorWindow::getExtensionFromFilter(const QString& filter)
         return QString();
     }
 
-    const int endLocation = filter.indexOf(QRegExp("[|\\* ]"), asteriskLocation + 1);
+    int endLocation = filter.indexOf(QRegExp("[|\\* ]"), asteriskLocation + 1);
     if (endLocation < 0)
     {
-        kDebug() << "Could not find a valid end of the format in the filter";
-        return QString();
+        endLocation = filter.length();
     }
 
     kDebug() << "astriskLocation = " << asteriskLocation
@@ -1723,11 +1727,12 @@ QString EditorWindow::getExtensionFromFilter(const QString& filter)
 
 }
 
-bool EditorWindow::selectValidSavingFormat(const QString& filterExtension, const KUrl& targetUrl)
+bool EditorWindow::selectValidSavingFormat(const QString& filter,
+                const KUrl& targetUrl, const QString &autoFilter)
 {
 
-    kDebug() << "Trying to find a saving format with filterExtension = "
-             << filterExtension << ", targetUrl = " << targetUrl;
+    kDebug() << "Trying to find a saving format with filter = "
+             << filter << ", targetUrl = " << targetUrl;
 
     // build a list of valid types
     QStringList validTypes = KImageIO::types(KImageIO::Writing);
@@ -1744,19 +1749,8 @@ bool EditorWindow::selectValidSavingFormat(const QString& filterExtension, const
 
     kDebug() << "Writable formats: " << validTypes;
 
-    // first check if the selected filter extension can be used
-    {
-        if (!filterExtension.isEmpty() &&
-            validTypes.contains(filterExtension, Qt::CaseInsensitive))
-        {
-            kDebug() << "Using format from filter extension: " << filterExtension;
-            m_savingContext->format = filterExtension;
-            return true;
-        }
-    }
-
-    // as a second step, try to determine the desired format from the extension
-    // of the target url
+    // if the auto filter is used, use the format provided in the filename
+    if (filter == autoFilter)
     {
         QString suffix;
         if (targetUrl.isLocalFile())
@@ -1781,6 +1775,20 @@ bool EditorWindow::selectValidSavingFormat(const QString& filterExtension, const
         {
             kDebug() << "Using format from target url " << suffix;
             m_savingContext->format = suffix;
+            return true;
+        }
+    }
+    else
+    {
+
+        // use extension from the filter
+
+        QString filterExtension = getExtensionFromFilter(filter);
+        if (!filterExtension.isEmpty() &&
+            validTypes.contains(filterExtension, Qt::CaseInsensitive))
+        {
+            kDebug() << "Using format from filter extension: " << filterExtension;
+            m_savingContext->format = filterExtension;
             return true;
         }
     }
@@ -1820,12 +1828,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
                                                        QString(),
                                                        this,
                                                        options);
-
-    connect(imageFileSaveDialog, SIGNAL(filterChanged(const QString&)),
-            options, SLOT(slotImageFileFormatChanged(const QString&)));
-
-    connect(imageFileSaveDialog, SIGNAL(fileSelected(const QString &)),
-            options, SLOT(slotImageFileSelected(const QString&)));
+    options->setDialog(imageFileSaveDialog);
 
     ImageDialogPreview *preview = new ImageDialogPreview(imageFileSaveDialog);
     imageFileSaveDialog->setPreviewWidget(preview);
@@ -1834,34 +1837,35 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
     imageFileSaveDialog->setMode(KFile::File);
     imageFileSaveDialog->setCaption(i18n("New Image File Name"));
 
+    // restore old settings for the dialog
     QFileInfo info(m_savingContext->srcURL.fileName());
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("ImageViewer Settings");
-    QString ext               = group.readEntry("LastSavedImageTypeMime", "png");
+    const QString optionLastExtension = "LastSavedImageExtension";
+    QString ext               = group.readEntry(optionLastExtension, "png");
+    if (ext.isEmpty())
+    {
+        ext = "png";
+    }
     QString fileName          = info.completeBaseName() + QString(".") + ext;
 
     // Determine the default filter from LastSavedImageTypeMime
     QStringList writablePattern = getWritingFilters();
     imageFileSaveDialog->setFilter(writablePattern.join(QChar('\n')));
-    QString initialFilter = findFilterByExtension(writablePattern, ext);
-    if (!initialFilter.isEmpty())
-    {
-        imageFileSaveDialog->filterWidget()->setCurrentFilter(initialFilter);
-    }
-    else
-    {
-        kWarning() << "Could not find a filter for extension " << ext
-                   << ". Is this really writable?";
-    }
-    kDebug() << "Using initial filter '" << initialFilter
-             << "' out of all possible ones:" << writablePattern;
+
+    // find the correct spelling of the auto filter
+    // XXX bad assumption that the "all images" filter is always the first
+    imageFileSaveDialog->filterWidget()->setCurrentFilter(writablePattern.at(0));
+    QString autoFilter = imageFileSaveDialog->filterWidget()->currentFilter();
+    options->setAutoFilter(autoFilter);
+
     imageFileSaveDialog->setSelection(fileName);
 
-    options->slotImageFileFormatChanged(ext);
-
     // Start dialog and check if canceled.
-    if ( imageFileSaveDialog->exec() != KFileDialog::Accepted )
+    if (imageFileSaveDialog->exec() != KFileDialog::Accepted)
+    {
        return false;
+    }
 
     // Update file save settings in editor instance.
     options->applySettings();
@@ -1871,10 +1875,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
     kDebug() << "Writing file to " << newURL;
 
     // select the format to save the image with
-    kDebug() << "filter from save dialog: " << imageFileSaveDialog->currentFilter();
-    QString dialogExtension = getExtensionFromFilter(imageFileSaveDialog->currentFilter());
-    kDebug() << "extracted extension from filter: " << dialogExtension;
-    bool validFormatSet = selectValidSavingFormat(dialogExtension, newURL);
+    bool validFormatSet = selectValidSavingFormat(imageFileSaveDialog->currentFilter(), newURL, autoFilter);
 
     if (!validFormatSet)
     {
@@ -1891,7 +1892,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
         return false;
     }
 
-    group.writeEntry("LastSavedImageTypeMime", m_savingContext->format);
+    group.writeEntry(optionLastExtension, m_savingContext->format);
     config->sync();
 
     // if new and original URL are equal use slotSave() ------------------------------

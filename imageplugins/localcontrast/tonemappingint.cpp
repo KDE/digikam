@@ -29,7 +29,7 @@
 
 // Local includes.
 
-#include "ToneMappingInt.h"
+#include "tonemappingint.h"
 
 #define FUNC_LOOKUP_TABLE_SIZE 65536
 

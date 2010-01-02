@@ -36,6 +36,7 @@
 
 #include "batchtool.h"
 #include "actions.h"
+#include "drawdecoding.h"
 
 namespace Digikam
 {
@@ -52,7 +53,8 @@ public:
     ~ActionThread();
 
     void setWorkingUrl(const KUrl& workingUrl);
-    void setExifSetOrientation(bool set);
+    void setResetExifOrientationAllowed(bool set);
+    void setRawDecodingSettings(const DRawDecoding& settings);
 
     void processFile(const AssignedBatchTools& item);
 

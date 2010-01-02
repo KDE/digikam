@@ -113,6 +113,8 @@ DigikamImageView::DigikamImageView(QWidget *parent)
 
     connect(settings, SIGNAL(setupChanged()),
             this, SLOT(slotSetupChanged()));
+
+    slotSetupChanged();
 }
 
 DigikamImageView::~DigikamImageView()

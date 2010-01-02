@@ -33,6 +33,7 @@ Name[tr]=ResimEklentisi_MercekDüzeltme
 Name[uk]=ImagePlugin_LensCorrection
 Name[x-test]=xxImagePlugin_LensCorrectionxx
 Name[zh_CN]=ImagePlugin_LensCorrection
+Name[zh_TW]=影像外掛程式_鏡頭校正
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
@@ -66,6 +67,7 @@ Comment[tr]=Mercek hata düzeltme araçları
 Comment[uk]=Інструмент для виправлення аберації
 Comment[x-test]=xxLens aberrations correction toolsxx
 Comment[zh_CN]=镜头扭曲校正工具
+Comment[zh_TW]=digiKam 的鏡頭像差校正工具
 
 X-KDE-Library=digikamimageplugin_lenscorrection
 author=Gilles Caulier, caulier dot gilles at gmail dot com

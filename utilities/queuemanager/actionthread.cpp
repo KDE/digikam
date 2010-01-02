@@ -84,6 +84,8 @@ public:
     KUrl            workingUrl;
 
     BatchTool*      tool;
+
+    DRawDecoding    rawDecodingSettings;
 };
 
 ActionThread::ActionThread(QObject *parent)
@@ -107,9 +109,14 @@ void ActionThread::setWorkingUrl(const KUrl& workingUrl)
     d->workingUrl = workingUrl;
 }
 
-void ActionThread::setExifSetOrientation(bool set)
+void ActionThread::setResetExifOrientationAllowed(bool set)
 {
     d->exifSetOrientation = set;
+}
+
+void ActionThread::setRawDecodingSettings(const DRawDecoding& settings)
+{
+    d->rawDecodingSettings = settings;
 }
 
 void ActionThread::processFile(const AssignedBatchTools& item)
@@ -184,7 +191,8 @@ void ActionThread::run()
 
                 d->tool->setImageData(tmpImage);
                 d->tool->setWorkingUrl(d->workingUrl);
-                d->tool->setExifSetOrientation(d->exifSetOrientation);
+                d->tool->setRawDecodingSettings(d->rawDecodingSettings);
+                d->tool->setResetExifOrientationAllowed(d->exifSetOrientation);
                 d->tool->setLastChainedTool(index == t->item.toolsMap.count());
                 d->tool->setInputUrl(inUrl);
                 d->tool->setSettings(settings);
