@@ -34,6 +34,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 025 ==> 220889 : Problem with color management.
 026 ==> 200392 : Slideshow displays "Headline" field as "image caption" and has no way to display "Caption" field.
 027 ==> 220202 : "Write Metadata to images" only modifies the first 201 files in any directory (album).
-028 ==> 219149 : digikam: Save window in editor lock main browse window.
-029 ==> 
-
+028 ==> 219149 : digiKam: Save window in editor lock main browse window.
+029 ==> 214620 : Crash when quitting the application.
+030 ==> 
