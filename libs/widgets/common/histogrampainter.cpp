@@ -69,8 +69,8 @@ public:
     double calculateMax()
     {
         int segments = histogram->getHistogramSegments();
-        int startSeg = HISTOGRAM_CALC_CUTOFF_MIN * (segments-1);
-        int endSeg = HISTOGRAM_CALC_CUTOFF_MAX * (segments-1);
+        int startSeg = (int)(HISTOGRAM_CALC_CUTOFF_MIN * (segments-1));
+        int endSeg = (int)(HISTOGRAM_CALC_CUTOFF_MAX * (segments-1));
         double max = 0.0;
 
         switch (scale)
@@ -268,8 +268,10 @@ public:
         p1.fillPath(curvePath, QBrush(palette.color(QPalette::Active, QPalette::Foreground), Qt::SolidPattern));
         if (highlightSelection)
         {
-            p1.setClipRect(selectionMin * wWidth, 0, selectionMax * wWidth - selectionMin * wWidth, wHeight);
-            p1.fillRect(selectionMin * wWidth, 0, selectionMax * wWidth - selectionMin * wWidth, wHeight,
+            p1.setClipRect((int)(selectionMin * wWidth), 0,
+                           (int)(selectionMax * wWidth - selectionMin * wWidth), wHeight);
+            p1.fillRect((int)(selectionMin * wWidth), 0,
+                        (int)(selectionMax * wWidth - selectionMin * wWidth), wHeight,
                         QBrush(palette.color(QPalette::Active, QPalette::Foreground), Qt::SolidPattern));
             p1.fillPath(curvePath, QBrush(palette.color(QPalette::Active, QPalette::Background), Qt::SolidPattern));
         }
@@ -353,9 +355,11 @@ public:
         // Highlight
         if (highlightSelection)
         {
-            p2.setClipRect(selectionMin * wWidth, 0, selectionMax * wWidth - selectionMin * wWidth, wHeight);
+            p2.setClipRect((int)(selectionMin * wWidth), 0,
+                           (int)(selectionMax * wWidth - selectionMin * wWidth), wHeight);
             p2.setCompositionMode(QPainter::CompositionMode_Source);
-            p2.fillRect(selectionMin * wWidth, 0, selectionMax * wWidth - selectionMin * wWidth, wHeight,
+            p2.fillRect((int)(selectionMin * wWidth), 0,
+                        (int)(selectionMax * wWidth - selectionMin * wWidth), wHeight,
                         palette.color(QPalette::Active, QPalette::Foreground));
             p2.fillPath(curveBlue, QBrush(Qt::black, Qt::SolidPattern));
             p2.fillPath(curveRed, QBrush(Qt::black, Qt::SolidPattern));
