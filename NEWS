@@ -36,4 +36,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 027 ==> 220202 : "Write Metadata to images" only modifies the first 201 files in any directory (album).
 028 ==> 219149 : digiKam: Save window in editor lock main browse window.
 029 ==> 214620 : Crash when quitting the application.
-030 ==> 
+030 ==> 219430 : "Move to Trash"/"Move %1 Files to Trash" messages are not compatible with Russian plural forms.
+031 ==> 
