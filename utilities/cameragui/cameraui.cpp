@@ -442,6 +442,12 @@ void CameraUI::setupActions()
 
     // -------------------------------------------------------------------------
 
+    d->markAsDownloadedAction = new KAction(KIcon("dialog-ok"), i18n("Mark as downloaded"), this);
+    connect(d->markAsDownloadedAction, SIGNAL(triggered()), this, SLOT(slotMarkAsDownloaded()));
+    actionCollection()->addAction("cameraui_imagemarkasdownloaded", d->markAsDownloadedAction);
+
+    // -------------------------------------------------------------------------
+
     d->deleteSelectedAction = new KAction(KIcon("edit-delete"), i18n("Delete Selected"), this);
     connect(d->deleteSelectedAction, SIGNAL(triggered()), this, SLOT(slotDeleteSelected()));
     actionCollection()->addAction("cameraui_imagedeleteselected", d->deleteSelectedAction);
@@ -966,18 +972,14 @@ void CameraUI::slotBusy(bool val)
         // d->renameCustomizer->restoreFocus();
 
         d->uploadAction->setEnabled(d->controller->cameraUploadSupport());
-        d->downloadSelectedAction->setEnabled(true);
-        d->downloadDelSelectedAction->setEnabled(d->controller->cameraDeleteSupport());
         d->downloadAllAction->setEnabled(true);
         d->downloadDelAllAction->setEnabled(d->controller->cameraDeleteSupport());
-        d->deleteSelectedAction->setEnabled(d->controller->cameraDeleteSupport());
         d->deleteAllAction->setEnabled(d->controller->cameraDeleteSupport());
         d->selectAllAction->setEnabled(true);
         d->selectNoneAction->setEnabled(true);
         d->selectInvertAction->setEnabled(true);
         d->selectNewItemsAction->setEnabled(true);
         d->selectLockedItemsAction->setEnabled(true);
-        d->lockAction->setEnabled(true);
         d->cameraInfoAction->setEnabled(true);
         d->cameraCaptureAction->setEnabled(d->controller->cameraCaptureImageSupport());
 
@@ -1028,8 +1030,10 @@ void CameraUI::slotBusy(bool val)
         d->selectNewItemsAction->setEnabled(false);
         d->selectLockedItemsAction->setEnabled(false);
         d->lockAction->setEnabled(false);
+        d->markAsDownloadedAction->setEnabled(false);
         d->cameraInfoAction->setEnabled(false);
         d->cameraCaptureAction->setEnabled(false);
+        d->imageViewAction->setEnabled(false);
     }
 }
 
@@ -2063,12 +2067,7 @@ void CameraUI::slotNewSelection(bool hasSelection)
         d->markAsDownloadedAction->setEnabled(haveNotDownloadedItem);
     }
     else
-    {
-        d->downloadSelectedAction->setEnabled(hasSelection);
-        d->downloadDelSelectedAction->setEnabled(hasSelection & d->controller->cameraDeleteSupport());
-        d->deleteSelectedAction->setEnabled(hasSelection & d->controller->cameraDeleteSupport());
-        d->imageViewAction->setEnabled(hasSelection);
-    }
+        d->markAsDownloadedAction->setEnabled(false);
 
     unsigned long fSize = 0;
     unsigned long dSize = 0;
@@ -2079,11 +2078,6 @@ void CameraUI::slotNewSelection(bool hasSelection)
 void CameraUI::slotItemsSelected(CameraIconItem* item, bool selected)
 {
     if (!d->controller) return;
-
-    d->downloadSelectedAction->setEnabled(selected);
-    d->downloadDelSelectedAction->setEnabled(selected & d->controller->cameraDeleteSupport());
-    d->deleteSelectedAction->setEnabled(selected & d->controller->cameraDeleteSupport());
-    d->imageViewAction->setEnabled(selected);
 
     if (selected)
     {

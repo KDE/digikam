@@ -35,6 +35,7 @@
         <Action name="cameraui_imagedeleteall" />
         <Separator />
         <Action name="cameraui_imageupload"/>
+        <Action name="cameraui_imagemarkasdownloaded" />
         <Separator />
         <Action name="cameraui_imagelock" />
     </Menu>
