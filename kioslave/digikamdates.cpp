@@ -31,23 +31,23 @@
 // Qt includes
 
 #include <QCoreApplication>
-#include <QFile>
 #include <QDataStream>
+#include <QFile>
 
 // KDE includes
 
-#include <kio/global.h>
-#include <kglobal.h>
-#include <klocale.h>
 #include <kcomponentdata.h>
+#include <kglobal.h>
+#include <kio/global.h>
+#include <klocale.h>
 #include <kdebug.h>
 
 // Local includes
 
-#include "digikam_export.h"
-#include "imagelister.h"
 #include "albumdb.h"
 #include "databaseaccess.h"
+#include "digikam_export.h"
+#include "imagelister.h"
 
 kio_digikamdates::kio_digikamdates(const QByteArray& pool_socket,
                                    const QByteArray& app_socket)
@@ -64,7 +64,6 @@ void kio_digikamdates::special(const QByteArray& data)
     bool folders = (metaData("folders") == "true");
 
     KUrl    kurl;
-    QString url;
     QString filter;
 
     QDataStream ds(data);
@@ -72,8 +71,6 @@ void kio_digikamdates::special(const QByteArray& data)
 
     Digikam::DatabaseUrl dbUrl(kurl);
     Digikam::DatabaseAccess::setParameters(dbUrl);
-
-    url = kurl.path();
 
     if (folders)
     {
@@ -111,7 +108,7 @@ extern "C"
         KGlobal::locale();
 
         if (argc != 4) {
-            kDebug(50004) << "Usage: kio_digikamdates  protocol domain-socket1 domain-socket2";
+            kDebug() << "Usage: kio_digikamdates  protocol domain-socket1 domain-socket2";
             exit(-1);
         }
 

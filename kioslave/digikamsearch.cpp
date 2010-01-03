@@ -34,18 +34,18 @@
 
 // KDE includes
 
-#include <klocale.h>
 #include <kcomponentdata.h>
+#include <klocale.h>
 #include <kdebug.h>
 
 // Local includes
 
-#include "digikam_export.h"
-#include "imagelister.h"
+#include "albumdb.h"
 #include "databaseaccess.h"
 #include "databaseurl.h"
-#include "albumdb.h"
+#include "digikam_export.h"
 #include "haariface.h"
+#include "imagelister.h"
 
 kio_digikamsearch::kio_digikamsearch(const QByteArray& pool_socket,
                                      const QByteArray& app_socket)
@@ -69,7 +69,7 @@ void kio_digikamsearch::special(const QByteArray& data)
     if (!ds.atEnd())
         ds >> listingType;
 
-    kDebug(50004) << "kio_digikamsearch::special " << kurl;
+    kDebug() << "kio_digikamsearch::special " << kurl;
 
     Digikam::DatabaseUrl dbUrl(kurl);
     Digikam::DatabaseAccess::setParameters(dbUrl);
@@ -134,7 +134,7 @@ void kio_digikamsearch::special(const QByteArray& data)
 
         if (albumIds.isEmpty() && tagIds.isEmpty())
         {
-            kDebug(50004) << "No album ids passed for duplicates search";
+            kDebug() << "No album ids passed for duplicates search";
             error(KIO::ERR_INTERNAL, i18n("No album ids passed"));
             return;
         }
@@ -190,7 +190,7 @@ extern "C"
 
         if (argc != 4)
         {
-            kDebug(50004) << "Usage: kio_digikamsearch  protocol domain-socket1 domain-socket2";
+            kDebug() << "Usage: kio_digikamsearch  protocol domain-socket1 domain-socket2";
             exit(-1);
         }
 

@@ -1,8 +1,8 @@
 SET_DEBUG_AREA_CODE(${AREA_CODE_KIOSLAVES})
 
 INCLUDE_DIRECTORIES(../digikam
-                    ../libs/dmetadata 
-                    ../libs/dimg 
+                    ../libs/dmetadata
+                    ../libs/dimg
                     ../libs/database
                     ../libs/database/haar
                     ../libs/database/sqlite2
