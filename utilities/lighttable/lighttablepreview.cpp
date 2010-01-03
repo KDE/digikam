@@ -363,7 +363,7 @@ void LightTablePreview::slotContextMenu()
     QAction *fitWindowAction = new QAction(SmallIcon("zoom-fit-best"), i18n("Fit to &Window"), this);
     QAction *slideshowAction = new QAction(SmallIcon("view-presentation"), i18n("Slideshow"), this);
     QAction *editAction      = new QAction(SmallIcon("editimage"), i18n("Edit..."), this);
-    QAction *trashAction     = new QAction(SmallIcon("user-trash"), i18n("Move to Trash"), this);
+    QAction *trashAction     = new QAction(SmallIcon("user-trash"), i18nc("Non-pluralized", "Move to Trash"), this);
 
     // --------------------------------------------------------
 

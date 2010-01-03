@@ -633,8 +633,8 @@ void ContextMenuHelper::addActionPaste(QObject* recv, const char* slot)
 
 void ContextMenuHelper::addActionItemDelete(QObject* recv, const char* slot, int quantity)
 {
-    QAction *trashAction = new QAction(SmallIcon("user-trash"), i18np("Move to Trash",
-                                       "Move %1 Files to Trash", quantity), d->parent);
+    QAction *trashAction = new QAction(SmallIcon("user-trash"), i18ncp("@action:inmenu Pluralized",
+                                       "Move to Trash", "Move %1 Files to Trash", quantity), d->parent);
     connect(trashAction, SIGNAL(triggered()),
             recv, slot);
     addAction(trashAction);

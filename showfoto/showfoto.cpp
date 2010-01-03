@@ -544,7 +544,7 @@ void ShowFoto::applySettings()
     if (d->deleteItem2Trash)
     {
         m_fileDeleteAction->setIcon(KIcon("user-trash"));
-        m_fileDeleteAction->setText(i18n("Move to Trash"));
+        m_fileDeleteAction->setText(i18nc("Non-pluralized", "Move to Trash"));
     }
     else
     {
