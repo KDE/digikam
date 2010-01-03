@@ -40,6 +40,10 @@
 #include <kconfig.h>
 #include <kdebug.h>
 
+// Local includes
+
+#include "albumfiltermodel.h"
+
 namespace Digikam
 {
 
@@ -47,29 +51,42 @@ class SearchTextBarPriv
 {
 public:
 
-    SearchTextBarPriv()
+    SearchTextBarPriv() :
+        optionAutoCompletionModeEntry("AutoCompletionMode"),
+        optionCaseSensitiveEntry("CaseSensitive"),
+        textQueryCompletion(false),
+        hasCaseSensitive(true),
+        highlightOnResult(true),
+        hasResultColor(200, 255, 200),
+        hasNoResultColor(255, 200, 200),
+        displayRole(Qt::DisplayRole),
+        uniqueIdRole(Qt::DisplayRole),
+        model(0),
+        filterModel(0)
     {
-        textQueryCompletion = false;
-        hasCaseSensitive    = true;
-        model               = 0;
-        displayRole         = Qt::DisplayRole;
-        uniqueIdRole        = Qt::DisplayRole;
     }
+
+    QString optionAutoCompletionModeEntry;
+    QString optionCaseSensitiveEntry;
 
     bool               textQueryCompletion;
     bool               hasCaseSensitive;
-    bool               highlightOnCompletion;
+    bool               highlightOnResult;
+
+    QColor             hasResultColor;
+    QColor             hasNoResultColor;
 
     int                displayRole;
     int                uniqueIdRole;
 
-    QAbstractItemModel *model;
+    QPointer<QAbstractItemModel> model;
+    QPointer<AlbumFilterModel>   filterModel;
 
     SearchTextSettings settings;
 
     /**
      * This map maps model indexes to their current text representation in the
-     * completion object. This is needed because if data changes in on index,
+     * completion object. This is needed because if data changes in one index,
      * the old text value is not known anymore, so that it cannot be removed
      * from the completion object.
      */
@@ -77,15 +94,14 @@ public:
     QMap<int, QString> idToTextMap;
 };
 
-// TODO the model code could also be placed in a subclass of KCompletion...
-
 SearchTextBar::SearchTextBar(QWidget *parent, const char* name, const QString& msg)
-             : KLineEdit(parent), d(new SearchTextBarPriv)
+             : KLineEdit(parent), StateSavingObject(this),
+               d(new SearchTextBarPriv)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setClearButtonShown(true);
     setClickMessage(msg);
-    setObjectName(name);
+    setObjectName(name + QString(" Search Text Tool"));
 
     KCompletion *kcom = new KCompletion;
     kcom->setOrder(KCompletion::Sorted);
@@ -97,26 +113,34 @@ SearchTextBar::SearchTextBar(QWidget *parent, const char* name, const QString& m
     connect(this, SIGNAL(userTextChanged(const QString&)),
             this, SLOT(slotTextChanged(const QString&)));
 
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(name + QString(" Search Text Tool"));
-    setCompletionMode((KGlobalSettings::Completion)group.readEntry("AutoCompletionMode",
-                      (int)KGlobalSettings::completionMode()));
-    d->settings.caseSensitive = (Qt::CaseSensitivity)group.readEntry("CaseSensitive", 
-                                                                     (int)Qt::CaseInsensitive);
+    loadState();
+
 }
 
 SearchTextBar::~SearchTextBar()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(objectName() + QString(" Search Text Tool"));
-    if (completionMode() != KGlobalSettings::completionMode())
-        group.writeEntry("AutoCompletionMode", (int)completionMode());
-    else
-        group.deleteEntry("AutoCompletionMode");
-    group.writeEntry("CaseSensitive",      (int)d->settings.caseSensitive);
-    group.sync();
-
+    saveState();
     delete d;
+}
+
+void SearchTextBar::doLoadState()
+{
+    KConfigGroup group = getConfigGroup();
+    setCompletionMode((KGlobalSettings::Completion)group.readEntry(d->optionAutoCompletionModeEntry,
+                      (int)KGlobalSettings::completionMode()));
+    d->settings.caseSensitive = (Qt::CaseSensitivity)group.readEntry(d->optionCaseSensitiveEntry,
+                                                                     (int)Qt::CaseInsensitive);
+}
+
+void SearchTextBar::doSaveState()
+{
+    KConfigGroup group = getConfigGroup();
+    if (completionMode() != KGlobalSettings::completionMode())
+        group.writeEntry(d->optionAutoCompletionModeEntry, (int)completionMode());
+    else
+        group.deleteEntry(d->optionAutoCompletionModeEntry);
+    group.writeEntry(d->optionCaseSensitiveEntry, (int)d->settings.caseSensitive);
+    group.sync();
 }
 
 void SearchTextBar::setTextQueryCompletion(bool b)
@@ -129,12 +153,12 @@ bool SearchTextBar::hasTextQueryCompletion() const
     return d->textQueryCompletion;
 }
 
-void SearchTextBar::setHighlightOnCompletion(bool highlight)
+void SearchTextBar::setHighlightOnResult(bool highlight)
 {
-    d->highlightOnCompletion = highlight;
+    d->highlightOnResult = highlight;
 }
 
-void SearchTextBar::setModel(QAbstractItemModel *model, int uniqueIdRole, int displayRole)
+void SearchTextBar::setModel(QPointer<QAbstractItemModel> model, int uniqueIdRole, int displayRole)
 {
 
     kDebug() << "Got now model " << model;
@@ -158,6 +182,28 @@ void SearchTextBar::setModel(QAbstractItemModel *model, int uniqueIdRole, int di
 
         // do an initial sync wit the new model
         sync(d->model);
+    }
+
+}
+
+void SearchTextBar::setFilterModel(QPointer<AlbumFilterModel> filterModel)
+{
+
+    // if there already was a model, disconnect from this model
+    if (d->filterModel)
+    {
+        disconnect(d->filterModel);
+    }
+
+    d->filterModel = filterModel;
+
+    // connect to new model if desired
+    if (d->filterModel)
+    {
+        connect(this, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
+                d->filterModel, SLOT(setSearchTextSettings(const SearchTextSettings&)));
+        connect(d->filterModel, SIGNAL(hasSearchResult(bool)),
+                this, SLOT(slotSearchResult(bool)));
     }
 
 }
@@ -317,11 +363,6 @@ void SearchTextBar::slotTextChanged(const QString& text)
     if (text.isEmpty())
         setPalette(QPalette());
 
-    if (d->highlightOnCompletion)
-    {
-        //slotSearchResult(!completionObject()->allMatches(text).empty());
-    }
-
     d->settings.text = text;
 
     emit signalSearchTextSettings(d->settings);
@@ -330,7 +371,8 @@ void SearchTextBar::slotTextChanged(const QString& text)
 void SearchTextBar::slotSearchResult(bool match)
 {
 
-    if (userText().isEmpty())
+    // only highlight if text is not empty or highlighting is disabled.
+    if (userText().isEmpty() || !d->highlightOnResult)
     {
         setPalette(QPalette());
         return;
@@ -338,8 +380,8 @@ void SearchTextBar::slotSearchResult(bool match)
 
     QPalette pal = palette();
     pal.setColor(QPalette::Active, QPalette::Base,
-                 match ? QColor(200, 255, 200) :
-                 QColor(255, 200, 200));
+                 match ? d->hasResultColor :
+                 d->hasNoResultColor);
     pal.setColor(QPalette::Active, QPalette::Text, Qt::black);
     setPalette(pal);
 

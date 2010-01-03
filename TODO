@@ -9,7 +9,6 @@ post 1.0.0 mvc merge
    should be moved to the sidebar class directly
  * background tag assigning should be moved to some manager from TagModificationHelper
  * think about where to create the tag modification helper for the sidebar in editor and lighttable.
- * connect searchtextbar directly to albumfiltermodel, to avoid indirect communication via treeviews
  * let day selection widget in DateFolderView work on the model directly
  * DEFINITELY clean up the project structure. It's absolutely not obvious which
    file depends on which atm

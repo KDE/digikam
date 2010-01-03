@@ -201,6 +201,7 @@ TagFilterSideBarWidget::TagFilterSideBarWidget(QWidget *parent,
     d->tagFilterView      = new TagFilterView(this, tagFilterModel, tagModificationHelper);
     d->tagFilterSearchBar = new SearchTextBar(this, "DigikamViewTagFilterSearchBar");
     d->tagFilterSearchBar->setModel(tagFilterModel, AbstractAlbumModel::AlbumIdRole);
+    d->tagFilterSearchBar->setFilterModel(d->tagFilterView->albumFilterModel());
 
     d->withoutTagCheckBox = new QCheckBox(i18n("Not Tagged"), this);
 
@@ -211,8 +212,6 @@ TagFilterSideBarWidget::TagFilterSideBarWidget(QWidget *parent,
     layout->addWidget(d->tagFilterSearchBar);
 
     // connection
-    connect(d->tagFilterSearchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
-            d->tagFilterView, SLOT(setSearchTextSettings(const SearchTextSettings&)));
 
     connect(d->tagFilterView, SIGNAL(checkedTagsChanged(const QList<TAlbum*>&)),
             this, SLOT(slotCheckedTagsChanged(const QList<TAlbum*>&)));

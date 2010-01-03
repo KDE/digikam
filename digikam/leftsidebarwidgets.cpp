@@ -85,19 +85,14 @@ AlbumFolderViewSideBarWidget::AlbumFolderViewSideBarWidget(QWidget *parent,
     d->albumFolderView = new AlbumSelectionTreeView(this, model, d->albumModificationHelper);
     d->albumFolderView->setConfigGroup(getConfigGroup());
     d->searchTextBar   = new SearchTextBar(this, "DigikamViewFolderSearchBar");
-    d->searchTextBar->setHighlightOnCompletion(true);
+    d->searchTextBar->setHighlightOnResult(true);
     d->searchTextBar->setModel(model, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
+    d->searchTextBar->setFilterModel(d->albumFolderView->albumFilterModel());
 
     layout->addWidget(d->albumFolderView);
     layout->addWidget(d->searchTextBar);
 
     // setup connection
-    connect(d->searchTextBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
-            d->albumFolderView->albumFilterModel(), SLOT(setSearchTextSettings(const SearchTextSettings&)));
-
-    connect(d->albumFolderView->albumFilterModel(), SIGNAL(hasSearchResult(bool)),
-            d->searchTextBar, SLOT(slotSearchResult(bool)));
-
     connect(d->albumFolderView, SIGNAL(signalFindDuplicatesInAlbum(Album*)),
             this, SIGNAL(signalFindDuplicatesInAlbum(Album*)));
 
@@ -190,16 +185,13 @@ TagViewSideBarWidget::TagViewSideBarWidget(QWidget *parent,
     d->tagFolderView = new TagFolderViewNew(this, model, tagModificationHelper);
     d->tagFolderView->setConfigGroup(getConfigGroup());
     d->tagSearchBar  = new SearchTextBar(this, "DigikamViewTagSearchBar");
-    d->tagSearchBar->setHighlightOnCompletion(true);
+    d->tagSearchBar->setHighlightOnResult(true);
     d->tagSearchBar->setModel(model, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
+    d->tagSearchBar->setFilterModel(d->tagFolderView->albumFilterModel());
 
     layout->addWidget(d->tagFolderView);
     layout->addWidget(d->tagSearchBar);
 
-    connect(d->tagSearchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
-            d->tagFolderView, SLOT(setSearchTextSettings(const SearchTextSettings&)));
-    connect(d->tagFolderView->albumFilterModel(), SIGNAL(hasSearchResult(bool)),
-            d->tagSearchBar, SLOT(slotSearchResult(bool)));
     connect(d->tagFolderView, SIGNAL(signalFindDuplicatesInAlbum(Album*)),
             this, SIGNAL(signalFindDuplicatesInAlbum(Album*)));
 
@@ -504,6 +496,7 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget *parent, SearchModel *searc
     d->searchDateBar->setModel(d->timeLineFolderView->filteredModel(),
                                AbstractAlbumModel::AlbumIdRole,
                                AbstractAlbumModel::AlbumTitleRole);
+    d->searchDateBar->setFilterModel(d->timeLineFolderView->albumFilterModel());
 
     vlay->addWidget(panel);
     vlay->addWidget(d->timeLineFolderView);
@@ -520,12 +513,6 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget *parent, SearchModel *searc
 
     connect(d->timeLineFolderView, SIGNAL(currentAlbumChanged(Album*)),
             this, SLOT(slotAlbumSelected(Album*)));
-
-    connect(d->searchDateBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
-            d->timeLineFolderView, SLOT(setSearchTextSettings(const SearchTextSettings&)));
-
-    connect(d->timeLineFolderView->albumFilterModel(), SIGNAL(hasSearchResult(bool)),
-            d->searchDateBar, SLOT(slotSearchResult(bool)));
 
     connect(d->timeUnitCB, SIGNAL(activated(int)),
             this, SLOT(slotTimeUnitChanged(int)));
@@ -824,16 +811,11 @@ SearchSideBarWidget::SearchSideBarWidget(QWidget *parent,
     d->searchSearchBar  = new SearchTextBar(this, "DigikamViewSearchSearchBar");
     d->searchSearchBar->setModel(d->searchTreeView->filteredModel(),
                                  AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
+    d->searchSearchBar->setFilterModel(d->searchTreeView->albumFilterModel());
 
     layout->addWidget(d->searchTabHeader);
     layout->addWidget(d->searchTreeView);
     layout->addWidget(d->searchSearchBar);
-
-    connect(d->searchSearchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
-            d->searchTreeView, SLOT(setSearchTextSettings(const SearchTextSettings&)));
-
-    connect(d->searchTreeView->albumFilterModel(), SIGNAL(hasSearchResult(bool)),
-            d->searchSearchBar, SLOT(slotSearchResult(bool)));
 
     connect(d->searchTreeView, SIGNAL(newSearch()),
             d->searchTabHeader, SLOT(newAdvancedSearch()));

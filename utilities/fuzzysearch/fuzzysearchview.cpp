@@ -231,6 +231,7 @@ FuzzySearchView::FuzzySearchView(SearchModel *searchModel,
     d->searchFuzzyBar        = new SearchTextBar(d->folderView, "FuzzySearchViewSearchFuzzyBar");
     d->searchFuzzyBar->setModel(d->searchTreeView->filteredModel(),
                                 AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
+    d->searchFuzzyBar->setFilterModel(d->searchTreeView->albumFilterModel());
     d->folderView->setSpacing(KDialog::spacingHint());
     d->folderView->setMargin(0);
 
@@ -450,12 +451,6 @@ void FuzzySearchView::setupConnections()
 
     connect(d->searchTreeView, SIGNAL(currentAlbumChanged(Album*)),
             this, SLOT(slotAlbumSelected(Album*)));
-
-    connect(d->searchFuzzyBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
-            d->searchTreeView, SLOT(setSearchTextSettings(const SearchTextSettings&)));
-
-    connect(d->searchTreeView->albumFilterModel(), SIGNAL(hasSearchResult(bool)),
-            d->searchFuzzyBar, SLOT(slotSearchResult(bool)));
 
     connect(d->hsSelector, SIGNAL(valueChanged(int, int)),
             this, SLOT(slotHSChanged(int, int)));

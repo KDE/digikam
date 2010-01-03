@@ -192,6 +192,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, TagModificationHelper *tagMo
 
     d->tagsSearchBar   = new SearchTextBar(tagsSearch, "ImageDescEditTabTagsSearchBar");
     d->tagsSearchBar->setModel(d->tagModel, AbstractAlbumModel::AlbumIdRole);
+    d->tagsSearchBar->setFilterModel(d->tagCheckView->albumFilterModel());
 
     d->assignedTagsBtn = new QToolButton(tagsSearch);
     d->assignedTagsBtn->setToolTip( i18n("Tags already assigned"));
@@ -285,10 +286,6 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, TagModificationHelper *tagMo
 
     connect(d->tagsSearchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
             this, SLOT(slotTagsSearchChanged(const SearchTextSettings&)));
-    connect(d->tagsSearchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
-            d->tagCheckView, SLOT(setSearchTextSettings(const SearchTextSettings&)));
-    connect(d->tagCheckView->albumFilterModel(), SIGNAL(hasSearchResult(bool)),
-            d->tagsSearchBar, SLOT(slotSearchResult(bool)));
 
     connect(d->assignedTagsBtn, SIGNAL(toggled(bool)),
             this, SLOT(slotAssignedTagsToggled(bool)));
