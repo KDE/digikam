@@ -828,7 +828,7 @@ void QueueListView::updateDestFileNames()
             // Update suffix using assigned batch tool rules.
             tools.itemUrl     = item->info().fileUrl();
             QString newSuffix = tools.targetSuffix();
-            QString newName   = QString("%1.%2").arg(fi.baseName()).arg(newSuffix);
+            QString newName   = QString("%1.%2").arg(fi.completeBaseName()).arg(newSuffix);
 
             if (settings().renamingRule == QueueSettings::CUSTOMIZE)
             {
