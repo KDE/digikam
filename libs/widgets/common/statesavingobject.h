@@ -164,23 +164,23 @@ public:
     void loadState();
 
     /**
+     * Invokes saving the class' state.
+     */
+    void saveState();
+
+protected:
+
+    /**
      * Implement this hook method for state loading. Use getConfigGroup() and
      * entryName() for the implementation.
      */
     virtual void doLoadState() = 0;
 
     /**
-     * Invokes saving the class' state.
-     */
-    void saveState();
-
-    /**
      * Implement this hook method for state saving. Use getConfigGroup() and
      * entryName() for the implementation.
      */
     virtual void doSaveState() = 0;
-
-protected:
 
     /**
      * Returns the config group that must be used for state saving and loading.
