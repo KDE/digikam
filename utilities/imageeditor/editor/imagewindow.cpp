@@ -208,8 +208,8 @@ ImageWindow::ImageWindow()
     // -- Build the GUI -------------------------------
 
     setupUserArea();
-    setupStatusBar();
     setupActions();
+    setupStatusBar();
 
     // Load image plugins to GUI
 
