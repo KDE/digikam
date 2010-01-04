@@ -39,4 +39,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 030 ==> 219430 : "Move to Trash"/"Move %1 Files to Trash" messages are not compatible with Russian plural forms.
 031 ==> 221159 : Batch queue manager generates duplicate target names if dots (.) are used in the file name
 032 ==> 160438 : Wish: Easy way to transform an image from one colorspace and bit-depth to another, like Krita's "Convert Image Type".
-033 ==> 
+033 ==> 211643 : Exposure indicators not working while raw import.
+034 ==> 
