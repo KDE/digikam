@@ -364,9 +364,6 @@ void RawPreview::paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh)
 
     if (d->expoSettings)
     {
-  
-qDebug() << "over expo indic: " << d->expoSettings->overExposureIndicator;
-
         if (d->expoSettings->underExposureIndicator || d->expoSettings->overExposureIndicator)
         {
             QImage pureColorMask = img.pureColorMask(d->expoSettings);
