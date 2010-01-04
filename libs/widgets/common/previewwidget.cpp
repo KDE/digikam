@@ -118,9 +118,14 @@ PreviewWidget::~PreviewWidget()
     delete d;
 }
 
-void PreviewWidget::slotReset()
+void PreviewWidget::clearCache()
 {
     d->tileCache.clear();
+}
+
+void PreviewWidget::slotReset()
+{
+    clearCache();
     resetPreview();
 }
 
@@ -406,7 +411,7 @@ void PreviewWidget::updateContentsSize()
         d->pixmapRect = QRect(0, 0, d->zoomWidth, d->zoomHeight);
     }
 
-    d->tileCache.clear();
+    clearCache();
     setContentsSize();
     viewport()->setUpdatesEnabled(true);
 }
