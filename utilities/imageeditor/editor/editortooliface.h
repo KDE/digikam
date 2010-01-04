@@ -37,6 +37,8 @@ namespace Digikam
 
 class EditorTool;
 class EditorWindow;
+class ExposureSettingsContainer;
+class ICCSettingsContainer;
 class EditorToolIfacePriv;
 
 class DIGIKAM_EXPORT EditorToolIface : public QObject
@@ -60,6 +62,9 @@ public:
     void setToolStopProgress();
 
     void setupICC();
+
+    void setExposureSettings(ExposureSettingsContainer* expoSettings);
+    void setICCSettings(ICCSettingsContainer* cmSettings);
 
 public Q_SLOTS:
 

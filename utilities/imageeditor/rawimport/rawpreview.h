@@ -6,7 +6,7 @@
  * Date        : 2008-08-04
  * Description : RAW preview widget.
  *
- * Copyright (C) 2008 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2010 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -46,6 +46,8 @@ namespace Digikam
 {
 
 class LoadingDescription;
+class ExposureSettingsContainer;
+class ICCSettingsContainer;
 class RawPreviewPriv;
 
 class DIGIKAM_EXPORT RawPreview : public PreviewWidget
@@ -63,6 +65,8 @@ public:
 
     void setDecodingSettings(const DRawDecoding& settings);
     void setPostProcessedImage(const DImg& image);
+    void setExposureSettings(ExposureSettingsContainer* expoSettings);
+    void setICCSettings(ICCSettingsContainer* cmSettings);
 
     void cancelLoading();
 

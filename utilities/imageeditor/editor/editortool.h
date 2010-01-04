@@ -33,10 +33,13 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "exposurecontainer.h"
 
 namespace Digikam
 {
 
+class ICCSettingsContainer;
+class ExposureSettingsContainer;
 class DImgThreadedFilter;
 class EditorToolSettings;
 class EditorToolPriv;
@@ -57,6 +60,9 @@ public:
     QPixmap             toolIcon() const;
     QWidget*            toolView() const;
     EditorToolSettings* toolSettings() const;
+
+    virtual void        setICCSettings(ICCSettingsContainer*){};
+    virtual void        setExposureSettings(ExposureSettingsContainer*){};
 
 public Q_SLOTS:
 

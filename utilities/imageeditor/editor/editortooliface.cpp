@@ -148,4 +148,18 @@ void EditorToolIface::setupICC()
     d->editor->setupICC();
 }
 
+void EditorToolIface::setICCSettings(ICCSettingsContainer *cmSettings)
+{
+    d->editor->editorStackView()->canvas()->setICCSettings(cmSettings);
+    EditorTool *tool = dynamic_cast<EditorTool*>(d->tool);
+    if (tool) tool->setICCSettings(cmSettings);
+}
+
+void EditorToolIface::setExposureSettings(ExposureSettingsContainer* expoSettings)
+{
+    d->editor->editorStackView()->canvas()->setExposureSettings(expoSettings);
+    EditorTool *tool = dynamic_cast<EditorTool*>(d->tool);
+    if (tool) tool->setExposureSettings(expoSettings);
+}
+
 }  // namespace Digikam

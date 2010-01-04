@@ -80,6 +80,7 @@ void RawPostProcessing::rawPostProcessing()
 
     if (m_customRawSettings.exposureComp != 0.0 || m_customRawSettings.saturation != 1.0)
     {
+qDebug() << "WB adjustements";        
         WhiteBalance wb(m_orgImage.sixteenBit());
         wb.whiteBalance(m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(), m_orgImage.sixteenBit(),
                         0.0,                                // black
@@ -94,6 +95,7 @@ void RawPostProcessing::rawPostProcessing()
 
     if (m_customRawSettings.lightness != 0.0 || m_customRawSettings.contrast != 1.0 || m_customRawSettings.gamma != 1.0)
     {
+qDebug() << "BCG adjustements";        
         BCGModifier bcg;
         bcg.setBrightness(m_customRawSettings.lightness);
         bcg.setContrast(m_customRawSettings.contrast);
@@ -102,8 +104,9 @@ void RawPostProcessing::rawPostProcessing()
     }
     postProgress(45);
 
-    if (!m_customRawSettings.curveAdjust.isEmpty())
+/*    if (!m_customRawSettings.curveAdjust.isEmpty())
     {
+qDebug() << "Curves adjustements";        
         DImg tmp(m_orgImage.width(), m_orgImage.height(), m_orgImage.sixteenBit());
         ImageCurves curves(m_orgImage.sixteenBit());
         curves.setCurvePoints(LuminosityChannel, m_customRawSettings.curveAdjust);
@@ -111,11 +114,12 @@ void RawPostProcessing::rawPostProcessing()
         curves.curvesLutSetup(AlphaChannel);
         curves.curvesLutProcess(m_orgImage.bits(), tmp.bits(), m_orgImage.width(), m_orgImage.height());
         memcpy(m_orgImage.bits(), tmp.bits(), tmp.numBytes());
-    }
+    }*/
     postProgress(60);
 
     if (!m_customRawSettings.levelsAdjust.isEmpty())
     {
+qDebug() << "Levels adjustements";        
         DImg tmp(m_orgImage.width(), m_orgImage.height(), m_orgImage.sixteenBit());
         ImageLevels levels(m_orgImage.sixteenBit());
         int j=0;

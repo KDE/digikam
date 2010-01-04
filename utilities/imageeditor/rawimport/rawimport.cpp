@@ -207,13 +207,23 @@ void RawImport::slotOk()
     // NOTE: work around B.K.O #211810
     if (d->settingsBox->curvesWidget()->isSixteenBits() != d->settingsBox->settings().sixteenBitsImage)
         d->settingsBox->curvesWidget()->updateData(0, 0, 0, d->settingsBox->settings().sixteenBitsImage);
-      
+
     EditorTool::slotOk();
 }
 
 void RawImport::slotCancel()
 {
     EditorTool::slotCancel();
+}
+
+void RawImport::setExposureSettings(ExposureSettingsContainer* settings)
+{
+    d->previewWidget->setExposureSettings(settings);
+}
+
+void RawImport::setICCSettings(ICCSettingsContainer* cmSettings)
+{
+    d->previewWidget->setICCSettings(cmSettings);
 }
 
 } // namespace Digikam

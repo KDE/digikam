@@ -6,7 +6,7 @@
  * Date        : 2008-08-04
  * Description : RAW postProcessedImg widget.
  *
- * Copyright (C) 2008 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2010 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -34,6 +34,7 @@
 
 // KDE includes
 
+#include <kdebug.h>
 #include <kcursor.h>
 #include <kdatetable.h>
 #include <kiconloader.h>
@@ -44,6 +45,10 @@
 #include "paniconwidget.h"
 #include "managedloadsavethread.h"
 #include "loadingdescription.h"
+#include "exposurecontainer.h"
+#include "iccmanager.h"
+#include "iccsettingscontainer.h"
+#include "icctransform.h"
 #include "themeengine.h"
 
 namespace Digikam
@@ -61,21 +66,25 @@ public:
         thread               = 0;
         url                  = 0;
         currentFitWindowZoom = 0;
+        cmSettings           = 0;
+        expoSettings         = 0;
     }
 
-    double                 currentFitWindowZoom;
+    double                     currentFitWindowZoom;
 
-    QToolButton*           cornerButton;
+    QToolButton*               cornerButton;
 
-    KPopupFrame*           panIconPopup;
-    KUrl                   url;
+    KPopupFrame*               panIconPopup;
+    KUrl                       url;
 
-    PanIconWidget*         panIconWidget;
-    DImg                   demosaicedImg;
-    DImg                   postProcessedImg;
-    DRawDecoding           settings;
-    ManagedLoadSaveThread* thread;
-    LoadingDescription     loadingDesc;
+    PanIconWidget*             panIconWidget;
+    DImg                       demosaicedImg;
+    DImg                       postProcessedImg;
+    DRawDecoding               settings;
+    ManagedLoadSaveThread*     thread;
+    LoadingDescription         loadingDesc;
+    ICCSettingsContainer*      cmSettings;
+    ExposureSettingsContainer* expoSettings;
 };
 
 RawPreview::RawPreview(const KUrl& url, QWidget *parent)
@@ -146,6 +155,20 @@ void RawPreview::setDecodingSettings(const DRawDecoding& settings)
     d->loadingDesc = LoadingDescription(d->url.toLocalFile(), demosaisedSettings);
     d->thread->load(d->loadingDesc, ManagedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
     emit signalLoadingStarted();
+}
+
+void RawPreview::setExposureSettings(ExposureSettingsContainer* expoSettings)
+{
+    d->expoSettings = expoSettings;
+    viewport()->setUpdatesEnabled(true);
+    viewport()->update();
+}
+
+void RawPreview::setICCSettings(ICCSettingsContainer* cmSettings)
+{
+    d->cmSettings = cmSettings;
+    viewport()->setUpdatesEnabled(true);
+    viewport()->update();
 }
 
 void RawPreview::cancelLoading()
@@ -319,10 +342,39 @@ void RawPreview::resetPreview()
 
 void RawPreview::paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh)
 {
-    DImg img     = d->postProcessedImg.smoothScaleSection(sx, sy, sw, sh, tileSize(), tileSize());
-    QPixmap pix2 = img.convertToPixmap();
+    DImg img = d->postProcessedImg.smoothScaleSection(sx, sy, sw, sh, tileSize(), tileSize());
+
+    QPixmap pixImage;
+
+    if (d->cmSettings && d->cmSettings->enableCM && d->cmSettings->useManagedView)
+    {
+        IccManager manager(img);
+        IccTransform monitorICCtrans = manager.displayTransform();
+        pixImage = img.convertToPixmap(monitorICCtrans);
+    }
+    else
+    {
+        pixImage = img.convertToPixmap();
+    }
+
     QPainter p(pix);
-    p.drawPixmap(0, 0, pix2);
+    p.drawPixmap(0, 0, pixImage);
+
+    // Show the Over/Under exposure pixels indicators
+
+    if (d->expoSettings)
+    {
+  
+qDebug() << "over expo indic: " << d->expoSettings->overExposureIndicator;
+
+        if (d->expoSettings->underExposureIndicator || d->expoSettings->overExposureIndicator)
+        {
+            QImage pureColorMask = img.pureColorMask(d->expoSettings);
+            QPixmap pixMask      = QPixmap::fromImage(pureColorMask);
+            p.drawPixmap(0, 0, pixMask);
+        }
+    }
+
     p.end();
 }
 

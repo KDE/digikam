@@ -2116,7 +2116,7 @@ void EditorWindow::slotUpdateSoftProofingState()
 void EditorWindow::slotSetUnderExposureIndicator(bool on)
 {
     d->exposureSettings->underExposureIndicator = on;
-    m_canvas->setExposureSettings(d->exposureSettings);
+    d->toolIface->setExposureSettings(d->exposureSettings);
 
     d->underExposureIndicator->setEnabled(on);
     d->viewUnderExpoAction->setChecked(on);
@@ -2133,7 +2133,7 @@ void EditorWindow::setUnderExposureToolTip(bool on)
 void EditorWindow::slotSetOverExposureIndicator(bool on)
 {
     d->exposureSettings->overExposureIndicator = on;
-    m_canvas->setExposureSettings(d->exposureSettings);
+    d->toolIface->setExposureSettings(d->exposureSettings);
 
     d->overExposureIndicator->setEnabled(on);
     d->viewOverExpoAction->setChecked(on);
