@@ -160,14 +160,14 @@ void RawPreview::setDecodingSettings(const DRawDecoding& settings)
 void RawPreview::setExposureSettings(ExposureSettingsContainer* expoSettings)
 {
     d->expoSettings = expoSettings;
-    viewport()->setUpdatesEnabled(true);
+    clearCache();
     viewport()->update();
 }
 
 void RawPreview::setICCSettings(ICCSettingsContainer* cmSettings)
 {
     d->cmSettings = cmSettings;
-    viewport()->setUpdatesEnabled(true);
+    clearCache();
     viewport()->update();
 }
 
@@ -350,7 +350,7 @@ void RawPreview::paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh)
     {
         IccManager manager(img);
         IccTransform monitorICCtrans = manager.displayTransform();
-        pixImage = img.convertToPixmap(monitorICCtrans);
+        pixImage                     = img.convertToPixmap(monitorICCtrans);
     }
     else
     {
