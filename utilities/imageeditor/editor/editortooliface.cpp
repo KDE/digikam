@@ -6,7 +6,7 @@
  * Date        : 2008-08-20
  * Description : Image editor interface used by editor tools.
  *
- * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -95,6 +95,9 @@ void EditorToolIface::loadTool(EditorTool* tool)
     // If editor tool has zoomable preview, switch on zoom actions.
     if (d->editor->editorStackView()->previewWidget())
         d->editor->toggleZoomActions(true);
+
+    updateExposureSettings();
+    updateICCSettings();
 }
 
 void EditorToolIface::unLoadTool()
@@ -148,15 +151,17 @@ void EditorToolIface::setupICC()
     d->editor->setupICC();
 }
 
-void EditorToolIface::setICCSettings(ICCSettingsContainer *cmSettings)
+void EditorToolIface::updateICCSettings()
 {
+    ICCSettingsContainer* cmSettings = d->editor->cmSettings();
     d->editor->editorStackView()->canvas()->setICCSettings(cmSettings);
     EditorTool *tool = dynamic_cast<EditorTool*>(d->tool);
     if (tool) tool->setICCSettings(cmSettings);
 }
 
-void EditorToolIface::setExposureSettings(ExposureSettingsContainer* expoSettings)
+void EditorToolIface::updateExposureSettings()
 {
+    ExposureSettingsContainer* expoSettings = d->editor->exposureSettings();
     d->editor->editorStackView()->canvas()->setExposureSettings(expoSettings);
     EditorTool *tool = dynamic_cast<EditorTool*>(d->tool);
     if (tool) tool->setExposureSettings(expoSettings);

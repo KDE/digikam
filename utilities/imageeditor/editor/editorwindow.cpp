@@ -196,6 +196,16 @@ EditorStackView* EditorWindow::editorStackView() const
     return m_stackView;
 }
 
+ExposureSettingsContainer* EditorWindow::exposureSettings() const
+{
+    return d->exposureSettings;
+}
+
+ICCSettingsContainer* EditorWindow::cmSettings() const
+{
+    return d->ICCSettings;
+}
+
 void EditorWindow::setupContextMenu()
 {
     m_contextMenu         = new DPopupMenu(this);
@@ -2057,7 +2067,7 @@ void EditorWindow::slotColorManagementOptionsChanged()
                                        !d->ICCSettings->defaultProofProfile.isEmpty());
     d->softProofOptionsAction->setEnabled(d->ICCSettings->enableCM);
 
-    m_canvas->setICCSettings(d->ICCSettings);
+    d->toolIface->updateICCSettings();
     d->viewCMViewAction->blockSignals(false);
 }
 
@@ -2069,8 +2079,7 @@ void EditorWindow::slotToggleColorManagedView()
     {
         cmv = !d->ICCSettings->useManagedView;
         d->ICCSettings->useManagedView = cmv;
-        m_canvas->setICCSettings(d->ICCSettings);
-
+        d->toolIface->updateICCSettings();
         IccSettings::instance()->setUseManagedView(cmv);
     }
 
@@ -2116,8 +2125,7 @@ void EditorWindow::slotUpdateSoftProofingState()
 void EditorWindow::slotSetUnderExposureIndicator(bool on)
 {
     d->exposureSettings->underExposureIndicator = on;
-    d->toolIface->setExposureSettings(d->exposureSettings);
-
+    d->toolIface->updateExposureSettings();
     d->underExposureIndicator->setEnabled(on);
     d->viewUnderExpoAction->setChecked(on);
     setUnderExposureToolTip(on);
@@ -2133,8 +2141,7 @@ void EditorWindow::setUnderExposureToolTip(bool on)
 void EditorWindow::slotSetOverExposureIndicator(bool on)
 {
     d->exposureSettings->overExposureIndicator = on;
-    d->toolIface->setExposureSettings(d->exposureSettings);
-
+    d->toolIface->updateExposureSettings();
     d->overExposureIndicator->setEnabled(on);
     d->viewOverExpoAction->setChecked(on);
     setOverExposureToolTip(on);
