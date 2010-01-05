@@ -715,7 +715,7 @@ void DImgInterface::paintOnDevice(QPaintDevice* p,
     if (d->expoSettings->underExposureIndicator || d->expoSettings->overExposureIndicator)
     {
         QImage pureColorMask = img.pureColorMask(d->expoSettings);
-        QPixmap pixMask      = QPixmap::fromImage(pureColorMask.scaled(dw, dh));
+        QPixmap pixMask      = QPixmap::fromImage(pureColorMask);
         painter.drawPixmap(dx, dy, pixMask, 0, 0, pixMask.width(), pixMask.height());
     }
 
@@ -777,7 +777,7 @@ void DImgInterface::paintOnDevice(QPaintDevice* p,
     if (d->expoSettings->underExposureIndicator || d->expoSettings->overExposureIndicator)
     {
         QImage pureColorMask = img.pureColorMask(d->expoSettings);
-        QPixmap pixMask      = QPixmap::fromImage(pureColorMask.scaled(dw, dh));
+        QPixmap pixMask      = QPixmap::fromImage(pureColorMask);
         painter.drawPixmap(dx, dy, pixMask, 0, 0, pixMask.width(), pixMask.height());
     }
 
