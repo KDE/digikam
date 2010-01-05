@@ -41,6 +41,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 032 ==> 160438 : Wish: Easy way to transform an image from one colorspace and bit-depth to another, like Krita's "Convert Image Type".
 033 ==> 211643 : Exposure indicators not working while raw import.
 034 ==> 221397 : Batch processing auto levels.
-035 ==> 
+035 ==> 211238 : Scrolling (shift + mousewheel) through pictures in editor caused crash
+036 ==> 
 
 

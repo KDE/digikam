@@ -652,7 +652,7 @@ void ImageWindow::slotBackward()
     {
         --index;
 
-        if (index != d->urlList.size())
+        if (index >= 0)
         {
            if (!d->imageInfoList.isEmpty())
                d->imageInfoCurrent = d->imageInfoList[index];
