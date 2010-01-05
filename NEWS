@@ -43,5 +43,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 034 ==> 221397 : Batch processing auto levels.
 035 ==> 211238 : Scrolling (shift + mousewheel) through pictures in editor caused crash
 036 ==> 220444 : Auto lens correction does not recognize a listed camera and lens using exif data.
-037 ==> 
+037 ==> 220559 : crash after select and unselect an item in batch window [QTreeWidgetItem::setIcon, Digikam::AssignedListViewItem::setDone, Digikam::QueueMgrWindow::slotAction]
+038 ==> 
 

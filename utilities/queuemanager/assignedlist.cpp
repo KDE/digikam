@@ -241,6 +241,7 @@ void AssignedListView::slotRemoveCurrentTool()
 void AssignedListView::slotClearToolsList()
 {
     clear();
+    emit signalAssignedToolsChanged(assignedList());
     emit signalToolSelected(BatchToolSet());
 }
 
