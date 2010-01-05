@@ -72,6 +72,8 @@ namespace Digikam
 
         QLabel *databaseTypeLabel        = new QLabel(i18n("Type"));
         databaseType                  = new QComboBox();
+        QLabel *internalServerLabel        = new QLabel(i18n("Interner Server"));
+        internalServer        = new QCheckBox();
         QLabel *databaseNameLabel        = new QLabel(i18n("Schema Name"));
         databaseName                  = new QLineEdit();
         QLabel *databaseNameThumbnailsLabel = new QLabel(i18n("Thumbnails Schema Name"));
@@ -105,6 +107,7 @@ namespace Digikam
         vlay->addWidget(databasePathLabel);
         vlay->addWidget(databasePathEdit);
 
+        expertSettinglayout->addRow(internalServerLabel, internalServer);
         expertSettinglayout->addRow(hostNameLabel, hostName);
         expertSettinglayout->addRow(hostPortLabel, hostPort);
         expertSettinglayout->addRow(databaseNameLabel, databaseName);
@@ -144,6 +147,8 @@ namespace Digikam
                 this, SLOT(slotDatabasePathEdited(const QString&)));
 
         connect(databaseType, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(setDatabaseInputFields(const QString&)));
+
+        connect(internalServer, SIGNAL(stateChanged(int)), this, SLOT(slotHandleInternalServerCheckbox(int)));
 
         connect(checkDatabaseConnectionButton, SIGNAL(clicked()), this, SLOT(checkDatabaseConnection()));
 
@@ -197,6 +202,17 @@ namespace Digikam
         adjustSize();
     }
 
+    void DatabaseWidget::slotHandleInternalServerCheckbox(int enableFields)
+    {
+        hostName->setEnabled(enableFields==Qt::Unchecked);
+        hostPort->setEnabled(enableFields==Qt::Unchecked);
+        databaseName->setEnabled(enableFields==Qt::Unchecked);
+        databaseNameThumbnails->setEnabled(enableFields==Qt::Unchecked);
+        userName->setEnabled(enableFields==Qt::Unchecked);
+        password->setEnabled(enableFields==Qt::Unchecked);
+        connectionOptions->setEnabled(enableFields==Qt::Unchecked);
+    }
+
     void DatabaseWidget::checkDatabaseConnection(){
         QString databaseID("ConnectionTest");
         QSqlDatabase testDatabase = QSqlDatabase::addDatabase(databaseType->currentText(), databaseID);
@@ -238,6 +254,7 @@ namespace Digikam
         originalDbType = settings->getDatabaseType();
         databasePathEdit->setUrl(settings->getDatabaseFilePath());
 
+        internalServer->setChecked(settings->getInternalDatabaseServer());
         databaseName->setText(settings->getDatabaseName());
         hostName->setText(settings->getDatabaseHostName());
         hostPort->setValue(settings->getDatabasePort());

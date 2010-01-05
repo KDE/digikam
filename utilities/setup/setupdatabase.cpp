@@ -117,6 +117,7 @@ void SetupDatabase::applySettings()
             settings->setDatabaseNameThumbnails(newPath);
 
             // clear other fields
+            d->databaseWidget->internalServer->setChecked(false);
             settings->setDatabaseConnectoptions("");
             settings->setDatabaseHostName("");
             settings->setDatabasePort(-1);
@@ -126,6 +127,7 @@ void SetupDatabase::applySettings()
             settings->saveSettings();
         }
     }else{
+        settings->setInternalDatabaseServer(d->databaseWidget->internalServer->isChecked());
         settings->setDatabaseType(d->databaseWidget->databaseType->currentText());
         settings->setDatabaseName(d->databaseWidget->databaseName->text());
         settings->setDatabaseNameThumbnails(d->databaseWidget->databaseNameThumbnails->text());
@@ -147,6 +149,7 @@ void SetupDatabase::readSettings()
     d->databaseWidget->originalDbType = settings->getDatabaseType();
     d->databaseWidget->databasePathEdit->setUrl(settings->getDatabaseFilePath());
 
+    d->databaseWidget->internalServer->setChecked(settings->getInternalDatabaseServer());
     d->databaseWidget->databaseName->setText(settings->getDatabaseName());
     d->databaseWidget->databaseNameThumbnails->setText(settings->getDatabaseNameThumbnails());
     d->databaseWidget->hostName->setText(settings->getDatabaseHostName());

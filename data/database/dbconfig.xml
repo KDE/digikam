@@ -619,6 +619,17 @@
 			    WHERE node.lft BETWEEN parent.lft AND parent.rgt
 			    AND node.id = NEW.id
 			    ORDER BY parent.lft;
+			    			    
+				SELECT @myLeft := lft, @myRight := rgt, @myWidth := rgt - lft + 1
+				FROM nested_category
+				WHERE name = 'GAME CONSOLES';
+				
+				
+				DELETE FROM nested_category WHERE lft BETWEEN @myLeft AND @myRight;
+				
+				
+				UPDATE nested_category SET rgt = rgt - @myWidth WHERE rgt > @myRight;
+				UPDATE nested_category SET lft = lft - @myWidth WHERE lft > @myRight;
 			  END;
 			  </statement>
 			</dbaction>

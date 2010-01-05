@@ -30,6 +30,7 @@
 #include <qcombobox.h>
 #include <qlineedit.h>
 #include <qspinbox.h>
+#include <qcheckbox.h>
 #include <qgroupbox.h>
 
 // KDE includes
@@ -59,6 +60,7 @@ public:
     QString                  originalDbType;
     QLabel                  *databasePathLabel;
     QComboBox               *databaseType;
+    QCheckBox               *internalServer;
     QLineEdit               *databaseName;
     QLineEdit               *databaseNameThumbnails;
     QLineEdit               *hostName;
@@ -79,6 +81,7 @@ public Q_SLOTS:
     void slotChangeDatabasePath(const KUrl&);
     void slotDatabasePathEdited(const QString&);
     void setDatabaseInputFields(const QString&);
+    void slotHandleInternalServerCheckbox(int enableFields);
     void checkDatabaseConnection();
 
 private:
