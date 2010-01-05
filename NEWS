@@ -40,6 +40,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 031 ==> 221159 : Batch queue manager generates duplicate target names if dots (.) are used in the file name
 032 ==> 160438 : Wish: Easy way to transform an image from one colorspace and bit-depth to another, like Krita's "Convert Image Type".
 033 ==> 211643 : Exposure indicators not working while raw import.
-034 ==> 221345 : Option to turn off search autostart.
+034 ==> 221397 : Batch processing auto levels.
 035 ==> 
+
 
