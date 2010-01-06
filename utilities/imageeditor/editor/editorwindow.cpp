@@ -886,6 +886,9 @@ void EditorWindow::readStandardSettings()
     bool autoZoom = group.readEntry("AutoZoom", true);
     if (autoZoom)
         d->zoomFitToWindowAction->activate(QAction::Trigger);
+
+    slotSetUnderExposureIndicator(group.readEntry("UnderExposureIndicator", false));
+    slotSetOverExposureIndicator(group.readEntry("OverExposureIndicator", false));
 }
 
 void EditorWindow::applyStandardSettings()
@@ -1020,8 +1023,6 @@ void EditorWindow::applyStandardSettings()
 
     // -- Exposure Indicators Settings ---------------------------------------
 
-    slotSetUnderExposureIndicator(group.readEntry("UnderExposureIndicator", false));
-    slotSetOverExposureIndicator(group.readEntry("OverExposureIndicator", false));
     d->exposureSettings->underExposureColor = group.readEntry("UnderExposureColor", QColor(Qt::white));
     d->exposureSettings->overExposureColor  = group.readEntry("OverExposureColor", QColor(Qt::black));
 }
