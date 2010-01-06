@@ -45,5 +45,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 036 ==> 220444 : Auto lens correction does not recognize a listed camera and lens using exif data.
 037 ==> 220559 : Crash after select and unselect an item in batch window [QTreeWidgetItem::setIcon, Digikam::AssignedListViewItem::setDone, Digikam::QueueMgrWindow::slotAction]
 038 ==> 221065 : Many Icons Don't Show Up in digikam Under Mac OS X (10.6.2).
-039 ==> 
+039 ==> 221188 : When system is set to Czech locale, there is "Aspect Ratio Crop" missing in transform menu.
+040 ==> 
 
