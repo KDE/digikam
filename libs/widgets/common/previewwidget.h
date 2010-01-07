@@ -105,6 +105,7 @@ protected:
     int    tileSize();
     void   updateAutoZoom(AutoZoomMode mode = ZoomInOrOut);
     void   updateContentsSize();
+    void   clearCache();
     QRect  previewRect();
 
     virtual void setContentsSize();

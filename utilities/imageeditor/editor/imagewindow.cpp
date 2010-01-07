@@ -215,8 +215,8 @@ ImageWindow::ImageWindow()
     // -- Build the GUI -------------------------------
 
     setupUserArea();
-    setupStatusBar();
     setupActions();
+    setupStatusBar();
 
     // Load image plugins to GUI
 
@@ -659,7 +659,7 @@ void ImageWindow::slotBackward()
     {
         --index;
 
-        if (index != d->urlList.size())
+        if (index >= 0)
         {
            if (!d->imageInfoList.isEmpty())
                d->imageInfoCurrent = d->imageInfoList[index];

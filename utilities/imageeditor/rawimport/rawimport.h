@@ -59,6 +59,8 @@ private:
     void setBusy(bool busy);
     void prepareEffect();
     void putPreviewData();
+    void setExposureSettings(ExposureSettingsContainer*);
+    void setICCSettings(ICCSettingsContainer*);
 
 private Q_SLOTS:
 

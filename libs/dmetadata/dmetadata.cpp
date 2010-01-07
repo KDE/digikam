@@ -575,6 +575,11 @@ bool DMetadata::getImageTagsPath(QStringList& tagsPath) const
 
     // Try to get Tags Path list from XMP in first.
     tagsPath = getXmpTagStringBag("Xmp.lr.hierarchicalSubject", false);
+
+    // See B.K.O #221460: there is another LR tag for hierarchical subjects.
+    if (tagsPath.isEmpty())
+        tagsPath = getXmpTagStringSeq("Xmp.lr.HierarchicalSubject", false);
+
     if (!tagsPath.isEmpty())
     {
         // See B.K.O #197285: LightRoom use '|' as separator.

@@ -196,6 +196,16 @@ EditorStackView* EditorWindow::editorStackView() const
     return m_stackView;
 }
 
+ExposureSettingsContainer* EditorWindow::exposureSettings() const
+{
+    return d->exposureSettings;
+}
+
+ICCSettingsContainer* EditorWindow::cmSettings() const
+{
+    return d->ICCSettings;
+}
+
 void EditorWindow::setupContextMenu()
 {
     m_contextMenu         = new DPopupMenu(this);
@@ -339,7 +349,7 @@ void EditorWindow::setupStandardActions()
     connect(d->filePrintAction, SIGNAL(triggered()), this, SLOT(slotFilePrint()));
     actionCollection()->addAction("editorwindow_print", d->filePrintAction);
 
-    m_fileDeleteAction = new KAction(KIcon("user-trash"), i18n("Move to Trash"), this);
+    m_fileDeleteAction = new KAction(KIcon("user-trash"), i18nc("Non-pluralized", "Move to Trash"), this);
     m_fileDeleteAction->setShortcut(KShortcut(Qt::Key_Delete));
     connect(m_fileDeleteAction, SIGNAL(triggered()), this, SLOT(slotDeleteCurrentItem()));
     actionCollection()->addAction("editorwindow_delete", m_fileDeleteAction);
@@ -613,31 +623,19 @@ void EditorWindow::setupStatusBar()
 
     QSize iconSize(fontMetrics().height()+2, fontMetrics().height()+2);
     d->underExposureIndicator = new QToolButton(statusBar());
-    d->underExposureIndicator->setIcon( SmallIcon("underexposure"));
-    d->underExposureIndicator->setCheckable(true);
+    d->underExposureIndicator->setDefaultAction(d->viewUnderExpoAction);
     d->underExposureIndicator->setMaximumSize(iconSize);
     statusBar()->addPermanentWidget(d->underExposureIndicator);
 
     d->overExposureIndicator = new QToolButton(statusBar());
-    d->overExposureIndicator->setIcon(SmallIcon("overexposure"));
-    d->overExposureIndicator->setCheckable(true);
+    d->overExposureIndicator->setDefaultAction(d->viewOverExpoAction);
     d->overExposureIndicator->setMaximumSize(iconSize);
     statusBar()->addPermanentWidget(d->overExposureIndicator);
 
     d->cmViewIndicator = new QToolButton(statusBar());
-    d->cmViewIndicator->setIcon(SmallIcon("video-display"));
-    d->cmViewIndicator->setCheckable(true);
+    d->cmViewIndicator->setDefaultAction(d->viewCMViewAction);
     d->cmViewIndicator->setMaximumSize(iconSize);
     statusBar()->addPermanentWidget(d->cmViewIndicator);
-
-    connect(d->underExposureIndicator, SIGNAL(clicked(bool)),
-            this, SLOT(slotSetUnderExposureIndicator(bool)));
-
-    connect(d->overExposureIndicator, SIGNAL(clicked(bool)),
-            this, SLOT(slotSetOverExposureIndicator(bool)));
-
-    connect(d->cmViewIndicator, SIGNAL(toggled(bool)),
-            this, SLOT(slotToggleColorManagedView()));
 }
 
 void EditorWindow::printImage(const KUrl& /*url*/)
@@ -888,6 +886,9 @@ void EditorWindow::readStandardSettings()
     bool autoZoom = group.readEntry("AutoZoom", true);
     if (autoZoom)
         d->zoomFitToWindowAction->activate(QAction::Trigger);
+
+    slotSetUnderExposureIndicator(group.readEntry("UnderExposureIndicator", false));
+    slotSetOverExposureIndicator(group.readEntry("OverExposureIndicator", false));
 }
 
 void EditorWindow::applyStandardSettings()
@@ -1022,12 +1023,8 @@ void EditorWindow::applyStandardSettings()
 
     // -- Exposure Indicators Settings ---------------------------------------
 
-    QColor black(Qt::black);
-    QColor white(Qt::white);
-    slotSetUnderExposureIndicator(group.readEntry("UnderExposureIndicator", false));
-    slotSetOverExposureIndicator( group.readEntry("OverExposureIndicator", false));
-    d->exposureSettings->underExposureColor     = group.readEntry("UnderExposureColor", white);
-    d->exposureSettings->overExposureColor      = group.readEntry("OverExposureColor", black);
+    d->exposureSettings->underExposureColor = group.readEntry("UnderExposureColor", QColor(Qt::white));
+    d->exposureSettings->overExposureColor  = group.readEntry("OverExposureColor", QColor(Qt::black));
 }
 
 void EditorWindow::saveStandardSettings()
@@ -1449,9 +1446,9 @@ void EditorWindow::colorManage()
     if (!manager.hasValidWorkspace())
     {
         QString message = i18n("Cannot open the specified working space profile (\"%1\"). "
-                                "No color transformation will be applied. "
-                                "Please check the color management "
-                                "configuration in digiKam's setup.", d->ICCSettings->workspaceProfile);
+                               "No color transformation will be applied. "
+                               "Please check the color management "
+                               "configuration in digiKam's setup.", d->ICCSettings->workspaceProfile);
         KMessageBox::information(this, message);
     }
 
@@ -1478,12 +1475,10 @@ void EditorWindow::slotNameLabelCancelButtonPressed()
 
 void EditorWindow::slotSave()
 {
-
     if (m_canvas->isReadOnly())
         saveAs();
     else if (promptForOverWrite())
         save();
-
 }
 
 void EditorWindow::slotSavingStarted(const QString& /*filename*/)
@@ -1500,7 +1495,6 @@ void EditorWindow::slotSavingStarted(const QString& /*filename*/)
 
 void EditorWindow::movingSaveFileFinished(bool successful)
 {
-
     if (!successful)
     {
         finishSaving(false);
@@ -1523,20 +1517,16 @@ void EditorWindow::movingSaveFileFinished(bool successful)
 
     // Take all actions necessary to update information and re-enable sidebar
     slotChanged();
-
-
 }
 
 void EditorWindow::slotSavingFinished(const QString& filename, bool success)
 {
-
     Q_UNUSED(filename);
 
     // only handle this if we really wanted to save a file...
-    if ((m_savingContext->savingState == SavingContextContainer::SavingStateSave)
-                    || (m_savingContext->savingState == SavingContextContainer::SavingStateSaveAs))
+    if ((m_savingContext->savingState == SavingContextContainer::SavingStateSave) ||
+        (m_savingContext->savingState == SavingContextContainer::SavingStateSaveAs))
     {
-
         // from save()
         m_savingContext->executedOperation = m_savingContext->savingState;
         m_savingContext->savingState = SavingContextContainer::SavingStateNone;
@@ -1561,7 +1551,6 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
         kWarning() << "Why was slotSavingFinished called "
                                   << "if we did not want to save a file?";
     }
-
 }
 
 void EditorWindow::finishSaving(bool success)
@@ -1594,9 +1583,8 @@ void EditorWindow::finishSaving(bool success)
 
 void EditorWindow::setupTempSaveFile(const KUrl & url)
 {
-
 #ifdef _WIN32
-    KUrl parent(url.directory(KUrl::AppendTrailingSlash)); 
+    KUrl parent(url.directory(KUrl::AppendTrailingSlash));
     QString tempDir = parent.toLocalFile();
 #else
     QString tempDir = url.directory(KUrl::AppendTrailingSlash);
@@ -1625,12 +1613,10 @@ void EditorWindow::setupTempSaveFile(const KUrl & url)
     m_savingContext->saveTempFileName = m_savingContext->saveTempFile->fileName();
     delete m_savingContext->saveTempFile;
     m_savingContext->saveTempFile = 0;
-
 }
 
 void EditorWindow::startingSave(const KUrl& url)
 {
-
     kDebug() << "startSaving url = " << url;
 
     // avoid any reentrancy. Should be impossible anyway since actions will be disabled.
@@ -1657,7 +1643,6 @@ void EditorWindow::startingSave(const KUrl& url)
 
 QStringList EditorWindow::getWritingFilters()
 {
-
     // begin with the filters KImageIO supports
     QString pattern             = KImageIO::pattern(KImageIO::Writing);
     QStringList writablePattern = pattern.split(QChar('\n'));
@@ -1668,12 +1653,10 @@ QStringList EditorWindow::getWritingFilters()
     writablePattern.append(QString("*.pgf|") + i18n("Progressive Graphics File"));
 
     return writablePattern;
-
 }
 
 QString EditorWindow::findFilterByExtension(const QStringList& allFilters, const QString& extension)
 {
-
     kDebug() << "Searching for a filter with extension '" << extension
              << "' in: " << allFilters;
 
@@ -1698,12 +1681,10 @@ QString EditorWindow::findFilterByExtension(const QStringList& allFilters, const
     }
 
     return QString();
-
 }
 
 QString EditorWindow::getExtensionFromFilter(const QString& filter)
 {
-
     kDebug () << "Trying to extract format from filter: " << filter;
 
     // find locations of interesting characters in the filter string
@@ -1729,13 +1710,11 @@ QString EditorWindow::getExtensionFromFilter(const QString& filter)
     formatString = formatString.left(endLocation - asteriskLocation - 2);
     kDebug() << "Extracted format " << formatString;
     return formatString;
-
 }
 
 bool EditorWindow::selectValidSavingFormat(const QString& filter,
-                const KUrl& targetUrl, const QString &autoFilter)
+                                           const KUrl& targetUrl, const QString &autoFilter)
 {
-
     kDebug() << "Trying to find a saving format with filter = "
              << filter << ", targetUrl = " << targetUrl;
 
@@ -1785,7 +1764,6 @@ bool EditorWindow::selectValidSavingFormat(const QString& filter,
     }
     else
     {
-
         // use extension from the filter
 
         QString filterExtension = getExtensionFromFilter(filter);
@@ -1813,12 +1791,10 @@ bool EditorWindow::selectValidSavingFormat(const QString& filter,
     kDebug() << "No suitable format found";
 
     return false;
-
 }
 
 bool EditorWindow::startingSaveAs(const KUrl& url)
 {
-
     kDebug() << "startSavingAs called";
 
     if (m_savingContext->savingState != SavingContextContainer::SavingStateNone)
@@ -1997,11 +1973,9 @@ bool EditorWindow::checkPermissions(const KUrl& url)
 
 void EditorWindow::moveFile()
 {
-
     // how to move a file depends on if the file is on a local system or not.
     if (m_savingContext->destinationURL.isLocalFile())
     {
-
         kDebug() << "moving a local file";
 
         QByteArray dstFileName = QFile::encodeName(m_savingContext->destinationURL.toLocalFile());
@@ -2054,11 +2028,9 @@ void EditorWindow::moveFile()
 #endif
         movingSaveFileFinished(true);
         return;
-
     }
     else
     {
-
         // for remote destinations use kio to move the temp file over there
 
         kDebug() << "moving a remote file via KIO";
@@ -2068,14 +2040,11 @@ void EditorWindow::moveFile()
                         m_savingContext->destinationURL);
         connect(moveJob, SIGNAL(result(KJob*)),
                 this, SLOT(slotKioMoveFinished(KJob*)));
-
     }
-
 }
 
 void EditorWindow::slotKioMoveFinished(KJob *job)
 {
-
     if (job->error())
     {
         KMessageBox::error(this, i18n("Failed to save file: %1", job->errorString()),
@@ -2090,41 +2059,33 @@ void EditorWindow::slotColorManagementOptionsChanged()
     *d->ICCSettings = IccSettings::instance()->settings();
 
     d->viewCMViewAction->blockSignals(true);
-    d->cmViewIndicator->blockSignals(true);
 
     d->viewCMViewAction->setEnabled(d->ICCSettings->enableCM);
     d->viewCMViewAction->setChecked(d->ICCSettings->useManagedView);
-    d->cmViewIndicator->setEnabled(d->ICCSettings->enableCM);
-    d->cmViewIndicator->setChecked(d->ICCSettings->useManagedView);
     setColorManagedViewIndicatorToolTip(d->ICCSettings->enableCM, d->ICCSettings->useManagedView);
 
     d->viewSoftProofAction->setEnabled(d->ICCSettings->enableCM &&
                                        !d->ICCSettings->defaultProofProfile.isEmpty());
     d->softProofOptionsAction->setEnabled(d->ICCSettings->enableCM);
 
-    m_canvas->setICCSettings(d->ICCSettings);
+    d->toolIface->updateICCSettings();
     d->viewCMViewAction->blockSignals(false);
-    d->cmViewIndicator->blockSignals(false);
 }
 
 void EditorWindow::slotToggleColorManagedView()
 {
-    d->cmViewIndicator->blockSignals(true);
     d->viewCMViewAction->blockSignals(true);
     bool cmv = false;
     if (d->ICCSettings->enableCM)
     {
         cmv = !d->ICCSettings->useManagedView;
         d->ICCSettings->useManagedView = cmv;
-        m_canvas->setICCSettings(d->ICCSettings);
-
+        d->toolIface->updateICCSettings();
         IccSettings::instance()->setUseManagedView(cmv);
     }
 
-    d->cmViewIndicator->setChecked(cmv);
     d->viewCMViewAction->setChecked(cmv);
     setColorManagedViewIndicatorToolTip(d->ICCSettings->enableCM, cmv);
-    d->cmViewIndicator->blockSignals(false);
     d->viewCMViewAction->blockSignals(false);
 }
 
@@ -2165,8 +2126,7 @@ void EditorWindow::slotUpdateSoftProofingState()
 void EditorWindow::slotSetUnderExposureIndicator(bool on)
 {
     d->exposureSettings->underExposureIndicator = on;
-    m_canvas->setExposureSettings(d->exposureSettings);
-
+    d->toolIface->updateExposureSettings();
     d->underExposureIndicator->setEnabled(on);
     d->viewUnderExpoAction->setChecked(on);
     setUnderExposureToolTip(on);
@@ -2182,8 +2142,7 @@ void EditorWindow::setUnderExposureToolTip(bool on)
 void EditorWindow::slotSetOverExposureIndicator(bool on)
 {
     d->exposureSettings->overExposureIndicator = on;
-    m_canvas->setExposureSettings(d->exposureSettings);
-
+    d->toolIface->updateExposureSettings();
     d->overExposureIndicator->setEnabled(on);
     d->viewOverExpoAction->setChecked(on);
     setOverExposureToolTip(on);

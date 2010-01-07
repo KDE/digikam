@@ -633,6 +633,25 @@ void SetupCollectionModel::addCollection(int category)
     }
 }
 
+/*
+//This code works, but is currently not used. Was intended as a workaround for 219876.
+void SetupCollectionModel::emitDataChangedForChildren(const QModelIndex& parent)
+{
+    int rows = rowCount(parent);
+    int columns = columnCount(parent);
+    emit dataChanged(index(0, 0, parent), index(rows, columns, parent));
+    for (int r = 0; r < rows; r++)
+    {
+        for (int c = 0; c < columns; c++)
+        {
+            QModelIndex i = index(r, c, parent);
+            if (i.isValid())
+                emitDataChangedForChildren(i);
+        }
+    }
+}
+*/
+
 void SetupCollectionModel::deleteCollection(int internalId)
 {
     QModelIndex index = indexForId(internalId, (int)ColumnStatus);
@@ -821,7 +840,7 @@ int SetupCollectionModel::rowCount(const QModelIndex& parent) const
     return rowCount;
 }
 
-int SetupCollectionModel::columnCount(const QModelIndex &/*parent*/) const
+int SetupCollectionModel::columnCount(const QModelIndex& /*parent*/) const
 {
     return 4;
 }
@@ -862,10 +881,10 @@ QModelIndex SetupCollectionModel::index(int row, int column, const QModelIndex& 
 {
     if (!parent.isValid())
     {
-        if (row < NumberOfCategories && column == 0)
+        if (row < NumberOfCategories && row >= 0 && column == 0)
             return createIndex(row, 0, -1);
     }
-    else
+    else if (row >= 0 && column < 4)
     {
         // m_collections is a flat list with all entries, of all categories and also deleted entries.
         // The model indices contain as internal id the index to this list.

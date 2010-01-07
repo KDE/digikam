@@ -28,6 +28,7 @@
 #include <QVBoxLayout>
 #include <QStyle>
 #include <QLabel>
+#include <QtCore/QTimer>
 
 // KDE includes
 

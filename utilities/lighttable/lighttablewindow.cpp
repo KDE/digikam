@@ -454,7 +454,7 @@ void LightTableWindow::setupActions()
     connect(d->clearListAction, SIGNAL(triggered()), this, SLOT(slotClearItemsList()));
     actionCollection()->addAction("lighttable_clearlist", d->clearListAction);
 
-    d->fileDeleteAction = new KAction(KIcon("user-trash"), i18n("Move to Trash"), this);
+    d->fileDeleteAction = new KAction(KIcon("user-trash"), i18nc("Non-pluralized", "Move to Trash"), this);
     d->fileDeleteAction->setShortcut(KShortcut(Qt::Key_Delete));
     d->fileDeleteAction->setEnabled(false);
     connect(d->fileDeleteAction, SIGNAL(triggered()), this, SLOT(slotDeleteItem()));

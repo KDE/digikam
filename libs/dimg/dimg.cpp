@@ -7,8 +7,8 @@
  * Description : digiKam 8/16 bits image management API
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -1578,7 +1578,8 @@ QImage DImg::pureColorMask(ExposureSettingsContainer *expoSettings)
     // alpha channel is auto-detected during QImage->QPixmap conversion
 
     uchar *bits = img.bits();
-    int    max  = sixteenBit() ? 65535 : 255;
+    // Using DImgScale before to compute Mask clamp to 65534 | 254. Why ?
+    int    max  = sixteenBit() ? 65534 : 254;
 
     // --------------------------------------------------------
 
@@ -1601,7 +1602,7 @@ QImage DImg::pureColorMask(ExposureSettingsContainer *expoSettings)
 
     if (sixteenBit())
     {
-        ushort*  sptr = (ushort*)m_priv->data;
+        unsigned short* sptr = (unsigned short*)m_priv->data;
 
         for (uint i = 0; i < dim; ++i)
         {
@@ -1612,18 +1613,18 @@ QImage DImg::pureColorMask(ExposureSettingsContainer *expoSettings)
 
             if ((under) && (s_red == 0) && (s_green == 0) && (s_blue == 0))
             {
-                    dptr[0] = u_blue;
-                    dptr[1] = u_green;
-                    dptr[2] = u_red;
-                    dptr[3] = 0xFF;
+                dptr[0] = u_blue;
+                dptr[1] = u_green;
+                dptr[2] = u_red;
+                dptr[3] = 0xFF;
             }
 
-            if ((over) && (s_red == max) && (s_green == max) && (s_blue == max))
+            if ((over) && (s_red >= max) && (s_green >= max) && (s_blue >= max))
             {
-                    dptr[0] = o_blue;
-                    dptr[1] = o_green;
-                    dptr[2] = o_red;
-                    dptr[3] = 0xFF;
+                dptr[0] = o_blue;
+                dptr[1] = o_green;
+                dptr[2] = o_red;
+                dptr[3] = 0xFF;
             }
 
             dptr += 4;
@@ -1631,28 +1632,32 @@ QImage DImg::pureColorMask(ExposureSettingsContainer *expoSettings)
     }
     else
     {
-       uint*  sptr = (uint*)m_priv->data;
+       uchar* sptr = m_priv->data;
 
        for (uint i = 0; i < dim; ++i)
         {
-            if ((under) && (qRed(*sptr) == 0) && (qGreen(*sptr) == 0) && (qBlue(*sptr) == 0))
+            int s_blue  = *sptr++;
+            int s_green = *sptr++;
+            int s_red   = *sptr++;
+            sptr++;
+
+            if ((under) && (s_red == 0) && (s_green == 0) && (s_blue == 0))
             {
-                    dptr[0] = u_blue;
-                    dptr[1] = u_green;
-                    dptr[2] = u_red;
-                    dptr[3] = 0xFF;
+                dptr[0] = u_blue;
+                dptr[1] = u_green;
+                dptr[2] = u_red;
+                dptr[3] = 0xFF;
             }
 
-            if ((over) && (qRed(*sptr) == max) && (qGreen(*sptr) == max) && (qBlue(*sptr) == max))
+            if ((over) && (s_red >= max) && (s_green >= max) && (s_blue >= max))
             {
-                    dptr[0] = o_blue;
-                    dptr[1] = o_green;
-                    dptr[2] = o_red;
-                    dptr[3] = 0xFF;
+                dptr[0] = o_blue;
+                dptr[1] = o_green;
+                dptr[2] = o_red;
+                dptr[3] = 0xFF;
             }
 
             dptr += 4;
-            ++sptr;
         }
     }
     return img;

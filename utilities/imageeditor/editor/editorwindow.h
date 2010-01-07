@@ -6,8 +6,8 @@
  * Date        : 2006-01-20
  * Description : main image editor GUI implementation
  *
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -58,8 +58,10 @@ class DPopupMenu;
 class DLogoAction;
 class EditorStackView;
 class EditorWindowPriv;
+class ExposureSettingsContainer;
 class IOFileSettingsContainer;
 class ImagePluginLoader;
+class ICCSettingsContainer;
 class SavingContextContainer;
 class Sidebar;
 class SidebarSplitter;
@@ -79,7 +81,7 @@ public:
     virtual void applySettings(){};
     virtual bool setup()=0;
     virtual bool setupICC()=0;
-
+   
 Q_SIGNALS:
 
     void signalSelectionChanged(const QRect&);
@@ -147,12 +149,14 @@ protected:
 
     bool promptForOverWrite();
     virtual bool hasChangesToSave();
+
     enum SaveOrSaveAs
     {
         AskIfNeeded,
         OverwriteWithoutAsking,
         AlwaysSaveAs
     };
+    
     bool promptUserSave(const KUrl& url, SaveOrSaveAs = AskIfNeeded, bool allowCancel = true);
     bool waitForSavingToComplete();
     void startingSave(const KUrl& url);
@@ -161,8 +165,10 @@ protected:
     void moveFile();
     void colorManage();
 
-    EditorStackView* editorStackView() const;
-
+    EditorStackView*           editorStackView()  const;
+    ExposureSettingsContainer* exposureSettings() const;
+    ICCSettingsContainer*      cmSettings()       const;
+    
     virtual void finishSaving(bool success);
 
     virtual void readSettings()               { readStandardSettings();     };
