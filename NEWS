@@ -47,5 +47,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 038 ==> 221065 : Many Icons Don't Show Up in digikam Under Mac OS X (10.6.2).
 039 ==> 221188 : When system is set to Czech locale, there is "Aspect Ratio Crop" missing in transform menu.
 040 ==> 207392 : Crash after rebuild all thumbnails.
-041 ==> 
-
+041 ==> 213001 : Scrolling when under-exposure indicator.
+042 ==> 
