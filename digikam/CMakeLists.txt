@@ -306,7 +306,6 @@ ENDIF(MARBLEWIDGET_FOUND)
 
 INSTALL(TARGETS digikam ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-
 # Others Files to install #######################################################
 
 INSTALL(FILES digikam.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
