@@ -48,4 +48,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 039 ==> 221188 : When system is set to Czech locale, there is "Aspect Ratio Crop" missing in transform menu.
 040 ==> 207392 : Crash after rebuild all thumbnails.
 041 ==> 213001 : Scrolling when under-exposure indicator.
-042 ==> 
+042 ==> 187188 : digiKam crashes when including a CIFS located album.
+043 ==> 
+
