@@ -173,7 +173,7 @@ public:
             endSegment = 0;
             return;
         }
-        startSegment = (x == 0) ? 0 : (x * (histogram->getHistogramSegments()) - 1) / drawWidth + 1;
+        startSegment = (x * (histogram->getHistogramSegments()) - 1) / drawWidth;
         endSegment   = ((x + 1) * (histogram->getHistogramSegments()) - 1) / drawWidth;
     }
 
