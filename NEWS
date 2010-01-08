@@ -51,5 +51,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 042 ==> 187188 : digiKam crashes when including a CIFS located album.
 043 ==> 221343 : [wish] Blank search field should not show all images
 044 ==> 221605 : digiKam crashed on startup, while scanning albuns [__libc_message, malloc_printerr, qFree].
-045 ==> 
-
+045 ==> 201654 : digiKam 1.0 crashes immediately on application start.
+046 ==> 
