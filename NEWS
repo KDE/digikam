@@ -50,5 +50,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 041 ==> 213001 : Scrolling when under-exposure indicator.
 042 ==> 187188 : digiKam crashes when including a CIFS located album.
 043 ==> 221343 : [wish] Blank search field should not show all images
-044 ==> 
+044 ==> 221605 : digiKam crashed on startup, while scanning albuns [__libc_message, malloc_printerr, qFree].
+045 ==> 
 
