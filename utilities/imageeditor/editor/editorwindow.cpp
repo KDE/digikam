@@ -6,8 +6,8 @@
  * Date        : 2006-01-20
  * Description : main image editor GUI implementation
  *
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,6 +47,7 @@
 #include <QTimer>
 #include <QToolButton>
 #include <QWidgetAction>
+#include <QButtonGroup>
 
 // KDE includes
 
@@ -484,15 +485,19 @@ void EditorWindow::setupStandardActions()
     connect(d->slideShowAction, SIGNAL(triggered()), this, SLOT(slotToggleSlideShow()));
     actionCollection()->addAction("editorwindow_slideshow", d->slideShowAction);
 
-    d->viewUnderExpoAction = new KToggleAction(KIcon("underexposure"),
-                                               i18n("Under-Exposure Indicator"), this);
+    d->viewUnderExpoAction = new KToggleAction(KIcon("underexposure"), i18n("Under-Exposure Indicator"), this);
     d->viewUnderExpoAction->setShortcut(KShortcut(Qt::Key_F10));
+    d->viewUnderExpoAction->setWhatsThis(i18n("Set this option to display black "
+                                              "overlaid on the image. This will help you to avoid "
+                                              "under-exposing the image."));
     connect(d->viewUnderExpoAction, SIGNAL(triggered(bool)), this, SLOT(slotSetUnderExposureIndicator(bool)));
     actionCollection()->addAction("editorwindow_underexposure", d->viewUnderExpoAction);
 
-    d->viewOverExpoAction = new KToggleAction(KIcon("overexposure"),
-                                              i18n("Over-Exposure Indicator"), this);
+    d->viewOverExpoAction = new KToggleAction(KIcon("overexposure"), i18n("Over-Exposure Indicator"), this);
     d->viewOverExpoAction->setShortcut(KShortcut(Qt::Key_F11));
+    d->viewOverExpoAction->setWhatsThis(i18n("Set this option to display white "
+                                             "overlaid on the image. This will help you to avoid "
+                                             "over-exposing the image." ) );
     connect(d->viewOverExpoAction, SIGNAL(triggered(bool)), this, SLOT(slotSetOverExposureIndicator(bool)));
     actionCollection()->addAction("editorwindow_overexposure", d->viewOverExpoAction);
 
@@ -621,21 +626,31 @@ void EditorWindow::setupStatusBar()
     statusBar()->addWidget(m_resLabel, 100);
     m_resLabel->setToolTip( i18n("Information about image size"));
 
-    QSize iconSize(fontMetrics().height()+2, fontMetrics().height()+2);
-    d->underExposureIndicator = new QToolButton(statusBar());
+    QWidget* buttonsBox      = new QWidget(statusBar());
+    QHBoxLayout *hlay        = new QHBoxLayout(buttonsBox);
+    QButtonGroup *buttonsGrp = new QButtonGroup(buttonsBox);
+    buttonsGrp->setExclusive(false);
+
+    d->underExposureIndicator = new QToolButton(buttonsBox);
     d->underExposureIndicator->setDefaultAction(d->viewUnderExpoAction);
-    d->underExposureIndicator->setMaximumSize(iconSize);
-    statusBar()->addPermanentWidget(d->underExposureIndicator);
 
-    d->overExposureIndicator = new QToolButton(statusBar());
+    d->overExposureIndicator  = new QToolButton(buttonsBox);
     d->overExposureIndicator->setDefaultAction(d->viewOverExpoAction);
-    d->overExposureIndicator->setMaximumSize(iconSize);
-    statusBar()->addPermanentWidget(d->overExposureIndicator);
 
-    d->cmViewIndicator = new QToolButton(statusBar());
+    d->cmViewIndicator        = new QToolButton(buttonsBox);
     d->cmViewIndicator->setDefaultAction(d->viewCMViewAction);
-    d->cmViewIndicator->setMaximumSize(iconSize);
-    statusBar()->addPermanentWidget(d->cmViewIndicator);
+
+    buttonsGrp->addButton(d->underExposureIndicator);
+    buttonsGrp->addButton(d->overExposureIndicator);
+    buttonsGrp->addButton(d->cmViewIndicator);
+    
+    hlay->setSpacing(0);
+    hlay->setMargin(0);
+    hlay->addWidget(d->underExposureIndicator);
+    hlay->addWidget(d->overExposureIndicator);
+    hlay->addWidget(d->cmViewIndicator);
+    
+    statusBar()->addPermanentWidget(buttonsBox);
 }
 
 void EditorWindow::printImage(const KUrl& /*url*/)
@@ -2127,7 +2142,6 @@ void EditorWindow::slotSetUnderExposureIndicator(bool on)
 {
     d->exposureSettings->underExposureIndicator = on;
     d->toolIface->updateExposureSettings();
-    d->underExposureIndicator->setEnabled(on);
     d->viewUnderExpoAction->setChecked(on);
     setUnderExposureToolTip(on);
 }
@@ -2143,7 +2157,6 @@ void EditorWindow::slotSetOverExposureIndicator(bool on)
 {
     d->exposureSettings->overExposureIndicator = on;
     d->toolIface->updateExposureSettings();
-    d->overExposureIndicator->setEnabled(on);
     d->viewOverExpoAction->setChecked(on);
     setOverExposureToolTip(on);
 }
