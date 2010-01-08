@@ -138,85 +138,23 @@ public:
         return max;
     }
 
-    void calculateSegmentMaxSingleColor(double& maxValue, const int& startSegment, const int& endSegment)
-    {
-
-        // sanity checks
-        ChannelType channel = channelType;
-        switch (channelType)
-        {
-            case GreenChannel:
-            case BlueChannel:
-            case RedChannel:
-            case AlphaChannel:
-            case LuminosityChannel:
-                // these cases are known to work with this function
-                break;
-            default:
-                kError() << "Untreated channel type " << channelType << ". Using luminosity as default";
-                channel = LuminosityChannel;
-        }
-
-
-        maxValue = 0.0;
-
-        // find the max value for one segment to paint
-        int currentSegment = startSegment;
-        do
-        {
-            maxValue = qMax(maxValue, histogram->getValue(channelType, currentSegment));
-            ++currentSegment;
-        }
-        while (currentSegment < endSegment);
-
-    }
-
-    void calculateSegmentMaxMultiColor(double& maxValueR, double& maxValueG,
-                                       double& maxValueB, const int& startSegment,
-                                       const int& endSegment)
-    {
-
-        // sanity checks
-        if (channelType != ColorChannels)
-        {
-            kError() << "This function can only be used for color channels "
-                     << "and not for type " << channelType
-                     << ". Using color channels as fallback.";
-        }
-
-        maxValueR = 0.0;
-        maxValueG = 0.0;
-        maxValueB = 0.0;
-
-        // find the max value for one segment to paint
-        int currentSegment = startSegment;
-        do
-        {
-            maxValueR = qMax(maxValueR, histogram->getValue(RedChannel, currentSegment));
-            maxValueG = qMax(maxValueG, histogram->getValue(GreenChannel, currentSegment));
-            maxValueB = qMax(maxValueB, histogram->getValue(BlueChannel, currentSegment));
-            ++currentSegment;
-        }
-        while (currentSegment < endSegment);
-
-    }
-
     inline int scaleToPixmapHeight(const double& value, const int& pixmapHeight, const double& max)
     {
+        if (max == 0) return 0;
         switch (scale)
         {
             case LinScaleHistogram:
             {
-                return (int) ((pixmapHeight * value) / max);
+                return qMin((int) ((pixmapHeight * value) / max), pixmapHeight);
             }
             case LogScaleHistogram:
             {
                 if (value <= 0.0)
                 {
                     kWarning() << "Scaling value < 0: " << value << ". Falling back to 1.0";
-                    return (int) ((pixmapHeight * log(1.0)) / max);
+                    return qMin((int) ((pixmapHeight * log(1.0)) / max), pixmapHeight);
                 }
-                return (int) ((pixmapHeight * log(value)) / max);
+                return qMin((int) ((pixmapHeight * log(value)) / max), pixmapHeight);
             }
             default:
             {
@@ -229,52 +167,72 @@ public:
     inline void calculateSegementsForIndex(const int& x, const int& drawWidth,
                                            int& startSegment, int& endSegment)
     {
-        startSegment = (x       * histogram->getHistogramSegments()) / drawWidth;
-        endSegment   = ((x + 1) * histogram->getHistogramSegments()) / drawWidth;
+        if (drawWidth == 0)
+        {
+            startSegment = 0;
+            endSegment = 0;
+            return;
+        }
+        startSegment = (x == 0) ? 0 : (x * (histogram->getHistogramSegments()) - 1) / drawWidth + 1;
+        endSegment   = ((x + 1) * (histogram->getHistogramSegments()) - 1) / drawWidth;
     }
 
     void renderSingleColorLine(QPixmap& bufferPixmap, QPainter& p1)
     {
         p1.save();
+
         int wWidth  = bufferPixmap.width();
         int wHeight = bufferPixmap.height();
+
+        QImage bb(wWidth, wHeight, QImage::Format_RGB32);
+        QPainter p2;
+        p2.begin(&bb);
+        p2.initFrom(widgetToInitFrom);
+
         double max  = 1.05 * calculateMax();
 
         QPainterPath curvePath;
-        curvePath.moveTo(0, wHeight);
+        curvePath.moveTo(1, wHeight - 1);
 
         int yPrev = 0;
 
-        for (int x = 0 ; x < wWidth ; ++x)
+        for (int x = 1; x < (wWidth - 1); ++x)
         {
             // calculate histogram segments included in this single pixel line
             int startSegment = 0;
             int endSegment   = 0;
-            calculateSegementsForIndex(x, wWidth, startSegment, endSegment);
+            calculateSegementsForIndex(x - 1, wWidth - 2, startSegment, endSegment);
 
-            double value = 0.0;
-            calculateSegmentMaxSingleColor(value, startSegment, endSegment);
+            double value = histogram->getMaximum(channelType, startSegment, endSegment);
 
-            int y = scaleToPixmapHeight(value, bufferPixmap.height(), max);
-            if (x > 0)
+            int y = scaleToPixmapHeight(value, wHeight - 2, max);
+            if (x > 1)
             {
                 (y > yPrev) ? curvePath.lineTo(x, wHeight - yPrev) : curvePath.lineTo(x - 1, wHeight - y);
             }
             curvePath.lineTo(x, wHeight - y);
             yPrev = y;
         }
-        curvePath.lineTo(wWidth, wHeight);
+        curvePath.lineTo(wWidth - 2, wHeight - 1);
+        curvePath.lineTo(1, wHeight - 1);
+        curvePath.closeSubpath();
 
-        p1.fillPath(curvePath, QBrush(palette.color(QPalette::Active, QPalette::Foreground), Qt::SolidPattern));
+        p2.fillRect(0, 0, wWidth, wHeight, palette.color(QPalette::Active, QPalette::Background));
+        p2.setPen(QPen(palette.color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
+        p2.setBrush(QBrush(palette.color(QPalette::Active, QPalette::Foreground), Qt::SolidPattern));
+        p2.drawPath(curvePath);
         if (highlightSelection)
         {
-            p1.setClipRect((int)(selectionMin * wWidth), 0,
+            p2.setClipRect((int)(selectionMin * wWidth), 0,
                            (int)(selectionMax * wWidth - selectionMin * wWidth), wHeight);
-            p1.fillRect((int)(selectionMin * wWidth), 0,
+            p2.fillRect((int)(selectionMin * wWidth), 0,
                         (int)(selectionMax * wWidth - selectionMin * wWidth), wHeight,
                         QBrush(palette.color(QPalette::Active, QPalette::Foreground), Qt::SolidPattern));
-            p1.fillPath(curvePath, QBrush(palette.color(QPalette::Active, QPalette::Background), Qt::SolidPattern));
+            p2.fillPath(curvePath, QBrush(palette.color(QPalette::Active, QPalette::Background), Qt::SolidPattern));
         }
+
+        p2.end();
+        p1.drawImage(0, 0, bb);
 
         p1.restore();
     }
@@ -294,31 +252,30 @@ public:
         double max  = 1.05 * calculateMax();
 
         QPainterPath curveRed, curveGreen, curveBlue;
-        curveRed.moveTo(0, wHeight);
-        curveGreen.moveTo(0, wHeight);
-        curveBlue.moveTo(0, wHeight);
+        curveRed.moveTo(1, wHeight - 1);
+        curveGreen.moveTo(1, wHeight - 1);
+        curveBlue.moveTo(1, wHeight - 1);
 
         int yrPrev = 0;
         int ygPrev = 0;
         int ybPrev = 0;
 
-        for (int x = 0 ; x < wWidth ; ++x)
+        for (int x = 1; x < (wWidth - 1); ++x)
         {
             // calculate histogram segments included in this single pixel line
             int startSegment = 0;
             int endSegment   = 0;
-            calculateSegementsForIndex(x, wWidth, startSegment, endSegment);
+            calculateSegementsForIndex(x - 1, wWidth - 2, startSegment, endSegment);
 
-            double valueR = 0.0;
-            double valueG = 0.0;
-            double valueB = 0.0;
-            calculateSegmentMaxMultiColor(valueR, valueG, valueB, startSegment, endSegment);
+            double valueR = histogram->getMaximum(RedChannel, startSegment, endSegment);
+            double valueG = histogram->getMaximum(GreenChannel, startSegment, endSegment);
+            double valueB = histogram->getMaximum(BlueChannel, startSegment, endSegment);
 
-            int yr = scaleToPixmapHeight(valueR, bufferPixmap.height(), max);
-            int yg = scaleToPixmapHeight(valueG, bufferPixmap.height(), max);
-            int yb = scaleToPixmapHeight(valueB, bufferPixmap.height(), max);
+            int yr = scaleToPixmapHeight(valueR, wHeight - 1, max);
+            int yg = scaleToPixmapHeight(valueG, wHeight - 1, max);
+            int yb = scaleToPixmapHeight(valueB, wHeight - 1, max);
 
-            if (x > 0)
+            if (x > 1)
             {
                 (yr > yrPrev) ? curveRed.lineTo(x, wHeight - yrPrev) : curveRed.lineTo(x - 1, wHeight - yr);
                 (yg > ygPrev) ? curveGreen.lineTo(x, wHeight - ygPrev) : curveGreen.lineTo(x - 1, wHeight - yg);
@@ -332,9 +289,15 @@ public:
             ygPrev = yg;
             ybPrev = yb;
         }
-        curveRed.lineTo(wWidth, wHeight);
-        curveGreen.lineTo(wWidth, wHeight);
-        curveBlue.lineTo(wWidth, wHeight);
+        curveRed.lineTo(wWidth - 2, wHeight - 1);
+        curveRed.lineTo(1, wHeight - 1);
+        curveRed.closeSubpath();
+        curveGreen.lineTo(wWidth - 2, wHeight - 1);
+        curveGreen.lineTo(1, wHeight - 1);
+        curveGreen.closeSubpath();
+        curveBlue.lineTo(wWidth - 2, wHeight - 1);
+        curveBlue.lineTo(1, wHeight - 1);
+        curveBlue.closeSubpath();
 
         p2.fillRect(0, 0, wWidth, wHeight, palette.color(QPalette::Active, QPalette::Background));
         p2.fillPath(curveBlue, QBrush(Qt::black, Qt::SolidPattern));
@@ -595,7 +558,7 @@ void HistogramPainter::render(QPixmap& bufferPixmap)
 
     // draw a final border around everything
     d->painter.setPen(QPen(d->palette.color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
-    d->painter.drawRect(0, 0, wWidth -1, wHeight - 1);
+    d->painter.drawRect(0, 0, wWidth - 1, wHeight - 1);
     d->painter.end();
 }
 
