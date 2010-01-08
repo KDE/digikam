@@ -6,7 +6,7 @@
  * Date        : 2005-07-01
  * Description : a widget to draw a control panel image tool.
  *
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -41,7 +41,6 @@
 
 // KDE includes
 
-
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kcursor.h>
@@ -53,6 +52,8 @@
 
 // Local includes
 
+#include "exposurecontainer.h"
+#include "iccsettingscontainer.h"
 #include "thumbnailsize.h"
 #include "imageregionwidget.h"
 #include "imagepaniconwidget.h"
@@ -334,6 +335,16 @@ void ImagePanelWidget::updateSelectionInfo(const QRect& rect)
     d->imagePanIconWidget->setToolTip(i18n("<nobr>(%1,%2)(%3x%4)</nobr>",
                                            rect.left(), rect.top(),
                                            rect.width(), rect.height()));
+}
+
+void ImagePanelWidget::setICCSettings(ICCSettingsContainer*)
+{
+    d->imageRegionWidget->viewport()->repaint();
+}
+
+void ImagePanelWidget::setExposureSettings(ExposureSettingsContainer*)
+{
+    // NOTE : not yet managed here by imageRegionWidget.
 }
 
 }  // namespace Digikam

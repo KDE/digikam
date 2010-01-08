@@ -7,7 +7,7 @@
  * Description : a widget to display an image preview with some
  *               modes to compare effect results.
  *
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -36,7 +36,6 @@
 
 // KDE includes
 
-
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kdialog.h>
@@ -45,6 +44,12 @@
 #include <klocale.h>
 #include <ksqueezedtextlabel.h>
 #include <kstandarddirs.h>
+
+// Local includes
+
+#include "exposurecontainer.h"
+#include "iccsettingscontainer.h"
+
 
 namespace Digikam
 {
@@ -55,28 +60,23 @@ public:
 
     ImageWidgetPriv()
     {
-        spotInfoLabel       = 0;
-        previewButtons      = 0;
-        underExposureButton = 0;
-        overExposureButton  = 0;
-        previewWidget       = 0;
-        prevBBox            = 0;
-        expoBBox            = 0;
+        spotInfoLabel  = 0;
+        previewButtons = 0;
+        previewWidget  = 0;
+        prevBBox       = 0;
+        expoBBox       = 0;
     }
 
-    QWidget            *prevBBox;
-    QWidget            *expoBBox;
+    QWidget*            prevBBox;
+    QWidget*            expoBBox;
 
     QString             settingsSection;
 
-    QButtonGroup       *previewButtons;
+    QButtonGroup*       previewButtons;
 
-    QToolButton        *underExposureButton;
-    QToolButton        *overExposureButton;
+    KSqueezedTextLabel* spotInfoLabel;
 
-    KSqueezedTextLabel *spotInfoLabel;
-
-    ImageGuideWidget   *previewWidget;
+    ImageGuideWidget*   previewWidget;
 };
 
 ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
@@ -170,33 +170,6 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
 
     // -------------------------------------------------------------
 
-    d->expoBBox                   = new QWidget(this);
-    QHBoxLayout *hlay2            = new QHBoxLayout(d->expoBBox);
-    QButtonGroup *exposureButtons = new QButtonGroup(d->expoBBox);
-    exposureButtons->setExclusive(false);
-    hlay2->setSpacing(0);
-    hlay2->setMargin(0);
-
-    d->underExposureButton = new QToolButton(d->expoBBox);
-    exposureButtons->addButton(d->underExposureButton, UnderExposure);
-    hlay2->addWidget(d->underExposureButton);
-    d->underExposureButton->setIcon(SmallIcon("underexposure"));
-    d->underExposureButton->setCheckable(true);
-    d->underExposureButton->setWhatsThis( i18n("Set this option to display black "
-                                               "overlaid on the preview. This will help you to avoid "
-                                               "under-exposing the image." ) );
-
-    d->overExposureButton = new QToolButton(d->expoBBox);
-    exposureButtons->addButton(d->overExposureButton, OverExposure);
-    hlay2->addWidget(d->overExposureButton);
-    d->overExposureButton->setIcon(SmallIcon("overexposure"));
-    d->overExposureButton->setCheckable(true);
-    d->overExposureButton->setWhatsThis( i18n("Set this option to display white "
-                                              "overlaid on the preview. This will help you to avoid "
-                                              "over-exposing the image." ) );
-
-    // -------------------------------------------------------------
-
     QFrame *frame    = new QFrame(this);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* l   = new QVBoxLayout(frame);
@@ -212,8 +185,7 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
 
     grid->addWidget(d->prevBBox,      1, 0, 1, 1);
     grid->addWidget(d->spotInfoLabel, 1, 1, 1, 1);
-    grid->addWidget(d->expoBBox,      1, 3, 1, 1);
-    grid->addWidget(frame,            3, 0, 1, 4 );
+    grid->addWidget(frame,            3, 0, 1, 4);
     grid->setColumnMinimumWidth(2, KDialog::spacingHint());
     grid->setColumnMinimumWidth(1, KDialog::spacingHint());
     grid->setRowMinimumHeight(0, KDialog::spacingHint());
@@ -242,12 +214,6 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
 
     connect(d->previewButtons, SIGNAL(buttonReleased(int)),
             d->previewWidget, SLOT(slotChangeRenderingPreviewMode(int)));
-
-    connect(d->underExposureButton, SIGNAL(toggled(bool)),
-            d->previewWidget, SLOT(slotToggleUnderExposure(bool)));
-
-    connect(d->overExposureButton, SIGNAL(toggled(bool)),
-            d->previewWidget, SLOT(slotToggleOverExposure(bool)));
 
     // -------------------------------------------------------------
 
@@ -337,9 +303,6 @@ void ImageWidget::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->settingsSection);
 
-    d->underExposureButton->setChecked(group.readEntry("Under Exposure Indicator", false));
-    d->overExposureButton->setChecked(group.readEntry("Over Exposure Indicator", false));
-
     int mode = group.readEntry("Separate View", (int)ImageGuideWidget::PreviewBothImagesVertCont);
     mode     = qMax((int)ImageGuideWidget::PreviewOriginalImage, mode);
     mode     = qMin((int)ImageGuideWidget::NoPreviewMode, mode);
@@ -350,9 +313,7 @@ void ImageWidget::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->settingsSection);
-    group.writeEntry("Separate View",            getRenderingPreviewMode());
-    group.writeEntry("Under Exposure Indicator", d->underExposureButton->isChecked());
-    group.writeEntry("Over Exposure Indicator",  d->overExposureButton->isChecked());
+    group.writeEntry("Separate View", getRenderingPreviewMode());
     config->sync();
 }
 
@@ -389,6 +350,17 @@ void ImageWidget::setMaskPenSize(int size)
 void ImageWidget::setEraseMode(bool erase)
 {
     d->previewWidget->setEraseMode(erase);
+}
+
+void ImageWidget::setICCSettings(ICCSettingsContainer*)
+{
+    d->previewWidget->slotCMViewSettingsChanged();
+}
+
+void ImageWidget::setExposureSettings(ExposureSettingsContainer* settings)
+{
+    d->previewWidget->slotToggleUnderExposure(settings->underExposureIndicator);
+    d->previewWidget->slotToggleOverExposure(settings->overExposureIndicator);
 }
 
 }  // namespace Digikam

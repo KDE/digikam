@@ -6,7 +6,7 @@
  * Date        : 2008-08-20
  * Description : editor tool template class.
  *
- * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -58,12 +58,12 @@ public:
         settings = 0;
     }
 
-    QString             helpAnchor;
-    QString             name;
+    QString  helpAnchor;
+    QString  name;
 
-    QWidget*            view;
-    QPixmap             icon;
-    QTimer*             timer;
+    QWidget* view;
+    QPixmap  icon;
+    QTimer*  timer;
 
     EditorToolSettings* settings;
 };
@@ -225,6 +225,28 @@ void EditorTool::slotCancel()
 void EditorTool::slotCloseTool()
 {
     slotCancel();
+}
+
+void EditorTool::setICCSettings(ICCSettingsContainer* settings)
+{
+    ImageWidget* view = dynamic_cast<ImageWidget*>(d->view);
+    if (view)
+        view->setICCSettings(settings);
+
+    ImagePanelWidget* view2 = dynamic_cast<ImagePanelWidget*>(d->view);
+    if (view2)
+        view2->setICCSettings(settings);
+}
+
+void EditorTool::setExposureSettings(ExposureSettingsContainer* settings)
+{
+    ImageWidget* view = dynamic_cast<ImageWidget*>(d->view);
+    if (view)
+        view->setExposureSettings(settings);
+
+    ImagePanelWidget* view2 = dynamic_cast<ImagePanelWidget*>(d->view);
+    if (view2)
+        view2->setExposureSettings(settings);
 }
 
 // ----------------------------------------------------------------

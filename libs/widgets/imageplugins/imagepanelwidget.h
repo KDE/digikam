@@ -6,7 +6,7 @@
  * Date        : 2005-07-01
  * Description : a widget to draw a control panel image tool.
  *
- * Copyright (C) 2005-2008 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2010 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -43,9 +43,11 @@ class QProgressBar;
 namespace Digikam
 {
 
-class ImagePanelWidgetPriv;
+class ExposureSettingsContainer;
+class ICCSettingsContainer;
 class ImageRegionWidget;
 class ImagePanIconWidget;
+class ImagePanelWidgetPriv;
 
 class DIGIKAM_EXPORT ImagePanelWidget : public QWidget
 {
@@ -76,6 +78,9 @@ public:
 
     void   setPanIconHighLightPoints(const QPolygon& pt);
 
+    void   setExposureSettings(ExposureSettingsContainer*);
+    void   setICCSettings(ICCSettingsContainer*);
+    
     void   writeSettings();
 
     ImageRegionWidget *previewWidget() const;
