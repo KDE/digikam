@@ -31,6 +31,7 @@
 // Qt includes
 
 #include <QCoreApplication>
+#include <QDBusConnection>
 #include <QDataStream>
 #include <QFile>
 
@@ -70,6 +71,7 @@ void kio_digikamdates::special(const QByteArray& data)
     ds >> kurl;
 
     Digikam::DatabaseUrl dbUrl(kurl);
+    QDBusConnection::sessionBus().registerService(QString("org.kde.digikam.KIO-digikamtags-%1").arg(QString::number(QCoreApplication::instance()->applicationPid())));
     Digikam::DatabaseAccess::setParameters(dbUrl);
 
     if (folders)
@@ -90,7 +92,6 @@ void kio_digikamdates::special(const QByteArray& data)
         // send rest
         receiver.sendData();
     }
-
     finished();
 }
 

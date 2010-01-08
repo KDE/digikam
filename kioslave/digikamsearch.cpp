@@ -31,6 +31,7 @@
 // Qt includes
 
 #include <QCoreApplication>
+#include <QDBusConnection>
 
 // KDE includes
 
@@ -72,6 +73,7 @@ void kio_digikamsearch::special(const QByteArray& data)
     kDebug() << "kio_digikamsearch::special " << kurl;
 
     Digikam::DatabaseUrl dbUrl(kurl);
+    QDBusConnection::sessionBus().registerService(QString("org.kde.digikam.KIO-digikamtags-%1").arg(QString::number(QCoreApplication::instance()->applicationPid())));
     Digikam::DatabaseAccess::setParameters(dbUrl);
 
     if (!duplicates)
@@ -171,7 +173,6 @@ void kio_digikamsearch::special(const QByteArray& data)
         Digikam::HaarIface iface;
         iface.rebuildDuplicatesAlbums(albumIds, tagIds, threshold, &observer);
     }
-
     finished();
 }
 

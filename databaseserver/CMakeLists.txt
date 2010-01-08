@@ -1,8 +1,14 @@
 # Digikam Database Server #######################################################
 SET(digikamdatabaseserver_SRCS ${lib..._SRCS}
+				 databaseserver.cpp
+				 pollthread.cpp
+				 	
                  main.cpp
     )
     
+QT4_ADD_DBUS_ADAPTOR(digikamdatabaseserver_SRCS org.kde.digikam.DatabaseServer.xml
+                     databaseserver.h DatabaseServer)
+                         
 KDE4_ADD_EXECUTABLE(digikamdatabaseserver ${digikamdatabaseserver_SRCS})
 
 TARGET_LINK_LIBRARIES(digikamdatabaseserver

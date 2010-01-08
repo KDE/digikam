@@ -140,6 +140,8 @@
 #include "dmetadata.h"
 #include "uifilevalidator.h"
 
+#include "databaseserverstarter.h"
+
 using KIO::Job;
 using KIO::UDSEntryList;
 using KIO::UDSEntry;
@@ -187,7 +189,6 @@ DigikamApp::DigikamApp()
     if(d->splashScreen)
         d->splashScreen->message(i18n("Scan Albums"));
 
-    dbServer=0;
     AlbumManager::instance()->setDatabase(AlbumSettings::instance()->getDatabaseType(), AlbumSettings::instance()->getDatabaseName(), AlbumSettings::instance()->getDatabaseNameThumbnails(), AlbumSettings::instance()->getDatabaseHostName(), AlbumSettings::instance()->getDatabasePort(), AlbumSettings::instance()->getDatabaseUserName(), AlbumSettings::instance()->getDatabasePassword(), AlbumSettings::instance()->getDatabaseConnectoptions(), AlbumSettings::instance()->getInternalDatabaseServer(), true);
 
     // set database error handler
@@ -329,7 +330,7 @@ DigikamApp::~DigikamApp()
 #endif
 
     // close database server
-    if (dbServer!=0 && AlbumSettings::instance()->getInternalDatabaseServer())
+    if (AlbumSettings::instance()->getInternalDatabaseServer())
     {
         stopInternalDatabase();
     }
@@ -342,24 +343,16 @@ DigikamApp::~DigikamApp()
 
 void DigikamApp::startInternalDatabase()
 {
-    if (dbServer==0)
+    // First of all, check if the database server must started
+    if (AlbumSettings::instance()->getInternalDatabaseServer())
     {
-        dbServer=new DatabaseServer(this);
-    }
-    if (!dbServer->isRunning())
-    {
-        dbServer->startDatabaseProcess();
+        DatabaseServerStarter::startServerManagerProcess();
     }
 }
 
 void DigikamApp::stopInternalDatabase()
 {
-    if (dbServer!=0 && dbServer->isRunning())
-    {
-        dbServer->stopDatabaseProcess();
-        dbServer->~QLocalServer();
-        dbServer=0;
-    }
+
 }
 
 

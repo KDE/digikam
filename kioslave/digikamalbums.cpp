@@ -32,6 +32,7 @@
 // Qt includes
 
 #include <QCoreApplication>
+#include <QDBusConnection>
 #include <QDataStream>
 #include <QFileInfo>
 
@@ -80,6 +81,7 @@ void kio_digikamalbums::special(const QByteArray& data)
     kDebug() << "kio_digikamalbums::special " << kurl;
 
     Digikam::DatabaseUrl dbUrl(kurl);
+    QDBusConnection::sessionBus().registerService(QString("org.kde.digikam.KIO-digikamtags-%1").arg(QString::number(QCoreApplication::instance()->applicationPid())));
     Digikam::DatabaseAccess::setParameters(dbUrl);
 
     bool folders = (metaData("folders") == "true");

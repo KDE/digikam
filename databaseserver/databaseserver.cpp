@@ -38,11 +38,31 @@
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QSqlError>
+#include <QDBusConnection>
+#include <QDBusConnectionInterface>
+#include <QDBusReply>
 
-DatabaseServer::DatabaseServer(QObject *parent=0):QLocalServer(parent)
+// Local includes
+#include <databaseserveradaptor.h>
+
+DatabaseServer::DatabaseServer(QCoreApplication *application=0): QObject(application), app(application), pollThread(0)
 {
     mDatabaseProcess=0;
     internalDBName="digikam";
+}
+
+void DatabaseServer::registerOnDBus()
+{
+    new DatabaseServerAdaptor(this);
+    QDBusConnection::sessionBus().registerObject("/DatabaseServer", this);
+    QDBusConnection::sessionBus().registerService("org.kde.digikam.DatabaseServer");
+}
+
+void DatabaseServer::startPolling()
+{
+    pollThread  = new PollThread(app);
+    pollThread->start();
+    connect(pollThread, SIGNAL(done()), SLOT(stopDatabaseProcess()));
 }
 
 /*
@@ -52,6 +72,9 @@ DatabaseServer::DatabaseServer(QObject *parent=0):QLocalServer(parent)
  */
 void DatabaseServer::startDatabaseProcess()
 {
+   //TODO Don't know if this is needed, because after the thread is finished, the database server manager should close
+   pollThread->stop=false;
+
   // QString filepath = KStandardDirs::locate("data", "digikam/database/dbconfig.xml");
 
   //TODO Move the database command outside of the code to the dbconfig.xml file
@@ -176,7 +199,7 @@ void DatabaseServer::startDatabaseProcess()
   // init db
   if (!QFile(dataDir+QDir::separator()+"mysql").exists())
   {
-      QProcess initProcess(this);
+      QProcess initProcess;
       initProcess.start( mysqlInitCmd );
       if ( !initProcess.waitForFinished()) {
         kDebug(50003) << "Could not start database init command!";
@@ -185,7 +208,7 @@ void DatabaseServer::startDatabaseProcess()
       }
   }
 
-  mDatabaseProcess = new QProcess( this );
+  mDatabaseProcess = new QProcess();
   mDatabaseProcess->start( mysqldPath, arguments );
   if ( !mDatabaseProcess->waitForStarted() ) {
     kDebug(50003) << "Could not start database server!";
@@ -286,6 +309,9 @@ void DatabaseServer::stopDatabaseProcess()
   mDatabaseProcess->waitForFinished();
   mDatabaseProcess->~QProcess();
   mDatabaseProcess=0;
+  pollThread->stop=true;
+  pollThread->wait();
+  app->exit(0);
 }
 
 /*

@@ -885,8 +885,8 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/schemaupdater.cpp        
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/upgradedb_sqlite2tosqlite3.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databasecopymanager.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseserverstarter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlquery.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseserver.cpp
        )
 
     SET(libdatabaseui_SRCS

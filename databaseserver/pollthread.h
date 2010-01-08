@@ -3,8 +3,9 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2009-11-14
- * Description : database migration dialog
+ * Date        : 2010-01-08
+ * Description : polling thread checks if there are digikam
+ *               components registered on DBus
  *
  * Copyright (C) 2009 by Holger Foerster <Hamsi2k at freenet dot de>
  *
@@ -21,31 +22,30 @@
  *
  * ============================================================ */
 
-#ifndef DATABASESERVER_H_
-#define DATABASESERVER_H_
+#ifndef POLLTHREAD_H_
+#define POLLTHREAD_H_
 
 // QT includes
-#include <QLocalServer>
-#include <QProcess>
-#include <QString>
+#include <QCoreApplication>
+#include <QThread>
 
 // Local includes
 
-#include "digikam_export.h"
-
-class DIGIKAM_EXPORT DatabaseServer : public QLocalServer
+class PollThread : public QThread
 {
+    Q_OBJECT
     public:
-        DatabaseServer(QObject *parent);
-        void startDatabaseProcess();
-        void createDatabase();
-        void stopDatabaseProcess();
-        bool isRunning();
+        PollThread(QObject *application);
+        void run();
+        bool checkDigikamInstancesRunning();
 
+        bool stop;
+    Q_SIGNALS:
+        void done();
     private:
-        QProcess *mDatabaseProcess;
-        QString internalDBName;
+        int waitTime;
+
 };
 
 
-#endif /* DATABASESERVER_H_ */
+#endif /* POLLTHREAD_H_ */

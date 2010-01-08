@@ -44,7 +44,6 @@
 // Local includes
 
 #include "albumlister.h"
-#include "databaseserver.h"
 #include "digikam_export.h"
 
 class KAction;
@@ -219,7 +218,6 @@ private:
     DigikamAppPriv* const d;
 
     static DigikamApp *m_instance;
-    DatabaseServer    *dbServer;
 };
 
 }  // namespace Digikam

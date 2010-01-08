@@ -3,10 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2010-01-07
- * Description : start class for database server manager
+ * Date        : 2010-01-08
+ * Description : database server starter
  *
- * Copyright (C) 2010 by Holger Foerster <Hamsi2k at freenet dot de>
+ * Copyright (C) 2009 by Holger Foerster <Hamsi2k at freenet dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -20,24 +20,31 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-#include <qapplication.h>
-#include <qpushbutton.h>
-#include <QApplication>
-#include <databaseserver.h>
 
-#include <QDBusConnection>
-#include <QDBusInterface>
-#include <QDBusConnectionInterface>
-#include <QDBusReply>
-#include "kdebug.h"
+#ifndef DATABASESERVER_H_
+#define DATABASESERVER_H_
 
-int main(int argc, char *argv[])
+// QT includes
+#include <QProcess>
+#include <QString>
+#include <QDBusAbstractAdaptor>
+#include <QCoreApplication>
+
+// Local includes
+
+#include "digikam_export.h"
+
+class DIGIKAM_EXPORT DatabaseServerStarter : public QObject
 {
-    QCoreApplication app(argc, argv);
+    Q_OBJECT
 
-    DatabaseServer server(&app);
-    server.registerOnDBus();
-    server.startPolling();
+    public:
+        DatabaseServerStarter(QObject *parent);
+        static void startServerManagerProcess();
 
-    return app.exec();
-}
+    private:
+        static bool isServerRegistered();
+};
+
+
+#endif /* DATABASESERVER_H_ */
