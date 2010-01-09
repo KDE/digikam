@@ -1036,7 +1036,7 @@ QString DImgInterface::getImageFormat()
     if (d->image.isNull())
         return QString();
 
-    QString mimeType = d->image.attribute("format").toString();
+    QString mimeType = d->image.format();
     // It is a bug in the loader if format attribute is not given
     if (mimeType.isEmpty())
     {

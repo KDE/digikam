@@ -320,17 +320,18 @@ bool BatchTool::savefromDImg()
 {
     if (!isLastChainedTool() && outputSuffix().isEmpty()) return true;
 
+    DImg::FORMAT detectedFormat = d->image.detectedFormat();
     QString frm = outputSuffix().toUpper();
+    bool resetOrientation = getResetExifOrientationAllowed()
+                    && (getNeedResetExifOrientation() || detectedFormat == DImg::RAW);
     if (frm.isEmpty())
     {
         // In case of output support is not set for ex. with all tool which do not convert to new format.
-        DImg::FORMAT format = d->image.detectedFormat();
-        d->image.updateMetadata(DImg::formatToMimeType(format), QString(),
-                                getResetExifOrientationAllowed() && getNeedResetExifOrientation());
-        return( d->image.save(outputUrl().toLocalFile(), format, d->observer) );
+        d->image.updateMetadata(DImg::formatToMimeType(detectedFormat), QString(), resetOrientation);
+        return( d->image.save(outputUrl().toLocalFile(), detectedFormat, d->observer) );
     }
 
-    d->image.updateMetadata(frm, QString(), getResetExifOrientationAllowed() && getNeedResetExifOrientation());
+    d->image.updateMetadata(frm, QString(), resetOrientation);
     bool b   = d->image.save(outputUrl().toLocalFile(), frm, d->observer);
     d->image = DImg();
     return b;
