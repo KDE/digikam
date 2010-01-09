@@ -71,16 +71,13 @@ FillDialog::~FillDialog()
 // --------------------------------------------------------
 
 FillModifier::FillModifier()
-            : Modifier(i18n("Fill..."), i18n("Fill the string to match a specific length"),
+            : Modifier(i18n("Fill..."), i18n("Fill the string with a character to match a specific length"),
                        SmallIcon("format-fill-color"))
 {
-    QString tooltipA = QString("%1 %2").arg(description())
-                                       .arg(i18n("(||align||: ||l|| = left, ||r|| = right)"));
-    QString tooltipB = QString("%1 %2").arg(description())
-                                       .arg(i18n("(||char|| = fill with a custom character)"));
+    QString tooltip = QString("%1 %2").arg(description())
+                                      .arg(i18n("(||align||: ||l|| = left, ||r|| = right)"));
 
-    addToken("{fill:||n||,||align||}",              tooltipA);
-    addToken("{fill:||n||,||align||,\"||char||\"}", tooltipB);
+    addToken("{fill:||length||,||align||,\"||char||\"}", tooltip);
 
     QRegExp reg("\\{fill:(\\d+)(,([lr]{1}))?(,\"(\\w)?\")?\\}");
     reg.setMinimal(true);
