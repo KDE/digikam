@@ -341,17 +341,13 @@ void DImgInterface::slotImageLoaded(const LoadingDescription& loadingDescription
         d->height     = d->origHeight;
         valRet        = true;
 
-        // Raw files are already rotated properly by dcraw. Only perform auto-rotation with JPEG/PNG/TIFF file.
+        // Raw files are already rotated properly by dcraw. Only perform auto-rotation with non-RAW files.
         // We don't have a feedback from dcraw about auto-rotated RAW file during decoding. Well set transformed
         // flag as well.
 
-        if (d->image.attribute("format").toString() == QString("RAW"))
+        if (d->image.detectedFormat() == DImg::RAW)
             d->rotatedOrFlipped = true;
-
-        if (d->exifOrient &&
-            (d->image.attribute("format").toString() == QString("JPEG") ||
-             d->image.attribute("format").toString() == QString("PNG")  ||
-             d->image.attribute("format").toString() == QString("TIFF")))
+        else if (d->exifOrient)
              exifRotate(d->filename);
 
         updateColorManagement();
@@ -559,16 +555,7 @@ void DImgInterface::switchToLastSaved(const QString& newFilename)
     // it has previously been saved to.
     d->filename = newFilename;
 
-    // Currently the only place where a DImg is connected to the file it originates from
-    // is the format attribute.
-    QVariant savedformat = d->image.attribute("savedformat");
-    if (!savedformat.isNull())
-        d->image.setAttribute("format", savedformat.toString());
-    QVariant readonly = d->image.attribute("savedformat-isreadonly");
-    if (!readonly.isNull())
-        d->image.setAttribute("isreadonly", readonly.toBool());
-
-    d->image.removeAttribute("rawDecodingSettings");
+    d->image.switchOriginToLastSaved();
 }
 
 void DImgInterface::setModified()
