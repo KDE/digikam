@@ -52,9 +52,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 043 ==> 221343 : [wish] Blank search field should not show all images
 044 ==> 221605 : digiKam crashed on startup, while scanning albuns [__libc_message, malloc_printerr, qFree].
 045 ==> 201654 : digiKam 1.0 crashes immediately on application start.
-046 ==> 190982 : crashes when selecting album-- every time
-047 ==> 194047 : Digikam crashes while atempting
-048 ==> 191414 : selecting "synchronize images with database" in album drop-down menu causes signal 6 (sigabrt)
-049 ==> 221440 : crashes when adding album
-050 ==> 214913 : digikam crash scanning photos
+046 ==> 190982 : Crashes when selecting album-- every time.
+047 ==> 194047 : digiKam crashes while atempting.
+048 ==> 191414 : Selecting "synchronize images with database" in album drop-down menu causes signal 6 (sigabrt).
+049 ==> 221440 : Crashes when adding album.
+050 ==> 214913 : digiKam crash scanning photos.
 051 ==> 
