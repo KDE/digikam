@@ -179,25 +179,6 @@ void AssignedListView::setCurrentTool(int index)
     }
 }
 
-int AssignedListView::toolIndex(BatchTool* tool)
-{
-    int index = 1;
-
-    QTreeWidgetItemIterator it(this);
-    while (*it)
-    {
-        AssignedListViewItem* item = dynamic_cast<AssignedListViewItem*>(*it);
-        if (item)
-        {
-            if (item->toolSet().tool == tool)
-                return index;
-        }
-        ++index;
-        ++it;
-    }
-    return -1;
-}
-
 AssignedBatchTools AssignedListView::assignedList()
 {
     BatchToolMap map;
@@ -250,34 +231,11 @@ void AssignedListView::slotMoveCurrentToolUp()
     AssignedListViewItem* item = dynamic_cast<AssignedListViewItem*>(currentItem());
     if (item)
     {
-        int index = toolIndex(item->toolSet().tool);
-        if (index != -1)
+        AssignedListViewItem* iabove = dynamic_cast<AssignedListViewItem*>(itemAbove(item));
+        if (iabove)
         {
-            int preIndex = index-2;
-            if (preIndex != -1)
-            {
-                AssignedListViewItem* iabove = findTool(preIndex);
-                if (iabove)
-                {
-                    AssignedListViewItem* nitem = moveTool(iabove, item->toolSet());
-                    setCurrentItem(nitem);
-                }
-            }
-            else
-            {
-                BatchToolMap map = assignedList().toolsMap;
-                BatchToolSet tmp = map[0];
-                map[0]           = map[1];
-                map[1]           = tmp;
-
-                AssignedBatchTools tools;
-                tools.toolsMap = map;
-
-                blockSignals(true);
-                slotQueueSelected(-1, QueueSettings(), tools);
-                blockSignals(false);
-                setCurrentTool(0);
-            }
+            moveTool(item, iabove->toolSet());
+            setCurrentItem(item);
         }
     }
 }
