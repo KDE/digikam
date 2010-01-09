@@ -354,10 +354,10 @@ void ImageWidget::setICCSettings(ICCSettingsContainer*)
     d->previewWidget->slotCMViewSettingsChanged();
 }
 
-void ImageWidget::setExposureSettings(ExposureSettingsContainer* settings)
+void ImageWidget::setExposureSettings(ExposureSettingsContainer*)
 {
-    d->previewWidget->slotToggleUnderExposure(settings->underExposureIndicator);
-    d->previewWidget->slotToggleOverExposure(settings->overExposureIndicator);
+    d->previewWidget->slotToggleUnderExposure();
+    d->previewWidget->slotToggleOverExposure();
 }
 
 }  // namespace Digikam

@@ -308,14 +308,24 @@ void DImgInterface::resetValues()
     d->undoMan->clear();
 }
 
-void DImgInterface::setICCSettings(ICCSettingsContainer *cmSettings)
+void DImgInterface::setICCSettings(ICCSettingsContainer* cmSettings)
 {
     d->cmSettings = cmSettings;
 }
 
-void DImgInterface::setExposureSettings(ExposureSettingsContainer *expoSettings)
+ICCSettingsContainer* DImgInterface::getICCSettings()
+{
+    return d->cmSettings;
+}
+
+void DImgInterface::setExposureSettings(ExposureSettingsContainer* expoSettings)
 {
     d->expoSettings = expoSettings;
+}
+
+ExposureSettingsContainer* DImgInterface::getExposureSettings()
+{
+    return d->expoSettings;
 }
 
 void DImgInterface::slotImageLoaded(const LoadingDescription& loadingDescription, const DImg& img)
@@ -1046,11 +1056,6 @@ QString DImgInterface::getImageFormat()
     return mimeType;
 }
 
-ICCSettingsContainer* DImgInterface::getICCSettings()
-{
-    return d->cmSettings;
-}
-
 QPixmap DImgInterface::convertToPixmap(DImg& img)
 {
     if (d->cmSettings->enableCM && (d->cmSettings->useManagedView || d->doSoftProofing))
@@ -1068,16 +1073,6 @@ QPixmap DImgInterface::convertToPixmap(DImg& img)
     }
 
     return img.convertToPixmap();
-}
-
-QColor DImgInterface::underExposureColor()
-{
-    return d->expoSettings->underExposureColor;
-}
-
-QColor DImgInterface::overExposureColor()
-{
-    return d->expoSettings->overExposureColor;
 }
 
 }  // namespace Digikam

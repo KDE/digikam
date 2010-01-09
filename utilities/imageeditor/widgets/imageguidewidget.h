@@ -113,8 +113,8 @@ public Q_SLOTS:
     void slotChangeGuideColor(const QColor& color);
     void slotChangeGuideSize(int size);
     void slotChangeRenderingPreviewMode(int mode);
-    void slotToggleUnderExposure(bool);
-    void slotToggleOverExposure(bool);
+    void slotToggleUnderExposure();
+    void slotToggleOverExposure();
     void slotCMViewSettingsChanged();
 
 Q_SIGNALS:
