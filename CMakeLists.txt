@@ -616,6 +616,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
        )
 
     SET(libcommonwidgets_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/buttonicondisabler.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/colorgradientwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/comboboxutilities.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/curveswidget.cpp

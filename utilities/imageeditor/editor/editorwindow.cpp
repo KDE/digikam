@@ -104,6 +104,7 @@
 
 // Local includes
 
+#include "buttonicondisabler.h"
 #include "canvas.h"
 #include "colorcorrectiondlg.h"
 #include "dimginterface.h"
@@ -633,23 +634,26 @@ void EditorWindow::setupStatusBar()
 
     d->underExposureIndicator = new QToolButton(buttonsBox);
     d->underExposureIndicator->setDefaultAction(d->viewUnderExpoAction);
+    new ButtonIconDisabler(d->underExposureIndicator);
 
     d->overExposureIndicator  = new QToolButton(buttonsBox);
     d->overExposureIndicator->setDefaultAction(d->viewOverExpoAction);
+    new ButtonIconDisabler(d->overExposureIndicator);
 
     d->cmViewIndicator        = new QToolButton(buttonsBox);
     d->cmViewIndicator->setDefaultAction(d->viewCMViewAction);
+    new ButtonIconDisabler(d->cmViewIndicator);
 
     buttonsGrp->addButton(d->underExposureIndicator);
     buttonsGrp->addButton(d->overExposureIndicator);
     buttonsGrp->addButton(d->cmViewIndicator);
-    
+
     hlay->setSpacing(0);
     hlay->setMargin(0);
     hlay->addWidget(d->underExposureIndicator);
     hlay->addWidget(d->overExposureIndicator);
     hlay->addWidget(d->cmViewIndicator);
-    
+
     statusBar()->addPermanentWidget(buttonsBox);
 }
 
