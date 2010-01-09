@@ -349,7 +349,7 @@ void RawPreview::paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh)
     if (d->cmSettings && d->cmSettings->enableCM && d->cmSettings->useManagedView)
     {
         IccManager manager(img);
-        IccTransform monitorICCtrans = manager.displayTransform();
+        IccTransform monitorICCtrans = manager.displayTransform(this);
         pixImage                     = img.convertToPixmap(monitorICCtrans);
     }
     else
