@@ -59,4 +59,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 050 ==> 214913 : digiKam crash scanning photos.
 051 ==> 221938 : crash while clicked on lens->distortion
 052 ==> 221113 : RW2 images are not rotated anymore.
-053 ==> 
+053 ==> 216874 : File renaming in the queue settings don't manage tokens [date] and [cam].
+054 ==> 
