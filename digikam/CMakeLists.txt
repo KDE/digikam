@@ -17,7 +17,6 @@ INCLUDE_DIRECTORIES(
 
                      # widgets and dialogs
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/common
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/imageplugins
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/metadata
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/iccprofiles
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/imageproperties
@@ -31,6 +30,7 @@ INCLUDE_DIRECTORIES(
                      # shared utilities
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/slideshow
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/editor
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/widgets
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/canvas
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/printiface
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/rawimport
@@ -106,7 +106,7 @@ SET(digikamcore_LIB_SRCS
 
                         # widgets and dialogs
                         ${libcommonwidgets_SRCS}
-                        ${libimagepluginswidgets_SRCS}
+                        ${libeditorwidgets_SRCS}
                         ${libiccprofileswidgets_SRCS}
                         ${libmetadatawidgets_SRCS}
                         ${libdialogs_SRCS}

@@ -2,6 +2,7 @@ SET_DEBUG_AREA_CODE(${AREA_CODE_IMAGEPLUGINS})
 
 INCLUDE_DIRECTORIES(../utilities/imageeditor/editor
                     ../utilities/imageeditor/canvas
+                    ../utilities/imageeditor/widgets
                     ../libs/histogram
                     ../libs/levels
                     ../libs/curves
@@ -9,7 +10,6 @@ INCLUDE_DIRECTORIES(../utilities/imageeditor/editor
                     ../libs/whitebalance
                     ../libs/widgets/common
                     ../libs/widgets/iccprofiles
-                    ../libs/widgets/imageplugins
                     ../libs/dialogs
                     ../libs/dimg
                     ../libs/dimg/filters

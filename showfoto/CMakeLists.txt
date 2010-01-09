@@ -7,7 +7,6 @@ ENDIF(NOT MSVC)
 
 INCLUDE_DIRECTORIES( ../showfoto/setup
                      ../libs/widgets/common
-                     ../libs/widgets/imageplugins
                      ../libs/widgets/metadata
                      ../libs/widgets/iccprofiles
                      ../libs/jpegutils
@@ -27,6 +26,7 @@ INCLUDE_DIRECTORIES( ../showfoto/setup
                      ../libs/dialogs
                      ../utilities/setup
                      ../utilities/imageeditor/canvas
+                     ../utilities/imageeditor/widgets
                      ../utilities/imageeditor/editor
                      ../utilities/imageeditor/printiface
                      ../utilities/imageeditor/rawimport
