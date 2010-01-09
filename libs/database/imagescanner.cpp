@@ -588,7 +588,7 @@ QString ImageScanner::uniqueHash()
 
 QString ImageScanner::detectFormat()
 {
-    DImg::FORMAT dimgFormat = m_img.fileFormat();
+    DImg::FORMAT dimgFormat = m_img.detectedFormat();
     switch (dimgFormat)
     {
         case DImg::JPEG:

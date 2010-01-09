@@ -250,7 +250,22 @@ public:
         QImage-based loader will have been used. To find out if this has worked, check
         the return value you got from load().
      */
-    FORMAT      fileFormat() const;
+    FORMAT      detectedFormat() const;
+
+    /** Returns the format string as written by the image loader this image was originally
+        loaded from. Format strings used include JPEG, PNG, TIFF, PGF, JP2K, RAW, PPM.
+        For images loaded with the platform QImage loader, the file suffix is used.
+        Returns null if this DImg was not loaded from a file, but created in memory.
+    */
+    QString     format() const;
+
+    /** Returns the format string of the format that this image was last saved to.
+        An image can be loaded from a file - retrieve that format with fileFormat()
+        and loadedFormat() - and can the multiple times be saved to different formats.
+        Format strings used include JPEG, PGF, PNG, TIFF and JP2K.
+        If this file was not save, a null string is returned.
+    */
+    QString     savedFormat() const;
 
     /** Returns the DRawDecoding options that this DImg was loaded with.
      *  If this is not a RAW image or no options were specified, returns DRawDecoding().
@@ -306,6 +321,15 @@ public:
      */
     void       updateMetadata(const QString& destMimeType, const QString& originalFileName,
                               bool resetExifOrientationTag);
+
+    /** When loaded from a file, some attributes like format and isReadOnly still depend on this
+        originating file. When saving in a different format to a different file,
+        you may wish to switch these attributes to the new file.
+        Example: an image loaded from a RAW and saved to PNG will be read-only and format RAW.
+        After calling this method, it will not be read-only, format will be PNG,
+        and rawDecodingSettings will be null. detectedFormat() will not change.
+    */
+    void        switchOriginToLastSaved();
 
     /** Return a deep copy of full image
       */

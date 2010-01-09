@@ -324,7 +324,7 @@ bool BatchTool::savefromDImg()
     if (frm.isEmpty())
     {
         // In case of output support is not set for ex. with all tool which do not convert to new format.
-        DImg::FORMAT format = (DImg::FORMAT)(d->image.attribute("detectedFileFormat").toInt());
+        DImg::FORMAT format = d->image.detectedFormat();
         d->image.updateMetadata(DImg::formatToMimeType(format), QString(),
                                 getResetExifOrientationAllowed() && getNeedResetExifOrientation());
         return( d->image.save(outputUrl().toLocalFile(), format, d->observer) );
