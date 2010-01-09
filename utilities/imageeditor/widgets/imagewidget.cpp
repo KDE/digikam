@@ -64,11 +64,9 @@ public:
         previewButtons = 0;
         previewWidget  = 0;
         prevBBox       = 0;
-        expoBBox       = 0;
     }
 
     QWidget*            prevBBox;
-    QWidget*            expoBBox;
 
     QString             settingsSection;
 
@@ -226,7 +224,6 @@ ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
         setRenderingPreviewMode(ImageGuideWidget::NoPreviewMode);
         d->spotInfoLabel->hide();
         d->prevBBox->hide();
-        d->expoBBox->hide();
     }
 }
 

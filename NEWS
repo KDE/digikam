@@ -57,4 +57,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 048 ==> 191414 : Selecting "synchronize images with database" in album drop-down menu causes signal 6 (sigabrt).
 049 ==> 221440 : Crashes when adding album.
 050 ==> 214913 : digiKam crash scanning photos.
-051 ==> 
+051 ==> 221938 : crash while clicked on lens->distortion
+052 ==>
