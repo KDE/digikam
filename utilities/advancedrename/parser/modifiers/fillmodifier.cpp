@@ -4,7 +4,8 @@
  * http://www.digikam.org
  *
  * Date        : 2009-09-14
- * Description : trimmed token modifier
+ * Description : a modifier to fill a string with a character to
+ *               match a certain length
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
