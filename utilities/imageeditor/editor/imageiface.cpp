@@ -386,7 +386,7 @@ void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h,
         p->begin(device);
     }
 
-    int width = w > 0 ? qMin(d->previewWidth, w) : d->previewWidth;
+    int width  = w > 0 ? qMin(d->previewWidth, w) : d->previewWidth;
     int height = h > 0 ? qMin(d->previewHeight, h) : d->previewHeight;
 
     if ( !d->targetPreviewImage.isNull() )
