@@ -69,19 +69,19 @@ public:
         currentFitWindowZoom = 0;
     }
 
-    double                     currentFitWindowZoom;
+    double                 currentFitWindowZoom;
 
-    QToolButton*               cornerButton;
+    QToolButton*           cornerButton;
 
-    KPopupFrame*               panIconPopup;
-    KUrl                       url;
+    KPopupFrame*           panIconPopup;
+    KUrl                   url;
 
-    PanIconWidget*             panIconWidget;
-    DImg                       demosaicedImg;
-    DImg                       postProcessedImg;
-    DRawDecoding               settings;
-    ManagedLoadSaveThread*     thread;
-    LoadingDescription         loadingDesc;
+    PanIconWidget*         panIconWidget;
+    DImg                   demosaicedImg;
+    DImg                   postProcessedImg;
+    DRawDecoding           settings;
+    ManagedLoadSaveThread* thread;
+    LoadingDescription     loadingDesc;
 };
 
 RawPreview::RawPreview(const KUrl& url, QWidget *parent)
