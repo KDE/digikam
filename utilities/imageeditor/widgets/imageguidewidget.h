@@ -108,14 +108,14 @@ public:
 
     QImage getMask() const;
 
+    void   ICCSettingsChanged();
+    void   exposureSettingsChanged();
+
 public Q_SLOTS:
 
     void slotChangeGuideColor(const QColor& color);
     void slotChangeGuideSize(int size);
     void slotChangeRenderingPreviewMode(int mode);
-    void slotToggleUnderExposure();
-    void slotToggleOverExposure();
-    void slotCMViewSettingsChanged();
 
 Q_SIGNALS:
 

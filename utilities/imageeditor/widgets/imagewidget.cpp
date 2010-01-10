@@ -345,13 +345,12 @@ void ImageWidget::setEraseMode(bool erase)
 
 void ImageWidget::ICCSettingsChanged()
 {
-    d->previewWidget->slotCMViewSettingsChanged();
+    d->previewWidget->ICCSettingsChanged();
 }
 
 void ImageWidget::exposureSettingsChanged()
 {
-    d->previewWidget->slotToggleUnderExposure();
-    d->previewWidget->slotToggleOverExposure();
+    d->previewWidget->exposureSettingsChanged();
 }
 
 }  // namespace Digikam

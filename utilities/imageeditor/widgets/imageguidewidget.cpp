@@ -184,17 +184,12 @@ ImageIface* ImageGuideWidget::imageIface()
     return d->iface;
 }
 
-void ImageGuideWidget::slotToggleUnderExposure()
+void ImageGuideWidget::ICCSettingsChanged()
 {
     updatePreview();
 }
 
-void ImageGuideWidget::slotToggleOverExposure()
-{
-    updatePreview();
-}
-
-void ImageGuideWidget::slotCMViewSettingsChanged()
+void ImageGuideWidget::exposureSettingsChanged()
 {
     updatePreview();
 }
