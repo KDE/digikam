@@ -24,9 +24,13 @@
 #ifndef PREVIEWTOOLBAR_H
 #define PREVIEWTOOLBAR_H
 
-// KDE includes
+// Qt includes
 
 #include <QtGui/QWidget>
+
+// KDE includes
+
+#include <kconfiggroup.h>
 
 // Local includes
 
@@ -43,7 +47,7 @@ class DIGIKAM_EXPORT PreviewToolBar : public QWidget
 
 public:
 
-    enum PreviewMode
+    enum PreviewModes
     {
         PreviewOriginalImage      = 0x00000001,      // Original image only.
         PreviewBothImagesHorz     = 0x00000002,      // Horizontal with original and target duplicated.
@@ -53,12 +57,21 @@ public:
         PreviewTargetImage        = 0x00000020,      // Target image only.
         PreviewToggleOnMouseOver  = 0x00000040,      // Original image if mouse is over image area, else target image.
         NoPreviewMode             = 0x00000080,      // Target image only without information displayed.
+        AllPreviewModes           = PreviewOriginalImage      | PreviewBothImagesHorz     |
+                                    PreviewBothImagesVert     | PreviewBothImagesHorzCont |
+                                    PreviewBothImagesVertCont | PreviewTargetImage        |
+                                    PreviewToggleOnMouseOver
     };
 
 public:
 
     PreviewToolBar(QWidget* parent=0);
     ~PreviewToolBar();
+
+    void setPreviewModes(PreviewModes modeMask);
+
+    void readSettings(KConfigGroup& group);
+    void writeSettings(KConfigGroup& group);
 
 Q_SIGNALS:
 
