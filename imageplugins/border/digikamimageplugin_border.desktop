@@ -2,6 +2,7 @@
 Name=ImagePlugin_Border
 Name[bg]=Приставка за снимки - Рамки
 Name[ca]=ImagePlugin_Border
+Name[ca@valencia]=ImagePlugin_Border
 Name[cs]=ImagePlugin_Border
 Name[da]=ImagePlugin_Border
 Name[de]=Bildmodul_Rahmen
@@ -45,6 +46,7 @@ Encoding=UTF-8
 Comment=Add border to image plugin for digiKam
 Comment[bg]=Приставка на digiKam за добавяне на рамки на снимки
 Comment[ca]=Connector pel DigiKam per afegir una vora a la imatge
+Comment[ca@valencia]=Connector pel DigiKam per afegir una vora a la imatge
 Comment[cs]=Modul digiKamu pro přidání okraje obrázku
 Comment[da]=digiKam-plugin til indramning af billeder
 Comment[de]=digiKam-Modul um einem Bild einen Rahmen hinzuzufügen

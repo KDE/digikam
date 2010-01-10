@@ -4,6 +4,7 @@ Icon=digikam
 Name=digiKam Detect and Download
 Name[bg]=Откриване и изтегляне
 Name[ca]=Detecta i descarrega amb el DigiKam
+Name[ca@valencia]=Detecta i descarrega amb el DigiKam
 Name[cs]=Detekce a stahování digiKam
 Name[da]=Detektér og download med digiKam
 Name[de]=digiKam - Entdecken und herunterladen

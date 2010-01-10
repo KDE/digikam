@@ -2,6 +2,7 @@
 Name=ImagePlugin_AdjustCurves
 Name[bg]=Приставка за снимки - Настройка на кривите
 Name[ca]=ImagePlugin_AdjustCurves
+Name[ca@valencia]=ImagePlugin_AdjustCurves
 Name[cs]=ImagePlugin_AdjustCurves
 Name[da]=ImagePlugin_AdjustCurves
 Name[de]=Bildmodul_Gradation
@@ -46,6 +47,7 @@ Encoding=UTF-8
 Comment=Image histogram adjust curves plugin for digiKam
 Comment[bg]=Приставка на digiKam за настройка кривите на хистограмите на снимки
 Comment[ca]=Connector pel DigiKam d'ajust de les corbes de l'histograma d'imatges
+Comment[ca@valencia]=Connector pel DigiKam d'ajust de les corbes de l'histograma d'imatges
 Comment[cs]=Modul digiKamu pro úpravu křivek histogramu obrázku
 Comment[da]=digiKam-plugin til justering af histogramkurver
 Comment[de]=digiKam-Modul zur Gradation mittels Bildhistogramm

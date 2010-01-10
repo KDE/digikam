@@ -2,6 +2,7 @@
 Name=ImagePlugin_OilPaint
 Name[bg]=Приставка за снимки - Маслени бои
 Name[ca]=ImagePlugin_OilPaint
+Name[ca@valencia]=ImagePlugin_OilPaint
 Name[cs]=ImagePlugin_OilPaint
 Name[da]=ImagePlugin_OilPaint
 Name[de]=Bildmodul_Ölgemälde
@@ -44,6 +45,7 @@ Encoding=UTF-8
 Comment=Oil paint image effect plugin for digiKam
 Comment[bg]=Приставка на digiKam за наподобяване на картина с маслени бои
 Comment[ca]=Connector pel DigiKam d'efecte de pintura a l'oli
+Comment[ca@valencia]=Connector pel DigiKam d'efecte de pintura a l'oli
 Comment[cs]=Modul simulace olejomalby pro digiKam
 Comment[da]=digiKam-plugin med oliemalingeffekt på billeder
 Comment[de]=digiKam-Modul zur Erzeugung eines Ölgemäldeeffektes

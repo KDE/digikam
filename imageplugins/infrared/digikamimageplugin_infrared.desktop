@@ -2,6 +2,7 @@
 Name=ImagePlugin_Infrared
 Name[bg]=Приставка за снимки - Инфрачервен филм
 Name[ca]=ImagePlugin_Infrared
+Name[ca@valencia]=ImagePlugin_Infrared
 Name[cs]=ImagePlugin_Infrared
 Name[da]=ImagePlugin_Infrared
 Name[de]=Bildmodul_Infrarot
@@ -45,6 +46,7 @@ Encoding=UTF-8
 Comment=Simulate infrared film plugin for digiKam
 Comment[bg]=Приставка на digiKam за наподобяване на снимка с инфрачервен филм
 Comment[ca]=Connector pel DigiKam de simulació de pel·lícula d'infraroigs
+Comment[ca@valencia]=Connector pel DigiKam de simulació de pel·lícula d'infraroigs
 Comment[cs]=Modul digiKamu pro simulaci infračerveného filmu
 Comment[da]=digiKam-plugin til simulering af infrarød film
 Comment[de]=digiKam-Modul zur Simulation eines Infrarotfilms
