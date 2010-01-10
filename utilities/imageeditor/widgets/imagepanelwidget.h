@@ -43,8 +43,6 @@ class QProgressBar;
 namespace Digikam
 {
 
-class ExposureSettingsContainer;
-class ICCSettingsContainer;
 class ImageRegionWidget;
 class ImagePanIconWidget;
 class ImagePanelWidgetPriv;
@@ -55,7 +53,7 @@ Q_OBJECT
 
 public:
 
-    enum SeparateViewOptions 
+    enum SeparateViewOptions
     {
         SeparateViewNormal=0,
         SeparateViewDuplicate,
@@ -78,9 +76,9 @@ public:
 
     void   setPanIconHighLightPoints(const QPolygon& pt);
 
-    void   setExposureSettings(ExposureSettingsContainer*);
-    void   setICCSettings(ICCSettingsContainer*);
-    
+    void   ICCSettingsChanged();
+    void   exposureSettingsChanged();
+
     void   writeSettings();
 
     ImageRegionWidget *previewWidget() const;

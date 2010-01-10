@@ -50,6 +50,7 @@
 #include "iccsettingscontainer.h"
 #include "icctransform.h"
 #include "themeengine.h"
+#include "dimginterface.h"
 
 namespace Digikam
 {
@@ -66,8 +67,6 @@ public:
         thread               = 0;
         url                  = 0;
         currentFitWindowZoom = 0;
-        cmSettings           = 0;
-        expoSettings         = 0;
     }
 
     double                     currentFitWindowZoom;
@@ -83,8 +82,6 @@ public:
     DRawDecoding               settings;
     ManagedLoadSaveThread*     thread;
     LoadingDescription         loadingDesc;
-    ICCSettingsContainer*      cmSettings;
-    ExposureSettingsContainer* expoSettings;
 };
 
 RawPreview::RawPreview(const KUrl& url, QWidget *parent)
@@ -157,16 +154,14 @@ void RawPreview::setDecodingSettings(const DRawDecoding& settings)
     emit signalLoadingStarted();
 }
 
-void RawPreview::setExposureSettings(ExposureSettingsContainer* expoSettings)
+void RawPreview::exposureSettingsChanged()
 {
-    d->expoSettings = expoSettings;
     clearCache();
     viewport()->update();
 }
 
-void RawPreview::setICCSettings(ICCSettingsContainer* cmSettings)
+void RawPreview::ICCSettingsChanged()
 {
-    d->cmSettings = cmSettings;
     clearCache();
     viewport()->update();
 }
@@ -346,7 +341,9 @@ void RawPreview::paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh)
 
     QPixmap pixImage;
 
-    if (d->cmSettings && d->cmSettings->enableCM && d->cmSettings->useManagedView)
+    ICCSettingsContainer *iccSettings = DImgInterface::defaultInterface()->getICCSettings();
+
+    if (iccSettings && iccSettings->enableCM && iccSettings->useManagedView)
     {
         IccManager manager(img);
         IccTransform monitorICCtrans = manager.displayTransform(this);
@@ -362,11 +359,12 @@ void RawPreview::paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh)
 
     // Show the Over/Under exposure pixels indicators
 
-    if (d->expoSettings)
+    ExposureSettingsContainer* expoSettings = DImgInterface::defaultInterface()->getExposureSettings();
+    if (expoSettings)
     {
-        if (d->expoSettings->underExposureIndicator || d->expoSettings->overExposureIndicator)
+        if (expoSettings->underExposureIndicator || expoSettings->overExposureIndicator)
         {
-            QImage pureColorMask = img.pureColorMask(d->expoSettings);
+            QImage pureColorMask = img.pureColorMask(expoSettings);
             QPixmap pixMask      = QPixmap::fromImage(pureColorMask);
             p.drawPixmap(0, 0, pixMask);
         }

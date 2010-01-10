@@ -41,8 +41,6 @@
 namespace Digikam
 {
 
-class ExposureSettingsContainer;
-class ICCSettingsContainer;
 class ImageIface;
 class ImageWidgetPriv;
 
@@ -84,9 +82,10 @@ public:
     void   setMaskEnabled(bool enabled);
     void   setMaskPenSize(int size);
     void   setEraseMode(bool erase);
-    void   setExposureSettings(ExposureSettingsContainer*);
-    void   setICCSettings(ICCSettingsContainer*);
-    
+
+    void   ICCSettingsChanged();
+    void   exposureSettingsChanged();
+
     QImage getMask() const;
 
 public Q_SLOTS:

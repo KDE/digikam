@@ -227,26 +227,26 @@ void EditorTool::slotCloseTool()
     slotCancel();
 }
 
-void EditorTool::setICCSettings(ICCSettingsContainer* settings)
+void EditorTool::ICCSettingsChanged()
 {
     ImageWidget* view = dynamic_cast<ImageWidget*>(d->view);
     if (view)
-        view->setICCSettings(settings);
+        view->ICCSettingsChanged();
 
     ImagePanelWidget* view2 = dynamic_cast<ImagePanelWidget*>(d->view);
     if (view2)
-        view2->setICCSettings(settings);
+        view2->ICCSettingsChanged();
 }
 
-void EditorTool::setExposureSettings(ExposureSettingsContainer* settings)
+void EditorTool::exposureSettingsChanged()
 {
     ImageWidget* view = dynamic_cast<ImageWidget*>(d->view);
     if (view)
-        view->setExposureSettings(settings);
+        view->exposureSettingsChanged();
 
     ImagePanelWidget* view2 = dynamic_cast<ImagePanelWidget*>(d->view);
     if (view2)
-        view2->setExposureSettings(settings);
+        view2->exposureSettingsChanged();
 }
 
 // ----------------------------------------------------------------

@@ -45,12 +45,6 @@
 #include <ksqueezedtextlabel.h>
 #include <kstandarddirs.h>
 
-// Local includes
-
-#include "exposurecontainer.h"
-#include "iccsettingscontainer.h"
-
-
 namespace Digikam
 {
 
@@ -349,12 +343,12 @@ void ImageWidget::setEraseMode(bool erase)
     d->previewWidget->setEraseMode(erase);
 }
 
-void ImageWidget::setICCSettings(ICCSettingsContainer*)
+void ImageWidget::ICCSettingsChanged()
 {
     d->previewWidget->slotCMViewSettingsChanged();
 }
 
-void ImageWidget::setExposureSettings(ExposureSettingsContainer*)
+void ImageWidget::exposureSettingsChanged()
 {
     d->previewWidget->slotToggleUnderExposure();
     d->previewWidget->slotToggleOverExposure();

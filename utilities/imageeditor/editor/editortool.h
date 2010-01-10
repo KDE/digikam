@@ -38,8 +38,6 @@
 namespace Digikam
 {
 
-class ICCSettingsContainer;
-class ExposureSettingsContainer;
 class DImgThreadedFilter;
 class EditorToolSettings;
 class EditorToolPriv;
@@ -61,8 +59,8 @@ public:
     QWidget*            toolView() const;
     EditorToolSettings* toolSettings() const;
 
-    virtual void        setICCSettings(ICCSettingsContainer*);
-    virtual void        setExposureSettings(ExposureSettingsContainer*);
+    virtual void        ICCSettingsChanged();
+    virtual void        exposureSettingsChanged();
 
 public Q_SLOTS:
 

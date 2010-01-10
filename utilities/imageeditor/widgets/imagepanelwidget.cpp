@@ -52,8 +52,6 @@
 
 // Local includes
 
-#include "exposurecontainer.h"
-#include "iccsettingscontainer.h"
 #include "thumbnailsize.h"
 #include "imageregionwidget.h"
 #include "imagepaniconwidget.h"
@@ -337,12 +335,12 @@ void ImagePanelWidget::updateSelectionInfo(const QRect& rect)
                                            rect.width(), rect.height()));
 }
 
-void ImagePanelWidget::setICCSettings(ICCSettingsContainer*)
+void ImagePanelWidget::ICCSettingsChanged()
 {
     d->imageRegionWidget->viewport()->repaint();
 }
 
-void ImagePanelWidget::setExposureSettings(ExposureSettingsContainer*)
+void ImagePanelWidget::exposureSettingsChanged()
 {
     // NOTE : not yet managed here by imageRegionWidget.
 }

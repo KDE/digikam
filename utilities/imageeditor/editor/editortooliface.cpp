@@ -47,8 +47,8 @@ public:
 
     EditorToolIfacePriv()
     {
-        editor  = 0;
-        tool    = 0;
+        editor = 0;
+        tool   = 0;
     }
 
     EditorTool*   tool;
@@ -156,7 +156,7 @@ void EditorToolIface::updateICCSettings()
     ICCSettingsContainer* cmSettings = d->editor->cmSettings();
     d->editor->editorStackView()->canvas()->setICCSettings(cmSettings);
     EditorTool *tool = dynamic_cast<EditorTool*>(d->tool);
-    if (tool) tool->setICCSettings(cmSettings);
+    if (tool) tool->ICCSettingsChanged();
 }
 
 void EditorToolIface::updateExposureSettings()
@@ -164,7 +164,7 @@ void EditorToolIface::updateExposureSettings()
     ExposureSettingsContainer* expoSettings = d->editor->exposureSettings();
     d->editor->editorStackView()->canvas()->setExposureSettings(expoSettings);
     EditorTool *tool = dynamic_cast<EditorTool*>(d->tool);
-    if (tool) tool->setExposureSettings(expoSettings);
+    if (tool) tool->exposureSettingsChanged();
 }
 
 }  // namespace Digikam

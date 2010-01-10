@@ -46,8 +46,6 @@ namespace Digikam
 {
 
 class LoadingDescription;
-class ExposureSettingsContainer;
-class ICCSettingsContainer;
 class RawPreviewPriv;
 
 class DIGIKAM_EXPORT RawPreview : public PreviewWidget
@@ -65,8 +63,9 @@ public:
 
     void setDecodingSettings(const DRawDecoding& settings);
     void setPostProcessedImage(const DImg& image);
-    void setExposureSettings(ExposureSettingsContainer* expoSettings);
-    void setICCSettings(ICCSettingsContainer* cmSettings);
+
+    void ICCSettingsChanged();
+    void exposureSettingsChanged();
 
     void cancelLoading();
 
