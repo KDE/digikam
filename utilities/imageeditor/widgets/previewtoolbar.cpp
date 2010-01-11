@@ -184,6 +184,8 @@ void PreviewToolBar::setPreviewMode(PreviewMode mode)
 
 PreviewToolBar::PreviewMode PreviewToolBar::previewMode()
 {
+    if (!isEnabled()) return PreviewToolBar::NoPreviewMode;
+    
     return((PreviewMode)d->previewButtons->checkedId());
 }
 

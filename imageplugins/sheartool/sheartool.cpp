@@ -116,7 +116,7 @@ ShearTool::ShearTool(QObject* parent)
     setToolName(i18n("Shear Tool"));
     setToolIcon(SmallIcon("shear"));
 
-    d->previewWidget = new ImageGuideWidget(0, false, ImageGuideWidget::HVGuideMode);
+    d->previewWidget = new ImageGuideWidget(0, true, ImageGuideWidget::HVGuideMode);
     d->previewWidget->setWhatsThis(i18n("This is the shear operation preview. "
                                         "If you move the mouse cursor on this preview, "
                                         "a vertical and horizontal dashed line will be drawn "

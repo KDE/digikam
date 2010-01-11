@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-
 #include "bordertool.moc"
 
 // Qt includes
@@ -145,7 +144,7 @@ BorderTool::BorderTool(QObject* parent)
     setToolName(i18n("Add Border"));
     setToolIcon(SmallIcon("bordertool"));
 
-    d->previewWidget = new ImageGuideWidget(0, true, ImageGuideWidget::HVGuideMode);
+    d->previewWidget = new ImageGuideWidget(0, false, ImageGuideWidget::HVGuideMode);
     setToolView(d->previewWidget);
 
     // -------------------------------------------------------------

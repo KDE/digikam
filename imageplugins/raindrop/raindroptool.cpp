@@ -100,7 +100,7 @@ RainDropTool::RainDropTool(QObject* parent)
     setToolName(i18n("Raindrops"));
     setToolIcon(SmallIcon("raindrop"));
 
-    d->previewWidget = new ImageGuideWidget;
+    d->previewWidget = new ImageGuideWidget(0, false, ImageGuideWidget::HVGuideMode);
     d->previewWidget->setWhatsThis(i18n("This is the preview of the Raindrop effect."
                                         "<p>Note: if you have previously selected an area in the editor, "
                                         "this will be unaffected by the filter. You can use this method to "

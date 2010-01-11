@@ -154,7 +154,7 @@ InPaintingTool::InPaintingTool(QObject* parent)
     setToolName(i18n("In-painting"));
     setToolIcon(SmallIcon("inpainting"));
 
-    d->previewWidget = new ImageGuideWidget(0, true, ImageGuideWidget::HVGuideMode, Qt::red, 1, false, true);
+    d->previewWidget = new ImageGuideWidget(0, false, ImageGuideWidget::HVGuideMode, Qt::red, 1, false, true);
     d->previewWidget->setWhatsThis(i18n("The image selection preview with in-painting applied "
                                         "is shown here."));
     setToolView(d->previewWidget);
