@@ -115,7 +115,7 @@ LensDistortionTool::LensDistortionTool(QObject* parent)
     setToolName(i18n("Lens Distortion"));
     setToolIcon(SmallIcon("lensdistortion"));
 
-    d->previewWidget = new ImageGuideWidget(0, false, ImageGuideWidget::HVGuideMode);
+    d->previewWidget = new ImageGuideWidget(0, true, ImageGuideWidget::HVGuideMode);
     setToolView(d->previewWidget);
 
     // -------------------------------------------------------------

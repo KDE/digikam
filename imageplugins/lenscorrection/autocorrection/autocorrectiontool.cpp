@@ -115,7 +115,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
     setToolName(i18n("Lens Auto-Correction"));
     setToolIcon(SmallIcon("lensdistortion"));
 
-    d->previewWidget = new ImageGuideWidget(0, false, ImageGuideWidget::HVGuideMode);
+    d->previewWidget = new ImageGuideWidget(0, true, ImageGuideWidget::HVGuideMode);
     setToolView(d->previewWidget);
     setPreviewModeMask(PreviewToolBar::AllPreviewModes);
     
