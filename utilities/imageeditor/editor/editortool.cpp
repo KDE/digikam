@@ -123,12 +123,16 @@ void EditorTool::setToolView(QWidget *view)
     // Will be unblocked in slotInit()
     // This will prevent resize event signals emit during tool init.
     d->view->blockSignals(true);
-    
-    connect(d->view, SIGNAL(spotPositionChangedFromOriginal(const Digikam::DColor&, const QPoint&)),
-            this, SLOT(slotUpdateSpotInfo(const Digikam::DColor&, const QPoint&)));
 
-    connect(d->view, SIGNAL(spotPositionChangedFromTarget(const Digikam::DColor&, const QPoint&)),
-            this, SLOT(slotUpdateSpotInfo(const Digikam::DColor&, const QPoint&)));
+    ImageGuideWidget* wgt = dynamic_cast<ImageGuideWidget*>(d->view);
+    if (wgt)    
+    {
+        connect(d->view, SIGNAL(spotPositionChangedFromOriginal(const Digikam::DColor&, const QPoint&)),
+                this, SLOT(slotUpdateSpotInfo(const Digikam::DColor&, const QPoint&)));
+
+        connect(d->view, SIGNAL(spotPositionChangedFromTarget(const Digikam::DColor&, const QPoint&)),
+                this, SLOT(slotUpdateSpotInfo(const Digikam::DColor&, const QPoint&)));
+    }
 }
 
 EditorToolSettings* EditorTool::toolSettings() const

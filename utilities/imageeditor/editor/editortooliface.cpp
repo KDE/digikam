@@ -108,8 +108,7 @@ void EditorToolIface::loadTool(EditorTool* tool)
                 
     updateExposureSettings();
     updateICCSettings();
-    setToolInfoMessage(QString());
-    
+    setToolInfoMessage(QString());    
 }
 
 void EditorToolIface::unLoadTool()
@@ -128,7 +127,7 @@ void EditorToolIface::unLoadTool()
     d->tool = 0;
     
     // Reset info label in status bar with canvas selection info.
-    d->editor->slotSelectionChanged(d->editor->m_canvas->getSelectedArea());
+    d->editor->slotSelected(!d->editor->m_canvas->getSelectedArea().isNull());
 }
 
 void EditorToolIface::setToolInfoMessage(const QString& txt)
