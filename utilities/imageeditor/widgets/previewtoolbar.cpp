@@ -167,13 +167,13 @@ void PreviewToolBar::setPreviewModeMask(PreviewMode mask)
 
     setDisabled(false);
 
-    d->previewOriginalButton->setDisabled(mask           & PreviewOriginalImage);
-    d->previewBothButtonVert->setDisabled(mask           & PreviewBothImagesHorz);
-    d->previewBothButtonHorz->setDisabled(mask           & PreviewBothImagesVert);
-    d->previewDuplicateBothButtonVert->setDisabled(mask  & PreviewBothImagesHorzCont);
-    d->previewDupplicateBothButtonHorz->setDisabled(mask & PreviewBothImagesVertCont);
-    d->previewtargetButton->setDisabled(mask             & PreviewTargetImage);
-    d->previewToggleMouseOverButton->setDisabled(mask    & PreviewToggleOnMouseOver);
+    d->previewOriginalButton->setEnabled(mask           & PreviewOriginalImage);
+    d->previewBothButtonVert->setEnabled(mask           & PreviewBothImagesHorz);
+    d->previewBothButtonHorz->setEnabled(mask           & PreviewBothImagesVert);
+    d->previewDuplicateBothButtonVert->setEnabled(mask  & PreviewBothImagesHorzCont);
+    d->previewDupplicateBothButtonHorz->setEnabled(mask & PreviewBothImagesVertCont);
+    d->previewtargetButton->setEnabled(mask             & PreviewTargetImage);
+    d->previewToggleMouseOverButton->setEnabled(mask    & PreviewToggleOnMouseOver);
 }
 
 void PreviewToolBar::setPreviewMode(PreviewMode mode)
