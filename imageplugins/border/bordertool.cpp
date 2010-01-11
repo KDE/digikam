@@ -217,9 +217,9 @@ BorderTool::BorderTool(QObject* parent)
     // -------------------------------------------------------------------
 
     d->labelForeground   = new QLabel();
-    d->firstColorButton  = new KColorButton( QColor::QColor( 192, 192, 192 ) );
+    d->firstColorButton  = new KColorButton( QColor( 192, 192, 192 ) );
     d->labelBackground   = new QLabel();
-    d->secondColorButton = new KColorButton( QColor::QColor( 128, 128, 128 ) );
+    d->secondColorButton = new KColorButton( QColor( 128, 128, 128 ) );
 
     // -------------------------------------------------------------------
 
