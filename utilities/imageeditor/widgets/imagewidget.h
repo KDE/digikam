@@ -50,14 +50,6 @@ Q_OBJECT
 
 public:
 
-    enum ExposureIndicator
-    {
-        UnderExposure=0,
-        OverExposure
-    };
-
-public:
-
     explicit ImageWidget(const QString& settingsSection, QWidget *parent=0,
                          const QString& previewWhatsThis=QString(), bool prevModeOptions=true,
                          int  guideMode=ImageGuideWidget::PickColorMode,
@@ -92,16 +84,13 @@ public Q_SLOTS:
 
     void slotChangeGuideColor(const QColor& color);
     void slotChangeGuideSize(int size);
+    void slotPreviewModeChanged(int);
 
 Q_SIGNALS:
 
     void spotPositionChangedFromOriginal(const Digikam::DColor& color, const QPoint& position);
     void spotPositionChangedFromTarget(const Digikam::DColor& color, const QPoint& position);
     void signalResized();
-
-private Q_SLOTS:
-
-    void slotUpdateSpotInfo(const Digikam::DColor& col, const QPoint& point);
 
 private:
 

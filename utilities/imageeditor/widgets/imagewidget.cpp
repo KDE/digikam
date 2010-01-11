@@ -26,12 +26,6 @@
 
 // Qt includes
 
-#include <QButtonGroup>
-#include <QFrame>
-#include <QGridLayout>
-#include <QLayout>
-#include <QPixmap>
-#include <QToolButton>
 #include <QVBoxLayout>
 
 // KDE includes
@@ -42,8 +36,11 @@
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <ksqueezedtextlabel.h>
 #include <kstandarddirs.h>
+
+// Local includes
+
+#include "previewtoolbar.h"
 
 namespace Digikam
 {
@@ -54,171 +51,42 @@ public:
 
     ImageWidgetPriv()
     {
-        spotInfoLabel  = 0;
-        previewButtons = 0;
         previewWidget  = 0;
-        prevBBox       = 0;
     }
 
-    QWidget*            prevBBox;
-
     QString             settingsSection;
-
-    QButtonGroup*       previewButtons;
-
-    KSqueezedTextLabel* spotInfoLabel;
 
     ImageGuideWidget*   previewWidget;
 };
 
-ImageWidget::ImageWidget(const QString& settingsSection, QWidget *parent,
-                         const QString& previewWhatsThis, bool prevModeOptions,
+ImageWidget::ImageWidget(const QString& settingsSection, QWidget* parent,
+                         const QString& previewWhatsThis, bool /*prevModeOptions*/,
                          int guideMode, bool guideVisible, bool useImageSelection)
            : QWidget(parent), d(new ImageWidgetPriv)
 {
     d->settingsSection = settingsSection;
 
-    // -------------------------------------------------------------
-
-    QGridLayout* grid = new QGridLayout(this);
-    d->spotInfoLabel  = new KSqueezedTextLabel(this);
-    d->spotInfoLabel->setAlignment(Qt::AlignRight);
-
-    // -------------------------------------------------------------
-
-    d->prevBBox       = new QWidget(this);
-    QHBoxLayout *hlay = new QHBoxLayout(d->prevBBox);
-    d->previewButtons = new QButtonGroup(d->prevBBox);
-    d->previewButtons->setExclusive(true);
-    hlay->setSpacing(0);
-    hlay->setMargin(0);
-
-    QToolButton *previewOriginalButton = new QToolButton( d->prevBBox );
-    d->previewButtons->addButton(previewOriginalButton, ImageGuideWidget::PreviewOriginalImage);
-    hlay->addWidget(previewOriginalButton);
-    previewOriginalButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/original.png")));
-    previewOriginalButton->setCheckable(true);
-    previewOriginalButton->setWhatsThis( i18n( "If this option is enabled, the original image "
-                                               "will be shown." ) );
-
-    QToolButton *previewBothButtonVert = new QToolButton( d->prevBBox );
-    d->previewButtons->addButton(previewBothButtonVert, ImageGuideWidget::PreviewBothImagesVertCont);
-    hlay->addWidget(previewBothButtonVert);
-    previewBothButtonVert->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/bothvert.png")));
-    previewBothButtonVert->setCheckable(true);
-    previewBothButtonVert->setWhatsThis( i18n( "If this option is enabled, the preview area will "
-                                               "split vertically. "
-                                               "A contiguous area of the image will be shown, "
-                                               "with one half from the original image, "
-                                               "the other half from the target image.") );
-
-    QToolButton *previewBothButtonHorz = new QToolButton( d->prevBBox );
-    d->previewButtons->addButton(previewBothButtonHorz, ImageGuideWidget::PreviewBothImagesHorzCont);
-    hlay->addWidget(previewBothButtonHorz);
-    previewBothButtonHorz->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/bothhorz.png")));
-    previewBothButtonHorz->setCheckable(true);
-    previewBothButtonHorz->setWhatsThis( i18n( "If this option is enabled, the preview area will "
-                                               "split horizontally. "
-                                               "A contiguous area of the image will be shown, "
-                                               "with one half from the original image, "
-                                               "the other half from the target image.") );
-
-    QToolButton *previewDuplicateBothButtonVert = new QToolButton( d->prevBBox );
-    d->previewButtons->addButton(previewDuplicateBothButtonVert, ImageGuideWidget::PreviewBothImagesVert);
-    hlay->addWidget(previewDuplicateBothButtonVert);
-    previewDuplicateBothButtonVert->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/duplicatebothvert.png")));
-    previewDuplicateBothButtonVert->setCheckable(true);
-    previewDuplicateBothButtonVert->setWhatsThis( i18n( "If this option is enabled, the preview area will "
-                                                        "split vertically. "
-                                                        "The same part of the original and the target image "
-                                                        "will be shown side by side.") );
-
-    QToolButton *previewDupplicateBothButtonHorz = new QToolButton( d->prevBBox );
-    d->previewButtons->addButton(previewDupplicateBothButtonHorz, ImageGuideWidget::PreviewBothImagesHorz);
-    hlay->addWidget(previewDupplicateBothButtonHorz);
-    previewDupplicateBothButtonHorz->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/duplicatebothhorz.png")));
-    previewDupplicateBothButtonHorz->setCheckable(true);
-    previewDupplicateBothButtonHorz->setWhatsThis( i18n( "If this option is enabled, the preview area will "
-                                                         "split horizontally. "
-                                                         "The same part of the original and the target image "
-                                                         "will be shown side by side.") );
-
-    QToolButton *previewtargetButton = new QToolButton( d->prevBBox );
-    d->previewButtons->addButton(previewtargetButton, ImageGuideWidget::PreviewTargetImage);
-    hlay->addWidget(previewtargetButton);
-    previewtargetButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/target.png")));
-    previewtargetButton->setCheckable(true);
-    previewtargetButton->setWhatsThis( i18n( "If this option is enabled, the target image "
-                                             "will be shown." ) );
-
-    QToolButton *previewToggleMouseOverButton = new QToolButton( d->prevBBox );
-    d->previewButtons->addButton(previewToggleMouseOverButton, ImageGuideWidget::PreviewToggleOnMouseOver);
-    hlay->addWidget(previewToggleMouseOverButton);
-    previewToggleMouseOverButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/togglemouseover.png")));
-    previewToggleMouseOverButton->setCheckable(true);
-    previewToggleMouseOverButton->setWhatsThis( i18n( "If this option is enabled, the original image will "
-                                                      "be shown when the mouse is over image area; otherwise, "
-                                                      "the target image will be shown." ) );
-
-    // -------------------------------------------------------------
-
-    QFrame *frame    = new QFrame(this);
-    frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QVBoxLayout* l   = new QVBoxLayout(frame);
-    l->setMargin(5);
-    l->setSpacing(0);
-    d->previewWidget = new ImageGuideWidget(480, 320, frame, guideVisible,
-                                            guideMode, Qt::red, 1, false,
-                                            useImageSelection);
+    QVBoxLayout* vlay = new QVBoxLayout(this);
+    d->previewWidget  = new ImageGuideWidget(this, guideVisible,
+                                             guideMode, Qt::red, 1, false,
+                                             useImageSelection);
     d->previewWidget->setWhatsThis(previewWhatsThis);
-    l->addWidget(d->previewWidget, 0);
-
-    // -------------------------------------------------------------
-
-    grid->addWidget(d->prevBBox,      1, 0, 1, 1);
-    grid->addWidget(d->spotInfoLabel, 1, 1, 1, 1);
-    grid->addWidget(frame,            3, 0, 1, 4);
-    grid->setColumnMinimumWidth(2, KDialog::spacingHint());
-    grid->setColumnMinimumWidth(1, KDialog::spacingHint());
-    grid->setRowMinimumHeight(0, KDialog::spacingHint());
-    grid->setRowMinimumHeight(2, KDialog::spacingHint());
-    grid->setRowStretch(3, 10);
-    grid->setColumnStretch(1, 10);
-    grid->setSpacing(0);
-    grid->setMargin(0);
-
+    vlay->addWidget(d->previewWidget, 0);
+    vlay->setMargin(5);
+    vlay->setSpacing(0);
+    
     // -------------------------------------------------------------
 
     connect(d->previewWidget, SIGNAL(signalResized()),
             this, SIGNAL(signalResized()));
 
     connect(d->previewWidget, SIGNAL(spotPositionChangedFromOriginal(const Digikam::DColor&, const QPoint&)),
-            this, SIGNAL(spotPositionChangedFromOriginal(const Digikam::DColor &, const QPoint &)));
-
-    connect(d->previewWidget, SIGNAL(spotPositionChangedFromOriginal(const Digikam::DColor&, const QPoint&)),
-            this, SLOT(slotUpdateSpotInfo(const Digikam::DColor&, const QPoint&)));
+            this, SIGNAL(spotPositionChangedFromOriginal(const Digikam::DColor&, const QPoint&)));
 
     connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget(const Digikam::DColor&, const QPoint&)),
             this, SIGNAL(spotPositionChangedFromTarget(const Digikam::DColor&, const QPoint&)));
 
-    connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget(const Digikam::DColor&, const QPoint&)),
-            this, SLOT(slotUpdateSpotInfo(const Digikam::DColor&, const QPoint&)));
-
-    connect(d->previewButtons, SIGNAL(buttonReleased(int)),
-            d->previewWidget, SLOT(slotChangeRenderingPreviewMode(int)));
-
     // -------------------------------------------------------------
-
-    if (prevModeOptions)
-    {
-        readSettings();
-    }
-    else
-    {
-        setRenderingPreviewMode(ImageGuideWidget::NoPreviewMode);
-        d->spotInfoLabel->hide();
-        d->prevBBox->hide();
-    }
 }
 
 ImageWidget::~ImageWidget()
@@ -269,43 +137,18 @@ void ImageWidget::setSpotVisible(bool spotVisible, bool blink)
 
 int ImageWidget::getRenderingPreviewMode()
 {
-    return ( d->previewWidget->getRenderingPreviewMode() );
 }
 
-void ImageWidget::setRenderingPreviewMode(int mode)
+void ImageWidget::setRenderingPreviewMode(int)
 {
-    if (d->previewButtons->button(mode))
-        d->previewButtons->button(mode)->setChecked(true);
-
-    d->previewWidget->slotChangeRenderingPreviewMode(mode);
-}
-
-void ImageWidget::slotUpdateSpotInfo(const Digikam::DColor& col, const QPoint& point)
-{
-    DColor color = col;
-    d->spotInfoLabel->setText(i18n("(%1,%2) RGBA:%3,%4,%5,%6",
-                              point.x(), point.y(),
-                              color.red(), color.green(),
-                              color.blue(), color.alpha()));
 }
 
 void ImageWidget::readSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(d->settingsSection);
-
-    int mode = group.readEntry("Separate View", (int)ImageGuideWidget::PreviewBothImagesVertCont);
-    mode     = qMax((int)ImageGuideWidget::PreviewOriginalImage, mode);
-    mode     = qMin((int)ImageGuideWidget::NoPreviewMode, mode);
-    setRenderingPreviewMode(mode);
 }
 
 void ImageWidget::writeSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(d->settingsSection);
-    group.writeEntry("Separate View", getRenderingPreviewMode());
-    config->sync();
 }
 
 void ImageWidget::setPoints(const QPolygon& p, bool drawLine)
@@ -351,6 +194,11 @@ void ImageWidget::ICCSettingsChanged()
 void ImageWidget::exposureSettingsChanged()
 {
     d->previewWidget->exposureSettingsChanged();
+}
+
+void ImageWidget::slotPreviewModeChanged(int button)
+{
+    d->previewWidget->slotPreviewModeChanged(button);
 }
 
 }  // namespace Digikam
