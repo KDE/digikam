@@ -186,9 +186,9 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
     setToolName(i18n("Liquid Rescale"));
     setToolIcon(SmallIcon("transform-scale"));
 
-    d->previewWidget = new ImageGuideWidget;
+    d->previewWidget = new ImageGuideWidget(0, false, ImageGuideWidget::HVGuideMode);
     setToolView(d->previewWidget);
-    setPreviewModeMask(PreviewToolBar::AllPreviewModes);
+    setPreviewModeMask(PreviewToolBar::NoBothPreviewModes);
 
     // -------------------------------------------------------------
 

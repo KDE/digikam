@@ -61,7 +61,9 @@ public:
         AllPreviewModes           = PreviewOriginalImage      | PreviewBothImagesHorz     |
                                     PreviewBothImagesVert     | PreviewBothImagesHorzCont |
                                     PreviewBothImagesVertCont | PreviewTargetImage        |
-                                    PreviewToggleOnMouseOver
+                                    PreviewToggleOnMouseOver,
+                                    
+        NoBothPreviewModes        = PreviewOriginalImage | PreviewTargetImage | PreviewToggleOnMouseOver                           
     };
 
 public:
