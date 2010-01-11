@@ -6,7 +6,7 @@
  * Date        : 2009-09-19
  * Description : a tool for color space conversion
  *
- * Copyright (C) 2009 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -172,10 +172,6 @@ ProfileConversionTool::ProfileConversionTool(QObject* parent)
 
     setToolSettings(d->gboxSettings);
 
-    /*d->previewWidget = new ImageWidget("Profile Conversion Tool", 0,
-                                      i18n("This is the image's color preview. "
-                                           "You can pick a spot on the image "
-                                           "to see the corresponding level in the histogram."));*/
     d->previewWidget = new ImagePanelWidget(470, 350, "Profile Conversion Tool", d->gboxSettings->panIconView());
     setToolView(d->previewWidget);
     init();

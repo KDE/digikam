@@ -50,6 +50,7 @@
 
 #include "dimg.h"
 #include "imageiface.h"
+#include "previewtoolbar.h"
 #include "exposurecontainer.h"
 #include "iccsettingscontainer.h"
 
@@ -70,7 +71,7 @@ public:
         timerID                   = 0;
         focus                     = false;
         onMouseMovePreviewToggled = true;
-        renderingPreviewMode      = ImageGuideWidget::NoPreviewMode;
+        renderingPreviewMode      = PreviewToolBar::NoPreviewMode;
         drawLineBetweenPoints     = false;
         drawingMask               = false;
         enableDrawMask            = false;
@@ -118,12 +119,13 @@ public:
     DImg        preview;
 };
 
-ImageGuideWidget::ImageGuideWidget(int w, int h, QWidget *parent,
+ImageGuideWidget::ImageGuideWidget(QWidget *parent,
                                    bool spotVisible, int guideMode,
                                    const QColor& guideColor, int guideSize,
                                    bool blink, bool useImageSelection)
                 : QWidget(parent), d(new ImageGuideWidgetPriv)
 {
+    int w = 480, h = 320;
     d->spotVisible = spotVisible;
     d->guideMode   = guideMode;
     d->guideColor  = guideColor;
@@ -201,18 +203,18 @@ void ImageGuideWidget::resetSpotPosition()
     updatePreview();
 }
 
-void ImageGuideWidget::slotChangeRenderingPreviewMode(int mode)
+void ImageGuideWidget::slotPreviewModeChanged(int mode)
 {
     d->renderingPreviewMode = mode;
     updatePreview();
 }
 
-int ImageGuideWidget::getRenderingPreviewMode()
+int ImageGuideWidget::previewMode()
 {
     return (d->renderingPreviewMode);
 }
 
-void ImageGuideWidget::setRenderingPreviewMode(int mode)
+void ImageGuideWidget::setPreviewMode(int mode)
 {
     d->renderingPreviewMode = mode;
 }
@@ -274,8 +276,8 @@ void ImageGuideWidget::updatePixmap()
 
     d->pixmap->fill(palette().color(QPalette::Background));
 
-    if (d->renderingPreviewMode == PreviewOriginalImage ||
-        (d->renderingPreviewMode == PreviewToggleOnMouseOver && d->onMouseMovePreviewToggled == false ))
+    if (d->renderingPreviewMode == PreviewToolBar::PreviewOriginalImage ||
+        (d->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver && d->onMouseMovePreviewToggled == false ))
     {
         p.drawPixmap(d->rect, *d->previewPixmap);
 
@@ -287,8 +289,9 @@ void ImageGuideWidget::updatePixmap()
         p.drawRect(textRect);
         p.drawText(textRect, Qt::AlignCenter, text);
     }
-    else if (d->renderingPreviewMode == PreviewTargetImage || d->renderingPreviewMode == NoPreviewMode ||
-            (d->renderingPreviewMode == PreviewToggleOnMouseOver && d->onMouseMovePreviewToggled == true ))
+    else if (d->renderingPreviewMode == PreviewToolBar::PreviewTargetImage || 
+             d->renderingPreviewMode == PreviewToolBar::NoPreviewMode ||
+            (d->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver && d->onMouseMovePreviewToggled == true ))
     {
         d->iface->paint(d->pixmap,
                         d->rect.x(),
@@ -297,8 +300,8 @@ void ImageGuideWidget::updatePixmap()
                         d->rect.height(),
                         &p);
 
-        if (d->renderingPreviewMode == PreviewTargetImage ||
-            d->renderingPreviewMode == PreviewToggleOnMouseOver)
+        if (d->renderingPreviewMode == PreviewToolBar::PreviewTargetImage ||
+            d->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver)
         {
             text     = i18n("Target");
             fontRect = fontMt.boundingRect(0, 0, d->rect.width(), d->rect.height(), 0, text);
@@ -309,10 +312,10 @@ void ImageGuideWidget::updatePixmap()
             p.drawText(textRect, Qt::AlignCenter, text);
         }
     }
-    else if (d->renderingPreviewMode == PreviewBothImagesVert ||
-             d->renderingPreviewMode == PreviewBothImagesVertCont)
+    else if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesVert ||
+             d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesVertCont)
     {
-        if (d->renderingPreviewMode == PreviewBothImagesVert)
+        if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesVert)
         {
             // Drawing the original image.
             p.drawPixmap(d->rect, *d->previewPixmap);
@@ -373,10 +376,10 @@ void ImageGuideWidget::updatePixmap()
         p.drawRect(textRect);
         p.drawText(textRect, Qt::AlignCenter, text);
     }
-    else if (d->renderingPreviewMode == PreviewBothImagesHorz ||
-             d->renderingPreviewMode == PreviewBothImagesHorzCont)
+    else if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorz ||
+             d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorzCont)
     {
-        if (d->renderingPreviewMode == PreviewBothImagesHorz)
+        if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorz)
         {
             // Drawing the original image.
             p.drawPixmap(d->rect, *d->previewPixmap);
@@ -632,17 +635,18 @@ void ImageGuideWidget::mouseReleaseEvent(QMouseEvent *e)
             DColor color;
             QPoint point = getSpotPosition();
 
-            if (d->renderingPreviewMode == PreviewOriginalImage)
+            if (d->renderingPreviewMode == PreviewToolBar::PreviewOriginalImage)
             {
                 color = getSpotColor(OriginalImage);
                 emit spotPositionChangedFromOriginal( color, d->spot );
             }
-            else if (d->renderingPreviewMode == PreviewTargetImage || d->renderingPreviewMode == NoPreviewMode)
+            else if (d->renderingPreviewMode == PreviewToolBar::PreviewTargetImage || 
+                     d->renderingPreviewMode == PreviewToolBar::NoPreviewMode)
             {
                 color = getSpotColor(TargetPreviewImage);
                 emit spotPositionChangedFromTarget( color, d->spot );
             }
-            else if (d->renderingPreviewMode == PreviewBothImagesVert)
+            else if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesVert)
             {
                 if (d->spot.x() > d->rect.width()/2)
                 {
@@ -656,7 +660,7 @@ void ImageGuideWidget::mouseReleaseEvent(QMouseEvent *e)
                     emit spotPositionChangedFromOriginal( color, d->spot );
                 }
             }
-            else if (d->renderingPreviewMode == PreviewBothImagesVertCont)
+            else if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesVertCont)
             {
                 if (d->spot.x() > d->rect.width()/2)
                 {
@@ -669,7 +673,7 @@ void ImageGuideWidget::mouseReleaseEvent(QMouseEvent *e)
                     emit spotPositionChangedFromOriginal( color, d->spot );
                 }
             }
-            else if (d->renderingPreviewMode == PreviewBothImagesHorz)
+            else if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorz)
             {
                 if (d->spot.y() > d->rect.height()/2)
                 {
@@ -683,7 +687,7 @@ void ImageGuideWidget::mouseReleaseEvent(QMouseEvent *e)
                     emit spotPositionChangedFromOriginal( color, d->spot );
                 }
             }
-            else if (d->renderingPreviewMode == PreviewBothImagesHorzCont)
+            else if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorzCont)
             {
                 if (d->spot.y() > d->rect.height()/2)
                 {
@@ -736,7 +740,7 @@ void ImageGuideWidget::mouseMoveEvent(QMouseEvent *e)
 
 void ImageGuideWidget::enterEvent(QEvent*)
 {
-    if ( !d->focus && d->renderingPreviewMode == PreviewToggleOnMouseOver )
+    if ( !d->focus && d->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver )
     {
         d->onMouseMovePreviewToggled = false;
         updatePixmap();
@@ -746,7 +750,7 @@ void ImageGuideWidget::enterEvent(QEvent*)
 
 void ImageGuideWidget::leaveEvent(QEvent*)
 {
-    if ( !d->focus && d->renderingPreviewMode == PreviewToggleOnMouseOver )
+    if ( !d->focus && d->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver )
     {
         d->onMouseMovePreviewToggled = true;
         updatePixmap();

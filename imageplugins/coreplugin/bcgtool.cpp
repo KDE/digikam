@@ -8,7 +8,7 @@
                  Contrast, and Gamma of picture.
  *
  * Copyright (C) 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,7 +22,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "bcgtool.moc"
 
@@ -67,7 +66,7 @@
 #include "histogrambox.h"
 #include "histogramwidget.h"
 #include "imageiface.h"
-#include "imagewidget.h"
+#include "imageguidewidget.h"
 
 using namespace KDcrawIface;
 using namespace Digikam;
@@ -109,7 +108,7 @@ public:
 
     RDoubleNumInput*     gInput;
 
-    ImageWidget*         previewWidget;
+    ImageGuideWidget*    previewWidget;
     EditorToolSettings*  gboxSettings;
 };
 
@@ -124,12 +123,13 @@ BCGTool::BCGTool(QObject* parent)
 
     d->destinationPreviewData = 0;
 
-    d->previewWidget = new ImageWidget("bcgadjust Tool", 0,
-                                      i18n("The image brightness-contrast-gamma adjustment preview "
-                                           "is shown here. "
-                                           "Picking a color on the image will show the "
-                                           "corresponding color level on the histogram."));
+    d->previewWidget = new ImageGuideWidget;
+    d->previewWidget->setWhatsThis(i18n("The image brightness-contrast-gamma adjustment preview "
+                                        "is shown here. "
+                                        "Picking a color on the image will show the "
+                                        "corresponding color level on the histogram."));
     setToolView(d->previewWidget);
+    setPreviewModeMask(PreviewToolBar::AllPreviewModes);
 
     // -------------------------------------------------------------
 
@@ -208,7 +208,7 @@ BCGTool::~BCGTool()
     delete d;
 }
 
-void BCGTool::slotColorSelectedFromTarget( const DColor& color )
+void BCGTool::slotColorSelectedFromTarget(const DColor& color)
 {
     d->gboxSettings->histogramBox()->histogram()->setHistogramGuideByColor(color);
 }
@@ -238,7 +238,6 @@ void BCGTool::writeSettings()
     group.writeEntry(d->configBrightnessAdjustmentEntry, d->bInput->value());
     group.writeEntry(d->configContrastAdjustmentEntry,   d->cInput->value());
     group.writeEntry(d->configGammaAdjustmentEntry,      d->gInput->value());
-    d->previewWidget->writeSettings();
     config->sync();
 }
 

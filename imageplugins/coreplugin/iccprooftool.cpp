@@ -8,7 +8,7 @@
  *               colors using an ICC color profile
  *
  * Copyright (C) 2005-2006 by F.J. Cruz <fj.cruz@supercable.es>
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -214,7 +214,7 @@ public:
 
     DImg*               originalImage;
     CurvesWidget*       curvesWidget;
-    ImageWidget*        previewWidget;
+    ImageGuideWidget*   previewWidget;
     EditorToolSettings* gboxSettings;
     RExpanderBox*       toolBoxWidgets;
 };
@@ -235,11 +235,12 @@ ICCProofTool::ICCProofTool(QObject* parent)
     d->originalImage = iface.getOriginalImg();
     d->embeddedICC   = iface.getEmbeddedICCFromOriginalImage();
 
-    d->previewWidget = new ImageWidget("colormanagement Tool",0,
-                                       i18n("<p>A preview of the image after "
-                                            "applying a color profile is shown here.</p>"));
+    d->previewWidget = new ImageGuideWidget;
+    d->previewWidget->setToolTip(i18n("<p>A preview of the image after "
+                                      "applying a color profile is shown here.</p>"));
     setToolView(d->previewWidget);
-
+    setPreviewModeMask(PreviewToolBar::AllPreviewModes);
+    
     // -------------------------------------------------------------------
 
     d->gboxSettings = new EditorToolSettings;
@@ -745,7 +746,6 @@ void ICCProofTool::writeSettings()
         group.writeEntry(d->configCurveAdjustmentPointEntry.arg(j), p);
     }
 
-    d->previewWidget->writeSettings();
     group.sync();
 }
 

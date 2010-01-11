@@ -58,7 +58,7 @@
 #include "daboutdata.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
-#include "imagewidget.h"
+#include "imageguidewidget.h"
 #include "lensdistortion.h"
 #include "version.h"
 
@@ -103,7 +103,7 @@ public:
 
     DImg                 previewRasterImage;
 
-    ImageWidget*         previewWidget;
+    ImageGuideWidget*    previewWidget;
     EditorToolSettings*  gboxSettings;
 };
 
@@ -115,9 +115,7 @@ LensDistortionTool::LensDistortionTool(QObject* parent)
     setToolName(i18n("Lens Distortion"));
     setToolIcon(SmallIcon("lensdistortion"));
 
-    d->previewWidget = new ImageWidget("lensdistortion Tool", 0, QString(),
-                                      false, ImageGuideWidget::HVGuideMode);
-
+    d->previewWidget = new ImageGuideWidget(0, false, ImageGuideWidget::HVGuideMode);
     setToolView(d->previewWidget);
 
     // -------------------------------------------------------------
@@ -178,13 +176,13 @@ LensDistortionTool::LensDistortionTool(QObject* parent)
     // -------------------------------------------------------------
 
     gridSettings->addWidget(d->maskPreviewLabel, 0, 0, 1, 2);
-    gridSettings->addWidget(label1,             1, 0, 1, 2);
+    gridSettings->addWidget(label1,              1, 0, 1, 2);
     gridSettings->addWidget(d->mainInput,        2, 0, 1, 2);
-    gridSettings->addWidget(label2,             3, 0, 1, 2);
+    gridSettings->addWidget(label2,              3, 0, 1, 2);
     gridSettings->addWidget(d->edgeInput,        4, 0, 1, 2);
-    gridSettings->addWidget(label3,             5, 0, 1, 2);
+    gridSettings->addWidget(label3,              5, 0, 1, 2);
     gridSettings->addWidget(d->rescaleInput,     6, 0, 1, 2);
-    gridSettings->addWidget(label4,             7, 0, 1, 2);
+    gridSettings->addWidget(label4,              7, 0, 1, 2);
     gridSettings->addWidget(d->brightenInput,    8, 0, 1, 2);
     gridSettings->setRowStretch(9, 10);
     gridSettings->setMargin(d->gboxSettings->spacingHint());
@@ -271,7 +269,7 @@ void LensDistortionTool::writeSettings()
     group.writeEntry(d->config4thOrderDistortionEntry, d->edgeInput->value());
     group.writeEntry(d->configZoomFactorEntry,         d->rescaleInput->value());
     group.writeEntry(d->configBrightenEntry,           d->brightenInput->value());
-    d->previewWidget->writeSettings();
+
     config->sync();
 }
 

@@ -31,11 +31,11 @@
 // KDE includes
 
 #include <kdebug.h>
+#include <klocale.h>
 
 // Local includes
 
 #include "dimgthreadedfilter.h"
-#include "imagewidget.h"
 #include "imageguidewidget.h"
 #include "imagepanelwidget.h"
 #include "histogramwidget.h"
@@ -107,6 +107,11 @@ void EditorTool::setToolName(const QString& name)
     d->name = name;
 }
 
+void EditorTool::setPreviewModeMask(PreviewToolBar::PreviewMode mask)
+{
+    EditorToolIface::editorToolIface()->setPreviewModeMask(mask);
+}
+
 QWidget* EditorTool::toolView() const
 {
     return d->view;
@@ -118,6 +123,12 @@ void EditorTool::setToolView(QWidget *view)
     // Will be unblocked in slotInit()
     // This will prevent resize event signals emit during tool init.
     d->view->blockSignals(true);
+    
+    connect(d->view, SIGNAL(spotPositionChangedFromOriginal(const Digikam::DColor&, const QPoint&)),
+            this, SLOT(slotUpdateSpotInfo(const Digikam::DColor&, const QPoint&)));
+
+    connect(d->view, SIGNAL(spotPositionChangedFromTarget(const Digikam::DColor&, const QPoint&)),
+            this, SLOT(slotUpdateSpotInfo(const Digikam::DColor&, const QPoint&)));
 }
 
 EditorToolSettings* EditorTool::toolSettings() const
@@ -229,7 +240,7 @@ void EditorTool::slotCloseTool()
 
 void EditorTool::ICCSettingsChanged()
 {
-    ImageWidget* view = dynamic_cast<ImageWidget*>(d->view);
+    ImageGuideWidget* view = dynamic_cast<ImageGuideWidget*>(d->view);
     if (view)
         view->ICCSettingsChanged();
 
@@ -240,13 +251,27 @@ void EditorTool::ICCSettingsChanged()
 
 void EditorTool::exposureSettingsChanged()
 {
-    ImageWidget* view = dynamic_cast<ImageWidget*>(d->view);
+    ImageGuideWidget* view = dynamic_cast<ImageGuideWidget*>(d->view);
     if (view)
         view->exposureSettingsChanged();
 
     ImagePanelWidget* view2 = dynamic_cast<ImagePanelWidget*>(d->view);
     if (view2)
         view2->exposureSettingsChanged();
+}
+
+void EditorTool::setToolInfoMessage(const QString& txt)
+{
+    EditorToolIface::editorToolIface()->setToolInfoMessage(txt);
+}
+
+void EditorTool::slotUpdateSpotInfo(const Digikam::DColor& col, const QPoint& point)
+{
+    DColor color = col;
+    setToolInfoMessage(i18n("(%1,%2) RGBA:%3,%4,%5,%6",
+                            point.x(), point.y(),
+                            color.red(), color.green(),
+                            color.blue(), color.alpha()));                              
 }
 
 // ----------------------------------------------------------------
@@ -407,8 +432,7 @@ void EditorToolThreaded::setToolView(QWidget *view)
 {
     EditorTool::setToolView(view);
 
-    if (dynamic_cast<ImageWidget*>(view) || dynamic_cast<ImageGuideWidget*>(view) ||
-        dynamic_cast<ImagePanelWidget*>(view))
+    if (dynamic_cast<ImageGuideWidget*>(view) || dynamic_cast<ImagePanelWidget*>(view))
     {
         connect(view, SIGNAL(signalResized()),
                 this, SLOT(slotResized()));

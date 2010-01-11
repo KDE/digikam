@@ -62,18 +62,6 @@ public:
         PickColorMode
     };
 
-    enum RenderingPreviewMode
-    {
-        PreviewOriginalImage=0,     // Original image only.
-        PreviewBothImagesHorz,      // Horizontal with original and target duplicated.
-        PreviewBothImagesVert,      // Vertical with original and target duplicated.
-        PreviewBothImagesHorzCont,  // Horizontal with original and target in contiguous.
-        PreviewBothImagesVertCont,  // Vertical with original and target in contiguous.
-        PreviewTargetImage,         // Target image only.
-        PreviewToggleOnMouseOver,   // Original image if mouse is over image area, else target image.
-        NoPreviewMode               // Target image only without information displayed.
-    };
-
     enum ColorPointSrc
     {
         OriginalImage=0,
@@ -83,8 +71,8 @@ public:
 
 public:
 
-    ImageGuideWidget(int w, int h, QWidget *parent=0,
-                     bool spotVisible=true, int guideMode=HVGuideMode,
+    ImageGuideWidget(QWidget *parent=0,
+                     bool spotVisible=true, int guideMode=PickColorMode,
                      const QColor& guideColor=Qt::red, int guideSize=1,
                      bool blink=false, bool useImageSelection=false);
     ~ImageGuideWidget();
@@ -94,8 +82,8 @@ public:
     QPoint getSpotPosition();
     DColor getSpotColor(int getColorFrom);
     void   setSpotVisible(bool spotVisible, bool blink=false);
-    int    getRenderingPreviewMode();
-    void   setRenderingPreviewMode(int mode);
+    int    previewMode();
+    void   setPreviewMode(int mode);
     void   resetSpotPosition();
     void   updatePreview();
     void   setPoints(const QPolygon& p, bool drawLine=false);
@@ -115,7 +103,7 @@ public Q_SLOTS:
 
     void slotChangeGuideColor(const QColor& color);
     void slotChangeGuideSize(int size);
-    void slotChangeRenderingPreviewMode(int mode);
+    void slotPreviewModeChanged(int mode);
 
 Q_SIGNALS:
 

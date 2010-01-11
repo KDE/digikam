@@ -7,7 +7,7 @@
  * Description : Red eyes correction tool for image editor
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -66,7 +66,7 @@
 #include "histogramwidget.h"
 #include "histogrambox.h"
 #include "imageiface.h"
-#include "imagewidget.h"
+#include "imageguidewidget.h"
 
 using namespace KDcrawIface;
 using namespace Digikam;
@@ -125,7 +125,7 @@ public:
     RIntNumInput*           redThreshold;
     RIntNumInput*           smoothLevel;
 
-    ImageWidget*            previewWidget;
+    ImageGuideWidget*       previewWidget;
     EditorToolSettings*     gboxSettings;
 };
 
@@ -140,12 +140,12 @@ RedEyeTool::RedEyeTool(QObject* parent)
 
     d->destinationPreviewData = 0;
 
-    d->previewWidget = new ImageWidget("redeye Tool", 0,
-                                      i18n("Here you can see the image selection preview with "
-                                           "red eye reduction applied."),
-                                      true, ImageGuideWidget::PickColorMode, true, true);
+    d->previewWidget = new ImageGuideWidget(0, true, ImageGuideWidget::PickColorMode, Qt::red, 1, false, true);
+    d->previewWidget->setToolTip(i18n("Here you can see the image selection preview with "
+                                      "red eye reduction applied."));
     setToolView(d->previewWidget);
-
+    setPreviewModeMask(PreviewToolBar::AllPreviewModes);
+    
     // -------------------------------------------------------------
 
     d->gboxSettings = new EditorToolSettings;
@@ -175,13 +175,13 @@ RedEyeTool::RedEyeTool(QObject* parent)
 
     QLabel *label3 = new QLabel(i18n("Coloring Tint:"));
 
-    d->HSSelector   = new KHueSaturationSelector();
+    d->HSSelector  = new KHueSaturationSelector();
     d->HSSelector->setWhatsThis(i18n("Sets a custom color when re-colorizing the eyes."));
     d->HSSelector->setMinimumSize(200, 142);
     d->HSSelector->setChooserMode(ChooserValue);
     d->HSSelector->setColorValue(255);
 
-    d->VSelector    = new KColorValueSelector();
+    d->VSelector   = new KColorValueSelector();
     d->VSelector->setChooserMode(ChooserValue);
     d->VSelector->setMinimumSize(26, 142);
     d->VSelector->setIndent(false);
@@ -342,7 +342,7 @@ void RedEyeTool::writeSettings()
     group.writeEntry(d->configSatColoringTintEntry,  d->HSSelector->saturation());
     group.writeEntry(d->configValColoringTintEntry,  d->VSelector->value());
     group.writeEntry(d->configTintLevelEntry,        d->tintLevel->value());
-    d->previewWidget->writeSettings();
+
     config->sync();
 }
 

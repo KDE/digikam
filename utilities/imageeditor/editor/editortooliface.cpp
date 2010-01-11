@@ -36,6 +36,7 @@
 #include "editortoolsettings.h"
 #include "editorstackview.h"
 #include "editorwindow.h"
+#include "imageguidewidget.h"
 
 namespace Digikam
 {
@@ -96,8 +97,19 @@ void EditorToolIface::loadTool(EditorTool* tool)
     if (d->editor->editorStackView()->previewWidget())
         d->editor->toggleZoomActions(true);
 
+    ImageGuideWidget* view = dynamic_cast<ImageGuideWidget*>(d->tool->toolView());
+    if (view)
+    {
+        connect(d->editor, SIGNAL(signalPreviewModeChanged(int)),
+                view, SLOT(slotPreviewModeChanged(int)));
+                
+        view->setPreviewMode(d->editor->previewMode());
+    }
+                
     updateExposureSettings();
     updateICCSettings();
+    setToolInfoMessage(QString());
+    
 }
 
 void EditorToolIface::unLoadTool()
@@ -108,11 +120,20 @@ void EditorToolIface::unLoadTool()
     d->editor->editorStackView()->setToolView(0);
     d->editor->rightSideBar()->deleteTab(d->tool->toolSettings());
     d->editor->toggleActions(true);
+    d->editor->setPreviewModeMask(PreviewToolBar::NoPreviewMode);
     // To restore canvas zoom level in zoom combobox.
     if (!d->editor->editorStackView()->canvas()->fitToWindow())
         d->editor->editorStackView()->setZoomFactor(d->editor->editorStackView()->canvas()->zoomFactor());
     delete d->tool;
     d->tool = 0;
+    
+    // Reset info label in status bar with canvas selection info.
+    d->editor->slotSelectionChanged(d->editor->m_canvas->getSelectedArea());
+}
+
+void EditorToolIface::setToolInfoMessage(const QString& txt)
+{
+    d->editor->setToolInfoMessage(txt);
 }
 
 void EditorToolIface::setToolStartProgress(const QString& toolName)
@@ -165,6 +186,11 @@ void EditorToolIface::updateExposureSettings()
     d->editor->editorStackView()->canvas()->setExposureSettings(expoSettings);
     EditorTool *tool = dynamic_cast<EditorTool*>(d->tool);
     if (tool) tool->exposureSettingsChanged();
+}
+
+void EditorToolIface::setPreviewModeMask(PreviewToolBar::PreviewMode mask)
+{
+    d->editor->setPreviewModeMask(mask);
 }
 
 }  // namespace Digikam

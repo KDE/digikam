@@ -73,7 +73,7 @@
 #include "greycstorationsettings.h"
 #include "greycstorationwidget.h"
 #include "imageiface.h"
-#include "imagewidget.h"
+#include "imageguidewidget.h"
 #include "version.h"
 
 using namespace Digikam;
@@ -141,7 +141,7 @@ public:
 
     GreycstorationWidget* settingsWidget;
 
-    ImageWidget*          previewWidget;
+    ImageGuideWidget*     previewWidget;
 
     EditorToolSettings*   gboxSettings;
 };
@@ -154,10 +154,9 @@ InPaintingTool::InPaintingTool(QObject* parent)
     setToolName(i18n("In-painting"));
     setToolIcon(SmallIcon("inpainting"));
 
-    d->previewWidget = new ImageWidget("inpainting Tool", 0,
-                                      i18n("The image selection preview with in-painting applied "
-                                           "is shown here."),
-                                           true, ImageGuideWidget::HVGuideMode, false, true);
+    d->previewWidget = new ImageGuideWidget(0, true, ImageGuideWidget::HVGuideMode, Qt::red, 1, false, true);
+    d->previewWidget->setWhatsThis(i18n("The image selection preview with in-painting applied "
+                                        "is shown here."));
     setToolView(d->previewWidget);
 
     // -------------------------------------------------------------
@@ -181,7 +180,7 @@ InPaintingTool::InPaintingTool(QObject* parent)
     cimgLogoLabel->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-cimg.png")));
     cimgLogoLabel->setToolTip(i18n("Visit CImg library website"));
 
-    QLabel *typeLabel  = new QLabel(i18n("Filtering type:"));
+    QLabel *typeLabel   = new QLabel(i18n("Filtering type:"));
     typeLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     d->inpaintingTypeCB = new KComboBox();
     d->inpaintingTypeCB->addItem(i18nc("no inpainting type", "None"));
@@ -288,7 +287,7 @@ void InPaintingTool::writeSettings()
 {
     GreycstorationSettings settings = d->settingsWidget->getSettings();
     KSharedConfig::Ptr config       = KGlobal::config();
-    KConfigGroup group        = config->group(d->configGroupName);
+    KConfigGroup group              = config->group(d->configGroupName);
 
     group.writeEntry(d->configPresetEntry,        d->inpaintingTypeCB->currentIndex());
     group.writeEntry(d->configFastApproxEntry,    settings.fastApprox);
@@ -304,7 +303,7 @@ void InPaintingTool::writeSettings()
     group.writeEntry(d->configIterationEntry,     settings.nbIter);
     group.writeEntry(d->configTileEntry,          settings.tile);
     group.writeEntry(d->configBTileEntry,         settings.btile);
-    d->previewWidget->writeSettings();
+
     config->sync();
 }
 

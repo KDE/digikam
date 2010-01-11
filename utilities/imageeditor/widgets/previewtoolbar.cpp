@@ -157,9 +157,9 @@ PreviewToolBar::~PreviewToolBar()
     delete d;
 }
 
-void PreviewToolBar::setPreviewModes(PreviewModes modeMask)
+void PreviewToolBar::setPreviewModeMask(PreviewMode mask)
 {
-    if (modeMask == NoPreviewMode)
+    if (mask == NoPreviewMode)
     {
         setDisabled(true);
         return;
@@ -167,26 +167,37 @@ void PreviewToolBar::setPreviewModes(PreviewModes modeMask)
 
     setDisabled(false);
 
-    d->previewOriginalButton->setVisible(modeMask           & PreviewOriginalImage);
-    d->previewBothButtonVert->setVisible(modeMask           & PreviewBothImagesHorz);
-    d->previewBothButtonHorz->setVisible(modeMask           & PreviewBothImagesVert);
-    d->previewDuplicateBothButtonVert->setVisible(modeMask  & PreviewBothImagesHorzCont);
-    d->previewDupplicateBothButtonHorz->setVisible(modeMask & PreviewBothImagesVertCont);
-    d->previewtargetButton->setVisible(modeMask             & PreviewTargetImage);
-    d->previewToggleMouseOverButton->setVisible(modeMask    & PreviewToggleOnMouseOver);
+    d->previewOriginalButton->setVisible(mask           & PreviewOriginalImage);
+    d->previewBothButtonVert->setVisible(mask           & PreviewBothImagesHorz);
+    d->previewBothButtonHorz->setVisible(mask           & PreviewBothImagesVert);
+    d->previewDuplicateBothButtonVert->setVisible(mask  & PreviewBothImagesHorzCont);
+    d->previewDupplicateBothButtonHorz->setVisible(mask & PreviewBothImagesVertCont);
+    d->previewtargetButton->setVisible(mask             & PreviewTargetImage);
+    d->previewToggleMouseOverButton->setVisible(mask    & PreviewToggleOnMouseOver);
+}
+
+void PreviewToolBar::setPreviewMode(PreviewMode mode)
+{
+    if (d->previewButtons->button(mode))
+        d->previewButtons->button(mode)->setChecked(true);
+}
+
+PreviewToolBar::PreviewMode PreviewToolBar::previewMode()
+{
+    return((PreviewMode)d->previewButtons->checkedId());
 }
 
 void PreviewToolBar::readSettings(KConfigGroup& group)
 {
-    int mode = group.readEntry("Separate View", (int)PreviewBothImagesVertCont);
+    int mode = group.readEntry("PreviewMode", (int)PreviewBothImagesVertCont);
     mode     = qMax((int)PreviewOriginalImage, mode);
     mode     = qMin((int)NoPreviewMode, mode);
-    d->previewButtons->button(mode)->setChecked(true);
+    setPreviewMode((PreviewMode)mode);
 }
 
 void PreviewToolBar::writeSettings(KConfigGroup& group)
 {
-    group.writeEntry("Separate View", d->previewButtons->checkedId());
+    group.writeEntry("PreviewMode", (int)previewMode());
 }
 
 }  // namespace Digikam

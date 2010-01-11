@@ -47,7 +47,7 @@ class DIGIKAM_EXPORT PreviewToolBar : public QWidget
 
 public:
 
-    enum PreviewModes
+    enum PreviewMode
     {
         PreviewOriginalImage      = 0x00000001,      // Original image only.
         PreviewBothImagesHorz     = 0x00000002,      // Horizontal with original and target duplicated.
@@ -57,6 +57,7 @@ public:
         PreviewTargetImage        = 0x00000020,      // Target image only.
         PreviewToggleOnMouseOver  = 0x00000040,      // Original image if mouse is over image area, else target image.
         NoPreviewMode             = 0x00000080,      // Target image only without information displayed.
+        
         AllPreviewModes           = PreviewOriginalImage      | PreviewBothImagesHorz     |
                                     PreviewBothImagesVert     | PreviewBothImagesHorzCont |
                                     PreviewBothImagesVertCont | PreviewTargetImage        |
@@ -68,7 +69,10 @@ public:
     PreviewToolBar(QWidget* parent=0);
     ~PreviewToolBar();
 
-    void setPreviewModes(PreviewModes modeMask);
+    void setPreviewModeMask(PreviewMode mask);
+    
+    void setPreviewMode(PreviewMode mode);
+    PreviewMode previewMode();
 
     void readSettings(KConfigGroup& group);
     void writeSettings(KConfigGroup& group);

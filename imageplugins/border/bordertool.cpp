@@ -7,8 +7,8 @@
  * Description : a digiKam image plugin to add a border
  *               around an image.
  *
- * Copyright 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -57,7 +57,7 @@
 #include "daboutdata.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
-#include "imagewidget.h"
+#include "imageguidewidget.h"
 #include "version.h"
 
 using namespace KDcrawIface;
@@ -130,7 +130,7 @@ public:
     KColorButton*       secondColorButton;
 
     EditorToolSettings* gboxSettings;
-    ImageWidget*        previewWidget;
+    ImageGuideWidget*   previewWidget;
 
     RComboBox*          borderType;
     RIntNumInput*       borderPercent;
@@ -145,9 +145,7 @@ BorderTool::BorderTool(QObject* parent)
     setToolName(i18n("Add Border"));
     setToolIcon(SmallIcon("bordertool"));
 
-    d->previewWidget = new ImageWidget("bordertool Tool", 0, QString(),
-                                       false, ImageGuideWidget::HVGuideMode, false);
-
+    d->previewWidget = new ImageGuideWidget(0, true, ImageGuideWidget::HVGuideMode);
     setToolView(d->previewWidget);
 
     // -------------------------------------------------------------
@@ -323,8 +321,6 @@ void BorderTool::writeSettings()
     group.writeEntry(d->configBevelLowerRightColorEntry,  d->bevelLowerRightColor);
     group.writeEntry(d->configDecorativeFirstColorEntry,  d->decorativeFirstColor);
     group.writeEntry(d->configDecorativeSecondColorEntry, d->decorativeSecondColor);
-
-    d->previewWidget->writeSettings();
 
     group.sync();
 }

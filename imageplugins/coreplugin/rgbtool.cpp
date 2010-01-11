@@ -6,7 +6,7 @@
  * Date        : 2004-07-11
  * Description : digiKam image editor Color Balance tool.
  *
- * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -65,7 +65,7 @@
 #include "histogrambox.h"
 #include "histogramwidget.h"
 #include "imageiface.h"
-#include "imagewidget.h"
+#include "imageguidewidget.h"
 
 using namespace KDcrawIface;
 using namespace Digikam;
@@ -116,7 +116,7 @@ public:
     RIntNumInput*        gInput;
     RIntNumInput*        bInput;
 
-    ImageWidget*         previewWidget;
+    ImageGuideWidget*    previewWidget;
     EditorToolSettings*  gboxSettings;
 };
 
@@ -130,12 +130,13 @@ RGBTool::RGBTool(QObject* parent)
 
     d->destinationPreviewData = 0;
 
-    d->previewWidget = new ImageWidget("colorbalance Tool", 0,
-                                      i18n("The image color-balance adjustment preview "
-                                           "is shown here. "
-                                           "Picking a color on the image will show the "
-                                           "corresponding color level on the histogram."));
+    d->previewWidget = new ImageGuideWidget;
+    d->previewWidget->setToolTip(i18n("The image color-balance adjustment preview "
+                                      "is shown here. "
+                                      "Picking a color on the image will show the "
+                                      "corresponding color level on the histogram."));
     setToolView(d->previewWidget);
+    setPreviewModeMask(PreviewToolBar::AllPreviewModes);
 
     // -------------------------------------------------------------
 
@@ -307,7 +308,7 @@ void RGBTool::writeSettings()
     group.writeEntry(d->configRedAdjustmentEntry,    d->rSlider->value());
     group.writeEntry(d->configGreenAdjustmentEntry,  d->gInput->value());
     group.writeEntry(d->configBlueAdjustmentEntry,   d->bInput->value());
-    d->previewWidget->writeSettings();
+
     group.sync();
 }
 

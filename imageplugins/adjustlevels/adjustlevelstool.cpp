@@ -6,7 +6,7 @@
  * Date        : 2004-07-20
  * Description : image histogram adjust levels.
  *
- * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -75,7 +75,7 @@
 #include "imagehistogram.h"
 #include "imageiface.h"
 #include "imagelevels.h"
-#include "imagewidget.h"
+#include "imageguidewidget.h"
 #include "version.h"
 
 using namespace KDcrawIface;
@@ -158,7 +158,7 @@ public:
     DGradientSlider*     inputLevels;
     DGradientSlider*     outputLevels;
 
-    ImageWidget*         previewWidget;
+    ImageGuideWidget*    previewWidget;
 
     ImageLevels*         levels;
 
@@ -185,13 +185,13 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->previewWidget = new ImageWidget("adjustlevels Tool", 0,
-            i18n("Here you can see the image's "
-                 "level-adjustments preview. You can pick a spot on the image "
-                 "to see the corresponding level in the histogram."));
-
+    d->previewWidget = new ImageGuideWidget;
+    d->previewWidget->setWhatsThis(i18n("Here you can see the image's "
+                                        "level-adjustments preview. You can pick a spot on the image "
+                                        "to see the corresponding level in the histogram."));
     setToolView(d->previewWidget);
-
+    setPreviewModeMask(PreviewToolBar::AllPreviewModes);
+    
     // -------------------------------------------------------------
 
     d->gboxSettings = new EditorToolSettings;
@@ -422,8 +422,8 @@ AdjustLevelsTool::~AdjustLevelsTool()
 void AdjustLevelsTool::slotPickerColorButtonActived()
 {
     // Save previous rendering mode and toggle to original image.
-    d->currentPreviewMode = d->previewWidget->getRenderingPreviewMode();
-    d->previewWidget->setRenderingPreviewMode(ImageGuideWidget::PreviewOriginalImage);
+    d->currentPreviewMode = d->previewWidget->previewMode();
+    d->previewWidget->setPreviewMode(PreviewToolBar::PreviewOriginalImage);
 }
 
 void AdjustLevelsTool::slotSpotColorChanged(const DColor& color)
@@ -456,7 +456,7 @@ void AdjustLevelsTool::slotSpotColorChanged(const DColor& color)
     slotChannelChanged();
 
     // restore previous rendering mode.
-    d->previewWidget->setRenderingPreviewMode(d->currentPreviewMode);
+    d->previewWidget->setPreviewMode(d->currentPreviewMode);
 
     slotEffect();
 }
@@ -767,8 +767,6 @@ void AdjustLevelsTool::writeSettings()
             group.writeEntry(d->configHighOutputChannelEntry.arg(i), sb ? highOutput/255 : highOutput);
         }
     }
-
-    d->previewWidget->writeSettings();
 
     config->sync();
 }

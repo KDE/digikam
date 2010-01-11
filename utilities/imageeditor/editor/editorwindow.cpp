@@ -70,8 +70,6 @@
 #include <kglobalsettings.h>
 #include <kiconloader.h>
 #include <kimageio.h>
-#include <kio/job.h>
-#include <kio/netaccess.h>
 #include <klocale.h>
 #include <kmenubar.h>
 #include <kmessagebox.h>
@@ -95,8 +93,11 @@
 #include <kwindowsystem.h>
 #include <kxmlguifactory.h>
 #include <kde_file.h>
-#include <kio/copyjob.h>
 #include <kdebug.h>
+#include <ksqueezedtextlabel.h>
+#include <kio/job.h>
+#include <kio/netaccess.h>
+#include <kio/copyjob.h>
 
 // LibKDcraw includes
 
@@ -261,14 +262,14 @@ void EditorWindow::setupStandardConnections()
     connect(m_canvas, SIGNAL(signalPrepareToLoad()),
             this, SLOT(slotPrepareToLoad()));
 
-    connect(m_canvas, SIGNAL(signalLoadingStarted(const QString &)),
-            this, SLOT(slotLoadingStarted(const QString &)));
+    connect(m_canvas, SIGNAL(signalLoadingStarted(const QString&)),
+            this, SLOT(slotLoadingStarted(const QString&)));
 
-    connect(m_canvas, SIGNAL(signalLoadingFinished(const QString &, bool)),
-            this, SLOT(slotLoadingFinished(const QString &, bool)));
+    connect(m_canvas, SIGNAL(signalLoadingFinished(const QString&, bool)),
+            this, SLOT(slotLoadingFinished(const QString&, bool)));
 
-    connect(m_canvas, SIGNAL(signalLoadingProgress(const QString &, float)),
-            this, SLOT(slotLoadingProgress(const QString &, float)));
+    connect(m_canvas, SIGNAL(signalLoadingProgress(const QString&, float)),
+            this, SLOT(slotLoadingProgress(const QString&, float)));
 
     connect(m_canvas, SIGNAL(signalSavingStarted(const QString&)),
             this, SLOT(slotSavingStarted(const QString&)));
@@ -617,15 +618,21 @@ void EditorWindow::setupStatusBar()
     m_nameLabel->setAlignment(Qt::AlignCenter);
     statusBar()->addWidget(m_nameLabel, 100);
 
-    d->selectLabel = new QLabel(i18n("No selection"), statusBar());
-    d->selectLabel->setAlignment(Qt::AlignCenter);
-    statusBar()->addWidget(d->selectLabel, 100);
-    d->selectLabel->setToolTip( i18n("Information about current selection area"));
+    d->infoLabel = new KSqueezedTextLabel(i18n("No selection"), statusBar());
+    d->infoLabel->setAlignment(Qt::AlignCenter);
+    statusBar()->addWidget(d->infoLabel, 100);
 
     m_resLabel  = new QLabel(statusBar());
     m_resLabel->setAlignment(Qt::AlignCenter);
     statusBar()->addWidget(m_resLabel, 100);
     m_resLabel->setToolTip( i18n("Information about image size"));
+
+    d->previewToolBar = new PreviewToolBar(statusBar());
+    d->previewToolBar->setEnabled(false);
+    statusBar()->addPermanentWidget(d->previewToolBar);
+
+    connect(d->previewToolBar, SIGNAL(signalPreviewModeChanged(int)),
+            this, SIGNAL(signalPreviewModeChanged(int)));
 
     QWidget* buttonsBox      = new QWidget(statusBar());
     QHBoxLayout *hlay        = new QHBoxLayout(buttonsBox);
@@ -691,8 +698,7 @@ void EditorWindow::slotAboutToShowUndoMenu()
 
     for (int i=0; i<titles.size(); ++i)
     {
-        QAction *action =
-            m_undoAction->menu()->addAction(titles[i], d->undoSignalMapper, SLOT(map()));
+        QAction *action = m_undoAction->menu()->addAction(titles[i], d->undoSignalMapper, SLOT(map()));
         d->undoSignalMapper->setMapping(action, i + 1);
     }
 }
@@ -783,7 +789,6 @@ void EditorWindow::slotZoomTextChanged(const QString& txt)
     {
         m_stackView->setZoomFactor(zoom);
     }
-
 }
 
 void EditorWindow::slotZoomChanged(bool isMax, bool isMin, double zoom)
@@ -908,6 +913,7 @@ void EditorWindow::readStandardSettings()
 
     slotSetUnderExposureIndicator(group.readEntry("UnderExposureIndicator", false));
     slotSetOverExposureIndicator(group.readEntry("OverExposureIndicator", false));
+    d->previewToolBar->readSettings(group);
 }
 
 void EditorWindow::applyStandardSettings()
@@ -1060,6 +1066,7 @@ void EditorWindow::saveStandardSettings()
     group.writeEntry("FullScreen", m_fullScreenAction->isChecked());
     group.writeEntry("UnderExposureIndicator", d->exposureSettings->underExposureIndicator);
     group.writeEntry("OverExposureIndicator", d->exposureSettings->overExposureIndicator);
+    d->previewToolBar->writeSettings(group);
 
     config->sync();
 }
@@ -1392,10 +1399,9 @@ void EditorWindow::slotSelected(bool val)
 
     // Update status bar
     if (val)
-        d->selectLabel->setText(QString("(%1, %2) (%3 x %4)").arg(sel.x()).arg(sel.y())
-                                .arg(sel.width()).arg(sel.height()));
+        setToolInfoMessage(QString("(%1, %2) (%3 x %4)").arg(sel.x()).arg(sel.y()).arg(sel.width()).arg(sel.height()));
     else
-        d->selectLabel->setText(i18n("No selection"));
+        setToolInfoMessage(i18n("No selection"));
 }
 
 void EditorWindow::hideToolBars()
@@ -2203,8 +2209,7 @@ void EditorWindow::slotToggleSlideShow()
 
 void EditorWindow::slotSelectionChanged(const QRect& sel)
 {
-    d->selectLabel->setText(QString("(%1, %2) (%3 x %4)").arg(sel.x()).arg(sel.y())
-                            .arg(sel.width()).arg(sel.height()));
+    setToolInfoMessage(QString("(%1, %2) (%3 x %4)").arg(sel.x()).arg(sel.y()).arg(sel.width()).arg(sel.height()));
 }
 
 void EditorWindow::slotRawCameraList()
@@ -2294,6 +2299,21 @@ void EditorWindow::slotCloseTool()
 {
     if (d->toolIface)
         d->toolIface->slotCloseTool();
+}
+
+void EditorWindow::setPreviewModeMask(PreviewToolBar::PreviewMode mask)
+{
+    d->previewToolBar->setPreviewModeMask(mask);
+}
+
+PreviewToolBar::PreviewMode EditorWindow::previewMode()
+{
+    return d->previewToolBar->previewMode();
+}
+    
+void EditorWindow::setToolInfoMessage(const QString& txt)
+{
+    d->infoLabel->setText(txt);
 }
 
 }  // namespace Digikam

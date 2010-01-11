@@ -59,7 +59,7 @@
 #include "dimgimagefilters.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
-#include "imagewidget.h"
+#include "imageguidewidget.h"
 #include "version.h"
 
 using namespace KDcrawIface;
@@ -110,7 +110,7 @@ public:
     RDoubleNumInput*    powerInput;
     RDoubleNumInput*    radiusInput;
 
-    ImageWidget*        previewWidget;
+    ImageGuideWidget*   previewWidget;
     EditorToolSettings* gboxSettings;
 };
 
@@ -122,9 +122,7 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
     setToolName(i18n("Vignetting Correction"));
     setToolIcon(SmallIcon("antivignetting"));
 
-    d->previewWidget = new ImageWidget("antivignetting Tool", 0, QString(),
-                                      false, ImageGuideWidget::HVGuideMode, false);
-
+    d->previewWidget = new ImageGuideWidget(0, false, ImageGuideWidget::HVGuideMode);
     setToolView(d->previewWidget);
 
     // -------------------------------------------------------------
@@ -292,7 +290,7 @@ void AntiVignettingTool::writeSettings()
     group.writeEntry(d->configBrightnessAdjustmentEntry, d->brightnessInput->value());
     group.writeEntry(d->configContrastAdjustmentEntry,   d->contrastInput->value());
     group.writeEntry(d->configGammaAdjustmentEntry,      d->gammaInput->value());
-    d->previewWidget->writeSettings();
+
     group.sync();
 }
 

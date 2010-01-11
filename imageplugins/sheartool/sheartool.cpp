@@ -6,7 +6,7 @@
  * Date        : 2004-12-23
  * Description : a plugin to shear an image
  *
- * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -20,7 +20,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "sheartool.moc"
 
@@ -54,7 +53,7 @@
 #include "dimg.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
-#include "imagewidget.h"
+#include "imageguidewidget.h"
 #include "shear.h"
 #include "version.h"
 
@@ -102,10 +101,10 @@ public:
     RIntNumInput*        mainHAngleInput;
     RIntNumInput*        mainVAngleInput;
 
-    RDoubleNumInput* 	 fineHAngleInput;
-    RDoubleNumInput* 	 fineVAngleInput;
+    RDoubleNumInput*     fineHAngleInput;
+    RDoubleNumInput*     fineVAngleInput;
 
-    ImageWidget*         previewWidget;
+    ImageGuideWidget*    previewWidget;
     EditorToolSettings*  gboxSettings;
 };
 
@@ -117,21 +116,20 @@ ShearTool::ShearTool(QObject* parent)
     setToolName(i18n("Shear Tool"));
     setToolIcon(SmallIcon("shear"));
 
-    d->previewWidget = new ImageWidget("sheartool Tool", 0,
-                                      i18n("This is the shear operation preview. "
-                                           "If you move the mouse cursor on this preview, "
-                                           "a vertical and horizontal dashed line will be drawn "
-                                           "to guide you in adjusting the shear correction. "
-                                           "Release the left mouse button to freeze the dashed "
-                                           "line's position."),
-                                      false, ImageGuideWidget::HVGuideMode);
+    d->previewWidget = new ImageGuideWidget(0, false, ImageGuideWidget::HVGuideMode);
+    d->previewWidget->setWhatsThis(i18n("This is the shear operation preview. "
+                                        "If you move the mouse cursor on this preview, "
+                                        "a vertical and horizontal dashed line will be drawn "
+                                        "to guide you in adjusting the shear correction. "
+                                        "Release the left mouse button to freeze the dashed "
+                                        "line's position."));
 
     setToolView(d->previewWidget);
 
     // -------------------------------------------------------------
 
     QString temp;
-    Digikam::ImageIface iface(0, 0);
+    ImageIface iface(0, 0);
 
     d->gboxSettings = new EditorToolSettings;
     d->gboxSettings->setTools(EditorToolSettings::ColorGuide);
@@ -261,7 +259,7 @@ void ShearTool::writeSettings()
 //    group.writeEntry(d->configFineHAngleEntry, d->fineHAngleInput->value());
 //    group.writeEntry(d->configFineVAngleEntry, d->fineVAngleInput->value());
     group.writeEntry(d->configAntiAliasingEntry, d->antialiasInput->isChecked());
-    d->previewWidget->writeSettings();
+
     config->sync();
 }
 
