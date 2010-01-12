@@ -62,7 +62,6 @@ public:
         tileSize(128), zoomMultiplier(1.2)
     {
         panIconPopup  = 0;
-        panIconWidget = 0;
         cornerButton  = 0;
         midButtonX    = 0;
         midButtonY    = 0;
@@ -103,8 +102,6 @@ public:
     QToolButton*             cornerButton;
 
     KPopupFrame*             panIconPopup;
-
-    PanIconWidget*           panIconWidget;
 };
 
 PreviewWidget::PreviewWidget(QWidget *parent)
