@@ -61,5 +61,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 052 ==> 221113 : RW2 images are not rotated anymore.
 053 ==> 216874 : File renaming in the queue settings don't manage tokens [date] and [cam].
 054 ==> 220292 : Red eyes tool crashs digikam with memory error.
-055 ==> 
+055 ==> 218873 : digiKam crashes while starting up [mem2chunk_check, free_check, Marble::GeoDataObject::~GeoDataObject].
+056 ==> 
 
