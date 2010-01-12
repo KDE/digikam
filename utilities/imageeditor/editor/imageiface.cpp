@@ -140,7 +140,7 @@ DColor ImageIface::getColorInfoFromTargetPreviewImage(const QPoint& point)
     if ( d->targetPreviewImage.isNull() || point.x() > previewWidth() || point.y() > previewHeight() )
     {
         kWarning() << "Coordinate out of range or no image data available!";
-        return DColor::DColor();
+        return DColor();
     }
 
     return d->targetPreviewImage.getPixelColor(point.x(), point.y());
