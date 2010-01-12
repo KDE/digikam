@@ -6,8 +6,8 @@
  * Date        : 2004-09-30
  * Description : a plugin to add rain drop over an image
  *
- * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,7 +21,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "raindroptool.moc"
 
@@ -53,7 +52,7 @@
 #include "daboutdata.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
-#include "imagewidget.h"
+#include "imageguidewidget.h"
 #include "raindrop.h"
 #include "version.h"
 
@@ -89,7 +88,7 @@ public:
     RIntNumInput*       amountInput;
     RIntNumInput*       coeffInput;
 
-    ImageWidget*        previewWidget;
+    ImageGuideWidget*   previewWidget;
     EditorToolSettings* gboxSettings;
 };
 
@@ -101,12 +100,11 @@ RainDropTool::RainDropTool(QObject* parent)
     setToolName(i18n("Raindrops"));
     setToolIcon(SmallIcon("raindrop"));
 
-    d->previewWidget = new ImageWidget("raindrops Tool", 0,
-                                      i18n("This is the preview of the Raindrop effect."
-                                           "<p>Note: if you have previously selected an area in the editor, "
-                                           "this will be unaffected by the filter. You can use this method to "
-                                           "disable the Raindrops effect on a human face, for example.</p>"),
-                                      false);
+    d->previewWidget = new ImageGuideWidget(0, false, ImageGuideWidget::HVGuideMode);
+    d->previewWidget->setWhatsThis(i18n("This is the preview of the Raindrop effect."
+                                        "<p>Note: if you have previously selected an area in the editor, "
+                                        "this will be unaffected by the filter. You can use this method to "
+                                        "disable the Raindrops effect on a human face, for example.</p>"));
 
     setToolView(d->previewWidget);
 
@@ -182,7 +180,7 @@ void RainDropTool::renderingFinished()
 void RainDropTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(d->configGroupName);
+    KConfigGroup group        = config->group(d->configGroupName);
 
     blockWidgetSignals(true);
 
@@ -196,11 +194,11 @@ void RainDropTool::readSettings()
 void RainDropTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(d->configGroupName);
+    KConfigGroup group        = config->group(d->configGroupName);
     group.writeEntry(d->configDropAdjustmentEntry,   d->dropInput->value());
     group.writeEntry(d->configAmountAdjustmentEntry, d->amountInput->value());
     group.writeEntry(d->configCoeffAdjustmentEntry,  d->coeffInput->value());
-    d->previewWidget->writeSettings();
+
     group.sync();
 }
 

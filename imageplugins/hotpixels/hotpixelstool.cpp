@@ -113,7 +113,6 @@ HotPixelsTool::HotPixelsTool(QObject* parent)
     // -------------------------------------------------------------
 
     d->gboxSettings = new EditorToolSettings;
-    d->gboxSettings->setTools(EditorToolSettings::PanIcon);
 
     // -------------------------------------------------------------
 
@@ -147,7 +146,7 @@ HotPixelsTool::HotPixelsTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->previewWidget = new ImagePanelWidget(470, 350, "hotpixels Tool", d->gboxSettings->panIconView(),
+    d->previewWidget = new ImagePanelWidget(470, 350, "hotpixels Tool",
                                             0, ImagePanelWidget::SeparateViewDuplicate);
 
     setToolView(d->previewWidget);

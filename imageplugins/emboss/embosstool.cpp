@@ -90,10 +90,8 @@ EmbossTool::EmbossTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings = new EditorToolSettings;
-    d->gboxSettings->setTools(EditorToolSettings::PanIcon);
-
-    d->previewWidget = new ImagePanelWidget(470, 350, "emboss Tool", d->gboxSettings->panIconView());
+    d->gboxSettings  = new EditorToolSettings;
+    d->previewWidget = new ImagePanelWidget(470, 350, "emboss Tool");
 
     // -------------------------------------------------------------
 

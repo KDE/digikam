@@ -41,6 +41,7 @@
 
 #include "digikam_export.h"
 #include "thumbbardock.h"
+#include "previewtoolbar.h"
 
 class QSplitter;
 class QLabel;
@@ -81,11 +82,12 @@ public:
     virtual void applySettings(){};
     virtual bool setup()=0;
     virtual bool setupICC()=0;
-   
+
 Q_SIGNALS:
 
     void signalSelectionChanged(const QRect&);
     void signalNoCurrentItem();
+    void signalPreviewModeChanged(int);
 
 protected:
 
@@ -156,7 +158,7 @@ protected:
         OverwriteWithoutAsking,
         AlwaysSaveAs
     };
-    
+
     bool promptUserSave(const KUrl& url, SaveOrSaveAs = AskIfNeeded, bool allowCancel = true);
     bool waitForSavingToComplete();
     void startingSave(const KUrl& url);
@@ -168,7 +170,7 @@ protected:
     EditorStackView*           editorStackView()  const;
     ExposureSettingsContainer* exposureSettings() const;
     ICCSettingsContainer*      cmSettings()       const;
-    
+
     virtual void finishSaving(bool success);
 
     virtual void readSettings()               { readStandardSettings();     };
@@ -290,6 +292,11 @@ private:
     void setToolStartProgress(const QString& toolName);
     void setToolProgress(int progress);
     void setToolStopProgress();
+    
+    void setToolInfoMessage(const QString& txt);
+
+    void setPreviewModeMask(PreviewToolBar::PreviewMode mask);
+    PreviewToolBar::PreviewMode previewMode();
 
     /**
      * Sets up a temp file to save image contents to and updates the saving

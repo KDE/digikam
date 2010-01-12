@@ -6,7 +6,7 @@
  * Date        : 2005-07-01
  * Description : a widget to draw a control panel image tool.
  *
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -41,7 +41,6 @@
 
 // KDE includes
 
-
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kcursor.h>
@@ -55,7 +54,6 @@
 
 #include "thumbnailsize.h"
 #include "imageregionwidget.h"
-#include "imagepaniconwidget.h"
 
 namespace Digikam
 {
@@ -66,7 +64,6 @@ public:
 
     ImagePanelWidgetPriv()
     {
-        imagePanIconWidget = 0;
         imageRegionWidget  = 0;
         separateView       = 0;
         sepaBBox           = 0;
@@ -80,16 +77,14 @@ public:
     QWidget*            sepaBBox;
 
     ImageRegionWidget*  imageRegionWidget;
-    ImagePanIconWidget* imagePanIconWidget;
 };
 
 ImagePanelWidget::ImagePanelWidget(uint w, uint h, const QString& settingsSection,
-                                   ImagePanIconWidget *pan, QWidget *parent, int separateViewMode)
+                                   QWidget *parent, int separateViewMode)
                 : QWidget(parent), d(new ImagePanelWidgetPriv)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     d->settingsSection    = settingsSection;
-    d->imagePanIconWidget = pan;
     QGridLayout *grid     = new QGridLayout(this);
 
     // -------------------------------------------------------------
@@ -98,7 +93,7 @@ ImagePanelWidget::ImagePanelWidget(uint w, uint h, const QString& settingsSectio
     QVBoxLayout* l1 = new QVBoxLayout(preview);
     l1->setSpacing(5);
     l1->setMargin(0);
-    d->imageRegionWidget = new ImageRegionWidget(w, h, preview, false);
+    d->imageRegionWidget = new ImageRegionWidget(w, h, preview);
     d->imageRegionWidget->setFrameStyle(QFrame::NoFrame);
     preview->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     d->imageRegionWidget->setWhatsThis( i18n("<p>Here you can see the original clip image "
@@ -190,17 +185,8 @@ ImagePanelWidget::ImagePanelWidget(uint w, uint h, const QString& settingsSectio
     connect(d->imageRegionWidget, SIGNAL(signalContentsMovedEvent(bool)),
             this, SLOT(slotOriginalImageRegionChanged(bool)));
 
-    connect(d->imagePanIconWidget, SIGNAL(signalSelectionMoved(const QRect&, bool)),
-            this, SLOT(slotSetImageRegionPosition(const QRect&, bool)));
-
-    connect(d->imagePanIconWidget, SIGNAL(signalSelectionTakeFocus()),
-            this, SLOT(slotPanIconTakeFocus()));
-
     connect(d->separateView, SIGNAL(buttonReleased(int)),
             d->imageRegionWidget, SLOT(slotSeparateViewToggled(int)));
-
-    connect(d->separateView, SIGNAL(buttonReleased(int)),
-            d->imagePanIconWidget, SLOT(slotSeparateViewToggled(int)));
 }
 
 ImagePanelWidget::~ImagePanelWidget()
@@ -223,13 +209,10 @@ void ImagePanelWidget::readSettings()
     mode                      = qMin((int)ImageRegionWidget::SeparateViewDuplicateHorz, mode);
 
     d->imageRegionWidget->blockSignals(true);
-    d->imagePanIconWidget->blockSignals(true);
     d->separateView->blockSignals(true);
     d->imageRegionWidget->slotSeparateViewToggled( mode );
-    d->imagePanIconWidget->slotSeparateViewToggled( mode );
     d->separateView->button(mode)->setChecked(true);
     d->imageRegionWidget->blockSignals(false);
-    d->imagePanIconWidget->blockSignals(false);
     d->separateView->blockSignals(false);
 }
 
@@ -243,10 +226,7 @@ void ImagePanelWidget::writeSettings()
 
 void ImagePanelWidget::slotOriginalImageRegionChanged(bool target)
 {
-    d->imagePanIconWidget->slotZoomFactorChanged(d->imageRegionWidget->zoomFactor());
     QRect rect = getOriginalImageRegion();
-    d->imagePanIconWidget->setRegionSelection(rect);
-    updateSelectionInfo(rect);
 
     if (target)
     {
@@ -283,18 +263,11 @@ void ImagePanelWidget::slotInitGui()
 void ImagePanelWidget::setPanIconHighLightPoints(const QPolygon& pt)
 {
     d->imageRegionWidget->setHighLightPoints(pt);
-    d->imagePanIconWidget->setHighLightPoints(pt);
-}
-
-void ImagePanelWidget::slotPanIconTakeFocus()
-{
-    d->imageRegionWidget->restorePixmapRegion();
 }
 
 void ImagePanelWidget::setEnable(bool b)
 {
     d->imageRegionWidget->setEnabled(b);
-    d->imagePanIconWidget->setEnabled(b);
     d->sepaBBox->setEnabled(b);
 }
 
@@ -324,16 +297,14 @@ void ImagePanelWidget::setCenterImageRegionPosition()
     d->imageRegionWidget->setCenterContentsPosition();
 }
 
-void ImagePanelWidget::slotSetImageRegionPosition(const QRect& rect, bool targetDone)
+void ImagePanelWidget::ICCSettingsChanged()
 {
-    d->imageRegionWidget->setContentsPosition(rect.x(), rect.y(), targetDone);
+    d->imageRegionWidget->viewport()->repaint();
 }
 
-void ImagePanelWidget::updateSelectionInfo(const QRect& rect)
+void ImagePanelWidget::exposureSettingsChanged()
 {
-    d->imagePanIconWidget->setToolTip(i18n("<nobr>(%1,%2)(%3x%4)</nobr>",
-                                           rect.left(), rect.top(),
-                                           rect.width(), rect.height()));
+    // NOTE : not yet managed here by imageRegionWidget.
 }
 
 }  // namespace Digikam

@@ -196,9 +196,6 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
                                 EditorToolSettings::SaveAs|
                                 EditorToolSettings::Try);
 
-
-    d->gboxSettings->setTools(EditorToolSettings::PanIcon);
-
     // -------------------------------------------------------------
 
     QGridLayout* grid  = new QGridLayout( d->gboxSettings->plainPage() );
@@ -450,7 +447,7 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
 
     setToolSettings(d->gboxSettings);
 
-    d->previewWidget = new ImagePanelWidget(470, 350, "localcontrast Tool", d->gboxSettings->panIconView());
+    d->previewWidget = new ImagePanelWidget(470, 350, "localcontrast Tool");
     setToolView(d->previewWidget);
 
     init();

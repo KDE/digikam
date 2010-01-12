@@ -414,7 +414,7 @@ void SearchTabHeader::keywordChanged()
 {
     QString keywords = d->keywordEdit->text();
     kDebug() << "keywords changed to '" << keywords << "'";
-    if (d->oldKeywordContent == keywords)
+    if (d->oldKeywordContent == keywords || keywords.trimmed().isEmpty())
     {
         kDebug() << "same keywords as before, ignoring...";
         return;

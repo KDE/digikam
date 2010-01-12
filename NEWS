@@ -49,5 +49,18 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 040 ==> 207392 : Crash after rebuild all thumbnails.
 041 ==> 213001 : Scrolling when under-exposure indicator.
 042 ==> 187188 : digiKam crashes when including a CIFS located album.
-043 ==> 
+043 ==> 221343 : [wish] Blank search field should not show all images
+044 ==> 221605 : digiKam crashed on startup, while scanning albuns [__libc_message, malloc_printerr, qFree].
+045 ==> 201654 : digiKam 1.0 crashes immediately on application start.
+046 ==> 190982 : Crashes when selecting album-- every time.
+047 ==> 194047 : digiKam crashes while atempting.
+048 ==> 191414 : Selecting "synchronize images with database" in album drop-down menu causes signal 6 (sigabrt).
+049 ==> 221440 : Crashes when adding album.
+050 ==> 214913 : digiKam crash scanning photos.
+051 ==> 221938 : Crash while clicked on lens->distortion
+052 ==> 221113 : RW2 images are not rotated anymore.
+053 ==> 216874 : File renaming in the queue settings don't manage tokens [date] and [cam].
+054 ==> 220292 : Red eyes tool crashs digikam with memory error.
+055 ==> 218873 : digiKam crashes while starting up [mem2chunk_check, free_check, Marble::GeoDataObject::~GeoDataObject].
+056 ==> 
 

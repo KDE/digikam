@@ -6,8 +6,8 @@
  * Date        : 2005-02-11
  * Description : a plugin to apply Distortion FX to an image.
  *
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * Original Distortion algorithms copyrighted 2004-2005 by
  * Pieter Z. Voloshyn <pieter dot voloshyn at gmail dot com>.
@@ -24,7 +24,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "distortionfxtool.moc"
 
@@ -62,7 +61,7 @@
 #include "distortionfx.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
-#include "imagewidget.h"
+#include "imageguidewidget.h"
 #include "version.h"
 
 using namespace KDcrawIface;
@@ -105,7 +104,7 @@ public:
     RIntNumInput*       levelInput;
     RIntNumInput*       iterationInput;
 
-    ImageWidget*        previewWidget;
+    ImageGuideWidget*   previewWidget;
     EditorToolSettings* gboxSettings;
 };
 
@@ -117,11 +116,9 @@ DistortionFXTool::DistortionFXTool(QObject* parent)
     setToolName(i18n("Distortion Effects"));
     setToolIcon(SmallIcon("distortionfx"));
 
-    d->previewWidget = new ImageWidget("distortionfx Tool", 0,
-                                      i18n("This is the preview of the distortion effect "
-                                           "applied to the photograph."),
-                                      false, ImageGuideWidget::HVGuideMode);
-
+    d->previewWidget = new ImageGuideWidget(0, false, ImageGuideWidget::HVGuideMode);
+    d->previewWidget->setWhatsThis(i18n("This is the preview of the distortion effect "
+                                        "applied to the photograph."));
     setToolView(d->previewWidget);
 
     // -------------------------------------------------------------
@@ -293,7 +290,7 @@ void DistortionFXTool::writeSettings()
     group.writeEntry(d->configEffectTypeEntry,          d->effectType->currentIndex());
     group.writeEntry(d->configIterationAdjustmentEntry, d->iterationInput->value());
     group.writeEntry(d->configLevelAdjustmentEntry,     d->levelInput->value());
-    d->previewWidget->writeSettings();
+
     config->sync();
 }
 

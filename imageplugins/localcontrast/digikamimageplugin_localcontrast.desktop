@@ -2,6 +2,7 @@
 Name=ImagePlugin_LocalContrast
 Name[bg]=Приставка за снимки - Локален контраст
 Name[ca]=ConnectorD'Imatge_ContrastLocal
+Name[ca@valencia]=ConnectorD'Imatge_ContrastLocal
 Name[cs]=ImagePlugin_LocalContrast
 Name[da]=ImagePlugin_LocalContrast
 Name[en_GB]=ImagePlugin_LocalContrast
@@ -27,6 +28,7 @@ Encoding=UTF-8
 Comment=Local contrast plugin for Digikam
 Comment[bg]=Приставка на digiKam с ефекти за локален контраст
 Comment[ca]=Connector pel DigiKam de contrast local
+Comment[ca@valencia]=Connector pel DigiKam de contrast local
 Comment[cs]=Modul digiKamu pro lokální kontrast
 Comment[da]=digiKam-plugin til lokal kontrast
 Comment[en_GB]=Local contrast plugin for Digikam

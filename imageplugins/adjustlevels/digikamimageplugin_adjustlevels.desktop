@@ -2,6 +2,7 @@
 Name=ImagePlugin_AdjustLevels
 Name[bg]=Приставка за снимки - Настройка на нивата
 Name[ca]=ImagePlugin_AdjustLevels
+Name[ca@valencia]=ImagePlugin_AdjustLevels
 Name[cs]=ImagePlugin_AdjustLevels
 Name[da]=ImagePlugin_AdjustLevels
 Name[de]=Bildmodul_Tonwertkorrektur
@@ -46,6 +47,7 @@ Encoding=UTF-8
 Comment=Image histogram adjust levels plugin for digiKam
 Comment[bg]=Приставка на digiKam за настройка нивата на хистограмите на снимки
 Comment[ca]=Connector pel DigiKam d'ajust dels nivells de l'histograma d'imatges
+Comment[ca@valencia]=Connector pel DigiKam d'ajust dels nivells de l'histograma d'imatges
 Comment[cs]=Modul digiKamu pro úpravu úrovní histogramu obrázku
 Comment[da]=digiKam-plugin til justering af niveauer
 Comment[de]=digiKam-Modul zur Tonwertkorrektur mittels Bildhistogramm

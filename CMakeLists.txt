@@ -616,6 +616,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
        )
 
     SET(libcommonwidgets_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/buttonicondisabler.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/colorgradientwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/comboboxutilities.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/curveswidget.cpp
@@ -659,14 +660,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/iccprofiles/iccprofilescombobox.cpp
        )
 
-    SET(libimagepluginswidgets_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/imageplugins/imagepaniconwidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/imageplugins/imageregionwidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/imageplugins/imageguidewidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/imageplugins/imagewidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/imageplugins/imagepanelwidget.cpp
-       )
-
     SET(libmetadatawidgets_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/mdkeylistviewitem.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/metadatalistview.cpp
@@ -690,6 +683,13 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupdcraw.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupicc.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupslideshow.cpp
+       )
+
+    SET(libeditorwidgets_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets/imageregionwidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets/imageguidewidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets/imagepanelwidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets/previewtoolbar.cpp
        )
 
     SET(libdimgcanvas_SRCS
@@ -1184,10 +1184,10 @@ IF(DOXYGEN_FOUND)
     SET(SOURCE_DIR ${CMAKE_SOURCE_DIR})
     SET(DOXYFILE ${CMAKE_BINARY_DIR}/Doxyfile)
     SET(WARNFILE ${CMAKE_BINARY_DIR}/doxygen-warn.log)
-    
+
     CONFIGURE_FILE(Doxyfile.cmake ${DOXYFILE})
-    
+
     ADD_CUSTOM_TARGET(doc ${DOXYGEN_EXECUTABLE} ${DOXYFILE}
                       WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
-                       
+
 ENDIF(DOXYGEN_FOUND)

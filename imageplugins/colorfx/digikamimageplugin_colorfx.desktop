@@ -2,6 +2,7 @@
 Name=ImagePlugin_ColorFx
 Name[bg]=Приставка за снимки - Поправяне на цветове
 Name[ca]=ImagePlugin_ColorFx
+Name[ca@valencia]=ImagePlugin_ColorFx
 Name[cs]=ImagePlugin_Core
 Name[da]=ImagePlugin_ColorFx
 Name[de]=Bildmodul_Farbeffekte
@@ -44,6 +45,7 @@ Encoding=UTF-8
 Comment=Color special effects plugin for digiKam
 Comment[bg]=Приставка на digiKam с ефекти за замъгляване на снимки
 Comment[ca]=Connector pel DigiKam d'efectes especials de color
+Comment[ca@valencia]=Connector pel DigiKam d'efectes especials de color
 Comment[cs]=Modul speciálních efektů digiKamu pro barvy
 Comment[da]=digiKam-plugin med specielle farveeffekter
 Comment[de]=digiKam-Modul für spezielle Farbeffekte

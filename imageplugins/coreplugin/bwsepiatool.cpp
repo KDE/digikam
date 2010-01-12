@@ -7,7 +7,7 @@
  * Description : Black and White conversion tool.
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -64,7 +64,7 @@
 #include "imagecurves.h"
 #include "imagehistogram.h"
 #include "imageiface.h"
-#include "imagewidget.h"
+#include "imageguidewidget.h"
 
 using namespace KDcrawIface;
 using namespace Digikam;
@@ -271,14 +271,14 @@ public:
     KDcrawIface::RIntNumInput*   cInput;
     KDcrawIface::RIntNumInput*   strengthInput;
 
-    Digikam::ImageWidget*        previewWidget;
+    ImageGuideWidget*            previewWidget;
 
-    Digikam::CurvesBox*          curvesBox;
+    CurvesBox*                   curvesBox;
 
-    Digikam::EditorToolSettings* gboxSettings;
+    EditorToolSettings*          gboxSettings;
 
-    Digikam::DImg*               originalImage;
-    Digikam::DImg                thumbnailImage;
+    DImg*                        originalImage;
+    DImg                         thumbnailImage;
 
     PreviewPixmapFactory*        previewPixmapFactory;
 };
@@ -301,12 +301,13 @@ BWSepiaTool::BWSepiaTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->previewWidget = new ImageWidget("convertbw Tool", 0,
-                                      i18n("The black and white conversion tool preview is "
-                                           "shown here. Picking a color on the image will "
-                                           "show the corresponding color level on the histogram."));
+    d->previewWidget = new ImageGuideWidget;
+    d->previewWidget->setToolTip(i18n("The black and white conversion tool preview is "
+                                      "shown here. Picking a color on the image will "
+                                      "show the corresponding color level on the histogram."));
     setToolView(d->previewWidget);
-
+    setPreviewModeMask(PreviewToolBar::AllPreviewModes);
+    
     // -------------------------------------------------------------
 
     d->gboxSettings = new EditorToolSettings;
@@ -723,7 +724,6 @@ void BWSepiaTool::writeSettings()
 
     d->curvesBox->writeCurveSettings(group, d->configCurveEntry);
 
-    d->previewWidget->writeSettings();
     group.sync();
 }
 

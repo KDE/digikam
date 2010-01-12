@@ -2,6 +2,7 @@
 Name=ImagePlugin_ShearTool
 Name[bg]=Приставка за снимки - Инструмент за изрязване
 Name[ca]=ImagePlugin_ShearTool
+Name[ca@valencia]=ImagePlugin_ShearTool
 Name[cs]=ImagePlugin_ShearTool
 Name[da]=ImagePlugin_ShearTool
 Name[de]=Bildmodul_Scheren
@@ -45,6 +46,7 @@ Encoding=UTF-8
 Comment=Shear tool plugin for digiKam
 Comment[bg]=Приставка на digiKam с инструмент за изрязване на снимки
 Comment[ca]=Connector pel DigiKam d'eina per retallar
+Comment[ca@valencia]=Connector pel DigiKam d'eina per retallar
 Comment[cs]=Modul digiKamu pro nástroj Střih
 Comment[da]=digiKam-plugin med forskydningsværktøjer til digiKam
 Comment[de]=digiKam-Modul zum Scheren eines Bildes

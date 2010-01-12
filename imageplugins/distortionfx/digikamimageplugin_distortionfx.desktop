@@ -2,6 +2,7 @@
 Name=ImagePlugin_DistortionFX
 Name[bg]=Приставка за снимки - Изкривяващи ефекти
 Name[ca]=ImagePlugin_DistortionFX
+Name[ca@valencia]=ImagePlugin_DistortionFX
 Name[cs]=ImagePlugin_DistortionFX
 Name[da]=ImagePlugin_DistortionFX
 Name[de]=Bildmodul_Verzerrungseffekte
@@ -45,6 +46,7 @@ Encoding=UTF-8
 Comment=Distortion special effects plugin for digiKam
 Comment[bg]=Приставка на digiKam с изкривяващи снимките ефекти
 Comment[ca]=Connector pel DigiKam d'efectes especials de distorsió
+Comment[ca@valencia]=Connector pel DigiKam d'efectes especials de distorsió
 Comment[cs]=Modul speciálních efektů digiKamu pro deformaci
 Comment[da]=digiKam-plugin med specielle forvrængningseffekter
 Comment[de]=digiKam-Modul für spezielle Verzerrungseffekte

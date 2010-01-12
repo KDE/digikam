@@ -6,7 +6,7 @@
  * Date        : 2004-08-17
  * Description : a widget to draw an image clip region.
  *
- * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -74,22 +74,16 @@ public:
 
     DImg        image;                 // Entire content image to render pixmap.
 
-    ImageIface *iface;
+    ImageIface* iface;
 };
 
-ImageRegionWidget::ImageRegionWidget(int wp, int hp, QWidget *parent, bool scrollBar)
+ImageRegionWidget::ImageRegionWidget(int wp, int hp, QWidget *parent)
                  : PreviewWidget(parent), d(new ImageRegionWidgetPriv)
 {
     d->iface = new ImageIface(0, 0);
     d->image = d->iface->getOriginalImg()->copy();
 
     setMinimumSize(wp, hp);
-
-    if( !scrollBar )
-    {
-       setVScrollBarMode( Q3ScrollView::AlwaysOff );
-       setHScrollBarMode( Q3ScrollView::AlwaysOff );
-    }
 
     connect(this, SIGNAL(signalZoomFactorChanged(double)),
             this, SLOT(slotZoomFactorChanged()));
@@ -468,6 +462,11 @@ void ImageRegionWidget::contentsWheelEvent(QWheelEvent *e)
             slotIncreaseZoom();
         return;
     }
+}
+
+QImage ImageRegionWidget::previewToQImage() const
+{
+    return d->image.copyQImage();
 }
 
 }  // namespace Digikam

@@ -46,8 +46,6 @@ namespace Digikam
 {
 
 class LoadingDescription;
-class ExposureSettingsContainer;
-class ICCSettingsContainer;
 class RawPreviewPriv;
 
 class DIGIKAM_EXPORT RawPreview : public PreviewWidget
@@ -65,8 +63,9 @@ public:
 
     void setDecodingSettings(const DRawDecoding& settings);
     void setPostProcessedImage(const DImg& image);
-    void setExposureSettings(ExposureSettingsContainer* expoSettings);
-    void setICCSettings(ICCSettingsContainer* cmSettings);
+
+    void ICCSettingsChanged();
+    void exposureSettingsChanged();
 
     void cancelLoading();
 
@@ -87,20 +86,18 @@ private Q_SLOTS:
     void slotLoadingProgress(const LoadingDescription& description, float progress);
     void slotImageLoaded(const LoadingDescription& description, const DImg& image);
     void slotThemeChanged();
-    void slotCornerButtonPressed();
-    void slotPanIconSelectionMoved(const QRect&, bool);
-    void slotPanIconHiden();
 
 private:
 
-    void setdemosaicedImg(const DImg& image);
-    void postProcessing(const DRawDecoding& settings);
-    int  previewWidth();
-    int  previewHeight();
-    bool previewIsNull();
-    void resetPreview();
-    void zoomFactorChanged(double zoom);
-    void updateZoomAndSize(bool alwaysFitToWindow);
+    void   setdemosaicedImg(const DImg& image);
+    void   postProcessing(const DRawDecoding& settings);
+    int    previewWidth();
+    int    previewHeight();
+    bool   previewIsNull();
+    void   resetPreview();
+    void   updateZoomAndSize(bool alwaysFitToWindow);
+    QImage previewToQImage() const;
+
     inline void paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh);
 
 private:

@@ -96,12 +96,11 @@ NoiseReductionTool::NoiseReductionTool(QObject* parent)
                                 EditorToolSettings::SaveAs|
                                 EditorToolSettings::Try);
 
-    d->gboxSettings->setTools(EditorToolSettings::PanIcon);
     d->nrSettings = new NoiseReductionSettings(d->gboxSettings->plainPage());
 
     setToolSettings(d->gboxSettings);
 
-    d->previewWidget = new ImagePanelWidget(470, 350, "noisereduction Tool", d->gboxSettings->panIconView());
+    d->previewWidget = new ImagePanelWidget(470, 350, "noisereduction Tool");
     setToolView(d->previewWidget);
 
     init();

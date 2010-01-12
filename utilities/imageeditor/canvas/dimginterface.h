@@ -63,10 +63,14 @@ public:
     void   load(const QString& filename, IOFileSettingsContainer *iofileSettings);
     void   applyTransform(const IccTransform& transform);
     void   updateColorManagement();
-
-    void   setICCSettings(ICCSettingsContainer *cmSettings);
     void   setSoftProofingEnabled(bool enabled);
-    void   setExposureSettings(ExposureSettingsContainer *expoSettings);
+
+    void   setICCSettings(ICCSettingsContainer* cmSettings);
+    ICCSettingsContainer* getICCSettings();
+
+    void   setExposureSettings(ExposureSettingsContainer* expoSettings);
+    ExposureSettingsContainer* getExposureSettings();
+
     void   setExifOrient(bool exifOrient);
     void   setDisplayingWidget(QWidget *widget);
 
@@ -151,14 +155,9 @@ public:
     QByteArray            getIptc();
     QByteArray            getXmp();
 
-    ICCSettingsContainer *getICCSettings();
-
     QString               getImageFileName();
     QString               getImageFilePath();
     QString               getImageFormat();
-
-    QColor                underExposureColor();
-    QColor                overExposureColor();
 
 protected Q_SLOTS:
 

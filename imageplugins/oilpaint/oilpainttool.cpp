@@ -104,8 +104,6 @@ OilPaintTool::OilPaintTool(QObject* parent)
                                 EditorToolSettings::Cancel|
                                 EditorToolSettings::Try);
 
-    d->gboxSettings->setTools(EditorToolSettings::PanIcon);
-
     // -------------------------------------------------------------
 
     QLabel *label1    = new QLabel(i18n("Brush size:"));
@@ -140,7 +138,7 @@ OilPaintTool::OilPaintTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->previewWidget = new ImagePanelWidget(470, 350, "oilpaint Tool", d->gboxSettings->panIconView());
+    d->previewWidget = new ImagePanelWidget(470, 350, "oilpaint Tool");
 
     setToolView(d->previewWidget);
     init();

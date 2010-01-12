@@ -3,11 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2006-02-01
- * Description : a widget to display an image preview with some
- *               modes to compare effect results.
+ * Date        : 2004-08-20
+ * Description : a widget to display an image with guides
  *
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2010 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,73 +21,89 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEWIDGET_H
-#define IMAGEWIDGET_H
+#ifndef IMAGEGUIDEWIDGET_H
+#define IMAGEGUIDEWIDGET_H
 
 // Qt includes
 
 #include <QtGui/QWidget>
 #include <QtCore/QPoint>
 #include <QtGui/QColor>
-#include <QtCore/QString>
+#include <QtGui/QPixmap>
+#include <QtGui/QResizeEvent>
+#include <QtCore/QEvent>
+#include <QtGui/QMouseEvent>
+#include <QtCore/QTimerEvent>
+#include <QtGui/QPaintEvent>
 
 // Local includes
 
 #include "dcolor.h"
-#include "imageguidewidget.h"
 #include "digikam_export.h"
+
+class QPixmap;
 
 namespace Digikam
 {
 
+class DColor;
 class ImageIface;
-class ImageWidgetPriv;
+class ImageGuideWidgetPriv;
 
-class DIGIKAM_EXPORT ImageWidget : public QWidget
+class DIGIKAM_EXPORT ImageGuideWidget : public QWidget
 {
 Q_OBJECT
 
 public:
 
-    enum ExposureIndicator
+    enum GuideToolMode
     {
-        UnderExposure=0,
-        OverExposure
+        HVGuideMode=0,
+        PickColorMode
+    };
+
+    enum ColorPointSrc
+    {
+        OriginalImage=0,
+        PreviewImage,
+        TargetPreviewImage
     };
 
 public:
 
-    explicit ImageWidget(const QString& settingsSection, QWidget *parent=0,
-                         const QString& previewWhatsThis=QString(), bool prevModeOptions=true,
-                         int  guideMode=ImageGuideWidget::PickColorMode,
-                         bool guideVisible=true, bool useImageSelection=false);
-    ~ImageWidget();
+    ImageGuideWidget(QWidget *parent=0,
+                     bool spotVisible=true, int guideMode=PickColorMode,
+                     const QColor& guideColor=Qt::red, int guideSize=1,
+                     bool blink=false, bool useImageSelection=false);
+    ~ImageGuideWidget();
 
     ImageIface* imageIface();
 
     QPoint getSpotPosition();
     DColor getSpotColor(int getColorFrom);
     void   setSpotVisible(bool spotVisible, bool blink=false);
-    int    getRenderingPreviewMode();
+    int    previewMode();
+    void   setPreviewMode(int mode);
     void   resetSpotPosition();
     void   updatePreview();
-    void   writeSettings();
-
-    void   setRenderingPreviewMode(int mode);
     void   setPoints(const QPolygon& p, bool drawLine=false);
     void   resetPoints();
 
     void   setPaintColor(const QColor& color);
+    void   setEraseMode(bool erase);
     void   setMaskEnabled(bool enabled);
     void   setMaskPenSize(int size);
-    void   setEraseMode(bool erase);
 
     QImage getMask() const;
+
+    void   ICCSettingsChanged();
+    void   exposureSettingsChanged();
 
 public Q_SLOTS:
 
     void slotChangeGuideColor(const QColor& color);
     void slotChangeGuideSize(int size);
+    void slotPreviewModeChanged(int mode);
 
 Q_SIGNALS:
 
@@ -96,19 +111,30 @@ Q_SIGNALS:
     void spotPositionChangedFromTarget(const Digikam::DColor& color, const QPoint& position);
     void signalResized();
 
-private Q_SLOTS:
+protected:
 
-    void slotUpdateSpotInfo(const Digikam::DColor& col, const QPoint& point);
+    void paintEvent(QPaintEvent*);
+    void resizeEvent(QResizeEvent*);
+    void timerEvent(QTimerEvent*);
+    void mousePressEvent(QMouseEvent*);
+    void mouseReleaseEvent(QMouseEvent*);
+    void mouseMoveEvent(QMouseEvent*);
+    void enterEvent(QEvent*);
+    void leaveEvent(QEvent*);
 
 private:
 
-    void readSettings();
+    void   updatePixmap();
+    void   drawLineTo(const QPoint& endPoint);
+    void   drawLineTo(int width, bool erase, const QColor& color, const QPoint& start, const QPoint& end);
+    QPoint translatePointPosition(QPoint& point);
+    void   updateMaskCursor();
 
 private:
 
-    ImageWidgetPriv* const d;
+    ImageGuideWidgetPriv* const d;
 };
 
 }  // namespace Digikam
 
-#endif /* IMAGEWIDGET_H */
+#endif /* IMAGEGUIDEWIDGET_H */

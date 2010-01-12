@@ -308,14 +308,24 @@ void DImgInterface::resetValues()
     d->undoMan->clear();
 }
 
-void DImgInterface::setICCSettings(ICCSettingsContainer *cmSettings)
+void DImgInterface::setICCSettings(ICCSettingsContainer* cmSettings)
 {
     d->cmSettings = cmSettings;
 }
 
-void DImgInterface::setExposureSettings(ExposureSettingsContainer *expoSettings)
+ICCSettingsContainer* DImgInterface::getICCSettings()
+{
+    return d->cmSettings;
+}
+
+void DImgInterface::setExposureSettings(ExposureSettingsContainer* expoSettings)
 {
     d->expoSettings = expoSettings;
+}
+
+ExposureSettingsContainer* DImgInterface::getExposureSettings()
+{
+    return d->expoSettings;
 }
 
 void DImgInterface::slotImageLoaded(const LoadingDescription& loadingDescription, const DImg& img)
@@ -341,17 +351,13 @@ void DImgInterface::slotImageLoaded(const LoadingDescription& loadingDescription
         d->height     = d->origHeight;
         valRet        = true;
 
-        // Raw files are already rotated properly by dcraw. Only perform auto-rotation with JPEG/PNG/TIFF file.
+        // Raw files are already rotated properly by dcraw. Only perform auto-rotation with non-RAW files.
         // We don't have a feedback from dcraw about auto-rotated RAW file during decoding. Well set transformed
         // flag as well.
 
-        if (d->image.attribute("format").toString() == QString("RAW"))
+        if (d->image.detectedFormat() == DImg::RAW)
             d->rotatedOrFlipped = true;
-
-        if (d->exifOrient &&
-            (d->image.attribute("format").toString() == QString("JPEG") ||
-             d->image.attribute("format").toString() == QString("PNG")  ||
-             d->image.attribute("format").toString() == QString("TIFF")))
+        else if (d->exifOrient)
              exifRotate(d->filename);
 
         updateColorManagement();
@@ -559,16 +565,7 @@ void DImgInterface::switchToLastSaved(const QString& newFilename)
     // it has previously been saved to.
     d->filename = newFilename;
 
-    // Currently the only place where a DImg is connected to the file it originates from
-    // is the format attribute.
-    QVariant savedformat = d->image.attribute("savedformat");
-    if (!savedformat.isNull())
-        d->image.setAttribute("format", savedformat.toString());
-    QVariant readonly = d->image.attribute("savedformat-isreadonly");
-    if (!readonly.isNull())
-        d->image.setAttribute("isreadonly", readonly.toBool());
-
-    d->image.removeAttribute("rawDecodingSettings");
+    d->image.switchOriginToLastSaved();
 }
 
 void DImgInterface::setModified()
@@ -1049,7 +1046,7 @@ QString DImgInterface::getImageFormat()
     if (d->image.isNull())
         return QString();
 
-    QString mimeType = d->image.attribute("format").toString();
+    QString mimeType = d->image.format();
     // It is a bug in the loader if format attribute is not given
     if (mimeType.isEmpty())
     {
@@ -1057,11 +1054,6 @@ QString DImgInterface::getImageFormat()
         mimeType = QImageReader::imageFormat(d->filename);
     }
     return mimeType;
-}
-
-ICCSettingsContainer* DImgInterface::getICCSettings()
-{
-    return d->cmSettings;
 }
 
 QPixmap DImgInterface::convertToPixmap(DImg& img)
@@ -1081,16 +1073,6 @@ QPixmap DImgInterface::convertToPixmap(DImg& img)
     }
 
     return img.convertToPixmap();
-}
-
-QColor DImgInterface::underExposureColor()
-{
-    return d->expoSettings->underExposureColor;
-}
-
-QColor DImgInterface::overExposureColor()
-{
-    return d->expoSettings->overExposureColor;
 }
 
 }  // namespace Digikam

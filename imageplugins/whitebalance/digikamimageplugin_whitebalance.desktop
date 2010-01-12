@@ -2,6 +2,7 @@
 Name=ImagePlugin_WhiteBalance
 Name[bg]=Приставка за снимки - Баланс на бялото
 Name[ca]=ImagePlugin_WhiteBalance
+Name[ca@valencia]=ImagePlugin_WhiteBalance
 Name[cs]=ImagePlugin_WhiteBalance
 Name[da]=ImagePlugin_WhiteBalance
 Name[de]=Bildmodul_Weißabgleich
@@ -45,6 +46,7 @@ Encoding=UTF-8
 Comment=White balance correction plugin for digiKam
 Comment[bg]=Приставка на digiKam за промяна баланса на бялото
 Comment[ca]=Connector pel DigiKam per corregir el balanç de blancs
+Comment[ca@valencia]=Connector pel DigiKam per corregir el balanç de blancs
 Comment[cs]=Modul digiKamu pro korekci vyvážení bílé
 Comment[da]=digiKam-plugin til korrigering af hvidbalance
 Comment[de]=digiKam-Modul zur Durchführung eines Weißabgleichs

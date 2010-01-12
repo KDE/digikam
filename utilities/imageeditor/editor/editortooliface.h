@@ -31,6 +31,7 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "previewtoolbar.h"
 
 namespace Digikam
 {
@@ -57,10 +58,14 @@ public:
     void loadTool(EditorTool* tool);
     void unLoadTool();
 
+    void setPreviewModeMask(PreviewToolBar::PreviewMode mask);
+
     void setToolStartProgress(const QString& toolName);
     void setToolProgress(int progress);
     void setToolStopProgress();
 
+    void setToolInfoMessage(const QString& txt);
+    
     void setupICC();
 
     void updateExposureSettings();

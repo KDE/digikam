@@ -14,6 +14,7 @@ maxInstances=1
 Description=digikam tags kioslave
 Description[bg]=Digikam kioslave за етикети
 Description[ca]=Kioslave d'etiquetes del DigiKam
+Description[ca@valencia]=Kioslave d'etiquetes del DigiKam
 Description[cs]=digiKam značky kioslave
 Description[da]=Kioslave til digiKam-mærker
 Description[de]=digiKam-Stichwörter-Ein/Ausgabemodul

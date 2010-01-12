@@ -2,6 +2,7 @@
 Name=ImagePlugin_RainDrop
 Name[bg]=Приставка за снимки - Дъждовни капки
 Name[ca]=ImagePlugin_RainDrop
+Name[ca@valencia]=ImagePlugin_RainDrop
 Name[cs]=ImagePlugin_RainDrop
 Name[da]=ImagePlugin_RainDrop
 Name[de]=Bildmodul_Regentropfen
@@ -44,6 +45,7 @@ Encoding=UTF-8
 Comment=Rain dropping image effect plugin for digiKam
 Comment[bg]=Приставка на digiKam за добавяне на дъждовни капки
 Comment[ca]=Connector pel DigiKam d'efecte d'imatge de gotes de pluja
+Comment[ca@valencia]=Connector pel DigiKam d'efecte d'imatge de gotes de pluja
 Comment[cs]=Modul digiKamu pro efekt vodních kapek
 Comment[da]=digiKam-plugin til regndråbeeffekt på billeder
 Comment[de]=digiKam-Modul zur Erzeugung eines Regentropfeneffektes

@@ -808,12 +808,22 @@ int DImg::originalBitDepth() const
     return m_priv->attributes.value("originalBitDepth").toInt();
 }
 
-DImg::FORMAT DImg::fileFormat() const
+DImg::FORMAT DImg::detectedFormat() const
 {
     if (m_priv->attributes.contains("detectedFileFormat"))
         return (FORMAT)m_priv->attributes.value("detectedFileFormat").toInt();
     else
         return NONE;
+}
+
+QString DImg::format() const
+{
+    return m_priv->attributes.value("format").toString();
+}
+
+QString DImg::savedFormat() const
+{
+    return m_priv->attributes.value("savedformat").toString();
 }
 
 DRawDecoding DImg::rawDecodingSettings() const
@@ -948,6 +958,19 @@ QString DImg::embeddedText(const QString& key) const
         return m_priv->embeddedText[key];
 
     return QString();
+}
+
+void DImg::switchOriginToLastSaved()
+{
+    QVariant savedformat = attribute("savedformat");
+    if (!savedformat.isNull())
+        setAttribute("format", savedformat);
+
+    QVariant readonly = attribute("savedformat-isreadonly");
+    if (!readonly.isNull())
+        setAttribute("isreadonly", readonly);
+
+    removeAttribute("rawDecodingSettings");
 }
 
 DColor DImg::getPixelColor(uint x, uint y) const

@@ -6,7 +6,7 @@
  * Date        : 2005-07-01
  * Description : a widget to draw a control panel image tool.
  *
- * Copyright (C) 2005-2008 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2010 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -43,17 +43,16 @@ class QProgressBar;
 namespace Digikam
 {
 
-class ImagePanelWidgetPriv;
 class ImageRegionWidget;
-class ImagePanIconWidget;
+class ImagePanelWidgetPriv;
 
 class DIGIKAM_EXPORT ImagePanelWidget : public QWidget
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
 
-    enum SeparateViewOptions 
+    enum SeparateViewOptions
     {
         SeparateViewNormal=0,
         SeparateViewDuplicate,
@@ -62,7 +61,7 @@ public:
 
 public:
 
-    ImagePanelWidget(uint w, uint h, const QString& settingsSection, ImagePanIconWidget *pan,
+    ImagePanelWidget(uint w, uint h, const QString& settingsSection,
                      QWidget *parent=0, int separateViewMode=SeparateViewAll);
     ~ImagePanelWidget();
 
@@ -76,6 +75,9 @@ public:
 
     void   setPanIconHighLightPoints(const QPolygon& pt);
 
+    void   ICCSettingsChanged();
+    void   exposureSettingsChanged();
+
     void   writeSettings();
 
     ImageRegionWidget *previewWidget() const;
@@ -87,9 +89,6 @@ Q_SIGNALS:
 
 public Q_SLOTS:
 
-    // Set the top/Left corner clip position.
-    void slotSetImageRegionPosition(const QRect& rect, bool targetDone);
-
     // Slot used when the original image clip focus is changed by the user.
     void slotOriginalImageRegionChanged(bool target);
 
@@ -99,13 +98,11 @@ protected:
 
 private Q_SLOTS:
 
-    void slotPanIconTakeFocus();
     void slotInitGui();
     void slotZoomSliderChanged(int);
 
 private:
 
-    void updateSelectionInfo(const QRect& rect);
     void readSettings();
 
 private:

@@ -6,8 +6,8 @@
  * Date        : 2006-01-20
  * Description : main image editor GUI implementation
  *
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,6 +47,7 @@
 #include <QTimer>
 #include <QToolButton>
 #include <QWidgetAction>
+#include <QButtonGroup>
 
 // KDE includes
 
@@ -69,8 +70,6 @@
 #include <kglobalsettings.h>
 #include <kiconloader.h>
 #include <kimageio.h>
-#include <kio/job.h>
-#include <kio/netaccess.h>
 #include <klocale.h>
 #include <kmenubar.h>
 #include <kmessagebox.h>
@@ -94,8 +93,11 @@
 #include <kwindowsystem.h>
 #include <kxmlguifactory.h>
 #include <kde_file.h>
-#include <kio/copyjob.h>
 #include <kdebug.h>
+#include <ksqueezedtextlabel.h>
+#include <kio/job.h>
+#include <kio/netaccess.h>
+#include <kio/copyjob.h>
 
 // LibKDcraw includes
 
@@ -103,6 +105,7 @@
 
 // Local includes
 
+#include "buttonicondisabler.h"
 #include "canvas.h"
 #include "colorcorrectiondlg.h"
 #include "dimginterface.h"
@@ -259,14 +262,14 @@ void EditorWindow::setupStandardConnections()
     connect(m_canvas, SIGNAL(signalPrepareToLoad()),
             this, SLOT(slotPrepareToLoad()));
 
-    connect(m_canvas, SIGNAL(signalLoadingStarted(const QString &)),
-            this, SLOT(slotLoadingStarted(const QString &)));
+    connect(m_canvas, SIGNAL(signalLoadingStarted(const QString&)),
+            this, SLOT(slotLoadingStarted(const QString&)));
 
-    connect(m_canvas, SIGNAL(signalLoadingFinished(const QString &, bool)),
-            this, SLOT(slotLoadingFinished(const QString &, bool)));
+    connect(m_canvas, SIGNAL(signalLoadingFinished(const QString&, bool)),
+            this, SLOT(slotLoadingFinished(const QString&, bool)));
 
-    connect(m_canvas, SIGNAL(signalLoadingProgress(const QString &, float)),
-            this, SLOT(slotLoadingProgress(const QString &, float)));
+    connect(m_canvas, SIGNAL(signalLoadingProgress(const QString&, float)),
+            this, SLOT(slotLoadingProgress(const QString&, float)));
 
     connect(m_canvas, SIGNAL(signalSavingStarted(const QString&)),
             this, SLOT(slotSavingStarted(const QString&)));
@@ -484,15 +487,19 @@ void EditorWindow::setupStandardActions()
     connect(d->slideShowAction, SIGNAL(triggered()), this, SLOT(slotToggleSlideShow()));
     actionCollection()->addAction("editorwindow_slideshow", d->slideShowAction);
 
-    d->viewUnderExpoAction = new KToggleAction(KIcon("underexposure"),
-                                               i18n("Under-Exposure Indicator"), this);
+    d->viewUnderExpoAction = new KToggleAction(KIcon("underexposure"), i18n("Under-Exposure Indicator"), this);
     d->viewUnderExpoAction->setShortcut(KShortcut(Qt::Key_F10));
+    d->viewUnderExpoAction->setWhatsThis(i18n("Set this option to display black "
+                                              "overlaid on the image. This will help you to avoid "
+                                              "under-exposing the image."));
     connect(d->viewUnderExpoAction, SIGNAL(triggered(bool)), this, SLOT(slotSetUnderExposureIndicator(bool)));
     actionCollection()->addAction("editorwindow_underexposure", d->viewUnderExpoAction);
 
-    d->viewOverExpoAction = new KToggleAction(KIcon("overexposure"),
-                                              i18n("Over-Exposure Indicator"), this);
+    d->viewOverExpoAction = new KToggleAction(KIcon("overexposure"), i18n("Over-Exposure Indicator"), this);
     d->viewOverExpoAction->setShortcut(KShortcut(Qt::Key_F11));
+    d->viewOverExpoAction->setWhatsThis(i18n("Set this option to display white "
+                                             "overlaid on the image. This will help you to avoid "
+                                             "over-exposing the image." ) );
     connect(d->viewOverExpoAction, SIGNAL(triggered(bool)), this, SLOT(slotSetOverExposureIndicator(bool)));
     actionCollection()->addAction("editorwindow_overexposure", d->viewOverExpoAction);
 
@@ -611,31 +618,50 @@ void EditorWindow::setupStatusBar()
     m_nameLabel->setAlignment(Qt::AlignCenter);
     statusBar()->addWidget(m_nameLabel, 100);
 
-    d->selectLabel = new QLabel(i18n("No selection"), statusBar());
-    d->selectLabel->setAlignment(Qt::AlignCenter);
-    statusBar()->addWidget(d->selectLabel, 100);
-    d->selectLabel->setToolTip( i18n("Information about current selection area"));
+    d->infoLabel = new KSqueezedTextLabel(i18n("No selection"), statusBar());
+    d->infoLabel->setAlignment(Qt::AlignCenter);
+    statusBar()->addWidget(d->infoLabel, 100);
 
     m_resLabel  = new QLabel(statusBar());
     m_resLabel->setAlignment(Qt::AlignCenter);
     statusBar()->addWidget(m_resLabel, 100);
     m_resLabel->setToolTip( i18n("Information about image size"));
 
-    QSize iconSize(fontMetrics().height()+2, fontMetrics().height()+2);
-    d->underExposureIndicator = new QToolButton(statusBar());
+    d->previewToolBar = new PreviewToolBar(statusBar());
+    d->previewToolBar->setEnabled(false);
+    statusBar()->addPermanentWidget(d->previewToolBar);
+
+    connect(d->previewToolBar, SIGNAL(signalPreviewModeChanged(int)),
+            this, SIGNAL(signalPreviewModeChanged(int)));
+
+    QWidget* buttonsBox      = new QWidget(statusBar());
+    QHBoxLayout *hlay        = new QHBoxLayout(buttonsBox);
+    QButtonGroup *buttonsGrp = new QButtonGroup(buttonsBox);
+    buttonsGrp->setExclusive(false);
+
+    d->underExposureIndicator = new QToolButton(buttonsBox);
     d->underExposureIndicator->setDefaultAction(d->viewUnderExpoAction);
-    d->underExposureIndicator->setMaximumSize(iconSize);
-    statusBar()->addPermanentWidget(d->underExposureIndicator);
+    new ButtonIconDisabler(d->underExposureIndicator);
 
-    d->overExposureIndicator = new QToolButton(statusBar());
+    d->overExposureIndicator  = new QToolButton(buttonsBox);
     d->overExposureIndicator->setDefaultAction(d->viewOverExpoAction);
-    d->overExposureIndicator->setMaximumSize(iconSize);
-    statusBar()->addPermanentWidget(d->overExposureIndicator);
+    new ButtonIconDisabler(d->overExposureIndicator);
 
-    d->cmViewIndicator = new QToolButton(statusBar());
+    d->cmViewIndicator        = new QToolButton(buttonsBox);
     d->cmViewIndicator->setDefaultAction(d->viewCMViewAction);
-    d->cmViewIndicator->setMaximumSize(iconSize);
-    statusBar()->addPermanentWidget(d->cmViewIndicator);
+    new ButtonIconDisabler(d->cmViewIndicator);
+
+    buttonsGrp->addButton(d->underExposureIndicator);
+    buttonsGrp->addButton(d->overExposureIndicator);
+    buttonsGrp->addButton(d->cmViewIndicator);
+
+    hlay->setSpacing(0);
+    hlay->setMargin(0);
+    hlay->addWidget(d->underExposureIndicator);
+    hlay->addWidget(d->overExposureIndicator);
+    hlay->addWidget(d->cmViewIndicator);
+
+    statusBar()->addPermanentWidget(buttonsBox);
 }
 
 void EditorWindow::printImage(const KUrl& /*url*/)
@@ -672,8 +698,7 @@ void EditorWindow::slotAboutToShowUndoMenu()
 
     for (int i=0; i<titles.size(); ++i)
     {
-        QAction *action =
-            m_undoAction->menu()->addAction(titles[i], d->undoSignalMapper, SLOT(map()));
+        QAction *action = m_undoAction->menu()->addAction(titles[i], d->undoSignalMapper, SLOT(map()));
         d->undoSignalMapper->setMapping(action, i + 1);
     }
 }
@@ -764,7 +789,6 @@ void EditorWindow::slotZoomTextChanged(const QString& txt)
     {
         m_stackView->setZoomFactor(zoom);
     }
-
 }
 
 void EditorWindow::slotZoomChanged(bool isMax, bool isMin, double zoom)
@@ -889,6 +913,7 @@ void EditorWindow::readStandardSettings()
 
     slotSetUnderExposureIndicator(group.readEntry("UnderExposureIndicator", false));
     slotSetOverExposureIndicator(group.readEntry("OverExposureIndicator", false));
+    d->previewToolBar->readSettings(group);
 }
 
 void EditorWindow::applyStandardSettings()
@@ -1041,6 +1066,7 @@ void EditorWindow::saveStandardSettings()
     group.writeEntry("FullScreen", m_fullScreenAction->isChecked());
     group.writeEntry("UnderExposureIndicator", d->exposureSettings->underExposureIndicator);
     group.writeEntry("OverExposureIndicator", d->exposureSettings->overExposureIndicator);
+    d->previewToolBar->writeSettings(group);
 
     config->sync();
 }
@@ -1373,10 +1399,9 @@ void EditorWindow::slotSelected(bool val)
 
     // Update status bar
     if (val)
-        d->selectLabel->setText(QString("(%1, %2) (%3 x %4)").arg(sel.x()).arg(sel.y())
-                                .arg(sel.width()).arg(sel.height()));
+        setToolInfoMessage(QString("(%1, %2) (%3 x %4)").arg(sel.x()).arg(sel.y()).arg(sel.width()).arg(sel.height()));
     else
-        d->selectLabel->setText(i18n("No selection"));
+        setToolInfoMessage(i18n("No selection"));
 }
 
 void EditorWindow::hideToolBars()
@@ -2127,7 +2152,6 @@ void EditorWindow::slotSetUnderExposureIndicator(bool on)
 {
     d->exposureSettings->underExposureIndicator = on;
     d->toolIface->updateExposureSettings();
-    d->underExposureIndicator->setEnabled(on);
     d->viewUnderExpoAction->setChecked(on);
     setUnderExposureToolTip(on);
 }
@@ -2143,7 +2167,6 @@ void EditorWindow::slotSetOverExposureIndicator(bool on)
 {
     d->exposureSettings->overExposureIndicator = on;
     d->toolIface->updateExposureSettings();
-    d->overExposureIndicator->setEnabled(on);
     d->viewOverExpoAction->setChecked(on);
     setOverExposureToolTip(on);
 }
@@ -2186,8 +2209,7 @@ void EditorWindow::slotToggleSlideShow()
 
 void EditorWindow::slotSelectionChanged(const QRect& sel)
 {
-    d->selectLabel->setText(QString("(%1, %2) (%3 x %4)").arg(sel.x()).arg(sel.y())
-                            .arg(sel.width()).arg(sel.height()));
+    setToolInfoMessage(QString("(%1, %2) (%3 x %4)").arg(sel.x()).arg(sel.y()).arg(sel.width()).arg(sel.height()));
 }
 
 void EditorWindow::slotRawCameraList()
@@ -2277,6 +2299,21 @@ void EditorWindow::slotCloseTool()
 {
     if (d->toolIface)
         d->toolIface->slotCloseTool();
+}
+
+void EditorWindow::setPreviewModeMask(PreviewToolBar::PreviewMode mask)
+{
+    d->previewToolBar->setPreviewModeMask(mask);
+}
+
+PreviewToolBar::PreviewMode EditorWindow::previewMode()
+{
+    return d->previewToolBar->previewMode();
+}
+    
+void EditorWindow::setToolInfoMessage(const QString& txt)
+{
+    d->infoLabel->setText(txt);
 }
 
 }  // namespace Digikam

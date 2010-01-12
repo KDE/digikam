@@ -6,7 +6,7 @@
  * Date        : 2004-12-01
  * Description : image histogram adjust curves.
  *
- * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -20,7 +20,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "adjustcurvestool.moc"
 
@@ -76,7 +75,7 @@
 #include "imagecurves.h"
 #include "imagehistogram.h"
 #include "imageiface.h"
-#include "imagewidget.h"
+#include "imageguidewidget.h"
 #include "version.h"
 
 using namespace Digikam;
@@ -116,7 +115,7 @@ public:
     KComboBox*           channelCB;
 
     CurvesBox*           curvesBox;
-    ImageWidget*         previewWidget;
+    ImageGuideWidget*    previewWidget;
 
     DImg*                originalImage;
 
@@ -140,11 +139,12 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->previewWidget = new ImageWidget("adjustcurves Tool", 0,
-                                      i18n("This is the image's curve-adjustments preview. "
-                                           "You can pick a spot on the image "
-                                           "to see the corresponding level in the histogram."));
+    d->previewWidget = new ImageGuideWidget;
+    d->previewWidget->setWhatsThis(i18n("This is the image's curve-adjustments preview. "
+                                        "You can pick a spot on the image "
+                                        "to see the corresponding level in the histogram."));
     setToolView(d->previewWidget);
+    setPreviewModeMask(PreviewToolBar::AllPreviewModes);
 
     // -------------------------------------------------------------
 
@@ -221,8 +221,8 @@ AdjustCurvesTool::~AdjustCurvesTool()
 void AdjustCurvesTool::slotPickerColorButtonActived()
 {
     // Save previous rendering mode and toggle to original image.
-    d->currentPreviewMode = d->previewWidget->getRenderingPreviewMode();
-    d->previewWidget->setRenderingPreviewMode(ImageGuideWidget::PreviewOriginalImage);
+    d->currentPreviewMode = d->previewWidget->previewMode();
+    d->previewWidget->setPreviewMode(PreviewToolBar::PreviewOriginalImage);
 }
 
 void AdjustCurvesTool::slotSpotColorChanged(const DColor& color)
@@ -279,7 +279,7 @@ void AdjustCurvesTool::slotSpotColorChanged(const DColor& color)
     d->curvesBox->repaint();
 
     // restore previous rendering mode.
-    d->previewWidget->setRenderingPreviewMode(d->currentPreviewMode);
+    d->previewWidget->setPreviewMode(d->currentPreviewMode);
 
     slotEffect();
 }
@@ -391,7 +391,6 @@ void AdjustCurvesTool::writeSettings()
     group.writeEntry(d->configHistogramScaleEntry,   (int)d->gboxSettings->histogramBox()->scale());
 
     d->curvesBox->writeCurveSettings(group, d->configCurveEntry);
-    d->previewWidget->writeSettings();
 
     config->sync();
 }

@@ -7,7 +7,7 @@
  * Description : image data interface for image plugins
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -140,7 +140,7 @@ DColor ImageIface::getColorInfoFromTargetPreviewImage(const QPoint& point)
     if ( d->targetPreviewImage.isNull() || point.x() > previewWidth() || point.y() > previewHeight() )
     {
         kWarning() << "Coordinate out of range or no image data available!";
-        return DColor::DColor();
+        return DColor();
     }
 
     return d->targetPreviewImage.getPixelColor(point.x(), point.y());
@@ -372,8 +372,7 @@ PhotoInfoContainer ImageIface::getPhotographInformation() const
     return meta.getPhotographInformation();
 }
 
-void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h,
-                       bool underExposure, bool overExposure, QPainter *painter)
+void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h, QPainter* painter)
 {
     QPainter localPainter;
     QPainter *p;
@@ -386,7 +385,7 @@ void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h,
         p->begin(device);
     }
 
-    int width = w > 0 ? qMin(d->previewWidth, w) : d->previewWidth;
+    int width  = w > 0 ? qMin(d->previewWidth, w) : d->previewWidth;
     int height = h > 0 ? qMin(d->previewHeight, h) : d->previewHeight;
 
     if ( !d->targetPreviewImage.isNull() )
@@ -414,16 +413,12 @@ void ImageIface::paint(QPaintDevice* device, int x, int y, int w, int h,
 
         // Show the Over/Under exposure pixels indicators
 
-        if (underExposure || overExposure)
+        ExposureSettingsContainer* expoSettings = DImgInterface::defaultInterface()->getExposureSettings();
+        if (expoSettings->underExposureIndicator || expoSettings->overExposureIndicator)
         {
-            ExposureSettingsContainer expoSettings;
-            expoSettings.underExposureIndicator = underExposure;
-            expoSettings.overExposureIndicator  = overExposure;
-            expoSettings.underExposureColor     = DImgInterface::defaultInterface()->underExposureColor();
-            expoSettings.overExposureColor      = DImgInterface::defaultInterface()->overExposureColor();
-
-            QImage pureColorMask = d->targetPreviewImage.pureColorMask(&expoSettings);
-            QPixmap pixMask      = QPixmap::fromImage(pureColorMask);
+            ExposureSettingsContainer* expoSettings = DImgInterface::defaultInterface()->getExposureSettings();
+            QImage pureColorMask                    = d->targetPreviewImage.pureColorMask(expoSettings);
+            QPixmap pixMask                         = QPixmap::fromImage(pureColorMask);
             p->drawPixmap(x, y, pixMask, 0, 0, width, height);
         }
     }

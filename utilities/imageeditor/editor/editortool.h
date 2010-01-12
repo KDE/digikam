@@ -6,7 +6,7 @@
  * Date        : 2008-08-20
  * Description : editor tool template class.
  *
- * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -29,17 +29,17 @@
 #include <QObject>
 #include <QString>
 #include <QPixmap>
+#include <QPoint>
 
 // Local includes
 
 #include "digikam_export.h"
-#include "exposurecontainer.h"
+#include "dcolor.h"
+#include "previewtoolbar.h"
 
 namespace Digikam
 {
 
-class ICCSettingsContainer;
-class ExposureSettingsContainer;
 class DImgThreadedFilter;
 class EditorToolSettings;
 class EditorToolPriv;
@@ -61,11 +61,12 @@ public:
     QWidget*            toolView() const;
     EditorToolSettings* toolSettings() const;
 
-    virtual void        setICCSettings(ICCSettingsContainer*){};
-    virtual void        setExposureSettings(ExposureSettingsContainer*){};
+    virtual void        ICCSettingsChanged();
+    virtual void        exposureSettingsChanged();
 
 public Q_SLOTS:
 
+    void slotUpdateSpotInfo(const Digikam::DColor& col, const QPoint& point);
     virtual void slotCloseTool();
 
 Q_SIGNALS:
@@ -75,9 +76,11 @@ Q_SIGNALS:
 
 protected:
 
+    void setToolInfoMessage(const QString& txt);
     void setToolHelp(const QString& anchor);
     void setToolName(const QString& name);
     void setToolIcon(const QPixmap& icon);
+    void setPreviewModeMask(PreviewToolBar::PreviewMode mask);
 
     virtual void setToolView(QWidget *view);
     virtual void setToolSettings(EditorToolSettings *settings);

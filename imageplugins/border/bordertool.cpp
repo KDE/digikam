@@ -7,8 +7,8 @@
  * Description : a digiKam image plugin to add a border
  *               around an image.
  *
- * Copyright 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,7 +22,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "bordertool.moc"
 
@@ -57,7 +56,7 @@
 #include "daboutdata.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
-#include "imagewidget.h"
+#include "imageguidewidget.h"
 #include "version.h"
 
 using namespace KDcrawIface;
@@ -130,7 +129,7 @@ public:
     KColorButton*       secondColorButton;
 
     EditorToolSettings* gboxSettings;
-    ImageWidget*        previewWidget;
+    ImageGuideWidget*   previewWidget;
 
     RComboBox*          borderType;
     RIntNumInput*       borderPercent;
@@ -145,9 +144,7 @@ BorderTool::BorderTool(QObject* parent)
     setToolName(i18n("Add Border"));
     setToolIcon(SmallIcon("bordertool"));
 
-    d->previewWidget = new ImageWidget("bordertool Tool", 0, QString(),
-                                       false, ImageGuideWidget::HVGuideMode, false);
-
+    d->previewWidget = new ImageGuideWidget(0, false, ImageGuideWidget::HVGuideMode);
     setToolView(d->previewWidget);
 
     // -------------------------------------------------------------
@@ -220,9 +217,9 @@ BorderTool::BorderTool(QObject* parent)
     // -------------------------------------------------------------------
 
     d->labelForeground   = new QLabel();
-    d->firstColorButton  = new KColorButton( QColor::QColor( 192, 192, 192 ) );
+    d->firstColorButton  = new KColorButton( QColor( 192, 192, 192 ) );
     d->labelBackground   = new QLabel();
-    d->secondColorButton = new KColorButton( QColor::QColor( 128, 128, 128 ) );
+    d->secondColorButton = new KColorButton( QColor( 128, 128, 128 ) );
 
     // -------------------------------------------------------------------
 
@@ -323,8 +320,6 @@ void BorderTool::writeSettings()
     group.writeEntry(d->configBevelLowerRightColorEntry,  d->bevelLowerRightColor);
     group.writeEntry(d->configDecorativeFirstColorEntry,  d->decorativeFirstColor);
     group.writeEntry(d->configDecorativeSecondColorEntry, d->decorativeSecondColor);
-
-    d->previewWidget->writeSettings();
 
     group.sync();
 }
