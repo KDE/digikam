@@ -57,7 +57,10 @@ public:
     Qt::CaseSensitivity caseSensitive;
 
     QString             text;
+
 };
+
+bool DIGIKAM_EXPORT operator==(const SearchTextSettings &a, const SearchTextSettings &b);
 
 /**
  * A text input for searching entries with visual feedback. Can be used on
@@ -73,6 +76,31 @@ class DIGIKAM_EXPORT SearchTextBar : public KLineEdit, public StateSavingObject
     Q_OBJECT
 
 public:
+
+    /**
+     * Possible highlighting states a SearchTextBar can have.
+     */
+    enum HighlightState
+    {
+
+        /**
+         * No highlighting at all. Background is colored in a neutral way
+         * according to the theme.
+         */
+        NEUTRAL,
+
+        /**
+         * The background color of the text input indicates that a result was
+         * found.
+         */
+        HAS_RESULT,
+
+        /**
+         * The background color indicates that no result was found.
+         */
+        NO_RESULT
+
+    };
 
     SearchTextBar(QWidget *parent, const char* name, const QString& msg=i18n("Search..."));
     ~SearchTextBar();
@@ -113,6 +141,22 @@ public:
      */
     void setFilterModel(QPointer<AlbumFilterModel> filterModel);
 
+    /**
+     * Tells the current highlighting state of the text input indicated via the
+     * background color.
+     *
+     * @return current highlight state
+     */
+    HighlightState getCurrentHighlightState() const;
+
+    /**
+     * Indicate whether this search text bar can be toggled to between case-
+     * sensitive and -insensitiv or or if always case-insensitive shall be used.
+     *
+     * @param b if <code>true</code> the user can decide the toggle between
+     *          case sensitivity, on <code>false</code> every search is case-
+     *          insensiive
+     */
     void setCaseSensitive(bool b);
     bool hasCaseSensitive() const;
 

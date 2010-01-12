@@ -136,6 +136,19 @@ TARGET_LINK_LIBRARIES(freerotationtest
 
 #------------------------------------------------------------------------
 
+SET(searchtextbartest_SRCS
+    searchtextbartest.cpp
+)
+KDE4_ADD_UNIT_TEST(searchtextbartest ${searchtextbartest_SRCS})
+TARGET_LINK_LIBRARIES(searchtextbartest
+                      ${KDE4_KDECORE_LIBS}
+                      ${QT_QTGUI_LIBRARY}
+                      ${QT_QTTEST_LIBRARY}
+                      digikamcore
+                      )
+
+#------------------------------------------------------------------------
+
 SET(filesaveoptionsboxtest_SRCS
     filesaveoptionsboxtest.cpp
 )

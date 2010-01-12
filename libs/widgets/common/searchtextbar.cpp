@@ -47,6 +47,11 @@
 namespace Digikam
 {
 
+bool operator==(const SearchTextSettings &a, const SearchTextSettings &b)
+{
+    return a.caseSensitive == b.caseSensitive && a.text == b.text;
+}
+
 class SearchTextBarPriv
 {
 public:
@@ -156,6 +161,10 @@ bool SearchTextBar::hasTextQueryCompletion() const
 void SearchTextBar::setHighlightOnResult(bool highlight)
 {
     d->highlightOnResult = highlight;
+    if (!highlight)
+    {
+        setPalette(QPalette());
+    }
 }
 
 void SearchTextBar::setModel(QPointer<QAbstractItemModel> model, int uniqueIdRole, int displayRole)
@@ -208,6 +217,28 @@ void SearchTextBar::setFilterModel(QPointer<AlbumFilterModel> filterModel)
 
 }
 
+SearchTextBar::HighlightState SearchTextBar::getCurrentHighlightState() const
+{
+
+    if (palette() == QPalette())
+    {
+        return NEUTRAL;
+    }
+    else if (palette().color(QPalette::Active, QPalette::Base) == d->hasResultColor)
+    {
+        return HAS_RESULT;
+    }
+    else if (palette().color(QPalette::Active, QPalette::Base) == d->hasNoResultColor)
+    {
+        return NO_RESULT;
+    }
+
+    kError() << "Impossible highlighting state";
+
+    return NEUTRAL;
+
+}
+
 void SearchTextBar::connectToModel(QAbstractItemModel *model)
 {
     connect(model, SIGNAL(rowsInserted(const QModelIndex&, int, int)),
@@ -229,7 +260,10 @@ void SearchTextBar::slotRowsInserted(const QModelIndex &parent, int start, int e
     for (int i = start; i <= end; ++i)
     {
         const QModelIndex child = d->model->index(i, 0, parent);
-        sync(d->model, child);
+        if (child.isValid())
+        {
+            sync(d->model, child);
+        }
     }
 }
 
@@ -341,6 +375,19 @@ void SearchTextBar::sync(QAbstractItemModel *model, const QModelIndex &index)
 void SearchTextBar::setCaseSensitive(bool b)
 {
     d->hasCaseSensitive = b;
+
+    if (!b)
+    {
+
+        d->settings.caseSensitive = Qt::CaseInsensitive;
+
+        if (!text().isEmpty())
+        {
+            emit signalSearchTextSettings(d->settings);
+        }
+
+    }
+
 }
 
 bool SearchTextBar::hasCaseSensitive() const
