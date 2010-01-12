@@ -667,6 +667,9 @@ void PreviewWidget::slotCornerButtonPressed()
     connect(pan, SIGNAL(signalHidden()),
             this, SLOT(slotPanIconHiden()));
 
+    connect(pan, SIGNAL(signalSelectionTakeFocus()),
+            this, SIGNAL(signalSelectionTakeFocus()));
+
     QPoint g = mapToGlobal(viewport()->pos());
     g.setX(g.x()+ viewport()->size().width());
     g.setY(g.y()+ viewport()->size().height());

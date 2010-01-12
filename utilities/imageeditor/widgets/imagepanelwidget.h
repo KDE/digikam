@@ -87,11 +87,6 @@ Q_SIGNALS:
     void signalOriginalClipFocusChanged();
     void signalResized();
 
-public Q_SLOTS:
-
-    // Slot used when the original image clip focus is changed by the user.
-    void slotOriginalImageRegionChanged(bool target);
-
 protected:
 
     void resizeEvent(QResizeEvent *e);
@@ -100,6 +95,10 @@ private Q_SLOTS:
 
     void slotInitGui();
     void slotZoomSliderChanged(int);
+    void slotSelectionTakeFocus();
+
+    // Slot used when the original image clip focus is changed by the user.
+    void slotOriginalImageRegionChanged(bool target);
 
 private:
 
