@@ -74,7 +74,7 @@ public:
 
     DImg        image;                 // Entire content image to render pixmap.
 
-    ImageIface *iface;
+    ImageIface* iface;
 };
 
 ImageRegionWidget::ImageRegionWidget(int wp, int hp, QWidget *parent, bool scrollBar)
@@ -468,6 +468,11 @@ void ImageRegionWidget::contentsWheelEvent(QWheelEvent *e)
             slotIncreaseZoom();
         return;
     }
+}
+
+QImage ImageRegionWidget::previewToQImage() const
+{
+    return d->image.copyQImage();
 }
 
 }  // namespace Digikam

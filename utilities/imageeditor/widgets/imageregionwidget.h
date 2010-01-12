@@ -49,7 +49,7 @@ class DIGIKAM_EXPORT ImageRegionWidget : public PreviewWidget
 
 public:
 
-    enum SeparateViewMode 
+    enum SeparateViewMode
     {
         SeparateViewHorizontal=0,
         SeparateViewVertical,
@@ -94,16 +94,17 @@ private Q_SLOTS:
 
 private:
 
-    QRect getLocalTargetImageRegion();
-    QRect getLocalImageRegionToRender();
-    void  viewportPaintExtraData();
-    int   previewWidth();
-    int   previewHeight();
-    bool  previewIsNull();
-    void  resetPreview();
-    void  setContentsSize();
-    void  resizeEvent(QResizeEvent*);
-    void  contentsWheelEvent(QWheelEvent*);
+    QRect  getLocalTargetImageRegion();
+    QRect  getLocalImageRegionToRender();
+    void   viewportPaintExtraData();
+    int    previewWidth();
+    int    previewHeight();
+    bool   previewIsNull();
+    void   resetPreview();
+    void   setContentsSize();
+    void   resizeEvent(QResizeEvent*);
+    void   contentsWheelEvent(QWheelEvent*);
+    QImage previewToQImage() const;
 
     inline void paintPreview(QPixmap* pix, int sx, int sy, int sw, int sh);
 

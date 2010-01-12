@@ -102,20 +102,18 @@ private Q_SLOTS:
     void slotRemoveTag(int tagID);
     void slotAssignRating(int rating);
     void slotThemeChanged();
-    void slotCornerButtonPressed();
-    void slotPanIconSelectionMoved(const QRect&, bool);
-    void slotPanIconHiden();
     void slotDeleteItem();
     void slotGotoTag(int tagID);
 
 private:
 
-    int  previewWidth();
-    int  previewHeight();
-    bool previewIsNull();
-    void resetPreview();
-    void zoomFactorChanged(double zoom);
-    void updateZoomAndSize(bool alwaysFitToWindow);
+    int    previewWidth();
+    int    previewHeight();
+    bool   previewIsNull();
+    void   resetPreview();
+    void   updateZoomAndSize(bool alwaysFitToWindow);
+    QImage previewToQImage() const;
+
     inline void paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh);
 
 private:

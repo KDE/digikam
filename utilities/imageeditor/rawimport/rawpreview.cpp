@@ -27,7 +27,6 @@
 
 #include <QString>
 #include <QPainter>
-#include <QToolButton>
 #include <QPixmap>
 #include <QFileInfo>
 #include <QResizeEvent>
@@ -36,13 +35,11 @@
 
 #include <kdebug.h>
 #include <kcursor.h>
-#include <kdatetable.h>
 #include <kiconloader.h>
 #include <klocale.h>
 
 // Local includes
 
-#include "paniconwidget.h"
 #include "managedloadsavethread.h"
 #include "loadingdescription.h"
 #include "exposurecontainer.h"
@@ -61,9 +58,6 @@ public:
 
     RawPreviewPriv()
     {
-        panIconPopup         = 0;
-        panIconWidget        = 0;
-        cornerButton         = 0;
         thread               = 0;
         url                  = 0;
         currentFitWindowZoom = 0;
@@ -71,12 +65,8 @@ public:
 
     double                 currentFitWindowZoom;
 
-    QToolButton*           cornerButton;
-
-    KPopupFrame*           panIconPopup;
     KUrl                   url;
 
-    PanIconWidget*         panIconWidget;
     DImg                   demosaicedImg;
     DImg                   postProcessedImg;
     DRawDecoding           settings;
@@ -93,9 +83,6 @@ RawPreview::RawPreview(const KUrl& url, QWidget *parent)
     setMinimumWidth(500);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    d->cornerButton = PanIconWidget::button();
-    setCornerWidget(d->cornerButton);
-
     // ------------------------------------------------------------
 
     connect(d->thread, SIGNAL(signalImageLoaded(const LoadingDescription&, const DImg&)),
@@ -103,9 +90,6 @@ RawPreview::RawPreview(const KUrl& url, QWidget *parent)
 
     connect(d->thread, SIGNAL(signalLoadingProgress(const LoadingDescription&, float)),
             this, SLOT(slotLoadingProgress(const LoadingDescription&, float)));
-
-    connect(d->cornerButton, SIGNAL(pressed()),
-            this, SLOT(slotCornerButtonPressed()));
 
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
@@ -214,80 +198,11 @@ void RawPreview::slotThemeChanged()
     setPalette(plt);
 }
 
-void RawPreview::slotCornerButtonPressed()
-{
-    if (d->panIconPopup)
-    {
-        d->panIconPopup->hide();
-        d->panIconPopup->deleteLater();
-        d->panIconPopup = 0;
-    }
-
-    d->panIconPopup    = new KPopupFrame(this);
-    PanIconWidget *pan = new PanIconWidget(d->panIconPopup);
-    pan->setImage(180, 120, postProcessedImage());
-    d->panIconPopup->setMainWidget(pan);
-
-    QRect r((int)(contentsX()    / zoomFactor()), (int)(contentsY()     / zoomFactor()),
-            (int)(visibleWidth() / zoomFactor()), (int)(visibleHeight() / zoomFactor()));
-    pan->setRegionSelection(r);
-    pan->setMouseFocus();
-
-    connect(pan, SIGNAL(signalSelectionMoved(const QRect&, bool)),
-            this, SLOT(slotPanIconSelectionMoved(const QRect&, bool)));
-
-    connect(pan, SIGNAL(signalHidden()),
-            this, SLOT(slotPanIconHiden()));
-
-    QPoint g = mapToGlobal(viewport()->pos());
-    g.setX(g.x()+ viewport()->size().width());
-    g.setY(g.y()+ viewport()->size().height());
-    d->panIconPopup->popup(QPoint(g.x() - d->panIconPopup->width(),
-                                  g.y() - d->panIconPopup->height()));
-
-    pan->setCursorToLocalRegionSelectionCenter();
-}
-
-void RawPreview::slotPanIconHiden()
-{
-    d->cornerButton->blockSignals(true);
-    d->cornerButton->animateClick();
-    d->cornerButton->blockSignals(false);
-}
-
-void RawPreview::slotPanIconSelectionMoved(const QRect& r, bool b)
-{
-    setContentsPos((int)(r.x()*zoomFactor()), (int)(r.y()*zoomFactor()));
-
-    if (b)
-    {
-        d->panIconPopup->hide();
-        d->panIconPopup->deleteLater();
-        d->panIconPopup = 0;
-        slotPanIconHiden();
-    }
-}
-
-void RawPreview::zoomFactorChanged(double zoom)
-{
-    updateScrollBars();
-
-    if (horizontalScrollBar()->isVisible() || verticalScrollBar()->isVisible())
-        d->cornerButton->show();
-    else
-        d->cornerButton->hide();
-
-    PreviewWidget::zoomFactorChanged(zoom);
-}
-
 void RawPreview::resizeEvent(QResizeEvent* e)
 {
     if (!e) return;
 
-    Q3ScrollView::resizeEvent(e);
-
-    if (!d->loadingDesc.filePath.isEmpty())
-        d->cornerButton->hide();
+    PreviewWidget::resizeEvent(e);
 
     updateZoomAndSize(false);
 }
@@ -371,6 +286,11 @@ void RawPreview::paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh)
     }
 
     p.end();
+}
+
+QImage RawPreview::previewToQImage() const
+{
+    return d->postProcessedImg.copyQImage();
 }
 
 }  // namespace Digikam
