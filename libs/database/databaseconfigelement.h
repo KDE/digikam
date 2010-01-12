@@ -66,6 +66,8 @@ public:
     QString m_DatabaseName;
     QString m_UserName;
     QString m_Password;
+    QString m_dbservercmd;
+    QString m_dbinitcmd;
     QMap<QString, databaseAction> m_SQLStatements;
 };
 

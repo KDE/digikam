@@ -1,3 +1,4 @@
+CONFIGURE_FILE(dbconfig.xml.cmake ${CMAKE_CURRENT_BINARY_DIR}/dbconfig.xml)
 
 INSTALL(FILES dbconfig.xml
 			  mysql-global.conf

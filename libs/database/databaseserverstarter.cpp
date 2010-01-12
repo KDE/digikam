@@ -28,6 +28,7 @@
 
 // Qt includes
 #include <QString>
+#include <QList>
 #include <QStringList>
 #include <QtGlobal>
 #include <QFile>
@@ -72,7 +73,7 @@ DatabaseServerStarter::DatabaseServerStarter(QObject *parent=0): QObject(parent)
 {
 }
 
-void DatabaseServerStarter::startServerManagerProcess()
+void DatabaseServerStarter::startServerManagerProcess(const QString dbType)
 {
     /*
      * TODO:
@@ -119,7 +120,9 @@ void DatabaseServerStarter::startServerManagerProcess()
   QDBusMessage stateMsg = dbus_iface.call("isRunning");
   if (!stateMsg.arguments().at(0).toBool())
   {
-      dbus_iface.call("startDatabaseProcess");
+      QList<QVariant> arguments;
+      arguments.append(dbType);
+      dbus_iface.callWithArgumentList(QDBus::Block, "startDatabaseProcess", arguments);
   }
   sem.release();
 }

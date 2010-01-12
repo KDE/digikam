@@ -58,6 +58,7 @@
 
 #include "albumsettings.h"
 #include <databasewidget.h>
+#include <databaseparameters.h>
 
 namespace Digikam
 {
@@ -127,15 +128,30 @@ void SetupDatabase::applySettings()
             settings->saveSettings();
         }
     }else{
-        settings->setInternalDatabaseServer(d->databaseWidget->internalServer->isChecked());
-        settings->setDatabaseType(d->databaseWidget->databaseType->currentText());
-        settings->setDatabaseName(d->databaseWidget->databaseName->text());
-        settings->setDatabaseNameThumbnails(d->databaseWidget->databaseNameThumbnails->text());
-        settings->setDatabaseConnectoptions(d->databaseWidget->connectionOptions->text());
-        settings->setDatabaseHostName(d->databaseWidget->hostName->text());
-        settings->setDatabasePort(d->databaseWidget->hostPort->text().toInt());
-        settings->setDatabaseUserName(d->databaseWidget->userName->text());
-        settings->setDatabasePassword(d->databaseWidget->password->text());
+        if (d->databaseWidget->internalServer->isChecked())
+        {
+            DatabaseParameters internalServerParameters = DatabaseParameters::parametersFromConfig(d->databaseWidget->databaseType->currentText());
+            settings->setInternalDatabaseServer(true);
+            settings->setDatabaseType(d->databaseWidget->databaseType->currentText());
+            settings->setDatabaseName(internalServerParameters.databaseName);
+            settings->setDatabaseNameThumbnails(internalServerParameters.databaseName);
+            settings->setDatabaseConnectoptions(internalServerParameters.connectOptions);
+            settings->setDatabaseHostName(internalServerParameters.hostName);
+            settings->setDatabasePort(internalServerParameters.port);
+            settings->setDatabaseUserName(internalServerParameters.userName);
+            settings->setDatabasePassword(internalServerParameters.password);
+        }else
+        {
+            settings->setInternalDatabaseServer(d->databaseWidget->internalServer->isChecked());
+            settings->setDatabaseType(d->databaseWidget->databaseType->currentText());
+            settings->setDatabaseName(d->databaseWidget->databaseName->text());
+            settings->setDatabaseNameThumbnails(d->databaseWidget->databaseNameThumbnails->text());
+            settings->setDatabaseConnectoptions(d->databaseWidget->connectionOptions->text());
+            settings->setDatabaseHostName(d->databaseWidget->hostName->text());
+            settings->setDatabasePort(d->databaseWidget->hostPort->text().toInt());
+            settings->setDatabaseUserName(d->databaseWidget->userName->text());
+            settings->setDatabasePassword(d->databaseWidget->password->text());
+        }
         settings->saveSettings();
     }
 }

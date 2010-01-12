@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
 {
     QCoreApplication app(argc, argv);
 
-    DatabaseServer server(&app);
+    Digikam::DatabaseServer server(&app);
     server.registerOnDBus();
     server.startPolling();
 

@@ -143,13 +143,31 @@ DatabaseParameters DatabaseParameters::parametersFromConfig(const QString databa
     // only the database name is needed
 	parameters.readConfig();
 
-	parameters.databaseType     = databaseType;
+    parameters.databaseType     = databaseType;
     parameters.databaseName     = databaseName;
     parameters.hostName         = databaseHostName;
     parameters.userName         = databaseUserName;
     parameters.password         = databaseUserPassword;
     parameters.port             = databasePort;
     parameters.connectOptions   = databaseConnectOptions;
+
+    return parameters;
+}
+
+DatabaseParameters DatabaseParameters::parametersFromConfig(const QString databaseType)
+{
+    DatabaseParameters parameters;
+
+    // only the database name is needed
+    parameters.readConfig();
+
+    parameters.databaseType     = databaseType;
+    parameters.databaseName     = parameters.m_DatabaseConfigs[databaseType].m_DatabaseName;
+    parameters.hostName         = parameters.m_DatabaseConfigs[databaseType].m_HostName;
+    parameters.userName         = parameters.m_DatabaseConfigs[databaseType].m_UserName;
+    parameters.password         = parameters.m_DatabaseConfigs[databaseType].m_Password;
+    parameters.port             = parameters.m_DatabaseConfigs[databaseType].m_Port.toInt();
+    parameters.connectOptions   = parameters.m_DatabaseConfigs[databaseType].m_ConnectOptions;
 
     return parameters;
 }
@@ -197,9 +215,6 @@ void DatabaseParameters::removeFromUrl(KUrl& url)
     url.removeQueryItem("password");
 }
 
-/*
- * TODO: Remove database specific connection settings. Only statements are needed.
- */
 void DatabaseParameters::readConfig(){    
 	    QString filepath = KStandardDirs::locate("data", "digikam/database/dbconfig.xml");
         QFile file(filepath);
@@ -250,6 +265,9 @@ void DatabaseParameters::readConfig(){
                    kDebug(50003) << "Password: " << l_Element.m_Password;
                    kDebug(50003) << "Port: " << l_Element.m_Port;
                    kDebug(50003) << "ConnectOptions: " << l_Element.m_ConnectOptions;
+                   kDebug(50003) << "Database Server CMD: " << l_Element.m_dbservercmd;
+                   kDebug(50003) << "Database Init CMD: " << l_Element.m_dbinitcmd;
+
 
                    kDebug(50003) << "Statements:";
 
@@ -264,10 +282,9 @@ void DatabaseParameters::readConfig(){
 #endif
      }
 
-/*
- * TODO: Remove database specific connection settings. Only statements are needed.
- */
 databaseconfigelement DatabaseParameters::readDatabase(QDomElement &databaseElement){
+    const QString miscDir     = KStandardDirs::locateLocal("data", "digikam/db_misc");
+
 	databaseconfigelement l_Element;
 	l_Element.m_DatabaseID="Unidentified";
 
@@ -311,6 +328,19 @@ databaseconfigelement DatabaseParameters::readDatabase(QDomElement &databaseElem
             kDebug(50003) << "Missing element <connectoptions>.";
         }
         l_Element.m_ConnectOptions = element.text();
+        l_Element.m_ConnectOptions = l_Element.m_ConnectOptions.replace(QRegExp("$$DBMISCPATH$$"), miscDir);
+
+        element =  databaseElement.namedItem("dbservercmd").toElement();
+        if (element.isNull()){
+            kDebug(50003) << "Missing element <dbservercmd>.";
+        }
+        l_Element.m_dbservercmd = element.text();
+
+        element =  databaseElement.namedItem("dbinitcmd").toElement();
+        if (element.isNull()){
+            kDebug(50003) << "Missing element <dbinitcmd>.";
+        }
+        l_Element.m_dbinitcmd = element.text();
 
         element =  databaseElement.namedItem("dbactions").toElement();
         if (element.isNull()){

@@ -44,6 +44,11 @@
 
 // Local includes
 #include <databaseserveradaptor.h>
+#include <databaseparameters.h>
+
+
+namespace Digikam
+{
 
 DatabaseServer::DatabaseServer(QCoreApplication *application=0): QObject(application), app(application), pollThread(0)
 {
@@ -72,13 +77,43 @@ void DatabaseServer::startPolling()
  */
 void DatabaseServer::startDatabaseProcess()
 {
+    startDatabaseProcess("QMYSQL");
+}
+
+/*
+ * Starts the database management server.
+ * TODO: Ensure that no other digikam dbms is running. Reusing this instance instead start a new one.
+ * Maybe this can be done by DBUS communication or an PID file.
+ */
+void DatabaseServer::startDatabaseProcess(const QString dbType)
+{
+ if (dbType=="QMYSQL")
+ {
+     startMYSQLDatabaseProcess();
+ }else
+ {
+     kDebug(50003) << "DBType ["<< dbType <<"] is not supported.";
+ }
+}
+
+/*
+ * Starts the database management server.
+ * TODO: Ensure that no other digikam dbms is running. Reusing this instance instead start a new one.
+ * Maybe this can be done by DBUS communication or an PID file.
+ */
+void DatabaseServer::startMYSQLDatabaseProcess()
+{
+   const QString dbType("QMYSQL");
+   DatabaseParameters internalServerParameters = DatabaseParameters::parametersFromConfig(dbType);
+
    //TODO Don't know if this is needed, because after the thread is finished, the database server manager should close
    pollThread->stop=false;
 
   // QString filepath = KStandardDirs::locate("data", "digikam/database/dbconfig.xml");
 
   //TODO Move the database command outside of the code to the dbconfig.xml file
-  const QString mysqldPath("/usr/sbin/mysqld");
+  const QString mysqldPath(internalServerParameters.m_DatabaseConfigs[dbType].m_dbservercmd);
+  //const QString mysqldPath("/usr/sbin/mysqld");
   if ( mysqldPath.isEmpty() )
     kDebug(50003) << "No path to mysqld set in server configuration!";
 
@@ -99,7 +134,7 @@ void DatabaseServer::startDatabaseProcess()
    * TODO Move the database command outside of the code to the dbconfig.xml file.
    * Offer a variable to the dataDir. E.g. the command definition in the config file has to be: /usr/bin/mysql_install_db --user=digikam --datadir=$dataDir$
    */
-  const QString mysqlInitCmd("/usr/bin/mysql_install_db --user=digikam --datadir="+dataDir);
+  const QString mysqlInitCmd(QString::fromLatin1("%1 --user=digikam --datadir=%2").arg(internalServerParameters.m_DatabaseConfigs[dbType].m_dbinitcmd, dataDir));
 
   if (!dirs.exists(akDir))
   {
@@ -324,4 +359,6 @@ bool DatabaseServer::isRunning()
         return false;
     }
     return mDatabaseProcess->state()==QProcess::Running;
+}
+
 }

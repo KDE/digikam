@@ -34,6 +34,8 @@
 		<password>Password</password>
 		<port>Port</port>
 		<connectoptions>ConnectOptions</connectoptions>
+		<dbservercmd></dbservercmd>
+		<dbinitcmd></dbinitcmd>
 		
 		<dbactions>		  
 			<dbaction name="CreateDB" mode="transaction"><statement mode="query">CREATE TABLE AlbumRoots
@@ -418,14 +420,15 @@
 						
 		</dbactions>
 	</database>
-	
 		<database name="QMYSQL">
-		<hostName>localhost</hostName>
+		<hostName></hostName>
 		<databaseName>digikam</databaseName>
-		<userName>digikam</userName>
-		<password>digikam</password>
-		<port>3306</port>
-		<connectoptions></connectoptions>
+		<userName>root</userName>
+		<password></password>
+		<port>1</port>
+		<connectoptions>$$DBMISCPATH$$/mysql.socket</connectoptions>
+		<dbservercmd>${SERVERCMD_MYSQL}</dbservercmd>
+		<dbinitcmd>${INITCMD_MYSQL}</dbinitcmd>
 		
 		<dbactions>
 			<dbaction name="CreateDB" mode="transaction"><statement mode="query">  CREATE TABLE AlbumRoots

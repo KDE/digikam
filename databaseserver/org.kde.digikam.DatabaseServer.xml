@@ -2,6 +2,9 @@
 <node>
   <interface name="org.kde.digikam.DatabaseServer">
     <method name="startDatabaseProcess">
+      <arg name="dbType" type="s" direction="in"/>
+    </method>
+    <method name="startDatabaseProcess">
     </method>
     <method name="stopDatabaseProcess">
     </method>

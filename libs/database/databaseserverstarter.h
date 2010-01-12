@@ -40,7 +40,7 @@ class DIGIKAM_EXPORT DatabaseServerStarter : public QObject
 
     public:
         DatabaseServerStarter(QObject *parent);
-        static void startServerManagerProcess();
+        static void startServerManagerProcess(const QString dbType="QMYSQL");
 
     private:
         static bool isServerRegistered();

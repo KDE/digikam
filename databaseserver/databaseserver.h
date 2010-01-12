@@ -35,6 +35,9 @@
 #include "digikam_export.h"
 #include <pollthread.h>
 
+namespace Digikam
+{
+
 class DIGIKAM_EXPORT DatabaseServer : public QObject
 {
     Q_OBJECT
@@ -45,8 +48,10 @@ class DIGIKAM_EXPORT DatabaseServer : public QObject
         void createDatabase();
         void registerOnDBus();
         void startPolling();
+        void startMYSQLDatabaseProcess();
 
     public Q_SLOTS:
+        void startDatabaseProcess(const QString dbType);
         void startDatabaseProcess();
         void stopDatabaseProcess();
         bool isRunning();
@@ -59,5 +64,6 @@ class DIGIKAM_EXPORT DatabaseServer : public QObject
         PollThread *pollThread;
 };
 
+}
 
 #endif /* DATABASESERVER_H_ */
