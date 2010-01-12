@@ -60,7 +60,7 @@ public:
 
 public:
 
-    ImageRegionWidget(int wp, int hp, QWidget *parent=0, bool scrollBar=true);
+    ImageRegionWidget(int wp, int hp, QWidget *parent=0);
     ~ImageRegionWidget();
 
     void   setContentsPosition(int x, int y, bool targetDone);

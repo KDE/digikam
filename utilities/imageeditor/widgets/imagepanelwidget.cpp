@@ -97,7 +97,7 @@ ImagePanelWidget::ImagePanelWidget(uint w, uint h, const QString& settingsSectio
     QVBoxLayout* l1 = new QVBoxLayout(preview);
     l1->setSpacing(5);
     l1->setMargin(0);
-    d->imageRegionWidget = new ImageRegionWidget(w, h, preview, false);
+    d->imageRegionWidget = new ImageRegionWidget(w, h, preview);
     d->imageRegionWidget->setFrameStyle(QFrame::NoFrame);
     preview->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     d->imageRegionWidget->setWhatsThis( i18n("<p>Here you can see the original clip image "
