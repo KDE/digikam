@@ -149,8 +149,6 @@ SharpenTool::SharpenTool(QObject* parent)
                                 EditorToolSettings::SaveAs|
                                 EditorToolSettings::Try);
 
-    d->gboxSettings->setTools(EditorToolSettings::PanIcon);
-
     QGridLayout* grid = new QGridLayout(d->gboxSettings->plainPage());
 
     QLabel *label1 = new QLabel(i18n("Method:"), d->gboxSettings->plainPage());
@@ -305,7 +303,7 @@ SharpenTool::SharpenTool(QObject* parent)
 
     setToolSettings(d->gboxSettings);
 
-    d->previewWidget = new ImagePanelWidget(470, 350, "sharpen Tool", d->gboxSettings->panIconView());
+    d->previewWidget = new ImagePanelWidget(470, 350, "sharpen Tool");
 
     setToolView(d->previewWidget);
     init();

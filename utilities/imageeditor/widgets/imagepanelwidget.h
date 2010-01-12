@@ -44,12 +44,11 @@ namespace Digikam
 {
 
 class ImageRegionWidget;
-class ImagePanIconWidget;
 class ImagePanelWidgetPriv;
 
 class DIGIKAM_EXPORT ImagePanelWidget : public QWidget
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
 
@@ -62,7 +61,7 @@ public:
 
 public:
 
-    ImagePanelWidget(uint w, uint h, const QString& settingsSection, ImagePanIconWidget *pan,
+    ImagePanelWidget(uint w, uint h, const QString& settingsSection,
                      QWidget *parent=0, int separateViewMode=SeparateViewAll);
     ~ImagePanelWidget();
 
@@ -90,9 +89,6 @@ Q_SIGNALS:
 
 public Q_SLOTS:
 
-    // Set the top/Left corner clip position.
-    void slotSetImageRegionPosition(const QRect& rect, bool targetDone);
-
     // Slot used when the original image clip focus is changed by the user.
     void slotOriginalImageRegionChanged(bool target);
 
@@ -102,13 +98,11 @@ protected:
 
 private Q_SLOTS:
 
-    void slotPanIconTakeFocus();
     void slotInitGui();
     void slotZoomSliderChanged(int);
 
 private:
 
-    void updateSelectionInfo(const QRect& rect);
     void readSettings();
 
 private:

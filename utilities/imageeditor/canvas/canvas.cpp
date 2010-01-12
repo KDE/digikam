@@ -7,7 +7,7 @@
  * Description : image editor canvas management class
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -66,7 +66,7 @@
 // Local includes
 
 #include "imagehistogram.h"
-#include "imagepaniconwidget.h"
+#include "paniconwidget.h"
 #include "dimginterface.h"
 #include "iccsettingscontainer.h"
 #include "icctransform.h"
@@ -102,7 +102,6 @@ public:
         midButtonX       = 0;
         midButtonY       = 0;
         panIconPopup     = 0;
-        panIconWidget    = 0;
         cornerButton     = 0;
         parent           = 0;
         im               = 0;
@@ -159,8 +158,6 @@ public:
     KPopupFrame*             panIconPopup;
 
     DImgInterface*           im;
-
-    ImagePanIconWidget*      panIconWidget;
 
     QString                  errorMessage;
 };
@@ -1388,8 +1385,9 @@ void Canvas::slotCornerButtonPressed()
         d->panIconPopup = 0;
     }
 
-    d->panIconPopup         = new KPopupFrame(this);
-    ImagePanIconWidget *pan = new ImagePanIconWidget(180, 120, d->panIconPopup);
+    d->panIconPopup    = new KPopupFrame(this);
+    PanIconWidget *pan = new PanIconWidget(d->panIconPopup);
+    pan->setImage(180, 120, d->im->getImg()->copyQImage());
     d->panIconPopup->setMainWidget(pan);
 
     QRect r((int)(contentsX()    / d->zoom), (int)(contentsY()     / d->zoom),

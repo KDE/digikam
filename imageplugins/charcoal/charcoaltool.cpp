@@ -105,9 +105,7 @@ CharcoalTool::CharcoalTool(QObject* parent)
                                 EditorToolSettings::Cancel|
                                 EditorToolSettings::Try);
 
-    d->gboxSettings->setTools(EditorToolSettings::PanIcon);
-
-    d->previewWidget = new ImagePanelWidget(470, 350, "charcoal Tool", d->gboxSettings->panIconView());
+    d->previewWidget = new ImagePanelWidget(470, 350, "charcoal Tool");
 
     // -------------------------------------------------------------
 

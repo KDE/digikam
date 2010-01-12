@@ -133,8 +133,6 @@ RestorationTool::RestorationTool(QObject* parent)
                                 EditorToolSettings::SaveAs|
                                 EditorToolSettings::Try);
 
-    d->gboxSettings->setTools(EditorToolSettings::PanIcon);
-
     QGridLayout* gridSettings = new QGridLayout(d->gboxSettings->plainPage());
     d->mainTab = new KTabWidget( d->gboxSettings->plainPage() );
 
@@ -182,7 +180,7 @@ RestorationTool::RestorationTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->previewWidget = new ImagePanelWidget(470, 350, "restoration Tool", d->gboxSettings->panIconView());
+    d->previewWidget = new ImagePanelWidget(470, 350, "restoration Tool");
 
     setToolView(d->previewWidget);
     init();

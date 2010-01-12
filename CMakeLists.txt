@@ -685,7 +685,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
        )
 
     SET(libeditorwidgets_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets/imagepaniconwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets/imageregionwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets/imageguidewidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets/imagepanelwidget.cpp

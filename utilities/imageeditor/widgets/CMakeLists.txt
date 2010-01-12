@@ -1,5 +1,4 @@
 INSTALL( FILES imageregionwidget.h
-               imagepaniconwidget.h
                imageguidewidget.h
                imagepanelwidget.h
                previewtoolbar.h

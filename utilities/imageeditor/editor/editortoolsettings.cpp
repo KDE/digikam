@@ -6,8 +6,8 @@
  * Date        : 2008-08-21
  * Description : Editor tool settings template box
  *
- * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2008-2009 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2010 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -57,7 +57,6 @@
 #include "colorgradientwidget.h"
 #include "histogramwidget.h"
 #include "histogrambox.h"
-#include "imagepaniconwidget.h"
 #include "globals.h"
 
 using namespace KDcrawIface;
@@ -85,18 +84,14 @@ public:
         guideBox        = 0;
         guideColorBt    = 0;
         guideSize       = 0;
-        panIconView     = 0;
         channelCB       = 0;
         colorsCB        = 0;
         scaleBG         = 0;
         histogramBox    = 0;
         hGradient       = 0;
-        panWidgetFrame  = 0;
     }
 
     QButtonGroup*        scaleBG;
-
-    QFrame*              panWidgetFrame;
 
     QToolButton*         linHistoButton;
     QToolButton*         logHistoButton;
@@ -122,8 +117,6 @@ public:
 
     ColorGradientWidget* hGradient;
 
-    ImagePanIconWidget*  panIconView;
-
     HistogramBox*        histogramBox;
 
     RIntNumInput*        guideSize;
@@ -146,20 +139,6 @@ EditorToolSettings::EditorToolSettings(QWidget *parent)
     d->btnBox1      = new KHBox(d->settingsArea);
     d->btnBox2      = new KHBox(d->settingsArea);
     d->histogramBox = new HistogramBox(d->settingsArea);
-
-    // ---------------------------------------------------------------
-
-    d->panWidgetFrame = new QFrame(d->settingsArea);
-    d->panWidgetFrame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QVBoxLayout* vlay = new QVBoxLayout(d->panWidgetFrame);
-    d->panIconView    = new ImagePanIconWidget(360, 240, d->panWidgetFrame);
-    d->panIconView->setWhatsThis(i18n("<p>Here you can see the original image panel "
-                                      "which can help you to select the clip preview.</p>"
-                                      "<p>Click and drag the mouse cursor in the "
-                                      "red rectangle to change the clip focus.</p>"));
-    vlay->addWidget(d->panIconView, 0, Qt::AlignCenter);
-    vlay->setSpacing(0);
-    vlay->setMargin(5);
 
     // ---------------------------------------------------------------
 
@@ -223,7 +202,6 @@ EditorToolSettings::EditorToolSettings(QWidget *parent)
     // ---------------------------------------------------------------
 
     gridSettings->addWidget(d->histogramBox,   0, 0, 2, 2);
-    gridSettings->addWidget(d->panWidgetFrame, 2, 0, 1, 2);
     gridSettings->addWidget(d->plainPage,      3, 0, 1, 2);
     gridSettings->addWidget(d->guideBox,       4, 0, 1, 2);
     gridSettings->addWidget(d->btnBox2,        5, 0, 1, 2);
@@ -309,11 +287,6 @@ QWidget *EditorToolSettings::plainPage() const
     return d->plainPage;
 }
 
-ImagePanIconWidget* EditorToolSettings::panIconView() const
-{
-    return d->panIconView;
-}
-
 HistogramBox* EditorToolSettings::histogramBox() const
 {
     return d->histogramBox;
@@ -383,7 +356,6 @@ void EditorToolSettings::setButtons(Buttons buttonMask)
 
 void EditorToolSettings::setTools(Tools toolMask)
 {
-    d->panWidgetFrame->setVisible(toolMask & PanIcon);
     d->histogramBox->setVisible(toolMask & Histogram);
     d->guideBox->setVisible(toolMask & ColorGuide);
 }
