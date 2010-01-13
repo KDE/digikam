@@ -480,7 +480,7 @@ QImage ImageRegionWidget::previewToQImage() const
 void ImageRegionWidget::slotPanIconSelectionMoved(const QRect& rect, bool targetDone)
 {
     PreviewWidget::slotPanIconSelectionMoved(rect, targetDone);
-    setContentsPosition(rect.x(), rect.y(), targetDone);
+    setContentsPosition((int)(rect.x()*zoomFactor()), (int)(rect.y()*zoomFactor()), targetDone);
 }
 
 void ImageRegionWidget::slotSelectionTakeFocus()
