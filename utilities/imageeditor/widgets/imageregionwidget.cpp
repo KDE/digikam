@@ -105,7 +105,7 @@ void ImageRegionWidget::resizeEvent(QResizeEvent* e)
 {
     if (!e) return;
 
-    Q3ScrollView::resizeEvent(e);
+    PreviewWidget::resizeEvent(e);
 
     // NOTE: We will always adapt the min. zoom factor to the visible size of canvas
 
@@ -491,7 +491,10 @@ void ImageRegionWidget::slotSelectionTakeFocus()
 void ImageRegionWidget::slotOriginalImageRegionChanged(bool target)
 {
     if (target)
+    {
         backupPixmapRegion();
+        emit signalOriginalClipFocusChanged();
+    }
 }
 
 }  // namespace Digikam

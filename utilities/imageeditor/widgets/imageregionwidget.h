@@ -87,6 +87,7 @@ public:
 Q_SIGNALS:
 
     void signalResized();
+    void signalOriginalClipFocusChanged();
 
 public Q_SLOTS:
 

@@ -187,6 +187,9 @@ ImagePanelWidget::ImagePanelWidget(uint w, uint h, const QString& settingsSectio
 
     connect(d->imageRegionWidget, SIGNAL(signalResized()),
             this, SIGNAL(signalResized()));
+
+    connect(d->imageRegionWidget, SIGNAL(signalOriginalClipFocusChanged()),
+            this, SIGNAL(signalOriginalClipFocusChanged()));
 }
 
 ImagePanelWidget::~ImagePanelWidget()

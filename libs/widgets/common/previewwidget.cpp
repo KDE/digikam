@@ -121,6 +121,8 @@ PreviewWidget::PreviewWidget(QWidget *parent)
     verticalScrollBar()->setSingleStep(1);
     verticalScrollBar()->setPageStep(1);
 
+    setHScrollBarMode(Q3ScrollView::AlwaysOn);
+    setVScrollBarMode(Q3ScrollView::AlwaysOn);
     setFrameStyle(QFrame::StyledPanel|QFrame::Plain);
     setMargin(0);
     setLineWidth(1);
@@ -632,13 +634,6 @@ void PreviewWidget::contentsWheelEvent(QWheelEvent *e)
 
 void PreviewWidget::zoomFactorChanged(double zoom)
 {
-    updateScrollBars();
-
-    if (horizontalScrollBar()->isVisible() || verticalScrollBar()->isVisible())
-        d->cornerButton->show();
-    else
-        d->cornerButton->hide();
-
     emit signalZoomFactorChanged(zoom);
 }
 
