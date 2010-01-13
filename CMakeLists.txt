@@ -298,6 +298,7 @@ ELSE(DOXYGEN_FOUND)
     MESSAGE(STATUS " You will not be able to to generate the API documentation.")
     MESSAGE(STATUS " This does not affect building digiKam in any way.")
     MESSAGE(STATUS "")
+    
 ENDIF(DOXYGEN_FOUND)
 
 IF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND JASPER_FOUND AND KDCRAW_FOR_DIGIKAM AND KEXIV2_FOUND AND KIPI_FOUND)
@@ -307,6 +308,11 @@ ELSE(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND AND JASPER_FOUND
     MESSAGE(FATAL_ERROR " digiKam will be compiled................. NO  (Look README file for more details about dependencies)")
     SET(DIGIKAM_CAN_BE_COMPILED false)
 ENDIF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND JASPER_FOUND AND KDCRAW_FOR_DIGIKAM AND KEXIV2_FOUND AND KIPI_FOUND)
+
+	MESSAGE(STATUS "")
+    MESSAGE(STATUS "Database server settings")
+    MESSAGE(STATUS " Using mysqld path (set by SERVERCMD_MYSQL)......[${SERVERCMD_MYSQL}]")
+	MESSAGE(STATUS " Using mysql-init path..(set by INITCMD_MYSQL)...[${INITCMD_MYSQL}]")
 
 MESSAGE(STATUS "----------------------------------------------------------------------------------")
 MESSAGE(STATUS "")
