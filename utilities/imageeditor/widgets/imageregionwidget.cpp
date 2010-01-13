@@ -90,6 +90,9 @@ ImageRegionWidget::ImageRegionWidget(int wp, int hp, QWidget *parent)
 
     connect(this, SIGNAL(signalSelectionTakeFocus()),
             this, SLOT(slotSelectionTakeFocus()));
+
+    connect(this, SIGNAL(signalContentsMovedEvent(bool)),
+            this, SLOT(slotOriginalImageRegionChanged(bool)));
 }
 
 ImageRegionWidget::~ImageRegionWidget()
@@ -481,6 +484,12 @@ void ImageRegionWidget::slotPanIconSelectionMoved(const QRect& rect, bool target
 void ImageRegionWidget::slotSelectionTakeFocus()
 {
     restorePixmapRegion();
+}
+
+void ImageRegionWidget::slotOriginalImageRegionChanged(bool target)
+{
+    if (target)
+        backupPixmapRegion();
 }
 
 }  // namespace Digikam

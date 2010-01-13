@@ -182,9 +182,6 @@ ImagePanelWidget::ImagePanelWidget(uint w, uint h, const QString& settingsSectio
 
     // -------------------------------------------------------------
 
-    connect(d->imageRegionWidget, SIGNAL(signalContentsMovedEvent(bool)),
-            this, SLOT(slotOriginalImageRegionChanged(bool)));
-
     connect(d->separateView, SIGNAL(buttonReleased(int)),
             d->imageRegionWidget, SLOT(slotSeparateViewToggled(int)));
 }
@@ -224,17 +221,6 @@ void ImagePanelWidget::writeSettings()
     config->sync();
 }
 
-void ImagePanelWidget::slotOriginalImageRegionChanged(bool target)
-{
-    QRect rect = getOriginalImageRegion();
-
-    if (target)
-    {
-        d->imageRegionWidget->backupPixmapRegion();
-        emit signalOriginalClipFocusChanged();
-    }
-}
-
 void ImagePanelWidget::slotZoomSliderChanged(int size)
 {
     double h    = (double)ThumbnailSize::Huge;
@@ -257,7 +243,7 @@ void ImagePanelWidget::slotInitGui()
 {
     readSettings();
     setCenterImageRegionPosition();
-    slotOriginalImageRegionChanged(true);
+    d->imageRegionWidget->slotOriginalImageRegionChanged(true);
 }
 
 void ImagePanelWidget::setPanIconHighLightPoints(const QPolygon& pt)

@@ -87,6 +87,7 @@ public:
 public Q_SLOTS:
 
     void slotSeparateViewToggled(int mode);
+    void slotOriginalImageRegionChanged(bool target);
 
 private Q_SLOTS:
 
