@@ -26,16 +26,9 @@
 // Qt includes
 
 #include <QButtonGroup>
-#include <QFrame>
 #include <QGridLayout>
-#include <QGroupBox>
-#include <QLabel>
-#include <QPixmap>
-#include <QProgressBar>
-#include <QPushButton>
-#include <QResizeEvent>
-#include <QSplitter>
 #include <QTimer>
+#include <QPixmap>
 #include <QToolButton>
 #include <QVBoxLayout>
 
@@ -43,7 +36,6 @@
 
 #include <kapplication.h>
 #include <kconfig.h>
-#include <kcursor.h>
 #include <kdialog.h>
 #include <kglobal.h>
 #include <kiconloader.h>
@@ -64,9 +56,9 @@ public:
 
     ImagePanelWidgetPriv()
     {
-        imageRegionWidget  = 0;
-        separateView       = 0;
-        sepaBBox           = 0;
+        imageRegionWidget = 0;
+        separateView      = 0;
+        sepaBBox          = 0;
     }
 
     QString            settingsSection;
@@ -114,47 +106,47 @@ ImagePanelWidget::ImagePanelWidget(uint w, uint h, const QString& settingsSectio
     if (separateViewMode == SeparateViewDuplicate || separateViewMode == SeparateViewAll)
     {
         QToolButton *duplicateHorButton = new QToolButton( d->sepaBBox );
-       d->separateView->addButton(duplicateHorButton, ImageRegionWidget::SeparateViewDuplicateHorz);
-       hlay->addWidget(duplicateHorButton);
-       duplicateHorButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/duplicatebothhorz.png")));
-       duplicateHorButton->setCheckable(true);
-       duplicateHorButton->setWhatsThis( i18n("If this option is enabled, the preview area will be split "
-                                              "horizontally, displaying the original and target image "
-                                              "at the same time. The target is duplicated from the original "
-                                              "below the red dashed line." ) );
+        d->separateView->addButton(duplicateHorButton, ImageRegionWidget::SeparateViewDuplicateHorz);
+        hlay->addWidget(duplicateHorButton);
+        duplicateHorButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/duplicatebothhorz.png")));
+        duplicateHorButton->setCheckable(true);
+        duplicateHorButton->setWhatsThis( i18n("If this option is enabled, the preview area will be split "
+                                                "horizontally, displaying the original and target image "
+                                                "at the same time. The target is duplicated from the original "
+                                                "below the red dashed line." ) );
 
-       QToolButton *duplicateVerButton = new QToolButton( d->sepaBBox );
-       d->separateView->addButton(duplicateVerButton, ImageRegionWidget::SeparateViewDuplicateVert);
-       hlay->addWidget(duplicateVerButton);
-       duplicateVerButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/duplicatebothvert.png")));
-       duplicateVerButton->setCheckable(true);
-       duplicateVerButton->setWhatsThis( i18n("If this option is enabled, the preview area will be split "
-                                              "vertically, displaying the original and target image "
-                                              "at the same time. The target is duplicated from the original to "
-                                              "the right of the red dashed line." ) );
+        QToolButton *duplicateVerButton = new QToolButton( d->sepaBBox );
+        d->separateView->addButton(duplicateVerButton, ImageRegionWidget::SeparateViewDuplicateVert);
+        hlay->addWidget(duplicateVerButton);
+        duplicateVerButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/duplicatebothvert.png")));
+        duplicateVerButton->setCheckable(true);
+        duplicateVerButton->setWhatsThis( i18n("If this option is enabled, the preview area will be split "
+                                                "vertically, displaying the original and target image "
+                                                "at the same time. The target is duplicated from the original to "
+                                                "the right of the red dashed line." ) );
     }
 
     if (separateViewMode == SeparateViewNormal || separateViewMode == SeparateViewAll)
     {
         QToolButton *separateHorButton = new QToolButton( d->sepaBBox );
-       d->separateView->addButton(separateHorButton, ImageRegionWidget::SeparateViewHorizontal);
-       hlay->addWidget(separateHorButton);
-       separateHorButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/bothhorz.png")));
-       separateHorButton->setCheckable(true);
-       separateHorButton->setWhatsThis( i18n( "If this option is enabled, the preview area will be split "
-                                              "horizontally, displaying the original and target image "
-                                              "at the same time. The original is above the "
-                                              "red dashed line, the target below it." ) );
+        d->separateView->addButton(separateHorButton, ImageRegionWidget::SeparateViewHorizontal);
+        hlay->addWidget(separateHorButton);
+        separateHorButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/bothhorz.png")));
+        separateHorButton->setCheckable(true);
+        separateHorButton->setWhatsThis( i18n( "If this option is enabled, the preview area will be split "
+                                                "horizontally, displaying the original and target image "
+                                                "at the same time. The original is above the "
+                                                "red dashed line, the target below it." ) );
 
-       QToolButton *separateVerButton = new QToolButton( d->sepaBBox );
-       d->separateView->addButton(separateVerButton, ImageRegionWidget::SeparateViewVertical);
-       hlay->addWidget(separateVerButton);
-       separateVerButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/bothvert.png")));
-       separateVerButton->setCheckable(true);
-       separateVerButton->setWhatsThis( i18n( "If this option is enabled, the preview area will be split "
-                                              "vertically, displaying the original and target image "
-                                              "at the same time. The original is to the left of the "
-                                              "red dashed line, the target to the right of it." ) );
+        QToolButton *separateVerButton = new QToolButton( d->sepaBBox );
+        d->separateView->addButton(separateVerButton, ImageRegionWidget::SeparateViewVertical);
+        hlay->addWidget(separateVerButton);
+        separateVerButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/bothvert.png")));
+        separateVerButton->setCheckable(true);
+        separateVerButton->setWhatsThis( i18n( "If this option is enabled, the preview area will be split "
+                                                "vertically, displaying the original and target image "
+                                                "at the same time. The original is to the left of the "
+                                                "red dashed line, the target to the right of it." ) );
     }
 
     QToolButton *noSeparateButton = new QToolButton( d->sepaBBox );
