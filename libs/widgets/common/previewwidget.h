@@ -98,8 +98,8 @@ protected:
 protected Q_SLOTS:
 
     void slotCornerButtonPressed();
-    void slotPanIconSelectionMoved(const QRect&, bool);
     void slotPanIconHiden();
+    virtual void slotPanIconSelectionMoved(const QRect&, bool);
 
 protected:
 

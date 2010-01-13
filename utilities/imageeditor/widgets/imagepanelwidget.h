@@ -95,7 +95,6 @@ private Q_SLOTS:
 
     void slotInitGui();
     void slotZoomSliderChanged(int);
-    void slotSelectionTakeFocus();
 
     // Slot used when the original image clip focus is changed by the user.
     void slotOriginalImageRegionChanged(bool target);

@@ -185,9 +185,6 @@ ImagePanelWidget::ImagePanelWidget(uint w, uint h, const QString& settingsSectio
     connect(d->imageRegionWidget, SIGNAL(signalContentsMovedEvent(bool)),
             this, SLOT(slotOriginalImageRegionChanged(bool)));
 
-    connect(d->imageRegionWidget, SIGNAL(signalSelectionTakeFocus()),
-            this, SLOT(slotSelectionTakeFocus()));
-
     connect(d->separateView, SIGNAL(buttonReleased(int)),
             d->imageRegionWidget, SLOT(slotSeparateViewToggled(int)));
 }
@@ -261,11 +258,6 @@ void ImagePanelWidget::slotInitGui()
     readSettings();
     setCenterImageRegionPosition();
     slotOriginalImageRegionChanged(true);
-}
-
-void ImagePanelWidget::slotSelectionTakeFocus()
-{
-    d->imageRegionWidget->restorePixmapRegion();
 }
 
 void ImagePanelWidget::setPanIconHighLightPoints(const QPolygon& pt)

@@ -87,6 +87,9 @@ ImageRegionWidget::ImageRegionWidget(int wp, int hp, QWidget *parent)
 
     connect(this, SIGNAL(signalZoomFactorChanged(double)),
             this, SLOT(slotZoomFactorChanged()));
+
+    connect(this, SIGNAL(signalSelectionTakeFocus()),
+            this, SLOT(slotSelectionTakeFocus()));
 }
 
 ImageRegionWidget::~ImageRegionWidget()
@@ -467,6 +470,17 @@ void ImageRegionWidget::contentsWheelEvent(QWheelEvent *e)
 QImage ImageRegionWidget::previewToQImage() const
 {
     return d->image.copyQImage();
+}
+
+void ImageRegionWidget::slotPanIconSelectionMoved(const QRect& rect, bool targetDone)
+{
+    PreviewWidget::slotPanIconSelectionMoved(rect, targetDone);
+    setContentsPosition(rect.x(), rect.y(), targetDone);
+}
+
+void ImageRegionWidget::slotSelectionTakeFocus()
+{
+    restorePixmapRegion();
 }
 
 }  // namespace Digikam
