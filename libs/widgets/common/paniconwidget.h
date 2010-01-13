@@ -100,24 +100,6 @@ protected Q_SLOTS:
 
     void slotFlickerTimer();
 
-protected:
-
-    bool     m_flicker;
-
-    int      m_width;
-    int      m_height;
-    int      m_zoomedOrgWidth;
-    int      m_zoomedOrgHeight;
-    int      m_orgWidth;
-    int      m_orgHeight;
-
-    double   m_zoomFactor;
-
-    QRect    m_rect;
-    QRect    m_localRegionSelection;    // Thumbnail size selection.
-
-    QPixmap  m_pixmap;
-
 private:
 
     PanIconWidgetPriv* const d;
