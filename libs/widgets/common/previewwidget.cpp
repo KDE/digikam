@@ -653,13 +653,9 @@ void PreviewWidget::slotCornerButtonPressed()
 
     d->panIconPopup    = new KPopupFrame(this);
     PanIconWidget *pan = new PanIconWidget(d->panIconPopup);
-    pan->setImage(180, 120, previewToQImage());
-    d->panIconPopup->setMainWidget(pan);
 
-    QRect r((int)(contentsX()    / zoomFactor()), (int)(contentsY()     / zoomFactor()),
-            (int)(visibleWidth() / zoomFactor()), (int)(visibleHeight() / zoomFactor()));
-    pan->setRegionSelection(r);
-    pan->setMouseFocus();
+    connect(pan, SIGNAL(signalSelectionTakeFocus()),
+            this, SIGNAL(signalSelectionTakeFocus()));
 
     connect(pan, SIGNAL(signalSelectionMoved(const QRect&, bool)),
             this, SLOT(slotPanIconSelectionMoved(const QRect&, bool)));
@@ -667,8 +663,12 @@ void PreviewWidget::slotCornerButtonPressed()
     connect(pan, SIGNAL(signalHidden()),
             this, SLOT(slotPanIconHiden()));
 
-    connect(pan, SIGNAL(signalSelectionTakeFocus()),
-            this, SIGNAL(signalSelectionTakeFocus()));
+    QRect r((int)(contentsX()    / zoomFactor()), (int)(contentsY()     / zoomFactor()),
+            (int)(visibleWidth() / zoomFactor()), (int)(visibleHeight() / zoomFactor()));
+    pan->setImage(180, 120, previewToQImage());
+    pan->setRegionSelection(r);
+    pan->setMouseFocus();
+    d->panIconPopup->setMainWidget(pan);
 
     QPoint g = mapToGlobal(viewport()->pos());
     g.setX(g.x()+ viewport()->size().width());
