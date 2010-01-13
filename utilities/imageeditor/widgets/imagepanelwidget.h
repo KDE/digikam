@@ -86,10 +86,6 @@ Q_SIGNALS:
 
     void signalResized();
 
-protected:
-
-    void resizeEvent(QResizeEvent *e);
-
 private Q_SLOTS:
 
     void slotInitGui();

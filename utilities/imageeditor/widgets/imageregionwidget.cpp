@@ -118,6 +118,8 @@ void ImageRegionWidget::resizeEvent(QResizeEvent* e)
     setZoomMin(zoom);
     setZoomMax(zoom*12.0);
     setZoomFactor(zoom);
+
+    emit signalResized();
 }
 
 int ImageRegionWidget::previewWidth()

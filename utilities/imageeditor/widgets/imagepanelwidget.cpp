@@ -184,6 +184,9 @@ ImagePanelWidget::ImagePanelWidget(uint w, uint h, const QString& settingsSectio
 
     connect(d->separateView, SIGNAL(buttonReleased(int)),
             d->imageRegionWidget, SLOT(slotSeparateViewToggled(int)));
+
+    connect(d->imageRegionWidget, SIGNAL(signalResized()),
+            this, SIGNAL(signalResized()));
 }
 
 ImagePanelWidget::~ImagePanelWidget()
@@ -232,11 +235,6 @@ void ImagePanelWidget::slotZoomSliderChanged(int size)
     double z    = a*size+b;
 
     d->imageRegionWidget->setZoomFactorSnapped(z);
-}
-
-void ImagePanelWidget::resizeEvent(QResizeEvent *)
-{
-    emit signalResized();
 }
 
 void ImagePanelWidget::slotInitGui()

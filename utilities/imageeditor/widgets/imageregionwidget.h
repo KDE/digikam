@@ -84,6 +84,10 @@ public:
     void   setHighLightPoints(const QPolygon& pointsList);
     void   drawSeparateView();
 
+Q_SIGNALS:
+
+    void signalResized();
+
 public Q_SLOTS:
 
     void slotSeparateViewToggled(int mode);
