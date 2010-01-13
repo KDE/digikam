@@ -189,6 +189,12 @@ DigikamApp::DigikamApp()
     if(d->splashScreen)
         d->splashScreen->message(i18n("Scan Albums"));
 
+    new DigikamAdaptor(this);
+    QDBusConnection::sessionBus().registerObject("/Digikam", this);
+    QDBusConnection::sessionBus().registerService("org.kde.digikam-"
+                            + QString::number(QCoreApplication::instance()->applicationPid()));
+
+
     AlbumManager::instance()->setDatabase(AlbumSettings::instance()->getDatabaseType(), AlbumSettings::instance()->getDatabaseName(), AlbumSettings::instance()->getDatabaseNameThumbnails(), AlbumSettings::instance()->getDatabaseHostName(), AlbumSettings::instance()->getDatabasePort(), AlbumSettings::instance()->getDatabaseUserName(), AlbumSettings::instance()->getDatabasePassword(), AlbumSettings::instance()->getDatabaseConnectoptions(), AlbumSettings::instance()->getInternalDatabaseServer(), true);
 
     // set database error handler
@@ -205,11 +211,6 @@ DigikamApp::DigikamApp()
 
     if(d->splashScreen)
         d->splashScreen->message(i18n("Initializing..."));
-
-    new DigikamAdaptor(this);
-    QDBusConnection::sessionBus().registerObject("/Digikam", this);
-    QDBusConnection::sessionBus().registerService("org.kde.digikam-"
-                            + QString::number(QCoreApplication::instance()->applicationPid()));
 
     // ensure creation
     AlbumSettings::instance();
