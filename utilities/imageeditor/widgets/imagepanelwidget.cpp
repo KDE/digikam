@@ -69,14 +69,14 @@ public:
         sepaBBox           = 0;
     }
 
-    QString             settingsSection;
+    QString            settingsSection;
 
-    QButtonGroup*       separateView;
+    QButtonGroup*      separateView;
 
-    QWidget*            previewWidget;
-    QWidget*            sepaBBox;
+    QWidget*           previewWidget;
+    QWidget*           sepaBBox;
 
-    ImageRegionWidget*  imageRegionWidget;
+    ImageRegionWidget* imageRegionWidget;
 };
 
 ImagePanelWidget::ImagePanelWidget(uint w, uint h, const QString& settingsSection,
@@ -84,8 +84,8 @@ ImagePanelWidget::ImagePanelWidget(uint w, uint h, const QString& settingsSectio
                 : QWidget(parent), d(new ImagePanelWidgetPriv)
 {
     setAttribute(Qt::WA_DeleteOnClose);
-    d->settingsSection    = settingsSection;
-    QGridLayout *grid     = new QGridLayout(this);
+    d->settingsSection = settingsSection;
+    QGridLayout *grid  = new QGridLayout(this);
 
     // -------------------------------------------------------------
 
@@ -96,10 +96,10 @@ ImagePanelWidget::ImagePanelWidget(uint w, uint h, const QString& settingsSectio
     d->imageRegionWidget = new ImageRegionWidget(w, h, preview);
     d->imageRegionWidget->setFrameStyle(QFrame::NoFrame);
     preview->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    d->imageRegionWidget->setWhatsThis( i18n("<p>Here you can see the original clip image "
-                                             "which will be used for the preview computation.</p>"
-                                             "<p>Click and drag the mouse cursor in the "
-                                             "image to change the clip focus.</p>"));
+    d->imageRegionWidget->setWhatsThis(i18n("<p>Here you can see the original clip image "
+                                            "which will be used for the preview computation.</p>"
+                                            "<p>Click and drag the mouse cursor in the "
+                                            "image to change the clip focus.</p>"));
     l1->addWidget(d->imageRegionWidget, 0);
 
     // -------------------------------------------------------------
@@ -111,8 +111,7 @@ ImagePanelWidget::ImagePanelWidget(uint w, uint h, const QString& settingsSectio
     hlay->setSpacing(0);
     hlay->setMargin(0);
 
-    if (separateViewMode == SeparateViewDuplicate ||
-        separateViewMode == SeparateViewAll)
+    if (separateViewMode == SeparateViewDuplicate || separateViewMode == SeparateViewAll)
     {
         QToolButton *duplicateHorButton = new QToolButton( d->sepaBBox );
        d->separateView->addButton(duplicateHorButton, ImageRegionWidget::SeparateViewDuplicateHorz);
@@ -135,8 +134,7 @@ ImagePanelWidget::ImagePanelWidget(uint w, uint h, const QString& settingsSectio
                                               "the right of the red dashed line." ) );
     }
 
-    if (separateViewMode == SeparateViewNormal ||
-        separateViewMode == SeparateViewAll)
+    if (separateViewMode == SeparateViewNormal || separateViewMode == SeparateViewAll)
     {
         QToolButton *separateHorButton = new QToolButton( d->sepaBBox );
        d->separateView->addButton(separateHorButton, ImageRegionWidget::SeparateViewHorizontal);
@@ -164,13 +162,13 @@ ImagePanelWidget::ImagePanelWidget(uint w, uint h, const QString& settingsSectio
     hlay->addWidget(noSeparateButton);
     noSeparateButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/target.png")));
     noSeparateButton->setCheckable(true);
-    noSeparateButton->setWhatsThis( i18n( "If this option is enabled, the preview area will not "
-                                          "be split into two." ) );
+    noSeparateButton->setWhatsThis(i18n("If this option is enabled, the preview area will not "
+                                        "be split into two."));
 
     // -------------------------------------------------------------
 
-    grid->addWidget(preview,        0, 0, 2, 5);
-    grid->addWidget(d->sepaBBox,    2, 2, 1, 3);
+    grid->addWidget(preview,     0, 0, 2, 5);
+    grid->addWidget(d->sepaBBox, 2, 2, 1, 3);
     grid->setRowStretch(1, 10);
     grid->setColumnStretch(1, 10);
     grid->setMargin(KDialog::spacingHint());
@@ -198,7 +196,7 @@ ImagePanelWidget::~ImagePanelWidget()
     delete d;
 }
 
-ImageRegionWidget *ImagePanelWidget::previewWidget() const
+ImageRegionWidget* ImagePanelWidget::previewWidget() const
 {
     return d->imageRegionWidget;
 }
@@ -225,19 +223,6 @@ void ImagePanelWidget::writeSettings()
     KConfigGroup group        = config->group(d->settingsSection);
     group.writeEntry("Separate View", d->separateView->checkedId());
     config->sync();
-}
-
-void ImagePanelWidget::slotZoomSliderChanged(int size)
-{
-    double h    = (double)ThumbnailSize::Huge;
-    double s    = (double)ThumbnailSize::Small;
-    double zmin = d->imageRegionWidget->zoomMin();
-    double zmax = d->imageRegionWidget->zoomMax();
-    double b    = (zmin-(zmax*s/h))/(1-s/h);
-    double a    = (zmax-b)/h;
-    double z    = a*size+b;
-
-    d->imageRegionWidget->setZoomFactorSnapped(z);
 }
 
 void ImagePanelWidget::slotInitGui()

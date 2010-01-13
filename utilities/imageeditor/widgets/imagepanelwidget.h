@@ -80,7 +80,7 @@ public:
 
     void   writeSettings();
 
-    ImageRegionWidget *previewWidget() const;
+    ImageRegionWidget* previewWidget() const;
 
 Q_SIGNALS:
 
@@ -90,7 +90,6 @@ Q_SIGNALS:
 private Q_SLOTS:
 
     void slotInitGui();
-    void slotZoomSliderChanged(int);
 
 private:
 
