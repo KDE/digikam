@@ -214,11 +214,6 @@ int ImageGuideWidget::previewMode()
     return (d->renderingPreviewMode);
 }
 
-void ImageGuideWidget::setPreviewMode(int mode)
-{
-    d->renderingPreviewMode = mode;
-}
-
 QPoint ImageGuideWidget::getSpotPosition()
 {
     return (QPoint( (int)((float)d->spot.x() * (float)d->iface->originalWidth()  / (float)d->width),

@@ -68,7 +68,7 @@ public:
     EditorToolSettings* settings;
 };
 
-EditorTool::EditorTool(QObject *parent)
+EditorTool::EditorTool(QObject* parent)
           : QObject(parent), d(new EditorToolPriv)
 {
     d->timer = new QTimer(this);
@@ -107,7 +107,7 @@ void EditorTool::setToolName(const QString& name)
     d->name = name;
 }
 
-void EditorTool::setPreviewModeMask(PreviewToolBar::PreviewMode mask)
+void EditorTool::setPreviewModeMask(int mask)
 {
     EditorToolIface::editorToolIface()->setPreviewModeMask(mask);
 }
@@ -117,7 +117,7 @@ QWidget* EditorTool::toolView() const
     return d->view;
 }
 
-void EditorTool::setToolView(QWidget *view)
+void EditorTool::setToolView(QWidget* view)
 {
     d->view = view;
     // Will be unblocked in slotInit()
@@ -140,7 +140,7 @@ EditorToolSettings* EditorTool::toolSettings() const
     return d->settings;
 }
 
-void EditorTool::setToolSettings(EditorToolSettings *settings)
+void EditorTool::setToolSettings(EditorToolSettings* settings)
 {
     d->settings = settings;
 
@@ -327,7 +327,7 @@ DImgThreadedFilter* EditorToolThreaded::filter() const
     return d->threadedFilter;
 }
 
-void EditorToolThreaded::setFilter(DImgThreadedFilter *filter)
+void EditorToolThreaded::setFilter(DImgThreadedFilter* filter)
 {
     d->threadedFilter = filter;
 

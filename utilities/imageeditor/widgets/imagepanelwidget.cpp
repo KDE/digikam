@@ -25,11 +25,9 @@
 
 // Qt includes
 
-#include <QButtonGroup>
 #include <QGridLayout>
 #include <QTimer>
 #include <QPixmap>
-#include <QToolButton>
 #include <QVBoxLayout>
 
 // KDE includes
@@ -38,9 +36,7 @@
 #include <kconfig.h>
 #include <kdialog.h>
 #include <kglobal.h>
-#include <kiconloader.h>
 #include <klocale.h>
-#include <kstandarddirs.h>
 
 // Local includes
 
@@ -57,22 +53,14 @@ public:
     ImagePanelWidgetPriv()
     {
         imageRegionWidget = 0;
-        separateView      = 0;
-        sepaBBox          = 0;
     }
 
     QString            settingsSection;
 
-    QButtonGroup*      separateView;
-
-    QWidget*           previewWidget;
-    QWidget*           sepaBBox;
-
     ImageRegionWidget* imageRegionWidget;
 };
 
-ImagePanelWidget::ImagePanelWidget(uint w, uint h, const QString& settingsSection,
-                                   QWidget *parent, int separateViewMode)
+ImagePanelWidget::ImagePanelWidget(uint w, uint h, const QString& settingsSection, QWidget* parent)
                 : QWidget(parent), d(new ImagePanelWidgetPriv)
 {
     setAttribute(Qt::WA_DeleteOnClose);
@@ -96,71 +84,7 @@ ImagePanelWidget::ImagePanelWidget(uint w, uint h, const QString& settingsSectio
 
     // -------------------------------------------------------------
 
-    d->sepaBBox       = new QWidget(this);
-    QHBoxLayout *hlay = new QHBoxLayout(d->sepaBBox);
-    d->separateView   = new QButtonGroup(d->sepaBBox);
-    d->separateView->setExclusive(true);
-    hlay->setSpacing(0);
-    hlay->setMargin(0);
-
-    if (separateViewMode == SeparateViewDuplicate || separateViewMode == SeparateViewAll)
-    {
-        QToolButton *duplicateHorButton = new QToolButton( d->sepaBBox );
-        d->separateView->addButton(duplicateHorButton, ImageRegionWidget::SeparateViewDuplicateHorz);
-        hlay->addWidget(duplicateHorButton);
-        duplicateHorButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/duplicatebothhorz.png")));
-        duplicateHorButton->setCheckable(true);
-        duplicateHorButton->setWhatsThis( i18n("If this option is enabled, the preview area will be split "
-                                                "horizontally, displaying the original and target image "
-                                                "at the same time. The target is duplicated from the original "
-                                                "below the red dashed line." ) );
-
-        QToolButton *duplicateVerButton = new QToolButton( d->sepaBBox );
-        d->separateView->addButton(duplicateVerButton, ImageRegionWidget::SeparateViewDuplicateVert);
-        hlay->addWidget(duplicateVerButton);
-        duplicateVerButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/duplicatebothvert.png")));
-        duplicateVerButton->setCheckable(true);
-        duplicateVerButton->setWhatsThis( i18n("If this option is enabled, the preview area will be split "
-                                                "vertically, displaying the original and target image "
-                                                "at the same time. The target is duplicated from the original to "
-                                                "the right of the red dashed line." ) );
-    }
-
-    if (separateViewMode == SeparateViewNormal || separateViewMode == SeparateViewAll)
-    {
-        QToolButton *separateHorButton = new QToolButton( d->sepaBBox );
-        d->separateView->addButton(separateHorButton, ImageRegionWidget::SeparateViewHorizontal);
-        hlay->addWidget(separateHorButton);
-        separateHorButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/bothhorz.png")));
-        separateHorButton->setCheckable(true);
-        separateHorButton->setWhatsThis( i18n( "If this option is enabled, the preview area will be split "
-                                                "horizontally, displaying the original and target image "
-                                                "at the same time. The original is above the "
-                                                "red dashed line, the target below it." ) );
-
-        QToolButton *separateVerButton = new QToolButton( d->sepaBBox );
-        d->separateView->addButton(separateVerButton, ImageRegionWidget::SeparateViewVertical);
-        hlay->addWidget(separateVerButton);
-        separateVerButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/bothvert.png")));
-        separateVerButton->setCheckable(true);
-        separateVerButton->setWhatsThis( i18n( "If this option is enabled, the preview area will be split "
-                                                "vertically, displaying the original and target image "
-                                                "at the same time. The original is to the left of the "
-                                                "red dashed line, the target to the right of it." ) );
-    }
-
-    QToolButton *noSeparateButton = new QToolButton( d->sepaBBox );
-    d->separateView->addButton(noSeparateButton, ImageRegionWidget::SeparateViewNone);
-    hlay->addWidget(noSeparateButton);
-    noSeparateButton->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/target.png")));
-    noSeparateButton->setCheckable(true);
-    noSeparateButton->setWhatsThis(i18n("If this option is enabled, the preview area will not "
-                                        "be split into two."));
-
-    // -------------------------------------------------------------
-
     grid->addWidget(preview,     0, 0, 2, 5);
-    grid->addWidget(d->sepaBBox, 2, 2, 1, 3);
     grid->setRowStretch(1, 10);
     grid->setColumnStretch(1, 10);
     grid->setMargin(KDialog::spacingHint());
@@ -171,9 +95,6 @@ ImagePanelWidget::ImagePanelWidget(uint w, uint h, const QString& settingsSectio
     QTimer::singleShot(0, this, SLOT(slotInitGui()));
 
     // -------------------------------------------------------------
-
-    connect(d->separateView, SIGNAL(buttonReleased(int)),
-            d->imageRegionWidget, SLOT(slotSeparateViewToggled(int)));
 
     connect(d->imageRegionWidget, SIGNAL(signalResized()),
             this, SIGNAL(signalResized()));
@@ -195,7 +116,7 @@ ImageRegionWidget* ImagePanelWidget::previewWidget() const
 
 void ImagePanelWidget::readSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+/*    KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->settingsSection);
     int mode                  = group.readEntry("Separate View", (int)ImageRegionWidget::SeparateViewDuplicateVert);
     mode                      = qMax((int)ImageRegionWidget::SeparateViewHorizontal, mode);
@@ -203,18 +124,18 @@ void ImagePanelWidget::readSettings()
 
     d->imageRegionWidget->blockSignals(true);
     d->separateView->blockSignals(true);
-    d->imageRegionWidget->slotSeparateViewToggled( mode );
+    d->imageRegionWidget->slotPreviewModeChanged(mode);
     d->separateView->button(mode)->setChecked(true);
     d->imageRegionWidget->blockSignals(false);
-    d->separateView->blockSignals(false);
+    d->separateView->blockSignals(false);*/
 }
 
 void ImagePanelWidget::writeSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+/*    KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->settingsSection);
     group.writeEntry("Separate View", d->separateView->checkedId());
-    config->sync();
+    config->sync();*/
 }
 
 void ImagePanelWidget::slotInitGui()
@@ -232,7 +153,6 @@ void ImagePanelWidget::setPanIconHighLightPoints(const QPolygon& pt)
 void ImagePanelWidget::setEnable(bool b)
 {
     d->imageRegionWidget->setEnabled(b);
-    d->sepaBBox->setEnabled(b);
 }
 
 QRect ImagePanelWidget::getOriginalImageRegion()

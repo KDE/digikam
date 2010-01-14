@@ -134,13 +134,11 @@ OilPaintTool::OilPaintTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    setToolSettings(d->gboxSettings);
-
-    // -------------------------------------------------------------
-
     d->previewWidget = new ImagePanelWidget(470, 350, "oilpaint Tool");
 
+    setToolSettings(d->gboxSettings);
     setToolView(d->previewWidget);
+    setPreviewModeMask(PreviewToolBar::NoToggleOnMouseOver);    
     init();
 }
 

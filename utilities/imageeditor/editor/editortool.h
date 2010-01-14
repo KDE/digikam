@@ -80,10 +80,10 @@ protected:
     void setToolHelp(const QString& anchor);
     void setToolName(const QString& name);
     void setToolIcon(const QPixmap& icon);
-    void setPreviewModeMask(PreviewToolBar::PreviewMode mask);
+    void setPreviewModeMask(int mask);
 
-    virtual void setToolView(QWidget *view);
-    virtual void setToolSettings(EditorToolSettings *settings);
+    virtual void setToolView(QWidget* view);
+    virtual void setToolSettings(EditorToolSettings* settings);
     virtual void setBusy(bool);
     virtual void readSettings();
     virtual void writeSettings();
@@ -147,14 +147,14 @@ public Q_SLOTS:
 protected:
 
     DImgThreadedFilter* filter() const;
-    void setFilter(DImgThreadedFilter *filter);
+    void setFilter(DImgThreadedFilter* filter);
 
     /** If true, delete filter instance when preview or final rendering is processed.
         If false, filter instance will be managed outside for ex. with ContentAwareResizing tool.
      */
     void deleteFilterInstance(bool b=true);
 
-    virtual void setToolView(QWidget *view);
+    virtual void setToolView(QWidget* view);
     virtual void prepareEffect(){};
     virtual void prepareFinal(){};
     virtual void putPreviewData(){};

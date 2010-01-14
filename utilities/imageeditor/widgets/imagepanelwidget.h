@@ -57,8 +57,7 @@ public:
 
 public:
 
-    ImagePanelWidget(uint w, uint h, const QString& settingsSection,
-                     QWidget *parent=0, int separateViewMode=SeparateViewAll);
+    ImagePanelWidget(uint w, uint h, const QString& settingsSection, QWidget *parent=0);
     ~ImagePanelWidget();
 
     QRect  getOriginalImageRegion();

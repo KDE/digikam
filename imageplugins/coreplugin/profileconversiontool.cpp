@@ -170,10 +170,12 @@ ProfileConversionTool::ProfileConversionTool(QObject* parent)
 
     // ---
 
-    setToolSettings(d->gboxSettings);
-
     d->previewWidget = new ImagePanelWidget(470, 350, "Profile Conversion Tool");
+    
+    setToolSettings(d->gboxSettings);
     setToolView(d->previewWidget);
+    setPreviewModeMask(PreviewToolBar::NoToggleOnMouseOver);
+    
     init();
 
     // ---

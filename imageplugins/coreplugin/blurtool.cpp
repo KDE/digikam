@@ -113,6 +113,7 @@ BlurTool::BlurTool(QObject* parent)
 
     // --------------------------------------------------------
 
+    setPreviewModeMask(PreviewToolBar::NoToggleOnMouseOver);
     setToolSettings(d->gboxSettings);
     setToolView(d->previewWidget);
     init();

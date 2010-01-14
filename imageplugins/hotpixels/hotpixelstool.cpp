@@ -146,10 +146,11 @@ HotPixelsTool::HotPixelsTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->previewWidget = new ImagePanelWidget(470, 350, "hotpixels Tool",
-                                            0, ImagePanelWidget::SeparateViewDuplicate);
-
+    d->previewWidget = new ImagePanelWidget(470, 350, "hotpixels Tool", 0);
     setToolView(d->previewWidget);
+    setPreviewModeMask(PreviewToolBar::PreviewBothImagesHorz | 
+                       PreviewToolBar::PreviewBothImagesVert | 
+                       PreviewToolBar::PreviewTargetImage);    
     init();
 
     // -------------------------------------------------------------

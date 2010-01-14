@@ -37,6 +37,8 @@
 #include "editorstackview.h"
 #include "editorwindow.h"
 #include "imageguidewidget.h"
+#include "imageregionwidget.h"
+#include "imagepanelwidget.h"
 
 namespace Digikam
 {
@@ -63,7 +65,7 @@ EditorToolIface* EditorToolIface::editorToolIface()
     return m_iface;
 }
 
-EditorToolIface::EditorToolIface(EditorWindow *editor)
+EditorToolIface::EditorToolIface(EditorWindow* editor)
                : QObject(), d(new EditorToolIfacePriv)
 {
     d->editor = editor;
@@ -103,9 +105,18 @@ void EditorToolIface::loadTool(EditorTool* tool)
         connect(d->editor, SIGNAL(signalPreviewModeChanged(int)),
                 view, SLOT(slotPreviewModeChanged(int)));
                 
-        view->setPreviewMode(d->editor->previewMode());
+        view->slotPreviewModeChanged(d->editor->previewMode());
     }
+
+    ImagePanelWidget* view2 = dynamic_cast<ImagePanelWidget*>(d->tool->toolView());
+    if (view2)
+    {
+        connect(d->editor, SIGNAL(signalPreviewModeChanged(int)),
+                view2->previewWidget(), SLOT(slotPreviewModeChanged(int)));
                 
+        view2->previewWidget()->slotPreviewModeChanged(d->editor->previewMode());
+    }
+
     updateExposureSettings();
     updateICCSettings();
     setToolInfoMessage(QString());    
@@ -187,7 +198,7 @@ void EditorToolIface::updateExposureSettings()
     if (tool) tool->exposureSettingsChanged();
 }
 
-void EditorToolIface::setPreviewModeMask(PreviewToolBar::PreviewMode mask)
+void EditorToolIface::setPreviewModeMask(int mask)
 {
     d->editor->setPreviewModeMask(mask);
 }

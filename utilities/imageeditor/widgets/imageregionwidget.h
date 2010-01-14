@@ -49,18 +49,7 @@ class DIGIKAM_EXPORT ImageRegionWidget : public PreviewWidget
 
 public:
 
-    enum SeparateViewMode
-    {
-        SeparateViewHorizontal=0,
-        SeparateViewVertical,
-        SeparateViewNone,
-        SeparateViewDuplicateVert,
-        SeparateViewDuplicateHorz
-    };
-
-public:
-
-    ImageRegionWidget(int wp, int hp, QWidget *parent=0);
+    ImageRegionWidget(int wp, int hp, QWidget* parent=0);
     ~ImageRegionWidget();
 
     void   setContentsPosition(int x, int y, bool targetDone);
@@ -76,7 +65,7 @@ public:
     /** To get target image region image to use for render operations */
     DImg   getImageRegionImage();
 
-    void   updatePreviewImage(DImg *img);
+    void   updatePreviewImage(DImg* img);
 
     void   backupPixmapRegion();
     void   restorePixmapRegion();
@@ -91,7 +80,7 @@ Q_SIGNALS:
 
 public Q_SLOTS:
 
-    void slotSeparateViewToggled(int mode);
+    void slotPreviewModeChanged(int mode);
     void slotOriginalImageRegionChanged(bool target);
 
 private Q_SLOTS:

@@ -222,7 +222,7 @@ void AdjustCurvesTool::slotPickerColorButtonActived()
 {
     // Save previous rendering mode and toggle to original image.
     d->currentPreviewMode = d->previewWidget->previewMode();
-    d->previewWidget->setPreviewMode(PreviewToolBar::PreviewOriginalImage);
+    d->previewWidget->slotPreviewModeChanged(PreviewToolBar::PreviewOriginalImage);
 }
 
 void AdjustCurvesTool::slotSpotColorChanged(const DColor& color)
@@ -279,7 +279,7 @@ void AdjustCurvesTool::slotSpotColorChanged(const DColor& color)
     d->curvesBox->repaint();
 
     // restore previous rendering mode.
-    d->previewWidget->setPreviewMode(d->currentPreviewMode);
+    d->previewWidget->slotPreviewModeChanged(d->currentPreviewMode);
 
     slotEffect();
 }

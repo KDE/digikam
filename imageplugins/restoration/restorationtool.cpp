@@ -176,13 +176,13 @@ RestorationTool::RestorationTool(QObject* parent)
     gridSettings->setSpacing(d->gboxSettings->spacingHint());
     gridSettings->setRowStretch(2, 10);
 
-    setToolSettings(d->gboxSettings);
-
     // -------------------------------------------------------------
 
     d->previewWidget = new ImagePanelWidget(470, 350, "restoration Tool");
 
+    setToolSettings(d->gboxSettings);
     setToolView(d->previewWidget);
+    setPreviewModeMask(PreviewToolBar::NoToggleOnMouseOver);       
     init();
 
     // -------------------------------------------------------------

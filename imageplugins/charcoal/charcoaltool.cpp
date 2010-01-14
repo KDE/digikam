@@ -139,7 +139,8 @@ CharcoalTool::CharcoalTool(QObject* parent)
     d->gboxSettings->plainPage()->setLayout(mainLayout);
 
     // -------------------------------------------------------------
-
+    
+    setPreviewModeMask(PreviewToolBar::NoToggleOnMouseOver);
     setToolSettings(d->gboxSettings);
     setToolView(d->previewWidget);
     init();

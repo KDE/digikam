@@ -49,6 +49,7 @@
 // Local includes
 
 #include "imageiface.h"
+#include "previewtoolbar.h"
 
 namespace Digikam
 {
@@ -61,7 +62,7 @@ public:
     ImageRegionWidgetPriv()
     {
         iface        = 0;
-        separateView = ImageRegionWidget::SeparateViewVertical;
+        separateView = PreviewToolBar::PreviewBothImagesVertCont;
     }
 
     int         separateView;
@@ -142,7 +143,7 @@ void ImageRegionWidget::resetPreview()
     d->image.reset();
 }
 
-void ImageRegionWidget::paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh)
+void ImageRegionWidget::paintPreview(QPixmap* pix, int sx, int sy, int sw, int sh)
 {
     DImg img     = d->image.smoothScaleSection(sx, sy, sw, sh, tileSize(), tileSize());
     QPixmap pix2 = d->iface->convertToPixmap(img);
@@ -162,7 +163,7 @@ void ImageRegionWidget::slotZoomFactorChanged()
     emit signalContentsMovedEvent(true);
 }
 
-void ImageRegionWidget::slotSeparateViewToggled(int mode)
+void ImageRegionWidget::slotPreviewModeChanged(int mode)
 {
     d->separateView = mode;
     updateContentsSize();
@@ -175,15 +176,15 @@ QRect ImageRegionWidget::getImageRegion()
 
     switch (d->separateView)
     {
-        case SeparateViewVertical:
-        case SeparateViewHorizontal:
-        case SeparateViewNone:
+        case PreviewToolBar::PreviewBothImagesVert:
+        case PreviewToolBar::PreviewBothImagesHorz:
+        case PreviewToolBar::PreviewTargetImage:
             region = QRect(contentsX(), contentsY(), visibleWidth(), visibleHeight());
             break;
-        case SeparateViewDuplicateVert:
+        case PreviewToolBar::PreviewBothImagesVertCont:
             region = QRect(contentsX(), contentsY(), visibleWidth()/2, visibleHeight());
             break;
-        case SeparateViewDuplicateHorz:
+        case PreviewToolBar::PreviewBothImagesHorzCont:
             region = QRect(contentsX(), contentsY(), visibleWidth(), visibleHeight()/2);
             break;
     }
@@ -208,8 +209,8 @@ void ImageRegionWidget::viewportPaintExtraData()
 
         switch (d->separateView)
         {
-            case SeparateViewVertical:
-            case SeparateViewDuplicateVert:
+            case PreviewToolBar::PreviewBothImagesVert:
+            case PreviewToolBar::PreviewBothImagesVertCont:
             {
                 p.setPen(QPen(Qt::white, 2, Qt::SolidLine));
                 p.drawLine(rt.topLeft().x(),    rt.topLeft().y(),
@@ -233,7 +234,7 @@ void ImageRegionWidget::viewportPaintExtraData()
                 text = i18n("Original");
                 fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text);
 
-                if (d->separateView == SeparateViewVertical)
+                if (d->separateView == PreviewToolBar::PreviewBothImagesVertCont)
                     ro.translate(-ro.width(), 0);
 
                 textRect.setTopLeft(QPoint(ro.topLeft().x()+20, ro.topLeft().y()+20));
@@ -243,8 +244,8 @@ void ImageRegionWidget::viewportPaintExtraData()
                 p.drawText(textRect, Qt::AlignCenter, text);
                 break;
             }
-            case SeparateViewHorizontal:
-            case SeparateViewDuplicateHorz:
+            case PreviewToolBar::PreviewBothImagesHorz:
+            case PreviewToolBar::PreviewBothImagesHorzCont:
             {
                 p.setPen(QPen(Qt::white, 2, Qt::SolidLine));
                 p.drawLine(rt.topLeft().x()+1,  rt.topLeft().y(),
@@ -268,7 +269,7 @@ void ImageRegionWidget::viewportPaintExtraData()
                 text = i18n("Original");
                 fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text);
 
-                if (d->separateView == SeparateViewHorizontal)
+                if (d->separateView == PreviewToolBar::PreviewBothImagesHorzCont)
                     ro.translate(0, -ro.height());
 
                 textRect.setTopLeft(QPoint(ro.topLeft().x()+20, ro.topLeft().y()+20));
@@ -354,7 +355,7 @@ void ImageRegionWidget::restorePixmapRegion()
     viewport()->repaint();
 }
 
-void ImageRegionWidget::updatePreviewImage(DImg *img)
+void ImageRegionWidget::updatePreviewImage(DImg* img)
 {
     DImg image = img->copy();
     QRect r    = getLocalImageRegionToRender();
@@ -391,22 +392,22 @@ QRect ImageRegionWidget::getLocalImageRegionToRender()
 {
     QRect region;
 
-    if (d->separateView == SeparateViewVertical)
+    if (d->separateView == PreviewToolBar::PreviewBothImagesVertCont)
     {
         region = QRect((int)ceilf(contentsX()+visibleWidth()/2.0), contentsY(),
                        (int)ceilf(visibleWidth()/2.0),             visibleHeight());
     }
-    else if (d->separateView == SeparateViewHorizontal)
+    else if (d->separateView == PreviewToolBar::PreviewBothImagesHorzCont)
     {
         region = QRect(contentsX(),    (int)ceilf(contentsY()+visibleHeight()/2.0),
                        visibleWidth(), (int)ceilf(visibleHeight()/2.0));
     }
-    else if (d->separateView == SeparateViewDuplicateVert)
+    else if (d->separateView == PreviewToolBar::PreviewBothImagesVert)
     {
         region = QRect(contentsX(),                    contentsY(),
                        (int)ceilf(visibleWidth()/2.0), visibleHeight());
     }
-    else if (d->separateView == SeparateViewDuplicateHorz)
+    else if (d->separateView == PreviewToolBar::PreviewBothImagesHorz)
     {
         region = QRect(contentsX(),    contentsY(),
                        visibleWidth(), (int)ceilf(visibleHeight()/2.0));
@@ -424,9 +425,9 @@ QRect ImageRegionWidget::getLocalTargetImageRegion()
 {
     QRect region = getLocalImageRegionToRender();
 
-    if (d->separateView == SeparateViewDuplicateVert)
+    if (d->separateView == PreviewToolBar::PreviewBothImagesVert)
         region.translate(region.width(), 0);
-    else if (d->separateView == SeparateViewDuplicateHorz)
+    else if (d->separateView == PreviewToolBar::PreviewBothImagesHorz)
         region.translate(0, region.height());
 
     return region;
@@ -436,29 +437,31 @@ void ImageRegionWidget::setContentsSize()
 {
     switch (d->separateView)
     {
-        case SeparateViewVertical:
-        case SeparateViewHorizontal:
-        case SeparateViewNone:
+        case PreviewToolBar::PreviewBothImagesVertCont:
+        case PreviewToolBar::PreviewBothImagesHorzCont:
+        case PreviewToolBar::PreviewTargetImage:
         {
             PreviewWidget::setContentsSize();
             break;
         }
-        case SeparateViewDuplicateVert:
+        case PreviewToolBar::PreviewBothImagesVert:
         {
             resizeContents(zoomWidth()+visibleWidth()/2, zoomHeight());
             break;
         }
-        case SeparateViewDuplicateHorz:
+        case PreviewToolBar::PreviewBothImagesHorz:
         {
             resizeContents(zoomWidth(), zoomHeight()+visibleHeight()/2);
             break;
         }
         default:
+        {
             kWarning() << "Unknown separation view specified";
+        }
     }
 }
 
-void ImageRegionWidget::contentsWheelEvent(QWheelEvent *e)
+void ImageRegionWidget::contentsWheelEvent(QWheelEvent* e)
 {
     e->accept();
 

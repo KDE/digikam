@@ -423,7 +423,7 @@ void AdjustLevelsTool::slotPickerColorButtonActived()
 {
     // Save previous rendering mode and toggle to original image.
     d->currentPreviewMode = d->previewWidget->previewMode();
-    d->previewWidget->setPreviewMode(PreviewToolBar::PreviewOriginalImage);
+    d->previewWidget->slotPreviewModeChanged(PreviewToolBar::PreviewOriginalImage);
 }
 
 void AdjustLevelsTool::slotSpotColorChanged(const DColor& color)
@@ -456,7 +456,7 @@ void AdjustLevelsTool::slotSpotColorChanged(const DColor& color)
     slotChannelChanged();
 
     // restore previous rendering mode.
-    d->previewWidget->setPreviewMode(d->currentPreviewMode);
+    d->previewWidget->slotPreviewModeChanged(d->currentPreviewMode);
 
     slotEffect();
 }

@@ -445,10 +445,11 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
     grid->setMargin(d->gboxSettings->spacingHint());
     grid->setSpacing(d->gboxSettings->spacingHint());
 
-    setToolSettings(d->gboxSettings);
-
     d->previewWidget = new ImagePanelWidget(470, 350, "localcontrast Tool");
+
+    setToolSettings(d->gboxSettings);
     setToolView(d->previewWidget);
+    setPreviewModeMask(PreviewToolBar::NoToggleOnMouseOver);    
 
     init();
 }

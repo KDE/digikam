@@ -96,13 +96,13 @@ NoiseReductionTool::NoiseReductionTool(QObject* parent)
                                 EditorToolSettings::SaveAs|
                                 EditorToolSettings::Try);
 
-    d->nrSettings = new NoiseReductionSettings(d->gboxSettings->plainPage());
-
-    setToolSettings(d->gboxSettings);
-
+    d->nrSettings    = new NoiseReductionSettings(d->gboxSettings->plainPage());
     d->previewWidget = new ImagePanelWidget(470, 350, "noisereduction Tool");
+    
+    setToolSettings(d->gboxSettings);
     setToolView(d->previewWidget);
-
+    setPreviewModeMask(PreviewToolBar::NoToggleOnMouseOver);
+    
     init();
 }
 

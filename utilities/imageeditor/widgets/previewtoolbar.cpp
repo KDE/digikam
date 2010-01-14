@@ -157,7 +157,7 @@ PreviewToolBar::~PreviewToolBar()
     delete d;
 }
 
-void PreviewToolBar::setPreviewModeMask(PreviewMode mask)
+void PreviewToolBar::setPreviewModeMask(int mask)
 {
     if (mask == NoPreviewMode)
     {
