@@ -416,7 +416,7 @@ void BlurFXTool::putPreviewData()
         case BlurFX::RadialBlur:
         case BlurFX::FocusBlur:
         {
-            QRect pRect    = d->previewWidget->getOriginalImageRegionToRender();
+            QRect pRect  = d->previewWidget->getOriginalImageRegionToRender();
             DImg destImg = filter()->getTargetImage().copy(pRect);
             d->previewWidget->setPreviewImage(destImg);
             break;
