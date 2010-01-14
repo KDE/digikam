@@ -63,7 +63,7 @@ public:
                                     PreviewBothImagesVertCont | PreviewTargetImage        |
                                     PreviewToggleOnMouseOver,
                                     
-        NoBothPreviewModes        = PreviewOriginalImage | PreviewTargetImage | PreviewToggleOnMouseOver,                           
+        NoBothPreviewModes        = PreviewOriginalImage | PreviewTargetImage | PreviewToggleOnMouseOver
 };
 
 public:
