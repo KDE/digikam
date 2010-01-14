@@ -507,4 +507,16 @@ void ImageRegionWidget::slotOriginalImageRegionChanged(bool target)
     }
 }
 
+void ImageRegionWidget::exposureSettingsChanged()
+{
+    clearCache();
+    viewport()->update();
+}
+
+void ImageRegionWidget::ICCSettingsChanged()
+{
+    clearCache();
+    viewport()->update();
+}
+
 }  // namespace Digikam

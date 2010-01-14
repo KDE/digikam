@@ -72,6 +72,10 @@ public:
 
     void   setHighLightPoints(const QPolygon& pointsList);
     void   drawSeparateView();
+    
+    void   ICCSettingsChanged();
+    void   exposureSettingsChanged();
+
 
 Q_SIGNALS:
 

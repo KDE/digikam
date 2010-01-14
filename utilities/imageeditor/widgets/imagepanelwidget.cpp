@@ -158,12 +158,12 @@ void ImagePanelWidget::setCenterImageRegionPosition()
 
 void ImagePanelWidget::ICCSettingsChanged()
 {
-    d->imageRegionWidget->viewport()->repaint();
+    d->imageRegionWidget->ICCSettingsChanged();
 }
 
 void ImagePanelWidget::exposureSettingsChanged()
 {
-    // NOTE : not yet managed here by imageRegionWidget.
+    d->imageRegionWidget->exposureSettingsChanged();
 }
 
 }  // namespace Digikam
