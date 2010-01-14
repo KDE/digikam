@@ -25,8 +25,6 @@
 
 // Qt includes
 
-#include <QTimer>
-#include <QPixmap>
 #include <QVBoxLayout>
 
 // KDE includes
@@ -73,10 +71,6 @@ ImagePanelWidget::ImagePanelWidget(uint w, uint h, const QString& settingsSectio
 
     // -------------------------------------------------------------
 
-    QTimer::singleShot(0, this, SLOT(slotInitGui()));
-
-    // -------------------------------------------------------------
-
     connect(d->imageRegionWidget, SIGNAL(signalResized()),
             this, SIGNAL(signalResized()));
 
@@ -117,13 +111,6 @@ void ImagePanelWidget::writeSettings()
     KConfigGroup group        = config->group(d->settingsSection);
     group.writeEntry("Separate View", d->separateView->checkedId());
     config->sync();*/
-}
-
-void ImagePanelWidget::slotInitGui()
-{
-    readSettings();
-    setCenterImageRegionPosition();
-    d->imageRegionWidget->slotOriginalImageRegionChanged(true);
 }
 
 void ImagePanelWidget::setHighLightPoints(const QPolygon& pt)

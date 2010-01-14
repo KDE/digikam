@@ -99,12 +99,20 @@ ImageRegionWidget::ImageRegionWidget(int w, int h, QWidget* parent)
 
     connect(this, SIGNAL(signalContentsMovedEvent(bool)),
             this, SLOT(slotOriginalImageRegionChanged(bool)));
+            
+    QTimer::singleShot(0, this, SLOT(slotInitGui()));            
 }
 
 ImageRegionWidget::~ImageRegionWidget()
 {
     if (d->iface) delete d->iface;
     delete d;
+}
+
+void ImageRegionWidget::slotInitGui()
+{
+    setCenterImageRegionPosition();
+    slotOriginalImageRegionChanged(true);
 }
 
 void ImageRegionWidget::resizeEvent(QResizeEvent* e)

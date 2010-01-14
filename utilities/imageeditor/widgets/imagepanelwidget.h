@@ -48,15 +48,6 @@ class DIGIKAM_EXPORT ImagePanelWidget : public QWidget
 
 public:
 
-    enum SeparateViewOptions
-    {
-        SeparateViewNormal=0,
-        SeparateViewDuplicate,
-        SeparateViewAll
-    };
-
-public:
-
     ImagePanelWidget(uint w, uint h, const QString& settingsSection, QWidget *parent=0);
     ~ImagePanelWidget();
 
@@ -79,10 +70,6 @@ Q_SIGNALS:
 
     void signalOriginalClipFocusChanged();
     void signalResized();
-
-private Q_SLOTS:
-
-    void slotInitGui();
 
 private:
 

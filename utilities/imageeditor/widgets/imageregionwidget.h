@@ -89,6 +89,7 @@ public Q_SLOTS:
 
 private Q_SLOTS:
 
+    void slotInitGui();
     void slotZoomFactorChanged();
     void slotPanIconSelectionMoved(const QRect& rect, bool targetDone);
     void slotSelectionTakeFocus();
