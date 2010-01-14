@@ -65,6 +65,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 056 ==> 222490 : digiKam: fails to build with gcc-4.5.
 057 ==> 219776 : Crash after AutoContrast in Image Editor.
 058 ==> 222593 : Exif Focus Distance and Focus Position.
-059 ==> 
+059 ==> 221986 : Many panels lack the 'mouse over' preview mode.
+060 ==> 218184 : Preview and image navigation out of sync when opening the sharpen dialog in the editor.
+061 ==> 219745 : Zoom is ignored in the tools on 1. try.
 
 
