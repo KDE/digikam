@@ -26,16 +26,16 @@
 
 // Qt includes
 
-#include <QtGui/QPolygon>
 #include <QtCore/QRect>
+#include <QtGui/QPolygon>
 #include <QtGui/QPixmap>
 #include <QtGui/QResizeEvent>
 #include <QtGui/QWheelEvent>
 
 // Local includes
 
-#include "previewwidget.h"
 #include "dimg.h"
+#include "previewwidget.h"
 #include "digikam_export.h"
 
 namespace Digikam

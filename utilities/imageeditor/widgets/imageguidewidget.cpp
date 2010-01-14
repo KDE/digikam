@@ -28,17 +28,11 @@
 #include <QRegion>
 #include <QPainter>
 #include <QPen>
-#include <QPixmap>
 #include <QTimer>
 #include <QRect>
 #include <QBrush>
 #include <QFont>
 #include <QFontMetrics>
-#include <QTimerEvent>
-#include <QPaintEvent>
-#include <QResizeEvent>
-#include <QMouseEvent>
-#include <QEvent>
 
 // KDE includes
 

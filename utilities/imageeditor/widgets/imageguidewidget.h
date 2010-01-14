@@ -27,21 +27,19 @@
 // Qt includes
 
 #include <QtGui/QWidget>
-#include <QtCore/QPoint>
 #include <QtGui/QColor>
 #include <QtGui/QPixmap>
 #include <QtGui/QResizeEvent>
-#include <QtCore/QEvent>
 #include <QtGui/QMouseEvent>
-#include <QtCore/QTimerEvent>
 #include <QtGui/QPaintEvent>
+#include <QtCore/QPoint>
+#include <QtCore/QEvent>
+#include <QtCore/QTimerEvent>
 
 // Local includes
 
 #include "dcolor.h"
 #include "digikam_export.h"
-
-class QPixmap;
 
 namespace Digikam
 {
