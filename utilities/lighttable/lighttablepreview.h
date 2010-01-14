@@ -6,7 +6,7 @@
  * Date        : 2006-21-12
  * Description : digiKam light table preview item.
  *
- * Copyright (C) 2006-2008 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -76,7 +76,7 @@ public:
     void setSelected(bool sel);
     bool isSelected();
 
-    void setDragAndDropEnabled(bool b); 
+    void setDragAndDropEnabled(bool b);
     void setDragAndDropMessage();
 
 Q_SIGNALS:
@@ -101,9 +101,6 @@ private Q_SLOTS:
     void slotRemoveTag(int tagID);
     void slotAssignRating(int rating);
     void slotThemeChanged();
-    void slotCornerButtonPressed();
-    void slotPanIconSelectionMoved(const QRect&, bool);
-    void slotPanIconHiden();
 
 private:
 
@@ -111,8 +108,9 @@ private:
     int  previewHeight();
     bool previewIsNull();
     void resetPreview();
-    void zoomFactorChanged(double zoom);
     void updateZoomAndSize(bool alwaysFitToWindow);
+    QImage previewToQImage() const;
+
     inline void paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh);
 
     void contentsDragEnterEvent(QDragEnterEvent*);

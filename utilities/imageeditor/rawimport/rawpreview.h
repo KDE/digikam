@@ -6,7 +6,7 @@
  * Date        : 2008-08-04
  * Description : RAW preview widget.
  *
- * Copyright (C) 2008 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2010 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -64,6 +64,9 @@ public:
     void setDecodingSettings(const DRawDecoding& settings);
     void setPostProcessedImage(const DImg& image);
 
+    void ICCSettingsChanged();
+    void exposureSettingsChanged();
+
     void cancelLoading();
 
 Q_SIGNALS:
@@ -83,20 +86,18 @@ private Q_SLOTS:
     void slotLoadingProgress(const LoadingDescription& description, float progress);
     void slotImageLoaded(const LoadingDescription& description, const DImg& image);
     void slotThemeChanged();
-    void slotCornerButtonPressed();
-    void slotPanIconSelectionMoved(const QRect&, bool);
-    void slotPanIconHiden();
 
 private:
 
-    void setdemosaicedImg(const DImg& image);
-    void postProcessing(const DRawDecoding& settings);
-    int  previewWidth();
-    int  previewHeight();
-    bool previewIsNull();
-    void resetPreview();
-    void zoomFactorChanged(double zoom);
-    void updateZoomAndSize(bool alwaysFitToWindow);
+    void   setdemosaicedImg(const DImg& image);
+    void   postProcessing(const DRawDecoding& settings);
+    int    previewWidth();
+    int    previewHeight();
+    bool   previewIsNull();
+    void   resetPreview();
+    void   updateZoomAndSize(bool alwaysFitToWindow);
+    QImage previewToQImage() const;
+
     inline void paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh);
 
 private:

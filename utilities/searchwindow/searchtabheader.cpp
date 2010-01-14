@@ -408,7 +408,7 @@ void SearchTabHeader::newAdvancedSearch()
 void SearchTabHeader::keywordChanged()
 {
     QString keywords = d->keywordEdit->text();
-    if (d->oldKeywordContent == keywords)
+    if (d->oldKeywordContent == keywords || keywords.trimmed().isEmpty())
         return;
     else
         d->oldKeywordContent = keywords;

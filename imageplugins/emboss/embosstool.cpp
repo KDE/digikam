@@ -51,7 +51,7 @@
 #include "editortoolsettings.h"
 #include "emboss.h"
 #include "imageiface.h"
-#include "imagepanelwidget.h"
+#include "imageregionwidget.h"
 #include "version.h"
 
 using namespace KDcrawIface;
@@ -76,7 +76,7 @@ public:
     const QString       configDepthAdjustmentEntry;
 
     RIntNumInput*       depthInput;
-    ImagePanelWidget*   previewWidget;
+    ImageRegionWidget*  previewWidget;
     EditorToolSettings* gboxSettings;
 };
 
@@ -90,10 +90,8 @@ EmbossTool::EmbossTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings = new EditorToolSettings;
-    d->gboxSettings->setTools(EditorToolSettings::PanIcon);
-
-    d->previewWidget = new ImagePanelWidget(470, 350, "emboss Tool", d->gboxSettings->panIconView());
+    d->gboxSettings  = new EditorToolSettings;
+    d->previewWidget = new ImageRegionWidget;
 
     // -------------------------------------------------------------
 
@@ -118,6 +116,7 @@ EmbossTool::EmbossTool(QObject* parent)
 
     setToolSettings(d->gboxSettings);
     setToolView(d->previewWidget);
+    setPreviewModeMask(PreviewToolBar::AllPreviewModes);
     init();
 
     // -------------------------------------------------------------
@@ -141,6 +140,7 @@ EmbossTool::~EmbossTool()
 void EmbossTool::renderingFinished()
 {
     d->depthInput->setEnabled(true);
+    toolView()->setEnabled(true);
 }
 
 void EmbossTool::readSettings()
@@ -159,7 +159,6 @@ void EmbossTool::writeSettings()
     KConfigGroup group        = config->group(d->configGroupName);
 
     group.writeEntry(d->configDepthAdjustmentEntry, d->depthInput->value());
-    d->previewWidget->writeSettings();
     group.sync();
 }
 
@@ -175,7 +174,8 @@ void EmbossTool::slotResetSettings()
 void EmbossTool::prepareEffect()
 {
     d->depthInput->setEnabled(false);
-
+    toolView()->setEnabled(false);
+    
     DImg image = d->previewWidget->getOriginalRegionImage();
     int depth  = d->depthInput->value();
 
@@ -185,7 +185,8 @@ void EmbossTool::prepareEffect()
 void EmbossTool::prepareFinal()
 {
     d->depthInput->setEnabled(false);
-
+    toolView()->setEnabled(false);
+    
     int depth = d->depthInput->value();
 
     ImageIface iface(0, 0);

@@ -53,7 +53,7 @@
 #include "dimg.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
-#include "imagepanelwidget.h"
+#include "imageregionwidget.h"
 #include "infrared.h"
 #include "version.h"
 
@@ -85,7 +85,7 @@ public:
     QCheckBox*          addFilmGrain;
     QSlider*            sensibilitySlider;
     QLCDNumber*         sensibilityLCDValue;
-    ImagePanelWidget*   previewWidget;
+    ImageRegionWidget*  previewWidget;
     EditorToolSettings* gboxSettings;
 };
 
@@ -100,10 +100,8 @@ InfraredTool::InfraredTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings = new EditorToolSettings;
-    d->gboxSettings->setTools(EditorToolSettings::PanIcon);
-
-    d->previewWidget = new ImagePanelWidget(470, 350, "infrared Tool", d->gboxSettings->panIconView());
+    d->gboxSettings  = new EditorToolSettings;
+    d->previewWidget = new ImageRegionWidget;
 
     // -------------------------------------------------------------
 
@@ -138,7 +136,7 @@ InfraredTool::InfraredTool(QObject* parent)
     d->addFilmGrain = new QCheckBox( i18n("Add film grain"));
     d->addFilmGrain->setChecked( true );
     d->addFilmGrain->setWhatsThis( i18n("This option adds infrared film grain to "
-                                       "the image depending on ISO-sensitivity."));
+                                        "the image depending on ISO-sensitivity."));
 
     // -------------------------------------------------------------
 
@@ -156,6 +154,7 @@ InfraredTool::InfraredTool(QObject* parent)
 
     setToolSettings(d->gboxSettings);
     setToolView(d->previewWidget);
+    setPreviewModeMask(PreviewToolBar::AllPreviewModes);    
     init();
 
     // -------------------------------------------------------------
@@ -187,6 +186,7 @@ void InfraredTool::renderingFinished()
 {
     d->sensibilitySlider->setEnabled(true);
     d->addFilmGrain->setEnabled(true);
+    toolView()->setEnabled(true);    
 }
 
 void InfraredTool::readSettings()
@@ -212,7 +212,6 @@ void InfraredTool::writeSettings()
 
     group.writeEntry(d->configSensitivityAdjustmentEntry, d->sensibilitySlider->value());
     group.writeEntry(d->configAddFilmGrainEntry,          d->addFilmGrain->isChecked());
-    d->previewWidget->writeSettings();
     group.sync();
 }
 
@@ -235,6 +234,7 @@ void InfraredTool::prepareEffect()
 {
     d->addFilmGrain->setEnabled(false);
     d->sensibilitySlider->setEnabled(false);
+    toolView()->setEnabled(false);    
 
     DImg image = d->previewWidget->getOriginalRegionImage();
     int  s     = 100 + 100 * d->sensibilitySlider->value();
@@ -247,6 +247,7 @@ void InfraredTool::prepareFinal()
 {
     d->addFilmGrain->setEnabled(false);
     d->sensibilitySlider->setEnabled(false);
+    toolView()->setEnabled(false);    
 
     int  s = 100 + 100 * d->sensibilitySlider->value();
     bool g = d->addFilmGrain->isChecked();

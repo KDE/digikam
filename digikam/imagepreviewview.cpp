@@ -6,8 +6,8 @@
  * Date        : 2006-21-12
  * Description : a embedded view to show the image preview widget.
  *
- * Copyright (C) 2006-2009 Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2006-2010 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,14 +32,12 @@
 #include <QPainter>
 #include <QPixmap>
 #include <QString>
-#include <QToolButton>
 
 // KDE includes
 
 #include <kaction.h>
 #include <kapplication.h>
 #include <kcursor.h>
-#include <kdatetable.h>
 #include <kdialog.h>
 #include <kiconloader.h>
 #include <klocale.h>
@@ -67,7 +65,6 @@
 #include "imageinfo.h"
 #include "loadingdescription.h"
 #include "metadatahub.h"
-#include "paniconwidget.h"
 #include "previewloadthread.h"
 #include "ratingpopupmenu.h"
 #include "tagspopupmenu.h"
@@ -82,9 +79,6 @@ public:
 
     ImagePreviewViewPriv()
     {
-        panIconPopup         = 0;
-        panIconWidget        = 0;
-        cornerButton         = 0;
         previewThread        = 0;
         previewPreloadThread = 0;
         stack                = 0;
@@ -106,12 +100,6 @@ public:
     QString            path;
     QString            nextPath;
     QString            previousPath;
-
-    QToolButton*       cornerButton;
-
-    KPopupFrame*       panIconPopup;
-
-    PanIconWidget*     panIconWidget;
 
     DImg               preview;
 
@@ -138,13 +126,7 @@ ImagePreviewView::ImagePreviewView(QWidget *parent, AlbumWidgetStack *stack)
 
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    d->cornerButton = PanIconWidget::button();
-    setCornerWidget(d->cornerButton);
-
     // ------------------------------------------------------------
-
-    connect(d->cornerButton, SIGNAL(pressed()),
-            this, SLOT(slotCornerButtonPressed()));
 
     connect(this, SIGNAL(signalShowNextImage()),
             this, SIGNAL(signalNextItem()));
@@ -449,75 +431,9 @@ void ImagePreviewView::slotThemeChanged()
     setPalette(plt);
 }
 
-void ImagePreviewView::slotCornerButtonPressed()
-{
-    if (d->panIconPopup)
-    {
-        d->panIconPopup->hide();
-        d->panIconPopup->deleteLater();
-        d->panIconPopup = 0;
-    }
-
-    d->panIconPopup    = new KPopupFrame(this);
-    PanIconWidget *pan = new PanIconWidget(d->panIconPopup);
-    pan->setImage(180, 120, getImage());
-    d->panIconPopup->setMainWidget(pan);
-
-    QRect r((int)(contentsX()    / zoomFactor()), (int)(contentsY()     / zoomFactor()),
-            (int)(visibleWidth() / zoomFactor()), (int)(visibleHeight() / zoomFactor()));
-    pan->setRegionSelection(r);
-    pan->setMouseFocus();
-
-    connect(pan, SIGNAL(signalSelectionMoved(const QRect&, bool)),
-            this, SLOT(slotPanIconSelectionMoved(const QRect&, bool)));
-
-    connect(pan, SIGNAL(signalHidden()),
-            this, SLOT(slotPanIconHiden()));
-
-    QPoint g = mapToGlobal(viewport()->pos());
-    g.setX(g.x()+ viewport()->size().width());
-    g.setY(g.y()+ viewport()->size().height());
-    d->panIconPopup->popup(QPoint(g.x() - d->panIconPopup->width(),
-                                  g.y() - d->panIconPopup->height()));
-
-    pan->setCursorToLocalRegionSelectionCenter();
-}
-
-void ImagePreviewView::slotPanIconHiden()
-{
-    d->cornerButton->blockSignals(true);
-    d->cornerButton->animateClick();
-    d->cornerButton->blockSignals(false);
-}
-
 void ImagePreviewView::slotDeleteItem()
 {
     emit signalDeleteItem();
-}
-
-void ImagePreviewView::slotPanIconSelectionMoved(const QRect& r, bool b)
-{
-    setContentsPos((int)(r.x()*zoomFactor()), (int)(r.y()*zoomFactor()));
-
-    if (b)
-    {
-        d->panIconPopup->hide();
-        d->panIconPopup->deleteLater();
-        d->panIconPopup = 0;
-        slotPanIconHiden();
-    }
-}
-
-void ImagePreviewView::zoomFactorChanged(double zoom)
-{
-    updateScrollBars();
-
-    if (horizontalScrollBar()->isVisible() || verticalScrollBar()->isVisible())
-        d->cornerButton->show();
-    else
-        d->cornerButton->hide();
-
-    PreviewWidget::zoomFactorChanged(zoom);
 }
 
 void ImagePreviewView::resizeEvent(QResizeEvent* e)
@@ -525,9 +441,6 @@ void ImagePreviewView::resizeEvent(QResizeEvent* e)
     if (!e) return;
 
     Q3ScrollView::resizeEvent(e);
-
-    if (d->imageInfo.isNull())
-        d->cornerButton->hide();
 
     updateZoomAndSize(false);
 }
@@ -589,6 +502,11 @@ void ImagePreviewView::paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh
 void ImagePreviewView::slotGotoTag(int tagID)
 {
     emit signalGotoTagAndItem(tagID);
+}
+
+QImage ImagePreviewView::previewToQImage() const
+{
+    return d->preview.copyQImage();
 }
 
 }  // namespace Digikam

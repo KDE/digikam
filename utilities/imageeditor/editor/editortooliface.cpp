@@ -6,7 +6,7 @@
  * Date        : 2008-08-20
  * Description : Image editor interface used by editor tools.
  *
- * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -36,6 +36,8 @@
 #include "editortoolsettings.h"
 #include "editorstackview.h"
 #include "editorwindow.h"
+#include "imageguidewidget.h"
+#include "imageregionwidget.h"
 
 namespace Digikam
 {
@@ -47,8 +49,8 @@ public:
 
     EditorToolIfacePriv()
     {
-        editor  = 0;
-        tool    = 0;
+        editor = 0;
+        tool   = 0;
     }
 
     EditorTool*   tool;
@@ -62,7 +64,7 @@ EditorToolIface* EditorToolIface::editorToolIface()
     return m_iface;
 }
 
-EditorToolIface::EditorToolIface(EditorWindow *editor)
+EditorToolIface::EditorToolIface(EditorWindow* editor)
                : QObject(), d(new EditorToolIfacePriv)
 {
     d->editor = editor;
@@ -95,6 +97,28 @@ void EditorToolIface::loadTool(EditorTool* tool)
     // If editor tool has zoomable preview, switch on zoom actions.
     if (d->editor->editorStackView()->previewWidget())
         d->editor->toggleZoomActions(true);
+
+    ImageGuideWidget* view = dynamic_cast<ImageGuideWidget*>(d->tool->toolView());
+    if (view)
+    {
+        connect(d->editor, SIGNAL(signalPreviewModeChanged(int)),
+                view, SLOT(slotPreviewModeChanged(int)));
+                
+        view->slotPreviewModeChanged(d->editor->previewMode());
+    }
+
+    ImageRegionWidget* view2 = dynamic_cast<ImageRegionWidget*>(d->tool->toolView());
+    if (view2)
+    {
+        connect(d->editor, SIGNAL(signalPreviewModeChanged(int)),
+                view2, SLOT(slotPreviewModeChanged(int)));
+                
+        view2->slotPreviewModeChanged(d->editor->previewMode());
+    }
+
+    updateExposureSettings();
+    updateICCSettings();
+    setToolInfoMessage(QString());    
 }
 
 void EditorToolIface::unLoadTool()
@@ -105,11 +129,20 @@ void EditorToolIface::unLoadTool()
     d->editor->editorStackView()->setToolView(0);
     d->editor->rightSideBar()->deleteTab(d->tool->toolSettings());
     d->editor->toggleActions(true);
+    d->editor->setPreviewModeMask(PreviewToolBar::NoPreviewMode);
     // To restore canvas zoom level in zoom combobox.
     if (!d->editor->editorStackView()->canvas()->fitToWindow())
         d->editor->editorStackView()->setZoomFactor(d->editor->editorStackView()->canvas()->zoomFactor());
     delete d->tool;
     d->tool = 0;
+    
+    // Reset info label in status bar with canvas selection info.
+    d->editor->slotSelected(!d->editor->m_canvas->getSelectedArea().isNull());
+}
+
+void EditorToolIface::setToolInfoMessage(const QString& txt)
+{
+    d->editor->setToolInfoMessage(txt);
 }
 
 void EditorToolIface::setToolStartProgress(const QString& toolName)
@@ -146,6 +179,27 @@ void EditorToolIface::slotCloseTool()
 void EditorToolIface::setupICC()
 {
     d->editor->setupICC();
+}
+
+void EditorToolIface::updateICCSettings()
+{
+    ICCSettingsContainer* cmSettings = d->editor->cmSettings();
+    d->editor->editorStackView()->canvas()->setICCSettings(cmSettings);
+    EditorTool *tool = dynamic_cast<EditorTool*>(d->tool);
+    if (tool) tool->ICCSettingsChanged();
+}
+
+void EditorToolIface::updateExposureSettings()
+{
+    ExposureSettingsContainer* expoSettings = d->editor->exposureSettings();
+    d->editor->editorStackView()->canvas()->setExposureSettings(expoSettings);
+    EditorTool *tool = dynamic_cast<EditorTool*>(d->tool);
+    if (tool) tool->exposureSettingsChanged();
+}
+
+void EditorToolIface::setPreviewModeMask(int mask)
+{
+    d->editor->setPreviewModeMask(mask);
 }
 
 }  // namespace Digikam

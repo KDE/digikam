@@ -177,7 +177,7 @@ public:
         languageCodeMap.insert( "kl-GL", i18n("Greenlandic (Greenland)") );
         languageCodeMap.insert( "km-KH", i18n("Khmer (Cambodia)") );
         languageCodeMap.insert( "kn-IN", i18n("Kannada (India)") );
-        languageCodeMap.insert( "ko-KR", i18n("Korean (Korea)") );
+        languageCodeMap.insert( "ko-KR", i18n("Korean (South Korea)") );
         languageCodeMap.insert( "ky-KG", i18n("Kyrgyz (Kyrgyzstan)") );
         languageCodeMap.insert( "lb-LU", i18n("Luxembourgish (Luxembourg)") );
         languageCodeMap.insert( "lo-LA", i18n("Lao (Lao PDR)") );

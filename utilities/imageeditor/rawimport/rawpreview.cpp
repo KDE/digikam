@@ -6,7 +6,7 @@
  * Date        : 2008-08-04
  * Description : RAW postProcessedImg widget.
  *
- * Copyright (C) 2008 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2010 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -27,24 +27,27 @@
 
 #include <QString>
 #include <QPainter>
-#include <QToolButton>
 #include <QPixmap>
 #include <QFileInfo>
 #include <QResizeEvent>
 
 // KDE includes
 
+#include <kdebug.h>
 #include <kcursor.h>
-#include <kdatetable.h>
 #include <kiconloader.h>
 #include <klocale.h>
 
 // Local includes
 
-#include "paniconwidget.h"
 #include "managedloadsavethread.h"
 #include "loadingdescription.h"
+#include "exposurecontainer.h"
+#include "iccmanager.h"
+#include "iccsettingscontainer.h"
+#include "icctransform.h"
 #include "themeengine.h"
+#include "dimginterface.h"
 
 namespace Digikam
 {
@@ -55,9 +58,6 @@ public:
 
     RawPreviewPriv()
     {
-        panIconPopup         = 0;
-        panIconWidget        = 0;
-        cornerButton         = 0;
         thread               = 0;
         url                  = 0;
         currentFitWindowZoom = 0;
@@ -65,12 +65,8 @@ public:
 
     double                 currentFitWindowZoom;
 
-    QToolButton*           cornerButton;
-
-    KPopupFrame*           panIconPopup;
     KUrl                   url;
 
-    PanIconWidget*         panIconWidget;
     DImg                   demosaicedImg;
     DImg                   postProcessedImg;
     DRawDecoding           settings;
@@ -87,9 +83,6 @@ RawPreview::RawPreview(const KUrl& url, QWidget *parent)
     setMinimumWidth(500);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    d->cornerButton = PanIconWidget::button();
-    setCornerWidget(d->cornerButton);
-
     // ------------------------------------------------------------
 
     connect(d->thread, SIGNAL(signalImageLoaded(const LoadingDescription&, const DImg&)),
@@ -97,9 +90,6 @@ RawPreview::RawPreview(const KUrl& url, QWidget *parent)
 
     connect(d->thread, SIGNAL(signalLoadingProgress(const LoadingDescription&, float)),
             this, SLOT(slotLoadingProgress(const LoadingDescription&, float)));
-
-    connect(d->cornerButton, SIGNAL(pressed()),
-            this, SLOT(slotCornerButtonPressed()));
 
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
@@ -146,6 +136,18 @@ void RawPreview::setDecodingSettings(const DRawDecoding& settings)
     d->loadingDesc = LoadingDescription(d->url.toLocalFile(), demosaisedSettings);
     d->thread->load(d->loadingDesc, ManagedLoadSaveThread::LoadingPolicyFirstRemovePrevious);
     emit signalLoadingStarted();
+}
+
+void RawPreview::exposureSettingsChanged()
+{
+    clearCache();
+    viewport()->update();
+}
+
+void RawPreview::ICCSettingsChanged()
+{
+    clearCache();
+    viewport()->update();
 }
 
 void RawPreview::cancelLoading()
@@ -196,80 +198,11 @@ void RawPreview::slotThemeChanged()
     setPalette(plt);
 }
 
-void RawPreview::slotCornerButtonPressed()
-{
-    if (d->panIconPopup)
-    {
-        d->panIconPopup->hide();
-        d->panIconPopup->deleteLater();
-        d->panIconPopup = 0;
-    }
-
-    d->panIconPopup    = new KPopupFrame(this);
-    PanIconWidget *pan = new PanIconWidget(d->panIconPopup);
-    pan->setImage(180, 120, postProcessedImage());
-    d->panIconPopup->setMainWidget(pan);
-
-    QRect r((int)(contentsX()    / zoomFactor()), (int)(contentsY()     / zoomFactor()),
-            (int)(visibleWidth() / zoomFactor()), (int)(visibleHeight() / zoomFactor()));
-    pan->setRegionSelection(r);
-    pan->setMouseFocus();
-
-    connect(pan, SIGNAL(signalSelectionMoved(const QRect&, bool)),
-            this, SLOT(slotPanIconSelectionMoved(const QRect&, bool)));
-
-    connect(pan, SIGNAL(signalHidden()),
-            this, SLOT(slotPanIconHiden()));
-
-    QPoint g = mapToGlobal(viewport()->pos());
-    g.setX(g.x()+ viewport()->size().width());
-    g.setY(g.y()+ viewport()->size().height());
-    d->panIconPopup->popup(QPoint(g.x() - d->panIconPopup->width(),
-                                  g.y() - d->panIconPopup->height()));
-
-    pan->setCursorToLocalRegionSelectionCenter();
-}
-
-void RawPreview::slotPanIconHiden()
-{
-    d->cornerButton->blockSignals(true);
-    d->cornerButton->animateClick();
-    d->cornerButton->blockSignals(false);
-}
-
-void RawPreview::slotPanIconSelectionMoved(const QRect& r, bool b)
-{
-    setContentsPos((int)(r.x()*zoomFactor()), (int)(r.y()*zoomFactor()));
-
-    if (b)
-    {
-        d->panIconPopup->hide();
-        d->panIconPopup->deleteLater();
-        d->panIconPopup = 0;
-        slotPanIconHiden();
-    }
-}
-
-void RawPreview::zoomFactorChanged(double zoom)
-{
-    updateScrollBars();
-
-    if (horizontalScrollBar()->isVisible() || verticalScrollBar()->isVisible())
-        d->cornerButton->show();
-    else
-        d->cornerButton->hide();
-
-    PreviewWidget::zoomFactorChanged(zoom);
-}
-
 void RawPreview::resizeEvent(QResizeEvent* e)
 {
     if (!e) return;
 
-    Q3ScrollView::resizeEvent(e);
-
-    if (!d->loadingDesc.filePath.isEmpty())
-        d->cornerButton->hide();
+    PreviewWidget::resizeEvent(e);
 
     updateZoomAndSize(false);
 }
@@ -319,11 +252,45 @@ void RawPreview::resetPreview()
 
 void RawPreview::paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh)
 {
-    DImg img     = d->postProcessedImg.smoothScaleSection(sx, sy, sw, sh, tileSize(), tileSize());
-    QPixmap pix2 = img.convertToPixmap();
+    DImg img = d->postProcessedImg.smoothScaleSection(sx, sy, sw, sh, tileSize(), tileSize());
+
+    QPixmap pixImage;
+
+    ICCSettingsContainer *iccSettings = DImgInterface::defaultInterface()->getICCSettings();
+
+    if (iccSettings && iccSettings->enableCM && iccSettings->useManagedView)
+    {
+        IccManager manager(img);
+        IccTransform monitorICCtrans = manager.displayTransform(this);
+        pixImage                     = img.convertToPixmap(monitorICCtrans);
+    }
+    else
+    {
+        pixImage = img.convertToPixmap();
+    }
+
     QPainter p(pix);
-    p.drawPixmap(0, 0, pix2);
+    p.drawPixmap(0, 0, pixImage);
+
+    // Show the Over/Under exposure pixels indicators
+
+    ExposureSettingsContainer* expoSettings = DImgInterface::defaultInterface()->getExposureSettings();
+    if (expoSettings)
+    {
+        if (expoSettings->underExposureIndicator || expoSettings->overExposureIndicator)
+        {
+            QImage pureColorMask = img.pureColorMask(expoSettings);
+            QPixmap pixMask      = QPixmap::fromImage(pureColorMask);
+            p.drawPixmap(0, 0, pixMask);
+        }
+    }
+
     p.end();
+}
+
+QImage RawPreview::previewToQImage() const
+{
+    return d->postProcessedImg.copyQImage();
 }
 
 }  // namespace Digikam

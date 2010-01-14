@@ -2,6 +2,7 @@
 Name=ImagePlugin_InsertText
 Name[bg]=Приставка за снимки - Добавяне на текст
 Name[ca]=ImagePlugin_InsertText
+Name[ca@valencia]=ImagePlugin_InsertText
 Name[cs]=ImagePlugin_InsertText
 Name[da]=ImagePlugin_InsertText
 Name[de]=Bildmodul_TextEinfügen
@@ -44,6 +45,7 @@ Encoding=UTF-8
 Comment=Insert text to image plugin for digiKam
 Comment[bg]=Приставка на digiKam за добавяне на текст към снимки
 Comment[ca]=Connector pel DigiKam per inserir text en una imatge
+Comment[ca@valencia]=Connector pel DigiKam per inserir text en una imatge
 Comment[cs]=Modul digiKamu pro vkládání textu do obrázku
 Comment[da]=digiKam-plugin til indsættelse af tekst i billeder
 Comment[de]=digiKam-Modul zum Einfügen von Text

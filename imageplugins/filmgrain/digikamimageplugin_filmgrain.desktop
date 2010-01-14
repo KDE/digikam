@@ -2,6 +2,7 @@
 Name=ImagePlugin_FilmGrain
 Name[bg]=Приставка за снимки - Филмово зърно
 Name[ca]=ImagePlugin_FilmGrain
+Name[ca@valencia]=ImagePlugin_FilmGrain
 Name[cs]=ImagePlugin_FilmGrain
 Name[da]=ImagePlugin_FilmGrain
 Name[de]=Bildmodul_Filmkörnung
@@ -45,6 +46,7 @@ Encoding=UTF-8
 Comment=Film grain image effect plugin for digiKam
 Comment[bg]=Приставка на digiKam за наподобяване на филмово зърно
 Comment[ca]=Connector pel DigiKam d'efecte d'imatge de gra de pel·lícula
+Comment[ca@valencia]=Connector pel DigiKam d'efecte d'imatge de gra de pel·lícula
 Comment[cs]=Modul speciálních efektů digiKamu pro tvorbu filmového zrna
 Comment[da]=digiKam-plugin til filmkorn-effekt på billeder
 Comment[de]=digiKam-Modul für Filmkörnungseffekte

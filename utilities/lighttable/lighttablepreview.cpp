@@ -6,7 +6,7 @@
  * Date        : 2006-21-12
  * Description : digiKam light table preview item.
  *
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -30,7 +30,6 @@
 #include <QCursor>
 #include <QString>
 #include <QFileInfo>
-#include <QToolButton>
 #include <QPixmap>
 #include <QDragMoveEvent>
 #include <QDropEvent>
@@ -41,7 +40,6 @@
 
 #include <kapplication.h>
 #include <kcursor.h>
-#include <kdatetable.h>
 #include <kdialog.h>
 #include <kiconloader.h>
 #include <klocale.h>
@@ -62,7 +60,6 @@
 #include "dpopupmenu.h"
 #include "loadingdescription.h"
 #include "metadatahub.h"
-#include "paniconwidget.h"
 #include "previewloadthread.h"
 #include "ratingpopupmenu.h"
 #include "tagspopupmenu.h"
@@ -78,9 +75,6 @@ public:
 
     LightTablePreviewPriv()
     {
-        panIconPopup         = 0;
-        panIconWidget        = 0;
-        cornerButton         = 0;
         previewThread        = 0;
         previewPreloadThread = 0;
         hasPrev              = false;
@@ -108,12 +102,6 @@ public:
     QString            nextPath;
     QString            previousPath;
 
-    QToolButton*       cornerButton;
-
-    KPopupFrame*       panIconPopup;
-
-    PanIconWidget*     panIconWidget;
-
     DImg               preview;
 
     ImageInfo          imageInfo;
@@ -128,7 +116,7 @@ LightTablePreview::LightTablePreview(QWidget *parent)
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("LightTable Settings");
     d->keepZoom               = group.readEntry("Zoom fixed",              false);
- 
+
     // get preview size from screen size, but limit from VGA to WQXGA
     d->previewSize = qMax(KApplication::desktop()->height(),
                           KApplication::desktop()->width());
@@ -143,16 +131,10 @@ LightTablePreview::LightTablePreview(QWidget *parent)
     slotThemeChanged();
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    d->cornerButton = PanIconWidget::button();
-    setCornerWidget(d->cornerButton);
-
     setLineWidth(5);
     setSelected(false);
 
     // ------------------------------------------------------------
-
-    connect(d->cornerButton, SIGNAL(pressed()),
-            this, SLOT(slotCornerButtonPressed()));
 
     connect(this, SIGNAL(signalRightButtonClicked()),
             this, SLOT(slotContextMenu()));
@@ -363,7 +345,7 @@ void LightTablePreview::slotContextMenu()
     QAction *fitWindowAction = new QAction(SmallIcon("zoom-fit-best"), i18n("Fit to &Window"), this);
     QAction *slideshowAction = new QAction(SmallIcon("view-presentation"), i18n("Slideshow"), this);
     QAction *editAction      = new QAction(SmallIcon("editimage"), i18n("Edit..."), this);
-    QAction *trashAction     = new QAction(SmallIcon("user-trash"), i18n("Move to Trash"), this);
+    QAction *trashAction     = new QAction(SmallIcon("user-trash"), i18nc("Non-pluralized", "Move to Trash"), this);
 
     // --------------------------------------------------------
 
@@ -457,72 +439,6 @@ void LightTablePreview::slotThemeChanged()
     frameChanged();
 }
 
-void LightTablePreview::slotCornerButtonPressed()
-{
-    if (d->panIconPopup)
-    {
-        d->panIconPopup->hide();
-        delete d->panIconPopup;
-        d->panIconPopup = 0;
-    }
-
-    d->panIconPopup    = new KPopupFrame(this);
-    PanIconWidget *pan = new PanIconWidget(d->panIconPopup);
-    pan->setImage(180, 120, getImage());
-    d->panIconPopup->setMainWidget(pan);
-
-    QRect r((int)(contentsX()    / zoomFactor()), (int)(contentsY()     / zoomFactor()),
-            (int)(visibleWidth() / zoomFactor()), (int)(visibleHeight() / zoomFactor()));
-    pan->setRegionSelection(r);
-    pan->setMouseFocus();
-
-    connect(pan, SIGNAL(signalSelectionMoved(const QRect&, bool)),
-            this, SLOT(slotPanIconSelectionMoved(const QRect&, bool)));
-
-    connect(pan, SIGNAL(signalHidden()),
-            this, SLOT(slotPanIconHiden()));
-
-    QPoint g = mapToGlobal(viewport()->pos());
-    g.setX(g.x()+ viewport()->size().width());
-    g.setY(g.y()+ viewport()->size().height());
-    d->panIconPopup->popup(QPoint(g.x() - d->panIconPopup->width(),
-                                  g.y() - d->panIconPopup->height()));
-
-    pan->setCursorToLocalRegionSelectionCenter();
-}
-
-void LightTablePreview::slotPanIconHiden()
-{
-    d->cornerButton->blockSignals(true);
-    d->cornerButton->animateClick();
-    d->cornerButton->blockSignals(false);
-}
-
-void LightTablePreview::slotPanIconSelectionMoved(const QRect& r, bool b)
-{
-    setContentsPos((int)(r.x()*zoomFactor()), (int)(r.y()*zoomFactor()));
-
-    if (b)
-    {
-        d->panIconPopup->hide();
-        d->panIconPopup->deleteLater();
-        d->panIconPopup = 0;
-        slotPanIconHiden();
-    }
-}
-
-void LightTablePreview::zoomFactorChanged(double zoom)
-{
-    updateScrollBars();
-
-    if (horizontalScrollBar()->isVisible() || verticalScrollBar()->isVisible())
-        d->cornerButton->show();
-    else
-        d->cornerButton->hide();
-
-    PreviewWidget::zoomFactorChanged(zoom);
-}
-
 void LightTablePreview::resizeEvent(QResizeEvent* e)
 {
     if (!e) return;
@@ -531,7 +447,6 @@ void LightTablePreview::resizeEvent(QResizeEvent* e)
 
     if (d->imageInfo.isNull())
     {
-        d->cornerButton->hide();
         setDragAndDropMessage();
     }
 
@@ -701,6 +616,11 @@ void LightTablePreview::drawFrame(QPainter *p)
     }
     else
         qDrawPlainRect(p, frameRect(), ThemeEngine::instance()->baseColor(), lineWidth());
+}
+
+QImage LightTablePreview::previewToQImage() const
+{
+    return d->preview.copyQImage();
 }
 
 }  // namespace Digikam

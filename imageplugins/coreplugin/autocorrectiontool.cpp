@@ -6,7 +6,7 @@
  * Date        : 2005-05-31
  * Description : Auto-Color correction tool.
  *
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -20,7 +20,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "autocorrectiontool.moc"
 
@@ -44,7 +43,7 @@
 #include "editortoolsettings.h"
 #include "histogramwidget.h"
 #include "imageiface.h"
-#include "imagewidget.h"
+#include "imageguidewidget.h"
 #include "whitebalance.h"
 
 using namespace Digikam;
@@ -77,7 +76,7 @@ public:
 
     QListWidget*        correctionTools;
 
-    ImageWidget*        previewWidget;
+    ImageGuideWidget*   previewWidget;
     EditorToolSettings* gboxSettings;
     DImg                thumbnailImage;
 };
@@ -95,11 +94,12 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->previewWidget = new ImageWidget("autocorrection Tool", 0,
-                                      i18n("The auto-color correction tool preview is shown "
-                                           "here. Picking a color on the image will show "
-                                           "the corresponding color level on the histogram."));
+    d->previewWidget = new ImageGuideWidget;
+    d->previewWidget->setToolTip(i18n("The auto-color correction tool preview is shown "
+                                      "here. Picking a color on the image will show "
+                                      "the corresponding color level on the histogram."));
     setToolView(d->previewWidget);
+    setPreviewModeMask(PreviewToolBar::AllPreviewModes);
 
     // -------------------------------------------------------------
 
@@ -184,8 +184,8 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
-            this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
+    connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget(const Digikam::DColor&, const QPoint&)),
+            this, SLOT(slotColorSelectedFromTarget(const Digikam::DColor&)));
 
     connect(d->correctionTools, SIGNAL(itemSelectionChanged()),
             this, SLOT(slotEffect()));
@@ -229,7 +229,6 @@ void AutoCorrectionTool::writeSettings()
     group.writeEntry(d->configHistogramChannelEntry,     d->gboxSettings->histogramBox()->channel());
     group.writeEntry(d->configHistogramScaleEntry,       (int)d->gboxSettings->histogramBox()->scale());
     group.writeEntry(d->configAutoCorrectionFilterEntry, d->correctionTools->currentRow());
-    d->previewWidget->writeSettings();
     config->sync();
 }
 

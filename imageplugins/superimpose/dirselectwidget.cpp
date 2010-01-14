@@ -62,7 +62,7 @@ DirSelectWidget::DirSelectWidget(QWidget* parent, const char* name, QString head
     if ( headerLabel.isNull() )
         header()->hide();
 
-    setAlternateBackground(QColor::QColor());
+    setAlternateBackground(QColor());
 }
 
 DirSelectWidget::DirSelectWidget(KUrl rootUrl, KUrl currentUrl,
@@ -75,7 +75,7 @@ DirSelectWidget::DirSelectWidget(KUrl rootUrl, KUrl currentUrl,
     if ( headerLabel.isNull() )
         header()->hide();
 
-    setAlternateBackground(QColor::QColor());
+    setAlternateBackground(QColor());
     setRootPath(rootUrl, currentUrl);
 }
 

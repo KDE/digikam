@@ -6,7 +6,7 @@
  * Date        : 2004-08-20
  * Description : a widget to display an image with guides
  *
- * Copyright (C) 2004-2009 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2010 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -27,21 +27,19 @@
 // Qt includes
 
 #include <QtGui/QWidget>
-#include <QtCore/QPoint>
 #include <QtGui/QColor>
 #include <QtGui/QPixmap>
 #include <QtGui/QResizeEvent>
-#include <QtCore/QEvent>
 #include <QtGui/QMouseEvent>
-#include <QtCore/QTimerEvent>
 #include <QtGui/QPaintEvent>
+#include <QtCore/QPoint>
+#include <QtCore/QEvent>
+#include <QtCore/QTimerEvent>
 
 // Local includes
 
 #include "dcolor.h"
 #include "digikam_export.h"
-
-class QPixmap;
 
 namespace Digikam
 {
@@ -62,18 +60,6 @@ public:
         PickColorMode
     };
 
-    enum RenderingPreviewMode
-    {
-        PreviewOriginalImage=0,     // Original image only.
-        PreviewBothImagesHorz,      // Horizontal with original and target duplicated.
-        PreviewBothImagesVert,      // Vertical with original and target duplicated.
-        PreviewBothImagesHorzCont,  // Horizontal with original and target in contiguous.
-        PreviewBothImagesVertCont,  // Vertical with original and target in contiguous.
-        PreviewTargetImage,         // Target image only.
-        PreviewToggleOnMouseOver,   // Original image if mouse is over image area, else target image.
-        NoPreviewMode               // Target image only without information displayed.
-    };
-
     enum ColorPointSrc
     {
         OriginalImage=0,
@@ -83,8 +69,8 @@ public:
 
 public:
 
-    ImageGuideWidget(int w, int h, QWidget *parent=0,
-                     bool spotVisible=true, int guideMode=HVGuideMode,
+    ImageGuideWidget(QWidget* parent=0,
+                     bool spotVisible=true, int guideMode=PickColorMode,
                      const QColor& guideColor=Qt::red, int guideSize=1,
                      bool blink=false, bool useImageSelection=false);
     ~ImageGuideWidget();
@@ -94,8 +80,7 @@ public:
     QPoint getSpotPosition();
     DColor getSpotColor(int getColorFrom);
     void   setSpotVisible(bool spotVisible, bool blink=false);
-    int    getRenderingPreviewMode();
-    void   setRenderingPreviewMode(int mode);
+    int    previewMode();
     void   resetSpotPosition();
     void   updatePreview();
     void   setPoints(const QPolygon& p, bool drawLine=false);
@@ -108,13 +93,14 @@ public:
 
     QImage getMask() const;
 
+    void   ICCSettingsChanged();
+    void   exposureSettingsChanged();
+
 public Q_SLOTS:
 
     void slotChangeGuideColor(const QColor& color);
     void slotChangeGuideSize(int size);
-    void slotChangeRenderingPreviewMode(int mode);
-    void slotToggleUnderExposure(bool);
-    void slotToggleOverExposure(bool);
+    void slotPreviewModeChanged(int mode);
 
 Q_SIGNALS:
 
@@ -122,23 +108,21 @@ Q_SIGNALS:
     void spotPositionChangedFromTarget(const Digikam::DColor& color, const QPoint& position);
     void signalResized();
 
-protected:
-
-    void paintEvent(QPaintEvent*);
-    void resizeEvent(QResizeEvent*);
-    void timerEvent(QTimerEvent*);
-    void mousePressEvent(QMouseEvent*);
-    void mouseReleaseEvent(QMouseEvent*);
-    void mouseMoveEvent(QMouseEvent*);
-    void enterEvent(QEvent*);
-    void leaveEvent(QEvent*);
-
 private:
 
+    void   paintEvent(QPaintEvent*);
+    void   resizeEvent(QResizeEvent*);
+    void   timerEvent(QTimerEvent*);
+    void   mousePressEvent(QMouseEvent*);
+    void   mouseReleaseEvent(QMouseEvent*);
+    void   mouseMoveEvent(QMouseEvent*);
+    void   enterEvent(QEvent*);
+    void   leaveEvent(QEvent*);
     void   updatePixmap();
     void   drawLineTo(const QPoint& endPoint);
     void   drawLineTo(int width, bool erase, const QColor& color, const QPoint& start, const QPoint& end);
     QPoint translatePointPosition(QPoint& point);
+    void   drawText(QPainter* p, const QRect& rect, const QString& text);
     void   updateMaskCursor();
 
 private:

@@ -8,7 +8,7 @@
  *               image white balance
  *
  * Copyright (C) 2008-2009 by Guillaume Castagnino <casta at xwing dot info>
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -78,7 +78,7 @@
 #include "histogramwidget.h"
 #include "imagehistogram.h"
 #include "imageiface.h"
-#include "imagewidget.h"
+#include "imageguidewidget.h"
 #include "version.h"
 #include "whitebalance.h"
 
@@ -193,7 +193,7 @@ public:
     RDoubleNumInput*    saturationInput;
     RDoubleNumInput*    greenInput;
 
-    ImageWidget*        previewWidget;
+    ImageGuideWidget*   previewWidget;
 
     EditorToolSettings* gboxSettings;
 
@@ -226,12 +226,13 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->previewWidget = new ImageWidget("whitebalance Tool", 0,
-                                      i18n("The image's white-balance adjustments preview "
-                                           "is shown here.  Pick a color on the image to "
-                                           "see the corresponding color level on the histogram."));
+    d->previewWidget = new ImageGuideWidget;
+    d->previewWidget->setWhatsThis(i18n("The image's white-balance adjustments preview "
+                                        "is shown here.  Pick a color on the image to "
+                                        "see the corresponding color level on the histogram."));
     setToolView(d->previewWidget);
-
+    setPreviewModeMask(PreviewToolBar::AllPreviewModes);
+    
     // -------------------------------------------------------------
 
     d->gboxSettings = new EditorToolSettings;
@@ -498,8 +499,8 @@ void WhiteBalanceTool::slotTemperaturePresetChanged(int tempPreset)
 void WhiteBalanceTool::slotPickerColorButtonActived()
 {
     // Save previous rendering mode and toggle to original image.
-    d->currentPreviewMode = d->previewWidget->getRenderingPreviewMode();
-    d->previewWidget->setRenderingPreviewMode(ImageGuideWidget::PreviewOriginalImage);
+    d->currentPreviewMode = d->previewWidget->previewMode();
+    d->previewWidget->slotPreviewModeChanged(PreviewToolBar::PreviewOriginalImage);
 }
 
 void WhiteBalanceTool::slotColorSelectedFromOriginal(const DColor& color)
@@ -522,12 +523,12 @@ void WhiteBalanceTool::slotColorSelectedFromOriginal(const DColor& color)
     }
 
     // restore previous rendering mode.
-    d->previewWidget->setRenderingPreviewMode(d->currentPreviewMode);
+    d->previewWidget->slotPreviewModeChanged(d->currentPreviewMode);
 
     slotEffect();
 }
 
-void WhiteBalanceTool::slotColorSelectedFromTarget( const DColor& color )
+void WhiteBalanceTool::slotColorSelectedFromTarget(const DColor& color)
 {
     d->gboxSettings->histogramBox()->histogram()->setHistogramGuideByColor(color);
 }
@@ -684,7 +685,7 @@ void WhiteBalanceTool::writeSettings()
     group.writeEntry(d->configSaturationInputEntry,  d->saturationInput->value());
     group.writeEntry(d->configGreenInputEntry,       d->greenInput->value());
     group.writeEntry(d->configTemeratureInputEntry,  d->temperatureInput->value());
-    d->previewWidget->writeSettings();
+
     config->sync();
 }
 

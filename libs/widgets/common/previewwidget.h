@@ -6,7 +6,7 @@
  * Date        : 2006-06-13
  * Description : a widget to display an image preview
  *
- * Copyright (C) 2006-2009 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,6 +32,7 @@
 #include <QtGui/QWheelEvent>
 #include <QtGui/QMouseEvent>
 #include <QtGui/QPaintEvent>
+#include <QtGui/QImage>
 
 // Local includes
 
@@ -82,6 +83,7 @@ Q_SIGNALS:
     void signalShowPrevImage();
     void signalZoomFactorChanged(double);
     void signalContentsMovedEvent(bool);
+    void signalSelectionTakeFocus();
 
 public Q_SLOTS:
 
@@ -92,6 +94,12 @@ public Q_SLOTS:
 protected:
 
     bool m_movingInProgress;
+
+protected Q_SLOTS:
+
+    void slotCornerButtonPressed();
+    void slotPanIconHiden();
+    virtual void slotPanIconSelectionMoved(const QRect&, bool);
 
 protected:
 
@@ -105,6 +113,7 @@ protected:
     int    tileSize();
     void   updateAutoZoom(AutoZoomMode mode = ZoomInOrOut);
     void   updateContentsSize();
+    void   clearCache();
     QRect  previewRect();
 
     virtual void setContentsSize();
@@ -113,6 +122,7 @@ protected:
     virtual int  previewHeight()=0;
     virtual bool previewIsNull()=0;
     virtual void resetPreview()=0;
+    virtual QImage previewToQImage() const =0;
     virtual void paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh)=0;
     virtual void zoomFactorChanged(double zoom);
 

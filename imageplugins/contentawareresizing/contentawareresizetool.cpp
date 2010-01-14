@@ -6,9 +6,9 @@
  * Date        : 2009-02-01
  * Description : Content aware resizing tool.
  *
- * Copyright (C) 2009 by Julien Pontabry <julien dot pontabry at ulp dot u-strasbg dot fr>
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009 by Julien Narboux <julien at narboux dot fr>
+ * Copyright (C) 2009-2010 by Julien Pontabry <julien dot pontabry at ulp dot u-strasbg dot fr>
+ * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Julien Narboux <julien at narboux dot fr>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -62,7 +62,7 @@
 #include "rexpanderbox.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
-#include "imagewidget.h"
+#include "imageguidewidget.h"
 #include "version.h"
 
 using namespace Digikam;
@@ -152,7 +152,7 @@ public:
     QCheckBox*          weightMaskBox;
     QCheckBox*          preserveSkinTones;
 
-    ImageWidget*        previewWidget;
+    ImageGuideWidget*   previewWidget;
 
     EditorToolSettings* gboxSettings;
 
@@ -186,11 +186,9 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject *parent)
     setToolName(i18n("Liquid Rescale"));
     setToolIcon(SmallIcon("transform-scale"));
 
-    d->previewWidget = new ImageWidget("liquidrescale Tool", 0, QString(),
-                                       false, ImageGuideWidget::HVGuideMode, false);
-
+    d->previewWidget = new ImageGuideWidget(0, false, ImageGuideWidget::HVGuideMode);
     setToolView(d->previewWidget);
-    d->previewWidget->setRenderingPreviewMode(ImageGuideWidget::PreviewToggleOnMouseOver);
+    setPreviewModeMask(PreviewToolBar::NoBothPreviewModes);
 
     // -------------------------------------------------------------
 
@@ -527,7 +525,6 @@ void ContentAwareResizeTool::writeSettings()
     group.writeEntry(d->configBrushSizeEntry,         d->maskPenSize->value());
     group.writeEntry(d->configPreserveTonesEntry,     d->preserveSkinTones->isChecked());
 
-    d->previewWidget->writeSettings();
     group.sync();
 }
 

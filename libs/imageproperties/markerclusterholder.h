@@ -27,6 +27,10 @@
 
 #include <memory>
 
+// Qt includes
+
+#include <QtCore/QVariant>
+
 // Marble includes
 
 #include <marble/MarbleWidget.h>

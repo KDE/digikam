@@ -61,6 +61,7 @@ static const char* StandardXmpEntryList[] =
      "xmpMM",           // Media Management schema.
      "xmpRights",       // Rights Management schema.
      "xmpTPg",          // Paged-Text schema.
+     "lr",              // Adobe LightRoom schema.
 
      "-1"
 };

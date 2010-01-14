@@ -8,7 +8,7 @@
  *               effect to an image.
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,7 +22,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "colorfxtool.moc"
 
@@ -72,7 +71,7 @@
 #include "imagecurves.h"
 #include "imagehistogram.h"
 #include "imageiface.h"
-#include "imagewidget.h"
+#include "imageguidewidget.h"
 #include "version.h"
 
 using namespace KDcrawIface;
@@ -122,7 +121,7 @@ public:
     RIntNumInput*        levelInput;
     RIntNumInput*        iterationInput;
 
-    ImageWidget*         previewWidget;
+    ImageGuideWidget*    previewWidget;
     EditorToolSettings*  gboxSettings;
 };
 
@@ -138,11 +137,11 @@ ColorFXTool::ColorFXTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->previewWidget = new ImageWidget("coloreffects Tool", 0,
-                                      i18n("This is the color effects preview"));
-
+    d->previewWidget = new ImageGuideWidget;
+    d->previewWidget->setWhatsThis(i18n("This is the color effects preview"));
     setToolView(d->previewWidget);
-
+    setPreviewModeMask(PreviewToolBar::AllPreviewModes);
+    
     // -------------------------------------------------------------
 
     d->gboxSettings = new EditorToolSettings;
@@ -228,7 +227,7 @@ ColorFXTool::~ColorFXTool()
 void ColorFXTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(d->configGroupName);
+    KConfigGroup group        = config->group(d->configGroupName);
 
     d->gboxSettings->histogramBox()->setChannel(group.readEntry(d->configHistogramChannelEntry,
                         (int)LuminosityChannel));
@@ -244,7 +243,7 @@ void ColorFXTool::readSettings()
 void ColorFXTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(d->configGroupName);
+    KConfigGroup group        = config->group(d->configGroupName);
 
     group.writeEntry(d->configHistogramChannelEntry,    d->gboxSettings->histogramBox()->channel());
     group.writeEntry(d->configHistogramScaleEntry,      (int)d->gboxSettings->histogramBox()->scale());
@@ -252,7 +251,7 @@ void ColorFXTool::writeSettings()
     group.writeEntry(d->configEffectTypeEntry,          d->effectType->currentIndex());
     group.writeEntry(d->configLevelAdjustmentEntry,     d->levelInput->value());
     group.writeEntry(d->configIterationAdjustmentEntry, d->iterationInput->value());
-    d->previewWidget->writeSettings();
+
     group.sync();
 }
 

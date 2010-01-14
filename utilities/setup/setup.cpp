@@ -372,6 +372,8 @@ bool Setup::execTemplateEditor(QWidget *parent, const Template& t)
 
 void Setup::slotOkClicked()
 {
+    kapp->setOverrideCursor(Qt::WaitCursor);
+
     d->databasePage->applySettings();
     d->collectionsPage->applySettings();
     d->albumViewPage->applySettings();
@@ -391,6 +393,8 @@ void Setup::slotOkClicked()
     d->pluginsPage->applyPlugins();
 
     AlbumSettings::instance()->emitSetupChanged();
+
+    kapp->restoreOverrideCursor();
 
     if (d->metadataPage->exifAutoRotateAsChanged())
     {

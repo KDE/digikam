@@ -2,6 +2,7 @@
 Name=ImagePlugin_Core
 Name[bg]=Приставка за снимки - Основна приставка
 Name[ca]=ImagePlugin_Core
+Name[ca@valencia]=ImagePlugin_Core
 Name[cs]=ImagePlugin_Core
 Name[da]=ImagePlugin_Core
 Name[de]=Bildmodul_Kern
@@ -45,6 +46,7 @@ Encoding=UTF-8
 Comment=digiKam Core Image Plugin
 Comment[bg]=Основна приставка за снимки на digiKam
 Comment[ca]=Connector d'imatge bàsic del DigiKam
+Comment[ca@valencia]=Connector d'imatge bàsic del DigiKam
 Comment[cs]=Hlavní modul digiKamu pro obrázky
 Comment[da]=Grundlæggende digiKam billed-plugin
 Comment[de]=digiKam-Kernmodul

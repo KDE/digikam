@@ -6,7 +6,7 @@
  * Date        : 2005-02-26
  * Description : image channels mixer.
  *
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Load and save mixer gains methods inspired from
  * Gimp 2.2.3 and copyrighted 2002 by Martin Guldahl <mguldahl at xmission dot com>
@@ -23,7 +23,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "channelmixertool.moc"
 
@@ -86,7 +85,7 @@
 #include "histogramwidget.h"
 #include "imagehistogram.h"
 #include "imageiface.h"
-#include "imagewidget.h"
+#include "imageguidewidget.h"
 #include "version.h"
 
 using namespace KDcrawIface;
@@ -183,7 +182,7 @@ public:
     RDoubleNumInput*    greenGain;
     RDoubleNumInput*    blueGain;
 
-    ImageWidget*        previewWidget;
+    ImageGuideWidget*   previewWidget;
     EditorToolSettings* gboxSettings;
 };
 
@@ -199,12 +198,13 @@ ChannelMixerTool::ChannelMixerTool(QObject* parent)
 
     d->destinationPreviewData = 0;
 
-    d->previewWidget = new ImageWidget("channelmixer Tool", 0,
-                                      i18n("You can see here the image's color channels' "
-                                           "gain adjustments preview. You can pick a color on the image "
-                                           "to see the corresponding color level on the histogram."));
+    d->previewWidget = new ImageGuideWidget;
+    d->previewWidget->setWhatsThis(i18n("You can see here the image's color channels' "
+                                        "gain adjustments preview. You can pick a color on the image "
+                                        "to see the corresponding color level on the histogram."));
     setToolView(d->previewWidget);
-
+    setPreviewModeMask(PreviewToolBar::AllPreviewModes);
+    
     // -------------------------------------------------------------
 
     d->gboxSettings = new EditorToolSettings;
@@ -448,10 +448,10 @@ void ChannelMixerTool::slotMonochromeActived(bool mono)
 void ChannelMixerTool::slotEffect()
 {
     ImageIface* iface = d->previewWidget->imageIface();
-    uchar *data                = iface->getPreviewImage();
-    int w                      = iface->previewWidth();
-    int h                      = iface->previewHeight();
-    bool sb                    = iface->previewSixteenBit();
+    uchar *data       = iface->getPreviewImage();
+    int w             = iface->previewWidth();
+    int h             = iface->previewHeight();
+    bool sb           = iface->previewSixteenBit();
 
     // Create the new empty destination image data space.
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
@@ -494,10 +494,10 @@ void ChannelMixerTool::finalRendering()
 {
     kapp->setOverrideCursor( Qt::WaitCursor );
     ImageIface* iface = d->previewWidget->imageIface();
-    uchar *data                = iface->getOriginalImage();
-    int w                      = iface->originalWidth();
-    int h                      = iface->originalHeight();
-    bool sb                    = iface->originalSixteenBit();
+    uchar *data       = iface->getOriginalImage();
+    int w             = iface->originalWidth();
+    int h             = iface->originalHeight();
+    bool sb           = iface->originalSixteenBit();
 
     DImgImageFilters filter;
 
@@ -597,8 +597,6 @@ void ChannelMixerTool::writeSettings()
     group.writeEntry(d->configBlackRedGainEntry,   d->blackRedGain);
     group.writeEntry(d->configBlackGreenGainEntry, d->blackGreenGain);
     group.writeEntry(d->configBlackBlueGainEntry,  d->blackBlueGain);
-
-    d->previewWidget->writeSettings();
 
     config->sync();
 }

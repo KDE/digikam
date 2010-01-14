@@ -59,7 +59,7 @@
 #include "dimgunsharpmask.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
-#include "imagepanelwidget.h"
+#include "imageregionwidget.h"
 
 using namespace KDcrawIface;
 using namespace Digikam;
@@ -126,7 +126,7 @@ public:
     RDoubleNumInput*    amountInput;
     RDoubleNumInput*    thresholdInput;
 
-    ImagePanelWidget*   previewWidget;
+    ImageRegionWidget*  previewWidget;
     EditorToolSettings* gboxSettings;
 };
 
@@ -148,8 +148,6 @@ SharpenTool::SharpenTool(QObject* parent)
                                 EditorToolSettings::Load|
                                 EditorToolSettings::SaveAs|
                                 EditorToolSettings::Try);
-
-    d->gboxSettings->setTools(EditorToolSettings::PanIcon);
 
     QGridLayout* grid = new QGridLayout(d->gboxSettings->plainPage());
 
@@ -303,11 +301,12 @@ SharpenTool::SharpenTool(QObject* parent)
 
     d->stack->insertWidget(Refocus, refocusSettings);
 
+    d->previewWidget = new ImageRegionWidget;
+
     setToolSettings(d->gboxSettings);
-
-    d->previewWidget = new ImagePanelWidget(470, 350, "sharpen Tool", d->gboxSettings->panIconView());
-
     setToolView(d->previewWidget);
+    setPreviewModeMask(PreviewToolBar::AllPreviewModes);
+    
     init();
 
     // -------------------------------------------------------------
@@ -323,6 +322,8 @@ SharpenTool::~SharpenTool()
 
 void SharpenTool::renderingFinished()
 {
+    toolView()->setEnabled(true);
+
     switch (d->stack->indexOf(d->stack->currentWidget()))
     {
         case SimpleSharp:
@@ -417,7 +418,6 @@ void SharpenTool::writeSettings()
     group.writeEntry(d->configRefocusCorrelationAdjustmentEntry,   d->correlation->value());
     group.writeEntry(d->configRefocusNoiseAdjustmentEntry,         d->noise->value());
     group.writeEntry(d->configSharpenMethodEntry,                  d->sharpMethod->currentIndex());
-    d->previewWidget->writeSettings();
     config->sync();
 }
 
@@ -457,6 +457,8 @@ void SharpenTool::slotResetSettings()
 
 void SharpenTool::prepareEffect()
 {
+    toolView()->setEnabled(false);
+    
     switch (d->stack->indexOf(d->stack->currentWidget()))
     {
         case SimpleSharp:
@@ -520,6 +522,8 @@ void SharpenTool::prepareFinal()
     bool hasAlpha   = iface.originalHasAlpha();
     DImg orgImage   = DImg(w, h, sixteenBit, hasAlpha ,data);
     delete [] data;
+
+    toolView()->setEnabled(false);
 
     switch (d->stack->indexOf(d->stack->currentWidget()))
     {

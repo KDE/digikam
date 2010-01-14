@@ -21,7 +21,6 @@ Note : see also KDE4PORT TODO list
 * B.K.O files to fix :
 
 ==> 113797 : Main interface : Little thumbnail refresh problem. 
-==> 121804 : Main interface : Image overwritten with blank file when importing into same folder.
 
 * Media support:
 

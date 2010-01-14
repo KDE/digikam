@@ -114,7 +114,6 @@ private Q_SLOTS:
 
 private:
 
-    int toolIndex(BatchTool* tool);
     AssignedListViewItem* findTool(const BatchToolSet& set);
     void assignTools(const QMap<int, QString>& map, AssignedListViewItem* preceding);
 

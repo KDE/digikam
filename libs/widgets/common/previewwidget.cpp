@@ -6,7 +6,7 @@
  * Date        : 2006-06-13
  * Description : a widget to display an image preview
  *
- * Copyright (C) 2006-2009 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,7 +32,6 @@
 #include <QCache>
 #include <QString>
 #include <QPainter>
-#include <QImage>
 #include <QPixmap>
 #include <QRect>
 #include <QWheelEvent>
@@ -40,11 +39,17 @@
 #include <QResizeEvent>
 #include <QFrame>
 #include <QMouseEvent>
+#include <QToolButton>
 
 // KDE includes
 
+#include <kdatetable.h>
 #include <kcursor.h>
 #include <klocale.h>
+
+// locale includes
+
+#include "paniconwidget.h"
 
 namespace Digikam
 {
@@ -56,16 +61,18 @@ public:
     PreviewWidgetPriv() :
         tileSize(128), zoomMultiplier(1.2)
     {
-        midButtonX = 0;
-        midButtonY = 0;
-        autoZoom   = false;
-        fullScreen = false;
-        zoom       = 1.0;
-        minZoom    = 0.1;
-        maxZoom    = 12.0;
-        zoomWidth  = 0;
-        zoomHeight = 0;
-        tileTmpPix = new QPixmap(tileSize, tileSize);
+        panIconPopup  = 0;
+        cornerButton  = 0;
+        midButtonX    = 0;
+        midButtonY    = 0;
+        autoZoom      = false;
+        fullScreen    = false;
+        zoom          = 1.0;
+        minZoom       = 0.1;
+        maxZoom       = 12.0;
+        zoomWidth     = 0;
+        zoomHeight    = 0;
+        tileTmpPix    = new QPixmap(tileSize, tileSize);
 
         tileCache.setMaxCost((10*1024*1024)/(tileSize*tileSize*4));
     }
@@ -91,6 +98,10 @@ public:
     QCache<QString, QPixmap> tileCache;
 
     QPixmap*                 tileTmpPix;
+
+    QToolButton*             cornerButton;
+
+    KPopupFrame*             panIconPopup;
 };
 
 PreviewWidget::PreviewWidget(QWidget *parent)
@@ -100,6 +111,9 @@ PreviewWidget::PreviewWidget(QWidget *parent)
     setAttribute(Qt::WA_DeleteOnClose);
     setBackgroundRole(QPalette::Base);
 
+    d->cornerButton = PanIconWidget::button();
+    setCornerWidget(d->cornerButton);
+
     viewport()->setMouseTracking(false);
 
     horizontalScrollBar()->setSingleStep(1);
@@ -107,9 +121,14 @@ PreviewWidget::PreviewWidget(QWidget *parent)
     verticalScrollBar()->setSingleStep(1);
     verticalScrollBar()->setPageStep(1);
 
+    setHScrollBarMode(Q3ScrollView::AlwaysOn);
+    setVScrollBarMode(Q3ScrollView::AlwaysOn);
     setFrameStyle(QFrame::StyledPanel|QFrame::Plain);
     setMargin(0);
     setLineWidth(1);
+
+    connect(d->cornerButton, SIGNAL(pressed()),
+            this, SLOT(slotCornerButtonPressed()));
 }
 
 PreviewWidget::~PreviewWidget()
@@ -118,9 +137,14 @@ PreviewWidget::~PreviewWidget()
     delete d;
 }
 
-void PreviewWidget::slotReset()
+void PreviewWidget::clearCache()
 {
     d->tileCache.clear();
+}
+
+void PreviewWidget::slotReset()
+{
+    clearCache();
     resetPreview();
 }
 
@@ -406,7 +430,7 @@ void PreviewWidget::updateContentsSize()
         d->pixmapRect = QRect(0, 0, d->zoomWidth, d->zoomHeight);
     }
 
-    d->tileCache.clear();
+    clearCache();
     setContentsSize();
     viewport()->setUpdatesEnabled(true);
 }
@@ -611,6 +635,63 @@ void PreviewWidget::contentsWheelEvent(QWheelEvent *e)
 void PreviewWidget::zoomFactorChanged(double zoom)
 {
     emit signalZoomFactorChanged(zoom);
+}
+
+void PreviewWidget::slotCornerButtonPressed()
+{
+    if (d->panIconPopup)
+    {
+        d->panIconPopup->hide();
+        d->panIconPopup->deleteLater();
+        d->panIconPopup = 0;
+    }
+
+    d->panIconPopup    = new KPopupFrame(this);
+    PanIconWidget *pan = new PanIconWidget(d->panIconPopup);
+
+    connect(pan, SIGNAL(signalSelectionTakeFocus()),
+            this, SIGNAL(signalSelectionTakeFocus()));
+
+    connect(pan, SIGNAL(signalSelectionMoved(const QRect&, bool)),
+            this, SLOT(slotPanIconSelectionMoved(const QRect&, bool)));
+
+    connect(pan, SIGNAL(signalHidden()),
+            this, SLOT(slotPanIconHiden()));
+
+    QRect r((int)(contentsX()    / zoomFactor()), (int)(contentsY()     / zoomFactor()),
+            (int)(visibleWidth() / zoomFactor()), (int)(visibleHeight() / zoomFactor()));
+    pan->setImage(180, 120, previewToQImage());
+    pan->setRegionSelection(r);
+    pan->setMouseFocus();
+    d->panIconPopup->setMainWidget(pan);
+
+    QPoint g = mapToGlobal(viewport()->pos());
+    g.setX(g.x()+ viewport()->size().width());
+    g.setY(g.y()+ viewport()->size().height());
+    d->panIconPopup->popup(QPoint(g.x() - d->panIconPopup->width(),
+                                  g.y() - d->panIconPopup->height()));
+
+    pan->setCursorToLocalRegionSelectionCenter();
+}
+
+void PreviewWidget::slotPanIconHiden()
+{
+    d->cornerButton->blockSignals(true);
+    d->cornerButton->animateClick();
+    d->cornerButton->blockSignals(false);
+}
+
+void PreviewWidget::slotPanIconSelectionMoved(const QRect& r, bool b)
+{
+    setContentsPos((int)(r.x()*zoomFactor()), (int)(r.y()*zoomFactor()));
+
+    if (b)
+    {
+        d->panIconPopup->hide();
+        d->panIconPopup->deleteLater();
+        d->panIconPopup = 0;
+        slotPanIconHiden();
+    }
 }
 
 }  // namespace Digikam

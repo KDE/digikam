@@ -2,6 +2,7 @@
 Name=ImagePlugin_Texture
 Name[bg]=Приставка за снимки - Текстури
 Name[ca]=ImagePlugin_Texture
+Name[ca@valencia]=ImagePlugin_Texture
 Name[cs]=ImagePlugin_Texture
 Name[da]=ImagePlugin_Texture
 Name[de]=Bildmodul_Textur
@@ -45,6 +46,7 @@ Encoding=UTF-8
 Comment=digiKam plugin to apply texture on image
 Comment[bg]=Приставка на digiKam за добавяне на текстури към снимки
 Comment[ca]=Connector pel DigiKam per aplicar una textura a una imatge
+Comment[ca@valencia]=Connector pel DigiKam per aplicar una textura a una imatge
 Comment[cs]=Modul digiKamu pro aplikaci textury na obrázek
 Comment[da]=digiKam-plugin til anvendelse af tekstur på billede
 Comment[de]=digiKam-Modul zum Anwenden einer Textur auf ein Bild

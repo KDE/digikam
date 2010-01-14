@@ -2,6 +2,7 @@
 Name=ImagePlugin_FreeRotation
 Name[bg]=Приставка за снимки - Свободно завъртане
 Name[ca]=ImagePlugin_FreeRotation
+Name[ca@valencia]=ImagePlugin_FreeRotation
 Name[cs]=ImagePlugin_FreeRotation
 Name[da]=ImagePlugin_FreeRotation
 Name[de]=Bildmodul_FreieRotation
@@ -45,6 +46,7 @@ Encoding=UTF-8
 Comment=Free rotation plugin for digiKam
 Comment[bg]=Приставка на digiKam за свободно завъртане на снимки
 Comment[ca]=Connector pel DigiKam de gir lliure
+Comment[ca@valencia]=Connector pel DigiKam de gir lliure
 Comment[cs]=Modul digiKamu pro libovolné otočení
 Comment[da]=digiKam-plugin til fri rotation af billeder
 Comment[de]=digiKam-Modul zur freien Rotation

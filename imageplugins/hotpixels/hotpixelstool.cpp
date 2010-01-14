@@ -59,7 +59,7 @@
 #include "hotpixelfixer.h"
 #include "imagedialog.h"
 #include "imageiface.h"
-#include "imagepanelwidget.h"
+#include "imageregionwidget.h"
 #include "version.h"
 
 using namespace KDcrawIface;
@@ -98,7 +98,7 @@ public:
     RComboBox*          filterMethodCombo;
 
     BlackFrameListView* blackFrameListView;
-    ImagePanelWidget*   previewWidget;
+    ImageRegionWidget*  previewWidget;
     EditorToolSettings* gboxSettings;
 };
 
@@ -113,7 +113,6 @@ HotPixelsTool::HotPixelsTool(QObject* parent)
     // -------------------------------------------------------------
 
     d->gboxSettings = new EditorToolSettings;
-    d->gboxSettings->setTools(EditorToolSettings::PanIcon);
 
     // -------------------------------------------------------------
 
@@ -143,14 +142,15 @@ HotPixelsTool::HotPixelsTool(QObject* parent)
     grid->setMargin(d->gboxSettings->spacingHint());
     grid->setSpacing(d->gboxSettings->spacingHint());
 
-    setToolSettings(d->gboxSettings);
-
     // -------------------------------------------------------------
 
-    d->previewWidget = new ImagePanelWidget(470, 350, "hotpixels Tool", d->gboxSettings->panIconView(),
-                                            0, ImagePanelWidget::SeparateViewDuplicate);
+    d->previewWidget = new ImageRegionWidget;
 
+    setToolSettings(d->gboxSettings);
     setToolView(d->previewWidget);
+    setPreviewModeMask(PreviewToolBar::PreviewBothImagesHorz | 
+                       PreviewToolBar::PreviewBothImagesVert | 
+                       PreviewToolBar::PreviewTargetImage);    
     init();
 
     // -------------------------------------------------------------
@@ -196,7 +196,6 @@ void HotPixelsTool::writeSettings()
     KConfigGroup group        = config->group(d->configGroupName);
     group.writeEntry(d->configLastBlackFrameFileEntry, d->blackFrameURL.url());
     group.writeEntry(d->configFilterMethodEntry,       d->filterMethodCombo->currentIndex());
-    d->previewWidget->writeSettings();
     group.sync();
 }
 
@@ -240,12 +239,14 @@ void HotPixelsTool::renderingFinished()
 {
     d->filterMethodCombo->setEnabled(true);
     d->blackFrameListView->setEnabled(true);
+    toolView()->setEnabled(true);
 }
 
 void HotPixelsTool::prepareEffect()
 {
     d->filterMethodCombo->setEnabled(false);
     d->blackFrameListView->setEnabled(false);
+    toolView()->setEnabled(false);
 
     DImg image              = d->previewWidget->getOriginalRegionImage();
     int interpolationMethod = d->filterMethodCombo->currentIndex();
@@ -271,7 +272,8 @@ void HotPixelsTool::prepareFinal()
 {
     d->filterMethodCombo->setEnabled(false);
     d->blackFrameListView->setEnabled(false);
-
+    toolView()->setEnabled(false);
+    
     int interpolationMethod = d->filterMethodCombo->currentIndex();
 
     ImageIface iface(0, 0);
@@ -301,7 +303,7 @@ void HotPixelsTool::slotBlackFrame(QList<HotPixel> hpList, const KUrl& blackFram
     for (it = d->hotPixelsList.begin() ; it != d->hotPixelsList.end() ; ++it, ++i)
        pointList.setPoint(i, (*it).rect.center());
 
-    d->previewWidget->setPanIconHighLightPoints(pointList);
+    d->previewWidget->setHighLightPoints(pointList);
 
     slotEffect();
 }

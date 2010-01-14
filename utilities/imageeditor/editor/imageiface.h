@@ -7,7 +7,7 @@
  * Description : image data interface for image plugins
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -181,9 +181,7 @@ public:
         if putPreviewImage has not been called) on the given paint device.
         at x|y, with given maximum width and height.
     */
-    void paint(QPaintDevice* device, int x, int y, int w, int h,
-               bool underExposure=false, bool overExposure=false,
-               QPainter *painter=0);
+    void paint(QPaintDevice* device, int x, int y, int w, int h, QPainter *painter=0);
 
 private:
 

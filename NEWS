@@ -34,5 +34,39 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 025 ==> 220889 : Problem with color management.
 026 ==> 200392 : Slideshow displays "Headline" field as "image caption" and has no way to display "Caption" field.
 027 ==> 220202 : "Write Metadata to images" only modifies the first 201 files in any directory (album).
-028 ==> 
+028 ==> 219149 : digiKam: Save window in editor lock main browse window.
+029 ==> 214620 : Crash when quitting the application.
+030 ==> 219430 : "Move to Trash"/"Move %1 Files to Trash" messages are not compatible with Russian plural forms.
+031 ==> 221159 : Batch queue manager generates duplicate target names if dots (.) are used in the file name
+032 ==> 160438 : Wish: Easy way to transform an image from one colorspace and bit-depth to another, like Krita's "Convert Image Type".
+033 ==> 211643 : Exposure indicators not working while raw import.
+034 ==> 221397 : Batch processing auto levels.
+035 ==> 211238 : Scrolling (shift + mousewheel) through pictures in editor caused crash
+036 ==> 220444 : Auto lens correction does not recognize a listed camera and lens using exif data.
+037 ==> 220559 : Crash after select and unselect an item in batch window [QTreeWidgetItem::setIcon, Digikam::AssignedListViewItem::setDone, Digikam::QueueMgrWindow::slotAction]
+038 ==> 221065 : Many Icons Don't Show Up in digikam Under Mac OS X (10.6.2).
+039 ==> 221188 : When system is set to Czech locale, there is "Aspect Ratio Crop" missing in transform menu.
+040 ==> 207392 : Crash after rebuild all thumbnails.
+041 ==> 213001 : Scrolling when under-exposure indicator.
+042 ==> 187188 : digiKam crashes when including a CIFS located album.
+043 ==> 221343 : [wish] Blank search field should not show all images
+044 ==> 221605 : digiKam crashed on startup, while scanning albuns [__libc_message, malloc_printerr, qFree].
+045 ==> 201654 : digiKam 1.0 crashes immediately on application start.
+046 ==> 190982 : Crashes when selecting album-- every time.
+047 ==> 194047 : digiKam crashes while atempting.
+048 ==> 191414 : Selecting "synchronize images with database" in album drop-down menu causes signal 6 (sigabrt).
+049 ==> 221440 : Crashes when adding album.
+050 ==> 214913 : digiKam crash scanning photos.
+051 ==> 221938 : Crash while clicked on lens->distortion
+052 ==> 221113 : RW2 images are not rotated anymore.
+053 ==> 216874 : File renaming in the queue settings don't manage tokens [date] and [cam].
+054 ==> 220292 : Red eyes tool crashs digikam with memory error.
+055 ==> 218873 : digiKam crashes while starting up [mem2chunk_check, free_check, Marble::GeoDataObject::~GeoDataObject].
+056 ==> 222490 : digiKam: fails to build with gcc-4.5.
+057 ==> 219776 : Crash after AutoContrast in Image Editor.
+058 ==> 222593 : Exif Focus Distance and Focus Position.
+059 ==> 221986 : Many panels lack the 'mouse over' preview mode.
+060 ==> 218184 : Preview and image navigation out of sync when opening the sharpen dialog in the editor.
+061 ==> 219745 : Zoom is ignored in the tools on 1. try.
+
 

@@ -7,7 +7,7 @@
  * Description : main image editor GUI implementation
  *               private data.
  *
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -29,6 +29,7 @@
 
 #include <QList>
 
+class QDialog;
 class QToolButton;
 class QLabel;
 class QWidgetAction;
@@ -39,6 +40,7 @@ class KAction;
 class KActionCollection;
 class KComboBox;
 class KToggleAction;
+class KSqueezedTextLabel;
 
 namespace Digikam
 {
@@ -46,6 +48,7 @@ namespace Digikam
 class EditorToolIface;
 class ExposureSettingsContainer;
 class ICCSettingsContainer;
+class PreviewToolBar;
 
 class EditorWindowPriv
 {
@@ -56,7 +59,7 @@ public:
     {
         removeFullScreenButton       = false;
         fullScreenHideToolBar        = false;
-        selectLabel                  = 0;
+        infoLabel                    = 0;
         donateMoneyAction            = 0;
         viewCMViewAction             = 0;
         filePrintAction              = 0;
@@ -84,6 +87,7 @@ public:
         selectAllAction              = 0;
         selectNoneAction             = 0;
         waitingLoop                  = 0;
+        currentWindowModalDialog     = 0;
         undoSignalMapper             = 0;
         redoSignalMapper             = 0;
         rawCameraListAction          = 0;
@@ -94,6 +98,7 @@ public:
         imagepluginsActionCollection = 0;
         viewSoftProofAction          = 0;
         softProofOptionsAction       = 0;
+        previewToolBar               = 0;
     }
 
     ~EditorWindowPriv()
@@ -105,11 +110,11 @@ public:
 
     QWidgetAction*             zoomComboAction;
 
-    QLabel*                    selectLabel;
-
     QToolButton*               cmViewIndicator;
     QToolButton*               underExposureIndicator;
     QToolButton*               overExposureIndicator;
+
+    KSqueezedTextLabel*        infoLabel;
 
     KActionCollection*         imagepluginsActionCollection;
 
@@ -137,6 +142,7 @@ public:
     QSignalMapper*             redoSignalMapper;
 
     QEventLoop*                waitingLoop;
+    QDialog*                   currentWindowModalDialog;
 
     KToggleAction*             zoomFitToWindowAction;
     KToggleAction*             viewCMViewAction;
@@ -150,6 +156,8 @@ public:
     QList<int>                 fullscreenSizeBackup;
 
     ICCSettingsContainer*      ICCSettings;
+
+    PreviewToolBar*            previewToolBar;
 
     ExposureSettingsContainer* exposureSettings;
 

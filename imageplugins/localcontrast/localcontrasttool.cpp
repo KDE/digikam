@@ -58,7 +58,7 @@
 #include "dimg.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
-#include "imagepanelwidget.h"
+#include "imageregionwidget.h"
 #include "localcontrast.h"
 #include "rexpanderbox.h"
 #include "version.h"
@@ -174,7 +174,7 @@ public:
 
     RExpanderBox*       expanderBox;
 
-    ImagePanelWidget*   previewWidget;
+    ImageRegionWidget*  previewWidget;
     EditorToolSettings* gboxSettings;
 };
 
@@ -195,9 +195,6 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
                                 EditorToolSettings::Load|
                                 EditorToolSettings::SaveAs|
                                 EditorToolSettings::Try);
-
-
-    d->gboxSettings->setTools(EditorToolSettings::PanIcon);
 
     // -------------------------------------------------------------
 
@@ -448,10 +445,11 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
     grid->setMargin(d->gboxSettings->spacingHint());
     grid->setSpacing(d->gboxSettings->spacingHint());
 
-    setToolSettings(d->gboxSettings);
+    d->previewWidget = new ImageRegionWidget;
 
-    d->previewWidget = new ImagePanelWidget(470, 350, "localcontrast Tool", d->gboxSettings->panIconView());
+    setToolSettings(d->gboxSettings);
     setToolView(d->previewWidget);
+    setPreviewModeMask(PreviewToolBar::AllPreviewModes);    
 
     init();
 }
@@ -497,6 +495,7 @@ void LocalContrastTool::slotStage4Enabled(bool b)
 void LocalContrastTool::renderingFinished()
 {
     d->expanderBox->setEnabled(true);
+    toolView()->setEnabled(true);
 }
 
 void LocalContrastTool::readSettings()
@@ -557,7 +556,6 @@ void LocalContrastTool::writeSettings()
     group.writeEntry(d->configFunctionInputEntry,   d->functionInput->currentIndex());
     d->expanderBox->writeSettings();
 
-    d->previewWidget->writeSettings();
     group.sync();
 }
 
@@ -632,7 +630,8 @@ ToneMappingParameters *LocalContrastTool::createParams()
 void LocalContrastTool::prepareEffect()
 {
     d->expanderBox->setEnabled(false);
-
+    toolView()->setEnabled(false);
+    
     ToneMappingParameters *par = createParams();
     DImg image                 = d->previewWidget->getOriginalRegionImage();
 
@@ -642,7 +641,8 @@ void LocalContrastTool::prepareEffect()
 void LocalContrastTool::prepareFinal()
 {
     d->expanderBox->setEnabled(false);
-
+    toolView()->setEnabled(false);
+    
     ToneMappingParameters *par = createParams();
 
     ImageIface iface(0, 0);

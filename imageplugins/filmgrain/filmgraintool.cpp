@@ -52,7 +52,7 @@
 #include "editortoolsettings.h"
 #include "filmgrain.h"
 #include "imageiface.h"
-#include "imagepanelwidget.h"
+#include "imageregionwidget.h"
 #include "version.h"
 
 using namespace Digikam;
@@ -80,7 +80,7 @@ public:
 
     QLCDNumber*         sensibilityLCDValue;
 
-    ImagePanelWidget*   previewWidget;
+    ImageRegionWidget*  previewWidget;
     EditorToolSettings* gboxSettings;
 };
 
@@ -94,10 +94,8 @@ FilmGrainTool::FilmGrainTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings = new EditorToolSettings;
-    d->gboxSettings->setTools(EditorToolSettings::PanIcon);
-
-    d->previewWidget = new ImagePanelWidget(470, 350, "filmgrain Tool", d->gboxSettings->panIconView());
+    d->gboxSettings  = new EditorToolSettings;
+    d->previewWidget = new ImageRegionWidget;
 
     // -------------------------------------------------------------
 
@@ -135,6 +133,7 @@ FilmGrainTool::FilmGrainTool(QObject* parent)
 
     setToolSettings(d->gboxSettings);
     setToolView(d->previewWidget);
+    setPreviewModeMask(PreviewToolBar::AllPreviewModes);    
     init();
 
     // -------------------------------------------------------------
@@ -163,6 +162,7 @@ FilmGrainTool::~FilmGrainTool()
 void FilmGrainTool::renderingFinished()
 {
     d->sensibilitySlider->setEnabled(true);
+    toolView()->setEnabled(true);
 }
 
 void FilmGrainTool::readSettings()
@@ -180,7 +180,6 @@ void FilmGrainTool::writeSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
     group.writeEntry(d->configSensitivityAdjustmentEntry, d->sensibilitySlider->value());
-    d->previewWidget->writeSettings();
     config->sync();
 }
 
@@ -199,7 +198,8 @@ void FilmGrainTool::slotSliderMoved(int v)
 void FilmGrainTool::prepareEffect()
 {
     d->sensibilitySlider->setEnabled(false);
-
+    toolView()->setEnabled(false);
+    
     DImg image = d->previewWidget->getOriginalRegionImage();
     int s      = 400 + 200 * d->sensibilitySlider->value();
 
@@ -209,6 +209,7 @@ void FilmGrainTool::prepareEffect()
 void FilmGrainTool::prepareFinal()
 {
     d->sensibilitySlider->setEnabled(false);
+    toolView()->setEnabled(false);    
 
     int s = 400 + 200 * d->sensibilitySlider->value();
 

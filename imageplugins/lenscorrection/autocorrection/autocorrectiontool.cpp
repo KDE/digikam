@@ -4,7 +4,7 @@
  * Description : a plugin to fix automatically camera lens aberrations
  *
  * Copyright (C) 2008 by Adrian Schroeter <adrian at suse dot de>
- * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -18,7 +18,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "autocorrectiontool.moc"
 
@@ -53,7 +52,7 @@
 #include "dmetadata.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
-#include "imagewidget.h"
+#include "imageguidewidget.h"
 #include "klensfun.h"
 #include "version.h"
 
@@ -104,7 +103,7 @@ public:
 
     KLFDeviceSelector*  cameraSelector;
 
-    ImageWidget*        previewWidget;
+    ImageGuideWidget*   previewWidget;
     EditorToolSettings* gboxSettings;
 };
 
@@ -116,18 +115,16 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
     setToolName(i18n("Lens Auto-Correction"));
     setToolIcon(SmallIcon("lensdistortion"));
 
-    d->previewWidget = new ImageWidget("antivignetting Tool", 0, QString(),
-                                       true, ImageGuideWidget::HVGuideMode, true);
-
+    d->previewWidget = new ImageGuideWidget(0, true, ImageGuideWidget::HVGuideMode);
     setToolView(d->previewWidget);
-
+    setPreviewModeMask(PreviewToolBar::AllPreviewModes);
+    
     // -------------------------------------------------------------
 
-    d->gboxSettings = new EditorToolSettings;
-
-    QGridLayout *grid  = new QGridLayout(d->gboxSettings->plainPage());
-    d->cameraSelector  = new KLFDeviceSelector(d->gboxSettings->plainPage());
-    KSeparator *line   = new KSeparator(Qt::Horizontal, d->gboxSettings->plainPage());
+    d->gboxSettings   = new EditorToolSettings;
+    QGridLayout *grid = new QGridLayout(d->gboxSettings->plainPage());
+    d->cameraSelector = new KLFDeviceSelector(d->gboxSettings->plainPage());
+    KSeparator *line  = new KSeparator(Qt::Horizontal, d->gboxSettings->plainPage());
 
     // -------------------------------------------------------------
 
@@ -254,7 +251,6 @@ void AutoCorrectionTool::writeSettings()
     if ( d->filterGeom->isEnabled() )
         group.writeEntry(d->configGeometryEntry,   (d->filterGeom->checkState() == Qt::Checked) ? true : false);
 
-    d->previewWidget->writeSettings();
     group.sync();
 }
 

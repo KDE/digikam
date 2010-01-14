@@ -54,7 +54,7 @@
 #include "dimg.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
-#include "imagepanelwidget.h"
+#include "imageregionwidget.h"
 #include "texture.h"
 #include "version.h"
 
@@ -85,7 +85,7 @@ public:
 
     RComboBox*          textureType;
     RIntNumInput*       blendGain;
-    ImagePanelWidget*   previewWidget;
+    ImageRegionWidget*  previewWidget;
     EditorToolSettings* gboxSettings;
 };
 
@@ -99,10 +99,8 @@ TextureTool::TextureTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings = new EditorToolSettings;
-    d->gboxSettings->setTools(EditorToolSettings::PanIcon);
-
-    d->previewWidget = new ImagePanelWidget(470, 350, "texture Tool", d->gboxSettings->panIconView());
+    d->gboxSettings  = new EditorToolSettings;
+    d->previewWidget = new ImageRegionWidget;
 
     // -------------------------------------------------------------
 
@@ -152,6 +150,7 @@ TextureTool::TextureTool(QObject* parent)
 
     setToolSettings(d->gboxSettings);
     setToolView(d->previewWidget);
+    setPreviewModeMask(PreviewToolBar::AllPreviewModes);         
     init();
 
     // -------------------------------------------------------------
@@ -175,6 +174,7 @@ void TextureTool::renderingFinished()
 {
     d->textureType->setEnabled(true);
     d->blendGain->setEnabled(true);
+    toolView()->setEnabled(true);
 }
 
 void TextureTool::readSettings()
@@ -196,7 +196,6 @@ void TextureTool::writeSettings()
     KConfigGroup group        = config->group(d->configGroupName);
     group.writeEntry(d->configTextureTypeEntry, d->textureType->currentIndex());
     group.writeEntry(d->configBlendGainEntry,   d->blendGain->value());
-    d->previewWidget->writeSettings();
     group.sync();
 }
 
@@ -218,6 +217,7 @@ void TextureTool::prepareEffect()
 {
     d->textureType->setEnabled(false);
     d->blendGain->setEnabled(false);
+    toolView()->setEnabled(false);    
 
     DImg image      = d->previewWidget->getOriginalRegionImage();
     QString texture = getTexturePath( d->textureType->currentIndex() );
@@ -231,6 +231,7 @@ void TextureTool::prepareFinal()
 {
     d->textureType->setEnabled(false);
     d->blendGain->setEnabled(false);
+    toolView()->setEnabled(false);    
 
     int b = 255 - d->blendGain->value();
 

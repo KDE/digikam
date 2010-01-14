@@ -6,7 +6,7 @@
  * Date        : 2009-09-19
  * Description : a tool for color space conversion
  *
- * Copyright (C) 2009 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -55,7 +55,7 @@
 #include "icctransform.h"
 #include "icctransformfilter.h"
 #include "imageiface.h"
-#include "imagepanelwidget.h"
+#include "imageregionwidget.h"
 
 using namespace KDcrawIface;
 using namespace Digikam;
@@ -85,7 +85,7 @@ public:
 
     IccProfilesComboBox*     profilesBox;
 
-    ImagePanelWidget*        previewWidget;
+    ImageRegionWidget*       previewWidget;
     EditorToolSettings*      gboxSettings;
 
     IccProfile               currentProfile;
@@ -133,8 +133,8 @@ ProfileConversionTool::ProfileConversionTool(QObject* parent)
 
     QGridLayout* grid = new QGridLayout(d->gboxSettings->plainPage());
 
-    // ---
-
+    // -------------------------------------------------------------
+    
     QVBoxLayout *currentProfVBox = new QVBoxLayout;
     QLabel *currentProfileTitle  = new QLabel(i18n("Current Color Space:"));
     QLabel *currentProfileDesc   = new QLabel(QString("<b>%1</b>").arg(d->currentProfile.description()));
@@ -145,8 +145,8 @@ ProfileConversionTool::ProfileConversionTool(QObject* parent)
     currentProfVBox->addWidget(currentProfileDesc);
     currentProfVBox->addWidget(currentProfInfo, 0, Qt::AlignLeft);
 
-    // ---
-
+    // -------------------------------------------------------------
+    
     QVBoxLayout *newProfVBox = new QVBoxLayout;
 
     QLabel *newProfileLabel  = new QLabel(i18n("Convert to:"));
@@ -160,36 +160,34 @@ ProfileConversionTool::ProfileConversionTool(QObject* parent)
     newProfVBox->addWidget(d->profilesBox);
     newProfVBox->addWidget(newProfInfo, 0, Qt::AlignLeft);
 
-    // ---
-
+    // -------------------------------------------------------------
+    
     grid->addLayout(currentProfVBox, 0, 0);
     grid->addLayout(newProfVBox,     1, 0);
     grid->setRowStretch(2, 10);
     grid->setMargin(d->gboxSettings->spacingHint());
     grid->setSpacing(d->gboxSettings->spacingHint());
 
-    // ---
-
+    // -------------------------------------------------------------
+    
+    d->previewWidget = new ImageRegionWidget;
+    
     setToolSettings(d->gboxSettings);
-
-    /*d->previewWidget = new ImageWidget("Profile Conversion Tool", 0,
-                                      i18n("This is the image's color preview. "
-                                           "You can pick a spot on the image "
-                                           "to see the corresponding level in the histogram."));*/
-    d->previewWidget = new ImagePanelWidget(470, 350, "Profile Conversion Tool", d->gboxSettings->panIconView());
     setToolView(d->previewWidget);
+    setPreviewModeMask(PreviewToolBar::AllPreviewModes);
+    
     init();
 
-    // ---
-
+    // -------------------------------------------------------------
+    
     connect(d->previewWidget, SIGNAL(signalOriginalClipFocusChanged()),
             this, SLOT(slotTimer()));
 
     connect(currentProfInfo, SIGNAL(clicked()),
-            this, SLOT(slotCurrentProfInfo()) );
+            this, SLOT(slotCurrentProfInfo()));
 
     connect(newProfInfo, SIGNAL(clicked()),
-            this, SLOT(slotNewProfInfo()) );
+            this, SLOT(slotNewProfInfo()));
 
     connect(d->profilesBox, SIGNAL(currentIndexChanged(int)),
             this, SLOT(slotProfileChanged()));
@@ -223,6 +221,7 @@ void ProfileConversionTool::fastConversion(const IccProfile& profile)
 void ProfileConversionTool::renderingFinished()
 {
     d->profilesBox->setEnabled(true);
+    toolView()->setEnabled(true);
 }
 
 void ProfileConversionTool::slotCurrentProfInfo()
@@ -264,8 +263,6 @@ void ProfileConversionTool::writeSettings()
 
     group.writePathEntry(d->configProfileEntry,              d->profilesBox->currentProfile().filePath());
     group.writePathEntry(d->configRecentlyUsedProfilesEntry, d->favoriteProfiles.keys());
-
-    d->previewWidget->writeSettings();
     config->sync();
 }
 
@@ -281,12 +278,18 @@ void ProfileConversionTool::updateTransform()
 
 void ProfileConversionTool::prepareEffect()
 {
+    d->profilesBox->setEnabled(false);
+    toolView()->setEnabled(false);
+
     DImg img = d->previewWidget->getOriginalRegionImage();
     setFilter(new IccTransformFilter(&img, this, d->transform));
 }
 
 void ProfileConversionTool::prepareFinal()
 {
+    d->profilesBox->setEnabled(false);
+    toolView()->setEnabled(false);
+
     ImageIface iface(0, 0);
     setFilter(new IccTransformFilter(iface.getOriginalImg(), this, d->transform));
 }

@@ -52,7 +52,7 @@
 #include "dimg.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
-#include "imagepanelwidget.h"
+#include "imageregionwidget.h"
 #include "oilpaint.h"
 #include "version.h"
 
@@ -84,7 +84,7 @@ public:
     RIntNumInput*       brushSizeInput;
     RIntNumInput*       smoothInput;
 
-    ImagePanelWidget*   previewWidget;
+    ImageRegionWidget*  previewWidget;
     EditorToolSettings* gboxSettings;
 };
 
@@ -103,8 +103,6 @@ OilPaintTool::OilPaintTool(QObject* parent)
                                 EditorToolSettings::Ok|
                                 EditorToolSettings::Cancel|
                                 EditorToolSettings::Try);
-
-    d->gboxSettings->setTools(EditorToolSettings::PanIcon);
 
     // -------------------------------------------------------------
 
@@ -136,13 +134,11 @@ OilPaintTool::OilPaintTool(QObject* parent)
 
     // -------------------------------------------------------------
 
+    d->previewWidget = new ImageRegionWidget;
+
     setToolSettings(d->gboxSettings);
-
-    // -------------------------------------------------------------
-
-    d->previewWidget = new ImagePanelWidget(470, 350, "oilpaint Tool", d->gboxSettings->panIconView());
-
     setToolView(d->previewWidget);
+    setPreviewModeMask(PreviewToolBar::AllPreviewModes);    
     init();
 }
 
@@ -155,6 +151,7 @@ void OilPaintTool::renderingFinished()
 {
     d->brushSizeInput->setEnabled(true);
     d->smoothInput->setEnabled(true);
+    toolView()->setEnabled(true);
 }
 
 void OilPaintTool::readSettings()
@@ -176,7 +173,6 @@ void OilPaintTool::writeSettings()
 
     group.writeEntry(d->configBrushSizeEntry,        d->brushSizeInput->value());
     group.writeEntry(d->configSmoothAdjustmentEntry, d->smoothInput->value());
-    d->previewWidget->writeSettings();
     group.sync();
 }
 
@@ -198,6 +194,7 @@ void OilPaintTool::prepareEffect()
 {
     d->brushSizeInput->setEnabled(false);
     d->smoothInput->setEnabled(false);
+    toolView()->setEnabled(false);
 
     DImg image = d->previewWidget->getOriginalRegionImage();
     int b      = d->brushSizeInput->value();
@@ -210,7 +207,8 @@ void OilPaintTool::prepareFinal()
 {
     d->brushSizeInput->setEnabled(false);
     d->smoothInput->setEnabled(false);
-
+    toolView()->setEnabled(false);
+    
     int b = d->brushSizeInput->value();
     int s = d->smoothInput->value();
 
