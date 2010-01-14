@@ -48,7 +48,7 @@ class DIGIKAM_EXPORT ImagePanelWidget : public QWidget
 
 public:
 
-    ImagePanelWidget(uint w, uint h, const QString& settingsSection, QWidget *parent=0);
+    ImagePanelWidget(uint w, uint h, const QString& settingsSection, QWidget* parent=0);
     ~ImagePanelWidget();
 
     QRect  getOriginalImageRegion();

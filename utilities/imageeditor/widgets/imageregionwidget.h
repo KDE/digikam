@@ -76,7 +76,6 @@ public:
     void   ICCSettingsChanged();
     void   exposureSettingsChanged();
 
-
 Q_SIGNALS:
 
     void signalResized();

@@ -81,10 +81,11 @@ public:
 ImageRegionWidget::ImageRegionWidget(int w, int h, QWidget* parent)
                  : PreviewWidget(parent), d(new ImageRegionWidgetPriv)
 {
-    setFrameStyle(QFrame::NoFrame);
     d->iface = new ImageIface(0, 0);
     d->image = d->iface->getOriginalImg()->copy();
 
+    setAttribute(Qt::WA_DeleteOnClose);
+    setFrameStyle(QFrame::NoFrame);
     setMinimumSize(w, h);
     setWhatsThis(i18n("<p>Here you can see the original clip image "
                       "which will be used for the preview computation.</p>"
