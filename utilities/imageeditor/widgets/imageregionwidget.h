@@ -106,6 +106,7 @@ private:
     void   resizeEvent(QResizeEvent*);
     void   contentsWheelEvent(QWheelEvent*);
     QImage previewToQImage() const;
+    void   drawText(QPainter* p, const QRect& rect, const QString& text);
 
     inline void paintPreview(QPixmap* pix, int sx, int sy, int sw, int sh);
 

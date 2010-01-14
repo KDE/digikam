@@ -71,7 +71,7 @@ public:
 
 public:
 
-    ImageGuideWidget(QWidget *parent=0,
+    ImageGuideWidget(QWidget* parent=0,
                      bool spotVisible=true, int guideMode=PickColorMode,
                      const QColor& guideColor=Qt::red, int guideSize=1,
                      bool blink=false, bool useImageSelection=false);
@@ -110,23 +110,21 @@ Q_SIGNALS:
     void spotPositionChangedFromTarget(const Digikam::DColor& color, const QPoint& position);
     void signalResized();
 
-protected:
-
-    void paintEvent(QPaintEvent*);
-    void resizeEvent(QResizeEvent*);
-    void timerEvent(QTimerEvent*);
-    void mousePressEvent(QMouseEvent*);
-    void mouseReleaseEvent(QMouseEvent*);
-    void mouseMoveEvent(QMouseEvent*);
-    void enterEvent(QEvent*);
-    void leaveEvent(QEvent*);
-
 private:
 
+    void   paintEvent(QPaintEvent*);
+    void   resizeEvent(QResizeEvent*);
+    void   timerEvent(QTimerEvent*);
+    void   mousePressEvent(QMouseEvent*);
+    void   mouseReleaseEvent(QMouseEvent*);
+    void   mouseMoveEvent(QMouseEvent*);
+    void   enterEvent(QEvent*);
+    void   leaveEvent(QEvent*);
     void   updatePixmap();
     void   drawLineTo(const QPoint& endPoint);
     void   drawLineTo(int width, bool erase, const QColor& color, const QPoint& start, const QPoint& end);
     QPoint translatePointPosition(QPoint& point);
+    void   drawText(QPainter* p, const QRect& rect, const QString& text);
     void   updateMaskCursor();
 
 private:

@@ -211,6 +211,12 @@ void ImageRegionWidget::viewportPaintExtraData()
     if (!m_movingInProgress && !d->pixmapRegion.isNull())
     {
         QPainter p(viewport());
+        p.setRenderHint(QPainter::Antialiasing, true);
+        p.setBackgroundMode(Qt::TransparentMode);
+        QFontMetrics fontMt = p.fontMetrics();
+
+        QString text;
+        QRect textRect, fontRect;
         QRect region = getLocalTargetImageRegion();
         QRect rt(contentsToViewport(region.topLeft()), contentsToViewport(region.bottomRight()));
 
@@ -233,17 +239,11 @@ void ImageRegionWidget::viewportPaintExtraData()
                 p.drawLine(rt.topLeft().x(),    rt.topLeft().y()+1,
                            rt.bottomLeft().x(), rt.bottomLeft().y()-1);
 
-                p.setPen(QPen(Qt::red, 1)) ;
-                QFontMetrics fontMt = p.fontMetrics();
-
-                QString text(i18n("Target"));
-                QRect textRect;
-                QRect fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text);
+                text = i18n("Target");
+                fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text);
                 textRect.setTopLeft(QPoint(rt.topLeft().x()+20, rt.topLeft().y()+20));
                 textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2) );
-                p.fillRect(textRect, QBrush(QColor(250, 250, 255)) );
-                p.drawRect(textRect);
-                p.drawText(textRect, Qt::AlignCenter, text);
+                drawText(&p, textRect, text);
 
                 text = i18n("Original");
                 fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text);
@@ -253,9 +253,7 @@ void ImageRegionWidget::viewportPaintExtraData()
 
                 textRect.setTopLeft(QPoint(ro.topLeft().x()+20, ro.topLeft().y()+20));
                 textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2 ) );
-                p.fillRect(textRect, QBrush(QColor(250, 250, 255)) );
-                p.drawRect(textRect);
-                p.drawText(textRect, Qt::AlignCenter, text);
+                drawText(&p, textRect, text);
                 break;
             }
             case PreviewToolBar::PreviewBothImagesHorz:
@@ -268,17 +266,11 @@ void ImageRegionWidget::viewportPaintExtraData()
                 p.drawLine(rt.topLeft().x(),   rt.topLeft().y(),
                            rt.topRight().x(), rt.topRight().y());
 
-                p.setPen(QPen(Qt::red, 1)) ;
-                QFontMetrics fontMt = p.fontMetrics();
-
-                QString text(i18n("Target"));
-                QRect textRect;
-                QRect fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text);
+                text = i18n("Target");
+                fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text);
                 textRect.setTopLeft(QPoint(rt.topLeft().x()+20, rt.topLeft().y()+20));
                 textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2) );
-                p.fillRect(textRect, QBrush(QColor(250, 250, 255)) );
-                p.drawRect(textRect);
-                p.drawText(textRect, Qt::AlignCenter, text);
+                drawText(&p, textRect, text);
 
                 text = i18n("Original");
                 fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text);
@@ -288,9 +280,16 @@ void ImageRegionWidget::viewportPaintExtraData()
 
                 textRect.setTopLeft(QPoint(ro.topLeft().x()+20, ro.topLeft().y()+20));
                 textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2 ) );
-                p.fillRect(textRect, QBrush(QColor(250, 250, 255)) );
-                p.drawRect(textRect);
-                p.drawText(textRect, Qt::AlignCenter, text);
+                drawText(&p, textRect, text);
+                break;
+            }
+            case PreviewToolBar::PreviewTargetImage:
+            {
+                text = i18n("Target");
+                fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text);
+                textRect.setTopLeft(QPoint(rt.topLeft().x()+20, rt.topLeft().y()+20));
+                textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2) );
+                drawText(&p, textRect, text);
                 break;
             }
         }
@@ -323,7 +322,7 @@ void ImageRegionWidget::viewportPaintExtraData()
                     p.drawLine(hpArea.x(),                   hp.y(),
                                hp.x()-(int)(3*zoomFactor()), hp.y());
                     p.drawLine(hp.x()+(int)(3*zoomFactor()), hp.y(),
-                               hpArea.right(),                hp.y());
+                               hpArea.right(),               hp.y());
 
                     p.setPen(QPen(Qt::red, 2, Qt::DotLine));
                     p.drawLine(hp.x(), hpArea.y(),
@@ -333,12 +332,29 @@ void ImageRegionWidget::viewportPaintExtraData()
                     p.drawLine(hpArea.x(),                   hp.y(),
                                hp.x()-(int)(3*zoomFactor()), hp.y());
                     p.drawLine(hp.x()+(int)(3*zoomFactor()), hp.y(),
-                               hpArea.right(),                hp.y());
+                               hpArea.right(),               hp.y());
                 }
             }
         }
         p.end();
     }
+}
+
+void ImageRegionWidget::drawText(QPainter* p, const QRect& rect, const QString& text)
+{
+    // Draw background
+    p->setPen(Qt::black);
+    QColor semiTransBg = palette().color(QPalette::Window);
+    semiTransBg.setAlpha(190);
+    p->setBrush(semiTransBg);
+    p->translate(0.5, 0.5);
+    p->drawRoundRect(rect, 10.0, 10.0);
+
+    // Draw shadow and text
+    p->setPen(palette().color(QPalette::Window).dark(115));
+    p->drawText(rect.translated(1, 1), text);
+    p->setPen(palette().color(QPalette::WindowText));
+    p->drawText(rect, text);
 }
 
 void ImageRegionWidget::setCenterImageRegionPosition()
