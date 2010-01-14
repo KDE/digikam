@@ -702,8 +702,6 @@ void ImageGuideWidget::mouseMoveEvent(QMouseEvent *e)
 {
     if (d->rect.contains(e->x(), e->y()))
     {
-//         setCursor(Qt::CrossCursor);
-
         if ( d->focus && d->spotVisible )
         {
             setCursor(Qt::CrossCursor);
