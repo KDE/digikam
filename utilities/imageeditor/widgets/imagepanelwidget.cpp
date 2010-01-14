@@ -146,9 +146,9 @@ DImg ImagePanelWidget::getOriginalRegionImage()
     return ( d->imageRegionWidget->getOriginalRegionImage() );
 }
 
-void ImagePanelWidget::setPreviewImage(DImg img)
+void ImagePanelWidget::setPreviewImage(const DImg &img)
 {
-    d->imageRegionWidget->setPreviewImage(&img);
+    d->imageRegionWidget->setPreviewImage(img);
 }
 
 void ImagePanelWidget::setCenterImageRegionPosition()

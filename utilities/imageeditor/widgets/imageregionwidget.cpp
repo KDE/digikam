@@ -360,9 +360,9 @@ void ImageRegionWidget::restorePixmapRegion()
     viewport()->repaint();
 }
 
-void ImageRegionWidget::setPreviewImage(DImg* img)
+void ImageRegionWidget::setPreviewImage(const DImg& img)
 {
-    DImg image = img->copy();
+    DImg image = img;
     QRect r    = getLocalImageRegionToRender();
     image.resize(r.width(), r.height());
 

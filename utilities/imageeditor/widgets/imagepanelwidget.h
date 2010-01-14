@@ -63,7 +63,7 @@ public:
     QRect  getOriginalImageRegion();
     QRect  getOriginalImageRegionToRender();
     DImg   getOriginalRegionImage();
-    void   setPreviewImage(DImg img);
+    void   setPreviewImage(const DImg& img);
     void   setCenterImageRegionPosition();
 
     void   setHighLightPoints(const QPolygon& pt);
