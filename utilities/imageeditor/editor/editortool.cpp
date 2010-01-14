@@ -58,12 +58,12 @@ public:
         settings = 0;
     }
 
-    QString  helpAnchor;
-    QString  name;
+    QString             helpAnchor;
+    QString             name;
 
-    QWidget* view;
-    QPixmap  icon;
-    QTimer*  timer;
+    QWidget*            view;
+    QPixmap             icon;
+    QTimer*             timer;
 
     EditorToolSettings* settings;
 };

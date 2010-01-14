@@ -28,6 +28,7 @@
 #include <QButtonGroup>
 #include <QLayout>
 #include <QToolButton>
+#include <QAbstractButton>
 
 // KDE includes
 
@@ -174,6 +175,24 @@ void PreviewToolBar::setPreviewModeMask(int mask)
     d->previewDupplicateBothButtonHorz->setEnabled(mask & PreviewBothImagesVertCont);
     d->previewtargetButton->setEnabled(mask             & PreviewTargetImage);
     d->previewToggleMouseOverButton->setEnabled(mask    & PreviewToggleOnMouseOver);
+
+    // When we switch to another mask, check if current mode is valid.
+    PreviewToolBar::PreviewMode mode = previewMode();
+    if (d->previewButtons->button(mode))
+    {
+        if (!d->previewButtons->button(mode)->isEnabled())
+        {
+            QList<QAbstractButton*> btns = d->previewButtons->buttons();
+            foreach (QAbstractButton* btn, btns)
+            {
+                if (btn && btn->isEnabled())
+                {
+                    btn->setChecked(true);
+                    return;
+                }
+            }
+        }
+    }
 }
 
 void PreviewToolBar::setPreviewMode(PreviewMode mode)
