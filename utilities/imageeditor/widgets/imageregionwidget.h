@@ -65,7 +65,7 @@ public:
     /** To get target image region image to use for render operations */
     DImg   getImageRegionImage();
 
-    void   updatePreviewImage(DImg* img);
+    void   setPreviewImage(DImg* img);
 
     void   backupPixmapRegion();
     void   restorePixmapRegion();

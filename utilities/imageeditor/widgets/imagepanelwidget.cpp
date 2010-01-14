@@ -153,8 +153,7 @@ DImg ImagePanelWidget::getOriginalRegionImage()
 
 void ImagePanelWidget::setPreviewImage(DImg img)
 {
-    d->imageRegionWidget->updatePreviewImage(&img);
-    d->imageRegionWidget->repaintContents(false);
+    d->imageRegionWidget->setPreviewImage(&img);
 }
 
 void ImagePanelWidget::setCenterImageRegionPosition()

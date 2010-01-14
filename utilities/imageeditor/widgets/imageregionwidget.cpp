@@ -360,7 +360,7 @@ void ImageRegionWidget::restorePixmapRegion()
     viewport()->repaint();
 }
 
-void ImageRegionWidget::updatePreviewImage(DImg* img)
+void ImageRegionWidget::setPreviewImage(DImg* img)
 {
     DImg image = img->copy();
     QRect r    = getLocalImageRegionToRender();
@@ -372,7 +372,9 @@ void ImageRegionWidget::updatePreviewImage(DImg* img)
     // However, some plugins may set a profile on the preview image, which we accept of course.
     if (image.getIccProfile().isNull())
         image.setIccProfile(d->image.getIccProfile());
+    
     d->pixmapRegion = d->iface->convertToPixmap(image);
+    repaintContents(false);
 }
 
 DImg ImageRegionWidget::getImageRegionImage()
