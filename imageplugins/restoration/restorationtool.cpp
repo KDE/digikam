@@ -207,7 +207,7 @@ RestorationTool::~RestorationTool()
 
 void RestorationTool::renderingFinished()
 {
-    d->previewWidget->setEnable(true);
+    d->previewWidget->setEnabled(true);
     d->mainTab->setEnabled(true);
 }
 

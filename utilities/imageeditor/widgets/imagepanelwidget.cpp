@@ -131,11 +131,6 @@ void ImagePanelWidget::setPanIconHighLightPoints(const QPolygon& pt)
     d->imageRegionWidget->setHighLightPoints(pt);
 }
 
-void ImagePanelWidget::setEnable(bool b)
-{
-    d->imageRegionWidget->setEnabled(b);
-}
-
 QRect ImagePanelWidget::getOriginalImageRegion()
 {
     return ( d->imageRegionWidget->getImageRegion() );

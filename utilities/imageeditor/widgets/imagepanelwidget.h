@@ -66,8 +66,6 @@ public:
     void   setPreviewImage(DImg img);
     void   setCenterImageRegionPosition();
 
-    void   setEnable(bool b);
-
     void   setPanIconHighLightPoints(const QPolygon& pt);
 
     void   ICCSettingsChanged();
