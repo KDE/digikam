@@ -153,7 +153,7 @@ void ImagePanelWidget::setPreviewImage(const DImg &img)
 
 void ImagePanelWidget::setCenterImageRegionPosition()
 {
-    d->imageRegionWidget->setCenterContentsPosition();
+    d->imageRegionWidget->setCenterImageRegionPosition();
 }
 
 void ImagePanelWidget::ICCSettingsChanged()

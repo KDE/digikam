@@ -53,7 +53,7 @@ public:
     ~ImageRegionWidget();
 
     void   setContentsPosition(int x, int y, bool targetDone);
-    void   setCenterContentsPosition();
+    void   setCenterImageRegionPosition();
 
     /** To get image region including original or/and target area depending of separate view mode.
         The region is given using not scaled image unit.*/

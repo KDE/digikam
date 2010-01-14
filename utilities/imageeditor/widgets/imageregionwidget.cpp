@@ -332,7 +332,7 @@ void ImageRegionWidget::viewportPaintExtraData()
     }
 }
 
-void ImageRegionWidget::setCenterContentsPosition()
+void ImageRegionWidget::setCenterImageRegionPosition()
 {
     center(contentsWidth()/2, contentsHeight()/2);
     slotZoomFactorChanged();
