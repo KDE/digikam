@@ -175,7 +175,7 @@ void ImageRegionWidget::slotPreviewModeChanged(int mode)
     slotZoomFactorChanged();
 }
 
-QRect ImageRegionWidget::getImageRegion()
+QRect ImageRegionWidget::getOriginalImageRegion()
 {
     QRect region;
 
@@ -297,7 +297,7 @@ void ImageRegionWidget::viewportPaintExtraData()
             {
                 pt = d->hightlightPoints.point(i);
 
-                if ( getImageRegionToRender().contains(pt) )
+                if ( getOriginalImageRegionToRender().contains(pt) )
                 {
                     int x = (int)(((double)pt.x() * tileSize()) / floor(tileSize() / zoomFactor()));
                     int y = (int)(((double)pt.y() * tileSize()) / floor(tileSize() / zoomFactor()));
@@ -377,12 +377,12 @@ void ImageRegionWidget::setPreviewImage(DImg* img)
     repaintContents(false);
 }
 
-DImg ImageRegionWidget::getImageRegionImage()
+DImg ImageRegionWidget::getOriginalRegionImage()
 {
-    return (d->image.copy(getImageRegionToRender()));
+    return (d->image.copy(getOriginalImageRegionToRender()));
 }
 
-QRect ImageRegionWidget::getImageRegionToRender()
+QRect ImageRegionWidget::getOriginalImageRegionToRender()
 {
     QRect r = getLocalImageRegionToRender();
 

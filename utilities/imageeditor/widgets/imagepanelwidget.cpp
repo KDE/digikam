@@ -133,17 +133,17 @@ void ImagePanelWidget::setHighLightPoints(const QPolygon& pt)
 
 QRect ImagePanelWidget::getOriginalImageRegion()
 {
-    return ( d->imageRegionWidget->getImageRegion() );
+    return ( d->imageRegionWidget->getOriginalImageRegion() );
 }
 
 QRect ImagePanelWidget::getOriginalImageRegionToRender()
 {
-    return ( d->imageRegionWidget->getImageRegionToRender() );
+    return ( d->imageRegionWidget->getOriginalImageRegionToRender() );
 }
 
 DImg ImagePanelWidget::getOriginalRegionImage()
 {
-    return ( d->imageRegionWidget->getImageRegionImage() );
+    return ( d->imageRegionWidget->getOriginalRegionImage() );
 }
 
 void ImagePanelWidget::setPreviewImage(DImg img)

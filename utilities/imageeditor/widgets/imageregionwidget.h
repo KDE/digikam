@@ -57,13 +57,13 @@ public:
 
     /** To get image region including original or/and target area depending of separate view mode.
         The region is given using not scaled image unit.*/
-    QRect  getImageRegion();
+    QRect  getOriginalImageRegion();
 
     /** To get target image region area to render */
-    QRect  getImageRegionToRender();
+    QRect  getOriginalImageRegionToRender();
 
     /** To get target image region image to use for render operations */
-    DImg   getImageRegionImage();
+    DImg   getOriginalRegionImage();
 
     void   setPreviewImage(DImg* img);
 
