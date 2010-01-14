@@ -500,7 +500,7 @@ void WhiteBalanceTool::slotPickerColorButtonActived()
 {
     // Save previous rendering mode and toggle to original image.
     d->currentPreviewMode = d->previewWidget->previewMode();
-    d->previewWidget->setPreviewMode(PreviewToolBar::PreviewOriginalImage);
+    d->previewWidget->slotPreviewModeChanged(PreviewToolBar::PreviewOriginalImage);
 }
 
 void WhiteBalanceTool::slotColorSelectedFromOriginal(const DColor& color)
@@ -523,12 +523,12 @@ void WhiteBalanceTool::slotColorSelectedFromOriginal(const DColor& color)
     }
 
     // restore previous rendering mode.
-    d->previewWidget->setPreviewMode(d->currentPreviewMode);
+    d->previewWidget->slotPreviewModeChanged(d->currentPreviewMode);
 
     slotEffect();
 }
 
-void WhiteBalanceTool::slotColorSelectedFromTarget( const DColor& color )
+void WhiteBalanceTool::slotColorSelectedFromTarget(const DColor& color)
 {
     d->gboxSettings->histogramBox()->histogram()->setHistogramGuideByColor(color);
 }

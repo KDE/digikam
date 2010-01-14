@@ -50,7 +50,7 @@
 #include "dimggaussianblur.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
-#include "imagepanelwidget.h"
+#include "imageregionwidget.h"
 
 using namespace KDcrawIface;
 using namespace Digikam;
@@ -75,7 +75,7 @@ public:
     const QString       configRadiusAdjustmentEntry;
 
     RDoubleNumInput*    radiusInput;
-    ImagePanelWidget*   previewWidget;
+    ImageRegionWidget*  previewWidget;
     EditorToolSettings* gboxSettings;
 };
 
@@ -89,7 +89,7 @@ BlurTool::BlurTool(QObject* parent)
     setToolHelp("blursharpentool.anchor");
 
     d->gboxSettings  = new EditorToolSettings;
-    d->previewWidget = new ImagePanelWidget(470, 350, "gaussianblur Tool");
+    d->previewWidget = new ImageRegionWidget;
 
     // --------------------------------------------------------
 
@@ -113,6 +113,7 @@ BlurTool::BlurTool(QObject* parent)
 
     // --------------------------------------------------------
 
+    setPreviewModeMask(PreviewToolBar::AllPreviewModes);
     setToolSettings(d->gboxSettings);
     setToolView(d->previewWidget);
     init();
@@ -143,7 +144,6 @@ void BlurTool::writeSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
     group.writeEntry(d->configRadiusAdjustmentEntry, d->radiusInput->value());
-    d->previewWidget->writeSettings();
     config->sync();
 }
 
@@ -158,6 +158,8 @@ void BlurTool::prepareEffect()
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
     d->radiusInput->setEnabled(false);
+    toolView()->setEnabled(false);
+
     DImg img = d->previewWidget->getOriginalRegionImage();
     setFilter(dynamic_cast<DImgThreadedFilter*>(new DImgGaussianBlur(&img, this, d->radiusInput->value())));
 }
@@ -165,6 +167,7 @@ void BlurTool::prepareEffect()
 void BlurTool::prepareFinal()
 {
     d->radiusInput->setEnabled(false);
+    toolView()->setEnabled(false);
 
     ImageIface iface(0, 0);
     uchar *data      = iface.getOriginalImage();
@@ -190,10 +193,11 @@ void BlurTool::putFinalData()
     iface.putOriginalImage(i18n("Gaussian Blur"), imDest.bits());
 }
 
-void BlurTool::renderingFinished(void)
+void BlurTool::renderingFinished()
 {
     QApplication::restoreOverrideCursor();
     d->radiusInput->setEnabled(true);
+    toolView()->setEnabled(true);
 }
 
 }  // namespace DigikamImagesPluginCore

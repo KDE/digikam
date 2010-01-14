@@ -53,7 +53,7 @@
 #include "dimg.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
-#include "imagepanelwidget.h"
+#include "imageregionwidget.h"
 #include "version.h"
 
 using namespace KDcrawIface;
@@ -85,7 +85,7 @@ public:
     RIntNumInput*       pencilInput;
     RIntNumInput*       smoothInput;
 
-    ImagePanelWidget*   previewWidget;
+    ImageRegionWidget*  previewWidget;
     EditorToolSettings* gboxSettings;
 };
 
@@ -105,7 +105,7 @@ CharcoalTool::CharcoalTool(QObject* parent)
                                 EditorToolSettings::Cancel|
                                 EditorToolSettings::Try);
 
-    d->previewWidget = new ImagePanelWidget(470, 350, "charcoal Tool");
+    d->previewWidget = new ImageRegionWidget;
 
     // -------------------------------------------------------------
 
@@ -139,7 +139,8 @@ CharcoalTool::CharcoalTool(QObject* parent)
     d->gboxSettings->plainPage()->setLayout(mainLayout);
 
     // -------------------------------------------------------------
-
+    
+    setPreviewModeMask(PreviewToolBar::AllPreviewModes);
     setToolSettings(d->gboxSettings);
     setToolView(d->previewWidget);
     init();
@@ -152,6 +153,7 @@ CharcoalTool::~CharcoalTool()
 
 void CharcoalTool::renderingFinished()
 {
+    toolView()->setEnabled(true);
     d->pencilInput->setEnabled(true);
     d->smoothInput->setEnabled(true);
 }
@@ -174,7 +176,6 @@ void CharcoalTool::writeSettings()
     KConfigGroup group        = config->group(d->configGroupName);
     group.writeEntry(d->configPencilAdjustmentEntry, d->pencilInput->value());
     group.writeEntry(d->configSmoothAdjustmentEntry, d->smoothInput->value());
-    d->previewWidget->writeSettings();
     config->sync();
 }
 
@@ -192,6 +193,7 @@ void CharcoalTool::prepareEffect()
 {
     d->pencilInput->setEnabled(false);
     d->smoothInput->setEnabled(false);
+    toolView()->setEnabled(false);
 
     double pencil = (double)d->pencilInput->value()/10.0;
     double smooth = (double)d->smoothInput->value();
@@ -204,6 +206,7 @@ void CharcoalTool::prepareFinal()
 {
     d->pencilInput->setEnabled(false);
     d->smoothInput->setEnabled(false);
+    toolView()->setEnabled(false);
 
     double pencil = (double)d->pencilInput->value()/10.0;
     double smooth = (double)d->smoothInput->value();

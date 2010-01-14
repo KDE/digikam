@@ -83,6 +83,7 @@ Q_SIGNALS:
     void signalShowPrevImage();
     void signalZoomFactorChanged(double);
     void signalContentsMovedEvent(bool);
+    void signalSelectionTakeFocus();
 
 public Q_SLOTS:
 
@@ -97,8 +98,8 @@ protected:
 protected Q_SLOTS:
 
     void slotCornerButtonPressed();
-    void slotPanIconSelectionMoved(const QRect&, bool);
     void slotPanIconHiden();
+    virtual void slotPanIconSelectionMoved(const QRect&, bool);
 
 protected:
 

@@ -51,7 +51,7 @@
 #include "waveletsnr.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
-#include "imagepanelwidget.h"
+#include "imageregionwidget.h"
 #include "noisereductionsettings.h"
 #include "version.h"
 
@@ -74,7 +74,7 @@ public:
     const QString           configGroupName;
 
     NoiseReductionSettings* nrSettings;
-    ImagePanelWidget*       previewWidget;
+    ImageRegionWidget*      previewWidget;
     EditorToolSettings*     gboxSettings;
 };
 
@@ -96,13 +96,13 @@ NoiseReductionTool::NoiseReductionTool(QObject* parent)
                                 EditorToolSettings::SaveAs|
                                 EditorToolSettings::Try);
 
-    d->nrSettings = new NoiseReductionSettings(d->gboxSettings->plainPage());
-
+    d->nrSettings    = new NoiseReductionSettings(d->gboxSettings->plainPage());
+    d->previewWidget = new ImageRegionWidget;
+    
     setToolSettings(d->gboxSettings);
-
-    d->previewWidget = new ImagePanelWidget(470, 350, "noisereduction Tool");
     setToolView(d->previewWidget);
-
+    setPreviewModeMask(PreviewToolBar::AllPreviewModes);
+    
     init();
 }
 
@@ -114,6 +114,7 @@ NoiseReductionTool::~NoiseReductionTool()
 void NoiseReductionTool::renderingFinished()
 {
     d->nrSettings->setEnabled(true);
+    toolView()->setEnabled(true);
 }
 
 void NoiseReductionTool::readSettings()
@@ -129,7 +130,6 @@ void NoiseReductionTool::writeSettings()
     KConfigGroup group        = config->group(d->configGroupName);
 
     d->nrSettings->writeSettings(group);
-    d->previewWidget->writeSettings();
     group.sync();
 }
 
@@ -141,6 +141,7 @@ void NoiseReductionTool::slotResetSettings()
 void NoiseReductionTool::prepareEffect()
 {
     d->nrSettings->setEnabled(false);
+    toolView()->setEnabled(false);
 
     DImg image              = d->previewWidget->getOriginalRegionImage();
     WaveletsNRContainer prm = d->nrSettings->settings();
@@ -151,6 +152,7 @@ void NoiseReductionTool::prepareEffect()
 void NoiseReductionTool::prepareFinal()
 {
     d->nrSettings->setEnabled(false);
+    toolView()->setEnabled(false);
 
     WaveletsNRContainer prm = d->nrSettings->settings();
 

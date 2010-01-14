@@ -63,15 +63,15 @@ public:
                                     PreviewBothImagesVertCont | PreviewTargetImage        |
                                     PreviewToggleOnMouseOver,
                                     
-        NoBothPreviewModes        = PreviewOriginalImage | PreviewTargetImage | PreviewToggleOnMouseOver                           
-    };
+        NoBothPreviewModes        = PreviewOriginalImage | PreviewTargetImage | PreviewToggleOnMouseOver
+};
 
 public:
 
     PreviewToolBar(QWidget* parent=0);
     ~PreviewToolBar();
 
-    void setPreviewModeMask(PreviewMode mask);
+    void setPreviewModeMask(int mask);
     
     void setPreviewMode(PreviewMode mode);
     PreviewMode previewMode();

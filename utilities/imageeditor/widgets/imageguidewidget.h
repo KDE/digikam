@@ -27,21 +27,19 @@
 // Qt includes
 
 #include <QtGui/QWidget>
-#include <QtCore/QPoint>
 #include <QtGui/QColor>
 #include <QtGui/QPixmap>
 #include <QtGui/QResizeEvent>
-#include <QtCore/QEvent>
 #include <QtGui/QMouseEvent>
-#include <QtCore/QTimerEvent>
 #include <QtGui/QPaintEvent>
+#include <QtCore/QPoint>
+#include <QtCore/QEvent>
+#include <QtCore/QTimerEvent>
 
 // Local includes
 
 #include "dcolor.h"
 #include "digikam_export.h"
-
-class QPixmap;
 
 namespace Digikam
 {
@@ -71,7 +69,7 @@ public:
 
 public:
 
-    ImageGuideWidget(QWidget *parent=0,
+    ImageGuideWidget(QWidget* parent=0,
                      bool spotVisible=true, int guideMode=PickColorMode,
                      const QColor& guideColor=Qt::red, int guideSize=1,
                      bool blink=false, bool useImageSelection=false);
@@ -83,7 +81,6 @@ public:
     DColor getSpotColor(int getColorFrom);
     void   setSpotVisible(bool spotVisible, bool blink=false);
     int    previewMode();
-    void   setPreviewMode(int mode);
     void   resetSpotPosition();
     void   updatePreview();
     void   setPoints(const QPolygon& p, bool drawLine=false);
@@ -111,23 +108,21 @@ Q_SIGNALS:
     void spotPositionChangedFromTarget(const Digikam::DColor& color, const QPoint& position);
     void signalResized();
 
-protected:
-
-    void paintEvent(QPaintEvent*);
-    void resizeEvent(QResizeEvent*);
-    void timerEvent(QTimerEvent*);
-    void mousePressEvent(QMouseEvent*);
-    void mouseReleaseEvent(QMouseEvent*);
-    void mouseMoveEvent(QMouseEvent*);
-    void enterEvent(QEvent*);
-    void leaveEvent(QEvent*);
-
 private:
 
+    void   paintEvent(QPaintEvent*);
+    void   resizeEvent(QResizeEvent*);
+    void   timerEvent(QTimerEvent*);
+    void   mousePressEvent(QMouseEvent*);
+    void   mouseReleaseEvent(QMouseEvent*);
+    void   mouseMoveEvent(QMouseEvent*);
+    void   enterEvent(QEvent*);
+    void   leaveEvent(QEvent*);
     void   updatePixmap();
     void   drawLineTo(const QPoint& endPoint);
     void   drawLineTo(int width, bool erase, const QColor& color, const QPoint& start, const QPoint& end);
     QPoint translatePointPosition(QPoint& point);
+    void   drawText(QPainter* p, const QRect& rect, const QString& text);
     void   updateMaskCursor();
 
 private:

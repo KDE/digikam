@@ -28,6 +28,7 @@
 #include <QButtonGroup>
 #include <QLayout>
 #include <QToolButton>
+#include <QAbstractButton>
 
 // KDE includes
 
@@ -88,6 +89,7 @@ PreviewToolBar::PreviewToolBar(QWidget* parent)
     d->previewOriginalButton->setCheckable(true);
     d->previewOriginalButton->setWhatsThis( i18n( "If this option is enabled, the original image "
                                                "will be shown." ) );
+    d->previewOriginalButton->setToolTip(i18n("Original image"));
 
     d->previewBothButtonVert = new QToolButton(this);
     d->previewButtons->addButton(d->previewBothButtonVert, PreviewBothImagesVertCont);
@@ -99,6 +101,7 @@ PreviewToolBar::PreviewToolBar(QWidget* parent)
                                                "A contiguous area of the image will be shown, "
                                                "with one half from the original image, "
                                                "the other half from the target image.") );
+    d->previewBothButtonVert->setToolTip(i18n("Vertical split with contiguous image"));
 
     d->previewBothButtonHorz = new QToolButton(this);
     d->previewButtons->addButton(d->previewBothButtonHorz, PreviewBothImagesHorzCont);
@@ -110,6 +113,7 @@ PreviewToolBar::PreviewToolBar(QWidget* parent)
                                                "A contiguous area of the image will be shown, "
                                                "with one half from the original image, "
                                                "the other half from the target image.") );
+    d->previewBothButtonHorz->setToolTip(i18n("Horizontal split with contiguous image"));
 
     d->previewDuplicateBothButtonVert = new QToolButton(this);
     d->previewButtons->addButton(d->previewDuplicateBothButtonVert, PreviewBothImagesVert);
@@ -120,6 +124,7 @@ PreviewToolBar::PreviewToolBar(QWidget* parent)
                                                         "split vertically. "
                                                         "The same part of the original and the target image "
                                                         "will be shown side by side.") );
+    d->previewDuplicateBothButtonVert->setToolTip(i18n("Vertical split with same image region"));
 
     d->previewDupplicateBothButtonHorz = new QToolButton(this);
     d->previewButtons->addButton(d->previewDupplicateBothButtonHorz, PreviewBothImagesHorz);
@@ -130,6 +135,7 @@ PreviewToolBar::PreviewToolBar(QWidget* parent)
                                                          "split horizontally. "
                                                          "The same part of the original and the target image "
                                                          "will be shown side by side.") );
+    d->previewDupplicateBothButtonHorz->setToolTip(i18n("Horizontal split with same image region"));
 
     d->previewtargetButton = new QToolButton(this);
     d->previewButtons->addButton(d->previewtargetButton, PreviewTargetImage);
@@ -138,6 +144,7 @@ PreviewToolBar::PreviewToolBar(QWidget* parent)
     d->previewtargetButton->setCheckable(true);
     d->previewtargetButton->setWhatsThis( i18n( "If this option is enabled, the target image "
                                              "will be shown." ) );
+    d->previewtargetButton->setToolTip(i18n("Target image"));
 
     d->previewToggleMouseOverButton = new QToolButton(this);
     d->previewButtons->addButton(d->previewToggleMouseOverButton, PreviewToggleOnMouseOver);
@@ -147,6 +154,7 @@ PreviewToolBar::PreviewToolBar(QWidget* parent)
     d->previewToggleMouseOverButton->setWhatsThis( i18n( "If this option is enabled, the original image will "
                                                       "be shown when the mouse is over image area; otherwise, "
                                                       "the target image will be shown." ) );
+    d->previewToggleMouseOverButton->setToolTip(i18n("Mouse-over mode"));
 
     connect(d->previewButtons, SIGNAL(buttonReleased(int)),
             this, SIGNAL(signalPreviewModeChanged(int)));
@@ -157,7 +165,7 @@ PreviewToolBar::~PreviewToolBar()
     delete d;
 }
 
-void PreviewToolBar::setPreviewModeMask(PreviewMode mask)
+void PreviewToolBar::setPreviewModeMask(int mask)
 {
     if (mask == NoPreviewMode)
     {
@@ -174,6 +182,24 @@ void PreviewToolBar::setPreviewModeMask(PreviewMode mask)
     d->previewDupplicateBothButtonHorz->setEnabled(mask & PreviewBothImagesVertCont);
     d->previewtargetButton->setEnabled(mask             & PreviewTargetImage);
     d->previewToggleMouseOverButton->setEnabled(mask    & PreviewToggleOnMouseOver);
+
+    // When we switch to another mask, check if current mode is valid.
+    PreviewToolBar::PreviewMode mode = previewMode();
+    if (d->previewButtons->button(mode))
+    {
+        if (!d->previewButtons->button(mode)->isEnabled())
+        {
+            QList<QAbstractButton*> btns = d->previewButtons->buttons();
+            foreach (QAbstractButton* btn, btns)
+            {
+                if (btn && btn->isEnabled())
+                {
+                    btn->setChecked(true);
+                    return;
+                }
+            }
+        }
+    }
 }
 
 void PreviewToolBar::setPreviewMode(PreviewMode mode)

@@ -28,17 +28,11 @@
 #include <QRegion>
 #include <QPainter>
 #include <QPen>
-#include <QPixmap>
 #include <QTimer>
 #include <QRect>
 #include <QBrush>
 #include <QFont>
 #include <QFontMetrics>
-#include <QTimerEvent>
-#include <QPaintEvent>
-#include <QResizeEvent>
-#include <QMouseEvent>
-#include <QEvent>
 
 // KDE includes
 
@@ -214,11 +208,6 @@ int ImageGuideWidget::previewMode()
     return (d->renderingPreviewMode);
 }
 
-void ImageGuideWidget::setPreviewMode(int mode)
-{
-    d->renderingPreviewMode = mode;
-}
-
 QPoint ImageGuideWidget::getSpotPosition()
 {
     return (QPoint( (int)((float)d->spot.x() * (float)d->iface->originalWidth()  / (float)d->width),
@@ -269,6 +258,9 @@ void ImageGuideWidget::slotChangeGuideSize(int size)
 void ImageGuideWidget::updatePixmap()
 {
     QPainter p(d->pixmap);
+    p.setRenderHint(QPainter::Antialiasing, true);
+    p.setBackgroundMode(Qt::TransparentMode);
+    
     QString text;
     QRect textRect, fontRect;
     QFontMetrics fontMt = p.fontMetrics();
@@ -285,12 +277,10 @@ void ImageGuideWidget::updatePixmap()
         fontRect = fontMt.boundingRect(0, 0, d->rect.width(), d->rect.height(), 0, text);
         textRect.setTopLeft(QPoint(d->rect.x() + 20, d->rect.y() + 20));
         textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2 ) );
-        p.fillRect(textRect, QBrush(QColor(250, 250, 255)) );
-        p.drawRect(textRect);
-        p.drawText(textRect, Qt::AlignCenter, text);
+        drawText(&p, textRect, text);
     }
     else if (d->renderingPreviewMode == PreviewToolBar::PreviewTargetImage || 
-             d->renderingPreviewMode == PreviewToolBar::NoPreviewMode ||
+             d->renderingPreviewMode == PreviewToolBar::NoPreviewMode      ||
             (d->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver && d->onMouseMovePreviewToggled == true ))
     {
         d->iface->paint(d->pixmap,
@@ -307,9 +297,7 @@ void ImageGuideWidget::updatePixmap()
             fontRect = fontMt.boundingRect(0, 0, d->rect.width(), d->rect.height(), 0, text);
             textRect.setTopLeft(QPoint(d->rect.x() + 20, d->rect.y() + 20));
             textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2 ) );
-            p.fillRect(textRect, QBrush(QColor(250, 250, 255)) );
-            p.drawRect(textRect);
-            p.drawText(textRect, Qt::AlignCenter, text);
+            drawText(&p, textRect, text);
         }
     }
     else if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesVert ||
@@ -357,24 +345,17 @@ void ImageGuideWidget::updatePixmap()
                    d->rect.x()+d->rect.width()/2-1,
                    d->rect.y()+d->rect.height());
 
-        p.setPen(QPen(Qt::red, 1)) ;
-
         text     = i18n("Target");
         fontRect = fontMt.boundingRect(0, 0, d->rect.width(), d->rect.height(), 0, text);
-        textRect.setTopLeft(QPoint(d->rect.x() + d->rect.width()/2 + 20,
-                                   d->rect.y() + 20));
+        textRect.setTopLeft(QPoint(d->rect.x() + d->rect.width()/2 + 20, d->rect.y() + 20));
         textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2) );
-        p.fillRect(textRect, QBrush(QColor(250, 250, 255)) );
-        p.drawRect(textRect);
-        p.drawText(textRect, Qt::AlignCenter, text);
+        drawText(&p, textRect, text);
 
         text     = i18n("Original");
         fontRect = fontMt.boundingRect(0, 0, d->rect.width(), d->rect.height(), 0, text);
         textRect.setTopLeft(QPoint(d->rect.x() + 20, d->rect.y() + 20));
         textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2 ) );
-        p.fillRect(textRect, QBrush(QColor(250, 250, 255)));
-        p.drawRect(textRect);
-        p.drawText(textRect, Qt::AlignCenter, text);
+        drawText(&p, textRect, text);
     }
     else if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorz ||
              d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorzCont)
@@ -420,24 +401,17 @@ void ImageGuideWidget::updatePixmap()
                    d->rect.x()+d->rect.width(),
                    d->rect.y()+d->rect.height()/2-1);
 
-        p.setPen(QPen(Qt::red, 1)) ;
-
         text     = i18n("Target");
         fontRect = fontMt.boundingRect(0, 0, d->rect.width(), d->rect.height(), 0, text);
-        textRect.setTopLeft(QPoint(d->rect.x() + 20,
-                                   d->rect.y() + d->rect.height()/2 + 20));
+        textRect.setTopLeft(QPoint(d->rect.x() + 20, d->rect.y() + d->rect.height()/2 + 20));
         textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2) );
-        p.fillRect(textRect, QBrush(QColor(250, 250, 255)) );
-        p.drawRect(textRect);
-        p.drawText(textRect, Qt::AlignCenter, text);
+        drawText(&p, textRect, text);
 
         text     = i18n("Original");
         fontRect = fontMt.boundingRect(0, 0, d->rect.width(), d->rect.height(), 0, text);
         textRect.setTopLeft(QPoint(d->rect.x() + 20, d->rect.y() + 20));
         textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2 ) );
-        p.fillRect(textRect, QBrush(QColor(250, 250, 255)) );
-        p.drawRect(textRect);
-        p.drawText(textRect, Qt::AlignCenter, text);
+        drawText(&p, textRect, text);
     }
 
     if (d->spotVisible)
@@ -476,7 +450,6 @@ void ImageGuideWidget::updatePixmap()
              break;
           }
        }
-
     }
 
     // draw additional points added by the image plugin
@@ -525,13 +498,29 @@ void ImageGuideWidget::updatePixmap()
                 p.drawLine(point, point2);
                 p.restore();
             }
-
         }
 
         p.setRenderHints(hints);
     }
 
     p.end();
+}
+
+void ImageGuideWidget::drawText(QPainter* p, const QRect& rect, const QString& text)
+{
+    // Draw background
+    p->setPen(Qt::black);
+    QColor semiTransBg = palette().color(QPalette::Window);
+    semiTransBg.setAlpha(190);
+    p->setBrush(semiTransBg);
+    p->translate(0.5, 0.5);
+    p->drawRoundRect(rect, 10.0, 10.0);
+
+    // Draw shadow and text
+    p->setPen(palette().color(QPalette::Window).dark(115));
+    p->drawText(rect.translated(1, 1), text);
+    p->setPen(palette().color(QPalette::WindowText));
+    p->drawText(rect, text);
 }
 
 void ImageGuideWidget::paintEvent(QPaintEvent*)
@@ -713,8 +702,6 @@ void ImageGuideWidget::mouseMoveEvent(QMouseEvent *e)
 {
     if (d->rect.contains(e->x(), e->y()))
     {
-//         setCursor(Qt::CrossCursor);
-
         if ( d->focus && d->spotVisible )
         {
             setCursor(Qt::CrossCursor);

@@ -37,7 +37,7 @@
 
 #include "dimgthreadedfilter.h"
 #include "imageguidewidget.h"
-#include "imagepanelwidget.h"
+#include "imageregionwidget.h"
 #include "histogramwidget.h"
 #include "histogrambox.h"
 #include "editortoolsettings.h"
@@ -58,17 +58,17 @@ public:
         settings = 0;
     }
 
-    QString  helpAnchor;
-    QString  name;
+    QString             helpAnchor;
+    QString             name;
 
-    QWidget* view;
-    QPixmap  icon;
-    QTimer*  timer;
+    QWidget*            view;
+    QPixmap             icon;
+    QTimer*             timer;
 
     EditorToolSettings* settings;
 };
 
-EditorTool::EditorTool(QObject *parent)
+EditorTool::EditorTool(QObject* parent)
           : QObject(parent), d(new EditorToolPriv)
 {
     d->timer = new QTimer(this);
@@ -107,7 +107,7 @@ void EditorTool::setToolName(const QString& name)
     d->name = name;
 }
 
-void EditorTool::setPreviewModeMask(PreviewToolBar::PreviewMode mask)
+void EditorTool::setPreviewModeMask(int mask)
 {
     EditorToolIface::editorToolIface()->setPreviewModeMask(mask);
 }
@@ -117,7 +117,7 @@ QWidget* EditorTool::toolView() const
     return d->view;
 }
 
-void EditorTool::setToolView(QWidget *view)
+void EditorTool::setToolView(QWidget* view)
 {
     d->view = view;
     // Will be unblocked in slotInit()
@@ -140,7 +140,7 @@ EditorToolSettings* EditorTool::toolSettings() const
     return d->settings;
 }
 
-void EditorTool::setToolSettings(EditorToolSettings *settings)
+void EditorTool::setToolSettings(EditorToolSettings* settings)
 {
     d->settings = settings;
 
@@ -248,7 +248,7 @@ void EditorTool::ICCSettingsChanged()
     if (view)
         view->ICCSettingsChanged();
 
-    ImagePanelWidget* view2 = dynamic_cast<ImagePanelWidget*>(d->view);
+    ImageRegionWidget* view2 = dynamic_cast<ImageRegionWidget*>(d->view);
     if (view2)
         view2->ICCSettingsChanged();
 }
@@ -259,7 +259,7 @@ void EditorTool::exposureSettingsChanged()
     if (view)
         view->exposureSettingsChanged();
 
-    ImagePanelWidget* view2 = dynamic_cast<ImagePanelWidget*>(d->view);
+    ImageRegionWidget* view2 = dynamic_cast<ImageRegionWidget*>(d->view);
     if (view2)
         view2->exposureSettingsChanged();
 }
@@ -327,7 +327,7 @@ DImgThreadedFilter* EditorToolThreaded::filter() const
     return d->threadedFilter;
 }
 
-void EditorToolThreaded::setFilter(DImgThreadedFilter *filter)
+void EditorToolThreaded::setFilter(DImgThreadedFilter* filter)
 {
     d->threadedFilter = filter;
 
@@ -436,7 +436,7 @@ void EditorToolThreaded::setToolView(QWidget *view)
 {
     EditorTool::setToolView(view);
 
-    if (dynamic_cast<ImageGuideWidget*>(view) || dynamic_cast<ImagePanelWidget*>(view))
+    if (dynamic_cast<ImageGuideWidget*>(view) || dynamic_cast<ImageRegionWidget*>(view))
     {
         connect(view, SIGNAL(signalResized()),
                 this, SLOT(slotResized()));

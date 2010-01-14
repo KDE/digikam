@@ -121,6 +121,8 @@ PreviewWidget::PreviewWidget(QWidget *parent)
     verticalScrollBar()->setSingleStep(1);
     verticalScrollBar()->setPageStep(1);
 
+    setHScrollBarMode(Q3ScrollView::AlwaysOn);
+    setVScrollBarMode(Q3ScrollView::AlwaysOn);
     setFrameStyle(QFrame::StyledPanel|QFrame::Plain);
     setMargin(0);
     setLineWidth(1);
@@ -632,13 +634,6 @@ void PreviewWidget::contentsWheelEvent(QWheelEvent *e)
 
 void PreviewWidget::zoomFactorChanged(double zoom)
 {
-    updateScrollBars();
-
-    if (horizontalScrollBar()->isVisible() || verticalScrollBar()->isVisible())
-        d->cornerButton->show();
-    else
-        d->cornerButton->hide();
-
     emit signalZoomFactorChanged(zoom);
 }
 
@@ -653,19 +648,22 @@ void PreviewWidget::slotCornerButtonPressed()
 
     d->panIconPopup    = new KPopupFrame(this);
     PanIconWidget *pan = new PanIconWidget(d->panIconPopup);
-    pan->setImage(180, 120, previewToQImage());
-    d->panIconPopup->setMainWidget(pan);
 
-    QRect r((int)(contentsX()    / zoomFactor()), (int)(contentsY()     / zoomFactor()),
-            (int)(visibleWidth() / zoomFactor()), (int)(visibleHeight() / zoomFactor()));
-    pan->setRegionSelection(r);
-    pan->setMouseFocus();
+    connect(pan, SIGNAL(signalSelectionTakeFocus()),
+            this, SIGNAL(signalSelectionTakeFocus()));
 
     connect(pan, SIGNAL(signalSelectionMoved(const QRect&, bool)),
             this, SLOT(slotPanIconSelectionMoved(const QRect&, bool)));
 
     connect(pan, SIGNAL(signalHidden()),
             this, SLOT(slotPanIconHiden()));
+
+    QRect r((int)(contentsX()    / zoomFactor()), (int)(contentsY()     / zoomFactor()),
+            (int)(visibleWidth() / zoomFactor()), (int)(visibleHeight() / zoomFactor()));
+    pan->setImage(180, 120, previewToQImage());
+    pan->setRegionSelection(r);
+    pan->setMouseFocus();
+    d->panIconPopup->setMainWidget(pan);
 
     QPoint g = mapToGlobal(viewport()->pos());
     g.setX(g.x()+ viewport()->size().width());

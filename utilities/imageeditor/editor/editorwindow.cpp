@@ -2301,7 +2301,7 @@ void EditorWindow::slotCloseTool()
         d->toolIface->slotCloseTool();
 }
 
-void EditorWindow::setPreviewModeMask(PreviewToolBar::PreviewMode mask)
+void EditorWindow::setPreviewModeMask(int mask)
 {
     d->previewToolBar->setPreviewModeMask(mask);
 }

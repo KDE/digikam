@@ -26,16 +26,17 @@
 
 // Qt includes
 
-#include <QtGui/QPolygon>
 #include <QtCore/QRect>
+#include <QtCore/QEvent>
+#include <QtGui/QPolygon>
 #include <QtGui/QPixmap>
 #include <QtGui/QResizeEvent>
 #include <QtGui/QWheelEvent>
 
 // Local includes
 
-#include "previewwidget.h"
 #include "dimg.h"
+#include "previewwidget.h"
 #include "digikam_export.h"
 
 namespace Digikam
@@ -49,48 +50,49 @@ class DIGIKAM_EXPORT ImageRegionWidget : public PreviewWidget
 
 public:
 
-    enum SeparateViewMode
-    {
-        SeparateViewHorizontal=0,
-        SeparateViewVertical,
-        SeparateViewNone,
-        SeparateViewDuplicateVert,
-        SeparateViewDuplicateHorz
-    };
-
-public:
-
-    ImageRegionWidget(int wp, int hp, QWidget *parent=0);
+    ImageRegionWidget(int w=470, int h=350, QWidget* parent=0);
     ~ImageRegionWidget();
 
     void   setContentsPosition(int x, int y, bool targetDone);
-    void   setCenterContentsPosition();
+    void   setCenterImageRegionPosition();
 
     /** To get image region including original or/and target area depending of separate view mode.
         The region is given using not scaled image unit.*/
-    QRect  getImageRegion();
+    QRect  getOriginalImageRegion();
 
     /** To get target image region area to render */
-    QRect  getImageRegionToRender();
+    QRect  getOriginalImageRegionToRender();
 
     /** To get target image region image to use for render operations */
-    DImg   getImageRegionImage();
+    DImg   getOriginalRegionImage();
 
-    void   updatePreviewImage(DImg *img);
+    void   setPreviewImage(const DImg& img);
 
     void   backupPixmapRegion();
     void   restorePixmapRegion();
 
     void   setHighLightPoints(const QPolygon& pointsList);
     void   drawSeparateView();
+    
+    void   ICCSettingsChanged();
+    void   exposureSettingsChanged();
+
+Q_SIGNALS:
+
+    void signalResized();
+    void signalOriginalClipFocusChanged();
 
 public Q_SLOTS:
 
-    void slotSeparateViewToggled(int mode);
+    void slotPreviewModeChanged(int mode);
+    void slotOriginalImageRegionChanged(bool target);
 
 private Q_SLOTS:
 
+    void slotInitGui();
     void slotZoomFactorChanged();
+    void slotPanIconSelectionMoved(const QRect& rect, bool targetDone);
+    void slotSelectionTakeFocus();
 
 private:
 
@@ -102,9 +104,12 @@ private:
     bool   previewIsNull();
     void   resetPreview();
     void   setContentsSize();
+    void   enterEvent(QEvent*);
+    void   leaveEvent(QEvent*);
     void   resizeEvent(QResizeEvent*);
     void   contentsWheelEvent(QWheelEvent*);
     QImage previewToQImage() const;
+    void   drawText(QPainter* p, const QRect& rect, const QString& text);
 
     inline void paintPreview(QPixmap* pix, int sx, int sy, int sw, int sh);
 

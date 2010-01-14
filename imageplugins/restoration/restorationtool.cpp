@@ -55,7 +55,7 @@
 #include "greycstorationsettings.h"
 #include "greycstorationwidget.h"
 #include "imageiface.h"
-#include "imagepanelwidget.h"
+#include "imageregionwidget.h"
 #include "version.h"
 
 using namespace Digikam;
@@ -111,7 +111,7 @@ public:
     KComboBox*            restorationTypeCB;
 
     GreycstorationWidget* settingsWidget;
-    ImagePanelWidget*     previewWidget;
+    ImageRegionWidget*    previewWidget;
     EditorToolSettings*   gboxSettings;
 };
 
@@ -176,13 +176,13 @@ RestorationTool::RestorationTool(QObject* parent)
     gridSettings->setSpacing(d->gboxSettings->spacingHint());
     gridSettings->setRowStretch(2, 10);
 
-    setToolSettings(d->gboxSettings);
-
     // -------------------------------------------------------------
 
-    d->previewWidget = new ImagePanelWidget(470, 350, "restoration Tool");
+    d->previewWidget = new ImageRegionWidget;
 
+    setToolSettings(d->gboxSettings);
     setToolView(d->previewWidget);
+    setPreviewModeMask(PreviewToolBar::AllPreviewModes);       
     init();
 
     // -------------------------------------------------------------
@@ -207,8 +207,8 @@ RestorationTool::~RestorationTool()
 
 void RestorationTool::renderingFinished()
 {
-    d->previewWidget->setEnable(true);
     d->mainTab->setEnabled(true);
+    toolView()->setEnabled(true);
 }
 
 void RestorationTool::readSettings()
@@ -263,7 +263,6 @@ void RestorationTool::writeSettings()
     group.writeEntry(d->configIterationEntry,     settings.nbIter);
     group.writeEntry(d->configTileEntry,          settings.tile);
     group.writeEntry(d->configBTileEntry,         settings.btile);
-    d->previewWidget->writeSettings();
     group.sync();
 }
 
@@ -320,7 +319,8 @@ void RestorationTool::processCImgUrl(const QString& url)
 void RestorationTool::prepareEffect()
 {
     d->mainTab->setEnabled(false);
-
+    toolView()->setEnabled(false);
+    
     DImg previewImage = d->previewWidget->getOriginalRegionImage();
 
     setFilter(dynamic_cast<DImgThreadedFilter*>(new GreycstorationIface(&previewImage,
@@ -331,7 +331,8 @@ void RestorationTool::prepareEffect()
 void RestorationTool::prepareFinal()
 {
     d->mainTab->setEnabled(false);
-
+    toolView()->setEnabled(false);
+    
     ImageIface iface(0, 0);
     uchar *data = iface.getOriginalImage();
     DImg originalImage(iface.originalWidth(), iface.originalHeight(),

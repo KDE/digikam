@@ -295,7 +295,7 @@ private:
     
     void setToolInfoMessage(const QString& txt);
 
-    void setPreviewModeMask(PreviewToolBar::PreviewMode mask);
+    void setPreviewModeMask(int mask);
     PreviewToolBar::PreviewMode previewMode();
 
     /**
