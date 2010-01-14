@@ -49,7 +49,7 @@ class DIGIKAM_EXPORT ImageRegionWidget : public PreviewWidget
 
 public:
 
-    ImageRegionWidget(int wp, int hp, QWidget* parent=0);
+    ImageRegionWidget(int w, int h, QWidget* parent=0);
     ~ImageRegionWidget();
 
     void   setContentsPosition(int x, int y, bool targetDone);

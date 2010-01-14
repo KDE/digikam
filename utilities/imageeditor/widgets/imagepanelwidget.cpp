@@ -25,7 +25,6 @@
 
 // Qt includes
 
-#include <QGridLayout>
 #include <QTimer>
 #include <QPixmap>
 #include <QVBoxLayout>
@@ -65,30 +64,12 @@ ImagePanelWidget::ImagePanelWidget(uint w, uint h, const QString& settingsSectio
 {
     setAttribute(Qt::WA_DeleteOnClose);
     d->settingsSection = settingsSection;
-    QGridLayout *grid  = new QGridLayout(this);
 
     // -------------------------------------------------------------
 
-    QFrame *preview = new QFrame(this);
-    QVBoxLayout* l1 = new QVBoxLayout(preview);
-    l1->setSpacing(5);
-    l1->setMargin(0);
-    d->imageRegionWidget = new ImageRegionWidget(w, h, preview);
-    d->imageRegionWidget->setFrameStyle(QFrame::NoFrame);
-    preview->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    d->imageRegionWidget->setWhatsThis(i18n("<p>Here you can see the original clip image "
-                                            "which will be used for the preview computation.</p>"
-                                            "<p>Click and drag the mouse cursor in the "
-                                            "image to change the clip focus.</p>"));
-    l1->addWidget(d->imageRegionWidget, 0);
-
-    // -------------------------------------------------------------
-
-    grid->addWidget(preview,     0, 0, 2, 5);
-    grid->setRowStretch(1, 10);
-    grid->setColumnStretch(1, 10);
-    grid->setMargin(KDialog::spacingHint());
-    grid->setSpacing(KDialog::spacingHint());
+    QVBoxLayout* vlay    = new QVBoxLayout(this);
+    d->imageRegionWidget = new ImageRegionWidget(w, h, this);
+    vlay->addWidget(d->imageRegionWidget, 0);
 
     // -------------------------------------------------------------
 
