@@ -126,7 +126,7 @@ void ImagePanelWidget::slotInitGui()
     d->imageRegionWidget->slotOriginalImageRegionChanged(true);
 }
 
-void ImagePanelWidget::setPanIconHighLightPoints(const QPolygon& pt)
+void ImagePanelWidget::setHighLightPoints(const QPolygon& pt)
 {
     d->imageRegionWidget->setHighLightPoints(pt);
 }

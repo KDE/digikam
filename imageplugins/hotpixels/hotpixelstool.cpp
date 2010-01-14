@@ -301,7 +301,7 @@ void HotPixelsTool::slotBlackFrame(QList<HotPixel> hpList, const KUrl& blackFram
     for (it = d->hotPixelsList.begin() ; it != d->hotPixelsList.end() ; ++it, ++i)
        pointList.setPoint(i, (*it).rect.center());
 
-    d->previewWidget->setPanIconHighLightPoints(pointList);
+    d->previewWidget->setHighLightPoints(pointList);
 
     slotEffect();
 }
