@@ -140,6 +140,7 @@ EmbossTool::~EmbossTool()
 void EmbossTool::renderingFinished()
 {
     d->depthInput->setEnabled(true);
+    toolView()->setEnabled(true);
 }
 
 void EmbossTool::readSettings()
@@ -173,7 +174,8 @@ void EmbossTool::slotResetSettings()
 void EmbossTool::prepareEffect()
 {
     d->depthInput->setEnabled(false);
-
+    toolView()->setEnabled(false);
+    
     DImg image = d->previewWidget->getOriginalRegionImage();
     int depth  = d->depthInput->value();
 
@@ -183,7 +185,8 @@ void EmbossTool::prepareEffect()
 void EmbossTool::prepareFinal()
 {
     d->depthInput->setEnabled(false);
-
+    toolView()->setEnabled(false);
+    
     int depth = d->depthInput->value();
 
     ImageIface iface(0, 0);

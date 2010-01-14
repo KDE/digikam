@@ -153,6 +153,7 @@ CharcoalTool::~CharcoalTool()
 
 void CharcoalTool::renderingFinished()
 {
+    toolView()->setEnabled(true);
     d->pencilInput->setEnabled(true);
     d->smoothInput->setEnabled(true);
 }
@@ -192,6 +193,7 @@ void CharcoalTool::prepareEffect()
 {
     d->pencilInput->setEnabled(false);
     d->smoothInput->setEnabled(false);
+    toolView()->setEnabled(false);
 
     double pencil = (double)d->pencilInput->value()/10.0;
     double smooth = (double)d->smoothInput->value();
@@ -204,6 +206,7 @@ void CharcoalTool::prepareFinal()
 {
     d->pencilInput->setEnabled(false);
     d->smoothInput->setEnabled(false);
+    toolView()->setEnabled(false);
 
     double pencil = (double)d->pencilInput->value()/10.0;
     double smooth = (double)d->smoothInput->value();

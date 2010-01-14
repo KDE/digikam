@@ -186,6 +186,7 @@ void InfraredTool::renderingFinished()
 {
     d->sensibilitySlider->setEnabled(true);
     d->addFilmGrain->setEnabled(true);
+    toolView()->setEnabled(true);    
 }
 
 void InfraredTool::readSettings()
@@ -233,6 +234,7 @@ void InfraredTool::prepareEffect()
 {
     d->addFilmGrain->setEnabled(false);
     d->sensibilitySlider->setEnabled(false);
+    toolView()->setEnabled(false);    
 
     DImg image = d->previewWidget->getOriginalRegionImage();
     int  s     = 100 + 100 * d->sensibilitySlider->value();
@@ -245,6 +247,7 @@ void InfraredTool::prepareFinal()
 {
     d->addFilmGrain->setEnabled(false);
     d->sensibilitySlider->setEnabled(false);
+    toolView()->setEnabled(false);    
 
     int  s = 100 + 100 * d->sensibilitySlider->value();
     bool g = d->addFilmGrain->isChecked();

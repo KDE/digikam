@@ -158,6 +158,8 @@ void BlurTool::prepareEffect()
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
     d->radiusInput->setEnabled(false);
+    toolView()->setEnabled(false);
+
     DImg img = d->previewWidget->getOriginalRegionImage();
     setFilter(dynamic_cast<DImgThreadedFilter*>(new DImgGaussianBlur(&img, this, d->radiusInput->value())));
 }
@@ -165,6 +167,7 @@ void BlurTool::prepareEffect()
 void BlurTool::prepareFinal()
 {
     d->radiusInput->setEnabled(false);
+    toolView()->setEnabled(false);
 
     ImageIface iface(0, 0);
     uchar *data      = iface.getOriginalImage();
@@ -190,10 +193,11 @@ void BlurTool::putFinalData()
     iface.putOriginalImage(i18n("Gaussian Blur"), imDest.bits());
 }
 
-void BlurTool::renderingFinished(void)
+void BlurTool::renderingFinished()
 {
     QApplication::restoreOverrideCursor();
     d->radiusInput->setEnabled(true);
+    toolView()->setEnabled(true);
 }
 
 }  // namespace DigikamImagesPluginCore

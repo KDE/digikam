@@ -162,6 +162,7 @@ FilmGrainTool::~FilmGrainTool()
 void FilmGrainTool::renderingFinished()
 {
     d->sensibilitySlider->setEnabled(true);
+    toolView()->setEnabled(true);
 }
 
 void FilmGrainTool::readSettings()
@@ -197,7 +198,8 @@ void FilmGrainTool::slotSliderMoved(int v)
 void FilmGrainTool::prepareEffect()
 {
     d->sensibilitySlider->setEnabled(false);
-
+    toolView()->setEnabled(false);
+    
     DImg image = d->previewWidget->getOriginalRegionImage();
     int s      = 400 + 200 * d->sensibilitySlider->value();
 
@@ -207,6 +209,7 @@ void FilmGrainTool::prepareEffect()
 void FilmGrainTool::prepareFinal()
 {
     d->sensibilitySlider->setEnabled(false);
+    toolView()->setEnabled(false);    
 
     int s = 400 + 200 * d->sensibilitySlider->value();
 

@@ -322,6 +322,8 @@ SharpenTool::~SharpenTool()
 
 void SharpenTool::renderingFinished()
 {
+    toolView()->setEnabled(true);
+
     switch (d->stack->indexOf(d->stack->currentWidget()))
     {
         case SimpleSharp:
@@ -455,6 +457,8 @@ void SharpenTool::slotResetSettings()
 
 void SharpenTool::prepareEffect()
 {
+    toolView()->setEnabled(false);
+    
     switch (d->stack->indexOf(d->stack->currentWidget()))
     {
         case SimpleSharp:
@@ -518,6 +522,8 @@ void SharpenTool::prepareFinal()
     bool hasAlpha   = iface.originalHasAlpha();
     DImg orgImage   = DImg(w, h, sixteenBit, hasAlpha ,data);
     delete [] data;
+
+    toolView()->setEnabled(false);
 
     switch (d->stack->indexOf(d->stack->currentWidget()))
     {

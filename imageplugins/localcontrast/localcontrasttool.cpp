@@ -495,6 +495,7 @@ void LocalContrastTool::slotStage4Enabled(bool b)
 void LocalContrastTool::renderingFinished()
 {
     d->expanderBox->setEnabled(true);
+    toolView()->setEnabled(true);
 }
 
 void LocalContrastTool::readSettings()
@@ -629,7 +630,8 @@ ToneMappingParameters *LocalContrastTool::createParams()
 void LocalContrastTool::prepareEffect()
 {
     d->expanderBox->setEnabled(false);
-
+    toolView()->setEnabled(false);
+    
     ToneMappingParameters *par = createParams();
     DImg image                 = d->previewWidget->getOriginalRegionImage();
 
@@ -639,7 +641,8 @@ void LocalContrastTool::prepareEffect()
 void LocalContrastTool::prepareFinal()
 {
     d->expanderBox->setEnabled(false);
-
+    toolView()->setEnabled(false);
+    
     ToneMappingParameters *par = createParams();
 
     ImageIface iface(0, 0);

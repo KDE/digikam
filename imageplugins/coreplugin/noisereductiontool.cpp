@@ -114,6 +114,7 @@ NoiseReductionTool::~NoiseReductionTool()
 void NoiseReductionTool::renderingFinished()
 {
     d->nrSettings->setEnabled(true);
+    toolView()->setEnabled(true);
 }
 
 void NoiseReductionTool::readSettings()
@@ -140,6 +141,7 @@ void NoiseReductionTool::slotResetSettings()
 void NoiseReductionTool::prepareEffect()
 {
     d->nrSettings->setEnabled(false);
+    toolView()->setEnabled(false);
 
     DImg image              = d->previewWidget->getOriginalRegionImage();
     WaveletsNRContainer prm = d->nrSettings->settings();
@@ -150,6 +152,7 @@ void NoiseReductionTool::prepareEffect()
 void NoiseReductionTool::prepareFinal()
 {
     d->nrSettings->setEnabled(false);
+    toolView()->setEnabled(false);
 
     WaveletsNRContainer prm = d->nrSettings->settings();
 

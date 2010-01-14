@@ -151,6 +151,7 @@ void OilPaintTool::renderingFinished()
 {
     d->brushSizeInput->setEnabled(true);
     d->smoothInput->setEnabled(true);
+    toolView()->setEnabled(true);
 }
 
 void OilPaintTool::readSettings()
@@ -193,6 +194,7 @@ void OilPaintTool::prepareEffect()
 {
     d->brushSizeInput->setEnabled(false);
     d->smoothInput->setEnabled(false);
+    toolView()->setEnabled(false);
 
     DImg image = d->previewWidget->getOriginalRegionImage();
     int b      = d->brushSizeInput->value();
@@ -205,7 +207,8 @@ void OilPaintTool::prepareFinal()
 {
     d->brushSizeInput->setEnabled(false);
     d->smoothInput->setEnabled(false);
-
+    toolView()->setEnabled(false);
+    
     int b = d->brushSizeInput->value();
     int s = d->smoothInput->value();
 

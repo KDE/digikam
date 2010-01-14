@@ -174,6 +174,7 @@ void TextureTool::renderingFinished()
 {
     d->textureType->setEnabled(true);
     d->blendGain->setEnabled(true);
+    toolView()->setEnabled(true);
 }
 
 void TextureTool::readSettings()
@@ -216,6 +217,7 @@ void TextureTool::prepareEffect()
 {
     d->textureType->setEnabled(false);
     d->blendGain->setEnabled(false);
+    toolView()->setEnabled(false);    
 
     DImg image      = d->previewWidget->getOriginalRegionImage();
     QString texture = getTexturePath( d->textureType->currentIndex() );
@@ -229,6 +231,7 @@ void TextureTool::prepareFinal()
 {
     d->textureType->setEnabled(false);
     d->blendGain->setEnabled(false);
+    toolView()->setEnabled(false);    
 
     int b = 255 - d->blendGain->value();
 

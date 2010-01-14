@@ -208,6 +208,7 @@ RestorationTool::~RestorationTool()
 void RestorationTool::renderingFinished()
 {
     d->mainTab->setEnabled(true);
+    toolView()->setEnabled(true);
 }
 
 void RestorationTool::readSettings()
@@ -318,7 +319,8 @@ void RestorationTool::processCImgUrl(const QString& url)
 void RestorationTool::prepareEffect()
 {
     d->mainTab->setEnabled(false);
-
+    toolView()->setEnabled(false);
+    
     DImg previewImage = d->previewWidget->getOriginalRegionImage();
 
     setFilter(dynamic_cast<DImgThreadedFilter*>(new GreycstorationIface(&previewImage,
@@ -329,7 +331,8 @@ void RestorationTool::prepareEffect()
 void RestorationTool::prepareFinal()
 {
     d->mainTab->setEnabled(false);
-
+    toolView()->setEnabled(false);
+    
     ImageIface iface(0, 0);
     uchar *data = iface.getOriginalImage();
     DImg originalImage(iface.originalWidth(), iface.originalHeight(),

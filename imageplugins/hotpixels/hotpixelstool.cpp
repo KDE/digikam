@@ -239,12 +239,14 @@ void HotPixelsTool::renderingFinished()
 {
     d->filterMethodCombo->setEnabled(true);
     d->blackFrameListView->setEnabled(true);
+    toolView()->setEnabled(true);
 }
 
 void HotPixelsTool::prepareEffect()
 {
     d->filterMethodCombo->setEnabled(false);
     d->blackFrameListView->setEnabled(false);
+    toolView()->setEnabled(false);
 
     DImg image              = d->previewWidget->getOriginalRegionImage();
     int interpolationMethod = d->filterMethodCombo->currentIndex();
@@ -270,7 +272,8 @@ void HotPixelsTool::prepareFinal()
 {
     d->filterMethodCombo->setEnabled(false);
     d->blackFrameListView->setEnabled(false);
-
+    toolView()->setEnabled(false);
+    
     int interpolationMethod = d->filterMethodCombo->currentIndex();
 
     ImageIface iface(0, 0);

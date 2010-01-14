@@ -221,6 +221,7 @@ void ProfileConversionTool::fastConversion(const IccProfile& profile)
 void ProfileConversionTool::renderingFinished()
 {
     d->profilesBox->setEnabled(true);
+    toolView()->setEnabled(true);
 }
 
 void ProfileConversionTool::slotCurrentProfInfo()
@@ -277,12 +278,18 @@ void ProfileConversionTool::updateTransform()
 
 void ProfileConversionTool::prepareEffect()
 {
+    d->profilesBox->setEnabled(false);
+    toolView()->setEnabled(false);
+
     DImg img = d->previewWidget->getOriginalRegionImage();
     setFilter(new IccTransformFilter(&img, this, d->transform));
 }
 
 void ProfileConversionTool::prepareFinal()
 {
+    d->profilesBox->setEnabled(false);
+    toolView()->setEnabled(false);
+
     ImageIface iface(0, 0);
     setFilter(new IccTransformFilter(iface.getOriginalImg(), this, d->transform));
 }
