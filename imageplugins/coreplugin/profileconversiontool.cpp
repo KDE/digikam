@@ -174,7 +174,7 @@ ProfileConversionTool::ProfileConversionTool(QObject* parent)
     
     setToolSettings(d->gboxSettings);
     setToolView(d->previewWidget);
-    setPreviewModeMask(PreviewToolBar::NoToggleOnMouseOver);
+    setPreviewModeMask(PreviewToolBar::AllPreviewModes);
     
     init();
 

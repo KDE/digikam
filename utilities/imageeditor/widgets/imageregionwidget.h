@@ -27,6 +27,7 @@
 // Qt includes
 
 #include <QtCore/QRect>
+#include <QtCore/QEvent>
 #include <QtGui/QPolygon>
 #include <QtGui/QPixmap>
 #include <QtGui/QResizeEvent>
@@ -103,6 +104,8 @@ private:
     bool   previewIsNull();
     void   resetPreview();
     void   setContentsSize();
+    void   enterEvent(QEvent*);
+    void   leaveEvent(QEvent*);
     void   resizeEvent(QResizeEvent*);
     void   contentsWheelEvent(QWheelEvent*);
     QImage previewToQImage() const;

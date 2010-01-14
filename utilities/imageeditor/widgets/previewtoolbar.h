@@ -64,11 +64,6 @@ public:
                                     PreviewToggleOnMouseOver,
                                     
         NoBothPreviewModes        = PreviewOriginalImage | PreviewTargetImage | PreviewToggleOnMouseOver,                           
-
-        /** Used by ImageRegionWidget */
-        NoToggleOnMouseOver       = PreviewBothImagesHorz     | PreviewBothImagesVert     |
-                                    PreviewBothImagesHorzCont | PreviewBothImagesVertCont | 
-                                    PreviewTargetImage
 };
 
 public:
