@@ -52,7 +52,7 @@
 #include "dimg.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
-#include "imagepanelwidget.h"
+#include "imageregionwidget.h"
 #include "oilpaint.h"
 #include "version.h"
 
@@ -84,7 +84,7 @@ public:
     RIntNumInput*       brushSizeInput;
     RIntNumInput*       smoothInput;
 
-    ImagePanelWidget*   previewWidget;
+    ImageRegionWidget*  previewWidget;
     EditorToolSettings* gboxSettings;
 };
 
@@ -134,7 +134,7 @@ OilPaintTool::OilPaintTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->previewWidget = new ImagePanelWidget(470, 350, "oilpaint Tool");
+    d->previewWidget = new ImageRegionWidget;
 
     setToolSettings(d->gboxSettings);
     setToolView(d->previewWidget);
@@ -172,7 +172,6 @@ void OilPaintTool::writeSettings()
 
     group.writeEntry(d->configBrushSizeEntry,        d->brushSizeInput->value());
     group.writeEntry(d->configSmoothAdjustmentEntry, d->smoothInput->value());
-    d->previewWidget->writeSettings();
     group.sync();
 }
 

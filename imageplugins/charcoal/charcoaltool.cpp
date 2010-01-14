@@ -53,7 +53,7 @@
 #include "dimg.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
-#include "imagepanelwidget.h"
+#include "imageregionwidget.h"
 #include "version.h"
 
 using namespace KDcrawIface;
@@ -85,7 +85,7 @@ public:
     RIntNumInput*       pencilInput;
     RIntNumInput*       smoothInput;
 
-    ImagePanelWidget*   previewWidget;
+    ImageRegionWidget*  previewWidget;
     EditorToolSettings* gboxSettings;
 };
 
@@ -105,7 +105,7 @@ CharcoalTool::CharcoalTool(QObject* parent)
                                 EditorToolSettings::Cancel|
                                 EditorToolSettings::Try);
 
-    d->previewWidget = new ImagePanelWidget(470, 350, "charcoal Tool");
+    d->previewWidget = new ImageRegionWidget;
 
     // -------------------------------------------------------------
 
@@ -175,7 +175,6 @@ void CharcoalTool::writeSettings()
     KConfigGroup group        = config->group(d->configGroupName);
     group.writeEntry(d->configPencilAdjustmentEntry, d->pencilInput->value());
     group.writeEntry(d->configSmoothAdjustmentEntry, d->smoothInput->value());
-    d->previewWidget->writeSettings();
     config->sync();
 }
 

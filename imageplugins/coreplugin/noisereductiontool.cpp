@@ -51,7 +51,7 @@
 #include "waveletsnr.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
-#include "imagepanelwidget.h"
+#include "imageregionwidget.h"
 #include "noisereductionsettings.h"
 #include "version.h"
 
@@ -74,7 +74,7 @@ public:
     const QString           configGroupName;
 
     NoiseReductionSettings* nrSettings;
-    ImagePanelWidget*       previewWidget;
+    ImageRegionWidget*      previewWidget;
     EditorToolSettings*     gboxSettings;
 };
 
@@ -97,7 +97,7 @@ NoiseReductionTool::NoiseReductionTool(QObject* parent)
                                 EditorToolSettings::Try);
 
     d->nrSettings    = new NoiseReductionSettings(d->gboxSettings->plainPage());
-    d->previewWidget = new ImagePanelWidget(470, 350, "noisereduction Tool");
+    d->previewWidget = new ImageRegionWidget;
     
     setToolSettings(d->gboxSettings);
     setToolView(d->previewWidget);
@@ -129,7 +129,6 @@ void NoiseReductionTool::writeSettings()
     KConfigGroup group        = config->group(d->configGroupName);
 
     d->nrSettings->writeSettings(group);
-    d->previewWidget->writeSettings();
     group.sync();
 }
 

@@ -51,7 +51,7 @@
 #include "editortoolsettings.h"
 #include "emboss.h"
 #include "imageiface.h"
-#include "imagepanelwidget.h"
+#include "imageregionwidget.h"
 #include "version.h"
 
 using namespace KDcrawIface;
@@ -76,7 +76,7 @@ public:
     const QString       configDepthAdjustmentEntry;
 
     RIntNumInput*       depthInput;
-    ImagePanelWidget*   previewWidget;
+    ImageRegionWidget*  previewWidget;
     EditorToolSettings* gboxSettings;
 };
 
@@ -91,7 +91,7 @@ EmbossTool::EmbossTool(QObject* parent)
     // -------------------------------------------------------------
 
     d->gboxSettings  = new EditorToolSettings;
-    d->previewWidget = new ImagePanelWidget(470, 350, "emboss Tool");
+    d->previewWidget = new ImageRegionWidget;
 
     // -------------------------------------------------------------
 
@@ -158,7 +158,6 @@ void EmbossTool::writeSettings()
     KConfigGroup group        = config->group(d->configGroupName);
 
     group.writeEntry(d->configDepthAdjustmentEntry, d->depthInput->value());
-    d->previewWidget->writeSettings();
     group.sync();
 }
 

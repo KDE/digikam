@@ -59,7 +59,7 @@
 #include "dimgunsharpmask.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
-#include "imagepanelwidget.h"
+#include "imageregionwidget.h"
 
 using namespace KDcrawIface;
 using namespace Digikam;
@@ -126,7 +126,7 @@ public:
     RDoubleNumInput*    amountInput;
     RDoubleNumInput*    thresholdInput;
 
-    ImagePanelWidget*   previewWidget;
+    ImageRegionWidget*  previewWidget;
     EditorToolSettings* gboxSettings;
 };
 
@@ -301,7 +301,7 @@ SharpenTool::SharpenTool(QObject* parent)
 
     d->stack->insertWidget(Refocus, refocusSettings);
 
-    d->previewWidget = new ImagePanelWidget(470, 350, "sharpen Tool");
+    d->previewWidget = new ImageRegionWidget;
 
     setToolSettings(d->gboxSettings);
     setToolView(d->previewWidget);
@@ -416,7 +416,6 @@ void SharpenTool::writeSettings()
     group.writeEntry(d->configRefocusCorrelationAdjustmentEntry,   d->correlation->value());
     group.writeEntry(d->configRefocusNoiseAdjustmentEntry,         d->noise->value());
     group.writeEntry(d->configSharpenMethodEntry,                  d->sharpMethod->currentIndex());
-    d->previewWidget->writeSettings();
     config->sync();
 }
 

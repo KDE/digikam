@@ -54,7 +54,7 @@
 #include "daboutdata.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
-#include "imagepanelwidget.h"
+#include "imageregionwidget.h"
 #include "version.h"
 
 using namespace KDcrawIface;
@@ -98,7 +98,7 @@ public:
     RIntNumInput*       distanceInput;
     RIntNumInput*       levelInput;
 
-    ImagePanelWidget*   previewWidget;
+    ImageRegionWidget*  previewWidget;
 
     EditorToolSettings* gboxSettings;
 };
@@ -119,7 +119,7 @@ BlurFXTool::BlurFXTool(QObject* parent)
                                 EditorToolSettings::Cancel|
                                 EditorToolSettings::Try);
 
-    d->previewWidget = new ImagePanelWidget(470, 350, "blurfx Tool");
+    d->previewWidget = new ImageRegionWidget;
 
     // -------------------------------------------------------------
 
@@ -255,7 +255,6 @@ void BlurFXTool::writeSettings()
     group.writeEntry(d->configEffectTypeEntry,         d->effectType->currentIndex());
     group.writeEntry(d->configDistanceAdjustmentEntry, d->distanceInput->value());
     group.writeEntry(d->configLevelAdjustmentEntry,    d->levelInput->value());
-    d->previewWidget->writeSettings();
     group.sync();
 }
 

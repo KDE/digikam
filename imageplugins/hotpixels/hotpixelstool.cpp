@@ -59,7 +59,7 @@
 #include "hotpixelfixer.h"
 #include "imagedialog.h"
 #include "imageiface.h"
-#include "imagepanelwidget.h"
+#include "imageregionwidget.h"
 #include "version.h"
 
 using namespace KDcrawIface;
@@ -98,7 +98,7 @@ public:
     RComboBox*          filterMethodCombo;
 
     BlackFrameListView* blackFrameListView;
-    ImagePanelWidget*   previewWidget;
+    ImageRegionWidget*  previewWidget;
     EditorToolSettings* gboxSettings;
 };
 
@@ -142,11 +142,11 @@ HotPixelsTool::HotPixelsTool(QObject* parent)
     grid->setMargin(d->gboxSettings->spacingHint());
     grid->setSpacing(d->gboxSettings->spacingHint());
 
-    setToolSettings(d->gboxSettings);
-
     // -------------------------------------------------------------
 
-    d->previewWidget = new ImagePanelWidget(470, 350, "hotpixels Tool", 0);
+    d->previewWidget = new ImageRegionWidget;
+
+    setToolSettings(d->gboxSettings);
     setToolView(d->previewWidget);
     setPreviewModeMask(PreviewToolBar::PreviewBothImagesHorz | 
                        PreviewToolBar::PreviewBothImagesVert | 
@@ -196,7 +196,6 @@ void HotPixelsTool::writeSettings()
     KConfigGroup group        = config->group(d->configGroupName);
     group.writeEntry(d->configLastBlackFrameFileEntry, d->blackFrameURL.url());
     group.writeEntry(d->configFilterMethodEntry,       d->filterMethodCombo->currentIndex());
-    d->previewWidget->writeSettings();
     group.sync();
 }
 

@@ -55,7 +55,7 @@
 #include "greycstorationsettings.h"
 #include "greycstorationwidget.h"
 #include "imageiface.h"
-#include "imagepanelwidget.h"
+#include "imageregionwidget.h"
 #include "version.h"
 
 using namespace Digikam;
@@ -111,7 +111,7 @@ public:
     KComboBox*            restorationTypeCB;
 
     GreycstorationWidget* settingsWidget;
-    ImagePanelWidget*     previewWidget;
+    ImageRegionWidget*    previewWidget;
     EditorToolSettings*   gboxSettings;
 };
 
@@ -178,7 +178,7 @@ RestorationTool::RestorationTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->previewWidget = new ImagePanelWidget(470, 350, "restoration Tool");
+    d->previewWidget = new ImageRegionWidget;
 
     setToolSettings(d->gboxSettings);
     setToolView(d->previewWidget);
@@ -207,7 +207,6 @@ RestorationTool::~RestorationTool()
 
 void RestorationTool::renderingFinished()
 {
-    d->previewWidget->setEnabled(true);
     d->mainTab->setEnabled(true);
 }
 
@@ -263,7 +262,6 @@ void RestorationTool::writeSettings()
     group.writeEntry(d->configIterationEntry,     settings.nbIter);
     group.writeEntry(d->configTileEntry,          settings.tile);
     group.writeEntry(d->configBTileEntry,         settings.btile);
-    d->previewWidget->writeSettings();
     group.sync();
 }
 

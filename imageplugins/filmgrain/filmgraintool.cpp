@@ -52,7 +52,7 @@
 #include "editortoolsettings.h"
 #include "filmgrain.h"
 #include "imageiface.h"
-#include "imagepanelwidget.h"
+#include "imageregionwidget.h"
 #include "version.h"
 
 using namespace Digikam;
@@ -80,7 +80,7 @@ public:
 
     QLCDNumber*         sensibilityLCDValue;
 
-    ImagePanelWidget*   previewWidget;
+    ImageRegionWidget*  previewWidget;
     EditorToolSettings* gboxSettings;
 };
 
@@ -95,7 +95,7 @@ FilmGrainTool::FilmGrainTool(QObject* parent)
     // -------------------------------------------------------------
 
     d->gboxSettings  = new EditorToolSettings;
-    d->previewWidget = new ImagePanelWidget(470, 350, "filmgrain Tool");
+    d->previewWidget = new ImageRegionWidget;
 
     // -------------------------------------------------------------
 
@@ -179,7 +179,6 @@ void FilmGrainTool::writeSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
     group.writeEntry(d->configSensitivityAdjustmentEntry, d->sensibilitySlider->value());
-    d->previewWidget->writeSettings();
     config->sync();
 }
 

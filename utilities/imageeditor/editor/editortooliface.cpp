@@ -38,7 +38,6 @@
 #include "editorwindow.h"
 #include "imageguidewidget.h"
 #include "imageregionwidget.h"
-#include "imagepanelwidget.h"
 
 namespace Digikam
 {
@@ -108,13 +107,13 @@ void EditorToolIface::loadTool(EditorTool* tool)
         view->slotPreviewModeChanged(d->editor->previewMode());
     }
 
-    ImagePanelWidget* view2 = dynamic_cast<ImagePanelWidget*>(d->tool->toolView());
+    ImageRegionWidget* view2 = dynamic_cast<ImageRegionWidget*>(d->tool->toolView());
     if (view2)
     {
         connect(d->editor, SIGNAL(signalPreviewModeChanged(int)),
-                view2->previewWidget(), SLOT(slotPreviewModeChanged(int)));
+                view2, SLOT(slotPreviewModeChanged(int)));
                 
-        view2->previewWidget()->slotPreviewModeChanged(d->editor->previewMode());
+        view2->slotPreviewModeChanged(d->editor->previewMode());
     }
 
     updateExposureSettings();

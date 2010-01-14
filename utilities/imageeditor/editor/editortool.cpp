@@ -37,7 +37,7 @@
 
 #include "dimgthreadedfilter.h"
 #include "imageguidewidget.h"
-#include "imagepanelwidget.h"
+#include "imageregionwidget.h"
 #include "histogramwidget.h"
 #include "histogrambox.h"
 #include "editortoolsettings.h"
@@ -248,7 +248,7 @@ void EditorTool::ICCSettingsChanged()
     if (view)
         view->ICCSettingsChanged();
 
-    ImagePanelWidget* view2 = dynamic_cast<ImagePanelWidget*>(d->view);
+    ImageRegionWidget* view2 = dynamic_cast<ImageRegionWidget*>(d->view);
     if (view2)
         view2->ICCSettingsChanged();
 }
@@ -259,7 +259,7 @@ void EditorTool::exposureSettingsChanged()
     if (view)
         view->exposureSettingsChanged();
 
-    ImagePanelWidget* view2 = dynamic_cast<ImagePanelWidget*>(d->view);
+    ImageRegionWidget* view2 = dynamic_cast<ImageRegionWidget*>(d->view);
     if (view2)
         view2->exposureSettingsChanged();
 }
@@ -436,7 +436,7 @@ void EditorToolThreaded::setToolView(QWidget *view)
 {
     EditorTool::setToolView(view);
 
-    if (dynamic_cast<ImageGuideWidget*>(view) || dynamic_cast<ImagePanelWidget*>(view))
+    if (dynamic_cast<ImageGuideWidget*>(view) || dynamic_cast<ImageRegionWidget*>(view))
     {
         connect(view, SIGNAL(signalResized()),
                 this, SLOT(slotResized()));

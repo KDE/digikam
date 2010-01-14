@@ -54,7 +54,7 @@
 #include "dimg.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
-#include "imagepanelwidget.h"
+#include "imageregionwidget.h"
 #include "texture.h"
 #include "version.h"
 
@@ -85,7 +85,7 @@ public:
 
     RComboBox*          textureType;
     RIntNumInput*       blendGain;
-    ImagePanelWidget*   previewWidget;
+    ImageRegionWidget*  previewWidget;
     EditorToolSettings* gboxSettings;
 };
 
@@ -100,7 +100,7 @@ TextureTool::TextureTool(QObject* parent)
     // -------------------------------------------------------------
 
     d->gboxSettings  = new EditorToolSettings;
-    d->previewWidget = new ImagePanelWidget(470, 350, "texture Tool");
+    d->previewWidget = new ImageRegionWidget;
 
     // -------------------------------------------------------------
 
@@ -195,7 +195,6 @@ void TextureTool::writeSettings()
     KConfigGroup group        = config->group(d->configGroupName);
     group.writeEntry(d->configTextureTypeEntry, d->textureType->currentIndex());
     group.writeEntry(d->configBlendGainEntry,   d->blendGain->value());
-    d->previewWidget->writeSettings();
     group.sync();
 }
 

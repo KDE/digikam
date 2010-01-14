@@ -50,7 +50,7 @@
 #include "dimggaussianblur.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
-#include "imagepanelwidget.h"
+#include "imageregionwidget.h"
 
 using namespace KDcrawIface;
 using namespace Digikam;
@@ -75,7 +75,7 @@ public:
     const QString       configRadiusAdjustmentEntry;
 
     RDoubleNumInput*    radiusInput;
-    ImagePanelWidget*   previewWidget;
+    ImageRegionWidget*  previewWidget;
     EditorToolSettings* gboxSettings;
 };
 
@@ -89,7 +89,7 @@ BlurTool::BlurTool(QObject* parent)
     setToolHelp("blursharpentool.anchor");
 
     d->gboxSettings  = new EditorToolSettings;
-    d->previewWidget = new ImagePanelWidget(470, 350, "gaussianblur Tool");
+    d->previewWidget = new ImageRegionWidget;
 
     // --------------------------------------------------------
 
@@ -144,7 +144,6 @@ void BlurTool::writeSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
     group.writeEntry(d->configRadiusAdjustmentEntry, d->radiusInput->value());
-    d->previewWidget->writeSettings();
     config->sync();
 }
 

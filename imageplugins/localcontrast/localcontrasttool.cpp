@@ -58,7 +58,7 @@
 #include "dimg.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
-#include "imagepanelwidget.h"
+#include "imageregionwidget.h"
 #include "localcontrast.h"
 #include "rexpanderbox.h"
 #include "version.h"
@@ -174,7 +174,7 @@ public:
 
     RExpanderBox*       expanderBox;
 
-    ImagePanelWidget*   previewWidget;
+    ImageRegionWidget*  previewWidget;
     EditorToolSettings* gboxSettings;
 };
 
@@ -445,7 +445,7 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
     grid->setMargin(d->gboxSettings->spacingHint());
     grid->setSpacing(d->gboxSettings->spacingHint());
 
-    d->previewWidget = new ImagePanelWidget(470, 350, "localcontrast Tool");
+    d->previewWidget = new ImageRegionWidget;
 
     setToolSettings(d->gboxSettings);
     setToolView(d->previewWidget);
@@ -555,7 +555,6 @@ void LocalContrastTool::writeSettings()
     group.writeEntry(d->configFunctionInputEntry,   d->functionInput->currentIndex());
     d->expanderBox->writeSettings();
 
-    d->previewWidget->writeSettings();
     group.sync();
 }
 

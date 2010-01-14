@@ -53,7 +53,7 @@
 #include "dimg.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
-#include "imagepanelwidget.h"
+#include "imageregionwidget.h"
 #include "infrared.h"
 #include "version.h"
 
@@ -85,7 +85,7 @@ public:
     QCheckBox*          addFilmGrain;
     QSlider*            sensibilitySlider;
     QLCDNumber*         sensibilityLCDValue;
-    ImagePanelWidget*   previewWidget;
+    ImageRegionWidget*  previewWidget;
     EditorToolSettings* gboxSettings;
 };
 
@@ -101,7 +101,7 @@ InfraredTool::InfraredTool(QObject* parent)
     // -------------------------------------------------------------
 
     d->gboxSettings  = new EditorToolSettings;
-    d->previewWidget = new ImagePanelWidget(470, 350, "infrared Tool");
+    d->previewWidget = new ImageRegionWidget;
 
     // -------------------------------------------------------------
 
@@ -211,7 +211,6 @@ void InfraredTool::writeSettings()
 
     group.writeEntry(d->configSensitivityAdjustmentEntry, d->sensibilitySlider->value());
     group.writeEntry(d->configAddFilmGrainEntry,          d->addFilmGrain->isChecked());
-    d->previewWidget->writeSettings();
     group.sync();
 }
 
