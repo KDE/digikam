@@ -112,7 +112,9 @@ public:
     RDoubleNumInput*    densityInput;
     RDoubleNumInput*    powerInput;
     RDoubleNumInput*    radiusInput;
-    
+    RDoubleNumInput*    xOffsetInput;
+    RDoubleNumInput*    yOffsetInput;
+
     QCheckBox*          addVignettingCheck;
 
     ImageGuideWidget*   previewWidget;
@@ -180,11 +182,29 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
                                       "multiple of the half-diagonal measure of the image, at which "
                                       "the density of the filter falls to zero."));
 
+    // -------------------------------------------------------------
+
+    QLabel *label4 = new QLabel(i18n("X offset:"));
+    d->xOffsetInput = new RDoubleNumInput();
+    d->xOffsetInput->setDecimals(0);
+    d->xOffsetInput->input()->setRange(-100, 100, 1, true);
+    d->xOffsetInput->setDefaultValue(0);
+    d->xOffsetInput->setWhatsThis(i18n("X offset "));
+    
+    // -------------------------------------------------------------
+
+    QLabel *label5 = new QLabel(i18n("Y offset:"));
+    d->yOffsetInput = new RDoubleNumInput();
+    d->yOffsetInput->setDecimals(0);
+    d->yOffsetInput->input()->setRange(-100, 100, 1, true);
+    d->yOffsetInput->setDefaultValue(0);
+    d->yOffsetInput->setWhatsThis(i18n("Y offset "));
+    
     KSeparator *line = new KSeparator (Qt::Horizontal);
 
     // -------------------------------------------------------------
 
-    QLabel *label4     = new QLabel(i18n("Brightness:"));
+    QLabel *label6     = new QLabel(i18n("Brightness:"));
     d->brightnessInput = new RIntNumInput();
     d->brightnessInput->setRange(0, 100, 1);
     d->brightnessInput->setSliderEnabled(true);
@@ -193,7 +213,7 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QLabel *label5   = new QLabel(i18n("Contrast:"));
+    QLabel *label7   = new QLabel(i18n("Contrast:"));
     d->contrastInput = new RIntNumInput();
     d->contrastInput->setRange(0, 100, 1);
     d->contrastInput->setSliderEnabled(true);
@@ -202,7 +222,7 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QLabel *label6 = new QLabel(i18n("Gamma:"));
+    QLabel *label8 = new QLabel(i18n("Gamma:"));
     d->gammaInput  = new RDoubleNumInput();
     d->gammaInput->setDecimals(2);
     d->gammaInput->input()->setRange(0.1, 3.0, 0.01, true);
@@ -219,15 +239,19 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
     mainLayout->addWidget(d->powerInput,          4, 0, 1, 3);
     mainLayout->addWidget(label3,                 5, 0, 1, 3);
     mainLayout->addWidget(d->radiusInput,         6, 0, 1, 3);
-    mainLayout->addWidget(line,                   7, 0, 1, 3);
-    mainLayout->addWidget(label4,                 8, 0, 1, 3);
-    mainLayout->addWidget(d->brightnessInput,     9, 0, 1, 3);
-    mainLayout->addWidget(label5,                 10, 0, 1, 3);   
-    mainLayout->addWidget(d->contrastInput,       11, 0, 1, 3);
+    mainLayout->addWidget(label4,                 7, 0, 1, 3);
+    mainLayout->addWidget(d->xOffsetInput,        8, 0, 1, 3);
+    mainLayout->addWidget(label5,                 9, 0, 1, 3);
+    mainLayout->addWidget(d->yOffsetInput,        10, 0, 1, 3);
+    mainLayout->addWidget(line,                   11, 0, 1, 3);
     mainLayout->addWidget(label6,                 12, 0, 1, 3);
-    mainLayout->addWidget(d->gammaInput,          13, 0, 1, 3);
-    mainLayout->addWidget(d->addVignettingCheck,  14, 0, 1, 3);
-    mainLayout->setRowStretch(15, 10);
+    mainLayout->addWidget(d->brightnessInput,     13, 0, 1, 3);
+    mainLayout->addWidget(label7,                 14, 0, 1, 3);   
+    mainLayout->addWidget(d->contrastInput,       15, 0, 1, 3);
+    mainLayout->addWidget(label8,                 16, 0, 1, 3);
+    mainLayout->addWidget(d->gammaInput,          17, 0, 1, 3);
+    mainLayout->addWidget(d->addVignettingCheck,  18, 0, 1, 3);
+    mainLayout->setRowStretch(19, 10);
     mainLayout->setMargin(d->gboxSettings->spacingHint());
     mainLayout->setSpacing(d->gboxSettings->spacingHint());
     d->gboxSettings->plainPage()->setLayout(mainLayout);
@@ -255,8 +279,14 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
             this, SLOT(slotTimer()));
 
     connect(d->gammaInput, SIGNAL(valueChanged (double)),
-            this, SLOT(slotTimer()));   
-
+            this, SLOT(slotTimer()));
+            
+    connect(d->xOffsetInput, SIGNAL(valueChanged (double)),
+            this, SLOT(slotTimer()));    
+    
+    connect(d->yOffsetInput, SIGNAL(valueChanged (double)),
+            this, SLOT(slotTimer()));
+            
     connect(d->addVignettingCheck, SIGNAL(toggled(bool)),
             this, SLOT(slotTimer()));
 }
@@ -274,6 +304,8 @@ void AntiVignettingTool::renderingFinished()
     d->brightnessInput->setEnabled(true);
     d->contrastInput->setEnabled(true);
     d->gammaInput->setEnabled(true);
+    d->xOffsetInput->setEnabled(true);
+    d->yOffsetInput->setEnabled(true);
     d->addVignettingCheck->setEnabled(true);
 }
 
@@ -335,14 +367,18 @@ void AntiVignettingTool::prepareEffect()
     d->radiusInput->setEnabled(false);
     d->brightnessInput->setEnabled(false);
     d->contrastInput->setEnabled(false);
-    d->gammaInput->setEnabled(false);
+    d->gammaInput->setEnabled(false); 
+    d->xOffsetInput->setEnabled(false);
+    d->yOffsetInput->setEnabled(false);
     d->addVignettingCheck->setEnabled(false);
 
     double dens           = d->densityInput->value();
     double power          = d->powerInput->value();
     double rad            = d->radiusInput->value();
     bool   addvignetting  = d->addVignettingCheck->isChecked();
-    
+    double xoffset        = d->xOffsetInput->value();
+    double yoffset        = d->yOffsetInput->value();
+        
     ImageIface* iface = d->previewWidget->imageIface();
     int orgWidth               = iface->originalWidth();
     int orgHeight              = iface->originalHeight();
@@ -352,7 +388,7 @@ void AntiVignettingTool::prepareEffect()
     // Calc mask preview.
     DImg preview(ps.width(), ps.height(), false);
     memset(preview.bits(), 255, preview.numBytes());
-    AntiVignetting maskPreview(&preview, 0, dens, power, rad, 0, 0, false, addvignetting);
+    AntiVignetting maskPreview(&preview, 0, dens, power, rad, xoffset, yoffset, false, addvignetting);
     maskPreview.startFilterDirectly();       // Run filter without to use multithreading.
     QPixmap pix = maskPreview.getTargetImage().convertToPixmap();
     QPainter pt(&pix);
@@ -362,7 +398,7 @@ void AntiVignettingTool::prepareEffect()
     d->maskPreviewLabel->setPixmap(pix);
 
     setFilter(dynamic_cast<DImgThreadedFilter *>(
-                       new AntiVignetting(iface->getOriginalImg(), this, dens, power, rad, 0, 0, true, addvignetting)));
+                       new AntiVignetting(iface->getOriginalImg(), this, dens, power, rad, xoffset, yoffset, true, addvignetting)));
 }
 
 void AntiVignettingTool::prepareFinal()
@@ -371,18 +407,22 @@ void AntiVignettingTool::prepareFinal()
     d->powerInput->setEnabled(false);
     d->radiusInput->setEnabled(false);
     d->brightnessInput->setEnabled(false);
-    d->contrastInput->setEnabled(false);
+    d->contrastInput->setEnabled(false); 
+    d->xOffsetInput->setEnabled(false);
+    d->yOffsetInput->setEnabled(false);
     d->gammaInput->setEnabled(false);
 
     double dens          = d->densityInput->value();
     double power         = d->powerInput->value();
     double rad           = d->radiusInput->value();
     bool   addvignetting = d->addVignettingCheck->isChecked();
+    double xoffset       = d->xOffsetInput->value();
+    double yoffset       = d->yOffsetInput->value();
     
     ImageIface iface(0, 0);
 
     setFilter(dynamic_cast<DImgThreadedFilter *>(
-                       new AntiVignetting(iface.getOriginalImg(), this, dens, power, rad, 0, 0, true, addvignetting)));
+                       new AntiVignetting(iface.getOriginalImg(), this, dens, power, rad, xoffset, yoffset, true, addvignetting)));
 }
 
 void AntiVignettingTool::putPreviewData()

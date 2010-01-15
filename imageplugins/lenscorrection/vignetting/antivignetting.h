@@ -37,7 +37,7 @@ class AntiVignetting : public Digikam::DImgThreadedFilter
 public:
 
     explicit AntiVignetting(Digikam::DImg *orgImage, QObject *parent=0, double density=2.0,
-                            double power=1.0, double radius=1.0, int xshift=0, int yshift=0, 
+                            double power=1.0, double radius=1.0, double xshift=0, double yshift=0, 
                             bool normalize=true, bool anti=true);
 
     ~AntiVignetting(){};

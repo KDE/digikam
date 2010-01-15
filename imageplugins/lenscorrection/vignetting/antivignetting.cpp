@@ -43,7 +43,7 @@ namespace DigikamAntiVignettingImagesPlugin
 {
 
 AntiVignetting::AntiVignetting(Digikam::DImg *orgImage, QObject *parent, double density,
-                               double power, double radius, int xshift, int yshift, 
+                               double power, double radius, double yshift, double xshift, 
                                bool normalize, bool anti)
               : Digikam::DImgThreadedFilter(orgImage, parent, "AntiVignetting")
 {
@@ -75,9 +75,14 @@ void AntiVignetting::filterImage()
 
     int Width  = m_orgImage.width();
     int Height = m_orgImage.height();
-
+    
+    // Determine the shift in pixels from the shift in percentage.
+    m_xshift = m_xshift*Height /200.0;
+    m_yshift = m_yshift*Width/200.0;
+    
     // Determine the radius of the filter.  This is the half diagonal
     // measure of the image multiplied by the command line radius factor.
+
 
     xsize = (Height + 1) / 2;
     ysize = (Width + 1) / 2;
