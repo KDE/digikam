@@ -38,9 +38,6 @@
 
 #include "digikam_export.h"
 
-class QPixmap;
-class QColor;
-
 namespace Digikam
 {
 
