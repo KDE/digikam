@@ -27,6 +27,7 @@
 
 // Qt includes
 
+#include <QCheckBox>
 #include <QGridLayout>
 #include <QImage>
 #include <QLabel>
@@ -80,6 +81,7 @@ public:
         configBrightnessAdjustmentEntry("BrightnessAdjustment"),
         configContrastAdjustmentEntry("ContrastAdjustment"),
         configGammaAdjustmentEntry("GammaAdjustment"),
+        configAddVignettingEntry("AddVignetting"),
 
         maskPreviewLabel(0),
         brightnessInput(0),
@@ -99,7 +101,8 @@ public:
     const QString       configBrightnessAdjustmentEntry;
     const QString       configContrastAdjustmentEntry;
     const QString       configGammaAdjustmentEntry;
-
+    const QString       configAddVignettingEntry;
+    
     QLabel*             maskPreviewLabel;
 
     RIntNumInput*       brightnessInput;
@@ -109,6 +112,8 @@ public:
     RDoubleNumInput*    densityInput;
     RDoubleNumInput*    powerInput;
     RDoubleNumInput*    radiusInput;
+    
+    QCheckBox*          addVignettingCheck;
 
     ImageGuideWidget*   previewWidget;
     EditorToolSettings* gboxSettings;
@@ -129,6 +134,13 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
 
     d->gboxSettings = new EditorToolSettings;
 
+    // -------------------------------------------------------------
+    
+    d->addVignettingCheck = new QCheckBox(i18n("Add vignetting"));
+    d->addVignettingCheck->setWhatsThis(i18n("This option add vignetting to the image instead for removing it."
+                                               "Use it for creative effects."));
+    d->addVignettingCheck->setChecked(false);
+    
     // -------------------------------------------------------------
 
     d->maskPreviewLabel = new QLabel();
@@ -162,7 +174,7 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
     QLabel *label3 = new QLabel(i18n("Radius:"));
     d->radiusInput = new RDoubleNumInput();
     d->radiusInput->setDecimals(1);
-    d->radiusInput->input()->setRange(-100.0, 100.0, 0.1, true);
+    d->radiusInput->input()->setRange(0.1, 1.5, 0.1, true);
     d->radiusInput->setDefaultValue(1.0);
     d->radiusInput->setWhatsThis(i18n("This value is the radius of the center filter. It is a "
                                       "multiple of the half-diagonal measure of the image, at which "
@@ -200,21 +212,22 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
     // -------------------------------------------------------------
 
     QGridLayout* mainLayout = new QGridLayout();
-    mainLayout->addWidget(d->maskPreviewLabel, 0, 0, 1, 3);
-    mainLayout->addWidget(label1,              1, 0, 1, 3);
-    mainLayout->addWidget(d->densityInput,     2, 0, 1, 3);
-    mainLayout->addWidget(label2,              3, 0, 1, 3);
-    mainLayout->addWidget(d->powerInput,       4, 0, 1, 3);
-    mainLayout->addWidget(label3,              5, 0, 1, 3);
-    mainLayout->addWidget(d->radiusInput,      6, 0, 1, 3);
-    mainLayout->addWidget(line,                7, 0, 1, 3);
-    mainLayout->addWidget(label4,              8, 0, 1, 3);
-    mainLayout->addWidget(d->brightnessInput,  9, 0, 1, 3);
-    mainLayout->addWidget(label5,             10, 0, 1, 3);
-    mainLayout->addWidget(d->contrastInput,   11, 0, 1, 3);
-    mainLayout->addWidget(label6,             12, 0, 1, 3);
-    mainLayout->addWidget(d->gammaInput,      13, 0, 1, 3);
-    mainLayout->setRowStretch(14, 10);
+    mainLayout->addWidget(d->maskPreviewLabel,    0, 0, 1, 3);
+    mainLayout->addWidget(label1,                 1, 0, 1, 3);
+    mainLayout->addWidget(d->densityInput,        2, 0, 1, 3);
+    mainLayout->addWidget(label2,                 3, 0, 1, 3);
+    mainLayout->addWidget(d->powerInput,          4, 0, 1, 3);
+    mainLayout->addWidget(label3,                 5, 0, 1, 3);
+    mainLayout->addWidget(d->radiusInput,         6, 0, 1, 3);
+    mainLayout->addWidget(line,                   7, 0, 1, 3);
+    mainLayout->addWidget(label4,                 8, 0, 1, 3);
+    mainLayout->addWidget(d->brightnessInput,     9, 0, 1, 3);
+    mainLayout->addWidget(label5,                 10, 0, 1, 3);   
+    mainLayout->addWidget(d->contrastInput,       11, 0, 1, 3);
+    mainLayout->addWidget(label6,                 12, 0, 1, 3);
+    mainLayout->addWidget(d->gammaInput,          13, 0, 1, 3);
+    mainLayout->addWidget(d->addVignettingCheck,  14, 0, 1, 3);
+    mainLayout->setRowStretch(15, 10);
     mainLayout->setMargin(d->gboxSettings->spacingHint());
     mainLayout->setSpacing(d->gboxSettings->spacingHint());
     d->gboxSettings->plainPage()->setLayout(mainLayout);
@@ -242,6 +255,9 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
             this, SLOT(slotTimer()));
 
     connect(d->gammaInput, SIGNAL(valueChanged (double)),
+            this, SLOT(slotTimer()));   
+
+    connect(d->addVignettingCheck, SIGNAL(toggled(bool)),
             this, SLOT(slotTimer()));
 }
 
@@ -258,6 +274,7 @@ void AntiVignettingTool::renderingFinished()
     d->brightnessInput->setEnabled(true);
     d->contrastInput->setEnabled(true);
     d->gammaInput->setEnabled(true);
+    d->addVignettingCheck->setEnabled(true);
 }
 
 void AntiVignettingTool::readSettings()
@@ -273,7 +290,7 @@ void AntiVignettingTool::readSettings()
     d->brightnessInput->setValue(group.readEntry(d->configBrightnessAdjustmentEntry, d->brightnessInput->defaultValue()));
     d->contrastInput->setValue(group.readEntry(d->configContrastAdjustmentEntry,     d->contrastInput->defaultValue()));
     d->gammaInput->setValue(group.readEntry(d->configGammaAdjustmentEntry,           d->gammaInput->defaultValue()));
-
+    d->addVignettingCheck->setChecked(group.readEntry(d->configAddVignettingEntry,   false));
     blockWidgetSignals(false);
 
     slotEffect();
@@ -290,7 +307,8 @@ void AntiVignettingTool::writeSettings()
     group.writeEntry(d->configBrightnessAdjustmentEntry, d->brightnessInput->value());
     group.writeEntry(d->configContrastAdjustmentEntry,   d->contrastInput->value());
     group.writeEntry(d->configGammaAdjustmentEntry,      d->gammaInput->value());
-
+    group.writeEntry(d->configAddVignettingEntry,        d->addVignettingCheck->isChecked());
+    
     group.sync();
 }
 
@@ -318,11 +336,13 @@ void AntiVignettingTool::prepareEffect()
     d->brightnessInput->setEnabled(false);
     d->contrastInput->setEnabled(false);
     d->gammaInput->setEnabled(false);
+    d->addVignettingCheck->setEnabled(false);
 
-    double dens  = d->densityInput->value();
-    double power = d->powerInput->value();
-    double rad   = d->radiusInput->value();
-
+    double dens           = d->densityInput->value();
+    double power          = d->powerInput->value();
+    double rad            = d->radiusInput->value();
+    bool   addvignetting  = d->addVignettingCheck->isChecked();
+    
     ImageIface* iface = d->previewWidget->imageIface();
     int orgWidth               = iface->originalWidth();
     int orgHeight              = iface->originalHeight();
@@ -332,7 +352,7 @@ void AntiVignettingTool::prepareEffect()
     // Calc mask preview.
     DImg preview(ps.width(), ps.height(), false);
     memset(preview.bits(), 255, preview.numBytes());
-    AntiVignetting maskPreview(&preview, 0, dens, power, rad, 0, 0, false);
+    AntiVignetting maskPreview(&preview, 0, dens, power, rad, 0, 0, false, addvignetting);
     maskPreview.startFilterDirectly();       // Run filter without to use multithreading.
     QPixmap pix = maskPreview.getTargetImage().convertToPixmap();
     QPainter pt(&pix);
@@ -342,7 +362,7 @@ void AntiVignettingTool::prepareEffect()
     d->maskPreviewLabel->setPixmap(pix);
 
     setFilter(dynamic_cast<DImgThreadedFilter *>(
-                       new AntiVignetting(iface->getOriginalImg(), this, dens, power, rad, 0, 0, true)));
+                       new AntiVignetting(iface->getOriginalImg(), this, dens, power, rad, 0, 0, true, addvignetting)));
 }
 
 void AntiVignettingTool::prepareFinal()
@@ -354,14 +374,15 @@ void AntiVignettingTool::prepareFinal()
     d->contrastInput->setEnabled(false);
     d->gammaInput->setEnabled(false);
 
-    double dens  = d->densityInput->value();
-    double power = d->powerInput->value();
-    double rad   = d->radiusInput->value();
-
+    double dens          = d->densityInput->value();
+    double power         = d->powerInput->value();
+    double rad           = d->radiusInput->value();
+    bool   addvignetting = d->addVignettingCheck->isChecked();
+    
     ImageIface iface(0, 0);
 
     setFilter(dynamic_cast<DImgThreadedFilter *>(
-                       new AntiVignetting(iface.getOriginalImg(), this, dens, power, rad, 0, 0, true)));
+                       new AntiVignetting(iface.getOriginalImg(), this, dens, power, rad, 0, 0, true, addvignetting)));
 }
 
 void AntiVignettingTool::putPreviewData()
@@ -391,7 +412,7 @@ void AntiVignettingTool::putFinalData()
     ImageIface* iface = d->previewWidget->imageIface();
     DImg finalImage   = filter()->getTargetImage();
 
-    double b = (double)(d->brightnessInput->value() / 250.0);
+    double b = (double)(d->brightnessInput->value() / 250.0); 
     double c = (double)(d->contrastInput->value()   / 100.0) + (double)(1.00);
     double g = d->gammaInput->value();
 
@@ -412,7 +433,8 @@ void AntiVignettingTool::blockWidgetSignals(bool b)
     d->radiusInput->blockSignals(b);
     d->brightnessInput->blockSignals(b);
     d->contrastInput->blockSignals(b);
-    d->gammaInput->blockSignals(b);
+    d->gammaInput->blockSignals(b); 
+    d->addVignettingCheck->blockSignals(b);
 }
 
 }  // namespace DigikamAntiVignettingImagesPlugin

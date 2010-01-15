@@ -43,15 +43,17 @@ namespace DigikamAntiVignettingImagesPlugin
 {
 
 AntiVignetting::AntiVignetting(Digikam::DImg *orgImage, QObject *parent, double density,
-                               double power, double radius, int xshift, int yshift, bool normalize)
+                               double power, double radius, int xshift, int yshift, 
+                               bool normalize, bool anti)
               : Digikam::DImgThreadedFilter(orgImage, parent, "AntiVignetting")
 {
-    m_density   = density;
-    m_power     = power;
-    m_radius    = radius;
-    m_xshift    = xshift;
-    m_yshift    = yshift;
-    m_normalize = normalize;
+    m_density        = density;
+    m_power          = power;
+    m_radius         = radius;
+    m_xshift         = xshift;
+    m_yshift         = yshift;
+    m_normalize      = normalize;
+    m_add_vignetting = anti;
 
     initFilter();
 }
@@ -89,7 +91,7 @@ void AntiVignetting::filterImage()
     // of the image.
 
     xsize    = ((Height + 1) / 2) + abs(m_xshift);
-    ysize    = ((Width + 1)  / 2) + abs(m_yshift);
+    ysize    = ((Width  + 1) / 2) + abs(m_yshift);
     diagonal = ((int) (sqrt((xsize * xsize) + (ysize * ysize)) + 0.5)) +  1;
 
     ldens = new double[diagonal];
@@ -97,13 +99,23 @@ void AntiVignetting::filterImage()
     for (i = 0 ; !m_cancel && (i < diagonal) ; ++i)
     {
         if ( i >= erad )
-           ldens[i] = 1;
+        {  
+          if (!m_add_vignetting)
+            ldens[i] = 1.0;
+          else
+            ldens[i] = 0.0;
+        }
         else
-           ldens[i] =  (1.0 + (m_density - 1) * pow(1.0 - (((double) i) / (erad - 1)), m_power));
+        {
+          if (!m_add_vignetting)
+             ldens[i] =  (1.0 + (m_density - 1) * pow(1.0 - (((double) i) / (erad - 1)), m_power));
+          else
+             ldens[i] =  20.0 / (1.0 + (24 - (m_density - 1)) * pow(1.0 - (((double) i) / (erad - 1)), m_power));
+        }
     }
 
     xctr = ((Height + 1) / 2) + m_xshift;
-    yctr = ((Width + 1) / 2) + m_yshift;
+    yctr = ((Width  + 1) / 2) + m_yshift;
 
     for (row = 0 ; !m_cancel && (row < Width) ; ++row)
     {
