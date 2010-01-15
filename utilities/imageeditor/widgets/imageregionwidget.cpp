@@ -485,9 +485,11 @@ void ImageRegionWidget::setContentsSize()
 {
     switch (d->renderingPreviewMode)
     {
+        case PreviewToolBar::PreviewOriginalImage:
         case PreviewToolBar::PreviewBothImagesVertCont:
         case PreviewToolBar::PreviewBothImagesHorzCont:
         case PreviewToolBar::PreviewTargetImage:
+        case PreviewToolBar::PreviewToggleOnMouseOver:
         {
             PreviewWidget::setContentsSize();
             break;
