@@ -69,4 +69,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 060 ==> 218184 : Preview and image navigation out of sync when opening the sharpen dialog in the editor.
 061 ==> 219745 : Zoom is ignored in the tools on 1. try.
 062 ==> 222748 : Editor preview mode buttons lack tooltip.
-063 ==> 
+063 ==> 222744 : Mouse-over preview mode with zoom removes ability to see whole image.
+064 ==> 
+
