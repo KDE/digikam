@@ -110,11 +110,6 @@ public:
     virtual void doLoadState();
     virtual void doSaveState();
 
-    /**
-     * Adapt the column sizes to the contents of the tree view.
-     */
-    void adaptColumnsToContent();
-
 public Q_SLOTS:
 
     void setSearchTextSettings(const SearchTextSettings& settings);
@@ -125,6 +120,11 @@ public Q_SLOTS:
      * @param album album to select
      */
     void slotSelectAlbum(Album *album);
+
+    /**
+     * Adapt the column sizes to the contents of the tree view.
+     */
+    void adaptColumnsToContent();
 
 Q_SIGNALS:
 

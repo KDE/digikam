@@ -28,6 +28,7 @@
 #include <QMouseEvent>
 #include <QScrollBar>
 #include <QStyledItemDelegate>
+#include <QTimer>
 
 // KDE includes
 
@@ -129,9 +130,10 @@ public:
     {
         delegate            = 0;
         expandOnSingleClick = true;
-        selectAlbumOnClick = false;
+        selectAlbumOnClick  = false;
         selectOnContextMenu = true;
-        enableContextMenu = false;
+        enableContextMenu   = false;
+        resizeColumnsTimer  = 0;
     }
 
     AlbumTreeViewDelegate *delegate;
@@ -149,6 +151,8 @@ public:
     const QString configSortColumnEntry;
     const QString configSortOrderEntry;
 
+    QTimer       *resizeColumnsTimer;
+
 };
 
 AbstractAlbumTreeView::AbstractAlbumTreeView(AbstractSpecificAlbumModel *model, AlbumFilterModel *filterModel, QWidget *parent)
@@ -161,6 +165,12 @@ AbstractAlbumTreeView::AbstractAlbumTreeView(AbstractSpecificAlbumModel *model, 
     d->delegate = new AlbumTreeViewDelegate(this);
     setItemDelegate(d->delegate);
     setUniformRowHeights(true);
+
+    d->resizeColumnsTimer = new QTimer(this);
+    d->resizeColumnsTimer->setInterval(200);
+    d->resizeColumnsTimer->setSingleShot(true);
+    connect(d->resizeColumnsTimer, SIGNAL(timeout()),
+            this, SLOT(adaptColumnsToContent()));
 
     m_albumModel       = model;
 
@@ -577,7 +587,8 @@ void AbstractAlbumTreeView::adaptColumnsOnDataChange(const QModelIndex &topLeft,
 {
     Q_UNUSED(topLeft);
     Q_UNUSED(bottomRight);
-    adaptColumnsToContent();
+    if (!d->resizeColumnsTimer->isActive())
+        d->resizeColumnsTimer->start();
 }
 
 void AbstractAlbumTreeView::adaptColumnsOnRowChange(const QModelIndex &parent, int start, int end)
@@ -585,12 +596,14 @@ void AbstractAlbumTreeView::adaptColumnsOnRowChange(const QModelIndex &parent, i
     Q_UNUSED(parent);
     Q_UNUSED(start);
     Q_UNUSED(end);
-    adaptColumnsToContent();
+    if (!d->resizeColumnsTimer->isActive())
+        d->resizeColumnsTimer->start();
 }
 
 void AbstractAlbumTreeView::adaptColumnsOnLayoutChange()
 {
-    adaptColumnsToContent();
+    if (!d->resizeColumnsTimer->isActive())
+        d->resizeColumnsTimer->start();
 }
 
 void AbstractAlbumTreeView::doSaveState()
