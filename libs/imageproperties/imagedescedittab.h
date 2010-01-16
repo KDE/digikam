@@ -42,7 +42,6 @@
 #include "searchtextbar.h"
 #include "imageinfolist.h"
 #include "albummanager.h"
-#include "tagmodificationhelper.h"
 #include "albummodel.h"
 #include "metadatahub.h"
 

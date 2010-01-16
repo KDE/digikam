@@ -114,7 +114,6 @@
 #include "globals.h"
 #include "uifilevalidator.h"
 #include "albummodel.h"
-#include "tagmodificationhelper.h"
 
 namespace Digikam
 {

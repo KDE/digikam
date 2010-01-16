@@ -60,6 +60,7 @@
 #include "slideshow.h"
 #include "statusprogressbar.h"
 #include "tagfiltersidebarwidget.h"
+#include "tagmodificationhelper.h"
 
 namespace Digikam
 {

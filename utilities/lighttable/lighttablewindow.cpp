@@ -82,7 +82,6 @@
 #include "lighttablewindow_p.h"
 #include "uifilevalidator.h"
 #include "albummodel.h"
-#include "tagmodificationhelper.h"
 
 namespace Digikam
 {

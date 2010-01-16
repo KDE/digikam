@@ -34,7 +34,6 @@
 #include "imagealbumfiltermodel.h"
 #include "searchmodificationhelper.h"
 #include "sidebarwidget.h"
-#include "tagmodificationhelper.h"
 
 namespace Digikam
 {

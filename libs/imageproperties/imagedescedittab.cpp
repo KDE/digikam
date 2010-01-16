@@ -61,6 +61,7 @@
 #include "templateviewer.h"
 #include "imageattributeswatch.h"
 #include "statusprogressbar.h"
+#include "tagmodificationhelper.h"
 
 namespace Digikam
 {

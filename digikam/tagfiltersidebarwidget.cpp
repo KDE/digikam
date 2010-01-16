@@ -38,7 +38,6 @@
 #include "albummodel.h"
 #include "contextmenuhelper.h"
 #include "tagcheckview.h"
-#include "tagmodificationhelper.h"
 
 namespace Digikam
 {
