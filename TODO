@@ -12,6 +12,7 @@ post 1.0.0 mvc merge
  * let day selection widget in DateFolderView work on the model directly
  * DEFINITELY clean up the project structure. It's absolutely not obvious which
    file depends on which atm
+ * duplicate search in tag filter view not working. is it wanted there???
 
 ------------------------------------------------------------------------------------
 1.0.0 TODO LIST
