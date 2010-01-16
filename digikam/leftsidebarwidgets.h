@@ -93,12 +93,10 @@ public:
     QString getCaption();
 
 public Q_SLOTS:
+
     void slotSelectAlbum(Album *album);
 
-    // TODO update, legacy signals
 Q_SIGNALS:
-    void signalProgressBarMode(int, const QString&);
-    void signalProgressValue(int);
 
     void signalFindDuplicatesInAlbum(Album*);
 
