@@ -207,21 +207,25 @@ Qt::DropAction TagDragDropHandler::accepts(const QDropEvent *e, const QModelInde
             return Qt::IgnoreAction;
 
         TAlbum *droppedAlbum = AlbumManager::instance()->findTAlbum(droppedId);
-
-        // Allow dragging on empty space when the itemDrag isn't already at root level
-        if (!droppedAlbum && destAlbum->parent()->isRoot())
+        if (!droppedAlbum)
             return Qt::IgnoreAction;
 
-        // Allow dragging at the root, to move the tag to the root
-        if(!destAlbum)
-            return Qt::MoveAction;
+        // Allow dragging on empty space to move the dragged album under the root albumForIndex
+        // - unless the itemDrag is already at root level
+        if (!destAlbum)
+        {
+            if (droppedAlbum->parent()->isRoot())
+                return Qt::IgnoreAction;
+            else
+                return Qt::MoveAction;
+        }
 
         // Dragging an item on itself makes no sense
-        if(destAlbum == droppedAlbum)
+        if (destAlbum == droppedAlbum)
             return Qt::IgnoreAction;
 
         // Dragging a parent on its child makes no sense
-        if(destAlbum && droppedAlbum && destAlbum->isAncestorOf(droppedAlbum))
+        if(destAlbum && droppedAlbum && droppedAlbum->isAncestorOf(destAlbum))
             return Qt::IgnoreAction;
 
         return Qt::MoveAction;
