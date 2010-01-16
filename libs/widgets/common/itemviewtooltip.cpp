@@ -49,7 +49,7 @@ public:
 };
 
 ItemViewToolTip::ItemViewToolTip(QAbstractItemView *view)
-               : DItemToolTip(), d(new ItemViewToolTipPriv)
+               : DItemToolTip(view), d(new ItemViewToolTipPriv)
 {
     d->view = view;
 

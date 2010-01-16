@@ -40,7 +40,7 @@ namespace Digikam {
 class AlbumSelectionTreeViewPriv;
 
 /**
- * Alubm tree view used in the left sidebar to select PAlbums and perform
+ * Album tree view used in the left sidebar to select PAlbums and perform
  * operations on them via a context menu.
  *
  * @author jwienke

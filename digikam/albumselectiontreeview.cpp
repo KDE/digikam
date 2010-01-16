@@ -40,10 +40,35 @@
 // Local includes
 #include "albummanager.h"
 #include "contextmenuhelper.h"
+#include "itemviewtooltip.h"
 #include "tooltipfiller.h"
 
 namespace Digikam
 {
+
+class AlbumViewToolTip: public ItemViewToolTip
+{
+public:
+    AlbumViewToolTip(AlbumSelectionTreeView *view) :
+        ItemViewToolTip(view)
+    {
+    }
+
+    AlbumSelectionTreeView *view() const
+    {
+        return static_cast<AlbumSelectionTreeView*>(ItemViewToolTip::view());
+    }
+
+protected:
+
+    virtual QString tipContents()
+    {
+        PAlbum *album = view()->albumForIndex(currentIndex());
+        return ToolTipFiller::albumTipContents(album,
+                        view()->albumModel()->albumCount(album));
+    }
+
+};
 
 class AlbumSelectionTreeViewPriv
 {
@@ -51,12 +76,17 @@ class AlbumSelectionTreeViewPriv
 public:
     AlbumSelectionTreeViewPriv() :
         albumModificationHelper(0),
-        enableToolTips(false)
+        enableToolTips(false),
+        toolTip(0),
+        renameAction(0),
+        resetIconAction(0),
+        findDuplAction(0)
     {
     }
 
     AlbumModificationHelper *albumModificationHelper;
     bool enableToolTips;
+    AlbumViewToolTip *toolTip;
 
     QAction *renameAction;
     QAction *resetIconAction;
@@ -70,6 +100,8 @@ AlbumSelectionTreeView::AlbumSelectionTreeView(QWidget *parent, AlbumModel *mode
 {
 
     d->albumModificationHelper = albumModificationHelper;
+
+    d->toolTip = new AlbumViewToolTip(this);
 
     d->renameAction    = new QAction(SmallIcon("edit-rename"), i18n("Rename..."), this);
     d->resetIconAction = new QAction(SmallIcon("view-refresh"), i18n("Reset Album Icon"), this);
@@ -159,11 +191,16 @@ void AlbumSelectionTreeView::handleCustomContextMenuAction(QAction *action, Albu
 bool AlbumSelectionTreeView::viewportEvent(QEvent *event)
 {
 
-    // let the base class handle the event if the extended tool tips aren't
-    // requested by the user or the event is not related to tool tips at all
-    if (!d->enableToolTips || event->type() != QEvent::ToolTip)
+    // let the base class handle the event if it is not a tool tip request
+    if (event->type() != QEvent::ToolTip)
     {
         return AlbumTreeView::viewportEvent(event);
+    }
+
+    // only show tool tips if requested
+    if (!d->enableToolTips)
+    {
+        return false;
     }
 
     // check that we got a correct event
@@ -176,16 +213,26 @@ bool AlbumSelectionTreeView::viewportEvent(QEvent *event)
     }
 
     // find the item this tool tip belongs to
-    PAlbum *album = albumForIndex(indexAt(helpEvent->pos()));
+    QModelIndex index = indexAt(helpEvent->pos());
+    if (!index.isValid())
+    {
+        return true;
+    }
+    PAlbum *album = albumForIndex(index);
     if (!album || album->isRoot() || album->isAlbumRoot())
     {
-        // there was no album so we really dont want to show a tooltip.
+        // there was no album so we really don't want to show a tooltip.
         return true;
     }
 
-    // TODO use a custom tool tip
-    QToolTip::showText(helpEvent->globalPos(), ToolTipFiller::albumTipContents(
-                    album, albumModel()->albumCount(album)));
+    QStyleOptionViewItem option = viewOptions();
+    option.rect = visualRect(index);
+    if (option.rect.width() > viewport()->width())
+    {
+        option.rect.setWidth(viewport()->width());
+    }
+    option.state |= (index == currentIndex() ? QStyle::State_HasFocus : QStyle::State_None);
+    d->toolTip->show(helpEvent, option, index);
 
     return true;
 

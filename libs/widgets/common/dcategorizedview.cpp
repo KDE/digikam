@@ -111,7 +111,6 @@ DCategorizedView::DCategorizedView(QWidget *parent)
 
 DCategorizedView::~DCategorizedView()
 {
-    delete d->toolTip;
     delete d;
 }
 
