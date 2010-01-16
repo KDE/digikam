@@ -37,15 +37,15 @@ namespace Digikam
 
 class ContextMenuHelper;
 
-class TagFolderViewNewPriv;
-class TagFolderViewNew: public TagTreeView
+class TagFolderViewPriv;
+class TagFolderView: public TagTreeView
 {
 Q_OBJECT
 
 public:
 
-    TagFolderViewNew(QWidget *parent, TagModel *model);
-    virtual ~TagFolderViewNew();
+    TagFolderView(QWidget *parent, TagModel *model);
+    virtual ~TagFolderView();
 
 Q_SIGNALS:
 
@@ -85,7 +85,7 @@ private Q_SLOTS:
     void slotTagNewFromABCMenu(const QString &personName);
 
 private:
-    TagFolderViewNewPriv *d;
+    TagFolderViewPriv *d;
 
 };
 

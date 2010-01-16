@@ -70,7 +70,7 @@ public:
 };
 
 TagCheckView::TagCheckView(QWidget *parent, TagModel *tagModel) :
-                TagFolderViewNew(parent, tagModel),
+                TagFolderView(parent, tagModel),
                 d(new TagCheckViewPriv)
 {
 
@@ -147,7 +147,7 @@ void TagCheckView::slotCheckStateChange(Album *album, Qt::CheckState state)
 
 void TagCheckView::doLoadState()
 {
-    TagFolderViewNew::doLoadState();
+    TagFolderView::doLoadState();
 
     KConfigGroup group = getConfigGroup();
     d->toggleAutoTags  = (ToggleAutoTags)
@@ -156,7 +156,7 @@ void TagCheckView::doLoadState()
 
 void TagCheckView::doSaveState()
 {
-    TagFolderViewNew::doSaveState();
+    TagFolderView::doSaveState();
 
     KConfigGroup group = getConfigGroup();
     group.writeEntry(entryName(d->configToggleAutoTagsEntry), (int)(d->toggleAutoTags));
@@ -190,7 +190,7 @@ void TagCheckView::setToggleAutoTags(TagCheckView::ToggleAutoTags toggle)
 
 void TagCheckView::addCustomContextMenuActions(ContextMenuHelper &cmh, Album *album)
 {
-    TagFolderViewNew::addCustomContextMenuActions(cmh, album);
+    TagFolderView::addCustomContextMenuActions(cmh, album);
 
     TAlbum *tag = dynamic_cast<TAlbum*> (album);
     if (!tag)
@@ -226,7 +226,7 @@ void TagCheckView::addCustomContextMenuActions(ContextMenuHelper &cmh, Album *al
 
 void TagCheckView::handleCustomContextMenuAction(QAction *action, Album *album)
 {
-    TagFolderViewNew::handleCustomContextMenuAction(action, album);
+    TagFolderView::handleCustomContextMenuAction(action, album);
 
     TAlbum *tag = dynamic_cast<TAlbum*> (album);
 

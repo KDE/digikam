@@ -44,10 +44,10 @@
 namespace Digikam
 {
 
-class TagFolderViewNewPriv
+class TagFolderViewPriv
 {
 public:
-    TagFolderViewNewPriv() :
+    TagFolderViewPriv() :
         model(0),
         resetIconAction(0),
         findDuplAction(0)
@@ -62,8 +62,8 @@ public:
 
 };
 
-TagFolderViewNew::TagFolderViewNew(QWidget *parent, TagModel *model) :
-    TagTreeView(model, parent), d(new TagFolderViewNewPriv)
+TagFolderView::TagFolderView(QWidget *parent, TagModel *model) :
+    TagTreeView(model, parent), d(new TagFolderViewPriv)
 {
 
     d->model = model;
@@ -77,17 +77,17 @@ TagFolderViewNew::TagFolderViewNew(QWidget *parent, TagModel *model) :
 
 }
 
-TagFolderViewNew::~TagFolderViewNew()
+TagFolderView::~TagFolderView()
 {
     delete d;
 }
 
-QString TagFolderViewNew::contextMenuTitle() const
+QString TagFolderView::contextMenuTitle() const
 {
     return i18n("My Tags");
 }
 
-void TagFolderViewNew::addCustomContextMenuActions(ContextMenuHelper &cmh, Album *album)
+void TagFolderView::addCustomContextMenuActions(ContextMenuHelper &cmh, Album *album)
 {
 
     TAlbum *tag = dynamic_cast<TAlbum*> (album);
@@ -114,7 +114,7 @@ void TagFolderViewNew::addCustomContextMenuActions(ContextMenuHelper &cmh, Album
 
 }
 
-void TagFolderViewNew::slotTagNewFromABCMenu(const QString &personName)
+void TagFolderView::slotTagNewFromABCMenu(const QString &personName)
 {
 
     TAlbum *parent = currentAlbum();
@@ -127,7 +127,7 @@ void TagFolderViewNew::slotTagNewFromABCMenu(const QString &personName)
 
 }
 
-void TagFolderViewNew::handleCustomContextMenuAction(QAction *action, Album *album)
+void TagFolderView::handleCustomContextMenuAction(QAction *action, Album *album)
 {
 
     TAlbum *tag = dynamic_cast<TAlbum*> (album);

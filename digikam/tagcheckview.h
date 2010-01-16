@@ -35,7 +35,7 @@ namespace Digikam
 {
 
 class TagCheckViewPriv;
-class TagCheckView : public TagFolderViewNew
+class TagCheckView : public TagFolderView
 {
     Q_OBJECT
 public:

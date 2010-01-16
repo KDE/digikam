@@ -166,7 +166,7 @@ public:
 
     TagModel *tagModel;
     SearchTextBar *tagSearchBar;
-    TagFolderViewNew *tagFolderView;
+    TagFolderView *tagFolderView;
 };
 
 TagViewSideBarWidget::TagViewSideBarWidget(QWidget *parent, TagModel *model) :
@@ -179,7 +179,7 @@ TagViewSideBarWidget::TagViewSideBarWidget(QWidget *parent, TagModel *model) :
 
     QVBoxLayout *layout = new QVBoxLayout(this);
 
-    d->tagFolderView = new TagFolderViewNew(this, model);
+    d->tagFolderView = new TagFolderView(this, model);
     d->tagFolderView->setConfigGroup(getConfigGroup());
     d->tagSearchBar  = new SearchTextBar(this, "DigikamViewTagSearchBar");
     d->tagSearchBar->setHighlightOnResult(true);
