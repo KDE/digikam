@@ -218,6 +218,7 @@ bool AlbumSelectionTreeView::viewportEvent(QEvent *event)
     {
         return true;
     }
+
     PAlbum *album = albumForIndex(index);
     if (!album || album->isRoot() || album->isAlbumRoot())
     {
@@ -225,12 +226,13 @@ bool AlbumSelectionTreeView::viewportEvent(QEvent *event)
         return true;
     }
 
+    QRect itemRect = visualRect(index);
+    if (!itemRect.contains(helpEvent->pos()))
+        return true;
     QStyleOptionViewItem option = viewOptions();
-    option.rect = visualRect(index);
-    if (option.rect.width() > viewport()->width())
-    {
-        option.rect.setWidth(viewport()->width());
-    }
+    option.rect = itemRect;
+    // visualRect can be larger than viewport, intersect with viewport rect
+    option.rect &= viewport()->rect();
     option.state |= (index == currentIndex() ? QStyle::State_HasFocus : QStyle::State_None);
     d->toolTip->show(helpEvent, option, index);
 
