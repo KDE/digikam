@@ -7,7 +7,8 @@ post 1.0.0 mvc merge
  * Use model view for cameraui when selecting the album to download to
  * model for the image view in cameraui
  * port thumbbar
- * Are there any non-model view lists in kipi interface?
+ * Are there any non-model view lists in kipi interface:
+   * KipiImagecollectionSelector
 
 Is this really needed?
  * sorting albums by something else than name (date, category)
