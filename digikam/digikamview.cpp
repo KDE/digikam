@@ -871,6 +871,22 @@ void DigikamView::slotGotoTagAndItem(int tagID)
     // d->iconView->setAlbumItemToFind(url);
 }
 
+void DigikamView::slotSelectAlbum(const KUrl &url)
+{
+
+    PAlbum *album = d->albumManager->findPAlbum(url);
+
+    if (!album)
+    {
+        kWarning() << "Unable to find album for " << url;
+        return;
+    }
+
+    slotLeftSideBarActivate(d->albumFolderSideBar);
+    d->albumFolderSideBar->slotSelectAlbum(album);
+
+}
+
 void DigikamView::slotAlbumSelected(Album* album)
 {
     emit signalNoCurrentItem();

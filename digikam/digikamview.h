@@ -128,6 +128,8 @@ public Q_SLOTS:
     void slotGotoDateAndItem(const ImageInfo& imageInfo);
     void slotGotoTagAndItem(int tagID);
 
+    void slotSelectAlbum(const KUrl &url);
+
     // Tag action slots
     void slotNewTag();
     void slotDeleteTag();
