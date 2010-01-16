@@ -121,7 +121,7 @@ AlbumSelectWidget::AlbumSelectWidget(QWidget *parent, PAlbum* albumToSelect)
             this, SLOT(slotSearchTextChanged(const SearchTextSettings&)));
 
     connect(d->newAlbumBtn, SIGNAL(clicked()),
-            this, SLOT(slotAlbumNew()));
+            this, SLOT(slotNewAlbum()));
 }
 
 AlbumSelectWidget::~AlbumSelectWidget()
