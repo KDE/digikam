@@ -298,15 +298,7 @@ AntiVignettingTool::~AntiVignettingTool()
 
 void AntiVignettingTool::renderingFinished()
 {
-    d->densityInput->setEnabled(true);
-    d->powerInput->setEnabled(true);
-    d->radiusInput->setEnabled(true);
-    d->brightnessInput->setEnabled(true);
-    d->contrastInput->setEnabled(true);
-    d->gammaInput->setEnabled(true);
-    d->xOffsetInput->setEnabled(true);
-    d->yOffsetInput->setEnabled(true);
-    d->addVignettingCheck->setEnabled(true);
+    enableSettings(true);
 }
 
 void AntiVignettingTool::readSettings()
@@ -354,23 +346,30 @@ void AntiVignettingTool::slotResetSettings()
     d->brightnessInput->slotReset();
     d->contrastInput->slotReset();
     d->gammaInput->slotReset();
+    d->xOffsetInput->slotReset();
+    d->yOffsetInput->slotReset();
 
     blockWidgetSignals(false);
 
     slotEffect();
 }
 
+void AntiVignettingTool::enableSettings(bool b)
+{
+    d->densityInput->setEnabled(b);
+    d->powerInput->setEnabled(b);
+    d->radiusInput->setEnabled(b);
+    d->brightnessInput->setEnabled(b);
+    d->contrastInput->setEnabled(b);
+    d->gammaInput->setEnabled(b); 
+    d->xOffsetInput->setEnabled(b);
+    d->yOffsetInput->setEnabled(b);
+    d->addVignettingCheck->setEnabled(b);
+}
+  
 void AntiVignettingTool::prepareEffect()
 {
-    d->densityInput->setEnabled(false);
-    d->powerInput->setEnabled(false);
-    d->radiusInput->setEnabled(false);
-    d->brightnessInput->setEnabled(false);
-    d->contrastInput->setEnabled(false);
-    d->gammaInput->setEnabled(false); 
-    d->xOffsetInput->setEnabled(false);
-    d->yOffsetInput->setEnabled(false);
-    d->addVignettingCheck->setEnabled(false);
+    enableSettings(false);
 
     double dens           = d->densityInput->value();
     double power          = d->powerInput->value();
@@ -385,7 +384,7 @@ void AntiVignettingTool::prepareEffect()
     QSize ps(orgWidth, orgHeight);
     ps.scale(QSize(120, 120), Qt::KeepAspectRatio);
 
-    // Calc mask preview.
+    // Compute preview mask.
     DImg preview(ps.width(), ps.height(), false);
     memset(preview.bits(), 255, preview.numBytes());
     AntiVignetting maskPreview(&preview, 0, dens, power, rad, xoffset, yoffset, false, addvignetting);
@@ -403,14 +402,7 @@ void AntiVignettingTool::prepareEffect()
 
 void AntiVignettingTool::prepareFinal()
 {
-    d->densityInput->setEnabled(false);
-    d->powerInput->setEnabled(false);
-    d->radiusInput->setEnabled(false);
-    d->brightnessInput->setEnabled(false);
-    d->contrastInput->setEnabled(false); 
-    d->xOffsetInput->setEnabled(false);
-    d->yOffsetInput->setEnabled(false);
-    d->gammaInput->setEnabled(false);
+    enableSettings(false);
 
     double dens          = d->densityInput->value();
     double power         = d->powerInput->value();
@@ -474,6 +466,8 @@ void AntiVignettingTool::blockWidgetSignals(bool b)
     d->brightnessInput->blockSignals(b);
     d->contrastInput->blockSignals(b);
     d->gammaInput->blockSignals(b); 
+    d->xOffsetInput->blockSignals(b);
+    d->yOffsetInput->blockSignals(b);
     d->addVignettingCheck->blockSignals(b);
 }
 
