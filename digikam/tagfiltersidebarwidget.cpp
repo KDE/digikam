@@ -54,7 +54,6 @@ public:
     ImageFilterSettings::MatchingCondition matchingCond;
 
     TagModel *tagFilterModel;
-    TagModificationHelper *tagModificationHelper;
 
     KSelectAction *matchingCondAction;
     QAction *orBetweenAction;
@@ -65,14 +64,12 @@ public:
 
 };
 
-TagFilterView::TagFilterView(QWidget *parent, TagModel *tagFilterModel,
-                TagModificationHelper *tagModificationHelper) :
-    TagCheckView(parent, tagFilterModel, tagModificationHelper),
+TagFilterView::TagFilterView(QWidget *parent, TagModel *tagFilterModel) :
+    TagCheckView(parent, tagFilterModel),
     d(new TagFilterViewPriv)
 {
 
     d->tagFilterModel = tagFilterModel;
-    d->tagModificationHelper = tagModificationHelper;
 
     d->matchingCondAction = new KSelectAction(i18n("Matching Condition"), this);
     d->orBetweenAction = d->matchingCondAction->addAction(i18n("Or Between Tags"));
@@ -181,24 +178,21 @@ public:
     SearchTextBar    *tagFilterSearchBar;
 
     TagModel *tagFilterModel;
-    TagModificationHelper *tagModificationHelper;
 
     QCheckBox *withoutTagCheckBox;
 
 };
 
 TagFilterSideBarWidget::TagFilterSideBarWidget(QWidget *parent,
-                TagModel *tagFilterModel,
-                TagModificationHelper *tagModificationHelper) :
+                TagModel *tagFilterModel) :
     QWidget(parent), StateSavingObject(this), d(new TagFilterSideBarWidgetPriv)
 {
 
     setObjectName("TagFilter Sidebar");
 
     d->tagFilterModel = tagFilterModel;
-    d->tagModificationHelper = tagModificationHelper;
 
-    d->tagFilterView      = new TagFilterView(this, tagFilterModel, tagModificationHelper);
+    d->tagFilterView      = new TagFilterView(this, tagFilterModel);
     d->tagFilterSearchBar = new SearchTextBar(this, "DigikamViewTagFilterSearchBar");
     d->tagFilterSearchBar->setModel(tagFilterModel, AbstractAlbumModel::AlbumIdRole);
     d->tagFilterSearchBar->setFilterModel(d->tagFilterView->albumFilterModel());

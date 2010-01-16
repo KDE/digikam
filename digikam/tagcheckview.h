@@ -48,8 +48,7 @@ public:
         ChildrenAndParents
     };
 
-    TagCheckView(QWidget *parent, TagModel *tagModel,
-                     TagModificationHelper *tagModificationHelper);
+    TagCheckView(QWidget *parent, TagModel *tagModel);
     virtual ~TagCheckView();
 
     virtual void doLoadState();

@@ -167,22 +167,19 @@ public:
     TagModel *tagModel;
     SearchTextBar *tagSearchBar;
     TagFolderViewNew *tagFolderView;
-    TagModificationHelper *tagModificationHelper;
 };
 
-TagViewSideBarWidget::TagViewSideBarWidget(QWidget *parent,
-                TagModel *model, TagModificationHelper *tagModificationHelper) :
+TagViewSideBarWidget::TagViewSideBarWidget(QWidget *parent, TagModel *model) :
     SidebarWidget(parent), d(new TagViewSideBarWidgetPriv)
 {
 
     setObjectName("TagView Sidebar");
 
     d->tagModel = model;
-    d->tagModificationHelper = tagModificationHelper;
 
     QVBoxLayout *layout = new QVBoxLayout(this);
 
-    d->tagFolderView = new TagFolderViewNew(this, model, tagModificationHelper);
+    d->tagFolderView = new TagFolderViewNew(this, model);
     d->tagFolderView->setConfigGroup(getConfigGroup());
     d->tagSearchBar  = new SearchTextBar(this, "DigikamViewTagSearchBar");
     d->tagSearchBar->setHighlightOnResult(true);

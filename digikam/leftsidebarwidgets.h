@@ -82,8 +82,7 @@ class TagViewSideBarWidget : public SidebarWidget
 {
     Q_OBJECT
 public:
-    TagViewSideBarWidget(QWidget *parent, TagModel *model,
-                         TagModificationHelper *tagModificationHelper);
+    TagViewSideBarWidget(QWidget *parent, TagModel *model);
     virtual ~TagViewSideBarWidget();
 
     void setActive(bool active);

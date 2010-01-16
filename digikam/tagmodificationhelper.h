@@ -81,11 +81,17 @@ public Q_SLOTS:
                     const QString &iconName = QString());
 
     /**
+     * Same as above, but this slot is using the parent TAlbum set previously
+     */
+    void slotTagNew();
+
+    /**
      * Edits the given tag via a user dialog.
      *
      * @param tag the tag to change
      */
     void slotTagEdit(TAlbum *tag);
+    void slotTagEdit();
 
     /**
      * Deletes the given tag and after prompting the user for this.
@@ -93,6 +99,7 @@ public Q_SLOTS:
      * @param tag the tag to delete, must not be the root tag album
      */
     void slotTagDelete(TAlbum *tag);
+    void slotTagDelete();
 
     /**
      * Assigns the given tag to the list of images in the background using the
@@ -103,6 +110,13 @@ public Q_SLOTS:
      */
     // TODO why don't we use real domain objects here instead of ids?
     void slotAssignTags(int tagId, const QList<int>& imageIDs);
+
+    /**
+     * Sets the parent tag. This will be used by the variants which do not
+     * take a TAlbum* argument.
+     * You may find this useful if you want to connect a signal to this object.
+     */
+    void setParentTag(TAlbum *parent);
 
 Q_SIGNALS:
 

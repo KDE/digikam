@@ -36,7 +36,6 @@ namespace Digikam
 {
 
 class TagModel;
-class TagModificationHelper;
 
 class TagFilterViewPriv;
 
@@ -55,10 +54,8 @@ public:
      *
      * @param parent parent for qt parent child mechanism
      * @param tagFilterModel tag model to work on
-     * @param tagModificationHelper helper object to perform tag operations on
      */
-    TagFilterView(QWidget *parent, TagModel *tagFilterModel,
-                  TagModificationHelper *tagModificationHelper);
+    TagFilterView(QWidget *parent, TagModel *tagFilterModel);
 
     /**
      * Destructor.
@@ -111,10 +108,8 @@ public:
      *
      * @param parent parent for qt parent child mechanism
      * @param tagFilterModel tag model to work on
-     * @param tagModificationHelper helper object to perform tag operations on
      */
-    TagFilterSideBarWidget(QWidget *parent, TagModel *tagFilterModel,
-                    TagModificationHelper *tagModificationHelper);
+    TagFilterSideBarWidget(QWidget *parent, TagModel *tagFilterModel);
 
     /**
      * Destructor.

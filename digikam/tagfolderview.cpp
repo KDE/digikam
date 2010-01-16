@@ -64,13 +64,11 @@ public:
 
 };
 
-TagFolderViewNew::TagFolderViewNew(QWidget *parent, TagModel *model,
-                                   TagModificationHelper *tagModificationHelper) :
-    TagTreeView(model, tagModificationHelper, parent), d(new TagFolderViewNewPriv)
+TagFolderViewNew::TagFolderViewNew(QWidget *parent, TagModel *model) :
+    TagTreeView(model, parent), d(new TagFolderViewNewPriv)
 {
 
     d->model = model;
-    d->tagModificationHelper = tagModificationHelper;
 
     d->resetIconAction = new QAction(SmallIcon("view-refresh"), i18n("Reset Tag Icon"), this);
     d->findDuplAction = new QAction(SmallIcon("tools-wizard"), i18n("Find Duplicates..."), this);

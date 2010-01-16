@@ -69,9 +69,8 @@ public:
     QAction *toggleBothAction;
 };
 
-TagCheckView::TagCheckView(QWidget *parent, TagModel *tagModel,
-                           TagModificationHelper *tagModificationHelper) :
-                TagFolderViewNew(parent, tagModel, tagModificationHelper),
+TagCheckView::TagCheckView(QWidget *parent, TagModel *tagModel) :
+                TagFolderViewNew(parent, tagModel),
                 d(new TagCheckViewPriv)
 {
 

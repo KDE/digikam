@@ -45,6 +45,13 @@ namespace Digikam
 class TagModificationHelperPriv
 {
 public:
+    
+    TagModificationHelperPriv()
+    {
+        parentTag         = 0;
+    }
+
+    TAlbum  *parentTag;
     QWidget *dialogParent;
 };
 
@@ -57,6 +64,11 @@ TagModificationHelper::TagModificationHelper(QObject *parent, QWidget *dialogPar
 TagModificationHelper::~TagModificationHelper()
 {
     delete d;
+}
+
+void TagModificationHelper::setParentTag(TAlbum *parent)
+{
+    d->parentTag = parent;
 }
 
 void TagModificationHelper::slotTagNew(TAlbum *parent, const QString &title, const QString &iconName)
@@ -78,6 +90,12 @@ void TagModificationHelper::slotTagNew(TAlbum *parent, const QString &title, con
     AlbumList tList = TagEditDlg::createTAlbum(parent, editTitle, editIconName, errMap);
     TagEditDlg::showtagsListCreationError(d->dialogParent, errMap);
 
+}
+
+void TagModificationHelper::slotTagNew()
+{
+    if (d->parentTag)
+        slotTagNew(d->parentTag);
 }
 
 void TagModificationHelper::slotTagEdit(TAlbum *tag)
@@ -113,6 +131,12 @@ void TagModificationHelper::slotTagEdit(TAlbum *tag)
         }
     }
 
+}
+
+void TagModificationHelper::slotTagEdit()
+{
+    if (d->parentTag)
+        slotTagEdit(d->parentTag);
 }
 
 void TagModificationHelper::slotTagDelete(TAlbum *tag)
@@ -181,6 +205,12 @@ void TagModificationHelper::slotTagDelete(TAlbum *tag)
             KMessageBox::error(0, errMsg);
         }
     }
+}
+
+void TagModificationHelper::slotTagDelete()
+{
+    if (d->parentTag)
+        slotTagDelete();
 }
 
 void TagModificationHelper::slotAssignTags(int tagId, const QList<int>& imageIDs)

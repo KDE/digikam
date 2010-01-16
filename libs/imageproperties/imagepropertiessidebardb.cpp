@@ -83,12 +83,11 @@ public:
 };
 
 ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget *parent, SidebarSplitter *splitter,
-                                                   TagModificationHelper *tagModificationHelper,
                                                    KMultiTabBarPosition side, bool mimimizedDefault)
                         : ImagePropertiesSideBar(parent, splitter, side, mimimizedDefault),
                           d(new ImagePropertiesSideBarDBPriv)
 {
-    d->desceditTab = new ImageDescEditTab(parent, tagModificationHelper);
+    d->desceditTab = new ImageDescEditTab(parent);
 
     appendTab(d->desceditTab, SmallIcon("imagecomment"), i18n("Caption/Tags"));
 

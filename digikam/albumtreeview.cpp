@@ -44,6 +44,7 @@
 #include "albumthumbnailloader.h"
 #include "contextmenuhelper.h"
 #include "tagdragdrop.h"
+#include "tagmodificationhelper.h"
 
 namespace Digikam
 {
@@ -1021,12 +1022,14 @@ PAlbum *AlbumTreeView::albumForIndex(const QModelIndex &index) const
 
 // --------------------------------------- //
 
-TagTreeView::TagTreeView(TagModel *model, TagModificationHelper *tagModificationHelper, QWidget *parent)
+TagTreeView::TagTreeView(TagModel *model, QWidget *parent)
     : AbstractCheckableAlbumTreeView(model, parent)
 {
+    m_modificationHelper = new TagModificationHelper(this, this);
+
     albumModel()->setDragDropHandler(new TagDragDropHandler(albumModel()));
     connect(albumModel()->dragDropHandler(), SIGNAL(assignTags(int, const QList<int>&)),
-            tagModificationHelper, SLOT(slotAssignTags(int, const QList<int>&)),
+            m_modificationHelper, SLOT(slotAssignTags(int, const QList<int>&)),
             Qt::QueuedConnection);
 
     connect(AlbumManager::instance(), SIGNAL(signalTAlbumsDirty(const QMap<int, int>&)),
@@ -1055,6 +1058,11 @@ TAlbum* TagTreeView::currentAlbum() const
 TAlbum *TagTreeView::albumForIndex(const QModelIndex &index) const
 {
     return dynamic_cast<TAlbum*> (m_albumFilterModel->albumForIndex(index));
+}
+
+TagModificationHelper *TagTreeView::tagModificationHelper() const
+{
+    return m_modificationHelper;
 }
 
 // --------------------------------------- //

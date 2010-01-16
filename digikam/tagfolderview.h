@@ -41,12 +41,14 @@ class TagFolderViewNewPriv;
 class TagFolderViewNew: public TagTreeView
 {
 Q_OBJECT
+
 public:
-    TagFolderViewNew(QWidget *parent, TagModel *model,
-                     TagModificationHelper *tagModificationHelper);
+
+    TagFolderViewNew(QWidget *parent, TagModel *model);
     virtual ~TagFolderViewNew();
 
 Q_SIGNALS:
+
     void signalFindDuplicatesInAlbum(Album*);
 
 protected:

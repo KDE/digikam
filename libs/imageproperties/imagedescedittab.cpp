@@ -143,7 +143,7 @@ public:
 
 };
 
-ImageDescEditTab::ImageDescEditTab(QWidget *parent, TagModificationHelper *tagModificationHelper)
+ImageDescEditTab::ImageDescEditTab(QWidget *parent)
                 : KVBox(parent), d(new ImageDescEditTabPriv)
 {
     setMargin(0);
@@ -181,11 +181,11 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent, TagModificationHelper *tagMo
                                      "'/' can be used to create a hierarchy of tags. "
                                      "',' can be used to create more than one hierarchy at the same time."));
 
-    d->tagModificationHelper = tagModificationHelper;
+    d->tagModificationHelper = new TagModificationHelper(this, this);
     d->tagModel = new TagModel(AbstractAlbumModel::IgnoreRootAlbum, this);
     d->tagModel->setCheckable(true);
     d->tagModel->setTristate(true);
-    d->tagCheckView = new TagCheckView(captionTagsArea, d->tagModel, d->tagModificationHelper);
+    d->tagCheckView = new TagCheckView(captionTagsArea, d->tagModel);
 
     KHBox *tagsSearch  = new KHBox(captionTagsArea);
     tagsSearch->setSpacing(KDialog::spacingHint());

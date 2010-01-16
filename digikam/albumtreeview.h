@@ -36,12 +36,12 @@
 #include "albummodel.h"
 #include "albumfiltermodel.h"
 #include "statesavingobject.h"
-#include "tagmodificationhelper.h"
 
 namespace Digikam
 {
 
 class ContextMenuHelper;
+class TagModificationHelper;
 
 class AbstractAlbumTreeViewPriv;
 
@@ -375,14 +375,20 @@ class TagTreeView : public AbstractCheckableAlbumTreeView
     Q_OBJECT
 public:
 
-    TagTreeView(TagModel *model, TagModificationHelper *tagModificationHelper, QWidget *parent = 0);
+    TagTreeView(TagModel *model, QWidget *parent = 0);
     TagModel *albumModel() const;
     TAlbum *currentAlbum() const;
     TAlbum *albumForIndex(const QModelIndex &index) const;
 
+    TagModificationHelper *tagModificationHelper() const;
+
 Q_SIGNALS:
+
     void assignTags(int tagId, const QList<int>& imageIDs);
 
+protected:
+
+    TagModificationHelper *m_modificationHelper;
 };
 
 class SearchTreeView : public AbstractAlbumTreeView

@@ -174,7 +174,7 @@ DigikamView::DigikamView(QWidget *parent, DigikamModelCollection *modelCollectio
 
     d->iconView = d->albumWidgetStack->imageIconView();
 
-    d->rightSideBar = new ImagePropertiesSideBarDB(this, d->splitter, d->tagModificationHelper, KMultiTabBar::Right, true);
+    d->rightSideBar = new ImagePropertiesSideBarDB(this, d->splitter, KMultiTabBar::Right, true);
     d->rightSideBar->setObjectName("Digikam Right Sidebar");
 
     // album folder view
@@ -193,7 +193,7 @@ DigikamView::DigikamView(QWidget *parent, DigikamModelCollection *modelCollectio
 
     // Tags sidebar tab contents.
     d->tagViewSideBar = new TagViewSideBarWidget(d->leftSideBar,
-                    d->modelCollection->getTagModel(), d->tagModificationHelper);
+                    d->modelCollection->getTagModel());
     d->leftSideBarWidgets << d->tagViewSideBar;
     connect(d->tagViewSideBar, SIGNAL(signalFindDuplicatesInAlbum(Album*)),
             this, SLOT(slotNewDuplicatesSearch(Album*)));
@@ -235,7 +235,7 @@ DigikamView::DigikamView(QWidget *parent, DigikamModelCollection *modelCollectio
     // To the right.
 
     // Tags Filter sidebar tab contents.
-    d->tagFilterWidget = new TagFilterSideBarWidget(d->rightSideBar, d->modelCollection->getTagFilterModel(), d->tagModificationHelper);
+    d->tagFilterWidget = new TagFilterSideBarWidget(d->rightSideBar, d->modelCollection->getTagFilterModel());
     d->rightSideBar->appendTab(d->tagFilterWidget, SmallIcon("tag-assigned"), i18n("Tag Filters"));
 
     d->selectionTimer = new QTimer(this);

@@ -57,7 +57,7 @@ class ImageDescEditTab : public KVBox
 
 public:
 
-    ImageDescEditTab(QWidget *parent, TagModificationHelper *tagModificationHelper);
+    ImageDescEditTab(QWidget *parent);
     ~ImageDescEditTab();
 
     void assignRating(int rating);

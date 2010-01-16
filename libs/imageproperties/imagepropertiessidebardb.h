@@ -47,7 +47,6 @@ class SidebarSplitter;
 class ImageInfo;
 class ImageChangeset;
 class ImagePropertiesSideBarDBPriv;
-class TagModificationHelper;
 
 class ImagePropertiesSideBarDB : public ImagePropertiesSideBar
 {
@@ -56,7 +55,6 @@ class ImagePropertiesSideBarDB : public ImagePropertiesSideBar
 public:
 
     ImagePropertiesSideBarDB(QWidget* parent, SidebarSplitter *splitter,
-                             TagModificationHelper *tagModificationHelper,
                              KMultiTabBarPosition side=KMultiTabBar::Left,
                              bool mimimizedDefault=false);
 
