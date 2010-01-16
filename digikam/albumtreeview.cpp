@@ -209,6 +209,16 @@ void AbstractAlbumTreeView::setAlbumFilterModel(AlbumFilterModel *filterModel)
     connect(selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection &)),
              this, SLOT(slotCurrentChanged()));
 
+    connect(m_albumFilterModel, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),
+            this, SLOT(adaptColumnsOnDataChange(const QModelIndex&, const QModelIndex&)));
+    connect(m_albumFilterModel, SIGNAL(rowsInserted(const QModelIndex&, int, int)),
+            this, SLOT(adaptColumnsOnRowChange(const QModelIndex&, int, int)));
+    connect(m_albumFilterModel, SIGNAL(rowsRemoved(const QModelIndex&, int, int)),
+            this, SLOT(adaptColumnsOnRowChange(const QModelIndex&, int, int)));
+    connect(m_albumFilterModel, SIGNAL(layoutChanged()),
+            this, SLOT(adaptColumnsOnLayoutChange()));
+    adaptColumnsToContent();
+
 }
 
 AbstractSpecificAlbumModel *AbstractAlbumTreeView::albumModel() const
@@ -554,6 +564,31 @@ void AbstractAlbumTreeView::slotFixRowsInserted(const QModelIndex &index, int st
         const QModelIndex child = model()->index(i, 0, index);
         restoreState(child);
     }
+}
+
+void AbstractAlbumTreeView::adaptColumnsToContent()
+{
+    resizeColumnToContents(0);
+}
+
+void AbstractAlbumTreeView::adaptColumnsOnDataChange(const QModelIndex &topLeft, const QModelIndex &bottomRight)
+{
+    Q_UNUSED(topLeft);
+    Q_UNUSED(bottomRight);
+    adaptColumnsToContent();
+}
+
+void AbstractAlbumTreeView::adaptColumnsOnRowChange(const QModelIndex &parent, int start, int end)
+{
+    Q_UNUSED(parent);
+    Q_UNUSED(start);
+    Q_UNUSED(end);
+    adaptColumnsToContent();
+}
+
+void AbstractAlbumTreeView::adaptColumnsOnLayoutChange()
+{
+    adaptColumnsToContent();
 }
 
 void AbstractAlbumTreeView::doSaveState()

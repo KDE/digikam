@@ -110,6 +110,11 @@ public:
     virtual void doLoadState();
     virtual void doSaveState();
 
+    /**
+     * Adapt the column sizes to the contents of the tree view.
+     */
+    void adaptColumnsToContent();
+
 public Q_SLOTS:
 
     void setSearchTextSettings(const SearchTextSettings& settings);
@@ -227,7 +232,39 @@ private:
 
 private Q_SLOTS:
 
+    /**
+     * Used for asynchronous restoring of the tree view state if the contents of
+     * the model are received after the view has been created.
+     *
+     * @param index parent index of the inserted data
+     * @param start start row of new data under the parent index
+     * @param end end row of new data under the parent index
+     */
     void slotFixRowsInserted(const QModelIndex &index, int start, int end);
+
+    /**
+     * Adapts the columns in between the given model indices to the content
+     * size. This can be connected to dataChanged.
+     *
+     * @param topLeft top left index of changed data
+     * @param bottomRight index of changed data
+     */
+    void adaptColumnsOnDataChange(const QModelIndex &topLeft, const QModelIndex &bottomRight);
+
+    /**
+     * Adapt the column sizes to new contents. This can be connected to all
+     * signals indicating row changes.
+     *
+     * @param parent parent index of changed rows
+     * @param start start row changed under the parent
+     * @param end end row changed under the parent
+     */
+    void adaptColumnsOnRowChange(const QModelIndex &parent, int start, int end);
+
+    /**
+     * Adapts the column sizes if the layout changes.
+     */
+    void adaptColumnsOnLayoutChange();
 
 private:
 
