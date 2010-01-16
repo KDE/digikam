@@ -26,10 +26,9 @@
 
 // Qt includes
 
-#include <QAbstractItemDelegate>
-
 // Local includes
 
+#include "ditemdelegate.h"
 #include "thumbnailsize.h"
 
 namespace Digikam
@@ -42,7 +41,7 @@ class ImageFilterModel;
 class ImageModel;
 class ImageDelegatePriv;
 
-class ImageDelegate : public QAbstractItemDelegate
+class ImageDelegate : public DItemDelegate
 {
     Q_OBJECT
 
@@ -90,9 +89,6 @@ public:
     void removeAllOverlays();
     void mouseMoved(QMouseEvent *e, const QRect& visualRect, const QModelIndex& index);
 
-    static QString squeezedText(const QFontMetrics &fm, int width, const QString& text);
-    static QString dateToString(const QDateTime& datetime);
-
 Q_SIGNALS:
 
     void gridSizeChanged(const QSize& newSize);
@@ -115,8 +111,6 @@ protected:
     void updateSizeRectsAndPixmaps();
 
     QPixmap ratingPixmap(int rating, bool selected) const;
-    QString squeezedTextCached(QPainter* p, int width, const QString& text) const;
-    QPixmap thumbnailBorderPixmap(const QSize& pixSize) const;
 
 private:
 

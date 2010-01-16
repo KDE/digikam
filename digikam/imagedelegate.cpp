@@ -83,8 +83,6 @@ public:
         ratingPixmaps   = QVector<QPixmap>(10);
 
         actualPixmapRectCache.setMaxCost(250);
-        thumbnailBorderCache.setMaxCost(10);
-        squeezedTextCache.setMaxCost(1000);
 
         thumbSize       = 0;
     }
@@ -120,8 +118,6 @@ public:
     QPersistentModelIndex     editingRating;
 
     QCache<qlonglong, QRect>  actualPixmapRectCache;
-    QCache<QString, QPixmap>  thumbnailBorderCache;
-    QCache<QString, QString>  squeezedTextCache;
 
     ImageCategoryDrawer      *categoryDrawer;
     QList<ImageDelegateOverlay *>
@@ -129,7 +125,7 @@ public:
 };
 
 ImageDelegate::ImageDelegate(ImageCategorizedView *parent)
-             : QAbstractItemDelegate(parent), d(new ImageDelegatePriv)
+             : DItemDelegate(parent), d(new ImageDelegatePriv)
 {
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
@@ -674,8 +670,7 @@ void ImageDelegate::updateSizeRectsAndPixmaps()
     // ---- Drawing related caches ----
 
     d->actualPixmapRectCache.clear();
-    d->thumbnailBorderCache.clear();
-    d->squeezedTextCache.clear();
+    clearCaches();
 }
 
 QPixmap ImageDelegate::ratingPixmap(int rating, bool selected) const
@@ -713,102 +708,6 @@ void ImageDelegate::updateActualPixmapRect(qlonglong imageid, const QRect& rect)
     QRect *old = d->actualPixmapRectCache.object(imageid);
     if (!old || *old != rect)
         d->actualPixmapRectCache.insert(imageid, new QRect(rect));
-}
-
-QPixmap ImageDelegate::thumbnailBorderPixmap(const QSize& pixSize) const
-{
-    const int radius         = 3;
-    const QColor borderColor = QColor(0, 0, 0, 128);
-
-    QString cacheKey  = QString::number(pixSize.width()) + '-' + QString::number(pixSize.height());
-    QPixmap *cachePix = d->thumbnailBorderCache.object(cacheKey);
-
-    if (!cachePix)
-    {
-        QPixmap pix = ThumbBarView::generateFuzzyRect(QSize(pixSize.width()  + 2*radius,
-                                                            pixSize.height() + 2*radius),
-                                                      borderColor, radius);
-        const_cast<ImageDelegate*>(this)->d->thumbnailBorderCache.insert(cacheKey, new QPixmap(pix));
-        return pix;
-    }
-
-    return *cachePix;
-}
-
-QString ImageDelegate::dateToString(const QDateTime& datetime)
-{
-    return KGlobal::locale()->formatDateTime(datetime, KLocale::ShortDate, false);
-}
-
-QString ImageDelegate::squeezedTextCached(QPainter* p, int width, const QString& text) const
-{
-    QCache<QString, QString> *cache = &const_cast<ImageDelegate*>(this)->d->squeezedTextCache;
-    // We do not need to include the font into cache key, the cache is cleared on font change
-    QString cacheKey = QString::number(width) + QString::number(qHash(text));
-    QString *cachedString = cache->object(cacheKey);
-    if (cachedString)
-        return *cachedString;
-
-    QString result = squeezedText(p->fontMetrics(), width, text);
-
-    cache->insert(cacheKey, new QString(result));
-    return result;
-}
-
-QString ImageDelegate::squeezedText(const QFontMetrics &fm, int width, const QString& text)
-{
-    QString fullText(text);
-    fullText.replace('\n',' ');
-    int textWidth = fm.width(fullText);
-    QString result = fullText;
-
-    if (textWidth > width)
-    {
-        // start with the dots only
-        QString squeezedText = "...";
-        int squeezedWidth    = fm.width(squeezedText);
-
-        // estimate how many letters we can add to the dots on both sides
-        int letters = fullText.length() * (width - squeezedWidth) / textWidth;
-        if (width < squeezedWidth) letters=1;
-        squeezedText  = fullText.left(letters) + "...";
-        squeezedWidth = fm.width(squeezedText);
-
-        if (squeezedWidth < width)
-        {
-            // we estimated too short
-            // add letters while text < label
-            do
-            {
-                ++letters;
-                squeezedText  = fullText.left(letters) + "...";
-                squeezedWidth = fm.width(squeezedText);
-            }
-            while (squeezedWidth < width);
-
-            --letters;
-            squeezedText = fullText.left(letters) + "...";
-        }
-        else if (squeezedWidth > width)
-        {
-            // we estimated too long
-            // remove letters while text > label
-            do
-            {
-                --letters;
-                squeezedText  = fullText.left(letters) + "...";
-                squeezedWidth = fm.width(squeezedText);
-            }
-            while (letters && squeezedWidth > width);
-        }
-
-        if (letters >= 5)
-        {
-
-            result = squeezedText;
-        }
-    }
-    return result;
 }
 
 } // namespace Digikam

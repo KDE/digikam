@@ -160,7 +160,7 @@ void DigikamImageView::openCurrentInEditor()
         d->utilities->openInEditor(info, imageInfos(), currentAlbum());
 }
 
-void DigikamImageView::showContextMenu(QContextMenuEvent* event, const ImageInfo& info)
+void DigikamImageView::showContextMenuOnInfo(QContextMenuEvent* event, const ImageInfo& info)
 {
     QList<ImageInfo> selectedInfos = selectedImageInfosCurrentFirst();
     QList<qlonglong> selectedImageIDs;
