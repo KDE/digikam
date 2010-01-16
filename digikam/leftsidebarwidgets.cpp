@@ -812,6 +812,7 @@ SearchSideBarWidget::SearchSideBarWidget(QWidget *parent,
 
     layout->addWidget(d->searchTabHeader);
     layout->addWidget(d->searchTreeView);
+    layout->setStretchFactor(d->searchTreeView, 1);
     layout->addWidget(d->searchSearchBar);
 
     connect(d->searchTreeView, SIGNAL(newSearch()),
