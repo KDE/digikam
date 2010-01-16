@@ -47,7 +47,7 @@ public:
 
 protected:
 
-    virtual QVariant decorationRole(Album *a) const;
+    virtual QVariant decorationRoleData(Album *a) const;
     virtual Album* albumForId(int id) const;
 };
 
@@ -64,7 +64,7 @@ public:
 
 protected:
 
-    virtual QVariant decorationRole(Album *a) const;
+    virtual QVariant decorationRoleData(Album *a) const;
     virtual Album* albumForId(int id) const;
 };
 
@@ -104,13 +104,20 @@ protected:
 
 // ------------------------------------------------------------------
 
+/**
+ * A model for date based albums.
+ */
 class DateAlbumModel : public AbstractCountingAlbumModel
 {
     Q_OBJECT
 
 public:
 
-    /// A model for date based albums
+    /**
+     * Constructor.
+     *
+     * @param parent parent for Qt's parent child mechanism
+     */
     DateAlbumModel(QObject *parent = 0);
 
     DAlbum *albumForIndex(const QModelIndex& index) const;
@@ -136,7 +143,8 @@ public Q_SLOTS:
 protected:
 
     virtual QString  albumName(Album *a) const;
-    virtual QVariant decorationRole(Album *a) const;
+    virtual QVariant decorationRoleData(Album *a) const;
+    virtual QVariant sortRoleData(Album *a) const;
     virtual Album* albumForId(int id) const;
 
 protected:

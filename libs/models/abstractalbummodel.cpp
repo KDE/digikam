@@ -94,7 +94,7 @@ QVariant AbstractAlbumModel::albumData(Album *a, int role) const
             return a->title();
         case Qt::DecorationRole:
             // reimplement in subclasses
-            return decorationRole(a);
+            return decorationRoleData(a);
         case AlbumTitleRole:
             return a->title();
         case AlbumTypeRole:
@@ -105,8 +105,12 @@ QVariant AbstractAlbumModel::albumData(Album *a, int role) const
             return a->id();
         case AlbumGlobalIdRole:
             return a->globalID();
+        case AlbumSortRole:
+            // reimplement in subclass
+            return sortRoleData(a);
+        default:
+            return QVariant();
     }
-    return QVariant();
 }
 
 QVariant AbstractAlbumModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -318,9 +322,14 @@ Album::Type AbstractAlbumModel::albumType() const
     return d->type;
 }
 
-QVariant AbstractAlbumModel::decorationRole(Album *) const
+QVariant AbstractAlbumModel::decorationRoleData(Album *) const
 {
     return QVariant();
+}
+
+QVariant AbstractAlbumModel::sortRoleData(Album *a) const
+{
+    return a->title();
 }
 
 QString AbstractAlbumModel::columnHeader() const

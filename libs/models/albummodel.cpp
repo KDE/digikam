@@ -57,7 +57,7 @@ PAlbum *AlbumModel::albumForIndex(const QModelIndex& index) const
     return static_cast<PAlbum*>(AbstractCheckableAlbumModel::albumForIndex(index));
 }
 
-QVariant AlbumModel::decorationRole(Album *album) const
+QVariant AlbumModel::decorationRoleData(Album *album) const
 {
     // asynchronous signals are handled by parent class
     return AlbumThumbnailLoader::instance()->getAlbumThumbnailDirectly(static_cast<PAlbum *>(album));
@@ -84,7 +84,7 @@ TAlbum *TagModel::albumForIndex(const QModelIndex& index) const
     return static_cast<TAlbum*>(AbstractCheckableAlbumModel::albumForIndex(index));
 }
 
-QVariant TagModel::decorationRole(Album *album) const
+QVariant TagModel::decorationRoleData(Album *album) const
 {
     return AlbumThumbnailLoader::instance()->getTagThumbnailDirectly(static_cast<TAlbum *>(album), true);
 }
@@ -242,13 +242,23 @@ QString DateAlbumModel::albumName(Album *album) const
         return KGlobal::locale()->calendar()->monthName(dalbum->date(), KCalendarSystem::LongName);
 }
 
-QVariant DateAlbumModel::decorationRole(Album *album) const
+QVariant DateAlbumModel::decorationRoleData(Album *album) const
 {
     DAlbum *dalbum = static_cast<DAlbum*>(album);
     if (dalbum->range() == DAlbum::Year)
         return m_yearPixmap;
     else
         return m_monthPixmap;
+}
+
+QVariant DateAlbumModel::sortRoleData(Album *a) const
+{
+    DAlbum *dalbum = static_cast<DAlbum*>(a);
+    if (dalbum) {
+        return dalbum->date();
+    }
+    kError() << "There must be a data album.";
+    return QDate();
 }
 
 Album* DateAlbumModel::albumForId(int id) const

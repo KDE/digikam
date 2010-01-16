@@ -196,6 +196,7 @@ SET(albummodeltest_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupmisc.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/batch/batchthumbsgenerator.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/models/abstractalbummodel.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/models/albumfiltermodel.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/models/albummodel.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/template/altlangstredit.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/template/countryselector.cpp

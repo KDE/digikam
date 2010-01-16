@@ -76,7 +76,9 @@ public:
         /// Returns the id of the associated Album object
         AlbumIdRole = Qt::UserRole + 3,
         /// Returns the global id (unique across all album types)
-        AlbumGlobalIdRole = Qt::UserRole + 4
+        AlbumGlobalIdRole = Qt::UserRole + 4,
+        /// Returns the data to sort on
+        AlbumSortRole = Qt::UserRole + 5
     };
 
     /**
@@ -142,7 +144,9 @@ protected:
     /// For subclassing convenience: A part of the implementation of data()
     virtual QVariant albumData(Album *a, int role) const;
     /// For subclassing convenience: A part of the implementation of data()
-    virtual QVariant decorationRole(Album *a) const;
+    virtual QVariant decorationRoleData(Album *a) const;
+    /// For subclassing convenience: A port of the implementation of data()
+    virtual QVariant sortRoleData(Album *a) const;
     /// For subclassing convenience: A part of the implementation of headerData()
     virtual QString columnHeader() const;
     /// For subclassing convenience: A part of the implementation of itemFlags()

@@ -104,7 +104,12 @@ protected:
      */
     virtual bool matches(Album *album) const;
 
-    // use setSourceAlbumModel please
+    /**
+     * Use setSourceAlbumModel.
+     *
+     * @see setSourceAlbumModel
+     * @param model source model
+     */
     virtual void setSourceModel(QAbstractItemModel* model);
 
     virtual bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const;

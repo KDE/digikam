@@ -37,6 +37,7 @@
 // Local includes
 
 #include "albumdb.h"
+#include "albumfiltermodel.h"
 #include "albummanager.h"
 #include "albummodel.h"
 #include "albumthumbnailloader.h"
@@ -211,8 +212,8 @@ void AlbumModelTest::init()
 
     kDebug() << "date albums: " << AlbumManager::instance()->allDAlbums();
 
-    // root + 2 years + 2 and 3 months per year = 8
-    QCOMPARE(AlbumManager::instance()->allDAlbums().size(), 8);
+    // root + 2 years + 2 and 3 months per year + (1997 as test year for date ordering with 12 months) = 21
+    QCOMPARE(AlbumManager::instance()->allDAlbums().size(), 21);
     // ensure that there is a root date album
     DAlbum *rootFromAlbumManager = AlbumManager::instance()->findDAlbum(0);
     QVERIFY(rootFromAlbumManager);
@@ -332,7 +333,7 @@ void AlbumModelTest::testDAlbumContainsAlbums()
         {
             // root album
             QVERIFY(dAlbum->isRoot());
-            QCOMPARE(albumModel->rowCount(index), 2);
+            QCOMPARE(albumModel->rowCount(index), 3);
             QCOMPARE(index, albumModel->rootAlbumIndex());
         }
         else if (dAlbum->range() == DAlbum::Year && dAlbum->date().year() == 2007)
@@ -363,6 +364,10 @@ void AlbumModelTest::testDAlbumContainsAlbums()
         {
             QCOMPARE(albumModel->rowCount(index), 0);
         }
+        else if (dAlbum->date().year() == 1997)
+        {
+            // Ignore these albums for order testing
+        }
         else
         {
             kError() << "Unexpected album: " << dAlbum->title();
@@ -372,6 +377,71 @@ void AlbumModelTest::testDAlbumContainsAlbums()
     }
 
     delete albumModel;
+
+}
+
+void AlbumModelTest::testDAlbumSorting()
+{
+
+    DateAlbumModel dateAlbumModel;
+    AlbumFilterModel albumModel;
+    albumModel.setSourceAlbumModel(&dateAlbumModel);
+
+    // first check ascending order
+    albumModel.sort(0, Qt::AscendingOrder);
+    int previousYear = 0;
+    for (int yearRow = 0; yearRow < albumModel.rowCount(); ++yearRow)
+    {
+
+        QModelIndex yearIndex = albumModel.index(yearRow, 0);
+        DAlbum *yearAlbum = dynamic_cast<DAlbum*> (albumModel.albumForIndex(yearIndex));
+        QVERIFY(yearAlbum);
+
+        QVERIFY(yearAlbum->date().year() > previousYear);
+        previousYear = yearAlbum->date().year();
+
+        int previousMonth = 0;
+        for (int monthRow = 0; monthRow < albumModel.rowCount(yearIndex); ++monthRow)
+        {
+
+            QModelIndex monthIndex = albumModel.index(monthRow, 0, yearIndex);
+            DAlbum *monthAlbum = dynamic_cast<DAlbum*> (albumModel.albumForIndex(monthIndex));
+            QVERIFY(monthAlbum);
+
+            QVERIFY(monthAlbum->date().month() > previousMonth);
+            previousMonth = monthAlbum->date().month();
+
+        }
+
+    }
+
+    // then check descending order
+    albumModel.sort(0, Qt::DescendingOrder);
+    previousYear = 1000000;
+    for (int yearRow = 0; yearRow < albumModel.rowCount(); ++yearRow)
+    {
+
+        QModelIndex yearIndex = albumModel.index(yearRow, 0);
+        DAlbum *yearAlbum = dynamic_cast<DAlbum*> (albumModel.albumForIndex(yearIndex));
+        QVERIFY(yearAlbum);
+
+        QVERIFY(yearAlbum->date().year() < previousYear);
+        previousYear = yearAlbum->date().year();
+
+        int previousMonth = 13;
+        for (int monthRow = 0; monthRow < albumModel.rowCount(yearIndex); ++monthRow)
+        {
+
+            QModelIndex monthIndex = albumModel.index(monthRow, 0, yearIndex);
+            DAlbum *monthAlbum = dynamic_cast<DAlbum*> (albumModel.albumForIndex(monthIndex));
+            QVERIFY(monthAlbum);
+
+            QVERIFY(monthAlbum->date().month() < previousMonth);
+            previousMonth = monthAlbum->date().month();
+
+        }
+
+    }
 
 }
 
@@ -499,6 +569,10 @@ void AlbumModelTest::testDAlbumCount()
 
             }
 
+        }
+        else if (yearDAlbum->date().year() == 1997)
+        {
+            // Nothing to do here, ignore the albums for ordering tests
         }
         else
         {

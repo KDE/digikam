@@ -45,6 +45,7 @@ AlbumFilterModel::AlbumFilterModel(QObject *parent)
 {
     m_chainedModel = 0;
     setDynamicSortFilter(true);
+    setSortRole(AbstractAlbumModel::AlbumSortRole);
 }
 
 void AlbumFilterModel::setSearchTextSettings(const SearchTextSettings& settings)
