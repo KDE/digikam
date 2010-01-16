@@ -213,49 +213,4 @@ void TagModificationHelper::slotTagDelete()
         slotTagDelete(d->parentTag);
 }
 
-void TagModificationHelper::slotAssignTags(int tagId, const QList<int>& imageIDs)
-{
-    TAlbum *destAlbum = AlbumManager::instance()->findTAlbum(tagId);
-    if (!destAlbum)
-    {
-        return;
-    }
-
-    emit signalProgressBarMode(StatusProgressBar::ProgressBarMode,
-                               i18n("Assigning image tags. Please wait..."));
-
-    // TODO this code reaaaaaally looks like it should be encapsulated in a
-    // method that is part of a model or something like that
-    AlbumLister::instance()->blockSignals(true);
-    ScanController::instance()->suspendCollectionScan();
-    DatabaseTransaction transaction;
-    MetadataHub         hub;
-    int i=0;
-
-    for (QList<int>::const_iterator it = imageIDs.constBegin(); it != imageIDs.constEnd(); ++it)
-    {
-        // create temporary ImageInfo object
-        ImageInfo info(*it);
-
-        hub.load(info);
-        hub.setTag(destAlbum, true);
-
-        QString filePath = info.filePath();
-        hub.write(info, MetadataHub::PartialWrite);
-        bool fileChanged = hub.write(filePath, MetadataHub::FullWriteIfChanged);
-        if (fileChanged)
-        {
-            ScanController::instance()->scanFileDirectly(filePath);
-        }
-
-        emit signalProgressValue((int)((i++/(float)imageIDs.count())*100.0));
-        kapp->processEvents();
-    }
-    ScanController::instance()->resumeCollectionScan();
-    AlbumLister::instance()->blockSignals(false);
-
-    emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
-
-}
-
 }

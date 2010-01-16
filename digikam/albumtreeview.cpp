@@ -43,6 +43,7 @@
 #include "albumsettings.h"
 #include "albumthumbnailloader.h"
 #include "contextmenuhelper.h"
+#include "metadatamanager.h"
 #include "tagdragdrop.h"
 #include "tagmodificationhelper.h"
 
@@ -1028,9 +1029,9 @@ TagTreeView::TagTreeView(TagModel *model, QWidget *parent)
     m_modificationHelper = new TagModificationHelper(this, this);
 
     albumModel()->setDragDropHandler(new TagDragDropHandler(albumModel()));
-    connect(albumModel()->dragDropHandler(), SIGNAL(assignTags(int, const QList<int>&)),
-            m_modificationHelper, SLOT(slotAssignTags(int, const QList<int>&)),
-            Qt::QueuedConnection);
+
+    connect(albumModel()->dragDropHandler(), SIGNAL(assignTags(const QList<int>&, const QList<int>&)),
+            MetadataManager::instance(), SLOT(assignTags(const QList<int>&, const QList<int>&)));
 
     connect(AlbumManager::instance(), SIGNAL(signalTAlbumsDirty(const QMap<int, int>&)),
              m_albumModel, SLOT(setCountMap(const QMap<int, int>&)));

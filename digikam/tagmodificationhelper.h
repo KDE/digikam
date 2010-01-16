@@ -102,45 +102,11 @@ public Q_SLOTS:
     void slotTagDelete();
 
     /**
-     * Assigns the given tag to the list of images in the background using the
-     * progress signals to indicate the progress.
-     *
-     * @param tagID id of the tag to assign
-     * @param imageIDs list of images that the tag will be assigned to
-     */
-    // TODO why don't we use real domain objects here instead of ids?
-    void slotAssignTags(int tagId, const QList<int>& imageIDs);
-
-    /**
      * Sets the parent tag. This will be used by the variants which do not
      * take a TAlbum* argument.
      * You may find this useful if you want to connect a signal to this object.
      */
     void setParentTag(TAlbum *parent);
-
-Q_SIGNALS:
-
-    // TODO create an interface class for this two methods with a proper
-    // encapsulation
-
-    /**
-     * Signal indicating that a new background tag assigning process has started
-     * that should be displayed in a progress bar.
-     *
-     * @param progressBarMode mode of the progress bar
-     * @param title for the progress bar
-     */
-    // TODO this encapsulation is wrong. The helper object should not know
-    // anything about a progress bar
-    void signalProgressBarMode(int progressBarMode, const QString &progressTitle);
-
-    /**
-     * Progress indication for the background process.
-     *
-     * @param progressValue percent of background process
-     *                      0 <= progressValue <= 100
-     */
-    void signalProgressValue(int progressValue);
 
 private:
     TagModificationHelperPriv *d;

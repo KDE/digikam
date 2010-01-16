@@ -185,7 +185,7 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView *view, const QDropEvent *e,
 
         if (assign)
         {
-            emit assignTags(destAlbum->id(), imageIDs);
+            emit assignTags(imageIDs, QList<int>() << destAlbum->id());
         }
 
         return true;

@@ -29,8 +29,8 @@
 #include <qtreeview.h>
 
 // Local includes
+
 #include "albumtreeview.h"
-#include "tagmodificationhelper.h"
 
 namespace Digikam
 {

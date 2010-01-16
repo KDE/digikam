@@ -49,7 +49,6 @@ class TagFolderViewNewPriv
 public:
     TagFolderViewNewPriv() :
         model(0),
-        tagModificationHelper(0),
         resetIconAction(0),
         findDuplAction(0)
     {
@@ -57,7 +56,6 @@ public:
     }
 
     TagModel *model;
-    TagModificationHelper *tagModificationHelper;
 
     QAction *resetIconAction;
     QAction *findDuplAction;
@@ -125,7 +123,7 @@ void TagFolderViewNew::slotTagNewFromABCMenu(const QString &personName)
         return;
     }
 
-    d->tagModificationHelper->slotTagNew(parent, personName, "tag-people");
+    tagModificationHelper()->slotTagNew(parent, personName, "tag-people");
 
 }
 

@@ -48,7 +48,8 @@ public:
     virtual QMimeData *createMimeData(const QList<Album*> &);
 
 Q_SIGNALS:
-    void assignTags(int tagId, const QList<int>& imageIDs);
+
+    void assignTags(const QList<int>& imageIDs, const QList<int>& tagIDs);
 
 };
 
