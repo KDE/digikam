@@ -64,6 +64,7 @@
 #include "lighttablewindow.h"
 #include "queuemgrwindow.h"
 #include "ratingpopupmenu.h"
+#include "tagmodificationhelper.h"
 #include "tagspopupmenu.h"
 #ifdef HAVE_KDEPIMLIBS
 #include <kabc/stdaddressbook.h>
@@ -359,6 +360,30 @@ bool ContextMenuHelper::imageIdsHaveSameCategory(const imageIds& ids, DatabaseIt
         }
     }
     return sameCategory;
+}
+
+void ContextMenuHelper::addActionNewTag(TagModificationHelper *helper)
+{
+    QAction *newTagAction = new QAction(SmallIcon("tag-new"), i18n("New Tag..."), this);
+    addAction(newTagAction);
+    connect(newTagAction, SIGNAL(triggered()),
+            helper, SLOT(slotTagNew()));
+}
+
+void ContextMenuHelper::addActionDeleteTag(TagModificationHelper *helper)
+{
+    QAction *deleteTagAction = new QAction(SmallIcon("user-trash"), i18n("Delete Tag"), this);
+    addAction(deleteTagAction);
+    connect(deleteTagAction, SIGNAL(triggered()),
+            helper, SLOT(slotTagDelete()));
+}
+
+void ContextMenuHelper::addActionEditTag(TagModificationHelper *helper)
+{
+    QAction *editTagAction = new QAction(SmallIcon("tag-properties"), i18nc("Edit Tag Properties", "Properties..."), this);
+    addAction(editTagAction);
+    connect(editTagAction, SIGNAL(triggered()),
+            helper, SLOT(slotTagEdit()));
 }
 
 void ContextMenuHelper::addAssignTagsMenu(imageIds& ids)

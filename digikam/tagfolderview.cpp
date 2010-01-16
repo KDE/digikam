@@ -98,14 +98,16 @@ void TagFolderViewNew::addCustomContextMenuActions(ContextMenuHelper &cmh, Album
         return;
     }
 
-    cmh.addAction("tag_new");
+    tagModificationHelper()->setParentTag(tag);
+
+    cmh.addActionNewTag(tagModificationHelper());
     cmh.addCreateTagFromAddressbookMenu();
     cmh.addAction(d->resetIconAction);
     cmh.addAction(d->findDuplAction);
     cmh.addSeparator();
-    cmh.addAction("tag_delete");
+    cmh.addActionDeleteTag(tagModificationHelper());
     cmh.addSeparator();
-    cmh.addAction("tag_edit");
+    cmh.addActionEditTag(tagModificationHelper());
 
     connect(&cmh, SIGNAL(signalAddNewTagFromABCMenu(const QString&)),
             this, SLOT(slotTagNewFromABCMenu(const QString&)));

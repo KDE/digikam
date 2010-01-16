@@ -53,6 +53,7 @@ class Album;
 class AlbumIconItem;
 class ContextMenuHelperPriv;
 class ImageInfo;
+class TagModificationHelper;
 
 /**
  * @brief A helper class to add actions and special menus to the context menu.
@@ -234,6 +235,15 @@ public:
      * Add Queue Manager actions menu.
      */
     void addQueueManagerMenu();
+
+    /**
+     * Add actions to add, remove or edit a tag.
+     * The tag modification helper is used to execute the action.
+     * You must set the parent tag to use on modification helper.
+     */
+    void addActionNewTag(TagModificationHelper *helper);
+    void addActionDeleteTag(TagModificationHelper *helper);
+    void addActionEditTag(TagModificationHelper *helper);
 
     /**
      * Add "Assign Tags" menu.

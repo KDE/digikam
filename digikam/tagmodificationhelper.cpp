@@ -210,7 +210,7 @@ void TagModificationHelper::slotTagDelete(TAlbum *tag)
 void TagModificationHelper::slotTagDelete()
 {
     if (d->parentTag)
-        slotTagDelete();
+        slotTagDelete(d->parentTag);
 }
 
 void TagModificationHelper::slotAssignTags(int tagId, const QList<int>& imageIDs)
