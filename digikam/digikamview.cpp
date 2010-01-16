@@ -150,10 +150,6 @@ DigikamView::DigikamView(QWidget *parent, DigikamModelCollection *modelCollectio
 
     d->albumModificationHelper = new AlbumModificationHelper(this, this);
     d->tagModificationHelper = new TagModificationHelper(this, this);
-    connect(d->tagModificationHelper, SIGNAL(signalProgressBarMode(int, const QString&)),
-            d->parent, SLOT(slotProgressBarMode(int, const QString&)));
-    connect(d->tagModificationHelper, SIGNAL(signalProgressValue(int)),
-            d->parent, SLOT(slotProgressValue(int)));
     d->searchModificationHelper = new SearchModificationHelper(this, this);
 
     d->splitter = new SidebarSplitter;
