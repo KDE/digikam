@@ -62,26 +62,6 @@ public:
      */
     virtual ~TagFilterView();
 
-    virtual void doLoadState();
-    virtual void doSaveState();
-
-    /**
-     * Returns the currently selected matching conditions for tags selected by
-     * the user.
-     *
-     * @return condition to match tags with
-     */
-    ImageFilterSettings::MatchingCondition getMatchingCondition() const;
-
-Q_SIGNALS:
-
-    /**
-     * Signals that the user selected a new matching condition for tags.
-     *
-     * @param condition new condition to match tags with
-     */
-    void matchingConditionChanged(const ImageFilterSettings::MatchingCondition &condition);
-
 protected:
     virtual void addCustomContextMenuActions(ContextMenuHelper &cmh, Album *album);
     virtual void handleCustomContextMenuAction(QAction *action, Album *album);
@@ -126,7 +106,7 @@ Q_SIGNALS:
      * Emitted if the selected filter has changed.
      *
      * @param tags a list of selected tag ids
-     * @param matchingcondition condition to join the seleted tags
+     * @param matchingCond condition to join the selected tags
      * @param showUnTagged if this is true, only photos without a tag shall be
      *                     shown
      */
@@ -143,7 +123,7 @@ public Q_SLOTS:
 
 private Q_SLOTS:
 
-    void slotMatchingConditionChanged(const ImageFilterSettings::MatchingCondition &condition);
+    void slotMatchingConditionChanged(int index);
     void slotCheckedTagsChanged(const QList<TAlbum*> &tags);
     void slotWithoutTagChanged(int newState);
 

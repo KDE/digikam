@@ -24,13 +24,17 @@
 #include "tagfiltersidebarwidget.moc"
 
 // Qt includes
-#include <qcheckbox.h>
+
+#include <qlabel.h>
 #include <qlayout.h>
+#include <qcheckbox.h>
 
 // KDE includes
+
 #include <kselectaction.h>
 
 // Local includes
+
 #include "albummodel.h"
 #include "contextmenuhelper.h"
 #include "tagcheckview.h"
@@ -44,20 +48,15 @@ class TagFilterViewPriv
 public:
 
     TagFilterViewPriv() :
-        configMatchingConditionEntry("Matching Condition"),
-        matchingCond(ImageFilterSettings::OrCondition)
+        tagFilterModel(0),
+        restoreTagFiltersAction(0),
+        onRestoreTagFiltersAction(0),
+        offRestoreTagFiltersAction(0)
     {
     }
 
-    const QString configMatchingConditionEntry;
-
-    ImageFilterSettings::MatchingCondition matchingCond;
-
     TagModel *tagFilterModel;
 
-    KSelectAction *matchingCondAction;
-    QAction *orBetweenAction;
-    QAction *andBetweenAction;
     KSelectAction *restoreTagFiltersAction;
     QAction *onRestoreTagFiltersAction;
     QAction *offRestoreTagFiltersAction;
@@ -71,10 +70,6 @@ TagFilterView::TagFilterView(QWidget *parent, TagModel *tagFilterModel) :
 
     d->tagFilterModel = tagFilterModel;
 
-    d->matchingCondAction = new KSelectAction(i18n("Matching Condition"), this);
-    d->orBetweenAction = d->matchingCondAction->addAction(i18n("Or Between Tags"));
-    d->andBetweenAction = d->matchingCondAction->addAction(i18n("And Between Tags"));
-
     d->restoreTagFiltersAction = new KSelectAction(i18n("Restore Tag Filters"), this);
     d->onRestoreTagFiltersAction = d->restoreTagFiltersAction->addAction(i18n("On"));
     d->offRestoreTagFiltersAction = d->restoreTagFiltersAction->addAction(i18n("Off"));
@@ -86,45 +81,11 @@ TagFilterView::~TagFilterView()
     delete d;
 }
 
-void TagFilterView::doLoadState()
-{
-    TagCheckView::doLoadState();
-
-    KConfigGroup group = getConfigGroup();
-    d->matchingCond = (ImageFilterSettings::MatchingCondition)
-                      (group.readEntry(entryName(d->configMatchingConditionEntry), (int)ImageFilterSettings::OrCondition));
-    emit matchingConditionChanged(d->matchingCond);
-
-}
-
-void TagFilterView::doSaveState()
-{
-    TagCheckView::doSaveState();
-
-    KConfigGroup group = getConfigGroup();
-    group.writeEntry(entryName(d->configMatchingConditionEntry),  (int)(d->matchingCond));
-    group.sync();
-
-}
-
-ImageFilterSettings::MatchingCondition TagFilterView::getMatchingCondition() const
-{
-    return d->matchingCond;
-}
-
 void TagFilterView::addCustomContextMenuActions(ContextMenuHelper &cmh, Album *album)
 {
     TagCheckView::addCustomContextMenuActions(cmh, album);
 
-    // matching condition
-
-    cmh.addAction(d->matchingCondAction);
-
-    d->orBetweenAction->setChecked(d->matchingCond == ImageFilterSettings::OrCondition);
-    d->andBetweenAction->setChecked(d->matchingCond != ImageFilterSettings::OrCondition);
-
     // restoring
-
     cmh.addAction(d->restoreTagFiltersAction);
 
     d->onRestoreTagFiltersAction->setChecked(isRestoreCheckState());
@@ -141,17 +102,7 @@ void TagFilterView::handleCustomContextMenuAction(QAction *action, Album *album)
         return;
     }
 
-    if (action == d->orBetweenAction)         // Or Between Tags.
-    {
-        d->matchingCond = ImageFilterSettings::OrCondition;
-        emit matchingConditionChanged(d->matchingCond);
-    }
-    else if (action == d->andBetweenAction)        // And Between Tags.
-    {
-        d->matchingCond = ImageFilterSettings::AndCondition;
-        emit matchingConditionChanged(d->matchingCond);
-    }
-    else if (action == d->onRestoreTagFiltersAction)        // Restore TagFilters ON.
+    if (action == d->onRestoreTagFiltersAction)        // Restore TagFilters ON.
     {
         setRestoreCheckState(true);
     }
@@ -169,10 +120,15 @@ class TagFilterSideBarWidgetPriv
 public:
 
     TagFilterSideBarWidgetPriv() :
+        configLastShowUntaggedEntry("Show Untagged"),
+        configMatchingConditionEntry("Matching Condition"),
         tagFilterView(0),
         tagFilterSearchBar(0)
     {
     }
+
+    QString configLastShowUntaggedEntry;
+    QString configMatchingConditionEntry;
 
     TagFilterView    *tagFilterView;
     SearchTextBar    *tagFilterSearchBar;
@@ -180,6 +136,7 @@ public:
     TagModel *tagFilterModel;
 
     QCheckBox *withoutTagCheckBox;
+    QComboBox *matchingConditionComboBox;
 
 };
 
@@ -197,24 +154,38 @@ TagFilterSideBarWidget::TagFilterSideBarWidget(QWidget *parent,
     d->tagFilterSearchBar->setModel(tagFilterModel, AbstractAlbumModel::AlbumIdRole);
     d->tagFilterSearchBar->setFilterModel(d->tagFilterView->albumFilterModel());
 
-    d->withoutTagCheckBox = new QCheckBox(i18n("Not Tagged"), this);
+    const QString notTaggedTitle = i18n("Images Without Tagged");
+    d->withoutTagCheckBox = new QCheckBox(notTaggedTitle, this);
+    d->withoutTagCheckBox->setWhatsThis(i18n("Show images without a tag."));
+
+    QLabel *matchingConditionLabel = new QLabel(i18n("Matching Condition:"), this);
+    matchingConditionLabel->setWhatsThis(i18n(
+                    "Defines in which way the selected tags are combined to filter the images. "
+                    "This also includes the '%1' check box.").arg(notTaggedTitle));
+
+    d->matchingConditionComboBox = new QComboBox(this);
+    d->matchingConditionComboBox->setWhatsThis(matchingConditionLabel->whatsThis());
+    d->matchingConditionComboBox->addItem(i18n("AND"), ImageFilterSettings::AndCondition);
+    d->matchingConditionComboBox->addItem(i18n("OR"), ImageFilterSettings::OrCondition);
 
     QVBoxLayout *layout = new QVBoxLayout(this);
 
     layout->addWidget(d->tagFilterView);
-    layout->addWidget(d->withoutTagCheckBox);
     layout->addWidget(d->tagFilterSearchBar);
+    layout->addWidget(d->withoutTagCheckBox);
+    layout->addWidget(matchingConditionLabel);
+    layout->addWidget(d->matchingConditionComboBox);
 
     // connection
 
     connect(d->tagFilterView, SIGNAL(checkedTagsChanged(const QList<TAlbum*>&)),
             this, SLOT(slotCheckedTagsChanged(const QList<TAlbum*>&)));
 
-    connect(d->tagFilterView, SIGNAL(matchingConditionChanged(const ImageFilterSettings::MatchingCondition&)),
-            this, SLOT(slotMatchingConditionChanged(const ImageFilterSettings::MatchingCondition&)));
-
     connect(d->withoutTagCheckBox, SIGNAL(stateChanged(int)),
             this, SLOT(slotWithoutTagChanged(int)));
+
+    connect(d->matchingConditionComboBox, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(slotMatchingConditionChanged(int)));
 
 }
 
@@ -225,11 +196,12 @@ TagFilterSideBarWidget::~TagFilterSideBarWidget()
 void TagFilterSideBarWidget::slotResetTagFilters()
 {
     d->tagFilterView->slotResetCheckState();
+    d->withoutTagCheckBox->setChecked(false);
 }
 
-void TagFilterSideBarWidget::slotMatchingConditionChanged(const ImageFilterSettings::MatchingCondition &condition)
+void TagFilterSideBarWidget::slotMatchingConditionChanged(int index)
 {
-    Q_UNUSED(condition);
+    Q_UNUSED(index);
     filterChanged();
 }
 
@@ -241,11 +213,7 @@ void TagFilterSideBarWidget::slotCheckedTagsChanged(const QList<TAlbum*> &tags)
 
 void TagFilterSideBarWidget::slotWithoutTagChanged(int newState)
 {
-
-    bool showUntagged = newState == Qt::Checked;
-    d->tagFilterView->setEnabled(!showUntagged);
-    d->tagFilterSearchBar->setEnabled(!showUntagged);
-
+    Q_UNUSED(newState);
     filterChanged();
 }
 
@@ -266,7 +234,10 @@ void TagFilterSideBarWidget::filterChanged()
         }
     }
 
-    emit tagFilterChanged(tagIds, d->tagFilterView->getMatchingCondition(), showUntagged);
+    emit tagFilterChanged(tagIds,
+                          (ImageFilterSettings::MatchingCondition)d->matchingConditionComboBox->itemData(
+                                          d->matchingConditionComboBox->currentIndex()).toInt(),
+                          showUntagged);
 
 }
 
@@ -278,12 +249,27 @@ void TagFilterSideBarWidget::setConfigGroup(KConfigGroup group)
 
 void TagFilterSideBarWidget::doLoadState()
 {
+    d->matchingConditionComboBox->setCurrentIndex(getConfigGroup().readEntry(
+                    entryName(d->configMatchingConditionEntry), 0));
     d->tagFilterView->loadState();
+
+    if (d->tagFilterView->isRestoreCheckState())
+    {
+        d->withoutTagCheckBox->setChecked(getConfigGroup().readEntry(entryName(
+                        d->configLastShowUntaggedEntry), false));
+    }
+
+    filterChanged();
 }
 
 void TagFilterSideBarWidget::doSaveState()
 {
+    getConfigGroup().writeEntry(entryName(d->configMatchingConditionEntry),
+                    d->matchingConditionComboBox->currentIndex());
     d->tagFilterView->saveState();
+    getConfigGroup().writeEntry(entryName(d->configLastShowUntaggedEntry),
+                        d->withoutTagCheckBox->isChecked());
+    getConfigGroup().sync();
 }
 
 }
