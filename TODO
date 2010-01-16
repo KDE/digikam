@@ -4,9 +4,6 @@ Note : see also KDE4PORT TODO list
 post 1.0.0 mvc merge
 ------------------------------------------------------------------------------------
 
- * background tag assigning should be moved to some manager from TagModificationHelper
- * duplicate search in tag filter view not working. is it wanted there???
-
 Is this really needed?
  * sorting albums by something else than name (date, category)
  

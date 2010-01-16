@@ -78,6 +78,8 @@ TagCheckView::TagCheckView(QWidget *parent, TagModel *tagModel) :
     setExpandOnSingleClick(false);
     setSelectOnContextMenu(false);
 
+    setShowFindDuplicateAction(false);
+
     // prepare custom menu action
     d->selectTagsMenu = new KMenu(i18nc("select tags menu", "Select"), this);
     d->selectAllTagsAction = d->selectTagsMenu->addAction(i18n("All Tags"));

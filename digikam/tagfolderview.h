@@ -44,8 +44,27 @@ Q_OBJECT
 
 public:
 
+    /**
+     * Constructor.
+     *
+     * @param parent parent for Qt's parent child mechanism
+     * @param model tag model to display
+     */
     TagFolderView(QWidget *parent, TagModel *model);
+
+    /**
+     * Destructor.
+     */
     virtual ~TagFolderView();
+
+    /**
+     * Define whether to show the "find duplicate" action in context menus
+     * or not.
+     *
+     * @param show if <code>true</code> the action to find duplicate images in
+     *             the tag album is displayed
+     */
+    void setShowFindDuplicateAction(bool show);
 
 Q_SIGNALS:
 

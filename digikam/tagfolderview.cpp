@@ -48,12 +48,14 @@ class TagFolderViewPriv
 {
 public:
     TagFolderViewPriv() :
+        showFindDuplicateAction(true),
         model(0),
         resetIconAction(0),
         findDuplAction(0)
     {
-
     }
+
+    bool showFindDuplicateAction;
 
     TagModel *model;
 
@@ -82,6 +84,11 @@ TagFolderView::~TagFolderView()
     delete d;
 }
 
+void TagFolderView::setShowFindDuplicateAction(bool show)
+{
+    d->showFindDuplicateAction = show;
+}
+
 QString TagFolderView::contextMenuTitle() const
 {
     return i18n("My Tags");
@@ -101,7 +108,10 @@ void TagFolderView::addCustomContextMenuActions(ContextMenuHelper &cmh, Album *a
     cmh.addActionNewTag(tagModificationHelper());
     cmh.addCreateTagFromAddressbookMenu();
     cmh.addAction(d->resetIconAction);
-    cmh.addAction(d->findDuplAction);
+    if (d->showFindDuplicateAction)
+    {
+        cmh.addAction(d->findDuplAction);
+    }
     cmh.addSeparator();
     cmh.addActionDeleteTag(tagModificationHelper());
     cmh.addSeparator();
