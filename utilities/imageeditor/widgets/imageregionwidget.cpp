@@ -103,7 +103,19 @@ ImageRegionWidget::ImageRegionWidget(int w, int h, QWidget* parent)
 
     connect(this, SIGNAL(signalContentsMovedEvent(bool)),
             this, SLOT(slotOriginalImageRegionChanged(bool)));
-            
+
+    connect(this, SIGNAL(horizontalSliderPressed()),
+            this, SLOT(slotSelectionTakeFocus()));
+
+    connect(this, SIGNAL(verticalSliderPressed()),
+            this, SLOT(slotSelectionTakeFocus()));
+
+    connect(this, SIGNAL(horizontalSliderReleased()),
+            this, SLOT(slotSelectionLeaveFocus()));
+
+    connect(this, SIGNAL(verticalSliderReleased()),
+            this, SLOT(slotSelectionLeaveFocus()));
+
     QTimer::singleShot(0, this, SLOT(slotInitGui()));            
 }
 
@@ -485,9 +497,11 @@ void ImageRegionWidget::setContentsSize()
 {
     switch (d->renderingPreviewMode)
     {
+        case PreviewToolBar::PreviewOriginalImage:
         case PreviewToolBar::PreviewBothImagesVertCont:
         case PreviewToolBar::PreviewBothImagesHorzCont:
         case PreviewToolBar::PreviewTargetImage:
+        case PreviewToolBar::PreviewToggleOnMouseOver:
         {
             PreviewWidget::setContentsSize();
             break;
@@ -537,6 +551,11 @@ void ImageRegionWidget::slotPanIconSelectionMoved(const QRect& rect, bool target
 void ImageRegionWidget::slotSelectionTakeFocus()
 {
     restorePixmapRegion();
+}
+
+void ImageRegionWidget::slotSelectionLeaveFocus()
+{
+    setContentsPosition(contentsX(), contentsY(), true);
 }
 
 void ImageRegionWidget::slotOriginalImageRegionChanged(bool target)

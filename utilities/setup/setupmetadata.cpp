@@ -137,29 +137,29 @@ SetupMetadata::SetupMetadata(QWidget* parent)
     QVBoxLayout *gLayout2  = new QVBoxLayout(commonGroup);
 
     d->saveTagsBox = new QCheckBox(commonGroup);
-    d->saveTagsBox->setText(i18n("&Save image tags as \"Keywords\" tag"));
+    d->saveTagsBox->setText(i18n("&Save image tags as \"Keywords\" tags in metadata embedded in files"));
     d->saveTagsBox->setWhatsThis( i18n("Turn on this option to store the image tags "
                                        "in the XMP and IPTC tags."));
 
     d->saveTemplateBox = new QCheckBox(commonGroup);
-    d->saveTemplateBox->setText(i18n("&Save metadata template as tags"));
+    d->saveTemplateBox->setText(i18n("&Save metadata template as metadata embedded in files"));
     d->saveTemplateBox->setWhatsThis( i18n("Turn on this option to store the metadata "
                                            "template in the XMP and the IPTC tags. "
                                            "You can set template values to Template setup page."));
 
     d->saveCommentsBox = new QCheckBox(commonGroup);
-    d->saveCommentsBox->setText(i18n("&Save image captions as embedded text"));
+    d->saveCommentsBox->setText(i18n("&Save image captions in metadata embedded in files "));
     d->saveCommentsBox->setWhatsThis( i18n("Turn on this option to store image captions "
                                            "in the JFIF Comment section, the EXIF tag, the XMP tag, "
                                            "and the IPTC tag."));
 
     d->saveDateTimeBox = new QCheckBox(commonGroup);
-    d->saveDateTimeBox->setText(i18n("&Save image timestamps as tags"));
+    d->saveDateTimeBox->setText(i18n("&Save image timestamps in metadata embedded in files"));
     d->saveDateTimeBox->setWhatsThis( i18n("Turn on this option to store the image date and time "
                                            "in the EXIF, XMP, and IPTC tags."));
 
     d->saveRatingBox = new QCheckBox(commonGroup);
-    d->saveRatingBox->setText(i18n("&Save image rating as tags"));
+    d->saveRatingBox->setText(i18n("&Save image rating in metadata embedded in files"));
     d->saveRatingBox->setWhatsThis( i18n("Turn on this option to store the image rating "
                                          "in the EXIF tag and the XMP tags."));
 
@@ -171,7 +171,7 @@ SetupMetadata::SetupMetadata(QWidget* parent)
     d->writeRawFilesBox->setEnabled(KExiv2Iface::KExiv2::supportMetadataWritting("image/x-raw"));
 
     d->updateFileTimeStampBox = new QCheckBox(commonGroup);
-    d->updateFileTimeStampBox->setText(i18n("&Update file timestamp when Metadata are saved"));
+    d->updateFileTimeStampBox->setText(i18n("&Update file timestamp when metadata are saved"));
     d->updateFileTimeStampBox->setWhatsThis( i18n("Turn on this option to update file timestamps when metadata are saved."));
 
 #if KEXIV2_VERSION >= 0x000600
