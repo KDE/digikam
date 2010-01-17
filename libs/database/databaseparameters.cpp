@@ -169,8 +169,12 @@ DatabaseParameters DatabaseParameters::parametersFromConfig(const QString databa
     parameters.port             = parameters.m_DatabaseConfigs[databaseType].m_Port.toInt();
 
     const QString miscDir     = KStandardDirs::locateLocal("data", "digikam/db_misc");
-    parameters.connectOptions   = parameters.m_DatabaseConfigs[databaseType].m_ConnectOptions.replace(QRegExp("$$DBMISCPATH$$"), miscDir);
+    QString connectOptions = parameters.m_DatabaseConfigs[databaseType].m_ConnectOptions;
+    connectOptions.replace(QString("$$DBMISCPATH$$"), miscDir);
 
+    parameters.connectOptions   = connectOptions;
+
+    kDebug(50003)<<"ConnectOptions "<< parameters.connectOptions;
     return parameters;
 }
 

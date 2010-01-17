@@ -344,11 +344,7 @@ DigikamApp::~DigikamApp()
 
 void DigikamApp::startInternalDatabase()
 {
-    // First of all, check if the database server must started
-    if (AlbumSettings::instance()->getInternalDatabaseServer())
-    {
-        DatabaseServerStarter::startServerManagerProcess();
-    }
+    DatabaseServerStarter::startServerManagerProcess();
 }
 
 void DigikamApp::stopInternalDatabase()

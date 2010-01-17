@@ -36,6 +36,9 @@
 #include <QSqlDatabase>
 #include <qsqlerror.h>
 
+#include <databaseparameters.h>
+#include <databaseserverstarter.h>
+
 namespace Digikam
 {
     DatabaseWidget::DatabaseWidget(QWidget* parent): QWidget(parent)
@@ -216,11 +219,24 @@ namespace Digikam
     void DatabaseWidget::checkDatabaseConnection(){
         QString databaseID("ConnectionTest");
         QSqlDatabase testDatabase = QSqlDatabase::addDatabase(databaseType->currentText(), databaseID);
-        testDatabase.setHostName(hostName->text());
-        testDatabase.setPort(hostPort->text().toInt());
-        testDatabase.setUserName(userName->text());
-        testDatabase.setPassword(password->text());
-        testDatabase.setConnectOptions(connectionOptions->text());
+
+        if (internalServer->isChecked())
+        {
+           DatabaseParameters internalServerParameters = DatabaseParameters::parametersFromConfig(databaseType->currentText());
+           testDatabase.setHostName(internalServerParameters.hostName);
+           testDatabase.setPort(internalServerParameters.port);
+           testDatabase.setUserName(internalServerParameters.userName);
+           testDatabase.setPassword(internalServerParameters.password);
+           testDatabase.setConnectOptions(internalServerParameters.connectOptions);
+           DatabaseServerStarter::startServerManagerProcess(databaseType->currentText());
+        }else
+        {
+            testDatabase.setHostName(hostName->text());
+            testDatabase.setPort(hostPort->text().toInt());
+            testDatabase.setUserName(userName->text());
+            testDatabase.setPassword(password->text());
+            testDatabase.setConnectOptions(connectionOptions->text());
+        }
 
         bool result = testDatabase.open();
         if (result == true){
