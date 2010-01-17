@@ -380,7 +380,10 @@ void AntiVignettingTool::prepareEffect()
         
     ImageIface* iface = d->previewWidget->imageIface();
     int orgWidth               = iface->originalWidth();
-    int orgHeight              = iface->originalHeight();
+    int orgHeight              = iface->originalHeight();  
+    int previewWidth           = iface->previewWidth();
+    int previewHeight          = iface->previewHeight();
+    DImg imTemp                = iface->getOriginalImg()->smoothScale(previewWidth, previewHeight, Qt::KeepAspectRatio);
     QSize ps(orgWidth, orgHeight);
     ps.scale(QSize(120, 120), Qt::KeepAspectRatio);
 
@@ -397,7 +400,7 @@ void AntiVignettingTool::prepareEffect()
     d->maskPreviewLabel->setPixmap(pix);
 
     setFilter(dynamic_cast<DImgThreadedFilter *>(
-                       new AntiVignetting(iface->getOriginalImg(), this, dens, power, rad, xoffset, yoffset, true, addvignetting)));
+                       new AntiVignetting(&imTemp, this, dens, power, rad, xoffset, yoffset, true, addvignetting)));
 }
 
 void AntiVignettingTool::prepareFinal()

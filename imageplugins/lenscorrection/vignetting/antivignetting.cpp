@@ -34,10 +34,16 @@
 #include <cmath>
 #include <cstdlib>
 
+// KDE includes
+
+#include <kdebug.h>
+
 // Local includes
 
 #include "dimg.h"
 #include "dimgimagefilters.h"
+
+
 
 namespace DigikamAntiVignettingImagesPlugin
 {
@@ -124,7 +130,7 @@ void AntiVignetting::filterImage()
     xsize    = ((Height + 1) / 2) + abs(m_xshift);
     ysize    = ((Width  + 1) / 2) + abs(m_yshift);
     diagonal = approx(hypothenuse(xsize,ysize)) +  1;
-
+    
     ldens = new double[diagonal];
 
     for (i = 0 ; !m_cancel && (i < diagonal) ; ++i)
