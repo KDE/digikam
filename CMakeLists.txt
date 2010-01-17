@@ -2,7 +2,7 @@ PROJECT(digikam)
 
 OPTION(ENABLE_THEMEDESIGNER "Build digiKam theme designer (default=OFF)" OFF)
 OPTION(ENABLE_THUMBS_DB "Build digiKam with thumbnails database support (default=ON)" ON)
-SET(SERVERCMD_MYSQL "/usr/bin/mysqld" CACHE STRING "Mysql Daemon executable (default=/usr/bin/mysqld)")
+SET(SERVERCMD_MYSQL "/usr/sbin/mysqld" CACHE STRING "Mysql Daemon executable (default=/usr/bin/mysqld)")
 SET(INITCMD_MYSQL   "/usr/bin/mysql_install_db" CACHE STRING "Mysql executable for DB initialization (default=/usr/bin/mysql_install_db)")
 
 # ==================================================================================================
