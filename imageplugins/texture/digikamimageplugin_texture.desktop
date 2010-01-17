@@ -22,7 +22,6 @@ Name[ja]=ImagePlugin_Texture
 Name[km]=ImagePlugin_Texture
 Name[lv]=ImagePlugin_Texture
 Name[nb]=ImagePlugin_Texture
-Name[nds]=ImagePlugin_Texture
 Name[ne]=ImagePlugin_Texture
 Name[nl]=Afbeeldingsplugin_Textuur
 Name[pa]=ImagePlugin_Texture
@@ -66,7 +65,6 @@ Comment[ja]=digiKam テクスチャ適用プラグイン
 Comment[km]=កម្មវិធី​ជំនួយ digiKam ដើម្បី​អនុវត្ត​វាយនភាព​លើ​រូបភាព
 Comment[lv]=DigiKam spraudnis tekstūras pielietošanai attēlam
 Comment[nb]=digiKam programtillegg for tekstur
-Comment[nds]=digiKam-Moduul för't Överdregen vun Texturen
 Comment[ne]=छविमा बनावट लागू गर्नका लागि डिजिक्याम प्लगइन
 Comment[nl]=Digikam-plugin voor het aanbrengen van textuur op een afbeelding
 Comment[pl]=Comment=Wtyczka do programu digiKam pozwalajÄca na nakÅadanie tekstury na obraz
