@@ -426,7 +426,7 @@
 		<userName>root</userName>
 		<password></password>
 		<port>1</port>
-		<connectoptions>$$DBMISCPATH$$/mysql.socket</connectoptions>
+		<connectoptions>UNIX_SOCKET=$$DBMISCPATH$$/mysql.socket</connectoptions>
 		<dbservercmd>${SERVERCMD_MYSQL}</dbservercmd>
 		<dbinitcmd>${INITCMD_MYSQL}</dbinitcmd>
 		
