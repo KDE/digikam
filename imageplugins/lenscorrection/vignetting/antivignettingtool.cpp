@@ -140,7 +140,7 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
     
     d->addVignettingCheck = new QCheckBox(i18n("Add vignetting"));
     d->addVignettingCheck->setWhatsThis(i18n("This option add vignetting to the image instead for removing it."
-                                               "Use it for creative effects."));
+                                             "Use it for creative effects."));
     d->addVignettingCheck->setChecked(false);
     
     // -------------------------------------------------------------
@@ -153,7 +153,7 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QLabel *label1  = new QLabel(i18n("Density:"));
+    QLabel *label1  = new QLabel(i18n("Amount:"));
     d->densityInput = new RDoubleNumInput();
     d->densityInput->setDecimals(1);
     d->densityInput->input()->setRange(1.0, 20.0, 0.1, true);
@@ -163,7 +163,7 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QLabel *label2 = new QLabel(i18n("Power:"));
+    QLabel *label2 = new QLabel(i18n("Feather:"));
     d->powerInput  = new RDoubleNumInput();
     d->powerInput->setDecimals(1);
     d->powerInput->input()->setRange(0.1, 2.0, 0.1, true);

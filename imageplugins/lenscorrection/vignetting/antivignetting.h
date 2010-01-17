@@ -58,6 +58,11 @@ private:
     double m_radius;
     
     bool   m_add_vignetting;
+    
+    double         hypothenuse(double x,double y);
+    int            approx(double x);
+    uchar          clamp8bits(double x);
+    unsigned short clamp16bits(double x);
 };
 
 }  // namespace DigikamAntiVignettingImagesPlugin
