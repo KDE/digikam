@@ -167,7 +167,9 @@ DatabaseParameters DatabaseParameters::parametersFromConfig(const QString databa
     parameters.userName         = parameters.m_DatabaseConfigs[databaseType].m_UserName;
     parameters.password         = parameters.m_DatabaseConfigs[databaseType].m_Password;
     parameters.port             = parameters.m_DatabaseConfigs[databaseType].m_Port.toInt();
-    parameters.connectOptions   = parameters.m_DatabaseConfigs[databaseType].m_ConnectOptions;
+
+    const QString miscDir     = KStandardDirs::locateLocal("data", "digikam/db_misc");
+    parameters.connectOptions   = parameters.m_DatabaseConfigs[databaseType].m_ConnectOptions.replace(QRegExp("$$DBMISCPATH$$"), miscDir);
 
     return parameters;
 }
@@ -283,7 +285,6 @@ void DatabaseParameters::readConfig(){
      }
 
 databaseconfigelement DatabaseParameters::readDatabase(QDomElement &databaseElement){
-    const QString miscDir     = KStandardDirs::locateLocal("data", "digikam/db_misc");
 
 	databaseconfigelement l_Element;
 	l_Element.m_DatabaseID="Unidentified";
@@ -328,7 +329,6 @@ databaseconfigelement DatabaseParameters::readDatabase(QDomElement &databaseElem
             kDebug(50003) << "Missing element <connectoptions>.";
         }
         l_Element.m_ConnectOptions = element.text();
-        l_Element.m_ConnectOptions = l_Element.m_ConnectOptions.replace(QRegExp("$$DBMISCPATH$$"), miscDir);
 
         element =  databaseElement.namedItem("dbservercmd").toElement();
         if (element.isNull()){

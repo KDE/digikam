@@ -2184,7 +2184,7 @@ void DigikamApp::slotSetupChanged()
     //if(AlbumSettings::instance()->getAlbumLibraryPath() != AlbumManager::instance()->getLibraryPath())
       //  d->view->clearHistory();
 
-    if (!AlbumManager::instance()->databaseEqual(AlbumSettings::instance()->getDatabaseType(), AlbumSettings::instance()->getDatabaseName(), AlbumSettings::instance()->getDatabaseHostName(), AlbumSettings::instance()->getDatabasePort()))
+    if (!AlbumManager::instance()->databaseEqual(AlbumSettings::instance()->getDatabaseType(), AlbumSettings::instance()->getDatabaseName(), AlbumSettings::instance()->getDatabaseHostName(), AlbumSettings::instance()->getDatabasePort(), AlbumSettings::instance()->getInternalDatabaseServer()))
     {
         AlbumManager::instance()->changeDatabase(AlbumSettings::instance()->getDatabaseType(), AlbumSettings::instance()->getDatabaseName(),  AlbumSettings::instance()->getDatabaseNameThumbnails(), AlbumSettings::instance()->getDatabaseHostName(), AlbumSettings::instance()->getDatabasePort(), AlbumSettings::instance()->getDatabaseUserName(), AlbumSettings::instance()->getDatabasePassword(), AlbumSettings::instance()->getDatabaseConnectoptions(), AlbumSettings::instance()->getInternalDatabaseServer());
     }

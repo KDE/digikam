@@ -177,6 +177,7 @@ public:
     QString                     dbName;
     QString                     dbHostName;
     int                         dbPort;
+    bool                        dbInternalServer;
 
     QList<QDateTime>            dbPathModificationDateList;
     QList<QString>              dirWatchBlackList;
@@ -347,12 +348,13 @@ void AlbumManager::cleanUp()
     d->dirWatch = 0;
 }
 
-bool AlbumManager::databaseEqual(const QString& dbType, const QString& dbName, const QString& dbHostName, int dbPort) const
+bool AlbumManager::databaseEqual(const QString& dbType, const QString& dbName, const QString& dbHostName, int dbPort, bool dbInternalServer) const
 {
     return d->dbType == dbType
            && d->dbName == dbName
            && d->dbHostName == dbHostName
-           && d->dbPort == dbPort;
+           && d->dbPort == dbPort
+           && d->dbInternalServer == dbInternalServer;
 }
 
 static bool moveToBackup(const QFileInfo& info)
@@ -439,9 +441,10 @@ void AlbumManager::changeDatabase(const QString& dbType, const QString& dbName, 
 {
     // if there is no file at the new place, copy old one
     DatabaseParameters params = DatabaseAccess::parameters();
-    kDebug(50003) << "Comparing old database name ["<< params.databaseName <<"] with type ["<< params.databaseType <<"] with new database name ["<< dbName <<"] with type ["<< dbType <<"].";
 
-    if (d->dbName == dbName && params.databaseType == dbType)
+    kDebug(50003) << "Comparing old database name ["<< params.databaseName <<"] with type ["<< params.databaseType <<"] with new database name ["<< dbName <<"] with type ["<< dbType <<"] and setting internal server ["<< d->dbInternalServer <<"] with new ["<< internalServer <<"].";
+
+    if (d->dbName == dbName && params.databaseType == dbType && d->dbInternalServer==internalServer)
         return;
 
     // New database type SQLITE
@@ -595,7 +598,7 @@ bool AlbumManager::setDatabase(const QString dbType, const QString dbName, const
         return true;
     }
 
-    if (d->dbName == dbName)
+    if (d->dbName == dbName && d->dbInternalServer == internalServer)
         return true;
 
     // shutdown possibly running collection scans. Must call resumeCollectionScan further down.
@@ -606,6 +609,7 @@ bool AlbumManager::setDatabase(const QString dbType, const QString dbName, const
     d->dbName     = dbName;
     d->dbHostName = dbHostName;
     d->dbPort     = dbPort;
+    d->dbInternalServer = internalServer;
 
     d->changed = true;
 
