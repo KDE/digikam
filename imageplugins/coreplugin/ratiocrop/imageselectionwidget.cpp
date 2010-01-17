@@ -775,7 +775,8 @@ void ImageSelectionWidget::drawRulesOfThirds(QPainter &p, const int &xThird, con
 
 void ImageSelectionWidget::drawDiagonalMethod(QPainter &p, const int &w, const int &h)
 {
-
+    p.setRenderHint(QPainter::Antialiasing);
+    
     if (w > h)
     {
         p.drawLine(0, 0, h, h);
@@ -795,7 +796,8 @@ void ImageSelectionWidget::drawDiagonalMethod(QPainter &p, const int &w, const i
 
 void ImageSelectionWidget::drawHarmoniousTriangles(QPainter &p, const int &dst)
 {
-
+    p.setRenderHint(QPainter::Antialiasing);
+        
     p.drawLine( -d->localRegionSelection.width()/2, -d->localRegionSelection.height()/2,
                  d->localRegionSelection.width()/2,  d->localRegionSelection.height()/2);
 
@@ -811,7 +813,8 @@ void ImageSelectionWidget::drawGoldenMean(QPainter &p, const QRect &R1,
                 const QRect &R2, const QRect &R3, const QRect &R4,
                 const QRect &R5, const QRect &R6, const QRect &R7)
 {
-
+    p.setRenderHint(QPainter::Antialiasing);
+    
     // Drawing Golden sections.
     if (d->drawGoldenSection)
     {
