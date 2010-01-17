@@ -134,7 +134,7 @@ void AntiVignetting::filterImage()
           if (!m_add_vignetting)
             ldens[i] = 1.0;
           else
-            ldens[i] = 0.0;
+            ldens[i] = 200000.0; // should be infinity
         }
         else
         {

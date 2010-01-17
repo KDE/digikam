@@ -176,7 +176,7 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
     QLabel *label3 = new QLabel(i18n("Radius:"));
     d->radiusInput = new RDoubleNumInput();
     d->radiusInput->setDecimals(1);
-    d->radiusInput->input()->setRange(0.1, 1.5, 0.1, true);
+    d->radiusInput->input()->setRange(0.1, 1.5, 0.05, true);
     d->radiusInput->setDefaultValue(1.0);
     d->radiusInput->setWhatsThis(i18n("This value is the radius of the center filter. It is a "
                                       "multiple of the half-diagonal measure of the image, at which "
