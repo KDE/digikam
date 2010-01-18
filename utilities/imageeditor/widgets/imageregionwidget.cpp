@@ -81,7 +81,7 @@ public:
     ImageIface* iface;
 };
 
-ImageRegionWidget::ImageRegionWidget(int w, int h, QWidget* parent)
+ImageRegionWidget::ImageRegionWidget(QWidget* parent)
                  : PreviewWidget(parent), d(new ImageRegionWidgetPriv)
 {
     d->iface = new ImageIface(0, 0);
@@ -89,7 +89,7 @@ ImageRegionWidget::ImageRegionWidget(int w, int h, QWidget* parent)
 
     setAttribute(Qt::WA_DeleteOnClose);
     setFrameStyle(QFrame::NoFrame);
-    setMinimumSize(w, h);
+    setMinimumSize(480, 320);
     setWhatsThis(i18n("<p>Here you can see the original clip image "
                       "which will be used for the preview computation.</p>"
                       "<p>Click and drag the mouse cursor in the "
