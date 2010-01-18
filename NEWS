@@ -70,5 +70,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 061 ==> 219745 : Zoom is ignored in the tools on 1. try.
 062 ==> 222748 : Editor preview mode buttons lack tooltip.
 063 ==> 222744 : Mouse-over preview mode with zoom removes ability to see whole image.
-064 ==> 
+064 ==> 220365 : digiKam crashes at startup (kipi-plugins work now).
+065 ==> 
+
 
