@@ -69,7 +69,6 @@ public:
     void   setPreviewImage(const DImg& img);
 
     void   setHighLightPoints(const QPolygon& pointsList);
-    void   drawSeparateView();
     
     void   ICCSettingsChanged();
     void   exposureSettingsChanged();
