@@ -269,7 +269,7 @@ void ImageGuideWidget::updatePixmap()
     d->pixmap->fill(palette().color(QPalette::Background));
 
     if (d->renderingPreviewMode == PreviewToolBar::PreviewOriginalImage ||
-        (d->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver && d->onMouseMovePreviewToggled == false ))
+        (d->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver && !d->onMouseMovePreviewToggled))
     {
         p.drawPixmap(d->rect, *d->previewPixmap);
 
@@ -281,14 +281,9 @@ void ImageGuideWidget::updatePixmap()
     }
     else if (d->renderingPreviewMode == PreviewToolBar::PreviewTargetImage || 
              d->renderingPreviewMode == PreviewToolBar::NoPreviewMode      ||
-            (d->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver && d->onMouseMovePreviewToggled == true ))
+            (d->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver && d->onMouseMovePreviewToggled))
     {
-        d->iface->paint(d->pixmap,
-                        d->rect.x(),
-                        d->rect.y(),
-                        d->rect.width(),
-                        d->rect.height(),
-                        &p);
+        d->iface->paint(d->pixmap, d->rect.x(), d->rect.y(), d->rect.width(), d->rect.height(), &p);
 
         if (d->renderingPreviewMode == PreviewToolBar::PreviewTargetImage ||
             d->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver)
@@ -305,45 +300,30 @@ void ImageGuideWidget::updatePixmap()
     {
         if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesVert)
         {
-            // Drawing the original image.
+            // Drawing original image.
             p.drawPixmap(d->rect, *d->previewPixmap);
 
-            // Drawing the target image under the original.
-            d->iface->paint(d->pixmap,
-                            d->rect.x()+d->rect.width()/2,
-                            d->rect.y(),
-                            d->rect.width()/2,
-                            d->rect.height(),
-                            &p);
+            // Drawing target image under the original.
+            d->iface->paint(d->pixmap, d->rect.x()+d->rect.width()/2, d->rect.y(), d->rect.width()/2, d->rect.height(), &p);
         }
         else
         {
-            // Drawing the target image.
-            d->iface->paint(d->pixmap,
-                            d->rect.x(),
-                            d->rect.y(),
-                            d->rect.width(),
-                            d->rect.height(),
-                            &p);
+            // Drawing target image.
+            d->iface->paint(d->pixmap, d->rect.x(), d->rect.y(), d->rect.width(), d->rect.height(), &p);
 
-            // Drawing the original image under the target.
-            p.drawPixmap(d->rect.x(), d->rect.y(), *d->previewPixmap,
-                         0, 0, d->rect.width()/2, d->rect.height());
+            // Drawing original image under the target.
+            p.drawPixmap(d->rect.x(), d->rect.y(), *d->previewPixmap, 0, 0, d->rect.width()/2, d->rect.height());
         }
 
-        // Drawing the information and others stuff.
+        // Drawing information and others stuff.
         p.fillRect(d->rect.right(), 0, width(), height(), palette().color(QPalette::Background));
 
         p.setPen(QPen(Qt::white, 2, Qt::SolidLine));
-        p.drawLine(d->rect.x()+d->rect.width()/2-1,
-                   d->rect.y(),
-                   d->rect.x()+d->rect.width()/2-1,
-                   d->rect.y()+d->rect.height());
+        p.drawLine(d->rect.x()+d->rect.width()/2-1, d->rect.y(), 
+                   d->rect.x()+d->rect.width()/2-1, d->rect.y()+d->rect.height());
         p.setPen(QPen(Qt::red, 2, Qt::DotLine));
-        p.drawLine(d->rect.x()+d->rect.width()/2-1,
-                   d->rect.y(),
-                   d->rect.x()+d->rect.width()/2-1,
-                   d->rect.y()+d->rect.height());
+        p.drawLine(d->rect.x()+d->rect.width()/2-1, d->rect.y(),
+                   d->rect.x()+d->rect.width()/2-1, d->rect.y()+d->rect.height());
 
         text     = i18n("Target");
         fontRect = fontMt.boundingRect(0, 0, d->rect.width(), d->rect.height(), 0, text);
@@ -362,28 +342,18 @@ void ImageGuideWidget::updatePixmap()
     {
         if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorz)
         {
-            // Drawing the original image.
+            // Drawing original image.
             p.drawPixmap(d->rect, *d->previewPixmap);
 
-            // Drawing the target image under the original.
-            d->iface->paint(d->pixmap,
-                            d->rect.x(),
-                            d->rect.y()+d->rect.height()/2,
-                            d->rect.width(),
-                            d->rect.height()/2,
-                            &p);
+            // Drawing target image under the original.
+            d->iface->paint(d->pixmap, d->rect.x(), d->rect.y()+d->rect.height()/2, d->rect.width(), d->rect.height()/2, &p);
         }
         else
         {
-            // Drawing the target image.
-            d->iface->paint(d->pixmap,
-                            d->rect.x(),
-                            d->rect.y(),
-                            d->rect.width(),
-                            d->rect.height(),
-                            &p);
+            // Drawing target image.
+            d->iface->paint(d->pixmap, d->rect.x(), d->rect.y(), d->rect.width(), d->rect.height(), &p);
 
-            // Drawing the original image under the target.
+            // Drawing original image under the target.
             p.drawPixmap(d->rect.x(), d->rect.y(), *d->previewPixmap,
                          0, 0, d->rect.width(), d->rect.height()/2);
         }
@@ -457,10 +427,7 @@ void ImageGuideWidget::updatePixmap()
     {
         QPainter::RenderHints hints = p.renderHints();
 
-        QColor semiTransGuideColor  = QColor(d->guideColor.red(),
-                                             d->guideColor.green(),
-                                             d->guideColor.blue(),
-                                             75);
+        QColor semiTransGuideColor  = QColor(d->guideColor.red(), d->guideColor.green(), d->guideColor.blue(), 75);
 
         QPoint point;
         int x = 0;

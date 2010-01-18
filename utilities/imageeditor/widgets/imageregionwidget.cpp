@@ -232,18 +232,21 @@ void ImageRegionWidget::viewportPaintExtraData()
 
         QString text;
         QRect textRect, fontRect;
+
+        // Target region.
         QRect region = getLocalTargetImageRegion();
         QRect rt(contentsToViewport(region.topLeft()), contentsToViewport(region.bottomRight()));
 
+        // Original region.
         region = getLocalImageRegionToRender();
         QRect ro(contentsToViewport(region.topLeft()), contentsToViewport(region.bottomRight()));
 
         // Drawing separate view.
 
         if (d->renderingPreviewMode == PreviewToolBar::PreviewOriginalImage ||
-            (d->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver && d->onMouseMovePreviewToggled == false ))
+            (d->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver && !d->onMouseMovePreviewToggled))
         {
-            text = i18n("Original");
+            text     = i18n("Original");
             fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text);
             textRect.setTopLeft(QPoint(rt.topLeft().x()+20, rt.topLeft().y()+20));
             textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2) );
@@ -251,14 +254,14 @@ void ImageRegionWidget::viewportPaintExtraData()
         }
         else if (d->renderingPreviewMode == PreviewToolBar::PreviewTargetImage || 
                  d->renderingPreviewMode == PreviewToolBar::NoPreviewMode      ||
-                (d->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver && d->onMouseMovePreviewToggled == true ))
+                 (d->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver && d->onMouseMovePreviewToggled))
         {   
             p.drawPixmap(rt.x(), rt.y(), d->pixmapRegion, 0, 0, rt.width(), rt.height());
 
             if (d->renderingPreviewMode == PreviewToolBar::PreviewTargetImage ||
                 d->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver)
             {
-                text = i18n("Target");
+                text     = i18n("Target");
                 fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text);
                 textRect.setTopLeft(QPoint(rt.topLeft().x()+20, rt.topLeft().y()+20));
                 textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2) );
@@ -266,16 +269,14 @@ void ImageRegionWidget::viewportPaintExtraData()
             }
         }
         else if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesVert ||
-                d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesVertCont)
+                 d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesVertCont)
         {        
             p.drawPixmap(rt.x(), rt.y(), d->pixmapRegion, 0, 0, rt.width(), rt.height());
             
             p.setPen(QPen(Qt::white, 2, Qt::SolidLine));
-            p.drawLine(rt.topLeft().x(),    rt.topLeft().y(),
-                        rt.bottomLeft().x(), rt.bottomLeft().y());
+            p.drawLine(rt.topLeft().x(), rt.topLeft().y(), rt.bottomLeft().x(), rt.bottomLeft().y());
             p.setPen(QPen(Qt::red, 2, Qt::DotLine));
-            p.drawLine(rt.topLeft().x(),    rt.topLeft().y()+1,
-                        rt.bottomLeft().x(), rt.bottomLeft().y()-1);
+            p.drawLine(rt.topLeft().x(), rt.topLeft().y()+1, rt.bottomLeft().x(), rt.bottomLeft().y()-1);
 
             text = i18n("Target");
             fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text);
@@ -294,24 +295,22 @@ void ImageRegionWidget::viewportPaintExtraData()
             drawText(&p, textRect, text);
         }
         else if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorz ||
-                d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorzCont)
+                 d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorzCont)
         {
             p.drawPixmap(rt.x(), rt.y(), d->pixmapRegion, 0, 0, rt.width(), rt.height());
           
             p.setPen(QPen(Qt::white, 2, Qt::SolidLine));
-            p.drawLine(rt.topLeft().x()+1,  rt.topLeft().y(),
-                        rt.topRight().x()-1, rt.topRight().y());
+            p.drawLine(rt.topLeft().x()+1, rt.topLeft().y(), rt.topRight().x()-1, rt.topRight().y());
             p.setPen(QPen(Qt::red, 2, Qt::DotLine));
-            p.drawLine(rt.topLeft().x(),   rt.topLeft().y(),
-                        rt.topRight().x(), rt.topRight().y());
+            p.drawLine(rt.topLeft().x(), rt.topLeft().y(), rt.topRight().x(), rt.topRight().y());
 
-            text = i18n("Target");
+            text     = i18n("Target");
             fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text);
             textRect.setTopLeft(QPoint(rt.topLeft().x()+20, rt.topLeft().y()+20));
             textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2) );
             drawText(&p, textRect, text);
 
-            text = i18n("Original");
+            text     = i18n("Original");
             fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text);
 
             if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorzCont)
@@ -343,24 +342,16 @@ void ImageRegionWidget::viewportPaintExtraData()
                     hpArea.moveCenter(hp);
 
                     p.setPen(QPen(Qt::white, 2, Qt::SolidLine));
-                    p.drawLine(hp.x(), hpArea.y(),
-                               hp.x(), hp.y()-(int)(3*zoomFactor()));
-                    p.drawLine(hp.x(), hp.y()+(int)(3*zoomFactor()),
-                               hp.x(), hpArea.bottom());
-                    p.drawLine(hpArea.x(),                   hp.y(),
-                               hp.x()-(int)(3*zoomFactor()), hp.y());
-                    p.drawLine(hp.x()+(int)(3*zoomFactor()), hp.y(),
-                               hpArea.right(),               hp.y());
+                    p.drawLine(hp.x(), hpArea.y(), hp.x(), hp.y()-(int)(3*zoomFactor()));
+                    p.drawLine(hp.x(), hp.y()+(int)(3*zoomFactor()), hp.x(), hpArea.bottom());
+                    p.drawLine(hpArea.x(), hp.y(), hp.x()-(int)(3*zoomFactor()), hp.y());
+                    p.drawLine(hp.x()+(int)(3*zoomFactor()), hp.y(), hpArea.right(), hp.y());
 
                     p.setPen(QPen(Qt::red, 2, Qt::DotLine));
-                    p.drawLine(hp.x(), hpArea.y(),
-                               hp.x(), hp.y()-(int)(3*zoomFactor()));
-                    p.drawLine(hp.x(), hp.y()+(int)(3*zoomFactor()),
-                               hp.x(), hpArea.bottom());
-                    p.drawLine(hpArea.x(),                   hp.y(),
-                               hp.x()-(int)(3*zoomFactor()), hp.y());
-                    p.drawLine(hp.x()+(int)(3*zoomFactor()), hp.y(),
-                               hpArea.right(),               hp.y());
+                    p.drawLine(hp.x(), hpArea.y(), hp.x(), hp.y()-(int)(3*zoomFactor()));
+                    p.drawLine(hp.x(), hp.y()+(int)(3*zoomFactor()), hp.x(), hpArea.bottom());
+                    p.drawLine(hpArea.x(), hp.y(), hp.x()-(int)(3*zoomFactor()), hp.y());
+                    p.drawLine(hp.x()+(int)(3*zoomFactor()), hp.y(), hpArea.right(), hp.y());
                 }
             }
         }
