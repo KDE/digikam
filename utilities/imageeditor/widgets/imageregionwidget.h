@@ -56,11 +56,7 @@ public:
     void   setContentsPosition(int x, int y, bool targetDone);
     void   setCenterImageRegionPosition();
 
-    /** To get image region including original or/and target area depending of separate view mode.
-        The region is given using not scaled image unit.*/
-    QRect  getOriginalImageRegion();
-
-    /** To get target image region area to render */
+    /** To get target image region area to render. */
     QRect  getOriginalImageRegionToRender();
 
     /** To get target image region image to use for render operations */
@@ -92,6 +88,10 @@ private Q_SLOTS:
     void slotSelectionLeaveFocus();
 
 private:
+
+    /** To get image region including original or/and target area depending of separate view mode.
+        The region is given using not scaled image unit.*/
+    QRect  getOriginalImageRegion();
 
     QRect  getLocalTargetImageRegion();
     QRect  getLocalImageRegionToRender();
