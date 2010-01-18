@@ -129,7 +129,7 @@ public:
         configSortOrderEntry("SortOrder")
     {
         delegate            = 0;
-        expandOnSingleClick = true;
+        expandOnSingleClick = false;
         selectAlbumOnClick  = false;
         selectOnContextMenu = true;
         enableContextMenu   = false;
