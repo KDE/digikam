@@ -68,9 +68,6 @@ public:
 
     void   setPreviewImage(const DImg& img);
 
-    void   backupPixmapRegion();
-    void   restorePixmapRegion();
-
     void   setHighLightPoints(const QPolygon& pointsList);
     void   drawSeparateView();
     
@@ -99,19 +96,24 @@ private:
 
     QRect  getLocalTargetImageRegion();
     QRect  getLocalImageRegionToRender();
-    void   viewportPaintExtraData();
-    int    previewWidth();
-    int    previewHeight();
-    bool   previewIsNull();
-    void   resetPreview();
+
+    void   backupPixmapRegion();
+    void   restorePixmapRegion();
     void   setContentsSize();
+
     void   enterEvent(QEvent*);
     void   leaveEvent(QEvent*);
     void   resizeEvent(QResizeEvent*);
     void   contentsWheelEvent(QWheelEvent*);
-    QImage previewToQImage() const;
-    void   drawText(QPainter* p, const QRect& rect, const QString& text);
 
+    int    previewWidth();
+    int    previewHeight();
+    bool   previewIsNull();
+    void   resetPreview();
+    QImage previewToQImage() const;
+
+    void   viewportPaintExtraData();
+    void   drawText(QPainter* p, const QRect& rect, const QString& text);
     inline void paintPreview(QPixmap* pix, int sx, int sy, int sw, int sh);
 
 private:
