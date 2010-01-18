@@ -53,9 +53,6 @@ public:
     ImageRegionWidget(QWidget* parent=0);
     ~ImageRegionWidget();
 
-    void   setContentsPosition(int x, int y, bool targetDone);
-    void   setCenterImageRegionPosition();
-
     /** To get target image region area to render. */
     QRect  getOriginalImageRegionToRender();
 
@@ -89,6 +86,9 @@ private Q_SLOTS:
 
 private:
 
+    void   setContentsPosition(int x, int y, bool targetDone);
+    void   setCenterImageRegionPosition();
+    
     /** To get image region including original or/and target area depending of separate view mode.
         The region is given using not scaled image unit.*/
     QRect  getOriginalImageRegion();
