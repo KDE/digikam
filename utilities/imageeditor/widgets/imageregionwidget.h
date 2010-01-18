@@ -86,6 +86,7 @@ private Q_SLOTS:
 
 private:
 
+    void   setContentsSize();
     void   setContentsPosition(int x, int y, bool targetDone);
     void   setCenterImageRegionPosition();
     
@@ -98,7 +99,6 @@ private:
 
     void   backupPixmapRegion();
     void   restorePixmapRegion();
-    void   setContentsSize();
 
     void   enterEvent(QEvent*);
     void   leaveEvent(QEvent*);
