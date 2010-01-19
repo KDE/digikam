@@ -61,18 +61,19 @@ public:
     PreviewWidgetPriv() :
         tileSize(128), zoomMultiplier(1.2)
     {
-        panIconPopup  = 0;
-        cornerButton  = 0;
-        midButtonX    = 0;
-        midButtonY    = 0;
-        autoZoom      = false;
-        fullScreen    = false;
-        zoom          = 1.0;
-        minZoom       = 0.1;
-        maxZoom       = 12.0;
-        zoomWidth     = 0;
-        zoomHeight    = 0;
-        tileTmpPix    = new QPixmap(tileSize, tileSize);
+        currentFitWindowZoom = 0.0;
+        panIconPopup         = 0;
+        cornerButton         = 0;
+        midButtonX           = 0;
+        midButtonY           = 0;
+        autoZoom             = false;
+        fullScreen           = false;
+        zoom                 = 1.0;
+        minZoom              = 0.1;
+        maxZoom              = 12.0;
+        zoomWidth            = 0;
+        zoomHeight           = 0;
+        tileTmpPix           = new QPixmap(tileSize, tileSize);
 
         tileCache.setMaxCost((10*1024*1024)/(tileSize*tileSize*4));
     }
@@ -89,6 +90,7 @@ public:
     double                   zoom;
     double                   minZoom;
     double                   maxZoom;
+    double                   currentFitWindowZoom;
     const double             zoomMultiplier;
 
     QPoint                   centerZoomPoint;
@@ -107,7 +109,7 @@ public:
 PreviewWidget::PreviewWidget(QWidget *parent)
              : Q3ScrollView(parent), d(new PreviewWidgetPriv)
 {
-    m_movingInProgress = false;
+    m_movingInProgress     = false;
     setAttribute(Qt::WA_DeleteOnClose);
     setBackgroundRole(QPalette::Base);
 
@@ -378,6 +380,26 @@ void PreviewWidget::toggleFitToWindowOr100()
     {
         setZoomFactor(1.0, true);
     }
+}
+
+void PreviewWidget::updateZoomAndSize(bool alwaysFitToWindow)
+{
+    // Set zoom for fit-in-window as minimum, but don't scale up images
+    // that are smaller than the available space, only scale down.
+    double zoom = calcAutoZoomFactor(ZoomInOnly);
+    setZoomMin(zoom);
+    setZoomMax(zoom*12.0);
+
+    // Is currently the zoom factor set to fit to window? Then set it again to fit the new size.
+    if (zoomFactor() < zoom || alwaysFitToWindow || zoomFactor() == d->currentFitWindowZoom)
+    {
+        setZoomFactor(zoom);
+    }
+
+    // store which zoom factor means it is fit to window
+    d->currentFitWindowZoom = zoom;
+
+    updateContentsSize();
 }
 
 void PreviewWidget::updateAutoZoom(AutoZoomMode mode)

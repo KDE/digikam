@@ -91,7 +91,7 @@ public Q_SLOTS:
 protected:
 
     bool m_movingInProgress;
-
+    
 protected Q_SLOTS:
 
     void slotCornerButtonPressed();
@@ -110,6 +110,7 @@ protected:
     int    tileSize();
     void   updateAutoZoom(AutoZoomMode mode = ZoomInOrOut);
     void   updateContentsSize();
+    void   updateZoomAndSize(bool alwaysFitToWindow);
     void   clearCache();
     QRect  previewRect();
 
