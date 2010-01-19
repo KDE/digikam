@@ -186,6 +186,10 @@ void DatabaseAccess::setParameters(const DatabaseParameters& parameters, Applica
     if (d->backend && d->backend->isOpen())
         d->backend->close();
 
+    // Kill the old database error handler
+    if (d->backend)
+        d->backend->setDatabaseErrorHandler(0);
+
     d->parameters = parameters;
 
     if (!d->databaseWatch)

@@ -442,11 +442,6 @@ void AlbumManager::changeDatabase(const QString& dbType, const QString& dbName, 
     // if there is no file at the new place, copy old one
     DatabaseParameters params = DatabaseAccess::parameters();
 
-    kDebug(50003) << "Comparing old database name ["<< params.databaseName <<"] with type ["<< params.databaseType <<"] with new database name ["<< dbName <<"] with type ["<< dbType <<"] and setting internal server ["<< d->dbInternalServer <<"] with new ["<< internalServer <<"].";
-
-    if (d->dbName == dbName && params.databaseType == dbType && d->dbInternalServer==internalServer)
-        return;
-
     // New database type SQLITE
     if (dbType == "SQLITE"){
         QDir newDir(dbName);
@@ -582,11 +577,9 @@ bool AlbumManager::setDatabase(const QString dbType, const QString dbName, const
         DigikamApp::instance()->stopInternalDatabase();
     }
 
-    if (dbName.isEmpty())
-        return false;
-
     // This is to ensure that the setup does not overrule the command line.
     // Replace with a better solution?
+    /*
     if (priority)
     {
         d->hasPriorizedDbPath = true;
@@ -597,9 +590,7 @@ bool AlbumManager::setDatabase(const QString dbType, const QString dbName, const
         // true means, don't exit()
         return true;
     }
-
-    if (d->dbName == dbName && d->dbInternalServer == internalServer)
-        return true;
+    */
 
     // shutdown possibly running collection scans. Must call resumeCollectionScan further down.
     ScanController::instance()->cancelAllAndSuspendCollectionScan();
@@ -979,7 +970,8 @@ bool AlbumManager::setDatabase(const QString dbType, const QString dbName, const
             dbConnectOptions,
             new DatabaseThumbnailInfoProvider());
 
-    ThumbnailDatabaseAccess::initDatabaseErrorHandler(handler);
+    DatabaseGUIErrorHandler *thumbnailsDBHandler = new DatabaseGUIErrorHandler(ThumbnailDatabaseAccess::parameters());
+    ThumbnailDatabaseAccess::initDatabaseErrorHandler(thumbnailsDBHandler);
 
     QApplication::restoreOverrideCursor();
 #endif
