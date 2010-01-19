@@ -38,7 +38,7 @@
 		<dbinitcmd></dbinitcmd>
 		
 		<dbactions>		  
-			<dbaction name="CreateDB" mode="transaction"><statement mode="query">CREATE TABLE AlbumRoots
+			<dbaction name="CreateDB" mode="transaction"><statement mode="plain">CREATE TABLE AlbumRoots
                             (id INTEGER PRIMARY KEY,
                              label TEXT,
                              status INTEGER NOT NULL,
@@ -46,7 +46,7 @@
                              identifier TEXT,
                              specificPath TEXT,
                              UNIQUE(identifier, specificPath))</statement>
-			<statement mode="query">CREATE TABLE Albums
+			<statement mode="plain">CREATE TABLE Albums
                             (id INTEGER PRIMARY KEY,
                              albumRoot INTEGER NOT NULL,
                              relativePath TEXT NOT NULL,
@@ -55,7 +55,7 @@
                              collection TEXT,
                              icon INTEGER,
                              UNIQUE(albumRoot, relativePath))</statement>
-			<statement mode="query"> CREATE TABLE Images
+			<statement mode="plain"> CREATE TABLE Images
                             (id INTEGER PRIMARY KEY,
                              album INTEGER,
                              name TEXT NOT NULL,
@@ -65,12 +65,12 @@
                              fileSize INTEGER,
                              uniqueHash TEXT,
                              UNIQUE (album, name))</statement>
-			<statement mode="query">CREATE TABLE ImageHaarMatrix
+			<statement mode="plain">CREATE TABLE ImageHaarMatrix
                             (imageid INTEGER PRIMARY KEY,
                              modificationDate DATETIME,
                              uniqueHash TEXT,
                              matrix BLOB)</statement>
-			<statement mode="query">CREATE TABLE ImageInformation
+			<statement mode="plain">CREATE TABLE ImageInformation
                             (imageid INTEGER PRIMARY KEY,
                              rating INTEGER,
                              creationDate DATETIME,
@@ -81,7 +81,7 @@
                              format TEXT,
                              colorDepth INTEGER,
 			     colorModel INTEGER);</statement>
-			<statement mode="query"> CREATE TABLE ImageMetadata
+			<statement mode="plain"> CREATE TABLE ImageMetadata
                             (imageid INTEGER PRIMARY KEY,
                              make TEXT,
                              model TEXT,
@@ -99,7 +99,7 @@
                              meteringMode INTEGER,
                              subjectDistance REAL,
                              subjectDistanceCategory INTEGER)</statement>
-			<statement mode="query">CREATE TABLE ImagePositions
+			<statement mode="plain">CREATE TABLE ImagePositions
                             (imageid INTEGER PRIMARY KEY,
                              latitude TEXT,
                              latitudeNumber REAL,
@@ -111,7 +111,7 @@
                              roll REAL,
                              accuracy REAL,
                              description TEXT)</statement>
-			<statement mode="query">CREATE TABLE ImageComments
+			<statement mode="plain">CREATE TABLE ImageComments
                             (id INTEGER PRIMARY KEY,
                              imageid INTEGER,
                              type INTEGER,
@@ -120,66 +120,66 @@
                              date DATETIME,
                              comment TEXT,
                              UNIQUE(imageid, type, language, author))</statement>
-			<statement mode="query"> CREATE TABLE ImageCopyright
+			<statement mode="plain"> CREATE TABLE ImageCopyright
                             (id INTEGER PRIMARY KEY,
                              imageid INTEGER,
                              property TEXT,
                              value TEXT,
                              extraValue TEXT,
                              UNIQUE(imageid, property, value, extraValue))</statement>
-			<statement mode="query">CREATE TABLE IF NOT EXISTS Tags
+			<statement mode="plain">CREATE TABLE IF NOT EXISTS Tags
                             (id INTEGER PRIMARY KEY,
                              pid INTEGER,
                              name TEXT NOT NULL,
                              icon INTEGER,
                              iconkde TEXT,
                              UNIQUE (name, pid))</statement>
-			<statement mode="query"> CREATE TABLE IF NOT EXISTS TagsTree
+			<statement mode="plain"> CREATE TABLE IF NOT EXISTS TagsTree
                             (id INTEGER NOT NULL,
                              pid INTEGER NOT NULL,
                              UNIQUE (id, pid))</statement>
-			<statement mode="query">CREATE TABLE IF NOT EXISTS ImageTags
+			<statement mode="plain">CREATE TABLE IF NOT EXISTS ImageTags
                             (imageid INTEGER NOT NULL,
                              tagid INTEGER NOT NULL,
                              UNIQUE (imageid, tagid))</statement>
-			<statement mode="query">CREATE TABLE IF NOT EXISTS ImageProperties
+			<statement mode="plain">CREATE TABLE IF NOT EXISTS ImageProperties
                             (imageid  INTEGER NOT NULL,
                              property TEXT    NOT NULL,
                              value    TEXT    NOT NULL,
                              UNIQUE (imageid, property))</statement>
-			<statement mode="query">CREATE TABLE IF NOT EXISTS Searches  
+			<statement mode="plain">CREATE TABLE IF NOT EXISTS Searches  
                             (id INTEGER PRIMARY KEY, 
                              type INTEGER, 
                              name TEXT NOT NULL, 
                              query TEXT NOT NULL)</statement>
-			<statement mode="query">CREATE TABLE DownloadHistory
+			<statement mode="plain">CREATE TABLE DownloadHistory
                             (id  INTEGER PRIMARY KEY,
                              identifier TEXT,
                              filename TEXT,
                              filesize INTEGER,
                              filedate DATETIME,
                              UNIQUE(identifier, filename, filesize, filedate))</statement>
-			<statement mode="query"> CREATE TABLE IF NOT EXISTS Settings         
+			<statement mode="plain"> CREATE TABLE IF NOT EXISTS Settings         
                             (keyword TEXT NOT NULL UNIQUE,
                             value TEXT)</statement></dbaction>
 
 			<!-- Indizes for V5 -->
-			<dbaction name="CreateIdx1" mode="transaction"><statement mode="query">CREATE INDEX dir_index  ON Images    (album);</statement></dbaction>
-			<dbaction name="CreateIdx2" mode="transaction"><statement mode="query">CREATE INDEX hash_index ON Images    (uniqueHash);</statement></dbaction>
-			<dbaction name="CreateIdx3" mode="transaction"><statement mode="query">CREATE INDEX tag_index  ON ImageTags (tagid);</statement></dbaction>
+			<dbaction name="CreateIdx1" mode="transaction"><statement mode="plain">CREATE INDEX dir_index  ON Images    (album);</statement></dbaction>
+			<dbaction name="CreateIdx2" mode="transaction"><statement mode="plain">CREATE INDEX hash_index ON Images    (uniqueHash);</statement></dbaction>
+			<dbaction name="CreateIdx3" mode="transaction"><statement mode="plain">CREATE INDEX tag_index  ON ImageTags (tagid);</statement></dbaction>
 			
 			<!-- Triggers for V5 -->
-			<dbaction name="CreateTriggerV5_1" mode="transaction"><statement mode="query">CREATE TRIGGER delete_albumroot DELETE ON AlbumRoots
+			<dbaction name="CreateTriggerV5_1" mode="transaction"><statement mode="plain">CREATE TRIGGER delete_albumroot DELETE ON AlbumRoots
 			BEGIN
 			DELETE FROM Albums
 			  WHERE Albums.albumRoot = OLD.id;
 			END;</statement></dbaction>
-			<dbaction name="CreateTriggerV5_2" mode="transaction"><statement mode="query">CREATE TRIGGER delete_album DELETE ON Albums
+			<dbaction name="CreateTriggerV5_2" mode="transaction"><statement mode="plain">CREATE TRIGGER delete_album DELETE ON Albums
 			BEGIN
 			DELETE FROM Images
 			  WHERE Images.album = OLD.id;
 			END;</statement></dbaction>
-			<dbaction name="CreateTriggerV5_3" mode="transaction"><statement mode="query">CREATE TRIGGER delete_image DELETE ON Images
+			<dbaction name="CreateTriggerV5_3" mode="transaction"><statement mode="plain">CREATE TRIGGER delete_image DELETE ON Images
 			BEGIN
 			DELETE FROM ImageTags
 			  WHERE imageid=OLD.id;
@@ -202,18 +202,18 @@
 			UPDATE Tags SET icon=null 
 			  WHERE icon=OLD.id;
 			END;</statement></dbaction>
-			<dbaction name="CreateTriggerV5_4" mode="transaction"><statement mode="query">CREATE TRIGGER delete_tag DELETE ON Tags
+			<dbaction name="CreateTriggerV5_4" mode="transaction"><statement mode="plain">CREATE TRIGGER delete_tag DELETE ON Tags
 			BEGIN
 			  DELETE FROM ImageTags WHERE tagid=OLD.id;
 			END;</statement></dbaction>
-			<dbaction name="CreateTriggerV5_5" mode="transaction"><statement mode="query">CREATE TRIGGER insert_tagstree AFTER INSERT ON Tags
+			<dbaction name="CreateTriggerV5_5" mode="transaction"><statement mode="plain">CREATE TRIGGER insert_tagstree AFTER INSERT ON Tags
 			BEGIN
 			  INSERT INTO TagsTree
 			    SELECT NEW.id, NEW.pid
 			    UNION
 			    SELECT NEW.id, pid FROM TagsTree WHERE id=NEW.pid;
 			END;</statement></dbaction>
-			<dbaction name="CreateTriggerV5_6" mode="transaction"><statement mode="query">CREATE TRIGGER delete_tagstree DELETE ON Tags
+			<dbaction name="CreateTriggerV5_6" mode="transaction"><statement mode="plain">CREATE TRIGGER delete_tagstree DELETE ON Tags
 			BEGIN
 			DELETE FROM Tags
 			  WHERE id  IN (SELECT id FROM TagsTree WHERE pid=OLD.id);
@@ -222,7 +222,7 @@
 			DELETE FROM TagsTree
 			    WHERE id=OLD.id;
 			END;</statement></dbaction>
-			<dbaction name="CreateTriggerV5_7" mode="transaction"><statement mode="query">CREATE TRIGGER move_tagstree UPDATE OF pid ON Tags
+			<dbaction name="CreateTriggerV5_7" mode="transaction"><statement mode="plain">CREATE TRIGGER move_tagstree UPDATE OF pid ON Tags
 			BEGIN
 			  DELETE FROM TagsTree
 			    WHERE
@@ -279,31 +279,33 @@
 
 			
 			<!-- Thumbnails Schema DB -->
-			<dbaction name="CreateThumbnailsDB_1" mode="transaction"><statement mode="query">CREATE TABLE Thumbnails 
+			<dbaction name="CreateThumbnailsDB" mode="transaction">
+					<statement mode="plain">CREATE TABLE Thumbnails 
                             (id INTEGER PRIMARY KEY, 
-                             type INTEGER, "
+                             type INTEGER, 
                              modificationDate DATETIME, 
                              orientationHint INTEGER, 
-                             data BLOB)</statement></dbaction>
-			     <dbaction name="CreateThumbnailsDB_2" mode="transaction"><statement mode="query">CREATE TABLE UniqueHashes 
+                             data BLOB)</statement>
+			     	<statement mode="plain">CREATE TABLE UniqueHashes 
                             (uniqueHash TEXT, 
                              fileSize INTEGER, 
                              thumbId INTEGER, 
-                             UNIQUE(uniqueHash, fileSize))</statement></dbaction>
-			     <dbaction name="CreateThumbnailsDB_3" mode="transaction"><statement mode="query">CREATE TABLE FilePaths 
+                             UNIQUE(uniqueHash, fileSize))</statement>
+			     	<statement mode="plain">CREATE TABLE FilePaths 
                             (path TEXT, 
                              thumbId INTEGER, 
-                             UNIQUE(path))</statement></dbaction>
-			     <dbaction name="CreateThumbnailsDB_4" mode="transaction"><statement mode="query">CREATE TABLE Settings         
+                             UNIQUE(path))</statement>
+			     	<statement mode="plain">CREATE TABLE Settings         
                             (keyword TEXT NOT NULL UNIQUE,
-                             value TEXT)</statement></dbaction>
+                             value TEXT)</statement>
+                 </dbaction>
 			     
 			     <!-- Thumbnails Indexes DB -->
-			     <dbaction name="CreateIndex_1" mode="transaction"><statement mode="query">CREATE INDEX id_uniqueHashes ON UniqueHashes (thumbId);</statement></dbaction>
-			     <dbaction name="CreateIndex_2" mode="transaction"><statement mode="query">CREATE INDEX id_filePaths ON FilePaths (thumbId);</statement></dbaction>
+			     <dbaction name="CreateIndex_1" mode="transaction"><statement mode="plain">CREATE INDEX id_uniqueHashes ON UniqueHashes (thumbId);</statement></dbaction>
+			     <dbaction name="CreateIndex_2" mode="transaction"><statement mode="plain">CREATE INDEX id_filePaths ON FilePaths (thumbId);</statement></dbaction>
 			     
 			     <!-- Thumbnails Trigger DB -->
-			     <dbaction name="CreateTrigger_1" mode="transaction"><statement mode="query">CREATE TRIGGER delete_thumbnails DELETE ON Thumbnails 
+			     <dbaction name="CreateTrigger_1" mode="transaction"><statement mode="plain">CREATE TRIGGER delete_thumbnails DELETE ON Thumbnails 
                                  BEGIN 
                                   DELETE FROM UniqueHashes WHERE UniqueHashes.thumbId = OLD.id; 
                                   DELETE FROM FilePaths WHERE FilePaths.thumbId = OLD.id; 
