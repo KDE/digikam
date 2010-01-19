@@ -219,7 +219,7 @@ void PreviewToolBar::readSettings(KConfigGroup& group)
 {
     int mode = group.readEntry("PreviewMode", (int)PreviewBothImagesVertCont);
     mode     = qMax((int)PreviewOriginalImage, mode);
-    mode     = qMin((int)NoPreviewMode, mode);
+    mode     = qMin((int)PreviewToggleOnMouseOver, mode);
     setPreviewMode((PreviewMode)mode);
 }
 
