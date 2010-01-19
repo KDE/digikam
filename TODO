@@ -8,7 +8,7 @@ post 1.0.0 mvc merge
  * model for the image view in cameraui
  * port thumbbar
  * Are there any non-model view lists in kipi interface:
-   * KipiImagecollectionSelector
+   * KipiImagecollectionSelector (TODO search albums not checkable)
  * duplicate search also contains a Qt3 Tree view
 
 Is this really needed?
