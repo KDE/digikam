@@ -40,6 +40,7 @@
 #include "albumfiltermodel.h"
 #include "albummanager.h"
 #include "albummodel.h"
+#include "albumsettings.h"
 #include "albumthumbnailloader.h"
 #include "collectionlocation.h"
 #include "collectionmanager.h"
@@ -80,8 +81,14 @@ void AlbumModelTest::initTestCase()
 
     kDebug() << "Using database path for test: " << dbPath;
 
+    AlbumSettings::instance()->setShowFolderTreeViewItemsCount(true);
+
     // use a testing database
     AlbumManager::instance();
+
+    connect(AlbumManager::instance(), SIGNAL(signalPAlbumsDirty(const QMap<int, int>&)),
+            this, SLOT(setLastPAlbumCountMap(const QMap<int, int>&)));
+
     AlbumManager::checkDatabaseDirsAfterFirstRun(QDir::temp().absoluteFilePath(
                     tempSuffix), QDir::temp().absoluteFilePath(tempSuffix));
     bool dbChangeGood = AlbumManager::instance()->setDatabase(
@@ -134,6 +141,9 @@ void AlbumModelTest::cleanupTestCase()
 
 void AlbumModelTest::init()
 {
+
+    palbumCountMap.clear();
+
     // insert some test data
 
     // physical albums
@@ -234,13 +244,23 @@ void AlbumModelTest::init()
 
 void AlbumModelTest::ensureItemCounts()
 {
-    kDebug() << "Waiting for AlbumManager and the IOSlave to create DAlbums...";
     // trigger listing job
-    AlbumManager::instance()->prepareItemCounts();
-    QEventLoop loop;
+    QEventLoop dAlbumLoop;
     connect(AlbumManager::instance(), SIGNAL(signalAllDAlbumsLoaded()),
-            &loop, SLOT(quit()));
-    loop.exec();
+            &dAlbumLoop, SLOT(quit()));
+    AlbumManager::instance()->prepareItemCounts();
+    kDebug() << "Waiting for AlbumManager and the IOSlave to create DAlbums...";
+    dAlbumLoop.exec();
+    kDebug() << "DAlbums were created";
+    while (palbumCountMap.size() < 8)
+    {
+        QEventLoop pAlbumLoop;
+        connect(AlbumManager::instance(), SIGNAL(signalPAlbumsDirty(const QMap<int, int>&)),
+                &pAlbumLoop, SLOT(quit()));
+        kDebug() << "Waiting for first PAlbum count map";
+        pAlbumLoop.exec();
+        kDebug() << "Got new PAlbum count map";
+    }
 }
 
 void AlbumModelTest::deletePAlbum(PAlbum *album)
@@ -249,6 +269,12 @@ void AlbumModelTest::deletePAlbum(PAlbum *album)
     u.setProtocol("file");
     u.setPath(album->folderPath());
     KIO::NetAccess::del(u, 0);
+}
+
+void AlbumModelTest::setLastPAlbumCountMap(const QMap<int, int> &map)
+{
+    kDebug() << "Receiving new count map "<< map;
+    palbumCountMap = map;
 }
 
 void AlbumModelTest::cleanup()
@@ -295,6 +321,64 @@ void AlbumModelTest::testPAlbumModel()
     test = new ModelTest(albumModel, 0);
     delete test;
     delete albumModel;
+
+}
+
+void AlbumModelTest::testDisablePAlbumCount()
+{
+
+    AlbumModel albumModel;
+    albumModel.setCountMap(palbumCountMap);
+    albumModel.setShowCount(true);
+
+    QRegExp countRegEx(".+ \\(\\d+\\)");
+    countRegEx.setMinimal(true);
+    QVERIFY(countRegEx.exactMatch("test (10)"));
+    QVERIFY(countRegEx.exactMatch("te st (10)"));
+    QVERIFY(countRegEx.exactMatch("te st (0)"));
+    QVERIFY(!countRegEx.exactMatch("te st ()"));
+    QVERIFY(!countRegEx.exactMatch("te st"));
+    QVERIFY(!countRegEx.exactMatch("te st (10) bla"));
+
+    // ensure that all albums except the root album have a count attached
+    QModelIndex rootIndex = albumModel.index(0, 0, QModelIndex());
+    QString rootTitle = albumModel.data(rootIndex, Qt::DisplayRole).toString();
+    QVERIFY(!countRegEx.exactMatch(rootTitle));
+    for (int collectionRow = 0; collectionRow < albumModel.rowCount(rootIndex); ++collectionRow)
+    {
+        QModelIndex collectionIndex = albumModel.index(collectionRow, 0, rootIndex);
+        QString collectionTitle = albumModel.data(collectionIndex, Qt::DisplayRole).toString();
+        QVERIFY2(countRegEx.exactMatch(collectionTitle), QString("'" + collectionTitle + "' matching error").toAscii().data());
+
+        for (int albumRow = 0; albumRow < albumModel.rowCount(collectionIndex); ++albumRow)
+        {
+            QModelIndex albumIndex = albumModel.index(albumRow, 0, collectionIndex);
+            QString albumTitle = albumModel.data(albumIndex, Qt::DisplayRole).toString();
+            QVERIFY2(countRegEx.exactMatch(albumTitle), QString("'" + albumTitle + "' matching error").toAscii().data());
+        }
+
+    }
+
+    // now disable showing the count
+    albumModel.setShowCount(false);
+
+    // ensure that no album has a count attached
+    rootTitle = albumModel.data(rootIndex, Qt::DisplayRole).toString();
+    QVERIFY(!countRegEx.exactMatch(rootTitle));
+    for (int collectionRow = 0; collectionRow < albumModel.rowCount(rootIndex); ++collectionRow)
+    {
+        QModelIndex collectionIndex = albumModel.index(collectionRow, 0, rootIndex);
+        QString collectionTitle = albumModel.data(collectionIndex, Qt::DisplayRole).toString();
+        QVERIFY2(!countRegEx.exactMatch(collectionTitle), QString("'" + collectionTitle + "' matching error").toAscii().data());
+
+        for (int albumRow = 0; albumRow < albumModel.rowCount(collectionIndex); ++albumRow)
+        {
+            QModelIndex albumIndex = albumModel.index(albumRow, 0, collectionIndex);
+            QString albumTitle = albumModel.data(albumIndex, Qt::DisplayRole).toString();
+            QVERIFY2(!countRegEx.exactMatch(albumTitle), QString("'" + albumTitle + "' matching error").toAscii().data());
+        }
+
+    }
 
 }
 

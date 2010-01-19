@@ -26,7 +26,8 @@
 
 // Qt includes
 
-#include <QtCore/QObject>
+#include <qobject.h>
+#include <qmap.h>
 
 namespace Digikam
 {
@@ -50,6 +51,7 @@ private Q_SLOTS:
     void cleanup();
 
     void testPAlbumModel();
+    void testDisablePAlbumCount();
     void testDAlbumModel();
     void testDAlbumCount();
     void testDAlbumContainsAlbums();
@@ -58,6 +60,8 @@ private Q_SLOTS:
     void testSAlbumModel();
 
     void deletePAlbum(Digikam::PAlbum *album);
+
+    void setLastPAlbumCountMap(const QMap<int, int> &map);
 
 private:
 
@@ -83,6 +87,8 @@ private:
     Digikam::TAlbum *talbumChild1Root0;
     Digikam::TAlbum *talbumChild0Child1Root0;
     Digikam::TAlbum *talbumChild0Root1;
+
+    QMap<int, int> palbumCountMap;
 
 };
 
