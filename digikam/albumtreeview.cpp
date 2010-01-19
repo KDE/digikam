@@ -1009,7 +1009,7 @@ AlbumTreeView::AlbumTreeView(AlbumModel *model, QWidget *parent)
     albumModel()->setDragDropHandler(new AlbumDragDropHandler(albumModel()));
 
     connect(AlbumManager::instance(), SIGNAL(signalPAlbumsDirty(const QMap<int, int>&)),
-             m_albumModel, SLOT(setCountMap(const QMap<int, int>&)));
+            m_albumModel, SLOT(setCountMap(const QMap<int, int>&)));
 
     expand(m_albumFilterModel->rootAlbumIndex());
     setRootIsDecorated(false);

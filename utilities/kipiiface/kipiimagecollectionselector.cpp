@@ -90,14 +90,19 @@ public:
     SearchTextBar  *tagSearchBar;
     SearchTextBar  *searchSearchBar;
 
-    void prepareTreeView(AbstractAlbumTreeView *treeView)
+    void prepareTreeView(AbstractCheckableAlbumTreeView *treeView)
     {
+
+        treeView->checkableModel()->setShowCount(false);
+        treeView->checkableModel()->setCheckable(true);
+
         treeView->setRootIsDecorated(true);
         treeView->setSortingEnabled(true);
         treeView->setSelectAlbumOnClick(false);
         treeView->setExpandOnSingleClick(false);
         treeView->setEnableContextMenu(false);
         treeView->setDragEnabled(false);
+
     }
 
     void fillCollectionsFromCheckedModel(QList<KIPI::ImageCollection> &collectionList,
@@ -135,8 +140,6 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface *iface, Q
 
     KVBox *albumBox  = new KVBox(d->tab);
     d->albumModel = new AlbumModel(AbstractAlbumModel::IgnoreRootAlbum, albumBox);
-    d->albumModel->setCheckable(true);
-    d->albumModel->setShowCount(false);
     d->albumTreeView = new AlbumTreeView(d->albumModel, albumBox);
     d->albumTreeView->setEntryPrefix("AlbumTreeView");
     d->albumTreeView->setConfigGroup(configGroup);
@@ -157,8 +160,6 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface *iface, Q
 
     KVBox *tagBox = new KVBox(d->tab);
     d->tagModel = new TagModel(AbstractAlbumModel::IgnoreRootAlbum, tagBox);
-    d->tagModel->setCheckable(true);
-    d->tagModel->setShowCount(false);
     d->tagTreeView = new TagTreeView(d->tagModel, tagBox);
     d->tagTreeView->setEntryPrefix("TagTreeView");
     d->tagTreeView->setConfigGroup(configGroup);
@@ -179,8 +180,6 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface *iface, Q
 
     KVBox *searchBox = new KVBox(d->tab);
     d->searchModel = new SearchModel(searchBox);
-    d->searchModel->setCheckable(true);
-    d->searchModel->setShowCount(false);
     d->searchTreeView = new SearchTreeView(searchBox, d->searchModel);
     d->searchTreeView->setEntryPrefix("SearchTreeView");
     d->searchTreeView->setConfigGroup(configGroup);
