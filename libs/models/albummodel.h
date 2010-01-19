@@ -70,8 +70,9 @@ protected:
 
 // ------------------------------------------------------------------
 
-class SearchModel : public AbstractSpecificAlbumModel
+class SearchModel : public AbstractCheckableAlbumModel
 {
+    Q_OBJECT
 public:
 
     /// Create a model containing searches
@@ -95,6 +96,11 @@ public:
 protected:
 
     virtual QVariant albumData(Album *a, int role) const;
+    virtual Album* albumForId(int id) const;
+
+private Q_SLOTS:
+
+    void albumSettingsChanged();
 
 protected:
 

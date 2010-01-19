@@ -153,7 +153,7 @@ protected:
 /**
  * Filter model for searches that can filter by search type
  */
-class SearchFilterModel : public AlbumFilterModel
+class SearchFilterModel : public CheckableAlbumFilterModel
 {
 public:
 

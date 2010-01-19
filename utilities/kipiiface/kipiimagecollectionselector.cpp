@@ -32,11 +32,12 @@
 
 // KDE includes
 
+#include <kdebug.h>
 #include <kdialog.h>
+#include <kiconloader.h>
 #include <klocale.h>
 #include <ktabwidget.h>
 #include <kvbox.h>
-#include <kdebug.h>
 
 // LibKIPI includes
 
@@ -45,12 +46,10 @@
 // Local includes
 
 #include "album.h"
-#include "albummanager.h"
-#include "albumthumbnailloader.h"
-#include "treefolderitem.h"
-#include "searchfolderview.h"
-#include "kipiinterface.h"
+#include "albumsettings.h"
+#include "albumtreeview.h"
 #include "kipiimagecollection.h"
+#include "kipiinterface.h"
 
 namespace Digikam
 {
@@ -59,86 +58,151 @@ class KipiImageCollectionSelectorPriv
 {
 public:
 
-    KipiImageCollectionSelectorPriv()
+    KipiImageCollectionSelectorPriv() :
+        tab(0),
+        albumModel(0),
+        albumTreeView(0),
+        tagModel(0),
+        tagTreeView(0),
+        searchModel(0),
+        searchTreeView(0),
+        iface(0),
+        albumSearchBar(0),
+        tagSearchBar(0),
+        searchSearchBar(0)
     {
-        tab               = 0;
-        albumsView        = 0;
-        tagsView          = 0;
-        searchesView      = 0;
-        iface             = 0;
-        albumsSearchBar   = 0;
-        tagsSearchBar     = 0;
-        searchesSearchBar = 0;
     }
 
-    QTreeWidget*   albumsView;
-    QTreeWidget*   tagsView;
-    QTreeWidget*   searchesView;
+    KTabWidget     *tab;
 
-    KTabWidget*    tab;
+    AlbumModel     *albumModel;
+    AlbumTreeView  *albumTreeView;
 
-    KipiInterface* iface;
+    TagModel       *tagModel;
+    TagTreeView    *tagTreeView;
 
-    SearchTextBar* albumsSearchBar;
-    SearchTextBar* tagsSearchBar;
-    SearchTextBar* searchesSearchBar;
+    SearchModel    *searchModel;
+    SearchTreeView *searchTreeView;
+
+    KipiInterface  *iface;
+
+    SearchTextBar  *albumSearchBar;
+    SearchTextBar  *tagSearchBar;
+    SearchTextBar  *searchSearchBar;
+
+    void prepareTreeView(AbstractAlbumTreeView *treeView)
+    {
+        treeView->setRootIsDecorated(true);
+        treeView->setSortingEnabled(true);
+        treeView->setSelectAlbumOnClick(false);
+        treeView->setExpandOnSingleClick(false);
+        treeView->setEnableContextMenu(false);
+        treeView->setDragEnabled(false);
+    }
+
+    void fillCollectionsFromCheckedModel(QList<KIPI::ImageCollection> &collectionList,
+                                         AbstractCheckableAlbumModel *model,
+                                         const QString &ext)
+    {
+
+        foreach(Album *album, model->checkedAlbums())
+        {
+
+            if (!album)
+            {
+                continue;
+            }
+
+            KipiImageCollection *col = new KipiImageCollection(KipiImageCollection::AllItems, album, ext);
+            collectionList.append(col);
+
+        }
+
+    }
+
 };
 
 KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface *iface, QWidget *parent)
                            : KIPI::ImageCollectionSelector(parent),
                              d(new KipiImageCollectionSelectorPriv)
 {
+
+    KSharedConfigPtr config = KGlobal::config();
+    KConfigGroup configGroup = config->group("KipiImageCollectionSelector");
+
     d->iface = iface;
     d->tab   = new KTabWidget(this);
 
-    KVBox *vbox1  = new KVBox(d->tab);
-    d->albumsView = new QTreeWidget(vbox1);
-    d->albumsView->setDragEnabled(false);
-    d->albumsView->setDropIndicatorShown(false);
-    d->albumsView->setAcceptDrops(false);
-    d->albumsView->header()->hide();
+    KVBox *albumBox  = new KVBox(d->tab);
+    d->albumModel = new AlbumModel(AbstractAlbumModel::IgnoreRootAlbum, albumBox);
+    d->albumModel->setCheckable(true);
+    d->albumModel->setShowCount(false);
+    d->albumTreeView = new AlbumTreeView(d->albumModel, albumBox);
+    d->albumTreeView->setEntryPrefix("AlbumTreeView");
+    d->albumTreeView->setConfigGroup(configGroup);
+    d->prepareTreeView(d->albumTreeView);
 
-    d->albumsSearchBar = new SearchTextBar(vbox1, "KipiImageCollectionSelectorAlbumSearchBar");
+    d->albumSearchBar = new SearchTextBar(albumBox, "KipiImageCollectionSelectorAlbumSearchBar");
+    d->albumSearchBar->setEntryPrefix("AlbumSearchBar");
+    d->albumSearchBar->setConfigGroup(configGroup);
+    d->albumSearchBar->setModel(d->albumModel, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
+    d->albumSearchBar->setFilterModel(d->albumTreeView->albumFilterModel());
 
-    vbox1->setMargin(0);
-    vbox1->setSpacing(KDialog::spacingHint());
-    vbox1->setStretchFactor(d->albumsView, 10);
-
-    // -------------------------------------------------------------------------------
-
-    KVBox *vbox2 = new KVBox(d->tab);
-    d->tagsView  = new QTreeWidget(vbox2);
-    d->tagsView->setDragEnabled(false);
-    d->tagsView->setDropIndicatorShown(false);
-    d->tagsView->setAcceptDrops(false);
-    d->tagsView->header()->hide();
-
-    d->tagsSearchBar = new SearchTextBar(vbox2, "KipiImageCollectionSelectorTagSearchBar");
-
-    vbox2->setMargin(0);
-    vbox2->setSpacing(KDialog::spacingHint());
-    vbox2->setStretchFactor(d->tagsView, 10);
+    albumBox->setMargin(0);
+    albumBox->setSpacing(KDialog::spacingHint());
+    albumBox->setStretchFactor(d->albumTreeView, 10);
+    albumBox->setStretchFactor(d->albumSearchBar, 1);
 
     // -------------------------------------------------------------------------------
 
-    KVBox *vbox3    = new KVBox(d->tab);
-    d->searchesView = new QTreeWidget(vbox3);
-    d->searchesView->setDragEnabled(false);
-    d->searchesView->setDropIndicatorShown(false);
-    d->searchesView->setAcceptDrops(false);
-    d->searchesView->header()->hide();
+    KVBox *tagBox = new KVBox(d->tab);
+    d->tagModel = new TagModel(AbstractAlbumModel::IgnoreRootAlbum, tagBox);
+    d->tagModel->setCheckable(true);
+    d->tagModel->setShowCount(false);
+    d->tagTreeView = new TagTreeView(d->tagModel, tagBox);
+    d->tagTreeView->setEntryPrefix("TagTreeView");
+    d->tagTreeView->setConfigGroup(configGroup);
+    d->prepareTreeView(d->tagTreeView);
 
-    d->searchesSearchBar = new SearchTextBar(vbox3, "KipiImageCollectionSelectorTagSearchBar");
+    d->tagSearchBar = new SearchTextBar(tagBox, "KipiImageCollectionSelectorTagSearchBar");
+    d->tagSearchBar->setEntryPrefix("TagSearchBar");
+    d->tagSearchBar->setConfigGroup(configGroup);
+    d->tagSearchBar->setModel(d->tagModel, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
+    d->tagSearchBar->setFilterModel(d->tagTreeView->albumFilterModel());
 
-    vbox3->setMargin(0);
-    vbox3->setSpacing(KDialog::spacingHint());
-    vbox3->setStretchFactor(d->searchesView, 10);
+    tagBox->setMargin(0);
+    tagBox->setSpacing(KDialog::spacingHint());
+    tagBox->setStretchFactor(d->tagTreeView, 10);
+    tagBox->setStretchFactor(d->tagSearchBar, 1);
 
     // -------------------------------------------------------------------------------
 
-    d->tab->addTab(vbox1, i18n("My Albums"));
-    d->tab->addTab(vbox2, i18n("My Tags"));
-    d->tab->addTab(vbox3, i18n("My Searches"));
+    KVBox *searchBox = new KVBox(d->tab);
+    d->searchModel = new SearchModel(searchBox);
+    d->searchModel->setCheckable(true);
+    d->searchModel->setShowCount(false);
+    d->searchTreeView = new SearchTreeView(searchBox, d->searchModel);
+    d->searchTreeView->setEntryPrefix("SearchTreeView");
+    d->searchTreeView->setConfigGroup(configGroup);
+    d->searchTreeView->filteredModel()->listAllSearches();
+    d->prepareTreeView(d->searchTreeView);
+
+    d->searchSearchBar = new SearchTextBar(searchBox, "KipiImageCollectionSelectorSearchSearchBar");
+    d->searchSearchBar->setEntryPrefix("SearchSearchBar");
+    d->searchSearchBar->setConfigGroup(configGroup);
+    d->searchSearchBar->setModel(d->searchModel, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
+    d->searchSearchBar->setFilterModel(d->searchTreeView->albumFilterModel());
+
+    searchBox->setMargin(0);
+    searchBox->setSpacing(KDialog::spacingHint());
+    searchBox->setStretchFactor(d->searchTreeView, 10);
+    searchBox->setStretchFactor(d->searchSearchBar, 1);
+
+    // -------------------------------------------------------------------------------
+
+    d->tab->addTab(albumBox, i18n("My Albums"));
+    d->tab->addTab(tagBox, i18n("My Tags"));
+    d->tab->addTab(searchBox, i18n("My Searches"));
 
     QHBoxLayout *hlay = new QHBoxLayout(this);
     hlay->addWidget(d->tab);
@@ -147,119 +211,41 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface *iface, Q
 
     // ------------------------------------------------------------------------------------
 
-    populateTreeView(AlbumManager::instance()->allPAlbums(), d->albumsView);
-    populateTreeView(AlbumManager::instance()->allTAlbums(), d->tagsView);
-    populateTreeView(AlbumManager::instance()->allSAlbums(), d->searchesView);
+    connect(d->albumModel, SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
+            this, SIGNAL(selectionChanged()));
+
+    connect(d->tagModel, SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
+            this, SIGNAL(selectionChanged()));
+
+    connect(d->searchModel, SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
+            this, SIGNAL(selectionChanged()));
 
     // ------------------------------------------------------------------------------------
 
-    connect(d->albumsView, SIGNAL(itemChanged(QTreeWidgetItem*, int)),
-            this, SIGNAL(selectionChanged()));
+    kDebug() << "Restoring view state";
 
-    connect(d->tagsView, SIGNAL(itemChanged(QTreeWidgetItem*, int)),
-            this, SIGNAL(selectionChanged()));
+    d->albumTreeView->loadState();
+    d->albumSearchBar->loadState();
+    d->tagTreeView->loadState();
+    d->tagSearchBar->loadState();
+    d->searchTreeView->loadState();
+    d->searchSearchBar->loadState();
 
-    connect(d->searchesView, SIGNAL(itemChanged(QTreeWidgetItem*, int)),
-            this, SIGNAL(selectionChanged()));
-
-    connect(d->albumsSearchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
-            this, SLOT(slotAlbumsSearchTextChanged(const SearchTextSettings&)));
-
-    connect(d->tagsSearchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
-            this, SLOT(slotTagsSearchTextChanged(const SearchTextSettings&)));
-
-    connect(d->searchesSearchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
-            this, SLOT(slotSearchesSearchTextChanged(const SearchTextSettings&)));
 }
 
 KipiImageCollectionSelector::~KipiImageCollectionSelector()
 {
+
+    kDebug() << "Saving view state";
+
+    d->albumTreeView->saveState();
+    d->albumSearchBar->saveState();
+    d->tagTreeView->saveState();
+    d->tagSearchBar->saveState();
+    d->searchTreeView->saveState();
+    d->searchSearchBar->saveState();
+
     delete d;
-}
-
-void KipiImageCollectionSelector::populateTreeView(const AlbumList& aList, QTreeWidget *view)
-{
-    for (AlbumList::const_iterator it = aList.constBegin(); it != aList.constEnd(); ++it)
-    {
-        Album *album                 = *it;
-        TreeAlbumCheckListItem *item = 0;
-
-        if (album->isRoot())
-        {
-            TreeAlbumItem *ritem = new TreeAlbumItem(view, album);
-            ritem->setExpanded(true);
-            PAlbum* palbum = dynamic_cast<PAlbum*>(album);
-            if (palbum)
-                ritem->setIcon(0, AlbumThumbnailLoader::instance()->getStandardAlbumIcon(palbum));
-            else
-            {
-                TAlbum* talbum = dynamic_cast<TAlbum*>(album);
-                if (talbum)
-                    ritem->setIcon(0, AlbumThumbnailLoader::instance()->getStandardTagIcon(talbum));
-                else
-                {
-                    SAlbum* salbum = dynamic_cast<SAlbum*>(album);
-                    if (salbum)
-                        ritem->setIcon(0, KIcon("edit-find"));
-                }
-            }
-        }
-        else
-        {
-            TreeAlbumCheckListItem* pitem = 0;
-            if (album->parent())
-                pitem = static_cast<TreeAlbumCheckListItem*>(album->parent()->extraData(view));
-
-            if (!pitem)
-            {
-                kWarning() << "Failed to find parent for Album " << album->title();
-                continue;
-            }
-
-            SAlbum* salbum = dynamic_cast<SAlbum*>(album);
-            if (salbum &&
-                (salbum->isTemporarySearch() || salbum->isDuplicatesSearch()))
-                continue;
-
-            item = new TreeAlbumCheckListItem(pitem, album);
-        }
-
-        if (item)
-        {
-            PAlbum* palbum = dynamic_cast<PAlbum*>(album);
-            if (palbum)
-                item->setIcon(0, AlbumThumbnailLoader::instance()->getStandardAlbumIcon(palbum));
-            else
-            {
-                TAlbum* talbum = dynamic_cast<TAlbum*>(album);
-                if (talbum)
-                    item->setIcon(0, AlbumThumbnailLoader::instance()->getStandardTagIcon(talbum));
-                else
-                {
-                    SAlbum* salbum = dynamic_cast<SAlbum*>(album);
-                    if (salbum && !salbum->isDuplicatesSearch())
-                    {
-                        if (salbum->isTimelineSearch())
-                            item->setIcon(0, KIcon("clock"));
-                        else if (salbum->isHaarSearch())
-                            item->setIcon(0, KIcon("tools-wizard"));
-                        else if (salbum->isMapSearch())
-                            item->setIcon(0, KIcon("applications-internet"));
-                        else
-                            item->setIcon(0, KIcon("edit-find"));
-                    }
-                }
-            }
-
-            if (album == AlbumManager::instance()->currentAlbum())
-            {
-                item->setCheckState(0, Qt::Checked);
-                item->setExpanded(true);
-                view->setCurrentItem(item);
-                view->scrollToItem(item);
-            }
-        }
-    }
 }
 
 QList<KIPI::ImageCollection> KipiImageCollectionSelector::selectedImageCollections() const
@@ -271,246 +257,13 @@ QList<KIPI::ImageCollection> KipiImageCollectionSelector::selectedImageCollectio
 #endif
     QList<KIPI::ImageCollection> list;
 
-    QTreeWidgetItemIterator it(d->albumsView, QTreeWidgetItemIterator::Checked);
-    while (*it)
-    {
-        TreeAlbumCheckListItem* item = dynamic_cast<TreeAlbumCheckListItem*>(*it);
-        if (item)
-        {
-            KipiImageCollection *col = new KipiImageCollection(KipiImageCollection::AllItems, item->album(), ext);
-            list.append(col);
-         }
-         ++it;
-    }
-
-    QTreeWidgetItemIterator it2(d->tagsView, QTreeWidgetItemIterator::Checked);
-    while (*it2)
-    {
-        TreeAlbumCheckListItem* item = dynamic_cast<TreeAlbumCheckListItem*>(*it2);
-        if (item)
-        {
-            KipiImageCollection *col = new KipiImageCollection(KipiImageCollection::AllItems, item->album(), ext);
-            list.append(col);
-         }
-         ++it2;
-    }
-
-    QTreeWidgetItemIterator it3(d->searchesView, QTreeWidgetItemIterator::Checked);
-    while (*it3)
-    {
-        TreeAlbumCheckListItem* item = dynamic_cast<TreeAlbumCheckListItem*>(*it3);
-        if (item)
-        {
-            KipiImageCollection *col = new KipiImageCollection(KipiImageCollection::AllItems, item->album(), ext);
-            list.append(col);
-         }
-         ++it3;
-    }
+    d->fillCollectionsFromCheckedModel(list, d->albumModel, ext);
+    d->fillCollectionsFromCheckedModel(list, d->tagModel, ext);
+    d->fillCollectionsFromCheckedModel(list, d->searchModel, ext);
 
     kDebug() << list.count() << " collection items selected";
 
     return list;
-}
-
-void KipiImageCollectionSelector::slotAlbumsSearchTextChanged(const SearchTextSettings& settings)
-{
-    QString search       = settings.text;
-    bool atleastOneMatch = false;
-
-    AlbumList pList = AlbumManager::instance()->allPAlbums();
-    for (AlbumList::const_iterator it = pList.constBegin(); it != pList.constEnd(); ++it)
-    {
-        PAlbum* palbum  = (PAlbum*)(*it);
-
-        // don't touch the root Album
-        if (palbum->isRoot())
-            continue;
-
-        bool match = palbum->title().contains(search, settings.caseSensitive);
-        if (!match)
-        {
-            // check if any of the parents match the search
-            Album* parent = palbum->parent();
-            while (parent && !parent->isRoot())
-            {
-                if (parent->title().contains(search, settings.caseSensitive))
-                {
-                    match = true;
-                    break;
-                }
-
-                parent = parent->parent();
-            }
-        }
-
-        if (!match)
-        {
-            // check if any of the children match the search
-            AlbumIterator it(palbum);
-            while (it.current())
-            {
-                if ((*it)->title().contains(search, settings.caseSensitive))
-                {
-                    match = true;
-                    break;
-                }
-                ++it;
-            }
-        }
-
-        TreeAlbumCheckListItem* viewItem = (TreeAlbumCheckListItem*) palbum->extraData(d->albumsView);
-
-        if (match)
-        {
-            atleastOneMatch = true;
-
-            if (viewItem)
-                viewItem->setHidden(false);
-        }
-        else
-        {
-            if (viewItem)
-            {
-                viewItem->setHidden(true);
-            }
-        }
-    }
-
-    d->albumsSearchBar->slotSearchResult(atleastOneMatch);
-}
-
-void KipiImageCollectionSelector::slotTagsSearchTextChanged(const SearchTextSettings& settings)
-{
-    QString search       = settings.text;
-    bool atleastOneMatch = false;
-
-    AlbumList tList = AlbumManager::instance()->allTAlbums();
-    for (AlbumList::const_iterator it = tList.constBegin(); it != tList.constEnd(); ++it)
-    {
-        TAlbum* talbum  = (TAlbum*)(*it);
-
-        // don't touch the root Album
-        if (talbum->isRoot())
-            continue;
-
-        bool match = talbum->title().contains(search, settings.caseSensitive);
-        if (!match)
-        {
-            // check if any of the parents match the search
-            Album* parent = talbum->parent();
-            while (parent && !parent->isRoot())
-            {
-                if (parent->title().contains(search, settings.caseSensitive))
-                {
-                    match = true;
-                    break;
-                }
-
-                parent = parent->parent();
-            }
-        }
-
-        if (!match)
-        {
-            // check if any of the children match the search
-            AlbumIterator it(talbum);
-            while (it.current())
-            {
-                if ((*it)->title().contains(search, settings.caseSensitive))
-                {
-                    match = true;
-                    break;
-                }
-                ++it;
-            }
-        }
-
-        TreeAlbumCheckListItem* viewItem = (TreeAlbumCheckListItem*) talbum->extraData(d->tagsView);
-
-        if (match)
-        {
-            atleastOneMatch = true;
-
-            if (viewItem)
-                viewItem->setHidden(false);
-        }
-        else
-        {
-            if (viewItem)
-            {
-                viewItem->setHidden(true);
-            }
-        }
-    }
-
-    d->tagsSearchBar->slotSearchResult(atleastOneMatch);
-}
-
-void KipiImageCollectionSelector::slotSearchesSearchTextChanged(const SearchTextSettings& settings)
-{
-    QString search       = settings.text;
-    bool atleastOneMatch = false;
-
-    AlbumList tList = AlbumManager::instance()->allSAlbums();
-    for (AlbumList::const_iterator it = tList.constBegin(); it != tList.constEnd(); ++it)
-    {
-        SAlbum* salbum  = (SAlbum*)(*it);
-
-        // don't touch the root Album
-        if (salbum->isRoot())
-            continue;
-
-        bool match = salbum->title().contains(search, settings.caseSensitive);
-        if (!match)
-        {
-            // check if any of the parents match the search
-            Album* parent = salbum->parent();
-            while (parent && !parent->isRoot())
-            {
-                if (parent->title().contains(search, settings.caseSensitive))
-                {
-                    match = true;
-                    break;
-                }
-
-                parent = parent->parent();
-            }
-        }
-
-        if (!match)
-        {
-            // check if any of the children match the search
-            AlbumIterator it(salbum);
-            while (it.current())
-            {
-                if ((*it)->title().contains(search, settings.caseSensitive))
-                {
-                    match = true;
-                    break;
-                }
-                ++it;
-            }
-        }
-
-        TreeAlbumCheckListItem* viewItem = (TreeAlbumCheckListItem*) salbum->extraData(d->searchesView);
-
-        if (match)
-        {
-            atleastOneMatch = true;
-
-            if (viewItem)
-                viewItem->setHidden(false);
-        }
-        else
-        {
-            if (viewItem)
-            {
-                viewItem->setHidden(true);
-            }
-        }
-    }
-
-    d->searchesSearchBar->slotSearchResult(atleastOneMatch);
 }
 
 }  // namespace Digikam

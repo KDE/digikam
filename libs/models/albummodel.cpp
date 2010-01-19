@@ -27,12 +27,14 @@
 
 #include <kcalendarsystem.h>
 #include <kglobal.h>
+#include <kiconloader.h>
 #include <klocale.h>
 #include <kdebug.h>
 
 // Local includes
 
 #include "albummanager.h"
+#include "albumsettings.h"
 #include "albumthumbnailloader.h"
 
 namespace Digikam
@@ -97,10 +99,18 @@ Album* TagModel::albumForId(int id) const
 // ------------------------------------------------------------------
 
 SearchModel::SearchModel(QObject *parent)
-            : AbstractSpecificAlbumModel(Album::SEARCH,
+            : AbstractCheckableAlbumModel(Album::SEARCH,
                                          AlbumManager::instance()->findSAlbum(0),
                                          IgnoreRootAlbum, parent)
 {
+
+    setShowCount(false);
+
+    // handle search icons
+    albumSettingsChanged();
+    connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
+            this, SLOT(albumSettingsChanged()));
+
 }
 
 SAlbum *SearchModel::albumForIndex(const QModelIndex& index) const
@@ -173,6 +183,19 @@ QVariant SearchModel::albumData(Album *a, int role) const
     }
 
     return AbstractSpecificAlbumModel::albumData(a, role);
+}
+
+Album* SearchModel::albumForId(int id) const
+{
+    return AlbumManager::instance()->findSAlbum(id);
+}
+
+void SearchModel::albumSettingsChanged()
+{
+    setPixmapForMapSearches(SmallIcon("applications-internet", AlbumSettings::instance()->getTreeViewIconSize()));
+    setPixmapForHaarSearches(SmallIcon("tools-wizard", AlbumSettings::instance()->getTreeViewIconSize()));
+    setPixmapForNormalSearches(SmallIcon("edit-find", AlbumSettings::instance()->getTreeViewIconSize()));
+    setPixmapForTimelineSearches(SmallIcon("chronometer", AlbumSettings::instance()->getTreeViewIconSize()));
 }
 
 // ------------------------------------------------------------------

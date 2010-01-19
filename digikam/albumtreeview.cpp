@@ -335,6 +335,16 @@ void AbstractAlbumTreeView::slotSelectionChanged()
 
 void AbstractAlbumTreeView::mousePressEvent(QMouseEvent *e)
 {
+
+    if (d->selectAlbumOnClick && e->button() == Qt::LeftButton)
+    {
+        QModelIndex index = indexVisuallyAt(e->pos());
+        if (index.isValid())
+        {
+            AlbumManager::instance()->setCurrentAlbum(m_albumFilterModel->albumForIndex(index));
+        }
+    }
+
     if (d->expandOnSingleClick && e->button() == Qt::LeftButton)
     {
         QModelIndex index = indexVisuallyAt(e->pos());
@@ -345,11 +355,6 @@ void AbstractAlbumTreeView::mousePressEvent(QMouseEvent *e)
             bool expanded = isExpanded(index);
             if (index == currentIndex() || !expanded)
                 setExpanded(index, !expanded);
-
-            if (d->selectAlbumOnClick)
-            {
-                AlbumManager::instance()->setCurrentAlbum(m_albumFilterModel->albumForIndex(index));
-            }
         }
     }
     else if (m_checkOnMiddleClick && e->button() == Qt::MidButton)
@@ -1082,7 +1087,7 @@ TagModificationHelper *TagTreeView::tagModificationHelper() const
 // --------------------------------------- //
 
 SearchTreeView::SearchTreeView(QWidget *parent, SearchModel *searchModel)
-    : AbstractAlbumTreeView(searchModel, 0, parent)
+    : AbstractCheckableAlbumTreeView(searchModel, parent)
 {
     m_filteredModel = new SearchFilterModel(this);
     m_filteredModel->setSourceSearchModel(searchModel);

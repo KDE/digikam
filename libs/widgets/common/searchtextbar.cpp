@@ -131,9 +131,9 @@ SearchTextBar::~SearchTextBar()
 void SearchTextBar::doLoadState()
 {
     KConfigGroup group = getConfigGroup();
-    setCompletionMode((KGlobalSettings::Completion)group.readEntry(d->optionAutoCompletionModeEntry,
+    setCompletionMode((KGlobalSettings::Completion)group.readEntry(entryName(d->optionAutoCompletionModeEntry),
                       (int)KGlobalSettings::completionMode()));
-    d->settings.caseSensitive = (Qt::CaseSensitivity)group.readEntry(d->optionCaseSensitiveEntry,
+    d->settings.caseSensitive = (Qt::CaseSensitivity)group.readEntry(entryName(d->optionCaseSensitiveEntry),
                                                                      (int)Qt::CaseInsensitive);
 }
 
@@ -141,10 +141,10 @@ void SearchTextBar::doSaveState()
 {
     KConfigGroup group = getConfigGroup();
     if (completionMode() != KGlobalSettings::completionMode())
-        group.writeEntry(d->optionAutoCompletionModeEntry, (int)completionMode());
+        group.writeEntry(entryName(d->optionAutoCompletionModeEntry), (int)completionMode());
     else
-        group.deleteEntry(d->optionAutoCompletionModeEntry);
-    group.writeEntry(d->optionCaseSensitiveEntry, (int)d->settings.caseSensitive);
+        group.deleteEntry(entryName(d->optionAutoCompletionModeEntry));
+    group.writeEntry(entryName(d->optionCaseSensitiveEntry), (int)d->settings.caseSensitive);
     group.sync();
 }
 

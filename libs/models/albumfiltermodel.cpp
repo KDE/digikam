@@ -289,7 +289,7 @@ bool CheckableAlbumFilterModel::matches(Album *album) const
 // -----------------------------------------------------------------------------
 
 SearchFilterModel::SearchFilterModel(QObject *parent)
-            : AlbumFilterModel(parent), m_searchType(-1)
+            : CheckableAlbumFilterModel(parent), m_searchType(-1)
 {
 }
 

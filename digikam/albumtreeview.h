@@ -391,7 +391,7 @@ protected:
     TagModificationHelper *m_modificationHelper;
 };
 
-class SearchTreeView : public AbstractAlbumTreeView
+class SearchTreeView : public AbstractCheckableAlbumTreeView
 {
     Q_OBJECT
 public:

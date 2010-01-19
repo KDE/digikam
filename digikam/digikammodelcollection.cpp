@@ -57,8 +57,6 @@ DigikamModelCollection::DigikamModelCollection() :
     d->tagFilterModel->setCheckable(true);
 
     d->searchModel = new SearchModel();
-    //d->searchModel->addReplaceName(SAlbum::getTemporaryTitle(
-      //              DatabaseSearch::AdvancedSearch), i18n("Current Search"));
 
     d->dateAlbumModel = new DateAlbumModel();
     // set icons initially
@@ -107,10 +105,6 @@ DateAlbumModel *DigikamModelCollection::getDateAlbumModel() const
 
 void DigikamModelCollection::albumSettingsChanged()
 {
-    d->searchModel->setPixmapForMapSearches(SmallIcon("applications-internet", AlbumSettings::instance()->getTreeViewIconSize()));
-    d->searchModel->setPixmapForHaarSearches(SmallIcon("tools-wizard", AlbumSettings::instance()->getTreeViewIconSize()));
-    d->searchModel->setPixmapForNormalSearches(SmallIcon("edit-find", AlbumSettings::instance()->getTreeViewIconSize()));
-    d->searchModel->setPixmapForTimelineSearches(SmallIcon("chronometer", AlbumSettings::instance()->getTreeViewIconSize()));
 
     d->dateAlbumModel->setPixmaps(
                     SmallIcon(
