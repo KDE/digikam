@@ -75,7 +75,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 066 ==> 163284 : Choose smart default zoom factor for each filter preview.
 067 ==> 148072 : zoom tool for sharpen tool is ankward.
 068 ==> 221987 : "zoom to 100%" not working.
-069 ==>
+069 ==> 207888 : Resetting tool properties to Defaults should not reset options for showing original/target image.
+070 ==> 
+
 
 
 
