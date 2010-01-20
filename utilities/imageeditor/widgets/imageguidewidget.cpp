@@ -255,12 +255,18 @@ void ImageGuideWidget::slotChangeGuideSize(int size)
     updatePreview();
 }
 
+void ImageGuideWidget::updatePreview()
+{
+    updatePixmap();
+    update();
+}
+
 void ImageGuideWidget::updatePixmap()
 {
     QPainter p(d->pixmap);
     p.setRenderHint(QPainter::Antialiasing, true);
     p.setBackgroundMode(Qt::TransparentMode);
-    
+
     QString text;
     QRect textRect, fontRect;
     QFontMetrics fontMt = p.fontMetrics();
@@ -504,13 +510,7 @@ void ImageGuideWidget::paintEvent(QPaintEvent*)
     p.end();
 }
 
-void ImageGuideWidget::updatePreview()
-{
-    updatePixmap();
-    update();
-}
-
-void ImageGuideWidget::timerEvent(QTimerEvent *e)
+void ImageGuideWidget::timerEvent(QTimerEvent* e)
 {
     if (e->timerId() == d->timerID)
     {
@@ -524,7 +524,7 @@ void ImageGuideWidget::timerEvent(QTimerEvent *e)
     }
 }
 
-void ImageGuideWidget::resizeEvent(QResizeEvent *e)
+void ImageGuideWidget::resizeEvent(QResizeEvent* e)
 {
     blockSignals(true);
     delete d->pixmap;
@@ -557,7 +557,7 @@ void ImageGuideWidget::resizeEvent(QResizeEvent *e)
     emit signalResized();
 }
 
-void ImageGuideWidget::mousePressEvent(QMouseEvent *e)
+void ImageGuideWidget::mousePressEvent(QMouseEvent* e)
 {
     if (e->button() == Qt::LeftButton)
     {
@@ -577,7 +577,7 @@ void ImageGuideWidget::mousePressEvent(QMouseEvent *e)
     }
 }
 
-void ImageGuideWidget::mouseReleaseEvent(QMouseEvent *e)
+void ImageGuideWidget::mouseReleaseEvent(QMouseEvent* e)
 {
     if (d->rect.contains(e->x(), e->y()))
     {
@@ -665,7 +665,7 @@ void ImageGuideWidget::mouseReleaseEvent(QMouseEvent *e)
     }
 }
 
-void ImageGuideWidget::mouseMoveEvent(QMouseEvent *e)
+void ImageGuideWidget::mouseMoveEvent(QMouseEvent* e)
 {
     if (d->rect.contains(e->x(), e->y()))
     {
