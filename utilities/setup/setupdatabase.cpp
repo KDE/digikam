@@ -119,6 +119,7 @@ void SetupDatabase::applySettings()
 
             // clear other fields
             d->databaseWidget->internalServer->setChecked(false);
+            settings->setInternalDatabaseServer(false);
             settings->setDatabaseConnectoptions("");
             settings->setDatabaseHostName("");
             settings->setDatabasePort(-1);
