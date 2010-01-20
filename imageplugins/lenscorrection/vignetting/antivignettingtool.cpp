@@ -140,7 +140,7 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
     
     d->addVignettingCheck = new QCheckBox(i18n("Add vignetting"));
     d->addVignettingCheck->setWhatsThis(i18n("This option add vignetting to the image instead for removing it."
-                                               "Use it for creative effects."));
+                                             "Use it for creative effects."));
     d->addVignettingCheck->setChecked(false);
     
     // -------------------------------------------------------------
@@ -153,7 +153,7 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QLabel *label1  = new QLabel(i18n("Density:"));
+    QLabel *label1  = new QLabel(i18n("Amount:"));
     d->densityInput = new RDoubleNumInput();
     d->densityInput->setDecimals(1);
     d->densityInput->input()->setRange(1.0, 20.0, 0.1, true);
@@ -163,7 +163,7 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QLabel *label2 = new QLabel(i18n("Power:"));
+    QLabel *label2 = new QLabel(i18n("Feather:"));
     d->powerInput  = new RDoubleNumInput();
     d->powerInput->setDecimals(1);
     d->powerInput->input()->setRange(0.1, 2.0, 0.1, true);
@@ -176,7 +176,7 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
     QLabel *label3 = new QLabel(i18n("Radius:"));
     d->radiusInput = new RDoubleNumInput();
     d->radiusInput->setDecimals(1);
-    d->radiusInput->input()->setRange(0.1, 1.5, 0.1, true);
+    d->radiusInput->input()->setRange(0.1, 1.5, 0.05, true);
     d->radiusInput->setDefaultValue(1.0);
     d->radiusInput->setWhatsThis(i18n("This value is the radius of the center filter. It is a "
                                       "multiple of the half-diagonal measure of the image, at which "
@@ -380,7 +380,10 @@ void AntiVignettingTool::prepareEffect()
         
     ImageIface* iface = d->previewWidget->imageIface();
     int orgWidth               = iface->originalWidth();
-    int orgHeight              = iface->originalHeight();
+    int orgHeight              = iface->originalHeight();  
+    int previewWidth           = iface->previewWidth();
+    int previewHeight          = iface->previewHeight();
+    DImg imTemp                = iface->getOriginalImg()->smoothScale(previewWidth, previewHeight, Qt::KeepAspectRatio);
     QSize ps(orgWidth, orgHeight);
     ps.scale(QSize(120, 120), Qt::KeepAspectRatio);
 
@@ -397,7 +400,7 @@ void AntiVignettingTool::prepareEffect()
     d->maskPreviewLabel->setPixmap(pix);
 
     setFilter(dynamic_cast<DImgThreadedFilter *>(
-                       new AntiVignetting(iface->getOriginalImg(), this, dens, power, rad, xoffset, yoffset, true, addvignetting)));
+                       new AntiVignetting(&imTemp, this, dens, power, rad, xoffset, yoffset, true, addvignetting)));
 }
 
 void AntiVignettingTool::prepareFinal()

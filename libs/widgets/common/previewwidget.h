@@ -81,6 +81,7 @@ Q_SIGNALS:
     void signalZoomFactorChanged(double);
     void signalContentsMovedEvent(bool);
     void signalSelectionTakeFocus();
+    void signalResized();
 
 public Q_SLOTS:
 
@@ -110,6 +111,7 @@ protected:
     int    tileSize();
     void   updateAutoZoom(AutoZoomMode mode = ZoomInOrOut);
     void   updateContentsSize();
+    void   updateZoomAndSize(bool alwaysFitToWindow);
     void   clearCache();
     QRect  previewRect();
 

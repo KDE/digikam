@@ -50,17 +50,10 @@ class DIGIKAM_EXPORT ImageRegionWidget : public PreviewWidget
 
 public:
 
-    ImageRegionWidget(int w=470, int h=350, QWidget* parent=0);
+    ImageRegionWidget(QWidget* parent=0);
     ~ImageRegionWidget();
 
-    void   setContentsPosition(int x, int y, bool targetDone);
-    void   setCenterImageRegionPosition();
-
-    /** To get image region including original or/and target area depending of separate view mode.
-        The region is given using not scaled image unit.*/
-    QRect  getOriginalImageRegion();
-
-    /** To get target image region area to render */
+    /** To get target image region area to render. */
     QRect  getOriginalImageRegionToRender();
 
     /** To get target image region image to use for render operations */
@@ -68,28 +61,23 @@ public:
 
     void   setPreviewImage(const DImg& img);
 
-    void   backupPixmapRegion();
-    void   restorePixmapRegion();
-
     void   setHighLightPoints(const QPolygon& pointsList);
-    void   drawSeparateView();
-    
+    void   setCenterImageRegionPosition();
+
     void   ICCSettingsChanged();
     void   exposureSettingsChanged();
 
 Q_SIGNALS:
 
-    void signalResized();
     void signalOriginalClipFocusChanged();
 
 public Q_SLOTS:
 
     void slotPreviewModeChanged(int mode);
-    void slotOriginalImageRegionChanged(bool target);
+    void slotOriginalImageRegionChanged(bool targetDone);
 
 private Q_SLOTS:
 
-    void slotInitGui();
     void slotZoomFactorChanged();
     void slotPanIconSelectionMoved(const QRect& rect, bool targetDone);
     void slotSelectionTakeFocus();
@@ -97,21 +85,31 @@ private Q_SLOTS:
 
 private:
 
+    void   setContentsSize();
+    void   setContentsPosition(int x, int y, bool targetDone);
+
+    /** To get image region including original or/and target area depending of separate view mode.
+        The region is given using not scaled image unit.*/
+    QRect  getOriginalImageRegion();
+
     QRect  getLocalTargetImageRegion();
     QRect  getLocalImageRegionToRender();
-    void   viewportPaintExtraData();
+
+    void   backupPixmapRegion();
+    void   restorePixmapRegion();
+
+    void   enterEvent(QEvent*);
+    void   leaveEvent(QEvent*);
+    void   contentsWheelEvent(QWheelEvent*);
+
     int    previewWidth();
     int    previewHeight();
     bool   previewIsNull();
     void   resetPreview();
-    void   setContentsSize();
-    void   enterEvent(QEvent*);
-    void   leaveEvent(QEvent*);
-    void   resizeEvent(QResizeEvent*);
-    void   contentsWheelEvent(QWheelEvent*);
     QImage previewToQImage() const;
-    void   drawText(QPainter* p, const QRect& rect, const QString& text);
 
+    void   viewportPaintExtraData();
+    void   drawText(QPainter* p, const QRect& rect, const QString& text);
     inline void paintPreview(QPixmap* pix, int sx, int sy, int sw, int sh);
 
 private:

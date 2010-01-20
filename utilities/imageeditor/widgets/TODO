@@ -1,0 +1,11 @@
+Factoring editor tools preview:
+
+221988 -  "fit to window" and zooming out not working
+196469 -  Zoom and pan should be available in all tools
+220567 -  Zooming, selecting picture part in editor tools
+148235 -  More comfortable panning and zooming of preview image
+197316 -  Two ways to do a simple zooming
+222975 -  Wrong editorwindow zoom behaviour                        (Fixed)
+163284 -  Choose smart default zoom factor for each filter preview (Fixed)
+148072 -  zoom tool for sharpen tool is ankward                    (Fixed)
+221987 -  "zoom to 100%" not working                               (Fixed)

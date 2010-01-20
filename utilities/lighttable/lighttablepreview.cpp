@@ -82,7 +82,6 @@ public:
         selected             = false;
         dragAndDropEnabled   = true;
         loadFullImageSize    = false;
-        currentFitWindowZoom = 0;
         previewSize          = 1024;
         keepZoom             = false;
     }
@@ -95,8 +94,6 @@ public:
     bool               keepZoom;
 
     int                previewSize;
-
-    double             currentFitWindowZoom;
 
     QString            path;
     QString            nextPath;
@@ -451,26 +448,6 @@ void LightTablePreview::resizeEvent(QResizeEvent* e)
     }
 
     updateZoomAndSize(false);
-}
-
-void LightTablePreview::updateZoomAndSize(bool alwaysFitToWindow)
-{
-    // Set zoom for fit-in-window as minimum, but don't scale up images
-    // that are smaller than the available space, only scale down.
-    double zoom = calcAutoZoomFactor(ZoomInOnly);
-    setZoomMin(zoom);
-    setZoomMax(zoom*12.0);
-
-    // Is currently the zoom factor set to fit to window? Then set it again to fit the new size.
-    if (zoomFactor() < zoom || alwaysFitToWindow || zoomFactor() == d->currentFitWindowZoom)
-    {
-        setZoomFactor(zoom);
-    }
-
-    // store which zoom factor means it is fit to window
-    d->currentFitWindowZoom = zoom;
-
-    updateContentsSize();
 }
 
 int LightTablePreview::previewWidth()

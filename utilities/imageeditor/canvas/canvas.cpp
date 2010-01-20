@@ -412,6 +412,11 @@ QRect Canvas::getSelectedArea()
     return ( QRect(x, y, w, h) );
 }
 
+QRect Canvas::visibleArea()
+{
+    return ( QRect(contentsX(), contentsY(), visibleWidth(), visibleHeight()) );
+}
+
 DImgInterface *Canvas::interface() const
 {
     return d->im;

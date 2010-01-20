@@ -103,7 +103,7 @@ void EditorToolIface::loadTool(EditorTool* tool)
     {
         connect(d->editor, SIGNAL(signalPreviewModeChanged(int)),
                 view, SLOT(slotPreviewModeChanged(int)));
-                
+
         view->slotPreviewModeChanged(d->editor->previewMode());
     }
 
@@ -112,13 +112,16 @@ void EditorToolIface::loadTool(EditorTool* tool)
     {
         connect(d->editor, SIGNAL(signalPreviewModeChanged(int)),
                 view2, SLOT(slotPreviewModeChanged(int)));
-                
+
+        view2->setZoomFactor(d->editor->editorStackView()->canvas()->zoomFactor());
+        QPoint tl = d->editor->editorStackView()->canvas()->visibleArea().topLeft();
+        view2->setContentsPos(tl.x(), tl.y());
         view2->slotPreviewModeChanged(d->editor->previewMode());
     }
 
     updateExposureSettings();
     updateICCSettings();
-    setToolInfoMessage(QString());    
+    setToolInfoMessage(QString());
 }
 
 void EditorToolIface::unLoadTool()
@@ -135,7 +138,7 @@ void EditorToolIface::unLoadTool()
         d->editor->editorStackView()->setZoomFactor(d->editor->editorStackView()->canvas()->zoomFactor());
     delete d->tool;
     d->tool = 0;
-    
+
     // Reset info label in status bar with canvas selection info.
     d->editor->slotSelected(!d->editor->m_canvas->getSelectedArea().isNull());
 }

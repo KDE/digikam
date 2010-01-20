@@ -22,7 +22,6 @@ Name[ja]=ImagePlugin_OilPaint
 Name[km]=ImagePlugin_OilPaint
 Name[lv]=ImagePlugin_OilPaint
 Name[nb]=ImagePlugin_OilPaint
-Name[nds]=ImagePlugin_OilPaint
 Name[ne]=ImagePlugin_OilPaint
 Name[nl]=Afbeeldingsplugin_Olieverf
 Name[pa]=ImagePlugin_OilPaint
@@ -65,7 +64,6 @@ Comment[ja]=digiKam 油絵効果プラグイン
 Comment[km]=កម្មវិធី​ជំនួយ​បែបផែន​រូបភាព​គំនូរ​ប្រេង​សម្រាប់ digiKam
 Comment[lv]=DigiKam spraudnis eļļas gleznas efektam
 Comment[nb]=digiKam programtillegg for oljemaleireffekter
-Comment[nds]=digiKam-Moduul för Öölbildeffekten
 Comment[ne]=डिजिक्यामका लागि आयल पेन्ट छवि प्रभाव प्लगइन
 Comment[nl]=Digikam-plugin voor olieverfafbeeldingen
 Comment[pl]=Wtyczka do programu digiKam zmniejszajÄca szum

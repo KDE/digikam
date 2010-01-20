@@ -21,7 +21,6 @@ Name[ja]=ImagePlugin_InPainting
 Name[km]=ImagePlugin_InPainting
 Name[lv]=ImagePlugin_InPainting
 Name[nb]=ImagePlugin_InPainting
-Name[nds]=ImagePlugin_InPainting
 Name[ne]=ImagePlugin_InPainting
 Name[nl]=Afbeeldingsplugin_Inkleuren
 Name[pa]=ImagePlugin_InPainting
@@ -62,8 +61,8 @@ Comment[is]=Íforrit fyrir digiKam til að fjarlægja óæskilega hluti úr mynd
 Comment[it]=Estensione di digiKam per reintegrare una fotografia
 Comment[ja]=digiKam 写真修復プラグイン
 Comment[km]=កម្មវិធី​ជំនួយ​ដើម្បី digiKam ដើម្បី inpaint រូបថត
+Comment[lv]=DigiKam spraudnis fotogrāfiju rekonstruēšanai
 Comment[nb]=digiKam programtillegg for overmailing
-Comment[nds]=digiKam-Moduul för de Fotokorrektuur dör Övermalen
 Comment[ne]=फोटोग्राफ इनपेन्ट गर्नका लागि डिजिक्याम प्लगइन
 Comment[nl]=Digikam-plugin voor het inkleuren van een foto
 Comment[pl]=Comment=Wtyczka do programu digiKam umoÅ¼liwiajÄca zamalowanie fragmentÃ³w zdjÄcia

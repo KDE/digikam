@@ -111,7 +111,6 @@ private:
     int    previewHeight();
     bool   previewIsNull();
     void   resetPreview();
-    void   updateZoomAndSize(bool alwaysFitToWindow);
     QImage previewToQImage() const;
 
     inline void paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh);

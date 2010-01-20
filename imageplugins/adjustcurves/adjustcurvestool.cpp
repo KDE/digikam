@@ -155,7 +155,7 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
                                 EditorToolSettings::Ok|
                                 EditorToolSettings::Cancel);
 
-    d->gboxSettings->setTools( EditorToolSettings::Histogram);
+    d->gboxSettings->setTools(EditorToolSettings::Histogram);
     d->gboxSettings->setHistogramType(Digikam::LRGBA);
 
     d->gboxSettings->histogramBox()->histogram()->setWhatsThis(i18n("Here you can see the target preview "
@@ -193,11 +193,11 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
     connect(d->curvesBox, SIGNAL(signalCurvesChanged()),
             this, SLOT(slotTimer()));
 
-    connect(d->previewWidget, SIGNAL(spotPositionChangedFromOriginal( const Digikam::DColor &, const QPoint & )),
-            this, SLOT(slotSpotColorChanged( const Digikam::DColor & )));
+    connect(d->previewWidget, SIGNAL(spotPositionChangedFromOriginal(const Digikam::DColor&, const QPoint&)),
+            this, SLOT(slotSpotColorChanged(const Digikam::DColor&)));
 
-    connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
-            this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
+    connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget(const Digikam::DColor&, const QPoint&)),
+            this, SLOT(slotColorSelectedFromTarget(const Digikam::DColor&)));
 
     connect(d->previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));
@@ -207,9 +207,9 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
 
     connect(d->curvesBox, SIGNAL(signalChannelReset(int)),
             this, SLOT(slotResetCurrentChannel()));
-//
+
     connect(d->curvesBox, SIGNAL(signalPickerChanged(int)),
-            this, SLOT(slotPickerColorButtonActived()));
+            this, SLOT(slotPickerColorButtonActived(int)));
 }
 
 AdjustCurvesTool::~AdjustCurvesTool()
@@ -218,8 +218,10 @@ AdjustCurvesTool::~AdjustCurvesTool()
     delete d;
 }
 
-void AdjustCurvesTool::slotPickerColorButtonActived()
+void AdjustCurvesTool::slotPickerColorButtonActived(int type)
 {
+    if (type == CurvesBox::NoPicker) return;
+
     // Save previous rendering mode and toggle to original image.
     d->currentPreviewMode = d->previewWidget->previewMode();
     d->previewWidget->slotPreviewModeChanged(PreviewToolBar::PreviewOriginalImage);
@@ -365,7 +367,7 @@ void AdjustCurvesTool::slotScaleChanged()
 void AdjustCurvesTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(d->configGroupName);
+    KConfigGroup group        = config->group(d->configGroupName);
 
     d->curvesBox->reset();
     d->curvesBox->readCurveSettings(group, d->configCurveEntry);
@@ -386,7 +388,7 @@ void AdjustCurvesTool::readSettings()
 void AdjustCurvesTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(d->configGroupName);
+    KConfigGroup group        = config->group(d->configGroupName);
     group.writeEntry(d->configHistogramChannelEntry, d->gboxSettings->histogramBox()->channel());
     group.writeEntry(d->configHistogramScaleEntry,   (int)d->gboxSettings->histogramBox()->scale());
 

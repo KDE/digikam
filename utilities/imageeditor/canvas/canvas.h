@@ -103,6 +103,7 @@ public:
     int    imageWidth();
     int    imageHeight();
     QRect  getSelectedArea();
+    QRect  visibleArea();
 
     // If current image file format is only available in read only,
     // typically all RAW image file formats.

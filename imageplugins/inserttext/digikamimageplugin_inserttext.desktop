@@ -22,7 +22,6 @@ Name[ja]=ImagePlugin_InsertText
 Name[km]=ImagePlugin_InsertText
 Name[lv]=ImagePlugin_InsertText
 Name[nb]=ImagePlugin_InsertText
-Name[nds]=ImagePlugin_InsertText
 Name[ne]=ImagePlugin_InsertText
 Name[nl]=Afbeeldingsplugin_TekstInvoegen
 Name[pa]=ImagePlugin_InsertText
@@ -65,7 +64,6 @@ Comment[ja]=digiKam テキスト挿入プラグイン
 Comment[km]=កម្មវិធី​បញ្ចូល​អត្ថបទ​ទៅ​រូបភាព​សម្រាប់ digiKam
 Comment[lv]=DigiKam spraudnis teksta ievietošanai attēlā
 Comment[nb]=digiKam programtillegg for å legge til tekst
-Comment[nds]=digiKam-Moduul för't Infögen vun Text in en Bild
 Comment[ne]=डिजिक्यामका लागि छवि प्लगइनमा पाठ घुसाउनुहोस्
 Comment[nl]=Digikam-plugin voor het invoegen van tekst
 Comment[pl]=Wtyczka do programu digiKam dodajÄca tekst do zdjÄcia
