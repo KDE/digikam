@@ -209,7 +209,7 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
             this, SLOT(slotResetCurrentChannel()));
 
     connect(d->curvesBox, SIGNAL(signalPickerChanged(int)),
-            this, SLOT(slotPickerColorButtonActived()));
+            this, SLOT(slotPickerColorButtonActived(int)));
 }
 
 AdjustCurvesTool::~AdjustCurvesTool()
@@ -218,8 +218,10 @@ AdjustCurvesTool::~AdjustCurvesTool()
     delete d;
 }
 
-void AdjustCurvesTool::slotPickerColorButtonActived()
+void AdjustCurvesTool::slotPickerColorButtonActived(int type)
 {
+    if (type == CurvesBox::NoPicker) return;
+
     // Save previous rendering mode and toggle to original image.
     d->currentPreviewMode = d->previewWidget->previewMode();
     d->previewWidget->slotPreviewModeChanged(PreviewToolBar::PreviewOriginalImage);
