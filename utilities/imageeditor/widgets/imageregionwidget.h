@@ -62,23 +62,22 @@ public:
     void   setPreviewImage(const DImg& img);
 
     void   setHighLightPoints(const QPolygon& pointsList);
-    
+    void   setCenterImageRegionPosition();
+
     void   ICCSettingsChanged();
     void   exposureSettingsChanged();
 
 Q_SIGNALS:
 
-    void signalResized();
     void signalOriginalClipFocusChanged();
 
 public Q_SLOTS:
 
     void slotPreviewModeChanged(int mode);
-    void slotOriginalImageRegionChanged(bool target);
+    void slotOriginalImageRegionChanged(bool targetDone);
 
 private Q_SLOTS:
 
-    void slotInitGui();
     void slotZoomFactorChanged();
     void slotPanIconSelectionMoved(const QRect& rect, bool targetDone);
     void slotSelectionTakeFocus();
@@ -88,8 +87,7 @@ private:
 
     void   setContentsSize();
     void   setContentsPosition(int x, int y, bool targetDone);
-    void   setCenterImageRegionPosition();
-    
+
     /** To get image region including original or/and target area depending of separate view mode.
         The region is given using not scaled image unit.*/
     QRect  getOriginalImageRegion();
@@ -102,7 +100,6 @@ private:
 
     void   enterEvent(QEvent*);
     void   leaveEvent(QEvent*);
-    void   resizeEvent(QResizeEvent*);
     void   contentsWheelEvent(QWheelEvent*);
 
     int    previewWidth();
