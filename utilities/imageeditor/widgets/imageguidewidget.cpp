@@ -38,7 +38,7 @@
 
 #include <kstandarddirs.h>
 #include <kcursor.h>
-#include <kglobal.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -113,7 +113,7 @@ public:
     DImg        preview;
 };
 
-ImageGuideWidget::ImageGuideWidget(QWidget *parent,
+ImageGuideWidget::ImageGuideWidget(QWidget* parent,
                                    bool spotVisible, int guideMode,
                                    const QColor& guideColor, int guideSize,
                                    bool blink, bool useImageSelection)
