@@ -155,7 +155,7 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
                                 EditorToolSettings::Ok|
                                 EditorToolSettings::Cancel);
 
-    d->gboxSettings->setTools( EditorToolSettings::Histogram);
+    d->gboxSettings->setTools(EditorToolSettings::Histogram);
     d->gboxSettings->setHistogramType(Digikam::LRGBA);
 
     d->gboxSettings->histogramBox()->histogram()->setWhatsThis(i18n("Here you can see the target preview "
@@ -365,7 +365,7 @@ void AdjustCurvesTool::slotScaleChanged()
 void AdjustCurvesTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(d->configGroupName);
+    KConfigGroup group        = config->group(d->configGroupName);
 
     d->curvesBox->reset();
     d->curvesBox->readCurveSettings(group, d->configCurveEntry);
@@ -386,7 +386,7 @@ void AdjustCurvesTool::readSettings()
 void AdjustCurvesTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(d->configGroupName);
+    KConfigGroup group        = config->group(d->configGroupName);
     group.writeEntry(d->configHistogramChannelEntry, d->gboxSettings->histogramBox()->channel());
     group.writeEntry(d->configHistogramScaleEntry,   (int)d->gboxSettings->histogramBox()->scale());
 
