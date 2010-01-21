@@ -1086,15 +1086,19 @@ CollectionLocation CollectionManager::locationForUrl(const KUrl& fileUrl)
     return locationForPath(fileUrl.toLocalFile(KUrl::RemoveTrailingSlash));
 }
 
-CollectionLocation CollectionManager::locationForPath(const QString& filePath)
+CollectionLocation CollectionManager::locationForPath(const QString& givenPath)
 {
     DatabaseAccess access;
     foreach (AlbumRootLocation *location, d->locations)
     {
         QString rootPath = location->albumRootPath();
-        //kDebug() << "Testing location " << location->id() << filePath << rootPath;
+        QString filePath = QDir::fromNativeSeparators(givenPath);
         if (!rootPath.isEmpty() && filePath.startsWith(rootPath))
-            return *location;
+        {
+            // see also bug #221155 for extra checks
+            if (filePath == rootPath || filePath.startsWith(rootPath + "/"))
+                return *location;
+        }
     }
     return CollectionLocation();
 }
