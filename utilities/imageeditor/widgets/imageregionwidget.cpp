@@ -197,15 +197,15 @@ void ImageRegionWidget::viewportPaintExtraData()
         QFontMetrics fontMt = p.fontMetrics();
 
         QString text;
-        QRect textRect, fontRect;
-
-        // Target region.
-        QRect region = getLocalTargetImageRegion();
-        QRect rt(contentsToViewport(region.topLeft()), contentsToViewport(region.bottomRight()));
+        QRect region, textRect, fontRect;
 
         // Original region.
         region = getLocalImageRegionToRender();
         QRect ro(contentsToViewport(region.topLeft()), contentsToViewport(region.bottomRight()));
+
+        // Target region.
+        region = getLocalImageRegionToRender();
+        QRect rt(contentsToViewport(region.topLeft()), contentsToViewport(region.bottomRight()));
 
         p.translate(previewRect().topLeft());
 
@@ -239,6 +239,12 @@ void ImageRegionWidget::viewportPaintExtraData()
         else if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesVert ||
                  d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesVertCont)
         {
+            if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesVert)
+                rt.translate(rt.width(), 0);
+
+            if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesVertCont)
+                ro.translate(-ro.width(), 0);
+
             p.drawPixmap(rt.x(), rt.y(), d->pixmapRegion, 0, 0, rt.width(), rt.height());
 
             p.setPen(QPen(Qt::white, 2, Qt::SolidLine));
@@ -248,16 +254,13 @@ void ImageRegionWidget::viewportPaintExtraData()
 
             text     = i18n("Target");
             fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text);
+
             textRect.setTopLeft(QPoint(rt.topLeft().x()+20, rt.topLeft().y()+20));
             textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2) );
             drawText(&p, textRect, text);
 
             text     = i18n("Original");
             fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text);
-
-            if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesVertCont)
-                ro.translate(-ro.width(), 0);
-
             textRect.setTopLeft(QPoint(ro.topLeft().x()+20, ro.topLeft().y()+20));
             textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2 ) );
             drawText(&p, textRect, text);
@@ -265,6 +268,12 @@ void ImageRegionWidget::viewportPaintExtraData()
         else if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorz ||
                  d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorzCont)
         {
+            if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorz)
+                rt.translate(0, rt.height());
+
+            if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorzCont)
+                ro.translate(0, -ro.height());
+
             p.drawPixmap(rt.x(), rt.y(), d->pixmapRegion, 0, 0, rt.width(), rt.height());
 
             p.setPen(QPen(Qt::white, 2, Qt::SolidLine));
@@ -274,15 +283,13 @@ void ImageRegionWidget::viewportPaintExtraData()
 
             text     = i18n("Target");
             fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text);
+
             textRect.setTopLeft(QPoint(rt.topLeft().x()+20, rt.topLeft().y()+20));
             textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2) );
             drawText(&p, textRect, text);
 
             text     = i18n("Original");
             fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text);
-
-            if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorzCont)
-                ro.translate(0, -ro.height());
 
             textRect.setTopLeft(QPoint(ro.topLeft().x()+20, ro.topLeft().y()+20));
             textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2 ) );
@@ -413,18 +420,6 @@ QRect ImageRegionWidget::getOriginalImageRegionToRender()
     return (rect);
 }
 
-QRect ImageRegionWidget::getLocalTargetImageRegion()
-{
-    QRect region = getLocalImageRegionToRender();
-
-    if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesVert)
-        region.translate(region.width(), 0);
-    else if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorz)
-        region.translate(0, region.height());
-
-    return region;
-}
-
 void ImageRegionWidget::setCenterImageRegionPosition()
 {
     center(contentsWidth()/2, contentsHeight()/2);
@@ -473,39 +468,6 @@ void ImageRegionWidget::setPreviewImage(const DImg& img)
 DImg ImageRegionWidget::getOriginalRegionImage()
 {
     return (d->image.copy(getOriginalImageRegionToRender()));
-}
-
-void ImageRegionWidget::setContentsSize()
-{
-PreviewWidget::setContentsSize();
-return;
-
-    switch (d->renderingPreviewMode)
-    {
-        case PreviewToolBar::PreviewOriginalImage:
-        case PreviewToolBar::PreviewBothImagesVertCont:
-        case PreviewToolBar::PreviewBothImagesHorzCont:
-        case PreviewToolBar::PreviewTargetImage:
-        case PreviewToolBar::PreviewToggleOnMouseOver:
-        {
-            PreviewWidget::setContentsSize();
-            break;
-        }
-        case PreviewToolBar::PreviewBothImagesVert:
-        {
-            resizeContents(zoomWidth()+visibleWidth()/2, zoomHeight());
-            break;
-        }
-        case PreviewToolBar::PreviewBothImagesHorz:
-        {
-            resizeContents(zoomWidth(), zoomHeight()+visibleHeight()/2);
-            break;
-        }
-        default:
-        {
-            kWarning() << "Unknown separation view specified";
-        }
-    }
 }
 
 void ImageRegionWidget::contentsWheelEvent(QWheelEvent* e)
