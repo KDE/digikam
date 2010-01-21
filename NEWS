@@ -80,7 +80,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 071 ==> 221162 : Add collection with smb://xxx path should give better warning.
 072 ==> 221933 : menu disbabled when F4 in digikam and e.g. sharpening was previously open.
 073 ==> 220231 : button "last used tags" always empty.
-074 ==> 
+074 ==> 223050 : Unable to have directories with the same name case-insensitively.
+075 ==> 
 
 
 
