@@ -1176,7 +1176,9 @@ void Canvas::setFitToWindow(bool fit)
     d->autoZoom = fit;
 
     if (d->autoZoom)
+    {
         updateAutoZoom();
+    }
     else
     {
         d->zoom = 1.0;
