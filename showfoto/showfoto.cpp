@@ -302,6 +302,9 @@ ShowFoto::~ShowFoto()
 {
     unLoadImagePlugins();
 
+    delete m_canvas;
+    m_canvas = 0;
+
     Digikam::ThumbnailLoadThread::cleanUp();
     Digikam::LoadingCacheInterface::cleanUp();
 #if KDCRAW_VERSION < 0x000400
