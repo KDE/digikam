@@ -257,8 +257,8 @@ void Canvas::load(const QString& filename, IOFileSettingsContainer *IOFileSettin
 {
     reset();
 
-    d->im->load(filename, IOFileSettings);
     emit signalPrepareToLoad();
+    d->im->load(filename, IOFileSettings);
 }
 
 void Canvas::slotImageLoaded(const QString& filePath, bool success)
