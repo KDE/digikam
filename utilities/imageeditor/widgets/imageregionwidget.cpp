@@ -247,13 +247,13 @@ void ImageRegionWidget::viewportPaintExtraData()
             p.setPen(QPen(Qt::red, 2, Qt::DotLine));
             p.drawLine(rt.topLeft().x(), rt.topLeft().y()+1, rt.bottomLeft().x(), rt.bottomLeft().y()-1);
 
-            text = i18n("Target");
+            text     = i18n("Target");
             fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text);
             textRect.setTopLeft(QPoint(rt.topLeft().x()+20, rt.topLeft().y()+20));
             textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2) );
             drawText(&p, textRect, text);
 
-            text = i18n("Original");
+            text     = i18n("Original");
             fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text);
 
             if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesVertCont)
@@ -346,6 +346,76 @@ void ImageRegionWidget::drawText(QPainter* p, const QRect& rect, const QString& 
     p->drawText(rect, text);
 }
 
+QRect ImageRegionWidget::getLocalImageRegionToRender()
+{
+    QRect region;
+    QRect pr = previewRect();
+    int pX   = pr.x();
+    int pY   = pr.y();
+    int pW   = pr.width();
+    int pH   = pr.height();
+
+    if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesVertCont)
+    {
+        region = QRect((int)ceilf(contentsX()-pX+visibleWidth()/2.0),
+                       contentsY(),
+                       (int)ceilf(pW/2.0),
+                       pH);
+    }
+    else if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesVert)
+    {
+        region = QRect(contentsX(),
+                       contentsY(),
+                       (int)ceilf(pW/2.0),
+                       pH);
+    }
+    else if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorzCont)
+    {
+        region = QRect(contentsX(),
+                       (int)ceilf(contentsY()-pY+visibleHeight()/2.0),
+                       pW,
+                       (int)ceilf(pH/2.0));
+    }
+    else if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorz)
+    {
+        region = QRect(contentsX(),
+                       contentsY(),
+                       pW,
+                       (int)ceilf(pH/2.0));
+    }
+    else
+    {
+        region = QRect(contentsX(), contentsY(), pW, pH);
+    }
+
+    return (region);
+}
+
+QRect ImageRegionWidget::getOriginalImageRegionToRender()
+{
+    QRect r = getLocalImageRegionToRender();
+
+    int x = (int)(((double)r.x()      / tileSize()) * floor(tileSize() / zoomFactor()));
+    int y = (int)(((double)r.y()      / tileSize()) * floor(tileSize() / zoomFactor()));
+    int w = (int)(((double)r.width()  / tileSize()) * floor(tileSize() / zoomFactor()));
+    int h = (int)(((double)r.height() / tileSize()) * floor(tileSize() / zoomFactor()));
+
+    QRect rect(x, y, w, h);
+    return (rect);
+}
+
+QRect ImageRegionWidget::getLocalTargetImageRegion()
+{
+    QRect region = getLocalImageRegionToRender();
+
+    if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesVert)
+        region.translate(region.width(), 0);
+    else if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorz)
+        region.translate(0, region.height());
+
+    return region;
+}
+
 void ImageRegionWidget::setCenterImageRegionPosition()
 {
     center(contentsWidth()/2, contentsHeight()/2);
@@ -394,64 +464,6 @@ void ImageRegionWidget::setPreviewImage(const DImg& img)
 DImg ImageRegionWidget::getOriginalRegionImage()
 {
     return (d->image.copy(getOriginalImageRegionToRender()));
-}
-
-QRect ImageRegionWidget::getOriginalImageRegionToRender()
-{
-    QRect r = getLocalImageRegionToRender();
-
-    int x = (int)(((double)r.x()      / tileSize()) * floor(tileSize() / zoomFactor()));
-    int y = (int)(((double)r.y()      / tileSize()) * floor(tileSize() / zoomFactor()));
-    int w = (int)(((double)r.width()  / tileSize()) * floor(tileSize() / zoomFactor()));
-    int h = (int)(((double)r.height() / tileSize()) * floor(tileSize() / zoomFactor()));
-
-    QRect rect(x, y, w, h);
-    return (rect);
-}
-
-QRect ImageRegionWidget::getLocalImageRegionToRender()
-{
-    QRect region;
-    QRect pr = previewRect();
-    int pX   = pr.x();
-    int pY   = pr.y();
-    int pW   = pr.width();
-    int pH   = pr.height();
-
-    if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesVertCont)
-    {
-        region = QRect((int)ceilf(contentsX()-pX+visibleWidth()/2.0), contentsY(), (int)ceilf(pW/2.0), pH);
-    }
-    else if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorzCont)
-    {
-        region = QRect(contentsX(), (int)ceilf(contentsY()-pY+visibleHeight()/2.0), pW, (int)ceilf(pH/2.0));
-    }
-    else if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesVert)
-    {
-        region = QRect(contentsX(),  contentsY(), (int)ceilf(pW/2.0), pH);
-    }
-    else if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorz)
-    {
-        region = QRect(contentsX(), contentsY(), pW, (int)ceilf(pH/2.0));
-    }
-    else
-    {
-        region = QRect(contentsX(), contentsY(), pW, pH);
-    }
-
-    return (region);
-}
-
-QRect ImageRegionWidget::getLocalTargetImageRegion()
-{
-    QRect region = getLocalImageRegionToRender();
-
-    if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesVert)
-        region.translate(region.width(), 0);
-    else if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorz)
-        region.translate(0, region.height());
-
-    return region;
 }
 
 void ImageRegionWidget::setContentsSize()
