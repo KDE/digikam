@@ -77,7 +77,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 068 ==> 221987 : "zoom to 100%" not working.
 069 ==> 207888 : Resetting tool properties to Defaults should not reset options for showing original/target image.
 070 ==> 221569 : Crash when closing showfoto while a raw image is loading.
-071 ==> 
+071 ==> 221162 : Add collection with smb://xxx path should give better warning.
+072 ==> 
 
 
 
