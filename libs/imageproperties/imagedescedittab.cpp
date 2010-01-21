@@ -220,7 +220,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
                               KIconLoader::NoGroup, KIconLoader::SizeSmall));
     d->recentTagsBtn->setIconSize(QSize(KIconLoader::SizeSmall, KIconLoader::SizeSmall));
     d->recentTagsBtn->setMenu(recentTagsMenu);
-    d->recentTagsBtn->setPopupMode(QToolButton::DelayedPopup);
+    d->recentTagsBtn->setPopupMode(QToolButton::InstantPopup);
     d->recentTagsMapper = new QSignalMapper(this);
 
     // Buttons -----------------------------------------
