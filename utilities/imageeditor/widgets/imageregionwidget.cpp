@@ -166,28 +166,6 @@ void ImageRegionWidget::slotPreviewModeChanged(int mode)
     slotZoomFactorChanged();
 }
 
-QRect ImageRegionWidget::getOriginalImageRegion()
-{
-    QRect region;
-
-    switch (d->renderingPreviewMode)
-    {
-        case PreviewToolBar::PreviewBothImagesVert:
-        case PreviewToolBar::PreviewBothImagesHorz:
-        case PreviewToolBar::PreviewTargetImage:
-            region = QRect(contentsX(), contentsY(), visibleWidth(), visibleHeight());
-            break;
-        case PreviewToolBar::PreviewBothImagesVertCont:
-            region = QRect(contentsX(), contentsY(), visibleWidth()/2, visibleHeight());
-            break;
-        case PreviewToolBar::PreviewBothImagesHorzCont:
-            region = QRect(contentsX(), contentsY(), visibleWidth(), visibleHeight()/2);
-            break;
-    }
-
-    return region;
-}
-
 void ImageRegionWidget::drawText(QPainter* p, const QRect& rect, const QString& text)
 {
     p->save();
@@ -396,6 +374,30 @@ QRect ImageRegionWidget::getLocalImageRegionToRender()
     }
 
     return (region);
+}
+
+QRect ImageRegionWidget::getOriginalImageRegion()
+{
+    QRect region;
+
+    switch (d->renderingPreviewMode)
+    {
+        case PreviewToolBar::PreviewOriginalImage:
+        case PreviewToolBar::PreviewTargetImage:
+        case PreviewToolBar::PreviewBothImagesVert:
+        case PreviewToolBar::PreviewBothImagesHorz:
+        case PreviewToolBar::PreviewToggleOnMouseOver:
+            region = QRect(contentsX(), contentsY(), visibleWidth(), visibleHeight());
+            break;
+        case PreviewToolBar::PreviewBothImagesVertCont:
+            region = QRect(contentsX(), contentsY(), visibleWidth()/2, visibleHeight());
+            break;
+        case PreviewToolBar::PreviewBothImagesHorzCont:
+            region = QRect(contentsX(), contentsY(), visibleWidth(), visibleHeight()/2);
+            break;
+    }
+
+    return region;
 }
 
 QRect ImageRegionWidget::getOriginalImageRegionToRender()
