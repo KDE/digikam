@@ -190,6 +190,8 @@ QRect ImageRegionWidget::getOriginalImageRegion()
 
 void ImageRegionWidget::drawText(QPainter* p, const QRect& rect, const QString& text)
 {
+    p->save();
+
     // Draw background
     p->setPen(Qt::black);
     QColor semiTransBg = palette().color(QPalette::Window);
@@ -203,6 +205,8 @@ void ImageRegionWidget::drawText(QPainter* p, const QRect& rect, const QString& 
     p->drawText(rect.translated(1, 1), text);
     p->setPen(palette().color(QPalette::WindowText));
     p->drawText(rect, text);
+
+    p->restore();
 }
 
 void ImageRegionWidget::viewportPaintExtraData()
@@ -352,40 +356,43 @@ QRect ImageRegionWidget::getLocalImageRegionToRender()
     QRect pr = previewRect();
     int pX   = pr.x();
     int pY   = pr.y();
-    int pW   = pr.width();
-    int pH   = pr.height();
+    int pW   = visibleWidth() > pr.width() ? pr.width() : visibleWidth();
+    int pH   = visibleHeight() > pr.height() ? pr.height() : visibleHeight();
 
     if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesVertCont)
     {
-        region = QRect((int)ceilf(contentsX()-pX+visibleWidth()/2.0),
+        region = QRect((int)ceilf(contentsX() -pX + visibleWidth()/2.0),
                        contentsY(),
-                       (int)ceilf(pW/2.0),
+                       (int)ceilf(pW / 2.0),
                        pH);
     }
     else if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesVert)
     {
         region = QRect(contentsX(),
                        contentsY(),
-                       (int)ceilf(pW/2.0),
+                       (int)ceilf(pW / 2.0),
                        pH);
     }
     else if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorzCont)
     {
         region = QRect(contentsX(),
-                       (int)ceilf(contentsY()-pY+visibleHeight()/2.0),
+                       (int)ceilf(contentsY() - pY + visibleHeight()/2.0),
                        pW,
-                       (int)ceilf(pH/2.0));
+                       (int)ceilf(pH / 2.0));
     }
     else if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorz)
     {
         region = QRect(contentsX(),
                        contentsY(),
                        pW,
-                       (int)ceilf(pH/2.0));
+                       (int)ceilf(pH / 2.0));
     }
     else
     {
-        region = QRect(contentsX(), contentsY(), pW, pH);
+        region = QRect(contentsX(),
+                       contentsY(),
+                       pW,
+                       pH);
     }
 
     return (region);
@@ -468,6 +475,9 @@ DImg ImageRegionWidget::getOriginalRegionImage()
 
 void ImageRegionWidget::setContentsSize()
 {
+PreviewWidget::setContentsSize();
+return;
+
     switch (d->renderingPreviewMode)
     {
         case PreviewToolBar::PreviewOriginalImage:
