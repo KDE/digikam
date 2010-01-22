@@ -233,10 +233,10 @@ void EditorWindow::setupContextMenu()
 
 void EditorWindow::setupStandardConnections()
 {
-    // -- Canvas connections ------------------------------------------------
-
-    connect(m_canvas, SIGNAL(signalToggleOffFitToWindow()),
+    connect(m_stackView, SIGNAL(signalToggleOffFitToWindow()),
             this, SLOT(slotToggleOffFitToWindow()));
+
+    // -- Canvas connections ------------------------------------------------
 
     connect(m_canvas, SIGNAL(signalShowNextImage()),
             this, SLOT(slotForward()));
@@ -309,7 +309,6 @@ void EditorWindow::setupStandardConnections()
 
     connect(IccSettings::instance(), SIGNAL(settingsChanged()),
             this, SLOT(slotColorManagementOptionsChanged()));
-
 }
 
 void EditorWindow::setupStandardActions()
@@ -1080,12 +1079,12 @@ void EditorWindow::toggleZoomActions(bool val)
     d->zoomPlusAction->setEnabled(val);
     d->zoomComboAction->setEnabled(val);
     d->zoomTo100percents->setEnabled(val);
+    d->zoomFitToWindowAction->setEnabled(val);
 }
 
 void EditorWindow::toggleStandardActions(bool val)
 {
     d->zoomFitToSelectAction->setEnabled(val);
-    d->zoomFitToWindowAction->setEnabled(val);
     toggleZoomActions(val);
 
     d->rotateLeftAction->setEnabled(val);

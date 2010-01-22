@@ -41,7 +41,7 @@ class EditorStackViewPriv;
 
 class DIGIKAM_EXPORT EditorStackView : public QStackedWidget
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
 
@@ -73,7 +73,7 @@ public:
     void setZoomFactor(double zoom);
 
     /** Two widgets are embedded in Editor Tool to perform preview with panning and zooming:
-        a PreviewWidget derived class or ImagePanelWidget.
+        a PreviewWidget derived class (ImageRegionWidget) or ImageGuideWidget.
         This method try to find the right PreviewWidget instance accordingly else return 0.
      */
     PreviewWidget* previewWidget() const;
@@ -81,6 +81,7 @@ public:
 Q_SIGNALS:
 
     void signalZoomChanged(bool isMax, bool isMin, double zoom);
+    void signalToggleOffFitToWindow();
 
 private Q_SLOTS:
 

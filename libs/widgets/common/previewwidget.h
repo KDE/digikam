@@ -82,6 +82,7 @@ Q_SIGNALS:
     void signalContentsMovedEvent(bool);
     void signalSelectionTakeFocus();
     void signalResized();
+    void signalToggleOffFitToWindow();
 
 public Q_SLOTS:
 

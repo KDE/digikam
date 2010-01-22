@@ -269,6 +269,12 @@ void PreviewWidget::setZoomFactor(double zoom)
 
 void PreviewWidget::setZoomFactor(double zoom, bool centerView)
 {
+    if (d->autoZoom)
+    {
+        d->autoZoom = false;
+        emit signalToggleOffFitToWindow();
+    }
+
     // Zoom using center of canvas and given zoom factor.
 
     double oldZoom = d->zoom;

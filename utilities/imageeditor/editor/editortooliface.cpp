@@ -113,9 +113,16 @@ void EditorToolIface::loadTool(EditorTool* tool)
         connect(d->editor, SIGNAL(signalPreviewModeChanged(int)),
                 view2, SLOT(slotPreviewModeChanged(int)));
 
-        view2->setZoomFactor(d->editor->editorStackView()->canvas()->zoomFactor());
-        QPoint tl = d->editor->editorStackView()->canvas()->visibleArea().topLeft();
-        view2->setContentsPos(tl.x(), tl.y());
+        if (d->editor->editorStackView()->canvas()->fitToWindow())
+        {
+            view2->toggleFitToWindow();
+        }
+        else
+        {
+            view2->setZoomFactor(d->editor->editorStackView()->canvas()->zoomFactor());
+            QPoint tl = d->editor->editorStackView()->canvas()->visibleArea().topLeft();
+            view2->setContentsPos(tl.x(), tl.y());
+        }
         view2->slotPreviewModeChanged(d->editor->previewMode());
     }
 
