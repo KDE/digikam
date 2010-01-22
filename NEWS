@@ -84,7 +84,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 075 ==> 221988 : "fit to window" and zooming out not working.
 076 ==> 196469 : Zoom and pan should be available in all tools.
 077 ==> 220567 : Zooming, selecting picture part in editor tools.
-078 ==> 
+078 ==> 148235 : More comfortable panning and zooming of preview image.
+079 ==> 
+
 
 
 
