@@ -83,7 +83,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 074 ==> 223050 : Unable to have directories with the same name case-insensitively.
 075 ==> 221988 : "fit to window" and zooming out not working.
 076 ==> 196469 : Zoom and pan should be available in all tools.
-077 ==> 
+077 ==> 220567 : Zooming, selecting picture part in editor tools.
+078 ==> 
+
 
 
 
