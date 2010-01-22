@@ -573,6 +573,27 @@ void PreviewWidget::viewportPaintEvent(QPaintEvent *e)
     viewportPaintExtraData();
 }
 
+void PreviewWidget::drawText(QPainter* p, const QRect& rect, const QString& text)
+{
+    p->save();
+
+    // Draw background
+    p->setPen(Qt::black);
+    QColor semiTransBg = palette().color(QPalette::Window);
+    semiTransBg.setAlpha(190);
+    p->setBrush(semiTransBg);
+    p->translate(0.5, 0.5);
+    p->drawRoundRect(rect, 10.0, 10.0);
+
+    // Draw shadow and text
+    p->setPen(palette().color(QPalette::Window).dark(115));
+    p->drawText(rect.translated(1, 1), text);
+    p->setPen(palette().color(QPalette::WindowText));
+    p->drawText(rect, text);
+
+    p->restore();
+}
+
 void PreviewWidget::contentsMousePressEvent(QMouseEvent *e)
 {
     if (!e || e->button() == Qt::RightButton)
@@ -694,6 +715,8 @@ void PreviewWidget::slotCornerButtonPressed()
     pan->setRegionSelection(r);
     pan->setMouseFocus();
     d->panIconPopup->setMainWidget(pan);
+    m_movingInProgress = true;
+    viewport()->repaint();
 
     QPoint g = mapToGlobal(viewport()->pos());
     g.setX(g.x()+ viewport()->size().width());
@@ -719,8 +742,10 @@ void PreviewWidget::slotPanIconSelectionMoved(const QRect& r, bool b)
     {
         d->panIconPopup->hide();
         d->panIconPopup->deleteLater();
-        d->panIconPopup = 0;
+        d->panIconPopup    = 0;
+        m_movingInProgress = false;
         slotPanIconHiden();
+        viewport()->repaint();
     }
 }
 

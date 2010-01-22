@@ -110,7 +110,8 @@ private:
     void   resetPreview();
     QImage previewToQImage() const;
 
-    inline void paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh);
+    void viewportPaintExtraData();
+    inline void paintPreview(QPixmap* pix, int sx, int sy, int sw, int sh);
 
     void contentsDragEnterEvent(QDragEnterEvent*);
     void contentsDropEvent(QDropEvent*);

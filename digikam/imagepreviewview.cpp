@@ -476,6 +476,35 @@ void ImagePreviewView::paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh
     p.end();
 }
 
+void ImagePreviewView::viewportPaintExtraData()
+{
+    if (!m_movingInProgress && !previewIsNull())
+    {
+        QPainter p(viewport());
+        p.setRenderHint(QPainter::Antialiasing, true);
+        p.setBackgroundMode(Qt::TransparentMode);
+        QFontMetrics fontMt = p.fontMetrics();
+
+        QString text;
+        QRect textRect, fontRect;
+        QRect region = contentsRect();
+        p.translate(region.topLeft());
+
+        // Drawing separate view.
+
+        if (!d->loadFullImageSize)
+        {
+            text     = i18n("Reduced Size Preview");
+            fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text);
+            textRect.setTopLeft(QPoint(region.topLeft().x()+20, region.topLeft().y()+20));
+            textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2) );
+            drawText(&p, textRect, text);
+        }
+
+        p.end();
+    }
+}
+
 void ImagePreviewView::slotGotoTag(int tagID)
 {
     emit signalGotoTagAndItem(tagID);

@@ -166,27 +166,6 @@ void ImageRegionWidget::slotPreviewModeChanged(int mode)
     slotZoomFactorChanged();
 }
 
-void ImageRegionWidget::drawText(QPainter* p, const QRect& rect, const QString& text)
-{
-    p->save();
-
-    // Draw background
-    p->setPen(Qt::black);
-    QColor semiTransBg = palette().color(QPalette::Window);
-    semiTransBg.setAlpha(190);
-    p->setBrush(semiTransBg);
-    p->translate(0.5, 0.5);
-    p->drawRoundRect(rect, 10.0, 10.0);
-
-    // Draw shadow and text
-    p->setPen(palette().color(QPalette::Window).dark(115));
-    p->drawText(rect.translated(1, 1), text);
-    p->setPen(palette().color(QPalette::WindowText));
-    p->drawText(rect, text);
-
-    p->restore();
-}
-
 void ImageRegionWidget::viewportPaintExtraData()
 {
     if (!m_movingInProgress && !d->pixmapRegion.isNull())

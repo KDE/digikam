@@ -107,7 +107,6 @@ private:
     QImage previewToQImage() const;
 
     void   viewportPaintExtraData();
-    void   drawText(QPainter* p, const QRect& rect, const QString& text);
     inline void paintPreview(QPixmap* pix, int sx, int sy, int sw, int sh);
 
 private:
