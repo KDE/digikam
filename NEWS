@@ -86,7 +86,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 077 ==> 220567 : Zooming, selecting picture part in editor tools.
 078 ==> 148235 : More comfortable panning and zooming of preview image.
 079 ==> 220122 : View 100% doesn't show real size (1:1).
-080 ==> 
+080 ==> 161338 : Too small images when "Embedded preview load full image size" deactivated.
+081 ==> 
 
 
 
