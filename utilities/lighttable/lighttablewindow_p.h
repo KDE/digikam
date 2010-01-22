@@ -6,7 +6,7 @@
  * Date        : 2007-03-05
  * Description : digiKam light table GUI
  *
- * Copyright (C) 2007-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -31,6 +31,7 @@
 // KDE includes
 
 #include <kaction.h>
+#include <ksqueezedtextlabel.h>
 
 // Local includes
 
@@ -100,6 +101,8 @@ public:
         contributeAction       = 0;
         showMenuBarAction      = 0;
         clearOnCloseAction     = 0;
+        leftFileName           = 0;
+        rightFileName          = 0;
     }
 
     bool                      autoLoadOnRightPanel;
@@ -152,6 +155,9 @@ public:
     KToggleAction*            navigateByPairAction;
     KToggleAction*            showMenuBarAction;
     KToggleAction*            clearOnCloseAction;
+
+    KSqueezedTextLabel*       leftFileName;
+    KSqueezedTextLabel*       rightFileName;
 
     LightTableBar*            barView;
 
