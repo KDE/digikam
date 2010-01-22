@@ -1,7 +1,7 @@
 Factoring editor tools preview:
 
-221988 -  "fit to window" and zooming out not working
-196469 -  Zoom and pan should be available in all tools
+221988 -  "fit to window" and zooming out not working              (Fixed)
+196469 -  Zoom and pan should be available in all tools            (Fixed)
 220567 -  Zooming, selecting picture part in editor tools
 148235 -  More comfortable panning and zooming of preview image
 197316 -  Two ways to do a simple zooming
