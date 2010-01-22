@@ -86,11 +86,13 @@ public:
         hasNext              = false;
         loadFullImageSize    = false;
         previewSize          = 1024;
+        isLoaded             = false;
     }
 
     bool               hasPrev;
     bool               hasNext;
     bool               loadFullImageSize;
+    bool               isLoaded;
 
     int                previewSize;
 
@@ -197,6 +199,7 @@ void ImagePreviewView::setImagePath(const QString& path)
     {
         slotReset();
         unsetCursor();
+        d->isLoaded = false;
         return;
     }
 
@@ -207,6 +210,7 @@ void ImagePreviewView::setImagePath(const QString& path)
         connect(d->previewThread, SIGNAL(signalImageLoaded(const LoadingDescription &, const DImg &)),
                 this, SLOT(slotGotImagePreview(const LoadingDescription &, const DImg&)));
     }
+
     if (!d->previewPreloadThread)
     {
         d->previewPreloadThread = new PreviewLoadThread();
@@ -242,6 +246,7 @@ void ImagePreviewView::slotGotImagePreview(const LoadingDescription& description
         // three copies - but the image is small
         setImage(DImg(pix.toImage()));
         d->stack->previewLoaded();
+        d->isLoaded = false;
         emit signalPreviewLoaded(false);
     }
     else
@@ -252,6 +257,7 @@ void ImagePreviewView::slotGotImagePreview(const LoadingDescription& description
         d->stack->setPreviewMode(AlbumWidgetStack::PreviewImageMode);
         setImage(img);
         d->stack->previewLoaded();
+        d->isLoaded = true;
         emit signalPreviewLoaded(true);
     }
 
@@ -273,7 +279,9 @@ void ImagePreviewView::slotNextPreload()
         d->previousPath.clear();
     }
     else
+    {
         return;
+    }
 
     if (d->loadFullImageSize)
         d->previewThread->loadHighQuality(loadPath, AlbumSettings::instance()->getExifRotate());
@@ -478,7 +486,7 @@ void ImagePreviewView::paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh
 
 void ImagePreviewView::viewportPaintExtraData()
 {
-    if (!m_movingInProgress && !previewIsNull())
+    if (!m_movingInProgress && d->isLoaded)
     {
         QPainter p(viewport());
         p.setRenderHint(QPainter::Antialiasing, true);

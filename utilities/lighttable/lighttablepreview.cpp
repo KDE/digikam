@@ -84,8 +84,10 @@ public:
         loadFullImageSize    = false;
         previewSize          = 1024;
         keepZoom             = false;
+        isLoaded             = false;
     }
 
+    bool               isLoaded;
     bool               hasPrev;
     bool               hasNext;
     bool               selected;
@@ -222,6 +224,7 @@ void LightTablePreview::setImagePath(const QString& path)
     {
         slotReset();
         unsetCursor();
+        d->isLoaded = false;
         return;
     }
 
@@ -265,7 +268,7 @@ void LightTablePreview::slotGotImagePreview(const LoadingDescription& descriptio
                    info.fileName()));
         p.end();
         setImage(DImg(pix.toImage()));
-
+        d->isLoaded = false;
         emit signalPreviewLoaded(false);
     }
     else
@@ -274,6 +277,7 @@ void LightTablePreview::slotGotImagePreview(const LoadingDescription& descriptio
         if (AlbumSettings::instance()->getExifRotate())
             d->previewThread->exifRotate(img, description.filePath);
         setImage(img);
+        d->isLoaded = true;
         emit signalPreviewLoaded(true);
     }
 
@@ -494,7 +498,7 @@ void LightTablePreview::paintPreview(QPixmap* pix, int sx, int sy, int sw, int s
 
 void LightTablePreview::viewportPaintExtraData()
 {
-    if (!m_movingInProgress && !d->preview.isNull())
+    if (!m_movingInProgress && d->isLoaded)
     {
         QPainter p(viewport());
         p.setRenderHint(QPainter::Antialiasing, true);
