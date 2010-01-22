@@ -109,7 +109,7 @@ public:
 PreviewWidget::PreviewWidget(QWidget *parent)
              : Q3ScrollView(parent), d(new PreviewWidgetPriv)
 {
-    m_movingInProgress     = false;
+    m_movingInProgress = false;
     setAttribute(Qt::WA_DeleteOnClose);
     setBackgroundRole(QPalette::Base);
 
@@ -131,6 +131,18 @@ PreviewWidget::PreviewWidget(QWidget *parent)
 
     connect(d->cornerButton, SIGNAL(pressed()),
             this, SLOT(slotCornerButtonPressed()));
+
+    connect(this, SIGNAL(horizontalSliderPressed()),
+            this, SLOT(slotSelectionTakeFocus()));
+
+    connect(this, SIGNAL(verticalSliderPressed()),
+            this, SLOT(slotSelectionTakeFocus()));
+
+    connect(this, SIGNAL(horizontalSliderReleased()),
+            this, SLOT(slotSelectionLeaveFocus()));
+
+    connect(this, SIGNAL(verticalSliderReleased()),
+            this, SLOT(slotSelectionLeaveFocus()));
 }
 
 PreviewWidget::~PreviewWidget()
@@ -747,6 +759,18 @@ void PreviewWidget::slotPanIconSelectionMoved(const QRect& r, bool b)
         slotPanIconHiden();
         viewport()->repaint();
     }
+}
+
+void PreviewWidget::slotSelectionTakeFocus()
+{
+    m_movingInProgress = true;
+    viewport()->repaint();
+}
+
+void PreviewWidget::slotSelectionLeaveFocus()
+{
+    m_movingInProgress = false;
+    viewport()->repaint();
 }
 
 }  // namespace Digikam

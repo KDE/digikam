@@ -99,18 +99,6 @@ ImageRegionWidget::ImageRegionWidget(QWidget* parent)
 
     connect(this, SIGNAL(signalContentsMovedEvent(bool)),
             this, SLOT(slotOriginalImageRegionChanged(bool)));
-
-    connect(this, SIGNAL(horizontalSliderPressed()),
-            this, SLOT(slotSelectionTakeFocus()));
-
-    connect(this, SIGNAL(verticalSliderPressed()),
-            this, SLOT(slotSelectionTakeFocus()));
-
-    connect(this, SIGNAL(horizontalSliderReleased()),
-            this, SLOT(slotSelectionLeaveFocus()));
-
-    connect(this, SIGNAL(verticalSliderReleased()),
-            this, SLOT(slotSelectionLeaveFocus()));
 }
 
 ImageRegionWidget::~ImageRegionWidget()
@@ -476,11 +464,13 @@ void ImageRegionWidget::slotPanIconSelectionMoved(const QRect& rect, bool target
 
 void ImageRegionWidget::slotSelectionTakeFocus()
 {
+    PreviewWidget::slotSelectionTakeFocus();
     restorePixmapRegion();
 }
 
 void ImageRegionWidget::slotSelectionLeaveFocus()
 {
+    PreviewWidget::slotSelectionLeaveFocus();
     setContentsPosition(contentsX(), contentsY(), true);
 }
 
