@@ -109,7 +109,7 @@ public:
 PreviewWidget::PreviewWidget(QWidget *parent)
              : Q3ScrollView(parent), d(new PreviewWidgetPriv)
 {
-    m_movingInProgress     = false;
+    m_movingInProgress = false;
     setAttribute(Qt::WA_DeleteOnClose);
     setBackgroundRole(QPalette::Base);
 
@@ -131,6 +131,18 @@ PreviewWidget::PreviewWidget(QWidget *parent)
 
     connect(d->cornerButton, SIGNAL(pressed()),
             this, SLOT(slotCornerButtonPressed()));
+
+    connect(this, SIGNAL(horizontalSliderPressed()),
+            this, SLOT(slotSelectionTakeFocus()));
+
+    connect(this, SIGNAL(verticalSliderPressed()),
+            this, SLOT(slotSelectionTakeFocus()));
+
+    connect(this, SIGNAL(horizontalSliderReleased()),
+            this, SLOT(slotSelectionLeaveFocus()));
+
+    connect(this, SIGNAL(verticalSliderReleased()),
+            this, SLOT(slotSelectionLeaveFocus()));
 }
 
 PreviewWidget::~PreviewWidget()
@@ -269,6 +281,12 @@ void PreviewWidget::setZoomFactor(double zoom)
 
 void PreviewWidget::setZoomFactor(double zoom, bool centerView)
 {
+    if (d->autoZoom)
+    {
+        d->autoZoom = false;
+        emit signalToggleOffFitToWindow();
+    }
+
     // Zoom using center of canvas and given zoom factor.
 
     double oldZoom = d->zoom;
@@ -567,6 +585,27 @@ void PreviewWidget::viewportPaintEvent(QPaintEvent *e)
     viewportPaintExtraData();
 }
 
+void PreviewWidget::drawText(QPainter* p, const QRect& rect, const QString& text)
+{
+    p->save();
+
+    // Draw background
+    p->setPen(Qt::black);
+    QColor semiTransBg = palette().color(QPalette::Window);
+    semiTransBg.setAlpha(190);
+    p->setBrush(semiTransBg);
+    p->translate(0.5, 0.5);
+    p->drawRoundRect(rect, 10.0, 10.0);
+
+    // Draw shadow and text
+    p->setPen(palette().color(QPalette::Window).dark(115));
+    p->drawText(rect.translated(1, 1), text);
+    p->setPen(palette().color(QPalette::WindowText));
+    p->drawText(rect, text);
+
+    p->restore();
+}
+
 void PreviewWidget::contentsMousePressEvent(QMouseEvent *e)
 {
     if (!e || e->button() == Qt::RightButton)
@@ -688,6 +727,8 @@ void PreviewWidget::slotCornerButtonPressed()
     pan->setRegionSelection(r);
     pan->setMouseFocus();
     d->panIconPopup->setMainWidget(pan);
+    m_movingInProgress = true;
+    viewport()->repaint();
 
     QPoint g = mapToGlobal(viewport()->pos());
     g.setX(g.x()+ viewport()->size().width());
@@ -713,9 +754,23 @@ void PreviewWidget::slotPanIconSelectionMoved(const QRect& r, bool b)
     {
         d->panIconPopup->hide();
         d->panIconPopup->deleteLater();
-        d->panIconPopup = 0;
+        d->panIconPopup    = 0;
+        m_movingInProgress = false;
         slotPanIconHiden();
+        viewport()->repaint();
     }
+}
+
+void PreviewWidget::slotSelectionTakeFocus()
+{
+    m_movingInProgress = true;
+    viewport()->repaint();
+}
+
+void PreviewWidget::slotSelectionLeaveFocus()
+{
+    m_movingInProgress = false;
+    viewport()->repaint();
 }
 
 }  // namespace Digikam

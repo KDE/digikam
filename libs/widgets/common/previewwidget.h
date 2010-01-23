@@ -82,6 +82,7 @@ Q_SIGNALS:
     void signalContentsMovedEvent(bool);
     void signalSelectionTakeFocus();
     void signalResized();
+    void signalToggleOffFitToWindow();
 
 public Q_SLOTS:
 
@@ -98,6 +99,8 @@ protected Q_SLOTS:
     void slotCornerButtonPressed();
     void slotPanIconHiden();
     virtual void slotPanIconSelectionMoved(const QRect&, bool);
+    virtual void slotSelectionTakeFocus();
+    virtual void slotSelectionLeaveFocus();
 
 protected:
 
@@ -114,6 +117,7 @@ protected:
     void   updateZoomAndSize(bool alwaysFitToWindow);
     void   clearCache();
     QRect  previewRect();
+    void   drawText(QPainter* p, const QRect& rect, const QString& text);
 
     virtual void setContentsSize();
     virtual void viewportPaintExtraData(){};

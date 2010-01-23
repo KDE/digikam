@@ -358,7 +358,9 @@ QMimeData *AlbumDragDropHandler::createMimeData(const QList<Album*>& albums)
     if (albums.size() > 1)
         kWarning() << "Dragging multiple albums is not implemented";
 
-    return new DAlbumDrag(albums.first()->databaseUrl(), albums.first()->id());
+    PAlbum *palbum = dynamic_cast<PAlbum*>(albums.first());
+    return new DAlbumDrag(albums.first()->databaseUrl(), albums.first()->id(),
+                          palbum ? palbum->fileUrl() : KUrl());
 }
 
 } // namespace Digikam

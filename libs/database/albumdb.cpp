@@ -2194,13 +2194,21 @@ int AlbumDB::getAlbumForPath(int albumRootId, const QString& folder, bool create
 QList<int> AlbumDB::getAlbumAndSubalbumsForPath(int albumRootId, const QString& relativePath)
 {
     QList<QVariant> values;
-    d->db->execSql( QString("SELECT id FROM Albums WHERE albumRoot=? AND (relativePath=? OR relativePath LIKE ?);"),
+    d->db->execSql( QString("SELECT id, relativePath FROM Albums WHERE albumRoot=? AND (relativePath=? OR relativePath LIKE ?);"),
                     albumRootId, relativePath, (relativePath == "/" ? "/%" : relativePath + "/%"), &values);
 
     QList<int> albumIds;
-    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd(); ++it)
+    int id;
+    QString albumRelativePath;
+    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd(); )
     {
-        albumIds << (*it).toInt();
+        id = (*it).toInt();
+        ++it;
+        QString albumRelativePath = (*it).toString();
+        ++it;
+        // bug #223050: The LIKE operator is case insensitive
+        if (albumRelativePath.startsWith(relativePath))
+            albumIds << id;
     }
     return albumIds;
 }

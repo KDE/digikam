@@ -285,7 +285,7 @@ void ImageGuideWidget::updatePixmap()
         textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2 ) );
         drawText(&p, textRect, text);
     }
-    else if (d->renderingPreviewMode == PreviewToolBar::PreviewTargetImage || 
+    else if (d->renderingPreviewMode == PreviewToolBar::PreviewTargetImage ||
              d->renderingPreviewMode == PreviewToolBar::NoPreviewMode      ||
             (d->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver && d->onMouseMovePreviewToggled))
     {
@@ -325,7 +325,7 @@ void ImageGuideWidget::updatePixmap()
         p.fillRect(d->rect.right(), 0, width(), height(), palette().color(QPalette::Background));
 
         p.setPen(QPen(Qt::white, 2, Qt::SolidLine));
-        p.drawLine(d->rect.x()+d->rect.width()/2-1, d->rect.y(), 
+        p.drawLine(d->rect.x()+d->rect.width()/2-1, d->rect.y(),
                    d->rect.x()+d->rect.width()/2-1, d->rect.y()+d->rect.height());
         p.setPen(QPen(Qt::red, 2, Qt::DotLine));
         p.drawLine(d->rect.x()+d->rect.width()/2-1, d->rect.y(),
@@ -481,6 +481,8 @@ void ImageGuideWidget::updatePixmap()
 
 void ImageGuideWidget::drawText(QPainter* p, const QRect& rect, const QString& text)
 {
+    p->save();
+
     // Draw background
     p->setPen(Qt::black);
     QColor semiTransBg = palette().color(QPalette::Window);
@@ -494,6 +496,8 @@ void ImageGuideWidget::drawText(QPainter* p, const QRect& rect, const QString& t
     p->drawText(rect.translated(1, 1), text);
     p->setPen(palette().color(QPalette::WindowText));
     p->drawText(rect, text);
+
+    p->restore();
 }
 
 void ImageGuideWidget::paintEvent(QPaintEvent*)
@@ -596,7 +600,7 @@ void ImageGuideWidget::mouseReleaseEvent(QMouseEvent* e)
                 color = getSpotColor(OriginalImage);
                 emit spotPositionChangedFromOriginal( color, d->spot );
             }
-            else if (d->renderingPreviewMode == PreviewToolBar::PreviewTargetImage || 
+            else if (d->renderingPreviewMode == PreviewToolBar::PreviewTargetImage ||
                      d->renderingPreviewMode == PreviewToolBar::NoPreviewMode)
             {
                 color = getSpotColor(TargetPreviewImage);

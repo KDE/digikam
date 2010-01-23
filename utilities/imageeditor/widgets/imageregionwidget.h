@@ -85,14 +85,12 @@ private Q_SLOTS:
 
 private:
 
-    void   setContentsSize();
     void   setContentsPosition(int x, int y, bool targetDone);
 
     /** To get image region including original or/and target area depending of separate view mode.
         The region is given using not scaled image unit.*/
     QRect  getOriginalImageRegion();
 
-    QRect  getLocalTargetImageRegion();
     QRect  getLocalImageRegionToRender();
 
     void   backupPixmapRegion();
@@ -109,7 +107,6 @@ private:
     QImage previewToQImage() const;
 
     void   viewportPaintExtraData();
-    void   drawText(QPainter* p, const QRect& rect, const QString& text);
     inline void paintPreview(QPixmap* pix, int sx, int sy, int sw, int sh);
 
 private:

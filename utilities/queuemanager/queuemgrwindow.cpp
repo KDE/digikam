@@ -268,7 +268,7 @@ void QueueMgrWindow::setupUserArea()
 void QueueMgrWindow::setupStatusBar()
 {
     d->statusProgressBar = new StatusProgressBar(statusBar());
-    d->statusProgressBar->setAlignment(Qt::AlignCenter);
+    d->statusProgressBar->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     d->statusProgressBar->setMaximumHeight(fontMetrics().height()+2);
     statusBar()->addWidget(d->statusProgressBar, 60);
 

@@ -86,11 +86,13 @@ public:
         hasNext              = false;
         loadFullImageSize    = false;
         previewSize          = 1024;
+        isLoaded             = false;
     }
 
     bool               hasPrev;
     bool               hasNext;
     bool               loadFullImageSize;
+    bool               isLoaded;
 
     int                previewSize;
 
@@ -197,6 +199,7 @@ void ImagePreviewView::setImagePath(const QString& path)
     {
         slotReset();
         unsetCursor();
+        d->isLoaded = false;
         return;
     }
 
@@ -207,6 +210,7 @@ void ImagePreviewView::setImagePath(const QString& path)
         connect(d->previewThread, SIGNAL(signalImageLoaded(const LoadingDescription &, const DImg &)),
                 this, SLOT(slotGotImagePreview(const LoadingDescription &, const DImg&)));
     }
+
     if (!d->previewPreloadThread)
     {
         d->previewPreloadThread = new PreviewLoadThread();
@@ -242,6 +246,7 @@ void ImagePreviewView::slotGotImagePreview(const LoadingDescription& description
         // three copies - but the image is small
         setImage(DImg(pix.toImage()));
         d->stack->previewLoaded();
+        d->isLoaded = false;
         emit signalPreviewLoaded(false);
     }
     else
@@ -252,6 +257,7 @@ void ImagePreviewView::slotGotImagePreview(const LoadingDescription& description
         d->stack->setPreviewMode(AlbumWidgetStack::PreviewImageMode);
         setImage(img);
         d->stack->previewLoaded();
+        d->isLoaded = true;
         emit signalPreviewLoaded(true);
     }
 
@@ -273,7 +279,9 @@ void ImagePreviewView::slotNextPreload()
         d->previousPath.clear();
     }
     else
+    {
         return;
+    }
 
     if (d->loadFullImageSize)
         d->previewThread->loadHighQuality(loadPath, AlbumSettings::instance()->getExifRotate());
@@ -474,6 +482,35 @@ void ImagePreviewView::paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh
     QPainter p(pix);
     p.drawPixmap(0, 0, pix2);
     p.end();
+}
+
+void ImagePreviewView::viewportPaintExtraData()
+{
+    if (!m_movingInProgress && d->isLoaded)
+    {
+        QPainter p(viewport());
+        p.setRenderHint(QPainter::Antialiasing, true);
+        p.setBackgroundMode(Qt::TransparentMode);
+        QFontMetrics fontMt = p.fontMetrics();
+
+        QString text;
+        QRect textRect, fontRect;
+        QRect region = contentsRect();
+        p.translate(region.topLeft());
+
+        // Drawing separate view.
+
+        if (!d->loadFullImageSize)
+        {
+            text     = i18n("Reduced Size Preview");
+            fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text);
+            textRect.setTopLeft(QPoint(region.topLeft().x()+20, region.topLeft().y()+20));
+            textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2) );
+            drawText(&p, textRect, text);
+        }
+
+        p.end();
+    }
 }
 
 void ImagePreviewView::slotGotoTag(int tagID)

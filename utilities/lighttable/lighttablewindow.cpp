@@ -281,9 +281,17 @@ void LightTableWindow::setupStatusBar()
     statusBar()->addWidget(d->leftZoomBar, 1);
     d->leftZoomBar->setEnabled(false);
 
+    d->leftFileName = new KSqueezedTextLabel(statusBar());
+    d->leftFileName->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    statusBar()->addWidget(d->leftFileName, 10);
+
     d->statusProgressBar = new StatusProgressBar(statusBar());
     d->statusProgressBar->setAlignment(Qt::AlignCenter);
-    statusBar()->addWidget(d->statusProgressBar, 100);
+    statusBar()->addWidget(d->statusProgressBar, 10);
+
+    d->rightFileName = new KSqueezedTextLabel(statusBar());
+    d->rightFileName->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    statusBar()->addWidget(d->rightFileName, 10);
 
     d->rightZoomBar = new StatusZoomBar(statusBar());
     statusBar()->addWidget(d->rightZoomBar, 1);
@@ -711,9 +719,11 @@ void LightTableWindow::slotRightPanelLeftButtonClicked()
 void LightTableWindow::slotLeftPreviewLoaded(bool b)
 {
     d->leftZoomBar->setEnabled(b);
+    d->leftFileName->clear();
 
     if (b)
     {
+        d->leftFileName->setText(d->previewView->leftImageInfo().name());
         d->previewView->checkForSelection(d->barView->currentItemImageInfo());
         d->barView->setOnLeftPanel(d->previewView->leftImageInfo());
 
@@ -740,8 +750,11 @@ void LightTableWindow::slotLeftPreviewLoaded(bool b)
 void LightTableWindow::slotRightPreviewLoaded(bool b)
 {
     d->rightZoomBar->setEnabled(b);
+    d->rightFileName->clear();
+
     if (b)
     {
+        d->rightFileName->setText(d->previewView->rightImageInfo().name());
         d->previewView->checkForSelection(d->barView->currentItemImageInfo());
         d->barView->setOnRightPanel(d->previewView->rightImageInfo());
 
