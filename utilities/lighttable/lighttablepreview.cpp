@@ -83,7 +83,6 @@ public:
         dragAndDropEnabled   = true;
         loadFullImageSize    = false;
         previewSize          = 1024;
-        keepZoom             = false;
         isLoaded             = false;
     }
 
@@ -93,7 +92,6 @@ public:
     bool               selected;
     bool               dragAndDropEnabled;
     bool               loadFullImageSize;
-    bool               keepZoom;
 
     int                previewSize;
 
@@ -112,10 +110,6 @@ public:
 LightTablePreview::LightTablePreview(QWidget *parent)
                  : PreviewWidget(parent), d(new LightTablePreviewPriv)
 {
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("LightTable Settings");
-    d->keepZoom               = group.readEntry("Zoom fixed", false);
-
     // get preview size from screen size, but limit from VGA to WQXGA
     d->previewSize = qMax(KApplication::desktop()->height(),
                           KApplication::desktop()->width());
@@ -184,7 +178,7 @@ void LightTablePreview::setImage(const DImg& image)
 {
     d->preview = image;
 
-    updateZoomAndSize(!d -> keepZoom);
+    updateZoomAndSize(false);
 
     viewport()->setUpdatesEnabled(true);
     viewport()->update();
