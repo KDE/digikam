@@ -269,47 +269,6 @@ void DigikamImageView::showContextMenu(QContextMenuEvent* event)
     delete paste;
 }
 
-void DigikamImageView::cut()
-{
-    QMimeData *data = imageModel()->dragDropHandler()->createMimeData(selectedImageInfos());
-    if (data)
-    {
-        d->utilities->addIsCutSelection(data, true);
-        kapp->clipboard()->setMimeData(data);
-    }
-}
-
-void DigikamImageView::copy()
-{
-    QMimeData *data = imageModel()->dragDropHandler()->createMimeData(selectedImageInfos());
-    if (data)
-    {
-        d->utilities->addIsCutSelection(data, false);
-        kapp->clipboard()->setMimeData(data);
-    }
-}
-
-void DigikamImageView::paste()
-{
-    const QMimeData *data = kapp->clipboard()->mimeData(QClipboard::Clipboard);
-    if (!data)
-        return;
-    // We need to have a real (context menu action) or fake (Ctrl+V shortcut) mouse position
-    QPoint eventPos = mapFromGlobal(QCursor::pos());
-    if (!rect().contains(eventPos))
-        eventPos = QPoint(0, 0);
-
-    bool cutAction = d->utilities->decodeIsCutSelection(data);
-    QDropEvent event(eventPos,
-                     cutAction ? Qt::MoveAction : Qt::CopyAction,
-                     data, Qt::NoButton,
-                     cutAction ? Qt::ShiftModifier : Qt::ControlModifier);
-    QModelIndex index = indexAt(event.pos());
-    if (!imageModel()->dragDropHandler()->accepts(&event, index))
-        return;
-    imageModel()->dragDropHandler()->dropEvent(this, &event, index);
-}
-
 void DigikamImageView::insertSelectedToLightTable(bool addTo)
 {
     // Run Light Table with all selected image files in the current Album.

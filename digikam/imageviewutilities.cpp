@@ -60,7 +60,6 @@
 namespace Digikam
 {
 
-const QString mimeTypeCutSelection("application/x-kde-cutselection");
 const QString renameFileProperty("AdvancedRename source file");
 
 ImageViewUtilities::ImageViewUtilities(QWidget *parentWidget)
@@ -334,20 +333,6 @@ void ImageViewUtilities::openInEditor(const ImageInfo& info, const QList<ImageIn
     if (imview->isMinimized())
         KWindowSystem::unminimizeWindow(imview->winId());
     KWindowSystem::activateWindow(imview->winId());
-}
-
-void ImageViewUtilities::addIsCutSelection(QMimeData* mime, bool cut)
-{
-    const QByteArray cutSelection = cut ? "1" : "0";
-    mime->setData(mimeTypeCutSelection, cutSelection);
-}
-
-bool ImageViewUtilities::decodeIsCutSelection(const QMimeData* mime)
-{
-    QByteArray a = mime->data(mimeTypeCutSelection);
-    if (a.isEmpty())
-        return false;
-    return (a.at(0) == '1'); // true if 1
 }
 
 } // namespace Digikam

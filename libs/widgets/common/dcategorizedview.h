@@ -66,6 +66,12 @@ public:
     void setToolTipEnabled(bool enabled);
     bool isToolTipEnabled() const;
 
+public Q_SLOTS:
+
+    virtual void cut();
+    virtual void copy();
+    virtual void paste();
+
 Q_SIGNALS:
 
     /// Emitted when any selection change occurs. Any of the signals below will be emitted before.
@@ -99,6 +105,9 @@ protected Q_SLOTS:
 
 protected:
 
+    void encodeIsCutSelection(QMimeData* mime, bool isCutSelection);
+    bool decodeIsCutSelection(const QMimeData *mimeData);
+
     void setToolTip(ItemViewToolTip *tip);
     void setItemDelegate(DItemDelegate *delegate);
     void updateDelegateSizes();
@@ -107,8 +116,6 @@ protected:
     /// Reimplement these in a subclass
     virtual void showContextMenuOnIndex(QContextMenuEvent *event, const QModelIndex& index);
     virtual void showContextMenu(QContextMenuEvent *event);
-    virtual void copy();
-    virtual void paste();
     virtual void indexActivated(const QModelIndex& index);
     virtual ImageModelDragDropHandler *dragDropHandler() const = 0;
 

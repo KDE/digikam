@@ -50,10 +50,6 @@ public:
 
 public Q_SLOTS:
 
-    virtual void cut();
-    virtual void copy();
-    virtual void paste();
-
     void openInEditor(const ImageInfo& info);
     void openCurrentInEditor();
 

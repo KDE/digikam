@@ -25,6 +25,7 @@
 
 // Qt includes
 
+#include <QClipboard>
 #include <QHelpEvent>
 #include <QScrollBar>
 #include <QSortFilterProxyModel>
@@ -32,6 +33,7 @@
 
 // KDE includes
 
+#include <kapplication.h>
 #include <kiconloader.h>
 #include <kdebug.h>
 
@@ -52,6 +54,7 @@ class DCategorizedViewPriv
 public:
 
     DCategorizedViewPriv()
+        : mimeTypeCutSelection("application/x-kde-cutselection")
     {
         delegate           = 0;
         toolTip            = 0;
@@ -71,6 +74,8 @@ public:
     bool                     ensureInitialSelectedItem;
     QPersistentModelIndex    hintAtSelectionIndex;
     int                      hintAtSelectionRow;
+
+    const QString            mimeTypeCutSelection;
 };
 
 // -------------------------------------------------------------------------------
@@ -468,16 +473,6 @@ void DCategorizedView::showContextMenu(QContextMenuEvent *)
     // implemented in subclass
 }
 
-void DCategorizedView::copy()
-{
-    // implemented in subclass
-}
-
-void DCategorizedView::paste()
-{
-    // implemented in subclass
-}
-
 void DCategorizedView::indexActivated(const QModelIndex&)
 {
 }
@@ -648,6 +643,47 @@ bool DCategorizedView::viewportEvent(QEvent *event)
     return KCategorizedView::viewportEvent(event);
 }
 
+void DCategorizedView::cut()
+{
+    QMimeData *data = dragDropHandler()->createMimeData(selectedIndexes());
+    if (data)
+    {
+        encodeIsCutSelection(data, true);
+        kapp->clipboard()->setMimeData(data);
+    }
+}
+
+void DCategorizedView::copy()
+{
+    QMimeData *data = dragDropHandler()->createMimeData(selectedIndexes());
+    if (data)
+    {
+        encodeIsCutSelection(data, false);
+        kapp->clipboard()->setMimeData(data);
+    }
+}
+
+void DCategorizedView::paste()
+{
+    const QMimeData *data = kapp->clipboard()->mimeData(QClipboard::Clipboard);
+    if (!data)
+        return;
+    // We need to have a real (context menu action) or fake (Ctrl+V shortcut) mouse position
+    QPoint eventPos = mapFromGlobal(QCursor::pos());
+    if (!rect().contains(eventPos))
+        eventPos = QPoint(0, 0);
+
+    bool cutAction = decodeIsCutSelection(data);
+    QDropEvent event(eventPos,
+                     cutAction ? Qt::MoveAction : Qt::CopyAction,
+                     data, Qt::NoButton,
+                     cutAction ? Qt::ShiftModifier : Qt::ControlModifier);
+    QModelIndex index = indexAt(event.pos());
+    if (dragDropHandler()->accepts(&event, index))
+        return;
+    dragDropHandler()->dropEvent(this, &event, index);
+}
+
 void DCategorizedView::startDrag(Qt::DropActions supportedActions)
 {
     QModelIndexList indexes = selectedIndexes();
@@ -702,6 +738,20 @@ void DCategorizedView::dropEvent(QDropEvent *e)
         if (handler->dropEvent(this, e, filterModel()->mapToSource(index)))
             e->accept();
     }
+}
+
+void DCategorizedView::encodeIsCutSelection(QMimeData* mime, bool cut)
+{
+    const QByteArray cutSelection = cut ? "1" : "0";
+    mime->setData(d->mimeTypeCutSelection, cutSelection);
+}
+
+bool DCategorizedView::decodeIsCutSelection(const QMimeData* mime)
+{
+    QByteArray a = mime->data(d->mimeTypeCutSelection);
+    if (a.isEmpty())
+        return false;
+    return (a.at(0) == '1'); // true if 1
 }
 
 } // namespace Digikam

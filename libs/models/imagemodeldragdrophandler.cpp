@@ -29,18 +29,16 @@
 
 // Local includes
 
-#include "imagemodel.h"
-
 
 namespace Digikam
 {
 
-ImageModelDragDropHandler::ImageModelDragDropHandler(ImageModel *model)
+ImageModelDragDropHandler::ImageModelDragDropHandler(QAbstractItemModel *model)
     : QObject(model), m_model(model)
 {
 }
 
-ImageModel *ImageModelDragDropHandler::model() const
+QAbstractItemModel *ImageModelDragDropHandler::model() const
 {
     return m_model;
 }
@@ -60,7 +58,7 @@ QStringList ImageModelDragDropHandler::mimeTypes() const
     return QStringList();
 }
 
-QMimeData *ImageModelDragDropHandler::createMimeData(const QList<ImageInfo> &)
+QMimeData *ImageModelDragDropHandler::createMimeData(const QList<QModelIndex> &)
 {
     return 0;
 }
