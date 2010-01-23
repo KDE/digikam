@@ -115,7 +115,7 @@ SearchModel::SearchModel(QObject *parent)
 
 SAlbum *SearchModel::albumForIndex(const QModelIndex& index) const
 {
-    return static_cast<SAlbum*>(AbstractSpecificAlbumModel::albumForIndex(index));
+    return static_cast<SAlbum*>(AbstractCheckableAlbumModel::albumForIndex(index));
 }
 
 void SearchModel::setReplaceNames(QHash<QString, QString> replaceNames)
@@ -182,7 +182,7 @@ QVariant SearchModel::albumData(Album *a, int role) const
         return pixmap;
     }
 
-    return AbstractSpecificAlbumModel::albumData(a, role);
+    return AbstractCheckableAlbumModel::albumData(a, role);
 }
 
 Album* SearchModel::albumForId(int id) const
