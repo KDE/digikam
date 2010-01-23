@@ -89,7 +89,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 080 ==> 161338 : Too small images when "Embedded preview load full image size" deactivated.
 081 ==> 218179 : Add file name labels to the light table.
 082 ==> 210910 : Please allow locking image zoom on the light table [patch].
-083 ==> 
+083 ==> 222469 : Drag folders to Dolphin.
+084 ==> 
 
 
 
