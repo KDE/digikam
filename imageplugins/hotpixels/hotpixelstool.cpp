@@ -112,6 +112,11 @@ HotPixelsTool::HotPixelsTool(QObject* parent)
     // -------------------------------------------------------------
 
     d->gboxSettings   = new EditorToolSettings;
+    d->gboxSettings->setButtons(EditorToolSettings::Default|
+                                EditorToolSettings::Ok|
+                                EditorToolSettings::Cancel|
+                                EditorToolSettings::Try);
+                                
     QGridLayout* grid = new QGridLayout(d->gboxSettings->plainPage());
 
     QLabel *filterMethodLabel = new QLabel(i18n("Filter:"), d->gboxSettings->plainPage());
