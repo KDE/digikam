@@ -7,7 +7,7 @@
  * Description : a digiKam image plugin for fixing dots produced by
  *               hot/stuck/dead pixels from a CCD.
  *
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2005-2006 by Unai Garro <ugarro at users dot sourceforge dot net>
  *
  * This program is free software; you can redistribute it
@@ -22,7 +22,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "hotpixelstool.moc"
 
@@ -148,9 +147,7 @@ HotPixelsTool::HotPixelsTool(QObject* parent)
 
     setToolSettings(d->gboxSettings);
     setToolView(d->previewWidget);
-    setPreviewModeMask(PreviewToolBar::PreviewBothImagesHorz | 
-                       PreviewToolBar::PreviewBothImagesVert | 
-                       PreviewToolBar::PreviewTargetImage);    
+    setPreviewModeMask(PreviewToolBar::AllPreviewModes);
     init();
 
     // -------------------------------------------------------------
@@ -161,8 +158,8 @@ HotPixelsTool::HotPixelsTool(QObject* parent)
     connect(d->blackFrameButton, SIGNAL(clicked()),
             this, SLOT(slotAddBlackFrame()));
 
-    connect(d->blackFrameListView, SIGNAL(blackFrameSelected(QList<HotPixel>, const KUrl&)),
-            this, SLOT(slotBlackFrame(QList<HotPixel>, const KUrl&)));
+    connect(d->blackFrameListView, SIGNAL(signalBlackFrameSelected(const QList<HotPixel>&, const KUrl&)),
+            this, SLOT(slotBlackFrame(const QList<HotPixel>&, const KUrl&)));
 }
 
 HotPixelsTool::~HotPixelsTool()
@@ -291,7 +288,7 @@ void HotPixelsTool::putFinalData()
     iface.putOriginalImage(i18n("Hot Pixels Correction"), filter()->getTargetImage().bits());
 }
 
-void HotPixelsTool::slotBlackFrame(QList<HotPixel> hpList, const KUrl& blackFrameURL)
+void HotPixelsTool::slotBlackFrame(const QList<HotPixel>& hpList, const KUrl& blackFrameURL)
 {
     d->blackFrameURL = blackFrameURL;
     d->hotPixelsList = hpList;

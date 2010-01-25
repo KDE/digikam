@@ -6,7 +6,7 @@
  * Date        : 2005-07-05
  * Description : a ListView to display black frames
  *
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2005-2006 by Unai Garro <ugarro at users dot sourceforge dot net>
  *
  * This program is free software; you can redistribute it
@@ -24,7 +24,6 @@
 
 #define THUMB_WIDTH 150
 
-
 #include "blackframelistview.moc"
 
 // Qt includes
@@ -32,7 +31,6 @@
 #include <QList>
 #include <QPainter>
 #include <QPixmap>
-
 
 namespace DigikamHotPixelsImagesPlugin
 {
@@ -51,7 +49,7 @@ BlackFrameListView::BlackFrameListView(QWidget* parent)
     labels.append( i18n("Preview") );
     labels.append( i18n("Size") );
     labels.append( i18nc("This is a column which will contain the amount of HotPixels "
-                   "found in the black frame file", "HP") );
+                         "found in the black frame file", "HP") );
     setHeaderLabels(labels);
 }
 
@@ -65,11 +63,11 @@ BlackFrameListViewItem::BlackFrameListViewItem(BlackFrameListView* parent, const
     m_parser        = new BlackFrameParser(parent);
     m_parser->parseBlackFrame(url);
 
-    connect(m_parser, SIGNAL(parsed(QList<HotPixel>)),
-            this, SLOT(slotParsed(QList<HotPixel>)));
+    connect(m_parser, SIGNAL(signalParsed(const QList<HotPixel>&)),
+            this, SLOT(slotParsed(const QList<HotPixel>&)));
 
-    connect(this, SIGNAL(parsed(QList<HotPixel>, const KUrl&)),
-            parent, SLOT(slotParsed(QList<HotPixel>, const KUrl&)));
+    connect(this, SIGNAL(signalParsed(const QList<HotPixel>&, const KUrl&)),
+            parent, SLOT(slotParsed(const QList<HotPixel>&, const KUrl&)));
 
     connect(m_parser, SIGNAL(signalLoadingProgress(float)),
             this, SIGNAL(signalLoadingProgress(float)));
@@ -81,10 +79,10 @@ BlackFrameListViewItem::BlackFrameListViewItem(BlackFrameListView* parent, const
 void BlackFrameListViewItem::activate()
 {
     m_parent->setToolTip( m_blackFrameDesc);
-    emit parsed(m_hotPixels, m_blackFrameURL);
+    emit signalParsed(m_hotPixels, m_blackFrameURL);
 }
 
-void BlackFrameListViewItem::slotParsed(QList<HotPixel> hotPixels)
+void BlackFrameListViewItem::slotParsed(const QList<HotPixel>& hotPixels)
 {
     m_hotPixels = hotPixels;
     m_image     = m_parser->image();
@@ -103,7 +101,7 @@ void BlackFrameListViewItem::slotParsed(QList<HotPixel> hotPixels)
         m_blackFrameDesc.append( QString("[%1,%2] ").arg((*it).x()).arg((*it).y()) );
     }
 
-    emit parsed(m_hotPixels, m_blackFrameURL);
+    emit signalParsed(m_hotPixels, m_blackFrameURL);
 }
 
 QPixmap BlackFrameListViewItem::thumb(const QSize& size)

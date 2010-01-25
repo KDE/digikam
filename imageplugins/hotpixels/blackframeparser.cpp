@@ -6,7 +6,7 @@
  * Date        : 2005-03-27
  * Description : black frames parser
  *
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2005-2006 by Unai Garro <ugarro at users dot sourceforge dot net>
  *
  * Part of the algorithm for finding the hot pixels was based on
@@ -36,7 +36,6 @@
 #define REL_TO_ABS(n,m) \
     ((((n) / DENOM_SQRT) * (m) + ((n) % DENOM_SQRT) * (m) / DENOM_SQRT) / DENOM_SQRT)
 
-
 #include "blackframeparser.moc"
 
 // Qt includes
@@ -50,7 +49,6 @@
 #include <kdeversion.h>
 #include <kio/netaccess.h>
 #include <kio/job.h>
-
 
 namespace DigikamHotPixelsImagesPlugin
 {
@@ -158,12 +156,12 @@ void BlackFrameParser::blackFrameParsing()
     consolidatePixels (hpList);
 
     //And notify
-    emit parsed(hpList);
+    emit signalParsed(hpList);
 }
 
 // Consolidate adjacent points into larger points.
 
-void BlackFrameParser::consolidatePixels (QList<HotPixel>& list)
+void BlackFrameParser::consolidatePixels(QList<HotPixel>& list)
 {
     if (list.isEmpty())
         return;
@@ -190,8 +188,9 @@ void BlackFrameParser::consolidatePixels (QList<HotPixel>& list)
 
             //find any intersecting hotpixels below tmp
             int i = list.indexOf(tmp);
+            
             if (i == -1) point_below_it = list.end();
-            else point_below_it = list.begin() + i;
+            else         point_below_it = list.begin() + i;
 
             if (point_below_it != list.end())
             {
@@ -207,12 +206,14 @@ void BlackFrameParser::consolidatePixels (QList<HotPixel>& list)
                 list.erase(point_below_it); //TODO: Check! this could remove it++?
             }
             else
+            {
                 break;
+            }
         }
     }
 }
 
-void BlackFrameParser::validateAndConsolidate (HotPixel *a, HotPixel *b)
+void BlackFrameParser::validateAndConsolidate(HotPixel* a, HotPixel* b)
 {
     a->luminosity = qMax(a->luminosity, b->luminosity);
 }
