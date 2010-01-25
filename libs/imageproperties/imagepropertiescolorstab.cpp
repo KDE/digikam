@@ -389,6 +389,7 @@ void ImagePropertiesColorsTab::setData(const KUrl& url, const QRect& selectionAr
     if (url.isEmpty())
     {
        setEnabled(false);
+       d->image.reset();
        return;
     }
 
@@ -534,6 +535,7 @@ void ImagePropertiesColorsTab::setSelection(const QRect& selectionArea)
     }
     else
     {
+        d->imageSelection.reset();
         d->regionBox->hide();
         slotRenderingChanged(FullImageHistogram);
     }
