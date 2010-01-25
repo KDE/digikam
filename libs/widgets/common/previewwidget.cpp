@@ -128,6 +128,7 @@ PreviewWidget::PreviewWidget(QWidget *parent)
     setFrameStyle(QFrame::StyledPanel|QFrame::Plain);
     setMargin(0);
     setLineWidth(1);
+    setFocusPolicy(Qt::ClickFocus);
 
     connect(d->cornerButton, SIGNAL(pressed()),
             this, SLOT(slotCornerButtonPressed()));
@@ -606,7 +607,7 @@ void PreviewWidget::drawText(QPainter* p, const QRect& rect, const QString& text
     p->restore();
 }
 
-void PreviewWidget::contentsMousePressEvent(QMouseEvent *e)
+void PreviewWidget::contentsMousePressEvent(QMouseEvent* e)
 {
     if (!e || e->button() == Qt::RightButton)
         return;
@@ -633,7 +634,7 @@ void PreviewWidget::contentsMousePressEvent(QMouseEvent *e)
     viewport()->setMouseTracking(false);
 }
 
-void PreviewWidget::contentsMouseMoveEvent(QMouseEvent *e)
+void PreviewWidget::contentsMouseMoveEvent(QMouseEvent* e)
 {
     if (!e) return;
 
@@ -647,7 +648,7 @@ void PreviewWidget::contentsMouseMoveEvent(QMouseEvent *e)
     }
 }
 
-void PreviewWidget::contentsMouseReleaseEvent(QMouseEvent *e)
+void PreviewWidget::contentsMouseReleaseEvent(QMouseEvent* e)
 {
     if (!e) return;
 
@@ -666,7 +667,7 @@ void PreviewWidget::contentsMouseReleaseEvent(QMouseEvent *e)
     }
 }
 
-void PreviewWidget::contentsWheelEvent(QWheelEvent *e)
+void PreviewWidget::contentsWheelEvent(QWheelEvent* e)
 {
     e->accept();
 
@@ -767,6 +768,48 @@ void PreviewWidget::slotSelectionLeaveFocus()
 {
     m_movingInProgress = false;
     viewport()->repaint();
+}
+
+void PreviewWidget::keyPressEvent(QKeyEvent* e)
+{
+    if (!e) return;
+
+    int mult = 1;
+    if ( (e->modifiers() & Qt::ControlModifier))
+        mult = 10;
+
+    switch ( e->key() )
+    {
+        case Qt::Key_Right:
+        {
+            horizontalScrollBar()->setValue(horizontalScrollBar()->value() + horizontalScrollBar()->singleStep()*mult);
+            break;
+        }
+
+        case Qt::Key_Left:
+        {
+            horizontalScrollBar()->setValue(horizontalScrollBar()->value() - horizontalScrollBar()->singleStep()*mult);
+            break;
+        }
+
+        case Qt::Key_Up:
+        {
+            verticalScrollBar()->setValue(verticalScrollBar()->value() - verticalScrollBar()->singleStep()*mult);
+            break;
+        }
+
+        case Qt::Key_Down:
+        {
+            verticalScrollBar()->setValue(verticalScrollBar()->value() + verticalScrollBar()->singleStep()*mult);
+            break;
+        }
+
+        default:
+        {
+            e->ignore();
+            break;
+        }
+    }
 }
 
 }  // namespace Digikam
