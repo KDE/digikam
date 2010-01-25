@@ -725,8 +725,7 @@ void PreviewWidget::slotCornerButtonPressed()
     pan->setRegionSelection(r);
     pan->setMouseFocus();
     d->panIconPopup->setMainWidget(pan);
-    m_movingInProgress = true;
-    viewport()->repaint();
+    slotSelectionTakeFocus();
 
     QPoint g = mapToGlobal(viewport()->pos());
     g.setX(g.x()+ viewport()->size().width());
@@ -752,10 +751,9 @@ void PreviewWidget::slotPanIconSelectionMoved(const QRect& r, bool b)
     {
         d->panIconPopup->hide();
         d->panIconPopup->deleteLater();
-        d->panIconPopup    = 0;
-        m_movingInProgress = false;
+        d->panIconPopup = 0;
         slotPanIconHiden();
-        viewport()->repaint();
+        slotSelectionLeaveFocus();
     }
 }
 
