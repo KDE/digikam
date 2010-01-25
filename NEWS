@@ -96,7 +96,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 086 ==> 177827 : Add vignetting effect to digiKam.
 087 ==> 224136 : Show dialog with settings when saving image on Windows [patch].
 088 ==> 183108 : View mode: mouse zoom and pan.
-089 ==> 
+089 ==> 150533 : New plugin for correction of backlighting.
+090 ==> 
+
 
 
 
