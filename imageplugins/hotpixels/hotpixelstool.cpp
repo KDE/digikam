@@ -128,6 +128,7 @@ HotPixelsTool::HotPixelsTool(QObject* parent)
     d->filterMethodCombo->setDefaultIndex(HotPixelFixer::QUADRATIC_INTERPOLATION);
 
     d->blackFrameButton = new QPushButton(i18n("Black Frame..."), d->gboxSettings->plainPage());
+    d->blackFrameButton->setIcon(KIcon("document-open"));
     d->blackFrameButton->setWhatsThis(i18n("Use this button to add a new black frame file which will "
                                            "be used by the hot pixels removal filter.") );
 
