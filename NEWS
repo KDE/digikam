@@ -93,7 +93,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 083 ==> 222469 : Drag folders to Dolphin.
 084 ==> 219735 : digiKam unable to detect Camera.
 085 ==> 218906 : Camera obscura/pinhole camera/vignetting effect.
-086 ==> 
+086 ==> 177827 : Add vignetting effect to digiKam.
+087 ==> 
+
 
 
 
