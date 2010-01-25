@@ -758,6 +758,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/iccprofileinfodlg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/dprogressdlg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/dbusydlg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/filesaveoptionsdlg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/imagedialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/rawcameradlg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/libsinfodlg.cpp

@@ -32,6 +32,7 @@
 #include <QPainter>
 #include <QPixmap>
 #include <QString>
+#include <QToolBar>
 
 // KDE includes
 
@@ -82,15 +83,15 @@ public:
         previewThread        = 0;
         previewPreloadThread = 0;
         stack                = 0;
-        hasPrev              = false;
-        hasNext              = false;
         loadFullImageSize    = false;
         previewSize          = 1024;
         isLoaded             = false;
+        toolBar              = 0;
+        back2AlbumAction     = 0;
+        prevAction           = 0;
+        nextAction           = 0;
     }
 
-    bool               hasPrev;
-    bool               hasNext;
     bool               loadFullImageSize;
     bool               isLoaded;
 
@@ -99,6 +100,12 @@ public:
     QString            path;
     QString            nextPath;
     QString            previousPath;
+
+    QAction*           back2AlbumAction;
+    QAction*           prevAction;
+    QAction*           nextAction;
+
+    QToolBar*          toolBar;
 
     DImg               preview;
 
@@ -110,10 +117,13 @@ public:
     AlbumWidgetStack*  stack;
 };
 
-ImagePreviewView::ImagePreviewView(QWidget *parent, AlbumWidgetStack *stack)
+ImagePreviewView::ImagePreviewView(QWidget* parent, AlbumWidgetStack* stack)
                 : PreviewWidget(parent), d(new ImagePreviewViewPriv)
 {
-    d->stack = stack;
+    d->stack            = stack;
+    d->back2AlbumAction = new QAction(SmallIcon("folder-image"), i18n("Back to Album"),                 this);
+    d->prevAction       = new QAction(SmallIcon("go-previous"),  i18nc("go to previous image", "Back"), this);
+    d->nextAction       = new QAction(SmallIcon("go-next"),      i18nc("go to next image", "Forward"),  this);
 
     // get preview size from screen size, but limit from VGA to WQXGA
     d->previewSize = qMax(KApplication::desktop()->height(),
@@ -136,13 +146,24 @@ ImagePreviewView::ImagePreviewView(QWidget *parent, AlbumWidgetStack *stack)
     connect(this, SIGNAL(signalRightButtonClicked()),
             this, SLOT(slotContextMenu()));
 
-    connect(this, SIGNAL(signalLeftButtonClicked()),
-            this, SIGNAL(signalBack2Album()));
-
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
 
+    connect(d->prevAction, SIGNAL(triggered()),
+            this, SIGNAL(signalPrevItem()));
+            
+    connect(d->nextAction, SIGNAL(triggered()),
+            this, SIGNAL(signalNextItem()));
+            
+    connect(d->back2AlbumAction, SIGNAL(triggered()),
+            this, SIGNAL(signalBack2Album()));
+
     // ------------------------------------------------------------
+            
+    d->toolBar = new QToolBar(this);
+    d->toolBar->addAction(d->prevAction);
+    d->toolBar->addAction(d->nextAction);
+    d->toolBar->addAction(d->back2AlbumAction);
 
     slotReset();
 }
@@ -207,15 +228,15 @@ void ImagePreviewView::setImagePath(const QString& path)
     {
         d->previewThread = new PreviewLoadThread();
         d->previewThread->setDisplayingWidget(this);
-        connect(d->previewThread, SIGNAL(signalImageLoaded(const LoadingDescription &, const DImg &)),
-                this, SLOT(slotGotImagePreview(const LoadingDescription &, const DImg&)));
+        connect(d->previewThread, SIGNAL(signalImageLoaded(const LoadingDescription&, const DImg&)),
+                this, SLOT(slotGotImagePreview(const LoadingDescription&, const DImg&)));
     }
 
     if (!d->previewPreloadThread)
     {
         d->previewPreloadThread = new PreviewLoadThread();
         d->previewPreloadThread->setDisplayingWidget(this);
-        connect(d->previewPreloadThread, SIGNAL(signalImageLoaded(const LoadingDescription &, const DImg &)),
+        connect(d->previewPreloadThread, SIGNAL(signalImageLoaded(const LoadingDescription&, const DImg&)),
                 this, SLOT(slotNextPreload()));
     }
 
@@ -289,12 +310,13 @@ void ImagePreviewView::slotNextPreload()
         d->previewPreloadThread->load(loadPath, d->previewSize, AlbumSettings::instance()->getExifRotate());
 }
 
-void ImagePreviewView::setImageInfo(const ImageInfo & info, const ImageInfo& previous, const ImageInfo& next)
+void ImagePreviewView::setImageInfo(const ImageInfo& info, const ImageInfo& previous, const ImageInfo& next)
 {
     d->imageInfo = info;
-    d->hasPrev   = previous.isNull() ? false : true;
-    d->hasNext   = next.isNull()     ? false : true;
 
+    d->prevAction->setEnabled(previous.isNull() ? false : true);
+    d->nextAction->setEnabled(next.isNull()     ? false : true);
+    
     if (!d->imageInfo.isNull())
         setImagePath(info.filePath());
     else
@@ -318,24 +340,14 @@ void ImagePreviewView::slotContextMenu()
     KUrl::List selectedItems;
     selectedItems << d->imageInfo.fileUrl();
 
-    // Temporary actions --------------------------------------
-
-    QAction *back2AlbumAction, *prevAction, *nextAction = 0;
-
-    back2AlbumAction = new QAction(SmallIcon("folder-image"), i18n("Back to Album"), this);
-    prevAction       = new QAction(SmallIcon("go-previous"),  i18nc("go to previous image", "Back"), this);
-    nextAction       = new QAction(SmallIcon("go-next"),      i18nc("go to next image", "Forward"), this);
-    prevAction->setEnabled(d->hasPrev);
-    nextAction->setEnabled(d->hasNext);
-
     // --------------------------------------------------------
 
     DPopupMenu popmenu(this);
     ContextMenuHelper cmhelper(&popmenu);
 
-    cmhelper.addAction(prevAction, true);
-    cmhelper.addAction(nextAction, true);
-    cmhelper.addAction(back2AlbumAction);
+    cmhelper.addAction(d->prevAction, true);
+    cmhelper.addAction(d->nextAction, true);
+    cmhelper.addAction(d->back2AlbumAction);
     cmhelper.addGotoMenu(idList);
     popmenu.addSeparator();
     // --------------------------------------------------------
@@ -381,15 +393,7 @@ void ImagePreviewView::slotContextMenu()
     connect(&cmhelper, SIGNAL(signalGotoDate(const ImageInfo&)),
             this, SIGNAL(signalGotoDateAndItem(const ImageInfo&)));
 
-    // handle temporary actions
-
-    QAction* choice = cmhelper.exec(QCursor::pos());
-    if (choice)
-    {
-        if (choice == prevAction)            emit signalPrevItem();
-        else if (choice == nextAction)       emit signalNextItem();
-        else if (choice == back2AlbumAction) emit signalBack2Album();
-    }
+    cmhelper.exec(QCursor::pos());
 }
 
 void ImagePreviewView::slotAssignTag(int tagID)
@@ -504,7 +508,7 @@ void ImagePreviewView::viewportPaintExtraData()
         {
             text     = i18n("Reduced Size Preview");
             fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text);
-            textRect.setTopLeft(QPoint(region.topLeft().x()+20, region.topLeft().y()+20));
+            textRect.setTopLeft(QPoint(region.topRight().x()-fontRect.width()-20, region.topRight().y()+20));
             textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2) );
             drawText(&p, textRect, text);
         }

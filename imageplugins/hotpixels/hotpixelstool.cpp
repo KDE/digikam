@@ -7,7 +7,7 @@
  * Description : a digiKam image plugin for fixing dots produced by
  *               hot/stuck/dead pixels from a CCD.
  *
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2005-2006 by Unai Garro <ugarro at users dot sourceforge dot net>
  *
  * This program is free software; you can redistribute it
@@ -22,7 +22,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "hotpixelstool.moc"
 
@@ -112,10 +111,12 @@ HotPixelsTool::HotPixelsTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings = new EditorToolSettings;
-
-    // -------------------------------------------------------------
-
+    d->gboxSettings   = new EditorToolSettings;
+    d->gboxSettings->setButtons(EditorToolSettings::Default|
+                                EditorToolSettings::Ok|
+                                EditorToolSettings::Cancel|
+                                EditorToolSettings::Try);
+                                
     QGridLayout* grid = new QGridLayout(d->gboxSettings->plainPage());
 
     QLabel *filterMethodLabel = new QLabel(i18n("Filter:"), d->gboxSettings->plainPage());
@@ -127,8 +128,9 @@ HotPixelsTool::HotPixelsTool(QObject* parent)
     d->filterMethodCombo->setDefaultIndex(HotPixelFixer::QUADRATIC_INTERPOLATION);
 
     d->blackFrameButton = new QPushButton(i18n("Black Frame..."), d->gboxSettings->plainPage());
+    d->blackFrameButton->setIcon(KIcon("document-open"));
     d->blackFrameButton->setWhatsThis(i18n("Use this button to add a new black frame file which will "
-                                          "be used by the hot pixels removal filter.") );
+                                           "be used by the hot pixels removal filter.") );
 
     d->blackFrameListView = new BlackFrameListView(d->gboxSettings->plainPage());
 
@@ -148,9 +150,7 @@ HotPixelsTool::HotPixelsTool(QObject* parent)
 
     setToolSettings(d->gboxSettings);
     setToolView(d->previewWidget);
-    setPreviewModeMask(PreviewToolBar::PreviewBothImagesHorz | 
-                       PreviewToolBar::PreviewBothImagesVert | 
-                       PreviewToolBar::PreviewTargetImage);    
+    setPreviewModeMask(PreviewToolBar::AllPreviewModes);
     init();
 
     // -------------------------------------------------------------
@@ -161,8 +161,8 @@ HotPixelsTool::HotPixelsTool(QObject* parent)
     connect(d->blackFrameButton, SIGNAL(clicked()),
             this, SLOT(slotAddBlackFrame()));
 
-    connect(d->blackFrameListView, SIGNAL(blackFrameSelected(QList<HotPixel>, const KUrl&)),
-            this, SLOT(slotBlackFrame(QList<HotPixel>, const KUrl&)));
+    connect(d->blackFrameListView, SIGNAL(signalBlackFrameSelected(const QList<HotPixel>&, const KUrl&)),
+            this, SLOT(slotBlackFrame(const QList<HotPixel>&, const KUrl&)));
 }
 
 HotPixelsTool::~HotPixelsTool()
@@ -254,11 +254,11 @@ void HotPixelsTool::prepareEffect()
     QList<HotPixel> hotPixelsRegion;
     QRect area = d->previewWidget->getOriginalImageRegionToRender();
 
-    for (QList<HotPixel>::Iterator it = d->hotPixelsList.begin() ; it != d->hotPixelsList.end() ; ++it )
+    for (QList<HotPixel>::Iterator it = d->hotPixelsList.begin() ; it != d->hotPixelsList.end() ; ++it)
     {
         HotPixel hp = (*it);
 
-        if ( area.contains( hp.rect ) )
+        if (area.contains( hp.rect ))
         {
            hp.rect.moveTopLeft(QPoint( hp.rect.x()-area.x(), hp.rect.y()-area.y() ));
            hotPixelsRegion.append(hp);
@@ -291,7 +291,7 @@ void HotPixelsTool::putFinalData()
     iface.putOriginalImage(i18n("Hot Pixels Correction"), filter()->getTargetImage().bits());
 }
 
-void HotPixelsTool::slotBlackFrame(QList<HotPixel> hpList, const KUrl& blackFrameURL)
+void HotPixelsTool::slotBlackFrame(const QList<HotPixel>& hpList, const KUrl& blackFrameURL)
 {
     d->blackFrameURL = blackFrameURL;
     d->hotPixelsList = hpList;

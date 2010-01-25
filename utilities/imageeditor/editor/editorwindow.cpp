@@ -115,6 +115,7 @@
 #include "editortooliface.h"
 #include "exposurecontainer.h"
 #include "filesaveoptionsbox.h"
+#include "filesaveoptionsdlg.h"
 #include "iccmanager.h"
 #include "iccsettings.h"
 #include "iccsettingscontainer.h"
@@ -1886,12 +1887,41 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
        return false;
     }
 
+    KUrl newURL = imageFileSaveDialog->selectedUrl();
+    kDebug() << "Writing file to " << newURL;
+
+#ifdef _WIN32
+    //-- Show Settings Dialog ----------------------------------------------
+    
+    const QString configShowImageSettingsDialog="ShowImageSettingsDialog";
+    bool showDialog = group.readEntry(configShowImageSettingsDialog, true);
+    if (showDialog && options->discoverFormat(newURL.fileName(), DImg::NONE)!=DImg::NONE) {
+        FileSaveOptionsDlg *fileSaveOptionsDialog   = new FileSaveOptionsDlg(this, options);
+        options->slotImageFileFormatChanged(newURL.fileName());
+        
+        if (d->currentWindowModalDialog)
+        {
+            // go application-modal - we will create utter confusion if descending into more than one window-modal dialog
+            fileSaveOptionsDialog->setModal(true);
+            result = fileSaveOptionsDialog->exec();
+        }
+        else
+        {
+            fileSaveOptionsDialog->setWindowModality(Qt::WindowModal);
+            d->currentWindowModalDialog = fileSaveOptionsDialog;
+            result = fileSaveOptionsDialog->exec();
+            d->currentWindowModalDialog = 0;
+        }
+        if (result != KFileDialog::Accepted || !fileSaveOptionsDialog)
+        {
+            return false;
+        }
+    }
+#endif
+
     // Update file save settings in editor instance.
     options->applySettings();
     applyStandardSettings();
-
-    KUrl newURL = imageFileSaveDialog->selectedUrl();
-    kDebug() << "Writing file to " << newURL;
 
     // select the format to save the image with
     bool validFormatSet = selectValidSavingFormat(imageFileSaveDialog->currentFilter(), newURL, autoFilter);

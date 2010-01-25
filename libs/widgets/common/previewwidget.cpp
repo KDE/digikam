@@ -613,12 +613,11 @@ void PreviewWidget::contentsMousePressEvent(QMouseEvent *e)
 
     m_movingInProgress = false;
 
-    if (e->button() == Qt::LeftButton)
+    if (e->button() == Qt::LeftButton || e->button() == Qt::MidButton)
     {
-        emit signalLeftButtonClicked();
-    }
-    else if (e->button() == Qt::MidButton)
-    {
+        if (e->button() == Qt::LeftButton)
+            emit signalLeftButtonClicked();
+
         if (visibleWidth()  < d->zoomWidth ||
             visibleHeight() < d->zoomHeight)
         {
@@ -638,12 +637,11 @@ void PreviewWidget::contentsMouseMoveEvent(QMouseEvent *e)
 {
     if (!e) return;
 
-    if (e->buttons() & Qt::MidButton)
+    if (e->buttons() & Qt::LeftButton || e->buttons() & Qt::MidButton)
     {
         if (m_movingInProgress)
         {
-            scrollBy(d->midButtonX - e->x(),
-                     d->midButtonY - e->y());
+            scrollBy(d->midButtonX - e->x(), d->midButtonY - e->y());
             emit signalContentsMovedEvent(false);
         }
     }
@@ -655,7 +653,7 @@ void PreviewWidget::contentsMouseReleaseEvent(QMouseEvent *e)
 
     m_movingInProgress = false;
 
-    if (e->button() == Qt::MidButton)
+    if (e->button() == Qt::LeftButton || e->button() == Qt::MidButton)
     {
         emit signalContentsMovedEvent(true);
         viewport()->unsetCursor();

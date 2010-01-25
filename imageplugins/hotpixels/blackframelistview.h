@@ -6,7 +6,7 @@
  * Date        : 2005-07-05
  * Description : a ListView to display black frames
  * 
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2005-2006 by Unai Garro <ugarro at users dot sourceforge dot net>
  * 
  * This program is free software; you can redistribute it
@@ -59,13 +59,13 @@ public:
 
 Q_SIGNALS:
 
-    void blackFrameSelected(QList<HotPixel>, const KUrl&);
+    void signalBlackFrameSelected(const QList<HotPixel>&, const KUrl&);
 
 private Q_SLOTS:
 
-    void slotParsed(QList<HotPixel> hotPixels, const KUrl& blackFrameURL)
+    void slotParsed(const QList<HotPixel>& hotPixels, const KUrl& blackFrameURL)
     {
-       emit blackFrameSelected(hotPixels, blackFrameURL);
+       emit signalBlackFrameSelected(hotPixels, blackFrameURL);
     };
 };
 
@@ -82,7 +82,7 @@ public:
 
 Q_SIGNALS:
 
-    void parsed(QList<HotPixel>, const KUrl&);
+    void signalParsed(const QList<HotPixel>&, const KUrl&);
     void signalLoadingProgress(float);
     void signalLoadingComplete();
 
@@ -96,7 +96,7 @@ private:
 
 private Q_SLOTS:
 
-    void slotParsed(QList<HotPixel>);
+    void slotParsed(const QList<HotPixel>&);
 
 private:
 
@@ -112,9 +112,9 @@ private:
 
     KUrl                  m_blackFrameURL;
 
-    BlackFrameParser     *m_parser;
+    BlackFrameParser*     m_parser;
 
-    BlackFrameListView   *m_parent;
+    BlackFrameListView*   m_parent;
 };
 
 }  // namespace DigikamHotPixelsImagesPlugin

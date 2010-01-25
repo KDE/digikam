@@ -3,7 +3,8 @@ digiKam 1.1.0 - Release date: 2010-01-31
 
 NEW FEATURES:
 
-AdvancedRename:  The ReplaceModifier has regular expressions support now.
+AdvancedRename : The ReplaceModifier has regular expressions support now.
+ImageEditor    : Add an option to add vignetting over an image.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
@@ -90,7 +91,15 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 081 ==> 218179 : Add file name labels to the light table.
 082 ==> 210910 : Please allow locking image zoom on the light table [patch].
 083 ==> 222469 : Drag folders to Dolphin.
-084 ==> 
+084 ==> 219735 : digiKam unable to detect Camera.
+085 ==> 218906 : Camera obscura/pinhole camera/vignetting effect.
+086 ==> 177827 : Add vignetting effect to digiKam.
+087 ==> 224136 : Show dialog with settings when saving image on Windows [patch].
+088 ==> 183108 : View mode: mouse zoom and pan.
+089 ==> 
+
+
+
 
 
 

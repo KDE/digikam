@@ -6,7 +6,7 @@
  * Date        : 2005-03-27
  * Description : black frames parser
  * 
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2005-2006 by Unai Garro <ugarro at users dot sourceforge dot net>
  * 
  * Part of the algorithm for finding the hot pixels was based on
@@ -68,7 +68,7 @@ public:
 
 Q_SIGNALS:
 
-    void parsed(QList<HotPixel>);
+    void signalParsed(const QList<HotPixel>&);
     void signalLoadingProgress(float);
     void signalLoadingComplete();
 
@@ -90,7 +90,7 @@ private:
 
     QImage          m_Image;
 
-    LoadSaveThread *m_imageLoaderThread;
+    LoadSaveThread* m_imageLoaderThread;
 };
 
 }  // namespace DigikamHotPixelsImagesPlugin

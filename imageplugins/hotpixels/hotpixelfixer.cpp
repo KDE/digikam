@@ -57,7 +57,7 @@
 namespace DigikamHotPixelsImagesPlugin
 {
 
-HotPixelFixer::HotPixelFixer(Digikam::DImg *orgImage, QObject *parent, const QList<HotPixel>& hpList,
+HotPixelFixer::HotPixelFixer(Digikam::DImg* orgImage, QObject* parent, const QList<HotPixel>& hpList,
                              int interpolationMethod)
              : Digikam::DImgThreadedFilter(orgImage, parent, "HotPixels")
 {
@@ -288,7 +288,6 @@ void HotPixelFixer::weightPixels (Digikam::DImg& img, HotPixel& px, int method, 
                     if (iComp==0) color.setRed(component);
                     else if (iComp==1) color.setGreen(component);
                     else color.setBlue(component);
-
 
                     img.setPixelColor(px.x()+x,px.y()+y,color);
                 }
