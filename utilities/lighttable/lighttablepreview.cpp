@@ -510,7 +510,7 @@ void LightTablePreview::viewportPaintExtraData()
         {
             text     = i18n("Reduced Size Preview");
             fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text);
-            textRect.setTopLeft(QPoint(region.topLeft().x()+20, region.topLeft().y()+20));
+            textRect.setTopLeft(QPoint(region.topRight().x()-fontRect.width()-20, region.topRight().y()+20));
             textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2) );
             drawText(&p, textRect, text);
         }
