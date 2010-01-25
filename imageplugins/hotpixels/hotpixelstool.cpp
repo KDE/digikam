@@ -111,10 +111,7 @@ HotPixelsTool::HotPixelsTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings = new EditorToolSettings;
-
-    // -------------------------------------------------------------
-
+    d->gboxSettings   = new EditorToolSettings;
     QGridLayout* grid = new QGridLayout(d->gboxSettings->plainPage());
 
     QLabel *filterMethodLabel = new QLabel(i18n("Filter:"), d->gboxSettings->plainPage());
@@ -127,7 +124,7 @@ HotPixelsTool::HotPixelsTool(QObject* parent)
 
     d->blackFrameButton = new QPushButton(i18n("Black Frame..."), d->gboxSettings->plainPage());
     d->blackFrameButton->setWhatsThis(i18n("Use this button to add a new black frame file which will "
-                                          "be used by the hot pixels removal filter.") );
+                                           "be used by the hot pixels removal filter.") );
 
     d->blackFrameListView = new BlackFrameListView(d->gboxSettings->plainPage());
 
@@ -251,11 +248,11 @@ void HotPixelsTool::prepareEffect()
     QList<HotPixel> hotPixelsRegion;
     QRect area = d->previewWidget->getOriginalImageRegionToRender();
 
-    for (QList<HotPixel>::Iterator it = d->hotPixelsList.begin() ; it != d->hotPixelsList.end() ; ++it )
+    for (QList<HotPixel>::Iterator it = d->hotPixelsList.begin() ; it != d->hotPixelsList.end() ; ++it)
     {
         HotPixel hp = (*it);
 
-        if ( area.contains( hp.rect ) )
+        if (area.contains( hp.rect ))
         {
            hp.rect.moveTopLeft(QPoint( hp.rect.x()-area.x(), hp.rect.y()-area.y() ));
            hotPixelsRegion.append(hp);
