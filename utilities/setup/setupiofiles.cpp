@@ -25,6 +25,7 @@
 
 // Qt includes
 
+#include <QCheckBox>
 #include <QVBoxLayout>
 
 // KDE includes
@@ -68,6 +69,12 @@ public:
         TIFFOptions(0),
         JPEG2000Options(0),
         PGFOptions(0)
+
+#ifdef _WIN32
+        ,
+        configShowImageSettingsDialog("ShowImageSettingsDialog"),
+        showImageSettingsDialog(0)
+#endif
     {}
 
     const QString configGroupName; 
@@ -85,6 +92,11 @@ public:
     TIFFSettings* TIFFOptions;
     JP2KSettings* JPEG2000Options;
     PGFSettings*  PGFOptions;
+
+#ifdef _WIN32
+    const QString configShowImageSettingsDialog;
+    QCheckBox*    showImageSettingsDialog;
+#endif
 };
 
 SetupIOFiles::SetupIOFiles(QWidget* parent )
@@ -120,6 +132,16 @@ SetupIOFiles::SetupIOFiles(QWidget* parent )
 
     d->PGFOptions = new PGFSettings(panel);
 
+#ifdef _WIN32
+    //-- Show Settings Dialog ----------------------------------------------
+    
+    KSeparator *line5 = new KSeparator(Qt::Horizontal, panel);
+    d->showImageSettingsDialog = new QCheckBox(panel);
+    d->showImageSettingsDialog->setText(i18n("Show Settings Dialog when Saving Image Files"));
+    d->showImageSettingsDialog->setWhatsThis( i18n("<ul><li>Checked: A dialog where settings can be changed when saving image files</li>"
+                                                 "<li>Unchecked: Default settings are used when saving image files</li></ul>"));
+#endif
+                                                 
     vbox->setMargin(0);
     vbox->setSpacing(KDialog::spacingHint());
     vbox->addWidget(d->JPEGOptions);
@@ -131,6 +153,10 @@ SetupIOFiles::SetupIOFiles(QWidget* parent )
     vbox->addWidget(d->JPEG2000Options);
     vbox->addWidget(line4);
     vbox->addWidget(d->PGFOptions);
+#ifdef _WIN32
+    vbox->addWidget(line5);
+    vbox->addWidget(d->showImageSettingsDialog);
+#endif
     vbox->addStretch(10);
 
     readSettings();
@@ -159,6 +185,9 @@ void SetupIOFiles::applySettings()
     group.writeEntry(d->configJPEG2000LossLessEntry,    d->JPEG2000Options->getLossLessCompression());
     group.writeEntry(d->configPGFCompressionEntry,      d->PGFOptions->getCompressionValue());
     group.writeEntry(d->configPGFLossLessEntry,         d->PGFOptions->getLossLessCompression());
+#ifdef _WIN32
+    group.writeEntry(d->configShowImageSettingsDialog,  d->showImageSettingsDialog->isChecked());
+#endif
     config->sync();
 }
 
@@ -174,6 +203,9 @@ void SetupIOFiles::readSettings()
     d->JPEG2000Options->setLossLessCompression( group.readEntry(d->configJPEG2000LossLessEntry, true) );
     d->PGFOptions->setCompressionValue( group.readEntry(d->configPGFCompressionEntry,           3) );
     d->PGFOptions->setLossLessCompression( group.readEntry(d->configPGFLossLessEntry,           true) );
+#ifdef _WIN32
+    d->showImageSettingsDialog->setChecked( group.readEntry(d->configShowImageSettingsDialog,   true) );
+#endif
 }
 
 }  // namespace Digikam
