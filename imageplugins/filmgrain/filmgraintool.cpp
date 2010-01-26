@@ -97,6 +97,11 @@ FilmGrainTool::FilmGrainTool(QObject* parent)
 
     d->gboxSettings  = new EditorToolSettings;
     d->previewWidget = new ImageRegionWidget;
+    
+    d->gboxSettings->setButtons(EditorToolSettings::Default|
+                                EditorToolSettings::Ok|
+                                EditorToolSettings::Cancel|
+                                EditorToolSettings::Try);
 
     // -------------------------------------------------------------
 
