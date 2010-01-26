@@ -188,6 +188,38 @@ void DCategorizedView::toIndex(const QModelIndex& index)
     scrollTo(index);
 }
 
+void DCategorizedView::awayFromSelection()
+{
+    QItemSelection selection = selectionModel()->selection();
+    if (selection.isEmpty())
+        return;
+    const QModelIndex first = model()->index(0, 0);
+    const QModelIndex last  = model()->index(model()->rowCount() - 1, 0);
+    if (selection.contains(first) && selection.contains(last))
+    {
+        QItemSelection remaining(first, last);
+        remaining.merge(selection, QItemSelectionModel::Toggle);
+        QList<QModelIndex> indexes = remaining.indexes();
+        if (indexes.isEmpty())
+        {
+            clearSelection();
+            setCurrentIndex(QModelIndex());
+        }
+        else
+            toIndex(remaining.indexes().first());
+    }
+    else if (selection.contains(last))
+    {
+        setCurrentIndex(selection.indexes().first());
+        toPreviousIndex();
+    }
+    else
+    {
+        setCurrentIndex(selection.indexes().last());
+        toNextIndex();
+    }
+}
+
 void DCategorizedView::invertSelection()
 {
     const QModelIndex topLeft = model()->index(0, 0);

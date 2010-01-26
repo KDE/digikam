@@ -6,8 +6,8 @@
  * Date   : 2005-05-25
  * Description : Infrared threaded image filter.
  * 
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * 
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -29,15 +29,17 @@
 
 #include "dimgthreadedfilter.h"
 
+using namespace Digikam;
+
 namespace DigikamInfraredImagesPlugin
 {
 
-class Infrared : public Digikam::DImgThreadedFilter
+class Infrared : public DImgThreadedFilter
 {
 
 public:
 
-    explicit Infrared(Digikam::DImg *orgImage, QObject *parent=0, int sensibility=1, bool grain=true);
+    explicit Infrared(DImg* orgImage, QObject* parent=0, int sensibility=1, bool grain=true);
 
     ~Infrared(){};
 
@@ -49,9 +51,8 @@ private:  // Infrared filter data.
 
 private:  // Infrared filter methods.
 
-    virtual void filterImage(void);
-
-    void infraredImage(Digikam::DImg *orgImage, int Sensibility, bool Grain);
+    void filterImage();
+    void infraredImage(int Sensibility, bool Grain);
 
 };
 

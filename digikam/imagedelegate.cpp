@@ -275,7 +275,6 @@ void ImageDelegate::paint(QPainter * p, const QStyleOptionViewItem& option, cons
     }
     else
     {
-        emit waitingForThumbnail(index);
         // simplified
         p->drawPixmap(0, 0, pix);
     }
@@ -402,7 +401,7 @@ QPixmap ImageDelegate::pixmapForDrag(const QStyleOptionViewItem& option, const Q
 
     if (icon.isNull())
     {
-        QPixmap icon(DesktopIcon("image-jp2", KIconLoader::SizeMedium));
+        icon = QPixmap(DesktopIcon("image-jp2", KIconLoader::SizeMedium));
     }
 
     int w = icon.width();

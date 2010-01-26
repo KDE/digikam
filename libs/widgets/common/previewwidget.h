@@ -32,6 +32,7 @@
 #include <QtGui/QWheelEvent>
 #include <QtGui/QMouseEvent>
 #include <QtGui/QPaintEvent>
+#include <QtGui/QKeyEvent>
 #include <QtGui/QImage>
 
 // Local includes
@@ -80,7 +81,7 @@ Q_SIGNALS:
     void signalShowPrevImage();
     void signalZoomFactorChanged(double);
     void signalContentsMovedEvent(bool);
-    void signalSelectionTakeFocus();
+    void signalContentTakeFocus();
     void signalResized();
     void signalToggleOffFitToWindow();
 
@@ -99,8 +100,8 @@ protected Q_SLOTS:
     void slotCornerButtonPressed();
     void slotPanIconHiden();
     virtual void slotPanIconSelectionMoved(const QRect&, bool);
-    virtual void slotSelectionTakeFocus();
-    virtual void slotSelectionLeaveFocus();
+    virtual void slotContentTakeFocus();
+    virtual void slotContentLeaveFocus();
 
 protected:
 
@@ -136,6 +137,8 @@ protected:
     virtual void contentsMouseMoveEvent(QMouseEvent*);
     virtual void contentsMouseReleaseEvent(QMouseEvent*);
     virtual void contentsWheelEvent(QWheelEvent*);
+    virtual void keyPressEvent(QKeyEvent*);
+    virtual void keyReleaseEvent(QKeyEvent*);
 
 private:
 

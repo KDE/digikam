@@ -56,7 +56,7 @@ public:
 public Q_SLOTS:
 
     void createNewAlbumForInfos(const QList<ImageInfo>& infos, Album *currentAlbum);
-    void deleteImages(const QList<ImageInfo>& infos, bool deletePermanently);
+    bool deleteImages(const QList<ImageInfo>& infos, bool deletePermanently);
     void deleteImagesDirectly(const QList<ImageInfo>& infos, bool useTrash);
 
     void insertToLightTable(const QList<ImageInfo>& list, const ImageInfo& current, bool emptyBeforeAdding);

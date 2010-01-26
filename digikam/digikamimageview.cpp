@@ -312,13 +312,15 @@ void DigikamImageView::insertSelectedToExistingQueue(int queueid)
 void DigikamImageView::deleteSelected(bool permanently)
 {
     ImageInfoList imageInfoList = selectedImageInfos();
-    d->utilities->deleteImages(imageInfoList, permanently);
+    if (d->utilities->deleteImages(imageInfoList, permanently))
+        awayFromSelection();
 }
 
 void DigikamImageView::deleteSelectedDirectly(bool permanently)
 {
     ImageInfoList imageInfoList = selectedImageInfos();
     d->utilities->deleteImagesDirectly(imageInfoList, permanently);
+    awayFromSelection();
 }
 
 void DigikamImageView::assignTagToSelected(int tagID)

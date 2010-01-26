@@ -185,6 +185,7 @@ Canvas::Canvas(QWidget *parent)
     viewport()->setPalette(palette);
     viewport()->setMouseTracking(false);
     setFrameStyle( QFrame::NoFrame );
+    setFocusPolicy(Qt::ClickFocus);
 
     d->rubber = new DRubberBand(this);
 
@@ -1463,6 +1464,48 @@ void Canvas::slotSelectNone()
 {
     reset();
     viewport()->update();
+}
+
+void Canvas::keyPressEvent(QKeyEvent* e)
+{
+    if (!e) return;
+
+    int mult = 1;
+    if ( (e->modifiers() & Qt::ControlModifier))
+        mult = 10;
+
+    switch ( e->key() )
+    {
+        case Qt::Key_Right:
+        {
+            horizontalScrollBar()->setValue(horizontalScrollBar()->value() + horizontalScrollBar()->singleStep()*mult);
+            break;
+        }
+
+        case Qt::Key_Left:
+        {
+            horizontalScrollBar()->setValue(horizontalScrollBar()->value() - horizontalScrollBar()->singleStep()*mult);
+            break;
+        }
+
+        case Qt::Key_Up:
+        {
+            verticalScrollBar()->setValue(verticalScrollBar()->value() - verticalScrollBar()->singleStep()*mult);
+            break;
+        }
+
+        case Qt::Key_Down:
+        {
+            verticalScrollBar()->setValue(verticalScrollBar()->value() + verticalScrollBar()->singleStep()*mult);
+            break;
+        }
+
+        default:
+        {
+            e->ignore();
+            break;
+        }
+    }
 }
 
 }  // namespace Digikam

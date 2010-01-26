@@ -128,7 +128,7 @@ void ImageViewUtilities::slotRenamed(KIO::Job* job, const KUrl &, const KUrl&new
     emit imageRenameSucceeded(url);
 }
 
-void ImageViewUtilities::deleteImages(const QList<ImageInfo>& infos, bool deletePermanently)
+bool ImageViewUtilities::deleteImages(const QList<ImageInfo>& infos, bool deletePermanently)
 {
     KUrl::List  urlList;
     KUrl::List  kioUrlList;
@@ -140,7 +140,7 @@ void ImageViewUtilities::deleteImages(const QList<ImageInfo>& infos, bool delete
     }
 
     if (urlList.count() <= 0)
-        return;
+        return false;
 
     DeleteDialog dialog(m_widget);
 
@@ -149,7 +149,7 @@ void ImageViewUtilities::deleteImages(const QList<ImageInfo>& infos, bool delete
                                   deletePermanently ?
                                   DeleteDialogMode::NoChoiceDeletePermanently :
                                   DeleteDialogMode::NoChoiceTrash))
-        return;
+        return false;
 
     bool useTrash = !dialog.shouldDelete();
 
@@ -158,6 +158,8 @@ void ImageViewUtilities::deleteImages(const QList<ImageInfo>& infos, bool delete
 
     connect(job, SIGNAL(result(KJob*)),
             this, SLOT(slotDIOResult(KJob*)));
+
+    return true;
 }
 
 void ImageViewUtilities::deleteImagesDirectly(const QList<ImageInfo>& infos, bool useTrash)

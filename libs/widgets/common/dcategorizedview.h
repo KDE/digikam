@@ -60,6 +60,7 @@ public:
     void toNextIndex();
     void toPreviousIndex();
     void toIndex(const QModelIndex& index);
+    void awayFromSelection();
 
     void invertSelection();
 

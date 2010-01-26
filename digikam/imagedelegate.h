@@ -92,8 +92,6 @@ public:
 Q_SIGNALS:
 
     void gridSizeChanged(const QSize& newSize);
-    void waitingForThumbnail(const QModelIndex& index) const;
-
     void visualChange();
 
 protected Q_SLOTS:
