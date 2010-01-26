@@ -138,6 +138,7 @@ protected:
     virtual void contentsMouseReleaseEvent(QMouseEvent*);
     virtual void contentsWheelEvent(QWheelEvent*);
     virtual void keyPressEvent(QKeyEvent*);
+    virtual void keyReleaseEvent(QKeyEvent*);
 
 private:
 

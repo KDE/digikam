@@ -782,24 +782,28 @@ void PreviewWidget::keyPressEvent(QKeyEvent* e)
     {
         case Qt::Key_Right:
         {
+            slotContentTakeFocus();
             horizontalScrollBar()->setValue(horizontalScrollBar()->value() + horizontalScrollBar()->singleStep()*mult);
             break;
         }
 
         case Qt::Key_Left:
         {
+            slotContentTakeFocus();
             horizontalScrollBar()->setValue(horizontalScrollBar()->value() - horizontalScrollBar()->singleStep()*mult);
             break;
         }
 
         case Qt::Key_Up:
         {
+            slotContentTakeFocus();
             verticalScrollBar()->setValue(verticalScrollBar()->value() - verticalScrollBar()->singleStep()*mult);
             break;
         }
 
         case Qt::Key_Down:
         {
+            slotContentTakeFocus();
             verticalScrollBar()->setValue(verticalScrollBar()->value() + verticalScrollBar()->singleStep()*mult);
             break;
         }
@@ -812,4 +816,27 @@ void PreviewWidget::keyPressEvent(QKeyEvent* e)
     }
 }
 
+void PreviewWidget::keyReleaseEvent(QKeyEvent* e)
+{
+    if (!e) return;
+
+    switch ( e->key() )
+    {
+        case Qt::Key_Right:
+        case Qt::Key_Left:
+        case Qt::Key_Up:
+        case Qt::Key_Down:
+        {
+            slotContentLeaveFocus();
+            break;
+        }
+
+        default:
+        {
+            e->ignore();
+            break;
+        }
+    }
+}
+    
 }  // namespace Digikam
