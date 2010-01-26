@@ -182,7 +182,7 @@ void InfraredTool::readSettings()
     d->sensibilityInput->blockSignals(true);
     d->addFilmGrain->blockSignals(true);
 
-    d->sensibilityInput->setValue(group.readEntry(d->configSensitivityAdjustmentEntry, 200));
+    d->sensibilityInput->setValue(group.readEntry(d->configSensitivityAdjustmentEntry, d->sensibilityInput->defaultValue()));
     d->addFilmGrain->setChecked(group.readEntry(d->configAddFilmGrainEntry,            false));
 
     d->sensibilityInput->blockSignals(false);

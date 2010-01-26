@@ -30,12 +30,14 @@
 
 #include "editortool.h"
 
+using namespace Digikam;
+
 namespace DigikamFilmGrainImagesPlugin
 {
 
 class FilmGrainToolPriv;
 
-class FilmGrainTool : public Digikam::EditorToolThreaded
+class FilmGrainTool : public EditorToolThreaded
 {
     Q_OBJECT
 

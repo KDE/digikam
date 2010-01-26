@@ -57,7 +57,6 @@
 #include "version.h"
 
 using namespace KDcrawIface;
-using namespace Digikam;
 
 namespace DigikamFilmGrainImagesPlugin
 {
@@ -154,7 +153,7 @@ void FilmGrainTool::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
     d->sensibilityInput->blockSignals(true);
-    d->sensibilityInput->setValue(group.readEntry(d->configSensitivityAdjustmentEntry, 2400));
+    d->sensibilityInput->setValue(group.readEntry(d->configSensitivityAdjustmentEntry, d->sensibilityInput->defaultValue()));
     d->sensibilityInput->blockSignals(false);
 }
 
