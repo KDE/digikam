@@ -6,8 +6,8 @@
  * Date        : 2005-05-25
  * Description : Infrared threaded image filter.
  *
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,7 +21,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "infrared.h"
 
@@ -50,17 +49,17 @@
 namespace DigikamInfraredImagesPlugin
 {
 
-Infrared::Infrared(Digikam::DImg *orgImage, QObject *parent, int sensibility, bool grain)
-        : Digikam::DImgThreadedFilter(orgImage, parent, "Infrared")
+Infrared::Infrared(DImg* orgImage, QObject* parent, int sensibility, bool grain)
+        : DImgThreadedFilter(orgImage, parent, "Infrared")
 {
     m_sensibility = sensibility;
     m_grain       = grain;
     initFilter();
 }
 
-void Infrared::filterImage(void)
+void Infrared::filterImage()
 {
-    infraredImage(&m_orgImage, m_sensibility, m_grain);
+    infraredImage(m_sensibility, m_grain);
 }
 
 // This method is based on the Simulate Infrared Film tutorial from GimpGuru.org web site
@@ -83,18 +82,18 @@ inline static int intMult16(uint a, uint b)
 http://www.pauck.de/marco/photo/infrared/comparison_of_films/comparison_of_films.html
 */
 
-void Infrared::infraredImage(Digikam::DImg *orgImage, int Sensibility, bool Grain)
+void Infrared::infraredImage(int Sensibility, bool Grain)
 {
     // Sensibility: 200..2600
 
     if (Sensibility <= 0) return;
 
-    int Width       = orgImage->width();
-    int Height      = orgImage->height();
-    int bytesDepth  = orgImage->bytesDepth();
-    uint numBytes   = orgImage->numBytes();
-    bool sixteenBit = orgImage->sixteenBit();
-    uchar* data     = orgImage->bits();
+    int Width       = m_orgImage.width();
+    int Height      = m_orgImage.height();
+    int bytesDepth  = m_orgImage.bytesDepth();
+    uint numBytes   = m_orgImage.numBytes();
+    bool sixteenBit = m_orgImage.sixteenBit();
+    uchar* data     = m_orgImage.bits();
 
     // Infrared film variables depending on Sensibility.
     // We can reproduce famous Ilford SFX200 infrared film
@@ -120,7 +119,7 @@ void Infrared::infraredImage(Digikam::DImg *orgImage, int Sensibility, bool Grai
     uchar* pOverlayBits = 0;    // Overlay to merge with original converted in gray scale.
     uchar*     pOutBits = m_destImage.bits(); // Destination image with merged grain mask and original.
 
-    Digikam::DColor bwData, bwBlurData, grainData, maskData, overData, outData;
+    DColor bwData, bwBlurData, grainData, maskData, overData, outData;
 
     //------------------------------------------
     // 1 - Create GrayScale green boosted image.
@@ -129,43 +128,37 @@ void Infrared::infraredImage(Digikam::DImg *orgImage, int Sensibility, bool Grai
     // Convert to gray scale with boosting Green channel.
     // Infrared film increase green color.
 
-    Digikam::DImg BWImage(Width, Height, sixteenBit);   // Black and White conversion.
+    DImg BWImage(Width, Height, sixteenBit);   // Black and White conversion.
     pBWBits = BWImage.bits();
     memcpy (pBWBits, data, numBytes);
 
-    Digikam::DImgImageFilters().channelMixerImage(pBWBits, Width, Height, sixteenBit, // Image data.
-                                                  true,                     // Preserve luminosity.
-                                                  true,                     // Monochrome.
-                                                  0.4F, greenBoost, -0.8F,  // Red channel gains.
-                                                  0.0F, 1.0F,        0.0F,  // Green channel gains (not used).
-                                                  0.0F, 0.0F,        1.0F); // Blue channel gains (not used).
+    DImgImageFilters().channelMixerImage(pBWBits, Width, Height, sixteenBit, // Image data.
+                                         true,                               // Preserve luminosity.
+                                         true,                               // Monochrome.
+                                         0.4F, greenBoost, -0.8F,            // Red channel gains.
+                                         0.0F, 1.0F,        0.0F,            // Green channel gains (not used).
+                                         0.0F, 0.0F,        1.0F);           // Blue channel gains (not used).
     postProgress( 10 );
     if (m_cancel)
-    {
         return;
-    }
 
     // Apply a Gaussian blur to the black and white image.
     // This way simulate Infrared film dispersion for the highlights.
 
-    Digikam::DImg BWBlurImage(Width, Height, sixteenBit);
+    DImg BWBlurImage(Width, Height, sixteenBit);
     pBWBlurBits = BWBlurImage.bits();
 
-    Digikam::DImgGaussianBlur(this, BWImage, BWBlurImage, 10, 20, blurRadius);
+    DImgGaussianBlur(this, BWImage, BWBlurImage, 10, 20, blurRadius);
 
     if (m_cancel)
-    {
         return;
-    }
 
     //-----------------------------------------------------------------
     // 2 - Create Gaussian blurred overlay mask with grain if necessary.
     //-----------------------------------------------------------------
 
-
     if (Grain)
     {
-
         // Create gray grain mask.
 
         QDateTime dt = QDateTime::currentDateTime();
@@ -213,7 +206,7 @@ void Infrared::infraredImage(Digikam::DImg *orgImage, int Sensibility, bool Grai
 
         // Smooth grain mask using gaussian blur.
 
-        Digikam::DImgImageFilters().gaussianBlurImage(pGrainBits, Width, Height, sixteenBit, 1);
+        DImgImageFilters().gaussianBlurImage(pGrainBits, Width, Height, sixteenBit, 1);
 
         postProgress( 40 );
         if (m_cancel)
@@ -235,26 +228,26 @@ void Infrared::infraredImage(Digikam::DImg *orgImage, int Sensibility, bool Grai
 
     if (Grain)
     {
-        Digikam::ImageCurves *grainCurves = new Digikam::ImageCurves(sixteenBit);
+        ImageCurves *grainCurves = new ImageCurves(sixteenBit);
         pMaskBits = new uchar[numBytes];    // Grain mask with curves adjustment.
 
         // We modify only global luminosity of the grain.
         if (sixteenBit)
         {
-            grainCurves->setCurvePoint(Digikam::LuminosityChannel, 0,  QPoint(0,   0));
-            grainCurves->setCurvePoint(Digikam::LuminosityChannel, 8,  QPoint(32768, 32768));
-            grainCurves->setCurvePoint(Digikam::LuminosityChannel, 16, QPoint(65535, 0));
+            grainCurves->setCurvePoint(LuminosityChannel, 0,  QPoint(0,   0));
+            grainCurves->setCurvePoint(LuminosityChannel, 8,  QPoint(32768, 32768));
+            grainCurves->setCurvePoint(LuminosityChannel, 16, QPoint(65535, 0));
         }
         else
         {
-            grainCurves->setCurvePoint(Digikam::LuminosityChannel, 0,  QPoint(0,   0));
-            grainCurves->setCurvePoint(Digikam::LuminosityChannel, 8,  QPoint(128, 128));
-            grainCurves->setCurvePoint(Digikam::LuminosityChannel, 16, QPoint(255, 0));
+            grainCurves->setCurvePoint(LuminosityChannel, 0,  QPoint(0,   0));
+            grainCurves->setCurvePoint(LuminosityChannel, 8,  QPoint(128, 128));
+            grainCurves->setCurvePoint(LuminosityChannel, 16, QPoint(255, 0));
         }
 
         // Calculate curves and lut to apply on grain.
-        grainCurves->curvesCalculateCurve(Digikam::LuminosityChannel);
-        grainCurves->curvesLutSetup(Digikam::AlphaChannel);
+        grainCurves->curvesCalculateCurve(LuminosityChannel);
+        grainCurves->curvesLutSetup(AlphaChannel);
         grainCurves->curvesLutProcess(pGrainBits, pMaskBits, Width, Height);
         delete grainCurves;
 
@@ -278,7 +271,7 @@ void Infrared::infraredImage(Digikam::DImg *orgImage, int Sensibility, bool Grai
         pOverlayBits = new uchar[numBytes];    // Overlay to merge with original converted in gray scale.
 
         // get composer for default blending
-        Digikam::DColorComposer *composer = Digikam::DColorComposer::getComposer(Digikam::DColorComposer::PorterDuffNone);
+        DColorComposer *composer = DColorComposer::getComposer(DColorComposer::PorterDuffNone);
         int alpha;
 
         int Shade = 52; // This value control the shading pixel effect between original image and grain mask.
