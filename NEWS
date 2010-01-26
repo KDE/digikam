@@ -100,7 +100,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 090 ==> 105934 : Would like to use the arrow keys to pan an image.
 091 ==> 193708 : digiKam crash on startup.
 092 ==> 218376 : digiKam tagging crash metadata.
-093 ==> 
+093 ==> 224243 : Content aware rescaling should not allow "original" preview mode.
+094 ==> 
 
 
 
