@@ -123,6 +123,14 @@ NoiseReductionSettings::NoiseReductionSettings(QWidget* parent)
 {
     QGridLayout* grid = new QGridLayout(parent);
 
+    QString thHelp = i18n("<b>Threshold</b>: Adjusts the threshold for denoising of "
+                          "the image in a range from 0.0 (none) to 10.0. "
+                          "The threshold is the value below which everything is considered noise.");
+                          
+    QString soHelp = i18n("<b>Softness</b>: This adjusts the softness of the thresholding "
+                          "(soft as opposed to hard thresholding). The higher the softness "
+                          "the more noise remains in the image.");
+    
     // -------------------------------------------------------------
 
     d->leadBox          = new QWidget;
@@ -133,18 +141,14 @@ NoiseReductionSettings::NoiseReductionSettings(QWidget* parent)
     d->thresholdInput->setDecimals(2);
     d->thresholdInput->input()->setRange(0.0, 10.0, 0.1, true);
     d->thresholdInput->setDefaultValue(1.2);
-    d->thresholdInput->setWhatsThis(i18n("<b>Threshold</b>: Adjusts the threshold for denoising of "
-                                         "the image in a range from 0.0 (none) to 10.0. "
-                                         "The threshold is the value below which everything is considered noise."));
+    d->thresholdInput->setWhatsThis(thHelp);
 
     QLabel *label2      = new QLabel(i18n("Softness:"), d->leadBox);
     d->softnessInput    = new RDoubleNumInput(d->leadBox);
     d->softnessInput->setDecimals(1);
     d->softnessInput->input()->setRange(0.0, 1.0, 0.1, true);
     d->softnessInput->setDefaultValue(0.9);
-    d->softnessInput->setWhatsThis(i18n("<b>Softness</b>: This adjusts the softness of the thresholding "
-                                        "(soft as opposed to hard thresholding). The higher the softness "
-                                        "the more noise remains in the image."));
+    d->softnessInput->setWhatsThis(soHelp);
 
     genLay->addWidget(label1,            0, 0, 1, 1);
     genLay->addWidget(d->thresholdInput, 0, 1, 1, 1);
@@ -170,18 +174,14 @@ NoiseReductionSettings::NoiseReductionSettings(QWidget* parent)
     d->thrLumInput->setDecimals(2);
     d->thrLumInput->input()->setRange(0.0, 10.0, 0.1, true);
     d->thrLumInput->setDefaultValue(1.2);
-/*    d->thrLumInput->setWhatsThis(i18n("<b>Threshold</b>: Adjusts the threshold for denoising of "
-                                         "the image in a range from 0.0 (none) to 10.0. "
-                                         "The threshold is the value below which everything is considered noise."));*/
+    d->thrLumInput->setWhatsThis(thHelp);
 
     QLabel *label4      = new QLabel(i18n("Softness:"), d->luminanceBox);
     d->softLumInput     = new RDoubleNumInput(d->luminanceBox);
     d->softLumInput->setDecimals(1);
     d->softLumInput->input()->setRange(0.0, 1.0, 0.1, true);
     d->softLumInput->setDefaultValue(0.9);
-/*    d->softLumInput->setWhatsThis(i18n("<b>Softness</b>: This adjusts the softness of the thresholding "
-                                        "(soft as opposed to hard thresholding). The higher the softness "
-                                        "the more noise remains in the image."));*/
+    d->softLumInput->setWhatsThis(soHelp);
 
     lumLay->addWidget(label3,          0, 0, 1, 1);
     lumLay->addWidget(d->thrLumInput,  0, 1, 1, 1);
@@ -201,18 +201,14 @@ NoiseReductionSettings::NoiseReductionSettings(QWidget* parent)
     d->thrCrInput->setDecimals(2);
     d->thrCrInput->input()->setRange(0.0, 10.0, 0.1, true);
     d->thrCrInput->setDefaultValue(1.2);
-/*    d->thrCrInput->setWhatsThis(i18n("<b>Threshold</b>: Adjusts the threshold for denoising of "
-                                         "the image in a range from 0.0 (none) to 10.0. "
-                                         "The threshold is the value below which everything is considered noise."));*/
+    d->thrCrInput->setWhatsThis(thHelp);
 
     QLabel *label6       = new QLabel(i18n("Softness:"), d->chrominanceRedBox);
     d->softCrInput       = new RDoubleNumInput(d->chrominanceRedBox);
     d->softCrInput->setDecimals(1);
     d->softCrInput->input()->setRange(0.0, 1.0, 0.1, true);
     d->softCrInput->setDefaultValue(0.9);
-/*    d->softCrInput->setWhatsThis(i18n("<b>Softness</b>: This adjusts the softness of the thresholding "
-                                        "(soft as opposed to hard thresholding). The higher the softness "
-                                        "the more noise remains in the image."));*/
+    d->softCrInput->setWhatsThis(soHelp);
 
     cRedLay->addWidget(label5,         0, 0, 1, 1);
     cRedLay->addWidget(d->thrCrInput,  0, 1, 1, 1);
@@ -232,18 +228,14 @@ NoiseReductionSettings::NoiseReductionSettings(QWidget* parent)
     d->thrCbInput->setDecimals(2);
     d->thrCbInput->input()->setRange(0.0, 10.0, 0.1, true);
     d->thrCbInput->setDefaultValue(1.2);
-/*    d->thrCbInput->setWhatsThis(i18n("<b>Threshold</b>: Adjusts the threshold for denoising of "
-                                         "the image in a range from 0.0 (none) to 10.0. "
-                                         "The threshold is the value below which everything is considered noise."));*/
+    d->thrCbInput->setWhatsThis(thHelp);
 
     QLabel *label8        = new QLabel(i18n("Softness:"), d->chrominanceBlueBox);
     d->softCbInput        = new RDoubleNumInput(d->chrominanceBlueBox);
     d->softCbInput->setDecimals(1);
     d->softCbInput->input()->setRange(0.0, 1.0, 0.1, true);
     d->softCbInput->setDefaultValue(0.9);
-/*    d->softCbInput->setWhatsThis(i18n("<b>Softness</b>: This adjusts the softness of the thresholding "
-                                        "(soft as opposed to hard thresholding). The higher the softness "
-                                        "the more noise remains in the image."));*/
+    d->softCbInput->setWhatsThis(soHelp);
 
     cBlueLay->addWidget(label7,         0, 0, 1, 1);
     cBlueLay->addWidget(d->thrCbInput,  0, 1, 1, 1);
