@@ -29,9 +29,7 @@
 
 #include <QGridLayout>
 #include <QImage>
-#include <QLCDNumber>
 #include <QLabel>
-#include <QSlider>
 
 // KDE includes
 

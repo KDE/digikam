@@ -28,12 +28,9 @@
 // Qt includes
 
 #include <QCheckBox>
-#include <QDateTime>
 #include <QGridLayout>
 #include <QImage>
-#include <QLCDNumber>
 #include <QLabel>
-#include <QSlider>
 
 // KDE includes
 
