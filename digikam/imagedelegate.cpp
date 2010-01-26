@@ -406,7 +406,7 @@ QPixmap ImageDelegate::pixmapForDrag(const QStyleOptionViewItem& option, const Q
 
     if (icon.isNull())
     {
-        QPixmap icon(DesktopIcon("image-jp2", KIconLoader::SizeMedium));
+        icon = QPixmap(DesktopIcon("image-jp2", KIconLoader::SizeMedium));
     }
 
     int w = icon.width();
