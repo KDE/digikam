@@ -156,30 +156,20 @@ void EditorStackView::toggleFitToWindow()
 void EditorStackView::fitToSelect()
 {
     if (viewMode() == CanvasMode)
-    {
         d->canvas->fitToSelect();
-    }
 }
 
 void EditorStackView::zoomTo100Percent()
 {
     if (viewMode() == CanvasMode)
     {
-        if (d->canvas->zoomFactor() == 1.0)
-            d->canvas->toggleFitToWindow();
-        else
-            d->canvas->setZoomFactor(1.0);
+        d->canvas->setZoomFactor(1.0);
     }
     else
     {
         PreviewWidget* preview = previewWidget();
         if (preview)
-        {
-            if (preview->zoomFactor() == 1.0)
-                preview->toggleFitToWindow();
-            else
-                preview->setZoomFactor(1.0);
-        }
+            preview->setZoomFactor(1.0);
     }
 }
 
