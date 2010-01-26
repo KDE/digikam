@@ -94,8 +94,8 @@ ImageRegionWidget::ImageRegionWidget(QWidget* parent)
     connect(this, SIGNAL(signalZoomFactorChanged(double)),
             this, SLOT(slotZoomFactorChanged()));
 
-    connect(this, SIGNAL(signalSelectionTakeFocus()),
-            this, SLOT(slotSelectionTakeFocus()));
+    connect(this, SIGNAL(signalContentTakeFocus()),
+            this, SLOT(slotContentTakeFocus()));
 
     connect(this, SIGNAL(signalContentsMovedEvent(bool)),
             this, SLOT(slotOriginalImageRegionChanged(bool)));
@@ -462,15 +462,15 @@ void ImageRegionWidget::slotPanIconSelectionMoved(const QRect& rect, bool target
     setContentsPosition((int)(rect.x()*zoomFactor()), (int)(rect.y()*zoomFactor()), targetDone);
 }
 
-void ImageRegionWidget::slotSelectionTakeFocus()
+void ImageRegionWidget::slotContentTakeFocus()
 {
-    PreviewWidget::slotSelectionTakeFocus();
+    PreviewWidget::slotContentTakeFocus();
     restorePixmapRegion();
 }
 
-void ImageRegionWidget::slotSelectionLeaveFocus()
+void ImageRegionWidget::slotContentLeaveFocus()
 {
-    PreviewWidget::slotSelectionLeaveFocus();
+    PreviewWidget::slotContentLeaveFocus();
     setContentsPosition(contentsX(), contentsY(), true);
 }
 

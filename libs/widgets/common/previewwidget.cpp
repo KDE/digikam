@@ -134,16 +134,16 @@ PreviewWidget::PreviewWidget(QWidget *parent)
             this, SLOT(slotCornerButtonPressed()));
 
     connect(this, SIGNAL(horizontalSliderPressed()),
-            this, SLOT(slotSelectionTakeFocus()));
+            this, SLOT(slotContentTakeFocus()));
 
     connect(this, SIGNAL(verticalSliderPressed()),
-            this, SLOT(slotSelectionTakeFocus()));
+            this, SLOT(slotContentTakeFocus()));
 
     connect(this, SIGNAL(horizontalSliderReleased()),
-            this, SLOT(slotSelectionLeaveFocus()));
+            this, SLOT(slotContentLeaveFocus()));
 
     connect(this, SIGNAL(verticalSliderReleased()),
-            this, SLOT(slotSelectionLeaveFocus()));
+            this, SLOT(slotContentLeaveFocus()));
 }
 
 PreviewWidget::~PreviewWidget()
@@ -712,7 +712,7 @@ void PreviewWidget::slotCornerButtonPressed()
     PanIconWidget *pan = new PanIconWidget(d->panIconPopup);
 
     connect(pan, SIGNAL(signalSelectionTakeFocus()),
-            this, SIGNAL(signalSelectionTakeFocus()));
+            this, SIGNAL(signalContentTakeFocus()));
 
     connect(pan, SIGNAL(signalSelectionMoved(const QRect&, bool)),
             this, SLOT(slotPanIconSelectionMoved(const QRect&, bool)));
@@ -726,7 +726,7 @@ void PreviewWidget::slotCornerButtonPressed()
     pan->setRegionSelection(r);
     pan->setMouseFocus();
     d->panIconPopup->setMainWidget(pan);
-    slotSelectionTakeFocus();
+    slotContentTakeFocus();
 
     QPoint g = mapToGlobal(viewport()->pos());
     g.setX(g.x()+ viewport()->size().width());
@@ -754,17 +754,17 @@ void PreviewWidget::slotPanIconSelectionMoved(const QRect& r, bool b)
         d->panIconPopup->deleteLater();
         d->panIconPopup = 0;
         slotPanIconHiden();
-        slotSelectionLeaveFocus();
+        slotContentLeaveFocus();
     }
 }
 
-void PreviewWidget::slotSelectionTakeFocus()
+void PreviewWidget::slotContentTakeFocus()
 {
     m_movingInProgress = true;
     viewport()->repaint();
 }
 
-void PreviewWidget::slotSelectionLeaveFocus()
+void PreviewWidget::slotContentLeaveFocus()
 {
     m_movingInProgress = false;
     viewport()->repaint();

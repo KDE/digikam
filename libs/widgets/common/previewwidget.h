@@ -81,7 +81,7 @@ Q_SIGNALS:
     void signalShowPrevImage();
     void signalZoomFactorChanged(double);
     void signalContentsMovedEvent(bool);
-    void signalSelectionTakeFocus();
+    void signalContentTakeFocus();
     void signalResized();
     void signalToggleOffFitToWindow();
 
@@ -100,8 +100,8 @@ protected Q_SLOTS:
     void slotCornerButtonPressed();
     void slotPanIconHiden();
     virtual void slotPanIconSelectionMoved(const QRect&, bool);
-    virtual void slotSelectionTakeFocus();
-    virtual void slotSelectionLeaveFocus();
+    virtual void slotContentTakeFocus();
+    virtual void slotContentLeaveFocus();
 
 protected:
 
