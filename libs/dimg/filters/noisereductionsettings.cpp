@@ -301,11 +301,11 @@ WaveletsNRContainer NoiseReductionSettings::settings() const
     WaveletsNRContainer prm;
 
     prm.thresholds[0] = d->thrLumInput->value();
-    prm.thresholds[1] = d->thrCrInput->value();
-    prm.thresholds[2] = d->thrCbInput->value();
+    prm.thresholds[2] = d->thrCrInput->value();
+    prm.thresholds[1] = d->thrCbInput->value();
     prm.softness[0]   = 1.0 - d->softLumInput->value();
-    prm.softness[1]   = 1.0 - d->softCrInput->value();
-    prm.softness[2]   = 1.0 - d->softCbInput->value();
+    prm.softness[2]   = 1.0 - d->softCrInput->value();
+    prm.softness[1]   = 1.0 - d->softCbInput->value();
     prm.advanced      = d->advancedBox->isChecked();
     prm.leadThreshold = d->thresholdInput->value();
     prm.leadSoftness  = 1.0 - d->softnessInput->value();
@@ -317,11 +317,11 @@ void NoiseReductionSettings::setSettings(const WaveletsNRContainer& settings)
 {
     blockSignals(true);
     d->thrLumInput->setValue(settings.thresholds[0]);
-    d->thrCrInput->setValue(settings.thresholds[1]);
-    d->thrCbInput->setValue(settings.thresholds[2]);
+    d->thrCrInput->setValue(settings.thresholds[2]);
+    d->thrCbInput->setValue(settings.thresholds[1]);
     d->softLumInput->setValue(1.0 - settings.softness[0]);
-    d->softCrInput->setValue(1.0 - settings.softness[1]);
-    d->softCbInput->setValue(1.0 - settings.softness[2]);
+    d->softCrInput->setValue(1.0 - settings.softness[2]);
+    d->softCbInput->setValue(1.0 - settings.softness[1]);
     d->advancedBox->setChecked(settings.advanced);
     d->thresholdInput->setValue(settings.leadThreshold);
     d->softnessInput->setValue(1.0 - settings.leadSoftness);
@@ -350,11 +350,11 @@ WaveletsNRContainer NoiseReductionSettings::defaultSettings() const
     WaveletsNRContainer prm;
 
     prm.thresholds[0] = d->thrLumInput->defaultValue();
-    prm.thresholds[1] = d->thrCrInput->defaultValue();
-    prm.thresholds[2] = d->thrCbInput->defaultValue();
+    prm.thresholds[2] = d->thrCrInput->defaultValue();
+    prm.thresholds[1] = d->thrCbInput->defaultValue();
     prm.softness[0]   = 1.0 - d->softLumInput->defaultValue();
-    prm.softness[1]   = 1.0 - d->softCrInput->defaultValue();
-    prm.softness[2]   = 1.0 - d->softCbInput->defaultValue();
+    prm.softness[2]   = 1.0 - d->softCrInput->defaultValue();
+    prm.softness[1]   = 1.0 - d->softCbInput->defaultValue();
     prm.advanced      = false;
     prm.leadThreshold = d->thresholdInput->defaultValue();
     prm.leadSoftness  = 1.0 - d->softnessInput->defaultValue();
@@ -392,11 +392,11 @@ void NoiseReductionSettings::readSettings(KConfigGroup& group)
     WaveletsNRContainer defaultPrm = defaultSettings();
 
     prm.thresholds[0] = group.readEntry(d->configThrLumInputAdjustmentEntry,  defaultPrm.thresholds[0]);
-    prm.thresholds[1] = group.readEntry(d->configThrCrInputAdjustmentEntry,   defaultPrm.thresholds[1]);
-    prm.thresholds[2] = group.readEntry(d->configThrCbInputAdjustmentEntry,   defaultPrm.thresholds[2]); 
+    prm.thresholds[2] = group.readEntry(d->configThrCrInputAdjustmentEntry,   defaultPrm.thresholds[2]);
+    prm.thresholds[1] = group.readEntry(d->configThrCbInputAdjustmentEntry,   defaultPrm.thresholds[1]); 
     prm.softness[0]   = group.readEntry(d->configSoftLumInputAdjustmentEntry, defaultPrm.softness[0]);
-    prm.softness[1]   = group.readEntry(d->configSoftCrInputAdjustmentEntry,  defaultPrm.softness[1]);
-    prm.softness[2]   = group.readEntry(d->configSoftCbInputAdjustmentEntry,  defaultPrm.softness[2]);
+    prm.softness[2]   = group.readEntry(d->configSoftCrInputAdjustmentEntry,  defaultPrm.softness[2]);
+    prm.softness[1]   = group.readEntry(d->configSoftCbInputAdjustmentEntry,  defaultPrm.softness[1]);
     prm.advanced      = group.readEntry(d->configAdvancedAdjustmentEntry,     defaultPrm.advanced);
     prm.leadThreshold = group.readEntry(d->configThresholdAdjustmentEntry,    defaultPrm.leadThreshold);
     prm.leadSoftness  = group.readEntry(d->configSoftnessAdjustmentEntry,     defaultPrm.leadSoftness);
@@ -408,11 +408,11 @@ void NoiseReductionSettings::writeSettings(KConfigGroup& group)
     WaveletsNRContainer prm = settings();
 
     group.writeEntry(d->configThrLumInputAdjustmentEntry,  prm.thresholds[0]);
-    group.writeEntry(d->configThrCrInputAdjustmentEntry,   prm.thresholds[1]);
-    group.writeEntry(d->configThrCbInputAdjustmentEntry,   prm.thresholds[2]);
+    group.writeEntry(d->configThrCrInputAdjustmentEntry,   prm.thresholds[2]);
+    group.writeEntry(d->configThrCbInputAdjustmentEntry,   prm.thresholds[1]);
     group.writeEntry(d->configSoftLumInputAdjustmentEntry, prm.softness[0]);
-    group.writeEntry(d->configSoftCrInputAdjustmentEntry,  prm.softness[1]);
-    group.writeEntry(d->configSoftCbInputAdjustmentEntry,  prm.softness[2]);
+    group.writeEntry(d->configSoftCrInputAdjustmentEntry,  prm.softness[2]);
+    group.writeEntry(d->configSoftCbInputAdjustmentEntry,  prm.softness[1]);
     group.writeEntry(d->configAdvancedAdjustmentEntry,     prm.advanced);
     group.writeEntry(d->configThresholdAdjustmentEntry,    prm.leadThreshold);
     group.writeEntry(d->configSoftnessAdjustmentEntry,     prm.leadSoftness);
