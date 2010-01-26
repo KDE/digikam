@@ -30,12 +30,14 @@
 
 #include "editortool.h"
 
+using namespace Digikam;
+
 namespace DigikamInfraredImagesPlugin
 {
 
 class InfraredToolPriv;
 
-class InfraredTool : public Digikam::EditorToolThreaded
+class InfraredTool : public EditorToolThreaded
 {
     Q_OBJECT
 
@@ -46,7 +48,6 @@ public:
 
 private Q_SLOTS:
 
-    void slotSliderMoved(int);
     void slotResetSettings();
 
 private:
