@@ -99,7 +99,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 089 ==> 150533 : New plugin for correction of backlighting.
 090 ==> 105934 : Would like to use the arrow keys to pan an image.
 091 ==> 193708 : digiKam crash on startup.
-092 ==> 
+092 ==> 218376 : digiKam tagging crash metadata.
+093 ==> 
+
 
 
 
