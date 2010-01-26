@@ -101,7 +101,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 091 ==> 193708 : digiKam crash on startup.
 092 ==> 218376 : digiKam tagging crash metadata.
 093 ==> 224243 : Content aware rescaling should not allow "original" preview mode.
-094 ==> 
+094 ==> 224293 : Wavelets NR tool confuses red and blue.
+095 ==> 
 
 
 
