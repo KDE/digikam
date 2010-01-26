@@ -16,6 +16,7 @@ Name[fi]=Siirrä valokuvat digiKamilla
 Name[fr]=Télécharger des photos avec digiKam
 Name[gl]=Descargar fotos con digiKam
 Name[hne]=डिजिकैम के साथ फोटो डाउनलोड करव
+Name[hr]=Preuzmi fotografije digiKamom
 Name[is]=Hala niður myndum með digiKam
 Name[it]=Scarica foto con digiKam
 Name[ja]=digiKam で写真をダウンロード
