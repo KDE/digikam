@@ -206,6 +206,8 @@ QStringList DAlbumDrag::mimeTypes()
 
 bool DAlbumDrag::canDecode(const QMimeData* e)
 {
+    if (e->hasFormat("digikam/item-ids") || e->hasFormat("digikam/image-ids"))
+        return false;
     foreach (const QString& mimeType, mimeTypes())
         if (!e->hasFormat(mimeType))
             return false;
