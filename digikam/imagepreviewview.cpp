@@ -37,6 +37,7 @@
 // KDE includes
 
 #include <kaction.h>
+#include <kactionmenu.h>
 #include <kapplication.h>
 #include <kcursor.h>
 #include <kdialog.h>
@@ -90,6 +91,8 @@ public:
         back2AlbumAction     = 0;
         prevAction           = 0;
         nextAction           = 0;
+        rotLeftAction        = 0;
+        rotRightAction       = 0;
     }
 
     bool               loadFullImageSize;
@@ -104,7 +107,9 @@ public:
     QAction*           back2AlbumAction;
     QAction*           prevAction;
     QAction*           nextAction;
-
+    QAction*           rotLeftAction;
+    QAction*           rotRightAction;
+    
     QToolBar*          toolBar;
 
     DImg               preview;
@@ -121,9 +126,11 @@ ImagePreviewView::ImagePreviewView(QWidget* parent, AlbumWidgetStack* stack)
                 : PreviewWidget(parent), d(new ImagePreviewViewPriv)
 {
     d->stack            = stack;
-    d->back2AlbumAction = new QAction(SmallIcon("folder-image"), i18n("Back to Album"),                 this);
-    d->prevAction       = new QAction(SmallIcon("go-previous"),  i18nc("go to previous image", "Back"), this);
-    d->nextAction       = new QAction(SmallIcon("go-next"),      i18nc("go to next image", "Forward"),  this);
+    d->back2AlbumAction = new QAction(SmallIcon("folder-image"),        i18n("Back to Album"),                  this);
+    d->prevAction       = new QAction(SmallIcon("go-previous"),         i18nc("go to previous image", "Back"),  this);
+    d->nextAction       = new QAction(SmallIcon("go-next"),             i18nc("go to next image", "Forward"),   this);
+    d->rotLeftAction    = new QAction(SmallIcon("object-rotate-left"),  i18nc("@info:tooltip", "Rotate Left"),  this);
+    d->rotRightAction   = new QAction(SmallIcon("object-rotate-right"), i18nc("@info:tooltip", "Rotate Right"), this);
 
     // get preview size from screen size, but limit from VGA to WQXGA
     d->previewSize = qMax(KApplication::desktop()->height(),
@@ -158,13 +165,21 @@ ImagePreviewView::ImagePreviewView(QWidget* parent, AlbumWidgetStack* stack)
     connect(d->back2AlbumAction, SIGNAL(triggered()),
             this, SIGNAL(signalBack2Album()));
 
+    connect(d->rotLeftAction, SIGNAL(triggered()),
+            this, SLOT(slotRotateLeft()));
+            
+    connect(d->rotRightAction, SIGNAL(triggered()),
+            this, SLOT(slotRotateRight()));
+            
     // ------------------------------------------------------------
             
     d->toolBar = new QToolBar(this);
     d->toolBar->addAction(d->prevAction);
     d->toolBar->addAction(d->nextAction);
     d->toolBar->addAction(d->back2AlbumAction);
-
+    d->toolBar->addAction(d->rotLeftAction);
+    d->toolBar->addAction(d->rotRightAction);
+        
     slotReset();
 }
 
@@ -282,6 +297,9 @@ void ImagePreviewView::slotGotImagePreview(const LoadingDescription& description
         emit signalPreviewLoaded(true);
     }
 
+    d->rotLeftAction->setEnabled(d->isLoaded);
+    d->rotRightAction->setEnabled(d->isLoaded);
+    
     unsetCursor();
     slotNextPreload();
 }
@@ -291,12 +309,12 @@ void ImagePreviewView::slotNextPreload()
     QString loadPath;
     if (!d->nextPath.isNull())
     {
-        loadPath    = d->nextPath;
+        loadPath = d->nextPath;
         d->nextPath.clear();
     }
     else if (!d->previousPath.isNull())
     {
-        loadPath        = d->previousPath;
+        loadPath = d->previousPath;
         d->previousPath.clear();
     }
     else
@@ -525,6 +543,34 @@ void ImagePreviewView::slotGotoTag(int tagID)
 QImage ImagePreviewView::previewToQImage() const
 {
     return d->preview.copyQImage();
+}
+
+void ImagePreviewView::slotRotateLeft()
+{
+    KActionMenu* action = dynamic_cast<KActionMenu*>(ContextMenuHelper::kipiRotateAction());
+    if (action)
+    {
+        QList<QAction*> list = action->menu()->actions();
+        foreach(QAction* ac, list)
+        {
+            if (ac->objectName() == QString("rotate_ccw"))
+                ac->trigger();
+        }
+    }
+}
+
+void ImagePreviewView::slotRotateRight()
+{
+    KActionMenu* action = dynamic_cast<KActionMenu*>(ContextMenuHelper::kipiRotateAction());
+    if (action)
+    {
+        QList<QAction*> list = action->menu()->actions();
+        foreach(QAction* ac, list)
+        {
+            if (ac->objectName() == QString("rotate_cw"))
+                ac->trigger();
+        }
+    }
 }
 
 }  // namespace Digikam
