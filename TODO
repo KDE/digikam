@@ -4,10 +4,8 @@ Note : see also KDE4PORT TODO list
 post 1.0.0 mvc merge
 ------------------------------------------------------------------------------------
 
- * Use model view for cameraui when selecting the album to download to
  * model for the image view in cameraui
  * port thumbbar
- * duplicate search also contains a Qt3 Tree view
 
 Is this really needed?
  * sorting albums by something else than name (date, category)
