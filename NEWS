@@ -105,7 +105,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 095 ==> 224404 : No images of a album are shown.
 096 ==> 224094 : Modifying file (caption, keywords, EXIF) takes a very long time and 100 % CPU.
 097 ==> 216883 : digiKam crashed while browsing on picture editor (spacebar to next pic.).
-098 ==> 
+098 ==> 197483 : High resolution screen window narrow width.
+099 ==> 
+
 
 
 
