@@ -139,12 +139,13 @@ MediaPlayerView::MediaPlayerView(AlbumWidgetStack* parent)
     d->grid->setSpacing(KDialog::spacingHint());
 
     insertWidget(MediaPlayerViewPriv::PlayerView, d->mediaPlayerView);
-    setPreviewMode(MediaPlayerViewPriv::PlayerView);
     
     d->toolBar = new QToolBar(this);
     d->toolBar->addAction(d->prevAction);
     d->toolBar->addAction(d->nextAction);
     d->toolBar->addAction(d->back2AlbumAction);    
+
+    setPreviewMode(MediaPlayerViewPriv::PlayerView);
 
     // --------------------------------------------------------------------------
 
@@ -174,8 +175,12 @@ MediaPlayerView::~MediaPlayerView()
     delete d;
 }
 
-void MediaPlayerView::setMediaPlayerFromUrl(const KUrl& url)
+void MediaPlayerView::setImageInfo(const ImageInfo& info, const ImageInfo& previous, const ImageInfo& next)
 {
+    d->prevAction->setEnabled(!previous.isNull());
+    d->nextAction->setEnabled(!next.isNull());
+
+    KUrl url = info.fileUrl();
     if (url.isEmpty())
     {
         d->player->stop();
@@ -225,6 +230,7 @@ void MediaPlayerView::setPreviewMode(int mode)
         return;
 
     setCurrentIndex(mode);
+    d->toolBar->raise();
 }
 
 }  // namespace Digikam

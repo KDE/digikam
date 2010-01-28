@@ -36,6 +36,7 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "imageinfo.h"
 
 namespace Digikam
 {
@@ -52,7 +53,9 @@ public:
     MediaPlayerView(AlbumWidgetStack* parent);
     ~MediaPlayerView();
 
-    void setMediaPlayerFromUrl(const KUrl& url=KUrl());
+    void setImageInfo(const ImageInfo& info = ImageInfo(),
+                      const ImageInfo& previous = ImageInfo(),
+                      const ImageInfo& next = ImageInfo());
     void escapePreview();
 
 Q_SIGNALS:
