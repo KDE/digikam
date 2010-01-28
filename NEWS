@@ -104,7 +104,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 094 ==> 224293 : Wavelets NR tool confuses red and blue.
 095 ==> 224404 : No images of a album are shown.
 096 ==> 224094 : Modifying file (caption, keywords, EXIF) takes a very long time and 100 % CPU.
-097 ==> 
+097 ==> 216883 : digiKam crashed while browsing on picture editor (spacebar to next pic.).
+098 ==> 
 
 
 
