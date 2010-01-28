@@ -103,7 +103,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 093 ==> 224243 : Content aware rescaling should not allow "original" preview mode.
 094 ==> 224293 : Wavelets NR tool confuses red and blue.
 095 ==> 224404 : No images of a album are shown.
-096 ==> 
+096 ==> 224094 : Modifying file (caption, keywords, EXIF) takes a very long time and 100 % CPU.
+097 ==> 
+
 
 
 
