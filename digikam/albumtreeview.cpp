@@ -317,10 +317,13 @@ void AbstractAlbumTreeView::setSearchTextSettings(const SearchTextSettings& sett
     m_albumFilterModel->setSearchTextSettings(settings);
 }
 
-void AbstractAlbumTreeView::slotSelectAlbum(Album *album)
+void AbstractAlbumTreeView::slotSelectAlbum(Album *album, bool selectInAlbumManager)
 {
     setCurrentIndex(albumFilterModel()->indexForAlbum(album));
-    AlbumManager::instance()->setCurrentAlbum(album);
+    if (selectInAlbumManager)
+    {
+        AlbumManager::instance()->setCurrentAlbum(album);
+    }
 }
 
 void AbstractAlbumTreeView::slotCurrentChanged()
@@ -695,7 +698,7 @@ void AbstractAlbumTreeView::contextMenuEvent(QContextMenuEvent *event)
         return;
     }
 
-    // switch to the sekected album if need
+    // switch to the selected album if need
     if(d->selectOnContextMenu && album)
     {
         slotSelectAlbum(album);

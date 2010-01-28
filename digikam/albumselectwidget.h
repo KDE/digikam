@@ -7,6 +7,7 @@
  * Description : a widget to select a physical album
  *
  * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -31,6 +32,7 @@
 // Local includes
 
 #include "albummanager.h"
+#include "albumtreeview.h"
 #include "searchtextbar.h"
 
 class QTreeWidget;
@@ -39,6 +41,49 @@ namespace Digikam
 {
 
 class PAlbum;
+class AlbumModificationHelper;
+
+class AlbumSelectTreeViewPriv;
+/**
+ * Enables a simple context menu only for creating a new album.
+ *
+ * @author jwienke
+ */
+class AlbumSelectTreeView: public AlbumTreeView
+{
+    Q_OBJECT
+public:
+
+    /**
+     * Constructor.
+     *
+     * @param model album model to work with
+     * @param albumModificationHelper helper object for modifying albums
+     * @param parent parent for Qt's parent child mechanism
+     */
+    AlbumSelectTreeView(AlbumModel *model, AlbumModificationHelper *albumModificationHelper, QWidget *parent = 0);
+
+    /**
+     * Destructor.
+     */
+    ~AlbumSelectTreeView();
+
+    virtual void addCustomContextMenuActions(ContextMenuHelper &cmh, Album *album);
+    virtual void handleCustomContextMenuAction(QAction *action, Album *album);
+
+public Q_SLOTS:
+
+    /**
+     * Shows a dialog to create a new album under the selected album in this
+     * view.
+     */
+    void slotNewAlbum();
+
+private:
+    AlbumSelectTreeViewPriv *d;
+
+};
+
 class AlbumSelectWidgetPriv;
 
 class AlbumSelectWidget : public QWidget
@@ -47,7 +92,7 @@ class AlbumSelectWidget : public QWidget
 
 public:
 
-    explicit AlbumSelectWidget(QWidget *parent=0, PAlbum* albumToSelect=0);
+    explicit AlbumSelectWidget(QWidget *parent = 0, PAlbum *albumToSelect = 0);
     ~AlbumSelectWidget();
 
     void setCurrentAlbumUrl(const KUrl& albumUrl);
@@ -56,29 +101,18 @@ public:
     PAlbum* currentAlbum() const;
     void    setCurrentAlbum(PAlbum *albumToSelect);
 
-    QTreeWidget* albumView() const;
-
 Q_SIGNALS:
 
-    void signalAlbumRenamed();
-
-private:
-
-    void populateTreeView(const AlbumList& aList, QTreeWidget *view, PAlbum* albumToSelect);
+    void itemSelectionChanged();
 
 private Q_SLOTS:
 
-    void slotSearchTextChanged(const SearchTextSettings&);
-    void slotNewAlbum();
-    void slotAlbumAdded(Album* a);
-    void slotAlbumDeleted(Album* a);
-    void slotAlbumsCleared();
     void slotAlbumRenamed(Album*);
-    void slotContextMenu();
 
 private:
 
     AlbumSelectWidgetPriv* const d;
+
 };
 
 }  // namespace Digikam

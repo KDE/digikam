@@ -159,10 +159,7 @@ QueueSettingsView::QueueSettingsView(QWidget *parent)
 
     // --------------------------------------------------------
 
-    connect(d->albumSel->albumView(), SIGNAL(itemSelectionChanged()),
-            this, SLOT(slotSettingsChanged()));
-
-    connect(d->albumSel, SIGNAL(signalAlbumRenamed()),
+    connect(d->albumSel, SIGNAL(itemSelectionChanged()),
             this, SLOT(slotSettingsChanged()));
 
     connect(d->conflictButtonGroup, SIGNAL(buttonClicked(int)),

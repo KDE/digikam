@@ -118,8 +118,10 @@ public Q_SLOTS:
      * Selects the given album.
      *
      * @param album album to select
+     * @param selectInAlbumManager if <code>true</code>, the album will be
+     *                             selected in the album manager
      */
-    void slotSelectAlbum(Album *album);
+    void slotSelectAlbum(Album *album, bool selectInAlbumManager = true);
 
     /**
      * Adapt the column sizes to the contents of the tree view.

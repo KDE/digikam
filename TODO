@@ -17,6 +17,10 @@ Later:
    should be moved to the sidebar class directly
  * DEFINITELY clean up the project structure. It's absolutely not obvious which
    file depends on which atm
+ * There are a few derived album tree views mainly to provide only another
+   context menu. It would be better to have strategy objects for handling
+   the context menu. These strategies could be used as decorators to allow
+   a more flexible sorting mechanism for menu entries.
 
 ------------------------------------------------------------------------------------
 1.0.0 TODO LIST

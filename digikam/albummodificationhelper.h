@@ -54,7 +54,7 @@ public:
      * Constructor.
      *
      * @param parent parent for qt parent child mechanism
-     * @param dialogParent paret widget for dialogs displayed by this object
+     * @param dialogParent parent widget for dialogs displayed by this object
      */
     AlbumModificationHelper(QObject *parent, QWidget *dialogParent);
 

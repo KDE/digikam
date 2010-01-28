@@ -153,7 +153,7 @@ TagFilterSideBarWidget::TagFilterSideBarWidget(QWidget *parent,
     d->tagFilterSearchBar->setModel(tagFilterModel, AbstractAlbumModel::AlbumIdRole);
     d->tagFilterSearchBar->setFilterModel(d->tagFilterView->albumFilterModel());
 
-    const QString notTaggedTitle = i18n("Images Without Tagged");
+    const QString notTaggedTitle = i18n("Images Without Tag");
     d->withoutTagCheckBox = new QCheckBox(notTaggedTitle, this);
     d->withoutTagCheckBox->setWhatsThis(i18n("Show images without a tag."));
 
