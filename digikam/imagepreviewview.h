@@ -53,7 +53,7 @@ class ImagePreviewView : public PreviewWidget
 
 public:
 
-    ImagePreviewView(QWidget *parent, AlbumWidgetStack *stack);
+    ImagePreviewView(AlbumWidgetStack* parent);
     ~ImagePreviewView();
 
     void setLoadFullImageSize(bool b);
@@ -116,7 +116,7 @@ private:
     QImage previewToQImage() const;
 
     void viewportPaintExtraData();
-    inline void paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh);
+    inline void paintPreview(QPixmap* pix, int sx, int sy, int sw, int sh);
 
 private:
 

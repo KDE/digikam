@@ -122,10 +122,10 @@ public:
     AlbumWidgetStack*  stack;
 };
 
-ImagePreviewView::ImagePreviewView(QWidget* parent, AlbumWidgetStack* stack)
+ImagePreviewView::ImagePreviewView(AlbumWidgetStack* parent)
                 : PreviewWidget(parent), d(new ImagePreviewViewPriv)
 {
-    d->stack            = stack;
+    d->stack            = parent;
     d->back2AlbumAction = new QAction(SmallIcon("folder-image"),        i18n("Back to Album"),                  this);
     d->prevAction       = new QAction(SmallIcon("go-previous"),         i18nc("go to previous image", "Back"),  this);
     d->nextAction       = new QAction(SmallIcon("go-next"),             i18nc("go to next image", "Forward"),   this);
