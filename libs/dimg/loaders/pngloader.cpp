@@ -29,6 +29,7 @@
 #define PNG_BYTES_TO_CHECK 4
 
 #include "pngloader.h"
+#include "pngconf.h"
 
 // C ANSI includes
 
@@ -105,7 +106,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     unsigned char buf[PNG_BYTES_TO_CHECK];
 
     size_t membersRead = fread(buf, 1, PNG_BYTES_TO_CHECK, f);
-    if ((membersRead != PNG_BYTES_TO_CHECK) || !png_check_sig(buf, PNG_BYTES_TO_CHECK))
+    if ((membersRead != PNG_BYTES_TO_CHECK) || !png_sig_cmp(buf, 0, PNG_BYTES_TO_CHECK))
     {
         kDebug() << "Not a PNG image file.";
         fclose(f);
@@ -165,7 +166,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     CleanupData *cleanupData = new CleanupData;
     cleanupData->setFile(f);
 
-    if (setjmp(png_ptr->jmpbuf))
+    if (setjmp(png_jmpbuf(png_ptr)))
     {
         kDebug() << "Internal libPNG error during reading file. Process aborted!";
         png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
@@ -322,7 +323,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
 #ifdef ENABLE_DEBUG_MESSAGES
                     kDebug() << "PNG in PNG_COLOR_TYPE_GRAY";
 #endif
-                    png_set_gray_1_2_4_to_8(png_ptr);
+                    png_set_expand_gray_1_2_4_to_8(png_ptr);
                     png_set_gray_to_rgb(png_ptr);
 
                     if (QSysInfo::ByteOrder == QSysInfo::LittleEndian)           // Intel
@@ -627,7 +628,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     CleanupData *cleanupData = new CleanupData;
     cleanupData->setFile(f);
 
-    if (setjmp(png_ptr->jmpbuf))
+    if (setjmp(png_jmpbuf(png_ptr)))
     {
         kDebug() << "Internal libPNG error during writing file. Process aborted!";
         png_destroy_write_struct(&png_ptr, (png_infopp) & info_ptr);
