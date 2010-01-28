@@ -9,6 +9,7 @@ post 1.0.0 mvc merge
 
 Is this really needed?
  * sorting albums by something else than name (date, category)
+   http://steveire.wordpress.com/2010/01/06/testing-proxy-models-gets-easier-again/
  
 Later:
  * decide which additional sidebar handling code currently placed in digikamview
