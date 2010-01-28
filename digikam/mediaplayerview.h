@@ -52,7 +52,7 @@ public:
     MediaPlayerView(AlbumWidgetStack* parent);
     ~MediaPlayerView();
 
-    void setMediaPlayerFromUrl(const KUrl& url);
+    void setMediaPlayerFromUrl(const KUrl& url=KUrl());
     void escapePreview();
 
 Q_SIGNALS:

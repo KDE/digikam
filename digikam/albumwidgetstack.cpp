@@ -244,7 +244,7 @@ void AlbumWidgetStack::setPreviewItem(const ImageInfo& info, const ImageInfo& pr
     {
         if (previewMode() == MediaPlayerMode)
         {
-            d->mediaPlayerView->setMediaPlayerFromUrl(KUrl());
+            d->mediaPlayerView->setMediaPlayerFromUrl();
         }
         else if (previewMode() == PreviewImageMode)
         {
