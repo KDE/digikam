@@ -185,6 +185,7 @@ Canvas::Canvas(QWidget *parent)
     viewport()->setPalette(palette);
     viewport()->setMouseTracking(false);
     setFrameStyle( QFrame::NoFrame );
+    setFocusPolicy(Qt::ClickFocus);
 
     d->rubber = new DRubberBand(this);
 
@@ -257,8 +258,8 @@ void Canvas::load(const QString& filename, IOFileSettingsContainer *IOFileSettin
 {
     reset();
 
-    d->im->load(filename, IOFileSettings);
     emit signalPrepareToLoad();
+    d->im->load(filename, IOFileSettings);
 }
 
 void Canvas::slotImageLoaded(const QString& filePath, bool success)
@@ -410,6 +411,11 @@ QRect Canvas::getSelectedArea()
     int x, y, w, h;
     d->im->getSelectedArea(x, y, w, h);
     return ( QRect(x, y, w, h) );
+}
+
+QRect Canvas::visibleArea()
+{
+    return ( QRect(contentsX(), contentsY(), visibleWidth(), visibleHeight()) );
 }
 
 DImgInterface *Canvas::interface() const
@@ -1171,7 +1177,9 @@ void Canvas::setFitToWindow(bool fit)
     d->autoZoom = fit;
 
     if (d->autoZoom)
+    {
         updateAutoZoom();
+    }
     else
     {
         d->zoom = 1.0;
@@ -1456,6 +1464,48 @@ void Canvas::slotSelectNone()
 {
     reset();
     viewport()->update();
+}
+
+void Canvas::keyPressEvent(QKeyEvent* e)
+{
+    if (!e) return;
+
+    int mult = 1;
+    if ( (e->modifiers() & Qt::ControlModifier))
+        mult = 10;
+
+    switch ( e->key() )
+    {
+        case Qt::Key_Right:
+        {
+            horizontalScrollBar()->setValue(horizontalScrollBar()->value() + horizontalScrollBar()->singleStep()*mult);
+            break;
+        }
+
+        case Qt::Key_Left:
+        {
+            horizontalScrollBar()->setValue(horizontalScrollBar()->value() - horizontalScrollBar()->singleStep()*mult);
+            break;
+        }
+
+        case Qt::Key_Up:
+        {
+            verticalScrollBar()->setValue(verticalScrollBar()->value() - verticalScrollBar()->singleStep()*mult);
+            break;
+        }
+
+        case Qt::Key_Down:
+        {
+            verticalScrollBar()->setValue(verticalScrollBar()->value() + verticalScrollBar()->singleStep()*mult);
+            break;
+        }
+
+        default:
+        {
+            e->ignore();
+            break;
+        }
+    }
 }
 
 }  // namespace Digikam

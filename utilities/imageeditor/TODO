@@ -1,0 +1,18 @@
+* Factoring editor tools preview:
+
+197316 -  Two ways to do a simple zooming
+221988 -  "fit to window" and zooming out not working              (Fixed)
+196469 -  Zoom and pan should be available in all tools            (Fixed)
+220567 -  Zooming, selecting picture part in editor tools          (Fixed)
+148235 -  More comfortable panning and zooming of preview image    (Fixed)
+222975 -  Wrong editorwindow zoom behaviour                        (Fixed)
+163284 -  Choose smart default zoom factor for each filter preview (Fixed)
+148072 -  zoom tool for sharpen tool is ankward                    (Fixed)
+221987 -  "zoom to 100%" not working                               (Fixed)
+
+* PreviewWidget pure Qt4 port :
+
+http://websvn.kde.org/?view=revision&revision=1050093
+http://websvn.kde.org/?view=revision&revision=1050458
+
+* Editor Canvas must be ported to PreviewWidget.

@@ -123,6 +123,14 @@ NoiseReductionSettings::NoiseReductionSettings(QWidget* parent)
 {
     QGridLayout* grid = new QGridLayout(parent);
 
+    QString thHelp = i18n("<b>Threshold</b>: Adjusts the threshold for denoising of "
+                          "the image in a range from 0.0 (none) to 10.0. "
+                          "The threshold is the value below which everything is considered noise.");
+                          
+    QString soHelp = i18n("<b>Softness</b>: This adjusts the softness of the thresholding "
+                          "(soft as opposed to hard thresholding). The higher the softness "
+                          "the more noise remains in the image.");
+    
     // -------------------------------------------------------------
 
     d->leadBox          = new QWidget;
@@ -133,18 +141,14 @@ NoiseReductionSettings::NoiseReductionSettings(QWidget* parent)
     d->thresholdInput->setDecimals(2);
     d->thresholdInput->input()->setRange(0.0, 10.0, 0.1, true);
     d->thresholdInput->setDefaultValue(1.2);
-    d->thresholdInput->setWhatsThis(i18n("<b>Threshold</b>: Adjusts the threshold for denoising of "
-                                         "the image in a range from 0.0 (none) to 10.0. "
-                                         "The threshold is the value below which everything is considered noise."));
+    d->thresholdInput->setWhatsThis(thHelp);
 
     QLabel *label2      = new QLabel(i18n("Softness:"), d->leadBox);
     d->softnessInput    = new RDoubleNumInput(d->leadBox);
     d->softnessInput->setDecimals(1);
     d->softnessInput->input()->setRange(0.0, 1.0, 0.1, true);
     d->softnessInput->setDefaultValue(0.9);
-    d->softnessInput->setWhatsThis(i18n("<b>Softness</b>: This adjusts the softness of the thresholding "
-                                        "(soft as opposed to hard thresholding). The higher the softness "
-                                        "the more noise remains in the image."));
+    d->softnessInput->setWhatsThis(soHelp);
 
     genLay->addWidget(label1,            0, 0, 1, 1);
     genLay->addWidget(d->thresholdInput, 0, 1, 1, 1);
@@ -170,18 +174,14 @@ NoiseReductionSettings::NoiseReductionSettings(QWidget* parent)
     d->thrLumInput->setDecimals(2);
     d->thrLumInput->input()->setRange(0.0, 10.0, 0.1, true);
     d->thrLumInput->setDefaultValue(1.2);
-/*    d->thrLumInput->setWhatsThis(i18n("<b>Threshold</b>: Adjusts the threshold for denoising of "
-                                         "the image in a range from 0.0 (none) to 10.0. "
-                                         "The threshold is the value below which everything is considered noise."));*/
+    d->thrLumInput->setWhatsThis(thHelp);
 
     QLabel *label4      = new QLabel(i18n("Softness:"), d->luminanceBox);
     d->softLumInput     = new RDoubleNumInput(d->luminanceBox);
     d->softLumInput->setDecimals(1);
     d->softLumInput->input()->setRange(0.0, 1.0, 0.1, true);
     d->softLumInput->setDefaultValue(0.9);
-/*    d->softLumInput->setWhatsThis(i18n("<b>Softness</b>: This adjusts the softness of the thresholding "
-                                        "(soft as opposed to hard thresholding). The higher the softness "
-                                        "the more noise remains in the image."));*/
+    d->softLumInput->setWhatsThis(soHelp);
 
     lumLay->addWidget(label3,          0, 0, 1, 1);
     lumLay->addWidget(d->thrLumInput,  0, 1, 1, 1);
@@ -201,18 +201,14 @@ NoiseReductionSettings::NoiseReductionSettings(QWidget* parent)
     d->thrCrInput->setDecimals(2);
     d->thrCrInput->input()->setRange(0.0, 10.0, 0.1, true);
     d->thrCrInput->setDefaultValue(1.2);
-/*    d->thrCrInput->setWhatsThis(i18n("<b>Threshold</b>: Adjusts the threshold for denoising of "
-                                         "the image in a range from 0.0 (none) to 10.0. "
-                                         "The threshold is the value below which everything is considered noise."));*/
+    d->thrCrInput->setWhatsThis(thHelp);
 
     QLabel *label6       = new QLabel(i18n("Softness:"), d->chrominanceRedBox);
     d->softCrInput       = new RDoubleNumInput(d->chrominanceRedBox);
     d->softCrInput->setDecimals(1);
     d->softCrInput->input()->setRange(0.0, 1.0, 0.1, true);
     d->softCrInput->setDefaultValue(0.9);
-/*    d->softCrInput->setWhatsThis(i18n("<b>Softness</b>: This adjusts the softness of the thresholding "
-                                        "(soft as opposed to hard thresholding). The higher the softness "
-                                        "the more noise remains in the image."));*/
+    d->softCrInput->setWhatsThis(soHelp);
 
     cRedLay->addWidget(label5,         0, 0, 1, 1);
     cRedLay->addWidget(d->thrCrInput,  0, 1, 1, 1);
@@ -232,18 +228,14 @@ NoiseReductionSettings::NoiseReductionSettings(QWidget* parent)
     d->thrCbInput->setDecimals(2);
     d->thrCbInput->input()->setRange(0.0, 10.0, 0.1, true);
     d->thrCbInput->setDefaultValue(1.2);
-/*    d->thrCbInput->setWhatsThis(i18n("<b>Threshold</b>: Adjusts the threshold for denoising of "
-                                         "the image in a range from 0.0 (none) to 10.0. "
-                                         "The threshold is the value below which everything is considered noise."));*/
+    d->thrCbInput->setWhatsThis(thHelp);
 
     QLabel *label8        = new QLabel(i18n("Softness:"), d->chrominanceBlueBox);
     d->softCbInput        = new RDoubleNumInput(d->chrominanceBlueBox);
     d->softCbInput->setDecimals(1);
     d->softCbInput->input()->setRange(0.0, 1.0, 0.1, true);
     d->softCbInput->setDefaultValue(0.9);
-/*    d->softCbInput->setWhatsThis(i18n("<b>Softness</b>: This adjusts the softness of the thresholding "
-                                        "(soft as opposed to hard thresholding). The higher the softness "
-                                        "the more noise remains in the image."));*/
+    d->softCbInput->setWhatsThis(soHelp);
 
     cBlueLay->addWidget(label7,         0, 0, 1, 1);
     cBlueLay->addWidget(d->thrCbInput,  0, 1, 1, 1);
@@ -309,11 +301,11 @@ WaveletsNRContainer NoiseReductionSettings::settings() const
     WaveletsNRContainer prm;
 
     prm.thresholds[0] = d->thrLumInput->value();
-    prm.thresholds[1] = d->thrCrInput->value();
-    prm.thresholds[2] = d->thrCbInput->value();
+    prm.thresholds[2] = d->thrCrInput->value();
+    prm.thresholds[1] = d->thrCbInput->value();
     prm.softness[0]   = 1.0 - d->softLumInput->value();
-    prm.softness[1]   = 1.0 - d->softCrInput->value();
-    prm.softness[2]   = 1.0 - d->softCbInput->value();
+    prm.softness[2]   = 1.0 - d->softCrInput->value();
+    prm.softness[1]   = 1.0 - d->softCbInput->value();
     prm.advanced      = d->advancedBox->isChecked();
     prm.leadThreshold = d->thresholdInput->value();
     prm.leadSoftness  = 1.0 - d->softnessInput->value();
@@ -325,11 +317,11 @@ void NoiseReductionSettings::setSettings(const WaveletsNRContainer& settings)
 {
     blockSignals(true);
     d->thrLumInput->setValue(settings.thresholds[0]);
-    d->thrCrInput->setValue(settings.thresholds[1]);
-    d->thrCbInput->setValue(settings.thresholds[2]);
+    d->thrCrInput->setValue(settings.thresholds[2]);
+    d->thrCbInput->setValue(settings.thresholds[1]);
     d->softLumInput->setValue(1.0 - settings.softness[0]);
-    d->softCrInput->setValue(1.0 - settings.softness[1]);
-    d->softCbInput->setValue(1.0 - settings.softness[2]);
+    d->softCrInput->setValue(1.0 - settings.softness[2]);
+    d->softCbInput->setValue(1.0 - settings.softness[1]);
     d->advancedBox->setChecked(settings.advanced);
     d->thresholdInput->setValue(settings.leadThreshold);
     d->softnessInput->setValue(1.0 - settings.leadSoftness);
@@ -358,11 +350,11 @@ WaveletsNRContainer NoiseReductionSettings::defaultSettings() const
     WaveletsNRContainer prm;
 
     prm.thresholds[0] = d->thrLumInput->defaultValue();
-    prm.thresholds[1] = d->thrCrInput->defaultValue();
-    prm.thresholds[2] = d->thrCbInput->defaultValue();
+    prm.thresholds[2] = d->thrCrInput->defaultValue();
+    prm.thresholds[1] = d->thrCbInput->defaultValue();
     prm.softness[0]   = 1.0 - d->softLumInput->defaultValue();
-    prm.softness[1]   = 1.0 - d->softCrInput->defaultValue();
-    prm.softness[2]   = 1.0 - d->softCbInput->defaultValue();
+    prm.softness[2]   = 1.0 - d->softCrInput->defaultValue();
+    prm.softness[1]   = 1.0 - d->softCbInput->defaultValue();
     prm.advanced      = false;
     prm.leadThreshold = d->thresholdInput->defaultValue();
     prm.leadSoftness  = 1.0 - d->softnessInput->defaultValue();
@@ -400,11 +392,11 @@ void NoiseReductionSettings::readSettings(KConfigGroup& group)
     WaveletsNRContainer defaultPrm = defaultSettings();
 
     prm.thresholds[0] = group.readEntry(d->configThrLumInputAdjustmentEntry,  defaultPrm.thresholds[0]);
-    prm.thresholds[1] = group.readEntry(d->configThrCrInputAdjustmentEntry,   defaultPrm.thresholds[1]);
-    prm.thresholds[2] = group.readEntry(d->configThrCbInputAdjustmentEntry,   defaultPrm.thresholds[2]); 
+    prm.thresholds[2] = group.readEntry(d->configThrCrInputAdjustmentEntry,   defaultPrm.thresholds[2]);
+    prm.thresholds[1] = group.readEntry(d->configThrCbInputAdjustmentEntry,   defaultPrm.thresholds[1]); 
     prm.softness[0]   = group.readEntry(d->configSoftLumInputAdjustmentEntry, defaultPrm.softness[0]);
-    prm.softness[1]   = group.readEntry(d->configSoftCrInputAdjustmentEntry,  defaultPrm.softness[1]);
-    prm.softness[2]   = group.readEntry(d->configSoftCbInputAdjustmentEntry,  defaultPrm.softness[2]);
+    prm.softness[2]   = group.readEntry(d->configSoftCrInputAdjustmentEntry,  defaultPrm.softness[2]);
+    prm.softness[1]   = group.readEntry(d->configSoftCbInputAdjustmentEntry,  defaultPrm.softness[1]);
     prm.advanced      = group.readEntry(d->configAdvancedAdjustmentEntry,     defaultPrm.advanced);
     prm.leadThreshold = group.readEntry(d->configThresholdAdjustmentEntry,    defaultPrm.leadThreshold);
     prm.leadSoftness  = group.readEntry(d->configSoftnessAdjustmentEntry,     defaultPrm.leadSoftness);
@@ -416,11 +408,11 @@ void NoiseReductionSettings::writeSettings(KConfigGroup& group)
     WaveletsNRContainer prm = settings();
 
     group.writeEntry(d->configThrLumInputAdjustmentEntry,  prm.thresholds[0]);
-    group.writeEntry(d->configThrCrInputAdjustmentEntry,   prm.thresholds[1]);
-    group.writeEntry(d->configThrCbInputAdjustmentEntry,   prm.thresholds[2]);
+    group.writeEntry(d->configThrCrInputAdjustmentEntry,   prm.thresholds[2]);
+    group.writeEntry(d->configThrCbInputAdjustmentEntry,   prm.thresholds[1]);
     group.writeEntry(d->configSoftLumInputAdjustmentEntry, prm.softness[0]);
-    group.writeEntry(d->configSoftCrInputAdjustmentEntry,  prm.softness[1]);
-    group.writeEntry(d->configSoftCbInputAdjustmentEntry,  prm.softness[2]);
+    group.writeEntry(d->configSoftCrInputAdjustmentEntry,  prm.softness[2]);
+    group.writeEntry(d->configSoftCbInputAdjustmentEntry,  prm.softness[1]);
     group.writeEntry(d->configAdvancedAdjustmentEntry,     prm.advanced);
     group.writeEntry(d->configThresholdAdjustmentEntry,    prm.leadThreshold);
     group.writeEntry(d->configSoftnessAdjustmentEntry,     prm.leadSoftness);

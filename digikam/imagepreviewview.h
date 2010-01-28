@@ -6,8 +6,8 @@
  * Date        : 2006-21-12
  * Description : a embedded view to show the image preview widget.
  *
- * Copyright (C) 2006-2009 Gilles Caulier  <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2006-2010 Gilles Caulier  <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -53,7 +53,7 @@ class ImagePreviewView : public PreviewWidget
 
 public:
 
-    ImagePreviewView(QWidget *parent, AlbumWidgetStack *stack);
+    ImagePreviewView(AlbumWidgetStack* parent);
     ~ImagePreviewView();
 
     void setLoadFullImageSize(bool b);
@@ -91,7 +91,7 @@ Q_SIGNALS:
 
 protected:
 
-    void resizeEvent(QResizeEvent* e);
+    void resizeEvent(QResizeEvent*);
 
 private Q_SLOTS:
 
@@ -104,6 +104,8 @@ private Q_SLOTS:
     void slotThemeChanged();
     void slotDeleteItem();
     void slotGotoTag(int tagID);
+    void slotRotateLeft();
+    void slotRotateRight();
 
 private:
 
@@ -111,10 +113,10 @@ private:
     int    previewHeight();
     bool   previewIsNull();
     void   resetPreview();
-    void   updateZoomAndSize(bool alwaysFitToWindow);
     QImage previewToQImage() const;
 
-    inline void paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh);
+    void viewportPaintExtraData();
+    inline void paintPreview(QPixmap* pix, int sx, int sy, int sw, int sh);
 
 private:
 

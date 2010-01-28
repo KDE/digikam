@@ -439,7 +439,7 @@ void FolderView::startDrag()
 {
     QDrag *o = makeDragObject();
     if(o)
-        o->exec();
+        o->exec(Qt::CopyAction|Qt::MoveAction, Qt::IgnoreAction);
 }
 
 Q3ListViewItem* FolderView::dragItem() const

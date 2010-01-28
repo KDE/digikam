@@ -61,18 +61,19 @@ public:
     PreviewWidgetPriv() :
         tileSize(128), zoomMultiplier(1.2)
     {
-        panIconPopup  = 0;
-        cornerButton  = 0;
-        midButtonX    = 0;
-        midButtonY    = 0;
-        autoZoom      = false;
-        fullScreen    = false;
-        zoom          = 1.0;
-        minZoom       = 0.1;
-        maxZoom       = 12.0;
-        zoomWidth     = 0;
-        zoomHeight    = 0;
-        tileTmpPix    = new QPixmap(tileSize, tileSize);
+        currentFitWindowZoom = 0.0;
+        panIconPopup         = 0;
+        cornerButton         = 0;
+        midButtonX           = 0;
+        midButtonY           = 0;
+        autoZoom             = false;
+        fullScreen           = false;
+        zoom                 = 1.0;
+        minZoom              = 0.1;
+        maxZoom              = 12.0;
+        zoomWidth            = 0;
+        zoomHeight           = 0;
+        tileTmpPix           = new QPixmap(tileSize, tileSize);
 
         tileCache.setMaxCost((10*1024*1024)/(tileSize*tileSize*4));
     }
@@ -89,6 +90,7 @@ public:
     double                   zoom;
     double                   minZoom;
     double                   maxZoom;
+    double                   currentFitWindowZoom;
     const double             zoomMultiplier;
 
     QPoint                   centerZoomPoint;
@@ -126,9 +128,22 @@ PreviewWidget::PreviewWidget(QWidget *parent)
     setFrameStyle(QFrame::StyledPanel|QFrame::Plain);
     setMargin(0);
     setLineWidth(1);
+    setFocusPolicy(Qt::ClickFocus);
 
     connect(d->cornerButton, SIGNAL(pressed()),
             this, SLOT(slotCornerButtonPressed()));
+
+    connect(this, SIGNAL(horizontalSliderPressed()),
+            this, SLOT(slotContentTakeFocus()));
+
+    connect(this, SIGNAL(verticalSliderPressed()),
+            this, SLOT(slotContentTakeFocus()));
+
+    connect(this, SIGNAL(horizontalSliderReleased()),
+            this, SLOT(slotContentLeaveFocus()));
+
+    connect(this, SIGNAL(verticalSliderReleased()),
+            this, SLOT(slotContentLeaveFocus()));
 }
 
 PreviewWidget::~PreviewWidget()
@@ -267,6 +282,12 @@ void PreviewWidget::setZoomFactor(double zoom)
 
 void PreviewWidget::setZoomFactor(double zoom, bool centerView)
 {
+    if (d->autoZoom)
+    {
+        d->autoZoom = false;
+        emit signalToggleOffFitToWindow();
+    }
+
     // Zoom using center of canvas and given zoom factor.
 
     double oldZoom = d->zoom;
@@ -380,6 +401,26 @@ void PreviewWidget::toggleFitToWindowOr100()
     }
 }
 
+void PreviewWidget::updateZoomAndSize(bool alwaysFitToWindow)
+{
+    // Set zoom for fit-in-window as minimum, but don't scale up images
+    // that are smaller than the available space, only scale down.
+    double zoom = calcAutoZoomFactor(ZoomInOnly);
+    setZoomMin(zoom);
+    setZoomMax(zoom*12.0);
+
+    // Is currently the zoom factor set to fit to window? Then set it again to fit the new size.
+    if (zoomFactor() < zoom || alwaysFitToWindow || zoomFactor() == d->currentFitWindowZoom)
+    {
+        setZoomFactor(zoom);
+    }
+
+    // store which zoom factor means it is fit to window
+    d->currentFitWindowZoom = zoom;
+
+    updateContentsSize();
+}
+
 void PreviewWidget::updateAutoZoom(AutoZoomMode mode)
 {
     d->zoom       = calcAutoZoomFactor(mode);
@@ -457,6 +498,8 @@ void PreviewWidget::resizeEvent(QResizeEvent* e)
     // To be sure than corner widget used to pan image will be hide/show
     // accordingly with resize event.
     zoomFactorChanged(d->zoom);
+
+    emit signalResized();
 }
 
 void PreviewWidget::viewportPaintEvent(QPaintEvent *e)
@@ -543,19 +586,39 @@ void PreviewWidget::viewportPaintEvent(QPaintEvent *e)
     viewportPaintExtraData();
 }
 
-void PreviewWidget::contentsMousePressEvent(QMouseEvent *e)
+void PreviewWidget::drawText(QPainter* p, const QRect& rect, const QString& text)
+{
+    p->save();
+
+    // Draw background
+    p->setPen(Qt::black);
+    QColor semiTransBg = palette().color(QPalette::Window);
+    semiTransBg.setAlpha(190);
+    p->setBrush(semiTransBg);
+    p->translate(0.5, 0.5);
+    p->drawRoundRect(rect, 10.0, 10.0);
+
+    // Draw shadow and text
+    p->setPen(palette().color(QPalette::Window).dark(115));
+    p->drawText(rect.translated(1, 1), text);
+    p->setPen(palette().color(QPalette::WindowText));
+    p->drawText(rect, text);
+
+    p->restore();
+}
+
+void PreviewWidget::contentsMousePressEvent(QMouseEvent* e)
 {
     if (!e || e->button() == Qt::RightButton)
         return;
 
     m_movingInProgress = false;
 
-    if (e->button() == Qt::LeftButton)
+    if (e->button() == Qt::LeftButton || e->button() == Qt::MidButton)
     {
-        emit signalLeftButtonClicked();
-    }
-    else if (e->button() == Qt::MidButton)
-    {
+        if (e->button() == Qt::LeftButton)
+            emit signalLeftButtonClicked();
+
         if (visibleWidth()  < d->zoomWidth ||
             visibleHeight() < d->zoomHeight)
         {
@@ -571,28 +634,27 @@ void PreviewWidget::contentsMousePressEvent(QMouseEvent *e)
     viewport()->setMouseTracking(false);
 }
 
-void PreviewWidget::contentsMouseMoveEvent(QMouseEvent *e)
+void PreviewWidget::contentsMouseMoveEvent(QMouseEvent* e)
 {
     if (!e) return;
 
-    if (e->buttons() & Qt::MidButton)
+    if (e->buttons() & Qt::LeftButton || e->buttons() & Qt::MidButton)
     {
         if (m_movingInProgress)
         {
-            scrollBy(d->midButtonX - e->x(),
-                     d->midButtonY - e->y());
+            scrollBy(d->midButtonX - e->x(), d->midButtonY - e->y());
             emit signalContentsMovedEvent(false);
         }
     }
 }
 
-void PreviewWidget::contentsMouseReleaseEvent(QMouseEvent *e)
+void PreviewWidget::contentsMouseReleaseEvent(QMouseEvent* e)
 {
     if (!e) return;
 
     m_movingInProgress = false;
 
-    if (e->button() == Qt::MidButton)
+    if (e->button() == Qt::LeftButton || e->button() == Qt::MidButton)
     {
         emit signalContentsMovedEvent(true);
         viewport()->unsetCursor();
@@ -605,7 +667,7 @@ void PreviewWidget::contentsMouseReleaseEvent(QMouseEvent *e)
     }
 }
 
-void PreviewWidget::contentsWheelEvent(QWheelEvent *e)
+void PreviewWidget::contentsWheelEvent(QWheelEvent* e)
 {
     e->accept();
 
@@ -650,7 +712,7 @@ void PreviewWidget::slotCornerButtonPressed()
     PanIconWidget *pan = new PanIconWidget(d->panIconPopup);
 
     connect(pan, SIGNAL(signalSelectionTakeFocus()),
-            this, SIGNAL(signalSelectionTakeFocus()));
+            this, SIGNAL(signalContentTakeFocus()));
 
     connect(pan, SIGNAL(signalSelectionMoved(const QRect&, bool)),
             this, SLOT(slotPanIconSelectionMoved(const QRect&, bool)));
@@ -664,6 +726,7 @@ void PreviewWidget::slotCornerButtonPressed()
     pan->setRegionSelection(r);
     pan->setMouseFocus();
     d->panIconPopup->setMainWidget(pan);
+    slotContentTakeFocus();
 
     QPoint g = mapToGlobal(viewport()->pos());
     g.setX(g.x()+ viewport()->size().width());
@@ -691,7 +754,89 @@ void PreviewWidget::slotPanIconSelectionMoved(const QRect& r, bool b)
         d->panIconPopup->deleteLater();
         d->panIconPopup = 0;
         slotPanIconHiden();
+        slotContentLeaveFocus();
     }
 }
 
+void PreviewWidget::slotContentTakeFocus()
+{
+    m_movingInProgress = true;
+    viewport()->repaint();
+}
+
+void PreviewWidget::slotContentLeaveFocus()
+{
+    m_movingInProgress = false;
+    viewport()->repaint();
+}
+
+void PreviewWidget::keyPressEvent(QKeyEvent* e)
+{
+    if (!e) return;
+
+    int mult = 1;
+    if ( (e->modifiers() & Qt::ControlModifier))
+        mult = 10;
+
+    switch ( e->key() )
+    {
+        case Qt::Key_Right:
+        {
+            slotContentTakeFocus();
+            horizontalScrollBar()->setValue(horizontalScrollBar()->value() + horizontalScrollBar()->singleStep()*mult);
+            break;
+        }
+
+        case Qt::Key_Left:
+        {
+            slotContentTakeFocus();
+            horizontalScrollBar()->setValue(horizontalScrollBar()->value() - horizontalScrollBar()->singleStep()*mult);
+            break;
+        }
+
+        case Qt::Key_Up:
+        {
+            slotContentTakeFocus();
+            verticalScrollBar()->setValue(verticalScrollBar()->value() - verticalScrollBar()->singleStep()*mult);
+            break;
+        }
+
+        case Qt::Key_Down:
+        {
+            slotContentTakeFocus();
+            verticalScrollBar()->setValue(verticalScrollBar()->value() + verticalScrollBar()->singleStep()*mult);
+            break;
+        }
+
+        default:
+        {
+            e->ignore();
+            break;
+        }
+    }
+}
+
+void PreviewWidget::keyReleaseEvent(QKeyEvent* e)
+{
+    if (!e) return;
+
+    switch ( e->key() )
+    {
+        case Qt::Key_Right:
+        case Qt::Key_Left:
+        case Qt::Key_Up:
+        case Qt::Key_Down:
+        {
+            slotContentLeaveFocus();
+            break;
+        }
+
+        default:
+        {
+            e->ignore();
+            break;
+        }
+    }
+}
+    
 }  // namespace Digikam

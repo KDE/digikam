@@ -738,6 +738,15 @@ CollectionLocation CollectionManager::addNetworkLocation(const KUrl& fileUrl, co
 CollectionManager::LocationCheckResult CollectionManager::checkLocation(const KUrl& fileUrl,
         QList<CollectionLocation> assumeDeleted, QString *message, QString *iconName)
 {
+    if (!fileUrl.isLocalFile())
+    {
+        if (message)
+            *message = i18n("Sorry, digiKam does not support remote URLs as collections.");
+        if (iconName)
+            *iconName = "dialog-error";
+        return LocationNotAllowed;
+    }
+
     QString path = fileUrl.toLocalFile(KUrl::RemoveTrailingSlash);
 
     QDir dir(path);
@@ -861,6 +870,23 @@ CollectionManager::LocationCheckResult CollectionManager::checkLocation(const KU
 CollectionManager::LocationCheckResult CollectionManager::checkNetworkLocation(const KUrl& fileUrl,
         QList<CollectionLocation> assumeDeleted, QString *message, QString *iconName)
 {
+    if (!fileUrl.isLocalFile())
+    {
+        if (message)
+        {
+            if (fileUrl.protocol() == "smb")
+                *message = i18n("You need to locally mount your Samba share. "
+                                "Sorry, digiKam does currently not support smb:// URLs. ");
+            else
+                *message = i18n("Your network storage must be set up to be accessible "
+                                "as files and folders through the operating system. "
+                                "DigiKam does not support remote URLs.");
+        }
+        if (iconName)
+            *iconName = "dialog-error";
+        return LocationNotAllowed;
+    }
+
     QString path = fileUrl.toLocalFile(KUrl::RemoveTrailingSlash);
 
     QDir dir(path);
@@ -1086,15 +1112,19 @@ CollectionLocation CollectionManager::locationForUrl(const KUrl& fileUrl)
     return locationForPath(fileUrl.toLocalFile(KUrl::RemoveTrailingSlash));
 }
 
-CollectionLocation CollectionManager::locationForPath(const QString& filePath)
+CollectionLocation CollectionManager::locationForPath(const QString& givenPath)
 {
     DatabaseAccess access;
     foreach (AlbumRootLocation *location, d->locations)
     {
         QString rootPath = location->albumRootPath();
-        //kDebug() << "Testing location " << location->id() << filePath << rootPath;
+        QString filePath = QDir::fromNativeSeparators(givenPath);
         if (!rootPath.isEmpty() && filePath.startsWith(rootPath))
-            return *location;
+        {
+            // see also bug #221155 for extra checks
+            if (filePath == rootPath || filePath.startsWith(rootPath + "/"))
+                return *location;
+        }
     }
     return CollectionLocation();
 }

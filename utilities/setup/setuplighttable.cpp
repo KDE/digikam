@@ -52,7 +52,6 @@ public:
         configAutoLoadRightPanelEntry("Auto Load Right Panel"),
         configLoadFullImagesizeEntry("Load Full Image size"),
         configClearOnCloseEntry("Clear On Close"),
-        configKeepZoom("Keep Zoom"),
 
         hideToolBar(0),
         autoSyncPreview(0),
@@ -67,14 +66,12 @@ public:
     const QString configAutoLoadRightPanelEntry;
     const QString configLoadFullImagesizeEntry;
     const QString configClearOnCloseEntry;
-    const QString configKeepZoom;
 
     QCheckBox*    hideToolBar;
     QCheckBox*    autoSyncPreview;
     QCheckBox*    autoLoadOnRightPanel;
     QCheckBox*    loadFullImageSize;
     QCheckBox*    clearOnClose;
-    QCheckBox*    keepZoom;
 };
 
 SetupLightTable::SetupLightTable(QWidget* parent)
@@ -114,15 +111,11 @@ SetupLightTable::SetupLightTable(QWidget* parent)
                                    "or unset it to preserve the images "
                                    "currently on the light table."));
 
-    d->keepZoom = new QCheckBox (i18n ("Keep zoom level fixed"), interfaceOptionsGroup);
-    d->keepZoom -> setWhatsThis (i18n ("Set this option to keep the current zoom level when switching images"));
-    
     gLayout->addWidget(d->autoSyncPreview);
     gLayout->addWidget(d->autoLoadOnRightPanel);
     gLayout->addWidget(d->loadFullImageSize);
     gLayout->addWidget(d->hideToolBar);
     gLayout->addWidget(d->clearOnClose);
-    gLayout->addWidget(d->keepZoom);
     gLayout->setMargin(KDialog::spacingHint());
     gLayout->setSpacing(0);
 
@@ -161,7 +154,6 @@ void SetupLightTable::readSettings()
     d->autoLoadOnRightPanel->setChecked(group.readEntry(d->configAutoLoadRightPanelEntry, true));
     d->loadFullImageSize->setChecked(group.readEntry(d->configLoadFullImagesizeEntry,     false));
     d->clearOnClose->setChecked(group.readEntry(d->configClearOnCloseEntry,               false));
-    d->keepZoom->setChecked(group.readEntry(d->configKeepZoom, false));
 }
 
 void SetupLightTable::applySettings()
@@ -173,7 +165,6 @@ void SetupLightTable::applySettings()
     group.writeEntry(d->configAutoLoadRightPanelEntry,    d->autoLoadOnRightPanel->isChecked());
     group.writeEntry(d->configLoadFullImagesizeEntry,     d->loadFullImageSize->isChecked());
     group.writeEntry(d->configClearOnCloseEntry,          d->clearOnClose->isChecked());
-    group.writeEntry(d->configKeepZoom,                   d->keepZoom->isChecked());
     config->sync();
 }
 

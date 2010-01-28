@@ -82,21 +82,18 @@ public:
         selected             = false;
         dragAndDropEnabled   = true;
         loadFullImageSize    = false;
-        currentFitWindowZoom = 0;
         previewSize          = 1024;
-        keepZoom             = false;
+        isLoaded             = false;
     }
 
+    bool               isLoaded;
     bool               hasPrev;
     bool               hasNext;
     bool               selected;
     bool               dragAndDropEnabled;
     bool               loadFullImageSize;
-    bool               keepZoom;
 
     int                previewSize;
-
-    double             currentFitWindowZoom;
 
     QString            path;
     QString            nextPath;
@@ -113,10 +110,6 @@ public:
 LightTablePreview::LightTablePreview(QWidget *parent)
                  : PreviewWidget(parent), d(new LightTablePreviewPriv)
 {
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("LightTable Settings");
-    d->keepZoom               = group.readEntry("Zoom fixed",              false);
-
     // get preview size from screen size, but limit from VGA to WQXGA
     d->previewSize = qMax(KApplication::desktop()->height(),
                           KApplication::desktop()->width());
@@ -185,7 +178,7 @@ void LightTablePreview::setImage(const DImg& image)
 {
     d->preview = image;
 
-    updateZoomAndSize(!d -> keepZoom);
+    updateZoomAndSize(false);
 
     viewport()->setUpdatesEnabled(true);
     viewport()->update();
@@ -225,6 +218,7 @@ void LightTablePreview::setImagePath(const QString& path)
     {
         slotReset();
         unsetCursor();
+        d->isLoaded = false;
         return;
     }
 
@@ -232,14 +226,15 @@ void LightTablePreview::setImagePath(const QString& path)
     {
         d->previewThread = new PreviewLoadThread();
         d->previewThread->setDisplayingWidget(this);
-        connect(d->previewThread, SIGNAL(signalImageLoaded(const LoadingDescription &, const DImg &)),
-                this, SLOT(slotGotImagePreview(const LoadingDescription &, const DImg&)));
+        connect(d->previewThread, SIGNAL(signalImageLoaded(const LoadingDescription&, const DImg&)),
+                this, SLOT(slotGotImagePreview(const LoadingDescription&, const DImg&)));
     }
+
     if (!d->previewPreloadThread)
     {
         d->previewPreloadThread = new PreviewLoadThread();
         d->previewPreloadThread->setDisplayingWidget(this);
-        connect(d->previewPreloadThread, SIGNAL(signalImageLoaded(const LoadingDescription &, const DImg &)),
+        connect(d->previewPreloadThread, SIGNAL(signalImageLoaded(const LoadingDescription&, const DImg&)),
                 this, SLOT(slotNextPreload()));
     }
 
@@ -267,7 +262,7 @@ void LightTablePreview::slotGotImagePreview(const LoadingDescription& descriptio
                    info.fileName()));
         p.end();
         setImage(DImg(pix.toImage()));
-
+        d->isLoaded = false;
         emit signalPreviewLoaded(false);
     }
     else
@@ -276,6 +271,7 @@ void LightTablePreview::slotGotImagePreview(const LoadingDescription& descriptio
         if (AlbumSettings::instance()->getExifRotate())
             d->previewThread->exifRotate(img, description.filePath);
         setImage(img);
+        d->isLoaded = true;
         emit signalPreviewLoaded(true);
     }
 
@@ -288,16 +284,18 @@ void LightTablePreview::slotNextPreload()
     QString loadPath;
     if (!d->nextPath.isNull())
     {
-        loadPath    = d->nextPath;
+        loadPath = d->nextPath;
         d->nextPath.clear();
     }
     else if (!d->previousPath.isNull())
     {
-        loadPath        = d->previousPath;
+        loadPath = d->previousPath;
         d->previousPath.clear();
     }
     else
+    {
         return;
+    }
 
     if (d->loadFullImageSize)
         d->previewThread->loadHighQuality(loadPath, AlbumSettings::instance()->getExifRotate());
@@ -312,7 +310,9 @@ void LightTablePreview::setImageInfo(const ImageInfo& info, const ImageInfo& pre
     d->hasNext   = !next.isNull();
 
     if (!d->imageInfo.isNull())
+    {
         setImagePath(info.filePath());
+    }
     else
     {
         setImagePath();
@@ -453,26 +453,6 @@ void LightTablePreview::resizeEvent(QResizeEvent* e)
     updateZoomAndSize(false);
 }
 
-void LightTablePreview::updateZoomAndSize(bool alwaysFitToWindow)
-{
-    // Set zoom for fit-in-window as minimum, but don't scale up images
-    // that are smaller than the available space, only scale down.
-    double zoom = calcAutoZoomFactor(ZoomInOnly);
-    setZoomMin(zoom);
-    setZoomMax(zoom*12.0);
-
-    // Is currently the zoom factor set to fit to window? Then set it again to fit the new size.
-    if (zoomFactor() < zoom || alwaysFitToWindow || zoomFactor() == d->currentFitWindowZoom)
-    {
-        setZoomFactor(zoom);
-    }
-
-    // store which zoom factor means it is fit to window
-    d->currentFitWindowZoom = zoom;
-
-    updateContentsSize();
-}
-
 int LightTablePreview::previewWidth()
 {
     return d->preview.width();
@@ -501,7 +481,7 @@ void LightTablePreview::resetPreview()
     emit signalPreviewLoaded(false);
 }
 
-void LightTablePreview::paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh)
+void LightTablePreview::paintPreview(QPixmap* pix, int sx, int sy, int sw, int sh)
 {
     DImg img     = d->preview.smoothScaleSection(sx, sy, sw, sh, tileSize(), tileSize());
     QPixmap pix2 = img.convertToPixmap();
@@ -510,7 +490,36 @@ void LightTablePreview::paintPreview(QPixmap *pix, int sx, int sy, int sw, int s
     p.end();
 }
 
-void LightTablePreview::contentsDragEnterEvent(QDragEnterEvent *e)
+void LightTablePreview::viewportPaintExtraData()
+{
+    if (!m_movingInProgress && d->isLoaded)
+    {
+        QPainter p(viewport());
+        p.setRenderHint(QPainter::Antialiasing, true);
+        p.setBackgroundMode(Qt::TransparentMode);
+        QFontMetrics fontMt = p.fontMetrics();
+
+        QString text;
+        QRect textRect, fontRect;
+        QRect region = contentsRect();
+        p.translate(region.topLeft());
+
+        // Drawing separate view.
+
+        if (!d->loadFullImageSize)
+        {
+            text     = i18n("Reduced Size Preview");
+            fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text);
+            textRect.setTopLeft(QPoint(region.topRight().x()-fontRect.width()-20, region.topRight().y()+20));
+            textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2) );
+            drawText(&p, textRect, text);
+        }
+
+        p.end();
+    }
+}
+
+void LightTablePreview::contentsDragEnterEvent(QDragEnterEvent* e)
 {
     if (d->dragAndDropEnabled)
     {
@@ -532,7 +541,7 @@ void LightTablePreview::contentsDragEnterEvent(QDragEnterEvent *e)
     e->ignore();
 }
 
-void LightTablePreview::contentsDropEvent(QDropEvent *e)
+void LightTablePreview::contentsDropEvent(QDropEvent* e)
 {
     if (d->dragAndDropEnabled)
     {
@@ -607,7 +616,7 @@ bool LightTablePreview::isSelected()
     return d->selected;
 }
 
-void LightTablePreview::drawFrame(QPainter *p)
+void LightTablePreview::drawFrame(QPainter* p)
 {
     if (d->selected)
     {
@@ -615,7 +624,9 @@ void LightTablePreview::drawFrame(QPainter *p)
         qDrawPlainRect(p, frameRect(), ThemeEngine::instance()->textSelColor(), 2);
     }
     else
+    {
         qDrawPlainRect(p, frameRect(), ThemeEngine::instance()->baseColor(), lineWidth());
+    }
 }
 
 QImage LightTablePreview::previewToQImage() const

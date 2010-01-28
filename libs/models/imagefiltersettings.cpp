@@ -145,22 +145,26 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool *foundText) const
                     break;
                 }
             }
+
+            match |= (untaggedFilter && tagIds.isEmpty());
         }
         else
         {
             // AND matching condition...
-
-            for (it = tagFilter.begin(); it != tagFilter.end(); ++it)
+            // untaggedFilter and non-empty tag filter, combined with AND, is logically no match
+            if (!untaggedFilter)
             {
-                if (!tagIds.contains(*it))
-                    break;
-            }
+                for (it = tagFilter.begin(); it != tagFilter.end(); ++it)
+                {
+                    if (!tagIds.contains(*it))
+                        break;
+                }
 
-            if (it == tagFilter.end())
-                match = true;
+                if (it == tagFilter.end())
+                    match = true;
+            }
         }
 
-        match |= (untaggedFilter && tagIds.isEmpty());
     }
     else if (untaggedFilter)
     {

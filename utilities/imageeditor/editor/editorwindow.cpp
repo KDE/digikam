@@ -115,6 +115,7 @@
 #include "editortooliface.h"
 #include "exposurecontainer.h"
 #include "filesaveoptionsbox.h"
+#include "filesaveoptionsdlg.h"
 #include "iccmanager.h"
 #include "iccsettings.h"
 #include "iccsettingscontainer.h"
@@ -233,10 +234,10 @@ void EditorWindow::setupContextMenu()
 
 void EditorWindow::setupStandardConnections()
 {
-    // -- Canvas connections ------------------------------------------------
-
-    connect(m_canvas, SIGNAL(signalToggleOffFitToWindow()),
+    connect(m_stackView, SIGNAL(signalToggleOffFitToWindow()),
             this, SLOT(slotToggleOffFitToWindow()));
+
+    // -- Canvas connections ------------------------------------------------
 
     connect(m_canvas, SIGNAL(signalShowNextImage()),
             this, SLOT(slotForward()));
@@ -309,7 +310,6 @@ void EditorWindow::setupStandardConnections()
 
     connect(IccSettings::instance(), SIGNAL(settingsChanged()),
             this, SLOT(slotColorManagementOptionsChanged()));
-
 }
 
 void EditorWindow::setupStandardActions()
@@ -1071,7 +1071,7 @@ void EditorWindow::saveStandardSettings()
     config->sync();
 }
 
-/** Method used by Editor Tools. Only Zoom+ and Zoom- are currently supported.
+/** Method used by Editor Tools. Only tools based on imageregionwidget support zoomming.
     TODO: Fix this behavior when editor tool preview widgets will be factored.
  */
 void EditorWindow::toggleZoomActions(bool val)
@@ -1079,12 +1079,12 @@ void EditorWindow::toggleZoomActions(bool val)
     d->zoomMinusAction->setEnabled(val);
     d->zoomPlusAction->setEnabled(val);
     d->zoomComboAction->setEnabled(val);
+    d->zoomTo100percents->setEnabled(val);
+    d->zoomFitToWindowAction->setEnabled(val);
 }
 
 void EditorWindow::toggleStandardActions(bool val)
 {
-    d->zoomTo100percents->setEnabled(val);
-    d->zoomFitToWindowAction->setEnabled(val);
     d->zoomFitToSelectAction->setEnabled(val);
     toggleZoomActions(val);
 
@@ -1887,12 +1887,41 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
        return false;
     }
 
+    KUrl newURL = imageFileSaveDialog->selectedUrl();
+    kDebug() << "Writing file to " << newURL;
+
+#ifdef _WIN32
+    //-- Show Settings Dialog ----------------------------------------------
+    
+    const QString configShowImageSettingsDialog="ShowImageSettingsDialog";
+    bool showDialog = group.readEntry(configShowImageSettingsDialog, true);
+    if (showDialog && options->discoverFormat(newURL.fileName(), DImg::NONE)!=DImg::NONE) {
+        FileSaveOptionsDlg *fileSaveOptionsDialog   = new FileSaveOptionsDlg(this, options);
+        options->slotImageFileFormatChanged(newURL.fileName());
+        
+        if (d->currentWindowModalDialog)
+        {
+            // go application-modal - we will create utter confusion if descending into more than one window-modal dialog
+            fileSaveOptionsDialog->setModal(true);
+            result = fileSaveOptionsDialog->exec();
+        }
+        else
+        {
+            fileSaveOptionsDialog->setWindowModality(Qt::WindowModal);
+            d->currentWindowModalDialog = fileSaveOptionsDialog;
+            result = fileSaveOptionsDialog->exec();
+            d->currentWindowModalDialog = 0;
+        }
+        if (result != KFileDialog::Accepted || !fileSaveOptionsDialog)
+        {
+            return false;
+        }
+    }
+#endif
+
     // Update file save settings in editor instance.
     options->applySettings();
     applyStandardSettings();
-
-    KUrl newURL = imageFileSaveDialog->selectedUrl();
-    kDebug() << "Writing file to " << newURL;
 
     // select the format to save the image with
     bool validFormatSet = selectValidSavingFormat(imageFileSaveDialog->currentFilter(), newURL, autoFilter);
@@ -2310,7 +2339,7 @@ PreviewToolBar::PreviewMode EditorWindow::previewMode()
 {
     return d->previewToolBar->previewMode();
 }
-    
+
 void EditorWindow::setToolInfoMessage(const QString& txt)
 {
     d->infoLabel->setText(txt);

@@ -7,7 +7,7 @@
  * Description : A widget stack to embedded album content view
  *               or the current image preview.
  *
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -94,7 +94,7 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
                 : QStackedWidget(parent), d(new AlbumWidgetStackPriv)
 {
     d->imageIconView    = new DigikamImageView(this);
-    d->imagePreviewView = new ImagePreviewView(this, this);
+    d->imagePreviewView = new ImagePreviewView(this);
     d->thumbBarDock     = new ThumbBarDock();
     d->thumbBar         = new ImagePreviewBar(d->thumbBarDock, Qt::Horizontal,
                                               AlbumSettings::instance()->getExifRotate());
@@ -165,10 +165,10 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
     connect(d->imagePreviewView, SIGNAL(signalAddToExistingQueue(int)),
             this, SIGNAL(signalAddToExistingQueue(int)));
 
-    connect(d->imageIconView->imageFilterModel(), SIGNAL(rowsInserted(const QModelIndex &, int, int)),
+    connect(d->imageIconView->imageFilterModel(), SIGNAL(rowsInserted(const QModelIndex&, int, int)),
             this, SLOT(slotItemsAddedOrRemoved()));
 
-    connect(d->imageIconView->imageFilterModel(), SIGNAL(rowsRemoved(const QModelIndex &, int, int)),
+    connect(d->imageIconView->imageFilterModel(), SIGNAL(rowsRemoved(const QModelIndex&, int, int)),
             this, SLOT(slotItemsAddedOrRemoved()));
 
     connect(d->imageIconView->imageFilterModel(), SIGNAL(layoutChanged()),
@@ -182,9 +182,18 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
 
     connect(d->thumbbarTimer, SIGNAL(timeout()),
             this, SLOT(updateThumbbar()));
+            
+    connect(d->mediaPlayerView, SIGNAL(signalNextItem()),
+            this, SIGNAL(signalNextItem()));
+
+    connect(d->mediaPlayerView, SIGNAL(signalPrevItem()),
+            this, SIGNAL(signalPrevItem()));
+
+    connect(d->mediaPlayerView, SIGNAL(signalBack2Album()),
+            this, SIGNAL(signalBack2Album()));
 
     LoadingCacheInterface::connectToSignalFileChanged(this,
-            SLOT(slotFileChanged(const QString &)));
+            SLOT(slotFileChanged(const QString&)));
 }
 
 AlbumWidgetStack::~AlbumWidgetStack()
@@ -195,21 +204,20 @@ AlbumWidgetStack::~AlbumWidgetStack()
 void AlbumWidgetStack::readSettings()
 {
     AlbumSettings *settings = AlbumSettings::instance();
-    bool showThumbbar = settings->getShowThumbbar();
+    bool showThumbbar       = settings->getShowThumbbar();
     d->thumbBarDock->setShouldBeVisible(showThumbbar);
 }
 
-void AlbumWidgetStack::setDockArea(QMainWindow *dockArea)
+void AlbumWidgetStack::setDockArea(QMainWindow* dockArea)
 {
-    // Attach the thumbbar dock to the given dock area and place it initially
-    // on top.
+    // Attach the thumbbar dock to the given dock area and place it initially on top.
     d->dockArea = dockArea;
     d->thumbBarDock->setParent(d->dockArea);
     d->dockArea->addDockWidget(Qt::TopDockWidgetArea, d->thumbBarDock);
     d->thumbBarDock->setFloating(false);
 }
 
-ThumbBarDock *AlbumWidgetStack::thumbBarDock()
+ThumbBarDock* AlbumWidgetStack::thumbBarDock()
 {
     return d->thumbBarDock;
 }
@@ -230,13 +238,13 @@ ImagePreviewView* AlbumWidgetStack::imagePreviewView()
     return d->imagePreviewView;
 }
 
-void AlbumWidgetStack::setPreviewItem(const ImageInfo & info, const ImageInfo& previous, const ImageInfo& next)
+void AlbumWidgetStack::setPreviewItem(const ImageInfo& info, const ImageInfo& previous, const ImageInfo& next)
 {
     if (info.isNull())
     {
         if (previewMode() == MediaPlayerMode)
         {
-            d->mediaPlayerView->setMediaPlayerFromUrl(KUrl());
+            d->mediaPlayerView->setImageInfo();
         }
         else if (previewMode() == PreviewImageMode)
         {
@@ -259,7 +267,7 @@ void AlbumWidgetStack::setPreviewItem(const ImageInfo & info, const ImageInfo& p
         if (mediaplayerfilter.contains(currentFileExtension) )
         {
             setPreviewMode(MediaPlayerMode);
-            d->mediaPlayerView->setMediaPlayerFromUrl(info.fileUrl());
+            d->mediaPlayerView->setImageInfo(info, previous, next);
         }
         else
         {

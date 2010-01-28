@@ -22,7 +22,6 @@ Name[ja]=ImagePlugin_ShearTool
 Name[km]=ImagePlugin_ShearTool
 Name[lv]=ImagePlugin_ShearTool
 Name[nb]=ImagePlugin_ShearTool
-Name[nds]=ImagePlugin_ShearTool
 Name[ne]=ImagePlugin_ShearTool
 Name[nl]=Afbeeldingsplugin_SchuinTrekken
 Name[pa]=ImagePlugin_ShearTool
@@ -66,7 +65,6 @@ Comment[ja]=digiKam 剪断変形プラグイン
 Comment[km]=កម្មវិធី​ជំនួយ​ឧបករណ៍​កាត់​សម្រាប់ digiKam
 Comment[lv]=DigiKam spraudnis attēla sašķiebšanai
 Comment[nb]=digikam programtillegg for beklipping
-Comment[nds]=digiKam-Warktüüchmoduul för't Scheren
 Comment[ne]=डिजिक्यामका लागि काँटछाँट उपकरण
 Comment[nl]=Digikam-plugin voor het schuintrekken van afbeeldingen
 Comment[pl]=Wtyczka do programu digiKam umoÅ¼liwiajÄca pochylenie obrazu

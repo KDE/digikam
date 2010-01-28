@@ -57,13 +57,11 @@ public:
         PreviewTargetImage        = 0x00000020,      // Target image only.
         PreviewToggleOnMouseOver  = 0x00000040,      // Original image if mouse is over image area, else target image.
         NoPreviewMode             = 0x00000080,      // Target image only without information displayed.
-        
+
         AllPreviewModes           = PreviewOriginalImage      | PreviewBothImagesHorz     |
                                     PreviewBothImagesVert     | PreviewBothImagesHorzCont |
                                     PreviewBothImagesVertCont | PreviewTargetImage        |
-                                    PreviewToggleOnMouseOver,
-                                    
-        NoBothPreviewModes        = PreviewOriginalImage | PreviewTargetImage | PreviewToggleOnMouseOver,                           
+                                    PreviewToggleOnMouseOver
 };
 
 public:

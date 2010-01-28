@@ -25,6 +25,13 @@
 
 #include "gpcamera.h"
 
+// C ANSI includes
+
+extern "C"
+{
+#include <utime.h>
+}
+
 // C++ includes
 
 #include <cstdio>
@@ -976,6 +983,16 @@ bool GPCamera::downloadItem(const QString& folder, const QString& itemName,
         delete d->status;
         d->status = 0;
         return false;
+    }
+
+    time_t mtime;
+    errorCode = gp_file_get_mtime(cfile, &mtime);
+    if (errorCode == GP_OK && mtime)
+    {
+        struct utimbuf ut;
+        ut.modtime = mtime;
+        ut.actime  = mtime;
+        ::utime(QFile::encodeName(saveFile), &ut);
     }
 
     file.close();

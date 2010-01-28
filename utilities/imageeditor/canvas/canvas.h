@@ -69,10 +69,10 @@ public:
     Canvas(QWidget *parent=0);
     ~Canvas();
 
-    void    load(const QString& filename, IOFileSettingsContainer *IOFileSettings);
+    void    load(const QString& filename, IOFileSettingsContainer* IOFileSettings);
     void    preload(const QString& filename);
 
-    void    saveAs(const QString& filename, IOFileSettingsContainer *IOFileSettings,
+    void    saveAs(const QString& filename, IOFileSettingsContainer* IOFileSettings,
                    bool setExifOrientationTag, const QString& mimeType=QString());
     void    resetImage();
     void    switchToLastSaved(const QString& newFilename);
@@ -103,6 +103,7 @@ public:
     int    imageWidth();
     int    imageHeight();
     QRect  getSelectedArea();
+    QRect  visibleArea();
 
     // If current image file format is only available in read only,
     // typically all RAW image file formats.
@@ -112,8 +113,8 @@ public:
     void  resizeImage(int w, int h);
 
     void  setBackgroundColor(const QColor& color);
-    void  setICCSettings(ICCSettingsContainer *cmSettings);
-    void  setExposureSettings(ExposureSettingsContainer *expoSettings);
+    void  setICCSettings(ICCSettingsContainer* cmSettings);
+    void  setExposureSettings(ExposureSettingsContainer* expoSettings);
     void  setSoftProofingEnabled(bool enable);
 
     void  setExifOrient(bool exifOrient);
@@ -171,12 +172,13 @@ public Q_SLOTS:
 
 protected:
 
-    void resizeEvent(QResizeEvent* e);
-    void viewportPaintEvent(QPaintEvent *e);
-    void contentsMousePressEvent(QMouseEvent *e);
-    void contentsMouseMoveEvent(QMouseEvent *e);
-    void contentsMouseReleaseEvent(QMouseEvent *e);
-    void contentsWheelEvent(QWheelEvent *e);
+    void resizeEvent(QResizeEvent*);
+    void viewportPaintEvent(QPaintEvent*);
+    void contentsMousePressEvent(QMouseEvent*);
+    void contentsMouseMoveEvent(QMouseEvent*);
+    void contentsMouseReleaseEvent(QMouseEvent*);
+    void contentsWheelEvent(QWheelEvent*);
+    void keyPressEvent(QKeyEvent*);
 
 private:
 

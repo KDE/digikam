@@ -250,6 +250,11 @@ void DImgInterface::load(const LoadingDescription& description)
 
         loadCurrent();
     }
+    else
+    {
+        emit signalLoadingStarted(d->filename);
+        emit signalImageLoaded(d->filename, true);
+    }
 
     EditorToolIface::editorToolIface()->unLoadTool();
 }

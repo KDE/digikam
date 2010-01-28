@@ -918,7 +918,7 @@ QDrag* AlbumFolderView::makeDragObject()
         return 0;
 
     QDrag *drag = new QDrag(this);
-    drag->setMimeData(new DAlbumDrag(album->databaseUrl(), album->id()));
+    drag->setMimeData(new DAlbumDrag(album->databaseUrl(), album->id(), album->fileUrl()));
     drag->setPixmap(*item->pixmap(0));
 
     return drag;

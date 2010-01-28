@@ -32,14 +32,12 @@
 #include <QtGui/QWheelEvent>
 #include <QtGui/QMouseEvent>
 #include <QtGui/QPaintEvent>
+#include <QtGui/QKeyEvent>
 #include <QtGui/QImage>
 
 // Local includes
 
 #include "digikam_export.h"
-
-class QPixmap;
-class QColor;
 
 namespace Digikam
 {
@@ -83,7 +81,9 @@ Q_SIGNALS:
     void signalShowPrevImage();
     void signalZoomFactorChanged(double);
     void signalContentsMovedEvent(bool);
-    void signalSelectionTakeFocus();
+    void signalContentTakeFocus();
+    void signalResized();
+    void signalToggleOffFitToWindow();
 
 public Q_SLOTS:
 
@@ -100,6 +100,8 @@ protected Q_SLOTS:
     void slotCornerButtonPressed();
     void slotPanIconHiden();
     virtual void slotPanIconSelectionMoved(const QRect&, bool);
+    virtual void slotContentTakeFocus();
+    virtual void slotContentLeaveFocus();
 
 protected:
 
@@ -113,8 +115,10 @@ protected:
     int    tileSize();
     void   updateAutoZoom(AutoZoomMode mode = ZoomInOrOut);
     void   updateContentsSize();
+    void   updateZoomAndSize(bool alwaysFitToWindow);
     void   clearCache();
     QRect  previewRect();
+    void   drawText(QPainter* p, const QRect& rect, const QString& text);
 
     virtual void setContentsSize();
     virtual void viewportPaintExtraData(){};
@@ -133,6 +137,8 @@ protected:
     virtual void contentsMouseMoveEvent(QMouseEvent*);
     virtual void contentsMouseReleaseEvent(QMouseEvent*);
     virtual void contentsWheelEvent(QWheelEvent*);
+    virtual void keyPressEvent(QKeyEvent*);
+    virtual void keyReleaseEvent(QKeyEvent*);
 
 private:
 

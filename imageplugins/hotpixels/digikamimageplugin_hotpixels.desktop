@@ -23,7 +23,6 @@ Name[km]=ImagePlugin_HotPixels
 Name[lt]=ImagePlugin_HotPixels
 Name[lv]=ImagePlugin_HotPixels
 Name[nb]=ImagePlugin_HotPixels
-Name[nds]=ImagePlugin_HotPixels
 Name[ne]=ImagePlugin_HotPixels
 Name[nl]=Afbeeldingsplugin_HotPixels
 Name[pa]=ImagePlugin_HotPixels
@@ -66,7 +65,6 @@ Comment[ja]=digiKam ホットピクセル除去プラグイン
 Comment[km]=កម្មវិធី​ជំនួយ​កែ​ភីកសែល​ងាប់​សម្រាប់ digiKam
 Comment[lv]=DigiKam spraudnis bojātu pikseļu koriģēšanai attēlos
 Comment[nb]=digiKam programtillegg for å rette «hete» piksler
-Comment[nds]=digiKam-Moduul för't Richten vun hitte Pixels
 Comment[ne]=डिजिक्यामका लागि हट पिक्सेल सुधार प्लगइन
 Comment[nl]=Digikam-plugin voor het corrigeren van de hotpixels
 Comment[pl]=Wtyczka do programu digiKam usuwajÄca "gorÄce piksele"

@@ -353,7 +353,37 @@ void DigikamImageView::insertSelectedToExistingQueue(int queueid)
 void DigikamImageView::deleteSelected(bool permanently)
 {
     ImageInfoList imageInfoList = selectedImageInfos();
-    d->utilities->deleteImages(imageInfoList, permanently);
+    if (d->utilities->deleteImages(imageInfoList, permanently)
+        && imageInfoList.size())
+    {
+        if (imageInfoList.size() == model()->rowCount())
+        {
+            clearSelection();
+            setCurrentIndex(QModelIndex());
+        }
+        else
+        {
+            QItemSelection selection = selectionModel()->selection();
+            const QModelIndex first = model()->index(0, 0);
+            const QModelIndex last  = model()->index(model()->rowCount() - 1, 0);
+            if (selection.contains(first) && selection.contains(last))
+            {
+                QItemSelection remaining(first, last);
+                remaining.merge(selection, QItemSelectionModel::Toggle);
+                toIndex(remaining.indexes().first());
+            }
+            else if (selection.contains(last))
+            {
+                setCurrentIndex(selection.indexes().first());
+                toPreviousIndex();
+            }
+            else
+            {
+                setCurrentIndex(selection.indexes().last());
+                toNextIndex();
+            }
+        }
+    }
 }
 
 void DigikamImageView::deleteSelectedDirectly(bool permanently)

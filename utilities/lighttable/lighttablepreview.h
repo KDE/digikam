@@ -104,14 +104,14 @@ private Q_SLOTS:
 
 private:
 
-    int  previewWidth();
-    int  previewHeight();
-    bool previewIsNull();
-    void resetPreview();
-    void updateZoomAndSize(bool alwaysFitToWindow);
+    int    previewWidth();
+    int    previewHeight();
+    bool   previewIsNull();
+    void   resetPreview();
     QImage previewToQImage() const;
 
-    inline void paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh);
+    void viewportPaintExtraData();
+    inline void paintPreview(QPixmap* pix, int sx, int sy, int sw, int sh);
 
     void contentsDragEnterEvent(QDragEnterEvent*);
     void contentsDropEvent(QDropEvent*);

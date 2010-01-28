@@ -3,7 +3,8 @@ digiKam 1.1.0 - Release date: 2010-01-31
 
 NEW FEATURES:
 
-AdvancedRename:  The ReplaceModifier has regular expressions support now.
+AdvancedRename : The ReplaceModifier has regular expressions support now.
+ImageEditor    : Add an option to add vignetting over an image.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
@@ -68,5 +69,57 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 059 ==> 221986 : Many panels lack the 'mouse over' preview mode.
 060 ==> 218184 : Preview and image navigation out of sync when opening the sharpen dialog in the editor.
 061 ==> 219745 : Zoom is ignored in the tools on 1. try.
+062 ==> 222748 : Editor preview mode buttons lack tooltip.
+063 ==> 222744 : Mouse-over preview mode with zoom removes ability to see whole image.
+064 ==> 220365 : digiKam crashes at startup (kipi-plugins work now).
+065 ==> 222975 : Wrong editorwindow zoom behaviour.
+066 ==> 163284 : Choose smart default zoom factor for each filter preview.
+067 ==> 148072 : zoom tool for sharpen tool is ankward.
+068 ==> 221987 : "zoom to 100%" not working.
+069 ==> 207888 : Resetting tool properties to Defaults should not reset options for showing original/target image.
+070 ==> 221569 : Crash when closing showfoto while a raw image is loading.
+071 ==> 221162 : Add collection with smb://xxx path should give better warning.
+072 ==> 221933 : menu disbabled when F4 in digikam and e.g. sharpening was previously open.
+073 ==> 220231 : button "last used tags" always empty.
+074 ==> 223050 : Unable to have directories with the same name case-insensitively.
+075 ==> 221988 : "fit to window" and zooming out not working.
+076 ==> 196469 : Zoom and pan should be available in all tools.
+077 ==> 220567 : Zooming, selecting picture part in editor tools.
+078 ==> 148235 : More comfortable panning and zooming of preview image.
+079 ==> 220122 : View 100% doesn't show real size (1:1).
+080 ==> 161338 : Too small images when "Embedded preview load full image size" deactivated.
+081 ==> 218179 : Add file name labels to the light table.
+082 ==> 210910 : Please allow locking image zoom on the light table [patch].
+083 ==> 222469 : Drag folders to Dolphin.
+084 ==> 219735 : digiKam unable to detect Camera.
+085 ==> 218906 : Camera obscura/pinhole camera/vignetting effect.
+086 ==> 177827 : Add vignetting effect to digiKam.
+087 ==> 224136 : Show dialog with settings when saving image on Windows [patch].
+088 ==> 183108 : View mode: mouse zoom and pan.
+089 ==> 150533 : New plugin for correction of backlighting.
+090 ==> 105934 : Would like to use the arrow keys to pan an image.
+091 ==> 193708 : digiKam crash on startup.
+092 ==> 218376 : digiKam tagging crash metadata.
+093 ==> 224243 : Content aware rescaling should not allow "original" preview mode.
+094 ==> 224293 : Wavelets NR tool confuses red and blue.
+095 ==> 224404 : No images of a album are shown.
+096 ==> 224094 : Modifying file (caption, keywords, EXIF) takes a very long time and 100 % CPU.
+097 ==> 216883 : digiKam crashed while browsing on picture editor (spacebar to next pic.).
+098 ==> 197483 : High resolution screen window narrow width.
+099 ==> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

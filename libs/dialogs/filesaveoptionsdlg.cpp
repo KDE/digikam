@@ -3,11 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2005-02-22
- * Description : a digiKam image editor plugin for simulate
- *               infrared film.
+ * Date        : 2010-01-14
+ * Description : a dialog to display image file save options.
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009 by David Eriksson <meldavid at acc umu se>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,38 +21,28 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEPLUGIN_INFRARED_H
-#define IMAGEPLUGIN_INFRARED_H
+#include "filesaveoptionsdlg.h"
 
-// Qt includes
+// KDE includes
 
-#include <QVariant>
+#include <klocale.h>
 
 // Local includes
 
-#include "imageplugin.h"
-#include "digikam_export.h"
-
-class KAction;
-
-class ImagePlugin_Infrared : public Digikam::ImagePlugin
+namespace Digikam
 {
-    Q_OBJECT
 
-public:
+FileSaveOptionsDlg::FileSaveOptionsDlg(QWidget* parent, FileSaveOptionsBox* options)
+                  : KDialog(parent)
+{
+    setCaption(i18n("Settings for Saving Image File"));
+    setButtons(Cancel|Ok);
+    setDefaultButton(Ok);
+    setMainWidget(options);
+}
 
-    ImagePlugin_Infrared(QObject *parent, const QVariantList& args);
-    ~ImagePlugin_Infrared();
+FileSaveOptionsDlg::~FileSaveOptionsDlg()
+{
+}
 
-    void setEnabledActions(bool enable);
-
-private Q_SLOTS:
-
-    void slotInfrared();
-
-private:
-
-    KAction* m_infraredAction;
-};
-
-#endif /* IMAGEPLUGIN_INFRARED_H */
+}  // namespace Digikam

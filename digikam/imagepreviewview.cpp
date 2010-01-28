@@ -32,10 +32,12 @@
 #include <QPainter>
 #include <QPixmap>
 #include <QString>
+#include <QToolBar>
 
 // KDE includes
 
 #include <kaction.h>
+#include <kactionmenu.h>
 #include <kapplication.h>
 #include <kcursor.h>
 #include <kdialog.h>
@@ -82,24 +84,33 @@ public:
         previewThread        = 0;
         previewPreloadThread = 0;
         stack                = 0;
-        hasPrev              = false;
-        hasNext              = false;
         loadFullImageSize    = false;
-        currentFitWindowZoom = 0;
         previewSize          = 1024;
+        isLoaded             = false;
+        toolBar              = 0;
+        back2AlbumAction     = 0;
+        prevAction           = 0;
+        nextAction           = 0;
+        rotLeftAction        = 0;
+        rotRightAction       = 0;
     }
 
-    bool               hasPrev;
-    bool               hasNext;
     bool               loadFullImageSize;
+    bool               isLoaded;
 
     int                previewSize;
-
-    double             currentFitWindowZoom;
 
     QString            path;
     QString            nextPath;
     QString            previousPath;
+
+    QAction*           back2AlbumAction;
+    QAction*           prevAction;
+    QAction*           nextAction;
+    QAction*           rotLeftAction;
+    QAction*           rotRightAction;
+    
+    QToolBar*          toolBar;
 
     DImg               preview;
 
@@ -111,10 +122,15 @@ public:
     AlbumWidgetStack*  stack;
 };
 
-ImagePreviewView::ImagePreviewView(QWidget *parent, AlbumWidgetStack *stack)
+ImagePreviewView::ImagePreviewView(AlbumWidgetStack* parent)
                 : PreviewWidget(parent), d(new ImagePreviewViewPriv)
 {
-    d->stack = stack;
+    d->stack            = parent;
+    d->back2AlbumAction = new QAction(SmallIcon("folder-image"),        i18n("Back to Album"),                  this);
+    d->prevAction       = new QAction(SmallIcon("go-previous"),         i18nc("go to previous image", "Back"),  this);
+    d->nextAction       = new QAction(SmallIcon("go-next"),             i18nc("go to next image", "Forward"),   this);
+    d->rotLeftAction    = new QAction(SmallIcon("object-rotate-left"),  i18nc("@info:tooltip", "Rotate Left"),  this);
+    d->rotRightAction   = new QAction(SmallIcon("object-rotate-right"), i18nc("@info:tooltip", "Rotate Right"), this);
 
     // get preview size from screen size, but limit from VGA to WQXGA
     d->previewSize = qMax(KApplication::desktop()->height(),
@@ -137,14 +153,33 @@ ImagePreviewView::ImagePreviewView(QWidget *parent, AlbumWidgetStack *stack)
     connect(this, SIGNAL(signalRightButtonClicked()),
             this, SLOT(slotContextMenu()));
 
-    connect(this, SIGNAL(signalLeftButtonClicked()),
-            this, SIGNAL(signalBack2Album()));
-
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
 
-    // ------------------------------------------------------------
+    connect(d->prevAction, SIGNAL(triggered()),
+            this, SIGNAL(signalPrevItem()));
+            
+    connect(d->nextAction, SIGNAL(triggered()),
+            this, SIGNAL(signalNextItem()));
+            
+    connect(d->back2AlbumAction, SIGNAL(triggered()),
+            this, SIGNAL(signalBack2Album()));
 
+    connect(d->rotLeftAction, SIGNAL(triggered()),
+            this, SLOT(slotRotateLeft()));
+            
+    connect(d->rotRightAction, SIGNAL(triggered()),
+            this, SLOT(slotRotateRight()));
+            
+    // ------------------------------------------------------------
+            
+    d->toolBar = new QToolBar(this);
+    d->toolBar->addAction(d->prevAction);
+    d->toolBar->addAction(d->nextAction);
+    d->toolBar->addAction(d->back2AlbumAction);
+    d->toolBar->addAction(d->rotLeftAction);
+    d->toolBar->addAction(d->rotRightAction);
+        
     slotReset();
 }
 
@@ -200,6 +235,7 @@ void ImagePreviewView::setImagePath(const QString& path)
     {
         slotReset();
         unsetCursor();
+        d->isLoaded = false;
         return;
     }
 
@@ -207,14 +243,15 @@ void ImagePreviewView::setImagePath(const QString& path)
     {
         d->previewThread = new PreviewLoadThread();
         d->previewThread->setDisplayingWidget(this);
-        connect(d->previewThread, SIGNAL(signalImageLoaded(const LoadingDescription &, const DImg &)),
-                this, SLOT(slotGotImagePreview(const LoadingDescription &, const DImg&)));
+        connect(d->previewThread, SIGNAL(signalImageLoaded(const LoadingDescription&, const DImg&)),
+                this, SLOT(slotGotImagePreview(const LoadingDescription&, const DImg&)));
     }
+
     if (!d->previewPreloadThread)
     {
         d->previewPreloadThread = new PreviewLoadThread();
         d->previewPreloadThread->setDisplayingWidget(this);
-        connect(d->previewPreloadThread, SIGNAL(signalImageLoaded(const LoadingDescription &, const DImg &)),
+        connect(d->previewPreloadThread, SIGNAL(signalImageLoaded(const LoadingDescription&, const DImg&)),
                 this, SLOT(slotNextPreload()));
     }
 
@@ -245,6 +282,7 @@ void ImagePreviewView::slotGotImagePreview(const LoadingDescription& description
         // three copies - but the image is small
         setImage(DImg(pix.toImage()));
         d->stack->previewLoaded();
+        d->isLoaded = false;
         emit signalPreviewLoaded(false);
     }
     else
@@ -255,9 +293,13 @@ void ImagePreviewView::slotGotImagePreview(const LoadingDescription& description
         d->stack->setPreviewMode(AlbumWidgetStack::PreviewImageMode);
         setImage(img);
         d->stack->previewLoaded();
+        d->isLoaded = true;
         emit signalPreviewLoaded(true);
     }
 
+    d->rotLeftAction->setEnabled(d->isLoaded);
+    d->rotRightAction->setEnabled(d->isLoaded);
+    
     unsetCursor();
     slotNextPreload();
 }
@@ -267,16 +309,18 @@ void ImagePreviewView::slotNextPreload()
     QString loadPath;
     if (!d->nextPath.isNull())
     {
-        loadPath    = d->nextPath;
+        loadPath = d->nextPath;
         d->nextPath.clear();
     }
     else if (!d->previousPath.isNull())
     {
-        loadPath        = d->previousPath;
+        loadPath = d->previousPath;
         d->previousPath.clear();
     }
     else
+    {
         return;
+    }
 
     if (d->loadFullImageSize)
         d->previewThread->loadHighQuality(loadPath, AlbumSettings::instance()->getExifRotate());
@@ -284,12 +328,13 @@ void ImagePreviewView::slotNextPreload()
         d->previewPreloadThread->load(loadPath, d->previewSize, AlbumSettings::instance()->getExifRotate());
 }
 
-void ImagePreviewView::setImageInfo(const ImageInfo & info, const ImageInfo& previous, const ImageInfo& next)
+void ImagePreviewView::setImageInfo(const ImageInfo& info, const ImageInfo& previous, const ImageInfo& next)
 {
     d->imageInfo = info;
-    d->hasPrev   = previous.isNull() ? false : true;
-    d->hasNext   = next.isNull()     ? false : true;
 
+    d->prevAction->setEnabled(previous.isNull());
+    d->nextAction->setEnabled(next.isNull());
+    
     if (!d->imageInfo.isNull())
         setImagePath(info.filePath());
     else
@@ -313,24 +358,14 @@ void ImagePreviewView::slotContextMenu()
     KUrl::List selectedItems;
     selectedItems << d->imageInfo.fileUrl();
 
-    // Temporary actions --------------------------------------
-
-    QAction *back2AlbumAction, *prevAction, *nextAction = 0;
-
-    back2AlbumAction = new QAction(SmallIcon("folder-image"), i18n("Back to Album"), this);
-    prevAction       = new QAction(SmallIcon("go-previous"),  i18nc("go to previous image", "Back"), this);
-    nextAction       = new QAction(SmallIcon("go-next"),      i18nc("go to next image", "Forward"), this);
-    prevAction->setEnabled(d->hasPrev);
-    nextAction->setEnabled(d->hasNext);
-
     // --------------------------------------------------------
 
     DPopupMenu popmenu(this);
     ContextMenuHelper cmhelper(&popmenu);
 
-    cmhelper.addAction(prevAction, true);
-    cmhelper.addAction(nextAction, true);
-    cmhelper.addAction(back2AlbumAction);
+    cmhelper.addAction(d->prevAction, true);
+    cmhelper.addAction(d->nextAction, true);
+    cmhelper.addAction(d->back2AlbumAction);
     cmhelper.addGotoMenu(idList);
     popmenu.addSeparator();
     // --------------------------------------------------------
@@ -376,15 +411,7 @@ void ImagePreviewView::slotContextMenu()
     connect(&cmhelper, SIGNAL(signalGotoDate(const ImageInfo&)),
             this, SIGNAL(signalGotoDateAndItem(const ImageInfo&)));
 
-    // handle temporary actions
-
-    QAction* choice = cmhelper.exec(QCursor::pos());
-    if (choice)
-    {
-        if (choice == prevAction)            emit signalPrevItem();
-        else if (choice == nextAction)       emit signalNextItem();
-        else if (choice == back2AlbumAction) emit signalBack2Album();
-    }
+    cmhelper.exec(QCursor::pos());
 }
 
 void ImagePreviewView::slotAssignTag(int tagID)
@@ -445,26 +472,6 @@ void ImagePreviewView::resizeEvent(QResizeEvent* e)
     updateZoomAndSize(false);
 }
 
-void ImagePreviewView::updateZoomAndSize(bool alwaysFitToWindow)
-{
-    // Set zoom for fit-in-window as minimum, but don't scale up images
-    // that are smaller than the available space, only scale down.
-    double zoom = calcAutoZoomFactor(ZoomInOnly);
-    setZoomMin(zoom);
-    setZoomMax(zoom*12.0);
-
-    // Is currently the zoom factor set to fit to window? Then set it again to fit the new size.
-    if (zoomFactor() < zoom || alwaysFitToWindow || zoomFactor() == d->currentFitWindowZoom)
-    {
-        setZoomFactor(zoom);
-    }
-
-    // store which zoom factor means it is fit to window
-    d->currentFitWindowZoom = zoom;
-
-    updateContentsSize();
-}
-
 int ImagePreviewView::previewWidth()
 {
     return d->preview.width();
@@ -499,6 +506,35 @@ void ImagePreviewView::paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh
     p.end();
 }
 
+void ImagePreviewView::viewportPaintExtraData()
+{
+    if (!m_movingInProgress && d->isLoaded)
+    {
+        QPainter p(viewport());
+        p.setRenderHint(QPainter::Antialiasing, true);
+        p.setBackgroundMode(Qt::TransparentMode);
+        QFontMetrics fontMt = p.fontMetrics();
+
+        QString text;
+        QRect textRect, fontRect;
+        QRect region = contentsRect();
+        p.translate(region.topLeft());
+
+        // Drawing separate view.
+
+        if (!d->loadFullImageSize)
+        {
+            text     = i18n("Reduced Size Preview");
+            fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text);
+            textRect.setTopLeft(QPoint(region.topRight().x()-fontRect.width()-20, region.topRight().y()+20));
+            textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2) );
+            drawText(&p, textRect, text);
+        }
+
+        p.end();
+    }
+}
+
 void ImagePreviewView::slotGotoTag(int tagID)
 {
     emit signalGotoTagAndItem(tagID);
@@ -507,6 +543,34 @@ void ImagePreviewView::slotGotoTag(int tagID)
 QImage ImagePreviewView::previewToQImage() const
 {
     return d->preview.copyQImage();
+}
+
+void ImagePreviewView::slotRotateLeft()
+{
+    KActionMenu* action = dynamic_cast<KActionMenu*>(ContextMenuHelper::kipiRotateAction());
+    if (action)
+    {
+        QList<QAction*> list = action->menu()->actions();
+        foreach(QAction* ac, list)
+        {
+            if (ac->objectName() == QString("rotate_ccw"))
+                ac->trigger();
+        }
+    }
+}
+
+void ImagePreviewView::slotRotateRight()
+{
+    KActionMenu* action = dynamic_cast<KActionMenu*>(ContextMenuHelper::kipiRotateAction());
+    if (action)
+    {
+        QList<QAction*> list = action->menu()->actions();
+        foreach(QAction* ac, list)
+        {
+            if (ac->objectName() == QString("rotate_cw"))
+                ac->trigger();
+        }
+    }
 }
 
 }  // namespace Digikam

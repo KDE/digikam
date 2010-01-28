@@ -928,16 +928,6 @@ bool AlbumManager::setDatabase(const QString dbType, const QString dbName, const
 
     // -- ---------------------------------------------------------
 
-    // measures to filter out KDirWatch signals caused by database operations
-    d->dirWatchBlackList.clear();
-    DatabaseParameters params = DatabaseAccess::parameters();
-    if (params.isSQLite())
-    {
-        QFileInfo dbFile(params.SQLiteDatabaseFile());
-        d->dbPathModificationDateList = d->buildDirectoryModList(dbFile);
-        d->dirWatchBlackList << dbFile.fileName() << dbFile.fileName() + "-journal";
-    }
-
     // check that we have one album root
     if (CollectionManager::instance()->allLocations().isEmpty())
     {
@@ -975,6 +965,20 @@ bool AlbumManager::setDatabase(const QString dbType, const QString dbName, const
 
     QApplication::restoreOverrideCursor();
 #endif
+
+    // -- ---------------------------------------------------------
+
+    // measures to filter out KDirWatch signals caused by database operations
+    d->dirWatchBlackList.clear();
+    DatabaseParameters params = DatabaseAccess::parameters();
+    if (params.isSQLite())
+    {
+        QFileInfo dbFile(params.SQLiteDatabaseFile());
+        d->dirWatchBlackList << dbFile.fileName() << dbFile.fileName() + "-journal";
+
+        // ensure this is done after setting up the black list
+        d->dbPathModificationDateList = d->buildDirectoryModList(dbFile);
+    }
 
     // -- ---------------------------------------------------------
 
@@ -1150,7 +1154,6 @@ void AlbumManager::slotCollectionLocationPropertiesChanged(const CollectionLocat
     if (album)
     {
         QString newLabel = d->labelForAlbumRootAlbum(location);
-        kDebug() << newLabel << album->title();
         if (album->title() != newLabel)
         {
             album->setTitle(newLabel);
@@ -2876,7 +2879,12 @@ void AlbumManager::slotDirWatchDirty(const QString& path)
     DatabaseParameters params = DatabaseAccess::parameters();
     if (params.isSQLite())
     {
-        QDir dir(path);
+        QFileInfo info(path);
+        QDir dir;
+        if (info.isDir())
+            dir = QDir(path);
+        else
+            dir = info.dir();
         QFileInfo dbFile(params.SQLiteDatabaseFile());
 
         // Workaround for broken KDirWatch in KDE 4.2.4

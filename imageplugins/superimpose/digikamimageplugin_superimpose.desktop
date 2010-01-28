@@ -22,7 +22,6 @@ Name[ja]=ImagePlugin_SuperImpose
 Name[km]=ImagePlugin_SuperImpose
 Name[lv]=ImagePlugin_SuperImpose
 Name[nb]=ImagePlugin_SuperImpose
-Name[nds]=ImagePlugin_SuperImpose
 Name[ne]=ImagePlugin_SuperImpose
 Name[nl]=Afbeeldingsplugin_SjabloonAanbrengen
 Name[pa]=ImagePlugin_SuperImpose
@@ -64,8 +63,8 @@ Comment[is]=Íforrit fyrir digiKam sem hleður forsniðinni mynd ofan á þá se
 Comment[it]=Estensione di digiKam per la sovrapposizione di modelli
 Comment[ja]=digiKam テンプレート重ね合わせプラグイン
 Comment[km]=កម្មវិធី​ជំនួយខាង​លើ​ពុម្ព​សម្រាប់ digiKam
+Comment[lv]=DigiKam spraudnis pārklājumu sagatavēm
 Comment[nb]=digiKam programtillegg for å legge på et mønster
-Comment[nds]=digiKam-Moduul för't Vörblennen vun Vörlagen
 Comment[ne]=डिजिक्यामका लागि टेम्प्लेट सुपरइम्पोज प्लगइन
 Comment[nl]=Digikam-plugin voor het aanbrengen van een sjabloon op de afbeelding
 Comment[pl]=Comment=Wtyczka do programu digiKam umoÅ¼liwiajÄca naÅoÅ¼enie szablonu na obraz

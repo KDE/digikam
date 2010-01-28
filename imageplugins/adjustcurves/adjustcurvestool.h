@@ -6,7 +6,7 @@
  * Date        : 2004-12-01
  * Description : image histogram adjust curves.
  *
- * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -44,7 +44,7 @@ class AdjustCurvesTool : public Digikam::EditorTool
 
 public:
 
-    AdjustCurvesTool(QObject *parent);
+    AdjustCurvesTool(QObject* parent);
     ~AdjustCurvesTool();
 
 private:
@@ -62,7 +62,7 @@ private Q_SLOTS:
     void slotResetCurrentChannel();
     void slotSpotColorChanged(const Digikam::DColor& color);
     void slotColorSelectedFromTarget(const Digikam::DColor& color);
-    void slotPickerColorButtonActived();
+    void slotPickerColorButtonActived(int);
     void slotChannelChanged();
     void slotScaleChanged();
 

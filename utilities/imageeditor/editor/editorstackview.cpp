@@ -65,6 +65,9 @@ void EditorStackView::setCanvas(Canvas* canvas)
 
     connect(d->canvas, SIGNAL(signalZoomChanged(double)),
             this, SLOT(slotZoomChanged(double)));
+
+    connect(d->canvas, SIGNAL(signalToggleOffFitToWindow()),
+            this, SIGNAL(signalToggleOffFitToWindow()));
 }
 
 Canvas* EditorStackView::canvas() const
@@ -87,6 +90,9 @@ void EditorStackView::setToolView(QWidget* view)
     {
         connect(preview, SIGNAL(signalZoomFactorChanged(double)),
                 this, SLOT(slotZoomChanged(double)));
+
+        connect(preview, SIGNAL(signalToggleOffFitToWindow()),
+                this, SIGNAL(signalToggleOffFitToWindow()));
     }
 }
 
@@ -138,45 +144,32 @@ void EditorStackView::decreaseZoom()
 
 void EditorStackView::toggleFitToWindow()
 {
-    if (viewMode() == CanvasMode)
-    {
-        d->canvas->toggleFitToWindow();
-    }
-    else
-    {
-        PreviewWidget* preview = previewWidget();
-        if (preview)
-            preview->toggleFitToWindow();
-    }
+    // Fit to window action is common place to switch view in this mode.
+    // User want to see the same behavors between canvas and tool preview.
+    // Both are toggle at the same time.
+    d->canvas->toggleFitToWindow();
+    PreviewWidget* preview = previewWidget();
+    if (preview)
+        preview->toggleFitToWindow();
 }
 
 void EditorStackView::fitToSelect()
 {
     if (viewMode() == CanvasMode)
-    {
         d->canvas->fitToSelect();
-    }
 }
 
 void EditorStackView::zoomTo100Percent()
 {
     if (viewMode() == CanvasMode)
     {
-        if (d->canvas->zoomFactor() == 1.0)
-            d->canvas->toggleFitToWindow();
-        else
-            d->canvas->setZoomFactor(1.0);
+        d->canvas->setZoomFactor(1.0);
     }
     else
     {
         PreviewWidget* preview = previewWidget();
         if (preview)
-        {
-            if (preview->zoomFactor() == 1.0)
-                preview->toggleFitToWindow();
-            else
-                preview->setZoomFactor(1.0);
-        }
+            preview->setZoomFactor(1.0);
     }
 }
 
