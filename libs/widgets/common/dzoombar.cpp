@@ -68,7 +68,7 @@ public:
         zoomTimer       = 0;
         zoomCombo       = 0;
     }
-    
+
     QToolButton* zoomToFitButton;
     QToolButton* zoomTo100Button;
     QToolButton* zoomPlusButton;
@@ -77,9 +77,9 @@ public:
     QTimer*      zoomTimer;
 
     QSlider*     zoomSlider;
-    
+
     KComboBox*   zoomCombo;
-    
+
     DTipTracker* zoomTracker;
 };
 
@@ -227,7 +227,7 @@ void DZoomBar::setZoom(double zoom, double zmin, double zmax)
     d->zoomCombo->setCurrentIndex(-1);
     d->zoomCombo->setEditText(ztxt);
     d->zoomCombo->blockSignals(false);
-    
+
     d->zoomTracker->setText(ztxt);
     triggerZoomTrackerToolTip();
 }

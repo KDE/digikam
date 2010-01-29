@@ -50,7 +50,7 @@ Q_OBJECT
 
 public:
 
-    DZoomBar(QWidget *parent=0);
+    DZoomBar(QWidget* parent=0);
     ~DZoomBar();
 
     void setZoom(double zoom, double zmin, double zmax);
