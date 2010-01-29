@@ -107,7 +107,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 097 ==> 216883 : digiKam crashed while browsing on picture editor (spacebar to next pic.).
 098 ==> 197483 : High resolution screen window narrow width.
 099 ==> 211814 : Raw import tool: annoying scrollbar
-100 ==>
+100 ==> 156836 : Preview zoom to 100 percent is not 100 percent viewing Canon RAW/CR2.
+101 ==> 
+
 
 
 
