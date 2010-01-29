@@ -524,7 +524,7 @@ void ImagePreviewView::viewportPaintExtraData()
         if (!d->loadFullImageSize)
         {
             if (d->imageInfo.format().startsWith("RAW"))
-                text = i18n("Embeded JPEG Preview");
+                text = i18n("Embedded JPEG Preview");
             else
                 text = i18n("Reduced Size Preview");
         }
