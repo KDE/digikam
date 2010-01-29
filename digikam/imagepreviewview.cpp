@@ -333,8 +333,8 @@ void ImagePreviewView::setImageInfo(const ImageInfo& info, const ImageInfo& prev
 {
     d->imageInfo = info;
 
-    d->prevAction->setEnabled(previous.isNull());
-    d->nextAction->setEnabled(next.isNull());
+    d->prevAction->setEnabled(!previous.isNull());
+    d->nextAction->setEnabled(!next.isNull());
     
     if (!d->imageInfo.isNull())
         setImagePath(info.filePath());
