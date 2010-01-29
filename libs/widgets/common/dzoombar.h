@@ -53,13 +53,13 @@ public:
     DZoomBar(QWidget *parent=0);
     ~DZoomBar();
 
+    void setZoom(double zoom, double zmin, double zmax);
+
     void setZoomToFitAction(QAction* action);
     void setZoomTo100Action(QAction* action);
     void setZoomPlusAction(QAction* action);
     void setZoomMinusAction(QAction* action);
 
-    void setZoomSliderValue(int v);
-    void setZoomTrackerText(const QString& text);
     void triggerZoomTrackerToolTip();
 
 Q_SIGNALS:
@@ -67,6 +67,7 @@ Q_SIGNALS:
     void signalZoomSliderChanged(int);
     void signalDelayedZoomSliderChanged(int);
     void signalZoomSliderReleased(int);
+    void signalZoomValueEdited(double);
 
 public Q_SLOTS:
 
@@ -77,6 +78,8 @@ private Q_SLOTS:
     void slotZoomSliderChanged(int);
     void slotDelayedZoomSliderChanged();
     void slotZoomSliderReleased();
+    void slotZoomSelected(int);
+    void slotZoomTextChanged(const QString&);
 
 private:
 

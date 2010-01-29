@@ -38,7 +38,6 @@ class QSignalMapper;
 
 class KAction;
 class KActionCollection;
-class KComboBox;
 class KToggleAction;
 class KSqueezedTextLabel;
 
@@ -49,6 +48,7 @@ class EditorToolIface;
 class ExposureSettingsContainer;
 class ICCSettingsContainer;
 class PreviewToolBar;
+class DZoomBar;
 
 class EditorWindowPriv
 {
@@ -82,8 +82,6 @@ public:
         zoomPlusAction               = 0;
         zoomMinusAction              = 0;
         zoomTo100percents            = 0;
-        zoomCombo                    = 0;
-        zoomComboAction              = 0;
         selectAllAction              = 0;
         selectNoneAction             = 0;
         waitingLoop                  = 0;
@@ -99,6 +97,7 @@ public:
         viewSoftProofAction          = 0;
         softProofOptionsAction       = 0;
         previewToolBar               = 0;
+        zoomBar                      = 0;
     }
 
     ~EditorWindowPriv()
@@ -107,8 +106,6 @@ public:
 
     bool                       removeFullScreenButton;
     bool                       fullScreenHideToolBar;
-
-    QWidgetAction*             zoomComboAction;
 
     QToolButton*               cmViewIndicator;
     QToolButton*               underExposureIndicator;
@@ -151,12 +148,11 @@ public:
     KToggleAction*             viewOverExpoAction;
     KToggleAction*             showMenuBarAction;
 
-    KComboBox*                 zoomCombo;
-
     QList<int>                 fullscreenSizeBackup;
 
     ICCSettingsContainer*      ICCSettings;
 
+    DZoomBar*                  zoomBar;
     PreviewToolBar*            previewToolBar;
 
     ExposureSettingsContainer* exposureSettings;

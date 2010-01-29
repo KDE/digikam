@@ -23,6 +23,10 @@
 
 #include "dzoombar.moc"
 
+// C++ includes
+
+#include <cmath>
+
 // Qt includes
 
 #include <QAction>
@@ -30,11 +34,15 @@
 #include <QSlider>
 #include <QTimer>
 #include <QToolButton>
+#include <QList>
 
 // KDE includes
 
 #include <klocale.h>
 #include <kvbox.h>
+#include <kcombobox.h>
+#include <kglobal.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -58,6 +66,7 @@ public:
         zoomPlusButton  = 0;
         zoomSlider      = 0;
         zoomTimer       = 0;
+        zoomCombo       = 0;
     }
     
     QToolButton* zoomToFitButton;
@@ -68,7 +77,9 @@ public:
     QTimer*      zoomTimer;
 
     QSlider*     zoomSlider;
-
+    
+    KComboBox*   zoomCombo;
+    
     DTipTracker* zoomTracker;
 };
 
@@ -90,7 +101,8 @@ DZoomBar::DZoomBar(QWidget *parent)
     d->zoomMinusButton->setAutoRaise(true);
     d->zoomMinusButton->setFocusPolicy(Qt::NoFocus);
 
-    d->zoomSlider = new QSlider(Qt::Horizontal, this);
+    d->zoomSlider  = new QSlider(Qt::Horizontal, this);
+    d->zoomTracker = new DTipTracker(QString(""), d->zoomSlider);
     d->zoomSlider->setRange(ThumbnailSize::Small, ThumbnailSize::Huge);
     d->zoomSlider->setSingleStep(ThumbnailSize::Step);
     d->zoomSlider->setValue(ThumbnailSize::Medium);
@@ -102,7 +114,27 @@ DZoomBar::DZoomBar(QWidget *parent)
     d->zoomPlusButton->setAutoRaise(true);
     d->zoomPlusButton->setFocusPolicy(Qt::NoFocus);
 
-    d->zoomTracker = new DTipTracker("", d->zoomSlider);
+    d->zoomCombo = new KComboBox(true, this);
+    d->zoomCombo->setDuplicatesEnabled(false);
+    d->zoomCombo->setFocusPolicy(Qt::ClickFocus);
+    d->zoomCombo->setInsertPolicy(QComboBox::NoInsert);
+
+    QList<double> zoomLevels;
+    zoomLevels << 10.0;
+    zoomLevels << 25.0;
+    zoomLevels << 50.0;
+    zoomLevels << 75.0;
+    zoomLevels << 100.0;
+    zoomLevels << 150.0;
+    zoomLevels << 200.0;
+    zoomLevels << 300.0;
+    zoomLevels << 450.0;
+    zoomLevels << 600.0;
+    zoomLevels << 800.0;
+    zoomLevels << 1200.0;
+
+    foreach (const double zoom, zoomLevels)
+        d->zoomCombo->addItem(QString("%1%").arg((int)zoom), QVariant(zoom));
 
     layout()->setMargin(0);
     layout()->setSpacing(0);
@@ -117,6 +149,12 @@ DZoomBar::DZoomBar(QWidget *parent)
 
     connect(d->zoomSlider, SIGNAL(sliderReleased()),
             this, SLOT(slotZoomSliderReleased()));
+
+    connect(d->zoomCombo, SIGNAL(activated(int)),
+            this, SLOT(slotZoomSelected(int)));
+
+    connect(d->zoomCombo, SIGNAL(returnPressed(const QString&)),
+            this, SLOT(slotZoomTextChanged(const QString&)));
 }
 
 DZoomBar::~DZoomBar()
@@ -172,16 +210,26 @@ void DZoomBar::slotZoomSliderReleased()
     emit signalZoomSliderReleased(d->zoomSlider->value());
 }
 
-void DZoomBar::setZoomSliderValue(int v)
+void DZoomBar::setZoom(double zoom, double zmin, double zmax)
 {
-    d->zoomSlider->blockSignals(true);
-    d->zoomSlider->setValue(v);
-    d->zoomSlider->blockSignals(false);
-}
+    double h = (double)ThumbnailSize::Huge;
+    double s = (double)ThumbnailSize::Small;
+    double b = (zmin-(zmax*s/h))/(1-s/h);
+    double a = (zmax-b)/h;
+    int size = (int)((zoom - b) /a);
 
-void DZoomBar::setZoomTrackerText(const QString& text)
-{
-    d->zoomTracker->setText(text);
+    d->zoomSlider->blockSignals(true);
+    d->zoomSlider->setValue(size);
+    d->zoomSlider->blockSignals(false);
+
+    QString ztxt = QString::number(lround(zoom*100.0)) + QString("%");
+    d->zoomCombo->blockSignals(true);
+    d->zoomCombo->setCurrentIndex(-1);
+    d->zoomCombo->setEditText(ztxt);
+    d->zoomCombo->blockSignals(false);
+    
+    d->zoomTracker->setText(ztxt);
+    triggerZoomTrackerToolTip();
 }
 
 void DZoomBar::triggerZoomTrackerToolTip()
@@ -192,6 +240,22 @@ void DZoomBar::triggerZoomTrackerToolTip()
 void DZoomBar::slotUpdateTrackerPos()
 {
     d->zoomTracker->refresh();
+}
+
+void DZoomBar::slotZoomSelected(int index)
+{
+    bool ok     = false;
+    double zoom = d->zoomCombo->itemData(index).toDouble(&ok) / 100.0;
+    if (ok && zoom > 0.0)
+        emit signalZoomValueEdited(zoom);
+}
+
+void DZoomBar::slotZoomTextChanged(const QString& txt)
+{
+    bool ok     = false;
+    double zoom = KGlobal::locale()->readNumber(txt, &ok) / 100.0;
+    if (ok && zoom > 0.0)
+        emit signalZoomValueEdited(zoom);
 }
 
 }  // namespace Digikam

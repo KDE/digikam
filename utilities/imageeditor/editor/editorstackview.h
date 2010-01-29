@@ -70,8 +70,10 @@ public:
     void toggleFitToWindow();
     void fitToSelect();
     void zoomTo100Percent();
-    void setZoomFactor(double zoom);
 
+    double zoomMax();
+    double zoomMin();
+    
     /** Two widgets are embedded in Editor Tool to perform preview with panning and zooming:
         a PreviewWidget derived class (ImageRegionWidget) or ImageGuideWidget.
         This method try to find the right PreviewWidget instance accordingly else return 0.
@@ -83,6 +85,11 @@ Q_SIGNALS:
     void signalZoomChanged(bool isMax, bool isMin, double zoom);
     void signalToggleOffFitToWindow();
 
+public Q_SLOTS:
+    
+    void setZoomFactor(double);
+    void slotZoomSliderChanged(int);
+    
 private Q_SLOTS:
 
     void slotZoomChanged(double);

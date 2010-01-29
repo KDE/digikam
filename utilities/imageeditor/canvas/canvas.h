@@ -94,7 +94,10 @@ public:
     void   setZoomFactorSnapped(double zoom);
 
     double zoomFactor();
+    double zoomMax();
+    double zoomMin();
     void   setZoomFactor(double z);
+
     void   setFitToWindow(bool enable);
     bool   fitToWindow();
     bool   maxZoom();

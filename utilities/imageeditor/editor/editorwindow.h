@@ -263,8 +263,6 @@ private Q_SLOTS:
     void slotContribute();
     void slotToggleSlideShow();
     void slotZoomTo100Percents();
-    void slotZoomSelected(int);
-    void slotZoomTextChanged(const QString&);
     void slotZoomChanged(bool isMax, bool isMin, double zoom);
     void slotSelectionChanged(const QRect& sel);
     void slotToggleFitToWindow();
