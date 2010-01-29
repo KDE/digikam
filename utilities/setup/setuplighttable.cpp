@@ -6,7 +6,7 @@
  * Date        : 2007-05-11
  * Description : setup Light Table tab.
  *
- * Copyright (C) 2007-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -99,17 +99,20 @@ SetupLightTable::SetupLightTable(QWidget* parent)
                      "into the right panel when the corresponding item is selected on the thumbbar."));
 
     d->loadFullImageSize = new QCheckBox(i18n("Load full-sized image"), interfaceOptionsGroup);
-    d->loadFullImageSize->setWhatsThis( i18n("Set this option to load the full-sized image "
-                     "into the preview panel instead of one at a reduced size. As this option will make it take longer "
-                     "to load images, only use it if you have a fast computer."));
+    d->loadFullImageSize->setWhatsThis( i18n("<p>Set this option to load images at their full size "
+                                             "for preview, rather than at a reduced size. As this option "
+                                             "will make it take longer to load images, only use it if you have "
+                                             "a fast computer.</p>"
+                                             "<p><b>Note:</b> for Raw image, an half size version of Raw data "
+                                             "is used instead embeded JPEG preview.</p>"));
 
     d->hideToolBar  = new QCheckBox(i18n("H&ide toolbar in fullscreen mode"), interfaceOptionsGroup);
 
     d->clearOnClose = new QCheckBox(i18n("Clear the light table on close"));
     d->clearOnClose->setWhatsThis(i18n("Set this option to remove all images "
-                                   "from the light table when you close it, "
-                                   "or unset it to preserve the images "
-                                   "currently on the light table."));
+                                       "from the light table when you close it, "
+                                       "or unset it to preserve the images "
+                                       "currently on the light table."));
 
     gLayout->addWidget(d->autoSyncPreview);
     gLayout->addWidget(d->autoLoadOnRightPanel);
