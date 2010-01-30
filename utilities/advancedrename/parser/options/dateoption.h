@@ -57,7 +57,7 @@ public:
         Standard = 0,
         ISO,
         FullText,
-        Locale,
+//        Locale,
         Custom
     };
 

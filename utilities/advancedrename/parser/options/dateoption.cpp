@@ -28,6 +28,7 @@
 #include <QDateTime>
 #include <QPointer>
 #include <QTimer>
+#include <QValidator>
 
 // KDE includes
 
@@ -54,7 +55,7 @@ DateFormat::DateFormat()
     m_map.insert(Standard, DateFormatDescriptor(QString("Standard"), QString("yyyyMMddThhmmss")));
     m_map.insert(ISO,      DateFormatDescriptor(QString("ISO"),      Qt::ISODate));
     m_map.insert(FullText, DateFormatDescriptor(QString("Text"),     Qt::TextDate));
-    m_map.insert(Locale,   DateFormatDescriptor(QString("Locale"),   Qt::SystemLocaleShortDate));
+//    m_map.insert(Locale,   DateFormatDescriptor(QString("Locale"),   Qt::SystemLocaleShortDate));
     m_map.insert(Custom,   DateFormatDescriptor(QString("Custom"),   QString("")));
 }
 
@@ -124,6 +125,9 @@ DateOptionDialog::DateOptionDialog(ParseObject* parent)
     ui->dateFormatLink->setTextInteractionFlags(Qt::LinksAccessibleByMouse|Qt::LinksAccessibleByKeyboard);
     ui->dateFormatLink->setText(dateFormatLink);
 
+    QRegExp validRegExp("[^/]+");
+    QValidator *validator = new QRegExpValidator(validRegExp, this);
+    ui->customFormatInput->setValidator(validator);
     ui->customFormatInput->setClickMessage(i18n("Enter custom format"));
 
     // --------------------------------------------------------
@@ -223,7 +227,8 @@ DateOption::DateOption()
                    SmallIcon("view-pim-calendar"))
 {
     addToken("[date]",            i18n("Date and time (standard format)"));
-    addToken("[date:||key||]",    i18n("Date and time (||key|| = ISO|Text|Locale)"));
+//    addToken("[date:||key||]",    i18n("Date and time (||key|| = Standard|ISO|Text|Locale)"));
+    addToken("[date:||key||]",    i18n("Date and time (||key|| = Standard|ISO|Text)"));
     addToken("[date:||format||]", i18n("Date and time") + " (" +  dateFormatLink + ')');
 
     QRegExp reg("\\[date(:.*)?\\]");
