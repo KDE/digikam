@@ -110,7 +110,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 100 ==> 156836 : Preview zoom to 100 percent is not 100 percent viewing Canon RAW/CR2.
 101 ==> 197316 : Two ways to do a simple zooming.
 102 ==> 224697 : Crash with gimp xcf files with metadata.
-103 ==> 
+103 ==> 224682 : Color Channel Mixer ui & usability.
+104 ==> 
 
 
 
