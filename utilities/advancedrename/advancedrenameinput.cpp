@@ -186,6 +186,11 @@ void AdvancedRenameLineEdit::keyPressEvent(QKeyEvent* e)
     {
         e->setAccepted(false);
     }
+    // the key "/" should not be allowed (QTextEdit is not able to use a QValidator, so we must do it in here)
+    else if (e->key() == Qt::Key_Slash)
+    {
+        // do nothing
+    }
     else
     {
         KTextEdit::keyPressEvent(e);
