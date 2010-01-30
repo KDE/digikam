@@ -89,6 +89,18 @@ protected Q_SLOTS:
 
 protected:
 
+    QRect drawThumbnail(QPainter *p, const QRect& thumbRect, const QPixmap& background, const QPixmap& thumbnail) const;
+    void drawRating(QPainter *p, const QModelIndex& index, const QRect& ratingRect, int rating, bool isSelected) const;
+    void drawName(QPainter *p,const QRect& nameRect, const QString& name) const;
+    void drawComments(QPainter *p, const QRect& commentsRect, const QString& comments) const;
+    void drawCreationDate(QPainter *p, const QRect& dateRect, const QDateTime& date) const;
+    void drawModificationDate(QPainter *p, const QRect& dateRect, const QDateTime& date) const;
+    void drawImageSize(QPainter *p, const QRect& dimsRect, const QSize& dims) const;
+    void drawFileSize(QPainter *p, const QRect& r, int bytes) const;
+    void drawTags(QPainter *p, const QRect& r, const QString& tagsString, bool isSelected) const;
+    void drawStateRects(QPainter *p, const QStyleOptionViewItem& option, bool isSelected) const;
+    void drawDelegates(QPainter *p, const QStyleOptionViewItem& option, const QModelIndex& index) const;
+
     virtual void invalidatePaintingCache();
     virtual void updateSizeRectsAndPixmaps() = 0;
 

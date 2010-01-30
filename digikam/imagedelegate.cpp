@@ -131,7 +131,7 @@ QRect ImageDelegate::tagsRect() const
     return d->tagRect;
 }
 
-void ImageDelegate::paint(QPainter * p, const QStyleOptionViewItem& option, const QModelIndex& index) const
+void ImageDelegate::paint(QPainter *p, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
     Q_D(const ImageDelegate);
     ImageInfo info = ImageModel::retrieveImageInfo(index);
@@ -157,141 +157,58 @@ void ImageDelegate::paint(QPainter * p, const QStyleOptionViewItem& option, cons
 
     p->setPen(isSelected ? te->textSelColor() : te->textRegColor());
 
+    // Thumbnail
     QVariant thumbData = index.data(ImageModel::ThumbnailRole);
-    if (!thumbData.isNull())
-    {
-        QPixmap thumbnail = thumbData.value<QPixmap>();
-        r = d->pixmapRect;
-        /*p->drawPixmap(r.x() + (r.width()-thumbnail.width())/2,
-                      r.y() + (r.height()-thumbnail.height())/2,
-                      thumbnail);*/
-
-        QRect actualPixmapRect(r.x() + (r.width()-thumbnail.width())/2,
-                               r.y() + (r.height()-thumbnail.height())/2,
-                               thumbnail.width(), thumbnail.height());
+    QRect actualPixmapRect = drawThumbnail(p, d->pixmapRect, pix, thumbData.value<QPixmap>());
+    if (!actualPixmapRect.isNull())
         const_cast<ImageDelegate*>(this)->updateActualPixmapRect(info.id(), actualPixmapRect);
-
-        /*p->save();
-        QRegion pixmapClipRegion = QRegion(d->rect) - QRegion(actualPixmapRect);
-        p->setClipRegion(pixmapClipRegion);*/
-        p->drawPixmap(0, 0, pix);
-
-        QPixmap borderPix = thumbnailBorderPixmap(actualPixmapRect.size());
-        p->drawPixmap(actualPixmapRect.x()-3, actualPixmapRect.y()-3, borderPix);
-
-        p->drawPixmap(r.x() + (r.width()-thumbnail.width())/2,
-                      r.y() + (r.height()-thumbnail.height())/2,
-                      thumbnail);
-        //p->restore();
-    }
-    else
-    {
-        // simplified
-        p->drawPixmap(0, 0, pix);
-    }
 
     if (settings->getIconShowRating())
     {
-        r = d->ratingRect;
-
-        if (d->editingRating != index)
-            p->drawPixmap(r, ratingPixmap(info.rating(), isSelected));
-        else
-            p->drawPixmap(r, ratingPixmap(-1, isSelected));
+        drawRating(p, index, d->ratingRect, info.rating(), isSelected);
     }
 
     if (settings->getIconShowName())
     {
-        r = d->nameRect;
-        p->setFont(d->fontReg);
-        p->drawText(r, Qt::AlignCenter, squeezedTextCached(p, r.width(), info.name()));
+        drawName(p, d->nameRect, info.name());
     }
-
-    p->setFont(d->fontCom);
 
     if (settings->getIconShowComments())
     {
-        QString comments = info.comment();
-
-        r = d->commentsRect;
-        p->drawText(r, Qt::AlignCenter, squeezedTextCached(p, r.width(), comments));
+        drawComments(p, d->commentsRect, info.comment());
     }
-
-    p->setFont(d->fontXtra);
 
     if (settings->getIconShowDate())
     {
-        QDateTime date(info.dateTime());
-
-        r = d->dateRect;
-        p->setFont(d->fontXtra);
-        QString str = dateToString(date);
-        str = i18nc("date of image creation", "created: %1",str);
-        p->drawText(r, Qt::AlignCenter, squeezedTextCached(p, r.width(), str));
+        drawCreationDate(p, d->dateRect, info.dateTime());
     }
 
     if (settings->getIconShowModDate())
     {
-        QDateTime date(info.modDateTime());
-
-        r = d->modDateRect;
-        p->setFont(d->fontXtra);
-        QString str = dateToString(date);
-        str = i18nc("date of last image modification", "modified: %1",str);
-        p->drawText(r, Qt::AlignCenter, squeezedTextCached(p, r.width(), str));
+        drawModificationDate(p, d->modDateRect, info.modDateTime());
     }
 
     if (settings->getIconShowResolution())
     {
-        QSize dims = info.dimensions();
-        if (dims.isValid())
-        {
-            QString mpixels, resolution;
-            mpixels.setNum(dims.width()*dims.height()/1000000.0, 'f', 2);
-            resolution = (!dims.isValid()) ? i18nc("unknown image resolution", "Unknown")
-                                           : i18nc("%1 width, %2 height, %3 mpixels", "%1x%2 (%3Mpx)",
-                                                   dims.width(),dims.height(),mpixels);
-            r = d->resolutionRect;
-            p->drawText(r, Qt::AlignCenter, squeezedTextCached(p, r.width(), resolution));
-        }
+        drawImageSize(p, d->resolutionRect, info.dimensions());
     }
 
     if (settings->getIconShowSize())
     {
-        r = d->sizeRect;
-        p->drawText(r, Qt::AlignCenter,
-                    squeezedTextCached(p, r.width(), KIO::convertSize(info.fileSize())));
+        drawFileSize(p, d->sizeRect, info.fileSize());
     }
-
-    p->setFont(d->fontCom);
-    p->setPen(isSelected ? te->textSpecialSelColor() : te->textSpecialRegColor());
 
     if (settings->getIconShowTags())
     {
         QString tags = AlbumManager::instance()->tagNames(info.tagIds()).join(", ");
-
-        r = d->tagRect;
-        p->drawText(r, Qt::AlignCenter, squeezedTextCached(p, r.width(), tags));
+        drawTags(p, d->tagRect, tags, isSelected);
     }
 
-    if (option.state & QStyle::State_HasFocus) //?? is current item
-    {
-        r = d->rect;
-        p->setPen(QPen(isSelected ? te->textSelColor() : te->textRegColor(), 1, Qt::DotLine));
-        p->drawRect(1, 1, r.width()-3, r.height()-3);
-    }
-
-    if (option.state & QStyle::State_MouseOver)
-    {
-        r = d->rect;
-        p->setPen(QPen(option.palette.color(QPalette::Highlight), 3, Qt::SolidLine));
-        p->drawRect(1, 1, r.width()-3, r.height()-3);
-    }
+    drawStateRects(p, option, isSelected);
 
     p->restore();
 
-    foreach (ImageDelegateOverlay *overlay, d->overlays)
-        overlay->paint(p, option, index);
+    drawDelegates(p, option, index);
 }
 
 QPixmap ImageDelegate::pixmapForDrag(const QStyleOptionViewItem& option, const QList<QModelIndex>& indexes) const
