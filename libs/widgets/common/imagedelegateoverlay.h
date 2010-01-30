@@ -28,14 +28,17 @@
 
 #include <QAbstractItemView>
 
+// Local includes
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
 
-class ImageCategorizedView;
-class ImageDelegate;
+class ItemViewImageDelegate;
 class ItemViewHoverButton;
 
-class ImageDelegateOverlay : public QObject
+class DIGIKAM_EXPORT ImageDelegateOverlay : public QObject
 {
     Q_OBJECT
 
@@ -57,10 +60,10 @@ public:
     virtual void mouseMoved(QMouseEvent *e, const QRect& visualRect, const QModelIndex& index);
     virtual void paint(QPainter *p, const QStyleOptionViewItem& option, const QModelIndex& index);
 
-    void setView(ImageCategorizedView *view);
-    ImageCategorizedView *view() const;
-    void setDelegate(ImageDelegate *delegate);
-    ImageDelegate *delegate() const;
+    void setView(QAbstractItemView *view);
+    QAbstractItemView *view() const;
+    void setDelegate(ItemViewImageDelegate *delegate);
+    ItemViewImageDelegate *delegate() const;
 
 Q_SIGNALS:
 
@@ -74,13 +77,13 @@ protected Q_SLOTS:
 
 protected:
 
-    ImageCategorizedView *m_view;
-    ImageDelegate        *m_delegate;
+    QAbstractItemView     *m_view;
+    ItemViewImageDelegate *m_delegate;
 };
 
 // -------------------------------------------------------------------------------------------
 
-class AbstractWidgetDelegateOverlay : public ImageDelegateOverlay
+class DIGIKAM_EXPORT AbstractWidgetDelegateOverlay : public ImageDelegateOverlay
 {
     Q_OBJECT
 
@@ -133,7 +136,7 @@ protected:
     bool m_mouseButtonPressedOnWidget;
 };
 
-class HoverButtonDelegateOverlay : public AbstractWidgetDelegateOverlay
+class DIGIKAM_EXPORT HoverButtonDelegateOverlay : public AbstractWidgetDelegateOverlay
 {
     Q_OBJECT
 

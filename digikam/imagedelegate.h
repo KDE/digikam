@@ -28,7 +28,7 @@
 
 // Local includes
 
-#include "ditemdelegate.h"
+#include "itemviewimagedelegate.h"
 #include "thumbnailsize.h"
 
 namespace Digikam
@@ -39,9 +39,9 @@ class ImageCategorizedView;
 class ImageDelegateOverlay;
 class ImageFilterModel;
 class ImageModel;
-class ImageDelegatePriv;
+class ImageDelegatePrivate;
 
-class ImageDelegate : public DItemDelegate
+class ImageDelegate : public ItemViewImageDelegate
 {
     Q_OBJECT
 
@@ -51,23 +51,13 @@ public:
     ~ImageDelegate();
 
     virtual void paint(QPainter * painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
-    virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex & index) const;
-    virtual QSize gridSize() const;
     virtual QPixmap pixmapForDrag(const QStyleOptionViewItem& option, const QList<QModelIndex>& indexes) const;
 
-    /** You must set these options from the view */
-    void setThumbnailSize(const ThumbnailSize& thumbSize);
-    void setSpacing(int spacing);
-    /** Style option with standard values to use for cached rendering.
-     *  option.rect shall be the viewport rectangle.
-     *  Call on resize, font change.*/
-    void setDefaultViewOptions(const QStyleOptionViewItem& option);
 
     ImageCategoryDrawer *categoryDrawer() const;
 
-    /** These methods take four parameters: The position on viewport, the rect on viewport,
-     *  the index, and optionally a parameter into which, if the return value is true,
-     *  a rectangle can be written for which the return value will be true as well. */
+    virtual void setSpacing(int spacing);
+    virtual void setDefaultViewOptions(const QStyleOptionViewItem& option);
     virtual bool acceptsToolTip(const QPoint& pos, const QRect& visualRect,
                                 const QModelIndex& index, QRect *tooltipRect = 0) const;
     virtual bool acceptsActivation(const QPoint& pos, const QRect& visualRect,
@@ -79,40 +69,18 @@ public:
     QRect tagsRect() const;
     QRect actualPixmapRect(qlonglong imageid) const;
 
-    /** Can be used to temporarily disable drawing of the rating.
-     *  Call with QModelIndex() afterwards. */
-    void setRatingEdited(const QModelIndex &index);
-
-    // to be called by ImageCategorizedView only
-    void installOverlay(ImageDelegateOverlay *overlay);
-    void removeOverlay(ImageDelegateOverlay *overlay);
-    void removeAllOverlays();
-    void mouseMoved(QMouseEvent *e, const QRect& visualRect, const QModelIndex& index);
-
-Q_SIGNALS:
-
-    void gridSizeChanged(const QSize& newSize);
-    void visualChange();
-
-protected Q_SLOTS:
-
-    void slotThemeChanged();
-    void slotSetupChanged();
-
 protected:
 
     bool onActualPixmapRect(const QPoint& pos, const QRect& visualRect,
                             const QModelIndex & index, QRect *actualRect) const;
     void updateActualPixmapRect(qlonglong imageid, const QRect& rect);
 
-    void invalidatePaintingCache();
-    void updateSizeRectsAndPixmaps();
-
-    QPixmap ratingPixmap(int rating, bool selected) const;
+    virtual void invalidatePaintingCache();
+    virtual void updateSizeRectsAndPixmaps();
 
 private:
 
-    ImageDelegatePriv* const d;
+    Q_DECLARE_PRIVATE(ImageDelegate)
 };
 
 } // namespace Digikam

@@ -635,7 +635,9 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/histogrambox.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/histogramwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/histogrampainter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/imagedelegateoverlay.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/itemviewhoverbutton.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/itemviewimagedelegate.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/itemviewtooltip.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/kcategorizedview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/knotificationwrapper.cpp
@@ -1113,7 +1115,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagecategorizedview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagecategorydrawer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagedelegate.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagedelegateoverlay.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagedragdrop.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagepreviewbar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagepreviewview.cpp

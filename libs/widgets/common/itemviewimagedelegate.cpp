@@ -24,7 +24,7 @@
  *
  * ============================================================ */
 
-#include "imagedelegate.moc"
+#include "itemviewimagedelegate.moc"
 #include "itemviewimagedelegatepriv.h"
 
 // C++ includes
@@ -45,95 +45,130 @@
 
 // Local includes
 
-#include "albummanager.h"
-#include "albumsettings.h"
-#include "imagecategorydrawer.h"
-#include "imagecategorizedview.h"
 #include "imagedelegateoverlay.h"
-#include "imagemodel.h"
-#include "imagefiltermodel.h"
 #include "themeengine.h"
-#include "thumbbar.h"
-#include "thumbnailloadthread.h"
 
 namespace Digikam
 {
 
-class ImageDelegatePrivate : public ItemViewImageDelegatePrivate
+ItemViewImageDelegatePrivate::ItemViewImageDelegatePrivate()
 {
-public:
+    spacing        = 0;
+    thumbSize      = 0;
 
-    ImageDelegatePrivate()
+    // Pre-computed star polygon for a 15x15 pixmap.
+    starPolygon << QPoint(0,  6);
+    starPolygon << QPoint(5,  5);
+    starPolygon << QPoint(7,  0);
+    starPolygon << QPoint(9,  5);
+    starPolygon << QPoint(14, 6);
+    starPolygon << QPoint(10, 9);
+    starPolygon << QPoint(11, 14);
+    starPolygon << QPoint(7,  11);
+    starPolygon << QPoint(3,  14);
+    starPolygon << QPoint(4,  9);
+
+    starPolygonSize = QSize(15, 15);
+
+    ratingPixmaps   = QVector<QPixmap>(10);
+}
+
+void ItemViewImageDelegatePrivate::init(ItemViewImageDelegate *_q)
+{
+    q = _q;
+
+    q->connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+               q, SLOT(slotThemeChanged()));
+}
+
+ItemViewImageDelegate::ItemViewImageDelegate(DCategorizedView *parent)
+             : DItemDelegate(parent), d_ptr(new ItemViewImageDelegatePrivate)
+{
+    d_ptr->init(this);
+}
+
+ItemViewImageDelegate::ItemViewImageDelegate(ItemViewImageDelegatePrivate &dd, DCategorizedView *parent)
+             : DItemDelegate(parent), d_ptr(&dd)
+{
+    d_ptr->init(this);
+}
+
+ItemViewImageDelegate::~ItemViewImageDelegate()
+{
+    Q_D(ItemViewImageDelegate);
+    delete d;
+}
+
+void ItemViewImageDelegate::setThumbnailSize(const ThumbnailSize& thumbSize)
+{
+    Q_D(ItemViewImageDelegate);
+    if ( d->thumbSize != thumbSize)
     {
-        categoryDrawer = 0;
-
-        actualPixmapRectCache.setMaxCost(250);
+        d->thumbSize = thumbSize;
+        invalidatePaintingCache();
     }
-
-    QRect                     ratingRect;
-    QRect                     dateRect;
-    QRect                     modDateRect;
-    QRect                     pixmapRect;
-    QRect                     nameRect;
-    QRect                     commentsRect;
-    QRect                     resolutionRect;
-    QRect                     sizeRect;
-    QRect                     tagRect;
-
-    QCache<qlonglong, QRect>  actualPixmapRectCache;
-    ImageCategoryDrawer      *categoryDrawer;
-};
-
-ImageDelegate::ImageDelegate(ImageCategorizedView *parent)
-             : ItemViewImageDelegate(*new ImageDelegatePrivate, parent)
-{
-    Q_D(ImageDelegate);
-    d->categoryDrawer = new ImageCategoryDrawer(parent);
-
-    connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
-            this, SLOT(slotSetupChanged()));
 }
 
-ImageDelegate::~ImageDelegate()
+void ItemViewImageDelegate::setSpacing(int spacing)
 {
-    Q_D(ImageDelegate);
-    delete d->categoryDrawer;
+    Q_D(ItemViewImageDelegate);
+    if (d->spacing == spacing)
+        return;
+    d->spacing = spacing;
+    invalidatePaintingCache();
 }
 
-void ImageDelegate::setSpacing(int spacing)
+void ItemViewImageDelegate::installOverlay(ImageDelegateOverlay *overlay)
 {
-    Q_D(ImageDelegate);
-    d->categoryDrawer->setLowerSpacing(spacing);
-    ItemViewImageDelegate::setSpacing(spacing);
+    Q_D(ItemViewImageDelegate);
+    overlay->setDelegate(this);
+    d->overlays << overlay;
+    overlay->setActive(true);
 }
 
-ImageCategoryDrawer *ImageDelegate::categoryDrawer() const
+void ItemViewImageDelegate::removeOverlay(ImageDelegateOverlay *overlay)
 {
-    Q_D(const ImageDelegate);
-    return d->categoryDrawer;
+    Q_D(ItemViewImageDelegate);
+    overlay->setActive(false);
+    overlay->setDelegate(0);
+    d->overlays.removeAll(overlay);
 }
 
-QRect ImageDelegate::ratingRect() const
+void ItemViewImageDelegate::removeAllOverlays()
 {
-    Q_D(const ImageDelegate);
-    return d->ratingRect;
+    Q_D(ItemViewImageDelegate);
+    foreach (ImageDelegateOverlay *overlay, d->overlays)
+    {
+        overlay->setActive(false);
+        overlay->setDelegate(0);
+        overlay->setView(0);
+    }
+    d->overlays.clear();
 }
 
-QRect ImageDelegate::commentsRect() const
+QRect ItemViewImageDelegate::rect() const
 {
-    Q_D(const ImageDelegate);
-    return d->commentsRect;
+    Q_D(const ItemViewImageDelegate);
+    return d->rect;
 }
 
-QRect ImageDelegate::tagsRect() const
+void ItemViewImageDelegate::setRatingEdited(const QModelIndex &index)
 {
-    Q_D(const ImageDelegate);
-    return d->tagRect;
+    Q_D(ItemViewImageDelegate);
+    d->editingRating = index;
 }
 
-void ImageDelegate::paint(QPainter * p, const QStyleOptionViewItem& option, const QModelIndex& index) const
+void ItemViewImageDelegate::mouseMoved(QMouseEvent *e, const QRect& visualRect, const QModelIndex& index)
 {
-    Q_D(const ImageDelegate);
+    Q_D(ItemViewImageDelegate);
+    foreach (ImageDelegateOverlay *overlay, d->overlays)
+        overlay->mouseMoved(e, visualRect, index);
+}
+
+/*
+void ItemViewImageDelegate::paint(QPainter * p, const QStyleOptionViewItem& option, const QModelIndex& index) const
+{
+    Q_D(ItemViewImageDelegate);
     ImageInfo info = ImageModel::retrieveImageInfo(index);
 
     if (info.isNull())
@@ -164,16 +199,16 @@ void ImageDelegate::paint(QPainter * p, const QStyleOptionViewItem& option, cons
         r = d->pixmapRect;
         /*p->drawPixmap(r.x() + (r.width()-thumbnail.width())/2,
                       r.y() + (r.height()-thumbnail.height())/2,
-                      thumbnail);*/
+                      thumbnail);* /
 
         QRect actualPixmapRect(r.x() + (r.width()-thumbnail.width())/2,
                                r.y() + (r.height()-thumbnail.height())/2,
                                thumbnail.width(), thumbnail.height());
-        const_cast<ImageDelegate*>(this)->updateActualPixmapRect(info.id(), actualPixmapRect);
+        const_cast<ItemViewImageDelegate*>(this)->updateActualPixmapRect(info.id(), actualPixmapRect);
 
         /*p->save();
         QRegion pixmapClipRegion = QRegion(d->rect) - QRegion(actualPixmapRect);
-        p->setClipRegion(pixmapClipRegion);*/
+        p->setClipRegion(pixmapClipRegion);* /
         p->drawPixmap(0, 0, pix);
 
         QPixmap borderPix = thumbnailBorderPixmap(actualPixmapRect.size());
@@ -294,7 +329,7 @@ void ImageDelegate::paint(QPainter * p, const QStyleOptionViewItem& option, cons
         overlay->paint(p, option, index);
 }
 
-QPixmap ImageDelegate::pixmapForDrag(const QStyleOptionViewItem& option, const QList<QModelIndex>& indexes) const
+QPixmap ItemViewImageDelegate::pixmapForDrag(const QStyleOptionViewItem& option, const QList<QModelIndex>& indexes) const
 {
     QPixmap icon;
 
@@ -337,52 +372,64 @@ QPixmap ImageDelegate::pixmapForDrag(const QStyleOptionViewItem& option, const Q
     p.drawText(r, Qt::AlignCenter, text);
 
     return pix;
+}*/
+
+QSize ItemViewImageDelegate::sizeHint(const QStyleOptionViewItem &/*option*/, const QModelIndex &/*index*/) const
+{
+    Q_D(const ItemViewImageDelegate);
+    return d->rect.size();
 }
 
-bool ImageDelegate::acceptsToolTip(const QPoint& pos, const QRect& visualRect, const QModelIndex& index, QRect *toolTipRect) const
+QSize ItemViewImageDelegate::gridSize() const
 {
-    return onActualPixmapRect(pos, visualRect, index, toolTipRect);
+    Q_D(const ItemViewImageDelegate);
+    return d->gridSize;
 }
 
-bool ImageDelegate::acceptsActivation(const QPoint& pos, const QRect& visualRect, const QModelIndex& index, QRect *activationRect) const
+bool ItemViewImageDelegate::acceptsToolTip(const QPoint& pos, const QRect& visualRect, const QModelIndex& index, QRect *toolTipRect) const
 {
-    return onActualPixmapRect(pos, visualRect, index, activationRect);
+    return true;
 }
 
-bool ImageDelegate::onActualPixmapRect(const QPoint& pos, const QRect& visualRect, const QModelIndex& index, QRect *returnRect) const
+bool ItemViewImageDelegate::acceptsActivation(const QPoint& pos, const QRect& visualRect, const QModelIndex& index, QRect *activationRect) const
 {
-    qlonglong id = ImageModel::retrieveImageId(index);
-
-    if (!id)
-        return false;
-
-    QRect actualRect = actualPixmapRect(id);
-    if (actualRect.isNull())
-        return false;
-
-    actualRect.translate(visualRect.topLeft());
-    if (returnRect)
-        *returnRect = actualRect;
-    return actualRect.contains(pos);
+    return true;
 }
 
-void ImageDelegate::setDefaultViewOptions(const QStyleOptionViewItem& option)
+void ItemViewImageDelegate::setDefaultViewOptions(const QStyleOptionViewItem& option)
 {
-    Q_D(ImageDelegate);
-    d->categoryDrawer->setDefaultViewOptions(option);
-    ItemViewImageDelegate::setDefaultViewOptions(option);
+    Q_D(ItemViewImageDelegate);
+    d->font = option.font;
+    invalidatePaintingCache();
 }
 
-void ImageDelegate::invalidatePaintingCache()
+void ItemViewImageDelegate::slotThemeChanged()
 {
-    Q_D(ImageDelegate);
-    d->categoryDrawer->invalidatePaintingCache();
-    ItemViewImageDelegate::invalidatePaintingCache();
+    invalidatePaintingCache();
 }
 
-void ImageDelegate::updateSizeRectsAndPixmaps()
+void ItemViewImageDelegate::slotSetupChanged()
 {
-    Q_D(ImageDelegate);
+    invalidatePaintingCache();
+}
+
+void ItemViewImageDelegate::invalidatePaintingCache()
+{
+    Q_D(ItemViewImageDelegate);
+    QSize oldGridSize = d->gridSize;
+    updateSizeRectsAndPixmaps();
+    if (oldGridSize != d->gridSize)
+    {
+        emit gridSizeChanged(d->gridSize);
+        // emit sizeHintChanged(QModelIndex());
+    }
+
+    emit visualChange();
+}
+
+/*
+void ItemViewImageDelegate::updateSizeRectsAndPixmaps()
+{
     // ---- Reset values ----
 
     d->gridSize       = QSize(0, 0);
@@ -555,25 +602,30 @@ void ImageDelegate::updateSizeRectsAndPixmaps()
 
     d->actualPixmapRectCache.clear();
     clearCaches();
-}
+}*/
 
-QRect ImageDelegate::actualPixmapRect(qlonglong imageid) const
+QPixmap ItemViewImageDelegate::ratingPixmap(int rating, bool selected) const
 {
-    Q_D(const ImageDelegate);
-    // We do not recompute if not found. Assumption is cache is always properly updated.
-    QRect *rect = d->actualPixmapRectCache.object(imageid);
-    if (rect)
-        return *rect;
+    Q_D(const ItemViewImageDelegate);
+    if (rating < 1 || rating > 5)
+    {
+        /*
+        QPixmap pix;
+        if (selected)
+            pix = d->selPixmap.copy(d->ratingRect);
+        else
+            pix = d->regPixmap.copy(d->ratingRect);
+
+        return pix;
+        */
+        return QPixmap();
+    }
+
+    --rating;
+    if (selected)
+        return d->ratingPixmaps[5 + rating];
     else
-        return d->pixmapRect;
-}
-
-void ImageDelegate::updateActualPixmapRect(qlonglong imageid, const QRect& rect)
-{
-    Q_D(ImageDelegate);
-    QRect *old = d->actualPixmapRectCache.object(imageid);
-    if (!old || *old != rect)
-        d->actualPixmapRectCache.insert(imageid, new QRect(rect));
+        return d->ratingPixmaps[rating];
 }
 
 } // namespace Digikam
