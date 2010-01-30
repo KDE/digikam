@@ -589,7 +589,7 @@ void EditorWindow::setupStatusBar()
     m_resLabel->setAlignment(Qt::AlignCenter);
     statusBar()->addWidget(m_resLabel, 100);
     m_resLabel->setToolTip( i18n("Information about image size"));
-    
+
     d->zoomBar   = new DZoomBar(statusBar());
     d->zoomBar->setZoomToFitAction(d->zoomFitToWindowAction);
     d->zoomBar->setZoomTo100Action(d->zoomTo100percents);
@@ -602,7 +602,7 @@ void EditorWindow::setupStatusBar()
 
     connect(d->zoomBar, SIGNAL(signalZoomValueEdited(double)),
             m_stackView, SLOT(setZoomFactor(double)));
-            
+
     d->previewToolBar = new PreviewToolBar(statusBar());
     d->previewToolBar->setEnabled(false);
     statusBar()->addPermanentWidget(d->previewToolBar);
@@ -617,15 +617,15 @@ void EditorWindow::setupStatusBar()
 
     d->underExposureIndicator = new QToolButton(buttonsBox);
     d->underExposureIndicator->setDefaultAction(d->viewUnderExpoAction);
-    new ButtonIconDisabler(d->underExposureIndicator);
+//    new ButtonIconDisabler(d->underExposureIndicator);
 
     d->overExposureIndicator  = new QToolButton(buttonsBox);
     d->overExposureIndicator->setDefaultAction(d->viewOverExpoAction);
-    new ButtonIconDisabler(d->overExposureIndicator);
+//    new ButtonIconDisabler(d->overExposureIndicator);
 
     d->cmViewIndicator        = new QToolButton(buttonsBox);
     d->cmViewIndicator->setDefaultAction(d->viewCMViewAction);
-    new ButtonIconDisabler(d->cmViewIndicator);
+//    new ButtonIconDisabler(d->cmViewIndicator);
 
     buttonsGrp->addButton(d->underExposureIndicator);
     buttonsGrp->addButton(d->overExposureIndicator);
@@ -1847,13 +1847,13 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
 
 #ifdef _WIN32
     //-- Show Settings Dialog ----------------------------------------------
-    
+
     const QString configShowImageSettingsDialog="ShowImageSettingsDialog";
     bool showDialog = group.readEntry(configShowImageSettingsDialog, true);
     if (showDialog && options->discoverFormat(newURL.fileName(), DImg::NONE)!=DImg::NONE) {
         FileSaveOptionsDlg *fileSaveOptionsDialog   = new FileSaveOptionsDlg(this, options);
         options->slotImageFileFormatChanged(newURL.fileName());
-        
+
         if (d->currentWindowModalDialog)
         {
             // go application-modal - we will create utter confusion if descending into more than one window-modal dialog
