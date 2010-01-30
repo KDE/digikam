@@ -111,7 +111,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 101 ==> 197316 : Two ways to do a simple zooming.
 102 ==> 224697 : Crash with gimp xcf files with metadata.
 103 ==> 224682 : Color Channel Mixer ui & usability.
-104 ==> 
+104 ==> 224841 : Search for duplicates in specific album only.
+105 ==> 
+
 
 
 
