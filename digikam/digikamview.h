@@ -40,6 +40,8 @@
 
 #include "searchtextbar.h"
 #include "imageinfo.h"
+#include "digikammodelcollection.h"
+#include "sidebarwidget.h"
 
 namespace Digikam
 {
@@ -56,7 +58,7 @@ class DigikamView : public KHBox
 
 public:
 
-    DigikamView(QWidget *parent);
+    DigikamView(QWidget *parent, DigikamModelCollection *modelCollection);
     ~DigikamView();
 
     void applySettings();
@@ -109,7 +111,6 @@ public Q_SLOTS:
     void slotNewAlbum();
     void slotSortAlbums(int order);
     void slotDeleteAlbum();
-    void slotSelectAlbum(const KUrl& url);
     void slotAlbumPropsEdit();
     void slotAlbumOpenInKonqui();
     void slotAlbumOpenInTerminal();
@@ -126,6 +127,8 @@ public Q_SLOTS:
     void slotGotoAlbumAndItem(const ImageInfo& imageInfo);
     void slotGotoDateAndItem(const ImageInfo& imageInfo);
     void slotGotoTagAndItem(int tagID);
+
+    void slotSelectAlbum(const KUrl &url);
 
     // Tag action slots
     void slotNewTag();
@@ -186,6 +189,8 @@ private:
     void connectBatchSyncMetadata(BatchSyncMetadata *syncMetadata);
 
 private Q_SLOTS:
+
+    void slotLeftSideBarActivate(SidebarWidget *widget);
 
     void slotAllAlbumsLoaded();
 

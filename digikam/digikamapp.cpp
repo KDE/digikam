@@ -229,6 +229,8 @@ DigikamApp::DigikamApp()
 
     d->templateManager = new TemplateManager(this, KStandardDirs::locateLocal("appdata", "template.xml"));
 
+    d->modelCollection = new DigikamModelCollection;
+
     setupView();
     setupStatusBar();
     setupAccelerators();
@@ -319,6 +321,8 @@ DigikamApp::~DigikamApp()
     KDcrawIface::DcrawBinary::cleanUp();
 #endif
     m_instance = 0;
+
+    delete d->modelCollection;
 
     delete d;
 }
@@ -490,7 +494,7 @@ void DigikamApp::setupView()
     if(d->splashScreen)
         d->splashScreen->message(i18n("Initializing Main View"));
 
-    d->view = new DigikamView(this);
+    d->view = new DigikamView(this, d->modelCollection);
     setCentralWidget(d->view);
     d->view->applySettings();
 
@@ -884,7 +888,8 @@ void DigikamApp::setupActions()
     d->albumSortAction = new KSelectAction(i18n("&Sort Albums"), this);
     d->albumSortAction->setWhatsThis(i18n("Sort Albums in tree-view."));
     connect(d->albumSortAction, SIGNAL(triggered(int)), d->view, SLOT(slotSortAlbums(int)));
-    actionCollection()->addAction("album_sort", d->albumSortAction);
+    // TODO this action is currently not supported by the model
+    //actionCollection()->addAction("album_sort", d->albumSortAction);
 
     // Use same list order as in albumsettings enum
     QStringList sortActionList;

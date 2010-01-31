@@ -126,7 +126,7 @@ public:
       * If the thumbnail is already available in the cache,
       * it is returned, already blended with the standard icon, if requested.
       * If the icon is not yet loaded, it will be returned asynchronously
-      * by the signals, and a default icon is returned here.
+      * by the signals (unblended), and a default icon is returned here.
       * If no icon is associated, the default icon is returned.
       */
     QPixmap getTagThumbnailDirectly(TAlbum *album, bool blendIcons = true);

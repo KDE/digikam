@@ -40,10 +40,10 @@ class FolderViewToolTip : public DItemToolTip
 {
 public:
 
-    FolderViewToolTip(FolderView* view);
+    FolderViewToolTip(QWidget *parent);
     ~FolderViewToolTip();
 
-    void setFolderItem(FolderItem* folderItem);
+    void setAlbum(PAlbum *album);
 
 private:
 

@@ -26,94 +26,88 @@
 #define TAGFOLDERVIEW_H
 
 // Qt includes
-
-#include <QDropEvent>
-#include <QPixmap>
+#include <qtreeview.h>
 
 // Local includes
 
-#include "searchtextbar.h"
-#include "folderview.h"
-
-class QDropEvent;
-class QDrag;
+#include "albumtreeview.h"
 
 namespace Digikam
 {
 
-class Album;
-class TAlbum;
-class TagFolderViewItem;
-class TagFolderViewPriv;
+class ContextMenuHelper;
 
-class TagFolderView : public FolderView
+class TagFolderViewPriv;
+class TagFolderView: public TagTreeView
 {
-    Q_OBJECT
+Q_OBJECT
 
 public:
 
-    TagFolderView(QWidget *parent);
-    ~TagFolderView();
+    /**
+     * Constructor.
+     *
+     * @param parent parent for Qt's parent child mechanism
+     * @param model tag model to display
+     */
+    TagFolderView(QWidget *parent, TagModel *model);
 
-    void tagNew();
-    void tagEdit();
-    void tagDelete();
+    /**
+     * Destructor.
+     */
+    virtual ~TagFolderView();
 
-    void selectItem(int id);
-
-    void refresh();
+    /**
+     * Define whether to show the "find duplicate" action in context menus
+     * or not.
+     *
+     * @param show if <code>true</code> the action to find duplicate images in
+     *             the tag album is displayed
+     */
+    void setShowFindDuplicateAction(bool show);
 
 Q_SIGNALS:
 
-    void signalProgressBarMode(int, const QString&);
-    void signalProgressValue(int);
-    void signalTextTagFilterMatch(bool);
-    void signalFindDuplicatesInTag(Album*);
-
-public Q_SLOTS:
-
-    void slotTextTagFilterChanged(const SearchTextSettings&);
+    void signalFindDuplicatesInAlbum(Album*);
 
 protected:
 
-    void contentsDropEvent(QDropEvent *e);
-    bool acceptDrop(const QDropEvent *e) const;
+    QString contextMenuTitle() const;
+
+    /**
+     * Hook method to add custom actions to the generated context menu.
+     *
+     * The default implementation adds actions to reset the tag icon and to
+     * find duplicates in a tag album. If you want to use these actions,
+     * remember to call this class' implementation of this method and
+     * the handleCustomContextMenuAction in your derived class.
+     *
+     * @param cmh helper object to create the context menu
+     * @param album tag on which the context menu will be created. May be null if
+     *              it is requested on no tag entry
+     */
+    virtual void addCustomContextMenuActions(ContextMenuHelper &cmh, Album *album);
+
+    /**
+     * Hook method to handle the custom context menu actions that were added
+     * with addCustomContextMenuActions.
+     *
+     * @param action the action that was chosen by the user, may be null if none
+     *               of the custom actions were selected
+     * @param album the tag on which the context menu was requested. May be null
+     *              if there was no
+     */
+    virtual void handleCustomContextMenuAction(QAction *action, Album *album);
 
 private Q_SLOTS:
 
-    void slotAlbumAdded(Album*);
-    void slotSelectionChanged();
-    void slotAlbumDeleted(Album*);
-    void slotAlbumRenamed(Album*);
-    void slotAlbumsCleared();
-    void slotAlbumIconChanged(Album* album);
-    void slotAlbumMoved(TAlbum* tag, TAlbum* newParent);
-    void slotContextMenu(Q3ListViewItem*, const QPoint&, int);
-    void slotGotThumbnailFromIcon(Album *album, const QPixmap& thumbnail);
-    void slotThumbnailLost(Album *album);
-    void slotReloadThumbnails();
-    void slotRefresh(const QMap<int, int>&);
-    void slotAssignTags(int tagId, const QList<int>& imageIDs);
-    void slotTagNewFromABCMenu(const QString&);
-
-Q_SIGNALS: // private
-
-    void assignTags(int tagId, const QList<int>& imageIDs);
+    void slotTagNewFromABCMenu(const QString &personName);
 
 private:
+    TagFolderViewPriv *d;
 
-    void tagNew(TagFolderViewItem *item, const QString& _title=QString(),
-                const QString& _icon=QString() );
-    void tagEdit(TagFolderViewItem *item);
-    void tagDelete(TagFolderViewItem *item);
-    void setTagThumbnail(TAlbum *album);
-    QDrag* makeDragObject();
-
-private:
-
-    TagFolderViewPriv* const d;
 };
 
-}  // namespace Digikam
+}
 
 #endif // TAGFOLDERVIEW_H

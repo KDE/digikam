@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2002-2005 by Renchi Raju  <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2002-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (c) 2009 by Johannes Wienke <languitar at semipol dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -26,83 +27,40 @@
 
 // Qt includes
 
-#include <QApplication>
-#include <QDir>
-#include <QDockWidget>
-#include <QEvent>
-#include <QFileInfo>
-#include <QFrame>
-#include <QImage>
-#include <QLabel>
-#include <QListView>
 #include <QProcess>
-#include <QSplitter>
-#include <QString>
-#include <QTimer>
-#include <QTreeView>
 
 // KDE includes
 
 #include <kapplication.h>
-#include <kconfig.h>
-#include <kconfiggroup.h>
+#include <kdebug.h>
 #include <kdialog.h>
-#include <kglobal.h>
-#include <kiconloader.h>
-#include <klocale.h>
 #include <kmessagebox.h>
-#include <kpushbutton.h>
 #include <krun.h>
-#include <kstandarddirs.h>
-#include <kvbox.h>
-
-// LibKDcraw includes
-
-#include <libkdcraw/rawfiles.h>
 
 // Local includes
 
-#include "album.h"
-#include "albumfolderview.h"
 #include "albumhistory.h"
 #include "albumiconviewfilter.h"
-#include "albummanager.h"
-#include "albummodel.h"
 #include "albumsettings.h"
 #include "albumwidgetstack.h"
 #include "batchsyncmetadata.h"
-#include "collectionmanager.h"
-#include "config-digikam.h"
-#include "datefolderview.h"
 #include "digikamapp.h"
 #include "digikamimageview.h"
-#include "dio.h"
-#include "dmetadata.h"
-#include "fuzzysearchfolderview.h"
-#include "fuzzysearchview.h"
-#include "gpssearchfolderview.h"
-#include "gpssearchview.h"
-#include "imagealbumfiltermodel.h"
 #include "imagealbummodel.h"
 #include "imageinfoalbumsjob.h"
 #include "imagepreviewview.h"
 #include "imagepropertiessidebardb.h"
 #include "imageviewutilities.h"
+#include "leftsidebarwidgets.h"
 #include "loadingcacheinterface.h"
 #include "metadatamanager.h"
 #include "queuemgrwindow.h"
 #include "scancontroller.h"
-#include "searchfolderview.h"
-#include "searchtabheader.h"
 #include "sidebar.h"
 #include "slideshow.h"
 #include "statusprogressbar.h"
-#include "tagfilterview.h"
-#include "tagfolderview.h"
-#include "themeengine.h"
-#include "thumbnailsize.h"
-#include "timelinefolderview.h"
-#include "timelineview.h"
+#include "tagfiltersidebarwidget.h"
+#include "tagmodificationhelper.h"
 
 namespace Digikam
 {
@@ -113,37 +71,23 @@ public:
 
     DigikamViewPriv()
     {
-        folderBox             = 0;
-        tagBox                = 0;
-        searchBox             = 0;
-        tagFilterBox          = 0;
-        folderSearchBar       = 0;
-        tagSearchBar          = 0;
-        searchSearchBar       = 0;
-        tagFilterSearchBar    = 0;
         dockArea              = 0;
         splitter              = 0;
         parent                = 0;
         iconView              = 0;
-        folderView            = 0;
         albumManager          = 0;
         albumHistory          = 0;
         leftSideBar           = 0;
         rightSideBar          = 0;
-        dateFolderView        = 0;
-        timeLineView          = 0;
-        tagFolderView         = 0;
-        searchFolderView      = 0;
-        tagFilterView         = 0;
         albumWidgetStack      = 0;
         selectionTimer        = 0;
         thumbSizeTimer        = 0;
-        fuzzySearchView       = 0;
-        gpsSearchView         = 0;
         needDispatchSelection = false;
         cancelSlideShow       = false;
         useAlbumHistory       = false;
         thumbSize             = ThumbnailSize::Medium;
+        optionAlbumViewPrefix = "AlbumView";
+        modelCollection       = 0;
     }
 
     QString userPresentableAlbumTitle(const QString& album);
@@ -162,42 +106,51 @@ public:
     QTimer*                   selectionTimer;
     QTimer*                   thumbSizeTimer;
 
-    KVBox*                    folderBox;
-    KVBox*                    tagBox;
-    KVBox*                    searchBox;
-    KVBox*                    tagFilterBox;
-
-    SearchTextBar*            folderSearchBar;
-    SearchTextBar*            tagSearchBar;
-    SearchTextBar*            searchSearchBar;
-    SearchTextBar*            tagFilterSearchBar;
+    // left side bar
+    AlbumFolderViewSideBarWidget *albumFolderSideBar;
+    TagViewSideBarWidget         *tagViewSideBar;
+    DateFolderViewSideBarWidget  *dateViewSideBar;
+    TimelineSideBarWidget        *timelineSideBar;
+    SearchSideBarWidget          *searchSideBar;
+    FuzzySearchSideBarWidget     *fuzzySearchSideBar;
+#ifdef HAVE_MARBLEWIDGET
+    GPSSearchSideBarWidget       *gpsSearchSideBar;
+#endif
 
     DigikamApp*               parent;
 
     DigikamImageView*         iconView;
-    AlbumFolderView*          folderView;
     AlbumManager*             albumManager;
     AlbumHistory*             albumHistory;
     AlbumWidgetStack*         albumWidgetStack;
 
+    AlbumModificationHelper*  albumModificationHelper;
+    TagModificationHelper*    tagModificationHelper;
+    SearchModificationHelper* searchModificationHelper;
+
     Sidebar*                  leftSideBar;
     ImagePropertiesSideBarDB* rightSideBar;
 
-    DateFolderView*           dateFolderView;
-    TimeLineView*             timeLineView;
-    TagFolderView*            tagFolderView;
-    SearchFolderView*         searchFolderView;
-    SearchTabHeader*          searchTabHeader;
-    TagFilterView*            tagFilterView;
-    FuzzySearchView*          fuzzySearchView;
-    GPSSearchView*            gpsSearchView;
+    TagFilterSideBarWidget *tagFilterWidget;
+
+    QString optionAlbumViewPrefix;
+
+    QList<SidebarWidget*> leftSideBarWidgets;
+
+    DigikamModelCollection *modelCollection;
+
 };
 
-DigikamView::DigikamView(QWidget *parent)
+DigikamView::DigikamView(QWidget *parent, DigikamModelCollection *modelCollection)
            : KHBox(parent), d(new DigikamViewPriv)
 {
     d->parent       = static_cast<DigikamApp*>(parent);
+    d->modelCollection = modelCollection;
     d->albumManager = AlbumManager::instance();
+
+    d->albumModificationHelper = new AlbumModificationHelper(this, this);
+    d->tagModificationHelper = new TagModificationHelper(this, this);
+    d->searchModificationHelper = new SearchModificationHelper(this, this);
 
     d->splitter = new SidebarSplitter;
     d->splitter->setFrameStyle( QFrame::NoFrame );
@@ -221,58 +174,66 @@ DigikamView::DigikamView(QWidget *parent)
     d->rightSideBar = new ImagePropertiesSideBarDB(this, d->splitter, KMultiTabBar::Right, true);
     d->rightSideBar->setObjectName("Digikam Right Sidebar");
 
-    // To the left.
-    // Folders sidebar tab contents.
-    d->folderBox       = new KVBox(this);
-    d->folderView      = new AlbumFolderView(d->folderBox);
-    d->folderSearchBar = new SearchTextBar(d->folderBox, "DigikamViewFolderSearchBar");
-    d->folderBox->setSpacing(KDialog::spacingHint());
-    d->folderBox->setMargin(0);
+    // album folder view
+    d->albumFolderSideBar = new AlbumFolderViewSideBarWidget(d->leftSideBar,
+                                    d->modelCollection->getAlbumModel(),
+                                    d->albumModificationHelper);
+    d->leftSideBarWidgets << d->albumFolderSideBar;
+    connect(d->albumFolderSideBar, SIGNAL(signalFindDuplicatesInAlbum(Album*)),
+            this, SLOT(slotNewDuplicatesSearch(Album*)));
+
+    // date view
+    d->dateViewSideBar = new DateFolderViewSideBarWidget(d->leftSideBar,
+                    d->modelCollection->getDateAlbumModel(),
+                    d->iconView->imageFilterModel());
+    d->leftSideBarWidgets << d->dateViewSideBar;
 
     // Tags sidebar tab contents.
-    d->tagBox        = new KVBox(this);
-    d->tagFolderView = new TagFolderView(d->tagBox);
-    d->tagSearchBar  = new SearchTextBar(d->tagBox, "DigikamViewTagSearchBar");
-    d->tagBox->setSpacing(KDialog::spacingHint());
-    d->tagBox->setMargin(0);
+    d->tagViewSideBar = new TagViewSideBarWidget(d->leftSideBar,
+                    d->modelCollection->getTagModel());
+    d->leftSideBarWidgets << d->tagViewSideBar;
+    connect(d->tagViewSideBar, SIGNAL(signalFindDuplicatesInAlbum(Album*)),
+            this, SLOT(slotNewDuplicatesSearch(Album*)));
+
+    // timeline side bar
+    d->timelineSideBar = new TimelineSideBarWidget(d->leftSideBar,
+                    d->modelCollection->getSearchModel(),
+                    d->searchModificationHelper);
+    d->leftSideBarWidgets << d->timelineSideBar;
 
     // Search sidebar tab contents.
-    d->searchBox        = new KVBox(this);
-    d->searchTabHeader  = new SearchTabHeader(d->searchBox);
-    d->searchFolderView = new SearchFolderView(d->searchBox);
-    d->searchSearchBar  = new SearchTextBar(d->searchBox, "DigikamViewSearchSearchBar");
-    d->searchBox->setStretchFactor(d->searchFolderView, 1);
-    d->searchBox->setSpacing(KDialog::spacingHint());
-    d->searchBox->setMargin(0);
+    d->searchSideBar = new SearchSideBarWidget(d->leftSideBar,
+                    d->modelCollection->getSearchModel(),
+                    d->searchModificationHelper);
+    d->leftSideBarWidgets << d->searchSideBar;
 
-    d->dateFolderView   = new DateFolderView(this);
-    d->dateFolderView->setImageModel(d->iconView->imageFilterModel());
-    d->timeLineView     = new TimeLineView(this);
-    d->fuzzySearchView  = new FuzzySearchView(this);
+    // Fuzzy search
+    d->fuzzySearchSideBar = new FuzzySearchSideBarWidget(d->leftSideBar,
+                    d->modelCollection->getSearchModel(),
+                    d->searchModificationHelper);
+    d->leftSideBarWidgets << d->fuzzySearchSideBar;
+
 #ifdef HAVE_MARBLEWIDGET
-    d->gpsSearchView    = new GPSSearchView(this);
+    d->gpsSearchSideBar = new GPSSearchSideBarWidget(d->leftSideBar,
+                    d->modelCollection->getSearchModel(),
+                    d->searchModificationHelper);
+    d->leftSideBarWidgets << d->gpsSearchSideBar;
 #endif
 
-    d->leftSideBar->appendTab(d->folderBox, SmallIcon("folder-image"), i18n("Albums"));
-    d->leftSideBar->appendTab(d->dateFolderView, SmallIcon("view-calendar-list"), i18n("Calendar"));
-    d->leftSideBar->appendTab(d->tagBox, SmallIcon("tag"), i18n("Tags"));
-    d->leftSideBar->appendTab(d->timeLineView, SmallIcon("player-time"), i18n("Timeline"));
-    d->leftSideBar->appendTab(d->searchBox, SmallIcon("edit-find"), i18n("Searches"));
-    d->leftSideBar->appendTab(d->fuzzySearchView, SmallIcon("tools-wizard"), i18n("Fuzzy Searches"));
-#ifdef HAVE_MARBLEWIDGET
-    d->leftSideBar->appendTab(d->gpsSearchView, SmallIcon("applications-internet"), i18n("Map Searches"));
-#endif
+
+    foreach(SidebarWidget *leftWidget, d->leftSideBarWidgets)
+    {
+        d->leftSideBar->appendTab(leftWidget, leftWidget->getIcon(),
+                        leftWidget->getCaption());
+        connect(leftWidget, SIGNAL(requestActiveTab(SidebarWidget*)),
+                this, SLOT(slotLeftSideBarActivate(SidebarWidget*)));
+    }
 
     // To the right.
 
     // Tags Filter sidebar tab contents.
-    d->tagFilterBox       = new KVBox(this);
-    d->tagFilterView      = new TagFilterView(d->tagFilterBox);
-    d->tagFilterSearchBar = new SearchTextBar(d->tagFilterBox, "DigikamViewTagFilterSearchBar");
-    d->tagFilterBox->setSpacing(KDialog::spacingHint());
-    d->tagFilterBox->setMargin(0);
-
-    d->rightSideBar->appendTab(d->tagFilterBox, SmallIcon("tag-assigned"), i18n("Tag Filters"));
+    d->tagFilterWidget = new TagFilterSideBarWidget(d->rightSideBar, d->modelCollection->getTagFilterModel());
+    d->rightSideBar->appendTab(d->tagFilterWidget, SmallIcon("tag-assigned"), i18n("Tag Filters"));
 
     d->selectionTimer = new QTimer(this);
     d->selectionTimer->setSingleShot(true);
@@ -297,19 +258,18 @@ DigikamView::~DigikamView()
 
 void DigikamView::applySettings()
 {
-    AlbumSettings *settings = AlbumSettings::instance();
     d->albumWidgetStack->applySettings();
 
-    d->folderView->setEnableToolTips(settings->getShowAlbumToolTips());
+    foreach(SidebarWidget *sidebarWidget, d->leftSideBarWidgets)
+    {
+        sidebarWidget->applySettings();
+    }
+
     refreshView();
 }
 
 void DigikamView::refreshView()
 {
-    d->folderView->refresh();
-    d->dateFolderView->refresh();
-    d->tagFolderView->refresh();
-    d->tagFilterView->refresh();
     d->rightSideBar->refreshTagsView();
 }
 
@@ -431,83 +391,29 @@ void DigikamView::setupConnections()
     connect(d->rightSideBar, SIGNAL(signalProgressValue(int)),
             d->parent, SLOT(slotProgressValue(int)));
 
-    connect(d->tagFilterView, SIGNAL(signalProgressBarMode(int, const QString&)),
-            d->parent, SLOT(slotProgressBarMode(int, const QString&)));
-
-    connect(d->tagFilterView, SIGNAL(signalProgressValue(int)),
-            d->parent, SLOT(slotProgressValue(int)));
-
-    connect(d->tagFolderView, SIGNAL(signalProgressBarMode(int, const QString&)),
-            d->parent, SLOT(slotProgressBarMode(int, const QString&)));
-
-    connect(d->tagFolderView, SIGNAL(signalProgressValue(int)),
-            d->parent, SLOT(slotProgressValue(int)));
-
-    connect(d->fuzzySearchView, SIGNAL(signalUpdateFingerPrints()),
+    connect(d->fuzzySearchSideBar, SIGNAL(signalUpdateFingerPrints()),
             d->parent, SLOT(slotRebuildFingerPrints()));
 
-    connect(d->fuzzySearchView, SIGNAL(signalGenerateFingerPrintsFirstTime()),
+    connect(d->fuzzySearchSideBar, SIGNAL(signalGenerateFingerPrintsFirstTime()),
             d->parent, SLOT(slotGenerateFingerPrintsFirstTime()));
 
 #ifdef HAVE_MARBLEWIDGET
     connect(this, SIGNAL(signalNoCurrentItem()),
-            d->gpsSearchView, SLOT(slotDigikamViewNoCurrentItem()));
+            d->gpsSearchSideBar, SLOT(slotDigikamViewNoCurrentItem()));
 
     connect(this, SIGNAL(signalImageSelected(const ImageInfoList&, bool, bool, const ImageInfoList&)),
-            d->gpsSearchView, SLOT(slotDigikamViewImageSelected(const ImageInfoList&, bool, bool, const ImageInfoList&)));
+            d->gpsSearchSideBar, SLOT(slotDigikamViewImageSelected(const ImageInfoList&, bool, bool, const ImageInfoList&)));
 
-    connect(d->gpsSearchView, SIGNAL(signalMapSelectedItems(const KUrl::List)),
+    connect(d->gpsSearchSideBar, SIGNAL(signalMapSelectedItems(const KUrl::List)),
             d->iconView, SLOT(setSelectedUrls(const KUrl::List&)));
 
-    connect(d->gpsSearchView, SIGNAL(signalMapSoloItems(const KUrl::List, const QString&)),
+    connect(d->gpsSearchSideBar, SIGNAL(signalMapSoloItems(const KUrl::List, const QString&)),
             d->iconView->imageFilterModel(), SLOT(setUrlWhitelist(const KUrl::List, const QString&)));
 #endif
 
     // -- Filter Bars Connections ---------------------------------
 
-    connect(d->folderSearchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
-            d->folderView, SLOT(slotTextFolderFilterChanged(const SearchTextSettings&)));
-
-    connect(d->tagSearchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
-            d->tagFolderView, SLOT(slotTextTagFilterChanged(const SearchTextSettings&)));
-
-    connect(d->searchSearchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
-            d->searchFolderView, SLOT(slotTextSearchFilterChanged(const SearchTextSettings&)));
-
-    connect(d->tagFilterSearchBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
-            d->tagFilterView, SLOT(slotTextTagFilterChanged(const SearchTextSettings&)));
-
-    connect(d->folderView, SIGNAL(signalTextFolderFilterMatch(bool)),
-            d->folderSearchBar, SLOT(slotSearchResult(bool)));
-
-    connect(d->folderView, SIGNAL(signalFindDuplicatesInAlbum(Album*)),
-            this, SLOT(slotNewDuplicatesSearch(Album*)));
-
-    connect(d->tagFolderView, SIGNAL(signalFindDuplicatesInTag(Album*)),
-            this, SLOT(slotNewDuplicatesSearch(Album*)));
-
-    connect(d->tagFolderView, SIGNAL(signalTextTagFilterMatch(bool)),
-            d->tagSearchBar, SLOT(slotSearchResult(bool)));
-
-    connect(d->searchFolderView, SIGNAL(newSearch()),
-            d->searchTabHeader, SLOT(newAdvancedSearch()));
-
-    connect(d->searchFolderView, SIGNAL(signalTextSearchFilterMatch(bool)),
-            d->searchSearchBar, SLOT(slotSearchResult(bool)));
-
-    connect(d->searchFolderView, SIGNAL(editSearch(SAlbum *)),
-            d->searchTabHeader, SLOT(editSearch(SAlbum *)));
-
-    connect(d->searchFolderView, SIGNAL(selectedSearchChanged(SAlbum *)),
-            d->searchTabHeader, SLOT(selectedSearchChanged(SAlbum *)));
-
-    connect(d->searchTabHeader, SIGNAL(searchShallBeSelected(SAlbum *)),
-            d->searchFolderView, SLOT(slotSelectSearch(SAlbum *)));
-
-    connect(d->tagFilterView, SIGNAL(signalTextTagFilterMatch(bool)),
-            d->tagFilterSearchBar, SLOT(slotSearchResult(bool)));
-
-    connect(d->tagFilterView,
+    connect(d->tagFilterWidget,
             SIGNAL(tagFilterChanged(const QList<int>&, ImageFilterSettings::MatchingCondition, bool)),
             d->iconView->imageFilterModel(),
             SLOT(setTagFilter(const QList<int>&, ImageFilterSettings::MatchingCondition, bool)));
@@ -613,11 +519,19 @@ void DigikamView::connectIconViewFilter(AlbumIconViewFilter *filter)
             filter, SLOT(slotFilterSettingsChanged(const ImageFilterSettings&)));
 
     connect(filter, SIGNAL(resetTagFilters()),
-            d->tagFilterView, SLOT(slotResetTagFilters()));
+            d->tagFilterWidget, SLOT(slotResetTagFilters()));
 }
 
 void DigikamView::loadViewState()
 {
+
+    foreach(SidebarWidget *widget, d->leftSideBarWidgets)
+    {
+        widget->loadState();
+    }
+
+    d->tagFilterWidget->loadState();
+
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("MainWindow");
 
@@ -630,12 +544,20 @@ void DigikamView::loadViewState()
     d->dockArea->restoreState(QByteArray::fromBase64(thumbbarState));
 
     d->initialAlbumID = group.readEntry("InitialAlbumID", 0);
+
 }
 
 void DigikamView::saveViewState()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("MainWindow");
+
+    foreach(SidebarWidget *widget, d->leftSideBarWidgets)
+    {
+        widget->saveState();
+    }
+
+    d->tagFilterWidget->saveState();
 
     // Save the splitter states.
     d->splitter->saveState(group);
@@ -711,8 +633,8 @@ void DigikamView::slotAllAlbumsLoaded()
                this, SLOT(slotAllAlbumsLoaded()));
 
     loadViewState();
-    d->leftSideBar->loadViewState();
-    d->rightSideBar->loadViewState();
+    d->leftSideBar->loadState();
+    d->rightSideBar->loadState();
     d->rightSideBar->populateTags();
 
     // now that all albums have been loaded, activate the albumHistory
@@ -727,235 +649,73 @@ void DigikamView::slotSortAlbums(int order)
     if (!settings)
         return;
     settings->setAlbumSortOrder((AlbumSettings::AlbumSortOrder) order);
-    d->folderView->resort();
+    // TODO sorting by anything else then the name is currently not supported by the model
+    //d->folderView->resort();
 }
 
 void DigikamView::slotNewAlbum()
 {
-    d->folderView->albumNew();
+    // TODO use the selection model of the view instead
+    d->albumModificationHelper->slotAlbumNew(d->albumManager->currentPAlbum());
 }
 
 void DigikamView::slotDeleteAlbum()
 {
-    d->folderView->albumDelete();
+    d->albumModificationHelper->slotAlbumDelete(d->albumManager->currentPAlbum());
 }
 
 void DigikamView::slotNewTag()
 {
-    d->tagFolderView->tagNew();
+    d->tagModificationHelper->slotTagNew(d->albumManager->currentTAlbum());
 }
 
 void DigikamView::slotDeleteTag()
 {
-    d->tagFolderView->tagDelete();
+    d->tagModificationHelper->slotTagDelete(d->albumManager->currentTAlbum());
 }
 
 void DigikamView::slotEditTag()
 {
-    d->tagFolderView->tagEdit();
+    d->tagModificationHelper->slotTagEdit(d->albumManager->currentTAlbum());
 }
 
 void DigikamView::slotNewKeywordSearch()
 {
-    if (d->leftSideBar->getActiveTab() != d->searchBox)
-        d->leftSideBar->setActiveTab(d->searchBox);
-    d->searchTabHeader->newKeywordSearch();
+    slotLeftSideBarActivate(d->searchSideBar);
+    d->searchSideBar->newKeywordSearch();
 }
 
 void DigikamView::slotNewAdvancedSearch()
 {
-    if (d->leftSideBar->getActiveTab() != d->searchBox)
-        d->leftSideBar->setActiveTab(d->searchBox);
-    d->searchTabHeader->newAdvancedSearch();
+    slotLeftSideBarActivate(d->searchSideBar);
+    d->searchSideBar->newAdvancedSearch();
 }
 
 void DigikamView::slotNewDuplicatesSearch(Album* album)
 {
-    if (d->leftSideBar->getActiveTab() != d->fuzzySearchView)
-        d->leftSideBar->setActiveTab(d->fuzzySearchView);
-    d->fuzzySearchView->newDuplicatesSearch(album);
+    slotLeftSideBarActivate(d->fuzzySearchSideBar);
+    d->fuzzySearchSideBar->newDuplicatesSearch(album);
 }
 
 void DigikamView::slotAlbumAdded(Album *album)
 {
-    if (!album->isRoot())
-    {
-        switch (album->type())
-        {
-            case Album::PHYSICAL:
-            {
-                d->folderSearchBar->completionObject()->addItem(album->title());
-                break;
-            }
-            case Album::TAG:
-            {
-                d->tagSearchBar->completionObject()->addItem(album->title());
-                d->tagFilterSearchBar->completionObject()->addItem(album->title());
-                break;
-            }
-            case Album::SEARCH:
-            {
-                SAlbum* salbum = (SAlbum*)(album);
-                if (salbum->isNormalSearch() || salbum->isKeywordSearch() || salbum->isAdvancedSearch())
-                    d->searchSearchBar->completionObject()->addItem(salbum->title());
-                else if (salbum->isTimelineSearch())
-                    d->timeLineView->searchBar()->completionObject()->addItem(salbum->title());
-                else if (salbum->isHaarSearch())
-                    d->fuzzySearchView->searchBar()->completionObject()->addItem(salbum->title());
-#ifdef HAVE_MARBLEWIDGET
-                else if (salbum->isMapSearch())
-                    d->gpsSearchView->searchBar()->completionObject()->addItem(salbum->title());
-#endif
-
-                break;
-            }
-            default:
-            {
-                // Nothing to do with Album::DATE
-                break;
-            }
-        }
-    }
+    Q_UNUSED(album);
+    // right now nothing has to be done here anymore
 }
 
 void DigikamView::slotAlbumDeleted(Album *album)
 {
     d->albumHistory->deleteAlbum(album);
-
-    /*
-    // For what is this needed?
-    Album *a;
-    QWidget *widget;
-    d->albumHistory->getCurrentAlbum(&a, &widget);
-
-    changeAlbumFromHistory(a, widget);
-    */
-
-    if (!album->isRoot())
-    {
-        switch (album->type())
-        {
-            case Album::PHYSICAL:
-            {
-                d->folderSearchBar->completionObject()->removeItem(album->title());
-                break;
-            }
-            case Album::TAG:
-            {
-                d->tagSearchBar->completionObject()->removeItem(album->title());
-                d->tagFilterSearchBar->completionObject()->removeItem(album->title());
-                break;
-            }
-            case Album::SEARCH:
-            {
-                SAlbum* salbum = (SAlbum*)(album);
-                if (salbum->isNormalSearch() || salbum->isKeywordSearch() || salbum->isAdvancedSearch())
-                    d->searchSearchBar->completionObject()->removeItem(salbum->title());
-                else if (salbum->isTimelineSearch())
-                    d->timeLineView->searchBar()->completionObject()->removeItem(salbum->title());
-                else if (salbum->isHaarSearch())
-                    d->fuzzySearchView->searchBar()->completionObject()->removeItem(salbum->title());
-#ifdef HAVE_MARBLEWIDGET
-                else if (salbum->isMapSearch())
-                    d->gpsSearchView->searchBar()->completionObject()->removeItem(salbum->title());
-#endif
-
-                break;
-            }
-            default:
-            {
-                // Nothing to do with Album::DATE
-                break;
-            }
-        }
-    }
 }
 
 void DigikamView::slotAlbumRenamed(Album *album)
 {
-    // display changed names
-
-    if (!album->isRoot())
-    {
-        switch (album->type())
-        {
-            case Album::PHYSICAL:
-            {
-                d->folderView->setAllowAutoCollapse(false);
-
-                d->folderSearchBar->completionObject()->addItem(album->title());
-                d->folderView->slotTextFolderFilterChanged(d->folderSearchBar->searchTextSettings());
-
-                d->folderView->setAllowAutoCollapse(true);
-                break;
-            }
-            case Album::TAG:
-            {
-                d->tagFolderView->setAllowAutoCollapse(false);
-                d->tagFilterView->setAllowAutoCollapse(false);
-
-                d->tagSearchBar->completionObject()->addItem(album->title());
-                d->tagFolderView->slotTextTagFilterChanged(d->tagSearchBar->searchTextSettings());
-
-                d->tagFilterSearchBar->completionObject()->addItem(album->title());
-                d->tagFilterView->slotTextTagFilterChanged(d->tagFilterSearchBar->searchTextSettings());
-
-                d->tagFolderView->setAllowAutoCollapse(true);
-                d->tagFilterView->setAllowAutoCollapse(true);
-                break;
-            }
-            case Album::SEARCH:
-            {
-                SAlbum* salbum = (SAlbum*)(album);
-                if (salbum->isNormalSearch() || salbum->isKeywordSearch() || salbum->isAdvancedSearch())
-                {
-                    d->searchSearchBar->completionObject()->addItem(salbum->title());
-                    d->searchFolderView->slotTextSearchFilterChanged(d->searchSearchBar->searchTextSettings());
-                }
-                else if (salbum->isTimelineSearch())
-                {
-                    d->timeLineView->searchBar()->completionObject()->addItem(salbum->title());
-                    d->timeLineView->folderView()->slotTextSearchFilterChanged(d->timeLineView->searchBar()->searchTextSettings());
-                }
-                else if (salbum->isHaarSearch())
-                {
-                    d->fuzzySearchView->searchBar()->completionObject()->addItem(salbum->title());
-                    d->fuzzySearchView->folderView()->slotTextSearchFilterChanged(d->fuzzySearchView->searchBar()->searchTextSettings());
-                }
-#ifdef HAVE_MARBLEWIDGET
-                else if (salbum->isMapSearch())
-                {
-                    d->gpsSearchView->searchBar()->completionObject()->addItem(salbum->title());
-                    d->gpsSearchView->folderView()->slotTextSearchFilterChanged(d->gpsSearchView->searchBar()->searchTextSettings());
-                }
-#endif
-
-                break;
-            }
-            default:
-            {
-                // Nothing to do with Album::DATE
-                break;
-            }
-        }
-    }
+    Q_UNUSED(album);
 }
 
 void DigikamView::slotAlbumsCleared()
 {
     emit signalAlbumSelected(false);
-
-    d->folderSearchBar->completionObject()->clear();
-
-    d->tagSearchBar->completionObject()->clear();
-    d->tagFilterSearchBar->completionObject()->clear();
-
-    d->searchSearchBar->completionObject()->clear();
-    d->timeLineView->searchBar()->completionObject()->clear();
-    d->fuzzySearchView->searchBar()->completionObject()->clear();
-#ifdef HAVE_MARBLEWIDGET
-    d->gpsSearchView->searchBar()->completionObject()->clear();
-#endif
 }
 
 void DigikamView::slotAlbumHistoryBack(int steps)
@@ -978,71 +738,19 @@ void DigikamView::slotAlbumHistoryForward(int steps)
     changeAlbumFromHistory(album, widget);
 }
 
+// TODO update, use SideBarWidget instead of QWidget
 void DigikamView::changeAlbumFromHistory(Album *album, QWidget *widget)
 {
     if (album && widget)
     {
-        Q3ListViewItem *item = 0;
 
-        // Check if widget is a vbox used to host folderview, tagview or searchview.
-        // B.K.O 202886: DateFolderView is also a KVBox widget, so we need to check for that in here, too.
-        if (KVBox *v = dynamic_cast<KVBox*>(widget))
+        // TODO update, temporary casting until signature is changed
+        SidebarWidget *sideBarWidget = dynamic_cast<SidebarWidget*> (widget);
+        if (sideBarWidget)
         {
-            if (v == d->folderBox)
-            {
-                item = (Q3ListViewItem*) album->extraData(d->folderView);
-                if (!item)
-                    return;
-
-                d->folderView->setSelected(item, true);
-                d->folderView->ensureItemVisible(item);
-            }
-            else if (v == d->tagBox)
-            {
-                item = (Q3ListViewItem*) album->extraData(d->tagFolderView);
-                if (!item)
-                    return;
-
-                d->tagFolderView->setSelected(item, true);
-                d->tagFolderView->ensureItemVisible(item);
-            }
-            else if (v == d->searchBox)
-            {
-                item = (Q3ListViewItem*) album->extraData(d->searchFolderView);
-                if (!item)
-                    return;
-
-                d->searchFolderView->setSelected(item, true);
-                d->searchFolderView->ensureItemVisible(item);
-            }
-            else if (v == d->dateFolderView)
-            {
-                item = (Q3ListViewItem*) album->extraData(v);
-                if (!item)
-                    return;
-                d->dateFolderView->setSelected(item);
-            }
+            sideBarWidget->changeAlbumFromHistory(album);
+            slotLeftSideBarActivate(sideBarWidget);
         }
-        else if (TimeLineView *v = dynamic_cast<TimeLineView*>(widget))
-        {
-            item = (Q3ListViewItem*) album->extraData(v->folderView());
-            if (!item)
-                return;
-
-            v->folderView()->setSelected(item, true);
-            v->folderView()->ensureItemVisible(item);
-        }
-        else if (FuzzySearchView *v = dynamic_cast<FuzzySearchView*>(widget))
-        {
-            item = (Q3ListViewItem*) album->extraData(v->folderView());
-            if (!item)
-                return;
-
-            v->folderView()->setSelected(item, true);
-            v->folderView()->ensureItemVisible(item);
-        }
-
-        d->leftSideBar->setActiveTab(widget);
 
         d->parent->enableAlbumBackwardHistory(d->useAlbumHistory && !d->albumHistory->isBackwardEmpty());
         d->parent->enableAlbumForwardHistory(d->useAlbumHistory && !d->albumHistory->isForwardEmpty());
@@ -1076,50 +784,31 @@ void DigikamView::getForwardHistory(QStringList& titles)
 
 QString DigikamViewPriv::userPresentableAlbumTitle(const QString& title)
 {
-    if (title == FuzzySearchFolderView::currentFuzzySketchSearchName())
+    if (title == SAlbum::getTemporaryHaarTitle(DatabaseSearch::HaarSketchSearch))
         return i18n("Fuzzy Sketch Search");
-    else if (title == FuzzySearchFolderView::currentFuzzyImageSearchName())
+    else if (title == SAlbum::getTemporaryHaarTitle(DatabaseSearch::HaarImageSearch))
         return i18n("Fuzzy Image Search");
-    else if (title == GPSSearchFolderView::currentGPSSearchName())
+    else if (title == SAlbum::getTemporaryTitle(DatabaseSearch::MapSearch))
         return i18n("Map Search");
-    else if (title == SearchFolderView::currentSearchViewSearchName())
+    else if (title == SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch) ||
+             title == SAlbum::getTemporaryTitle(DatabaseSearch::KeywordSearch))
         return i18n("Last Search");
-    else if (title == TimeLineFolderView::currentTimeLineSearchName())
+    else if (title == SAlbum::getTemporaryTitle(DatabaseSearch::TimeLineSearch))
         return i18n("Timeline");
     return title;
 }
 
-void DigikamView::slotSelectAlbum(const KUrl &)
-{
-    /* TODO
-    if (url.isEmpty())
-        return;
-
-    Album *album = d->albumManager->findPAlbum(url);
-    if(album && album->getViewItem())
-    {
-        AlbumFolderItem_Deprecated *item;
-        item = static_cast<AlbumFolderItem_Deprecated*>(album->getViewItem());
-        mFolderView_Deprecated->setSelected(item);
-        d->parent->enableAlbumBackwardHistory(!d->albumHistory->isBackwardEmpty());
-        d->parent->enableAlbumForwardHistory(!d->albumHistory->isForwardEmpty());
-    }
-    */
-}
-
 void DigikamView::slotGotoAlbumAndItem(const ImageInfo& imageInfo)
 {
+
+    kDebug() << "going to " << imageInfo;
+
     emit signalNoCurrentItem();
 
     Album* album = dynamic_cast<Album*>(AlbumManager::instance()->findPAlbum(imageInfo.albumId()));
 
-    // Change the current album in list view.
-    d->folderView->setCurrentAlbum(album);
-
-    // Change to (physical) Album view.
-    // Note, that this also opens the side bar if it is closed; this is
-    // considered as a feature, because it highlights that the view was changed.
-    d->leftSideBar->setActiveTab(d->folderBox);
+    d->albumFolderSideBar->slotSelectAlbum(album);
+    slotLeftSideBarActivate(d->albumFolderSideBar);
 
     // Set the activate item url to find in the Album View after
     // all items have be reloaded.
@@ -1128,6 +817,7 @@ void DigikamView::slotGotoAlbumAndItem(const ImageInfo& imageInfo)
     // And finally toggle album manager to handle album history and
     // reload all items.
     d->albumManager->setCurrentAlbum(album);
+
 }
 
 void DigikamView::slotGotoDateAndItem(const ImageInfo& imageInfo)
@@ -1139,14 +829,14 @@ void DigikamView::slotGotoDateAndItem(const ImageInfo& imageInfo)
     // Change to Date Album view.
     // Note, that this also opens the side bar if it is closed; this is
     // considered as a feature, because it highlights that the view was changed.
-    d->leftSideBar->setActiveTab(d->dateFolderView);
+    slotLeftSideBarActivate(d->dateViewSideBar);
 
     // Set the activate item url to find in the Album View after
     // all items have be reloaded.
     d->iconView->setCurrentWhenAvailable(imageInfo.id());
 
     // Change the year and month of the iconItem (day is unused).
-    d->dateFolderView->gotoDate(date);
+    d->dateViewSideBar->gotoDate(date);
 }
 
 void DigikamView::slotGotoTagAndItem(int tagID)
@@ -1161,15 +851,40 @@ void DigikamView::slotGotoTagAndItem(int tagID)
     // Change to Tag Folder view.
     // Note, that this also opens the side bar if it is closed; this is
     // considered as a feature, because it highlights that the view was changed.
-    d->leftSideBar->setActiveTab(d->tagBox);
+    slotLeftSideBarActivate(d->tagViewSideBar);
 
     // Set the current tag in the tag folder view.
-    d->tagFolderView->selectItem(tagID);
+    // TODO this slot should use a TAlbum pointer directly
+    TAlbum *tag = AlbumManager::instance()->findTAlbum(tagID);
+    if (tag)
+    {
+        d->tagViewSideBar->slotSelectAlbum(tag);
+    }
+    else
+    {
+        kError() << "Could not find a tag album for tag id " << tagID;
+    }
 
     // Set the activate item url to find in the Tag View after
     // all items have be reloaded.
     // FIXME: see above
     // d->iconView->setAlbumItemToFind(url);
+}
+
+void DigikamView::slotSelectAlbum(const KUrl &url)
+{
+
+    PAlbum *album = d->albumManager->findPAlbum(url);
+
+    if (!album)
+    {
+        kWarning() << "Unable to find album for " << url;
+        return;
+    }
+
+    slotLeftSideBarActivate(d->albumFolderSideBar);
+    d->albumFolderSideBar->slotSelectAlbum(album);
+
 }
 
 void DigikamView::slotAlbumSelected(Album* album)
@@ -1422,7 +1137,7 @@ void DigikamView::slotZoomFactorChanged(double zoom)
 
 void DigikamView::slotAlbumPropsEdit()
 {
-    d->folderView->albumEdit();
+    d->albumModificationHelper->slotAlbumEdit(d->albumManager->currentPAlbum());
 }
 
 void DigikamView::connectBatchSyncMetadata(BatchSyncMetadata *syncMetadata)
@@ -1434,7 +1149,7 @@ void DigikamView::connectBatchSyncMetadata(BatchSyncMetadata *syncMetadata)
             d->parent, SLOT(slotProgressValue(int)));
 
     //connect(syncMetadata, SIGNAL(signalComplete()),
-      //      this, SLOT(slotAlbumSyncPicturesMetadataDone()));
+    //      this, SLOT(slotAlbumSyncPicturesMetadataDone()));
 
     connect(d->parent, SIGNAL(signalCancelButtonPressed()),
             syncMetadata, SLOT(slotAbort()));
@@ -1534,10 +1249,8 @@ void DigikamView::slotImageFindSimilar()
     ImageInfo current = d->iconView->currentInfo();
     if (!current.isNull())
     {
-        d->fuzzySearchView->setImageInfo(current);
-
-        if (d->leftSideBar->getActiveTab() != d->fuzzySearchView)
-            d->leftSideBar->setActiveTab(d->fuzzySearchView);
+        d->fuzzySearchSideBar->newSimilarSearch(current);
+        slotLeftSideBarActivate(d->fuzzySearchSideBar);
     }
 }
 
@@ -1619,7 +1332,7 @@ void DigikamView::slotImageAddToNewQueue()
     }
     else
     {
-        //FIXME.
+        // FIXME
         ImageInfoList list;
         ImageInfo info = d->albumWidgetStack->imagePreviewView()->getImageInfo();
         list.append(info);
@@ -1712,19 +1425,15 @@ void DigikamView::slotMoveSelectionToAlbum()
 
 void DigikamView::slotLeftSidebarChangedTab(QWidget* w)
 {
-    // setActive means that selection changes are propagated, nothing more.
-    // Additionally, when it is set to true, the selectionChanged signal will be emitted.
-    // So this is the place which causes the behavior that when the left sidebar
-    // tab is changed, the current album is changed as well.
-    d->dateFolderView->setActive(w == d->dateFolderView);
-    d->folderView->setActive(w == d->folderBox);
-    d->tagFolderView->setActive(w == d->tagBox);
-    d->searchFolderView->setActive(w == d->searchBox);
-    d->timeLineView->setActive(w == d->timeLineView);
-    d->fuzzySearchView->setActive(w == d->fuzzySearchView);
-#ifdef HAVE_MARBLEWIDGET
-    d->gpsSearchView->setActive(w == d->gpsSearchView);
-#endif
+
+    // TODO update, temporary cast
+    SidebarWidget *widget = dynamic_cast<SidebarWidget*> (w);
+    foreach(SidebarWidget *sideBarWidget, d->leftSideBarWidgets)
+    {
+        bool active = (widget && (widget == sideBarWidget));
+        sideBarWidget->setActive(active);
+    }
+
 }
 
 void DigikamView::slotAssignRating(int rating)
@@ -1910,6 +1619,11 @@ void DigikamView::slotOrientationChangeFailed(const QStringList& failedFileNames
         KMessageBox::errorList(0, i18n("Failed to revise Exif orientation these files:"),
                                         failedFileNames);
     }
+}
+
+void DigikamView::slotLeftSideBarActivate(SidebarWidget *widget)
+{
+    d->leftSideBar->setActiveTab(widget);
 }
 
 }  // namespace Digikam

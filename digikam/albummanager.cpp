@@ -977,8 +977,14 @@ void AlbumManager::startScan()
     insertTAlbum(d->rootTAlbum, 0);
 
     d->rootSAlbum = new SAlbum(i18n("My Searches"), 0, true);
+    emit signalAlbumAboutToBeAdded(d->rootSAlbum, 0, 0);
+    d->allAlbumsIdHash[d->rootSAlbum->globalID()] = d->rootSAlbum;
+    emit signalAlbumAdded(d->rootSAlbum);
 
     d->rootDAlbum = new DAlbum(QDate(), true);
+    emit signalAlbumAboutToBeAdded(d->rootDAlbum, 0, 0);
+    d->allAlbumsIdHash[d->rootDAlbum->globalID()] = d->rootDAlbum;
+    emit signalAlbumAdded(d->rootDAlbum);
 
     // create albums for album roots
     QList<CollectionLocation> locations = CollectionManager::instance()->allAvailableLocations();
@@ -1498,7 +1504,7 @@ void AlbumManager::scanSAlbums()
         {
             SAlbum *album = oldSearches[info.id];
             if (info.name != album->title()
-                || info.type != album->type()
+                || info.type != album->searchType()
                 || info.query != album->query())
             {
                 QString oldName = album->title();
@@ -1530,8 +1536,8 @@ void AlbumManager::scanSAlbums()
     foreach (const SearchInfo& info, newSearches)
     {
         SAlbum* album = new SAlbum(info.name, info.id);
-        emit signalAlbumAboutToBeAdded(album, d->rootSAlbum, d->rootSAlbum->lastChild());
         album->setSearch(info.type, info.query);
+        emit signalAlbumAboutToBeAdded(album, d->rootSAlbum, d->rootSAlbum->lastChild());
         album->setParent(d->rootSAlbum);
         d->allAlbumsIdHash[album->globalID()] = album;
         emit signalAlbumAdded(album);
@@ -1637,6 +1643,16 @@ void AlbumManager::setCurrentAlbum(Album *album)
 Album* AlbumManager::currentAlbum() const
 {
     return d->currentAlbum;
+}
+
+PAlbum* AlbumManager::currentPAlbum() const
+{
+    return dynamic_cast<PAlbum*> (d->currentAlbum);
+}
+
+TAlbum* AlbumManager::currentTAlbum() const
+{
+    return dynamic_cast<TAlbum*> (d->currentAlbum);
 }
 
 PAlbum* AlbumManager::findPAlbum(const KUrl& url) const
@@ -2154,11 +2170,18 @@ bool AlbumManager::moveTAlbum(TAlbum* album, TAlbum *newParent, QString& errMsg)
         return false;
     }
 
-    ChangingDB changing(d);
-    DatabaseAccess().db()->setTagParentID(album->id(), newParent->id());
+    emit signalAlbumAboutToBeDeleted(album);
     if (album->parent())
         album->parent()->removeChild(album);
+    album->setParent(0);
+    emit signalAlbumDeleted(album);
+    emit signalAlbumHasBeenDeleted(album);
+
+    emit signalAlbumAboutToBeAdded(album, newParent, newParent ? newParent->lastChild() : 0);
+    ChangingDB changing(d);
+    DatabaseAccess().db()->setTagParentID(album->id(), newParent->id());
     album->setParent(newParent);
+    emit signalAlbumAdded(album);
 
     emit signalTAlbumMoved(album, newParent);
 
@@ -2302,7 +2325,7 @@ SAlbum* AlbumManager::createSAlbum(const QString& name, DatabaseSearch::Type typ
     {
         album->setSearch(type, query);
         DatabaseAccess access;
-        access.db()->updateSearch(album->id(), album->m_type, name, query);
+        access.db()->updateSearch(album->id(), album->m_searchType, name, query);
         return album;
     }
 
@@ -2329,7 +2352,7 @@ bool AlbumManager::updateSAlbum(SAlbum* album, const QString& changedQuery,
         return false;
 
     QString newName = changedName.isNull() ? album->title() : changedName;
-    DatabaseSearch::Type newType = (type == DatabaseSearch::UndefinedType) ? album->type() : type;
+    DatabaseSearch::Type newType = (type == DatabaseSearch::UndefinedType) ? album->searchType() : type;
 
     ChangingDB changing(d);
     DatabaseAccess().db()->updateSearch(album->id(), newType, newName, changedQuery);

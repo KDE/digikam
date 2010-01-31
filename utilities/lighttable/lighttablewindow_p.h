@@ -41,6 +41,7 @@
 #include "lighttableview.h"
 #include "lighttablebar.h"
 #include "thumbbardock.h"
+#include "albummodel.h"
 
 namespace Digikam
 {

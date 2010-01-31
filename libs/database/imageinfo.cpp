@@ -648,4 +648,10 @@ ImageInfo ImageInfo::copyItem(int dstAlbumID, const QString& dstFileName)
     return ImageInfo(id);
 }
 
+QDebug& operator<<(QDebug &stream, const ImageInfo &info)
+{
+    return stream << "ImageInfo [id = " << info.id() << ", databaseurl = "
+                  << info.databaseUrl() << "]";
+}
+
 }  // namespace Digikam

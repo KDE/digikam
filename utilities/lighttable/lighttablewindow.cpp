@@ -81,6 +81,7 @@
 #include "lighttablepreview.h"
 #include "lighttablewindow_p.h"
 #include "uifilevalidator.h"
+#include "albummodel.h"
 
 namespace Digikam
 {
@@ -134,8 +135,8 @@ LightTableWindow::LightTableWindow()
 
     //-------------------------------------------------------------
 
-    d->leftSideBar->loadViewState();
-    d->rightSideBar->loadViewState();
+    d->leftSideBar->loadState();
+    d->rightSideBar->loadState();
     d->leftSideBar->populateTags();
     d->rightSideBar->populateTags();
     slotSidebarTabTitleStyleChanged();

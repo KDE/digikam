@@ -31,23 +31,21 @@
 
 // Local includes
 
-#include "imageinfo.h"
 #include "digikam_export.h"
 
 namespace Digikam
 {
 
 class Album;
-class ImageModel;
 
 class DIGIKAM_DATABASE_EXPORT ImageModelDragDropHandler : public QObject
 {
 public:
 
-    ImageModelDragDropHandler(ImageModel *model);
+    ImageModelDragDropHandler(QAbstractItemModel *model);
     virtual ~ImageModelDragDropHandler() {}
 
-    ImageModel *model() const;
+    QAbstractItemModel *model() const;
 
     /** Gives the view and the occurring drop event.
      *  The index is the index where the drop was dropped on.
@@ -65,7 +63,7 @@ public:
     virtual QStringList mimeTypes() const;
 
     /** Create a mime data object for starting a drag from the given Albums */
-    virtual QMimeData *createMimeData(const QList<ImageInfo> &);
+    virtual QMimeData *createMimeData(const QList<QModelIndex> &);
 
     /** Returns if the given mime data can be handled. acceptsMimeData shall return true
      *  if a drop of the given mime data will be accepted on any index or place at all.
@@ -76,7 +74,7 @@ public:
 
 protected:
 
-    ImageModel *m_model;
+    QAbstractItemModel *m_model;
 };
 
 } // namespace Digikam

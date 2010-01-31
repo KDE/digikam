@@ -35,15 +35,12 @@
 #include <QResizeEvent>
 #include <QMouseEvent>
 
-// KDE includes
+// Local inclues
 
-
+#include "searchmodificationhelper.h"
 
 namespace Digikam
 {
-
-typedef QPair<QDateTime, QDateTime> DateRange;    // Range of a contiguous dates selection <start date, end date>.
-typedef QList<DateRange> DateRangeList;           // List of dates range selected.
 
 class TimeLineWidgetPriv;
 

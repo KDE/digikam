@@ -49,7 +49,7 @@ public:
 };
 
 ItemViewToolTip::ItemViewToolTip(QAbstractItemView *view)
-               : DItemToolTip(), d(new ItemViewToolTipPriv)
+               : DItemToolTip(view), d(new ItemViewToolTipPriv)
 {
     d->view = view;
 
@@ -75,7 +75,7 @@ void ItemViewToolTip::show(QHelpEvent *, const QStyleOptionViewItem& option, con
 {
     d->index = index;
     d->rect  = option.rect;
-    d->rect.moveTopLeft(d->view->mapToGlobal(d->rect.topLeft()));
+    d->rect.moveTopLeft(d->view->viewport()->mapToGlobal(d->rect.topLeft()));
     updateToolTip();
     reposition();
     if (isHidden() && !toolTipIsEmpty())
@@ -154,7 +154,7 @@ void ItemViewToolTip::mouseMoveEvent(QMouseEvent *e)
     if (d->rect.isNull())
         return;
     QPoint pos = e->globalPos();
-    pos = d->view->mapFromGlobal(pos);
+    pos = d->view->viewport()->mapFromGlobal(pos);
     if (!d->rect.contains(pos))
         hide();
     DItemToolTip::mouseMoveEvent(e);

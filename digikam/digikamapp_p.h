@@ -180,6 +180,7 @@ public:
         showBarAction                        = 0;
         showMenuBarAction                    = 0;
         kipipluginsActionCollection          = 0;
+        modelCollection                      = 0;
     }
 
     bool                                fullScreen;
@@ -320,6 +321,8 @@ public:
     QString                             statusBarSelectionText;
 
     KIPI::PluginLoader*                 kipiPluginLoader;
+
+    DigikamModelCollection*             modelCollection;
 };
 
 }  // namespace Digikam

@@ -26,6 +26,7 @@
 
 // KDE includes
 
+#include <kdebug.h>
 #include <klocale.h>
 #include <kglobal.h>
 
@@ -93,13 +94,23 @@ QVariant AbstractAlbumModel::albumData(Album *a, int role) const
             return a->title();
         case Qt::DecorationRole:
             // reimplement in subclasses
-            return decorationRole(a);
+            return decorationRoleData(a);
+        case AlbumTitleRole:
+            return a->title();
         case AlbumTypeRole:
             return a->type();
         case AlbumPointerRole:
             return QVariant::fromValue(a);
+        case AlbumIdRole:
+            return a->id();
+        case AlbumGlobalIdRole:
+            return a->globalID();
+        case AlbumSortRole:
+            // reimplement in subclass
+            return sortRoleData(a);
+        default:
+            return QVariant();
     }
-    return QVariant();
 }
 
 QVariant AbstractAlbumModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -164,7 +175,7 @@ bool AbstractAlbumModel::hasChildren(const QModelIndex& parent) const
 
 QModelIndex AbstractAlbumModel::index(int row, int column, const QModelIndex& parent) const
 {
-    if (column != 0)
+    if (column != 0 || row < 0)
         return QModelIndex();
 
     if (parent.isValid())
@@ -286,6 +297,11 @@ Album *AbstractAlbumModel::albumForIndex(const QModelIndex& index) const
     return static_cast<Album*>(index.internalPointer());
 }
 
+Album *AbstractAlbumModel::retrieveAlbum(const QModelIndex& index)
+{
+    return index.data(AbstractAlbumModel::AlbumPointerRole).value<Album*>();
+}
+
 Album *AbstractAlbumModel::rootAlbum() const
 {
     return d->rootAlbum;
@@ -296,14 +312,24 @@ QModelIndex AbstractAlbumModel::rootAlbumIndex() const
     return indexForAlbum(d->rootAlbum);
 }
 
+AbstractAlbumModel::RootAlbumBehavior AbstractAlbumModel::rootAlbumBehavior() const
+{
+    return d->rootBehavior;
+}
+
 Album::Type AbstractAlbumModel::albumType() const
 {
     return d->type;
 }
 
-QVariant AbstractAlbumModel::decorationRole(Album *) const
+QVariant AbstractAlbumModel::decorationRoleData(Album *) const
 {
     return QVariant();
+}
+
+QVariant AbstractAlbumModel::sortRoleData(Album *a) const
+{
+    return a->title();
 }
 
 QString AbstractAlbumModel::columnHeader() const
@@ -331,6 +357,12 @@ void AbstractAlbumModel::slotAlbumAboutToBeAdded(Album *album, Album *parent, Al
     if (!filterAlbum(album))
         return;
 
+    if (album->isRoot() && d->rootBehavior == IgnoreRootAlbum)
+    {
+        d->rootAlbum = album;
+        return;
+    }
+
     // start inserting operation
     int row = prev ? d->findIndexAsChild(prev)+1 : 0;
     QModelIndex parentIndex = indexForAlbum(parent);
@@ -350,7 +382,6 @@ void AbstractAlbumModel::slotAlbumAdded(Album *album)
 {
     if (d->addingAlbum == album)
     {
-
         bool isRoot = d->addingAlbum == d->rootAlbum;
         d->addingAlbum = 0;
         endInsertRows();
@@ -363,6 +394,13 @@ void AbstractAlbumModel::slotAlbumAboutToBeDeleted(Album *album)
 {
     if (!filterAlbum(album))
         return;
+
+    if (album->isRoot() && d->rootBehavior == IgnoreRootAlbum)
+    {
+        albumCleared(album);
+        d->rootAlbum = 0;
+        return;
+    }
 
     // begin removing operation
     int row = d->findIndexAsChild(album);
@@ -609,6 +647,18 @@ QVariant AbstractCountingAlbumModel::albumData(Album *album, int role) const
     return AbstractSpecificAlbumModel::albumData(album, role);
 }
 
+int AbstractCountingAlbumModel::albumCount(Album *album) const
+{
+    QHash<int, int>::const_iterator it = m_countHashReady.constFind(album->id());
+    if (it != m_countHashReady.constEnd())
+    {
+        return it.value();
+    }
+
+    return -1;
+
+}
+
 QString AbstractCountingAlbumModel::albumName(Album *album) const
 {
     return album->title();
@@ -698,7 +748,7 @@ QList<Album *> AbstractCheckableAlbumModel::checkedAlbums() const
     return m_checkedAlbums.keys(Qt::Checked);
 }
 
-void AbstractCheckableAlbumModel::resetCheckedAlbums()
+void AbstractCheckableAlbumModel::resetAllCheckedAlbums()
 {
     QList<Album *> oldChecked = m_checkedAlbums.keys();
     m_checkedAlbums.clear();
@@ -708,6 +758,77 @@ void AbstractCheckableAlbumModel::resetCheckedAlbums()
         emit dataChanged(index, index);
         emit checkStateChanged(album, Qt::Unchecked);
     }
+}
+
+void AbstractCheckableAlbumModel::setDataForChildren(QModelIndex &parent, const QVariant& value, int role)
+{
+    setData(parent, value, role);
+    for (int row = 0; row < rowCount(parent); ++row)
+    {
+        QModelIndex childIndex = index(row, 0, parent);
+        setDataForChildren(childIndex, value, role);
+    }
+}
+
+void AbstractCheckableAlbumModel::resetCheckedAlbums(QModelIndex parent)
+{
+
+    if (parent == rootAlbumIndex())
+    {
+        resetAllCheckedAlbums();
+        return;
+    }
+
+    setDataForChildren(parent, Qt::Unchecked, Qt::CheckStateRole);
+}
+
+void AbstractCheckableAlbumModel::setDataForParents(QModelIndex &child, const QVariant& value, int role)
+{
+    QModelIndex current = child;
+    while (current.isValid()) {
+        setData(current, value, role);
+        current = parent(current);
+    }
+}
+
+void AbstractCheckableAlbumModel::resetCheckedParentAlbums(QModelIndex &child)
+{
+    setDataForParents(child, Qt::Unchecked, Qt::CheckStateRole);
+}
+
+void AbstractCheckableAlbumModel::checkAllParentAlbums(QModelIndex &child)
+{
+    setDataForParents(child, Qt::Checked, Qt::CheckStateRole);
+}
+
+void AbstractCheckableAlbumModel::checkAllAlbums(QModelIndex parent)
+{
+    setDataForChildren(parent, Qt::Checked, Qt::CheckStateRole);
+}
+
+void AbstractCheckableAlbumModel::invertCheckedAlbums(QModelIndex parent)
+{
+    Album *album = albumForIndex(parent);
+    if (album)
+    {
+        toggleChecked(album);
+    }
+    for (int row = 0; row < rowCount(parent); ++row)
+    {
+        invertCheckedAlbums(index(row, 0, parent));
+    }
+}
+
+void AbstractCheckableAlbumModel::setCheckStateForChildren(Album *album, Qt::CheckState state)
+{
+    QModelIndex parent = indexForAlbum(album);
+    setDataForChildren(parent, state, Qt::CheckStateRole);
+}
+
+void AbstractCheckableAlbumModel::setCheckStateForParents(Album *album, Qt::CheckState state)
+{
+    QModelIndex parent = indexForAlbum(album);
+    setDataForParents(parent, state, Qt::CheckStateRole);
 }
 
 QVariant AbstractCheckableAlbumModel::albumData(Album *a, int role) const

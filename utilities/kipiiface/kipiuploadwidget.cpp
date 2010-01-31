@@ -78,7 +78,7 @@ KipiUploadWidget::KipiUploadWidget(KipiInterface* iface, QWidget *parent)
     vlay->setMargin(0);
     vlay->setSpacing(KDialog::spacingHint());
 
-    connect(d->albumSel->albumView(), SIGNAL(itemSelectionChanged()),
+    connect(d->albumSel, SIGNAL(itemSelectionChanged()),
             this, SLOT(slotSelectionChanged()));
 }
 
@@ -98,18 +98,21 @@ KIPI::ImageCollection KipiUploadWidget::selectedImageCollection() const
         QString ext = d->iface->fileExtensions();
 #endif
 
-        TreeAlbumItem* item = dynamic_cast<TreeAlbumItem*>(d->albumSel->albumView()->currentItem());
-        if (item)
-            collection = new KipiImageCollection(KipiImageCollection::AllItems, item->album(), ext);
+        PAlbum *currentAlbum = d->albumSel->currentAlbum();
+        if (currentAlbum)
+        {
+            collection = new KipiImageCollection(KipiImageCollection::AllItems, currentAlbum, ext);
+        }
     }
     return collection;
 }
 
 void KipiUploadWidget::slotSelectionChanged()
 {
-    QTreeWidgetItem* selItem = d->albumSel->albumView()->currentItem();
+    PAlbum *currentAlbum = d->albumSel->currentAlbum();
 
-    if (!selItem || (selItem == d->albumSel->albumView()->topLevelItem(0)))
+    // TODO is this the desired semantic?
+    if (!currentAlbum || (currentAlbum->isRoot()))
     {
         emit selectionChanged();
     }

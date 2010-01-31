@@ -23,6 +23,10 @@
 
 #include "albummodeldragdrophandler.h"
 
+// Qt includes
+
+#include <QMimeData>
+
 // Local includes
 
 #include "abstractalbummodel.h"
@@ -40,12 +44,12 @@ AbstractAlbumModel *AlbumModelDragDropHandler::model() const
     return m_model;
 }
 
-bool AlbumModelDragDropHandler::dropEvent(QAbstractItemView *, QDropEvent *, const QModelIndex &)
+bool AlbumModelDragDropHandler::dropEvent(QAbstractItemView *, const QDropEvent *, const QModelIndex &)
 {
     return false;
 }
 
-Qt::DropAction AlbumModelDragDropHandler::accepts(const QMimeData *, const QModelIndex &)
+Qt::DropAction AlbumModelDragDropHandler::accepts(const QDropEvent *, const QModelIndex &)
 {
     return Qt::IgnoreAction;
 }
@@ -60,6 +64,16 @@ QMimeData *AlbumModelDragDropHandler::createMimeData(const QList<Album*> &)
     return 0;
 }
 
+bool AlbumModelDragDropHandler::acceptsMimeData(const QMimeData *mime)
+{
+    QStringList modelTypes = mimeTypes();
+    for (int i = 0; i < modelTypes.count(); ++i)
+    {
+        if (mime->hasFormat(modelTypes.at(i))) //&& (e->dropAction() & model->supportedDropActions()))
+            return true;
+    }
+    return false;
+}
 
 }
 

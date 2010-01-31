@@ -38,14 +38,14 @@
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kapplication.h>
+#include <kfileitem.h>
 #include <klocale.h>
 #include <kmenu.h>
 #include <kmimetype.h>
 #include <kmimetypetrader.h>
-#include <kstandardaction.h>
 #include <kopenwithdialog.h>
 #include <krun.h>
-#include <kfileitem.h>
+#include <kstandardaction.h>
 
 // LibKIPI includes
 
@@ -57,14 +57,15 @@
 #include "album.h"
 #include "albumdb.h"
 #include "albummanager.h"
+#include "config-digikam.h"
 #include "databaseaccess.h"
 #include "digikamapp.h"
 #include "imageinfo.h"
 #include "lighttablewindow.h"
 #include "queuemgrwindow.h"
 #include "ratingpopupmenu.h"
+#include "tagmodificationhelper.h"
 #include "tagspopupmenu.h"
-#include "config-digikam.h"
 #ifdef HAVE_KDEPIMLIBS
 #include <kabc/stdaddressbook.h>
 #endif // HAVE_KDEPIMLIBS
@@ -131,6 +132,16 @@ void ContextMenuHelper::addAction(QAction* action, bool addDisabled)
 
     if (action->isEnabled() || addDisabled)
         d->parent->addAction(action);
+}
+
+void ContextMenuHelper::addSubMenu(KMenu *subMenu)
+{
+    d->parent->addMenu(subMenu);
+}
+
+void ContextMenuHelper::addSeparator()
+{
+    d->parent->addSeparator();
 }
 
 void ContextMenuHelper::addAction(QAction* action, QObject* recv, const char* slot,
@@ -349,6 +360,30 @@ bool ContextMenuHelper::imageIdsHaveSameCategory(const imageIds& ids, DatabaseIt
         }
     }
     return sameCategory;
+}
+
+void ContextMenuHelper::addActionNewTag(TagModificationHelper *helper)
+{
+    QAction *newTagAction = new QAction(SmallIcon("tag-new"), i18n("New Tag..."), this);
+    addAction(newTagAction);
+    connect(newTagAction, SIGNAL(triggered()),
+            helper, SLOT(slotTagNew()));
+}
+
+void ContextMenuHelper::addActionDeleteTag(TagModificationHelper *helper)
+{
+    QAction *deleteTagAction = new QAction(SmallIcon("user-trash"), i18n("Delete Tag"), this);
+    addAction(deleteTagAction);
+    connect(deleteTagAction, SIGNAL(triggered()),
+            helper, SLOT(slotTagDelete()));
+}
+
+void ContextMenuHelper::addActionEditTag(TagModificationHelper *helper)
+{
+    QAction *editTagAction = new QAction(SmallIcon("tag-properties"), i18nc("Edit Tag Properties", "Properties..."), this);
+    addAction(editTagAction);
+    connect(editTagAction, SIGNAL(triggered()),
+            helper, SLOT(slotTagEdit()));
 }
 
 void ContextMenuHelper::addAssignTagsMenu(imageIds& ids)

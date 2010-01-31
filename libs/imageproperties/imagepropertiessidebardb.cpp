@@ -439,7 +439,8 @@ void ImagePropertiesSideBarDB::slotAssignRatingFiveStar()
 
 void ImagePropertiesSideBarDB::refreshTagsView()
 {
-    d->desceditTab->refreshTagsView();
+    // TODO update, do we still need this method?
+    //d->desceditTab->refreshTagsView();
 }
 
 void ImagePropertiesSideBarDB::setImagePropertiesInformation(const KUrl& url)

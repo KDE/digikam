@@ -26,6 +26,7 @@
 
 // Local includes
 
+#include "imageinfo.h"
 #include "imagemodeldragdrophandler.h"
 #include "imagealbummodel.h"
 
@@ -47,7 +48,7 @@ public:
     virtual bool dropEvent(QAbstractItemView *view, const QDropEvent *e, const QModelIndex& droppedOn);
     virtual Qt::DropAction accepts(const QDropEvent *e, const QModelIndex& dropIndex);
     virtual QStringList mimeTypes() const;
-    virtual QMimeData *createMimeData(const QList<ImageInfo> &);
+    virtual QMimeData *createMimeData(const QList<QModelIndex> &);
 
 Q_SIGNALS:
 

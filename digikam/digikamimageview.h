@@ -50,10 +50,6 @@ public:
 
 public Q_SLOTS:
 
-    virtual void cut();
-    virtual void copy();
-    virtual void paste();
-
     void openInEditor(const ImageInfo& info);
     void openCurrentInEditor();
 
@@ -84,7 +80,7 @@ Q_SIGNALS:
 protected:
 
     virtual void activated(const ImageInfo& info);
-    virtual void showContextMenu(QContextMenuEvent* event, const ImageInfo& info);
+    virtual void showContextMenuOnInfo(QContextMenuEvent* event, const ImageInfo& info);
     virtual void showContextMenu(QContextMenuEvent* event);
     virtual void slotSetupChanged();
 

@@ -7,6 +7,7 @@
  * Description : GPS search sidebar tab contents.
  *
  * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009 by Johannes Wienke <languitar at semipol dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -31,14 +32,15 @@
 #include <QLabel>
 #include <QLayout>
 #include <QPushButton>
+#include <QSplitter>
 #include <QStyle>
 #include <QToolButton>
-#include <QSplitter>
 
 // KDE includes
 
 #include <kapplication.h>
 #include <kconfig.h>
+#include <kdebug.h>
 #include <kdialog.h>
 #include <khbox.h>
 #include <kiconloader.h>
@@ -46,18 +48,17 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
-#include <kdebug.h>
 
 // Local includes
 
 #include "album.h"
 #include "albummanager.h"
+#include "editablesearchtreeview.h"
+#include "gpssearchwidget.h"
 #include "imageinfo.h"
 #include "imageinfojob.h"
-#include "searchxml.h"
 #include "searchtextbar.h"
-#include "gpssearchwidget.h"
-#include "gpssearchfolderview.h"
+#include "searchxml.h"
 
 namespace Digikam
 {
@@ -68,6 +69,7 @@ class GPSSearchViewPriv
 public:
 
     GPSSearchViewPriv() :
+        configSplitterStateEntry("SplitterState"),
         saveBtn(0),
         zoomInBtn(0),
         zoomOutBtn(0),
@@ -82,11 +84,13 @@ public:
         nameEdit(0),
         imageInfoJob(),
         searchGPSBar(0),
-        gpsSearchFolderView(0),
+        searchTreeView(0),
         splitter(0),
         gpsSearchWidget(0),
         mapThemeBtn(0)
     {}
+
+    const QString configSplitterStateEntry;
 
     QToolButton*         saveBtn;
     QToolButton*         zoomInBtn;
@@ -106,7 +110,7 @@ public:
 
     SearchTextBar*       searchGPSBar;
 
-    GPSSearchFolderView* gpsSearchFolderView;
+    EditableSearchTreeView *searchTreeView;
 
     QSplitter*           splitter;
 
@@ -114,8 +118,10 @@ public:
     WorldMapThemeBtn*    mapThemeBtn;
 };
 
-GPSSearchView::GPSSearchView(QWidget *parent)
-             : QWidget(parent), d(new GPSSearchViewPriv)
+GPSSearchView::GPSSearchView(QWidget *parent, SearchModel *searchModel,
+                SearchModificationHelper *searchModificationHelper)
+             : QWidget(parent), StateSavingObject(this),
+               d(new GPSSearchViewPriv)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setAcceptDrops(true);
@@ -205,8 +211,12 @@ GPSSearchView::GPSSearchView(QWidget *parent)
 
     // ---------------------------------------------------------------
 
-    d->gpsSearchFolderView = new GPSSearchFolderView(this);
-    d->searchGPSBar        = new SearchTextBar(this, "GPSSearchViewSearchGPSBar");
+    d->searchTreeView = new EditableSearchTreeView(this, searchModel, searchModificationHelper);
+    d->searchTreeView->filteredModel()->setFilterSearchType(DatabaseSearch::MapSearch);
+    d->searchTreeView->filteredModel()->setListTemporarySearches(true);
+    d->searchGPSBar   = new SearchTextBar(this, "GPSSearchViewSearchGPSBar");
+    d->searchGPSBar->setModel(d->searchTreeView->filteredModel(), AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
+    d->searchGPSBar->setFilterModel(d->searchTreeView->albumFilterModel());
 
     // ---------------------------------------------------------------
 
@@ -227,7 +237,7 @@ GPSSearchView::GPSSearchView(QWidget *parent)
     vlayTop->setSpacing(KDialog::spacingHint());
     QFrame* const frameBottom = new QFrame(d->splitter);
     QVBoxLayout* const vlayBottom = new QVBoxLayout(frameBottom);
-    vlayBottom->addWidget(d->gpsSearchFolderView);
+    vlayBottom->addWidget(d->searchTreeView);
     vlayBottom->addWidget(d->searchGPSBar);
     vlayBottom->setMargin(0);
     vlayBottom->setSpacing(KDialog::spacingHint());
@@ -239,21 +249,10 @@ GPSSearchView::GPSSearchView(QWidget *parent)
 
     vlay->addWidget(d->splitter);
 
-    readConfig();
-
     // ---------------------------------------------------------------
 
-    connect(d->gpsSearchFolderView, SIGNAL(signalAlbumSelected(SAlbum*)),
-            this, SLOT(slotAlbumSelected(SAlbum*)));
-
-    connect(d->gpsSearchFolderView, SIGNAL(signalRenameAlbum(SAlbum*)),
-            this, SLOT(slotRenameAlbum(SAlbum*)));
-
-    connect(d->gpsSearchFolderView, SIGNAL(signalTextSearchFilterMatch(bool)),
-            d->searchGPSBar, SLOT(slotSearchResult(bool)));
-
-    connect(d->searchGPSBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
-            d->gpsSearchFolderView, SLOT(slotTextSearchFilterChanged(const SearchTextSettings&)));
+    connect(d->searchTreeView, SIGNAL(currentAlbumChanged(Album*)),
+            this, SLOT(slotAlbumSelected(Album*)));
 
     connect(d->saveBtn, SIGNAL(clicked()),
             this, SLOT(slotSaveGPSSAlbum()));
@@ -283,19 +282,23 @@ GPSSearchView::GPSSearchView(QWidget *parent)
 
 GPSSearchView::~GPSSearchView()
 {
-    writeConfig();
     delete d;
 }
 
-void GPSSearchView::readConfig()
+void GPSSearchView::setConfigGroup(KConfigGroup group)
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    StateSavingObject::setConfigGroup(group);
+    d->searchTreeView->setConfigGroup(group);
+}
 
-    KConfigGroup group        = config->group(QString("GPSSearch SideBar"));
+void GPSSearchView::doLoadState()
+{
 
-    if (group.hasKey("SplitterState"))
+    KConfigGroup group = getConfigGroup();
+
+    if (group.hasKey(entryName(d->configSplitterStateEntry)))
     {
-        const QByteArray splitterState = QByteArray::fromBase64(group.readEntry(QString("SplitterState"), QByteArray()));
+        const QByteArray splitterState = QByteArray::fromBase64(group.readEntry(entryName(d->configSplitterStateEntry), QByteArray()));
         if (!splitterState.isEmpty())
         {
             d->splitter->restoreState(splitterState);
@@ -303,27 +306,18 @@ void GPSSearchView::readConfig()
     }
 
     d->gpsSearchWidget->readConfig(group);
+    d->searchTreeView->loadState();
 }
 
-void GPSSearchView::writeConfig()
+void GPSSearchView::doSaveState()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(QString("GPSSearch SideBar"));
+    KConfigGroup group = getConfigGroup();
 
-    group.writeEntry(QString("SplitterState"), d->splitter->saveState().toBase64());
+    group.writeEntry(entryName(d->configSplitterStateEntry), d->splitter->saveState().toBase64());
     d->gpsSearchWidget->writeConfig(group);
+    d->searchTreeView->saveState();
 
-    config->sync();
-}
-
-GPSSearchFolderView* GPSSearchView::folderView() const
-{
-    return d->gpsSearchFolderView;
-}
-
-SearchTextBar* GPSSearchView::searchBar() const
-{
-    return d->searchGPSBar;
+    group.sync();
 }
 
 void GPSSearchView::setActive(bool val)
@@ -333,14 +327,21 @@ void GPSSearchView::setActive(bool val)
         // make sure we reset the custom filters set by the MarkerClusterer:
         emit(signalMapSoloItems(KUrl::List(), "gpssearch"));
     }
-    if (d->gpsSearchFolderView->selectedItem())
+
+    if (val && d->searchTreeView->currentAlbum())
     {
-        d->gpsSearchFolderView->setActive(val);
+        AlbumManager::instance()->setCurrentAlbum(
+                        d->searchTreeView->currentAlbum());
     }
     else if (val)
     {
         // TODO
     }
+}
+
+void GPSSearchView::changeAlbumFromHistory(SAlbum *album)
+{
+    d->searchTreeView->slotSelectSAlbum(album);
 }
 
 void GPSSearchView::slotSaveGPSSAlbum()
@@ -355,7 +356,7 @@ void GPSSearchView::slotSaveGPSSAlbum()
 void GPSSearchView::slotSelectionChanged()
 {
     slotCheckNameEditGPSConditions();
-    createNewGPSSearchAlbum(GPSSearchFolderView::currentGPSSearchName());
+    createNewGPSSearchAlbum(SAlbum::getTemporaryTitle(DatabaseSearch::MapSearch));
 }
 
 void GPSSearchView::createNewGPSSearchAlbum(const QString& name)
@@ -387,17 +388,19 @@ void GPSSearchView::createNewGPSSearchAlbum(const QString& name)
     SAlbum* salbum = AlbumManager::instance()->createSAlbum(name, DatabaseSearch::MapSearch, writer.xml());
     AlbumManager::instance()->setCurrentAlbum(salbum);
     d->imageInfoJob.allItemsFromAlbum(salbum);
+    d->searchTreeView->slotSelectAlbum(salbum);
 }
 
-void GPSSearchView::slotAlbumSelected(SAlbum* salbum)
+void GPSSearchView::slotAlbumSelected(Album* a)
 {
+
+    SAlbum *salbum = dynamic_cast<SAlbum*> (a);
+
     if (!salbum)
         return;
 
     // clear positions shown on the map:
     d->gpsSearchWidget->clearGPSPositions();
-
-    AlbumManager::instance()->setCurrentAlbum(salbum);
 
     SearchXmlReader reader(salbum->query());
     reader.readToFirstField();
@@ -482,27 +485,6 @@ void GPSSearchView::slotCheckNameEditGPSConditions()
         d->nameEdit->setEnabled(false);
         d->saveBtn->setEnabled(false);
     }
-}
-
-void GPSSearchView::slotRenameAlbum(SAlbum* salbum)
-{
-    if (!salbum) return;
-
-    if (salbum->title() == GPSSearchFolderView::currentGPSSearchName())
-        return;
-
-    QString oldName(salbum->title());
-    bool    ok;
-
-    QString name = KInputDialog::getText(i18n("Rename Album (%1)",oldName),
-                                         i18n("Enter new album name:"),
-                                         oldName, &ok, this);
-
-    if (!ok || name == oldName || name.isEmpty()) return;
-
-    if (!checkName(name)) return;
-
-    AlbumManager::instance()->updateSAlbum(salbum, salbum->query(), name);
 }
 
 /**

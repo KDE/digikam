@@ -29,6 +29,10 @@
 
 #include <QScrollArea>
 
+// Local includs
+
+#include "statesavingobject.h"
+
 class QDragEnterEvent;
 class QDropEvent;
 class QPixmap;
@@ -37,29 +41,37 @@ namespace Digikam
 {
 
 class Album;
-class SAlbum;
-class ImageInfo;
-class SearchTextBar;
-class LoadingDescription;
 class FuzzySearchFolderView;
 class FuzzySearchViewPriv;
+class ImageInfo;
+class LoadingDescription;
+class SAlbum;
+class SearchModel;
+class SearchModificationHelper;
+class SearchTextBar;
 
-class FuzzySearchView : public QScrollArea
+class FuzzySearchView : public QScrollArea, public StateSavingObject
 {
     Q_OBJECT
 
 public:
 
-    FuzzySearchView(QWidget *parent=0);
+    FuzzySearchView(SearchModel *searchModel,
+                    SearchModificationHelper *searchModificationHelper,
+                    QWidget *parent = 0);
     ~FuzzySearchView();
 
-    FuzzySearchFolderView* folderView() const;
-    SearchTextBar* searchBar() const;
+    SAlbum *currentAlbum() const;
+    void setCurrentAlbum(SAlbum *album);
 
     void setActive(bool val);
     void setImageInfo(const ImageInfo& info);
 
     void newDuplicatesSearch(Album*);
+
+    virtual void setConfigGroup(KConfigGroup group);
+    void doLoadState();
+    void doSaveState();
 
 Q_SIGNALS:
 
@@ -81,8 +93,7 @@ private Q_SLOTS:
     void slotSaveSketchSAlbum();
     void slotCheckNameEditSketchConditions();
 
-    void slotAlbumSelected(SAlbum*);
-    void slotRenameAlbum(SAlbum*);
+    void slotAlbumSelected(Album *album);
 
     void slotSaveImageSAlbum();
     void slotCheckNameEditImageConditions();
@@ -100,14 +111,8 @@ private:
     void setCurrentImage(qlonglong imageid);
     void setCurrentImage(const ImageInfo& info);
 
-    void readConfig();
-    void writeConfig();
-
-    void createNewFuzzySearchAlbumFromSketch(const QString& name);
-    void createNewFuzzySearchAlbumFromImage(const QString& name);
-
-    bool checkName(QString& name);
-    bool checkAlbum(const QString& name) const;
+    void createNewFuzzySearchAlbumFromSketch(const QString& name, bool force = false);
+    void createNewFuzzySearchAlbumFromImage(const QString& name, bool force = false);
 
     void setColor(QColor c);
 

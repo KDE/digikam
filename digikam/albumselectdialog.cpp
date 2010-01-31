@@ -112,7 +112,7 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* parent, PAlbum* albumToSelect,
 
     // -------------------------------------------------------------
 
-    connect(d->albumSel->albumView(), SIGNAL(itemSelectionChanged()),
+    connect(d->albumSel, SIGNAL(itemSelectionChanged()),
             this, SLOT(slotSelectionChanged()));
 
     // -------------------------------------------------------------
@@ -128,9 +128,9 @@ AlbumSelectDialog::~AlbumSelectDialog()
 
 void AlbumSelectDialog::slotSelectionChanged()
 {
-    QTreeWidgetItem* selItem = d->albumSel->albumView()->currentItem();
+    PAlbum *currentAlbum = d->albumSel->currentAlbum();
 
-    if (!selItem || (selItem == d->albumSel->albumView()->topLevelItem(0)))
+    if (!currentAlbum || (currentAlbum->isRoot()))
     {
         enableButtonOk(false);
         return;
@@ -152,23 +152,15 @@ PAlbum* AlbumSelectDialog::selectAlbum(QWidget* parent,
         return 0;
     }
 
-    QTreeWidgetItem* cItem  = dlg->d->albumSel->albumView()->currentItem();
-    QTreeWidgetItem* tlItem = dlg->d->albumSel->albumView()->topLevelItem(0);
-    if (!cItem || (cItem == tlItem))
+    PAlbum *selectedAlbum = dlg->d->albumSel->currentAlbum();
+    if (!selectedAlbum || (selectedAlbum->isRoot()))
     {
         delete dlg;
         return 0;
     }
 
-    TreeAlbumItem* item = dynamic_cast<TreeAlbumItem*>(cItem);
-    PAlbum* album       = 0;
-    if (item && item->album())
-    {
-        album = dynamic_cast<PAlbum*>(item->album());
-    }
-
     delete dlg;
-    return album;
+    return selectedAlbum;
 }
 
 }  // namespace Digikam

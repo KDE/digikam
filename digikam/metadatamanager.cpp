@@ -90,6 +90,18 @@ void MetadataManager::shutDown()
     d->fileWorker->shutDown();
 }
 
+void MetadataManager::assignTags(const QList<int>& ids, const QList<int>& tagIDs)
+{
+    QList<ImageInfo> infos;
+    foreach (int id, ids)
+    {
+        ImageInfo info(id);
+        if (!info.isNull())
+            infos << info;
+    }
+    assignTags(infos, tagIDs);
+}
+
 void MetadataManager::assignTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs)
 {
     d->schedulingForDB(infos.size());

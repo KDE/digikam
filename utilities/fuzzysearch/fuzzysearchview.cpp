@@ -26,6 +26,7 @@
 
 // Qt includes
 
+#include <qevent.h>
 #include <QFrame>
 #include <QImage>
 #include <QLabel>
@@ -41,6 +42,7 @@
 #include <kapplication.h>
 #include <kcolorvalueselector.h>
 #include <kconfig.h>
+#include <kdebug.h>
 #include <kdialog.h>
 #include <khbox.h>
 #include <khuesaturationselect.h>
@@ -56,20 +58,23 @@
 // Local includes
 
 #include "album.h"
-#include "albummanager.h"
 #include "albumdb.h"
+#include "albuminfo.h"
+#include "albummanager.h"
+#include "albummodel.h"
 #include "databaseaccess.h"
 #include "ddragobjects.h"
-#include "imageinfo.h"
-#include "haariface.h"
-#include "searchxml.h"
-#include "searchtextbar.h"
-#include "sketchwidget.h"
-#include "imagelister.h"
-#include "thumbnailsize.h"
-#include "thumbnailloadthread.h"
+#include "editablesearchtreeview.h"
 #include "findduplicatesview.h"
-#include "fuzzysearchfolderview.h"
+#include "haariface.h"
+#include "imageinfo.h"
+#include "imagelister.h"
+#include "searchmodificationhelper.h"
+#include "searchtextbar.h"
+#include "searchxml.h"
+#include "sketchwidget.h"
+#include "thumbnailloadthread.h"
+#include "thumbnailsize.h"
 
 namespace Digikam
 {
@@ -86,34 +91,55 @@ public:
         DUPLICATES
     };
 
-    FuzzySearchViewPriv()
+    FuzzySearchViewPriv() :
+        configTabEntry("FuzzySearch Tab"),
+        configPenSketchSizeEntry("Pen Sketch Size"),
+        configResultSketchItemsEntry("Result Sketch items"),
+        configPenSketchHueEntry("Pen Sketch Hue"),
+        configPenSketchSaturationEntry("Pen Sketch Saturation"),
+        configPenSkethValueEntry("Pen Sketch Value"),
+        configSimilarsThresholdEntry("Similars Threshold"),
+        // initially be active to update sketch panel when the search list is restored
+        active(true),
+        fingerprintsChecked(false),
+        resetButton(0),
+        saveBtnSketch(0),
+        undoBtnSketch(0),
+        redoBtnSketch(0),
+        saveBtnImage(0),
+        penSize(0),
+        resultsSketch(0),
+        levelImage(0),
+        imageWidget(0),
+        timerSketch(0),
+        timerImage(0),
+        folderView(0),
+        nameEditSketch(0),
+        nameEditImage(0),
+        tabWidget(0),
+        hsSelector(0),
+        vSelector(0),
+        labelFile(0),
+        labelFolder(0),
+        searchFuzzyBar(0),
+        searchTreeView(0),
+        sketchWidget(0),
+        thumbLoadThread(0),
+        findDuplicatesPanel(0),
+        imageSAlbum(0),
+        sketchSAlbum(0),
+        searchModel(0),
+        searchModificationHelper(0)
     {
-        sketchWidget          = 0;
-        hsSelector            = 0;
-        vSelector             = 0;
-        penSize               = 0;
-        resultsSketch         = 0;
-        levelImage            = 0;
-        resetButton           = 0;
-        saveBtnSketch         = 0;
-        undoBtnSketch         = 0;
-        redoBtnSketch         = 0;
-        saveBtnImage          = 0;
-        nameEditSketch        = 0;
-        nameEditImage         = 0;
-        searchFuzzyBar        = 0;
-        fuzzySearchFolderView = 0;
-        tabWidget             = 0;
-        thumbLoadThread       = 0;
-        imageSAlbum           = 0;
-        sketchSAlbum          = 0;
-        folderView            = 0;
-        timerSketch           = 0;
-        timerImage            = 0;
-        findDuplicatesPanel   = 0;
-        active                = false;
-        fingerprintsChecked   = false;
     }
+
+    const QString configTabEntry;
+    const QString configPenSketchSizeEntry;
+    const QString configResultSketchItemsEntry;
+    const QString configPenSketchHueEntry;
+    const QString configPenSketchSaturationEntry;
+    const QString configPenSkethValueEntry;
+    const QString configSimilarsThresholdEntry;
 
     bool                    active;
     bool                    fingerprintsChecked;
@@ -153,7 +179,7 @@ public:
 
     SearchTextBar*          searchFuzzyBar;
 
-    FuzzySearchFolderView*  fuzzySearchFolderView;
+    EditableSearchTreeView* searchTreeView;
 
     SketchWidget*           sketchWidget;
 
@@ -163,12 +189,21 @@ public:
 
     AlbumPointer<SAlbum>    imageSAlbum;
     AlbumPointer<SAlbum>    sketchSAlbum;
+
+    SearchModel *searchModel;
+    SearchModificationHelper *searchModificationHelper;
 };
 
-FuzzySearchView::FuzzySearchView(QWidget *parent)
-               : QScrollArea(parent), d(new FuzzySearchViewPriv)
+FuzzySearchView::FuzzySearchView(SearchModel *searchModel,
+                SearchModificationHelper *searchModificationHelper,
+                QWidget *parent)
+               : QScrollArea(parent), StateSavingObject(this),
+                 d(new FuzzySearchViewPriv)
 {
     d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
+
+    d->searchModel = searchModel;
+    d->searchModificationHelper = searchModificationHelper;
 
     setWidgetResizable(true);
     setAttribute(Qt::WA_DeleteOnClose);
@@ -189,8 +224,14 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
     // ---------------------------------------------------------------
 
     d->folderView            = new KVBox();
-    d->fuzzySearchFolderView = new FuzzySearchFolderView(d->folderView);
+    d->searchTreeView        = new EditableSearchTreeView(d->folderView, searchModel,
+                                                          searchModificationHelper);
+    d->searchTreeView->filteredModel()->listHaarSearches();
+    d->searchTreeView->filteredModel()->setListTemporarySearches(true);
     d->searchFuzzyBar        = new SearchTextBar(d->folderView, "FuzzySearchViewSearchFuzzyBar");
+    d->searchFuzzyBar->setModel(d->searchTreeView->filteredModel(),
+                                AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
+    d->searchFuzzyBar->setFilterModel(d->searchTreeView->albumFilterModel());
     d->folderView->setSpacing(KDialog::spacingHint());
     d->folderView->setMargin(0);
 
@@ -211,7 +252,6 @@ FuzzySearchView::FuzzySearchView(QWidget *parent)
 
     // ---------------------------------------------------------------
 
-    readConfig();
     setupConnections();
 
     // ---------------------------------------------------------------
@@ -409,17 +449,8 @@ void FuzzySearchView::setupConnections()
     connect(d->tabWidget, SIGNAL(currentChanged(int)),
             this, SLOT(slotTabChanged(int)));
 
-    connect(d->fuzzySearchFolderView, SIGNAL(signalAlbumSelected(SAlbum*)),
-            this, SLOT(slotAlbumSelected(SAlbum*)));
-
-    connect(d->fuzzySearchFolderView, SIGNAL(signalRenameAlbum(SAlbum*)),
-            this, SLOT(slotRenameAlbum(SAlbum*)));
-
-    connect(d->fuzzySearchFolderView, SIGNAL(signalTextSearchFilterMatch(bool)),
-            d->searchFuzzyBar, SLOT(slotSearchResult(bool)));
-
-    connect(d->searchFuzzyBar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
-            d->fuzzySearchFolderView, SLOT(slotTextSearchFilterChanged(const SearchTextSettings&)));
+    connect(d->searchTreeView, SIGNAL(currentAlbumChanged(Album*)),
+            this, SLOT(slotAlbumSelected(Album*)));
 
     connect(d->hsSelector, SIGNAL(valueChanged(int, int)),
             this, SLOT(slotHSChanged(int, int)));
@@ -478,10 +509,19 @@ void FuzzySearchView::setupConnections()
 
 FuzzySearchView::~FuzzySearchView()
 {
-    writeConfig();
     delete d->timerSketch;
     delete d->timerImage;
     delete d;
+}
+
+SAlbum *FuzzySearchView::currentAlbum() const
+{
+    return d->searchTreeView->currentAlbum();
+}
+
+void FuzzySearchView::setCurrentAlbum(SAlbum *album)
+{
+    d->searchTreeView->slotSelectAlbum(album);
 }
 
 void FuzzySearchView::newDuplicatesSearch(Album* album)
@@ -496,19 +536,24 @@ void FuzzySearchView::newDuplicatesSearch(Album* album)
     d->tabWidget->setCurrentIndex(FuzzySearchViewPriv::DUPLICATES);
 }
 
-void FuzzySearchView::readConfig()
+void FuzzySearchView::setConfigGroup(KConfigGroup group)
 {
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(QString("FuzzySearch SideBar"));
+    StateSavingObject::setConfigGroup(group);
+    d->searchTreeView->setConfigGroup(group);
+}
 
-    d->tabWidget->setCurrentIndex(group.readEntry("FuzzySearch Tab",
+void FuzzySearchView::doLoadState()
+{
+    KConfigGroup group = getConfigGroup();
+
+    d->tabWidget->setCurrentIndex(group.readEntry(entryName(d->configTabEntry),
                                   (int)FuzzySearchViewPriv::SKETCH));
-    d->penSize->setValue(group.readEntry("Pen Sketch Size", 10));
-    d->resultsSketch->setValue(group.readEntry("Result Sketch items", 10));
-    d->hsSelector->setHue(group.readEntry("Pen Sketch Hue", 180));
-    d->hsSelector->setSaturation(group.readEntry("Pen Sketch Saturation", 128));
-    d->vSelector->setValue(group.readEntry("Pen Sketch Value", 255));
-    d->levelImage->setValue(group.readEntry("Similars Threshold", 90));
+    d->penSize->setValue(group.readEntry(entryName(d->configPenSketchSizeEntry), 10));
+    d->resultsSketch->setValue(group.readEntry(entryName(d->configResultSketchItemsEntry), 10));
+    d->hsSelector->setHue(group.readEntry(entryName(d->configPenSketchHueEntry), 180));
+    d->hsSelector->setSaturation(group.readEntry(entryName(d->configPenSketchSaturationEntry), 128));
+    d->vSelector->setValue(group.readEntry(entryName(d->configPenSkethValueEntry), 255));
+    d->levelImage->setValue(group.readEntry(entryName(d->configSimilarsThresholdEntry), 90));
     d->hsSelector->updateContents();
 
     QColor col;
@@ -518,30 +563,22 @@ void FuzzySearchView::readConfig()
     setColor(col);
 
     d->sketchWidget->setPenWidth(d->penSize->value());
+
+    d->searchTreeView->loadState();
 }
 
-void FuzzySearchView::writeConfig()
+void FuzzySearchView::doSaveState()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(QString("FuzzySearch SideBar"));
-    group.writeEntry("FuzzySearch Tab",        d->tabWidget->currentIndex());
-    group.writeEntry("Pen Sketch Size",        d->penSize->value());
-    group.writeEntry("Result Sketch items",    d->resultsSketch->value());
-    group.writeEntry("Pen Sketch Hue",         d->hsSelector->hue());
-    group.writeEntry("Pen Sketch Saturation",  d->hsSelector->saturation());
-    group.writeEntry("Pen Sketch Value",       d->vSelector->value());
-    group.writeEntry("Similars Threshold",     d->levelImage->value());
+    KConfigGroup group = getConfigGroup();
+    group.writeEntry(entryName(d->configTabEntry),                 d->tabWidget->currentIndex());
+    group.writeEntry(entryName(d->configPenSketchSizeEntry),       d->penSize->value());
+    group.writeEntry(entryName(d->configResultSketchItemsEntry),   d->resultsSketch->value());
+    group.writeEntry(entryName(d->configPenSketchHueEntry),        d->hsSelector->hue());
+    group.writeEntry(entryName(d->configPenSketchSaturationEntry), d->hsSelector->saturation());
+    group.writeEntry(entryName(d->configPenSkethValueEntry),       d->vSelector->value());
+    group.writeEntry(entryName(d->configSimilarsThresholdEntry),   d->levelImage->value());
+    d->searchTreeView->saveState();
     group.sync();
-}
-
-FuzzySearchFolderView* FuzzySearchView::folderView() const
-{
-    return d->fuzzySearchFolderView;
-}
-
-SearchTextBar* FuzzySearchView::searchBar() const
-{
-    return d->searchFuzzyBar;
 }
 
 void FuzzySearchView::setActive(bool val)
@@ -571,28 +608,10 @@ void FuzzySearchView::setActive(bool val)
 
     int tab = d->tabWidget->currentIndex();
 
-    switch(tab)
-    {
-        case FuzzySearchViewPriv::SIMILARS:
-        {
-            if (d->fuzzySearchFolderView->selectedItem())
-                d->fuzzySearchFolderView->setActive(val);
-            break;
-        }
-        case FuzzySearchViewPriv::SKETCH:
-        {
-            if (d->fuzzySearchFolderView->selectedItem())
-                d->fuzzySearchFolderView->setActive(val);
-            break;
-        }
-        default:  // DUPLICATES
-        {
-            break;
-        }
-    }
-
     if (val)
+    {
         slotTabChanged(tab);
+    }
 }
 
 void FuzzySearchView::slotTabChanged(int tab)
@@ -620,15 +639,24 @@ void FuzzySearchView::slotTabChanged(int tab)
     }
 }
 
-void FuzzySearchView::slotAlbumSelected(SAlbum* salbum)
+void FuzzySearchView::slotAlbumSelected(Album* album)
 {
+
+    kDebug() << "Selected new album" << album;
+
+    SAlbum *salbum = dynamic_cast<SAlbum*> (album);
+
     if (!salbum || !salbum->isHaarSearch())
+    {
+        kDebug() << "Not a haar search, returning";
         return;
+    }
 
     if (!d->active)
+    {
+        kDebug() << "Not active, returning";
         return;
-
-    AlbumManager::instance()->setCurrentAlbum(salbum);
+    }
 
     SearchXmlReader reader(salbum->query());
     reader.readToFirstField();
@@ -650,60 +678,6 @@ void FuzzySearchView::slotAlbumSelected(SAlbum* salbum)
         if (reader.readToStartOfElement("SketchImage"))
             d->sketchWidget->setSketchImageFromXML(reader);
     }
-}
-
-bool FuzzySearchView::checkName(QString& name)
-{
-    bool checked = checkAlbum(name);
-
-    while (!checked)
-    {
-        QString label = i18n( "Search name already exists.\n"
-                              "Please enter a new name:" );
-        bool ok;
-        QString newTitle = KInputDialog::getText(i18n("Name exists"), label, name, &ok, this);
-        if (!ok) return false;
-
-        name    = newTitle;
-        checked = checkAlbum(name);
-    }
-
-    return true;
-}
-
-bool FuzzySearchView::checkAlbum(const QString& name) const
-{
-    AlbumList list = AlbumManager::instance()->allSAlbums();
-
-    for (AlbumList::Iterator it = list.begin() ; it != list.end() ; ++it)
-    {
-        SAlbum *album = (SAlbum*)(*it);
-        if ( album->title() == name )
-            return false;
-    }
-    return true;
-}
-
-void FuzzySearchView::slotRenameAlbum(SAlbum* salbum)
-{
-    if (!salbum) return;
-
-    if (salbum->title() == FuzzySearchFolderView::currentFuzzySketchSearchName() ||
-        salbum->title() == FuzzySearchFolderView::currentFuzzyImageSearchName())
-        return;
-
-    QString oldName(salbum->title());
-    bool    ok;
-
-    QString name = KInputDialog::getText(i18n("Rename Album (%1)",oldName),
-                                         i18n("Enter new album name:"),
-                                         oldName, &ok, this);
-
-    if (!ok || name == oldName || name.isEmpty()) return;
-
-    if (!checkName(name)) return;
-
-    AlbumManager::instance()->updateSAlbum(salbum, salbum->query(), name);
 }
 
 // Sketch Searches methods -----------------------------------------------------------------------
@@ -768,11 +742,7 @@ void FuzzySearchView::slotUndoRedoStateChanged(bool hasUndo, bool hasRedo)
 
 void FuzzySearchView::slotSaveSketchSAlbum()
 {
-    QString name = d->nameEditSketch->text();
-    if (!checkName(name))
-        return;
-
-    createNewFuzzySearchAlbumFromSketch(name);
+    createNewFuzzySearchAlbumFromSketch(d->nameEditSketch->text());
 }
 
 void FuzzySearchView::slotDirtySketch()
@@ -793,34 +763,15 @@ void FuzzySearchView::slotDirtySketch()
 void FuzzySearchView::slotTimerSketchDone()
 {
     slotCheckNameEditSketchConditions();
-    createNewFuzzySearchAlbumFromSketch(FuzzySearchFolderView::currentFuzzySketchSearchName());
+    createNewFuzzySearchAlbumFromSketch(SAlbum::getTemporaryHaarTitle(DatabaseSearch::HaarSketchSearch), true);
 }
 
-void FuzzySearchView::createNewFuzzySearchAlbumFromSketch(const QString& name)
+void FuzzySearchView::createNewFuzzySearchAlbumFromSketch(const QString& name, bool force)
 {
     AlbumManager::instance()->setCurrentAlbum(0);
-
-    if (d->sketchWidget->isClear())
-        return;
-
-    // We query database here
-
-    HaarIface haarIface;
-    SearchXmlWriter writer;
-
-    writer.writeGroup();
-    writer.writeField("similarity", SearchXml::Like);
-    writer.writeAttribute("type", "signature");         // we pass a signature
-    writer.writeAttribute("numberofresults", QString::number(d->resultsSketch->value()));
-    writer.writeAttribute("sketchtype", "handdrawn");
-    writer.writeValue(haarIface.signatureAsText(d->sketchWidget->sketchImage()));
-    d->sketchWidget->sketchImageToXML(writer);
-    writer.finishField();
-    writer.finishGroup();
-
-    SAlbum* salbum = AlbumManager::instance()->createSAlbum(name, DatabaseSearch::HaarSearch, writer.xml());
-    AlbumManager::instance()->setCurrentAlbum(salbum);
-    d->sketchSAlbum = salbum;
+    d->sketchSAlbum = d->searchModificationHelper->createFuzzySearchFromSketch(
+                    name, d->sketchWidget, d->resultsSketch->value(), force);
+    d->searchTreeView->slotSelectAlbum(d->sketchSAlbum);
 }
 
 void FuzzySearchView::slotClearSketch()
@@ -871,7 +822,7 @@ void FuzzySearchView::dropEvent(QDropEvent *e)
 
         setCurrentImage(imageIDs.first());
         slotCheckNameEditImageConditions();
-        createNewFuzzySearchAlbumFromImage(FuzzySearchFolderView::currentFuzzyImageSearchName());
+        createNewFuzzySearchAlbumFromImage(SAlbum::getTemporaryHaarTitle(DatabaseSearch::HaarImageSearch));
         d->tabWidget->setCurrentIndex((int)FuzzySearchViewPriv::SIMILARS);
 
         e->acceptProposedAction();
@@ -916,7 +867,7 @@ void FuzzySearchView::setImageInfo(const ImageInfo& info)
 {
     setCurrentImage(info);
     slotCheckNameEditImageConditions();
-    createNewFuzzySearchAlbumFromImage(FuzzySearchFolderView::currentFuzzyImageSearchName());
+    createNewFuzzySearchAlbumFromImage(SAlbum::getTemporaryHaarTitle(DatabaseSearch::HaarImageSearch), true);
     d->tabWidget->setCurrentIndex((int)FuzzySearchViewPriv::SIMILARS);
 }
 
@@ -927,29 +878,13 @@ void FuzzySearchView::slotThumbnailLoaded(const LoadingDescription& desc, const 
                                              Qt::SmoothTransformation));
 }
 
-void FuzzySearchView::createNewFuzzySearchAlbumFromImage(const QString& name)
+void FuzzySearchView::createNewFuzzySearchAlbumFromImage(const QString& name,
+                bool force)
 {
     AlbumManager::instance()->setCurrentAlbum(0);
-
-    if (d->imageInfo.isNull())
-        return;
-
-    // We query database here
-
-    SearchXmlWriter writer;
-
-    writer.writeGroup();
-    writer.writeField("similarity", SearchXml::Like);
-    writer.writeAttribute("type", "imageid");
-    writer.writeAttribute("threshold", QString::number(d->levelImage->value()/100.0));
-    writer.writeAttribute("sketchtype", "scanned");
-    writer.writeValue(d->imageInfo.id());
-    writer.finishField();
-    writer.finishGroup();
-
-    SAlbum* salbum = AlbumManager::instance()->createSAlbum(name, DatabaseSearch::HaarSearch, writer.xml());
-    AlbumManager::instance()->setCurrentAlbum(salbum);
-    d->imageSAlbum = salbum;
+    d->imageSAlbum = d->searchModificationHelper->createFuzzySearchFromImage(
+                    name, d->imageInfo, d->levelImage->value() / 100.0, force);
+    d->searchTreeView->slotSelectAlbum(d->imageSAlbum);
 }
 
 void FuzzySearchView::slotCheckNameEditImageConditions()
@@ -970,11 +905,7 @@ void FuzzySearchView::slotCheckNameEditImageConditions()
 
 void FuzzySearchView::slotSaveImageSAlbum()
 {
-    QString name = d->nameEditImage->text();
-    if (!checkName(name))
-        return;
-
-    createNewFuzzySearchAlbumFromImage(name);
+    createNewFuzzySearchAlbumFromImage(d->nameEditImage->text());
 }
 
 }  // namespace Digikam

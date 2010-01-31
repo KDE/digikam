@@ -186,6 +186,16 @@ public:
     * @returns the current album
     */
     Album*    currentAlbum() const;
+
+    /**
+     * @returns the current PAlbum or null if no one is selected
+     */
+    PAlbum* currentPAlbum() const;
+
+    /**
+     * @returns the current TAlbum or null if no one is selected
+     */
+    TAlbum* currentTAlbum() const;
     //@}
 
     /** @name Finding Albums
