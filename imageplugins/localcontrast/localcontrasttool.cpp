@@ -293,7 +293,7 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
     d->blurInput1->setWhatsThis(i18n("<b>Blur</b>: How strong the image is blurred before combining with the original "
                                      "image and with the tonemapping function."));
 
-    grid2->addWidget(d->stageOne,    0, 0, 1, 1);
+    grid2->addWidget(d->stageOne,    0, 0, 1, 2);
     grid2->addWidget(d->label4,      1, 0, 1, 1);
     grid2->addWidget(d->powerInput1, 1, 1, 1, 1);
     grid2->addWidget(d->label5,      2, 0, 1, 1);
@@ -333,7 +333,7 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
     d->blurInput2->setWhatsThis(i18n("<b>Blur</b>: How strong the image is blurred before combining with the original "
                                      "image and with the tonemapping function."));
 
-    grid3->addWidget(d->stageTwo,    0, 0, 1, 1);
+    grid3->addWidget(d->stageTwo,    0, 0, 1, 2);
     grid3->addWidget(d->label6,      1, 0, 1, 1);
     grid3->addWidget(d->powerInput2, 1, 1, 1, 1);
     grid3->addWidget(d->label7,      2, 0, 1, 1);
@@ -373,7 +373,7 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
     d->blurInput3->setWhatsThis(i18n("<b>Blur</b>: How strong the image is blurred before combining with the original "
                                      "image and with the tonemapping function."));
 
-    grid4->addWidget(d->stageThree,  0, 0, 1, 1);
+    grid4->addWidget(d->stageThree,  0, 0, 1, 2);
     grid4->addWidget(d->label8,      1, 0, 1, 1);
     grid4->addWidget(d->powerInput3, 1, 1, 1, 1);
     grid4->addWidget(d->label9,      2, 0, 1, 1);
@@ -413,7 +413,7 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
     d->blurInput4->setWhatsThis(i18n("<b>Blur</b>: How strong the image is blurred before combining with the original "
                                      "image and with the tonemapping function."));
 
-    grid5->addWidget(d->stageFour,   0, 0, 1, 1);
+    grid5->addWidget(d->stageFour,   0, 0, 1, 2);
     grid5->addWidget(d->label10,     1, 0, 1, 1);
     grid5->addWidget(d->powerInput4, 1, 1, 1, 1);
     grid5->addWidget(d->label11,     2, 0, 1, 1);

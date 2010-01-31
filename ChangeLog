@@ -1,3 +1,2676 @@
+1.1.0 2009-12-20
+--------------------------------------------------------------------------------
+
+2010-01-30 17:27  cgilles
+
+	* NEWS: update
+
+2010-01-30 17:12  cgilles
+
+	* NEWS: update
+
+2010-01-30 10:48  scripty
+
+	* digikam/digikam.notifyrc,
+	  imageplugins/charcoal/digikamimageplugin_charcoal.desktop,
+	  imageplugins/inserttext/digikamimageplugin_inserttext.desktop,
+	  imageplugins/localcontrast/digikamimageplugin_localcontrast.desktop,
+	  utilities/nepomuk/digikamnepomukservice.desktop: SVN_SILENT made
+	  messages (.desktop file)
+
+2010-01-30 10:31  jmueller
+
+	* imageplugins/channelmixer/channelmixertool.cpp: make the single
+	  channel reset toolbuttons work to point to per channels defaults
+	  CCBUGS: 224682
+
+2010-01-30 09:06  aclemens
+
+	* utilities/advancedrename/parser/options/dateoption.cpp,
+	  utilities/advancedrename/parser/options/dateoption.h: Disable
+	  "Locale" date option for now, it can generate "/" characters,
+	  which are
+	  invalid, since digiKam will not create a new folder at the
+	  moment.
+	  Also add a QValidator object to the custom date format input
+	  widget.
+
+2010-01-30 08:53  aclemens
+
+	* utilities/advancedrename/advancedrenameinput.cpp: The character
+	  "/" should not be allowed for now in the AdvancedRenameLineEdit
+	  widget. Since we can not use a QValidator here, handle the event
+	  instead
+
+2010-01-30 08:39  aclemens
+
+	* utilities/imageeditor/editor/editorwindow.cpp: I have not found a
+	  solution to the "view menu" problem with the
+	  ButtonIconDisabler class. So I will disable it for now for the
+	  1.1.0 release.
+
+2010-01-29 22:30  cgilles
+
+	* NEWS: update
+
+2010-01-29 21:38  jnarboux
+
+	* digikam/imagepreviewview.cpp: fix logic
+
+2010-01-29 19:09  aclemens
+
+	* digikam/tageditdlg.cpp: The same for tags: do not allow complete
+	  empty names
+
+2010-01-29 19:09  aclemens
+
+	* digikam/albumpropsedit.cpp: It should not be possible to enter
+	  empty album names in the "New Album" dialog.
+
+2010-01-29 15:00  jnarboux
+
+	* digikam/imagepreviewview.cpp,
+	  utilities/lighttable/lighttablepreview.cpp: typo
+
+2010-01-29 13:37  cgilles
+
+	* libs/widgets/common/dzoombar.cpp, libs/widgets/common/dzoombar.h:
+	  polish
+
+2010-01-29 13:06  cgilles
+
+	* utilities/imageeditor/TODO: update
+
+2010-01-29 13:00  cgilles
+
+	* showfoto/showfotoui.rc: remove zoom action from toolbar
+
+2010-01-29 12:55  cgilles
+
+	* NEWS: update
+
+2010-01-29 12:54  cgilles
+
+	* libs/widgets/common/dzoombar.cpp, libs/widgets/common/dzoombar.h,
+	  utilities/imageeditor/canvas/canvas.cpp,
+	  utilities/imageeditor/canvas/canvas.h,
+	  utilities/imageeditor/editor/digikamimagewindowui.rc,
+	  utilities/imageeditor/editor/editorstackview.cpp,
+	  utilities/imageeditor/editor/editorstackview.h,
+	  utilities/imageeditor/editor/editorwindow.cpp,
+	  utilities/imageeditor/editor/editorwindow.h,
+	  utilities/imageeditor/editor/editorwindow_p.h: Image Editor :
+	  move zoom action from tool bar to status bar. Use new DZoomBar
+	  widget.
+	  Now editor has the same usability about zoom action than other
+	  digiKam parts, as Light Table or Preview
+	  BUGS: 197316
+
+2010-01-29 10:55  cgilles
+
+	* NEWS: update
+
+2010-01-29 10:54  cgilles
+
+	* utilities/lighttable/lighttablepreview.cpp: lighttable preview :
+	  show more details about RAW preview loaded : half size or JPEG
+	  embeded.
+	  BUGS: 156836
+
+2010-01-29 10:52  cgilles
+
+	* digikam/imagepreviewview.cpp: image preview mode : show more
+	  details about RAW preview loaded : half size or JPEG embeded.
+	  CCBUGS: 156836
+
+2010-01-29 10:33  cgilles
+
+	* utilities/setup/setupalbumview.cpp,
+	  utilities/setup/setuplighttable.cpp: add more details about file
+	  preview loading in full size or reduced size, especially with RAW
+	  files
+	  CCBUGS: 156836
+
+2010-01-28 21:12  jmueller
+
+	* NEWS, utilities/imageeditor/editor/editortoolsettings.cpp: As
+	  some tools need more space than vertically available in settings
+	  widget they get a vertical scollbar. The vertical scrollbar
+	  instantly introduces a horizontal scrollbar as the widget content
+	  do not fit into space any more. This patch adds the height of a
+	  scrollbar to minimumSizeHint()'s width so there is always enough
+	  width to display widget content and scrollbar.
+	  
+	  BUGS: 211814
+	  CCBUGS: 211524, 221989
+
+2010-01-28 20:59  jmueller
+
+	* imageplugins/localcontrast/localcontrasttool.cpp: allows the
+	  stages settings items from local contrast tool to have a smaller
+	  width
+	  CCBUGS: 221989
+
+2010-01-28 15:13  mwiesweg
+
+	* digikam/albummanager.cpp: Ensure that the initial setup of
+	  modification dates of db file directory is
+	  done after the dir watch black list is setup. Otherwise, a
+	  complete collection
+	  scan would be triggered for each first use.
+	  Also fix retrieving the directory from the dir watch path, which
+	  can be either a
+	  file or a directory path.
+	  
+	  CCBUG: 223936
+
+2010-01-28 14:44  cgilles
+
+	* CMakeLists.txt: compile
+
+2010-01-28 14:44  cgilles
+
+	* libs/widgets/common/CMakeLists.txt,
+	  libs/widgets/common/dzoombar.cpp, libs/widgets/common/dzoombar.h:
+	  prepare the future : add DZoomBar widget. Will be used later to
+	  solve #197316
+	  CCBUGS: 197316
+
+2010-01-28 13:43  cgilles
+
+	* utilities/imageeditor/widgets/CMakeLists.txt: update
+
+2010-01-28 12:45  cgilles
+
+	* digikam/albumwidgetstack.cpp, digikam/imagepreviewview.cpp,
+	  digikam/mediaplayerview.cpp, digikam/mediaplayerview.h: polish
+
+2010-01-28 12:30  cgilles
+
+	* digikam/albumwidgetstack.cpp, digikam/mediaplayerview.h: polish
+
+2010-01-28 12:27  cgilles
+
+	* digikam/albumwidgetstack.cpp, digikam/albumwidgetstack.h,
+	  digikam/imagepreviewview.cpp, digikam/imagepreviewview.h,
+	  digikam/mediaplayerview.cpp, digikam/mediaplayerview.h: add
+	  toolbar over media player view with next item, previous item, and
+	  go back to album view options.
+
+2010-01-28 10:57  cgilles
+
+	* digikam/imagepreviewview.cpp, digikam/imagepreviewview.h: in
+	  preview image mode, add rotate left/right button to overlay
+	  toolbar
+
+2010-01-28 09:11  cgilles
+
+	* NEWS: update
+
+2010-01-28 08:53  cgilles
+
+	* NEWS: update
+
+2010-01-28 08:49  cgilles
+
+	* NEWS: update
+
+2010-01-28 08:16  cgilles
+
+	* NEWS: update
+
+2010-01-27 21:19  mwiesweg
+
+	* digikam/ddragobjects.cpp: Fix dragging of items (DAlbumDrag said
+	  it could decode item drags)
+
+2010-01-26 21:56  mwiesweg
+
+	* digikam/digikamimageview.cpp, digikam/imageviewutilities.cpp,
+	  digikam/imageviewutilities.h: When deleting images, move to the
+	  next index.
+	  
+	  CCBUG: 224052
+
+2010-01-26 21:56  mwiesweg
+
+	* digikam/imagedelegate.cpp: this was a no-op. Fix dragging pixmap
+	  for multiple images.
+
+2010-01-26 11:48  cgilles
+
+	* utilities/imageeditor/editor/editorstackview.cpp: this is a non
+	  sence to switch to fit to windows if zoom to 100% is already
+	  active
+
+2010-01-26 11:34  cgilles
+
+	* showfoto/showfotoui.rc,
+	  utilities/imageeditor/editor/digikamimagewindowui.rc: as zoom to
+	  100% is now available everywhere in editor tools based on
+	  imageregionwidget, set as default button to toolbar
+
+2010-01-26 11:25  cgilles
+
+	* utilities/imageeditor/TODO: update
+
+2010-01-26 11:14  scripty
+
+	* utilities/hotplug/digikam-download.desktop.cmake,
+	  utilities/hotplug/digikam-mount-and-download.desktop.cmake,
+	  utilities/hotplug/digikam-opencamera.desktop.cmake: SVN_SILENT
+	  made messages (.desktop file)
+
+2010-01-26 10:39  cgilles
+
+	* NEWS: update
+
+2010-01-26 10:38  cgilles
+
+	* libs/dimg/filters/noisereductionsettings.cpp: CRed and CBlue
+	  parameters are inverted
+	  BUGS: 224293
+
+2010-01-26 10:00  cgilles
+
+	* libs/widgets/common/previewwidget.cpp,
+	  libs/widgets/common/previewwidget.h: handle key release event
+
+2010-01-26 09:57  cgilles
+
+	* libs/dimg/filters/noisereductionsettings.cpp: factoring tooltips
+
+2010-01-26 09:21  cgilles
+
+	* libs/widgets/common/previewwidget.cpp,
+	  libs/widgets/common/previewwidget.h,
+	  utilities/imageeditor/widgets/imageregionwidget.cpp,
+	  utilities/imageeditor/widgets/imageregionwidget.h: polish API
+
+2010-01-26 09:07  cgilles
+
+	* utilities/imageeditor/widgets/previewtoolbar.cpp,
+	  utilities/imageeditor/widgets/previewtoolbar.h: polish
+
+2010-01-26 08:12  cgilles
+
+	* imageplugins/filmgrain/filmgraintool.cpp,
+	  imageplugins/filmgrain/filmgraintool.h,
+	  imageplugins/infrared/infraredtool.cpp: polish
+
+2010-01-26 08:10  cgilles
+
+	* imageplugins/filmgrain/filmgraintool.cpp,
+	  imageplugins/infrared/infraredtool.cpp: polish
+
+2010-01-26 08:09  cgilles
+
+	* imageplugins/infrared/infraredtool.cpp,
+	  imageplugins/infrared/infraredtool.h: use rnuminput
+
+2010-01-26 08:01  cgilles
+
+	* imageplugins/infrared/CMakeLists.txt,
+	  imageplugins/infrared/imageplugin_infrared.cpp,
+	  imageplugins/infrared/imageplugin_infrared.h,
+	  imageplugins/infrared/infrared.cpp,
+	  imageplugins/infrared/infrared.h,
+	  imageplugins/infrared/infraredtool.cpp,
+	  imageplugins/infrared/infraredtool.h: polish
+
+2010-01-26 07:51  cgilles
+
+	* imageplugins/filmgrain/filmgraintool.cpp: add Try button
+
+2010-01-26 07:46  cgilles
+
+	* imageplugins/filmgrain/CMakeLists.txt,
+	  imageplugins/filmgrain/filmgraintool.cpp,
+	  imageplugins/filmgrain/filmgraintool.h: use RNumImput widget
+	  here. No need to make different gui style with LCD widget
+
+2010-01-26 07:16  cgilles
+
+	* imageplugins/filmgrain/filmgraintool.cpp,
+	  imageplugins/filmgrain/filmgraintool.h: polish
+
+2010-01-26 07:15  cgilles
+
+	* imageplugins/filmgrain/imageplugin_filmgrain.cpp,
+	  imageplugins/filmgrain/imageplugin_filmgrain.h: polish
+
+2010-01-26 07:13  cgilles
+
+	* NEWS: update
+
+2010-01-26 07:00  cgilles
+
+	* NEWS: update
+
+2010-01-26 06:54  cgilles
+
+	* utilities/imageeditor/TODO, utilities/imageeditor/widgets/TODO:
+	  move to top folder
+
+2010-01-26 06:27  jnarboux
+
+	* imageplugins/contentawareresizing/contentawareresizetool.cpp:
+	  Only allow mouse over preview in liquid rescale.
+	  
+	  FIX: 224243
+
+2010-01-26 05:22  cgilles
+
+	* NEWS: update
+
+2010-01-25 21:09  cgilles
+
+	* NEWS: update
+
+2010-01-25 20:20  cgilles
+
+	* NEWS: update
+
+2010-01-25 20:19  cgilles
+
+	* libs/widgets/common/previewwidget.cpp,
+	  libs/widgets/common/previewwidget.h,
+	  utilities/imageeditor/canvas/canvas.cpp,
+	  utilities/imageeditor/canvas/canvas.h: add keybaord handling to
+	  pan preview and editor canvas with arrow key.
+	  BUGS: 105934
+
+2010-01-25 18:44  mwiesweg
+
+	* libs/imageproperties/imagepropertiescolorstab.cpp: Reset
+	  histogram image data when url is null.
+	  Should probably also be done when switching to other tab.
+	  
+	  CCBUG: 195610
+
+2010-01-25 17:24  cgilles
+
+	* NEWS: update
+
+2010-01-25 16:38  cgilles
+
+	* libs/widgets/common/previewwidget.cpp: factoring
+
+2010-01-25 13:27  cgilles
+
+	* NEWS: update
+
+2010-01-25 13:27  cgilles
+
+	* digikam/imagepreviewview.cpp,
+	  libs/widgets/common/previewwidget.cpp,
+	  utilities/lighttable/lighttablepreview.cpp: preview mode :
+	  - Do not use content left mouse bouton event to go back to album
+	  view. Use new preview tool bar or ESC key.
+	  - Use left mouse button to pan content (middle button still
+	  available for this action too).
+	  - Add a little toolbar on the left top corner to switch between
+	  album items and go back to album view.
+	  BUGS: 183108
+
+2010-01-25 11:04  cgilles
+
+	* imageplugins/hotpixels/hotpixelstool.cpp: polish
+
+2010-01-25 11:00  cgilles
+
+	* imageplugins/hotpixels/hotpixelstool.cpp: missing buttons there
+
+2010-01-25 10:48  cgilles
+
+	* imageplugins/hotpixels/hotpixelstool.cpp: polish
+
+2010-01-25 10:45  cgilles
+
+	* imageplugins/hotpixels/blackframelistview.cpp,
+	  imageplugins/hotpixels/blackframelistview.h,
+	  imageplugins/hotpixels/blackframeparser.cpp,
+	  imageplugins/hotpixels/blackframeparser.h,
+	  imageplugins/hotpixels/hotpixelfixer.cpp,
+	  imageplugins/hotpixels/hotpixelfixer.h,
+	  imageplugins/hotpixels/hotpixelstool.cpp,
+	  imageplugins/hotpixels/hotpixelstool.h: use const ref
+
+2010-01-25 10:41  scripty
+
+	* digikam/digikam.desktop, digikam/digikam.notifyrc: SVN_SILENT
+	  made messages (.desktop file)
+
+2010-01-25 10:10  cgilles
+
+	* NEWS: update
+
+2010-01-25 10:10  cgilles
+
+	* libs/dialogs/filesaveoptionsdlg.cpp,
+	  libs/dialogs/filesaveoptionsdlg.h: files missing
+
+2010-01-25 10:08  cgilles
+
+	* CMakeLists.txt, utilities/imageeditor/editor/editorwindow.cpp,
+	  utilities/setup/setupiofiles.cpp: apply patch #40216 from David
+	  Eriksson
+	  BUGS: 224136
+
+2010-01-25 08:59  cgilles
+
+	* NEWS: update
+
+2010-01-24 19:37  cgilles
+
+	* NEWS: update
+
+2010-01-24 18:27  jwienke
+
+	* AUTHORS, data/pics/splash-digikam.png,
+	  data/pics/splash-digikam.svgz: new splash screen
+
+2010-01-24 17:07  cgilles
+
+	* AUTHORS: added showfoto 1.1.0 splashscreen credit
+
+2010-01-24 17:05  cgilles
+
+	* data/pics/splash-showfoto.png, data/pics/splash-showfoto.svgz:
+	  new Showfoto 1.1.0 splashscreen by Petr Sigut
+	  CCMAIL: sigut@sigut.net
+
+2010-01-24 14:18  cgilles
+
+	* NEWS: update
+
+2010-01-23 15:31  mwiesweg
+
+	* utilities/cameragui/gpcamera.cpp: Set the mtime of a file
+	  downloaded from a gphoto2 camera to the mtime retrieved from the
+	  camera.
+	  
+	  CCBUG: 221457
+
+2010-01-23 15:03  mwiesweg
+
+	* NEWS, digikam/albumdragdrop.cpp, digikam/albumfolderview.cpp,
+	  digikam/ddragobjects.cpp, digikam/ddragobjects.h,
+	  digikam/folderview.cpp: Allow dragging of PAlbums to Dolphin (and
+	  all other places)
+	  So far we used the database url to specify an album. Now,
+	  optionally,
+	  a file url can be provided. Dolphin now nicely shows a drop menu
+	  as well.
+	  Additionally, unify internal mimetype usage.
+	  
+	  BUG: 222469
+
+2010-01-23 07:55  cgilles
+
+	* NEWS: update
+
+2010-01-23 07:41  jnarboux
+
+	* utilities/lighttable/lighttablepreview.cpp,
+	  utilities/lighttable/lighttablewindow_p.h,
+	  utilities/setup/setuplighttable.cpp: Undo compit 1054504, this
+	  removes the option for updating zoom ratio when new image is
+	  loaded in lighttable.
+	  Make new behaviour be old default, we never update zoom ratio.
+	  
+	  CCBUGS: 210910
+
+2010-01-22 17:36  cgilles
+
+	* digikam/imagepreviewview.cpp,
+	  utilities/lighttable/lighttablepreview.cpp: do not display info
+	  message over preview if no image is loaded
+
+2010-01-22 17:13  cgilles
+
+	* utilities/queuemanager/queuemgrwindow.cpp: polish
+
+2010-01-22 17:00  cgilles
+
+	* libs/widgets/common/previewwidget.cpp,
+	  libs/widgets/common/previewwidget.h,
+	  utilities/imageeditor/widgets/imageregionwidget.cpp: polish API
+
+2010-01-22 16:39  cgilles
+
+	* NEWS: update
+
+2010-01-22 16:38  cgilles
+
+	* utilities/lighttable/lighttablewindow.cpp,
+	  utilities/lighttable/lighttablewindow_p.h: add left and right
+	  file names outside light table panels
+	  BUGS: 218179
+
+2010-01-22 16:07  cgilles
+
+	* NEWS: update
+
+2010-01-22 15:00  cgilles
+
+	* NEWS: update
+
+2010-01-22 14:58  cgilles
+
+	* digikam/imagepreviewview.cpp, digikam/imagepreviewview.h,
+	  libs/widgets/common/previewwidget.cpp,
+	  libs/widgets/common/previewwidget.h,
+	  utilities/imageeditor/widgets/imageregionwidget.cpp,
+	  utilities/imageeditor/widgets/imageregionwidget.h,
+	  utilities/lighttable/lighttablepreview.cpp,
+	  utilities/lighttable/lighttablepreview.h: with icon view preview
+	  mode and light table, show an annotation over preview area when
+	  reduced image is loaded instead full image size
+	  BUGS: 220122
+
+2010-01-22 07:36  cgilles
+
+	* utilities/imageeditor/widgets/TODO: update
+
+2010-01-22 07:35  cgilles
+
+	* NEWS: update
+
+2010-01-22 07:28  cgilles
+
+	* NEWS: update
+
+2010-01-22 07:27  cgilles
+
+	* utilities/imageeditor/widgets/TODO: update
+
+2010-01-22 07:23  cgilles
+
+	* utilities/imageeditor/widgets/TODO: update
+
+2010-01-22 07:22  cgilles
+
+	* NEWS: update
+
+2010-01-22 07:20  cgilles
+
+	* libs/widgets/common/previewwidget.cpp,
+	  libs/widgets/common/previewwidget.h,
+	  utilities/imageeditor/editor/editorstackview.cpp,
+	  utilities/imageeditor/editor/editorstackview.h,
+	  utilities/imageeditor/editor/editortooliface.cpp,
+	  utilities/imageeditor/editor/editorwindow.cpp: Zoom to fit is now
+	  available with all editor tools based on imageregionwidget
+	  as refocus and NR.
+	  BUGS: 221988
+	  BUGS: 196469
+
+2010-01-21 21:18  mwiesweg
+
+	* NEWS, libs/database/albumdb.cpp: The SQL string operator "LIKE"
+	  is, at least for SQLite, case insensitive.
+	  For albums, which are case sensitive on Unix, add an additional
+	  check in C++.
+	  
+	  BUG: 223050
+
+2010-01-21 20:46  mwiesweg
+
+	* NEWS, libs/imageproperties/imagedescedittab.cpp: Show the "Recent
+	  Tags" menu on the button immediately, not after a delay
+	  
+	  BUG: 220231
+
+2010-01-21 20:36  mwiesweg
+
+	* NEWS, utilities/imageeditor/canvas/canvas.cpp,
+	  utilities/imageeditor/canvas/dimginterface.cpp: When loading is
+	  skipped, because current image is identical, emit signals anyway
+	  so that UI is toggled appropriately
+	  
+	  BUG: 221933
+
+2010-01-21 18:36  mwiesweg
+
+	* NEWS, libs/database/collectionmanager.cpp: Check that URLs are
+	  local
+	  
+	  BUG: 221162
+
+2010-01-21 18:23  mwiesweg
+
+	* libs/database/collectionmanager.cpp: Add extra check to compare
+	  directories
+	  
+	  CCBUG: 221155
+
+2010-01-21 16:50  cgilles
+
+	* NEWS: update
+
+2010-01-21 16:46  mwiesweg
+
+	* showfoto/showfoto.cpp: Delete canvas (normally done in
+	  EditorWindow destructor) before shutting down loading cache.
+	  Dont get a crash here now.
+	  
+	  BUG: 221569
+
+2010-01-21 16:45  cgilles
+
+	* utilities/imageeditor/canvas/canvas.cpp: polish
+
+2010-01-21 16:39  cgilles
+
+	* utilities/imageeditor/editor/editorwindow.cpp: Zoom to 100% is
+	  now available with all editor tools based on imageregionwidget as
+	  refocus and NR.
+	  CCBUGS: 221988
+	  CCBUGS: 196469
+
+2010-01-21 16:23  cgilles
+
+	* utilities/imageeditor/widgets/imageregionwidget.cpp,
+	  utilities/imageeditor/widgets/imageregionwidget.h: factorize
+
+2010-01-21 15:12  cgilles
+
+	* utilities/imageeditor/widgets/imageregionwidget.cpp: polish
+
+2010-01-21 13:36  cgilles
+
+	* utilities/imageeditor/widgets/imageregionwidget.cpp: fix preview
+	  rendiring position with contiguous mode
+
+2010-01-21 11:04  cgilles
+
+	* utilities/imageeditor/widgets/imageguidewidget.cpp: polish
+
+2010-01-21 10:25  cgilles
+
+	* utilities/imageeditor/widgets/imageregionwidget.cpp: polish
+
+2010-01-21 10:08  cgilles
+
+	* utilities/imageeditor/widgets/imageregionwidget.cpp: polish
+
+2010-01-20 15:03  cgilles
+
+	* NEWS: update
+
+2010-01-20 15:02  cgilles
+
+	* imageplugins/adjustcurves/adjustcurvestool.cpp,
+	  imageplugins/adjustcurves/adjustcurvestool.h: check if picker
+	  color is valid when reset is done.
+	  BUGS: 207888
+
+2010-01-20 14:40  cgilles
+
+	* utilities/imageeditor/widgets/imageguidewidget.cpp: polish
+
+2010-01-20 13:58  cgilles
+
+	* utilities/imageeditor/widgets/imageguidewidget.cpp: polish
+
+2010-01-20 13:42  cgilles
+
+	* imageplugins/adjustcurves/adjustcurvestool.cpp: polish
+
+2010-01-20 11:47  cgilles
+
+	* imageplugins/adjustcurves/adjustcurvestool.cpp: polish
+
+2010-01-20 11:35  scripty
+
+	* digikam/digikam.desktop, digikam/digikam.notifyrc,
+	  imageplugins/contentawareresizing/digikamimageplugin_contentawareresizing.desktop,
+	  imageplugins/emboss/digikamimageplugin_emboss.desktop,
+	  imageplugins/inpainting/digikamimageplugin_inpainting.desktop,
+	  imageplugins/localcontrast/digikamimageplugin_localcontrast.desktop,
+	  imageplugins/superimpose/digikamimageplugin_superimpose.desktop,
+	  showfoto/showfoto.desktop,
+	  utilities/nepomuk/digikamnepomukservice.desktop: SVN_SILENT made
+	  messages (.desktop file)
+
+2010-01-20 11:23  cgilles
+
+	* NEWS: update
+
+2010-01-20 11:20  cgilles
+
+	* utilities/imageeditor/widgets/TODO: update
+
+2010-01-20 11:20  cgilles
+
+	* utilities/imageeditor/canvas/canvas.cpp,
+	  utilities/imageeditor/canvas/canvas.h,
+	  utilities/imageeditor/editor/editortooliface.cpp,
+	  utilities/imageeditor/widgets/imageregionwidget.cpp,
+	  utilities/imageeditor/widgets/imageregionwidget.h: Editor Tool
+	  Preview factoring : Important change here
+	  - Now editor tool based on image region widget preview can be
+	  zommed to 100% all time. there is no zomming
+	  restriction based on image size to always fit contents to preview
+	  size.
+	  - When user select a zommable editor tool, canvas zoom is applied
+	  to preview.
+	  - All preview mode are available with image region widget tools
+	  based (NR, refocus, etc...)
+	  
+	  Warnings: this commit do not finalize preview factoring and
+	  regressions tests need to be done again.
+	  I can see preview dysfunctions in some cases.
+	  
+	  TODO : port progressively all editor tools based on image guide
+	  widget (not zommable) to image region widget (zommable) as WB,
+	  curves, levels, etc...
+	  
+	  BUGS: 221987
+	  BUGS: 163284
+	  BUGS: 148072
+	  BUGS: 222975
+	  CCBUGS: 197316
+	  CCBUGS: 148235
+	  CCBUGS: 220567
+	  CCBUGS: 196469
+	  CCBUGS: 221988
+
+2010-01-20 11:10  cgilles
+
+	* utilities/imageeditor/widgets/TODO: added toto list for editor
+	  toll preview factoring
+
+2010-01-20 09:39  cgilles
+
+	* libs/widgets/common/previewwidget.cpp,
+	  libs/widgets/common/previewwidget.h: factorize
+
+2010-01-19 09:50  cgilles
+
+	* utilities/lighttable/lighttablepreview.cpp,
+	  utilities/lighttable/lighttablepreview.h: factorize
+
+2010-01-19 09:49  cgilles
+
+	* digikam/imagepreviewview.cpp, digikam/imagepreviewview.h:
+	  factorize
+
+2010-01-19 09:35  cgilles
+
+	* libs/widgets/common/previewwidget.cpp,
+	  libs/widgets/common/previewwidget.h: factorize
+
+2010-01-19 08:26  cgilles
+
+	* utilities/imageeditor/widgets/previewtoolbar.cpp: NoPreviewMode
+	  is not a valid saved mode from rc file
+
+2010-01-18 09:55  cgilles
+
+	* utilities/imageeditor/widgets/imageregionwidget.h: polish
+
+2010-01-18 09:32  cgilles
+
+	* NEWS: update
+
+2010-01-18 09:26  cgilles
+
+	* utilities/imageeditor/widgets/imageregionwidget.h: can be private
+
+2010-01-18 09:21  cgilles
+
+	* utilities/imageeditor/widgets/imageregionwidget.h: can be private
+
+2010-01-18 09:17  cgilles
+
+	* utilities/imageeditor/widgets/imageregionwidget.h: this method
+	  doen't exist
+
+2010-01-18 09:16  cgilles
+
+	* utilities/imageeditor/widgets/imageregionwidget.h: these method
+	  can be private
+
+2010-01-18 09:14  cgilles
+
+	* utilities/imageeditor/widgets/imageregionwidget.cpp,
+	  utilities/imageeditor/widgets/imageregionwidget.h: simplify
+	  constructor
+
+2010-01-18 09:08  cgilles
+
+	* utilities/imageeditor/widgets/imageguidewidget.cpp,
+	  utilities/imageeditor/widgets/imageregionwidget.cpp: polish
+
+2010-01-18 07:17  jnarboux
+
+	* imageplugins/lenscorrection/vignetting/TODO: Add TODO file for
+	  the vignetting tool.
+	  
+	  CCBUG: 218906
+	  CCBUG: 177827
+
+2010-01-17 20:47  jnarboux
+
+	* imageplugins/coreplugin/ratiocrop/imageselectionwidget.cpp: add
+	  antialiasing of the croping helpers
+
+2010-01-17 14:34  jnarboux
+
+	* imageplugins/lenscorrection/vignetting/antivignetting.cpp,
+	  imageplugins/lenscorrection/vignetting/antivignettingtool.cpp:
+	  Compute preview of vignetting effect on a downscaled version.
+
+2010-01-17 10:27  scripty
+
+	* digikam/digikam.desktop, digikam/digikam.notifyrc,
+	  imageplugins/adjustcurves/digikamimageplugin_adjustcurves.desktop,
+	  imageplugins/adjustlevels/digikamimageplugin_adjustlevels.desktop,
+	  imageplugins/blurfx/digikamimageplugin_blurfx.desktop,
+	  imageplugins/border/digikamimageplugin_border.desktop,
+	  imageplugins/channelmixer/digikamimageplugin_channelmixer.desktop,
+	  imageplugins/charcoal/digikamimageplugin_charcoal.desktop,
+	  imageplugins/colorfx/digikamimageplugin_colorfx.desktop,
+	  imageplugins/contentawareresizing/digikamimageplugin_contentawareresizing.desktop,
+	  imageplugins/coreplugin/digikamimageplugin_core.desktop,
+	  imageplugins/distortionfx/digikamimageplugin_distortionfx.desktop,
+	  imageplugins/emboss/digikamimageplugin_emboss.desktop,
+	  imageplugins/filmgrain/digikamimageplugin_filmgrain.desktop,
+	  imageplugins/freerotation/digikamimageplugin_freerotation.desktop,
+	  imageplugins/hotpixels/digikamimageplugin_hotpixels.desktop,
+	  imageplugins/infrared/digikamimageplugin_infrared.desktop,
+	  imageplugins/inpainting/digikamimageplugin_inpainting.desktop,
+	  imageplugins/inserttext/digikamimageplugin_inserttext.desktop,
+	  imageplugins/lenscorrection/digikamimageplugin_lenscorrection.desktop,
+	  imageplugins/localcontrast/digikamimageplugin_localcontrast.desktop,
+	  imageplugins/oilpaint/digikamimageplugin_oilpaint.desktop,
+	  imageplugins/perspective/digikamimageplugin_perspective.desktop,
+	  imageplugins/raindrop/digikamimageplugin_raindrop.desktop,
+	  imageplugins/restoration/digikamimageplugin_restoration.desktop,
+	  imageplugins/sheartool/digikamimageplugin_sheartool.desktop,
+	  imageplugins/superimpose/digikamimageplugin_superimpose.desktop,
+	  imageplugins/texture/digikamimageplugin_texture.desktop,
+	  imageplugins/whitebalance/digikamimageplugin_whitebalance.desktop,
+	  kioslave/digikamalbums.protocol, kioslave/digikamdates.protocol,
+	  kioslave/digikamsearch.protocol, kioslave/digikamtags.protocol,
+	  showfoto/showfoto.desktop,
+	  utilities/hotplug/digikam-download.desktop.cmake,
+	  utilities/hotplug/digikam-gphoto2-camera.desktop.cmake,
+	  utilities/hotplug/digikam-mount-and-download.desktop.cmake,
+	  utilities/hotplug/digikam-opencamera.desktop.cmake,
+	  utilities/imageeditor/editor/digikamimageplugin.desktop,
+	  utilities/nepomuk/digikamnepomukservice.desktop: SVN_SILENT made
+	  messages (.desktop file)
+
+2010-01-17 09:20  jnarboux
+
+	* imageplugins/lenscorrection/vignetting/antivignetting.cpp,
+	  imageplugins/lenscorrection/vignetting/antivignettingtool.cpp:
+	  Fix bug when radius is small, polish.
+	  
+	  CCBUG: 218906
+	  CCBUG: 177827
+	  FEATURE: 218906
+
+2010-01-17 08:23  jnarboux
+
+	* imageplugins/lenscorrection/vignetting/antivignetting.cpp,
+	  imageplugins/lenscorrection/vignetting/antivignetting.h,
+	  imageplugins/lenscorrection/vignetting/antivignettingtool.cpp:
+	  Prevent overflow, factorize code.
+	  There is still a bug when adding vignetting when radisus is
+	  smaller than 1.0.
+	  
+	  CCBUGS: 218906, 177827
+
+2010-01-16 14:21  mwiesweg
+
+	* libs/models/imagefiltersettings.cpp: Tag filter: When match
+	  condition is AND, selection "Not tagged" and any
+	  other tag means no match.
+	  When condition is OR, selects "Not tagged" files and all with the
+	  selected tags.
+
+2010-01-16 13:35  jnarboux
+
+	* imageplugins/lenscorrection/vignetting/antivignettingtool.cpp,
+	  imageplugins/lenscorrection/vignetting/antivignettingtool.h:
+	  factorize code, polish
+
+2010-01-15 22:31  jnarboux
+
+	* imageplugins/lenscorrection/vignetting/antivignetting.cpp,
+	  imageplugins/lenscorrection/vignetting/antivignetting.h,
+	  imageplugins/lenscorrection/vignetting/antivignettingtool.cpp:
+	  add support for offset can be used when adding vignetting
+
+2010-01-15 15:35  jnarboux
+
+	* imageplugins/lenscorrection/vignetting/antivignetting.cpp,
+	  imageplugins/lenscorrection/vignetting/antivignetting.h,
+	  imageplugins/lenscorrection/vignetting/antivignettingtool.cpp:
+	  Add option to add vignetting.
+	  Fix radius slider whose range was too large.
+	  
+	  CCBUGS: 218906 177827
+
+2010-01-15 13:20  cgilles
+
+	* utilities/imageeditor/widgets/imageregionwidget.cpp,
+	  utilities/imageeditor/widgets/imageregionwidget.h: handle
+	  scroolbar events to clear preview rendering
+
+2010-01-15 12:55  jnarboux
+
+	* utilities/setup/setupmetadata.cpp: Clarify the descriptions of
+	  the option about metadata. The word Tags is ambiguous as it could
+	  describe keyword Tags.
+
+2010-01-15 10:58  cgilles
+
+	* NEWS: update
+
+2010-01-15 10:57  cgilles
+
+	* utilities/imageeditor/widgets/imageregionwidget.cpp: missing to
+	  handle 2 preview mode to set up contents size
+	  BUGS: 222744
+
+2010-01-15 10:52  cgilles
+
+	* libs/widgets/common/previewwidget.h: polish
+
+2010-01-14 18:32  jwienke
+
+	* NEWS: news update
+
+2010-01-14 18:31  jwienke
+
+	* utilities/imageeditor/widgets/previewtoolbar.cpp: Add tooltips
+	  for preview buttons
+	  
+	  BUG: 222748
+
+2010-01-14 17:33  jwienke
+
+	* utilities/imageeditor/widgets/previewtoolbar.h: fix warning
+
+2010-01-14 16:21  mwiesweg
+
+	* libs/imageproperties/talbumlistview.cpp: I dont clearly see when
+	  it should crash, but there is a bit of dereferencing.
+	  Make sure every dereferenced pointer is checked.
+	  Cannot prove that this fixed the bug, but it should.
+	  
+	  CCBUG: 222698
+
+2010-01-14 14:53  cgilles
+
+	* NEWS: update
+
+2010-01-14 14:49  cgilles
+
+	* imageplugins/blurfx/blurfxtool.cpp,
+	  imageplugins/charcoal/charcoaltool.cpp,
+	  imageplugins/coreplugin/blurtool.cpp,
+	  imageplugins/coreplugin/noisereductiontool.cpp,
+	  imageplugins/coreplugin/profileconversiontool.cpp,
+	  imageplugins/coreplugin/sharpentool.cpp,
+	  imageplugins/emboss/embosstool.cpp,
+	  imageplugins/filmgrain/filmgraintool.cpp,
+	  imageplugins/infrared/infraredtool.cpp,
+	  imageplugins/localcontrast/localcontrasttool.cpp,
+	  imageplugins/oilpaint/oilpainttool.cpp,
+	  imageplugins/restoration/restorationtool.cpp,
+	  imageplugins/texture/texturetool.cpp,
+	  utilities/imageeditor/widgets/imageregionwidget.cpp,
+	  utilities/imageeditor/widgets/imageregionwidget.h,
+	  utilities/imageeditor/widgets/previewtoolbar.h: now, all image
+	  editor tool preview have the same options available, especially
+	  OnMouseOver
+	  mode which can be used with ImageRegionWidget (NR, Sharpen,
+	  Restoration, etc...)
+	  CCMAIL:digikam-devel@kde.org
+	  BUGS: 219745
+	  BUGS: 218184
+	  BUGS: 221986
+
+2010-01-14 14:01  cgilles
+
+	* utilities/imageeditor/widgets/imageguidewidget.cpp: polish
+
+2010-01-14 13:58  cgilles
+
+	* utilities/imageeditor/widgets/imageguidewidget.cpp,
+	  utilities/imageeditor/widgets/imageguidewidget.h,
+	  utilities/imageeditor/widgets/imageregionwidget.h: polish
+
+2010-01-14 13:51  cgilles
+
+	* utilities/imageeditor/widgets/imageguidewidget.cpp,
+	  utilities/imageeditor/widgets/imageguidewidget.h,
+	  utilities/imageeditor/widgets/imageregionwidget.cpp,
+	  utilities/imageeditor/widgets/imageregionwidget.h: improve text
+	  drawing to identify target and original image
+
+2010-01-14 12:20  cgilles
+
+	* utilities/imageeditor/editor/editortool.cpp,
+	  utilities/imageeditor/widgets/previewtoolbar.cpp: if current
+	  preview is not avialable when preview mode mask is changed, use
+	  the first one available in the list
+
+2010-01-14 11:44  cgilles
+
+	* imageplugins/blurfx/blurfxtool.cpp,
+	  imageplugins/charcoal/charcoaltool.cpp,
+	  imageplugins/coreplugin/blurtool.cpp,
+	  imageplugins/coreplugin/noisereductiontool.cpp,
+	  imageplugins/coreplugin/profileconversiontool.cpp,
+	  imageplugins/coreplugin/sharpentool.cpp,
+	  imageplugins/emboss/embosstool.cpp,
+	  imageplugins/filmgrain/filmgraintool.cpp,
+	  imageplugins/hotpixels/hotpixelstool.cpp,
+	  imageplugins/infrared/infraredtool.cpp,
+	  imageplugins/localcontrast/localcontrasttool.cpp,
+	  imageplugins/oilpaint/oilpainttool.cpp,
+	  imageplugins/restoration/restorationtool.cpp,
+	  imageplugins/texture/texturetool.cpp: disable preview during
+	  rendering
+
+2010-01-14 11:19  cgilles
+
+	* CMakeLists.txt, imageplugins/blurfx/blurfxtool.cpp,
+	  imageplugins/charcoal/charcoaltool.cpp,
+	  imageplugins/coreplugin/blurtool.cpp,
+	  imageplugins/coreplugin/noisereductiontool.cpp,
+	  imageplugins/coreplugin/profileconversiontool.cpp,
+	  imageplugins/coreplugin/sharpentool.cpp,
+	  imageplugins/emboss/embosstool.cpp,
+	  imageplugins/filmgrain/filmgraintool.cpp,
+	  imageplugins/hotpixels/hotpixelstool.cpp,
+	  imageplugins/infrared/infraredtool.cpp,
+	  imageplugins/localcontrast/localcontrasttool.cpp,
+	  imageplugins/oilpaint/oilpainttool.cpp,
+	  imageplugins/restoration/restorationtool.cpp,
+	  imageplugins/texture/texturetool.cpp,
+	  utilities/imageeditor/editor/editorstackview.cpp,
+	  utilities/imageeditor/editor/editorstackview.h,
+	  utilities/imageeditor/editor/editortool.cpp,
+	  utilities/imageeditor/editor/editortooliface.cpp,
+	  utilities/imageeditor/widgets/CMakeLists.txt,
+	  utilities/imageeditor/widgets/imagepanelwidget.cpp,
+	  utilities/imageeditor/widgets/imagepanelwidget.h,
+	  utilities/imageeditor/widgets/imageregionwidget.h: Editor Preview
+	  factoring : remove ImagePanelWidget. Use ImageRegionWidget
+	  directly instead.
+	  CCMAIL: digikam-devel@kde.org
+
+2010-01-14 10:49  cgilles
+
+	* utilities/imageeditor/widgets/imagepanelwidget.h,
+	  utilities/imageeditor/widgets/imageregionwidget.cpp,
+	  utilities/imageeditor/widgets/imageregionwidget.h: polish
+
+2010-01-14 10:47  cgilles
+
+	* utilities/imageeditor/widgets/imagepanelwidget.cpp,
+	  utilities/imageeditor/widgets/imagepanelwidget.h,
+	  utilities/imageeditor/widgets/imageregionwidget.cpp,
+	  utilities/imageeditor/widgets/imageregionwidget.h: polish api
+
+2010-01-14 10:38  cgilles
+
+	* utilities/imageeditor/widgets/imagepanelwidget.cpp,
+	  utilities/imageeditor/widgets/imageregionwidget.cpp,
+	  utilities/imageeditor/widgets/imageregionwidget.h: polish api
+
+2010-01-14 10:33  cgilles
+
+	* utilities/imageeditor/widgets/imagepanelwidget.cpp,
+	  utilities/imageeditor/widgets/imageregionwidget.cpp,
+	  utilities/imageeditor/widgets/imageregionwidget.h: polish api
+
+2010-01-14 10:30  cgilles
+
+	* imageplugins/blurfx/blurfxtool.cpp: polish
+
+2010-01-14 10:29  cgilles
+
+	* utilities/imageeditor/widgets/imagepanelwidget.cpp,
+	  utilities/imageeditor/widgets/imagepanelwidget.h,
+	  utilities/imageeditor/widgets/imageregionwidget.cpp,
+	  utilities/imageeditor/widgets/imageregionwidget.h: polish api
+
+2010-01-14 10:16  cgilles
+
+	* utilities/imageeditor/widgets/imagepanelwidget.cpp,
+	  utilities/imageeditor/widgets/imageregionwidget.cpp,
+	  utilities/imageeditor/widgets/imageregionwidget.h: polish api
+
+2010-01-14 10:06  cgilles
+
+	* imageplugins/hotpixels/hotpixelstool.cpp,
+	  utilities/imageeditor/widgets/imagepanelwidget.cpp,
+	  utilities/imageeditor/widgets/imagepanelwidget.h: polish api
+
+2010-01-14 10:04  cgilles
+
+	* imageplugins/restoration/restorationtool.cpp,
+	  utilities/imageeditor/widgets/imagepanelwidget.cpp,
+	  utilities/imageeditor/widgets/imagepanelwidget.h: polish api
+
+2010-01-14 10:01  cgilles
+
+	* utilities/imageeditor/widgets/imagepanelwidget.cpp,
+	  utilities/imageeditor/widgets/imageregionwidget.cpp,
+	  utilities/imageeditor/widgets/imageregionwidget.h: polish api
+
+2010-01-14 09:56  cgilles
+
+	* utilities/imageeditor/widgets/imagepanelwidget.cpp,
+	  utilities/imageeditor/widgets/imageregionwidget.cpp,
+	  utilities/imageeditor/widgets/imageregionwidget.h: polish
+
+2010-01-14 09:40  cgilles
+
+	* imageplugins/adjustcurves/adjustcurvestool.cpp,
+	  imageplugins/adjustlevels/adjustlevelstool.cpp,
+	  imageplugins/blurfx/blurfxtool.cpp,
+	  imageplugins/charcoal/charcoaltool.cpp,
+	  imageplugins/coreplugin/blurtool.cpp,
+	  imageplugins/coreplugin/noisereductiontool.cpp,
+	  imageplugins/coreplugin/profileconversiontool.cpp,
+	  imageplugins/coreplugin/sharpentool.cpp,
+	  imageplugins/emboss/embosstool.cpp,
+	  imageplugins/filmgrain/filmgraintool.cpp,
+	  imageplugins/hotpixels/hotpixelstool.cpp,
+	  imageplugins/infrared/infraredtool.cpp,
+	  imageplugins/localcontrast/localcontrasttool.cpp,
+	  imageplugins/oilpaint/oilpainttool.cpp,
+	  imageplugins/restoration/restorationtool.cpp,
+	  imageplugins/texture/texturetool.cpp,
+	  imageplugins/whitebalance/whitebalancetool.cpp,
+	  utilities/imageeditor/editor/editortool.cpp,
+	  utilities/imageeditor/editor/editortool.h,
+	  utilities/imageeditor/editor/editortooliface.cpp,
+	  utilities/imageeditor/editor/editortooliface.h,
+	  utilities/imageeditor/editor/editorwindow.cpp,
+	  utilities/imageeditor/editor/editorwindow.h,
+	  utilities/imageeditor/widgets/imageguidewidget.cpp,
+	  utilities/imageeditor/widgets/imageguidewidget.h,
+	  utilities/imageeditor/widgets/imagepanelwidget.cpp,
+	  utilities/imageeditor/widgets/imagepanelwidget.h,
+	  utilities/imageeditor/widgets/imageregionwidget.cpp,
+	  utilities/imageeditor/widgets/imageregionwidget.h,
+	  utilities/imageeditor/widgets/previewtoolbar.cpp,
+	  utilities/imageeditor/widgets/previewtoolbar.h: Editor Preview
+	  factoring : ImagePanelWidget use PreviewToolBar to set preview
+	  mode.
+	  Next stage : removing ImagePanelWidget and use ImageRegionWidget
+	  directly.
+	  Note : It will stay only ImageRegionWidget and ImageGuidewidget
+	  to factorize to a common and unique widget,
+	  based on PreviewWidget. But before to do it, PreviewWidget must
+	  be ported to pure a Qt4 implementation (Andi (:=)))
+	  This will be done after 1.1 release, because a lots of changes
+	  have be done in editor code and it time to perform
+	  regression tests now.
+	  CCMAIL: digikam-devel@kde.org
+
+2010-01-14 07:40  cgilles
+
+	* NEWS: update
+
+2010-01-14 07:35  cgilles
+
+	* NEWS: update
+
+2010-01-13 14:18  cgilles
+
+	* utilities/imageeditor/widgets/imagepanelwidget.cpp,
+	  utilities/imageeditor/widgets/imagepanelwidget.h: polish
+
+2010-01-13 14:04  cgilles
+
+	* libs/widgets/common/paniconwidget.cpp,
+	  libs/widgets/common/paniconwidget.h: use d private container
+
+2010-01-13 13:55  cgilles
+
+	* utilities/imageeditor/widgets/imagepanelwidget.cpp,
+	  utilities/imageeditor/widgets/imagepanelwidget.h: this method is
+	  not used
+
+2010-01-13 13:43  cgilles
+
+	* libs/widgets/common/paniconwidget.cpp,
+	  libs/widgets/common/paniconwidget.h: polish
+
+2010-01-13 13:10  cgilles
+
+	* utilities/imageeditor/widgets/imageregionwidget.cpp: polish
+
+2010-01-13 12:40  cgilles
+
+	* libs/widgets/common/previewwidget.cpp,
+	  utilities/imageeditor/widgets/imagepanelwidget.cpp,
+	  utilities/imageeditor/widgets/imagepanelwidget.h,
+	  utilities/imageeditor/widgets/imageregionwidget.cpp,
+	  utilities/imageeditor/widgets/imageregionwidget.h: fix crash when
+	  preview widget is resized in editor
+
+2010-01-13 12:25  scripty
+
+	* kioslave/digikamalbums.protocol, kioslave/digikamdates.protocol,
+	  kioslave/digikamsearch.protocol, kioslave/digikamtags.protocol:
+	  SVN_SILENT made messages (.desktop file)
+
+2010-01-13 09:33  cgilles
+
+	* utilities/imageeditor/widgets/imagepanelwidget.cpp,
+	  utilities/imageeditor/widgets/imagepanelwidget.h,
+	  utilities/imageeditor/widgets/imageregionwidget.cpp,
+	  utilities/imageeditor/widgets/imageregionwidget.h: polish
+
+2010-01-13 09:15  cgilles
+
+	* utilities/imageeditor/widgets/imagepanelwidget.cpp,
+	  utilities/imageeditor/widgets/imagepanelwidget.h,
+	  utilities/imageeditor/widgets/imageregionwidget.cpp,
+	  utilities/imageeditor/widgets/imageregionwidget.h: factorize
+
+2010-01-13 09:01  cgilles
+
+	* libs/widgets/common/previewwidget.h,
+	  utilities/imageeditor/widgets/imagepanelwidget.cpp,
+	  utilities/imageeditor/widgets/imagepanelwidget.h,
+	  utilities/imageeditor/widgets/imageregionwidget.cpp,
+	  utilities/imageeditor/widgets/imageregionwidget.h: missing
+	  connection
+
+2010-01-13 08:06  cgilles
+
+	* libs/widgets/common/previewwidget.cpp,
+	  utilities/imageeditor/canvas/canvas.cpp: polish
+
+2010-01-13 07:36  cgilles
+
+	* NEWS: update
+
+2010-01-12 22:45  cgilles
+
+	* libs/widgets/common/previewwidget.cpp,
+	  libs/widgets/common/previewwidget.h,
+	  utilities/imageeditor/widgets/imagepanelwidget.cpp,
+	  utilities/imageeditor/widgets/imagepanelwidget.h: polish
+
+2010-01-12 22:13  cgilles
+
+	* CMakeLists.txt, imageplugins/blurfx/blurfxtool.cpp,
+	  imageplugins/charcoal/charcoaltool.cpp,
+	  imageplugins/coreplugin/blurtool.cpp,
+	  imageplugins/coreplugin/noisereductiontool.cpp,
+	  imageplugins/coreplugin/profileconversiontool.cpp,
+	  imageplugins/coreplugin/sharpentool.cpp,
+	  imageplugins/emboss/embosstool.cpp,
+	  imageplugins/filmgrain/filmgraintool.cpp,
+	  imageplugins/hotpixels/hotpixelstool.cpp,
+	  imageplugins/infrared/infraredtool.cpp,
+	  imageplugins/localcontrast/localcontrasttool.cpp,
+	  imageplugins/oilpaint/oilpainttool.cpp,
+	  imageplugins/restoration/restorationtool.cpp,
+	  imageplugins/texture/texturetool.cpp,
+	  utilities/imageeditor/canvas/canvas.cpp,
+	  utilities/imageeditor/canvas/canvas.h,
+	  utilities/imageeditor/editor/editortoolsettings.cpp,
+	  utilities/imageeditor/editor/editortoolsettings.h,
+	  utilities/imageeditor/widgets/CMakeLists.txt,
+	  utilities/imageeditor/widgets/imagepanelwidget.cpp,
+	  utilities/imageeditor/widgets/imagepanelwidget.h,
+	  utilities/imageeditor/widgets/imagepaniconwidget.cpp,
+	  utilities/imageeditor/widgets/imagepaniconwidget.h: image editor
+	  simplification and factorization : imagepaniconwidget removed
+	  everywhere. use pan icon view from the corner button on
+	  bottom/right
+
+2010-01-12 22:09  cgilles
+
+	* libs/widgets/common/previewwidget.cpp: polish
+
+2010-01-12 18:55  cgilles
+
+	* utilities/imageeditor/widgets/imagepanelwidget.cpp,
+	  utilities/imageeditor/widgets/imageregionwidget.cpp,
+	  utilities/imageeditor/widgets/imageregionwidget.h: polish
+
+2010-01-12 17:45  cgilles
+
+	* digikam/imagepreviewview.cpp, digikam/imagepreviewview.h,
+	  libs/widgets/common/previewwidget.cpp,
+	  libs/widgets/common/previewwidget.h,
+	  utilities/imageeditor/rawimport/rawpreview.cpp,
+	  utilities/imageeditor/rawimport/rawpreview.h,
+	  utilities/imageeditor/widgets/imageregionwidget.cpp,
+	  utilities/imageeditor/widgets/imageregionwidget.h,
+	  utilities/lighttable/lighttablepreview.cpp,
+	  utilities/lighttable/lighttablepreview.h: preview widget :
+	  factorize corner button and pan icon widget everywhere to parent
+	  class
+
+2010-01-12 14:46  cgilles
+
+	* NEWS: update
+
+2010-01-12 14:18  pino
+
+	* utilities/imageeditor/editor/imageiface.cpp: don't double-qualify
+	  constructor call
+
+2010-01-11 20:43  pino
+
+	* imageplugins/border/bordertool.cpp,
+	  imageplugins/superimpose/dirselectwidget.cpp: simplify
+	  constructor calls
+
+2010-01-11 20:13  pino
+
+	* libs/dimg/dcolor.cpp: simplify constructor call
+
+2010-01-11 15:33  cgilles
+
+	* imageplugins/lenscorrection/autocorrection/autocorrectiontool.cpp,
+	  imageplugins/lenscorrection/distortion/lensdistortiontool.cpp:
+	  polish
+
+2010-01-11 15:25  cgilles
+
+	* imageplugins/adjustcurves/adjustcurvestool.cpp,
+	  imageplugins/channelmixer/channelmixertool.cpp,
+	  utilities/imageeditor/widgets/previewtoolbar.cpp: polish
+
+2010-01-11 14:49  cgilles
+
+	* utilities/imageeditor/widgets/previewtoolbar.cpp: polish
+
+2010-01-11 14:46  cgilles
+
+	* imageplugins/contentawareresizing/contentawareresizetool.cpp,
+	  imageplugins/coreplugin/resizetool.cpp,
+	  utilities/imageeditor/widgets/previewtoolbar.h: polish
+
+2010-01-11 14:32  cgilles
+
+	* imageplugins/border/bordertool.cpp,
+	  imageplugins/freerotation/freerotationtool.cpp,
+	  imageplugins/inpainting/inpaintingtool.cpp,
+	  imageplugins/raindrop/raindroptool.cpp,
+	  imageplugins/sheartool/sheartool.cpp,
+	  utilities/imageeditor/widgets/previewtoolbar.cpp: polish
+
+2010-01-11 14:17  cgilles
+
+	* utilities/imageeditor/editor/editortool.cpp,
+	  utilities/imageeditor/editor/editortooliface.cpp: polish
+
+2010-01-11 13:55  cgilles
+
+	* CMakeLists.txt, imageplugins/adjustcurves/adjustcurvestool.cpp,
+	  imageplugins/adjustlevels/adjustlevelstool.cpp,
+	  imageplugins/border/bordertool.cpp,
+	  imageplugins/channelmixer/channelmixertool.cpp,
+	  imageplugins/colorfx/colorfxtool.cpp,
+	  imageplugins/contentawareresizing/contentawareresizetool.cpp,
+	  imageplugins/coreplugin/autocorrectiontool.cpp,
+	  imageplugins/coreplugin/bcgtool.cpp,
+	  imageplugins/coreplugin/bwsepiatool.cpp,
+	  imageplugins/coreplugin/hsl/hsltool.cpp,
+	  imageplugins/coreplugin/iccprooftool.cpp,
+	  imageplugins/coreplugin/profileconversiontool.cpp,
+	  imageplugins/coreplugin/redeyetool.cpp,
+	  imageplugins/coreplugin/resizetool.cpp,
+	  imageplugins/coreplugin/rgbtool.cpp,
+	  imageplugins/distortionfx/distortionfxtool.cpp,
+	  imageplugins/freerotation/freerotationtool.cpp,
+	  imageplugins/inpainting/inpaintingtool.cpp,
+	  imageplugins/lenscorrection/autocorrection/autocorrectiontool.cpp,
+	  imageplugins/lenscorrection/distortion/lensdistortiontool.cpp,
+	  imageplugins/lenscorrection/vignetting/antivignettingtool.cpp,
+	  imageplugins/raindrop/raindroptool.cpp,
+	  imageplugins/sheartool/sheartool.cpp,
+	  imageplugins/whitebalance/whitebalancetool.cpp,
+	  utilities/imageeditor/editor/editortool.cpp,
+	  utilities/imageeditor/editor/editortool.h,
+	  utilities/imageeditor/editor/editortooliface.cpp,
+	  utilities/imageeditor/editor/editortooliface.h,
+	  utilities/imageeditor/editor/editorwindow.cpp,
+	  utilities/imageeditor/editor/editorwindow.h,
+	  utilities/imageeditor/editor/editorwindow_p.h,
+	  utilities/imageeditor/widgets/CMakeLists.txt,
+	  utilities/imageeditor/widgets/imageguidewidget.cpp,
+	  utilities/imageeditor/widgets/imageguidewidget.h,
+	  utilities/imageeditor/widgets/imagewidget.cpp,
+	  utilities/imageeditor/widgets/imagewidget.h,
+	  utilities/imageeditor/widgets/previewtoolbar.cpp,
+	  utilities/imageeditor/widgets/previewtoolbar.h: Big changes here
+	  in image editor: Factoring !!!
+	  - Add preview tool bar to statusbar.
+	  - Remove ImageWidget wrapper.
+	  - Use ImageGuideWidget instead.
+	  - Adjust editor tools interface to handle new preview tool bar
+	  with editor tool.
+	  - Adjust editor tool api.
+	  - Regression tests not yet fully complete. Please report if
+	  necessary
+	  
+	  PENDING : ImageRegionWidget is not yet factorized to use preview
+	  tool bar from status bar.
+	  These tools still suitable, but GUI will provide tool bar to set
+	  preview mode. Please take a care.
+	  
+	  CCMAIL: digikam-devel@kde.org
+
+2010-01-11 13:47  cgilles
+
+	* utilities/imageeditor/widgets/imagewidget.cpp,
+	  utilities/imageeditor/widgets/imagewidget.h: compile
+
+2010-01-11 08:30  cgilles
+
+	* NEWS: update
+
+2010-01-10 21:23  cgilles
+
+	* utilities/imageeditor/widgets/previewtoolbar.cpp,
+	  utilities/imageeditor/widgets/previewtoolbar.h: polish
+
+2010-01-10 18:22  cgilles
+
+	* utilities/imageeditor/widgets/previewtoolbar.h: polish
+
+2010-01-10 14:30  cgilles
+
+	* CMakeLists.txt, utilities/imageeditor/widgets/CMakeLists.txt,
+	  utilities/imageeditor/widgets/previewtoolbar.cpp,
+	  utilities/imageeditor/widgets/previewtoolbar.h: introduce preview
+	  tool bar to factorize preview widget.
+	  This tool bar will be used in editor status bar.
+	  Next stage : factorize again indeep. remove imagewidget and
+	  cerainly imagepanelwidget
+
+2010-01-10 14:06  cgilles
+
+	* utilities/imageeditor/widgets/imageguidewidget.cpp,
+	  utilities/imageeditor/widgets/imageguidewidget.h,
+	  utilities/imageeditor/widgets/imagewidget.cpp: polish API again
+
+2010-01-10 14:00  cgilles
+
+	* utilities/imageeditor/rawimport/rawpreview.cpp: polish
+
+2010-01-10 12:32  cgilles
+
+	* utilities/imageeditor/editor/editortool.cpp,
+	  utilities/imageeditor/editor/editortool.h,
+	  utilities/imageeditor/editor/editortooliface.cpp,
+	  utilities/imageeditor/rawimport/rawimport.cpp,
+	  utilities/imageeditor/rawimport/rawimport.h,
+	  utilities/imageeditor/rawimport/rawpreview.cpp,
+	  utilities/imageeditor/rawimport/rawpreview.h,
+	  utilities/imageeditor/widgets/imagepanelwidget.cpp,
+	  utilities/imageeditor/widgets/imagepanelwidget.h,
+	  utilities/imageeditor/widgets/imagewidget.cpp,
+	  utilities/imageeditor/widgets/imagewidget.h: simplify api again
+
+2010-01-10 10:54  scripty
+
+	* digikam/digikam.desktop, digikam/digikam.notifyrc,
+	  imageplugins/adjustcurves/digikamimageplugin_adjustcurves.desktop,
+	  imageplugins/adjustlevels/digikamimageplugin_adjustlevels.desktop,
+	  imageplugins/blurfx/digikamimageplugin_blurfx.desktop,
+	  imageplugins/border/digikamimageplugin_border.desktop,
+	  imageplugins/channelmixer/digikamimageplugin_channelmixer.desktop,
+	  imageplugins/charcoal/digikamimageplugin_charcoal.desktop,
+	  imageplugins/colorfx/digikamimageplugin_colorfx.desktop,
+	  imageplugins/contentawareresizing/digikamimageplugin_contentawareresizing.desktop,
+	  imageplugins/coreplugin/digikamimageplugin_core.desktop,
+	  imageplugins/distortionfx/digikamimageplugin_distortionfx.desktop,
+	  imageplugins/emboss/digikamimageplugin_emboss.desktop,
+	  imageplugins/filmgrain/digikamimageplugin_filmgrain.desktop,
+	  imageplugins/freerotation/digikamimageplugin_freerotation.desktop,
+	  imageplugins/hotpixels/digikamimageplugin_hotpixels.desktop,
+	  imageplugins/infrared/digikamimageplugin_infrared.desktop,
+	  imageplugins/inpainting/digikamimageplugin_inpainting.desktop,
+	  imageplugins/inserttext/digikamimageplugin_inserttext.desktop,
+	  imageplugins/lenscorrection/digikamimageplugin_lenscorrection.desktop,
+	  imageplugins/localcontrast/digikamimageplugin_localcontrast.desktop,
+	  imageplugins/oilpaint/digikamimageplugin_oilpaint.desktop,
+	  imageplugins/perspective/digikamimageplugin_perspective.desktop,
+	  imageplugins/raindrop/digikamimageplugin_raindrop.desktop,
+	  imageplugins/restoration/digikamimageplugin_restoration.desktop,
+	  imageplugins/sheartool/digikamimageplugin_sheartool.desktop,
+	  imageplugins/superimpose/digikamimageplugin_superimpose.desktop,
+	  imageplugins/texture/digikamimageplugin_texture.desktop,
+	  imageplugins/whitebalance/digikamimageplugin_whitebalance.desktop,
+	  kioslave/digikamalbums.protocol, kioslave/digikamdates.protocol,
+	  kioslave/digikamsearch.protocol, kioslave/digikamtags.protocol,
+	  showfoto/showfoto.desktop,
+	  utilities/hotplug/digikam-download.desktop.cmake,
+	  utilities/hotplug/digikam-gphoto2-camera.desktop.cmake,
+	  utilities/hotplug/digikam-mount-and-download.desktop.cmake,
+	  utilities/hotplug/digikam-opencamera.desktop.cmake,
+	  utilities/imageeditor/editor/digikamimageplugin.desktop,
+	  utilities/nepomuk/digikamnepomukservice.desktop: SVN_SILENT made
+	  messages (.desktop file)
+
+2010-01-10 10:16  mlaurent
+
+	* utilities/advancedrename/parser/modifiers/fillmodifierdialogwidget.ui,
+	  utilities/advancedrename/parser/modifiers/rangemodifierdialogwidget.ui,
+	  utilities/advancedrename/parser/modifiers/replacemodifierdialogwidget.ui,
+	  utilities/advancedrename/parser/options/sequencenumberoptiondialogwidget.ui:
+	  Fix ui files
+
+2010-01-09 23:12  cgilles
+
+	* utilities/imageeditor/canvas/dimginterface.cpp,
+	  utilities/imageeditor/canvas/dimginterface.h,
+	  utilities/imageeditor/editor/imageiface.cpp,
+	  utilities/imageeditor/editor/imageiface.h,
+	  utilities/imageeditor/widgets/imageguidewidget.cpp,
+	  utilities/imageeditor/widgets/imageguidewidget.h,
+	  utilities/imageeditor/widgets/imagewidget.cpp: polish api. code
+	  simplification
+
+2010-01-09 22:31  cgilles
+
+	* utilities/imageeditor/editor/imageiface.cpp: polish
+
+2010-01-09 21:02  aclemens
+
+	* CMakeLists.txt, libs/widgets/common/buttonicondisabler.cpp,
+	  libs/widgets/common/buttonicondisabler.h,
+	  utilities/imageeditor/editor/editorwindow.cpp: Add helper class
+	  "ButtonIconDisabler". This class can take a QAbstractButton as
+	  a child and disable the icon if the button is not toggled /
+	  checked.
+	  This makes the state of the indicator much more visible...
+	  
+	  It will look like the button is disabled, but with the difference
+	  that it still
+	  can be pressed. This will be used in the status bar of the image
+	  editor for the
+	  indicator buttons.
+	  
+	  I found a weird bug though: When using the actions via shortcuts,
+	  the icons are
+	  drawn correct. BUT if you select the "View" menu for the first
+	  time and the
+	  indicators were grayed out, they will be redrawn and displayed as
+	  if the
+	  buttons have been checked.
+	  I checked with GDB, but the ButtonIconDisabler class is not
+	  triggered. I don't
+	  understand what is causing this, because it only happens when you
+	  click on the
+	  menu the first time. After that this behavior is not visible.
+	  
+	  Any idea why this is happening? If we can't find a solution, I
+	  guess we need to
+	  remove the ButtonIconDisabler class again.
+	  
+	  CCMAIL:digikam-devel@kde.org
+
+2010-01-09 20:54  aclemens
+
+	* utilities/advancedrename/parser/modifiers/fillmodifier.cpp:
+	  Shorten tooltip for FillModifier
+
+2010-01-09 20:54  aclemens
+
+	* utilities/advancedrename/parser/modifiers/fillmodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/fillmodifier.h: fix
+	  header
+
+2010-01-09 20:44  aclemens
+
+	* NEWS: update
+
+2010-01-09 20:31  cgilles
+
+	* NEWS: update
+
+2010-01-09 16:30  jmueller
+
+	* NEWS, utilities/imageeditor/widgets/imagewidget.cpp: remove lost
+	  exposure indicator fraqments
+	  
+	  BUGS: 221938
+
+2010-01-09 16:23  mwiesweg
+
+	* utilities/imageeditor/canvas/dimginterface.cpp,
+	  utilities/queuemanager/batchtool.cpp: Reset exif orientation,
+	  regardless if the tools requested that, if
+	  the DImg was loaded from RAW.
+	  (it's done similarly in the image editor, where a flag is set
+	  that the image
+	  was rotated if it is RAW, and subsequently the orientation is
+	  reset)
+	  
+	  CCBUG: 221113
+
+2010-01-09 15:10  mwiesweg
+
+	* utilities/imageeditor/canvas/dimginterface.cpp: Rotate by exif
+	  orientation for all images except RAWs.
+	  Previously, this was restricted to JPG/PNG/TIFF.
+	  
+	  CCBUG: 221113
+
+2010-01-09 15:10  mwiesweg
+
+	* libs/database/imagescanner.cpp, libs/dimg/dimg.cpp,
+	  libs/dimg/dimg.h, utilities/queuemanager/batchtool.cpp: Add
+	  methods which deal with attributes to DImg. Better keep this
+	  internal.
+
+2010-01-09 15:10  mwiesweg
+
+	* utilities/imageeditor/rawimport/rawpreview.cpp: Pass the widget
+	  when retrieving monitor profiles - possibly there are different
+	  profiles per screen.
+
+2010-01-09 14:41  cgilles
+
+	* CMakeLists.txt, digikam/CMakeLists.txt,
+	  imageplugins/CMakeLists.txt, libs/widgets/CMakeLists.txt,
+	  libs/widgets/imageplugins, showfoto/CMakeLists.txt,
+	  utilities/imageeditor/widgets: move image plugins widgets to
+	  editor
+
+2010-01-09 13:03  cgilles
+
+	* NEWS: typo
+
+2010-01-09 09:58  jmueller
+
+	* utilities/queuemanager/assignedlist.cpp,
+	  utilities/queuemanager/assignedlist.h: fix for 'the second tool
+	  of BQM toollist can't be moved up'
+
+2010-01-08 22:45  jmueller
+
+	* libs/widgets/common/histogrampainter.cpp: fix histogram segment
+	  calculation
+
+2010-01-08 22:23  jwienke
+
+	* NEWS: news update
+
+2010-01-08 21:39  jmueller
+
+	* libs/widgets/common/histogrampainter.cpp: fix some histogram
+	  painting issues
+	  - segment calculation
+	  - painting outside paint area
+	  - null division checks
+
+2010-01-08 14:02  cgilles
+
+	* NEWS: update
+
+2010-01-08 12:59  cgilles
+
+	* libs/widgets/imageplugins/imageguidewidget.cpp,
+	  libs/widgets/imageplugins/imageguidewidget.h,
+	  libs/widgets/imageplugins/imagepanelwidget.cpp,
+	  libs/widgets/imageplugins/imagepanelwidget.h,
+	  libs/widgets/imageplugins/imageregionwidget.cpp,
+	  libs/widgets/imageplugins/imageregionwidget.h,
+	  libs/widgets/imageplugins/imagewidget.cpp,
+	  libs/widgets/imageplugins/imagewidget.h,
+	  utilities/imageeditor/editor/editortool.cpp,
+	  utilities/imageeditor/editor/editortool.h: under/over/cm
+	  indicator : information is propagated to all editor tools preview
+	  now (I hope to not forget something there).
+	  Preview incator buttons are removed. Use status bar buttons, or
+	  menu options, or keyboard shortcuts to switch indicators.
+	  
+	  This is not yet editor tools preview factorization. This require
+	  image preview port to Qt4.
+	  Andi, please, can you help me to merge with current devel branche
+	  to trunk after 1.1 release ?
+	  
+	  At least this commit simplify source code, and will help for
+	  future factoring.
+	  
+	  CCMAIL: digikam-devel@kde.org
+
+2010-01-08 12:03  cgilles
+
+	* utilities/imageeditor/editor/editorwindow.cpp: improve
+	  over/under/CM indicator state in status bar. Make button
+	  activable or not
+
+2010-01-08 09:27  cgilles
+
+	* NEWS: update
+
+2010-01-07 21:50  jwienke
+
+	* NEWS, utilities/searchwindow/searchtabheader.cpp: do not search
+	  for empty keyword string
+	  
+	  BUG: 221343
+	  CCBUGS: 221345
+
+2010-01-07 12:56  cgilles
+
+	* libs/dmetadata/dmetadata.cpp: LR xmp tags list can be hosted to
+	  both different way : XMPBag or XMPSeq
+	  BUGS: 221460
+
+2010-01-07 12:38  cgilles
+
+	* NEWS: update
+
+2010-01-07 12:07  cgilles
+
+	* NEWS: update
+
+2010-01-07 01:47  jmhoffmann
+
+	* libs/imageproperties/markerclusterholder.h,
+	  libs/imageproperties/worldmapwidget.cpp: Compile fix, add missing
+	  includes. Marble headers had some unnecessary includes which were
+	  removed.
+
+2010-01-06 13:08  cgilles
+
+	* libs/widgets/metadata/xmpwidget.cpp: add Adobe LightRoom schema
+	  to the list
+
+2010-01-06 13:06  scripty
+
+	* utilities/hotplug/digikam-download.desktop.cmake,
+	  utilities/hotplug/digikam-mount-and-download.desktop.cmake,
+	  utilities/hotplug/digikam-opencamera.desktop.cmake: SVN_SILENT
+	  made messages (.desktop file)
+
+2010-01-06 10:14  cgilles
+
+	* NEWS: update
+
+2010-01-06 10:01  cgilles
+
+	* utilities/imageeditor/editor/editorwindow.cpp: read exposure
+	  indicator to standard settings method, not apply method
+
+2010-01-06 09:04  cgilles
+
+	* NEWS: update
+
+2010-01-06 08:48  cgilles
+
+	* NEWS: update
+
+2010-01-05 22:08  jmueller
+
+	* NEWS, utilities/queuemanager/assignedlist.cpp: emit missing
+	  signal to delegate empty queue forward
+	  BUGS: 220559
+
+2010-01-05 19:40  cgilles
+
+	* NEWS: update
+
+2010-01-05 17:08  jmueller
+
+	* NEWS, utilities/imageeditor/editor/imagewindow.cpp: fix prooving
+	  of previous index in slotBackward()
+	  BUGS: 211238
+
+2010-01-05 14:02  cgilles
+
+	* NEWS: update
+
+2010-01-05 10:01  cgilles
+
+	* NEWS: update
+
+2010-01-05 07:08  cgilles
+
+	* utilities/imageeditor/canvas/dimginterface.cpp: again, another
+	  speed-up improvements there.
+	  CCBUGS: 213001
+
+2010-01-05 06:48  cgilles
+
+	* utilities/imageeditor/canvas/dimginterface.cpp: another speedup
+	  improvent with over/under exposure indicators painting.
+	  CCBUGS : 213001
+
+2010-01-04 15:07  aspotashev
+
+	* libs/template/altlangstredit.cpp: ko-KR stands for "Korean (South
+	  Korea)", not "Korean (Korea)"
+	  CCMAIL: kde-i18n-doc@kde.org
+
+2010-01-04 12:54  cgilles
+
+	* NEWS: update
+
+2010-01-04 12:53  cgilles
+
+	* utilities/imageeditor/rawimport/rawpreview.cpp: clear cache when
+	  indicator state change
+	  BUGS: 211643
+
+2010-01-04 12:52  cgilles
+
+	* libs/widgets/common/previewwidget.cpp,
+	  libs/widgets/common/previewwidget.h: add new method to clear
+	  cache
+
+2010-01-04 11:13  cgilles
+
+	* utilities/imageeditor/editor/editortooliface.cpp,
+	  utilities/imageeditor/editor/editortooliface.h,
+	  utilities/imageeditor/editor/editorwindow.cpp,
+	  utilities/imageeditor/editor/editorwindow.h: polish
+
+2010-01-04 10:48  cgilles
+
+	* utilities/imageeditor/rawimport/rawpreview.cpp: remove debug
+
+2010-01-04 10:47  cgilles
+
+	* utilities/imageeditor/rawimport/rawpostprocessing.cpp: remove
+	  debugs
+
+2010-01-04 10:46  cgilles
+
+	* utilities/imageeditor/editor/editortool.h,
+	  utilities/imageeditor/editor/editortooliface.cpp,
+	  utilities/imageeditor/editor/editortooliface.h,
+	  utilities/imageeditor/editor/editorwindow.cpp,
+	  utilities/imageeditor/rawimport/rawimport.cpp,
+	  utilities/imageeditor/rawimport/rawimport.h,
+	  utilities/imageeditor/rawimport/rawpostprocessing.cpp,
+	  utilities/imageeditor/rawimport/rawpreview.cpp,
+	  utilities/imageeditor/rawimport/rawpreview.h: dispatch
+	  under/over/CM flags to editortool.
+	  Use it as well to RAWImport
+	  CCBUGS: 211643
+
+2010-01-04 10:45  cgilles
+
+	* libs/dimg/dimg.cpp: for obscurs reasons, DImgScale code clamp to
+	  65534 or 254 instead 65535 or 255. I don't know why exactly.
+	  This can be seen with RawPreview code when pixamp is rendered.
+	  So we adapt pureColor Mask code accordingly.
+	  CCBUGS: 211643
+
+2010-01-04 09:35  cgilles
+
+	* libs/dimg/dimg.cpp: never use int with Dimg color components.
+	  It's not compatible with endianness
+
+2010-01-04 08:41  cgilles
+
+	* utilities/imageeditor/editor/editorwindow.cpp: use same action
+	  for statusbar indicator and menu
+
+2010-01-04 08:34  cgilles
+
+	* utilities/imageeditor/editor/imagewindow.cpp: polish
+
+2010-01-04 08:34  cgilles
+
+	* showfoto/showfoto.cpp: polish
+
+2010-01-03 21:55  cgilles
+
+	* NEWS: update
+
+2010-01-03 21:33  aclemens
+
+	* utilities/queuemanager/queuelist.cpp: Fix renaming in BQM
+
+2010-01-03 21:26  jmueller
+
+	* NEWS, utilities/queuemanager/queuelist.cpp: fix wrong basename
+	  selection after first dot to last dot
+	  BUGS: 221159
+
+2010-01-03 21:06  cgilles
+
+	* utilities/imageeditor/canvas/dimginterface.cpp: speed up
+	  improvement to compute mask. No need to resize/crop full image,
+	  it's amready done previously
+
+2010-01-03 20:47  cgilles
+
+	* NEWS: update
+
+2010-01-03 20:13  jmueller
+
+	* libs/widgets/common/histogrampainter.cpp: fix compile warnings
+	  under win32
+
+2010-01-03 19:21  aspotashev
+
+	* digikam/contextmenuhelper.cpp, digikam/digikamapp.cpp,
+	  showfoto/showfoto.cpp,
+	  utilities/imageeditor/editor/editorwindow.cpp,
+	  utilities/lighttable/lighttablepreview.cpp,
+	  utilities/lighttable/lighttablewindow.cpp: Split translations of
+	  "Move to Trash" to allow different translations
+	  in pluralized and non-pluralized contexts.
+	  
+	  CCMAIL: kde-i18n-doc@kde.org
+
+2010-01-03 16:44  mwiesweg
+
+	* utilities/setup/setup.cpp: Set a wait cursor while applying setup
+	  options.
+	  The collection setup is the first to apply, I suspect that when
+	  cancelling
+	  the scan dialog, the other pages are still busy applying.
+	  The dialog is closed only when all this is finished.
+	  
+	  CCBUG: 219878
+
+2010-01-03 16:44  mwiesweg
+
+	* utilities/setup/setupcollectionview.cpp: Some code intended as a
+	  workaround, but did not work around the bug.
+	  And some minor fixes.
+
+2010-01-03 09:00  cgilles
+
+	* NEWS: update
+
+2010-01-03 08:54  cgilles
+
+	* digikam/daboutdata.h: 2010
+
+2010-01-03 01:33  jwienke
+
+	* TODO: remove old bug that is already fixed
+
+2010-01-02 16:54  mwiesweg
+
+	* NEWS, utilities/imageeditor/editor/editorwindow.cpp,
+	  utilities/imageeditor/editor/editorwindow_p.h: Make the file save
+	  dialog in EditorWindow window-modal (blocks only its own window).
+	  For such a change some care must be taken because the assumption
+	  breaks
+	  that the user cannot interact while executing the dialog. He can,
+	  from the other windows.
+	  For this dialog it is easy to cancel when the user loads
+	  different images to the editor.
+	  
+	  BUG: 219149
+
+2010-01-02 16:21  jwienke
+
+	* HACKING: small how-to on unit testing
+
+2010-01-02 14:33  mwiesweg
+
+	* libs/database/imagescanner.cpp, libs/database/imagescanner.h: Fix
+	  the bug the "Reread metadata" removes the rating.
+	  In the five main methods, set a status (new, modified or rescan).
+	  For addImage and updateImage there are still separate methods,
+	  but for the scanning scanFile() and all scan... methods behave
+	  according to the scan mode and the type of metadata they scan.
+	  I am still unsure if all copyright information should be cleared
+	  when rescanning, or if only those fields should be replaced that
+	  are found
+	  in metadata. There are usecases for both forms of behavior.
+
+2010-01-02 13:37  mwiesweg
+
+	* NEWS, utilities/batch/batchalbumssyncmetadata.cpp,
+	  utilities/batch/batchalbumssyncmetadata.h: Indeed album listing
+	  was cancelled after receiving the first package of ImageInfos,
+	  which is typically 201 images.
+	  Use a status variable, reorganize a bit.
+	  
+	  BUG: 220202
+
+2010-01-02 09:06  cgilles
+
+	* NEWS: update
+
+2010-01-01 14:26  cgilles
+
+	* NEWS: update
+
+2010-01-01 11:24  cgilles
+
+	* NEWS: update
+
+2010-01-01 09:00  aclemens
+
+	* CMakeLists.txt, Doxyfile.cmake, Doxyfile.in: Rename template file
+	  to match the other renaming styles
+
+2009-12-31 19:57  aclemens
+
+	* digikam/CMakeLists.txt,
+	  utilities/advancedrename/parser/modifiers/rangemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/rangemodifier.h,
+	  utilities/advancedrename/parser/modifiers/rangemodifierdialogwidget.ui:
+	  Add UI file for RangeModifier
+
+2009-12-31 19:21  aclemens
+
+	* digikam/CMakeLists.txt: polish
+
+2009-12-31 19:21  aclemens
+
+	* digikam/CMakeLists.txt,
+	  utilities/advancedrename/parser/modifiers/fillmodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/fillmodifier.h,
+	  utilities/advancedrename/parser/modifiers/fillmodifierdialogwidget.ui:
+	  Add UI file for FillModifier
+
+2009-12-31 19:21  aclemens
+
+	* utilities/advancedrename/parser/modifiers/replacemodifier.cpp,
+	  utilities/advancedrename/parser/options/sequencenumberoption.cpp:
+	  polish
+
+2009-12-31 19:21  aclemens
+
+	* digikam/CMakeLists.txt,
+	  utilities/advancedrename/parser/options/sequencenumberoption.cpp,
+	  utilities/advancedrename/parser/options/sequencenumberoption.h,
+	  utilities/advancedrename/parser/options/sequencenumberoptiondialogwidget.ui:
+	  Add UI file for SequenceNumberOption
+
+2009-12-31 19:21  aclemens
+
+	* digikam/CMakeLists.txt,
+	  utilities/advancedrename/parser/modifiers/replacemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/replacemodifier.h,
+	  utilities/advancedrename/parser/modifiers/replacemodifierdialogwidget.ui:
+	  Add UI file for ReplaceModifier
+
+2009-12-31 16:09  aclemens
+
+	* utilities/advancedrename/parser/modifiers/trimmedmodifier.cpp,
+	  utilities/advancedrename/parser/options/cameranameoption.cpp:
+	  polish
+
+2009-12-31 16:09  aclemens
+
+	* tests/advancedrenametest.cpp, tests/advancedrenametest.h: Add
+	  tests for FilePropertiesOption
+
+2009-12-31 13:20  aclemens
+
+	* utilities/advancedrename/parser/options/filepropertiesoption.cpp:
+	  remove the *ID tokens again, I don't think they are useful
+
+2009-12-31 13:17  aclemens
+
+	* utilities/advancedrename/parser/options/filepropertiesoption.cpp:
+	  polish
+
+2009-12-31 13:17  aclemens
+
+	* utilities/advancedrename/parser/options/filepropertiesoption.cpp:
+	  Add some more file properties renaming options (owner, ownerid,
+	  group, groupid)
+
+2009-12-31 13:17  aclemens
+
+	* utilities/advancedrename/common/parseobject.cpp,
+	  utilities/advancedrename/common/parseobject.h: Add a helper
+	  method to ease handling of escape characters
+
+2009-12-31 10:04  aclemens
+
+	* utilities/advancedrename/common/token.h: Add some
+	  documentation...
+
+2009-12-30 23:22  aclemens
+
+	* digikam/albummanager.cpp, digikam/digikamimageview.cpp,
+	  libs/database/imagescanner.cpp,
+	  utilities/searchwindow/searchfields.cpp,
+	  utilities/setup/setupicc.cpp: Change TODO keywords to doxygen
+	  style, so that we can have a generated todo
+	  list in our documentation.
+	  I only changed some keywords for now, could you please check if
+	  your IDE /
+	  editor still displays them correctly in the "Tasks view"?
+	  At least Eclipse works fine...
+	  
+	  CCMAIL:digikam-devel@kde.org
+
+2009-12-30 20:08  cgilles
+
+	* utilities/imageeditor/canvas/dimginterface.cpp: polish
+
+2009-12-30 13:10  cgilles
+
+	* NEWS: update
+
+2009-12-30 13:10  cgilles
+
+	* libs/dimg/dimg.cpp: apply patch #39456 from Jens Mueller
+	  BUGS: 220454
+
+2009-12-30 10:48  cgilles
+
+	* libs/widgets/metadata/xmpwidget.cpp: record kipi namespace
+
+2009-12-30 10:25  cgilles
+
+	* NEWS: update
+
+2009-12-30 10:23  cgilles
+
+	* utilities/queuemanager/queuemgrwindow.cpp: apply patch #39449
+	  from Jens Mueller
+	  BUGS: 216134
+
+2009-12-29 18:31  mwiesweg
+
+	* NEWS, libs/imageproperties/imagepropertiescolorstab.cpp,
+	  libs/threadimageio/previewloadthread.cpp,
+	  utilities/imageeditor/canvas/dimginterface.cpp: Always give the
+	  correct RawDecodingHint to the loading descriptions.
+	  This should ensure that the raw decoding settings are compared in
+	  detail
+	  before retrieving an image from the cache.
+	  
+	  BUG: 211681
+
+2009-12-29 18:30  mwiesweg
+
+	* libs/threadimageio/loadingcache.cpp: Remove ancient code
+
+2009-12-29 18:26  mwiesweg
+
+	* libs/threadimageio/loadsavetask.cpp,
+	  libs/threadimageio/previewtask.cpp: When needed - when loading
+	  with custom or global settings - check that the DRawDecoding
+	  settings of requested and cached image are identical.
+	  
+	  CCBUG: 211681, 219748
+
+2009-12-29 18:24  mwiesweg
+
+	* libs/threadimageio/loadingdescription.cpp,
+	  libs/threadimageio/loadingdescription.h: Update to cache key
+	  mechanism to our current needs.
+	  Add a "hint" to LoadingDescription about the kind of raw decoding
+	  settings.
+	  This simplifies things for non-raws. For raws with custom
+	  settings,
+	  it's now clear that the cache key alone is not sufficient.
+	  
+	  CCBUG: 211681 219748
+
+2009-12-29 18:24  mwiesweg
+
+	* libs/dimg/dimg.cpp, libs/dimg/dimg.h, libs/dimg/drawdecoding.h,
+	  libs/dimg/loaders/rawloader.cpp: Retrieve the DRawDecoding
+	  settings from a DImg loaded from RAW
+
+2009-12-29 15:17  cgilles
+
+	* NEWS: update
+
+2009-12-29 14:14  mwiesweg
+
+	* NEWS, libs/dimg/loaders/tiffloader.cpp: Support loading 16bit
+	  TIFFs with TIFFTAG_PLANARCONFIG == PLANARCONFIG_SEPARATE.
+	  Applying patch by Jens Müller, thank you.
+	  
+	  BUG: 192461
+
+2009-12-29 13:57  mwiesweg
+
+	* imageplugins/coreplugin/imageplugin_core.cpp: Update the favorite
+	  profiles in menu when plugin has finished.
+
+2009-12-29 13:57  mwiesweg
+
+	* NEWS, imageplugins/coreplugin/profileconversiontool.cpp: To use
+	  QCache as I intend, we need to insert some dummy bytes as
+	  payload.
+	  
+	  BUG: 220399
+
+2009-12-29 12:28  scripty
+
+	* imageplugins/distortionfx/digikamimageplugin_distortionfx.desktop:
+	  SVN_SILENT made messages (.desktop file)
+
+2009-12-29 08:49  cgilles
+
+	* NEWS: update
+
+2009-12-29 08:48  cgilles
+
+	* libs/widgets/imageplugins/imageregionwidget.cpp: apply patch
+	  #39411 from Jens Mueller
+	  BUGS: 220423
+
+2009-12-28 17:11  cgilles
+
+	* NEWS: update
+
+2009-12-28 15:04  cgilles
+
+	* NEWS: update
+
+2009-12-28 14:23  cgilles
+
+	* NEWS: update
+
+2009-12-28 10:31  scripty
+
+	* digikam/digikam.notifyrc,
+	  imageplugins/contentawareresizing/digikamimageplugin_contentawareresizing.desktop:
+	  SVN_SILENT made messages (.desktop file)
+
+2009-12-28 10:10  nlecureuil
+
+	* utilities/cameragui/cameraui.cpp: Allow to delete pictures from
+	  the cameraui window with the Delete key of the keyboard
+
+2009-12-27 23:01  jwienke
+
+	* HACKING: * an additional hint on finding doxygen errors
+	  * private slots -> private Q_SLOTS
+
+2009-12-27 22:51  jwienke
+
+	* digikam/albummanager.h, digikam/contextmenuhelper.h,
+	  digikam/kcategorizedview.h, digikam/kcategorizedview_p.h,
+	  digikam/kdatepickerpopup.h,
+	  imageplugins/hotpixels/blackframeparser.cpp,
+	  imageplugins/hotpixels/blackframeparser.h,
+	  imageplugins/localcontrast/tonemappingint.h,
+	  imageplugins/perspective/matrix.h, libs/database/albumdb.cpp,
+	  libs/database/albumdb.h, libs/database/imagecopyright.h,
+	  libs/database/imageextendedproperties.h,
+	  libs/database/imageinfo.h, libs/database/imagelister.h,
+	  libs/dimg/dimgscale.cpp, libs/dimg/filters/matrix.h,
+	  libs/dmetadata/geodetictools.cpp, libs/dmetadata/geodetictools.h,
+	  libs/imageproperties/markerclusterholder.cpp,
+	  libs/imageproperties/markerclusterholder.h,
+	  libs/threadimageio/loadingcache.h,
+	  libs/widgets/common/curveswidget.h,
+	  libs/widgets/common/sidebar.h,
+	  libs/widgets/iccprofiles/cietonguewidget.cpp,
+	  utilities/advancedrename/common/parseobject.h,
+	  utilities/cameragui/camerahistoryupdater.cpp,
+	  utilities/gpssearch/gpssearchview.cpp: make doxygen happy
+
+2009-12-27 21:20  aclemens
+
+	* utilities/advancedrename/parser/modifiers/fillmodifier.cpp:
+	  polish
+
+2009-12-27 21:11  aclemens
+
+	* utilities/advancedrename/parser/defaultrenameparser.cpp: change
+	  order
+
+2009-12-27 21:11  aclemens
+
+	* utilities/advancedrename/parser/modifiers/fillmodifier.cpp:
+	  polish
+
+2009-12-27 21:11  aclemens
+
+	* CMakeLists.txt, tests/CMakeLists.txt,
+	  tests/advancedrenametest.cpp, tests/advancedrenametest.h,
+	  utilities/advancedrename/parser/defaultrenameparser.cpp,
+	  utilities/advancedrename/parser/modifiers/fillmodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/fillmodifier.h: New
+	  modifier "FillModifier". Fill a string with a custom character to
+	  match a
+	  certain length.
+
+2009-12-27 20:14  jwienke
+
+	* CMakeLists.txt, Doxyfile.in, HACKING,
+	  libs/widgets/common/histogrampainter.h, project/Doxyfile: * allow
+	  to build doxygen documentation with cmake
+	  * updated doxyfile to newer doxygen versions and current project
+	  structure
+
+2009-12-27 20:04  mwiesweg
+
+	* NEWS, digikam/imagecategorizedview.cpp: Eat the wheel event when
+	  using it to change thumbnail size.
+	  
+	  BUG: 220131
+
+2009-12-27 19:49  cgilles
+
+	* NEWS: update
+
+2009-12-27 17:44  aclemens
+
+	* utilities/advancedrename/parser/modifiers/replacemodifier.cpp:
+	  polish
+
+2009-12-27 17:13  aclemens
+
+	* tests/advancedrenametest.cpp, tests/advancedrenametest.h,
+	  utilities/advancedrename/parser/modifiers/replacemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/replacemodifier.h: Add
+	  an "regular expression" option to the ReplaceModifier and
+	  ReplaceDialog
+
+2009-12-27 16:39  cgilles
+
+	* NEWS: update
+
+2009-12-27 15:07  aclemens
+
+	* tests/advancedrenametest.cpp,
+	  utilities/advancedrename/parser/modifiers/defaultvaluemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/replacemodifier.cpp:
+	  Make DefaultValueModifier and ReplaceModifier tokens more
+	  verbose. Since you
+	  don't have to enter all the tokens by hand and all the other
+	  modifiers and
+	  option have more meaningful names, too, we should unify these
+	  modifiers also.
+
+2009-12-27 14:52  aclemens
+
+	* utilities/advancedrename/parser/modifiers/replacemodifier.cpp:
+	  Allow empty "original" string for ReplaceModifier...
+
+2009-12-27 14:52  aclemens
+
+	* utilities/advancedrename/common/highlighter.cpp: Fix highlighter:
+	  ReplaceModifier can use RegExp and therefore string might
+	  appear that look like a renaming token. Change the order and
+	  logic of the
+	  highlighting rules to avoid wrong syntax highlighting.
+
+2009-12-27 14:26  aclemens
+
+	* NEWS: update
+
+2009-12-27 14:24  aclemens
+
+	* utilities/advancedrename/TODO: update
+
+2009-12-27 14:24  aclemens
+
+	* utilities/advancedrename/TODO,
+	  utilities/advancedrename/parser/modifiers/replacemodifier.cpp:
+	  Add regular expression support to ReplaceModifier
+
+2009-12-27 14:12  aclemens
+
+	* utilities/advancedrename/TODO: update
+
+2009-12-27 13:55  aclemens
+
+	* utilities/advancedrename/parser/modifiers/uniquemodifier.cpp:
+	  polish
+
+2009-12-27 13:53  aclemens
+
+	* utilities/advancedrename/parser/modifiers/uniquemodifier.cpp: Add
+	  more token descriptions to UniqueModifier
+
+2009-12-27 12:54  aclemens
+
+	* NEWS,
+	  utilities/advancedrename/parser/options/filepropertiesoption.cpp:
+	  Fix filename handling when name contains "dots".
+	  Use completeBaseName() to get the filename.
+	  BUG:220260
+
+2009-12-27 08:40  cgilles
+
+	* NEWS: update
+
+2009-12-27 08:38  cgilles
+
+	* libs/widgets/iccprofiles/cietonguewidget.cpp,
+	  libs/widgets/iccprofiles/cietonguewidget.h: apply patch #39261
+	  BUGS: 220203
+
+2009-12-27 08:31  cgilles
+
+	* NEWS: update
+
+2009-12-26 14:46  aclemens
+
+	* utilities/advancedrename/common/parseobject.h: polish
+
+2009-12-26 13:06  cgilles
+
+	* NEWS: update
+
+2009-12-25 23:01  cgilles
+
+	* NEWS: update
+
+2009-12-25 20:43  cgilles
+
+	* NEWS: update
+
+2009-12-25 19:38  cgilles
+
+	* NEWS: update
+
+2009-12-25 15:06  mwiesweg
+
+	* digikam/scancontroller.cpp, digikam/scancontroller.h,
+	  utilities/kipiiface/kipiinterface.cpp: Record ItemChangeHints
+	  from KIPI interface.
+	  This way, items will be updated even though the modification date
+	  is preserved.
+
+2009-12-25 15:06  mwiesweg
+
+	* libs/database/collectionscanner.cpp,
+	  libs/database/collectionscanner.h: Support ItemChangeHints in
+	  CollectionScanner
+
+2009-12-25 15:05  mwiesweg
+
+	* libs/database/collectionscannerhints.cpp,
+	  libs/database/collectionscannerhints.h: Introduce a collection
+	  scanner hint for file modification (needs rescan although
+	  modification
+	  date did not change)
+
+2009-12-25 14:36  mwiesweg
+
+	* libs/widgets/common/itemviewtooltip.cpp: Dont check for
+	  isVisible() here.
+	  I cannot reproduce the problem for the bug report, but after
+	  careful reading,
+	  that's one of the few differences I can spot to Qt's QTipLabel.
+	  
+	  CCBUG: 196917
+
+2009-12-25 14:15  mwiesweg
+
+	* utilities/imageeditor/canvas/iccsettings.cpp: There seem to be
+	  situations where to _ICC_PROFILE atom is detected
+	  but empty. Ignore it then.
+
+2009-12-25 11:52  mwiesweg
+
+	* digikam/imagecategorizedview.cpp, digikam/imagedelegate.cpp: When
+	  starting a drag, give Qt::IgnoreAction as default proposed
+	  action.
+	  This is how dolphin starts a drag as well.
+	  When dragging only one image, use it's icon as drag pixmap.
+	  
+	  CCBUG: 219908
+
+2009-12-23 16:13  mwiesweg
+
+	* libs/database/imagescanner.cpp: When scanning an image, do not
+	  overwrite rating in the database
+	  if the image's metadata has no rating set
+
+2009-12-23 12:51  mghansen
+
+	* NEWS, libs/imageproperties/worldmapwidget.cpp: Remove work-around
+	  for bug 217702 as thumbnails for movies are properly loaded now.
+	  
+	  BUG: 217702
+
+2009-12-23 11:58  jwienke
+
+	* digikam/imagedelegateoverlay.cpp: remove warning
+
+2009-12-23 11:32  jwienke
+
+	* CMakeLists.txt: use cmake macros for printing where easily
+	  possible.
+
+2009-12-22 21:54  mwiesweg
+
+	* NEWS, digikam/imagedelegateoverlay.cpp,
+	  digikam/imagedelegateoverlay.h, digikam/imagerotationoverlay.cpp,
+	  digikam/imagerotationoverlay.h: Only show the rotation overlay on
+	  images.
+	  Introduce a checkIndex method that overlay can override for such
+	  purposes.
+	  
+	  BUG: 217860
+
+2009-12-22 20:01  mwiesweg
+
+	* libs/threadimageio/thumbnailloadthread.cpp: When loading with KDE
+	  loader, the thread's default size was always used,
+	  not the one specified to find()
+	  
+	  CCBUG: 217702
+
+2009-12-22 18:32  mwiesweg
+
+	* utilities/setup/setupicc.cpp: Show info about system-wide set
+	  monitor profile as well
+
+2009-12-22 10:23  aclemens
+
+	* utilities/advancedrename/common/tooltipcreator.cpp,
+	  utilities/advancedrename/parser/modifiers/defaultvaluemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/rangemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/replacemodifier.cpp,
+	  utilities/advancedrename/parser/options/dateoption.cpp,
+	  utilities/advancedrename/parser/options/metadataoption.cpp,
+	  utilities/advancedrename/parser/options/sequencenumberoption.cpp:
+	  fix option parsing
+
+2009-12-22 10:23  aclemens
+
+	* utilities/advancedrename/TODO: update
+
+2009-12-22 10:23  aclemens
+
+	* CMakeLists.txt, tests/CMakeLists.txt,
+	  utilities/advancedrename/parser/defaultrenameparser.cpp,
+	  utilities/advancedrename/parser/modifiers/casemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/casemodifier.h,
+	  utilities/advancedrename/parser/modifiers/firstletterofeachworduppercasemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/firstletterofeachworduppercasemodifier.h,
+	  utilities/advancedrename/parser/modifiers/lowercasemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/lowercasemodifier.h,
+	  utilities/advancedrename/parser/modifiers/uppercasemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/uppercasemodifier.h:
+	  Merge all case modifiers into one modifier
+
+2009-12-21 19:39  mwiesweg
+
+	* NEWS, utilities/imageeditor/canvas/colorcorrectiondlg.cpp: Fix
+	  crash.
+	  It seems during the whole beta testing phase noone hit this
+	  particular code path...
+	  
+	  BUG: 219559
+
+2009-12-21 19:39  mwiesweg
+
+	* libs/dimg/loaders/pngloader.cpp: Fix 16bit PNG loading on Big
+	  Endian,
+	  thanks to pochini@shiny.it
+	  
+	  CCBUG: 215752
+
+2009-12-21 14:21  cgilles
+
+	* CMakeLists.txt, NEWS: 1.1.0 is open for commmit.
+	  Next release date is planed to 31/01/2010
+
+2009-12-21 14:17  cgilles
+
+	* NEWS, project/NEWS.1.0.0: archive
+
+2009-12-21 10:20  scripty
+
+	* digikam/digikam.desktop, digikam/digikam.notifyrc,
+	  imageplugins/adjustcurves/digikamimageplugin_adjustcurves.desktop,
+	  imageplugins/adjustlevels/digikamimageplugin_adjustlevels.desktop,
+	  imageplugins/blurfx/digikamimageplugin_blurfx.desktop,
+	  imageplugins/border/digikamimageplugin_border.desktop,
+	  imageplugins/channelmixer/digikamimageplugin_channelmixer.desktop,
+	  imageplugins/charcoal/digikamimageplugin_charcoal.desktop,
+	  imageplugins/colorfx/digikamimageplugin_colorfx.desktop,
+	  imageplugins/contentawareresizing/digikamimageplugin_contentawareresizing.desktop,
+	  imageplugins/coreplugin/digikamimageplugin_core.desktop,
+	  imageplugins/distortionfx/digikamimageplugin_distortionfx.desktop,
+	  imageplugins/emboss/digikamimageplugin_emboss.desktop,
+	  imageplugins/filmgrain/digikamimageplugin_filmgrain.desktop,
+	  imageplugins/freerotation/digikamimageplugin_freerotation.desktop,
+	  imageplugins/hotpixels/digikamimageplugin_hotpixels.desktop,
+	  imageplugins/infrared/digikamimageplugin_infrared.desktop,
+	  imageplugins/inpainting/digikamimageplugin_inpainting.desktop,
+	  imageplugins/inserttext/digikamimageplugin_inserttext.desktop,
+	  imageplugins/localcontrast/digikamimageplugin_localcontrast.desktop,
+	  imageplugins/oilpaint/digikamimageplugin_oilpaint.desktop,
+	  imageplugins/perspective/digikamimageplugin_perspective.desktop,
+	  imageplugins/raindrop/digikamimageplugin_raindrop.desktop,
+	  imageplugins/restoration/digikamimageplugin_restoration.desktop,
+	  imageplugins/sheartool/digikamimageplugin_sheartool.desktop,
+	  imageplugins/superimpose/digikamimageplugin_superimpose.desktop,
+	  imageplugins/texture/digikamimageplugin_texture.desktop,
+	  imageplugins/whitebalance/digikamimageplugin_whitebalance.desktop,
+	  kioslave/digikamalbums.protocol, kioslave/digikamdates.protocol,
+	  kioslave/digikamsearch.protocol, kioslave/digikamtags.protocol,
+	  showfoto/showfoto.desktop,
+	  utilities/hotplug/digikam-download.desktop.cmake,
+	  utilities/hotplug/digikam-gphoto2-camera.desktop.cmake,
+	  utilities/hotplug/digikam-mount-and-download.desktop.cmake,
+	  utilities/hotplug/digikam-opencamera.desktop.cmake,
+	  utilities/imageeditor/editor/digikamimageplugin.desktop:
+	  SVN_SILENT made messages (.desktop file)
+
+2009-12-21 09:20  cgilles
+
+	* ChangeLog: prepare 1.0.0 final release.
+
+2009-12-21 08:48  cgilles
+
+	* NEWS: update
+
 1.0.0 2009-12-20
 --------------------------------------------------------------------------------
 

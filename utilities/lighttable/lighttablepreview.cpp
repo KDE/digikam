@@ -504,17 +504,25 @@ void LightTablePreview::viewportPaintExtraData()
         QRect region = contentsRect();
         p.translate(region.topLeft());
 
-        // Drawing separate view.
-
         if (!d->loadFullImageSize)
         {
-            text     = i18n("Reduced Size Preview");
-            fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text);
-            textRect.setTopLeft(QPoint(region.topRight().x()-fontRect.width()-20, region.topRight().y()+20));
-            textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2) );
-            drawText(&p, textRect, text);
+            if (d->imageInfo.format().startsWith("RAW"))
+                text = i18n("Embedded JPEG Preview");
+            else
+                text = i18n("Reduced Size Preview");
+        }
+        else
+        {
+            if (d->imageInfo.format().startsWith("RAW"))
+                text = i18n("Half Size Raw Preview");
+            else
+                text = i18n("Full Size Preview");
         }
 
+        fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text);
+        textRect.setTopLeft(QPoint(region.topRight().x()-fontRect.width()-20, region.topRight().y()+20));
+        textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2) );
+        drawText(&p, textRect, text);
         p.end();
     }
 }

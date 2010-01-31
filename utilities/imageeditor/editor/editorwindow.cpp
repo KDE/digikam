@@ -60,7 +60,6 @@
 #include <kactioncollection.h>
 #include <kactionmenu.h>
 #include <kapplication.h>
-#include <kcombobox.h>
 #include <kconfig.h>
 #include <kcursor.h>
 #include <kedittoolbar.h>
@@ -111,6 +110,7 @@
 #include "dimginterface.h"
 #include "dlogoaction.h"
 #include "dpopupmenu.h"
+#include "dzoombar.h"
 #include "editorstackview.h"
 #include "editortooliface.h"
 #include "exposurecontainer.h"
@@ -137,6 +137,7 @@
 #include "statusprogressbar.h"
 #include "themeengine.h"
 #include "thumbbar.h"
+#include "thumbnailsize.h"
 
 namespace Digikam
 {
@@ -441,44 +442,6 @@ void EditorWindow::setupStandardActions()
 
     // --------------------------------------------------------
 
-    d->zoomCombo = new KComboBox(true);
-    d->zoomCombo->setDuplicatesEnabled(false);
-    d->zoomCombo->setFocusPolicy(Qt::ClickFocus);
-    d->zoomCombo->setInsertPolicy(QComboBox::NoInsert);
-
-    QList<double> zoomLevels;
-    zoomLevels << 10.0;
-    zoomLevels << 25.0;
-    zoomLevels << 50.0;
-    zoomLevels << 75.0;
-    zoomLevels << 100.0;
-    zoomLevels << 150.0;
-    zoomLevels << 200.0;
-    zoomLevels << 300.0;
-    zoomLevels << 450.0;
-    zoomLevels << 600.0;
-    zoomLevels << 800.0;
-    zoomLevels << 1200.0;
-
-    foreach (const double zoom, zoomLevels)
-    {
-        d->zoomCombo->addItem(QString("%1%").arg((int)zoom),
-                              QVariant(zoom));
-    }
-
-    connect(d->zoomCombo, SIGNAL(activated(int)),
-            this, SLOT(slotZoomSelected(int)));
-
-    connect(d->zoomCombo, SIGNAL(returnPressed(const QString&)),
-            this, SLOT(slotZoomTextChanged(const QString&)));
-
-    d->zoomComboAction = new QWidgetAction(this);
-    d->zoomComboAction->setDefaultWidget(d->zoomCombo);
-    d->zoomComboAction->setText(i18n("Zoom"));
-    actionCollection()->addAction("editorwindow_zoomto", d->zoomComboAction);
-
-    // --------------------------------------------------------
-
     m_fullScreenAction = KStandardAction::fullScreen(this, SLOT(slotToggleFullScreen()), this, this);
     actionCollection()->addAction("editorwindow_fullscreen", m_fullScreenAction);
 
@@ -622,10 +585,23 @@ void EditorWindow::setupStatusBar()
     d->infoLabel->setAlignment(Qt::AlignCenter);
     statusBar()->addWidget(d->infoLabel, 100);
 
-    m_resLabel  = new QLabel(statusBar());
+    m_resLabel   = new QLabel(statusBar());
     m_resLabel->setAlignment(Qt::AlignCenter);
     statusBar()->addWidget(m_resLabel, 100);
     m_resLabel->setToolTip( i18n("Information about image size"));
+
+    d->zoomBar   = new DZoomBar(statusBar());
+    d->zoomBar->setZoomToFitAction(d->zoomFitToWindowAction);
+    d->zoomBar->setZoomTo100Action(d->zoomTo100percents);
+    d->zoomBar->setZoomPlusAction(d->zoomPlusAction);
+    d->zoomBar->setZoomMinusAction(d->zoomMinusAction);
+    statusBar()->addPermanentWidget(d->zoomBar);
+
+    connect(d->zoomBar, SIGNAL(signalZoomSliderChanged(int)),
+            m_stackView, SLOT(slotZoomSliderChanged(int)));
+
+    connect(d->zoomBar, SIGNAL(signalZoomValueEdited(double)),
+            m_stackView, SLOT(setZoomFactor(double)));
 
     d->previewToolBar = new PreviewToolBar(statusBar());
     d->previewToolBar->setEnabled(false);
@@ -641,15 +617,15 @@ void EditorWindow::setupStatusBar()
 
     d->underExposureIndicator = new QToolButton(buttonsBox);
     d->underExposureIndicator->setDefaultAction(d->viewUnderExpoAction);
-    new ButtonIconDisabler(d->underExposureIndicator);
+//    new ButtonIconDisabler(d->underExposureIndicator);
 
     d->overExposureIndicator  = new QToolButton(buttonsBox);
     d->overExposureIndicator->setDefaultAction(d->viewOverExpoAction);
-    new ButtonIconDisabler(d->overExposureIndicator);
+//    new ButtonIconDisabler(d->overExposureIndicator);
 
     d->cmViewIndicator        = new QToolButton(buttonsBox);
     d->cmViewIndicator->setDefaultAction(d->viewCMViewAction);
-    new ButtonIconDisabler(d->cmViewIndicator);
+//    new ButtonIconDisabler(d->cmViewIndicator);
 
     buttonsGrp->addButton(d->underExposureIndicator);
     buttonsGrp->addButton(d->overExposureIndicator);
@@ -750,7 +726,7 @@ void EditorWindow::slotDecreaseZoom()
 void EditorWindow::slotToggleFitToWindow()
 {
     d->zoomPlusAction->setEnabled(true);
-    d->zoomComboAction->setEnabled(true);
+    d->zoomBar->setEnabled(true);
     d->zoomMinusAction->setEnabled(true);
     m_stackView->toggleFitToWindow();
 }
@@ -758,7 +734,7 @@ void EditorWindow::slotToggleFitToWindow()
 void EditorWindow::slotFitToSelect()
 {
     d->zoomPlusAction->setEnabled(true);
-    d->zoomComboAction->setEnabled(true);
+    d->zoomBar->setEnabled(true);
     d->zoomMinusAction->setEnabled(true);
     m_stackView->fitToSelect();
 }
@@ -766,29 +742,9 @@ void EditorWindow::slotFitToSelect()
 void EditorWindow::slotZoomTo100Percents()
 {
     d->zoomPlusAction->setEnabled(true);
-    d->zoomComboAction->setEnabled(true);
+    d->zoomBar->setEnabled(true);
     d->zoomMinusAction->setEnabled(true);
     m_stackView->zoomTo100Percent();
-}
-
-void EditorWindow::slotZoomSelected(int index)
-{
-    bool ok     = false;
-    double zoom = d->zoomCombo->itemData(index).toDouble(&ok) / 100.0;
-    if (ok && zoom > 0.0)
-    {
-        m_stackView->setZoomFactor(zoom);
-    }
-}
-
-void EditorWindow::slotZoomTextChanged(const QString& txt)
-{
-    bool r      = false;
-    double zoom = KGlobal::locale()->readNumber(txt, &r) / 100.0;
-    if (r && zoom > 0.0)
-    {
-        m_stackView->setZoomFactor(zoom);
-    }
 }
 
 void EditorWindow::slotZoomChanged(bool isMax, bool isMin, double zoom)
@@ -796,10 +752,9 @@ void EditorWindow::slotZoomChanged(bool isMax, bool isMin, double zoom)
     d->zoomPlusAction->setEnabled(!isMax);
     d->zoomMinusAction->setEnabled(!isMin);
 
-    d->zoomCombo->blockSignals(true);
-    d->zoomCombo->setCurrentIndex(-1);
-    d->zoomCombo->setEditText(QString::number(lround(zoom*100.0)) + QString("%"));
-    d->zoomCombo->blockSignals(false);
+    double zmin = m_stackView->zoomMin();
+    double zmax = m_stackView->zoomMax();
+    d->zoomBar->setZoom(zoom, zmin, zmax);
 }
 
 void EditorWindow::slotToggleOffFitToWindow()
@@ -1078,9 +1033,9 @@ void EditorWindow::toggleZoomActions(bool val)
 {
     d->zoomMinusAction->setEnabled(val);
     d->zoomPlusAction->setEnabled(val);
-    d->zoomComboAction->setEnabled(val);
     d->zoomTo100percents->setEnabled(val);
     d->zoomFitToWindowAction->setEnabled(val);
+    d->zoomBar->setEnabled(val);
 }
 
 void EditorWindow::toggleStandardActions(bool val)
@@ -1892,13 +1847,13 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
 
 #ifdef _WIN32
     //-- Show Settings Dialog ----------------------------------------------
-    
+
     const QString configShowImageSettingsDialog="ShowImageSettingsDialog";
     bool showDialog = group.readEntry(configShowImageSettingsDialog, true);
     if (showDialog && options->discoverFormat(newURL.fileName(), DImg::NONE)!=DImg::NONE) {
         FileSaveOptionsDlg *fileSaveOptionsDialog   = new FileSaveOptionsDlg(this, options);
         options->slotImageFileFormatChanged(newURL.fileName());
-        
+
         if (d->currentWindowModalDialog)
         {
             // go application-modal - we will create utter confusion if descending into more than one window-modal dialog

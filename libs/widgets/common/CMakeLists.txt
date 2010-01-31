@@ -7,15 +7,16 @@ INSTALL(FILES histogramwidget.h
               sidebar.h
               dpopupmenu.h
               dlogoaction.h
+              dgradientslider.h
+              dcursortracker.h
+              dzoombar.h
               statuszoombar.h
               statusnavigatebar.h
               statusprogressbar.h
               statusled.h
-              dcursortracker.h
               paniconwidget.h
               previewwidget.h
               searchtextbar.h
-              dgradientslider.h
               knotificationwrapper.h
          DESTINATION ${INCLUDE_INSTALL_DIR}/digikam COMPONENT Devel
         )

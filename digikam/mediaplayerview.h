@@ -6,7 +6,7 @@
  * Date        : 2006-20-12
  * Description : a view to embed Phonon media player.
  *
- * Copyright (C) 2006-2008 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -36,10 +36,12 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "imageinfo.h"
 
 namespace Digikam
 {
 
+class AlbumWidgetStack;
 class MediaPlayerViewPriv;
 
 class MediaPlayerView : public QStackedWidget
@@ -48,12 +50,20 @@ Q_OBJECT
 
 public:
 
-    MediaPlayerView(QWidget *parent=0);
+    MediaPlayerView(AlbumWidgetStack* parent);
     ~MediaPlayerView();
 
-    void setMediaPlayerFromUrl(const KUrl& url);
+    void setImageInfo(const ImageInfo& info = ImageInfo(),
+                      const ImageInfo& previous = ImageInfo(),
+                      const ImageInfo& next = ImageInfo());
     void escapePreview();
 
+Q_SIGNALS:
+
+    void signalNextItem();
+    void signalPrevItem();
+    void signalBack2Album();
+    
 private Q_SLOTS:
 
     void slotThemeChanged();

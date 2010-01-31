@@ -7,7 +7,7 @@
  * Description : A widget stack to embedded album content view
  *               or the current image preview.
  *
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -65,15 +65,15 @@ public:
 
 public:
 
-    AlbumWidgetStack(QWidget *parent=0);
+    AlbumWidgetStack(QWidget* parent=0);
     ~AlbumWidgetStack();
 
     /* Attach the thumbnail dock widget to the specified QMainWindow. */
     void setDockArea(QMainWindow*);
 
-    ThumbBarDock     *thumbBarDock();
-    DigikamImageView *imageIconView();
-    ImagePreviewView *imagePreviewView();
+    ThumbBarDock*     thumbBarDock();
+    DigikamImageView* imageIconView();
+    ImagePreviewView* imagePreviewView();
 
     void setPreviewItem(const ImageInfo& info = ImageInfo(),
                         const ImageInfo& previous = ImageInfo(),
@@ -124,7 +124,7 @@ public Q_SLOTS:
 private Q_SLOTS:
 
     void slotZoomFactorChanged(double);
-    void slotFileChanged(const QString &path);
+    void slotFileChanged(const QString& path);
     void slotItemsAddedOrRemoved();
     void updateThumbbar();
 

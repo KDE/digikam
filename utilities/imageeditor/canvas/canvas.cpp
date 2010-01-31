@@ -1007,6 +1007,16 @@ bool Canvas::minZoom()
     return ((d->zoom / d->zoomMultiplier) <= d->minZoom);
 }
 
+double Canvas::zoomMax()
+{
+    return d->maxZoom;
+}
+
+double Canvas::zoomMin()
+{
+    return d->minZoom;
+}
+
 bool Canvas::exifRotated()
 {
     return d->im->exifRotated();

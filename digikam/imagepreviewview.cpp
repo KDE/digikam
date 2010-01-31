@@ -37,12 +37,14 @@
 // KDE includes
 
 #include <kaction.h>
+#include <kactionmenu.h>
 #include <kapplication.h>
 #include <kcursor.h>
 #include <kdialog.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmenu.h>
+#include <kdebug.h>
 #include <kmimetype.h>
 #include <kmimetypetrader.h>
 
@@ -90,6 +92,8 @@ public:
         back2AlbumAction     = 0;
         prevAction           = 0;
         nextAction           = 0;
+        rotLeftAction        = 0;
+        rotRightAction       = 0;
     }
 
     bool               loadFullImageSize;
@@ -104,7 +108,9 @@ public:
     QAction*           back2AlbumAction;
     QAction*           prevAction;
     QAction*           nextAction;
-
+    QAction*           rotLeftAction;
+    QAction*           rotRightAction;
+    
     QToolBar*          toolBar;
 
     DImg               preview;
@@ -117,13 +123,15 @@ public:
     AlbumWidgetStack*  stack;
 };
 
-ImagePreviewView::ImagePreviewView(QWidget* parent, AlbumWidgetStack* stack)
+ImagePreviewView::ImagePreviewView(AlbumWidgetStack* parent)
                 : PreviewWidget(parent), d(new ImagePreviewViewPriv)
 {
-    d->stack            = stack;
-    d->back2AlbumAction = new QAction(SmallIcon("folder-image"), i18n("Back to Album"),                 this);
-    d->prevAction       = new QAction(SmallIcon("go-previous"),  i18nc("go to previous image", "Back"), this);
-    d->nextAction       = new QAction(SmallIcon("go-next"),      i18nc("go to next image", "Forward"),  this);
+    d->stack            = parent;
+    d->back2AlbumAction = new QAction(SmallIcon("folder-image"),        i18n("Back to Album"),                  this);
+    d->prevAction       = new QAction(SmallIcon("go-previous"),         i18nc("go to previous image", "Back"),  this);
+    d->nextAction       = new QAction(SmallIcon("go-next"),             i18nc("go to next image", "Forward"),   this);
+    d->rotLeftAction    = new QAction(SmallIcon("object-rotate-left"),  i18nc("@info:tooltip", "Rotate Left"),  this);
+    d->rotRightAction   = new QAction(SmallIcon("object-rotate-right"), i18nc("@info:tooltip", "Rotate Right"), this);
 
     // get preview size from screen size, but limit from VGA to WQXGA
     d->previewSize = qMax(KApplication::desktop()->height(),
@@ -158,13 +166,21 @@ ImagePreviewView::ImagePreviewView(QWidget* parent, AlbumWidgetStack* stack)
     connect(d->back2AlbumAction, SIGNAL(triggered()),
             this, SIGNAL(signalBack2Album()));
 
+    connect(d->rotLeftAction, SIGNAL(triggered()),
+            this, SLOT(slotRotateLeft()));
+            
+    connect(d->rotRightAction, SIGNAL(triggered()),
+            this, SLOT(slotRotateRight()));
+            
     // ------------------------------------------------------------
             
     d->toolBar = new QToolBar(this);
     d->toolBar->addAction(d->prevAction);
     d->toolBar->addAction(d->nextAction);
     d->toolBar->addAction(d->back2AlbumAction);
-
+    d->toolBar->addAction(d->rotLeftAction);
+    d->toolBar->addAction(d->rotRightAction);
+        
     slotReset();
 }
 
@@ -282,6 +298,9 @@ void ImagePreviewView::slotGotImagePreview(const LoadingDescription& description
         emit signalPreviewLoaded(true);
     }
 
+    d->rotLeftAction->setEnabled(d->isLoaded);
+    d->rotRightAction->setEnabled(d->isLoaded);
+    
     unsetCursor();
     slotNextPreload();
 }
@@ -291,12 +310,12 @@ void ImagePreviewView::slotNextPreload()
     QString loadPath;
     if (!d->nextPath.isNull())
     {
-        loadPath    = d->nextPath;
+        loadPath = d->nextPath;
         d->nextPath.clear();
     }
     else if (!d->previousPath.isNull())
     {
-        loadPath        = d->previousPath;
+        loadPath = d->previousPath;
         d->previousPath.clear();
     }
     else
@@ -314,8 +333,8 @@ void ImagePreviewView::setImageInfo(const ImageInfo& info, const ImageInfo& prev
 {
     d->imageInfo = info;
 
-    d->prevAction->setEnabled(previous.isNull() ? false : true);
-    d->nextAction->setEnabled(next.isNull()     ? false : true);
+    d->prevAction->setEnabled(!previous.isNull());
+    d->nextAction->setEnabled(!next.isNull());
     
     if (!d->imageInfo.isNull())
         setImagePath(info.filePath());
@@ -502,17 +521,25 @@ void ImagePreviewView::viewportPaintExtraData()
         QRect region = contentsRect();
         p.translate(region.topLeft());
 
-        // Drawing separate view.
-
         if (!d->loadFullImageSize)
         {
-            text     = i18n("Reduced Size Preview");
-            fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text);
-            textRect.setTopLeft(QPoint(region.topRight().x()-fontRect.width()-20, region.topRight().y()+20));
-            textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2) );
-            drawText(&p, textRect, text);
+            if (d->imageInfo.format().startsWith("RAW"))
+                text = i18n("Embedded JPEG Preview");
+            else
+                text = i18n("Reduced Size Preview");
+        }
+        else
+        {
+            if (d->imageInfo.format().startsWith("RAW"))
+                text = i18n("Half Size Raw Preview");
+            else
+                text = i18n("Full Size Preview");
         }
 
+        fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text);
+        textRect.setTopLeft(QPoint(region.topRight().x()-fontRect.width()-20, region.topRight().y()+20));
+        textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2) );
+        drawText(&p, textRect, text);
         p.end();
     }
 }
@@ -525,6 +552,34 @@ void ImagePreviewView::slotGotoTag(int tagID)
 QImage ImagePreviewView::previewToQImage() const
 {
     return d->preview.copyQImage();
+}
+
+void ImagePreviewView::slotRotateLeft()
+{
+    KActionMenu* action = dynamic_cast<KActionMenu*>(ContextMenuHelper::kipiRotateAction());
+    if (action)
+    {
+        QList<QAction*> list = action->menu()->actions();
+        foreach(QAction* ac, list)
+        {
+            if (ac->objectName() == QString("rotate_ccw"))
+                ac->trigger();
+        }
+    }
+}
+
+void ImagePreviewView::slotRotateRight()
+{
+    KActionMenu* action = dynamic_cast<KActionMenu*>(ContextMenuHelper::kipiRotateAction());
+    if (action)
+    {
+        QList<QAction*> list = action->menu()->actions();
+        foreach(QAction* ac, list)
+        {
+            if (ac->objectName() == QString("rotate_cw"))
+                ac->trigger();
+        }
+    }
 }
 
 }  // namespace Digikam
