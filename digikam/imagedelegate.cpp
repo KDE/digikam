@@ -70,7 +70,6 @@ public:
         actualPixmapRectCache.setMaxCost(250);
     }
 
-    QRect                     ratingRect;
     QRect                     dateRect;
     QRect                     modDateRect;
     QRect                     pixmapRect;
@@ -82,7 +81,22 @@ public:
 
     QCache<qlonglong, QRect>  actualPixmapRectCache;
     ImageCategoryDrawer      *categoryDrawer;
+
+    virtual void clearRects();
 };
+
+void ImageDelegatePrivate::clearRects()
+{
+    ItemViewImageDelegatePrivate::clearRects();
+    dateRect       = QRect(0, 0, 0, 0);
+    modDateRect    = QRect(0, 0, 0, 0);
+    pixmapRect     = QRect(0, 0, 0, 0);
+    nameRect       = QRect(0, 0, 0, 0);
+    commentsRect   = QRect(0, 0, 0, 0);
+    resolutionRect = QRect(0, 0, 0, 0);
+    sizeRect       = QRect(0, 0, 0, 0);
+    tagRect        = QRect(0, 0, 0, 0);
+}
 
 ImageDelegate::ImageDelegate(ImageCategorizedView *parent)
              : ItemViewImageDelegate(*new ImageDelegatePrivate, parent)
@@ -219,41 +233,10 @@ QPixmap ImageDelegate::pixmapForDrag(const QStyleOptionViewItem& option, const Q
     {
         QVariant thumbData = indexes.first().data(ImageModel::ThumbnailRole);
         if (!thumbData.isNull())
-        {
             icon = thumbData.value<QPixmap>();
-            if (qMax(icon.width(), icon.height()) > KIconLoader::SizeMedium)
-                icon = icon.scaled(KIconLoader::SizeMedium, KIconLoader::SizeMedium,
-                                   Qt::KeepAspectRatio, Qt::SmoothTransformation);
-        }
     }
 
-    if (icon.isNull())
-    {
-        icon = QPixmap(DesktopIcon("image-jp2", KIconLoader::SizeMedium));
-    }
-
-    int w = icon.width();
-    int h = icon.height();
-
-    QPixmap pix(w+4, h+4);
-    QString text(QString::number(indexes.count()));
-
-    QPainter p(&pix);
-    p.fillRect(0, 0, pix.width()-1, pix.height()-1, QColor(Qt::white));
-    p.setPen(QPen(Qt::black, 1));
-    p.drawRect(0, 0, pix.width()-1, pix.height()-1);
-    p.drawPixmap(2, 2, icon);
-    QRect r = p.boundingRect(2, 2, w, h, Qt::AlignLeft|Qt::AlignTop, text);
-    r.setWidth(qMax(r.width(), r.height()));
-    r.setHeight(qMax(r.width(), r.height()));
-    p.fillRect(r, QColor(0, 80, 0));
-    p.setPen(Qt::white);
-    QFont f(option.font);
-    f.setBold(true);
-    p.setFont(f);
-    p.drawText(r, Qt::AlignCenter, text);
-
-    return pix;
+    return makeDragPixmap(option, indexes, icon);
 }
 
 bool ImageDelegate::acceptsToolTip(const QPoint& pos, const QRect& visualRect, const QModelIndex& index, QRect *toolTipRect) const
@@ -300,178 +283,96 @@ void ImageDelegate::invalidatePaintingCache()
 void ImageDelegate::updateSizeRectsAndPixmaps()
 {
     Q_D(ImageDelegate);
-    // ---- Reset values ----
 
-    d->gridSize       = QSize(0, 0);
-    d->rect           = QRect(0, 0, 0, 0);
-    d->ratingRect     = QRect(0, 0, 0, 0);
-    d->dateRect       = QRect(0, 0, 0, 0);
-    d->modDateRect    = QRect(0, 0, 0, 0);
-    d->pixmapRect     = QRect(0, 0, 0, 0);
-    d->nameRect       = QRect(0, 0, 0, 0);
-    d->commentsRect   = QRect(0, 0, 0, 0);
-    d->resolutionRect = QRect(0, 0, 0, 0);
-    d->sizeRect       = QRect(0, 0, 0, 0);
-    d->tagRect        = QRect(0, 0, 0, 0);
+    // ---- Reset rects and prepare fonts ----
 
-    // ---- Calculate fonts ----
-
-    d->fontReg  = d->font;
-    d->fontCom  = d->font;
-    d->fontXtra = d->font;
-    d->fontCom.setItalic(true);
-
-    int fnSz = d->fontReg.pointSize();
-    if (fnSz > 0)
-    {
-        d->fontCom.setPointSize(fnSz-1);
-        d->fontXtra.setPointSize(fnSz-2);
-    }
-    else
-    {
-        fnSz = d->fontReg.pixelSize();
-        d->fontCom.setPixelSize(fnSz-1);
-        d->fontXtra.setPixelSize(fnSz-2);
-    }
+    d->clearRects();
+    prepareFonts();
 
     // ---- Fixed sizes and metrics ----
 
-    const int radius = 3;
-    const int margin = 5;
-    int w            = d->thumbSize.size() + 2*radius;
-
-    QFontMetrics fm(d->fontReg);
-    QRect oneRowRegRect = fm.boundingRect(0, 0, w, 0xFFFFFFFF,
-                                          Qt::AlignTop | Qt::AlignHCenter,
-                                          "XXXXXXXXX");
-    fm = QFontMetrics(d->fontCom);
-    QRect oneRowComRect = fm.boundingRect(0, 0, w, 0xFFFFFFFF,
-                                          Qt::AlignTop | Qt::AlignHCenter,
-                                          "XXXXXXXXX");
-    fm = QFontMetrics(d->fontXtra);
-    QRect oneRowXtraRect = fm.boundingRect(0, 0, w, 0xFFFFFFFF,
-                                           Qt::AlignTop | Qt::AlignHCenter,
-                                           "XXXXXXXXX");
-
-    QSize starPolygonSize(15, 15);
+    int w = d->thumbSize.size() + 2*d->radius;
+    prepareMetrics(w);
 
     // ---- Calculate rects ----
 
-    int y = margin;
+    int y = d->margin;
 
-    d->pixmapRect = QRect(margin, y, w, d->thumbSize.size() + 2*radius);
+    d->pixmapRect = QRect(d->margin, y, w, d->thumbSize.size() + 2*d->radius);
     y = d->pixmapRect.bottom();
 
     const AlbumSettings *albumSettings = AlbumSettings::instance();
     if (albumSettings->getIconShowRating())
     {
-        d->ratingRect = QRect(margin, y, w, starPolygonSize.height());
+        d->ratingRect = QRect(d->margin, y, w, d->starPolygonSize.height());
         y = d->ratingRect.bottom();
     }
 
     if (albumSettings->getIconShowName())
     {
-        d->nameRect = QRect(margin, y, w-margin, oneRowRegRect.height());
+        d->nameRect = QRect(d->margin, y, w-d->margin, d->oneRowRegRect.height());
         y = d->nameRect.bottom();
     }
 
     if (albumSettings->getIconShowComments())
     {
-        d->commentsRect = QRect(margin, y, w, oneRowComRect.height());
+        d->commentsRect = QRect(d->margin, y, w, d->oneRowComRect.height());
         y = d->commentsRect.bottom();
     }
 
     if (albumSettings->getIconShowDate())
     {
-        d->dateRect = QRect(margin, y, w, oneRowXtraRect.height());
+        d->dateRect = QRect(d->margin, y, w, d->oneRowXtraRect.height());
         y = d->dateRect.bottom();
     }
 
     if (albumSettings->getIconShowModDate())
     {
-        d->modDateRect = QRect(margin, y, w, oneRowXtraRect.height());
+        d->modDateRect = QRect(d->margin, y, w, d->oneRowXtraRect.height());
         y = d->modDateRect.bottom();
     }
 
     if (albumSettings->getIconShowResolution())
     {
-        d->resolutionRect = QRect(margin, y, w, oneRowXtraRect.height());
+        d->resolutionRect = QRect(d->margin, y, w, d->oneRowXtraRect.height());
         y = d->resolutionRect.bottom() ;
     }
 
     if (albumSettings->getIconShowSize())
     {
-        d->sizeRect = QRect(margin, y, w, oneRowXtraRect.height());
+        d->sizeRect = QRect(d->margin, y, w, d->oneRowXtraRect.height());
         y = d->sizeRect.bottom();
     }
 
     if (albumSettings->getIconShowTags())
     {
-        d->tagRect = QRect(margin, y, w, oneRowComRect.height());
+        d->tagRect = QRect(d->margin, y, w, d->oneRowComRect.height());
         y = d->tagRect.bottom();
     }
 
-    d->rect = QRect(0, 0, w + 2*margin, y+margin+radius);
+    d->rect = QRect(0, 0, w + 2*d->margin, y+d->margin+d->radius);
 
     d->gridSize  = QSize(d->rect.width() + d->spacing, d->rect.height() + d->spacing);
 
     // ---- Cached pixmaps ----
 
-    d->regPixmap = ThemeEngine::instance()->thumbRegPixmap(d->rect.width(),
-                                                               d->rect.height());
+    prepareBackground();
 
-    d->selPixmap = ThemeEngine::instance()->thumbSelPixmap(d->rect.width(),
-                                                               d->rect.height());
-
-    // We use antialiasing and want to pre-render the pixmaps.
-    // So we need the background at the time of painting,
-    // and the background may be a gradient, and will be different for selected items.
-    // This makes 5*2 (small) pixmaps.
     if (albumSettings->getIconShowRating())
     {
-        for (int sel=0; sel<2; ++sel)
-        {
-            QPixmap basePix;
-
-            // do this once for regular, once for selected backgrounds
-            if (sel)
-                basePix = d->selPixmap.copy(d->ratingRect);
-            else
-                basePix = d->regPixmap.copy(d->ratingRect);
-
-            for (int rating=1; rating<=5; ++rating)
-            {
-                // we store first the 5 regular, then the 5 selected pixmaps, for simplicity
-                int index = (sel * 5 + rating) - 1;
-
-                // copy background
-                d->ratingPixmaps[index] = basePix;
-                // open a painter
-                QPainter painter(&d->ratingPixmaps[index]);
-
-                // use antialiasing
-                painter.setRenderHint(QPainter::Antialiasing, true);
-                painter.setBrush(ThemeEngine::instance()->textSpecialRegColor());
-                QPen pen(ThemeEngine::instance()->textRegColor());
-                // set a pen which joins the lines at a filled angle
-                pen.setJoinStyle(Qt::MiterJoin);
-                painter.setPen(pen);
-
-                // move painter while drawing polygons
-                painter.translate( lround((d->ratingRect.width() - margin - rating*(starPolygonSize.width()+1))/2.0) + 2, 1 );
-                for (int s=0; s<rating; ++s)
-                {
-                    painter.drawPolygon(d->starPolygon, Qt::WindingFill);
-                    painter.translate(starPolygonSize.width() + 1, 0);
-                }
-            }
-        }
+        prepareRatingPixmaps();
     }
 
     // ---- Drawing related caches ----
 
-    d->actualPixmapRectCache.clear();
     clearCaches();
+}
+
+void ImageDelegate::clearCaches()
+{
+    Q_D(ImageDelegate);
+    ItemViewImageDelegate::clearCaches();
+    d->actualPixmapRectCache.clear();
 }
 
 QRect ImageDelegate::actualPixmapRect(qlonglong imageid) const

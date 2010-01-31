@@ -54,17 +54,10 @@ public:
     virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex & index) const;
     virtual QSize gridSize() const;
 
-    /** You must set these options from the view */
+    // reimplemented from DItemDelegate
     virtual void setThumbnailSize(const ThumbnailSize& thumbSize);
     virtual void setSpacing(int spacing);
-    /** Style option with standard values to use for cached rendering.
-     *  option.rect shall be the viewport rectangle.
-     *  Call on resize, font change.*/
     virtual void setDefaultViewOptions(const QStyleOptionViewItem& option);
-
-    /** These methods take four parameters: The position on viewport, the rect on viewport,
-     *  the index, and optionally a parameter into which, if the return value is true,
-     *  a rectangle can be written for which the return value will be true as well. */
     virtual bool acceptsToolTip(const QPoint& pos, const QRect& visualRect,
                                 const QModelIndex& index, QRect *tooltipRect = 0) const;
     virtual bool acceptsActivation(const QPoint& pos, const QRect& visualRect,
@@ -75,8 +68,11 @@ public:
     /** Can be used to temporarily disable drawing of the rating.
      *  Call with QModelIndex() afterwards. */
     void setRatingEdited(const QModelIndex &index);
+    /** Returns the rectangle where the rating is drawn,
+     *  or a null rectangle if not supported. */
+    virtual QRect ratingRect() const;
 
-    // to be called by ImageCategorizedView only
+    /** Support for overlays. To be called by the item view only. */
     void installOverlay(ImageDelegateOverlay *overlay);
     void removeOverlay(ImageDelegateOverlay *overlay);
     void removeAllOverlays();
@@ -89,6 +85,7 @@ protected Q_SLOTS:
 
 protected:
 
+    /// Use the tool methods for painting in subclasses
     QRect drawThumbnail(QPainter *p, const QRect& thumbRect, const QPixmap& background, const QPixmap& thumbnail) const;
     void drawRating(QPainter *p, const QModelIndex& index, const QRect& ratingRect, int rating, bool isSelected) const;
     void drawName(QPainter *p,const QRect& nameRect, const QString& name) const;
@@ -100,10 +97,16 @@ protected:
     void drawTags(QPainter *p, const QRect& r, const QString& tagsString, bool isSelected) const;
     void drawStateRects(QPainter *p, const QStyleOptionViewItem& option, bool isSelected) const;
     void drawDelegates(QPainter *p, const QStyleOptionViewItem& option, const QModelIndex& index) const;
+    void prepareFonts();
+    void prepareMetrics(int maxWidth);
+    void prepareBackground();
+    void prepareRatingPixmaps();
 
+    // reimplement these in subclasses
     virtual void invalidatePaintingCache();
     virtual void updateSizeRectsAndPixmaps() = 0;
 
+    /// Returns the relevant pixmap from the cached rating pixmaps
     QPixmap ratingPixmap(int rating, bool selected) const;
 
     ItemViewImageDelegatePrivate *const d_ptr;

@@ -71,6 +71,8 @@ public:
 
 protected:
 
+    virtual void clearCaches();
+
     bool onActualPixmapRect(const QPoint& pos, const QRect& visualRect,
                             const QModelIndex & index, QRect *actualRect) const;
     void updateActualPixmapRect(qlonglong imageid, const QRect& rect);

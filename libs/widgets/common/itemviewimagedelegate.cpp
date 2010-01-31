@@ -56,6 +56,32 @@ ItemViewImageDelegatePrivate::ItemViewImageDelegatePrivate()
     spacing        = 0;
     thumbSize      = 0;
 
+    // painting constants
+    radius         = 3;
+    margin         = 5;
+
+    makeStarPolygon();
+
+    ratingPixmaps   = QVector<QPixmap>(10);
+}
+
+void ItemViewImageDelegatePrivate::init(ItemViewImageDelegate *_q)
+{
+    q = _q;
+
+    q->connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
+               q, SLOT(slotThemeChanged()));
+}
+
+void ItemViewImageDelegatePrivate::clearRects()
+{
+    gridSize       = QSize(0, 0);
+    rect           = QRect(0, 0, 0, 0);
+    ratingRect     = QRect(0, 0, 0, 0);
+}
+
+void ItemViewImageDelegatePrivate::makeStarPolygon()
+{
     // Pre-computed star polygon for a 15x15 pixmap.
     starPolygon << QPoint(0,  6);
     starPolygon << QPoint(5,  5);
@@ -69,16 +95,6 @@ ItemViewImageDelegatePrivate::ItemViewImageDelegatePrivate()
     starPolygon << QPoint(4,  9);
 
     starPolygonSize = QSize(15, 15);
-
-    ratingPixmaps   = QVector<QPixmap>(10);
-}
-
-void ItemViewImageDelegatePrivate::init(ItemViewImageDelegate *_q)
-{
-    q = _q;
-
-    q->connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
-               q, SLOT(slotThemeChanged()));
 }
 
 ItemViewImageDelegate::ItemViewImageDelegate(DCategorizedView *parent)
@@ -150,6 +166,12 @@ QRect ItemViewImageDelegate::rect() const
 {
     Q_D(const ItemViewImageDelegate);
     return d->rect;
+}
+
+QRect ItemViewImageDelegate::ratingRect() const
+{
+    Q_D(const ItemViewImageDelegate);
+    return d->ratingRect;
 }
 
 void ItemViewImageDelegate::setRatingEdited(const QModelIndex &index)
@@ -347,6 +369,105 @@ void ItemViewImageDelegate::drawDelegates(QPainter *p, const QStyleOptionViewIte
     Q_D(const ItemViewImageDelegate);
     foreach (ImageDelegateOverlay *overlay, d->overlays)
         overlay->paint(p, option, index);
+}
+
+void ItemViewImageDelegate::prepareFonts()
+{
+    Q_D(ItemViewImageDelegate);
+
+    d->fontReg  = d->font;
+    d->fontCom  = d->font;
+    d->fontXtra = d->font;
+    d->fontCom.setItalic(true);
+
+    int fnSz = d->fontReg.pointSize();
+    if (fnSz > 0)
+    {
+        d->fontCom.setPointSize(fnSz-1);
+        d->fontXtra.setPointSize(fnSz-2);
+    }
+    else
+    {
+        fnSz = d->fontReg.pixelSize();
+        d->fontCom.setPixelSize(fnSz-1);
+        d->fontXtra.setPixelSize(fnSz-2);
+    }
+}
+
+void ItemViewImageDelegate::prepareMetrics(int maxWidth)
+{
+    Q_D(ItemViewImageDelegate);
+
+    QFontMetrics fm(d->fontReg);
+    d->oneRowRegRect = fm.boundingRect(0, 0, maxWidth, 0xFFFFFFFF,
+                                       Qt::AlignTop | Qt::AlignHCenter,
+                                       "XXXXXXXXX");
+    fm = QFontMetrics(d->fontCom);
+    d->oneRowComRect = fm.boundingRect(0, 0, maxWidth, 0xFFFFFFFF,
+                                       Qt::AlignTop | Qt::AlignHCenter,
+                                       "XXXXXXXXX");
+    fm = QFontMetrics(d->fontXtra);
+    d->oneRowXtraRect = fm.boundingRect(0, 0, maxWidth, 0xFFFFFFFF,
+                                        Qt::AlignTop | Qt::AlignHCenter,
+                                        "XXXXXXXXX");
+}
+
+void ItemViewImageDelegate::prepareBackground()
+{
+    Q_D(ItemViewImageDelegate);
+    d->regPixmap = ThemeEngine::instance()->thumbRegPixmap(d->rect.width(),
+                                                           d->rect.height());
+
+    d->selPixmap = ThemeEngine::instance()->thumbSelPixmap(d->rect.width(),
+                                                           d->rect.height());
+}
+
+void ItemViewImageDelegate::prepareRatingPixmaps()
+{
+    /// Please call this method after prepareBackground() and when d->ratingPixmap is set
+
+    Q_D(ItemViewImageDelegate);
+    // We use antialiasing and want to pre-render the pixmaps.
+    // So we need the background at the time of painting,
+    // and the background may be a gradient, and will be different for selected items.
+    // This makes 5*2 (small) pixmaps.
+    for (int sel=0; sel<2; ++sel)
+    {
+        QPixmap basePix;
+
+        // do this once for regular, once for selected backgrounds
+        if (sel)
+            basePix = d->selPixmap.copy(d->ratingRect);
+        else
+            basePix = d->regPixmap.copy(d->ratingRect);
+
+        for (int rating=1; rating<=5; ++rating)
+        {
+            // we store first the 5 regular, then the 5 selected pixmaps, for simplicity
+            int index = (sel * 5 + rating) - 1;
+
+            // copy background
+            d->ratingPixmaps[index] = basePix;
+            // open a painter
+            QPainter painter(&d->ratingPixmaps[index]);
+
+            // use antialiasing
+            painter.setRenderHint(QPainter::Antialiasing, true);
+            painter.setBrush(ThemeEngine::instance()->textSpecialRegColor());
+            QPen pen(ThemeEngine::instance()->textRegColor());
+            // set a pen which joins the lines at a filled angle
+            pen.setJoinStyle(Qt::MiterJoin);
+            painter.setPen(pen);
+
+            // move painter while drawing polygons
+            painter.translate( lround((d->ratingRect.width() - d->margin - rating*(d->starPolygonSize.width()+1))/2.0) + 2, 1 );
+            for (int s=0; s<rating; ++s)
+            {
+                painter.drawPolygon(d->starPolygon, Qt::WindingFill);
+                painter.translate(d->starPolygonSize.width() + 1, 0);
+            }
+        }
+    }
 }
 
 QPixmap ItemViewImageDelegate::ratingPixmap(int rating, bool selected) const

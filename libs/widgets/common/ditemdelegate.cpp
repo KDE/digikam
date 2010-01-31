@@ -100,6 +100,47 @@ QPixmap DItemDelegate::thumbnailBorderPixmap(const QSize& pixSize) const
     return *cachePix;
 }
 
+QPixmap DItemDelegate::makeDragPixmap(const QStyleOptionViewItem& option,
+                                      const QList<QModelIndex>& indexes,
+                                      const QPixmap& suggestedPixmap) const
+{
+    QPixmap icon = suggestedPixmap;
+
+    if (icon.isNull())
+    {
+        icon = QPixmap(DesktopIcon("image-jp2", KIconLoader::SizeMedium));
+    }
+
+    if (qMax(icon.width(), icon.height()) > KIconLoader::SizeMedium)
+    {
+        icon = icon.scaled(KIconLoader::SizeMedium, KIconLoader::SizeMedium,
+                           Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    }
+
+    int w = icon.width();
+    int h = icon.height();
+
+    QPixmap pix(w+4, h+4);
+    QString text(QString::number(indexes.count()));
+
+    QPainter p(&pix);
+    p.fillRect(0, 0, pix.width()-1, pix.height()-1, QColor(Qt::white));
+    p.setPen(QPen(Qt::black, 1));
+    p.drawRect(0, 0, pix.width()-1, pix.height()-1);
+    p.drawPixmap(2, 2, icon);
+    QRect r = p.boundingRect(2, 2, w, h, Qt::AlignLeft|Qt::AlignTop, text);
+    r.setWidth(qMax(r.width(), r.height()));
+    r.setHeight(qMax(r.width(), r.height()));
+    p.fillRect(r, QColor(0, 80, 0));
+    p.setPen(Qt::white);
+    QFont f(option.font);
+    f.setBold(true);
+    p.setFont(f);
+    p.drawText(r, Qt::AlignCenter, text);
+
+    return pix;
+}
+
 QString DItemDelegate::dateToString(const QDateTime& datetime)
 {
     return KGlobal::locale()->formatDateTime(datetime, KLocale::ShortDate, false);

@@ -94,7 +94,7 @@ void ImageRatingOverlay::updatePosition()
     if (!m_index.isValid())
         return;
 
-    QRect rect = static_cast<ImageDelegate*>(delegate())->ratingRect();
+    QRect rect = delegate()->ratingRect();
     QRect visualRect = m_view->visualRect(m_index);
     rect.translate(visualRect.topLeft());
 

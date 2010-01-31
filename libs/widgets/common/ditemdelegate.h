@@ -48,8 +48,7 @@ public:
     DItemDelegate(DCategorizedView *parent);
     ~DItemDelegate();
 
-    virtual void paint(QPainter * painter, const QStyleOptionViewItem& option, const QModelIndex& index) const = 0;
-    virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex & index) const = 0;
+    /// Returns the gridsize to be set by the view. It's sizeHint plus spacing.
     virtual QSize gridSize() const = 0;
     virtual QPixmap pixmapForDrag(const QStyleOptionViewItem& option, const QList<QModelIndex>& indexes) const = 0;
 
@@ -78,14 +77,16 @@ public:
 Q_SIGNALS:
 
     void gridSizeChanged(const QSize& newSize);
-
     void visualChange();
 
 protected:
 
-    void clearCaches();
+    virtual void clearCaches();
+
     QString squeezedTextCached(QPainter* p, int width, const QString& text) const;
     QPixmap thumbnailBorderPixmap(const QSize& pixSize) const;
+    QPixmap makeDragPixmap(const QStyleOptionViewItem& option, const QList<QModelIndex>& indexes,
+                           const QPixmap& suggestedPixmap = QPixmap()) const;
 
 private:
 

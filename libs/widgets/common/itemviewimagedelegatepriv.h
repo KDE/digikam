@@ -51,12 +51,14 @@ class DIGIKAM_EXPORT ItemViewImageDelegatePrivate
 public:
 
     ItemViewImageDelegatePrivate();
+    virtual ~ItemViewImageDelegatePrivate() {}
     void init(ItemViewImageDelegate *_q);
 
     int                       spacing;
     QSize                     gridSize;
 
     QRect                     rect;
+    QRect                     ratingRect;
 
     QPixmap                   regPixmap;
     QPixmap                   selPixmap;
@@ -78,6 +80,19 @@ public:
                               overlays;
 
     ItemViewImageDelegate    *q;
+
+    QRect                     oneRowRegRect;
+    QRect                     oneRowComRect;
+    QRect                     oneRowXtraRect;
+    // constant values for drawing
+    int                       radius;
+    int                       margin;
+
+
+    /// Resets cached rects. Remember to reimplement in subclass for added rects.
+    virtual void clearRects();
+
+    void makeStarPolygon();
 };
 
 } // namespace Digikam
