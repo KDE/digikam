@@ -192,7 +192,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
     tagsSearch->setSpacing(KDialog::spacingHint());
 
     d->tagsSearchBar   = new SearchTextBar(tagsSearch, "ImageDescEditTabTagsSearchBar");
-    d->tagsSearchBar->setModel(d->tagModel, AbstractAlbumModel::AlbumIdRole);
+    d->tagsSearchBar->setModel(d->tagModel, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
     d->tagsSearchBar->setFilterModel(d->tagCheckView->albumFilterModel());
 
     d->assignedTagsBtn = new QToolButton(tagsSearch);
