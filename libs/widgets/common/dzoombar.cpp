@@ -217,11 +217,7 @@ void DZoomBar::slotZoomSliderReleased()
 void DZoomBar::setZoom(double zoom, double zmin, double zmax)
 {
     setBarMode(PreviewZoomCtrl);
-    double h = (double)ThumbnailSize::Huge;
-    double s = (double)ThumbnailSize::Small;
-    double b = (zmin-(zmax*s/h))/(1-s/h);
-    double a = (zmax-b)/h;
-    int size = (int)((zoom - b) /a);
+    int size = sizeFromZoom(zoom, zmin, zmax);
 
     d->zoomSlider->blockSignals(true);
     d->zoomSlider->setValue(size);
@@ -245,6 +241,26 @@ void DZoomBar::setThumbsSize(int size)
     triggerZoomTrackerToolTip();
 }
 
+int DZoomBar::sizeFromZoom(double zoom, double zmin, double zmax)
+{
+    double h = (double)ThumbnailSize::Huge;
+    double s = (double)ThumbnailSize::Small;
+    double b = (zmin-(zmax*s/h))/(1-s/h);
+    double a = (zmax-b)/h;
+    int size = (int)((zoom - b) /a);
+    return size;
+}
+
+double DZoomBar::zoomFromSize(int size, double zmin, double zmax)
+{
+    double h = (double)ThumbnailSize::Huge;
+    double s = (double)ThumbnailSize::Small;
+    double b = (zmin-(zmax*s/h))/(1-s/h);
+    double a = (zmax-b)/h;
+    double z = a*size+b;
+    return z;
+}
+    
 void DZoomBar::triggerZoomTrackerToolTip()
 {
     d->zoomTracker->triggerAutoShow();

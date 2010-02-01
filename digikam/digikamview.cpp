@@ -46,6 +46,7 @@
 #include "batchsyncmetadata.h"
 #include "digikamapp.h"
 #include "digikamimageview.h"
+#include "dzoombar.h"
 #include "imagealbummodel.h"
 #include "imageinfoalbumsjob.h"
 #include "imagepreviewview.h"
@@ -1037,13 +1038,7 @@ void DigikamView::setThumbSize(int size)
 {
     if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewImageMode)
     {
-        double h    = (double)ThumbnailSize::Huge;
-        double s    = (double)ThumbnailSize::Small;
-        double zmin = zoomMin();
-        double zmax = zoomMax();
-        double b    = (zmin-(zmax*s/h))/(1-s/h);
-        double a    = (zmax-b)/h;
-        double z    = a*size+b;
+        double z    = DZoomBar::zoomFromSize(size, zoomMin(), zoomMax());
         setZoomFactor(z);
     }
     else if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
