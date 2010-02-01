@@ -77,6 +77,7 @@ Q_SIGNALS:
 
     void signalRightButtonClicked();
     void signalLeftButtonClicked();
+    void signalLeftButtonDoubleClicked();
     void signalShowNextImage();
     void signalShowPrevImage();
     void signalZoomFactorChanged(double);
@@ -133,6 +134,7 @@ protected:
     // Re-implemented from parent class.
     virtual void resizeEvent(QResizeEvent*);
     virtual void viewportPaintEvent(QPaintEvent*);
+    virtual void contentsMouseDoubleClickEvent(QMouseEvent*);
     virtual void contentsMousePressEvent(QMouseEvent*);
     virtual void contentsMouseMoveEvent(QMouseEvent*);
     virtual void contentsMouseReleaseEvent(QMouseEvent*);

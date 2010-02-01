@@ -607,6 +607,15 @@ void PreviewWidget::drawText(QPainter* p, const QRect& rect, const QString& text
     p->restore();
 }
 
+void PreviewWidget::contentsMouseDoubleClickEvent(QMouseEvent* e)
+{
+    if (!e || e->button() == Qt::RightButton)
+        return;
+
+    if (e->button() == Qt::LeftButton)
+        emit signalLeftButtonDoubleClicked();
+}
+
 void PreviewWidget::contentsMousePressEvent(QMouseEvent* e)
 {
     if (!e || e->button() == Qt::RightButton)
@@ -838,5 +847,5 @@ void PreviewWidget::keyReleaseEvent(QKeyEvent* e)
         }
     }
 }
-    
+
 }  // namespace Digikam
