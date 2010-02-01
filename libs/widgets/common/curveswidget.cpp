@@ -170,10 +170,7 @@ public:
 
         // ... and we render busy text.
 
-        QPixmap pm(q->size());
-        QPainter p1;
-        p1.begin(&pm);
-        p1.initFrom(q);
+        QPainter p1(q);
         p1.fillRect(0, 0, q->width(), q->height(), q->palette().color(QPalette::Active, QPalette::Background));
         p1.setPen(QPen(q->palette().color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
         p1.drawRect(0, 0, q->width()-1, q->height()-1);
@@ -192,17 +189,11 @@ public:
         }
 
         p1.end();
-        QPainter p3(q);
-        p3.drawPixmap(0, 0, pm);
-        p3.end();
     }
 
     void renderHistogramFailed()
     {
-        QPixmap pm(q->size());
-        QPainter p1;
-        p1.begin(&pm);
-        p1.initFrom(q);
+        QPainter p1(q);
         p1.fillRect(0, 0, q->width(), q->height(), q->palette().color(QPalette::Active, QPalette::Background));
         p1.setPen(QPen(q->palette().color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
         p1.drawRect(0, 0, q->width()-1, q->height()-1);
@@ -210,9 +201,6 @@ public:
         p1.drawText(0, 0, q->width(), q->height(), Qt::AlignCenter,
                     i18n("Histogram\ncalculation\nfailed."));
         p1.end();
-        QPainter p2(q);
-        p2.drawPixmap(0, 0, pm);
-        p2.end();
     }
 
     void renderCurve(QPixmap& pm)

@@ -473,10 +473,7 @@ void HistogramWidget::paintEvent(QPaintEvent*)
                                d->clearFlag == HistogramWidgetPriv::HistogramDataLoading))
        )
     {
-       QPixmap pm(size());
-       QPainter p1;
-       p1.begin(&pm);
-       p1.initFrom(this);
+       QPainter p1(this);
        p1.fillRect(0, 0, width(), height(), palette().color(QPalette::Disabled, QPalette::Background));
        p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
        p1.drawRect(0, 0, width()-1, height()-1);
@@ -488,9 +485,6 @@ void HistogramWidget::paintEvent(QPaintEvent*)
        p1.drawRect(0, 0, width(), height());
        p1.end();
 
-       QPainter p2(this);
-       p2.drawPixmap(0, 0, pm);
-       p2.end();
        return;
     }
     // Image data is loading or histogram is being computed:
@@ -508,10 +502,7 @@ void HistogramWidget::paintEvent(QPaintEvent*)
 
        // ... and we render busy text.
 
-       QPixmap pm(size());
-       QPainter p1;
-       p1.begin(&pm);
-       p1.initFrom(this);
+       QPainter p1(this);
        p1.fillRect(0, 0, width(), height(), palette().color(QPalette::Active, QPalette::Background));
        p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
        p1.drawRect(0, 0, width()-1, height()-1);
@@ -526,19 +517,13 @@ void HistogramWidget::paintEvent(QPaintEvent*)
                        i18n("Histogram calculation..."));
        p1.end();
 
-       QPainter p2(this);
-       p2.drawPixmap(0, 0, pm);
-       p2.end();
        return;
     }
     // Histogram computation failed:
     // Draw message.
     else if (d->clearFlag == HistogramWidgetPriv::HistogramFailed)
     {
-       QPixmap pm(size());
-       QPainter p1;
-       p1.begin(&pm);
-       p1.initFrom(this);
+       QPainter p1(this);
        p1.fillRect(0, 0, width(), height(), palette().color(QPalette::Active, QPalette::Background));
        p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
        p1.drawRect(0, 0, width()-1, height()-1);
@@ -547,9 +532,6 @@ void HistogramWidget::paintEvent(QPaintEvent*)
                    i18n("Histogram\ncalculation\nfailed."));
        p1.end();
 
-       QPainter p2(this);
-       p2.drawPixmap(0, 0, pm);
-       p2.end();
        return;
     }
 
