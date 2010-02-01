@@ -28,6 +28,7 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qscrollbar.h>
+#include <qtimer.h>
 
 // KDE includes
 #include <kcombobox.h>
