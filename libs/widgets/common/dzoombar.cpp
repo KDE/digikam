@@ -138,7 +138,7 @@ DZoomBar::DZoomBar(QWidget *parent)
 
     layout()->setMargin(0);
     layout()->setSpacing(0);
-
+    
     // -------------------------------------------------------------
 
     connect(d->zoomSlider, SIGNAL(valueChanged(int)),
@@ -155,6 +155,10 @@ DZoomBar::DZoomBar(QWidget *parent)
 
     connect(d->zoomCombo, SIGNAL(returnPressed(const QString&)),
             this, SLOT(slotZoomTextChanged(const QString&)));
+
+    // -------------------------------------------------------------
+
+    setBarMode(PreviewZoomCtrl);
 }
 
 DZoomBar::~DZoomBar()
@@ -212,6 +216,7 @@ void DZoomBar::slotZoomSliderReleased()
 
 void DZoomBar::setZoom(double zoom, double zmin, double zmax)
 {
+    setBarMode(PreviewZoomCtrl);
     double h = (double)ThumbnailSize::Huge;
     double s = (double)ThumbnailSize::Small;
     double b = (zmin-(zmax*s/h))/(1-s/h);
@@ -221,14 +226,22 @@ void DZoomBar::setZoom(double zoom, double zmin, double zmax)
     d->zoomSlider->blockSignals(true);
     d->zoomSlider->setValue(size);
     d->zoomSlider->blockSignals(false);
-
+    
     QString ztxt = QString::number(lround(zoom*100.0)) + QString("%");
     d->zoomCombo->blockSignals(true);
     d->zoomCombo->setCurrentIndex(-1);
     d->zoomCombo->setEditText(ztxt);
     d->zoomCombo->blockSignals(false);
+}
 
-    d->zoomTracker->setText(ztxt);
+void DZoomBar::setThumbsSize(int size)
+{
+    setBarMode(ThumbsSizeCtrl);
+    d->zoomSlider->blockSignals(true);
+    d->zoomSlider->setValue(size);
+    d->zoomSlider->blockSignals(false);
+    
+    d->zoomTracker->setText(i18n("Size: %1", size));
     triggerZoomTrackerToolTip();
 }
 
@@ -256,6 +269,25 @@ void DZoomBar::slotZoomTextChanged(const QString& txt)
     double zoom = KGlobal::locale()->readNumber(txt, &ok) / 100.0;
     if (ok && zoom > 0.0)
         emit signalZoomValueEdited(zoom);
+}
+
+void DZoomBar::setBarMode(BarMode mode)
+{
+    switch(mode)
+    {
+        case PreviewZoomCtrl:
+        {
+            d->zoomCombo->setEnabled(true);
+            d->zoomTracker->setEnable(false);
+            break;
+        }
+        default:
+        {
+            d->zoomCombo->setEnabled(false);
+            d->zoomTracker->setEnable(true);
+            break;
+        }
+    }
 }
 
 }  // namespace Digikam

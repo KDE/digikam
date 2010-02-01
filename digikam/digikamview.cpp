@@ -7,8 +7,8 @@
  * Description : implementation of album view interface.
  *
  * Copyright (C) 2002-2005 by Renchi Raju  <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2002-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (c) 2009 by Johannes Wienke <languitar at semipol dot de>
+ * Copyright (C) 2002-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (c) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -1012,18 +1012,39 @@ void DigikamView::slotDispatchImageSelected()
     }
 }
 
+double DigikamView::zoomMin()
+{
+    return d->albumWidgetStack->zoomMin();
+}
+
+double DigikamView::zoomMax()
+{
+    return d->albumWidgetStack->zoomMax();
+}
+
+void DigikamView::setZoomFactor(double zoom)
+{
+    d->albumWidgetStack->setZoomFactorSnapped(zoom);    
+}
+
+void DigikamView::slotZoomFactorChanged(double zoom)
+{
+    toggleZoomActions();
+    emit signalZoomChanged(zoom);
+}
+
 void DigikamView::setThumbSize(int size)
 {
     if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewImageMode)
     {
         double h    = (double)ThumbnailSize::Huge;
         double s    = (double)ThumbnailSize::Small;
-        double zmin = d->albumWidgetStack->zoomMin();
-        double zmax = d->albumWidgetStack->zoomMax();
+        double zmin = zoomMin();
+        double zmax = zoomMax();
         double b    = (zmin-(zmax*s/h))/(1-s/h);
         double a    = (zmax-b)/h;
         double z    = a*size+b;
-        d->albumWidgetStack->setZoomFactorSnapped(z);
+        setZoomFactor(z);
     }
     else if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
     {
@@ -1118,21 +1139,6 @@ void DigikamView::slotFitToWindow()
     {
         d->albumWidgetStack->fitToWindow();
     }
-}
-
-void DigikamView::slotZoomFactorChanged(double zoom)
-{
-    toggleZoomActions();
-
-    double h    = (double)ThumbnailSize::Huge;
-    double s    = (double)ThumbnailSize::Small;
-    double zmin = d->albumWidgetStack->zoomMin();
-    double zmax = d->albumWidgetStack->zoomMax();
-    double b    = (zmin-(zmax*s/h))/(1-s/h);
-    double a    = (zmax-b)/h;
-    int size    = (int)((zoom - b) /a);
-
-    emit signalZoomChanged(zoom, size);
 }
 
 void DigikamView::slotAlbumPropsEdit()

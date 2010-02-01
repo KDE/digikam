@@ -45,15 +45,24 @@ class DZoomBarPriv;
 
 class DIGIKAM_EXPORT DZoomBar : public KHBox
 {
+    Q_OBJECT
 
-Q_OBJECT
+public:
+
+    enum BarMode
+    {
+        PreviewZoomCtrl=0,
+        ThumbsSizeCtrl
+    };
 
 public:
 
     DZoomBar(QWidget* parent=0);
     ~DZoomBar();
 
+    void setBarMode(BarMode mode);
     void setZoom(double zoom, double zmin, double zmax);
+    void setThumbsSize(int size);
 
     void setZoomToFitAction(QAction* action);
     void setZoomTo100Action(QAction* action);

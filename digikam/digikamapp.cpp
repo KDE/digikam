@@ -8,8 +8,8 @@
  *
  * Copyright (C) 2002-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C)      2006 by Tom Albers <tomalbers@kde.nl>
- * Copyright (C) 2002-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C)      2009 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2002-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -232,10 +232,11 @@ DigikamApp::DigikamApp()
     d->modelCollection = new DigikamModelCollection;
 
     setupView();
-    setupStatusBar();
     setupAccelerators();
     setupActions();
-
+    setupStatusBar();
+    initGui();
+    
     applyMainWindowSettings(d->config->group("General Settings"));
 
     // Check ICC profiles repository availability
@@ -525,8 +526,12 @@ void DigikamApp::setupStatusBar()
 
     //------------------------------------------------------------------------------
 
-    d->statusZoomBar = new StatusZoomBar(statusBar());
-    statusBar()->addPermanentWidget(d->statusZoomBar, 1);
+    d->zoomBar = new DZoomBar(statusBar());
+    d->zoomBar->setZoomToFitAction(d->zoomFitToWindowAction);
+    d->zoomBar->setZoomTo100Action(d->zoomTo100percents);
+    d->zoomBar->setZoomPlusAction(d->zoomPlusAction);
+    d->zoomBar->setZoomMinusAction(d->zoomMinusAction);
+    statusBar()->addPermanentWidget(d->zoomBar);
 
     //------------------------------------------------------------------------------
 
@@ -535,20 +540,20 @@ void DigikamApp::setupStatusBar()
 
     //------------------------------------------------------------------------------
 
-    connect(d->statusZoomBar, SIGNAL(signalZoomMinusClicked()),
-            d->view, SLOT(slotZoomOut()));
-
-    connect(d->statusZoomBar, SIGNAL(signalZoomPlusClicked()),
-            d->view, SLOT(slotZoomIn()));
-
-    connect(d->statusZoomBar, SIGNAL(signalZoomSliderChanged(int)),
+    connect(d->zoomBar, SIGNAL(signalZoomSliderChanged(int)),
             this, SLOT(slotZoomSliderChanged(int)));
+
+    connect(this, SIGNAL(signalWindowHasMoved()),
+            d->zoomBar, SLOT(slotUpdateTrackerPos()));
+
+    connect(d->zoomBar, SIGNAL(signalZoomValueEdited(double)),
+            d->view, SLOT(setZoomFactor(double)));
+
+    connect(d->view, SIGNAL(signalZoomChanged(double)),
+            this, SLOT(slotZoomChanged(double)));
 
     connect(d->view, SIGNAL(signalThumbSizeChanged(int)),
             this, SLOT(slotThumbSizeChanged(int)));
-
-    connect(d->view, SIGNAL(signalZoomChanged(double, int)),
-            this, SLOT(slotZoomChanged(double, int)));
 
     connect(d->view, SIGNAL(signalTogglePreview(bool)),
             this, SLOT(slotTogglePreview(bool)));
@@ -567,9 +572,6 @@ void DigikamApp::setupStatusBar()
 
     connect(d->statusProgressBar, SIGNAL(signalCancelButtonPressed()),
             this, SIGNAL(signalCancelButtonPressed()));
-
-    connect(this, SIGNAL(signalWindowHasMoved()),
-            d->statusZoomBar, SLOT(slotUpdateTrackerPos()));
 }
 
 void DigikamApp::setupAccelerators()
@@ -1233,7 +1235,10 @@ void DigikamApp::setupActions()
     loadCameras();
 
     createGUI(xmlFile());
+}
 
+void DigikamApp::initGui()
+{
     // Initialize Actions ---------------------------------------
 
     d->deleteAction->setEnabled(false);
@@ -1269,13 +1274,11 @@ void DigikamApp::setupActions()
 void DigikamApp::enableZoomPlusAction(bool val)
 {
     d->zoomPlusAction->setEnabled(val);
-    d->statusZoomBar->setEnableZoomPlus(val);
 }
 
 void DigikamApp::enableZoomMinusAction(bool val)
 {
     d->zoomMinusAction->setEnabled(val);
-    d->statusZoomBar->setEnableZoomMinus(val);
 }
 
 void DigikamApp::enableAlbumBackwardHistory(bool enable)
@@ -2595,18 +2598,19 @@ void DigikamApp::slotZoomSliderChanged(int size)
 
 void DigikamApp::slotThumbSizeChanged(int size)
 {
-    d->statusZoomBar->setZoomSliderValue(size);
-    d->statusZoomBar->setZoomTrackerText(i18n("Size: %1", size));
+    d->zoomBar->setThumbsSize(size);
     if (!d->fullScreen && d->autoShowZoomToolTip)
-        d->statusZoomBar->triggerZoomTrackerToolTip();
+        d->zoomBar->triggerZoomTrackerToolTip();
 }
 
-void DigikamApp::slotZoomChanged(double zoom, int size)
+void DigikamApp::slotZoomChanged(double zoom)
 {
-    d->statusZoomBar->setZoomSliderValue(size);
-    d->statusZoomBar->setZoomTrackerText(i18n("zoom: %1%", (int)(zoom*100.0)));
+    double zmin = d->view->zoomMin();
+    double zmax = d->view->zoomMax();
+    d->zoomBar->setZoom(zoom, zmin, zmax);
+  
     if (!d->fullScreen && d->autoShowZoomToolTip)
-        d->statusZoomBar->triggerZoomTrackerToolTip();
+        d->zoomBar->triggerZoomTrackerToolTip();
 }
 
 void DigikamApp::slotTogglePreview(bool t)

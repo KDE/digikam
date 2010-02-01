@@ -56,7 +56,7 @@
 #include "imagepluginloader.h"
 #include "splashscreen.h"
 #include "kipiinterface.h"
-#include "statuszoombar.h"
+#include "dzoombar.h"
 #include "statusprogressbar.h"
 #include "statusnavigatebar.h"
 #include "digikamview.h"
@@ -162,7 +162,7 @@ public:
         templateManager                      = 0;
         statusProgressBar                    = 0;
         statusNavigateBar                    = 0;
-        statusZoomBar                        = 0;
+        zoomBar                              = 0;
         kipiPluginLoader                     = 0;
         view                                 = 0;
         splashScreen                         = 0;
@@ -315,7 +315,7 @@ public:
     DigikamView*                        view;
     CameraList*                         cameraList;
     TemplateManager*                    templateManager;
-    StatusZoomBar*                      statusZoomBar;
+    DZoomBar*                           zoomBar;
     StatusProgressBar*                  statusProgressBar;
     StatusNavigateBar*                  statusNavigateBar;
     QString                             statusBarSelectionText;
