@@ -64,8 +64,8 @@ public:
     void recurse(QObjectList children, bool save)
     {
 
-        for (QObjectList::const_iterator childIt = children.begin(); childIt
-                        != children.end(); ++childIt)
+        for (QObjectList::const_iterator childIt = children.constBegin(); childIt
+                        != children.constEnd(); ++childIt)
         {
 
             StateSavingObject *statefulChild =
