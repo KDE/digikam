@@ -531,6 +531,7 @@ void DigikamApp::setupStatusBar()
     d->zoomBar->setZoomTo100Action(d->zoomTo100percents);
     d->zoomBar->setZoomPlusAction(d->zoomPlusAction);
     d->zoomBar->setZoomMinusAction(d->zoomMinusAction);
+    d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
     statusBar()->addPermanentWidget(d->zoomBar);
 
     //------------------------------------------------------------------------------
@@ -2632,9 +2633,10 @@ void DigikamApp::slotTogglePreview(bool t)
     d->albumSortAction->setEnabled(!t);
     d->imageSortAction->setEnabled(!t);
     d->imageGroupAction->setEnabled(!t);
-    d->zoomTo100percents->setEnabled(t);
-    d->zoomFitToWindowAction->setEnabled(t);
     d->showBarAction->setEnabled(t);
+
+    if (t) d->zoomBar->setBarMode(DZoomBar::PreviewZoomCtrl);
+    else   d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
 }
 
 void DigikamApp::slotImportAddImages()

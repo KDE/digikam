@@ -51,8 +51,9 @@ public:
 
     enum BarMode
     {
-        PreviewZoomCtrl=0,
-        ThumbsSizeCtrl
+        PreviewZoomCtrl=0,      // Preview Zoom controler.
+        ThumbsSizeCtrl,         // Thumb Size controler. Preview zoom controller still visible but disabled.
+        NoPreviewZoomCtrl       // Thumb Size controler alone. Preview Zoom controler is hidden.
     };
 
 public:

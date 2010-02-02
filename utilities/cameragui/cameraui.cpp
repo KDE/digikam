@@ -7,8 +7,8 @@
  * Description : Camera interface
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -94,7 +94,6 @@
 // Local includes
 
 #include "componentsinfo.h"
-#include "statuszoombar.h"
 #include "statusprogressbar.h"
 #include "statusnavigatebar.h"
 #include "dlogoaction.h"
@@ -107,6 +106,7 @@
 #include "setup.h"
 #include "downloadsettingscontainer.h"
 #include "downloadhistory.h"
+#include "dzoombar.h"
 #include "imagepropertiessidebarcamgui.h"
 #include "albummanager.h"
 #include "albumsettings.h"
@@ -168,8 +168,8 @@ CameraUI::CameraUI(QWidget* parent, const QString& cameraTitle,
     // -------------------------------------------------------------------
 
     setupUserArea();
-    setupStatusBar();
     setupActions();
+    setupStatusBar();
     setupAccelerators();
 
     // -- Make signals/slots connections ---------------------------------
@@ -625,17 +625,11 @@ void CameraUI::setupConnections()
 
     // -------------------------------------------------------------------------
 
-    connect(d->statusZoomBar, SIGNAL(signalZoomMinusClicked()),
-           this, SLOT(slotDecreaseThumbSize()));
-
-    connect(d->statusZoomBar, SIGNAL(signalZoomPlusClicked()),
-           this, SLOT(slotIncreaseThumbSize()));
-
-    connect(d->statusZoomBar, SIGNAL(signalZoomSliderChanged(int)),
+    connect(d->zoomBar, SIGNAL(signalZoomSliderChanged(int)),
            this, SLOT(slotZoomSliderChanged(int)));
 
     connect(this, SIGNAL(signalWindowHasMoved()),
-            d->statusZoomBar, SLOT(slotUpdateTrackerPos()));
+            d->zoomBar, SLOT(slotUpdateTrackerPos()));
 
     connect(this, SIGNAL(signalWindowHasMoved()),
             d->renameCustomizer, SLOT(slotUpdateTrackerPos()));
@@ -672,8 +666,11 @@ void CameraUI::setupStatusBar()
 
     //------------------------------------------------------------------------------
 
-    d->statusZoomBar = new StatusZoomBar(statusBar());
-    statusBar()->addPermanentWidget(d->statusZoomBar, 1);
+    d->zoomBar = new DZoomBar(statusBar());
+    d->zoomBar->setZoomPlusAction(d->increaseThumbsAction);
+    d->zoomBar->setZoomMinusAction(d->decreaseThumbsAction);
+    d->zoomBar->setBarMode(DZoomBar::NoPreviewZoomCtrl);
+    statusBar()->addPermanentWidget(d->zoomBar, 1);
 
     //------------------------------------------------------------------------------
 
@@ -1057,26 +1054,16 @@ void CameraUI::slotZoomSliderChanged(int size)
 
 void CameraUI::slotThumbSizeChanged(int size)
 {
-    d->statusZoomBar->setZoomSliderValue(size);
-    d->statusZoomBar->setZoomTrackerText(i18n("Size: %1", size));
-    d->statusZoomBar->triggerZoomTrackerToolTip();
+    d->zoomBar->setThumbsSize(size);
 
-    d->statusZoomBar->setEnableZoomPlus(true);
-    d->statusZoomBar->setEnableZoomMinus(true);
     d->increaseThumbsAction->setEnabled(true);
     d->decreaseThumbsAction->setEnabled(true);
 
     if (d->view->thumbnailSize() == ThumbnailSize::Small)
-    {
         d->decreaseThumbsAction->setEnabled(false);
-        d->statusZoomBar->setEnableZoomMinus(false);
-    }
 
     if (d->view->thumbnailSize() == ThumbnailSize::Huge)
-    {
         d->increaseThumbsAction->setEnabled(false);
-        d->statusZoomBar->setEnableZoomPlus(false);
-    }
 }
 
 void CameraUI::slotConnected(bool val)
@@ -2420,4 +2407,3 @@ bool CameraUI::chronologicOrder() const
 }
 
 }  // namespace Digikam
-

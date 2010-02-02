@@ -216,7 +216,6 @@ void DZoomBar::slotZoomSliderReleased()
 
 void DZoomBar::setZoom(double zoom, double zmin, double zmax)
 {
-    setBarMode(PreviewZoomCtrl);
     int size = sizeFromZoom(zoom, zmin, zmax);
 
     d->zoomSlider->blockSignals(true);
@@ -232,7 +231,6 @@ void DZoomBar::setZoom(double zoom, double zmin, double zmax)
 
 void DZoomBar::setThumbsSize(int size)
 {
-    setBarMode(ThumbsSizeCtrl);
     d->zoomSlider->blockSignals(true);
     d->zoomSlider->setValue(size);
     d->zoomSlider->blockSignals(false);
@@ -293,13 +291,31 @@ void DZoomBar::setBarMode(BarMode mode)
     {
         case PreviewZoomCtrl:
         {
+            d->zoomToFitButton->show();
+            d->zoomToFitButton->setEnabled(true);
+            d->zoomTo100Button->show();
+            d->zoomTo100Button->setEnabled(true);
+            d->zoomCombo->show();
             d->zoomCombo->setEnabled(true);
             d->zoomTracker->setEnable(false);
             break;
         }
-        default:
+        case ThumbsSizeCtrl:
         {
+            d->zoomToFitButton->show();
+            d->zoomToFitButton->setEnabled(false);
+            d->zoomTo100Button->show();
+            d->zoomTo100Button->setEnabled(false);
+            d->zoomCombo->show();
             d->zoomCombo->setEnabled(false);
+            d->zoomTracker->setEnable(true);
+            break;
+        }
+        default:   // NoPreviewZoomCtrl
+        {
+            d->zoomToFitButton->hide();
+            d->zoomTo100Button->hide();
+            d->zoomCombo->hide();
             d->zoomTracker->setEnable(true);
             break;
         }

@@ -595,6 +595,7 @@ void EditorWindow::setupStatusBar()
     d->zoomBar->setZoomTo100Action(d->zoomTo100percents);
     d->zoomBar->setZoomPlusAction(d->zoomPlusAction);
     d->zoomBar->setZoomMinusAction(d->zoomMinusAction);
+    d->zoomBar->setBarMode(DZoomBar::PreviewZoomCtrl);
     statusBar()->addPermanentWidget(d->zoomBar);
 
     connect(d->zoomBar, SIGNAL(signalZoomSliderChanged(int)),
