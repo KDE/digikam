@@ -414,13 +414,17 @@ void EditorWindow::setupStandardActions()
 
     // -- Standard 'View' menu actions ---------------------------------------------
 
-    d->zoomPlusAction = KStandardAction::zoomIn(this, SLOT(slotIncreaseZoom()), this);
+    d->zoomPlusAction  = KStandardAction::zoomIn(this, SLOT(slotIncreaseZoom()), this);
+    KShortcut keysPlus = d->zoomPlusAction->shortcut();
+    keysPlus.setAlternate(Qt::Key_Plus);
+    d->zoomPlusAction->setShortcut(keysPlus);
     actionCollection()->addAction("editorwindow_zoomplus", d->zoomPlusAction);
-    d->zoomPlusAction->setShortcut(KShortcut(Qt::Key_Plus));
 
-    d->zoomMinusAction = KStandardAction::zoomOut(this, SLOT(slotDecreaseZoom()), this);
+    d->zoomMinusAction  = KStandardAction::zoomOut(this, SLOT(slotDecreaseZoom()), this);
+    KShortcut keysMinus = d->zoomMinusAction->shortcut();
+    keysMinus.setAlternate(Qt::Key_Minus);
+    d->zoomMinusAction->setShortcut(keysMinus);
     actionCollection()->addAction("editorwindow_zoomminus", d->zoomMinusAction);
-    d->zoomMinusAction->setShortcut(KShortcut(Qt::Key_Minus));
 
     d->zoomTo100percents = new KAction(KIcon("zoom-original"), i18n("Zoom to 100%"), this);
     d->zoomTo100percents->setShortcut(KShortcut(Qt::ALT+Qt::CTRL+Qt::Key_0));       // NOTE: Photoshop 7 use ALT+CTRL+0

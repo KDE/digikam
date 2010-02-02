@@ -470,10 +470,16 @@ void CameraUI::setupActions()
 
     d->increaseThumbsAction = KStandardAction::zoomIn(this, SLOT(slotIncreaseThumbSize()), this);
     d->increaseThumbsAction->setEnabled(false);
+    KShortcut keysPlus      = d->increaseThumbsAction->shortcut();
+    keysPlus.setAlternate(Qt::Key_Plus);
+    d->increaseThumbsAction->setShortcut(keysPlus);
     actionCollection()->addAction("cameraui_zoomplus", d->increaseThumbsAction);
 
     d->decreaseThumbsAction = KStandardAction::zoomOut(this, SLOT(slotDecreaseThumbSize()), this);
     d->decreaseThumbsAction->setEnabled(false);
+    KShortcut keysMinus     = d->decreaseThumbsAction->shortcut();
+    keysMinus.setAlternate(Qt::Key_Minus);
+    d->decreaseThumbsAction->setShortcut(keysMinus);
     actionCollection()->addAction("cameraui_zoomminus", d->decreaseThumbsAction);
 
     d->fullScreenAction = actionCollection()->addAction(KStandardAction::FullScreen,

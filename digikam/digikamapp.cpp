@@ -1016,12 +1016,18 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->zoomPlusAction = KStandardAction::zoomIn(d->view, SLOT(slotZoomIn()), this);
+    d->zoomPlusAction  = KStandardAction::zoomIn(d->view, SLOT(slotZoomIn()), this);
+    KShortcut keysPlus = d->zoomPlusAction->shortcut();
+    keysPlus.setAlternate(Qt::Key_Plus);
+    d->zoomPlusAction->setShortcut(keysPlus);
     actionCollection()->addAction("album_zoomin", d->zoomPlusAction);
 
     // -----------------------------------------------------------
 
-    d->zoomMinusAction = KStandardAction::zoomOut(d->view, SLOT(slotZoomOut()), this);
+    d->zoomMinusAction  = KStandardAction::zoomOut(d->view, SLOT(slotZoomOut()), this);
+    KShortcut keysMinus = d->zoomMinusAction->shortcut();
+    keysMinus.setAlternate(Qt::Key_Minus);
+    d->zoomMinusAction->setShortcut(keysMinus);
     actionCollection()->addAction("album_zoomout", d->zoomMinusAction);
 
     // -----------------------------------------------------------
