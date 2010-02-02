@@ -138,7 +138,7 @@ DZoomBar::DZoomBar(QWidget *parent)
 
     layout()->setMargin(0);
     layout()->setSpacing(0);
-    
+
     // -------------------------------------------------------------
 
     connect(d->zoomSlider, SIGNAL(valueChanged(int)),
@@ -221,7 +221,7 @@ void DZoomBar::setZoom(double zoom, double zmin, double zmax)
     d->zoomSlider->blockSignals(true);
     d->zoomSlider->setValue(size);
     d->zoomSlider->blockSignals(false);
-    
+
     QString ztxt = QString::number(lround(zoom*100.0)) + QString("%");
     d->zoomCombo->blockSignals(true);
     d->zoomCombo->setCurrentIndex(-1);
@@ -234,7 +234,7 @@ void DZoomBar::setThumbsSize(int size)
     d->zoomSlider->blockSignals(true);
     d->zoomSlider->setValue(size);
     d->zoomSlider->blockSignals(false);
-    
+
     d->zoomTracker->setText(i18n("Size: %1", size));
     triggerZoomTrackerToolTip();
 }
@@ -258,7 +258,7 @@ double DZoomBar::zoomFromSize(int size, double zmin, double zmax)
     double z = a*size+b;
     return z;
 }
-    
+
 void DZoomBar::triggerZoomTrackerToolTip()
 {
     d->zoomTracker->triggerAutoShow();
@@ -287,14 +287,17 @@ void DZoomBar::slotZoomTextChanged(const QString& txt)
 
 void DZoomBar::setBarMode(BarMode mode)
 {
+    QAction* zfitAction = d->zoomToFitButton->defaultAction();
+    QAction* z100Action = d->zoomTo100Button->defaultAction();
+
     switch(mode)
     {
         case PreviewZoomCtrl:
         {
             d->zoomToFitButton->show();
-            d->zoomToFitButton->setEnabled(true);
+            if (zfitAction) zfitAction->setEnabled(true);
             d->zoomTo100Button->show();
-            d->zoomTo100Button->setEnabled(true);
+            if (z100Action) z100Action->setEnabled(true);
             d->zoomCombo->show();
             d->zoomCombo->setEnabled(true);
             d->zoomTracker->setEnable(false);
@@ -303,9 +306,9 @@ void DZoomBar::setBarMode(BarMode mode)
         case ThumbsSizeCtrl:
         {
             d->zoomToFitButton->show();
-            d->zoomToFitButton->setEnabled(false);
+            if (zfitAction) zfitAction->setEnabled(false);
             d->zoomTo100Button->show();
-            d->zoomTo100Button->setEnabled(false);
+            if (z100Action) z100Action->setEnabled(false);
             d->zoomCombo->show();
             d->zoomCombo->setEnabled(false);
             d->zoomTracker->setEnable(true);
