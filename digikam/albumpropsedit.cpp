@@ -333,7 +333,9 @@ bool AlbumPropsEdit::createNew(PAlbum *parent, QString& title, QString& comments
 
 void AlbumPropsEdit::slotTitleChanged(const QString& newtitle)
 {
-    enableButtonOk(!newtitle.isEmpty());
+    QRegExp emptyTitle = QRegExp("^\\s*$");
+    bool enable = (!emptyTitle.exactMatch(newtitle) && !newtitle.isEmpty());
+    enableButtonOk(enable);
 }
 
 void AlbumPropsEdit::slotDateLowButtonClicked()

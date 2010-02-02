@@ -574,19 +574,20 @@ void QueueMgrWindow::applySettings()
 
 void QueueMgrWindow::refreshStatusBar()
 {
-    int items       = d->queuePool->currentQueue()->pendingItemsCount();
-    int tasks       = d->queuePool->currentQueue()->pendingTasksCount();
-    int totalItems  = d->queuePool->totalPendingItems();
-    int totalTasks  = d->queuePool->totalPendingTasks();
-    QString message = i18n("Current Queue: ");
+    int items        = d->queuePool->currentQueue()->itemsCount();
+    int pendingItems = d->queuePool->currentQueue()->pendingItemsCount();
+    int tasks        = d->queuePool->currentQueue()->pendingTasksCount();
+    int totalItems   = d->queuePool->totalPendingItems();
+    int totalTasks   = d->queuePool->totalPendingTasks();
+    QString message  = i18n("Current Queue: ");
 
-    switch (items)
+    switch (pendingItems)
     {
         case 0:
             message.append(i18n("No items"));
             break;
         default:
-            message.append(i18np("1 item", "%1 items", items));
+            message.append(i18np("1 item", "%1 items", pendingItems));
             break;
     }
 
@@ -631,11 +632,10 @@ void QueueMgrWindow::refreshStatusBar()
     if (!d->busy)
     {
         d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, i18n("Ready"));
-        bool b = (items != 0) ? true : false;
-        d->removeItemsSelAction->setEnabled(b);
-        d->removeItemsDoneAction->setEnabled(b);
-        d->clearQueueAction->setEnabled(b);
-        d->runAction->setEnabled(b && items);
+        d->removeItemsSelAction->setEnabled(items > 0);
+        d->removeItemsDoneAction->setEnabled((items - pendingItems) > 0);
+        d->clearQueueAction->setEnabled(items > 0);
+        d->runAction->setEnabled((tasks > 0) && (pendingItems > 0));
     }
 }
 

@@ -27,6 +27,7 @@
 
 #include "previewwidget.h"
 #include "canvas.h"
+#include "thumbnailsize.h"
 
 namespace Digikam
 {
@@ -187,6 +188,63 @@ void EditorStackView::setZoomFactor(double zoom)
     }
 }
 
+double EditorStackView::zoomMax()
+{
+    if (viewMode() == CanvasMode)
+    {
+        return d->canvas->zoomMax();
+    }
+    else
+    {
+        PreviewWidget* preview = previewWidget();
+        if (preview)
+            return preview->zoomMax();
+        else 
+            return -1.0;
+    }
+}
+
+double EditorStackView::zoomMin()
+{
+    if (viewMode() == CanvasMode)
+    {
+        return d->canvas->zoomMin();
+    }
+    else
+    {
+        PreviewWidget* preview = previewWidget();
+        if (preview)
+            return preview->zoomMin();
+        else 
+            return -1.0;
+    }
+}
+    
+void EditorStackView::slotZoomSliderChanged(int size)
+{
+    if (viewMode() == ToolViewMode && !previewWidget())
+        return;
+
+    double h    = (double)ThumbnailSize::Huge;
+    double s    = (double)ThumbnailSize::Small;
+    double zmin = zoomMin();
+    double zmax = zoomMax();
+    double b    = (zmin-(zmax*s/h))/(1-s/h);
+    double a    = (zmax-b)/h;
+    double z    = a*size+b;
+
+    if (viewMode() == CanvasMode)
+    {
+        d->canvas->setZoomFactorSnapped(z);
+    }
+    else
+    {
+        PreviewWidget* preview = previewWidget();
+        if (preview)
+            preview->setZoomFactorSnapped(z);
+    } 
+}
+    
 void EditorStackView::slotZoomChanged(double zoom)
 {
     bool max, min;

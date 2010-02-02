@@ -267,7 +267,9 @@ void TagEditDlg::slotTitleChanged(const QString& newtitle)
                                   "<i>\"%1\"</i></b>", tagName));
     }
 
-    enableButtonOk(!newtitle.isEmpty());
+    QRegExp emptyTitle = QRegExp("^\\s*$");
+    bool enable = (!emptyTitle.exactMatch(newtitle) && !newtitle.isEmpty());
+    enableButtonOk(enable);
 }
 
 bool TagEditDlg::tagEdit(QWidget *parent, TAlbum* album, QString& title, QString& icon)

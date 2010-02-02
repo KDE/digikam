@@ -407,12 +407,18 @@ void ChannelMixerTool::adjustSliders()
     switch(d->gboxSettings->histogramBox()->channel())
     {
        case GreenChannel:           // Green.
+          d->redGain->setDefaultValue(0);
+          d->greenGain->setDefaultValue(100);
+          d->blueGain->setDefaultValue(0);
           d->redGain->setValue(d->greenRedGain     * 100.0);
           d->greenGain->setValue(d->greenGreenGain * 100.0);
           d->blueGain->setValue(d->greenBlueGain   * 100.0);
           break;
 
        case BlueChannel:            // Blue.
+          d->redGain->setDefaultValue(0);
+          d->greenGain->setDefaultValue(0);
+          d->blueGain->setDefaultValue(100);
           d->redGain->setValue(d->blueRedGain     * 100.0);
           d->greenGain->setValue(d->blueGreenGain * 100.0);
           d->blueGain->setValue(d->blueBlueGain   * 100.0);
@@ -421,12 +427,18 @@ void ChannelMixerTool::adjustSliders()
        default:          // Red or monochrome.
           if ( d->monochrome->isChecked() )
           {
+             d->redGain->setDefaultValue(100);
+             d->greenGain->setDefaultValue(0);
+             d->blueGain->setDefaultValue(0);
              d->redGain->setValue(d->blackRedGain     * 100.0);
              d->greenGain->setValue(d->blackGreenGain * 100.0);
              d->blueGain->setValue(d->blackBlueGain   * 100.0);
           }
           else
           {
+             d->redGain->setDefaultValue(100);
+             d->greenGain->setDefaultValue(0);
+             d->blueGain->setDefaultValue(0);
              d->redGain->setValue(d->redRedGain     * 100.0);
              d->greenGain->setValue(d->redGreenGain * 100.0);
              d->blueGain->setValue(d->redBlueGain   * 100.0);

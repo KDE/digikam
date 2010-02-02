@@ -33,6 +33,7 @@
 #include <QString>
 #include <QToolButton>
 #include <QVariant>
+#include <QScrollBar>
 
 // KDE includes
 
@@ -268,7 +269,8 @@ QSize EditorToolSettings::minimumSizeHint() const
     // Limit to 40% of the desktop width.
     QSize hint = QScrollArea::minimumSizeHint();
     QRect desktopRect = KGlobalSettings::desktopGeometry(d->settingsArea);
-    hint.setWidth(qMin(d->settingsArea->minimumSizeHint().width(), desktopRect.width() * 2 / 5));
+    int wSB = verticalScrollBar()->height();
+    hint.setWidth(qMin(d->settingsArea->minimumSizeHint().width() + wSB, desktopRect.width() * 2 / 5));
     return hint;
 }
 
