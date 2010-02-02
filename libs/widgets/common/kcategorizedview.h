@@ -23,7 +23,7 @@
 
 #include <QtGui/QListView>
 
-#include <kdeui_export.h>
+#include "digikam_export.h"
 
 class KCategoryDrawer;
 
@@ -37,7 +37,7 @@ class KCategoryDrawer;
  *
  * @author Rafael Fernández López <ereslibre@kde.org>
  */
-class /*KDEUI_EXPORT*/KCategorizedView: public QListView
+class /*KDEUI_EXPORT*/ DIGIKAM_EXPORT KCategorizedView: public QListView
 {
 Q_OBJECT
 

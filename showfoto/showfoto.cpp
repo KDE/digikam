@@ -254,7 +254,7 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
     applySettings();
     setAutoSaveSettings("ImageViewer Settings", true);
 
-    d->rightSideBar->loadViewState();
+    d->rightSideBar->loadState();
 
     // -- Load current items ---------------------------
 

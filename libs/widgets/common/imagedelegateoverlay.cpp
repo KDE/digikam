@@ -31,7 +31,7 @@
 // Local includes
 
 #include "imagecategorizedview.h"
-#include "imagedelegate.h"
+#include "itemviewimagedelegate.h"
 #include "itemviewhoverbutton.h"
 
 namespace Digikam
@@ -64,7 +64,7 @@ void ImageDelegateOverlay::paint(QPainter *, const QStyleOptionViewItem&, const 
 {
 }
 
-void ImageDelegateOverlay::setView(ImageCategorizedView *view)
+void ImageDelegateOverlay::setView(QAbstractItemView *view)
 {
     if (!view && m_view)
     {
@@ -81,12 +81,12 @@ void ImageDelegateOverlay::setView(ImageCategorizedView *view)
     }
 }
 
-ImageCategorizedView *ImageDelegateOverlay::view() const
+QAbstractItemView *ImageDelegateOverlay::view() const
 {
     return m_view;
 }
 
-void ImageDelegateOverlay::setDelegate(ImageDelegate *delegate)
+void ImageDelegateOverlay::setDelegate(ItemViewImageDelegate *delegate)
 {
     if (!delegate && m_delegate)
     {
@@ -103,7 +103,7 @@ void ImageDelegateOverlay::setDelegate(ImageDelegate *delegate)
     }
 }
 
-ImageDelegate *ImageDelegateOverlay::delegate() const
+ItemViewImageDelegate *ImageDelegateOverlay::delegate() const
 {
     return m_delegate;
 }

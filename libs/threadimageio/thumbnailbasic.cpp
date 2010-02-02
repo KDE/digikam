@@ -137,7 +137,11 @@ QImage ThumbnailCreator::loadPNG(const QString& path)
     unsigned char buf[PNG_BYTES_TO_CHECK];
 
     size_t itemsRead = fread(buf, 1, PNG_BYTES_TO_CHECK, f);
-    if (itemsRead != 1 || !png_sig_cmp(buf, 0, PNG_BYTES_TO_CHECK))
+#if PNG_LIBPNG_VER >= 10400
+    if (itemsRead != 1 || png_sig_cmp(buf, 0, PNG_BYTES_TO_CHECK))
+#else
+    if (itemsRead != 1 || !png_check_sig(buf, PNG_BYTES_TO_CHECK))
+#endif
     {
         fclose(f);
         return qimage;
@@ -159,7 +163,11 @@ QImage ThumbnailCreator::loadPNG(const QString& path)
         return qimage;
     }
 
+#if PNG_LIBPNG_VER >= 10400
     if (setjmp(png_jmpbuf(png_ptr)))
+#else
+    if (setjmp(png_ptr->jmpbuf))
+#endif
     {
         png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
         fclose(f);
@@ -180,16 +188,23 @@ QImage ThumbnailCreator::loadPNG(const QString& path)
     if (color_type == PNG_COLOR_TYPE_PALETTE)
         png_set_expand(png_ptr);
 
-    if (info_ptr->color_type == PNG_COLOR_TYPE_RGB_ALPHA)
+
+#if PNG_LIBPNG_VER >= 10400
+    png_byte info_color_type = png_get_color_type(png_ptr, info_ptr);
+#else
+    png_byte info_color_type = info_ptr->color_type;
+#endif
+
+    if (info_color_type == PNG_COLOR_TYPE_RGB_ALPHA)
         has_alpha = 1;
 
-    if (info_ptr->color_type == PNG_COLOR_TYPE_GRAY_ALPHA)
+    if (info_color_type == PNG_COLOR_TYPE_GRAY_ALPHA)
     {
         has_alpha = 1;
         has_grey = 1;
     }
 
-    if (info_ptr->color_type == PNG_COLOR_TYPE_GRAY)
+    if (info_color_type == PNG_COLOR_TYPE_GRAY)
         has_grey = 1;
 
     unsigned char **lines;
@@ -232,7 +247,11 @@ QImage ThumbnailCreator::loadPNG(const QString& path)
     {
         png_set_gray_to_rgb(png_ptr);
         if (png_get_bit_depth(png_ptr, info_ptr) < 8)
+#if PNG_LIBPNG_VER >= 10400
             png_set_expand_gray_1_2_4_to_8(png_ptr);
+#else
+            png_set_gray_1_2_4_to_8(png_ptr);
+#endif
     }
 
     int sizeOfUint = sizeof(unsigned int);

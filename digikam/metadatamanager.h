@@ -47,6 +47,7 @@ public:
 public Q_SLOTS:
 
     void assignTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs);
+    void assignTags(const QList<int>& imageIds, const QList<int>& tagIDs);
     void removeTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs);
     void assignRating(const QList<ImageInfo>& infos, int rating);
     void setExifOrientation(const QList<ImageInfo>& infos, int orientation);

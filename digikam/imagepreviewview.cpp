@@ -110,7 +110,7 @@ public:
     QAction*           nextAction;
     QAction*           rotLeftAction;
     QAction*           rotRightAction;
-    
+
     QToolBar*          toolBar;
 
     DImg               preview;
@@ -151,6 +151,9 @@ ImagePreviewView::ImagePreviewView(AlbumWidgetStack* parent)
     connect(this, SIGNAL(signalShowPrevImage()),
             this, SIGNAL(signalPrevItem()));
 
+    connect(this, SIGNAL(signalLeftButtonDoubleClicked()),
+            this, SIGNAL(signalBack2Album()));
+
     connect(this, SIGNAL(signalRightButtonClicked()),
             this, SLOT(slotContextMenu()));
 
@@ -159,28 +162,28 @@ ImagePreviewView::ImagePreviewView(AlbumWidgetStack* parent)
 
     connect(d->prevAction, SIGNAL(triggered()),
             this, SIGNAL(signalPrevItem()));
-            
+
     connect(d->nextAction, SIGNAL(triggered()),
             this, SIGNAL(signalNextItem()));
-            
+
     connect(d->back2AlbumAction, SIGNAL(triggered()),
             this, SIGNAL(signalBack2Album()));
 
     connect(d->rotLeftAction, SIGNAL(triggered()),
             this, SLOT(slotRotateLeft()));
-            
+
     connect(d->rotRightAction, SIGNAL(triggered()),
             this, SLOT(slotRotateRight()));
-            
+
     // ------------------------------------------------------------
-            
+
     d->toolBar = new QToolBar(this);
     d->toolBar->addAction(d->prevAction);
     d->toolBar->addAction(d->nextAction);
     d->toolBar->addAction(d->back2AlbumAction);
     d->toolBar->addAction(d->rotLeftAction);
     d->toolBar->addAction(d->rotRightAction);
-        
+
     slotReset();
 }
 
@@ -300,7 +303,7 @@ void ImagePreviewView::slotGotImagePreview(const LoadingDescription& description
 
     d->rotLeftAction->setEnabled(d->isLoaded);
     d->rotRightAction->setEnabled(d->isLoaded);
-    
+
     unsetCursor();
     slotNextPreload();
 }
@@ -335,7 +338,7 @@ void ImagePreviewView::setImageInfo(const ImageInfo& info, const ImageInfo& prev
 
     d->prevAction->setEnabled(!previous.isNull());
     d->nextAction->setEnabled(!next.isNull());
-    
+
     if (!d->imageInfo.isNull())
         setImagePath(info.filePath());
     else

@@ -155,6 +155,10 @@ DZoomBar::DZoomBar(QWidget *parent)
 
     connect(d->zoomCombo, SIGNAL(returnPressed(const QString&)),
             this, SLOT(slotZoomTextChanged(const QString&)));
+
+    // -------------------------------------------------------------
+
+    setBarMode(PreviewZoomCtrl);
 }
 
 DZoomBar::~DZoomBar()
@@ -212,11 +216,7 @@ void DZoomBar::slotZoomSliderReleased()
 
 void DZoomBar::setZoom(double zoom, double zmin, double zmax)
 {
-    double h = (double)ThumbnailSize::Huge;
-    double s = (double)ThumbnailSize::Small;
-    double b = (zmin-(zmax*s/h))/(1-s/h);
-    double a = (zmax-b)/h;
-    int size = (int)((zoom - b) /a);
+    int size = sizeFromZoom(zoom, zmin, zmax);
 
     d->zoomSlider->blockSignals(true);
     d->zoomSlider->setValue(size);
@@ -227,9 +227,36 @@ void DZoomBar::setZoom(double zoom, double zmin, double zmax)
     d->zoomCombo->setCurrentIndex(-1);
     d->zoomCombo->setEditText(ztxt);
     d->zoomCombo->blockSignals(false);
+}
 
-    d->zoomTracker->setText(ztxt);
+void DZoomBar::setThumbsSize(int size)
+{
+    d->zoomSlider->blockSignals(true);
+    d->zoomSlider->setValue(size);
+    d->zoomSlider->blockSignals(false);
+
+    d->zoomTracker->setText(i18n("Size: %1", size));
     triggerZoomTrackerToolTip();
+}
+
+int DZoomBar::sizeFromZoom(double zoom, double zmin, double zmax)
+{
+    double h = (double)ThumbnailSize::Huge;
+    double s = (double)ThumbnailSize::Small;
+    double b = (zmin-(zmax*s/h))/(1-s/h);
+    double a = (zmax-b)/h;
+    int size = (int)((zoom - b) /a);
+    return size;
+}
+
+double DZoomBar::zoomFromSize(int size, double zmin, double zmax)
+{
+    double h = (double)ThumbnailSize::Huge;
+    double s = (double)ThumbnailSize::Small;
+    double b = (zmin-(zmax*s/h))/(1-s/h);
+    double a = (zmax-b)/h;
+    double z = a*size+b;
+    return z;
 }
 
 void DZoomBar::triggerZoomTrackerToolTip()
@@ -256,6 +283,46 @@ void DZoomBar::slotZoomTextChanged(const QString& txt)
     double zoom = KGlobal::locale()->readNumber(txt, &ok) / 100.0;
     if (ok && zoom > 0.0)
         emit signalZoomValueEdited(zoom);
+}
+
+void DZoomBar::setBarMode(BarMode mode)
+{
+    QAction* zfitAction = d->zoomToFitButton->defaultAction();
+    QAction* z100Action = d->zoomTo100Button->defaultAction();
+
+    switch(mode)
+    {
+        case PreviewZoomCtrl:
+        {
+            d->zoomToFitButton->show();
+            if (zfitAction) zfitAction->setEnabled(true);
+            d->zoomTo100Button->show();
+            if (z100Action) z100Action->setEnabled(true);
+            d->zoomCombo->show();
+            d->zoomCombo->setEnabled(true);
+            d->zoomTracker->setEnable(false);
+            break;
+        }
+        case ThumbsSizeCtrl:
+        {
+            d->zoomToFitButton->show();
+            if (zfitAction) zfitAction->setEnabled(false);
+            d->zoomTo100Button->show();
+            if (z100Action) z100Action->setEnabled(false);
+            d->zoomCombo->show();
+            d->zoomCombo->setEnabled(false);
+            d->zoomTracker->setEnable(true);
+            break;
+        }
+        default:   // NoPreviewZoomCtrl
+        {
+            d->zoomToFitButton->hide();
+            d->zoomTo100Button->hide();
+            d->zoomCombo->hide();
+            d->zoomTracker->setEnable(true);
+            break;
+        }
+    }
 }
 
 }  // namespace Digikam

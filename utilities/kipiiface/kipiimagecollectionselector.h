@@ -40,9 +40,6 @@
 #include "searchtextbar.h"
 #include "albummanager.h"
 
-class QWidget;
-class QTreeWidget;
-
 namespace Digikam
 {
 class KipiInterface;
@@ -58,16 +55,6 @@ public:
     ~KipiImageCollectionSelector();
 
     QList<KIPI::ImageCollection> selectedImageCollections() const;
-
-private:
-
-    void populateTreeView(const AlbumList& aList, QTreeWidget *view);
-
-private Q_SLOTS: 
-
-    void slotAlbumsSearchTextChanged(const SearchTextSettings&);
-    void slotTagsSearchTextChanged(const SearchTextSettings&);
-    void slotSearchesSearchTextChanged(const SearchTextSettings&);
 
 private:
 

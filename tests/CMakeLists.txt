@@ -2,13 +2,18 @@ SET( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 
 INCLUDE_DIRECTORIES(
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/database
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dialogs
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/loaders
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dmetadata
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/models
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/template
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/common
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/iccprofiles
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/imageplugins
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/metadata
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/batch
                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename
                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/common
                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser
@@ -17,9 +22,13 @@ INCLUDE_DIRECTORIES(
                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/cameragui
                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/canvas
                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/editor
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup
                     ${CMAKE_CURRENT_SOURCE_DIR}/../imageplugins/freerotation
                     ${CMAKE_CURRENT_SOURCE_DIR}/../digikam
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../showfoto
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../showfoto/setup
                     ${CMAKE_CURRENT_SOURCE_DIR}/..
+                    ${CMAKE_CURRENT_SOURCE_DIR}/modeltest
                     ${CMAKE_CURRENT_BINARY_DIR}/..
                     ${GPHOTO2_INCLUDE_DIRS}
 )
@@ -98,12 +107,40 @@ TARGET_LINK_LIBRARIES(uifilevalidatortest
 
 #------------------------------------------------------------------------
 
+SET(statesavingobject_SRCS
+    statesavingobjecttest.cpp
+)
+
+KDE4_ADD_UNIT_TEST(statesavingobjecttest ${statesavingobject_SRCS})
+TARGET_LINK_LIBRARIES(statesavingobjecttest
+                      ${KDE4_KDECORE_LIBS}
+                      ${QT_QTGUI_LIBRARY}
+                      ${QT_QTTEST_LIBRARY}
+                      ${GPHOTO2_LIBRARIES}
+                      digikamcore
+                      )
+
+#------------------------------------------------------------------------
+
 SET(freerotationtest_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/../imageplugins/freerotation/freerotation.cpp
     freerotationtest.cpp
 )
 KDE4_ADD_UNIT_TEST(freerotationtest ${freerotationtest_SRCS})
 TARGET_LINK_LIBRARIES(freerotationtest
+                      ${KDE4_KDECORE_LIBS}
+                      ${QT_QTGUI_LIBRARY}
+                      ${QT_QTTEST_LIBRARY}
+                      digikamcore
+                      )
+
+#------------------------------------------------------------------------
+
+SET(searchtextbartest_SRCS
+    searchtextbartest.cpp
+)
+KDE4_ADD_UNIT_TEST(searchtextbartest ${searchtextbartest_SRCS})
+TARGET_LINK_LIBRARIES(searchtextbartest
                       ${KDE4_KDECORE_LIBS}
                       ${QT_QTGUI_LIBRARY}
                       ${QT_QTTEST_LIBRARY}
@@ -122,6 +159,73 @@ TARGET_LINK_LIBRARIES(filesaveoptionsboxtest
                       ${QT_QTTEST_LIBRARY}
                       digikamcore
                       )
+                      
+                 
+#------------------------------------------------------------------------
+
+SET(albummodeltest_SRCS
+    albummodeltest.cpp
+    modeltest/modeltest.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/album.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/albummanager.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/albumsettings.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/albumthumbnailloader.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/databaseerrorhandler.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/digikamapp.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/scancontroller.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/cameragui/dkcamera.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/cameragui/gpcamera.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/cameralist.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/cameraselection.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/cameratype.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setup.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupdatabase.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupcollections.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupcollectionview.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupalbumview.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupcategory.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setuptooltip.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupmetadata.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setuptemplate.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupmime.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setuplighttable.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupeditor.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupiofiles.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupdcraw.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupicc.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupplugins.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupslideshow.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupcamera.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupmisc.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/batch/batchthumbsgenerator.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/models/abstractalbummodel.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/models/albumfiltermodel.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/models/albummodel.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/template/altlangstredit.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/template/countryselector.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/template/msgtextedit.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/template/subjectedit.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/template/subjectwidget.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/template/templatelist.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/template/templatemanager.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/template/templatepanel.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/iccprofiles/iccprofilescombobox.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dialogs/dprogressdlg.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/loaders/jp2ksettings.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/loaders/pgfsettings.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/loaders/pngsettings.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/loaders/tiffsettings.cpp
+)
+#KDE4_ADD_UNIT_TEST(albummodeltest ${albummodeltest_SRCS})
+#TARGET_LINK_LIBRARIES(albummodeltest
+#                      ${KDE4_KDECORE_LIBS}
+#                      ${QT_QTGUI_LIBRARY}
+#                      ${QT_QTTEST_LIBRARY}
+#                      ${GPHOTO2_LIBRARIES}
+#                      digikamdatabase
+#                      digikamcore
+#                      )
+
 
 #------------------------------------------------------------------------
 

@@ -35,6 +35,7 @@
 namespace Digikam
 {
 
+class Album;
 class SAlbum;
 class SearchWindow;
 class SearchTabHeaderPriv;
@@ -50,7 +51,7 @@ public:
 
 public Q_SLOTS:
 
-    void selectedSearchChanged(SAlbum *album);
+    void selectedSearchChanged(Album *album);
     void editSearch(SAlbum *album);
     void newKeywordSearch();
     void newAdvancedSearch();

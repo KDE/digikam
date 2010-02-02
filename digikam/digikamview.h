@@ -7,7 +7,7 @@
  * Description : implementation of album view interface.
  *
  * Copyright (C) 2002-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2002-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2002-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -40,6 +40,8 @@
 
 #include "searchtextbar.h"
 #include "imageinfo.h"
+#include "digikammodelcollection.h"
+#include "sidebarwidget.h"
 
 namespace Digikam
 {
@@ -56,7 +58,7 @@ class DigikamView : public KHBox
 
 public:
 
-    DigikamView(QWidget *parent);
+    DigikamView(QWidget* parent, DigikamModelCollection* modelCollection);
     ~DigikamView();
 
     void applySettings();
@@ -71,11 +73,14 @@ public:
     void setRecurseAlbums(bool recursive);
     void setRecurseTags(bool recursive);
 
-    void connectIconViewFilter(AlbumIconViewFilter *filter);
+    void connectIconViewFilter(AlbumIconViewFilter* filter);
 
     KUrl::List allUrls() const;
     KUrl::List selectedUrls() const;
 
+    double zoomMin();
+    double zoomMax();
+    
 Q_SIGNALS:
 
     void signalAlbumSelected(bool val);
@@ -86,15 +91,17 @@ Q_SIGNALS:
     void signalProgressBarMode(int, const QString&);
     void signalProgressValue(int);
     void signalThumbSizeChanged(int);
-    void signalZoomChanged(double, int);
+    void signalZoomChanged(double);
     void signalTogglePreview(bool);
 
     void signalGotoAlbumAndItem(const ImageInfo&);
-    void signalGotoDateAndItem(AlbumIconItem *);
+    void signalGotoDateAndItem(AlbumIconItem*);
     void signalGotoTagAndItem(int tagID);
     void signalChangedTab(QWidget*);
 
 public Q_SLOTS:
+
+    void setZoomFactor(double zoom);
 
     // View Action slots
     void slotZoomIn();
@@ -109,16 +116,15 @@ public Q_SLOTS:
     void slotNewAlbum();
     void slotSortAlbums(int order);
     void slotDeleteAlbum();
-    void slotSelectAlbum(const KUrl& url);
     void slotAlbumPropsEdit();
     void slotAlbumOpenInKonqui();
     void slotAlbumOpenInTerminal();
     void slotAlbumRefresh();
     void slotAlbumHistoryBack(int steps=1);
     void slotAlbumHistoryForward(int steps=1);
-    void slotAlbumAdded(Album *album);
-    void slotAlbumDeleted(Album *album);
-    void slotAlbumRenamed(Album *album);
+    void slotAlbumAdded(Album* album);
+    void slotAlbumDeleted(Album* album);
+    void slotAlbumRenamed(Album* album);
     void slotAlbumWriteMetadata();
     void slotAlbumReadMetadata();
     void slotAlbumSelected(Album* album);
@@ -126,6 +132,8 @@ public Q_SLOTS:
     void slotGotoAlbumAndItem(const ImageInfo& imageInfo);
     void slotGotoDateAndItem(const ImageInfo& imageInfo);
     void slotGotoTagAndItem(int tagID);
+
+    void slotSelectAlbum(const KUrl& url);
 
     // Tag action slots
     void slotNewTag();
@@ -181,11 +189,13 @@ private:
     void setupConnections();
     void loadViewState();
     void saveViewState();
-    void changeAlbumFromHistory(Album *album, QWidget *widget);
+    void changeAlbumFromHistory(Album* album, QWidget* widget);
     void slideShow(const ImageInfoList& infoList);
-    void connectBatchSyncMetadata(BatchSyncMetadata *syncMetadata);
+    void connectBatchSyncMetadata(BatchSyncMetadata* syncMetadata);
 
 private Q_SLOTS:
+
+    void slotLeftSideBarActivate(SidebarWidget* widget);
 
     void slotAllAlbumsLoaded();
 

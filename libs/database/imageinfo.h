@@ -302,6 +302,8 @@ private:
 
 inline uint qHash(const ImageInfo& info) { return info.hash(); }
 
+DIGIKAM_EXPORT QDebug& operator<<(QDebug &stream, const ImageInfo &info);
+
 }  // namespace Digikam
 
 Q_DECLARE_TYPEINFO(Digikam::ImageInfo, Q_MOVABLE_TYPE);

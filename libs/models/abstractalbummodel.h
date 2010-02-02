@@ -67,10 +67,18 @@ public:
 
     enum AlbumDataRole
     {
+        /// Returns the album title. Principally the same as display role, but without any additions.
+        AlbumTitleRole = Qt::UserRole,
         /// Returns the Album::Type of the associated album
-        AlbumTypeRole = Qt::UserRole,
+        AlbumTypeRole = Qt::UserRole + 1,
         /// Returns a pointer to the associated Album object
-        AlbumPointerRole = Qt::UserRole + 1
+        AlbumPointerRole = Qt::UserRole + 2,
+        /// Returns the id of the associated Album object
+        AlbumIdRole = Qt::UserRole + 3,
+        /// Returns the global id (unique across all album types)
+        AlbumGlobalIdRole = Qt::UserRole + 4,
+        /// Returns the data to sort on
+        AlbumSortRole = Qt::UserRole + 5
     };
 
     /**
@@ -108,9 +116,17 @@ public:
         the album is not contained in this model. */
     QModelIndex indexForAlbum(Album *album) const;
 
+    /** Returns the album represented by the index. In contrast to albumForIndex(),
+     *  the index can be from any proxy model, as long as an AbstractAlbumModel is at the end.
+     */
+    static Album *retrieveAlbum(const QModelIndex& index);
+
     Album *rootAlbum() const;
     /// Return the index corresponding to the root album. If the policy is IgnoreRootAlbum, this is an invalid index. */
     QModelIndex rootAlbumIndex() const;
+
+    /// Returns the root album behavior set for this model
+    RootAlbumBehavior rootAlbumBehavior() const;
 
     /// Returns the Album::Type of the contained albums
     Album::Type albumType() const;
@@ -128,7 +144,9 @@ protected:
     /// For subclassing convenience: A part of the implementation of data()
     virtual QVariant albumData(Album *a, int role) const;
     /// For subclassing convenience: A part of the implementation of data()
-    virtual QVariant decorationRole(Album *a) const;
+    virtual QVariant decorationRoleData(Album *a) const;
+    /// For subclassing convenience: A port of the implementation of data()
+    virtual QVariant sortRoleData(Album *a) const;
     /// For subclassing convenience: A part of the implementation of headerData()
     virtual QString columnHeader() const;
     /// For subclassing convenience: A part of the implementation of itemFlags()
@@ -227,6 +245,13 @@ public Q_SLOTS:
      *  Can connect to QTreeView's collapsed() signal. */
     void includeChildrenCount(const QModelIndex& index);
 
+    /**
+     * Returns the number of included items for this album.
+     *
+     * @return positive value or -1 if unknown
+     */
+    virtual int albumCount(Album *album) const;
+
 protected:
 
     /// need to implement in subclass
@@ -294,7 +319,21 @@ public:
     QList<Album *> checkedAlbums() const;
 
     /// Resets the checked state of all albums to Qt::Unchecked
-    void resetCheckedAlbums();
+    void resetAllCheckedAlbums();
+    /// Resets the checked state of all albums under the given parent
+    void resetCheckedAlbums(QModelIndex parent = QModelIndex());
+    /// Resets the checked state of all parents of the child including it.
+    void resetCheckedParentAlbums(QModelIndex &child);
+    /// Checks all albums beneath the given parent
+    void checkAllAlbums(QModelIndex parent = QModelIndex());
+    // Checks all parent albums starting at the child, including it.
+    void checkAllParentAlbums(QModelIndex &child);
+    /// Inverts the checked state of all albums under the given parent.
+    void invertCheckedAlbums(QModelIndex parent = QModelIndex());
+    /// Sets the checked state recursively for all children of and the given album.
+    void setCheckStateForChildren(Album *album, Qt::CheckState state);
+    /// Sets the checked state recursively for all parents of and the given album.
+    void setCheckStateForParents(Album *album, Qt::CheckState state);
 
 Q_SIGNALS:
 
@@ -306,12 +345,15 @@ protected:
 
     virtual QVariant albumData(Album *a, int role) const;
     virtual Qt::ItemFlags flags(const QModelIndex& index) const;
-    virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
+    virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
 
     virtual void albumCleared(Album *album);
     virtual void allAlbumsCleared();
 
 private:
+
+    void setDataForParents(QModelIndex &child, const QVariant& value, int role = Qt::EditRole);
+    void setDataForChildren(QModelIndex &parent, const QVariant& value, int role = Qt::EditRole);
 
     Qt::ItemFlags                 m_extraFlags;
     QHash<Album*, Qt::CheckState> m_checkedAlbums;

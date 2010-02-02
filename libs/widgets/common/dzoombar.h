@@ -45,15 +45,25 @@ class DZoomBarPriv;
 
 class DIGIKAM_EXPORT DZoomBar : public KHBox
 {
+    Q_OBJECT
 
-Q_OBJECT
+public:
+
+    enum BarMode
+    {
+        PreviewZoomCtrl=0,      // Preview Zoom controler.
+        ThumbsSizeCtrl,         // Thumb Size controler. Preview zoom controller still visible but disabled.
+        NoPreviewZoomCtrl       // Thumb Size controler alone. Preview Zoom controler is hidden.
+    };
 
 public:
 
     DZoomBar(QWidget* parent=0);
     ~DZoomBar();
 
+    void setBarMode(BarMode mode);
     void setZoom(double zoom, double zmin, double zmax);
+    void setThumbsSize(int size);
 
     void setZoomToFitAction(QAction* action);
     void setZoomTo100Action(QAction* action);
@@ -61,6 +71,9 @@ public:
     void setZoomMinusAction(QAction* action);
 
     void triggerZoomTrackerToolTip();
+    
+    static int    sizeFromZoom(double zoom, double zmin, double zmax);
+    static double zoomFromSize(int size, double zmin, double zmax);
 
 Q_SIGNALS:
 

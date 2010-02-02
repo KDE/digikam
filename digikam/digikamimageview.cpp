@@ -160,7 +160,7 @@ void DigikamImageView::openCurrentInEditor()
         d->utilities->openInEditor(info, imageInfos(), currentAlbum());
 }
 
-void DigikamImageView::showContextMenu(QContextMenuEvent* event, const ImageInfo& info)
+void DigikamImageView::showContextMenuOnInfo(QContextMenuEvent* event, const ImageInfo& info)
 {
     QList<ImageInfo> selectedInfos = selectedImageInfosCurrentFirst();
     QList<qlonglong> selectedImageIDs;
@@ -269,47 +269,6 @@ void DigikamImageView::showContextMenu(QContextMenuEvent* event)
     delete paste;
 }
 
-void DigikamImageView::cut()
-{
-    QMimeData *data = imageModel()->dragDropHandler()->createMimeData(selectedImageInfos());
-    if (data)
-    {
-        d->utilities->addIsCutSelection(data, true);
-        kapp->clipboard()->setMimeData(data);
-    }
-}
-
-void DigikamImageView::copy()
-{
-    QMimeData *data = imageModel()->dragDropHandler()->createMimeData(selectedImageInfos());
-    if (data)
-    {
-        d->utilities->addIsCutSelection(data, false);
-        kapp->clipboard()->setMimeData(data);
-    }
-}
-
-void DigikamImageView::paste()
-{
-    const QMimeData *data = kapp->clipboard()->mimeData(QClipboard::Clipboard);
-    if (!data)
-        return;
-    // We need to have a real (context menu action) or fake (Ctrl+V shortcut) mouse position
-    QPoint eventPos = mapFromGlobal(QCursor::pos());
-    if (!rect().contains(eventPos))
-        eventPos = QPoint(0, 0);
-
-    bool cutAction = d->utilities->decodeIsCutSelection(data);
-    QDropEvent event(eventPos,
-                     cutAction ? Qt::MoveAction : Qt::CopyAction,
-                     data, Qt::NoButton,
-                     cutAction ? Qt::ShiftModifier : Qt::ControlModifier);
-    QModelIndex index = indexAt(event.pos());
-    if (!imageModel()->dragDropHandler()->accepts(&event, index))
-        return;
-    imageModel()->dragDropHandler()->dropEvent(this, &event, index);
-}
-
 void DigikamImageView::insertSelectedToLightTable(bool addTo)
 {
     // Run Light Table with all selected image files in the current Album.
@@ -353,43 +312,15 @@ void DigikamImageView::insertSelectedToExistingQueue(int queueid)
 void DigikamImageView::deleteSelected(bool permanently)
 {
     ImageInfoList imageInfoList = selectedImageInfos();
-    if (d->utilities->deleteImages(imageInfoList, permanently)
-        && imageInfoList.size())
-    {
-        if (imageInfoList.size() == model()->rowCount())
-        {
-            clearSelection();
-            setCurrentIndex(QModelIndex());
-        }
-        else
-        {
-            QItemSelection selection = selectionModel()->selection();
-            const QModelIndex first = model()->index(0, 0);
-            const QModelIndex last  = model()->index(model()->rowCount() - 1, 0);
-            if (selection.contains(first) && selection.contains(last))
-            {
-                QItemSelection remaining(first, last);
-                remaining.merge(selection, QItemSelectionModel::Toggle);
-                toIndex(remaining.indexes().first());
-            }
-            else if (selection.contains(last))
-            {
-                setCurrentIndex(selection.indexes().first());
-                toPreviousIndex();
-            }
-            else
-            {
-                setCurrentIndex(selection.indexes().last());
-                toNextIndex();
-            }
-        }
-    }
+    if (d->utilities->deleteImages(imageInfoList, permanently))
+        awayFromSelection();
 }
 
 void DigikamImageView::deleteSelectedDirectly(bool permanently)
 {
     ImageInfoList imageInfoList = selectedImageInfos();
     d->utilities->deleteImagesDirectly(imageInfoList, permanently);
+    awayFromSelection();
 }
 
 void DigikamImageView::assignTagToSelected(int tagID)

@@ -44,6 +44,7 @@ class QString;
 
 class KAction;
 class KActionCollection;
+class KMenu;
 
 namespace Digikam
 {
@@ -52,6 +53,7 @@ class Album;
 class AlbumIconItem;
 class ContextMenuHelperPriv;
 class ImageInfo;
+class TagModificationHelper;
 
 /**
  * @brief A helper class to add actions and special menus to the context menu.
@@ -128,6 +130,10 @@ public:
      * @param addDisabled if set, disabled actions are added to the menu
      */
     void addAction(QAction* action, bool addDisabled = false);
+
+    void addSubMenu(KMenu *subMenu);
+
+    void addSeparator();
 
     /**
      * Add a temporary action and assign it to a custom slot.
@@ -229,6 +235,15 @@ public:
      * Add Queue Manager actions menu.
      */
     void addQueueManagerMenu();
+
+    /**
+     * Add actions to add, remove or edit a tag.
+     * The tag modification helper is used to execute the action.
+     * You must set the parent tag to use on modification helper.
+     */
+    void addActionNewTag(TagModificationHelper *helper);
+    void addActionDeleteTag(TagModificationHelper *helper);
+    void addActionEditTag(TagModificationHelper *helper);
 
     /**
      * Add "Assign Tags" menu.

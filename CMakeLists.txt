@@ -633,6 +633,8 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dfontselect.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dhistoryview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dgradientslider.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dcategorizedview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/ditemdelegate.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/ditemtooltip.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dlogoaction.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dpopupmenu.cpp
@@ -642,8 +644,11 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/histogrambox.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/histogramwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/histogrampainter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/imagedelegateoverlay.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/itemviewhoverbutton.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/itemviewimagedelegate.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/itemviewtooltip.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/kcategorizedview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/knotificationwrapper.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/paniconwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/previewwidget.cpp
@@ -651,6 +656,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/searchtextbar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/sidebar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/splashscreen.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/statesavingobject.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/statusled.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/statusnavigatebar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/statusprogressbar.cpp
@@ -828,7 +834,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiessidebardb.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/cameraitempropertiestab.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagedescedittab.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/talbumlistview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/captionedit.cpp
        )
 
@@ -1047,7 +1052,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
        )
 
     SET(libfuzzysearch_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/fuzzysearch/fuzzysearchfolderview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/fuzzysearch/fuzzysearchview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/fuzzysearch/findduplicatesview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/fuzzysearch/findduplicatesalbumitem.cpp
@@ -1055,14 +1059,11 @@ IF(DIGIKAM_CAN_BE_COMPILED)
        )
 
     SET(libgpssearch_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/gpssearch/gpssearchfolderview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/gpssearch/gpssearchview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/gpssearch/gpssearchwidget.cpp
        )
 
     SET(libtimeline_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/timeline/timelinefolderview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/timeline/timelineview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/timeline/timelinewidget.cpp
        )
 
@@ -1100,14 +1101,15 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     SET(libdigikamgui_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumdragdrop.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumfolderview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumhistory.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumiconviewfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumlister.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albummanager.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albummodificationhelper.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumpropsedit.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumselectcombobox.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumselectdialog.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumselectiontreeview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumselectwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumsettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumthumbnailloader.cpp
@@ -1120,10 +1122,10 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikamapp.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikamimageview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikamimageview_p.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikammodelcollection.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikamview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/dio.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/folderitem.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/folderview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/editablesearchtreeview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/folderviewtooltip.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/icongroupitem.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/iconitem.cpp
@@ -1132,7 +1134,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagecategorizedview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagecategorydrawer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagedelegate.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagedelegateoverlay.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagedragdrop.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagepreviewbar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagepreviewview.cpp
@@ -1140,10 +1141,10 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imagerotationoverlay.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imageselectionoverlay.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/imageviewutilities.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/kcategorizedview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/kdateedit.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/kdatepickerpopup.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/kdatetimeedit.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/leftsidebarwidgets.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/mediaplayerview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/metadatahub.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/metadatamanager.cpp
@@ -1153,13 +1154,18 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/ratingpopupmenu.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/ratingwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/scancontroller.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/sidebarwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/syncjob.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagcheckview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagdragdrop.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tageditdlg.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagfilterview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagfiltersidebarwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagfolderview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagmodificationhelper.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tagspopupmenu.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tooltipfiller.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/treefolderitem.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/searchmodificationhelper.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/welcomepageview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/databaseerrorhandler.cpp
        )

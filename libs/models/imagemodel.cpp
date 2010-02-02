@@ -641,8 +641,7 @@ QMimeData *ImageModel::mimeData(const QModelIndexList& indexes) const
     if (!d->dragDropHandler)
         return 0;
 
-    QList<ImageInfo> infos = imageInfos(indexes);
-    return d->dragDropHandler->createMimeData(infos);
+    return d->dragDropHandler->createMimeData(indexes);
 }
 
 void ImageModel::setEnableDrag(bool enable)

@@ -55,9 +55,9 @@ AlbumDragDropHandler::AlbumDragDropHandler(AlbumModel *model)
 {
 }
 
-bool AlbumDragDropHandler::dropEvent(QAbstractItemView *view, QDropEvent *e, const QModelIndex& droppedOn)
+bool AlbumDragDropHandler::dropEvent(QAbstractItemView *view, const QDropEvent *e, const QModelIndex& droppedOn)
 {
-    if(accepts(e->mimeData(), droppedOn) == Qt::IgnoreAction)
+    if(accepts(e, droppedOn) == Qt::IgnoreAction)
         return false;
 
     PAlbum *destAlbum = model()->albumForIndex(droppedOn);
@@ -71,7 +71,7 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView *view, QDropEvent *e, con
 
         PAlbum *droppedAlbum = AlbumManager::instance()->findPAlbum(albumId);
 
-        // TODO: Copy?
+        // TODO Copy?
         KMenu popMenu(view);
         popMenu.addTitle(SmallIcon("digikam"), i18n("My Albums"));
         QAction *moveAction = popMenu.addAction(SmallIcon("go-jump"), i18n("&Move Here"));
@@ -82,6 +82,7 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView *view, QDropEvent *e, con
 
         if(choice == moveAction)
         {
+        	// FIXME there is no such slot
             KIO::Job* job = DIO::move(droppedAlbum, destAlbum);
             connect(job, SIGNAL(result(KJob*)),
                     this, SLOT(slotDIOResult(KJob*)));
@@ -89,8 +90,7 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView *view, QDropEvent *e, con
 
         return true;
     }
-
-    if (DItemDrag::canDecode(e->mimeData()))
+    else if (DItemDrag::canDecode(e->mimeData()))
     {
 
         KUrl::List urls;
@@ -217,10 +217,8 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView *view, QDropEvent *e, con
 
         return true;
     }
-
     // -- DnD from Camera GUI ----------------------------
-
-    if (DCameraItemListDrag::canDecode(e->mimeData()))
+    else if (DCameraItemListDrag::canDecode(e->mimeData()))
     {
         CameraUI *ui = dynamic_cast<CameraUI*>(e->source());
         if (ui)
@@ -244,10 +242,8 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView *view, QDropEvent *e, con
             }
         }
     }
-
     // -- DnD from an external source ---------------------
-
-    if (KUrl::List::canDecode(e->mimeData()))
+    else if (KUrl::List::canDecode(e->mimeData()))
     {
         KUrl destURL(destAlbum->databaseUrl());
 
@@ -301,11 +297,11 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView *view, QDropEvent *e, con
     return false;
 }
 
-Qt::DropAction AlbumDragDropHandler::accepts(const QMimeData *data, const QModelIndex& dropIndex)
+Qt::DropAction AlbumDragDropHandler::accepts(const QDropEvent *e, const QModelIndex& dropIndex)
 {
     PAlbum *destAlbum = model()->albumForIndex(dropIndex);
 
-    if (DAlbumDrag::canDecode(data))
+    if (DAlbumDrag::canDecode(e->mimeData()))
     {
         // do not allow to drop on root
         if (dropIndex == model()->rootAlbumIndex())
@@ -316,7 +312,7 @@ Qt::DropAction AlbumDragDropHandler::accepts(const QMimeData *data, const QModel
 
         KUrl::List urls;
         int albumId;
-        if (!DAlbumDrag::decode(data, urls, albumId))
+        if (!DAlbumDrag::decode(e->mimeData(), urls, albumId))
             return Qt::IgnoreAction;
 
         PAlbum *droppedAlbum = AlbumManager::instance()->findPAlbum(albumId);
@@ -333,10 +329,9 @@ Qt::DropAction AlbumDragDropHandler::accepts(const QMimeData *data, const QModel
 
         return Qt::MoveAction;
     }
-
-    if(DItemDrag::canDecode(data)
-       || DCameraItemListDrag::canDecode(data)
-       || KUrl::List::canDecode(data))
+    else if (DItemDrag::canDecode(e->mimeData()) ||
+             DCameraItemListDrag::canDecode(e->mimeData()) ||
+             KUrl::List::canDecode(e->mimeData()))
     {
         // Do not allow drop images on album root
         if (destAlbum && !destAlbum->isRoot())

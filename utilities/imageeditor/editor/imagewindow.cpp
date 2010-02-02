@@ -113,6 +113,7 @@
 #include "thumbbardock.h"
 #include "globals.h"
 #include "uifilevalidator.h"
+#include "albummodel.h"
 
 namespace Digikam
 {
@@ -236,7 +237,7 @@ ImageWindow::ImageWindow()
 
     //-------------------------------------------------------------
 
-    d->rightSideBar->loadViewState();
+    d->rightSideBar->loadState();
     d->rightSideBar->populateTags();
     slotSidebarTabTitleStyleChanged();
 }

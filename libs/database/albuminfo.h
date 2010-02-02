@@ -146,6 +146,12 @@ namespace DatabaseSearch
         MapSearch,
         DuplicatesSearch
     };
+
+    enum HaarSearchType
+    {
+        HaarImageSearch,
+        HaarSketchSearch
+    };
 }
 
 /**

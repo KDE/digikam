@@ -6,7 +6,7 @@
  * Date        : 2007-03-05
  * Description : digiKam light table GUI
  *
- * Copyright (C) 2007-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -81,6 +81,7 @@
 #include "lighttablepreview.h"
 #include "lighttablewindow_p.h"
 #include "uifilevalidator.h"
+#include "albummodel.h"
 
 namespace Digikam
 {
@@ -134,8 +135,8 @@ LightTableWindow::LightTableWindow()
 
     //-------------------------------------------------------------
 
-    d->leftSideBar->loadViewState();
-    d->rightSideBar->loadViewState();
+    d->leftSideBar->loadState();
+    d->rightSideBar->loadState();
     d->leftSideBar->populateTags();
     d->rightSideBar->populateTags();
     slotSidebarTabTitleStyleChanged();
@@ -495,14 +496,18 @@ void LightTableWindow::setupActions()
     d->clearOnCloseAction->setWhatsThis(i18n("Remove all images from the light table when it is closed"));
     actionCollection()->addAction("lighttable_clearonclose", d->clearOnCloseAction);
 
-    d->zoomPlusAction = KStandardAction::zoomIn(d->previewView, SLOT(slotIncreaseZoom()), this);
+    d->zoomPlusAction  = KStandardAction::zoomIn(d->previewView, SLOT(slotIncreaseZoom()), this);
     d->zoomPlusAction->setEnabled(false);
-    d->zoomPlusAction->setShortcut(KShortcut(Qt::Key_Plus));
+    KShortcut keysPlus = d->zoomPlusAction->shortcut();
+    keysPlus.setAlternate(Qt::Key_Plus);
+    d->zoomPlusAction->setShortcut(keysPlus);
     actionCollection()->addAction("lighttable_zoomplus", d->zoomPlusAction);
 
-    d->zoomMinusAction = KStandardAction::zoomOut(d->previewView, SLOT(slotDecreaseZoom()), this);
+    d->zoomMinusAction  = KStandardAction::zoomOut(d->previewView, SLOT(slotDecreaseZoom()), this);
     d->zoomMinusAction->setEnabled(false);
-    d->zoomMinusAction->setShortcut(KShortcut(Qt::Key_Minus));
+    KShortcut keysMinus = d->zoomMinusAction->shortcut();
+    keysMinus.setAlternate(Qt::Key_Minus);
+    d->zoomMinusAction->setShortcut(keysMinus);
     actionCollection()->addAction("lighttable_zoomminus", d->zoomMinusAction);
 
     d->zoomTo100percents = new KAction(KIcon("zoom-original"), i18n("Zoom to 100%"), this);

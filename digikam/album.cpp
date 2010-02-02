@@ -487,7 +487,7 @@ DatabaseUrl DAlbum::databaseUrl() const
 
 SAlbum::SAlbum(const QString& title, int id, bool root)
       : Album(Album::SEARCH, id, root),
-        m_type(DatabaseSearch::UndefinedType)
+        m_searchType(DatabaseSearch::UndefinedType)
 {
     setTitle(title);
 }
@@ -498,7 +498,7 @@ SAlbum::~SAlbum()
 
 void SAlbum::setSearch(DatabaseSearch::Type type, const QString& query)
 {
-    m_type  = type;
+    m_searchType  = type;
     m_query = query;
 }
 
@@ -512,14 +512,14 @@ QString SAlbum::query() const
     return m_query;
 }
 
-DatabaseSearch::Type SAlbum::type() const
+DatabaseSearch::Type SAlbum::searchType() const
 {
-    return m_type;
+    return m_searchType;
 }
 
 bool SAlbum::isNormalSearch() const
 {
-    switch (m_type)
+    switch (m_searchType)
     {
         case DatabaseSearch::KeywordSearch:
         case DatabaseSearch::AdvancedSearch:
@@ -532,32 +532,113 @@ bool SAlbum::isNormalSearch() const
 
 bool SAlbum::isAdvancedSearch() const
 {
-    return m_type == DatabaseSearch::AdvancedSearch;
+    return m_searchType == DatabaseSearch::AdvancedSearch;
 }
 
 bool SAlbum::isKeywordSearch() const
 {
-    return m_type == DatabaseSearch::KeywordSearch;
+    return m_searchType == DatabaseSearch::KeywordSearch;
 }
 
 bool SAlbum::isTimelineSearch() const
 {
-    return m_type == DatabaseSearch::TimeLineSearch;
+    return m_searchType == DatabaseSearch::TimeLineSearch;
 }
 
 bool SAlbum::isHaarSearch() const
 {
-    return m_type == DatabaseSearch::HaarSearch;
+    return m_searchType == DatabaseSearch::HaarSearch;
 }
 
 bool SAlbum::isMapSearch() const
 {
-    return m_type == DatabaseSearch::MapSearch;
+    return m_searchType == DatabaseSearch::MapSearch;
 }
 
 bool SAlbum::isDuplicatesSearch() const
 {
-    return m_type == DatabaseSearch::DuplicatesSearch;
+    return m_searchType == DatabaseSearch::DuplicatesSearch;
+}
+
+bool SAlbum::isTemporarySearch() const
+{
+
+    if (isHaarSearch()) {
+        return (title() == getTemporaryHaarTitle(DatabaseSearch::HaarImageSearch)) ||
+                title() == getTemporaryHaarTitle(DatabaseSearch::HaarSketchSearch);
+    }
+
+    return (title() == getTemporaryTitle(m_searchType));
+
+}
+
+QString SAlbum::displayTitle() const
+{
+    if (isTemporarySearch())
+    {
+        switch(m_searchType)
+        {
+            case DatabaseSearch::TimeLineSearch:
+                return i18n("Current Timeline Search");
+            case DatabaseSearch::HaarSearch:
+            {
+                if (title() == getTemporaryHaarTitle(DatabaseSearch::HaarImageSearch))
+                    return i18n("Current Fuzzy Image Search");
+                else if (title() == getTemporaryHaarTitle(DatabaseSearch::HaarSketchSearch))
+                    return i18n("Current Fuzzy Sketch Search");
+                break;
+            }
+            case DatabaseSearch::MapSearch:
+                return i18n("Current Map Search");
+            case DatabaseSearch::KeywordSearch:
+            case DatabaseSearch::AdvancedSearch:
+            case DatabaseSearch::LegacyUrlSearch:
+                return i18n("Current Search");
+            case DatabaseSearch::DuplicatesSearch:
+                return i18n("Current Duplicates Search");
+            case DatabaseSearch::UndefinedType:
+                break;
+        }
+    }
+    return title();
+}
+
+QString SAlbum::getTemporaryTitle(DatabaseSearch::Type type, DatabaseSearch::HaarSearchType haarType)
+{
+
+    switch(type)
+    {
+    case DatabaseSearch::TimeLineSearch:
+        return "_Current_Time_Line_Search_";
+    case DatabaseSearch::HaarSearch:
+        return getTemporaryHaarTitle(haarType);
+    case DatabaseSearch::MapSearch:
+        return "_Current_Map_Search_";
+    case DatabaseSearch::KeywordSearch:
+    case DatabaseSearch::AdvancedSearch:
+    case DatabaseSearch::LegacyUrlSearch:
+        return "_Current_Search_View_Search_";
+    case DatabaseSearch::DuplicatesSearch:
+        return "_Current_Duplicates_Search_";
+    default:
+        kError() << "Untreated temporary search type " << type;
+        return "_Current_Unknown_Search_";
+    }
+
+}
+
+QString SAlbum::getTemporaryHaarTitle(DatabaseSearch::HaarSearchType haarType)
+{
+    switch(haarType)
+    {
+    case DatabaseSearch::HaarImageSearch:
+        return "_Current_Fuzzy_Image_Search_";
+    case DatabaseSearch::HaarSketchSearch:
+        return "_Current_Fuzzy_Sketch_Search_";
+    default:
+        kError() << "Untreated temporary haar search type " << haarType;
+        return "_Current_Unknown_Haar_Search_";
+    }
 }
 
 // --------------------------------------------------------------------------
