@@ -7,5 +7,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 223936 : Moving photos between albums is slow.
 002 ==> 224698 : digiKam fails to rotate pefs via orientation tag.
-003 ==> 
+003 ==> 224021 : Zoom shortcuts inconsistent between editor and preview.
+004 ==> 
 
