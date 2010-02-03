@@ -10,7 +10,6 @@ INSTALL(FILES histogramwidget.h
               dgradientslider.h
               dcursortracker.h
               dzoombar.h
-              statuszoombar.h
               statusnavigatebar.h
               statusprogressbar.h
               statusled.h
