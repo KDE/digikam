@@ -233,13 +233,13 @@ void LightTableWindow::setupUserArea()
     QHBoxLayout *hlay = new QHBoxLayout(mainW);
 
     // The left sidebar
-    d->leftSideBar = new ImagePropertiesSideBarDB(mainW, d->hSplitter, KMultiTabBar::Left, true);
+    d->leftSideBar    = new ImagePropertiesSideBarDB(mainW, d->hSplitter, KMultiTabBar::Left, true);
 
     // The central preview is wrapped in a KMainWindow so that the thumbnail
     // bar can float around it.
     KMainWindow* viewContainer = new KMainWindow(mainW, Qt::Widget);
     d->hSplitter->addWidget(viewContainer);
-    d->previewView = new LightTableView(viewContainer);
+    d->previewView             = new LightTableView(viewContainer);
     viewContainer->setCentralWidget(d->previewView);
 
     // The right sidebar.
@@ -817,13 +817,6 @@ void LightTableWindow::slotItemSelected(const ImageInfo& info)
     d->firstAction->setEnabled(hasInfo);
     d->lastAction->setEnabled(hasInfo);
     d->syncPreviewAction->setEnabled(hasInfo);
-
-/* FIXME
-    d->leftZoomPlusAction->setEnabled(hasInfo);
-    d->leftZoomMinusAction->setEnabled(hasInfo);
-    d->rightZoomPlusAction->setEnabled(hasInfo);
-    d->rightZoomMinusAction->setEnabled(hasInfo);
-*/
     d->navigateByPairAction->setEnabled(hasInfo);
     d->slideShowAction->setEnabled(hasInfo);
 
