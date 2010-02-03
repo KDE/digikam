@@ -107,7 +107,7 @@ public:
     PreviewLoadThread* previewPreloadThread;
 };
 
-LightTablePreview::LightTablePreview(QWidget *parent)
+LightTablePreview::LightTablePreview(QWidget* parent)
                  : PreviewWidget(parent), d(new LightTablePreviewPriv)
 {
     // get preview size from screen size, but limit from VGA to WQXGA
@@ -538,7 +538,7 @@ void LightTablePreview::contentsDragEnterEvent(QDragEnterEvent* e)
         KUrl::List kioURLs;
 
         if (DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs) ||
-            DAlbumDrag::decode(e->mimeData(), urls, albumID) ||
+            DAlbumDrag::decode(e->mimeData(), urls, albumID)                    ||
             DTagDrag::canDecode(e->mimeData()))
         {
             e->accept();
