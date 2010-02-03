@@ -437,6 +437,7 @@ void LightTablePreview::slotThemeChanged()
     palette.setColor(backgroundRole(), ThemeEngine::instance()->baseColor());
     setPalette(palette);
     frameChanged();
+    update();
 }
 
 void LightTablePreview::resizeEvent(QResizeEvent* e)
@@ -616,6 +617,7 @@ void LightTablePreview::setSelected(bool sel)
     {
         d->selected = sel;
         frameChanged();
+        update();
     }
 }
 

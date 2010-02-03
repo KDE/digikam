@@ -31,6 +31,7 @@
 // KDE includes
 
 #include <kdialog.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -391,12 +392,14 @@ void LightTableView::checkForSelection(const ImageInfo& info)
 
     if (!d->leftPreview->getImageInfo().isNull())
     {
-        d->leftPreview->setSelected(d->leftPreview->getImageInfo() == info);
+        bool onLeft = (d->leftPreview->getImageInfo() == info);
+        d->leftPreview->setSelected(onLeft);
     }
 
     if (!d->rightPreview->getImageInfo().isNull())
     {
-        d->rightPreview->setSelected(d->rightPreview->getImageInfo() == info);
+        bool onRight = (d->rightPreview->getImageInfo() == info);
+        d->rightPreview->setSelected(onRight);
     }
 }
 
