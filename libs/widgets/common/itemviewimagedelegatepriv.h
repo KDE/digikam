@@ -24,6 +24,9 @@
  *
  * ============================================================ */
 
+#ifndef ITEMVIEWIMAGEDELEGATEPRIV_H
+#define ITEMVIEWIMAGEDELEGATEPRIV_H
+
 // Qt includes
 
 #include <QCache>
@@ -96,3 +99,5 @@ public:
 };
 
 } // namespace Digikam
+
+#endif // ITEMVIEWIMAGEDELEGATEPRIV_H

@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef TAGFILTERVIEW_H
-#define TAGFILTERVIEW_H
+#ifndef TAGCHECKVIEW_H
+#define TAGCHECKVIEW_H
 
 // Local includes
 #include "imagefiltersettings.h"
@@ -94,4 +94,4 @@ private:
 
 }
 
-#endif /* TAGFILTERVIEW_H */
+#endif /* TAGCHECKVIEW_H */
