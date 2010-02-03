@@ -195,10 +195,10 @@ void WaveletsNR::waveletDenoise(float* fimg[3], unsigned int width, unsigned int
     temp  = new float[qMax(width, height)];
     hpass = 0;
 
-    for (lev = 0; !m_cancel && (lev < 5); lev++)
+    for (lev = 0; !m_cancel && (lev < 5); ++lev)
     {
         lpass = ((lev & 1) + 1);
-        for (row = 0; !m_cancel && (row < height); row++)
+        for (row = 0; !m_cancel && (row < height); ++row)
         {
             hatTransform(temp, fimg[hpass] + row * width, 1, width, 1 << lev);
             for (col = 0; col < width; col++)
@@ -207,10 +207,10 @@ void WaveletsNR::waveletDenoise(float* fimg[3], unsigned int width, unsigned int
             }
         }
 
-        for (col = 0; !m_cancel && (col < width); col++)
+        for (col = 0; !m_cancel && (col < width); ++col)
         {
             hatTransform(temp, fimg[lpass] + col, width, height, 1 << lev);
-            for (row = 0; row < height; row++)
+            for (row = 0; row < height; ++row)
             {
                 fimg[lpass][row * width + col] = temp[row] * 0.25;
             }
@@ -225,7 +225,7 @@ void WaveletsNR::waveletDenoise(float* fimg[3], unsigned int width, unsigned int
 
         // calculate stdevs for all intensities
 
-        for (i = 0; !m_cancel && (i < size); i++)
+        for (i = 0; !m_cancel && (i < size); ++i)
         {
             fimg[hpass][i] -= fimg[lpass][i];
 
@@ -267,7 +267,7 @@ void WaveletsNR::waveletDenoise(float* fimg[3], unsigned int width, unsigned int
 
         // do thresholding
 
-        for (i = 0; !m_cancel && (i < size); i++)
+        for (i = 0; !m_cancel && (i < size); ++i)
         {
             if (fimg[lpass][i] > 0.8)
             {
@@ -304,7 +304,7 @@ void WaveletsNR::waveletDenoise(float* fimg[3], unsigned int width, unsigned int
         hpass = lpass;
     }
 
-    for (i = 0; !m_cancel && (i < size); i++)
+    for (i = 0; !m_cancel && (i < size); ++i)
         fimg[0][i] = fimg[0][i] + fimg[lpass][i];
 
     delete [] temp;
