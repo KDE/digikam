@@ -790,7 +790,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
                 case(DImg::COM):
                 {
                     png_text comment;
-                    comment.key         = "Comment";
+                    comment.key         = const_cast<char*> ("Comment");
                     comment.text        = ba.data();
                     comment.itxt_length = ba.size();
                     comment.compression = PNG_ITXT_COMPRESSION_zTXt;
