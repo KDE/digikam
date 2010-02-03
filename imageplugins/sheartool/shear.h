@@ -41,7 +41,7 @@ class Shear : public Digikam::DImgThreadedFilter
 
 public:
 
-    Shear(Digikam::DImg *orgImage, QObject *parent=0, float hAngle=0.0, float vAngle=0.0,
+    explicit Shear(Digikam::DImg *orgImage, QObject *parent=0, float hAngle=0.0, float vAngle=0.0,
               bool antialiasing=true, QColor backgroundColor=Qt::black, int orgW=0, int orgH=0);
     ~Shear(){};
 

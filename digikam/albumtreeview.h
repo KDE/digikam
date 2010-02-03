@@ -364,7 +364,7 @@ class AlbumTreeView : public AbstractCheckableAlbumTreeView
     Q_OBJECT
 public:
 
-    AlbumTreeView(AlbumModel *model, QWidget *parent = 0);
+    explicit AlbumTreeView(AlbumModel *model, QWidget *parent = 0);
     virtual ~AlbumTreeView();
     AlbumModel *albumModel() const;
     PAlbum *currentAlbum() const;
@@ -377,7 +377,7 @@ class TagTreeView : public AbstractCheckableAlbumTreeView
     Q_OBJECT
 public:
 
-    TagTreeView(TagModel *model, QWidget *parent = 0);
+    explicit TagTreeView(TagModel *model, QWidget *parent = 0);
     TagModel *albumModel() const;
     TAlbum *currentAlbum() const;
     TAlbum *albumForIndex(const QModelIndex &index) const;

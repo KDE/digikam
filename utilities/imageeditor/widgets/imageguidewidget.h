@@ -69,7 +69,7 @@ public:
 
 public:
 
-    ImageGuideWidget(QWidget* parent=0,
+    explicit ImageGuideWidget(QWidget* parent=0,
                      bool spotVisible=true, int guideMode=PickColorMode,
                      const QColor& guideColor=Qt::red, int guideSize=1,
                      bool blink=false, bool useImageSelection=false);

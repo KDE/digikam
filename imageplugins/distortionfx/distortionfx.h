@@ -44,7 +44,7 @@ class DistortionFX : public Digikam::DImgThreadedFilter
 
 public:
 
-    DistortionFX(Digikam::DImg *orgImage, QObject *parent=0, int effectType=0,
+    explicit DistortionFX(Digikam::DImg *orgImage, QObject *parent=0, int effectType=0,
                  int level=0, int iteration=0, bool antialiasing=true);
 
     ~DistortionFX(){};
