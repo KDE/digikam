@@ -218,7 +218,7 @@ void BCGTool::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
 
-    d->gboxSettings->histogramBox()->setChannel(group.readEntry(d->configHistogramChannelEntry,
+    d->gboxSettings->histogramBox()->setChannel((ChannelType)group.readEntry(d->configHistogramChannelEntry,
                         (int)LuminosityChannel));
     d->gboxSettings->histogramBox()->setScale((HistogramScale)group.readEntry(d->configHistogramScaleEntry,
                         (int)LogScaleHistogram));
@@ -233,7 +233,7 @@ void BCGTool::writeSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
 
-    group.writeEntry(d->configHistogramChannelEntry,     d->gboxSettings->histogramBox()->channel());
+    group.writeEntry(d->configHistogramChannelEntry,     (int)d->gboxSettings->histogramBox()->channel());
     group.writeEntry(d->configHistogramScaleEntry,       (int)d->gboxSettings->histogramBox()->scale());
     group.writeEntry(d->configBrightnessAdjustmentEntry, d->bInput->value());
     group.writeEntry(d->configContrastAdjustmentEntry,   d->cInput->value());

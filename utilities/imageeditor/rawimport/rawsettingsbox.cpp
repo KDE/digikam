@@ -473,7 +473,7 @@ void RawSettingsBox::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->optionGroupName);
 
-    histogramBox()->setChannel(group.readEntry(d->optionHistogramChannelEntry,
+    histogramBox()->setChannel((ChannelType)group.readEntry(d->optionHistogramChannelEntry,
                     (int) LuminosityChannel));
     histogramBox()->setScale((HistogramScale)group.readEntry(d->optionHistogramScaleEntry,
                     (int) LogScaleHistogram));
@@ -559,7 +559,7 @@ void RawSettingsBox::writeSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->optionGroupName);
 
-    group.writeEntry(d->optionHistogramChannelEntry, histogramBox()->channel());
+    group.writeEntry(d->optionHistogramChannelEntry, (int)histogramBox()->channel());
     group.writeEntry(d->optionHistogramScaleEntry, (int)histogramBox()->scale());
 
     group.writeEntry(d->optionDecodeSixteenBitEntry,

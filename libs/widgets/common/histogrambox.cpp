@@ -176,13 +176,13 @@ void HistogramBox::setGradientColors(const QColor& from, const QColor& to)
     d->hGradient->setColors(from, to);
 }
 
-int HistogramBox::channel() const
+ChannelType HistogramBox::channel() const
 {
     int index = d->channelCB->currentIndex();
-    return d->channelCB->itemData(index).toInt();
+    return (ChannelType)(d->channelCB->itemData(index).toInt());
 }
 
-void HistogramBox::setChannel(int channel)
+void HistogramBox::setChannel(ChannelType channel)
 {
     int id = d->channelCB->findData(QVariant(channel));
     d->channelCB->setCurrentIndex(id);

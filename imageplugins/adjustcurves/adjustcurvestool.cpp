@@ -373,7 +373,7 @@ void AdjustCurvesTool::readSettings()
     d->curvesBox->readCurveSettings(group, d->configCurveEntry);
 
     // we need to call the set methods here, otherwise the curve will not be updated correctly
-    d->gboxSettings->histogramBox()->setChannel(group.readEntry(d->configHistogramChannelEntry,
+    d->gboxSettings->histogramBox()->setChannel((ChannelType)group.readEntry(d->configHistogramChannelEntry,
                     (int)LuminosityChannel));
     d->gboxSettings->histogramBox()->setScale((HistogramScale)group.readEntry(d->configHistogramScaleEntry,
                     (int)LogScaleHistogram));
@@ -389,7 +389,7 @@ void AdjustCurvesTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
-    group.writeEntry(d->configHistogramChannelEntry, d->gboxSettings->histogramBox()->channel());
+    group.writeEntry(d->configHistogramChannelEntry, (int)d->gboxSettings->histogramBox()->channel());
     group.writeEntry(d->configHistogramScaleEntry,   (int)d->gboxSettings->histogramBox()->scale());
 
     d->curvesBox->writeCurveSettings(group, d->configCurveEntry);

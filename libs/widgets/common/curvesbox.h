@@ -83,11 +83,11 @@ public:
     void enableControlWidgets(bool enable);
 
     void setScale(HistogramScale type);
-    void setChannel(int channel);
+    void setChannel(ChannelType channel);
     void setCurveGuide(const DColor& color);
 
     int  picker() const;
-    int  channel() const;
+    ChannelType channel() const;
 
     void resetPickers();
     void resetChannel(int channel);

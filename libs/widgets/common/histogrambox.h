@@ -61,8 +61,8 @@ public:
 
     HistogramWidget* histogram() const;
 
-    int  channel() const;
-    void setChannel(int channel);
+    ChannelType channel() const;
+    void setChannel(ChannelType channel);
     void setChannelEnabled(bool enabled);
 
     HistogramScale scale() const;

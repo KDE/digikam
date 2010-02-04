@@ -573,7 +573,7 @@ void ChannelMixerTool::readSettings()
     adjustSliders();
 
     // we need to call the set methods here, otherwise the histogram will not be updated correctly
-    d->gboxSettings->histogramBox()->setChannel(group.readEntry(d->configHistogramChannelEntry,
+    d->gboxSettings->histogramBox()->setChannel((ChannelType)group.readEntry(d->configHistogramChannelEntry,
                         (int)LuminosityChannel));
     d->gboxSettings->histogramBox()->setScale((HistogramScale)group.readEntry(d->configHistogramScaleEntry,
                         (int)LogScaleHistogram));
@@ -588,7 +588,7 @@ void ChannelMixerTool::writeSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group = config->group(d->configGroupName);
 
-    group.writeEntry(d->configHistogramChannelEntry, d->gboxSettings->histogramBox()->channel());
+    group.writeEntry(d->configHistogramChannelEntry, (int)d->gboxSettings->histogramBox()->channel());
     group.writeEntry(d->configHistogramScaleEntry,   (int)d->gboxSettings->histogramBox()->scale());
 
     group.writeEntry(d->configMonochromeEntry,         d->monochrome->isChecked());
@@ -659,7 +659,7 @@ void ChannelMixerTool::slotLoadSettings()
     if ( fp )
     {
         bool monochrome;
-        int  currentOutputChannel = RedChannel;
+        ChannelType currentOutputChannel = RedChannel;
         char buf1[1024];
         char buf2[1024];
         char buf3[1024];

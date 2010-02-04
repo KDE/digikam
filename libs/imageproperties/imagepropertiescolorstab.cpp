@@ -292,7 +292,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
     d->iccProfileWidget->setMode(group.readEntry("ICC Level", (int)ICCProfileWidget::CUSTOM));
     d->iccProfileWidget->setCurrentItemByKey(group.readEntry("Current ICC Item", QString()));
 
-    d->histogramBox->setChannel(group.readEntry("Histogram Channel",
+    d->histogramBox->setChannel((ChannelType)group.readEntry("Histogram Channel",
                                 (int)Digikam::LuminosityChannel));
     d->histogramBox->setScale((HistogramScale)group.readEntry("Histogram Scale",
                               (int)LogScaleHistogram));
@@ -343,7 +343,7 @@ ImagePropertiesColorsTab::~ImagePropertiesColorsTab()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(QString("Image Properties SideBar"));
     group.writeEntry("ImagePropertiesColors Tab", currentIndex());
-    group.writeEntry("Histogram Channel", d->histogramBox->channel());
+    group.writeEntry("Histogram Channel", (int)d->histogramBox->channel());
     group.writeEntry("Histogram Scale", (int)d->histogramBox->scale());
     group.writeEntry("Histogram Rendering", d->regionBG->checkedId());
     group.writeEntry("ICC Level", d->iccProfileWidget->getMode());
