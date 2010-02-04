@@ -771,8 +771,12 @@ void ImageDescEditTab::slotCreateNewTag()
     {
         return;
     }
-    d->tagModificationHelper->slotTagNew(d->tagCheckView->currentAlbum(),
+    TAlbum *created = d->tagModificationHelper->slotTagNew(d->tagCheckView->currentAlbum(),
                                          d->newTagEdit->text());
+    if (created)
+    {
+        d->tagCheckView->slotSelectAlbum(created, false);
+    }
 }
 
 void ImageDescEditTab::assignRating(int rating)

@@ -76,14 +76,17 @@ public Q_SLOTS:
      * @param title if this isn't an empty string, then this tag name is
      *              suggested
      * @param iconName an optional name for the icon to suggest for the new tag
+     * @return new tag album or 0 if not created
      */
-    void slotTagNew(TAlbum *parent, const QString &title = QString(),
-                    const QString &iconName = QString());
+    TAlbum *slotTagNew(TAlbum *parent, const QString &title = QString(),
+                       const QString &iconName = QString());
 
     /**
      * Same as above, but this slot is using the parent TAlbum set previously
+     *
+     * @return new tag created or 0 if no tag was created
      */
-    void slotTagNew();
+    TAlbum *slotTagNew();
 
     /**
      * Edits the given tag via a user dialog.

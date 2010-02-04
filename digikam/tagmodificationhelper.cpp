@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2000-12-05
- * Description : helper class used to modify physical albums in views
+ * Description : helper class used to modify tag albums in views
  *
  * Copyright (C) 2009 by Johannes Wienke <languitar at semipol dot de>
  *
@@ -25,6 +25,7 @@
 
 // KDE includes
 #include <kapplication.h>
+#include <kdebug.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 
@@ -71,7 +72,7 @@ void TagModificationHelper::setParentTag(TAlbum *parent)
     d->parentTag = parent;
 }
 
-void TagModificationHelper::slotTagNew(TAlbum *parent, const QString &title, const QString &iconName)
+TAlbum *TagModificationHelper::slotTagNew(TAlbum *parent, const QString &title, const QString &iconName)
 {
 
     QString editTitle = title;
@@ -82,7 +83,7 @@ void TagModificationHelper::slotTagNew(TAlbum *parent, const QString &title, con
         bool doCreate = TagEditDlg::tagCreate(d->dialogParent, parent, editTitle, editIconName);
         if(!doCreate)
         {
-            return;
+            return 0;
         }
     }
 
@@ -90,12 +91,28 @@ void TagModificationHelper::slotTagNew(TAlbum *parent, const QString &title, con
     AlbumList tList = TagEditDlg::createTAlbum(parent, editTitle, editIconName, errMap);
     TagEditDlg::showtagsListCreationError(d->dialogParent, errMap);
 
+    if (errMap.isEmpty() && !tList.isEmpty())
+    {
+        return dynamic_cast<TAlbum*> (tList.last());
+    }
+    else
+    {
+        return 0;
+    }
+
 }
 
-void TagModificationHelper::slotTagNew()
+TAlbum *TagModificationHelper::slotTagNew()
 {
     if (d->parentTag)
-        slotTagNew(d->parentTag);
+    {
+        return slotTagNew(d->parentTag);
+    }
+    else
+    {
+        kWarning() << "Tried to create a new tag but no parent tag was given";
+        return 0;
+    }
 }
 
 void TagModificationHelper::slotTagEdit(TAlbum *tag)
