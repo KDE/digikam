@@ -244,7 +244,7 @@
 			END;</statement></dbaction>
 			
 			<dbaction name="InsertTag" mode="transaction">
-				<statement mode="query">"INSERT INTO Tags (pid, name) VALUES( :tagPID, :tagname);</statement>
+				<statement mode="query">INSERT INTO Tags (pid, name) VALUES( :tagPID, :tagname);</statement>
 			</dbaction>
 			
 			<dbaction name="DeleteTag" mode="transaction"><statement mode="query">DELETE FROM Tags WHERE id=:tagID;</statement></dbaction>
