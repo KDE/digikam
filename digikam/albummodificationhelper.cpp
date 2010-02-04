@@ -60,13 +60,13 @@ AlbumModificationHelper::~AlbumModificationHelper()
     delete d;
 }
 
-void AlbumModificationHelper::slotAlbumNew(PAlbum *parent)
+PAlbum *AlbumModificationHelper::slotAlbumNew(PAlbum *parent)
 {
     AlbumSettings* settings = AlbumSettings::instance();
     if(!settings)
     {
         kWarning() << "could not get Album Settings";
-        return;
+        return 0;
     }
 
     /*
@@ -98,7 +98,9 @@ void AlbumModificationHelper::slotAlbumNew(PAlbum *parent)
 
     if(!AlbumPropsEdit::createNew(parent, title, comments, date, category,
                                   albumCategories))
-        return;
+    {
+        return 0;
+    }
 
     QStringList oldAlbumCategories(AlbumSettings::instance()->getAlbumCategoryNames());
     if(albumCategories != oldAlbumCategories)
@@ -109,17 +111,23 @@ void AlbumModificationHelper::slotAlbumNew(PAlbum *parent)
     QString errMsg;
     PAlbum* album;
     if (parent->isRoot())
+    {
         album = AlbumManager::instance()->createPAlbum(albumRootPath, title, comments,
                                           date, category, errMsg);
+    }
     else
+    {
         album = AlbumManager::instance()->createPAlbum(parent, title, comments,
                                           date, category, errMsg);
+    }
 
     if (!album)
     {
         KMessageBox::error(0, errMsg);
-        return;
+        return 0;
     }
+
+    return album;
 
 }
 

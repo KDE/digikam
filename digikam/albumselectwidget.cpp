@@ -111,7 +111,11 @@ void AlbumSelectTreeView::slotNewAlbum()
     PAlbum *palbum = currentAlbum();
     if (palbum)
     {
-        d->albumModificationHelper->slotAlbumNew(palbum);
+        PAlbum *createdAlbum = d->albumModificationHelper->slotAlbumNew(palbum);
+        if (createdAlbum)
+        {
+            slotSelectAlbum(createdAlbum, false);
+        }
     }
 }
 

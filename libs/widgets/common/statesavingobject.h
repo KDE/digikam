@@ -62,7 +62,7 @@ class StateSavingObjectPriv;
  * and shouldn't be used inside the implementing class.
  *
  * Additionally to setting the config group, also a prefix for each config group
- * entry can be defined via setEntryPrefix(). This may be usefull if multiple
+ * entry can be defined via setEntryPrefix(). This may be useful if multiple
  * instances of the same class shall be stored in the same config group or can
  * generally be a good idea to make the config more readable and recognizable.
  * By default this prefix is empty.
