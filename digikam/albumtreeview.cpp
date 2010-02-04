@@ -34,6 +34,8 @@
 
 #include <kdebug.h>
 #include <kiconloader.h>
+#include <kio/job.h>
+#include <kio/jobuidelegate.h>
 #include <kmenu.h>
 
 // Local includes
@@ -1010,7 +1012,10 @@ void AbstractCheckableAlbumTreeView::doSaveState()
 AlbumTreeView::AlbumTreeView(AlbumModel *model, QWidget *parent)
     : AbstractCheckableAlbumTreeView(model, parent)
 {
-    albumModel()->setDragDropHandler(new AlbumDragDropHandler(albumModel()));
+    AlbumDragDropHandler *handler = new AlbumDragDropHandler(albumModel());
+    albumModel()->setDragDropHandler(handler);
+    connect(handler, SIGNAL(dioResult(KJob*)),
+            this, SLOT(slotDIOResult(KJob*)));
 
     connect(AlbumManager::instance(), SIGNAL(signalPAlbumsDirty(const QMap<int, int>&)),
             m_albumModel, SLOT(setCountMap(const QMap<int, int>&)));
@@ -1041,6 +1046,16 @@ PAlbum* AlbumTreeView::currentAlbum() const
 PAlbum *AlbumTreeView::albumForIndex(const QModelIndex &index) const
 {
     return dynamic_cast<PAlbum*> (m_albumFilterModel->albumForIndex(index));
+}
+
+void AlbumTreeView::slotDIOResult(KJob *kjob)
+{
+    KIO::Job *job = static_cast<KIO::Job*>(kjob);
+    if (job->error())
+    {
+        job->ui()->setWindow(this);
+        job->ui()->showErrorMessage();
+    }
 }
 
 // --------------------------------------- //
