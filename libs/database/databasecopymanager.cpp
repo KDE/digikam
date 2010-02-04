@@ -37,15 +37,25 @@
 
 namespace Digikam
 {
-    void DatabaseCopyManager::copyDatabases(DatabaseParameters *fromDBParameters, DatabaseParameters *toDBParameters)
+    void DatabaseCopyManager::copyDatabases(DatabaseParameters fromDBParameters, DatabaseParameters toDBParameters)
     {
         DatabaseLocking toLocking;
         DatabaseBackend toDBbackend(&toLocking, "MigrationToDatabase");
-        toDBbackend.open(*toDBParameters);
+
+        if (!toDBbackend.open(toDBParameters))
+        {
+            emit finishedFailure(i18n("Error while opening the target database."));
+            return;
+        }
+
 
         DatabaseLocking fromLocking;
         DatabaseBackend fromDBbackend(&fromLocking, "MigrationFromDatabase");
-        fromDBbackend.open(*fromDBParameters);
+        if (!fromDBbackend.open(fromDBParameters))
+        {
+            emit finishedFailure(i18n("Error while opening the source database."));
+            return;
+        }
 
 
         QMap<QString, QVariant> bindingMap;
@@ -55,11 +65,13 @@ namespace Digikam
 
         // then create the schema
         AlbumDB       albumDB(&toDBbackend);
-        SchemaUpdater updater(&albumDB, &toDBbackend, *toDBParameters);
+        SchemaUpdater updater(&albumDB, &toDBbackend, toDBParameters);
 
+        emit stepStarted(i18n("Create Schema..."));
         if (!updater.update())
         {
-            emit finishedFailure(i18n("Error while converting the database."));
+            emit finishedFailure(i18n("Error while creating the database schema."));
+            return;
         }
 
         emit stepStarted(i18n("Copy AlbumRoots..."));

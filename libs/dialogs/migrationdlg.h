@@ -49,12 +49,12 @@ class DIGIKAM_EXPORT DatabaseCopyThread : public QThread
             bool stop;
             void run();
 
-            void init(DatabaseParameters *fromDatabaseWidget, DatabaseParameters *toDatabaseWidget);
+            void init(DatabaseParameters fromDatabaseWidget, DatabaseParameters toDatabaseWidget);
             DatabaseCopyManager copyManager;
 
         private:
-            DatabaseParameters *fromDatabaseWidget;
-            DatabaseParameters *toDatabaseWidget;
+            DatabaseParameters fromDatabaseParameters;
+            DatabaseParameters toDatabaseParameters;
 };
 
 

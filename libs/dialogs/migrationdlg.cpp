@@ -56,13 +56,13 @@ namespace Digikam
 
     void DatabaseCopyThread::run()
     {
-        copyManager.copyDatabases(fromDatabaseWidget, toDatabaseWidget);
+        copyManager.copyDatabases(fromDatabaseParameters, toDatabaseParameters);
     }
 
-    void DatabaseCopyThread::init(DatabaseParameters *fromDatabaseWidget, DatabaseParameters *toDatabaseWidget)
+    void DatabaseCopyThread::init(DatabaseParameters fromDatabaseParameters, DatabaseParameters toDatabaseParameters)
     {
-        this->fromDatabaseWidget=fromDatabaseWidget;
-        this->toDatabaseWidget=toDatabaseWidget;
+        this->fromDatabaseParameters=fromDatabaseParameters;
+        this->toDatabaseParameters=toDatabaseParameters;
     }
 
     MigrationDlg::MigrationDlg(QWidget* parent): KDialog(parent)
@@ -83,7 +83,7 @@ namespace Digikam
         migrateButton                   = new QPushButton(i18n("Migrate ->"), this);
         progressBar                     = new QProgressBar();
         progressBar->setTextVisible(true);
-        progressBar->setRange(0,14);
+        progressBar->setRange(0,13);
 
         QWidget *mainWidget     = new QWidget;
         QGridLayout *layout     = new QGridLayout;
@@ -98,36 +98,20 @@ namespace Digikam
         dataInit();
 
         connect(migrateButton, SIGNAL(clicked()), this, SLOT(performCopy()));
+
+
+        // connect signal handlers for copy thread
+        this->connect(&(thread->copyManager), SIGNAL(finishedSuccessfully()), SLOT(handleSuccessfullyFinish()));
+        this->connect(&(thread->copyManager), SIGNAL(finishedFailure(QString)), SLOT(handleFailureFinish(QString)));
+        this->connect(&(thread->copyManager), SIGNAL(stepStarted(QString)), SLOT(handleStepStarted(QString)));
+
     }
 
     void MigrationDlg::performCopy()
     {
-        DatabaseParameters *toDBParameters = new DatabaseParameters();
-        toDBParameters->readConfig();
-        toDBParameters->connectOptions = toDatabaseWidget->connectionOptions->text();
-        toDBParameters->databaseName   = toDatabaseWidget->databaseName->text();
-        toDBParameters->databaseType   = toDatabaseWidget->databaseType->currentText();
-        toDBParameters->hostName       = toDatabaseWidget->hostName->text();
-        toDBParameters->password       = toDatabaseWidget->password->text();
-        toDBParameters->port           = toDatabaseWidget->hostPort->text().toInt();
-        toDBParameters->userName       = toDatabaseWidget->userName->text();
-
-        DatabaseParameters *fromDBParameters = new DatabaseParameters();
-        fromDBParameters->readConfig();
-        fromDBParameters->connectOptions = fromDatabaseWidget->connectionOptions->text();
-        fromDBParameters->databaseName   = fromDatabaseWidget->databaseName->text();
-        fromDBParameters->databaseType   = fromDatabaseWidget->databaseType->currentText();
-        fromDBParameters->hostName       = fromDatabaseWidget->hostName->text();
-        fromDBParameters->password       = fromDatabaseWidget->password->text();
-        fromDBParameters->port           = fromDatabaseWidget->hostPort->text().toInt();
-        fromDBParameters->userName       = fromDatabaseWidget->userName->text();
-
+        DatabaseParameters toDBParameters = toDatabaseWidget->getDatabaseParameters();
+        DatabaseParameters fromDBParameters = fromDatabaseWidget->getDatabaseParameters();
         thread->init(fromDBParameters, toDBParameters);
-
-        // connect signal handlers
-        this->connect(&(thread->copyManager), SIGNAL(finishedSuccessfully()), SLOT(handleSuccessfullyFinish()));
-        this->connect(&(thread->copyManager), SIGNAL(finishedFailure(QString)), SLOT(handleFailureFinish(QString)));
-        this->connect(&(thread->copyManager), SIGNAL(stepStarted(QString)), SLOT(handleStepStarted(QString)));
 
         lockInputFields();
         thread->start();

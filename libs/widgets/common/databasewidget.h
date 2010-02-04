@@ -41,6 +41,7 @@
 // Local includes
 #include "digikam_export.h"
 #include "albumsettings.h"
+#include "databaseparameters.h"
 
 namespace Digikam
 {
@@ -75,6 +76,7 @@ public:
 
 public:
     void setParametersFromSettings(const AlbumSettings *settings);
+    DatabaseParameters getDatabaseParameters();
 
 public Q_SLOTS:
 

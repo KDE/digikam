@@ -220,23 +220,12 @@ namespace Digikam
         QString databaseID("ConnectionTest");
         QSqlDatabase testDatabase = QSqlDatabase::addDatabase(databaseType->currentText(), databaseID);
 
-        if (internalServer->isChecked())
-        {
-           DatabaseParameters internalServerParameters = DatabaseParameters::parametersFromConfig(databaseType->currentText());
-           testDatabase.setHostName(internalServerParameters.hostName);
-           testDatabase.setPort(internalServerParameters.port);
-           testDatabase.setUserName(internalServerParameters.userName);
-           testDatabase.setPassword(internalServerParameters.password);
-           testDatabase.setConnectOptions(internalServerParameters.connectOptions);
-           DatabaseServerStarter::startServerManagerProcess(databaseType->currentText());
-        }else
-        {
-            testDatabase.setHostName(hostName->text());
-            testDatabase.setPort(hostPort->text().toInt());
-            testDatabase.setUserName(userName->text());
-            testDatabase.setPassword(password->text());
-            testDatabase.setConnectOptions(connectionOptions->text());
-        }
+        DatabaseParameters parameters = getDatabaseParameters();
+        testDatabase.setHostName(parameters.hostName);
+        testDatabase.setPort(parameters.port);
+        testDatabase.setUserName(parameters.userName);
+        testDatabase.setPassword(parameters.password);
+        testDatabase.setConnectOptions(parameters.connectOptions);
 
         bool result = testDatabase.open();
         if (result == true){
@@ -290,5 +279,33 @@ namespace Digikam
                 setDatabaseInputFields(databaseType->itemText(i));
             }
         }
+    }
+
+    DatabaseParameters DatabaseWidget::getDatabaseParameters()
+    {
+        DatabaseParameters parameters;
+        if (internalServer->isChecked())
+        {
+           parameters = DatabaseParameters::parametersFromConfig(databaseType->currentText());
+           DatabaseServerStarter::startServerManagerProcess(databaseType->currentText());
+        }else
+        {
+            parameters.connectOptions = connectionOptions->text();
+            parameters.databaseType   = databaseType->currentText();
+            parameters.hostName       = hostName->text();
+            parameters.password       = password->text();
+            parameters.port           = hostPort->text().toInt();
+            parameters.userName       = userName->text();
+
+            if (parameters.databaseType == "QSQLITE")
+            {
+                parameters.databaseName = QDir::cleanPath(databaseName->text() + '/' + "digikam4.db");
+            }else
+            {
+                parameters.databaseName   = databaseName->text();
+            }
+        }
+        parameters.readConfig();
+        return parameters;
     }
 }

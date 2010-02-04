@@ -37,7 +37,7 @@ namespace Digikam
         Q_OBJECT
 
         public:
-            void copyDatabases(DatabaseParameters *fromDBParameters, DatabaseParameters *toDBParameters);
+            void copyDatabases(DatabaseParameters fromDBParameters, DatabaseParameters toDBParameters);
 
         Q_SIGNALS:
             void stepStarted(QString stepName);
