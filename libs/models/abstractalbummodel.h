@@ -298,6 +298,10 @@ public:
     /// Triggers if the albums in this model are checkable
     void setCheckable(bool isCheckable);
     bool isCheckable() const;
+    /** Triggers if the root album is checkable.
+     *  Only applicable if the root album is contained at all, and if isCheckable() is true. */
+    void setRootCheckable(bool rootIsCheckable);
+    bool rootIsCheckable() const;
     /** Triggers if the albums in this model are tristate.
      *  Note that you want to set setCheckable(true) before. */
     void setTristate(bool isTristate);
@@ -356,6 +360,7 @@ private:
     void setDataForChildren(QModelIndex &parent, const QVariant& value, int role = Qt::EditRole);
 
     Qt::ItemFlags                 m_extraFlags;
+    bool                          m_rootIsCheckable;
     QHash<Album*, Qt::CheckState> m_checkedAlbums;
 };
 

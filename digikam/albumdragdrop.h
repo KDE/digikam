@@ -29,6 +29,8 @@
 #include "albummodeldragdrophandler.h"
 #include "albummodel.h"
 
+class KJob;
+
 namespace Digikam
 {
 

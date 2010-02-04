@@ -686,6 +686,7 @@ AbstractCheckableAlbumModel::AbstractCheckableAlbumModel(Album::Type albumType, 
                            : AbstractCountingAlbumModel(albumType, rootAlbum, rootBehavior, parent)
 {
     m_extraFlags = 0;
+    m_rootIsCheckable = true;
 }
 
 void AbstractCheckableAlbumModel::setCheckable(bool isCheckable)
@@ -702,6 +703,19 @@ void AbstractCheckableAlbumModel::setCheckable(bool isCheckable)
 bool AbstractCheckableAlbumModel::isCheckable() const
 {
     return m_extraFlags & Qt::ItemIsUserCheckable;
+}
+
+void AbstractCheckableAlbumModel::setRootCheckable(bool isCheckable)
+{
+    m_rootIsCheckable = isCheckable;
+    Album *root = rootAlbum();
+    if (!m_rootIsCheckable && root)
+        setChecked(root, false);
+}
+
+bool AbstractCheckableAlbumModel::rootIsCheckable() const
+{
+    return m_rootIsCheckable && isCheckable();
 }
 
 void AbstractCheckableAlbumModel::setTristate(bool isTristate)
@@ -848,7 +862,14 @@ QVariant AbstractCheckableAlbumModel::albumData(Album *a, int role) const
 
 Qt::ItemFlags AbstractCheckableAlbumModel::flags(const QModelIndex& index) const
 {
-    return AbstractCountingAlbumModel::flags(index) | m_extraFlags;
+    Qt::ItemFlags extraFlags = m_extraFlags;
+    if (!m_rootIsCheckable)
+    {
+        QModelIndex root = rootAlbumIndex();
+        if (root.isValid() && index == root)
+            extraFlags &= ~Qt::ItemIsUserCheckable;
+    }
+    return AbstractCountingAlbumModel::flags(index) | extraFlags;
 }
 
 bool AbstractCheckableAlbumModel::setData(const QModelIndex& index, const QVariant& value, int role)
