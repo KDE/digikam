@@ -46,6 +46,10 @@ public:
     virtual Qt::DropAction accepts(const QDropEvent *e, const QModelIndex& dropIndex);
     virtual QStringList mimeTypes() const;
     virtual QMimeData *createMimeData(const QList<Album*> &);
+
+Q_SIGNALS:
+
+    void dioResult(KJob *);
 };
 
 } // namespace Digikam
