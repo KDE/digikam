@@ -125,6 +125,7 @@ protected:
     virtual void showContextMenuOnIndex(QContextMenuEvent *event, const QModelIndex& index);
 
     // reimplemented from parent class
+    void setItemDelegate(ImageDelegate *delegate);
     void indexActivated(const QModelIndex& index);
     QSortFilterProxyModel *filterModel() const;
     void currentChanged(const QModelIndex& index, const QModelIndex& previous);

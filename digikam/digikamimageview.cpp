@@ -53,6 +53,7 @@
 #include "contextmenuhelper.h"
 #include "ddragobjects.h"
 #include "digikamapp.h"
+#include "digikamimagedelegate.h"
 #include "dio.h"
 #include "dpopupmenu.h"
 #include "imagealbumfiltermodel.h"
@@ -70,6 +71,7 @@ namespace Digikam
 DigikamImageView::DigikamImageView(QWidget *parent)
                 : ImageCategorizedView(parent), d(new DigikamImageViewPriv(this))
 {
+    setItemDelegate(new DigikamImageDelegate(this));
 
     AlbumSettings *settings = AlbumSettings::instance();
 
@@ -87,6 +89,9 @@ DigikamImageView::DigikamImageView(QWidget *parent)
     imageFilterModel()->setSortRole((ImageSortSettings::SortRole)settings->getImageSortOrder());
     imageFilterModel()->setSortOrder((ImageSortSettings::SortOrder)settings->getImageSorting());
     imageFilterModel()->setCategorizationMode((ImageSortSettings::CategorizationMode)settings->getImageGroupMode());
+
+    // selection overlay
+    addSelectionOverlay();
 
     // rotation overlays
     d->rotateLeftOverlay = new ImageRotateLeftOverlay(this);

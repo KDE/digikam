@@ -120,10 +120,6 @@ ImageCategorizedView::ImageCategorizedView(QWidget *parent)
     // set flags that we want to get dataChanged() signals for
     d->model->setWatchFlags(d->filterModel->suggestedWatchFlags());
 
-    d->delegate = new ImageDelegate(this);
-    setItemDelegate(d->delegate);
-    setCategoryDrawer(d->delegate->categoryDrawer());
-
     setToolTip(new ImageItemViewToolTip(this));
 
     setModel(d->filterModel);
@@ -140,9 +136,6 @@ ImageCategorizedView::ImageCategorizedView(QWidget *parent)
 
     LoadingCacheInterface::connectToSignalFileChanged(this,
             SLOT(slotFileChanged(const QString &)));
-
-    updateDelegateSizes();
-    addSelectionOverlay();
 }
 
 ImageCategorizedView::~ImageCategorizedView()
@@ -169,6 +162,14 @@ QSortFilterProxyModel *ImageCategorizedView::filterModel() const
 ImageDelegate *ImageCategorizedView::delegate() const
 {
     return d->delegate;
+}
+
+void ImageCategorizedView::setItemDelegate(ImageDelegate *delegate)
+{
+    d->delegate = delegate;
+    DCategorizedView::setItemDelegate(d->delegate);
+    setCategoryDrawer(d->delegate->categoryDrawer());
+    updateDelegateSizes();
 }
 
 Album *ImageCategorizedView::currentAlbum() const

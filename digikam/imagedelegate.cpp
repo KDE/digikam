@@ -25,11 +25,7 @@
  * ============================================================ */
 
 #include "imagedelegate.moc"
-#include "itemviewimagedelegatepriv.h"
-
-// C++ includes
-
-#include <cmath>
+#include "imagedelegatepriv.h"
 
 // Qt includes
 
@@ -46,7 +42,6 @@
 // Local includes
 
 #include "albummanager.h"
-#include "albumsettings.h"
 #include "imagecategorydrawer.h"
 #include "imagecategorizedview.h"
 #include "imagedelegateoverlay.h"
@@ -58,32 +53,6 @@
 
 namespace Digikam
 {
-
-class ImageDelegatePrivate : public ItemViewImageDelegatePrivate
-{
-public:
-
-    ImageDelegatePrivate()
-    {
-        categoryDrawer = 0;
-
-        actualPixmapRectCache.setMaxCost(250);
-    }
-
-    QRect                     dateRect;
-    QRect                     modDateRect;
-    QRect                     pixmapRect;
-    QRect                     nameRect;
-    QRect                     commentsRect;
-    QRect                     resolutionRect;
-    QRect                     sizeRect;
-    QRect                     tagRect;
-
-    QCache<qlonglong, QRect>  actualPixmapRectCache;
-    ImageCategoryDrawer      *categoryDrawer;
-
-    virtual void clearRects();
-};
 
 void ImageDelegatePrivate::clearRects()
 {
@@ -101,11 +70,11 @@ void ImageDelegatePrivate::clearRects()
 ImageDelegate::ImageDelegate(ImageCategorizedView *parent)
              : ItemViewImageDelegate(*new ImageDelegatePrivate, parent)
 {
-    Q_D(ImageDelegate);
-    d->categoryDrawer = new ImageCategoryDrawer(parent);
+}
 
-    connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
-            this, SLOT(slotSetupChanged()));
+ImageDelegate::ImageDelegate(ImageDelegatePrivate &dd, ImageCategorizedView *parent)
+             : ItemViewImageDelegate(dd, parent)
+{
 }
 
 ImageDelegate::~ImageDelegate()
@@ -117,7 +86,8 @@ ImageDelegate::~ImageDelegate()
 void ImageDelegate::setSpacing(int spacing)
 {
     Q_D(ImageDelegate);
-    d->categoryDrawer->setLowerSpacing(spacing);
+    if (d->categoryDrawer)
+        d->categoryDrawer->setLowerSpacing(spacing);
     ItemViewImageDelegate::setSpacing(spacing);
 }
 
@@ -158,7 +128,6 @@ void ImageDelegate::paint(QPainter *p, const QStyleOptionViewItem& option, const
     p->translate(option.rect.topLeft());
 
     QRect r;
-    const AlbumSettings *settings = AlbumSettings::instance();
     ThemeEngine* te               = ThemeEngine::instance();
 
     bool isSelected = (option.state & QStyle::State_Selected);
@@ -181,42 +150,42 @@ void ImageDelegate::paint(QPainter *p, const QStyleOptionViewItem& option, const
     if (!actualPixmapRect.isNull())
         const_cast<ImageDelegate*>(this)->updateActualPixmapRect(info.id(), actualPixmapRect);
 
-    if (settings->getIconShowRating())
+    if (!d->ratingRect.isNull())
     {
         drawRating(p, index, d->ratingRect, info.rating(), isSelected);
     }
 
-    if (settings->getIconShowName())
+    if (!d->nameRect.isNull())
     {
         drawName(p, d->nameRect, info.name());
     }
 
-    if (settings->getIconShowComments())
+    if (!d->commentsRect.isNull())
     {
         drawComments(p, d->commentsRect, info.comment());
     }
 
-    if (settings->getIconShowDate())
+    if (!d->dateRect.isNull())
     {
         drawCreationDate(p, d->dateRect, info.dateTime());
     }
 
-    if (settings->getIconShowModDate())
+    if (!d->modDateRect.isNull())
     {
         drawModificationDate(p, d->modDateRect, info.modDateTime());
     }
 
-    if (settings->getIconShowResolution())
+    if (!d->resolutionRect.isNull())
     {
         drawImageSize(p, d->resolutionRect, info.dimensions());
     }
 
-    if (settings->getIconShowSize())
+    if (!d->sizeRect.isNull())
     {
         drawFileSize(p, d->sizeRect, info.fileSize());
     }
 
-    if (settings->getIconShowTags())
+    if (!d->tagRect.isNull())
     {
         QString tags = AlbumManager::instance()->tagNames(info.tagIds()).join(", ");
         drawTags(p, d->tagRect, tags, isSelected);
@@ -273,14 +242,16 @@ bool ImageDelegate::onActualPixmapRect(const QPoint& pos, const QRect& visualRec
 void ImageDelegate::setDefaultViewOptions(const QStyleOptionViewItem& option)
 {
     Q_D(ImageDelegate);
-    d->categoryDrawer->setDefaultViewOptions(option);
+    if (d->categoryDrawer)
+        d->categoryDrawer->setDefaultViewOptions(option);
     ItemViewImageDelegate::setDefaultViewOptions(option);
 }
 
 void ImageDelegate::invalidatePaintingCache()
 {
     Q_D(ImageDelegate);
-    d->categoryDrawer->invalidatePaintingCache();
+    if (d->categoryDrawer)
+        d->categoryDrawer->invalidatePaintingCache();
     ItemViewImageDelegate::invalidatePaintingCache();
 }
 
@@ -300,69 +271,13 @@ void ImageDelegate::updateSizeRectsAndPixmaps()
 
     // ---- Calculate rects ----
 
-    int y = d->margin;
-
-    d->pixmapRect = QRect(d->margin, y, w, d->thumbSize.size() + 2*d->radius);
-    y = d->pixmapRect.bottom();
-
-    const AlbumSettings *albumSettings = AlbumSettings::instance();
-    if (albumSettings->getIconShowRating())
-    {
-        d->ratingRect = QRect(d->margin, y, w, d->starPolygonSize.height());
-        y = d->ratingRect.bottom();
-    }
-
-    if (albumSettings->getIconShowName())
-    {
-        d->nameRect = QRect(d->margin, y, w-d->margin, d->oneRowRegRect.height());
-        y = d->nameRect.bottom();
-    }
-
-    if (albumSettings->getIconShowComments())
-    {
-        d->commentsRect = QRect(d->margin, y, w, d->oneRowComRect.height());
-        y = d->commentsRect.bottom();
-    }
-
-    if (albumSettings->getIconShowDate())
-    {
-        d->dateRect = QRect(d->margin, y, w, d->oneRowXtraRect.height());
-        y = d->dateRect.bottom();
-    }
-
-    if (albumSettings->getIconShowModDate())
-    {
-        d->modDateRect = QRect(d->margin, y, w, d->oneRowXtraRect.height());
-        y = d->modDateRect.bottom();
-    }
-
-    if (albumSettings->getIconShowResolution())
-    {
-        d->resolutionRect = QRect(d->margin, y, w, d->oneRowXtraRect.height());
-        y = d->resolutionRect.bottom() ;
-    }
-
-    if (albumSettings->getIconShowSize())
-    {
-        d->sizeRect = QRect(d->margin, y, w, d->oneRowXtraRect.height());
-        y = d->sizeRect.bottom();
-    }
-
-    if (albumSettings->getIconShowTags())
-    {
-        d->tagRect = QRect(d->margin, y, w, d->oneRowComRect.height());
-        y = d->tagRect.bottom();
-    }
-
-    d->rect = QRect(0, 0, w + 2*d->margin, y+d->margin+d->radius);
-
-    d->gridSize  = QSize(d->rect.width() + d->spacing, d->rect.height() + d->spacing);
+    updateRects(w);
 
     // ---- Cached pixmaps ----
 
     prepareBackground();
 
-    if (albumSettings->getIconShowRating())
+    if (!d->ratingRect.isNull())
     {
         prepareRatingPixmaps();
     }

@@ -71,6 +71,10 @@ public:
 
 protected:
 
+    /** In a subclass, you need to implement this method to set up the rects
+     *  for drawing. The paint() method operates depending on these rects. */
+    virtual void updateRects(int width) = 0;
+
     virtual void clearCaches();
 
     bool onActualPixmapRect(const QPoint& pos, const QRect& visualRect,
@@ -79,6 +83,8 @@ protected:
 
     virtual void invalidatePaintingCache();
     virtual void updateSizeRectsAndPixmaps();
+
+    ImageDelegate(ImageDelegatePrivate &dd, ImageCategorizedView *parent);
 
 private:
 
