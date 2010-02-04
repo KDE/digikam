@@ -57,6 +57,11 @@ public:
     void setThumbnailLoadThread(ThumbnailLoadThread *thread);
     /// Set the thumbnail size to use
     void setThumbnailSize(const ThumbnailSize& thumbSize);
+    /** Enable emitting dataChanged() when a thumbnail becomes available.
+     *  The thumbnailAvailable() signal will be emitted in any case.
+     *  Default is true.
+     */
+    void setEmitDataChanged(bool emitSignal);
 
     ThumbnailSize thumbnailSize() const;
 
@@ -69,6 +74,16 @@ public:
      *  thumbnailAvailable() as soon as it is available.
      */
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+    /**
+     * You can override the current thumbnail size by giving an integer value for ThumbnailRole.
+     * Set a null QVariant to use the thumbnail size set by setThumbnailSize() again.
+     * The index given here is ignored for this purpose.
+     */
+    virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::DisplayRole);
+
+Q_SIGNALS:
+
+    void thumbnailAvailable(const QModelIndex& index, int requestedSize);
 
 protected Q_SLOTS:
 
