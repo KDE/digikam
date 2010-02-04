@@ -1,5 +1,5 @@
 *********************************************************************************************************
-digiKam 1.1.0 - Release date: 2010-XX-XX
+digiKam 1.2.0 - Release date: 2010-XX-XX
 
 NEW FEATURES:
 
@@ -10,6 +10,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 003 ==> 224021 : Zoom shortcuts inconsistent between editor and preview.
 004 ==> 225160 : digiKam built with QT4 ver 4.5.3 does not display pictures in album view.
 005 ==> 225397 : Tip refers to "Print Wizard", it is now "Print Assistant".
-006 ==> 
-
-
+006 ==> 225555 : Crash when deleting tag.
+007 ==> 

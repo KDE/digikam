@@ -710,10 +710,11 @@ void AbstractAlbumTreeView::contextMenuEvent(QContextMenuEvent *event)
     popmenu.addTitle(contextMenuIcon(), contextMenuTitle());
     ContextMenuHelper cmhelper(&popmenu);
 
+    AlbumPointer<Album> albumPointer(album);
     addCustomContextMenuActions(cmhelper, album);
 
     QAction* choice = cmhelper.exec(QCursor::pos());
-    handleCustomContextMenuAction(choice, album);
+    handleCustomContextMenuAction(choice, albumPointer);
 
 }
 
@@ -728,7 +729,7 @@ void AbstractAlbumTreeView::addCustomContextMenuActions(ContextMenuHelper &cmh, 
     Q_UNUSED(album);
 }
 
-void AbstractAlbumTreeView::handleCustomContextMenuAction(QAction *action, Album *album)
+void AbstractAlbumTreeView::handleCustomContextMenuAction(QAction *action, AlbumPointer<Album> album)
 {
     Q_UNUSED(action);
     Q_UNUSED(album);

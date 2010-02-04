@@ -77,7 +77,7 @@ public Q_SLOTS:
 
 protected:
     virtual void addCustomContextMenuActions(ContextMenuHelper &cmh, Album *album);
-    virtual void handleCustomContextMenuAction(QAction *action, Album *album);
+    virtual void handleCustomContextMenuAction(QAction *action, AlbumPointer<Album> album);
 
 private Q_SLOTS:
 

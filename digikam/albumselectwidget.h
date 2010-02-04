@@ -69,7 +69,7 @@ public:
     ~AlbumSelectTreeView();
 
     virtual void addCustomContextMenuActions(ContextMenuHelper &cmh, Album *album);
-    virtual void handleCustomContextMenuAction(QAction *action, Album *album);
+    virtual void handleCustomContextMenuAction(QAction *action, AlbumPointer<Album> album);
 
 public Q_SLOTS:
 

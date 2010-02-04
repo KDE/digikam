@@ -92,7 +92,7 @@ void TagFilterView::addCustomContextMenuActions(ContextMenuHelper &cmh, Album *a
 
 }
 
-void TagFilterView::handleCustomContextMenuAction(QAction *action, Album *album)
+void TagFilterView::handleCustomContextMenuAction(QAction *action, AlbumPointer<Album> album)
 {
     TagCheckView::handleCustomContextMenuAction(action, album);
 

@@ -137,10 +137,11 @@ void TagFolderView::slotTagNewFromABCMenu(const QString &personName)
 
 }
 
-void TagFolderView::handleCustomContextMenuAction(QAction *action, Album *album)
+void TagFolderView::handleCustomContextMenuAction(QAction *action, AlbumPointer<Album> album)
 {
 
-    TAlbum *tag = dynamic_cast<TAlbum*> (album);
+    Album *a = album;
+    TAlbum *tag = dynamic_cast<TAlbum*> (a);
     if (!tag)
     {
         return;

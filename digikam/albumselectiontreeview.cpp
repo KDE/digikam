@@ -161,10 +161,11 @@ void AlbumSelectionTreeView::addCustomContextMenuActions(ContextMenuHelper &cmh,
 
 }
 
-void AlbumSelectionTreeView::handleCustomContextMenuAction(QAction *action, Album *a)
+void AlbumSelectionTreeView::handleCustomContextMenuAction(QAction *action, AlbumPointer<Album> a)
 {
 
-    PAlbum *album = dynamic_cast<PAlbum*> (a);
+    Album *alb = a;
+    PAlbum *album = dynamic_cast<PAlbum*> (alb);
 
     if (!action || !album)
     {

@@ -104,10 +104,11 @@ void EditableSearchTreeView::addCustomContextMenuActions(ContextMenuHelper &cmh,
 
 }
 
-void EditableSearchTreeView::handleCustomContextMenuAction(QAction *action, Album *album)
+void EditableSearchTreeView::handleCustomContextMenuAction(QAction *action, AlbumPointer<Album> album)
 {
 
-    SAlbum *searchAlbum = dynamic_cast<SAlbum*> (album);
+    Album *a = album;
+    SAlbum *searchAlbum = dynamic_cast<SAlbum*> (a);
 
     if (!searchAlbum || !action)
     {

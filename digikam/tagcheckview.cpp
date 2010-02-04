@@ -226,11 +226,12 @@ void TagCheckView::addCustomContextMenuActions(ContextMenuHelper &cmh, Album *al
 
 }
 
-void TagCheckView::handleCustomContextMenuAction(QAction *action, Album *album)
+void TagCheckView::handleCustomContextMenuAction(QAction *action, AlbumPointer<Album> album)
 {
     TagFolderView::handleCustomContextMenuAction(action, album);
 
-    TAlbum *tag = dynamic_cast<TAlbum*> (album);
+    Album *a = album;
+    TAlbum *tag = dynamic_cast<TAlbum*> (a);
 
     if (!action || !tag)
     {
