@@ -12,4 +12,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 005 ==> 225397 : Tip refers to "Print Wizard", it is now "Print Assistant".
 006 ==> 225555 : Crash when deleting tag.
 007 ==> 207244 : Image disappears when enlarging.
-008 ==> 
+008 ==> 221155 : Add collection fails on similarly named directories (seems that check is not strict enough).
+009 ==> 
