@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2007 by Jaromir Malenko <malenko at email.cz>
  * Copyright (C) 2008 by Roberto Castagnola <roberto dot castagnola at gmail dot com>
- * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -155,7 +155,7 @@ ImageSelectionWidget::ImageSelectionWidget(int w, int h, QWidget *parent)
     setup(w, h);
 }
 
-ImageSelectionWidget::ImageSelectionWidget(int w, int h, bool initDrawing, QWidget *parent)
+ImageSelectionWidget::ImageSelectionWidget(int w, int h, bool initDrawing, QWidget* parent)
                     : QWidget(parent), d(new ImageSelectionWidgetPriv)
 {
     d->isDrawingSelection = initDrawing;
@@ -443,7 +443,7 @@ void ImageSelectionWidget::setSelectionOrientation(int orient)
     d->currentOrientation = orient;
     reverseRatioValues();
     applyAspectRatio(true);
-    emit signalSelectionOrientationChanged( d->currentOrientation );
+    emit signalSelectionOrientationChanged(d->currentOrientation);
 }
 
 void ImageSelectionWidget::setSelectionAspectRatioType(int aspectRatioType)
@@ -458,14 +458,19 @@ void ImageSelectionWidget::setSelectionAspectRatioType(int aspectRatioType)
           d->currentHeightRatioValue = 1.0;
           break;
 
+       case RATIO02x03:
+          d->currentWidthRatioValue  = 3.0;
+          d->currentHeightRatioValue = 2.0;
+          break;
+
        case RATIO03X04:
           d->currentWidthRatioValue  = 4.0;
           d->currentHeightRatioValue = 3.0;
           break;
 
-       case RATIO02x03:
-          d->currentWidthRatioValue  = 3.0;
-          d->currentHeightRatioValue = 2.0;
+       case RATIO04X05:
+          d->currentWidthRatioValue  = 5.0;
+          d->currentHeightRatioValue = 4.0;
           break;
 
        case RATIO05x07:
@@ -478,9 +483,9 @@ void ImageSelectionWidget::setSelectionAspectRatioType(int aspectRatioType)
           d->currentHeightRatioValue = 7.0;
           break;
 
-       case RATIO04X05:
+       case RATIO08x05:
           d->currentWidthRatioValue  = 5.0;
-          d->currentHeightRatioValue = 4.0;
+          d->currentHeightRatioValue = 8.0;
           break;
 
        case RATIOGOLDEN:
@@ -505,7 +510,7 @@ void ImageSelectionWidget::setSelectionAspectRatioValue(int widthRatioValue,
         gdc = mod;
     }
 
-    d->currentWidthRatioValue  = widthRatioValue / gdc;
+    d->currentWidthRatioValue  = widthRatioValue  / gdc;
     d->currentHeightRatioValue = heightRatioValue / gdc;
     d->currentAspectRatioType  = RATIOCUSTOM;
 
@@ -526,7 +531,9 @@ void ImageSelectionWidget::setSelectionAspectRatioValue(int widthRatioValue,
         }
     }
     else
+    {
         reverseRatioValues();
+    }
 
     applyAspectRatio(false);
 }
@@ -711,7 +718,7 @@ void ImageSelectionWidget::applyAspectRatio(bool useHeight, bool repaintWidget)
     }
 }
 
-void ImageSelectionWidget::normalizeRegion(void)
+void ImageSelectionWidget::normalizeRegion()
 {
     // Perform normalization of selection area.
 
@@ -728,7 +735,7 @@ void ImageSelectionWidget::normalizeRegion(void)
         d->regionSelection.moveBottom(d->image.bottom());
 }
 
-void ImageSelectionWidget::regionSelectionMoved(void)
+void ImageSelectionWidget::regionSelectionMoved()
 {
     normalizeRegion();
 
@@ -738,7 +745,7 @@ void ImageSelectionWidget::regionSelectionMoved(void)
     emit signalSelectionMoved( d->regionSelection );
 }
 
-void ImageSelectionWidget::regionSelectionChanged(void)
+void ImageSelectionWidget::regionSelectionChanged()
 {
     // Compute the intersection of selection region and image region
     QRect cut = d->regionSelection & d->image;
@@ -758,7 +765,7 @@ void ImageSelectionWidget::regionSelectionChanged(void)
     emit signalSelectionChanged( d->regionSelection );
 }
 
-void ImageSelectionWidget::drawRulesOfThirds(QPainter &p, const int &xThird, const int &yThird)
+void ImageSelectionWidget::drawRulesOfThirds(QPainter& p, const int& xThird, const int& yThird)
 {
 
     p.drawLine( d->localRegionSelection.left() + xThird,   d->localRegionSelection.top(),
@@ -773,10 +780,10 @@ void ImageSelectionWidget::drawRulesOfThirds(QPainter &p, const int &xThird, con
 
 }
 
-void ImageSelectionWidget::drawDiagonalMethod(QPainter &p, const int &w, const int &h)
+void ImageSelectionWidget::drawDiagonalMethod(QPainter& p, const int& w, const int& h)
 {
     p.setRenderHint(QPainter::Antialiasing);
-    
+
     if (w > h)
     {
         p.drawLine(0, 0, h, h);
@@ -794,10 +801,10 @@ void ImageSelectionWidget::drawDiagonalMethod(QPainter &p, const int &w, const i
 
 }
 
-void ImageSelectionWidget::drawHarmoniousTriangles(QPainter &p, const int &dst)
+void ImageSelectionWidget::drawHarmoniousTriangles(QPainter& p, const int& dst)
 {
     p.setRenderHint(QPainter::Antialiasing);
-        
+
     p.drawLine( -d->localRegionSelection.width()/2, -d->localRegionSelection.height()/2,
                  d->localRegionSelection.width()/2,  d->localRegionSelection.height()/2);
 
@@ -809,12 +816,12 @@ void ImageSelectionWidget::drawHarmoniousTriangles(QPainter &p, const int &dst)
 
 }
 
-void ImageSelectionWidget::drawGoldenMean(QPainter &p, const QRect &R1,
-                const QRect &R2, const QRect &R3, const QRect &R4,
-                const QRect &R5, const QRect &R6, const QRect &R7)
+void ImageSelectionWidget::drawGoldenMean(QPainter& p, const QRect& R1,
+                const QRect& R2, const QRect& R3, const QRect& R4,
+                const QRect& R5, const QRect& R6, const QRect& R7)
 {
     p.setRenderHint(QPainter::Antialiasing);
-    
+
     // Drawing Golden sections.
     if (d->drawGoldenSection)
     {
@@ -896,7 +903,6 @@ void ImageSelectionWidget::drawGoldenMean(QPainter &p, const QRect &R1,
                    2*R7.width(), 2*R7.height(),
                    0, 90*16);
     }
-
 }
 
 void ImageSelectionWidget::updatePixmap()
@@ -1068,7 +1074,7 @@ void ImageSelectionWidget::updatePixmap()
     p.end();
 }
 
-void ImageSelectionWidget::paintEvent( QPaintEvent * )
+void ImageSelectionWidget::paintEvent(QPaintEvent*)
 {
     QPainter p(this);
     p.drawPixmap(0, 0, *d->pixmap);
@@ -1102,7 +1108,7 @@ QPoint ImageSelectionWidget::opposite()
     return opp;
 }
 
-float ImageSelectionWidget::distance(QPoint a, QPoint b)
+float ImageSelectionWidget::distance(const QPoint& a, const QPoint& b)
 {
     return sqrt(pow(a.x() - b.x(), 2) + pow(a.y() - b.y(), 2));
 }
@@ -1129,7 +1135,7 @@ void ImageSelectionWidget::setCursorResizing()
     }
 }
 
-void ImageSelectionWidget::placeSelection(QPoint pm, bool symmetric, QPoint center)
+void ImageSelectionWidget::placeSelection(const QPoint& pm, bool symmetric, const QPoint& center)
 {
     // Set orientation
     if ( d->autoOrientation )
@@ -1199,7 +1205,7 @@ void ImageSelectionWidget::placeSelection(QPoint pm, bool symmetric, QPoint cent
     repaint();
 }
 
-void ImageSelectionWidget::mousePressEvent ( QMouseEvent * e )
+void ImageSelectionWidget::mousePressEvent(QMouseEvent* e)
 {
     if (e->button() == Qt::LeftButton)
     {
@@ -1271,7 +1277,7 @@ void ImageSelectionWidget::mousePressEvent ( QMouseEvent * e )
     }
 }
 
-void ImageSelectionWidget::mouseReleaseEvent ( QMouseEvent * )
+void ImageSelectionWidget::mouseReleaseEvent(QMouseEvent*)
 {
     if ( d->currentResizing != ImageSelectionWidgetPriv::ResizingNone )
     {
@@ -1291,7 +1297,7 @@ void ImageSelectionWidget::mouseReleaseEvent ( QMouseEvent * )
     }
 }
 
-void ImageSelectionWidget::mouseMoveEvent ( QMouseEvent * e )
+void ImageSelectionWidget::mouseMoveEvent(QMouseEvent* e)
 {
     if (e->buttons() & Qt::LeftButton)
     {
