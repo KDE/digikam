@@ -1,7 +1,9 @@
 *********************************************************************************************************
 digiKam 1.2.0 - Release date: 2010-XX-XX
 
-NEW FEATURES:
+NEW FEATURES: 
+
+AlbumGUI       : All Album tree views are ported to pure Qt4 model/view implementation.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
@@ -13,4 +15,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 006 ==> 225555 : Crash when deleting tag.
 007 ==> 207244 : Image disappears when enlarging.
 008 ==> 221155 : Add collection fails on similarly named directories (seems that check is not strict enough).
-009 ==> 
+009 ==> 225731 : digiKam no preview icon for movie.
+010 ==> 
