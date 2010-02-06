@@ -343,6 +343,12 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
                                   (int)ImageDescEditTabPriv::DESCRIPTIONS));
     d->templateViewer->setObjectName("ImageDescEditTab Expander");
     d->templateViewer->readSettings();
+    d->tagCheckView->setConfigGroup(group2);
+    d->tagCheckView->setEntryPrefix("ImageDescEditTab TagCheckView");
+    d->tagCheckView->loadState();
+    d->tagsSearchBar->setConfigGroup(group2);
+    d->tagsSearchBar->setEntryPrefix("ImageDescEditTab SearchBar");
+    d->tagsSearchBar->loadState();
 }
 
 ImageDescEditTab::~ImageDescEditTab()
@@ -367,6 +373,9 @@ ImageDescEditTab::~ImageDescEditTab()
     KConfigGroup group2       = config->group("Image Properties SideBar");
     group2.writeEntry("ImageDescEditTab Tab", d->tabWidget->currentIndex());
     group2.sync();
+
+    d->tagCheckView->saveState();
+    d->tagsSearchBar->saveState();
 
     delete d;
 }
@@ -1034,9 +1043,17 @@ void ImageDescEditTab::updateRecentTags()
                         icon = loader->getStandardTagIcon(album, AlbumThumbnailLoader::SmallerSize);
                     }
                 }
-                QString text = album->title() + " (" + ((TAlbum*)album->parent())->prettyUrl() + ')';
-                QAction *action = menu->addAction(icon, text, d->recentTagsMapper, SLOT(map()));
-                d->recentTagsMapper->setMapping(action, album->id());
+                TAlbum *parent = dynamic_cast<TAlbum*> (album->parent());
+                if (parent)
+                {
+                    QString text = album->title() + " (" + parent->prettyUrl() + ')';
+                    QAction *action = menu->addAction(icon, text, d->recentTagsMapper, SLOT(map()));
+                    d->recentTagsMapper->setMapping(action, album->id());
+                }
+                else
+                {
+                    kError() << "Tag" << album << "doesn't have a valid parent";
+                }
             }
         }
     }
