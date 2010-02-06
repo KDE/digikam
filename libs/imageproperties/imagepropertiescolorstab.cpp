@@ -545,7 +545,6 @@ void ImagePropertiesColorsTab::slotRefreshOptions(bool /*sixteenBit*/)
 {
     slotChannelChanged();
     slotScaleChanged();
-    slotColorsChanged();
 
     if (d->selectionArea.isValid())
        slotRenderingChanged(d->regionBG->checkedId());
@@ -558,11 +557,6 @@ void ImagePropertiesColorsTab::slotHistogramComputationFailed()
 }
 
 void ImagePropertiesColorsTab::slotChannelChanged()
-{
-    updateStatistics();
-}
-
-void ImagePropertiesColorsTab::slotColorsChanged()
 {
     updateStatistics();
 }

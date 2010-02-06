@@ -77,13 +77,6 @@ enum ChannelType
     ColorChannels
 };
 
-enum ColorChannelsType
-{
-    ColorChannelsRed = 0,      // Red color to foreground in All Colors Channel mode.
-    ColorChannelsGreen,        // Green color to foreground in All Colors Channel mode.
-    ColorChannelsBlue          // Blue color to foreground in All Colors Channel mode.
-};
-
 } // namespace Digikam
 
 #endif /* DIGIKAMGLOBALS_H */

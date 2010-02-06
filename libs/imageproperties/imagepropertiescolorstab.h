@@ -75,7 +75,6 @@ private Q_SLOTS:
     void slotHistogramComputationFailed(void);
     void slotChannelChanged();
     void slotScaleChanged();
-    void slotColorsChanged();
     void slotRenderingChanged(int rendering);
     void slotMinValueChanged(int);
     void slotMaxValueChanged(int);

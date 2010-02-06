@@ -551,7 +551,6 @@ void RawSettingsBox::readSettings()
 
 //    slotChannelChanged();
 //    slotScaleChanged(histogramScale());
-//    slotColorsChanged(d->colorsCB->currentIndex());
 }
 
 void RawSettingsBox::writeSettings()
