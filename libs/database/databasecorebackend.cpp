@@ -21,11 +21,11 @@
  *
  * ============================================================ */
 
-
+/*
 #ifndef DATABASCOREBACKEND_DEBUG
 #define DATABASCOREBACKEND_DEBUG
 #endif
-
+*/
 
 #include "databasecorebackend.h"
 #include "databasecorebackend_p.h"
