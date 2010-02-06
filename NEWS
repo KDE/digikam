@@ -16,4 +16,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 007 ==> 207244 : Image disappears when enlarging.
 008 ==> 221155 : Add collection fails on similarly named directories (seems that check is not strict enough).
 009 ==> 225731 : digiKam no preview icon for movie.
-010 ==> 
+010 ==> 222698 : digiKam 1.0.0 crashes when editing tags by drag-and-drop.
+011 ==> 
