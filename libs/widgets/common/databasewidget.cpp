@@ -284,11 +284,7 @@ namespace Digikam
     DatabaseParameters DatabaseWidget::getDatabaseParameters()
     {
         DatabaseParameters parameters;
-        if (internalServer->isChecked())
-        {
-           parameters = DatabaseParameters::parametersFromConfig(databaseType->currentText());
-           DatabaseServerStarter::startServerManagerProcess(databaseType->currentText());
-        }else
+        if (databaseType->currentText() == "QSQLITE" || !internalServer->isChecked())
         {
             parameters.connectOptions = connectionOptions->text();
             parameters.databaseType   = databaseType->currentText();
@@ -299,11 +295,15 @@ namespace Digikam
 
             if (parameters.databaseType == "QSQLITE")
             {
-                parameters.databaseName = QDir::cleanPath(databaseName->text() + '/' + "digikam4.db");
+                parameters.databaseName = QDir::cleanPath(databasePathEdit->url().toLocalFile() + '/' + "digikam4.db");
             }else
             {
                 parameters.databaseName   = databaseName->text();
             }
+        }else
+        {
+            parameters = DatabaseParameters::parametersFromConfig(databaseType->currentText());
+            DatabaseServerStarter::startServerManagerProcess(databaseType->currentText());
         }
         parameters.readConfig();
         return parameters;

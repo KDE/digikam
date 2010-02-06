@@ -128,6 +128,12 @@ void AlbumDB::deleteAlbumRoot(int rootId)
 {
     d->db->execSql( QString("DELETE FROM AlbumRoots WHERE id=?;"),
                     rootId );
+    QMap<QString, QVariant> parameters;
+    parameters.insert(":albumRoot", rootId);
+    if (DatabaseCoreBackend::NoErrors!=d->db->execDBAction(d->db->getDBAction(QString("deleteAlbumRoot")), parameters))
+    {
+       return;
+    }
     d->db->recordChangeset(AlbumRootChangeset(rootId, AlbumRootChangeset::Deleted));
 }
 
@@ -425,8 +431,12 @@ bool AlbumDB::getAlbumIcon(int albumID, int *albumRootId, QString *iconRelativeP
 
 void AlbumDB::deleteAlbum(int albumID)
 {
-    d->db->execSql( QString("DELETE FROM Albums WHERE id=?;"),
-                    albumID );
+    QMap<QString, QVariant> parameters;
+    parameters.insert(":albumId", albumID);
+    if (DatabaseCoreBackend::NoErrors!=d->db->execDBAction(d->db->getDBAction(QString("deleteAlbumID")), parameters))
+    {
+       return;
+    }
     d->db->recordChangeset(AlbumChangeset(albumID, AlbumChangeset::Deleted));
 }
 
@@ -447,8 +457,13 @@ void AlbumDB::makeStaleAlbum(int albumID)
     QString newRelativePath = values[0].toString() + '-' + values[1].toString();
 
     // delete older stale albums
-    d->db->execSql( QString("DELETE FROM Albums WHERE albumRoot=0 AND relativePath=?;"),
-                    newRelativePath );
+    QMap<QString, QVariant> parameters;
+    parameters.insert(":albumRoot", 0);
+    parameters.insert(":relativePath", newRelativePath);
+    if (DatabaseCoreBackend::NoErrors!=d->db->execDBAction(d->db->getDBAction(QString("deleteAlbumRootPath")), parameters))
+    {
+       return;
+    }
 
     // now do our update
     d->db->execSql( QString("UPDATE Albums SET albumRoot=0, relativePath=? WHERE id=?;"),
@@ -460,7 +475,12 @@ void AlbumDB::makeStaleAlbum(int albumID)
 
 void AlbumDB::deleteStaleAlbums()
 {
-    d->db->execSql( QString("DELETE FROM Albums WHERE albumRoot=0;") );
+    QMap<QString, QVariant> parameters;
+    parameters.insert(":albumRoot", 0);
+    if (DatabaseCoreBackend::NoErrors!=d->db->execDBAction(d->db->getDBAction(QString("deleteAlbumRoot")), parameters))
+    {
+       return;
+    }
     // deliberately no changeset here, is done above
 }
 
@@ -471,17 +491,10 @@ int AlbumDB::addTag(int parentTagID, const QString& name, const QString& iconKDE
     QMap<QString, QVariant> parameters;
     parameters.insert(":tagPID", parentTagID);
     parameters.insert(":tagname", name);
-//     if (!d->db->execDBAction(d->db->getDBAction(QString("InsertTag"))), &parameters, NULL, &id)
-
-     if (DatabaseCoreBackend::NoErrors!=d->db->execDBAction(d->db->getDBAction(QString("InsertTag")), parameters, 0 , &id))
-//     if (!d->db->execSql( QString("INSERT INTO Tags (pid, name) "
-//                                  "VALUES( ?, ?);"),
-//                          parentTagID,
-//                          name,
-//                          0, &id) )
-   {
-      return -1;
-   }
+    if (DatabaseCoreBackend::NoErrors!=d->db->execDBAction(d->db->getDBAction(QString("InsertTag")), parameters, 0 , &id))
+    {
+       return -1;
+    }
 
     if (!iconKDE.isEmpty())
     {
@@ -2967,8 +2980,13 @@ void AlbumDB::renameAlbum(int albumID, int newAlbumRoot, const QString& newRelat
         return;
 
     // first delete any stale albums left behind
-    d->db->execSql( QString("DELETE FROM Albums WHERE relativePath=? AND albumRoot=?;"),
-                    newRelativePath, albumRoot );
+    QMap<QString, QVariant> parameters;
+    parameters.insert(":albumRoot", albumRoot);
+    parameters.insert(":relativePath", newRelativePath);
+    if (DatabaseCoreBackend::NoErrors!=d->db->execDBAction(d->db->getDBAction(QString("deleteAlbumRootPath")), parameters))
+    {
+       return;
+    }
 
     // now update the album
     d->db->execSql( QString("UPDATE Albums SET albumRoot=?, relativePath=? WHERE id=? AND albumRoot=?;"),

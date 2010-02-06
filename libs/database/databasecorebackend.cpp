@@ -21,11 +21,11 @@
  *
  * ============================================================ */
 
-/*
+
 #ifndef DATABASCOREBACKEND_DEBUG
 #define DATABASCOREBACKEND_DEBUG
 #endif
-*/
+
 
 #include "databasecorebackend.h"
 #include "databasecorebackend_p.h"
@@ -440,19 +440,20 @@ DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDBAction(const database
         {
             result = execDirectSql(actionElement.m_Statement);
         }
-        if (result==DatabaseCoreBackend::NoErrors)
-        {
-            if (wrapInTransaction)
-                db.commit();
-        }
-        else
+        if (result!=DatabaseCoreBackend::NoErrors)
         {
             kDebug(50003) << "Error while executing DBAction ["<<  action.m_Name  <<"] Statement ["<<actionElement.m_Statement<<"]";
             returnResult = result;
-            if (wrapInTransaction)
-                db.rollback();
+            if (wrapInTransaction && !db.rollback())
+            {
+                kDebug(50003) << "Error while rollback changes of previous DBAction.";
+            }
             break;
         }
+    }
+    if (returnResult==DatabaseCoreBackend::NoErrors && wrapInTransaction && !db.commit())
+    {
+      kDebug(50003) << "Error while committing changes of previous DBAction.";
     }
     return returnResult;
 }
