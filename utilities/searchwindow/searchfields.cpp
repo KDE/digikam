@@ -200,7 +200,7 @@ SearchField *SearchField::createField(const QString& name, SearchFieldGroup *par
         SearchFieldRangeInt *field = new SearchFieldRangeInt(parent);
         field->setFieldName(name);
         field->setText(i18n("Width"), i18n("Find pictures with a width between"));
-        field->setBetweenText("-");
+        field->setBetweenText(i18nc("Find pictures with a width between...and...", "and"));
         field->setNumberPrefixAndSuffix(QString(), i18nc("Pixels", "px"));
         field->setBoundary(1, 100000, 250);
         field->setSuggestedValues(QList<int>()
@@ -217,7 +217,7 @@ SearchField *SearchField::createField(const QString& name, SearchFieldGroup *par
         SearchFieldRangeInt *field = new SearchFieldRangeInt(parent);
         field->setFieldName(name);
         field->setText(i18n("Height"), i18n("Find pictures with a height between"));
-        field->setBetweenText("-");
+        field->setBetweenText(i18nc("Find pictures with a height between...and...", "and"));
         field->setNumberPrefixAndSuffix(QString(), i18nc("Pixels", "px"));
         field->setBoundary(1, 100000, 250);
         field->setSuggestedValues(QList<int>()
