@@ -349,7 +349,7 @@ void CurvesBox::setChannel(ChannelType channel)
             break;
 
         default:
-            d->curvesWidget->m_channelType = AlphaChannel;
+            d->curvesWidget->m_channelType = channel;
             d->hGradient->setColors(QColor("white"), QColor("black"));
             d->vGradient->setColors(QColor("white"), QColor("black"));
             break;
