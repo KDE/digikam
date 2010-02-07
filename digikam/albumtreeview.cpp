@@ -173,8 +173,6 @@ AbstractAlbumTreeView::AbstractAlbumTreeView(AbstractSpecificAlbumModel *model, 
     d->resizeColumnsTimer->setSingleShot(true);
     connect(d->resizeColumnsTimer, SIGNAL(timeout()),
             this, SLOT(adaptColumnsToContent()));
-    connect(d->resizeColumnsTimer, SIGNAL(timeout()),
-            this, SLOT(scrollToSelectedAlbum()));
 
     m_albumModel       = model;
 
@@ -273,6 +271,9 @@ void AbstractAlbumTreeView::slotFilterChanged()
     {
         // Returning from search: collapse all, expand to current album
         collapseAll();
+        // TODO this assumption is wrong. Not every instance of this class
+        // uses the selected album in the AlbumManager as reference. Eg. tag
+        // view in ImageDescEditTab
         Album *currentAlbum = AlbumManager::instance()->currentAlbum();
         if (currentAlbum)
         {
@@ -526,6 +527,13 @@ void AbstractAlbumTreeView::doLoadState()
     // also restore the sorting order
     sortByColumn(configGroup.readEntry(entryName(d->configSortColumnEntry), 0),
                  (Qt::SortOrder) configGroup.readEntry(entryName(d->configSortOrderEntry), (int) Qt::AscendingOrder));
+
+    // use a timer to scroll to the first possible selected album
+    QTimer *selectCurrentTimer = new QTimer(this);
+    selectCurrentTimer->setInterval(200);
+    selectCurrentTimer->setSingleShot(true);
+    connect(selectCurrentTimer, SIGNAL(timeout()),
+            this, SLOT(scrollToSelectedAlbum()));
 
 }
 
