@@ -102,12 +102,26 @@ public:
      */
     void setSelectOnContextMenu(bool select);
 
-    /** This is a combination of indexAt() checked with visualRect().
-     *  p must be in the viewport currently. Decoration will not be included.
-     *  Suitable for mouse click positions.
+    /**
+     * This is a combination of indexAt() checked with visualRect().
+     * p must be in the viewport currently. Decoration will not be included.
+     * Suitable for mouse click positions.
      */
     QModelIndex indexVisuallyAt(const QPoint& p);
 
+    /**
+     * Implements state loading for the album tree view in a somewhat clumsy
+     * procedure because the model may not be fully loaded when this method is
+     * called. Therefore the config is first parsed into d->statesByAlbumId
+     * which holds the state of all tree view entries indexed by album id.
+     * Afterwards an initial sync run is done restoring the state of all model
+     * entries that are already present at this time. Every processed entry
+     * is removed from d->statesByAlbumId. If there are still entries left in
+     * this map we assume that the model is not fully loaded at the moment.
+     * Therefore the rowsInserted signal is connected to a slot that restores
+     * the state of new rows based on the remaining entries in
+     * d->statesByAlbumId.
+     */
     virtual void doLoadState();
     virtual void doSaveState();
 

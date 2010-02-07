@@ -458,9 +458,10 @@ void AbstractAlbumTreeView::doLoadState()
 
     kDebug() << "Loading view state from " << configGroup.name();
 
+    // extract the selection from the config
     const QStringList selection = configGroup.readEntry(entryName(d->configSelectionEntry),
                     QStringList());
-    kDebug() << "selection: " << selection;
+//    kDebug() << "selection: " << selection;
     foreach(const QString &key, selection)
     {
         bool validId;
@@ -471,6 +472,7 @@ void AbstractAlbumTreeView::doLoadState()
         }
     }
 
+    // extract expansion state from config
     const QStringList expansion = configGroup.readEntry(entryName(d->configExpansionEntry),
                     QStringList());
     kDebug() << "expansion: " << expansion;
@@ -484,8 +486,9 @@ void AbstractAlbumTreeView::doLoadState()
         }
     }
 
+    // extract current index from config
     const QString key = configGroup.readEntry(entryName(d->configCurrentIndexEntry), QString());
-    kDebug() << "currentIndey: " << key;
+//    kDebug() << "currentIndey: " << key;
     bool validId;
     const int id = key.toInt(&validId);
     if (validId)
@@ -493,24 +496,26 @@ void AbstractAlbumTreeView::doLoadState()
         d->statesByAlbumId[id].currentIndex = true;
     }
 
-    for (QMap<int, Digikam::State>::iterator it = d->statesByAlbumId.begin(); it
-                    != d->statesByAlbumId.end(); ++it)
-    {
-        kDebug() << "id = " << it.key() << ": recovered state (selected = "
-                 << it.value().selected << ", expanded = "
-                 << it.value().expanded << ", currentIndex = "
-                 << it.value().currentIndex << ")";
-    }
+//    for (QMap<int, Digikam::State>::iterator it = d->statesByAlbumId.begin(); it
+//                    != d->statesByAlbumId.end(); ++it)
+//    {
+//        kDebug() << "id = " << it.key() << ": recovered state (selected = "
+//                 << it.value().selected << ", expanded = "
+//                 << it.value().expanded << ", currentIndex = "
+//                 << it.value().currentIndex << ")";
+//    }
 
 
     // initial restore run, for everything already loaded
-    kDebug() << "initial restore run with " << model()->rowCount() << " rows";
+//    kDebug() << "initial restore run with " << model()->rowCount() << " rows";
     for (int i = 0; i < model()->rowCount(); ++i)
     {
         const QModelIndex index = model()->index(i, 0);
         restoreState(index);
     }
 
+    // if there are still untreated entries that need to be restored, used the
+    // model's signal to handle them
     if (!d->statesByAlbumId.empty())
     {
         // and the watch the model for new items added
