@@ -124,18 +124,18 @@ class AbstractAlbumTreeViewPriv
 
 public:
     AbstractAlbumTreeViewPriv() :
+        delegate(0),
+        expandOnSingleClick(false),
+        selectAlbumOnClick(false),
+        selectOnContextMenu(true),
+        enableContextMenu(false),
         configSelectionEntry("Selection"),
         configExpansionEntry("Expansion"),
         configCurrentIndexEntry("CurrentIndex"),
         configSortColumnEntry("SortColumn"),
-        configSortOrderEntry("SortOrder")
+        configSortOrderEntry("SortOrder"),
+        resizeColumnsTimer(0)
     {
-        delegate            = 0;
-        expandOnSingleClick = false;
-        selectAlbumOnClick  = false;
-        selectOnContextMenu = true;
-        enableContextMenu   = false;
-        resizeColumnsTimer  = 0;
     }
 
     AlbumTreeViewDelegate *delegate;
@@ -173,6 +173,8 @@ AbstractAlbumTreeView::AbstractAlbumTreeView(AbstractSpecificAlbumModel *model, 
     d->resizeColumnsTimer->setSingleShot(true);
     connect(d->resizeColumnsTimer, SIGNAL(timeout()),
             this, SLOT(adaptColumnsToContent()));
+    connect(d->resizeColumnsTimer, SIGNAL(timeout()),
+            this, SLOT(scrollToSelectedAlbum()));
 
     m_albumModel       = model;
 
@@ -591,6 +593,15 @@ void AbstractAlbumTreeView::slotFixRowsInserted(const QModelIndex &index, int st
 void AbstractAlbumTreeView::adaptColumnsToContent()
 {
     resizeColumnToContents(0);
+}
+
+void AbstractAlbumTreeView::scrollToSelectedAlbum()
+{
+    QModelIndexList selected = selectedIndexes();
+    if (!selected.isEmpty())
+    {
+        scrollTo(selected.first());
+    }
 }
 
 void AbstractAlbumTreeView::adaptColumnsOnDataChange(const QModelIndex &topLeft, const QModelIndex &bottomRight)

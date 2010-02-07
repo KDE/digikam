@@ -129,6 +129,11 @@ public Q_SLOTS:
      */
     void adaptColumnsToContent();
 
+    /**
+     * Scrolls to the first selected album if there is one.
+     */
+    void scrollToSelectedAlbum();
+
 Q_SIGNALS:
 
     /// Emitted when the currently selected album changes
