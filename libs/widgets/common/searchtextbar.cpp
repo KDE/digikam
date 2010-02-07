@@ -293,7 +293,12 @@ void SearchTextBar::slotRowsAboutToBeRemoved(const QModelIndex &parent, int star
         {
             QString itemName = d->idToTextMap[id];
             d->idToTextMap.remove(id);
-            completionObject()->removeItem(itemName);
+            // only delete an item in the completion object if there is no other
+            // item with the same display name
+            if (d->idToTextMap.keys(itemName).empty())
+            {
+                completionObject()->removeItem(itemName);
+            }
         }
         else
         {
@@ -495,6 +500,8 @@ void SearchTextBar::setIgnoreCase(bool ignore)
         d->settings.caseSensitive = Qt::CaseInsensitive;
         completionObject()->setIgnoreCase(true);
     }
+
+    emit signalSearchTextSettings(d->settings);
 
 }
 
