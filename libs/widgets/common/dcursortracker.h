@@ -75,6 +75,7 @@ private Q_SLOTS:
 private:
 
     void moveToParent(QWidget* parent);
+    bool canBeDisplayed();
 
 private:
 

@@ -37,7 +37,7 @@
 
 // KDE includes
 
-
+#include <kapplication.h>
 
 namespace Digikam
 {
@@ -110,7 +110,7 @@ void DCursorTracker::setTrackerAlignment(Qt::Alignment alignment)
 
 void DCursorTracker::triggerAutoShow(int timeout)
 {
-    if (d->enable)
+    if (canBeDisplayed())
     {
         show();
         moveToParent(d->parent);
@@ -120,7 +120,10 @@ void DCursorTracker::triggerAutoShow(int timeout)
 
 void DCursorTracker::refresh()
 {
-    moveToParent(d->parent);
+    if (canBeDisplayed())
+    {
+        moveToParent(d->parent);
+    }
 }
 
 void DCursorTracker::slotAutoHide()
@@ -137,7 +140,7 @@ bool DCursorTracker::eventFilter(QObject *object, QEvent *e)
         case QEvent::MouseMove:
         {
             QMouseEvent *event = static_cast<QMouseEvent*>(e);
-            if (d->enable && (widget->rect().contains(event->pos()) ||
+            if (canBeDisplayed() && (widget->rect().contains(event->pos()) ||
                              (event->buttons() & Qt::LeftButton)))
             {
                 show();
@@ -166,7 +169,7 @@ bool DCursorTracker::eventFilter(QObject *object, QEvent *e)
 
 void DCursorTracker::moveToParent(QWidget* parent)
 {
-    if (!parent)
+    if (!parent || !canBeDisplayed())
         return;
 
     switch (d->alignment)
@@ -194,6 +197,11 @@ void DCursorTracker::moveToParent(QWidget* parent)
             break;
         }
     }
+}
+
+bool DCursorTracker::canBeDisplayed()
+{
+    return d->enable && d->parent->isVisible();
 }
 
 
