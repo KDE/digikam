@@ -151,7 +151,8 @@ public:
 
     /**
      * Indicate whether this search text bar can be toggled to between case-
-     * sensitive and -insensitiv or or if always case-insensitive shall be used.
+     * sensitive and -insensitive or or if always case-insensitive shall be
+     * used.
      *
      * @param b if <code>true</code> the user can decide the toggle between
      *          case sensitivity, on <code>false</code> every search is case-
@@ -190,6 +191,15 @@ private:
     void disconnectFromModel(QAbstractItemModel *model);
     void sync(QAbstractItemModel *model);
     void sync(QAbstractItemModel *model, const QModelIndex &index);
+
+    /**
+     * If hasCaseSensitive returns <code>true</code> this tells the search
+     * text bar whether to ignore case or not.
+     *
+     * @param ignore if <code>true</code>, case is ignored in the emitted
+     *               search text settings and the completion
+     */
+    void setIgnoreCase(bool ignore);
 
 private:
 
