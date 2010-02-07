@@ -119,10 +119,7 @@ void DCursorTracker::triggerAutoShow(int timeout)
 
 void DCursorTracker::refresh()
 {
-    if (canBeDisplayed())
-    {
-        moveToParent(d->parent);
-    }
+    moveToParent(d->parent);
 }
 
 void DCursorTracker::slotAutoHide()
@@ -168,7 +165,7 @@ bool DCursorTracker::eventFilter(QObject *object, QEvent *e)
 
 void DCursorTracker::moveToParent(QWidget* parent)
 {
-    if (!parent || !canBeDisplayed())
+    if (!parent)
         return;
 
     switch (d->alignment)
