@@ -241,7 +241,7 @@ SearchTextBar::HighlightState SearchTextBar::getCurrentHighlightState() const
 
 void SearchTextBar::connectToModel(QAbstractItemModel *model)
 {
-    connect(model, SIGNAL(rowsInserted(const QModelIndex&, int, int)),
+    connect(model, SIGNAL(rowsAboutToBeInserted(const QModelIndex&, int, int)),
             this, SLOT(slotRowsInserted(const QModelIndex&, int, int)));
     connect(model, SIGNAL(rowsAboutToBeRemoved(const QModelIndex&, int, int)),
             this, SLOT(slotRowsAboutToBeRemoved(const QModelIndex&, int, int)));
@@ -263,6 +263,12 @@ void SearchTextBar::slotRowsInserted(const QModelIndex &parent, int start, int e
         if (child.isValid())
         {
             sync(d->model, child);
+        }
+        else
+        {
+        	kError() << "inserted rows are not valid for parent " << parent
+					 << parent.data(d->displayRole).toString() << "and child"
+					 << child;
         }
     }
 }
@@ -286,7 +292,7 @@ void SearchTextBar::slotRowsAboutToBeRemoved(const QModelIndex &parent, int star
         else
         {
             kWarning() << "idToTextMap seems to be out of sync with the model. "
-                     << "There is no entry for model index " << index;
+                       << "There is no entry for model index " << index;
         }
     }
 }
@@ -299,8 +305,6 @@ void SearchTextBar::slotModelReset()
 
 void SearchTextBar::slotDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight)
 {
-    Q_UNUSED(topLeft);
-    Q_UNUSED(bottomRight);
 
     for (int row = topLeft.row(); row <= bottomRight.row(); ++row)
     {
@@ -315,7 +319,10 @@ void SearchTextBar::slotDataChanged(const QModelIndex &topLeft, const QModelInde
 
         QModelIndex index = d->model->index(row, topLeft.column(), topLeft.parent());
         if (!index.isValid())
+        {
+        	kError() << "illegal index in changed data";
             continue;
+        }
 
         int id = index.data(d->uniqueIdRole).toInt();
         QString itemName = index.data(d->displayRole).toString();
@@ -327,7 +334,7 @@ void SearchTextBar::slotDataChanged(const QModelIndex &topLeft, const QModelInde
         else
         {
             kError() << "idToTextMap did not contain an entry for index "
-                     << index;
+                     << index << itemName;
         }
         d->idToTextMap[id] = itemName;
     }
