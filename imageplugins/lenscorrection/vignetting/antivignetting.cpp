@@ -6,7 +6,7 @@
  * Date        : 2005-05-25
  * Description : Antivignetting threaded image filter.
  *
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Original AntiVignetting algorithm copyrighted 2003 by
  * John Walker from 'pnmctrfilt' implementation. See
@@ -26,7 +26,6 @@
  *
  * ============================================================ */
 
-
 #include "antivignetting.h"
 
 // C++ includes
@@ -43,15 +42,13 @@
 #include "dimg.h"
 #include "dimgimagefilters.h"
 
-
-
 namespace DigikamAntiVignettingImagesPlugin
 {
 
-AntiVignetting::AntiVignetting(Digikam::DImg *orgImage, QObject *parent, double density,
-                               double power, double radius, double yshift, double xshift, 
+AntiVignetting::AntiVignetting(DImg* orgImage, QObject* parent, double density,
+                               double power, double radius, double yshift, double xshift,
                                bool normalize, bool addvignetting)
-              : Digikam::DImgThreadedFilter(orgImage, parent, "AntiVignetting")
+              : DImgThreadedFilter(orgImage, parent, "AntiVignetting")
 {
     m_density        = density;
     m_power          = power;
@@ -62,32 +59,6 @@ AntiVignetting::AntiVignetting(Digikam::DImg *orgImage, QObject *parent, double 
     m_add_vignetting = addvignetting;
 
     initFilter();
-}
-
-int AntiVignetting::approx(double x) {
-  return ((int) x+0.5);
-}
-
-double AntiVignetting::hypothenuse(double x, double y) {
-  return (sqrt (x*x + y*y));
-}
-
-uchar  AntiVignetting::clamp8bits(double x) {
-  if (x < 0)
-    return 0;
-  else if (x > 255)
-    return 255;
-  else 
-    return ((uchar) x);
-}
-
-unsigned short  AntiVignetting::clamp16bits(double x) {
-  if (x < 0)
-    return 0;
-  else if (x > 65535)
-    return 65535;
-  else 
-    return ((unsigned short) x);
 }
 
 // This method is inspired from John Walker 'pnmctrfilt' algorithm code.
@@ -107,11 +78,11 @@ void AntiVignetting::filterImage()
 
     int Width  = m_orgImage.width();
     int Height = m_orgImage.height();
-    
+
     // Determine the shift in pixels from the shift in percentage.
     m_xshift = m_xshift*Height/200.0;
     m_yshift = m_yshift*Width/200.0;
-    
+
     // Determine the radius of the filter.  This is the half diagonal
     // measure of the image multiplied by the command line radius factor.
 
@@ -130,24 +101,24 @@ void AntiVignetting::filterImage()
     xsize    = ((Height + 1) / 2) + abs(m_xshift);
     ysize    = ((Width  + 1) / 2) + abs(m_yshift);
     diagonal = approx(hypothenuse(xsize,ysize)) +  1;
-    
+
     ldens = new double[diagonal];
 
     for (i = 0 ; !m_cancel && (i < diagonal) ; ++i)
     {
         if ( i >= erad )
-        {  
-          if (!m_add_vignetting)
-            ldens[i] = 1.0;
-          else
-            ldens[i] = 200000.0; // should be infinity
+        {
+            if (!m_add_vignetting)
+                ldens[i] = 1.0;
+            else
+                ldens[i] = 200000.0; // should be infinity
         }
         else
         {
-          if (!m_add_vignetting)
-             ldens[i] =  (1.0 + (m_density - 1) * pow(1.0 - (((double) i) / (erad - 1)), m_power));
-          else
-             ldens[i] =  20.0 / (1.0 + (24 - (m_density - 1)) * pow(1.0 - (((double) i) / (erad - 1)), m_power));
+            if (!m_add_vignetting)
+                ldens[i] =  (1.0 + (m_density - 1) * pow(1.0 - (((double) i) / (erad - 1)), m_power));
+            else
+                ldens[i] =  20.0 / (1.0 + (24 - (m_density - 1)) * pow(1.0 - (((double) i) / (erad - 1)), m_power));
         }
     }
 
@@ -190,11 +161,41 @@ void AntiVignetting::filterImage()
     // Normalize colors for a best rendering.
     if (m_normalize)
     {
-       Digikam::DImgImageFilters filters;
+       DImgImageFilters filters;
        filters.normalizeImage(m_destImage.bits(), Width, Height, m_destImage.sixteenBit());
     }
 
     delete [] ldens;
+}
+
+int AntiVignetting::approx(double x)
+{
+    return ((int) x+0.5);
+}
+
+double AntiVignetting::hypothenuse(double x, double y)
+{
+    return (sqrt (x*x + y*y));
+}
+
+uchar AntiVignetting::clamp8bits(double x)
+{
+    if (x < 0)
+        return 0;
+    else if (x > 255)
+        return 255;
+    else
+        return ((uchar) x);
+}
+
+unsigned short  AntiVignetting::clamp16bits(double x)
+{
+    if (x < 0)
+        return 0;
+    else if (x > 65535)
+        return 65535;
+    else
+        return ((unsigned short) x);
 }
 
 }  // namespace DigikamAntiVignettingImagesPlugin
