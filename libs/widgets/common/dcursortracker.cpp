@@ -95,7 +95,6 @@ void DCursorTracker::setText(const QString& txt)
 void DCursorTracker::setEnable(bool b)
 {
     d->enable = b;
-    moveToParent(d->parent);
 }
 
 void DCursorTracker::setKeepOpen(bool b)
