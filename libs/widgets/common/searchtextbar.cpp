@@ -7,7 +7,7 @@
  * Description : a bar used to search a string.
  *
  * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009 by Johannes Wienke <languitar at semipol dot de>
+ * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -135,6 +135,7 @@ void SearchTextBar::doLoadState()
                       (int)KGlobalSettings::completionMode()));
     d->settings.caseSensitive = (Qt::CaseSensitivity)group.readEntry(entryName(d->optionCaseSensitiveEntry),
                                                                      (int)Qt::CaseInsensitive);
+    setIgnoreCase(d->settings.caseSensitive == Qt::CaseInsensitive);
 }
 
 void SearchTextBar::doSaveState()
@@ -254,8 +255,8 @@ void SearchTextBar::connectToModel(QAbstractItemModel *model)
 
 void SearchTextBar::slotRowsInserted(const QModelIndex &parent, int start, int end)
 {
-    kDebug() << "rowInserted in parent " << parent << ", start = " << start
-             << ", end = " << end;
+    //kDebug() << "rowInserted in parent " << parent << ", start = " << start
+    //         << ", end = " << end;
 
     for (int i = start; i <= end; ++i)
     {
@@ -275,25 +276,31 @@ void SearchTextBar::slotRowsInserted(const QModelIndex &parent, int start, int e
 
 void SearchTextBar::slotRowsAboutToBeRemoved(const QModelIndex &parent, int start, int end)
 {
-    kDebug() << "rows of parent " << parent << " removed, start = " << start
-             << ", end = " << end;
+    //kDebug() << "rows of parent " << parent << " removed, start = " << start
+    //         << ", end = " << end;
     for (int i = start; i <= end; ++i)
     {
+
         QModelIndex index = d->model->index(i, 0, parent);
         if (!index.isValid())
+        {
+            kError() << "Received an invalid index to be removed";
             continue;
+        }
+
         int id = index.data(d->uniqueIdRole).toInt();
         if (d->idToTextMap.contains(id))
         {
             QString itemName = d->idToTextMap[id];
-            completionObject()->removeItem(itemName);
             d->idToTextMap.remove(id);
+            completionObject()->removeItem(itemName);
         }
         else
         {
             kWarning() << "idToTextMap seems to be out of sync with the model. "
                        << "There is no entry for model index " << index;
         }
+
     }
 }
 
@@ -308,6 +315,7 @@ void SearchTextBar::slotDataChanged(const QModelIndex &topLeft, const QModelInde
 
     for (int row = topLeft.row(); row <= bottomRight.row(); ++row)
     {
+
         if (!d->model->hasIndex(row, topLeft.column(), topLeft.parent()))
         {
             kError() << "Got wrong change event for index with row " << row
@@ -329,7 +337,6 @@ void SearchTextBar::slotDataChanged(const QModelIndex &topLeft, const QModelInde
         if (d->idToTextMap.contains(id))
         {
             completionObject()->removeItem(d->idToTextMap.value(id));
-            completionObject()->addItem(itemName);
         }
         else
         {
@@ -337,6 +344,8 @@ void SearchTextBar::slotDataChanged(const QModelIndex &topLeft, const QModelInde
                      << index << itemName;
         }
         d->idToTextMap[id] = itemName;
+        completionObject()->addItem(itemName);
+
     }
 
 }
@@ -349,8 +358,8 @@ void SearchTextBar::disconnectFromModel(QAbstractItemModel *model)
 void SearchTextBar::sync(QAbstractItemModel *model)
 {
 
-    kDebug() << "Starting sync with model " << model
-             << ", rowCount for parent: " << model->rowCount();
+    //kDebug() << "Starting sync with model " << model
+    //         << ", rowCount for parent: " << model->rowCount();
 
     completionObject()->clear();
     d->idToTextMap.clear();
@@ -367,7 +376,7 @@ void SearchTextBar::sync(QAbstractItemModel *model, const QModelIndex &index)
 {
 
     QString itemName = index.data(d->displayRole).toString();
-    kDebug() << "sync adding item '" << itemName << "' for index " << index;
+    //kDebug() << "sync adding item '" << itemName << "' for index " << index;
     completionObject()->addItem(itemName);
     d->idToTextMap.insert(index.data(d->uniqueIdRole).toInt(), itemName);
 
@@ -383,16 +392,16 @@ void SearchTextBar::setCaseSensitive(bool b)
 {
     d->hasCaseSensitive = b;
 
+    // reset settings if selecting case sensitivity is not allowed
     if (!b)
     {
-
         d->settings.caseSensitive = Qt::CaseInsensitive;
+    }
 
-        if (!text().isEmpty())
-        {
-            emit signalSearchTextSettings(d->settings);
-        }
-
+    // re-emit signal with changed settings
+    if (!text().isEmpty())
+    {
+        emit signalSearchTextSettings(d->settings);
     }
 
 }
@@ -456,9 +465,37 @@ void SearchTextBar::contextMenuEvent(QContextMenuEvent* e)
     menu->exec(e->globalPos());
 
     if (d->hasCaseSensitive)
-        d->settings.caseSensitive = cs->isChecked() ? Qt::CaseSensitive : Qt::CaseInsensitive;
+    {
+        setIgnoreCase(!cs->isChecked());
+    }
 
     delete menu;
+}
+
+void SearchTextBar::setIgnoreCase(bool ignore)
+{
+
+    if (hasCaseSensitive())
+    {
+
+        if (ignore)
+        {
+            d->settings.caseSensitive = Qt::CaseInsensitive;
+        }
+        else
+        {
+            d->settings.caseSensitive = Qt::CaseSensitive;
+        }
+
+        completionObject()->setIgnoreCase(ignore);
+
+    }
+    else
+    {
+        d->settings.caseSensitive = Qt::CaseInsensitive;
+        completionObject()->setIgnoreCase(true);
+    }
+
 }
 
 }  // namespace Digikam
