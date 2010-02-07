@@ -7,7 +7,7 @@
  * Description : a Brightness/Contrast/Gamma image filter.
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -28,6 +28,9 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "dimgthreadedfilter.h"
+
+using namespace Digikam;
 
 namespace Digikam
 {
@@ -51,11 +54,34 @@ public:
     void setBrightness(double val);
     void setContrast(double val);
     void applyBCG(DImg& image);
-    void applyBCG(uchar *bits, uint width, uint height, bool sixteenBits);
+    void applyBCG(uchar* bits, uint width, uint height, bool sixteenBits);
 
 private:
 
     BCGModifierPriv* const d;
+};
+
+// -----------------------------------------------------------------------------------------------
+
+class BCGFilter : public DImgThreadedFilter
+{
+
+public:
+
+    explicit BCGFilter(DImg* orgImage, QObject *parent=0,
+                       double brightness=1.0, double contrast=1.0, double gamma=1.0);
+    ~BCGFilter(){};
+
+private:
+
+    void filterImage();
+
+private:
+
+    double m_brightness;
+    double m_contrast;
+    double m_gamma;
+
 };
 
 }  // namespace Digikam
