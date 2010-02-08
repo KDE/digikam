@@ -57,8 +57,19 @@ public:
     QModelIndex indexForAlbum(Album *album) const;
     QModelIndex rootAlbumIndex() const;
 
-    /// Returns if the the filters will result in any filtering
+    /**
+     * Returns if the currently applied filters will result in any filtering.
+     *
+     * @return <code>true</code> if the current selected filter could result in
+     *         any filtering without checking if this really happens.
+     */
     virtual bool isFiltering() const;
+
+    /**
+     * Returns the settings currently used for filtering.
+     *
+     * @return current settings for filtering.
+     */
     SearchTextSettings searchTextSettings() const;
 
     enum MatchResult
@@ -79,12 +90,40 @@ public:
 
 public Q_SLOTS:
 
+    /**
+     * Accepts new settings used for filtering and applies them to the model.
+     *
+     * @param settings new settings to apply. An empty text will be interpreted
+     *                 as no filtering
+     */
     void setSearchTextSettings(const SearchTextSettings& settings);
 
 Q_SIGNALS:
 
+    /**
+     * This signal indicates that a new SearchTextSettings arrived and is about
+     * to be applied to the model.
+     *
+     * @param searched <code>true</code> if filtering by text was enabled before
+     *                 applying the new settings
+     * @param willSearch <code>true</code> if the new settings can result in
+     *                   any filtering by text, else <code> false.
+     */
+    void searchTextSettingsAboutToChange(bool searched, bool willSearch);
+
+    /**
+     * Indicates that a new filter was applied to the model.
+     */
     void filterChanged();
-    void hasSearchResult(bool);
+
+    /**
+     * Indicates whether the newly applied filter results in a search result or
+     * not.
+     *
+     * @param hasResult <code>true</code> if the new filter matches any album,
+     *                  else <code>false</code>
+     */
+    void hasSearchResult(bool hasResult);
 
 protected:
 

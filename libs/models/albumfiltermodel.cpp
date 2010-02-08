@@ -50,6 +50,9 @@ AlbumFilterModel::AlbumFilterModel(QObject *parent)
 
 void AlbumFilterModel::setSearchTextSettings(const SearchTextSettings& settings)
 {
+
+    emit searchTextSettingsAboutToChange(!m_settings.text.isEmpty(), !settings.text.isEmpty());
+
     m_settings = settings;
     invalidateFilter();
     emit filterChanged();
