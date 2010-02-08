@@ -43,6 +43,7 @@ namespace Digikam
 
 class ContextMenuHelper;
 class TagModificationHelper;
+struct State;
 
 class AbstractAlbumTreeViewPriv;
 
@@ -250,7 +251,16 @@ private:
 
     void saveStateRecursive(const QModelIndex &index, QStringList &selection,
                     QStringList &expansion);
-    void restoreState(const QModelIndex &index);
+
+    /**
+     * Restores the state of the index and all sub-indexes if there is an entry
+     * for this index in stateStore. Every album that is restored is removed
+     * from the stateStore.
+     *
+     * @param index index to start restoring
+     * @param stateStore states indexed by album id
+     */
+    void restoreState(const QModelIndex &index, QMap<int, Digikam::State> &stateStore);
 
     /**
      * Creates the context menu.

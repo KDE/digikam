@@ -514,7 +514,7 @@ void AbstractAlbumTreeView::doLoadState()
     for (int i = 0; i < model()->rowCount(); ++i)
     {
         const QModelIndex index = model()->index(i, 0);
-        restoreState(index);
+        restoreState(index, d->statesByAlbumId);
     }
 
     // if there are still untreated entries that need to be restored, used the
@@ -539,14 +539,14 @@ void AbstractAlbumTreeView::doLoadState()
 
 }
 
-void AbstractAlbumTreeView::restoreState(const QModelIndex &index)
+void AbstractAlbumTreeView::restoreState(const QModelIndex &index, QMap<int, Digikam::State> &stateStore)
 {
 
     Album *album = albumFilterModel()->albumForIndex(index);
     if (album)
     {
 
-        Digikam::State state = d->statesByAlbumId[album->id()];
+        Digikam::State state = stateStore[album->id()];
 
         /*kDebug() << "Trying to restore state of album " << album->title()
                  << ": state(selected = " << state.selected
@@ -568,14 +568,7 @@ void AbstractAlbumTreeView::restoreState(const QModelIndex &index)
 
         // remove this state so that we don't get in trouble later in case the
         // same album id is reused again
-        d->statesByAlbumId.remove(album->id());
-
-        if (d->statesByAlbumId.empty())
-        {
-            // disconnect if not needed anymore
-            disconnect(model(), SIGNAL(rowsInserted(QModelIndex, int, int)),
-                       this, SLOT(slotFixRowsInserted(QModelIndex, int, int)));
-        }
+        stateStore.remove(album->id());
 
     }
     else
@@ -587,7 +580,7 @@ void AbstractAlbumTreeView::restoreState(const QModelIndex &index)
     for (int i = 0; i < model()->rowCount(index); ++i)
     {
         const QModelIndex child = model()->index(i, 0, index);
-        restoreState(child);
+        restoreState(child, stateStore);
     }
 
 }
@@ -601,8 +594,16 @@ void AbstractAlbumTreeView::slotFixRowsInserted(const QModelIndex &index, int st
     for (int i = start; i <= end; ++i)
     {
         const QModelIndex child = model()->index(i, 0, index);
-        restoreState(child);
+        restoreState(child, d->statesByAlbumId);
     }
+
+    if (d->statesByAlbumId.empty())
+    {
+        // disconnect if not needed anymore
+        disconnect(model(), SIGNAL(rowsInserted(QModelIndex, int, int)),
+                   this, SLOT(slotFixRowsInserted(QModelIndex, int, int)));
+    }
+
 }
 
 void AbstractAlbumTreeView::adaptColumnsToContent()
