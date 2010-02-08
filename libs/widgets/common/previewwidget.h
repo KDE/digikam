@@ -50,7 +50,7 @@ class DIGIKAM_EXPORT PreviewWidget : public Q3ScrollView
 
 public:
 
-    PreviewWidget(QWidget *parent=0);
+    PreviewWidget(QWidget* parent=0);
     ~PreviewWidget();
 
     void   setZoomFactor(double z);
@@ -128,7 +128,7 @@ protected:
     virtual bool previewIsNull()=0;
     virtual void resetPreview()=0;
     virtual QImage previewToQImage() const =0;
-    virtual void paintPreview(QPixmap *pix, int sx, int sy, int sw, int sh)=0;
+    virtual void paintPreview(QPixmap* pix, int sx, int sy, int sw, int sh)=0;
     virtual void zoomFactorChanged(double zoom);
 
     // Re-implemented from parent class.
