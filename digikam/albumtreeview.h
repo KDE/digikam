@@ -219,6 +219,13 @@ protected:
 
     // other stuff
 
+    /**
+     * Ensures that while filtering every match is visible by expanding all
+     * parent entries.
+     *
+     * @param index index to start ensuring expansion state
+     * @return <code>true</code> if there was a match under <code>index</code>
+     */
     bool checkExpandedState(const QModelIndex& index);
     void mousePressEvent(QMouseEvent *e);
 

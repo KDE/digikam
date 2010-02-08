@@ -301,14 +301,16 @@ bool AbstractAlbumTreeView::checkExpandedState(const QModelIndex& index)
 {
     bool anyMatch = false;
 
+    // expand index if a child matches
     QModelIndex source_index = m_albumFilterModel->mapToSource(index);
     AlbumFilterModel::MatchResult result = m_albumFilterModel->matchResult(source_index);
-    if (result == AlbumFilterModel::ChildMatch)
+    if (result == AlbumFilterModel::ChildMatch || result == AlbumFilterModel::SpecialMatch)
         expand(index);
     anyMatch = result;
 
+    // expand children if they have a (indirect) match
     int rows = m_albumFilterModel->rowCount(index);
-    for (int i=0; i<rows; ++i)
+    for (int i = 0; i < rows; ++i)
     {
         QModelIndex child = m_albumFilterModel->index(i, 0, index);
         bool childResult = checkExpandedState(child);
