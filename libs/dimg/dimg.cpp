@@ -773,8 +773,8 @@ uchar* DImg::bits() const
 
 uchar* DImg::copyBits() const
 {
-    uchar* data = new uchar[sizeof(m_priv->data)];
-    memcpy (data, m_priv->data, sizeof(m_priv->data));
+    uchar* data = new uchar[numBytes()];
+    memcpy(data, bits(), numBytes());
     return data;
 }
 
