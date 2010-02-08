@@ -75,11 +75,11 @@ namespace Digikam
 
         QLabel *databaseTypeLabel        = new QLabel(i18n("Type"));
         databaseType                  = new QComboBox();
-        QLabel *internalServerLabel        = new QLabel(i18n("Interner Server"));
+        QLabel *internalServerLabel        = new QLabel(i18n("Internal Server"));
         internalServer        = new QCheckBox();
         QLabel *databaseNameLabel        = new QLabel(i18n("Schema Name"));
         databaseName                  = new QLineEdit();
-        QLabel *databaseNameThumbnailsLabel = new QLabel(i18n("Thumbnails Schema Name"));
+        QLabel *databaseNameThumbnailsLabel = new QLabel(i18n("Thumbnails<br>Schema Name"));
         databaseNameThumbnails        = new QLineEdit();
         QLabel *hostNameLabel            = new QLabel(i18n("Host Name"));
         hostName                      = new QLineEdit();
@@ -87,7 +87,7 @@ namespace Digikam
         hostPort                      = new QSpinBox();
         hostPort->setMaximum(65536);
 
-        QLabel *connectionOptionsLabel   = new QLabel(i18n("Database Connection Options"));
+        QLabel *connectionOptionsLabel   = new QLabel(i18n("Database<br>Connection<br>Options"));
         connectionOptions             = new QLineEdit();
 
         QLabel *userNameLabel            = new QLabel(i18n("User"));

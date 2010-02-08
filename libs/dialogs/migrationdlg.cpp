@@ -32,6 +32,7 @@
 #include <qsqlquery.h>
 #include <qmap.h>
 #include <qsqlerror.h>
+#include <qlabel.h>
 
 // KDE includes
 #include <klocale.h>
@@ -83,11 +84,20 @@ namespace Digikam
         migrateButton                   = new QPushButton(i18n("Migrate ->"), this);
         cancelButton                    = new QPushButton(i18n("Cancel"), this);
         cancelButton->setEnabled(false);
-        progressBar                     = new QProgressBar(this);
+
+        QGroupBox *progressBox = new QGroupBox(i18n("Progress Information"), this);
+        QVBoxLayout *vlay         = new QVBoxLayout(progressBox);
+
+        progressBar                     = new QProgressBar(progressBox);
         progressBar->setTextVisible(true);
         progressBar->setRange(0,13);
-        progressBarSmallStep            = new QProgressBar(this);
+        progressBarSmallStep            = new QProgressBar(progressBox);
         progressBarSmallStep->setTextVisible(true);
+
+        vlay->addWidget(new QLabel(i18n("Overall Progress"), progressBox));
+        vlay->addWidget(progressBar);
+        vlay->addWidget(new QLabel(i18n("Step Progress"), progressBox));
+        vlay->addWidget(progressBarSmallStep);
 
         QWidget *mainWidget     = new QWidget;
         QGridLayout *layout     = new QGridLayout;
@@ -97,11 +107,15 @@ namespace Digikam
         layout->addWidget(migrateButton,1,1);
         layout->addWidget(cancelButton,2,1);
         layout->addWidget(toDatabaseWidget, 0,2, 4,1);
-        layout->addWidget(progressBar, 4,0, 1,3);
-        layout->addWidget(progressBarSmallStep, 5,0, 1,3);
+        layout->addWidget(progressBox, 4,0, 1,3);
+//        layout->addWidget(progressBar, 4,0, 1,3);
+//        layout->addWidget(progressBarSmallStep, 5,0, 1,3);
 
         setMainWidget(mainWidget);
         dataInit();
+
+        // setup dialog
+        setButtons(Close);
 
         connect(migrateButton, SIGNAL(clicked()), this, SLOT(performCopy()));
 
@@ -114,6 +128,7 @@ namespace Digikam
 
         connect(cancelButton, SIGNAL(clicked()), &(thread->copyManager), SLOT(stopThread()));
 
+        this->connect(cancelButton, SIGNAL(closeClicked()), &(thread->copyManager), SLOT(stopThread()));
     }
 
     void MigrationDlg::performCopy()
