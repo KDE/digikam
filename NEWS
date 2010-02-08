@@ -20,6 +20,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 011 ==> 225328 : Creating new album during import fails.
 012 ==> 216633 : Additional aspect ratios in crop tool.
 013 ==> 151406 : Filters in 'Enhance' dropdown menu lack mouse-over preview mode.
-014 ==> 
+014 ==> 225698 : When I export my Album to a Html Gallery then Digikam crashed at the End.
+015 ==> 
 
 
