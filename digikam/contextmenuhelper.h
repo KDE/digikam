@@ -204,7 +204,7 @@ public:
     void addActionThumbnail(imageIds& ids, Album* album);
 
     /**
-     * Add the services menut to the menu.
+     * Add the services menu to the menu.
      *
      * The services menu is used to open the selected items in a different application.
      * It will query the item for registered services and provide them in a submenu.
