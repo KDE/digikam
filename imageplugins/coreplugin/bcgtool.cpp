@@ -65,7 +65,7 @@
 #include "histogrambox.h"
 #include "histogramwidget.h"
 #include "imageiface.h"
-#include "imageguidewidget.h"
+#include "imageregionwidget.h"
 
 using namespace KDcrawIface;
 using namespace Digikam;
@@ -107,7 +107,7 @@ public:
 
     RDoubleNumInput*    gInput;
 
-    ImageGuideWidget*   previewWidget;
+    ImageRegionWidget*  previewWidget;
     EditorToolSettings* gboxSettings;
 };
 
@@ -122,7 +122,7 @@ BCGTool::BCGTool(QObject* parent)
 
     d->destinationPreviewData = 0;
 
-    d->previewWidget = new ImageGuideWidget;
+    d->previewWidget = new ImageRegionWidget;
     d->previewWidget->setWhatsThis(i18n("The image brightness-contrast-gamma adjustment preview "
                                         "is shown here. "
                                         "Picking a color on the image will show the "
@@ -134,6 +134,10 @@ BCGTool::BCGTool(QObject* parent)
 
     d->gboxSettings = new EditorToolSettings;
     d->gboxSettings->setTools(EditorToolSettings::Histogram);
+    d->gboxSettings->setButtons(EditorToolSettings::Default|
+                                EditorToolSettings::Ok|
+                                EditorToolSettings::Cancel|
+                                EditorToolSettings::Try);
 
     // -------------------------------------------------------------
 
@@ -271,30 +275,21 @@ void BCGTool::prepareEffect()
     d->gboxSettings->enableButton(EditorToolSettings::Ok, ( b != 0.0 || c != 1.0 || g != 1.0 ));
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 
-    if (d->destinationPreviewData)
-       delete [] d->destinationPreviewData;
-
-    ImageIface* iface         = d->previewWidget->imageIface();
-    d->destinationPreviewData = iface->getPreviewImage();
-    int w                     = iface->previewWidth();
-    int h                     = iface->previewHeight();
-    bool a                    = iface->previewHasAlpha();
-    bool sb                   = iface->previewSixteenBit();
-
-    DImg preview(w, h, sb, a, d->destinationPreviewData);
+    DImg preview = d->previewWidget->getOriginalRegionImage();
     setFilter(dynamic_cast<DImgThreadedFilter*>(new BCGFilter(&preview, this, b, c, g)));
 }
 
 void BCGTool::putPreviewData()
 {
-    DImg preview      = filter()->getTargetImage();
-    ImageIface* iface = d->previewWidget->imageIface();
-    iface->putPreviewImage(preview.bits());
-    d->previewWidget->updatePreview();
+    DImg preview = filter()->getTargetImage();
+    d->previewWidget->setPreviewImage(preview);
 
     // Update histogram.
 
-    memcpy(d->destinationPreviewData, preview.bits(), preview.numBytes());
+    if (d->destinationPreviewData)
+       delete [] d->destinationPreviewData;
+
+    d->destinationPreviewData = preview.copyBits();
     d->gboxSettings->histogramBox()->histogram()->updateData(d->destinationPreviewData,
                                                              preview.width(), preview.height(), preview.sixteenBit(),
                                                              0, 0, 0, false);
@@ -313,21 +308,13 @@ void BCGTool::prepareFinal()
     double g = d->gInput->value();
 
     ImageIface iface(0, 0);
-    uchar* data = iface.getOriginalImage();
-    int w       = iface.originalWidth();
-    int h       = iface.originalHeight();
-    bool sb     = iface.originalSixteenBit();
-    bool a      = iface.originalHasAlpha();
-    DImg orgImage = DImg(w, h, sb, a ,data);
-    delete [] data;
-    setFilter(dynamic_cast<DImgThreadedFilter*>(new BCGFilter(&orgImage, this, b, c, g)));
+    setFilter(dynamic_cast<DImgThreadedFilter*>(new BCGFilter(iface.getOriginalImg(), this, b, c, g)));
 }
 
 void BCGTool::putFinalData()
 {
     ImageIface iface(0, 0);
-    DImg imDest = filter()->getTargetImage();
-    iface.putOriginalImage(i18n("Brightness / Contrast / Gamma"), imDest.bits());
+    iface.putOriginalImage(i18n("Brightness / Contrast / Gamma"), filter()->getTargetImage().bits());
 }
 
 void BCGTool::renderingFinished()
