@@ -134,6 +134,7 @@ protected:
      * that is never filtered out.
      **/
     MatchResult matchResult(Album *album) const;
+
     /**
      * This method provides the basic match checking algorithm.
      * Return true if this single album matches the current criteria.
@@ -158,6 +159,17 @@ protected:
 
     SearchTextSettings m_settings;
     AlbumFilterModel  *m_chainedModel;
+
+private:
+
+    /**
+     * Tells whether the given settings result in filtering.
+     *
+     * @return <code>true</code> if the provided settings result in filtering
+     *         the model
+     */
+    bool settingsFilter(const SearchTextSettings &settings) const;
+
 };
 
 /**

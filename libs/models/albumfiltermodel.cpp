@@ -51,7 +51,8 @@ AlbumFilterModel::AlbumFilterModel(QObject *parent)
 void AlbumFilterModel::setSearchTextSettings(const SearchTextSettings& settings)
 {
 
-    emit searchTextSettingsAboutToChange(!m_settings.text.isEmpty(), !settings.text.isEmpty());
+    // don't use isFiltering here because it may be reimplemented
+    emit searchTextSettingsAboutToChange(settingsFilter(m_settings), settingsFilter(settings));
 
     m_settings = settings;
     invalidateFilter();
@@ -81,9 +82,14 @@ void AlbumFilterModel::setSearchTextSettings(const SearchTextSettings& settings)
     }
 }
 
+bool AlbumFilterModel::settingsFilter(const SearchTextSettings &settings) const
+{
+    return !settings.text.isEmpty();
+}
+
 bool AlbumFilterModel::isFiltering() const
 {
-    return !m_settings.text.isEmpty();
+    return settingsFilter(m_settings);
 }
 
 SearchTextSettings AlbumFilterModel::searchTextSettings() const
