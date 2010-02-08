@@ -1,3 +1,4 @@
+* Port all colors correction tools to imageregionwidget + multithreading (163286 - Accurate histogram preview required).
 
 * PreviewWidget pure Qt4 port :
 
