@@ -19,6 +19,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 010 ==> 222698 : digiKam 1.0.0 crashes when editing tags by drag-and-drop.
 011 ==> 225328 : Creating new album during import fails.
 012 ==> 216633 : Additional aspect ratios in crop tool.
-013 ==> 
+013 ==> 151406 : Filters in 'Enhance' dropdown menu lack mouse-over preview mode.
+014 ==> 
 
 
