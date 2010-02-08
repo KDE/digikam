@@ -98,7 +98,7 @@ void BCGModifier::applyBCG(DImg& image)
     applyBCG(image.bits(), image.width(), image.height(), image.sixteenBit());
 }
 
-void BCGModifier::applyBCG(uchar *bits, uint width, uint height, bool sixteenBits)
+void BCGModifier::applyBCG(uchar* bits, uint width, uint height, bool sixteenBits)
 {
     if (!d->modified || !bits)
         return;
@@ -215,7 +215,7 @@ void BCGModifier::setContrast(double val)
 
 BCGFilter::BCGFilter(DImg* orgImage, QObject* parent,
                      double brightness, double contrast, double gamma)
-              : DImgThreadedFilter(orgImage, parent, "BCGFilter")
+         : DImgThreadedFilter(orgImage, parent, "BCGFilter")
 {
     m_brightness = brightness;
     m_contrast   = contrast;
