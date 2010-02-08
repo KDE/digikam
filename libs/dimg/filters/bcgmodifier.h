@@ -68,7 +68,7 @@ class DIGIKAM_EXPORT BCGFilter : public DImgThreadedFilter
 
 public:
 
-    explicit BCGFilter(DImg* orgImage, QObject *parent=0,
+    explicit BCGFilter(DImg* orgImage, QObject* parent=0,
                        double brightness=1.0, double contrast=1.0, double gamma=1.0);
     ~BCGFilter(){};
 
