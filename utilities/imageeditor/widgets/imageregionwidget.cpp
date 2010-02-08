@@ -437,20 +437,6 @@ DImg ImageRegionWidget::getOriginalRegionImage()
     return (d->image.copy(getOriginalImageRegionToRender()));
 }
 
-void ImageRegionWidget::contentsWheelEvent(QWheelEvent* e)
-{
-    e->accept();
-
-    if (e->modifiers() & Qt::ControlModifier)
-    {
-        if (e->delta() < 0 && !minZoom())
-            slotDecreaseZoom();
-        else if (e->delta() > 0 && !maxZoom())
-            slotIncreaseZoom();
-        return;
-    }
-}
-
 QImage ImageRegionWidget::previewToQImage() const
 {
     return d->image.copyQImage();

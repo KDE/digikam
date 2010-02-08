@@ -98,7 +98,6 @@ private:
 
     void   enterEvent(QEvent*);
     void   leaveEvent(QEvent*);
-    void   contentsWheelEvent(QWheelEvent*);
 
     int    previewWidth();
     int    previewHeight();
