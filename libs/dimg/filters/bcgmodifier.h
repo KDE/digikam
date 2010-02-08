@@ -63,7 +63,7 @@ private:
 
 // -----------------------------------------------------------------------------------------------
 
-class BCGFilter : public DImgThreadedFilter
+class DIGIKAM_EXPORT BCGFilter : public DImgThreadedFilter
 {
 
 public:
