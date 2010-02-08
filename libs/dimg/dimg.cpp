@@ -175,7 +175,7 @@ bool DImg::operator==(const DImg& image) const
     return m_priv == image.m_priv;
 }
 
-void DImg::reset(void)
+void DImg::reset()
 {
     m_priv = new DImgPrivate;
 }
@@ -201,7 +201,7 @@ void DImg::detach()
     }
 }
 
-void DImg::putImageData(uint width, uint height, bool sixteenBit, bool alpha, uchar *data, bool copyData)
+void DImg::putImageData(uint width, uint height, bool sixteenBit, bool alpha, uchar* data, bool copyData)
 {
     // set image data, metadata is untouched
 
@@ -234,7 +234,7 @@ void DImg::putImageData(uint width, uint height, bool sixteenBit, bool alpha, uc
     }
 }
 
-void DImg::putImageData(uchar *data, bool copyData)
+void DImg::putImageData(uchar* data, bool copyData)
 {
     if (!data)
     {
@@ -259,7 +259,7 @@ void DImg::resetMetaData()
     m_priv->metaData.clear();
 }
 
-uchar *DImg::stripImageData()
+uchar* DImg::stripImageData()
 {
     uchar *data  = m_priv->data;
     m_priv->data = 0;
@@ -267,7 +267,7 @@ uchar *DImg::stripImageData()
     return data;
 }
 
-void DImg::copyMetaData(const DImgPrivate *src)
+void DImg::copyMetaData(const DImgPrivate* src)
 {
     m_priv->attributes   = src->attributes;
     m_priv->embeddedText = src->embeddedText;
@@ -285,7 +285,7 @@ void DImg::copyMetaData(const DImgPrivate *src)
     }
 }
 
-void DImg::copyImageData(const DImgPrivate *src)
+void DImg::copyImageData(const DImgPrivate* src)
 {
     setImageData(src->null, src->width, src->height, src->sixteenBit, src->alpha);
 }
@@ -769,6 +769,13 @@ QSize DImg::size() const
 uchar* DImg::bits() const
 {
     return m_priv->data;
+}
+
+uchar* DImg::copyBits() const
+{
+    uchar* data = new uchar[sizeof(m_priv->data)];
+    memcpy (data, m_priv->data, sizeof(m_priv->data));
+    return data;
 }
 
 uchar* DImg::scanLine(uint i) const

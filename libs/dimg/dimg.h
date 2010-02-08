@@ -218,6 +218,7 @@ public:
     uint        width()          const;
     uint        height()         const;
     QSize       size()           const;
+    uchar*      copyBits()       const;
     uchar*      bits()           const;
     uchar*      scanLine(uint i) const;
     bool        hasAlpha()       const;
