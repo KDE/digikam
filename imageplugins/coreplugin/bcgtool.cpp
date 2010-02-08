@@ -61,7 +61,6 @@
 
 #include "bcgmodifier.h"
 #include "colorgradientwidget.h"
-#include "dimg.h"
 #include "editortoolsettings.h"
 #include "histogrambox.h"
 #include "histogramwidget.h"
@@ -94,26 +93,26 @@ public:
         gboxSettings(0)
         {}
 
-    const QString        configGroupName;
-    const QString        configHistogramChannelEntry;
-    const QString        configHistogramScaleEntry;
-    const QString        configBrightnessAdjustmentEntry;
-    const QString        configContrastAdjustmentEntry;
-    const QString        configGammaAdjustmentEntry;
+    const QString       configGroupName;
+    const QString       configHistogramChannelEntry;
+    const QString       configHistogramScaleEntry;
+    const QString       configBrightnessAdjustmentEntry;
+    const QString       configContrastAdjustmentEntry;
+    const QString       configGammaAdjustmentEntry;
 
-    uchar*               destinationPreviewData;
+    uchar*              destinationPreviewData;
 
-    RIntNumInput*        bInput;
-    RIntNumInput*        cInput;
+    RIntNumInput*       bInput;
+    RIntNumInput*       cInput;
 
-    RDoubleNumInput*     gInput;
+    RDoubleNumInput*    gInput;
 
-    ImageGuideWidget*    previewWidget;
-    EditorToolSettings*  gboxSettings;
+    ImageGuideWidget*   previewWidget;
+    EditorToolSettings* gboxSettings;
 };
 
 BCGTool::BCGTool(QObject* parent)
-       : EditorTool(parent),
+       : EditorToolThreaded(parent),
          d(new BCGToolPriv)
 {
     setObjectName("bcgadjust");
@@ -180,8 +179,8 @@ BCGTool::BCGTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
-            this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
+    connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget(const Digikam::DColor&, const QPoint&)),
+            this, SLOT(slotColorSelectedFromTarget(const Digikam::DColor&)));
 
     connect(d->bInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));
@@ -254,74 +253,90 @@ void BCGTool::slotResetSettings()
     d->bInput->blockSignals(false);
     d->cInput->blockSignals(false);
     d->gInput->blockSignals(false);
-
     slotEffect();
 }
 
-void BCGTool::slotEffect()
+void BCGTool::prepareEffect()
 {
-    kapp->setOverrideCursor( Qt::WaitCursor );
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+    d->bInput->setEnabled(false);
+    d->cInput->setEnabled(false);
+    d->gInput->setEnabled(false);
+    toolView()->setEnabled(false);
 
     double b = (double)d->bInput->value()/250.0;
     double c = (double)(d->cInput->value()/100.0) + 1.00;
     double g = d->gInput->value();
 
-    d->gboxSettings->enableButton(EditorToolSettings::Ok,
-                                 ( b != 0.0 || c != 1.0 || g != 1.0 ));
-
+    d->gboxSettings->enableButton(EditorToolSettings::Ok, ( b != 0.0 || c != 1.0 || g != 1.0 ));
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 
     if (d->destinationPreviewData)
        delete [] d->destinationPreviewData;
 
-    ImageIface* iface = d->previewWidget->imageIface();
-    d->destinationPreviewData  = iface->getPreviewImage();
-    int w                      = iface->previewWidth();
-    int h                      = iface->previewHeight();
-    bool a                     = iface->previewHasAlpha();
-    bool sb                    = iface->previewSixteenBit();
+    ImageIface* iface         = d->previewWidget->imageIface();
+    d->destinationPreviewData = iface->getPreviewImage();
+    int w                     = iface->previewWidth();
+    int h                     = iface->previewHeight();
+    bool a                    = iface->previewHasAlpha();
+    bool sb                   = iface->previewSixteenBit();
 
     DImg preview(w, h, sb, a, d->destinationPreviewData);
-    BCGModifier cmod;
-    cmod.setGamma(g);
-    cmod.setBrightness(b);
-    cmod.setContrast(c);
-    cmod.applyBCG(preview);
-    iface->putPreviewImage(preview.bits());
+    setFilter(dynamic_cast<DImgThreadedFilter*>(new BCGFilter(&preview, this, b, c, g)));
+}
 
+void BCGTool::putPreviewData()
+{
+    DImg preview      = filter()->getTargetImage();
+    ImageIface* iface = d->previewWidget->imageIface();
+    iface->putPreviewImage(preview.bits());
     d->previewWidget->updatePreview();
 
     // Update histogram.
 
     memcpy(d->destinationPreviewData, preview.bits(), preview.numBytes());
-    d->gboxSettings->histogramBox()->histogram()->updateData(d->destinationPreviewData, w, h, sb, 0, 0, 0, false);
-
-    kapp->restoreOverrideCursor();
+    d->gboxSettings->histogramBox()->histogram()->updateData(d->destinationPreviewData,
+                                                             preview.width(), preview.height(), preview.sixteenBit(),
+                                                             0, 0, 0, false);
 }
 
-void BCGTool::finalRendering()
+void BCGTool::prepareFinal()
 {
-    kapp->setOverrideCursor( Qt::WaitCursor );
-    ImageIface* iface = d->previewWidget->imageIface();
-    uchar* data       = iface->getOriginalImage();
-    int w             = iface->originalWidth();
-    int h             = iface->originalHeight();
-    bool a            = iface->originalHasAlpha();
-    bool sb           = iface->originalSixteenBit();
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+    d->bInput->setEnabled(false);
+    d->cInput->setEnabled(false);
+    d->gInput->setEnabled(false);
+    toolView()->setEnabled(false);
 
     double b = (double)d->bInput->value()/250.0;
     double c = (double)(d->cInput->value()/100.0) + 1.00;
     double g = d->gInput->value();
 
-    BCGModifier cmod;
-    DImg finalImage(w, h, sb, a, data);
-    cmod.setGamma(g);
-    cmod.setBrightness(b);
-    cmod.setContrast(c);
-    cmod.applyBCG(finalImage);
+    ImageIface iface(0, 0);
+    uchar* data = iface.getOriginalImage();
+    int w       = iface.originalWidth();
+    int h       = iface.originalHeight();
+    bool sb     = iface.originalSixteenBit();
+    bool a      = iface.originalHasAlpha();
+    DImg orgImage = DImg(w, h, sb, a ,data);
+    delete [] data;
+    setFilter(dynamic_cast<DImgThreadedFilter*>(new BCGFilter(&orgImage, this, b, c, g)));
+}
 
-    iface->putOriginalImage(i18n("Brightness / Contrast / Gamma"), finalImage.bits());
-    kapp->restoreOverrideCursor();
+void BCGTool::putFinalData()
+{
+    ImageIface iface(0, 0);
+    DImg imDest = filter()->getTargetImage();
+    iface.putOriginalImage(i18n("Brightness / Contrast / Gamma"), imDest.bits());
+}
+
+void BCGTool::renderingFinished()
+{
+    QApplication::restoreOverrideCursor();
+    d->bInput->setEnabled(true);
+    d->cInput->setEnabled(true);
+    d->gInput->setEnabled(true);
+    toolView()->setEnabled(true);
 }
 
 }  // namespace DigikamImagesPluginCore

@@ -29,37 +29,39 @@
 // Local includes
 
 #include "editortool.h"
+#include "dimg.h"
 
-namespace Digikam
-{
-class DColor;
-}
+using namespace Digikam;
 
 namespace DigikamImagesPluginCore
 {
 
 class BCGToolPriv;
 
-class BCGTool : public Digikam::EditorTool
+class BCGTool : public EditorToolThreaded
 {
     Q_OBJECT
 
 public:
 
-    BCGTool(QObject *parent);
+    BCGTool(QObject* parent);
     ~BCGTool();
 
 private Q_SLOTS:
 
-    void slotEffect();
+    void slotColorSelectedFromTarget(const DColor& color);
     void slotResetSettings();
-    void slotColorSelectedFromTarget( const Digikam::DColor& color );
 
 private:
 
     void readSettings();
     void writeSettings();
-    void finalRendering();
+    void prepareEffect();
+    void prepareFinal();
+    void abortPreview();
+    void putPreviewData();
+    void putFinalData();
+    void renderingFinished();
 
 private:
 
