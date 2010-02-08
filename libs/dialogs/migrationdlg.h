@@ -72,17 +72,18 @@ private Q_SLOTS:
     void unlockInputFields();
     void lockInputFields();
 
+    void handleFinish(int finishState, QString errorMsg);
     void handleStepStarted(QString stepName);
-    void handleSuccessfullyFinish();
-    void handleFailureFinish(QString errorMsg);
-
+    void handleSmallStepStarted(int currValue, int maxValue);
 private:
 
 //    MigrationDlgPriv* const d;
     DatabaseWidget *fromDatabaseWidget;
     DatabaseWidget *toDatabaseWidget;
     QPushButton    *migrateButton;
+    QPushButton    *cancelButton;
     QProgressBar   *progressBar;
+    QProgressBar   *progressBarSmallStep;
     DatabaseCopyThread *thread;
 
     void setupMainArea();

@@ -37,13 +37,19 @@
 
 namespace Digikam
 {
+    void DatabaseCopyManager::stopThread()
+    {
+        isStopThread=true;
+    }
+
     void DatabaseCopyManager::copyDatabases(DatabaseParameters fromDBParameters, DatabaseParameters toDBParameters)
     {
+        isStopThread=false;
         DatabaseLocking fromLocking;
         DatabaseBackend fromDBbackend(&fromLocking, "MigrationFromDatabase");
         if (!fromDBbackend.open(fromDBParameters))
         {
-            emit finishedFailure(i18n("Error while opening the source database."));
+            emit finished(DatabaseCopyManager::failed, i18n("Error while opening the source database."));
             return;
         }
 
@@ -53,7 +59,7 @@ namespace Digikam
 
         if (!toDBbackend.open(toDBParameters))
         {
-            emit finishedFailure(i18n("Error while opening the target database."));
+            emit finished(DatabaseCopyManager::failed, i18n("Error while opening the target database."));
             fromDBbackend.close();
             return;
         }
@@ -63,7 +69,7 @@ namespace Digikam
         // Delete all tables
         if (!DatabaseCoreBackend::NoErrors == toDBbackend.execDBAction(toDBbackend.getDBAction("Migrate_Cleanup_DB"), bindingMap) )
         {
-            emit finishedFailure(i18n("Error while scrubbing the target database."));
+            emit finished(DatabaseCopyManager::failed, i18n("Error while scrubbing the target database."));
             fromDBbackend.close();
             toDBbackend.close();
             return;
@@ -76,7 +82,7 @@ namespace Digikam
         emit stepStarted(i18n("Create Schema..."));
         if (!updater.update())
         {
-            emit finishedFailure(i18n("Error while creating the database schema."));
+            emit finished(DatabaseCopyManager::failed, i18n("Error while creating the database schema."));
             fromDBbackend.close();
             toDBbackend.close();
             return;
@@ -84,112 +90,99 @@ namespace Digikam
 
         emit stepStarted(i18n("Copy AlbumRoots..."));
         // now perform the copy action
-        if (!copyTable(fromDBbackend, QString("Migrate_Read_AlbumRoots"), toDBbackend, QString("Migrate_Write_AlbumRoots")))
+        if (isStopThread || !copyTable(fromDBbackend, QString("Migrate_Read_AlbumRoots"), toDBbackend, QString("Migrate_Write_AlbumRoots")))
         {
-            fromDBbackend.close();
-            toDBbackend.close();
+            handleClosing(isStopThread, fromDBbackend, toDBbackend);
             return;
         }
         emit stepStarted(i18n("Copy Albums..."));
-        if (!copyTable(fromDBbackend, QString("Migrate_Read_Albums"), toDBbackend, QString("Migrate_Write_Albums")))
+        if (isStopThread || !copyTable(fromDBbackend, QString("Migrate_Read_Albums"), toDBbackend, QString("Migrate_Write_Albums")))
         {
-            fromDBbackend.close();
-            toDBbackend.close();
+            handleClosing(isStopThread, fromDBbackend, toDBbackend);
             return;
         }
         emit stepStarted(i18n("Copy Images..."));
-        if (!copyTable(fromDBbackend, QString("Migrate_Read_Images"), toDBbackend, QString("Migrate_Write_Images")))
+        if (isStopThread || !copyTable(fromDBbackend, QString("Migrate_Read_Images"), toDBbackend, QString("Migrate_Write_Images")))
         {
-            fromDBbackend.close();
-            toDBbackend.close();
+            handleClosing(isStopThread, fromDBbackend, toDBbackend);
             return;
         }
         emit stepStarted(i18n("Copy ImageHaarMatrix..."));
-        if (!copyTable(fromDBbackend, QString("Migrate_Read_ImageHaarMatrix"), toDBbackend, QString("Migrate_Write_ImageHaarMatrix")))
+        if (isStopThread || !copyTable(fromDBbackend, QString("Migrate_Read_ImageHaarMatrix"), toDBbackend, QString("Migrate_Write_ImageHaarMatrix")))
         {
-            fromDBbackend.close();
-            toDBbackend.close();
+            handleClosing(isStopThread, fromDBbackend, toDBbackend);
             return;
         }
         emit stepStarted(i18n("Copy ImageInformation..."));
-        if (!copyTable(fromDBbackend, QString("Migrate_Read_ImageInformation"), toDBbackend, QString("Migrate_Write_ImageInformation")))
+        if (isStopThread || !copyTable(fromDBbackend, QString("Migrate_Read_ImageInformation"), toDBbackend, QString("Migrate_Write_ImageInformation")))
         {
-            fromDBbackend.close();
-            toDBbackend.close();
+            handleClosing(isStopThread, fromDBbackend, toDBbackend);
             return;
         }
         emit stepStarted(i18n("Copy ImageMetadata..."));
-        if (!copyTable(fromDBbackend, QString("Migrate_Read_ImageMetadata"), toDBbackend, QString("Migrate_Write_ImageMetadata")))
+        if (isStopThread || !copyTable(fromDBbackend, QString("Migrate_Read_ImageMetadata"), toDBbackend, QString("Migrate_Write_ImageMetadata")))
         {
-            fromDBbackend.close();
-            toDBbackend.close();
+            handleClosing(isStopThread, fromDBbackend, toDBbackend);
             return;
         }
         emit stepStarted(i18n("Copy ImagePositions..."));
-        if (!copyTable(fromDBbackend, QString("Migrate_Read_ImagePositions"), toDBbackend, QString("Migrate_Write_ImagePositions")))
+        if (isStopThread || !copyTable(fromDBbackend, QString("Migrate_Read_ImagePositions"), toDBbackend, QString("Migrate_Write_ImagePositions")))
         {
-            fromDBbackend.close();
-            toDBbackend.close();
+            handleClosing(isStopThread, fromDBbackend, toDBbackend);
             return;
         }
         emit stepStarted(i18n("Copy ImageComments..."));
-        if (!copyTable(fromDBbackend, QString("Migrate_Read_ImageComments"), toDBbackend, QString("Migrate_Write_ImageComments")))
+        if (isStopThread || !copyTable(fromDBbackend, QString("Migrate_Read_ImageComments"), toDBbackend, QString("Migrate_Write_ImageComments")))
         {
-            fromDBbackend.close();
-            toDBbackend.close();
+            handleClosing(isStopThread, fromDBbackend, toDBbackend);
             return;
         }
         emit stepStarted(i18n("Copy ImageCopyright..."));
-        if (!copyTable(fromDBbackend, QString("Migrate_Read_ImageCopyright"), toDBbackend, QString("Migrate_Write_ImageCopyright")))
+        if (isStopThread || !copyTable(fromDBbackend, QString("Migrate_Read_ImageCopyright"), toDBbackend, QString("Migrate_Write_ImageCopyright")))
         {
-            fromDBbackend.close();
-            toDBbackend.close();
+            handleClosing(isStopThread, fromDBbackend, toDBbackend);
             return;
         }
         emit stepStarted(i18n("Copy Tags..."));
-        if (!copyTable(fromDBbackend, QString("Migrate_Read_Tags"), toDBbackend, QString("Migrate_Write_Tags")))
+        if (isStopThread || !copyTable(fromDBbackend, QString("Migrate_Read_Tags"), toDBbackend, QString("Migrate_Write_Tags")))
         {
-            fromDBbackend.close();
-            toDBbackend.close();
+            handleClosing(isStopThread, fromDBbackend, toDBbackend);
             return;
         }
         emit stepStarted(i18n("Copy ImageTags..."));
-        if (!copyTable(fromDBbackend, QString("Migrate_Read_ImageTags"), toDBbackend, QString("Migrate_Write_ImageTags")))
+        if (isStopThread || !copyTable(fromDBbackend, QString("Migrate_Read_ImageTags"), toDBbackend, QString("Migrate_Write_ImageTags")))
         {
-            fromDBbackend.close();
-            toDBbackend.close();
+            handleClosing(isStopThread, fromDBbackend, toDBbackend);
             return;
         }
         emit stepStarted(i18n("Copy ImageProperties..."));
-        if (!copyTable(fromDBbackend, QString("Migrate_Read_ImageProperties"), toDBbackend, QString("Migrate_Write_ImageProperties")))
+        if (isStopThread || !copyTable(fromDBbackend, QString("Migrate_Read_ImageProperties"), toDBbackend, QString("Migrate_Write_ImageProperties")))
         {
-            fromDBbackend.close();
-            toDBbackend.close();
+            handleClosing(isStopThread, fromDBbackend, toDBbackend);
             return;
         }
         emit stepStarted(i18n("Copy Searches..."));
-        if (!copyTable(fromDBbackend, QString("Migrate_Read_Searches"), toDBbackend, QString("Migrate_Write_Searches")))
+        if (isStopThread || !copyTable(fromDBbackend, QString("Migrate_Read_Searches"), toDBbackend, QString("Migrate_Write_Searches")))
         {
-            fromDBbackend.close();
-            toDBbackend.close();
+            handleClosing(isStopThread, fromDBbackend, toDBbackend);
             return;
         }
         emit stepStarted(i18n("Copy DownloadHistory..."));
-        if (!copyTable(fromDBbackend, QString("Migrate_Read_DownloadHistory"), toDBbackend, QString("Migrate_Write_DownloadHistory")))
+        if (isStopThread || !copyTable(fromDBbackend, QString("Migrate_Read_DownloadHistory"), toDBbackend, QString("Migrate_Write_DownloadHistory")))
         {
-            fromDBbackend.close();
-            toDBbackend.close();
+            handleClosing(isStopThread, fromDBbackend, toDBbackend);
             return;
         }
 /*
-        if (!copyTable(fromDBbackend, QString("Migrate_Read_Settings"), toDBbackend, QString("Migrate_Write_Settings")))
+        if (isStopThread || !copyTable(fromDBbackend, QString("Migrate_Read_Settings"), toDBbackend, QString("Migrate_Write_Settings")))
         {
+            handleClosing(isStopThread, fromDBbackend, toDBbackend);
             return;
         }
 */
         fromDBbackend.close();
         toDBbackend.close();
-        emit finishedSuccessfully();
+        emit finished(DatabaseCopyManager::success, "");
     }
 
     bool DatabaseCopyManager::copyTable(DatabaseBackend &fromDBbackend, QString fromActionName, DatabaseBackend &toDBbackend, QString toActionName)
@@ -209,8 +202,16 @@ namespace Digikam
         }
 
         kDebug(50003) << "Result size: ["<< result.size() << "]";
+        int resultCounter=0;
         while (result.next())
         {
+            if (isStopThread==true)
+            {
+                return false;
+            }
+            // Send a signal to the GUI to entertain the user
+            emit smallStepStarted(++resultCounter, result.size());
+
             // read the values from the fromDB into a hash
             QMap<QString, QVariant> tempBindingMap;
             int i=0;
@@ -228,11 +229,19 @@ namespace Digikam
             {
                 kDebug(50003) << "Error while converting table data. Details: " << toDBbackend.lastSQLError();
                 QString errorMsg = i18n("Error while converting the database. \n Details: %1", toDBbackend.lastSQLError().databaseText());
-                emit finishedFailure(errorMsg);
+                emit finished(DatabaseCopyManager::failed, errorMsg);
                 return false;
             }
 
         }
         return true;
+    }
+
+    void DatabaseCopyManager::handleClosing(bool isStopThread, DatabaseBackend &fromDBbackend, DatabaseBackend &toDBbackend){
+        if (isStopThread){
+            emit finished(DatabaseCopyManager::canceled, "");
+        }
+        fromDBbackend.close();
+        toDBbackend.close();
     }
 }

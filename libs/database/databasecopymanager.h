@@ -37,15 +37,21 @@ namespace Digikam
         Q_OBJECT
 
         public:
+            enum FinishStates{success, failed, canceled};
             void copyDatabases(DatabaseParameters fromDBParameters, DatabaseParameters toDBParameters);
 
         Q_SIGNALS:
             void stepStarted(QString stepName);
-            void finishedFailure(QString errorMsg);
-            void finishedSuccessfully();
+            void smallStepStarted(int currValue, int maxValue);
+            void finished(int finishState, QString errorMsg);
+
+        public Q_SLOTS:
+            void stopThread();
 
         private:
+            bool isStopThread;
             bool copyTable(DatabaseBackend &fromDBbackend, QString fromActionName, DatabaseBackend &toDBbackend, QString toActionName);
+            void handleClosing(bool isstopThread, DatabaseBackend &fromDBbackend, DatabaseBackend &toDBbackend);
 
     };
 }

@@ -81,18 +81,24 @@ namespace Digikam
         fromDatabaseWidget              = new DatabaseWidget(this);
         toDatabaseWidget                = new DatabaseWidget(this);
         migrateButton                   = new QPushButton(i18n("Migrate ->"), this);
-        progressBar                     = new QProgressBar();
+        cancelButton                    = new QPushButton(i18n("Cancel"), this);
+        cancelButton->setEnabled(false);
+        progressBar                     = new QProgressBar(this);
         progressBar->setTextVisible(true);
         progressBar->setRange(0,13);
+        progressBarSmallStep            = new QProgressBar(this);
+        progressBarSmallStep->setTextVisible(true);
 
         QWidget *mainWidget     = new QWidget;
         QGridLayout *layout     = new QGridLayout;
         mainWidget->setLayout(layout);
 
-        layout->addWidget(fromDatabaseWidget, 0,0);
-        layout->addWidget(migrateButton,0,1);
-        layout->addWidget(toDatabaseWidget, 0, 2);
-        layout->addWidget(progressBar, 1, 0, 1,3);
+        layout->addWidget(fromDatabaseWidget, 0,0, 4,1);
+        layout->addWidget(migrateButton,1,1);
+        layout->addWidget(cancelButton,2,1);
+        layout->addWidget(toDatabaseWidget, 0,2, 4,1);
+        layout->addWidget(progressBar, 4,0, 1,3);
+        layout->addWidget(progressBarSmallStep, 5,0, 1,3);
 
         setMainWidget(mainWidget);
         dataInit();
@@ -101,9 +107,12 @@ namespace Digikam
 
 
         // connect signal handlers for copy thread
-        this->connect(&(thread->copyManager), SIGNAL(finishedSuccessfully()), SLOT(handleSuccessfullyFinish()));
-        this->connect(&(thread->copyManager), SIGNAL(finishedFailure(QString)), SLOT(handleFailureFinish(QString)));
+        this->connect(&(thread->copyManager), SIGNAL(finished(int, QString)), SLOT(handleFinish(int, QString)));
+
         this->connect(&(thread->copyManager), SIGNAL(stepStarted(QString)), SLOT(handleStepStarted(QString)));
+        this->connect(&(thread->copyManager), SIGNAL(smallStepStarted(int, int)), SLOT(handleSmallStepStarted(int, int)));
+
+        connect(cancelButton, SIGNAL(clicked()), &(thread->copyManager), SLOT(stopThread()));
 
     }
 
@@ -129,6 +138,9 @@ namespace Digikam
         toDatabaseWidget->setEnabled(true);
         migrateButton->setEnabled(true);
         progressBar->setValue(0);
+        progressBarSmallStep->setValue(0);
+
+        cancelButton->setEnabled(false);
     }
 
     void MigrationDlg::lockInputFields()
@@ -136,23 +148,35 @@ namespace Digikam
          fromDatabaseWidget->setEnabled(false);
          toDatabaseWidget->setEnabled(false);
          migrateButton->setEnabled(false);
+
+         cancelButton->setEnabled(true);
     }
 
-    void MigrationDlg::handleSuccessfullyFinish()
+    void MigrationDlg::handleFinish(int finishState, QString errorMsg)
     {
-        KMessageBox::information(this, i18n("Database copied successfully") );
-        unlockInputFields();
-    }
-
-    void MigrationDlg::handleFailureFinish(QString errorMsg)
-    {
-        KMessageBox::error(this, errorMsg );
-        unlockInputFields();
+        switch (finishState)
+        {
+            case DatabaseCopyManager::failed:   KMessageBox::error(this, errorMsg );
+                                                unlockInputFields();
+                                                break;
+            case DatabaseCopyManager::success:  KMessageBox::information(this, i18n("Database copied successfully.") );
+                                                unlockInputFields();
+                                                break;
+            case DatabaseCopyManager::canceled: KMessageBox::information(this, i18n("Database conversion canceled.") );
+                                                unlockInputFields();
+                                                break;
+        }
     }
 
     void MigrationDlg::handleStepStarted(QString stepName)
     {
         int progressBarValue = progressBar->value();
         progressBar->setValue(++progressBarValue);
+    }
+
+    void MigrationDlg::handleSmallStepStarted(int currentValue, int maxValue)
+    {
+        progressBarSmallStep->setMaximum(maxValue);
+        progressBarSmallStep->setValue(currentValue);
     }
 }
