@@ -3,7 +3,8 @@ digiKam 1.2.0 - Release date: 2010-XX-XX
 
 NEW FEATURES: 
 
-AlbumGUI       : All Album tree views are ported to pure Qt4 model/view implementation.
+AlbumGUI          : All Album tree views are ported to pure Qt4 model/view implementation.
+BatchQueueManager : new tool to fix Brightness/Contrast/gamma.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
