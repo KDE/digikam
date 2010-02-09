@@ -1,9 +1,9 @@
-INSTALL(FILES bcgmodifier.h 
-              hslmodifier.h 
+INSTALL(FILES hslmodifier.h 
               dimgthreadedfilter.h 
               dimgimagefilters.h 
               dimggaussianblur.h 
               colormodifier.h 
+              bcg/bcgmodifier.h 
               icc/icctransform.h 
               nr/waveletsnr.h 
               nr/noisereductionsettings.h

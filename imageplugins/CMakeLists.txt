@@ -14,6 +14,7 @@ INCLUDE_DIRECTORIES(../utilities/imageeditor/editor
                     ../libs/dimg
                     ../libs/dimg/loaders
                     ../libs/dimg/filters
+                    ../libs/dimg/filters/bcg
                     ../libs/dimg/filters/icc
                     ../libs/dimg/filters/nr
                     ../libs/dimg/filters/sharp
