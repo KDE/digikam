@@ -39,6 +39,7 @@
 #include "sharpen.h"
 #include "watermark.h"
 #include "noisereduction.h"
+#include "bcgcorrection.h"
 
 namespace Digikam
 {
@@ -71,6 +72,7 @@ BatchToolsManager::BatchToolsManager(QObject* parent)
     registerTool(new AssignTemplate(this));
     registerTool(new Sharpen(this));
     registerTool(new NoiseReduction(this));
+    registerTool(new BCGCorrection(this));
 }
 
 BatchToolsManager::~BatchToolsManager()

@@ -151,8 +151,8 @@ BCGContainer BCGSettings::settings() const
 void BCGSettings::setSettings(const BCGContainer& settings)
 {
     blockSignals(true);
-    d->bInput->setValue(settings.brightness);
-    d->cInput->setValue(settings.contrast);
+    d->bInput->setValue((int)(settings.brightness*250.0));
+    d->cInput->setValue((int)((settings.contrast-1.0)*100.0));
     d->gInput->setValue(settings.gamma);
     blockSignals(false);
 }
