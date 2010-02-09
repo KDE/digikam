@@ -183,9 +183,6 @@ BCGTool::BCGTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget(const Digikam::DColor&, const QPoint&)),
-            this, SLOT(slotColorSelectedFromTarget(const Digikam::DColor&)));
-
     connect(d->bInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));
 
@@ -211,20 +208,15 @@ BCGTool::~BCGTool()
     delete d;
 }
 
-void BCGTool::slotColorSelectedFromTarget(const DColor& color)
-{
-    d->gboxSettings->histogramBox()->histogram()->setHistogramGuideByColor(color);
-}
-
 void BCGTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
 
     d->gboxSettings->histogramBox()->setChannel((ChannelType)group.readEntry(d->configHistogramChannelEntry,
-                        (int)LuminosityChannel));
+                                                (int)LuminosityChannel));
     d->gboxSettings->histogramBox()->setScale((HistogramScale)group.readEntry(d->configHistogramScaleEntry,
-                        (int)LogScaleHistogram));
+                                              (int)LogScaleHistogram));
 
     d->bInput->setValue(group.readEntry(d->configBrightnessAdjustmentEntry, d->bInput->defaultValue()));
     d->cInput->setValue(group.readEntry(d->configContrastAdjustmentEntry,   d->cInput->defaultValue()));

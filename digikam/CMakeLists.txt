@@ -5,6 +5,9 @@ INCLUDE_DIRECTORIES(
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/loaders
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/icc
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/nr
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/sharp
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/whitebalance
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dmetadata
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/histogram

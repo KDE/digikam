@@ -503,19 +503,19 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${libclapack_SRCS}
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/bcgmodifier.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/hslmodifier.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/iccprofile.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/icctransform.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/icctransformfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/dimgthreadedfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/dimgimagefilters.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/colormodifier.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/waveletsnr.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/noisereductionsettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/dimggaussianblur.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/dimgsharpen.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/dimgthreadedfilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/dimgunsharpmask.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/dimgrefocus.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/matrix.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/icc/iccprofile.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/icc/icctransform.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/icc/icctransformfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/nr/waveletsnr.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/nr/noisereductionsettings.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/sharp/dimgsharpen.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/sharp/dimgunsharpmask.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/sharp/dimgrefocus.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/sharp/matrix.cpp
        )
 
     SET(libdmetadata_SRCS

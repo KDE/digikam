@@ -12,8 +12,11 @@ INCLUDE_DIRECTORIES(../utilities/imageeditor/editor
                     ../libs/widgets/iccprofiles
                     ../libs/dialogs
                     ../libs/dimg
-                    ../libs/dimg/filters
                     ../libs/dimg/loaders
+                    ../libs/dimg/filters
+                    ../libs/dimg/filters/icc
+                    ../libs/dimg/filters/nr
+                    ../libs/dimg/filters/sharp
                     ../libs/threadimageio
                     ../libs/dmetadata
                     ../libs/themeengine
