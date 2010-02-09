@@ -52,11 +52,15 @@ void AlbumFilterModel::setSearchTextSettings(const SearchTextSettings& settings)
 {
 
     // don't use isFiltering here because it may be reimplemented
-    emit searchTextSettingsAboutToChange(settingsFilter(m_settings), settingsFilter(settings));
+    bool wasSearching = settingsFilter(m_settings);
+    bool willSearch = settingsFilter(settings);
+    emit searchTextSettingsAboutToChange(wasSearching, willSearch);
 
     m_settings = settings;
     invalidateFilter();
     emit filterChanged();
+
+    emit searchTextSettingsChanged(wasSearching, willSearch);
 
     if (sourceAlbumModel()->albumType() == Album::PHYSICAL)
     {

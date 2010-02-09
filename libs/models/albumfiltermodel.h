@@ -112,6 +112,15 @@ Q_SIGNALS:
     void searchTextSettingsAboutToChange(bool searched, bool willSearch);
 
     /**
+     * Indicates that new search text settings were applied.
+     *
+     * @param wasSearching <code>true</code> if this is not a new search that
+     * @param searched <code>true</code> if the new settings result in any
+     *                 filtering
+     */
+    void searchTextSettingsChanged(bool wasSearching, bool searched);
+
+    /**
      * Indicates that a new filter was applied to the model.
      */
     void filterChanged();

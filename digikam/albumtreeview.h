@@ -161,7 +161,8 @@ protected Q_SLOTS:
     // override if implemented behavior is not as intended
     virtual void slotRootAlbumAvailable();
 
-    void slotFilterChanged();
+    void slotSearchTextSettingsChanged(bool wasSearching, bool searching);
+    void slotSearchTextSettingsAboutToChange(bool searched, bool willSearch);
     void slotCurrentChanged();
     void slotSelectionChanged();
 
@@ -249,8 +250,8 @@ protected:
 
 private:
 
-    void saveStateRecursive(const QModelIndex &index, QStringList &selection,
-                    QStringList &expansion);
+    void saveStateRecursive(const QModelIndex &index, QList<int> &selection,
+                    QList<int> &expansion);
 
     /**
      * Restores the state of the index and all sub-indexes if there is an entry
@@ -304,6 +305,12 @@ private Q_SLOTS:
      * Adapts the column sizes if the layout changes.
      */
     void adaptColumnsOnLayoutChange();
+
+    /**
+     * This slot is used to ensure that after searching for entries the correct
+     * album is selected again. Therefore it tracks new selections.
+     */
+    void currentAlbumChangedForBackupSelection(Album *currentAlbum);
 
 private:
 
