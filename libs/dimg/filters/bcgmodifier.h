@@ -38,6 +38,27 @@ namespace Digikam
 class DImg;
 class BCGModifierPriv;
 
+class DIGIKAM_EXPORT BCGContainer
+{
+
+public:
+
+    BCGContainer()
+    {
+        brightness = 0.0;
+        contrast   = 0.0;
+        gamma      = 1.0;
+    };
+
+    ~BCGContainer(){};
+
+public:
+
+    double brightness;
+    double contrast;
+    double gamma;
+};
+
 class DIGIKAM_EXPORT BCGModifier
 {
 
@@ -68,8 +89,7 @@ class DIGIKAM_EXPORT BCGFilter : public DImgThreadedFilter
 
 public:
 
-    explicit BCGFilter(DImg* orgImage, QObject* parent=0,
-                       double brightness=1.0, double contrast=1.0, double gamma=1.0);
+    explicit BCGFilter(DImg* orgImage, QObject* parent=0, const BCGContainer& settings=BCGContainer());
     ~BCGFilter(){};
 
 private:
@@ -78,10 +98,7 @@ private:
 
 private:
 
-    double m_brightness;
-    double m_contrast;
-    double m_gamma;
-
+    BCGContainer m_settings;
 };
 
 }  // namespace Digikam

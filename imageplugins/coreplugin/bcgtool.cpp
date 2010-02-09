@@ -260,15 +260,18 @@ void BCGTool::prepareEffect()
     d->gInput->setEnabled(false);
     toolView()->setEnabled(false);
 
-    double b = (double)d->bInput->value()/250.0;
-    double c = (double)(d->cInput->value()/100.0) + 1.00;
-    double g = d->gInput->value();
+    BCGContainer settings;
+    settings.brightness = (double)d->bInput->value()/250.0;
+    settings.contrast   = (double)(d->cInput->value()/100.0) + 1.00;
+    settings.gamma      = d->gInput->value();
 
-    d->gboxSettings->enableButton(EditorToolSettings::Ok, ( b != 0.0 || c != 1.0 || g != 1.0 ));
+    d->gboxSettings->enableButton(EditorToolSettings::Ok, (settings.brightness != 0.0 ||
+                                                           settings.contrast != 1.0   ||
+                                                           settings.gamma != 1.0));
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 
     DImg preview = d->previewWidget->getOriginalRegionImage();
-    setFilter(dynamic_cast<DImgThreadedFilter*>(new BCGFilter(&preview, this, b, c, g)));
+    setFilter(dynamic_cast<DImgThreadedFilter*>(new BCGFilter(&preview, this, settings)));
 }
 
 void BCGTool::putPreviewData()
@@ -295,12 +298,13 @@ void BCGTool::prepareFinal()
     d->gInput->setEnabled(false);
     toolView()->setEnabled(false);
 
-    double b = (double)d->bInput->value()/250.0;
-    double c = (double)(d->cInput->value()/100.0) + 1.00;
-    double g = d->gInput->value();
+    BCGContainer settings;
+    settings.brightness = (double)d->bInput->value()/250.0;
+    settings.contrast   = (double)(d->cInput->value()/100.0) + 1.00;
+    settings.gamma      = d->gInput->value();
 
     ImageIface iface(0, 0);
-    setFilter(dynamic_cast<DImgThreadedFilter*>(new BCGFilter(iface.getOriginalImg(), this, b, c, g)));
+    setFilter(dynamic_cast<DImgThreadedFilter*>(new BCGFilter(iface.getOriginalImg(), this, settings)));
 }
 
 void BCGTool::putFinalData()

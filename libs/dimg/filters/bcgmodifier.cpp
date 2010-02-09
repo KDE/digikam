@@ -213,23 +213,19 @@ void BCGModifier::setContrast(double val)
 
 // --------------------------------------------------------------------------------------------
 
-BCGFilter::BCGFilter(DImg* orgImage, QObject* parent,
-                     double brightness, double contrast, double gamma)
+BCGFilter::BCGFilter(DImg* orgImage, QObject* parent, const BCGContainer& settings)
          : DImgThreadedFilter(orgImage, parent, "BCGFilter")
 {
-    m_brightness = brightness;
-    m_contrast   = contrast;
-    m_gamma      = gamma;
-
+    m_settings = settings;
     initFilter();
 }
 
 void BCGFilter::filterImage()
 {
     BCGModifier cmod;
-    cmod.setGamma(m_gamma);
-    cmod.setBrightness(m_brightness);
-    cmod.setContrast(m_contrast);
+    cmod.setGamma(m_settings.gamma);
+    cmod.setBrightness(m_settings.brightness);
+    cmod.setContrast(m_settings.contrast);
     cmod.applyBCG(m_orgImage);
     m_destImage = m_orgImage;
 }
