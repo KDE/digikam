@@ -59,7 +59,7 @@
 
 // Local includes
 
-#include "bcgmodifier.h"
+#include "bcgsettings.h"
 #include "colorgradientwidget.h"
 #include "editortoolsettings.h"
 #include "histogrambox.h"
@@ -81,14 +81,8 @@ public:
         configGroupName("bcgadjust Tool"),
         configHistogramChannelEntry("Histogram Channel"),
         configHistogramScaleEntry("Histogram Scale"),
-        configBrightnessAdjustmentEntry("BrightnessAdjustment"),
-        configContrastAdjustmentEntry("ContrastAdjustment"),
-        configGammaAdjustmentEntry("GammaAdjustment"),
 
         destinationPreviewData(0),
-        bInput(0),
-        cInput(0),
-        gInput(0),
         previewWidget(0),
         gboxSettings(0)
         {}
@@ -96,17 +90,10 @@ public:
     const QString       configGroupName;
     const QString       configHistogramChannelEntry;
     const QString       configHistogramScaleEntry;
-    const QString       configBrightnessAdjustmentEntry;
-    const QString       configContrastAdjustmentEntry;
-    const QString       configGammaAdjustmentEntry;
 
     uchar*              destinationPreviewData;
 
-    RIntNumInput*       bInput;
-    RIntNumInput*       cInput;
-
-    RDoubleNumInput*    gInput;
-
+    BCGSettings*        bcgSettings;
     ImageRegionWidget*  previewWidget;
     EditorToolSettings* gboxSettings;
 };
@@ -141,55 +128,13 @@ BCGTool::BCGTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QLabel *label2 = new QLabel(i18n("Brightness:"));
-    d->bInput      = new RIntNumInput();
-    d->bInput->setRange(-100, 100, 1);
-    d->bInput->setSliderEnabled(true);
-    d->bInput->setDefaultValue(0);
-    d->bInput->setWhatsThis( i18n("Set here the brightness adjustment of the image."));
-
-    QLabel *label3 = new QLabel(i18n("Contrast:"));
-    d->cInput      = new RIntNumInput();
-    d->cInput->setRange(-100, 100, 1);
-    d->cInput->setSliderEnabled(true);
-    d->cInput->setDefaultValue(0);
-    d->cInput->setWhatsThis( i18n("Set here the contrast adjustment of the image."));
-
-    QLabel *label4 = new QLabel(i18n("Gamma:"));
-    d->gInput      = new RDoubleNumInput();
-    d->gInput->setDecimals(2);
-    d->gInput->input()->setRange(0.1, 3.0, 0.01, true);
-    d->gInput->setDefaultValue(1.0);
-    d->gInput->setWhatsThis( i18n("Set here the gamma adjustment of the image."));
-
-    // -------------------------------------------------------------
-
-    QGridLayout* mainLayout = new QGridLayout();
-    mainLayout->addWidget(label2,    0, 0, 1, 5);
-    mainLayout->addWidget(d->bInput, 1, 0, 1, 5);
-    mainLayout->addWidget(label3,    2, 0, 1, 5);
-    mainLayout->addWidget(d->cInput, 3, 0, 1, 5);
-    mainLayout->addWidget(label4,    4, 0, 1, 5);
-    mainLayout->addWidget(d->gInput, 5, 0, 1, 5);
-    mainLayout->setRowStretch(6, 10);
-    mainLayout->setMargin(d->gboxSettings->spacingHint());
-    mainLayout->setSpacing(d->gboxSettings->spacingHint());
-    d->gboxSettings->plainPage()->setLayout(mainLayout);
-
-    // -------------------------------------------------------------
-
+    d->bcgSettings = new BCGSettings(d->gboxSettings->plainPage());
     setToolSettings(d->gboxSettings);
     init();
 
     // -------------------------------------------------------------
 
-    connect(d->bInput, SIGNAL(valueChanged(int)),
-            this, SLOT(slotTimer()));
-
-    connect(d->cInput, SIGNAL(valueChanged(int)),
-            this, SLOT(slotTimer()));
-
-    connect(d->gInput, SIGNAL(valueChanged(double)),
+    connect(d->bcgSettings, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotTimer()));
 
     connect(d->previewWidget, SIGNAL(signalResized()),
@@ -217,10 +162,7 @@ void BCGTool::readSettings()
                                                 (int)LuminosityChannel));
     d->gboxSettings->histogramBox()->setScale((HistogramScale)group.readEntry(d->configHistogramScaleEntry,
                                               (int)LogScaleHistogram));
-
-    d->bInput->setValue(group.readEntry(d->configBrightnessAdjustmentEntry, d->bInput->defaultValue()));
-    d->cInput->setValue(group.readEntry(d->configContrastAdjustmentEntry,   d->cInput->defaultValue()));
-    d->gInput->setValue(group.readEntry(d->configGammaAdjustmentEntry,      d->gInput->defaultValue()));
+    d->bcgSettings->readSettings(group);
 }
 
 void BCGTool::writeSettings()
@@ -230,40 +172,25 @@ void BCGTool::writeSettings()
 
     group.writeEntry(d->configHistogramChannelEntry,     (int)d->gboxSettings->histogramBox()->channel());
     group.writeEntry(d->configHistogramScaleEntry,       (int)d->gboxSettings->histogramBox()->scale());
-    group.writeEntry(d->configBrightnessAdjustmentEntry, d->bInput->value());
-    group.writeEntry(d->configContrastAdjustmentEntry,   d->cInput->value());
-    group.writeEntry(d->configGammaAdjustmentEntry,      d->gInput->value());
+
+    d->bcgSettings->writeSettings(group);
+
     config->sync();
 }
 
 void BCGTool::slotResetSettings()
 {
-    d->bInput->blockSignals(true);
-    d->cInput->blockSignals(true);
-    d->gInput->blockSignals(true);
-
-    d->bInput->slotReset();
-    d->cInput->slotReset();
-    d->gInput->slotReset();
-
-    d->bInput->blockSignals(false);
-    d->cInput->blockSignals(false);
-    d->gInput->blockSignals(false);
+    d->bcgSettings->resetToDefault();
     slotEffect();
 }
 
 void BCGTool::prepareEffect()
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    d->bInput->setEnabled(false);
-    d->cInput->setEnabled(false);
-    d->gInput->setEnabled(false);
+    d->bcgSettings->setEnabled(false);
     toolView()->setEnabled(false);
 
-    BCGContainer settings;
-    settings.brightness = (double)d->bInput->value()/250.0;
-    settings.contrast   = (double)(d->cInput->value()/100.0) + 1.00;
-    settings.gamma      = d->gInput->value();
+    BCGContainer settings = d->bcgSettings->settings();
 
     d->gboxSettings->enableButton(EditorToolSettings::Ok, (settings.brightness != 0.0 ||
                                                            settings.contrast != 1.0   ||
@@ -293,15 +220,10 @@ void BCGTool::putPreviewData()
 void BCGTool::prepareFinal()
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    d->bInput->setEnabled(false);
-    d->cInput->setEnabled(false);
-    d->gInput->setEnabled(false);
+    d->bcgSettings->setEnabled(false);
     toolView()->setEnabled(false);
 
-    BCGContainer settings;
-    settings.brightness = (double)d->bInput->value()/250.0;
-    settings.contrast   = (double)(d->cInput->value()/100.0) + 1.00;
-    settings.gamma      = d->gInput->value();
+    BCGContainer settings = d->bcgSettings->settings();
 
     ImageIface iface(0, 0);
     setFilter(dynamic_cast<DImgThreadedFilter*>(new BCGFilter(iface.getOriginalImg(), this, settings)));
@@ -316,9 +238,7 @@ void BCGTool::putFinalData()
 void BCGTool::renderingFinished()
 {
     QApplication::restoreOverrideCursor();
-    d->bInput->setEnabled(true);
-    d->cInput->setEnabled(true);
-    d->gInput->setEnabled(true);
+    d->bcgSettings->setEnabled(true);
     toolView()->setEnabled(true);
 }
 
