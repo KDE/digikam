@@ -35,7 +35,7 @@
 // Local includes
 
 #include "digikam_export.h"
-#include "bcgmodifier.h"
+#include "bcgfilter.h"
 
 namespace Digikam
 {

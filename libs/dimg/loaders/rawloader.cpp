@@ -7,8 +7,8 @@
  * Description : A digital camera RAW files loader for DImg
  *               framework using an external dcraw instance.
  *
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2005-2008 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2010 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,7 +22,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "rawloader.moc"
 
@@ -47,7 +46,7 @@
 #include "imagehistogram.h"
 #include "imagecurves.h"
 #include "imagelevels.h"
-#include "bcgmodifier.h"
+#include "bcgfilter.h"
 #include "whitebalance.h"
 #include "globals.h"
 
@@ -394,11 +393,11 @@ void RAWLoader::postProcess(DImgLoaderObserver *observer)
         m_customRawSettings.contrast  != 1.0 ||
         m_customRawSettings.gamma     != 1.0)
     {
-        BCGModifier bcg;
-        bcg.setBrightness(m_customRawSettings.lightness);
-        bcg.setContrast(m_customRawSettings.contrast);
-        bcg.setGamma(m_customRawSettings.gamma);
-        bcg.applyBCG(imageData(), imageWidth(), imageHeight(), m_rawDecodingSettings.sixteenBitsImage);
+        BCGContainer settings;
+        settings.brightness = m_customRawSettings.lightness;
+        settings.contrast   = m_customRawSettings.contrast;
+        settings.gamma      = m_customRawSettings.gamma;
+        BCGFilter bcg(imageData(), imageWidth(), imageHeight(), m_rawDecodingSettings.sixteenBitsImage, settings);
     }
     if (observer) observer->progressInfo(m_image, 0.94F);
 

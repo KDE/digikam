@@ -22,13 +22,14 @@
  *
  * ============================================================ */
 
-#ifndef BCGMODIFIER_H
-#define BCGMODIFIER_H
+#ifndef BCGFILTER_H
+#define BCGFILTER_H
 
 // Local includes
 
 #include "digikam_export.h"
 #include "dimgthreadedfilter.h"
+#include "globals.h"
 
 using namespace Digikam;
 
@@ -36,7 +37,7 @@ namespace Digikam
 {
 
 class DImg;
-class BCGModifierPriv;
+class BCGFilterPriv;
 
 class DIGIKAM_EXPORT BCGContainer
 {
@@ -45,6 +46,7 @@ public:
 
     BCGContainer()
     {
+        channel    = LuminosityChannel;
         brightness = 0.0;
         contrast   = 0.0;
         gamma      = 1.0;
@@ -54,32 +56,11 @@ public:
 
 public:
 
+    int    channel;
+
     double brightness;
     double contrast;
     double gamma;
-};
-
-class DIGIKAM_EXPORT BCGModifier
-{
-
-public:
-
-    BCGModifier();
-    ~BCGModifier();
-
-    void reset();
-    bool modified() const;
-
-    void setChannel(int channel);
-    void setGamma(double val);
-    void setBrightness(double val);
-    void setContrast(double val);
-    void applyBCG(DImg& image);
-    void applyBCG(uchar* bits, uint width, uint height, bool sixteenBits);
-
-private:
-
-    BCGModifierPriv* const d;
 };
 
 // -----------------------------------------------------------------------------------------------
@@ -89,18 +70,26 @@ class DIGIKAM_EXPORT BCGFilter : public DImgThreadedFilter
 
 public:
 
-    explicit BCGFilter(DImg* orgImage, QObject* parent=0, const BCGContainer& settings=BCGContainer());
-    ~BCGFilter(){};
+    BCGFilter(DImg* orgImage, QObject* parent=0, const BCGContainer& settings=BCGContainer());
+    BCGFilter(uchar* bits, uint width, uint height, bool sixteenBits, const BCGContainer& settings=BCGContainer());
+    virtual ~BCGFilter();
 
 private:
 
     void filterImage();
 
+    void reset();
+    void setGamma(double val);
+    void setBrightness(double val);
+    void setContrast(double val);
+    void applyBCG(DImg& image);
+    void applyBCG(uchar* bits, uint width, uint height, bool sixteenBits);
+
 private:
 
-    BCGContainer m_settings;
+    BCGFilterPriv* const d;
 };
 
 }  // namespace Digikam
 
-#endif /* BCGMODIFIER_H */
+#endif /* BCGFILTER_H */
