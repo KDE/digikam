@@ -24,6 +24,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 014 ==> 225698 : When I export my Album to a Html Gallery then Digikam crashed at the End.
 015 ==> 225787 : Scroll wheel doesn't work while moving images.
 016 ==> 226081 : Trying to delete tags crashes digiKam.
-017 ==> 
-
+017 ==> 226118 : IPTC metadata tag delimiter is no longer stored (since 0.10).
+018 ==> 
 
