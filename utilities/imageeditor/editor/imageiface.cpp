@@ -43,7 +43,6 @@
 #include "iccsettingscontainer.h"
 #include "icctransform.h"
 #include "dimginterface.h"
-#include "bcgmodifier.h"
 #include "dmetadata.h"
 
 namespace Digikam
