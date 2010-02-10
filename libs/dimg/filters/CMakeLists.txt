@@ -3,7 +3,7 @@ INSTALL(FILES hslmodifier.h
               dimgimagefilters.h 
               dimggaussianblur.h 
               colormodifier.h 
-              bcg/bcgmodifier.h 
+              bcg/bcgfilter.h 
               icc/icctransform.h 
               nr/waveletsnr.h 
               nr/noisereductionsettings.h
