@@ -52,7 +52,7 @@
 
 // Local includes
 
-#include "bcgmodifier.h"
+#include "bcgfilter.h"
 #include "colorgradientwidget.h"
 #include "curvesbox.h"
 #include "curveswidget.h"
@@ -307,7 +307,7 @@ BWSepiaTool::BWSepiaTool(QObject* parent)
                                       "show the corresponding color level on the histogram."));
     setToolView(d->previewWidget);
     setPreviewModeMask(PreviewToolBar::AllPreviewModes);
-    
+
     // -------------------------------------------------------------
 
     d->gboxSettings = new EditorToolSettings;
@@ -659,9 +659,6 @@ QPixmap BWSepiaTool::getThumbnailForEffect(int type)
         d->curvesBox->curves()->curvesLutProcess(thumb.bits(), targetData, w, h);
 
         DImg preview(w, h, sb, a, targetData);
-        BCGModifier cmod;
-        cmod.setContrast((double)(d->cInput->value()/100.0) + 1.00);
-        cmod.applyBCG(preview);
 
         thumb.putImageData(preview.bits());
 
@@ -790,11 +787,12 @@ void BWSepiaTool::slotEffect()
     // Adjust contrast.
 
     DImg preview(w, h, sb, a, targetData);
-    BCGModifier cmod;
-    cmod.setContrast((double)(d->cInput->value()/100.0) + 1.00);
-    cmod.applyBCG(preview);
-    iface->putPreviewImage(preview.bits());
+    BCGContainer prm;
+    prm.contrast = ((double)(d->cInput->value()/100.0) + 1.00);
+    BCGFilter bcg(&preview, 0L, prm);
+    bcg.startFilterDirectly();
 
+    iface->putPreviewImage(preview.bits());
     d->previewWidget->updatePreview();
 
     // Update histogram.
@@ -839,9 +837,10 @@ void BWSepiaTool::finalRendering()
         // Adjust contrast.
 
         DImg img(w, h, sb, a, targetData);
-        BCGModifier cmod;
-        cmod.setContrast((double)(d->cInput->value()/100.0) + 1.00);
-        cmod.applyBCG(img);
+        BCGContainer prm;
+        prm.contrast = ((double)(d->cInput->value()/100.0) + 1.00);
+        BCGFilter bcg(&img, 0L, prm);
+        bcg.startFilterDirectly();
 
         iface->putOriginalImage(i18n("Convert to Black && White"), img.bits());
 
