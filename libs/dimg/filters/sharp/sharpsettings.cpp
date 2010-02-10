@@ -348,6 +348,7 @@ void SharpSettings::setSettings(const SharpContainer& settings)
     blockSignals(true);
 
     d->sharpMethod->setCurrentIndex(settings.method);
+    d->stack->setCurrentWidget(d->stack->widget(settings.method));
 
     d->radiusInput->setValue(settings.ssRadius);
 
@@ -362,8 +363,6 @@ void SharpSettings::setSettings(const SharpContainer& settings)
     d->matrixSize->setValue(settings.rfMatrix);
 
     blockSignals(false);
-
-    slotSharpMethodChanged(settings.method);
 }
 
 void SharpSettings::resetToDefault()
@@ -371,6 +370,7 @@ void SharpSettings::resetToDefault()
     blockSignals(true);
 
     d->sharpMethod->slotReset();
+    d->stack->setCurrentWidget(d->stack->widget(d->sharpMethod->defaultIndex()));
 
     d->radiusInput->slotReset();
 
@@ -385,8 +385,6 @@ void SharpSettings::resetToDefault()
     d->matrixSize->slotReset();
 
     blockSignals(false);
-
-    slotSharpMethodChanged(d->sharpMethod->defaultIndex());
 }
 
 SharpContainer SharpSettings::defaultSettings() const

@@ -78,7 +78,7 @@ BatchToolSettings Sharpen::defaultSettings()
     settings.insert("SimpleSharpRadius",    (int)defaultPrm.ssRadius);
 
     // unsharp mask
-    settings.insert("UnsharpMaskRadius",    (int)defaultPrm.umRadius);
+    settings.insert("UnsharpMaskRadius",    (double)defaultPrm.umRadius);
     settings.insert("UnsharpMaskAmount",    (double)defaultPrm.umAmount);
     settings.insert("UnsharpMaskThreshold", (double)defaultPrm.umThreshold);
 
@@ -103,7 +103,7 @@ void Sharpen::slotAssignSettings2Widget()
     prm.ssRadius      = settings()["SimpleSharpRadius"].toInt();
 
     // unsharp mask
-    prm.umRadius      = settings()["UnsharpMaskRadius"].toInt();
+    prm.umRadius      = settings()["UnsharpMaskRadius"].toDouble();
     prm.umAmount      = settings()["UnsharpMaskAmount"].toDouble();
     prm.umThreshold   = settings()["UnsharpMaskThreshold"].toDouble();
 
@@ -129,7 +129,7 @@ void Sharpen::slotSettingsChanged()
     settings.insert("SimpleSharpRadius",    (int)prm.ssRadius);
 
     // unsharp mask
-    settings.insert("UnsharpMaskRadius",    (int)prm.umRadius);
+    settings.insert("UnsharpMaskRadius",    (double)prm.umRadius);
     settings.insert("UnsharpMaskAmount",    (double)prm.umAmount);
     settings.insert("UnsharpMaskThreshold", (double)prm.umThreshold);
 
@@ -177,7 +177,7 @@ bool Sharpen::toolOperations()
 
         case SharpContainer::UnsharpMask:
         {
-            int r     = settings()["UnsharpMaskRadius"].toInt();
+            int r     = (int)settings()["UnsharpMaskRadius"].toDouble();
             double a  = settings()["UnsharpMaskAmount"].toDouble();
             double th = settings()["UnsharpMaskThreshold"].toDouble();
 
@@ -192,11 +192,11 @@ bool Sharpen::toolOperations()
 
         case SharpContainer::Refocus:
         {
-            int matrixSize     = settings()["RefocusMatrixSize"].toInt();
             double radius      = settings()["RefocusRadius"].toDouble();
-            double gauss       = settings()["RefocusGauss"].toDouble();
             double correlation = settings()["RefocusCorrelation"].toDouble();
             double noise       = settings()["RefocusNoise"].toDouble();
+            double gauss       = settings()["RefocusGauss"].toDouble();
+            int matrixSize     = settings()["RefocusMatrixSize"].toInt();
 
             DImg orgImage(width, height, sixteenBit, true, data);
             DImgRefocus* filter = new DImgRefocus(&orgImage, 0L, matrixSize,
