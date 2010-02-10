@@ -58,7 +58,6 @@
 
 // Local includes
 
-#include "bcgmodifier.h"
 #include "colorgradientwidget.h"
 #include "dimg.h"
 #include "dimgimagefilters.h"
@@ -145,7 +144,7 @@ RedEyeTool::RedEyeTool(QObject* parent)
                                       "red eye reduction applied."));
     setToolView(d->previewWidget);
     setPreviewModeMask(PreviewToolBar::AllPreviewModes);
-    
+
     // -------------------------------------------------------------
 
     d->gboxSettings = new EditorToolSettings;
