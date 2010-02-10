@@ -39,7 +39,7 @@
 // Local includes
 
 #include "dimg.h"
-#include "bcgmodifier.h"
+#include "bcgfilter.h"
 #include "bcgsettings.h"
 
 namespace Digikam
@@ -106,11 +106,8 @@ bool BCGCorrection::toolOperations()
     prm.contrast   = settings()["Contrast"].toDouble();
     prm.gamma      = settings()["Gamma"].toDouble();
 
-    BCGModifier cmod;
-    cmod.setGamma(prm.gamma);
-    cmod.setBrightness(prm.brightness);
-    cmod.setContrast(prm.contrast);
-    cmod.applyBCG(image());
+    BCGFilter bcg(&image(), 0L, prm);
+    bcg.startFilterDirectly();
 
     return (savefromDImg());
 }

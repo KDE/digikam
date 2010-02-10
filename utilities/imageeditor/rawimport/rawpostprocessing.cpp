@@ -32,7 +32,7 @@
 #include "imagehistogram.h"
 #include "imagecurves.h"
 #include "imagelevels.h"
-#include "bcgmodifier.h"
+#include "bcgfilter.h"
 #include "whitebalance.h"
 #include "dimgimagefilters.h"
 #include "globals.h"
@@ -94,11 +94,11 @@ void RawPostProcessing::rawPostProcessing()
 
     if (m_customRawSettings.lightness != 0.0 || m_customRawSettings.contrast != 1.0 || m_customRawSettings.gamma != 1.0)
     {
-        BCGModifier bcg;
-        bcg.setBrightness(m_customRawSettings.lightness);
-        bcg.setContrast(m_customRawSettings.contrast);
-        bcg.setGamma(m_customRawSettings.gamma);
-        bcg.applyBCG(m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(), m_orgImage.sixteenBit());
+        BCGContainer settings;
+        settings.brightness = m_customRawSettings.lightness;
+        settings.contrast   = m_customRawSettings.contrast;
+        settings.gamma      = m_customRawSettings.gamma;
+        BCGFilter bcg(m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(), m_orgImage.sixteenBit(), settings);
     }
     postProgress(45);
 
