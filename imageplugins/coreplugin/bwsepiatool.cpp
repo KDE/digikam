@@ -792,7 +792,7 @@ void BWSepiaTool::slotEffect()
     BCGFilter bcg(&preview, 0L, prm);
     bcg.startFilterDirectly();
 
-    iface->putPreviewImage(preview.bits());
+    iface->putPreviewImage(bcg.getTargetImage().bits());
     d->previewWidget->updatePreview();
 
     // Update histogram.
@@ -842,7 +842,7 @@ void BWSepiaTool::finalRendering()
         BCGFilter bcg(&img, 0L, prm);
         bcg.startFilterDirectly();
 
-        iface->putOriginalImage(i18n("Convert to Black && White"), img.bits());
+        iface->putOriginalImage(i18n("Convert to Black && White"), bcg.getTargetImage().bits());
 
         delete [] data;
         delete [] targetData;

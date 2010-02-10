@@ -108,6 +108,8 @@ bool BCGCorrection::toolOperations()
 
     BCGFilter bcg(&image(), 0L, prm);
     bcg.startFilterDirectly();
+    DImg trg = bcg.getTargetImage();
+    image().putImageData(trg.bits());
 
     return (savefromDImg());
 }

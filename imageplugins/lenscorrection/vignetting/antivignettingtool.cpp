@@ -435,7 +435,7 @@ void AntiVignettingTool::putPreviewData()
     BCGFilter bcg(&imDest, 0L, settings);
     bcg.startFilterDirectly();
 
-    iface->putPreviewImage((imDest.smoothScale(iface->previewWidth(), iface->previewHeight())).bits());
+    iface->putPreviewImage((bcg.getTargetImage().smoothScale(iface->previewWidth(), iface->previewHeight())).bits());
     d->previewWidget->updatePreview();
 }
 
@@ -453,7 +453,7 @@ void AntiVignettingTool::putFinalData()
     BCGFilter bcg(&finalImage, 0L, settings);
     bcg.startFilterDirectly();
 
-    iface->putOriginalImage(i18n("Vignetting Correction"), finalImage.bits());
+    iface->putOriginalImage(i18n("Vignetting Correction"), bcg.getTargetImage().bits());
     kapp->restoreOverrideCursor();
 }
 
