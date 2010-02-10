@@ -107,8 +107,6 @@ BCGTool::BCGTool(QObject* parent)
     setToolIcon(SmallIcon("contrast"));
     setToolHelp("bcgadjusttool.anchor");
 
-    d->destinationPreviewData = 0;
-
     d->previewWidget = new ImageRegionWidget;
     d->previewWidget->setWhatsThis(i18n("The image brightness-contrast-gamma adjustment preview "
                                         "is shown here. "
