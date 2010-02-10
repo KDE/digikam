@@ -8,6 +8,7 @@ INCLUDE_DIRECTORIES(
                      ../libs/dimg/filters/icc
                      ../libs/dimg/filters/nr
                      ../libs/dimg/filters/sharp
+                     ../libs/dimg/filters/cb
                      ../libs/dmetadata
                      ../libs/histogram
                      ../libs/curves

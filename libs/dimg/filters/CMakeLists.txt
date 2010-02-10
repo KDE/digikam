@@ -2,7 +2,7 @@ INSTALL(FILES hslmodifier.h
               dimgthreadedfilter.h 
               dimgimagefilters.h 
               dimggaussianblur.h 
-              colormodifier.h 
+              cb/colormodifier.h 
               bcg/bcgfilter.h 
               icc/icctransform.h 
               nr/waveletsnr.h 
