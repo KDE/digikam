@@ -42,8 +42,6 @@
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <klocale.h>
-#include <kmessagebox.h>
-#include <kurl.h>
 
 // Local includes
 
@@ -55,7 +53,6 @@
 #include "imageiface.h"
 #include "imageregionwidget.h"
 
-using namespace KDcrawIface;
 using namespace Digikam;
 
 namespace DigikamImagesPluginCore
