@@ -58,6 +58,7 @@ INCLUDE_DIRECTORIES(
                      ../utilities/advancedrename/parser/options
                      ../utilities/advancedrename/parser/modifiers
                      ../utilities/queuemanager
+                     ../utilities/queuemanager/basetools/color
                      ../utilities/queuemanager/basetools/convert
                      ../utilities/queuemanager/basetools/enhance
                      ../utilities/queuemanager/basetools/transform

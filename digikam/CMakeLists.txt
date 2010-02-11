@@ -54,6 +54,7 @@ INCLUDE_DIRECTORIES(
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/batch
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/lighttable
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/queuemanager
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/queuemanager/basetools/color
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/queuemanager/basetools/convert
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/queuemanager/basetools/enhance
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/queuemanager/basetools/transform

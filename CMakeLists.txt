@@ -504,9 +504,9 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/hslmodifier.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/dimgthreadedfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/dimgimagefilters.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/dimggaussianblur.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/cb/cbfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/cb/cbsettings.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/dimggaussianblur.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/bcg/bcgfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/bcg/bcgsettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/icc/iccprofile.cpp
@@ -983,16 +983,16 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/queuesettingsview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/batchtoolsmanager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/batchtool.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/color/autocorrection.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/color/bcgcorrection.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/convert/convert2jpeg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/convert/convert2png.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/convert/convert2tiff.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/convert/convert2jp2.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/convert/convert2pgf.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/enhance/autocorrection.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/enhance/restoration.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/enhance/sharpen.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/enhance/noisereduction.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/enhance/bcgcorrection.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/transform/rotate.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/transform/flip.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/transform/resize.cpp
