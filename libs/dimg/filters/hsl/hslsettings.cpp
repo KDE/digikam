@@ -216,7 +216,8 @@ void HSLSettings::setSettings(const HSLContainer& settings)
     d->hInput->setValue(settings.hue);
     d->sInput->setValue(settings.saturation);
     d->lInput->setValue(settings.lightness);
-    slotHSChanged(d->hInput->value(), d->sInput->value());
+    slotHChanged(settings.hue);
+    slotHChanged(settings.saturation);
     blockSignals(false);
 }
 
