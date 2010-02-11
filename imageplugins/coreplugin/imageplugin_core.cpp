@@ -127,7 +127,7 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QVariantList &)
     d->CBAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_B));
     actionCollection()->addAction("implugcore_rgb", d->CBAction );
     connect(d->CBAction, SIGNAL(triggered(bool) ),
-            this, SLOT(slotRGB()));
+            this, SLOT(slotCB()));
 
     // NOTE: Photoshop 7 use CTRL+SHIFT+B with
     d->autoCorrectionAction = new KAction(KIcon("autocorrection"), i18n("Auto-Correction..."), this);
