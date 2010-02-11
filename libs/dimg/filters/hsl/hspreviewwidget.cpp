@@ -6,7 +6,7 @@
  * Date        : 2007-01-08
  * Description : Hue/Saturation preview widget
  *
- * Copyright (C) 2007-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,9 +39,9 @@
 // Local includes
 
 #include "dimg.h"
-#include "hslmodifier.h"
+#include "hslfilter.h"
 
-namespace DigikamImagesPluginCore
+namespace Digikam
 {
 
 class HSPreviewWidgetPrivate
@@ -63,7 +63,7 @@ public:
     QPixmap pixmap;
 };
 
-HSPreviewWidget::HSPreviewWidget(QWidget *parent, int xBorder)
+HSPreviewWidget::HSPreviewWidget(QWidget* parent, int xBorder)
                : QWidget(parent), d(new HSPreviewWidgetPrivate)
 {
     d->xBorder = xBorder;
@@ -83,12 +83,12 @@ void HSPreviewWidget::setHS(double hue, double sat)
     update();
 }
 
-void HSPreviewWidget::resizeEvent(QResizeEvent *)
+void HSPreviewWidget::resizeEvent(QResizeEvent*)
 {
     updatePixmap();
 }
 
-void HSPreviewWidget::paintEvent(QPaintEvent *)
+void HSPreviewWidget::paintEvent(QPaintEvent*)
 {
     QPainter p(this);
     p.drawPixmap(d->xBorder, 0, d->pixmap);
@@ -100,9 +100,9 @@ void HSPreviewWidget::updatePixmap()
     int xSize = width()-2*d->xBorder;
     int ySize = height();
 
-    Digikam::DImg image(xSize, ySize, false, false, 0, false);
-    QColor  col;
-    uint   *p;
+    DImg   image(xSize, ySize, false, false, 0, false);
+    QColor col;
+    uint*  p;
 
     for ( int s = ySize-1 ; s >= 0 ; --s )
     {
@@ -116,13 +116,15 @@ void HSPreviewWidget::updatePixmap()
         }
     }
 
-    Digikam::HSLModifier cmod;
-    cmod.setHue(d->hue);
-    cmod.setSaturation(d->sat);
-    cmod.setLightness(0.0);
-    cmod.applyHSL(image);
+    HSLContainer settings;
+    settings.hue        = d->hue;
+    settings.saturation = d->sat;
+    settings.lightness  = 0.0;
+    HSLFilter hsl(&image, 0L, settings);
+    hsl.startFilterDirectly();
+    image.putImageData(hsl.getTargetImage().bits());
 
     d->pixmap = image.convertToPixmap();
 }
 
-}  // namespace DigikamImagesPluginCore
+}  // namespace Digikam

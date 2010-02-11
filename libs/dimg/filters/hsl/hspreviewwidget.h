@@ -6,7 +6,7 @@
  * Date        : 2007-01-08
  * Description : Hue/Saturation preview widget
  *
- * Copyright (C) 2007-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -30,26 +30,30 @@
 #include <QPaintEvent>
 #include <QResizeEvent>
 
-namespace DigikamImagesPluginCore
+// Local includes
+
+#include "digikam_export.h"
+
+namespace Digikam
 {
 
 class HSPreviewWidgetPrivate;
 
-class HSPreviewWidget : public QWidget
+class DIGIKAM_EXPORT HSPreviewWidget : public QWidget
 {
   Q_OBJECT
 
 public:
 
-    explicit HSPreviewWidget(QWidget *parent=0, int xBorder=0);
+    explicit HSPreviewWidget(QWidget* parent=0, int xBorder=0);
     ~HSPreviewWidget();
 
     void setHS(double hue, double sat);
 
 protected:
 
-    void resizeEvent(QResizeEvent *);
-    void paintEvent(QPaintEvent *);
+    void resizeEvent(QResizeEvent*);
+    void paintEvent(QPaintEvent*);
 
 private:
 
@@ -60,6 +64,6 @@ private:
     HSPreviewWidgetPrivate* const d;
 };
 
-}  // namespace DigikamImagesPluginCore
+}  // namespace Digikam
 
 #endif /* HSPREVIEWWIDGET_H */
