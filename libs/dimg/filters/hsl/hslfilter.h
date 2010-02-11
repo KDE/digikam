@@ -46,7 +46,7 @@ public:
     {
         hue        = 0.0;
         saturation = 0.0;
-        lightness  = 1.0;
+        lightness  = 0.0;
     };
 
     ~HSLContainer(){};
