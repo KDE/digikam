@@ -7,9 +7,11 @@ AlbumGUI          : All Album tree views are ported to pure Qt4 model/view imple
 
 ImageEditor       : Brightness/Contrast/gamma tool is multithreaded and use a zommable preview widget.
 ImageEditor       : Color Balance tool is multithreaded and use a zommable preview widget.
+ImageEditor       : Hue/Saturation/Lightness tool is multithreaded and use a zommable preview widget.
 
 BatchQueueManager : new tool to fix Brightness/Contrast/gamma.
 BatchQueueManager : new tool to adjust Color Balance.
+BatchQueueManager : new tool to fix Hue/Saturation/Lightness.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
