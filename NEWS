@@ -4,7 +4,12 @@ digiKam 1.2.0 - Release date: 2010-XX-XX
 NEW FEATURES: 
 
 AlbumGUI          : All Album tree views are ported to pure Qt4 model/view implementation.
+
+ImageEditor       : Brightness/Contrast/gamma tool is multithreaded and use a zommable preview widget.
+ImageEditor       : Color Balance tool is multithreaded and use a zommable preview widget.
+
 BatchQueueManager : new tool to fix Brightness/Contrast/gamma.
+BatchQueueManager : new tool to adjust Color Balance.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
