@@ -184,7 +184,8 @@ void HSLSettings::slotHChanged(double h)
     d->HSSelector->blockSignals(true);
     d->HSSelector->setXValue(hue);
     d->HSSelector->blockSignals(false);
-    slotHSChanged(d->HSSelector->xValue(), d->HSSelector->yValue());
+
+    d->HSPreview->setHS(settings().hue, settings().saturation);
 }
 
 void HSLSettings::slotSChanged(double s)
@@ -194,7 +195,8 @@ void HSLSettings::slotSChanged(double s)
     d->HSSelector->blockSignals(true);
     d->HSSelector->setYValue(sat);
     d->HSSelector->blockSignals(false);
-    slotHSChanged(d->HSSelector->xValue(), d->HSSelector->yValue());
+
+    d->HSPreview->setHS(settings().hue, settings().saturation);
 }
 
 HSLContainer HSLSettings::settings() const
