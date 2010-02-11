@@ -1,11 +1,11 @@
-INSTALL(FILES hslmodifier.h 
-              dimgthreadedfilter.h 
+INSTALL(FILES dimgthreadedfilter.h 
               dimgimagefilters.h 
               dimggaussianblur.h 
               cb/cbfilter.h 
               cb/cbsettings.h 
               bcg/bcgfilter.h 
               bcg/bcgsettings.h 
+              hsl/hslmodifier.h 
               icc/icctransform.h 
               nr/waveletsnr.h 
               nr/noisereductionsettings.h
