@@ -25,6 +25,7 @@
 
 // Qt includes
 
+#include <QStyle>
 #include <QImage>
 #include <QPainter>
 #include <QPixmap>
@@ -51,8 +52,8 @@ public:
 
     HSPreviewWidgetPrivate()
     {
-        hue = 0.0;
-        sat = 0.0;
+        hue     = 0.0;
+        sat     = 0.0;
     }
 
     int     xBorder;
@@ -63,10 +64,10 @@ public:
     QPixmap pixmap;
 };
 
-HSPreviewWidget::HSPreviewWidget(QWidget* parent, int xBorder)
+HSPreviewWidget::HSPreviewWidget(QWidget* parent)
                : QWidget(parent), d(new HSPreviewWidgetPrivate)
 {
-    d->xBorder = xBorder;
+    d->xBorder = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
     setAttribute(Qt::WA_DeleteOnClose);
 }
 

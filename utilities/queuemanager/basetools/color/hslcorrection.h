@@ -3,10 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2007-01-08
- * Description : Hue/Saturation preview widget
+ * Date        : 2010-02-11
+ * Description : Hue/Saturation/Lightness batch tool.
  *
- * Copyright (C) 2007-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,49 +21,43 @@
  *
  * ============================================================ */
 
-#ifndef HSPREVIEWWIDGET_H
-#define HSPREVIEWWIDGET_H
-
-// Qt includes
-
-#include <QWidget>
-#include <QPaintEvent>
-#include <QResizeEvent>
+#ifndef HSLCORRECTION_H
+#define HSLCORRECTION_H
 
 // Local includes
 
-#include "digikam_export.h"
+#include "batchtool.h"
 
 namespace Digikam
 {
 
-class HSPreviewWidgetPrivate;
+class HSLSettings;
 
-class DIGIKAM_EXPORT HSPreviewWidget : public QWidget
+class HSLCorrection : public BatchTool
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
 
-    explicit HSPreviewWidget(QWidget* parent=0);
-    ~HSPreviewWidget();
+    HSLCorrection(QObject* parent=0);
+    ~HSLCorrection();
 
-    void setHS(double hue, double sat);
-
-protected:
-
-    void resizeEvent(QResizeEvent*);
-    void paintEvent(QPaintEvent*);
+    BatchToolSettings defaultSettings();
 
 private:
 
-    void updatePixmap();
+    bool toolOperations();
+
+private Q_SLOTS:
+
+    void slotAssignSettings2Widget();
+    void slotSettingsChanged();
 
 private:
 
-    HSPreviewWidgetPrivate* const d;
+    HSLSettings* m_settingsView;
 };
 
 }  // namespace Digikam
 
-#endif /* HSPREVIEWWIDGET_H */
+#endif /* HSLCORRECTION_H */

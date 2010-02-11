@@ -40,6 +40,7 @@
 #include "watermark.h"
 #include "noisereduction.h"
 #include "bcgcorrection.h"
+#include "hslcorrection.h"
 #include "colorbalance.h"
 
 namespace Digikam
@@ -78,6 +79,7 @@ BatchToolsManager::BatchToolsManager(QObject* parent)
     registerTool(new Restoration(this));
     // Color
     registerTool(new BCGCorrection(this));
+    registerTool(new HSLCorrection(this));
     registerTool(new ColorBalance(this));
     registerTool(new AutoCorrection(this));
 }

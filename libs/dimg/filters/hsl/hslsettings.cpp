@@ -92,7 +92,7 @@ HSLSettings::HSLSettings(QWidget* parent)
     d->HSSelector->setWhatsThis(i18n("Select the hue and saturation adjustments of the image."));
     d->HSSelector->setMinimumSize(256, 142);
 
-    d->HSPreview = new HSPreviewWidget(0, KDialog::spacingHint());
+    d->HSPreview = new HSPreviewWidget();
     d->HSPreview->setWhatsThis(i18n("You can see here a color preview of the hue and "
                                     "saturation adjustments."));
     d->HSPreview->setMinimumSize(256, 15);
