@@ -122,13 +122,13 @@ HSLSettings::HSLSettings(QWidget* parent)
 
     grid->addWidget(d->HSSelector, 0, 0, 1, 5);
     grid->addWidget(d->HSPreview,  1, 0, 1, 5);
-    grid->addWidget(label2,        2, 0, 1, 5);
-    grid->addWidget(d->hInput,     3, 0, 1, 5);
-    grid->addWidget(label3,        4, 0, 1, 5);
-    grid->addWidget(d->sInput,     5, 0, 1, 5);
-    grid->addWidget(label4,        6, 0, 1, 5);
-    grid->addWidget(d->lInput,     7, 0, 1, 5);
-    grid->setRowStretch(8, 10);
+    grid->addWidget(label2,        2, 0, 1, 1);
+    grid->addWidget(d->hInput,     2, 1, 1, 4);
+    grid->addWidget(label3,        3, 0, 1, 1);
+    grid->addWidget(d->sInput,     3, 1, 1, 4);
+    grid->addWidget(label4,        4, 0, 1, 1);
+    grid->addWidget(d->lInput,     4, 1, 1, 4);
+    grid->setRowStretch(5, 10);
     grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(KDialog::spacingHint());
 
@@ -217,7 +217,7 @@ void HSLSettings::setSettings(const HSLContainer& settings)
     d->sInput->setValue(settings.saturation);
     d->lInput->setValue(settings.lightness);
     slotHChanged(settings.hue);
-    slotHChanged(settings.saturation);
+    slotSChanged(settings.saturation);
     blockSignals(false);
 }
 
