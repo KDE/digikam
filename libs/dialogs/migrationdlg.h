@@ -82,9 +82,10 @@ private:
     DatabaseWidget *toDatabaseWidget;
     QPushButton    *migrateButton;
     QPushButton    *cancelButton;
+    QLabel         *overallStepTitle;
     QProgressBar   *progressBar;
     QProgressBar   *progressBarSmallStep;
-    DatabaseCopyThread *thread;
+    DatabaseCopyThread *copyThread;
 
     void setupMainArea();
     void dataInit();

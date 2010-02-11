@@ -37,6 +37,8 @@ namespace Digikam
         Q_OBJECT
 
         public:
+            DatabaseCopyManager();
+            ~DatabaseCopyManager();
             enum FinishStates{success, failed, canceled};
             void copyDatabases(DatabaseParameters fromDBParameters, DatabaseParameters toDBParameters);
 
@@ -46,10 +48,10 @@ namespace Digikam
             void finished(int finishState, QString errorMsg);
 
         public Q_SLOTS:
-            void stopThread();
+            void stopProcessing();
 
         private:
-            bool isStopThread;
+            bool isStopProcessing;
             bool copyTable(DatabaseBackend &fromDBbackend, QString fromActionName, DatabaseBackend &toDBbackend, QString toActionName);
             void handleClosing(bool isstopThread, DatabaseBackend &fromDBbackend, DatabaseBackend &toDBbackend);
 

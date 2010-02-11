@@ -73,12 +73,12 @@ namespace Digikam
 
     MigrationDlg::~MigrationDlg()
     {
-
+        copyThread->wait();
     }
 
     void MigrationDlg::setupMainArea()
     {
-        thread                          = new DatabaseCopyThread(this);
+        copyThread                      = new DatabaseCopyThread(this);
         fromDatabaseWidget              = new DatabaseWidget(this);
         toDatabaseWidget                = new DatabaseWidget(this);
         migrateButton                   = new QPushButton(i18n("Migrate ->"), this);
@@ -94,9 +94,11 @@ namespace Digikam
         progressBarSmallStep            = new QProgressBar(progressBox);
         progressBarSmallStep->setTextVisible(true);
 
+        overallStepTitle=new QLabel(i18n("Step Progress"), progressBox);
+
         vlay->addWidget(new QLabel(i18n("Overall Progress"), progressBox));
         vlay->addWidget(progressBar);
-        vlay->addWidget(new QLabel(i18n("Step Progress"), progressBox));
+        vlay->addWidget(overallStepTitle);
         vlay->addWidget(progressBarSmallStep);
 
         QWidget *mainWidget     = new QWidget;
@@ -120,25 +122,24 @@ namespace Digikam
         connect(migrateButton, SIGNAL(clicked()), this, SLOT(performCopy()));
 
 
-        // connect signal handlers for copy thread
-        this->connect(&(thread->copyManager), SIGNAL(finished(int, QString)), SLOT(handleFinish(int, QString)));
+        // connect signal handlers for copy copyThread
+        this->connect(&(copyThread->copyManager), SIGNAL(finished(int, QString)), SLOT(handleFinish(int, QString)));
 
-        this->connect(&(thread->copyManager), SIGNAL(stepStarted(QString)), SLOT(handleStepStarted(QString)));
-        this->connect(&(thread->copyManager), SIGNAL(smallStepStarted(int, int)), SLOT(handleSmallStepStarted(int, int)));
+        this->connect(&(copyThread->copyManager), SIGNAL(stepStarted(QString)), SLOT(handleStepStarted(QString)));
+        this->connect(&(copyThread->copyManager), SIGNAL(smallStepStarted(int, int)), SLOT(handleSmallStepStarted(int, int)));
 
-        connect(cancelButton, SIGNAL(clicked()), &(thread->copyManager), SLOT(stopThread()));
-
-        this->connect(cancelButton, SIGNAL(closeClicked()), &(thread->copyManager), SLOT(stopThread()));
+        connect(cancelButton, SIGNAL(clicked()), &(copyThread->copyManager), SLOT(stopProcessing()));
+        this->connect(this, SIGNAL(closeClicked()), &(copyThread->copyManager), SLOT(stopProcessing()));
     }
 
     void MigrationDlg::performCopy()
     {
         DatabaseParameters toDBParameters = toDatabaseWidget->getDatabaseParameters();
         DatabaseParameters fromDBParameters = fromDatabaseWidget->getDatabaseParameters();
-        thread->init(fromDBParameters, toDBParameters);
+        copyThread->init(fromDBParameters, toDBParameters);
 
         lockInputFields();
-        thread->start();
+        copyThread->start();
     }
 
     void MigrationDlg::dataInit()
@@ -186,6 +187,7 @@ namespace Digikam
     void MigrationDlg::handleStepStarted(QString stepName)
     {
         int progressBarValue = progressBar->value();
+        overallStepTitle->setText(i18n("Step Progress (%1)", stepName));
         progressBar->setValue(++progressBarValue);
     }
 
