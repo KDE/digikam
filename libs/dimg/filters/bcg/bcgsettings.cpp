@@ -170,8 +170,8 @@ BCGContainer BCGSettings::defaultSettings() const
 {
     BCGContainer prm;
 
-    prm.brightness = d->bInput->defaultValue();
-    prm.contrast   = d->cInput->defaultValue();
+    prm.brightness = (double)d->bInput->defaultValue()/250.0;
+    prm.contrast   = (double)(d->cInput->defaultValue()/100.0) + 1.00;
     prm.gamma      = d->gInput->defaultValue();
 
     return prm;
