@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef RGBTOOL_H
-#define RGBTOOL_H
+#ifndef CBTOOL_H
+#define CBTOOL_H
 
 #include <QObject>
 
@@ -35,16 +35,16 @@ using namespace Digikam;
 namespace DigikamImagesPluginCore
 {
 
-class RGBToolPriv;
+class CBToolPriv;
 
-class RGBTool : public EditorToolThreaded
+class CBTool : public EditorToolThreaded
 {
     Q_OBJECT
 
 public:
 
-    RGBTool(QObject* parent);
-    ~RGBTool();
+    CBTool(QObject* parent);
+    ~CBTool();
 
 private Q_SLOTS:
 
@@ -63,9 +63,9 @@ private:
 
 private:
 
-    RGBToolPriv* const d;
+    CBToolPriv* const d;
 };
 
 }  // namespace DigikamImagesPluginCore
 
-#endif /* RGBTOOL_H */
+#endif /* CBTOOL_H */

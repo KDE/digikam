@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "rgbtool.moc"
+#include "cbtool.moc"
 
 // Qt includes
 
@@ -65,11 +65,11 @@ using namespace Digikam;
 namespace DigikamImagesPluginCore
 {
 
-class RGBToolPriv
+class CBToolPriv
 {
 public:
 
-    RGBToolPriv() :
+    CBToolPriv() :
         configGroupName("colorbalance Tool"),
         configHistogramChannelEntry("Histogram Channel"),
         configHistogramScaleEntry("Histogram Scale"),
@@ -90,9 +90,9 @@ public:
     EditorToolSettings* gboxSettings;
 };
 
-RGBTool::RGBTool(QObject* parent)
-       : EditorToolThreaded(parent),
-         d(new RGBToolPriv)
+CBTool::CBTool(QObject* parent)
+      : EditorToolThreaded(parent),
+        d(new CBToolPriv)
 {
     setObjectName("colorbalance");
     setToolName(i18n("Color Balance"));
@@ -128,7 +128,7 @@ RGBTool::RGBTool(QObject* parent)
     d->gboxSettings->enableButton(EditorToolSettings::Ok, false);
 }
 
-RGBTool::~RGBTool()
+CBTool::~CBTool()
 {
     if (d->destinationPreviewData)
        delete [] d->destinationPreviewData;
@@ -136,7 +136,7 @@ RGBTool::~RGBTool()
     delete d;
 }
 
-void RGBTool::readSettings()
+void CBTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
@@ -147,7 +147,7 @@ void RGBTool::readSettings()
     d->cbSettings->readSettings(group);
 }
 
-void RGBTool::writeSettings()
+void CBTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
@@ -159,13 +159,13 @@ void RGBTool::writeSettings()
     group.sync();
 }
 
-void RGBTool::slotResetSettings()
+void CBTool::slotResetSettings()
 {
     d->cbSettings->resetToDefault();
     slotEffect();
 }
 
-void RGBTool::prepareEffect()
+void CBTool::prepareEffect()
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
     d->cbSettings->setEnabled(false);
@@ -182,7 +182,7 @@ void RGBTool::prepareEffect()
     setFilter(dynamic_cast<DImgThreadedFilter*>(new CBFilter(&preview, this, settings)));
 }
 
-void RGBTool::putPreviewData()
+void CBTool::putPreviewData()
 {
     DImg preview = filter()->getTargetImage();
     d->previewWidget->setPreviewImage(preview);
@@ -198,7 +198,7 @@ void RGBTool::putPreviewData()
                                                              0, 0, 0, false);
 }
 
-void RGBTool::prepareFinal()
+void CBTool::prepareFinal()
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
     d->cbSettings->setEnabled(false);
@@ -210,13 +210,13 @@ void RGBTool::prepareFinal()
     setFilter(dynamic_cast<DImgThreadedFilter*>(new CBFilter(iface.getOriginalImg(), this, settings)));
 }
 
-void RGBTool::putFinalData()
+void CBTool::putFinalData()
 {
     ImageIface iface(0, 0);
     iface.putOriginalImage(i18n("Color Balance"), filter()->getTargetImage().bits());
 }
 
-void RGBTool::renderingFinished()
+void CBTool::renderingFinished()
 {
     QApplication::restoreOverrideCursor();
     d->cbSettings->setEnabled(true);
