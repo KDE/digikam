@@ -29,11 +29,6 @@
 
 #include "editortool.h"
 
-namespace Digikam
-{
-class DColor;
-}
-
 using namespace Digikam;
 
 namespace DigikamImagesPluginCore
@@ -41,7 +36,7 @@ namespace DigikamImagesPluginCore
 
 class HSLToolPriv;
 
-class HSLTool : public EditorTool
+class HSLTool : public EditorToolThreaded
 {
     Q_OBJECT
 
@@ -52,18 +47,18 @@ public:
 
 private Q_SLOTS:
 
-    void slotEffect();
     void slotResetSettings();
-    void slotColorSelectedFromTarget(const Digikam::DColor& color);
-    void slotHSChanged(int h, int s);
-    void slotHChanged(double h);
-    void slotSChanged(double s);
 
 private:
 
-    void writeSettings();
     void readSettings();
-    void finalRendering();
+    void writeSettings();
+    void prepareEffect();
+    void prepareFinal();
+    void abortPreview();
+    void putPreviewData();
+    void putFinalData();
+    void renderingFinished();
 
 private:
 
