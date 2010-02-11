@@ -5,7 +5,7 @@ INSTALL(FILES dimgthreadedfilter.h
               cb/cbsettings.h 
               bcg/bcgfilter.h 
               bcg/bcgsettings.h 
-              hsl/hslmodifier.h 
+              hsl/hslfilter.h 
               icc/icctransform.h 
               nr/waveletsnr.h 
               nr/noisereductionsettings.h
