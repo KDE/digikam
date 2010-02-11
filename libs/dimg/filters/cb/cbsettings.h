@@ -66,10 +66,6 @@ Q_SIGNALS:
 
 private:
 
-    void adjustSliders(const CBContainer& settings);
-
-private:
-
     CBSettingsPriv* const d;
 };
 
