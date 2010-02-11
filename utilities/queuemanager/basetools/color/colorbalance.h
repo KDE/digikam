@@ -3,10 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2008-11-24
- * Description : Batch Tools Manager.
+ * Date        : 2010-02-11
+ * Description : Color Balance batch tool.
  *
- * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,12 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef BATCHTOOLSMANAGER_H
-#define BATCHTOOLSMANAGER_H
-
-// Qt includes
-
-#include <QObject>
+#ifndef COLORBALANCE_H
+#define COLORBALANCE_H
 
 // Local includes
 
@@ -35,29 +31,33 @@
 namespace Digikam
 {
 
-class BatchToolsManagerPriv;
+class CBSettings;
 
-class BatchToolsManager : public QObject
+class ColorBalance : public BatchTool
 {
     Q_OBJECT
 
 public:
 
-    BatchToolsManager(QObject* parent=0);
-    ~BatchToolsManager();
+    ColorBalance(QObject* parent=0);
+    ~ColorBalance();
 
-    void registerTool(BatchTool* tool);
-    void unregisterTool(BatchTool* tool);
-
-    BatchTool* findTool(const QString& name, BatchTool::BatchToolGroup group) const;
-
-    BatchToolsList toolsList() const;
+    BatchToolSettings defaultSettings();
 
 private:
 
-    BatchToolsManagerPriv* const d;
+    bool toolOperations();
+
+private Q_SLOTS:
+
+    void slotAssignSettings2Widget();
+    void slotSettingsChanged();
+
+private:
+
+    CBSettings* m_settingsView;
 };
 
 }  // namespace Digikam
 
-#endif /* BATCHTOOLSMANAGER_H */
+#endif /* COLORBALANCE_H */

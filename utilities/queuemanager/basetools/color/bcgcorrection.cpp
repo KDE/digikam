@@ -25,16 +25,13 @@
 
 // Qt includes
 
-#include <QLabel>
 #include <QWidget>
 
 // KDE includes
 
-#include <kcombobox.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
-#include <kurllabel.h>
 
 // Local includes
 
