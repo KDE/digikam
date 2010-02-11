@@ -21,12 +21,10 @@
  *
  * ============================================================ */
 
-
 #include "rgbtool.moc"
 
 // Qt includes
 
-#include <QCheckBox>
 #include <QColor>
 #include <QFrame>
 #include <QGridLayout>
@@ -35,13 +33,11 @@
 #include <QLabel>
 #include <QPixmap>
 #include <QPushButton>
-#include <QSlider>
 #include <QToolButton>
 
 // KDE includes
 
 #include <kapplication.h>
-#include <kcombobox.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kcursor.h>
@@ -52,20 +48,16 @@
 #include <kstandarddirs.h>
 #include <kvbox.h>
 
-// LibKDcraw includes
-
-#include <libkdcraw/rnuminput.h>
-
 // Local includes
 
-#include "colorgradientwidget.h"
-#include "colormodifier.h"
+#include "cbsettings.h"
+#include "cbfilter.h"
 #include "dimg.h"
 #include "editortoolsettings.h"
 #include "histogrambox.h"
 #include "histogramwidget.h"
 #include "imageiface.h"
-#include "imageguidewidget.h"
+#include "imageregionwidget.h"
 
 using namespace KDcrawIface;
 using namespace Digikam;
@@ -81,60 +73,32 @@ public:
         configGroupName("colorbalance Tool"),
         configHistogramChannelEntry("Histogram Channel"),
         configHistogramScaleEntry("Histogram Scale"),
-        configRedAdjustmentEntry("RedAdjustment"),
-        configGreenAdjustmentEntry("GreenAdjustment"),
-        configBlueAdjustmentEntry("BlueAdjustment"),
-
         destinationPreviewData(0),
-        rSlider(0),
-        gSlider(0),
-        bSlider(0),
-        channelCB(0),
-        rInput(0),
-        gInput(0),
-        bInput(0),
+        cbSettings(0),
         previewWidget(0),
         gboxSettings(0)
         {}
 
-    const QString        configGroupName;
-    const QString        configHistogramChannelEntry;
-    const QString        configHistogramScaleEntry;
-    const QString        configRedAdjustmentEntry;
-    const QString        configGreenAdjustmentEntry;
-    const QString        configBlueAdjustmentEntry;
+    const QString       configGroupName;
+    const QString       configHistogramChannelEntry;
+    const QString       configHistogramScaleEntry;
 
-    uchar*               destinationPreviewData;
+    uchar*              destinationPreviewData;
 
-    QSlider*             rSlider;
-    QSlider*             gSlider;
-    QSlider*             bSlider;
-
-    KComboBox*           channelCB;
-
-    RIntNumInput*        rInput;
-    RIntNumInput*        gInput;
-    RIntNumInput*        bInput;
-
-    ImageGuideWidget*    previewWidget;
-    EditorToolSettings*  gboxSettings;
+    CBSettings*         cbSettings;
+    ImageRegionWidget*  previewWidget;
+    EditorToolSettings* gboxSettings;
 };
 
 RGBTool::RGBTool(QObject* parent)
-       : EditorTool(parent),
+       : EditorToolThreaded(parent),
          d(new RGBToolPriv)
 {
     setObjectName("colorbalance");
     setToolName(i18n("Color Balance"));
     setToolIcon(SmallIcon("adjustrgb"));
 
-    d->destinationPreviewData = 0;
-
-    d->previewWidget = new ImageGuideWidget;
-    d->previewWidget->setToolTip(i18n("The image color-balance adjustment preview "
-                                      "is shown here. "
-                                      "Picking a color on the image will show the "
-                                      "corresponding color level on the histogram."));
+    d->previewWidget = new ImageRegionWidget;
     setToolView(d->previewWidget);
     setPreviewModeMask(PreviewToolBar::AllPreviewModes);
 
@@ -142,123 +106,18 @@ RGBTool::RGBTool(QObject* parent)
 
     d->gboxSettings = new EditorToolSettings;
     d->gboxSettings->setTools(EditorToolSettings::Histogram);
+    d->gboxSettings->setButtons(EditorToolSettings::Default|
+                                EditorToolSettings::Ok|
+                                EditorToolSettings::Cancel|
+                                EditorToolSettings::Try);
 
-    QGridLayout* gridSettings = new QGridLayout(d->gboxSettings->plainPage());
-
-    // -------------------------------------------------------------
-
-    QLabel *labelCyan = new QLabel(i18n("Cyan"), d->gboxSettings->plainPage());
-    labelCyan->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-
-    d->rSlider = new QSlider(Qt::Horizontal, d->gboxSettings->plainPage());
-    d->rSlider->setValue(0);
-    d->rSlider->setRange(-100, 100);
-    d->rSlider->setPageStep(1);
-    d->rSlider->setTickPosition(QSlider::TicksBelow);
-    d->rSlider->setTickInterval(20);
-    d->rSlider->setWhatsThis(i18n("Set here the cyan/red color adjustment of the image."));
-
-    QLabel *labelRed = new QLabel(i18n("Red"), d->gboxSettings->plainPage());
-    labelRed->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-
-    d->rInput = new RIntNumInput(d->gboxSettings->plainPage());
-    d->rInput->setRange(-100, 100, 1);
-    d->rInput->setSliderEnabled(false);
-    d->rInput->setDefaultValue(0);
-
-    // -------------------------------------------------------------
-
-    QLabel *labelMagenta = new QLabel(i18n("Magenta"), d->gboxSettings->plainPage());
-    labelMagenta->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-
-    d->gSlider = new QSlider(Qt::Horizontal, d->gboxSettings->plainPage());
-    d->gSlider->setValue(0);
-    d->gSlider->setRange(-100, 100);
-    d->gSlider->setPageStep(1);
-    d->gSlider->setTickPosition(QSlider::TicksBelow);
-    d->gSlider->setTickInterval(20);
-    d->gSlider->setWhatsThis(i18n("Set here the magenta/green color adjustment of the image."));
-
-    QLabel *labelGreen = new QLabel(i18n("Green"), d->gboxSettings->plainPage());
-    labelGreen->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-
-    d->gInput = new RIntNumInput(d->gboxSettings->plainPage());
-    d->gInput->setRange(-100, 100, 1);
-    d->gInput->setSliderEnabled(false);
-    d->gInput->setDefaultValue(0);
-
-    // -------------------------------------------------------------
-
-    QLabel *labelYellow = new QLabel(i18n("Yellow"), d->gboxSettings->plainPage());
-    labelYellow->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-
-    d->bSlider = new QSlider(Qt::Horizontal, d->gboxSettings->plainPage());
-    d->bSlider->setValue(0);
-    d->bSlider->setRange(-100, 100);
-    d->bSlider->setPageStep(1);
-    d->bSlider->setTickPosition(QSlider::TicksBelow);
-    d->bSlider->setTickInterval(20);
-    d->bSlider->setWhatsThis(i18n("Set here the yellow/blue color adjustment of the image."));
-
-    QLabel *labelBlue = new QLabel(i18n("Blue"), d->gboxSettings->plainPage());
-    labelBlue->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-
-    d->bInput = new RIntNumInput(d->gboxSettings->plainPage());
-    d->bInput->setRange(-100, 100, 1);
-    d->bInput->setSliderEnabled(false);
-    d->bInput->setDefaultValue(0);
-
-    // -------------------------------------------------------------
-
-    gridSettings->addWidget(labelCyan,      0, 0, 1, 1);
-    gridSettings->addWidget(d->rSlider,     0, 1, 1, 1);
-    gridSettings->addWidget(labelRed,       0, 2, 1, 1);
-    gridSettings->addWidget(d->rInput,      0, 3, 1, 1);
-    gridSettings->addWidget(labelMagenta,   1, 0, 1, 1);
-    gridSettings->addWidget(d->gSlider,     1, 1, 1, 1);
-    gridSettings->addWidget(labelGreen,     1, 2, 1, 1);
-    gridSettings->addWidget(d->gInput,      1, 3, 1, 1);
-    gridSettings->addWidget(labelYellow,    2, 0, 1, 1);
-    gridSettings->addWidget(d->bSlider,     2, 1, 1, 1);
-    gridSettings->addWidget(labelBlue,      2, 2, 1, 1);
-    gridSettings->addWidget(d->bInput,      2, 3, 1, 1);
-    gridSettings->setMargin(d->gboxSettings->spacingHint());
-    gridSettings->setSpacing(d->gboxSettings->spacingHint());
-    gridSettings->setRowStretch(3, 10);
-
+    d->cbSettings = new CBSettings(d->gboxSettings->plainPage());
     setToolSettings(d->gboxSettings);
     init();
 
     // -------------------------------------------------------------
 
-    connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
-            this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
-
-    connect(d->rSlider, SIGNAL(valueChanged(int)),
-            d->rInput, SLOT(setValue(int)));
-
-    connect(d->rInput, SIGNAL(valueChanged (int)),
-            d->rSlider, SLOT(setValue(int)));
-
-    connect(d->rInput, SIGNAL(valueChanged (int)),
-            this, SLOT(slotTimer()));
-
-    connect(d->gSlider, SIGNAL(valueChanged(int)),
-            d->gInput, SLOT(setValue(int)));
-
-    connect(d->gInput, SIGNAL(valueChanged (int)),
-            d->gSlider, SLOT(setValue(int)));
-
-    connect(d->gInput, SIGNAL(valueChanged (int)),
-            this, SLOT(slotTimer()));
-
-    connect(d->bSlider, SIGNAL(valueChanged(int)),
-            d->bInput, SLOT(setValue(int)));
-
-    connect(d->bInput, SIGNAL(valueChanged (int)),
-            d->bSlider, SLOT(setValue(int)));
-
-    connect(d->bInput, SIGNAL(valueChanged (int)),
+    connect(d->cbSettings, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotTimer()));
 
     connect(d->previewWidget, SIGNAL(signalResized()),
@@ -277,25 +136,15 @@ RGBTool::~RGBTool()
     delete d;
 }
 
-void RGBTool::slotColorSelectedFromTarget( const DColor& color )
-{
-    d->gboxSettings->histogramBox()->histogram()->setHistogramGuideByColor(color);
-}
-
 void RGBTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
 
-    d->gboxSettings->histogramBox()->setChannel((ChannelType)group.readEntry(d->configHistogramChannelEntry,
-                        (int)LuminosityChannel));
-    d->gboxSettings->histogramBox()->setScale((HistogramScale)group.readEntry(d->configHistogramScaleEntry,
-                        (int)LogScaleHistogram));
+    d->gboxSettings->histogramBox()->setChannel((ChannelType)group.readEntry(d->configHistogramChannelEntry, (int)LuminosityChannel));
+    d->gboxSettings->histogramBox()->setScale((HistogramScale)group.readEntry(d->configHistogramScaleEntry,  (int)LogScaleHistogram));
 
-    int r = group.readEntry(d->configRedAdjustmentEntry,   d->rInput->defaultValue());
-    int g = group.readEntry(d->configGreenAdjustmentEntry, d->gInput->defaultValue());
-    int b = group.readEntry(d->configBlueAdjustmentEntry,  d->bInput->defaultValue());
-    adjustSliders(r, g, b);
+    d->cbSettings->readSettings(group);
 }
 
 void RGBTool::writeSettings()
@@ -305,112 +154,73 @@ void RGBTool::writeSettings()
 
     group.writeEntry(d->configHistogramChannelEntry, (int)d->gboxSettings->histogramBox()->channel());
     group.writeEntry(d->configHistogramScaleEntry,   (int)d->gboxSettings->histogramBox()->scale());
-    group.writeEntry(d->configRedAdjustmentEntry,    d->rSlider->value());
-    group.writeEntry(d->configGreenAdjustmentEntry,  d->gInput->value());
-    group.writeEntry(d->configBlueAdjustmentEntry,   d->bInput->value());
+    d->cbSettings->writeSettings(group);
 
     group.sync();
 }
 
 void RGBTool::slotResetSettings()
 {
-    int r = d->rInput->defaultValue();
-    int g = d->gInput->defaultValue();
-    int b = d->bInput->defaultValue();
-
-    adjustSliders(r, g, b);
-}
-
-void RGBTool::adjustSliders(int r, int g, int b)
-{
-    d->rSlider->blockSignals(true);
-    d->gSlider->blockSignals(true);
-    d->bSlider->blockSignals(true);
-    d->rInput->blockSignals(true);
-    d->gInput->blockSignals(true);
-    d->bInput->blockSignals(true);
-
-    d->rSlider->setValue(r);
-    d->gSlider->setValue(g);
-    d->bSlider->setValue(b);
-    d->rInput->setValue(r);
-    d->gInput->setValue(g);
-    d->bInput->setValue(b);
-
-    d->rSlider->blockSignals(false);
-    d->gSlider->blockSignals(false);
-    d->bSlider->blockSignals(false);
-    d->rInput->blockSignals(false);
-    d->gInput->blockSignals(false);
-    d->bInput->blockSignals(false);
-
+    d->cbSettings->resetToDefault();
     slotEffect();
 }
 
-void RGBTool::slotEffect()
+void RGBTool::prepareEffect()
 {
-    kapp->setOverrideCursor( Qt::WaitCursor );
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+    d->cbSettings->setEnabled(false);
+    toolView()->setEnabled(false);
 
-    d->gboxSettings->enableButton(EditorToolSettings::Ok,
-                                (d->rInput->value() != 0 ||
-                                 d->gInput->value() != 0 ||
-                                 d->bInput->value() != 0));
+    CBContainer settings = d->cbSettings->settings();
 
+    d->gboxSettings->enableButton(EditorToolSettings::Ok, (settings.red   != 0 ||
+                                                           settings.green != 0 ||
+                                                           settings.blue  != 0));
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
+
+    DImg preview = d->previewWidget->getOriginalRegionImage();
+    setFilter(dynamic_cast<DImgThreadedFilter*>(new CBFilter(&preview, this, settings)));
+}
+
+void RGBTool::putPreviewData()
+{
+    DImg preview = filter()->getTargetImage();
+    d->previewWidget->setPreviewImage(preview);
+
+    // Update histogram.
 
     if (d->destinationPreviewData)
        delete [] d->destinationPreviewData;
 
-    ImageIface* iface = d->previewWidget->imageIface();
-    d->destinationPreviewData   = iface->getPreviewImage();
-    int w                      = iface->previewWidth();
-    int h                      = iface->previewHeight();
-    bool alpha                 = iface->previewHasAlpha();
-    bool sixteenBit            = iface->previewSixteenBit();
-
-    double r = ((double)d->rInput->value() + 100.0)/100.0;
-    double g = ((double)d->gInput->value() + 100.0)/100.0;
-    double b = ((double)d->bInput->value() + 100.0)/100.0;
-    double a = 1.0;
-
-    DImg preview(w, h, sixteenBit, alpha, d->destinationPreviewData);
-    ColorModifier cmod;
-    cmod.applyColorModifier(preview, r, g, b, a);
-    iface->putPreviewImage(preview.bits());
-
-    d->previewWidget->updatePreview();
-
-    // Update histogram.
-    memcpy(d->destinationPreviewData, preview.bits(), preview.numBytes());
+    d->destinationPreviewData = preview.copyBits();
     d->gboxSettings->histogramBox()->histogram()->updateData(d->destinationPreviewData,
-                                            w, h, sixteenBit, 0, 0, 0, false);
-
-    kapp->restoreOverrideCursor();
+                                                             preview.width(), preview.height(), preview.sixteenBit(),
+                                                             0, 0, 0, false);
 }
 
-void RGBTool::finalRendering()
+void RGBTool::prepareFinal()
 {
-    kapp->setOverrideCursor( Qt::WaitCursor );
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+    d->cbSettings->setEnabled(false);
+    toolView()->setEnabled(false);
 
-    double r = ((double)d->rInput->value() + 100.0)/100.0;
-    double g = ((double)d->gInput->value() + 100.0)/100.0;
-    double b = ((double)d->bInput->value() + 100.0)/100.0;
-    double a = 1.0;
+    CBContainer settings = d->cbSettings->settings();
 
-    ImageIface* iface = d->previewWidget->imageIface();
-    uchar *data                = iface->getOriginalImage();
-    int w                      = iface->originalWidth();
-    int h                      = iface->originalHeight();
-    bool alpha                 = iface->originalHasAlpha();
-    bool sixteenBit            = iface->originalSixteenBit();
-    DImg original(w, h, sixteenBit, alpha, data);
-    delete [] data;
+    ImageIface iface(0, 0);
+    setFilter(dynamic_cast<DImgThreadedFilter*>(new CBFilter(iface.getOriginalImg(), this, settings)));
+}
 
-    ColorModifier cmod;
-    cmod.applyColorModifier(original, r, g, b, a);
+void RGBTool::putFinalData()
+{
+    ImageIface iface(0, 0);
+    iface.putOriginalImage(i18n("Color Balance"), filter()->getTargetImage().bits());
+}
 
-    iface->putOriginalImage(i18n("Color Balance"), original.bits());
-    kapp->restoreOverrideCursor();
+void RGBTool::renderingFinished()
+{
+    QApplication::restoreOverrideCursor();
+    d->cbSettings->setEnabled(true);
+    toolView()->setEnabled(true);
 }
 
 }  // namespace DigikamImagesPluginCore

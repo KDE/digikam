@@ -6,7 +6,7 @@
  * Date        : 2004-07-11
  * Description : digiKam image editor Color Balance tool.
  *
- * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -30,17 +30,14 @@
 
 #include "editortool.h"
 
-namespace Digikam
-{
-class DColor;
-}
+using namespace Digikam;
 
 namespace DigikamImagesPluginCore
 {
 
 class RGBToolPriv;
 
-class RGBTool : public Digikam::EditorTool
+class RGBTool : public EditorToolThreaded
 {
     Q_OBJECT
 
@@ -49,18 +46,20 @@ public:
     RGBTool(QObject* parent);
     ~RGBTool();
 
-private:
-
-    void writeSettings();
-    void readSettings();
-    void slotResetSettings();
-    void adjustSliders(int r, int g, int b);
-    void finalRendering();
-
 private Q_SLOTS:
 
-    void slotEffect();
-    void slotColorSelectedFromTarget(const Digikam::DColor& color);
+    void slotResetSettings();
+
+private:
+
+    void readSettings();
+    void writeSettings();
+    void prepareEffect();
+    void prepareFinal();
+    void abortPreview();
+    void putPreviewData();
+    void putFinalData();
+    void renderingFinished();
 
 private:
 

@@ -3,10 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2006-01-18
- * Description : color modifier methods for DImg framework
+ * Date        : 2010-02-11
+ * Description : Color Balance settings view.
  *
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,42 +21,58 @@
  *
  * ============================================================ */
 
-#ifndef COLORMODIFIER_H
-#define COLORMODIFIER_H
+#ifndef CBSETTINGS_H
+#define CBSETTINGS_H
+
+// Local includes
+
+#include <QWidget>
+
+// KDE includes
+
+#include <kconfig.h>
 
 // Local includes
 
 #include "digikam_export.h"
+#include "cbfilter.h"
 
 namespace Digikam
 {
 
-class DImg;
-class ColorModifierPriv;
+class CBSettingsPriv;
 
-class DIGIKAM_EXPORT ColorModifier
+class DIGIKAM_EXPORT CBSettings : public QWidget
 {
+    Q_OBJECT
+
 public:
 
-    ColorModifier();
-    ~ColorModifier();
+    CBSettings(QWidget* parent);
+    ~CBSettings();
 
-    void reset();
-    bool modified() const;
-    void applyColorModifier(DImg& image, double r, double g, double b, double a);
+    CBContainer defaultSettings() const;
+    void resetToDefault();
+
+    CBContainer settings() const;
+    void setSettings(const CBContainer& settings);
+
+    void readSettings(KConfigGroup& group);
+    void writeSettings(KConfigGroup& group);
+
+Q_SIGNALS:
+
+    void signalSettingsChanged();
 
 private:
 
-    void setTables(int *redMap, int *greenMap, int *blueMap, int *alphaMap, bool sixteenBit);
-    void getTables(int *redMap, int *greenMap, int *blueMap, int *alphaMap, bool sixteenBit);
-    void setGamma(double val);
-    void adjustRGB(double r, double g, double b, double a, bool sixteenBit);
+    void adjustSliders(const CBContainer& settings);
 
 private:
 
-    ColorModifierPriv* const d;
+    CBSettingsPriv* const d;
 };
 
 }  // namespace Digikam
 
-#endif /* COLORMODIFIER_H */
+#endif /* CBSETTINGS_H */
