@@ -108,10 +108,6 @@ BCGTool::BCGTool(QObject* parent)
     setToolHelp("bcgadjusttool.anchor");
 
     d->previewWidget = new ImageRegionWidget;
-    d->previewWidget->setWhatsThis(i18n("The image brightness-contrast-gamma adjustment preview "
-                                        "is shown here. "
-                                        "Picking a color on the image will show the "
-                                        "corresponding color level on the histogram."));
     setToolView(d->previewWidget);
     setPreviewModeMask(PreviewToolBar::AllPreviewModes);
 
