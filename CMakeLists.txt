@@ -509,6 +509,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/bcg/bcgfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/bcg/bcgsettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/hsl/hslmodifier.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/hsl/hslfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/icc/iccprofile.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/icc/icctransform.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/icc/icctransformfilter.cpp
