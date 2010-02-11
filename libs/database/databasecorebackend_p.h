@@ -64,7 +64,7 @@ public:
     void debugOutputFailedQuery(const QSqlQuery &query);
 
     bool checkOperationStatus();
-    bool checkConnectionError();
+    bool checkDatabaseError(const SqlQuery& query);
     // called by DatabaseErrorHandler, implementing DatabaseErrorAnswer
     virtual void connectionErrorContinueQueries();
     virtual void connectionErrorAbortQueries();

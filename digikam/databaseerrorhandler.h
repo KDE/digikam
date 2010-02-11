@@ -69,7 +69,7 @@ private:
     bool               refuseQueries;
 
 private Q_SLOTS:
-    virtual void connectionError(DatabaseErrorAnswer *answer);
+    virtual void databaseError(DatabaseErrorAnswer *answer,  const SqlQuery& query);
 
 };
 

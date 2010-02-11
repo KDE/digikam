@@ -67,7 +67,7 @@ public Q_SLOTS:
      *  It must then call either connectionErrorContinueQueries()
      *  or connectionErrorAbortQueries().
      */
-    virtual void connectionError(DatabaseErrorAnswer *answer) = 0;
+    virtual void databaseError(DatabaseErrorAnswer *answer, const SqlQuery &query) = 0;
 
 };
 
