@@ -1,12 +1,9 @@
 INCLUDE_DIRECTORIES( dimg
                      dimg/filters
                      dimg/loaders
-                     whitebalance
                      dmetadata 
                      histogram
-                     curves
-                     levels
-                     lprof/
+                     lprof
                      jpegutils 
                      greycstoration
                      threadimageio
@@ -23,8 +20,6 @@ INCLUDE_DIRECTORIES( dimg
                      ${PNG_INCLUDE_DIR}
                      ${JASPER_INCLUDE_DIR}
                    )
-ADD_SUBDIRECTORY( curves )
-ADD_SUBDIRECTORY( levels )
 ADD_SUBDIRECTORY( histogram )
 ADD_SUBDIRECTORY( dmetadata )
 ADD_SUBDIRECTORY( dimg )
