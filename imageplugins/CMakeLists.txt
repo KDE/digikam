@@ -23,7 +23,7 @@ INCLUDE_DIRECTORIES(../utilities/imageeditor/editor
                     ../libs/dimg/filters/cb
                     ../libs/dimg/filters/levels
                     ../libs/dimg/filters/curves
-                    ../libs/dimg/filters/whitebalance
+                    ../libs/dimg/filters/wb
                     ../libs/threadimageio
                     ../libs/dmetadata
                     ../libs/themeengine
