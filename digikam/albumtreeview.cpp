@@ -461,7 +461,10 @@ void AbstractAlbumTreeView::dragEnterEvent(QDragEnterEvent *e)
 {
     AlbumModelDragDropHandler *handler = m_albumModel->dragDropHandler();
     if (handler && handler->acceptsMimeData(e->mimeData()))
+    {
+        setState(DraggingState);
         e->accept();
+    }
     else
         e->ignore();
 }

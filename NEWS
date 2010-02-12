@@ -35,6 +35,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 018 ==> 226235 : digiKam fails after upgrade - no albums - rh tag & captions bar frozen.
 019 ==> 225272 : digiKam destroy some exif data.
 020 ==> 226584 : digiKam crashes in the starting phase.
-021 ==> 
+021 ==> 226537 : hovering doesn't show sub-tags
+022 ==>
 
 
