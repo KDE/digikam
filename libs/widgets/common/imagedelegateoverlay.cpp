@@ -30,7 +30,6 @@
 
 // Local includes
 
-#include "imagecategorizedview.h"
 #include "itemviewimagedelegate.h"
 #include "itemviewhoverbutton.h"
 

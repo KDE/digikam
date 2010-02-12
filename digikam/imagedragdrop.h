@@ -41,9 +41,10 @@ class ImageDragDropHandler : public ImageModelDragDropHandler
 
 public:
 
-    ImageDragDropHandler(ImageAlbumModel *model);
+    ImageDragDropHandler(ImageModel *model);
 
-    ImageAlbumModel *model() const { return static_cast<ImageAlbumModel*>(m_model); }
+    ImageModel *model() const { return static_cast<ImageModel*>(m_model); }
+    ImageAlbumModel *albumModel() const;
 
     virtual bool dropEvent(QAbstractItemView *view, const QDropEvent *e, const QModelIndex& droppedOn);
     virtual Qt::DropAction accepts(const QDropEvent *e, const QModelIndex& dropIndex);

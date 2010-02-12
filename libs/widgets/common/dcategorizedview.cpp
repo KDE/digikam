@@ -253,8 +253,11 @@ void DCategorizedView::slotGridSizeChanged(const QSize& gridSize)
 {
     setGridSize(gridSize);
 
-    horizontalScrollBar()->setSingleStep(gridSize.width() / 20);
-    verticalScrollBar()->setSingleStep(gridSize.height() / 20);
+    if (!gridSize.isNull())
+    {
+        horizontalScrollBar()->setSingleStep(gridSize.width() / 20);
+        verticalScrollBar()->setSingleStep(gridSize.height() / 20);
+    }
 }
 
 void DCategorizedView::updateDelegateSizes()
