@@ -5,6 +5,7 @@ INCLUDE_DIRECTORIES(
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/loaders
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/auto
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/bcg
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/hsl
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/icc
