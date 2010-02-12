@@ -33,5 +33,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 016 ==> 226081 : Trying to delete tags crashes digiKam.
 017 ==> 226118 : IPTC metadata tag delimiter is no longer stored (since 0.10).
 018 ==> 226235 : digiKam fails after upgrade - no albums - rh tag & captions bar frozen.
-019 ==> 
+019 ==> 225272 : digiKam destroy some exif data.
+020 ==> 
 
