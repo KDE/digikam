@@ -454,8 +454,8 @@ void DigikamView::setupConnections()
     connect(d->albumWidgetStack, SIGNAL(signalFindSimilar()),
             this, SLOT(slotImageFindSimilar()));
 
-    connect(d->albumWidgetStack, SIGNAL(signalUrlSelected(const KUrl&)),
-            this, SLOT(slotSelectItemByUrl(const KUrl&)));
+    connect(d->albumWidgetStack, SIGNAL(signalImageSelected(const ImageInfo&)),
+            d->iconView, SLOT(setCurrentInfo(const ImageInfo&)));
 
     connect(d->albumWidgetStack, SIGNAL(signalAddToExistingQueue(int)),
             this, SLOT(slotImageAddToExistingQueue(int)));

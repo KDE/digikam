@@ -110,7 +110,7 @@ Q_SIGNALS:
     void signalInsert2LightTable();
     void signalInsert2QueueMgr();
     void signalFindSimilar();
-    void signalUrlSelected(const KUrl&);
+    void signalImageSelected(const ImageInfo& info);
     void signalAddToExistingQueue(int);
 
     void signalGotoAlbumAndItem(const ImageInfo&);
@@ -125,8 +125,6 @@ private Q_SLOTS:
 
     void slotZoomFactorChanged(double);
     void slotFileChanged(const QString& path);
-    void slotItemsAddedOrRemoved();
-    void updateThumbbar();
 
 private:
 
