@@ -43,11 +43,11 @@
 #include "equalizefilter.h"
 #include "stretchfilter.h"
 #include "normalizefilter.h"
+#include "wbfilter.h"
 #include "editortoolsettings.h"
 #include "histogramwidget.h"
 #include "imageiface.h"
 #include "imageguidewidget.h"
-#include "whitebalance.h"
 
 using namespace Digikam;
 
@@ -345,11 +345,9 @@ void AutoCorrectionTool::autoCorrection(uchar* data, int w, int h, bool sb, int 
         }
         case AutoExposureCorrection:
         {
-            WhiteBalance wbFilter(sb);
-            double blackLevel;
-            double exposureLevel;
-            wbFilter.autoExposureAdjustement(data, w, h, sb, blackLevel, exposureLevel);
-            wbFilter.whiteBalance(data, w, h, sb, blackLevel, exposureLevel);
+            WBContainer settings;
+            WBFilter::autoExposureAdjustement(data, w, h, sb, settings.black, settings.exposition);
+            WBFilter wb(data, w, h, sb, settings);
             break;
         }
     }
