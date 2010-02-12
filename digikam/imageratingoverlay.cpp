@@ -72,8 +72,9 @@ void ImageRatingOverlay::setActive(bool active)
         connect(ratingWidget(), SIGNAL(signalRatingChanged(int)),
                 this, SLOT(slotRatingChanged(int)));
 
-        connect(view()->model(), SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)),
-                this, SLOT(slotDataChanged(const QModelIndex &, const QModelIndex &)));
+        if (view()->model())
+            connect(view()->model(), SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)),
+                    this, SLOT(slotDataChanged(const QModelIndex &, const QModelIndex &)));
     }
 }
 

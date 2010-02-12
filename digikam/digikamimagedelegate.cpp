@@ -70,65 +70,65 @@ DigikamImageDelegate::~DigikamImageDelegate()
 {
 }
 
-void DigikamImageDelegate::updateRects(int w)
+void DigikamImageDelegate::updateRects()
 {
     Q_D(DigikamImageDelegate);
 
     int y = d->margin;
 
-    d->pixmapRect = QRect(d->margin, y, w, d->thumbSize.size() + 2*d->radius);
+    d->pixmapRect = QRect(d->margin, y, d->contentWidth, d->contentWidth);
     y = d->pixmapRect.bottom();
 
     const AlbumSettings *albumSettings = AlbumSettings::instance();
     if (albumSettings->getIconShowRating())
     {
-        d->ratingRect = QRect(d->margin, y, w, d->starPolygonSize.height());
+        d->ratingRect = QRect(d->margin, y, d->contentWidth, d->starPolygonSize.height());
         y = d->ratingRect.bottom();
     }
 
     if (albumSettings->getIconShowName())
     {
-        d->nameRect = QRect(d->margin, y, w-d->margin, d->oneRowRegRect.height());
+        d->nameRect = QRect(d->margin, y, d->contentWidth-d->margin, d->oneRowRegRect.height());
         y = d->nameRect.bottom();
     }
 
     if (albumSettings->getIconShowComments())
     {
-        d->commentsRect = QRect(d->margin, y, w, d->oneRowComRect.height());
+        d->commentsRect = QRect(d->margin, y, d->contentWidth, d->oneRowComRect.height());
         y = d->commentsRect.bottom();
     }
 
     if (albumSettings->getIconShowDate())
     {
-        d->dateRect = QRect(d->margin, y, w, d->oneRowXtraRect.height());
+        d->dateRect = QRect(d->margin, y, d->contentWidth, d->oneRowXtraRect.height());
         y = d->dateRect.bottom();
     }
 
     if (albumSettings->getIconShowModDate())
     {
-        d->modDateRect = QRect(d->margin, y, w, d->oneRowXtraRect.height());
+        d->modDateRect = QRect(d->margin, y, d->contentWidth, d->oneRowXtraRect.height());
         y = d->modDateRect.bottom();
     }
 
     if (albumSettings->getIconShowResolution())
     {
-        d->resolutionRect = QRect(d->margin, y, w, d->oneRowXtraRect.height());
+        d->resolutionRect = QRect(d->margin, y, d->contentWidth, d->oneRowXtraRect.height());
         y = d->resolutionRect.bottom() ;
     }
 
     if (albumSettings->getIconShowSize())
     {
-        d->sizeRect = QRect(d->margin, y, w, d->oneRowXtraRect.height());
+        d->sizeRect = QRect(d->margin, y, d->contentWidth, d->oneRowXtraRect.height());
         y = d->sizeRect.bottom();
     }
 
     if (albumSettings->getIconShowTags())
     {
-        d->tagRect = QRect(d->margin, y, w, d->oneRowComRect.height());
+        d->tagRect = QRect(d->margin, y, d->contentWidth, d->oneRowComRect.height());
         y = d->tagRect.bottom();
     }
 
-    d->rect = QRect(0, 0, w + 2*d->margin, y+d->margin+d->radius);
+    d->rect = QRect(0, 0, d->contentWidth + 2*d->margin, y+d->margin+d->radius);
 
     d->gridSize  = QSize(d->rect.width() + d->spacing, d->rect.height() + d->spacing);
 }

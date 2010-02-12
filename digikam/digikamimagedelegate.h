@@ -47,7 +47,7 @@ public:
 
 protected:
 
-    virtual void updateRects(int width);
+    virtual void updateRects();
 
 private:
 

@@ -74,6 +74,7 @@ DigikamImageView::DigikamImageView(QWidget *parent)
     installDefaultModels();
 
     setItemDelegate(new DigikamImageDelegate(this));
+    setSpacing(10);
 
     AlbumSettings *settings = AlbumSettings::instance();
 
