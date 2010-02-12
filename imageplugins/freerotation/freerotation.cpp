@@ -126,13 +126,13 @@ void FreeRotation::filterImage(void)
 
     if ((lfSin * lfCos) < 0)
     {
-        nNewWidth = ROUND (fabs (nWidth * lfCos - nHeight * lfSin));
-        nNewHeight = ROUND (fabs (nWidth * lfSin - nHeight * lfCos));
+        nNewWidth  = lround (fabs (nWidth * lfCos - nHeight * lfSin));
+        nNewHeight = lround (fabs (nWidth * lfSin - nHeight * lfCos));
     }
     else
     {
-        nNewWidth = ROUND (fabs (nWidth * lfCos + nHeight * lfSin));
-        nNewHeight = ROUND (fabs (nWidth * lfSin + nHeight * lfCos));
+        nNewWidth  = lround (fabs (nWidth * lfCos + nHeight * lfSin));
+        nNewHeight = lround (fabs (nWidth * lfSin + nHeight * lfCos));
     }
 
     // getting the destination's center position
