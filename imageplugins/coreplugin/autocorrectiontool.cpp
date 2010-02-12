@@ -39,6 +39,7 @@
 // Local includes
 
 #include "dimg.h"
+#include "autolevelsfilter.h"
 #include "dimgimagefilters.h"
 #include "editortoolsettings.h"
 #include "histogramwidget.h"
@@ -212,13 +213,9 @@ void AutoCorrectionTool::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
 
-    d->gboxSettings->histogramBox()->setChannel((ChannelType)group.readEntry(d->configHistogramChannelEntry,
-                        (int)LuminosityChannel));
-    d->gboxSettings->histogramBox()->setScale((HistogramScale)group.readEntry(d->configHistogramScaleEntry,
-                        (int)LogScaleHistogram));
-
-    d->correctionTools->setCurrentRow(group.readEntry(d->configAutoCorrectionFilterEntry,
-                                                      (int)AutoLevelsCorrection));
+    d->gboxSettings->histogramBox()->setChannel((ChannelType)group.readEntry(d->configHistogramChannelEntry, (int)LuminosityChannel));
+    d->gboxSettings->histogramBox()->setScale((HistogramScale)group.readEntry(d->configHistogramScaleEntry,  (int)LogScaleHistogram));
+    d->correctionTools->setCurrentRow(group.readEntry(d->configAutoCorrectionFilterEntry, (int)AutoLevelsCorrection));
 }
 
 void AutoCorrectionTool::writeSettings()
@@ -275,7 +272,6 @@ QPixmap AutoCorrectionTool::getThumbnailForEffect(AutoCorrectionType type)
     return (thumb.convertToPixmap());
 }
 
-
 void AutoCorrectionTool::finalRendering()
 {
     kapp->setOverrideCursor( Qt::WaitCursor );
@@ -321,37 +317,42 @@ void AutoCorrectionTool::finalRendering()
     kapp->restoreOverrideCursor();
 }
 
-void AutoCorrectionTool::autoCorrection(uchar *data, int w, int h, bool sb, int type)
+void AutoCorrectionTool::autoCorrection(uchar* data, int w, int h, bool sb, int type)
 {
     DImgImageFilters filter;
 
     switch (type)
     {
         case AutoLevelsCorrection:
-            filter.autoLevelsCorrectionImage(data, w, h, sb);
+        {
+            AutoLevelsFilter autolevels(data, w, h, sb);
             break;
-
+        }
         case NormalizeCorrection:
+        {
             filter.normalizeImage(data, w, h, sb);
             break;
-
+        }
         case EqualizeCorrection:
+        {
             filter.equalizeImage(data, w, h, sb);
             break;
-
+        }
         case StretchContrastCorrection:
+        {
             filter.stretchContrastImage(data, w, h, sb);
             break;
-
+        }
         case AutoExposureCorrection:
+        {
             WhiteBalance wbFilter(sb);
             double blackLevel;
             double exposureLevel;
             wbFilter.autoExposureAdjustement(data, w, h, sb, blackLevel, exposureLevel);
             wbFilter.whiteBalance(data, w, h, sb, blackLevel, exposureLevel);
             break;
+        }
     }
 }
 
 }  // namespace DigikamImagesPluginCore
-

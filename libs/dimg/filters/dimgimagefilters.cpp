@@ -44,7 +44,6 @@
 // Local includes
 
 #include "imagehistogram.h"
-#include "imagelevels.h"
 #include "dcolor.h"
 #include "dimggaussianblur.h"
 #include "dimgsharpen.h"
@@ -625,52 +624,6 @@ void DImgImageFilters::normalizeImage(uchar *data, int w, int h, bool sixteenBit
     }
 
      delete [] param.lut;
-}
-
-/** Performs histogram auto correction of levels.
-    This method maximizes the tonal range in the Red,
-    Green, and Blue channels. It search the image shadow and highlight
-    limit values and adjust the Red, Green, and Blue channels
-    to a full histogram range.*/
-void DImgImageFilters::autoLevelsCorrectionImage(uchar *data, int w, int h, bool sixteenBit)
-{
-    if (!data || !w || !h)
-    {
-       kWarning() << ("DImgImageFilters::autoLevelsCorrectionImage: no image data available!");
-       return;
-    }
-    uchar* desData;
-
-    // Create the new empty destination image data space.
-    if (sixteenBit)
-       desData = new uchar[w*h*8];
-    else
-       desData = new uchar[w*h*4];
-
-    // Create an histogram of the current image.
-    ImageHistogram *histogram = new ImageHistogram(data, w, h, sixteenBit);
-    histogram->calculate();
-
-    // Create an empty instance of levels to use.
-    ImageLevels *levels = new ImageLevels(sixteenBit);
-
-    // Initialize an auto levels correction of the histogram.
-    levels->levelsAuto(histogram);
-
-    // Calculate the LUT to apply on the image.
-    levels->levelsLutSetup(AlphaChannel);
-
-    // Apply the lut to the image.
-    levels->levelsLutProcess(data, desData, w, h);
-
-    if (sixteenBit)
-       memcpy (data, desData, w*h*8);
-    else
-       memcpy (data, desData, w*h*4);
-
-    delete [] desData;
-    delete histogram;
-    delete levels;
 }
 
 /** Performs image colors inversion. This tool is used for negate image

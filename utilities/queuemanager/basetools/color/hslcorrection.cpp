@@ -105,8 +105,7 @@ bool HSLCorrection::toolOperations()
 
     HSLFilter hsl(&image(), 0L, prm);
     hsl.startFilterDirectly();
-    DImg trg = hsl.getTargetImage();
-    image().putImageData(trg.bits());
+    image().putImageData(hsl.getTargetImage().bits());
 
     return (savefromDImg());
 }

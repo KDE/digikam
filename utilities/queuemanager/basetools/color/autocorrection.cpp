@@ -38,8 +38,9 @@
 // Local includes
 
 #include "dimg.h"
-#include "dimgimagefilters.h"
+#include "autolevelsfilter.h"
 #include "whitebalance.h"
+#include "dimgimagefilters.h"
 
 namespace Digikam
 {
@@ -103,22 +104,29 @@ bool AutoCorrection::toolOperations()
     switch (type)
     {
         case AutoLevelsCorrection:
-            filter.autoLevelsCorrectionImage(image().bits(), image().width(), image().height(), image().sixteenBit());
+        {
+            AutoLevelsFilter autolevels(&image());
+            autolevels.startFilterDirectly();
+            image().putImageData(autolevels.getTargetImage().bits());
             break;
-
+        }
         case NormalizeCorrection:
+        {
             filter.normalizeImage(image().bits(), image().width(), image().height(), image().sixteenBit());
             break;
-
+        }
         case EqualizeCorrection:
+        {
             filter.equalizeImage(image().bits(), image().width(), image().height(), image().sixteenBit());
             break;
-
+        }
         case StretchContrastCorrection:
+        {
             filter.stretchContrastImage(image().bits(), image().width(), image().height(), image().sixteenBit());
             break;
-
+        }
         case AutoExposureCorrection:
+        {
             WhiteBalance wbFilter(image().sixteenBit());
             double       blackLevel, exposureLevel;
             wbFilter.autoExposureAdjustement(image().bits(), image().width(), image().height(),
@@ -126,6 +134,7 @@ bool AutoCorrection::toolOperations()
             wbFilter.whiteBalance(image().bits(), image().width(), image().height(),
                                   image().sixteenBit(), blackLevel, exposureLevel);
             break;
+        }
     }
 
     return (savefromDImg());

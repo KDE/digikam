@@ -12,6 +12,9 @@ INCLUDE_DIRECTORIES(
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/nr
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/sharp
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/cb
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/levels
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/curves
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/whitebalance
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/whitebalance
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dmetadata
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/histogram

@@ -105,8 +105,7 @@ bool ColorBalance::toolOperations()
 
     CBFilter cb(&image(), 0L, prm);
     cb.startFilterDirectly();
-    DImg trg = cb.getTargetImage();
-    image().putImageData(trg.bits());
+    image().putImageData(cb.getTargetImage().bits());
 
     return (savefromDImg());
 }

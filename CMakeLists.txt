@@ -436,10 +436,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     # ==================================================================================================
     # Common targets parts
 
-    SET(libcurves_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/curves/imagecurves.cpp
-       )
-
     SET(libdimg_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/dimg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/dimgscale.cpp
@@ -522,6 +518,9 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/sharp/dimgrefocus.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/sharp/matrix.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/sharp/sharpsettings.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/levels/imagelevels.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/curves/imagecurves.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/whitebalance/whitebalance.cpp
        )
 
     SET(libdmetadata_SRCS
@@ -579,10 +578,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
            )
     ENDIF(MSVC)
 
-    SET(liblevels_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/levels/imagelevels.cpp
-       )
-
     # Gilles Caulier 12/01/06: lprof implementation is C not C++ and do not
     # support 'nofinal' compilation option.
     KDE4_NO_ENABLE_FINAL(liblprof)
@@ -615,10 +610,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/thumbnailcreator.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/thumbnailloadthread.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/thumbnailtask.cpp
-       )
-
-    SET(libwhitebalance_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/whitebalance/whitebalance.cpp
        )
 
     SET(libcommonwidgets_SRCS

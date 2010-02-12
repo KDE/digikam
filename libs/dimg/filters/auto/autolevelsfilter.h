@@ -36,14 +36,13 @@ namespace Digikam
 {
 
 class DImg;
-class AutoLevelsFilterPriv;
 
 class DIGIKAM_EXPORT AutoLevelsFilter : public DImgThreadedFilter
 {
 
 public:
 
-    AutoLevelsFilter(DImg* orgImage, QObject* parent=0);
+    explicit AutoLevelsFilter(DImg* orgImage, QObject* parent=0);
     AutoLevelsFilter(uchar* data, uint width, uint height, bool sixteenBit);
     virtual ~AutoLevelsFilter();
 
