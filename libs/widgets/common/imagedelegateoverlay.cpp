@@ -130,14 +130,17 @@ void AbstractWidgetDelegateOverlay::setActive(bool active)
         m_view->viewport()->installEventFilter(this);
         m_widget->installEventFilter(this);
 
-        connect(m_view->model(), SIGNAL(rowsRemoved(const QModelIndex&, int, int)),
-                this, SLOT(slotRowsRemoved(const QModelIndex&, int, int)));
+        if (view()->model())
+        {
+            connect(m_view->model(), SIGNAL(rowsRemoved(const QModelIndex&, int, int)),
+                    this, SLOT(slotRowsRemoved(const QModelIndex&, int, int)));
 
-        connect(m_view->model(), SIGNAL(layoutChanged()),
-                this, SLOT(slotLayoutChanged()));
+            connect(m_view->model(), SIGNAL(layoutChanged()),
+                    this, SLOT(slotLayoutChanged()));
 
-        connect(m_view->model(), SIGNAL(modelReset()),
-                this, SLOT(slotReset()));
+            connect(m_view->model(), SIGNAL(modelReset()),
+                    this, SLOT(slotReset()));
+        }
 
         connect(m_view, SIGNAL(entered(const QModelIndex &)),
                 this, SLOT(slotEntered(const QModelIndex &)));
@@ -150,7 +153,8 @@ void AbstractWidgetDelegateOverlay::setActive(bool active)
         delete m_widget;
         m_widget = 0;
         m_view->viewport()->removeEventFilter(this);
-        disconnect(m_view->model(), 0, this, 0);
+        if (view()->model())
+            disconnect(m_view->model(), 0, this, 0);
         disconnect(m_view, 0, this, 0);
     }
 }

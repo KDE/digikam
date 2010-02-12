@@ -150,6 +150,15 @@ void ItemViewImageDelegate::removeOverlay(ImageDelegateOverlay *overlay)
     d->overlays.removeAll(overlay);
 }
 
+void ItemViewImageDelegate::setAllOverlaysActive(bool active)
+{
+    Q_D(ItemViewImageDelegate);
+    foreach (ImageDelegateOverlay *overlay, d->overlays)
+    {
+        overlay->setActive(active);
+    }
+}
+
 void ItemViewImageDelegate::removeAllOverlays()
 {
     Q_D(ItemViewImageDelegate);
@@ -199,13 +208,17 @@ QSize ItemViewImageDelegate::gridSize() const
     return d->gridSize;
 }
 
-bool ItemViewImageDelegate::acceptsToolTip(const QPoint&, const QRect&, const QModelIndex&, QRect *) const
+bool ItemViewImageDelegate::acceptsToolTip(const QPoint&, const QRect& visualRect, const QModelIndex&, QRect *retRect) const
 {
+    if (retRect)
+        *retRect = visualRect;
     return true;
 }
 
-bool ItemViewImageDelegate::acceptsActivation(const QPoint& , const QRect&, const QModelIndex&, QRect *) const
+bool ItemViewImageDelegate::acceptsActivation(const QPoint& , const QRect& visualRect, const QModelIndex&, QRect *retRect) const
 {
+    if (retRect)
+        *retRect = visualRect;
     return true;
 }
 
@@ -346,7 +359,7 @@ void ItemViewImageDelegate::drawTags(QPainter *p, const QRect& r, const QString&
     p->drawText(r, Qt::AlignCenter, squeezedTextCached(p, r.width(), tagsString));
 }
 
-void ItemViewImageDelegate::drawStateRects(QPainter *p, const QStyleOptionViewItem& option, bool isSelected) const
+void ItemViewImageDelegate::drawFocusRect(QPainter *p, const QStyleOptionViewItem& option, bool isSelected) const
 {
     Q_D(const ItemViewImageDelegate);
     if (option.state & QStyle::State_HasFocus) //?? is current item
@@ -356,7 +369,11 @@ void ItemViewImageDelegate::drawStateRects(QPainter *p, const QStyleOptionViewIt
                        1, Qt::DotLine));
         p->drawRect(1, 1, d->rect.width()-3, d->rect.height()-3);
     }
+}
 
+void ItemViewImageDelegate::drawMouseOverRect(QPainter *p, const QStyleOptionViewItem& option) const
+{
+    Q_D(const ItemViewImageDelegate);
     if (option.state & QStyle::State_MouseOver)
     {
         p->setPen(QPen(option.palette.color(QPalette::Highlight), 3, Qt::SolidLine));
