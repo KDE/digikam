@@ -405,8 +405,8 @@ void AbstractAlbumModel::slotAlbumAboutToBeDeleted(Album *album)
     // begin removing operation
     int row = d->findIndexAsChild(album);
     QModelIndex parent = indexForAlbum(album->parent());
-    albumCleared(album);
     beginRemoveRows(parent, row, row);
+    albumCleared(album);
 
     // store album for slotAlbumHasBeenDeleted
     d->removingAlbum = album;
