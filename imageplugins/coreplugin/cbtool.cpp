@@ -122,10 +122,6 @@ CBTool::CBTool(QObject* parent)
 
     connect(d->previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));
-
-    // -------------------------------------------------------------
-
-    d->gboxSettings->enableButton(EditorToolSettings::Ok, false);
 }
 
 CBTool::~CBTool()
@@ -172,10 +168,6 @@ void CBTool::prepareEffect()
     toolView()->setEnabled(false);
 
     CBContainer settings = d->cbSettings->settings();
-
-    d->gboxSettings->enableButton(EditorToolSettings::Ok, (settings.red   != 0 ||
-                                                           settings.green != 0 ||
-                                                           settings.blue  != 0));
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 
     DImg preview = d->previewWidget->getOriginalRegionImage();

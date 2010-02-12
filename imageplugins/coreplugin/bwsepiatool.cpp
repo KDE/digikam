@@ -302,9 +302,6 @@ BWSepiaTool::BWSepiaTool(QObject* parent)
     // -------------------------------------------------------------
 
     d->previewWidget = new ImageGuideWidget;
-    d->previewWidget->setToolTip(i18n("The black and white conversion tool preview is "
-                                      "shown here. Picking a color on the image will "
-                                      "show the corresponding color level on the histogram."));
     setToolView(d->previewWidget);
     setPreviewModeMask(PreviewToolBar::AllPreviewModes);
 

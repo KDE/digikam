@@ -133,10 +133,6 @@ BCGTool::BCGTool(QObject* parent)
 
     connect(d->previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));
-
-    // -------------------------------------------------------------
-
-    d->gboxSettings->enableButton(EditorToolSettings::Ok, false);
 }
 
 BCGTool::~BCGTool()
@@ -183,9 +179,6 @@ void BCGTool::prepareEffect()
 
     BCGContainer settings = d->bcgSettings->settings();
 
-    d->gboxSettings->enableButton(EditorToolSettings::Ok, (settings.brightness != 0.0 ||
-                                                           settings.contrast != 1.0   ||
-                                                           settings.gamma != 1.0));
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 
     DImg preview = d->previewWidget->getOriginalRegionImage();

@@ -125,10 +125,6 @@ HSLTool::HSLTool(QObject* parent)
 
     connect(d->hslSettings, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotTimer()));
-
-    // -------------------------------------------------------------
-
-    d->gboxSettings->enableButton(EditorToolSettings::Ok, false);
 }
 
 HSLTool::~HSLTool()
@@ -154,8 +150,8 @@ void HSLTool::writeSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
 
-    group.writeEntry(d->configHistogramChannelEntry,     (int)d->gboxSettings->histogramBox()->channel());
-    group.writeEntry(d->configHistogramScaleEntry,       (int)d->gboxSettings->histogramBox()->scale());
+    group.writeEntry(d->configHistogramChannelEntry, (int)d->gboxSettings->histogramBox()->channel());
+    group.writeEntry(d->configHistogramScaleEntry,   (int)d->gboxSettings->histogramBox()->scale());
     d->hslSettings->writeSettings(group);
 
     config->sync();
@@ -174,10 +170,6 @@ void HSLTool::prepareEffect()
     toolView()->setEnabled(false);
 
     HSLContainer settings = d->hslSettings->settings();
-
-    d->gboxSettings->enableButton(EditorToolSettings::Ok, (settings.hue != 0.0        ||
-                                                           settings.saturation != 0.0 ||
-                                                           settings.lightness != 0.0));
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 
     DImg preview = d->previewWidget->getOriginalRegionImage();
