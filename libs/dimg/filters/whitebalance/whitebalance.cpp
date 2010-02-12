@@ -6,7 +6,7 @@
  * Date        : 2007-16-01
  * Description : white balance color correction.
  *
- * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2008 by Guillaume Castagnino <casta at xwing dot info>
  *
  * Some parts are inspired from RawPhoto implementation copyrighted
@@ -24,8 +24,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
-#define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
 
 #include "whitebalance.h"
 
@@ -101,7 +99,7 @@ public:
 };
 
 WhiteBalance::WhiteBalance(bool sixteenBit)
-            :     d(new WhiteBalancePriv)
+            : d(new WhiteBalancePriv)
 {
     d->WP     = sixteenBit ? 65536 : 256;
     d->rgbMax = sixteenBit ? 65536 : 256;
@@ -112,7 +110,7 @@ WhiteBalance::~WhiteBalance()
     delete d;
 }
 
-void WhiteBalance::whiteBalance(uchar *data, int width, int height, bool sixteenBit,
+void WhiteBalance::whiteBalance(uchar* data, int width, int height, bool sixteenBit,
                                 double black, double exposition,
                                 double temperature, double green, double dark,
                                 double gamma, double saturation)
@@ -306,7 +304,7 @@ void WhiteBalance::setLUTv()
     }
 }
 
-void WhiteBalance::adjustWhiteBalance(uchar *data, int width, int height, bool sixteenBit)
+void WhiteBalance::adjustWhiteBalance(uchar* data, int width, int height, bool sixteenBit)
 {
     uint i, j;
 
