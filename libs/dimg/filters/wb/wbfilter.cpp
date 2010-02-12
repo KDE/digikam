@@ -162,6 +162,11 @@ void WBFilter::autoWBAdjustementFromColor(const QColor& tc, double& temperature,
     kDebug() << "Green component:" << green;
 }
 
+void WBFilter::autoExposureAdjustement(DImg* img, double& black, double& expo)
+{
+    autoExposureAdjustement(img->bits(), img->width(), img->height(), img->sixteenBit(), black, expo);
+}
+
 void WBFilter::autoExposureAdjustement(uchar* data, int width, int height, bool sb, double& black, double& expo)
 {
     // Create an histogram of original image.

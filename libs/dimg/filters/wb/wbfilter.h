@@ -82,6 +82,7 @@ public:
     WBFilter(uchar* data, uint width, uint height, bool sixteenBit, const WBContainer& settings=WBContainer());
     virtual ~WBFilter();
 
+    static void autoExposureAdjustement(DImg *img, double& black, double& expo);
     static void autoExposureAdjustement(uchar* data, int width, int height, bool sb, double& black, double& expo);
     static void autoWBAdjustementFromColor(const QColor& tc, double& temperature, double& green);
 
