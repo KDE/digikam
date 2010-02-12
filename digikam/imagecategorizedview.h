@@ -112,6 +112,8 @@ public Q_SLOTS:
     void setCurrentWhenAvailable(qlonglong imageId);
     /** Set as current item the item identified by its file url */
     void setCurrentUrl(const KUrl& url);
+    /** Set as current item the item identified by the imageinfo */
+    void setCurrentInfo(const ImageInfo& info);
     /** Set selected items identified by their file urls */
     void setSelectedUrls(const KUrl::List& urlList);
 

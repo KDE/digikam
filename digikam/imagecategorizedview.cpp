@@ -140,6 +140,9 @@ void ImageCategorizedView::installDefaultModels()
 
 void ImageCategorizedView::setModels(ImageModel *model, ImageFilterModel *filterModel)
 {
+    if (d->delegate)
+        d->delegate->setAllOverlaysActive(false);
+
     if (d->filterModel)
     {
         disconnect(d->filterModel, SIGNAL(layoutAboutToBeChanged()),
@@ -168,6 +171,9 @@ void ImageCategorizedView::setModels(ImageModel *model, ImageFilterModel *filter
 
     connect(d->model, SIGNAL(imageInfosAdded(const QList<ImageInfo> &)),
             this, SLOT(slotImageInfosAdded()));
+
+    if (d->delegate)
+        d->delegate->setAllOverlaysActive(true);
 }
 
 ImageModel *ImageCategorizedView::imageModel() const
@@ -325,11 +331,13 @@ void ImageCategorizedView::setCurrentUrl(const KUrl& url)
 {
     QString path = url.toLocalFile();
     QModelIndex index = d->filterModel->indexForPath(path);
-    if (!index.isValid())
-    {
-        kWarning() << "no QModelIndex found for" << url;
-        return;
-    }
+    clearSelection();
+    setCurrentIndex(index);
+}
+
+void ImageCategorizedView::setCurrentInfo(const ImageInfo& info)
+{
+    QModelIndex index = d->filterModel->indexForImageInfo(info);
     clearSelection();
     setCurrentIndex(index);
 }
