@@ -22,9 +22,6 @@
  *
  * ============================================================ */
 
-#define CLAMP_0_255(x)   qMax(qMin(x, 255), 0)
-#define CLAMP_0_65535(x) qMax(qMin(x, 65535), 0)
-
 #include "bcgfilter.h"
 
 // C++ includes
@@ -157,21 +154,21 @@ void BCGFilter::applyBCG(uchar* bits, uint width, uint height, bool sixteenBits)
             switch (d->settings.channel)
             {
                 case BlueChannel:
-                    data[0] = CLAMP_0_255(d->map[data[0]]);
+                    data[0] = CLAMP0255(d->map[data[0]]);
                     break;
 
                 case GreenChannel:
-                    data[1] = CLAMP_0_255(d->map[data[1]]);
+                    data[1] = CLAMP0255(d->map[data[1]]);
                     break;
 
                 case RedChannel:
-                    data[2] = CLAMP_0_255(d->map[data[2]]);
+                    data[2] = CLAMP0255(d->map[data[2]]);
                     break;
 
                 default:      // all channels
-                    data[0] = CLAMP_0_255(d->map[data[0]]);
-                    data[1] = CLAMP_0_255(d->map[data[1]]);
-                    data[2] = CLAMP_0_255(d->map[data[2]]);
+                    data[0] = CLAMP0255(d->map[data[0]]);
+                    data[1] = CLAMP0255(d->map[data[1]]);
+                    data[2] = CLAMP0255(d->map[data[2]]);
                     break;
             }
 
@@ -191,21 +188,21 @@ void BCGFilter::applyBCG(uchar* bits, uint width, uint height, bool sixteenBits)
             switch (d->settings.channel)
             {
                 case BlueChannel:
-                    data[0] = CLAMP_0_65535(d->map16[data[0]]);
+                    data[0] = CLAMP065535(d->map16[data[0]]);
                     break;
 
                 case GreenChannel:
-                    data[1] = CLAMP_0_65535(d->map16[data[1]]);
+                    data[1] = CLAMP065535(d->map16[data[1]]);
                     break;
 
                 case RedChannel:
-                    data[2] = CLAMP_0_65535(d->map16[data[2]]);
+                    data[2] = CLAMP065535(d->map16[data[2]]);
                     break;
 
                 default:      // all channels
-                    data[0] = CLAMP_0_65535(d->map16[data[0]]);
-                    data[1] = CLAMP_0_65535(d->map16[data[1]]);
-                    data[2] = CLAMP_0_65535(d->map16[data[2]]);
+                    data[0] = CLAMP065535(d->map16[data[0]]);
+                    data[1] = CLAMP065535(d->map16[data[1]]);
+                    data[2] = CLAMP065535(d->map16[data[2]]);
                     break;
             }
 

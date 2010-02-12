@@ -21,9 +21,6 @@
  *
  * ============================================================ */
 
-#define CLAMP_0_255(x)   qMax(qMin(x, 255), 0)
-#define CLAMP_0_65535(x) qMax(qMin(x, 65535), 0)
-
 #include "cbfilter.h"
 
 // C++ includes
@@ -217,31 +214,31 @@ void CBFilter::setGamma(double val)
     for (int i=0; i<65536; ++i)
     {
         val2 = (int)(pow(((double)d->redMap16[i] / 65535), (1 / val)) * 65535);
-        d->redMap16[i] = CLAMP_0_65535(val2);
+        d->redMap16[i] = CLAMP065535(val2);
 
         val2 = (int)(pow(((double)d->greenMap16[i] / 65535), (1 / val)) * 65535);
-        d->greenMap16[i] = CLAMP_0_65535(val2);
+        d->greenMap16[i] = CLAMP065535(val2);
 
         val2 = (int)(pow(((double)d->blueMap16[i] / 65535), (1 / val)) * 65535);
-        d->blueMap16[i] = CLAMP_0_65535(val2);
+        d->blueMap16[i] = CLAMP065535(val2);
 
         val2 = (int)(pow(((double)d->alphaMap16[i] / 65535), (1 / val)) * 65535);
-        d->alphaMap16[i] = CLAMP_0_65535(val2);
+        d->alphaMap16[i] = CLAMP065535(val2);
     }
 
     for (int i=0; i<256; ++i)
     {
         val2 = (int)(pow(((double)d->redMap[i] / 255), (1 / val)) * 255);
-        d->redMap[i] = CLAMP_0_255(val2);
+        d->redMap[i] = CLAMP0255(val2);
 
         val2 = (int)(pow(((double)d->greenMap[i] / 255), (1 / val)) * 255);
-        d->greenMap[i] = CLAMP_0_255(val2);
+        d->greenMap[i] = CLAMP0255(val2);
 
         val2 = (int)(pow(((double)d->blueMap[i] / 255), (1 / val)) * 255);
-        d->blueMap[i] = CLAMP_0_255(val2);
+        d->blueMap[i] = CLAMP0255(val2);
 
         val2 = (int)(pow(((double)d->alphaMap[i] / 255), (1 / val)) * 255);
-        d->alphaMap[i] = CLAMP_0_255(val2);
+        d->alphaMap[i] = CLAMP0255(val2);
     }
 }
 

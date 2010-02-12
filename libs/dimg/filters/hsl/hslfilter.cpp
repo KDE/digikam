@@ -21,10 +21,6 @@
  *
  * ============================================================ */
 
-#define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
-#define CLAMP_0_255(x)   qMax(qMin(x, 255), 0)
-#define CLAMP_0_65535(x) qMax(qMin(x, 65535), 0)
-
 #include "hslfilter.h"
 
 // C++ includes
@@ -139,13 +135,13 @@ void HSLFilter::setSaturation(double val)
     for (int i = 0; i < 65536; ++i)
     {
         value = lround( (i * (100.0 + val)) / 100.0 );
-        d->stransfer16[i] = CLAMP_0_65535(value);
+        d->stransfer16[i] = CLAMP065535(value);
     }
 
     for (int i = 0; i < 256; ++i)
     {
         value = lround( (i * (100.0 + val)) / 100.0 );
-        d->stransfer[i]  = CLAMP_0_255(value);
+        d->stransfer[i]  = CLAMP0255(value);
     }
 }
 
