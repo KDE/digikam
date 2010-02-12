@@ -102,7 +102,6 @@ private:    // Private methods used internally.
 
 public:   // Public methods.
 
-    void stretchContrastImage(uchar *data, int w, int h, bool sixteenBit);
     void normalizeImage(uchar *data, int w, int h, bool sixteenBit);
     void invertImage(uchar *data, int w, int h, bool sixteenBit);
     void channelMixerImage(uchar *data, int Width, int Height, bool sixteenBit,

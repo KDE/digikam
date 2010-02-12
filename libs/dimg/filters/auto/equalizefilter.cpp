@@ -91,7 +91,7 @@ void EqualizeFilter::equalizeImage(uchar *data, int w, int h, bool sixteenBit)
 {
     if (!data || !w || !h)
     {
-       kWarning() << ("DImgImageFilters::equalizeImage: no image data available!");
+       kWarning() << ("no image data available!");
        return;
     }
 
@@ -120,7 +120,7 @@ void EqualizeFilter::equalizeImage(uchar *data, int w, int h, bool sixteenBit)
        if(equalize_map)
            delete [] equalize_map;
 
-       kWarning() << ("DImgImageFilters::equalizeImage: Unable to allocate memory!");
+       kWarning() << ("Unable to allocate memory!");
        return;
     }
 

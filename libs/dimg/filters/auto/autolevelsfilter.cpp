@@ -72,54 +72,78 @@ void AutoLevelsFilter::autoLevelsCorrectionImage(uchar* data, int w, int h, bool
 {
     if (!data || !w || !h)
     {
-       kWarning() << ("DImgImageFilters::autoLevelsCorrectionImage: no image data available!");
+       kWarning() << ("no image data available!");
        return;
     }
 
     postProgress(10);
-    uchar* desData;
+    uchar* desData            = 0;
+    ImageHistogram* histogram = 0;
+    ImageLevels* levels       = 0;
 
     // Create the new empty destination image data space.
-    if (sixteenBit)
-       desData = new uchar[w*h*8];
-    else
-       desData = new uchar[w*h*4];
+    if (!m_cancel)
+    {
+        if (sixteenBit)
+            desData = new uchar[w*h*8];
+        else
+            desData = new uchar[w*h*4];
 
-    postProgress(20);
+        postProgress(20);
+    }
 
     // Create an histogram of the current image.
-    ImageHistogram* histogram = new ImageHistogram(data, w, h, sixteenBit);
-    histogram->calculate();
-    postProgress(30);
+    if (!m_cancel)
+    {
+        histogram = new ImageHistogram(data, w, h, sixteenBit);
+        histogram->calculate();
+        postProgress(30);
+    }
 
     // Create an empty instance of levels to use.
-    ImageLevels* levels = new ImageLevels(sixteenBit);
-    postProgress(40);
+    if (!m_cancel)
+    {
+        levels = new ImageLevels(sixteenBit);
+        postProgress(40);
+    }
 
     // Initialize an auto levels correction of the histogram.
-    levels->levelsAuto(histogram);
-    postProgress(50);
+    if (!m_cancel)
+    {
+        levels->levelsAuto(histogram);
+        postProgress(50);
+    }
 
     // Calculate the LUT to apply on the image.
-    levels->levelsLutSetup(AlphaChannel);
-    postProgress(60);
+    if (!m_cancel)
+    {
+        levels->levelsLutSetup(AlphaChannel);
+        postProgress(60);
+    }
 
     // Apply the lut to the image.
-    levels->levelsLutProcess(data, desData, w, h);
-    postProgress(70);
+    if (!m_cancel)
+    {
+        levels->levelsLutProcess(data, desData, w, h);
+        postProgress(70);
+    }
 
-    if (sixteenBit)
-       memcpy (data, desData, w*h*8);
-    else
-       memcpy (data, desData, w*h*4);
+    if (!m_cancel)
+    {
+        if (sixteenBit)
+            memcpy (data, desData, w*h*8);
+        else
+            memcpy (data, desData, w*h*4);
 
-    postProgress(80);
+        postProgress(80);
+    }
 
     delete [] desData;
     delete histogram;
     delete levels;
 
-    postProgress(90);
+    if (!m_cancel)
+        postProgress(90);
 }
 
 }  // namespace Digikam
