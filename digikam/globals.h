@@ -4,9 +4,9 @@
  * http://www.digikam.org
  *
  * Date        : 2009-09-08
- * Description : global variables and flags for the digiKam project
+ * Description : global macros, variables and flags
  *
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -24,6 +24,11 @@
 #ifndef DIGIKAMGLOBALS_H
 #define DIGIKAMGLOBALS_H
 
+// Macros for image filters.
+#define CLAMP0255(a)   qMin(qMax(a,0), 255)
+#define CLAMP065535(a) qMin(qMax(a,0), 65535)
+#define CLAMP(x,l,u)   ((x)<(l)?(l):((x)>(u)?(u):(x)))
+
 namespace Digikam
 {
 
@@ -37,9 +42,9 @@ static const int NoRating  = -1;
 
 // segments for histograms and curves
 static const int NUM_SEGMENTS_16BIT = 65536;
-static const int NUM_SEGMENTS_8BIT = 256;
-static const int MAX_SEGMENT_16BIT = NUM_SEGMENTS_16BIT - 1;
-static const int MAX_SEGMENT_8BIT = NUM_SEGMENTS_8BIT - 1;
+static const int NUM_SEGMENTS_8BIT  = 256;
+static const int MAX_SEGMENT_16BIT  = NUM_SEGMENTS_16BIT - 1;
+static const int MAX_SEGMENT_8BIT   = NUM_SEGMENTS_8BIT - 1;
 
 // --------------------------------------------------------
 
