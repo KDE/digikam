@@ -36,6 +36,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 019 ==> 225272 : digiKam destroy some exif data.
 020 ==> 226584 : digiKam crashes in the starting phase.
 021 ==> 226537 : hovering doesn't show sub-tags
-022 ==>
+022 ==> 225827 : gpswidget inactive on default selected photo.
+023 ==>
 
 

@@ -1058,8 +1058,6 @@ void DigikamView::setThumbSize(int size)
 
 void DigikamView::slotThumbSizeEffect()
 {
-    emit signalNoCurrentItem();
-
     d->iconView->setThumbnailSize(d->thumbSize);
     toggleZoomActions();
 
