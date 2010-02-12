@@ -849,7 +849,8 @@ QVariant AbstractCheckableAlbumModel::albumData(Album *a, int role) const
 {
     if (role == Qt::CheckStateRole)
     {
-        if (m_extraFlags & Qt::ItemIsUserCheckable)
+        if (m_extraFlags & Qt::ItemIsUserCheckable
+            && (!a->isRoot() || m_rootIsCheckable))
         {
             // with Qt::Unchecked as default, albums not in the hash (initially all)
             // are simply regarded as unchecked
