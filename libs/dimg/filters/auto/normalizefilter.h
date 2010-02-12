@@ -3,8 +3,8 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2005-05-25
- * Description : Charcoal threaded image filter.
+ * Date        : 2005-24-01
+ * Description : normalize image filter.
  *
  * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,38 +21,38 @@
  *
  * ============================================================ */
 
-#ifndef CHARCOAL_H
-#define CHARCOAL_H
+#ifndef NORMALIZEFILTER_H
+#define NORMALIZEFILTER_H
 
 // Local includes
 
+#include "digikam_export.h"
 #include "dimgthreadedfilter.h"
+#include "globals.h"
 
 using namespace Digikam;
 
-namespace DigikamCharcoalImagesPlugin
+namespace Digikam
 {
 
-class Charcoal : public DImgThreadedFilter
+class DImg;
+
+class DIGIKAM_EXPORT NormalizeFilter : public DImgThreadedFilter
 {
 
 public:
 
-    explicit Charcoal(DImg* orgImage, QObject* parent=0, double pencil=5.0, double smooth=10.0);
-    ~Charcoal(){};
+    explicit NormalizeFilter(DImg* orgImage, QObject* parent=0);
+    NormalizeFilter(uchar* data, uint width, uint height, bool sixteenBit);
+    virtual ~NormalizeFilter();
 
 private:
 
     void filterImage();
-    bool convolveImage(const unsigned int order, const double* kernel);
-    int  getOptimalKernelWidth(double radius, double sigma);
 
-private:
-
-    double m_pencil;
-    double m_smooth;
+    void normalizeImage(uchar* data, int w, int h, bool sixteenBit);
 };
 
-}  // namespace DigikamCharcoalImagesPlugin
+}  // namespace Digikam
 
-#endif /* CHARCOAL_H */
+#endif /* NORMALIZEFILTER_H */

@@ -40,7 +40,7 @@
 // Local includes
 
 #include "dimg.h"
-#include "dimgimagefilters.h"
+#include "normalizefilter.h"
 
 namespace DigikamAntiVignettingImagesPlugin
 {
@@ -161,8 +161,9 @@ void AntiVignetting::filterImage()
     // Normalize colors for a best rendering.
     if (m_normalize)
     {
-       DImgImageFilters filters;
-       filters.normalizeImage(m_destImage.bits(), Width, Height, m_destImage.sixteenBit());
+        NormalizeFilter normalize(&m_destImage);
+        normalize.startFilterDirectly();
+        m_destImage.putImageData(normalize.getTargetImage().bits());
     }
 
     delete [] ldens;

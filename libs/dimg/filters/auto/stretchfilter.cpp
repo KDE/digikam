@@ -57,13 +57,13 @@ struct int_packet
 };
 
 StretchFilter::StretchFilter(DImg* orgImage, QObject* parent)
-              : DImgThreadedFilter(orgImage, parent, "StretchFilter")
+             : DImgThreadedFilter(orgImage, parent, "StretchFilter")
 {
     initFilter();
 }
 
 StretchFilter::StretchFilter(uchar* bits, uint width, uint height, bool sixteenBits)
-              : DImgThreadedFilter()
+             : DImgThreadedFilter()
 {
     stretchContrastImage(bits, width, height, sixteenBits);
 }
@@ -77,7 +77,6 @@ void StretchFilter::filterImage()
     stretchContrastImage(m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(), m_orgImage.sixteenBit());
     m_destImage = m_orgImage;
 }
-
 
 /** Performs histogram normalization of the image. The algorithm normalizes
     the pixel values from an image for to span the full range

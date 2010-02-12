@@ -6,7 +6,7 @@
  * Date        : 2005-05-25
  * Description : Charcoal threaded image filter.
  *
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Original Charcoal algorithm copyright 2002
  * by Daniel M. Duley <mosfet@kde.org> from KImageEffect API.
@@ -42,13 +42,14 @@
 
 #include "dimg.h"
 #include "dimggaussianblur.h"
+#include "stretchfilter.h"
 #include "dimgimagefilters.h"
 
 namespace DigikamCharcoalImagesPlugin
 {
 
-Charcoal::Charcoal(Digikam::DImg *orgImage, QObject *parent, double pencil, double smooth)
-        : Digikam::DImgThreadedFilter(orgImage, parent, "Charcoal")
+Charcoal::Charcoal(DImg* orgImage, QObject* parent, double pencil, double smooth)
+        : DImgThreadedFilter(orgImage, parent, "Charcoal")
 {
     m_pencil = pencil;
     m_smooth = smooth;
@@ -56,7 +57,7 @@ Charcoal::Charcoal(Digikam::DImg *orgImage, QObject *parent, double pencil, doub
     initFilter();
 }
 
-void Charcoal::filterImage(void)
+void Charcoal::filterImage()
 {
     if (m_orgImage.isNull())
     {
@@ -98,30 +99,32 @@ void Charcoal::filterImage(void)
 
     // -- Applying Gaussian blur effect ---------------------------------------
 
-    Digikam::DImgGaussianBlur(this, m_destImage, m_destImage, 80, 85, (int)(m_smooth/10.0));
+    DImgGaussianBlur(this, m_destImage, m_destImage, 80, 85, (int)(m_smooth/10.0));
 
     if (m_cancel)
         return;
 
     // -- Applying stretch contrast color effect -------------------------------
 
-    Digikam::DImgImageFilters().stretchContrastImage(m_destImage.bits(), m_destImage.width(),
-                                m_destImage.height(), m_destImage.sixteenBit());
+    StretchFilter strech(&m_destImage);
+    strech.startFilterDirectly();
+    m_destImage.putImageData(strech.getTargetImage().bits());
+
     postProgress( 90 );
     if (m_cancel)
         return;
 
     // -- Inverting image color -----------------------------------------------
 
-    Digikam::DImgImageFilters().invertImage(m_destImage.bits(), m_destImage.width(),
-                                m_destImage.height(), m_destImage.sixteenBit());
+    DImgImageFilters().invertImage(m_destImage.bits(), m_destImage.width(),
+                                   m_destImage.height(), m_destImage.sixteenBit());
     postProgress( 95 );
     if (m_cancel)
         return;
 
     // -- Convert to neutral black & white ------------------------------------
 
-    Digikam::DImgImageFilters().channelMixerImage(
+    DImgImageFilters().channelMixerImage(
                    m_destImage.bits(), m_destImage.width(),
                    m_destImage.height(), m_destImage.sixteenBit(),  // Image data.
                    true,                                            // Preserve luminosity.
@@ -209,7 +212,7 @@ bool Charcoal::convolveImage(const unsigned int order, const double *kernel)
                 for (mcx = 0; !m_cancel && (mcx < kernelWidth); ++mcx, ++sx)
                 {
                     mx = sx < 0 ? 0 : sx > (int) width - 1 ? width - 1 : sx;
-                    Digikam::DColor color(sdata + mx * sdepth + (width * my * sdepth), sixteenBit);
+                    DColor color(sdata + mx * sdepth + (width * my * sdepth), sixteenBit);
                     red += (*k) * (color.red() * 257.0);
                     green += (*k) * (color.green() * 257.0);
                     blue += (*k) * (color.blue() * 257.0);
@@ -223,7 +226,7 @@ bool Charcoal::convolveImage(const unsigned int order, const double *kernel)
             blue  =  blue < 0.0 ? 0.0 :  blue > maxClamp ? maxClamp :  blue+0.5;
             alpha = alpha < 0.0 ? 0.0 : alpha > maxClamp ? maxClamp : alpha+0.5;
 
-            Digikam::DColor color((int)(red / 257UL),  (int)(green / 257UL),
+            DColor color((int)(red / 257UL),  (int)(green / 257UL),
                                   (int)(blue / 257UL), (int)(alpha / 257UL), sixteenBit);
             color.setPixel((ddata + x * ddepth + (width * y * ddepth)));
         }

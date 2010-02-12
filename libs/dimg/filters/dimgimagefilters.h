@@ -43,31 +43,6 @@ public:
     DImgImageFilters(){};
     ~DImgImageFilters(){};
 
-private:    // Private structures used internally.
-
-    struct double_packet
-    {
-        double red;
-        double green;
-        double blue;
-        double alpha;
-    };
-
-    struct int_packet
-    {
-        unsigned int red;
-        unsigned int green;
-        unsigned int blue;
-        unsigned int alpha;
-    };
-
-    struct NormalizeParam
-    {
-        unsigned short *lut;
-        double min;
-        double max;
-    };
-
 private:    // Private methods used internally.
 
     // Methods for Channel Mixer.
@@ -102,7 +77,6 @@ private:    // Private methods used internally.
 
 public:   // Public methods.
 
-    void normalizeImage(uchar *data, int w, int h, bool sixteenBit);
     void invertImage(uchar *data, int w, int h, bool sixteenBit);
     void channelMixerImage(uchar *data, int Width, int Height, bool sixteenBit,
                            bool bPreserveLum, bool bMonochrome,
@@ -114,9 +88,9 @@ public:   // Public methods.
     void gaussianBlurImage(uchar *data, int width, int height, bool sixteenBit, int radius);
     void sharpenImage(uchar *data, int width, int height, bool sixteenBit, int radius);
     void unsharpMaskImage(uchar *data, int width, int height, bool sixteenBit,
-    		int radius, double amount, double threshold);
+                          int radius, double amount, double threshold);
     void refocusImage(uchar *data, int width, int height, bool sixteenBit, int matrixSize,
-    		double radius, double gauss, double correlation, double noise);
+                      double radius, double gauss, double correlation, double noise);
     void pixelAntiAliasing(uchar *data, int Width, int Height, double X, double Y,
                            uchar *A, uchar *R, uchar *G, uchar *B);
 

@@ -6,7 +6,7 @@
  * Date        : 2008-11-28
  * Description : auto colors correction batch tool.
  *
- * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -64,7 +64,7 @@ private:
         AutoExposureCorrection
     };
 
-    KComboBox *m_comboBox;
+    KComboBox* m_comboBox;
 };
 
 }  // namespace Digikam

@@ -41,7 +41,8 @@
 #include "dimg.h"
 #include "autolevelsfilter.h"
 #include "equalizefilter.h"
-#include "dimgimagefilters.h"
+#include "stretchfilter.h"
+#include "normalizefilter.h"
 #include "editortoolsettings.h"
 #include "histogramwidget.h"
 #include "imageiface.h"
@@ -320,8 +321,6 @@ void AutoCorrectionTool::finalRendering()
 
 void AutoCorrectionTool::autoCorrection(uchar* data, int w, int h, bool sb, int type)
 {
-    DImgImageFilters filter;
-
     switch (type)
     {
         case AutoLevelsCorrection:
@@ -331,7 +330,7 @@ void AutoCorrectionTool::autoCorrection(uchar* data, int w, int h, bool sb, int 
         }
         case NormalizeCorrection:
         {
-            filter.normalizeImage(data, w, h, sb);
+            NormalizeFilter normalize(data, w, h, sb);
             break;
         }
         case EqualizeCorrection:
@@ -341,7 +340,7 @@ void AutoCorrectionTool::autoCorrection(uchar* data, int w, int h, bool sb, int 
         }
         case StretchContrastCorrection:
         {
-            filter.stretchContrastImage(data, w, h, sb);
+            StretchFilter stretch(data, w, h, sb);
             break;
         }
         case AutoExposureCorrection:

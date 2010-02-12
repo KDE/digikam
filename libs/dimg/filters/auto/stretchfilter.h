@@ -50,7 +50,7 @@ private:
 
     void filterImage();
 
-    void stretchContrastImage(uchar *data, int w, int h, bool sixteenBit);
+    void stretchContrastImage(uchar* data, int w, int h, bool sixteenBit);
 };
 
 }  // namespace Digikam

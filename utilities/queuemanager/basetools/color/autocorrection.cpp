@@ -6,7 +6,7 @@
  * Date        : 2008-11-28
  * Description : auto colors correction batch tool.
  *
- * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -40,8 +40,9 @@
 #include "dimg.h"
 #include "autolevelsfilter.h"
 #include "equalizefilter.h"
+#include "stretchfilter.h"
 #include "whitebalance.h"
-#include "dimgimagefilters.h"
+#include "normalizefilter.h"
 
 namespace Digikam
 {
@@ -100,8 +101,6 @@ bool AutoCorrection::toolOperations()
 
     int type = settings()["AutoCorrectionFilter"].toInt();
 
-    DImgImageFilters filter;
-
     switch (type)
     {
         case AutoLevelsCorrection:
@@ -113,7 +112,9 @@ bool AutoCorrection::toolOperations()
         }
         case NormalizeCorrection:
         {
-            filter.normalizeImage(image().bits(), image().width(), image().height(), image().sixteenBit());
+            NormalizeFilter normalize(&image());
+            normalize.startFilterDirectly();
+            image().putImageData(normalize.getTargetImage().bits());
             break;
         }
         case EqualizeCorrection:
@@ -125,7 +126,9 @@ bool AutoCorrection::toolOperations()
         }
         case StretchContrastCorrection:
         {
-            filter.stretchContrastImage(image().bits(), image().width(), image().height(), image().sixteenBit());
+            StretchFilter strech(&image());
+            strech.startFilterDirectly();
+            image().putImageData(strech.getTargetImage().bits());
             break;
         }
         case AutoExposureCorrection:
