@@ -60,6 +60,8 @@ public:
         toolTip            = 0;
         currentMouseEvent  = 0;
         showToolTip        = false;
+        usePointingHand    = true;
+        scrollStepFactor   = 10;
         ensureOneSelectedItem     = false;
         ensureInitialSelectedItem = false;
         hintAtSelectionRow = -1;
@@ -68,6 +70,8 @@ public:
     DItemDelegate           *delegate;
     ItemViewToolTip         *toolTip;
     bool                     showToolTip;
+    bool                     usePointingHand;
+    int                      scrollStepFactor;
 
     QMouseEvent             *currentMouseEvent;
     bool                     ensureOneSelectedItem;
@@ -136,11 +140,25 @@ void DCategorizedView::setItemDelegate(DItemDelegate *delegate)
     }
 
     d->delegate = delegate;
-    d->delegate->setSpacing(10);
     KCategorizedView::setItemDelegate(d->delegate);
 
     connect(d->delegate, SIGNAL(gridSizeChanged(const QSize &)),
             this, SLOT(slotGridSizeChanged(const QSize &)));
+}
+
+void DCategorizedView::setSpacing(int spacing)
+{
+    d->delegate->setSpacing(spacing);
+}
+
+void DCategorizedView::setUsePointingHandCursor(bool useCursor)
+{
+    d->usePointingHand = useCursor;
+}
+
+void DCategorizedView::setScrollStepGranularity(int factor)
+{
+    d->scrollStepFactor = qMax(1, factor);
 }
 
 DItemDelegate *DCategorizedView::delegate() const
@@ -255,8 +273,8 @@ void DCategorizedView::slotGridSizeChanged(const QSize& gridSize)
 
     if (!gridSize.isNull())
     {
-        horizontalScrollBar()->setSingleStep(gridSize.width() / 20);
-        verticalScrollBar()->setSingleStep(gridSize.height() / 20);
+        horizontalScrollBar()->setSingleStep(gridSize.width() / d->scrollStepFactor);
+        verticalScrollBar()->setSingleStep(gridSize.height() / d->scrollStepFactor);
     }
 }
 
@@ -299,7 +317,6 @@ void DCategorizedView::slotActivated(const QModelIndex& index)
         if (!d->delegate->acceptsActivation(d->currentMouseEvent->pos(), visualRect(index), index))
             return;
     }
-
     indexActivated(index);
 }
 
@@ -560,7 +577,8 @@ void DCategorizedView::mouseMoveEvent(QMouseEvent *event)
     if (index.isValid())
     {
         indexVisualRect = visualRect(index);
-        if (KGlobalSettings::changeCursorOverIcon() &&
+        if (d->usePointingHand &&
+            KGlobalSettings::changeCursorOverIcon() &&
             d->delegate->acceptsActivation(event->pos(), indexVisualRect, index))
         {
             setCursor(Qt::PointingHandCursor);
@@ -585,8 +603,8 @@ void DCategorizedView::mouseMoveEvent(QMouseEvent *event)
 void DCategorizedView::wheelEvent(QWheelEvent* event)
 {
     // KCategorizedView updates the single step at some occasions in a private methody
-    horizontalScrollBar()->setSingleStep(d->delegate->gridSize().height() / 10);
-    verticalScrollBar()->setSingleStep(d->delegate->gridSize().width() / 10);
+    horizontalScrollBar()->setSingleStep(d->delegate->gridSize().height() / d->scrollStepFactor);
+    verticalScrollBar()->setSingleStep(d->delegate->gridSize().width() / d->scrollStepFactor);
 
     if (event->modifiers() & Qt::ControlModifier) {
         const int delta = event->delta();
@@ -598,7 +616,15 @@ void DCategorizedView::wheelEvent(QWheelEvent* event)
         return;
     }
 
-    KCategorizedView::wheelEvent(event);
+    if (verticalScrollBarPolicy() == Qt::ScrollBarAlwaysOff && event->orientation() == Qt::Vertical)
+    {
+        QWheelEvent n(event->pos(), event->globalPos(), event->delta(),
+                      event->buttons(), event->modifiers(), Qt::Horizontal);
+        QApplication::sendEvent(horizontalScrollBar(), &n);
+        event->setAccepted(n.isAccepted());
+    }
+    else
+        KCategorizedView::wheelEvent(event);
 }
 
 void DCategorizedView::keyPressEvent(QKeyEvent *event)
