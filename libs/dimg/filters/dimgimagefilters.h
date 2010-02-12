@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2005-24-01
- * Description : misc image filters 
+ * Description : misc image filters
  *
  * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -24,11 +24,6 @@
 #ifndef DIMGIMAGE_FILTERS_H
 #define DIMGIMAGE_FILTERS_H
 
-#define CLAMP0255(a)    qMin(qMax(a,0), 255)
-#define CLAMP065535(a)  qMin(qMax(a,0), 65535)
-#define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
-#define ROUND(x) ((int) ((x) + 0.5))
-
 // C++ includes
 
 #include <cmath>
@@ -36,6 +31,7 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "globals.h"
 
 namespace Digikam
 {
@@ -74,7 +70,7 @@ private:    // Private structures used internally.
 
 private:    // Private methods used internally.
 
-    // Methods for Channel Mixer.   
+    // Methods for Channel Mixer.
 
     inline double CalculateNorm(float RedGain, float GreenGain, float BlueGain, bool bPreserveLum)
     {
@@ -120,9 +116,9 @@ public:   // Public methods.
                         int redMask, int greenMask, int blueMask);
     void gaussianBlurImage(uchar *data, int width, int height, bool sixteenBit, int radius);
     void sharpenImage(uchar *data, int width, int height, bool sixteenBit, int radius);
-    void unsharpMaskImage(uchar *data, int width, int height, bool sixteenBit, 
+    void unsharpMaskImage(uchar *data, int width, int height, bool sixteenBit,
     		int radius, double amount, double threshold);
-    void refocusImage(uchar *data, int width, int height, bool sixteenBit, int matrixSize, 
+    void refocusImage(uchar *data, int width, int height, bool sixteenBit, int matrixSize,
     		double radius, double gauss, double correlation, double noise);
     void pixelAntiAliasing(uchar *data, int Width, int Height, double X, double Y,
                            uchar *A, uchar *R, uchar *G, uchar *B);

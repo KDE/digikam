@@ -50,7 +50,6 @@
 #include "dimgsharpen.h"
 #include "dimgunsharpmask.h"
 #include "dimgrefocus.h"
-#include "globals.h"
 
 namespace Digikam
 {
@@ -816,7 +815,7 @@ void DImgImageFilters::changeTonality(uchar *data, int width, int height, bool s
         {
             // Convert to grayscale using tonal mask
 
-            lig = ROUND (0.3 * ptr[2] + 0.59 * ptr[1] + 0.11 * ptr[0]);
+            lig = lround(0.3 * ptr[2] + 0.59 * ptr[1] + 0.11 * ptr[0]);
 
             mask.setRGB(hue, sat, lig, sixteenBit);
 
@@ -834,7 +833,7 @@ void DImgImageFilters::changeTonality(uchar *data, int width, int height, bool s
         {
             // Convert to grayscale using tonal mask
 
-            lig = ROUND (0.3 * ptr[2] + 0.59 * ptr[1] + 0.11 * ptr[0]);
+            lig = lround(0.3 * ptr[2] + 0.59 * ptr[1] + 0.11 * ptr[0]);
 
             mask.setRGB(hue, sat, lig, sixteenBit);
 
