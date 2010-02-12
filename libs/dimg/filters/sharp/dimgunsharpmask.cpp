@@ -91,7 +91,7 @@ void DImgUnsharpMask::filterImage()
             else
                 value = (double)(p.red()) + value*m_amount;
 
-            q.setRed(CLAMP(ROUND(value), 0, quantum));
+            q.setRed(CLAMP(lround(value), 0, quantum));
 
             // Green Channel.
             value = (double)(p.green())-(double)(q.green());
@@ -101,7 +101,7 @@ void DImgUnsharpMask::filterImage()
             else
                 value = (double)(p.green()) + value*m_amount;
 
-            q.setGreen(CLAMP(ROUND(value), 0, quantum));
+            q.setGreen(CLAMP(lround(value), 0, quantum));
 
             // Blue Channel.
             value = (double)(p.blue())-(double)(q.blue());
@@ -111,7 +111,7 @@ void DImgUnsharpMask::filterImage()
             else
                 value = (double)(p.blue()) + value*m_amount;
 
-            q.setBlue(CLAMP(ROUND(value), 0, quantum));
+            q.setBlue(CLAMP(lround(value), 0, quantum));
 
             // Alpha Channel.
             value = (double)(p.alpha())-(double)(q.alpha());
@@ -121,7 +121,7 @@ void DImgUnsharpMask::filterImage()
             else
                 value = (double)(p.alpha()) + value*m_amount;
 
-            q.setAlpha(CLAMP(ROUND(value), 0, quantum));
+            q.setAlpha(CLAMP(lround(value), 0, quantum));
 
             m_destImage.setPixelColor(x, y, q);
         }
