@@ -439,7 +439,7 @@ void ItemViewImageDelegate::prepareBackground()
                                                            d->rect.height());
 }
 
-void ItemViewImageDelegate::prepareRatingPixmaps()
+void ItemViewImageDelegate::prepareRatingPixmaps(bool composeOverBackground)
 {
     /// Please call this method after prepareBackground() and when d->ratingPixmap is set
 
@@ -452,11 +452,19 @@ void ItemViewImageDelegate::prepareRatingPixmaps()
     {
         QPixmap basePix;
 
-        // do this once for regular, once for selected backgrounds
-        if (sel)
-            basePix = d->selPixmap.copy(d->ratingRect);
+        if (composeOverBackground)
+        {
+            // do this once for regular, once for selected backgrounds
+            if (sel)
+                basePix = d->selPixmap.copy(d->ratingRect);
+            else
+                basePix = d->regPixmap.copy(d->ratingRect);
+        }
         else
-            basePix = d->regPixmap.copy(d->ratingRect);
+        {
+            basePix = QPixmap(d->ratingRect.size());
+            basePix.fill(Qt::transparent);
+        }
 
         for (int rating=1; rating<=5; ++rating)
         {

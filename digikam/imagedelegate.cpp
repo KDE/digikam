@@ -288,7 +288,9 @@ void ImageDelegate::updateSizeRectsAndPixmaps()
 
     if (!d->ratingRect.isNull())
     {
-        prepareRatingPixmaps();
+        // Normally we prepare the pixmaps over the background of the rating rect.
+        // If the rating is drawn over the thumbnail, we can only draw over a transparent pixmap.
+        prepareRatingPixmaps(!d->ratingOverThumbnail);
     }
 
     // ---- Drawing related caches ----

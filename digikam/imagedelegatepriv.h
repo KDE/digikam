@@ -46,8 +46,9 @@ public:
     {
         categoryDrawer = 0;
         contentWidth   = 0;
-        drawMouseOverFrame = true;
-        drawFocusFrame     = true;
+        drawMouseOverFrame  = true;
+        drawFocusFrame      = true;
+        ratingOverThumbnail = false;
 
         actualPixmapRectCache.setMaxCost(250);
     }
@@ -64,6 +65,7 @@ public:
     QRect                     tagRect;
     bool                      drawFocusFrame;
     bool                      drawMouseOverFrame;
+    bool                      ratingOverThumbnail;
 
     QCache<qlonglong, QRect>  actualPixmapRectCache;
     ImageCategoryDrawer      *categoryDrawer;

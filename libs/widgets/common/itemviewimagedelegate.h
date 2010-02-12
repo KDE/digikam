@@ -102,7 +102,7 @@ protected:
     void prepareFonts();
     void prepareMetrics(int maxWidth);
     void prepareBackground();
-    void prepareRatingPixmaps();
+    void prepareRatingPixmaps(bool composeOverBackground = true);
 
     // reimplement these in subclasses
     virtual void invalidatePaintingCache();
