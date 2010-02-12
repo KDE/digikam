@@ -34,5 +34,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 017 ==> 226118 : IPTC metadata tag delimiter is no longer stored (since 0.10).
 018 ==> 226235 : digiKam fails after upgrade - no albums - rh tag & captions bar frozen.
 019 ==> 225272 : digiKam destroy some exif data.
-020 ==> 
+020 ==> 226584 : digiKam crashes in the starting phase.
+021 ==> 
+
 
