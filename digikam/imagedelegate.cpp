@@ -191,7 +191,10 @@ void ImageDelegate::paint(QPainter *p, const QStyleOptionViewItem& option, const
         drawTags(p, d->tagRect, tags, isSelected);
     }
 
-    drawStateRects(p, option, isSelected);
+    if (d->drawFocusFrame)
+        drawFocusRect(p, option, isSelected);
+    if (d->drawMouseOverFrame)
+        drawMouseOverRect(p, option);
 
     p->restore();
 
@@ -255,6 +258,12 @@ void ImageDelegate::invalidatePaintingCache()
     ItemViewImageDelegate::invalidatePaintingCache();
 }
 
+void ImageDelegate::updateContentWidth()
+{
+    Q_D(ImageDelegate);
+    d->contentWidth = d->thumbSize.size() + 2*d->radius;
+}
+
 void ImageDelegate::updateSizeRectsAndPixmaps()
 {
     Q_D(ImageDelegate);
@@ -266,12 +275,12 @@ void ImageDelegate::updateSizeRectsAndPixmaps()
 
     // ---- Fixed sizes and metrics ----
 
-    int w = d->thumbSize.size() + 2*d->radius;
-    prepareMetrics(w);
+    updateContentWidth();
+    prepareMetrics(d->contentWidth);
 
     // ---- Calculate rects ----
 
-    updateRects(w);
+    updateRects();
 
     // ---- Cached pixmaps ----
 

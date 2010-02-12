@@ -45,9 +45,14 @@ public:
     ImageDelegatePrivate()
     {
         categoryDrawer = 0;
+        contentWidth   = 0;
+        drawMouseOverFrame = true;
+        drawFocusFrame     = true;
 
         actualPixmapRectCache.setMaxCost(250);
     }
+
+    int                       contentWidth;
 
     QRect                     dateRect;
     QRect                     modDateRect;
@@ -57,6 +62,8 @@ public:
     QRect                     resolutionRect;
     QRect                     sizeRect;
     QRect                     tagRect;
+    bool                      drawFocusFrame;
+    bool                      drawMouseOverFrame;
 
     QCache<qlonglong, QRect>  actualPixmapRectCache;
     ImageCategoryDrawer      *categoryDrawer;
