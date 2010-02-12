@@ -39,6 +39,7 @@
 
 #include "dimg.h"
 #include "autolevelsfilter.h"
+#include "equalizefilter.h"
 #include "whitebalance.h"
 #include "dimgimagefilters.h"
 
@@ -117,7 +118,9 @@ bool AutoCorrection::toolOperations()
         }
         case EqualizeCorrection:
         {
-            filter.equalizeImage(image().bits(), image().width(), image().height(), image().sixteenBit());
+            EqualizeFilter equalize(&image());
+            equalize.startFilterDirectly();
+            image().putImageData(equalize.getTargetImage().bits());
             break;
         }
         case StretchContrastCorrection:

@@ -6,7 +6,7 @@
  * Date        : 2005-24-01
  * Description : misc image filters
  *
- * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -102,7 +102,6 @@ private:    // Private methods used internally.
 
 public:   // Public methods.
 
-    void equalizeImage(uchar *data, int w, int h, bool sixteenBit);
     void stretchContrastImage(uchar *data, int w, int h, bool sixteenBit);
     void normalizeImage(uchar *data, int w, int h, bool sixteenBit);
     void invertImage(uchar *data, int w, int h, bool sixteenBit);

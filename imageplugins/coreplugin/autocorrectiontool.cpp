@@ -40,6 +40,7 @@
 
 #include "dimg.h"
 #include "autolevelsfilter.h"
+#include "equalizefilter.h"
 #include "dimgimagefilters.h"
 #include "editortoolsettings.h"
 #include "histogramwidget.h"
@@ -335,7 +336,7 @@ void AutoCorrectionTool::autoCorrection(uchar* data, int w, int h, bool sb, int 
         }
         case EqualizeCorrection:
         {
-            filter.equalizeImage(data, w, h, sb);
+            EqualizeFilter autolevels(data, w, h, sb);
             break;
         }
         case StretchContrastCorrection:
