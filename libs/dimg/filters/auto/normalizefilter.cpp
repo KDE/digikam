@@ -76,9 +76,10 @@ void NormalizeFilter::filterImage()
     images that are dim or washed out.*/
 void NormalizeFilter::normalizeImage(uchar* data, int w, int h, bool sixteenBit)
 {
-    NormalizeParam  param;
-    int             x, i;
-    unsigned short  range;
+    NormalizeParam param;
+    int            x, i;
+    unsigned short range;
+    int            progress;
 
     int segments = sixteenBit ? NUM_SEGMENTS_16BIT : NUM_SEGMENTS_8BIT;
 
@@ -96,7 +97,7 @@ void NormalizeFilter::normalizeImage(uchar* data, int w, int h, bool sixteenBit)
         uchar red, green, blue;
         uchar *ptr = data;
 
-        for (i = 0 ; i < w*h ; ++i)
+        for (i = 0 ; !m_cancel && (i < w*h) ; ++i)
         {
             blue  = ptr[0];
             green = ptr[1];
@@ -119,7 +120,7 @@ void NormalizeFilter::normalizeImage(uchar* data, int w, int h, bool sixteenBit)
         unsigned short red, green, blue;
         unsigned short *ptr = (unsigned short *)data;
 
-        for (i = 0 ; i < w*h ; ++i)
+        for (i = 0 ; i < !m_cancel && (w*h) ; ++i)
         {
             blue  = ptr[0];
             green = ptr[1];
@@ -140,15 +141,22 @@ void NormalizeFilter::normalizeImage(uchar* data, int w, int h, bool sixteenBit)
 
     // Calculate LUT.
 
-    range = (unsigned short)(param.max - param.min);
-
-    if (range != 0)
+    if (!m_cancel)
     {
-       for (x = (int)param.min ; x <= (int)param.max ; ++x)
-          param.lut[x] = (unsigned short)((segments-1) * (x - param.min) / range);
+        range = (unsigned short)(param.max - param.min);
+
+        if (range != 0)
+        {
+            for (x = (int)param.min ; x <= (int)param.max ; ++x)
+                param.lut[x] = (unsigned short)((segments-1) * (x - param.min) / range);
+        }
+        else
+        {
+            param.lut[(int)param.min] = (unsigned short)param.min;
+        }
     }
-    else
-       param.lut[(int)param.min] = (unsigned short)param.min;
+
+    int size = w*h;
 
     // Apply LUT to image.
 
@@ -157,7 +165,7 @@ void NormalizeFilter::normalizeImage(uchar* data, int w, int h, bool sixteenBit)
         uchar red, green, blue;
         uchar *ptr = data;
 
-        for (i = 0 ; i < w*h ; ++i)
+        for (i = 0 ; !m_cancel && (i < size) ; ++i)
         {
             blue  = ptr[0];
             green = ptr[1];
@@ -168,6 +176,10 @@ void NormalizeFilter::normalizeImage(uchar* data, int w, int h, bool sixteenBit)
             ptr[2] = param.lut[red];
 
             ptr += 4;
+
+            progress = (int)(((double)i * 100.0) / size);
+            if ( progress%5 == 0 )
+                postProgress( progress );
         }
     }
     else               // 16 bits image.
@@ -175,7 +187,7 @@ void NormalizeFilter::normalizeImage(uchar* data, int w, int h, bool sixteenBit)
         unsigned short red, green, blue;
         unsigned short *ptr = (unsigned short *)data;
 
-        for (i = 0 ; i < w*h ; ++i)
+        for (i = 0 ; !m_cancel && (i < size) ; ++i)
         {
             blue  = ptr[0];
             green = ptr[1];
@@ -186,10 +198,14 @@ void NormalizeFilter::normalizeImage(uchar* data, int w, int h, bool sixteenBit)
             ptr[2] = param.lut[red];
 
             ptr += 4;
+
+            progress = (int)(((double)i * 100.0) / size);
+            if ( progress%5 == 0 )
+                postProgress( progress );
         }
     }
 
-     delete [] param.lut;
+    delete [] param.lut;
 }
 
 }  // namespace Digikam
