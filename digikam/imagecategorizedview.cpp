@@ -93,8 +93,8 @@ public:
         showToolTip        = false;
     }
 
-    ImageAlbumModel         *model;
-    ImageAlbumFilterModel   *filterModel;
+    ImageModel              *model;
+    ImageFilterModel        *filterModel;
 
     ImageDelegate           *delegate;
     bool                     showToolTip;
@@ -109,18 +109,53 @@ public:
 ImageCategorizedView::ImageCategorizedView(QWidget *parent)
                     : DCategorizedView(parent), d(new ImageCategorizedViewPriv)
 {
-    d->model = new ImageAlbumModel(this);
-    d->filterModel = new ImageAlbumFilterModel(this);
-    d->filterModel->setSourceImageModel(d->model);
+    setToolTip(new ImageItemViewToolTip(this));
 
-    d->filterModel->setSortRole(ImageSortSettings::SortByFileName);
-    d->filterModel->setCategorizationMode(ImageSortSettings::CategoryByAlbum);
-    d->filterModel->sort(0); // an initial sorting is necessary
+    LoadingCacheInterface::connectToSignalFileChanged(this,
+            SLOT(slotFileChanged(const QString &)));
+}
+
+ImageCategorizedView::~ImageCategorizedView()
+{
+    d->delegate->removeAllOverlays();
+    delete d;
+}
+
+void ImageCategorizedView::installDefaultModels()
+{
+    ImageAlbumModel *model = new ImageAlbumModel(this);
+    ImageAlbumFilterModel *filterModel = new ImageAlbumFilterModel(this);
+
+    filterModel->setSourceImageModel(model);
+
+    filterModel->setSortRole(ImageSortSettings::SortByFileName);
+    filterModel->setCategorizationMode(ImageSortSettings::CategoryByAlbum);
+    filterModel->sort(0); // an initial sorting is necessary
 
     // set flags that we want to get dataChanged() signals for
-    d->model->setWatchFlags(d->filterModel->suggestedWatchFlags());
+    model->setWatchFlags(filterModel->suggestedWatchFlags());
 
-    setToolTip(new ImageItemViewToolTip(this));
+    setModels(model, filterModel);
+}
+
+void ImageCategorizedView::setModels(ImageModel *model, ImageFilterModel *filterModel)
+{
+    if (d->filterModel)
+    {
+        disconnect(d->filterModel, SIGNAL(layoutAboutToBeChanged()),
+                   this, SLOT(layoutAboutToBeChanged()));
+
+        disconnect(d->filterModel, SIGNAL(layoutChanged()),
+                   this, SLOT(layoutWasChanged()));
+    }
+    if (d->model)
+    {
+        disconnect(d->model, SIGNAL(imageInfosAdded(const QList<ImageInfo> &)),
+                   this, SLOT(slotImageInfosAdded()));
+    }
+
+    d->model = model;
+    d->filterModel = filterModel;
 
     setModel(d->filterModel);
 
@@ -133,25 +168,31 @@ ImageCategorizedView::ImageCategorizedView(QWidget *parent)
 
     connect(d->model, SIGNAL(imageInfosAdded(const QList<ImageInfo> &)),
             this, SLOT(slotImageInfosAdded()));
-
-    LoadingCacheInterface::connectToSignalFileChanged(this,
-            SLOT(slotFileChanged(const QString &)));
 }
 
-ImageCategorizedView::~ImageCategorizedView()
-{
-    d->delegate->removeAllOverlays();
-    delete d;
-}
-
-ImageAlbumModel *ImageCategorizedView::imageModel() const
+ImageModel *ImageCategorizedView::imageModel() const
 {
     return d->model;
 }
 
-ImageAlbumFilterModel *ImageCategorizedView::imageFilterModel() const
+ImageFilterModel *ImageCategorizedView::imageFilterModel() const
 {
     return d->filterModel;
+}
+
+ImageThumbnailModel *ImageCategorizedView::imageThumbnailModel() const
+{
+    return qobject_cast<ImageThumbnailModel*>(d->model);
+}
+
+ImageAlbumModel *ImageCategorizedView::imageAlbumModel() const
+{
+    return qobject_cast<ImageAlbumModel*>(d->model);
+}
+
+ImageAlbumFilterModel *ImageCategorizedView::imageAlbumFilterModel() const
+{
+    return qobject_cast<ImageAlbumFilterModel*>(d->filterModel);
 }
 
 QSortFilterProxyModel *ImageCategorizedView::filterModel() const
@@ -174,7 +215,10 @@ void ImageCategorizedView::setItemDelegate(ImageDelegate *delegate)
 
 Album *ImageCategorizedView::currentAlbum() const
 {
-    return d->model->currentAlbum();
+    ImageAlbumModel *albumModel = imageAlbumModel();
+    if (albumModel)
+        return albumModel->currentAlbum();
+    return 0;
 }
 
 ImageInfo ImageCategorizedView::currentInfo() const
@@ -247,12 +291,17 @@ ImageInfo ImageCategorizedView::nextInOrder(const ImageInfo &startingPoint, int 
 
 void ImageCategorizedView::openAlbum(Album *album)
 {
-    d->model->openAlbum(album);
+    ImageAlbumModel *albumModel = imageAlbumModel();
+    if (albumModel)
+        albumModel->openAlbum(album);
 }
 
 ThumbnailSize ImageCategorizedView::thumbnailSize() const
 {
-    return d->model->thumbnailSize();
+    ImageThumbnailModel *thumbModel = imageThumbnailModel();
+    if (thumbModel)
+        return thumbModel->thumbnailSize();
+    return ThumbnailSize();
 }
 
 void ImageCategorizedView::setThumbnailSize(int size)
@@ -409,8 +458,12 @@ void ImageCategorizedView::showContextMenuOnInfo(QContextMenuEvent *, const Imag
 void ImageCategorizedView::paintEvent(QPaintEvent *e)
 {
     // We want the thumbnails to be loaded in order.
-    QModelIndexList indexesToThumbnail = categorizedIndexesIn(viewport()->rect());
-    d->filterModel->prepareThumbnails(indexesToThumbnail);
+    ImageThumbnailModel *thumbModel = imageThumbnailModel();
+    if (thumbModel)
+    {
+        QModelIndexList indexesToThumbnail = categorizedIndexesIn(viewport()->rect());
+        thumbModel->prepareThumbnails(indexesToThumbnail);
+    }
 
     DCategorizedView::paintEvent(e);
 }

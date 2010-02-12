@@ -36,8 +36,11 @@ namespace Digikam
 class Album;
 class ImageAlbumModel;
 class ImageAlbumFilterModel;
+class ImageModel;
+class ImageFilterModel;
 class ImageDelegate;
 class ImageDelegateOverlay;
+class ImageThumbnailModel;
 class ImageCategorizedViewPriv;
 
 class ImageCategorizedView : public DCategorizedView
@@ -49,8 +52,17 @@ public:
     ImageCategorizedView(QWidget *parent = 0);
     ~ImageCategorizedView();
 
-    ImageAlbumModel *imageModel() const;
-    ImageAlbumFilterModel *imageFilterModel() const;
+    void setModels(ImageModel *model, ImageFilterModel *filterModel);
+
+    ImageModel *imageModel() const;
+    ImageFilterModel *imageFilterModel() const;
+
+    /// Returns 0 if the ImageModel is not an ImageThumbnailModel
+    ImageThumbnailModel *imageThumbnailModel() const;
+
+    /// Returns 0 if the ImageModel is not an ImageAlbumModel
+    ImageAlbumModel *imageAlbumModel() const;
+    ImageAlbumFilterModel *imageAlbumFilterModel() const;
 
     ImageDelegate *delegate() const;
 
@@ -118,6 +130,9 @@ protected Q_SLOTS:
     void slotImageInfosAdded();
 
 protected:
+
+    /// install default ImageAlbumModel and filter model, ready for use
+    void installDefaultModels();
 
     /// Reimplement these in a subclass
     virtual void activated(const ImageInfo& info);

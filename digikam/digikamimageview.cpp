@@ -71,13 +71,15 @@ namespace Digikam
 DigikamImageView::DigikamImageView(QWidget *parent)
                 : ImageCategorizedView(parent), d(new DigikamImageViewPriv(this))
 {
+    installDefaultModels();
+
     setItemDelegate(new DigikamImageDelegate(this));
 
     AlbumSettings *settings = AlbumSettings::instance();
 
     imageFilterModel()->setCategorizationMode(ImageSortSettings::CategoryByAlbum);
 
-    imageModel()->setThumbnailLoadThread(ThumbnailLoadThread::defaultIconViewThread());
+    imageAlbumModel()->setThumbnailLoadThread(ThumbnailLoadThread::defaultIconViewThread());
     setThumbnailSize((ThumbnailSize::Size)settings->getDefaultIconSize());
 
     imageModel()->setDragDropHandler(new ImageDragDropHandler(imageModel()));
