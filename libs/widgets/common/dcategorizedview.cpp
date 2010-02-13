@@ -706,7 +706,7 @@ bool DCategorizedView::viewportEvent(QEvent *event)
 
 void DCategorizedView::cut()
 {
-    QMimeData *data = dragDropHandler()->createMimeData(selectedIndexes());
+    QMimeData *data = model()->mimeData(selectedIndexes());
     if (data)
     {
         encodeIsCutSelection(data, true);
@@ -716,7 +716,7 @@ void DCategorizedView::cut()
 
 void DCategorizedView::copy()
 {
-    QMimeData *data = dragDropHandler()->createMimeData(selectedIndexes());
+    QMimeData *data = model()->mimeData(selectedIndexes());
     if (data)
     {
         encodeIsCutSelection(data, false);

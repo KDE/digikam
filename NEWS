@@ -37,6 +37,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 020 ==> 226584 : digiKam crashes in the starting phase.
 021 ==> 226537 : hovering doesn't show sub-tags
 022 ==> 225827 : gpswidget inactive on default selected photo.
-023 ==>
+023 ==> 226381 : Copy/Paste of images in Albums view selects wrong image
+024 ==>
 
 
