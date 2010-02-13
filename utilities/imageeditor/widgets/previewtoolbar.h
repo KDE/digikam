@@ -70,7 +70,7 @@ public:
     ~PreviewToolBar();
 
     void setPreviewModeMask(int mask);
-    
+
     void setPreviewMode(PreviewMode mode);
     PreviewMode previewMode();
 
