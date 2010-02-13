@@ -139,7 +139,7 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
     // -------------------------------------------------------------
 
     d->addVignettingCheck = new QCheckBox(i18n("Add vignetting"));
-    d->addVignettingCheck->setWhatsThis(i18n("This option add vignetting to the image instead for removing it."
+    d->addVignettingCheck->setWhatsThis(i18n("This option adds vignetting to the image instead for removing it. "
                                              "Use it for creative effects."));
     d->addVignettingCheck->setChecked(false);
 
