@@ -313,13 +313,12 @@ void WBFilter::adjustWhiteBalance(uchar* data, int width, int height, bool sixte
     uint i, j;
     int  progress;
 
-
     if (!sixteenBit)        // 8 bits image.
     {
         uchar  red, green, blue;
         uchar* ptr = data;
 
-        for (j = 0 ; j < !m_cancel && (size) ; ++j)
+        for (j = 0 ; !m_cancel && (j < size) ; ++j)
         {
             int v, rv[3];
 
@@ -351,7 +350,7 @@ void WBFilter::adjustWhiteBalance(uchar* data, int width, int height, bool sixte
         unsigned short  red, green, blue;
         unsigned short* ptr = (unsigned short *)data;
 
-        for (j = 0 ; j < !m_cancel && (size) ; ++j)
+        for (j = 0 ; !m_cancel && (j < size) ; ++j)
         {
             int v, rv[3];
 
