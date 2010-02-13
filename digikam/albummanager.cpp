@@ -353,7 +353,7 @@ static bool moveToBackup(const QFileInfo& info)
         KIO::Job *job = KIO::file_move(info.filePath(), backup.filePath(), -1, KIO::Overwrite | KIO::HideProgressInfo);
         if (!KIO::NetAccess::synchronousRun(job, 0))
         {
-            KMessageBox::error(0, i18n("Failed to backup the existing database file (\"%1\")."
+            KMessageBox::error(0, i18n("Failed to backup the existing database file (\"%1\"). "
                                        "Refusing to replace file without backup, using the existing file.",
                                         info.filePath()));
             return false;
