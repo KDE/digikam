@@ -233,6 +233,8 @@ protected:
     bool checkExpandedState(const QModelIndex& index);
     void mousePressEvent(QMouseEvent *e);
 
+    void rowsInserted(const QModelIndex &index, int start, int end);
+    void rowsAboutToBeRemoved(const QModelIndex& parent, int start, int end);
     void startDrag(Qt::DropActions supportedActions);
     void dragEnterEvent(QDragEnterEvent *e);
     void dragMoveEvent(QDragMoveEvent *e);
@@ -263,6 +265,10 @@ private:
      * @param index index to start restoring
      * @param stateStore states indexed by album id
      */
+    void restoreStateForHierarchy(const QModelIndex &index, QMap<int, Digikam::State> &stateStore);
+    /**
+     * Restore the state for this index.
+     */
     void restoreState(const QModelIndex &index, QMap<int, Digikam::State> &stateStore);
 
     /**
@@ -273,16 +279,6 @@ private:
     void contextMenuEvent(QContextMenuEvent *event);
 
 private Q_SLOTS:
-
-    /**
-     * Used for asynchronous restoring of the tree view state if the contents of
-     * the model are received after the view has been created.
-     *
-     * @param index parent index of the inserted data
-     * @param start start row of new data under the parent index
-     * @param end end row of new data under the parent index
-     */
-    void slotFixRowsInserted(const QModelIndex &index, int start, int end);
 
     /**
      * Adapts the columns in between the given model indices to the content
@@ -333,13 +329,13 @@ public:
 protected:
 
     void setAlbumFilterModel(AlbumFilterModel *filterModel);
+    virtual void rowsInserted(const QModelIndex& parent, int start, int end);
 
 private Q_SLOTS:
 
     void slotCollapsed(const QModelIndex& index);
     void slotExpanded(const QModelIndex& index);
     void slotSetShowCount();
-    void slotRowsInserted(const QModelIndex& parent, int start, int end);
     void updateShowCountState(const QModelIndex& index, bool recurse);
 
 private:
@@ -391,13 +387,11 @@ public:
 protected:
 
     virtual void middleButtonPressed(Album *a);
-
-private Q_SLOTS:
-
-    void slotRowsAddedCheckState(QModelIndex index, int start, int end);
+    virtual void rowsInserted(const QModelIndex& parent, int start, int end);
 
 private:
 
+    void restoreCheckStateForHierarchy(const QModelIndex &index);
     void restoreCheckState(const QModelIndex &index);
 
     AbstractCheckableAlbumTreeViewPriv *d;

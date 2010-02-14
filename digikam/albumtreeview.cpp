@@ -320,7 +320,7 @@ void AbstractAlbumTreeView::slotSearchTextSettingsChanged(bool wasSearching, boo
 
         kDebug() << "Searching finished, restoring tree view state";
 
-        restoreState(QModelIndex(), d->searchBackup);
+        restoreStateForHierarchy(QModelIndex(), d->searchBackup);
         d->searchBackup.clear();
 
         if (d->lastSelectedAlbum)
@@ -519,12 +519,12 @@ void AbstractAlbumTreeView::doLoadState()
 
     KConfigGroup configGroup = getConfigGroup();
 
-    //kDebug() << "Loading view state from " << configGroup.name();
+    //kDebug() << "Loading view state from " << this << configGroup.name() << objectName();
 
     // extract the selection from the config
     const QStringList selection = configGroup.readEntry(entryName(d->configSelectionEntry),
                     QStringList());
-//    kDebug() << "selection: " << selection;
+    //kDebug() << "selection: " << selection;
     foreach(const QString &key, selection)
     {
         bool validId;
@@ -551,7 +551,7 @@ void AbstractAlbumTreeView::doLoadState()
 
     // extract current index from config
     const QString key = configGroup.readEntry(entryName(d->configCurrentIndexEntry), QString());
-//    kDebug() << "currentIndey: " << key;
+    //kDebug() << "currentIndex: " << key;
     bool validId;
     const int id = key.toInt(&validId);
     if (validId)
@@ -559,32 +559,21 @@ void AbstractAlbumTreeView::doLoadState()
         d->statesByAlbumId[id].currentIndex = true;
     }
 
-//    for (QMap<int, Digikam::State>::iterator it = d->statesByAlbumId.begin(); it
-//                    != d->statesByAlbumId.end(); ++it)
-//    {
-//        kDebug() << "id = " << it.key() << ": recovered state (selected = "
-//                 << it.value().selected << ", expanded = "
-//                 << it.value().expanded << ", currentIndex = "
-//                 << it.value().currentIndex << ")";
-//    }
+    /*
+    for (QMap<int, Digikam::State>::iterator it = d->statesByAlbumId.begin(); it
+        != d->statesByAlbumId.end(); ++it)
+    {
+        kDebug() << "id = " << it.key() << ": recovered state (selected = "
+        << it.value().selected << ", expanded = "
+        << it.value().expanded << ", currentIndex = "
+        << it.value().currentIndex << ")";
+    }
+    */
 
 
     // initial restore run, for everything already loaded
-//    kDebug() << "initial restore run with " << model()->rowCount() << " rows";
-    for (int i = 0; i < model()->rowCount(); ++i)
-    {
-        const QModelIndex index = model()->index(i, 0);
-        restoreState(index, d->statesByAlbumId);
-    }
-
-    // if there are still untreated entries that need to be restored, used the
-    // model's signal to handle them
-    if (!d->statesByAlbumId.empty())
-    {
-        // and the watch the model for new items added
-        connect(model(), SIGNAL(rowsInserted(QModelIndex, int, int)),
-                         SLOT(slotFixRowsInserted(QModelIndex, int, int)), Qt::QueuedConnection);
-    }
+    //kDebug() << "initial restore run with " << model()->rowCount() << " rows";
+    restoreStateForHierarchy(QModelIndex(), d->statesByAlbumId);
 
     // also restore the sorting order
     sortByColumn(configGroup.readEntry(entryName(d->configSortColumnEntry), 0),
@@ -599,26 +588,36 @@ void AbstractAlbumTreeView::doLoadState()
 
 }
 
+void AbstractAlbumTreeView::restoreStateForHierarchy(const QModelIndex &index, QMap<int, Digikam::State> &stateStore)
+{
+    restoreState(index, stateStore);
+    // do a recursive call of the state restoration
+    for (int i = 0; i < model()->rowCount(index); ++i)
+    {
+        const QModelIndex child = model()->index(i, 0, index);
+        restoreStateForHierarchy(child, stateStore);
+    }
+}
+
 void AbstractAlbumTreeView::restoreState(const QModelIndex &index, QMap<int, Digikam::State> &stateStore)
 {
-
     Album *album = albumFilterModel()->albumForIndex(index);
-    if (album)
+    if (album && stateStore.contains(album->id()))
     {
 
-        Digikam::State state = stateStore[album->id()];
+        Digikam::State state = stateStore.value(album->id());
 
-//        kDebug() << "Trying to restore state of album " << album->title()
-//                 << ": state(selected = " << state.selected
-//                 << ", expanded = " << state.expanded
-//                 << ", currentIndex = " << state.currentIndex << ")";
-
-        // restore selection state
+        /*
+        kDebug() << "Trying to restore state of album " << album->title()
+                 << ": state(selected = " << state.selected
+                 << ", expanded = " << state.expanded
+                 << ", currentIndex = " << state.currentIndex << ")" << this;
+        */
         if (state.selected)
         {
-//            kDebug() << "Selecting" << album->title();
-            selectionModel()->select(index, QItemSelectionModel::Select
-                            | QItemSelectionModel::Rows);
+            //kDebug() << "Selecting" << album->title();
+            selectionModel()->select(index, QItemSelectionModel::SelectCurrent
+                                          | QItemSelectionModel::Rows);
         }
 
         // restore expansion state but ensure that the root album is always
@@ -635,44 +634,48 @@ void AbstractAlbumTreeView::restoreState(const QModelIndex &index, QMap<int, Dig
         // restore the current index
         if (state.currentIndex)
         {
-//            kDebug() << "Setting current index" << album->title();
-            setCurrentIndex(index);
+            //kDebug() << "Setting current index" << album->title();
+            selectionModel()->setCurrentIndex(index, QItemSelectionModel::SelectCurrent
+                                                   | QItemSelectionModel::Rows);
         }
-
-        // remove this state so that we don't get in trouble later in case the
-        // same album id is reused again
-        stateStore.remove(album->id());
-
     }
-
-    // do a recursive call of the state restoration
-    for (int i = 0; i < model()->rowCount(index); ++i)
-    {
-        const QModelIndex child = model()->index(i, 0, index);
-        restoreState(child, stateStore);
-    }
-
 }
 
-void AbstractAlbumTreeView::slotFixRowsInserted(const QModelIndex &index, int start, int end)
+void AbstractAlbumTreeView::rowsInserted(const QModelIndex &parent, int start, int end)
 {
+    QTreeView::rowsInserted(parent, start, end);
 
-//    kDebug() << "slot rowInserted called with index = " << index
-//             << ", start = " << start << ", end = " << end;
-
-    for (int i = start; i <= end; ++i)
+    if (!d->statesByAlbumId.isEmpty())
     {
-        const QModelIndex child = model()->index(i, 0, index);
-        restoreState(child, d->statesByAlbumId);
-    }
+        //kDebug() << "slot rowInserted called with index = " << index
+        //         << ", start = " << start << ", end = " << end << "remaining ids" << d->statesByAlbumId.keys();
 
-    if (d->statesByAlbumId.empty())
+        // Restore state for parent a second time - expansion can only be restored if there are children
+        restoreState(parent, d->statesByAlbumId);
+
+        for (int i = start; i <= end; ++i)
+        {
+            const QModelIndex child = model()->index(i, 0, parent);
+            restoreState(child, d->statesByAlbumId);
+        }
+    }
+}
+
+void AbstractAlbumTreeView::rowsAboutToBeRemoved(const QModelIndex& parent, int start, int end)
+{
+    QTreeView::rowsAboutToBeRemoved(parent, start, end);
+
+    // Clean up map if album id is reused for a new album
+    if (!d->statesByAlbumId.isEmpty())
     {
-        // disconnect if not needed anymore
-        disconnect(model(), SIGNAL(rowsInserted(QModelIndex, int, int)),
-                   this, SLOT(slotFixRowsInserted(QModelIndex, int, int)));
+        for (int i = start; i <= end; ++i)
+        {
+            const QModelIndex child = model()->index(i, 0, parent);
+            Album *album = albumModel()->albumForIndex(child);
+            if (album)
+                d->statesByAlbumId.remove(album->id());
+        }
     }
-
 }
 
 void AbstractAlbumTreeView::adaptColumnsToContent()
@@ -883,9 +886,6 @@ void AbstractCountingAlbumTreeView::setAlbumFilterModel(AlbumFilterModel *filter
 {
     AbstractAlbumTreeView::setAlbumFilterModel(filterModel);
 
-    connect(m_albumFilterModel, SIGNAL(rowsInserted(const QModelIndex &, int, int)),
-             this, SLOT(slotRowsInserted(const QModelIndex &, int, int)));
-
     // Initialize expanded/collapsed showCount state
     updateShowCountState(QModelIndex(), true);
 }
@@ -920,8 +920,9 @@ void AbstractCountingAlbumTreeView::slotSetShowCount()
     static_cast<AbstractCountingAlbumModel*>(m_albumModel)->setShowCount(AlbumSettings::instance()->getShowFolderTreeViewItemsCount());
 }
 
-void AbstractCountingAlbumTreeView::slotRowsInserted(const QModelIndex& parent, int start, int end)
+void AbstractCountingAlbumTreeView::rowsInserted(const QModelIndex& parent, int start, int end)
 {
+    AbstractAlbumTreeView::rowsInserted(parent, start, end);
     // initialize showCount state when items are added
     for (int i=start; i<=end; ++i)
         updateShowCountState(m_albumFilterModel->index(i, 0, parent), false);
@@ -1030,25 +1031,26 @@ void AbstractCheckableAlbumTreeView::doLoadState()
     }
 
     // initially sync with the albums that are already in the model
-    for (int i = 0; i < checkableModel()->rowCount(); ++i)
-    {
-        const QModelIndex index = checkableModel()->index(i, 0);
-        restoreCheckState(index);
-    }
-
-    // wait for missing albums in the background
-    if (!d->checkedAlbumIds.empty())
-    {
-        // and the watch the model for new items added
-        connect(checkableModel(), SIGNAL(rowsInserted(QModelIndex, int, int)),
-                this,  SLOT(slotRowsAddedCheckState(QModelIndex, int, int)), Qt::QueuedConnection);
-    }
-
+    restoreCheckStateForHierarchy(QModelIndex());
 }
 
-void AbstractCheckableAlbumTreeView::slotRowsAddedCheckState(QModelIndex index, int start, int end)
+void AbstractCheckableAlbumTreeView::rowsInserted(const QModelIndex& parent, int start, int end)
 {
-    for (int i = start; i <= end; ++i)
+    AbstractCountingAlbumTreeView::rowsInserted(parent, start, end);
+    if (!d->checkedAlbumIds.isEmpty())
+    {
+        for (int i = start; i <= end; ++i)
+        {
+            const QModelIndex child = checkableModel()->index(i, 0, parent);
+            restoreCheckState(child);
+        }
+    }
+}
+
+void AbstractCheckableAlbumTreeView::restoreCheckStateForHierarchy(const QModelIndex &index)
+{
+    // recurse children
+    for (int i = 0; i < checkableModel()->rowCount(index); ++i)
     {
         const QModelIndex child = checkableModel()->index(i, 0, index);
         restoreCheckState(child);
@@ -1057,32 +1059,12 @@ void AbstractCheckableAlbumTreeView::slotRowsAddedCheckState(QModelIndex index, 
 
 void AbstractCheckableAlbumTreeView::restoreCheckState(const QModelIndex &index)
 {
-
     Album *album = checkableModel()->albumForIndex(index);
-    if (album)
+    if (album && d->checkedAlbumIds.contains(album->id()))
     {
-
-        if (d->checkedAlbumIds.contains(album->id()))
-        {
-            checkableModel()->setCheckState(album, Qt::Checked);
-            d->checkedAlbumIds.removeOne(album->id());
-            if (d->checkedAlbumIds.empty())
-            {
-                // disconnect if not needed anymore
-                disconnect(model(), SIGNAL(rowsInserted(QModelIndex, int, int)),
-                           this, SLOT(slotRowsAddedCheckState(QModelIndex, int, int)));
-            }
-        }
-
+        checkableModel()->setCheckState(album, Qt::Checked);
+        d->checkedAlbumIds.removeOne(album->id());
     }
-
-    // recurse children
-    for (int i = 0; i < checkableModel()->rowCount(index); ++i)
-    {
-        const QModelIndex child = checkableModel()->index(i, 0, index);
-        restoreCheckState(child);
-    }
-
 }
 
 void AbstractCheckableAlbumTreeView::doSaveState()
