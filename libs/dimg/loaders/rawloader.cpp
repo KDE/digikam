@@ -129,19 +129,6 @@ void RAWLoader::setWaitingDataProgress(double value)
         m_observer->progressInfo(m_image, value);
 }
 
-#if KDCRAW_VERSION < 0x000400
-bool RAWLoader::checkToCancelReceivingData()
-{
-    return (m_observer ? m_observer->isShuttingDown() : false);
-}
-
-void RAWLoader::setReceivingDataProgress(double value)
-{
-    if (m_observer)
-        m_observer->progressInfo(m_image, value);
-}
-#endif
-
 bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbmax,
                                 DImgLoaderObserver *observer)
 {
@@ -177,15 +164,9 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
             {
                 if (QSysInfo::ByteOrder == QSysInfo::LittleEndian)     // Intel
                 {
-                    #if KDCRAW_VERSION < 0x000400
-                    dst[0] = (unsigned short)((src[4]*256 + src[5]) * fac);      // Blue
-                    dst[1] = (unsigned short)((src[2]*256 + src[3]) * fac);      // Green
-                    dst[2] = (unsigned short)((src[0]*256 + src[1]) * fac);      // Red
-                    #else
                     dst[0] = (unsigned short)((src[5]*256 + src[4]) * fac);      // Blue
                     dst[1] = (unsigned short)((src[3]*256 + src[2]) * fac);      // Green
                     dst[2] = (unsigned short)((src[1]*256 + src[0]) * fac);      // Red
-                    #endif
                 }
                 else
                 {
@@ -200,63 +181,6 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
             }
         }
 
-#if KDCRAW_VERSION < 0x000400
-        // ----------------------------------------------------------
-
-        // Special case: if Color Management is not used here, output color space is in sRGB* color space
-        // RAW decoded image is a linear-histogram image with 16 bits color depth.
-        // No auto white balance and no gamma adjustments are performed. Image is a black hole.
-        // We need to reproduce all dcraw 8 bits color depth adjustments here.
-
-        if (m_rawDecodingSettings.outputColorSpace != DRawDecoding::RAWCOLOR)
-        {
-            ImageHistogram histogram(image, width, height, true);
-            histogram.calculate();
-
-            int perc, val, total;
-            float white=0.0, r, gamma=2.222222;
-            unsigned short lut[65536];
-
-            // Search 99th percentile white level.
-
-            perc = (int)(width * height * 0.01);
-            kDebug() << "White Level: " << perc;
-            for (int c = 1 ; c < 4 ; ++c)
-            {
-                total = 0;
-                for (val = 65535 ; val > 256 ; --val)
-                    if ((total += (int)histogram.getValue(c, val)) > perc)
-                        break;
-
-                if (white < val) white = (float)val;
-            }
-
-            white *= 1.0 / m_rawDecodingSettings.brightness;
-
-            kDebug() << "White Point: " << white;
-
-            // Compute the Gamma lut accordingly.
-
-            for (int i=0; i < 65536; ++i)
-            {
-                r = i / white;
-                val = (int)(65536.0 * (r <= 0.018 ? r*4.5 : pow(r, 1.0/gamma) * 1.099-0.099));
-                if (val > 65535) val = 65535;
-                lut[i] = val;
-            }
-
-            //  Apply Gamma lut to the whole image.
-
-            unsigned short *im = (unsigned short *)image;
-            for (int i = 0; i < width*height; ++i)
-            {
-                im[0] = lut[im[0]];      // Blue
-                im[1] = lut[im[1]];      // Green
-                im[2] = lut[im[2]];      // Red
-                im += 4;
-            }
-        }
-#endif
         // ----------------------------------------------------------
 
         imageData() = (uchar *)image;

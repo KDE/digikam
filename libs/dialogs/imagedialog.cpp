@@ -42,10 +42,6 @@
 #include <libkdcraw/version.h>
 #include <libkdcraw/kdcraw.h>
 
-#if KDCRAW_VERSION < 0x000400
-#include <libkdcraw/dcrawbinary.h>
-#endif
-
 // Local includes
 
 #include "ditemtooltip.h"
@@ -241,19 +237,6 @@ ImageDialog::ImageDialog(QWidget* parent, const KUrl& url, bool singleSelect, co
     // All Images from list must been always the first entry given by KDE API
     QString allPictures = patternList[0];
 
-#if KDCRAW_VERSION < 0x000400
-    // Add other files format witch are missing to All Images" type mime provided by KDE and replace current.
-    if (KDcrawIface::DcrawBinary::instance()->versionIsRight())
-    {
-        allPictures.insert(allPictures.indexOf("|"), QString(KDcrawIface::DcrawBinary::instance()->rawFiles()) + QString(" *.JPE *.TIF *.PGF"));
-        patternList.removeAll(patternList[0]);
-        // Added RAW file formats supported by dcraw program like a type mime.
-        // Note: we cannot use here "image/x-raw" type mime from KDE because it is incomplete
-        // or unavailable(see file #121242 in B.K.O).
-        patternList.prepend(i18n("\n%1|Camera RAW files", QString(KDcrawIface::DcrawBinary::instance()->rawFiles())));
-        patternList.prepend(allPictures);
-    }
-#else
     allPictures.insert(allPictures.indexOf("|"), QString(KDcrawIface::KDcraw::rawFiles()) + QString(" *.JPE *.TIF *.PGF"));
     patternList.removeAll(patternList[0]);
     // Added RAW file formats supported by dcraw program like a type mime.
@@ -261,7 +244,6 @@ ImageDialog::ImageDialog(QWidget* parent, const KUrl& url, bool singleSelect, co
     // or unavailable(see file #121242 in B.K.O).
     patternList.prepend(i18n("%1|Camera RAW files", QString(KDcrawIface::KDcraw::rawFiles())));
     patternList.prepend(allPictures);
-#endif
     patternList.append(i18n("*.pgf|Progressive Graphics file"));
 
     d->fileFormats = patternList.join("\n");

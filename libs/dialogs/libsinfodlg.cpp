@@ -52,10 +52,6 @@ using namespace Marble;
 #include <libkdcraw/version.h>
 #include <libkdcraw/kdcraw.h>
 
-#if KDCRAW_VERSION < 0x000400
-#include <libkdcraw/dcrawbinary.h>
-#endif
-
 // C ANSI includes
 
 #ifndef Q_CC_MSVC
@@ -96,11 +92,7 @@ LibsInfoDlg::LibsInfoDlg(QWidget *parent)
     list.insert(i18n("LibQt"),                       qVersion());
     list.insert(i18n("LibKDE"),                      KDE::versionString());
     list.insert(i18n("LibKdcraw"),                   KDcrawIface::KDcraw::version());
-#if KDCRAW_VERSION < 0x000400
-    list.insert(i18n("Dcraw program"),               KDcrawIface::DcrawBinary::internalVersion());
-#else
     list.insert(i18n("LibRaw"),                      KDcrawIface::KDcraw::librawVersion());
-#endif
 
 #if KDCRAW_VERSION >= 0x000500
     list.insert(i18n("Parallelized demosaicing"),    KDcrawIface::KDcraw::librawUseGomp() ?

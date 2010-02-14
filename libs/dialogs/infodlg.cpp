@@ -60,10 +60,6 @@ using namespace Marble;
 #include <libkdcraw/version.h>
 #include <libkdcraw/kdcraw.h>
 
-#if KDCRAW_VERSION < 0x000400
-#include <libkdcraw/dcrawbinary.h>
-#endif
-
 // C ANSI includes
 
 #ifndef Q_CC_MSVC

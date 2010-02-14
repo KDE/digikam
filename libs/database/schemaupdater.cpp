@@ -43,10 +43,6 @@
 #include <libkdcraw/version.h>
 #include <libkdcraw/kdcraw.h>
 
-#if KDCRAW_VERSION < 0x000400
-#include <libkdcraw/dcrawbinary.h>
-#endif
-
 // Local includes
 
 #include "databasebackend.h"
@@ -319,11 +315,7 @@ void SchemaUpdater::defaultFilterSettings(QStringList& defaultImageFilter,
                        << "xpm" << "ppm"  << "pnm" << "pgf"
                        << "gif" << "bmp"  << "xcf" << "pcx";
 
-#if KDCRAW_VERSION < 0x000400
-    defaultImageFilter << KDcrawIface::DcrawBinary::rawFilesList();
-#else
     defaultImageFilter << KDcrawIface::KDcraw::rawFilesList();
-#endif
 
     defaultVideoFilter << "mpeg" << "mpg" << "mpo" << "mpe"     // MPEG
                        << "avi"  << "mov" << "wmf" << "asf" << "mp4" << "3gp" << "wmv";
@@ -338,11 +330,7 @@ bool SchemaUpdater::createFilterSettings()
 
     m_access->db()->setFilterSettings(defaultImageFilter, defaultVideoFilter, defaultAudioFilter);
     m_access->db()->setSetting("FilterSettingsVersion", QString::number(filterSettingsVersion()));
-#if KDCRAW_VERSION < 0x000400
-    m_access->db()->setSetting("DcrawFilterSettingsVersion", QString::number(KDcrawIface::DcrawBinary::rawFilesVersion()));
-#else
     m_access->db()->setSetting("DcrawFilterSettingsVersion", QString::number(KDcrawIface::KDcraw::rawFilesVersion()));
-#endif
 
     return true;
 }
@@ -354,11 +342,7 @@ bool SchemaUpdater::updateFilterSettings()
 
     if (
          filterVersion.toInt() < filterSettingsVersion() ||
-#if KDCRAW_VERSION < 0x000400
-         dcrawFilterVersion.toInt() < KDcrawIface::DcrawBinary::rawFilesVersion()
-#else
          dcrawFilterVersion.toInt() < KDcrawIface::KDcraw::rawFilesVersion()
-#endif
        )
     {
         createFilterSettings();

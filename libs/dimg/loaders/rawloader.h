@@ -70,11 +70,6 @@ private:
     bool checkToCancelWaitingData();
     void setWaitingDataProgress(double value);
 
-#if KDCRAW_VERSION < 0x000400
-    bool checkToCancelReceivingData();
-    void setReceivingDataProgress(double value);
-#endif
-
 private:
 
     DImgLoaderObserver *m_observer;

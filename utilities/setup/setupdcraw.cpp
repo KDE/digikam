@@ -134,11 +134,9 @@ SetupDcraw::~SetupDcraw()
 
 void SetupDcraw::slotSixteenBitsImageToggled(bool)
 {
-#if KDCRAW_VERSION >= 0x000300
     // Dcraw do not provide a way to set brightness of image in 16 bits color depth.
     // We always set on this option. We drive brightness adjustment in digiKam Raw image loader.
     d->dcrawSettings->setEnabledBrightnessSettings(true);
-#endif
 }
 
 void SetupDcraw::applySettings()
