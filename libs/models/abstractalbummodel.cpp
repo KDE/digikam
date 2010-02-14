@@ -570,7 +570,16 @@ void AbstractCountingAlbumModel::setCountMap(const QMap<int, int>& idCountMap)
 void AbstractCountingAlbumModel::updateCount(Album *album)
 {
     if (!album)
+    {
         return;
+    }
+
+    // if the model does not contain the album, do nothing.
+    QModelIndex index = indexForAlbum(album);
+    if (!index.isValid())
+    {
+        return;
+    }
 
     QHash<int, int>::iterator includeIt = m_countHashReady.find(album->id());
     bool changed = false;
@@ -604,7 +613,6 @@ void AbstractCountingAlbumModel::updateCount(Album *album)
     // notify views
     if (changed)
     {
-        QModelIndex index = indexForAlbum(album);
         emit dataChanged(index, index);
     }
 }
@@ -612,7 +620,16 @@ void AbstractCountingAlbumModel::updateCount(Album *album)
 void AbstractCountingAlbumModel::setCount(Album *album, int count)
 {
     if (!album)
+    {
         return;
+    }
+
+    // if the model does not contain the album, do nothing.
+    QModelIndex index = indexForAlbum(album);
+    if (!index.isValid())
+    {
+        return;
+    }
 
     QHash<int, int>::iterator includeIt = m_countHashReady.find(album->id());
     bool changed = false;
@@ -632,7 +649,6 @@ void AbstractCountingAlbumModel::setCount(Album *album, int count)
     // notify views
     if (changed)
     {
-        QModelIndex index = indexForAlbum(album);
         emit dataChanged(index, index);
     }
 }
