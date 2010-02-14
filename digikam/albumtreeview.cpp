@@ -320,6 +320,7 @@ void AbstractAlbumTreeView::slotSearchTextSettingsChanged(bool wasSearching, boo
 
         kDebug() << "Searching finished, restoring tree view state";
 
+        collapseAll();
         restoreStateForHierarchy(QModelIndex(), d->searchBackup);
         d->searchBackup.clear();
 
