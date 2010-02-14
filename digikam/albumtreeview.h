@@ -73,8 +73,10 @@ public:
     AbstractSpecificAlbumModel *albumModel() const;
     AlbumFilterModel *albumFilterModel() const;
 
-    /// Enable expanding of tree items on single click on the item (default: on)
+    /// Enable expanding of tree items on single click on the item (default: off)
     void setExpandOnSingleClick(bool doThat);
+    /// Expand an item when making it the new current item
+    void setExpandNewCurrentItem(bool doThat);
 
     /**
      * Sets whether to select an album on click via the album manager or not.

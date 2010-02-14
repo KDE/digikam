@@ -126,6 +126,7 @@ public:
     AbstractAlbumTreeViewPriv() :
         delegate(0),
         expandOnSingleClick(false),
+        expandNewCurrent(false),
         selectAlbumOnClick(false),
         selectOnContextMenu(true),
         enableContextMenu(false),
@@ -141,6 +142,7 @@ public:
     AlbumTreeViewDelegate *delegate;
 
     bool expandOnSingleClick;
+    bool expandNewCurrent;
     bool selectAlbumOnClick;
     bool selectOnContextMenu;
     bool enableContextMenu;
@@ -402,16 +404,24 @@ void AbstractAlbumTreeView::mousePressEvent(QMouseEvent *e)
         }
     }
 
-    if (d->expandOnSingleClick && e->button() == Qt::LeftButton)
+    if ((d->expandOnSingleClick || d->expandNewCurrent) && e->button() == Qt::LeftButton)
     {
         QModelIndex index = indexVisuallyAt(e->pos());
         if (index.isValid())
         {
-            // See B.K.O #126871: collapse/expand treeview using left mouse button single click.
-            // Exception: If a newly selected item is already expanded, do not collapse on selection.
-            bool expanded = isExpanded(index);
-            if (index == currentIndex() || !expanded)
-                setExpanded(index, !expanded);
+            if (d->expandOnSingleClick)
+            {
+                // See B.K.O #126871: collapse/expand treeview using left mouse button single click.
+                // Exception: If a newly selected item is already expanded, do not collapse on selection.
+                bool expanded = isExpanded(index);
+                if (index == currentIndex() || !expanded)
+                    setExpanded(index, !expanded);
+            }
+            else
+            {
+                if (index != currentIndex())
+                    expand(index);
+            }
         }
     }
     else if (m_checkOnMiddleClick && e->button() == Qt::MidButton)
