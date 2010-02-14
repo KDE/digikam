@@ -472,6 +472,36 @@ public:
     bool deleteSAlbum(SAlbum* album);
     //@}
 
+    /** @name Accessors to counting maps
+     */
+    //@{
+
+    /**
+     * Returns the latest count for PAlbums as also emitted via
+     * signalPAlbumsDirty.
+     *
+     * @return count map for PAlbums
+     */
+    QMap<int, int> getPAlbumsCount() const;
+
+    /**
+     * Returns the latest count for TAlbums as also emitted via
+     * signalTAlbumsDirty.
+     *
+     * @return count map for TAlbums
+     */
+    QMap<int, int> getTAlbumsCount() const;
+
+    /**
+     * Returns the latest count for DAlbums as also emitted via
+     * signalDAlbumsDirty.
+     *
+     * @return count map for DAlbums
+     */
+    QMap<YearMonth, int> getDAlbumsCount() const;
+
+    //@}
+
 Q_SIGNALS:
 
     /// An album is about to be added to the given parent (0 if album is root)

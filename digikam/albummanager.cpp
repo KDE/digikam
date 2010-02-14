@@ -203,6 +203,9 @@ public:
     QTimer*                     tagItemCountTimer;
     QSet<int>                   changedPAlbums;
 
+    QMap<int, int>              pAlbumsCount;
+    QMap<int, int>              tAlbumsCount;
+    QMap<YearMonth, int>        dAlbumsCount;
 
     QList<QDateTime> buildDirectoryModList(const QFileInfo& dbFile)
     {
@@ -2385,6 +2388,21 @@ bool AlbumManager::deleteSAlbum(SAlbum* album)
     return true;
 }
 
+QMap<int, int> AlbumManager::getPAlbumsCount() const
+{
+    return d->pAlbumsCount;
+}
+
+QMap<int, int> AlbumManager::getTAlbumsCount() const
+{
+    return d->tAlbumsCount;
+}
+
+QMap<YearMonth, int> AlbumManager::getDAlbumsCount() const
+{
+    return d->dAlbumsCount;
+}
+
 void AlbumManager::insertPAlbum(PAlbum *album, PAlbum *parent)
 {
     if (!album)
@@ -2501,6 +2519,7 @@ void AlbumManager::slotAlbumsJobData(KIO::Job*, const QByteArray& data)
     QDataStream ds(&di, QIODevice::ReadOnly);
     ds >> albumsStatMap;
 
+    d->pAlbumsCount = albumsStatMap;
     emit signalPAlbumsDirty(albumsStatMap);
 }
 
@@ -2525,6 +2544,7 @@ void AlbumManager::slotTagsJobData(KIO::Job*, const QByteArray& data)
     QDataStream ds(&di, QIODevice::ReadOnly);
     ds >> tagsStatMap;
 
+    d->tAlbumsCount = tagsStatMap;
     emit signalTAlbumsDirty(tagsStatMap);
 }
 
@@ -2662,6 +2682,7 @@ void AlbumManager::slotDatesJobData(KIO::Job*, const QByteArray& data)
         emit signalAlbumHasBeenDeleted(album);
     }
 
+    d->dAlbumsCount = yearMonthMap;
     emit signalDAlbumsDirty(yearMonthMap);
     emit signalDatesMapDirty(datesStatMap);
 }

@@ -1103,6 +1103,7 @@ AlbumTreeView::AlbumTreeView(AlbumModel *model, QWidget *parent)
 
     connect(AlbumManager::instance(), SIGNAL(signalPAlbumsDirty(const QMap<int, int>&)),
             m_albumModel, SLOT(setCountMap(const QMap<int, int>&)));
+    albumModel()->setCountMap(AlbumManager::instance()->getPAlbumsCount());
 
     expand(m_albumFilterModel->rootAlbumIndex());
     setRootIsDecorated(false);
@@ -1156,6 +1157,7 @@ TagTreeView::TagTreeView(TagModel *model, QWidget *parent)
 
     connect(AlbumManager::instance(), SIGNAL(signalTAlbumsDirty(const QMap<int, int>&)),
              m_albumModel, SLOT(setCountMap(const QMap<int, int>&)));
+    albumModel()->setCountMap(AlbumManager::instance()->getTAlbumsCount());
 
     expand(m_albumFilterModel->rootAlbumIndex());
     if (m_albumModel->rootAlbumBehavior() == AbstractAlbumModel::IncludeRootAlbum)
