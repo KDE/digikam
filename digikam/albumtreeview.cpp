@@ -529,7 +529,7 @@ void AbstractAlbumTreeView::doLoadState()
     const QStringList expansion = configGroup.readEntry(entryName(d->configExpansionEntry),
                     QStringList());
     //kDebug() << "expansion: " << expansion;
-    foreach( const QString &key, expansion )
+    foreach(const QString &key, expansion)
     {
         bool validId;
         int id = key.toInt(&validId);
@@ -602,13 +602,27 @@ void AbstractAlbumTreeView::restoreState(const QModelIndex &index, QMap<int, Dig
 //                 << ": state(selected = " << state.selected
 //                 << ", expanded = " << state.expanded
 //                 << ", currentIndex = " << state.currentIndex << ")";
+
+        // restore selection state
         if (state.selected)
         {
 //            kDebug() << "Selecting" << album->title();
             selectionModel()->select(index, QItemSelectionModel::Select
                             | QItemSelectionModel::Rows);
         }
-        setExpanded(index, state.expanded);
+
+        // restore expansion state but ensure that the root album is always
+        // expanded
+        if (!album->isRoot())
+        {
+            setExpanded(index, state.expanded);
+        }
+        else
+        {
+            setExpanded(index, true);
+        }
+
+        // restore the current index
         if (state.currentIndex)
         {
 //            kDebug() << "Setting current index" << album->title();
