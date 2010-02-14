@@ -39,6 +39,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 022 ==> 225827 : gpswidget inactive on default selected photo.
 023 ==> 226381 : Copy/Paste of images in Albums view selects wrong image
 024 ==> 224999 : Thumbnails blury after upgrade to 1.0.0 from 0.10.
-025 ==> 
+025 ==> 226789 : Metadata settings only EXIF.
+026 ==> 185266 : digiKam shows unknown icon when moving images to other directory.
+027 ==> 
 
 
