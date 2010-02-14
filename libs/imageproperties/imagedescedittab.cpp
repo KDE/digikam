@@ -183,7 +183,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
                                      "',' can be used to create more than one hierarchy at the same time."));
 
     d->tagModificationHelper = new TagModificationHelper(this, this);
-    d->tagModel = new TagModel(AbstractAlbumModel::IgnoreRootAlbum, this);
+    d->tagModel = new TagModel(AbstractAlbumModel::IncludeRootAlbum, this);
     d->tagModel->setCheckable(true);
     d->tagModel->setTristate(true);
     d->tagModel->setRootCheckable(false);
