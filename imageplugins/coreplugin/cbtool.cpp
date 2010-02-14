@@ -170,7 +170,7 @@ void CBTool::prepareEffect()
     CBContainer settings = d->cbSettings->settings();
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 
-    DImg preview = d->previewWidget->getOriginalRegionImage();
+    DImg preview = d->previewWidget->getOriginalRegionImage(true);
     setFilter(dynamic_cast<DImgThreadedFilter*>(new CBFilter(&preview, this, settings)));
 }
 

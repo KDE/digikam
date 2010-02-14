@@ -181,7 +181,7 @@ void BCGTool::prepareEffect()
 
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 
-    DImg preview = d->previewWidget->getOriginalRegionImage();
+    DImg preview = d->previewWidget->getOriginalRegionImage(true);
     setFilter(dynamic_cast<DImgThreadedFilter*>(new BCGFilter(&preview, this, settings)));
 }
 

@@ -172,7 +172,7 @@ void HSLTool::prepareEffect()
     HSLContainer settings = d->hslSettings->settings();
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 
-    DImg preview = d->previewWidget->getOriginalRegionImage();
+    DImg preview = d->previewWidget->getOriginalRegionImage(true);
     setFilter(dynamic_cast<DImgThreadedFilter*>(new HSLFilter(&preview, this, settings)));
 }
 

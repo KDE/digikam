@@ -432,9 +432,15 @@ void ImageRegionWidget::setPreviewImage(const DImg& img)
     repaintContents(false);
 }
 
-DImg ImageRegionWidget::getOriginalRegionImage()
+DImg ImageRegionWidget::getOriginalRegionImage(bool use_downscaled_image)
 {
-    return (d->image.copy(getOriginalImageRegionToRender()));
+    DImg image = d->image.copy(getOriginalImageRegionToRender());
+    if (use_downscaled_image)
+     {
+      QRect r = getLocalImageRegionToRender();
+      image.resize(r.width(), r.height());
+     }
+    return (image);
 }
 
 QImage ImageRegionWidget::previewToQImage() const
