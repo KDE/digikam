@@ -184,7 +184,7 @@ void StateSavingObject::setEntryPrefix(const QString &prefix)
 void StateSavingObject::loadState()
 {
 
-    kDebug() << "Loading state";
+    //kDebug() << "Loading state";
 
     doLoadState();
 
@@ -195,7 +195,7 @@ void StateSavingObject::loadState()
 void StateSavingObject::saveState()
 {
 
-    kDebug() << "Saving state";
+    //kDebug() << "Saving state";
 
     doSaveState();
 
@@ -208,7 +208,7 @@ KConfigGroup StateSavingObject::getConfigGroup()
 
     if (!d->groupSet)
     {
-        kDebug() << "No config group set, returning one based on object name";
+        //kDebug() << "No config group set, returning one based on object name";
         return d->getGroupFromObjectName();
     }
 

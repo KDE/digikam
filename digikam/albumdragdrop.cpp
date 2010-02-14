@@ -82,7 +82,6 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView *view, const QDropEvent *
 
         if(choice == moveAction)
         {
-        	// FIXME there is no such slot
             KIO::Job* job = DIO::move(droppedAlbum, destAlbum);
             connect(job, SIGNAL(result(KJob*)),
                     this, SIGNAL(dioResult(KJob*)));

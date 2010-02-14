@@ -430,6 +430,7 @@ void AbstractAlbumModel::slotAlbumsCleared()
 
 void AbstractAlbumModel::slotAlbumIconChanged(Album* album)
 {
+	kDebug() << "icon changed for album" << album->title();
     QModelIndex index = indexForAlbum(album);
     emit dataChanged(index, index);
 }

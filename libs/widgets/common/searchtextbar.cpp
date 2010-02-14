@@ -171,7 +171,7 @@ void SearchTextBar::setHighlightOnResult(bool highlight)
 void SearchTextBar::setModel(QPointer<QAbstractItemModel> model, int uniqueIdRole, int displayRole)
 {
 
-    kDebug() << "Got now model " << model;
+    kDebug() << "Got new model " << model;
 
     // first release old model
     if (d->model)
@@ -242,7 +242,7 @@ SearchTextBar::HighlightState SearchTextBar::getCurrentHighlightState() const
 
 void SearchTextBar::connectToModel(QAbstractItemModel *model)
 {
-    connect(model, SIGNAL(rowsAboutToBeInserted(const QModelIndex&, int, int)),
+    connect(model, SIGNAL(rowsInserted(const QModelIndex&, int, int)),
             this, SLOT(slotRowsInserted(const QModelIndex&, int, int)));
     connect(model, SIGNAL(rowsAboutToBeRemoved(const QModelIndex&, int, int)),
             this, SLOT(slotRowsAboutToBeRemoved(const QModelIndex&, int, int)));
@@ -260,6 +260,9 @@ void SearchTextBar::slotRowsInserted(const QModelIndex &parent, int start, int e
 
     for (int i = start; i <= end; ++i)
     {
+    	// this cannot work if this is called from rowsAboutToBeInserted
+    	// because then the model doesn't know the index yet. So never do this
+    	// ;)
         const QModelIndex child = d->model->index(i, 0, parent);
         if (child.isValid())
         {
@@ -345,8 +348,17 @@ void SearchTextBar::slotDataChanged(const QModelIndex &topLeft, const QModelInde
         }
         else
         {
-            kError() << "idToTextMap did not contain an entry for index "
-                     << index << itemName;
+        	// FIXME normally this should be a bug. Fortunately we can handle
+        	// it and it is a constant case that this happens because of some
+        	// kind of race condition between the tree vies and this class.
+        	// If the model emits the signal, that a new index was added, it may
+        	// be first processed by the tree view. This updates the item
+        	// counting based on the expansion state. Unfortunately, this
+        	// operations needs a data change which is emitted as a dataChanged
+        	// signal which then will arrive at this class before the original
+        	// inserted signal arrived at this class.
+            //kError() << "idToTextMap did not contain an entry for index "
+            //         << index << itemName;
         }
         d->idToTextMap[id] = itemName;
         completionObject()->addItem(itemName);

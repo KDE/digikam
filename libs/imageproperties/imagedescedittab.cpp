@@ -183,7 +183,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
                                      "',' can be used to create more than one hierarchy at the same time."));
 
     d->tagModificationHelper = new TagModificationHelper(this, this);
-    d->tagModel = new TagModel(AbstractAlbumModel::IncludeRootAlbum, this);
+    d->tagModel = new TagModel(AbstractAlbumModel::IgnoreRootAlbum, this);
     d->tagModel->setCheckable(true);
     d->tagModel->setTristate(true);
     d->tagModel->setRootCheckable(false);
@@ -358,14 +358,6 @@ ImageDescEditTab::~ImageDescEditTab()
     // twice, and this seems to be exactly the problem when called here.
     // We should disable the slot here at the moment, otherwise digikam crashes.
     //slotChangingItems();
-
-    /*
-    AlbumList tList = AlbumManager::instance().allTAlbums();
-    for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
-    {
-        (*it)->removeExtraData(this);
-    }
-    */
 
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(QString("Tag List View"));
@@ -1078,7 +1070,6 @@ void ImageDescEditTab::slotTagsSearchChanged(const SearchTextSettings& settings)
 
     Q_UNUSED(settings);
 
-    // see TODO below.
     // if we filter, we should reset the assignedTagsBtn again
     d->assignedTagsBtn->setChecked(false);
     slotAssignedTagsToggled(false);

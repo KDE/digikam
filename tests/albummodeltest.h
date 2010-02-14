@@ -28,16 +28,20 @@
 
 #include <qobject.h>
 #include <qmap.h>
+#include <qabstractitemmodel.h>
 
 namespace Digikam
 {
 class PAlbum;
 class TAlbum;
+class AlbumModel;
 }
 
 class AlbumModelTest: public QObject
 {
-Q_OBJECT
+
+	Q_OBJECT
+
 public:
     AlbumModelTest();
     virtual ~AlbumModelTest();
@@ -58,10 +62,15 @@ private Q_SLOTS:
     void testDAlbumSorting();
     void testTAlbumModel();
     void testSAlbumModel();
+    void testStartAlbumModel();
 
     void deletePAlbum(Digikam::PAlbum *album);
 
     void setLastPAlbumCountMap(const QMap<int, int> &map);
+
+    // slots for ensuring signal order while scanning albums
+    void slotStartModelRowsInserted(const QModelIndex &parent, int start, int end);
+    void slotStartModelDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
 
 private:
 
@@ -89,6 +98,13 @@ private:
     Digikam::TAlbum *talbumChild0Root1;
 
     QMap<int, int> palbumCountMap;
+
+    /**
+     * This model is used to ensure that adding and changing signals are emitted
+     * correctly if the model is created beorre the scanning starts.
+     */
+    Digikam::AlbumModel *startModel;
+    QList<int> addedIds;
 
 };
 

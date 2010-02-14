@@ -509,7 +509,7 @@ void AbstractAlbumTreeView::doLoadState()
 
     KConfigGroup configGroup = getConfigGroup();
 
-    kDebug() << "Loading view state from " << configGroup.name();
+    //kDebug() << "Loading view state from " << configGroup.name();
 
     // extract the selection from the config
     const QStringList selection = configGroup.readEntry(entryName(d->configSelectionEntry),
@@ -528,7 +528,7 @@ void AbstractAlbumTreeView::doLoadState()
     // extract expansion state from config
     const QStringList expansion = configGroup.readEntry(entryName(d->configExpansionEntry),
                     QStringList());
-    kDebug() << "expansion: " << expansion;
+    //kDebug() << "expansion: " << expansion;
     foreach( const QString &key, expansion )
     {
         bool validId;
