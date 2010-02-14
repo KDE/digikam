@@ -176,17 +176,14 @@ void ImageRegionWidget::viewportPaintExtraData()
         QPainter p(viewport());
         p.setRenderHint(QPainter::Antialiasing, true);
         p.setBackgroundMode(Qt::TransparentMode);
-        QFontMetrics fontMt = p.fontMetrics();
-
-        QString text;
-        QRect region, textRect, fontRect;
+     
+        QRect region;
 
         // Original region.
         region = getLocalImageRegionToRender();
         QRect ro(contentsToViewport(region.topLeft()), contentsToViewport(region.bottomRight()));
 
         // Target region.
-        region = getLocalImageRegionToRender();
         QRect rt(contentsToViewport(region.topLeft()), contentsToViewport(region.bottomRight()));
 
         p.translate(previewRect().topLeft());
