@@ -1079,6 +1079,10 @@ void ImageDescEditTab::slotAssignedTagsToggled(bool t)
 {
     d->tagCheckView->checkableAlbumFilterModel()->setFilterChecked(t);
     d->tagCheckView->checkableAlbumFilterModel()->setFilterPartiallyChecked(t);
+    if (t)
+    {
+        d->tagCheckView->expandEverything(d->tagCheckView->rootIndex());
+    }
 }
 
 void ImageDescEditTab::focusLastSelectedWidget()

@@ -692,6 +692,18 @@ void AbstractAlbumTreeView::scrollToSelectedAlbum()
     }
 }
 
+void AbstractAlbumTreeView::expandEverything(const QModelIndex &index)
+{
+
+    for (int row = 0; row < albumFilterModel()->rowCount(index); ++row)
+    {
+        QModelIndex rowIndex = albumFilterModel()->index(row, 0, index);
+        expand(rowIndex);
+        expandEverything(rowIndex);
+    }
+
+}
+
 void AbstractAlbumTreeView::adaptColumnsOnDataChange(const QModelIndex &topLeft, const QModelIndex &bottomRight)
 {
     Q_UNUSED(topLeft);

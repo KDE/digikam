@@ -151,6 +151,13 @@ public Q_SLOTS:
      */
     void scrollToSelectedAlbum();
 
+    /**
+     * Expands the complete tree under the given index.
+     *
+     * @param index index to start expanding everything
+     */
+    void expandEverything(const QModelIndex &index);
+
 Q_SIGNALS:
 
     /// Emitted when the currently selected album changes
