@@ -545,7 +545,7 @@ void SetupCollectionModel::addCollection(int category)
         {
             if (!item.path.isEmpty() && path.startsWith(item.path))
             {
-                if (path == item.path || path.startsWith(item.path + "/"))
+                if (path == item.path || path.startsWith(item.path + '/'))
                 {
                     messageFromManager = i18n("You have previously added a collection "
                                             "that contains the path \"%1\".", path);

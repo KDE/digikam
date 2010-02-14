@@ -1122,7 +1122,7 @@ CollectionLocation CollectionManager::locationForPath(const QString& givenPath)
         if (!rootPath.isEmpty() && filePath.startsWith(rootPath))
         {
             // see also bug #221155 for extra checks
-            if (filePath == rootPath || filePath.startsWith(rootPath + "/"))
+            if (filePath == rootPath || filePath.startsWith(rootPath + '/'))
                 return *location;
         }
     }

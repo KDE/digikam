@@ -90,7 +90,7 @@ QString FilePropertiesOption::parseOperation(ParseSettings& settings)
     }
     else if (token == QString(".[ext]"))
     {
-        result = "." + fi.suffix();
+        result = '.' + fi.suffix();
         settings.useOriginalFileExtension = false;
     }
 

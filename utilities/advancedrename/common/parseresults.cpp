@@ -100,7 +100,7 @@ int ParseResults::offset(const ResultsKey& key)
 
 ParseResults::ResultsKey ParseResults::keyAtPosition(int pos)
 {
-    foreach (const ResultsKey& key, m_results.keys())
+    foreach (const ResultsKey &key, m_results.keys())
     {
         if (pos == key.first)
         {
@@ -119,7 +119,7 @@ bool ParseResults::hasKeyAtPosition(int pos)
 
 ParseResults::ResultsKey ParseResults::keyAtApproximatePosition(int pos)
 {
-    foreach (const ResultsKey& key, m_results.keys())
+    foreach (const ResultsKey &key, m_results.keys())
     {
         int start  = key.first;
         int length = key.second;
@@ -187,7 +187,7 @@ QString ParseResults::replaceTokens(const QString& markedString)
 
 void ParseResults::debug()
 {
-    foreach (const ResultsKey& key, m_results.keys())
+    foreach (const ResultsKey &key, m_results.keys())
     {
         QString _token  = token(key);
         QString _result = result(key);

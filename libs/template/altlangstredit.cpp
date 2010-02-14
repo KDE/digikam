@@ -402,7 +402,7 @@ void AltLangStrEdit::loadLangAltListEntries()
     QStringList list = d->values.keys();
     if (!list.isEmpty())
     {
-        foreach (QString item, list)
+        foreach (const QString &item, list)
         {
               d->languageCB->addItem(item);
               d->languageCB->setItemIcon(d->languageCB->count()-1, SmallIcon("dialog-ok"));

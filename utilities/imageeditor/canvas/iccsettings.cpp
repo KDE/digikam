@@ -383,7 +383,7 @@ QList<IccProfile> IccSettings::allProfiles()
 QList<IccProfile> IccSettings::workspaceProfiles()
 {
     QList<IccProfile> profiles;
-    foreach (IccProfile profile, allProfiles())
+    foreach (IccProfile profile, allProfiles()) // krazy:exclude=foreach
     {
         switch (profile.type())
         {
@@ -400,7 +400,7 @@ QList<IccProfile> IccSettings::workspaceProfiles()
 QList<IccProfile> IccSettings::displayProfiles()
 {
     QList<IccProfile> profiles;
-    foreach (IccProfile profile, allProfiles())
+    foreach (IccProfile profile, allProfiles()) // krazy:exclude=foreach
     {
         if (profile.type() == IccProfile::Display)
             profiles << profile;
@@ -411,7 +411,7 @@ QList<IccProfile> IccSettings::displayProfiles()
 QList<IccProfile> IccSettings::inputProfiles()
 {
     QList<IccProfile> profiles;
-    foreach (IccProfile profile, allProfiles())
+    foreach (IccProfile profile, allProfiles()) // krazy:exclude=foreach
     {
         switch (profile.type())
         {
@@ -428,7 +428,7 @@ QList<IccProfile> IccSettings::inputProfiles()
 QList<IccProfile> IccSettings::outputProfiles()
 {
     QList<IccProfile> profiles;
-    foreach (IccProfile profile, allProfiles())
+    foreach (IccProfile profile, allProfiles()) // krazy:exclude=foreach
     {
         if (profile.type() == IccProfile::Output)
             profiles << profile;

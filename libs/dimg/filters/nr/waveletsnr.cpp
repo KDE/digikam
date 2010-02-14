@@ -201,7 +201,7 @@ void WaveletsNR::waveletDenoise(float* fimg[3], unsigned int width, unsigned int
         for (row = 0; !m_cancel && (row < height); ++row)
         {
             hatTransform(temp, fimg[hpass] + row * width, 1, width, 1 << lev);
-            for (col = 0; col < width; col++)
+            for (col = 0; col < width; ++col)
             {
                 fimg[lpass][row * width + col] = temp[col] * 0.25;
             }

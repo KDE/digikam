@@ -543,14 +543,14 @@ bool AlbumDB::getTagIcon(int tagID, int *iconAlbumRootId, QString *iconAlbumRela
 
     if (albumURL.isEmpty())
     {
-        *iconAlbumRelativePath = QString();
+        *iconAlbumRelativePath = QString(); // krazy:exclude=nullstrassign
         *icon = iconKDE;
         return !iconKDE.isEmpty();
     }
     else
     {
         *iconAlbumRelativePath = albumURL + '/' + iconName;
-        *icon = QString();
+        *icon = QString(); // krazy:exclude=nullstrassign
         return true;
     }
 }

@@ -188,7 +188,7 @@ QString MetadataOption::parseMetadata(const QString& token, ParseSettings& setti
             dataMap = meta.getXmpTagsDataList(QStringList(), true);
         }
 
-        foreach (const QString& key, dataMap.keys())
+        foreach (const QString &key, dataMap.keys())
         {
             if (key.toLower().contains(keyword))
             {

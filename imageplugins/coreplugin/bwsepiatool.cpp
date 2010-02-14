@@ -150,7 +150,7 @@ PreviewPixmapFactory::PreviewPixmapFactory(BWSepiaTool* bwSepia, const QSize& pr
 PreviewPixmapFactory::~PreviewPixmapFactory()
 {
     // Delete all hash items
-    foreach (QPixmap* pm, m_previewPixmapMap.values())
+    foreach (QPixmap* pm, m_previewPixmapMap.values()) // krazy:exclude=foreach
     {
         delete pm;
     }

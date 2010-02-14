@@ -160,7 +160,7 @@ TagFilterSideBarWidget::TagFilterSideBarWidget(QWidget *parent,
     QLabel *matchingConditionLabel = new QLabel(i18n("Matching Condition:"), this);
     matchingConditionLabel->setWhatsThis(i18n(
                     "Defines in which way the selected tags are combined to filter the images. "
-                    "This also includes the '%1' check box.").arg(notTaggedTitle));
+                    "This also includes the '%1' check box.", notTaggedTitle));
 
     d->matchingConditionComboBox = new QComboBox(this);
     d->matchingConditionComboBox->setWhatsThis(matchingConditionLabel->whatsThis());

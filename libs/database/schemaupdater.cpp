@@ -891,7 +891,8 @@ bool SchemaUpdater::updateV4toV5()
                                 "If you are working on Linux, check that HAL is installed and running. "
                                 "In any case, you can seek advice from the digikam-devel@kde.org mailing list. "
                                 "The database updating process will now be aborted because we do not want "
-                                "to create a new database based on false assumptions from a broken installation.");
+                                "to create a new database based on false assumptions from a broken installation.",
+                                albumLibraryPath);
         m_access->setLastError(errorMsg);
         m_setError = true;
         if (m_observer)

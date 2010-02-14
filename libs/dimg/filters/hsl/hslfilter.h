@@ -65,7 +65,7 @@ class DIGIKAM_EXPORT HSLFilter : public DImgThreadedFilter
 
 public:
 
-    HSLFilter(DImg* orgImage, QObject* parent=0, const HSLContainer& settings=HSLContainer());
+    explicit HSLFilter(DImg* orgImage, QObject* parent=0, const HSLContainer& settings=HSLContainer());
     virtual ~HSLFilter();
 
 private:

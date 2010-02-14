@@ -70,7 +70,7 @@ class DIGIKAM_EXPORT CBFilter : public DImgThreadedFilter
 
 public:
 
-    CBFilter(DImg* orgImage, QObject* parent=0, const CBContainer& settings=CBContainer());
+    explicit CBFilter(DImg* orgImage, QObject* parent=0, const CBContainer& settings=CBContainer());
     virtual ~CBFilter();
 
 private:

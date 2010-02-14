@@ -401,7 +401,7 @@ void ImagePlugin_Core::slotUpdateColorSpaceMenu()
                      << IccProfile::wideGamutRGB()
                      << IccProfile::proPhotoRGB();
 
-    foreach (IccProfile profile, standardProfiles)
+    foreach (IccProfile profile, standardProfiles) // krazy:exclude=foreach
     {
         d->profileMenuAction->addProfile(profile, profile.description());
         standardProfilePaths << profile.filePath();
