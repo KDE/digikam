@@ -260,6 +260,11 @@ void AbstractAlbumTreeView::setExpandOnSingleClick(bool doThat)
     d->expandOnSingleClick = doThat;
 }
 
+void AbstractAlbumTreeView::setExpandNewCurrentItem(bool doThat)
+{
+    d->expandNewCurrent = doThat;
+}
+
 void AbstractAlbumTreeView::setSelectAlbumOnClick(bool selectOnClick)
 {
     d->selectAlbumOnClick = selectOnClick;

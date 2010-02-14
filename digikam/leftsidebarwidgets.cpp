@@ -84,7 +84,9 @@ AlbumFolderViewSideBarWidget::AlbumFolderViewSideBarWidget(QWidget *parent,
     QVBoxLayout *layout = new QVBoxLayout(this);
 
     d->albumFolderView = new AlbumSelectionTreeView(this, model, d->albumModificationHelper);
+    d->albumFolderView->setObjectName("AlbumFolderView");
     d->albumFolderView->setConfigGroup(getConfigGroup());
+    d->albumFolderView->setExpandNewCurrentItem(true);
     d->searchTextBar   = new SearchTextBar(this, "DigikamViewFolderSearchBar");
     d->searchTextBar->setHighlightOnResult(true);
     d->searchTextBar->setModel(model, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
@@ -182,6 +184,7 @@ TagViewSideBarWidget::TagViewSideBarWidget(QWidget *parent, TagModel *model) :
 
     d->tagFolderView = new TagFolderView(this, model);
     d->tagFolderView->setConfigGroup(getConfigGroup());
+    d->tagFolderView->setExpandNewCurrentItem(true);
     d->tagSearchBar  = new SearchTextBar(this, "DigikamViewTagSearchBar");
     d->tagSearchBar->setHighlightOnResult(true);
     d->tagSearchBar->setModel(model, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
