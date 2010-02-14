@@ -38,13 +38,12 @@
 
 class QLabel;
 class QCheckBox;
-class QComboBox;
 class QGridLayout;
-class QLineEdit;
 class QSpinBox;
 class QDoubleSpinBox;
 class QTimeEdit;
 class QTreeView;
+class KComboBox;
 class KLineEdit;
 class KSqueezedTextLabel;
 
@@ -143,7 +142,7 @@ protected Q_SLOTS:
 
 protected:
 
-    QLineEdit *m_edit;
+    KLineEdit *m_edit;
 };
 
 //-----------------------------------------------------------------------------
@@ -414,7 +413,7 @@ protected Q_SLOTS:
 
 protected:
 
-    QComboBox *m_comboBox;
+    KComboBox *m_comboBox;
 };
 
 //-----------------------------------------------------------------------------

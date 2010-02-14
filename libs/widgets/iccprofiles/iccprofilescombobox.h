@@ -27,6 +27,7 @@
 // KDE includes
 
 #include <kactionmenu.h>
+#include <kcombobox.h>
 
 // LibKDcraw includes
 
@@ -81,7 +82,7 @@ public:
 
 // ----------------------------------------------------------------------------
 
-class DIGIKAM_EXPORT IccRenderingIntentComboBox : public QComboBox
+class DIGIKAM_EXPORT IccRenderingIntentComboBox : public KComboBox
 {
 public:
 

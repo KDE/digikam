@@ -135,7 +135,7 @@ public:
     TagModel *tagFilterModel;
 
     QCheckBox *withoutTagCheckBox;
-    QComboBox *matchingConditionComboBox;
+    KComboBox *matchingConditionComboBox;
 
 };
 
@@ -162,7 +162,7 @@ TagFilterSideBarWidget::TagFilterSideBarWidget(QWidget *parent,
                     "Defines in which way the selected tags are combined to filter the images. "
                     "This also includes the '%1' check box.", notTaggedTitle));
 
-    d->matchingConditionComboBox = new QComboBox(this);
+    d->matchingConditionComboBox = new KComboBox(this);
     d->matchingConditionComboBox->setWhatsThis(matchingConditionLabel->whatsThis());
     d->matchingConditionComboBox->addItem(i18n("AND"), ImageFilterSettings::AndCondition);
     d->matchingConditionComboBox->addItem(i18n("OR"), ImageFilterSettings::OrCondition);

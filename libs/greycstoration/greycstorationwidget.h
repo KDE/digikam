@@ -34,7 +34,7 @@
 #include "digikam_export.h"
 #include "greycstorationsettings.h"
 
-class QTabWidget;
+class KTabWidget;
 
 namespace Digikam
 {
@@ -47,7 +47,7 @@ class DIGIKAM_EXPORT GreycstorationWidget : public QObject
 
 public:
 
-    GreycstorationWidget(QTabWidget *parent);
+    GreycstorationWidget(KTabWidget *parent);
     ~GreycstorationWidget();
 
     void setSettings(GreycstorationSettings settings);

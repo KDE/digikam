@@ -28,7 +28,6 @@
 #include <QGridLayout>
 #include <QGroupBox>
 #include <QLabel>
-#include <QLineEdit>
 #include <QToolButton>
 #include <QVBoxLayout>
 #include <QWhatsThis>
@@ -37,6 +36,7 @@
 
 #include <kdialog.h>
 #include <kiconloader.h>
+#include <klineedit.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kvbox.h>
@@ -75,9 +75,9 @@ public:
     QToolButton* revertMovieFileFilterBtn;
     QToolButton* revertAudioFileFilterBtn;
 
-    QLineEdit*   imageFileFilterEdit;
-    QLineEdit*   movieFileFilterEdit;
-    QLineEdit*   audioFileFilterEdit;
+    KLineEdit*   imageFileFilterEdit;
+    KLineEdit*   movieFileFilterEdit;
+    KLineEdit*   audioFileFilterEdit;
 };
 
 SetupMime::SetupMime(QWidget* parent)
@@ -110,7 +110,7 @@ SetupMime::SetupMime(QWidget* parent)
     d->imageFileFilterLabel->setText(i18n("Additional &image file extensions (<a href='image'>Currently-supported types</a>):"));
 
     KHBox *hbox1 = new KHBox(imageFileFilterBox);
-    d->imageFileFilterEdit = new QLineEdit(hbox1);
+    d->imageFileFilterEdit = new KLineEdit(hbox1);
     d->imageFileFilterEdit->setWhatsThis( i18n("<p>Here you can add the extensions of image files (including RAW files) "
                                                "to be displayed in the Album view. Just put \"xyz abc\" "
                                                "to display files with the xyz and abc extensions in your Album view.</p>"
@@ -146,7 +146,7 @@ SetupMime::SetupMime(QWidget* parent)
     d->movieFileFilterLabel->setText(i18n("Additional &movie file extensions (<a href='video'>Currently-supported types</a>):"));
 
     KHBox *hbox2 = new KHBox(movieFileFilterBox);
-    d->movieFileFilterEdit = new QLineEdit(hbox2);
+    d->movieFileFilterEdit = new KLineEdit(hbox2);
     d->movieFileFilterEdit->setWhatsThis( i18n("<p>Here you can add extra extensions of video files "
                                                "to be displayed in your Album view. Just write \"xyz abc\" "
                                                "to support files with the *.xyz and *.abc extensions. "
@@ -184,7 +184,7 @@ SetupMime::SetupMime(QWidget* parent)
     d->audioFileFilterLabel->setText(i18n("Additional &audio file extensions (<a href='audio'>Currently-supported types</a>):"));
 
     KHBox *hbox3 = new KHBox(audioFileFilterBox);
-    d->audioFileFilterEdit = new QLineEdit(hbox3);
+    d->audioFileFilterEdit = new KLineEdit(hbox3);
     d->audioFileFilterEdit->setWhatsThis( i18n("<p>Here you can add extra extensions of audio files "
                                                "to be displayed in your Album view. Just write \"mp7\" "
                                                "to support files with the *.mp7 extension. "

@@ -29,7 +29,6 @@
 #include <QGridLayout>
 #include <QLabel>
 #include <QLayout>
-#include <QTabWidget>
 #include <QTextStream>
 #include <QToolTip>
 
@@ -37,6 +36,7 @@
 
 #include <kdialog.h>
 #include <klocale.h>
+#include <ktabwidget.h>
 
 // LibKDcraw includes
 
@@ -103,7 +103,7 @@ public:
 
     QCheckBox       *fastApproxCBox;
 
-    QTabWidget      *parent;
+    KTabWidget      *parent;
 
     RComboBox       *interpolationBox;
 
@@ -121,7 +121,7 @@ public:
     RIntNumInput    *tileInput;
 };
 
-GreycstorationWidget::GreycstorationWidget(QTabWidget *parent)
+GreycstorationWidget::GreycstorationWidget(KTabWidget *parent)
                     : QObject(static_cast<QObject*>(parent)),
                       d(new GreycstorationWidgetPriv)
 {

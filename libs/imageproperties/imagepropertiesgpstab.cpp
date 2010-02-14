@@ -96,7 +96,7 @@ public:
 #endif // MARBLE_VERSION >= 0x000800
 #endif // HAVE_MARBLEWIDGET
 
-    QComboBox          *detailsCombo;
+    KComboBox          *detailsCombo;
 
     KSqueezedTextLabel *altitude;
     KSqueezedTextLabel *latitude;

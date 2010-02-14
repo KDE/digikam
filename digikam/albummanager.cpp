@@ -45,7 +45,6 @@ extern "C"
 
 #include <QApplication>
 #include <QByteArray>
-#include <QComboBox>
 #include <QDBusConnection>
 #include <QDBusInterface>
 #include <QDBusReply>
@@ -62,6 +61,7 @@ extern "C"
 
 // KDE includes
 
+#include <kcombobox.h>
 #include <kconfig.h>
 #include <klocale.h>
 #include <kdeversion.h>
@@ -760,7 +760,7 @@ bool AlbumManager::setDatabase(const QString& dbPath, bool priority, const QStri
         layout->setColumnStretch(1, 1);
 
         QRadioButton *migrateButton = 0;
-        QComboBox *migrateChoices = 0;
+        KComboBox *migrateChoices = 0;
         if (!candidateIds.isEmpty())
         {
             migrateButton = new QRadioButton;
@@ -771,7 +771,7 @@ bool AlbumManager::setDatabase(const QString& dbPath, bool priority, const QStri
                         "The collection is now located at this place:</p>"));
             migrateLabel->setWordWrap(true);
 
-            migrateChoices = new QComboBox;
+            migrateChoices = new KComboBox;
             for (int i=0; i<candidateIds.size(); ++i)
                 migrateChoices->addItem(candidateDescriptions[i], candidateIds[i]);
 

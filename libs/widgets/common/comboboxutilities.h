@@ -34,6 +34,7 @@
 // KDE includes
 
 #include <klineedit.h>
+#include <kcombobox.h>
 
 // Local includes
 
@@ -116,7 +117,7 @@ protected:
 
 // -------------------------------------------------------------------------
 
-class DIGIKAM_EXPORT ModelIndexBasedComboBox : public QComboBox
+class DIGIKAM_EXPORT ModelIndexBasedComboBox : public KComboBox
 {
 public:
 

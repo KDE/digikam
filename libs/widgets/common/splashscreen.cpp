@@ -129,7 +129,7 @@ void SplashScreen::animate()
 void SplashScreen::message(const QString& message)
 {
     d->message = message;
-    QSplashScreen::showMessage(d->message, d->messageAlign, d->messageColor);
+    QSplashScreen::showMessage(d->message, d->messageAlign, d->messageColor); // krazy:exclude=qclasses
     animate();
     qApp->processEvents();
 }

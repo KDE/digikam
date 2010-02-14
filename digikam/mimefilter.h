@@ -24,14 +24,14 @@
 #ifndef MIMEFILTER_H
 #define MIMEFILTER_H
 
-// Qt includes
+// KDE includes
 
-#include <QComboBox>
+#include <kcombobox.h>
 
 namespace Digikam
 {
 
-class MimeFilter : public QComboBox
+class MimeFilter : public KComboBox
 {
     Q_OBJECT
 

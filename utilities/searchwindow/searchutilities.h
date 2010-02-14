@@ -44,7 +44,7 @@
 #include "comboboxutilities.h"
 
 class QVBoxLayout;
-class QTextEdit;
+class KTextEdit;
 class QTimeLine;
 class KPushButton;
 
@@ -243,7 +243,7 @@ protected Q_SLOTS:
 
 protected:
 
-    QTextEdit      *m_edit;
+    KTextEdit      *m_edit;
     KPushButton    *m_okButton;
     QWidget        *m_widget;
 };

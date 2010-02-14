@@ -237,7 +237,7 @@ void IccProfilesMenuAction::slotTriggered(QObject *obj)
 // ------------------------------------------------------------------------------------------
 
 IccRenderingIntentComboBox::IccRenderingIntentComboBox(QWidget *parent)
-                          : QComboBox(parent)
+                          : KComboBox(parent)
 {
     addItem("Perceptual", IccTransform::Perceptual);
     addItem("Relative Colorimetric", IccTransform::RelativeColorimetric);
