@@ -185,7 +185,6 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
     d->tagModificationHelper = new TagModificationHelper(this, this);
     d->tagModel = new TagModel(AbstractAlbumModel::IncludeRootAlbum, this);
     d->tagModel->setCheckable(true);
-    d->tagModel->setTristate(true);
     d->tagModel->setRootCheckable(false);
     d->tagCheckView = new TagCheckView(captionTagsArea, d->tagModel);
 
