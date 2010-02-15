@@ -27,7 +27,8 @@
 
 // Qt includes
 
-#include <QtGui/QListWidget>
+#include <QtGui/QTreeWidget>
+#include <QtGui/QTreeWidgetItem>
 
 // Local includes
 
@@ -39,16 +40,21 @@ namespace Digikam
 class DImgThreadedFilter;
 class PreviewListItemPriv;
 
-class DIGIKAM_EXPORT PreviewListItem : public QListWidgetItem
+class DIGIKAM_EXPORT PreviewListItem : public QTreeWidgetItem
 {
 
 public:
 
-    PreviewListItem(QListWidget* parent=0);
+    PreviewListItem(QTreeWidget* parent=0);
     ~PreviewListItem();
 
     void setFilter(DImgThreadedFilter* filter);
     DImgThreadedFilter* filter() const;
+
+    void setPixmap(const QPixmap& pix);
+
+    void setId(int id);
+    int  id();
 
 private:
 
@@ -59,7 +65,7 @@ private:
 
 class PreviewListPriv;
 
-class DIGIKAM_EXPORT PreviewList : public QListWidget
+class DIGIKAM_EXPORT PreviewList : public QTreeWidget
 {
     Q_OBJECT
 
@@ -68,7 +74,10 @@ public:
     PreviewList(QWidget* parent=0);
     ~PreviewList();
 
-    PreviewListItem* addItem(DImgThreadedFilter* filter, const QString& txt);
+    PreviewListItem* addItem(DImgThreadedFilter* filter, const QString& txt, int id);
+
+    void setCurrentId(int id);
+    int currentId();
 
 private Q_SLOTS:
 

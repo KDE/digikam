@@ -26,8 +26,8 @@
 
 // Qt includes
 
-#include <QListWidgetItem>
 #include <QPixmap>
+#include <QHeaderView>
 
 // KDE includes
 
@@ -52,14 +52,16 @@ public:
 
     PreviewListItemPriv()
     {
+        id     = 0;
         filter = 0;
     }
 
+    int                 id;
     DImgThreadedFilter* filter;
 };
 
-PreviewListItem::PreviewListItem(QListWidget* parent)
-               : QListWidgetItem(parent), d(new PreviewListItemPriv)
+PreviewListItem::PreviewListItem(QTreeWidget* parent)
+               : QTreeWidgetItem(parent), d(new PreviewListItemPriv)
 {
 }
 
@@ -78,6 +80,21 @@ DImgThreadedFilter* PreviewListItem::filter() const
     return d->filter;
 }
 
+void PreviewListItem::setPixmap(const QPixmap& pix)
+{
+    setIcon(0, QIcon(pix));
+}
+
+void PreviewListItem::setId(int id)
+{
+    d->id = id;
+}
+
+int PreviewListItem::id()
+{
+    return d->id;
+}
+
 // ---------------------------------------------------------------------
 
 class PreviewListPriv
@@ -87,20 +104,24 @@ public:
 
     PreviewListPriv()
     {
-        image = 0;
+
     }
 
-    DImg* image;
 };
 
 PreviewList::PreviewList(QWidget* parent)
-           : QListWidget(parent), d(new PreviewListPriv)
+           : QTreeWidget(parent), d(new PreviewListPriv)
 {
-    setAttribute(Qt::WA_DeleteOnClose);
+    setSelectionMode(QAbstractItemView::SingleSelection);
+    setDropIndicatorShown(true);
+    setSortingEnabled(false);
+    setAllColumnsShowFocus(true);
+    setRootIsDecorated(false);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    setColumnCount(1);
     setIconSize(QSize(128, 128));
-
-    ImageIface iface(0, 0);
-    d->image = iface.getOriginalImg();
+    setHeaderHidden(true);
+    header()->setResizeMode(QHeaderView::Stretch);
 }
 
 PreviewList::~PreviewList()
@@ -108,13 +129,14 @@ PreviewList::~PreviewList()
     delete d;
 }
 
-PreviewListItem* PreviewList::addItem(DImgThreadedFilter* filter, const QString& txt)
+PreviewListItem* PreviewList::addItem(DImgThreadedFilter* filter, const QString& txt, int id)
 {
     if (!filter) return 0;
 
     PreviewListItem* item  = new PreviewListItem(this);
     item->setFilter(filter);
-    item->setText(txt);
+    item->setText(0, txt);
+    item->setId(id);
 
     connect(filter, SIGNAL(started()),
             this, SLOT(slotFilterStarted()));
@@ -136,7 +158,7 @@ void PreviewList::slotFilterStarted()
     if (!filter) return;
 
     PreviewListItem* item = findItem(filter);
-    item->setIcon(SmallIcon("run"));
+    item->setIcon(0, SmallIconSet("system-run", 128));
 }
 
 void PreviewList::slotFilterFinished(bool /*success*/)
@@ -145,7 +167,7 @@ void PreviewList::slotFilterFinished(bool /*success*/)
     if (!filter) return;
 
     PreviewListItem* item = findItem(filter);
-    item->setIcon(QIcon(filter->getTargetImage().convertToPixmap().scaled(128, 128, Qt::KeepAspectRatio)));
+    item->setPixmap(filter->getTargetImage().convertToPixmap().scaled(128, 128, Qt::KeepAspectRatio));
 }
 
 void PreviewList::slotFilterProgress(int /*progress*/)
@@ -159,12 +181,39 @@ void PreviewList::slotFilterProgress(int /*progress*/)
 
 PreviewListItem* PreviewList::findItem(DImgThreadedFilter* filter)
 {
-    for (int i = 0 ; i < count() ; ++i)
+    QTreeWidgetItemIterator it(this);
+    while (*it)
     {
-        PreviewListItem* it = dynamic_cast<PreviewListItem*>(item(i));
-        if (it && it->filter() == filter)
-            return it;
+        PreviewListItem* item = dynamic_cast<PreviewListItem*>(*it);
+        if (item && item->filter() == filter)
+            return item;
+
+        ++it;
     }
+    return 0;
+}
+
+void PreviewList::setCurrentId(int id)
+{
+    QTreeWidgetItemIterator it(this);
+    while (*it)
+    {
+        PreviewListItem* item = dynamic_cast<PreviewListItem*>(*it);
+        if (item && item->id() == id)
+        {
+            setCurrentItem(item);
+            item->setSelected(true);
+            return;
+        }
+        ++it;
+    }
+}
+
+int PreviewList::currentId()
+{
+    PreviewListItem* item = dynamic_cast<PreviewListItem*>(currentItem());
+    if (item ) return item->id();
+
     return 0;
 }
 
