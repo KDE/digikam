@@ -108,9 +108,9 @@ PreviewList::~PreviewList()
     delete d;
 }
 
-void PreviewList::addPreview(DImgThreadedFilter* filter, const QString& txt)
+PreviewListItem* PreviewList::addItem(DImgThreadedFilter* filter, const QString& txt)
 {
-    if (!filter) return;
+    if (!filter) return 0;
 
     PreviewListItem* item  = new PreviewListItem(this);
     item->setFilter(filter);
@@ -126,6 +126,8 @@ void PreviewList::addPreview(DImgThreadedFilter* filter, const QString& txt)
             this, SLOT(slotFilterProgress(int)));
 
     filter->startFilter();
+
+    return item;
 }
 
 void PreviewList::slotFilterStarted()

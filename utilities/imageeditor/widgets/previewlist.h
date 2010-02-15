@@ -68,7 +68,7 @@ public:
     PreviewList(QWidget* parent=0);
     ~PreviewList();
 
-    void addPreview(DImgThreadedFilter* filter, const QString& txt);
+    PreviewListItem* addItem(DImgThreadedFilter* filter, const QString& txt);
 
 private Q_SLOTS:
 
