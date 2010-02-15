@@ -56,6 +56,9 @@ public:
     void setId(int id);
     int  id();
 
+    void setBusy(bool b);
+    bool isBusy();
+
 private:
 
     PreviewListItemPriv* const d;
@@ -78,12 +81,17 @@ public:
 
     void setCurrentId(int id);
     int currentId();
+    
+    void startFilters();
+    void stopFilters();
+
 
 private Q_SLOTS:
 
     void slotFilterStarted();
     void slotFilterFinished(bool success);
     void slotFilterProgress(int progress);
+    void slotProgressTimerDone();
 
 private:
 
