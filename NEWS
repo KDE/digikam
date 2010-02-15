@@ -44,5 +44,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 027 ==> 226872 : Tag tree not expanded with "Tags already assigned" button.
 028 ==> 226858 : digiKam 1.2 My Tags window always blank.
 029 ==> 226568 : digiKam 1.1 crashes when renaming tag.
-030 ==> 
+030 ==> 226515 : My tags on Caption/Tags becomes empty after removing a single tag.
+031 ==> 
+
 
