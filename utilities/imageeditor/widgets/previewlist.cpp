@@ -26,7 +26,8 @@
 
 // Qt includes
 
-#include <QLayout>
+#include <QListWidgetItem>
+#include <QPixmap>
 
 // KDE includes
 
@@ -34,6 +35,12 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
+
+// Local includes
+
+#include "dimg.h"
+#include "dimgthreadedfilter.h"
+#include "imageiface.h"
 
 namespace Digikam
 {
@@ -61,9 +68,14 @@ PreviewListItem::~PreviewListItem()
     delete d;
 }
 
-void PreviewListItem::setPreviewFilter(DImgThreadedFilter* filter)
+void PreviewListItem::setFilter(DImgThreadedFilter* filter)
 {
     d->filter = filter;
+}
+
+DImgThreadedFilter* PreviewListItem::filter() const
+{
+    return d->filter;
 }
 
 // ---------------------------------------------------------------------
@@ -75,8 +87,10 @@ public:
 
     PreviewListPriv()
     {
+        image = 0;
     }
 
+    DImg* image;
 };
 
 PreviewList::PreviewList(QWidget* parent)
@@ -84,11 +98,72 @@ PreviewList::PreviewList(QWidget* parent)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setIconSize(QSize(128, 128));
+
+    ImageIface iface(0, 0);
+    d->image = iface.getOriginalImg();
 }
 
 PreviewList::~PreviewList()
 {
     delete d;
+}
+
+void PreviewList::addPreview(DImgThreadedFilter* filter, const QString& txt)
+{
+    if (!filter) return;
+
+    PreviewListItem* item  = new PreviewListItem(this);
+    item->setFilter(filter);
+    item->setText(txt);
+
+    connect(filter, SIGNAL(started()),
+            this, SLOT(slotFilterStarted()));
+
+    connect(filter, SIGNAL(finished(bool)),
+            this, SLOT(slotFilterFinished(bool)));
+
+    connect(filter, SIGNAL(progress(int)),
+            this, SLOT(slotFilterProgress(int)));
+
+    filter->startFilter();
+}
+
+void PreviewList::slotFilterStarted()
+{
+    DImgThreadedFilter* filter = dynamic_cast<DImgThreadedFilter*>(sender());
+    if (!filter) return;
+
+    PreviewListItem* item = findItem(filter);
+    item->setIcon(SmallIcon("run"));
+}
+
+void PreviewList::slotFilterFinished(bool /*success*/)
+{
+    DImgThreadedFilter* filter = dynamic_cast<DImgThreadedFilter*>(sender());
+    if (!filter) return;
+
+    PreviewListItem* item = findItem(filter);
+    item->setIcon(QIcon(filter->getTargetImage().convertToPixmap().scaled(128, 128, Qt::KeepAspectRatio)));
+}
+
+void PreviewList::slotFilterProgress(int /*progress*/)
+{
+    DImgThreadedFilter* filter = dynamic_cast<DImgThreadedFilter*>(sender());
+    if (!filter) return;
+
+    PreviewListItem* item = findItem(filter);
+    //item->setIcon();
+}
+
+PreviewListItem* PreviewList::findItem(DImgThreadedFilter* filter)
+{
+    for (int i = 0 ; i < count() ; ++i)
+    {
+        PreviewListItem* it = dynamic_cast<PreviewListItem*>(item(i));
+        if (it && it->filter() == filter)
+            return it;
+    }
+    return 0;
 }
 
 }  // namespace Digikam

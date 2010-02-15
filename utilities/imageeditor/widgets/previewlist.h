@@ -47,7 +47,8 @@ public:
     PreviewListItem(QListWidget* parent=0);
     ~PreviewListItem();
 
-    void setPreviewFilter(DImgThreadedFilter* filter);
+    void setFilter(DImgThreadedFilter* filter);
+    DImgThreadedFilter* filter() const;
 
 private:
 
@@ -66,6 +67,18 @@ public:
 
     PreviewList(QWidget* parent=0);
     ~PreviewList();
+
+    void addPreview(DImgThreadedFilter* filter, const QString& txt);
+
+private Q_SLOTS:
+
+    void slotFilterStarted();
+    void slotFilterFinished(bool success);
+    void slotFilterProgress(int progress);
+
+private:
+
+    PreviewListItem* findItem(DImgThreadedFilter* filter);
 
 private:
 
