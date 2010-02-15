@@ -43,11 +43,12 @@
 #include "equalizefilter.h"
 #include "stretchfilter.h"
 #include "normalizefilter.h"
-#include "wbfilter.h"
+#include "autoexpofilter.h"
 #include "editortoolsettings.h"
 #include "histogramwidget.h"
 #include "imageiface.h"
 #include "imageguidewidget.h"
+#include "previewlist.h"
 
 using namespace Digikam;
 
@@ -77,7 +78,7 @@ public:
 
     uchar*              destinationPreviewData;
 
-    QListWidget*        correctionTools;
+    PreviewList*        correctionTools;
 
     ImageGuideWidget*   previewWidget;
     EditorToolSettings* gboxSettings;
@@ -98,74 +99,65 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
     // -------------------------------------------------------------
 
     d->previewWidget = new ImageGuideWidget;
-    d->previewWidget->setToolTip(i18n("The auto-color correction tool preview is shown "
-                                      "here. Picking a color on the image will show "
-                                      "the corresponding color level on the histogram."));
     setToolView(d->previewWidget);
     setPreviewModeMask(PreviewToolBar::AllPreviewModes);
 
     // -------------------------------------------------------------
 
     ImageIface iface(0, 0);
-    d->thumbnailImage = iface.getOriginalImg()->smoothScale(128, 128, Qt::KeepAspectRatio);
-
-    d->gboxSettings = new EditorToolSettings;
+    d->thumbnailImage     = iface.getOriginalImg()->copy()/*->smoothScale(128, 128, Qt::KeepAspectRatio)*/;
+    PreviewListItem *item = 0;
+    d->gboxSettings       = new EditorToolSettings;
     d->gboxSettings->setTools(EditorToolSettings::Histogram);
 
     // -------------------------------------------------------------
 
-    d->correctionTools = new QListWidget();
-    d->correctionTools->setIconSize(QSize(128, 128));
+    d->correctionTools = new PreviewList();
 
-    QPixmap pix = getThumbnailForEffect(AutoLevelsCorrection);
-    QListWidgetItem *item = new QListWidgetItem(QIcon(pix), i18n("Auto Levels"));
-    item->setWhatsThis(i18n("<b>Auto Levels</b>:"
-                            "<p>This option maximizes the tonal range in the Red, "
-                            "Green, and Blue channels. It searches the image shadow and highlight "
-                            "limit values and adjusts the Red, Green, and Blue channels "
-                            "to a full histogram range.</p>"));
-    d->correctionTools->insertItem(AutoLevelsCorrection, item);
+    item = d->correctionTools->addItem(new AutoLevelsFilter(&d->thumbnailImage, d->correctionTools),
+                                       i18n("Auto Levels"), AutoLevelsCorrection);
+    item->setWhatsThis(0, i18n("<b>Auto Levels</b>:"
+                               "<p>This option maximizes the tonal range in the Red, "
+                               "Green, and Blue channels. It searches the image shadow and highlight "
+                               "limit values and adjusts the Red, Green, and Blue channels "
+                               "to a full histogram range.</p>"));
 
-    pix = getThumbnailForEffect(NormalizeCorrection);
-    item = new QListWidgetItem(QIcon(pix), i18n("Normalize"));
-    item->setWhatsThis(i18n("<b>Normalize</b>:"
-                            "<p>This option scales brightness values across the active "
-                            "image so that the darkest point becomes black, and the "
-                            "brightest point becomes as bright as possible without "
-                            "altering its hue. This is often a \"magic fix\" for "
-                            "images that are dim or washed out.</p>"));
-    d->correctionTools->insertItem(NormalizeCorrection, item);
+    item = d->correctionTools->addItem(new NormalizeFilter(&d->thumbnailImage, d->correctionTools),
+                                       i18n("Normalize"), NormalizeCorrection);
+    item->setWhatsThis(0, i18n("<b>Normalize</b>:"
+                               "<p>This option scales brightness values across the active "
+                               "image so that the darkest point becomes black, and the "
+                               "brightest point becomes as bright as possible without "
+                               "altering its hue. This is often a \"magic fix\" for "
+                               "images that are dim or washed out.</p>"));
 
-    pix = getThumbnailForEffect(EqualizeCorrection);
-    item = new QListWidgetItem(QIcon(pix), i18n("Equalize"));
-    item->setWhatsThis(i18n("<b>Equalize</b>:"
-                            "<p>This option adjusts the brightness of colors across the "
-                            "active image so that the histogram for the value channel "
-                            "is as nearly as possible flat, that is, so that each possible "
-                            "brightness value appears at about the same number of pixels "
-                            "as each other value. Sometimes Equalize works wonderfully at "
-                            "enhancing the contrasts in an image. Other times it gives "
-                            "garbage. It is a very powerful operation, which can either work "
-                            "miracles on an image or destroy it.</p>"));
-    d->correctionTools->insertItem(EqualizeCorrection, item);
+    item = d->correctionTools->addItem(new EqualizeFilter(&d->thumbnailImage, d->correctionTools),
+                                       i18n("Equalize"), EqualizeCorrection);
+    item->setWhatsThis(0, i18n("<b>Equalize</b>:"
+                               "<p>This option adjusts the brightness of colors across the "
+                               "active image so that the histogram for the value channel "
+                               "is as nearly as possible flat, that is, so that each possible "
+                               "brightness value appears at about the same number of pixels "
+                               "as each other value. Sometimes Equalize works wonderfully at "
+                               "enhancing the contrasts in an image. Other times it gives "
+                               "garbage. It is a very powerful operation, which can either work "
+                               "miracles on an image or destroy it.</p>"));
 
-    pix = getThumbnailForEffect(StretchContrastCorrection);
-    item = new QListWidgetItem(QIcon(pix), i18n("Stretch Contrast"));
-    item->setWhatsThis(i18n("<b>Stretch Contrast</b>:"
-                            "<p>This option enhances the contrast and brightness "
-                            "of the RGB values of an image by stretching the lowest "
-                            "and highest values to their fullest range, adjusting "
-                            "everything in between.</p>"));
-    d->correctionTools->insertItem(StretchContrastCorrection, item);
+    item = d->correctionTools->addItem(new StretchFilter(&d->thumbnailImage, d->correctionTools),
+                                       i18n("Stretch Contrast"), StretchContrastCorrection);
+    item->setWhatsThis(0, i18n("<b>Stretch Contrast</b>:"
+                               "<p>This option enhances the contrast and brightness "
+                               "of the RGB values of an image by stretching the lowest "
+                               "and highest values to their fullest range, adjusting "
+                               "everything in between.</p>"));
 
-    pix = getThumbnailForEffect(AutoExposureCorrection);
-    item = new QListWidgetItem(QIcon(pix), i18n("Auto Exposure"));
-    item->setWhatsThis(i18n("<b>Auto Exposure</b>:"
-                            "<p>This option enhances the contrast and brightness "
-                            "of the RGB values of an image to calculate optimal "
-                            "exposition and black level using image histogram "
-                            "properties.</p>"));
-    d->correctionTools->insertItem(AutoExposureCorrection, item);
+    item = d->correctionTools->addItem(new AutoExpoFilter(&d->thumbnailImage, d->correctionTools),
+                                       i18n("Auto Exposure"), AutoExposureCorrection);
+    item->setWhatsThis(0, i18n("<b>Auto Exposure</b>:"
+                               "<p>This option enhances the contrast and brightness "
+                               "of the RGB values of an image to calculate optimal "
+                               "exposition and black level using image histogram "
+                               "properties.</p>"));
 
     // -------------------------------------------------------------
 
@@ -205,6 +197,12 @@ AutoCorrectionTool::~AutoCorrectionTool()
     delete d;
 }
 
+void AutoCorrectionTool::slotInit()
+{
+    EditorTool::slotInit();
+    d->correctionTools->startFilters();    
+}
+
 void AutoCorrectionTool::slotColorSelectedFromTarget(const DColor& color)
 {
     d->gboxSettings->histogramBox()->histogram()->setHistogramGuideByColor(color);
@@ -217,7 +215,7 @@ void AutoCorrectionTool::readSettings()
 
     d->gboxSettings->histogramBox()->setChannel((ChannelType)group.readEntry(d->configHistogramChannelEntry, (int)LuminosityChannel));
     d->gboxSettings->histogramBox()->setScale((HistogramScale)group.readEntry(d->configHistogramScaleEntry,  (int)LogScaleHistogram));
-    d->correctionTools->setCurrentRow(group.readEntry(d->configAutoCorrectionFilterEntry, (int)AutoLevelsCorrection));
+    d->correctionTools->setCurrentId(group.readEntry(d->configAutoCorrectionFilterEntry, (int)AutoLevelsCorrection));
 }
 
 void AutoCorrectionTool::writeSettings()
@@ -227,14 +225,14 @@ void AutoCorrectionTool::writeSettings()
 
     group.writeEntry(d->configHistogramChannelEntry,     (int)d->gboxSettings->histogramBox()->channel());
     group.writeEntry(d->configHistogramScaleEntry,       (int)d->gboxSettings->histogramBox()->scale());
-    group.writeEntry(d->configAutoCorrectionFilterEntry, d->correctionTools->currentRow());
+    group.writeEntry(d->configAutoCorrectionFilterEntry, d->correctionTools->currentId());
     config->sync();
 }
 
 void AutoCorrectionTool::slotResetSettings()
 {
     d->correctionTools->blockSignals(true);
-    d->correctionTools->setCurrentRow(AutoLevelsCorrection);
+    d->correctionTools->setCurrentId(AutoLevelsCorrection);
     d->correctionTools->blockSignals(false);
 
     slotEffect();
@@ -255,7 +253,7 @@ void AutoCorrectionTool::slotEffect()
     int h                     = iface->previewHeight();
     bool sb                   = iface->previewSixteenBit();
 
-    autoCorrection(d->destinationPreviewData, w, h, sb, d->correctionTools->currentRow());
+    autoCorrection(d->destinationPreviewData, w, h, sb, d->correctionTools->currentId());
 
     iface->putPreviewImage(d->destinationPreviewData);
     d->previewWidget->updatePreview();
@@ -265,13 +263,6 @@ void AutoCorrectionTool::slotEffect()
     d->gboxSettings->histogramBox()->histogram()->updateData(d->destinationPreviewData, w, h, sb, 0, 0, 0, false);
 
     kapp->restoreOverrideCursor();
-}
-
-QPixmap AutoCorrectionTool::getThumbnailForEffect(AutoCorrectionType type)
-{
-    DImg thumb = d->thumbnailImage.copy();
-    autoCorrection(thumb.bits(), thumb.width(), thumb.height(), thumb.sixteenBit(), type);
-    return (thumb.convertToPixmap());
 }
 
 void AutoCorrectionTool::finalRendering()
@@ -285,7 +276,7 @@ void AutoCorrectionTool::finalRendering()
 
     if (data)
     {
-       int type = d->correctionTools->currentRow();
+       int type = d->correctionTools->currentId();
        autoCorrection(data, w, h, sb, type);
        QString name;
 
