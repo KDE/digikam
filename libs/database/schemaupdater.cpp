@@ -943,6 +943,15 @@ bool SchemaUpdater::updateV4toV5()
        )
          return false;
 
+    if (!m_access->backend()->execSql(QString(
+                    "REPLACE INTO ImageInformation "
+                    " (imageId) "
+                    "SELECT id FROM Images;"
+                                             ),
+                    DatabaseItem::Visible, DatabaseItem::UndefinedCategory)
+       )
+         return false;
+
     // remove orphan images that would not be removed by CollectionScanner
     m_access->backend()->execSql(QString("DELETE FROM Images WHERE album NOT IN (SELECT id FROM Albums);"));
 
