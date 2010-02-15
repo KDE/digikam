@@ -29,6 +29,7 @@
 #include <QPixmap>
 #include <QHeaderView>
 #include <QTimer>
+#include <QPainter>
 
 // KDE includes
 
@@ -121,7 +122,7 @@ public:
     {
         progressCount = 0;
         progressTimer = 0;
-        progressPix   = SmallIcon("process-working", 48).scaledToWidth(128);
+        progressPix   = SmallIcon("process-working", 22);
     }
 
     int     progressCount;
@@ -170,7 +171,7 @@ void PreviewList::startFilters()
             item->filter()->startFilter();
 
         ++it;
-    }
+    }    
 }
 
 void PreviewList::stopFilters()
@@ -223,17 +224,18 @@ void PreviewList::slotFilterStarted()
     item->setBusy(true);
 }
 
-void PreviewList::slotFilterFinished(bool /*success*/)
+void PreviewList::slotFilterFinished(bool success)
 {
     DImgThreadedFilter* filter = dynamic_cast<DImgThreadedFilter*>(sender());
     if (!filter) return;
 
     PreviewListItem* item = findItem(filter);
-    item->setPixmap(filter->getTargetImage().convertToPixmap().scaled(128, 128, Qt::KeepAspectRatio));
     item->setBusy(false);
+    if (success)
+        item->setPixmap(filter->getTargetImage().convertToPixmap().scaled(128, 128, Qt::KeepAspectRatio));
 }
 
-void PreviewList::slotFilterProgress(int progress)
+void PreviewList::slotFilterProgress(int /*progress*/)
 {
     DImgThreadedFilter* filter = dynamic_cast<DImgThreadedFilter*>(sender());
     if (!filter) return;
@@ -283,7 +285,11 @@ void PreviewList::slotProgressTimerDone()
 {
     kDebug() << "timer shot";
 
-    QPixmap ico(d->progressPix.copy(0, d->progressCount*128, 128, 128));
+    QPixmap ppix(d->progressPix.copy(0, d->progressCount*22, 22, 22));
+    QPixmap pixmap(128, 128);
+    pixmap.fill(Qt::transparent);
+    QPainter p(&pixmap);
+    p.drawPixmap((pixmap.width()/2) - (ppix.width()/2), (pixmap.height()/2) - (ppix.height()/2), ppix);
     
     int busy = 0;
     QTreeWidgetItemIterator it(this);
@@ -292,7 +298,7 @@ void PreviewList::slotProgressTimerDone()
         PreviewListItem* item = dynamic_cast<PreviewListItem*>(*it);
         if (item && item->isBusy())
         {
-            item->setPixmap(ico);
+            item->setPixmap(pixmap);
             ++busy;
         }
 
