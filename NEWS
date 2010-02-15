@@ -41,5 +41,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 024 ==> 224999 : Thumbnails blury after upgrade to 1.0.0 from 0.10.
 025 ==> 226789 : Metadata settings only EXIF.
 026 ==> 185266 : digiKam shows unknown icon when moving images to other directory.
-027 ==> 226872 : Tag tree not expanded with "Tags already assigned"-button.
-028 ==> 
+027 ==> 226872 : Tag tree not expanded with "Tags already assigned" button.
+028 ==> 226858 : digiKam 1.2 My Tags window always blank.
+029 ==> 
