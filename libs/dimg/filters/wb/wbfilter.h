@@ -86,9 +86,15 @@ public:
     static void autoExposureAdjustement(uchar* data, int width, int height, bool sb, double& black, double& expo);
     static void autoWBAdjustementFromColor(const QColor& tc, double& temperature, double& green);
 
-private:
+protected:
 
-    void filterImage();
+    virtual void filterImage();
+    
+  protected:
+    
+    WBContainer m_settings;
+
+private:
 
     void setRGBmult();
     void setLUTv();

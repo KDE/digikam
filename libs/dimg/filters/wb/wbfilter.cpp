@@ -63,30 +63,28 @@ public:
         BP      = 0;
     }
 
-    bool        clipSat;
-    bool        overExp;
-    bool        WBind;
+    bool  clipSat;
+    bool  overExp;
+    bool  WBind;
 
-    int         BP;
-    int         WP;
+    int   BP;
+    int   WP;
 
-    uint        rgbMax;
+    uint  rgbMax;
 
-    float       curve[65536];
-    float       mr;
-    float       mg;
-    float       mb;
-
-    WBContainer settings;
+    float curve[65536];
+    float mr;
+    float mg;
+    float mb;
 };
 
 WBFilter::WBFilter(DImg* orgImage, QObject* parent, const WBContainer& settings)
         : DImgThreadedFilter(orgImage, parent, "WBFilter"),
           d(new WBFilterPriv)
 {
-    d->settings = settings;
-    d->WP       = m_orgImage.sixteenBit() ? 65536 : 256;
-    d->rgbMax   = m_orgImage.sixteenBit() ? 65536 : 256;
+    m_settings = settings;
+    d->WP      = m_orgImage.sixteenBit() ? 65536 : 256;
+    d->rgbMax  = m_orgImage.sixteenBit() ? 65536 : 256;
     initFilter();
 }
 
@@ -94,9 +92,9 @@ WBFilter::WBFilter(uchar* data, uint width, uint height, bool sixteenBit, const 
         : DImgThreadedFilter(),
           d(new WBFilterPriv)
 {
-    d->settings = settings;
-    d->WP       = sixteenBit ? 65536 : 256;
-    d->rgbMax   = sixteenBit ? 65536 : 256;
+    m_settings = settings;
+    d->WP      = sixteenBit ? 65536 : 256;
+    d->rgbMax  = sixteenBit ? 65536 : 256;
 
     // Set final lut.
     setRGBmult();
@@ -270,18 +268,18 @@ void WBFilter::setRGBmult(double& temperature, double& green, float& mr, float& 
 
 void WBFilter::setRGBmult()
 {
-    setRGBmult(d->settings.temperature, d->settings.green, d->mr, d->mg, d->mb);
+    setRGBmult(m_settings.temperature, m_settings.green, d->mr, d->mg, d->mb);
 }
 
 void WBFilter::setLUTv()
 {
-    double b = d->mg * pow(2, d->settings.exposition);
-    d->BP    = (uint)(d->rgbMax * d->settings.black);
+    double b = d->mg * pow(2, m_settings.exposition);
+    d->BP    = (uint)(d->rgbMax * m_settings.black);
     d->WP    = (uint)(d->rgbMax / b);
 
     if (d->WP - d->BP < 1) d->WP = d->BP + 1;
 
-    kDebug() << "T(K): " << d->settings.temperature
+    kDebug() << "T(K): " << m_settings.temperature
              << " => R:" << d->mr
              << " G:"    << d->mg
              << " B:"    << d->mb
@@ -293,16 +291,16 @@ void WBFilter::setLUTv()
     // We will try to reproduce the same Gamma effect here than BCG tool.
     double gamma;
 
-    if (d->settings.gamma >= 1.0)
-        gamma = 0.335*(2.0-d->settings.gamma) + 0.665;
+    if (m_settings.gamma >= 1.0)
+        gamma = 0.335*(2.0-m_settings.gamma) + 0.665;
     else
-        gamma = 1.8*(2.0-d->settings.gamma) - 0.8;
+        gamma = 1.8*(2.0-m_settings.gamma) - 0.8;
 
     for (int i = 1; i < (int)d->rgbMax; ++i)
     {
         float x      = (float)(i - d->BP)/(d->WP - d->BP);
         d->curve[i]  = (i < d->BP) ? 0 : (d->rgbMax-1) * pow((double)x, gamma);
-        d->curve[i] *= (1 - d->settings.dark * exp(-x * x / 0.002));
+        d->curve[i] *= (1 - m_settings.dark * exp(-x * x / 0.002));
         d->curve[i] /= (float)i;
     }
 }
@@ -391,7 +389,7 @@ unsigned short WBFilter::pixelColor(int colorMult, int index, int value)
            r = 0;
     }
 
-    return((unsigned short)CLAMP((int)((index - d->settings.saturation*(index - r)) * d->curve[index]), 0, (int)(d->rgbMax-1)));
+    return((unsigned short)CLAMP((int)((index - m_settings.saturation*(index - r)) * d->curve[index]), 0, (int)(d->rgbMax-1)));
 }
 
 }  // namespace Digikam
