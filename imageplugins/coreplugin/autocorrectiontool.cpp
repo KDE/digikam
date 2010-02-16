@@ -105,6 +105,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
     // -------------------------------------------------------------
 
     ImageIface iface(0, 0);
+    // FIXME : use whole image here to test progress indicator.
     d->thumbnailImage     = iface.getOriginalImg()->copy()/*->smoothScale(128, 128, Qt::KeepAspectRatio)*/;
     PreviewListItem *item = 0;
     d->gboxSettings       = new EditorToolSettings;
@@ -114,7 +115,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
 
     d->correctionTools = new PreviewList();
 
-    item = d->correctionTools->addItem(new AutoLevelsFilter(&d->thumbnailImage, d->correctionTools),
+    item = d->correctionTools->addItem(new AutoLevelsFilter(&d->thumbnailImage),
                                        i18n("Auto Levels"), AutoLevelsCorrection);
     item->setWhatsThis(0, i18n("<b>Auto Levels</b>:"
                                "<p>This option maximizes the tonal range in the Red, "
@@ -122,7 +123,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
                                "limit values and adjusts the Red, Green, and Blue channels "
                                "to a full histogram range.</p>"));
 
-    item = d->correctionTools->addItem(new NormalizeFilter(&d->thumbnailImage, d->correctionTools),
+    item = d->correctionTools->addItem(new NormalizeFilter(&d->thumbnailImage),
                                        i18n("Normalize"), NormalizeCorrection);
     item->setWhatsThis(0, i18n("<b>Normalize</b>:"
                                "<p>This option scales brightness values across the active "
@@ -131,7 +132,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
                                "altering its hue. This is often a \"magic fix\" for "
                                "images that are dim or washed out.</p>"));
 
-    item = d->correctionTools->addItem(new EqualizeFilter(&d->thumbnailImage, d->correctionTools),
+    item = d->correctionTools->addItem(new EqualizeFilter(&d->thumbnailImage),
                                        i18n("Equalize"), EqualizeCorrection);
     item->setWhatsThis(0, i18n("<b>Equalize</b>:"
                                "<p>This option adjusts the brightness of colors across the "
@@ -143,7 +144,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
                                "garbage. It is a very powerful operation, which can either work "
                                "miracles on an image or destroy it.</p>"));
 
-    item = d->correctionTools->addItem(new StretchFilter(&d->thumbnailImage, d->correctionTools),
+    item = d->correctionTools->addItem(new StretchFilter(&d->thumbnailImage),
                                        i18n("Stretch Contrast"), StretchContrastCorrection);
     item->setWhatsThis(0, i18n("<b>Stretch Contrast</b>:"
                                "<p>This option enhances the contrast and brightness "
@@ -151,7 +152,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
                                "and highest values to their fullest range, adjusting "
                                "everything in between.</p>"));
 
-    item = d->correctionTools->addItem(new AutoExpoFilter(&d->thumbnailImage, d->correctionTools),
+    item = d->correctionTools->addItem(new AutoExpoFilter(&d->thumbnailImage),
                                        i18n("Auto Exposure"), AutoExposureCorrection);
     item->setWhatsThis(0, i18n("<b>Auto Exposure</b>:"
                                "<p>This option enhances the contrast and brightness "
