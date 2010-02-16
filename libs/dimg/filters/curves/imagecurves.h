@@ -24,8 +24,6 @@
 #ifndef IMAGECURVES_H
 #define IMAGECURVES_H
 
-#define ROUND(x) ((int) ((x) + 0.5))
-
 // Qt includes
 
 #include <QtCore/QPoint>

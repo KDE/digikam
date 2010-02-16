@@ -6,7 +6,7 @@
  * Date        : 2004-12-01
  * Description : a widget to draw histogram curves
  *
- * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -121,7 +121,6 @@ public:
 
     void getHistogramCoordinates(const QPoint& mousePosition, int& x, int& y, int& closestPoint)
     {
-
         x = CLAMP((int)(mousePosition.x() *
                            ((float)(q->m_imageHistogram->getMaxSegmentIndex()) / (float)q->width())),
                         0, q->m_imageHistogram->getMaxSegmentIndex());
@@ -151,7 +150,6 @@ public:
         {
             closestPoint = (x + getDelta() / 2) / getDelta();
         }
-
     }
 
     // --- rendering ---
