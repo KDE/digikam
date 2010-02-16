@@ -31,18 +31,16 @@
 // Local includes
 
 #include "editortool.h"
+#include "dimg.h"
 
-namespace Digikam
-{
-class DColor;
-}
+using namespace Digikam;
 
 namespace DigikamImagesPluginCore
 {
 
 class AutoCorrectionToolPriv;
 
-class AutoCorrectionTool : public Digikam::EditorTool
+class AutoCorrectionTool : public EditorToolThreaded
 {
     Q_OBJECT
 
@@ -54,9 +52,7 @@ public:
 private Q_SLOTS:
 
     void slotInit();
-    void slotEffect();
     void slotResetSettings();
-    void slotColorSelectedFromTarget(const Digikam::DColor& color);
 
 private:
 
@@ -71,11 +67,15 @@ private:
 
 private:
 
-    void readSettings();
     void writeSettings();
-    void finalRendering();
+    void readSettings();    
+    void prepareEffect();
+    void prepareFinal();
+    void putPreviewData();
+    void putFinalData();
+    void renderingFinished();
 
-    void autoCorrection(uchar* data, int w, int h, bool sb, int type);
+    void autoCorrection(DImg* img, int type);
 
 private:
 

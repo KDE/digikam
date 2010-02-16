@@ -38,7 +38,6 @@
 
 // Local includes
 
-#include "dimg.h"
 #include "autolevelsfilter.h"
 #include "equalizefilter.h"
 #include "stretchfilter.h"
@@ -82,19 +81,16 @@ public:
 
     ImageGuideWidget*   previewWidget;
     EditorToolSettings* gboxSettings;
-    DImg                thumbnailImage;
 };
 
 AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
-                  : EditorTool(parent),
+                  : EditorToolThreaded(parent),
                     d(new AutoCorrectionToolPriv)
 {
     setObjectName("autocorrection");
     setToolName(i18n("Auto Correction"));
     setToolIcon(SmallIcon("autocorrection"));
     setToolHelp("autocolorcorrectiontool.anchor");
-
-    d->destinationPreviewData = 0;
 
     // -------------------------------------------------------------
 
@@ -106,7 +102,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
 
     ImageIface iface(0, 0);
     // FIXME : use whole image here to test progress indicator.
-    d->thumbnailImage     = iface.getOriginalImg()->copy()/*->smoothScale(128, 128, Qt::KeepAspectRatio)*/;
+    DImg thumbImage       = iface.getOriginalImg()->copy()/*->smoothScale(128, 128, Qt::KeepAspectRatio)*/;
     PreviewListItem *item = 0;
     d->gboxSettings       = new EditorToolSettings;
     d->gboxSettings->setTools(EditorToolSettings::Histogram);
@@ -115,7 +111,8 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
 
     d->correctionTools = new PreviewList(parent);
 
-    item = d->correctionTools->addItem(new AutoLevelsFilter(&d->thumbnailImage),
+/*
+    item = d->correctionTools->addItem(new AutoLevelsFilter(&thumbImage),
                                        i18n("Auto Levels"), AutoLevelsCorrection);
     item->setWhatsThis(0, i18n("<b>Auto Levels</b>:"
                                "<p>This option maximizes the tonal range in the Red, "
@@ -123,7 +120,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
                                "limit values and adjusts the Red, Green, and Blue channels "
                                "to a full histogram range.</p>"));
 
-    item = d->correctionTools->addItem(new NormalizeFilter(&d->thumbnailImage),
+    item = d->correctionTools->addItem(new NormalizeFilter(&thumbImage),
                                        i18n("Normalize"), NormalizeCorrection);
     item->setWhatsThis(0, i18n("<b>Normalize</b>:"
                                "<p>This option scales brightness values across the active "
@@ -132,7 +129,8 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
                                "altering its hue. This is often a \"magic fix\" for "
                                "images that are dim or washed out.</p>"));
 
-    item = d->correctionTools->addItem(new EqualizeFilter(&d->thumbnailImage),
+                               
+    item = d->correctionTools->addItem(new EqualizeFilter(&thumbImage),
                                        i18n("Equalize"), EqualizeCorrection);
     item->setWhatsThis(0, i18n("<b>Equalize</b>:"
                                "<p>This option adjusts the brightness of colors across the "
@@ -144,23 +142,21 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
                                "garbage. It is a very powerful operation, which can either work "
                                "miracles on an image or destroy it.</p>"));
 
-    item = d->correctionTools->addItem(new StretchFilter(&d->thumbnailImage),
+    item = d->correctionTools->addItem(new StretchFilter(&thumbImage),
                                        i18n("Stretch Contrast"), StretchContrastCorrection);
     item->setWhatsThis(0, i18n("<b>Stretch Contrast</b>:"
                                "<p>This option enhances the contrast and brightness "
                                "of the RGB values of an image by stretching the lowest "
                                "and highest values to their fullest range, adjusting "
                                "everything in between.</p>"));
-
-    item = d->correctionTools->addItem(new AutoExpoFilter(&d->thumbnailImage),
+*/
+    item = d->correctionTools->addItem(new AutoExpoFilter(&thumbImage),
                                        i18n("Auto Exposure"), AutoExposureCorrection);
     item->setWhatsThis(0, i18n("<b>Auto Exposure</b>:"
                                "<p>This option enhances the contrast and brightness "
                                "of the RGB values of an image to calculate optimal "
                                "exposition and black level using image histogram "
                                "properties.</p>"));
-
-    // -------------------------------------------------------------
 
     d->correctionTools->setFocus();
 
@@ -180,14 +176,11 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget(const Digikam::DColor&, const QPoint&)),
-            this, SLOT(slotColorSelectedFromTarget(const Digikam::DColor&)));
-
     connect(d->correctionTools, SIGNAL(itemSelectionChanged()),
-            this, SLOT(slotEffect()));
+            this, SLOT(slotTimer()));
 
     connect(d->previewWidget, SIGNAL(signalResized()),
-            this, SLOT(slotEffect()));
+            this, SLOT(slotTimer()));
 }
 
 AutoCorrectionTool::~AutoCorrectionTool()
@@ -200,13 +193,8 @@ AutoCorrectionTool::~AutoCorrectionTool()
 
 void AutoCorrectionTool::slotInit()
 {
-    EditorTool::slotInit();
+    EditorToolThreaded::slotInit();
     d->correctionTools->startFilters();    
-}
-
-void AutoCorrectionTool::slotColorSelectedFromTarget(const DColor& color)
-{
-    d->gboxSettings->histogramBox()->histogram()->setHistogramGuideByColor(color);
 }
 
 void AutoCorrectionTool::readSettings()
@@ -239,107 +227,118 @@ void AutoCorrectionTool::slotResetSettings()
     slotEffect();
 }
 
-void AutoCorrectionTool::slotEffect()
+void AutoCorrectionTool::prepareEffect()
 {
     kapp->setOverrideCursor(Qt::WaitCursor);
+    d->gboxSettings->setEnabled(false);
+    toolView()->setEnabled(false);
 
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 
-    if (d->destinationPreviewData)
-       delete [] d->destinationPreviewData;
+    ImageIface* iface = d->previewWidget->imageIface();
+    DImg preview      = iface->getPreviewImg();
+    
+    autoCorrection(&preview, d->correctionTools->currentId());
+}
 
-    ImageIface* iface         = d->previewWidget->imageIface();
-    d->destinationPreviewData = iface->getPreviewImage();
-    int w                     = iface->previewWidth();
-    int h                     = iface->previewHeight();
-    bool sb                   = iface->previewSixteenBit();
-
-    autoCorrection(d->destinationPreviewData, w, h, sb, d->correctionTools->currentId());
-
-    iface->putPreviewImage(d->destinationPreviewData);
+void AutoCorrectionTool::putPreviewData()
+{
+    DImg preview      = filter()->getTargetImage();
+    ImageIface* iface = d->previewWidget->imageIface();
+    iface->putPreviewImage(preview.bits());
     d->previewWidget->updatePreview();
 
     // Update histogram.
 
-    d->gboxSettings->histogramBox()->histogram()->updateData(d->destinationPreviewData, w, h, sb, 0, 0, 0, false);
+    if (d->destinationPreviewData)
+       delete [] d->destinationPreviewData;
 
+    d->destinationPreviewData = preview.copyBits();
+    d->gboxSettings->histogramBox()->histogram()->updateData(d->destinationPreviewData,
+                                                             preview.width(), preview.height(), preview.sixteenBit(),
+                                                             0, 0, 0, false);
     kapp->restoreOverrideCursor();
 }
 
-void AutoCorrectionTool::finalRendering()
+void AutoCorrectionTool::prepareFinal()
+{
+    d->gboxSettings->setEnabled(false);
+    toolView()->setEnabled(false);
+
+    int type = d->correctionTools->currentId();
+    ImageIface iface(0, 0);
+    autoCorrection(iface.getOriginalImg(), type);
+}
+
+void AutoCorrectionTool::putFinalData()
 {
     kapp->setOverrideCursor( Qt::WaitCursor );
-    ImageIface* iface = d->previewWidget->imageIface();
-    uchar *data       = iface->getOriginalImage();
-    int w             = iface->originalWidth();
-    int h             = iface->originalHeight();
-    bool sb           = iface->originalSixteenBit();
+    int type = d->correctionTools->currentId();
+    QString name;
 
-    if (data)
+    switch (type)
     {
-       int type = d->correctionTools->currentId();
-       autoCorrection(data, w, h, sb, type);
-       QString name;
+        case AutoLevelsCorrection:
+            name = i18n("Auto Levels");
+            break;
 
-       switch (type)
-        {
-            case AutoLevelsCorrection:
-                name = i18n("Auto Levels");
-                break;
+        case NormalizeCorrection:
+            name = i18n("Normalize");
+            break;
 
-            case NormalizeCorrection:
-                name = i18n("Normalize");
-                break;
+        case EqualizeCorrection:
+            name = i18n("Equalize");
+            break;
 
-            case EqualizeCorrection:
-                name = i18n("Equalize");
-                break;
+        case StretchContrastCorrection:
+            name = i18n("Stretch Contrast");
+            break;
 
-            case StretchContrastCorrection:
-                name = i18n("Stretch Contrast");
-                break;
-
-            case AutoExposureCorrection:
-                name = i18n("Auto Exposure");
-                break;
-        }
-
-        iface->putOriginalImage(name, data);
-        delete[] data;
+        case AutoExposureCorrection:
+            name = i18n("Auto Exposure");
+            break;
     }
+
+    ImageIface iface(0, 0);
+    iface.putOriginalImage(name, filter()->getTargetImage().bits());
 
     kapp->restoreOverrideCursor();
 }
 
-void AutoCorrectionTool::autoCorrection(uchar* data, int w, int h, bool sb, int type)
+void AutoCorrectionTool::renderingFinished()
+{
+    QApplication::restoreOverrideCursor();
+    d->gboxSettings->setEnabled(true);
+    toolView()->setEnabled(false);
+}
+
+void AutoCorrectionTool::autoCorrection(DImg* img, int type)
 {
     switch (type)
     {
         case AutoLevelsCorrection:
         {
-            AutoLevelsFilter autolevels(data, w, h, sb);
+            setFilter(dynamic_cast<DImgThreadedFilter*>(new AutoLevelsFilter(img, this)));
             break;
         }
         case NormalizeCorrection:
         {
-            NormalizeFilter normalize(data, w, h, sb);
+            setFilter(dynamic_cast<DImgThreadedFilter*>(new NormalizeFilter(img, this)));
             break;
         }
         case EqualizeCorrection:
         {
-            EqualizeFilter autolevels(data, w, h, sb);
+            setFilter(dynamic_cast<DImgThreadedFilter*>(new EqualizeFilter(img, this)));
             break;
         }
         case StretchContrastCorrection:
         {
-            StretchFilter stretch(data, w, h, sb);
+            setFilter(dynamic_cast<DImgThreadedFilter*>(new StretchFilter(img, this)));
             break;
         }
         case AutoExposureCorrection:
         {
-            WBContainer settings;
-            WBFilter::autoExposureAdjustement(data, w, h, sb, settings.black, settings.exposition);
-            WBFilter wb(data, w, h, sb, settings);
+            setFilter(dynamic_cast<DImgThreadedFilter*>(new AutoExpoFilter(img, this)));
             break;
         }
     }
