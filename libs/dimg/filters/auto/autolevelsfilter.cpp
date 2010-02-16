@@ -41,16 +41,11 @@
 namespace Digikam
 {
 
-AutoLevelsFilter::AutoLevelsFilter(DImg* orgImage, QObject* parent)
+AutoLevelsFilter::AutoLevelsFilter(DImg* orgImage, DImg* refImage, QObject* parent)
                 : DImgThreadedFilter(orgImage, parent, "AutoLevelsFilter")
 {
+    m_refImage = refImage;
     initFilter();
-}
-
-AutoLevelsFilter::AutoLevelsFilter(uchar* data, uint width, uint height, bool sixteenBit)
-                : DImgThreadedFilter()
-{
-    autoLevelsCorrectionImage(data, width, height, sixteenBit);
 }
 
 AutoLevelsFilter::~AutoLevelsFilter()
@@ -59,7 +54,7 @@ AutoLevelsFilter::~AutoLevelsFilter()
 
 void AutoLevelsFilter::filterImage()
 {
-    autoLevelsCorrectionImage(m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(), m_orgImage.sixteenBit());
+    autoLevelsCorrectionImage();
     m_destImage = m_orgImage;
 }
 
@@ -68,13 +63,12 @@ void AutoLevelsFilter::filterImage()
     Green, and Blue channels. It search the image shadow and highlight
     limit values and adjust the Red, Green, and Blue channels
     to a full histogram range.*/
-void AutoLevelsFilter::autoLevelsCorrectionImage(uchar* data, int w, int h, bool sixteenBit)
+void AutoLevelsFilter::autoLevelsCorrectionImage()
 {
-    if (!data || !w || !h)
-    {
-       kWarning() << ("no image data available!");
-       return;
-    }
+    uchar* data     = m_orgImage.bits(); 
+    int w           = m_orgImage.width();
+    int h           = m_orgImage.height();
+    bool sixteenBit = m_orgImage.sixteenBit();
 
     postProgress(10);
     uchar* desData            = 0;
@@ -92,10 +86,11 @@ void AutoLevelsFilter::autoLevelsCorrectionImage(uchar* data, int w, int h, bool
         postProgress(20);
     }
 
-    // Create an histogram of the current image.
+    // Create an histogram of the reference image.
     if (!m_cancel)
     {
-        histogram = new ImageHistogram(data, w, h, sixteenBit);
+        histogram = new ImageHistogram(m_refImage->bits(), m_refImage->width(), 
+                                       m_refImage->height(), m_refImage->sixteenBit());
         histogram->calculate();
         postProgress(30);
     }

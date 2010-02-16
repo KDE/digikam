@@ -101,8 +101,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
     // -------------------------------------------------------------
 
     ImageIface iface(0, 0);
-    // FIXME : use whole image here to test progress indicator in preview list.
-    DImg thumbImage       = iface.getOriginalImg()->copy()/*->smoothScale(128, 128, Qt::KeepAspectRatio)*/;
+    DImg thumbImage       = iface.getOriginalImg()->smoothScale(128, 128, Qt::KeepAspectRatio);
     PreviewListItem *item = 0;
     d->gboxSettings       = new EditorToolSettings;
     d->gboxSettings->setTools(EditorToolSettings::Histogram);
@@ -111,7 +110,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
 
     d->correctionTools = new PreviewList(parent);
 
-    item = d->correctionTools->addItem(new AutoLevelsFilter(&thumbImage),
+    item = d->correctionTools->addItem(new AutoLevelsFilter(&thumbImage, iface.getOriginalImg()),
                                        i18n("Auto Levels"), AutoLevelsCorrection);
     item->setWhatsThis(0, i18n("<b>Auto Levels</b>:"
                                "<p>This option maximizes the tonal range in the Red, "
@@ -237,7 +236,7 @@ void AutoCorrectionTool::prepareEffect()
     ImageIface* iface = d->previewWidget->imageIface();
     DImg preview      = iface->getPreviewImg();
     
-    autoCorrection(&preview, d->correctionTools->currentId());
+    autoCorrection(&preview, iface->getOriginalImg(), d->correctionTools->currentId());
 }
 
 void AutoCorrectionTool::putPreviewData()
@@ -266,7 +265,7 @@ void AutoCorrectionTool::prepareFinal()
 
     int type = d->correctionTools->currentId();
     ImageIface iface(0, 0);
-    autoCorrection(iface.getOriginalImg(), type);
+    autoCorrection(iface.getOriginalImg(), iface.getOriginalImg(), type);
 }
 
 void AutoCorrectionTool::putFinalData()
@@ -311,13 +310,13 @@ void AutoCorrectionTool::renderingFinished()
     toolView()->setEnabled(false);
 }
 
-void AutoCorrectionTool::autoCorrection(DImg* img, int type)
+void AutoCorrectionTool::autoCorrection(DImg* img, DImg* ref, int type)
 {
     switch (type)
     {
         case AutoLevelsCorrection:
         {
-            setFilter(dynamic_cast<DImgThreadedFilter*>(new AutoLevelsFilter(img, this)));
+            setFilter(dynamic_cast<DImgThreadedFilter*>(new AutoLevelsFilter(img, ref, this)));
             break;
         }
         case NormalizeCorrection:

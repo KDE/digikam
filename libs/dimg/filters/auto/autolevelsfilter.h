@@ -42,14 +42,17 @@ class DIGIKAM_EXPORT AutoLevelsFilter : public DImgThreadedFilter
 
 public:
 
-    explicit AutoLevelsFilter(DImg* orgImage, QObject* parent=0);
-    AutoLevelsFilter(uchar* data, uint width, uint height, bool sixteenBit);
+    AutoLevelsFilter(DImg* orgImage, DImg* refImage, QObject* parent=0);
     virtual ~AutoLevelsFilter();
 
 private:
 
     void filterImage();
-    void autoLevelsCorrectionImage(uchar* data, int w, int h, bool sixteenBit);
+    void autoLevelsCorrectionImage();
+    
+private:     
+    
+    DImg* m_refImage;
 };
 
 }  // namespace Digikam

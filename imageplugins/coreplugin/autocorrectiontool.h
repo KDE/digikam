@@ -75,7 +75,7 @@ private:
     void putFinalData();
     void renderingFinished();
 
-    void autoCorrection(DImg* img, int type);
+    void autoCorrection(DImg* img, DImg* ref, int type);
 
 private:
 

@@ -105,7 +105,7 @@ bool AutoCorrection::toolOperations()
     {
         case AutoLevelsCorrection:
         {
-            AutoLevelsFilter autolevels(&image());
+            AutoLevelsFilter autolevels(&image(), &image());
             autolevels.startFilterDirectly();
             image().putImageData(autolevels.getTargetImage().bits());
             break;
