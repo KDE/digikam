@@ -126,7 +126,7 @@ bool AutoCorrection::toolOperations()
         }
         case StretchContrastCorrection:
         {
-            StretchFilter strech(&image());
+            StretchFilter strech(&image(), &image());
             strech.startFilterDirectly();
             image().putImageData(strech.getTargetImage().bits());
             break;

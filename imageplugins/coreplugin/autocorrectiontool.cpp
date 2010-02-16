@@ -140,7 +140,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
                                "garbage. It is a very powerful operation, which can either work "
                                "miracles on an image or destroy it.</p>"));
 
-    item = d->correctionTools->addItem(new StretchFilter(&thumbImage),
+    item = d->correctionTools->addItem(new StretchFilter(&thumbImage, iface.getOriginalImg()),
                                        i18n("Stretch Contrast"), StretchContrastCorrection);
     item->setWhatsThis(0, i18n("<b>Stretch Contrast</b>:"
                                "<p>This option enhances the contrast and brightness "
@@ -331,7 +331,7 @@ void AutoCorrectionTool::autoCorrection(DImg* img, DImg* ref, int type)
         }
         case StretchContrastCorrection:
         {
-            setFilter(dynamic_cast<DImgThreadedFilter*>(new StretchFilter(img, this)));
+            setFilter(dynamic_cast<DImgThreadedFilter*>(new StretchFilter(img, ref, this)));
             break;
         }
         case AutoExposureCorrection:

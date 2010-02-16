@@ -56,9 +56,10 @@ struct int_packet
     unsigned int alpha;
 };
 
-StretchFilter::StretchFilter(DImg* orgImage, QObject* parent)
+StretchFilter::StretchFilter(DImg* orgImage, DImg* refImage, QObject* parent)
              : DImgThreadedFilter(orgImage, parent, "StretchFilter")
 {
+    m_refImage = refImage; 
     initFilter();
 }
 
@@ -77,11 +78,6 @@ void StretchFilter::filterImage()
     of color values. This is a contrast enhancement technique.*/
 void StretchFilter::stretchContrastImage()
 {
-    uchar* data     = m_orgImage.bits(); 
-    int w           = m_orgImage.width();
-    int h           = m_orgImage.height();
-    bool sixteenBit = m_orgImage.sixteenBit();
-
     struct double_packet high, low, intensity;
     struct int_packet*   normalize_map;
     long long            number_pixels;
@@ -89,8 +85,9 @@ void StretchFilter::stretchContrastImage()
     int                  progress;
     unsigned long        threshold_intensity;
 
-    // Create an histogram of the current image.
-    ImageHistogram* histogram = new ImageHistogram(data, w, h, sixteenBit);
+    // Create an histogram of the reference image.
+    ImageHistogram* histogram = new ImageHistogram(m_refImage->bits(), m_refImage->width(), 
+                                                   m_refImage->height(), m_refImage->sixteenBit());
     histogram->calculate();
 
     // Memory allocation.
@@ -110,7 +107,7 @@ void StretchFilter::stretchContrastImage()
 
     // Find the histogram boundaries by locating the 0.1 percent levels.
 
-    number_pixels = (long long)(w*h);
+    number_pixels       = (long long)(m_refImage->width() * m_refImage->height());
     threshold_intensity = number_pixels / 1000;
 
     memset(&high, 0, sizeof(struct double_packet));
@@ -296,14 +293,19 @@ void StretchFilter::stretchContrastImage()
           normalize_map[i].alpha = (int)(((256*histogram->getHistogramSegments() -1)*(i-low.alpha))/(high.alpha-low.alpha));
     }
 
-    int size = w*h;
-
     // Apply result to image.
+    
+    uchar* data     = m_orgImage.bits(); 
+    int w           = m_orgImage.width();
+    int h           = m_orgImage.height();
+    bool sixteenBit = m_orgImage.sixteenBit();
+    int size        = w*h;
+
     // TODO magic number 257
     if (!sixteenBit)        // 8 bits image.
     {
-        uchar red, green, blue, alpha;
-        uchar *ptr = data;
+        uchar  red, green, blue, alpha;
+        uchar* ptr = data;
 
         for (i = 0 ; !m_cancel && (i < size) ; ++i)
         {
@@ -337,8 +339,8 @@ void StretchFilter::stretchContrastImage()
     }
     else               // 16 bits image.
     {
-        unsigned short red, green, blue, alpha;
-        unsigned short *ptr = (unsigned short *)data;
+        unsigned short  red, green, blue, alpha;
+        unsigned short* ptr = (unsigned short *)data;
 
         for (i = 0 ; !m_cancel && (i < size) ; ++i)
         {
