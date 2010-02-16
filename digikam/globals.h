@@ -29,8 +29,8 @@
 #define CLAMP0255(a)   qMin(qMax(a,0), 255)
 #define CLAMP065535(a) qMin(qMax(a,0), 65535)
 #define CLAMP(x,l,u)   ((x)<(l)?(l):((x)>(u)?(u):(x)))
-#define MAX3(a, b, c) (qMax(qMax(a,b),b))
-#define MIN3(a, b, c) (qMin(qMin(a,b),b))
+#define MAX3(a, b, c)  (qMax(qMax(a,b),b))
+#define MIN3(a, b, c)  (qMin(qMin(a,b),b))
 
 namespace Digikam
 {
