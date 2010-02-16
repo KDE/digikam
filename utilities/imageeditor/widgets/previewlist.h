@@ -81,7 +81,7 @@ public:
 
     void setCurrentId(int id);
     int currentId();
-    
+
     void startFilters();
     void stopFilters();
 

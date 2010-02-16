@@ -145,12 +145,12 @@ PreviewList::PreviewList(QWidget* parent)
     setIconSize(QSize(128, 128));
     setHeaderHidden(true);
     header()->setResizeMode(QHeaderView::Stretch);
-    
+
     d->progressTimer = new QTimer(this);
     d->progressTimer->setInterval(300);
-    
+
     connect(d->progressTimer, SIGNAL(timeout()),
-            this, SLOT(slotProgressTimerDone()));    
+            this, SLOT(slotProgressTimerDone()));
 }
 
 PreviewList::~PreviewList()
@@ -171,7 +171,7 @@ void PreviewList::startFilters()
             item->filter()->startFilter();
 
         ++it;
-    }    
+    }
 }
 
 void PreviewList::stopFilters()
@@ -186,7 +186,7 @@ void PreviewList::stopFilters()
         {
             if (item->isBusy())
                 item->filter()->cancelFilter();
-            
+
             delete item->filter();
         }
 
@@ -292,7 +292,7 @@ void PreviewList::slotProgressTimerDone()
     pixmap.fill(Qt::transparent);
     QPainter p(&pixmap);
     p.drawPixmap((pixmap.width()/2) - (ppix.width()/2), (pixmap.height()/2) - (ppix.height()/2), ppix);
-    
+
     int busy = 0;
     QTreeWidgetItemIterator it(this);
     while (*it)
@@ -306,7 +306,7 @@ void PreviewList::slotProgressTimerDone()
 
         ++it;
     }
-    d->progressCount++;    
+    d->progressCount++;
     if (d->progressCount == 8) d->progressCount = 0;
 
     kDebug() << "item busy : " << busy;
