@@ -26,11 +26,11 @@
 #define DIGIKAMGLOBALS_H
 
 // Macros for image filters.
-#define CLAMP0255(a)   qMin(qMax(a,0), 255)
-#define CLAMP065535(a) qMin(qMax(a,0), 65535)
-#define CLAMP(x,l,u)   ((x)<(l)?(l):((x)>(u)?(u):(x)))
-#define MAX3(a, b, c)  (qMax(qMax(a,b),b))
-#define MIN3(a, b, c)  (qMin(qMin(a,b),b))
+#define CLAMP0255(a)   qBound(0,a,255)
+#define CLAMP065535(a) qBound(0,a,65535)
+#define CLAMP(x,l,u)   qBound(l,x,u)
+#define MAX3(a, b, c)  (qMax(qMax(a,b),c))
+#define MIN3(a, b, c)  (qMin(qMin(a,b),c))
 
 namespace Digikam
 {
