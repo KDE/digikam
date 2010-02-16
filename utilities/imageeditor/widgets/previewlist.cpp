@@ -101,7 +101,7 @@ void PreviewThreadWrapper::slotFilterFinished(bool success)
 
     if (success)
     {
-        QPixmap pix = filter->getTargetImage().convertToPixmap().scaled(128, 128, Qt::KeepAspectRatio);
+        QPixmap pix = filter->getTargetImage().smoothScale(128, 128, Qt::KeepAspectRatio).convertToPixmap();
         emit signalFilterFinished(d->map.key(filter), pix);
     }
 }
