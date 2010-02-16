@@ -24,17 +24,6 @@
 #ifndef IMAGELEVELS_H
 #define IMAGELEVELS_H
 
-#define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
-
-/*  Map RGB to intensity  */
-
-#define LEVELS_RGB_INTENSITY_RED    0.30
-#define LEVELS_RGB_INTENSITY_GREEN  0.59
-#define LEVELS_RGB_INTENSITY_BLUE   0.11
-#define LEVELS_RGB_INTENSITY(r,g,b) ((r) * LEVELS_RGB_INTENSITY_RED   + \
-                                     (g) * LEVELS_RGB_INTENSITY_GREEN + \
-                                     (b) * LEVELS_RGB_INTENSITY_BLUE)
-
 // KDE includes
 
 #include <kurl.h>
@@ -65,30 +54,30 @@ public:
     // Methods for to manipulate the levels data.
 
     void   levelsChannelReset(int channel);
-    void   levelsAuto(ImageHistogram *hist);
-    void   levelsChannelAuto(ImageHistogram *hist, int channel);
+    void   levelsAuto(ImageHistogram* hist);
+    void   levelsChannelAuto(ImageHistogram* hist, int channel);
     int    levelsInputFromColor(int channel, const DColor& color);
     void   levelsBlackToneAdjustByColors(int channel, const DColor& color);
     void   levelsGrayToneAdjustByColors(int channel, const DColor& color);
     void   levelsWhiteToneAdjustByColors(int channel, const DColor& color);
     void   levelsCalculateTransfers();
-    float  levelsLutFunc(int n_channels, int channel, float value);
+    float  levelsLutFunc(int nchannels, int channel, float value);
     void   levelsLutSetup(int nchannels);
-    void   levelsLutProcess(uchar *srcPR, uchar *destPR, int w, int h);
+    void   levelsLutProcess(uchar* srcPR, uchar* destPR, int w, int h);
 
     // Methods for to set manually the levels values.
 
-    void   setLevelGammaValue(int Channel, double val);
-    void   setLevelLowInputValue(int Channel, int val);
-    void   setLevelHighInputValue(int Channel, int val);
-    void   setLevelLowOutputValue(int Channel, int val);
-    void   setLevelHighOutputValue(int Channel, int val);
+    void   setLevelGammaValue(int channel, double val);
+    void   setLevelLowInputValue(int channel, int val);
+    void   setLevelHighInputValue(int channel, int val);
+    void   setLevelLowOutputValue(int channel, int val);
+    void   setLevelHighOutputValue(int channel, int val);
 
-    double getLevelGammaValue(int Channel);
-    int    getLevelLowInputValue(int Channel);
-    int    getLevelHighInputValue(int Channel);
-    int    getLevelLowOutputValue(int Channel);
-    int    getLevelHighOutputValue(int Channel);
+    double getLevelGammaValue(int channel);
+    int    getLevelLowInputValue(int channel);
+    int    getLevelHighInputValue(int channel);
+    int    getLevelLowOutputValue(int channel);
+    int    getLevelHighOutputValue(int channel);
 
     // Methods for to save/load the levels values to/from a Gimp levels text file.
 
