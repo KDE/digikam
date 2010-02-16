@@ -944,11 +944,7 @@ bool SchemaUpdater::updateV4toV5()
          return false;
 
     if (!m_access->backend()->execSql(QString(
-                    "REPLACE INTO ImageInformation "
-                    " (imageId) "
-                    "SELECT id FROM Images;"
-                                             ),
-                    DatabaseItem::Visible, DatabaseItem::UndefinedCategory)
+                    "REPLACE INTO ImageInformation (imageId) SELECT id FROM Images;"))
        )
          return false;
 
