@@ -73,7 +73,17 @@ PreviewThreadWrapper::~PreviewThreadWrapper()
 
 void PreviewThreadWrapper::registerFilter(int id, DImgThreadedFilter* filter)
 {
+    filter->setParent(this);
     d->map.insert(id, filter);
+        
+    connect(filter, SIGNAL(started()),
+            this, SLOT(slotFilterStarted()));
+
+    connect(filter, SIGNAL(finished(bool)),
+            this, SLOT(slotFilterFinished(bool)));
+
+    connect(filter, SIGNAL(progress(int)),
+            this, SLOT(slotFilterProgress(int)));
 }
     
 void PreviewThreadWrapper::slotFilterStarted()
@@ -251,22 +261,11 @@ PreviewListItem* PreviewList::addItem(DImgThreadedFilter* filter, const QString&
 {
     if (!filter) return 0;
 
-    filter->setParent(d->wrapper);
     d->wrapper->registerFilter(id, filter);
 
     PreviewListItem* item = new PreviewListItem(this);
     item->setText(0, txt);
     item->setId(id);
-
-    connect(filter, SIGNAL(started()),
-            d->wrapper, SLOT(slotFilterStarted()));
-
-    connect(filter, SIGNAL(finished(bool)),
-            d->wrapper, SLOT(slotFilterFinished(bool)));
-
-    connect(filter, SIGNAL(progress(int)),
-            d->wrapper, SLOT(slotFilterProgress(int)));
-
     return item;
 }
 
