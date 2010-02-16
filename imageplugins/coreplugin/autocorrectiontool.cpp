@@ -101,7 +101,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
     // -------------------------------------------------------------
 
     ImageIface iface(0, 0);
-    // FIXME : use whole image here to test progress indicator.
+    // FIXME : use whole image here to test progress indicator in preview list.
     DImg thumbImage       = iface.getOriginalImg()->copy()/*->smoothScale(128, 128, Qt::KeepAspectRatio)*/;
     PreviewListItem *item = 0;
     d->gboxSettings       = new EditorToolSettings;
@@ -111,7 +111,6 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
 
     d->correctionTools = new PreviewList(parent);
 
-/*
     item = d->correctionTools->addItem(new AutoLevelsFilter(&thumbImage),
                                        i18n("Auto Levels"), AutoLevelsCorrection);
     item->setWhatsThis(0, i18n("<b>Auto Levels</b>:"
@@ -149,7 +148,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
                                "of the RGB values of an image by stretching the lowest "
                                "and highest values to their fullest range, adjusting "
                                "everything in between.</p>"));
-*/
+
     item = d->correctionTools->addItem(new AutoExpoFilter(&thumbImage),
                                        i18n("Auto Exposure"), AutoExposureCorrection);
     item->setWhatsThis(0, i18n("<b>Auto Exposure</b>:"
