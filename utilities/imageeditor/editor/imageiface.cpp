@@ -207,6 +207,12 @@ uchar* ImageIface::getPreviewImage() const
     return previewData.stripImageData();
 }
 
+DImg ImageIface::getPreviewImg()
+{
+    DImg preview(previewWidth(), previewHeight(), previewSixteenBit(), previewHasAlpha(), getPreviewImage());
+    return preview;
+}
+    
 uchar* ImageIface::getOriginalImage() const
 {
     DImg *im = DImgInterface::defaultInterface()->getImg();
