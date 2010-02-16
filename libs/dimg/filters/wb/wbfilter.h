@@ -89,9 +89,9 @@ public:
 protected:
 
     virtual void filterImage();
-    
+
   protected:
-    
+
     WBContainer m_settings;
 
 private:
