@@ -41,7 +41,7 @@
 #include "autolevelsfilter.h"
 #include "equalizefilter.h"
 #include "stretchfilter.h"
-#include "wbfilter.h"
+#include "autoexpofilter.h"
 #include "normalizefilter.h"
 
 namespace Digikam
@@ -133,11 +133,9 @@ bool AutoCorrection::toolOperations()
         }
         case AutoExposureCorrection:
         {
-            WBContainer settings;
-            WBFilter::autoExposureAdjustement(&image(), settings.black, settings.exposition);
-            WBFilter wb(&image(), 0L, settings);
-            wb.startFilterDirectly();
-            image().putImageData(wb.getTargetImage().bits());
+            AutoExpoFilter expo(&image(), &image());
+            expo.startFilterDirectly();
+            image().putImageData(expo.getTargetImage().bits());
             break;
         }
     }

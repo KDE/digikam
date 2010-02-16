@@ -148,7 +148,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
                                "and highest values to their fullest range, adjusting "
                                "everything in between.</p>"));
 
-    item = d->correctionTools->addItem(new AutoExpoFilter(&thumbImage),
+    item = d->correctionTools->addItem(new AutoExpoFilter(&thumbImage, iface.getOriginalImg()),
                                        i18n("Auto Exposure"), AutoExposureCorrection);
     item->setWhatsThis(0, i18n("<b>Auto Exposure</b>:"
                                "<p>This option enhances the contrast and brightness "
@@ -336,7 +336,7 @@ void AutoCorrectionTool::autoCorrection(DImg* img, DImg* ref, int type)
         }
         case AutoExposureCorrection:
         {
-            setFilter(dynamic_cast<DImgThreadedFilter*>(new AutoExpoFilter(img, this)));
+            setFilter(dynamic_cast<DImgThreadedFilter*>(new AutoExpoFilter(img, ref, this)));
             break;
         }
     }

@@ -34,9 +34,10 @@
 namespace Digikam
 {
 
-AutoExpoFilter::AutoExpoFilter(DImg* orgImage, QObject* parent)
+AutoExpoFilter::AutoExpoFilter(DImg* orgImage, DImg* refImage, QObject* parent)
                 : WBFilter(orgImage, parent)
 {
+    m_refImage = refImage;
     initFilter();
 }
 
@@ -46,7 +47,7 @@ AutoExpoFilter::~AutoExpoFilter()
 
 void AutoExpoFilter::filterImage()
 {
-    autoExposureAdjustement(&m_orgImage, m_settings.black, m_settings.exposition);
+    autoExposureAdjustement(m_refImage, m_settings.black, m_settings.exposition);
     WBFilter::filterImage();
 }
 
