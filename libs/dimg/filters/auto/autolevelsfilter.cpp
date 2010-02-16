@@ -65,15 +65,17 @@ void AutoLevelsFilter::filterImage()
     to a full histogram range.*/
 void AutoLevelsFilter::autoLevelsCorrectionImage()
 {
+
     uchar* data     = m_orgImage.bits(); 
     int w           = m_orgImage.width();
     int h           = m_orgImage.height();
     bool sixteenBit = m_orgImage.sixteenBit();
-
-    postProgress(10);
+    
     uchar* desData            = 0;
     ImageHistogram* histogram = 0;
     ImageLevels* levels       = 0;
+
+    postProgress(10);
 
     // Create the new empty destination image data space.
     if (!m_cancel)
@@ -115,7 +117,7 @@ void AutoLevelsFilter::autoLevelsCorrectionImage()
         levels->levelsLutSetup(AlphaChannel);
         postProgress(60);
     }
-
+    
     // Apply the lut to the image.
     if (!m_cancel)
     {

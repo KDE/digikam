@@ -119,7 +119,7 @@ bool AutoCorrection::toolOperations()
         }
         case EqualizeCorrection:
         {
-            EqualizeFilter equalize(&image());
+            EqualizeFilter equalize(&image(), &image());
             equalize.startFilterDirectly();
             image().putImageData(equalize.getTargetImage().bits());
             break;

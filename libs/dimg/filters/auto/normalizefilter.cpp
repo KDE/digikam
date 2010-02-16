@@ -71,17 +71,13 @@ void NormalizeFilter::filterImage()
     images that are dim or washed out.*/
 void NormalizeFilter::normalizeImage()
 {
-    uchar* data     = m_orgImage.bits(); 
-    int w           = m_orgImage.width();
-    int h           = m_orgImage.height();
-    bool sixteenBit = m_orgImage.sixteenBit();
-    
     NormalizeParam param;
     int            x, i;
     unsigned short range;
     int            progress;
-
-    int segments = sixteenBit ? NUM_SEGMENTS_16BIT : NUM_SEGMENTS_8BIT;
+    
+    bool sixteenBit = m_orgImage.sixteenBit();
+    int segments    = sixteenBit ? NUM_SEGMENTS_16BIT : NUM_SEGMENTS_8BIT;
 
     // Memory allocation.
 
@@ -156,7 +152,10 @@ void NormalizeFilter::normalizeImage()
         }
     }
 
-    int size = w*h;
+    uchar* data     = m_orgImage.bits(); 
+    int w           = m_orgImage.width();
+    int h           = m_orgImage.height();
+    int size        = w*h;
 
     // Apply LUT to image.
 

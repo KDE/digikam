@@ -128,7 +128,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
                                "images that are dim or washed out.</p>"));
 
                                
-    item = d->correctionTools->addItem(new EqualizeFilter(&thumbImage),
+    item = d->correctionTools->addItem(new EqualizeFilter(&thumbImage, iface.getOriginalImg()),
                                        i18n("Equalize"), EqualizeCorrection);
     item->setWhatsThis(0, i18n("<b>Equalize</b>:"
                                "<p>This option adjusts the brightness of colors across the "
@@ -326,7 +326,7 @@ void AutoCorrectionTool::autoCorrection(DImg* img, DImg* ref, int type)
         }
         case EqualizeCorrection:
         {
-            setFilter(dynamic_cast<DImgThreadedFilter*>(new EqualizeFilter(img, this)));
+            setFilter(dynamic_cast<DImgThreadedFilter*>(new EqualizeFilter(img, ref, this)));
             break;
         }
         case StretchContrastCorrection:

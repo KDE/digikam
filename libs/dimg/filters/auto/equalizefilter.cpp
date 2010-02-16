@@ -56,9 +56,10 @@ struct int_packet
     unsigned int alpha;
 };
 
-EqualizeFilter::EqualizeFilter(DImg* orgImage, QObject* parent)
+EqualizeFilter::EqualizeFilter(DImg* orgImage, DImg* refImage, QObject* parent)
               : DImgThreadedFilter(orgImage, parent, "EqualizeFilter")
 {
+    m_refImage = refImage;  
     initFilter();
 }
 
@@ -83,19 +84,15 @@ void EqualizeFilter::filterImage()
     miracles on an image or destroy it.*/
 void EqualizeFilter::equalizeImage()
 {
-    uchar* data     = m_orgImage.bits(); 
-    int w           = m_orgImage.width();
-    int h           = m_orgImage.height();
-    bool sixteenBit = m_orgImage.sixteenBit();
-    
     struct double_packet  high, low, intensity;
     struct double_packet* map;
     struct int_packet*    equalize_map;
     register long i;
     int           progress;
 
-    // Create an histogram of the current image.
-    ImageHistogram *histogram = new ImageHistogram(data, w, h, sixteenBit);
+    // Create an histogram of the reference image.
+    ImageHistogram *histogram = new ImageHistogram(m_refImage->bits(), m_refImage->width(), 
+                                                   m_refImage->height(), m_refImage->sixteenBit());
     histogram->calculate();
 
     // Memory allocation.
@@ -161,14 +158,18 @@ void EqualizeFilter::equalizeImage()
     delete histogram;
     delete [] map;
 
-    int size = w*h;
+    uchar* data     = m_orgImage.bits(); 
+    int w           = m_orgImage.width();
+    int h           = m_orgImage.height();
+    bool sixteenBit = m_orgImage.sixteenBit();
+    int size        = w*h;
 
     // Apply results to image.
     // TODO magic number 257
     if (!sixteenBit)        // 8 bits image.
     {
-        uchar red, green, blue, alpha;
-        uchar *ptr = data;
+        uchar  red, green, blue, alpha;
+        uchar* ptr = data;
 
         for (i = 0 ; !m_cancel && (i < size) ; ++i)
         {
@@ -202,8 +203,8 @@ void EqualizeFilter::equalizeImage()
     }
     else               // 16 bits image.
     {
-        unsigned short red, green, blue, alpha;
-        unsigned short *ptr = (unsigned short *)data;
+        unsigned short  red, green, blue, alpha;
+        unsigned short* ptr = (unsigned short *)data;
 
         for (i = 0 ; !m_cancel && (i < size) ; ++i)
         {
