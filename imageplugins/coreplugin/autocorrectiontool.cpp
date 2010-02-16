@@ -118,7 +118,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
                                "limit values and adjusts the Red, Green, and Blue channels "
                                "to a full histogram range.</p>"));
 
-    item = d->correctionTools->addItem(new NormalizeFilter(&thumbImage),
+    item = d->correctionTools->addItem(new NormalizeFilter(&thumbImage, iface.getOriginalImg()),
                                        i18n("Normalize"), NormalizeCorrection);
     item->setWhatsThis(0, i18n("<b>Normalize</b>:"
                                "<p>This option scales brightness values across the active "
@@ -321,7 +321,7 @@ void AutoCorrectionTool::autoCorrection(DImg* img, DImg* ref, int type)
         }
         case NormalizeCorrection:
         {
-            setFilter(dynamic_cast<DImgThreadedFilter*>(new NormalizeFilter(img, this)));
+            setFilter(dynamic_cast<DImgThreadedFilter*>(new NormalizeFilter(img, ref, this)));
             break;
         }
         case EqualizeCorrection:

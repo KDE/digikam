@@ -47,9 +47,10 @@ struct NormalizeParam
     double          max;
 };
 
-NormalizeFilter::NormalizeFilter(DImg* orgImage, QObject* parent)
+NormalizeFilter::NormalizeFilter(DImg* orgImage, DImg* refImage, QObject* parent)
                : DImgThreadedFilter(orgImage, parent, "NormalizeFilter")
 {
+    m_refImage = refImage;  
     initFilter();
 }
 
@@ -93,10 +94,10 @@ void NormalizeFilter::normalizeImage()
 
     if (!sixteenBit)        // 8 bits image.
     {
-        uchar red, green, blue;
-        uchar *ptr = data;
+        uchar  red, green, blue;
+        uchar* ptr = m_refImage->bits();
 
-        for (i = 0 ; !m_cancel && (i < w*h) ; ++i)
+        for (i = 0 ; !m_cancel && (i < (int)(m_refImage->width()*m_refImage->height())) ; ++i)
         {
             blue  = ptr[0];
             green = ptr[1];
@@ -116,10 +117,10 @@ void NormalizeFilter::normalizeImage()
     }
     else               // 16 bits image.
     {
-        unsigned short red, green, blue;
-        unsigned short *ptr = (unsigned short *)data;
+        unsigned short  red, green, blue;
+        unsigned short* ptr = (unsigned short *)m_refImage->bits();
 
-        for (i = 0 ; i < !m_cancel && (w*h) ; ++i)
+        for (i = 0 ; i < !m_cancel && ((int)(m_refImage->width()*m_refImage->height())) ; ++i)
         {
             blue  = ptr[0];
             green = ptr[1];
@@ -161,8 +162,8 @@ void NormalizeFilter::normalizeImage()
 
     if (!sixteenBit)        // 8 bits image.
     {
-        uchar red, green, blue;
-        uchar *ptr = data;
+        uchar  red, green, blue;
+        uchar* ptr = data;
 
         for (i = 0 ; !m_cancel && (i < size) ; ++i)
         {
@@ -183,8 +184,8 @@ void NormalizeFilter::normalizeImage()
     }
     else               // 16 bits image.
     {
-        unsigned short red, green, blue;
-        unsigned short *ptr = (unsigned short *)data;
+        unsigned short  red, green, blue;
+        unsigned short* ptr = (unsigned short*)data;
 
         for (i = 0 ; !m_cancel && (i < size) ; ++i)
         {

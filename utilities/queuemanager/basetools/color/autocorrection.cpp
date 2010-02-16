@@ -112,7 +112,7 @@ bool AutoCorrection::toolOperations()
         }
         case NormalizeCorrection:
         {
-            NormalizeFilter normalize(&image());
+            NormalizeFilter normalize(&image(), &image());
             normalize.startFilterDirectly();
             image().putImageData(normalize.getTargetImage().bits());
             break;

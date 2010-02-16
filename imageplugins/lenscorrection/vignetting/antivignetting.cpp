@@ -161,7 +161,7 @@ void AntiVignetting::filterImage()
     // Normalize colors for a best rendering.
     if (m_normalize)
     {
-        NormalizeFilter normalize(&m_destImage);
+        NormalizeFilter normalize(&m_destImage, &m_destImage);
         normalize.startFilterDirectly();
         m_destImage.putImageData(normalize.getTargetImage().bits());
     }
