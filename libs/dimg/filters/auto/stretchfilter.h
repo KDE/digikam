@@ -42,15 +42,13 @@ class DIGIKAM_EXPORT StretchFilter : public DImgThreadedFilter
 
 public:
 
-    explicit StretchFilter(DImg* orgImage, QObject* parent=0);
-    StretchFilter(uchar* data, uint width, uint height, bool sixteenBit);
+    StretchFilter(DImg* orgImage, QObject* parent=0);
     virtual ~StretchFilter();
 
 private:
 
     void filterImage();
-
-    void stretchContrastImage(uchar* data, int w, int h, bool sixteenBit);
+    void stretchContrastImage();
 };
 
 }  // namespace Digikam

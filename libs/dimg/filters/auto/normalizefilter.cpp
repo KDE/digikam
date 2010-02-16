@@ -53,19 +53,13 @@ NormalizeFilter::NormalizeFilter(DImg* orgImage, QObject* parent)
     initFilter();
 }
 
-NormalizeFilter::NormalizeFilter(uchar* bits, uint width, uint height, bool sixteenBits)
-               : DImgThreadedFilter()
-{
-    normalizeImage(bits, width, height, sixteenBits);
-}
-
 NormalizeFilter::~NormalizeFilter()
 {
 }
 
 void NormalizeFilter::filterImage()
 {
-    normalizeImage(m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(), m_orgImage.sixteenBit());
+    normalizeImage();
     m_destImage = m_orgImage;
 }
 
@@ -74,8 +68,13 @@ void NormalizeFilter::filterImage()
     brightest point becomes as bright as possible without
     altering its hue. This is often a magic fix for
     images that are dim or washed out.*/
-void NormalizeFilter::normalizeImage(uchar* data, int w, int h, bool sixteenBit)
+void NormalizeFilter::normalizeImage()
 {
+    uchar* data     = m_orgImage.bits(); 
+    int w           = m_orgImage.width();
+    int h           = m_orgImage.height();
+    bool sixteenBit = m_orgImage.sixteenBit();
+    
     NormalizeParam param;
     int            x, i;
     unsigned short range;

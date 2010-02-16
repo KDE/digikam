@@ -42,15 +42,13 @@ class DIGIKAM_EXPORT NormalizeFilter : public DImgThreadedFilter
 
 public:
 
-    explicit NormalizeFilter(DImg* orgImage, QObject* parent=0);
-    NormalizeFilter(uchar* data, uint width, uint height, bool sixteenBit);
+    NormalizeFilter(DImg* orgImage, QObject* parent=0);
     virtual ~NormalizeFilter();
 
 private:
 
     void filterImage();
-
-    void normalizeImage(uchar* data, int w, int h, bool sixteenBit);
+    void normalizeImage();
 };
 
 }  // namespace Digikam

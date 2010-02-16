@@ -62,32 +62,25 @@ StretchFilter::StretchFilter(DImg* orgImage, QObject* parent)
     initFilter();
 }
 
-StretchFilter::StretchFilter(uchar* bits, uint width, uint height, bool sixteenBits)
-             : DImgThreadedFilter()
-{
-    stretchContrastImage(bits, width, height, sixteenBits);
-}
-
 StretchFilter::~StretchFilter()
 {
 }
 
 void StretchFilter::filterImage()
 {
-    stretchContrastImage(m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(), m_orgImage.sixteenBit());
+    stretchContrastImage();
     m_destImage = m_orgImage;
 }
 
 /** Performs histogram normalization of the image. The algorithm normalizes
     the pixel values from an image for to span the full range
     of color values. This is a contrast enhancement technique.*/
-void StretchFilter::stretchContrastImage(uchar* data, int w, int h, bool sixteenBit)
+void StretchFilter::stretchContrastImage()
 {
-    if (!data || !w || !h)
-    {
-       kWarning() << ("no image data available!");
-       return;
-    }
+    uchar* data     = m_orgImage.bits(); 
+    int w           = m_orgImage.width();
+    int h           = m_orgImage.height();
+    bool sixteenBit = m_orgImage.sixteenBit();
 
     struct double_packet high, low, intensity;
     struct int_packet*   normalize_map;

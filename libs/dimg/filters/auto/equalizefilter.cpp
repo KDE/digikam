@@ -62,19 +62,13 @@ EqualizeFilter::EqualizeFilter(DImg* orgImage, QObject* parent)
     initFilter();
 }
 
-EqualizeFilter::EqualizeFilter(uchar* bits, uint width, uint height, bool sixteenBits)
-              : DImgThreadedFilter()
-{
-    equalizeImage(bits, width, height, sixteenBits);
-}
-
 EqualizeFilter::~EqualizeFilter()
 {
 }
 
 void EqualizeFilter::filterImage()
 {
-    equalizeImage(m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(), m_orgImage.sixteenBit());
+    equalizeImage();
     m_destImage = m_orgImage;
 }
 
@@ -87,14 +81,13 @@ void EqualizeFilter::filterImage()
     enhancing the contrasts in an image. Other times it gives
     garbage. It is a very powerful operation, which can either work
     miracles on an image or destroy it.*/
-void EqualizeFilter::equalizeImage(uchar *data, int w, int h, bool sixteenBit)
+void EqualizeFilter::equalizeImage()
 {
-    if (!data || !w || !h)
-    {
-       kWarning() << ("no image data available!");
-       return;
-    }
-
+    uchar* data     = m_orgImage.bits(); 
+    int w           = m_orgImage.width();
+    int h           = m_orgImage.height();
+    bool sixteenBit = m_orgImage.sixteenBit();
+    
     struct double_packet  high, low, intensity;
     struct double_packet* map;
     struct int_packet*    equalize_map;
