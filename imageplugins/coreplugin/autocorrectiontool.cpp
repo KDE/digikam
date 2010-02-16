@@ -46,7 +46,7 @@
 #include "editortoolsettings.h"
 #include "histogramwidget.h"
 #include "imageiface.h"
-#include "imageguidewidget.h"
+#include "imageregionwidget.h"
 #include "previewlist.h"
 
 using namespace Digikam;
@@ -79,7 +79,7 @@ public:
 
     PreviewList*        correctionTools;
 
-    ImageGuideWidget*   previewWidget;
+    ImageRegionWidget*  previewWidget;
     EditorToolSettings* gboxSettings;
 };
 
@@ -94,7 +94,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->previewWidget = new ImageGuideWidget;
+    d->previewWidget = new ImageRegionWidget;
     setToolView(d->previewWidget);
     setPreviewModeMask(PreviewToolBar::AllPreviewModes);
 
@@ -105,6 +105,10 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
     PreviewListItem *item = 0;
     d->gboxSettings       = new EditorToolSettings;
     d->gboxSettings->setTools(EditorToolSettings::Histogram);
+    d->gboxSettings->setButtons(EditorToolSettings::Default|
+                                EditorToolSettings::Ok|
+                                EditorToolSettings::Cancel|
+                                EditorToolSettings::Try);
 
     // -------------------------------------------------------------
 
@@ -233,19 +237,17 @@ void AutoCorrectionTool::prepareEffect()
 
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 
-    ImageIface* iface = d->previewWidget->imageIface();
-    DImg preview      = iface->getPreviewImg();
+    ImageIface iface(0, 0);
+    DImg preview = d->previewWidget->getOriginalRegionImage(true);
     
-    autoCorrection(&preview, iface->getOriginalImg(), d->correctionTools->currentId());
+    autoCorrection(&preview, iface.getOriginalImg(), d->correctionTools->currentId());
 }
 
 void AutoCorrectionTool::putPreviewData()
 {
-    DImg preview      = filter()->getTargetImage();
-    ImageIface* iface = d->previewWidget->imageIface();
-    iface->putPreviewImage(preview.bits());
-    d->previewWidget->updatePreview();
-
+    DImg preview = filter()->getTargetImage();
+    d->previewWidget->setPreviewImage(preview);
+    
     // Update histogram.
 
     if (d->destinationPreviewData)
@@ -307,7 +309,7 @@ void AutoCorrectionTool::renderingFinished()
 {
     QApplication::restoreOverrideCursor();
     d->gboxSettings->setEnabled(true);
-    toolView()->setEnabled(false);
+    toolView()->setEnabled(true);
 }
 
 void AutoCorrectionTool::autoCorrection(DImg* img, DImg* ref, int type)
