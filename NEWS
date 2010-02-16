@@ -45,6 +45,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 028 ==> 226858 : digiKam 1.2 My Tags window always blank.
 029 ==> 226568 : digiKam 1.1 crashes when renaming tag.
 030 ==> 226515 : My tags on Caption/Tags becomes empty after removing a single tag.
-031 ==> 
+031 ==> 227244 : Images on local disk not shown in middle pane.
+032 ==> 
+
 
 
