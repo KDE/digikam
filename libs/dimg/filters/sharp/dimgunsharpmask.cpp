@@ -58,12 +58,13 @@ DImgUnsharpMask::DImgUnsharpMask(DImg *orgImage, QObject *parent, int radius,
 
 void DImgUnsharpMask::filterImage()
 {
-    int    progress;
-    int    quantum;
-    double quantumThreshold;
-    double value;
-    DColor p;
-    DColor q;
+    int      progress;
+    long int quantum;
+    long int zero = 0;
+    double   quantumThreshold;
+    double   value;
+    DColor   p;
+    DColor   q;
 
     if (m_orgImage.isNull())
     {
@@ -91,7 +92,7 @@ void DImgUnsharpMask::filterImage()
             else
                 value = (double)(p.red()) + value*m_amount;
 
-            q.setRed(CLAMP(lround(value), 0, quantum));
+            q.setRed(CLAMP(lround(value), zero, quantum));
 
             // Green Channel.
             value = (double)(p.green())-(double)(q.green());
@@ -101,7 +102,7 @@ void DImgUnsharpMask::filterImage()
             else
                 value = (double)(p.green()) + value*m_amount;
 
-            q.setGreen(CLAMP(lround(value), 0, quantum));
+            q.setGreen(CLAMP(lround(value), zero, quantum));
 
             // Blue Channel.
             value = (double)(p.blue())-(double)(q.blue());
@@ -111,7 +112,7 @@ void DImgUnsharpMask::filterImage()
             else
                 value = (double)(p.blue()) + value*m_amount;
 
-            q.setBlue(CLAMP(lround(value), 0, quantum));
+            q.setBlue(CLAMP(lround(value), zero, quantum));
 
             // Alpha Channel.
             value = (double)(p.alpha())-(double)(q.alpha());
@@ -121,7 +122,7 @@ void DImgUnsharpMask::filterImage()
             else
                 value = (double)(p.alpha()) + value*m_amount;
 
-            q.setAlpha(CLAMP(lround(value), 0, quantum));
+            q.setAlpha(CLAMP(lround(value), zero, quantum));
 
             m_destImage.setPixelColor(x, y, q);
         }

@@ -26,8 +26,6 @@
  *
  * ============================================================ */
 
-#define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
-
 #include "imagecurves.h"
 
 // C++ includes
@@ -460,8 +458,8 @@ void ImageCurves::curvesPlotCurve(int channel, int p1, int p2, int p3, int p4)
     dy2 = deltas[2][1];
     dy3 = deltas[3][1];
 
-    lastx = (int)CLAMP (x, 0, d->segmentMax);
-    lasty = (int)CLAMP (y, 0, d->segmentMax);
+    lastx = (int)CLAMP (x, 0.0, (double)d->segmentMax);
+    lasty = (int)CLAMP (y, 0.0, (double)d->segmentMax);
 
     d->curves->curve[channel][lastx] = lasty;
 
@@ -481,8 +479,8 @@ void ImageCurves::curvesPlotCurve(int channel, int p1, int p2, int p3, int p4)
        dy  += dy2;
        dy2 += dy3;
 
-       newx = CLAMP(ROUND (x), 0, d->segmentMax);
-       newy = CLAMP(ROUND (y), 0, d->segmentMax);
+       newx = CLAMP((int)lround(x), 0, d->segmentMax);
+       newy = CLAMP((int)lround(y), 0, d->segmentMax);
 
        // If this point is different than the last one...then draw it.
 
@@ -529,9 +527,9 @@ void ImageCurves::curvesLutSetup(int nchannels)
        {
           // To add gamma correction use func(v ^ g) ^ 1/g instead.
 
-          val = (float)(d->segmentMax) * curvesLutFunc( d->lut->nchannels, i, v / (float)(d->segmentMax)) + 0.5;
+          val = (double)(d->segmentMax) * curvesLutFunc( d->lut->nchannels, i, v / (float)(d->segmentMax)) + 0.5;
 
-          d->lut->luts[i][v] = (unsigned short)CLAMP (val, 0, d->segmentMax);
+          d->lut->luts[i][v] = (unsigned short)CLAMP(val, 0.0, (double)d->segmentMax);
        }
     }
 }

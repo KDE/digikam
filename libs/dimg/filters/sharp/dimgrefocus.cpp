@@ -225,9 +225,9 @@ void DImgRefocus::convolveImage(uchar *orgData, uchar *destData, int width, int 
                     ptr = &destData[index2*4];
 
                     // Overwrite RGB values to destination.
-                    ptr[0] = (uchar) CLAMP (valBlue,  0, 255);
-                    ptr[1] = (uchar) CLAMP (valGreen, 0, 255);
-                    ptr[2] = (uchar) CLAMP (valRed,   0, 255);
+                    ptr[0] = (uchar) CLAMP(valBlue,  0.0, 255.0);
+                    ptr[1] = (uchar) CLAMP(valGreen, 0.0, 255.0);
+                    ptr[2] = (uchar) CLAMP(valRed,   0.0, 255.0);
                 }
             }
             else                 // 16 bits image.
@@ -266,9 +266,9 @@ void DImgRefocus::convolveImage(uchar *orgData, uchar *destData, int width, int 
                     ptr = &destData16[index2*4];
 
                     // Overwrite RGB values to destination.
-                    ptr[0] = (unsigned short) CLAMP (valBlue,  0, 65535);
-                    ptr[1] = (unsigned short) CLAMP (valGreen, 0, 65535);
-                    ptr[2] = (unsigned short) CLAMP (valRed,   0, 65535);
+                    ptr[0] = (unsigned short) CLAMP(valBlue,  0.0, 65535.0);
+                    ptr[1] = (unsigned short) CLAMP(valGreen, 0.0, 65535.0);
+                    ptr[2] = (unsigned short) CLAMP(valRed,   0.0, 65535.0);
                 }
             }
         }

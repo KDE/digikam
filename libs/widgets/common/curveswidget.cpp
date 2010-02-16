@@ -21,8 +21,6 @@
  *
  * ============================================================ */
 
-#define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
-
 #include "curveswidget.moc"
 
 // C++ includes

@@ -442,7 +442,7 @@ void ImageLevels::levelsLutSetup(int nchannels)
           val = (float)(d->sixteenBit ? 65535 : 255) *
                 levelsLutFunc( d->lut->nchannels, i, v/(float)(d->sixteenBit ? 65535 : 255)) + 0.5;
 
-          d->lut->luts[i][v] = (unsigned short)CLAMP (val, 0, (d->sixteenBit ? 65535 : 255));
+          d->lut->luts[i][v] = (unsigned short)CLAMP(val, 0.0, (d->sixteenBit ? 65535.0 : 255.0));
        }
     }
 }
