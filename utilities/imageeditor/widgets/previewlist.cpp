@@ -198,6 +198,8 @@ PreviewListItem* PreviewList::addItem(DImgThreadedFilter* filter, const QString&
 {
     if (!filter) return 0;
 
+    filter->setParent(this);
+
     PreviewListItem* item = new PreviewListItem(this);
     item->setFilter(filter);
     item->setText(0, txt);
