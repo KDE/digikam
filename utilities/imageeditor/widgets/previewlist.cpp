@@ -30,6 +30,7 @@
 #include <QHeaderView>
 #include <QTimer>
 #include <QPainter>
+#include <QMap>
 
 // KDE includes
 
@@ -48,6 +49,82 @@
 namespace Digikam
 {
 
+class PreviewThreadWrapperPriv
+{
+
+public:
+
+    PreviewThreadWrapperPriv()
+    {
+    }
+
+    QMap<int, DImgThreadedFilter*> map;
+};
+
+PreviewThreadWrapper::PreviewThreadWrapper(QObject* parent)
+                    : QObject(parent), d(new PreviewThreadWrapperPriv)
+{
+}
+
+PreviewThreadWrapper::~PreviewThreadWrapper()
+{
+    delete d;
+}
+
+void PreviewThreadWrapper::registerFilter(int id, DImgThreadedFilter* filter)
+{
+    d->map.insert(id, filter);
+}
+    
+void PreviewThreadWrapper::slotFilterStarted()
+{
+    DImgThreadedFilter* filter = dynamic_cast<DImgThreadedFilter*>(sender());
+    if (!filter) return;
+
+    emit signalFilterStarted(d->map.key(filter));
+}
+
+void PreviewThreadWrapper::slotFilterFinished(bool success)
+{
+    DImgThreadedFilter* filter = dynamic_cast<DImgThreadedFilter*>(sender());
+    if (!filter) return;
+
+    if (success)
+    {
+        QPixmap pix = filter->getTargetImage().convertToPixmap().scaled(128, 128, Qt::KeepAspectRatio);
+        emit signalFilterFinished(d->map.key(filter), pix);
+    }
+}
+
+void PreviewThreadWrapper::slotFilterProgress(int /*progress*/)
+{
+    DImgThreadedFilter* filter = dynamic_cast<DImgThreadedFilter*>(sender());
+    if (!filter) return;
+
+//    kDebug() << filter->filterName() << " : " << progress << " %";
+}
+
+void PreviewThreadWrapper::startFilters()
+{
+    QList<DImgThreadedFilter*> list = d->map.values();
+    foreach(DImgThreadedFilter* filter, list)
+    {
+        filter->startFilter();
+    }
+}
+
+void PreviewThreadWrapper::stopFilters()
+{
+    QList<DImgThreadedFilter*> list = d->map.values();
+    foreach(DImgThreadedFilter* filter, list)
+    {
+        filter->cancelFilter();
+        filter->deleteLater();
+    }
+}
+
+// ---------------------------------------------------------------------
+  
 class PreviewListItemPriv
 {
 
@@ -55,14 +132,12 @@ public:
 
     PreviewListItemPriv()
     {
-        busy   = false;
-        id     = 0;
-        filter = 0;
+        busy = false;
+        id   = 0;
     }
 
-    bool                busy;
-    int                 id;
-    DImgThreadedFilter* filter;
+    bool busy;
+    int  id;
 };
 
 PreviewListItem::PreviewListItem(QTreeWidget* parent)
@@ -73,16 +148,6 @@ PreviewListItem::PreviewListItem(QTreeWidget* parent)
 PreviewListItem::~PreviewListItem()
 {
     delete d;
-}
-
-void PreviewListItem::setFilter(DImgThreadedFilter* filter)
-{
-    d->filter = filter;
-}
-
-DImgThreadedFilter* PreviewListItem::filter() const
-{
-    return d->filter;
 }
 
 void PreviewListItem::setPixmap(const QPixmap& pix)
@@ -120,21 +185,26 @@ public:
 
     PreviewListPriv()
     {
+        wrapper       = 0;
         progressCount = 0;
         progressTimer = 0;
         progressPix   = SmallIcon("process-working", 22);
     }
 
-    int     progressCount;
+    int                   progressCount;
 
-    QTimer* progressTimer;
+    QTimer*               progressTimer;
 
-    QPixmap progressPix;
+    QPixmap               progressPix;
+    
+    PreviewThreadWrapper* wrapper;
 };
 
-PreviewList::PreviewList(QWidget* parent)
-           : QTreeWidget(parent), d(new PreviewListPriv)
+PreviewList::PreviewList(QObject* parent)
+           : QTreeWidget(), d(new PreviewListPriv)
 {
+    d->wrapper = new PreviewThreadWrapper(parent);
+    
     setSelectionMode(QAbstractItemView::SingleSelection);
     setDropIndicatorShown(true);
     setSortingEnabled(false);
@@ -151,6 +221,12 @@ PreviewList::PreviewList(QWidget* parent)
 
     connect(d->progressTimer, SIGNAL(timeout()),
             this, SLOT(slotProgressTimerDone()));
+
+    connect(d->wrapper, SIGNAL(signalFilterStarted(int)),
+            this, SLOT(slotFilterStarted(int)));
+
+    connect(d->wrapper, SIGNAL(signalFilterFinished(int, const QPixmap&)),
+            this, SLOT(slotFilterFinished(int, const QPixmap&)));    
 }
 
 PreviewList::~PreviewList()
@@ -162,102 +238,51 @@ PreviewList::~PreviewList()
 void PreviewList::startFilters()
 {
     d->progressTimer->start();
-
-    QTreeWidgetItemIterator it(this);
-    while (*it)
-    {
-        PreviewListItem* item = dynamic_cast<PreviewListItem*>(*it);
-        if (item)
-            item->filter()->startFilter();
-
-        ++it;
-    }
+    d->wrapper->startFilters();
 }
 
 void PreviewList::stopFilters()
 {
     d->progressTimer->stop();
-
-    QTreeWidgetItemIterator it(this);
-    while (*it)
-    {
-        PreviewListItem* item = dynamic_cast<PreviewListItem*>(*it);
-        if (item)
-        {
-            if (item->isBusy())
-                item->filter()->cancelFilter();
-
-            delete item->filter();
-        }
-
-        ++it;
-    }
+    d->wrapper->stopFilters();
 }
 
 PreviewListItem* PreviewList::addItem(DImgThreadedFilter* filter, const QString& txt, int id)
 {
     if (!filter) return 0;
 
-    filter->setParent(this);
+    filter->setParent(d->wrapper);
+    d->wrapper->registerFilter(id, filter);
 
     PreviewListItem* item = new PreviewListItem(this);
-    item->setFilter(filter);
     item->setText(0, txt);
     item->setId(id);
 
     connect(filter, SIGNAL(started()),
-            this, SLOT(slotFilterStarted()));
+            d->wrapper, SLOT(slotFilterStarted()));
 
     connect(filter, SIGNAL(finished(bool)),
-            this, SLOT(slotFilterFinished(bool)));
+            d->wrapper, SLOT(slotFilterFinished(bool)));
 
     connect(filter, SIGNAL(progress(int)),
-            this, SLOT(slotFilterProgress(int)));
+            d->wrapper, SLOT(slotFilterProgress(int)));
 
     return item;
 }
 
-void PreviewList::slotFilterStarted()
-{
-    DImgThreadedFilter* filter = dynamic_cast<DImgThreadedFilter*>(sender());
-    if (!filter) return;
-
-    PreviewListItem* item = findItem(filter);
-    item->setBusy(true);
-}
-
-void PreviewList::slotFilterFinished(bool success)
-{
-    DImgThreadedFilter* filter = dynamic_cast<DImgThreadedFilter*>(sender());
-    if (!filter) return;
-
-    PreviewListItem* item = findItem(filter);
-    item->setBusy(false);
-    if (success)
-        item->setPixmap(filter->getTargetImage().convertToPixmap().scaled(128, 128, Qt::KeepAspectRatio));
-}
-
-void PreviewList::slotFilterProgress(int /*progress*/)
-{
-    DImgThreadedFilter* filter = dynamic_cast<DImgThreadedFilter*>(sender());
-    if (!filter) return;
-
-//    kDebug() << filter->filterName() << " : " << progress << " %";
-}
-
-PreviewListItem* PreviewList::findItem(DImgThreadedFilter* filter)
+PreviewListItem* PreviewList::findItem(int id)
 {
     QTreeWidgetItemIterator it(this);
     while (*it)
     {
         PreviewListItem* item = dynamic_cast<PreviewListItem*>(*it);
-        if (item && item->filter() == filter)
+        if (item && item->id() == id)
             return item;
 
         ++it;
     }
     return 0;
-}
+}  
 
 void PreviewList::setCurrentId(int id)
 {
@@ -312,6 +337,19 @@ void PreviewList::slotProgressTimerDone()
     kDebug() << "item busy : " << busy;
     if (!busy)
         d->progressTimer->stop();
+}
+
+void PreviewList::slotFilterStarted(int id)
+{
+    PreviewListItem* item = findItem(id);
+    item->setBusy(true);
+}
+
+void PreviewList::slotFilterFinished(int id, const QPixmap& pix)
+{
+    PreviewListItem* item = findItem(id);
+    item->setBusy(false);
+    item->setPixmap(pix);
 }
 
 }  // namespace Digikam

@@ -113,7 +113,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->correctionTools = new PreviewList();
+    d->correctionTools = new PreviewList(parent);
 
     item = d->correctionTools->addItem(new AutoLevelsFilter(&d->thumbnailImage),
                                        i18n("Auto Levels"), AutoLevelsCorrection);

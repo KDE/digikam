@@ -27,6 +27,8 @@
 
 // Qt includes
 
+#include <QtCore/QObject>
+#include <QtGui/QPixmap>
 #include <QtGui/QTreeWidget>
 #include <QtGui/QTreeWidgetItem>
 
@@ -36,8 +38,42 @@
 
 namespace Digikam
 {
-
+  
 class DImgThreadedFilter;
+class PreviewThreadWrapperPriv;
+
+class DIGIKAM_EXPORT PreviewThreadWrapper : public QObject
+{
+    Q_OBJECT
+
+public:
+
+    PreviewThreadWrapper(QObject* parent=0);
+    ~PreviewThreadWrapper();
+    
+    void registerFilter(int id, DImgThreadedFilter* filter);
+    
+    void startFilters();
+    void stopFilters();
+
+Q_SIGNALS:
+
+    void signalFilterStarted(int);
+    void signalFilterFinished(int, const QPixmap&);
+    
+private Q_SLOTS:
+
+    void slotFilterStarted();
+    void slotFilterFinished(bool success);
+    void slotFilterProgress(int progress);
+
+private:
+
+    PreviewThreadWrapperPriv* const d;  
+};  
+
+// -------------------------------------------------------------------
+
 class PreviewListItemPriv;
 
 class DIGIKAM_EXPORT PreviewListItem : public QTreeWidgetItem
@@ -47,9 +83,6 @@ public:
 
     PreviewListItem(QTreeWidget* parent=0);
     ~PreviewListItem();
-
-    void setFilter(DImgThreadedFilter* filter);
-    DImgThreadedFilter* filter() const;
 
     void setPixmap(const QPixmap& pix);
 
@@ -74,7 +107,7 @@ class DIGIKAM_EXPORT PreviewList : public QTreeWidget
 
 public:
 
-    PreviewList(QWidget* parent=0);
+    PreviewList(QObject* parent);
     ~PreviewList();
 
     PreviewListItem* addItem(DImgThreadedFilter* filter, const QString& txt, int id);
@@ -85,17 +118,15 @@ public:
     void startFilters();
     void stopFilters();
 
-
 private Q_SLOTS:
 
-    void slotFilterStarted();
-    void slotFilterFinished(bool success);
-    void slotFilterProgress(int progress);
     void slotProgressTimerDone();
+    void slotFilterStarted(int);
+    void slotFilterFinished(int, const QPixmap&);
 
 private:
 
-    PreviewListItem* findItem(DImgThreadedFilter* filter);
+    PreviewListItem* findItem(int id);
 
 private:
 
