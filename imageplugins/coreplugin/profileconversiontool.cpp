@@ -220,8 +220,8 @@ void ProfileConversionTool::prepareEffect()
     d->profilesBox->setEnabled(false);
     toolView()->setEnabled(false);
 
-    DImg img = d->previewWidget->getOriginalRegionImage();
-    setFilter(new IccTransformFilter(&img, this, d->transform));
+    DImg preview = d->previewWidget->getOriginalRegionImage(true);
+    setFilter(new IccTransformFilter(&preview, this, d->transform));
 }
 
 void ProfileConversionTool::putPreviewData()
