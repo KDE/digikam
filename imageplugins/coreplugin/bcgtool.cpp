@@ -68,7 +68,6 @@
 #include "imageregionwidget.h"
 
 using namespace KDcrawIface;
-using namespace Digikam;
 
 namespace DigikamImagesPluginCore
 {
