@@ -50,7 +50,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 031 ==> 227244 : Images on local disk not shown in middle pane.
 032 ==> 226853 : No images shown after upgrading from previous version.
 033 ==> 226932 : Batch Color Space Conversion Tool.
-034 ==> 
+034 ==> 207338 : Batch queue manager does not cancel processing.
+035 ==> 
+
 
 
 
