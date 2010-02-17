@@ -169,7 +169,7 @@ double MixerFilter::CalculateNorm(float RedGain, float GreenGain, float BlueGain
         return (1.0);
 
     return( fabs (1.0 / lfSum) );
-};
+}
 
 unsigned short MixerFilter::MixPixel(float RedGain, float GreenGain, float BlueGain,
                                      unsigned short R, unsigned short G, unsigned short B, bool sixteenBit,
@@ -180,6 +180,6 @@ unsigned short MixerFilter::MixPixel(float RedGain, float GreenGain, float BlueG
     int segment  = sixteenBit ? 65535 : 255;
 
     return( (unsigned short)CLAMP((int)lfMix, 0, segment));
-};
+}
     
 }  // namespace Digikam
