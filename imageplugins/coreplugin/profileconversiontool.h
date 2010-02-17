@@ -27,18 +27,16 @@
 // Local includes
 
 #include "editortool.h"
+#include "iccprofile.h"
 
-namespace Digikam
-{
-    class IccProfile;
-}
+using namespace Digikam;
 
 namespace DigikamImagesPluginCore
 {
 
 class ProfileConversionToolPriv;
 
-class ProfileConversionTool : public Digikam::EditorToolThreaded
+class ProfileConversionTool : public EditorToolThreaded
 {
     Q_OBJECT
 
@@ -48,7 +46,7 @@ public:
     ~ProfileConversionTool();
 
     static QStringList favoriteProfiles();
-    static void fastConversion(const Digikam::IccProfile& profile);
+    static void fastConversion(const IccProfile& profile);
 
 private Q_SLOTS:
 

@@ -58,7 +58,6 @@
 #include "imageregionwidget.h"
 
 using namespace KDcrawIface;
-using namespace Digikam;
 
 namespace DigikamImagesPluginCore
 {
@@ -92,6 +91,8 @@ public:
     QCache<QString, bool> favoriteProfiles;
 
     IccTransform          transform;
+
+public:
 
     static IccTransform getTransform(const IccProfile& in, const IccProfile& out);
 };
@@ -129,7 +130,7 @@ ProfileConversionTool::ProfileConversionTool(QObject* parent)
                                 EditorToolSettings::Cancel);
 
     d->gboxSettings->setTools(EditorToolSettings::Histogram);
-    d->gboxSettings->setHistogramType(Digikam::LRGBA);
+    d->gboxSettings->setHistogramType(LRGBA);
 
     QGridLayout* grid = new QGridLayout(d->gboxSettings->plainPage());
 
@@ -197,27 +198,6 @@ ProfileConversionTool::~ProfileConversionTool()
 {
     delete d;
 }
-
-QStringList ProfileConversionTool::favoriteProfiles()
-{
-    ProfileConversionToolPriv d;
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(d.configGroupName);
-    return group.readPathEntry(d.configRecentlyUsedProfilesEntry, QStringList());
-}
-
-void ProfileConversionTool::fastConversion(const IccProfile& profile)
-{
-    ImageIface iface(0, 0);
-    IccProfile currentProfile = iface.getOriginalIccProfile();
-    IccTransform transform = ProfileConversionToolPriv::getTransform(currentProfile, profile);
-    IccTransformFilter filter(iface.getOriginalImg(), 0, transform);
-    filter.startFilterDirectly();
-    DImg imDest = filter.getTargetImage();
-    iface.putOriginalImage(i18n("Color Profile Conversion"), imDest.bits());
-    iface.putOriginalIccProfile(imDest.getIccProfile());
-}
-
 
 void ProfileConversionTool::slotCurrentProfInfo()
 {
@@ -306,6 +286,28 @@ void ProfileConversionTool::putFinalData()
     ImageIface iface(0, 0);
     DImg imDest = filter()->getTargetImage();
 
+    iface.putOriginalImage(i18n("Color Profile Conversion"), imDest.bits());
+    iface.putOriginalIccProfile(imDest.getIccProfile());
+}
+
+// Static Methods.
+
+QStringList ProfileConversionTool::favoriteProfiles()
+{
+    ProfileConversionToolPriv d;
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(d.configGroupName);
+    return group.readPathEntry(d.configRecentlyUsedProfilesEntry, QStringList());
+}
+
+void ProfileConversionTool::fastConversion(const IccProfile& profile)
+{
+    ImageIface iface(0, 0);
+    IccProfile currentProfile = iface.getOriginalIccProfile();
+    IccTransform transform = ProfileConversionToolPriv::getTransform(currentProfile, profile);
+    IccTransformFilter filter(iface.getOriginalImg(), 0, transform);
+    filter.startFilterDirectly();
+    DImg imDest = filter.getTargetImage();
     iface.putOriginalImage(i18n("Color Profile Conversion"), imDest.bits());
     iface.putOriginalIccProfile(imDest.getIccProfile());
 }
