@@ -53,6 +53,7 @@
 // Local includes
 
 #include "bcgfilter.h"
+#include "tonalityfilter.h"
 #include "colorgradientwidget.h"
 #include "curvesbox.h"
 #include "curveswidget.h"
@@ -850,233 +851,309 @@ void BWSepiaTool::finalRendering()
 
 void BWSepiaTool::blackAndWhiteConversion(uchar *data, int w, int h, bool sb, int type)
 {
-    // Value to multiply RGB 8 bits component of mask used by changeTonality() method.
-    int mul = sb ? 255 : 1;
-    DImgImageFilters filter;
+    // Value to multiply RGB 8 bits component of mask used by TonalityFilter.
+    int mul         = sb ? 255 : 1;
     double strength = 1.0 + ((double)d->strengthInput->value() - 1.0) * (1.0 / 3.0);
 
+    DImgImageFilters  filter;
+    TonalityContainer toneSettings;
+    
     switch (type)
     {
-       case BWNoFilter:
-          d->redAttn   = 0.0;
-          d->greenAttn = 0.0;
-          d->blueAttn  = 0.0;
-          break;
+        case BWNoFilter:
+        {
+            d->redAttn   = 0.0;
+            d->greenAttn = 0.0;
+            d->blueAttn  = 0.0;
+            break;
+        }
 
-       case BWGreenFilter:
-          d->redAttn   = -0.20 * strength;
-          d->greenAttn = +0.11 * strength;
-          d->blueAttn  = +0.09 * strength;
-          break;
+        case BWGreenFilter:
+        {
+            d->redAttn   = -0.20 * strength;
+            d->greenAttn = +0.11 * strength;
+            d->blueAttn  = +0.09 * strength;
+            break;
+        }
 
-       case BWOrangeFilter:
-          d->redAttn   = +0.48 * strength;
-          d->greenAttn = -0.37 * strength;
-          d->blueAttn  = -0.11 * strength;
-          break;
+        case BWOrangeFilter:
+        {
+            d->redAttn   = +0.48 * strength;
+            d->greenAttn = -0.37 * strength;
+            d->blueAttn  = -0.11 * strength;
+            break;
+        }
 
-       case BWRedFilter:
-          d->redAttn   = +0.60 * strength;
-          d->greenAttn = -0.49 * strength;
-          d->blueAttn  = -0.11 * strength;
-          break;
+        case BWRedFilter:
+        {
+            d->redAttn   = +0.60 * strength;
+            d->greenAttn = -0.49 * strength;
+            d->blueAttn  = -0.11 * strength;
+            break;
+        }
 
-       case BWYellowFilter:
-          d->redAttn   = +0.30 * strength;
-          d->greenAttn = -0.31 * strength;
-          d->blueAttn  = +0.01 * strength;
-          break;
+        case BWYellowFilter:
+        {
+            d->redAttn   = +0.30 * strength;
+            d->greenAttn = -0.31 * strength;
+            d->blueAttn  = +0.01 * strength;
+            break;
+        }
 
-       case BWYellowGreenFilter:
-          d->redAttn   = +0.25 * strength;
-          d->greenAttn = +0.65 * strength;
-          d->blueAttn  = +0.15 * strength;
-          break;
+        case BWYellowGreenFilter:
+        {
+            d->redAttn   = +0.25 * strength;
+            d->greenAttn = +0.65 * strength;
+            d->blueAttn  = +0.15 * strength;
+            break;
+        }
 
-       case BWBlueFilter:
-          d->redAttn   = +0.15 * strength;
-          d->greenAttn = +0.15 * strength;
-          d->blueAttn  = +0.80 * strength;
-          break;
+        case BWBlueFilter:
+        {
+            d->redAttn   = +0.15 * strength;
+            d->greenAttn = +0.15 * strength;
+            d->blueAttn  = +0.80 * strength;
+            break;
+        }
 
-       // --------------------------------------------------------------------------------
+        // --------------------------------------------------------------------------------
 
-       case BWGeneric:
-       case BWNoTone:
-          d->redMult   = 0.24;
-          d->greenMult = 0.68;
-          d->blueMult  = 0.08;
-          filter.channelMixerImage(data, w, h, sb, true, true,
-                 d->redMult + d->redMult*d->redAttn, d->greenMult + d->greenMult*d->greenAttn, d->blueMult + d->blueMult*d->blueAttn,
-                 0.0, 1.0, 0.0,
-                 0.0, 0.0, 1.0);
-          break;
+        case BWGeneric:
+        case BWNoTone:
+        {
+            d->redMult   = 0.24;
+            d->greenMult = 0.68;
+            d->blueMult  = 0.08;
+            filter.channelMixerImage(data, w, h, sb, true, true,
+                  d->redMult + d->redMult*d->redAttn, d->greenMult + d->greenMult*d->greenAttn, d->blueMult + d->blueMult*d->blueAttn,
+                  0.0, 1.0, 0.0,
+                  0.0, 0.0, 1.0);
+            break;
+        }
 
-       case BWAgfa200X:
-          d->redMult   = 0.18;
-          d->greenMult = 0.41;
-          d->blueMult  = 0.41;
-          filter.channelMixerImage(data, w, h, sb, true, true,
-                 d->redMult + d->redMult*d->redAttn, d->greenMult + d->greenMult*d->greenAttn, d->blueMult + d->blueMult*d->blueAttn,
-                 0.0, 1.0, 0.0,
-                 0.0, 0.0, 1.0);
-          break;
+        case BWAgfa200X:
+        {
+            d->redMult   = 0.18;
+            d->greenMult = 0.41;
+            d->blueMult  = 0.41;
+            filter.channelMixerImage(data, w, h, sb, true, true,
+                  d->redMult + d->redMult*d->redAttn, d->greenMult + d->greenMult*d->greenAttn, d->blueMult + d->blueMult*d->blueAttn,
+                  0.0, 1.0, 0.0,
+                  0.0, 0.0, 1.0);
+            break;
+        }
 
-       case BWAgfapan25:
-          d->redMult   = 0.25;
-          d->greenMult = 0.39;
-          d->blueMult  = 0.36;
-          filter.channelMixerImage(data, w, h, sb, true, true,
-                 d->redMult + d->redMult*d->redAttn, d->greenMult + d->greenMult*d->greenAttn, d->blueMult + d->blueMult*d->blueAttn,
-                 0.0, 1.0, 0.0,
-                 0.0, 0.0, 1.0);
-          break;
+        case BWAgfapan25:
+        {
+            d->redMult   = 0.25;
+            d->greenMult = 0.39;
+            d->blueMult  = 0.36;
+            filter.channelMixerImage(data, w, h, sb, true, true,
+                  d->redMult + d->redMult*d->redAttn, d->greenMult + d->greenMult*d->greenAttn, d->blueMult + d->blueMult*d->blueAttn,
+                  0.0, 1.0, 0.0,
+                  0.0, 0.0, 1.0);
+            break;
+        }
 
-       case BWAgfapan100:
-          d->redMult   = 0.21;
-          d->greenMult = 0.40;
-          d->blueMult  = 0.39;
-          filter.channelMixerImage(data, w, h, sb, true, true,
-                 d->redMult + d->redMult*d->redAttn, d->greenMult + d->greenMult*d->greenAttn, d->blueMult + d->blueMult*d->blueAttn,
-                 0.0, 1.0, 0.0,
-                 0.0, 0.0, 1.0);
-          break;
+        case BWAgfapan100:
+        {
+            d->redMult   = 0.21;
+            d->greenMult = 0.40;
+            d->blueMult  = 0.39;
+            filter.channelMixerImage(data, w, h, sb, true, true,
+                  d->redMult + d->redMult*d->redAttn, d->greenMult + d->greenMult*d->greenAttn, d->blueMult + d->blueMult*d->blueAttn,
+                  0.0, 1.0, 0.0,
+                  0.0, 0.0, 1.0);
+            break;
+        }
 
-       case BWAgfapan400:
-          d->redMult   = 0.20;
-          d->greenMult = 0.41;
-          d->blueMult  = 0.39;
-          filter.channelMixerImage(data, w, h, sb, true, true,
-                 d->redMult + d->redMult*d->redAttn, d->greenMult + d->greenMult*d->greenAttn, d->blueMult + d->blueMult*d->blueAttn,
-                 0.0, 1.0, 0.0,
-                 0.0, 0.0, 1.0);
-          break;
+        case BWAgfapan400:
+        {
+            d->redMult   = 0.20;
+            d->greenMult = 0.41;
+            d->blueMult  = 0.39;
+            filter.channelMixerImage(data, w, h, sb, true, true,
+                  d->redMult + d->redMult*d->redAttn, d->greenMult + d->greenMult*d->greenAttn, d->blueMult + d->blueMult*d->blueAttn,
+                  0.0, 1.0, 0.0,
+                  0.0, 0.0, 1.0);
+            break;
+        }
 
-       case BWIlfordDelta100:
-          d->redMult   = 0.21;
-          d->greenMult = 0.42;
-          d->blueMult  = 0.37;
-          filter.channelMixerImage(data, w, h, sb, true, true,
-                 d->redMult + d->redMult*d->redAttn, d->greenMult + d->greenMult*d->greenAttn, d->blueMult + d->blueMult*d->blueAttn,
-                 0.0, 1.0, 0.0,
-                 0.0, 0.0, 1.0);
-          break;
+        case BWIlfordDelta100:
+        {
+            d->redMult   = 0.21;
+            d->greenMult = 0.42;
+            d->blueMult  = 0.37;
+            filter.channelMixerImage(data, w, h, sb, true, true,
+                  d->redMult + d->redMult*d->redAttn, d->greenMult + d->greenMult*d->greenAttn, d->blueMult + d->blueMult*d->blueAttn,
+                  0.0, 1.0, 0.0,
+                  0.0, 0.0, 1.0);
+            break;
+        }
 
-       case BWIlfordDelta400:
-          d->redMult   = 0.22;
-          d->greenMult = 0.42;
-          d->blueMult  = 0.36;
-          filter.channelMixerImage(data, w, h, sb, true, true,
-                 d->redMult + d->redMult*d->redAttn, d->greenMult + d->greenMult*d->greenAttn, d->blueMult + d->blueMult*d->blueAttn,
-                 0.0, 1.0, 0.0,
-                 0.0, 0.0, 1.0);
-          break;
+        case BWIlfordDelta400:
+        {
+            d->redMult   = 0.22;
+            d->greenMult = 0.42;
+            d->blueMult  = 0.36;
+            filter.channelMixerImage(data, w, h, sb, true, true,
+                  d->redMult + d->redMult*d->redAttn, d->greenMult + d->greenMult*d->greenAttn, d->blueMult + d->blueMult*d->blueAttn,
+                  0.0, 1.0, 0.0,
+                  0.0, 0.0, 1.0);
+            break;
+        }
 
-       case BWIlfordDelta400Pro3200:
-          d->redMult   = 0.31;
-          d->greenMult = 0.36;
-          d->blueMult  = 0.33;
-          filter.channelMixerImage(data, w, h, sb, true, true,
-                 d->redMult + d->redMult*d->redAttn, d->greenMult + d->greenMult*d->greenAttn, d->blueMult + d->blueMult*d->blueAttn,
-                 0.0, 1.0, 0.0,
-                 0.0, 0.0, 1.0);
-          break;
+        case BWIlfordDelta400Pro3200:
+        {
+            d->redMult   = 0.31;
+            d->greenMult = 0.36;
+            d->blueMult  = 0.33;
+            filter.channelMixerImage(data, w, h, sb, true, true,
+                  d->redMult + d->redMult*d->redAttn, d->greenMult + d->greenMult*d->greenAttn, d->blueMult + d->blueMult*d->blueAttn,
+                  0.0, 1.0, 0.0,
+                  0.0, 0.0, 1.0);
+            break;
+        }
 
-       case BWIlfordFP4:
-          d->redMult   = 0.28;
-          d->greenMult = 0.41;
-          d->blueMult  = 0.31;
-          filter.channelMixerImage(data, w, h, sb, true, true,
-                 d->redMult + d->redMult*d->redAttn, d->greenMult + d->greenMult*d->greenAttn, d->blueMult + d->blueMult*d->blueAttn,
-                 0.0, 1.0, 0.0,
-                 0.0, 0.0, 1.0);
-          break;
+        case BWIlfordFP4:
+        {
+            d->redMult   = 0.28;
+            d->greenMult = 0.41;
+            d->blueMult  = 0.31;
+            filter.channelMixerImage(data, w, h, sb, true, true,
+                  d->redMult + d->redMult*d->redAttn, d->greenMult + d->greenMult*d->greenAttn, d->blueMult + d->blueMult*d->blueAttn,
+                  0.0, 1.0, 0.0,
+                  0.0, 0.0, 1.0);
+            break;
+        }
 
-       case BWIlfordHP5:
-          d->redMult   = 0.23;
-          d->greenMult = 0.37;
-          d->blueMult  = 0.40;
-          filter.channelMixerImage(data, w, h, sb, true, true,
-                 d->redMult + d->redMult*d->redAttn, d->greenMult + d->greenMult*d->greenAttn, d->blueMult + d->blueMult*d->blueAttn,
-                 0.0, 1.0, 0.0,
-                 0.0, 0.0, 1.0);
-          break;
+        case BWIlfordHP5:
+        {
+            d->redMult   = 0.23;
+            d->greenMult = 0.37;
+            d->blueMult  = 0.40;
+            filter.channelMixerImage(data, w, h, sb, true, true,
+                  d->redMult + d->redMult*d->redAttn, d->greenMult + d->greenMult*d->greenAttn, d->blueMult + d->blueMult*d->blueAttn,
+                  0.0, 1.0, 0.0,
+                  0.0, 0.0, 1.0);
+            break;
+        }
 
-       case BWIlfordPanF:
-          d->redMult   = 0.33;
-          d->greenMult = 0.36;
-          d->blueMult  = 0.31;
-          filter.channelMixerImage(data, w, h, sb, true, true,
-                 d->redMult + d->redMult*d->redAttn, d->greenMult + d->greenMult*d->greenAttn, d->blueMult + d->blueMult*d->blueAttn,
-                 0.0, 1.0, 0.0,
-                 0.0, 0.0, 1.0);
-          break;
+        case BWIlfordPanF:
+        {
+            d->redMult   = 0.33;
+            d->greenMult = 0.36;
+            d->blueMult  = 0.31;
+            filter.channelMixerImage(data, w, h, sb, true, true,
+                  d->redMult + d->redMult*d->redAttn, d->greenMult + d->greenMult*d->greenAttn, d->blueMult + d->blueMult*d->blueAttn,
+                  0.0, 1.0, 0.0,
+                  0.0, 0.0, 1.0);
+            break;
+        }
 
-       case BWIlfordXP2Super:
-          d->redMult   = 0.21;
-          d->greenMult = 0.42;
-          d->blueMult  = 0.37;
-          filter.channelMixerImage(data, w, h, sb, true, true,
-                 d->redMult + d->redMult*d->redAttn, d->greenMult + d->greenMult*d->greenAttn, d->blueMult + d->blueMult*d->blueAttn,
-                 0.0, 1.0, 0.0,
-                 0.0, 0.0, 1.0);
-          break;
+        case BWIlfordXP2Super:
+        {
+            d->redMult   = 0.21;
+            d->greenMult = 0.42;
+            d->blueMult  = 0.37;
+            filter.channelMixerImage(data, w, h, sb, true, true,
+                  d->redMult + d->redMult*d->redAttn, d->greenMult + d->greenMult*d->greenAttn, d->blueMult + d->blueMult*d->blueAttn,
+                  0.0, 1.0, 0.0,
+                  0.0, 0.0, 1.0);
+            break;
+        }
 
-       case BWKodakTmax100:
-          d->redMult   = 0.24;
-          d->greenMult = 0.37;
-          d->blueMult  = 0.39;
-          filter.channelMixerImage(data, w, h, sb, true, true,
-                 d->redMult + d->redMult*d->redAttn, d->greenMult + d->greenMult*d->greenAttn, d->blueMult + d->blueMult*d->blueAttn,
-                 0.0, 1.0, 0.0,
-                 0.0, 0.0, 1.0);
-          break;
+        case BWKodakTmax100:
+        {
+            d->redMult   = 0.24;
+            d->greenMult = 0.37;
+            d->blueMult  = 0.39;
+            filter.channelMixerImage(data, w, h, sb, true, true,
+                  d->redMult + d->redMult*d->redAttn, d->greenMult + d->greenMult*d->greenAttn, d->blueMult + d->blueMult*d->blueAttn,
+                  0.0, 1.0, 0.0,
+                  0.0, 0.0, 1.0);
+            break;
+        }
 
-       case BWKodakTmax400:
-          d->redMult   = 0.27;
-          d->greenMult = 0.36;
-          d->blueMult  = 0.37;
-          filter.channelMixerImage(data, w, h, sb, true, true,
-                 d->redMult + d->redMult*d->redAttn, d->greenMult + d->greenMult*d->greenAttn, d->blueMult + d->blueMult*d->blueAttn,
-                 0.0, 1.0, 0.0,
-                 0.0, 0.0, 1.0);
-          break;
+        case BWKodakTmax400:
+        {
+            d->redMult   = 0.27;
+            d->greenMult = 0.36;
+            d->blueMult  = 0.37;
+            filter.channelMixerImage(data, w, h, sb, true, true,
+                  d->redMult + d->redMult*d->redAttn, d->greenMult + d->greenMult*d->greenAttn, d->blueMult + d->blueMult*d->blueAttn,
+                  0.0, 1.0, 0.0,
+                  0.0, 0.0, 1.0);
+            break;
+        }
 
-       case BWKodakTriX:
-          d->redMult   = 0.25;
-          d->greenMult = 0.35;
-          d->blueMult  = 0.40;
-          filter.channelMixerImage(data, w, h, sb, true, true,
-                 d->redMult + d->redMult*d->redAttn, d->greenMult + d->greenMult*d->greenAttn, d->blueMult + d->blueMult*d->blueAttn,
-                 0.0, 1.0, 0.0,
-                 0.0, 0.0, 1.0);
-          break;
+        case BWKodakTriX:
+        {
+            d->redMult   = 0.25;
+            d->greenMult = 0.35;
+            d->blueMult  = 0.40;
+            filter.channelMixerImage(data, w, h, sb, true, true,
+                  d->redMult + d->redMult*d->redAttn, d->greenMult + d->greenMult*d->greenAttn, d->blueMult + d->blueMult*d->blueAttn,
+                  0.0, 1.0, 0.0,
+                  0.0, 0.0, 1.0);
+            break;
+        }
 
-       // --------------------------------------------------------------------------------
+        // --------------------------------------------------------------------------------
 
-       case BWSepiaTone:
-          filter.changeTonality(data, w, h, sb, 162*mul, 132*mul, 101*mul);
-          break;
+        case BWSepiaTone:
+        {
+            toneSettings.redMask   = 162*mul;
+            toneSettings.greenMask = 132*mul;
+            toneSettings.blueMask  = 101*mul;
+            TonalityFilter tone(data, w, h, sb, toneSettings);
+            break;
+        }
 
-       case BWBrownTone:
-          filter.changeTonality(data, w, h, sb, 129*mul, 115*mul, 104*mul);
-          break;
+        case BWBrownTone:
+        {
+            toneSettings.redMask   = 129*mul;
+            toneSettings.greenMask = 115*mul;
+            toneSettings.blueMask  = 104*mul;
+            TonalityFilter tone(data, w, h, sb, toneSettings);
+            break;
+        }
 
-       case BWColdTone:
-          filter.changeTonality(data, w, h, sb, 102*mul, 109*mul, 128*mul);
-          break;
+        case BWColdTone:
+        {
+            toneSettings.redMask   = 102*mul;
+            toneSettings.greenMask = 109*mul;
+            toneSettings.blueMask  = 128*mul;
+            TonalityFilter tone(data, w, h, sb, toneSettings);
+            break;
+        }
 
-       case BWSeleniumTone:
-          filter.changeTonality(data, w, h, sb, 122*mul, 115*mul, 122*mul);
-          break;
+        case BWSeleniumTone:
+        {
+            toneSettings.redMask   = 122*mul;
+            toneSettings.greenMask = 115*mul;
+            toneSettings.blueMask  = 122*mul;
+            TonalityFilter tone(data, w, h, sb, toneSettings);
+            break;
+        }
 
-       case BWPlatinumTone:
-          filter.changeTonality(data, w, h, sb, 115*mul, 110*mul, 106*mul);
-          break;
+        case BWPlatinumTone:
+        {
+            toneSettings.redMask   = 115*mul;
+            toneSettings.greenMask = 110*mul;
+            toneSettings.blueMask  = 106*mul;
+            TonalityFilter tone(data, w, h, sb, toneSettings);
+            break;
+        }
 
-       case BWGreenTone:
-          filter.changeTonality(data, w, h, sb, 125*mul, 125*mul, 105*mul);
-          break;
+        case BWGreenTone:
+        {
+            toneSettings.redMask   = 125*mul;
+            toneSettings.greenMask = 125*mul;
+            toneSettings.blueMask  = 105*mul;
+            TonalityFilter tone(data, w, h, sb, toneSettings);
+            break;
+        }
     }
 }
 
