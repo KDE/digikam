@@ -53,7 +53,6 @@ private Q_SLOTS:
 
     void slotResetSettings();
     void slotCurrentProfInfo();
-    void slotNewProfInfo();
     void slotProfileChanged();
 
 private:

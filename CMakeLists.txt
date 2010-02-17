@@ -513,6 +513,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/hsl/hslsettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/hsl/hspreviewwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/icc/iccprofile.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/icc/iccprofilesettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/icc/icctransform.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/icc/icctransformfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/nr/waveletsnr.cpp

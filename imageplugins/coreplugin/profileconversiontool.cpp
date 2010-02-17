@@ -26,7 +26,6 @@
 
 // Qt includes
 
-#include <QCache>
 #include <QGridLayout>
 #include <QLabel>
 #include <QPushButton>
@@ -44,7 +43,7 @@
 
 #include "editortoolsettings.h"
 #include "iccprofileinfodlg.h"
-#include "iccprofilescombobox.h"
+#include "iccprofilesettings.h"
 #include "iccsettings.h"
 #include "iccsettingscontainer.h"
 #include "icctransform.h"
@@ -52,8 +51,6 @@
 #include "histogramwidget.h"
 #include "imageiface.h"
 #include "imageregionwidget.h"
-
-using namespace KDcrawIface;
 
 namespace DigikamImagesPluginCore
 {
@@ -65,29 +62,24 @@ public:
     ProfileConversionToolPriv() :
         configGroupName("Profile Conversion Tool"),
         configProfileEntry("Profile"),
-        configRecentlyUsedProfilesEntry("Recently Used Profiles"),
-
         destinationPreviewData(0),
         profilesBox(0),
         previewWidget(0),
         gboxSettings(0)
     {      
-        favoriteProfiles.setMaxCost(10);
     }
 
     const QString         configGroupName;
     const QString         configProfileEntry;
-    const QString         configRecentlyUsedProfilesEntry;
-
+    
     uchar*                destinationPreviewData;
 
-    IccProfilesComboBox*  profilesBox;
+    IccProfilesSettings*  profilesBox;
 
     ImageRegionWidget*    previewWidget;
     EditorToolSettings*   gboxSettings;
 
     IccProfile            currentProfile;
-    QCache<QString, bool> favoriteProfiles;
 
     IccTransform          transform;
 
@@ -133,43 +125,26 @@ ProfileConversionTool::ProfileConversionTool(QObject* parent)
     d->gboxSettings->setTools(EditorToolSettings::Histogram);
     d->gboxSettings->setHistogramType(LRGBA);
 
-    QGridLayout* grid = new QGridLayout(d->gboxSettings->plainPage());
-
     // -------------------------------------------------------------
 
-    QVBoxLayout* currentProfVBox = new QVBoxLayout;
-    QLabel* currentProfileTitle  = new QLabel(i18n("Current Color Space:"));
-    QLabel* currentProfileDesc   = new QLabel(QString("<b>%1</b>").arg(d->currentProfile.description()));
+    QGridLayout* grid            = new QGridLayout(d->gboxSettings->plainPage());
+    QLabel* currentProfileTitle  = new QLabel;
+    QLabel* currentProfileDesc   = new QLabel;
     QPushButton* currentProfInfo = new QPushButton(i18n("Info..."));
+    d->profilesBox               = new IccProfilesSettings;
+
+    currentProfileTitle->setText(i18n("Current Color Space:"));
+    currentProfileDesc->setText(QString("<b>%1</b>").arg(d->currentProfile.description()));
     currentProfileDesc->setWordWrap(true);
 
-    currentProfVBox->addWidget(currentProfileTitle);
-    currentProfVBox->addWidget(currentProfileDesc);
-    currentProfVBox->addWidget(currentProfInfo, 0, Qt::AlignLeft);
-
-    // -------------------------------------------------------------
-
-    QVBoxLayout* newProfVBox = new QVBoxLayout;
-
-    QLabel* newProfileLabel  = new QLabel(i18n("Convert to:"));
-    d->profilesBox           = new IccProfilesComboBox;
-    d->profilesBox->addProfilesSqueezed(IccSettings::instance()->workspaceProfiles());
-    d->profilesBox->setWhatsThis( i18n("Select the profile of the color space to convert to."));
-    newProfileLabel->setBuddy(d->profilesBox);
-    QPushButton *newProfInfo = new QPushButton(i18n("Info..."));
-
-    newProfVBox->addWidget(newProfileLabel);
-    newProfVBox->addWidget(d->profilesBox);
-    newProfVBox->addWidget(newProfInfo, 0, Qt::AlignLeft);
-
-    // -------------------------------------------------------------
-
-    grid->addLayout(currentProfVBox, 0, 0);
-    grid->addLayout(newProfVBox,     1, 0);
-    grid->setRowStretch(2, 10);
+    grid->addWidget(currentProfileTitle, 0, 0, 1, 5);
+    grid->addWidget(currentProfileDesc,  1, 0, 1, 5);
+    grid->addWidget(currentProfInfo,     2, 0, 1, 1);
+    grid->addWidget(d->profilesBox,      3, 0, 1, 5);
+    grid->setRowStretch(4, 10);
     grid->setMargin(d->gboxSettings->spacingHint());
     grid->setSpacing(d->gboxSettings->spacingHint());
-
+        
     // -------------------------------------------------------------
 
     d->previewWidget = new ImageRegionWidget;
@@ -188,11 +163,8 @@ ProfileConversionTool::ProfileConversionTool(QObject* parent)
     connect(currentProfInfo, SIGNAL(clicked()),
             this, SLOT(slotCurrentProfInfo()));
 
-    connect(d->profilesBox, SIGNAL(currentIndexChanged(int)),
+    connect(d->profilesBox, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotProfileChanged()));
-
-    connect(newProfInfo, SIGNAL(clicked()),
-            this, SLOT(slotNewProfInfo()));
 }
 
 ProfileConversionTool::~ProfileConversionTool()
@@ -203,15 +175,9 @@ ProfileConversionTool::~ProfileConversionTool()
     delete d;
 }
 
-void ProfileConversionTool::slotNewProfInfo()
-{
-    ICCProfileInfoDlg infoDlg(d->gboxSettings , QString(), d->profilesBox->currentProfile());
-    infoDlg.exec();
-}
-
 void ProfileConversionTool::slotCurrentProfInfo()
 {
-    ICCProfileInfoDlg infoDlg(d->gboxSettings, QString(), d->currentProfile);
+    ICCProfileInfoDlg infoDlg(kapp->activeWindow(), QString(), d->currentProfile);
     infoDlg.exec();
 }
 
@@ -219,7 +185,6 @@ void ProfileConversionTool::slotProfileChanged()
 {
     d->gboxSettings->enableButton(EditorToolSettings::Ok, !d->profilesBox->currentProfile().isNull());
     updateTransform();
-    d->favoriteProfiles.insert(d->profilesBox->currentProfile().filePath(), new bool(true));
     slotTimer();
 }
 
@@ -232,27 +197,22 @@ void ProfileConversionTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
-
-    d->profilesBox->setCurrentProfile(group.readPathEntry(d->configProfileEntry,        d->currentProfile.filePath()));
-    QStringList lastProfiles  = group.readPathEntry(d->configRecentlyUsedProfilesEntry, QStringList());
-
-    foreach (const QString &path, lastProfiles)
-        d->favoriteProfiles.insert(path, new bool(true));
+    d->profilesBox->setCurrentProfile(group.readPathEntry(d->configProfileEntry, d->currentProfile.filePath()));
+    d->profilesBox->readSettings(group);
 }
 
 void ProfileConversionTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
-
-    group.writePathEntry(d->configProfileEntry,              d->profilesBox->currentProfile().filePath());
-    group.writePathEntry(d->configRecentlyUsedProfilesEntry, d->favoriteProfiles.keys());
+    group.writePathEntry(d->configProfileEntry, d->profilesBox->currentProfile().filePath());
+    d->profilesBox->writeSettings(group);
     config->sync();
 }
 
 void ProfileConversionTool::slotResetSettings()
 {
-    d->profilesBox->setCurrentIndex(-1);
+    d->profilesBox->resetToDefault();
 }
 
 void ProfileConversionTool::prepareEffect()
@@ -311,7 +271,7 @@ QStringList ProfileConversionTool::favoriteProfiles()
     ProfileConversionToolPriv d;
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d.configGroupName);
-    return group.readPathEntry(d.configRecentlyUsedProfilesEntry, QStringList());
+    return IccProfilesSettings::favoriteProfiles(group);
 }
 
 void ProfileConversionTool::fastConversion(const IccProfile& profile)
