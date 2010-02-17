@@ -306,6 +306,12 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
     connect(d->recentTagsMapper, SIGNAL(mapped(int)),
             this, SLOT(slotRecentTagsMenuActivated(int)));
 
+    connect(AlbumManager::instance(), SIGNAL(signalAlbumAboutToBeDeleted(Album *)),
+            this, SLOT(slotAlbumAboutToBeDeleted(Album *)));
+
+    connect(AlbumManager::instance(), SIGNAL(signalAlbumsCleared()),
+            this, SLOT(slotAlbumsCleared()));
+
     // Initialize ---------------------------------------------
 
     d->captionsEdit->installEventFilter(this);
@@ -1001,6 +1007,17 @@ void ImageDescEditTab::reloadForMetadataChange(qlonglong imageId)
             }
         }
     }
+}
+
+void ImageDescEditTab::slotAlbumAboutToBeDeleted(Album *album)
+{
+    if (album->type() == Album::TAG && !AlbumManager::instance()->isMovingAlbum(album))
+        d->hub.notifyTagRemoved(static_cast<TAlbum*>(album));
+}
+
+void ImageDescEditTab::slotAlbumsCleared()
+{
+    d->hub.notifyTagsCleared();
 }
 
 void ImageDescEditTab::updateRecentTags()
