@@ -7,8 +7,8 @@
  * Description : central place for ICC settings
  *
  * Copyright (C) 2005-2006 by F.J. Cruz <fj.cruz@supercable.es>
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -73,10 +73,12 @@ public:
 
     QHash<int, IccProfile> screenProfiles;
 
-    QList<IccProfile> scanDirectories(const QStringList& dirs);
-    void scanDirectory(const QString& path, const QStringList& filter, QList<IccProfile> *profiles);
+public:
 
-    IccProfile profileFromWindowSystem(QWidget *widget);
+    QList<IccProfile> scanDirectories(const QStringList& dirs);
+    void scanDirectory(const QString& path, const QStringList& filter, QList<IccProfile>* profiles);
+
+    IccProfile profileFromWindowSystem(QWidget* widget);
 };
 
 // -----------------------------------------------------------------------------------------------
@@ -185,7 +187,7 @@ IccProfile IccSettingsPriv::profileFromWindowSystem(QWidget *widget)
     int           format;
     unsigned long nitems;
     unsigned long bytes_after;
-    quint8 *      str;
+    quint8*       str;
 
     static Atom icc_atom = XInternAtom( QX11Info::display(), atomName.toLatin1(), True );
 

@@ -516,6 +516,8 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/icc/iccprofilesettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/icc/icctransform.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/icc/icctransformfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/icc/iccsettingscontainer.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/icc/iccsettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/nr/waveletsnr.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/nr/noisereductionsettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/sharp/dimgsharpen.cpp
@@ -709,8 +711,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/colorcorrectiondlg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/softproofdialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/dimginterface.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/iccsettingscontainer.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/iccsettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/iccmanager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/canvas/canvas.cpp
        )

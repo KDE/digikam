@@ -7,7 +7,7 @@
  * Description : ICC Settings Container.
  *
  * Copyright (C) 2005-2007 by F.J. Cruz <fj.cruz@supercable.es>
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -60,17 +60,17 @@ ICCSettingsContainer::ICCSettingsContainer()
 
 void ICCSettingsContainer::readFromConfig(KConfigGroup& group)
 {
-    enableCM             = group.readEntry("EnableCM", false);
+    enableCM                      = group.readEntry("EnableCM", false);
 
     //if (!group.hasKey("OnProfileMismatch") && group.hasKey("BehaviourICC")) // legacy
       //  behavior = group.readEntry("BehaviourICC", false) ? "convert" : "ask";
 
     QString sRGB = IccProfile::sRGB().filePath();
 
-    workspaceProfile     = group.readPathEntry("WorkProfileFile", sRGB);
-    monitorProfile       = group.readPathEntry("MonitorProfileFile", sRGB);
-    defaultInputProfile  = group.readPathEntry("InProfileFile", QString());
-    defaultProofProfile  = group.readPathEntry("ProofProfileFile", QString());
+    workspaceProfile              = group.readPathEntry("WorkProfileFile", sRGB);
+    monitorProfile                = group.readPathEntry("MonitorProfileFile", sRGB);
+    defaultInputProfile           = group.readPathEntry("InProfileFile", QString());
+    defaultProofProfile           = group.readPathEntry("ProofProfileFile", QString());
 
     defaultMismatchBehavior       = (Behavior)group.readEntry("DefaultMismatchBehavior", (int)EmbeddedToWorkspace);
     defaultMissingProfileBehavior = (Behavior)group.readEntry("DefaultMissingProfileBehavior", (int)SRGBToWorkspace);
@@ -82,16 +82,16 @@ void ICCSettingsContainer::readFromConfig(KConfigGroup& group)
     lastSpecifiedAssignProfile    = group.readEntry("LastSpecifiedAssignProfile", sRGB);
     lastSpecifiedInputProfile     = group.readEntry("LastSpecifiedInputProfile", defaultInputProfile);
 
-    useBPC               = group.readEntry("BPCAlgorithm", true);
-    useManagedView       = group.readEntry("ManagedView", false);
-    useManagedPreviews   = group.readEntry("ManagedPreviews", false);
-    renderingIntent      = group.readEntry("RenderingIntent", (int)IccTransform::Perceptual);
+    useBPC                        = group.readEntry("BPCAlgorithm", true);
+    useManagedView                = group.readEntry("ManagedView", false);
+    useManagedPreviews            = group.readEntry("ManagedPreviews", false);
+    renderingIntent               = group.readEntry("RenderingIntent", (int)IccTransform::Perceptual);
 
-    proofingRenderingIntent = group.readEntry("ProofingRenderingIntent", (int)IccTransform::AbsoluteColorimetric);
-    doGamutCheck            = group.readEntry("DoGamutCheck", false);
-    gamutCheckMaskColor     = group.readEntry("GamutCheckMaskColor", QColor(126, 255, 255));
+    proofingRenderingIntent       = group.readEntry("ProofingRenderingIntent", (int)IccTransform::AbsoluteColorimetric);
+    doGamutCheck                  = group.readEntry("DoGamutCheck", false);
+    gamutCheckMaskColor           = group.readEntry("GamutCheckMaskColor", QColor(126, 255, 255));
 
-    iccFolder            = group.readEntry("DefaultPath", QString());
+    iccFolder                     = group.readEntry("DefaultPath", QString());
 }
 
 void ICCSettingsContainer::writeToConfig(KConfigGroup& group) const
@@ -101,29 +101,29 @@ void ICCSettingsContainer::writeToConfig(KConfigGroup& group) const
     if (!enableCM)
         return;          // No need to write settings in this case.
 
-    group.writeEntry("DefaultMismatchBehavior", (int)defaultMismatchBehavior);
+    group.writeEntry("DefaultMismatchBehavior",       (int)defaultMismatchBehavior);
     group.writeEntry("DefaultMissingProfileBehavior", (int)defaultMissingProfileBehavior);
-    group.writeEntry("DefaultUncalibratedBehavior", (int)defaultUncalibratedBehavior);
+    group.writeEntry("DefaultUncalibratedBehavior",   (int)defaultUncalibratedBehavior);
 
-    group.writeEntry("LastMismatchBehavior", (int)lastMismatchBehavior);
-    group.writeEntry("LastMissingProfileBehavior", (int)lastMissingProfileBehavior);
-    group.writeEntry("LastUncalibratedBehavior", (int)lastUncalibratedBehavior);
-    group.writeEntry("LastSpecifiedAssignProfile", lastSpecifiedAssignProfile);
-    group.writeEntry("LastSpecifiedInputProfile", lastSpecifiedInputProfile);
+    group.writeEntry("LastMismatchBehavior", 	      (int)lastMismatchBehavior);
+    group.writeEntry("LastMissingProfileBehavior",    (int)lastMissingProfileBehavior);
+    group.writeEntry("LastUncalibratedBehavior",      (int)lastUncalibratedBehavior);
+    group.writeEntry("LastSpecifiedAssignProfile",    lastSpecifiedAssignProfile);
+    group.writeEntry("LastSpecifiedInputProfile",     lastSpecifiedInputProfile);
 
-    group.writeEntry("BPCAlgorithm", useBPC);
-    group.writeEntry("ManagedView", useManagedView);
-    group.writeEntry("ManagedPreviews", useManagedPreviews);
-    group.writeEntry("RenderingIntent", renderingIntent);
+    group.writeEntry("BPCAlgorithm",                  useBPC);
+    group.writeEntry("ManagedView",                   useManagedView);
+    group.writeEntry("ManagedPreviews",               useManagedPreviews);
+    group.writeEntry("RenderingIntent",               renderingIntent);
 
-    group.writePathEntry("WorkProfileFile", workspaceProfile);
-    group.writePathEntry("MonitorProfileFile", monitorProfile);
-    group.writePathEntry("InProfileFile", defaultInputProfile);
-    group.writePathEntry("ProofProfileFile", defaultProofProfile);
+    group.writePathEntry("WorkProfileFile",           workspaceProfile);
+    group.writePathEntry("MonitorProfileFile",        monitorProfile);
+    group.writePathEntry("InProfileFile",             defaultInputProfile);
+    group.writePathEntry("ProofProfileFile",          defaultProofProfile);
 
-    group.writeEntry("ProofingRenderingIntent", proofingRenderingIntent);
-    group.writeEntry("DoGamutCheck", doGamutCheck);
-    group.writeEntry("GamutCheckMaskColor", gamutCheckMaskColor);
+    group.writeEntry("ProofingRenderingIntent",       proofingRenderingIntent);
+    group.writeEntry("DoGamutCheck",                  doGamutCheck);
+    group.writeEntry("GamutCheckMaskColor",           gamutCheckMaskColor);
 
     group.writeEntry("DefaultPath", iccFolder);
 }
