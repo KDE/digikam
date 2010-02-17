@@ -111,6 +111,8 @@ IccTransform ProfileConversionToolPriv::getTransform(const IccProfile& in, const
     return transform;
 }
 
+// ----------------------------------------------------------------------------
+
 ProfileConversionTool::ProfileConversionTool(QObject* parent)
                      : EditorToolThreaded(parent),
                        d(new ProfileConversionToolPriv)
@@ -136,10 +138,10 @@ ProfileConversionTool::ProfileConversionTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QVBoxLayout *currentProfVBox = new QVBoxLayout;
-    QLabel *currentProfileTitle  = new QLabel(i18n("Current Color Space:"));
-    QLabel *currentProfileDesc   = new QLabel(QString("<b>%1</b>").arg(d->currentProfile.description()));
-    QPushButton *currentProfInfo = new QPushButton(i18n("Info..."));
+    QVBoxLayout* currentProfVBox = new QVBoxLayout;
+    QLabel* currentProfileTitle  = new QLabel(i18n("Current Color Space:"));
+    QLabel* currentProfileDesc   = new QLabel(QString("<b>%1</b>").arg(d->currentProfile.description()));
+    QPushButton* currentProfInfo = new QPushButton(i18n("Info..."));
     currentProfileDesc->setWordWrap(true);
 
     currentProfVBox->addWidget(currentProfileTitle);
@@ -148,9 +150,9 @@ ProfileConversionTool::ProfileConversionTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QVBoxLayout *newProfVBox = new QVBoxLayout;
+    QVBoxLayout* newProfVBox = new QVBoxLayout;
 
-    QLabel *newProfileLabel  = new QLabel(i18n("Convert to:"));
+    QLabel* newProfileLabel  = new QLabel(i18n("Convert to:"));
     d->profilesBox = new IccProfilesComboBox;
     d->profilesBox->addProfilesSqueezed(IccSettings::instance()->workspaceProfiles());
     d->profilesBox->setWhatsThis( i18n("Select the profile of the color space to convert to."));
@@ -304,10 +306,10 @@ void ProfileConversionTool::fastConversion(const IccProfile& profile)
 {
     ImageIface iface(0, 0);
     IccProfile currentProfile = iface.getOriginalIccProfile();
-    IccTransform transform = ProfileConversionToolPriv::getTransform(currentProfile, profile);
+    IccTransform transform    = ProfileConversionToolPriv::getTransform(currentProfile, profile);
     IccTransformFilter filter(iface.getOriginalImg(), 0, transform);
     filter.startFilterDirectly();
-    DImg imDest = filter.getTargetImage();
+    DImg imDest               = filter.getTargetImage();
     iface.putOriginalImage(i18n("Color Profile Conversion"), imDest.bits());
     iface.putOriginalIccProfile(imDest.getIccProfile());
 }
