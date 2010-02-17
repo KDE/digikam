@@ -79,19 +79,19 @@ public:
         favoriteProfiles.setMaxCost(10);
     }
 
-    const QString            configGroupName;
-    const QString            configProfileEntry;
-    const QString            configRecentlyUsedProfilesEntry;
+    const QString         configGroupName;
+    const QString         configProfileEntry;
+    const QString         configRecentlyUsedProfilesEntry;
 
-    IccProfilesComboBox*     profilesBox;
+    IccProfilesComboBox*  profilesBox;
 
-    ImageRegionWidget*       previewWidget;
-    EditorToolSettings*      gboxSettings;
+    ImageRegionWidget*    previewWidget;
+    EditorToolSettings*   gboxSettings;
 
-    IccProfile               currentProfile;
-    QCache<QString, bool>    favoriteProfiles;
+    IccProfile            currentProfile;
+    QCache<QString, bool> favoriteProfiles;
 
-    IccTransform             transform;
+    IccTransform          transform;
 
     static IccTransform getTransform(const IccProfile& in, const IccProfile& out);
 };
@@ -134,7 +134,7 @@ ProfileConversionTool::ProfileConversionTool(QObject* parent)
     QGridLayout* grid = new QGridLayout(d->gboxSettings->plainPage());
 
     // -------------------------------------------------------------
-    
+
     QVBoxLayout *currentProfVBox = new QVBoxLayout;
     QLabel *currentProfileTitle  = new QLabel(i18n("Current Color Space:"));
     QLabel *currentProfileDesc   = new QLabel(QString("<b>%1</b>").arg(d->currentProfile.description()));
@@ -146,7 +146,7 @@ ProfileConversionTool::ProfileConversionTool(QObject* parent)
     currentProfVBox->addWidget(currentProfInfo, 0, Qt::AlignLeft);
 
     // -------------------------------------------------------------
-    
+
     QVBoxLayout *newProfVBox = new QVBoxLayout;
 
     QLabel *newProfileLabel  = new QLabel(i18n("Convert to:"));
@@ -161,7 +161,7 @@ ProfileConversionTool::ProfileConversionTool(QObject* parent)
     newProfVBox->addWidget(newProfInfo, 0, Qt::AlignLeft);
 
     // -------------------------------------------------------------
-    
+
     grid->addLayout(currentProfVBox, 0, 0);
     grid->addLayout(newProfVBox,     1, 0);
     grid->setRowStretch(2, 10);
@@ -169,17 +169,17 @@ ProfileConversionTool::ProfileConversionTool(QObject* parent)
     grid->setSpacing(d->gboxSettings->spacingHint());
 
     // -------------------------------------------------------------
-    
+
     d->previewWidget = new ImageRegionWidget;
-    
+
     setToolSettings(d->gboxSettings);
     setToolView(d->previewWidget);
     setPreviewModeMask(PreviewToolBar::AllPreviewModes);
-    
+
     init();
 
     // -------------------------------------------------------------
-    
+
     connect(d->previewWidget, SIGNAL(signalOriginalClipFocusChanged()),
             this, SLOT(slotTimer()));
 
@@ -218,11 +218,6 @@ void ProfileConversionTool::fastConversion(const IccProfile& profile)
     iface.putOriginalIccProfile(imDest.getIccProfile());
 }
 
-void ProfileConversionTool::renderingFinished()
-{
-    d->profilesBox->setEnabled(true);
-    toolView()->setEnabled(true);
-}
 
 void ProfileConversionTool::slotCurrentProfInfo()
 {
@@ -242,6 +237,11 @@ void ProfileConversionTool::slotProfileChanged()
     updateTransform();
     d->favoriteProfiles.insert(d->profilesBox->currentProfile().filePath(), new bool(true));
     slotTimer();
+}
+
+void ProfileConversionTool::updateTransform()
+{
+    d->transform = d->getTransform(d->currentProfile, d->profilesBox->currentProfile());
 }
 
 void ProfileConversionTool::readSettings()
@@ -271,11 +271,6 @@ void ProfileConversionTool::slotResetSettings()
     d->profilesBox->setCurrentIndex(-1);
 }
 
-void ProfileConversionTool::updateTransform()
-{
-    d->transform = d->getTransform(d->currentProfile, d->profilesBox->currentProfile());
-}
-
 void ProfileConversionTool::prepareEffect()
 {
     d->profilesBox->setEnabled(false);
@@ -285,6 +280,18 @@ void ProfileConversionTool::prepareEffect()
     setFilter(new IccTransformFilter(&img, this, d->transform));
 }
 
+void ProfileConversionTool::putPreviewData()
+{
+    DImg imDest = filter()->getTargetImage();
+    d->previewWidget->setPreviewImage(imDest);
+}
+
+void ProfileConversionTool::renderingFinished()
+{
+    d->profilesBox->setEnabled(true);
+    toolView()->setEnabled(true);
+}
+
 void ProfileConversionTool::prepareFinal()
 {
     d->profilesBox->setEnabled(false);
@@ -292,12 +299,6 @@ void ProfileConversionTool::prepareFinal()
 
     ImageIface iface(0, 0);
     setFilter(new IccTransformFilter(iface.getOriginalImg(), this, d->transform));
-}
-
-void ProfileConversionTool::putPreviewData()
-{
-    DImg imDest = filter()->getTargetImage();
-    d->previewWidget->setPreviewImage(imDest);
 }
 
 void ProfileConversionTool::putFinalData()
