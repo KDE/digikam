@@ -7,6 +7,7 @@
  * Description : a tool for color space conversion
  *
  * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -54,6 +55,7 @@
 #include "iccsettingscontainer.h"
 #include "icctransform.h"
 #include "icctransformfilter.h"
+#include "histogramwidget.h"
 #include "imageiface.h"
 #include "imageregionwidget.h"
 
@@ -71,16 +73,19 @@ public:
         configProfileEntry("Profile"),
         configRecentlyUsedProfilesEntry("Recently Used Profiles"),
 
+        destinationPreviewData(0),
         profilesBox(0),
         previewWidget(0),
         gboxSettings(0)
-    {
+    {      
         favoriteProfiles.setMaxCost(10);
     }
 
     const QString         configGroupName;
     const QString         configProfileEntry;
     const QString         configRecentlyUsedProfilesEntry;
+
+    uchar*                destinationPreviewData;
 
     IccProfilesComboBox*  profilesBox;
 
@@ -198,6 +203,9 @@ ProfileConversionTool::ProfileConversionTool(QObject* parent)
 
 ProfileConversionTool::~ProfileConversionTool()
 {
+    if (d->destinationPreviewData)
+       delete [] d->destinationPreviewData;
+      
     delete d;
 }
 
@@ -264,8 +272,18 @@ void ProfileConversionTool::prepareEffect()
 
 void ProfileConversionTool::putPreviewData()
 {
-    DImg imDest = filter()->getTargetImage();
-    d->previewWidget->setPreviewImage(imDest);
+    DImg preview = filter()->getTargetImage();
+    d->previewWidget->setPreviewImage(preview);
+    
+    // Update histogram.
+
+    if (d->destinationPreviewData)
+       delete [] d->destinationPreviewData;
+
+    d->destinationPreviewData = preview.copyBits();
+    d->gboxSettings->histogramBox()->histogram()->updateData(d->destinationPreviewData,
+                                                             preview.width(), preview.height(), preview.sixteenBit(),
+                                                             0, 0, 0, false);
 }
 
 void ProfileConversionTool::renderingFinished()
