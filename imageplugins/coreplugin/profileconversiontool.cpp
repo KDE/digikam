@@ -152,7 +152,7 @@ ProfileConversionTool::ProfileConversionTool(QObject* parent)
     QVBoxLayout* newProfVBox = new QVBoxLayout;
 
     QLabel* newProfileLabel  = new QLabel(i18n("Convert to:"));
-    d->profilesBox = new IccProfilesComboBox;
+    d->profilesBox           = new IccProfilesComboBox;
     d->profilesBox->addProfilesSqueezed(IccSettings::instance()->workspaceProfiles());
     d->profilesBox->setWhatsThis( i18n("Select the profile of the color space to convert to."));
     newProfileLabel->setBuddy(d->profilesBox);
@@ -188,11 +188,11 @@ ProfileConversionTool::ProfileConversionTool(QObject* parent)
     connect(currentProfInfo, SIGNAL(clicked()),
             this, SLOT(slotCurrentProfInfo()));
 
-    connect(newProfInfo, SIGNAL(clicked()),
-            this, SLOT(slotNewProfInfo()));
-
     connect(d->profilesBox, SIGNAL(currentIndexChanged(int)),
             this, SLOT(slotProfileChanged()));
+
+    connect(newProfInfo, SIGNAL(clicked()),
+            this, SLOT(slotNewProfInfo()));
 }
 
 ProfileConversionTool::~ProfileConversionTool()
@@ -203,15 +203,15 @@ ProfileConversionTool::~ProfileConversionTool()
     delete d;
 }
 
-void ProfileConversionTool::slotCurrentProfInfo()
-{
-    ICCProfileInfoDlg infoDlg(d->gboxSettings, QString(), d->currentProfile);
-    infoDlg.exec();
-}
-
 void ProfileConversionTool::slotNewProfInfo()
 {
     ICCProfileInfoDlg infoDlg(d->gboxSettings , QString(), d->profilesBox->currentProfile());
+    infoDlg.exec();
+}
+
+void ProfileConversionTool::slotCurrentProfInfo()
+{
+    ICCProfileInfoDlg infoDlg(d->gboxSettings, QString(), d->currentProfile);
     infoDlg.exec();
 }
 
@@ -233,8 +233,8 @@ void ProfileConversionTool::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
 
-    d->profilesBox->setCurrentProfile(group.readPathEntry(d->configProfileEntry,       d->currentProfile.filePath()));
-    QStringList lastProfiles = group.readPathEntry(d->configRecentlyUsedProfilesEntry, QStringList());
+    d->profilesBox->setCurrentProfile(group.readPathEntry(d->configProfileEntry,        d->currentProfile.filePath()));
+    QStringList lastProfiles  = group.readPathEntry(d->configRecentlyUsedProfilesEntry, QStringList());
 
     foreach (const QString &path, lastProfiles)
         d->favoriteProfiles.insert(path, new bool(true));
