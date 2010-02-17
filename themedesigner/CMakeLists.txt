@@ -6,6 +6,7 @@ INCLUDE_DIRECTORIES(
                      ../libs/dimg/filters
                      ../libs/dimg/filters/auto
                      ../libs/dimg/filters/bcg
+                     ../libs/dimg/filters/bw
                      ../libs/dimg/filters/hsl
                      ../libs/dimg/filters/icc
                      ../libs/dimg/filters/nr

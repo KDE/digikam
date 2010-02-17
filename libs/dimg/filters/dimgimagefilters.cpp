@@ -6,13 +6,7 @@
  * Date        : 2005-24-01
  * Description : misc image filters
  *
- * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- *
- * Original Equalise and StretchContrast Algorithms copyright 2002
- * by Daniel M. Duley <mosfet@kde.org> from KImageEffect API.
- *
- * Original Normalize Image algorithm copyrighted 1997 by
- * Adam D. Moss <adam@foxbox.org> from Gimp 2.0 implementation.
+ * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Original channel mixer algorithm copyrighted 2002 by
  * Martin Guldahl <mguldahl at xmission dot com> from Gimp 2.2
@@ -167,59 +161,6 @@ void DImgImageFilters::channelMixerImage(uchar *data, int Width, int Height, boo
                 ptr[2] = MixPixel (rrGain, rgGain, rbGain, red, green, blue, sixteenBit, rnorm);
             }
 
-            ptr += 4;
-        }
-    }
-}
-
-/** Change color tonality of an image for applying a RGB color mask.*/
-void DImgImageFilters::changeTonality(uchar *data, int width, int height, bool sixteenBit,
-                                      int redMask, int greenMask, int blueMask)
-{
-    if (!data || !width || !height)
-    {
-       kWarning() << ("DImgImageFilters::changeTonality: no image data available!");
-       return;
-    }
-
-    int hue, sat, lig;
-
-    DColor mask(redMask, greenMask, blueMask, 0, sixteenBit);
-    mask.getHSL(&hue, &sat, &lig);
-
-    if (!sixteenBit)        // 8 bits image.
-    {
-        uchar *ptr = data;
-
-        for (int i = 0 ; i < width*height ; ++i)
-        {
-            // Convert to grayscale using tonal mask
-
-            lig = lround(0.3 * ptr[2] + 0.59 * ptr[1] + 0.11 * ptr[0]);
-
-            mask.setRGB(hue, sat, lig, sixteenBit);
-
-            ptr[0] = (uchar)mask.blue();
-            ptr[1] = (uchar)mask.green();
-            ptr[2] = (uchar)mask.red();
-            ptr += 4;
-        }
-    }
-    else               // 16 bits image.
-    {
-        unsigned short *ptr = (unsigned short *)data;
-
-        for (int i = 0 ; i < width*height ; ++i)
-        {
-            // Convert to grayscale using tonal mask
-
-            lig = lround(0.3 * ptr[2] + 0.59 * ptr[1] + 0.11 * ptr[0]);
-
-            mask.setRGB(hue, sat, lig, sixteenBit);
-
-            ptr[0] = (unsigned short)mask.blue();
-            ptr[1] = (unsigned short)mask.green();
-            ptr[2] = (unsigned short)mask.red();
             ptr += 4;
         }
     }
