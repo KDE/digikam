@@ -156,6 +156,7 @@ public:
         rootDAlbum         = 0;
         rootSAlbum         = 0;
         currentAlbum       = 0;
+        currentlyMovingAlbum = 0;
         changingDB         = false;
         scanPAlbumsTimer   = 0;
         scanTAlbumsTimer   = 0;
@@ -188,6 +189,7 @@ public:
     QHash<int,Album *>          allAlbumsIdHash;
     QHash<PAlbumPath, PAlbum*>  albumPathHash;
     QHash<int, PAlbum*>         albumRootAlbumHash;
+    Album*                      currentlyMovingAlbum;
 
     QMultiHash<Album*, Album**> guardedPointers;
 
@@ -2173,6 +2175,9 @@ bool AlbumManager::moveTAlbum(TAlbum* album, TAlbum *newParent, QString& errMsg)
         return false;
     }
 
+    d->currentlyMovingAlbum = album;
+    emit signalAlbumAboutToBeMoved(album);
+
     emit signalAlbumAboutToBeDeleted(album);
     if (album->parent())
         album->parent()->removeChild(album);
@@ -2186,7 +2191,8 @@ bool AlbumManager::moveTAlbum(TAlbum* album, TAlbum *newParent, QString& errMsg)
     album->setParent(newParent);
     emit signalAlbumAdded(album);
 
-    emit signalTAlbumMoved(album, newParent);
+    emit signalAlbumMoved(album);
+    d->currentlyMovingAlbum = 0;
 
     return true;
 }
@@ -2401,6 +2407,11 @@ QMap<int, int> AlbumManager::getTAlbumsCount() const
 QMap<YearMonth, int> AlbumManager::getDAlbumsCount() const
 {
     return d->dAlbumsCount;
+}
+
+bool AlbumManager::isMovingAlbum(Album *album) const
+{
+    return d->currentlyMovingAlbum == album;
 }
 
 void AlbumManager::insertPAlbum(PAlbum *album, PAlbum *parent)

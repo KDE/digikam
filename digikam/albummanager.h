@@ -500,6 +500,15 @@ public:
      */
     QMap<YearMonth, int> getDAlbumsCount() const;
 
+    /**
+     * Returns if the given album is currently being moved, that is,
+     * if this album is in between signalAlbumAboutToBeMoved and
+     * signalAlbumMoved. In this case, you can preserve state of such an album
+     * because the object is guaranteed not to be deleted, even if
+     * signalAlbumAboutToBeDeleted is emitted.
+     */
+    bool isMovingAlbum(Album* album) const;
+
     //@}
 
 Q_SIGNALS:
@@ -523,7 +532,12 @@ Q_SIGNALS:
     void signalAlbumIconChanged(Album* album);
     void signalAlbumRenamed(Album* album);
     void signalSearchUpdated(SAlbum *album);
-    void signalTAlbumMoved(TAlbum* album, TAlbum* newParent);
+    /// Indicates that an album is about to be moved. Signals for deleting and adding will be
+    /// sent afterwards, but the album object is guaranteed not to be deleted until after signalAlbumMoved.
+    void signalAlbumAboutToBeMoved(Album* album);
+    /// Emitted when the album is moved to its new parent. After signalAlbumAboutToBeMoved,
+    /// all four signals for first deleting and then adding will have been sent.
+    void signalAlbumMoved(Album* album);
     void signalPAlbumsDirty(const QMap<int, int>&);
     void signalTAlbumsDirty(const QMap<int, int>&);
     void signalDAlbumsDirty(const QMap<YearMonth, int>&);
