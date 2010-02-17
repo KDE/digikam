@@ -59,7 +59,7 @@ struct int_packet
 EqualizeFilter::EqualizeFilter(DImg* orgImage, DImg* refImage, QObject* parent)
               : DImgThreadedFilter(orgImage, parent, "EqualizeFilter")
 {
-    m_refImage = refImage;  
+    m_refImage = refImage;
     initFilter();
 }
 
@@ -87,11 +87,11 @@ void EqualizeFilter::equalizeImage()
     struct double_packet  high, low, intensity;
     struct double_packet* map;
     struct int_packet*    equalize_map;
-    register long i;
+    register int i;
     int           progress;
 
     // Create an histogram of the reference image.
-    ImageHistogram *histogram = new ImageHistogram(m_refImage->bits(), m_refImage->width(), 
+    ImageHistogram *histogram = new ImageHistogram(m_refImage->bits(), m_refImage->width(),
                                                    m_refImage->height(), m_refImage->sixteenBit());
     histogram->calculate();
 
@@ -158,7 +158,7 @@ void EqualizeFilter::equalizeImage()
     delete histogram;
     delete [] map;
 
-    uchar* data     = m_orgImage.bits(); 
+    uchar* data     = m_orgImage.bits();
     int w           = m_orgImage.width();
     int h           = m_orgImage.height();
     bool sixteenBit = m_orgImage.sixteenBit();
