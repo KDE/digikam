@@ -5,7 +5,7 @@
  *
  * Date        : 2004-06-05
  * Description : digiKam image editor to adjust Brightness,
-                 Contrast, and Gamma of picture.
+ *               Contrast, and Gamma of picture.
  *
  * Copyright (C) 2004 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
