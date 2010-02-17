@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2005-24-01
- * Description : Change tonality image filters
+ * Description : Change tonality image filter
  *
  * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
