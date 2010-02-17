@@ -13,6 +13,7 @@ ImageEditor       : Auto Color Correction tool is multithreaded and use a zommab
 BatchQueueManager : new tool to fix Brightness/Contrast/gamma.
 BatchQueueManager : new tool to adjust Color Balance.
 BatchQueueManager : new tool to fix Hue/Saturation/Lightness.
+BatchQueueManager : new tool to convert images color space.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
@@ -48,7 +49,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 030 ==> 226515 : My tags on Caption/Tags becomes empty after removing a single tag.
 031 ==> 227244 : Images on local disk not shown in middle pane.
 032 ==> 226853 : No images shown after upgrading from previous version.
-033 ==> 
+033 ==> 226932 : Batch Color Space Conversion Tool.
+034 ==> 
+
 
 
 
