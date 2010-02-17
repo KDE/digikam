@@ -30,21 +30,15 @@
 #include <QGridLayout>
 #include <QLabel>
 #include <QPushButton>
-#include <QStackedWidget>
 
 // KDE includes
 
-#include <kaboutdata.h>
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kcursor.h>
-#include <kfiledialog.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <klocale.h>
-#include <kmessagebox.h>
-#include <kseparator.h>
-#include <kurl.h>
 
 // Local includes
 
