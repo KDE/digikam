@@ -86,6 +86,7 @@ void AlbumModelTest::initTestCase()
     // use a testing database
     AlbumManager::instance();
 
+    // catch palbum counts for waiting
     connect(AlbumManager::instance(), SIGNAL(signalPAlbumsDirty(const QMap<int, int>&)),
             this, SLOT(setLastPAlbumCountMap(const QMap<int, int>&)));
 
@@ -120,6 +121,7 @@ void AlbumModelTest::cleanupTestCase()
     KUrl deleteUrl = KUrl::fromPath(dbPath);
     KIO::NetAccess::del(deleteUrl, 0);
     kDebug() << "deleted test folder " << deleteUrl;
+
 }
 
 // Qt test doesn't use exceptions, so using assertion macros in methods called
@@ -145,6 +147,24 @@ void AlbumModelTest::init()
 {
 
     palbumCountMap.clear();
+
+    // create a model to check that model work is done correctly while scanning
+    addedIds.clear();
+    startModel = new AlbumModel;
+    startModel->setShowCount(true);
+    connect(startModel, SIGNAL(rowsInserted(const QModelIndex&, int, int)),
+            this, SLOT(slotStartModelRowsInserted(const QModelIndex&, int, int)));
+    connect(startModel, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex &)),
+            this, SLOT(slotStartModelDataChanged(const QModelIndex&, const QModelIndex &)));
+    kDebug() << "Created startModel" << startModel;
+
+    // ensure that this model is empty in the beginning except for the root
+    // album and the collection
+    QCOMPARE(startModel->rowCount(), 1);
+    QModelIndex rootIndex = startModel->index(0, 0);
+    QCOMPARE(startModel->rowCount(rootIndex), 1);
+    QModelIndex collectionIndex = startModel->index(0, 0, rootIndex);
+    QCOMPARE(startModel->rowCount(collectionIndex), 0);
 
     // insert some test data
 
@@ -180,8 +200,11 @@ void AlbumModelTest::init()
 
     safeCreatePAlbum(palbumRoot1, sameName, palbumChild0Root1);
 
-    kDebug() << "AlbumManager now knows these PAlbums: "
-                    << AlbumManager::instance()->allPAlbums();
+    kDebug() << "AlbumManager now knows these PAlbums:";
+    foreach(Album *a, AlbumManager::instance()->allPAlbums())
+    {
+    	kDebug() << "\t" << a->title();
+    }
 
     // tags
 
@@ -207,7 +230,7 @@ void AlbumModelTest::init()
     QStringList imageFiles = imageDir.entryList();
 
     kDebug() << "copying images " << imageFiles << " to "
-                    << palbumChild0Root0->fileUrl();
+             << palbumChild0Root0->fileUrl();
 
     foreach (const QString &imageFile, imageFiles)
     {
@@ -244,6 +267,27 @@ void AlbumModelTest::init()
 
 }
 
+void AlbumModelTest::testStartAlbumModel()
+{
+
+    // verify that the start album model got all these changes
+
+    // one root
+    QCOMPARE(startModel->rowCount(), 1);
+    // one collection
+    QModelIndex rootIndex = startModel->index(0, 0);
+    QCOMPARE(startModel->rowCount(rootIndex), 1);
+    // two albums in the collection
+    QModelIndex collectionIndex = startModel->index(0, 0, rootIndex);
+    QCOMPARE(startModel->rowCount(collectionIndex), 3);
+    // this is should be enough for now
+
+    // We must have received an added notation for everything except album root
+    // and collection
+    QCOMPARE(addedIds.size(), 7);
+
+}
+
 void AlbumModelTest::ensureItemCounts()
 {
     // trigger listing job
@@ -265,6 +309,50 @@ void AlbumModelTest::ensureItemCounts()
     }
 }
 
+
+void AlbumModelTest::slotStartModelRowsInserted(const QModelIndex &parent, int start, int end)
+{
+	kDebug() << "called, parent:" << parent << ", start:" << start << ", end:" << end;
+	for (int row = start; row <= end; ++row)
+	{
+		QModelIndex child = startModel->index(row, 0, parent);
+		QVERIFY(child.isValid());
+		Album *album = startModel->albumForIndex(child);
+		const int id = child.data(AbstractAlbumModel::AlbumIdRole).toInt();
+		QVERIFY(album);
+		kDebug() << "added album with id"
+				 << id
+				 << "and name" << album->title();
+		addedIds << id;
+	}
+}
+
+void AlbumModelTest::slotStartModelDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight)
+{
+    for (int row = topLeft.row(); row <= bottomRight.row(); ++row)
+    {
+
+        QModelIndex index = startModel->index(row, topLeft.column(), topLeft.parent());
+        if (!index.isValid())
+        {
+        	QFAIL("Illegal index received");
+            continue;
+        }
+
+        int albumId = index.data(AbstractAlbumModel::AlbumIdRole).toInt();
+
+        if (!addedIds.contains(albumId))
+        {
+        	QString message = "Album id " + QString::number(albumId)
+					        + " was changed before adding signal was received";
+			QFAIL(message.toAscii().data());
+			kError() << message;
+        }
+
+    }
+
+}
+
 void AlbumModelTest::deletePAlbum(PAlbum *album)
 {
     KUrl u;
@@ -281,6 +369,14 @@ void AlbumModelTest::setLastPAlbumCountMap(const QMap<int, int> &map)
 
 void AlbumModelTest::cleanup()
 {
+
+	if (startModel)
+	{
+		disconnect(startModel);
+	}
+	delete startModel;
+	addedIds.clear();
+
     // remove all test data
 
     AlbumManager::instance()->refresh();

@@ -95,10 +95,11 @@ void AlbumSelectTreeView::addCustomContextMenuActions(ContextMenuHelper &cmh,
 }
 
 void AlbumSelectTreeView::handleCustomContextMenuAction(QAction *action,
-                                                        Album *album)
+                                                        AlbumPointer<Album> album)
 {
 
-    PAlbum *palbum = dynamic_cast<PAlbum*> (album);
+    Album *a = album;
+    PAlbum *palbum = dynamic_cast<PAlbum*> (a);
     if (palbum && action == d->newAlbumAction)
     {
         d->albumModificationHelper->slotAlbumNew(palbum);
@@ -111,7 +112,11 @@ void AlbumSelectTreeView::slotNewAlbum()
     PAlbum *palbum = currentAlbum();
     if (palbum)
     {
-        d->albumModificationHelper->slotAlbumNew(palbum);
+        PAlbum *createdAlbum = d->albumModificationHelper->slotAlbumNew(palbum);
+        if (createdAlbum)
+        {
+            slotSelectAlbum(createdAlbum, false);
+        }
     }
 }
 

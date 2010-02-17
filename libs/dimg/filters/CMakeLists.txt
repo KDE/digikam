@@ -1,5 +1,19 @@
-INSTALL( FILES  bcgmodifier.h hslmodifier.h dimgthreadedfilter.h dimgimagefilters.h 
-                icctransform.h colormodifier.h dimgsharpen.h dimggaussianblur.h dimgunsharpmask.h
-                dimgrefocus.h waveletsnr.h noisereductionsettings.h
-         DESTINATION ${INCLUDE_INSTALL_DIR}/digikam COMPONENT Devel )
+INSTALL(FILES dimgthreadedfilter.h 
+              dimgimagefilters.h 
+              dimggaussianblur.h 
+              cb/cbfilter.h 
+              cb/cbsettings.h 
+              curves/imagecurves.h
+              bcg/bcgfilter.h 
+              bcg/bcgsettings.h 
+              hsl/hslfilter.h 
+              icc/icctransform.h 
+              levels/imagelevels.h
+              nr/waveletsnr.h 
+              nr/noisereductionsettings.h
+              sharp/dimgsharpen.h 
+              sharp/dimgunsharpmask.h
+              sharp/dimgrefocus.h 
+              wb/whitebalance.h
+         DESTINATION ${INCLUDE_INSTALL_DIR}/digikam COMPONENT Devel)
 

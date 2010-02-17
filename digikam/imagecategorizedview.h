@@ -36,8 +36,11 @@ namespace Digikam
 class Album;
 class ImageAlbumModel;
 class ImageAlbumFilterModel;
+class ImageModel;
+class ImageFilterModel;
 class ImageDelegate;
 class ImageDelegateOverlay;
+class ImageThumbnailModel;
 class ImageCategorizedViewPriv;
 
 class ImageCategorizedView : public DCategorizedView
@@ -49,8 +52,17 @@ public:
     ImageCategorizedView(QWidget *parent = 0);
     ~ImageCategorizedView();
 
-    ImageAlbumModel *imageModel() const;
-    ImageAlbumFilterModel *imageFilterModel() const;
+    void setModels(ImageModel *model, ImageFilterModel *filterModel);
+
+    ImageModel *imageModel() const;
+    ImageFilterModel *imageFilterModel() const;
+
+    /// Returns 0 if the ImageModel is not an ImageThumbnailModel
+    ImageThumbnailModel *imageThumbnailModel() const;
+
+    /// Returns 0 if the ImageModel is not an ImageAlbumModel
+    ImageAlbumModel *imageAlbumModel() const;
+    ImageAlbumFilterModel *imageAlbumFilterModel() const;
 
     ImageDelegate *delegate() const;
 
@@ -100,6 +112,8 @@ public Q_SLOTS:
     void setCurrentWhenAvailable(qlonglong imageId);
     /** Set as current item the item identified by its file url */
     void setCurrentUrl(const KUrl& url);
+    /** Set as current item the item identified by the imageinfo */
+    void setCurrentInfo(const ImageInfo& info);
     /** Set selected items identified by their file urls */
     void setSelectedUrls(const KUrl::List& urlList);
 
@@ -119,12 +133,16 @@ protected Q_SLOTS:
 
 protected:
 
+    /// install default ImageAlbumModel and filter model, ready for use
+    void installDefaultModels();
+
     /// Reimplement these in a subclass
     virtual void activated(const ImageInfo& info);
     virtual void showContextMenuOnInfo(QContextMenuEvent *event, const ImageInfo& info);
     virtual void showContextMenuOnIndex(QContextMenuEvent *event, const QModelIndex& index);
 
     // reimplemented from parent class
+    void setItemDelegate(ImageDelegate *delegate);
     void indexActivated(const QModelIndex& index);
     QSortFilterProxyModel *filterModel() const;
     void currentChanged(const QModelIndex& index, const QModelIndex& previous);

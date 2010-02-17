@@ -56,10 +56,6 @@
 #include <libkdcraw/version.h>
 #include <libkdcraw/kdcraw.h>
 
-#if KDCRAW_VERSION < 0x000400
-#include <libkdcraw/dcrawbinary.h>
-#endif
-
 // Local includes
 
 #include "componentsinfo.h"
@@ -126,8 +122,8 @@ LightTableWindow::LightTableWindow()
     // -- Build the GUI -------------------------------
 
     setupUserArea();
-    setupStatusBar();
     setupActions();
+    setupStatusBar();
 
     // Make signals/slots connections
 
@@ -233,13 +229,13 @@ void LightTableWindow::setupUserArea()
     QHBoxLayout *hlay = new QHBoxLayout(mainW);
 
     // The left sidebar
-    d->leftSideBar = new ImagePropertiesSideBarDB(mainW, d->hSplitter, KMultiTabBar::Left, true);
+    d->leftSideBar    = new ImagePropertiesSideBarDB(mainW, d->hSplitter, KMultiTabBar::Left, true);
 
     // The central preview is wrapped in a KMainWindow so that the thumbnail
     // bar can float around it.
     KMainWindow* viewContainer = new KMainWindow(mainW, Qt::Widget);
     d->hSplitter->addWidget(viewContainer);
-    d->previewView = new LightTableView(viewContainer);
+    d->previewView             = new LightTableView(viewContainer);
     viewContainer->setCentralWidget(d->previewView);
 
     // The right sidebar.
@@ -277,9 +273,14 @@ void LightTableWindow::setupUserArea()
 
 void LightTableWindow::setupStatusBar()
 {
-    d->leftZoomBar = new StatusZoomBar(statusBar());
-    statusBar()->addWidget(d->leftZoomBar, 1);
+    d->leftZoomBar = new DZoomBar(statusBar());
+    d->leftZoomBar->setZoomToFitAction(d->leftZoomFitToWindowAction);
+    d->leftZoomBar->setZoomTo100Action(d->leftZoomTo100percents);
+    d->leftZoomBar->setZoomPlusAction(d->leftZoomPlusAction);
+    d->leftZoomBar->setZoomMinusAction(d->leftZoomMinusAction);
+    d->leftZoomBar->setBarMode(DZoomBar::PreviewZoomCtrl);    
     d->leftZoomBar->setEnabled(false);
+    statusBar()->addWidget(d->leftZoomBar, 1);
 
     d->leftFileName = new KSqueezedTextLabel(statusBar());
     d->leftFileName->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
@@ -293,9 +294,14 @@ void LightTableWindow::setupStatusBar()
     d->rightFileName->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     statusBar()->addWidget(d->rightFileName, 10);
 
-    d->rightZoomBar = new StatusZoomBar(statusBar());
-    statusBar()->addWidget(d->rightZoomBar, 1);
+    d->rightZoomBar = new DZoomBar(statusBar());
+    d->rightZoomBar->setZoomToFitAction(d->rightZoomFitToWindowAction);
+    d->rightZoomBar->setZoomTo100Action(d->rightZoomTo100percents);
+    d->rightZoomBar->setZoomPlusAction(d->rightZoomPlusAction);
+    d->rightZoomBar->setZoomMinusAction(d->rightZoomMinusAction);
+    d->rightZoomBar->setBarMode(DZoomBar::PreviewZoomCtrl);    
     d->rightZoomBar->setEnabled(false);
+    statusBar()->addWidget(d->rightZoomBar, 1);
 }
 
 void LightTableWindow::setupConnections()
@@ -311,46 +317,40 @@ void LightTableWindow::setupConnections()
 
     // Thumbs bar connections ---------------------------------------
 
-    connect(d->barView, SIGNAL(signalSetItemOnLeftPanel(const ImageInfo &)),
-           this, SLOT(slotSetItemOnLeftPanel(const ImageInfo &)));
+    connect(d->barView, SIGNAL(signalSetItemOnLeftPanel(const ImageInfo&)),
+           this, SLOT(slotSetItemOnLeftPanel(const ImageInfo&)));
 
-    connect(d->barView, SIGNAL(signalSetItemOnRightPanel(const ImageInfo &)),
-           this, SLOT(slotSetItemOnRightPanel(const ImageInfo &)));
+    connect(d->barView, SIGNAL(signalSetItemOnRightPanel(const ImageInfo&)),
+           this, SLOT(slotSetItemOnRightPanel(const ImageInfo&)));
 
-    connect(d->barView, SIGNAL(signalRemoveItem(const ImageInfo &)),
-           this, SLOT(slotRemoveItem(const ImageInfo &)));
+    connect(d->barView, SIGNAL(signalRemoveItem(const ImageInfo&)),
+           this, SLOT(slotRemoveItem(const ImageInfo&)));
 
-    connect(d->barView, SIGNAL(signalEditItem(const ImageInfo &)),
-           this, SLOT(slotEditItem(const ImageInfo &)));
+    connect(d->barView, SIGNAL(signalEditItem(const ImageInfo&)),
+           this, SLOT(slotEditItem(const ImageInfo&)));
 
     connect(d->barView, SIGNAL(signalClearAll()),
            this, SLOT(slotClearItemsList()));
 
-    connect(d->barView, SIGNAL(signalLightTableBarItemSelected(const ImageInfo &)),
-           this, SLOT(slotItemSelected(const ImageInfo &)));
+    connect(d->barView, SIGNAL(signalLightTableBarItemSelected(const ImageInfo&)),
+           this, SLOT(slotItemSelected(const ImageInfo&)));
 
     connect(d->barView, SIGNAL(signalDroppedItems(const ImageInfoList&)),
            this, SLOT(slotThumbbarDroppedItems(const ImageInfoList&)));
 
     // Zoom bars connections -----------------------------------------
 
-    connect(d->leftZoomBar, SIGNAL(signalZoomMinusClicked()),
-           d->previewView, SLOT(slotDecreaseLeftZoom()));
-
-    connect(d->leftZoomBar, SIGNAL(signalZoomPlusClicked()),
-           d->previewView, SLOT(slotIncreaseLeftZoom()));
-
     connect(d->leftZoomBar, SIGNAL(signalZoomSliderChanged(int)),
            d->previewView, SLOT(slotLeftZoomSliderChanged(int)));
-
-    connect(d->rightZoomBar, SIGNAL(signalZoomMinusClicked()),
-           d->previewView, SLOT(slotDecreaseRightZoom()));
-
-    connect(d->rightZoomBar, SIGNAL(signalZoomPlusClicked()),
-           d->previewView, SLOT(slotIncreaseRightZoom()));
+           
+    connect(d->leftZoomBar, SIGNAL(signalZoomValueEdited(double)),
+            d->previewView, SLOT(setLeftZoomFactor(double)));
 
     connect(d->rightZoomBar, SIGNAL(signalZoomSliderChanged(int)),
            d->previewView, SLOT(slotRightZoomSliderChanged(int)));
+
+    connect(d->rightZoomBar, SIGNAL(signalZoomValueEdited(double)),
+            d->previewView, SLOT(setRightZoomFactor(double)));
 
     // View connections ---------------------------------------------
 
@@ -360,11 +360,11 @@ void LightTableWindow::setupConnections()
     connect(d->previewView, SIGNAL(signalRightZoomFactorChanged(double)),
            this, SLOT(slotRightZoomFactorChanged(double)));
 
-    connect(d->previewView, SIGNAL(signalEditItem(const ImageInfo &)),
-           this, SLOT(slotEditItem(const ImageInfo &)));
+    connect(d->previewView, SIGNAL(signalEditItem(const ImageInfo&)),
+           this, SLOT(slotEditItem(const ImageInfo&)));
 
-    connect(d->previewView, SIGNAL(signalDeleteItem(const ImageInfo &)),
-           this, SLOT(slotDeleteItem(const ImageInfo &)));
+    connect(d->previewView, SIGNAL(signalDeleteItem(const ImageInfo&)),
+           this, SLOT(slotDeleteItem(const ImageInfo&)));
 
     connect(d->previewView, SIGNAL(signalSlideShow()),
            this, SLOT(slotToggleSlideShow()));
@@ -407,12 +407,12 @@ void LightTableWindow::setupActions()
 
     d->backwardAction = KStandardAction::back(this, SLOT(slotBackward()), this);
     actionCollection()->addAction("lighttable_backward", d->backwardAction);
-    d->backwardAction->setShortcut( KShortcut(Qt::Key_PageUp, Qt::Key_Backspace) );
+    d->backwardAction->setShortcut(KShortcut(Qt::Key_PageUp, Qt::Key_Backspace));
 
     d->forwardAction = KStandardAction::forward(this, SLOT(slotForward()), this);
     actionCollection()->addAction("lighttable_forward", d->forwardAction);
     d->forwardAction->setEnabled(false);
-    d->forwardAction->setShortcut( KShortcut(Qt::Key_PageDown, Qt::Key_Space) );
+    d->forwardAction->setShortcut(KShortcut(Qt::Key_PageDown, Qt::Key_Space));
 
     d->firstAction = new KAction(KIcon("go-first"), i18n("&First"), this);
     d->firstAction->setShortcut(KStandardShortcut::begin());
@@ -496,30 +496,6 @@ void LightTableWindow::setupActions()
     d->clearOnCloseAction->setWhatsThis(i18n("Remove all images from the light table when it is closed"));
     actionCollection()->addAction("lighttable_clearonclose", d->clearOnCloseAction);
 
-    d->zoomPlusAction  = KStandardAction::zoomIn(d->previewView, SLOT(slotIncreaseZoom()), this);
-    d->zoomPlusAction->setEnabled(false);
-    KShortcut keysPlus = d->zoomPlusAction->shortcut();
-    keysPlus.setAlternate(Qt::Key_Plus);
-    d->zoomPlusAction->setShortcut(keysPlus);
-    actionCollection()->addAction("lighttable_zoomplus", d->zoomPlusAction);
-
-    d->zoomMinusAction  = KStandardAction::zoomOut(d->previewView, SLOT(slotDecreaseZoom()), this);
-    d->zoomMinusAction->setEnabled(false);
-    KShortcut keysMinus = d->zoomMinusAction->shortcut();
-    keysMinus.setAlternate(Qt::Key_Minus);
-    d->zoomMinusAction->setShortcut(keysMinus);
-    actionCollection()->addAction("lighttable_zoomminus", d->zoomMinusAction);
-
-    d->zoomTo100percents = new KAction(KIcon("zoom-original"), i18n("Zoom to 100%"), this);
-    d->zoomTo100percents->setShortcut(KShortcut(Qt::ALT+Qt::CTRL+Qt::Key_0));       // NOTE: Photoshop 7 use ALT+CTRL+0
-    connect(d->zoomTo100percents, SIGNAL(triggered()), this, SLOT(slotZoomTo100Percents()));
-    actionCollection()->addAction("lighttable_zoomto100percents", d->zoomTo100percents);
-
-    d->zoomFitToWindowAction = new KToggleAction(KIcon("zoom-fit-best"), i18n("Fit to &Window"), this);
-    d->zoomFitToWindowAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_E)); // NOTE: Gimp 2 use CTRL+SHIFT+E.
-    connect(d->zoomFitToWindowAction, SIGNAL(triggered()), this, SLOT(slotFitToWindow()));
-    actionCollection()->addAction("lighttable_zoomfit2window", d->zoomFitToWindowAction);
-
     d->showThumbBarAction = d->barViewDock->getToggleAction(this);
     actionCollection()->addAction("lighttable_showthumbbar", d->showThumbBarAction);
 
@@ -531,6 +507,60 @@ void LightTableWindow::setupActions()
     connect(d->slideShowAction, SIGNAL(triggered()), this, SLOT(slotToggleSlideShow()));
     actionCollection()->addAction("lighttable_slideshow", d->slideShowAction);
 
+    // Left Panel Zoom Actions
+    
+    d->leftZoomPlusAction  = KStandardAction::zoomIn(d->previewView, SLOT(slotIncreaseLeftZoom()), this);
+    d->leftZoomPlusAction->setEnabled(false);
+    KShortcut leftKeysPlus = d->leftZoomPlusAction->shortcut();
+    leftKeysPlus.setAlternate(Qt::Key_Plus);
+    d->leftZoomPlusAction->setShortcut(leftKeysPlus);
+    actionCollection()->addAction("lighttable_zoomplus_left", d->leftZoomPlusAction);
+
+    d->leftZoomMinusAction  = KStandardAction::zoomOut(d->previewView, SLOT(slotDecreaseLeftZoom()), this);
+    d->leftZoomMinusAction->setEnabled(false);
+    KShortcut leftKeysMinus = d->leftZoomMinusAction->shortcut();
+    leftKeysMinus.setAlternate(Qt::Key_Minus);
+    d->leftZoomMinusAction->setShortcut(leftKeysMinus);
+    actionCollection()->addAction("lighttable_zoomminus_left", d->leftZoomMinusAction);
+
+    d->leftZoomTo100percents = new KAction(KIcon("zoom-original"), i18n("Zoom to 100%"), this);
+    d->leftZoomTo100percents->setShortcut(KShortcut(Qt::ALT + Qt::CTRL + Qt::Key_0));    // NOTE: Photoshop 7 use ALT+CTRL+0
+    connect(d->leftZoomTo100percents, SIGNAL(triggered()), d->previewView, SLOT(slotLeftZoomTo100()));
+    actionCollection()->addAction("lighttable_zoomto100percents_left", d->leftZoomTo100percents);
+
+    d->leftZoomFitToWindowAction = new KAction(KIcon("zoom-fit-best"), i18n("Fit to &Window"), this);
+    d->leftZoomFitToWindowAction->setShortcut(KShortcut(Qt::ALT + Qt::CTRL + Qt::Key_E));
+    connect(d->leftZoomFitToWindowAction, SIGNAL(triggered()), d->previewView, SLOT(slotLeftFitToWindow()));
+    actionCollection()->addAction("lighttable_zoomfit2window_left", d->leftZoomFitToWindowAction);
+
+    // Right Panel Zoom Actions
+
+    d->rightZoomPlusAction  = KStandardAction::zoomIn(d->previewView, SLOT(slotIncreaseRightZoom()), this);
+    d->rightZoomPlusAction->setEnabled(false);
+    KShortcut rightKeysPlus = d->rightZoomPlusAction->shortcut();
+    rightKeysPlus.setPrimary(Qt::SHIFT + Qt::CTRL + Qt::Key_Plus);
+    rightKeysPlus.setAlternate(Qt::SHIFT + Qt::Key_Plus);
+    d->rightZoomPlusAction->setShortcut(rightKeysPlus);
+    actionCollection()->addAction("lighttable_zoomplus_right", d->rightZoomPlusAction);
+
+    d->rightZoomMinusAction  = KStandardAction::zoomOut(d->previewView, SLOT(slotDecreaseRightZoom()), this);
+    d->rightZoomMinusAction->setEnabled(false);
+    KShortcut rightKeysMinus = d->rightZoomMinusAction->shortcut();
+    rightKeysMinus.setPrimary(Qt::SHIFT + Qt::CTRL + Qt::Key_Minus);
+    rightKeysMinus.setAlternate(Qt::SHIFT + Qt::Key_Minus);
+    d->rightZoomMinusAction->setShortcut(rightKeysMinus);
+    actionCollection()->addAction("lighttable_zoomminus_right", d->rightZoomMinusAction);
+
+    d->rightZoomTo100percents = new KAction(KIcon("zoom-original"), i18n("Zoom to 100%"), this);
+    d->rightZoomTo100percents->setShortcut(KShortcut(Qt::SHIFT + Qt::CTRL + Qt::Key_0));
+    connect(d->rightZoomTo100percents, SIGNAL(triggered()), d->previewView, SLOT(slotRightZoomTo100()));
+    actionCollection()->addAction("lighttable_zoomto100percents_right", d->rightZoomTo100percents);
+
+    d->rightZoomFitToWindowAction = new KAction(KIcon("zoom-fit-best"), i18n("Fit to &Window"), this);
+    d->rightZoomFitToWindowAction->setShortcut(KShortcut(Qt::SHIFT + Qt::CTRL + Qt::Key_E));
+    connect(d->rightZoomFitToWindowAction, SIGNAL(triggered()), d->previewView, SLOT(slotRightFitToWindow()));
+    actionCollection()->addAction("lighttable_zoomfit2window_right", d->rightZoomFitToWindowAction);
+    
     // -- Standard 'Configure' menu actions ----------------------------------------
 
     d->showMenuBarAction = KStandardAction::showMenubar(this, SLOT(slotShowMenuBar()), actionCollection());
@@ -783,8 +813,6 @@ void LightTableWindow::slotItemSelected(const ImageInfo& info)
     d->firstAction->setEnabled(hasInfo);
     d->lastAction->setEnabled(hasInfo);
     d->syncPreviewAction->setEnabled(hasInfo);
-    d->zoomPlusAction->setEnabled(hasInfo);
-    d->zoomMinusAction->setEnabled(hasInfo);
     d->navigateByPairAction->setEnabled(hasInfo);
     d->slideShowAction->setEnabled(hasInfo);
 
@@ -1311,16 +1339,6 @@ void LightTableWindow::slotEditItem(const ImageInfo& info)
     im->setFocus();
 }
 
-void LightTableWindow::slotZoomTo100Percents()
-{
-    d->previewView->toggleFitToWindowOr100();
-}
-
-void LightTableWindow::slotFitToWindow()
-{
-    d->previewView->fitToWindow();
-}
-
 void LightTableWindow::slotToggleSlideShow()
 {
     KSharedConfig::Ptr config = KGlobal::config();
@@ -1534,50 +1552,22 @@ void LightTableWindow::slotSetup()
 
 void LightTableWindow::slotLeftZoomFactorChanged(double zoom)
 {
-    double h    = (double)ThumbnailSize::Huge;
-    double s    = (double)ThumbnailSize::Small;
     double zmin = d->previewView->leftZoomMin();
     double zmax = d->previewView->leftZoomMax();
-    double b    = (zmin-(zmax*s/h))/(1-s/h);
-    double a    = (zmax-b)/h;
-    int size    = (int)((zoom - b) /a);
+    d->leftZoomBar->setZoom(zoom, zmin, zmax);
 
-    d->leftZoomBar->setZoomSliderValue(size);
-    d->leftZoomBar->setZoomTrackerText(i18n("zoom: %1%",(int)(zoom*100.0)));
-    d->leftZoomBar->triggerZoomTrackerToolTip();
-
-    d->leftZoomBar->setEnableZoomPlus(true);
-    d->leftZoomBar->setEnableZoomMinus(true);
-
-    if (d->previewView->leftMaxZoom())
-        d->leftZoomBar->setEnableZoomPlus(false);
-
-    if (d->previewView->leftMinZoom())
-        d->leftZoomBar->setEnableZoomMinus(false);
+    d->leftZoomPlusAction->setEnabled(!d->previewView->leftMaxZoom());
+    d->leftZoomMinusAction->setEnabled(!d->previewView->leftMinZoom());
 }
 
 void LightTableWindow::slotRightZoomFactorChanged(double zoom)
 {
-    double h    = (double)ThumbnailSize::Huge;
-    double s    = (double)ThumbnailSize::Small;
     double zmin = d->previewView->rightZoomMin();
     double zmax = d->previewView->rightZoomMax();
-    double b    = (zmin-(zmax*s/h))/(1-s/h);
-    double a    = (zmax-b)/h;
-    int size    = (int)((zoom - b) /a);
+    d->rightZoomBar->setZoom(zoom, zmin, zmax);
 
-    d->rightZoomBar->setZoomSliderValue(size);
-    d->rightZoomBar->setZoomTrackerText(i18n("zoom: %1%",(int)(zoom*100.0)));
-    d->rightZoomBar->triggerZoomTrackerToolTip();
-
-    d->rightZoomBar->setEnableZoomPlus(true);
-    d->rightZoomBar->setEnableZoomMinus(true);
-
-    if (d->previewView->rightMaxZoom())
-        d->rightZoomBar->setEnableZoomPlus(false);
-
-    if (d->previewView->rightMinZoom())
-        d->rightZoomBar->setEnableZoomMinus(false);
+    d->rightZoomPlusAction->setEnabled(!d->previewView->rightMaxZoom());
+    d->rightZoomMinusAction->setEnabled(!d->previewView->rightMinZoom());
 }
 
 void LightTableWindow::slotToggleSyncPreview()

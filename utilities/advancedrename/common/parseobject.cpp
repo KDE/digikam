@@ -267,12 +267,12 @@ QString ParseObject::escapeToken(const QString& token)
     QString escaped = token;
 
     // replace special characters for renaming options
-    escaped.replace("[", "\\[");
-    escaped.replace("]", "\\]");
+    escaped.replace('[', "\\[");
+    escaped.replace(']', "\\]");
 
     // replace special characters for modifiers
-    escaped.replace("{", "\\{");
-    escaped.replace("}", "\\}");
+    escaped.replace('{', "\\{");
+    escaped.replace('}', "\\}");
 
     return escaped;
 }

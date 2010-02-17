@@ -154,6 +154,21 @@ void ImageRegionWidget::slotPreviewModeChanged(int mode)
     slotZoomFactorChanged();
 }
 
+void ImageRegionWidget::drawTextInRectangle(QString text, QRect r)
+{        
+    QPainter p(viewport());
+    p.setRenderHint(QPainter::Antialiasing, true);
+    p.setBackgroundMode(Qt::TransparentMode);
+    p.translate(previewRect().topLeft());
+    QFontMetrics fontMt = p.fontMetrics();
+    QRect fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text);
+    QRect textRect;
+    textRect.setTopLeft(QPoint(r.topLeft().x()+20, r.topLeft().y()+20));
+    textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2) );
+    drawText(&p, textRect, text);
+    return;
+}
+
 void ImageRegionWidget::viewportPaintExtraData()
 {
     if (!m_movingInProgress && !d->pixmapRegion.isNull())
@@ -161,17 +176,14 @@ void ImageRegionWidget::viewportPaintExtraData()
         QPainter p(viewport());
         p.setRenderHint(QPainter::Antialiasing, true);
         p.setBackgroundMode(Qt::TransparentMode);
-        QFontMetrics fontMt = p.fontMetrics();
-
-        QString text;
-        QRect region, textRect, fontRect;
+     
+        QRect region;
 
         // Original region.
         region = getLocalImageRegionToRender();
         QRect ro(contentsToViewport(region.topLeft()), contentsToViewport(region.bottomRight()));
 
         // Target region.
-        region = getLocalImageRegionToRender();
         QRect rt(contentsToViewport(region.topLeft()), contentsToViewport(region.bottomRight()));
 
         p.translate(previewRect().topLeft());
@@ -181,11 +193,7 @@ void ImageRegionWidget::viewportPaintExtraData()
         if (d->renderingPreviewMode == PreviewToolBar::PreviewOriginalImage ||
             (d->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver && !d->onMouseMovePreviewToggled))
         {
-            text     = i18n("Original");
-            fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text);
-            textRect.setTopLeft(QPoint(rt.topLeft().x()+20, rt.topLeft().y()+20));
-            textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2) );
-            drawText(&p, textRect, text);
+           drawTextInRectangle(i18n("Original"), rt);
         }
         else if (d->renderingPreviewMode == PreviewToolBar::PreviewTargetImage ||
                  d->renderingPreviewMode == PreviewToolBar::NoPreviewMode      ||
@@ -196,11 +204,7 @@ void ImageRegionWidget::viewportPaintExtraData()
             if (d->renderingPreviewMode == PreviewToolBar::PreviewTargetImage ||
                 d->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver)
             {
-                text     = i18n("Target");
-                fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text);
-                textRect.setTopLeft(QPoint(rt.topLeft().x()+20, rt.topLeft().y()+20));
-                textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2) );
-                drawText(&p, textRect, text);
+                drawTextInRectangle(i18n("Target"), rt);
             }
         }
         else if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesVert ||
@@ -219,18 +223,8 @@ void ImageRegionWidget::viewportPaintExtraData()
             p.setPen(QPen(Qt::red, 2, Qt::DotLine));
             p.drawLine(rt.topLeft().x(), rt.topLeft().y()+1, rt.bottomLeft().x(), rt.bottomLeft().y()-1);
 
-            text     = i18n("Target");
-            fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text);
-
-            textRect.setTopLeft(QPoint(rt.topLeft().x()+20, rt.topLeft().y()+20));
-            textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2) );
-            drawText(&p, textRect, text);
-
-            text     = i18n("Original");
-            fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text);
-            textRect.setTopLeft(QPoint(ro.topLeft().x()+20, ro.topLeft().y()+20));
-            textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2 ) );
-            drawText(&p, textRect, text);
+            drawTextInRectangle(i18n("Target")  ,rt);        
+            drawTextInRectangle(i18n("Original"),ro);
         }
         else if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorz ||
                  d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorzCont)
@@ -248,19 +242,8 @@ void ImageRegionWidget::viewportPaintExtraData()
             p.setPen(QPen(Qt::red, 2, Qt::DotLine));
             p.drawLine(rt.topLeft().x(), rt.topLeft().y(), rt.topRight().x(), rt.topRight().y());
 
-            text     = i18n("Target");
-            fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text);
-
-            textRect.setTopLeft(QPoint(rt.topLeft().x()+20, rt.topLeft().y()+20));
-            textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2) );
-            drawText(&p, textRect, text);
-
-            text     = i18n("Original");
-            fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text);
-
-            textRect.setTopLeft(QPoint(ro.topLeft().x()+20, ro.topLeft().y()+20));
-            textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2 ) );
-            drawText(&p, textRect, text);
+            drawTextInRectangle(i18n("Target")  ,rt); 
+            drawTextInRectangle(i18n("Original"),ro);
         }
 
         // Drawing highlighted points.
@@ -432,23 +415,15 @@ void ImageRegionWidget::setPreviewImage(const DImg& img)
     repaintContents(false);
 }
 
-DImg ImageRegionWidget::getOriginalRegionImage()
+DImg ImageRegionWidget::getOriginalRegionImage(bool use_downscaled_image)
 {
-    return (d->image.copy(getOriginalImageRegionToRender()));
-}
-
-void ImageRegionWidget::contentsWheelEvent(QWheelEvent* e)
-{
-    e->accept();
-
-    if (e->modifiers() & Qt::ControlModifier)
-    {
-        if (e->delta() < 0 && !minZoom())
-            slotDecreaseZoom();
-        else if (e->delta() > 0 && !maxZoom())
-            slotIncreaseZoom();
-        return;
-    }
+    DImg image = d->image.copy(getOriginalImageRegionToRender());
+    if (use_downscaled_image)
+     {
+      QRect r = getLocalImageRegionToRender();
+      image.resize(r.width(), r.height());
+     }
+    return (image);
 }
 
 QImage ImageRegionWidget::previewToQImage() const

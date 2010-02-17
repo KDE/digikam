@@ -59,11 +59,6 @@ extern "C"
 #include <libkdcraw/version.h>
 #include <libkdcraw/kdcraw.h>
 
-#if KDCRAW_VERSION < 0x000400
-#include <libkdcraw/dcrawbinary.h>
-#endif
-
-
 // Local includes
 
 #include "pngloader.h"
@@ -175,7 +170,7 @@ bool DImg::operator==(const DImg& image) const
     return m_priv == image.m_priv;
 }
 
-void DImg::reset(void)
+void DImg::reset()
 {
     m_priv = new DImgPrivate;
 }
@@ -201,7 +196,7 @@ void DImg::detach()
     }
 }
 
-void DImg::putImageData(uint width, uint height, bool sixteenBit, bool alpha, uchar *data, bool copyData)
+void DImg::putImageData(uint width, uint height, bool sixteenBit, bool alpha, uchar* data, bool copyData)
 {
     // set image data, metadata is untouched
 
@@ -234,7 +229,7 @@ void DImg::putImageData(uint width, uint height, bool sixteenBit, bool alpha, uc
     }
 }
 
-void DImg::putImageData(uchar *data, bool copyData)
+void DImg::putImageData(uchar* data, bool copyData)
 {
     if (!data)
     {
@@ -259,7 +254,7 @@ void DImg::resetMetaData()
     m_priv->metaData = KExiv2Data();
 }
 
-uchar *DImg::stripImageData()
+uchar* DImg::stripImageData()
 {
     uchar *data  = m_priv->data;
     m_priv->data = 0;
@@ -267,7 +262,7 @@ uchar *DImg::stripImageData()
     return data;
 }
 
-void DImg::copyMetaData(const DImgPrivate *src)
+void DImg::copyMetaData(const DImgPrivate* src)
 {
     m_priv->metaData     = src->metaData;
     m_priv->attributes   = src->attributes;
@@ -276,7 +271,7 @@ void DImg::copyMetaData(const DImgPrivate *src)
     //FIXME: what about sharing and deleting lanczos_func?
 }
 
-void DImg::copyImageData(const DImgPrivate *src)
+void DImg::copyImageData(const DImgPrivate* src)
 {
     setImageData(src->null, src->width, src->height, src->sixteenBit, src->alpha);
 }
@@ -623,11 +618,7 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
         return NONE;
     }
 
-#if KDCRAW_VERSION < 0x000400
-    QString rawFilesExt(KDcrawIface::DcrawBinary::instance()->rawFiles());
-#else
     QString rawFilesExt(KDcrawIface::KDcraw::rawFiles());
-#endif
     QString ext = fileInfo.suffix().toUpper();
 
     if (!ext.isEmpty())
@@ -760,6 +751,13 @@ QSize DImg::size() const
 uchar* DImg::bits() const
 {
     return m_priv->data;
+}
+
+uchar* DImg::copyBits() const
+{
+    uchar* data = new uchar[numBytes()];
+    memcpy(data, bits(), numBytes());
+    return data;
 }
 
 uchar* DImg::scanLine(uint i) const

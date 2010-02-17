@@ -707,7 +707,7 @@ bool DMetadata::setMetadataTemplate(const Template& t) const
     // Synchronize Iptc subjects tags with Xmp subjects tags.
     QStringList list = t.IptcSubjects();
     QStringList newList;
-    foreach(QString str, list)
+    foreach(QString str, list) // krazy:exclude=foreach
     {
         if (str.startsWith("XMP"))
         {
@@ -1364,7 +1364,7 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field) const
 QVariantList DMetadata::getMetadataFields(const MetadataFields& fields) const
 {
     QVariantList list;
-    foreach (MetadataInfo::Field field, fields)
+    foreach (MetadataInfo::Field field, fields) // krazy:exclude=foreach
     {
         list << getMetadataField(field);
     }
@@ -1498,7 +1498,7 @@ QString DMetadata::valueToString (const QVariant& value, MetadataInfo::Field fie
         {
             QString meters = QString("%L1").arg(value.toDouble(), 0, 'f', 2);
             // xgettext: no-c-format
-            return i18nc("Height in meters", "%L1m", meters);
+            return i18nc("Height in meters", "%L1m", meters); // krazy:exclude=i18ncheckarg
         }
 
         case MetadataInfo::PositionOrientation:

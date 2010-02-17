@@ -183,9 +183,9 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
                                      "',' can be used to create more than one hierarchy at the same time."));
 
     d->tagModificationHelper = new TagModificationHelper(this, this);
-    d->tagModel = new TagModel(AbstractAlbumModel::IgnoreRootAlbum, this);
+    d->tagModel = new TagModel(AbstractAlbumModel::IncludeRootAlbum, this);
     d->tagModel->setCheckable(true);
-    d->tagModel->setTristate(true);
+    d->tagModel->setRootCheckable(false);
     d->tagCheckView = new TagCheckView(captionTagsArea, d->tagModel);
 
     KHBox *tagsSearch  = new KHBox(captionTagsArea);
@@ -342,6 +342,12 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
                                   (int)ImageDescEditTabPriv::DESCRIPTIONS));
     d->templateViewer->setObjectName("ImageDescEditTab Expander");
     d->templateViewer->readSettings();
+    d->tagCheckView->setConfigGroup(group2);
+    d->tagCheckView->setEntryPrefix("ImageDescEditTab TagCheckView");
+    d->tagCheckView->loadState();
+    d->tagsSearchBar->setConfigGroup(group2);
+    d->tagsSearchBar->setEntryPrefix("ImageDescEditTab SearchBar");
+    d->tagsSearchBar->loadState();
 }
 
 ImageDescEditTab::~ImageDescEditTab()
@@ -352,20 +358,15 @@ ImageDescEditTab::~ImageDescEditTab()
     // We should disable the slot here at the moment, otherwise digikam crashes.
     //slotChangingItems();
 
-    /*
-    AlbumList tList = AlbumManager::instance().allTAlbums();
-    for (AlbumList::iterator it = tList.begin(); it != tList.end(); ++it)
-    {
-        (*it)->removeExtraData(this);
-    }
-    */
-
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(QString("Tag List View"));
     group.sync();
     KConfigGroup group2       = config->group("Image Properties SideBar");
     group2.writeEntry("ImageDescEditTab Tab", d->tabWidget->currentIndex());
     group2.sync();
+
+    d->tagCheckView->saveState();
+    d->tagsSearchBar->saveState();
 
     delete d;
 }
@@ -771,8 +772,12 @@ void ImageDescEditTab::slotCreateNewTag()
     {
         return;
     }
-    d->tagModificationHelper->slotTagNew(d->tagCheckView->currentAlbum(),
+    TAlbum *created = d->tagModificationHelper->slotTagNew(d->tagCheckView->currentAlbum(),
                                          d->newTagEdit->text());
+    if (created)
+    {
+        d->tagCheckView->slotSelectAlbum(created, false);
+    }
 }
 
 void ImageDescEditTab::assignRating(int rating)
@@ -1029,9 +1034,17 @@ void ImageDescEditTab::updateRecentTags()
                         icon = loader->getStandardTagIcon(album, AlbumThumbnailLoader::SmallerSize);
                     }
                 }
-                QString text = album->title() + " (" + ((TAlbum*)album->parent())->prettyUrl() + ')';
-                QAction *action = menu->addAction(icon, text, d->recentTagsMapper, SLOT(map()));
-                d->recentTagsMapper->setMapping(action, album->id());
+                TAlbum *parent = dynamic_cast<TAlbum*> (album->parent());
+                if (parent)
+                {
+                    QString text = album->title() + " (" + parent->prettyUrl() + ')';
+                    QAction *action = menu->addAction(icon, text, d->recentTagsMapper, SLOT(map()));
+                    d->recentTagsMapper->setMapping(action, album->id());
+                }
+                else
+                {
+                    kError() << "Tag" << album << "doesn't have a valid parent";
+                }
             }
         }
     }
@@ -1056,7 +1069,6 @@ void ImageDescEditTab::slotTagsSearchChanged(const SearchTextSettings& settings)
 
     Q_UNUSED(settings);
 
-    // see TODO below.
     // if we filter, we should reset the assignedTagsBtn again
     d->assignedTagsBtn->setChecked(false);
     slotAssignedTagsToggled(false);
@@ -1067,6 +1079,10 @@ void ImageDescEditTab::slotAssignedTagsToggled(bool t)
 {
     d->tagCheckView->checkableAlbumFilterModel()->setFilterChecked(t);
     d->tagCheckView->checkableAlbumFilterModel()->setFilterPartiallyChecked(t);
+    if (t)
+    {
+        d->tagCheckView->expandEverything(d->tagCheckView->rootIndex());
+    }
 }
 
 void ImageDescEditTab::focusLastSelectedWidget()

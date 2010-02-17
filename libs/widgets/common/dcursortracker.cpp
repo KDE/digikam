@@ -7,8 +7,8 @@
  * Description : A tool tip widget which follows cursor movements.
  *               Tool tip content is displayed without delay.
  *
- * Copyright (C) 2007-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C)      2009 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2007-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -37,7 +37,7 @@
 
 // KDE includes
 
-
+#include <kapplication.h>
 
 namespace Digikam
 {
@@ -95,7 +95,6 @@ void DCursorTracker::setText(const QString& txt)
 void DCursorTracker::setEnable(bool b)
 {
     d->enable = b;
-    moveToParent(d->parent);
 }
 
 void DCursorTracker::setKeepOpen(bool b)
@@ -110,7 +109,7 @@ void DCursorTracker::setTrackerAlignment(Qt::Alignment alignment)
 
 void DCursorTracker::triggerAutoShow(int timeout)
 {
-    if (d->enable)
+    if (canBeDisplayed())
     {
         show();
         moveToParent(d->parent);
@@ -137,7 +136,7 @@ bool DCursorTracker::eventFilter(QObject *object, QEvent *e)
         case QEvent::MouseMove:
         {
             QMouseEvent *event = static_cast<QMouseEvent*>(e);
-            if (d->enable && (widget->rect().contains(event->pos()) ||
+            if (canBeDisplayed() && (widget->rect().contains(event->pos()) ||
                              (event->buttons() & Qt::LeftButton)))
             {
                 show();
@@ -194,6 +193,11 @@ void DCursorTracker::moveToParent(QWidget* parent)
             break;
         }
     }
+}
+
+bool DCursorTracker::canBeDisplayed()
+{
+    return d->enable && d->parent->isVisible();
 }
 
 

@@ -355,9 +355,12 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo &info)
     int maxSize = qMax(qimage.width(), qimage.height());
     if (maxSize != d->cachedSize)
     {
+        /*
+        Cheat scaling is disabled because of quality problems - see bug #224999
         // Perform cheat scaling (http://labs.trolltech.com/blogs/2009/01/26/creating-thumbnail-preview)
         int cheatSize = maxSize - (3*(maxSize - d->cachedSize) / 4);
         qimage        = qimage.scaled(cheatSize, cheatSize, Qt::KeepAspectRatio, Qt::FastTransformation);
+        */
         qimage        = qimage.scaled(d->cachedSize, d->cachedSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     }
     if (colorManage && !profile.isNull())

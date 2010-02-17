@@ -165,9 +165,6 @@ void EditorTool::setToolSettings(EditorToolSettings* settings)
     connect(d->settings, SIGNAL(signalChannelChanged()),
             this, SLOT(slotChannelChanged()));
 
-    connect(d->settings, SIGNAL(signalColorsChanged()),
-            this, SLOT(slotColorsChanged()));
-
     connect(d->settings, SIGNAL(signalScaleChanged()),
             this, SLOT(slotScaleChanged()));
 

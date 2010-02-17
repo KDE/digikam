@@ -6,7 +6,7 @@
  * Date        : 2007-04-11
  * Description : light table thumbs bar
  *
- * Copyright (C) 2007-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,8 +42,7 @@ class LightTableBar : public ImagePreviewBar
 
 public:
 
-    explicit LightTableBar(QWidget* parent, int orientation=Qt::Vertical,
-                           bool exifRotate=true);
+    explicit LightTableBar(QWidget* parent, int orientation=Qt::Vertical, bool exifRotate=true);
     ~LightTableBar();
 
     void setOnLeftPanel(const ImageInfo& info);
@@ -58,18 +57,18 @@ public:
 
 Q_SIGNALS:
 
-    void signalLightTableBarItemSelected(const ImageInfo &);
-    void signalSetItemOnLeftPanel(const ImageInfo &);
-    void signalSetItemOnRightPanel(const ImageInfo &);
-    void signalEditItem(const ImageInfo &);
-    void signalRemoveItem(const ImageInfo &);
+    void signalLightTableBarItemSelected(const ImageInfo&);
+    void signalSetItemOnLeftPanel(const ImageInfo&);
+    void signalSetItemOnRightPanel(const ImageInfo&);
+    void signalEditItem(const ImageInfo&);
+    void signalRemoveItem(const ImageInfo&);
     void signalClearAll();
     void signalDroppedItems(const ImageInfoList&);
 
 private:
 
-    void drawItem(ThumbBarItem *item, QPainter &p, QPixmap &tile);
-    void drawEmptyMessage(QPixmap &pixmap);
+    void drawItem(ThumbBarItem* item, QPainter& p, QPixmap& tile);
+    void drawEmptyMessage(QPixmap& pixmap);
     void contentsMouseReleaseEvent(QMouseEvent*);
     void startDrag();
     void contentsDragEnterEvent(QDragEnterEvent*);
@@ -102,7 +101,7 @@ class LightTableBarItem : public ImagePreviewBarItem
 {
 public:
 
-    LightTableBarItem(LightTableBar *view, const ImageInfo& info);
+    LightTableBarItem(LightTableBar* view, const ImageInfo& info);
     ~LightTableBarItem();
 
     void setOnLeftPanel(bool on);

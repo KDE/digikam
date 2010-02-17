@@ -70,8 +70,9 @@ public Q_SLOTS:
      * the settings of the new album.
      *
      * @param parentAlbum parent album for the new one
+     * @return the new album or 0 if no album was created
      */
-    void slotAlbumNew(PAlbum *parentAlbum);
+    PAlbum *slotAlbumNew(PAlbum *parentAlbum);
 
     /**
      * Deletes the given album after waiting for a graphical confirmation of the

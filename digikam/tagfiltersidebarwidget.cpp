@@ -92,7 +92,7 @@ void TagFilterView::addCustomContextMenuActions(ContextMenuHelper &cmh, Album *a
 
 }
 
-void TagFilterView::handleCustomContextMenuAction(QAction *action, Album *album)
+void TagFilterView::handleCustomContextMenuAction(QAction *action, AlbumPointer<Album> album)
 {
     TagCheckView::handleCustomContextMenuAction(action, album);
 
@@ -135,7 +135,7 @@ public:
     TagModel *tagFilterModel;
 
     QCheckBox *withoutTagCheckBox;
-    QComboBox *matchingConditionComboBox;
+    KComboBox *matchingConditionComboBox;
 
 };
 
@@ -150,7 +150,7 @@ TagFilterSideBarWidget::TagFilterSideBarWidget(QWidget *parent,
 
     d->tagFilterView      = new TagFilterView(this, tagFilterModel);
     d->tagFilterSearchBar = new SearchTextBar(this, "DigikamViewTagFilterSearchBar");
-    d->tagFilterSearchBar->setModel(tagFilterModel, AbstractAlbumModel::AlbumIdRole);
+    d->tagFilterSearchBar->setModel(tagFilterModel, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
     d->tagFilterSearchBar->setFilterModel(d->tagFilterView->albumFilterModel());
 
     const QString notTaggedTitle = i18n("Images Without Tag");
@@ -160,9 +160,9 @@ TagFilterSideBarWidget::TagFilterSideBarWidget(QWidget *parent,
     QLabel *matchingConditionLabel = new QLabel(i18n("Matching Condition:"), this);
     matchingConditionLabel->setWhatsThis(i18n(
                     "Defines in which way the selected tags are combined to filter the images. "
-                    "This also includes the '%1' check box.").arg(notTaggedTitle));
+                    "This also includes the '%1' check box.", notTaggedTitle));
 
-    d->matchingConditionComboBox = new QComboBox(this);
+    d->matchingConditionComboBox = new KComboBox(this);
     d->matchingConditionComboBox->setWhatsThis(matchingConditionLabel->whatsThis());
     d->matchingConditionComboBox->addItem(i18n("AND"), ImageFilterSettings::AndCondition);
     d->matchingConditionComboBox->addItem(i18n("OR"), ImageFilterSettings::OrCondition);

@@ -6,7 +6,8 @@
  * Date        : 2009-09-19
  * Description : a tool for color space conversion
  *
- * Copyright (C) 2009 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -27,34 +28,31 @@
 // Local includes
 
 #include "editortool.h"
+#include "iccprofile.h"
 
-namespace Digikam
-{
-    class IccProfile;
-}
+using namespace Digikam;
 
 namespace DigikamImagesPluginCore
 {
 
 class ProfileConversionToolPriv;
 
-class ProfileConversionTool : public Digikam::EditorToolThreaded
+class ProfileConversionTool : public EditorToolThreaded
 {
     Q_OBJECT
 
 public:
 
-    ProfileConversionTool(QObject *parent);
+    ProfileConversionTool(QObject* parent);
     ~ProfileConversionTool();
 
     static QStringList favoriteProfiles();
-    static void fastConversion(const Digikam::IccProfile& profile);
+    static void fastConversion(const IccProfile& profile);
 
 private Q_SLOTS:
 
     void slotResetSettings();
     void slotCurrentProfInfo();
-    void slotNewProfInfo();
     void slotProfileChanged();
 
 private:

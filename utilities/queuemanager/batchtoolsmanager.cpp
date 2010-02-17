@@ -6,7 +6,7 @@
  * Date        : 2008-11-24
  * Description : Batch Tools Manager.
  *
- * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,6 +39,10 @@
 #include "sharpen.h"
 #include "watermark.h"
 #include "noisereduction.h"
+#include "bcgcorrection.h"
+#include "hslcorrection.h"
+#include "colorbalance.h"
+#include "iccconvert.h"
 
 namespace Digikam
 {
@@ -56,21 +60,30 @@ public:
 BatchToolsManager::BatchToolsManager(QObject* parent)
                  : QObject(parent), d(new BatchToolsManagerPriv)
 {
-    // Register base tools.
+    // Convert
     registerTool(new Convert2JPEG(this));
     registerTool(new Convert2PNG(this));
     registerTool(new Convert2TIFF(this));
     registerTool(new Convert2JP2(this));
     registerTool(new Convert2PGF(this));
-    registerTool(new AutoCorrection(this));
+    // Transform
     registerTool(new Rotate(this));
     registerTool(new Flip(this));
     registerTool(new Resize(this));
-    registerTool(new Restoration(this));
+    // Decorate
     registerTool(new WaterMark(this));
+    // Metadata
     registerTool(new AssignTemplate(this));
+    // Enhance
     registerTool(new Sharpen(this));
     registerTool(new NoiseReduction(this));
+    registerTool(new Restoration(this));
+    // Color
+    registerTool(new BCGCorrection(this));
+    registerTool(new HSLCorrection(this));
+    registerTool(new ColorBalance(this));
+    registerTool(new AutoCorrection(this));
+    registerTool(new IccConvert(this));
 }
 
 BatchToolsManager::~BatchToolsManager()

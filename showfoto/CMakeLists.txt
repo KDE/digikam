@@ -13,8 +13,18 @@ INCLUDE_DIRECTORIES( ../showfoto/setup
                      ../libs/greycstoration
                      ../libs/imageproperties
                      ../libs/dimg
-                     ../libs/dimg/filters
                      ../libs/dimg/loaders
+                     ../libs/dimg/filters
+                     ../libs/dimg/filters/auto
+                     ../libs/dimg/filters/bcg
+                     ../libs/dimg/filters/bw
+                     ../libs/dimg/filters/hsl
+                     ../libs/dimg/filters/icc
+                     ../libs/dimg/filters/nr
+                     ../libs/dimg/filters/sharp
+                     ../libs/dimg/filters/levels
+                     ../libs/dimg/filters/curves
+                     ../libs/dimg/filters/wb
                      ../libs/dmetadata
                      ../libs/themeengine
                      ../libs/curves

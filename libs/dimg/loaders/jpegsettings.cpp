@@ -62,7 +62,7 @@ public:
     QLabel       *labelWarning;
     QLabel       *labelSubSampling;
 
-    QComboBox    *subSamplingCB;
+    KComboBox    *subSamplingCB;
 
     KIntNumInput *JPEGcompression;
 };

@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2007 by Jaromir Malenko <malenko at email.cz>
  * Copyright (C) 2008 by Roberto Castagnola <roberto dot castagnola at gmail dot com>
- * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -49,7 +49,7 @@ Q_OBJECT
 
 public:
 
-    enum RatioAspect           // Constrained Aspect Ratio list.
+    enum RatioAspect               // Constrained Aspect Ratio list.
     {
         RATIOCUSTOM=0,             // Custom aspect ratio.
         RATIO01X01,                // 1:1
@@ -58,6 +58,7 @@ public:
         RATIO04X05,                // 4:5
         RATIO05x07,                // 5:7
         RATIO07x10,                // 7:10
+        RATIO08x05,                // 8:5
         RATIOGOLDEN,               // Golden ratio : 1:1.618
         RATIONONE                  // No aspect ratio.
     };
@@ -96,8 +97,8 @@ public:
                          int guideLinesType=GuideNone);
     */
 
-    ImageSelectionWidget(int width, int height, QWidget *parent = 0);
-    ImageSelectionWidget(int width, int height, bool initDrawing, QWidget *parent = 0);
+    ImageSelectionWidget(int width, int height, QWidget* parent = 0);
+    ImageSelectionWidget(int width, int height, bool initDrawing, QWidget* parent = 0);
     ~ImageSelectionWidget();
 
     void  setCenterSelection(int centerType=CenterImage);
@@ -147,11 +148,11 @@ Q_SIGNALS:
 
 protected:
 
-    void paintEvent( QPaintEvent *e );
-    void mousePressEvent ( QMouseEvent * e );
-    void mouseReleaseEvent ( QMouseEvent * e );
-    void mouseMoveEvent ( QMouseEvent * e );
-    void resizeEvent(QResizeEvent * e);
+    void paintEvent(QPaintEvent*);
+    void mousePressEvent(QMouseEvent*);
+    void mouseReleaseEvent(QMouseEvent*);
+    void mouseMoveEvent(QMouseEvent*);
+    void resizeEvent(QResizeEvent*);
 
 private:
 
@@ -167,17 +168,17 @@ private:
     void   applyAspectRatio(bool useHeight, bool repaintWidget=true);
     void   updatePixmap();
     QPoint opposite();
-    float  distance(QPoint a, QPoint b);
-    void   placeSelection(QPoint pm, bool symmetric, QPoint center);
+    float  distance(const QPoint& a, const QPoint& b);
+    void   placeSelection(const QPoint& pm, bool symmetric, const QPoint& center);
     void   setCursorResizing();
 
     // drawing functions for the various guide types
-    void   drawRulesOfThirds(QPainter &p, const int &xThird, const int &yThird);
-    void   drawDiagonalMethod(QPainter &p, const int &w, const int &h);
-    void   drawHarmoniousTriangles(QPainter &p, const int &dst);
-    void   drawGoldenMean(QPainter &p, const QRect &R1, const QRect &R2,
-                          const QRect &R3, const QRect &R4, const QRect &R5,
-                          const QRect &R6, const QRect &R7);
+    void   drawRulesOfThirds(QPainter& p, const int& xThird, const int& yThird);
+    void   drawDiagonalMethod(QPainter& p, const int& w, const int& h);
+    void   drawHarmoniousTriangles(QPainter& p, const int& dst);
+    void   drawGoldenMean(QPainter& p, const QRect& R1, const QRect& R2,
+                          const QRect& R3, const QRect& R4, const QRect& R5,
+                          const QRect& R6, const QRect& R7);
 
     void setup(int width, int height,
                int widthRatioValue=1, int heightRatioValue=1,

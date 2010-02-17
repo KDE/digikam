@@ -43,10 +43,6 @@
 #include <libkdcraw/kdcraw.h>
 #include <libkdcraw/version.h>
 
-#if KDCRAW_VERSION < 0x000400
-#include <libkdcraw/dcrawbinary.h>
-#endif
-
 // Local includes
 
 #include "thumbbar.h"
@@ -165,11 +161,7 @@ QString ThumbBarToolTip::tipContents()
 
         QSize   dims;
 
-#if KDCRAW_VERSION < 0x000400
-        QString rawFilesExt(KDcrawIface::DcrawBinary::instance()->rawFiles());
-#else
         QString rawFilesExt(KDcrawIface::KDcraw::rawFiles());
-#endif
         QString ext = fileInfo.suffix().toUpper();
 
         if (!ext.isEmpty() && rawFilesExt.toUpper().contains(ext))

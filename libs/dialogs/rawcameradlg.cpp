@@ -46,10 +46,6 @@
 #include <libkdcraw/version.h>
 #include <libkdcraw/kdcraw.h>
 
-#if KDCRAW_VERSION < 0x000400
-#include <libkdcraw/dcrawbinary.h>
-#endif
-
 namespace Digikam
 {
 
@@ -68,28 +64,13 @@ RawCameraDlg::RawCameraDlg(QWidget *parent)
             : InfoDlg(parent), d(new RawCameraDlgPriv)
 {
 
-#if KDCRAW_VERSION < 0x000400
-    QStringList list      = KDcrawIface::DcrawBinary::instance()->supportedCamera();
-    QString     dcrawVer  = KDcrawIface::DcrawBinary::instance()->internalVersion();
-    QString     KDcrawVer = KDcrawIface::KDcraw::version();
-#else
     QStringList list      = KDcrawIface::KDcraw::supportedCamera();
     QString     librawVer = KDcrawIface::KDcraw::librawVersion();
     QString     KDcrawVer = KDcrawIface::KDcraw::version();
-#endif
 
     // --------------------------------------------------------
 
     QLabel *header = new QLabel(this);
-#if KDCRAW_VERSION < 0x000400
-    header->setText(i18np("<p>Using KDcraw library version %2<br/>"
-                          "Using Dcraw program version %3<br/>"
-                          "1 model in the list</p>",
-                          "<p>Using KDcraw library version %2<br/>"
-                          "Using Dcraw program version %3<br/>"
-                          "%1 models in the list</p>",
-                          list.count(), KDcrawVer, dcrawVer));
-#else
     header->setText(i18np("<p>Using KDcraw library version %2<br/>"
                           "Using LibRaw version %3<br/>"
                           "1 model in the list</p>",
@@ -97,7 +78,6 @@ RawCameraDlg::RawCameraDlg(QWidget *parent)
                           "Using LibRaw version %3<br/>"
                           "%1 models in the list</p>",
                           list.count(), KDcrawVer, librawVer));
-#endif
 
     // --------------------------------------------------------
 

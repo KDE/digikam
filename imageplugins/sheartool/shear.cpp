@@ -140,7 +140,7 @@ void Shear::filterImage(void)
             ny = y + dy + x * vert_factor;
 
             // if is inside the source image
-            if (isInside (nWidth, nHeight, ROUND( nx ), ROUND( ny )))
+            if (isInside (nWidth, nHeight, lround( nx ), lround( ny )))
             {
                 if ( m_antiAlias )
                 {
@@ -155,7 +155,7 @@ void Shear::filterImage(void)
                 }
                 else
                 {
-                    pt = setPosition (nWidth, ROUND( nx ), ROUND( ny ));
+                    pt = setPosition (nWidth, lround( nx ), lround( ny ));
 
                     for (int z = 0 ; z < 4 ; ++z)
                     {

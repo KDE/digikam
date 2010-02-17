@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2007 by Jaromir Malenko <malenko at email dot cz>
  * Copyright (C) 2008 by Roberto Castagnola <roberto dot castagnola at gmail dot com>
- * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -252,12 +252,14 @@ RatioCropTool::RatioCropTool(QObject* parent)
     QLabel *label = new QLabel(i18n("Aspect ratio:"), cropSelection);
     d->ratioCB    = new RComboBox(cropSelection);
     d->ratioCB->addItem(i18nc("custom aspect ratio crop settings", "Custom"));
+    // NOTE: Order is important there. Look ImageSelectionWidget::RatioAspect for details.
     d->ratioCB->addItem("1:1");
     d->ratioCB->addItem("2:3");
     d->ratioCB->addItem("3:4");
     d->ratioCB->addItem("4:5");
     d->ratioCB->addItem("5:7");
     d->ratioCB->addItem("7:10");
+    d->ratioCB->addItem("8:5");
     d->ratioCB->addItem(i18n("Golden Ratio"));
     d->ratioCB->addItem(i18nc("no crop mode", "None"));
     d->ratioCB->setDefaultIndex(ImageSelectionWidget::RATIO03X04);
@@ -275,6 +277,7 @@ RatioCropTool::RatioCropTool(QObject* parent)
                                    "<p><b>4:5</b>: 20x25cm, 40x50cm, 8x10\", 16x20\"</p>"
                                    "<p><b>5:7</b>: 15x21cm, 30x42cm, 5x7\"</p>"
                                    "<p><b>7:10</b>: 21x30cm, 42x60cm, 3.5x5\"</p>"
+                                   "<p><b>8:5</b>: common widescreen monitor (as 1680x1050)</p>"
                                    "<p>The <b>Golden Ratio</b> is 1:1.618. A composition following this rule "
                                    "is considered visually harmonious but can be unadapted to print on "
                                    "standard photographic paper.</p>"));
@@ -295,7 +298,7 @@ RatioCropTool::RatioCropTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->customLabel = new QLabel(i18n("Custom ratio:"), cropSelection);
+    d->customLabel       = new QLabel(i18n("Custom ratio:"), cropSelection);
     d->customLabel->setAlignment(Qt::AlignLeft|Qt::AlignVCenter);
     d->customRatioNInput = new RIntNumInput(cropSelection);
     d->customRatioNInput->setRange(1, 10000, 1);
@@ -322,8 +325,8 @@ RatioCropTool::RatioCropTool(QObject* parent)
     d->widthInput->input()->setLabel(i18n("Width:"), Qt::AlignLeft|Qt::AlignVCenter);
     d->widthInput->setWhatsThis( i18n("Set here the width selection for cropping."));
     d->widthInput->setRange(d->imageSelectionWidget->getMinWidthRange(),
-                           d->imageSelectionWidget->getMaxWidthRange(),
-                           d->imageSelectionWidget->getWidthStep());
+                            d->imageSelectionWidget->getMaxWidthRange(),
+                            d->imageSelectionWidget->getWidthStep());
     d->widthInput->setSliderEnabled(true);
     d->widthInput->setDefaultValue(800);
 
@@ -375,7 +378,7 @@ RatioCropTool::RatioCropTool(QObject* parent)
     mainLayout->setSpacing(d->gboxSettings->spacingHint());
 
     d->expbox->addItem(cropSelection, SmallIcon("transform-crop-and-resize"),
-                      i18n("Crop Settings"), QString("CropSelection"), true);
+                       i18n("Crop Settings"), QString("CropSelection"), true);
 
     // -------------------------------------------------------------
 
@@ -598,16 +601,15 @@ void RatioCropTool::readSettings()
     if (d->originalIsLandscape)
     {
         d->orientCB->setCurrentIndex(group.readEntry(d->configHorOrientedAspectRatioOrientationEntry,
-                                    (int)ImageSelectionWidget::Landscape));
+                                     (int)ImageSelectionWidget::Landscape));
         d->orientCB->setDefaultIndex(ImageSelectionWidget::Landscape);
     }
     else
     {
         d->orientCB->setCurrentIndex(group.readEntry(d->configVerOrientedAspectRatioOrientationEntry,
-                                    (int)ImageSelectionWidget::Portrait));
+                                     (int)ImageSelectionWidget::Portrait));
         d->orientCB->setDefaultIndex(ImageSelectionWidget::Portrait);
     }
-
 
     d->autoOrientation->setChecked(group.readEntry(d->configAutoOrientationEntry, false));
     slotAutoOrientChanged( d->autoOrientation->isChecked() );
@@ -729,6 +731,7 @@ void RatioCropTool::setRatioCBText(int orientation)
         d->ratioCB->addItem("5:4");
         d->ratioCB->addItem("7:5");
         d->ratioCB->addItem("10:7");
+        d->ratioCB->addItem("5:8");
     }
     else
     {
@@ -737,6 +740,7 @@ void RatioCropTool::setRatioCBText(int orientation)
         d->ratioCB->addItem("4:5");
         d->ratioCB->addItem("5:7");
         d->ratioCB->addItem("7:10");
+        d->ratioCB->addItem("8:5");
     }
     d->ratioCB->addItem(i18n("Golden Ratio"));
     d->ratioCB->addItem(i18nc("no aspect ratio", "None"));
@@ -888,11 +892,11 @@ void RatioCropTool::slotGuideTypeChanged(int t)
     }
 
     d->imageSelectionWidget->setGoldenGuideTypes(d->goldenSectionBox->isChecked(),
-                                                d->goldenSpiralSectionBox->isChecked(),
-                                                d->goldenSpiralBox->isChecked(),
-                                                d->goldenTriangleBox->isChecked(),
-                                                d->flipHorBox->isChecked(),
-                                                d->flipVerBox->isChecked());
+                                                 d->goldenSpiralSectionBox->isChecked(),
+                                                 d->goldenSpiralBox->isChecked(),
+                                                 d->goldenTriangleBox->isChecked(),
+                                                 d->flipHorBox->isChecked(),
+                                                 d->flipVerBox->isChecked());
     d->imageSelectionWidget->slotGuideLines(t);
 }
 
@@ -939,8 +943,8 @@ void RatioCropTool::slotCustomDRatioChanged(int a)
 
 void RatioCropTool::slotCustomRatioChanged()
 {
-    d->imageSelectionWidget->setSelectionAspectRatioValue(
-            d->customRatioNInput->value(), d->customRatioDInput->value() );
+    d->imageSelectionWidget->setSelectionAspectRatioValue(d->customRatioNInput->value(),
+                                                          d->customRatioDInput->value());
 
     // Reset selection area.
     slotResetSettings();
@@ -950,15 +954,15 @@ void RatioCropTool::finalRendering()
 {
     kapp->setOverrideCursor( Qt::WaitCursor );
 
-    QRect currentRegion = d->imageSelectionWidget->getRegionSelection();
-    ImageIface* iface   = d->imageSelectionWidget->imageIface();
-    uchar *data         = iface->getOriginalImage();
-    int w               = iface->originalWidth();
-    int h               = iface->originalHeight();
-    bool a              = iface->originalHasAlpha();
-    bool sb             = iface->originalSixteenBit();
-
+    QRect currentRegion    = d->imageSelectionWidget->getRegionSelection();
+    ImageIface* iface      = d->imageSelectionWidget->imageIface();
+    uchar *data            = iface->getOriginalImage();
+    int w                  = iface->originalWidth();
+    int h                  = iface->originalHeight();
+    bool a                 = iface->originalHasAlpha();
+    bool sb                = iface->originalSixteenBit();
     QRect normalizedRegion = currentRegion.normalized();
+
     if (normalizedRegion.right() > w) normalizedRegion.setRight(w);
     if (normalizedRegion.bottom() > h) normalizedRegion.setBottom(h);
 

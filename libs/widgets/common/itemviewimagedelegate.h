@@ -75,6 +75,7 @@ public:
     /** Support for overlays. To be called by the item view only. */
     void installOverlay(ImageDelegateOverlay *overlay);
     void removeOverlay(ImageDelegateOverlay *overlay);
+    void setAllOverlaysActive(bool active);
     void removeAllOverlays();
     void mouseMoved(QMouseEvent *e, const QRect& visualRect, const QModelIndex& index);
 
@@ -95,12 +96,13 @@ protected:
     void drawImageSize(QPainter *p, const QRect& dimsRect, const QSize& dims) const;
     void drawFileSize(QPainter *p, const QRect& r, int bytes) const;
     void drawTags(QPainter *p, const QRect& r, const QString& tagsString, bool isSelected) const;
-    void drawStateRects(QPainter *p, const QStyleOptionViewItem& option, bool isSelected) const;
+    void drawFocusRect(QPainter *p, const QStyleOptionViewItem& option, bool isSelected) const;
+    void drawMouseOverRect(QPainter *p, const QStyleOptionViewItem& option) const;
     void drawDelegates(QPainter *p, const QStyleOptionViewItem& option, const QModelIndex& index) const;
     void prepareFonts();
     void prepareMetrics(int maxWidth);
     void prepareBackground();
-    void prepareRatingPixmaps();
+    void prepareRatingPixmaps(bool composeOverBackground = true);
 
     // reimplement these in subclasses
     virtual void invalidatePaintingCache();

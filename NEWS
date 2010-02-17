@@ -1,7 +1,19 @@
 *********************************************************************************************************
-digiKam 1.1.0 - Release date: 2010-XX-XX
+digiKam 1.2.0 - Release date: 2010-XX-XX
 
-NEW FEATURES:
+NEW FEATURES: 
+
+AlbumGUI          : All Album tree views are ported to pure Qt4 model/view implementation.
+
+ImageEditor       : Brightness/Contrast/gamma tool is multithreaded and use a zommable preview widget.
+ImageEditor       : Color Balance tool is multithreaded and use a zommable preview widget.
+ImageEditor       : Hue/Saturation/Lightness tool is multithreaded and use a zommable preview widget.
+ImageEditor       : Auto Color Correction tool is multithreaded and use a zommable preview widget.
+
+BatchQueueManager : new tool to fix Brightness/Contrast/gamma.
+BatchQueueManager : new tool to adjust Color Balance.
+BatchQueueManager : new tool to fix Hue/Saturation/Lightness.
+BatchQueueManager : new tool to convert images color space.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
@@ -9,6 +21,42 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 002 ==> 224698 : digiKam fails to rotate pefs via orientation tag.
 003 ==> 224021 : Zoom shortcuts inconsistent between editor and preview.
 004 ==> 225160 : digiKam built with QT4 ver 4.5.3 does not display pictures in album view.
-005 ==> 
+005 ==> 225397 : Tip refers to "Print Wizard", it is now "Print Assistant".
+006 ==> 225555 : Crash when deleting tag.
+007 ==> 207244 : Image disappears when enlarging.
+008 ==> 221155 : Add collection fails on similarly named directories (seems that check is not strict enough).
+009 ==> 225731 : digiKam no preview icon for movie.
+010 ==> 222698 : digiKam 1.0.0 crashes when editing tags by drag-and-drop.
+011 ==> 225328 : Creating new album during import fails.
+012 ==> 216633 : Additional aspect ratios in crop tool.
+013 ==> 151406 : Filters in 'Enhance' dropdown menu lack mouse-over preview mode.
+014 ==> 225698 : When I export my Album to a Html Gallery then Digikam crashed at the End.
+015 ==> 225787 : Scroll wheel doesn't work while moving images.
+016 ==> 226081 : Trying to delete tags crashes digiKam.
+017 ==> 226118 : IPTC metadata tag delimiter is no longer stored (since 0.10).
+018 ==> 226235 : digiKam fails after upgrade - no albums - rh tag & captions bar frozen.
+019 ==> 225272 : digiKam destroy some exif data.
+020 ==> 226584 : digiKam crashes in the starting phase.
+021 ==> 226537 : hovering doesn't show sub-tags
+022 ==> 225827 : gpswidget inactive on default selected photo.
+023 ==> 226381 : Copy/Paste of images in Albums view selects wrong image
+024 ==> 224999 : Thumbnails blury after upgrade to 1.0.0 from 0.10.
+025 ==> 226789 : Metadata settings only EXIF.
+026 ==> 185266 : digiKam shows unknown icon when moving images to other directory.
+027 ==> 226872 : Tag tree not expanded with "Tags already assigned" button.
+028 ==> 226858 : digiKam 1.2 My Tags window always blank.
+029 ==> 226568 : digiKam 1.1 crashes when renaming tag.
+030 ==> 226515 : My tags on Caption/Tags becomes empty after removing a single tag.
+031 ==> 227244 : Images on local disk not shown in middle pane.
+032 ==> 226853 : No images shown after upgrading from previous version.
+033 ==> 226932 : Batch Color Space Conversion Tool.
+034 ==> 207338 : Batch queue manager does not cancel processing.
+035 ==> 215657 : Raw import tool does not use general digikam settings.
+036 ==> 
+
+
+
+
+
 
 

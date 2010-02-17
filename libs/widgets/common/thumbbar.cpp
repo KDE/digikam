@@ -59,10 +59,6 @@
 #include <libkdcraw/kdcraw.h>
 #include <libkdcraw/version.h>
 
-#if KDCRAW_VERSION < 0x000400
-#include <libkdcraw/dcrawbinary.h>
-#endif
-
 // Local includes
 
 #include "dmetadata.h"

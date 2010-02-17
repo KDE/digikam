@@ -106,7 +106,7 @@ public:
     KPopupFrame*             panIconPopup;
 };
 
-PreviewWidget::PreviewWidget(QWidget *parent)
+PreviewWidget::PreviewWidget(QWidget* parent)
              : Q3ScrollView(parent), d(new PreviewWidgetPriv)
 {
     m_movingInProgress = false;
@@ -502,7 +502,7 @@ void PreviewWidget::resizeEvent(QResizeEvent* e)
     emit signalResized();
 }
 
-void PreviewWidget::viewportPaintEvent(QPaintEvent *e)
+void PreviewWidget::viewportPaintEvent(QPaintEvent* e)
 {
     QPainter p(viewport());
     QRect er(e->rect());

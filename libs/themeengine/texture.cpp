@@ -213,9 +213,9 @@ void Texture::doHgradient()
 
     for (x = 0; x < d->width; ++x)
     {
-        *(pr++) = (unsigned char) (xr);
-        *(pg++) = (unsigned char) (xg);
-        *(pb++) = (unsigned char) (xb);
+        *(pr++) = (unsigned char) (xr); // krazy:exclude=postfixop
+        *(pg++) = (unsigned char) (xg); // krazy:exclude=postfixop
+        *(pb++) = (unsigned char) (xb); // krazy:exclude=postfixop
 
         xr += drx;
         xg += dgx;

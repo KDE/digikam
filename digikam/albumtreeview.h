@@ -33,6 +33,7 @@
 
 // Local includes
 
+#include "albummanager.h"
 #include "albummodel.h"
 #include "albumfiltermodel.h"
 #include "statesavingobject.h"
@@ -42,6 +43,7 @@ namespace Digikam
 
 class ContextMenuHelper;
 class TagModificationHelper;
+struct State;
 
 class AbstractAlbumTreeViewPriv;
 
@@ -71,8 +73,10 @@ public:
     AbstractSpecificAlbumModel *albumModel() const;
     AlbumFilterModel *albumFilterModel() const;
 
-    /// Enable expanding of tree items on single click on the item (default: on)
+    /// Enable expanding of tree items on single click on the item (default: off)
     void setExpandOnSingleClick(bool doThat);
+    /// Expand an item when making it the new current item
+    void setExpandNewCurrentItem(bool doThat);
 
     /**
      * Sets whether to select an album on click via the album manager or not.
@@ -101,12 +105,26 @@ public:
      */
     void setSelectOnContextMenu(bool select);
 
-    /** This is a combination of indexAt() checked with visualRect().
-     *  p must be in the viewport currently. Decoration will not be included.
-     *  Suitable for mouse click positions.
+    /**
+     * This is a combination of indexAt() checked with visualRect().
+     * p must be in the viewport currently. Decoration will not be included.
+     * Suitable for mouse click positions.
      */
     QModelIndex indexVisuallyAt(const QPoint& p);
 
+    /**
+     * Implements state loading for the album tree view in a somewhat clumsy
+     * procedure because the model may not be fully loaded when this method is
+     * called. Therefore the config is first parsed into d->statesByAlbumId
+     * which holds the state of all tree view entries indexed by album id.
+     * Afterwards an initial sync run is done restoring the state of all model
+     * entries that are already present at this time. Every processed entry
+     * is removed from d->statesByAlbumId. If there are still entries left in
+     * this map we assume that the model is not fully loaded at the moment.
+     * Therefore the rowsInserted signal is connected to a slot that restores
+     * the state of new rows based on the remaining entries in
+     * d->statesByAlbumId.
+     */
     virtual void doLoadState();
     virtual void doSaveState();
 
@@ -128,6 +146,18 @@ public Q_SLOTS:
      */
     void adaptColumnsToContent();
 
+    /**
+     * Scrolls to the first selected album if there is one.
+     */
+    void scrollToSelectedAlbum();
+
+    /**
+     * Expands the complete tree under the given index.
+     *
+     * @param index index to start expanding everything
+     */
+    void expandEverything(const QModelIndex &index);
+
 Q_SIGNALS:
 
     /// Emitted when the currently selected album changes
@@ -140,7 +170,8 @@ protected Q_SLOTS:
     // override if implemented behavior is not as intended
     virtual void slotRootAlbumAvailable();
 
-    void slotFilterChanged();
+    void slotSearchTextSettingsChanged(bool wasSearching, bool searching);
+    void slotSearchTextSettingsAboutToChange(bool searched, bool willSearch);
     void slotCurrentChanged();
     void slotSelectionChanged();
 
@@ -195,13 +226,22 @@ protected:
      * @param album the tag on which the context menu was requested. May be null
      *              if there was no
      */
-    virtual void handleCustomContextMenuAction(QAction *action, Album *album);
+    virtual void handleCustomContextMenuAction(QAction *action, AlbumPointer<Album> album);
 
     // other stuff
 
+    /**
+     * Ensures that while filtering every match is visible by expanding all
+     * parent entries.
+     *
+     * @param index index to start ensuring expansion state
+     * @return <code>true</code> if there was a match under <code>index</code>
+     */
     bool checkExpandedState(const QModelIndex& index);
     void mousePressEvent(QMouseEvent *e);
 
+    void rowsInserted(const QModelIndex &index, int start, int end);
+    void rowsAboutToBeRemoved(const QModelIndex& parent, int start, int end);
     void startDrag(Qt::DropActions supportedActions);
     void dragEnterEvent(QDragEnterEvent *e);
     void dragMoveEvent(QDragMoveEvent *e);
@@ -221,9 +261,22 @@ protected:
 
 private:
 
-    void saveStateRecursive(const QModelIndex &index, QStringList &selection,
-                    QStringList &expansion);
-    void restoreState(const QModelIndex &index);
+    void saveStateRecursive(const QModelIndex &index, QList<int> &selection,
+                    QList<int> &expansion);
+
+    /**
+     * Restores the state of the index and all sub-indexes if there is an entry
+     * for this index in stateStore. Every album that is restored is removed
+     * from the stateStore.
+     *
+     * @param index index to start restoring
+     * @param stateStore states indexed by album id
+     */
+    void restoreStateForHierarchy(const QModelIndex &index, QMap<int, Digikam::State> &stateStore);
+    /**
+     * Restore the state for this index.
+     */
+    void restoreState(const QModelIndex &index, QMap<int, Digikam::State> &stateStore);
 
     /**
      * Creates the context menu.
@@ -233,16 +286,6 @@ private:
     void contextMenuEvent(QContextMenuEvent *event);
 
 private Q_SLOTS:
-
-    /**
-     * Used for asynchronous restoring of the tree view state if the contents of
-     * the model are received after the view has been created.
-     *
-     * @param index parent index of the inserted data
-     * @param start start row of new data under the parent index
-     * @param end end row of new data under the parent index
-     */
-    void slotFixRowsInserted(const QModelIndex &index, int start, int end);
 
     /**
      * Adapts the columns in between the given model indices to the content
@@ -268,6 +311,12 @@ private Q_SLOTS:
      */
     void adaptColumnsOnLayoutChange();
 
+    /**
+     * This slot is used to ensure that after searching for entries the correct
+     * album is selected again. Therefore it tracks new selections.
+     */
+    void currentAlbumChangedForBackupSelection(Album *currentAlbum);
+
 private:
 
     AbstractAlbumTreeViewPriv *d;
@@ -287,13 +336,13 @@ public:
 protected:
 
     void setAlbumFilterModel(AlbumFilterModel *filterModel);
+    virtual void rowsInserted(const QModelIndex& parent, int start, int end);
 
 private Q_SLOTS:
 
     void slotCollapsed(const QModelIndex& index);
     void slotExpanded(const QModelIndex& index);
     void slotSetShowCount();
-    void slotRowsInserted(const QModelIndex& parent, int start, int end);
     void updateShowCountState(const QModelIndex& index, bool recurse);
 
 private:
@@ -345,13 +394,11 @@ public:
 protected:
 
     virtual void middleButtonPressed(Album *a);
-
-private Q_SLOTS:
-
-    void slotRowsAddedCheckState(QModelIndex index, int start, int end);
+    virtual void rowsInserted(const QModelIndex& parent, int start, int end);
 
 private:
 
+    void restoreCheckStateForHierarchy(const QModelIndex &index);
     void restoreCheckState(const QModelIndex &index);
 
     AbstractCheckableAlbumTreeViewPriv *d;
@@ -364,11 +411,15 @@ class AlbumTreeView : public AbstractCheckableAlbumTreeView
     Q_OBJECT
 public:
 
-    AlbumTreeView(AlbumModel *model, QWidget *parent = 0);
+    explicit AlbumTreeView(AlbumModel *model, QWidget *parent = 0);
     virtual ~AlbumTreeView();
     AlbumModel *albumModel() const;
     PAlbum *currentAlbum() const;
     PAlbum *albumForIndex(const QModelIndex &index) const;
+
+private Q_SLOTS:
+
+    void slotDIOResult(KJob *job);
 
 };
 
@@ -377,7 +428,7 @@ class TagTreeView : public AbstractCheckableAlbumTreeView
     Q_OBJECT
 public:
 
-    TagTreeView(TagModel *model, QWidget *parent = 0);
+    explicit TagTreeView(TagModel *model, QWidget *parent = 0);
     TagModel *albumModel() const;
     TAlbum *currentAlbum() const;
     TAlbum *albumForIndex(const QModelIndex &index) const;

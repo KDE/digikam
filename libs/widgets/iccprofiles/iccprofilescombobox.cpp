@@ -77,7 +77,7 @@ static void formatProfiles(const QList<IccProfile>& givenProfiles, QList<IccProf
 {
     QList<IccProfile> profiles;
     QSet<QString>     filePaths;
-    foreach (IccProfile profile, givenProfiles)
+    foreach (IccProfile profile, givenProfiles) // krazy:exclude=foreach
     {
         QString filePath = profile.filePath();
         if (!profile.description().isNull() && (filePath.isNull() || !filePaths.contains(filePath)) )
@@ -89,7 +89,7 @@ static void formatProfiles(const QList<IccProfile>& givenProfiles, QList<IccProf
 
     qSort(profiles.begin(), profiles.end(), iccProfileLessThan);
 
-    foreach (IccProfile profile, profiles)
+    foreach (IccProfile profile, profiles) // krazy:exclude=foreach
     {
         QString description = profileUserString(profile);
         if (description.isNull())
@@ -237,7 +237,7 @@ void IccProfilesMenuAction::slotTriggered(QObject *obj)
 // ------------------------------------------------------------------------------------------
 
 IccRenderingIntentComboBox::IccRenderingIntentComboBox(QWidget *parent)
-                          : QComboBox(parent)
+                          : KComboBox(parent)
 {
     addItem("Perceptual", IccTransform::Perceptual);
     addItem("Relative Colorimetric", IccTransform::RelativeColorimetric);

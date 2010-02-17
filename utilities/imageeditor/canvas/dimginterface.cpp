@@ -56,7 +56,6 @@
 
 // Local includes
 
-#include "bcgmodifier.h"
 #include "colorcorrectiondlg.h"
 #include "undomanager.h"
 #include "undoaction.h"

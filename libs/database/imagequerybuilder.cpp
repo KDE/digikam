@@ -373,7 +373,7 @@ public:
             sql += " (" + name + " IN (";
             AlbumDB::addBoundValuePlaceholders(sql, values.size());
             sql += ") ";
-            foreach (qlonglong v, values)
+            foreach (const qlonglong &v, values)
                 *boundValues << v;
             sql += " ) ";
         }
@@ -447,7 +447,7 @@ public:
             }
             if (!wildcards.isEmpty())
             {
-                foreach(QString wildcard, wildcards)
+                foreach(QString wildcard, wildcards) // krazy:exclude=foreach
                 {
                     ImageQueryBuilder::addSqlOperator(sql, SearchXml::Or, firstCondition);
                     firstCondition = false;

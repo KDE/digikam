@@ -126,6 +126,7 @@ just use something like that:
 # export PATH=$QTDIR/bin:$PATH 
 # cmake .
 # make
+# sudo make install
 
 Usual CMake options :
 

@@ -56,7 +56,7 @@ Q_OBJECT
 
 public:
 
-    LightTablePreview(QWidget *parent=0);
+    LightTablePreview(QWidget* parent=0);
     ~LightTablePreview();
 
     void setLoadFullImageSize(bool b);
@@ -82,8 +82,8 @@ public:
 Q_SIGNALS:
 
     void signalDroppedItems(const ImageInfoList&);
-    void signalDeleteItem(const ImageInfo &);
-    void signalEditItem(const ImageInfo &);
+    void signalDeleteItem(const ImageInfo&);
+    void signalEditItem(const ImageInfo&);
     void signalPreviewLoaded(bool success);
     void signalSlideShow();
 

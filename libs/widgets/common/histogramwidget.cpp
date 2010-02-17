@@ -460,8 +460,6 @@ void HistogramWidget::slotProgressTimerDone()
     d->progressTimer->start( 200 );
 }
 
-// TODO code duplication with curves widget
-
 void HistogramWidget::paintEvent(QPaintEvent*)
 {
     // Widget is disabled, not initialized,

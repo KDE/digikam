@@ -336,7 +336,7 @@ void SearchView::paintEvent(QPaintEvent *)
         p.setPen(QPen(Qt::NoPen));
         p.setBrush(grad);
 
-        foreach(QRect rect, rects)
+        foreach(QRect rect, rects) // krazy:exclude=foreach
         {
             rect.adjust(-margin, -margin, margin, margin);
             p.drawRoundedRect(rect, 4, 4);

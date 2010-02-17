@@ -4,9 +4,9 @@
  * http://www.digikam.org
  *
  * Date        : 2005-24-01
- * Description : misc image filters 
+ * Description : misc image filters
  *
- * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -24,11 +24,6 @@
 #ifndef DIMGIMAGE_FILTERS_H
 #define DIMGIMAGE_FILTERS_H
 
-#define CLAMP0255(a)    qMin(qMax(a,0), 255)
-#define CLAMP065535(a)  qMin(qMax(a,0), 65535)
-#define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
-#define ROUND(x) ((int) ((x) + 0.5))
-
 // C++ includes
 
 #include <cmath>
@@ -36,6 +31,7 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "globals.h"
 
 namespace Digikam
 {
@@ -47,34 +43,9 @@ public:
     DImgImageFilters(){};
     ~DImgImageFilters(){};
 
-private:    // Private structures used internally.
-
-    struct double_packet
-    {
-        double red;
-        double green;
-        double blue;
-        double alpha;
-    };
-
-    struct int_packet
-    {
-        unsigned int red;
-        unsigned int green;
-        unsigned int blue;
-        unsigned int alpha;
-    };
-
-    struct NormalizeParam
-    {
-        unsigned short *lut;
-        double min;
-        double max;
-    };
-
 private:    // Private methods used internally.
 
-    // Methods for Channel Mixer.   
+    // Methods for Channel Mixer.
 
     inline double CalculateNorm(float RedGain, float GreenGain, float BlueGain, bool bPreserveLum)
     {
@@ -91,10 +62,10 @@ private:    // Private methods used internally.
                                    double Norm)
     {
        double lfMix = RedGain * (double)R + GreenGain * (double)G + BlueGain * (double)B;
-       lfMix *= Norm;
-       int segment = sixteenBit ? 65535 : 255;
+       lfMix        *= Norm;
+       int segment  = sixteenBit ? 65535 : 255;
 
-       return( (unsigned short)CLAMP (lfMix, 0, segment) );
+       return( (unsigned short)CLAMP((int)lfMix, 0, segment));
     };
 
     inline int setPositionAdjusted (int Width, int Height, int X, int Y)
@@ -106,29 +77,29 @@ private:    // Private methods used internally.
 
 public:   // Public methods.
 
-    void equalizeImage(uchar *data, int w, int h, bool sixteenBit);
-    void stretchContrastImage(uchar *data, int w, int h, bool sixteenBit);
-    void normalizeImage(uchar *data, int w, int h, bool sixteenBit);
-    void autoLevelsCorrectionImage(uchar *data, int w, int h, bool sixteenBit);
-    void invertImage(uchar *data, int w, int h, bool sixteenBit);
-    void channelMixerImage(uchar *data, int Width, int Height, bool sixteenBit,
+    void invertImage(uchar* data, int w, int h, bool sixteenBit);
+    
+    void channelMixerImage(uchar* data, int Width, int Height, bool sixteenBit,
                            bool bPreserveLum, bool bMonochrome,
                            float rrGain, float rgGain, float rbGain,
                            float grGain, float ggGain, float gbGain,
                            float brGain, float bgGain, float bbGain);
-    void changeTonality(uchar *data, int width, int height, bool sixteenBit,
-                        int redMask, int greenMask, int blueMask);
-    void gaussianBlurImage(uchar *data, int width, int height, bool sixteenBit, int radius);
-    void sharpenImage(uchar *data, int width, int height, bool sixteenBit, int radius);
-    void unsharpMaskImage(uchar *data, int width, int height, bool sixteenBit, 
-    		int radius, double amount, double threshold);
-    void refocusImage(uchar *data, int width, int height, bool sixteenBit, int matrixSize, 
-    		double radius, double gauss, double correlation, double noise);
-    void pixelAntiAliasing(uchar *data, int Width, int Height, double X, double Y,
-                           uchar *A, uchar *R, uchar *G, uchar *B);
+                           
+    void gaussianBlurImage(uchar* data, int width, int height, bool sixteenBit, int radius);
+    
+    void sharpenImage(uchar* data, int width, int height, bool sixteenBit, int radius);
+    
+    void unsharpMaskImage(uchar* data, int width, int height, bool sixteenBit,
+                          int radius, double amount, double threshold);
+                          
+    void refocusImage(uchar* data, int width, int height, bool sixteenBit, int matrixSize,
+                      double radius, double gauss, double correlation, double noise);
+                      
+    void pixelAntiAliasing(uchar* data, int Width, int Height, double X, double Y,
+                           uchar* A, uchar* R, uchar* G, uchar* B);
 
-    void pixelAntiAliasing16(unsigned short *data, int Width, int Height, double X, double Y,
-                             unsigned short *A, unsigned short *R, unsigned short *G, unsigned short *B);
+    void pixelAntiAliasing16(unsigned short* data, int Width, int Height, double X, double Y,
+                             unsigned short* A, unsigned short* R, unsigned short* G, unsigned short* B);
 };
 
 }  // namespace Digikam

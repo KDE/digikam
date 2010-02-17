@@ -80,7 +80,7 @@ class DateValidator : public QValidator
 };
 
 KDateEdit::KDateEdit(QWidget *parent, const char* name)
-         : QComboBox(parent), mReadOnly(false), mDiscardNextMousePress(false)
+         : KComboBox(parent), mReadOnly(false), mDiscardNextMousePress(false)
 {
     setObjectName(name);
     // need at least one entry for popup to work
@@ -353,7 +353,7 @@ void KDateEdit::mousePressEvent( QMouseEvent *event )
         return;
     }
 
-    QComboBox::mousePressEvent( event );
+    KComboBox::mousePressEvent( event );
 }
 
 void KDateEdit::slotTextChanged( const QString& )

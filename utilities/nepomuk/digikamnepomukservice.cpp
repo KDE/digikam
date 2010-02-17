@@ -458,7 +458,7 @@ static int digikamToNepomukRating(int digikamRating)
 void NepomukService::syncToNepomuk(const QList<qlonglong>& imageIds, SyncToNepomukSettings syncSettings)
 {
     QList<ImageInfo> infos;
-    foreach (qlonglong imageid, imageIds)
+    foreach (const qlonglong &imageid, imageIds)
     {
         ImageInfo info(imageid);
         if (!info.isNull())
@@ -538,7 +538,7 @@ void NepomukService::syncTagsToNepomuk(const QList<qlonglong>& imageIds, const Q
         Nepomuk::Tag tag = nepomukForDigikamTag(d->tagInfo(tagId));
         if (tag.isValid())
         {
-            foreach (qlonglong imageId, imageIds)
+            foreach (const qlonglong &imageId, imageIds)
             {
                 ImageInfo info(imageId);
                 if (!info.isNull())

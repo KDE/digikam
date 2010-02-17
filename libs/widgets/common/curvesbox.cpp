@@ -75,7 +75,7 @@ public:
         currentChannel  = LuminosityChannel;
         sixteenBit      = false;
     }
-    int                  currentChannel;
+    ChannelType          currentChannel;
     bool                 sixteenBit;
     CurvesWidget*        curvesWidget;
     ColorGradientWidget* hGradient;
@@ -324,18 +324,12 @@ void CurvesBox::setScale(HistogramScale type)
     d->curvesWidget->repaint();
 }
 
-void CurvesBox::setChannel(int channel)
+void CurvesBox::setChannel(ChannelType channel)
 {
     d->currentChannel = channel;
 
     switch (channel)
     {
-        case LuminosityChannel:
-            d->curvesWidget->m_channelType = LuminosityChannel;
-            d->hGradient->setColors(QColor("white"), QColor("black"));
-            d->vGradient->setColors(QColor("white"), QColor("black"));
-            break;
-
         case RedChannel:
             d->curvesWidget->m_channelType = RedChannel;
             d->hGradient->setColors(QColor("red"), QColor("black"));
@@ -354,8 +348,8 @@ void CurvesBox::setChannel(int channel)
             d->vGradient->setColors(QColor("blue"), QColor("black"));
             break;
 
-        case AlphaChannel:
-            d->curvesWidget->m_channelType = AlphaChannel;
+        default:
+            d->curvesWidget->m_channelType = channel;
             d->hGradient->setColors(QColor("white"), QColor("black"));
             d->vGradient->setColors(QColor("white"), QColor("black"));
             break;
@@ -365,7 +359,7 @@ void CurvesBox::setChannel(int channel)
     d->curvesWidget->repaint();
 }
 
-int CurvesBox::channel() const
+ChannelType CurvesBox::channel() const
 {
     return d->currentChannel;
 }

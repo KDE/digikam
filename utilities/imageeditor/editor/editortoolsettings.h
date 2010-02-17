@@ -112,7 +112,6 @@ Q_SIGNALS:
     void signalColorGuideChanged();
     void signalChannelChanged();
     void signalScaleChanged();
-    void signalColorsChanged();
 
 private:
 

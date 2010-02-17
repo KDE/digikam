@@ -405,8 +405,8 @@ void AbstractAlbumModel::slotAlbumAboutToBeDeleted(Album *album)
     // begin removing operation
     int row = d->findIndexAsChild(album);
     QModelIndex parent = indexForAlbum(album->parent());
-    albumCleared(album);
     beginRemoveRows(parent, row, row);
+    albumCleared(album);
 
     // store album for slotAlbumHasBeenDeleted
     d->removingAlbum = album;
@@ -430,6 +430,7 @@ void AbstractAlbumModel::slotAlbumsCleared()
 
 void AbstractAlbumModel::slotAlbumIconChanged(Album* album)
 {
+	kDebug() << "icon changed for album" << album->title();
     QModelIndex index = indexForAlbum(album);
     emit dataChanged(index, index);
 }
@@ -569,7 +570,16 @@ void AbstractCountingAlbumModel::setCountMap(const QMap<int, int>& idCountMap)
 void AbstractCountingAlbumModel::updateCount(Album *album)
 {
     if (!album)
+    {
         return;
+    }
+
+    // if the model does not contain the album, do nothing.
+    QModelIndex index = indexForAlbum(album);
+    if (!index.isValid())
+    {
+        return;
+    }
 
     QHash<int, int>::iterator includeIt = m_countHashReady.find(album->id());
     bool changed = false;
@@ -603,7 +613,6 @@ void AbstractCountingAlbumModel::updateCount(Album *album)
     // notify views
     if (changed)
     {
-        QModelIndex index = indexForAlbum(album);
         emit dataChanged(index, index);
     }
 }
@@ -611,7 +620,16 @@ void AbstractCountingAlbumModel::updateCount(Album *album)
 void AbstractCountingAlbumModel::setCount(Album *album, int count)
 {
     if (!album)
+    {
         return;
+    }
+
+    // if the model does not contain the album, do nothing.
+    QModelIndex index = indexForAlbum(album);
+    if (!index.isValid())
+    {
+        return;
+    }
 
     QHash<int, int>::iterator includeIt = m_countHashReady.find(album->id());
     bool changed = false;
@@ -631,7 +649,6 @@ void AbstractCountingAlbumModel::setCount(Album *album, int count)
     // notify views
     if (changed)
     {
-        QModelIndex index = indexForAlbum(album);
         emit dataChanged(index, index);
     }
 }
@@ -686,6 +703,7 @@ AbstractCheckableAlbumModel::AbstractCheckableAlbumModel(Album::Type albumType, 
                            : AbstractCountingAlbumModel(albumType, rootAlbum, rootBehavior, parent)
 {
     m_extraFlags = 0;
+    m_rootIsCheckable = true;
 }
 
 void AbstractCheckableAlbumModel::setCheckable(bool isCheckable)
@@ -702,6 +720,19 @@ void AbstractCheckableAlbumModel::setCheckable(bool isCheckable)
 bool AbstractCheckableAlbumModel::isCheckable() const
 {
     return m_extraFlags & Qt::ItemIsUserCheckable;
+}
+
+void AbstractCheckableAlbumModel::setRootCheckable(bool isCheckable)
+{
+    m_rootIsCheckable = isCheckable;
+    Album *root = rootAlbum();
+    if (!m_rootIsCheckable && root)
+        setChecked(root, false);
+}
+
+bool AbstractCheckableAlbumModel::rootIsCheckable() const
+{
+    return m_rootIsCheckable && isCheckable();
 }
 
 void AbstractCheckableAlbumModel::setTristate(bool isTristate)
@@ -835,7 +866,8 @@ QVariant AbstractCheckableAlbumModel::albumData(Album *a, int role) const
 {
     if (role == Qt::CheckStateRole)
     {
-        if (m_extraFlags & Qt::ItemIsUserCheckable)
+        if (m_extraFlags & Qt::ItemIsUserCheckable
+            && (!a->isRoot() || m_rootIsCheckable))
         {
             // with Qt::Unchecked as default, albums not in the hash (initially all)
             // are simply regarded as unchecked
@@ -848,7 +880,14 @@ QVariant AbstractCheckableAlbumModel::albumData(Album *a, int role) const
 
 Qt::ItemFlags AbstractCheckableAlbumModel::flags(const QModelIndex& index) const
 {
-    return AbstractCountingAlbumModel::flags(index) | m_extraFlags;
+    Qt::ItemFlags extraFlags = m_extraFlags;
+    if (!m_rootIsCheckable)
+    {
+        QModelIndex root = rootAlbumIndex();
+        if (root.isValid() && index == root)
+            extraFlags &= ~Qt::ItemIsUserCheckable;
+    }
+    return AbstractCountingAlbumModel::flags(index) | extraFlags;
 }
 
 bool AbstractCheckableAlbumModel::setData(const QModelIndex& index, const QVariant& value, int role)

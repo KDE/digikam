@@ -178,19 +178,19 @@ void ProxyClickLineEdit::mouseReleaseEvent(QMouseEvent *event)
 // -------------------------------------------------------------------------
 
 ModelIndexBasedComboBox::ModelIndexBasedComboBox(QWidget *parent)
-                       : QComboBox(parent)
+                       : KComboBox(parent)
 {
 }
 
 void ModelIndexBasedComboBox::hidePopup()
 {
     m_currentIndex = view()->selectionModel()->currentIndex();
-    QComboBox::hidePopup();
+    KComboBox::hidePopup();
 }
 
 void ModelIndexBasedComboBox::showPopup()
 {
-    QComboBox::showPopup();
+    KComboBox::showPopup();
     if (m_currentIndex.isValid())
         view()->selectionModel()->setCurrentIndex(m_currentIndex, QItemSelectionModel::ClearAndSelect);
 }
@@ -339,14 +339,14 @@ QListView *ListViewComboBox::view() const
 
 // -------------------------------------------------------------------------
 
-class TreeViewComboBoxLineEdit : public QLineEdit
+class TreeViewComboBoxLineEdit : public KLineEdit
 {
 public:
 
     // This line edit works like a weblink:
     // Readonly; A mouse press shows the popup; Cursor is the pointing hand.
 
-    TreeViewComboBoxLineEdit(QComboBox *box) : QLineEdit(box)
+    TreeViewComboBoxLineEdit(KComboBox *box) : KLineEdit(box)
     {
         m_box = box;
         setReadOnly(true);
@@ -355,7 +355,7 @@ public:
 
     virtual void mouseReleaseEvent(QMouseEvent *event)
     {
-        QLineEdit::mouseReleaseEvent(event);
+        KLineEdit::mouseReleaseEvent(event);
         m_box->showPopup();
     }
 
@@ -364,7 +364,7 @@ public:
         m_box->showPopup();
     }
 
-    QComboBox *m_box;
+    KComboBox *m_box;
 };
 
 TreeViewLineEditComboBox::TreeViewLineEditComboBox(QWidget *parent)

@@ -4,6 +4,17 @@ INCLUDE_DIRECTORIES(
                      ../libs/dimg
                      ../libs/dimg/loaders
                      ../libs/dimg/filters
+                     ../libs/dimg/filters/auto
+                     ../libs/dimg/filters/bcg
+                     ../libs/dimg/filters/bw
+                     ../libs/dimg/filters/hsl
+                     ../libs/dimg/filters/icc
+                     ../libs/dimg/filters/nr
+                     ../libs/dimg/filters/sharp
+                     ../libs/dimg/filters/cb
+                     ../libs/dimg/filters/levels
+                     ../libs/dimg/filters/curves
+                     ../libs/dimg/filters/wb
                      ../libs/dmetadata
                      ../libs/histogram
                      ../libs/curves
@@ -53,6 +64,7 @@ INCLUDE_DIRECTORIES(
                      ../utilities/advancedrename/parser/options
                      ../utilities/advancedrename/parser/modifiers
                      ../utilities/queuemanager
+                     ../utilities/queuemanager/basetools/color
                      ../utilities/queuemanager/basetools/convert
                      ../utilities/queuemanager/basetools/enhance
                      ../utilities/queuemanager/basetools/transform

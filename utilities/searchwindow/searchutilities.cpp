@@ -50,6 +50,7 @@
 #include <klocale.h>
 #include <kpushbutton.h>
 #include <kstandardguiitem.h>
+#include <ktextedit.h>
 #include <kdebug.h>
 
 // Local includes
@@ -603,7 +604,7 @@ StyleSheetDebugger::StyleSheetDebugger(QWidget *object)
 
     QVBoxLayout *vbox = new QVBoxLayout;
 
-    m_edit = new QTextEdit;
+    m_edit = new KTextEdit;
     vbox->addWidget(m_edit, 1);
     m_okButton = new KPushButton(KStandardGuiItem::ok());
     vbox->addWidget(m_okButton, 0, Qt::AlignRight);

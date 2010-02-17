@@ -5,6 +5,17 @@ INCLUDE_DIRECTORIES(
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/loaders
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/auto
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/bcg
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/bw
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/hsl
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/icc
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/nr
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/sharp
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/cb
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/levels
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/curves
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/wb
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/whitebalance
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dmetadata
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/histogram
@@ -49,6 +60,7 @@ INCLUDE_DIRECTORIES(
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/batch
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/lighttable
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/queuemanager
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/queuemanager/basetools/color
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/queuemanager/basetools/convert
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/queuemanager/basetools/enhance
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/queuemanager/basetools/transform

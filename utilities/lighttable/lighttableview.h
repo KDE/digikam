@@ -7,7 +7,7 @@
  * Description : a widget to display 2 preview image on 
  *               lightable to compare pictures.
  *
- * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -61,9 +61,6 @@ public:
 
     void   setLoadFullImageSize(bool b);
 
-    void   setLeftZoomFactor(double z);
-    void   setRightZoomFactor(double z);
-
     void   checkForSelection(const ImageInfo& info);
 
     double leftZoomMax();
@@ -81,9 +78,6 @@ public:
     void   leftReload();
     void   rightReload();
 
-    void   fitToWindow();
-    void   toggleFitToWindowOr100();
-
 Q_SIGNALS:
 
     void signalLeftPreviewLoaded(bool);
@@ -99,21 +93,25 @@ Q_SIGNALS:
     void signalRightPanelLeftButtonClicked();
 
     void signalSlideShow();
-    void signalDeleteItem(const ImageInfo &);
-    void signalEditItem(const ImageInfo &);
+    void signalDeleteItem(const ImageInfo&);
+    void signalEditItem(const ImageInfo&);
     void signalToggleOnSyncPreview(bool);
 
 public Q_SLOTS:
 
-    void slotDecreaseZoom();
-    void slotIncreaseZoom();
     void slotDecreaseLeftZoom();
     void slotIncreaseLeftZoom();
     void slotLeftZoomSliderChanged(int);
+    void setLeftZoomFactor(double z);
+    void slotLeftFitToWindow();
+    void slotLeftZoomTo100();
 
     void slotDecreaseRightZoom();
     void slotIncreaseRightZoom();
     void slotRightZoomSliderChanged(int);
+    void setRightZoomFactor(double z);
+    void slotRightFitToWindow();
+    void slotRightZoomTo100();
 
 private Q_SLOTS:
 

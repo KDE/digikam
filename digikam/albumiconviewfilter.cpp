@@ -58,7 +58,7 @@ public:
 #if KDE_IS_VERSION(4,1,0)
     SearchTextBar*       textFilter;
 #else
-    QLineEdit*           textFilter;
+    QLineEdit*           textFilter; // krazy:exclude=qclasses
 #endif
 
     StatusLed*           led;
@@ -85,7 +85,7 @@ AlbumIconViewFilter::AlbumIconViewFilter(QWidget* parent)
     d->textFilter = new SearchTextBar(this, "AlbumIconViewFilterSearchTextBar");
     d->textFilter->setTextQueryCompletion(true);
 #else
-    d->textFilter = new QLineEdit(this);
+    d->textFilter = new QLineEdit(this); // krazy:exclude=qclasses
 #endif
 
     d->textFilter->setToolTip(i18n("Text quick filter (search)"));

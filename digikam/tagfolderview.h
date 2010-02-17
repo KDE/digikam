@@ -97,7 +97,7 @@ protected:
      * @param album the tag on which the context menu was requested. May be null
      *              if there was no
      */
-    virtual void handleCustomContextMenuAction(QAction *action, Album *album);
+    virtual void handleCustomContextMenuAction(QAction *action, AlbumPointer<Album> album);
 
 private Q_SLOTS:
 

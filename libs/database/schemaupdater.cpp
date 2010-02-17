@@ -43,10 +43,6 @@
 #include <libkdcraw/version.h>
 #include <libkdcraw/kdcraw.h>
 
-#if KDCRAW_VERSION < 0x000400
-#include <libkdcraw/dcrawbinary.h>
-#endif
-
 // Local includes
 
 #include "databasebackend.h"
@@ -329,11 +325,7 @@ void SchemaUpdater::defaultFilterSettings(QStringList& defaultImageFilter,
                        << "xpm" << "ppm"  << "pnm" << "pgf"
                        << "gif" << "bmp"  << "xcf" << "pcx";
 
-#if KDCRAW_VERSION < 0x000400
-    defaultImageFilter << KDcrawIface::DcrawBinary::rawFilesList();
-#else
     defaultImageFilter << KDcrawIface::KDcraw::rawFilesList();
-#endif
 
     defaultVideoFilter << "mpeg" << "mpg" << "mpo" << "mpe"     // MPEG
                        << "avi"  << "mov" << "wmf" << "asf" << "mp4" << "3gp" << "wmv";
@@ -348,11 +340,7 @@ bool SchemaUpdater::createFilterSettings()
 
     m_AlbumDB->setFilterSettings(defaultImageFilter, defaultVideoFilter, defaultAudioFilter);
     m_AlbumDB->setSetting("FilterSettingsVersion", QString::number(filterSettingsVersion()));
-#if KDCRAW_VERSION < 0x000400
-    m_AlbumDB->setSetting("DcrawFilterSettingsVersion", QString::number(KDcrawIface::DcrawBinary::rawFilesVersion()));
-#else
     m_AlbumDB->setSetting("DcrawFilterSettingsVersion", QString::number(KDcrawIface::KDcraw::rawFilesVersion()));
-#endif
 
     return true;
 }
@@ -364,11 +352,7 @@ bool SchemaUpdater::updateFilterSettings()
 
     if (
          filterVersion.toInt() < filterSettingsVersion() ||
-#if KDCRAW_VERSION < 0x000400
-         dcrawFilterVersion.toInt() < KDcrawIface::DcrawBinary::rawFilesVersion()
-#else
          dcrawFilterVersion.toInt() < KDcrawIface::KDcraw::rawFilesVersion()
-#endif
        )
     {
         createFilterSettings();
@@ -619,7 +603,8 @@ bool SchemaUpdater::updateV4toV5()
                                 "If you are working on Linux, check that HAL is installed and running. "
                                 "In any case, you can seek advice from the digikam-devel@kde.org mailing list. "
                                 "The database updating process will now be aborted because we do not want "
-                                "to create a new database based on false assumptions from a broken installation.");
+                                "to create a new database based on false assumptions from a broken installation.",
+                                albumLibraryPath);
         m_LastErrorMessage=errorMsg;
         m_setError = true;
         if (m_observer)
@@ -667,6 +652,11 @@ bool SchemaUpdater::updateV4toV5()
                     " FROM ImagesV3;"
                                              ),
                     DatabaseItem::Visible, DatabaseItem::UndefinedCategory)
+       )
+         return false;
+
+    if (!m_access->backend()->execSql(QString(
+                    "REPLACE INTO ImageInformation (imageId) SELECT id FROM Images;"))
        )
          return false;
 

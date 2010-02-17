@@ -43,7 +43,6 @@
 #include "iccsettingscontainer.h"
 #include "icctransform.h"
 #include "dimginterface.h"
-#include "bcgmodifier.h"
 #include "dmetadata.h"
 
 namespace Digikam
@@ -208,6 +207,12 @@ uchar* ImageIface::getPreviewImage() const
     return previewData.stripImageData();
 }
 
+DImg ImageIface::getPreviewImg()
+{
+    DImg preview(previewWidth(), previewHeight(), previewSixteenBit(), previewHasAlpha(), getPreviewImage());
+    return preview;
+}
+    
 uchar* ImageIface::getOriginalImage() const
 {
     DImg *im = DImgInterface::defaultInterface()->getImg();

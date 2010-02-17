@@ -30,7 +30,9 @@
 namespace Digikam
 {
 
-DragHandle::DragHandle(QDockWidget *parent) : QWidget()
+DragHandle::DragHandle(QDockWidget *parent)
+    : QWidget(),
+      m_currentArea(Qt::LeftDockWidgetArea)
 {
     m_parent = parent;
 
@@ -59,19 +61,18 @@ void DragHandle::paintEvent(QPaintEvent*)
 
     // If the thumbnail bar is layed out horizontally, the state should be set
     // to horizontal to draw the handle in the proper orientation.
-    ThumbBarView *parent = static_cast<ThumbBarView *>(m_parent->widget());
-    if (parent->getOrientation() == Qt::Horizontal)
+    if (m_currentArea == Qt::LeftDockWidgetArea || m_currentArea == Qt::RightDockWidgetArea)
+    {
+        opt.rect = QRect(opt.rect.x(), opt.rect.y(),
+                         m_parent->width(),
+                         style->pixelMetric(QStyle::PM_ToolBarHandleExtent));
+    }
+    else
     {
         opt.state |= QStyle::State_Horizontal;
         opt.rect = QRect(opt.rect.x(), opt.rect.y(),
                          style->pixelMetric(QStyle::PM_ToolBarHandleExtent),
                          m_parent->height());
-    }
-    else
-    {
-        opt.rect = QRect(opt.rect.x(), opt.rect.y(),
-                         m_parent->width(),
-                         style->pixelMetric(QStyle::PM_ToolBarHandleExtent));
     }
 
     // Draw the toolbar handle.
@@ -80,11 +81,12 @@ void DragHandle::paintEvent(QPaintEvent*)
 
 void DragHandle::dockLocationChanged(Qt::DockWidgetArea area)
 {
+    m_currentArea = area;
     // When the dock widget that contains this handle changes to a different
     // orientation, the DockWidgetVerticalTitleBar feature needs to be adjusted:
     // present when the thumbbar orientation is horizontal, absent when it is
     // vertical(!)
-    if ((area == Qt::LeftDockWidgetArea) || (area == Qt::RightDockWidgetArea))
+    if (m_currentArea == Qt::LeftDockWidgetArea || m_currentArea == Qt::RightDockWidgetArea)
     {
         m_parent->setFeatures(m_parent->features() & ~QDockWidget::DockWidgetVerticalTitleBar);
     }
@@ -101,14 +103,13 @@ QSize DragHandle::sizeHint() const
     int handleWidth = style->pixelMetric(QStyle::PM_ToolBarHandleExtent);
     int margin      = style->pixelMetric(QStyle::PM_ToolBarItemMargin) +
                       style->pixelMetric(QStyle::PM_ToolBarFrameWidth);
-    ThumbBarView *parent = static_cast<ThumbBarView *>(m_parent->widget());
-    if (parent->getOrientation() == Qt::Horizontal)
+    if (m_currentArea == Qt::LeftDockWidgetArea || m_currentArea == Qt::RightDockWidgetArea)
     {
-           return QSize(handleWidth + 2*margin, m_parent->height());
+        return QSize(m_parent->width(), handleWidth + 2*margin);
     }
     else
     {
-        return QSize(m_parent->width(), handleWidth + 2*margin);
+        return QSize(handleWidth + 2*margin, m_parent->height());
     }
 }
 
@@ -140,8 +141,8 @@ void ThumbBarDock::reInitialize()
     // orientation and size.
     QMainWindow *parent = qobject_cast<QMainWindow*>(parentWidget());
     emit dockLocationChanged(parent->dockWidgetArea(this));
-    ThumbBarView *child = qobject_cast<ThumbBarView *>(widget());
-    child->resize(size());
+    //ThumbBarView *child = qobject_cast<ThumbBarView *>(widget());
+    widget()->resize(size());
     update();
 }
 
@@ -191,6 +192,8 @@ void ThumbBarDock::slotDockLocationChanged(Qt::DockWidgetArea area)
 {
     // Change orientation of child thumbbar when location has changed.
     ThumbBarView *child = qobject_cast<ThumbBarView *>(widget());
+    if (!child)
+        return;
     if ((area == Qt::LeftDockWidgetArea) || (area == Qt::RightDockWidgetArea))
     {
         child->setOrientation(Qt::Vertical);

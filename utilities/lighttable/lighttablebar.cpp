@@ -6,7 +6,7 @@
  * Date        : 2007-04-11
  * Description : light table thumbs bar
  *
- * Copyright (C) 2007-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -117,7 +117,7 @@ void LightTableBar::setNavigateByPair(bool b)
     d->navigateByPair = b;
 }
 
-void LightTableBar::contentsMouseReleaseEvent(QMouseEvent *e)
+void LightTableBar::contentsMouseReleaseEvent(QMouseEvent* e)
 {
     if (!e) return;
 
@@ -328,9 +328,8 @@ ImagePreviewBarItem* LightTableBar::findItemById(qlonglong id) const
     return 0;
 }
 
-void LightTableBar::drawItem(ThumbBarItem *item, QPainter &p, QPixmap &tile)
+void LightTableBar::drawItem(ThumbBarItem* item, QPainter& p, QPixmap& tile)
 {
-
     LightTableBarItem *rItem = dynamic_cast<LightTableBarItem*>(item);
 
     if (rItem->isOnLeftPanel())
@@ -363,14 +362,11 @@ void LightTableBar::drawItem(ThumbBarItem *item, QPainter &p, QPixmap &tile)
         r.setWidth((rating * ratingPixmap().width()));
         r.setBottom(r.bottom()+1);
         p.drawTiledPixmap(r, ratingPixmap());
-
     }
-
 }
 
-void LightTableBar::drawEmptyMessage(QPixmap &bgPix)
+void LightTableBar::drawEmptyMessage(QPixmap& bgPix)
 {
-
     ThemeEngine* te = ThemeEngine::instance();
 
     QPainter p4(&bgPix);
@@ -379,7 +375,6 @@ void LightTableBar::drawEmptyMessage(QPixmap &bgPix)
                 Qt::AlignCenter|Qt::TextWordWrap,
                 i18n("Drag and drop images here"));
     p4.end();
-
 }
 
 void LightTableBar::startDrag()
@@ -391,7 +386,7 @@ void LightTableBar::startDrag()
     QList<int> albumIDs;
     QList<int> imageIDs;
 
-    LightTableBarItem *item = dynamic_cast<LightTableBarItem*>(currentItem());
+    LightTableBarItem* item = dynamic_cast<LightTableBarItem*>(currentItem());
 
     urls.append(item->info().fileUrl());
     kioURLs.append(item->info().databaseUrl());
@@ -416,7 +411,7 @@ void LightTableBar::startDrag()
     drag->exec();
 }
 
-void LightTableBar::contentsDragEnterEvent(QDragEnterEvent *e)
+void LightTableBar::contentsDragEnterEvent(QDragEnterEvent* e)
 {
     int        albumID;
     QList<int> albumIDs;
@@ -435,7 +430,7 @@ void LightTableBar::contentsDragEnterEvent(QDragEnterEvent *e)
     e->ignore();
 }
 
-void LightTableBar::contentsDropEvent(QDropEvent *e)
+void LightTableBar::contentsDropEvent(QDropEvent* e)
 {
     int        albumID;
     QList<int> albumIDs;
@@ -535,7 +530,7 @@ void LightTableBar::slotCollectionImageChange(const CollectionImageChangeset& ch
 
 // -------------------------------------------------------------------------
 
-LightTableBarItem::LightTableBarItem(LightTableBar *view, const ImageInfo& info)
+LightTableBarItem::LightTableBarItem(LightTableBar* view, const ImageInfo& info)
                  : ImagePreviewBarItem(view, info.fileUrl()),
                    d(new LightTableBarItemPriv)
 {

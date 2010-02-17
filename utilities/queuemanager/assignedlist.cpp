@@ -6,7 +6,7 @@
  * Date        : 2008-11-21
  * Description : Batch Queue Manager items list.
  *
- * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,14 +48,14 @@
 namespace Digikam
 {
 
-AssignedListViewItem::AssignedListViewItem(QTreeWidget *parent, const BatchToolSet& set)
+AssignedListViewItem::AssignedListViewItem(QTreeWidget* parent, const BatchToolSet& set)
                     : QTreeWidgetItem(parent)
 {
     setFlags(Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | flags());
     setToolSet(set);
 }
 
-AssignedListViewItem::AssignedListViewItem(QTreeWidget *parent, QTreeWidgetItem* preceding, const BatchToolSet& set)
+AssignedListViewItem::AssignedListViewItem(QTreeWidget* parent, QTreeWidgetItem* preceding, const BatchToolSet& set)
                     : QTreeWidgetItem(parent, preceding)
 {
     setFlags(Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | flags());
@@ -139,18 +139,12 @@ AssignedListView::~AssignedListView()
 {
 }
 
-void AssignedListView::keyPressEvent(QKeyEvent *event)
+void AssignedListView::keyPressEvent(QKeyEvent* e)
 {
-
-    if (event->key() == Qt::Key_Delete)
-    {
+    if (e->key() == Qt::Key_Delete)
         slotRemoveCurrentTool();
-    }
     else
-    {
-        QTreeWidget::keyPressEvent(event);
-    }
-
+        QTreeWidget::keyPressEvent(e);
 }
 
 void AssignedListView::setBusy(bool b)
@@ -522,8 +516,7 @@ void AssignedListView::assignTools(const QMap<int, QString>& map, AssignedListVi
         it.previous();
         BatchTool::BatchToolGroup group = (BatchTool::BatchToolGroup)(it.key());
         QString name                    = it.value();
-        BatchTool *tool                 = QueueMgrWindow::queueManagerWindow()->batchToolsManager()
-                                                                                ->findTool(name, group);
+        BatchTool *tool                 = QueueMgrWindow::queueManagerWindow()->batchToolsManager()->findTool(name, group);
         BatchToolSet set;
         set.tool                   = tool;
         set.settings               = tool->defaultSettings();

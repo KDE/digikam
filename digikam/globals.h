@@ -4,9 +4,10 @@
  * http://www.digikam.org
  *
  * Date        : 2009-09-08
- * Description : global variables and flags for the digiKam project
+ * Description : global macros, variables and flags
  *
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -24,6 +25,13 @@
 #ifndef DIGIKAMGLOBALS_H
 #define DIGIKAMGLOBALS_H
 
+// Macros for image filters.
+#define CLAMP0255(a)   qBound(0,a,255)
+#define CLAMP065535(a) qBound(0,a,65535)
+#define CLAMP(x,l,u)   qBound(l,x,u)
+#define MAX3(a, b, c)  (qMax(qMax(a,b),c))
+#define MIN3(a, b, c)  (qMin(qMin(a,b),c))
+
 namespace Digikam
 {
 
@@ -37,9 +45,9 @@ static const int NoRating  = -1;
 
 // segments for histograms and curves
 static const int NUM_SEGMENTS_16BIT = 65536;
-static const int NUM_SEGMENTS_8BIT = 256;
-static const int MAX_SEGMENT_16BIT = NUM_SEGMENTS_16BIT - 1;
-static const int MAX_SEGMENT_8BIT = NUM_SEGMENTS_8BIT - 1;
+static const int NUM_SEGMENTS_8BIT  = 256;
+static const int MAX_SEGMENT_16BIT  = NUM_SEGMENTS_16BIT - 1;
+static const int MAX_SEGMENT_8BIT   = NUM_SEGMENTS_8BIT - 1;
 
 // --------------------------------------------------------
 
@@ -75,13 +83,6 @@ enum ChannelType
     BlueChannel,
     AlphaChannel,
     ColorChannels
-};
-
-enum ColorChannelsType
-{
-    ColorChannelsRed = 0,      // Red color to foreground in All Colors Channel mode.
-    ColorChannelsGreen,        // Green color to foreground in All Colors Channel mode.
-    ColorChannelsBlue          // Blue color to foreground in All Colors Channel mode.
 };
 
 } // namespace Digikam

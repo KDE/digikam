@@ -51,9 +51,14 @@
 namespace Digikam
 {
 
-ImageDragDropHandler::ImageDragDropHandler(ImageAlbumModel *model)
+ImageDragDropHandler::ImageDragDropHandler(ImageModel *model)
                     : ImageModelDragDropHandler(model)
 {
+}
+
+ImageAlbumModel *ImageDragDropHandler::albumModel() const
+{
+    return qobject_cast<ImageAlbumModel*>(model());
 }
 
 static Qt::DropAction copyOrMove(const QDropEvent *e, QWidget *view, bool showMenu = true)
@@ -91,16 +96,17 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView *abstractview, const QDro
         return false;
 
     PAlbum *palbum = 0;
+    Album *currentAlbum = albumModel() ? albumModel()->currentAlbum() : 0;
     if (album->type() == Album::PHYSICAL)
         palbum = static_cast<PAlbum*>(album);
-    else if (model()->currentAlbum()->type() == Album::PHYSICAL)
-        palbum = static_cast<PAlbum*>(model()->currentAlbum());
+    else if (currentAlbum && currentAlbum->type() == Album::PHYSICAL)
+        palbum = static_cast<PAlbum*>(currentAlbum);
 
     TAlbum *talbum = 0;
     if (album->type() == Album::TAG)
         talbum = static_cast<TAlbum*>(album);
-    else if (model()->currentAlbum()->type() == Album::TAG)
-        talbum = static_cast<TAlbum*>(model()->currentAlbum());
+    else if (currentAlbum && currentAlbum->type() == Album::TAG)
+        talbum = static_cast<TAlbum*>(currentAlbum);
 
     if (DItemDrag::canDecode(e->mimeData()))
     {
@@ -361,7 +367,7 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView *abstractview, const QDro
 
 Qt::DropAction ImageDragDropHandler::accepts(const QDropEvent *e, const QModelIndex &/*dropIndex*/)
 {
-    if (!model()->currentAlbum())
+    if (albumModel() && !albumModel()->currentAlbum())
         return Qt::IgnoreAction;
 
     if (DItemDrag::canDecode(e->mimeData()) || KUrl::List::canDecode(e->mimeData()))
@@ -398,9 +404,6 @@ QStringList ImageDragDropHandler::mimeTypes() const
 
 QMimeData *ImageDragDropHandler::createMimeData(const QList<QModelIndex>& indexes)
 {
-    if (!model()->currentAlbum())
-        return 0;
-
     QList<ImageInfo> infos = model()->imageInfos(indexes);
 
     KUrl::List urls;
@@ -412,9 +415,9 @@ QMimeData *ImageDragDropHandler::createMimeData(const QList<QModelIndex>& indexe
     {
         urls.append(info.fileUrl());
         kioURLs.append(info.databaseUrl());
+        albumIDs.append(info.albumId());
         imageIDs.append(info.id());
     }
-    albumIDs.append(model()->currentAlbum()->id());
 
     if (urls.isEmpty())
         return 0;

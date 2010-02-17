@@ -40,10 +40,6 @@
 #include <libkdcraw/version.h>
 #include <libkdcraw/kdcraw.h>
 
-#if KDCRAW_VERSION < 0x000400
-#include <libkdcraw/dcrawbinary.h>
-#endif
-
 // Local includes
 
 #include "config-digikam.h"
@@ -905,14 +901,7 @@ QString AlbumSettings::getAudioFileFilter() const
 
 QString AlbumSettings::getRawFileFilter() const
 {
-    QStringList supportedRaws;
-#if KDCRAW_VERSION < 0x000400
-    if (KDcrawIface::DcrawBinary::instance()->versionIsRight())
-        supportedRaws = KDcrawIface::DcrawBinary::rawFilesList();
-#else
-    supportedRaws = KDcrawIface::KDcraw::rawFilesList();
-#endif
-
+    QStringList supportedRaws = KDcrawIface::KDcraw::rawFilesList();
     QStringList imageSettings;
     DatabaseAccess().db()->getFilterSettings(&imageSettings, 0, 0);
 

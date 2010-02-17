@@ -82,10 +82,9 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView *view, const QDropEvent *
 
         if(choice == moveAction)
         {
-        	// FIXME there is no such slot
             KIO::Job* job = DIO::move(droppedAlbum, destAlbum);
             connect(job, SIGNAL(result(KJob*)),
-                    this, SLOT(slotDIOResult(KJob*)));
+                    this, SIGNAL(dioResult(KJob*)));
         }
 
         return true;
@@ -193,7 +192,7 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView *view, const QDropEvent *
         {
             KIO::Job* job = DIO::move(extUrls, extImageIDs, destAlbum);
             connect(job, SIGNAL(result(KJob*)),
-                    this, SLOT(slotDIOResult(KJob*)));
+                    this, SIGNAL(dioResult(KJob*)));
 
             /*
             // In recurssive album contents mode, we need to force AlbumLister to take a care about
@@ -207,7 +206,7 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView *view, const QDropEvent *
         {
             KIO::Job* job = DIO::copy(extUrls, extImageIDs, destAlbum);
             connect(job, SIGNAL(result(KJob*)),
-                    this, SLOT(slotDIOResult(KJob*)));
+                    this, SIGNAL(dioResult(KJob*)));
         }
         else if (setThumbnail)
         {
@@ -282,13 +281,13 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView *view, const QDropEvent *
         {
             KIO::Job* job = DIO::move(srcURLs, destAlbum);
             connect(job, SIGNAL(result(KJob*)),
-                    this, SLOT(slotDIOResult(KJob*)));
+                    this, SIGNAL(dioResult(KJob*)));
         }
         else if (copy)
         {
             KIO::Job* job = DIO::copy(srcURLs, destAlbum);
             connect(job, SIGNAL(result(KJob*)),
-                    this, SLOT(slotDIOResult(KJob*)));
+                    this, SIGNAL(dioResult(KJob*)));
         }
 
         return true;

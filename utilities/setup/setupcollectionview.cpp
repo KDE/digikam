@@ -520,6 +520,8 @@ void SetupCollectionModel::addCollection(int category)
     if (path.isEmpty())
         return;
 
+    path = QDir::fromNativeSeparators(path);
+
     // Check path: First check with manager
     QString messageFromManager, deviceIcon;
     QList<CollectionLocation> assumeDeleted;
@@ -541,12 +543,15 @@ void SetupCollectionModel::addCollection(int category)
     {
         if (!item.deleted && item.location.isNull())
         {
-            if (path.startsWith(item.path))
+            if (!item.path.isEmpty() && path.startsWith(item.path))
             {
-                messageFromManager = i18n("You have previously added a collection "
-                                          "that contains the path \"%1\".", path);
-                result = CollectionManager::LocationNotAllowed;
-                break;
+                if (path == item.path || path.startsWith(item.path + '/'))
+                {
+                    messageFromManager = i18n("You have previously added a collection "
+                                            "that contains the path \"%1\".", path);
+                    result = CollectionManager::LocationNotAllowed;
+                    break;
+                }
             }
         }
     }

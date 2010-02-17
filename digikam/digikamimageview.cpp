@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#include "digikamimageview.moc"
 #include "digikamimageview_p.h"
+#include "digikamimageview.moc"
 
 // Qt includes
 
@@ -53,6 +53,7 @@
 #include "contextmenuhelper.h"
 #include "ddragobjects.h"
 #include "digikamapp.h"
+#include "digikamimagedelegate.h"
 #include "dio.h"
 #include "dpopupmenu.h"
 #include "imagealbumfiltermodel.h"
@@ -70,12 +71,16 @@ namespace Digikam
 DigikamImageView::DigikamImageView(QWidget *parent)
                 : ImageCategorizedView(parent), d(new DigikamImageViewPriv(this))
 {
+    installDefaultModels();
+
+    setItemDelegate(new DigikamImageDelegate(this));
+    setSpacing(10);
 
     AlbumSettings *settings = AlbumSettings::instance();
 
     imageFilterModel()->setCategorizationMode(ImageSortSettings::CategoryByAlbum);
 
-    imageModel()->setThumbnailLoadThread(ThumbnailLoadThread::defaultIconViewThread());
+    imageAlbumModel()->setThumbnailLoadThread(ThumbnailLoadThread::defaultIconViewThread());
     setThumbnailSize((ThumbnailSize::Size)settings->getDefaultIconSize());
 
     imageModel()->setDragDropHandler(new ImageDragDropHandler(imageModel()));
@@ -87,6 +92,9 @@ DigikamImageView::DigikamImageView(QWidget *parent)
     imageFilterModel()->setSortRole((ImageSortSettings::SortRole)settings->getImageSortOrder());
     imageFilterModel()->setSortOrder((ImageSortSettings::SortOrder)settings->getImageSorting());
     imageFilterModel()->setCategorizationMode((ImageSortSettings::CategorizationMode)settings->getImageGroupMode());
+
+    // selection overlay
+    addSelectionOverlay();
 
     // rotation overlays
     d->rotateLeftOverlay = new ImageRotateLeftOverlay(this);

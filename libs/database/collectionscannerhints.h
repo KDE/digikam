@@ -190,7 +190,7 @@ public:
     };
 
     ItemChangeHint();
-    ItemChangeHint(QList<qlonglong> srcIds, ChangeType type = ItemModified);
+    explicit ItemChangeHint(QList<qlonglong> srcIds, ChangeType type = ItemModified);
 
     QList<qlonglong> ids() const;
     bool isId(qlonglong id) const;

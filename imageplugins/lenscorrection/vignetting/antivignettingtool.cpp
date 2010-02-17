@@ -55,7 +55,7 @@
 // Local includes
 
 #include "antivignetting.h"
-#include "bcgmodifier.h"
+#include "bcgfilter.h"
 #include "daboutdata.h"
 #include "dimgimagefilters.h"
 #include "editortoolsettings.h"
@@ -102,7 +102,7 @@ public:
     const QString       configContrastAdjustmentEntry;
     const QString       configGammaAdjustmentEntry;
     const QString       configAddVignettingEntry;
-    
+
     QLabel*             maskPreviewLabel;
 
     RIntNumInput*       brightnessInput;
@@ -137,12 +137,12 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
     d->gboxSettings = new EditorToolSettings;
 
     // -------------------------------------------------------------
-    
+
     d->addVignettingCheck = new QCheckBox(i18n("Add vignetting"));
-    d->addVignettingCheck->setWhatsThis(i18n("This option add vignetting to the image instead for removing it."
+    d->addVignettingCheck->setWhatsThis(i18n("This option adds vignetting to the image instead for removing it. "
                                              "Use it for creative effects."));
     d->addVignettingCheck->setChecked(false);
-    
+
     // -------------------------------------------------------------
 
     d->maskPreviewLabel = new QLabel();
@@ -190,7 +190,7 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
     d->xOffsetInput->input()->setRange(-100, 100, 1, true);
     d->xOffsetInput->setDefaultValue(0);
     d->xOffsetInput->setWhatsThis(i18n("X offset "));
-    
+
     // -------------------------------------------------------------
 
     QLabel *label5 = new QLabel(i18n("Y offset:"));
@@ -199,7 +199,7 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
     d->yOffsetInput->input()->setRange(-100, 100, 1, true);
     d->yOffsetInput->setDefaultValue(0);
     d->yOffsetInput->setWhatsThis(i18n("Y offset "));
-    
+
     KSeparator *line = new KSeparator (Qt::Horizontal);
 
     // -------------------------------------------------------------
@@ -246,7 +246,7 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
     mainLayout->addWidget(line,                   11, 0, 1, 3);
     mainLayout->addWidget(label6,                 12, 0, 1, 3);
     mainLayout->addWidget(d->brightnessInput,     13, 0, 1, 3);
-    mainLayout->addWidget(label7,                 14, 0, 1, 3);   
+    mainLayout->addWidget(label7,                 14, 0, 1, 3);
     mainLayout->addWidget(d->contrastInput,       15, 0, 1, 3);
     mainLayout->addWidget(label8,                 16, 0, 1, 3);
     mainLayout->addWidget(d->gammaInput,          17, 0, 1, 3);
@@ -280,13 +280,13 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
 
     connect(d->gammaInput, SIGNAL(valueChanged (double)),
             this, SLOT(slotTimer()));
-            
+
     connect(d->xOffsetInput, SIGNAL(valueChanged (double)),
-            this, SLOT(slotTimer()));    
-    
+            this, SLOT(slotTimer()));
+
     connect(d->yOffsetInput, SIGNAL(valueChanged (double)),
             this, SLOT(slotTimer()));
-            
+
     connect(d->addVignettingCheck, SIGNAL(toggled(bool)),
             this, SLOT(slotTimer()));
 }
@@ -332,7 +332,7 @@ void AntiVignettingTool::writeSettings()
     group.writeEntry(d->configContrastAdjustmentEntry,   d->contrastInput->value());
     group.writeEntry(d->configGammaAdjustmentEntry,      d->gammaInput->value());
     group.writeEntry(d->configAddVignettingEntry,        d->addVignettingCheck->isChecked());
-    
+
     group.sync();
 }
 
@@ -361,12 +361,12 @@ void AntiVignettingTool::enableSettings(bool b)
     d->radiusInput->setEnabled(b);
     d->brightnessInput->setEnabled(b);
     d->contrastInput->setEnabled(b);
-    d->gammaInput->setEnabled(b); 
+    d->gammaInput->setEnabled(b);
     d->xOffsetInput->setEnabled(b);
     d->yOffsetInput->setEnabled(b);
     d->addVignettingCheck->setEnabled(b);
 }
-  
+
 void AntiVignettingTool::prepareEffect()
 {
     enableSettings(false);
@@ -377,10 +377,10 @@ void AntiVignettingTool::prepareEffect()
     bool   addvignetting  = d->addVignettingCheck->isChecked();
     double xoffset        = d->xOffsetInput->value();
     double yoffset        = d->yOffsetInput->value();
-        
+
     ImageIface* iface = d->previewWidget->imageIface();
     int orgWidth               = iface->originalWidth();
-    int orgHeight              = iface->originalHeight();  
+    int orgHeight              = iface->originalHeight();
     int previewWidth           = iface->previewWidth();
     int previewHeight          = iface->previewHeight();
     DImg imTemp                = iface->getOriginalImg()->smoothScale(previewWidth, previewHeight, Qt::KeepAspectRatio);
@@ -399,7 +399,7 @@ void AntiVignettingTool::prepareEffect()
     pt.end();
     d->maskPreviewLabel->setPixmap(pix);
 
-    setFilter(dynamic_cast<DImgThreadedFilter *>(
+    setFilter(dynamic_cast<DImgThreadedFilter*>(
                        new AntiVignetting(&imTemp, this, dens, power, rad, xoffset, yoffset, true, addvignetting)));
 }
 
@@ -413,10 +413,10 @@ void AntiVignettingTool::prepareFinal()
     bool   addvignetting = d->addVignettingCheck->isChecked();
     double xoffset       = d->xOffsetInput->value();
     double yoffset       = d->yOffsetInput->value();
-    
+
     ImageIface iface(0, 0);
 
-    setFilter(dynamic_cast<DImgThreadedFilter *>(
+    setFilter(dynamic_cast<DImgThreadedFilter*>(
                        new AntiVignetting(iface.getOriginalImg(), this, dens, power, rad, xoffset, yoffset, true, addvignetting)));
 }
 
@@ -427,17 +427,15 @@ void AntiVignettingTool::putPreviewData()
 
     // Adjust Image BCG.
 
-    double b = (double)(d->brightnessInput->value() / 100.0);
-    double c = (double)(d->contrastInput->value()   / 100.0) + (double)(1.00);
-    double g = d->gammaInput->value();
+    BCGContainer settings;
+    settings.brightness = (double)(d->brightnessInput->value() / 250.0);
+    settings.contrast   = (double)(d->contrastInput->value()   / 100.0) + 1.00;
+    settings.gamma      = d->gammaInput->value();
 
-    BCGModifier cmod;
-    cmod.setGamma(g);
-    cmod.setBrightness(b);
-    cmod.setContrast(c);
-    cmod.applyBCG(imDest);
+    BCGFilter bcg(&imDest, 0L, settings);
+    bcg.startFilterDirectly();
 
-    iface->putPreviewImage((imDest.smoothScale(iface->previewWidth(), iface->previewHeight())).bits());
+    iface->putPreviewImage((bcg.getTargetImage().smoothScale(iface->previewWidth(), iface->previewHeight())).bits());
     d->previewWidget->updatePreview();
 }
 
@@ -447,17 +445,15 @@ void AntiVignettingTool::putFinalData()
     ImageIface* iface = d->previewWidget->imageIface();
     DImg finalImage   = filter()->getTargetImage();
 
-    double b = (double)(d->brightnessInput->value() / 250.0); 
-    double c = (double)(d->contrastInput->value()   / 100.0) + (double)(1.00);
-    double g = d->gammaInput->value();
+    BCGContainer settings;
+    settings.brightness = (double)(d->brightnessInput->value() / 250.0);
+    settings.contrast   = (double)(d->contrastInput->value()   / 100.0) + 1.00;
+    settings.gamma      = d->gammaInput->value();
 
-    BCGModifier cmod;
-    cmod.setGamma(g);
-    cmod.setBrightness(b);
-    cmod.setContrast(c);
-    cmod.applyBCG(finalImage);
+    BCGFilter bcg(&finalImage, 0L, settings);
+    bcg.startFilterDirectly();
 
-    iface->putOriginalImage(i18n("Vignetting Correction"), finalImage.bits());
+    iface->putOriginalImage(i18n("Vignetting Correction"), bcg.getTargetImage().bits());
     kapp->restoreOverrideCursor();
 }
 
@@ -468,7 +464,7 @@ void AntiVignettingTool::blockWidgetSignals(bool b)
     d->radiusInput->blockSignals(b);
     d->brightnessInput->blockSignals(b);
     d->contrastInput->blockSignals(b);
-    d->gammaInput->blockSignals(b); 
+    d->gammaInput->blockSignals(b);
     d->xOffsetInput->blockSignals(b);
     d->yOffsetInput->blockSignals(b);
     d->addVignettingCheck->blockSignals(b);

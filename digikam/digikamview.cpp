@@ -186,7 +186,7 @@ DigikamView::DigikamView(QWidget *parent, DigikamModelCollection *modelCollectio
     // date view
     d->dateViewSideBar = new DateFolderViewSideBarWidget(d->leftSideBar,
                     d->modelCollection->getDateAlbumModel(),
-                    d->iconView->imageFilterModel());
+                    d->iconView->imageAlbumFilterModel());
     d->leftSideBarWidgets << d->dateViewSideBar;
 
     // Tags sidebar tab contents.
@@ -454,8 +454,8 @@ void DigikamView::setupConnections()
     connect(d->albumWidgetStack, SIGNAL(signalFindSimilar()),
             this, SLOT(slotImageFindSimilar()));
 
-    connect(d->albumWidgetStack, SIGNAL(signalUrlSelected(const KUrl&)),
-            this, SLOT(slotSelectItemByUrl(const KUrl&)));
+    connect(d->albumWidgetStack, SIGNAL(signalImageSelected(const ImageInfo&)),
+            d->iconView, SLOT(setCurrentInfo(const ImageInfo&)));
 
     connect(d->albumWidgetStack, SIGNAL(signalAddToExistingQueue(int)),
             this, SLOT(slotImageAddToExistingQueue(int)));
@@ -499,7 +499,7 @@ void DigikamView::setupConnections()
 
 void DigikamView::connectIconViewFilter(AlbumIconViewFilter *filter)
 {
-    ImageAlbumFilterModel *model = d->iconView->imageFilterModel();
+    ImageAlbumFilterModel *model = d->iconView->imageAlbumFilterModel();
 
     connect(filter, SIGNAL(ratingFilterChanged(int, ImageFilterSettings::RatingCondition)),
             model, SLOT(setRatingFilter(int, ImageFilterSettings::RatingCondition)));
@@ -968,7 +968,7 @@ void DigikamView::slotAlbumRefresh()
         ScanController::instance()->scheduleCollectionScan(static_cast<PAlbum*>(album)->folderPath());
     // force reload. Should normally not be necessary, but we may have bugs
     qlonglong currentId = d->iconView->currentInfo().id();
-    d->iconView->imageModel()->refresh();
+    d->iconView->imageAlbumModel()->refresh();
     if (currentId != -1)
         d->iconView->setCurrentWhenAvailable(currentId);
 }
@@ -1058,8 +1058,6 @@ void DigikamView::setThumbSize(int size)
 
 void DigikamView::slotThumbSizeEffect()
 {
-    emit signalNoCurrentItem();
-
     d->iconView->setThumbnailSize(d->thumbSize);
     toggleZoomActions();
 
@@ -1575,12 +1573,12 @@ void DigikamView::toggleShowBar(bool b)
 
 void DigikamView::setRecurseAlbums(bool recursive)
 {
-    d->iconView->imageModel()->setRecurseAlbums(recursive);
+    d->iconView->imageAlbumModel()->setRecurseAlbums(recursive);
 }
 
 void DigikamView::setRecurseTags(bool recursive)
 {
-    d->iconView->imageModel()->setRecurseTags(recursive);
+    d->iconView->imageAlbumModel()->setRecurseTags(recursive);
 }
 
 void DigikamView::slotSidebarTabTitleStyleChanged()

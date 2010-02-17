@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef TAGFILTERVIEW_H
-#define TAGFILTERVIEW_H
+#ifndef TAGCHECKVIEW_H
+#define TAGCHECKVIEW_H
 
 // Local includes
 #include "imagefiltersettings.h"
@@ -77,7 +77,7 @@ public Q_SLOTS:
 
 protected:
     virtual void addCustomContextMenuActions(ContextMenuHelper &cmh, Album *album);
-    virtual void handleCustomContextMenuAction(QAction *action, Album *album);
+    virtual void handleCustomContextMenuAction(QAction *action, AlbumPointer<Album> album);
 
 private Q_SLOTS:
 
@@ -94,4 +94,4 @@ private:
 
 }
 
-#endif /* TAGFILTERVIEW_H */
+#endif /* TAGCHECKVIEW_H */

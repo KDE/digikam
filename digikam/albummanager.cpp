@@ -45,7 +45,6 @@ extern "C"
 
 #include <QApplication>
 #include <QByteArray>
-#include <QComboBox>
 #include <QDBusConnection>
 #include <QDBusInterface>
 #include <QDBusReply>
@@ -62,6 +61,7 @@ extern "C"
 
 // KDE includes
 
+#include <kcombobox.h>
 #include <kconfig.h>
 #include <klocale.h>
 #include <kdeversion.h>
@@ -211,6 +211,9 @@ public:
     QTimer*                     tagItemCountTimer;
     QSet<int>                   changedPAlbums;
 
+    QMap<int, int>              pAlbumsCount;
+    QMap<int, int>              tAlbumsCount;
+    QMap<YearMonth, int>        dAlbumsCount;
 
     QList<QDateTime> buildDirectoryModList(const QFileInfo& dbFile)
     {
@@ -365,7 +368,7 @@ static bool moveToBackup(const QFileInfo& info)
         KIO::Job *job = KIO::file_move(info.filePath(), backup.filePath(), -1, KIO::Overwrite | KIO::HideProgressInfo);
         if (!KIO::NetAccess::synchronousRun(job, 0))
         {
-            KMessageBox::error(0, i18n("Failed to backup the existing database file (\"%1\")."
+            KMessageBox::error(0, i18n("Failed to backup the existing database file (\"%1\"). "
                                        "Refusing to replace file without backup, using the existing file.",
                                         info.filePath()));
             return false;
@@ -861,7 +864,7 @@ bool AlbumManager::setDatabase(const QString dbType, const QString dbName, const
         layout->setColumnStretch(1, 1);
 
         QRadioButton *migrateButton = 0;
-        QComboBox *migrateChoices = 0;
+        KComboBox *migrateChoices = 0;
         if (!candidateIds.isEmpty())
         {
             migrateButton = new QRadioButton;
@@ -872,7 +875,7 @@ bool AlbumManager::setDatabase(const QString dbType, const QString dbName, const
                         "The collection is now located at this place:</p>"));
             migrateLabel->setWordWrap(true);
 
-            migrateChoices = new QComboBox;
+            migrateChoices = new KComboBox;
             for (int i=0; i<candidateIds.size(); ++i)
                 migrateChoices->addItem(candidateDescriptions[i], candidateIds[i]);
 
@@ -2501,6 +2504,21 @@ bool AlbumManager::deleteSAlbum(SAlbum* album)
     return true;
 }
 
+QMap<int, int> AlbumManager::getPAlbumsCount() const
+{
+    return d->pAlbumsCount;
+}
+
+QMap<int, int> AlbumManager::getTAlbumsCount() const
+{
+    return d->tAlbumsCount;
+}
+
+QMap<YearMonth, int> AlbumManager::getDAlbumsCount() const
+{
+    return d->dAlbumsCount;
+}
+
 void AlbumManager::insertPAlbum(PAlbum *album, PAlbum *parent)
 {
     if (!album)
@@ -2617,6 +2635,7 @@ void AlbumManager::slotAlbumsJobData(KIO::Job*, const QByteArray& data)
     QDataStream ds(&di, QIODevice::ReadOnly);
     ds >> albumsStatMap;
 
+    d->pAlbumsCount = albumsStatMap;
     emit signalPAlbumsDirty(albumsStatMap);
 }
 
@@ -2641,6 +2660,7 @@ void AlbumManager::slotTagsJobData(KIO::Job*, const QByteArray& data)
     QDataStream ds(&di, QIODevice::ReadOnly);
     ds >> tagsStatMap;
 
+    d->tAlbumsCount = tagsStatMap;
     emit signalTAlbumsDirty(tagsStatMap);
 }
 
@@ -2778,6 +2798,7 @@ void AlbumManager::slotDatesJobData(KIO::Job*, const QByteArray& data)
         emit signalAlbumHasBeenDeleted(album);
     }
 
+    d->dAlbumsCount = yearMonthMap;
     emit signalDAlbumsDirty(yearMonthMap);
     emit signalDatesMapDirty(datesStatMap);
 }
@@ -2822,7 +2843,7 @@ void AlbumManager::slotTagChange(const TagChangeset& changeset)
         case TagChangeset::Renamed:
         case TagChangeset::IconChanged:
             /**
-             * @todo
+             * @todo what happens here?
              */
             break;
         case TagChangeset::Unknown:

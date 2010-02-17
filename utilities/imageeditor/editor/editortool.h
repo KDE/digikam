@@ -102,7 +102,6 @@ protected Q_SLOTS:
     virtual void slotEffect(){};
     virtual void slotChannelChanged(){};
     virtual void slotScaleChanged(){};
-    virtual void slotColorsChanged(){};
 
 private:
 

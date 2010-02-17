@@ -34,6 +34,8 @@
 
 #include <kdebug.h>
 #include <kiconloader.h>
+#include <kio/job.h>
+#include <kio/jobuidelegate.h>
 #include <kmenu.h>
 
 // Local includes
@@ -122,28 +124,31 @@ class AbstractAlbumTreeViewPriv
 
 public:
     AbstractAlbumTreeViewPriv() :
+        delegate(0),
+        expandOnSingleClick(false),
+        expandNewCurrent(false),
+        selectAlbumOnClick(false),
+        selectOnContextMenu(true),
+        enableContextMenu(false),
         configSelectionEntry("Selection"),
         configExpansionEntry("Expansion"),
         configCurrentIndexEntry("CurrentIndex"),
         configSortColumnEntry("SortColumn"),
-        configSortOrderEntry("SortOrder")
+        configSortOrderEntry("SortOrder"),
+        resizeColumnsTimer(0)
     {
-        delegate            = 0;
-        expandOnSingleClick = false;
-        selectAlbumOnClick  = false;
-        selectOnContextMenu = true;
-        enableContextMenu   = false;
-        resizeColumnsTimer  = 0;
     }
 
     AlbumTreeViewDelegate *delegate;
 
     bool expandOnSingleClick;
+    bool expandNewCurrent;
     bool selectAlbumOnClick;
     bool selectOnContextMenu;
     bool enableContextMenu;
 
     QMap<int, State> statesByAlbumId;
+    QMap<int, State> searchBackup;
 
     const QString configSelectionEntry;
     const QString configExpansionEntry;
@@ -152,6 +157,8 @@ public:
     const QString configSortOrderEntry;
 
     QTimer       *resizeColumnsTimer;
+
+    AlbumPointer<Album> lastSelectedAlbum;
 
 };
 
@@ -185,6 +192,9 @@ AbstractAlbumTreeView::AbstractAlbumTreeView(AbstractSpecificAlbumModel *model, 
 
     connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
              this, SLOT(albumSettingsChanged()));
+    connect(this, SIGNAL(currentAlbumChanged(Album*)),
+            this, SLOT(currentAlbumChangedForBackupSelection(Album*)));
+
 }
 
 AbstractAlbumTreeView::~AbstractAlbumTreeView()
@@ -210,8 +220,10 @@ void AbstractAlbumTreeView::setAlbumFilterModel(AlbumFilterModel *filterModel)
     m_albumFilterModel = filterModel;
     m_albumFilterModel->setSourceAlbumModel(m_albumModel);
 
-    connect(m_albumFilterModel, SIGNAL(filterChanged()),
-             this, SLOT(slotFilterChanged()));
+    connect(m_albumFilterModel, SIGNAL(searchTextSettingsAboutToChange(bool, bool)),
+             this, SLOT(slotSearchTextSettingsAboutToChange(bool, bool)));
+    connect(m_albumFilterModel, SIGNAL(searchTextSettingsChanged(bool, bool)),
+             this, SLOT(slotSearchTextSettingsChanged(bool, bool)));
 
     setModel(m_albumFilterModel);
 
@@ -248,6 +260,11 @@ void AbstractAlbumTreeView::setExpandOnSingleClick(bool doThat)
     d->expandOnSingleClick = doThat;
 }
 
+void AbstractAlbumTreeView::setExpandNewCurrentItem(bool doThat)
+{
+    d->expandNewCurrent = doThat;
+}
+
 void AbstractAlbumTreeView::setSelectAlbumOnClick(bool selectOnClick)
 {
     d->selectAlbumOnClick = selectOnClick;
@@ -263,28 +280,71 @@ QModelIndex AbstractAlbumTreeView::indexVisuallyAt(const QPoint& p)
     return QModelIndex();
 }
 
-void AbstractAlbumTreeView::slotFilterChanged()
+void AbstractAlbumTreeView::slotSearchTextSettingsAboutToChange(bool searched, bool willSearch)
 {
-    if (!m_albumFilterModel->isFiltering())
+
+    // backup before we begin searching
+    if (!searched && willSearch && d->searchBackup.isEmpty())
     {
-        // Returning from search: collapse all, expand to current album
-        collapseAll();
-        Album *currentAlbum = AlbumManager::instance()->currentAlbum();
-        if (currentAlbum)
+
+        kDebug() << "Searching started, backing up state";
+
+        QList<int> selection, expansion;
+        saveStateRecursive(QModelIndex(), selection, expansion);
+
+        // selection is ignored here because the user may have changed this
+        // while searching
+        foreach (const int &expandedId, expansion)
         {
-            QModelIndex current = m_albumFilterModel->indexForAlbum(currentAlbum);
-            expand(current);
-            scrollTo(current);
+            d->searchBackup[expandedId].expanded = true;
         }
-        else
-        {
-            // expand only root
-            expand(m_albumFilterModel->rootAlbumIndex());
-        }
-        return;
+
+        // also backup the last selected album in case this didn't work via the
+        // slot
+        Album *current = currentAlbum<Album>(selectionModel(), m_albumFilterModel);
+        d->lastSelectedAlbum = current;
+
     }
 
-    checkExpandedState(QModelIndex());
+}
+
+void AbstractAlbumTreeView::slotSearchTextSettingsChanged(bool wasSearching, bool searched)
+{
+
+    // ensure that all search results are visible if there is currently a search
+    // working
+    if (searched)
+    {
+        kDebug() << "Searched, expanding all results";
+        checkExpandedState(QModelIndex());
+    }
+
+    // restore the tree view state if searching finished
+    if (wasSearching && !searched && !d->searchBackup.isEmpty())
+    {
+
+        kDebug() << "Searching finished, restoring tree view state";
+
+        collapseAll();
+        restoreStateForHierarchy(QModelIndex(), d->searchBackup);
+        d->searchBackup.clear();
+
+        if (d->lastSelectedAlbum)
+        {
+            slotSelectAlbum(d->lastSelectedAlbum, false);
+            // doing this twice somehow ensures that all parents are expanded
+            // and we are at the right position. Maybe a hack... ;)
+            scrollTo(m_albumFilterModel->indexForAlbum(d->lastSelectedAlbum));
+            scrollTo(m_albumFilterModel->indexForAlbum(d->lastSelectedAlbum));
+        }
+
+    }
+
+}
+
+void AbstractAlbumTreeView::currentAlbumChangedForBackupSelection(Album *currentAlbum)
+{
+    d->lastSelectedAlbum = currentAlbum;
 }
 
 void AbstractAlbumTreeView::slotRootAlbumAvailable()
@@ -296,14 +356,16 @@ bool AbstractAlbumTreeView::checkExpandedState(const QModelIndex& index)
 {
     bool anyMatch = false;
 
+    // expand index if a child matches
     QModelIndex source_index = m_albumFilterModel->mapToSource(index);
     AlbumFilterModel::MatchResult result = m_albumFilterModel->matchResult(source_index);
-    if (result == AlbumFilterModel::ChildMatch)
+    if (result == AlbumFilterModel::ChildMatch || result == AlbumFilterModel::SpecialMatch)
         expand(index);
     anyMatch = result;
 
+    // expand children if they have a (indirect) match
     int rows = m_albumFilterModel->rowCount(index);
-    for (int i=0; i<rows; ++i)
+    for (int i = 0; i < rows; ++i)
     {
         QModelIndex child = m_albumFilterModel->index(i, 0, index);
         bool childResult = checkExpandedState(child);
@@ -348,16 +410,24 @@ void AbstractAlbumTreeView::mousePressEvent(QMouseEvent *e)
         }
     }
 
-    if (d->expandOnSingleClick && e->button() == Qt::LeftButton)
+    if ((d->expandOnSingleClick || d->expandNewCurrent) && e->button() == Qt::LeftButton)
     {
         QModelIndex index = indexVisuallyAt(e->pos());
         if (index.isValid())
         {
-            // See B.K.O #126871: collapse/expand treeview using left mouse button single click.
-            // Exception: If a newly selected item is already expanded, do not collapse on selection.
-            bool expanded = isExpanded(index);
-            if (index == currentIndex() || !expanded)
-                setExpanded(index, !expanded);
+            if (d->expandOnSingleClick)
+            {
+                // See B.K.O #126871: collapse/expand treeview using left mouse button single click.
+                // Exception: If a newly selected item is already expanded, do not collapse on selection.
+                bool expanded = isExpanded(index);
+                if (index == currentIndex() || !expanded)
+                    setExpanded(index, !expanded);
+            }
+            else
+            {
+                if (index != currentIndex())
+                    expand(index);
+            }
         }
     }
     else if (m_checkOnMiddleClick && e->button() == Qt::MidButton)
@@ -407,7 +477,10 @@ void AbstractAlbumTreeView::dragEnterEvent(QDragEnterEvent *e)
 {
     AlbumModelDragDropHandler *handler = m_albumModel->dragDropHandler();
     if (handler && handler->acceptsMimeData(e->mimeData()))
+    {
+        setState(DraggingState);
         e->accept();
+    }
     else
         e->ignore();
 }
@@ -452,11 +525,12 @@ void AbstractAlbumTreeView::doLoadState()
 
     KConfigGroup configGroup = getConfigGroup();
 
-    kDebug() << "Loading view state from " << configGroup.name();
+    //kDebug() << "Loading view state from " << this << configGroup.name() << objectName();
 
+    // extract the selection from the config
     const QStringList selection = configGroup.readEntry(entryName(d->configSelectionEntry),
                     QStringList());
-    kDebug() << "selection: " << selection;
+    //kDebug() << "selection: " << selection;
     foreach(const QString &key, selection)
     {
         bool validId;
@@ -467,10 +541,11 @@ void AbstractAlbumTreeView::doLoadState()
         }
     }
 
+    // extract expansion state from config
     const QStringList expansion = configGroup.readEntry(entryName(d->configExpansionEntry),
                     QStringList());
-    kDebug() << "expansion: " << expansion;
-    foreach( const QString &key, expansion )
+    //kDebug() << "expansion: " << expansion;
+    foreach(const QString &key, expansion)
     {
         bool validId;
         int id = key.toInt(&validId);
@@ -480,8 +555,9 @@ void AbstractAlbumTreeView::doLoadState()
         }
     }
 
+    // extract current index from config
     const QString key = configGroup.readEntry(entryName(d->configCurrentIndexEntry), QString());
-    kDebug() << "currentIndey: " << key;
+    //kDebug() << "currentIndex: " << key;
     bool validId;
     const int id = key.toInt(&validId);
     if (validId)
@@ -489,106 +565,149 @@ void AbstractAlbumTreeView::doLoadState()
         d->statesByAlbumId[id].currentIndex = true;
     }
 
+    /*
     for (QMap<int, Digikam::State>::iterator it = d->statesByAlbumId.begin(); it
-                    != d->statesByAlbumId.end(); ++it)
+        != d->statesByAlbumId.end(); ++it)
     {
         kDebug() << "id = " << it.key() << ": recovered state (selected = "
-                 << it.value().selected << ", expanded = "
-                 << it.value().expanded << ", currentIndex = "
-                 << it.value().currentIndex << ")";
+        << it.value().selected << ", expanded = "
+        << it.value().expanded << ", currentIndex = "
+        << it.value().currentIndex << ")";
     }
+    */
 
 
     // initial restore run, for everything already loaded
-    kDebug() << "initial restore run with " << model()->rowCount() << " rows";
-    for (int i = 0; i < model()->rowCount(); ++i)
-    {
-        const QModelIndex index = model()->index(i, 0);
-        restoreState(index);
-    }
-
-    if (!d->statesByAlbumId.empty())
-    {
-        // and the watch the model for new items added
-        connect(model(), SIGNAL(rowsInserted(QModelIndex, int, int)),
-                         SLOT(slotFixRowsInserted(QModelIndex, int, int)), Qt::QueuedConnection);
-    }
+    //kDebug() << "initial restore run with " << model()->rowCount() << " rows";
+    restoreStateForHierarchy(QModelIndex(), d->statesByAlbumId);
 
     // also restore the sorting order
     sortByColumn(configGroup.readEntry(entryName(d->configSortColumnEntry), 0),
                  (Qt::SortOrder) configGroup.readEntry(entryName(d->configSortOrderEntry), (int) Qt::AscendingOrder));
 
+    // use a timer to scroll to the first possible selected album
+    QTimer *selectCurrentTimer = new QTimer(this);
+    selectCurrentTimer->setInterval(200);
+    selectCurrentTimer->setSingleShot(true);
+    connect(selectCurrentTimer, SIGNAL(timeout()),
+            this, SLOT(scrollToSelectedAlbum()));
+
 }
 
-void AbstractAlbumTreeView::restoreState(const QModelIndex &index)
+void AbstractAlbumTreeView::restoreStateForHierarchy(const QModelIndex &index, QMap<int, Digikam::State> &stateStore)
 {
-
-    Album *album = albumFilterModel()->albumForIndex(index);
-    if (album)
-    {
-
-        Digikam::State state = d->statesByAlbumId[album->id()];
-
-        /*kDebug() << "Trying to restore state of album " << album->title()
-                 << ": state(selected = " << state.selected
-                 << ", expanded = " << state.expanded
-                 << ", currentIndex = " << state.currentIndex << ")";*/
-        if (state.selected)
-        {
-            selectionModel()->select(index, QItemSelectionModel::Select
-                            | QItemSelectionModel::Rows);
-        }
-        if (state.expanded)
-        {
-            setExpanded(index, true);
-        }
-        if (state.currentIndex)
-        {
-            setCurrentIndex(index);
-        }
-
-        // remove this state so that we don't get in trouble later in case the
-        // same album id is reused again
-        d->statesByAlbumId.remove(album->id());
-
-        if (d->statesByAlbumId.empty())
-        {
-            // disconnect if not needed anymore
-            disconnect(model(), SIGNAL(rowsInserted(QModelIndex, int, int)),
-                       this, SLOT(slotFixRowsInserted(QModelIndex, int, int)));
-        }
-
-    }
-    else
-    {
-        kError() << "got an invalid album for the index";
-    }
-
+    restoreState(index, stateStore);
     // do a recursive call of the state restoration
     for (int i = 0; i < model()->rowCount(index); ++i)
     {
         const QModelIndex child = model()->index(i, 0, index);
-        restoreState(child);
+        restoreStateForHierarchy(child, stateStore);
     }
-
 }
 
-void AbstractAlbumTreeView::slotFixRowsInserted(const QModelIndex &index, int start, int end)
+void AbstractAlbumTreeView::restoreState(const QModelIndex &index, QMap<int, Digikam::State> &stateStore)
 {
-
-    kDebug() << "slot rowInserted called with index = " << index
-             << ", start = " << start << ", end = " << end;
-
-    for (int i = start; i <= end; ++i)
+    Album *album = albumFilterModel()->albumForIndex(index);
+    if (album && stateStore.contains(album->id()))
     {
-        const QModelIndex child = model()->index(i, 0, index);
-        restoreState(child);
+
+        Digikam::State state = stateStore.value(album->id());
+
+        /*
+        kDebug() << "Trying to restore state of album " << album->title()
+                 << ": state(selected = " << state.selected
+                 << ", expanded = " << state.expanded
+                 << ", currentIndex = " << state.currentIndex << ")" << this;
+        */
+        if (state.selected)
+        {
+            //kDebug() << "Selecting" << album->title();
+            selectionModel()->select(index, QItemSelectionModel::SelectCurrent
+                                          | QItemSelectionModel::Rows);
+        }
+
+        // restore expansion state but ensure that the root album is always
+        // expanded
+        if (!album->isRoot())
+        {
+            setExpanded(index, state.expanded);
+        }
+        else
+        {
+            setExpanded(index, true);
+        }
+
+        // restore the current index
+        if (state.currentIndex)
+        {
+            //kDebug() << "Setting current index" << album->title();
+            selectionModel()->setCurrentIndex(index, QItemSelectionModel::SelectCurrent
+                                                   | QItemSelectionModel::Rows);
+        }
+    }
+}
+
+void AbstractAlbumTreeView::rowsInserted(const QModelIndex &parent, int start, int end)
+{
+    QTreeView::rowsInserted(parent, start, end);
+
+    if (!d->statesByAlbumId.isEmpty())
+    {
+        //kDebug() << "slot rowInserted called with index = " << index
+        //         << ", start = " << start << ", end = " << end << "remaining ids" << d->statesByAlbumId.keys();
+
+        // Restore state for parent a second time - expansion can only be restored if there are children
+        restoreState(parent, d->statesByAlbumId);
+
+        for (int i = start; i <= end; ++i)
+        {
+            const QModelIndex child = model()->index(i, 0, parent);
+            restoreState(child, d->statesByAlbumId);
+        }
+    }
+}
+
+void AbstractAlbumTreeView::rowsAboutToBeRemoved(const QModelIndex& parent, int start, int end)
+{
+    QTreeView::rowsAboutToBeRemoved(parent, start, end);
+
+    // Clean up map if album id is reused for a new album
+    if (!d->statesByAlbumId.isEmpty())
+    {
+        for (int i = start; i <= end; ++i)
+        {
+            const QModelIndex child = model()->index(i, 0, parent);
+            Album *album = albumModel()->albumForIndex(child);
+            if (album)
+                d->statesByAlbumId.remove(album->id());
+        }
     }
 }
 
 void AbstractAlbumTreeView::adaptColumnsToContent()
 {
     resizeColumnToContents(0);
+}
+
+void AbstractAlbumTreeView::scrollToSelectedAlbum()
+{
+    QModelIndexList selected = selectedIndexes();
+    if (!selected.isEmpty())
+    {
+        scrollTo(selected.first());
+    }
+}
+
+void AbstractAlbumTreeView::expandEverything(const QModelIndex &index)
+{
+
+    for (int row = 0; row < albumFilterModel()->rowCount(index); ++row)
+    {
+        QModelIndex rowIndex = albumFilterModel()->index(row, 0, index);
+        expand(rowIndex);
+        expandEverything(rowIndex);
+    }
+
 }
 
 void AbstractAlbumTreeView::adaptColumnsOnDataChange(const QModelIndex &topLeft, const QModelIndex &bottomRight)
@@ -619,7 +738,7 @@ void AbstractAlbumTreeView::doSaveState()
 
     KConfigGroup configGroup = getConfigGroup();
 
-    QStringList selection, expansion;
+    QList<int> selection, expansion;
     for (int i = 0; i < model()->rowCount(); ++i)
     {
         const QModelIndex index = model()->index(i, 0);
@@ -633,9 +752,9 @@ void AbstractAlbumTreeView::doSaveState()
         currentIndex = QString::number(selectedAlbum->id());
     }
 
-    kDebug() << "selection: " << selection;
-    kDebug() << "expansion: " << expansion;
-    kDebug() << "currentIndex: " << currentIndex;
+//    kDebug() << "selection: " << selection;
+//    kDebug() << "expansion: " << expansion;
+//    kDebug() << "currentIndex: " << currentIndex;
 
     configGroup.writeEntry(entryName(d->configSelectionEntry), selection);
     configGroup.writeEntry(entryName(d->configExpansionEntry), expansion);
@@ -645,20 +764,26 @@ void AbstractAlbumTreeView::doSaveState()
 
 }
 
-void AbstractAlbumTreeView::saveStateRecursive(const QModelIndex &index, QStringList &selection,
-                QStringList &expansion)
+void AbstractAlbumTreeView::saveStateRecursive(const QModelIndex &index,
+                QList<int> &selection, QList<int> &expansion)
 {
-    const QString cfgKey = QString::number(albumFilterModel()->albumForIndex(
-                    index)->id());
-    if (selectionModel()->isSelected(index))
-        selection.append(cfgKey);
-    if (isExpanded(index))
-        expansion.append(cfgKey);
+
+    Album *album = albumFilterModel()->albumForIndex(index);
+    if (album)
+    {
+        const int id = album->id();
+        if (selectionModel()->isSelected(index))
+            selection.append(id);
+        if (isExpanded(index))
+            expansion.append(id);
+    }
+
     for (int i = 0; i < model()->rowCount(index); ++i)
     {
         const QModelIndex child = model()->index(i, 0, index);
         saveStateRecursive(child, selection, expansion);
     }
+
 }
 
 void AbstractAlbumTreeView::setEnableContextMenu(bool enable)
@@ -710,10 +835,11 @@ void AbstractAlbumTreeView::contextMenuEvent(QContextMenuEvent *event)
     popmenu.addTitle(contextMenuIcon(), contextMenuTitle());
     ContextMenuHelper cmhelper(&popmenu);
 
+    AlbumPointer<Album> albumPointer(album);
     addCustomContextMenuActions(cmhelper, album);
 
     QAction* choice = cmhelper.exec(QCursor::pos());
-    handleCustomContextMenuAction(choice, album);
+    handleCustomContextMenuAction(choice, albumPointer);
 
 }
 
@@ -728,7 +854,7 @@ void AbstractAlbumTreeView::addCustomContextMenuActions(ContextMenuHelper &cmh, 
     Q_UNUSED(album);
 }
 
-void AbstractAlbumTreeView::handleCustomContextMenuAction(QAction *action, Album *album)
+void AbstractAlbumTreeView::handleCustomContextMenuAction(QAction *action, AlbumPointer<Album> album)
 {
     Q_UNUSED(action);
     Q_UNUSED(album);
@@ -778,9 +904,6 @@ void AbstractCountingAlbumTreeView::setAlbumFilterModel(AlbumFilterModel *filter
 {
     AbstractAlbumTreeView::setAlbumFilterModel(filterModel);
 
-    connect(m_albumFilterModel, SIGNAL(rowsInserted(const QModelIndex &, int, int)),
-             this, SLOT(slotRowsInserted(const QModelIndex &, int, int)));
-
     // Initialize expanded/collapsed showCount state
     updateShowCountState(QModelIndex(), true);
 }
@@ -815,8 +938,9 @@ void AbstractCountingAlbumTreeView::slotSetShowCount()
     static_cast<AbstractCountingAlbumModel*>(m_albumModel)->setShowCount(AlbumSettings::instance()->getShowFolderTreeViewItemsCount());
 }
 
-void AbstractCountingAlbumTreeView::slotRowsInserted(const QModelIndex& parent, int start, int end)
+void AbstractCountingAlbumTreeView::rowsInserted(const QModelIndex& parent, int start, int end)
 {
+    AbstractAlbumTreeView::rowsInserted(parent, start, end);
     // initialize showCount state when items are added
     for (int i=start; i<=end; ++i)
         updateShowCountState(m_albumFilterModel->index(i, 0, parent), false);
@@ -925,25 +1049,26 @@ void AbstractCheckableAlbumTreeView::doLoadState()
     }
 
     // initially sync with the albums that are already in the model
-    for (int i = 0; i < checkableModel()->rowCount(); ++i)
-    {
-        const QModelIndex index = checkableModel()->index(i, 0);
-        restoreCheckState(index);
-    }
-
-    // wait for missing albums in the background
-    if (!d->checkedAlbumIds.empty())
-    {
-        // and the watch the model for new items added
-        connect(checkableModel(), SIGNAL(rowsInserted(QModelIndex, int, int)),
-                this,  SLOT(slotRowsAddedCheckState(QModelIndex, int, int)), Qt::QueuedConnection);
-    }
-
+    restoreCheckStateForHierarchy(QModelIndex());
 }
 
-void AbstractCheckableAlbumTreeView::slotRowsAddedCheckState(QModelIndex index, int start, int end)
+void AbstractCheckableAlbumTreeView::rowsInserted(const QModelIndex& parent, int start, int end)
 {
-    for (int i = start; i <= end; ++i)
+    AbstractCountingAlbumTreeView::rowsInserted(parent, start, end);
+    if (!d->checkedAlbumIds.isEmpty())
+    {
+        for (int i = start; i <= end; ++i)
+        {
+            const QModelIndex child = checkableModel()->index(i, 0, parent);
+            restoreCheckState(child);
+        }
+    }
+}
+
+void AbstractCheckableAlbumTreeView::restoreCheckStateForHierarchy(const QModelIndex &index)
+{
+    // recurse children
+    for (int i = 0; i < checkableModel()->rowCount(index); ++i)
     {
         const QModelIndex child = checkableModel()->index(i, 0, index);
         restoreCheckState(child);
@@ -952,32 +1077,12 @@ void AbstractCheckableAlbumTreeView::slotRowsAddedCheckState(QModelIndex index, 
 
 void AbstractCheckableAlbumTreeView::restoreCheckState(const QModelIndex &index)
 {
-
     Album *album = checkableModel()->albumForIndex(index);
-    if (album)
+    if (album && d->checkedAlbumIds.contains(album->id()))
     {
-
-        if (d->checkedAlbumIds.contains(album->id()))
-        {
-            checkableModel()->setCheckState(album, Qt::Checked);
-            d->checkedAlbumIds.removeOne(album->id());
-            if (d->checkedAlbumIds.empty())
-            {
-                // disconnect if not needed anymore
-                disconnect(model(), SIGNAL(rowsInserted(QModelIndex, int, int)),
-                           this, SLOT(slotRowsAddedCheckState(QModelIndex, int, int)));
-            }
-        }
-
+        checkableModel()->setCheckState(album, Qt::Checked);
+        d->checkedAlbumIds.removeOne(album->id());
     }
-
-    // recurse children
-    for (int i = 0; i < checkableModel()->rowCount(index); ++i)
-    {
-        const QModelIndex child = checkableModel()->index(i, 0, index);
-        restoreCheckState(child);
-    }
-
 }
 
 void AbstractCheckableAlbumTreeView::doSaveState()
@@ -1009,10 +1114,14 @@ void AbstractCheckableAlbumTreeView::doSaveState()
 AlbumTreeView::AlbumTreeView(AlbumModel *model, QWidget *parent)
     : AbstractCheckableAlbumTreeView(model, parent)
 {
-    albumModel()->setDragDropHandler(new AlbumDragDropHandler(albumModel()));
+    AlbumDragDropHandler *handler = new AlbumDragDropHandler(albumModel());
+    albumModel()->setDragDropHandler(handler);
+    connect(handler, SIGNAL(dioResult(KJob*)),
+            this, SLOT(slotDIOResult(KJob*)));
 
     connect(AlbumManager::instance(), SIGNAL(signalPAlbumsDirty(const QMap<int, int>&)),
             m_albumModel, SLOT(setCountMap(const QMap<int, int>&)));
+    albumModel()->setCountMap(AlbumManager::instance()->getPAlbumsCount());
 
     expand(m_albumFilterModel->rootAlbumIndex());
     setRootIsDecorated(false);
@@ -1042,6 +1151,16 @@ PAlbum *AlbumTreeView::albumForIndex(const QModelIndex &index) const
     return dynamic_cast<PAlbum*> (m_albumFilterModel->albumForIndex(index));
 }
 
+void AlbumTreeView::slotDIOResult(KJob *kjob)
+{
+    KIO::Job *job = static_cast<KIO::Job*>(kjob);
+    if (job->error())
+    {
+        job->ui()->setWindow(this);
+        job->ui()->showErrorMessage();
+    }
+}
+
 // --------------------------------------- //
 
 TagTreeView::TagTreeView(TagModel *model, QWidget *parent)
@@ -1056,6 +1175,7 @@ TagTreeView::TagTreeView(TagModel *model, QWidget *parent)
 
     connect(AlbumManager::instance(), SIGNAL(signalTAlbumsDirty(const QMap<int, int>&)),
              m_albumModel, SLOT(setCountMap(const QMap<int, int>&)));
+    albumModel()->setCountMap(AlbumManager::instance()->getTAlbumsCount());
 
     expand(m_albumFilterModel->rootAlbumIndex());
     if (m_albumModel->rootAlbumBehavior() == AbstractAlbumModel::IncludeRootAlbum)

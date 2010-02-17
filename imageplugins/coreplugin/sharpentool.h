@@ -6,7 +6,7 @@
  * Date        : 2004-07-09
  * Description : a tool to sharp an image
  *
- * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,7 +47,7 @@ private Q_SLOTS:
     void slotSaveAsSettings();
     void slotLoadSettings();
     void slotResetSettings();
-    void slotSharpMethodActived(int);
+    void slotSettingsChanged();
 
 private:
 
@@ -59,16 +59,6 @@ private:
     void putPreviewData();
     void putFinalData();
     void renderingFinished();
-    void blockWidgetSignals(bool b);
-
-private:
-
-    enum SharpingMethods
-    {
-        SimpleSharp = 0,
-        UnsharpMask,
-        Refocus
-    };
 
 private:
 

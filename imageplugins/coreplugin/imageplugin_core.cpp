@@ -7,7 +7,7 @@
  * Description : digiKam image editor plugin core
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -55,7 +55,7 @@
 #include "ratiocroptool.h"
 #include "sharpentool.h"
 #include "redeyetool.h"
-#include "rgbtool.h"
+#include "cbtool.h"
 
 using namespace DigikamImagesPluginCore;
 using namespace Digikam;
@@ -72,7 +72,7 @@ public:
         redeyeAction(0),
         BCGAction(0),
         HSLAction(0),
-        RGBAction(0),
+        CBAction(0),
         autoCorrectionAction(0),
         invertAction(0),
         BWAction(0),
@@ -89,7 +89,7 @@ public:
     KAction*               redeyeAction;
     KAction*               BCGAction;
     KAction*               HSLAction;
-    KAction*               RGBAction;
+    KAction*               CBAction;
     KAction*               autoCorrectionAction;
     KAction*               invertAction;
     KAction*               BWAction;
@@ -123,11 +123,11 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QVariantList &)
             this, SLOT(slotHSL()));
 
     // NOTE: Photoshop 7 use CTRL+B.
-    d->RGBAction = new KAction(KIcon("adjustrgb"), i18n("Color Balance..."), this);
-    d->RGBAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_B));
-    actionCollection()->addAction("implugcore_rgb", d->RGBAction );
-    connect(d->RGBAction, SIGNAL(triggered(bool) ),
-            this, SLOT(slotRGB()));
+    d->CBAction = new KAction(KIcon("adjustrgb"), i18n("Color Balance..."), this);
+    d->CBAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_B));
+    actionCollection()->addAction("implugcore_rgb", d->CBAction );
+    connect(d->CBAction, SIGNAL(triggered(bool) ),
+            this, SLOT(slotCB()));
 
     // NOTE: Photoshop 7 use CTRL+SHIFT+B with
     d->autoCorrectionAction = new KAction(KIcon("autocorrection"), i18n("Auto-Correction..."), this);
@@ -239,7 +239,7 @@ void ImagePlugin_Core::setEnabledActions(bool b)
     d->convertTo16Bits->setEnabled(b);
     d->invertAction->setEnabled(b);
     d->BCGAction->setEnabled(b);
-    d->RGBAction->setEnabled(b);
+    d->CBAction->setEnabled(b);
     d->blurAction->setEnabled(b);
     d->redeyeAction->setEnabled(b);
     d->autoCorrectionAction->setEnabled(b);
@@ -317,9 +317,9 @@ void ImagePlugin_Core::slotBCG()
     loadTool(tool);
 }
 
-void ImagePlugin_Core::slotRGB()
+void ImagePlugin_Core::slotCB()
 {
-    RGBTool *tool = new RGBTool(this);
+    CBTool *tool = new CBTool(this);
     loadTool(tool);
 }
 
@@ -401,7 +401,7 @@ void ImagePlugin_Core::slotUpdateColorSpaceMenu()
                      << IccProfile::wideGamutRGB()
                      << IccProfile::proPhotoRGB();
 
-    foreach (IccProfile profile, standardProfiles)
+    foreach (IccProfile profile, standardProfiles) // krazy:exclude=foreach
     {
         d->profileMenuAction->addProfile(profile, profile.description());
         standardProfilePaths << profile.filePath();

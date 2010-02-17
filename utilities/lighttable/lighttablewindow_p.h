@@ -37,7 +37,7 @@
 
 #include "imagepropertiessidebardb.h"
 #include "statusprogressbar.h"
-#include "statuszoombar.h"
+#include "dzoombar.h"
 #include "lighttableview.h"
 #include "lighttablebar.h"
 #include "thumbbardock.h"
@@ -53,57 +53,61 @@ public:
 
     LightTableWindowPriv()
     {
-        autoLoadOnRightPanel   = true;
-        autoSyncPreview        = true;
-        fullScreenHideToolBar  = false;
-        fullScreen             = false;
-        removeFullScreenButton = false;
-        cancelSlideShow        = false;
-        star0                  = 0;
-        star1                  = 0;
-        star2                  = 0;
-        star3                  = 0;
-        star4                  = 0;
-        star5                  = 0;
-        leftSideBar            = 0;
-        rightSideBar           = 0;
-        previewView            = 0;
-        barView                = 0;
-        hSplitter              = 0;
-        barViewDock            = 0;
-        syncPreviewAction      = 0;
-        clearListAction        = 0;
-        setItemLeftAction      = 0;
-        setItemRightAction     = 0;
-        editItemAction         = 0;
-        removeItemAction       = 0;
-        fileDeleteAction       = 0;
-        fileDeleteFinalAction  = 0;
-        slideShowAction        = 0;
-        fullScreenAction       = 0;
-        donateMoneyAction      = 0;
-        zoomFitToWindowAction  = 0;
-        zoomTo100percents      = 0;
-        zoomPlusAction         = 0;
-        zoomMinusAction        = 0;
-        showThumbBarAction     = 0;
-        statusProgressBar      = 0;
-        leftZoomBar            = 0;
-        rightZoomBar           = 0;
-        forwardAction          = 0;
-        backwardAction         = 0;
-        firstAction            = 0;
-        lastAction             = 0;
-        navigateByPairAction   = 0;
-        rawCameraListAction    = 0;
-        libsInfoAction         = 0;
-        dbStatAction           = 0;
-        themeMenuAction        = 0;
-        contributeAction       = 0;
-        showMenuBarAction      = 0;
-        clearOnCloseAction     = 0;
-        leftFileName           = 0;
-        rightFileName          = 0;
+        autoLoadOnRightPanel       = true;
+        autoSyncPreview            = true;
+        fullScreenHideToolBar      = false;
+        fullScreen                 = false;
+        removeFullScreenButton     = false;
+        cancelSlideShow            = false;
+        star0                      = 0;
+        star1                      = 0;
+        star2                      = 0;
+        star3                      = 0;
+        star4                      = 0;
+        star5                      = 0;
+        leftSideBar                = 0;
+        rightSideBar               = 0;
+        previewView                = 0;
+        barView                    = 0;
+        hSplitter                  = 0;
+        barViewDock                = 0;
+        syncPreviewAction          = 0;
+        clearListAction            = 0;
+        setItemLeftAction          = 0;
+        setItemRightAction         = 0;
+        editItemAction             = 0;
+        removeItemAction           = 0;
+        fileDeleteAction           = 0;
+        fileDeleteFinalAction      = 0;
+        slideShowAction            = 0;
+        fullScreenAction           = 0;
+        donateMoneyAction          = 0;
+        showThumbBarAction         = 0;
+        statusProgressBar          = 0;
+        forwardAction              = 0;
+        backwardAction             = 0;
+        firstAction                = 0;
+        lastAction                 = 0;
+        navigateByPairAction       = 0;
+        rawCameraListAction        = 0;
+        libsInfoAction             = 0;
+        dbStatAction               = 0;
+        themeMenuAction            = 0;
+        contributeAction           = 0;
+        showMenuBarAction          = 0;
+        clearOnCloseAction         = 0;
+        leftZoomBar                = 0;
+        leftFileName               = 0;
+        leftZoomFitToWindowAction  = 0;
+        leftZoomTo100percents      = 0;
+        leftZoomPlusAction         = 0;
+        leftZoomMinusAction        = 0;
+        rightZoomBar               = 0;
+        rightFileName              = 0;
+        rightZoomFitToWindowAction = 0;
+        rightZoomTo100percents     = 0;
+        rightZoomPlusAction        = 0;
+        rightZoomMinusAction       = 0;
     }
 
     bool                      autoLoadOnRightPanel;
@@ -113,9 +117,6 @@ public:
     bool                      removeFullScreenButton;
     bool                      cancelSlideShow;
 
-    SidebarSplitter*          hSplitter;
-    ThumbBarDock*             barViewDock;
-
     KAction*                  setItemLeftAction;
     KAction*                  setItemRightAction;
     KAction*                  clearListAction;
@@ -124,13 +125,16 @@ public:
     KAction*                  fileDeleteAction;
     KAction*                  fileDeleteFinalAction;
     KAction*                  slideShowAction;
-    KAction*                  zoomPlusAction;
-    KAction*                  zoomMinusAction;
-    KAction*                  zoomTo100percents;
-    KAction*                  zoomFitToWindowAction;
     KAction*                  fullScreenAction;
-    KToggleAction*            showThumbBarAction;
-
+    KAction*                  leftZoomPlusAction;
+    KAction*                  leftZoomMinusAction;
+    KAction*                  leftZoomTo100percents;
+    KAction*                  leftZoomFitToWindowAction;
+    KAction*                  rightZoomPlusAction;
+    KAction*                  rightZoomMinusAction;
+    KAction*                  rightZoomTo100percents;
+    KAction*                  rightZoomFitToWindowAction;
+    
     // Rating actions.
     KAction*                  star0;
     KAction*                  star1;
@@ -151,6 +155,7 @@ public:
 
     KSelectAction*            themeMenuAction;
 
+    KToggleAction*            showThumbBarAction;
     KToggleAction*            syncPreviewAction;
     KToggleAction*            navigateByPairAction;
     KToggleAction*            showMenuBarAction;
@@ -159,12 +164,14 @@ public:
     KSqueezedTextLabel*       leftFileName;
     KSqueezedTextLabel*       rightFileName;
 
+    SidebarSplitter*          hSplitter;
+    ThumbBarDock*             barViewDock;
     LightTableBar*            barView;
 
     LightTableView*           previewView;
 
-    StatusZoomBar*            leftZoomBar;
-    StatusZoomBar*            rightZoomBar;
+    DZoomBar*                 leftZoomBar;
+    DZoomBar*                 rightZoomBar;
 
     StatusProgressBar*        statusProgressBar;
 

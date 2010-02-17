@@ -472,16 +472,46 @@ public:
     bool deleteSAlbum(SAlbum* album);
     //@}
 
+    /** @name Accessors to counting maps
+     */
+    //@{
+
+    /**
+     * Returns the latest count for PAlbums as also emitted via
+     * signalPAlbumsDirty.
+     *
+     * @return count map for PAlbums
+     */
+    QMap<int, int> getPAlbumsCount() const;
+
+    /**
+     * Returns the latest count for TAlbums as also emitted via
+     * signalTAlbumsDirty.
+     *
+     * @return count map for TAlbums
+     */
+    QMap<int, int> getTAlbumsCount() const;
+
+    /**
+     * Returns the latest count for DAlbums as also emitted via
+     * signalDAlbumsDirty.
+     *
+     * @return count map for DAlbums
+     */
+    QMap<YearMonth, int> getDAlbumsCount() const;
+
+    //@}
+
 Q_SIGNALS:
 
     /// An album is about to be added to the given parent (0 if album is root)
     /// after the item given by prev (prev is 0 if parent has no children yet)
     void signalAlbumAboutToBeAdded(Album *album, Album *parent, Album *prev);
-    /// The album has been added
+    /// The album has been added.
     void signalAlbumAdded(Album* album);
-    /// The album is about to be deleted, but is still fully valid
+    /// The album is about to be deleted, but is still fully valid.
     void signalAlbumAboutToBeDeleted(Album *album);
-    /// The album is deleted, but the object can still be accessed
+    /// The album is deleted, but the object can still be accessed.
     void signalAlbumDeleted(Album* album);
     /// The album is deleted, the object can no longer be accessed.
     /// For identification purposes, the former album pointer is passed.
@@ -523,20 +553,20 @@ private Q_SLOTS:
     /**
      * Scan albums directly from database and creates new PAlbums
      * It only creates those PAlbums which haven't already been
-     * created
+     * created.
      */
     void scanPAlbums();
     void updateChangedPAlbums();
     /**
      * Scan tags directly from database and creates new TAlbums
      * It only creates those TAlbums which haven't already been
-     * created
+     * created.
      */
     void scanTAlbums();
     /**
      * Scan searches directly from database and creates new SAlbums
      * It only creates those SAlbums which haven't already been
-     * created
+     * created.
      */
     void scanSAlbums();
     /**

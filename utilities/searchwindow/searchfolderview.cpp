@@ -92,10 +92,11 @@ void NormalSearchTreeView::addCustomContextMenuActions(ContextMenuHelper &cmh,
 
 }
 
-void NormalSearchTreeView::handleCustomContextMenuAction(QAction *action, Album *album)
+void NormalSearchTreeView::handleCustomContextMenuAction(QAction *action, AlbumPointer<Album> album)
 {
 
-    SAlbum *salbum = dynamic_cast<SAlbum*> (album);
+    Album *a = album;
+    SAlbum *salbum = dynamic_cast<SAlbum*> (a);
 
     if (action == d->newAction && salbum)
     {

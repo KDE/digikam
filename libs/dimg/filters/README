@@ -1,0 +1,12 @@
+auto    : Auto Color Correction.
+bw      : Black and White.
+bcg     : Brighness / Contrast / Gamma.
+cb      : Color Balance Correction.
+curves  : Histogram Curves Correction.
+hsl     : Hue / Saturation / Lightness.
+icc     : Color Management.
+levels  : Histogram Levels Correction.
+nr      : Wavelets Noise Reduction.
+sharp   : Sharp / Unsharp Mask / Refocus
+wb      : White Balance.
+

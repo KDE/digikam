@@ -58,7 +58,6 @@
 
 // Local includes
 
-#include "bcgmodifier.h"
 #include "colorgradientwidget.h"
 #include "dimg.h"
 #include "dimgimagefilters.h"
@@ -145,7 +144,7 @@ RedEyeTool::RedEyeTool(QObject* parent)
                                       "red eye reduction applied."));
     setToolView(d->previewWidget);
     setPreviewModeMask(PreviewToolBar::AllPreviewModes);
-    
+
     // -------------------------------------------------------------
 
     d->gboxSettings = new EditorToolSettings;
@@ -311,7 +310,7 @@ void RedEyeTool::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
 
-    d->gboxSettings->histogramBox()->setChannel(group.readEntry(d->configHistogramChannelEntry,
+    d->gboxSettings->histogramBox()->setChannel((ChannelType)group.readEntry(d->configHistogramChannelEntry,
                         (int)LuminosityChannel));
     d->gboxSettings->histogramBox()->setScale((HistogramScale)group.readEntry(d->configHistogramScaleEntry,
                         (int)LogScaleHistogram));
@@ -334,7 +333,7 @@ void RedEyeTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
-    group.writeEntry(d->configHistogramChannelEntry, d->gboxSettings->histogramBox()->channel());
+    group.writeEntry(d->configHistogramChannelEntry, (int)d->gboxSettings->histogramBox()->channel());
     group.writeEntry(d->configHistogramScaleEntry,   (int)d->gboxSettings->histogramBox()->scale());
     group.writeEntry(d->configRedThresholdEntry,     d->redThreshold->value());
     group.writeEntry(d->configSmoothLevelEntry,      d->smoothLevel->value());

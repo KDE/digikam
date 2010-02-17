@@ -40,10 +40,7 @@
 #include "dcolor.h"
 #include "photoinfocontainer.h"
 #include "digikam_export.h"
-
-#define MAX3(a, b, c) (qMax(qMax(a,b),b))
-#define MIN3(a, b, c) (qMin(qMin(a,b),b))
-#define ROUND(x) ((int) ((x) + 0.5))
+#include "globals.h"
 
 class QPaintDevice;
 
@@ -76,6 +73,10 @@ public:
     */
     uchar* getPreviewImage() const;
 
+    /** Return a DImg object representing the preview image.
+    */
+    DImg getPreviewImg();
+    
     /** Return image data for the current original image selection.
         The selectionWidth(), selectionHeight(), originalSixteenBit()
         and originalHasAlpha() methods provide the characteristics of the data.
@@ -181,7 +182,7 @@ public:
         if putPreviewImage has not been called) on the given paint device.
         at x|y, with given maximum width and height.
     */
-    void paint(QPaintDevice* device, int x, int y, int w, int h, QPainter *painter=0);
+    void paint(QPaintDevice* device, int x, int y, int w, int h, QPainter* painter=0);
 
 private:
 

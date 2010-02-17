@@ -76,7 +76,7 @@ protected:
     /**
      * Handles deletion and renaming actions.
      */
-    virtual void handleCustomContextMenuAction(QAction *action, Album *album);
+    virtual void handleCustomContextMenuAction(QAction *action, AlbumPointer<Album> album);
 
 private:
     EditableSearchTreeViewPriv *d;

@@ -93,7 +93,7 @@ void Highlighter::highlightBlock(const QString& text)
     ParseSettings settings;
     settings.parseString = text;
     ParseResults invalid = parser->invalidModifiers(settings);
-    foreach (const ParseResults::ResultsKey& key, invalid.keys())
+    foreach (const ParseResults::ResultsKey &key, invalid.keys())
     {
         setFormat(key.first, key.second, errorFormat);
     }

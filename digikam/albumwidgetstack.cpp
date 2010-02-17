@@ -48,7 +48,7 @@
 #include "imagealbummodel.h"
 #include "imagealbumfiltermodel.h"
 #include "imagepreviewview.h"
-#include "imagepreviewbar.h"
+#include "imagethumbnailbar.h"
 #include "loadingcacheinterface.h"
 #include "welcomepageview.h"
 #include "mediaplayerview.h"
@@ -83,7 +83,7 @@ public:
     QTimer*           thumbbarTimer;
 
     DigikamImageView* imageIconView;
-    ImagePreviewBar*  thumbBar;
+    ImageThumbnailBar*thumbBar;
     ImagePreviewView* imagePreviewView;
     MediaPlayerView*  mediaPlayerView;
     ThumbBarDock*     thumbBarDock;
@@ -96,14 +96,14 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
     d->imageIconView    = new DigikamImageView(this);
     d->imagePreviewView = new ImagePreviewView(this);
     d->thumbBarDock     = new ThumbBarDock();
-    d->thumbBar         = new ImagePreviewBar(d->thumbBarDock, Qt::Horizontal,
-                                              AlbumSettings::instance()->getExifRotate());
+    d->thumbBar         = new ImageThumbnailBar(d->thumbBarDock);
+    d->thumbBar->setModels(d->imageIconView->imageModel(), d->imageIconView->imageFilterModel());
     d->thumbBarDock->setWidget(d->thumbBar);
     d->thumbBarDock->setObjectName("mainwindow_thumbbar");
 
     // To prevent flicker effect with content when user change icon view filter
     // if scrollbar appears or disapears.
-    d->thumbBar->setHScrollBarMode(Q3ScrollView::AlwaysOn);
+    d->thumbBar->setScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
     d->welcomePageView = new WelcomePageView(this);
     d->mediaPlayerView = new MediaPlayerView(this);
@@ -165,6 +165,7 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
     connect(d->imagePreviewView, SIGNAL(signalAddToExistingQueue(int)),
             this, SIGNAL(signalAddToExistingQueue(int)));
 
+    /*
     connect(d->imageIconView->imageFilterModel(), SIGNAL(rowsInserted(const QModelIndex&, int, int)),
             this, SLOT(slotItemsAddedOrRemoved()));
 
@@ -177,12 +178,16 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
     connect(d->imageIconView->imageFilterModel(), SIGNAL(modelReset()),
             this, SLOT(slotItemsAddedOrRemoved()));
 
-    connect(d->thumbBar, SIGNAL(signalUrlSelected(const KUrl&)),
-            this, SIGNAL(signalUrlSelected(const KUrl&)));
-
     connect(d->thumbbarTimer, SIGNAL(timeout()),
             this, SLOT(updateThumbbar()));
-            
+    */
+
+    connect(d->thumbBar, SIGNAL(imageActivated(const ImageInfo&)),
+            this, SIGNAL(signalImageSelected(const ImageInfo&)));
+
+    connect(d->thumbBarDock, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
+            d->thumbBar, SLOT(slotDockLocationChanged(Qt::DockWidgetArea)));
+
     connect(d->mediaPlayerView, SIGNAL(signalNextItem()),
             this, SIGNAL(signalNextItem()));
 
@@ -251,10 +256,12 @@ void AlbumWidgetStack::setPreviewItem(const ImageInfo& info, const ImageInfo& pr
             d->imagePreviewView->setImageInfo();
         }
 
+        /*
         // Special case to cleanup thumbbar if Image Lister do not query item accordingly to
         // IconView Filters.
         if (d->imageIconView->imageModel()->isEmpty())
             d->thumbBar->clear();
+        */
     }
     else
     {
@@ -275,8 +282,10 @@ void AlbumWidgetStack::setPreviewItem(const ImageInfo& info, const ImageInfo& pr
             if (previewMode() == MediaPlayerMode)
                 setPreviewItem();
 
+            /*
             if (previewMode() != PreviewImageMode)
                 updateThumbbar();
+            */
 
             d->imagePreviewView->setImageInfo(info, previous, next);
 
@@ -285,8 +294,7 @@ void AlbumWidgetStack::setPreviewItem(const ImageInfo& info, const ImageInfo& pr
             // This will prevent a flicker effect with the old image preview loaded in stack.
         }
 
-        ThumbBarItem* item = d->thumbBar->findItemByUrl(info.fileUrl());
-        d->thumbBar->setSelected(item);
+        d->thumbBar->setCurrentInfo(info);
     }
 }
 
@@ -346,13 +354,9 @@ void AlbumWidgetStack::slotFileChanged(const QString &path)
 
     if (path == imagePreviewView()->getImageInfo().filePath())
         d->imagePreviewView->reload();
-
-    KUrl url = KUrl::fromPath(path);
-    ThumbBarItem* foundItem = d->thumbBar->findItemByUrl(url);
-    if (foundItem)
-        d->thumbBar->reloadThumb(foundItem);
 }
 
+/*
 void AlbumWidgetStack::slotItemsAddedOrRemoved()
 {
     // do this before the check in the next line, to store this state in any case,
@@ -390,6 +394,7 @@ void AlbumWidgetStack::updateThumbbar()
 
     d->thumbBar->slotUpdate();
 }
+*/
 
 void AlbumWidgetStack::increaseZoom()
 {
@@ -455,7 +460,6 @@ void AlbumWidgetStack::applySettings()
 {
     AlbumSettings *settings = AlbumSettings::instance();
     d->imagePreviewView->setLoadFullImageSize(settings->getPreviewLoadFullImageSize());
-    d->thumbBar->applySettings();
 }
 
 }  // namespace Digikam

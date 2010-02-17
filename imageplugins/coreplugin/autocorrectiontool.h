@@ -6,7 +6,7 @@
  * Date        : 2005-05-31
  * Description : Auto-Color correction tool.
  *
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -31,31 +31,28 @@
 // Local includes
 
 #include "editortool.h"
+#include "dimg.h"
 
-namespace Digikam
-{
-class DColor;
-}
+using namespace Digikam;
 
 namespace DigikamImagesPluginCore
 {
 
 class AutoCorrectionToolPriv;
 
-class AutoCorrectionTool : public Digikam::EditorTool
+class AutoCorrectionTool : public EditorToolThreaded
 {
     Q_OBJECT
 
 public:
 
-    AutoCorrectionTool(QObject *parent);
+    AutoCorrectionTool(QObject* parent);
     ~AutoCorrectionTool();
 
 private Q_SLOTS:
 
-    void slotEffect();
+    void slotInit();
     void slotResetSettings();
-    void slotColorSelectedFromTarget(const Digikam::DColor& color);
 
 private:
 
@@ -70,12 +67,15 @@ private:
 
 private:
 
-    void readSettings();
     void writeSettings();
-    void finalRendering();
+    void readSettings();    
+    void prepareEffect();
+    void prepareFinal();
+    void putPreviewData();
+    void putFinalData();
+    void renderingFinished();
 
-    void autoCorrection(uchar *data, int w, int h, bool sb, int type);
-    QPixmap getThumbnailForEffect(AutoCorrectionType type);
+    void autoCorrection(DImg* img, DImg* ref, int type);
 
 private:
 
