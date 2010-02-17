@@ -63,19 +63,19 @@ public:
         configRecentlyUsedProfilesEntry("Recently Used Profiles"),
         profilesBox(0)
         {
-            favoriteProfiles.setMaxCost(10);          
+            favoriteProfiles.setMaxCost(10);
         }
 
     const QString         configRecentlyUsedProfilesEntry;
-    
+
     QCache<QString, bool> favoriteProfiles;
-    
+
     IccProfilesComboBox*  profilesBox;
 };
 
 IccProfilesSettings::IccProfilesSettings(QWidget* parent)
-           : KVBox(parent),
-             d(new IccProfilesSettingsPriv)
+                   : KVBox(parent),
+                     d(new IccProfilesSettingsPriv)
 {
     QLabel* newProfileLabel  = new QLabel(i18n("Convert to:"), this);
     d->profilesBox           = new IccProfilesComboBox(this);
@@ -87,7 +87,7 @@ IccProfilesSettings::IccProfilesSettings(QWidget* parent)
     layout()->setAlignment(newProfInfo, Qt::AlignLeft);
     setMargin(0);
     setSpacing(KDialog::spacingHint());
-    
+
     // -------------------------------------------------------------
 
     connect(d->profilesBox, SIGNAL(currentIndexChanged(int)),
