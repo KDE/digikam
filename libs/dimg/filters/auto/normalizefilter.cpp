@@ -42,7 +42,7 @@ namespace Digikam
 NormalizeFilter::NormalizeFilter(DImg* orgImage, DImg* refImage, QObject* parent)
                : DImgThreadedFilter(orgImage, parent, "NormalizeFilter")
 {
-    m_refImage = refImage;
+    m_refImage = refImage->copy();
     initFilter();
 }
 
@@ -69,7 +69,7 @@ void NormalizeFilter::normalizeImage()
     unsigned short range;
     int            progress;
     
-    if (m_orgImage.sixteenBit() != m_refImage->sixteenBit())
+    if (m_orgImage.sixteenBit() != m_refImage.sixteenBit())
     {
         kDebug() << "Ref. image and Org. has different bits depth"; 
         return;
@@ -86,12 +86,12 @@ void NormalizeFilter::normalizeImage()
 
     param.min    = segments-1;
     param.max    = 0;
-    uint refSize = m_refImage->width()*m_refImage->height();
+    uint refSize = m_refImage.width()*m_refImage.height();
 
     if (!sixteenBit)        // 8 bits image.
     {
         uchar  red, green, blue;
-        uchar* ptr = m_refImage->bits();
+        uchar* ptr = m_refImage.bits();
 
         for (i = 0 ; !m_cancel && (i < refSize) ; ++i)
         {
@@ -114,7 +114,7 @@ void NormalizeFilter::normalizeImage()
     else                    // 16 bits image.
     {
         unsigned short  red, green, blue;
-        unsigned short* ptr = (unsigned short*)m_refImage->bits();
+        unsigned short* ptr = (unsigned short*)m_refImage.bits();
 
         for (i = 0 ; !m_cancel && (i < refSize) ; ++i)
         {

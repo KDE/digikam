@@ -44,7 +44,7 @@ namespace Digikam
 AutoLevelsFilter::AutoLevelsFilter(DImg* orgImage, DImg* refImage, QObject* parent)
                 : DImgThreadedFilter(orgImage, parent, "AutoLevelsFilter")
 {
-    m_refImage = refImage;
+    m_refImage = refImage->copy();
     initFilter();
 }
 
@@ -65,7 +65,7 @@ void AutoLevelsFilter::filterImage()
     to a full histogram range.*/
 void AutoLevelsFilter::autoLevelsCorrectionImage()
 {
-    if (m_orgImage.sixteenBit() != m_refImage->sixteenBit())
+    if (m_orgImage.sixteenBit() != m_refImage.sixteenBit())
     {
         kDebug() << "Ref. image and Org. has different bits depth"; 
         return;
@@ -96,8 +96,8 @@ void AutoLevelsFilter::autoLevelsCorrectionImage()
     // Create an histogram of the reference image.
     if (!m_cancel)
     {
-        histogram = new ImageHistogram(m_refImage->bits(), m_refImage->width(), 
-                                       m_refImage->height(), m_refImage->sixteenBit());
+        histogram = new ImageHistogram(m_refImage.bits(), m_refImage.width(), 
+                                       m_refImage.height(), m_refImage.sixteenBit());
         histogram->calculate();
         postProgress(30);
     }

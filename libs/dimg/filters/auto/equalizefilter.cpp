@@ -43,7 +43,7 @@ namespace Digikam
 EqualizeFilter::EqualizeFilter(DImg* orgImage, DImg* refImage, QObject* parent)
               : DImgThreadedFilter(orgImage, parent, "EqualizeFilter")
 {
-    m_refImage = refImage;
+    m_refImage = refImage->copy();
     initFilter();
 }
 
@@ -74,15 +74,15 @@ void EqualizeFilter::equalizeImage()
     register int          i;
     int                   progress;
     
-    if (m_orgImage.sixteenBit() != m_refImage->sixteenBit())
+    if (m_orgImage.sixteenBit() != m_refImage.sixteenBit())
     {
         kDebug() << "Ref. image and Org. has different bits depth"; 
         return;
     }
 
     // Create an histogram of the reference image.
-    ImageHistogram *histogram = new ImageHistogram(m_refImage->bits(), m_refImage->width(),
-                                                   m_refImage->height(), m_refImage->sixteenBit());
+    ImageHistogram *histogram = new ImageHistogram(m_refImage.bits(), m_refImage.width(),
+                                                   m_refImage.height(), m_refImage.sixteenBit());
     histogram->calculate();
 
     // Memory allocation.

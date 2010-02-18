@@ -68,7 +68,7 @@ private:
         unsigned int alpha;
     };
     
-    DImg* m_refImage;
+    DImg m_refImage;
 };
 
 }  // namespace Digikam

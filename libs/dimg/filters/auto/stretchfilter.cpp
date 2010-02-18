@@ -43,7 +43,7 @@ namespace Digikam
 StretchFilter::StretchFilter(DImg* orgImage, DImg* refImage, QObject* parent)
              : DImgThreadedFilter(orgImage, parent, "StretchFilter")
 {
-    m_refImage = refImage; 
+    m_refImage = refImage->copy();
     initFilter();
 }
 
@@ -69,15 +69,15 @@ void StretchFilter::stretchContrastImage()
     int                  progress;
     unsigned long        threshold_intensity;
 
-    if (m_orgImage.sixteenBit() != m_refImage->sixteenBit())
+    if (m_orgImage.sixteenBit() != m_refImage.sixteenBit())
     {
         kDebug() << "Ref. image and Org. has different bits depth"; 
         return;
     }
     
     // Create an histogram of the reference image.
-    ImageHistogram* histogram = new ImageHistogram(m_refImage->bits(), m_refImage->width(), 
-                                                   m_refImage->height(), m_refImage->sixteenBit());
+    ImageHistogram* histogram = new ImageHistogram(m_refImage.bits(), m_refImage.width(), 
+                                                   m_refImage.height(), m_refImage.sixteenBit());
     histogram->calculate();
 
     // Memory allocation.
@@ -97,7 +97,7 @@ void StretchFilter::stretchContrastImage()
 
     // Find the histogram boundaries by locating the 0.1 percent levels.
 
-    number_pixels       = (long long)(m_refImage->width() * m_refImage->height());
+    number_pixels       = (long long)(m_refImage.width() * m_refImage.height());
     threshold_intensity = number_pixels / 1000;
 
     memset(&high, 0, sizeof(struct double_packet));
