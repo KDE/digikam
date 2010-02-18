@@ -64,7 +64,7 @@
 #include "colorgradientwidget.h"
 #include "daboutdata.h"
 #include "dimg.h"
-#include "dimgimagefilters.h"
+#include "mixerfilter.h"
 #include "editortoolsettings.h"
 #include "histogrambox.h"
 #include "histogramwidget.h"
@@ -103,26 +103,26 @@ public:
         gboxSettings(0)
         {}
 
-    const QString        configGroupName;
-    const QString        configHistogramChannelEntry;
-    const QString        configHistogramScaleEntry;
-    const QString        configEffectTypeEntry;
-    const QString        configLevelAdjustmentEntry;
-    const QString        configIterationAdjustmentEntry;
+    const QString       configGroupName;
+    const QString       configHistogramChannelEntry;
+    const QString       configHistogramScaleEntry;
+    const QString       configEffectTypeEntry;
+    const QString       configLevelAdjustmentEntry;
+    const QString       configIterationAdjustmentEntry;
 
-    uchar*               destinationPreviewData;
+    uchar*              destinationPreviewData;
 
-    QLabel*              effectTypeLabel;
-    QLabel*              levelLabel;
-    QLabel*              iterationLabel;
+    QLabel*             effectTypeLabel;
+    QLabel*             levelLabel;
+    QLabel*             iterationLabel;
 
-    RComboBox*           effectType;
+    RComboBox*          effectType;
 
-    RIntNumInput*        levelInput;
-    RIntNumInput*        iterationInput;
+    RIntNumInput*       levelInput;
+    RIntNumInput*       iterationInput;
 
-    ImageGuideWidget*    previewWidget;
-    EditorToolSettings*  gboxSettings;
+    ImageGuideWidget*   previewWidget;
+    EditorToolSettings* gboxSettings;
 };
 
 ColorFXTool::ColorFXTool(QObject* parent)
@@ -200,8 +200,8 @@ ColorFXTool::ColorFXTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
-            this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
+    connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget(const Digikam::DColor&, const QPoint&)),
+            this, SLOT(slotColorSelectedFromTarget(const Digikam::DColor&)));
 
     connect(d->levelInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));
@@ -272,7 +272,7 @@ void ColorFXTool::slotResetSettings()
     slotEffect();
 }
 
-void ColorFXTool::slotColorSelectedFromTarget( const DColor& color )
+void ColorFXTool::slotColorSelectedFromTarget(const DColor& color)
 {
     d->gboxSettings->histogramBox()->histogram()->setHistogramGuideByColor(color);
 }
@@ -500,22 +500,23 @@ void ColorFXTool::vivid(int factor, uchar *data, int w, int h, bool sb)
 {
     float amount = factor/100.0;
 
-    DImgImageFilters filter;
-
     // Apply Channel Mixer adjustments.
-
-    filter.channelMixerImage(
-                             data, w, h, sb,                       // Image data.
-                             true,                                 // Preserve Luminosity
-                             false,                                // Disable Black & White mode.
-                             1.0 + amount + amount, (-1.0)*amount, (-1.0)*amount, // Red Gains.
-                             (-1.0)*amount, 1.0 + amount + amount, (-1.0)*amount, // Green Gains.
-                             (-1.0)*amount, (-1.0)*amount, 1.0 + amount + amount  // Blue Gains.
-                            );
+    
+    MixerContainer settings;
+    settings.rrGain = 1.0 + amount + amount;
+    settings.rgGain = (-1.0)*amount;
+    settings.rbGain = (-1.0)*amount;
+    settings.grGain = (-1.0)*amount;
+    settings.ggGain = 1.0 + amount + amount;
+    settings.gbGain = (-1.0)*amount;
+    settings.brGain = (-1.0)*amount;
+    settings.bgGain = (-1.0)*amount;
+    settings.bbGain = 1.0 + amount + amount;
+    MixerFilter mixer(data, w, h, sb, settings);
 
     // Allocate the destination image data.
 
-    uchar *dest = new uchar[w*h*(sb ? 8 : 4)];
+    uchar* dest = new uchar[w*h*(sb ? 8 : 4)];
 
     // And now apply the curve correction.
 
@@ -556,7 +557,7 @@ void ColorFXTool::vivid(int factor, uchar *data, int w, int h, bool sb)
  *                     like this on PSC. Is very similar to Growing Edges (photoshop)
  *                     Some pictures will be very interesting
  */
-void ColorFXTool::neon(uchar *data, int w, int h, bool sb, int Intensity, int BW)
+void ColorFXTool::neon(uchar* data, int w, int h, bool sb, int Intensity, int BW)
 {
     neonFindEdges(data, w, h, sb, true, Intensity, BW);
 }
@@ -573,13 +574,13 @@ void ColorFXTool::neon(uchar *data, int w, int h, bool sb, int Intensity, int BW
  *                     Neon effect ? This is the same engine, but is inversed with
  *                     255 - color.
  */
-void ColorFXTool::findEdges(uchar *data, int w, int h, bool sb, int Intensity, int BW)
+void ColorFXTool::findEdges(uchar* data, int w, int h, bool sb, int Intensity, int BW)
 {
     neonFindEdges(data, w, h, sb, false, Intensity, BW);
 }
 
 // Implementation of neon and FindEdges. They share 99% of their code.
-void ColorFXTool::neonFindEdges(uchar *data, int w, int h, bool sb, bool neon, int Intensity, int BW)
+void ColorFXTool::neonFindEdges(uchar* data, int w, int h, bool sb, bool neon, int Intensity, int BW)
 {
     int Width       = w;
     int Height      = h;
