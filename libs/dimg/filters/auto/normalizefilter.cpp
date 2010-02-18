@@ -39,13 +39,6 @@
 namespace Digikam
 {
 
-struct NormalizeParam
-{
-    unsigned short* lut;
-    double          min;
-    double          max;
-};
-
 NormalizeFilter::NormalizeFilter(DImg* orgImage, DImg* refImage, QObject* parent)
                : DImgThreadedFilter(orgImage, parent, "NormalizeFilter")
 {

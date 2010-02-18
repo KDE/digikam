@@ -52,6 +52,13 @@ private:
 
 private:
 
+    struct NormalizeParam
+    {
+        unsigned short* lut;
+        double          min;
+        double          max;
+    };
+    
     DImg* m_refImage;
 };
 
