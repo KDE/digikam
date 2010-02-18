@@ -6,7 +6,7 @@
  * Date        : 2005-02-26
  * Description : image channels mixer.
  *
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -44,7 +44,7 @@ class ChannelMixerTool : public Digikam::EditorTool
 
 public:
 
-    ChannelMixerTool(QObject *parent);
+    ChannelMixerTool(QObject* parent);
     ~ChannelMixerTool();
 
 private:

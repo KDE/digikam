@@ -282,8 +282,8 @@ ChannelMixerTool::ChannelMixerTool(QObject* parent)
     // -------------------------------------------------------------
     // Channels and scale selection slots.
 
-    connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
-            this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
+    connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget(const Digikam::DColor&, const QPoint&)),
+            this, SLOT(slotColorSelectedFromTarget(const Digikam::DColor&)));
 
     connect(d->previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));
@@ -557,7 +557,7 @@ void ChannelMixerTool::slotChannelChanged()
 void ChannelMixerTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(d->configGroupName);
+    KConfigGroup group        = config->group(d->configGroupName);
 
     d->monochrome->setChecked(group.readEntry(d->configMonochromeEntry,                 false));
     d->preserveLuminosity->setChecked(group.readEntry(d->configPreserveLuminosityEntry, false));
@@ -594,7 +594,7 @@ void ChannelMixerTool::readSettings()
 void ChannelMixerTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(d->configGroupName);
+    KConfigGroup group        = config->group(d->configGroupName);
 
     group.writeEntry(d->configHistogramChannelEntry, (int)d->gboxSettings->histogramBox()->channel());
     group.writeEntry(d->configHistogramScaleEntry,   (int)d->gboxSettings->histogramBox()->scale());
@@ -654,7 +654,7 @@ void ChannelMixerTool::slotResetSettings()
 void ChannelMixerTool::slotLoadSettings()
 {
     KUrl loadGainsFileUrl;
-    FILE *fp = 0L;
+    FILE* fp = 0L;
 
     loadGainsFileUrl = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
                                             QString( "*" ), kapp->activeWindow(),
@@ -741,7 +741,7 @@ void ChannelMixerTool::slotLoadSettings()
 void ChannelMixerTool::slotSaveAsSettings()
 {
     KUrl saveGainsFileUrl;
-    FILE *fp = 0L;
+    FILE* fp = 0L;
 
     saveGainsFileUrl = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
                                                QString( "*" ), kapp->activeWindow(),
@@ -753,7 +753,7 @@ void ChannelMixerTool::slotSaveAsSettings()
 
     if ( fp )
     {
-        const char *str = 0L;
+        const char* str = 0L;
         char        buf1[256];
         char        buf2[256];
         char        buf3[256];
