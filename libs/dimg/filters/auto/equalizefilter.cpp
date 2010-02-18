@@ -40,22 +40,6 @@
 namespace Digikam
 {
 
-struct double_packet
-{
-    double red;
-    double green;
-    double blue;
-    double alpha;
-};
-
-struct int_packet
-{
-    unsigned int red;
-    unsigned int green;
-    unsigned int blue;
-    unsigned int alpha;
-};
-
 EqualizeFilter::EqualizeFilter(DImg* orgImage, DImg* refImage, QObject* parent)
               : DImgThreadedFilter(orgImage, parent, "EqualizeFilter")
 {
@@ -87,8 +71,14 @@ void EqualizeFilter::equalizeImage()
     struct double_packet  high, low, intensity;
     struct double_packet* map;
     struct int_packet*    equalize_map;
-    register int i;
-    int           progress;
+    register int          i;
+    int                   progress;
+    
+    if (m_orgImage.sixteenBit() != m_refImage->sixteenBit())
+    {
+        kDebug() << "Ref. image and Org. has different bits depth"; 
+        return;
+    }
 
     // Create an histogram of the reference image.
     ImageHistogram *histogram = new ImageHistogram(m_refImage->bits(), m_refImage->width(),

@@ -323,7 +323,7 @@ void AutoCorrectionTool::autoCorrection(DImg* img, DImg* ref, int type)
         }
         case NormalizeCorrection:
         {
-            setFilter(dynamic_cast<DImgThreadedFilter*>(new NormalizeFilter(img, ref, this)));
+            setFilter(dynamic_cast<DImgThreadedFilter*>(new NormalizeFilter(img, img/*ref*/, this)));
             break;
         }
         case EqualizeCorrection:

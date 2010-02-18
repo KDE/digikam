@@ -47,6 +47,12 @@ AutoExpoFilter::~AutoExpoFilter()
 
 void AutoExpoFilter::filterImage()
 {
+    if (m_orgImage.sixteenBit() != m_refImage->sixteenBit())
+    {
+        kDebug() << "Ref. image and Org. has different bits depth"; 
+        return;
+    }
+    
     autoExposureAdjustement(m_refImage, m_settings.black, m_settings.exposition);
     WBFilter::filterImage();
 }

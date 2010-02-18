@@ -106,12 +106,12 @@ void PreviewThreadWrapper::slotFilterFinished(bool success)
     }
 }
 
-void PreviewThreadWrapper::slotFilterProgress(int /*progress*/)
+void PreviewThreadWrapper::slotFilterProgress(int progress)
 {
     DImgThreadedFilter* filter = dynamic_cast<DImgThreadedFilter*>(sender());
     if (!filter) return;
 
-//    kDebug() << filter->filterName() << " : " << progress << " %";
+    kDebug() << filter->filterName() << " : " << progress << " %";
 }
 
 void PreviewThreadWrapper::startFilters()

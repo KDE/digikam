@@ -64,10 +64,17 @@ void NormalizeFilter::filterImage()
 void NormalizeFilter::normalizeImage()
 {
     NormalizeParam param;
-    int            x, i;
+    int            x;
+    uint           i;
     unsigned short range;
     int            progress;
-
+    
+    if (m_orgImage.sixteenBit() != m_refImage->sixteenBit())
+    {
+        kDebug() << "Ref. image and Org. has different bits depth"; 
+        return;
+    }
+    
     bool sixteenBit = m_orgImage.sixteenBit();
     int segments    = sixteenBit ? NUM_SEGMENTS_16BIT : NUM_SEGMENTS_8BIT;
 
@@ -77,15 +84,16 @@ void NormalizeFilter::normalizeImage()
 
     // Find min. and max. values.
 
-    param.min = segments-1;
-    param.max = 0;
+    param.min    = segments-1;
+    param.max    = 0;
+    uint refSize = m_refImage->width()*m_refImage->height();
 
     if (!sixteenBit)        // 8 bits image.
     {
         uchar  red, green, blue;
         uchar* ptr = m_refImage->bits();
 
-        for (i = 0 ; !m_cancel && (i < (int)(m_refImage->width()*m_refImage->height())) ; ++i)
+        for (i = 0 ; !m_cancel && (i < refSize) ; ++i)
         {
             blue  = ptr[0];
             green = ptr[1];
@@ -108,7 +116,7 @@ void NormalizeFilter::normalizeImage()
         unsigned short  red, green, blue;
         unsigned short* ptr = (unsigned short*)m_refImage->bits();
 
-        for (i = 0 ; i < !m_cancel && ((int)(m_refImage->width()*m_refImage->height())) ; ++i)
+        for (i = 0 ; !m_cancel && (i < refSize) ; ++i)
         {
             blue  = ptr[0];
             green = ptr[1];
@@ -147,7 +155,7 @@ void NormalizeFilter::normalizeImage()
     uchar* data = m_orgImage.bits(); 
     int w       = m_orgImage.width();
     int h       = m_orgImage.height();
-    int size    = w*h;
+    uint size   = w*h;
 
     // Apply LUT to image.
 

@@ -65,7 +65,12 @@ void AutoLevelsFilter::filterImage()
     to a full histogram range.*/
 void AutoLevelsFilter::autoLevelsCorrectionImage()
 {
-
+    if (m_orgImage.sixteenBit() != m_refImage->sixteenBit())
+    {
+        kDebug() << "Ref. image and Org. has different bits depth"; 
+        return;
+    }
+    
     uchar* data     = m_orgImage.bits(); 
     int w           = m_orgImage.width();
     int h           = m_orgImage.height();
