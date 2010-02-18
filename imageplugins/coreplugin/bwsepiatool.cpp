@@ -55,10 +55,10 @@
 #include "bcgfilter.h"
 #include "tonalityfilter.h"
 #include "colorgradientwidget.h"
+#include "mixerfilter.h"
 #include "curvesbox.h"
 #include "curveswidget.h"
 #include "dimg.h"
-#include "dimgimagefilters.h"
 #include "editortoolsettings.h"
 #include "histogramwidget.h"
 #include "histogrambox.h"
@@ -855,7 +855,6 @@ void BWSepiaTool::blackAndWhiteConversion(uchar *data, int w, int h, bool sb, in
     int mul         = sb ? 255 : 1;
     double strength = 1.0 + ((double)d->strengthInput->value() - 1.0) * (1.0 / 3.0);
 
-    DImgImageFilters  filter;
     TonalityContainer toneSettings;
     
     switch (type)
@@ -924,10 +923,7 @@ void BWSepiaTool::blackAndWhiteConversion(uchar *data, int w, int h, bool sb, in
             d->redMult   = 0.24;
             d->greenMult = 0.68;
             d->blueMult  = 0.08;
-            filter.channelMixerImage(data, w, h, sb, true, true,
-                  d->redMult + d->redMult*d->redAttn, d->greenMult + d->greenMult*d->greenAttn, d->blueMult + d->blueMult*d->blueAttn,
-                  0.0, 1.0, 0.0,
-                  0.0, 0.0, 1.0);
+            applyChannelMixer(data, w, h, sb);
             break;
         }
 
@@ -936,10 +932,7 @@ void BWSepiaTool::blackAndWhiteConversion(uchar *data, int w, int h, bool sb, in
             d->redMult   = 0.18;
             d->greenMult = 0.41;
             d->blueMult  = 0.41;
-            filter.channelMixerImage(data, w, h, sb, true, true,
-                  d->redMult + d->redMult*d->redAttn, d->greenMult + d->greenMult*d->greenAttn, d->blueMult + d->blueMult*d->blueAttn,
-                  0.0, 1.0, 0.0,
-                  0.0, 0.0, 1.0);
+            applyChannelMixer(data, w, h, sb);
             break;
         }
 
@@ -948,10 +941,7 @@ void BWSepiaTool::blackAndWhiteConversion(uchar *data, int w, int h, bool sb, in
             d->redMult   = 0.25;
             d->greenMult = 0.39;
             d->blueMult  = 0.36;
-            filter.channelMixerImage(data, w, h, sb, true, true,
-                  d->redMult + d->redMult*d->redAttn, d->greenMult + d->greenMult*d->greenAttn, d->blueMult + d->blueMult*d->blueAttn,
-                  0.0, 1.0, 0.0,
-                  0.0, 0.0, 1.0);
+            applyChannelMixer(data, w, h, sb);
             break;
         }
 
@@ -960,10 +950,7 @@ void BWSepiaTool::blackAndWhiteConversion(uchar *data, int w, int h, bool sb, in
             d->redMult   = 0.21;
             d->greenMult = 0.40;
             d->blueMult  = 0.39;
-            filter.channelMixerImage(data, w, h, sb, true, true,
-                  d->redMult + d->redMult*d->redAttn, d->greenMult + d->greenMult*d->greenAttn, d->blueMult + d->blueMult*d->blueAttn,
-                  0.0, 1.0, 0.0,
-                  0.0, 0.0, 1.0);
+            applyChannelMixer(data, w, h, sb);
             break;
         }
 
@@ -972,10 +959,7 @@ void BWSepiaTool::blackAndWhiteConversion(uchar *data, int w, int h, bool sb, in
             d->redMult   = 0.20;
             d->greenMult = 0.41;
             d->blueMult  = 0.39;
-            filter.channelMixerImage(data, w, h, sb, true, true,
-                  d->redMult + d->redMult*d->redAttn, d->greenMult + d->greenMult*d->greenAttn, d->blueMult + d->blueMult*d->blueAttn,
-                  0.0, 1.0, 0.0,
-                  0.0, 0.0, 1.0);
+            applyChannelMixer(data, w, h, sb);
             break;
         }
 
@@ -984,10 +968,7 @@ void BWSepiaTool::blackAndWhiteConversion(uchar *data, int w, int h, bool sb, in
             d->redMult   = 0.21;
             d->greenMult = 0.42;
             d->blueMult  = 0.37;
-            filter.channelMixerImage(data, w, h, sb, true, true,
-                  d->redMult + d->redMult*d->redAttn, d->greenMult + d->greenMult*d->greenAttn, d->blueMult + d->blueMult*d->blueAttn,
-                  0.0, 1.0, 0.0,
-                  0.0, 0.0, 1.0);
+            applyChannelMixer(data, w, h, sb);
             break;
         }
 
@@ -996,10 +977,7 @@ void BWSepiaTool::blackAndWhiteConversion(uchar *data, int w, int h, bool sb, in
             d->redMult   = 0.22;
             d->greenMult = 0.42;
             d->blueMult  = 0.36;
-            filter.channelMixerImage(data, w, h, sb, true, true,
-                  d->redMult + d->redMult*d->redAttn, d->greenMult + d->greenMult*d->greenAttn, d->blueMult + d->blueMult*d->blueAttn,
-                  0.0, 1.0, 0.0,
-                  0.0, 0.0, 1.0);
+            applyChannelMixer(data, w, h, sb);
             break;
         }
 
@@ -1008,10 +986,7 @@ void BWSepiaTool::blackAndWhiteConversion(uchar *data, int w, int h, bool sb, in
             d->redMult   = 0.31;
             d->greenMult = 0.36;
             d->blueMult  = 0.33;
-            filter.channelMixerImage(data, w, h, sb, true, true,
-                  d->redMult + d->redMult*d->redAttn, d->greenMult + d->greenMult*d->greenAttn, d->blueMult + d->blueMult*d->blueAttn,
-                  0.0, 1.0, 0.0,
-                  0.0, 0.0, 1.0);
+            applyChannelMixer(data, w, h, sb);
             break;
         }
 
@@ -1020,10 +995,7 @@ void BWSepiaTool::blackAndWhiteConversion(uchar *data, int w, int h, bool sb, in
             d->redMult   = 0.28;
             d->greenMult = 0.41;
             d->blueMult  = 0.31;
-            filter.channelMixerImage(data, w, h, sb, true, true,
-                  d->redMult + d->redMult*d->redAttn, d->greenMult + d->greenMult*d->greenAttn, d->blueMult + d->blueMult*d->blueAttn,
-                  0.0, 1.0, 0.0,
-                  0.0, 0.0, 1.0);
+            applyChannelMixer(data, w, h, sb);
             break;
         }
 
@@ -1032,10 +1004,7 @@ void BWSepiaTool::blackAndWhiteConversion(uchar *data, int w, int h, bool sb, in
             d->redMult   = 0.23;
             d->greenMult = 0.37;
             d->blueMult  = 0.40;
-            filter.channelMixerImage(data, w, h, sb, true, true,
-                  d->redMult + d->redMult*d->redAttn, d->greenMult + d->greenMult*d->greenAttn, d->blueMult + d->blueMult*d->blueAttn,
-                  0.0, 1.0, 0.0,
-                  0.0, 0.0, 1.0);
+            applyChannelMixer(data, w, h, sb);
             break;
         }
 
@@ -1044,10 +1013,7 @@ void BWSepiaTool::blackAndWhiteConversion(uchar *data, int w, int h, bool sb, in
             d->redMult   = 0.33;
             d->greenMult = 0.36;
             d->blueMult  = 0.31;
-            filter.channelMixerImage(data, w, h, sb, true, true,
-                  d->redMult + d->redMult*d->redAttn, d->greenMult + d->greenMult*d->greenAttn, d->blueMult + d->blueMult*d->blueAttn,
-                  0.0, 1.0, 0.0,
-                  0.0, 0.0, 1.0);
+            applyChannelMixer(data, w, h, sb);
             break;
         }
 
@@ -1056,10 +1022,7 @@ void BWSepiaTool::blackAndWhiteConversion(uchar *data, int w, int h, bool sb, in
             d->redMult   = 0.21;
             d->greenMult = 0.42;
             d->blueMult  = 0.37;
-            filter.channelMixerImage(data, w, h, sb, true, true,
-                  d->redMult + d->redMult*d->redAttn, d->greenMult + d->greenMult*d->greenAttn, d->blueMult + d->blueMult*d->blueAttn,
-                  0.0, 1.0, 0.0,
-                  0.0, 0.0, 1.0);
+            applyChannelMixer(data, w, h, sb);
             break;
         }
 
@@ -1068,10 +1031,7 @@ void BWSepiaTool::blackAndWhiteConversion(uchar *data, int w, int h, bool sb, in
             d->redMult   = 0.24;
             d->greenMult = 0.37;
             d->blueMult  = 0.39;
-            filter.channelMixerImage(data, w, h, sb, true, true,
-                  d->redMult + d->redMult*d->redAttn, d->greenMult + d->greenMult*d->greenAttn, d->blueMult + d->blueMult*d->blueAttn,
-                  0.0, 1.0, 0.0,
-                  0.0, 0.0, 1.0);
+            applyChannelMixer(data, w, h, sb);
             break;
         }
 
@@ -1080,10 +1040,7 @@ void BWSepiaTool::blackAndWhiteConversion(uchar *data, int w, int h, bool sb, in
             d->redMult   = 0.27;
             d->greenMult = 0.36;
             d->blueMult  = 0.37;
-            filter.channelMixerImage(data, w, h, sb, true, true,
-                  d->redMult + d->redMult*d->redAttn, d->greenMult + d->greenMult*d->greenAttn, d->blueMult + d->blueMult*d->blueAttn,
-                  0.0, 1.0, 0.0,
-                  0.0, 0.0, 1.0);
+            applyChannelMixer(data, w, h, sb);
             break;
         }
 
@@ -1092,10 +1049,7 @@ void BWSepiaTool::blackAndWhiteConversion(uchar *data, int w, int h, bool sb, in
             d->redMult   = 0.25;
             d->greenMult = 0.35;
             d->blueMult  = 0.40;
-            filter.channelMixerImage(data, w, h, sb, true, true,
-                  d->redMult + d->redMult*d->redAttn, d->greenMult + d->greenMult*d->greenAttn, d->blueMult + d->blueMult*d->blueAttn,
-                  0.0, 1.0, 0.0,
-                  0.0, 0.0, 1.0);
+            applyChannelMixer(data, w, h, sb);
             break;
         }
 
@@ -1155,6 +1109,16 @@ void BWSepiaTool::blackAndWhiteConversion(uchar *data, int w, int h, bool sb, in
             break;
         }
     }
+}
+
+void BWSepiaTool::applyChannelMixer(uchar* data, int w, int h, bool sb)
+{
+    MixerContainer settings;
+    settings.bMonochrome = true;            
+    settings.rrGain      = d->redMult   + d->redMult*d->redAttn;
+    settings.rgGain      = d->greenMult + d->greenMult*d->greenAttn;
+    settings.rbGain      = d->blueMult  + d->blueMult*d->blueAttn;
+    MixerFilter mixer(data, w, h, sb, settings);
 }
 
 //-- Load all settings from file --------------------------------------
