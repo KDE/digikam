@@ -53,7 +53,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 034 ==> 207338 : Batch queue manager does not cancel processing.
 035 ==> 215657 : Raw import tool does not use general digiKam settings.
 036 ==> 226846 : Issues with color management and color profiles.
-037 ==> 
+037 ==> 227498 : digiKam no longer shows any fotos. opengl image viewer works. showFoto works.
+038 ==> 
+
 
 
 
