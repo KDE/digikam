@@ -35,7 +35,6 @@
 // Local includes
 
 #include "dimg.h"
-#include "imagehistogram.h"
 
 namespace Digikam
 {
@@ -111,10 +110,10 @@ void NormalizeFilter::normalizeImage()
             ptr += 4;
         }
     }
-    else               // 16 bits image.
+    else                    // 16 bits image.
     {
         unsigned short  red, green, blue;
-        unsigned short* ptr = (unsigned short *)m_refImage->bits();
+        unsigned short* ptr = (unsigned short*)m_refImage->bits();
 
         for (i = 0 ; i < !m_cancel && ((int)(m_refImage->width()*m_refImage->height())) ; ++i)
         {
@@ -152,10 +151,10 @@ void NormalizeFilter::normalizeImage()
         }
     }
 
-    uchar* data     = m_orgImage.bits(); 
-    int w           = m_orgImage.width();
-    int h           = m_orgImage.height();
-    int size        = w*h;
+    uchar* data = m_orgImage.bits(); 
+    int w       = m_orgImage.width();
+    int h       = m_orgImage.height();
+    int size    = w*h;
 
     // Apply LUT to image.
 
@@ -166,9 +165,9 @@ void NormalizeFilter::normalizeImage()
 
         for (i = 0 ; !m_cancel && (i < size) ; ++i)
         {
-            blue  = ptr[0];
-            green = ptr[1];
-            red   = ptr[2];
+            blue   = ptr[0];
+            green  = ptr[1];
+            red    = ptr[2];
 
             ptr[0] = param.lut[blue];
             ptr[1] = param.lut[green];
@@ -181,16 +180,16 @@ void NormalizeFilter::normalizeImage()
                 postProgress( progress );
         }
     }
-    else               // 16 bits image.
+    else                    // 16 bits image.
     {
         unsigned short  red, green, blue;
         unsigned short* ptr = (unsigned short*)data;
 
         for (i = 0 ; !m_cancel && (i < size) ; ++i)
         {
-            blue  = ptr[0];
-            green = ptr[1];
-            red   = ptr[2];
+            blue   = ptr[0];
+            green  = ptr[1];
+            red    = ptr[2];
 
             ptr[0] = param.lut[blue];
             ptr[1] = param.lut[green];
