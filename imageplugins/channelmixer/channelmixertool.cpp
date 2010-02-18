@@ -79,7 +79,7 @@
 #include "colorgradientwidget.h"
 #include "daboutdata.h"
 #include "dimg.h"
-#include "dimgimagefilters.h"
+#include "mixerfilter.h"
 #include "editortoolsettings.h"
 #include "histogrambox.h"
 #include "histogramwidget.h"
@@ -472,25 +472,29 @@ void ChannelMixerTool::slotEffect()
        delete [] d->destinationPreviewData;
 
     d->destinationPreviewData = new uchar[w*h*(sb ? 8 : 4)];
-    DImgImageFilters filter;
-
+    MixerContainer settings;
+    settings.bPreserveLum = d->preserveLuminosity->isChecked();
+    settings.bMonochrome  = d->monochrome->isChecked();
+    
     if (d->monochrome->isChecked())
     {
-       filter.channelMixerImage(data, w, h, sb,                                 // Image data.
-                d->preserveLuminosity->isChecked(),                              // Preserve luminosity.
-                d->monochrome->isChecked(),                                      // Monochrome.
-                d->blackRedGain, d->blackGreenGain, d->blackBlueGain,              // Red channel gains.
-                0.0,            1.0,              0.0,                          // Green channel gains (not used).
-                0.0,            0.0,              1.0);                         // Blue channel gains (not used).
+        settings.rrGain = d->blackRedGain;
+        settings.rgGain = d->blackGreenGain;
+        settings.rbGain = d->blackBlueGain;
+        MixerFilter mixer(data, w, h, sb, settings);
     }
     else
     {
-       filter.channelMixerImage(data, w, h, sb,                                 // Image data.
-                d->preserveLuminosity->isChecked(),                              // Preserve luminosity.
-                d->monochrome->isChecked(),                                      // Monochrome.
-                d->redRedGain,   d->redGreenGain,   d->redBlueGain,                // Red channel gains.
-                d->greenRedGain, d->greenGreenGain, d->greenBlueGain,              // Green channel gains.
-                d->blueRedGain,  d->blueGreenGain,  d->blueBlueGain);              // Blue channel gains.
+        settings.rrGain = d->redRedGain;
+        settings.rgGain = d->redGreenGain;
+        settings.rbGain = d->redBlueGain;
+        settings.grGain = d->greenRedGain;
+        settings.ggGain = d->greenGreenGain;
+        settings.gbGain = d->greenBlueGain;
+        settings.brGain = d->blueRedGain;
+        settings.bgGain = d->blueGreenGain;
+        settings.bbGain = d->blueBlueGain;
+        MixerFilter mixer(data, w, h, sb, settings);
     }
 
     iface->putPreviewImage(data);
@@ -511,25 +515,29 @@ void ChannelMixerTool::finalRendering()
     int h             = iface->originalHeight();
     bool sb           = iface->originalSixteenBit();
 
-    DImgImageFilters filter;
+    MixerContainer settings;
+    settings.bPreserveLum = d->preserveLuminosity->isChecked();
+    settings.bMonochrome  = d->monochrome->isChecked();
 
     if (d->monochrome->isChecked())
     {
-       filter.channelMixerImage(data, w, h, sb,                     // Image data.
-                d->preserveLuminosity->isChecked(),                  // Preserve luminosity.
-                d->monochrome->isChecked(),                          // Monochrome.
-                d->blackRedGain, d->blackGreenGain, d->blackBlueGain,  // Red channel gains.
-                0.0,            1.0,              0.0,              // Green channel gains (not used).
-                0.0,            0.0,              1.0);             // Blue channel gains (not used).
+        settings.rrGain = d->blackRedGain;
+        settings.rgGain = d->blackGreenGain;
+        settings.rbGain = d->blackBlueGain;
+        MixerFilter mixer(data, w, h, sb, settings);
     }
     else
     {
-       filter.channelMixerImage(data, w, h, sb,                     // Image data.
-                d->preserveLuminosity->isChecked(),                  // Preserve luminosity.
-                d->monochrome->isChecked(),                          // Monochrome.
-                d->redRedGain,   d->redGreenGain,   d->redBlueGain,    // Red channel gains.
-                d->greenRedGain, d->greenGreenGain, d->greenBlueGain,  // Green channel gains.
-                d->blueRedGain,  d->blueGreenGain,  d->blueBlueGain);  // Blue channel gains.
+        settings.rrGain = d->redRedGain;
+        settings.rgGain = d->redGreenGain;
+        settings.rbGain = d->redBlueGain;
+        settings.grGain = d->greenRedGain;
+        settings.ggGain = d->greenGreenGain;
+        settings.gbGain = d->greenBlueGain;
+        settings.brGain = d->blueRedGain;
+        settings.bgGain = d->blueGreenGain;
+        settings.bbGain = d->blueBlueGain;
+        MixerFilter mixer(data, w, h, sb, settings);
     }
 
     iface->putOriginalImage(i18n("Channel Mixer"), data);
