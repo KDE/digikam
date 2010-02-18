@@ -49,9 +49,9 @@ private:
 
     void filterImage();
     void normalizeImage();
-            
-private:     
-    
+
+private:
+
     DImg* m_refImage;
 };
 

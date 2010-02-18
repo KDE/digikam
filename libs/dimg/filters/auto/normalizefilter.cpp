@@ -49,7 +49,7 @@ struct NormalizeParam
 NormalizeFilter::NormalizeFilter(DImg* orgImage, DImg* refImage, QObject* parent)
                : DImgThreadedFilter(orgImage, parent, "NormalizeFilter")
 {
-    m_refImage = refImage;  
+    m_refImage = refImage;
     initFilter();
 }
 
@@ -74,7 +74,7 @@ void NormalizeFilter::normalizeImage()
     int            x, i;
     unsigned short range;
     int            progress;
-    
+
     bool sixteenBit = m_orgImage.sixteenBit();
     int segments    = sixteenBit ? NUM_SEGMENTS_16BIT : NUM_SEGMENTS_8BIT;
 
