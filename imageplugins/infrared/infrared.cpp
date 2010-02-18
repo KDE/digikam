@@ -44,6 +44,7 @@
 #include "imagecurves.h"
 #include "imagehistogram.h"
 #include "dimgimagefilters.h"
+#include "mixerfilter.h"
 #include "globals.h"
 
 namespace DigikamInfraredImagesPlugin
@@ -132,12 +133,13 @@ void Infrared::infraredImage(int Sensibility, bool Grain)
     pBWBits = BWImage.bits();
     memcpy (pBWBits, data, numBytes);
 
-    DImgImageFilters().channelMixerImage(pBWBits, Width, Height, sixteenBit, // Image data.
-                                         true,                               // Preserve luminosity.
-                                         true,                               // Monochrome.
-                                         0.4F, greenBoost, -0.8F,            // Red channel gains.
-                                         0.0F, 1.0F,        0.0F,            // Green channel gains (not used).
-                                         0.0F, 0.0F,        1.0F);           // Blue channel gains (not used).
+    MixerContainer settings;
+    settings.bMonochrome = true;
+    settings.rrGain      = 0.4;
+    settings.rgGain      = greenBoost;
+    settings.rbGain      = -0.8;
+    MixerFilter mixer(pBWBits, Width, Height, sixteenBit, settings);
+    
     postProgress( 10 );
     if (m_cancel)
         return;
@@ -169,7 +171,7 @@ void Infrared::infraredImage(int Sensibility, bool Grain)
 #endif
 
         pGrainBits = new uchar[numBytes];    // Grain blurred without curves adjustment.
-        uchar *ptr;
+        uchar* ptr;
         int component;
         grainData.setSixteenBit(sixteenBit);
 
@@ -228,8 +230,8 @@ void Infrared::infraredImage(int Sensibility, bool Grain)
 
     if (Grain)
     {
-        ImageCurves *grainCurves = new ImageCurves(sixteenBit);
-        pMaskBits = new uchar[numBytes];    // Grain mask with curves adjustment.
+        ImageCurves* grainCurves = new ImageCurves(sixteenBit);
+        pMaskBits                = new uchar[numBytes];    // Grain mask with curves adjustment.
 
         // We modify only global luminosity of the grain.
         if (sixteenBit)
@@ -271,7 +273,7 @@ void Infrared::infraredImage(int Sensibility, bool Grain)
         pOverlayBits = new uchar[numBytes];    // Overlay to merge with original converted in gray scale.
 
         // get composer for default blending
-        DColorComposer *composer = DColorComposer::getComposer(DColorComposer::PorterDuffNone);
+        DColorComposer* composer = DColorComposer::getComposer(DColorComposer::PorterDuffNone);
         int alpha;
 
         int Shade = 52; // This value control the shading pixel effect between original image and grain mask.

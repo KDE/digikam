@@ -53,7 +53,6 @@ private:  // Infrared filter methods.
 
     void filterImage();
     void infraredImage(int Sensibility, bool Grain);
-
 };
 
 }  // namespace DigikamInfraredImagesPlugin
