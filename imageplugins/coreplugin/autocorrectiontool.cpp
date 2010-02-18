@@ -318,27 +318,27 @@ void AutoCorrectionTool::autoCorrection(DImg* img, DImg* ref, int type)
     {
         case AutoLevelsCorrection:
         {
-            setFilter(dynamic_cast<DImgThreadedFilter*>(new AutoLevelsFilter(img, ref, this)));
+            setFilter(new AutoLevelsFilter(img, ref, this));
             break;
         }
         case NormalizeCorrection:
         {
-            setFilter(dynamic_cast<DImgThreadedFilter*>(new NormalizeFilter(img, img/*ref*/, this)));
+            setFilter(new NormalizeFilter(img, ref, this));
             break;
         }
         case EqualizeCorrection:
         {
-            setFilter(dynamic_cast<DImgThreadedFilter*>(new EqualizeFilter(img, ref, this)));
+            setFilter(new EqualizeFilter(img, ref, this));
             break;
         }
         case StretchContrastCorrection:
         {
-            setFilter(dynamic_cast<DImgThreadedFilter*>(new StretchFilter(img, ref, this)));
+            setFilter(new StretchFilter(img, ref, this));
             break;
         }
         case AutoExposureCorrection:
         {
-            setFilter(dynamic_cast<DImgThreadedFilter*>(new AutoExpoFilter(img, ref, this)));
+            setFilter(new AutoExpoFilter(img, ref, this));
             break;
         }
     }
