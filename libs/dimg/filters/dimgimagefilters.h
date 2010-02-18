@@ -45,29 +45,6 @@ public:
 
 private:    // Private methods used internally.
 
-    // Methods for Channel Mixer.
-
-    inline double CalculateNorm(float RedGain, float GreenGain, float BlueGain, bool bPreserveLum)
-    {
-       double lfSum = RedGain + GreenGain + BlueGain;
-
-       if ((lfSum == 0.0) || (bPreserveLum == false))
-           return (1.0);
-
-       return( fabs (1.0 / lfSum) );
-    };
-
-    inline unsigned short MixPixel(float RedGain, float GreenGain, float BlueGain,
-                                   unsigned short R, unsigned short G, unsigned short B, bool sixteenBit,
-                                   double Norm)
-    {
-       double lfMix = RedGain * (double)R + GreenGain * (double)G + BlueGain * (double)B;
-       lfMix        *= Norm;
-       int segment  = sixteenBit ? 65535 : 255;
-
-       return( (unsigned short)CLAMP((int)lfMix, 0, segment));
-    };
-
     inline int setPositionAdjusted (int Width, int Height, int X, int Y)
     {
        X = (X < 0) ? 0 : (X >= Width ) ? Width  - 1 : X;
@@ -79,12 +56,6 @@ public:   // Public methods.
 
     void invertImage(uchar* data, int w, int h, bool sixteenBit);
     
-    void channelMixerImage(uchar* data, int Width, int Height, bool sixteenBit,
-                           bool bPreserveLum, bool bMonochrome,
-                           float rrGain, float rgGain, float rbGain,
-                           float grGain, float ggGain, float gbGain,
-                           float brGain, float bgGain, float bbGain);
-                           
     void gaussianBlurImage(uchar* data, int width, int height, bool sixteenBit, int radius);
     
     void sharpenImage(uchar* data, int width, int height, bool sixteenBit, int radius);
