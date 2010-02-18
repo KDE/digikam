@@ -6,7 +6,7 @@
  * Date        : 2005-24-01
  * Description : Chanels mixer filter
  *
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,15 +47,15 @@ public:
     {
         bPreserveLum = true;
         bMonochrome  = false;
-        rrGain       = 0.0;
+        rrGain       = 1.0;
         rgGain       = 0.0;
         rbGain       = 0.0;
         grGain       = 0.0;
-        ggGain       = 0.0;
+        ggGain       = 1.0;
         gbGain       = 0.0;
-        brGain       = 0.0; 
+        brGain       = 0.0;
         bgGain       = 0.0;
-        bbGain       = 0.0;    
+        bbGain       = 1.0;
     };
 
     ~MixerContainer(){};
@@ -64,16 +64,16 @@ public:
 
     bool  bPreserveLum;
     bool  bMonochrome;
-    
+
     float rrGain;
     float rgGain;
     float rbGain;
     float grGain;
     float ggGain;
     float gbGain;
-    float brGain; 
+    float brGain;
     float bgGain;
-    float bbGain;    
+    float bbGain;
 };
 
 // -----------------------------------------------------------------------------------------------
@@ -94,7 +94,7 @@ private:
 
     void channelMixerImage(DImg& image);
     void channelMixerImage(uchar* data, uint width, uint height, bool sixteenBit);
-    
+
     inline double CalculateNorm(float RedGain, float GreenGain, float BlueGain, bool bPreserveLum);
 
     inline unsigned short MixPixel(float RedGain, float GreenGain, float BlueGain,

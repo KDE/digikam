@@ -6,7 +6,7 @@
  * Date        : 2005-24-01
  * Description : Chanels mixer filter
  *
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -118,10 +118,10 @@ void MixerFilter::channelMixerImage(uchar* bits, uint width, uint height, bool s
             }
 
             ptr += 4;
-            
+
             progress = (int)(((double)i * 100.0) / size);
             if ( progress%5 == 0 )
-                postProgress( progress );               
+                postProgress( progress );
         }
     }
     else               // 16 bits image.
@@ -152,10 +152,10 @@ void MixerFilter::channelMixerImage(uchar* bits, uint width, uint height, bool s
             }
 
             ptr += 4;
-            
+
             progress = (int)(((double)i * 100.0) / size);
             if ( progress%5 == 0 )
-                postProgress( progress );               
+                postProgress( progress );
         }
     }
 }
@@ -181,5 +181,5 @@ unsigned short MixerFilter::MixPixel(float RedGain, float GreenGain, float BlueG
 
     return( (unsigned short)CLAMP((int)lfMix, 0, segment));
 }
-    
+
 }  // namespace Digikam
