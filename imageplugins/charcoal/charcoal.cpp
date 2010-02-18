@@ -27,7 +27,6 @@
 #define SQ2PI   2.50662827463100024161235523934010416269302368164062
 #define Epsilon 1.0e-12
 
-
 #include "charcoal.h"
 
 // C++ includes
@@ -43,6 +42,7 @@
 #include "dimg.h"
 #include "dimggaussianblur.h"
 #include "stretchfilter.h"
+#include "mixerfilter.h"
 #include "dimgimagefilters.h"
 
 namespace DigikamCharcoalImagesPlugin
@@ -124,14 +124,14 @@ void Charcoal::filterImage()
 
     // -- Convert to neutral black & white ------------------------------------
 
-    DImgImageFilters().channelMixerImage(
-                   m_destImage.bits(), m_destImage.width(),
-                   m_destImage.height(), m_destImage.sixteenBit(),  // Image data.
-                   true,                                            // Preserve luminosity.
-                   true,                                            // Monochrome.
-                   0.3F, 0.59F , 0.11F,                             // Red channel gains.
-                   0.0F, 1.0F,   0.0F,                              // Green channel gains (not used).
-                   0.0F, 0.0F,   1.0F);                             // Blue channel gains (not used).
+    MixerContainer settings;
+    settings.bMonochrome = true;
+    settings.rrGain      = 0.3;
+    settings.rgGain      = 0.59;
+    settings.rbGain      = 0.11;
+    MixerFilter mixer(m_destImage.bits(), m_destImage.width(),
+                      m_destImage.height(), m_destImage.sixteenBit(), settings);
+    
     postProgress( 100 );
     if (m_cancel)
         return;
@@ -143,7 +143,7 @@ bool Charcoal::convolveImage(const unsigned int order, const double *kernel)
     int     mx, my, sx, sy, mcx, mcy, progress;
     long    kernelWidth, i;
     double  red, green, blue, alpha, normalize=0.0;
-    double *k=0;
+    double* k=0;
 
     kernelWidth = order;
 
