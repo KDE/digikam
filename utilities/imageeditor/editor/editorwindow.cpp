@@ -142,6 +142,8 @@
 namespace Digikam
 {
 
+const QString EditorWindow::CONFIG_GROUP_NAME = "ImageViewer Settings";
+
 EditorWindow::EditorWindow(const char *name)
             : KXmlGuiWindow(0), d(new EditorWindowPriv)
 {
@@ -699,7 +701,7 @@ void EditorWindow::slotAboutToShowRedoMenu()
 
 void EditorWindow::slotConfToolbars()
 {
-    saveMainWindowSettings(KGlobal::config()->group(d->configGroupName));
+    saveMainWindowSettings(KGlobal::config()->group(CONFIG_GROUP_NAME));
     KEditToolBar dlg(factory(), this);
 
     connect(&dlg, SIGNAL(newToolbarConfig()),
@@ -715,7 +717,7 @@ void EditorWindow::slotConfNotifications()
 
 void EditorWindow::slotNewToolbarConfig()
 {
-    applyMainWindowSettings(KGlobal::config()->group(d->configGroupName));
+    applyMainWindowSettings(KGlobal::config()->group(CONFIG_GROUP_NAME));
 }
 
 void EditorWindow::slotIncreaseZoom()
@@ -849,7 +851,7 @@ void EditorWindow::unLoadImagePlugins()
 void EditorWindow::readStandardSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(d->configGroupName);
+    KConfigGroup group        = config->group(CONFIG_GROUP_NAME);
 
     // Restore Canvas layout
     if (group.hasKey(d->configVerticalSplitterSizesEntry) && m_vSplitter)
@@ -884,7 +886,7 @@ void EditorWindow::applyStandardSettings()
 
     // -- JPEG, PNG, TIFF JPEG2000 files format settings --------------------------------------
 
-    KConfigGroup group = config->group(d->configGroupName);
+    KConfigGroup group = config->group(CONFIG_GROUP_NAME);
 
     m_IOFileSettings->JPEGCompression     = JPEGSettings::convertCompressionForLibJpeg(group.readEntry(d->configJpegCompressionEntry, 75));
 
@@ -1015,7 +1017,7 @@ void EditorWindow::applyStandardSettings()
 void EditorWindow::saveStandardSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(d->configGroupName);
+    KConfigGroup group        = config->group(CONFIG_GROUP_NAME);
 
     group.writeEntry(d->configAutoZoomEntry, d->zoomFitToWindowAction->isChecked());
     m_splitter->saveState(group);
@@ -1806,7 +1808,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
     // restore old settings for the dialog
     QFileInfo info(m_savingContext->srcURL.fileName());
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(d->configGroupName);
+    KConfigGroup group        = config->group(CONFIG_GROUP_NAME);
     const QString optionLastExtension = "LastSavedImageExtension";
     QString ext               = group.readEntry(optionLastExtension, "png");
     if (ext.isEmpty())
@@ -2180,7 +2182,7 @@ void EditorWindow::slotContribute()
 void EditorWindow::slotToggleSlideShow()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(d->configGroupName);
+    KConfigGroup group = config->group(CONFIG_GROUP_NAME);
     bool startWithCurrent = group.readEntry(d->configSlideShowStartCurrentEntry, false);
 
     SlideShowSettings settings;
@@ -2217,7 +2219,7 @@ void EditorWindow::slotThemeChanged()
     m_themeMenuAction->setCurrentItem(index);
 
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(d->configGroupName);
+    KConfigGroup group        = config->group(CONFIG_GROUP_NAME);
 
     if (!group.readEntry(d->configUseThemeBackgroundColorEntry, true))
         m_bgColor = group.readEntry(d->configBackgroundColorEntry, QColor(Qt::black));

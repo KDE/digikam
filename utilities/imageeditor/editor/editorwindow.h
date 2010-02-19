@@ -83,6 +83,8 @@ public:
     virtual bool setup()=0;
     virtual bool setupICC()=0;
 
+    const static QString CONFIG_GROUP_NAME;
+
 Q_SIGNALS:
 
     void signalSelectionChanged(const QRect&);

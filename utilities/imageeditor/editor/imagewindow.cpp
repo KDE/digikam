@@ -125,6 +125,8 @@ public:
 
     ImageWindowPriv()
     {
+        configShowThumbbarEntry             = "Show Thumbbar";
+        configHorizontalThumbbarEntry       = "HorizontalThumbbar";
         allowSaving                         = true;
         star0                               = 0;
         star1                               = 0;
@@ -139,6 +141,9 @@ public:
         thumbBar                            = 0;
         thumbBarDock                        = 0;
     }
+
+    QString                   configShowThumbbarEntry;
+    QString                   configHorizontalThumbbarEntry;
 
     // If image editor is launched by camera interface, current
     // image cannot be saved.
@@ -230,10 +235,10 @@ ImageWindow::ImageWindow()
     readSettings();
     applySettings();
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("ImageViewer Settings");
+    KConfigGroup group        = config->group(EditorWindow::CONFIG_GROUP_NAME);
     applyMainWindowSettings(group);
-    d->thumbBarDock->setShouldBeVisible(group.readEntry("Show Thumbbar", false));
-    setAutoSaveSettings("ImageViewer Settings", true);
+    d->thumbBarDock->setShouldBeVisible(group.readEntry(d->configShowThumbbarEntry, false));
+    setAutoSaveSettings(EditorWindow::CONFIG_GROUP_NAME, true);
 
     //-------------------------------------------------------------
 
@@ -280,7 +285,7 @@ void ImageWindow::closeEvent(QCloseEvent* e)
     }
 
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("ImageViewer Settings");
+    KConfigGroup group        = config->group(EditorWindow::CONFIG_GROUP_NAME);
     saveMainWindowSettings(group);
     saveSettings();
 
@@ -345,7 +350,7 @@ void ImageWindow::setupConnections()
 void ImageWindow::setupUserArea()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("ImageViewer Settings");
+    KConfigGroup group        = config->group(EditorWindow::CONFIG_GROUP_NAME);
 
     QWidget* widget = new QWidget(this);
     QHBoxLayout *hlay = new QHBoxLayout(widget);
@@ -381,15 +386,15 @@ void ImageWindow::setupUserArea()
     // by viewContainers built-in mechanism.
     Qt::DockWidgetArea dockArea    = Qt::LeftDockWidgetArea;
     Qt::Orientation    orientation = Qt::Vertical;
-    if (group.hasKey("HorizontalThumbbar"))
+    if (group.hasKey(d->configHorizontalThumbbarEntry))
     {
-        if (group.readEntry("HorizontalThumbbar", true))
+        if (group.readEntry(d->configHorizontalThumbbarEntry, true))
         {
             // Horizontal thumbbar layout
             dockArea    = Qt::TopDockWidgetArea;
             orientation = Qt::Horizontal;
         }
-        group.deleteEntry("HorizontalThumbbar");
+        group.deleteEntry(d->configHorizontalThumbbarEntry);
     }
 
     // The thumb bar is placed in a detachable/dockable widget.

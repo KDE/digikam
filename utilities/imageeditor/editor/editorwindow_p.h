@@ -58,7 +58,6 @@ public:
 
     EditorWindowPriv()
     {
-        configGroupName                          = "ImageViewer Settings";
         configAutoBrightnessEntry                = "AutoBrightness";
         configAutoZoomEntry                      = "AutoZoom";
         configBackgroundColorEntry               = "BackgroundColor";
@@ -154,7 +153,6 @@ public:
     {
     }
 
-    QString                    configGroupName;
     QString                    configAutoBrightnessEntry;
     QString                    configAutoZoomEntry;
     QString                    configBackgroundColorEntry;
@@ -203,7 +201,6 @@ public:
     QString                    configVerticalSplitterSizesEntry;
     QString                    configVerticalSplitterStateEntry;
     QString                    configWhiteBalanceEntry;
-
 
     bool                       removeFullScreenButton;
     bool                       fullScreenHideToolBar;

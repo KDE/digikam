@@ -184,7 +184,7 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
     KIconLoader::global()->addAppDir("digikam");
 
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("ImageViewer Settings");
+    KConfigGroup group = config->group(EditorWindow::CONFIG_GROUP_NAME);
 
     if(group.readEntry("ShowSplash", true) && !kapp->isSessionRestored())
     {
@@ -239,7 +239,7 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
 
     readSettings();
     applySettings();
-    setAutoSaveSettings("ImageViewer Settings", true);
+    setAutoSaveSettings(EditorWindow::CONFIG_GROUP_NAME, true);
 
     d->rightSideBar->loadState();
 
@@ -384,7 +384,7 @@ void ShowFoto::setupConnections()
 void ShowFoto::setupUserArea()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("ImageViewer Settings");
+    KConfigGroup group        = config->group(EditorWindow::CONFIG_GROUP_NAME);
 
     QWidget* widget   = new QWidget(this);
     QHBoxLayout *hlay = new QHBoxLayout(widget);
@@ -481,7 +481,7 @@ void ShowFoto::readSettings()
     readStandardSettings();
 
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("ImageViewer Settings");
+    KConfigGroup group        = config->group(EditorWindow::CONFIG_GROUP_NAME);
 
     QString defaultDir =group.readEntry("Last Opened Directory", QString());
     if (defaultDir.isNull())
@@ -503,7 +503,7 @@ void ShowFoto::saveSettings()
     saveStandardSettings();
 
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("ImageViewer Settings");
+    KConfigGroup group        = config->group(EditorWindow::CONFIG_GROUP_NAME);
 
     group.writeEntry("Last Opened Directory", d->lastOpenedDirectory.toLocalFile() );
     group.writeEntry("Theme", Digikam::ThemeEngine::instance()->getCurrentThemeName());
@@ -516,7 +516,7 @@ void ShowFoto::applySettings()
     applyStandardSettings();
 
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("ImageViewer Settings");
+    KConfigGroup group        = config->group(EditorWindow::CONFIG_GROUP_NAME);
 
     d->rightSideBar->setStyle(group.readEntry("Sidebar Title Style", 0) == 0 ?
                               KMultiTabBar::VSNET : KMultiTabBar::KDEV3ICON);
@@ -782,7 +782,7 @@ void ShowFoto::openFolder(const KUrl& url)
     // Determine sort ordering for the entries from configuration setting:
 
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("ImageViewer Settings");
+    KConfigGroup group        = config->group(EditorWindow::CONFIG_GROUP_NAME);
 
     QDir::SortFlags flag;
     bool reverse = group.readEntry("ReverseSort", false);
@@ -1121,7 +1121,7 @@ void ShowFoto::slideShow(bool startWithCurrent, Digikam::SlideShowSettings& sett
     if (!d->thumbBar->countItems()) return;
 
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("ImageViewer Settings");
+    KConfigGroup group = config->group(EditorWindow::CONFIG_GROUP_NAME);
 
     settings.exifRotate = group.readEntry("EXIF Rotate", true);
     settings.fileList   = d->thumbBar->itemsUrls();
