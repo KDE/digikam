@@ -53,14 +53,18 @@ ChannelMixer::ChannelMixer(QObject* parent)
 
     KVBox* vbox          = new KVBox;
     KHBox* hbox          = new KHBox(vbox);
-    QLabel* channelLabel = new QLabel(i18n("Channel:"), hbox);
-    channelLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    QLabel* channelLabel = new QLabel(hbox);
+    channelLabel->setText(i18n("Channel:"));
     m_channelCB          = new KComboBox(hbox);
     m_channelCB->addItem(i18n("Red"),   QVariant(RedChannel));
     m_channelCB->addItem(i18n("Green"), QVariant(GreenChannel));
     m_channelCB->addItem(i18n("Blue"),  QVariant(BlueChannel));
     
     m_settingsView = new MixerSettings(vbox);
+    
+    QLabel *space = new QLabel(vbox);
+    vbox->setStretchFactor(space, 10);
+    
     setSettingsWidget(vbox);
 
     connect(m_settingsView, SIGNAL(signalSettingsChanged()),
