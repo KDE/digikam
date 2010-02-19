@@ -25,13 +25,15 @@
 
 // Qt includes
 
-#include <QWidget>
+#include <QLabel>
 
 // KDE includes
 
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
+#include <kvbox.h>
+#include <kcombobox.h>
 
 // Local includes
 
@@ -49,16 +51,43 @@ ChannelMixer::ChannelMixer(QObject* parent)
     setToolDescription(i18n("A tool to mix Color Channel."));
     setToolIcon(KIcon(SmallIcon("channelmixer")));
 
-    QWidget *box   = new QWidget;
-    m_settingsView = new MixerSettings(box);
-    setSettingsWidget(box);
+    KVBox* vbox          = new KVBox;
+    KHBox* hbox          = new KHBox(vbox);
+    QLabel* channelLabel = new QLabel(i18n("Channel:"), hbox);
+    channelLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    m_channelCB          = new KComboBox(hbox);
+    m_channelCB->addItem(i18n("Red"),   QVariant(RedChannel));
+    m_channelCB->addItem(i18n("Green"), QVariant(GreenChannel));
+    m_channelCB->addItem(i18n("Blue"),  QVariant(BlueChannel));
+    
+    m_settingsView = new MixerSettings(vbox);
+    setSettingsWidget(vbox);
 
     connect(m_settingsView, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotSettingsChanged()));
+            
+    connect(m_channelCB, SIGNAL(activated(int)),
+            this, SLOT(slotChannelChanged()));
+            
+    connect(m_settingsView, SIGNAL(signalMonochromeActived(bool)),
+            this, SLOT(slotMonochromeActived(bool)));            
 }
 
 ChannelMixer::~ChannelMixer()
 {
+}
+
+void ChannelMixer::slotChannelChanged()
+{
+    int index = m_channelCB->currentIndex();
+    m_settingsView->setCurrentChannel((ChannelType)(m_channelCB->itemData(index).toInt()));
+}
+
+void ChannelMixer::slotMonochromeActived(bool mono)
+{
+    m_channelCB->setEnabled(!mono);
+    int id = m_channelCB->findData(QVariant(RedChannel));
+    m_channelCB->setCurrentIndex(id);    
 }
 
 BatchToolSettings ChannelMixer::defaultSettings()

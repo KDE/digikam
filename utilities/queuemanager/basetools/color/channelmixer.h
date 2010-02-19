@@ -28,6 +28,8 @@
 
 #include "batchtool.h"
 
+class KComboBox;
+
 namespace Digikam
 {
 
@@ -52,9 +54,13 @@ private Q_SLOTS:
 
     void slotAssignSettings2Widget();
     void slotSettingsChanged();
+    
+    void slotChannelChanged();
+    void slotMonochromeActived(bool);
 
 private:
 
+    KComboBox*     m_channelCB;
     MixerSettings* m_settingsView;
 };
 
