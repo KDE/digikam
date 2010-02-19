@@ -34,14 +34,10 @@
 // Qt includes
 
 #include <QCheckBox>
-#include <QColor>
 #include <QFile>
 #include <QGridLayout>
 #include <QLabel>
-#include <QPixmap>
 #include <QPushButton>
-#include <QTimer>
-#include <QToolButton>
 
 // KDE includes
 
@@ -56,7 +52,6 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
-#include <kvbox.h>
 
 // LibKDcraw includes
 
@@ -532,7 +527,7 @@ void ChannelMixerTool::readSettings()
     updateSettingsWidgets();
     slotMonochromeActived(d->mixerSettings.bMonochrome);
 
-    // we need to call the set methods here, otherwise the histogram will not be updated correctly
+    // we need to call these methods here, otherwise the histogram will not be updated correctly
     d->gboxSettings->histogramBox()->setChannel((ChannelType)group.readEntry(d->configHistogramChannelEntry,
                                                 (int)LuminosityChannel));
     d->gboxSettings->histogramBox()->setScale((HistogramScale)group.readEntry(d->configHistogramScaleEntry,
@@ -600,7 +595,7 @@ void ChannelMixerTool::slotResetSettings()
 // Load all gains.
 void ChannelMixerTool::slotLoadSettings()
 {
-    KUrl loadGainsFileUrl;
+    KUrl  loadGainsFileUrl;
     FILE* fp = 0L;
 
     loadGainsFileUrl = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
@@ -687,7 +682,7 @@ void ChannelMixerTool::slotLoadSettings()
 // Save all gains.
 void ChannelMixerTool::slotSaveAsSettings()
 {
-    KUrl saveGainsFileUrl;
+    KUrl  saveGainsFileUrl;
     FILE* fp = 0L;
 
     saveGainsFileUrl = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
