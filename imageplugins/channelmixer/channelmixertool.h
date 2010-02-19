@@ -28,6 +28,8 @@
 
 #include "editortool.h"
 
+using namespace Digikam;
+
 namespace Digikam
 {
 class DColor;
@@ -38,7 +40,7 @@ namespace DigikamChannelMixerImagesPlugin
 
 class ChannelMixerToolPriv;
 
-class ChannelMixerTool : public Digikam::EditorTool
+class ChannelMixerTool : public EditorTool
 {
     Q_OBJECT
 
