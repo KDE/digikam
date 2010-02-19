@@ -371,35 +371,14 @@ void MixerSettings::slotMonochromeActived(bool mono)
   
 MixerContainer MixerSettings::settings() const
 {
-    MixerContainer prm;
-/*
-    prm.thresholds[0] = d->thrLumInput->value();
-    prm.thresholds[2] = d->thrCrInput->value();
-    prm.thresholds[1] = d->thrCbInput->value();
-    prm.softness[0]   = 1.0 - d->softLumInput->value();
-    prm.softness[2]   = 1.0 - d->softCrInput->value();
-    prm.softness[1]   = 1.0 - d->softCbInput->value();
-    prm.advanced      = d->advancedBox->isChecked();
-    prm.leadThreshold = d->thresholdInput->value();
-    prm.leadSoftness  = 1.0 - d->softnessInput->value();
-*/
-    return prm;
+    return d->mixerSettings;
 }
 
 void MixerSettings::setSettings(const MixerContainer& settings)
 {
-    blockSignals(true);
-/*    d->thrLumInput->setValue(settings.thresholds[0]);
-    d->thrCrInput->setValue(settings.thresholds[2]);
-    d->thrCbInput->setValue(settings.thresholds[1]);
-    d->softLumInput->setValue(1.0 - settings.softness[0]);
-    d->softCrInput->setValue(1.0 - settings.softness[2]);
-    d->softCbInput->setValue(1.0 - settings.softness[1]);
-    d->advancedBox->setChecked(settings.advanced);
-    d->thresholdInput->setValue(settings.leadThreshold);
-    d->softnessInput->setValue(1.0 - settings.leadSoftness);
-*/
-    blockSignals(false);
+    d->mixerSettings = settings;
+    updateSettingsWidgets();
+    slotMonochromeActived(d->mixerSettings.bMonochrome);
 }
 
 void MixerSettings::resetToDefault()
@@ -457,9 +436,6 @@ void MixerSettings::readSettings(KConfigGroup& group)
     prm.blackGreenGain = group.readEntry(d->configBlackGreenGainEntry,     defaultPrm.blackGreenGain);
     prm.blackBlueGain  = group.readEntry(d->configBlackBlueGainEntry,      defaultPrm.blackBlueGain);
 
-    updateSettingsWidgets();
-    slotMonochromeActived(prm.bMonochrome);
-    
     setSettings(prm);
 }
 
@@ -489,8 +465,9 @@ void MixerSettings::writeSettings(KConfigGroup& group)
 
 void MixerSettings::loadSettings()
 {
-    KUrl  loadGainsFileUrl;
-    FILE* fp = 0L;
+    KUrl           loadGainsFileUrl;
+    FILE*          fp = 0L;
+    MixerContainer settings;
 
     loadGainsFileUrl = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
                                             QString( "*" ), kapp->activeWindow(),
@@ -527,42 +504,40 @@ void MixerSettings::loadSettings()
         fscanf (fp, "%*s %s", buf1);
 
         if (strcmp (buf1, "true") == 0)
-            d->mixerSettings.bMonochrome = true;
+            settings.bMonochrome = true;
         else
-            d->mixerSettings.bMonochrome = false;
+            settings.bMonochrome = false;
 
         fscanf (fp, "%*s %s", buf1);
 
         if (strcmp (buf1, "true") == 0)
-            d->mixerSettings.bPreserveLum = true;
+            settings.bPreserveLum = true;
         else
-            d->mixerSettings.bPreserveLum = false;
+            settings.bPreserveLum = false;
 
         fscanf (fp, "%*s %s %s %s", buf1, buf2, buf3);
-        d->mixerSettings.redRedGain   = atof(buf1);
-        d->mixerSettings.redGreenGain = atof(buf2);
-        d->mixerSettings.redBlueGain  = atof(buf3);
+        settings.redRedGain   = atof(buf1);
+        settings.redGreenGain = atof(buf2);
+        settings.redBlueGain  = atof(buf3);
 
         fscanf (fp, "%*s %s %s %s", buf1, buf2, buf3);
-        d->mixerSettings.greenRedGain   = atof(buf1);
-        d->mixerSettings.greenGreenGain = atof(buf2);
-        d->mixerSettings.greenBlueGain  = atof(buf3);
+        settings.greenRedGain   = atof(buf1);
+        settings.greenGreenGain = atof(buf2);
+        settings.greenBlueGain  = atof(buf3);
 
         fscanf (fp, "%*s %s %s %s", buf1, buf2, buf3);
-        d->mixerSettings.blueRedGain   = atof(buf1);
-        d->mixerSettings.blueGreenGain = atof(buf2);
-        d->mixerSettings.blueBlueGain  = atof(buf3);
+        settings.blueRedGain   = atof(buf1);
+        settings.blueGreenGain = atof(buf2);
+        settings.blueBlueGain  = atof(buf3);
 
         fscanf (fp, "%*s %s %s %s", buf1, buf2, buf3);
-        d->mixerSettings.blackRedGain   = atof(buf1);
-        d->mixerSettings.blackGreenGain = atof(buf2);
-        d->mixerSettings.blackBlueGain  = atof(buf3);
+        settings.blackRedGain   = atof(buf1);
+        settings.blackGreenGain = atof(buf2);
+        settings.blackBlueGain  = atof(buf3);
 
         fclose(fp);
-
-        // Refresh settings.
-        updateSettingsWidgets();
-        slotMonochromeActived(d->mixerSettings.bMonochrome);
+        
+        setSettings(settings);
     }
     else
     {
