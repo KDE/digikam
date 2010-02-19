@@ -103,6 +103,7 @@ public:
         configHistogramScaleEntry("Histogram Scale"),
 
         destinationPreviewData(0),
+        currentChannel(RedChannel),
         settingsView(0),
         resetButton(0),
         preserveLuminosity(0),
@@ -134,6 +135,8 @@ public:
 
     uchar*              destinationPreviewData;
   
+    int                 currentChannel;
+    
     QWidget*            settingsView;
     
     QPushButton*        resetButton;
@@ -243,6 +246,9 @@ ChannelMixerTool::ChannelMixerTool(QObject* parent)
 
     connect(d->previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));
+            
+    connect(d->gboxSettings, SIGNAL(signalChannelChanged()),
+            this, SLOT(slotChannelChanged()));
 
     // -------------------------------------------------------------
     // Gains settings slots.
@@ -279,7 +285,7 @@ ChannelMixerTool::~ChannelMixerTool()
 
 void ChannelMixerTool::slotResetCurrentChannel()
 {
-    switch (d->gboxSettings->histogramBox()->channel())
+    switch (d->currentChannel)
     {
         case GreenChannel:
         {
@@ -322,7 +328,7 @@ void ChannelMixerTool::slotResetCurrentChannel()
 
 void ChannelMixerTool::slotGainsChanged()
 {
-    switch(d->gboxSettings->histogramBox()->channel())
+    switch(d->currentChannel)
     {
         case GreenChannel:
         {
@@ -369,7 +375,7 @@ void ChannelMixerTool::updateSettingsWidgets()
     d->greenGain->blockSignals(true);
     d->blueGain->blockSignals(true);
 
-    switch(d->gboxSettings->histogramBox()->channel())
+    switch(d->currentChannel)
     {
         case GreenChannel:
         {
@@ -440,6 +446,7 @@ void ChannelMixerTool::slotChannelChanged()
     if (d->monochrome->isChecked())
         d->gboxSettings->histogramBox()->setGradientColors(QColor("black"), QColor("white"));
 
+    d->currentChannel = d->gboxSettings->histogramBox()->channel();
     updateSettingsWidgets();
     slotEffect();
 }
