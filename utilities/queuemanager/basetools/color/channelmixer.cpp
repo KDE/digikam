@@ -65,22 +65,52 @@ BatchToolSettings ChannelMixer::defaultSettings()
 {
     BatchToolSettings prm;
     MixerContainer defaultPrm = m_settingsView->defaultSettings();
-/*
-    prm.insert("Brightness", (double)defaultPrm.brightness);
-    prm.insert("Contrast",   (double)defaultPrm.contrast);
-    prm.insert("Gamma",      (double)defaultPrm.gamma);
-*/
+    
+    prm.insert("bPreserveLum",   (bool)defaultPrm.bPreserveLum);
+    prm.insert("bMonochrome",    (bool)defaultPrm.bMonochrome);
+
+    // Standard settings.
+    prm.insert("redRedGain",     (double)defaultPrm.redRedGain);
+    prm.insert("redGreenGain",   (double)defaultPrm.redGreenGain);
+    prm.insert("redBlueGain",    (double)defaultPrm.redBlueGain);
+    prm.insert("greenRedGain",   (double)defaultPrm.greenRedGain);
+    prm.insert("greenGreenGain", (double)defaultPrm.greenGreenGain);
+    prm.insert("greenBlueGain",  (double)defaultPrm.greenBlueGain);
+    prm.insert("blueRedGain",    (double)defaultPrm.blueRedGain);
+    prm.insert("blueGreenGain",  (double)defaultPrm.blueGreenGain);
+    prm.insert("blueBlueGain",   (double)defaultPrm.blueBlueGain);
+
+    // Monochrome settings.
+    prm.insert("blackRedGain",   (double)defaultPrm.blackRedGain);
+    prm.insert("blackGreenGain", (double)defaultPrm.blackGreenGain);
+    prm.insert("blackBlueGain",  (double)defaultPrm.blackBlueGain);
+
     return prm;
 }
 
 void ChannelMixer::slotAssignSettings2Widget()
 {
     MixerContainer prm;
-/*    
-    prm.brightness = settings()["Brightness"].toDouble();
-    prm.contrast   = settings()["Contrast"].toDouble();
-    prm.gamma      = settings()["Gamma"].toDouble();
-*/    
+
+    prm.bPreserveLum   = settings()["bPreserveLum"].toBool();
+    prm.bMonochrome    = settings()["bMonochrome"].toBool();
+
+    // Standard settings.
+    prm.redRedGain     = settings()["redRedGain"].toDouble();
+    prm.redGreenGain   = settings()["redGreenGain"].toDouble();
+    prm.redBlueGain    = settings()["redBlueGain"].toDouble();
+    prm.greenRedGain   = settings()["greenRedGain"].toDouble();
+    prm.greenGreenGain = settings()["greenGreenGain"].toDouble();
+    prm.greenBlueGain  = settings()["greenBlueGain"].toDouble();
+    prm.blueRedGain    = settings()["blueRedGain"].toDouble();
+    prm.blueGreenGain  = settings()["blueGreenGain"].toDouble();
+    prm.blueBlueGain   = settings()["blueBlueGain"].toDouble();
+
+    // Monochrome settings.
+    prm.blackRedGain   = settings()["blackRedGain"].toDouble();
+    prm.blackGreenGain = settings()["blackGreenGain"].toDouble();
+    prm.blackBlueGain  = settings()["blackBlueGain"].toDouble();   
+    
     m_settingsView->setSettings(prm);
 }
 
@@ -88,11 +118,26 @@ void ChannelMixer::slotSettingsChanged()
 {
     BatchToolSettings prm;
     MixerContainer currentPrm = m_settingsView->settings();
-/*
-    prm.insert("Brightness", (double)currentPrm.brightness);
-    prm.insert("Contrast",   (double)currentPrm.contrast);
-    prm.insert("Gamma",      (double)currentPrm.gamma);
-*/
+    
+    prm.insert("bPreserveLum",   (bool)currentPrm.bPreserveLum);
+    prm.insert("bMonochrome",    (bool)currentPrm.bMonochrome);
+
+    // Standard settings.
+    prm.insert("redRedGain",     (double)currentPrm.redRedGain);
+    prm.insert("redGreenGain",   (double)currentPrm.redGreenGain);
+    prm.insert("redBlueGain",    (double)currentPrm.redBlueGain);
+    prm.insert("greenRedGain",   (double)currentPrm.greenRedGain);
+    prm.insert("greenGreenGain", (double)currentPrm.greenGreenGain);
+    prm.insert("greenBlueGain",  (double)currentPrm.greenBlueGain);
+    prm.insert("blueRedGain",    (double)currentPrm.blueRedGain);
+    prm.insert("blueGreenGain",  (double)currentPrm.blueGreenGain);
+    prm.insert("blueBlueGain",   (double)currentPrm.blueBlueGain);
+
+    // Monochrome settings.
+    prm.insert("blackRedGain",   (double)currentPrm.blackRedGain);
+    prm.insert("blackGreenGain", (double)currentPrm.blackGreenGain);
+    prm.insert("blackBlueGain",  (double)currentPrm.blackBlueGain);    
+
     setSettings(prm);
 }
 
@@ -101,11 +146,26 @@ bool ChannelMixer::toolOperations()
     if (!loadToDImg()) return false;
 
     MixerContainer prm;
-/*    
-    prm.brightness = settings()["Brightness"].toDouble();
-    prm.contrast   = settings()["Contrast"].toDouble();
-    prm.gamma      = settings()["Gamma"].toDouble();
-*/
+
+    prm.bPreserveLum   = settings()["bPreserveLum"].toBool();
+    prm.bMonochrome    = settings()["bMonochrome"].toBool();
+
+    // Standard settings.
+    prm.redRedGain     = settings()["redRedGain"].toDouble();
+    prm.redGreenGain   = settings()["redGreenGain"].toDouble();
+    prm.redBlueGain    = settings()["redBlueGain"].toDouble();
+    prm.greenRedGain   = settings()["greenRedGain"].toDouble();
+    prm.greenGreenGain = settings()["greenGreenGain"].toDouble();
+    prm.greenBlueGain  = settings()["greenBlueGain"].toDouble();
+    prm.blueRedGain    = settings()["blueRedGain"].toDouble();
+    prm.blueGreenGain  = settings()["blueGreenGain"].toDouble();
+    prm.blueBlueGain   = settings()["blueBlueGain"].toDouble();
+
+    // Monochrome settings.
+    prm.blackRedGain   = settings()["blackRedGain"].toDouble();
+    prm.blackGreenGain = settings()["blackGreenGain"].toDouble();
+    prm.blackBlueGain  = settings()["blackBlueGain"].toDouble();  
+    
     MixerFilter mixer(&image(), 0L, prm);
     mixer.startFilterDirectly();
     image().putImageData(mixer.getTargetImage().bits());
