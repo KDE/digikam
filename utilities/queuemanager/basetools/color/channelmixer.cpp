@@ -59,22 +59,22 @@ ChannelMixer::ChannelMixer(QObject* parent)
     m_channelCB->addItem(i18n("Red"),   QVariant(RedChannel));
     m_channelCB->addItem(i18n("Green"), QVariant(GreenChannel));
     m_channelCB->addItem(i18n("Blue"),  QVariant(BlueChannel));
-    
+
     m_settingsView = new MixerSettings(vbox);
-    
-    QLabel *space = new QLabel(vbox);
+
+    QLabel* space = new QLabel(vbox);
     vbox->setStretchFactor(space, 10);
-    
+
     setSettingsWidget(vbox);
 
     connect(m_settingsView, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotSettingsChanged()));
-            
+
     connect(m_channelCB, SIGNAL(activated(int)),
             this, SLOT(slotChannelChanged()));
-            
+
     connect(m_settingsView, SIGNAL(signalMonochromeActived(bool)),
-            this, SLOT(slotMonochromeActived(bool)));            
+            this, SLOT(slotMonochromeActived(bool)));
 }
 
 ChannelMixer::~ChannelMixer()
@@ -91,14 +91,14 @@ void ChannelMixer::slotMonochromeActived(bool mono)
 {
     m_channelCB->setEnabled(!mono);
     int id = m_channelCB->findData(QVariant(RedChannel));
-    m_channelCB->setCurrentIndex(id);    
+    m_channelCB->setCurrentIndex(id);
 }
 
 BatchToolSettings ChannelMixer::defaultSettings()
 {
     BatchToolSettings prm;
     MixerContainer defaultPrm = m_settingsView->defaultSettings();
-    
+
     prm.insert("bPreserveLum",   (bool)defaultPrm.bPreserveLum);
     prm.insert("bMonochrome",    (bool)defaultPrm.bMonochrome);
 
@@ -142,8 +142,8 @@ void ChannelMixer::slotAssignSettings2Widget()
     // Monochrome settings.
     prm.blackRedGain   = settings()["blackRedGain"].toDouble();
     prm.blackGreenGain = settings()["blackGreenGain"].toDouble();
-    prm.blackBlueGain  = settings()["blackBlueGain"].toDouble();   
-    
+    prm.blackBlueGain  = settings()["blackBlueGain"].toDouble();
+
     m_settingsView->setSettings(prm);
 }
 
@@ -151,7 +151,7 @@ void ChannelMixer::slotSettingsChanged()
 {
     BatchToolSettings prm;
     MixerContainer currentPrm = m_settingsView->settings();
-    
+
     prm.insert("bPreserveLum",   (bool)currentPrm.bPreserveLum);
     prm.insert("bMonochrome",    (bool)currentPrm.bMonochrome);
 
@@ -169,7 +169,7 @@ void ChannelMixer::slotSettingsChanged()
     // Monochrome settings.
     prm.insert("blackRedGain",   (double)currentPrm.blackRedGain);
     prm.insert("blackGreenGain", (double)currentPrm.blackGreenGain);
-    prm.insert("blackBlueGain",  (double)currentPrm.blackBlueGain);    
+    prm.insert("blackBlueGain",  (double)currentPrm.blackBlueGain);
 
     setSettings(prm);
 }
@@ -198,7 +198,7 @@ bool ChannelMixer::toolOperations()
     prm.blackRedGain   = settings()["blackRedGain"].toDouble();
     prm.blackGreenGain = settings()["blackGreenGain"].toDouble();
     prm.blackBlueGain  = settings()["blackBlueGain"].toDouble();  
-    
+
     MixerFilter mixer(&image(), 0L, prm);
     mixer.startFilterDirectly();
     image().putImageData(mixer.getTargetImage().bits());
