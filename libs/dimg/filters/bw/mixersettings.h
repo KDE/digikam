@@ -62,11 +62,25 @@ public:
 
     void loadSettings();
     void saveAsSettings();
+    
+    void setCurrentChannel(int);
+    int  currentChannel();
 
 Q_SIGNALS:
 
     void signalSettingsChanged();
+    void signalMonochromeActived(bool);
+    
+private:
+    
+    void updateSettingsWidgets();
 
+private Q_SLOTS:
+    
+    void slotResetCurrentChannel();
+    void slotGainsChanged();
+    void slotMonochromeActived(bool);
+    
 private:
 
     MixerSettingsPriv* const d;
