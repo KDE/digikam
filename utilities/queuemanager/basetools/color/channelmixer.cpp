@@ -48,7 +48,7 @@ ChannelMixer::ChannelMixer(QObject* parent)
             : BatchTool("ChannelMixer", BaseTool, parent)
 {
     setToolTitle(i18n("Channel Mixer"));
-    setToolDescription(i18n("A tool to mix Color Channel."));
+    setToolDescription(i18n("A tool to mix color channel."));
     setToolIcon(KIcon(SmallIcon("channelmixer")));
 
     KVBox* vbox          = new KVBox;
@@ -197,7 +197,7 @@ bool ChannelMixer::toolOperations()
     // Monochrome settings.
     prm.blackRedGain   = settings()["blackRedGain"].toDouble();
     prm.blackGreenGain = settings()["blackGreenGain"].toDouble();
-    prm.blackBlueGain  = settings()["blackBlueGain"].toDouble();  
+    prm.blackBlueGain  = settings()["blackBlueGain"].toDouble();
 
     MixerFilter mixer(&image(), 0L, prm);
     mixer.startFilterDirectly();

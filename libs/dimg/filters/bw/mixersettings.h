@@ -48,7 +48,7 @@ class DIGIKAM_EXPORT MixerSettings : public QWidget
 
 public:
 
-    MixerSettings(QWidget* parent);
+    MixerSettings(QWidget* parent=0);
     ~MixerSettings();
 
     MixerContainer defaultSettings() const;
@@ -62,7 +62,7 @@ public:
 
     void loadSettings();
     void saveAsSettings();
-    
+
     void setCurrentChannel(int);
     int  currentChannel();
 

@@ -31,9 +31,14 @@
 #include <cstdlib>
 #include <cerrno>
 
+// Qt includes
+
+#include <QVBoxLayout>
+
 // KDE includes
 
 #include <kapplication.h>
+#include <kvbox.h>
 #include <kconfig.h>
 #include <kcursor.h>
 #include <kfiledialog.h>
@@ -122,7 +127,11 @@ ChannelMixerTool::ChannelMixerTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->settingsView = new MixerSettings(d->gboxSettings->plainPage());
+    QVBoxLayout* vbox = new QVBoxLayout(d->gboxSettings->plainPage());
+    d->settingsView   = new MixerSettings;
+    vbox->addWidget(d->settingsView);
+    vbox->addStretch(10);
+
     setToolSettings(d->gboxSettings);
     init();
 
@@ -165,13 +174,13 @@ void ChannelMixerTool::slotChannelChanged()
 }
 
 void ChannelMixerTool::prepareEffect()
-{    
+{
     QApplication::setOverrideCursor(Qt::WaitCursor);
     d->settingsView->setEnabled(false);
     toolView()->setEnabled(false);
 
     MixerContainer settings = d->settingsView->settings();
-   
+
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 
     DImg preview = d->previewWidget->getOriginalRegionImage(true);
@@ -191,9 +200,9 @@ void ChannelMixerTool::putPreviewData()
     d->destinationPreviewData = preview.copyBits();
     d->gboxSettings->histogramBox()->histogram()->updateData(d->destinationPreviewData,
                                                              preview.width(), preview.height(), preview.sixteenBit(),
-                                                             0, 0, 0, false);  
-}  
-                                                             
+                                                             0, 0, 0, false);
+}
+
 void ChannelMixerTool::prepareFinal()
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
@@ -210,7 +219,7 @@ void ChannelMixerTool::putFinalData()
 {
     ImageIface iface(0, 0);
     iface.putOriginalImage(i18n("Channel Mixer"), filter()->getTargetImage().bits());
-}                                                             
+}
 
 void ChannelMixerTool::renderingFinished()
 {
@@ -225,7 +234,7 @@ void ChannelMixerTool::readSettings()
     KConfigGroup group        = config->group(d->configGroupName);
 
     d->settingsView->readSettings(group);
-    
+
     // we need to call these methods here, otherwise the histogram will not be updated correctly
     d->gboxSettings->histogramBox()->setChannel((ChannelType)group.readEntry(d->configHistogramChannelEntry,
                                                 (int)LuminosityChannel));
@@ -241,7 +250,7 @@ void ChannelMixerTool::writeSettings()
     KConfigGroup group        = config->group(d->configGroupName);
 
     d->settingsView->writeSettings(group);
-        
+
     group.writeEntry(d->configHistogramChannelEntry, (int)d->gboxSettings->histogramBox()->channel());
     group.writeEntry(d->configHistogramScaleEntry,   (int)d->gboxSettings->histogramBox()->scale());
 
