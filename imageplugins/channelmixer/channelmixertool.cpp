@@ -114,18 +114,6 @@ public:
         configHistogramScaleEntry("Histogram Scale"),
 
         destinationPreviewData(0),
-        redRedGain(0.0),
-        redGreenGain(0.0),
-        redBlueGain(0.0),
-        greenRedGain(0.0),
-        greenGreenGain(0.0),
-        greenBlueGain(0.0),
-        blueRedGain(0.0),
-        blueGreenGain(0.0),
-        blueBlueGain(0.0),
-        blackRedGain(0.0),
-        blackGreenGain(0.0),
-        blackBlueGain(0.0),
         resetButton(0),
         preserveLuminosity(0),
         monochrome(0),
@@ -155,20 +143,9 @@ public:
     const QString       configHistogramScaleEntry;
 
     uchar*              destinationPreviewData;
-
-    double              redRedGain;
-    double              redGreenGain;
-    double              redBlueGain;
-    double              greenRedGain;
-    double              greenGreenGain;
-    double              greenBlueGain;
-    double              blueRedGain;
-    double              blueGreenGain;
-    double              blueBlueGain;
-    double              blackRedGain;
-    double              blackGreenGain;
-    double              blackBlueGain;
-
+  
+    MixerContainer      mixerSettings;
+    
     QPushButton*        resetButton;
 
     QCheckBox*          preserveLuminosity;
@@ -320,31 +297,37 @@ void ChannelMixerTool::slotResetCurrentChannel()
     switch (d->gboxSettings->histogramBox()->channel())
     {
         case GreenChannel:
-            d->greenRedGain     = 0.0;
-            d->greenGreenGain   = 1.0;
-            d->greenBlueGain    = 0.0;
+        {
+            d->mixerSettings.greenRedGain     = 0.0;
+            d->mixerSettings.greenGreenGain   = 1.0;
+            d->mixerSettings.greenBlueGain    = 0.0;
             break;
-
+        }
+        
         case BlueChannel:
-            d->blueRedGain      = 0.0;
-            d->blueGreenGain    = 0.0;
-            d->blueBlueGain     = 1.0;
+        {
+            d->mixerSettings.blueRedGain      = 0.0;
+            d->mixerSettings.blueGreenGain    = 0.0;
+            d->mixerSettings.blueBlueGain     = 1.0;
             break;
-
+        }
+            
         default:                        // Red or monochrome.
+        {
             if (d->monochrome->isChecked())
             {
-                d->blackRedGain   = 1.0;
-                d->blackGreenGain = 0.0;
-                d->blackBlueGain  = 0.0;
+                d->mixerSettings.blackRedGain   = 1.0;
+                d->mixerSettings.blackGreenGain = 0.0;
+                d->mixerSettings.blackBlueGain  = 0.0;
             }
             else
             {
-                d->redRedGain   = 1.0;
-                d->redGreenGain = 0.0;
-                d->redBlueGain  = 0.0;
+                d->mixerSettings.redRedGain   = 1.0;
+                d->mixerSettings.redGreenGain = 0.0;
+                d->mixerSettings.redBlueGain  = 0.0;
             }
             break;
+        }
     }
 
     adjustSliders();
@@ -363,17 +346,17 @@ void ChannelMixerTool::slotGainsChanged()
     {
         case GreenChannel:
         {
-            d->greenRedGain   = d->redGain->value()   / 100.0;
-            d->greenGreenGain = d->greenGain->value() / 100.0;
-            d->greenBlueGain  = d->blueGain->value()  / 100.0;
+            d->mixerSettings.greenRedGain   = d->redGain->value()   / 100.0;
+            d->mixerSettings.greenGreenGain = d->greenGain->value() / 100.0;
+            d->mixerSettings.greenBlueGain  = d->blueGain->value()  / 100.0;
             break;
         }
 
         case BlueChannel:
         {
-            d->blueRedGain   = d->redGain->value()   / 100.0;
-            d->blueGreenGain = d->greenGain->value() / 100.0;
-            d->blueBlueGain  = d->blueGain->value()  / 100.0;
+            d->mixerSettings.blueRedGain   = d->redGain->value()   / 100.0;
+            d->mixerSettings.blueGreenGain = d->greenGain->value() / 100.0;
+            d->mixerSettings.blueBlueGain  = d->blueGain->value()  / 100.0;
             break;
         }
 
@@ -381,15 +364,15 @@ void ChannelMixerTool::slotGainsChanged()
         {
             if ( d->monochrome->isChecked() )
             {
-              d->blackRedGain   = d->redGain->value()   / 100.0;
-              d->blackGreenGain = d->greenGain->value() / 100.0;
-              d->blackBlueGain  = d->blueGain->value()  / 100.0;
+              d->mixerSettings.blackRedGain   = d->redGain->value()   / 100.0;
+              d->mixerSettings.blackGreenGain = d->greenGain->value() / 100.0;
+              d->mixerSettings.blackBlueGain  = d->blueGain->value()  / 100.0;
             }
             else
             {
-              d->redRedGain   = d->redGain->value()   / 100.0;
-              d->redGreenGain = d->greenGain->value() / 100.0;
-              d->redBlueGain  = d->blueGain->value()  / 100.0;
+              d->mixerSettings.redRedGain   = d->redGain->value()   / 100.0;
+              d->mixerSettings.redGreenGain = d->greenGain->value() / 100.0;
+              d->mixerSettings.redBlueGain  = d->blueGain->value()  / 100.0;
             }
             break;
         }
@@ -411,9 +394,9 @@ void ChannelMixerTool::adjustSliders()
             d->redGain->setDefaultValue(0);
             d->greenGain->setDefaultValue(100);
             d->blueGain->setDefaultValue(0);
-            d->redGain->setValue(d->greenRedGain     * 100.0);
-            d->greenGain->setValue(d->greenGreenGain * 100.0);
-            d->blueGain->setValue(d->greenBlueGain   * 100.0);
+            d->redGain->setValue(d->mixerSettings.greenRedGain     * 100.0);
+            d->greenGain->setValue(d->mixerSettings.greenGreenGain * 100.0);
+            d->blueGain->setValue(d->mixerSettings.greenBlueGain   * 100.0);
             break;
         }
 
@@ -422,9 +405,9 @@ void ChannelMixerTool::adjustSliders()
             d->redGain->setDefaultValue(0);
             d->greenGain->setDefaultValue(0);
             d->blueGain->setDefaultValue(100);
-            d->redGain->setValue(d->blueRedGain     * 100.0);
-            d->greenGain->setValue(d->blueGreenGain * 100.0);
-            d->blueGain->setValue(d->blueBlueGain   * 100.0);
+            d->redGain->setValue(d->mixerSettings.blueRedGain     * 100.0);
+            d->greenGain->setValue(d->mixerSettings.blueGreenGain * 100.0);
+            d->blueGain->setValue(d->mixerSettings.blueBlueGain   * 100.0);
             break;
         }
 
@@ -435,18 +418,18 @@ void ChannelMixerTool::adjustSliders()
               d->redGain->setDefaultValue(100);
               d->greenGain->setDefaultValue(0);
               d->blueGain->setDefaultValue(0);
-              d->redGain->setValue(d->blackRedGain     * 100.0);
-              d->greenGain->setValue(d->blackGreenGain * 100.0);
-              d->blueGain->setValue(d->blackBlueGain   * 100.0);
+              d->redGain->setValue(d->mixerSettings.blackRedGain     * 100.0);
+              d->greenGain->setValue(d->mixerSettings.blackGreenGain * 100.0);
+              d->blueGain->setValue(d->mixerSettings.blackBlueGain   * 100.0);
             }
             else
             {
               d->redGain->setDefaultValue(100);
               d->greenGain->setDefaultValue(0);
               d->blueGain->setDefaultValue(0);
-              d->redGain->setValue(d->redRedGain     * 100.0);
-              d->greenGain->setValue(d->redGreenGain * 100.0);
-              d->blueGain->setValue(d->redBlueGain   * 100.0);
+              d->redGain->setValue(d->mixerSettings.redRedGain     * 100.0);
+              d->greenGain->setValue(d->mixerSettings.redGreenGain * 100.0);
+              d->blueGain->setValue(d->mixerSettings.redBlueGain   * 100.0);
             }
             break;
         }
@@ -477,31 +460,10 @@ void ChannelMixerTool::slotEffect()
     if (d->destinationPreviewData)
        delete [] d->destinationPreviewData;
 
-    MixerContainer settings;
-    d->destinationPreviewData = new uchar[w*h*(sb ? 8 : 4)];
-    settings.bPreserveLum     = d->preserveLuminosity->isChecked();
-    settings.bMonochrome      = d->monochrome->isChecked();
-    
-    if (d->monochrome->isChecked())
-    {
-        settings.blackRedGain   = d->blackRedGain;
-        settings.blackGreenGain = d->blackGreenGain;
-        settings.blackBlueGain  = d->blackBlueGain;
-        MixerFilter mixer(data, w, h, sb, settings);
-    }
-    else
-    {
-        settings.redRedGain     = d->redRedGain;
-        settings.redGreenGain   = d->redGreenGain;
-        settings.redBlueGain    = d->redBlueGain;
-        settings.greenRedGain   = d->greenRedGain;
-        settings.greenGreenGain = d->greenGreenGain;
-        settings.greenBlueGain  = d->greenBlueGain;
-        settings.blueRedGain    = d->blueRedGain;
-        settings.blueGreenGain  = d->blueGreenGain;
-        settings.blueGreenGain  = d->blueBlueGain;
-        MixerFilter mixer(data, w, h, sb, settings);
-    }
+    d->destinationPreviewData     = new uchar[w*h*(sb ? 8 : 4)];
+    d->mixerSettings.bPreserveLum = d->preserveLuminosity->isChecked();
+    d->mixerSettings.bMonochrome  = d->monochrome->isChecked();
+    MixerFilter mixer(data, w, h, sb, d->mixerSettings);
 
     iface->putPreviewImage(data);
     d->previewWidget->updatePreview();
@@ -515,36 +477,14 @@ void ChannelMixerTool::slotEffect()
 void ChannelMixerTool::finalRendering()
 {
     kapp->setOverrideCursor( Qt::WaitCursor );
-    ImageIface* iface = d->previewWidget->imageIface();
-    uchar *data       = iface->getOriginalImage();
-    int w             = iface->originalWidth();
-    int h             = iface->originalHeight();
-    bool sb           = iface->originalSixteenBit();
-
-    MixerContainer settings;
-    settings.bPreserveLum = d->preserveLuminosity->isChecked();
-    settings.bMonochrome  = d->monochrome->isChecked();
-
-    if (d->monochrome->isChecked())
-    {
-        settings.blackRedGain   = d->blackRedGain;
-        settings.blackGreenGain = d->blackGreenGain;
-        settings.blackBlueGain  = d->blackBlueGain;
-        MixerFilter mixer(data, w, h, sb, settings);
-    }
-    else
-    {
-        settings.redRedGain     = d->redRedGain;
-        settings.redGreenGain   = d->redGreenGain;
-        settings.redBlueGain    = d->redBlueGain;
-        settings.greenRedGain   = d->greenRedGain;
-        settings.greenGreenGain = d->greenGreenGain;
-        settings.greenBlueGain  = d->greenBlueGain;
-        settings.blueRedGain    = d->blueRedGain;
-        settings.blueGreenGain  = d->blueGreenGain;
-        settings.blueGreenGain  = d->blueBlueGain;
-        MixerFilter mixer(data, w, h, sb, settings);
-    }
+    ImageIface* iface             = d->previewWidget->imageIface();
+    uchar *data                   = iface->getOriginalImage();
+    int w                         = iface->originalWidth();
+    int h                         = iface->originalHeight();
+    bool sb                       = iface->originalSixteenBit();
+    d->mixerSettings.bPreserveLum = d->preserveLuminosity->isChecked();
+    d->mixerSettings.bMonochrome  = d->monochrome->isChecked();
+    MixerFilter mixer(data, w, h, sb, d->mixerSettings);
 
     iface->putOriginalImage(i18n("Channel Mixer"), data);
     delete [] data;
@@ -568,29 +508,29 @@ void ChannelMixerTool::readSettings()
     d->monochrome->setChecked(group.readEntry(d->configMonochromeEntry,                 false));
     d->preserveLuminosity->setChecked(group.readEntry(d->configPreserveLuminosityEntry, false));
 
-    d->redRedGain     = group.readEntry(d->configRedRedGainEntry,   1.0);
-    d->redGreenGain   = group.readEntry(d->configRedGreenGainEntry, 0.0);
-    d->redBlueGain    = group.readEntry(d->configRedBlueGainEntry,  0.0);
+    d->mixerSettings.redRedGain     = group.readEntry(d->configRedRedGainEntry,   1.0);
+    d->mixerSettings.redGreenGain   = group.readEntry(d->configRedGreenGainEntry, 0.0);
+    d->mixerSettings.redBlueGain    = group.readEntry(d->configRedBlueGainEntry,  0.0);
 
-    d->greenRedGain   = group.readEntry(d->configGreenRedGainEntry,   0.0);
-    d->greenGreenGain = group.readEntry(d->configGreenGreenGainEntry, 1.0);
-    d->greenBlueGain  = group.readEntry(d->configGreenBlueGainEntry,  0.0);
+    d->mixerSettings.greenRedGain   = group.readEntry(d->configGreenRedGainEntry,   0.0);
+    d->mixerSettings.greenGreenGain = group.readEntry(d->configGreenGreenGainEntry, 1.0);
+    d->mixerSettings.greenBlueGain  = group.readEntry(d->configGreenBlueGainEntry,  0.0);
 
-    d->blueRedGain    = group.readEntry(d->configBlueRedGainEntry,   0.0);
-    d->blueGreenGain  = group.readEntry(d->configBlueGreenGainEntry, 0.0);
-    d->blueBlueGain   = group.readEntry(d->configBlueBlueGainEntry,  1.0);
+    d->mixerSettings.blueRedGain    = group.readEntry(d->configBlueRedGainEntry,   0.0);
+    d->mixerSettings.blueGreenGain  = group.readEntry(d->configBlueGreenGainEntry, 0.0);
+    d->mixerSettings.blueBlueGain   = group.readEntry(d->configBlueBlueGainEntry,  1.0);
 
-    d->blackRedGain   = group.readEntry(d->configBlackRedGainEntry,   1.0);
-    d->blackGreenGain = group.readEntry(d->configBlackGreenGainEntry, 0.0);
-    d->blackBlueGain  = group.readEntry(d->configBlackBlueGainEntry,  0.0);
+    d->mixerSettings.blackRedGain   = group.readEntry(d->configBlackRedGainEntry,   1.0);
+    d->mixerSettings.blackGreenGain = group.readEntry(d->configBlackGreenGainEntry, 0.0);
+    d->mixerSettings.blackBlueGain  = group.readEntry(d->configBlackBlueGainEntry,  0.0);
 
     adjustSliders();
 
     // we need to call the set methods here, otherwise the histogram will not be updated correctly
     d->gboxSettings->histogramBox()->setChannel((ChannelType)group.readEntry(d->configHistogramChannelEntry,
-                        (int)LuminosityChannel));
+                                                (int)LuminosityChannel));
     d->gboxSettings->histogramBox()->setScale((HistogramScale)group.readEntry(d->configHistogramScaleEntry,
-                        (int)LogScaleHistogram));
+                                              (int)LogScaleHistogram));
 
     d->gboxSettings->histogramBox()->histogram()->reset();
 
@@ -608,21 +548,21 @@ void ChannelMixerTool::writeSettings()
     group.writeEntry(d->configMonochromeEntry,         d->monochrome->isChecked());
     group.writeEntry(d->configPreserveLuminosityEntry, d->preserveLuminosity->isChecked());
 
-    group.writeEntry(d->configRedRedGainEntry,     d->redRedGain);
-    group.writeEntry(d->configRedGreenGainEntry,   d->redGreenGain);
-    group.writeEntry(d->configRedBlueGainEntry,    d->redBlueGain);
+    group.writeEntry(d->configRedRedGainEntry,     d->mixerSettings.redRedGain);
+    group.writeEntry(d->configRedGreenGainEntry,   d->mixerSettings.redGreenGain);
+    group.writeEntry(d->configRedBlueGainEntry,    d->mixerSettings.redBlueGain);
 
-    group.writeEntry(d->configGreenRedGainEntry,   d->greenRedGain);
-    group.writeEntry(d->configGreenGreenGainEntry, d->greenGreenGain);
-    group.writeEntry(d->configGreenBlueGainEntry,  d->greenBlueGain);
+    group.writeEntry(d->configGreenRedGainEntry,   d->mixerSettings.greenRedGain);
+    group.writeEntry(d->configGreenGreenGainEntry, d->mixerSettings.greenGreenGain);
+    group.writeEntry(d->configGreenBlueGainEntry,  d->mixerSettings.greenBlueGain);
 
-    group.writeEntry(d->configBlueRedGainEntry,    d->blueRedGain);
-    group.writeEntry(d->configBlueGreenGainEntry,  d->blueGreenGain);
-    group.writeEntry(d->configBlueBlueGainEntry,   d->blueBlueGain);
+    group.writeEntry(d->configBlueRedGainEntry,    d->mixerSettings.blueRedGain);
+    group.writeEntry(d->configBlueGreenGainEntry,  d->mixerSettings.blueGreenGain);
+    group.writeEntry(d->configBlueBlueGainEntry,   d->mixerSettings.blueBlueGain);
 
-    group.writeEntry(d->configBlackRedGainEntry,   d->blackRedGain);
-    group.writeEntry(d->configBlackGreenGainEntry, d->blackGreenGain);
-    group.writeEntry(d->configBlackBlueGainEntry,  d->blackBlueGain);
+    group.writeEntry(d->configBlackRedGainEntry,   d->mixerSettings.blackRedGain);
+    group.writeEntry(d->configBlackGreenGainEntry, d->mixerSettings.blackGreenGain);
+    group.writeEntry(d->configBlackBlueGainEntry,  d->mixerSettings.blackBlueGain);
 
     config->sync();
 }
@@ -632,21 +572,21 @@ void ChannelMixerTool::slotResetSettings()
     d->monochrome->blockSignals(true);
     d->preserveLuminosity->blockSignals(true);
 
-    d->redRedGain     = 1.0;
-    d->redGreenGain   = 0.0;
-    d->redBlueGain    = 0.0;
+    d->mixerSettings.redRedGain     = 1.0;
+    d->mixerSettings.redGreenGain   = 0.0;
+    d->mixerSettings.redBlueGain    = 0.0;
 
-    d->greenRedGain   = 0.0;
-    d->greenGreenGain = 1.0;
-    d->greenBlueGain  = 0.0;
+    d->mixerSettings.greenRedGain   = 0.0;
+    d->mixerSettings.greenGreenGain = 1.0;
+    d->mixerSettings.greenBlueGain  = 0.0;
 
-    d->blueRedGain    = 0.0;
-    d->blueGreenGain  = 0.0;
-    d->blueBlueGain   = 1.0;
+    d->mixerSettings.blueRedGain    = 0.0;
+    d->mixerSettings.blueGreenGain  = 0.0;
+    d->mixerSettings.blueBlueGain   = 1.0;
 
-    d->blackRedGain   = 1.0;
-    d->blackGreenGain = 0.0;
-    d->blackBlueGain  = 0.0;
+    d->mixerSettings.blackRedGain   = 1.0;
+    d->mixerSettings.blackGreenGain = 0.0;
+    d->mixerSettings.blackBlueGain  = 0.0;
 
     adjustSliders();
 
@@ -710,24 +650,24 @@ void ChannelMixerTool::slotLoadSettings()
             d->preserveLuminosity->setChecked(false);
 
         fscanf (fp, "%*s %s %s %s", buf1, buf2, buf3);
-        d->redRedGain = atof(buf1);
-        d->redGreenGain = atof(buf2);
-        d->redBlueGain = atof(buf3);
+        d->mixerSettings.redRedGain   = atof(buf1);
+        d->mixerSettings.redGreenGain = atof(buf2);
+        d->mixerSettings.redBlueGain  = atof(buf3);
 
         fscanf (fp, "%*s %s %s %s", buf1, buf2, buf3);
-        d->greenRedGain = atof(buf1);
-        d->greenGreenGain = atof(buf2);
-        d->greenBlueGain = atof(buf3);
+        d->mixerSettings.greenRedGain   = atof(buf1);
+        d->mixerSettings.greenGreenGain = atof(buf2);
+        d->mixerSettings.greenBlueGain  = atof(buf3);
 
         fscanf (fp, "%*s %s %s %s", buf1, buf2, buf3);
-        d->blueRedGain = atof(buf1);
-        d->blueGreenGain = atof(buf2);
-        d->blueBlueGain = atof(buf3);
+        d->mixerSettings.blueRedGain   = atof(buf1);
+        d->mixerSettings.blueGreenGain = atof(buf2);
+        d->mixerSettings.blueBlueGain  = atof(buf3);
 
         fscanf (fp, "%*s %s %s %s", buf1, buf2, buf3);
-        d->blackRedGain = atof(buf1);
-        d->blackGreenGain = atof(buf2);
-        d->blackBlueGain = atof(buf3);
+        d->mixerSettings.blackRedGain   = atof(buf1);
+        d->mixerSettings.blackGreenGain = atof(buf2);
+        d->mixerSettings.blackBlueGain  = atof(buf3);
 
         fclose(fp);
 
@@ -789,24 +729,24 @@ void ChannelMixerTool::slotSaveAsSettings()
         fprintf (fp, "PRESERVE_LUMINOSITY: %s\n",
                  d->preserveLuminosity->isChecked() ? "true" : "false");
 
-        sprintf (buf1, "%5.3f", d->redRedGain);
-        sprintf (buf2, "%5.3f", d->redGreenGain);
-        sprintf (buf3, "%5.3f", d->redBlueGain);
+        sprintf (buf1, "%5.3f", d->mixerSettings.redRedGain);
+        sprintf (buf2, "%5.3f", d->mixerSettings.redGreenGain);
+        sprintf (buf3, "%5.3f", d->mixerSettings.redBlueGain);
         fprintf (fp, "RED: %s %s %s\n", buf1, buf2,buf3);
 
-        sprintf (buf1, "%5.3f", d->greenRedGain);
-        sprintf (buf2, "%5.3f", d->greenGreenGain);
-        sprintf (buf3, "%5.3f", d->greenBlueGain);
+        sprintf (buf1, "%5.3f", d->mixerSettings.greenRedGain);
+        sprintf (buf2, "%5.3f", d->mixerSettings.greenGreenGain);
+        sprintf (buf3, "%5.3f", d->mixerSettings.greenBlueGain);
         fprintf (fp, "GREEN: %s %s %s\n", buf1, buf2,buf3);
 
-        sprintf (buf1, "%5.3f", d->blueRedGain);
-        sprintf (buf2, "%5.3f", d->blueGreenGain);
-        sprintf (buf3, "%5.3f", d->blueBlueGain);
+        sprintf (buf1, "%5.3f", d->mixerSettings.blueRedGain);
+        sprintf (buf2, "%5.3f", d->mixerSettings.blueGreenGain);
+        sprintf (buf3, "%5.3f", d->mixerSettings.blueBlueGain);
         fprintf (fp, "BLUE: %s %s %s\n", buf1, buf2,buf3);
 
-        sprintf (buf1, "%5.3f", d->blackRedGain);
-        sprintf (buf2, "%5.3f", d->blackGreenGain);
-        sprintf (buf3, "%5.3f", d->blackBlueGain);
+        sprintf (buf1, "%5.3f", d->mixerSettings.blackRedGain);
+        sprintf (buf2, "%5.3f", d->mixerSettings.blackGreenGain);
+        sprintf (buf3, "%5.3f", d->mixerSettings.blackBlueGain);
         fprintf (fp, "BLACK: %s %s %s\n", buf1, buf2,buf3);
 
         fclose (fp);
