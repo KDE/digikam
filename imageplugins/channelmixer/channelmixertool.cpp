@@ -267,10 +267,10 @@ ChannelMixerTool::ChannelMixerTool(QObject* parent)
     connect(d->blueGain, SIGNAL(valueChanged(double)),
             this, SLOT(slotGainsChanged()));
 
-    connect(d->preserveLuminosity, SIGNAL(toggled (bool)),
+    connect(d->preserveLuminosity, SIGNAL(toggled(bool)),
             this, SLOT(slotEffect()));
 
-    connect(d->monochrome, SIGNAL(toggled (bool)),
+    connect(d->monochrome, SIGNAL(toggled(bool)),
             this, SLOT(slotMonochromeActived(bool)));
 
     // -------------------------------------------------------------
@@ -326,7 +326,7 @@ void ChannelMixerTool::slotResetCurrentChannel()
         }
     }
 
-    adjustSliders();
+    updateSettingsWidgets();
     slotEffect();
     d->gboxSettings->histogramBox()->histogram()->reset();
 }
@@ -372,8 +372,10 @@ void ChannelMixerTool::slotGainsChanged()
     slotTimer();
 }
 
-void ChannelMixerTool::adjustSliders()
+void ChannelMixerTool::updateSettingsWidgets()
 {
+    d->monochrome->blockSignals(true);
+    d->preserveLuminosity->blockSignals(true);
     d->redGain->blockSignals(true);
     d->greenGain->blockSignals(true);
     d->blueGain->blockSignals(true);
@@ -426,6 +428,11 @@ void ChannelMixerTool::adjustSliders()
         }
     }
 
+    d->monochrome->setChecked(d->mixerSettings.bMonochrome);
+    d->preserveLuminosity->setChecked(d->mixerSettings.bPreserveLum);
+
+    d->monochrome->blockSignals(false);
+    d->preserveLuminosity->blockSignals(false);
     d->redGain->blockSignals(false);
     d->greenGain->blockSignals(false);
     d->blueGain->blockSignals(false);
@@ -433,6 +440,8 @@ void ChannelMixerTool::adjustSliders()
 
 void ChannelMixerTool::slotMonochromeActived(bool mono)
 {
+    d->mixerSettings.bMonochrome = d->monochrome->isChecked();
+    
     d->gboxSettings->histogramBox()->setChannelEnabled(!mono);
     d->gboxSettings->histogramBox()->setChannel(RedChannel);
 }
@@ -442,7 +451,7 @@ void ChannelMixerTool::slotChannelChanged()
     if (d->monochrome->isChecked())
         d->gboxSettings->histogramBox()->setGradientColors(QColor("black"), QColor("white"));
 
-    adjustSliders();
+    updateSettingsWidgets();
     slotEffect();
 }
 
@@ -453,7 +462,6 @@ void ChannelMixerTool::prepareEffect()
     toolView()->setEnabled(false);
 
     d->mixerSettings.bPreserveLum = d->preserveLuminosity->isChecked();
-    d->mixerSettings.bMonochrome  = d->monochrome->isChecked();
 
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 
@@ -484,7 +492,6 @@ void ChannelMixerTool::prepareFinal()
     toolView()->setEnabled(false);
 
     d->mixerSettings.bPreserveLum = d->preserveLuminosity->isChecked();
-    d->mixerSettings.bMonochrome  = d->monochrome->isChecked();
 
     ImageIface iface(0, 0);
     setFilter(dynamic_cast<DImgThreadedFilter*>(new MixerFilter(iface.getOriginalImg(), this, d->mixerSettings)));
@@ -505,11 +512,11 @@ void ChannelMixerTool::renderingFinished()
 
 void ChannelMixerTool::readSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(d->configGroupName);
+    KSharedConfig::Ptr config       = KGlobal::config();
+    KConfigGroup group              = config->group(d->configGroupName);
 
-    d->monochrome->setChecked(group.readEntry(d->configMonochromeEntry,                 false));
-    d->preserveLuminosity->setChecked(group.readEntry(d->configPreserveLuminosityEntry, false));
+    d->mixerSettings.bMonochrome    = group.readEntry(d->configMonochromeEntry, false);
+    d->mixerSettings.bPreserveLum   = group.readEntry(d->configPreserveLuminosityEntry, true);
 
     d->mixerSettings.redRedGain     = group.readEntry(d->configRedRedGainEntry,   1.0);
     d->mixerSettings.redGreenGain   = group.readEntry(d->configRedGreenGainEntry, 0.0);
@@ -527,7 +534,7 @@ void ChannelMixerTool::readSettings()
     d->mixerSettings.blackGreenGain = group.readEntry(d->configBlackGreenGainEntry, 0.0);
     d->mixerSettings.blackBlueGain  = group.readEntry(d->configBlackBlueGainEntry,  0.0);
 
-    adjustSliders();
+    updateSettingsWidgets();
 
     // we need to call the set methods here, otherwise the histogram will not be updated correctly
     d->gboxSettings->histogramBox()->setChannel((ChannelType)group.readEntry(d->configHistogramChannelEntry,
@@ -548,8 +555,8 @@ void ChannelMixerTool::writeSettings()
     group.writeEntry(d->configHistogramChannelEntry, (int)d->gboxSettings->histogramBox()->channel());
     group.writeEntry(d->configHistogramScaleEntry,   (int)d->gboxSettings->histogramBox()->scale());
 
-    group.writeEntry(d->configMonochromeEntry,         d->monochrome->isChecked());
-    group.writeEntry(d->configPreserveLuminosityEntry, d->preserveLuminosity->isChecked());
+    group.writeEntry(d->configMonochromeEntry,         d->mixerSettings.bMonochrome);
+    group.writeEntry(d->configPreserveLuminosityEntry, d->mixerSettings.bPreserveLum);
 
     group.writeEntry(d->configRedRedGainEntry,     d->mixerSettings.redRedGain);
     group.writeEntry(d->configRedGreenGainEntry,   d->mixerSettings.redGreenGain);
@@ -572,9 +579,9 @@ void ChannelMixerTool::writeSettings()
 
 void ChannelMixerTool::slotResetSettings()
 {
-    d->monochrome->blockSignals(true);
-    d->preserveLuminosity->blockSignals(true);
-
+    d->mixerSettings.bMonochrome    = false;
+    d->mixerSettings.bPreserveLum   = true;
+    
     d->mixerSettings.redRedGain     = 1.0;
     d->mixerSettings.redGreenGain   = 0.0;
     d->mixerSettings.redBlueGain    = 0.0;
@@ -591,10 +598,8 @@ void ChannelMixerTool::slotResetSettings()
     d->mixerSettings.blackGreenGain = 0.0;
     d->mixerSettings.blackBlueGain  = 0.0;
 
-    adjustSliders();
+    updateSettingsWidgets();
 
-    d->monochrome->blockSignals(false);
-    d->preserveLuminosity->blockSignals(false);
     d->gboxSettings->histogramBox()->histogram()->reset();
     d->gboxSettings->histogramBox()->setChannel(RedChannel);
 }
@@ -615,7 +620,6 @@ void ChannelMixerTool::slotLoadSettings()
 
     if ( fp )
     {
-        bool monochrome;
         ChannelType currentOutputChannel = RedChannel;
         char buf1[1024];
         char buf2[1024];
@@ -641,16 +645,16 @@ void ChannelMixerTool::slotLoadSettings()
         fscanf (fp, "%*s %s", buf1);
 
         if (strcmp (buf1, "true") == 0)
-            monochrome = true;
+            d->mixerSettings.bMonochrome = true;
         else
-            monochrome = false;
+            d->mixerSettings.bMonochrome = false;
 
         fscanf (fp, "%*s %s", buf1);
 
         if (strcmp (buf1, "true") == 0)
-            d->preserveLuminosity->setChecked(true);
+            d->mixerSettings.bPreserveLum = true;
         else
-            d->preserveLuminosity->setChecked(false);
+            d->mixerSettings.bPreserveLum = false;
 
         fscanf (fp, "%*s %s %s %s", buf1, buf2, buf3);
         d->mixerSettings.redRedGain   = atof(buf1);
@@ -675,7 +679,7 @@ void ChannelMixerTool::slotLoadSettings()
         fclose(fp);
 
         // Refresh settings.
-        d->monochrome->setChecked(monochrome);
+        updateSettingsWidgets();
         d->gboxSettings->histogramBox()->setChannel(currentOutputChannel);
     }
     else
@@ -728,9 +732,9 @@ void ChannelMixerTool::slotSaveAsSettings()
         fprintf (fp, "CHANNEL: %s\n", str);
         fprintf (fp, "PREVIEW: %s\n", "true"); // preserved for compatibility
         fprintf (fp, "MONOCHROME: %s\n",
-                 d->monochrome->isChecked() ? "true" : "false");
+                 d->mixerSettings.bMonochrome ? "true" : "false");
         fprintf (fp, "PRESERVE_LUMINOSITY: %s\n",
-                 d->preserveLuminosity->isChecked() ? "true" : "false");
+                 d->mixerSettings.bPreserveLum ? "true" : "false");
 
         sprintf (buf1, "%5.3f", d->mixerSettings.redRedGain);
         sprintf (buf2, "%5.3f", d->mixerSettings.redGreenGain);

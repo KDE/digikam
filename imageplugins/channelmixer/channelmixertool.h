@@ -54,7 +54,7 @@ private:
     void putFinalData();
     void renderingFinished();
     
-    void adjustSliders();
+    void updateSettingsWidgets();
 
 private Q_SLOTS:
 
