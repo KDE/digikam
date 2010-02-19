@@ -404,35 +404,32 @@ void MixerSettings::setSettings(const MixerContainer& settings)
 
 void MixerSettings::resetToDefault()
 {
-    blockSignals(true);
-/*
-    d->thresholdInput->slotReset();
-    d->softnessInput->slotReset();
-    d->thrLumInput->slotReset();
-    d->softLumInput->slotReset();
-    d->thrCrInput->slotReset();
-    d->softCrInput->slotReset();
-    d->thrCbInput->slotReset();
-    d->softCbInput->slotReset();
-    d->advancedBox->setChecked(false);
-*/
-    blockSignals(false);
+    setSettings(defaultSettings());
 }
 
 MixerContainer MixerSettings::defaultSettings() const
 {
     MixerContainer prm;
-/*
-    prm.thresholds[0] = d->thrLumInput->defaultValue();
-    prm.thresholds[2] = d->thrCrInput->defaultValue();
-    prm.thresholds[1] = d->thrCbInput->defaultValue();
-    prm.softness[0]   = 1.0 - d->softLumInput->defaultValue();
-    prm.softness[2]   = 1.0 - d->softCrInput->defaultValue();
-    prm.softness[1]   = 1.0 - d->softCbInput->defaultValue();
-    prm.advanced      = false;
-    prm.leadThreshold = d->thresholdInput->defaultValue();
-    prm.leadSoftness  = 1.0 - d->softnessInput->defaultValue();
-*/
+    
+    prm.bMonochrome    = false;
+    prm.bPreserveLum   = true;
+
+    prm.redRedGain     = 1.0;
+    prm.redGreenGain   = 0.0;
+    prm.redBlueGain    = 0.0;
+
+    prm.greenRedGain   = 0.0;
+    prm.greenGreenGain = 1.0;
+    prm.greenBlueGain  = 0.0;
+
+    prm.blueRedGain    = 0.0;
+    prm.blueGreenGain  = 0.0;
+    prm.blueBlueGain   = 1.0;
+
+    prm.blackRedGain   = 1.0;
+    prm.blackGreenGain = 0.0;
+    prm.blackBlueGain  = 0.0;
+
     return prm;
 }
 
@@ -440,34 +437,54 @@ void MixerSettings::readSettings(KConfigGroup& group)
 {
     MixerContainer prm;
     MixerContainer defaultPrm = defaultSettings();
-/*
-    prm.thresholds[0] = group.readEntry(d->configThrLumInputAdjustmentEntry,  defaultPrm.thresholds[0]);
-    prm.thresholds[2] = group.readEntry(d->configThrCrInputAdjustmentEntry,   defaultPrm.thresholds[2]);
-    prm.thresholds[1] = group.readEntry(d->configThrCbInputAdjustmentEntry,   defaultPrm.thresholds[1]);
-    prm.softness[0]   = group.readEntry(d->configSoftLumInputAdjustmentEntry, defaultPrm.softness[0]);
-    prm.softness[2]   = group.readEntry(d->configSoftCrInputAdjustmentEntry,  defaultPrm.softness[2]);
-    prm.softness[1]   = group.readEntry(d->configSoftCbInputAdjustmentEntry,  defaultPrm.softness[1]);
-    prm.advanced      = group.readEntry(d->configAdvancedAdjustmentEntry,     defaultPrm.advanced);
-    prm.leadThreshold = group.readEntry(d->configThresholdAdjustmentEntry,    defaultPrm.leadThreshold);
-    prm.leadSoftness  = group.readEntry(d->configSoftnessAdjustmentEntry,     defaultPrm.leadSoftness);
-*/    
+    
+    prm.bMonochrome    = group.readEntry(d->configMonochromeEntry,         defaultPrm.bMonochrome);
+    prm.bPreserveLum   = group.readEntry(d->configPreserveLuminosityEntry, defaultPrm.bPreserveLum);
+
+    prm.redRedGain     = group.readEntry(d->configRedRedGainEntry,         defaultPrm.redRedGain);
+    prm.redGreenGain   = group.readEntry(d->configRedGreenGainEntry,       defaultPrm.redGreenGain);
+    prm.redBlueGain    = group.readEntry(d->configRedBlueGainEntry,        defaultPrm.redBlueGain);
+
+    prm.greenRedGain   = group.readEntry(d->configGreenRedGainEntry,       defaultPrm.greenRedGain);
+    prm.greenGreenGain = group.readEntry(d->configGreenGreenGainEntry,     defaultPrm.greenGreenGain);
+    prm.greenBlueGain  = group.readEntry(d->configGreenBlueGainEntry,      defaultPrm.greenBlueGain);
+
+    prm.blueRedGain    = group.readEntry(d->configBlueRedGainEntry,        defaultPrm.blueRedGain);
+    prm.blueGreenGain  = group.readEntry(d->configBlueGreenGainEntry,      defaultPrm.blueGreenGain);
+    prm.blueBlueGain   = group.readEntry(d->configBlueBlueGainEntry,       defaultPrm.blueBlueGain);
+
+    prm.blackRedGain   = group.readEntry(d->configBlackRedGainEntry,       defaultPrm.blackRedGain);
+    prm.blackGreenGain = group.readEntry(d->configBlackGreenGainEntry,     defaultPrm.blackGreenGain);
+    prm.blackBlueGain  = group.readEntry(d->configBlackBlueGainEntry,      defaultPrm.blackBlueGain);
+
+    updateSettingsWidgets();
+    slotMonochromeActived(prm.bMonochrome);
+    
     setSettings(prm);
 }
 
 void MixerSettings::writeSettings(KConfigGroup& group)
 {
     MixerContainer prm = settings();
-/*
-    group.writeEntry(d->configThrLumInputAdjustmentEntry,  prm.thresholds[0]);
-    group.writeEntry(d->configThrCrInputAdjustmentEntry,   prm.thresholds[2]);
-    group.writeEntry(d->configThrCbInputAdjustmentEntry,   prm.thresholds[1]);
-    group.writeEntry(d->configSoftLumInputAdjustmentEntry, prm.softness[0]);
-    group.writeEntry(d->configSoftCrInputAdjustmentEntry,  prm.softness[2]);
-    group.writeEntry(d->configSoftCbInputAdjustmentEntry,  prm.softness[1]);
-    group.writeEntry(d->configAdvancedAdjustmentEntry,     prm.advanced);
-    group.writeEntry(d->configThresholdAdjustmentEntry,    prm.leadThreshold);
-    group.writeEntry(d->configSoftnessAdjustmentEntry,     prm.leadSoftness);
-*/    
+    
+    group.writeEntry(d->configMonochromeEntry,         prm.bMonochrome);
+    group.writeEntry(d->configPreserveLuminosityEntry, prm.bPreserveLum);
+
+    group.writeEntry(d->configRedRedGainEntry,         prm.redRedGain);
+    group.writeEntry(d->configRedGreenGainEntry,       prm.redGreenGain);
+    group.writeEntry(d->configRedBlueGainEntry,        prm.redBlueGain);
+
+    group.writeEntry(d->configGreenRedGainEntry,       prm.greenRedGain);
+    group.writeEntry(d->configGreenGreenGainEntry,     prm.greenGreenGain);
+    group.writeEntry(d->configGreenBlueGainEntry,      prm.greenBlueGain);
+
+    group.writeEntry(d->configBlueRedGainEntry,        prm.blueRedGain);
+    group.writeEntry(d->configBlueGreenGainEntry,      prm.blueGreenGain);
+    group.writeEntry(d->configBlueBlueGainEntry,       prm.blueBlueGain);
+
+    group.writeEntry(d->configBlackRedGainEntry,       prm.blackRedGain);
+    group.writeEntry(d->configBlackGreenGainEntry,     prm.blackGreenGain);
+    group.writeEntry(d->configBlackBlueGainEntry,      prm.blackBlueGain);
 }
 
 void MixerSettings::loadSettings()
