@@ -76,7 +76,7 @@ public:
         configHistogramChannelEntry("Histogram Channel"),
         configHistogramScaleEntry("Histogram Scale"),
         destinationPreviewData(0),
-        settingsView(0),        
+        settingsView(0),
         previewWidget(0),
         gboxSettings(0)
         {}
@@ -86,9 +86,9 @@ public:
     const QString       configHistogramScaleEntry;
 
     uchar*              destinationPreviewData;
-      
+
     MixerSettings*      settingsView;
-    
+
     ImageRegionWidget*  previewWidget;
     EditorToolSettings* gboxSettings;
 };
@@ -106,7 +106,7 @@ ChannelMixerTool::ChannelMixerTool(QObject* parent)
     d->previewWidget = new ImageRegionWidget;
     setToolView(d->previewWidget);
     setPreviewModeMask(PreviewToolBar::AllPreviewModes);
-    
+
     // -------------------------------------------------------------
 
     d->gboxSettings = new EditorToolSettings;
@@ -118,25 +118,25 @@ ChannelMixerTool::ChannelMixerTool(QObject* parent)
                                 EditorToolSettings::Try);
 
     d->gboxSettings->setTools(EditorToolSettings::Histogram);
-    d->gboxSettings->setHistogramType(Digikam::RGB);
+    d->gboxSettings->setHistogramType(RGB);
 
     // -------------------------------------------------------------
-    
+
     d->settingsView = new MixerSettings(d->gboxSettings->plainPage());
     setToolSettings(d->gboxSettings);
     init();
 
     // -------------------------------------------------------------
-    
+
     connect(d->settingsView, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotTimer()));
-            
+
     connect(d->previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));
-            
+
     connect(d->gboxSettings, SIGNAL(signalChannelChanged()),
             this, SLOT(slotChannelChanged()));
-            
+
     connect(d->settingsView, SIGNAL(signalMonochromeActived(bool)),
             this, SLOT(slotMonochromeActived(bool)));
 }
