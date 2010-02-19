@@ -503,15 +503,16 @@ void ColorFXTool::vivid(int factor, uchar *data, int w, int h, bool sb)
     // Apply Channel Mixer adjustments.
     
     MixerContainer settings;
-    settings.rrGain = 1.0 + amount + amount;
-    settings.rgGain = (-1.0)*amount;
-    settings.rbGain = (-1.0)*amount;
-    settings.grGain = (-1.0)*amount;
-    settings.ggGain = 1.0 + amount + amount;
-    settings.gbGain = (-1.0)*amount;
-    settings.brGain = (-1.0)*amount;
-    settings.bgGain = (-1.0)*amount;
-    settings.bbGain = 1.0 + amount + amount;
+
+    settings.redRedGain     = 1.0 + amount + amount;
+    settings.redGreenGain   = (-1.0)*amount;
+    settings.redBlueGain    = (-1.0)*amount;
+    settings.greenRedGain   = (-1.0)*amount;
+    settings.greenGreenGain = 1.0 + amount + amount;
+    settings.greenBlueGain  = (-1.0)*amount;
+    settings.blueRedGain    = (-1.0)*amount;
+    settings.blueGreenGain  = (-1.0)*amount;
+    settings.blueBlueGain   = 1.0 + amount + amount;
     MixerFilter mixer(data, w, h, sb, settings);
 
     // Allocate the destination image data.

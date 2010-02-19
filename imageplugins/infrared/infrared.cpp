@@ -135,9 +135,9 @@ void Infrared::infraredImage(int Sensibility, bool Grain)
 
     MixerContainer settings;
     settings.bMonochrome = true;
-    settings.rrGain      = 0.4;
-    settings.rgGain      = greenBoost;
-    settings.rbGain      = -0.8;
+    settings.blackRedGain   = 0.4;
+    settings.blackGreenGain = greenBoost;
+    settings.blackBlueGain  = -0.8;
     MixerFilter mixer(pBWBits, Width, Height, sixteenBit, settings);
     
     postProgress( 10 );

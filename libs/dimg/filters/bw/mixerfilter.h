@@ -45,35 +45,44 @@ public:
 
     MixerContainer()
     {
-        bPreserveLum = true;
-        bMonochrome  = false;
-        rrGain       = 1.0;
-        rgGain       = 0.0;
-        rbGain       = 0.0;
-        grGain       = 0.0;
-        ggGain       = 1.0;
-        gbGain       = 0.0;
-        brGain       = 0.0;
-        bgGain       = 0.0;
-        bbGain       = 1.0;
+        bPreserveLum   = true;
+        bMonochrome    = false;
+        redRedGain     = 1.0;
+        redGreenGain   = 0.0;
+        redBlueGain    = 0.0;
+        greenRedGain   = 0.0;
+        greenGreenGain = 1.0;
+        greenBlueGain  = 0.0;
+        blueRedGain    = 0.0;
+        blueGreenGain  = 0.0;
+        blueBlueGain   = 1.0;
+        blackRedGain   = 1.0;
+        blackGreenGain = 0.0;
+        blackBlueGain  = 0.0;
     };
 
     ~MixerContainer(){};
 
 public:
 
-    bool  bPreserveLum;
-    bool  bMonochrome;
+    bool   bPreserveLum;
+    bool   bMonochrome;
 
-    float rrGain;
-    float rgGain;
-    float rbGain;
-    float grGain;
-    float ggGain;
-    float gbGain;
-    float brGain;
-    float bgGain;
-    float bbGain;
+    // Standard settings.
+    double redRedGain;
+    double redGreenGain;
+    double redBlueGain;
+    double greenRedGain;
+    double greenGreenGain;
+    double greenBlueGain;
+    double blueRedGain;
+    double blueGreenGain;
+    double blueBlueGain;
+    
+    // Monochrome settings.
+    double blackRedGain;
+    double blackGreenGain;
+    double blackBlueGain;    
 };
 
 // -----------------------------------------------------------------------------------------------
@@ -95,9 +104,9 @@ private:
     void channelMixerImage(DImg& image);
     void channelMixerImage(uchar* data, uint width, uint height, bool sixteenBit);
 
-    inline double CalculateNorm(float RedGain, float GreenGain, float BlueGain, bool bPreserveLum);
+    inline double CalculateNorm(double RedGain, double GreenGain, double BlueGain, bool bPreserveLum);
 
-    inline unsigned short MixPixel(float RedGain, float GreenGain, float BlueGain,
+    inline unsigned short MixPixel(double RedGain, double GreenGain, double BlueGain,
                                    unsigned short R, unsigned short G, unsigned short B, bool sixteenBit,
                                    double Norm);
 

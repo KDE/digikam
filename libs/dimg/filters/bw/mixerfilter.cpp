@@ -82,9 +82,12 @@ void MixerFilter::channelMixerImage(uchar* bits, uint width, uint height, bool s
 
     register uint i;
 
-    double rnorm = CalculateNorm (m_settings.rrGain, m_settings.rgGain, m_settings.rbGain, m_settings.bPreserveLum);
-    double gnorm = CalculateNorm (m_settings.grGain, m_settings.ggGain, m_settings.gbGain, m_settings.bPreserveLum);
-    double bnorm = CalculateNorm (m_settings.brGain, m_settings.bgGain, m_settings.bbGain, m_settings.bPreserveLum);
+    double rnorm = CalculateNorm (m_settings.redRedGain, m_settings.redGreenGain, 
+                                  m_settings.redBlueGain, m_settings.bPreserveLum);
+    double gnorm = CalculateNorm (m_settings.greenRedGain, m_settings.greenGreenGain, 
+                                  m_settings.greenBlueGain, m_settings.bPreserveLum);
+    double bnorm = CalculateNorm (m_settings.blueRedGain, m_settings.blueGreenGain, 
+                                  m_settings.blueBlueGain, m_settings.bPreserveLum);
 
     if (!sixteenBit)        // 8 bits image.
     {
@@ -99,20 +102,20 @@ void MixerFilter::channelMixerImage(uchar* bits, uint width, uint height, bool s
 
             if (m_settings.bMonochrome)
             {
-                nGray = MixPixel (m_settings.rrGain, m_settings.rgGain, m_settings.rbGain,
+                nGray = MixPixel (m_settings.blackRedGain, m_settings.blackGreenGain, m_settings.blackBlueGain,
                                   (unsigned short)red, (unsigned short)green, (unsigned short)blue,
                                   sixteenBit, rnorm);
                 ptr[0] = ptr[1] = ptr[2] = nGray;
             }
             else
             {
-                ptr[0] = (uchar)MixPixel (m_settings.brGain, m_settings.bgGain, m_settings.bbGain,
+                ptr[0] = (uchar)MixPixel (m_settings.blueRedGain, m_settings.blueGreenGain, m_settings.blueBlueGain,
                                           (unsigned short)red, (unsigned short)green, (unsigned short)blue,
                                           sixteenBit, bnorm);
-                ptr[1] = (uchar)MixPixel (m_settings.grGain, m_settings.ggGain, m_settings.gbGain,
+                ptr[1] = (uchar)MixPixel (m_settings.greenRedGain, m_settings.greenGreenGain, m_settings.greenBlueGain,
                                           (unsigned short)red, (unsigned short)green, (unsigned short)blue,
                                           sixteenBit, gnorm);
-                ptr[2] = (uchar)MixPixel (m_settings.rrGain, m_settings.rgGain, m_settings.rbGain,
+                ptr[2] = (uchar)MixPixel (m_settings.redRedGain, m_settings.redGreenGain, m_settings.redBlueGain,
                                           (unsigned short)red, (unsigned short)green, (unsigned short)blue,
                                           sixteenBit, rnorm);
             }
@@ -137,17 +140,17 @@ void MixerFilter::channelMixerImage(uchar* bits, uint width, uint height, bool s
 
             if (m_settings.bMonochrome)
             {
-                nGray = MixPixel (m_settings.rrGain, m_settings.rgGain, m_settings.rbGain, 
+                nGray = MixPixel (m_settings.blackRedGain, m_settings.blackGreenGain, m_settings.blackBlueGain,
                                   red, green, blue, sixteenBit, rnorm);
                 ptr[0] = ptr[1] = ptr[2] = nGray;
             }
             else
             {
-                ptr[0] = MixPixel (m_settings.brGain, m_settings.bgGain, m_settings.bbGain, 
+                ptr[0] = MixPixel (m_settings.blueRedGain, m_settings.blueGreenGain, m_settings.blueBlueGain, 
                                    red, green, blue, sixteenBit, bnorm);
-                ptr[1] = MixPixel (m_settings.grGain, m_settings.ggGain, m_settings.gbGain, 
+                ptr[1] = MixPixel (m_settings.greenRedGain, m_settings.greenGreenGain, m_settings.greenBlueGain, 
                                    red, green, blue, sixteenBit, gnorm);
-                ptr[2] = MixPixel (m_settings.rrGain, m_settings.rgGain, m_settings.rbGain, 
+                ptr[2] = MixPixel (m_settings.redRedGain, m_settings.redGreenGain, m_settings.redBlueGain, 
                                    red, green, blue, sixteenBit, rnorm);
             }
 
@@ -161,7 +164,7 @@ void MixerFilter::channelMixerImage(uchar* bits, uint width, uint height, bool s
 }
 
 
-double MixerFilter::CalculateNorm(float RedGain, float GreenGain, float BlueGain, bool bPreserveLum)
+double MixerFilter::CalculateNorm(double RedGain, double GreenGain, double BlueGain, bool bPreserveLum)
 {
     double lfSum = RedGain + GreenGain + BlueGain;
 
@@ -171,7 +174,7 @@ double MixerFilter::CalculateNorm(float RedGain, float GreenGain, float BlueGain
     return( fabs (1.0 / lfSum) );
 }
 
-unsigned short MixerFilter::MixPixel(float RedGain, float GreenGain, float BlueGain,
+unsigned short MixerFilter::MixPixel(double RedGain, double GreenGain, double BlueGain,
                                      unsigned short R, unsigned short G, unsigned short B, bool sixteenBit,
                                      double Norm)
 {

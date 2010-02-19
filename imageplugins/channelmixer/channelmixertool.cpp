@@ -8,9 +8,6 @@
  *
  * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
- * Load and save mixer gains methods inspired from
- * Gimp 2.2.3 and copyrighted 2002 by Martin Guldahl <mguldahl at xmission dot com>
- *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -478,22 +475,22 @@ void ChannelMixerTool::slotEffect()
     
     if (d->monochrome->isChecked())
     {
-        settings.rrGain = d->blackRedGain;
-        settings.rgGain = d->blackGreenGain;
-        settings.rbGain = d->blackBlueGain;
+        settings.blackRedGain   = d->blackRedGain;
+        settings.blackGreenGain = d->blackGreenGain;
+        settings.blackBlueGain  = d->blackBlueGain;
         MixerFilter mixer(data, w, h, sb, settings);
     }
     else
     {
-        settings.rrGain = d->redRedGain;
-        settings.rgGain = d->redGreenGain;
-        settings.rbGain = d->redBlueGain;
-        settings.grGain = d->greenRedGain;
-        settings.ggGain = d->greenGreenGain;
-        settings.gbGain = d->greenBlueGain;
-        settings.brGain = d->blueRedGain;
-        settings.bgGain = d->blueGreenGain;
-        settings.bbGain = d->blueBlueGain;
+        settings.redRedGain     = d->redRedGain;
+        settings.redGreenGain   = d->redGreenGain;
+        settings.redBlueGain    = d->redBlueGain;
+        settings.greenRedGain   = d->greenRedGain;
+        settings.greenGreenGain = d->greenGreenGain;
+        settings.greenBlueGain  = d->greenBlueGain;
+        settings.blueRedGain    = d->blueRedGain;
+        settings.blueGreenGain  = d->blueGreenGain;
+        settings.blueGreenGain  = d->blueBlueGain;
         MixerFilter mixer(data, w, h, sb, settings);
     }
 
@@ -521,22 +518,22 @@ void ChannelMixerTool::finalRendering()
 
     if (d->monochrome->isChecked())
     {
-        settings.rrGain = d->blackRedGain;
-        settings.rgGain = d->blackGreenGain;
-        settings.rbGain = d->blackBlueGain;
+        settings.blackRedGain   = d->blackRedGain;
+        settings.blackGreenGain = d->blackGreenGain;
+        settings.blackBlueGain  = d->blackBlueGain;
         MixerFilter mixer(data, w, h, sb, settings);
     }
     else
     {
-        settings.rrGain = d->redRedGain;
-        settings.rgGain = d->redGreenGain;
-        settings.rbGain = d->redBlueGain;
-        settings.grGain = d->greenRedGain;
-        settings.ggGain = d->greenGreenGain;
-        settings.gbGain = d->greenBlueGain;
-        settings.brGain = d->blueRedGain;
-        settings.bgGain = d->blueGreenGain;
-        settings.bbGain = d->blueBlueGain;
+        settings.redRedGain     = d->redRedGain;
+        settings.redGreenGain   = d->redGreenGain;
+        settings.redBlueGain    = d->redBlueGain;
+        settings.greenRedGain   = d->greenRedGain;
+        settings.greenGreenGain = d->greenGreenGain;
+        settings.greenBlueGain  = d->greenBlueGain;
+        settings.blueRedGain    = d->blueRedGain;
+        settings.blueGreenGain  = d->blueGreenGain;
+        settings.blueGreenGain  = d->blueBlueGain;
         MixerFilter mixer(data, w, h, sb, settings);
     }
 

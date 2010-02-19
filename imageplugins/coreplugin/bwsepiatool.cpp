@@ -1114,10 +1114,10 @@ void BWSepiaTool::blackAndWhiteConversion(uchar *data, int w, int h, bool sb, in
 void BWSepiaTool::applyChannelMixer(uchar* data, int w, int h, bool sb)
 {
     MixerContainer settings;
-    settings.bMonochrome = true;            
-    settings.rrGain      = d->redMult   + d->redMult*d->redAttn;
-    settings.rgGain      = d->greenMult + d->greenMult*d->greenAttn;
-    settings.rbGain      = d->blueMult  + d->blueMult*d->blueAttn;
+    settings.bMonochrome    = true;    
+    settings.blackRedGain   = d->redMult   + d->redMult*d->redAttn;
+    settings.blackGreenGain = d->greenMult + d->greenMult*d->greenAttn;
+    settings.blackBlueGain  = d->blueMult  + d->blueMult*d->blueAttn;
     MixerFilter mixer(data, w, h, sb, settings);
 }
 

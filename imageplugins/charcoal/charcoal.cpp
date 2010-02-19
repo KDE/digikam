@@ -125,10 +125,10 @@ void Charcoal::filterImage()
     // -- Convert to neutral black & white ------------------------------------
 
     MixerContainer settings;
-    settings.bMonochrome = true;
-    settings.rrGain      = 0.3;
-    settings.rgGain      = 0.59;
-    settings.rbGain      = 0.11;
+    settings.bMonochrome    = true;
+    settings.blackRedGain   = 0.3;
+    settings.blackGreenGain = 0.59;
+    settings.blackBlueGain  = 0.11;
     MixerFilter mixer(m_destImage.bits(), m_destImage.width(),
                       m_destImage.height(), m_destImage.sixteenBit(), settings);
     
