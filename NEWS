@@ -15,6 +15,7 @@ BatchQueueManager : new tool to fix Brightness/Contrast/gamma.
 BatchQueueManager : new tool to adjust Color Balance.
 BatchQueueManager : new tool to fix Hue/Saturation/Lightness.
 BatchQueueManager : new tool to convert images color space.
+BatchQueueManager : new tool to mix color channel.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
