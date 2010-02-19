@@ -48,7 +48,7 @@ class DIGIKAM_EXPORT MixerSettings : public QWidget
 
 public:
 
-    MixerSettings(QWidget* parent=0);
+    MixerSettings(QWidget* parent);
     ~MixerSettings();
 
     MixerContainer defaultSettings() const;
@@ -70,18 +70,18 @@ Q_SIGNALS:
 
     void signalSettingsChanged();
     void signalMonochromeActived(bool);
-    
+
 private:
-    
+
     void updateSettingsWidgets();
 
 private Q_SLOTS:
-    
+
     void slotResetCurrentChannel();
     void slotGainsChanged();
     void slotMonochromeActived(bool);
     void slotLuminosityChanged(bool);
-    
+
 private:
 
     MixerSettingsPriv* const d;
