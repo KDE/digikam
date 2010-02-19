@@ -9,6 +9,7 @@ ImageEditor       : Brightness/Contrast/gamma tool is multithreaded and use a zo
 ImageEditor       : Color Balance tool is multithreaded and use a zommable preview widget.
 ImageEditor       : Hue/Saturation/Lightness tool is multithreaded and use a zommable preview widget.
 ImageEditor       : Auto Color Correction tool is multithreaded and use a zommable preview widget.
+ImageEditor       : Channel Mixer tool is multithreaded and use a zommable preview widget.
 
 BatchQueueManager : new tool to fix Brightness/Contrast/gamma.
 BatchQueueManager : new tool to adjust Color Balance.
