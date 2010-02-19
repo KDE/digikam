@@ -18,7 +18,7 @@ print("Opening file " + filename)
 source = open(filename, "r")
 lines = source.readlines()
 
-expression = re.compile("readEntry\(\"(\w+)\",")
+expression = re.compile("readEntry\(\"([\s\w]+)\",")
 
 configKeys = []
 
@@ -26,6 +26,7 @@ def makeStringDefinition(key):
     return '"' + key + '"'
 
 def makeVariable(key):
+    key = key.replace(" ", "")
     return "config" + key[0].capitalize() + key[1:] + "Entry";
 
 for line in lines:

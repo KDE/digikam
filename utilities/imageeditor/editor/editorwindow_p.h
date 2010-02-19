@@ -106,6 +106,7 @@ public:
         configBackgroundColorEntry               = "BackgroundColor";
         configWhiteBalanceEntry                  = "WhiteBalance";
         configRAWQualityEntry                    = "RAWQuality";
+        configFullScreenHideToolBarEntry         = "FullScreen Hide ToolBar";
         removeFullScreenButton       = false;
         fullScreenHideToolBar        = false;
         infoLabel                    = 0;
@@ -201,6 +202,8 @@ public:
     QString                    configBackgroundColorEntry;
     QString                    configWhiteBalanceEntry;
     QString                    configRAWQualityEntry;
+    QString                    configFullScreenHideToolBarEntry;
+
 
     bool                       removeFullScreenButton;
     bool                       fullScreenHideToolBar;

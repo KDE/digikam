@@ -1001,7 +1001,7 @@ void EditorWindow::applyStandardSettings()
     }
     m_splitter->restoreState(group);
 
-    d->fullScreenHideToolBar = group.readEntry("FullScreen Hide ToolBar", false);
+    d->fullScreenHideToolBar = group.readEntry(d->configFullScreenHideToolBarEntry, false);
     m_fullScreenHideThumbBar = group.readEntry(d->configFullScreenHideThumbBarEntry, true);
 
     slotThemeChanged();
