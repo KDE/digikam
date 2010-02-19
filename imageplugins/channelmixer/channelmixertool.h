@@ -62,10 +62,8 @@ private Q_SLOTS:
     void slotSaveAsSettings();
     void slotLoadSettings();
 
-    void slotResetCurrentChannel();
     void slotChannelChanged();
-    void slotGainsChanged();
-    void slotMonochromeActived(bool mono);
+    void slotMonochromeActived(bool);
 
 private:
 

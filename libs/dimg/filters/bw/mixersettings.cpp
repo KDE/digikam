@@ -195,7 +195,7 @@ MixerSettings::MixerSettings(QWidget* parent)
             this, SLOT(slotMonochromeActived(bool)));
 
     connect(d->preserveLuminosity, SIGNAL(toggled(bool)),
-            this, SIGNAL(signalSettingsChanged()));
+            this, SLOT(slotLuminosityChanged(bool)));
 }
 
 MixerSettings::~MixerSettings()
@@ -368,7 +368,13 @@ void MixerSettings::slotMonochromeActived(bool mono)
     d->mixerSettings.bMonochrome = d->monochrome->isChecked();
     emit signalMonochromeActived(mono);  
 }
-  
+
+void MixerSettings::slotLuminosityChanged(bool)
+{
+    d->mixerSettings.bPreserveLum = d->preserveLuminosity->isChecked();
+    emit signalSettingsChanged();  
+}
+
 MixerContainer MixerSettings::settings() const
 {
     return d->mixerSettings;

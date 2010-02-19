@@ -80,6 +80,7 @@ private Q_SLOTS:
     void slotResetCurrentChannel();
     void slotGainsChanged();
     void slotMonochromeActived(bool);
+    void slotLuminosityChanged(bool);
     
 private:
 
