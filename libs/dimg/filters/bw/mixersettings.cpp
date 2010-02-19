@@ -103,14 +103,14 @@ public:
     const QString       configBlackBlueGainEntry;
 
     int                 currentChannel;
-    
+
     QPushButton*        resetButton;
 
     QCheckBox*          preserveLuminosity;
     QCheckBox*          monochrome;
 
     MixerContainer      mixerSettings;
-    
+
     RDoubleNumInput*    redGain;
     RDoubleNumInput*    greenGain;
     RDoubleNumInput*    blueGain;
@@ -120,7 +120,7 @@ MixerSettings::MixerSettings(QWidget* parent)
              : QWidget(parent),
                d(new MixerSettingsPriv)
 {
-    QGridLayout* grid = new QGridLayout(parent);
+    QGridLayout* grid = new QGridLayout(this);
 
     QLabel* redLabel  = new QLabel(i18n("Red:"));
     d->redGain        = new RDoubleNumInput;
@@ -225,7 +225,7 @@ void MixerSettings::slotResetCurrentChannel()
             d->mixerSettings.greenBlueGain  = 0.0;
             break;
         }
-        
+
         case BlueChannel:
         {
             d->mixerSettings.blueRedGain   = 0.0;
@@ -233,7 +233,7 @@ void MixerSettings::slotResetCurrentChannel()
             d->mixerSettings.blueBlueGain  = 1.0;
             break;
         }
-            
+
         default:                        // Red or monochrome.
         {
             if (d->monochrome->isChecked())
@@ -395,7 +395,7 @@ void MixerSettings::resetToDefault()
 MixerContainer MixerSettings::defaultSettings() const
 {
     MixerContainer prm;
-    
+
     prm.bMonochrome    = false;
     prm.bPreserveLum   = true;
 
@@ -448,7 +448,7 @@ void MixerSettings::readSettings(KConfigGroup& group)
 void MixerSettings::writeSettings(KConfigGroup& group)
 {
     MixerContainer prm = settings();
-    
+
     group.writeEntry(d->configMonochromeEntry,         prm.bMonochrome);
     group.writeEntry(d->configPreserveLuminosityEntry, prm.bPreserveLum);
 
@@ -542,7 +542,7 @@ void MixerSettings::loadSettings()
         settings.blackBlueGain  = atof(buf3);
 
         fclose(fp);
-        
+
         setSettings(settings);
     }
     else
