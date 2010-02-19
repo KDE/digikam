@@ -540,9 +540,7 @@ void ImagePreviewView::viewportPaintExtraData()
         }
 
         fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text);
-        textRect.setTopLeft(QPoint(region.topRight().x()-fontRect.width()-20, region.topRight().y()+20));
-        textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2) );
-        drawText(&p, textRect, text);
+        drawText(&p, QPoint(region.topRight().x()-fontRect.width()-10, region.topRight().y()+5), text);
         p.end();
     }
 }

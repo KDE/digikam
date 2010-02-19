@@ -67,7 +67,8 @@ private:
     void buildBias(const QImage& mask);
     void buildSkinToneBias();
     inline bool isSkinTone(const DColor& c);
-
+    void getEnergyImage();
+    
 private:
 
     ContentAwareResizerPriv* const d;

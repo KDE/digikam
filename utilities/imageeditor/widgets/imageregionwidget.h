@@ -102,9 +102,7 @@ private:
 
     void   enterEvent(QEvent*);
     void   leaveEvent(QEvent*);
-    
-    void   drawTextInRectangle(QString text, QRect r);
-    
+        
     int    previewWidth();
     int    previewHeight();
     bool   previewIsNull();

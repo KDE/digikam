@@ -119,7 +119,7 @@ protected:
     void   updateZoomAndSize(bool alwaysFitToWindow);
     void   clearCache();
     QRect  previewRect();
-    void   drawText(QPainter* p, const QRect& rect, const QString& text);
+    void   drawText(QPainter* p, const QPoint& corner, const QString& text);
 
     virtual void setContentsSize();
     virtual void viewportPaintExtraData(){};
