@@ -323,7 +323,6 @@ void ChannelMixerTool::slotResetCurrentChannel()
 
     updateSettingsWidgets();
     slotEffect();
-    d->gboxSettings->histogramBox()->histogram()->reset();
 }
 
 void ChannelMixerTool::slotGainsChanged()
@@ -539,8 +538,6 @@ void ChannelMixerTool::readSettings()
     d->gboxSettings->histogramBox()->setScale((HistogramScale)group.readEntry(d->configHistogramScaleEntry,
                                               (int)LogScaleHistogram));
 
-    d->gboxSettings->histogramBox()->histogram()->reset();
-
     slotEffect();
 }
 
@@ -597,7 +594,6 @@ void ChannelMixerTool::slotResetSettings()
 
     updateSettingsWidgets();
 
-    d->gboxSettings->histogramBox()->histogram()->reset();
     slotMonochromeActived(d->mixerSettings.bMonochrome);
 }
 
