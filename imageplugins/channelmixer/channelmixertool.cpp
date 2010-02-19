@@ -289,17 +289,17 @@ void ChannelMixerTool::slotResetCurrentChannel()
     {
         case GreenChannel:
         {
-            d->mixerSettings.greenRedGain     = 0.0;
-            d->mixerSettings.greenGreenGain   = 1.0;
-            d->mixerSettings.greenBlueGain    = 0.0;
+            d->mixerSettings.greenRedGain   = 0.0;
+            d->mixerSettings.greenGreenGain = 1.0;
+            d->mixerSettings.greenBlueGain  = 0.0;
             break;
         }
         
         case BlueChannel:
         {
-            d->mixerSettings.blueRedGain      = 0.0;
-            d->mixerSettings.blueGreenGain    = 0.0;
-            d->mixerSettings.blueBlueGain     = 1.0;
+            d->mixerSettings.blueRedGain   = 0.0;
+            d->mixerSettings.blueGreenGain = 0.0;
+            d->mixerSettings.blueBlueGain  = 1.0;
             break;
         }
             
@@ -511,26 +511,27 @@ void ChannelMixerTool::readSettings()
     KSharedConfig::Ptr config       = KGlobal::config();
     KConfigGroup group              = config->group(d->configGroupName);
 
-    d->mixerSettings.bMonochrome    = group.readEntry(d->configMonochromeEntry, false);
+    d->mixerSettings.bMonochrome    = group.readEntry(d->configMonochromeEntry,         false);
     d->mixerSettings.bPreserveLum   = group.readEntry(d->configPreserveLuminosityEntry, true);
 
-    d->mixerSettings.redRedGain     = group.readEntry(d->configRedRedGainEntry,   1.0);
-    d->mixerSettings.redGreenGain   = group.readEntry(d->configRedGreenGainEntry, 0.0);
-    d->mixerSettings.redBlueGain    = group.readEntry(d->configRedBlueGainEntry,  0.0);
+    d->mixerSettings.redRedGain     = group.readEntry(d->configRedRedGainEntry,         1.0);
+    d->mixerSettings.redGreenGain   = group.readEntry(d->configRedGreenGainEntry,       0.0);
+    d->mixerSettings.redBlueGain    = group.readEntry(d->configRedBlueGainEntry,        0.0);
 
-    d->mixerSettings.greenRedGain   = group.readEntry(d->configGreenRedGainEntry,   0.0);
-    d->mixerSettings.greenGreenGain = group.readEntry(d->configGreenGreenGainEntry, 1.0);
-    d->mixerSettings.greenBlueGain  = group.readEntry(d->configGreenBlueGainEntry,  0.0);
+    d->mixerSettings.greenRedGain   = group.readEntry(d->configGreenRedGainEntry,       0.0);
+    d->mixerSettings.greenGreenGain = group.readEntry(d->configGreenGreenGainEntry,     1.0);
+    d->mixerSettings.greenBlueGain  = group.readEntry(d->configGreenBlueGainEntry,      0.0);
 
-    d->mixerSettings.blueRedGain    = group.readEntry(d->configBlueRedGainEntry,   0.0);
-    d->mixerSettings.blueGreenGain  = group.readEntry(d->configBlueGreenGainEntry, 0.0);
-    d->mixerSettings.blueBlueGain   = group.readEntry(d->configBlueBlueGainEntry,  1.0);
+    d->mixerSettings.blueRedGain    = group.readEntry(d->configBlueRedGainEntry,        0.0);
+    d->mixerSettings.blueGreenGain  = group.readEntry(d->configBlueGreenGainEntry,      0.0);
+    d->mixerSettings.blueBlueGain   = group.readEntry(d->configBlueBlueGainEntry,       1.0);
 
-    d->mixerSettings.blackRedGain   = group.readEntry(d->configBlackRedGainEntry,   1.0);
-    d->mixerSettings.blackGreenGain = group.readEntry(d->configBlackGreenGainEntry, 0.0);
-    d->mixerSettings.blackBlueGain  = group.readEntry(d->configBlackBlueGainEntry,  0.0);
+    d->mixerSettings.blackRedGain   = group.readEntry(d->configBlackRedGainEntry,       1.0);
+    d->mixerSettings.blackGreenGain = group.readEntry(d->configBlackGreenGainEntry,     0.0);
+    d->mixerSettings.blackBlueGain  = group.readEntry(d->configBlackBlueGainEntry,      0.0);
 
     updateSettingsWidgets();
+    slotMonochromeActived(d->mixerSettings.bMonochrome);
 
     // we need to call the set methods here, otherwise the histogram will not be updated correctly
     d->gboxSettings->histogramBox()->setChannel((ChannelType)group.readEntry(d->configHistogramChannelEntry,
@@ -548,27 +549,27 @@ void ChannelMixerTool::writeSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
 
-    group.writeEntry(d->configHistogramChannelEntry, (int)d->gboxSettings->histogramBox()->channel());
-    group.writeEntry(d->configHistogramScaleEntry,   (int)d->gboxSettings->histogramBox()->scale());
+    group.writeEntry(d->configHistogramChannelEntry,   (int)d->gboxSettings->histogramBox()->channel());
+    group.writeEntry(d->configHistogramScaleEntry,     (int)d->gboxSettings->histogramBox()->scale());
 
     group.writeEntry(d->configMonochromeEntry,         d->mixerSettings.bMonochrome);
     group.writeEntry(d->configPreserveLuminosityEntry, d->mixerSettings.bPreserveLum);
 
-    group.writeEntry(d->configRedRedGainEntry,     d->mixerSettings.redRedGain);
-    group.writeEntry(d->configRedGreenGainEntry,   d->mixerSettings.redGreenGain);
-    group.writeEntry(d->configRedBlueGainEntry,    d->mixerSettings.redBlueGain);
+    group.writeEntry(d->configRedRedGainEntry,         d->mixerSettings.redRedGain);
+    group.writeEntry(d->configRedGreenGainEntry,       d->mixerSettings.redGreenGain);
+    group.writeEntry(d->configRedBlueGainEntry,        d->mixerSettings.redBlueGain);
 
-    group.writeEntry(d->configGreenRedGainEntry,   d->mixerSettings.greenRedGain);
-    group.writeEntry(d->configGreenGreenGainEntry, d->mixerSettings.greenGreenGain);
-    group.writeEntry(d->configGreenBlueGainEntry,  d->mixerSettings.greenBlueGain);
+    group.writeEntry(d->configGreenRedGainEntry,       d->mixerSettings.greenRedGain);
+    group.writeEntry(d->configGreenGreenGainEntry,     d->mixerSettings.greenGreenGain);
+    group.writeEntry(d->configGreenBlueGainEntry,      d->mixerSettings.greenBlueGain);
 
-    group.writeEntry(d->configBlueRedGainEntry,    d->mixerSettings.blueRedGain);
-    group.writeEntry(d->configBlueGreenGainEntry,  d->mixerSettings.blueGreenGain);
-    group.writeEntry(d->configBlueBlueGainEntry,   d->mixerSettings.blueBlueGain);
+    group.writeEntry(d->configBlueRedGainEntry,        d->mixerSettings.blueRedGain);
+    group.writeEntry(d->configBlueGreenGainEntry,      d->mixerSettings.blueGreenGain);
+    group.writeEntry(d->configBlueBlueGainEntry,       d->mixerSettings.blueBlueGain);
 
-    group.writeEntry(d->configBlackRedGainEntry,   d->mixerSettings.blackRedGain);
-    group.writeEntry(d->configBlackGreenGainEntry, d->mixerSettings.blackGreenGain);
-    group.writeEntry(d->configBlackBlueGainEntry,  d->mixerSettings.blackBlueGain);
+    group.writeEntry(d->configBlackRedGainEntry,       d->mixerSettings.blackRedGain);
+    group.writeEntry(d->configBlackGreenGainEntry,     d->mixerSettings.blackGreenGain);
+    group.writeEntry(d->configBlackBlueGainEntry,      d->mixerSettings.blackBlueGain);
 
     config->sync();
 }
@@ -597,7 +598,7 @@ void ChannelMixerTool::slotResetSettings()
     updateSettingsWidgets();
 
     d->gboxSettings->histogramBox()->histogram()->reset();
-    d->gboxSettings->histogramBox()->setChannel(RedChannel);
+    slotMonochromeActived(d->mixerSettings.bMonochrome);
 }
 
 // Load all gains.
@@ -676,6 +677,7 @@ void ChannelMixerTool::slotLoadSettings()
 
         // Refresh settings.
         updateSettingsWidgets();
+        slotMonochromeActived(d->mixerSettings.bMonochrome);
         d->gboxSettings->histogramBox()->setChannel(currentOutputChannel);
     }
     else
