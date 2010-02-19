@@ -27,28 +27,29 @@
 
 // Qt includes
 
-#include <QList>
+#include <qlist.h>
+#include <qstring.h>
 
 class QDialog;
-class QToolButton;
-class QLabel;
-class QWidgetAction;
 class QEventLoop;
+class QLabel;
 class QSignalMapper;
+class QToolButton;
+class QWidgetAction;
 
 class KAction;
 class KActionCollection;
-class KToggleAction;
 class KSqueezedTextLabel;
+class KToggleAction;
 
 namespace Digikam
 {
 
+class DZoomBar;
 class EditorToolIface;
 class ExposureSettingsContainer;
 class ICCSettingsContainer;
 class PreviewToolBar;
-class DZoomBar;
 
 class EditorWindowPriv
 {
@@ -57,6 +58,54 @@ public:
 
     EditorWindowPriv()
     {
+        configGroupName                          = "ImageViewer Settings";
+        configVerticalSplitterSizesEntry         = "Vertical Splitter Sizes";
+        configVerticalSplitterStateEntry         = "Vertical Splitter State";
+        configFullScreenEntry                    = "FullScreen";
+        configAutoZoomEntry                      = "AutoZoom";
+        configUnderExposureIndicatorEntry        = "UnderExposureIndicator";
+        configOverExposureIndicatorEntry         = "OverExposureIndicator";
+        configJpegCompressionEntry               = "JPEGCompression";
+        configJpegSubSamplingEntry               = "JPEGSubSampling";
+        configPngCompressionEntry                = "PNGCompression";
+        configTiffCompressionEntry               = "TIFFCompression";
+        configJpeg2000CompressionEntry           = "JPEG2000Compression";
+        configJpeg2000LossLessEntry              = "JPEG2000LossLess";
+        configPgfCompressionEntry                = "PGFCompression";
+        configPgfLossLessEntry                   = "PGFLossLess";
+        configSixteenBitsImageEntry              = "SixteenBitsImage";
+        configCustomWhiteBalanceEntry            = "CustomWhiteBalance";
+        configCustomWhiteBalanceGreenEntry       = "CustomWhiteBalanceGreen";
+        configRGBInterpolate4ColorsEntry         = "RGBInterpolate4Colors";
+        configDontStretchPixelsEntry             = "DontStretchPixels";
+        configEnableNoiseReductionEntry          = "EnableNoiseReduction";
+        configUnclipColorsEntry                  = "UnclipColors";
+        configNRThresholdEntry                   = "NRThreshold";
+        configEnableCACorrectionEntry            = "EnableCACorrection";
+        configCaRedMultiplierEntry               = "caRedMultiplier";
+        configCaBlueMultiplierEntry              = "caBlueMultiplier";
+        configRAWBrightnessEntry                 = "RAWBrightness";
+        configMedianFilterPassesEntry            = "MedianFilterPasses";
+        configAutoBrightnessEntry                = "AutoBrightness";
+        configUseRawImportToolEntry              = "UseRawImportTool";
+        configSplitterStateEntry                 = "SplitterState";
+        configFullScreenHideThumbBarEntry        = "FullScreenHideThumbBar";
+        configUnderExposureColorEntry            = "UnderExposureColor";
+        configOverExposureColorEntry             = "OverExposureColor";
+        configSlideShowStartCurrentEntry         = "SlideShowStartCurrent";
+        configSlideShowDelayEntry                = "SlideShowDelay";
+        configSlideShowPrintNameEntry            = "SlideShowPrintName";
+        configSlideShowPrintDateEntry            = "SlideShowPrintDate";
+        configSlideShowPrintApertureFocalEntry   = "SlideShowPrintApertureFocal";
+        configSlideShowPrintExpoSensitivityEntry = "SlideShowPrintExpoSensitivity";
+        configSlideShowPrintMakeModelEntry       = "SlideShowPrintMakeModel";
+        configSlideShowPrintCommentEntry         = "SlideShowPrintComment";
+        configSlideShowPrintRatingEntry          = "SlideShowPrintRating";
+        configSlideShowLoopEntry                 = "SlideShowLoop";
+        configUseThemeBackgroundColorEntry       = "UseThemeBackgroundColor";
+        configBackgroundColorEntry               = "BackgroundColor";
+        configWhiteBalanceEntry                  = "WhiteBalance";
+        configRAWQualityEntry                    = "RAWQuality";
         removeFullScreenButton       = false;
         fullScreenHideToolBar        = false;
         infoLabel                    = 0;
@@ -103,6 +152,55 @@ public:
     ~EditorWindowPriv()
     {
     }
+
+    QString                    configGroupName;
+    QString                    configVerticalSplitterSizesEntry;
+    QString                    configVerticalSplitterStateEntry;
+    QString                    configFullScreenEntry;
+    QString                    configAutoZoomEntry;
+    QString                    configUnderExposureIndicatorEntry;
+    QString                    configOverExposureIndicatorEntry;
+    QString                    configJpegCompressionEntry;
+    QString                    configJpegSubSamplingEntry;
+    QString                    configPngCompressionEntry;
+    QString                    configTiffCompressionEntry;
+    QString                    configJpeg2000CompressionEntry;
+    QString                    configJpeg2000LossLessEntry;
+    QString                    configPgfCompressionEntry;
+    QString                    configPgfLossLessEntry;
+    QString                    configSixteenBitsImageEntry;
+    QString                    configCustomWhiteBalanceEntry;
+    QString                    configCustomWhiteBalanceGreenEntry;
+    QString                    configRGBInterpolate4ColorsEntry;
+    QString                    configDontStretchPixelsEntry;
+    QString                    configEnableNoiseReductionEntry;
+    QString                    configUnclipColorsEntry;
+    QString                    configNRThresholdEntry;
+    QString                    configEnableCACorrectionEntry;
+    QString                    configCaRedMultiplierEntry;
+    QString                    configCaBlueMultiplierEntry;
+    QString                    configRAWBrightnessEntry;
+    QString                    configMedianFilterPassesEntry;
+    QString                    configAutoBrightnessEntry;
+    QString                    configUseRawImportToolEntry;
+    QString                    configSplitterStateEntry;
+    QString                    configFullScreenHideThumbBarEntry;
+    QString                    configUnderExposureColorEntry;
+    QString                    configOverExposureColorEntry;
+    QString                    configSlideShowStartCurrentEntry;
+    QString                    configSlideShowDelayEntry;
+    QString                    configSlideShowPrintNameEntry;
+    QString                    configSlideShowPrintDateEntry;
+    QString                    configSlideShowPrintApertureFocalEntry;
+    QString                    configSlideShowPrintExpoSensitivityEntry;
+    QString                    configSlideShowPrintMakeModelEntry;
+    QString                    configSlideShowPrintCommentEntry;
+    QString                    configSlideShowPrintRatingEntry;
+    QString                    configSlideShowLoopEntry;
+    QString                    configUseThemeBackgroundColorEntry;
+    QString                    configBackgroundColorEntry;
+    QString                    configWhiteBalanceEntry;
+    QString                    configRAWQualityEntry;
 
     bool                       removeFullScreenButton;
     bool                       fullScreenHideToolBar;
