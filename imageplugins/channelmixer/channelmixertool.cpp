@@ -36,34 +36,25 @@
 #include <QCheckBox>
 #include <QColor>
 #include <QFile>
-#include <QFrame>
 #include <QGridLayout>
-#include <QGroupBox>
-#include <QHBoxLayout>
 #include <QLabel>
-#include <QPainter>
 #include <QPixmap>
 #include <QPushButton>
-#include <QSpinBox>
 #include <QTimer>
 #include <QToolButton>
 
 // KDE includes
 
-#include <kaboutdata.h>
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kcursor.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
-#include <khelpmenu.h>
 #include <kicon.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kmenu.h>
 #include <kmessagebox.h>
-#include <kselector.h>
 #include <kstandarddirs.h>
 #include <kvbox.h>
 
@@ -74,7 +65,6 @@
 // Local includes
 
 #include "colorgradientwidget.h"
-#include "daboutdata.h"
 #include "dimg.h"
 #include "mixerfilter.h"
 #include "editortoolsettings.h"
@@ -83,7 +73,6 @@
 #include "imagehistogram.h"
 #include "imageiface.h"
 #include "imageregionwidget.h"
-#include "version.h"
 
 using namespace KDcrawIface;
 
