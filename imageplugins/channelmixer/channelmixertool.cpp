@@ -82,7 +82,7 @@
 #include "histogramwidget.h"
 #include "imagehistogram.h"
 #include "imageiface.h"
-#include "imageguidewidget.h"
+#include "imageregionwidget.h"
 #include "version.h"
 
 using namespace KDcrawIface;
@@ -114,6 +114,7 @@ public:
         configHistogramScaleEntry("Histogram Scale"),
 
         destinationPreviewData(0),
+        settingsView(0),
         resetButton(0),
         preserveLuminosity(0),
         monochrome(0),
@@ -144,23 +145,25 @@ public:
 
     uchar*              destinationPreviewData;
   
-    MixerContainer      mixerSettings;
+    QWidget*            settingsView;
     
     QPushButton*        resetButton;
 
     QCheckBox*          preserveLuminosity;
     QCheckBox*          monochrome;
 
+    MixerContainer      mixerSettings;
+    
     RDoubleNumInput*    redGain;
     RDoubleNumInput*    greenGain;
     RDoubleNumInput*    blueGain;
 
-    ImageGuideWidget*   previewWidget;
+    ImageRegionWidget*   previewWidget;
     EditorToolSettings* gboxSettings;
 };
 
 ChannelMixerTool::ChannelMixerTool(QObject* parent)
-                : EditorTool(parent),
+                : EditorToolThreaded(parent),
                   d(new ChannelMixerToolPriv)
 {
     setObjectName("channelmixer");
@@ -169,10 +172,7 @@ ChannelMixerTool::ChannelMixerTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->previewWidget = new ImageGuideWidget;
-    d->previewWidget->setWhatsThis(i18n("You can see here the image's color channels' "
-                                        "gain adjustments preview. You can pick a color on the image "
-                                        "to see the corresponding color level on the histogram."));
+    d->previewWidget = new ImageRegionWidget;
     setToolView(d->previewWidget);
     setPreviewModeMask(PreviewToolBar::AllPreviewModes);
     
@@ -183,52 +183,54 @@ ChannelMixerTool::ChannelMixerTool(QObject* parent)
                                 EditorToolSettings::Load|
                                 EditorToolSettings::SaveAs|
                                 EditorToolSettings::Ok|
-                                EditorToolSettings::Cancel);
+                                EditorToolSettings::Cancel|
+                                EditorToolSettings::Try);
 
     d->gboxSettings->setTools(EditorToolSettings::Histogram);
     d->gboxSettings->setHistogramType(Digikam::RGB);
 
+    d->settingsView   = new QWidget(d->gboxSettings->plainPage());
     QGridLayout* grid = new QGridLayout(d->gboxSettings->plainPage());
 
     // -------------------------------------------------------------
 
-    QLabel *redLabel  = new QLabel(i18n("Red:"), d->gboxSettings->plainPage());
-    d->redGain        = new RDoubleNumInput(d->gboxSettings->plainPage());
+    QLabel *redLabel  = new QLabel(i18n("Red:"), d->settingsView);
+    d->redGain        = new RDoubleNumInput(d->settingsView);
     d->redGain->setDecimals(0);
     d->redGain->setRange(-200.0, 200.0, 1);
     d->redGain->setDefaultValue(0);
     d->redGain->setWhatsThis(i18n("Select the red color gain, as a percentage, "
                                  "for the current channel."));
 
-    QLabel *greenLabel = new QLabel(i18n("Green:"), d->gboxSettings->plainPage());
-    d->greenGain       = new RDoubleNumInput(d->gboxSettings->plainPage());
+    QLabel *greenLabel = new QLabel(i18n("Green:"), d->settingsView);
+    d->greenGain       = new RDoubleNumInput(d->settingsView);
     d->greenGain->setDecimals(0);
     d->greenGain->setRange(-200.0, 200.0, 1);
     d->greenGain->setDefaultValue(0);
     d->greenGain->setWhatsThis(i18n("Select the green color gain, as a percentage, "
                                     "for the current channel."));
 
-    QLabel *blueLabel = new QLabel(i18n("Blue:"), d->gboxSettings->plainPage());
-    d->blueGain       = new RDoubleNumInput(d->gboxSettings->plainPage());
+    QLabel *blueLabel = new QLabel(i18n("Blue:"), d->settingsView);
+    d->blueGain       = new RDoubleNumInput(d->settingsView);
     d->blueGain->setDecimals(0);
     d->blueGain->setRange(-200.0, 200.0, 1);
     d->blueGain->setDefaultValue(0);
     d->blueGain->setWhatsThis(i18n("Select the blue color gain, as a percentage, "
                                    "for the current channel."));
 
-    d->resetButton = new QPushButton(i18n("&Reset"), d->gboxSettings->plainPage());
+    d->resetButton = new QPushButton(i18n("&Reset"), d->settingsView);
     d->resetButton->setIcon(KIconLoader::global()->loadIcon("document-revert", KIconLoader::Toolbar));
     d->resetButton->setWhatsThis(i18n("Reset color channels' gains settings from "
                                       "the currently selected channel."));
 
     // -------------------------------------------------------------
 
-    d->monochrome = new QCheckBox(i18n("Monochrome"), d->gboxSettings->plainPage());
+    d->monochrome = new QCheckBox(i18n("Monochrome"), d->settingsView);
     d->monochrome->setWhatsThis(i18n("Enable this option if you want the image rendered "
                                      "in monochrome mode. "
                                      "In this mode, the histogram will display only luminosity values."));
 
-    d->preserveLuminosity = new QCheckBox(i18n("Preserve luminosity"), d->gboxSettings->plainPage());
+    d->preserveLuminosity = new QCheckBox(i18n("Preserve luminosity"), d->settingsView);
     d->preserveLuminosity->setWhatsThis(i18n("Enable this option is you want preserve "
                                              "the image luminosity."));
 
@@ -249,12 +251,6 @@ ChannelMixerTool::ChannelMixerTool(QObject* parent)
 
     setToolSettings(d->gboxSettings);
     init();
-
-    // -------------------------------------------------------------
-    // Channels and scale selection slots.
-
-    connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget(const Digikam::DColor&, const QPoint&)),
-            this, SLOT(slotColorSelectedFromTarget(const Digikam::DColor&)));
 
     connect(d->previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));
@@ -333,11 +329,6 @@ void ChannelMixerTool::slotResetCurrentChannel()
     adjustSliders();
     slotEffect();
     d->gboxSettings->histogramBox()->histogram()->reset();
-}
-
-void ChannelMixerTool::slotColorSelectedFromTarget( const DColor& color )
-{
-    d->gboxSettings->histogramBox()->histogram()->setHistogramGuideByColor(color);
 }
 
 void ChannelMixerTool::slotGainsChanged()
@@ -446,51 +437,6 @@ void ChannelMixerTool::slotMonochromeActived(bool mono)
     d->gboxSettings->histogramBox()->setChannel(RedChannel);
 }
 
-void ChannelMixerTool::slotEffect()
-{
-    ImageIface* iface = d->previewWidget->imageIface();
-    uchar *data       = iface->getPreviewImage();
-    int w             = iface->previewWidth();
-    int h             = iface->previewHeight();
-    bool sb           = iface->previewSixteenBit();
-
-    // Create the new empty destination image data space.
-    d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
-
-    if (d->destinationPreviewData)
-       delete [] d->destinationPreviewData;
-
-    d->destinationPreviewData     = new uchar[w*h*(sb ? 8 : 4)];
-    d->mixerSettings.bPreserveLum = d->preserveLuminosity->isChecked();
-    d->mixerSettings.bMonochrome  = d->monochrome->isChecked();
-    MixerFilter mixer(data, w, h, sb, d->mixerSettings);
-
-    iface->putPreviewImage(data);
-    d->previewWidget->updatePreview();
-
-    // Update histogram.
-    memcpy (d->destinationPreviewData, data, w*h*(sb ? 8 : 4));
-    d->gboxSettings->histogramBox()->histogram()->updateData(d->destinationPreviewData, w, h, sb, 0, 0, 0, false);
-    delete [] data;
-}
-
-void ChannelMixerTool::finalRendering()
-{
-    kapp->setOverrideCursor( Qt::WaitCursor );
-    ImageIface* iface             = d->previewWidget->imageIface();
-    uchar *data                   = iface->getOriginalImage();
-    int w                         = iface->originalWidth();
-    int h                         = iface->originalHeight();
-    bool sb                       = iface->originalSixteenBit();
-    d->mixerSettings.bPreserveLum = d->preserveLuminosity->isChecked();
-    d->mixerSettings.bMonochrome  = d->monochrome->isChecked();
-    MixerFilter mixer(data, w, h, sb, d->mixerSettings);
-
-    iface->putOriginalImage(i18n("Channel Mixer"), data);
-    delete [] data;
-    kapp->restoreOverrideCursor();
-}
-
 void ChannelMixerTool::slotChannelChanged()
 {
     if (d->monochrome->isChecked())
@@ -498,6 +444,63 @@ void ChannelMixerTool::slotChannelChanged()
 
     adjustSliders();
     slotEffect();
+}
+
+void ChannelMixerTool::prepareEffect()
+{    
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+    d->settingsView->setEnabled(false);
+    toolView()->setEnabled(false);
+
+    d->mixerSettings.bPreserveLum = d->preserveLuminosity->isChecked();
+    d->mixerSettings.bMonochrome  = d->monochrome->isChecked();
+
+    d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
+
+    DImg preview = d->previewWidget->getOriginalRegionImage(true);
+    setFilter(dynamic_cast<DImgThreadedFilter*>(new MixerFilter(&preview, this, d->mixerSettings)));
+}
+
+void ChannelMixerTool::putPreviewData()
+{
+    DImg preview = filter()->getTargetImage();
+    d->previewWidget->setPreviewImage(preview);
+
+    // Update histogram.
+
+    if (d->destinationPreviewData)
+       delete [] d->destinationPreviewData;
+
+    d->destinationPreviewData = preview.copyBits();
+    d->gboxSettings->histogramBox()->histogram()->updateData(d->destinationPreviewData,
+                                                             preview.width(), preview.height(), preview.sixteenBit(),
+                                                             0, 0, 0, false);  
+}  
+                                                             
+void ChannelMixerTool::prepareFinal()
+{
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+    d->settingsView->setEnabled(false);
+    toolView()->setEnabled(false);
+
+    d->mixerSettings.bPreserveLum = d->preserveLuminosity->isChecked();
+    d->mixerSettings.bMonochrome  = d->monochrome->isChecked();
+
+    ImageIface iface(0, 0);
+    setFilter(dynamic_cast<DImgThreadedFilter*>(new MixerFilter(iface.getOriginalImg(), this, d->mixerSettings)));
+}
+
+void ChannelMixerTool::putFinalData()
+{
+    ImageIface iface(0, 0);
+    iface.putOriginalImage(i18n("Channel Mixer"), filter()->getTargetImage().bits());
+}                                                             
+
+void ChannelMixerTool::renderingFinished()
+{
+    QApplication::restoreOverrideCursor();
+    d->settingsView->setEnabled(true);
+    toolView()->setEnabled(true);
 }
 
 void ChannelMixerTool::readSettings()

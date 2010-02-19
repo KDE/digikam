@@ -30,17 +30,12 @@
 
 using namespace Digikam;
 
-namespace Digikam
-{
-class DColor;
-}
-
 namespace DigikamChannelMixerImagesPlugin
 {
 
 class ChannelMixerToolPriv;
 
-class ChannelMixerTool : public EditorTool
+class ChannelMixerTool : public EditorToolThreaded
 {
     Q_OBJECT
 
@@ -53,20 +48,24 @@ private:
 
     void readSettings();
     void writeSettings();
-    void finalRendering();
+    void prepareEffect();
+    void prepareFinal();
+    void putPreviewData();
+    void putFinalData();
+    void renderingFinished();
+    
     void adjustSliders();
 
 private Q_SLOTS:
 
+    void slotResetSettings();
     void slotSaveAsSettings();
     void slotLoadSettings();
+
     void slotResetCurrentChannel();
-    void slotResetSettings();
-    void slotEffect();
     void slotChannelChanged();
     void slotGainsChanged();
     void slotMonochromeActived(bool mono);
-    void slotColorSelectedFromTarget(const Digikam::DColor& color);
 
 private:
 
