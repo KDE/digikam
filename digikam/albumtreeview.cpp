@@ -316,7 +316,7 @@ void AbstractAlbumTreeView::slotSearchTextSettingsChanged(bool wasSearching, boo
     if (searched)
     {
         kDebug() << "Searched, expanding all results";
-        checkExpandedState(QModelIndex());
+        expandMatches(QModelIndex());
     }
 
     // restore the tree view state if searching finished
@@ -352,7 +352,7 @@ void AbstractAlbumTreeView::slotRootAlbumAvailable()
     expand(m_albumFilterModel->rootAlbumIndex());
 }
 
-bool AbstractAlbumTreeView::checkExpandedState(const QModelIndex& index)
+bool AbstractAlbumTreeView::expandMatches(const QModelIndex& index)
 {
     bool anyMatch = false;
 
@@ -368,7 +368,7 @@ bool AbstractAlbumTreeView::checkExpandedState(const QModelIndex& index)
     for (int i = 0; i < rows; ++i)
     {
         QModelIndex child = m_albumFilterModel->index(i, 0, index);
-        bool childResult = checkExpandedState(child);
+        bool childResult = expandMatches(child);
         anyMatch = anyMatch || childResult;
     }
     return anyMatch;
