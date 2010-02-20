@@ -128,7 +128,7 @@ ChannelMixerTool::ChannelMixerTool(QObject* parent)
     // -------------------------------------------------------------
 
     QVBoxLayout* vbox = new QVBoxLayout(d->gboxSettings->plainPage());
-    d->settingsView   = new MixerSettings;
+    d->settingsView   = new MixerSettings(d->gboxSettings->plainPage());
     vbox->addWidget(d->settingsView);
     vbox->addStretch(10);
 
