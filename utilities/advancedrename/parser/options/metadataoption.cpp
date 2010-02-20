@@ -165,6 +165,12 @@ QString MetadataOption::parseOperation(ParseSettings& settings)
 QString MetadataOption::parseMetadata(const QString& token, ParseSettings& settings)
 {
     QString result;
+
+    if (settings.fileUrl.isEmpty())
+    {
+        return result;
+    }
+
     QString keyword = token.toLower();
     if (keyword.isEmpty())
     {

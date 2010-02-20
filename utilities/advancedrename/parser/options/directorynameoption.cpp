@@ -52,12 +52,18 @@ DirectoryNameOption::DirectoryNameOption()
 
 QString DirectoryNameOption::parseOperation(ParseSettings& settings)
 {
+    QString result;
     QFileInfo fi(settings.fileUrl.toLocalFile());
+
+    if (!fi.exists())
+    {
+        return result;
+    }
+
     QStringList folders = fi.absolutePath().split('/', QString::SkipEmptyParts);
     int folderCount     = folders.count();
     const QRegExp& reg  = regExp();
 
-    QString result;
     int matchedLength = reg.cap(1).length();
 
     if (matchedLength == 0)

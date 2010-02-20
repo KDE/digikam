@@ -67,11 +67,17 @@ FilePropertiesOption::FilePropertiesOption()
 
 QString FilePropertiesOption::parseOperation(ParseSettings& settings)
 {
+    QString result;
     QFileInfo fi(settings.fileUrl.toLocalFile());
+
+    if (!fi.exists())
+    {
+        return result;
+    }
+
     const QRegExp& reg   = regExp();
     const QString& token = reg.cap(1);
 
-    QString result;
     if (token == QString("[file]"))
     {
         result = fi.completeBaseName();

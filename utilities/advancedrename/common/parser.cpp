@@ -138,11 +138,6 @@ ParseResults Parser::invalidModifiers(ParseSettings& settings)
 
 QString Parser::parse(ParseSettings& settings)
 {
-    if (settings.fileUrl.isEmpty())
-    {
-        return QString();
-    }
-
     QFileInfo fi(settings.fileUrl.toLocalFile());
 
     if (!parseStringIsValid(settings.parseString))
