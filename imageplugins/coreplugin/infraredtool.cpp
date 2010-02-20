@@ -59,7 +59,7 @@
 
 using namespace KDcrawIface;
 
-namespace DigikamInfraredImagesPlugin
+namespace DigikamImagesPluginCore
 {
 
 class InfraredToolPriv
@@ -247,4 +247,4 @@ void InfraredTool::putFinalData()
     iface.putOriginalImage(i18n("Infrared"), filter()->getTargetImage().bits());
 }
 
-}  // namespace DigikamInfraredImagesPlugin
+}  // namespace DigikamImagesPluginCore

@@ -14,6 +14,7 @@ SET(digikamimageplugin_core_PART_SRCS
     ../../imageplugins/coreplugin/sharpentool.cpp
     ../../imageplugins/coreplugin/noisereductiontool.cpp
     ../../imageplugins/coreplugin/hsltool.cpp
+    ../../imageplugins/coreplugin/infraredtool.cpp
     ../../imageplugins/coreplugin/ratiocrop/imageselectionwidget.cpp
     ../../imageplugins/coreplugin/ratiocrop/ratiocroptool.cpp
    )

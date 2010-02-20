@@ -32,7 +32,7 @@
 
 using namespace Digikam;
 
-namespace DigikamInfraredImagesPlugin
+namespace DigikamImagesPluginCore
 {
 
 class InfraredToolPriv;
@@ -65,6 +65,6 @@ private:
     InfraredToolPriv* const d;
 };
 
-}  // namespace DigikamInfraredImagesPlugin
+}  // namespace DigikamImagesPluginCore
 
 #endif /* INFRAREDTOOL_H */

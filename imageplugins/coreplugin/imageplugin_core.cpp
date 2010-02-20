@@ -48,6 +48,7 @@
 #include "bcgtool.h"
 #include "bwsepiatool.h"
 #include "hsltool.h"
+#include "infraredtool.h"
 #include "profileconversiontool.h"
 #include "resizetool.h"
 #include "blurtool.h"
@@ -83,6 +84,7 @@ public:
         convertTo8Bits(0),
         convertTo16Bits(0),
         noiseReductionAction(0),
+        infraredAction(0),
         profileMenuAction(0)
         {}
 
@@ -100,6 +102,7 @@ public:
     KAction*               convertTo8Bits;
     KAction*               convertTo16Bits;
     KAction*               noiseReductionAction;
+    KAction*               infraredAction;
     IccProfilesMenuAction* profileMenuAction;
 };
 
@@ -153,12 +156,6 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QVariantList &)
     connect(d->convertTo16Bits, SIGNAL(triggered(bool) ),
             this, SLOT(slotConvertTo16Bits()));
 
-    /*
-    d->colorManagementAction = new KAction(KIcon("colormanagement"), i18n("Color Management..."), this);
-    actionCollection()->addAction("implugcore_colormanagement", d->colorManagementAction );
-    connect(d->colorManagementAction, SIGNAL(triggered(bool) ),
-            this, SLOT(slotColorManagement()));
-    */
     d->profileMenuAction = new IccProfilesMenuAction(KIcon("colormanagement"), i18n("Color Space Conversion"), this);
     actionCollection()->addAction("implugcore_colormanagement", d->profileMenuAction );
     connect(d->profileMenuAction, SIGNAL(triggered(const IccProfile &)),
@@ -202,6 +199,11 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QVariantList &)
     connect(d->BWAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotBW()));
 
+    d->infraredAction = new KAction(KIcon("infrared"), i18n("Infrared Film..."), this);
+    actionCollection()->addAction("implugcore_infrared", d->infraredAction );
+    connect(d->infraredAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotInfrared()));
+
     //-------------------------------
     // Transform menu actions.
 
@@ -244,6 +246,7 @@ void ImagePlugin_Core::setEnabledActions(bool b)
     d->redeyeAction->setEnabled(b);
     d->autoCorrectionAction->setEnabled(b);
     d->BWAction->setEnabled(b);
+    d->infraredAction->setEnabled(b);
     d->HSLAction->setEnabled(b);
     d->sharpenAction->setEnabled(b);
     d->aspectRatioCropAction->setEnabled(b);
@@ -355,14 +358,6 @@ void ImagePlugin_Core::slotRedEye()
     loadTool(tool);
 }
 
-/*
-void ImagePlugin_Core::slotColorManagement()
-{
-    ICCProofTool *tool = new ICCProofTool(this);
-    loadTool(tool);
-}
-*/
-
 void ImagePlugin_Core::slotConvertToColorSpace(const IccProfile& profile)
 {
     ImageIface iface(0, 0);
@@ -468,5 +463,11 @@ void ImagePlugin_Core::slotResize()
 void ImagePlugin_Core::slotNoiseReduction()
 {
     NoiseReductionTool *tool = new NoiseReductionTool(this);
+    loadTool(tool);
+}
+
+void ImagePlugin_Core::slotInfrared()
+{
+    InfraredTool* tool = new InfraredTool(this);
     loadTool(tool);
 }
