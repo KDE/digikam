@@ -161,7 +161,6 @@ void ImageRegionWidget::viewportPaintExtraData()
         QPainter p(viewport());
         p.setRenderHint(QPainter::Antialiasing, true);
         p.setBackgroundMode(Qt::TransparentMode);
-        p.translate(previewRect().topLeft());
          
         QRect region;
 
