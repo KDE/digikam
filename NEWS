@@ -60,5 +60,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 039 ==> 227550 : Tags already assigned looks messy.
 040 ==> 226962 : Applying tags to images requires extra work.
 041 ==> 226238 : Histogram never get completed in image editor after any change in the image.
-042 ==> 
-
+042 ==> 227545 : Toggle Auto/Parents does not work as expected.
+043 ==> 

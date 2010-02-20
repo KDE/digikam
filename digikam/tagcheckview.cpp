@@ -130,7 +130,8 @@ void TagCheckView::slotCheckStateChange(Album *album, Qt::CheckState state)
     Q_UNUSED(state);
 
     // handle custom toggle modes
-    albumModel()->blockSignals(true);
+    disconnect(albumModel(), SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
+               this, SLOT(slotCheckStateChange(Album*, Qt::CheckState)));
     // avoid signal recursion here
     switch(d->toggleAutoTags)
     {
@@ -147,7 +148,8 @@ void TagCheckView::slotCheckStateChange(Album *album, Qt::CheckState state)
     default:
         break;
     }
-    albumModel()->blockSignals(false);
+    connect(albumModel(), SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
+            this, SLOT(slotCheckStateChange(Album*, Qt::CheckState)));
 
     emit checkedTagsChanged(getCheckedTags());
 
