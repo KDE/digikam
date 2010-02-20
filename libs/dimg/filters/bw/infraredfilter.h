@@ -33,22 +33,22 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT Infrared : public DImgThreadedFilter
+class DIGIKAM_EXPORT InfraredFilter : public DImgThreadedFilter
 {
 
 public:
 
-    explicit Infrared(DImg* orgImage, QObject* parent=0, int sensibility=1, bool grain=true);
+    explicit InfraredFilter(DImg* orgImage, QObject* parent=0, int sensibility=1, bool grain=true);
 
-    ~Infrared(){};
+    ~InfraredFilter(){};
 
-private:  // Infrared filter data.
+private:
 
     bool m_grain;
 
     int  m_sensibility;
 
-private:  // Infrared filter methods.
+private:
 
     void filterImage();
     void infraredImage(int Sensibility, bool Grain);

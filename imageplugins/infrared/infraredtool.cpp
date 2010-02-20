@@ -82,9 +82,9 @@ public:
     const QString       configAddFilmGrainEntry;
 
     QCheckBox*          addFilmGrain;
-    
+
     RIntNumInput*       sensibilityInput;
-    
+
     ImageRegionWidget*  previewWidget;
     EditorToolSettings* gboxSettings;
 };
@@ -103,12 +103,12 @@ InfraredTool::InfraredTool(QObject* parent)
     d->gboxSettings  = new EditorToolSettings;
     d->previewWidget = new ImageRegionWidget;
 
-        
+
     d->gboxSettings->setButtons(EditorToolSettings::Default|
                                 EditorToolSettings::Ok|
                                 EditorToolSettings::Cancel|
                                 EditorToolSettings::Try);
-                                
+
     // -------------------------------------------------------------
 
     QLabel *label1       = new QLabel(i18n("Sensitivity (ISO):"));
@@ -148,7 +148,7 @@ InfraredTool::InfraredTool(QObject* parent)
 
     setToolSettings(d->gboxSettings);
     setToolView(d->previewWidget);
-    setPreviewModeMask(PreviewToolBar::AllPreviewModes);    
+    setPreviewModeMask(PreviewToolBar::AllPreviewModes);
     init();
 
     // -------------------------------------------------------------
@@ -158,7 +158,7 @@ InfraredTool::InfraredTool(QObject* parent)
 
     connect(d->previewWidget, SIGNAL(signalOriginalClipFocusChanged()),
             this, SLOT(slotTimer()));
-    
+
     connect(d->addFilmGrain, SIGNAL(toggled (bool)),
             this, SLOT(slotEffect()));
 }
@@ -172,7 +172,7 @@ void InfraredTool::renderingFinished()
 {
     d->sensibilityInput->setEnabled(true);
     d->addFilmGrain->setEnabled(true);
-    toolView()->setEnabled(true);    
+    toolView()->setEnabled(true);
 }
 
 void InfraredTool::readSettings()
@@ -214,26 +214,26 @@ void InfraredTool::prepareEffect()
 {
     d->addFilmGrain->setEnabled(false);
     d->sensibilityInput->setEnabled(false);
-    toolView()->setEnabled(false);    
+    toolView()->setEnabled(false);
 
     DImg image = d->previewWidget->getOriginalRegionImage();
     int  s     = d->sensibilityInput->value();
     bool g     = d->addFilmGrain->isChecked();
 
-    setFilter(dynamic_cast<DImgThreadedFilter*>(new Infrared(&image, this, s, g)));
+    setFilter(new InfraredFilter(&image, this, s, g));
 }
 
 void InfraredTool::prepareFinal()
 {
     d->addFilmGrain->setEnabled(false);
     d->sensibilityInput->setEnabled(false);
-    toolView()->setEnabled(false);    
+    toolView()->setEnabled(false);
 
     int  s = d->sensibilityInput->value();
     bool g = d->addFilmGrain->isChecked();
 
     ImageIface iface(0, 0);
-    setFilter(dynamic_cast<DImgThreadedFilter*>(new Infrared(iface.getOriginalImg(), this, s, g)));
+    setFilter(new InfraredFilter(iface.getOriginalImg(), this, s, g));
 }
 
 void InfraredTool::putPreviewData()

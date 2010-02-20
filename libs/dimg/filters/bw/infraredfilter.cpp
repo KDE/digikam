@@ -50,15 +50,15 @@
 namespace Digikam
 {
 
-Infrared::Infrared(DImg* orgImage, QObject* parent, int sensibility, bool grain)
-        : DImgThreadedFilter(orgImage, parent, "Infrared")
+InfraredFilter::InfraredFilter(DImg* orgImage, QObject* parent, int sensibility, bool grain)
+              : DImgThreadedFilter(orgImage, parent, "Infrared")
 {
     m_sensibility = sensibility;
     m_grain       = grain;
     initFilter();
 }
 
-void Infrared::filterImage()
+void InfraredFilter::filterImage()
 {
     infraredImage(m_sensibility, m_grain);
 }
@@ -83,7 +83,7 @@ inline static int intMult16(uint a, uint b)
 http://www.pauck.de/marco/photo/infrared/comparison_of_films/comparison_of_films.html
 */
 
-void Infrared::infraredImage(int Sensibility, bool Grain)
+void InfraredFilter::infraredImage(int Sensibility, bool Grain)
 {
     // Sensibility: 200..2600
 
@@ -134,7 +134,7 @@ void Infrared::infraredImage(int Sensibility, bool Grain)
     memcpy (pBWBits, data, numBytes);
 
     MixerContainer settings;
-    settings.bMonochrome = true;
+    settings.bMonochrome    = true;
     settings.blackRedGain   = 0.4;
     settings.blackGreenGain = greenBoost;
     settings.blackBlueGain  = -0.8;
