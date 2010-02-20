@@ -852,15 +852,14 @@ void AbstractCheckableAlbumModel::invertCheckedAlbums(QModelIndex parent)
 
 void AbstractCheckableAlbumModel::setCheckStateForChildren(Album *album, Qt::CheckState state)
 {
-    QModelIndex parent = indexForAlbum(album);
-    setDataForChildren(parent, state, Qt::CheckStateRole);
+    QModelIndex index = indexForAlbum(album);
+    setDataForChildren(index, state, Qt::CheckStateRole);
 }
 
 void AbstractCheckableAlbumModel::setCheckStateForParents(Album *album, Qt::CheckState state)
 {
-    QModelIndex parent = indexForAlbum(album);
-    if (parent != rootAlbumIndex())
-    setDataForParents(parent, state, Qt::CheckStateRole);
+    QModelIndex index = indexForAlbum(album);
+    setDataForParents(index, state, Qt::CheckStateRole);
 }
 
 QVariant AbstractCheckableAlbumModel::albumData(Album *a, int role) const
