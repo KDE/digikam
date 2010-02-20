@@ -57,5 +57,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 036 ==> 226846 : Issues with color management and color profiles.
 037 ==> 227498 : digiKam no longer shows any fotos. opengl image viewer works. showFoto works.
 038 ==> 226537 : hovering doesn't show sub-tags.
-039 ==> 227545 : Toggle Auto/Parents does not work as expected.
+039 ==> 227550 : Tags already assigned looks messy.
 040 ==> 
