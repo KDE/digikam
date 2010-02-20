@@ -519,9 +519,11 @@ void ImagePropertiesColorsTab::slotMoreCompleteLoadingAvailable(const LoadingDes
 
 void ImagePropertiesColorsTab::setSelection(const QRect& selectionArea)
 {
+    if (selectionArea == d->selectionArea)
+        return;
+
     // This is necessary to stop computation because d->image.bits() is currently used by
     // threaded histogram algorithm.
-
     d->histogramBox->histogram()->stopHistogramComputation();
     d->selectionArea = selectionArea;
 
