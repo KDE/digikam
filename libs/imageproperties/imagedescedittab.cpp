@@ -187,6 +187,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
     d->tagModel->setCheckable(true);
     d->tagModel->setRootCheckable(false);
     d->tagCheckView = new TagCheckView(captionTagsArea, d->tagModel);
+    d->tagCheckView->setCheckNewTags(true);
 
     KHBox *tagsSearch  = new KHBox(captionTagsArea);
     tagsSearch->setSpacing(KDialog::spacingHint());

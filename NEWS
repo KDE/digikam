@@ -58,4 +58,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 037 ==> 227498 : digiKam no longer shows any fotos. opengl image viewer works. showFoto works.
 038 ==> 226537 : hovering doesn't show sub-tags.
 039 ==> 227550 : Tags already assigned looks messy.
-040 ==> 
+040 ==> 226962 : Applying tags to images requires extra work.
+041 ==> 
+

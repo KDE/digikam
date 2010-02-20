@@ -111,6 +111,12 @@ public Q_SLOTS:
      */
     void setParentTag(TAlbum *parent);
 
+Q_SIGNALS:
+
+    void tagCreated(TAlbum *tag);
+    void tagEdited(TAlbum *tag);
+    void aboutToDeleteTag(TAlbum *tag);
+
 private:
     TagModificationHelperPriv *d;
 

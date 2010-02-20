@@ -93,7 +93,9 @@ TAlbum *TagModificationHelper::slotTagNew(TAlbum *parent, const QString &title, 
 
     if (errMap.isEmpty() && !tList.isEmpty())
     {
-        return dynamic_cast<TAlbum*> (tList.last());
+        TAlbum *tag = static_cast<TAlbum*>(tList.last());
+        emit tagCreated(tag);
+        return tag;
     }
     else
     {
@@ -147,6 +149,8 @@ void TagModificationHelper::slotTagEdit(TAlbum *tag)
             KMessageBox::error(0, errMsg);
         }
     }
+
+    emit tagEdited(tag);
 
 }
 
@@ -216,6 +220,7 @@ void TagModificationHelper::slotTagDelete(TAlbum *tag)
 
     if(result == KMessageBox::Continue)
     {
+        emit aboutToDeleteTag(tag);
         QString errMsg;
         if (!AlbumManager::instance()->deleteTAlbum(tag, errMsg))
         {
