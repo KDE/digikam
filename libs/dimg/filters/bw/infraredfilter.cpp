@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "infrared.h"
+#include "infraredfilter.h"
 
 // C++ includes
 
@@ -47,7 +47,7 @@
 #include "mixerfilter.h"
 #include "globals.h"
 
-namespace DigikamInfraredImagesPlugin
+namespace Digikam
 {
 
 Infrared::Infrared(DImg* orgImage, QObject* parent, int sensibility, bool grain)
@@ -139,7 +139,7 @@ void Infrared::infraredImage(int Sensibility, bool Grain)
     settings.blackGreenGain = greenBoost;
     settings.blackBlueGain  = -0.8;
     MixerFilter mixer(pBWBits, Width, Height, sixteenBit, settings);
-    
+
     postProgress( 10 );
     if (m_cancel)
         return;
@@ -372,4 +372,4 @@ void Infrared::infraredImage(int Sensibility, bool Grain)
         delete [] pOverlayBits;
 }
 
-}  // namespace DigikamInfraredImagesPlugin
+}  // namespace Digikam

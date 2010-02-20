@@ -510,6 +510,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/bcg/bcgfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/bcg/bcgsettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/bw/tonalityfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/bw/infraredfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/bw/mixerfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/bw/mixersettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/hsl/hslfilter.cpp

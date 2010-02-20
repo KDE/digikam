@@ -5,36 +5,35 @@
  *
  * Date   : 2005-05-25
  * Description : Infrared threaded image filter.
- * 
+ *
  * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * 
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
-  
-#ifndef INFRARED_H
-#define INFRARED_H
+
+#ifndef INFRAREDFILTER_H
+#define INFRAREDFILTER_H
 
 // Local includes
 
 #include "dimgthreadedfilter.h"
+#include "digikam_export.h"
 
-using namespace Digikam;
-
-namespace DigikamInfraredImagesPlugin
+namespace Digikam
 {
 
-class Infrared : public DImgThreadedFilter
+class DIGIKAM_EXPORT Infrared : public DImgThreadedFilter
 {
 
 public:
@@ -55,6 +54,6 @@ private:  // Infrared filter methods.
     void infraredImage(int Sensibility, bool Grain);
 };
 
-}  // namespace DigikamInfraredImagesPlugin
+}  // namespace Digikam
 
-#endif /* INFRARED_H */
+#endif /* INFRAREDFILTER_H */

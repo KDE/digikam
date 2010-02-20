@@ -54,7 +54,7 @@
 #include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imageregionwidget.h"
-#include "infrared.h"
+#include "infraredfilter.h"
 #include "version.h"
 
 using namespace KDcrawIface;

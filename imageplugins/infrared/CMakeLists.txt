@@ -1,7 +1,6 @@
 
 SET(digikamimageplugin_infrared_PART_SRCS imageplugin_infrared.cpp
                                           infraredtool.cpp 
-                                          infrared.cpp 
    )
 
 KDE4_ADD_PLUGIN(digikamimageplugin_infrared ${digikamimageplugin_infrared_PART_SRCS})
