@@ -909,7 +909,9 @@ bool AbstractCheckableAlbumModel::setData(const QModelIndex& index, const QVaria
 
 void AbstractCheckableAlbumModel::albumCleared(Album *album)
 {
-    m_checkedAlbums.remove(album);
+    // preserve check state if album is only being moved
+    if (!AlbumManager::instance()->isMovingAlbum(album))
+        m_checkedAlbums.remove(album);
     AbstractCountingAlbumModel::albumCleared(album);
 }
 
