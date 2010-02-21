@@ -62,5 +62,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 041 ==> 226238 : Histogram never get completed in image editor after any change in the image.
 042 ==> 227545 : Toggle Auto/Parents does not work as expected.
 043 ==> 219772 : Opening the application causes crash.
-044 ==> 
-
+044 ==> 226382 : Curves Adjust dialog broken: No Histogram and no effect when changing the line.
+045 ==> 
