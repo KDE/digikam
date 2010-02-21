@@ -85,6 +85,9 @@ void InfraredFilter::filterImage()
     bool sixteenBit = m_orgImage.sixteenBit();
     uchar* data     = m_orgImage.bits();
 
+    postProgress( 10 );
+    if (m_cancel) return;
+
     // Infrared film variables depending on Sensibility.
     // We can reproduce famous Ilford SFX200 infrared film
     // http://www.ilford.com/html/us_english/prod_html/sfx200/sfx200.html
@@ -98,12 +101,13 @@ void InfraredFilter::filterImage()
     int    offset, progress;
 
     uchar*      pBWBits = 0;                  // Black and White conversion.
-    uchar*  pBWBlurBits = 0;                  // Black and White with blur.
-    uchar*    pMaskBits = 0;                  // Grain mask with curves adjustment.
     uchar* pOverlayBits = 0;                  // Overlay to merge with original converted in gray scale.
     uchar*     pOutBits = m_destImage.bits(); // Destination image with merged grain mask and original.
 
     DColor bwData, bwBlurData, maskData, overData, outData;
+
+    postProgress( 20 );
+    if (m_cancel) return;
 
     //------------------------------------------
     // 1 - Create GrayScale green boosted image.
@@ -123,25 +127,20 @@ void InfraredFilter::filterImage()
     settings.blackBlueGain  = -0.8;
     MixerFilter mixer(pBWBits, Width, Height, sixteenBit, settings);
 
-    postProgress( 10 );
-    if (m_cancel)
-        return;
+    postProgress( 30 );
+    if (m_cancel) return;
 
     // Apply a Gaussian blur to the black and white image.
     // This way simulate Infrared film dispersion for the highlights.
 
     DImg BWBlurImage(Width, Height, sixteenBit);
-    pBWBlurBits = BWBlurImage.bits();
-
     DImgGaussianBlur(this, BWImage, BWBlurImage, 10, 20, blurRadius);
 
     // save a memcpy
-    pOverlayBits = pBWBlurBits;
-    pBWBlurBits  = 0;
+    pOverlayBits = BWBlurImage.bits();
 
-    postProgress( 50 );
-    if (m_cancel)
-        return;
+    postProgress( 40 );
+    if (m_cancel) return;
 
     //------------------------------------------
     // 2 - Merge Grayscale image & overlay mask.
@@ -152,6 +151,7 @@ void InfraredFilter::filterImage()
     // Overlay mode composite value computation is D =  A * (B + (2 * B) * (255 - A)).
 
     outData.setSixteenBit(sixteenBit);
+
     for (int x = 0; !m_cancel && x < Width; ++x)
     {
         for (int y = 0; !m_cancel && y < Height; ++y)
@@ -178,13 +178,11 @@ void InfraredFilter::filterImage()
         }
 
         // Update progress bar in dialog.
-        progress = (int) (80.0 + ((double)x * 20.0) / Width);
+        progress = (int) (50.0 + ((double)x * 50.0) / Width);
 
         if (progress%5 == 0)
             postProgress(progress);
     }
-
-    delete [] pMaskBits;
 }
 
 int InfraredFilter::intMult8(uint a, uint b)
