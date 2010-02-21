@@ -38,20 +38,22 @@ class DIGIKAM_EXPORT InfraredFilter : public DImgThreadedFilter
 
 public:
 
-    explicit InfraredFilter(DImg* orgImage, QObject* parent=0, int sensibility=1, bool grain=true);
-
+    explicit InfraredFilter(DImg* orgImage, QObject* parent=0, int sensibility=200, bool grain=false);
+    InfraredFilter(uchar* bits, uint width, uint height, bool sixteenBits, int sensibility=200, bool grain=false);
     ~InfraredFilter(){};
+
+private:
+
+    void filterImage();
+
+    inline int intMult8(uint a, uint b);
+    inline int intMult16(uint a, uint b);
 
 private:
 
     bool m_grain;
 
     int  m_sensibility;
-
-private:
-
-    void filterImage();
-    void infraredImage(int Sensibility, bool Grain);
 };
 
 }  // namespace Digikam

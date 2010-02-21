@@ -56,6 +56,7 @@
 #include "tonalityfilter.h"
 #include "colorgradientwidget.h"
 #include "mixerfilter.h"
+#include "infraredfilter.h"
 #include "curvesbox.h"
 #include "curveswidget.h"
 #include "dimg.h"
@@ -98,6 +99,10 @@ enum BlackWhiteConversionType
     BWKodakTmax100,
     BWKodakTmax400,
     BWKodakTriX,
+
+    BWIlfordSFX200,       // Infrared film simulation.
+    BWIlfordSFX400,
+    BWIlfordSFX800,
 
     BWNoTone,             // Chemical color tone filter.
     BWSepiaTone,
@@ -407,6 +412,24 @@ BWSepiaTool::BWSepiaTool(QObject* parent)
 
     // -------------------------------------------------------------
 
+    type = BWIlfordSFX200;
+
+    item = new ListWidgetBWPreviewItem(d->bwFilm, i18n("Ilford SPX 200"), d->previewPixmapFactory, type);
+    item->setWhatsThis(i18n("<b>Ilford SPX 200</b>:"
+                            "<p>Simulate the Ilford SPX infrared film at 200 ISO.</p>"));
+
+    ++type;
+    item = new ListWidgetBWPreviewItem(d->bwFilm, i18n("Ilford SPX 400"), d->previewPixmapFactory, type);
+    item->setWhatsThis(i18n("<b>Ilford SPX 400</b>:"
+                            "<p>Simulate the Ilford SPX infrared film at 400 ISO.</p>"));
+
+    ++type;
+    item = new ListWidgetBWPreviewItem(d->bwFilm, i18n("Ilford SPX 800"), d->previewPixmapFactory, type);
+    item->setWhatsThis(i18n("<b>Ilford SPX 800</b>:"
+                            "<p>Simulate the Ilford SPX infrared film at 800 ISO.</p>"));
+
+    // -------------------------------------------------------------
+
     KVBox *vbox = new KVBox(d->tab);
     vbox->setSpacing(d->gboxSettings->spacingHint());
 
@@ -652,7 +675,7 @@ QPixmap BWSepiaTool::getThumbnailForEffect(int type)
 
     if (d->curvesBox->curves())   // in case we're called before the creator is done
     {
-        uchar *targetData = new uchar[w*h*(sb ? 8 : 4)];
+        uchar* targetData = new uchar[w*h*(sb ? 8 : 4)];
         d->curvesBox->curves()->curvesLutSetup(AlphaChannel);
         d->curvesBox->curves()->curvesLutProcess(thumb.bits(), targetData, w, h);
 
@@ -778,7 +801,7 @@ void BWSepiaTool::slotEffect()
 
     // Calculate and apply the curve on image.
 
-    uchar *targetData = new uchar[w*h*(sb ? 8 : 4)];
+    uchar* targetData = new uchar[w*h*(sb ? 8 : 4)];
     d->curvesBox->curves()->curvesLutSetup(AlphaChannel);
     d->curvesBox->curves()->curvesLutProcess(d->destinationPreviewData, targetData, w, h);
 
@@ -828,7 +851,7 @@ void BWSepiaTool::finalRendering()
 
         // Calculate and apply the curve on image.
 
-        uchar *targetData = new uchar[w*h*(sb ? 8 : 4)];
+        uchar* targetData = new uchar[w*h*(sb ? 8 : 4)];
         d->curvesBox->curves()->curvesLutSetup(AlphaChannel);
         d->curvesBox->curves()->curvesLutProcess(data, targetData, w, h);
 
@@ -849,14 +872,14 @@ void BWSepiaTool::finalRendering()
     kapp->restoreOverrideCursor();
 }
 
-void BWSepiaTool::blackAndWhiteConversion(uchar *data, int w, int h, bool sb, int type)
+void BWSepiaTool::blackAndWhiteConversion(uchar* data, int w, int h, bool sb, int type)
 {
     // Value to multiply RGB 8 bits component of mask used by TonalityFilter.
     int mul         = sb ? 255 : 1;
     double strength = 1.0 + ((double)d->strengthInput->value() - 1.0) * (1.0 / 3.0);
 
     TonalityContainer toneSettings;
-    
+
     switch (type)
     {
         case BWNoFilter:
@@ -1055,6 +1078,26 @@ void BWSepiaTool::blackAndWhiteConversion(uchar *data, int w, int h, bool sb, in
 
         // --------------------------------------------------------------------------------
 
+        case BWIlfordSFX200:
+        {
+            InfraredFilter infra(data, w, h, sb, 200);
+            break;
+        }
+
+        case BWIlfordSFX400:
+        {
+            InfraredFilter infra(data, w, h, sb, 400);
+            break;
+        }
+
+        case BWIlfordSFX800:
+        {
+            InfraredFilter infra(data, w, h, sb, 800);
+            break;
+        }
+
+        // --------------------------------------------------------------------------------
+
         case BWSepiaTone:
         {
             toneSettings.redMask   = 162*mul;
@@ -1114,7 +1157,7 @@ void BWSepiaTool::blackAndWhiteConversion(uchar *data, int w, int h, bool sb, in
 void BWSepiaTool::applyChannelMixer(uchar* data, int w, int h, bool sb)
 {
     MixerContainer settings;
-    settings.bMonochrome    = true;    
+    settings.bMonochrome    = true;
     settings.blackRedGain   = d->redMult   + d->redMult*d->redAttn;
     settings.blackGreenGain = d->greenMult + d->greenMult*d->greenAttn;
     settings.blackBlueGain  = d->blueMult  + d->blueMult*d->blueAttn;
