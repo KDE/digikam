@@ -170,7 +170,7 @@ void ImageRegionWidget::viewportPaintExtraData()
 
         // Target region.
         QRect rt(contentsToViewport(region.topLeft()), contentsToViewport(region.bottomRight()));
-
+        
         p.translate(previewRect().topLeft());
 
         // Drawing separate view.
