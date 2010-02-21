@@ -41,28 +41,23 @@
 
 #include "dimg.h"
 #include "dimggaussianblur.h"
-#include "imagecurves.h"
-#include "imagehistogram.h"
-#include "dimgimagefilters.h"
 #include "mixerfilter.h"
 #include "globals.h"
 
 namespace Digikam
 {
 
-InfraredFilter::InfraredFilter(DImg* orgImage, QObject* parent, int sensibility, bool grain)
+InfraredFilter::InfraredFilter(DImg* orgImage, QObject* parent, int sensibility)
               : DImgThreadedFilter(orgImage, parent, "Infrared")
 {
     m_sensibility = sensibility;
-    m_grain       = grain;
     initFilter();
 }
 
-InfraredFilter::InfraredFilter(uchar* bits, uint width, uint height, bool sixteenBits, int sensibility, bool grain)
+InfraredFilter::InfraredFilter(uchar* bits, uint width, uint height, bool sixteenBits, int sensibility)
               : DImgThreadedFilter()
 {
     m_sensibility = sensibility;
-    m_grain       = grain;
     m_orgImage    = DImg(width, height, sixteenBits, true, bits, true);
     initFilter();
     startFilterDirectly();
@@ -96,25 +91,19 @@ void InfraredFilter::filterImage()
     // This film have a sensibility escursion from 200 to 800 ISO.
     // Over 800 ISO, we reproduce The Kodak HIE high speed infrared film.
 
-    // Infrared film grain.
-    int Noise = (m_sensibility + 3000) / 10;
-    if (sixteenBit)
-        Noise = (Noise + 1) * 256 - 1;
-
     int    blurRadius = (int)((m_sensibility / 200.0) + 1.0);   // Gaussian blur infrared highlight effect
                                                                 // [2 to 5].
     double greenBoost = 2.1 - (m_sensibility / 2000.0);         // Infrared green color boost [1.7 to 2.0].
 
-    int nRand, offset, progress;
+    int    offset, progress;
 
     uchar*      pBWBits = 0;                  // Black and White conversion.
     uchar*  pBWBlurBits = 0;                  // Black and White with blur.
-    uchar*   pGrainBits = 0;                  // Grain blurred without curves adjustment.
     uchar*    pMaskBits = 0;                  // Grain mask with curves adjustment.
     uchar* pOverlayBits = 0;                  // Overlay to merge with original converted in gray scale.
     uchar*     pOutBits = m_destImage.bits(); // Destination image with merged grain mask and original.
 
-    DColor bwData, bwBlurData, grainData, maskData, overData, outData;
+    DColor bwData, bwBlurData, maskData, overData, outData;
 
     //------------------------------------------
     // 1 - Create GrayScale green boosted image.
@@ -146,180 +135,16 @@ void InfraredFilter::filterImage()
 
     DImgGaussianBlur(this, BWImage, BWBlurImage, 10, 20, blurRadius);
 
-    if (m_cancel)
-        return;
-
-    //-----------------------------------------------------------------
-    // 2 - Create Gaussian blurred overlay mask with grain if necessary.
-    //-----------------------------------------------------------------
-
-    if (m_grain)
-    {
-        // Create gray grain mask.
-
-        QDateTime dt = QDateTime::currentDateTime();
-        QDateTime Y2000( QDate(2000, 1, 1), QTime(0, 0, 0) );
-        uint seed = ((uint) dt.secsTo(Y2000));
-#ifdef _WIN32
-        srand(seed);
-#endif
-
-        pGrainBits = new uchar[numBytes];    // Grain blurred without curves adjustment.
-        uchar* ptr;
-        int component;
-        grainData.setSixteenBit(sixteenBit);
-
-        for (int x = 0; !m_cancel && x < Width; ++x)
-        {
-            for (int y = 0; !m_cancel && y < Height; ++y)
-            {
-                ptr = pGrainBits + x*bytesDepth + (y*Width*bytesDepth);
-
-#ifndef _WIN32
-                nRand = (rand_r(&seed) % Noise) - (Noise / 2);
-#else
-                nRand = (rand() % Noise) - (Noise / 2);
-#endif
-                if (sixteenBit)
-                    component = CLAMP(32768 + nRand, 0, 65535);
-                else
-                    component = CLAMP(128 + nRand, 0, 255);
-
-                grainData.setRed  (component);
-                grainData.setGreen(component);
-                grainData.setBlue (component);
-                grainData.setAlpha(0);
-
-                grainData.setPixel(ptr);
-            }
-
-            // Update progress bar in dialog.
-            progress = (int) (30.0 + ((double)x * 10.0) / Width);
-
-            if (progress%5 == 0)
-                postProgress( progress );
-        }
-
-        // Smooth grain mask using gaussian blur.
-
-        DImgImageFilters().gaussianBlurImage(pGrainBits, Width, Height, sixteenBit, 1);
-
-        postProgress( 40 );
-        if (m_cancel)
-        {
-            delete [] pGrainBits;
-            return;
-        }
-    }
+    // save a memcpy
+    pOverlayBits = pBWBlurBits;
+    pBWBlurBits  = 0;
 
     postProgress( 50 );
     if (m_cancel)
-    {
-        delete [] pGrainBits;
         return;
-    }
-
-    // Normally, film grain tends to be most noticeable in the midtones, and much less
-    // so in the shadows and highlights. Adjust histogram curve to adjust grain like this.
-
-    if (m_grain)
-    {
-        ImageCurves* grainCurves = new ImageCurves(sixteenBit);
-        pMaskBits                = new uchar[numBytes];    // Grain mask with curves adjustment.
-
-        // We modify only global luminosity of the grain.
-        if (sixteenBit)
-        {
-            grainCurves->setCurvePoint(LuminosityChannel, 0,  QPoint(0,   0));
-            grainCurves->setCurvePoint(LuminosityChannel, 8,  QPoint(32768, 32768));
-            grainCurves->setCurvePoint(LuminosityChannel, 16, QPoint(65535, 0));
-        }
-        else
-        {
-            grainCurves->setCurvePoint(LuminosityChannel, 0,  QPoint(0,   0));
-            grainCurves->setCurvePoint(LuminosityChannel, 8,  QPoint(128, 128));
-            grainCurves->setCurvePoint(LuminosityChannel, 16, QPoint(255, 0));
-        }
-
-        // Calculate curves and lut to apply on grain.
-        grainCurves->curvesCalculateCurve(LuminosityChannel);
-        grainCurves->curvesLutSetup(AlphaChannel);
-        grainCurves->curvesLutProcess(pGrainBits, pMaskBits, Width, Height);
-        delete grainCurves;
-
-        // delete it here, not used any more
-        delete [] pGrainBits;
-        pGrainBits = 0;
-    }
-
-    postProgress( 60 );
-    if (m_cancel)
-    {
-        delete [] pGrainBits;
-        delete [] pMaskBits;
-        return;
-    }
-
-    // Merge gray scale image with grain using shade coefficient.
-
-    if (m_grain)
-    {
-        pOverlayBits = new uchar[numBytes];    // Overlay to merge with original converted in gray scale.
-
-        // get composer for default blending
-        DColorComposer* composer = DColorComposer::getComposer(DColorComposer::PorterDuffNone);
-        int alpha;
-
-        int Shade = 52; // This value control the shading pixel effect between original image and grain mask.
-        if (sixteenBit)
-            Shade = (Shade + 1) * 256 - 1;
-
-        for (int x = 0; !m_cancel && x < Width; ++x)
-        {
-            for (int y = 0; !m_cancel && y < Height; ++y)
-            {
-                int offset = x*bytesDepth + (y*Width*bytesDepth);
-
-                // read color from orig image
-                bwBlurData.setColor(pBWBlurBits + offset, sixteenBit);
-                // read color from mask
-                maskData.setColor(pMaskBits + offset, sixteenBit);
-                // set shade as alpha value - it will be used as source alpha when blending
-                maskData.setAlpha(Shade);
-
-                // compose, write result to blendData.
-                // Preserve alpha, do not blend it (taken from old algorithm - correct?)
-                alpha = bwBlurData.alpha();
-                composer->compose(bwBlurData, maskData);
-                bwBlurData.setAlpha(alpha);
-
-                // write to destination
-                bwBlurData.setPixel(pOverlayBits + offset);
-            }
-
-            // Update progress bar in dialog.
-            progress = (int) (70.0 + ((double)x * 10.0) / Width);
-
-            if (progress%5 == 0)
-                postProgress( progress );
-        }
-
-        delete composer;
-
-        // delete it here, not used any more
-        BWBlurImage.reset();
-        delete [] pMaskBits;
-        pMaskBits   = 0;
-    }
-    else
-    {
-        // save a memcpy
-        pOverlayBits = pBWBlurBits;
-        pBWBlurBits  = 0;
-    }
 
     //------------------------------------------
-    // 3 - Merge Grayscale image & overlay mask.
+    // 2 - Merge Grayscale image & overlay mask.
     //------------------------------------------
 
     // Merge overlay and gray scale image using 'Overlay' Gimp method for increase the highlight.
@@ -359,11 +184,7 @@ void InfraredFilter::filterImage()
             postProgress(progress);
     }
 
-    delete [] pGrainBits;
     delete [] pMaskBits;
-
-    if (m_grain)
-        delete [] pOverlayBits;
 }
 
 int InfraredFilter::intMult8(uint a, uint b)
