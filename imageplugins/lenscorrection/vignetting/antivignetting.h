@@ -39,8 +39,8 @@ class AntiVignetting : public DImgThreadedFilter
 public:
 
     explicit AntiVignetting(DImg *orgImage, QObject *parent=0, double density=2.0,
-                            double power=1.0, double radius=1.0, double xshift=0, double yshift=0,
-                            bool normalize=true, bool anti=true);
+                            double power=1.0, double innerradius=1.0, double outerradius=1.0, double xshift=0, double yshift=0,
+                            bool anti=true);
 
     ~AntiVignetting(){};
 
@@ -52,7 +52,8 @@ private:
     int            approx(double x);
     uchar          clamp8bits(double x);
     unsigned short clamp16bits(double x);
-
+    double         attenuation(double r1, double r2, double distcenter);
+    double         real_attenuation(double r1, double r2, double distcenter);
 private:
 
     bool   m_normalize;
@@ -62,8 +63,9 @@ private:
 
     double m_density;
     double m_power;
-    double m_radius;
-
+    double m_inner_radius;
+    double m_outer_radius;
+    
     bool   m_add_vignetting;
 };
 
