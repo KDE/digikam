@@ -68,7 +68,6 @@ private Q_SLOTS:
     void slotAutoCorrection();
     void slotInvert();
     void slotBW();
-    void slotInfrared();
     void slotConvertTo8Bits();
     void slotConvertTo16Bits();
     void slotConvertToColorSpace(const IccProfile&);
