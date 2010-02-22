@@ -102,23 +102,23 @@ void BWSepiaFilter::filterImage()
     else
     {
         postProgress(10);
-        
+
         // Apply black and white filter.
 
-        blackAndWhiteConversion(m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(), 
+        blackAndWhiteConversion(m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(),
                                 m_orgImage.sixteenBit(), d->settings.filterType);
         postProgress(20);
-        
+
         // Apply black and white film type.
 
-        blackAndWhiteConversion(m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(), 
-                                m_orgImage.sixteenBit(), d->settings.filmType + BWSepiaContainer::BWGeneric);
+        blackAndWhiteConversion(m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(),
+                                m_orgImage.sixteenBit(), d->settings.filmType);
         postProgress(30);
 
         // Apply color tone filter.
 
-        blackAndWhiteConversion(m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(), 
-                                m_orgImage.sixteenBit(), d->settings.toneType + BWSepiaContainer::BWNoTone);
+        blackAndWhiteConversion(m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(),
+                                m_orgImage.sixteenBit(), d->settings.toneType);
         postProgress(40);
 
         // Calculate and apply the curve on image.
@@ -128,7 +128,7 @@ void BWSepiaFilter::filterImage()
 
         d->settings.curves->curvesLutSetup(AlphaChannel);
         postProgress(60);
-        
+
         d->settings.curves->curvesLutProcess(m_orgImage.bits(), targetData, m_orgImage.width(), m_orgImage.height());
         postProgress(70);
 
@@ -145,7 +145,7 @@ void BWSepiaFilter::filterImage()
 }
 
 DImg BWSepiaFilter::getThumbnailForEffect(const DImg& img)
-{    
+{
     return getThumbnailForEffect(img.bits(), img.width(), img.height(), img.sixteenBit());
 }
 
@@ -176,7 +176,7 @@ DImg BWSepiaFilter::getThumbnailForEffect(uchar* data, int w, int h, bool sb)
 
     d->settings.curves->curvesLutSetup(AlphaChannel);
     postProgress(70);
-    
+
     d->settings.curves->curvesLutProcess(thumb.bits(), targetData, w, h);
     postProgress(80);
 
@@ -185,12 +185,12 @@ DImg BWSepiaFilter::getThumbnailForEffect(uchar* data, int w, int h, bool sb)
     postProgress(90);
 
     delete [] targetData;
-    
+
     return (thumb);
 }
 
 void BWSepiaFilter::blackAndWhiteConversion(int type)
-{    
+{
     return blackAndWhiteConversion(m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(),
                                    m_orgImage.sixteenBit(), type);
 }

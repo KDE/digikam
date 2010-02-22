@@ -47,12 +47,15 @@ TonalityFilter::TonalityFilter(DImg* orgImage, QObject* parent, const TonalityCo
     initFilter();
 }
 
-TonalityFilter::TonalityFilter(uchar* bits, uint width, uint height, bool sixteenBits, 
+TonalityFilter::TonalityFilter(uchar* bits, uint width, uint height, bool sixteenBits,
                                const TonalityContainer& settings)
               : DImgThreadedFilter()
 {
     m_settings = settings;
-    changeTonality(bits, width, height, sixteenBits);
+    m_orgImage = DImg(width, height, sixteenBits, true, bits, true);
+    initFilter();
+    startFilterDirectly();
+    memcpy(bits, m_destImage.bits(), m_destImage.numBytes());
 }
 
 TonalityFilter::~TonalityFilter()
