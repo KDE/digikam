@@ -160,7 +160,7 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
     d->powerInput->input()->setRange(1.0, 2.0, 0.05, true);
     d->powerInput->setDefaultValue(1.5);
     d->powerInput->setWhatsThis(i18n("This value is used as the exponent controlling the "
-                                     "fall-off in density from the inner circle of the filter" 
+                                     "fall-off in density from the inner circle of the filter " 
                                      "to the outer circle."));
 
     // -------------------------------------------------------------
@@ -170,8 +170,8 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
     d->innerRadiusInput->setDecimals(1);
     d->innerRadiusInput->input()->setRange(0.05, 0.9, 0.05, true);
     d->innerRadiusInput->setDefaultValue(0.5);
-    d->innerRadiusInput->setWhatsThis(i18n("This value is the radius of the inner circle of the filter."
-                                      "In the inner circle the image is preserved."
+    d->innerRadiusInput->setWhatsThis(i18n("This value is the radius of the inner circle of the filter. "
+                                      "In the inner circle the image is preserved. "
                                       "It is expressed as a multiple of the outer radius of the filter."));
 
     // -------------------------------------------------------------
@@ -181,8 +181,8 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
     d->outerRadiusInput->setDecimals(1);
     d->outerRadiusInput->input()->setRange(0.1, 1.5, 0.05, true);
     d->outerRadiusInput->setDefaultValue(1.0);
-    d->outerRadiusInput->setWhatsThis(i18n("This value is the radius of the outer circle of the filter."
-                                      "Outside the outer circle the effect of the filter is at its maximum."
+    d->outerRadiusInput->setWhatsThis(i18n("This value is the radius of the outer circle of the filter. "
+                                      "Outside the outer circle the effect of the filter is at its maximum. "
                                       "It is expressed as a multiple of the diagonal of the image."));
 
     // -------------------------------------------------------------
