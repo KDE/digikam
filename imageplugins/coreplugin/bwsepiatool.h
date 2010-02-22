@@ -39,13 +39,15 @@ namespace Digikam
 class DColor;
 }
 
+using namespace Digikam;
+
 namespace DigikamImagesPluginCore
 {
 
 class PreviewPixmapFactory;
 class BWSepiaToolPriv;
 
-class BWSepiaTool : public Digikam::EditorTool
+class BWSepiaTool : public EditorTool
 {
     Q_OBJECT
 

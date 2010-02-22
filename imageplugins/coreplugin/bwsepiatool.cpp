@@ -69,7 +69,6 @@
 #include "imageguidewidget.h"
 
 using namespace KDcrawIface;
-using namespace Digikam;
 
 namespace DigikamImagesPluginCore
 {
@@ -189,7 +188,7 @@ class BWPreviewItem : public QListWidgetItem
 public:
 
     BWPreviewItem(QListWidget* parent, const QString& text,
-                            PreviewPixmapFactory* factory, int id)
+                  PreviewPixmapFactory* factory, int id)
         : QListWidgetItem(QIcon(QPixmap(factory->previewSize())), text, parent)
     {
           m_previewPixmapFactory = factory;
@@ -326,13 +325,13 @@ BWSepiaTool::BWSepiaTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->tab = new KTabWidget(d->gboxSettings->plainPage());
+    d->tab    = new KTabWidget(d->gboxSettings->plainPage());
 
     d->bwFilm = new QListWidget(d->tab);
     d->bwFilm->setIconSize(d->thumbnailImage.size());
     d->previewPixmapFactory = new PreviewPixmapFactory(this, d->thumbnailImage.size());
 
-    int type = BWGeneric;
+    int type            = BWGeneric;
     BWPreviewItem* item = 0;
 
     item = new BWPreviewItem(d->bwFilm, i18nc("generic black and white film", "Generic"), d->previewPixmapFactory, type);
@@ -651,41 +650,6 @@ void BWSepiaTool::slotFilterSelected()
     slotEffect();
 }
 
-QPixmap BWSepiaTool::getThumbnailForEffect(int type)
-{
-    DImg thumb = d->thumbnailImage.copy();
-    int w      = thumb.width();
-    int h      = thumb.height();
-    bool sb    = thumb.sixteenBit();
-    bool a     = thumb.hasAlpha();
-
-    if (type < BWGeneric)
-    {
-        // In Filter view, we will render a preview of the B&W filter with the generic B&W film.
-        blackAndWhiteConversion(thumb.bits(), w, h, sb, type);
-        blackAndWhiteConversion(thumb.bits(), w, h, sb, BWGeneric);
-    }
-    else
-    {
-        // In Film and Tone view, we will render the preview without to use the B&W Filter
-        blackAndWhiteConversion(thumb.bits(), w, h, sb, type);
-    }
-
-    if (d->curvesBox->curves())   // in case we're called before the creator is done
-    {
-        uchar* targetData = new uchar[w*h*(sb ? 8 : 4)];
-        d->curvesBox->curves()->curvesLutSetup(AlphaChannel);
-        d->curvesBox->curves()->curvesLutProcess(thumb.bits(), targetData, w, h);
-
-        DImg preview(w, h, sb, a, targetData);
-
-        thumb.putImageData(preview.bits());
-
-        delete [] targetData;
-    }
-    return (thumb.convertToPixmap());
-}
-
 void BWSepiaTool::slotScaleChanged()
 {
     d->curvesBox->setScale(d->gboxSettings->histogramBox()->scale());
@@ -696,9 +660,18 @@ void BWSepiaTool::slotSpotColorChanged(const DColor& color)
     d->curvesBox->setCurveGuide(color);
 }
 
-void BWSepiaTool::slotColorSelectedFromTarget( const DColor& color )
+void BWSepiaTool::slotColorSelectedFromTarget(const DColor& color)
 {
     d->gboxSettings->histogramBox()->histogram()->setHistogramGuideByColor(color);
+}
+
+void BWSepiaTool::blockWidgetSignals(bool b)
+{
+    d->bwFilm->blockSignals(b);
+    d->bwFilters->blockSignals(b);
+    d->bwTone->blockSignals(b);
+    d->cInput->blockSignals(b);
+    d->strengthInput->blockSignals(b);
 }
 
 void BWSepiaTool::readSettings()
@@ -770,9 +743,45 @@ void BWSepiaTool::slotResetSettings()
     slotEffect();
 }
 
+QPixmap BWSepiaTool::getThumbnailForEffect(int type)
+{
+    DImg thumb = d->thumbnailImage.copy();
+    int w      = thumb.width();
+    int h      = thumb.height();
+    bool sb    = thumb.sixteenBit();
+    bool a     = thumb.hasAlpha();
+
+    if (type < BWGeneric)
+    {
+        // In Filter view, we will render a preview of the B&W filter with the generic B&W film.
+        blackAndWhiteConversion(thumb.bits(), w, h, sb, type);
+        blackAndWhiteConversion(thumb.bits(), w, h, sb, BWGeneric);
+    }
+    else
+    {
+        // In Film and Tone view, we will render the preview without to use the B&W Filter
+        blackAndWhiteConversion(thumb.bits(), w, h, sb, type);
+    }
+
+    if (d->curvesBox->curves())   // in case we're called before the creator is done
+    {
+        uchar* targetData = new uchar[w*h*(sb ? 8 : 4)];
+        d->curvesBox->curves()->curvesLutSetup(AlphaChannel);
+        d->curvesBox->curves()->curvesLutProcess(thumb.bits(), targetData, w, h);
+
+        DImg preview(w, h, sb, a, targetData);
+
+        thumb.putImageData(preview.bits());
+
+        delete [] targetData;
+    }
+    
+    return (thumb.convertToPixmap());
+}
+
 void BWSepiaTool::slotEffect()
 {
-    kapp->setOverrideCursor( Qt::WaitCursor );
+    kapp->setOverrideCursor(Qt::WaitCursor);
 
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 
@@ -825,7 +834,7 @@ void BWSepiaTool::slotEffect()
 
 void BWSepiaTool::finalRendering()
 {
-    kapp->setOverrideCursor( Qt::WaitCursor );
+    kapp->setOverrideCursor(Qt::WaitCursor);
     ImageIface* iface = d->previewWidget->imageIface();
     uchar *data       = iface->getOriginalImage();
     int w             = iface->originalWidth();
@@ -1273,15 +1282,6 @@ void BWSepiaTool::slotSaveAsSettings()
                            i18n("Cannot save settings to the Black & White text file."));
 
     file.close();
-}
-
-void BWSepiaTool::blockWidgetSignals(bool b)
-{
-    d->bwFilm->blockSignals(b);
-    d->bwFilters->blockSignals(b);
-    d->bwTone->blockSignals(b);
-    d->cInput->blockSignals(b);
-    d->strengthInput->blockSignals(b);
 }
 
 }  // namespace DigikamImagesPluginCore
