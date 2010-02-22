@@ -898,7 +898,7 @@ bool AbstractCheckableAlbumModel::setData(const QModelIndex& index, const QVaria
         Album *album = albumForIndex(index);
         if (!album)
             return false;
-        kDebug() << "Updating check state for album" << album->title() << "to" << value;
+        //kDebug() << "Updating check state for album" << album->title() << "to" << value;
         m_checkedAlbums.insert(album, state);
         emit dataChanged(index, index);
         emit checkStateChanged(album, state);
