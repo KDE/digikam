@@ -88,13 +88,24 @@ public:
 
     BWSepiaContainer()
     {
-        curves      = 0;
         previewType = BWGeneric;
+        preview     = false;
         filmType    = BWGeneric;
         filterType  = BWNoFilter;
         toneType    = BWNoTone;
-        preview     = false;
         strength    = 1.0;
+        curves      = new ImageCurves(false);
+    };
+
+    BWSepiaContainer(int ptype)
+    {
+        previewType = ptype;
+        preview     = true;
+        strength    = 1.0;
+        filmType    = BWGeneric;
+        filterType  = BWNoFilter;
+        toneType    = BWNoTone;
+        curves      = new ImageCurves(false);
     };
 
     ~BWSepiaContainer(){};

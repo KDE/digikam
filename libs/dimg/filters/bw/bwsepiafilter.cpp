@@ -171,23 +171,20 @@ DImg BWSepiaFilter::getThumbnailForEffect(uchar* data, int w, int h, bool sb)
         postProgress(50);
     }
 
-    if (d->settings.curves)   // in case we're called before the creator is done
-    {
-        uchar* targetData = new uchar[w*h*(sb ? 8 : 4)];
-        postProgress(60);
+    uchar* targetData = new uchar[w*h*(sb ? 8 : 4)];
+    postProgress(60);
 
-        d->settings.curves->curvesLutSetup(AlphaChannel);
-        postProgress(70);
-        
-        d->settings.curves->curvesLutProcess(thumb.bits(), targetData, w, h);
-        postProgress(80);
+    d->settings.curves->curvesLutSetup(AlphaChannel);
+    postProgress(70);
+    
+    d->settings.curves->curvesLutProcess(thumb.bits(), targetData, w, h);
+    postProgress(80);
 
-        DImg preview(w, h, sb, true, targetData);
-        thumb.putImageData(preview.bits());
-        postProgress(90);
+    DImg preview(w, h, sb, true, targetData);
+    thumb.putImageData(preview.bits());
+    postProgress(90);
 
-        delete [] targetData;
-    }
+    delete [] targetData;
     
     return (thumb);
 }
