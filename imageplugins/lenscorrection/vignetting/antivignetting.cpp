@@ -7,6 +7,7 @@
  * Description : Antivignetting threaded image filter.
  *
  * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010      by Julien Narboux <julien at narboux dot fr>
  *
  * Original AntiVignetting algorithm copyrighted 2003 by
  * John Walker from 'pnmctrfilt' implementation. See
@@ -81,20 +82,13 @@ void AntiVignetting::filterImage()
     m_xshift = m_xshift*Height/200.0;
     m_yshift = m_yshift*Width /200.0;
 
-    // Determine the radius of the filter.  This is the half diagonal
+    // Determine the outer radius of the filter.  This is the half diagonal
     // measure of the image multiplied by the radius factor.
 
     xsize = (Height + 1) / 2;
     ysize = (Width  + 1) / 2;
     erad = approx(hypothenuse(xsize,ysize) * m_outer_radius);
     irad = approx(hypothenuse(xsize,ysize) * m_outer_radius * m_inner_radius);
-
-    // Build the in-memory table which maps distance from the
-    // center of the image (as adjusted by the X and Y offset,
-    // if any) to the density of the filter at this remove.  This
-    // table needs to be as large as the diagonal from the
-    // (possibly offset) center to the most distant corner
-    // of the image.
 
     xsize    = ((Height + 1) / 2) + abs(m_xshift);
     ysize    = ((Width  + 1) / 2) + abs(m_yshift);

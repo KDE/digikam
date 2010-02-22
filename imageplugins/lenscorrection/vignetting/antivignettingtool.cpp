@@ -8,6 +8,7 @@
  *               vignetting on an image.
  *
  * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010      by Julien Narboux <julien at narboux dot fr>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -147,7 +148,7 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
     QLabel *label1  = new QLabel(i18n("Amount:"));
     d->densityInput = new RDoubleNumInput();
     d->densityInput->setDecimals(1);
-    d->densityInput->input()->setRange(0.05, 3.0, 0.05, true);
+    d->densityInput->input()->setRange(0.05, 5.0, 0.05, true);
     d->densityInput->setDefaultValue(1.0);
     d->densityInput->setWhatsThis(i18n("This value controls the degree of intensity "
                                        "of the filter at its point of maximum density."));
@@ -157,7 +158,7 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
     QLabel *label2 = new QLabel(i18n("Feather:"));
     d->powerInput  = new RDoubleNumInput();
     d->powerInput->setDecimals(1);
-    d->powerInput->input()->setRange(1.0, 2.0, 0.05, true);
+    d->powerInput->input()->setRange(1.0, 4.0, 0.05, true);
     d->powerInput->setDefaultValue(1.5);
     d->powerInput->setWhatsThis(i18n("This value is used as the exponent controlling the "
                                      "fall-off in density from the inner circle of the filter " 
@@ -168,7 +169,7 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
     QLabel *label3 = new QLabel(i18n("Inner Radius:"));
     d->innerRadiusInput = new RDoubleNumInput();
     d->innerRadiusInput->setDecimals(1);
-    d->innerRadiusInput->input()->setRange(0.05, 0.9, 0.05, true);
+    d->innerRadiusInput->input()->setRange(0.0, 0.9, 0.05, true);
     d->innerRadiusInput->setDefaultValue(0.5);
     d->innerRadiusInput->setWhatsThis(i18n("This value is the radius of the inner circle of the filter. "
                                       "In the inner circle the image is preserved. "
@@ -179,7 +180,7 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
     QLabel *label4 = new QLabel(i18n("Outer Radius:"));
     d->outerRadiusInput = new RDoubleNumInput();
     d->outerRadiusInput->setDecimals(1);
-    d->outerRadiusInput->input()->setRange(0.1, 1.5, 0.05, true);
+    d->outerRadiusInput->input()->setRange(0.1, 2.0, 0.05, true);
     d->outerRadiusInput->setDefaultValue(1.0);
     d->outerRadiusInput->setWhatsThis(i18n("This value is the radius of the outer circle of the filter. "
                                       "Outside the outer circle the effect of the filter is at its maximum. "
