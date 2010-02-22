@@ -30,6 +30,7 @@
 #include "dimgthreadedfilter.h"
 #include "globals.h"
 #include "imagecurves.h"
+#include "bcgfilter.h"
 
 using namespace Digikam;
 
@@ -105,6 +106,7 @@ public:
     
     ImageCurves* curves;
 
+    BCGContainer bcgPrm;
 };
 
 // -----------------------------------------------------------------------------------------------

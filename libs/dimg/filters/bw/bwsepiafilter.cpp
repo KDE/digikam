@@ -35,7 +35,6 @@
 // Local includes
 
 #include "dimg.h"
-#include "bcgfilter.h"
 #include "tonalityfilter.h"
 #include "mixerfilter.h"
 #include "infraredfilter.h"
@@ -101,8 +100,47 @@ void BWSepiaFilter::filterImage()
     }
     else
     {
-        blackAndWhiteConversion(d->settings.type);
-        m_destImage = m_orgImage;
+        postProgress(10);
+        
+        // Apply black and white filter.
+
+        blackAndWhiteConversion(m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(), 
+                                m_orgImage.sixteenBit(), d->settings.type);
+        postProgress(20);
+        
+        // Apply black and white film type.
+
+        blackAndWhiteConversion(m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(), 
+                                m_orgImage.sixteenBit(), d->settings.type + BWSepiaContainer::BWGeneric);
+        postProgress(30);
+
+        // Apply color tone filter.
+
+        blackAndWhiteConversion(m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(), 
+                                m_orgImage.sixteenBit(), d->settings.type + BWSepiaContainer::BWNoTone);
+        postProgress(40);
+
+        // Calculate and apply the curve on image.
+
+        uchar* targetData = new uchar[m_orgImage.numBytes()];
+        postProgress(50);
+
+        d->settings.curves->curvesLutSetup(AlphaChannel);
+        postProgress(60);
+        
+        d->settings.curves->curvesLutProcess(m_orgImage.bits(), targetData, m_orgImage.width(), m_orgImage.height());
+        postProgress(70);
+
+        // Adjust contrast.
+
+        DImg preview(m_orgImage.width(), m_orgImage.height(), m_orgImage.sixteenBit(), true, targetData);
+        postProgress(80);
+
+        BCGFilter bcg(&preview, 0L, d->settings.bcgPrm);
+        bcg.startFilterDirectly();
+        postProgress(90);
+
+        m_destImage.putImageData(targetData);
     }
 }
 
@@ -450,85 +488,5 @@ void BWSepiaFilter::applyChannelMixer(uchar* data, int w, int h, bool sb)
     settings.blackBlueGain  = d->blueMult  + d->blueMult*d->blueAttn;
     MixerFilter mixer(data, w, h, sb, settings);
 }
-
-
-/*
-void BWSepiaFilter::applyBWSepia(uchar* bits, uint width, uint height, bool sixteenBits)
-{
-    if (!bits) return;
-
-    uint size = width*height;
-    int  progress;
-
-    if (!sixteenBits)                    // 8 bits image.
-    {
-        uchar* data = bits;
-
-        for (uint i=0; !m_cancel && (i<size); ++i)
-        {
-            switch (d->settings.channel)
-            {
-                case BlueChannel:
-                    data[0] = CLAMP0255(d->map[data[0]]);
-                    break;
-
-                case GreenChannel:
-                    data[1] = CLAMP0255(d->map[data[1]]);
-                    break;
-
-                case RedChannel:
-                    data[2] = CLAMP0255(d->map[data[2]]);
-                    break;
-
-                default:      // all channels
-                    data[0] = CLAMP0255(d->map[data[0]]);
-                    data[1] = CLAMP0255(d->map[data[1]]);
-                    data[2] = CLAMP0255(d->map[data[2]]);
-                    break;
-            }
-
-            data += 4;
-
-            progress = (int)(((double)i * 100.0) / size);
-            if ( progress%5 == 0 )
-                postProgress( progress );
-        }
-    }
-    else                                        // 16 bits image.
-    {
-        ushort* data = (ushort*)bits;
-
-        for (uint i=0; !m_cancel && (i<size); ++i)
-        {
-            switch (d->settings.channel)
-            {
-                case BlueChannel:
-                    data[0] = CLAMP065535(d->map16[data[0]]);
-                    break;
-
-                case GreenChannel:
-                    data[1] = CLAMP065535(d->map16[data[1]]);
-                    break;
-
-                case RedChannel:
-                    data[2] = CLAMP065535(d->map16[data[2]]);
-                    break;
-
-                default:      // all channels
-                    data[0] = CLAMP065535(d->map16[data[0]]);
-                    data[1] = CLAMP065535(d->map16[data[1]]);
-                    data[2] = CLAMP065535(d->map16[data[2]]);
-                    break;
-            }
-
-            data += 4;
-
-            progress = (int)(((double)i * 100.0) / size);
-            if ( progress%5 == 0 )
-                postProgress( progress );
-        }
-    }
-}
-*/
 
 }  // namespace Digikam
