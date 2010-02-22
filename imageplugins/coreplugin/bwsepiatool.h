@@ -62,8 +62,6 @@ private:
 
     void readSettings();
     void writeSettings();
-    void blackAndWhiteConversion(uchar* data, int w, int h, bool sb, int type);
-    void applyChannelMixer(uchar* data, int w, int h, bool sb);
     void updatePreviews();
     void finalRendering();
     void blockWidgetSignals(bool b);

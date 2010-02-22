@@ -84,6 +84,7 @@ BWSepiaFilter::BWSepiaFilter(uchar* bits, uint width, uint height, bool sixteenB
 {
     d->settings = settings;
     m_orgImage  = DImg(width, height, sixteenBits, true, bits, true);
+    initFilter();
     filterImage();
 }
 
@@ -105,19 +106,19 @@ void BWSepiaFilter::filterImage()
         // Apply black and white filter.
 
         blackAndWhiteConversion(m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(), 
-                                m_orgImage.sixteenBit(), d->settings.type);
+                                m_orgImage.sixteenBit(), d->settings.filterType);
         postProgress(20);
         
         // Apply black and white film type.
 
         blackAndWhiteConversion(m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(), 
-                                m_orgImage.sixteenBit(), d->settings.type + BWSepiaContainer::BWGeneric);
+                                m_orgImage.sixteenBit(), d->settings.filmType + BWSepiaContainer::BWGeneric);
         postProgress(30);
 
         // Apply color tone filter.
 
         blackAndWhiteConversion(m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(), 
-                                m_orgImage.sixteenBit(), d->settings.type + BWSepiaContainer::BWNoTone);
+                                m_orgImage.sixteenBit(), d->settings.toneType + BWSepiaContainer::BWNoTone);
         postProgress(40);
 
         // Calculate and apply the curve on image.
@@ -133,14 +134,13 @@ void BWSepiaFilter::filterImage()
 
         // Adjust contrast.
 
-        DImg preview(m_orgImage.width(), m_orgImage.height(), m_orgImage.sixteenBit(), true, targetData);
+        m_destImage.putImageData(targetData);
         postProgress(80);
 
-        BCGFilter bcg(&preview, 0L, d->settings.bcgPrm);
+        BCGFilter bcg(&m_destImage, 0L, d->settings.bcgPrm);
         bcg.startFilterDirectly();
+        m_destImage.putImageData(bcg.getTargetImage().bits());
         postProgress(90);
-
-        m_destImage.putImageData(targetData);
     }
 }
 
@@ -155,10 +155,10 @@ DImg BWSepiaFilter::getThumbnailForEffect(uchar* data, int w, int h, bool sb)
 
     postProgress(10);
 
-    if (d->settings.type < BWSepiaContainer::BWGeneric)
+    if (d->settings.previewType < BWSepiaContainer::BWGeneric)
     {
         // In Filter view, we will render a preview of the B&W filter with the generic B&W film.
-        blackAndWhiteConversion(thumb.bits(), w, h, sb, d->settings.type);
+        blackAndWhiteConversion(thumb.bits(), w, h, sb, d->settings.previewType);
         postProgress(25);
 
         blackAndWhiteConversion(thumb.bits(), w, h, sb, BWSepiaContainer::BWGeneric);
@@ -167,7 +167,7 @@ DImg BWSepiaFilter::getThumbnailForEffect(uchar* data, int w, int h, bool sb)
     else
     {
         // In Film and Tone view, we will render the preview without to use the B&W Filter
-        blackAndWhiteConversion(thumb.bits(), w, h, sb, d->settings.type);
+        blackAndWhiteConversion(thumb.bits(), w, h, sb, d->settings.previewType);
         postProgress(50);
     }
 

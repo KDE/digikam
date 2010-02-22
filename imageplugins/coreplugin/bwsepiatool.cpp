@@ -52,65 +52,21 @@
 
 // Local includes
 
-#include "bcgfilter.h"
-#include "tonalityfilter.h"
 #include "colorgradientwidget.h"
-#include "mixerfilter.h"
-#include "infraredfilter.h"
 #include "curvesbox.h"
 #include "curveswidget.h"
 #include "dimg.h"
 #include "editortoolsettings.h"
 #include "histogramwidget.h"
 #include "histogrambox.h"
-#include "imagecurves.h"
-#include "imagehistogram.h"
 #include "imageiface.h"
 #include "imageguidewidget.h"
+#include "bwsepiafilter.h"
 
 using namespace KDcrawIface;
 
 namespace DigikamImagesPluginCore
 {
-
-enum BlackWhiteConversionType
-{
-    BWNoFilter=0,         // B&W filter to the front of lens.
-    BWGreenFilter,
-    BWOrangeFilter,
-    BWRedFilter,
-    BWYellowFilter,
-    BWYellowGreenFilter,
-    BWBlueFilter,
-
-    BWGeneric,            // B&W film simulation.
-    BWAgfa200X,
-    BWAgfapan25,
-    BWAgfapan100,
-    BWAgfapan400,
-    BWIlfordDelta100,
-    BWIlfordDelta400,
-    BWIlfordDelta400Pro3200,
-    BWIlfordFP4,
-    BWIlfordHP5,
-    BWIlfordPanF,
-    BWIlfordXP2Super,
-    BWKodakTmax100,
-    BWKodakTmax400,
-    BWKodakTriX,
-
-    BWIlfordSFX200,       // Infrared film simulation.
-    BWIlfordSFX400,
-    BWIlfordSFX800,
-
-    BWNoTone,             // Chemical color tone filter.
-    BWSepiaTone,
-    BWBrownTone,
-    BWColdTone,
-    BWSeleniumTone,
-    BWPlatinumTone,
-    BWGreenTone
-};
 
 enum SettingsTab
 {
@@ -224,12 +180,6 @@ public:
         configHistogramScaleEntry("Histogram Scale"),
         configCurveEntry("BWSepiaCurve"),
 
-        redAttn(0.0),
-        greenAttn(0.0),
-        blueAttn(0.0),
-        redMult(0.0),
-        greenMult(0.0),
-        blueMult(0.0),
         destinationPreviewData(0),
         bwFilters(0),
         bwFilm(0),
@@ -254,16 +204,6 @@ public:
     const QString                configHistogramChannelEntry;
     const QString                configHistogramScaleEntry;
     const QString                configCurveEntry;
-
-    // Color filter attenuation in percents.
-    double                       redAttn;
-    double                       greenAttn;
-    double                       blueAttn;
-
-    // Channel mixer color multiplier.
-    double                       redMult;
-    double                       greenMult;
-    double                       blueMult;
 
     uchar*                       destinationPreviewData;
 
@@ -331,7 +271,7 @@ BWSepiaTool::BWSepiaTool(QObject* parent)
     d->bwFilm->setIconSize(d->thumbnailImage.size());
     d->previewPixmapFactory = new PreviewPixmapFactory(this, d->thumbnailImage.size());
 
-    int type            = BWGeneric;
+    int type            = BWSepiaContainer::BWGeneric;
     BWPreviewItem* item = 0;
 
     item = new BWPreviewItem(d->bwFilm, i18nc("generic black and white film", "Generic"), d->previewPixmapFactory, type);
@@ -410,7 +350,7 @@ BWSepiaTool::BWSepiaTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    type = BWIlfordSFX200;
+    type = BWSepiaContainer::BWIlfordSFX200;
 
     item = new BWPreviewItem(d->bwFilm, i18n("Ilford SPX 200"), d->previewPixmapFactory, type);
     item->setWhatsThis(i18n("<b>Ilford SPX 200</b>:"
@@ -434,7 +374,7 @@ BWSepiaTool::BWSepiaTool(QObject* parent)
     d->bwFilters = new QListWidget(vbox);
     d->bwFilters->setIconSize(d->thumbnailImage.size());
 
-    type = BWNoFilter;
+    type = BWSepiaContainer::BWNoFilter;
 
     item = new BWPreviewItem(d->bwFilters, i18n("No Lens Filter"), d->previewPixmapFactory, type);
     item->setWhatsThis(i18n("<b>No Lens Filter</b>:"
@@ -495,7 +435,7 @@ BWSepiaTool::BWSepiaTool(QObject* parent)
     d->bwTone = new QListWidget(d->tab);
     d->bwTone->setIconSize(d->thumbnailImage.size());
 
-    type = BWNoTone;
+    type = BWSepiaContainer::BWNoTone;
 
     item = new BWPreviewItem(d->bwTone, i18n("No Tone Filter"), d->previewPixmapFactory, type);
     item->setWhatsThis(i18n("<b>No Tone Filter</b>:"
@@ -541,8 +481,8 @@ BWSepiaTool::BWSepiaTool(QObject* parent)
     // -------------------------------------------------------------
 
     QWidget* curveBox = new QWidget();
-    d->curvesBox = new CurvesBox(256, 256, d->originalImage->bits(), d->originalImage->width(),
-                                           d->originalImage->height(), d->originalImage->sixteenBit());
+    d->curvesBox      = new CurvesBox(256, 256, d->originalImage->bits(), d->originalImage->width(),
+                                      d->originalImage->height(), d->originalImage->sixteenBit());
     d->curvesBox->enableCurveTypes(true);
     d->curvesBox->enableResetButton(true);
     d->curvesBox->setWhatsThis( i18n("This is the curve adjustment of the image luminosity"));
@@ -642,7 +582,7 @@ void BWSepiaTool::updatePreviews()
 void BWSepiaTool::slotFilterSelected()
 {
     int filter = d->bwFilters->currentRow();
-    if (filter == BWNoFilter)
+    if (filter == BWSepiaContainer::BWNoFilter)
         d->strengthInput->setEnabled(false);
     else
         d->strengthInput->setEnabled(true);
@@ -745,38 +685,13 @@ void BWSepiaTool::slotResetSettings()
 
 QPixmap BWSepiaTool::getThumbnailForEffect(int type)
 {
-    DImg thumb = d->thumbnailImage.copy();
-    int w      = thumb.width();
-    int h      = thumb.height();
-    bool sb    = thumb.sixteenBit();
-    bool a     = thumb.hasAlpha();
-
-    if (type < BWGeneric)
-    {
-        // In Filter view, we will render a preview of the B&W filter with the generic B&W film.
-        blackAndWhiteConversion(thumb.bits(), w, h, sb, type);
-        blackAndWhiteConversion(thumb.bits(), w, h, sb, BWGeneric);
-    }
-    else
-    {
-        // In Film and Tone view, we will render the preview without to use the B&W Filter
-        blackAndWhiteConversion(thumb.bits(), w, h, sb, type);
-    }
-
-    if (d->curvesBox->curves())   // in case we're called before the creator is done
-    {
-        uchar* targetData = new uchar[w*h*(sb ? 8 : 4)];
-        d->curvesBox->curves()->curvesLutSetup(AlphaChannel);
-        d->curvesBox->curves()->curvesLutProcess(thumb.bits(), targetData, w, h);
-
-        DImg preview(w, h, sb, a, targetData);
-
-        thumb.putImageData(preview.bits());
-
-        delete [] targetData;
-    }
-    
-    return (thumb.convertToPixmap());
+    BWSepiaContainer prm;
+    DImg thumb      = d->thumbnailImage.copy();
+    prm.preview     = true;
+    prm.previewType = type;
+    BWSepiaFilter bw(&thumb, 0L, prm);
+    bw.startFilterDirectly();
+    return (bw.getTargetImage().convertToPixmap());
 }
 
 void BWSepiaTool::slotEffect()
@@ -791,43 +706,25 @@ void BWSepiaTool::slotEffect()
     d->destinationPreviewData = iface->getPreviewImage();
     int w                     = iface->previewWidth();
     int h                     = iface->previewHeight();
-    bool a                    = iface->previewHasAlpha();
     bool sb                   = iface->previewSixteenBit();
 
-    // Apply black and white filter.
-
-    blackAndWhiteConversion(d->destinationPreviewData, w, h, sb, d->bwFilters->currentRow());
-
-    // Apply black and white film type.
-
-    blackAndWhiteConversion(d->destinationPreviewData, w, h, sb, d->bwFilm->currentRow() + BWGeneric);
-
-    // Apply color tone filter.
-
-    blackAndWhiteConversion(d->destinationPreviewData, w, h, sb, d->bwTone->currentRow() + BWNoTone);
-
-    // Calculate and apply the curve on image.
-
-    uchar* targetData = new uchar[w*h*(sb ? 8 : 4)];
-    d->curvesBox->curves()->curvesLutSetup(AlphaChannel);
-    d->curvesBox->curves()->curvesLutProcess(d->destinationPreviewData, targetData, w, h);
-
-    // Adjust contrast.
-
-    DImg preview(w, h, sb, a, targetData);
-    BCGContainer prm;
-    prm.contrast = ((double)(d->cInput->value()/100.0) + 1.00);
-    BCGFilter bcg(&preview, 0L, prm);
-    bcg.startFilterDirectly();
-
-    iface->putPreviewImage(bcg.getTargetImage().bits());
+    BWSepiaContainer prm;
+    prm.filmType        = d->bwFilm->currentRow();
+    prm.filterType      = d->bwFilters->currentRow();
+    prm.toneType        = d->bwTone->currentRow();
+    prm.curves          = d->curvesBox->curves();
+    prm.bcgPrm.contrast = ((double)(d->cInput->value()/100.0) + 1.00);
+    prm.strength        = 1.0 + ((double)d->strengthInput->value() - 1.0) * (1.0 / 3.0); 
+    BWSepiaFilter bw(d->destinationPreviewData, w, h, sb, prm);
+    DImg preview        = bw.getTargetImage();
+    
+    iface->putPreviewImage(preview.bits());
     d->previewWidget->updatePreview();
 
     // Update histogram.
 
     memcpy(d->destinationPreviewData, preview.bits(), preview.numBytes());
     d->gboxSettings->histogramBox()->histogram()->updateData(d->destinationPreviewData, w, h, sb, 0, 0, 0, false);
-    delete [] targetData;
 
     kapp->restoreOverrideCursor();
 }
@@ -839,336 +736,25 @@ void BWSepiaTool::finalRendering()
     uchar *data       = iface->getOriginalImage();
     int w             = iface->originalWidth();
     int h             = iface->originalHeight();
-    bool a            = iface->originalHasAlpha();
     bool sb           = iface->originalSixteenBit();
 
     if (data)
     {
-        // Apply black and white filter.
+        BWSepiaContainer prm;
+        prm.filmType        = d->bwFilm->currentRow();
+        prm.filterType      = d->bwFilters->currentRow();
+        prm.toneType        = d->bwTone->currentRow();
+        prm.curves          = d->curvesBox->curves();
+        prm.bcgPrm.contrast = ((double)(d->cInput->value()/100.0) + 1.00);
+        prm.strength        = 1.0 + ((double)d->strengthInput->value() - 1.0) * (1.0 / 3.0); 
+        BWSepiaFilter bw(d->destinationPreviewData, w, h, sb, prm);
+        
+        iface->putPreviewImage(bw.getTargetImage().bits());      
 
-        blackAndWhiteConversion(data, w, h, sb, d->bwFilters->currentRow());
-
-        // Apply black and white film type.
-
-        blackAndWhiteConversion(data, w, h, sb, d->bwFilm->currentRow() + BWGeneric);
-
-        // Apply color tone filter.
-
-        blackAndWhiteConversion(data, w, h, sb, d->bwTone->currentRow() + BWNoTone);
-
-        // Calculate and apply the curve on image.
-
-        uchar* targetData = new uchar[w*h*(sb ? 8 : 4)];
-        d->curvesBox->curves()->curvesLutSetup(AlphaChannel);
-        d->curvesBox->curves()->curvesLutProcess(data, targetData, w, h);
-
-        // Adjust contrast.
-
-        DImg img(w, h, sb, a, targetData);
-        BCGContainer prm;
-        prm.contrast = ((double)(d->cInput->value()/100.0) + 1.00);
-        BCGFilter bcg(&img, 0L, prm);
-        bcg.startFilterDirectly();
-
-        iface->putOriginalImage(i18n("Convert to Black && White"), bcg.getTargetImage().bits());
-
-        delete [] data;
-        delete [] targetData;
+        iface->putOriginalImage(i18n("Convert to Black && White"), bw.getTargetImage().bits());
     }
 
     kapp->restoreOverrideCursor();
-}
-
-void BWSepiaTool::blackAndWhiteConversion(uchar* data, int w, int h, bool sb, int type)
-{
-    // Value to multiply RGB 8 bits component of mask used by TonalityFilter.
-    int mul         = sb ? 255 : 1;
-    double strength = 1.0 + ((double)d->strengthInput->value() - 1.0) * (1.0 / 3.0);
-
-    TonalityContainer toneSettings;
-
-    switch (type)
-    {
-        case BWNoFilter:
-        {
-            d->redAttn   = 0.0;
-            d->greenAttn = 0.0;
-            d->blueAttn  = 0.0;
-            break;
-        }
-
-        case BWGreenFilter:
-        {
-            d->redAttn   = -0.20 * strength;
-            d->greenAttn = +0.11 * strength;
-            d->blueAttn  = +0.09 * strength;
-            break;
-        }
-
-        case BWOrangeFilter:
-        {
-            d->redAttn   = +0.48 * strength;
-            d->greenAttn = -0.37 * strength;
-            d->blueAttn  = -0.11 * strength;
-            break;
-        }
-
-        case BWRedFilter:
-        {
-            d->redAttn   = +0.60 * strength;
-            d->greenAttn = -0.49 * strength;
-            d->blueAttn  = -0.11 * strength;
-            break;
-        }
-
-        case BWYellowFilter:
-        {
-            d->redAttn   = +0.30 * strength;
-            d->greenAttn = -0.31 * strength;
-            d->blueAttn  = +0.01 * strength;
-            break;
-        }
-
-        case BWYellowGreenFilter:
-        {
-            d->redAttn   = +0.25 * strength;
-            d->greenAttn = +0.65 * strength;
-            d->blueAttn  = +0.15 * strength;
-            break;
-        }
-
-        case BWBlueFilter:
-        {
-            d->redAttn   = +0.15 * strength;
-            d->greenAttn = +0.15 * strength;
-            d->blueAttn  = +0.80 * strength;
-            break;
-        }
-
-        // --------------------------------------------------------------------------------
-
-        case BWGeneric:
-        case BWNoTone:
-        {
-            d->redMult   = 0.24;
-            d->greenMult = 0.68;
-            d->blueMult  = 0.08;
-            applyChannelMixer(data, w, h, sb);
-            break;
-        }
-
-        case BWAgfa200X:
-        {
-            d->redMult   = 0.18;
-            d->greenMult = 0.41;
-            d->blueMult  = 0.41;
-            applyChannelMixer(data, w, h, sb);
-            break;
-        }
-
-        case BWAgfapan25:
-        {
-            d->redMult   = 0.25;
-            d->greenMult = 0.39;
-            d->blueMult  = 0.36;
-            applyChannelMixer(data, w, h, sb);
-            break;
-        }
-
-        case BWAgfapan100:
-        {
-            d->redMult   = 0.21;
-            d->greenMult = 0.40;
-            d->blueMult  = 0.39;
-            applyChannelMixer(data, w, h, sb);
-            break;
-        }
-
-        case BWAgfapan400:
-        {
-            d->redMult   = 0.20;
-            d->greenMult = 0.41;
-            d->blueMult  = 0.39;
-            applyChannelMixer(data, w, h, sb);
-            break;
-        }
-
-        case BWIlfordDelta100:
-        {
-            d->redMult   = 0.21;
-            d->greenMult = 0.42;
-            d->blueMult  = 0.37;
-            applyChannelMixer(data, w, h, sb);
-            break;
-        }
-
-        case BWIlfordDelta400:
-        {
-            d->redMult   = 0.22;
-            d->greenMult = 0.42;
-            d->blueMult  = 0.36;
-            applyChannelMixer(data, w, h, sb);
-            break;
-        }
-
-        case BWIlfordDelta400Pro3200:
-        {
-            d->redMult   = 0.31;
-            d->greenMult = 0.36;
-            d->blueMult  = 0.33;
-            applyChannelMixer(data, w, h, sb);
-            break;
-        }
-
-        case BWIlfordFP4:
-        {
-            d->redMult   = 0.28;
-            d->greenMult = 0.41;
-            d->blueMult  = 0.31;
-            applyChannelMixer(data, w, h, sb);
-            break;
-        }
-
-        case BWIlfordHP5:
-        {
-            d->redMult   = 0.23;
-            d->greenMult = 0.37;
-            d->blueMult  = 0.40;
-            applyChannelMixer(data, w, h, sb);
-            break;
-        }
-
-        case BWIlfordPanF:
-        {
-            d->redMult   = 0.33;
-            d->greenMult = 0.36;
-            d->blueMult  = 0.31;
-            applyChannelMixer(data, w, h, sb);
-            break;
-        }
-
-        case BWIlfordXP2Super:
-        {
-            d->redMult   = 0.21;
-            d->greenMult = 0.42;
-            d->blueMult  = 0.37;
-            applyChannelMixer(data, w, h, sb);
-            break;
-        }
-
-        case BWKodakTmax100:
-        {
-            d->redMult   = 0.24;
-            d->greenMult = 0.37;
-            d->blueMult  = 0.39;
-            applyChannelMixer(data, w, h, sb);
-            break;
-        }
-
-        case BWKodakTmax400:
-        {
-            d->redMult   = 0.27;
-            d->greenMult = 0.36;
-            d->blueMult  = 0.37;
-            applyChannelMixer(data, w, h, sb);
-            break;
-        }
-
-        case BWKodakTriX:
-        {
-            d->redMult   = 0.25;
-            d->greenMult = 0.35;
-            d->blueMult  = 0.40;
-            applyChannelMixer(data, w, h, sb);
-            break;
-        }
-
-        // --------------------------------------------------------------------------------
-
-        case BWIlfordSFX200:
-        {
-            InfraredFilter infra(data, w, h, sb, 200);
-            break;
-        }
-
-        case BWIlfordSFX400:
-        {
-            InfraredFilter infra(data, w, h, sb, 400);
-            break;
-        }
-
-        case BWIlfordSFX800:
-        {
-            InfraredFilter infra(data, w, h, sb, 800);
-            break;
-        }
-
-        // --------------------------------------------------------------------------------
-
-        case BWSepiaTone:
-        {
-            toneSettings.redMask   = 162*mul;
-            toneSettings.greenMask = 132*mul;
-            toneSettings.blueMask  = 101*mul;
-            TonalityFilter tone(data, w, h, sb, toneSettings);
-            break;
-        }
-
-        case BWBrownTone:
-        {
-            toneSettings.redMask   = 129*mul;
-            toneSettings.greenMask = 115*mul;
-            toneSettings.blueMask  = 104*mul;
-            TonalityFilter tone(data, w, h, sb, toneSettings);
-            break;
-        }
-
-        case BWColdTone:
-        {
-            toneSettings.redMask   = 102*mul;
-            toneSettings.greenMask = 109*mul;
-            toneSettings.blueMask  = 128*mul;
-            TonalityFilter tone(data, w, h, sb, toneSettings);
-            break;
-        }
-
-        case BWSeleniumTone:
-        {
-            toneSettings.redMask   = 122*mul;
-            toneSettings.greenMask = 115*mul;
-            toneSettings.blueMask  = 122*mul;
-            TonalityFilter tone(data, w, h, sb, toneSettings);
-            break;
-        }
-
-        case BWPlatinumTone:
-        {
-            toneSettings.redMask   = 115*mul;
-            toneSettings.greenMask = 110*mul;
-            toneSettings.blueMask  = 106*mul;
-            TonalityFilter tone(data, w, h, sb, toneSettings);
-            break;
-        }
-
-        case BWGreenTone:
-        {
-            toneSettings.redMask   = 125*mul;
-            toneSettings.greenMask = 125*mul;
-            toneSettings.blueMask  = 105*mul;
-            TonalityFilter tone(data, w, h, sb, toneSettings);
-            break;
-        }
-    }
-}
-
-void BWSepiaTool::applyChannelMixer(uchar* data, int w, int h, bool sb)
-{
-    MixerContainer settings;
-    settings.bMonochrome    = true;
-    settings.blackRedGain   = d->redMult   + d->redMult*d->redAttn;
-    settings.blackGreenGain = d->greenMult + d->greenMult*d->greenAttn;
-    settings.blackBlueGain  = d->blueMult  + d->blueMult*d->blueAttn;
-    MixerFilter mixer(data, w, h, sb, settings);
 }
 
 //-- Load all settings from file --------------------------------------
@@ -1239,7 +825,9 @@ void BWSepiaTool::slotLoadSettings()
         slotEffect();
     }
     else
+    {
         KMessageBox::error(kapp->activeWindow(), i18n("Cannot load settings from the Black & White text file."));
+    }
 
     file.close();
 }
@@ -1278,8 +866,10 @@ void BWSepiaTool::slotSaveAsSettings()
         }
     }
     else
+    {
         KMessageBox::error(kapp->activeWindow(),
                            i18n("Cannot save settings to the Black & White text file."));
+    }
 
     file.close();
 }

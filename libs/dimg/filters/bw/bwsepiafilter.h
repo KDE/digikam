@@ -88,10 +88,13 @@ public:
 
     BWSepiaContainer()
     {
-        curves   = 0;
-        type     = BWGeneric;
-        preview  = false;
-        strength = 1.0;
+        curves      = 0;
+        previewType = BWGeneric;
+        filmType    = BWGeneric;
+        filterType  = BWNoFilter;
+        toneType    = BWNoTone;
+        preview     = false;
+        strength    = 1.0;
     };
 
     ~BWSepiaContainer(){};
@@ -100,7 +103,10 @@ public:
 
     bool         preview;
 
-    int          type;
+    int          previewType;
+    int          filmType;
+    int          filterType;
+    int          toneType;
 
     double       strength;
     
