@@ -329,8 +329,16 @@ void ImageCategorizedView::setCurrentWhenAvailable(qlonglong imageId)
 
 void ImageCategorizedView::setCurrentUrl(const KUrl& url)
 {
+    if (url.isEmpty())
+    {
+        clearSelection();
+        setCurrentIndex(QModelIndex());
+        return;
+    }
     QString path = url.toLocalFile();
     QModelIndex index = d->filterModel->indexForPath(path);
+    if (!index.isValid())
+        return;
     clearSelection();
     setCurrentIndex(index);
 }
