@@ -39,9 +39,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 018 ==> 226235 : digiKam fails after upgrade - no albums - rh tag & captions bar frozen.
 019 ==> 225272 : digiKam destroy some exif data.
 020 ==> 226584 : digiKam crashes in the starting phase.
-021 ==> 226537 : hovering doesn't show sub-tags
-022 ==> 225827 : gpswidget inactive on default selected photo.
-023 ==> 226381 : Copy/Paste of images in Albums view selects wrong image
+021 ==> 226537 : hovering doesn't show sub-tags.
+022 ==> 225827 : Gpswidget inactive on default selected photo.
+023 ==> 226381 : Copy/Paste of images in Albums view selects wrong image.
 024 ==> 224999 : Thumbnails blury after upgrade to 1.0.0 from 0.10.
 025 ==> 226789 : Metadata settings only EXIF.
 026 ==> 185266 : digiKam shows unknown icon when moving images to other directory.
@@ -63,5 +63,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 042 ==> 227545 : Toggle Auto/Parents does not work as expected.
 043 ==> 219772 : Opening the application causes crash.
 044 ==> 226382 : Curves Adjust dialog broken: No Histogram and no effect when changing the line.
-045 ==> 227555 : Preview image in Digikam is not displayed after saveas in editor.
+045 ==> 227555 : Preview image in digiKam is not displayed after saveas in editor.
 046 ==>
