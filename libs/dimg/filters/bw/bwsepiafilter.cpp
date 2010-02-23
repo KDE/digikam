@@ -85,7 +85,7 @@ BWSepiaFilter::BWSepiaFilter(uchar* bits, uint width, uint height, bool sixteenB
     d->settings = settings;
     m_orgImage  = DImg(width, height, sixteenBits, true, bits, true);
     initFilter();
-    filterImage();
+    startFilterDirectly();
 }
 
 BWSepiaFilter::~BWSepiaFilter()
@@ -123,7 +123,8 @@ void BWSepiaFilter::filterImage()
 
         // Calculate and apply the curve on image.
 
-        uchar* targetData = new uchar[m_orgImage.numBytes()];
+//        uchar* targetData = new uchar[m_orgImage.numBytes()];
+        uchar* targetData = new uchar[m_orgImage.width()*m_orgImage.height()*(m_orgImage.sixteenBit() ? 8 : 4)];
         postProgress(50);
 
         d->settings.curves->curvesLutSetup(AlphaChannel);
@@ -151,40 +152,32 @@ DImg BWSepiaFilter::getThumbnailForEffect(const DImg& img)
 
 DImg BWSepiaFilter::getThumbnailForEffect(uchar* data, int w, int h, bool sb)
 {
+    postProgress(10);
     DImg thumb(w, h, sb, true, data);
 
-    postProgress(10);
+    postProgress(25);
 
     if (d->settings.previewType < BWSepiaContainer::BWGeneric)
     {
         // In Filter view, we will render a preview of the B&W filter with the generic B&W film.
+        
         blackAndWhiteConversion(thumb.bits(), w, h, sb, d->settings.previewType);
-        postProgress(25);
+        postProgress(50);
 
         blackAndWhiteConversion(thumb.bits(), w, h, sb, BWSepiaContainer::BWGeneric);
-        postProgress(50);
+        postProgress(75);
     }
     else
     {
-        // In Film and Tone view, we will render the preview without to use the B&W Filter
-        blackAndWhiteConversion(thumb.bits(), w, h, sb, d->settings.previewType);
+        // In Film and Tone view, we will render the preview without to use the B&W Filter.
+        
         postProgress(50);
+
+        blackAndWhiteConversion(thumb.bits(), w, h, sb, d->settings.previewType);
+        postProgress(75);
     }
-
-    uchar* targetData = new uchar[w*h*(sb ? 8 : 4)];
-    postProgress(60);
-
-    d->settings.curves->curvesLutSetup(AlphaChannel);
-    postProgress(70);
-
-    d->settings.curves->curvesLutProcess(thumb.bits(), targetData, w, h);
-    postProgress(80);
-
-    DImg preview(w, h, sb, true, targetData);
-    thumb.putImageData(preview.bits());
+    
     postProgress(90);
-
-    delete [] targetData;
 
     return (thumb);
 }
