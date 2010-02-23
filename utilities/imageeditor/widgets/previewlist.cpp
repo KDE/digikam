@@ -99,8 +99,9 @@ void PreviewThreadWrapper::slotFilterFinished(bool success)
 
     if (success)
     {
+        int key = d->map.key(filter);
         QPixmap pix = filter->getTargetImage().smoothScale(128, 128, Qt::KeepAspectRatio).convertToPixmap();
-        emit signalFilterFinished(d->map.key(filter), pix);
+        emit signalFilterFinished(key, pix);
     }
 }
 
@@ -341,8 +342,11 @@ void PreviewList::slotFilterStarted(int id)
 void PreviewList::slotFilterFinished(int id, const QPixmap& pix)
 {
     PreviewListItem* item = findItem(id);
-    item->setBusy(false);
-    item->setPixmap(pix);
+    if (item)
+    {
+        item->setBusy(false);
+        item->setPixmap(pix);
+    }
 }
 
 }  // namespace Digikam
