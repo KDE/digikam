@@ -55,7 +55,7 @@ TonalityFilter::TonalityFilter(uchar* bits, uint width, uint height, bool sixtee
     m_orgImage = DImg(width, height, sixteenBits, true, bits, true);
     initFilter();
     startFilterDirectly();
-    memcpy(bits, m_destImage.bits(), m_destImage.numBytes());
+    memcpy(bits, m_orgImage.bits(), m_orgImage.numBytes());
 }
 
 TonalityFilter::~TonalityFilter()
