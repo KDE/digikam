@@ -42,16 +42,6 @@ class BWSepiaTool : public EditorToolThreaded
 
 public:
 
-    enum SettingsTab
-    {
-        FilmTab=0,
-        BWFiltersTab,
-        ToneTab,
-        LuminosityTab
-    };
-
-public:
-
     BWSepiaTool(QObject* parent);
     ~BWSepiaTool();
 
@@ -61,9 +51,6 @@ private Q_SLOTS:
     void slotSaveAsSettings();
     void slotLoadSettings();
     void slotResetSettings();
-
-    void slotFilterSelected();
-    void slotScaleChanged();
 
 private:
 
@@ -75,8 +62,6 @@ private:
     void putPreviewData();
     void putFinalData();
     void renderingFinished();
-
-    void blockWidgetSignals(bool b);
 
 private:
 
