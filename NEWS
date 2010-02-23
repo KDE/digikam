@@ -64,4 +64,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 043 ==> 219772 : Opening the application causes crash.
 044 ==> 226382 : Curves Adjust dialog broken: No Histogram and no effect when changing the line.
 045 ==> 227555 : Preview image in digiKam is not displayed after saveas in editor.
-046 ==>
+046 ==> 225728 : Adding vignette should not increase brightness in the center.
+047 ==> 
