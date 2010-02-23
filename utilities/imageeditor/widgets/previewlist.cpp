@@ -54,9 +54,7 @@ class PreviewThreadWrapperPriv
 
 public:
 
-    PreviewThreadWrapperPriv()
-    {
-    }
+    PreviewThreadWrapperPriv(){}
 
     QMap<int, DImgThreadedFilter*> map;
 };
@@ -106,12 +104,12 @@ void PreviewThreadWrapper::slotFilterFinished(bool success)
     }
 }
 
-void PreviewThreadWrapper::slotFilterProgress(int progress)
+void PreviewThreadWrapper::slotFilterProgress(int /*progress*/)
 {
     DImgThreadedFilter* filter = dynamic_cast<DImgThreadedFilter*>(sender());
     if (!filter) return;
 
-    kDebug() << filter->filterName() << " : " << progress << " %";
+    //kDebug() << filter->filterName() << " : " << progress << " %";
 }
 
 void PreviewThreadWrapper::startFilters()
@@ -178,7 +176,6 @@ int PreviewListItem::id()
 void PreviewListItem::setBusy(bool b)
 {
     d->busy = b;
-    kDebug() << "busy: " << b;
 }
 
 bool PreviewListItem::isBusy()
@@ -309,8 +306,6 @@ int PreviewList::currentId()
 
 void PreviewList::slotProgressTimerDone()
 {
-    kDebug() << "timer shot";
-
     QPixmap ppix(d->progressPix.copy(0, d->progressCount*22, 22, 22));
     QPixmap pixmap(128, 128);
     pixmap.fill(Qt::transparent);
@@ -333,7 +328,6 @@ void PreviewList::slotProgressTimerDone()
     d->progressCount++;
     if (d->progressCount == 8) d->progressCount = 0;
 
-    kDebug() << "item busy : " << busy;
     if (!busy)
         d->progressTimer->stop();
 }
