@@ -44,6 +44,7 @@
 #include <kglobalsettings.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
+#include <ktabwidget.h>
 
 // LibKDcraw includes
 
@@ -52,6 +53,9 @@
 // Local includes
 
 #include "rexpanderbox.h"
+#include "previewlist.h"
+#include "curvesbox.h"
+#include "curveswidget.h"
 
 using namespace KDcrawIface;
 
@@ -60,32 +64,34 @@ namespace Digikam
 
 class BWSepiaSettingsPriv
 {
+  
+public:
+
+    enum SettingsTab
+    {
+        FilmTab=0,
+        BWFiltersTab,
+        ToneTab,
+        LuminosityTab
+    };
+  
 public:
 
     BWSepiaSettingsPriv() :
-        configThresholdAdjustmentEntry("ThresholdAdjustment"),
-        configSoftnessAdjustmentEntry("SoftnessAdjustment"),
-        configAdvancedAdjustmentEntry("AdvancedAdjustment"),
-        configThrLumInputAdjustmentEntry("ThrLumAdjustment"),
-        configSoftLumInputAdjustmentEntry("SoftLumAdjustment"),
-        configThrCrInputAdjustmentEntry("ThrCrAdjustment"),
-        configSoftCrInputAdjustmentEntry("SoftCrAdjustment"),
-        configThrCbInputAdjustmentEntry("ThrCbAdjustment"),
-        configSoftCbInputAdjustmentEntry("SoftCbAdjustment"),
-        advancedBox(0),
-        leadBox(0),
-        luminanceBox(0),
-        chrominanceRedBox(0),
-        chrominanceBlueBox(0),
-        advExpanderBox(0),
-        thresholdInput(0),
-        softnessInput(0),
-        thrLumInput(0),
-        softLumInput(0),
-        thrCrInput(0),
-        softCrInput(0),
-        thrCbInput(0),
-        softCbInput(0)
+        configSettingsTabEntry("Settings Tab"),
+        configBWFilterEntry("BW Filter"),
+        configBWFilmEntry("BW Film"),
+        configBWToneEntry("BW Tone"),
+        configContrastAdjustmentEntry("ContrastAdjustment"),
+        configStrengthAdjustmentEntry("StrengthAdjustment"),
+        configCurveEntry("BWSepiaCurve"),
+        bwFilters(0),
+        bwFilm(0),
+        bwTone(0),
+        tab(0),
+        cInput(0),
+        strengthInput(0),
+        curvesBox(0)
         {}
 
     const QString    configThresholdAdjustmentEntry;
@@ -98,196 +104,336 @@ public:
     const QString    configThrCbInputAdjustmentEntry;
     const QString    configSoftCbInputAdjustmentEntry;
 
-    QCheckBox*       advancedBox;
+    const QString              configSettingsTabEntry;
+    const QString              configBWFilterEntry;
+    const QString              configBWFilmEntry;
+    const QString              configBWToneEntry;
+    const QString              configContrastAdjustmentEntry;
+    const QString              configStrengthAdjustmentEntry;
+    const QString              configCurveEntry;
 
-    QWidget*         leadBox;
-    QWidget*         luminanceBox;
-    QWidget*         chrominanceRedBox;
-    QWidget*         chrominanceBlueBox;
+    PreviewList*               bwFilters;
+    PreviewList*               bwFilm;
+    PreviewList*               bwTone;
 
-    RExpanderBox*    advExpanderBox;
+    KTabWidget*                tab;
 
-    RDoubleNumInput* thresholdInput;
-    RDoubleNumInput* softnessInput;
-    RDoubleNumInput* thrLumInput;
-    RDoubleNumInput* softLumInput;
-    RDoubleNumInput* thrCrInput;
-    RDoubleNumInput* softCrInput;
-    RDoubleNumInput* thrCbInput;
-    RDoubleNumInput* softCbInput;
+    KDcrawIface::RIntNumInput* cInput;
+    KDcrawIface::RIntNumInput* strengthInput;
+
+    CurvesBox*                 curvesBox;
 };
 
-BWSepiaSettings::BWSepiaSettings(QWidget* parent)
+BWSepiaSettings::BWSepiaSettings(QWidget* parent, DImg& thumbImage)
                : QWidget(parent),
                  d(new BWSepiaSettingsPriv)
 {
     QGridLayout* grid = new QGridLayout(parent);
 
-    QString thHelp = i18n("<b>Threshold</b>: Adjusts the threshold for denoising of "
-                          "the image in a range from 0.0 (none) to 10.0. "
-                          "The threshold is the value below which everything is considered noise.");
-                          
-    QString soHelp = i18n("<b>Softness</b>: This adjusts the softness of the thresholding "
-                          "(soft as opposed to hard thresholding). The higher the softness "
-                          "the more noise remains in the image.");
-    
-    // -------------------------------------------------------------
+    d->tab = new KTabWidget(parent);
 
-    d->leadBox          = new QWidget;
-    QGridLayout* genLay = new QGridLayout(d->leadBox);
+    PreviewListItem* item = 0;
+    d->bwFilm             = new PreviewList(parent);
+    int type              = BWSepiaContainer::BWGeneric;
 
-    QLabel *label1      = new QLabel(i18n("Threshold:"), d->leadBox);
-    d->thresholdInput   = new RDoubleNumInput(d->leadBox);
-    d->thresholdInput->setDecimals(2);
-    d->thresholdInput->input()->setRange(0.0, 10.0, 0.1, true);
-    d->thresholdInput->setDefaultValue(1.2);
-    d->thresholdInput->setWhatsThis(thHelp);
+    item = d->bwFilm->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18nc("generic black and white film", "Generic"), type);
+    item->setWhatsThis(0, i18n("<b>Generic</b>:"
+                               "<p>Simulate a generic black and white film.</p>"));
 
-    QLabel *label2      = new QLabel(i18n("Softness:"), d->leadBox);
-    d->softnessInput    = new RDoubleNumInput(d->leadBox);
-    d->softnessInput->setDecimals(1);
-    d->softnessInput->input()->setRange(0.0, 1.0, 0.1, true);
-    d->softnessInput->setDefaultValue(0.9);
-    d->softnessInput->setWhatsThis(soHelp);
+    ++type;
+    item = d->bwFilm->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Agfa 200X"), type);
+    item->setWhatsThis(0, i18n("<b>Agfa 200X</b>:"
+                               "<p>Simulate the Agfa 200X black and white film at 200 ISO.</p>"));
 
-    genLay->addWidget(label1,            0, 0, 1, 1);
-    genLay->addWidget(d->thresholdInput, 0, 1, 1, 1);
-    genLay->addWidget(label2,            1, 0, 1, 1);
-    genLay->addWidget(d->softnessInput,  1, 1, 1, 1);
-    genLay->setRowStretch(2, 10);
-    genLay->setSpacing(0);
-    genLay->setMargin(KDialog::spacingHint());
+    ++type;
+    item = d->bwFilm->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Agfa Pan 25"), type);
+    item->setWhatsThis(0, i18n("<b>Agfa Pan 25</b>:"
+                               "<p>Simulate the Agfa Pan black and white film at 25 ISO.</p>"));
 
-    // -------------------------------------------------------------
+    ++type;
+    item = d->bwFilm->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Agfa Pan 100"), type);
+    item->setWhatsThis(0, i18n("<b>Agfa Pan 100</b>:"
+                               "<p>Simulate the Agfa Pan black and white film at 100 ISO.</p>"));
 
-    d->advancedBox      = new QCheckBox(i18n("Advanced adjustments"));
-    d->advExpanderBox   = new RExpanderBox;
-    d->advExpanderBox->setObjectName("Advanced Settings Expander");
+    ++type;
+    item = d->bwFilm->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Agfa Pan 400"), type);
+    item->setWhatsThis(0, i18n("<b>Agfa Pan 400</b>:"
+                               "<p>Simulate the Agfa Pan black and white film at 400 ISO.</p>"));
 
-    // -------------------------------------------------------------
+    ++type;
+    item = d->bwFilm->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Ilford Delta 100"), type);
+    item->setWhatsThis(0, i18n("<b>Ilford Delta 100</b>:"
+                               "<p>Simulate the Ilford Delta black and white film at 100 ISO.</p>"));
 
-    d->luminanceBox     = new QWidget(d->advExpanderBox);
-    QGridLayout* lumLay = new QGridLayout(d->luminanceBox);
+    ++type;
+    item = d->bwFilm->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Ilford Delta 400"), type);
+    item->setWhatsThis(0, i18n("<b>Ilford Delta 400</b>:"
+                               "<p>Simulate the Ilford Delta black and white film at 400 ISO.</p>"));
 
-    QLabel *label3      = new QLabel(i18n("Threshold:"), d->luminanceBox);
-    d->thrLumInput      = new RDoubleNumInput(d->luminanceBox);
-    d->thrLumInput->setDecimals(2);
-    d->thrLumInput->input()->setRange(0.0, 10.0, 0.1, true);
-    d->thrLumInput->setDefaultValue(1.2);
-    d->thrLumInput->setWhatsThis(thHelp);
+    ++type;
+    item = d->bwFilm->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Ilford Delta 400 Pro 3200"), type);
+    item->setWhatsThis(0, i18n("<b>Ilford Delta 400 Pro 3200</b>:"
+                               "<p>Simulate the Ilford Delta 400 Pro black and white film at 3200 ISO.</p>"));
 
-    QLabel *label4      = new QLabel(i18n("Softness:"), d->luminanceBox);
-    d->softLumInput     = new RDoubleNumInput(d->luminanceBox);
-    d->softLumInput->setDecimals(1);
-    d->softLumInput->input()->setRange(0.0, 1.0, 0.1, true);
-    d->softLumInput->setDefaultValue(0.9);
-    d->softLumInput->setWhatsThis(soHelp);
+    ++type;
+    item = d->bwFilm->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Ilford FP4 Plus"), type);
+    item->setWhatsThis(0, i18n("<b>Ilford FP4 Plus</b>:"
+                               "<p>Simulate the Ilford FP4 Plus black and white film at 125 ISO.</p>"));
 
-    lumLay->addWidget(label3,          0, 0, 1, 1);
-    lumLay->addWidget(d->thrLumInput,  0, 1, 1, 1);
-    lumLay->addWidget(label4,          1, 0, 1, 1);
-    lumLay->addWidget(d->softLumInput, 1, 1, 1, 1);
-    lumLay->setRowStretch(2, 10);
-    lumLay->setSpacing(0);
-    lumLay->setMargin(KDialog::spacingHint());
+    ++type;
+    item = d->bwFilm->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Ilford HP5 Plus"), type);
+    item->setWhatsThis(0, i18n("<b>Ilford HP5 Plus</b>:"
+                               "<p>Simulate the Ilford HP5 Plus black and white film at 400 ISO.</p>"));
 
-    // -------------------------------------------------------------
+    ++type;
+    item = d->bwFilm->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Ilford PanF Plus"), type);
+    item->setWhatsThis(0, i18n("<b>Ilford PanF Plus</b>:"
+                               "<p>Simulate the Ilford PanF Plus black and white film at 50 ISO.</p>"));
 
-    d->chrominanceRedBox = new QWidget(d->advExpanderBox);
-    QGridLayout* cRedLay = new QGridLayout(d->chrominanceRedBox);
+    ++type;
+    item = d->bwFilm->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Ilford XP2 Super"), type);
+    item->setWhatsThis(0, i18n("<b>Ilford XP2 Super</b>:"
+                               "<p>Simulate the Ilford XP2 Super black and white film at 400 ISO.</p>"));
 
-    QLabel *label5       = new QLabel(i18n("Threshold:"), d->chrominanceRedBox);
-    d->thrCrInput        = new RDoubleNumInput(d->chrominanceRedBox);
-    d->thrCrInput->setDecimals(2);
-    d->thrCrInput->input()->setRange(0.0, 10.0, 0.1, true);
-    d->thrCrInput->setDefaultValue(1.2);
-    d->thrCrInput->setWhatsThis(thHelp);
+    ++type;
+    item = d->bwFilm->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Kodak Tmax 100"), type);
+    item->setWhatsThis(0, i18n("<b>Kodak Tmax 100</b>:"
+                               "<p>Simulate the Kodak Tmax black and white film at 100 ISO.</p>"));
 
-    QLabel *label6       = new QLabel(i18n("Softness:"), d->chrominanceRedBox);
-    d->softCrInput       = new RDoubleNumInput(d->chrominanceRedBox);
-    d->softCrInput->setDecimals(1);
-    d->softCrInput->input()->setRange(0.0, 1.0, 0.1, true);
-    d->softCrInput->setDefaultValue(0.9);
-    d->softCrInput->setWhatsThis(soHelp);
+    ++type;
+    item = d->bwFilm->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Kodak Tmax 400"), type);
+    item->setWhatsThis(0, i18n("<b>Kodak Tmax 400</b>:"
+                               "<p>Simulate the Kodak Tmax black and white film at 400 ISO.</p>"));
 
-    cRedLay->addWidget(label5,         0, 0, 1, 1);
-    cRedLay->addWidget(d->thrCrInput,  0, 1, 1, 1);
-    cRedLay->addWidget(label6,         1, 0, 1, 1);
-    cRedLay->addWidget(d->softCrInput, 1, 1, 1, 1);
-    cRedLay->setRowStretch(2, 10);
-    cRedLay->setSpacing(0);
-    cRedLay->setMargin(KDialog::spacingHint());
+    ++type;
+    item = d->bwFilm->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Kodak TriX"), type);
+    item->setWhatsThis(0, i18n("<b>Kodak TriX</b>:"
+                               "<p>Simulate the Kodak TriX black and white film at 400 ISO.</p>"));
 
     // -------------------------------------------------------------
 
-    d->chrominanceBlueBox = new QWidget(d->advExpanderBox);
-    QGridLayout* cBlueLay = new QGridLayout(d->chrominanceBlueBox);
+    type = BWSepiaContainer::BWIlfordSFX200;
 
-    QLabel *label7        = new QLabel(i18n("Threshold:"), d->chrominanceBlueBox);
-    d->thrCbInput         = new RDoubleNumInput(d->chrominanceBlueBox);
-    d->thrCbInput->setDecimals(2);
-    d->thrCbInput->input()->setRange(0.0, 10.0, 0.1, true);
-    d->thrCbInput->setDefaultValue(1.2);
-    d->thrCbInput->setWhatsThis(thHelp);
+    item = d->bwFilm->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Ilford SPX 200"), type);
+    item->setWhatsThis(0, i18n("<b>Ilford SPX 200</b>:"
+                               "<p>Simulate the Ilford SPX infrared film at 200 ISO.</p>"));
 
-    QLabel *label8        = new QLabel(i18n("Softness:"), d->chrominanceBlueBox);
-    d->softCbInput        = new RDoubleNumInput(d->chrominanceBlueBox);
-    d->softCbInput->setDecimals(1);
-    d->softCbInput->input()->setRange(0.0, 1.0, 0.1, true);
-    d->softCbInput->setDefaultValue(0.9);
-    d->softCbInput->setWhatsThis(soHelp);
+    ++type;
+    item = d->bwFilm->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Ilford SPX 400"), type);
+    item->setWhatsThis(0, i18n("<b>Ilford SPX 400</b>:"
+                               "<p>Simulate the Ilford SPX infrared film at 400 ISO.</p>"));
 
-    cBlueLay->addWidget(label7,         0, 0, 1, 1);
-    cBlueLay->addWidget(d->thrCbInput,  0, 1, 1, 1);
-    cBlueLay->addWidget(label8,         1, 0, 1, 1);
-    cBlueLay->addWidget(d->softCbInput, 1, 1, 1, 1);
-    cBlueLay->setRowStretch(2, 10);
-    cBlueLay->setSpacing(0);
-    cBlueLay->setMargin(KDialog::spacingHint());
+    ++type;
+    item = d->bwFilm->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Ilford SPX 800"), type);
+    item->setWhatsThis(0, i18n("<b>Ilford SPX 800</b>:"
+                               "<p>Simulate the Ilford SPX infrared film at 800 ISO.</p>"));
 
     // -------------------------------------------------------------
 
-    d->advExpanderBox->addItem(d->luminanceBox,       i18n("Luminance"),        QString("Luminance"),       true);
-    d->advExpanderBox->addItem(d->chrominanceRedBox,  i18n("Chrominance Red"),  QString("ChrominanceRed"),  true);
-    d->advExpanderBox->addItem(d->chrominanceBlueBox, i18n("Chrominance Blue"), QString("ChrominanceBlue"), true);
-    d->advExpanderBox->addStretch();
+    QWidget* vbox     = new QWidget(d->tab);
+    QVBoxLayout* vlay = new QVBoxLayout(vbox);
+    d->bwFilters      = new PreviewList(parent);
+
+    type = BWSepiaContainer::BWNoFilter;
+    item = d->bwFilters->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("No Lens Filter"), type);
+    item->setWhatsThis(0, i18n("<b>No Lens Filter</b>:"
+                               "<p>Do not apply a lens filter when rendering the image.</p>"));
+
+    ++type;
+    item = d->bwFilters->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Green Filter"), type);
+    item->setWhatsThis(0, i18n("<b>Black & White with Green Filter</b>:"
+                               "<p>Simulate black and white film exposure using a green filter. "
+                               "This is useful for all scenic shoots, especially "
+                               "portraits photographed against the sky.</p>"));
+
+    ++type;
+    item = d->bwFilters->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Orange Filter"), type);
+    item->setWhatsThis(0, i18n("<b>Black & White with Orange Filter</b>:"
+                               "<p>Simulate black and white film exposure using an orange filter. "
+                               "This will enhance landscapes, marine scenes and aerial "
+                               "photography.</p>"));
+
+    ++type;
+    item = d->bwFilters->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Red Filter"), type);
+    item->setWhatsThis(0, i18n("<b>Black & White with Red Filter</b>:"
+                               "<p>Simulate black and white film exposure using a red filter. "
+                               "This creates dramatic sky effects, and simulates moonlight scenes "
+                               "in the daytime.</p>"));
+
+    ++type;
+    item = d->bwFilters->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Yellow Filter"), type);
+    item->setWhatsThis(0, i18n("<b>Black & White with Yellow Filter</b>:"
+                               "<p>Simulate black and white film exposure using a yellow filter. "
+                               "This has the most natural tonal correction, and improves contrast. Ideal for "
+                               "landscapes.</p>"));
+
+    ++type;
+    item = d->bwFilters->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Yellow-Green Filter"), type);
+    item->setWhatsThis(0, i18n("<b>Black & White with Yellow-Green Filter</b>:"
+                               "<p>Simulate black and white film exposure using a yellow-green filter. "
+                               "A yellow-green filter is highly effective for outdoor portraits because "
+                               "red is rendered dark while green appears lighter. Great for correcting skin tones, "
+                               "bringing out facial expressions in close-ups and emphasizing the feeling of liveliness. "
+                               "This filter is highly effective for indoor portraits under tungsten lighting.</p>"));
+
+    ++type;
+    item = d->bwFilters->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Blue Filter"), type);
+    item->setWhatsThis(0, i18n("<b>Black & White with Blue Filter</b>:"
+                               "<p>Simulate black and white film exposure using a blue filter. "
+                               "This accentuates haze and fog. Used for dye transfer and contrast effects.</p>"));
+
+    d->strengthInput = new RIntNumInput();
+    d->strengthInput->input()->setLabel(i18n("Strength:"), Qt::AlignLeft | Qt::AlignVCenter);
+    d->strengthInput->setRange(1, 5, 1);
+    d->strengthInput->setSliderEnabled(true);
+    d->strengthInput->setDefaultValue(1);
+    d->strengthInput->setWhatsThis(i18n("Here, set the strength adjustment of the lens filter."));
+
+    vlay->addWidget(d->bwFilters);
+    vlay->addWidget(d->strengthInput);
+    vlay->setSpacing(KDialog::spacingHint());
+    vlay->setMargin(0);
 
     // -------------------------------------------------------------
 
-    grid->addWidget(d->leadBox,        0, 0, 1, 2);
-    grid->addWidget(d->advancedBox,    1, 0, 1, 2);
-    grid->addWidget(d->advExpanderBox, 2, 0, 1, 2);
-    grid->setRowStretch(3, 10);
+    d->bwTone = new PreviewList(parent);
+
+    type = BWSepiaContainer::BWNoTone;
+    item = d->bwTone->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("No Tone Filter"), type);
+    item->setWhatsThis(0, i18n("<b>No Tone Filter</b>:"
+                               "<p>Do not apply a tone filter to the image.</p>"));
+
+    ++type;
+    item = d->bwTone->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Sepia Filter"), type);
+    item->setWhatsThis(0, i18n("<b>Black & White with Sepia Tone</b>:"
+                               "<p>Gives a warm highlight and mid-tone while adding a bit of coolness to "
+                               "the shadows - very similar to the process of bleaching a print and "
+                               "re-developing in a sepia toner.</p>"));
+
+    ++type;
+    item = d->bwTone->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Brown Filter"), type);
+    item->setWhatsThis(0, i18n("<b>Black & White with Brown Tone</b>:"
+                               "<p>This filter is more neutral than the Sepia Tone "
+                               "filter.</p>"));
+
+    ++type;
+    item = d->bwTone->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Cold Filter"), type);
+    item->setWhatsThis(0, i18n("<b>Black & White with Cold Tone</b>:"
+                               "<p>Start subtly and replicate printing on a cold tone black and white "
+                               "paper such as a bromide enlarging "
+                               "paper.</p>"));
+
+    ++type;
+    item = d->bwTone->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Selenium Filter"), type);
+    item->setWhatsThis(0, i18n("<b>Black & White with Selenium Tone</b>:"
+                               "<p>This effect replicates traditional selenium chemical toning done "
+                               "in the darkroom.</p>"));
+
+    ++type;
+    item = d->bwTone->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Platinum Filter"), type);
+    item->setWhatsThis(0, i18n("<b>Black & White with Platinum Tone</b>:"
+                               "<p>This effect replicates traditional platinum chemical toning done "
+                               "in the darkroom.</p>"));
+
+    ++type;
+    item = d->bwTone->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Green Filter"), type);
+    item->setWhatsThis(0, i18n("<b>Black & White with greenish tint</b>:"
+                               "<p>This effect is also known as Verdante.</p>"));
+
+    // -------------------------------------------------------------
+
+    QWidget* curveBox = new QWidget();
+    // FIXME
+    d->curvesBox      = new CurvesBox(256, 256, thumbImage.bits(), thumbImage.width(),
+                                      thumbImage.height(), thumbImage.sixteenBit());
+    d->curvesBox->enableCurveTypes(true);
+    d->curvesBox->enableResetButton(true);
+    d->curvesBox->setWhatsThis( i18n("This is the curve adjustment of the image luminosity"));
+
+    // -------------------------------------------------------------
+
+    d->cInput = new RIntNumInput(curveBox);
+    d->cInput->input()->setLabel(i18n("Contrast:"), Qt::AlignLeft | Qt::AlignVCenter);
+    d->cInput->setRange(-100, 100, 1);
+    d->cInput->setSliderEnabled(true);
+    d->cInput->setDefaultValue(0);
+    d->cInput->setWhatsThis(i18n("Set here the contrast adjustment of the image."));
+
+    QGridLayout* gridTab2 = new QGridLayout();
+    gridTab2->addWidget(d->curvesBox, 0, 0, 1, 1);
+    gridTab2->addWidget(d->cInput,    1, 0, 1, 1);
+    gridTab2->setRowStretch(2, 10);
+    gridTab2->setMargin(KDialog::spacingHint());
+    gridTab2->setSpacing(0);
+    curveBox->setLayout(gridTab2);
+
+    // -------------------------------------------------------------
+
+    d->tab->insertTab(BWSepiaSettingsPriv::FilmTab,       d->bwFilm, i18n("Film"));
+    d->tab->insertTab(BWSepiaSettingsPriv::BWFiltersTab,  vbox,      i18n("Lens Filters"));
+    d->tab->insertTab(BWSepiaSettingsPriv::ToneTab,       d->bwTone, i18n("Tone"));
+    d->tab->insertTab(BWSepiaSettingsPriv::LuminosityTab, curveBox,  i18n("Lightness"));
+
+    grid->addWidget(d->tab, 0, 0, 1, 5);
+    grid->setRowStretch(0, 10);
     grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(KDialog::spacingHint());
 
     // -------------------------------------------------------------
 
-    connect(d->softnessInput, SIGNAL(valueChanged(double)),
-            this, SLOT(slotLeadSettingsChanged()));
+    connect(d->bwFilters, SIGNAL(itemSelectionChanged()),
+            this, SLOT(slotFilterSelected()));
 
-    connect(d->thrLumInput, SIGNAL(valueChanged(double)),
+    connect(d->strengthInput, SIGNAL(valueChanged(int)),
             this, SIGNAL(signalSettingsChanged()));
 
-    connect(d->softLumInput, SIGNAL(valueChanged(double)),
+    connect(d->bwFilm, SIGNAL(itemSelectionChanged()),
             this, SIGNAL(signalSettingsChanged()));
 
-    connect(d->thrCrInput, SIGNAL(valueChanged(double)),
+    connect(d->bwTone, SIGNAL(itemSelectionChanged()),
             this, SIGNAL(signalSettingsChanged()));
 
-    connect(d->softCrInput, SIGNAL(valueChanged(double)),
+    connect(d->cInput, SIGNAL(valueChanged(int)),
             this, SIGNAL(signalSettingsChanged()));
 
-    connect(d->thrCbInput, SIGNAL(valueChanged(double)),
+    connect(d->curvesBox, SIGNAL(signalCurvesChanged()),
             this, SIGNAL(signalSettingsChanged()));
 
-    connect(d->softCbInput, SIGNAL(valueChanged(double)),
+    connect(d->curvesBox, SIGNAL(signalChannelReset(int)),
             this, SIGNAL(signalSettingsChanged()));
 }
 
 BWSepiaSettings::~BWSepiaSettings()
 {
     delete d;
+}
+
+void BWSepiaSettings::startPreviewFilters()
+{
+    d->bwFilters->startFilters();
+    d->bwFilm->startFilters();
+    d->bwTone->startFilters();
+}
+
+void BWSepiaSettings::blockWidgetSignals(bool b)
+{
+    d->bwFilm->blockSignals(b);
+    d->bwFilters->blockSignals(b);
+    d->bwTone->blockSignals(b);
+    d->strengthInput->blockSignals(b);
+    d->curvesBox->blockSignals(b);
+    d->cInput->blockSignals(b);
+}
+
+void BWSepiaSettings::slotFilterSelected()
+{
+    int filter = d->bwFilters->currentId();
+    if (filter == BWSepiaContainer::BWNoFilter)
+        d->strengthInput->setEnabled(false);
+    else
+        d->strengthInput->setEnabled(true);
+
+    emit signalSettingsChanged();
 }
 
 BWSepiaContainer BWSepiaSettings::settings() const
@@ -328,6 +474,7 @@ void BWSepiaSettings::setSettings(const BWSepiaContainer& settings)
 void BWSepiaSettings::resetToDefault()
 {
     blockSignals(true);
+/*
     d->thresholdInput->slotReset();
     d->softnessInput->slotReset();
     d->thrLumInput->slotReset();
@@ -336,7 +483,7 @@ void BWSepiaSettings::resetToDefault()
     d->softCrInput->slotReset();
     d->thrCbInput->slotReset();
     d->softCbInput->slotReset();
-    d->advancedBox->setChecked(false);
+*/
     blockSignals(false);
 }
 
@@ -392,86 +539,112 @@ void BWSepiaSettings::writeSettings(KConfigGroup& group)
 
 void BWSepiaSettings::loadSettings()
 {
-/*
-    KUrl loadRestorationFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
-                               QString( "*" ), kapp->activeWindow(),
-                               QString( i18n("Photograph Noise Reduction Settings File to Load")) );
-    if ( loadRestorationFile.isEmpty() )
-        return;
+    KUrl loadFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
+                                            QString( "*" ), kapp->activeWindow(),
+                                            QString( i18n("Black & White Settings File to Load")) );
+    if ( loadFile.isEmpty() )
+       return;
 
-    QFile file(loadRestorationFile.toLocalFile());
+    QFile file(loadFile.toLocalFile());
 
     if ( file.open(QIODevice::ReadOnly) )
     {
         QTextStream stream( &file );
-        if ( stream.readLine() != "# Photograph Wavelets Noise Reduction Configuration File" )
+
+        if ( stream.readLine() != "# Black & White Configuration File" )
         {
-            KMessageBox::error(kapp->activeWindow(),
-                               i18n("\"%1\" is not a Photograph Noise Reduction settings text file.",
-                                    loadRestorationFile.fileName()));
-            file.close();
-            return;
+           KMessageBox::error(kapp->activeWindow(),
+                        i18n("\"%1\" is not a Black & White settings text file.",
+                             loadFile.fileName()));
+           file.close();
+           return;
         }
 
-        blockSignals(true);
+        blockWidgetSignals(true);
 
-        d->thresholdInput->setValue( stream.readLine().toDouble() );
-        d->softnessInput->setValue( stream.readLine().toDouble() );
-        d->advancedBox->setChecked( (bool)stream.readLine().toInt() );
+        d->bwFilm->setCurrentId(stream.readLine().toInt());
+        d->bwFilters->setCurrentId(stream.readLine().toInt());
+        d->bwTone->setCurrentId(stream.readLine().toInt());
+        d->cInput->setValue(stream.readLine().toInt());
 
-        d->thrLumInput->setValue( stream.readLine().toDouble() );
-        d->softLumInput->setValue( stream.readLine().toDouble() );
-        d->thrCrInput->setValue( stream.readLine().toDouble() );
-        d->softCrInput->setValue( stream.readLine().toDouble() );
-        d->thrCbInput->setValue( stream.readLine().toDouble() );
-        d->softCbInput->setValue( stream.readLine().toDouble() );
+        for (int i = 0 ; i < 5 ; ++i)
+            d->curvesBox->curves()->curvesChannelReset(i);
 
-        slotAdvancedEnabled(d->advancedBox->isChecked());
+        d->curvesBox->curves()->setCurveType(d->curvesBox->channel(), ImageCurves::CURVE_SMOOTH);
+        d->curvesBox->reset();
 
-        blockSignals(false);
+        // TODO cant we use the kconfig mechanisms provided by CurveWidget here?
+        QPoint disable = ImageCurves::getDisabledValue();
+        QPoint p;
+        for (int j = 0 ; j < ImageCurves::NUM_POINTS ; ++j)
+        {
+            p.setX( stream.readLine().toInt() );
+            p.setY( stream.readLine().toInt() );
+
+/*FIXME
+            if (d->originalImage->sixteenBit() && p != disable)
+            {
+                p.setX(p.x()*ImageCurves::MULTIPLIER_16BIT);
+                p.setY(p.y()*ImageCurves::MULTIPLIER_16BIT);
+            }
+            */
+
+            d->curvesBox->curves()->setCurvePoint(LuminosityChannel, j, p);
+        }
+
+        for (int i = 0 ; i < ImageCurves::NUM_CHANNELS ; ++i)
+            d->curvesBox->curves()->curvesCalculateCurve(i);
+
+        blockWidgetSignals(false);
     }
     else
     {
-        KMessageBox::error(kapp->activeWindow(), i18n("Cannot load settings from the Photograph Noise Reduction text file."));
+        KMessageBox::error(kapp->activeWindow(), i18n("Cannot load settings from the Black & White text file."));
     }
 
     file.close();
-*/
 }
 
 void BWSepiaSettings::saveAsSettings()
 {
-/*
-    KUrl saveRestorationFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
-                               QString( "*" ), kapp->activeWindow(),
-                               QString( i18n("Photograph Noise Reduction Settings File to Save")) );
-    if ( saveRestorationFile.isEmpty() )
-        return;
+    KUrl saveFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
+                                            QString( "*" ), kapp->activeWindow(),
+                                            QString( i18n("Black & White Settings File to Save")) );
+    if ( saveFile.isEmpty() )
+       return;
 
-    QFile file(saveRestorationFile.toLocalFile());
+    QFile file(saveFile.toLocalFile());
 
     if ( file.open(QIODevice::WriteOnly) )
     {
         QTextStream stream( &file );
-        stream << "# Photograph Wavelets Noise Reduction Configuration File\n";
-        stream << d->thresholdInput->value()  << "\n";
-        stream << d->softnessInput->value()   << "\n";
-        stream << d->advancedBox->isChecked() << "\n";
+        stream << "# Black & White Configuration File\n";
+        stream << d->bwFilm->currentId() << "\n";
+        stream << d->bwFilters->currentId() << "\n";
+        stream << d->bwTone->currentId() << "\n";
+        stream << d->cInput->value() << "\n";
 
-        stream << d->thrLumInput->value()     << "\n";
-        stream << d->softLumInput->value()    << "\n";
-        stream << d->thrCrInput->value()      << "\n";
-        stream << d->softCrInput->value()     << "\n";
-        stream << d->thrCbInput->value()      << "\n";
-        stream << d->softCbInput->value()     << "\n";
+        // TODO cant we use the kconfig mechanisms provided by CurveWidget here?
+        for (int j = 0 ; j < ImageCurves::NUM_POINTS ; ++j)
+        {
+            QPoint p = d->curvesBox->curves()->getCurvePoint(LuminosityChannel, j);
+/*FIXME
+            if (d->originalImage->sixteenBit())
+            {
+                p.setX(p.x()/ImageCurves::MULTIPLIER_16BIT);
+                p.setY(p.y()/ImageCurves::MULTIPLIER_16BIT);
+            }*/
+            stream << p.x() << "\n";
+            stream << p.y() << "\n";
+        }
     }
     else
     {
-        KMessageBox::error(kapp->activeWindow(), i18n("Cannot save settings to the Photograph Noise Reduction text file."));
+        KMessageBox::error(kapp->activeWindow(),
+                           i18n("Cannot save settings to the Black & White text file."));
     }
 
     file.close();
-*/    
 }
 
 }  // namespace Digikam

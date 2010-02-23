@@ -36,6 +36,7 @@
 
 #include "digikam_export.h"
 #include "bwsepiafilter.h"
+#include "dimg.h"
 
 namespace Digikam
 {
@@ -48,7 +49,7 @@ class DIGIKAM_EXPORT BWSepiaSettings : public QWidget
 
 public:
 
-    BWSepiaSettings(QWidget* parent);
+    BWSepiaSettings(QWidget* parent, DImg& thumbImage);
     ~BWSepiaSettings();
 
     BWSepiaContainer defaultSettings() const;
@@ -62,6 +63,8 @@ public:
 
     void loadSettings();
     void saveAsSettings();
+    
+    void startPreviewFilters();
 
 Q_SIGNALS:
 
@@ -69,7 +72,11 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 
+    void slotFilterSelected();
 
+private:
+
+    void blockWidgetSignals(bool b);
   
 private:
 
