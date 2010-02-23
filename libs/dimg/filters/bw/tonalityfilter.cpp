@@ -65,7 +65,7 @@ TonalityFilter::~TonalityFilter()
 void TonalityFilter::filterImage()
 {
     changeTonality(m_orgImage);
-    m_destImage = m_orgImage;
+    m_destImage.putImageData(m_orgImage.bits());
 }
 
 void TonalityFilter::changeTonality(DImg& image)
