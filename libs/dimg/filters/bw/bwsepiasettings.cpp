@@ -345,8 +345,8 @@ BWSepiaSettings::BWSepiaSettings(QWidget* parent, DImg* img)
     // -------------------------------------------------------------
 
     QWidget* curveBox = new QWidget();
-    d->curvesBox      = new CurvesBox(256, 256, img->bits(), img->width(),
-                                      img->height(), img->sixteenBit());
+    if (img->isNull()) d->curvesBox = new CurvesBox(256, 192, img->bits(), img->width(), img->height(), img->sixteenBit());
+    else               d->curvesBox = new CurvesBox(256, 192);
     d->curvesBox->enableCurveTypes(true);
     d->curvesBox->enableResetButton(true);
     d->curvesBox->setWhatsThis( i18n("This is the curve adjustment of the image luminosity"));

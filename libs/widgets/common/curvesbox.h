@@ -51,7 +51,7 @@ public:
 
     enum ColorPicker
     {
-        NoPicker = -1,
+        NoPicker   = -1,
         BlackTonal = 0,
         GrayTonal,
         WhiteTonal
@@ -65,7 +65,7 @@ public:
 
 public:
 
-    CurvesBox(int w, int h, QWidget *parent, bool readOnly=false);
+    CurvesBox(int w, int h, QWidget* parent=0, bool readOnly=false);
     CurvesBox(int w, int h,                         // Widget size.
               uchar *i_data, uint i_w, uint i_h,    // Full image info.
               bool i_sixteenBits,                   // 8 or 16 bits image.
