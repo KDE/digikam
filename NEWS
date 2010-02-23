@@ -1,7 +1,7 @@
 *********************************************************************************************************
 digiKam 1.2.0 - Release date: 2010-XX-XX
 
-NEW FEATURES: 
+NEW FEATURES:
 
 AlbumGUI          : All Album tree views are ported to pure Qt4 model/view implementation.
 
@@ -65,4 +65,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 044 ==> 226382 : Curves Adjust dialog broken: No Histogram and no effect when changing the line.
 045 ==> 227555 : Preview image in digiKam is not displayed after saveas in editor.
 046 ==> 225728 : Adding vignette should not increase brightness in the center.
-047 ==> 
+047 ==> 227992 : Search field should not lost focus if nothing was found.
+048 ==>
