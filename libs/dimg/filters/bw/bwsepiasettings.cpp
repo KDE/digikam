@@ -416,16 +416,6 @@ void BWSepiaSettings::startPreviewFilters()
     d->bwTone->startFilters();
 }
 
-void BWSepiaSettings::blockWidgetSignals(bool b)
-{
-    d->bwFilm->blockSignals(b);
-    d->bwFilters->blockSignals(b);
-    d->bwTone->blockSignals(b);
-    d->strengthInput->blockSignals(b);
-    d->curvesBox->blockSignals(b);
-    d->cInput->blockSignals(b);
-}
-
 void BWSepiaSettings::slotFilterSelected()
 {
     int filter = d->bwFilters->currentId();
@@ -453,7 +443,7 @@ BWSepiaContainer BWSepiaSettings::settings() const
 
 void BWSepiaSettings::setSettings(const BWSepiaContainer& settings)
 {
-    blockWidgetSignals(true);
+    blockSignals(true);
 
     d->bwFilm->setCurrentId(settings.filmType);
     d->bwFilters->setCurrentId(settings.filterType);
@@ -463,12 +453,12 @@ void BWSepiaSettings::setSettings(const BWSepiaContainer& settings)
     d->curvesBox->curves()->fillFromOtherCurvers(settings.curves);
 
     slotFilterSelected();
-    blockWidgetSignals(false);
+    blockSignals(false);
 }
 
 void BWSepiaSettings::resetToDefault()
 {
-    blockWidgetSignals(true);
+    blockSignals(true);
 
     d->bwFilters->setCurrentId(BWSepiaContainer::BWNoFilter);
     d->bwFilm->setCurrentId(BWSepiaContainer::BWGeneric);
@@ -482,7 +472,7 @@ void BWSepiaSettings::resetToDefault()
 
     d->curvesBox->reset();
 
-    blockWidgetSignals(false);
+    blockSignals(false);
     slotFilterSelected();
 }
 
@@ -552,7 +542,7 @@ void BWSepiaSettings::loadSettings()
            return;
         }
 
-        blockWidgetSignals(true);
+        blockSignals(true);
 
         d->bwFilm->setCurrentId(stream.readLine().toInt());
         d->bwFilters->setCurrentId(stream.readLine().toInt());
@@ -586,7 +576,7 @@ void BWSepiaSettings::loadSettings()
         for (int i = 0 ; i < ImageCurves::NUM_CHANNELS ; ++i)
             d->curvesBox->curves()->curvesCalculateCurve(i);
 
-        blockWidgetSignals(false);
+        blockSignals(false);
     }
     else
     {
