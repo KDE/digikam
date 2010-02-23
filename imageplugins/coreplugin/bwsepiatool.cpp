@@ -29,8 +29,6 @@
 #include <QFile>
 #include <QGridLayout>
 #include <QVBoxLayout>
-#include <QHash>
-#include <QPixmap>
 #include <QTextStream>
 
 // KDE includes
@@ -98,35 +96,35 @@ public:
         originalImage(0)
         {}
 
-    const QString                configGroupName;
-    const QString                configSettingsTabEntry;
-    const QString                configBWFilterEntry;
-    const QString                configBWFilmEntry;
-    const QString                configBWToneEntry;
-    const QString                configContrastAdjustmentEntry;
-    const QString                configStrengthAdjustmentEntry;
-    const QString                configHistogramChannelEntry;
-    const QString                configHistogramScaleEntry;
-    const QString                configCurveEntry;
+    const QString              configGroupName;
+    const QString              configSettingsTabEntry;
+    const QString              configBWFilterEntry;
+    const QString              configBWFilmEntry;
+    const QString              configBWToneEntry;
+    const QString              configContrastAdjustmentEntry;
+    const QString              configStrengthAdjustmentEntry;
+    const QString              configHistogramChannelEntry;
+    const QString              configHistogramScaleEntry;
+    const QString              configCurveEntry;
 
-    uchar*                       destinationPreviewData;
+    uchar*                     destinationPreviewData;
 
-    PreviewList*                 bwFilters;
-    PreviewList*                 bwFilm;
-    PreviewList*                 bwTone;
+    PreviewList*               bwFilters;
+    PreviewList*               bwFilm;
+    PreviewList*               bwTone;
 
-    KTabWidget*                  tab;
+    KTabWidget*                tab;
 
-    KDcrawIface::RIntNumInput*   cInput;
-    KDcrawIface::RIntNumInput*   strengthInput;
+    KDcrawIface::RIntNumInput* cInput;
+    KDcrawIface::RIntNumInput* strengthInput;
 
-    ImageGuideWidget*            previewWidget;
+    ImageGuideWidget*          previewWidget;
 
-    CurvesBox*                   curvesBox;
+    CurvesBox*                 curvesBox;
 
-    EditorToolSettings*          gboxSettings;
+    EditorToolSettings*        gboxSettings;
 
-    DImg*                        originalImage;
+    DImg*                      originalImage;
 };
 
 // -----------------------------------------------------------------------------------
@@ -449,7 +447,10 @@ BWSepiaTool::BWSepiaTool(QObject* parent)
 
 BWSepiaTool::~BWSepiaTool()
 {
-    delete [] d->destinationPreviewData;
+    if (d->destinationPreviewData)
+       delete [] d->destinationPreviewData;
+
+    delete d;
 }
 
 void BWSepiaTool::slotInit()

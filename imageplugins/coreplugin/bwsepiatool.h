@@ -54,13 +54,11 @@ public:
         ToneTab,
         LuminosityTab
     };
-    
+
 public:
 
     BWSepiaTool(QObject* parent);
     ~BWSepiaTool();
-
-    friend class PreviewPixmapFactory;
 
 private:
 
