@@ -32,14 +32,43 @@
 
 namespace Digikam
 {
+  
+class DIGIKAM_EXPORT InfraredContainer
+{
+
+public:
+
+    InfraredContainer()
+    {
+        redGain     = 0.4;
+        greenGain   = 2.1;
+        blueGain    = -0.8;
+        sensibility = 200;
+    };
+
+    ~InfraredContainer(){};
+
+public:
+
+    // Sensibility: 200..2600 ISO
+    int    sensibility;
+
+    double redGain;
+    double greenGain;
+    double blueGain;
+};
+
+// ---------------------------------------------------------------------------
 
 class DIGIKAM_EXPORT InfraredFilter : public DImgThreadedFilter
 {
 
 public:
 
-    explicit InfraredFilter(DImg* orgImage, QObject* parent=0, int sensibility=200);
-    InfraredFilter(uchar* bits, uint width, uint height, bool sixteenBits, int sensibility=200);
+    explicit InfraredFilter(DImg* orgImage, QObject* parent=0, 
+                            const InfraredContainer& settings=InfraredContainer());
+    InfraredFilter(uchar* bits, uint width, uint height, bool sixteenBits, 
+                   const InfraredContainer& settings=InfraredContainer());
     ~InfraredFilter(){};
 
 private:
@@ -51,7 +80,7 @@ private:
 
 private:
 
-    int m_sensibility;
+    InfraredContainer m_settings;
 };
 
 }  // namespace Digikam

@@ -148,6 +148,7 @@ private:
     void blackAndWhiteConversion(int type);
     void blackAndWhiteConversion(uchar* data, int w, int h, bool sb, int type);
     void applyChannelMixer(uchar* data, int w, int h, bool sb);
+    void applyInfraredFilter(uchar* data, int w, int h, bool sb, int sensibility);
 
 private:
 

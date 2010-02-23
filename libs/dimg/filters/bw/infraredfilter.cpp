@@ -47,18 +47,18 @@
 namespace Digikam
 {
 
-InfraredFilter::InfraredFilter(DImg* orgImage, QObject* parent, int sensibility)
+InfraredFilter::InfraredFilter(DImg* orgImage, QObject* parent, const InfraredContainer& settings)
               : DImgThreadedFilter(orgImage, parent, "Infrared")
 {
-    m_sensibility = sensibility;
+    m_settings = settings;
     initFilter();
 }
 
-InfraredFilter::InfraredFilter(uchar* bits, uint width, uint height, bool sixteenBits, int sensibility)
+InfraredFilter::InfraredFilter(uchar* bits, uint width, uint height, bool sixteenBits, const InfraredContainer& settings)
               : DImgThreadedFilter()
 {
-    m_sensibility = sensibility;
-    m_orgImage    = DImg(width, height, sixteenBits, true, bits, true);
+    m_settings = settings;
+    m_orgImage = DImg(width, height, sixteenBits, true, bits, true);
     initFilter();
     startFilterDirectly();
     memcpy(bits, m_destImage.bits(), m_destImage.numBytes());
@@ -74,10 +74,6 @@ http://www.pauck.de/marco/photo/infrared/comparison_of_films/comparison_of_films
 
 void InfraredFilter::filterImage()
 {
-    // Sensibility: 200..2600
-
-    if (m_sensibility <= 0) return;
-
     int Width       = m_orgImage.width();
     int Height      = m_orgImage.height();
     int bytesDepth  = m_orgImage.bytesDepth();
@@ -94,10 +90,7 @@ void InfraredFilter::filterImage()
     // This film have a sensibility escursion from 200 to 800 ISO.
     // Over 800 ISO, we reproduce The Kodak HIE high speed infrared film.
 
-    int    blurRadius = (int)((m_sensibility / 200.0) + 1.0);   // Gaussian blur infrared highlight effect
-                                                                // [2 to 5].
-    double greenBoost = 2.1 - (m_sensibility / 2000.0);         // Infrared green color boost [1.7 to 2.0].
-
+    int    blurRadius = (int)((m_settings.sensibility / 200.0) + 1.0);   // Gaussian blur infrared highlight effect [2 to 5].
     int    offset, progress;
 
     uchar*      pBWBits = 0;                  // Black and White conversion.
@@ -122,9 +115,9 @@ void InfraredFilter::filterImage()
 
     MixerContainer settings;
     settings.bMonochrome    = true;
-    settings.blackRedGain   = 0.4;
-    settings.blackGreenGain = greenBoost;
-    settings.blackBlueGain  = -0.8;
+    settings.blackRedGain   = m_settings.redGain;
+    settings.blackGreenGain = m_settings.greenGain - (m_settings.sensibility / 2000.0);   // Infrared green color boost [1.7 to 2.0].
+    settings.blackBlueGain  = m_settings.blueGain;
     MixerFilter mixer(pBWBits, Width, Height, sixteenBit, settings);
 
     postProgress( 30 );

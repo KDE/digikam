@@ -194,7 +194,7 @@ void BWSepiaFilter::blackAndWhiteConversion(uchar* data, int w, int h, bool sb, 
     int mul = sb ? 255 : 1;
 
     TonalityContainer toneSettings;
-
+    
     switch (type)
     {
         case BWSepiaContainer::BWNoFilter:
@@ -395,19 +395,28 @@ void BWSepiaFilter::blackAndWhiteConversion(uchar* data, int w, int h, bool sb, 
 
         case BWSepiaContainer::BWIlfordSFX200:
         {
-            InfraredFilter infra(data, w, h, sb, 200);
+            d->redMult   = 0.4;
+            d->greenMult = 2.1;
+            d->blueMult  = -0.8;
+            applyInfraredFilter(data, w, h, sb, 200);
             break;
         }
 
         case BWSepiaContainer::BWIlfordSFX400:
         {
-            InfraredFilter infra(data, w, h, sb, 400);
+            d->redMult   = 0.4;
+            d->greenMult = 2.1;
+            d->blueMult  = -0.8;
+            applyInfraredFilter(data, w, h, sb, 400);
             break;
         }
 
         case BWSepiaContainer::BWIlfordSFX800:
         {
-            InfraredFilter infra(data, w, h, sb, 800);
+            d->redMult   = 0.4;
+            d->greenMult = 2.1;
+            d->blueMult  = -0.8;
+            applyInfraredFilter(data, w, h, sb, 800);
             break;
         }
 
@@ -477,6 +486,16 @@ void BWSepiaFilter::applyChannelMixer(uchar* data, int w, int h, bool sb)
     settings.blackGreenGain = d->greenMult + d->greenMult*d->greenAttn;
     settings.blackBlueGain  = d->blueMult  + d->blueMult*d->blueAttn;
     MixerFilter mixer(data, w, h, sb, settings);
+}
+
+void BWSepiaFilter::applyInfraredFilter(uchar* data, int w, int h, bool sb, int sensibility)
+{
+    InfraredContainer settings;
+    settings.sensibility = sensibility;
+    settings.redGain     = d->redMult   + d->redMult*d->redAttn;
+    settings.greenGain   = d->greenMult + d->greenMult*d->greenAttn;
+    settings.blueGain    = d->blueMult  + d->blueMult*d->blueAttn;
+    InfraredFilter infra(data, w, h, sb, settings);
 }
 
 }  // namespace Digikam
