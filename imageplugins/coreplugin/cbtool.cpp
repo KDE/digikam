@@ -60,7 +60,6 @@
 #include "imageregionwidget.h"
 
 using namespace KDcrawIface;
-using namespace Digikam;
 
 namespace DigikamImagesPluginCore
 {
@@ -171,7 +170,7 @@ void CBTool::prepareEffect()
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 
     DImg preview = d->previewWidget->getOriginalRegionImage(true);
-    setFilter(dynamic_cast<DImgThreadedFilter*>(new CBFilter(&preview, this, settings)));
+    setFilter(new CBFilter(&preview, this, settings));
 }
 
 void CBTool::putPreviewData()
@@ -199,7 +198,7 @@ void CBTool::prepareFinal()
     CBContainer settings = d->cbSettings->settings();
 
     ImageIface iface(0, 0);
-    setFilter(dynamic_cast<DImgThreadedFilter*>(new CBFilter(iface.getOriginalImg(), this, settings)));
+    setFilter(new CBFilter(iface.getOriginalImg(), this, settings));
 }
 
 void CBTool::putFinalData()
@@ -216,4 +215,3 @@ void CBTool::renderingFinished()
 }
 
 }  // namespace DigikamImagesPluginCore
-

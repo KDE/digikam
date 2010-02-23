@@ -173,7 +173,7 @@ void HSLTool::prepareEffect()
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 
     DImg preview = d->previewWidget->getOriginalRegionImage(true);
-    setFilter(dynamic_cast<DImgThreadedFilter*>(new HSLFilter(&preview, this, settings)));
+    setFilter(new HSLFilter(&preview, this, settings));
 }
 
 void HSLTool::putPreviewData()
@@ -201,7 +201,7 @@ void HSLTool::prepareFinal()
     HSLContainer settings = d->hslSettings->settings();
 
     ImageIface iface(0, 0);
-    setFilter(dynamic_cast<DImgThreadedFilter*>(new HSLFilter(iface.getOriginalImg(), this, settings)));
+    setFilter(new HSLFilter(iface.getOriginalImg(), this, settings));
 }
 
 void HSLTool::putFinalData()
@@ -218,4 +218,3 @@ void HSLTool::renderingFinished()
 }
 
 }  // namespace DigikamImagesPluginCore
-

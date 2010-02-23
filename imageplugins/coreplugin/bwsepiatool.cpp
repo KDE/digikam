@@ -57,7 +57,7 @@
 #include "histogramwidget.h"
 #include "histogrambox.h"
 #include "imageiface.h"
-#include "imageguidewidget.h"
+#include "imageregionwidget.h"
 #include "bwsepiafilter.h"
 #include "previewlist.h"
 
@@ -118,7 +118,7 @@ public:
     KDcrawIface::RIntNumInput* cInput;
     KDcrawIface::RIntNumInput* strengthInput;
 
-    ImageGuideWidget*          previewWidget;
+    ImageRegionWidget*         previewWidget;
 
     CurvesBox*                 curvesBox;
 
@@ -130,7 +130,7 @@ public:
 // -----------------------------------------------------------------------------------
 
 BWSepiaTool::BWSepiaTool(QObject* parent)
-           : EditorTool(parent), d(new BWSepiaToolPriv)
+           : EditorToolThreaded(parent), d(new BWSepiaToolPriv)
 {
     setObjectName("convertbw");
     setToolName(i18n("Black && White"));
@@ -139,20 +139,20 @@ BWSepiaTool::BWSepiaTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->previewWidget = new ImageGuideWidget;
+    d->previewWidget = new ImageRegionWidget;
     setToolView(d->previewWidget);
     setPreviewModeMask(PreviewToolBar::AllPreviewModes);
 
     // -------------------------------------------------------------
 
     d->gboxSettings = new EditorToolSettings;
+    d->gboxSettings->setTools(EditorToolSettings::Histogram);
     d->gboxSettings->setButtons(EditorToolSettings::Default|
+                                EditorToolSettings::Ok|
+                                EditorToolSettings::Cancel|
                                 EditorToolSettings::Load|
                                 EditorToolSettings::SaveAs|
-                                EditorToolSettings::Ok|
-                                EditorToolSettings::Cancel);
-
-    d->gboxSettings->setTools(EditorToolSettings::Histogram);
+                                EditorToolSettings::Try);
 
     QGridLayout* gridSettings = new QGridLayout(d->gboxSettings->plainPage());
 
@@ -414,12 +414,6 @@ BWSepiaTool::BWSepiaTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    connect(d->previewWidget, SIGNAL(spotPositionChangedFromOriginal(const Digikam::DColor&, const QPoint&)),
-            this, SLOT(slotSpotColorChanged(const Digikam::DColor&)));
-
-    connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget(const Digikam::DColor&, const QPoint& )),
-            this, SLOT(slotColorSelectedFromTarget(const Digikam::DColor&)));
-
     connect(d->bwFilters, SIGNAL(itemSelectionChanged()),
             this, SLOT(slotFilterSelected()));
 
@@ -455,7 +449,7 @@ BWSepiaTool::~BWSepiaTool()
 
 void BWSepiaTool::slotInit()
 {
-    EditorTool::slotInit();
+    EditorToolThreaded::slotInit();
     d->bwFilters->startFilters();
     d->bwFilm->startFilters();
     d->bwTone->startFilters();
@@ -477,23 +471,14 @@ void BWSepiaTool::slotScaleChanged()
     d->curvesBox->setScale(d->gboxSettings->histogramBox()->scale());
 }
 
-void BWSepiaTool::slotSpotColorChanged(const DColor& color)
-{
-    d->curvesBox->setCurveGuide(color);
-}
-
-void BWSepiaTool::slotColorSelectedFromTarget(const DColor& color)
-{
-    d->gboxSettings->histogramBox()->histogram()->setHistogramGuideByColor(color);
-}
-
 void BWSepiaTool::blockWidgetSignals(bool b)
 {
     d->bwFilm->blockSignals(b);
     d->bwFilters->blockSignals(b);
     d->bwTone->blockSignals(b);
-    d->cInput->blockSignals(b);
     d->strengthInput->blockSignals(b);
+    d->curvesBox->blockSignals(b);
+    d->cInput->blockSignals(b);
 }
 
 void BWSepiaTool::readSettings()
@@ -557,68 +542,75 @@ void BWSepiaTool::slotResetSettings()
     blockWidgetSignals(false);
 
     d->gboxSettings->histogramBox()->histogram()->reset();
-    d->bwFilters->update();
-    d->bwTone->update();
 
     slotEffect();
 }
 
-void BWSepiaTool::slotEffect()
+void BWSepiaTool::prepareEffect()
 {
     kapp->setOverrideCursor(Qt::WaitCursor);
+    d->gboxSettings->setEnabled(false);
+    toolView()->setEnabled(false);
+
+    BWSepiaContainer settings;
+    settings.filmType        = d->bwFilm->currentId();
+    settings.filterType      = d->bwFilters->currentId();
+    settings.toneType        = d->bwTone->currentId();
+    settings.bcgPrm.contrast = ((double)(d->cInput->value()/100.0) + 1.00);
+    settings.strength        = 1.0 + ((double)d->strengthInput->value() - 1.0) * (1.0 / 3.0);
+    settings.curves->fillFromOtherCurvers(d->curvesBox->curves());
 
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 
-    delete [] d->destinationPreviewData;
+    DImg preview = d->previewWidget->getOriginalRegionImage(true);
+    setFilter(new BWSepiaFilter(&preview, this, settings));
+}
 
-    ImageIface* iface         = d->previewWidget->imageIface();
-    d->destinationPreviewData = iface->getPreviewImage();
-    int w                     = iface->previewWidth();
-    int h                     = iface->previewHeight();
-    bool sb                   = iface->previewSixteenBit();
-
-    BWSepiaContainer prm;
-    prm.filmType        = d->bwFilm->currentId();
-    prm.filterType      = d->bwFilters->currentId();
-    prm.toneType        = d->bwTone->currentId();
-    prm.bcgPrm.contrast = ((double)(d->cInput->value()/100.0) + 1.00);
-    prm.strength        = 1.0 + ((double)d->strengthInput->value() - 1.0) * (1.0 / 3.0);
-    prm.curves->fillFromOtherCurvers(d->curvesBox->curves());
-    BWSepiaFilter bw(d->destinationPreviewData, w, h, sb, prm);
-    DImg preview        = bw.getTargetImage();
-
-    iface->putPreviewImage(preview.bits());
-    d->previewWidget->updatePreview();
+void BWSepiaTool::putPreviewData()
+{
+    DImg preview = filter()->getTargetImage();
+    d->previewWidget->setPreviewImage(preview);
 
     // Update histogram.
 
-    memcpy(d->destinationPreviewData, preview.bits(), preview.numBytes());
-    d->gboxSettings->histogramBox()->histogram()->updateData(d->destinationPreviewData, w, h, sb, 0, 0, 0, false);
+    if (d->destinationPreviewData)
+       delete [] d->destinationPreviewData;
 
-    kapp->restoreOverrideCursor();
+    d->destinationPreviewData = preview.copyBits();
+    d->gboxSettings->histogramBox()->histogram()->updateData(d->destinationPreviewData,
+                                                             preview.width(), preview.height(), preview.sixteenBit(),
+                                                             0, 0, 0, false);
 }
 
-void BWSepiaTool::finalRendering()
+void BWSepiaTool::prepareFinal()
 {
     kapp->setOverrideCursor(Qt::WaitCursor);
+    d->gboxSettings->setEnabled(false);
+    toolView()->setEnabled(false);
+
+    BWSepiaContainer settings;
+    settings.filmType        = d->bwFilm->currentId();
+    settings.filterType      = d->bwFilters->currentId();
+    settings.toneType        = d->bwTone->currentId();
+    settings.bcgPrm.contrast = ((double)(d->cInput->value()/100.0) + 1.00);
+    settings.strength        = 1.0 + ((double)d->strengthInput->value() - 1.0) * (1.0 / 3.0);
+    settings.curves->fillFromOtherCurvers(d->curvesBox->curves());
+
     ImageIface iface(0, 0);
-    uchar* data = iface.getOriginalImage();
-    int w       = iface.originalWidth();
-    int h       = iface.originalHeight();
-    bool sb     = iface.originalSixteenBit();
+    setFilter(new BWSepiaFilter(iface.getOriginalImg(), this, settings));
+}
 
-    BWSepiaContainer prm;
-    prm.filmType        = d->bwFilm->currentId();
-    prm.filterType      = d->bwFilters->currentId();
-    prm.toneType        = d->bwTone->currentId();
-    prm.bcgPrm.contrast = ((double)(d->cInput->value()/100.0) + 1.00);
-    prm.strength        = 1.0 + ((double)d->strengthInput->value() - 1.0) * (1.0 / 3.0);
-    prm.curves->fillFromOtherCurvers(d->curvesBox->curves());
-    BWSepiaFilter bw(data, w, h, sb, prm);
+void BWSepiaTool::putFinalData()
+{
+    ImageIface iface(0, 0);
+    iface.putOriginalImage(i18n("Convert to Black && White"), filter()->getTargetImage().bits());
+}
 
-    iface.putOriginalImage(i18n("Convert to Black && White"), bw.getTargetImage().bits());
-
+void BWSepiaTool::renderingFinished()
+{
     kapp->restoreOverrideCursor();
+    d->gboxSettings->setEnabled(true);
+    toolView()->setEnabled(true);
 }
 
 //-- Load all settings from file --------------------------------------

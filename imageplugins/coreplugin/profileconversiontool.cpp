@@ -66,22 +66,22 @@ public:
         profilesBox(0),
         previewWidget(0),
         gboxSettings(0)
-    {      
+    {
     }
 
-    const QString         configGroupName;
-    const QString         configProfileEntry;
-    
-    uchar*                destinationPreviewData;
+    const QString        configGroupName;
+    const QString        configProfileEntry;
 
-    IccProfilesSettings*  profilesBox;
+    uchar*               destinationPreviewData;
 
-    ImageRegionWidget*    previewWidget;
-    EditorToolSettings*   gboxSettings;
+    IccProfilesSettings* profilesBox;
 
-    IccProfile            currentProfile;
+    ImageRegionWidget*   previewWidget;
+    EditorToolSettings*  gboxSettings;
 
-    IccTransform          transform;
+    IccProfile           currentProfile;
+
+    IccTransform         transform;
 
 public:
 
@@ -144,7 +144,7 @@ ProfileConversionTool::ProfileConversionTool(QObject* parent)
     grid->setRowStretch(4, 10);
     grid->setMargin(d->gboxSettings->spacingHint());
     grid->setSpacing(d->gboxSettings->spacingHint());
-        
+
     // -------------------------------------------------------------
 
     d->previewWidget = new ImageRegionWidget;
@@ -171,7 +171,7 @@ ProfileConversionTool::~ProfileConversionTool()
 {
     if (d->destinationPreviewData)
        delete [] d->destinationPreviewData;
-      
+
     delete d;
 }
 
@@ -228,7 +228,7 @@ void ProfileConversionTool::putPreviewData()
 {
     DImg preview = filter()->getTargetImage();
     d->previewWidget->setPreviewImage(preview);
-    
+
     // Update histogram.
 
     if (d->destinationPreviewData)

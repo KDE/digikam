@@ -6,7 +6,7 @@
  * Date        : 2004-08-24
  * Description : a plugin to reduce CCD noise.
  *
- * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -55,8 +55,6 @@
 #include "noisereductionsettings.h"
 #include "version.h"
 
-using namespace Digikam;
-
 namespace DigikamImagesPluginCore
 {
 
@@ -98,11 +96,11 @@ NoiseReductionTool::NoiseReductionTool(QObject* parent)
 
     d->nrSettings    = new NoiseReductionSettings(d->gboxSettings->plainPage());
     d->previewWidget = new ImageRegionWidget;
-    
+
     setToolSettings(d->gboxSettings);
     setToolView(d->previewWidget);
     setPreviewModeMask(PreviewToolBar::AllPreviewModes);
-    
+
     init();
 }
 
@@ -146,7 +144,7 @@ void NoiseReductionTool::prepareEffect()
     DImg image              = d->previewWidget->getOriginalRegionImage();
     WaveletsNRContainer prm = d->nrSettings->settings();
 
-    setFilter(dynamic_cast<DImgThreadedFilter*>(new WaveletsNR(&image, this, prm)));
+    setFilter(new WaveletsNR(&image, this, prm));
 }
 
 void NoiseReductionTool::prepareFinal()
@@ -157,7 +155,7 @@ void NoiseReductionTool::prepareFinal()
     WaveletsNRContainer prm = d->nrSettings->settings();
 
     ImageIface iface(0, 0);
-    setFilter(dynamic_cast<DImgThreadedFilter*>(new WaveletsNR(iface.getOriginalImg(), this, prm)));
+    setFilter(new WaveletsNR(iface.getOriginalImg(), this, prm));
 }
 
 void NoiseReductionTool::putPreviewData()

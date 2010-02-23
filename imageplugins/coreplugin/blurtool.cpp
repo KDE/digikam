@@ -6,7 +6,7 @@
  * Date        : 2004-07-09
  * Description : a tool to blur an image
  *
- * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009      by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
@@ -21,7 +21,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "blurtool.moc"
 
@@ -53,7 +52,6 @@
 #include "imageregionwidget.h"
 
 using namespace KDcrawIface;
-using namespace Digikam;
 
 namespace DigikamImagesPluginCore
 {
@@ -161,7 +159,7 @@ void BlurTool::prepareEffect()
     toolView()->setEnabled(false);
 
     DImg img = d->previewWidget->getOriginalRegionImage();
-    setFilter(dynamic_cast<DImgThreadedFilter*>(new DImgGaussianBlur(&img, this, d->radiusInput->value())));
+    setFilter(new DImgGaussianBlur(&img, this, d->radiusInput->value()));
 }
 
 void BlurTool::prepareFinal()
@@ -177,7 +175,7 @@ void BlurTool::prepareFinal()
     bool hasAlpha    = iface.originalHasAlpha();
     DImg orgImage = DImg(w, h, sixteenBit, hasAlpha ,data);
     delete [] data;
-    setFilter(dynamic_cast<DImgThreadedFilter*>(new DImgGaussianBlur(&orgImage, this, d->radiusInput->value())));
+    setFilter(new DImgGaussianBlur(&orgImage, this, d->radiusInput->value()));
 }
 
 void BlurTool::putPreviewData()

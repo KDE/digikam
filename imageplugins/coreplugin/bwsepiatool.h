@@ -29,11 +29,6 @@
 
 #include "editortool.h"
 
-namespace Digikam
-{
-class DColor;
-}
-
 using namespace Digikam;
 
 namespace DigikamImagesPluginCore
@@ -41,7 +36,7 @@ namespace DigikamImagesPluginCore
 
 class BWSepiaToolPriv;
 
-class BWSepiaTool : public EditorTool
+class BWSepiaTool : public EditorToolThreaded
 {
     Q_OBJECT
 
@@ -60,24 +55,28 @@ public:
     BWSepiaTool(QObject* parent);
     ~BWSepiaTool();
 
+private Q_SLOTS:
+
+    void slotInit();
+    void slotSaveAsSettings();
+    void slotLoadSettings();
+    void slotResetSettings();
+
+    void slotFilterSelected();
+    void slotScaleChanged();
+
 private:
 
     void readSettings();
     void writeSettings();
-    void finalRendering();
+    void prepareEffect();
+    void prepareFinal();
+    void abortPreview();
+    void putPreviewData();
+    void putFinalData();
+    void renderingFinished();
+
     void blockWidgetSignals(bool b);
-
-private Q_SLOTS:
-
-    void slotInit();
-    void slotResetSettings();
-    void slotSaveAsSettings();
-    void slotLoadSettings();
-    void slotEffect();
-    void slotScaleChanged();
-    void slotSpotColorChanged(const Digikam::DColor& color);
-    void slotColorSelectedFromTarget(const Digikam::DColor& color);
-    void slotFilterSelected();
 
 private:
 
