@@ -568,18 +568,17 @@ void BWSepiaSettings::loadSettings()
         // TODO cant we use the kconfig mechanisms provided by CurveWidget here?
         QPoint disable = ImageCurves::getDisabledValue();
         QPoint p;
+
         for (int j = 0 ; j < ImageCurves::NUM_POINTS ; ++j)
         {
             p.setX( stream.readLine().toInt() );
             p.setY( stream.readLine().toInt() );
 
-/*FIXME
-            if (d->originalImage->sixteenBit() && p != disable)
+            if (d->curvesBox->curves()->isSixteenBits() && p != disable)
             {
                 p.setX(p.x()*ImageCurves::MULTIPLIER_16BIT);
                 p.setY(p.y()*ImageCurves::MULTIPLIER_16BIT);
             }
-            */
 
             d->curvesBox->curves()->setCurvePoint(LuminosityChannel, j, p);
         }
@@ -620,12 +619,11 @@ void BWSepiaSettings::saveAsSettings()
         for (int j = 0 ; j < ImageCurves::NUM_POINTS ; ++j)
         {
             QPoint p = d->curvesBox->curves()->getCurvePoint(LuminosityChannel, j);
-/*FIXME
-            if (d->originalImage->sixteenBit())
+            if (d->curvesBox->curves()->isSixteenBits())
             {
                 p.setX(p.x()/ImageCurves::MULTIPLIER_16BIT);
                 p.setY(p.y()/ImageCurves::MULTIPLIER_16BIT);
-            }*/
+            }
             stream << p.x() << "\n";
             stream << p.y() << "\n";
         }
