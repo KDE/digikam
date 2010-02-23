@@ -50,7 +50,6 @@ BWConvert::BWConvert(QObject* parent)
     setToolIcon(KIcon(SmallIcon("bwtonal")));
 
     QWidget* box   = new QWidget;
-    m_preview      = DImg();
     m_settingsView = new BWSepiaSettings(box, &m_preview);
     setSettingsWidget(box);
 
@@ -66,22 +65,28 @@ BatchToolSettings BWConvert::defaultSettings()
 {
     BatchToolSettings prm;
     BWSepiaContainer defaultPrm = m_settingsView->defaultSettings();
-/*
-    prm.insert("Brightness", (double)defaultPrm.brightness);
-    prm.insert("Contrast",   (double)defaultPrm.contrast);
-    prm.insert("Gamma",      (double)defaultPrm.gamma);
-*/
+
+    prm.insert("filmType",   (int)defaultPrm.filmType);
+    prm.insert("filterType", (int)defaultPrm.filterType);
+    prm.insert("toneType",   (int)defaultPrm.toneType);
+    prm.insert("contrast",   (double)defaultPrm.bcgPrm.contrast);
+    prm.insert("strength",   (double)defaultPrm.strength);
+    prm.insert("curves",     defaultPrm.curves->getCurvePoints(LuminosityChannel));
+
     return prm;
 }
 
 void BWConvert::slotAssignSettings2Widget()
 {
     BWSepiaContainer prm;
-/*
-    prm.brightness = settings()["Brightness"].toDouble();
-    prm.contrast   = settings()["Contrast"].toDouble();
-    prm.gamma      = settings()["Gamma"].toDouble();
-*/
+
+    prm.filmType        = settings()["filmType"].toInt();
+    prm.filterType      = settings()["filterType"].toInt();
+    prm.toneType        = settings()["toneType"].toInt();
+    prm.bcgPrm.contrast = settings()["contrast"].toDouble();
+    prm.strength        = settings()["strength"].toDouble();
+    prm.curves->setCurvePoints(LuminosityChannel, settings()["curves"].value<QPolygon>());
+
     m_settingsView->setSettings(prm);
 }
 
@@ -89,11 +94,14 @@ void BWConvert::slotSettingsChanged()
 {
     BatchToolSettings prm;
     BWSepiaContainer currentPrm = m_settingsView->settings();
-/*
-    prm.insert("Brightness", (double)currentPrm.brightness);
-    prm.insert("Contrast",   (double)currentPrm.contrast);
-    prm.insert("Gamma",      (double)currentPrm.gamma);
-*/
+
+    prm.insert("filmType",   (int)currentPrm.filmType);
+    prm.insert("filterType", (int)currentPrm.filterType);
+    prm.insert("toneType",   (int)currentPrm.toneType);
+    prm.insert("contrast",   (double)currentPrm.bcgPrm.contrast);
+    prm.insert("strength",   (double)currentPrm.strength);
+    prm.insert("curves",     currentPrm.curves->getCurvePoints(LuminosityChannel));
+
     setSettings(prm);
 }
 
@@ -102,11 +110,14 @@ bool BWConvert::toolOperations()
     if (!loadToDImg()) return false;
 
     BWSepiaContainer prm;
-/*
-    prm.brightness = settings()["Brightness"].toDouble();
-    prm.contrast   = settings()["Contrast"].toDouble();
-    prm.gamma      = settings()["Gamma"].toDouble();
-*/
+
+    prm.filmType        = settings()["filmType"].toInt();
+    prm.filterType      = settings()["filterType"].toInt();
+    prm.toneType        = settings()["toneType"].toInt();
+    prm.bcgPrm.contrast = settings()["contrast"].toDouble();
+    prm.strength        = settings()["strength"].toDouble();
+    prm.curves->setCurvePoints(LuminosityChannel, settings()["curves"].value<QPolygon>());
+
     BWSepiaFilter bw(&image(), 0L, prm);
     bw.startFilterDirectly();
     image().putImageData(bw.getTargetImage().bits());
