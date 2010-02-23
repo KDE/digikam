@@ -49,7 +49,7 @@ class DIGIKAM_EXPORT BWSepiaSettings : public QWidget
 
 public:
 
-    BWSepiaSettings(QWidget* parent, DImg& thumbImage);
+    BWSepiaSettings(QWidget* parent, DImg* img);
     ~BWSepiaSettings();
 
     BWSepiaContainer defaultSettings() const;
@@ -63,7 +63,7 @@ public:
 
     void loadSettings();
     void saveAsSettings();
-    
+
     void startPreviewFilters();
 
 Q_SIGNALS:
@@ -77,7 +77,7 @@ private Q_SLOTS:
 private:
 
     void blockWidgetSignals(bool b);
-  
+
 private:
 
     BWSepiaSettingsPriv* const d;

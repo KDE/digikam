@@ -64,7 +64,7 @@ namespace Digikam
 
 class BWSepiaSettingsPriv
 {
-  
+
 public:
 
     enum SettingsTab
@@ -74,7 +74,7 @@ public:
         ToneTab,
         LuminosityTab
     };
-  
+
 public:
 
     BWSepiaSettingsPriv() :
@@ -124,10 +124,12 @@ public:
     CurvesBox*                 curvesBox;
 };
 
-BWSepiaSettings::BWSepiaSettings(QWidget* parent, DImg& thumbImage)
+BWSepiaSettings::BWSepiaSettings(QWidget* parent, DImg* img)
                : QWidget(parent),
                  d(new BWSepiaSettingsPriv)
 {
+    DImg thumbImage = img->smoothScale(128, 128, Qt::KeepAspectRatio);
+
     QGridLayout* grid = new QGridLayout(parent);
 
     d->tab = new KTabWidget(parent);
@@ -343,9 +345,8 @@ BWSepiaSettings::BWSepiaSettings(QWidget* parent, DImg& thumbImage)
     // -------------------------------------------------------------
 
     QWidget* curveBox = new QWidget();
-    // FIXME
-    d->curvesBox      = new CurvesBox(256, 256, thumbImage.bits(), thumbImage.width(),
-                                      thumbImage.height(), thumbImage.sixteenBit());
+    d->curvesBox      = new CurvesBox(256, 256, img->bits(), img->width(),
+                                      img->height(), img->sixteenBit());
     d->curvesBox->enableCurveTypes(true);
     d->curvesBox->enableResetButton(true);
     d->curvesBox->setWhatsThis( i18n("This is the curve adjustment of the image luminosity"));
@@ -446,19 +447,19 @@ BWSepiaContainer BWSepiaSettings::settings() const
     prm.bcgPrm.contrast = ((double)(d->cInput->value()/100.0) + 1.00);
     prm.strength        = 1.0 + ((double)d->strengthInput->value() - 1.0) * (1.0 / 3.0);
     prm.curves->fillFromOtherCurvers(d->curvesBox->curves());
-    
+
     return prm;
 }
 
 void BWSepiaSettings::setSettings(const BWSepiaContainer& settings)
 {
     blockWidgetSignals(true);
-    
+
     d->bwFilm->setCurrentId(settings.filmType);
     d->bwFilters->setCurrentId(settings.filterType);
     d->bwTone->setCurrentId(settings.toneType);
     d->cInput->setValue((settings.bcgPrm.contrast - 1.00) * 100.0);
-    d->strengthInput->setValue((settings.strength-1.0) / (1.0 / 3.0) + 1.0); 
+    d->strengthInput->setValue(1.0 + (settings.strength-1.0) * 3.0);
     d->curvesBox->curves()->fillFromOtherCurvers(settings.curves);
 
     slotFilterSelected();
@@ -488,10 +489,10 @@ void BWSepiaSettings::resetToDefault()
 BWSepiaContainer BWSepiaSettings::defaultSettings() const
 {
     BWSepiaContainer prm;
-    
+
     prm.bcgPrm.contrast = ((double)(d->cInput->defaultValue()/100.0) + 1.00);
     prm.strength        = 1.0 + ((double)d->strengthInput->defaultValue() - 1.0) * (1.0 / 3.0);
-    
+
     return prm;
 }
 
@@ -499,9 +500,9 @@ void BWSepiaSettings::readSettings(KConfigGroup& group)
 {
     BWSepiaContainer prm;
     BWSepiaContainer defaultPrm = defaultSettings();
-    
+
     d->tab->setCurrentIndex(group.readEntry(d->configSettingsTabEntry, 0));
-   
+
     prm.filmType        = group.readEntry(d->configBWFilmEntry,             defaultPrm.filmType);
     prm.filterType      = group.readEntry(d->configBWFilterEntry,           defaultPrm.filterType);
     prm.toneType        = group.readEntry(d->configBWToneEntry,             defaultPrm.toneType);
@@ -510,7 +511,7 @@ void BWSepiaSettings::readSettings(KConfigGroup& group)
 
     d->curvesBox->readCurveSettings(group, d->configCurveEntry);
     prm.curves->fillFromOtherCurvers(d->curvesBox->curves());
-    
+
     setSettings(prm);
 }
 
