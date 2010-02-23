@@ -172,7 +172,7 @@ void BCGTool::slotResetSettings()
 
 void BCGTool::prepareEffect()
 {
-    QApplication::setOverrideCursor(Qt::WaitCursor);
+    kapp->setOverrideCursor(Qt::WaitCursor);
     d->bcgSettings->setEnabled(false);
     toolView()->setEnabled(false);
 
@@ -181,7 +181,7 @@ void BCGTool::prepareEffect()
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 
     DImg preview = d->previewWidget->getOriginalRegionImage(true);
-    setFilter(dynamic_cast<DImgThreadedFilter*>(new BCGFilter(&preview, this, settings)));
+    setFilter(new BCGFilter(&preview, this, settings));
 }
 
 void BCGTool::putPreviewData()
@@ -202,14 +202,14 @@ void BCGTool::putPreviewData()
 
 void BCGTool::prepareFinal()
 {
-    QApplication::setOverrideCursor(Qt::WaitCursor);
+    kapp->setOverrideCursor(Qt::WaitCursor);
     d->bcgSettings->setEnabled(false);
     toolView()->setEnabled(false);
 
     BCGContainer settings = d->bcgSettings->settings();
 
     ImageIface iface(0, 0);
-    setFilter(dynamic_cast<DImgThreadedFilter*>(new BCGFilter(iface.getOriginalImg(), this, settings)));
+    setFilter(new BCGFilter(iface.getOriginalImg(), this, settings));
 }
 
 void BCGTool::putFinalData()
@@ -220,7 +220,7 @@ void BCGTool::putFinalData()
 
 void BCGTool::renderingFinished()
 {
-    QApplication::restoreOverrideCursor();
+    kapp->restoreOverrideCursor();
     d->bcgSettings->setEnabled(true);
     toolView()->setEnabled(true);
 }
