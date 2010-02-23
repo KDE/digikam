@@ -28,8 +28,8 @@
 
 #include <QFile>
 #include <QGridLayout>
+#include <QVBoxLayout>
 #include <QHash>
-#include <QListWidget>
 #include <QPixmap>
 #include <QTextStream>
 
@@ -44,7 +44,6 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <ktabwidget.h>
-#include <kvbox.h>
 
 // LibKDcraw includes
 
@@ -62,110 +61,16 @@
 #include "imageiface.h"
 #include "imageguidewidget.h"
 #include "bwsepiafilter.h"
+#include "previewlist.h"
 
 using namespace KDcrawIface;
 
 namespace DigikamImagesPluginCore
 {
 
-enum SettingsTab
-{
-    FilmTab=0,
-    BWFiltersTab,
-    ToneTab,
-    LuminosityTab
-};
-
-// --------------------------------------------------------
-
-class PreviewPixmapFactory : public QObject
-{
-public:
-
-    PreviewPixmapFactory(BWSepiaTool* bwSepia, const QSize& previewSize);
-    ~PreviewPixmapFactory();
-
-    void invalidate() { m_previewPixmapMap.clear(); }
-
-    const QSize previewSize() { return m_previewSize; };
-    const QPixmap* pixmap(int id);
-
-private:
-
-    QPixmap makePixmap(int id);
-
-private:
-
-    QHash<int, QPixmap*> m_previewPixmapMap;
-    QSize                m_previewSize;
-    BWSepiaTool*         m_bwSepia;
-};
-
-PreviewPixmapFactory::PreviewPixmapFactory(BWSepiaTool* bwSepia, const QSize& previewSize)
-                    : QObject(bwSepia)
-{
-    m_bwSepia     = bwSepia;
-    m_previewSize = previewSize;
-}
-
-PreviewPixmapFactory::~PreviewPixmapFactory()
-{
-    // Delete all hash items
-    foreach (QPixmap* pm, m_previewPixmapMap.values()) // krazy:exclude=foreach
-    {
-        delete pm;
-    }
-    m_previewPixmapMap.clear();
-}
-
-const QPixmap* PreviewPixmapFactory::pixmap(int id)
-{
-    if (m_previewPixmapMap.find(id) == m_previewPixmapMap.end())
-    {
-        QPixmap pix = makePixmap(id);
-        m_previewPixmapMap.insert(id, new QPixmap(pix));
-    }
-
-    QPixmap* res = m_previewPixmapMap[id];
-
-    return res;
-}
-
-QPixmap PreviewPixmapFactory::makePixmap(int id)
-{
-    return m_bwSepia->getThumbnailForEffect(id);
-}
-
-// -----------------------------------------------------------------------------------
-
-class BWPreviewItem : public QListWidgetItem
-{
-
-public:
-
-    BWPreviewItem(QListWidget* parent, const QString& text,
-                  PreviewPixmapFactory* factory, int id)
-        : QListWidgetItem(QIcon(QPixmap(factory->previewSize())), text, parent)
-    {
-          m_previewPixmapFactory = factory;
-          m_id                   = id;
-    };
-
-    void updatePreview()
-    {
-          setIcon(QIcon(*m_previewPixmapFactory->pixmap(m_id)));
-    }
-
-private:
-
-    int                   m_id;
-    PreviewPixmapFactory* m_previewPixmapFactory;
-};
-
-// -----------------------------------------------------------------------------------
-
 class BWSepiaToolPriv
 {
+
 public:
 
     BWSepiaToolPriv() :
@@ -190,8 +95,7 @@ public:
         previewWidget(0),
         curvesBox(0),
         gboxSettings(0),
-        originalImage(0),
-        previewPixmapFactory(0)
+        originalImage(0)
         {}
 
     const QString                configGroupName;
@@ -207,9 +111,9 @@ public:
 
     uchar*                       destinationPreviewData;
 
-    QListWidget*                 bwFilters;
-    QListWidget*                 bwFilm;
-    QListWidget*                 bwTone;
+    PreviewList*                 bwFilters;
+    PreviewList*                 bwFilm;
+    PreviewList*                 bwTone;
 
     KTabWidget*                  tab;
 
@@ -223,9 +127,6 @@ public:
     EditorToolSettings*          gboxSettings;
 
     DImg*                        originalImage;
-    DImg                         thumbnailImage;
-
-    PreviewPixmapFactory*        previewPixmapFactory;
 };
 
 // -----------------------------------------------------------------------------------
@@ -237,12 +138,6 @@ BWSepiaTool::BWSepiaTool(QObject* parent)
     setToolName(i18n("Black && White"));
     setToolIcon(SmallIcon("bwtonal"));
     setToolHelp("blackandwhitetool.anchor");
-
-    d->destinationPreviewData = 0;
-
-    ImageIface iface(0, 0);
-    d->originalImage  = iface.getOriginalImg();
-    d->thumbnailImage = d->originalImage->smoothScale(128, 128, Qt::KeepAspectRatio);
 
     // -------------------------------------------------------------
 
@@ -265,218 +160,218 @@ BWSepiaTool::BWSepiaTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->tab    = new KTabWidget(d->gboxSettings->plainPage());
+    d->tab = new KTabWidget(d->gboxSettings->plainPage());
 
-    d->bwFilm = new QListWidget(d->tab);
-    d->bwFilm->setIconSize(d->thumbnailImage.size());
-    d->previewPixmapFactory = new PreviewPixmapFactory(this, d->thumbnailImage.size());
+    ImageIface iface(0, 0);
+    PreviewListItem* item = 0;
+    d->originalImage      = iface.getOriginalImg();
+    DImg thumbImage       = d->originalImage->smoothScale(128, 128, Qt::KeepAspectRatio);
+    d->bwFilm             = new PreviewList(parent);
+    int type              = BWSepiaContainer::BWGeneric;
 
-    int type            = BWSepiaContainer::BWGeneric;
-    BWPreviewItem* item = 0;
-
-    item = new BWPreviewItem(d->bwFilm, i18nc("generic black and white film", "Generic"), d->previewPixmapFactory, type);
-    item->setWhatsThis(i18n("<b>Generic</b>:"
-                            "<p>Simulate a generic black and white film.</p>"));
-
-    ++type;
-    item = new BWPreviewItem(d->bwFilm, i18n("Agfa 200X"), d->previewPixmapFactory, type);
-    item->setWhatsThis(i18n("<b>Agfa 200X</b>:"
-                            "<p>Simulate the Agfa 200X black and white film at 200 ISO.</p>"));
+    item = d->bwFilm->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18nc("generic black and white film", "Generic"), type);
+    item->setWhatsThis(0, i18n("<b>Generic</b>:"
+                               "<p>Simulate a generic black and white film.</p>"));
 
     ++type;
-    item = new BWPreviewItem(d->bwFilm, i18n("Agfa Pan 25"), d->previewPixmapFactory, type);
-    item->setWhatsThis(i18n("<b>Agfa Pan 25</b>:"
-                            "<p>Simulate the Agfa Pan black and white film at 25 ISO.</p>"));
+    item = d->bwFilm->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Agfa 200X"), type);
+    item->setWhatsThis(0, i18n("<b>Agfa 200X</b>:"
+                               "<p>Simulate the Agfa 200X black and white film at 200 ISO.</p>"));
 
     ++type;
-    item = new BWPreviewItem(d->bwFilm, i18n("Agfa Pan 100"), d->previewPixmapFactory, type);
-    item->setWhatsThis(i18n("<b>Agfa Pan 100</b>:"
-                            "<p>Simulate the Agfa Pan black and white film at 100 ISO.</p>"));
+    item = d->bwFilm->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Agfa Pan 25"), type);
+    item->setWhatsThis(0, i18n("<b>Agfa Pan 25</b>:"
+                               "<p>Simulate the Agfa Pan black and white film at 25 ISO.</p>"));
 
     ++type;
-    item = new BWPreviewItem(d->bwFilm, i18n("Agfa Pan 400"), d->previewPixmapFactory, type);
-    item->setWhatsThis(i18n("<b>Agfa Pan 400</b>:"
-                            "<p>Simulate the Agfa Pan black and white film at 400 ISO.</p>"));
+    item = d->bwFilm->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Agfa Pan 100"), type);
+    item->setWhatsThis(0, i18n("<b>Agfa Pan 100</b>:"
+                               "<p>Simulate the Agfa Pan black and white film at 100 ISO.</p>"));
 
     ++type;
-    item = new BWPreviewItem(d->bwFilm, i18n("Ilford Delta 100"), d->previewPixmapFactory, type);
-    item->setWhatsThis(i18n("<b>Ilford Delta 100</b>:"
-                            "<p>Simulate the Ilford Delta black and white film at 100 ISO.</p>"));
+    item = d->bwFilm->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Agfa Pan 400"), type);
+    item->setWhatsThis(0, i18n("<b>Agfa Pan 400</b>:"
+                               "<p>Simulate the Agfa Pan black and white film at 400 ISO.</p>"));
 
     ++type;
-    item = new BWPreviewItem(d->bwFilm, i18n("Ilford Delta 400"), d->previewPixmapFactory, type);
-    item->setWhatsThis(i18n("<b>Ilford Delta 400</b>:"
-                            "<p>Simulate the Ilford Delta black and white film at 400 ISO.</p>"));
+    item = d->bwFilm->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Ilford Delta 100"), type);
+    item->setWhatsThis(0, i18n("<b>Ilford Delta 100</b>:"
+                               "<p>Simulate the Ilford Delta black and white film at 100 ISO.</p>"));
 
     ++type;
-    item = new BWPreviewItem(d->bwFilm, i18n("Ilford Delta 400 Pro 3200"), d->previewPixmapFactory, type);
-    item->setWhatsThis(i18n("<b>Ilford Delta 400 Pro 3200</b>:"
-                            "<p>Simulate the Ilford Delta 400 Pro black and white film at 3200 ISO.</p>"));
+    item = d->bwFilm->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Ilford Delta 400"), type);
+    item->setWhatsThis(0, i18n("<b>Ilford Delta 400</b>:"
+                               "<p>Simulate the Ilford Delta black and white film at 400 ISO.</p>"));
 
     ++type;
-    item = new BWPreviewItem(d->bwFilm, i18n("Ilford FP4 Plus"), d->previewPixmapFactory, type);
-    item->setWhatsThis(i18n("<b>Ilford FP4 Plus</b>:"
-                            "<p>Simulate the Ilford FP4 Plus black and white film at 125 ISO.</p>"));
+    item = d->bwFilm->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Ilford Delta 400 Pro 3200"), type);
+    item->setWhatsThis(0, i18n("<b>Ilford Delta 400 Pro 3200</b>:"
+                               "<p>Simulate the Ilford Delta 400 Pro black and white film at 3200 ISO.</p>"));
 
     ++type;
-    item = new BWPreviewItem(d->bwFilm, i18n("Ilford HP5 Plus"), d->previewPixmapFactory, type);
-    item->setWhatsThis(i18n("<b>Ilford HP5 Plus</b>:"
-                            "<p>Simulate the Ilford HP5 Plus black and white film at 400 ISO.</p>"));
+    item = d->bwFilm->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Ilford FP4 Plus"), type);
+    item->setWhatsThis(0, i18n("<b>Ilford FP4 Plus</b>:"
+                               "<p>Simulate the Ilford FP4 Plus black and white film at 125 ISO.</p>"));
 
     ++type;
-    item = new BWPreviewItem(d->bwFilm, i18n("Ilford PanF Plus"), d->previewPixmapFactory, type);
-    item->setWhatsThis(i18n("<b>Ilford PanF Plus</b>:"
-                            "<p>Simulate the Ilford PanF Plus black and white film at 50 ISO.</p>"));
+    item = d->bwFilm->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Ilford HP5 Plus"), type);
+    item->setWhatsThis(0, i18n("<b>Ilford HP5 Plus</b>:"
+                               "<p>Simulate the Ilford HP5 Plus black and white film at 400 ISO.</p>"));
 
     ++type;
-    item = new BWPreviewItem(d->bwFilm, i18n("Ilford XP2 Super"), d->previewPixmapFactory, type);
-    item->setWhatsThis(i18n("<b>Ilford XP2 Super</b>:"
-                            "<p>Simulate the Ilford XP2 Super black and white film at 400 ISO.</p>"));
+    item = d->bwFilm->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Ilford PanF Plus"), type);
+    item->setWhatsThis(0, i18n("<b>Ilford PanF Plus</b>:"
+                               "<p>Simulate the Ilford PanF Plus black and white film at 50 ISO.</p>"));
 
     ++type;
-    item = new BWPreviewItem(d->bwFilm, i18n("Kodak Tmax 100"), d->previewPixmapFactory, type);
-    item->setWhatsThis(i18n("<b>Kodak Tmax 100</b>:"
-                            "<p>Simulate the Kodak Tmax black and white film at 100 ISO.</p>"));
+    item = d->bwFilm->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Ilford XP2 Super"), type);
+    item->setWhatsThis(0, i18n("<b>Ilford XP2 Super</b>:"
+                               "<p>Simulate the Ilford XP2 Super black and white film at 400 ISO.</p>"));
 
     ++type;
-    item = new BWPreviewItem(d->bwFilm, i18n("Kodak Tmax 400"), d->previewPixmapFactory, type);
-    item->setWhatsThis(i18n("<b>Kodak Tmax 400</b>:"
-                            "<p>Simulate the Kodak Tmax black and white film at 400 ISO.</p>"));
+    item = d->bwFilm->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Kodak Tmax 100"), type);
+    item->setWhatsThis(0, i18n("<b>Kodak Tmax 100</b>:"
+                               "<p>Simulate the Kodak Tmax black and white film at 100 ISO.</p>"));
 
     ++type;
-    item = new BWPreviewItem(d->bwFilm, i18n("Kodak TriX"), d->previewPixmapFactory, type);
-    item->setWhatsThis(i18n("<b>Kodak TriX</b>:"
-                            "<p>Simulate the Kodak TriX black and white film at 400 ISO.</p>"));
+    item = d->bwFilm->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Kodak Tmax 400"), type);
+    item->setWhatsThis(0, i18n("<b>Kodak Tmax 400</b>:"
+                               "<p>Simulate the Kodak Tmax black and white film at 400 ISO.</p>"));
+
+    ++type;
+    item = d->bwFilm->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Kodak TriX"), type);
+    item->setWhatsThis(0, i18n("<b>Kodak TriX</b>:"
+                               "<p>Simulate the Kodak TriX black and white film at 400 ISO.</p>"));
 
     // -------------------------------------------------------------
 
     type = BWSepiaContainer::BWIlfordSFX200;
 
-    item = new BWPreviewItem(d->bwFilm, i18n("Ilford SPX 200"), d->previewPixmapFactory, type);
-    item->setWhatsThis(i18n("<b>Ilford SPX 200</b>:"
-                            "<p>Simulate the Ilford SPX infrared film at 200 ISO.</p>"));
+    item = d->bwFilm->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Ilford SPX 200"), type);
+    item->setWhatsThis(0, i18n("<b>Ilford SPX 200</b>:"
+                               "<p>Simulate the Ilford SPX infrared film at 200 ISO.</p>"));
 
     ++type;
-    item = new BWPreviewItem(d->bwFilm, i18n("Ilford SPX 400"), d->previewPixmapFactory, type);
-    item->setWhatsThis(i18n("<b>Ilford SPX 400</b>:"
-                            "<p>Simulate the Ilford SPX infrared film at 400 ISO.</p>"));
+    item = d->bwFilm->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Ilford SPX 400"), type);
+    item->setWhatsThis(0, i18n("<b>Ilford SPX 400</b>:"
+                               "<p>Simulate the Ilford SPX infrared film at 400 ISO.</p>"));
 
     ++type;
-    item = new BWPreviewItem(d->bwFilm, i18n("Ilford SPX 800"), d->previewPixmapFactory, type);
-    item->setWhatsThis(i18n("<b>Ilford SPX 800</b>:"
-                            "<p>Simulate the Ilford SPX infrared film at 800 ISO.</p>"));
+    item = d->bwFilm->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Ilford SPX 800"), type);
+    item->setWhatsThis(0, i18n("<b>Ilford SPX 800</b>:"
+                               "<p>Simulate the Ilford SPX infrared film at 800 ISO.</p>"));
 
     // -------------------------------------------------------------
 
-    KVBox* vbox = new KVBox(d->tab);
-    vbox->setSpacing(d->gboxSettings->spacingHint());
-
-    d->bwFilters = new QListWidget(vbox);
-    d->bwFilters->setIconSize(d->thumbnailImage.size());
+    QWidget* vbox     = new QWidget(d->tab);
+    QVBoxLayout* vlay = new QVBoxLayout(vbox);
+    d->bwFilters      = new PreviewList(parent);
 
     type = BWSepiaContainer::BWNoFilter;
-
-    item = new BWPreviewItem(d->bwFilters, i18n("No Lens Filter"), d->previewPixmapFactory, type);
-    item->setWhatsThis(i18n("<b>No Lens Filter</b>:"
-                            "<p>Do not apply a lens filter when rendering the image.</p>"));
-
-    ++type;
-    item = new BWPreviewItem(d->bwFilters, i18n("Green Filter"), d->previewPixmapFactory, type);
-    item->setWhatsThis(i18n("<b>Black & White with Green Filter</b>:"
-                            "<p>Simulate black and white film exposure using a green filter. "
-                            "This is useful for all scenic shoots, especially "
-                            "portraits photographed against the sky.</p>"));
+    item = d->bwFilters->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("No Lens Filter"), type);
+    item->setWhatsThis(0, i18n("<b>No Lens Filter</b>:"
+                               "<p>Do not apply a lens filter when rendering the image.</p>"));
 
     ++type;
-    item = new BWPreviewItem(d->bwFilters, i18n("Orange Filter"), d->previewPixmapFactory, type);
-    item->setWhatsThis(i18n("<b>Black & White with Orange Filter</b>:"
-                            "<p>Simulate black and white film exposure using an orange filter. "
-                            "This will enhance landscapes, marine scenes and aerial "
-                            "photography.</p>"));
+    item = d->bwFilters->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Green Filter"), type);
+    item->setWhatsThis(0, i18n("<b>Black & White with Green Filter</b>:"
+                               "<p>Simulate black and white film exposure using a green filter. "
+                               "This is useful for all scenic shoots, especially "
+                               "portraits photographed against the sky.</p>"));
 
     ++type;
-    item = new BWPreviewItem(d->bwFilters, i18n("Red Filter"), d->previewPixmapFactory, type);
-    item->setWhatsThis(i18n("<b>Black & White with Red Filter</b>:"
-                            "<p>Simulate black and white film exposure using a red filter. "
-                            "This creates dramatic sky effects, and simulates moonlight scenes "
-                            "in the daytime.</p>"));
+    item = d->bwFilters->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Orange Filter"), type);
+    item->setWhatsThis(0, i18n("<b>Black & White with Orange Filter</b>:"
+                               "<p>Simulate black and white film exposure using an orange filter. "
+                               "This will enhance landscapes, marine scenes and aerial "
+                               "photography.</p>"));
 
     ++type;
-    item = new BWPreviewItem(d->bwFilters, i18n("Yellow Filter"), d->previewPixmapFactory, type);
-    item->setWhatsThis(i18n("<b>Black & White with Yellow Filter</b>:"
-                            "<p>Simulate black and white film exposure using a yellow filter. "
-                            "This has the most natural tonal correction, and improves contrast. Ideal for "
-                            "landscapes.</p>"));
+    item = d->bwFilters->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Red Filter"), type);
+    item->setWhatsThis(0, i18n("<b>Black & White with Red Filter</b>:"
+                               "<p>Simulate black and white film exposure using a red filter. "
+                               "This creates dramatic sky effects, and simulates moonlight scenes "
+                               "in the daytime.</p>"));
 
     ++type;
-    item = new BWPreviewItem(d->bwFilters, i18n("Yellow-Green Filter"), d->previewPixmapFactory, type);
-    item->setWhatsThis(i18n("<b>Black & White with Yellow-Green Filter</b>:"
-                            "<p>Simulate black and white film exposure using a yellow-green filter. "
-                            "A yellow-green filter is highly effective for outdoor portraits because "
-                            "red is rendered dark while green appears lighter. Great for correcting skin tones, "
-                            "bringing out facial expressions in close-ups and emphasizing the feeling of liveliness. "
-                            "This filter is highly effective for indoor portraits under tungsten lighting.</p>"));
+    item = d->bwFilters->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Yellow Filter"), type);
+    item->setWhatsThis(0, i18n("<b>Black & White with Yellow Filter</b>:"
+                               "<p>Simulate black and white film exposure using a yellow filter. "
+                               "This has the most natural tonal correction, and improves contrast. Ideal for "
+                               "landscapes.</p>"));
 
     ++type;
-    item = new BWPreviewItem(d->bwFilters, i18n("Blue Filter"), d->previewPixmapFactory, type);
-    item->setWhatsThis(i18n("<b>Black & White with Blue Filter</b>:"
-                            "<p>Simulate black and white film exposure using a blue filter. "
-                            "This accentuates haze and fog. Used for dye transfer and contrast effects.</p>"));
+    item = d->bwFilters->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Yellow-Green Filter"), type);
+    item->setWhatsThis(0, i18n("<b>Black & White with Yellow-Green Filter</b>:"
+                               "<p>Simulate black and white film exposure using a yellow-green filter. "
+                               "A yellow-green filter is highly effective for outdoor portraits because "
+                               "red is rendered dark while green appears lighter. Great for correcting skin tones, "
+                               "bringing out facial expressions in close-ups and emphasizing the feeling of liveliness. "
+                               "This filter is highly effective for indoor portraits under tungsten lighting.</p>"));
 
-    d->strengthInput = new RIntNumInput(vbox);
+    ++type;
+    item = d->bwFilters->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Blue Filter"), type);
+    item->setWhatsThis(0, i18n("<b>Black & White with Blue Filter</b>:"
+                               "<p>Simulate black and white film exposure using a blue filter. "
+                               "This accentuates haze and fog. Used for dye transfer and contrast effects.</p>"));
+
+    d->strengthInput = new RIntNumInput();
     d->strengthInput->input()->setLabel(i18n("Strength:"), Qt::AlignLeft | Qt::AlignVCenter);
     d->strengthInput->setRange(1, 5, 1);
     d->strengthInput->setSliderEnabled(true);
     d->strengthInput->setDefaultValue(1);
     d->strengthInput->setWhatsThis(i18n("Here, set the strength adjustment of the lens filter."));
 
+    vlay->addWidget(d->bwFilters);
+    vlay->addWidget(d->strengthInput);
+    vlay->setSpacing(d->gboxSettings->spacingHint());
+    vlay->setMargin(0);
+
     // -------------------------------------------------------------
 
-    d->bwTone = new QListWidget(d->tab);
-    d->bwTone->setIconSize(d->thumbnailImage.size());
+    d->bwTone = new PreviewList(parent);
 
     type = BWSepiaContainer::BWNoTone;
-
-    item = new BWPreviewItem(d->bwTone, i18n("No Tone Filter"), d->previewPixmapFactory, type);
-    item->setWhatsThis(i18n("<b>No Tone Filter</b>:"
-                            "<p>Do not apply a tone filter to the image.</p>"));
-
-    ++type;
-    item = new BWPreviewItem(d->bwTone, i18n("Sepia Tone"), d->previewPixmapFactory, type);
-    item->setWhatsThis(i18n("<b>Black & White with Sepia Tone</b>:"
-                            "<p>Gives a warm highlight and mid-tone while adding a bit of coolness to "
-                            "the shadows - very similar to the process of bleaching a print and "
-                            "re-developing in a sepia toner.</p>"));
+    item = d->bwTone->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("No Tone Filter"), type);
+    item->setWhatsThis(0, i18n("<b>No Tone Filter</b>:"
+                               "<p>Do not apply a tone filter to the image.</p>"));
 
     ++type;
-    item = new BWPreviewItem(d->bwTone, i18n("Brown Tone"), d->previewPixmapFactory, type);
-    item->setWhatsThis(i18n("<b>Black & White with Brown Tone</b>:"
-                            "<p>This filter is more neutral than the Sepia Tone "
-                            "filter.</p>"));
+    item = d->bwTone->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Sepia Filter"), type);
+    item->setWhatsThis(0, i18n("<b>Black & White with Sepia Tone</b>:"
+                               "<p>Gives a warm highlight and mid-tone while adding a bit of coolness to "
+                               "the shadows - very similar to the process of bleaching a print and "
+                               "re-developing in a sepia toner.</p>"));
 
     ++type;
-    item = new BWPreviewItem(d->bwTone, i18n("Cold Tone"), d->previewPixmapFactory, type);
-    item->setWhatsThis(i18n("<b>Black & White with Cold Tone</b>:"
-                            "<p>Start subtly and replicate printing on a cold tone black and white "
-                            "paper such as a bromide enlarging "
-                            "paper.</p>"));
+    item = d->bwTone->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Brown Filter"), type);
+    item->setWhatsThis(0, i18n("<b>Black & White with Brown Tone</b>:"
+                               "<p>This filter is more neutral than the Sepia Tone "
+                               "filter.</p>"));
 
     ++type;
-    item = new BWPreviewItem(d->bwTone, i18n("Selenium Tone"), d->previewPixmapFactory, type);
-    item->setWhatsThis(i18n("<b>Black & White with Selenium Tone</b>:"
-                            "<p>This effect replicates traditional selenium chemical toning done "
-                            "in the darkroom.</p>"));
+    item = d->bwTone->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Cold Filter"), type);
+    item->setWhatsThis(0, i18n("<b>Black & White with Cold Tone</b>:"
+                               "<p>Start subtly and replicate printing on a cold tone black and white "
+                               "paper such as a bromide enlarging "
+                               "paper.</p>"));
 
     ++type;
-    item = new BWPreviewItem(d->bwTone, i18n("Platinum Tone"), d->previewPixmapFactory, type);
-    item->setWhatsThis(i18n("<b>Black & White with Platinum Tone</b>:"
-                            "<p>This effect replicates traditional platinum chemical toning done "
-                            "in the darkroom.</p>"));
+    item = d->bwTone->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Selenium Filter"), type);
+    item->setWhatsThis(0, i18n("<b>Black & White with Selenium Tone</b>:"
+                               "<p>This effect replicates traditional selenium chemical toning done "
+                               "in the darkroom.</p>"));
 
     ++type;
-    item = new BWPreviewItem(d->bwTone, i18n("Green Tone"), d->previewPixmapFactory, type);
-    item->setWhatsThis(i18n("<b>Black & White with greenish tint</b>:"
-                            "<p>This effect is also known as Verdante.</p>"));
+    item = d->bwTone->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Platinum Filter"), type);
+    item->setWhatsThis(0, i18n("<b>Black & White with Platinum Tone</b>:"
+                               "<p>This effect replicates traditional platinum chemical toning done "
+                               "in the darkroom.</p>"));
+
+    ++type;
+    item = d->bwTone->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("Green Filter"), type);
+    item->setWhatsThis(0, i18n("<b>Black & White with greenish tint</b>:"
+                               "<p>This effect is also known as Verdante.</p>"));
 
     // -------------------------------------------------------------
 
@@ -517,7 +412,6 @@ BWSepiaTool::BWSepiaTool(QObject* parent)
     gridSettings->setSpacing(d->gboxSettings->spacingHint());
 
     setToolSettings(d->gboxSettings);
-    updatePreviews();
     init();
 
     // -------------------------------------------------------------
@@ -558,30 +452,17 @@ BWSepiaTool::~BWSepiaTool()
     delete [] d->destinationPreviewData;
 }
 
-void BWSepiaTool::updatePreviews()
+void BWSepiaTool::slotInit()
 {
-    for (int i = 0 ; i < d->bwFilters->count(); ++i)
-    {
-        BWPreviewItem* item = dynamic_cast<BWPreviewItem*>(d->bwFilters->item(i));
-        item->updatePreview();
-    }
-
-    for (int i = 0 ; i < d->bwFilm->count(); ++i)
-    {
-        BWPreviewItem* item = dynamic_cast<BWPreviewItem*>(d->bwFilm->item(i));
-        item->updatePreview();
-    }
-
-    for (int i = 0 ; i < d->bwTone->count(); ++i)
-    {
-        BWPreviewItem* item = dynamic_cast<BWPreviewItem*>(d->bwTone->item(i));
-        item->updatePreview();
-    }
+    EditorTool::slotInit();
+    d->bwFilters->startFilters();
+    d->bwFilm->startFilters();
+    d->bwTone->startFilters();
 }
 
 void BWSepiaTool::slotFilterSelected()
 {
-    int filter = d->bwFilters->currentRow();
+    int filter = d->bwFilters->currentId();
     if (filter == BWSepiaContainer::BWNoFilter)
         d->strengthInput->setEnabled(false);
     else
@@ -620,9 +501,9 @@ void BWSepiaTool::readSettings()
     KConfigGroup group        = config->group(d->configGroupName);
 
     d->tab->setCurrentIndex(group.readEntry(d->configSettingsTabEntry,           (int)BWFiltersTab));
-    d->bwFilters->setCurrentRow(group.readEntry(d->configBWFilterEntry,          0));
-    d->bwFilm->setCurrentRow(group.readEntry(d->configBWFilmEntry,               0));
-    d->bwTone->setCurrentRow(group.readEntry(d->configBWToneEntry,               0));
+    d->bwFilters->setCurrentId(group.readEntry(d->configBWFilterEntry,           0));
+    d->bwFilm->setCurrentId(group.readEntry(d->configBWFilmEntry,                0));
+    d->bwTone->setCurrentId(group.readEntry(d->configBWToneEntry,                0));
     d->cInput->setValue(group.readEntry(d->configContrastAdjustmentEntry,        d->cInput->defaultValue()));
     d->strengthInput->setValue(group.readEntry(d->configStrengthAdjustmentEntry, d->strengthInput->defaultValue()));
 
@@ -645,9 +526,9 @@ void BWSepiaTool::writeSettings()
     group.writeEntry(d->configSettingsTabEntry,        d->tab->currentIndex());
     group.writeEntry(d->configHistogramChannelEntry,   (int)d->gboxSettings->histogramBox()->channel());
     group.writeEntry(d->configHistogramScaleEntry,     (int)d->gboxSettings->histogramBox()->scale());
-    group.writeEntry(d->configBWFilterEntry,           d->bwFilters->currentRow());
-    group.writeEntry(d->configBWFilmEntry,             d->bwFilm->currentRow());
-    group.writeEntry(d->configBWToneEntry,             d->bwTone->currentRow());
+    group.writeEntry(d->configBWFilterEntry,           d->bwFilters->currentId());
+    group.writeEntry(d->configBWFilmEntry,             d->bwFilm->currentId());
+    group.writeEntry(d->configBWToneEntry,             d->bwTone->currentId());
     group.writeEntry(d->configContrastAdjustmentEntry, d->cInput->value());
     group.writeEntry(d->configStrengthAdjustmentEntry, d->strengthInput->value());
 
@@ -660,9 +541,9 @@ void BWSepiaTool::slotResetSettings()
 {
     blockWidgetSignals(true);
 
-    d->bwFilters->setCurrentRow(0);
-    d->bwFilm->setCurrentRow(0);
-    d->bwTone->setCurrentRow(0);
+    d->bwFilters->setCurrentId(BWSepiaContainer::BWNoFilter);
+    d->bwFilm->setCurrentId(BWSepiaContainer::BWGeneric);
+    d->bwTone->setCurrentId(BWSepiaContainer::BWNoTone);
 
     d->cInput->slotReset();
     d->strengthInput->slotReset();
@@ -675,23 +556,10 @@ void BWSepiaTool::slotResetSettings()
     blockWidgetSignals(false);
 
     d->gboxSettings->histogramBox()->histogram()->reset();
-    d->previewPixmapFactory->invalidate();
-    updatePreviews();
     d->bwFilters->update();
     d->bwTone->update();
 
     slotEffect();
-}
-
-QPixmap BWSepiaTool::getThumbnailForEffect(int type)
-{
-    BWSepiaContainer prm;
-    DImg thumb      = d->thumbnailImage.copy();
-    prm.preview     = true;
-    prm.previewType = type;
-    BWSepiaFilter bw(&thumb, 0L, prm);
-    bw.startFilterDirectly();
-    return (bw.getTargetImage().convertToPixmap());
 }
 
 void BWSepiaTool::slotEffect()
@@ -709,15 +577,15 @@ void BWSepiaTool::slotEffect()
     bool sb                   = iface->previewSixteenBit();
 
     BWSepiaContainer prm;
-    prm.filmType        = d->bwFilm->currentRow();
-    prm.filterType      = d->bwFilters->currentRow();
-    prm.toneType        = d->bwTone->currentRow();
-    prm.curves          = d->curvesBox->curves();
+    prm.filmType        = d->bwFilm->currentId();
+    prm.filterType      = d->bwFilters->currentId();
+    prm.toneType        = d->bwTone->currentId();
     prm.bcgPrm.contrast = ((double)(d->cInput->value()/100.0) + 1.00);
-    prm.strength        = 1.0 + ((double)d->strengthInput->value() - 1.0) * (1.0 / 3.0); 
+    prm.strength        = 1.0 + ((double)d->strengthInput->value() - 1.0) * (1.0 / 3.0);
+    prm.curves->fillFromOtherCurvers(d->curvesBox->curves());
     BWSepiaFilter bw(d->destinationPreviewData, w, h, sb, prm);
     DImg preview        = bw.getTargetImage();
-    
+
     iface->putPreviewImage(preview.bits());
     d->previewWidget->updatePreview();
 
@@ -732,27 +600,22 @@ void BWSepiaTool::slotEffect()
 void BWSepiaTool::finalRendering()
 {
     kapp->setOverrideCursor(Qt::WaitCursor);
-    ImageIface* iface = d->previewWidget->imageIface();
-    uchar *data       = iface->getOriginalImage();
-    int w             = iface->originalWidth();
-    int h             = iface->originalHeight();
-    bool sb           = iface->originalSixteenBit();
+    ImageIface iface(0, 0);
+    uchar* data = iface.getOriginalImage();
+    int w       = iface.originalWidth();
+    int h       = iface.originalHeight();
+    bool sb     = iface.originalSixteenBit();
 
-    if (data)
-    {
-        BWSepiaContainer prm;
-        prm.filmType        = d->bwFilm->currentRow();
-        prm.filterType      = d->bwFilters->currentRow();
-        prm.toneType        = d->bwTone->currentRow();
-        prm.curves          = d->curvesBox->curves();
-        prm.bcgPrm.contrast = ((double)(d->cInput->value()/100.0) + 1.00);
-        prm.strength        = 1.0 + ((double)d->strengthInput->value() - 1.0) * (1.0 / 3.0); 
-        BWSepiaFilter bw(d->destinationPreviewData, w, h, sb, prm);
-        
-        iface->putPreviewImage(bw.getTargetImage().bits());      
+    BWSepiaContainer prm;
+    prm.filmType        = d->bwFilm->currentId();
+    prm.filterType      = d->bwFilters->currentId();
+    prm.toneType        = d->bwTone->currentId();
+    prm.bcgPrm.contrast = ((double)(d->cInput->value()/100.0) + 1.00);
+    prm.strength        = 1.0 + ((double)d->strengthInput->value() - 1.0) * (1.0 / 3.0);
+    prm.curves->fillFromOtherCurvers(d->curvesBox->curves());
+    BWSepiaFilter bw(data, w, h, sb, prm);
 
-        iface->putOriginalImage(i18n("Convert to Black && White"), bw.getTargetImage().bits());
-    }
+    iface.putOriginalImage(i18n("Convert to Black && White"), bw.getTargetImage().bits());
 
     kapp->restoreOverrideCursor();
 }
@@ -784,8 +647,9 @@ void BWSepiaTool::slotLoadSettings()
 
         blockWidgetSignals(true);
 
-        d->bwFilters->setCurrentRow(stream.readLine().toInt());
-        d->bwTone->setCurrentRow(stream.readLine().toInt());
+        d->bwFilm->setCurrentId(stream.readLine().toInt());
+        d->bwFilters->setCurrentId(stream.readLine().toInt());
+        d->bwTone->setCurrentId(stream.readLine().toInt());
         d->cInput->setValue(stream.readLine().toInt());
 
         for (int i = 0 ; i < 5 ; ++i)
@@ -817,8 +681,6 @@ void BWSepiaTool::slotLoadSettings()
         blockWidgetSignals(false);
 
         d->gboxSettings->histogramBox()->histogram()->reset();
-        d->previewPixmapFactory->invalidate();
-        updatePreviews();
         d->bwFilters->update();
         d->bwTone->update();
 
@@ -848,8 +710,9 @@ void BWSepiaTool::slotSaveAsSettings()
     {
         QTextStream stream( &file );
         stream << "# Black & White Configuration File\n";
-        stream << d->bwFilters->currentItem() << "\n";
-        stream << d->bwTone->currentItem() << "\n";
+        stream << d->bwFilm->currentId() << "\n";
+        stream << d->bwFilters->currentId() << "\n";
+        stream << d->bwTone->currentId() << "\n";
         stream << d->cInput->value() << "\n";
 
         // TODO cant we use the kconfig mechanisms provided by CurveWidget here?

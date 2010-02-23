@@ -29,11 +29,6 @@
 
 #include "editortool.h"
 
-namespace KDcrawIface
-{
-class RIntNumInput;
-}
-
 namespace Digikam
 {
 class DColor;
@@ -44,13 +39,22 @@ using namespace Digikam;
 namespace DigikamImagesPluginCore
 {
 
-class PreviewPixmapFactory;
 class BWSepiaToolPriv;
 
 class BWSepiaTool : public EditorTool
 {
     Q_OBJECT
 
+public:
+
+    enum SettingsTab
+    {
+        FilmTab=0,
+        BWFiltersTab,
+        ToneTab,
+        LuminosityTab
+    };
+    
 public:
 
     BWSepiaTool(QObject* parent);
@@ -62,13 +66,12 @@ private:
 
     void readSettings();
     void writeSettings();
-    void updatePreviews();
     void finalRendering();
     void blockWidgetSignals(bool b);
-    QPixmap getThumbnailForEffect(int type);
 
 private Q_SLOTS:
 
+    void slotInit();
     void slotResetSettings();
     void slotSaveAsSettings();
     void slotLoadSettings();
