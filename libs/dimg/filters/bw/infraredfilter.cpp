@@ -54,32 +54,23 @@ InfraredFilter::InfraredFilter(DImg* orgImage, QObject* parent, const InfraredCo
     initFilter();
 }
 
-InfraredFilter::InfraredFilter(uchar* bits, uint width, uint height, bool sixteenBits, const InfraredContainer& settings)
-              : DImgThreadedFilter()
-{
-    m_settings = settings;
-    m_orgImage = DImg(width, height, sixteenBits, true, bits, true);
-    initFilter();
-    startFilterDirectly();
-    memcpy(bits, m_destImage.bits(), m_destImage.numBytes());
-}
+/** This method is based on the Simulate Infrared Film tutorial from GimpGuru.org web site
+    available at this url : http://www.gimpguru.org/Tutorials/SimulatedInfrared/
 
-// This method is based on the Simulate Infrared Film tutorial from GimpGuru.org web site
-// available at this url : http://www.gimpguru.org/Tutorials/SimulatedInfrared/
+    More info about IR film can be seen at this url :
 
-/* More info about IR film can be seen at this url :
-
-http://www.pauck.de/marco/photo/infrared/comparison_of_films/comparison_of_films.html
+    http://www.pauck.de/marco/photo/infrared/comparison_of_films/comparison_of_films.html
 */
 
 void InfraredFilter::filterImage()
 {
-    int Width       = m_orgImage.width();
-    int Height      = m_orgImage.height();
-    int bytesDepth  = m_orgImage.bytesDepth();
-    uint numBytes   = m_orgImage.numBytes();
-    bool sixteenBit = m_orgImage.sixteenBit();
-    uchar* data     = m_orgImage.bits();
+    m_destImage.putImageData(m_orgImage.bits());
+    
+    int Width       = m_destImage.width();
+    int Height      = m_destImage.height();
+    int bytesDepth  = m_destImage.bytesDepth();
+    bool sixteenBit = m_destImage.sixteenBit();
+    uchar* data     = m_destImage.bits();
 
     postProgress( 10 );
     if (m_cancel) return;
@@ -93,7 +84,6 @@ void InfraredFilter::filterImage()
     int    blurRadius = (int)((m_settings.sensibility / 200.0) + 1.0);   // Gaussian blur infrared highlight effect [2 to 5].
     int    offset, progress;
 
-    uchar*      pBWBits = 0;                  // Black and White conversion.
     uchar* pOverlayBits = 0;                  // Overlay to merge with original converted in gray scale.
     uchar*     pOutBits = m_destImage.bits(); // Destination image with merged grain mask and original.
 
@@ -109,16 +99,16 @@ void InfraredFilter::filterImage()
     // Convert to gray scale with boosting Green channel.
     // Infrared film increase green color.
 
-    DImg BWImage(Width, Height, sixteenBit);   // Black and White conversion.
-    pBWBits = BWImage.bits();
-    memcpy (pBWBits, data, numBytes);
+    DImg BWImage(Width, Height, sixteenBit, true, data);   // Black and White conversion.
 
     MixerContainer settings;
     settings.bMonochrome    = true;
     settings.blackRedGain   = m_settings.redGain;
     settings.blackGreenGain = m_settings.greenGain - (m_settings.sensibility / 2000.0);   // Infrared green color boost [1.7 to 2.0].
     settings.blackBlueGain  = m_settings.blueGain;
-    MixerFilter mixer(pBWBits, Width, Height, sixteenBit, settings);
+    MixerFilter mixer(&BWImage, 0L, settings);
+    mixer.startFilterDirectly();
+    BWImage.putImageData(mixer.getTargetImage().bits());
 
     postProgress( 30 );
     if (m_cancel) return;
@@ -151,7 +141,7 @@ void InfraredFilter::filterImage()
         {
             offset = x*bytesDepth + (y*Width*bytesDepth);
 
-            bwData.setColor (pBWBits + offset, sixteenBit);
+            bwData.setColor(BWImage.bits() + offset, sixteenBit);
             overData.setColor(pOverlayBits + offset, sixteenBit);
 
             if (sixteenBit)
@@ -166,7 +156,7 @@ void InfraredFilter::filterImage()
                 outData.setGreen( intMult8  (bwData.green(), bwData.green() + intMult8(2 * overData.green(),  255 - bwData.green()) ) );
                 outData.setBlue ( intMult8  (bwData.blue(),  bwData.blue()  + intMult8(2 * overData.blue(),   255 - bwData.blue())  ) );
             }
-            outData.setAlpha( bwData.alpha() );
+            outData.setAlpha(bwData.alpha());
             outData.setPixel( pOutBits + offset );
         }
 

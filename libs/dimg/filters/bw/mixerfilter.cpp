@@ -47,35 +47,18 @@ MixerFilter::MixerFilter(DImg* orgImage, QObject* parent, const MixerContainer& 
     initFilter();
 }
 
-MixerFilter::MixerFilter(uchar* bits, uint width, uint height, bool sixteenBits, 
-                         const MixerContainer& settings)
-           : DImgThreadedFilter()
-{
-    m_settings = settings;
-    channelMixerImage(bits, width, height, sixteenBits);
-}
-
 MixerFilter::~MixerFilter()
 {
 }
 
 void MixerFilter::filterImage()
 {
-    channelMixerImage(m_orgImage);
     m_destImage.putImageData(m_orgImage.bits());
-}
-
-void MixerFilter::channelMixerImage(DImg& image)
-{
-    if (image.isNull()) return;
-
-    channelMixerImage(image.bits(), image.width(), image.height(), image.sixteenBit());
-}
-
-    /** Mix RGB channel color from image*/
-void MixerFilter::channelMixerImage(uchar* bits, uint width, uint height, bool sixteenBit)
-{
-    if (!bits) return;
+    
+    uchar* bits     = m_destImage.bits();
+    uint width      = m_destImage.width();
+    uint height     = m_destImage.height();
+    bool sixteenBit = m_destImage.sixteenBit();
 
     uint size = width*height;
     int  progress;

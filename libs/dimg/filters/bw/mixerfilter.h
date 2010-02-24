@@ -90,17 +90,12 @@ class DIGIKAM_EXPORT MixerFilter : public DImgThreadedFilter
 
 public:
 
-    explicit MixerFilter(DImg* orgImage, QObject* parent=0, const MixerContainer& settings=MixerContainer());
-    MixerFilter(uchar* bits, uint width, uint height, bool sixteenBits,
-                const MixerContainer& settings=MixerContainer());
+    MixerFilter(DImg* orgImage, QObject* parent=0, const MixerContainer& settings=MixerContainer());
     virtual ~MixerFilter();
 
 private:
 
     void filterImage();
-
-    void channelMixerImage(DImg& image);
-    void channelMixerImage(uchar* data, uint width, uint height, bool sixteenBit);
 
     inline double CalculateNorm(double RedGain, double GreenGain, double BlueGain, bool bPreserveLum);
 
