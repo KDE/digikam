@@ -6,7 +6,7 @@
  * Date        : 2009-11-22
  * Description : noise reduction settings view.
  *
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "noisereductionsettings.moc"
+#include "nrsettings.moc"
 
 // Qt includes
 
@@ -58,11 +58,11 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-class NoiseReductionSettingsPriv
+class NRSettingsPriv
 {
 public:
 
-    NoiseReductionSettingsPriv() :
+    NRSettingsPriv() :
         configThresholdAdjustmentEntry("ThresholdAdjustment"),
         configSoftnessAdjustmentEntry("SoftnessAdjustment"),
         configAdvancedAdjustmentEntry("AdvancedAdjustment"),
@@ -117,9 +117,9 @@ public:
     RDoubleNumInput* softCbInput;
 };
 
-NoiseReductionSettings::NoiseReductionSettings(QWidget* parent)
-                      : QWidget(parent),
-                        d(new NoiseReductionSettingsPriv)
+NRSettings::NRSettings(QWidget* parent)
+          : QWidget(parent),
+            d(new NRSettingsPriv)
 {
     QGridLayout* grid = new QGridLayout(parent);
 
@@ -291,14 +291,14 @@ NoiseReductionSettings::NoiseReductionSettings(QWidget* parent)
             this, SLOT(slotAdvancedEnabled(bool)));
 }
 
-NoiseReductionSettings::~NoiseReductionSettings()
+NRSettings::~NRSettings()
 {
     delete d;
 }
 
-WaveletsNRContainer NoiseReductionSettings::settings() const
+NRContainer NRSettings::settings() const
 {
-    WaveletsNRContainer prm;
+    NRContainer prm;
 
     prm.thresholds[0] = d->thrLumInput->value();
     prm.thresholds[2] = d->thrCrInput->value();
@@ -313,7 +313,7 @@ WaveletsNRContainer NoiseReductionSettings::settings() const
     return prm;
 }
 
-void NoiseReductionSettings::setSettings(const WaveletsNRContainer& settings)
+void NRSettings::setSettings(const NRContainer& settings)
 {
     blockSignals(true);
     d->thrLumInput->setValue(settings.thresholds[0]);
@@ -329,7 +329,7 @@ void NoiseReductionSettings::setSettings(const WaveletsNRContainer& settings)
     blockSignals(false);
 }
 
-void NoiseReductionSettings::resetToDefault()
+void NRSettings::resetToDefault()
 {
     blockSignals(true);
     d->thresholdInput->slotReset();
@@ -345,9 +345,9 @@ void NoiseReductionSettings::resetToDefault()
     blockSignals(false);
 }
 
-WaveletsNRContainer NoiseReductionSettings::defaultSettings() const
+NRContainer NRSettings::defaultSettings() const
 {
-    WaveletsNRContainer prm;
+    NRContainer prm;
 
     prm.thresholds[0] = d->thrLumInput->defaultValue();
     prm.thresholds[2] = d->thrCrInput->defaultValue();
@@ -362,7 +362,7 @@ WaveletsNRContainer NoiseReductionSettings::defaultSettings() const
     return prm;
 }
 
-void NoiseReductionSettings::slotAdvancedEnabled(bool b)
+void NRSettings::slotAdvancedEnabled(bool b)
 {
     d->leadBox->setEnabled(!b);
     d->advExpanderBox->setEnabled(b);
@@ -370,11 +370,11 @@ void NoiseReductionSettings::slotAdvancedEnabled(bool b)
     if (!b) slotLeadSettingsChanged();
 }
 
-void NoiseReductionSettings::slotLeadSettingsChanged()
+void NRSettings::slotLeadSettingsChanged()
 {
     if (!d->advancedBox->isChecked())
     {
-        WaveletsNRContainer prm = settings();
+        NRContainer prm = settings();
         d->thrLumInput->setValue(prm.leadThreshold);
         d->thrCrInput->setValue(prm.leadThreshold);
         d->thrCbInput->setValue(prm.leadThreshold);
@@ -386,10 +386,10 @@ void NoiseReductionSettings::slotLeadSettingsChanged()
     emit signalSettingsChanged();
 }
 
-void NoiseReductionSettings::readSettings(KConfigGroup& group)
+void NRSettings::readSettings(KConfigGroup& group)
 {
-    WaveletsNRContainer prm;
-    WaveletsNRContainer defaultPrm = defaultSettings();
+    NRContainer prm;
+    NRContainer defaultPrm = defaultSettings();
 
     prm.thresholds[0] = group.readEntry(d->configThrLumInputAdjustmentEntry,  defaultPrm.thresholds[0]);
     prm.thresholds[2] = group.readEntry(d->configThrCrInputAdjustmentEntry,   defaultPrm.thresholds[2]);
@@ -403,9 +403,9 @@ void NoiseReductionSettings::readSettings(KConfigGroup& group)
     setSettings(prm);
 }
 
-void NoiseReductionSettings::writeSettings(KConfigGroup& group)
+void NRSettings::writeSettings(KConfigGroup& group)
 {
-    WaveletsNRContainer prm = settings();
+    NRContainer prm = settings();
 
     group.writeEntry(d->configThrLumInputAdjustmentEntry,  prm.thresholds[0]);
     group.writeEntry(d->configThrCrInputAdjustmentEntry,   prm.thresholds[2]);
@@ -418,7 +418,7 @@ void NoiseReductionSettings::writeSettings(KConfigGroup& group)
     group.writeEntry(d->configSoftnessAdjustmentEntry,     prm.leadSoftness);
 }
 
-void NoiseReductionSettings::loadSettings()
+void NRSettings::loadSettings()
 {
     KUrl loadRestorationFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
                                QString( "*" ), kapp->activeWindow(),
@@ -465,7 +465,7 @@ void NoiseReductionSettings::loadSettings()
     file.close();
 }
 
-void NoiseReductionSettings::saveAsSettings()
+void NRSettings::saveAsSettings()
 {
     KUrl saveRestorationFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
                                QString( "*" ), kapp->activeWindow(),

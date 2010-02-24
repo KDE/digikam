@@ -7,7 +7,7 @@
  * Description : Wavelets Noise Reduction threaded image filter.
  *               This filter work in YCrCb color space.
  *
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef WAVELETS_NR_H
-#define WAVELETS_NR_H
+#ifndef NRFILTER_H
+#define NRFILTER_H
 
 // Local includes
 
@@ -33,14 +33,14 @@
 namespace Digikam
 {
 
-class WaveletsNRPriv;
+class NRFilterPriv;
 
-class DIGIKAM_EXPORT WaveletsNRContainer
+class DIGIKAM_EXPORT NRContainer
 {
 
 public:
 
-    WaveletsNRContainer()
+    NRContainer()
     {
         leadThreshold = 1.2;
         leadSoftness  = 0.9;
@@ -53,7 +53,7 @@ public:
         softness[2]   = 0.9;     // Cb
     };
 
-    ~WaveletsNRContainer(){};
+    ~NRContainer(){};
 
 public:
 
@@ -75,13 +75,13 @@ public:
 
 // --------------------------------------------------------------------------
 
-class DIGIKAM_EXPORT WaveletsNR : public DImgThreadedFilter
+class DIGIKAM_EXPORT NRFilter : public DImgThreadedFilter
 {
 
 public:
 
-    WaveletsNR(DImg* orgImage, QObject* parent, const WaveletsNRContainer& settings);
-    ~WaveletsNR();
+    NRFilter(DImg* orgImage, QObject* parent, const NRContainer& settings);
+    ~NRFilter();
 
 private:
 
@@ -102,9 +102,9 @@ private:
 
 private:
 
-    WaveletsNRPriv* const d;
+    NRFilterPriv* const d;
 };
 
 }  // namespace Digikam
 
-#endif /* WAVELETS_NR_H */
+#endif /* NRFILTER_H */

@@ -7,7 +7,7 @@
  * Description : Wavelets Noise Reduction threaded image filter.
  *               This filter work in YCrCb color space.
  *
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2008 by Marco Rossini <marco dot rossini at gmx dot net>
  *
  * This program is free software; you can redistribute it
@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "waveletsnr.h"
+#include "nrfilter.h"
 
 // C++ includes
 
@@ -38,11 +38,11 @@
 namespace Digikam
 {
 
-class WaveletsNRPriv
+class NRFilterPriv
 {
 public:
 
-    WaveletsNRPriv()
+    NRFilterPriv()
     {
         for (int c = 0 ; c < 3; c++)
         {
@@ -51,27 +51,27 @@ public:
         }
     }
 
-    float*              fimg[3];
-    float*              buffer[3];
+    float*      fimg[3];
+    float*      buffer[3];
 
-    WaveletsNRContainer settings;  
+    NRContainer settings;  
 };
   
-WaveletsNR::WaveletsNR(DImg *orgImage, QObject *parent, const WaveletsNRContainer& settings)
-          : DImgThreadedFilter(orgImage, parent, "WaveletsNR"),
-            d(new WaveletsNRPriv)
+NRFilter::NRFilter(DImg *orgImage, QObject *parent, const NRContainer& settings)
+        : DImgThreadedFilter(orgImage, parent, "NRFilter"),
+          d(new NRFilterPriv)
 {
     d->settings = settings;
 
     initFilter();
 }
 
-WaveletsNR::~WaveletsNR()
+NRFilter::~NRFilter()
 {
     delete d;
 }
 
-void WaveletsNR::filterImage()
+void NRFilter::filterImage()
 {
     DColor col;
     int    progress;
@@ -183,8 +183,8 @@ void WaveletsNR::filterImage()
 
 // -- Wavelets denoise methods -----------------------------------------------------------
 
-void WaveletsNR::waveletDenoise(float* fimg[3], unsigned int width, unsigned int height,
-                                float threshold, double softness)
+void NRFilter::waveletDenoise(float* fimg[3], unsigned int width, unsigned int height,
+                              float threshold, double softness)
 {
     float        *temp=0, thold;
     unsigned int i, lev, lpass, hpass, size, col, row;
@@ -310,7 +310,7 @@ void WaveletsNR::waveletDenoise(float* fimg[3], unsigned int width, unsigned int
     delete [] temp;
 }
 
-void WaveletsNR::hatTransform (float* temp, float* base, int st, int size, int sc)
+void NRFilter::hatTransform (float* temp, float* base, int st, int size, int sc)
 {
     int i;
 
@@ -326,7 +326,7 @@ void WaveletsNR::hatTransform (float* temp, float* base, int st, int size, int s
 
 // -- Color Space conversion methods --------------------------------------------------
 
-void WaveletsNR::srgb2ycbcr(float** fimg, int size)
+void NRFilter::srgb2ycbcr(float** fimg, int size)
 {
     /* using JPEG conversion here - expecting all channels to be in [0:255] range */
     float y, cb, cr;
@@ -342,7 +342,7 @@ void WaveletsNR::srgb2ycbcr(float** fimg, int size)
     }
 }
 
-void WaveletsNR::ycbcr2srgb(float** fimg, int size)
+void NRFilter::ycbcr2srgb(float** fimg, int size)
 {
     /* using JPEG conversion here - expecting all channels to be in [0:255] range */
     float r, g, b;
@@ -358,7 +358,7 @@ void WaveletsNR::ycbcr2srgb(float** fimg, int size)
     }
 }
 
-void WaveletsNR::srgb2xyz(float** fimg, int size)
+void NRFilter::srgb2xyz(float** fimg, int size)
 {
     /* fimg in [0:1], sRGB */
     float x, y, z;
@@ -387,7 +387,7 @@ void WaveletsNR::srgb2xyz(float** fimg, int size)
     }
 }
 
-void WaveletsNR::xyz2srgb(float** fimg, int size)
+void NRFilter::xyz2srgb(float** fimg, int size)
 {
     float r, g, b;
 
@@ -418,7 +418,7 @@ void WaveletsNR::xyz2srgb(float** fimg, int size)
     }
 }
 
-void WaveletsNR::lab2srgb(float** fimg, int size)
+void NRFilter::lab2srgb(float** fimg, int size)
 {
     float x, y, z;
 
@@ -458,7 +458,7 @@ void WaveletsNR::lab2srgb(float** fimg, int size)
     xyz2srgb(fimg, size);
 }
 
-void WaveletsNR::srgb2lab(float** fimg, int size)
+void NRFilter::srgb2lab(float** fimg, int size)
 {
     float l, a, b;
 

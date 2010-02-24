@@ -6,7 +6,7 @@
  * Date        : 2009-11-22
  * Description : noise reduction settings view.
  *
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef NOISEREDUCTIONSETTINGS_H
-#define NOISEREDUCTIONSETTINGS_H
+#ifndef NRSETTINGS_H
+#define NRSETTINGS_H
 
 // Local includes
 
@@ -35,27 +35,27 @@
 // Local includes
 
 #include "digikam_export.h"
-#include "waveletsnr.h"
+#include "nrfilter.h"
 
 namespace Digikam
 {
 
-class NoiseReductionSettingsPriv;
+class NRSettingsPriv;
 
-class DIGIKAM_EXPORT NoiseReductionSettings : public QWidget
+class DIGIKAM_EXPORT NRSettings : public QWidget
 {
     Q_OBJECT
 
 public:
 
-    NoiseReductionSettings(QWidget* parent);
-    ~NoiseReductionSettings();
+    NRSettings(QWidget* parent);
+    ~NRSettings();
 
-    WaveletsNRContainer defaultSettings() const;
+    NRContainer defaultSettings() const;
     void resetToDefault();
 
-    WaveletsNRContainer settings() const;
-    void setSettings(const WaveletsNRContainer& settings);
+    NRContainer settings() const;
+    void setSettings(const NRContainer& settings);
 
     void readSettings(KConfigGroup& group);
     void writeSettings(KConfigGroup& group);
@@ -74,9 +74,9 @@ private Q_SLOTS:
 
 private:
 
-    NoiseReductionSettingsPriv* const d;
+    NRSettingsPriv* const d;
 };
 
 }  // namespace Digikam
 
-#endif /* NOISEREDUCTIONTOOL_H */
+#endif /* NRSETTINGS_H */
