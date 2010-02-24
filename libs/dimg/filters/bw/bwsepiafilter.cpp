@@ -170,12 +170,6 @@ DImg BWSepiaFilter::getThumbnailForEffect(DImg& img)
     return (thumb);
 }
 
-/*void BWSepiaFilter::blackAndWhiteConversion(int type)
-{
-    return blackAndWhiteConversion(m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(),
-                                   m_orgImage.sixteenBit(), type);
-}
-*/
 void BWSepiaFilter::blackAndWhiteConversion(uchar* data, int w, int h, bool sb, int type)
 {
     // Value to multiply RGB 8 bits component of mask used by TonalityFilter.
