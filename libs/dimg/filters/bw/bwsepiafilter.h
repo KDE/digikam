@@ -31,6 +31,7 @@
 #include "globals.h"
 #include "imagecurves.h"
 #include "bcgfilter.h"
+#include "tonalityfilter.h"
 
 using namespace Digikam;
 
@@ -142,9 +143,10 @@ private:
 
     DImg getThumbnailForEffect(DImg& img);
     
-    void blackAndWhiteConversion(uchar* data, int w, int h, bool sb, int type);
-    void applyChannelMixer(uchar* data, int w, int h, bool sb);
-    void applyInfraredFilter(uchar* data, int w, int h, bool sb, int sensibility);
+    void blackAndWhiteConversion(DImg& img, int type);
+    void applyChannelMixer(DImg& img);
+    void applyInfraredFilter(DImg& img, int sensibility);
+    void applyToneFilter(DImg& img, TonalityContainer& settings);
 
 private:
 
