@@ -65,6 +65,24 @@ public:
         StartEditor
     };
 
+    /**
+     * Possible ways of comparing strings.
+     */
+    enum StringComparisonType
+    {
+
+        /**
+         * Natural compare using KStringHandler::naturalCompare.
+         */
+        Natural = 0,
+
+        /**
+         * Normal comparison using Qt's compare function.
+         */
+        Normal
+
+    };
+
 Q_SIGNALS:
 
     void setupChanged();
@@ -312,6 +330,19 @@ public:
 
     void setSyncDigikamToNepomuk(bool val);
     bool getSyncDigikamToNepomuk() const;
+
+    /**
+     * Defines the way in which string comparisons are performed.
+     *
+     * @param val new way to compare strings
+     */
+    void setStringComparisonType(AlbumSettings::StringComparisonType val);
+    /**
+     * Tells in which way strings are compared at the moment.
+     *
+     * @return string comparison type to use.
+     */
+    StringComparisonType getStringComparisonType() const;
 
 private:
 

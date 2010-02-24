@@ -69,4 +69,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 046 ==> 225728 : Adding vignette should not increase brightness in the center.
 047 ==> 227992 : Search field should not lost focus if nothing was found.
 048 ==> 228326 : Crash trying to create a new tag.
-049 ==> 
+049 ==> 227905 :  ISO Album dates for 2009 2010 sort wrong.
+050 ==> 

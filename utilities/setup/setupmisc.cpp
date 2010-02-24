@@ -58,9 +58,12 @@ public:
         scanAtStart                    = 0;
         sidebarTypeLabel               = 0;
         sidebarType                    = 0;
+        stringComparisonTypeLabel      = 0;
+        stringComparisonType           = 0;
     }
 
     QLabel*    sidebarTypeLabel;
+    QLabel*    stringComparisonTypeLabel;
 
     QCheckBox* showSplashCheck;
     QCheckBox* showTrashDeleteDialogCheck;
@@ -69,6 +72,7 @@ public:
     QCheckBox* scanAtStart;
 
     KComboBox* sidebarType;
+    KComboBox* stringComparisonType;
 };
 
 SetupMisc::SetupMisc(QWidget* parent)
@@ -85,12 +89,25 @@ SetupMisc::SetupMisc(QWidget* parent)
     d->showSplashCheck                = new QCheckBox(i18n("&Show splash screen at startup."), panel);
     d->scanAtStart                    = new QCheckBox(i18n("&Scan for new items at startup (makes startup slower.)"), panel);
 
-    KHBox *hbox         = new KHBox(panel);
-    d->sidebarTypeLabel = new QLabel(i18n("Sidebar tab title:"), hbox);
-    d->sidebarType      = new KComboBox(hbox);
+    KHBox *tabStyleHbox = new KHBox(panel);
+    d->sidebarTypeLabel = new QLabel(i18n("Sidebar tab title:"), tabStyleHbox);
+    d->sidebarType      = new KComboBox(tabStyleHbox);
     d->sidebarType->addItem(i18n("Only For Active Tab"), 0);
     d->sidebarType->addItem(i18n("For All Tabs"),        1);
     d->sidebarType->setToolTip(i18n("Set this option to configure how sidebar tab titles are visible."));
+
+    KHBox *stringComparisonHbox  = new KHBox(panel);
+    d->stringComparisonTypeLabel = new QLabel(i18n("String comparison type:"), stringComparisonHbox);
+    d->stringComparisonType      = new KComboBox(stringComparisonHbox);
+    d->stringComparisonType->addItem(i18nc("method to compare strings", "Natural"), AlbumSettings::Natural);
+    d->stringComparisonType->addItem(i18nc("method to compare strings", "Normal"),  AlbumSettings::Normal);
+    d->stringComparisonType->setToolTip(i18n("Sets the way in which strings are compared inside digiKam. "
+                    "This eg. influences the sorting of the tree views.<br/>"
+                    "<b>Natural</b> tries to compare strings in a way that regards some normal conventions "
+                    "and will eg. result in sorting numbers naturally even if they have a different number of digits.<br/>"
+                    "<b>Normal</b> uses a more technical approach. "
+                    "Use this style if you eg. want to entitle albums with ISO dates (201006 or 20090523) "
+                    "and the albums should be sorted according to these dates."));
 
     // --------------------------------------------------------
 
@@ -101,7 +118,8 @@ SetupMisc::SetupMisc(QWidget* parent)
     layout->addWidget(d->sidebarApplyDirectlyCheck);
     layout->addWidget(d->showSplashCheck);
     layout->addWidget(d->scanAtStart);
-    layout->addWidget(hbox);
+    layout->addWidget(tabStyleHbox);
+    layout->addWidget(stringComparisonHbox);
     layout->addStretch();
 
     readSettings();
@@ -129,6 +147,7 @@ void SetupMisc::applySettings()
     settings->setApplySidebarChangesDirectly(d->sidebarApplyDirectlyCheck->isChecked());
     settings->setScanAtStart(d->scanAtStart->isChecked());
     settings->setSidebarTitleStyle(d->sidebarType->currentIndex() == 0 ? KMultiTabBar::VSNET : KMultiTabBar::KDEV3ICON);
+    settings->setStringComparisonType((AlbumSettings::StringComparisonType)d->stringComparisonType->itemData(d->stringComparisonType->currentIndex()).toInt());
     settings->saveSettings();
 }
 
@@ -142,6 +161,7 @@ void SetupMisc::readSettings()
     d->sidebarApplyDirectlyCheck->setChecked(settings->getApplySidebarChangesDirectly());
     d->scanAtStart->setChecked(settings->getScanAtStart());
     d->sidebarType->setCurrentIndex(settings->getSidebarTitleStyle() == KMultiTabBar::VSNET ? 0 : 1);
+    d->stringComparisonType->setCurrentIndex(settings->getStringComparisonType());
 }
 
 }  // namespace Digikam
