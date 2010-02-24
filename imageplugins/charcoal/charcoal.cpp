@@ -129,8 +129,9 @@ void Charcoal::filterImage()
     settings.blackRedGain   = 0.3;
     settings.blackGreenGain = 0.59;
     settings.blackBlueGain  = 0.11;
-    MixerFilter mixer(m_destImage.bits(), m_destImage.width(),
-                      m_destImage.height(), m_destImage.sixteenBit(), settings);
+    MixerFilter mixer(&m_destImage, 0L, settings);
+    mixer.startFilterDirectly();
+    m_destImage.putImageData(mixer.getTargetImage().bits());
     
     postProgress( 100 );
     if (m_cancel)

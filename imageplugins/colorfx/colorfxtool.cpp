@@ -392,7 +392,7 @@ void ColorFXTool::finalRendering()
     kapp->restoreOverrideCursor();
 }
 
-void ColorFXTool::colorEffect(uchar *data, int w, int h, bool sb)
+void ColorFXTool::colorEffect(uchar* data, int w, int h, bool sb)
 {
     switch (d->effectType->currentIndex())
     {
@@ -496,14 +496,13 @@ void ColorFXTool::solarize(int factor, uchar *data, int w, int h, bool sb)
     }
 }
 
-void ColorFXTool::vivid(int factor, uchar *data, int w, int h, bool sb)
+void ColorFXTool::vivid(int factor, uchar* data, int w, int h, bool sb)
 {
     float amount = factor/100.0;
 
     // Apply Channel Mixer adjustments.
     
     MixerContainer settings;
-
     settings.redRedGain     = 1.0 + amount + amount;
     settings.redGreenGain   = (-1.0)*amount;
     settings.redBlueGain    = (-1.0)*amount;
@@ -513,8 +512,13 @@ void ColorFXTool::vivid(int factor, uchar *data, int w, int h, bool sb)
     settings.blueRedGain    = (-1.0)*amount;
     settings.blueGreenGain  = (-1.0)*amount;
     settings.blueBlueGain   = 1.0 + amount + amount;
-    MixerFilter mixer(data, w, h, sb, settings);
-
+   
+    DImg img(w, h, sb, true, data);
+    MixerFilter mixer(&img, 0L, settings);
+    mixer.startFilterDirectly();
+    DImg tgt = mixer.getTargetImage();
+    memcpy(data, tgt.bits(), tgt.numBytes());    
+    
     // Allocate the destination image data.
 
     uchar* dest = new uchar[w*h*(sb ? 8 : 4)];
@@ -530,7 +534,7 @@ void ColorFXTool::vivid(int factor, uchar *data, int w, int h, bool sb)
         Curves.setCurvePoint(LuminosityChannel, 10, QPoint(191, 194));
         Curves.setCurvePoint(LuminosityChannel, 16, QPoint(255, 255));
     }
-    else                    // 16 bits image.
+    else            // 16 bits image.
     {
         Curves.setCurvePoint(LuminosityChannel, 0,  QPoint(0,     0));
         Curves.setCurvePoint(LuminosityChannel, 5,  QPoint(16128, 15360));
@@ -541,7 +545,7 @@ void ColorFXTool::vivid(int factor, uchar *data, int w, int h, bool sb)
     Curves.curvesCalculateCurve(AlphaChannel);   // Calculate cure on all channels.
     Curves.curvesLutSetup(AlphaChannel);         // ... and apply it on all channels
     Curves.curvesLutProcess(data, dest, w, h);
-
+    
     memcpy(data, dest, w*h*(sb ? 8 : 4));
     delete [] dest;
 }
