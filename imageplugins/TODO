@@ -1,0 +1,47 @@
+Editor tools pending task
+
+                        Multithreaded      Zommable Preview        Port to BQM
+adjustcurves                TODO                 TODO                  TODO
+adjustlevels                TODO                 TODO                  TODO           
+blurfx                      DONE                 DONE                  TODO
+border                      DONE                  NO                   TODO
+channelmixer                DONE                 DONE                  DONE
+charcoal                    DONE                 DONE                  TODO
+colorfx                     TODO                 TODO                  TODO
+contentawareresizing        DONE                 TODO                  TODO
+
+coreplugin
+  /autocorrectiontool       DONE                 DONE                  DONE
+  /bcgtool                  DONE                 DONE                  DONE
+  /blurtool                 DONE                 DONE                  TODO
+  /bwsepiatool              DONE                 DONE                  DONE
+  /cbtool                   DONE                 DONE                  DONE
+  /hsltool                  DONE                 DONE                  DONE
+  /noisereductiontool       DONE                 DONE                  DONE
+  /profileconversiontool    DONE                 DONE                  DONE
+  /redeyetool               DONE                 TODO                   NO
+  /resizetool               DONE                 TODO                  DONE
+  /sharpentool              DONE                 DONE                  DONE
+
+distortionfx                DONE                 TODO                  TODO
+emboss                      DONE                 DONE                  TODO
+filmgrain                   DONE                 DONE                  TODO
+freerotation                DONE                  NO                   TODO
+hotpixels                   DONE                 DONE                  TODO
+inpainting                  DONE                  NO                    NO
+inserttext                   NO                   NO                    NO
+
+lenscorrection
+  /autocorrection           DONE                 TODO                  TODO
+  /distortion               DONE                 TODO                  TODO
+  /vignetting               DONE                 TODO                  TODO
+
+localcontrast               DONE                 TODO                  TODO
+oilpaint                    DONE                 DONE                  TODO
+perspective                  NO                   NO                    NO
+raindrop                    DONE                  NO                   TODO
+restoration                 DONE                 DONE                  DONE
+sheartool                   DONE                  NO                   TODO  
+superimpose                  NO                   NO                    NO
+texture                     DONE                 DONE                  TODO
+whitebalance                TODO                 TODO                  TODO
