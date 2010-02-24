@@ -47,38 +47,19 @@ TonalityFilter::TonalityFilter(DImg* orgImage, QObject* parent, const TonalityCo
     initFilter();
 }
 
-TonalityFilter::TonalityFilter(uchar* bits, uint width, uint height, bool sixteenBits,
-                               const TonalityContainer& settings)
-              : DImgThreadedFilter()
-{
-    m_settings = settings;
-    m_orgImage = DImg(width, height, sixteenBits, true, bits, true);
-    initFilter();
-    startFilterDirectly();
-    memcpy(bits, m_orgImage.bits(), m_orgImage.numBytes());
-}
-
 TonalityFilter::~TonalityFilter()
 {
 }
 
+/** Change color tonality of an image for applying a RGB color mask.*/
 void TonalityFilter::filterImage()
 {
-    changeTonality(m_orgImage);
     m_destImage.putImageData(m_orgImage.bits());
-}
-
-void TonalityFilter::changeTonality(DImg& image)
-{
-    if (image.isNull()) return;
-
-    changeTonality(image.bits(), image.width(), image.height(), image.sixteenBit());
-}
-
-/** Change color tonality of an image for applying a RGB color mask.*/
-void TonalityFilter::changeTonality(uchar* bits, uint width, uint height, bool sixteenBit)
-{
-    if (!bits) return;
+    
+    uchar* bits     = m_destImage.bits();
+    uint width      = m_destImage.width();
+    uint height     = m_destImage.height();
+    bool sixteenBit = m_destImage.sixteenBit();
 
     uint size = width*height;
     int  progress;
