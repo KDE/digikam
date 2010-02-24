@@ -68,4 +68,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 045 ==> 227555 : Preview image in digiKam is not displayed after saveas in editor.
 046 ==> 225728 : Adding vignette should not increase brightness in the center.
 047 ==> 227992 : Search field should not lost focus if nothing was found.
-048 ==>
+048 ==> 228326 : Crash trying to create a new tag.
+049 ==> 

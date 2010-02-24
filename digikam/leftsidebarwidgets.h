@@ -38,6 +38,9 @@
 namespace Digikam
 {
 
+template <class T>
+class AlbumPointer;
+
 class AlbumFolderViewSideBarWidgetPriv;
 /**
  * SideBarWidget for the folder view.
@@ -57,6 +60,7 @@ public:
     void doSaveState();
     void applySettings();
     void changeAlbumFromHistory(Album *album);
+    AlbumPointer<PAlbum> currentAlbum() const;
     QPixmap getIcon();
     QString getCaption();
 
@@ -89,6 +93,7 @@ public:
     void doSaveState();
     void applySettings();
     void changeAlbumFromHistory(Album *album);
+    AlbumPointer<TAlbum> currentAlbum() const;
     QPixmap getIcon();
     QString getCaption();
 
@@ -124,6 +129,7 @@ public:
     void doSaveState();
     void applySettings();
     void changeAlbumFromHistory(Album *album);
+    AlbumPointer<DAlbum> currentAlbum() const;
     QPixmap getIcon();
     QString getCaption();
 

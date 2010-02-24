@@ -44,6 +44,9 @@ class DateAlbumModel;
 class DateFolderViewPriv;
 class ImageFilterModel;
 
+template <class T>
+class AlbumPointer;
+
 class DateFolderView: public KVBox, public StateSavingObject
 {
 Q_OBJECT
@@ -60,6 +63,8 @@ public:
     void gotoDate(const QDate& dt);
 
     void changeAlbumFromHistory(SAlbum *album);
+
+    AlbumPointer<DAlbum> currentAlbum() const;
 
     virtual void setConfigGroup(KConfigGroup group);
 
