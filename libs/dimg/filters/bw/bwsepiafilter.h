@@ -133,19 +133,16 @@ class DIGIKAM_EXPORT BWSepiaFilter : public DImgThreadedFilter
 
 public:
 
-    explicit BWSepiaFilter(DImg* orgImage, QObject* parent=0, const BWSepiaContainer& settings=BWSepiaContainer());
-    BWSepiaFilter(uchar* bits, uint width, uint height, bool sixteenBits, 
-                  const BWSepiaContainer& settings=BWSepiaContainer());
+    BWSepiaFilter(DImg* orgImage, QObject* parent=0, const BWSepiaContainer& settings=BWSepiaContainer());
     virtual ~BWSepiaFilter();
 
 private:
 
     void filterImage();
 
-    DImg getThumbnailForEffect(const DImg& img);
-    DImg getThumbnailForEffect(uchar* data, int w, int h, bool sb);
+    DImg getThumbnailForEffect(DImg& img);
     
-    void blackAndWhiteConversion(int type);
+//    void blackAndWhiteConversion(int type);
     void blackAndWhiteConversion(uchar* data, int w, int h, bool sb, int type);
     void applyChannelMixer(uchar* data, int w, int h, bool sb);
     void applyInfraredFilter(uchar* data, int w, int h, bool sb, int sensibility);

@@ -78,16 +78,6 @@ BWSepiaFilter::BWSepiaFilter(DImg* orgImage, QObject* parent, const BWSepiaConta
     initFilter();
 }
 
-BWSepiaFilter::BWSepiaFilter(uchar* bits, uint width, uint height, bool sixteenBits, const BWSepiaContainer& settings)
-             : DImgThreadedFilter(),
-               d(new BWSepiaFilterPriv)
-{
-    d->settings = settings;
-    m_orgImage  = DImg(width, height, sixteenBits, true, bits, true);
-    initFilter();
-    startFilterDirectly();
-}
-
 BWSepiaFilter::~BWSepiaFilter()
 {
     delete d;
@@ -145,15 +135,10 @@ void BWSepiaFilter::filterImage()
     }
 }
 
-DImg BWSepiaFilter::getThumbnailForEffect(const DImg& img)
-{
-    return getThumbnailForEffect(img.bits(), img.width(), img.height(), img.sixteenBit());
-}
-
-DImg BWSepiaFilter::getThumbnailForEffect(uchar* data, int w, int h, bool sb)
+DImg BWSepiaFilter::getThumbnailForEffect(DImg& img)
 {
     postProgress(10);
-    DImg thumb(w, h, sb, true, data);
+    DImg thumb = img.copy();
 
     postProgress(25);
 
@@ -161,10 +146,12 @@ DImg BWSepiaFilter::getThumbnailForEffect(uchar* data, int w, int h, bool sb)
     {
         // In Filter view, we will render a preview of the B&W filter with the generic B&W film.
         
-        blackAndWhiteConversion(thumb.bits(), w, h, sb, d->settings.previewType);
+        blackAndWhiteConversion(thumb.bits(), thumb.width(), thumb.height(), thumb.sixteenBit(), 
+                                d->settings.previewType);
         postProgress(50);
 
-        blackAndWhiteConversion(thumb.bits(), w, h, sb, BWSepiaContainer::BWGeneric);
+        blackAndWhiteConversion(thumb.bits(), thumb.width(), thumb.height(), thumb.sixteenBit(),
+                                BWSepiaContainer::BWGeneric);
         postProgress(75);
     }
     else
@@ -173,7 +160,8 @@ DImg BWSepiaFilter::getThumbnailForEffect(uchar* data, int w, int h, bool sb)
         
         postProgress(50);
 
-        blackAndWhiteConversion(thumb.bits(), w, h, sb, d->settings.previewType);
+        blackAndWhiteConversion(thumb.bits(), thumb.width(), thumb.height(), thumb.sixteenBit(),
+                                d->settings.previewType);
         postProgress(75);
     }
     
@@ -182,12 +170,12 @@ DImg BWSepiaFilter::getThumbnailForEffect(uchar* data, int w, int h, bool sb)
     return (thumb);
 }
 
-void BWSepiaFilter::blackAndWhiteConversion(int type)
+/*void BWSepiaFilter::blackAndWhiteConversion(int type)
 {
     return blackAndWhiteConversion(m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(),
                                    m_orgImage.sixteenBit(), type);
 }
-
+*/
 void BWSepiaFilter::blackAndWhiteConversion(uchar* data, int w, int h, bool sb, int type)
 {
     // Value to multiply RGB 8 bits component of mask used by TonalityFilter.
