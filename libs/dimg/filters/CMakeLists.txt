@@ -9,8 +9,8 @@ INSTALL(FILES dimgthreadedfilter.h
               hsl/hslfilter.h 
               icc/icctransform.h 
               levels/imagelevels.h
-              nr/waveletsnr.h 
-              nr/noisereductionsettings.h
+              nr/nrfilter.h 
+              nr/nrsettings.h
               sharp/dimgsharpen.h 
               sharp/dimgunsharpmask.h
               sharp/dimgrefocus.h 
