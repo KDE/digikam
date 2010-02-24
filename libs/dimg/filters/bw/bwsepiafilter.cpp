@@ -38,6 +38,7 @@
 #include "mixerfilter.h"
 #include "infraredfilter.h"
 #include "imagehistogram.h"
+#include "imagecurves.h"
 
 namespace Digikam
 {
@@ -110,18 +111,24 @@ void BWSepiaFilter::filterImage()
 
         // Calculate and apply the curve on image.
 
-        uchar* targetData = new uchar[m_destImage.numBytes()];
-        postProgress(50);
+        if (!d->settings.curvePts.isEmpty())
+        {
+            ImageCurves curves(m_destImage.sixteenBit());
+            curves.setCurvePoints(LuminosityChannel, d->settings.curvePts);
+            
+            uchar* targetData = new uchar[m_destImage.numBytes()];
+            postProgress(50);
 
-        d->settings.curves->curvesLutSetup(AlphaChannel);
-        postProgress(60);
+            curves.curvesLutSetup(AlphaChannel);
+            postProgress(60);
 
-        d->settings.curves->curvesLutProcess(m_destImage.bits(), targetData, m_destImage.width(), m_destImage.height());
-        postProgress(70);
+            curves.curvesLutProcess(m_destImage.bits(), targetData, m_destImage.width(), m_destImage.height());
+            postProgress(70);
 
-        m_destImage.putImageData(targetData);
-        postProgress(80);
-
+            m_destImage.putImageData(targetData);
+            postProgress(80);
+        }
+            
         // Adjust contrast.
 
         BCGFilter bcg(&m_destImage, 0L, d->settings.bcgPrm);

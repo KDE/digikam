@@ -24,12 +24,13 @@
 #ifndef BWSEPIAFILTER_H
 #define BWSEPIAFILTER_H
 
+#include <QPolygon>
+
 // Local includes
 
 #include "digikam_export.h"
 #include "dimgthreadedfilter.h"
 #include "globals.h"
-#include "imagecurves.h"
 #include "bcgfilter.h"
 #include "tonalityfilter.h"
 
@@ -95,7 +96,6 @@ public:
         filterType  = BWNoFilter;
         toneType    = BWNoTone;
         strength    = 1.0;
-        curves      = new ImageCurves(false);
     };
 
     BWSepiaContainer(int ptype)
@@ -106,7 +106,6 @@ public:
         filmType    = BWGeneric;
         filterType  = BWNoFilter;
         toneType    = BWNoTone;
-        curves      = new ImageCurves(false);
     };
 
     ~BWSepiaContainer(){};
@@ -122,7 +121,7 @@ public:
 
     double       strength;
     
-    ImageCurves* curves;
+    QPolygon     curvePts;
 
     BCGContainer bcgPrm;
 };
