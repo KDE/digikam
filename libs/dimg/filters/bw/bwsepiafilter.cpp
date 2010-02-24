@@ -90,39 +90,39 @@ void BWSepiaFilter::filterImage()
     }
     else
     {
+        m_destImage.putImageData(m_orgImage.bits());
         postProgress(10);
 
         // Apply black and white filter.
 
-        blackAndWhiteConversion(m_orgImage, d->settings.filterType);
+        blackAndWhiteConversion(m_destImage, d->settings.filterType);
         postProgress(20);
 
         // Apply black and white film type.
 
-        blackAndWhiteConversion(m_orgImage, d->settings.filmType);
+        blackAndWhiteConversion(m_destImage, d->settings.filmType);
         postProgress(30);
 
         // Apply color tone filter.
 
-        blackAndWhiteConversion(m_orgImage, d->settings.toneType);
+        blackAndWhiteConversion(m_destImage, d->settings.toneType);
         postProgress(40);
 
         // Calculate and apply the curve on image.
 
-//        uchar* targetData = new uchar[m_orgImage.numBytes()];
-        uchar* targetData = new uchar[m_orgImage.width()*m_orgImage.height()*(m_orgImage.sixteenBit() ? 8 : 4)];
+        uchar* targetData = new uchar[m_destImage.numBytes()];
         postProgress(50);
 
         d->settings.curves->curvesLutSetup(AlphaChannel);
         postProgress(60);
 
-        d->settings.curves->curvesLutProcess(m_orgImage.bits(), targetData, m_orgImage.width(), m_orgImage.height());
+        d->settings.curves->curvesLutProcess(m_destImage.bits(), targetData, m_destImage.width(), m_destImage.height());
         postProgress(70);
-
-        // Adjust contrast.
 
         m_destImage.putImageData(targetData);
         postProgress(80);
+
+        // Adjust contrast.
 
         BCGFilter bcg(&m_destImage, 0L, d->settings.bcgPrm);
         bcg.startFilterDirectly();
