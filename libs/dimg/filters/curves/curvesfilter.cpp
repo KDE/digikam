@@ -49,45 +49,31 @@ CurvesFilter::~CurvesFilter()
 void CurvesFilter::filterImage()
 {
     postProgress(10);
-
     ImageCurves curves(m_orgImage.sixteenBit());
-    
-    if (!m_settings.lumCurvePts.isEmpty())
-        curves.setCurvePoints(LuminosityChannel, m_settings.lumCurvePts);
-
+    curves.setCurvePoints(LuminosityChannel, m_settings.lumCurvePts);
     postProgress(20);
 
-    if (!m_settings.redCurvePts.isEmpty())
-        curves.setCurvePoints(RedChannel, m_settings.redCurvePts);
-
+    curves.setCurvePoints(RedChannel, m_settings.redCurvePts);
     postProgress(30);
 
-    if (!m_settings.greenCurvePts.isEmpty())
-        curves.setCurvePoints(GreenChannel, m_settings.greenCurvePts);
-
+    curves.setCurvePoints(GreenChannel, m_settings.greenCurvePts);
     postProgress(40);
 
-    if (!m_settings.blueCurvePts.isEmpty())
-        curves.setCurvePoints(BlueChannel, m_settings.blueCurvePts);
-
+    curves.setCurvePoints(BlueChannel, m_settings.blueCurvePts);
     postProgress(50);
     
-    if (!m_settings.alphaCurvePts.isEmpty())
-        curves.setCurvePoints(AlphaChannel, m_settings.alphaCurvePts);
-
+    curves.setCurvePoints(AlphaChannel, m_settings.alphaCurvePts);
     postProgress(60);
     
-    uchar* targetData = new uchar[m_orgImage.numBytes()];
+    m_destImage = DImg(m_orgImage.width(), m_orgImage.height(), m_orgImage.sixteenBit(), m_orgImage.hasAlpha());
     postProgress(70);
     
     // Process all channels curves
     curves.curvesLutSetup(AlphaChannel);
     postProgress(80);
     
-    curves.curvesLutProcess(m_orgImage.bits(), targetData, m_orgImage.width(), m_orgImage.height());
+    curves.curvesLutProcess(m_orgImage.bits(), m_destImage.bits(), m_orgImage.width(), m_orgImage.height());
     postProgress(90);
-
-    m_destImage.putImageData(targetData);
 }
 
 }  // namespace Digikam
