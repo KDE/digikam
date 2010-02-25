@@ -29,6 +29,7 @@
 
 // Qt includes
 
+#include <QApplication>
 #include <QCache>
 #include <QString>
 #include <QPainter>
@@ -44,7 +45,9 @@
 // KDE includes
 
 #include <kdatetable.h>
+#include <kdebug.h>
 #include <kcursor.h>
+#include <kglobalsettings.h>
 #include <klocale.h>
 
 // locale includes
@@ -64,8 +67,6 @@ public:
         currentFitWindowZoom = 0.0;
         panIconPopup         = 0;
         cornerButton         = 0;
-        midButtonX           = 0;
-        midButtonY           = 0;
         autoZoom             = false;
         fullScreen           = false;
         zoom                 = 1.0;
@@ -82,10 +83,9 @@ public:
     bool                     fullScreen;
 
     const int                tileSize;
-    int                      midButtonX;
-    int                      midButtonY;
     int                      zoomWidth;
     int                      zoomHeight;
+    QPoint                   mousePressPos;
 
     double                   zoom;
     double                   minZoom;
@@ -619,7 +619,34 @@ void PreviewWidget::contentsMouseDoubleClickEvent(QMouseEvent* e)
         return;
 
     if (e->button() == Qt::LeftButton)
+    {
         emit signalLeftButtonDoubleClicked();
+        if (!KGlobalSettings::singleClick())
+            emit signalActivated();
+    }
+}
+
+void PreviewWidget::startPanning(const QPoint& pos)
+{
+    if (visibleWidth()  < d->zoomWidth ||
+        visibleHeight() < d->zoomHeight)
+    {
+        m_movingInProgress = true;
+        d->mousePressPos   = pos;
+        viewport()->setCursor(Qt::SizeAllCursor);
+    }
+}
+
+void PreviewWidget::continuePanning(const QPoint& pos)
+{
+    scrollBy(d->mousePressPos.x() - pos.x(), d->mousePressPos.y() - pos.y());
+    emit signalContentsMovedEvent(false);
+}
+
+void PreviewWidget::finishPanning()
+{
+    emit signalContentsMovedEvent(true);
+    viewport()->unsetCursor();
 }
 
 void PreviewWidget::contentsMousePressEvent(QMouseEvent* e)
@@ -631,18 +658,10 @@ void PreviewWidget::contentsMousePressEvent(QMouseEvent* e)
 
     if (e->button() == Qt::LeftButton || e->button() == Qt::MidButton)
     {
-        if (e->button() == Qt::LeftButton)
-            emit signalLeftButtonClicked();
+        d->mousePressPos = e->pos();
+        if (!KGlobalSettings::singleClick() || e->button() == Qt::MidButton)
+            startPanning(e->pos());
 
-        if (visibleWidth()  < d->zoomWidth ||
-            visibleHeight() < d->zoomHeight)
-        {
-            m_movingInProgress = true;
-            d->midButtonX      = e->x();
-            d->midButtonY      = e->y();
-            viewport()->repaint();
-            viewport()->setCursor(Qt::SizeAllCursor);
-        }
         return;
     }
 
@@ -653,12 +672,17 @@ void PreviewWidget::contentsMouseMoveEvent(QMouseEvent* e)
 {
     if (!e) return;
 
-    if (e->buttons() & Qt::LeftButton || e->buttons() & Qt::MidButton)
+    if ((e->buttons() & Qt::LeftButton || e->buttons() & Qt::MidButton) && !d->mousePressPos.isNull())
     {
+        if (!m_movingInProgress && e->buttons() & Qt::LeftButton)
+        {
+            if ((d->mousePressPos - e->pos()).manhattanLength() > QApplication::startDragDistance())
+                startPanning(d->mousePressPos);
+        }
+
         if (m_movingInProgress)
         {
-            scrollBy(d->midButtonX - e->x(), d->midButtonY - e->y());
-            emit signalContentsMovedEvent(false);
+            continuePanning(e->pos());
         }
     }
 }
@@ -667,19 +691,27 @@ void PreviewWidget::contentsMouseReleaseEvent(QMouseEvent* e)
 {
     if (!e) return;
 
-    m_movingInProgress = false;
-
-    if (e->button() == Qt::LeftButton || e->button() == Qt::MidButton)
+    if ((e->button() == Qt::LeftButton || e->button() == Qt::MidButton) && !d->mousePressPos.isNull())
     {
-        emit signalContentsMovedEvent(true);
-        viewport()->unsetCursor();
-        viewport()->repaint();
+        if (!m_movingInProgress && e->button() == Qt::LeftButton)
+        {
+            emit signalLeftButtonClicked();
+            if (KGlobalSettings::singleClick())
+                emit signalActivated();
+        }
+        else
+        {
+            finishPanning();
+        }
     }
 
     if (e->button() == Qt::RightButton)
     {
         emit signalRightButtonClicked();
     }
+
+    m_movingInProgress = false;
+    d->mousePressPos   = QPoint();
 }
 
 void PreviewWidget::contentsWheelEvent(QWheelEvent* e)

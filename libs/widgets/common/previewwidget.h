@@ -78,6 +78,7 @@ Q_SIGNALS:
     void signalRightButtonClicked();
     void signalLeftButtonClicked();
     void signalLeftButtonDoubleClicked();
+    void signalActivated();
     void signalShowNextImage();
     void signalShowPrevImage();
     void signalZoomFactorChanged(double);
@@ -120,6 +121,9 @@ protected:
     void   clearCache();
     QRect  previewRect();
     void   drawText(QPainter* p, const QPoint& corner, const QString& text);
+    void   startPanning(const QPoint& pos);
+    void   continuePanning(const QPoint& pos);
+    void   finishPanning();
 
     virtual void setContentsSize();
     virtual void viewportPaintExtraData(){};

@@ -151,7 +151,7 @@ ImagePreviewView::ImagePreviewView(AlbumWidgetStack* parent)
     connect(this, SIGNAL(signalShowPrevImage()),
             this, SIGNAL(signalPrevItem()));
 
-    connect(this, SIGNAL(signalLeftButtonDoubleClicked()),
+    connect(this, SIGNAL(signalActivated()),
             this, SIGNAL(signalBack2Album()));
 
     connect(this, SIGNAL(signalRightButtonClicked()),
