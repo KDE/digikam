@@ -44,8 +44,8 @@
 #include "dimgloaderobserver.h"
 #include "icctransform.h"
 #include "imagehistogram.h"
-#include "imagecurves.h"
 #include "imagelevels.h"
+#include "imagecurves.h"
 #include "bcgfilter.h"
 #include "whitebalance.h"
 #include "globals.h"
@@ -61,7 +61,7 @@ RAWLoader::RAWLoader(DImg* image, DRawDecoding rawDecodingSettings)
     m_observer            = 0;
 }
 
-bool RAWLoader::load(const QString& filePath, DImgLoaderObserver *observer)
+bool RAWLoader::load(const QString& filePath, DImgLoaderObserver* observer)
 {
     m_observer = observer;
 
@@ -130,7 +130,7 @@ void RAWLoader::setWaitingDataProgress(double value)
 }
 
 bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbmax,
-                                DImgLoaderObserver *observer)
+                                DImgLoaderObserver* observer)
 {
     int checkpoint = 0;
 
@@ -282,7 +282,7 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
     return true;
 }
 
-void RAWLoader::postProcess(DImgLoaderObserver *observer)
+void RAWLoader::postProcess(DImgLoaderObserver* observer)
 {
     // emulate LibRaw custom output profile
     if (!m_customOutputProfile.isNull())

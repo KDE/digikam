@@ -50,11 +50,11 @@ public:
 
     explicit RAWLoader(DImg* image, DRawDecoding rawDecodingSettings=DRawDecoding());
 
-    bool load(const QString& filePath, DImgLoaderObserver *observer=0);
-    void postProcess(DImgLoaderObserver *observer);
+    bool load(const QString& filePath, DImgLoaderObserver* observer=0);
+    void postProcess(DImgLoaderObserver* observer);
 
     // NOTE: RAW files are always Read only.
-    bool save(const QString& /*filePath*/, DImgLoaderObserver * /*observer=0*/) { return false; };
+    bool save(const QString& /*filePath*/, DImgLoaderObserver* /*observer=0*/) { return false; };
 
     bool hasAlpha()   const { return false;                                  };
     bool isReadOnly() const { return true;                                   };
@@ -72,7 +72,7 @@ private:
 
 private:
 
-    DImgLoaderObserver *m_observer;
+    DImgLoaderObserver* m_observer;
     DRawDecoding        m_customRawSettings;
     IccProfile          m_customOutputProfile;
 };
