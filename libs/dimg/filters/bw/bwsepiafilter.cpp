@@ -37,8 +37,7 @@
 #include "dimg.h"
 #include "mixerfilter.h"
 #include "infraredfilter.h"
-#include "imagehistogram.h"
-#include "imagecurves.h"
+#include "curvesfilter.h"
 
 namespace Digikam
 {
@@ -109,30 +108,22 @@ void BWSepiaFilter::filterImage()
         blackAndWhiteConversion(m_destImage, d->settings.toneType);
         postProgress(40);
 
-        // Calculate and apply the curve on image.
+        // Calculate and apply the luminosity curve on image.
 
-        if (!d->settings.curvePts.isEmpty())
-        {
-            ImageCurves curves(m_destImage.sixteenBit());
-            curves.setCurvePoints(LuminosityChannel, d->settings.curvePts);
-            
-            uchar* targetData = new uchar[m_destImage.numBytes()];
-            postProgress(50);
-
-            curves.curvesLutSetup(AlphaChannel);
-            postProgress(60);
-
-            curves.curvesLutProcess(m_destImage.bits(), targetData, m_destImage.width(), m_destImage.height());
-            postProgress(70);
-
-            m_destImage.putImageData(targetData);
-            postProgress(80);
-        }
-            
+        CurvesContainer prm;
+        prm.lumCurvePts = d->settings.curvePts;
+        postProgress(50);
+        CurvesFilter curves(&m_destImage, 0L, prm);
+        curves.startFilterDirectly();
+        postProgress(60);
+        m_destImage.putImageData(curves.getTargetImage().bits());
+        postProgress(70);
+        
         // Adjust contrast.
 
         BCGFilter bcg(&m_destImage, 0L, d->settings.bcgPrm);
         bcg.startFilterDirectly();
+        postProgress(80);
         m_destImage.putImageData(bcg.getTargetImage().bits());
         postProgress(90);
     }
