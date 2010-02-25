@@ -6,7 +6,7 @@
  * Date        : 2004-12-01
  * Description : image curves manipulation methods.
  *
- * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Some code parts are inspired from gimp 2.0
  * app/base/curves.c, gimplut.c, and app/base/gimpcurvetool.c
@@ -514,6 +514,9 @@ void ImageCurves::curvesLutSetup(int nchannels)
     uint   v;
     double val;
 
+    for (i = 0 ; i < NUM_CHANNELS ; ++i)
+       curvesCalculateCurve(i);
+    
     freeLutData();
 
     d->lut->nchannels = nchannels;
@@ -737,6 +740,10 @@ void ImageCurves::setCurvePoints(int channel, const QPolygon& vals)
         d->dirty = true;
         for (int j = 0 ; j <= NUM_POINTS ; ++j)
             setCurvePoint(channel, j, vals.point(j));
+    }
+    else
+    {
+        kDebug() << "Curves points list not applied (nb pts " << vals.size() << " - Channel " << channel << ")";
     }
 }
 
