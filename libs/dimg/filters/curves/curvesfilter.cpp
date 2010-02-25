@@ -48,10 +48,9 @@ CurvesFilter::~CurvesFilter()
 
 void CurvesFilter::filterImage()
 {
-    m_destImage.putImageData(m_orgImage.bits());
     postProgress(10);
 
-    ImageCurves curves(m_destImage.sixteenBit());
+    ImageCurves curves(m_orgImage.sixteenBit());
     
     if (!m_settings.lumCurvePts.isEmpty())
         curves.setCurvePoints(LuminosityChannel, m_settings.lumCurvePts);
@@ -78,13 +77,14 @@ void CurvesFilter::filterImage()
 
     postProgress(60);
     
-    uchar* targetData = new uchar[m_destImage.numBytes()];
+    uchar* targetData = new uchar[m_orgImage.numBytes()];
     postProgress(70);
     
+    // Process all channels curves
     curves.curvesLutSetup(AlphaChannel);
     postProgress(80);
     
-    curves.curvesLutProcess(m_destImage.bits(), targetData, m_destImage.width(), m_destImage.height());
+    curves.curvesLutProcess(m_orgImage.bits(), targetData, m_orgImage.width(), m_orgImage.height());
     postProgress(90);
 
     m_destImage.putImageData(targetData);
