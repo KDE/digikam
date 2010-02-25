@@ -42,12 +42,33 @@ namespace Digikam
 class DImg;
 class CurvesFilterPriv;
 
+
+class DIGIKAM_EXPORT CurvesContainer
+{
+
+public:
+
+    CurvesContainer(){};
+
+    ~CurvesContainer(){};
+
+public:
+
+    QPolygon lumCurvePts;
+    QPolygon redCurvePts;
+    QPolygon greenCurvePts;
+    QPolygon blueCurvePts;
+    QPolygon alphaCurvePts;
+};
+
+// --------------------------------------------------------------------------------
+
 class DIGIKAM_EXPORT CurvesFilter : public DImgThreadedFilter
 {
 
 public:
 
-    CurvesFilter(DImg* orgImage, QObject* parent=0, const QPolygon& curvesPts=QPolygon());
+    CurvesFilter(DImg* orgImage, QObject* parent=0, const CurvesContainer& settings=CurvesContainer());
     virtual ~CurvesFilter();
 
 private:
@@ -56,7 +77,7 @@ private:
 
 private:
 
-    QPolygon m_curvesPts;
+    CurvesContainer m_settings;
 };
 
 }  // namespace Digikam

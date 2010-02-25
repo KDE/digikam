@@ -35,10 +35,10 @@
 namespace Digikam
 {
 
-CurvesFilter::CurvesFilter(DImg* orgImage, QObject* parent, const QPolygon& curvesPts)
+CurvesFilter::CurvesFilter(DImg* orgImage, QObject* parent, const CurvesContainer& settings)
             : DImgThreadedFilter(orgImage, parent, "CurvesFilter")
 {
-    m_curvesPts = curvesPts;
+    m_settings = settings;
     initFilter();
 }
 
@@ -48,33 +48,46 @@ CurvesFilter::~CurvesFilter()
 
 void CurvesFilter::filterImage()
 {
-    postProgress(10);    
     m_destImage.putImageData(m_orgImage.bits());
+    postProgress(10);
+
+    ImageCurves curves(m_destImage.sixteenBit());
     
+    if (!m_settings.lumCurvePts.isEmpty())
+        curves.setCurvePoints(LuminosityChannel, m_settings.lumCurvePts);
+
     postProgress(20);
 
-    if (!m_curvesPts.isEmpty())
-    {
-        postProgress(30);
-        ImageCurves curves(m_destImage.sixteenBit());
+    if (!m_settings.redCurvePts.isEmpty())
+        curves.setCurvePoints(RedChannel, m_settings.redCurvePts);
 
-        postProgress(40);
-        curves.setCurvePoints(AlphaChannel, m_curvesPts);
-        
-        postProgress(50);
-        uchar* targetData = new uchar[m_destImage.numBytes()];
+    postProgress(30);
 
-        postProgress(60);
-        curves.curvesLutSetup(AlphaChannel);
+    if (!m_settings.greenCurvePts.isEmpty())
+        curves.setCurvePoints(GreenChannel, m_settings.greenCurvePts);
 
-        postProgress(70);
-        curves.curvesLutProcess(m_destImage.bits(), targetData, m_destImage.width(), m_destImage.height());
+    postProgress(40);
 
-        postProgress(80);
-        m_destImage.putImageData(targetData);
-    }
+    if (!m_settings.blueCurvePts.isEmpty())
+        curves.setCurvePoints(BlueChannel, m_settings.blueCurvePts);
+
+    postProgress(50);
     
+    if (!m_settings.alphaCurvePts.isEmpty())
+        curves.setCurvePoints(AlphaChannel, m_settings.alphaCurvePts);
+
+    postProgress(60);
+    
+    uchar* targetData = new uchar[m_destImage.numBytes()];
+    postProgress(70);
+    
+    curves.curvesLutSetup(AlphaChannel);
+    postProgress(80);
+    
+    curves.curvesLutProcess(m_destImage.bits(), targetData, m_destImage.width(), m_destImage.height());
     postProgress(90);
+
+    m_destImage.putImageData(targetData);
 }
 
 }  // namespace Digikam
