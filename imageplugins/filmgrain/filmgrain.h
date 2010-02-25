@@ -29,23 +29,23 @@
 
 #include "dimgthreadedfilter.h"
 
+using namespace Digikam;
+
 namespace DigikamFilmGrainImagesPlugin
 {
 
-class FilmGrain : public Digikam::DImgThreadedFilter
+class FilmGrain : public DImgThreadedFilter
 {
 
 public:
 
-    explicit FilmGrain(Digikam::DImg *orgImage, QObject *parent=0, int sensibility=12);
+    explicit FilmGrain(DImg* orgImage, QObject* parent=0, int sensibility=12);
 
     ~FilmGrain(){};
 
 private:
 
-    virtual void filterImage(void);
-
-    void filmgrainImage(Digikam::DImg *orgImage, int Sensibility);
+    void filterImage();
 
 private:
 
