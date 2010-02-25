@@ -61,21 +61,17 @@
 
 // Local includes
 
-#include "colorgradientwidget.h"
-#include "daboutdata.h"
 #include "dimg.h"
 #include "mixerfilter.h"
+#include "curvesfilter.h"
 #include "editortoolsettings.h"
 #include "histogrambox.h"
 #include "histogramwidget.h"
-#include "imagecurves.h"
 #include "imagehistogram.h"
 #include "imageiface.h"
 #include "imageguidewidget.h"
-#include "version.h"
 
 using namespace KDcrawIface;
-using namespace Digikam;
 
 namespace DigikamColorFXImagesPlugin
 {
@@ -132,8 +128,6 @@ ColorFXTool::ColorFXTool(QObject* parent)
     setObjectName("coloreffects");
     setToolName(i18n("Color Effects"));
     setToolIcon(SmallIcon("colorfx"));
-
-    d->destinationPreviewData = 0;
 
     // -------------------------------------------------------------
 
@@ -516,38 +510,33 @@ void ColorFXTool::vivid(int factor, uchar* data, int w, int h, bool sb)
     DImg img(w, h, sb, true, data);
     MixerFilter mixer(&img, 0L, settings);
     mixer.startFilterDirectly();
-    DImg tgt = mixer.getTargetImage();
-    memcpy(data, tgt.bits(), tgt.numBytes());    
+    DImg mixed = mixer.getTargetImage();
     
-    // Allocate the destination image data.
-
-    uchar* dest = new uchar[w*h*(sb ? 8 : 4)];
-
     // And now apply the curve correction.
 
-    ImageCurves Curves(sb);
-
+    CurvesContainer prm;
+    prm.lumCurvePts.resize(18);
+    
     if (!sb)        // 8 bits image.
     {
-        Curves.setCurvePoint(LuminosityChannel, 0,  QPoint(0,   0));
-        Curves.setCurvePoint(LuminosityChannel, 5,  QPoint(63,  60));
-        Curves.setCurvePoint(LuminosityChannel, 10, QPoint(191, 194));
-        Curves.setCurvePoint(LuminosityChannel, 16, QPoint(255, 255));
+        prm.lumCurvePts.setPoint(0,  QPoint(0,   0));
+        prm.lumCurvePts.setPoint(5,  QPoint(63,  60));
+        prm.lumCurvePts.setPoint(10, QPoint(191, 194));
+        prm.lumCurvePts.setPoint(16, QPoint(255, 255));
     }
     else            // 16 bits image.
     {
-        Curves.setCurvePoint(LuminosityChannel, 0,  QPoint(0,     0));
-        Curves.setCurvePoint(LuminosityChannel, 5,  QPoint(16128, 15360));
-        Curves.setCurvePoint(LuminosityChannel, 10, QPoint(48896, 49664));
-        Curves.setCurvePoint(LuminosityChannel, 16, QPoint(65535, 65535));
-   }
+        prm.lumCurvePts.setPoint(0,  QPoint(0,     0));
+        prm.lumCurvePts.setPoint(5,  QPoint(16128, 15360));
+        prm.lumCurvePts.setPoint(10, QPoint(48896, 49664));
+        prm.lumCurvePts.setPoint(16, QPoint(65535, 65535));
+    }
 
-    Curves.curvesCalculateCurve(AlphaChannel);   // Calculate cure on all channels.
-    Curves.curvesLutSetup(AlphaChannel);         // ... and apply it on all channels
-    Curves.curvesLutProcess(data, dest, w, h);
-    
-    memcpy(data, dest, w*h*(sb ? 8 : 4));
-    delete [] dest;
+    CurvesFilter curves(&mixed, 0L, prm);
+    curves.startFilterDirectly();
+    DImg tgt = curves.getTargetImage();    
+
+    memcpy(data, tgt.bits(), tgt.numBytes());    
 }
 
 /* Function to apply the Neon effect

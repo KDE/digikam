@@ -30,6 +30,8 @@
 
 #include "editortool.h"
 
+using namespace Digikam;
+
 namespace Digikam
 {
 class DColor;
@@ -40,7 +42,7 @@ namespace DigikamColorFXImagesPlugin
 
 class ColorFXToolPriv;
 
-class ColorFXTool : public Digikam::EditorTool
+class ColorFXTool : public EditorTool
 {
     Q_OBJECT
 
