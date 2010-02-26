@@ -29,6 +29,7 @@
 
 // Qt includes
 
+#include <QCursor>
 #include <QPainter>
 #include <QPen>
 #include <QImage>
@@ -38,6 +39,7 @@
 
 // KDE includes
 
+#include <kiconloader.h>
 #include <kcursor.h>
 #include <klocale.h>
 #include <kdebug.h>
@@ -57,13 +59,15 @@ public:
 
     ImageRegionWidgetPriv()
     {
+        capturePtMode             = false;
         onMouseMovePreviewToggled = true;
         iface                     = 0;
         renderingPreviewMode      = PreviewToolBar::PreviewBothImagesVertCont;
     }
 
     bool        onMouseMovePreviewToggled;
-
+    bool        capturePtMode;
+    
     int         renderingPreviewMode;
     int         xpos;
     int         ypos;
@@ -83,6 +87,8 @@ ImageRegionWidget::ImageRegionWidget(QWidget* parent)
     d->iface = new ImageIface(0, 0);
     d->image = d->iface->getOriginalImg()->copy();
 
+    setCapturePointMode(true);
+    
     setAttribute(Qt::WA_DeleteOnClose);
     setFrameStyle(QFrame::NoFrame);
     setMinimumSize(480, 320);
@@ -142,6 +148,19 @@ void ImageRegionWidget::setHighLightPoints(const QPolygon& pointsList)
     repaintContents(false);
 }
 
+void ImageRegionWidget::setCapturePointMode(bool b)
+{
+    d->capturePtMode = b;
+    viewport()->setMouseTracking(b);
+    if (b) viewport()->setCursor(QCursor(SmallIcon("color-picker", 32), 1, 28));
+    else   viewport()->unsetCursor();
+}
+
+bool ImageRegionWidget::capturePointMode()
+{
+    return d->capturePtMode;
+}
+    
 void ImageRegionWidget::slotZoomFactorChanged()
 {
     emit signalContentsMovedEvent(true);
@@ -471,6 +490,81 @@ void ImageRegionWidget::leaveEvent(QEvent*)
         d->onMouseMovePreviewToggled = true;
         viewport()->repaint();
     }
+}
+
+void ImageRegionWidget::contentsMousePressEvent(QMouseEvent* e)
+{
+    if (d->capturePtMode)
+    {
+        QRect  region = getLocalImageRegionToRender();
+        // Original region.
+        QRect  ro(contentsToViewport(region.topLeft()), contentsToViewport(region.bottomRight()));
+        // Target region.
+        QRect rt(contentsToViewport(region.topLeft()), contentsToViewport(region.bottomRight()));
+        QPoint tl = previewRect().topLeft();
+        ro.translate(tl);
+        rt.translate(tl);
+
+        QPoint pt(contentsToViewport(e->pos()));
+
+        // Drawing separate view.
+
+        if (d->renderingPreviewMode == PreviewToolBar::PreviewOriginalImage ||
+            (d->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver && !d->onMouseMovePreviewToggled))
+        {
+            if (ro.contains(pt))
+                emitCapturedPointFromOriginal(pt - ro.topLeft());
+        }
+        else if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesVert ||
+                d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesVertCont)
+        {
+            if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesVert)
+                rt.translate(rt.width(), 0);
+
+            if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesVertCont)
+                ro.translate(-ro.width(), 0);
+
+            if (!rt.contains(pt) && ro.contains(pt))
+                emitCapturedPointFromOriginal(pt - ro.topLeft());
+        }
+        else if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorz ||
+                d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorzCont)
+        {
+            if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorz)
+                rt.translate(0, rt.height());
+
+            if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorzCont)
+                ro.translate(0, -ro.height());
+
+            if (!rt.contains(pt) && ro.contains(pt))
+                emitCapturedPointFromOriginal(pt - ro.topLeft());
+        }        
+        
+        return;
+    }
+
+    PreviewWidget::contentsMousePressEvent(e);
+}
+
+void ImageRegionWidget::emitCapturedPointFromOriginal(const QPoint& pt)
+{
+    int x = (int)(((double)pt.x() / tileSize()) * floor(tileSize() / zoomFactor()));
+    int y = (int)(((double)pt.y() / tileSize()) * floor(tileSize() / zoomFactor()));
+    QPoint imgPt(x, y);
+    DColor color = d->image.getPixelColor(x, y);
+    kDebug() << "Captured point from image : " << imgPt;
+    emit signalCapturedPointFromOriginal(color, imgPt);
+}
+
+void ImageRegionWidget::contentsMouseReleaseEvent(QMouseEvent* e)
+{
+    if (d->capturePtMode)
+    {
+        setCapturePointMode(false);
+        return;
+    }
+
+    PreviewWidget::contentsMouseReleaseEvent(e);
 }
 
 }  // namespace Digikam
