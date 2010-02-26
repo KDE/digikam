@@ -641,6 +641,7 @@ void PreviewWidget::continuePanning(const QPoint& pos)
 {
     scrollBy(d->mousePressPos.x() - pos.x(), d->mousePressPos.y() - pos.y());
     emit signalContentsMovedEvent(false);
+    viewport()->update();
 }
 
 void PreviewWidget::finishPanning()
