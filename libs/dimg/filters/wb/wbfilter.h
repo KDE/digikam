@@ -35,8 +35,6 @@
 #include "dimgthreadedfilter.h"
 #include "globals.h"
 
-class QColor;
-
 using namespace Digikam;
 
 namespace Digikam
