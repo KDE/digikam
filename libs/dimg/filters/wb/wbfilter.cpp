@@ -29,10 +29,6 @@
 #include <cstdio>
 #include <cmath>
 
-// Qt includes
-
-#include <QColor>
-
 // KDE includes
 
 #include <kdebug.h>
