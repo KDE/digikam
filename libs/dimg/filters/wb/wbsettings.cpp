@@ -102,7 +102,7 @@ public:
         configGammaInputEntry("Gamma"),
         configSaturationInputEntry("Saturation"),
         configGreenInputEntry("Green"),
-        configTemeratureInputEntry("Temperature"),
+        configTemperatureInputEntry("Temperature"),
         pickTemperature(0),
         autoAdjustExposure(0),
         adjTemperatureLabel(0),
@@ -136,7 +136,7 @@ public:
     const QString    configGammaInputEntry;
     const QString    configSaturationInputEntry;
     const QString    configGreenInputEntry;
-    const QString    configTemeratureInputEntry;
+    const QString    configTemperatureInputEntry;
 
     QToolButton*     pickTemperature;
     QToolButton*     autoAdjustExposure;
@@ -448,6 +448,7 @@ void WBSettings::setSettings(const WBContainer& settings)
     d->darkInput->setValue(settings.dark);
     d->gammaInput->setValue(settings.gamma);
     d->saturationInput->setValue(settings.saturation);
+    slotTemperatureChanged(d->temperatureInput->value());
 
     blockSignals(false);
 }
@@ -490,22 +491,31 @@ void WBSettings::readSettings(KConfigGroup& group)
 {
     WBContainer prm;
     WBContainer defaultPrm = defaultSettings();
-/*
-    prm.brightness = group.readEntry(d->configBrightnessAdjustmentEntry, defaultPrm.brightness);
-    prm.contrast   = group.readEntry(d->configContrastAdjustmentEntry,   defaultPrm.contrast);
-    prm.gamma      = group.readEntry(d->configGammaAdjustmentEntry,      defaultPrm.gamma);
-*/
+
+    prm.black       = group.readEntry(d->configBlackInputEntry,       d->blackInput->defaultValue());
+    prm.temperature = group.readEntry(d->configTemperatureInputEntry, d->temperatureInput->defaultValue());
+    prm.green       = group.readEntry(d->configGreenInputEntry,       d->greenInput->defaultValue());
+    prm.dark        = group.readEntry(d->configDarkInputEntry,        d->darkInput->defaultValue());
+    prm.gamma       = group.readEntry(d->configGammaInputEntry,       d->gammaInput->defaultValue());
+    prm.saturation  = group.readEntry(d->configSaturationInputEntry,  d->saturationInput->defaultValue());
+    double fineExpo = group.readEntry(d->configFineExposureEntry,     d->fineExposureInput->defaultValue());
+    prm.exposition  = group.readEntry(d->configMainExposureEntry,     d->mainExposureInput->defaultValue()) + fineExpo;
+
     setSettings(prm);
 }
 
 void WBSettings::writeSettings(KConfigGroup& group)
 {
     WBContainer prm = settings();
-/*
-    group.writeEntry(d->configBrightnessAdjustmentEntry, prm.brightness);
-    group.writeEntry(d->configContrastAdjustmentEntry,   prm.contrast);
-    group.writeEntry(d->configGammaAdjustmentEntry,      prm.gamma);
-*/
+
+    group.writeEntry(d->configDarkInputEntry,        d->darkInput->value());
+    group.writeEntry(d->configBlackInputEntry,       d->blackInput->value());
+    group.writeEntry(d->configMainExposureEntry,     d->mainExposureInput->value());
+    group.writeEntry(d->configFineExposureEntry,     d->fineExposureInput->value());
+    group.writeEntry(d->configGammaInputEntry,       d->gammaInput->value());
+    group.writeEntry(d->configSaturationInputEntry,  d->saturationInput->value());
+    group.writeEntry(d->configGreenInputEntry,       d->greenInput->value());
+    group.writeEntry(d->configTemperatureInputEntry, d->temperatureInput->value());
 }
 
 void WBSettings::loadSettings()
@@ -540,6 +550,7 @@ void WBSettings::loadSettings()
         d->gammaInput->setValue(stream.readLine().toDouble());
         d->saturationInput->setValue(stream.readLine().toDouble());
         d->greenInput->setValue(stream.readLine().toDouble());
+        slotTemperatureChanged(d->temperatureInput->value());
         blockSignals(false);
     }
     else
