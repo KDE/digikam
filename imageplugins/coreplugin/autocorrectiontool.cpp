@@ -27,7 +27,6 @@
 
 #include <QGridLayout>
 #include <QListWidget>
-#include <QPixmap>
 
 // KDE includes
 
@@ -232,7 +231,7 @@ void AutoCorrectionTool::slotResetSettings()
 void AutoCorrectionTool::prepareEffect()
 {
     kapp->setOverrideCursor(Qt::WaitCursor);
-    d->gboxSettings->setEnabled(false);
+    toolSettings()->setEnabled(false);
     toolView()->setEnabled(false);
 
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
@@ -262,7 +261,7 @@ void AutoCorrectionTool::putPreviewData()
 
 void AutoCorrectionTool::prepareFinal()
 {
-    d->gboxSettings->setEnabled(false);
+    toolSettings()->setEnabled(false);
     toolView()->setEnabled(false);
 
     int type = d->correctionTools->currentId();
@@ -308,7 +307,7 @@ void AutoCorrectionTool::putFinalData()
 void AutoCorrectionTool::renderingFinished()
 {
     QApplication::restoreOverrideCursor();
-    d->gboxSettings->setEnabled(true);
+    toolSettings()->setEnabled(true);
     toolView()->setEnabled(true);
 }
 

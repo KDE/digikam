@@ -155,7 +155,7 @@ void BlurTool::slotResetSettings()
 void BlurTool::prepareEffect()
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    d->radiusInput->setEnabled(false);
+    toolSettings()->setEnabled(false);
     toolView()->setEnabled(false);
 
     DImg img = d->previewWidget->getOriginalRegionImage();
@@ -164,7 +164,7 @@ void BlurTool::prepareEffect()
 
 void BlurTool::prepareFinal()
 {
-    d->radiusInput->setEnabled(false);
+    toolSettings()->setEnabled(false);
     toolView()->setEnabled(false);
 
     ImageIface iface(0, 0);
@@ -194,7 +194,7 @@ void BlurTool::putFinalData()
 void BlurTool::renderingFinished()
 {
     QApplication::restoreOverrideCursor();
-    d->radiusInput->setEnabled(true);
+    toolSettings()->setEnabled(true);
     toolView()->setEnabled(true);
 }
 

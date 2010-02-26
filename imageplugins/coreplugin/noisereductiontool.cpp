@@ -126,7 +126,7 @@ void NoiseReductionTool::slotResetSettings()
 
 void NoiseReductionTool::prepareEffect()
 {
-    d->nrSettings->setEnabled(false);
+    toolSettings()->setEnabled(false);
     toolView()->setEnabled(false);
 
     DImg image      = d->previewWidget->getOriginalRegionImage();
@@ -137,7 +137,7 @@ void NoiseReductionTool::prepareEffect()
 
 void NoiseReductionTool::prepareFinal()
 {
-    d->nrSettings->setEnabled(false);
+    toolSettings()->setEnabled(false);
     toolView()->setEnabled(false);
 
     NRContainer prm = d->nrSettings->settings();

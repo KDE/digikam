@@ -217,7 +217,7 @@ void ProfileConversionTool::slotResetSettings()
 
 void ProfileConversionTool::prepareEffect()
 {
-    d->profilesBox->setEnabled(false);
+    toolSettings()->setEnabled(false);
     toolView()->setEnabled(false);
 
     DImg preview = d->previewWidget->getOriginalRegionImage(true);
@@ -242,13 +242,13 @@ void ProfileConversionTool::putPreviewData()
 
 void ProfileConversionTool::renderingFinished()
 {
-    d->profilesBox->setEnabled(true);
+    toolSettings()->setEnabled(true);
     toolView()->setEnabled(true);
 }
 
 void ProfileConversionTool::prepareFinal()
 {
-    d->profilesBox->setEnabled(false);
+    toolSettings()->setEnabled(false);
     toolView()->setEnabled(false);
 
     ImageIface iface(0, 0);

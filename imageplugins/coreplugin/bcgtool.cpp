@@ -191,7 +191,6 @@ void BCGTool::putPreviewData()
 
 void BCGTool::prepareFinal()
 {
-    kapp->setOverrideCursor(Qt::WaitCursor);
     toolSettings()->setEnabled(false);
     toolView()->setEnabled(false);
 

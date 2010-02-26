@@ -137,7 +137,7 @@ void SharpenTool::slotSettingsChanged()
 void SharpenTool::renderingFinished()
 {
     toolView()->setEnabled(true);
-    d->sharpSettings->setEnabled(true);
+    toolSettings()->setEnabled(true);
     slotSettingsChanged();
 }
 
@@ -164,7 +164,7 @@ void SharpenTool::slotResetSettings()
 void SharpenTool::prepareEffect()
 {
     toolView()->setEnabled(false);
-    d->sharpSettings->setEnabled(false);
+    toolSettings()->setEnabled(false);
     SharpContainer settings = d->sharpSettings->settings();
 
     switch (settings.method)
@@ -220,7 +220,7 @@ void SharpenTool::prepareFinal()
     delete [] data;
 
     toolView()->setEnabled(false);
-    d->sharpSettings->setEnabled(false);
+    toolSettings()->setEnabled(false);
     SharpContainer settings = d->sharpSettings->settings();
 
     switch (settings.method)

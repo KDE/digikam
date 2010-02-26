@@ -25,15 +25,7 @@
 
 // Qt includes
 
-#include <QColor>
-#include <QFrame>
-#include <QGridLayout>
-#include <QGroupBox>
-#include <QHBoxLayout>
 #include <QLabel>
-#include <QPixmap>
-#include <QPushButton>
-#include <QToolButton>
 
 // KDE includes
 
@@ -163,7 +155,7 @@ void CBTool::slotResetSettings()
 void CBTool::prepareEffect()
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    d->cbSettings->setEnabled(false);
+    toolSettings()->setEnabled(false);
     toolView()->setEnabled(false);
 
     CBContainer settings = d->cbSettings->settings();
@@ -191,8 +183,7 @@ void CBTool::putPreviewData()
 
 void CBTool::prepareFinal()
 {
-    QApplication::setOverrideCursor(Qt::WaitCursor);
-    d->cbSettings->setEnabled(false);
+    toolSettings()->setEnabled(false);
     toolView()->setEnabled(false);
 
     CBContainer settings = d->cbSettings->settings();
@@ -210,7 +201,7 @@ void CBTool::putFinalData()
 void CBTool::renderingFinished()
 {
     QApplication::restoreOverrideCursor();
-    d->cbSettings->setEnabled(true);
+    toolSettings()->setEnabled(true);
     toolView()->setEnabled(true);
 }
 

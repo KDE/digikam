@@ -26,16 +26,7 @@
 
 // Qt includes
 
-#include <QColor>
-#include <QFrame>
-#include <QGridLayout>
-#include <QGroupBox>
-#include <QHBoxLayout>
 #include <QLabel>
-#include <QPixmap>
-#include <QPushButton>
-#include <QTimer>
-#include <QToolButton>
 
 // KDE includes
 
@@ -166,7 +157,7 @@ void HSLTool::slotResetSettings()
 void HSLTool::prepareEffect()
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    d->hslSettings->setEnabled(false);
+    toolSettings()->setEnabled(false);
     toolView()->setEnabled(false);
 
     HSLContainer settings = d->hslSettings->settings();
@@ -195,7 +186,7 @@ void HSLTool::putPreviewData()
 void HSLTool::prepareFinal()
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    d->hslSettings->setEnabled(false);
+    toolSettings()->setEnabled(false);
     toolView()->setEnabled(false);
 
     HSLContainer settings = d->hslSettings->settings();
@@ -212,8 +203,7 @@ void HSLTool::putFinalData()
 
 void HSLTool::renderingFinished()
 {
-    QApplication::restoreOverrideCursor();
-    d->hslSettings->setEnabled(true);
+    toolSettings()->setEnabled(true);
     toolView()->setEnabled(true);
 }
 

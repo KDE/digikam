@@ -26,10 +26,7 @@
 
 // Qt includes
 
-#include <QFile>
 #include <QGridLayout>
-#include <QVBoxLayout>
-#include <QTextStream>
 
 // KDE includes
 
@@ -182,7 +179,7 @@ void BWSepiaTool::slotResetSettings()
 void BWSepiaTool::prepareEffect()
 {
     kapp->setOverrideCursor(Qt::WaitCursor);
-    d->gboxSettings->setEnabled(false);
+    toolSettings()->setEnabled(false);
     toolView()->setEnabled(false);
 
     BWSepiaContainer settings = d->bwsepiaSettings->settings();
@@ -211,8 +208,7 @@ void BWSepiaTool::putPreviewData()
 
 void BWSepiaTool::prepareFinal()
 {
-    kapp->setOverrideCursor(Qt::WaitCursor);
-    d->gboxSettings->setEnabled(false);
+    toolSettings()->setEnabled(false);
     toolView()->setEnabled(false);
 
     BWSepiaContainer settings = d->bwsepiaSettings->settings();
@@ -230,7 +226,7 @@ void BWSepiaTool::putFinalData()
 void BWSepiaTool::renderingFinished()
 {
     kapp->restoreOverrideCursor();
-    d->gboxSettings->setEnabled(true);
+    toolSettings()->setEnabled(true);
     toolView()->setEnabled(true);
 }
 
