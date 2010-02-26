@@ -535,7 +535,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/levels/levelsfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/curves/imagecurves.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/curves/curvesfilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/wb/whitebalance.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/wb/wbfilter.cpp
        )
 
