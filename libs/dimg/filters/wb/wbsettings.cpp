@@ -414,11 +414,15 @@ void WBSettings::slotTemperaturePresetChanged(int tempPreset)
 WBContainer WBSettings::settings() const
 {
     WBContainer prm;
-/*
-    prm.brightness = (double)d->bInput->value()/250.0;
-    prm.contrast   = (double)(d->cInput->value()/100.0) + 1.00;
-    prm.gamma      = d->gInput->value();
-*/
+
+    prm.black       = d->blackInput->value();
+    prm.exposition  = d->mainExposureInput->value() + d->fineExposureInput->value();
+    prm.temperature = d->temperatureInput->value();
+    prm.green       = d->greenInput->value();
+    prm.dark        = d->darkInput->value();
+    prm.gamma       = d->gammaInput->value();
+    prm.saturation  = d->saturationInput->value();
+
     return prm;
 }
 
