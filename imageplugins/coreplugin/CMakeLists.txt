@@ -11,6 +11,7 @@ SET(digikamimageplugin_core_PART_SRCS
     ../../imageplugins/coreplugin/resizetool.cpp
     ../../imageplugins/coreplugin/redeyetool.cpp
     ../../imageplugins/coreplugin/cbtool.cpp
+    ../../imageplugins/coreplugin/whitebalancetool.cpp
     ../../imageplugins/coreplugin/sharpentool.cpp
     ../../imageplugins/coreplugin/noisereductiontool.cpp
     ../../imageplugins/coreplugin/hsltool.cpp

@@ -83,9 +83,8 @@
 #include "whitebalance.h"
 
 using namespace KDcrawIface;
-using namespace Digikam;
 
-namespace DigikamWhiteBalanceImagesPlugin
+namespace DigikamImagesPluginCore
 {
 
 enum TemperaturePreset
@@ -303,7 +302,7 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
                                           "image used to set the white color balance temperature and "
                                           "green component."));
 
-    KSeparator *line = new KSeparator(Qt::Horizontal);
+    KSeparator* line = new KSeparator(Qt::Horizontal);
 
     // -------------------------------------------------------------
 
@@ -779,4 +778,4 @@ void WhiteBalanceTool::blockWidgetSignals(bool b)
     d->temperaturePresetCB->blockSignals(b);
 }
 
-}  // namespace DigikamWhiteBalanceImagesPlugin
+}  // namespace DigikamImagesPluginCore

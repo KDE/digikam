@@ -56,8 +56,8 @@
 #include "sharpentool.h"
 #include "redeyetool.h"
 #include "cbtool.h"
+#include "whitebalancetool.h"
 
-using namespace Digikam;
 using namespace DigikamImagesPluginCore;
 
 K_PLUGIN_FACTORY( CorePluginFactory, registerPlugin<ImagePlugin_Core>(); )
@@ -83,6 +83,7 @@ public:
         convertTo8Bits(0),
         convertTo16Bits(0),
         noiseReductionAction(0),
+        whitebalanceAction(0),
         profileMenuAction(0)
         {}
 
@@ -100,6 +101,7 @@ public:
     KAction*               convertTo8Bits;
     KAction*               convertTo16Bits;
     KAction*               noiseReductionAction;
+    KAction*               whitebalanceAction;
 
     IccProfilesMenuAction* profileMenuAction;
 };
@@ -156,8 +158,8 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QVariantList &)
 
     d->profileMenuAction = new IccProfilesMenuAction(KIcon("colormanagement"), i18n("Color Space Conversion"), this);
     actionCollection()->addAction("implugcore_colormanagement", d->profileMenuAction );
-    connect(d->profileMenuAction, SIGNAL(triggered(const IccProfile &)),
-            this, SLOT(slotConvertToColorSpace(const IccProfile &)));
+    connect(d->profileMenuAction, SIGNAL(triggered(const IccProfile&)),
+            this, SLOT(slotConvertToColorSpace(const IccProfile&)));
 
     connect(IccSettings::instance(), SIGNAL(settingsChanged()),
             this, SLOT(slotUpdateColorSpaceMenu()));
@@ -169,6 +171,12 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QVariantList &)
     connect(d->BWAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotBW()));
 
+    d->whitebalanceAction = new KAction(KIcon("whitebalance"), i18n("White Balance..."), this);
+    d->whitebalanceAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_W));
+    actionCollection()->addAction("implugcore_whitebalance", d->whitebalanceAction );    
+    connect(d->whitebalanceAction, SIGNAL(triggered(bool) ),
+            this, SLOT(slotWhiteBalance()));
+            
     //-------------------------------
     // Enhance menu actions
 
@@ -242,6 +250,7 @@ void ImagePlugin_Core::setEnabledActions(bool b)
     d->resizeAction->setEnabled(b);
     d->profileMenuAction->setEnabled(b);
     d->noiseReductionAction->setEnabled(b);
+    d->whitebalanceAction->setEnabled(b);
 }
 
 void ImagePlugin_Core::slotInvert()
@@ -452,5 +461,11 @@ void ImagePlugin_Core::slotResize()
 void ImagePlugin_Core::slotNoiseReduction()
 {
     NoiseReductionTool* tool = new NoiseReductionTool(this);
+    loadTool(tool);
+}
+
+void ImagePlugin_Core::slotWhiteBalance()
+{
+    WhiteBalanceTool* tool = new WhiteBalanceTool(this);
     loadTool(tool);
 }
