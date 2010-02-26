@@ -94,7 +94,7 @@ public:
 public:
 
     WBSettingsPriv() :
-        defaultTemperature(DaylightD65),
+        DefaultTemperature(DaylightD65),
         configDarkInputEntry("Dark"),
         configBlackInputEntry("Black"),
         configMainExposureEntry("MainExposure"),
@@ -127,42 +127,42 @@ public:
         greenInput(0)
         {}
 
-    const int           defaultTemperature;
+    const int        DefaultTemperature;
 
-    const QString       configDarkInputEntry;
-    const QString       configBlackInputEntry;
-    const QString       configMainExposureEntry;
-    const QString       configFineExposureEntry;
-    const QString       configGammaInputEntry;
-    const QString       configSaturationInputEntry;
-    const QString       configGreenInputEntry;
-    const QString       configTemeratureInputEntry;
+    const QString    configDarkInputEntry;
+    const QString    configBlackInputEntry;
+    const QString    configMainExposureEntry;
+    const QString    configFineExposureEntry;
+    const QString    configGammaInputEntry;
+    const QString    configSaturationInputEntry;
+    const QString    configGreenInputEntry;
+    const QString    configTemeratureInputEntry;
 
-    QToolButton*        pickTemperature;
-    QToolButton*        autoAdjustExposure;
+    QToolButton*     pickTemperature;
+    QToolButton*     autoAdjustExposure;
 
-    QLabel*             adjTemperatureLabel;
-    QLabel*             temperaturePresetLabel;
-    QLabel*             darkLabel;
-    QLabel*             blackLabel;
-    QLabel*             mainExposureLabel;
-    QLabel*             fineExposureLabel;
-    QLabel*             gammaLabel;
-    QLabel*             saturationLabel;
-    QLabel*             greenLabel;
-    QLabel*             exposureLabel;
-    QLabel*             temperatureLabel;
+    QLabel*          adjTemperatureLabel;
+    QLabel*          temperaturePresetLabel;
+    QLabel*          darkLabel;
+    QLabel*          blackLabel;
+    QLabel*          mainExposureLabel;
+    QLabel*          fineExposureLabel;
+    QLabel*          gammaLabel;
+    QLabel*          saturationLabel;
+    QLabel*          greenLabel;
+    QLabel*          exposureLabel;
+    QLabel*          temperatureLabel;
 
-    RComboBox*          temperaturePresetCB;
+    RComboBox*       temperaturePresetCB;
 
-    RDoubleNumInput*    temperatureInput;
-    RDoubleNumInput*    darkInput;
-    RDoubleNumInput*    blackInput;
-    RDoubleNumInput*    mainExposureInput;
-    RDoubleNumInput*    fineExposureInput;
-    RDoubleNumInput*    gammaInput;
-    RDoubleNumInput*    saturationInput;
-    RDoubleNumInput*    greenInput;
+    RDoubleNumInput* temperatureInput;
+    RDoubleNumInput* darkInput;
+    RDoubleNumInput* blackInput;
+    RDoubleNumInput* mainExposureInput;
+    RDoubleNumInput* fineExposureInput;
+    RDoubleNumInput* gammaInput;
+    RDoubleNumInput* saturationInput;
+    RDoubleNumInput* greenInput;
 
 public:
 
@@ -196,7 +196,7 @@ WBSettings::WBSettings(QWidget* parent)
     d->temperatureInput    = new RDoubleNumInput;
     d->temperatureInput->setDecimals(1);
     d->temperatureInput->input()->setRange(1750.0, 12000.0, 10.0);
-    d->temperatureInput->setDefaultValue((double)d->defaultTemperature);
+    d->temperatureInput->setDefaultValue((double)d->DefaultTemperature);
     d->temperatureInput->setWhatsThis( i18n("Set here the white balance color temperature in Kelvin."));
 
     d->temperaturePresetLabel = new QLabel(i18n("Preset:"));
@@ -215,10 +215,9 @@ WBSettings::WBSettings(QWidget* parent)
     d->temperaturePresetCB->combo()->addItem(i18n("Sunrise"),                        QVariant(d->Sunrise));
     d->temperaturePresetCB->combo()->addItem(i18n("Xenon Lamp"),                     QVariant(d->XenonLamp));
     d->temperaturePresetCB->combo()->addItem(i18nc("no temperature preset", "None"), QVariant(d->None));
-    d->temperaturePresetCB->setDefaultIndex(d->temperaturePresetCB->combo()->findData(QVariant(d->defaultTemperature)));
+    d->temperaturePresetCB->setDefaultIndex(d->temperaturePresetCB->combo()->findData(QVariant(d->DefaultTemperature)));
 
-    QString toolTip = QString("<p>%1</p>")
-                              .arg(i18n("Select the white balance color temperature preset to use."));
+    QString toolTip = QString("<p>%1</p>").arg(i18n("Select the white balance color temperature preset to use."));
     toolTip += d->addTemperatureDescription(i18n("40 Watt incandescent lamp"),             d->Lamp40W);
     toolTip += d->addTemperatureDescription(i18n("100 Watt incandescent lamp"),            d->Lamp100W);
     toolTip += d->addTemperatureDescription(i18n("200 Watt incandescent lamp"),            d->Lamp200W);
@@ -401,7 +400,7 @@ void WBSettings::slotTemperaturePresetChanged(int tempPreset)
     int temperature = d->temperaturePresetCB->combo()->itemData(tempPreset).toInt(&ok);
     if (!ok)
     {
-        temperature = d->defaultTemperature;
+        temperature = d->DefaultTemperature;
     }
 
     if (temperature != -1)
