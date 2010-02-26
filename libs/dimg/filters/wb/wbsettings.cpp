@@ -429,11 +429,16 @@ WBContainer WBSettings::settings() const
 void WBSettings::setSettings(const WBContainer& settings)
 {
     blockSignals(true);
-/*
-    d->bInput->setValue((int)(settings.brightness*250.0));
-    d->cInput->setValue((int)((settings.contrast-1.0)*100.0));
-    d->gInput->setValue(settings.gamma);
-*/
+
+    d->blackInput->setValue(settings.black);
+    d->mainExposureInput->setValue(double(int(settings.exposition)));
+    d->fineExposureInput->setValue(settings.exposition - d->mainExposureInput->value());
+    d->temperatureInput->setValue(settings.temperature);
+    d->greenInput->setValue(settings.green);
+    d->darkInput->setValue(settings.dark);
+    d->gammaInput->setValue(settings.gamma);
+    d->saturationInput->setValue(settings.saturation);
+
     blockSignals(false);
 }
 
@@ -459,11 +464,15 @@ void WBSettings::resetToDefault()
 WBContainer WBSettings::defaultSettings() const
 {
     WBContainer prm;
-/*
-    prm.brightness = (double)d->bInput->defaultValue()/250.0;
-    prm.contrast   = (double)(d->cInput->defaultValue()/100.0) + 1.00;
-    prm.gamma      = d->gInput->defaultValue();
-*/
+
+    prm.black       = d->blackInput->defaultValue();
+    prm.exposition  = d->mainExposureInput->defaultValue() + d->fineExposureInput->defaultValue();
+    prm.temperature = d->temperatureInput->defaultValue();
+    prm.green       = d->greenInput->defaultValue();
+    prm.dark        = d->darkInput->defaultValue();
+    prm.gamma       = d->gammaInput->defaultValue();
+    prm.saturation  = d->saturationInput->defaultValue();
+
     return prm;
 }
 
