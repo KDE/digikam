@@ -75,5 +75,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 051 ==> 224094 : Modifying file (caption, keywords, EXIF) takes a very long time and 100 % CPU.
 052 ==> 228378 : Tag filtering is bugged.
 053 ==> 227668 : Not enough space to show alle tags.
-054 ==> 
+054 ==> 227640 : No Pictures visible in Collections.
+055 ==> 
+
 
