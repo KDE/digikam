@@ -27,17 +27,7 @@
 
 // Qt includes
 
-#include <QButtonGroup>
-#include <QCheckBox>
-#include <QColor>
-#include <QFrame>
-#include <QGridLayout>
-#include <QGroupBox>
-#include <QHBoxLayout>
 #include <QLabel>
-#include <QPixmap>
-#include <QPushButton>
-#include <QToolButton>
 
 // KDE includes
 
@@ -60,7 +50,6 @@
 // Local includes
 
 #include "bcgsettings.h"
-#include "colorgradientwidget.h"
 #include "editortoolsettings.h"
 #include "histogrambox.h"
 #include "histogramwidget.h"
@@ -173,7 +162,7 @@ void BCGTool::slotResetSettings()
 void BCGTool::prepareEffect()
 {
     kapp->setOverrideCursor(Qt::WaitCursor);
-    d->bcgSettings->setEnabled(false);
+    toolSettings()->setEnabled(false);
     toolView()->setEnabled(false);
 
     BCGContainer settings = d->bcgSettings->settings();
@@ -203,7 +192,7 @@ void BCGTool::putPreviewData()
 void BCGTool::prepareFinal()
 {
     kapp->setOverrideCursor(Qt::WaitCursor);
-    d->bcgSettings->setEnabled(false);
+    toolSettings()->setEnabled(false);
     toolView()->setEnabled(false);
 
     BCGContainer settings = d->bcgSettings->settings();
@@ -221,7 +210,7 @@ void BCGTool::putFinalData()
 void BCGTool::renderingFinished()
 {
     kapp->restoreOverrideCursor();
-    d->bcgSettings->setEnabled(true);
+    toolSettings()->setEnabled(true);
     toolView()->setEnabled(true);
 }
 
