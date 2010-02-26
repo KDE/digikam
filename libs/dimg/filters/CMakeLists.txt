@@ -14,6 +14,5 @@ INSTALL(FILES dimgthreadedfilter.h
               sharp/dimgsharpen.h 
               sharp/dimgunsharpmask.h
               sharp/dimgrefocus.h 
-              wb/whitebalance.h
          DESTINATION ${INCLUDE_INSTALL_DIR}/digikam COMPONENT Devel)
 
