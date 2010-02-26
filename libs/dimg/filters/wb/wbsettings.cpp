@@ -87,6 +87,7 @@ WBSettings::WBSettings(QWidget* parent)
 {
     QGridLayout* grid = new QGridLayout(parent);
 
+/*
     QLabel *label2 = new QLabel(i18n("Brightness:"));
     d->bInput      = new RIntNumInput();
     d->bInput->setRange(-100, 100, 1);
@@ -130,6 +131,7 @@ WBSettings::WBSettings(QWidget* parent)
 
     connect(d->gInput, SIGNAL(valueChanged(double)),
             this, SIGNAL(signalSettingsChanged()));
+*/            
 }
 
 WBSettings::~WBSettings()
@@ -140,40 +142,44 @@ WBSettings::~WBSettings()
 WBContainer WBSettings::settings() const
 {
     WBContainer prm;
-
+/*
     prm.brightness = (double)d->bInput->value()/250.0;
     prm.contrast   = (double)(d->cInput->value()/100.0) + 1.00;
     prm.gamma      = d->gInput->value();
-
+*/
     return prm;
 }
 
 void WBSettings::setSettings(const WBContainer& settings)
 {
     blockSignals(true);
+/*    
     d->bInput->setValue((int)(settings.brightness*250.0));
     d->cInput->setValue((int)((settings.contrast-1.0)*100.0));
     d->gInput->setValue(settings.gamma);
+*/    
     blockSignals(false);
 }
 
 void WBSettings::resetToDefault()
 {
     blockSignals(true);
+/*
     d->bInput->slotReset();
     d->cInput->slotReset();
     d->gInput->slotReset();
+*/    
     blockSignals(false);
 }
 
 WBContainer WBSettings::defaultSettings() const
 {
     WBContainer prm;
-
+/*
     prm.brightness = (double)d->bInput->defaultValue()/250.0;
     prm.contrast   = (double)(d->cInput->defaultValue()/100.0) + 1.00;
     prm.gamma      = d->gInput->defaultValue();
-
+*/
     return prm;
 }
 
@@ -181,21 +187,22 @@ void WBSettings::readSettings(KConfigGroup& group)
 {
     WBContainer prm;
     WBContainer defaultPrm = defaultSettings();
-
+/*
     prm.brightness = group.readEntry(d->configBrightnessAdjustmentEntry, defaultPrm.brightness);
     prm.contrast   = group.readEntry(d->configContrastAdjustmentEntry,   defaultPrm.contrast);
     prm.gamma      = group.readEntry(d->configGammaAdjustmentEntry,      defaultPrm.gamma);
-
+*/
     setSettings(prm);
 }
 
 void WBSettings::writeSettings(KConfigGroup& group)
 {
     WBContainer prm = settings();
-
+/*
     group.writeEntry(d->configBrightnessAdjustmentEntry, prm.brightness);
     group.writeEntry(d->configContrastAdjustmentEntry,   prm.contrast);
     group.writeEntry(d->configGammaAdjustmentEntry,      prm.gamma);
+*/    
 }
 
 }  // namespace Digikam
