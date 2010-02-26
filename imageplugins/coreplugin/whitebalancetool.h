@@ -59,8 +59,6 @@ private Q_SLOTS:
     void slotPickerColorButtonActived();
     void slotColorSelectedFromOriginal(const Digikam::DColor&);
     void slotColorSelectedFromTarget(const Digikam::DColor&);
-    void slotTemperatureChanged(double temperature);
-    void slotTemperaturePresetChanged(int tempPreset);
     void slotAutoAdjustExposure();
 
 private:
@@ -73,7 +71,6 @@ private:
     void putPreviewData();
     void putFinalData();
     void renderingFinished();
-    void blockWidgetSignals(bool b);
 
 private:
 
