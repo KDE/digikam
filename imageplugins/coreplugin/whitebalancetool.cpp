@@ -221,8 +221,6 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
     setToolName(i18n("White Balance"));
     setToolIcon(SmallIcon("whitebalance"));
 
-    d->destinationPreviewData = 0;
-
     // -------------------------------------------------------------
 
     d->previewWidget = new ImageGuideWidget;
@@ -342,7 +340,7 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
     d->greenInput->setWhatsThis(i18n("Set here the green component to control the magenta color "
                                      "cast removal level."));
 
-    KSeparator *line2 = new KSeparator(Qt::Horizontal);
+    KSeparator* line2 = new KSeparator(Qt::Horizontal);
 
     // -------------------------------------------------------------
 
@@ -409,11 +407,11 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    connect(d->previewWidget, SIGNAL(spotPositionChangedFromOriginal( const Digikam::DColor &, const QPoint & )),
-            this, SLOT(slotColorSelectedFromOriginal( const Digikam::DColor & )));
+    connect(d->previewWidget, SIGNAL(spotPositionChangedFromOriginal(const Digikam::DColor&, const QPoint&)),
+            this, SLOT(slotColorSelectedFromOriginal(const Digikam::DColor&)));
 
-    connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
-            this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
+    connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor&, const QPoint&)),
+            this, SLOT(slotColorSelectedFromTarget(const Digikam::DColor&)));
 
     connect(d->previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));
@@ -534,7 +532,7 @@ void WhiteBalanceTool::slotColorSelectedFromTarget(const DColor& color)
 
 void WhiteBalanceTool::slotAutoAdjustExposure()
 {
-    kapp->activeWindow()->setCursor( Qt::WaitCursor );
+    kapp->activeWindow()->setCursor(Qt::WaitCursor);
 
     ImageIface* iface = d->previewWidget->imageIface();
     uchar *data       = iface->getOriginalImage();
@@ -559,7 +557,7 @@ void WhiteBalanceTool::slotAutoAdjustExposure()
 void WhiteBalanceTool::slotEffect()
 {
     ImageIface* iface = d->previewWidget->imageIface();
-    uchar *data       = iface->getPreviewImage();
+    uchar* data       = iface->getPreviewImage();
     int w             = iface->previewWidth();
     int h             = iface->previewHeight();
     bool sb           = iface->previewSixteenBit();
@@ -597,9 +595,9 @@ void WhiteBalanceTool::slotEffect()
 
 void WhiteBalanceTool::finalRendering()
 {
-    kapp->setOverrideCursor( Qt::WaitCursor );
+    kapp->setOverrideCursor(Qt::WaitCursor);
     ImageIface* iface   = d->previewWidget->imageIface();
-    uchar *data         = iface->getOriginalImage();
+    uchar* data         = iface->getOriginalImage();
     int w               = iface->originalWidth();
     int h               = iface->originalHeight();
     bool sb             = iface->originalSixteenBit();
