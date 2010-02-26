@@ -22,6 +22,7 @@ coreplugin
   /redeyetool               DONE                 TODO                   NO
   /resizetool               DONE                 TODO                  DONE
   /sharpentool              DONE                 DONE                  DONE
+  /whitebalance             TODO                 TODO                  TODO
 
 distortionfx                DONE                 TODO                  TODO
 emboss                      DONE                 DONE                  TODO
@@ -44,4 +45,3 @@ restoration                 DONE                 DONE                  DONE
 sheartool                   DONE                  NO                   TODO  
 superimpose                  NO                   NO                    NO
 texture                     DONE                 DONE                  TODO
-whitebalance                TODO                 TODO                  TODO
