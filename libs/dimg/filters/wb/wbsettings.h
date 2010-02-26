@@ -60,9 +60,19 @@ public:
     void readSettings(KConfigGroup& group);
     void writeSettings(KConfigGroup& group);
 
+    void loadSettings();
+    void saveAsSettings();
+
 Q_SIGNALS:
 
     void signalSettingsChanged();
+    void signalPickerColorButtonActived();
+    void signalAutoAdjustExposure();
+
+private Q_SLOTS:
+
+    void slotTemperatureChanged(double temperature);
+    void slotTemperaturePresetChanged(int tempPreset);
 
 private:
 
