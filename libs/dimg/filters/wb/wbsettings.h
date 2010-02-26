@@ -63,6 +63,9 @@ public:
     void loadSettings();
     void saveAsSettings();
 
+    bool pickTemperatureIsOn();
+    void setOnPickTemperature(bool b);
+
 Q_SIGNALS:
 
     void signalSettingsChanged();

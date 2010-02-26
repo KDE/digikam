@@ -382,6 +382,16 @@ WBSettings::~WBSettings()
     delete d;
 }
 
+bool WBSettings::pickTemperatureIsOn()
+{
+    return d->pickTemperature->isChecked();
+}
+
+void WBSettings::setOnPickTemperature(bool b)
+{
+    d->pickTemperature->setChecked(b);
+}
+
 void WBSettings::slotTemperatureChanged(double temperature)
 {
     int index = d->temperaturePresetCB->combo()->findData(QVariant((int)temperature));
