@@ -25,6 +25,10 @@
 #ifndef WBFILTER_H
 #define WBFILTER_H
 
+// Qt includes.
+
+#include <QColor>
+
 // Local includes
 
 #include "digikam_export.h"
