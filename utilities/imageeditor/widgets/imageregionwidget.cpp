@@ -63,12 +63,14 @@ public:
         onMouseMovePreviewToggled = true;
         iface                     = 0;
         renderingPreviewMode      = PreviewToolBar::PreviewBothImagesVertCont;
+        oldRenderingPreviewMode   = PreviewToolBar::PreviewBothImagesVertCont;
     }
 
     bool        onMouseMovePreviewToggled;
     bool        capturePtMode;
     
     int         renderingPreviewMode;
+    int         oldRenderingPreviewMode;
     int         xpos;
     int         ypos;
 
@@ -152,8 +154,17 @@ void ImageRegionWidget::setCapturePointMode(bool b)
 {
     d->capturePtMode = b;
     viewport()->setMouseTracking(b);
-    if (b) viewport()->setCursor(QCursor(SmallIcon("color-picker", 32), 1, 28));
-    else   viewport()->unsetCursor();
+    if (b)
+    {
+        d->oldRenderingPreviewMode = d->renderingPreviewMode;
+        slotPreviewModeChanged(PreviewToolBar::PreviewOriginalImage);
+        viewport()->setCursor(QCursor(SmallIcon("color-picker", 32), 1, 28));
+    }
+    else
+    {
+        slotPreviewModeChanged(d->oldRenderingPreviewMode);
+        viewport()->unsetCursor();
+    }
 }
 
 bool ImageRegionWidget::capturePointMode()

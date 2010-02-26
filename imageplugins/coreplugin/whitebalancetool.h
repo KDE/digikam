@@ -42,7 +42,7 @@ namespace DigikamImagesPluginCore
 
 class WhiteBalanceToolPriv;
 
-class WhiteBalanceTool : public EditorTool
+class WhiteBalanceTool : public EditorToolThreaded
 {
     Q_OBJECT
 
@@ -56,19 +56,23 @@ private Q_SLOTS:
     void slotSaveAsSettings();
     void slotLoadSettings();
     void slotResetSettings();
-    void slotEffect();
+    void slotPickerColorButtonActived();
     void slotColorSelectedFromOriginal(const Digikam::DColor&);
     void slotColorSelectedFromTarget(const Digikam::DColor&);
     void slotTemperatureChanged(double temperature);
     void slotTemperaturePresetChanged(int tempPreset);
     void slotAutoAdjustExposure();
-    void slotPickerColorButtonActived();
 
 private:
 
     void readSettings();
     void writeSettings();
-    void finalRendering();
+    void prepareEffect();
+    void prepareFinal();
+    void abortPreview();
+    void putPreviewData();
+    void putFinalData();
+    void renderingFinished();
     void blockWidgetSignals(bool b);
 
 private:

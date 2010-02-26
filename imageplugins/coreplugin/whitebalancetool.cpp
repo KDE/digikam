@@ -35,17 +35,14 @@
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QPixmap>
-#include <QProgressBar>
 #include <QPushButton>
 #include <QRegExp>
 #include <QTextStream>
-#include <QTimer>
 #include <QToolButton>
 #include <QVBoxLayout>
 
 // KDE includes
 
-#include <kaboutdata.h>
 #include <kapplication.h>
 #include <kcombobox.h>
 #include <kconfig.h>
@@ -56,7 +53,6 @@
 #include <khelpmenu.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kmenu.h>
 #include <kmessagebox.h>
 #include <kseparator.h>
 #include <kstandarddirs.h>
@@ -78,9 +74,8 @@
 #include "histogramwidget.h"
 #include "imagehistogram.h"
 #include "imageiface.h"
-#include "imageguidewidget.h"
-#include "version.h"
-#include "whitebalance.h"
+#include "imageregionwidget.h"
+#include "wbfilter.h"
 
 using namespace KDcrawIface;
 
@@ -104,6 +99,7 @@ enum TemperaturePreset
     XenonLamp   = 6420,
     DaylightD65 = 6500
 };
+
 const int DEFAULT_TEMPERATURE = DaylightD65;
 
 class WhiteBalanceToolPriv
@@ -192,7 +188,7 @@ public:
     RDoubleNumInput*    saturationInput;
     RDoubleNumInput*    greenInput;
 
-    ImageGuideWidget*   previewWidget;
+    ImageRegionWidget*  previewWidget;
 
     EditorToolSettings* gboxSettings;
 
@@ -215,7 +211,7 @@ public:
 };
 
 WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
-                : EditorTool(parent), d(new WhiteBalanceToolPriv)
+                : EditorToolThreaded(parent), d(new WhiteBalanceToolPriv)
 {
     setObjectName("whitebalance");
     setToolName(i18n("White Balance"));
@@ -223,23 +219,20 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->previewWidget = new ImageGuideWidget;
-    d->previewWidget->setWhatsThis(i18n("The image's white-balance adjustments preview "
-                                        "is shown here.  Pick a color on the image to "
-                                        "see the corresponding color level on the histogram."));
+    d->previewWidget = new ImageRegionWidget;
     setToolView(d->previewWidget);
     setPreviewModeMask(PreviewToolBar::AllPreviewModes);
     
     // -------------------------------------------------------------
 
     d->gboxSettings = new EditorToolSettings;
+    d->gboxSettings->setTools(EditorToolSettings::Histogram);
     d->gboxSettings->setButtons(EditorToolSettings::Default|
                                 EditorToolSettings::Load|
                                 EditorToolSettings::SaveAs|
                                 EditorToolSettings::Ok|
-                                EditorToolSettings::Cancel);
-
-    d->gboxSettings->setTools(EditorToolSettings::Histogram);
+                                EditorToolSettings::Cancel|
+                                EditorToolSettings::Try);                                
 
     // -------------------------------------------------------------
 
@@ -407,14 +400,16 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    connect(d->previewWidget, SIGNAL(spotPositionChangedFromOriginal(const Digikam::DColor&, const QPoint&)),
-            this, SLOT(slotColorSelectedFromOriginal(const Digikam::DColor&)));
-
-    connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor&, const QPoint&)),
-            this, SLOT(slotColorSelectedFromTarget(const Digikam::DColor&)));
-
     connect(d->previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));
+            
+    connect(d->previewWidget, SIGNAL(signalCapturedPointFromOriginal(const Digikam::DColor&, const QPoint&)),
+            this, SLOT(slotColorSelectedFromOriginal(const Digikam::DColor&)));
+
+/*
+    connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget(const Digikam::DColor&, const QPoint&)),
+            this, SLOT(slotColorSelectedFromTarget(const Digikam::DColor&)));
+*/
 
     // -------------------------------------------------------------
     // Correction Filter Slider controls.
@@ -422,28 +417,28 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
     connect(d->temperaturePresetCB, SIGNAL(activated(int)),
             this, SLOT(slotTemperaturePresetChanged(int)));
 
-    connect(d->temperatureInput, SIGNAL(valueChanged (double)),
+    connect(d->temperatureInput, SIGNAL(valueChanged(double)),
             this, SLOT(slotTemperatureChanged(double)));
 
-    connect(d->darkInput, SIGNAL(valueChanged (double)),
+    connect(d->darkInput, SIGNAL(valueChanged(double)),
             this, SLOT(slotTimer()));
 
-    connect(d->blackInput, SIGNAL(valueChanged (double)),
+    connect(d->blackInput, SIGNAL(valueChanged(double)),
             this, SLOT(slotTimer()));
 
-    connect(d->mainExposureInput, SIGNAL(valueChanged (double)),
+    connect(d->mainExposureInput, SIGNAL(valueChanged(double)),
             this, SLOT(slotTimer()));
 
-    connect(d->fineExposureInput, SIGNAL(valueChanged (double)),
+    connect(d->fineExposureInput, SIGNAL(valueChanged(double)),
             this, SLOT(slotTimer()));
 
-    connect(d->gammaInput, SIGNAL(valueChanged (double)),
+    connect(d->gammaInput, SIGNAL(valueChanged(double)),
             this, SLOT(slotTimer()));
 
-    connect(d->saturationInput, SIGNAL(valueChanged (double)),
+    connect(d->saturationInput, SIGNAL(valueChanged(double)),
             this, SLOT(slotTimer()));
 
-    connect(d->greenInput, SIGNAL(valueChanged (double)),
+    connect(d->greenInput, SIGNAL(valueChanged(double)),
             this, SLOT(slotTimer()));
 
     // -------------------------------------------------------------
@@ -490,14 +485,12 @@ void WhiteBalanceTool::slotTemperaturePresetChanged(int tempPreset)
         d->temperatureInput->setValue((double)temperature);
     }
 
-    slotEffect();
+    slotTimer();
 }
 
 void WhiteBalanceTool::slotPickerColorButtonActived()
 {
-    // Save previous rendering mode and toggle to original image.
-    d->currentPreviewMode = d->previewWidget->previewMode();
-    d->previewWidget->slotPreviewModeChanged(PreviewToolBar::PreviewOriginalImage);
+    d->previewWidget->setCapturePointMode(true);
 }
 
 void WhiteBalanceTool::slotColorSelectedFromOriginal(const DColor& color)
@@ -508,7 +501,7 @@ void WhiteBalanceTool::slotColorSelectedFromOriginal(const DColor& color)
         QColor tc = dc.getQColor();
         double temperatureLevel, greenLevel;
 
-        WhiteBalance::autoWBAdjustementFromColor(tc, temperatureLevel, greenLevel);
+        WBFilter::autoWBAdjustementFromColor(tc, temperatureLevel, greenLevel);
 
         d->temperatureInput->setValue(temperatureLevel);
         d->greenInput->setValue(greenLevel);
@@ -519,10 +512,8 @@ void WhiteBalanceTool::slotColorSelectedFromOriginal(const DColor& color)
         return;
     }
 
-    // restore previous rendering mode.
-    d->previewWidget->slotPreviewModeChanged(d->currentPreviewMode);
-
-    slotEffect();
+    d->previewWidget->setCapturePointMode(false);
+    slotTimer();
 }
 
 void WhiteBalanceTool::slotColorSelectedFromTarget(const DColor& color)
@@ -534,16 +525,16 @@ void WhiteBalanceTool::slotAutoAdjustExposure()
 {
     kapp->activeWindow()->setCursor(Qt::WaitCursor);
 
-    ImageIface* iface = d->previewWidget->imageIface();
-    uchar *data       = iface->getOriginalImage();
-    int width         = iface->originalWidth();
-    int height        = iface->originalHeight();
-    bool sb           = iface->originalSixteenBit();
+    ImageIface iface(0, 0);
+    uchar* data = iface.getOriginalImage();
+    int width   = iface.originalWidth();
+    int height  = iface.originalHeight();
+    bool sb     = iface.originalSixteenBit();
 
     double blackLevel;
     double exposureLevel;
 
-    WhiteBalance::autoExposureAdjustement(data, width, height, sb, blackLevel, exposureLevel);
+    WBFilter::autoExposureAdjustement(data, width, height, sb, blackLevel, exposureLevel);
     delete [] data;
 
     d->blackInput->setValue(blackLevel);
@@ -554,71 +545,73 @@ void WhiteBalanceTool::slotAutoAdjustExposure()
     slotEffect();
 }
 
-void WhiteBalanceTool::slotEffect()
+void WhiteBalanceTool::prepareEffect()
 {
-    ImageIface* iface = d->previewWidget->imageIface();
-    uchar* data       = iface->getPreviewImage();
-    int w             = iface->previewWidth();
-    int h             = iface->previewHeight();
-    bool sb           = iface->previewSixteenBit();
+    kapp->setOverrideCursor(Qt::WaitCursor);
+    toolSettings()->setEnabled(false);
+    toolView()->setEnabled(false);
 
-    // Create the new empty destination image data space.
+    WBContainer settings;
+    settings.temperature  = d->temperatureInput->value();
+    settings.dark         = d->darkInput->value();
+    settings.black        = d->blackInput->value();
+    settings.exposition   = d->mainExposureInput->value() + d->fineExposureInput->value();
+    settings.gamma        = d->gammaInput->value();
+    settings.saturation   = d->saturationInput->value();
+    settings.green        = d->greenInput->value();
+
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
+
+    DImg preview = d->previewWidget->getOriginalRegionImage(true);
+    setFilter(new WBFilter(&preview, this, settings));
+}
+
+void WhiteBalanceTool::putPreviewData()
+{
+    DImg preview = filter()->getTargetImage();
+    d->previewWidget->setPreviewImage(preview);
+
+    // Update histogram.
 
     if (d->destinationPreviewData)
        delete [] d->destinationPreviewData;
 
-    d->destinationPreviewData = new uchar[w*h*(sb ? 8 : 4)];
-    double temperature        = d->temperatureInput->value();
-    double dark               = d->darkInput->value();
-    double black              = d->blackInput->value();
-    double mainExposure       = d->mainExposureInput->value();
-    double fineExposure       = d->fineExposureInput->value();
-    double gamma              = d->gammaInput->value();
-    double saturation         = d->saturationInput->value();
-    double green              = d->greenInput->value();
-
-    WhiteBalance wbFilter(sb);
-    wbFilter.whiteBalance(data, w, h, sb,
-                          black, mainExposure + fineExposure,
-                          temperature, green, dark,
-                          gamma, saturation);
-
-    iface->putPreviewImage(data);
-    d->previewWidget->updatePreview();
-
-    // Update histogram.
-    memcpy (d->destinationPreviewData, data, w*h*(sb ? 8 : 4));
-    d->gboxSettings->histogramBox()->histogram()->updateData(d->destinationPreviewData, w, h, sb, 0, 0, 0, false);
-    delete [] data;
+    d->destinationPreviewData = preview.copyBits();
+    d->gboxSettings->histogramBox()->histogram()->updateData(d->destinationPreviewData,
+                                                             preview.width(), preview.height(), preview.sixteenBit(),
+                                                             0, 0, 0, false);
 }
 
-void WhiteBalanceTool::finalRendering()
+void WhiteBalanceTool::prepareFinal()
 {
     kapp->setOverrideCursor(Qt::WaitCursor);
-    ImageIface* iface   = d->previewWidget->imageIface();
-    uchar* data         = iface->getOriginalImage();
-    int w               = iface->originalWidth();
-    int h               = iface->originalHeight();
-    bool sb             = iface->originalSixteenBit();
-    double temperature  = d->temperatureInput->value();
-    double dark         = d->darkInput->value();
-    double black        = d->blackInput->value();
-    double mainExposure = d->mainExposureInput->value();
-    double fineExposure = d->fineExposureInput->value();
-    double gamma        = d->gammaInput->value();
-    double saturation   = d->saturationInput->value();
-    double green        = d->greenInput->value();
+    toolSettings()->setEnabled(false);
+    toolView()->setEnabled(false);
 
-    WhiteBalance wbFilter(sb);
-    wbFilter.whiteBalance(data, w, h, sb,
-                          black, mainExposure + fineExposure,
-                          temperature, green, dark,
-                          gamma, saturation);
+    WBContainer settings;
+    settings.temperature  = d->temperatureInput->value();
+    settings.dark         = d->darkInput->value();
+    settings.black        = d->blackInput->value();
+    settings.exposition   = d->mainExposureInput->value() + d->fineExposureInput->value();
+    settings.gamma        = d->gammaInput->value();
+    settings.saturation   = d->saturationInput->value();
+    settings.green        = d->greenInput->value();
 
-    iface->putOriginalImage(i18n("White Balance"), data);
-    delete [] data;
+    ImageIface iface(0, 0);
+    setFilter(new WBFilter(iface.getOriginalImg(), this, settings));
+}
+
+void WhiteBalanceTool::putFinalData()
+{
+    ImageIface iface(0, 0);
+    iface.putOriginalImage(i18n("White Balance"), filter()->getTargetImage().bits());
+}
+
+void WhiteBalanceTool::renderingFinished()
+{
     kapp->restoreOverrideCursor();
+    toolSettings()->setEnabled(true);
+    toolView()->setEnabled(true);
 }
 
 void WhiteBalanceTool::slotResetSettings()
@@ -637,7 +630,6 @@ void WhiteBalanceTool::slotResetSettings()
     d->temperaturePresetCB->slotReset();
     slotTemperaturePresetChanged(d->temperaturePresetCB->defaultIndex());
 
-    d->previewWidget->resetSpotPosition();
     d->gboxSettings->histogramBox()->setChannel(LuminosityChannel);
     d->gboxSettings->histogramBox()->histogram()->reset();
 
