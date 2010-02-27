@@ -30,7 +30,7 @@
 
 using namespace Digikam;
 
-namespace DigikamChannelMixerImagesPlugin
+namespace DigikamImagesPluginCore
 {
 
 class ChannelMixerToolPriv;
@@ -53,7 +53,7 @@ private:
     void putPreviewData();
     void putFinalData();
     void renderingFinished();
-    
+
     void updateSettingsWidgets();
 
 private Q_SLOTS:
@@ -70,6 +70,6 @@ private:
     ChannelMixerToolPriv* const d;
 };
 
-}  // namespace DigikamChannelMixerImagesPlugin
+}  // namespace DigikamImagesPluginCore
 
 #endif /* CHANNELMIXERTOOL_H */

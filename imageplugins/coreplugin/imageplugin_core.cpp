@@ -84,7 +84,8 @@ public:
         convertTo16Bits(0),
         noiseReductionAction(0),
         whitebalanceAction(0),
-        profileMenuAction(0)
+        profileMenuAction(0),
+        channelMixerAction(0)
         {}
 
     KAction*               redeyeAction;
@@ -102,6 +103,7 @@ public:
     KAction*               convertTo16Bits;
     KAction*               noiseReductionAction;
     KAction*               whitebalanceAction;
+    KAction*               channelMixerAction;
 
     IccProfilesMenuAction* profileMenuAction;
 };
@@ -173,10 +175,16 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QVariantList &)
 
     d->whitebalanceAction = new KAction(KIcon("whitebalance"), i18n("White Balance..."), this);
     d->whitebalanceAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_W));
-    actionCollection()->addAction("implugcore_whitebalance", d->whitebalanceAction );    
+    actionCollection()->addAction("implugcore_whitebalance", d->whitebalanceAction );
     connect(d->whitebalanceAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotWhiteBalance()));
-            
+
+    d->channelMixerAction  = new KAction(KIcon("channelmixer"), i18n("Channel Mixer..."), this);
+    d->channelMixerAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_H));
+    actionCollection()->addAction("implugcore_channelmixer", d->channelMixerAction );
+    connect(d->channelMixerAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotChannelMixer()));
+
     //-------------------------------
     // Enhance menu actions
 
@@ -251,6 +259,7 @@ void ImagePlugin_Core::setEnabledActions(bool b)
     d->profileMenuAction->setEnabled(b);
     d->noiseReductionAction->setEnabled(b);
     d->whitebalanceAction->setEnabled(b);
+    d->channelMixerAction->setEnabled(b);
 }
 
 void ImagePlugin_Core::slotInvert()
@@ -467,5 +476,11 @@ void ImagePlugin_Core::slotNoiseReduction()
 void ImagePlugin_Core::slotWhiteBalance()
 {
     WhiteBalanceTool* tool = new WhiteBalanceTool(this);
+    loadTool(tool);
+}
+
+void ImagePlugin_Core::slotChannelMixer()
+{
+    ChannelMixerTool* tool = new ChannelMixerTool(this);
     loadTool(tool);
 }

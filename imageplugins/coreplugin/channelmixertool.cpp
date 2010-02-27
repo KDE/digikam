@@ -69,7 +69,7 @@
 
 using namespace KDcrawIface;
 
-namespace DigikamChannelMixerImagesPlugin
+namespace DigikamImagesPluginCore
 {
 
 class ChannelMixerToolPriv
@@ -175,8 +175,8 @@ void ChannelMixerTool::slotChannelChanged()
 
 void ChannelMixerTool::prepareEffect()
 {
-    QApplication::setOverrideCursor(Qt::WaitCursor);
-    d->settingsView->setEnabled(false);
+    kapp->setOverrideCursor(Qt::WaitCursor);
+    toolSettings()->setEnabled(false);
     toolView()->setEnabled(false);
 
     MixerContainer settings = d->settingsView->settings();
@@ -184,7 +184,7 @@ void ChannelMixerTool::prepareEffect()
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 
     DImg preview = d->previewWidget->getOriginalRegionImage(true);
-    setFilter(dynamic_cast<DImgThreadedFilter*>(new MixerFilter(&preview, this, settings)));
+    setFilter(new MixerFilter(&preview, this, settings));
 }
 
 void ChannelMixerTool::putPreviewData()
@@ -205,14 +205,13 @@ void ChannelMixerTool::putPreviewData()
 
 void ChannelMixerTool::prepareFinal()
 {
-    QApplication::setOverrideCursor(Qt::WaitCursor);
-    d->settingsView->setEnabled(false);
+    toolSettings()->setEnabled(false);
     toolView()->setEnabled(false);
 
     MixerContainer settings = d->settingsView->settings();
 
     ImageIface iface(0, 0);
-    setFilter(dynamic_cast<DImgThreadedFilter*>(new MixerFilter(iface.getOriginalImg(), this, settings)));
+    setFilter(new MixerFilter(iface.getOriginalImg(), this, settings));
 }
 
 void ChannelMixerTool::putFinalData()
@@ -223,8 +222,8 @@ void ChannelMixerTool::putFinalData()
 
 void ChannelMixerTool::renderingFinished()
 {
-    QApplication::restoreOverrideCursor();
-    d->settingsView->setEnabled(true);
+    kapp->restoreOverrideCursor();
+    toolSettings()->setEnabled(true);
     toolView()->setEnabled(true);
 }
 
@@ -273,4 +272,4 @@ void ChannelMixerTool::slotSaveAsSettings()
     d->settingsView->saveAsSettings();
 }
 
-}  // namespace DigikamChannelMixerImagesPlugin
+}  // namespace DigikamImagesPluginCore

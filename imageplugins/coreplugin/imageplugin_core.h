@@ -75,6 +75,7 @@ private Q_SLOTS:
     void slotConvertTo16Bits();
     void slotConvertToColorSpace(const IccProfile&);
     void slotProfileConversionTool();
+    void slotChannelMixer();
 
     void slotRatioCrop();
     void slotResize();

@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="16" name="digikamimageplugin_core" >
+<gui version="17" name="digikamimageplugin_core" >
 
  <MenuBar>
 
@@ -12,6 +12,7 @@
       <Action name="implugcore_invert" />
       <Action name="implugcore_blackwhite" />
       <Action name="implugcore_whitebalance" />
+      <Action name="implugcore_channelmixer" />
       <Menu name="Depth"><text>&amp;Depth</text>
           <Action name="implugcore_convertto8bits" />
           <Action name="implugcore_convertto16bits" />
