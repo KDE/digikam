@@ -1911,16 +1911,11 @@ bool AlbumManager::renamePAlbum(PAlbum* album, const QString& newName,
     }
 
     // first check if we have another sibling with the same name
-    Album *sibling = album->m_parent->m_firstChild;
-    while (sibling)
+    if (hasDirectChildAlbumWithTitle(album->m_parent, newName))
     {
-        if (sibling->title() == newName)
-        {
-            errMsg = i18n("Another album with the same name already exists.\n"
-                          "Please choose another name.");
-            return false;
-        }
-        sibling = sibling->m_next;
+        errMsg = i18n("Another album with the same name already exists.\n"
+                      "Please choose another name.");
+        return false;
     }
 
     QString oldAlbumPath = album->albumPath();
@@ -2041,15 +2036,10 @@ TAlbum* AlbumManager::createTAlbum(TAlbum* parent, const QString& name,
     }
 
     // first check if we have another album with the same name
-    Album *child = parent->m_firstChild;
-    while (child)
+    if (hasDirectChildAlbumWithTitle(parent, name))
     {
-        if (child->title() == name)
-        {
-            errMsg = i18n("Tag name already exists");
-            return 0;
-        }
-        child = child->m_next;
+        errMsg = i18n("Tag name already exists");
+        return 0;
     }
 
     ChangingDB changing(d);
@@ -2119,6 +2109,23 @@ bool AlbumManager::deleteTAlbum(TAlbum* album, QString& errMsg)
     return true;
 }
 
+bool AlbumManager::hasDirectChildAlbumWithTitle(Album *parent, const QString &title)
+{
+
+    Album *sibling = parent->m_firstChild;
+    while (sibling)
+    {
+        if (sibling->title() == title)
+        {
+            return true;
+        }
+        sibling = sibling->m_next;
+    }
+
+    return false;
+
+}
+
 bool AlbumManager::renameTAlbum(TAlbum* album, const QString& name,
                                 QString& errMsg)
 {
@@ -2141,16 +2148,11 @@ bool AlbumManager::renameTAlbum(TAlbum* album, const QString& name,
     }
 
     // first check if we have another sibling with the same name
-    Album *sibling = album->m_parent->m_firstChild;
-    while (sibling)
+    if (hasDirectChildAlbumWithTitle(album->m_parent, name))
     {
-        if (sibling->title() == name)
-        {
-            errMsg = i18n("Another tag with the same name already exists.\n"
-                          "Please choose another name.");
-            return false;
-        }
-        sibling = sibling->m_next;
+        errMsg = i18n("Another tag with the same name already exists.\n"
+                      "Please rename the tag another name.");
+        return false;
     }
 
     ChangingDB changing(d);
@@ -2172,6 +2174,13 @@ bool AlbumManager::moveTAlbum(TAlbum* album, TAlbum *newParent, QString& errMsg)
     if (album == d->rootTAlbum)
     {
         errMsg = i18n("Cannot move root tag");
+        return false;
+    }
+
+    if (hasDirectChildAlbumWithTitle(newParent, album->title()))
+    {
+        errMsg = i18n("Another tag with the same name already exists.\n"
+                      "Please rename the tag before moving it.");
         return false;
     }
 

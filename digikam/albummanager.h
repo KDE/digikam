@@ -598,6 +598,16 @@ private:
     AlbumManager();
     ~AlbumManager();
 
+    /**
+     * Checks whether an Album has a direct child with the given name.
+     *
+     * @param parent album to check children for
+     * @param title title to search for
+     * @return <code>true</code> if there is a child with name, else
+     *         <code>false</code>
+     */
+    bool hasDirectChildAlbumWithTitle(Album *parent, const QString &title);
+
     void insertPAlbum(PAlbum *album, PAlbum *parent);
     void removePAlbum(PAlbum *album);
     void insertTAlbum(TAlbum *album, TAlbum *parent);
