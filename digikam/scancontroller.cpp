@@ -422,6 +422,20 @@ void ScanController::scanFileDirectly(const QString& filePath)
     resumeCollectionScan();
 }
 
+void ScanController::scanFileDirectlyCopyAttributes(const QString& filePath, qlonglong parentVersion)
+{
+    suspendCollectionScan();
+
+    CollectionScanner scanner;
+    scanner.recordHints(d->itemHints);
+    scanner.recordHints(d->itemChangeHints);
+    qlonglong id = scanner.scanFile(filePath);
+    ImageInfo dest(id), source(parentVersion);
+    scanner.copyFileProperties(source, dest);
+
+    resumeCollectionScan();
+}
+
 void ScanController::abortInitialization()
 {
     QMutexLocker lock(&d->mutex);

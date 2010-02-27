@@ -954,7 +954,9 @@ void ImageWindow::saveAsIsComplete()
     {
         // Now copy the metadata of the original file to the new file ------------
 
-        ImageInfo newInfo(d->imageInfoCurrent.copyItem(dstAlbum->id(), m_savingContext->destinationURL.fileName()));
+        ScanController::instance()->scanFileDirectlyCopyAttributes(m_savingContext->destinationURL.toLocalFile(),
+                                                                   d->imageInfoCurrent.id());
+        ImageInfo newInfo(m_savingContext->destinationURL.toLocalFile());
 
         if ( !d->urlList.contains(m_savingContext->destinationURL) )
         {
