@@ -57,6 +57,7 @@
 #include "redeyetool.h"
 #include "cbtool.h"
 #include "whitebalancetool.h"
+#include "channelmixertool.h"
 
 using namespace DigikamImagesPluginCore;
 
