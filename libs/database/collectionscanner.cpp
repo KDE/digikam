@@ -344,25 +344,25 @@ void CollectionScanner::partialScan(const QString& albumRoot, const QString& alb
     updateRemovedItemsTime();
 }
 
-void CollectionScanner::scanFile(const QString& filePath, FileScanMode mode)
+qlonglong CollectionScanner::scanFile(const QString& filePath, FileScanMode mode)
 {
     QFileInfo info(filePath);
     QString dirPath   = info.path(); // strip off filename
     QString albumRoot = CollectionManager::instance()->albumRootPath(dirPath);
 
     if (albumRoot.isNull())
-        return;
+        return -1;
 
     QString album = CollectionManager::instance()->album(dirPath);
-    scanFile(albumRoot, album, info.fileName(), mode);
+    return scanFile(albumRoot, album, info.fileName(), mode);
 }
 
-void CollectionScanner::scanFile(const QString& albumRoot, const QString& album, const QString& fileName, FileScanMode mode)
+qlonglong CollectionScanner::scanFile(const QString& albumRoot, const QString& album, const QString& fileName, FileScanMode mode)
 {
     if (album.isEmpty() || fileName.isEmpty())
     {
         kWarning() << "scanFile(QString, QString, QString) called with empty album or empty filename";
-        return;
+        return -1;
     }
 
     if (DatabaseAccess().backend()->isInTransaction())
@@ -370,7 +370,7 @@ void CollectionScanner::scanFile(const QString& albumRoot, const QString& album,
         // Install ScanController::instance()->suspendCollectionScan around your DatabaseTransaction
         kError() << "Detected an active database transaction when starting a collection file scan. "
                          "Please report this error.";
-        return;
+        return -1;
     }
 
     CollectionLocation location = CollectionManager::instance()->locationForAlbumRootPath(albumRoot);
@@ -378,7 +378,7 @@ void CollectionScanner::scanFile(const QString& albumRoot, const QString& album,
     if (location.isNull())
     {
         kWarning() << "Did not find a CollectionLocation for album root path " << albumRoot;
-        return;
+        return -1;
     }
 
     QDir dir(location.albumRootPath() + album);
@@ -387,7 +387,7 @@ void CollectionScanner::scanFile(const QString& albumRoot, const QString& album,
     if (!fi.exists())
     {
         kWarning() << "File given to scan does not exist" << albumRoot << album << fileName;
-        return;
+        return -1;
     }
 
     int albumId       = checkAlbum(location, album);
@@ -401,10 +401,10 @@ void CollectionScanner::scanFile(const QString& albumRoot, const QString& album,
         {
             case NormalScan:
             case ModifiedScan:
-                scanNewFile(fi, albumId);
+                imageId = scanNewFile(fi, albumId);
                 break;
             case Rescan:
-                scanNewFileFullScan(fi, albumId);
+                imageId = scanNewFileFullScan(fi, albumId);
                 break;
         }
     }
@@ -424,6 +424,8 @@ void CollectionScanner::scanFile(const QString& albumRoot, const QString& album,
                 break;
         }
     }
+
+    return imageId;
 }
 
 void CollectionScanner::scanFile(const ImageInfo& info, FileScanMode mode)
@@ -730,7 +732,7 @@ void CollectionScanner::scanFileNormal(const QFileInfo& fi, const ItemScanInfo& 
     }
 }
 
-void CollectionScanner::scanNewFile(const QFileInfo& info, int albumId)
+qlonglong CollectionScanner::scanNewFile(const QFileInfo& info, int albumId)
 {
     ImageScanner scanner(info);
     scanner.setCategory(category(info));
@@ -753,13 +755,16 @@ void CollectionScanner::scanNewFile(const QFileInfo& info, int albumId)
             // Establishing identity with the unique hsah
             scanner.newFile(albumId);
     }
+
+    return scanner.id();
 }
 
-void CollectionScanner::scanNewFileFullScan(const QFileInfo& info, int albumId)
+qlonglong CollectionScanner::scanNewFileFullScan(const QFileInfo& info, int albumId)
 {
     ImageScanner scanner(info);
     scanner.setCategory(category(info));
     scanner.newFileFullScan(albumId);
+    return scanner.id();
 }
 
 void CollectionScanner::scanModifiedFile(const QFileInfo& info, const ItemScanInfo& scanInfo)
@@ -774,6 +779,14 @@ void CollectionScanner::rescanFile(const QFileInfo& info, const ItemScanInfo& sc
     ImageScanner scanner(info, scanInfo);
     scanner.setCategory(category(info));
     scanner.rescan();
+}
+
+void CollectionScanner::copyFileProperties(const ImageInfo& source, const ImageInfo& dest)
+{
+    if (source.isNull() || dest.isNull())
+        return;
+
+    ImageScanner::copyProperties(source.id(), dest.id());
 }
 
 int CollectionScanner::countItemsInFolder(const QString& directory)
