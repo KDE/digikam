@@ -80,5 +80,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 055 ==> 227075 : digikam3 database is not imported.
 056 ==> 225927 : Add white-balance to the batch base tools.
 057 ==> 225718 : Crash when having two tags with the same name in one folder.
-058 ==> 221918 : Wrong thumbnails after save as
-059 ==> 
+058 ==> 221918 : Wrong thumbnails after save as.
+059 ==> 226586 : digiKam 1.2 crashes after My Tags window goes blank.
+060 ==> 
+
