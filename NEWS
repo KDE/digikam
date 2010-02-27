@@ -76,6 +76,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 052 ==> 228378 : Tag filtering is bugged.
 053 ==> 227668 : Not enough space to show alle tags.
 054 ==> 227640 : No Pictures visible in Collections.
-055 ==> 
+055 ==> 227075 : digikam3 database is not imported.
+056 ==> 
 
 
