@@ -79,5 +79,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 054 ==> 227640 : No Pictures visible in Collections.
 055 ==> 227075 : digikam3 database is not imported.
 056 ==> 225927 : Add white-balance to the batch base tools.
-057 ==> 225718 :  Crash wenn having two tags with the same name in one folder.
+057 ==> 225718 : Crash when having two tags with the same name in one folder.
 058 ==> 
