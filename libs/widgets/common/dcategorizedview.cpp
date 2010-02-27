@@ -740,7 +740,7 @@ void DCategorizedView::paste()
                      data, Qt::NoButton,
                      cutAction ? Qt::ShiftModifier : Qt::ControlModifier);
     QModelIndex index = indexAt(event.pos());
-    if (dragDropHandler()->accepts(&event, index))
+    if (!dragDropHandler()->accepts(&event, index))
         return;
     dragDropHandler()->dropEvent(this, &event, index);
 }
