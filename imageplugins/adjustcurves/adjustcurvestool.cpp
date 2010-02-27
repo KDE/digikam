@@ -44,7 +44,6 @@
 
 // KDE includes
 
-#include <kaboutdata.h>
 #include <kapplication.h>
 #include <kcombobox.h>
 #include <kconfig.h>
@@ -52,11 +51,9 @@
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
-#include <khelpmenu.h>
 #include <kicon.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kmenu.h>
 #include <kmessagebox.h>
 #include <kselector.h>
 #include <kstandarddirs.h>
@@ -66,7 +63,6 @@
 #include "colorgradientwidget.h"
 #include "curveswidget.h"
 #include "curvesbox.h"
-#include "daboutdata.h"
 #include "dimg.h"
 #include "dimgimagefilters.h"
 #include "editortoolsettings.h"
@@ -76,9 +72,6 @@
 #include "imagehistogram.h"
 #include "imageiface.h"
 #include "imageguidewidget.h"
-#include "version.h"
-
-using namespace Digikam;
 
 namespace DigikamAdjustCurvesImagesPlugin
 {
@@ -102,24 +95,24 @@ public:
         gboxSettings(0)
         {}
 
-    const QString        configGroupName;
-    const QString        configHistogramChannelEntry;
-    const QString        configHistogramScaleEntry;
-    const QString        configCurveEntry;
+    const QString       configGroupName;
+    const QString       configHistogramChannelEntry;
+    const QString       configHistogramScaleEntry;
+    const QString       configCurveEntry;
 
-    uchar*               destinationPreviewData;
+    uchar*              destinationPreviewData;
 
-    int                  histoSegments;
-    int                  currentPreviewMode;
+    int                 histoSegments;
+    int                 currentPreviewMode;
 
-    KComboBox*           channelCB;
+    KComboBox*          channelCB;
 
-    CurvesBox*           curvesBox;
-    ImageGuideWidget*    previewWidget;
+    CurvesBox*          curvesBox;
+    ImageGuideWidget*   previewWidget;
 
-    DImg*                originalImage;
+    DImg*               originalImage;
 
-    EditorToolSettings*  gboxSettings;
+    EditorToolSettings* gboxSettings;
 };
 
 AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
@@ -130,8 +123,6 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
     setToolName(i18n("Adjust Curves"));
     setToolIcon(SmallIcon("adjustcurves"));
 
-    d->destinationPreviewData = 0;
-
     ImageIface iface(0, 0);
     d->originalImage = iface.getOriginalImg();
 
@@ -140,9 +131,6 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
     // -------------------------------------------------------------
 
     d->previewWidget = new ImageGuideWidget;
-    d->previewWidget->setWhatsThis(i18n("This is the image's curve-adjustments preview. "
-                                        "You can pick a spot on the image "
-                                        "to see the corresponding level in the histogram."));
     setToolView(d->previewWidget);
     setPreviewModeMask(PreviewToolBar::AllPreviewModes);
 
@@ -214,7 +202,9 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
 
 AdjustCurvesTool::~AdjustCurvesTool()
 {
-    delete [] d->destinationPreviewData;
+    if (d->destinationPreviewData)
+       delete [] d->destinationPreviewData;
+
     delete d;
 }
 

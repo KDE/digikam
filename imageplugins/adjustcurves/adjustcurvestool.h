@@ -33,12 +33,14 @@ namespace Digikam
 class DColor;
 }
 
+using namespace Digikam;
+
 namespace DigikamAdjustCurvesImagesPlugin
 {
 
 class AdjustCurvesToolPriv;
 
-class AdjustCurvesTool : public Digikam::EditorTool
+class AdjustCurvesTool : public EditorTool
 {
     Q_OBJECT
 
