@@ -85,8 +85,8 @@ public:
         convertTo16Bits(0),
         noiseReductionAction(0),
         whitebalanceAction(0),
-        profileMenuAction(0),
-        channelMixerAction(0)
+        channelMixerAction(0),
+        profileMenuAction(0)
         {}
 
     KAction*               redeyeAction;
