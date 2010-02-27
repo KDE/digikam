@@ -19,6 +19,7 @@ BatchQueueManager : new tool to fix Hue/Saturation/Lightness.
 BatchQueueManager : new tool to convert images color space.
 BatchQueueManager : new tool to mix color channel.
 BatchQueueManager : new tool to convert to Black and White.
+BatchQueueManager : new tool to adjust White Balance.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
@@ -77,6 +78,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 053 ==> 227668 : Not enough space to show alle tags.
 054 ==> 227640 : No Pictures visible in Collections.
 055 ==> 227075 : digikam3 database is not imported.
-056 ==> 
+056 ==> 225927 : Add white-balance to the batch base tools.
+057 ==> 
+
 
 
