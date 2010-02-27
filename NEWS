@@ -82,5 +82,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 057 ==> 225718 : Crash when having two tags with the same name in one folder.
 058 ==> 221918 : Wrong thumbnails after save as.
 059 ==> 226586 : digiKam 1.2 crashes after My Tags window goes blank.
-060 ==> 
+060 ==> 226885 : Not displayed thumbnails failed load kio_digikamalbums.
+061 ==> 
 
