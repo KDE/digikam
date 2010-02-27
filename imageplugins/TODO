@@ -2,7 +2,7 @@ Editor tools pending task
 
                         Multithreaded      Zommable Preview        Port to BQM
 adjustcurves                TODO                 TODO                  TODO
-adjustlevels                TODO                 TODO                  TODO           
+adjustlevels                TODO                 TODO                  TODO
 blurfx                      DONE                 DONE                  TODO
 border                      DONE                  NO                   TODO
 channelmixer                DONE                 DONE                  DONE
@@ -22,7 +22,7 @@ coreplugin
   /redeyetool               DONE                 TODO                   NO
   /resizetool               DONE                 TODO                  DONE
   /sharpentool              DONE                 DONE                  DONE
-  /whitebalance             TODO                 TODO                  TODO
+  /whitebalance             DONE                 DONE                  DONE
 
 distortionfx                DONE                 TODO                  TODO
 emboss                      DONE                 DONE                  TODO
