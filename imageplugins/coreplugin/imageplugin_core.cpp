@@ -58,6 +58,7 @@
 #include "cbtool.h"
 #include "whitebalancetool.h"
 #include "channelmixertool.h"
+#include "adjustcurvestool.h"
 
 using namespace DigikamImagesPluginCore;
 
@@ -86,6 +87,7 @@ public:
         noiseReductionAction(0),
         whitebalanceAction(0),
         channelMixerAction(0),
+        curvesAction(0),
         profileMenuAction(0)
         {}
 
@@ -105,6 +107,7 @@ public:
     KAction*               noiseReductionAction;
     KAction*               whitebalanceAction;
     KAction*               channelMixerAction;
+    KAction*               curvesAction;
 
     IccProfilesMenuAction* profileMenuAction;
 };
@@ -180,11 +183,18 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QVariantList &)
     connect(d->whitebalanceAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotWhiteBalance()));
 
-    d->channelMixerAction  = new KAction(KIcon("channelmixer"), i18n("Channel Mixer..."), this);
+    d->channelMixerAction = new KAction(KIcon("channelmixer"), i18n("Channel Mixer..."), this);
     d->channelMixerAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_H));
     actionCollection()->addAction("implugcore_channelmixer", d->channelMixerAction );
     connect(d->channelMixerAction, SIGNAL(triggered(bool)),
             this, SLOT(slotChannelMixer()));
+
+    d->curvesAction = new KAction(KIcon("adjustcurves"), i18n("Curves Adjust..."), this);
+    // NOTE: Photoshop 7 use CTRL+M (but it's used in KDE to toogle menu bar).
+    d->curvesAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_M));
+    actionCollection()->addAction("implugcore_adjustcurves", d->curvesAction);
+    connect(d->curvesAction, SIGNAL(triggered(bool) ),
+            this, SLOT(slotCurvesAdjust()));
 
     //-------------------------------
     // Enhance menu actions
@@ -261,6 +271,7 @@ void ImagePlugin_Core::setEnabledActions(bool b)
     d->noiseReductionAction->setEnabled(b);
     d->whitebalanceAction->setEnabled(b);
     d->channelMixerAction->setEnabled(b);
+    d->curvesAction->setEnabled(b);
 }
 
 void ImagePlugin_Core::slotInvert()
@@ -483,5 +494,11 @@ void ImagePlugin_Core::slotWhiteBalance()
 void ImagePlugin_Core::slotChannelMixer()
 {
     ChannelMixerTool* tool = new ChannelMixerTool(this);
+    loadTool(tool);
+}
+
+void ImagePlugin_Core::slotCurvesAdjust()
+{
+    AdjustCurvesTool* tool = new AdjustCurvesTool(this);
     loadTool(tool);
 }

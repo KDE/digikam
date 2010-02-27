@@ -73,7 +73,7 @@
 #include "imageiface.h"
 #include "imageguidewidget.h"
 
-namespace DigikamAdjustCurvesImagesPlugin
+namespace DigikamImagesPluginCore
 {
 
 class AdjustCurvesToolPriv
@@ -439,4 +439,4 @@ void AdjustCurvesTool::slotSaveAsSettings()
     slotChannelChanged();
 }
 
-}  // namespace DigikamAdjustCurvesImagesPlugin
+}  // namespace DigikamImagesPluginCore

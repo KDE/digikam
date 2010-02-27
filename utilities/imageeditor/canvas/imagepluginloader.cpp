@@ -61,6 +61,7 @@ static const char* ObsoleteImagePluginsList[] =
      "digikamimageplugin_infrared",       // Merged to core plugin with B&W converter since 1.2.0.
      "digikamimageplugin_whitebalance",   // Merged to core plugin since 1.2.0.
      "digikamimageplugin_channelmixer",   // Merged to core plugin since 1.2.0.
+     "digikamimageplugin_adjustcurves",   // Merged to core plugin since 1.2.0.
      "-1"
 };
 
