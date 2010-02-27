@@ -187,15 +187,10 @@ void WhiteBalanceTool::slotAutoAdjustExposure()
     kapp->activeWindow()->setCursor(Qt::WaitCursor);
 
     ImageIface iface(0, 0);
-    uchar* data = iface.getOriginalImage();
-    int width   = iface.originalWidth();
-    int height  = iface.originalHeight();
-    bool sb     = iface.originalSixteenBit();
-
+    DImg* img            = iface.getOriginalImg();
     WBContainer settings = d->settingsView->settings();
-    WBFilter::autoExposureAdjustement(data, width, height, sb, settings.black, settings.exposition);
+    WBFilter::autoExposureAdjustement(img, settings.black, settings.exposition);
     d->settingsView->setSettings(settings);
-    delete [] data;
 
     kapp->activeWindow()->unsetCursor();
     slotTimer();
