@@ -61,7 +61,6 @@ using namespace KDcrawIface;
 namespace DigikamImagesPluginCore
 {
 
-
 class WhiteBalanceToolPriv
 {
 public:
