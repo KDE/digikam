@@ -45,6 +45,7 @@
 #include "iccconvert.h"
 #include "channelmixer.h"
 #include "bwconvert.h"
+#include "whitebalance.h"
 
 namespace Digikam
 {
@@ -88,6 +89,7 @@ BatchToolsManager::BatchToolsManager(QObject* parent)
     registerTool(new IccConvert(this));
     registerTool(new ChannelMixer(this));
     registerTool(new BWConvert(this));
+    registerTool(new WhiteBalance(this));
 }
 
 BatchToolsManager::~BatchToolsManager()

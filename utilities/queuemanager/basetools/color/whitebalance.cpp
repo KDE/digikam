@@ -65,22 +65,30 @@ BatchToolSettings WhiteBalance::defaultSettings()
 {
     BatchToolSettings prm;
     WBContainer defaultPrm = m_settingsView->defaultSettings();
-/*
-    prm.insert("Brightness", (double)defaultPrm.brightness);
-    prm.insert("Contrast",   (double)defaultPrm.contrast);
-    prm.insert("Gamma",      (double)defaultPrm.gamma);
-*/
+
+    prm.insert("black",       (double)defaultPrm.black);
+    prm.insert("temperature", (double)defaultPrm.temperature);
+    prm.insert("green",       (double)defaultPrm.green);
+    prm.insert("dark",        (double)defaultPrm.dark);
+    prm.insert("gamma",       (double)defaultPrm.gamma);
+    prm.insert("saturation",  (double)defaultPrm.saturation);
+    prm.insert("exposition",  (double)defaultPrm.exposition);
+
     return prm;
 }
 
 void WhiteBalance::slotAssignSettings2Widget()
 {
     WBContainer prm;
-/*
-    prm.brightness = settings()["Brightness"].toDouble();
-    prm.contrast   = settings()["Contrast"].toDouble();
-    prm.gamma      = settings()["Gamma"].toDouble();
-*/
+
+    prm.black       = settings()["black"].toDouble();
+    prm.temperature = settings()["temperature"].toDouble();
+    prm.green       = settings()["green"].toDouble();
+    prm.dark        = settings()["dark"].toDouble();
+    prm.gamma       = settings()["gamma"].toDouble();
+    prm.saturation  = settings()["saturation"].toDouble();
+    prm.exposition  = settings()["exposition"].toDouble();
+
     m_settingsView->setSettings(prm);
 }
 
@@ -88,11 +96,15 @@ void WhiteBalance::slotSettingsChanged()
 {
     BatchToolSettings prm;
     WBContainer currentPrm = m_settingsView->settings();
-/*
-    prm.insert("Brightness", (double)currentPrm.brightness);
-    prm.insert("Contrast",   (double)currentPrm.contrast);
-    prm.insert("Gamma",      (double)currentPrm.gamma);
-*/
+
+    prm.insert("black",       (double)currentPrm.black);
+    prm.insert("temperature", (double)currentPrm.temperature);
+    prm.insert("green",       (double)currentPrm.green);
+    prm.insert("dark",        (double)currentPrm.dark);
+    prm.insert("gamma",       (double)currentPrm.gamma);
+    prm.insert("saturation",  (double)currentPrm.saturation);
+    prm.insert("exposition",  (double)currentPrm.exposition);
+
     setSettings(prm);
 }
 
@@ -101,11 +113,15 @@ bool WhiteBalance::toolOperations()
     if (!loadToDImg()) return false;
 
     WBContainer prm;
-/*
-    prm.brightness = settings()["Brightness"].toDouble();
-    prm.contrast   = settings()["Contrast"].toDouble();
-    prm.gamma      = settings()["Gamma"].toDouble();
-*/
+
+    prm.black       = settings()["black"].toDouble();
+    prm.temperature = settings()["temperature"].toDouble();
+    prm.green       = settings()["green"].toDouble();
+    prm.dark        = settings()["dark"].toDouble();
+    prm.gamma       = settings()["gamma"].toDouble();
+    prm.saturation  = settings()["saturation"].toDouble();
+    prm.exposition  = settings()["exposition"].toDouble();
+
     WBFilter bcg(&image(), 0L, prm);
     bcg.startFilterDirectly();
     image().putImageData(bcg.getTargetImage().bits());
