@@ -392,6 +392,12 @@ void WBSettings::setOnPickTemperature(bool b)
     d->pickTemperature->setChecked(b);
 }
 
+void WBSettings::showAdvancedButtons(bool b)
+{
+    d->pickTemperature->setVisible(b);
+    d->autoAdjustExposure->setVisible(b);
+}
+
 void WBSettings::slotTemperatureChanged(double temperature)
 {
     int index = d->temperaturePresetCB->combo()->findData(QVariant((int)temperature));

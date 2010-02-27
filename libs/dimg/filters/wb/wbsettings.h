@@ -66,6 +66,8 @@ public:
     bool pickTemperatureIsOn();
     void setOnPickTemperature(bool b);
 
+    void showAdvancedButtons(bool b);
+
 Q_SIGNALS:
 
     void signalSettingsChanged();

@@ -51,6 +51,7 @@ WhiteBalance::WhiteBalance(QObject* parent)
 
     QWidget *box   = new QWidget;
     m_settingsView = new WBSettings(box);
+    m_settingsView->showAdvancedButtons(false);
     setSettingsWidget(box);
 
     connect(m_settingsView, SIGNAL(signalSettingsChanged()),
