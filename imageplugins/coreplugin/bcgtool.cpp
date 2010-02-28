@@ -49,6 +49,7 @@
 
 // Local includes
 
+#include "dimg.h"
 #include "bcgsettings.h"
 #include "editortoolsettings.h"
 #include "histogrambox.h"
