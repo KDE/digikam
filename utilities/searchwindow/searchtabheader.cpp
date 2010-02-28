@@ -426,7 +426,8 @@ void SearchTabHeader::keywordChanged()
         d->oldKeywordContent = keywords;
     }
 
-    setCurrentSearch(DatabaseSearch::KeywordSearch, queryFromKeywords(keywords), false);
+    setCurrentSearch(DatabaseSearch::KeywordSearch, queryFromKeywords(keywords));
+    d->keywordEdit->setFocus();
 }
 
 void SearchTabHeader::editCurrentAdvancedSearch()
