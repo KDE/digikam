@@ -87,6 +87,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 062 ==> 224080 : Selected image thumbnails should be automatically added to the list of images for processing in Batch Queue Manager.
 063 ==> 225722 : Selection in editor should not darken image.
 064 ==> 228802 : Copy paste doesn't work.
-065 ==> 
+065 ==> 227064 : digiKam 1.1.0: crash on image download.
+066 ==> 
 
 
