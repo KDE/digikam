@@ -1,7 +1,6 @@
 Editor tools pending task
 
                         Multithreaded      Zommable Preview        Port to BQM
-adjustlevels                TODO                 TODO                  TODO
 blurfx                      DONE                 DONE                  TODO
 border                      DONE                  NO                   TODO
 charcoal                    DONE                 DONE                  TODO
@@ -10,6 +9,7 @@ contentawareresizing        DONE                 TODO                  TODO
 
 coreplugin
   /adjustcurves             TODO                 TODO                  TODO
+  /adjustlevels             TODO                 TODO                  TODO
   /autocorrectiontool       DONE                 DONE                  DONE
   /bcgtool                  DONE                 DONE                  DONE
   /blurtool                 DONE                 DONE                  TODO
