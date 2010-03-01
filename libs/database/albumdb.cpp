@@ -2563,6 +2563,7 @@ QStringList AlbumDB::getItemURLsInAlbum(int albumID, ItemSortOrder sortOrder)
     if (albumRootPath.isNull())
         return QStringList();
 
+    //TODO lets define SQL actions within dbconfig.xml
     QString sqlString;
     switch(sortOrder)
     {
@@ -2570,7 +2571,7 @@ QStringList AlbumDB::getItemURLsInAlbum(int albumID, ItemSortOrder sortOrder)
             sqlString = QString("SELECT Albums.relativePath, Images.name "
                                  "FROM Images INNER JOIN Albums ON Albums.id=Images.album "
                                  "WHERE Albums.id=? "
-                                 "ORDER BY Images.name COLLATE NOCASE;");
+                                 "ORDER BY Images.name;"); //  COLLATE NOCASE
             break;
         case ByItemPath:
             // Don't collate on the path - this is to maintain the same behavior
