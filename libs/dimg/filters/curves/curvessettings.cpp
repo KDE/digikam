@@ -99,7 +99,7 @@ CurvesSettings::CurvesSettings(QWidget* parent, DImg* img)
 
     grid->addWidget(d->curvesBox, 0, 0, 1, 1);
     grid->setRowStretch(1, 10);
-    grid->setMargin(KDialog::spacingHint());
+    grid->setMargin(0);
     grid->setSpacing(KDialog::spacingHint());
 
     // -------------------------------------------------------------
