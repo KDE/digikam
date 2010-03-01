@@ -791,11 +791,11 @@ void CurvesWidget::mouseMoveEvent(QMouseEvent* e)
 
                 d->grabPoint = x;
                 d->last      = y;
+                
+                emit signalCurvesChanged();
             }
 
-           emit signalCurvesChanged();
-
-           break;
+            break;
         }
     }
 
