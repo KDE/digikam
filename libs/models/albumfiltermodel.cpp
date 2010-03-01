@@ -36,6 +36,7 @@
 // Local includes
 
 #include "albummodel.h"
+#include "albumsettings.h"
 
 namespace Digikam
 {
@@ -46,6 +47,12 @@ AlbumFilterModel::AlbumFilterModel(QObject *parent)
     m_chainedModel = 0;
     setDynamicSortFilter(true);
     setSortRole(AbstractAlbumModel::AlbumSortRole);
+    setSortCaseSensitivity(Qt::CaseInsensitive);
+
+    // sorting may have changed when the string comparison is different
+    connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
+            this, SLOT(invalidate()));
+
 }
 
 void AlbumFilterModel::setSearchTextSettings(const SearchTextSettings& settings)
@@ -223,8 +230,15 @@ bool AlbumFilterModel::lessThan(const QModelIndex& left, const QModelIndex& righ
     QVariant valLeft = left.data(sortRole());
     QVariant valRight = right.data(sortRole());
 
-    if (valLeft.type() == QVariant::String && valRight.type() == QVariant::String)
-        return KStringHandler::naturalCompare(valLeft.toString(), valRight.toString(), sortCaseSensitivity()) < 0;
+    if ((valLeft.type() == QVariant::String) && (valRight.type() == QVariant::String))
+        switch (AlbumSettings::instance()->getStringComparisonType())
+        {
+            case AlbumSettings::Natural:
+                return KStringHandler::naturalCompare(valLeft.toString(), valRight.toString(), sortCaseSensitivity()) < 0;
+            case AlbumSettings::Normal:
+            default:
+                return QString::compare(valLeft.toString(), valRight.toString(), sortCaseSensitivity()) < 0;
+        }
     else
         return QSortFilterProxyModel::lessThan(left, right);
 }

@@ -53,8 +53,6 @@
 #include "imageiface.h"
 #include "imageregionwidget.h"
 
-using namespace Digikam;
-
 namespace DigikamImagesPluginCore
 {
 
@@ -139,7 +137,7 @@ void SharpenTool::slotSettingsChanged()
 void SharpenTool::renderingFinished()
 {
     toolView()->setEnabled(true);
-    d->sharpSettings->setEnabled(true);
+    toolSettings()->setEnabled(true);
     slotSettingsChanged();
 }
 
@@ -166,7 +164,7 @@ void SharpenTool::slotResetSettings()
 void SharpenTool::prepareEffect()
 {
     toolView()->setEnabled(false);
-    d->sharpSettings->setEnabled(false);
+    toolSettings()->setEnabled(false);
     SharpContainer settings = d->sharpSettings->settings();
 
     switch (settings.method)
@@ -180,7 +178,7 @@ void SharpenTool::prepareEffect()
             if (radius < 1.0) sigma = radius;
             else sigma = sqrt(radius);
 
-            setFilter(dynamic_cast<DImgThreadedFilter*>(new DImgSharpen(&img, this, radius, sigma)));
+            setFilter(new DImgSharpen(&img, this, radius, sigma));
             break;
         }
 
@@ -191,7 +189,7 @@ void SharpenTool::prepareEffect()
             double a  = settings.umAmount;
             double th = settings.umThreshold;
 
-            setFilter(dynamic_cast<DImgThreadedFilter*>(new DImgUnsharpMask(&img, this, r, a, th)));
+            setFilter(new DImgUnsharpMask(&img, this, r, a, th));
             break;
         }
 
@@ -204,7 +202,7 @@ void SharpenTool::prepareEffect()
             double g   = settings.rfGauss;
             int    ms  = settings.rfMatrix;
 
-            setFilter(dynamic_cast<DImgThreadedFilter*>(new DImgRefocus(&img, this, ms, r, g, c, n)));
+            setFilter(new DImgRefocus(&img, this, ms, r, g, c, n));
             break;
         }
     }
@@ -222,7 +220,7 @@ void SharpenTool::prepareFinal()
     delete [] data;
 
     toolView()->setEnabled(false);
-    d->sharpSettings->setEnabled(false);
+    toolSettings()->setEnabled(false);
     SharpContainer settings = d->sharpSettings->settings();
 
     switch (settings.method)
@@ -235,7 +233,7 @@ void SharpenTool::prepareFinal()
             if (radius < 1.0) sigma = radius;
             else sigma = sqrt(radius);
 
-            setFilter(dynamic_cast<DImgThreadedFilter*>(new DImgSharpen(&orgImage, this, radius, sigma)));
+            setFilter(new DImgSharpen(&orgImage, this, radius, sigma));
             break;
         }
 
@@ -245,7 +243,7 @@ void SharpenTool::prepareFinal()
             double a  = settings.umAmount;
             double th = settings.umThreshold;
 
-            setFilter(dynamic_cast<DImgThreadedFilter*>(new DImgUnsharpMask(&orgImage, this, r, a, th)));
+            setFilter(new DImgUnsharpMask(&orgImage, this, r, a, th));
             break;
         }
 
@@ -257,7 +255,7 @@ void SharpenTool::prepareFinal()
             double g   = settings.rfGauss;
             int    ms  = settings.rfMatrix;
 
-            setFilter(dynamic_cast<DImgThreadedFilter*>(new DImgRefocus(&orgImage, this, ms, r, g, c, n)));
+            setFilter(new DImgRefocus(&orgImage, this, ms, r, g, c, n));
             break;
         }
     }

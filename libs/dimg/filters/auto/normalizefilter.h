@@ -49,10 +49,17 @@ private:
 
     void filterImage();
     void normalizeImage();
-            
-private:     
+
+private:
+
+    struct NormalizeParam
+    {
+        unsigned short* lut;
+        double          min;
+        double          max;
+    };
     
-    DImg* m_refImage;
+    DImg m_refImage;
 };
 
 }  // namespace Digikam

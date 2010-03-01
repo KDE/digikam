@@ -142,6 +142,8 @@
 namespace Digikam
 {
 
+const QString EditorWindow::CONFIG_GROUP_NAME = "ImageViewer Settings";
+
 EditorWindow::EditorWindow(const char *name)
             : KXmlGuiWindow(0), d(new EditorWindowPriv)
 {
@@ -699,7 +701,7 @@ void EditorWindow::slotAboutToShowRedoMenu()
 
 void EditorWindow::slotConfToolbars()
 {
-    saveMainWindowSettings(KGlobal::config()->group("ImageViewer Settings"));
+    saveMainWindowSettings(KGlobal::config()->group(CONFIG_GROUP_NAME));
     KEditToolBar dlg(factory(), this);
 
     connect(&dlg, SIGNAL(newToolbarConfig()),
@@ -715,7 +717,7 @@ void EditorWindow::slotConfNotifications()
 
 void EditorWindow::slotNewToolbarConfig()
 {
-    applyMainWindowSettings(KGlobal::config()->group("ImageViewer Settings"));
+    applyMainWindowSettings(KGlobal::config()->group(CONFIG_GROUP_NAME));
 }
 
 void EditorWindow::slotIncreaseZoom()
@@ -849,30 +851,30 @@ void EditorWindow::unLoadImagePlugins()
 void EditorWindow::readStandardSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("ImageViewer Settings");
+    KConfigGroup group        = config->group(CONFIG_GROUP_NAME);
 
     // Restore Canvas layout
-    if (group.hasKey("Vertical Splitter Sizes") && m_vSplitter)
+    if (group.hasKey(d->configVerticalSplitterSizesEntry) && m_vSplitter)
     {
         QByteArray state;
-        state = group.readEntry("Vertical Splitter State", state);
+        state = group.readEntry(d->configVerticalSplitterStateEntry, state);
         m_vSplitter->restoreState(QByteArray::fromBase64(state));
     }
 
     // Restore full screen Mode
-    if (group.readEntry("FullScreen", false))
+    if (group.readEntry(d->configFullScreenEntry, false))
     {
         m_fullScreenAction->activate(QAction::Trigger);
         m_fullScreen = true;
     }
 
     // Restore Auto zoom action
-    bool autoZoom = group.readEntry("AutoZoom", true);
+    bool autoZoom = group.readEntry(d->configAutoZoomEntry, true);
     if (autoZoom)
         d->zoomFitToWindowAction->activate(QAction::Trigger);
 
-    slotSetUnderExposureIndicator(group.readEntry("UnderExposureIndicator", false));
-    slotSetOverExposureIndicator(group.readEntry("OverExposureIndicator", false));
+    slotSetUnderExposureIndicator(group.readEntry(d->configUnderExposureIndicatorEntry, false));
+    slotSetOverExposureIndicator(group.readEntry(d->configOverExposureIndicatorEntry, false));
     d->previewToolBar->readSettings(group);
 }
 
@@ -884,28 +886,28 @@ void EditorWindow::applyStandardSettings()
 
     // -- JPEG, PNG, TIFF JPEG2000 files format settings --------------------------------------
 
-    KConfigGroup group = config->group("ImageViewer Settings");
+    KConfigGroup group = config->group(CONFIG_GROUP_NAME);
 
-    m_IOFileSettings->JPEGCompression     = JPEGSettings::convertCompressionForLibJpeg(group.readEntry("JPEGCompression", 75));
+    m_IOFileSettings->JPEGCompression     = JPEGSettings::convertCompressionForLibJpeg(group.readEntry(d->configJpegCompressionEntry, 75));
 
-    m_IOFileSettings->JPEGSubSampling     = group.readEntry("JPEGSubSampling", 1);  // Medium subsampling
+    m_IOFileSettings->JPEGSubSampling     = group.readEntry(d->configJpegSubSamplingEntry, 1);  // Medium subsampling
 
-    m_IOFileSettings->PNGCompression      = PNGSettings::convertCompressionForLibPng(group.readEntry("PNGCompression", 1));
+    m_IOFileSettings->PNGCompression      = PNGSettings::convertCompressionForLibPng(group.readEntry(d->configPngCompressionEntry, 1));
 
     // TIFF compression setting.
-    m_IOFileSettings->TIFFCompression     = group.readEntry("TIFFCompression", false);
+    m_IOFileSettings->TIFFCompression     = group.readEntry(d->configTiffCompressionEntry, false);
 
     // JPEG2000 quality slider settings : 1 - 100
-    m_IOFileSettings->JPEG2000Compression = group.readEntry("JPEG2000Compression", 100);
+    m_IOFileSettings->JPEG2000Compression = group.readEntry(d->configJpeg2000CompressionEntry, 100);
 
     // JPEG2000 LossLess setting.
-    m_IOFileSettings->JPEG2000LossLess    = group.readEntry("JPEG2000LossLess", true);
+    m_IOFileSettings->JPEG2000LossLess    = group.readEntry(d->configJpeg2000LossLessEntry, true);
 
     // PGF quality slider settings : 1 - 9
-    m_IOFileSettings->PGFCompression      = group.readEntry("PGFCompression", 3);
+    m_IOFileSettings->PGFCompression      = group.readEntry(d->configPgfCompressionEntry, 3);
 
     // PGF LossLess setting.
-    m_IOFileSettings->PGFLossLess         = group.readEntry("PGFLossLess", true);
+    m_IOFileSettings->PGFLossLess         = group.readEntry(d->configPgfLossLessEntry, true);
 
     // -- RAW images decoding settings ------------------------------------------------------
 
@@ -929,38 +931,38 @@ void EditorWindow::applyStandardSettings()
         m_IOFileSettings->rawDecodingSettings.outputColorSpace = DRawDecoding::SRGB;
     }
 
-    m_IOFileSettings->rawDecodingSettings.sixteenBitsImage        = group.readEntry("SixteenBitsImage", false);
-    m_IOFileSettings->rawDecodingSettings.whiteBalance            = (DRawDecoding::WhiteBalance)group.readEntry("WhiteBalance",
+    m_IOFileSettings->rawDecodingSettings.sixteenBitsImage        = group.readEntry(d->configSixteenBitsImageEntry, false);
+    m_IOFileSettings->rawDecodingSettings.whiteBalance            = (DRawDecoding::WhiteBalance)group.readEntry(d->configWhiteBalanceEntry,
                                                                     (int)DRawDecoding::CAMERA);
-    m_IOFileSettings->rawDecodingSettings.customWhiteBalance      = group.readEntry("CustomWhiteBalance", 6500);
-    m_IOFileSettings->rawDecodingSettings.customWhiteBalanceGreen = group.readEntry("CustomWhiteBalanceGreen", 1.0);
-    m_IOFileSettings->rawDecodingSettings.RGBInterpolate4Colors   = group.readEntry("RGBInterpolate4Colors", false);
-    m_IOFileSettings->rawDecodingSettings.DontStretchPixels       = group.readEntry("DontStretchPixels", false);
-    m_IOFileSettings->rawDecodingSettings.enableNoiseReduction    = group.readEntry("EnableNoiseReduction", false);
-    m_IOFileSettings->rawDecodingSettings.unclipColors            = group.readEntry("UnclipColors", 0);
+    m_IOFileSettings->rawDecodingSettings.customWhiteBalance      = group.readEntry(d->configCustomWhiteBalanceEntry, 6500);
+    m_IOFileSettings->rawDecodingSettings.customWhiteBalanceGreen = group.readEntry(d->configCustomWhiteBalanceGreenEntry, 1.0);
+    m_IOFileSettings->rawDecodingSettings.RGBInterpolate4Colors   = group.readEntry(d->configRGBInterpolate4ColorsEntry, false);
+    m_IOFileSettings->rawDecodingSettings.DontStretchPixels       = group.readEntry(d->configDontStretchPixelsEntry, false);
+    m_IOFileSettings->rawDecodingSettings.enableNoiseReduction    = group.readEntry(d->configEnableNoiseReductionEntry, false);
+    m_IOFileSettings->rawDecodingSettings.unclipColors            = group.readEntry(d->configUnclipColorsEntry, 0);
     m_IOFileSettings->rawDecodingSettings.RAWQuality              = (DRawDecoding::DecodingQuality)
-                                                                    group.readEntry("RAWQuality",
+                                                                    group.readEntry(d->configRAWQualityEntry,
                                                                     (int)DRawDecoding::BILINEAR);
-    m_IOFileSettings->rawDecodingSettings.NRThreshold             = group.readEntry("NRThreshold", 100);
-    m_IOFileSettings->rawDecodingSettings.enableCACorrection      = group.readEntry("EnableCACorrection", false);
-    m_IOFileSettings->rawDecodingSettings.caMultiplier[0]         = group.readEntry("caRedMultiplier", 1.0);
-    m_IOFileSettings->rawDecodingSettings.caMultiplier[1]         = group.readEntry("caBlueMultiplier", 1.0);
-    m_IOFileSettings->rawDecodingSettings.brightness              = group.readEntry("RAWBrightness", 1.0);
-    m_IOFileSettings->rawDecodingSettings.medianFilterPasses      = group.readEntry("MedianFilterPasses", 0);
+    m_IOFileSettings->rawDecodingSettings.NRThreshold             = group.readEntry(d->configNRThresholdEntry, 100);
+    m_IOFileSettings->rawDecodingSettings.enableCACorrection      = group.readEntry(d->configEnableCACorrectionEntry, false);
+    m_IOFileSettings->rawDecodingSettings.caMultiplier[0]         = group.readEntry(d->configCaRedMultiplierEntry, 1.0);
+    m_IOFileSettings->rawDecodingSettings.caMultiplier[1]         = group.readEntry(d->configCaBlueMultiplierEntry, 1.0);
+    m_IOFileSettings->rawDecodingSettings.brightness              = group.readEntry(d->configRAWBrightnessEntry, 1.0);
+    m_IOFileSettings->rawDecodingSettings.medianFilterPasses      = group.readEntry(d->configMedianFilterPassesEntry, 0);
 #if KDCRAW_VERSION >= 0x000500
-    m_IOFileSettings->rawDecodingSettings.autoBrightness          = group.readEntry("AutoBrightness", true);
+    m_IOFileSettings->rawDecodingSettings.autoBrightness          = group.readEntry(d->configAutoBrightnessEntry, true);
 #endif
-    m_IOFileSettings->useRAWImport                                = group.readEntry("UseRawImportTool", false);
+    m_IOFileSettings->useRAWImport                                = group.readEntry(d->configUseRawImportToolEntry, false);
 
     // -- GUI Settings -------------------------------------------------------
 
     // Check if the thumbnail size in the config file is splitter based (the
     // old method), and convert to dock based if needed.
-    if (group.hasKey("SplitterState"))
+    if (group.hasKey(d->configSplitterStateEntry))
     {
         // Read splitter state from config file
         QByteArray state;
-        state = QByteArray::fromBase64(group.readEntry("SplitterState", state));
+        state = QByteArray::fromBase64(group.readEntry(d->configSplitterStateEntry, state));
 
         // Do a cheap check: a splitter state with 3 windows is always 34 bytes.
         if (state.count() == 34)
@@ -994,38 +996,38 @@ void EditorWindow::applyStandardSettings()
                     char s[24];
                     int numBytes = stream.readRawData(s, 24);
                     newStream.writeRawData(s, numBytes);
-                    group.writeEntry("SplitterState", newData.toBase64());
+                    group.writeEntry(d->configSplitterStateEntry, newData.toBase64());
                 }
             }
         }
     }
     m_splitter->restoreState(group);
 
-    d->fullScreenHideToolBar = group.readEntry("FullScreen Hide ToolBar", false);
-    m_fullScreenHideThumbBar = group.readEntry("FullScreenHideThumbBar", true);
+    d->fullScreenHideToolBar = group.readEntry(d->configFullScreenHideToolBarEntry, false);
+    m_fullScreenHideThumbBar = group.readEntry(d->configFullScreenHideThumbBarEntry, true);
 
     slotThemeChanged();
 
     // -- Exposure Indicators Settings ---------------------------------------
 
-    d->exposureSettings->underExposureColor = group.readEntry("UnderExposureColor", QColor(Qt::white));
-    d->exposureSettings->overExposureColor  = group.readEntry("OverExposureColor", QColor(Qt::black));
+    d->exposureSettings->underExposureColor = group.readEntry(d->configUnderExposureColorEntry, QColor(Qt::white));
+    d->exposureSettings->overExposureColor  = group.readEntry(d->configOverExposureColorEntry, QColor(Qt::black));
 }
 
 void EditorWindow::saveStandardSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("ImageViewer Settings");
+    KConfigGroup group        = config->group(CONFIG_GROUP_NAME);
 
-    group.writeEntry("AutoZoom", d->zoomFitToWindowAction->isChecked());
+    group.writeEntry(d->configAutoZoomEntry, d->zoomFitToWindowAction->isChecked());
     m_splitter->saveState(group);
     if (m_vSplitter)
-        group.writeEntry("Vertical Splitter State", m_vSplitter->saveState().toBase64());
+        group.writeEntry(d->configVerticalSplitterStateEntry, m_vSplitter->saveState().toBase64());
 
     group.writeEntry("Show Thumbbar", thumbBar()->shouldBeVisible());
-    group.writeEntry("FullScreen", m_fullScreenAction->isChecked());
-    group.writeEntry("UnderExposureIndicator", d->exposureSettings->underExposureIndicator);
-    group.writeEntry("OverExposureIndicator", d->exposureSettings->overExposureIndicator);
+    group.writeEntry(d->configFullScreenEntry, m_fullScreenAction->isChecked());
+    group.writeEntry(d->configUnderExposureIndicatorEntry, d->exposureSettings->underExposureIndicator);
+    group.writeEntry(d->configOverExposureIndicatorEntry, d->exposureSettings->overExposureIndicator);
     d->previewToolBar->writeSettings(group);
 
     config->sync();
@@ -1806,7 +1808,7 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
     // restore old settings for the dialog
     QFileInfo info(m_savingContext->srcURL.fileName());
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("ImageViewer Settings");
+    KConfigGroup group        = config->group(CONFIG_GROUP_NAME);
     const QString optionLastExtension = "LastSavedImageExtension";
     QString ext               = group.readEntry(optionLastExtension, "png");
     if (ext.isEmpty())
@@ -2180,19 +2182,19 @@ void EditorWindow::slotContribute()
 void EditorWindow::slotToggleSlideShow()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group("ImageViewer Settings");
-    bool startWithCurrent = group.readEntry("SlideShowStartCurrent", false);
+    KConfigGroup group = config->group(CONFIG_GROUP_NAME);
+    bool startWithCurrent = group.readEntry(d->configSlideShowStartCurrentEntry, false);
 
     SlideShowSettings settings;
-    settings.delay                = group.readEntry("SlideShowDelay", 5) * 1000;
-    settings.printName            = group.readEntry("SlideShowPrintName", true);
-    settings.printDate            = group.readEntry("SlideShowPrintDate", false);
-    settings.printApertureFocal   = group.readEntry("SlideShowPrintApertureFocal", false);
-    settings.printExpoSensitivity = group.readEntry("SlideShowPrintExpoSensitivity", false);
-    settings.printMakeModel       = group.readEntry("SlideShowPrintMakeModel", false);
-    settings.printComment         = group.readEntry("SlideShowPrintComment", false);
-    settings.printRating          = group.readEntry("SlideShowPrintRating", false);
-    settings.loop                 = group.readEntry("SlideShowLoop", false);
+    settings.delay                = group.readEntry(d->configSlideShowDelayEntry, 5) * 1000;
+    settings.printName            = group.readEntry(d->configSlideShowPrintNameEntry, true);
+    settings.printDate            = group.readEntry(d->configSlideShowPrintDateEntry, false);
+    settings.printApertureFocal   = group.readEntry(d->configSlideShowPrintApertureFocalEntry, false);
+    settings.printExpoSensitivity = group.readEntry(d->configSlideShowPrintExpoSensitivityEntry, false);
+    settings.printMakeModel       = group.readEntry(d->configSlideShowPrintMakeModelEntry, false);
+    settings.printComment         = group.readEntry(d->configSlideShowPrintCommentEntry, false);
+    settings.printRating          = group.readEntry(d->configSlideShowPrintRatingEntry, false);
+    settings.loop                 = group.readEntry(d->configSlideShowLoopEntry, false);
     slideShow(startWithCurrent, settings);
 }
 
@@ -2217,10 +2219,10 @@ void EditorWindow::slotThemeChanged()
     m_themeMenuAction->setCurrentItem(index);
 
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("ImageViewer Settings");
+    KConfigGroup group        = config->group(CONFIG_GROUP_NAME);
 
-    if (!group.readEntry("UseThemeBackgroundColor", true))
-        m_bgColor = group.readEntry("BackgroundColor", QColor(Qt::black));
+    if (!group.readEntry(d->configUseThemeBackgroundColorEntry, true))
+        m_bgColor = group.readEntry(d->configBackgroundColorEntry, QColor(Qt::black));
     else
         m_bgColor = ThemeEngine::instance()->baseColor();
 

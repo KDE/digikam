@@ -113,6 +113,17 @@ public:
     QModelIndex indexVisuallyAt(const QPoint& p);
 
     /**
+     * Ensures that every current match is visible by expanding all parent
+     * entries.
+     *
+     * @param index index to start ensuring expansion state
+     * @return <code>true</code> if there was a match under <code>index</code>.
+     *         This return value can normally be ignored by the caller because
+     *         it is only used for an internal recursion.
+     */
+    bool expandMatches(const QModelIndex& index);
+
+    /**
      * Implements state loading for the album tree view in a somewhat clumsy
      * procedure because the model may not be fully loaded when this method is
      * called. Therefore the config is first parsed into d->statesByAlbumId
@@ -230,14 +241,6 @@ protected:
 
     // other stuff
 
-    /**
-     * Ensures that while filtering every match is visible by expanding all
-     * parent entries.
-     *
-     * @param index index to start ensuring expansion state
-     * @return <code>true</code> if there was a match under <code>index</code>
-     */
-    bool checkExpandedState(const QModelIndex& index);
     void mousePressEvent(QMouseEvent *e);
 
     void rowsInserted(const QModelIndex &index, int start, int end);

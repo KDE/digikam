@@ -187,6 +187,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
     d->tagModel->setCheckable(true);
     d->tagModel->setRootCheckable(false);
     d->tagCheckView = new TagCheckView(captionTagsArea, d->tagModel);
+    d->tagCheckView->setCheckNewTags(true);
 
     KHBox *tagsSearch  = new KHBox(captionTagsArea);
     tagsSearch->setSpacing(KDialog::spacingHint());
@@ -305,6 +306,12 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
 
     connect(d->recentTagsMapper, SIGNAL(mapped(int)),
             this, SLOT(slotRecentTagsMenuActivated(int)));
+
+    connect(AlbumManager::instance(), SIGNAL(signalAlbumAboutToBeDeleted(Album *)),
+            this, SLOT(slotAlbumAboutToBeDeleted(Album *)));
+
+    connect(AlbumManager::instance(), SIGNAL(signalAlbumsCleared()),
+            this, SLOT(slotAlbumsCleared()));
 
     // Initialize ---------------------------------------------
 
@@ -1003,6 +1010,17 @@ void ImageDescEditTab::reloadForMetadataChange(qlonglong imageId)
     }
 }
 
+void ImageDescEditTab::slotAlbumAboutToBeDeleted(Album *album)
+{
+    if (album->type() == Album::TAG && !AlbumManager::instance()->isMovingAlbum(album))
+        d->hub.notifyTagRemoved(static_cast<TAlbum*>(album));
+}
+
+void ImageDescEditTab::slotAlbumsCleared()
+{
+    d->hub.notifyTagsCleared();
+}
+
 void ImageDescEditTab::updateRecentTags()
 {
     KMenu *menu = dynamic_cast<KMenu *>(d->recentTagsBtn->menu());
@@ -1081,7 +1099,7 @@ void ImageDescEditTab::slotAssignedTagsToggled(bool t)
     d->tagCheckView->checkableAlbumFilterModel()->setFilterPartiallyChecked(t);
     if (t)
     {
-        d->tagCheckView->expandEverything(d->tagCheckView->rootIndex());
+        d->tagCheckView->expandMatches(d->tagCheckView->rootIndex());
     }
 }
 

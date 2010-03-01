@@ -75,6 +75,11 @@ ImageScanner::ImageScanner(qlonglong imageid)
                                       shortInfo.album, albumRootPath, shortInfo.albumRootID).fileUrl().toLocalFile());
 }
 
+qlonglong ImageScanner::id() const
+{
+    return m_scanInfo.id;
+}
+
 void ImageScanner::setCategory(DatabaseItem::Category category)
 {
     // we don't have the necessary information in this class, but in CollectionScanner
@@ -551,6 +556,35 @@ void ImageScanner::scanAudioFile()
                                                DatabaseFields::Rating       |
                                                DatabaseFields::CreationDate |
                                                DatabaseFields::Format);
+}
+
+void ImageScanner::copyProperties(qlonglong source, qlonglong dest)
+{
+    DatabaseAccess access;
+
+    DatabaseFields::ImageInformation imageInfoFields =
+            DatabaseFields::Rating |
+            DatabaseFields::CreationDate |
+            DatabaseFields::DigitizationDate;
+    QVariantList imageInfos = access.db()->getImageInformation(source, imageInfoFields);
+    if (!imageInfos.isEmpty())
+        access.db()->changeImageInformation(dest, imageInfos, imageInfoFields);
+
+    QVariantList positionData = access.db()->getImagePosition(source, DatabaseFields::ImagePositionsAll);
+    if (!positionData.isEmpty())
+        access.db()->addImagePosition(dest, positionData, DatabaseFields::ImagePositionsAll);
+
+    ImageComments commentsSource(access, source);
+    ImageComments commentsDest(access, dest);
+    commentsDest.replaceFrom(commentsSource);
+    commentsDest.apply(access);
+
+    ImageCopyright copyrightSource(source);
+    ImageCopyright copyrightDest(dest);
+    copyrightDest.replaceFrom(source);
+
+    access.db()->copyImageTags(source, dest);
+    access.db()->copyImageProperties(source, dest);
 }
 
 void ImageScanner::loadFromDisk()

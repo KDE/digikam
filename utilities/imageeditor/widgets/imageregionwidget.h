@@ -26,6 +26,7 @@
 
 // Qt includes
 
+#include <QtCore/QPoint>
 #include <QtCore/QRect>
 #include <QtCore/QEvent>
 #include <QtGui/QPolygon>
@@ -65,6 +66,9 @@ public:
 
     void   setPreviewImage(const DImg& img);
 
+    void   setCapturePointMode(bool b);
+    bool   capturePointMode();
+    
     void   setHighLightPoints(const QPolygon& pointsList);
     void   setCenterImageRegionPosition();
 
@@ -74,6 +78,7 @@ public:
 Q_SIGNALS:
 
     void signalOriginalClipFocusChanged();
+    void signalCapturedPointFromOriginal(const Digikam::DColor&, const QPoint&);
 
 public Q_SLOTS:
 
@@ -102,9 +107,9 @@ private:
 
     void   enterEvent(QEvent*);
     void   leaveEvent(QEvent*);
-    
-    void   drawTextInRectangle(QString text, QRect r);
-    
+    void   contentsMousePressEvent(QMouseEvent*);
+    void   contentsMouseReleaseEvent(QMouseEvent*);
+        
     int    previewWidth();
     int    previewHeight();
     bool   previewIsNull();
@@ -113,6 +118,8 @@ private:
 
     void   viewportPaintExtraData();
     inline void paintPreview(QPixmap* pix, int sx, int sy, int sw, int sh);
+    
+    void   emitCapturedPointFromOriginal(const QPoint& pt);
 
 private:
 

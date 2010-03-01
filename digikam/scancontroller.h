@@ -100,6 +100,12 @@ public:
      */
     void scanFileDirectly(const QString& filePath);
 
+    /**
+     * This variant shall be used when a new file is created which is a version
+     * of another image, and all relevant attributes shall be copied.
+     */
+    void scanFileDirectlyCopyAttributes(const QString& filePath, qlonglong parentVersion);
+
     /** If the controller is currently processing a database update
      *  (typically after first run),
      *  cancel this hard and as soon as possible. Any progress may be lost. */

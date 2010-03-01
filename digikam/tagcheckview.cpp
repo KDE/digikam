@@ -27,15 +27,19 @@
 #include "tagcheckview.moc"
 
 // Qt includes
+
 #include <qaction.h>
 
 // KDE includes
+
 #include <kdebug.h>
 #include <kmenu.h>
 #include <kselectaction.h>
 
 // Local includes
+
 #include "contextmenuhelper.h"
+#include "tagmodificationhelper.h"
 
 namespace Digikam
 {
@@ -47,11 +51,13 @@ public:
         configToggleAutoTagsEntry("Toggle Auto Tags"),
         toggleAutoTags(TagCheckView::NoToggleAuto)
     {
+        checkNewTags = false;
     }
 
     const QString configToggleAutoTagsEntry;
 
     TagCheckView::ToggleAutoTags       toggleAutoTags;
+    bool                               checkNewTags;
 
     KMenu *selectTagsMenu;
     QAction *selectAllTagsAction;
@@ -124,7 +130,8 @@ void TagCheckView::slotCheckStateChange(Album *album, Qt::CheckState state)
     Q_UNUSED(state);
 
     // handle custom toggle modes
-    albumModel()->blockSignals(true);
+    disconnect(albumModel(), SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
+               this, SLOT(slotCheckStateChange(Album*, Qt::CheckState)));
     // avoid signal recursion here
     switch(d->toggleAutoTags)
     {
@@ -141,7 +148,8 @@ void TagCheckView::slotCheckStateChange(Album *album, Qt::CheckState state)
     default:
         break;
     }
-    albumModel()->blockSignals(false);
+    connect(albumModel(), SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
+            this, SLOT(slotCheckStateChange(Album*, Qt::CheckState)));
 
     emit checkedTagsChanged(getCheckedTags());
 
@@ -188,6 +196,34 @@ TagCheckView::ToggleAutoTags TagCheckView::getToggleAutoTags() const
 void TagCheckView::setToggleAutoTags(TagCheckView::ToggleAutoTags toggle)
 {
     d->toggleAutoTags = toggle;
+}
+
+void TagCheckView::setCheckNewTags(bool checkNewTags)
+{
+    if (d->checkNewTags == checkNewTags)
+        return;
+
+    d->checkNewTags = checkNewTags;
+    if (d->checkNewTags)
+    {
+        connect(tagModificationHelper(), SIGNAL(tagCreated(TAlbum*)),
+                this, SLOT(slotCreatedNewTagByContextMenu(TAlbum*)));
+    }
+    else
+    {
+        disconnect(tagModificationHelper(), SIGNAL(tagCreated(TAlbum*)),
+                   this, SLOT(slotCreatedNewTagByContextMenu(TAlbum*)));
+    }
+}
+
+bool TagCheckView::checkNewTags() const
+{
+    return d->checkNewTags;
+}
+
+void TagCheckView::slotCreatedNewTagByContextMenu(TAlbum* tag)
+{
+    albumModel()->setChecked(tag, true);
 }
 
 void TagCheckView::addCustomContextMenuActions(ContextMenuHelper &cmh, Album *album)

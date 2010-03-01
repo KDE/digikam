@@ -7,7 +7,7 @@
  * Description : Black and White conversion tool.
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -29,53 +29,39 @@
 
 #include "editortool.h"
 
-namespace KDcrawIface
-{
-class RIntNumInput;
-}
-
-namespace Digikam
-{
-class DColor;
-}
+using namespace Digikam;
 
 namespace DigikamImagesPluginCore
 {
 
-class PreviewPixmapFactory;
 class BWSepiaToolPriv;
 
-class BWSepiaTool : public Digikam::EditorTool
+class BWSepiaTool : public EditorToolThreaded
 {
     Q_OBJECT
 
 public:
 
-    BWSepiaTool(QObject *parent);
+    BWSepiaTool(QObject* parent);
     ~BWSepiaTool();
 
-    friend class PreviewPixmapFactory;
+private Q_SLOTS:
+
+    void slotInit();
+    void slotSaveAsSettings();
+    void slotLoadSettings();
+    void slotResetSettings();
 
 private:
 
     void readSettings();
     void writeSettings();
-    void blackAndWhiteConversion(uchar *data, int w, int h, bool sb, int type);
-    void updatePreviews();
-    void finalRendering();
-    void blockWidgetSignals(bool b);
-    QPixmap getThumbnailForEffect(int type);
-
-private Q_SLOTS:
-
-    void slotResetSettings();
-    void slotSaveAsSettings();
-    void slotLoadSettings();
-    void slotEffect();
-    void slotScaleChanged();
-    void slotSpotColorChanged(const Digikam::DColor& color);
-    void slotColorSelectedFromTarget(const Digikam::DColor& color);
-    void slotFilterSelected();
+    void prepareEffect();
+    void prepareFinal();
+    void abortPreview();
+    void putPreviewData();
+    void putFinalData();
+    void renderingFinished();
 
 private:
 

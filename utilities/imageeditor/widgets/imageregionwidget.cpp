@@ -29,6 +29,7 @@
 
 // Qt includes
 
+#include <QCursor>
 #include <QPainter>
 #include <QPen>
 #include <QImage>
@@ -38,6 +39,7 @@
 
 // KDE includes
 
+#include <kiconloader.h>
 #include <kcursor.h>
 #include <klocale.h>
 #include <kdebug.h>
@@ -57,14 +59,18 @@ public:
 
     ImageRegionWidgetPriv()
     {
+        capturePtMode             = false;
         onMouseMovePreviewToggled = true;
         iface                     = 0;
         renderingPreviewMode      = PreviewToolBar::PreviewBothImagesVertCont;
+        oldRenderingPreviewMode   = PreviewToolBar::PreviewBothImagesVertCont;
     }
 
     bool        onMouseMovePreviewToggled;
-
+    bool        capturePtMode;
+    
     int         renderingPreviewMode;
+    int         oldRenderingPreviewMode;
     int         xpos;
     int         ypos;
 
@@ -142,6 +148,28 @@ void ImageRegionWidget::setHighLightPoints(const QPolygon& pointsList)
     repaintContents(false);
 }
 
+void ImageRegionWidget::setCapturePointMode(bool b)
+{
+    d->capturePtMode = b;
+    viewport()->setMouseTracking(b);
+    if (b)
+    {
+        d->oldRenderingPreviewMode = d->renderingPreviewMode;
+        slotPreviewModeChanged(PreviewToolBar::PreviewOriginalImage);
+        viewport()->setCursor(QCursor(SmallIcon("color-picker", 32), 1, 28));
+    }
+    else
+    {
+        slotPreviewModeChanged(d->oldRenderingPreviewMode);
+        viewport()->unsetCursor();
+    }
+}
+
+bool ImageRegionWidget::capturePointMode()
+{
+    return d->capturePtMode;
+}
+    
 void ImageRegionWidget::slotZoomFactorChanged()
 {
     emit signalContentsMovedEvent(true);
@@ -154,21 +182,6 @@ void ImageRegionWidget::slotPreviewModeChanged(int mode)
     slotZoomFactorChanged();
 }
 
-void ImageRegionWidget::drawTextInRectangle(QString text, QRect r)
-{        
-    QPainter p(viewport());
-    p.setRenderHint(QPainter::Antialiasing, true);
-    p.setBackgroundMode(Qt::TransparentMode);
-    p.translate(previewRect().topLeft());
-    QFontMetrics fontMt = p.fontMetrics();
-    QRect fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text);
-    QRect textRect;
-    textRect.setTopLeft(QPoint(r.topLeft().x()+20, r.topLeft().y()+20));
-    textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2) );
-    drawText(&p, textRect, text);
-    return;
-}
-
 void ImageRegionWidget::viewportPaintExtraData()
 {
     if (!m_movingInProgress && !d->pixmapRegion.isNull())
@@ -176,7 +189,7 @@ void ImageRegionWidget::viewportPaintExtraData()
         QPainter p(viewport());
         p.setRenderHint(QPainter::Antialiasing, true);
         p.setBackgroundMode(Qt::TransparentMode);
-     
+         
         QRect region;
 
         // Original region.
@@ -185,7 +198,7 @@ void ImageRegionWidget::viewportPaintExtraData()
 
         // Target region.
         QRect rt(contentsToViewport(region.topLeft()), contentsToViewport(region.bottomRight()));
-
+        
         p.translate(previewRect().topLeft());
 
         // Drawing separate view.
@@ -193,7 +206,7 @@ void ImageRegionWidget::viewportPaintExtraData()
         if (d->renderingPreviewMode == PreviewToolBar::PreviewOriginalImage ||
             (d->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver && !d->onMouseMovePreviewToggled))
         {
-           drawTextInRectangle(i18n("Original"), rt);
+           drawText(&p,QPoint(rt.topLeft().x()+20, rt.topLeft().y()+20),i18n("Original"));
         }
         else if (d->renderingPreviewMode == PreviewToolBar::PreviewTargetImage ||
                  d->renderingPreviewMode == PreviewToolBar::NoPreviewMode      ||
@@ -204,7 +217,7 @@ void ImageRegionWidget::viewportPaintExtraData()
             if (d->renderingPreviewMode == PreviewToolBar::PreviewTargetImage ||
                 d->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver)
             {
-                drawTextInRectangle(i18n("Target"), rt);
+                drawText(&p,QPoint(rt.topLeft().x()+20, rt.topLeft().y()+20),i18n("Target"));
             }
         }
         else if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesVert ||
@@ -223,8 +236,8 @@ void ImageRegionWidget::viewportPaintExtraData()
             p.setPen(QPen(Qt::red, 2, Qt::DotLine));
             p.drawLine(rt.topLeft().x(), rt.topLeft().y()+1, rt.bottomLeft().x(), rt.bottomLeft().y()-1);
 
-            drawTextInRectangle(i18n("Target")  ,rt);        
-            drawTextInRectangle(i18n("Original"),ro);
+            drawText(&p,QPoint(rt.topLeft().x()+20, rt.topLeft().y()+20),i18n("Target"));        
+            drawText(&p,QPoint(ro.topLeft().x()+20, ro.topLeft().y()+20),i18n("Original"));
         }
         else if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorz ||
                  d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorzCont)
@@ -240,10 +253,10 @@ void ImageRegionWidget::viewportPaintExtraData()
             p.setPen(QPen(Qt::white, 2, Qt::SolidLine));
             p.drawLine(rt.topLeft().x()+1, rt.topLeft().y(), rt.topRight().x()-1, rt.topRight().y());
             p.setPen(QPen(Qt::red, 2, Qt::DotLine));
-            p.drawLine(rt.topLeft().x(), rt.topLeft().y(), rt.topRight().x(), rt.topRight().y());
+            p.drawLine(rt.topLeft().x()  , rt.topLeft().y(), rt.topRight().x()  , rt.topRight().y());
 
-            drawTextInRectangle(i18n("Target")  ,rt); 
-            drawTextInRectangle(i18n("Original"),ro);
+            drawText(&p,QPoint(rt.topLeft().x()+20, rt.topLeft().y()+20),i18n("Target")); 
+            drawText(&p,QPoint(ro.topLeft().x()+20, ro.topLeft().y()+20),i18n("Original"));
         }
 
         // Drawing highlighted points.
@@ -486,6 +499,81 @@ void ImageRegionWidget::leaveEvent(QEvent*)
         d->onMouseMovePreviewToggled = true;
         viewport()->repaint();
     }
+}
+
+void ImageRegionWidget::contentsMousePressEvent(QMouseEvent* e)
+{
+    if (d->capturePtMode)
+    {
+        QRect  region = getLocalImageRegionToRender();
+        // Original region.
+        QRect  ro(contentsToViewport(region.topLeft()), contentsToViewport(region.bottomRight()));
+        // Target region.
+        QRect rt(contentsToViewport(region.topLeft()), contentsToViewport(region.bottomRight()));
+        QPoint tl = previewRect().topLeft();
+        ro.translate(tl);
+        rt.translate(tl);
+
+        QPoint pt(contentsToViewport(e->pos()));
+
+        // Drawing separate view.
+
+        if (d->renderingPreviewMode == PreviewToolBar::PreviewOriginalImage ||
+            (d->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver && !d->onMouseMovePreviewToggled))
+        {
+            if (ro.contains(pt))
+                emitCapturedPointFromOriginal(pt - ro.topLeft());
+        }
+        else if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesVert ||
+                d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesVertCont)
+        {
+            if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesVert)
+                rt.translate(rt.width(), 0);
+
+            if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesVertCont)
+                ro.translate(-ro.width(), 0);
+
+            if (!rt.contains(pt) && ro.contains(pt))
+                emitCapturedPointFromOriginal(pt - ro.topLeft());
+        }
+        else if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorz ||
+                d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorzCont)
+        {
+            if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorz)
+                rt.translate(0, rt.height());
+
+            if (d->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorzCont)
+                ro.translate(0, -ro.height());
+
+            if (!rt.contains(pt) && ro.contains(pt))
+                emitCapturedPointFromOriginal(pt - ro.topLeft());
+        }        
+        
+        return;
+    }
+
+    PreviewWidget::contentsMousePressEvent(e);
+}
+
+void ImageRegionWidget::emitCapturedPointFromOriginal(const QPoint& pt)
+{
+    int x = (int)(((double)pt.x() / tileSize()) * floor(tileSize() / zoomFactor()));
+    int y = (int)(((double)pt.y() / tileSize()) * floor(tileSize() / zoomFactor()));
+    QPoint imgPt(x, y);
+    DColor color = d->image.getPixelColor(x, y);
+    kDebug() << "Captured point from image : " << imgPt;
+    emit signalCapturedPointFromOriginal(color, imgPt);
+}
+
+void ImageRegionWidget::contentsMouseReleaseEvent(QMouseEvent* e)
+{
+    if (d->capturePtMode)
+    {
+        setCapturePointMode(false);
+        return;
+    }
+
+    PreviewWidget::contentsMouseReleaseEvent(e);
 }
 
 }  // namespace Digikam

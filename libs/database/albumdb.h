@@ -1086,6 +1086,10 @@ public:
      */
     void copyImageAttributes(qlonglong srcId, qlonglong destId);
 
+    /// Copies all entries in the ImageProperties table
+    void copyImageProperties(qlonglong srcId, qlonglong dstId);
+    /// Copies all entries in the ImageTags table
+    void copyImageTags(qlonglong srcId, qlonglong dstId);
 
     // ----------- Download history methods -----------
 

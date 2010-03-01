@@ -377,6 +377,30 @@ void ImageComments::replaceComments(const CaptionsMap& map, DatabaseComment::Typ
     }
 }
 
+void ImageComments::replaceFrom(const ImageComments& source)
+{
+    if (!d)
+        return;
+
+    if (!source.d)
+    {
+        removeAll();
+        return;
+    }
+
+    foreach (const CommentInfo& info, source.d->infos)
+        addComment(info.comment, info.language, info.author, info.date, info.type);
+
+    // remove all that have not been touched above
+    for (int i=0; i<d->infos.size() /* changing! */; )
+    {
+        if (!d->dirtyIndices.contains(i) && !d->newIndices.contains(i))
+            remove(i);
+        else
+            ++i;
+    }
+}
+
 void ImageComments::addCommentDirectly(const QString& comment, const QString& language, const QString& author,
                                        DatabaseComment::Type type, const QDateTime& date)
 {

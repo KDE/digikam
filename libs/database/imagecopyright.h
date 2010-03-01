@@ -230,6 +230,9 @@ public:
     /** Calls all remove...() methods in this class */
     void removeAll();
 
+    /** Removes all entries and replaces them with the entries from source. */
+    void replaceFrom(const ImageCopyright& source);
+
 protected:
 
     CopyrightInfo copyrightInfo(const QString& property);

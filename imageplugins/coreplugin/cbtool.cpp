@@ -25,15 +25,7 @@
 
 // Qt includes
 
-#include <QColor>
-#include <QFrame>
-#include <QGridLayout>
-#include <QGroupBox>
-#include <QHBoxLayout>
 #include <QLabel>
-#include <QPixmap>
-#include <QPushButton>
-#include <QToolButton>
 
 // KDE includes
 
@@ -60,7 +52,6 @@
 #include "imageregionwidget.h"
 
 using namespace KDcrawIface;
-using namespace Digikam;
 
 namespace DigikamImagesPluginCore
 {
@@ -164,14 +155,14 @@ void CBTool::slotResetSettings()
 void CBTool::prepareEffect()
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    d->cbSettings->setEnabled(false);
+    toolSettings()->setEnabled(false);
     toolView()->setEnabled(false);
 
     CBContainer settings = d->cbSettings->settings();
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 
     DImg preview = d->previewWidget->getOriginalRegionImage(true);
-    setFilter(dynamic_cast<DImgThreadedFilter*>(new CBFilter(&preview, this, settings)));
+    setFilter(new CBFilter(&preview, this, settings));
 }
 
 void CBTool::putPreviewData()
@@ -192,14 +183,13 @@ void CBTool::putPreviewData()
 
 void CBTool::prepareFinal()
 {
-    QApplication::setOverrideCursor(Qt::WaitCursor);
-    d->cbSettings->setEnabled(false);
+    toolSettings()->setEnabled(false);
     toolView()->setEnabled(false);
 
     CBContainer settings = d->cbSettings->settings();
 
     ImageIface iface(0, 0);
-    setFilter(dynamic_cast<DImgThreadedFilter*>(new CBFilter(iface.getOriginalImg(), this, settings)));
+    setFilter(new CBFilter(iface.getOriginalImg(), this, settings));
 }
 
 void CBTool::putFinalData()
@@ -211,9 +201,8 @@ void CBTool::putFinalData()
 void CBTool::renderingFinished()
 {
     QApplication::restoreOverrideCursor();
-    d->cbSettings->setEnabled(true);
+    toolSettings()->setEnabled(true);
     toolView()->setEnabled(true);
 }
 
 }  // namespace DigikamImagesPluginCore
-

@@ -26,16 +26,7 @@
 
 // Qt includes
 
-#include <QColor>
-#include <QFrame>
-#include <QGridLayout>
-#include <QGroupBox>
-#include <QHBoxLayout>
 #include <QLabel>
-#include <QPixmap>
-#include <QPushButton>
-#include <QTimer>
-#include <QToolButton>
 
 // KDE includes
 
@@ -166,14 +157,14 @@ void HSLTool::slotResetSettings()
 void HSLTool::prepareEffect()
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    d->hslSettings->setEnabled(false);
+    toolSettings()->setEnabled(false);
     toolView()->setEnabled(false);
 
     HSLContainer settings = d->hslSettings->settings();
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 
     DImg preview = d->previewWidget->getOriginalRegionImage(true);
-    setFilter(dynamic_cast<DImgThreadedFilter*>(new HSLFilter(&preview, this, settings)));
+    setFilter(new HSLFilter(&preview, this, settings));
 }
 
 void HSLTool::putPreviewData()
@@ -195,13 +186,13 @@ void HSLTool::putPreviewData()
 void HSLTool::prepareFinal()
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    d->hslSettings->setEnabled(false);
+    toolSettings()->setEnabled(false);
     toolView()->setEnabled(false);
 
     HSLContainer settings = d->hslSettings->settings();
 
     ImageIface iface(0, 0);
-    setFilter(dynamic_cast<DImgThreadedFilter*>(new HSLFilter(iface.getOriginalImg(), this, settings)));
+    setFilter(new HSLFilter(iface.getOriginalImg(), this, settings));
 }
 
 void HSLTool::putFinalData()
@@ -212,10 +203,8 @@ void HSLTool::putFinalData()
 
 void HSLTool::renderingFinished()
 {
-    QApplication::restoreOverrideCursor();
-    d->hslSettings->setEnabled(true);
+    toolSettings()->setEnabled(true);
     toolView()->setEnabled(true);
 }
 
 }  // namespace DigikamImagesPluginCore
-

@@ -6,7 +6,7 @@
  * Date        : 2008-13-08
  * Description : Raw post processing corrections.
  *
- * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -30,28 +30,27 @@
 // Local includes
 
 #include "imagehistogram.h"
-#include "imagecurves.h"
 #include "imagelevels.h"
+#include "wbfilter.h"
+#include "curvesfilter.h"
 #include "bcgfilter.h"
-#include "whitebalance.h"
-#include "dimgimagefilters.h"
 #include "globals.h"
 
 namespace Digikam
 {
 
-RawPostProcessing::RawPostProcessing(DImg *orgImage, QObject *parent, const DRawDecoding& settings)
+RawPostProcessing::RawPostProcessing(DImg* orgImage, QObject* parent, const DRawDecoding& settings)
                  : DImgThreadedFilter(orgImage, parent, "RawPostProcessing")
 {
     m_customRawSettings = settings;
     initFilter();
 }
 
-RawPostProcessing::RawPostProcessing(DImgThreadedFilter *parentFilter,
-                                     const DImg &orgImage, const DImg &destImage,
+RawPostProcessing::RawPostProcessing(DImgThreadedFilter* parentFilter,
+                                     const DImg& orgImage, const DImg& destImage,
                                      int progressBegin, int progressEnd, const DRawDecoding& settings)
-                : DImgThreadedFilter(parentFilter, orgImage, destImage, progressBegin, progressEnd,
-                                     parentFilter->filterName() + ": RawPostProcessing")
+                 : DImgThreadedFilter(parentFilter, orgImage, destImage, progressBegin, progressEnd,
+                                      parentFilter->filterName() + ": RawPostProcessing")
 {
     m_customRawSettings = settings;
     filterImage();
@@ -80,15 +79,15 @@ void RawPostProcessing::rawPostProcessing()
 
     if (m_customRawSettings.exposureComp != 0.0 || m_customRawSettings.saturation != 1.0)
     {
-        WhiteBalance wb(m_orgImage.sixteenBit());
-        wb.whiteBalance(m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(), m_orgImage.sixteenBit(),
-                        0.0,                                // black
-                        m_customRawSettings.exposureComp,   // exposure
-                        6500.0,                             // temperature (neutral)
-                        1.0,                                // green
-                        0.5,                                // dark
-                        1.0,                                // gamma
-                        m_customRawSettings.saturation);    // saturation
+        WBContainer settings;
+        settings.temperature  = 6500.0;
+        settings.dark         = 0.5;
+        settings.black        = 0.0;
+        settings.exposition   = m_customRawSettings.exposureComp;
+        settings.gamma        = 1.0;
+        settings.saturation   = m_customRawSettings.saturation;
+        settings.green        = 1.0;
+        WBFilter wb(m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(), m_orgImage.sixteenBit(), settings);
     }
     postProgress(30);
 
@@ -104,13 +103,12 @@ void RawPostProcessing::rawPostProcessing()
 
     if (!m_customRawSettings.curveAdjust.isEmpty())
     {
-        DImg tmp(m_orgImage.width(), m_orgImage.height(), m_orgImage.sixteenBit());
-        ImageCurves curves(m_orgImage.sixteenBit());
-        curves.setCurvePoints(LuminosityChannel, m_customRawSettings.curveAdjust);
-        curves.curvesCalculateCurve(LuminosityChannel);
-        curves.curvesLutSetup(AlphaChannel);
-        curves.curvesLutProcess(m_orgImage.bits(), tmp.bits(), m_orgImage.width(), m_orgImage.height());
-        memcpy(m_orgImage.bits(), tmp.bits(), tmp.numBytes());
+        CurvesContainer prm;
+        prm.curvesType   = ImageCurves::CURVE_SMOOTH;
+        prm.lumCurveVals = m_customRawSettings.curveAdjust;
+        CurvesFilter curves(&m_orgImage, 0L, prm);
+        curves.startFilterDirectly();
+        m_orgImage.putImageData(curves.getTargetImage().bits());
     }
     postProgress(60);
 

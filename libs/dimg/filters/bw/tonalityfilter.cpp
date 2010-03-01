@@ -4,9 +4,9 @@
  * http://www.digikam.org
  *
  * Date        : 2005-24-01
- * Description : Change tonality image filters
+ * Description : Change tonality image filter
  *
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,35 +47,19 @@ TonalityFilter::TonalityFilter(DImg* orgImage, QObject* parent, const TonalityCo
     initFilter();
 }
 
-TonalityFilter::TonalityFilter(uchar* bits, uint width, uint height, bool sixteenBits, 
-                               const TonalityContainer& settings)
-              : DImgThreadedFilter()
-{
-    m_settings = settings;
-    changeTonality(bits, width, height, sixteenBits);
-}
-
 TonalityFilter::~TonalityFilter()
 {
 }
 
+/** Change color tonality of an image for applying a RGB color mask.*/
 void TonalityFilter::filterImage()
 {
-    changeTonality(m_orgImage);
-    m_destImage = m_orgImage;
-}
-
-void TonalityFilter::changeTonality(DImg& image)
-{
-    if (image.isNull()) return;
-
-    changeTonality(image.bits(), image.width(), image.height(), image.sixteenBit());
-}
-
-/** Change color tonality of an image for applying a RGB color mask.*/
-void TonalityFilter::changeTonality(uchar* bits, uint width, uint height, bool sixteenBit)
-{
-    if (!bits) return;
+    m_destImage.putImageData(m_orgImage.bits());
+    
+    uchar* bits     = m_destImage.bits();
+    uint width      = m_destImage.width();
+    uint height     = m_destImage.height();
+    bool sixteenBit = m_destImage.sixteenBit();
 
     uint size = width*height;
     int  progress;
@@ -101,10 +85,10 @@ void TonalityFilter::changeTonality(uchar* bits, uint width, uint height, bool s
             ptr[1] = (uchar)mask.green();
             ptr[2] = (uchar)mask.red();
             ptr += 4;
-            
+
             progress = (int)(((double)i * 100.0) / size);
             if ( progress%5 == 0 )
-                postProgress( progress );            
+                postProgress( progress );
         }
     }
     else               // 16 bits image.
@@ -123,10 +107,10 @@ void TonalityFilter::changeTonality(uchar* bits, uint width, uint height, bool s
             ptr[1] = (unsigned short)mask.green();
             ptr[2] = (unsigned short)mask.red();
             ptr += 4;
-            
+
             progress = (int)(((double)i * 100.0) / size);
             if ( progress%5 == 0 )
-                postProgress( progress );            
+                postProgress( progress );
         }
     }
 }

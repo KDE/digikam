@@ -6,8 +6,8 @@
  * Date        : 2005-05-25
  * Description : threaded image filter class.
  *
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -56,20 +56,20 @@ public:
         to start the threaded computation.
         To run filter without to use multithreading, call startFilterDirectly().
     */
-    DImgThreadedFilter(QObject *parent=0);
+    DImgThreadedFilter(QObject* parent=0);
 
     /** Constructs a filter with all arguments (ready to use).
         You need to call startFilter() to start the threaded computation.
         To run filter without to use multithreading, call startFilterDirectly().
     */
-    DImgThreadedFilter(DImg *orgImage, QObject *parent,
+    DImgThreadedFilter(DImg* orgImage, QObject* parent,
                        const QString& name = QString());
 
     ~DImgThreadedFilter();
 
     void setOriginalImage(const DImg& orgImage);
     void setFilterName(const QString& name);
-    void setParent(QObject *parent);
+    void setParent(QObject* parent);
 
     DImg getTargetImage()       { return m_destImage; };
     const QString& filterName() { return m_name; };
@@ -130,11 +130,11 @@ protected:
       Any derived filter class that is publicly available to other filters
       should implement an additional constructor using this constructor.
       */
-    DImgThreadedFilter(DImgThreadedFilter *master, const DImg& orgImage, const DImg& destImage,
+    DImgThreadedFilter(DImgThreadedFilter* master, const DImg& orgImage, const DImg& destImage,
                        int progressBegin=0, int progressEnd=100, const QString& name=QString());
 
     /** Inform the master that there is currently a slave. At destruction of the slave, call with slave=0. */
-    void setSlave(DImgThreadedFilter *slave);
+    void setSlave(DImgThreadedFilter* slave);
 
     /** This method modulates the progress value from the 0..100 span to the span of this slave.
         Called by postProgress if master is not null. */
@@ -148,9 +148,10 @@ protected:
     /** The progress span that a slave filter uses in the parent filter's progress. */
     int                 m_progressBegin;
     int                 m_progressSpan;
+    int                 m_progressCurrent;  // To prevent signals bombarding with progress indicator value in postProgress().
 
     /** To post event from thread to parent. */
-    QObject            *m_parent;
+    QObject*            m_parent;
 
     /** Filter name.*/
     QString             m_name;
@@ -162,10 +163,10 @@ protected:
     DImg                m_destImage;
 
     /** The current slave. Any filter might want to use another filter while processing. */
-    DImgThreadedFilter *m_slave;
+    DImgThreadedFilter* m_slave;
 
     /** The master of this slave filter. Progress info will be routed to this one. */
-    DImgThreadedFilter *m_master;
+    DImgThreadedFilter* m_master;
 };
 
 }  // namespace Digikam

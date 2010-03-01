@@ -6,8 +6,8 @@
  * Date        : 2005-05-25
  * Description : FilmGrain threaded image filter.
  *
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2005-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,7 +21,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "filmgrain.h"
 
@@ -44,53 +43,47 @@
 #include "dimggaussianblur.h"
 #include "imagecurves.h"
 #include "imagehistogram.h"
-#include "dimgimagefilters.h"
 #include "globals.h"
 
 namespace DigikamFilmGrainImagesPlugin
 {
 
-FilmGrain::FilmGrain(Digikam::DImg *orgImage, QObject *parent, int sensibility)
-         : Digikam::DImgThreadedFilter(orgImage, parent, "FilmGrain")
+FilmGrain::FilmGrain(DImg* orgImage, QObject* parent, int sensibility)
+         : DImgThreadedFilter(orgImage, parent, "FilmGrain")
 {
     m_sensibility = sensibility;
     initFilter();
 }
 
-void FilmGrain::filterImage(void)
-{
-    filmgrainImage(&m_orgImage, m_sensibility);
-}
-
 // This method is based on the Simulate Film grain tutorial from GimpGuru.org web site
 // available at this url : http://www.gimpguru.org/Tutorials/FilmGrain
 
-void FilmGrain::filmgrainImage(Digikam::DImg *orgImage, int Sensibility)
+void FilmGrain::filterImage()
 {
     // Sensibility: 800..6400
 
-    if (Sensibility <= 0) return;
+    if (m_sensibility <= 0) return;
 
-    int Width = orgImage->width();
-    int Height = orgImage->height();
-    int bytesDepth = orgImage->bytesDepth();
-    bool sixteenBit = orgImage->sixteenBit();
-    uchar* data = orgImage->bits();
+    int Width       = m_orgImage.width();
+    int Height      = m_orgImage.height();
+    int bytesDepth  = m_orgImage.bytesDepth();
+    bool sixteenBit = m_orgImage.sixteenBit();
+    uchar* data     = m_orgImage.bits();
 
-    Digikam::DImg grain(Width, Height, sixteenBit);      // Grain blurred without curves adjustment.
-    Digikam::DImg mask(Width, Height, sixteenBit);       // Grain mask with curves adjustment.
+    DImg grain(Width, Height, sixteenBit);      // Grain blurred without curves adjustment.
+    DImg mask(Width, Height, sixteenBit);       // Grain mask with curves adjustment.
     uchar* pGrainBits = grain.bits();
     uchar* pMaskBits  = mask.bits();
-    uchar* pOutBits = m_destImage.bits(); // Destination image with merged grain mask and original.
+    uchar* pOutBits   = m_destImage.bits(); // Destination image with merged grain mask and original.
 
-    int Noise, Shade, nRand, component, progress;
-    uchar *ptr;
-    Digikam::DColor blendData, grainData, maskData, outData;
+    int    Noise, Shade, nRand, component, progress;
+    uchar* ptr = 0;
+    DColor blendData, grainData, maskData, outData;
 
     if (sixteenBit)
-        Noise = (Sensibility / 10 + 1) * 256 - 1;
+        Noise = (m_sensibility / 10 + 1) * 256 - 1;
     else
-        Noise = Sensibility / 10;
+        Noise = m_sensibility / 10;
 
     // This value controls the shading pixel effect between original image and grain mask.
     if (sixteenBit)
@@ -100,7 +93,7 @@ void FilmGrain::filmgrainImage(Digikam::DImg *orgImage, int Sensibility)
 
     QDateTime dt = QDateTime::currentDateTime();
     QDateTime Y2000( QDate(2000, 1, 1), QTime(0, 0, 0) );
-    uint seed = (uint) dt.secsTo(Y2000);
+    uint seed    = (uint) dt.secsTo(Y2000);
 
     // Make gray grain mask.
 
@@ -141,30 +134,30 @@ void FilmGrain::filmgrainImage(Digikam::DImg *orgImage, int Sensibility)
     }
 
     // Smooth grain mask using gaussian blur with radius 1.
-    Digikam::DImgGaussianBlur(this, grain, grain, 25, 30, 1);
+    DImgGaussianBlur(this, grain, grain, 25, 30, 1);
 
     // Normally, film grain tends to be most noticeable in the midtones, and much less
     // so in the shadows and highlights. Adjust histogram curve to adjust grain like this.
 
-    Digikam::ImageCurves *grainCurves = new Digikam::ImageCurves(sixteenBit);
+    ImageCurves* grainCurves = new ImageCurves(sixteenBit);
 
     // We modify only global luminosity of the grain.
     if (sixteenBit)
     {
-        grainCurves->setCurvePoint(Digikam::LuminosityChannel, 0,  QPoint(0,     0));
-        grainCurves->setCurvePoint(Digikam::LuminosityChannel, 8,  QPoint(32768, 32768));
-        grainCurves->setCurvePoint(Digikam::LuminosityChannel, 16, QPoint(65535, 0));
+        grainCurves->setCurvePoint(LuminosityChannel, 0,  QPoint(0,     0));
+        grainCurves->setCurvePoint(LuminosityChannel, 8,  QPoint(32768, 32768));
+        grainCurves->setCurvePoint(LuminosityChannel, 16, QPoint(65535, 0));
     }
     else
     {
-        grainCurves->setCurvePoint(Digikam::LuminosityChannel, 0,  QPoint(0,   0));
-        grainCurves->setCurvePoint(Digikam::LuminosityChannel, 8,  QPoint(128, 128));
-        grainCurves->setCurvePoint(Digikam::LuminosityChannel, 16, QPoint(255, 0));
+        grainCurves->setCurvePoint(LuminosityChannel, 0,  QPoint(0,   0));
+        grainCurves->setCurvePoint(LuminosityChannel, 8,  QPoint(128, 128));
+        grainCurves->setCurvePoint(LuminosityChannel, 16, QPoint(255, 0));
     }
 
     // Calculate curves and lut to apply on grain.
-    grainCurves->curvesCalculateCurve(Digikam::LuminosityChannel);
-    grainCurves->curvesLutSetup(Digikam::AlphaChannel);
+    grainCurves->curvesCalculateCurve(LuminosityChannel);
+    grainCurves->curvesLutSetup(AlphaChannel);
     grainCurves->curvesLutProcess(pGrainBits, pMaskBits, Width, Height);
 
     grain.reset();
@@ -177,7 +170,7 @@ void FilmGrain::filmgrainImage(Digikam::DImg *orgImage, int Sensibility)
 
     int alpha;
     // get composer for default blending
-    Digikam::DColorComposer *composer = Digikam::DColorComposer::getComposer(Digikam::DColorComposer::PorterDuffNone);
+    DColorComposer* composer = DColorComposer::getComposer(DColorComposer::PorterDuffNone);
 
     for (int x = 0; !m_cancel && x < Width; ++x)
     {

@@ -657,27 +657,27 @@ void DigikamView::slotSortAlbums(int order)
 void DigikamView::slotNewAlbum()
 {
     // TODO use the selection model of the view instead
-    d->albumModificationHelper->slotAlbumNew(d->albumManager->currentPAlbum());
+    d->albumModificationHelper->slotAlbumNew(d->albumFolderSideBar->currentAlbum());
 }
 
 void DigikamView::slotDeleteAlbum()
 {
-    d->albumModificationHelper->slotAlbumDelete(d->albumManager->currentPAlbum());
+    d->albumModificationHelper->slotAlbumDelete(d->albumFolderSideBar->currentAlbum());
 }
 
 void DigikamView::slotNewTag()
 {
-    d->tagModificationHelper->slotTagNew(d->albumManager->currentTAlbum());
+    d->tagModificationHelper->slotTagNew(d->tagViewSideBar->currentAlbum());
 }
 
 void DigikamView::slotDeleteTag()
 {
-    d->tagModificationHelper->slotTagDelete(d->albumManager->currentTAlbum());
+    d->tagModificationHelper->slotTagDelete(d->tagViewSideBar->currentAlbum());
 }
 
 void DigikamView::slotEditTag()
 {
-    d->tagModificationHelper->slotTagEdit(d->albumManager->currentTAlbum());
+    d->tagModificationHelper->slotTagEdit(d->tagViewSideBar->currentAlbum());
 }
 
 void DigikamView::slotNewKeywordSearch()

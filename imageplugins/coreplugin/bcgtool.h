@@ -29,7 +29,6 @@
 // Local includes
 
 #include "editortool.h"
-#include "dimg.h"
 
 using namespace Digikam;
 

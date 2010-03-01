@@ -398,7 +398,9 @@ void SearchTabHeader::editSearch(SAlbum *album)
 
 void SearchTabHeader::newKeywordSearch()
 {
-    d->keywordEdit->setText(QString());
+    d->keywordEdit->clear();
+    QString keywords = d->keywordEdit->text();
+    setCurrentSearch(DatabaseSearch::KeywordSearch, queryFromKeywords(keywords));
     d->keywordEdit->setFocus();
 }
 
@@ -425,6 +427,7 @@ void SearchTabHeader::keywordChanged()
     }
 
     setCurrentSearch(DatabaseSearch::KeywordSearch, queryFromKeywords(keywords));
+    d->keywordEdit->setFocus();
 }
 
 void SearchTabHeader::editCurrentAdvancedSearch()

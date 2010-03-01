@@ -1,19 +1,25 @@
 *********************************************************************************************************
 digiKam 1.2.0 - Release date: 2010-XX-XX
 
-NEW FEATURES: 
+NEW FEATURES:
 
 AlbumGUI          : All Album tree views are ported to pure Qt4 model/view implementation.
 
-ImageEditor       : Brightness/Contrast/gamma tool is multithreaded and use a zommable preview widget.
-ImageEditor       : Color Balance tool is multithreaded and use a zommable preview widget.
-ImageEditor       : Hue/Saturation/Lightness tool is multithreaded and use a zommable preview widget.
-ImageEditor       : Auto Color Correction tool is multithreaded and use a zommable preview widget.
+ImageEditor       : Brightness/Contrast/gamma tool is multithreaded and use a zoomable preview widget.
+ImageEditor       : Color Balance tool is multithreaded and use a zoomable preview widget.
+ImageEditor       : Hue/Saturation/Lightness tool is multithreaded and use a zoomable preview widget.
+ImageEditor       : Auto Color Correction tool is multithreaded and use a zoomable preview widget.
+ImageEditor       : Channel Mixer tool is multithreaded and use a zoomable preview widget.
+ImageEditor       : Black and White tool is multithreaded and use a zoomable preview widget.
+ImageEditor       : White Balance tool is multithreaded and use a zoomable preview widget.
 
 BatchQueueManager : new tool to fix Brightness/Contrast/gamma.
 BatchQueueManager : new tool to adjust Color Balance.
 BatchQueueManager : new tool to fix Hue/Saturation/Lightness.
 BatchQueueManager : new tool to convert images color space.
+BatchQueueManager : new tool to mix color channel.
+BatchQueueManager : new tool to convert to Black and White.
+BatchQueueManager : new tool to adjust White Balance.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
@@ -37,9 +43,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 018 ==> 226235 : digiKam fails after upgrade - no albums - rh tag & captions bar frozen.
 019 ==> 225272 : digiKam destroy some exif data.
 020 ==> 226584 : digiKam crashes in the starting phase.
-021 ==> 226537 : hovering doesn't show sub-tags
-022 ==> 225827 : gpswidget inactive on default selected photo.
-023 ==> 226381 : Copy/Paste of images in Albums view selects wrong image
+021 ==> 226537 : hovering doesn't show sub-tags.
+022 ==> 225827 : Gpswidget inactive on default selected photo.
+023 ==> 226381 : Copy/Paste of images in Albums view selects wrong image.
 024 ==> 224999 : Thumbnails blury after upgrade to 1.0.0 from 0.10.
 025 ==> 226789 : Metadata settings only EXIF.
 026 ==> 185266 : digiKam shows unknown icon when moving images to other directory.
@@ -51,12 +57,37 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 032 ==> 226853 : No images shown after upgrading from previous version.
 033 ==> 226932 : Batch Color Space Conversion Tool.
 034 ==> 207338 : Batch queue manager does not cancel processing.
-035 ==> 215657 : Raw import tool does not use general digikam settings.
-036 ==> 
-
-
-
-
-
+035 ==> 215657 : Raw import tool does not use general digiKam settings.
+036 ==> 226846 : Issues with color management and color profiles.
+037 ==> 227498 : digiKam no longer shows any fotos. opengl image viewer works. showFoto works.
+038 ==> 226537 : hovering doesn't show sub-tags.
+039 ==> 227550 : Tags already assigned looks messy.
+040 ==> 226962 : Applying tags to images requires extra work.
+041 ==> 226238 : Histogram never get completed in image editor after any change in the image.
+042 ==> 227545 : Toggle Auto/Parents does not work as expected.
+043 ==> 219772 : Opening the application causes crash.
+044 ==> 226382 : Curves Adjust dialog broken: No Histogram and no effect when changing the line.
+045 ==> 227555 : Preview image in digiKam is not displayed after saveas in editor.
+046 ==> 225728 : Adding vignette should not increase brightness in the center.
+047 ==> 227992 : Search field should not lost focus if nothing was found.
+048 ==> 228326 : Crash trying to create a new tag.
+049 ==> 227905 : ISO Album dates for 2009 2010 sort wrong.
+050 ==> 225443 : Fileview preview panning shortcut back to old.
+051 ==> 224094 : Modifying file (caption, keywords, EXIF) takes a very long time and 100 % CPU.
+052 ==> 228378 : Tag filtering is bugged.
+053 ==> 227668 : Not enough space to show alle tags.
+054 ==> 227640 : No Pictures visible in Collections.
+055 ==> 227075 : digikam3 database is not imported.
+056 ==> 225927 : Add white-balance to the batch base tools.
+057 ==> 225718 : Crash when having two tags with the same name in one folder.
+058 ==> 221918 : Wrong thumbnails after save as.
+059 ==> 226586 : digiKam 1.2 crashes after My Tags window goes blank.
+060 ==> 226885 : Not displayed thumbnails failed load kio_digikamalbums.
+061 ==> 226363 : Root album is not expansed after upgrade to model view port.
+062 ==> 224080 : Selected image thumbnails should be automatically added to the list of images for processing in Batch Queue Manager.
+063 ==> 225722 : Selection in editor should not darken image.
+064 ==> 228802 : Copy paste doesn't work.
+065 ==> 227064 : digiKam 1.1.0: crash on image download.
+066 ==> 
 
 

@@ -141,6 +141,18 @@ ContentAwareResizer::~ContentAwareResizer()
     delete d;
 }
 
+void ContentAwareResizer::getEnergyImage()
+{
+    if(!d->carver) return;
+
+    int w = lqr_carver_get_width(d->carver);
+    int h = lqr_carver_get_height(d->carver);
+    guchar * buff = (guchar *) malloc (w*h*3*sizeof(guchar));
+    
+    lqr_carver_get_energy_image(d->carver,buff,1,LQR_COLDEPTH_8I,LQR_RGBA_IMAGE);
+    
+}
+    
 void ContentAwareResizer::filterImage()
 {
     if (!d->carver) return;

@@ -1,7 +1,4 @@
 TODO file for the vignetting tool.
 
-- make the paramaters independant of resolution
-- make the parameters independant of bit depth
-- port to the new plugin architecture to allow all preview modes (mouseover, ...)
 - add support for adding vignette by changing the gamma
 - add support for different shapes ? (rectancle, ellipse, etc)

@@ -517,7 +517,12 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/cb/cbsettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/bcg/bcgfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/bcg/bcgsettings.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/bw/bwsepiafilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/bw/bwsepiasettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/bw/tonalityfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/bw/infraredfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/bw/mixerfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/bw/mixersettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/hsl/hslfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/hsl/hslsettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/hsl/hspreviewwidget.cpp
@@ -527,17 +532,20 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/icc/icctransformfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/icc/iccsettingscontainer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/icc/iccsettings.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/nr/waveletsnr.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/nr/noisereductionsettings.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/nr/nrfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/nr/nrsettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/sharp/dimgsharpen.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/sharp/dimgunsharpmask.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/sharp/dimgrefocus.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/sharp/matrix.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/sharp/sharpsettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/levels/imagelevels.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/levels/levelsfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/curves/imagecurves.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/wb/whitebalance.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/curves/curvesfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/curves/curvessettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/wb/wbfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/wb/wbsettings.cpp
        )
 
     SET(libdmetadata_SRCS
@@ -1008,6 +1016,9 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/color/hslcorrection.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/color/colorbalance.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/color/iccconvert.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/color/channelmixer.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/color/bwconvert.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/color/whitebalance.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/convert/convert2jpeg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/convert/convert2png.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/convert/convert2tiff.cpp

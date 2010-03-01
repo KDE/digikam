@@ -503,7 +503,7 @@ void LightTablePreview::viewportPaintExtraData()
         QString text;
         QRect textRect, fontRect;
         QRect region = contentsRect();
-        p.translate(region.topLeft());
+        //p.translate(region.topLeft());
 
         if (!d->loadFullImageSize)
         {
@@ -523,7 +523,8 @@ void LightTablePreview::viewportPaintExtraData()
         fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text);
         textRect.setTopLeft(QPoint(region.topRight().x()-fontRect.width()-20, region.topRight().y()+20));
         textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2) );
-        drawText(&p, textRect, text);
+        
+        drawText(&p, QPoint(region.topRight().x()-fontRect.width()-20, region.topRight().y()+20), text);
         p.end();
     }
 }

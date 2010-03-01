@@ -51,8 +51,24 @@ private:
     void equalizeImage();
                 
 private:     
+
+    struct double_packet
+    {
+        double red;
+        double green;
+        double blue;
+        double alpha;
+    };
+
+    struct int_packet
+    {
+        unsigned int red;
+        unsigned int green;
+        unsigned int blue;
+        unsigned int alpha;
+    };
     
-    DImg* m_refImage;
+    DImg m_refImage;
 };
 
 }  // namespace Digikam

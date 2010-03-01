@@ -144,7 +144,8 @@ public:
         configApplySidebarChangesDirectlyEntry("Apply Sidebar Changes Directly"),
         configScanAtStartEntry("Scan At Start"),
         configSyncNepomuktoDigikamEntry("Sync Nepomuk to Digikam"),
-        configSyncDigikamtoNepomukEntry("Sync Digikam to Nepomuk")
+        configSyncDigikamtoNepomukEntry("Sync Digikam to Nepomuk"),
+        configStringComparisonTypeEntry("String Comparison Type")
         {}
 
     const QString                       configGroupDefault;
@@ -233,6 +234,7 @@ public:
     const QString                       configScanAtStartEntry;
     const QString                       configSyncNepomuktoDigikamEntry;
     const QString                       configSyncDigikamtoNepomukEntry;
+    const QString                       configStringComparisonTypeEntry;
 
     // start up setting
     bool                                showSplash;
@@ -347,8 +349,14 @@ public:
     int                                 imageSorting;
     int                                 imageGroupMode;
     AlbumSettings::ItemLeftClickAction  itemLeftClickAction;
-    bool syncToDigikam;
-    bool syncToNepomuk;
+
+    // nepomuk settings
+    bool                                syncToDigikam;
+    bool                                syncToNepomuk;
+
+    //misc
+    AlbumSettings::StringComparisonType stringComparisonType;
+
 };
 
 class AlbumSettingsCreator { public: AlbumSettings object; };
@@ -464,6 +472,8 @@ void AlbumSettings::init()
 
     d->syncToDigikam                = false;
     d->syncToNepomuk                = false;
+
+    d->stringComparisonType         = AlbumSettings::Natural;
 }
 
 void AlbumSettings::readSettings()
@@ -578,6 +588,7 @@ void AlbumSettings::readSettings()
     d->showPermanentDeleteDialog = group.readEntry(d->configShowPermanentDeleteDialogEntry,   true);
     d->sidebarApplyDirectly      = group.readEntry(d->configApplySidebarChangesDirectlyEntry, false);
     d->scanAtStart               = group.readEntry(d->configScanAtStartEntry,                 true);
+    d->stringComparisonType      = (StringComparisonType) group.readEntry(d->configStringComparisonTypeEntry, (int) Natural);
 
     // ---------------------------------------------------------------------
 
@@ -732,6 +743,7 @@ void AlbumSettings::saveSettings()
     group.writeEntry(d->configShowPermanentDeleteDialogEntry,   d->showPermanentDeleteDialog);
     group.writeEntry(d->configApplySidebarChangesDirectlyEntry, d->sidebarApplyDirectly);
     group.writeEntry(d->configScanAtStartEntry,                 d->scanAtStart);
+    group.writeEntry(d->configStringComparisonTypeEntry,        (int) d->stringComparisonType);
 
     // ---------------------------------------------------------------------
 
@@ -1675,5 +1687,16 @@ void AlbumSettings::setInternalDatabaseServer(const bool useInternalDBServer)
 {
     d->internalDatabaseServer = useInternalDBServer;
 }
+
+void AlbumSettings::setStringComparisonType(AlbumSettings::StringComparisonType val)
+{
+    d->stringComparisonType = val;
+}
+
+AlbumSettings::StringComparisonType AlbumSettings::getStringComparisonType() const
+{
+    return d->stringComparisonType;
+}
+
 
 }  // namespace Digikam

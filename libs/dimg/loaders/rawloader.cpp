@@ -44,10 +44,10 @@
 #include "dimgloaderobserver.h"
 #include "icctransform.h"
 #include "imagehistogram.h"
-#include "imagecurves.h"
 #include "imagelevels.h"
+#include "imagecurves.h"
 #include "bcgfilter.h"
-#include "whitebalance.h"
+#include "wbfilter.h"
 #include "globals.h"
 
 namespace Digikam
@@ -61,7 +61,7 @@ RAWLoader::RAWLoader(DImg* image, DRawDecoding rawDecodingSettings)
     m_observer            = 0;
 }
 
-bool RAWLoader::load(const QString& filePath, DImgLoaderObserver *observer)
+bool RAWLoader::load(const QString& filePath, DImgLoaderObserver* observer)
 {
     m_observer = observer;
 
@@ -130,7 +130,7 @@ void RAWLoader::setWaitingDataProgress(double value)
 }
 
 bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbmax,
-                                DImgLoaderObserver *observer)
+                                DImgLoaderObserver* observer)
 {
     int checkpoint = 0;
 
@@ -282,7 +282,7 @@ bool RAWLoader::loadedFromDcraw(QByteArray data, int width, int height, int rgbm
     return true;
 }
 
-void RAWLoader::postProcess(DImgLoaderObserver *observer)
+void RAWLoader::postProcess(DImgLoaderObserver* observer)
 {
     // emulate LibRaw custom output profile
     if (!m_customOutputProfile.isNull())
@@ -301,15 +301,15 @@ void RAWLoader::postProcess(DImgLoaderObserver *observer)
 
     if (m_customRawSettings.exposureComp != 0.0 || m_customRawSettings.saturation != 1.0)
     {
-        WhiteBalance wb(m_rawDecodingSettings.sixteenBitsImage);
-        wb.whiteBalance(imageData(), imageWidth(), imageHeight(), m_rawDecodingSettings.sixteenBitsImage,
-                        0.0,                                // black
-                        m_customRawSettings.exposureComp,   // exposure
-                        6500.0,                             // temperature (neutral)
-                        1.0,                                // green
-                        0.5,                                // dark
-                        1.0,                                // gamma
-                        m_customRawSettings.saturation);    // saturation
+        WBContainer settings;
+        settings.temperature  = 6500.0;
+        settings.dark         = 0.5;
+        settings.black        = 0.0;
+        settings.exposition   = m_customRawSettings.exposureComp;
+        settings.gamma        = 1.0;
+        settings.saturation   = m_customRawSettings.saturation;
+        settings.green        = 1.0;
+        WBFilter wb(imageData(), imageWidth(), imageHeight(), m_rawDecodingSettings.sixteenBitsImage, settings);
     }
     if (observer) observer->progressInfo(m_image, 0.92F);
 

@@ -137,6 +137,11 @@ void AlbumFolderViewSideBarWidget::changeAlbumFromHistory(Album *album)
     d->albumFolderView->slotSelectAlbum(album);
 }
 
+AlbumPointer<PAlbum> AlbumFolderViewSideBarWidget::currentAlbum() const
+{
+    return AlbumPointer<PAlbum> (d->albumFolderView->currentAlbum());
+}
+
 void AlbumFolderViewSideBarWidget::slotSelectAlbum(Album *album)
 {
 
@@ -231,6 +236,11 @@ void TagViewSideBarWidget::changeAlbumFromHistory(Album *album)
     d->tagFolderView->slotSelectAlbum(album);
 }
 
+AlbumPointer<TAlbum> TagViewSideBarWidget::currentAlbum() const
+{
+    return AlbumPointer<TAlbum> (d->tagFolderView->currentAlbum());
+}
+
 QPixmap TagViewSideBarWidget::getIcon()
 {
     return SmallIcon("tag");
@@ -303,6 +313,11 @@ void DateFolderViewSideBarWidget::applySettings()
 void DateFolderViewSideBarWidget::changeAlbumFromHistory(Album *album)
 {
     d->dateFolderView->changeAlbumFromHistory(dynamic_cast<SAlbum*> (album));
+}
+
+AlbumPointer<DAlbum> DateFolderViewSideBarWidget::currentAlbum() const
+{
+    return d->dateFolderView->currentAlbum();
 }
 
 void DateFolderViewSideBarWidget::gotoDate(const QDate &date)

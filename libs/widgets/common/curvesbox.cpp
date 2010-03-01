@@ -75,20 +75,25 @@ public:
         currentChannel  = LuminosityChannel;
         sixteenBit      = false;
     }
-    ChannelType          currentChannel;
     bool                 sixteenBit;
-    CurvesWidget*        curvesWidget;
-    ColorGradientWidget* hGradient;
-    ColorGradientWidget* vGradient;
+    ChannelType          currentChannel;
+    
     QToolButton*         curveFree;
     QToolButton*         curveSmooth;
     QToolButton*         pickBlack;
     QToolButton*         pickGray;
     QToolButton*         pickWhite;
+    
     QButtonGroup*        curveType;
     QButtonGroup*        pickerType;
+    
     QWidget*             pickerBox;
+    
     QPushButton*         resetButton;
+    
+    CurvesWidget*        curvesWidget;
+    ColorGradientWidget* hGradient;
+    ColorGradientWidget* vGradient;
 };
 
 CurvesBox::CurvesBox(int w, int h, QWidget *parent, bool readOnly)
@@ -107,7 +112,6 @@ CurvesBox::CurvesBox(int w, int h, uchar *i_data, uint i_w, uint i_h,
     d->currentChannel = d->curvesWidget->m_channelType;
     setup();
 }
-
 
 void CurvesBox::setup()
 {
@@ -131,7 +135,7 @@ void CurvesBox::setup()
 
     // -------------------------------------------------------------
 
-    QWidget *typeBox = new QWidget();
+    QWidget* typeBox = new QWidget();
 
     d->curveFree = new QToolButton;
     d->curveFree->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/curvefree.png")));

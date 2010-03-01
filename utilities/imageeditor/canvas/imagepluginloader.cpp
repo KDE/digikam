@@ -7,7 +7,7 @@
  * Description : image plugins loader for image editor.
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -58,6 +58,11 @@ static const char* ObsoleteImagePluginsList[] =
      "digikamimageplugin_antivignetting", // Merged with "Lens Correction" since 0.10.0.
      "digikamimageplugin_lensdistortion", // Merged with "Lens Correction" since 0.10.0.
      "digikamimageplugin_noisereduction", // Merged to core plugin since 1.0.0-rc.
+     "digikamimageplugin_infrared",       // Merged to core plugin with B&W converter since 1.2.0.
+     "digikamimageplugin_whitebalance",   // Merged to core plugin since 1.2.0.
+     "digikamimageplugin_channelmixer",   // Merged to core plugin since 1.2.0.
+     "digikamimageplugin_adjustcurves",   // Merged to core plugin since 1.2.0.
+     "digikamimageplugin_adjustlevels",   // Merged to core plugin since 1.2.0.
      "-1"
 };
 
@@ -90,11 +95,11 @@ ImagePluginLoader* ImagePluginLoader::instance()
     return m_instance;
 }
 
-ImagePluginLoader::ImagePluginLoader(QObject *parent, SplashScreen *splash)
+ImagePluginLoader::ImagePluginLoader(QObject* parent, SplashScreen* splash)
                  : QObject(parent), d(new ImagePluginLoaderPrivate)
 {
     m_instance = this;
-    d->splash = splash;
+    d->splash  = splash;
 
     QStringList imagePluginsList2Load;
 
@@ -146,7 +151,7 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& pluginsToLoad)
     {
         QString error;
 
-        ImagePlugin *plugin = corePlugin->createInstance<ImagePlugin>(this, QVariantList(), &error);
+        ImagePlugin* plugin = corePlugin->createInstance<ImagePlugin>(this, QVariantList(), &error);
 
         if (plugin && (dynamic_cast<KXMLGUIClient*>(plugin) != 0))
         {
@@ -181,7 +186,7 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& pluginsToLoad)
     foreach (const QString& name, pluginsToLoad)
     {
         KService::Ptr service = d->pluginServiceMap.value(name);
-        ImagePlugin *plugin;
+        ImagePlugin* plugin;
 
         if ( pluginIsLoaded(name) )
             continue;
@@ -262,7 +267,7 @@ bool ImagePluginLoader::pluginLibraryIsLoaded(const QString& libraryName)
     return false;
 }
 
-QList<ImagePlugin *> ImagePluginLoader::pluginList()
+QList<ImagePlugin*> ImagePluginLoader::pluginList()
 {
     return d->pluginMap.values();
 }

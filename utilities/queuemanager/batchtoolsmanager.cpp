@@ -43,6 +43,9 @@
 #include "hslcorrection.h"
 #include "colorbalance.h"
 #include "iccconvert.h"
+#include "channelmixer.h"
+#include "bwconvert.h"
+#include "whitebalance.h"
 
 namespace Digikam
 {
@@ -84,6 +87,9 @@ BatchToolsManager::BatchToolsManager(QObject* parent)
     registerTool(new ColorBalance(this));
     registerTool(new AutoCorrection(this));
     registerTool(new IccConvert(this));
+    registerTool(new ChannelMixer(this));
+    registerTool(new BWConvert(this));
+    registerTool(new WhiteBalance(this));
 }
 
 BatchToolsManager::~BatchToolsManager()

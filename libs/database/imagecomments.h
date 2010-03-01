@@ -214,6 +214,11 @@ public:
      */
     CaptionsMap toCaptionsMap(DatabaseComment::Type = DatabaseComment::Comment) const;
 
+    /**
+     * Replaces all entries in this object with all entries from source.
+     */
+    void replaceFrom(const ImageComments& source);
+
     // If you need more methods, add your methods here!
 
 protected:

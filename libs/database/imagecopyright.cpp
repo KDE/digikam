@@ -100,6 +100,25 @@ ImageCopyright &ImageCopyright::operator=(const ImageCopyright& other)
     return *this;
 }
 
+void ImageCopyright::replaceFrom(const ImageCopyright& source)
+{
+    if (!m_id)
+        return;
+
+    DatabaseAccess access;
+    access.db()->removeImageCopyrightProperties(m_id);
+
+    if (!source.m_id)
+        return;
+
+    QList<CopyrightInfo> infos = access.db()->getImageCopyright(source.m_id, QString());
+    foreach (const CopyrightInfo& info, infos)
+    {
+        access.db()->setImageCopyrightProperty(m_id, info.property, info.value,
+                                               info.extraValue, AlbumDB::PropertyNoConstraint);
+    }
+}
+
 QStringList ImageCopyright::creator()
 {
     QList<CopyrightInfo> infos = copyrightInfos(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCreator));

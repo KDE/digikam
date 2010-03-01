@@ -6,7 +6,7 @@
  * Date        : 2009-11-21
  * Description : Wavelets Noise Reduction batch tool.
  *
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,8 +39,8 @@
 // Local includes
 
 #include "dimg.h"
-#include "waveletsnr.h"
-#include "noisereductionsettings.h"
+#include "nrfilter.h"
+#include "nrsettings.h"
 
 namespace Digikam
 {
@@ -53,7 +53,7 @@ NoiseReduction::NoiseReduction(QObject* parent)
     setToolIcon(KIcon(SmallIcon("noisereduction")));
 
     QWidget *box   = new QWidget;
-    m_settingsView = new NoiseReductionSettings(box);
+    m_settingsView = new NRSettings(box);
     setSettingsWidget(box);
 
     connect(m_settingsView, SIGNAL(signalSettingsChanged()),
@@ -67,7 +67,7 @@ NoiseReduction::~NoiseReduction()
 BatchToolSettings NoiseReduction::defaultSettings()
 {
     BatchToolSettings prm;
-    WaveletsNRContainer defaultPrm = m_settingsView->defaultSettings();
+    NRContainer defaultPrm = m_settingsView->defaultSettings();
 
     prm.insert("LeadThreshold", (double)defaultPrm.leadThreshold);
     prm.insert("LeadSoftness",  (double)defaultPrm.leadSoftness);
@@ -84,7 +84,7 @@ BatchToolSettings NoiseReduction::defaultSettings()
 
 void NoiseReduction::slotAssignSettings2Widget()
 {
-    WaveletsNRContainer prm;
+    NRContainer prm;
     prm.leadThreshold = settings()["LeadThreshold"].toDouble();
     prm.leadSoftness  = settings()["LeadSoftness"].toDouble();
     prm.advanced      = settings()["Advanced"].toBool();
@@ -100,7 +100,7 @@ void NoiseReduction::slotAssignSettings2Widget()
 void NoiseReduction::slotSettingsChanged()
 {
     BatchToolSettings prm;
-    WaveletsNRContainer currentPrm = m_settingsView->settings();
+    NRContainer currentPrm = m_settingsView->settings();
 
     prm.insert("LeadThreshold", (double)currentPrm.leadThreshold);
     prm.insert("LeadSoftness",  (double)currentPrm.leadSoftness);
@@ -119,7 +119,7 @@ bool NoiseReduction::toolOperations()
 {
     if (!loadToDImg()) return false;
 
-    WaveletsNRContainer prm;
+    NRContainer prm;
     prm.leadThreshold = settings()["LeadThreshold"].toDouble();
     prm.leadSoftness  = settings()["LeadSoftness"].toDouble();
     prm.advanced      = settings()["Advanced"].toBool();
@@ -130,7 +130,7 @@ bool NoiseReduction::toolOperations()
     prm.softness[1]   = settings()["CrSoftness"].toDouble();
     prm.softness[2]   = settings()["CbSoftness"].toDouble();
 
-    WaveletsNR wnr(&image(), 0L, prm);
+    NRFilter wnr(&image(), 0L, prm);
     wnr.startFilterDirectly();
     DImg trg = wnr.getTargetImage();
     image().putImageData(trg.bits());

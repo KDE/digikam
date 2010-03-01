@@ -75,12 +75,24 @@ void TagModificationHelper::setParentTag(TAlbum *parent)
 TAlbum *TagModificationHelper::slotTagNew(TAlbum *parent, const QString &title, const QString &iconName)
 {
 
+    // ensure that there is a parent
+    TAlbum *p = parent;
+    if (!p)
+    {
+        p = AlbumManager::instance()->findTAlbum(0);
+        if (!p)
+        {
+            kError() << "Could not find root tag album";
+            return 0;
+        }
+    }
+
     QString editTitle = title;
     QString editIconName = iconName;
 
     if (title.isEmpty())
     {
-        bool doCreate = TagEditDlg::tagCreate(d->dialogParent, parent, editTitle, editIconName);
+        bool doCreate = TagEditDlg::tagCreate(d->dialogParent, p, editTitle, editIconName);
         if(!doCreate)
         {
             return 0;
@@ -88,12 +100,14 @@ TAlbum *TagModificationHelper::slotTagNew(TAlbum *parent, const QString &title, 
     }
 
     QMap<QString, QString> errMap;
-    AlbumList tList = TagEditDlg::createTAlbum(parent, editTitle, editIconName, errMap);
+    AlbumList tList = TagEditDlg::createTAlbum(p, editTitle, editIconName, errMap);
     TagEditDlg::showtagsListCreationError(d->dialogParent, errMap);
 
     if (errMap.isEmpty() && !tList.isEmpty())
     {
-        return dynamic_cast<TAlbum*> (tList.last());
+        TAlbum *tag = static_cast<TAlbum*>(tList.last());
+        emit tagCreated(tag);
+        return tag;
     }
     else
     {
@@ -147,6 +161,8 @@ void TagModificationHelper::slotTagEdit(TAlbum *tag)
             KMessageBox::error(0, errMsg);
         }
     }
+
+    emit tagEdited(tag);
 
 }
 
@@ -216,6 +232,7 @@ void TagModificationHelper::slotTagDelete(TAlbum *tag)
 
     if(result == KMessageBox::Continue)
     {
+        emit aboutToDeleteTag(tag);
         QString errMsg;
         if (!AlbumManager::instance()->deleteTAlbum(tag, errMsg))
         {

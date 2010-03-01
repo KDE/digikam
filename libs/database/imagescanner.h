@@ -61,6 +61,11 @@ public:
     ImageScanner(qlonglong imageid);
 
     /**
+     * Returns the image id of the scanned file, if (yet) available.
+     */
+    qlonglong id() const;
+
+    /**
      * Inform the scanner about the category of the file.
      * Required at least for newFile() calls, recommended for calls with the
      * first constructor above as well.
@@ -106,6 +111,11 @@ public:
      * Give the id of the album of the new file, and the id of the src file.
      */
     void copiedFrom(int albumId, qlonglong srcId);
+
+    /**
+     * Copy all relevant attributes like comments, tags, rating from source to destination.
+     */
+    static void copyProperties(qlonglong source, qlonglong destination);
 
     /**
      * Returns a suitable creation date from file system information.

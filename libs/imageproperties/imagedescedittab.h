@@ -114,6 +114,8 @@ private Q_SLOTS:
     void slotImageRatingChanged(qlonglong imageId);
     void slotImageDateChanged(qlonglong imageId);
     void slotImageCaptionChanged(qlonglong imageId);
+    void slotAlbumAboutToBeDeleted(Album *album);
+    void slotAlbumsCleared();
 
     void slotRecentTagsMenuActivated(int);
     void slotAssignedTagsToggled(bool);

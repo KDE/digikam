@@ -35,22 +35,14 @@
 // Local includes
 
 #include "dimg.h"
-#include "imagehistogram.h"
 
 namespace Digikam
 {
 
-struct NormalizeParam
-{
-    unsigned short* lut;
-    double          min;
-    double          max;
-};
-
 NormalizeFilter::NormalizeFilter(DImg* orgImage, DImg* refImage, QObject* parent)
                : DImgThreadedFilter(orgImage, parent, "NormalizeFilter")
 {
-    m_refImage = refImage;  
+    m_refImage = refImage->copy();
     initFilter();
 }
 
@@ -72,9 +64,16 @@ void NormalizeFilter::filterImage()
 void NormalizeFilter::normalizeImage()
 {
     NormalizeParam param;
-    int            x, i;
+    int            x;
+    uint           i;
     unsigned short range;
     int            progress;
+    
+    if (m_orgImage.sixteenBit() != m_refImage.sixteenBit())
+    {
+        kDebug() << "Ref. image and Org. has different bits depth"; 
+        return;
+    }
     
     bool sixteenBit = m_orgImage.sixteenBit();
     int segments    = sixteenBit ? NUM_SEGMENTS_16BIT : NUM_SEGMENTS_8BIT;
@@ -85,15 +84,16 @@ void NormalizeFilter::normalizeImage()
 
     // Find min. and max. values.
 
-    param.min = segments-1;
-    param.max = 0;
+    param.min    = segments-1;
+    param.max    = 0;
+    uint refSize = m_refImage.width()*m_refImage.height();
 
     if (!sixteenBit)        // 8 bits image.
     {
         uchar  red, green, blue;
-        uchar* ptr = m_refImage->bits();
+        uchar* ptr = m_refImage.bits();
 
-        for (i = 0 ; !m_cancel && (i < (int)(m_refImage->width()*m_refImage->height())) ; ++i)
+        for (i = 0 ; !m_cancel && (i < refSize) ; ++i)
         {
             blue  = ptr[0];
             green = ptr[1];
@@ -111,12 +111,12 @@ void NormalizeFilter::normalizeImage()
             ptr += 4;
         }
     }
-    else               // 16 bits image.
+    else                    // 16 bits image.
     {
         unsigned short  red, green, blue;
-        unsigned short* ptr = (unsigned short *)m_refImage->bits();
+        unsigned short* ptr = (unsigned short*)m_refImage.bits();
 
-        for (i = 0 ; i < !m_cancel && ((int)(m_refImage->width()*m_refImage->height())) ; ++i)
+        for (i = 0 ; !m_cancel && (i < refSize) ; ++i)
         {
             blue  = ptr[0];
             green = ptr[1];
@@ -152,10 +152,10 @@ void NormalizeFilter::normalizeImage()
         }
     }
 
-    uchar* data     = m_orgImage.bits(); 
-    int w           = m_orgImage.width();
-    int h           = m_orgImage.height();
-    int size        = w*h;
+    uchar* data = m_orgImage.bits(); 
+    int w       = m_orgImage.width();
+    int h       = m_orgImage.height();
+    uint size   = w*h;
 
     // Apply LUT to image.
 
@@ -166,9 +166,9 @@ void NormalizeFilter::normalizeImage()
 
         for (i = 0 ; !m_cancel && (i < size) ; ++i)
         {
-            blue  = ptr[0];
-            green = ptr[1];
-            red   = ptr[2];
+            blue   = ptr[0];
+            green  = ptr[1];
+            red    = ptr[2];
 
             ptr[0] = param.lut[blue];
             ptr[1] = param.lut[green];
@@ -181,16 +181,16 @@ void NormalizeFilter::normalizeImage()
                 postProgress( progress );
         }
     }
-    else               // 16 bits image.
+    else                    // 16 bits image.
     {
         unsigned short  red, green, blue;
         unsigned short* ptr = (unsigned short*)data;
 
         for (i = 0 ; !m_cancel && (i < size) ; ++i)
         {
-            blue  = ptr[0];
-            green = ptr[1];
-            red   = ptr[2];
+            blue   = ptr[0];
+            green  = ptr[1];
+            red    = ptr[2];
 
             ptr[0] = param.lut[blue];
             ptr[1] = param.lut[green];

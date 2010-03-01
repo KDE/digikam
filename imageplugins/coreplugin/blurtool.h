@@ -6,7 +6,7 @@
  * Date        : 2004-07-09
  * Description : a tool to blur an image
  *
- * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009      by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
@@ -29,12 +29,14 @@
 
 #include "editortool.h"
 
+using namespace Digikam;
+
 namespace DigikamImagesPluginCore
 {
 
 class BlurToolPriv;
 
-class BlurTool : public Digikam::EditorToolThreaded
+class BlurTool : public EditorToolThreaded
 {
     Q_OBJECT
 

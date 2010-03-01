@@ -39,15 +39,17 @@ namespace Digikam
     class IccProfile;
 }
 
+using namespace Digikam;
+
 class ImagePlugin_CorePriv;
 
-class ImagePlugin_Core : public Digikam::ImagePlugin
+class ImagePlugin_Core : public ImagePlugin
 {
     Q_OBJECT
 
 public:
 
-    ImagePlugin_Core(QObject *parent, const QVariantList& args);
+    ImagePlugin_Core(QObject* parent, const QVariantList& args);
     ~ImagePlugin_Core();
 
     void setEnabledSelectionActions(bool b);
@@ -68,11 +70,15 @@ private Q_SLOTS:
     void slotAutoCorrection();
     void slotInvert();
     void slotBW();
+    void slotWhiteBalance();
     void slotConvertTo8Bits();
     void slotConvertTo16Bits();
     void slotConvertToColorSpace(const IccProfile&);
     void slotProfileConversionTool();
-
+    void slotChannelMixer();
+    void slotCurvesAdjust();
+    void slotLevelsAdjust();
+    
     void slotRatioCrop();
     void slotResize();
 

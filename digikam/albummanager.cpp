@@ -160,6 +160,7 @@ public:
         rootDAlbum         = 0;
         rootSAlbum         = 0;
         currentAlbum       = 0;
+        currentlyMovingAlbum = 0;
         changingDB         = false;
         scanPAlbumsTimer   = 0;
         scanTAlbumsTimer   = 0;
@@ -196,6 +197,7 @@ public:
     QHash<int,Album *>          allAlbumsIdHash;
     QHash<PAlbumPath, PAlbum*>  albumPathHash;
     QHash<int, PAlbum*>         albumRootAlbumHash;
+    Album*                      currentlyMovingAlbum;
 
     QMultiHash<Album*, Album**> guardedPointers;
 
@@ -2025,16 +2027,11 @@ bool AlbumManager::renamePAlbum(PAlbum* album, const QString& newName,
     }
 
     // first check if we have another sibling with the same name
-    Album *sibling = album->m_parent->m_firstChild;
-    while (sibling)
+    if (hasDirectChildAlbumWithTitle(album->m_parent, newName))
     {
-        if (sibling->title() == newName)
-        {
-            errMsg = i18n("Another album with the same name already exists.\n"
-                          "Please choose another name.");
-            return false;
-        }
-        sibling = sibling->m_next;
+        errMsg = i18n("Another album with the same name already exists.\n"
+                      "Please choose another name.");
+        return false;
     }
 
     QString oldAlbumPath = album->albumPath();
@@ -2155,15 +2152,10 @@ TAlbum* AlbumManager::createTAlbum(TAlbum* parent, const QString& name,
     }
 
     // first check if we have another album with the same name
-    Album *child = parent->m_firstChild;
-    while (child)
+    if (hasDirectChildAlbumWithTitle(parent, name))
     {
-        if (child->title() == name)
-        {
-            errMsg = i18n("Tag name already exists");
-            return 0;
-        }
-        child = child->m_next;
+        errMsg = i18n("Tag name already exists");
+        return 0;
     }
 
     ChangingDB changing(d);
@@ -2233,6 +2225,23 @@ bool AlbumManager::deleteTAlbum(TAlbum* album, QString& errMsg)
     return true;
 }
 
+bool AlbumManager::hasDirectChildAlbumWithTitle(Album *parent, const QString &title)
+{
+
+    Album *sibling = parent->m_firstChild;
+    while (sibling)
+    {
+        if (sibling->title() == title)
+        {
+            return true;
+        }
+        sibling = sibling->m_next;
+    }
+
+    return false;
+
+}
+
 bool AlbumManager::renameTAlbum(TAlbum* album, const QString& name,
                                 QString& errMsg)
 {
@@ -2255,16 +2264,11 @@ bool AlbumManager::renameTAlbum(TAlbum* album, const QString& name,
     }
 
     // first check if we have another sibling with the same name
-    Album *sibling = album->m_parent->m_firstChild;
-    while (sibling)
+    if (hasDirectChildAlbumWithTitle(album->m_parent, name))
     {
-        if (sibling->title() == name)
-        {
-            errMsg = i18n("Another tag with the same name already exists.\n"
-                          "Please choose another name.");
-            return false;
-        }
-        sibling = sibling->m_next;
+        errMsg = i18n("Another tag with the same name already exists.\n"
+                      "Please rename the tag another name.");
+        return false;
     }
 
     ChangingDB changing(d);
@@ -2289,6 +2293,16 @@ bool AlbumManager::moveTAlbum(TAlbum* album, TAlbum *newParent, QString& errMsg)
         return false;
     }
 
+    if (hasDirectChildAlbumWithTitle(newParent, album->title()))
+    {
+        errMsg = i18n("Another tag with the same name already exists.\n"
+                      "Please rename the tag before moving it.");
+        return false;
+    }
+
+    d->currentlyMovingAlbum = album;
+    emit signalAlbumAboutToBeMoved(album);
+
     emit signalAlbumAboutToBeDeleted(album);
     if (album->parent())
         album->parent()->removeChild(album);
@@ -2302,7 +2316,8 @@ bool AlbumManager::moveTAlbum(TAlbum* album, TAlbum *newParent, QString& errMsg)
     album->setParent(newParent);
     emit signalAlbumAdded(album);
 
-    emit signalTAlbumMoved(album, newParent);
+    emit signalAlbumMoved(album);
+    d->currentlyMovingAlbum = 0;
 
     return true;
 }
@@ -2517,6 +2532,11 @@ QMap<int, int> AlbumManager::getTAlbumsCount() const
 QMap<YearMonth, int> AlbumManager::getDAlbumsCount() const
 {
     return d->dAlbumsCount;
+}
+
+bool AlbumManager::isMovingAlbum(Album *album) const
+{
+    return d->currentlyMovingAlbum == album;
 }
 
 void AlbumManager::insertPAlbum(PAlbum *album, PAlbum *parent)

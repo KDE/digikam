@@ -27,7 +27,6 @@
 
 #include <QGridLayout>
 #include <QListWidget>
-#include <QPixmap>
 
 // KDE includes
 
@@ -232,7 +231,7 @@ void AutoCorrectionTool::slotResetSettings()
 void AutoCorrectionTool::prepareEffect()
 {
     kapp->setOverrideCursor(Qt::WaitCursor);
-    d->gboxSettings->setEnabled(false);
+    toolSettings()->setEnabled(false);
     toolView()->setEnabled(false);
 
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
@@ -262,7 +261,7 @@ void AutoCorrectionTool::putPreviewData()
 
 void AutoCorrectionTool::prepareFinal()
 {
-    d->gboxSettings->setEnabled(false);
+    toolSettings()->setEnabled(false);
     toolView()->setEnabled(false);
 
     int type = d->correctionTools->currentId();
@@ -308,7 +307,7 @@ void AutoCorrectionTool::putFinalData()
 void AutoCorrectionTool::renderingFinished()
 {
     QApplication::restoreOverrideCursor();
-    d->gboxSettings->setEnabled(true);
+    toolSettings()->setEnabled(true);
     toolView()->setEnabled(true);
 }
 
@@ -318,27 +317,27 @@ void AutoCorrectionTool::autoCorrection(DImg* img, DImg* ref, int type)
     {
         case AutoLevelsCorrection:
         {
-            setFilter(dynamic_cast<DImgThreadedFilter*>(new AutoLevelsFilter(img, ref, this)));
+            setFilter(new AutoLevelsFilter(img, ref, this));
             break;
         }
         case NormalizeCorrection:
         {
-            setFilter(dynamic_cast<DImgThreadedFilter*>(new NormalizeFilter(img, ref, this)));
+            setFilter(new NormalizeFilter(img, ref, this));
             break;
         }
         case EqualizeCorrection:
         {
-            setFilter(dynamic_cast<DImgThreadedFilter*>(new EqualizeFilter(img, ref, this)));
+            setFilter(new EqualizeFilter(img, ref, this));
             break;
         }
         case StretchContrastCorrection:
         {
-            setFilter(dynamic_cast<DImgThreadedFilter*>(new StretchFilter(img, ref, this)));
+            setFilter(new StretchFilter(img, ref, this));
             break;
         }
         case AutoExposureCorrection:
         {
-            setFilter(dynamic_cast<DImgThreadedFilter*>(new AutoExpoFilter(img, ref, this)));
+            setFilter(new AutoExpoFilter(img, ref, this));
             break;
         }
     }

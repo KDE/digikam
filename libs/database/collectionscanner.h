@@ -100,19 +100,27 @@ public:
 
     /**
      * The given file will be scanned according to the given mode.
+     * Returns the image id of the file.
      */
-    void scanFile(const QString& filePath, FileScanMode mode = ModifiedScan);
+    qlonglong scanFile(const QString& filePath, FileScanMode mode = ModifiedScan);
 
     /**
      * Same procedure as above, but albumRoot and album is provided.
      * If you already have this info it need not be retrieved.
+     * Returns the image id of the file, or -1 on failure.
      */
-    void scanFile(const QString& albumRoot, const QString& album, const QString& fileName, FileScanMode mode = ModifiedScan);
+    qlonglong scanFile(const QString& albumRoot, const QString& album, const QString& fileName, FileScanMode mode = ModifiedScan);
 
     /**
      * The given file represented by the ImageInfo will be scanned according to mode
      */
     void scanFile(const ImageInfo& info, FileScanMode mode = ModifiedScan);
+
+    /**
+     * When a file is derived from another file, typically through editing,
+     * copy all relevant attributes from source file to the new file.
+     */
+    void copyFileProperties(const ImageInfo& source, const ImageInfo& dest);
 
     /**
      * Call this to enable the progress info signals.
@@ -161,8 +169,8 @@ protected:
     void scanAlbum(const CollectionLocation& location, const QString& album);
     int checkAlbum(const CollectionLocation& location, const QString& album);
     void scanFileNormal(const QFileInfo& info, const ItemScanInfo& scanInfo);
-    void scanNewFile(const QFileInfo& info, int albumId);
-    void scanNewFileFullScan(const QFileInfo& info, int albumId);
+    qlonglong scanNewFile(const QFileInfo& info, int albumId);
+    qlonglong scanNewFileFullScan(const QFileInfo& info, int albumId);
     void scanModifiedFile(const QFileInfo& info, const ItemScanInfo& scanInfo);
     void rescanFile(const QFileInfo& info, const ItemScanInfo& scanInfo);
 

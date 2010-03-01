@@ -816,7 +816,7 @@ void AbstractCheckableAlbumModel::resetCheckedAlbums(QModelIndex parent)
 void AbstractCheckableAlbumModel::setDataForParents(QModelIndex &child, const QVariant& value, int role)
 {
     QModelIndex current = child;
-    while (current.isValid()) {
+    while (current.isValid() && current != rootAlbumIndex()) {
         setData(current, value, role);
         current = parent(current);
     }
@@ -852,14 +852,14 @@ void AbstractCheckableAlbumModel::invertCheckedAlbums(QModelIndex parent)
 
 void AbstractCheckableAlbumModel::setCheckStateForChildren(Album *album, Qt::CheckState state)
 {
-    QModelIndex parent = indexForAlbum(album);
-    setDataForChildren(parent, state, Qt::CheckStateRole);
+    QModelIndex index = indexForAlbum(album);
+    setDataForChildren(index, state, Qt::CheckStateRole);
 }
 
 void AbstractCheckableAlbumModel::setCheckStateForParents(Album *album, Qt::CheckState state)
 {
-    QModelIndex parent = indexForAlbum(album);
-    setDataForParents(parent, state, Qt::CheckStateRole);
+    QModelIndex index = indexForAlbum(album);
+    setDataForParents(index, state, Qt::CheckStateRole);
 }
 
 QVariant AbstractCheckableAlbumModel::albumData(Album *a, int role) const
@@ -898,6 +898,7 @@ bool AbstractCheckableAlbumModel::setData(const QModelIndex& index, const QVaria
         Album *album = albumForIndex(index);
         if (!album)
             return false;
+        //kDebug() << "Updating check state for album" << album->title() << "to" << value;
         m_checkedAlbums.insert(album, state);
         emit dataChanged(index, index);
         emit checkStateChanged(album, state);
@@ -909,7 +910,9 @@ bool AbstractCheckableAlbumModel::setData(const QModelIndex& index, const QVaria
 
 void AbstractCheckableAlbumModel::albumCleared(Album *album)
 {
-    m_checkedAlbums.remove(album);
+    // preserve check state if album is only being moved
+    if (!AlbumManager::instance()->isMovingAlbum(album))
+        m_checkedAlbums.remove(album);
     AbstractCountingAlbumModel::albumCleared(album);
 }
 

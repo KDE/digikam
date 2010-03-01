@@ -28,12 +28,14 @@
 
 #include "editortool.h"
 
+using namespace Digikam;
+
 namespace DigikamImagesPluginCore
 {
 
 class SharpenToolPriv;
 
-class SharpenTool : public Digikam::EditorToolThreaded
+class SharpenTool : public EditorToolThreaded
 {
     Q_OBJECT
 

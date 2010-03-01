@@ -27,17 +27,7 @@
 
 // Qt includes
 
-#include <QButtonGroup>
-#include <QCheckBox>
-#include <QColor>
-#include <QFrame>
-#include <QGridLayout>
-#include <QGroupBox>
-#include <QHBoxLayout>
 #include <QLabel>
-#include <QPixmap>
-#include <QPushButton>
-#include <QToolButton>
 
 // KDE includes
 
@@ -59,8 +49,8 @@
 
 // Local includes
 
+#include "dimg.h"
 #include "bcgsettings.h"
-#include "colorgradientwidget.h"
 #include "editortoolsettings.h"
 #include "histogrambox.h"
 #include "histogramwidget.h"
@@ -172,8 +162,8 @@ void BCGTool::slotResetSettings()
 
 void BCGTool::prepareEffect()
 {
-    QApplication::setOverrideCursor(Qt::WaitCursor);
-    d->bcgSettings->setEnabled(false);
+    kapp->setOverrideCursor(Qt::WaitCursor);
+    toolSettings()->setEnabled(false);
     toolView()->setEnabled(false);
 
     BCGContainer settings = d->bcgSettings->settings();
@@ -181,7 +171,7 @@ void BCGTool::prepareEffect()
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 
     DImg preview = d->previewWidget->getOriginalRegionImage(true);
-    setFilter(dynamic_cast<DImgThreadedFilter*>(new BCGFilter(&preview, this, settings)));
+    setFilter(new BCGFilter(&preview, this, settings));
 }
 
 void BCGTool::putPreviewData()
@@ -202,14 +192,13 @@ void BCGTool::putPreviewData()
 
 void BCGTool::prepareFinal()
 {
-    QApplication::setOverrideCursor(Qt::WaitCursor);
-    d->bcgSettings->setEnabled(false);
+    toolSettings()->setEnabled(false);
     toolView()->setEnabled(false);
 
     BCGContainer settings = d->bcgSettings->settings();
 
     ImageIface iface(0, 0);
-    setFilter(dynamic_cast<DImgThreadedFilter*>(new BCGFilter(iface.getOriginalImg(), this, settings)));
+    setFilter(new BCGFilter(iface.getOriginalImg(), this, settings));
 }
 
 void BCGTool::putFinalData()
@@ -220,8 +209,8 @@ void BCGTool::putFinalData()
 
 void BCGTool::renderingFinished()
 {
-    QApplication::restoreOverrideCursor();
-    d->bcgSettings->setEnabled(true);
+    kapp->restoreOverrideCursor();
+    toolSettings()->setEnabled(true);
     toolView()->setEnabled(true);
 }
 

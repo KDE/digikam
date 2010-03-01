@@ -191,4 +191,9 @@ void DateFolderView::changeAlbumFromHistory(SAlbum *album)
     d->dateTreeView->slotSelectAlbum(album);
 }
 
+AlbumPointer<DAlbum> DateFolderView::currentAlbum() const
+{
+    return AlbumPointer<DAlbum> (d->dateTreeView->currentAlbum());
+}
+
 }  // namespace Digikam

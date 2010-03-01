@@ -6,7 +6,7 @@
  * Date        : 2004-08-24
  * Description : a plugin to reduce CCD noise.
  *
- * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -25,37 +25,23 @@
 
 // Qt includes
 
-#include <QFile>
-#include <QImage>
 #include <QString>
-#include <QTextStream>
 
 // KDE includes
 
-#include <kaboutdata.h>
 #include <kapplication.h>
 #include <kconfig.h>
-#include <kfiledialog.h>
-#include <kglobal.h>
-#include <kglobalsettings.h>
-#include <kiconloader.h>
 #include <klocale.h>
-#include <kmessagebox.h>
-#include <kstandarddirs.h>
-#include <ktabwidget.h>
+#include <kiconloader.h>
 
 // Local includes
 
-#include "daboutdata.h"
 #include "dimg.h"
-#include "waveletsnr.h"
+#include "nrfilter.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imageregionwidget.h"
-#include "noisereductionsettings.h"
-#include "version.h"
-
-using namespace Digikam;
+#include "nrsettings.h"
 
 namespace DigikamImagesPluginCore
 {
@@ -71,11 +57,11 @@ public:
         gboxSettings(0)
         {}
 
-    const QString           configGroupName;
+    const QString       configGroupName;
 
-    NoiseReductionSettings* nrSettings;
-    ImageRegionWidget*      previewWidget;
-    EditorToolSettings*     gboxSettings;
+    NRSettings*         nrSettings;
+    ImageRegionWidget*  previewWidget;
+    EditorToolSettings* gboxSettings;
 };
 
 NoiseReductionTool::NoiseReductionTool(QObject* parent)
@@ -96,13 +82,13 @@ NoiseReductionTool::NoiseReductionTool(QObject* parent)
                                 EditorToolSettings::SaveAs|
                                 EditorToolSettings::Try);
 
-    d->nrSettings    = new NoiseReductionSettings(d->gboxSettings->plainPage());
+    d->nrSettings    = new NRSettings(d->gboxSettings->plainPage());
     d->previewWidget = new ImageRegionWidget;
-    
+
     setToolSettings(d->gboxSettings);
     setToolView(d->previewWidget);
     setPreviewModeMask(PreviewToolBar::AllPreviewModes);
-    
+
     init();
 }
 
@@ -140,24 +126,24 @@ void NoiseReductionTool::slotResetSettings()
 
 void NoiseReductionTool::prepareEffect()
 {
-    d->nrSettings->setEnabled(false);
+    toolSettings()->setEnabled(false);
     toolView()->setEnabled(false);
 
-    DImg image              = d->previewWidget->getOriginalRegionImage();
-    WaveletsNRContainer prm = d->nrSettings->settings();
+    DImg image      = d->previewWidget->getOriginalRegionImage();
+    NRContainer prm = d->nrSettings->settings();
 
-    setFilter(dynamic_cast<DImgThreadedFilter*>(new WaveletsNR(&image, this, prm)));
+    setFilter(new NRFilter(&image, this, prm));
 }
 
 void NoiseReductionTool::prepareFinal()
 {
-    d->nrSettings->setEnabled(false);
+    toolSettings()->setEnabled(false);
     toolView()->setEnabled(false);
 
-    WaveletsNRContainer prm = d->nrSettings->settings();
+    NRContainer prm = d->nrSettings->settings();
 
     ImageIface iface(0, 0);
-    setFilter(dynamic_cast<DImgThreadedFilter*>(new WaveletsNR(iface.getOriginalImg(), this, prm)));
+    setFilter(new NRFilter(iface.getOriginalImg(), this, prm));
 }
 
 void NoiseReductionTool::putPreviewData()

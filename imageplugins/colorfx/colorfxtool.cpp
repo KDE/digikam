@@ -61,21 +61,17 @@
 
 // Local includes
 
-#include "colorgradientwidget.h"
-#include "daboutdata.h"
 #include "dimg.h"
-#include "dimgimagefilters.h"
+#include "mixerfilter.h"
+#include "curvesfilter.h"
 #include "editortoolsettings.h"
 #include "histogrambox.h"
 #include "histogramwidget.h"
-#include "imagecurves.h"
 #include "imagehistogram.h"
 #include "imageiface.h"
 #include "imageguidewidget.h"
-#include "version.h"
 
 using namespace KDcrawIface;
-using namespace Digikam;
 
 namespace DigikamColorFXImagesPlugin
 {
@@ -103,26 +99,26 @@ public:
         gboxSettings(0)
         {}
 
-    const QString        configGroupName;
-    const QString        configHistogramChannelEntry;
-    const QString        configHistogramScaleEntry;
-    const QString        configEffectTypeEntry;
-    const QString        configLevelAdjustmentEntry;
-    const QString        configIterationAdjustmentEntry;
+    const QString       configGroupName;
+    const QString       configHistogramChannelEntry;
+    const QString       configHistogramScaleEntry;
+    const QString       configEffectTypeEntry;
+    const QString       configLevelAdjustmentEntry;
+    const QString       configIterationAdjustmentEntry;
 
-    uchar*               destinationPreviewData;
+    uchar*              destinationPreviewData;
 
-    QLabel*              effectTypeLabel;
-    QLabel*              levelLabel;
-    QLabel*              iterationLabel;
+    QLabel*             effectTypeLabel;
+    QLabel*             levelLabel;
+    QLabel*             iterationLabel;
 
-    RComboBox*           effectType;
+    RComboBox*          effectType;
 
-    RIntNumInput*        levelInput;
-    RIntNumInput*        iterationInput;
+    RIntNumInput*       levelInput;
+    RIntNumInput*       iterationInput;
 
-    ImageGuideWidget*    previewWidget;
-    EditorToolSettings*  gboxSettings;
+    ImageGuideWidget*   previewWidget;
+    EditorToolSettings* gboxSettings;
 };
 
 ColorFXTool::ColorFXTool(QObject* parent)
@@ -132,8 +128,6 @@ ColorFXTool::ColorFXTool(QObject* parent)
     setObjectName("coloreffects");
     setToolName(i18n("Color Effects"));
     setToolIcon(SmallIcon("colorfx"));
-
-    d->destinationPreviewData = 0;
 
     // -------------------------------------------------------------
 
@@ -200,8 +194,8 @@ ColorFXTool::ColorFXTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget( const Digikam::DColor &, const QPoint & )),
-            this, SLOT(slotColorSelectedFromTarget( const Digikam::DColor & )));
+    connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget(const Digikam::DColor&, const QPoint&)),
+            this, SLOT(slotColorSelectedFromTarget(const Digikam::DColor&)));
 
     connect(d->levelInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));
@@ -272,7 +266,7 @@ void ColorFXTool::slotResetSettings()
     slotEffect();
 }
 
-void ColorFXTool::slotColorSelectedFromTarget( const DColor& color )
+void ColorFXTool::slotColorSelectedFromTarget(const DColor& color)
 {
     d->gboxSettings->histogramBox()->histogram()->setHistogramGuideByColor(color);
 }
@@ -392,7 +386,7 @@ void ColorFXTool::finalRendering()
     kapp->restoreOverrideCursor();
 }
 
-void ColorFXTool::colorEffect(uchar *data, int w, int h, bool sb)
+void ColorFXTool::colorEffect(uchar* data, int w, int h, bool sb)
 {
     switch (d->effectType->currentIndex())
     {
@@ -496,52 +490,54 @@ void ColorFXTool::solarize(int factor, uchar *data, int w, int h, bool sb)
     }
 }
 
-void ColorFXTool::vivid(int factor, uchar *data, int w, int h, bool sb)
+void ColorFXTool::vivid(int factor, uchar* data, int w, int h, bool sb)
 {
     float amount = factor/100.0;
 
-    DImgImageFilters filter;
-
     // Apply Channel Mixer adjustments.
-
-    filter.channelMixerImage(
-                             data, w, h, sb,                       // Image data.
-                             true,                                 // Preserve Luminosity
-                             false,                                // Disable Black & White mode.
-                             1.0 + amount + amount, (-1.0)*amount, (-1.0)*amount, // Red Gains.
-                             (-1.0)*amount, 1.0 + amount + amount, (-1.0)*amount, // Green Gains.
-                             (-1.0)*amount, (-1.0)*amount, 1.0 + amount + amount  // Blue Gains.
-                            );
-
-    // Allocate the destination image data.
-
-    uchar *dest = new uchar[w*h*(sb ? 8 : 4)];
-
+    
+    MixerContainer settings;
+    settings.redRedGain     = 1.0 + amount + amount;
+    settings.redGreenGain   = (-1.0)*amount;
+    settings.redBlueGain    = (-1.0)*amount;
+    settings.greenRedGain   = (-1.0)*amount;
+    settings.greenGreenGain = 1.0 + amount + amount;
+    settings.greenBlueGain  = (-1.0)*amount;
+    settings.blueRedGain    = (-1.0)*amount;
+    settings.blueGreenGain  = (-1.0)*amount;
+    settings.blueBlueGain   = 1.0 + amount + amount;
+   
+    DImg img(w, h, sb, true, data);
+    MixerFilter mixer(&img, 0L, settings);
+    mixer.startFilterDirectly();
+    DImg mixed = mixer.getTargetImage();
+    
     // And now apply the curve correction.
 
-    ImageCurves Curves(sb);
-
+    CurvesContainer prm;
+    prm.curvesType = ImageCurves::CURVE_SMOOTH;
+    prm.lumCurveVals.resize(18);
+    
     if (!sb)        // 8 bits image.
     {
-        Curves.setCurvePoint(LuminosityChannel, 0,  QPoint(0,   0));
-        Curves.setCurvePoint(LuminosityChannel, 5,  QPoint(63,  60));
-        Curves.setCurvePoint(LuminosityChannel, 10, QPoint(191, 194));
-        Curves.setCurvePoint(LuminosityChannel, 16, QPoint(255, 255));
+        prm.lumCurveVals.setPoint(0,  QPoint(0,   0));
+        prm.lumCurveVals.setPoint(5,  QPoint(63,  60));
+        prm.lumCurveVals.setPoint(10, QPoint(191, 194));
+        prm.lumCurveVals.setPoint(16, QPoint(255, 255));
     }
-    else                    // 16 bits image.
+    else            // 16 bits image.
     {
-        Curves.setCurvePoint(LuminosityChannel, 0,  QPoint(0,     0));
-        Curves.setCurvePoint(LuminosityChannel, 5,  QPoint(16128, 15360));
-        Curves.setCurvePoint(LuminosityChannel, 10, QPoint(48896, 49664));
-        Curves.setCurvePoint(LuminosityChannel, 16, QPoint(65535, 65535));
-   }
+        prm.lumCurveVals.setPoint(0,  QPoint(0,     0));
+        prm.lumCurveVals.setPoint(5,  QPoint(16128, 15360));
+        prm.lumCurveVals.setPoint(10, QPoint(48896, 49664));
+        prm.lumCurveVals.setPoint(16, QPoint(65535, 65535));
+    }
 
-    Curves.curvesCalculateCurve(AlphaChannel);   // Calculate cure on all channels.
-    Curves.curvesLutSetup(AlphaChannel);         // ... and apply it on all channels
-    Curves.curvesLutProcess(data, dest, w, h);
+    CurvesFilter curves(&mixed, 0L, prm);
+    curves.startFilterDirectly();
+    DImg tgt = curves.getTargetImage();    
 
-    memcpy(data, dest, w*h*(sb ? 8 : 4));
-    delete [] dest;
+    memcpy(data, tgt.bits(), tgt.numBytes());    
 }
 
 /* Function to apply the Neon effect
@@ -556,7 +552,7 @@ void ColorFXTool::vivid(int factor, uchar *data, int w, int h, bool sb)
  *                     like this on PSC. Is very similar to Growing Edges (photoshop)
  *                     Some pictures will be very interesting
  */
-void ColorFXTool::neon(uchar *data, int w, int h, bool sb, int Intensity, int BW)
+void ColorFXTool::neon(uchar* data, int w, int h, bool sb, int Intensity, int BW)
 {
     neonFindEdges(data, w, h, sb, true, Intensity, BW);
 }
@@ -573,13 +569,13 @@ void ColorFXTool::neon(uchar *data, int w, int h, bool sb, int Intensity, int BW
  *                     Neon effect ? This is the same engine, but is inversed with
  *                     255 - color.
  */
-void ColorFXTool::findEdges(uchar *data, int w, int h, bool sb, int Intensity, int BW)
+void ColorFXTool::findEdges(uchar* data, int w, int h, bool sb, int Intensity, int BW)
 {
     neonFindEdges(data, w, h, sb, false, Intensity, BW);
 }
 
 // Implementation of neon and FindEdges. They share 99% of their code.
-void ColorFXTool::neonFindEdges(uchar *data, int w, int h, bool sb, bool neon, int Intensity, int BW)
+void ColorFXTool::neonFindEdges(uchar* data, int w, int h, bool sb, bool neon, int Intensity, int BW)
 {
     int Width       = w;
     int Height      = h;

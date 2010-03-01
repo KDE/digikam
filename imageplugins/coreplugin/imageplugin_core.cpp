@@ -56,9 +56,12 @@
 #include "sharpentool.h"
 #include "redeyetool.h"
 #include "cbtool.h"
+#include "whitebalancetool.h"
+#include "channelmixertool.h"
+#include "adjustcurvestool.h"
+#include "adjustlevelstool.h"
 
 using namespace DigikamImagesPluginCore;
-using namespace Digikam;
 
 K_PLUGIN_FACTORY( CorePluginFactory, registerPlugin<ImagePlugin_Core>(); )
 K_EXPORT_PLUGIN ( CorePluginFactory("digikamimageplugin_core") )
@@ -83,6 +86,10 @@ public:
         convertTo8Bits(0),
         convertTo16Bits(0),
         noiseReductionAction(0),
+        whitebalanceAction(0),
+        channelMixerAction(0),
+        curvesAction(0),
+        levelsAction(0),
         profileMenuAction(0)
         {}
 
@@ -100,6 +107,11 @@ public:
     KAction*               convertTo8Bits;
     KAction*               convertTo16Bits;
     KAction*               noiseReductionAction;
+    KAction*               whitebalanceAction;
+    KAction*               channelMixerAction;
+    KAction*               curvesAction;
+    KAction*               levelsAction;
+
     IccProfilesMenuAction* profileMenuAction;
 };
 
@@ -153,22 +165,46 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QVariantList &)
     connect(d->convertTo16Bits, SIGNAL(triggered(bool) ),
             this, SLOT(slotConvertTo16Bits()));
 
-    /*
-    d->colorManagementAction = new KAction(KIcon("colormanagement"), i18n("Color Management..."), this);
-    actionCollection()->addAction("implugcore_colormanagement", d->colorManagementAction );
-    connect(d->colorManagementAction, SIGNAL(triggered(bool) ),
-            this, SLOT(slotColorManagement()));
-    */
     d->profileMenuAction = new IccProfilesMenuAction(KIcon("colormanagement"), i18n("Color Space Conversion"), this);
     actionCollection()->addAction("implugcore_colormanagement", d->profileMenuAction );
-    connect(d->profileMenuAction, SIGNAL(triggered(const IccProfile &)),
-            this, SLOT(slotConvertToColorSpace(const IccProfile &)));
+    connect(d->profileMenuAction, SIGNAL(triggered(const IccProfile&)),
+            this, SLOT(slotConvertToColorSpace(const IccProfile&)));
 
     connect(IccSettings::instance(), SIGNAL(settingsChanged()),
             this, SLOT(slotUpdateColorSpaceMenu()));
 
     slotUpdateColorSpaceMenu();
 
+    d->BWAction = new KAction(KIcon("bwtonal"), i18n("Black && White..."), this);
+    actionCollection()->addAction("implugcore_blackwhite", d->BWAction );
+    connect(d->BWAction, SIGNAL(triggered(bool) ),
+            this, SLOT(slotBW()));
+
+    d->whitebalanceAction = new KAction(KIcon("whitebalance"), i18n("White Balance..."), this);
+    d->whitebalanceAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_W));
+    actionCollection()->addAction("implugcore_whitebalance", d->whitebalanceAction );
+    connect(d->whitebalanceAction, SIGNAL(triggered(bool) ),
+            this, SLOT(slotWhiteBalance()));
+
+    d->channelMixerAction = new KAction(KIcon("channelmixer"), i18n("Channel Mixer..."), this);
+    d->channelMixerAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_H));
+    actionCollection()->addAction("implugcore_channelmixer", d->channelMixerAction );
+    connect(d->channelMixerAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotChannelMixer()));
+
+    d->curvesAction = new KAction(KIcon("adjustcurves"), i18n("Curves Adjust..."), this);
+    // NOTE: Photoshop 7 use CTRL+M (but it's used in KDE to toogle menu bar).
+    d->curvesAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_M));
+    actionCollection()->addAction("implugcore_adjustcurves", d->curvesAction);
+    connect(d->curvesAction, SIGNAL(triggered(bool) ),
+            this, SLOT(slotCurvesAdjust()));
+
+    d->levelsAction  = new KAction(KIcon("adjustlevels"), i18n("Levels Adjust..."), this);
+    d->levelsAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_L));
+    actionCollection()->addAction("implugcore_adjustlevels", d->levelsAction );
+    connect(d->levelsAction, SIGNAL(triggered(bool) ),
+            this, SLOT(slotLevelsAdjust()));
+            
     //-------------------------------
     // Enhance menu actions
 
@@ -193,14 +229,6 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QVariantList &)
     actionCollection()->addAction("implugcore_noisereduction", d->noiseReductionAction );
     connect(d->noiseReductionAction, SIGNAL(triggered(bool)),
             this, SLOT(slotNoiseReduction()));
-
-    //-------------------------------
-    // Filters menu actions.
-
-    d->BWAction = new KAction(KIcon("bwtonal"), i18n("Black && White..."), this);
-    actionCollection()->addAction("implugcore_blackwhite", d->BWAction );
-    connect(d->BWAction, SIGNAL(triggered(bool) ),
-            this, SLOT(slotBW()));
 
     //-------------------------------
     // Transform menu actions.
@@ -250,6 +278,10 @@ void ImagePlugin_Core::setEnabledActions(bool b)
     d->resizeAction->setEnabled(b);
     d->profileMenuAction->setEnabled(b);
     d->noiseReductionAction->setEnabled(b);
+    d->whitebalanceAction->setEnabled(b);
+    d->channelMixerAction->setEnabled(b);
+    d->curvesAction->setEnabled(b);
+    d->levelsAction->setEnabled(b);
 }
 
 void ImagePlugin_Core::slotInvert()
@@ -258,7 +290,7 @@ void ImagePlugin_Core::slotInvert()
 
     ImageIface iface(0, 0);
 
-    uchar *data     = iface.getOriginalImage();
+    uchar* data     = iface.getOriginalImage();
     int w           = iface.originalWidth();
     int h           = iface.originalHeight();
     bool sixteenBit = iface.originalSixteenBit();
@@ -313,25 +345,25 @@ void ImagePlugin_Core::slotConvertTo16Bits()
 
 void ImagePlugin_Core::slotBCG()
 {
-    BCGTool *tool = new BCGTool(this);
+    BCGTool* tool = new BCGTool(this);
     loadTool(tool);
 }
 
 void ImagePlugin_Core::slotCB()
 {
-    CBTool *tool = new CBTool(this);
+    CBTool* tool = new CBTool(this);
     loadTool(tool);
 }
 
 void ImagePlugin_Core::slotBlur()
 {
-    BlurTool *tool = new BlurTool(this);
+    BlurTool* tool = new BlurTool(this);
     loadTool(tool);
 }
 
 void ImagePlugin_Core::slotAutoCorrection()
 {
-    AutoCorrectionTool *tool = new AutoCorrectionTool(this);
+    AutoCorrectionTool* tool = new AutoCorrectionTool(this);
     loadTool(tool);
 }
 
@@ -351,17 +383,9 @@ void ImagePlugin_Core::slotRedEye()
         return;
     }
 
-    RedEyeTool *tool = new RedEyeTool(this);
+    RedEyeTool* tool = new RedEyeTool(this);
     loadTool(tool);
 }
-
-/*
-void ImagePlugin_Core::slotColorManagement()
-{
-    ICCProofTool *tool = new ICCProofTool(this);
-    loadTool(tool);
-}
-*/
 
 void ImagePlugin_Core::slotConvertToColorSpace(const IccProfile& profile)
 {
@@ -384,7 +408,7 @@ void ImagePlugin_Core::slotUpdateColorSpaceMenu()
 
     if (!IccSettings::instance()->isEnabled())
     {
-        KAction *action = new KAction(i18n("Color Management is disabled..."), this);
+        KAction* action = new KAction(i18n("Color Management is disabled..."), this);
         d->profileMenuAction->addAction(action);
 
         connect(action, SIGNAL(triggered()),
@@ -413,11 +437,11 @@ void ImagePlugin_Core::slotUpdateColorSpaceMenu()
     favoriteProfilePaths -= standardProfilePaths;
     foreach (const QString &path, favoriteProfilePaths)
         favoriteProfiles << path;
-    d->profileMenuAction->addProfiles(favoriteProfiles);
 
+    d->profileMenuAction->addProfiles(favoriteProfiles);
     d->profileMenuAction->addSeparator();
 
-    KAction *moreAction = new KAction(i18n("Other..."), this);
+    KAction* moreAction = new KAction(i18n("Other..."), this);
     d->profileMenuAction->addAction(moreAction);
     connect(moreAction, SIGNAL(triggered()),
             this, SLOT(slotProfileConversionTool()));
@@ -430,43 +454,67 @@ void ImagePlugin_Core::slotSetupICC()
 
 void ImagePlugin_Core::slotProfileConversionTool()
 {
-    ProfileConversionTool *tool = new ProfileConversionTool(this);
+    ProfileConversionTool* tool = new ProfileConversionTool(this);
     connect(tool, SIGNAL(okClicked()), this, SLOT(slotUpdateColorSpaceMenu()));
     loadTool(tool);
 }
 
 void ImagePlugin_Core::slotBW()
 {
-    BWSepiaTool *tool = new BWSepiaTool(this);
+    BWSepiaTool* tool = new BWSepiaTool(this);
     loadTool(tool);
 }
 
 void ImagePlugin_Core::slotHSL()
 {
-    HSLTool *tool = new HSLTool(this);
+    HSLTool* tool = new HSLTool(this);
     loadTool(tool);
 }
 
 void ImagePlugin_Core::slotSharpen()
 {
-    SharpenTool *tool = new SharpenTool(this);
+    SharpenTool* tool = new SharpenTool(this);
     loadTool(tool);
 }
 
 void ImagePlugin_Core::slotRatioCrop()
 {
-    RatioCropTool *tool = new RatioCropTool(this);
+    RatioCropTool* tool = new RatioCropTool(this);
     loadTool(tool);
 }
 
 void ImagePlugin_Core::slotResize()
 {
-    ResizeTool *tool = new ResizeTool(this);
+    ResizeTool* tool = new ResizeTool(this);
     loadTool(tool);
 }
 
 void ImagePlugin_Core::slotNoiseReduction()
 {
-    NoiseReductionTool *tool = new NoiseReductionTool(this);
+    NoiseReductionTool* tool = new NoiseReductionTool(this);
+    loadTool(tool);
+}
+
+void ImagePlugin_Core::slotWhiteBalance()
+{
+    WhiteBalanceTool* tool = new WhiteBalanceTool(this);
+    loadTool(tool);
+}
+
+void ImagePlugin_Core::slotChannelMixer()
+{
+    ChannelMixerTool* tool = new ChannelMixerTool(this);
+    loadTool(tool);
+}
+
+void ImagePlugin_Core::slotCurvesAdjust()
+{
+    AdjustCurvesTool* tool = new AdjustCurvesTool(this);
+    loadTool(tool);
+}
+
+void ImagePlugin_Core::slotLevelsAdjust()
+{
+    AdjustLevelsTool* tool = new AdjustLevelsTool(this);
     loadTool(tool);
 }
