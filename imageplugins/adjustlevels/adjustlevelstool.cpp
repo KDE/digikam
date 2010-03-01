@@ -44,18 +44,15 @@
 
 // KDE includes
 
-#include <kaboutdata.h>
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kcursor.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
-#include <khelpmenu.h>
 #include <kicon.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kmenu.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 
@@ -65,10 +62,8 @@
 
 // Local includes
 
-#include "daboutdata.h"
 #include "dgradientslider.h"
 #include "dimg.h"
-#include "dimgimagefilters.h"
 #include "editortoolsettings.h"
 #include "histogrambox.h"
 #include "histogramwidget.h"
@@ -76,10 +71,8 @@
 #include "imageiface.h"
 #include "imagelevels.h"
 #include "imageguidewidget.h"
-#include "version.h"
 
 using namespace KDcrawIface;
-using namespace Digikam;
 
 namespace DigikamAdjustLevelsImagesPlugin
 {
@@ -122,49 +115,49 @@ public:
         gboxSettings(0)
         {}
 
-    const QString        configGroupName;
-    const QString        configGammaChannelEntry;
-    const QString        configLowInputChannelEntry;
-    const QString        configLowOutputChannelEntry;
-    const QString        configHighInputChannelEntry;
-    const QString        configHighOutputChannelEntry;
-    const QString        configHistogramChannelEntry;
-    const QString        configHistogramScaleEntry;
+    const QString       configGroupName;
+    const QString       configGammaChannelEntry;
+    const QString       configLowInputChannelEntry;
+    const QString       configLowOutputChannelEntry;
+    const QString       configHighInputChannelEntry;
+    const QString       configHighOutputChannelEntry;
+    const QString       configHistogramChannelEntry;
+    const QString       configHistogramScaleEntry;
 
-    uchar*               destinationPreviewData;
+    uchar*              destinationPreviewData;
 
-    int                  histoSegments;
-    int                  currentPreviewMode;
+    int                 histoSegments;
+    int                 currentPreviewMode;
 
-    QWidget*             pickerBox;
+    QWidget*            pickerBox;
 
-    QPushButton*         resetButton;
-    QToolButton*         autoButton;
-    QToolButton*         pickBlack;
-    QToolButton*         pickGray;
-    QToolButton*         pickWhite;
+    QPushButton*        resetButton;
+    QToolButton*        autoButton;
+    QToolButton*        pickBlack;
+    QToolButton*        pickGray;
+    QToolButton*        pickWhite;
 
-    QButtonGroup*        pickerColorButtonGroup;
+    QButtonGroup*       pickerColorButtonGroup;
 
-    RIntNumInput*        minInput;
-    RIntNumInput*        maxInput;
-    RIntNumInput*        minOutput;
-    RIntNumInput*        maxOutput;
+    RIntNumInput*       minInput;
+    RIntNumInput*       maxInput;
+    RIntNumInput*       minOutput;
+    RIntNumInput*       maxOutput;
 
-    RDoubleNumInput*     gammaInput;
+    RDoubleNumInput*    gammaInput;
 
-    HistogramWidget*     levelsHistogramWidget;
+    HistogramWidget*    levelsHistogramWidget;
 
-    DGradientSlider*     inputLevels;
-    DGradientSlider*     outputLevels;
+    DGradientSlider*    inputLevels;
+    DGradientSlider*    outputLevels;
 
-    ImageGuideWidget*    previewWidget;
+    ImageGuideWidget*   previewWidget;
 
-    ImageLevels*         levels;
+    ImageLevels*        levels;
 
-    DImg*                originalImage;
+    DImg*               originalImage;
 
-    EditorToolSettings*  gboxSettings;
+    EditorToolSettings* gboxSettings;
 };
 
 AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
@@ -174,8 +167,6 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
     setObjectName("adjustlevels");
     setToolName(i18n("Adjust Levels"));
     setToolIcon(SmallIcon("adjustlevels"));
-
-    d->destinationPreviewData = 0;
 
     ImageIface iface(0, 0);
     d->originalImage = iface.getOriginalImg();
@@ -414,7 +405,9 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
 
 AdjustLevelsTool::~AdjustLevelsTool()
 {
-    delete [] d->destinationPreviewData;
+    if (d->destinationPreviewData)
+       delete [] d->destinationPreviewData;
+    
     delete d->levels;
     delete d;
 }
@@ -461,7 +454,7 @@ void AdjustLevelsTool::slotSpotColorChanged(const DColor& color)
     slotEffect();
 }
 
-void AdjustLevelsTool::slotColorSelectedFromTarget( const DColor& color )
+void AdjustLevelsTool::slotColorSelectedFromTarget(const DColor& color)
 {
     d->gboxSettings->histogramBox()->histogram()->setHistogramGuideByColor(color);
 }
@@ -575,7 +568,7 @@ void AdjustLevelsTool::slotAutoLevels()
 void AdjustLevelsTool::slotEffect()
 {
     ImageIface* iface = d->previewWidget->imageIface();
-    uchar *orgData    = iface->getPreviewImage();
+    uchar* orgData    = iface->getPreviewImage();
     int w             = iface->previewWidth();
     int h             = iface->previewHeight();
     bool sb           = iface->previewSixteenBit();
@@ -607,7 +600,7 @@ void AdjustLevelsTool::finalRendering()
 {
     kapp->setOverrideCursor( Qt::WaitCursor );
     ImageIface* iface = d->previewWidget->imageIface();
-    uchar *orgData    = iface->getOriginalImage();
+    uchar* orgData    = iface->getOriginalImage();
     int w             = iface->originalWidth();
     int h             = iface->originalHeight();
     bool sb           = iface->originalSixteenBit();
