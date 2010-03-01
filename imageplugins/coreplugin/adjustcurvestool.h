@@ -49,6 +49,18 @@ public:
     AdjustCurvesTool(QObject* parent);
     ~AdjustCurvesTool();
 
+private Q_SLOTS:
+
+    void slotSaveAsSettings();
+    void slotLoadSettings();
+    void slotResetSettings();
+    void slotPickerColorButtonActived(int);
+    void slotSpotColorChanged();
+    void slotColorSelectedFromTarget(const Digikam::DColor& color);
+    void slotResetCurrentChannel();
+    void slotChannelChanged();
+    void slotScaleChanged();
+
 private:
 
     void readSettings();
@@ -59,18 +71,6 @@ private:
     void putPreviewData();
     void putFinalData();
     void renderingFinished();    
-
-private Q_SLOTS:
-
-    void slotResetSettings();
-    void slotSaveAsSettings();
-    void slotLoadSettings();
-    void slotResetCurrentChannel();
-    void slotSpotColorChanged(const Digikam::DColor& color);
-    void slotColorSelectedFromTarget(const Digikam::DColor& color);
-    void slotPickerColorButtonActived(int);
-    void slotChannelChanged();
-    void slotScaleChanged();
 
 private:
 

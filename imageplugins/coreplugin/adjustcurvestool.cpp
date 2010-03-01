@@ -47,27 +47,22 @@
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kcursor.h>
-#include <kfiledialog.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <kicon.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kmessagebox.h>
 #include <kselector.h>
 #include <kstandarddirs.h>
 
 // Local includes
 
-#include "colorgradientwidget.h"
-#include "curveswidget.h"
-#include "curvesbox.h"
 #include "dimg.h"
-#include "dimgimagefilters.h"
 #include "editortoolsettings.h"
 #include "histogrambox.h"
 #include "histogramwidget.h"
 #include "curvesfilter.h"
+#include "curvessettings.h"
 #include "imagehistogram.h"
 #include "imagecurves.h"
 #include "imageiface.h"
@@ -84,10 +79,8 @@ public:
         configGroupName("adjustcurves Tool"),
         configHistogramChannelEntry("Histogram Channel"),
         configHistogramScaleEntry("Histogram Scale"),
-        configCurveEntry("AdjustCurves"),
         destinationPreviewData(0),
-        histoSegments(0),
-        curvesBox(0),
+        settingsView(0),
         previewWidget(0),
         gboxSettings(0)
         {}
@@ -95,13 +88,10 @@ public:
     const QString       configGroupName;
     const QString       configHistogramChannelEntry;
     const QString       configHistogramScaleEntry;
-    const QString       configCurveEntry;
 
     uchar*              destinationPreviewData;
 
-    int                 histoSegments;
-
-    CurvesBox*          curvesBox;
+    CurvesSettings*     settingsView;
     ImageRegionWidget*  previewWidget;
 
     EditorToolSettings* gboxSettings;
@@ -114,10 +104,6 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
     setObjectName("adjustcurves");
     setToolName(i18n("Adjust Curves"));
     setToolIcon(SmallIcon("adjustcurves"));
-
-    ImageIface iface(0, 0);
-    DImg *originalImage = iface.getOriginalImg();
-    d->histoSegments    = originalImage->sixteenBit() ? 65535 : 255;
 
     // -------------------------------------------------------------
 
@@ -142,42 +128,34 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->curvesBox = new CurvesBox(256, 256, originalImage->bits(), originalImage->width(),
-                                 originalImage->height(), originalImage->sixteenBit());
-
-    d->curvesBox->enableGradients(true);
-    d->curvesBox->enableControlWidgets(true);
-
-    // -------------------------------------------------------------
-
-    QGridLayout* grid = new QGridLayout();
-    grid->addWidget(d->curvesBox, 0, 0, 1, 1);
-    grid->setRowStretch(1, 10);
-    grid->setMargin(0);
-    grid->setSpacing(d->gboxSettings->spacingHint());
-    d->gboxSettings->plainPage()->setLayout(grid);
-
-    // -------------------------------------------------------------
-
+    ImageIface iface(0, 0);
+    d->settingsView = new CurvesSettings(d->gboxSettings->plainPage(), iface.getOriginalImg());
+        
     setToolSettings(d->gboxSettings);
     init();
 
     // -------------------------------------------------------------
 
-    connect(d->curvesBox, SIGNAL(signalCurvesChanged()),
+    connect(d->settingsView, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotTimer()));
+            
+    connect(d->gboxSettings, SIGNAL(signalChannelChanged()),
+            this, SLOT(slotChannelChanged()));
 
-    connect(d->curvesBox, SIGNAL(signalChannelReset(int)),
-            this, SLOT(slotResetCurrentChannel()));
-
-    connect(d->curvesBox, SIGNAL(signalPickerChanged(int)),
-            this, SLOT(slotPickerColorButtonActived(int)));
-
+    connect(d->gboxSettings, SIGNAL(signalScaleChanged()),
+            this, SLOT(slotScaleChanged()));
+            
     connect(d->previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));
 
     connect(d->previewWidget, SIGNAL(signalCapturedPointFromOriginal(const Digikam::DColor&, const QPoint&)),
-            this, SLOT(slotSpotColorChanged(const Digikam::DColor&)));
+            d->settingsView, SLOT(slotSpotColorChanged(const Digikam::DColor&)));
+
+    connect(d->settingsView, SIGNAL(signalSpotColorChanged()),
+            this, SLOT(slotSpotColorChanged()));          
+            
+    connect(d->settingsView, SIGNAL(signalChannelReset(int)),
+            this, SLOT(slotResetCurrentChannel())); 
 
 /*
     connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget(const Digikam::DColor&, const QPoint&)),
@@ -193,17 +171,6 @@ AdjustCurvesTool::~AdjustCurvesTool()
     delete d;
 }
 
-void AdjustCurvesTool::slotChannelChanged()
-{
-    d->curvesBox->setChannel(d->gboxSettings->histogramBox()->channel());
-    d->gboxSettings->histogramBox()->slotChannelChanged();
-}
-
-void AdjustCurvesTool::slotScaleChanged()
-{
-    d->curvesBox->setScale(d->gboxSettings->histogramBox()->scale());
-}
-
 void AdjustCurvesTool::slotPickerColorButtonActived(int type)
 {
     if (type == CurvesBox::NoPicker) return;
@@ -211,60 +178,9 @@ void AdjustCurvesTool::slotPickerColorButtonActived(int type)
     d->previewWidget->setCapturePointMode(true);
 }
 
-void AdjustCurvesTool::slotSpotColorChanged(const DColor& color)
+void AdjustCurvesTool::slotSpotColorChanged()
 {
-    DColor sc = color;
-
-    switch (d->curvesBox->picker())
-    {
-        case CurvesBox::BlackTonal:
-        {
-            // Black tonal curves point.
-            d->curvesBox->curves()->setCurvePoint(LuminosityChannel, 1,
-                    QPoint(qMax(qMax(sc.red(), sc.green()), sc.blue()), 42*d->histoSegments/256));
-            d->curvesBox->curves()->setCurvePoint(RedChannel, 1, QPoint(sc.red(), 42*d->histoSegments/256));
-            d->curvesBox->curves()->setCurvePoint(GreenChannel, 1, QPoint(sc.green(), 42*d->histoSegments/256));
-            d->curvesBox->curves()->setCurvePoint(BlueChannel, 1, QPoint(sc.blue(), 42*d->histoSegments/256));
-            d->curvesBox->resetPickers();
-            break;
-        }
-        case CurvesBox::GrayTonal:
-        {
-            // Gray tonal curves point.
-            d->curvesBox->curves()->setCurvePoint(LuminosityChannel, 8,
-                    QPoint(qMax(qMax(sc.red(), sc.green()), sc.blue()), 128*d->histoSegments/256));
-            d->curvesBox->curves()->setCurvePoint(RedChannel, 8, QPoint(sc.red(), 128*d->histoSegments/256));
-            d->curvesBox->curves()->setCurvePoint(GreenChannel, 8, QPoint(sc.green(), 128*d->histoSegments/256));
-            d->curvesBox->curves()->setCurvePoint(BlueChannel, 8, QPoint(sc.blue(), 128*d->histoSegments/256));
-            d->curvesBox->resetPickers();
-            break;
-        }
-        case CurvesBox::WhiteTonal:
-        {
-            // White tonal curves point.
-            d->curvesBox->curves()->setCurvePoint(LuminosityChannel, 15,
-                    QPoint(qMax(qMax(sc.red(), sc.green()), sc.blue()), 213*d->histoSegments/256));
-            d->curvesBox->curves()->setCurvePoint(RedChannel, 15, QPoint(sc.red(), 213*d->histoSegments/256));
-            d->curvesBox->curves()->setCurvePoint(GreenChannel, 15, QPoint(sc.green(), 213*d->histoSegments/256));
-            d->curvesBox->curves()->setCurvePoint(BlueChannel, 15, QPoint(sc.blue(), 213*d->histoSegments/256));
-            d->curvesBox->resetPickers();
-            break;
-        }
-        default:
-        {
-            d->curvesBox->setCurveGuide(color);
-            return;
-        }
-    }
-
-    // Calculate Red, green, blue curves.
-
-    for (int i = LuminosityChannel ; i <= BlueChannel ; ++i)
-       d->curvesBox->curves()->curvesCalculateCurve(i);
-
-    d->curvesBox->repaint();
     d->previewWidget->setCapturePointMode(false);
-
     slotEffect();
 }
 
@@ -275,8 +191,18 @@ void AdjustCurvesTool::slotColorSelectedFromTarget(const DColor& color)
 
 void AdjustCurvesTool::slotResetCurrentChannel()
 {
-    slotEffect();
     d->gboxSettings->histogramBox()->histogram()->reset();
+    slotEffect();
+}
+
+void AdjustCurvesTool::slotChannelChanged()
+{
+    d->settingsView->setChannel(d->gboxSettings->histogramBox()->channel());
+}
+
+void AdjustCurvesTool::slotScaleChanged()
+{
+    d->settingsView->setScale(d->gboxSettings->histogramBox()->scale());
 }
 
 void AdjustCurvesTool::readSettings()
@@ -284,18 +210,16 @@ void AdjustCurvesTool::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
 
-    d->curvesBox->reset();
-    d->curvesBox->readCurveSettings(group, d->configCurveEntry);
-
     // we need to call the set methods here, otherwise the curve will not be updated correctly
     d->gboxSettings->histogramBox()->setChannel((ChannelType)group.readEntry(d->configHistogramChannelEntry,
                     (int)LuminosityChannel));
     d->gboxSettings->histogramBox()->setScale((HistogramScale)group.readEntry(d->configHistogramScaleEntry,
                     (int)LogScaleHistogram));
 
-    d->curvesBox->setScale(d->gboxSettings->histogramBox()->scale());
-    d->curvesBox->setChannel(d->gboxSettings->histogramBox()->channel());
-    d->curvesBox->update();
+    d->settingsView->readSettings(group);
+
+    slotScaleChanged();
+    slotChannelChanged();
 
     slotEffect();
 }
@@ -307,17 +231,15 @@ void AdjustCurvesTool::writeSettings()
     group.writeEntry(d->configHistogramChannelEntry, (int)d->gboxSettings->histogramBox()->channel());
     group.writeEntry(d->configHistogramScaleEntry,   (int)d->gboxSettings->histogramBox()->scale());
 
-    d->curvesBox->writeCurveSettings(group, d->configCurveEntry);
+    d->settingsView->writeSettings(group);
 
     config->sync();
 }
 
 void AdjustCurvesTool::slotResetSettings()
 {
-    d->curvesBox->resetChannels();
-    d->curvesBox->resetPickers();
+    d->settingsView->resetToDefault();
     d->gboxSettings->histogramBox()->histogram()->reset();
-
     slotEffect();
 }
 
@@ -327,12 +249,7 @@ void AdjustCurvesTool::prepareEffect()
     toolSettings()->setEnabled(false);
     toolView()->setEnabled(false);
 
-    CurvesContainer settings;
-    settings.lumCurveVals   = d->curvesBox->curves()->getCurveValues(LuminosityChannel);
-    settings.redCurveVals   = d->curvesBox->curves()->getCurveValues(RedChannel);
-    settings.greenCurveVals = d->curvesBox->curves()->getCurveValues(GreenChannel);
-    settings.blueCurveVals  = d->curvesBox->curves()->getCurveValues(BlueChannel);
-    settings.alphaCurveVals = d->curvesBox->curves()->getCurveValues(AlphaChannel);
+    CurvesContainer settings = d->settingsView->settings();
 
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 
@@ -361,12 +278,7 @@ void AdjustCurvesTool::prepareFinal()
     toolSettings()->setEnabled(false);
     toolView()->setEnabled(false);
 
-    CurvesContainer settings;
-    settings.lumCurveVals   = d->curvesBox->curves()->getCurveValues(LuminosityChannel);
-    settings.redCurveVals   = d->curvesBox->curves()->getCurveValues(RedChannel);
-    settings.greenCurveVals = d->curvesBox->curves()->getCurveValues(GreenChannel);
-    settings.blueCurveVals  = d->curvesBox->curves()->getCurveValues(BlueChannel);
-    settings.alphaCurveVals = d->curvesBox->curves()->getCurveValues(AlphaChannel);
+    CurvesContainer settings = d->settingsView->settings();
 
     ImageIface iface(0, 0);
     setFilter(new CurvesFilter(iface.getOriginalImg(), this, settings));
@@ -387,21 +299,8 @@ void AdjustCurvesTool::renderingFinished()
 
 void AdjustCurvesTool::slotLoadSettings()
 {
-    KUrl loadCurvesFile;
-
-    loadCurvesFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
-                                             QString( "*" ), kapp->activeWindow(),
-                                             QString( i18n("Select Gimp Curves File to Load")) );
-    if ( loadCurvesFile.isEmpty() )
-       return;
-
-    if ( d->curvesBox->curves()->loadCurvesFromGimpCurvesFile( loadCurvesFile ) == false )
-    {
-        KMessageBox::error(kapp->activeWindow(),
-                           i18n("Cannot load from the Gimp curves text file."));
-        return;
-    }
-
+    d->settingsView->loadSettings();
+    
     // Refresh the current curves config.
     slotChannelChanged();
     slotEffect();
@@ -409,23 +308,7 @@ void AdjustCurvesTool::slotLoadSettings()
 
 void AdjustCurvesTool::slotSaveAsSettings()
 {
-    KUrl saveCurvesFile;
-
-    saveCurvesFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
-                                             QString( "*" ), kapp->activeWindow(),
-                                             QString( i18n("Gimp Curves File to Save")) );
-    if ( saveCurvesFile.isEmpty() )
-       return;
-
-    if ( d->curvesBox->curves()->saveCurvesToGimpCurvesFile( saveCurvesFile ) == false )
-    {
-        KMessageBox::error(kapp->activeWindow(),
-                           i18n("Cannot save to the Gimp curves text file."));
-        return;
-    }
-
-    // Refresh the current curves config.
-    slotChannelChanged();
+    d->settingsView->saveAsSettings();
 }
 
 }  // namespace DigikamImagesPluginCore

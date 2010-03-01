@@ -121,7 +121,7 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
     // -------------------------------------------------------------
 
     connect(d->settingsView, SIGNAL(signalSettingsChanged()),
-        this, SLOT(slotTimer()));
+            this, SLOT(slotTimer()));
 
     connect(d->settingsView, SIGNAL(signalAutoAdjustExposure()),
             this, SLOT(slotAutoAdjustExposure()));
