@@ -109,8 +109,7 @@ BWSepiaTool::BWSepiaTool(QObject* parent)
                                 EditorToolSettings::Ok|
                                 EditorToolSettings::Cancel|
                                 EditorToolSettings::Load|
-                                EditorToolSettings::SaveAs|
-                                EditorToolSettings::Try);
+                                EditorToolSettings::SaveAs);
 
     ImageIface iface(0, 0);
     d->bwsepiaSettings = new BWSepiaSettings(d->gboxSettings->plainPage(), iface.getOriginalImg());
