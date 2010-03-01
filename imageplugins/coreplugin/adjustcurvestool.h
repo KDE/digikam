@@ -40,7 +40,7 @@ namespace DigikamImagesPluginCore
 
 class AdjustCurvesToolPriv;
 
-class AdjustCurvesTool : public EditorTool
+class AdjustCurvesTool : public EditorToolThreaded
 {
     Q_OBJECT
 
@@ -53,21 +53,25 @@ private:
 
     void readSettings();
     void writeSettings();
-    void finalRendering();
+    void prepareEffect();
+    void prepareFinal();
+    void abortPreview();
+    void putPreviewData();
+    void putFinalData();
+    void renderingFinished();    
 
 private Q_SLOTS:
 
+    void slotResetSettings();
     void slotSaveAsSettings();
     void slotLoadSettings();
-    void slotEffect();
-    void slotResetSettings();
     void slotResetCurrentChannel();
     void slotSpotColorChanged(const Digikam::DColor& color);
     void slotColorSelectedFromTarget(const Digikam::DColor& color);
     void slotPickerColorButtonActived(int);
     void slotChannelChanged();
     void slotScaleChanged();
-
+    
 private:
 
     AdjustCurvesToolPriv* const d;

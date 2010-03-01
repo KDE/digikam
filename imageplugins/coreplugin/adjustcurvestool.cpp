@@ -68,10 +68,11 @@
 #include "editortoolsettings.h"
 #include "histogrambox.h"
 #include "histogramwidget.h"
-#include "imagecurves.h"
+#include "curvesfilter.h"
 #include "imagehistogram.h"
+#include "imagecurves.h"
 #include "imageiface.h"
-#include "imageguidewidget.h"
+#include "imageregionwidget.h"
 
 namespace DigikamImagesPluginCore
 {
@@ -87,7 +88,6 @@ public:
         configCurveEntry("AdjustCurves"),
         destinationPreviewData(0),
         histoSegments(0),
-        currentPreviewMode(0),
         channelCB(0),
         curvesBox(0),
         previewWidget(0),
@@ -103,12 +103,11 @@ public:
     uchar*              destinationPreviewData;
 
     int                 histoSegments;
-    int                 currentPreviewMode;
 
     KComboBox*          channelCB;
 
     CurvesBox*          curvesBox;
-    ImageGuideWidget*   previewWidget;
+    ImageRegionWidget*  previewWidget;
 
     DImg*               originalImage;
 
@@ -116,7 +115,7 @@ public:
 };
 
 AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
-                : EditorTool(parent),
+                : EditorToolThreaded(parent),
                   d(new AdjustCurvesToolPriv)
 {
     setObjectName("adjustcurves");
@@ -130,26 +129,21 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->previewWidget = new ImageGuideWidget;
+    d->previewWidget = new ImageRegionWidget;
     setToolView(d->previewWidget);
     setPreviewModeMask(PreviewToolBar::AllPreviewModes);
 
     // -------------------------------------------------------------
 
     d->gboxSettings = new EditorToolSettings;
+    d->gboxSettings->setTools(EditorToolSettings::Histogram);
+    d->gboxSettings->setHistogramType(Digikam::LRGBA);
     d->gboxSettings->setButtons(EditorToolSettings::Default|
                                 EditorToolSettings::Load|
                                 EditorToolSettings::SaveAs|
                                 EditorToolSettings::Ok|
-                                EditorToolSettings::Cancel);
-
-    d->gboxSettings->setTools(EditorToolSettings::Histogram);
-    d->gboxSettings->setHistogramType(Digikam::LRGBA);
-
-    d->gboxSettings->histogramBox()->histogram()->setWhatsThis(i18n("Here you can see the target preview "
-                                                  "image histogram drawing of the selected image "
-                                                  "channel. This one is re-computed at any curves "
-                                                  "settings changes."));
+                                EditorToolSettings::Cancel|
+                                EditorToolSettings::Try);
 
     // we don't need to use the Gradient widget in this tool
     d->gboxSettings->histogramBox()->setGradientVisible(false);
@@ -164,12 +158,12 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QGridLayout* mainLayout = new QGridLayout();
-    mainLayout->addWidget(d->curvesBox, 0, 0, 1, 1);
-    mainLayout->setRowStretch(1, 10);
-    mainLayout->setMargin(0);
-    mainLayout->setSpacing(d->gboxSettings->spacingHint());
-    d->gboxSettings->plainPage()->setLayout(mainLayout);
+    QGridLayout* grid = new QGridLayout();
+    grid->addWidget(d->curvesBox, 0, 0, 1, 1);
+    grid->setRowStretch(1, 10);
+    grid->setMargin(0);
+    grid->setSpacing(d->gboxSettings->spacingHint());
+    d->gboxSettings->plainPage()->setLayout(grid);
 
     // -------------------------------------------------------------
 
@@ -180,24 +174,23 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
 
     connect(d->curvesBox, SIGNAL(signalCurvesChanged()),
             this, SLOT(slotTimer()));
-
-    connect(d->previewWidget, SIGNAL(spotPositionChangedFromOriginal(const Digikam::DColor&, const QPoint&)),
-            this, SLOT(slotSpotColorChanged(const Digikam::DColor&)));
-
-    connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget(const Digikam::DColor&, const QPoint&)),
-            this, SLOT(slotColorSelectedFromTarget(const Digikam::DColor&)));
-
-    connect(d->previewWidget, SIGNAL(signalResized()),
-            this, SLOT(slotEffect()));
-
-    // -------------------------------------------------------------
-    // Buttons slots.
-
+            
     connect(d->curvesBox, SIGNAL(signalChannelReset(int)),
             this, SLOT(slotResetCurrentChannel()));
 
     connect(d->curvesBox, SIGNAL(signalPickerChanged(int)),
             this, SLOT(slotPickerColorButtonActived(int)));
+
+    connect(d->previewWidget, SIGNAL(signalResized()),
+            this, SLOT(slotEffect()));
+
+    connect(d->previewWidget, SIGNAL(signalCapturedPointFromOriginal(const Digikam::DColor&, const QPoint&)),
+            this, SLOT(slotSpotColorChanged(const Digikam::DColor&)));
+
+/*
+    connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget(const Digikam::DColor&, const QPoint&)),
+            this, SLOT(slotColorSelectedFromTarget(const Digikam::DColor&)));
+*/
 }
 
 AdjustCurvesTool::~AdjustCurvesTool()
@@ -208,13 +201,22 @@ AdjustCurvesTool::~AdjustCurvesTool()
     delete d;
 }
 
+void AdjustCurvesTool::slotChannelChanged()
+{
+    d->curvesBox->setChannel(d->gboxSettings->histogramBox()->channel());
+    d->gboxSettings->histogramBox()->slotChannelChanged();
+}
+
+void AdjustCurvesTool::slotScaleChanged()
+{
+    d->curvesBox->setScale(d->gboxSettings->histogramBox()->scale());
+}
+
 void AdjustCurvesTool::slotPickerColorButtonActived(int type)
 {
     if (type == CurvesBox::NoPicker) return;
 
-    // Save previous rendering mode and toggle to original image.
-    d->currentPreviewMode = d->previewWidget->previewMode();
-    d->previewWidget->slotPreviewModeChanged(PreviewToolBar::PreviewOriginalImage);
+    d->previewWidget->setCapturePointMode(true);
 }
 
 void AdjustCurvesTool::slotSpotColorChanged(const DColor& color)
@@ -269,14 +271,12 @@ void AdjustCurvesTool::slotSpotColorChanged(const DColor& color)
        d->curvesBox->curves()->curvesCalculateCurve(i);
 
     d->curvesBox->repaint();
-
-    // restore previous rendering mode.
-    d->previewWidget->slotPreviewModeChanged(d->currentPreviewMode);
-
+    d->previewWidget->setCapturePointMode(false);
+    
     slotEffect();
 }
 
-void AdjustCurvesTool::slotColorSelectedFromTarget( const DColor& color )
+void AdjustCurvesTool::slotColorSelectedFromTarget(const DColor& color)
 {
     d->gboxSettings->histogramBox()->histogram()->setHistogramGuideByColor(color);
 }
@@ -285,73 +285,6 @@ void AdjustCurvesTool::slotResetCurrentChannel()
 {
     slotEffect();
     d->gboxSettings->histogramBox()->histogram()->reset();
-}
-
-void AdjustCurvesTool::slotEffect()
-{
-    ImageIface* iface = d->previewWidget->imageIface();
-    uchar *orgData    = iface->getPreviewImage();
-    int w             = iface->previewWidth();
-    int h             = iface->previewHeight();
-    bool sb           = iface->previewSixteenBit();
-
-    // Create the new empty destination image data space.
-    d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
-
-    if (d->destinationPreviewData)
-       delete [] d->destinationPreviewData;
-
-    d->destinationPreviewData = new uchar[w*h*(sb ? 8 : 4)];
-
-    // Calculate the LUT to apply on the image.
-    d->curvesBox->curves()->curvesLutSetup(AlphaChannel);
-
-    // Apply the LUT to the image.
-    d->curvesBox->curves()->curvesLutProcess(orgData, d->destinationPreviewData, w, h);
-
-    iface->putPreviewImage(d->destinationPreviewData);
-    d->previewWidget->updatePreview();
-
-    // Update histogram.
-    d->gboxSettings->histogramBox()->histogram()->updateData(d->destinationPreviewData, w, h, sb, 0, 0, 0, false);
-    delete [] orgData;
-}
-
-void AdjustCurvesTool::finalRendering()
-{
-    kapp->setOverrideCursor( Qt::WaitCursor );
-
-    ImageIface* iface = d->previewWidget->imageIface();
-    uchar *orgData    = iface->getOriginalImage();
-    int w             = iface->originalWidth();
-    int h             = iface->originalHeight();
-    bool sb           = iface->originalSixteenBit();
-
-    // Create the new empty destination image data space.
-    uchar* desData = new uchar[w*h*(sb ? 8 : 4)];
-
-    // Calculate the LUT to apply on the image.
-    d->curvesBox->curves()->curvesLutSetup(AlphaChannel);
-
-    // Apply the LUT to the image.
-    d->curvesBox->curves()->curvesLutProcess(orgData, desData, w, h);
-
-    iface->putOriginalImage(i18n("Adjust Curve"), desData);
-    kapp->restoreOverrideCursor();
-
-    delete [] orgData;
-    delete [] desData;
-}
-
-void AdjustCurvesTool::slotChannelChanged()
-{
-    d->curvesBox->setChannel(d->gboxSettings->histogramBox()->channel());
-    d->gboxSettings->histogramBox()->slotChannelChanged();
-}
-
-void AdjustCurvesTool::slotScaleChanged()
-{
-    d->curvesBox->setScale(d->gboxSettings->histogramBox()->scale());
 }
 
 void AdjustCurvesTool::readSettings()
@@ -394,6 +327,70 @@ void AdjustCurvesTool::slotResetSettings()
     d->gboxSettings->histogramBox()->histogram()->reset();
 
     slotEffect();
+}
+
+void AdjustCurvesTool::prepareEffect()
+{
+    kapp->setOverrideCursor(Qt::WaitCursor);
+    toolSettings()->setEnabled(false);
+    toolView()->setEnabled(false);
+
+    CurvesContainer settings;
+    settings.lumCurvePts   = d->curvesBox->curves()->getCurvePoints(LuminosityChannel);
+    settings.redCurvePts   = d->curvesBox->curves()->getCurvePoints(RedChannel);
+    settings.greenCurvePts = d->curvesBox->curves()->getCurvePoints(GreenChannel);
+    settings.blueCurvePts  = d->curvesBox->curves()->getCurvePoints(BlueChannel);
+    settings.alphaCurvePts = d->curvesBox->curves()->getCurvePoints(AlphaChannel);
+
+    d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
+
+    DImg preview = d->previewWidget->getOriginalRegionImage(true);
+    setFilter(new CurvesFilter(&preview, this, settings));
+}
+
+void AdjustCurvesTool::putPreviewData()
+{
+    DImg preview = filter()->getTargetImage();
+    d->previewWidget->setPreviewImage(preview);
+
+    // Update histogram.
+
+    if (d->destinationPreviewData)
+       delete [] d->destinationPreviewData;
+
+    d->destinationPreviewData = preview.copyBits();
+    d->gboxSettings->histogramBox()->histogram()->updateData(d->destinationPreviewData,
+                                                             preview.width(), preview.height(), preview.sixteenBit(),
+                                                             0, 0, 0, false);
+}
+
+void AdjustCurvesTool::prepareFinal()
+{
+    toolSettings()->setEnabled(false);
+    toolView()->setEnabled(false);
+
+    CurvesContainer settings;
+    settings.lumCurvePts   = d->curvesBox->curves()->getCurvePoints(LuminosityChannel);
+    settings.redCurvePts   = d->curvesBox->curves()->getCurvePoints(RedChannel);
+    settings.greenCurvePts = d->curvesBox->curves()->getCurvePoints(GreenChannel);
+    settings.blueCurvePts  = d->curvesBox->curves()->getCurvePoints(BlueChannel);
+    settings.alphaCurvePts = d->curvesBox->curves()->getCurvePoints(AlphaChannel);
+
+    ImageIface iface(0, 0);
+    setFilter(new CurvesFilter(iface.getOriginalImg(), this, settings));
+}
+
+void AdjustCurvesTool::putFinalData()
+{
+    ImageIface iface(0, 0);
+    iface.putOriginalImage(i18n("Adjust Curve"), filter()->getTargetImage().bits());
+}
+
+void AdjustCurvesTool::renderingFinished()
+{
+    kapp->restoreOverrideCursor();
+    toolSettings()->setEnabled(true);
+    toolView()->setEnabled(true);
 }
 
 void AdjustCurvesTool::slotLoadSettings()
