@@ -182,7 +182,7 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
                                         "to see the corresponding level in the histogram."));
     setToolView(d->previewWidget);
     setPreviewModeMask(PreviewToolBar::AllPreviewModes);
-    
+
     // -------------------------------------------------------------
 
     d->gboxSettings = new EditorToolSettings;
@@ -407,7 +407,7 @@ AdjustLevelsTool::~AdjustLevelsTool()
 {
     if (d->destinationPreviewData)
        delete [] d->destinationPreviewData;
-    
+
     delete d->levels;
     delete d;
 }

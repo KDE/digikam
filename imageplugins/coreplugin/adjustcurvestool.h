@@ -71,7 +71,7 @@ private Q_SLOTS:
     void slotPickerColorButtonActived(int);
     void slotChannelChanged();
     void slotScaleChanged();
-    
+
 private:
 
     AdjustCurvesToolPriv* const d;

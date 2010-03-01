@@ -174,7 +174,7 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
 
     connect(d->curvesBox, SIGNAL(signalCurvesChanged()),
             this, SLOT(slotTimer()));
-            
+
     connect(d->curvesBox, SIGNAL(signalChannelReset(int)),
             this, SLOT(slotResetCurrentChannel()));
 
@@ -272,7 +272,7 @@ void AdjustCurvesTool::slotSpotColorChanged(const DColor& color)
 
     d->curvesBox->repaint();
     d->previewWidget->setCapturePointMode(false);
-    
+
     slotEffect();
 }
 
