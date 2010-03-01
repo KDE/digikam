@@ -17,6 +17,7 @@ SET(digikamimageplugin_core_PART_SRCS
     ../../imageplugins/coreplugin/hsltool.cpp
     ../../imageplugins/coreplugin/channelmixertool.cpp
     ../../imageplugins/coreplugin/adjustcurvestool.cpp
+    ../../imageplugins/coreplugin/adjustlevelstool.cpp
     ../../imageplugins/coreplugin/ratiocrop/imageselectionwidget.cpp
     ../../imageplugins/coreplugin/ratiocrop/ratiocroptool.cpp
    )

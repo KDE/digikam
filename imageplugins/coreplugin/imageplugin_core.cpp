@@ -59,6 +59,7 @@
 #include "whitebalancetool.h"
 #include "channelmixertool.h"
 #include "adjustcurvestool.h"
+#include "adjustlevelstool.h"
 
 using namespace DigikamImagesPluginCore;
 
@@ -88,6 +89,7 @@ public:
         whitebalanceAction(0),
         channelMixerAction(0),
         curvesAction(0),
+        levelsAction(0),
         profileMenuAction(0)
         {}
 
@@ -108,6 +110,7 @@ public:
     KAction*               whitebalanceAction;
     KAction*               channelMixerAction;
     KAction*               curvesAction;
+    KAction*               levelsAction;
 
     IccProfilesMenuAction* profileMenuAction;
 };
@@ -196,6 +199,12 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QVariantList &)
     connect(d->curvesAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotCurvesAdjust()));
 
+    d->levelsAction  = new KAction(KIcon("adjustlevels"), i18n("Levels Adjust..."), this);
+    d->levelsAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_L));
+    actionCollection()->addAction("implugcore_adjustlevels", d->levelsAction );
+    connect(d->levelsAction, SIGNAL(triggered(bool) ),
+            this, SLOT(slotLevelsAdjust()));
+            
     //-------------------------------
     // Enhance menu actions
 
@@ -272,6 +281,7 @@ void ImagePlugin_Core::setEnabledActions(bool b)
     d->whitebalanceAction->setEnabled(b);
     d->channelMixerAction->setEnabled(b);
     d->curvesAction->setEnabled(b);
+    d->levelsAction->setEnabled(b);
 }
 
 void ImagePlugin_Core::slotInvert()
@@ -500,5 +510,11 @@ void ImagePlugin_Core::slotChannelMixer()
 void ImagePlugin_Core::slotCurvesAdjust()
 {
     AdjustCurvesTool* tool = new AdjustCurvesTool(this);
+    loadTool(tool);
+}
+
+void ImagePlugin_Core::slotLevelsAdjust()
+{
+    AdjustLevelsTool* tool = new AdjustLevelsTool(this);
     loadTool(tool);
 }

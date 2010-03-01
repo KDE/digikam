@@ -34,7 +34,6 @@ INCLUDE_DIRECTORIES(../utilities/imageeditor/editor
                     ${KDCRAW_INCLUDE_DIR}
                    )
 
-ADD_SUBDIRECTORY( adjustlevels )
 ADD_SUBDIRECTORY( blurfx )
 ADD_SUBDIRECTORY( border )
 ADD_SUBDIRECTORY( charcoal )

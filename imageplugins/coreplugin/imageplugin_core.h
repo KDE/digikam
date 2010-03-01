@@ -77,7 +77,8 @@ private Q_SLOTS:
     void slotProfileConversionTool();
     void slotChannelMixer();
     void slotCurvesAdjust();
-
+    void slotLevelsAdjust();
+    
     void slotRatioCrop();
     void slotResize();
 

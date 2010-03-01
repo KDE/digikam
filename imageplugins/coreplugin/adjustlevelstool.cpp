@@ -74,7 +74,7 @@
 
 using namespace KDcrawIface;
 
-namespace DigikamAdjustLevelsImagesPlugin
+namespace DigikamImagesPluginCore
 {
 
 class AdjustLevelsToolPriv
@@ -898,4 +898,4 @@ void AdjustLevelsTool::slotShowOutputHistogramGuide(double v)
     d->gboxSettings->histogramBox()->histogram()->setHistogramGuideByColor(color);
 }
 
-}  // namespace DigikamAdjustLevelsImagesPlugin
+}  // namespace DigikamImagesPluginCore
