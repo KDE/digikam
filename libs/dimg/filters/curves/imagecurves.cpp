@@ -425,7 +425,7 @@ void ImageCurves::curvesPlotCurve(int channel, int p1, int p2, int p3, int p4)
     // Subdivide the curve 1000 times.
     // n can be adjusted to give a finer or coarser curve.
 
-    d1  = 1.0 / loopdiv;
+    d1 = 1.0 / loopdiv;
     d2 = d1 * d1;
     d3 = d1 * d1 * d1;
 
@@ -667,11 +667,10 @@ QPolygon ImageCurves::getCurvePoints(int channel)
 {
     QPolygon array(18);
 
-    if ( d->curves &&
-         channel>=0 && channel<NUM_CHANNELS)
+    if ( d->curves && channel>=0 && channel<NUM_CHANNELS)
     {
         for (int j = 0 ; j <= NUM_POINTS ; ++j)
-        array.setPoint(j, getCurvePoint(channel, j));
+            array.setPoint(j, getCurvePoint(channel, j));
     }
 
     return array;
