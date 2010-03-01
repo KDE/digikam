@@ -89,8 +89,6 @@ ImageRegionWidget::ImageRegionWidget(QWidget* parent)
     d->iface = new ImageIface(0, 0);
     d->image = d->iface->getOriginalImg()->copy();
 
-    setCapturePointMode(true);
-    
     setAttribute(Qt::WA_DeleteOnClose);
     setFrameStyle(QFrame::NoFrame);
     setMinimumSize(480, 320);
