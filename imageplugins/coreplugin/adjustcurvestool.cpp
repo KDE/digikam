@@ -45,7 +45,6 @@
 // KDE includes
 
 #include <kapplication.h>
-#include <kcombobox.h>
 #include <kconfig.h>
 #include <kcursor.h>
 #include <kfiledialog.h>
@@ -88,7 +87,6 @@ public:
         configCurveEntry("AdjustCurves"),
         destinationPreviewData(0),
         histoSegments(0),
-        channelCB(0),
         curvesBox(0),
         previewWidget(0),
         originalImage(0),
@@ -103,8 +101,6 @@ public:
     uchar*              destinationPreviewData;
 
     int                 histoSegments;
-
-    KComboBox*          channelCB;
 
     CurvesBox*          curvesBox;
     ImageRegionWidget*  previewWidget;
