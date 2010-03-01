@@ -515,21 +515,22 @@ void ColorFXTool::vivid(int factor, uchar* data, int w, int h, bool sb)
     // And now apply the curve correction.
 
     CurvesContainer prm;
-    prm.lumCurvePts.resize(18);
+    prm.curvesType = ImageCurves::CURVE_SMOOTH;
+    prm.lumCurveVals.resize(18);
     
     if (!sb)        // 8 bits image.
     {
-        prm.lumCurvePts.setPoint(0,  QPoint(0,   0));
-        prm.lumCurvePts.setPoint(5,  QPoint(63,  60));
-        prm.lumCurvePts.setPoint(10, QPoint(191, 194));
-        prm.lumCurvePts.setPoint(16, QPoint(255, 255));
+        prm.lumCurveVals.setPoint(0,  QPoint(0,   0));
+        prm.lumCurveVals.setPoint(5,  QPoint(63,  60));
+        prm.lumCurveVals.setPoint(10, QPoint(191, 194));
+        prm.lumCurveVals.setPoint(16, QPoint(255, 255));
     }
     else            // 16 bits image.
     {
-        prm.lumCurvePts.setPoint(0,  QPoint(0,     0));
-        prm.lumCurvePts.setPoint(5,  QPoint(16128, 15360));
-        prm.lumCurvePts.setPoint(10, QPoint(48896, 49664));
-        prm.lumCurvePts.setPoint(16, QPoint(65535, 65535));
+        prm.lumCurveVals.setPoint(0,  QPoint(0,     0));
+        prm.lumCurveVals.setPoint(5,  QPoint(16128, 15360));
+        prm.lumCurveVals.setPoint(10, QPoint(48896, 49664));
+        prm.lumCurveVals.setPoint(16, QPoint(65535, 65535));
     }
 
     CurvesFilter curves(&mixed, 0L, prm);

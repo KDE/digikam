@@ -33,6 +33,7 @@
 #include "digikam_export.h"
 #include "dimgthreadedfilter.h"
 #include "globals.h"
+#include "imagecurves.h"
 
 using namespace Digikam;
 
@@ -48,17 +49,23 @@ class DIGIKAM_EXPORT CurvesContainer
 
 public:
 
-    CurvesContainer(){};
-
+    CurvesContainer()
+    {
+        curvesType = ImageCurves::CURVE_FREE;
+    };
+    
     ~CurvesContainer(){};
 
 public:
+  
+    ImageCurves::CurveType curvesType;      // Smooth : QPolygon have size of 18 points.
+                                            // Free   : QPolygon have size of 255 or 65535 values.
 
-    QPolygon lumCurvePts;
-    QPolygon redCurvePts;
-    QPolygon greenCurvePts;
-    QPolygon blueCurvePts;
-    QPolygon alphaCurvePts;
+    QPolygon               lumCurveVals;
+    QPolygon               redCurveVals;
+    QPolygon               greenCurveVals;
+    QPolygon               blueCurveVals;
+    QPolygon               alphaCurveVals;
 };
 
 // --------------------------------------------------------------------------------

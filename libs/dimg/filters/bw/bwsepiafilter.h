@@ -121,7 +121,7 @@ public:
 
     double       strength;
     
-    QPolygon     curvePts;
+    QPolygon     curveVals;
 
     BCGContainer bcgPrm;
 };

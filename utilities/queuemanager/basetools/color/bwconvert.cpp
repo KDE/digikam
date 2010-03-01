@@ -71,7 +71,7 @@ BatchToolSettings BWConvert::defaultSettings()
     prm.insert("toneType",   (int)defaultPrm.toneType);
     prm.insert("contrast",   (double)defaultPrm.bcgPrm.contrast);
     prm.insert("strength",   (double)defaultPrm.strength);
-    prm.insert("curves",     defaultPrm.curvePts);
+    prm.insert("curves",     defaultPrm.curveVals);
 
     return prm;
 }
@@ -85,7 +85,7 @@ void BWConvert::slotAssignSettings2Widget()
     prm.toneType        = settings()["toneType"].toInt();
     prm.bcgPrm.contrast = settings()["contrast"].toDouble();
     prm.strength        = settings()["strength"].toDouble();
-    prm.curvePts        = settings()["curves"].value<QPolygon>();
+    prm.curveVals       = settings()["curves"].value<QPolygon>();
 
     m_settingsView->setSettings(prm);
 }
@@ -100,7 +100,7 @@ void BWConvert::slotSettingsChanged()
     prm.insert("toneType",   (int)currentPrm.toneType);
     prm.insert("contrast",   (double)currentPrm.bcgPrm.contrast);
     prm.insert("strength",   (double)currentPrm.strength);
-    prm.insert("curves",     currentPrm.curvePts);
+    prm.insert("curves",     currentPrm.curveVals);
 
     setSettings(prm);
 }
@@ -116,7 +116,7 @@ bool BWConvert::toolOperations()
     prm.toneType        = settings()["toneType"].toInt();
     prm.bcgPrm.contrast = settings()["contrast"].toDouble();
     prm.strength        = settings()["strength"].toDouble();
-    prm.curvePts        = settings()["curves"].value<QPolygon>();
+    prm.curveVals       = settings()["curves"].value<QPolygon>();
 
     BWSepiaFilter bw(&image(), 0L, prm);
     bw.startFilterDirectly();

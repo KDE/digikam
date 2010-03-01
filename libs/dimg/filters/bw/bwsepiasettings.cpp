@@ -95,15 +95,15 @@ public:
         curvesBox(0)
         {}
 
-    const QString    configThresholdAdjustmentEntry;
-    const QString    configSoftnessAdjustmentEntry;
-    const QString    configAdvancedAdjustmentEntry;
-    const QString    configThrLumInputAdjustmentEntry;
-    const QString    configSoftLumInputAdjustmentEntry;
-    const QString    configThrCrInputAdjustmentEntry;
-    const QString    configSoftCrInputAdjustmentEntry;
-    const QString    configThrCbInputAdjustmentEntry;
-    const QString    configSoftCbInputAdjustmentEntry;
+    const QString              configThresholdAdjustmentEntry;
+    const QString              configSoftnessAdjustmentEntry;
+    const QString              configAdvancedAdjustmentEntry;
+    const QString              configThrLumInputAdjustmentEntry;
+    const QString              configSoftLumInputAdjustmentEntry;
+    const QString              configThrCrInputAdjustmentEntry;
+    const QString              configSoftCrInputAdjustmentEntry;
+    const QString              configThrCbInputAdjustmentEntry;
+    const QString              configSoftCbInputAdjustmentEntry;
 
     const QString              configSettingsTabEntry;
     const QString              configBWFilterEntry;
@@ -438,7 +438,7 @@ BWSepiaContainer BWSepiaSettings::settings() const
     prm.toneType        = d->bwTone->currentId();
     prm.bcgPrm.contrast = ((double)(d->cInput->value()/100.0) + 1.00);
     prm.strength        = 1.0 + ((double)d->strengthInput->value() - 1.0) * (1.0 / 3.0);
-    prm.curvePts        = d->curvesBox->curves()->getCurvePoints(LuminosityChannel);
+    prm.curveVals       = d->curvesBox->curves()->getCurveValues(LuminosityChannel);
 
     return prm;
 }
@@ -452,7 +452,7 @@ void BWSepiaSettings::setSettings(const BWSepiaContainer& settings)
     d->bwTone->setCurrentId(settings.toneType);
     d->cInput->setValue((settings.bcgPrm.contrast - 1.00) * 100.0);
     d->strengthInput->setValue(1.0 + (settings.strength-1.0) * 3.0);
-    d->curvesBox->curves()->setCurvePoints(LuminosityChannel, settings.curvePts);
+    d->curvesBox->curves()->setCurveValues(LuminosityChannel, settings.curveVals);
 
     slotFilterSelected();
     blockSignals(false);
@@ -502,7 +502,7 @@ void BWSepiaSettings::readSettings(KConfigGroup& group)
     prm.strength        = group.readEntry(d->configStrengthAdjustmentEntry, defaultPrm.strength);
 
     d->curvesBox->readCurveSettings(group, d->configCurveEntry);
-    prm.curvePts        = d->curvesBox->curves()->getCurvePoints(LuminosityChannel);
+    prm.curveVals       = d->curvesBox->curves()->getCurvePoints(LuminosityChannel);
     
     setSettings(prm);
 }

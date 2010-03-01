@@ -111,7 +111,7 @@ void BWSepiaFilter::filterImage()
         // Calculate and apply the luminosity curve on image.
 
         CurvesContainer prm;
-        prm.lumCurvePts = d->settings.curvePts;
+        prm.lumCurveVals = d->settings.curveVals;
         postProgress(50);
         CurvesFilter curves(&m_destImage, 0L, prm);
         curves.startFilterDirectly();

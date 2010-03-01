@@ -336,11 +336,11 @@ void AdjustCurvesTool::prepareEffect()
     toolView()->setEnabled(false);
 
     CurvesContainer settings;
-    settings.lumCurvePts   = d->curvesBox->curves()->getCurvePoints(LuminosityChannel);
-    settings.redCurvePts   = d->curvesBox->curves()->getCurvePoints(RedChannel);
-    settings.greenCurvePts = d->curvesBox->curves()->getCurvePoints(GreenChannel);
-    settings.blueCurvePts  = d->curvesBox->curves()->getCurvePoints(BlueChannel);
-    settings.alphaCurvePts = d->curvesBox->curves()->getCurvePoints(AlphaChannel);
+    settings.lumCurveVals   = d->curvesBox->curves()->getCurveValues(LuminosityChannel);
+    settings.redCurveVals   = d->curvesBox->curves()->getCurveValues(RedChannel);
+    settings.greenCurveVals = d->curvesBox->curves()->getCurveValues(GreenChannel);
+    settings.blueCurveVals  = d->curvesBox->curves()->getCurveValues(BlueChannel);
+    settings.alphaCurveVals = d->curvesBox->curves()->getCurveValues(AlphaChannel);
 
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 
@@ -370,11 +370,11 @@ void AdjustCurvesTool::prepareFinal()
     toolView()->setEnabled(false);
 
     CurvesContainer settings;
-    settings.lumCurvePts   = d->curvesBox->curves()->getCurvePoints(LuminosityChannel);
-    settings.redCurvePts   = d->curvesBox->curves()->getCurvePoints(RedChannel);
-    settings.greenCurvePts = d->curvesBox->curves()->getCurvePoints(GreenChannel);
-    settings.blueCurvePts  = d->curvesBox->curves()->getCurvePoints(BlueChannel);
-    settings.alphaCurvePts = d->curvesBox->curves()->getCurvePoints(AlphaChannel);
+    settings.lumCurveVals   = d->curvesBox->curves()->getCurveValues(LuminosityChannel);
+    settings.redCurveVals   = d->curvesBox->curves()->getCurveValues(RedChannel);
+    settings.greenCurveVals = d->curvesBox->curves()->getCurveValues(GreenChannel);
+    settings.blueCurveVals  = d->curvesBox->curves()->getCurveValues(BlueChannel);
+    settings.alphaCurveVals = d->curvesBox->curves()->getCurveValues(AlphaChannel);
 
     ImageIface iface(0, 0);
     setFilter(new CurvesFilter(iface.getOriginalImg(), this, settings));

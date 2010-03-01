@@ -30,7 +30,6 @@
 // Local includes
 
 #include "dimg.h"
-#include "imagecurves.h"
 
 namespace Digikam
 {
@@ -50,21 +49,43 @@ void CurvesFilter::filterImage()
 {
     postProgress(10);
     ImageCurves curves(m_orgImage.sixteenBit());
-    curves.setCurvePoints(LuminosityChannel, m_settings.lumCurvePts);
-    postProgress(20);
+    curves.setCurveType(m_settings.curvesType);
 
-    curves.setCurvePoints(RedChannel, m_settings.redCurvePts);
-    postProgress(30);
+    if (m_settings.curvesType == ImageCurves::CURVE_FREE)
+    {
+        curves.setCurveValues(LuminosityChannel, m_settings.lumCurveVals);
+        postProgress(20);
 
-    curves.setCurvePoints(GreenChannel, m_settings.greenCurvePts);
-    postProgress(40);
+        curves.setCurveValues(RedChannel, m_settings.redCurveVals);
+        postProgress(30);
 
-    curves.setCurvePoints(BlueChannel, m_settings.blueCurvePts);
-    postProgress(50);
-    
-    curves.setCurvePoints(AlphaChannel, m_settings.alphaCurvePts);
-    postProgress(60);
-    
+        curves.setCurveValues(GreenChannel, m_settings.greenCurveVals);
+        postProgress(40);
+
+        curves.setCurveValues(BlueChannel, m_settings.blueCurveVals);
+        postProgress(50);
+        
+        curves.setCurveValues(AlphaChannel, m_settings.alphaCurveVals);
+        postProgress(60);
+    }
+    else
+    {
+        curves.setCurvePoints(LuminosityChannel, m_settings.lumCurveVals);
+        postProgress(20);
+
+        curves.setCurvePoints(RedChannel, m_settings.redCurveVals);
+        postProgress(30);
+
+        curves.setCurvePoints(GreenChannel, m_settings.greenCurveVals);
+        postProgress(40);
+
+        curves.setCurvePoints(BlueChannel, m_settings.blueCurveVals);
+        postProgress(50);
+        
+        curves.setCurvePoints(AlphaChannel, m_settings.alphaCurveVals);
+        postProgress(60);
+    }
+        
     m_destImage = DImg(m_orgImage.width(), m_orgImage.height(), m_orgImage.sixteenBit(), m_orgImage.hasAlpha());
     postProgress(70);
     
