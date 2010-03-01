@@ -107,6 +107,7 @@ RainDropTool::RainDropTool(QObject* parent)
                                         "disable the Raindrops effect on a human face, for example.</p>"));
 
     setToolView(d->previewWidget);
+    setPreviewModeMask(PreviewToolBar::AllPreviewModes);
 
     // -------------------------------------------------------------
 

@@ -213,6 +213,7 @@ ResizeTool::ResizeTool(QObject* parent)
 
     d->previewWidget = new ImageGuideWidget(0, false, ImageGuideWidget::HVGuideMode, Qt::red, 1, false, false);
     setToolView(d->previewWidget);
+    setPreviewModeMask(PreviewToolBar::UnSplitPreviewModes);
 
     // -------------------------------------------------------------
 

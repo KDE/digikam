@@ -125,6 +125,7 @@ ShearTool::ShearTool(QObject* parent)
                                         "line's position."));
 
     setToolView(d->previewWidget);
+    setPreviewModeMask(PreviewToolBar::UnSplitPreviewModes);
 
     // -------------------------------------------------------------
 

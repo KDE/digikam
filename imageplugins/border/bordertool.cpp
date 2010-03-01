@@ -146,7 +146,8 @@ BorderTool::BorderTool(QObject* parent)
 
     d->previewWidget = new ImageGuideWidget(0, false, ImageGuideWidget::HVGuideMode);
     setToolView(d->previewWidget);
-
+    setPreviewModeMask(PreviewToolBar::UnSplitPreviewModes);
+    
     // -------------------------------------------------------------
 
     d->gboxSettings = new EditorToolSettings;

@@ -120,6 +120,7 @@ DistortionFXTool::DistortionFXTool(QObject* parent)
     d->previewWidget->setWhatsThis(i18n("This is the preview of the distortion effect "
                                         "applied to the photograph."));
     setToolView(d->previewWidget);
+    setPreviewModeMask(PreviewToolBar::AllPreviewModes);
 
     // -------------------------------------------------------------
 
