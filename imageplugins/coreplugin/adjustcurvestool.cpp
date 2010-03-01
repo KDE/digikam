@@ -89,7 +89,6 @@ public:
         histoSegments(0),
         curvesBox(0),
         previewWidget(0),
-        originalImage(0),
         gboxSettings(0)
         {}
 
@@ -105,8 +104,6 @@ public:
     CurvesBox*          curvesBox;
     ImageRegionWidget*  previewWidget;
 
-    DImg*               originalImage;
-
     EditorToolSettings* gboxSettings;
 };
 
@@ -119,9 +116,8 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
     setToolIcon(SmallIcon("adjustcurves"));
 
     ImageIface iface(0, 0);
-    d->originalImage = iface.getOriginalImg();
-
-    d->histoSegments = d->originalImage->sixteenBit() ? 65535 : 255;
+    DImg *originalImage = iface.getOriginalImg();
+    d->histoSegments    = originalImage->sixteenBit() ? 65535 : 255;
 
     // -------------------------------------------------------------
 
@@ -146,8 +142,8 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->curvesBox = new CurvesBox(256, 256, d->originalImage->bits(), d->originalImage->width(),
-                                 d->originalImage->height(), d->originalImage->sixteenBit());
+    d->curvesBox = new CurvesBox(256, 256, originalImage->bits(), originalImage->width(),
+                                 originalImage->height(), originalImage->sixteenBit());
 
     d->curvesBox->enableGradients(true);
     d->curvesBox->enableControlWidgets(true);
