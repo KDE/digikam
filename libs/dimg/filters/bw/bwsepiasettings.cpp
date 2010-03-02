@@ -433,12 +433,12 @@ BWSepiaContainer BWSepiaSettings::settings() const
 {
     BWSepiaContainer prm;
 
-    prm.filmType        = d->bwFilm->currentId();
-    prm.filterType      = d->bwFilters->currentId();
-    prm.toneType        = d->bwTone->currentId();
-    prm.bcgPrm.contrast = ((double)(d->cInput->value()/100.0) + 1.00);
-    prm.strength        = 1.0 + ((double)d->strengthInput->value() - 1.0) * (1.0 / 3.0);
-    prm.curveVals       = d->curvesBox->curves()->getCurveValues(LuminosityChannel);
+    prm.filmType               = d->bwFilm->currentId();
+    prm.filterType             = d->bwFilters->currentId();
+    prm.toneType               = d->bwTone->currentId();
+    prm.bcgPrm.contrast        = ((double)(d->cInput->value()/100.0) + 1.00);
+    prm.strength               = 1.0 + ((double)d->strengthInput->value() - 1.0) * (1.0 / 3.0);
+    prm.curvesPrm.lumCurveVals = d->curvesBox->curves()->getCurveValues(LuminosityChannel);
 
     return prm;
 }
@@ -452,7 +452,8 @@ void BWSepiaSettings::setSettings(const BWSepiaContainer& settings)
     d->bwTone->setCurrentId(settings.toneType);
     d->cInput->setValue((settings.bcgPrm.contrast - 1.00) * 100.0);
     d->strengthInput->setValue(1.0 + (settings.strength-1.0) * 3.0);
-    d->curvesBox->curves()->setCurveValues(LuminosityChannel, settings.curveVals);
+    d->curvesBox->curves()->setCurveValues(LuminosityChannel, settings.curvesPrm.lumCurveVals);
+    d->curvesBox->update();
 
     slotFilterSelected();
     blockSignals(false);
@@ -468,10 +469,7 @@ void BWSepiaSettings::resetToDefault()
 
     d->cInput->slotReset();
     d->strengthInput->slotReset();
-
-    for (int channel = 0 ; channel < 5 ; ++channel)
-       d->curvesBox->curves()->curvesChannelReset(channel);
-
+    d->curvesBox->curves()->curvesChannelReset(LuminosityChannel);
     d->curvesBox->reset();
 
     blockSignals(false);
@@ -502,7 +500,7 @@ void BWSepiaSettings::readSettings(KConfigGroup& group)
     prm.strength        = group.readEntry(d->configStrengthAdjustmentEntry, defaultPrm.strength);
 
     d->curvesBox->readCurveSettings(group, d->configCurveEntry);
-    prm.curveVals       = d->curvesBox->curves()->getCurvePoints(LuminosityChannel);
+    prm.curvesPrm.lumCurveVals = d->curvesBox->curves()->getCurveValues(LuminosityChannel);
     
     setSettings(prm);
 }

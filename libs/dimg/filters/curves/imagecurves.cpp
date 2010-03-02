@@ -758,7 +758,6 @@ void ImageCurves::setCurvePoints(int channel, const QPolygon& vals)
          channel >= 0 && channel < NUM_CHANNELS &&
          vals.size() == 18 )
     {
-        d->dirty = true;
         for (int j = 0 ; j <= NUM_POINTS ; ++j)
             setCurvePoint(channel, j, vals.point(j));
     }

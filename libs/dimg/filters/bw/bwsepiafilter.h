@@ -32,6 +32,7 @@
 #include "dimgthreadedfilter.h"
 #include "globals.h"
 #include "bcgfilter.h"
+#include "curvesfilter.h"
 #include "tonalityfilter.h"
 
 using namespace Digikam;
@@ -112,18 +113,18 @@ public:
 
 public:
 
-    bool         preview;
+    bool            preview;
 
-    int          previewType;
-    int          filmType;
-    int          filterType;
-    int          toneType;
+    int             previewType;
+    int             filmType;
+    int             filterType;
+    int             toneType;
 
-    double       strength;
+    double          strength;
     
-    QPolygon     curveVals;
+    CurvesContainer curvesPrm;
 
-    BCGContainer bcgPrm;
+    BCGContainer    bcgPrm;
 };
 
 // -----------------------------------------------------------------------------------------------

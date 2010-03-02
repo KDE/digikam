@@ -37,7 +37,6 @@
 #include "dimg.h"
 #include "mixerfilter.h"
 #include "infraredfilter.h"
-#include "curvesfilter.h"
 
 namespace Digikam
 {
@@ -110,10 +109,8 @@ void BWSepiaFilter::filterImage()
 
         // Calculate and apply the luminosity curve on image.
 
-        CurvesContainer prm;
-        prm.lumCurveVals = d->settings.curveVals;
+        CurvesFilter curves(&m_destImage, 0L, d->settings.curvesPrm);
         postProgress(50);
-        CurvesFilter curves(&m_destImage, 0L, prm);
         curves.startFilterDirectly();
         postProgress(60);
         m_destImage.putImageData(curves.getTargetImage().bits());
@@ -122,10 +119,11 @@ void BWSepiaFilter::filterImage()
         // Adjust contrast.
 
         BCGFilter bcg(&m_destImage, 0L, d->settings.bcgPrm);
-        bcg.startFilterDirectly();
         postProgress(80);
-        m_destImage.putImageData(bcg.getTargetImage().bits());
+        bcg.startFilterDirectly();
         postProgress(90);
+        m_destImage.putImageData(bcg.getTargetImage().bits());
+        postProgress(100);
     }
 }
 
