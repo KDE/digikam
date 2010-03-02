@@ -8,7 +8,7 @@ colorfx                     TODO                 TODO                  TODO
 contentawareresizing        DONE                 TODO                  TODO
 
 coreplugin
-  /adjustcurves             TODO                 TODO                  TODO
+  /adjustcurves             DONE                 DONE                  TODO
   /adjustlevels             TODO                 TODO                  TODO
   /autocorrectiontool       DONE                 DONE                  DONE
   /bcgtool                  DONE                 DONE                  DONE
