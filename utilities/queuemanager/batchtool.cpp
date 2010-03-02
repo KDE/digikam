@@ -29,6 +29,7 @@
 #include <QDateTime>
 #include <QFileInfo>
 #include <QWidget>
+#include <QPolygon>
 
 // KDE includes
 
@@ -354,7 +355,27 @@ bool BatchTool::apply()
     BatchToolSettings prm = settings();
     for (BatchToolSettings::const_iterator it = prm.constBegin() ; it != prm.constEnd() ; ++it)
     {
-        kDebug() << "   " << it.key() << ": " << it.value();
+        if (it.value().canConvert<QPolygon>())
+        {
+            QPolygon pol = it.value().value<QPolygon>();
+            int size     = pol.size() > 20 ? 20 : pol.size();
+            QString tmp;
+            
+            for (int i=0 ; i<size ; ++i)
+            {
+                tmp.append("(");
+                tmp.append(QString::number(pol.point(i).x()));
+                tmp.append(", ");
+                tmp.append(QString::number(pol.point(i).y()));
+                tmp.append(") ");
+            }
+                
+            kDebug() << "   " << it.key() << ": " << tmp;
+        }
+        else
+        {
+            kDebug() << "   " << it.key() << ": " << it.value();
+        }
     }
 
     return toolOperations();
