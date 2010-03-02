@@ -29,18 +29,9 @@
 
 // Qt includes
 
-#include <QColor>
-#include <QFrame>
-#include <QGridLayout>
 #include <QGroupBox>
-#include <QHBoxLayout>
+#include <QVBoxLayout>
 #include <QLabel>
-#include <QPainter>
-#include <QPixmap>
-#include <QPushButton>
-#include <QSpinBox>
-#include <QTimer>
-#include <QToolButton>
 
 // KDE includes
 
@@ -52,7 +43,6 @@
 #include <kicon.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kselector.h>
 #include <kstandarddirs.h>
 
 // Local includes
@@ -129,8 +119,13 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
     // -------------------------------------------------------------
 
     ImageIface iface(0, 0);
-    d->settingsView = new CurvesSettings(d->gboxSettings->plainPage(), iface.getOriginalImg());
-        
+    QVBoxLayout* vbox = new QVBoxLayout(d->gboxSettings->plainPage());
+    d->settingsView   = new CurvesSettings(d->gboxSettings->plainPage(), iface.getOriginalImg());
+    vbox->addWidget(d->settingsView);
+    vbox->addStretch(10);
+    vbox->setMargin(0);
+    vbox->setSpacing(0);    
+    
     setToolSettings(d->gboxSettings);
     init();
 
