@@ -95,10 +95,18 @@ CurvesSettings::CurvesSettings(QWidget* parent, DImg* img)
     QGridLayout* grid = new QGridLayout(this);
     
     // NOTE: add a method to be able to use curves widget without image data as simple curve editor.
-    if (!img->isNull()) d->curvesBox = new CurvesBox(256, 192, img->bits(), img->width(), img->height(), img->sixteenBit());
-    else                d->curvesBox = new CurvesBox(256, 192, (uchar*)"\x00\x00\x00\x00\x00\x00\x00\x00", 1, 1, true);
+    if (!img->isNull())
+    {
+        d->curvesBox = new CurvesBox(256, 192, img->bits(), img->width(), img->height(), img->sixteenBit());
+        d->curvesBox->enableControlWidgets(true);
+    }
+    else
+    {
+        d->curvesBox = new CurvesBox(256, 192, (uchar*)"\x00\x00\x00\x00\x00\x00\x00\x00", 1, 1, true);
+        d->curvesBox->enableControlWidgets(true);
+        d->curvesBox->enablePickers(false);
+    }
   
-    d->curvesBox->enableGradients(true);
     d->curvesBox->enableControlWidgets(true);
 
     grid->addWidget(d->curvesBox, 0, 0, 1, 1);
