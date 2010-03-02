@@ -736,7 +736,10 @@ void ImageCurves::setCurveValues(int channel, const QPolygon& vals)
         kDebug() << "Apply Curves Values on channel " << channel;
 
         for (int j = 0 ; j <= d->segmentMax ; ++j)
+        {
             setCurveValue(channel, j, vals.point(j).y());
+            if (j < 20) kDebug() << vals.point(j);
+        }
     }
 }
 
