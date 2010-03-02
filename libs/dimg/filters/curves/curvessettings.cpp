@@ -92,8 +92,12 @@ CurvesSettings::CurvesSettings(QWidget* parent, DImg* img)
                 d(new CurvesSettingsPriv)
 {
     d->histoSegments  = img->sixteenBit() ? 65535 : 255;
-    QGridLayout* grid = new QGridLayout(parent);
-    d->curvesBox      = new CurvesBox(256, 256, img->bits(), img->width(), img->height(), img->sixteenBit());
+    QGridLayout* grid = new QGridLayout(this);
+    
+    // NOTE: add a method to be able to use curves widget without image data as simple curve editor.
+    if (!img->isNull()) d->curvesBox = new CurvesBox(256, 192, img->bits(), img->width(), img->height(), img->sixteenBit());
+    else                d->curvesBox = new CurvesBox(256, 192, (uchar*)"\x00\x00\x00\x00\x00\x00\x00\x00", 1, 1, true);
+  
     d->curvesBox->enableGradients(true);
     d->curvesBox->enableControlWidgets(true);
 
@@ -119,7 +123,7 @@ CurvesSettings::~CurvesSettings()
     delete d;
 }
 
-void CurvesSettings::setChannel(ChannelType channel)
+void CurvesSettings::setCurrentChannel(ChannelType channel)
 {
     d->curvesBox->setChannel(channel);
 }

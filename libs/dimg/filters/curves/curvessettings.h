@@ -67,7 +67,7 @@ public:
     void saveAsSettings();
 
     void setScale(HistogramScale type);
-    void setChannel(ChannelType channel);
+    void setCurrentChannel(ChannelType channel);
     
 Q_SIGNALS:
 
