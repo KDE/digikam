@@ -222,15 +222,6 @@ void CurvesSettings::resetToDefault()
 CurvesContainer CurvesSettings::defaultSettings() const
 {
     CurvesContainer prm;
-/*
-    prm.black       = d->blackInput->defaultValue();
-    prm.exposition  = d->mainExposureInput->defaultValue() + d->fineExposureInput->defaultValue();
-    prm.temperature = d->temperatureInput->defaultValue();
-    prm.green       = d->greenInput->defaultValue();
-    prm.dark        = d->darkInput->defaultValue();
-    prm.gamma       = d->gammaInput->defaultValue();
-    prm.saturation  = d->saturationInput->defaultValue();
-*/
     return prm;
 }
 
