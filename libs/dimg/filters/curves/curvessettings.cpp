@@ -107,7 +107,7 @@ CurvesSettings::CurvesSettings(QWidget* parent, DImg* img)
         d->curvesBox->enablePickers(false);
     }
   
-    d->curvesBox->enableControlWidgets(true);
+    d->curvesBox->enableGradients(true);
 
     grid->addWidget(d->curvesBox, 0, 0, 1, 1);
     grid->setRowStretch(1, 10);
