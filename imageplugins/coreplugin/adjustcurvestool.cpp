@@ -197,7 +197,7 @@ void AdjustCurvesTool::slotResetCurrentChannel()
 
 void AdjustCurvesTool::slotChannelChanged()
 {
-    d->settingsView->setChannel(d->gboxSettings->histogramBox()->channel());
+    d->settingsView->setCurrentChannel(d->gboxSettings->histogramBox()->channel());
 }
 
 void AdjustCurvesTool::slotScaleChanged()
