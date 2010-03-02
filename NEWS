@@ -12,6 +12,7 @@ ImageEditor       : Auto Color Correction tool is multithreaded and use a zoomab
 ImageEditor       : Channel Mixer tool is multithreaded and use a zoomable preview widget.
 ImageEditor       : Black and White tool is multithreaded and use a zoomable preview widget.
 ImageEditor       : White Balance tool is multithreaded and use a zoomable preview widget.
+ImageEditor       : Adjust Curves tool is multithreaded and use a zoomable preview widget.
 
 BatchQueueManager : new tool to fix Brightness/Contrast/gamma.
 BatchQueueManager : new tool to adjust Color Balance.
