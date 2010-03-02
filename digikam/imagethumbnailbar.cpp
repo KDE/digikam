@@ -120,8 +120,8 @@ void ImageThumbnailBar::setScrollBarPolicy(Qt::ScrollBarPolicy policy)
 {
     if (policy == Qt::ScrollBarAsNeeded)
     {
-        // Delegate esizing will cause endless relayouting, see bug #228807
-        kError() << "The Qt::ScrollBarAsNeeded policy is not supported by ImageThumbnailBar"
+        // Delegate resizing will cause endless relayouting, see bug #228807
+        kError() << "The Qt::ScrollBarAsNeeded policy is not supported by ImageThumbnailBar";
     }
 
     d->scrollPolicy = policy;
