@@ -98,6 +98,7 @@ BatchToolSettings CurvesAdjust::defaultSettings()
 {
     BatchToolSettings prm;
     CurvesContainer defaultPrm = m_settingsView->defaultSettings();
+    prm.insert("curvesType",     (int)defaultPrm.curvesType);
     prm.insert("lumCurveVals",   defaultPrm.lumCurveVals);
     prm.insert("redCurveVals",   defaultPrm.redCurveVals);
     prm.insert("greenCurveVals", defaultPrm.greenCurveVals);
@@ -110,7 +111,8 @@ BatchToolSettings CurvesAdjust::defaultSettings()
 void CurvesAdjust::slotAssignSettings2Widget()
 {
     CurvesContainer prm;
-    
+
+    prm.curvesType     = (ImageCurves::CurveType)settings()["curvesType"].toInt();
     prm.lumCurveVals   = settings()["lumCurveVals"].value<QPolygon>();
     prm.redCurveVals   = settings()["redCurveVals"].value<QPolygon>();
     prm.greenCurveVals = settings()["greenCurveVals"].value<QPolygon>();
@@ -125,6 +127,7 @@ void CurvesAdjust::slotSettingsChanged()
     BatchToolSettings prm;
     CurvesContainer currentPrm = m_settingsView->settings();
 
+    prm.insert("curvesType",     (int)currentPrm.curvesType);
     prm.insert("lumCurveVals",   currentPrm.lumCurveVals);
     prm.insert("redCurveVals",   currentPrm.redCurveVals);
     prm.insert("greenCurveVals", currentPrm.greenCurveVals);
@@ -139,7 +142,8 @@ bool CurvesAdjust::toolOperations()
     if (!loadToDImg()) return false;
 
     CurvesContainer prm;
-    
+
+    prm.curvesType     = (ImageCurves::CurveType)settings()["curvesType"].toInt();
     prm.lumCurveVals   = settings()["lumCurveVals"].value<QPolygon>();
     prm.redCurveVals   = settings()["redCurveVals"].value<QPolygon>();
     prm.greenCurveVals = settings()["greenCurveVals"].value<QPolygon>();
