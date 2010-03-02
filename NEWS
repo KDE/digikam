@@ -89,6 +89,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 063 ==> 225722 : Selection in editor should not darken image.
 064 ==> 228802 : Copy paste doesn't work.
 065 ==> 227064 : digiKam 1.1.0: crash on image download.
-066 ==> 
+066 ==> 228807 : dancing thumbs in album view.
+067 ==> 
 
 

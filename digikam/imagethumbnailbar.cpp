@@ -67,7 +67,7 @@ public:
 
     ImageThumbnailBarPriv()
     {
-        scrollPolicy = Qt::ScrollBarAsNeeded;
+        scrollPolicy = Qt::ScrollBarAlwaysOn;
     }
 
     Qt::ScrollBarPolicy     scrollPolicy;
@@ -80,6 +80,7 @@ ImageThumbnailBar::ImageThumbnailBar(QWidget *parent)
     setSpacing(3);
     setUsePointingHandCursor(false);
     setScrollStepGranularity(5);
+    setScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 
     AlbumSettings *settings = AlbumSettings::instance();
 
@@ -117,6 +118,12 @@ void ImageThumbnailBar::slotDockLocationChanged(Qt::DockWidgetArea area)
 
 void ImageThumbnailBar::setScrollBarPolicy(Qt::ScrollBarPolicy policy)
 {
+    if (policy == Qt::ScrollBarAsNeeded)
+    {
+        // Delegate esizing will cause endless relayouting, see bug #228807
+        kError() << "The Qt::ScrollBarAsNeeded policy is not supported by ImageThumbnailBar"
+    }
+
     d->scrollPolicy = policy;
     if (flow() == TopToBottom)
     {
