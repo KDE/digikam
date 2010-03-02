@@ -2563,47 +2563,30 @@ QStringList AlbumDB::getItemURLsInAlbum(int albumID, ItemSortOrder sortOrder)
     if (albumRootPath.isNull())
         return QStringList();
 
-    //TODO lets define SQL actions within dbconfig.xml
-    QString sqlString;
+    QMap<QString, QVariant> bindingMap;
+    bindingMap.insert(QString(":albumID"), albumID);
+
     switch(sortOrder)
     {
         case ByItemName:
-            sqlString = QString("SELECT Albums.relativePath, Images.name "
-                                 "FROM Images INNER JOIN Albums ON Albums.id=Images.album "
-                                 "WHERE Albums.id=? "
-                                 "ORDER BY Images.name;"); //  COLLATE NOCASE
+            d->db->execDBAction(d->db->getDBAction(QString("getItemURLsInAlbumByItemName")), bindingMap, &values);
             break;
         case ByItemPath:
             // Don't collate on the path - this is to maintain the same behavior
             // that happens when sort order is "By Path"
-            sqlString = QString("SELECT Albums.relativePath, Images.name "
-                                 "FROM Images INNER JOIN Albums ON Albums.id=Images.album "
-                                 "WHERE Albums.id=? "
-                                 "ORDER BY Albums.relativePath,Images.name;");
+            d->db->execDBAction(d->db->getDBAction(QString("getItemURLsInAlbumByItemPath")), bindingMap, &values);
             break;
         case ByItemDate:
-            sqlString = QString("SELECT Albums.relativePath, Images.name "
-                                 "FROM Images INNER JOIN Albums ON Albums.id=Images.album "
-                                 "            INNER JOIN ImageInformation ON ImageInformation.imageid=Images.id "
-                                 "WHERE Albums.id=? "
-                                 "ORDER BY ImageInformation.creationDate;");
+            d->db->execDBAction(d->db->getDBAction(QString("getItemURLsInAlbumByItemDate")), bindingMap, &values);
             break;
         case ByItemRating:
-            sqlString = QString("SELECT Albums.relativePath, Images.name "
-                                 "FROM Images INNER JOIN Albums ON Albums.id=Images.album "
-                                 "            INNER JOIN ImageInformation ON ImageInformation.imageid=Images.id "
-                                 "WHERE Albums.id=? "
-                                 "ORDER BY ImageInformation.rating DESC;");
+            d->db->execDBAction(d->db->getDBAction(QString("getItemURLsInAlbumByItemRating")), bindingMap, &values);
             break;
         case NoItemSorting:
         default:
-            sqlString = QString("SELECT Albums.relativePath, Images.name "
-                                 "FROM Images INNER JOIN Albums ON Albums.id=Images.album "
-                                 "WHERE Albums.id=?;");
+            d->db->execDBAction(d->db->getDBAction(QString("getItemURLsInAlbumNoItemSorting")), bindingMap, &values);
             break;
     }
-    // all statements take one bound value
-    d->db->execSql(sqlString, albumID, &values);
 
     QStringList urls;
     QString relativePath, name;

@@ -245,6 +245,30 @@
 				END;</statement>
 			</dbaction>
 			
+			<dbaction name="getItemURLsInAlbumByItemName" mode="transaction">
+				<statement mode="query">SELECT Albums.relativePath, Images.name FROM Images INNER JOIN Albums ON Albums.id=Images.album WHERE Albums.id=:albumID ORDER BY Images.name COLLATE NOCASE;</statement>
+			</dbaction>
+			
+			<!--Don't collate on the path - this is to maintain the same behavior
+            	that happens when sort order is "By Path"
+            -->
+			<dbaction name="getItemURLsInAlbumByItemPath" mode="transaction">
+				<statement mode="query">SELECT Albums.relativePath, Images.name FROM Images INNER JOIN Albums ON Albums.id=Images.album WHERE Albums.id=:albumID ORDER BY Albums.relativePath,Images.name;</statement>
+			</dbaction>
+			
+			<dbaction name="getItemURLsInAlbumByItemDate" mode="transaction">
+				<statement mode="query">SELECT Albums.relativePath, Images.name FROM Images INNER JOIN Albums ON Albums.id=Images.album INNER JOIN ImageInformation ON ImageInformation.imageid=Images.id WHERE Albums.id=:albumID ORDER BY ImageInformation.creationDate;</statement>
+			</dbaction>
+			
+			<dbaction name="getItemURLsInAlbumByItemRating" mode="transaction">
+				<statement mode="query">SELECT Albums.relativePath, Images.name FROM Images INNER JOIN Albums ON Albums.id=Images.album INNER JOIN ImageInformation ON ImageInformation.imageid=Images.id WHERE Albums.id=:albumID ORDER BY ImageInformation.rating DESC;</statement>
+			</dbaction>
+			
+			<dbaction name="getItemURLsInAlbumNoItemSorting" mode="transaction">
+				<statement mode="query">SELECT Albums.relativePath, Images.name FROM Images INNER JOIN Albums ON Albums.id=Images.album WHERE Albums.id=:albumID;</statement>
+			</dbaction>
+			
+			
 			<dbaction name="InsertTag" mode="transaction">
 				<statement mode="query">INSERT INTO Tags (pid, name) VALUES( :tagPID, :tagname);</statement>
 			</dbaction>
@@ -645,7 +669,33 @@
 			  WHERE node.lft BETWEEN parent.lft AND parent.rgt
 			  ORDER BY parent.lft;
 			END;</statement>
-			</dbaction> 
+			</dbaction>
+			
+			<dbaction name="getItemURLsInAlbumByItemName" mode="transaction">
+				<statement mode="query">SELECT Albums.relativePath, Images.name FROM Images INNER JOIN Albums ON Albums.id=Images.album WHERE Albums.id=:albumID ORDER BY Images.name;</statement>
+			</dbaction>
+			
+			<!--Don't collate on the path - this is to maintain the same behavior
+            	that happens when sort order is "By Path"
+            -->
+			<dbaction name="getItemURLsInAlbumByItemPath" mode="transaction">
+				<statement mode="query">SELECT Albums.relativePath, Images.name FROM Images INNER JOIN Albums ON Albums.id=Images.album WHERE Albums.id=:albumID ORDER BY Albums.relativePath,Images.name;</statement>
+			</dbaction>
+			
+			<dbaction name="getItemURLsInAlbumByItemDate" mode="transaction">
+				<statement mode="query">SELECT Albums.relativePath, Images.name FROM Images INNER JOIN Albums ON Albums.id=Images.album INNER JOIN ImageInformation ON ImageInformation.imageid=Images.id WHERE Albums.id=:albumID ORDER BY ImageInformation.creationDate;</statement>
+			</dbaction>
+			
+			<dbaction name="getItemURLsInAlbumByItemRating" mode="transaction">
+				<statement mode="query">SELECT Albums.relativePath, Images.name FROM Images INNER JOIN Albums ON Albums.id=Images.album INNER JOIN ImageInformation ON ImageInformation.imageid=Images.id WHERE Albums.id=:albumID ORDER BY ImageInformation.rating DESC;</statement>
+			</dbaction>
+			
+			<dbaction name="getItemURLsInAlbumNoItemSorting" mode="transaction">
+				<statement mode="query">SELECT Albums.relativePath, Images.name FROM Images INNER JOIN Albums ON Albums.id=Images.album WHERE Albums.id=:albumID;</statement>
+			</dbaction>
+			
+			
+			 
 			<dbaction name="InsertTag" mode="transaction">
 				<statement mode="plain">LOCK TABLE Tags WRITE;</statement>
 				<statement mode="query">SELECT @myLeft := lft FROM Tags WHERE id = :tagPID;</statement>
