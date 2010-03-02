@@ -104,8 +104,8 @@ CurvesSettings::CurvesSettings(QWidget* parent, DImg* img)
     {
         d->curvesBox = new CurvesBox(256, 192, (uchar*)"\x00\x00\x00\x00\x00\x00\x00\x00", 1, 1, true);
         d->curvesBox->enablePickers(false);
-        d->enableResetButton(true);
-        d->enableCurveTypes(true);
+        d->curvesBox->enableResetButton(true);
+        d->curvesBox->enableCurveTypes(true);
     }
   
     d->curvesBox->enableGradients(true);
