@@ -13,6 +13,7 @@ ImageEditor       : Channel Mixer tool is multithreaded and use a zoomable previ
 ImageEditor       : Black and White tool is multithreaded and use a zoomable preview widget.
 ImageEditor       : White Balance tool is multithreaded and use a zoomable preview widget.
 ImageEditor       : Adjust Curves tool is multithreaded and use a zoomable preview widget.
+ImageEditor       : Adjust Levels tool is multithreaded and use a zoomable preview widget.
 
 BatchQueueManager : new tool to fix Brightness/Contrast/gamma.
 BatchQueueManager : new tool to adjust Color Balance.
@@ -92,6 +93,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 065 ==> 227064 : digiKam 1.1.0: crash on image download.
 066 ==> 228807 : dancing thumbs in album view.
 067 ==> 214303 : Position of preview type buttons is inconsistent across different tools.
-068 ==> 
+068 ==> 163286 : Accurate histogram preview required.
+069 ==> 
 
 
