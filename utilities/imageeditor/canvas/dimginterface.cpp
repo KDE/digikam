@@ -362,7 +362,12 @@ void DImgInterface::slotImageLoaded(const LoadingDescription& loadingDescription
         if (d->image.detectedFormat() == DImg::RAW)
             d->rotatedOrFlipped = true;
         else if (d->exifOrient)
-             exifRotate(d->filename);
+        {
+            // Do not rotate twice if already rotated, e.g. for full size preview.
+            QVariant attribute(d->image.attribute("exifRotated"));
+            if (!attribute.isValid() || !attribute.toBool())
+                exifRotate(d->filename);
+        }
 
         updateColorManagement();
     }
