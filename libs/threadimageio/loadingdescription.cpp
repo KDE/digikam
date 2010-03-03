@@ -55,7 +55,6 @@ void LoadingDescription::PostProcessingParameters::setTransform(const IccTransfo
 bool LoadingDescription::PostProcessingParameters::hasTransform() const
 {
     return !iccData.isNull() && iccData.canConvert<IccTransform>();
-;
 }
 
 IccTransform LoadingDescription::PostProcessingParameters::transform() const
