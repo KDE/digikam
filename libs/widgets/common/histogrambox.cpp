@@ -149,11 +149,11 @@ HistogramBox::HistogramBox(QWidget *parent, HistogramBoxType type, bool selectMo
 
     // ---------------------------------------------------------------
 
-    connect(d->channelCB, SIGNAL(activated(int)),
-            this, SIGNAL(signalChannelChanged()));
+    //connect(d->channelCB, SIGNAL(activated(int)),
+    //        this, SIGNAL(signalChannelChanged()));
 
-    connect(d->scaleBG, SIGNAL(buttonReleased(int)),
-            this, SIGNAL(signalScaleChanged()));
+    //connect(d->scaleBG, SIGNAL(buttonReleased(int)),
+    //        this, SIGNAL(signalScaleChanged()));
 
     connect(d->channelCB, SIGNAL(activated(int)),
             this, SLOT(slotChannelChanged()));
