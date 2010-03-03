@@ -244,10 +244,10 @@ EditorToolSettings::EditorToolSettings(QWidget *parent)
     connect(d->guideSize, SIGNAL(valueChanged(int)),
             this, SIGNAL(signalColorGuideChanged()));
 
-    connect(d->histogramBox, SIGNAL(signalChannelChanged()),
+    connect(d->histogramBox, SIGNAL(signalChannelChanged(ChannelType)),
             this, SIGNAL(signalChannelChanged()));
 
-    connect(d->histogramBox, SIGNAL(signalScaleChanged()),
+    connect(d->histogramBox, SIGNAL(signalScaleChanged(HistogramScale)),
             this, SIGNAL(signalScaleChanged()));
 
     // --------------------------------------------------------

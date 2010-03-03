@@ -63,18 +63,21 @@ public:
     HistogramWidget* histogram() const;
 
     ChannelType channel() const;
-    void setChannel(ChannelType channel);
     void setChannelEnabled(bool enabled);
 
     HistogramScale scale() const;
-    void setScale(HistogramScale scale);
 
 Q_SIGNALS:
 
-    void signalChannelChanged();
-    void signalScaleChanged();
+    void signalChannelChanged(ChannelType channel);
+    void signalScaleChanged(HistogramScale scale);
 
 public Q_SLOTS:
+
+    void setChannel(ChannelType channel);
+    void setScale(HistogramScale scale);
+
+protected Q_SLOTS:
 
     void slotChannelChanged();
     void slotScaleChanged();

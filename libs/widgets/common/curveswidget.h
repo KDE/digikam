@@ -115,19 +115,17 @@ public:
     ImageCurves* curves() const;
     bool isSixteenBits();
 
-public:
-
-    ChannelType     m_channelType;     // Channel type to draw.
-    HistogramScale  m_scaleType;       // Scale to use for drawing.
-
-    ImageHistogram* m_imageHistogram;
-
 Q_SIGNALS:
 
     void signalMouseMoved(int x, int y);
     void signalCurvesChanged();
     void signalHistogramComputationDone();
     void signalHistogramComputationFailed();
+
+public Q_SLOTS:
+
+    void setChannelType(ChannelType channel);
+    void setScaleType(HistogramScale scale);
 
 protected Q_SLOTS:
 

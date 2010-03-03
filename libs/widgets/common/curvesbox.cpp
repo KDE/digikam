@@ -72,11 +72,11 @@ public:
         pickerBox       = 0;
         pickerType      = 0;
         resetButton     = 0;
-        currentChannel  = LuminosityChannel;
+        channel         = LuminosityChannel;
         sixteenBit      = false;
     }
     bool                 sixteenBit;
-    ChannelType          currentChannel;
+    ChannelType          channel;
     
     QToolButton*         curveFree;
     QToolButton*         curveSmooth;
@@ -109,7 +109,7 @@ CurvesBox::CurvesBox(int w, int h, uchar *i_data, uint i_w, uint i_h,
 {
     d->sixteenBit     = i_sixteenBits;
     d->curvesWidget   = new CurvesWidget(w, h, i_data, i_w, i_h, i_sixteenBits, this, readOnly);
-    d->currentChannel = d->curvesWidget->m_channelType;
+    d->curvesWidget->setChannelType(d->channel);
     setup();
 }
 
@@ -240,8 +240,8 @@ void CurvesBox::setup()
 
     // -------------------------------------------------------------
 
-    connect(d->curvesWidget, SIGNAL(signalCurvesChanged()),
-            this, SIGNAL(signalCurvesChanged()));
+    //connect(d->curvesWidget, SIGNAL(signalCurvesChanged()),
+    //        this, SIGNAL(signalCurvesChanged()));
 
     connect(d->pickerType, SIGNAL(buttonReleased(int)),
             this, SIGNAL(signalPickerChanged(int)));
@@ -305,14 +305,14 @@ void CurvesBox::slotCurveTypeChanged(int type)
     {
        case SmoothDrawing:
        {
-          d->curvesWidget->curves()->setCurveType(d->curvesWidget->m_channelType, ImageCurves::CURVE_SMOOTH);
+          d->curvesWidget->curves()->setCurveType(d->channel, ImageCurves::CURVE_SMOOTH);
           d->pickerBox->setEnabled(true);
           break;
        }
 
        case FreeDrawing:
        {
-          d->curvesWidget->curves()->setCurveType(d->curvesWidget->m_channelType, ImageCurves::CURVE_FREE);
+          d->curvesWidget->curves()->setCurveType(d->channel, ImageCurves::CURVE_FREE);
           d->pickerBox->setEnabled(false);
           break;
        }
@@ -324,36 +324,32 @@ void CurvesBox::slotCurveTypeChanged(int type)
 
 void CurvesBox::setScale(HistogramScale type)
 {
-    d->curvesWidget->m_scaleType = type;
-    d->curvesWidget->repaint();
+    d->curvesWidget->setScaleType(type);
 }
 
 void CurvesBox::setChannel(ChannelType channel)
 {
-    d->currentChannel = channel;
+    d->channel = channel;
+    d->curvesWidget->setChannelType(channel);
 
     switch (channel)
     {
         case RedChannel:
-            d->curvesWidget->m_channelType = RedChannel;
             d->hGradient->setColors(QColor("red"), QColor("black"));
             d->vGradient->setColors(QColor("red"), QColor("black"));
             break;
 
         case GreenChannel:
-            d->curvesWidget->m_channelType = GreenChannel;
             d->hGradient->setColors(QColor("green"), QColor("black"));
             d->vGradient->setColors(QColor("green"), QColor("black"));
             break;
 
         case BlueChannel:
-            d->curvesWidget->m_channelType = BlueChannel;
             d->hGradient->setColors(QColor("blue"), QColor("black"));
             d->vGradient->setColors(QColor("blue"), QColor("black"));
             break;
 
         default:
-            d->curvesWidget->m_channelType = channel;
             d->hGradient->setColors(QColor("white"), QColor("black"));
             d->vGradient->setColors(QColor("white"), QColor("black"));
             break;
@@ -365,7 +361,7 @@ void CurvesBox::setChannel(ChannelType channel)
 
 ChannelType CurvesBox::channel() const
 {
-    return d->currentChannel;
+    return d->channel;
 }
 
 int CurvesBox::picker() const
@@ -391,8 +387,8 @@ void CurvesBox::resetChannel(int channel)
 
 void CurvesBox::slotResetChannel()
 {
-    resetChannel(d->currentChannel);
-    emit signalChannelReset(d->currentChannel);
+    resetChannel(d->channel);
+    emit signalChannelReset(d->channel);
 }
 
 void CurvesBox::slotResetChannels()
@@ -411,7 +407,7 @@ void CurvesBox::resetChannels()
 
 void CurvesBox::reset()
 {
-    d->curvesWidget->curves()->setCurveType(d->curvesWidget->m_channelType, ImageCurves::CURVE_SMOOTH);
+    d->curvesWidget->curves()->setCurveType(d->channel, ImageCurves::CURVE_SMOOTH);
     d->curvesWidget->reset();
 }
 

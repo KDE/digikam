@@ -644,7 +644,7 @@ void AdjustLevelsTool::slotResetCurrentChannel()
 void AdjustLevelsTool::slotAutoLevels()
 {
     // Calculate Auto levels.
-    d->levels->levelsAuto(d->levelsHistogramWidget->m_imageHistogram);
+    d->levels->levelsAuto(d->levelsHistogramWidget->currentHistogram());
 
     // Refresh the current levels config.
     slotChannelChanged();
@@ -654,46 +654,27 @@ void AdjustLevelsTool::slotAutoLevels()
 
 void AdjustLevelsTool::slotChannelChanged()
 {
-    int channel = d->gboxSettings->histogramBox()->channel();
+    ChannelType channel = d->gboxSettings->histogramBox()->channel();
+    d->levelsHistogramWidget->setChannelType(channel);
     switch (channel)
     {
-        case LuminosityChannel:
-            d->levelsHistogramWidget->m_channelType = LuminosityChannel;
-            d->inputLevels->setColors(QColor("black"), QColor("white"));
-            d->inputLevels->setColors(QColor("black"), QColor("white"));
-            d->outputLevels->setColors(QColor("black"), QColor("white"));
-            d->outputLevels->setColors(QColor("black"), QColor("white"));
-            break;
-
         case RedChannel:
-            d->levelsHistogramWidget->m_channelType = RedChannel;
             d->inputLevels->setColors(QColor("black"), QColor("red"));
-            d->inputLevels->setColors(QColor("black"), QColor("red"));
-            d->outputLevels->setColors(QColor("black"), QColor("red"));
             d->outputLevels->setColors(QColor("black"), QColor("red"));
             break;
 
         case GreenChannel:
-            d->levelsHistogramWidget->m_channelType = GreenChannel;
             d->inputLevels->setColors(QColor("black"), QColor("green"));
-            d->inputLevels->setColors(QColor("black"), QColor("green"));
-            d->outputLevels->setColors(QColor("black"), QColor("green"));
             d->outputLevels->setColors(QColor("black"), QColor("green"));
             break;
 
         case BlueChannel:
-            d->levelsHistogramWidget->m_channelType = BlueChannel;
             d->inputLevels->setColors(QColor("black"), QColor("blue"));
-            d->inputLevels->setColors(QColor("black"), QColor("blue"));
-            d->outputLevels->setColors(QColor("black"), QColor("blue"));
             d->outputLevels->setColors(QColor("black"), QColor("blue"));
             break;
 
-        case AlphaChannel:
-            d->levelsHistogramWidget->m_channelType = AlphaChannel;
+        default:
             d->inputLevels->setColors(QColor("black"), QColor("white"));
-            d->inputLevels->setColors(QColor("black"), QColor("white"));
-            d->outputLevels->setColors(QColor("black"), QColor("white"));
             d->outputLevels->setColors(QColor("black"), QColor("white"));
             break;
     }
@@ -704,14 +685,11 @@ void AdjustLevelsTool::slotChannelChanged()
                               d->levels->getLevelLowOutputValue(channel),
                               d->levels->getLevelHighOutputValue(channel));
 
-    d->levelsHistogramWidget->repaint();
-    d->gboxSettings->histogramBox()->slotChannelChanged();
 }
 
 void AdjustLevelsTool::slotScaleChanged()
 {
-    d->levelsHistogramWidget->m_scaleType = d->gboxSettings->histogramBox()->scale();
-    d->levelsHistogramWidget->repaint();
+    d->levelsHistogramWidget->setScaleType(d->gboxSettings->histogramBox()->scale());
 }
 
 void AdjustLevelsTool::readSettings()

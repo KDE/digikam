@@ -319,10 +319,10 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
     connect(d->histogramBox->histogram(), SIGNAL(signalHistogramComputationFailed(void)),
             this, SLOT(slotHistogramComputationFailed(void)));
 
-    connect(d->histogramBox, SIGNAL(signalChannelChanged()),
+    connect(d->histogramBox, SIGNAL(signalChannelChanged(ChannelType)),
             this, SLOT(slotChannelChanged()));
 
-    connect(d->histogramBox, SIGNAL(signalScaleChanged()),
+    connect(d->histogramBox, SIGNAL(signalScaleChanged(HistogramScale)),
             this, SLOT(slotScaleChanged()));
 
     // -------------------------------------------------------------
