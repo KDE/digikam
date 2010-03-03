@@ -67,7 +67,6 @@ private:
     void writeSettings();
     void prepareEffect();
     void prepareFinal();
-    void abortPreview();
     void putPreviewData();
     void putFinalData();
     void renderingFinished();
