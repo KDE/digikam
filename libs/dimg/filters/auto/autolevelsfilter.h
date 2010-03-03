@@ -49,9 +49,9 @@ private:
 
     void filterImage();
     void autoLevelsCorrectionImage();
-    
-private:     
-    
+
+private:
+
     DImg m_refImage;
 };
 

@@ -49,8 +49,8 @@ private:
 
     void filterImage();
     void stretchContrastImage();
-            
-private:     
+
+private:
 
     struct double_packet
     {
@@ -66,9 +66,9 @@ private:
         unsigned int green;
         unsigned int blue;
         unsigned int alpha;
-    };  
-  
-    DImg m_refImage;    
+    };
+
+    DImg m_refImage;
 };
 
 }  // namespace Digikam

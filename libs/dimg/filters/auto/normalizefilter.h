@@ -58,7 +58,7 @@ private:
         double          min;
         double          max;
     };
-    
+
     DImg m_refImage;
 };
 

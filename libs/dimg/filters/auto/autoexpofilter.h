@@ -48,9 +48,9 @@ public:
 private:
 
     void filterImage();
-        
-private:     
-    
+
+private:
+
     DImg m_refImage;
 };
 

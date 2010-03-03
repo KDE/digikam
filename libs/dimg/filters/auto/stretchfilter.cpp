@@ -74,7 +74,7 @@ void StretchFilter::stretchContrastImage()
         kDebug() << "Ref. image and Org. has different bits depth"; 
         return;
     }
-    
+
     // Create an histogram of the reference image.
     ImageHistogram* histogram = new ImageHistogram(m_refImage.bits(), m_refImage.width(), 
                                                    m_refImage.height(), m_refImage.sixteenBit());
@@ -284,7 +284,7 @@ void StretchFilter::stretchContrastImage()
     }
 
     // Apply result to image.
-    
+
     uchar* data     = m_orgImage.bits(); 
     int w           = m_orgImage.width();
     int h           = m_orgImage.height();

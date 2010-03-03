@@ -73,7 +73,7 @@ void EqualizeFilter::equalizeImage()
     struct int_packet*    equalize_map;
     register int          i;
     int                   progress;
-    
+
     if (m_orgImage.sixteenBit() != m_refImage.sixteenBit())
     {
         kDebug() << "Ref. image and Org. has different bits depth"; 

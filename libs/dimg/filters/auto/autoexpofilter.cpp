@@ -52,7 +52,7 @@ void AutoExpoFilter::filterImage()
         kDebug() << "Ref. image and Org. has different bits depth"; 
         return;
     }
-    
+
     autoExposureAdjustement(&m_refImage, m_settings.black, m_settings.exposition);
     WBFilter::filterImage();
 }

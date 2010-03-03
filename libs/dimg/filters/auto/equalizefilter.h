@@ -49,8 +49,8 @@ private:
 
     void filterImage();
     void equalizeImage();
-                
-private:     
+
+private:
 
     struct double_packet
     {
@@ -67,7 +67,7 @@ private:
         unsigned int blue;
         unsigned int alpha;
     };
-    
+
     DImg m_refImage;
 };
 
