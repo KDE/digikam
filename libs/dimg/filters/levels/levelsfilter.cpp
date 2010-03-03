@@ -55,7 +55,7 @@ void LevelsFilter::filterImage()
         postProgress(i*10);
         levels.setLevelLowInputValue(i,   m_settings.lInput[i]);
         levels.setLevelHighInputValue(i,  m_settings.hInput[i]);
-        levels.setLevelHighInputValue(i,  m_settings.lOutput[i]);
+        levels.setLevelLowOutputValue(i,  m_settings.lOutput[i]);
         levels.setLevelHighOutputValue(i, m_settings.hOutput[i]);
         levels.setLevelGammaValue(i,      m_settings.gamma[i]);
     }

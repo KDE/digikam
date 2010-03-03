@@ -66,6 +66,7 @@ public:
         channelCB       = 0;
         hGradient       = 0;
         histogramWidget = 0;
+        histoBox        = 0;
     }
 
     QButtonGroup*        scaleBG;
@@ -73,6 +74,7 @@ public:
     QToolButton*         linHistoButton;
     QToolButton*         logHistoButton;
 
+    QWidget*             histoBox;
     KComboBox*           channelCB;
 
     ColorGradientWidget* hGradient;
@@ -114,28 +116,28 @@ HistogramBox::HistogramBox(QWidget *parent, HistogramBoxType type, bool selectMo
     d->scaleBG->setExclusive(true);
     d->logHistoButton->setChecked(true);
 
-    QWidget *histoBox = new QWidget;
-    QVBoxLayout *histoBoxLayout = new QVBoxLayout;
+    d->histoBox                 = new QWidget;
+    QVBoxLayout* histoBoxLayout = new QVBoxLayout;
 
-    d->histogramWidget = new HistogramWidget(256, 140, histoBox, selectMode, true, true);
+    d->histogramWidget = new HistogramWidget(256, 140, d->histoBox, selectMode, true, true);
     d->histogramWidget->setWhatsThis(i18n("Here you can see the target preview image histogram drawing "
                                           "of the selected image channel. This one is re-computed at any "
                                           "settings changes."));
 
-    d->hGradient = new ColorGradientWidget(Qt::Horizontal, 10, histoBox);
+    d->hGradient = new ColorGradientWidget(Qt::Horizontal, 10, d->histoBox);
     d->hGradient->setColors(QColor("black"), QColor("white"));
 
     histoBoxLayout->addWidget(d->histogramWidget);
     histoBoxLayout->addWidget(d->hGradient);
     histoBoxLayout->setSpacing(1);
     histoBoxLayout->setMargin(0);
-    histoBox->setLayout(histoBoxLayout);
+    d->histoBox->setLayout(histoBoxLayout);
 
     QGridLayout* mainLayout = new QGridLayout;
     mainLayout->addWidget(channelLabel,   0, 0, 1, 1);
     mainLayout->addWidget(d->channelCB,   0, 1, 1, 1);
     mainLayout->addWidget(scaleBox,       0, 3, 1, 2);
-    mainLayout->addWidget(histoBox,       2, 0, 1, 5);
+    mainLayout->addWidget(d->histoBox,    2, 0, 1, 5);
     mainLayout->setColumnStretch(2, 10);
     mainLayout->setSpacing(5);
     mainLayout->setMargin(0);
@@ -212,6 +214,11 @@ HistogramWidget* HistogramBox::histogram() const
     return d->histogramWidget;
 }
 
+void HistogramBox::setHistogramMargin(int margin)
+{
+    d->histoBox->layout()->setMargin(margin);
+}
+    
 void HistogramBox::slotChannelChanged()
 {
     switch (channel())

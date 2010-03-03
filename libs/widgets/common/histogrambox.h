@@ -55,6 +55,7 @@ public:
     ~HistogramBox();
 
     void setHistogramType(HistogramBoxType type);
+    void setHistogramMargin(int);
 
     void setGradientColors(const QColor& from, const QColor& to);
     void setGradientVisible(bool visible);

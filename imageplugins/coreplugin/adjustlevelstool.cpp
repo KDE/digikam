@@ -31,13 +31,10 @@
 
 #include <QButtonGroup>
 #include <QColor>
-#include <QFrame>
 #include <QGridLayout>
 #include <QGroupBox>
 #include <QHBoxLayout>
 #include <QLabel>
-#include <QPainter>
-#include <QPixmap>
 #include <QPushButton>
 #include <QTimer>
 #include <QToolButton>
@@ -69,8 +66,9 @@
 #include "histogramwidget.h"
 #include "imagehistogram.h"
 #include "imageiface.h"
+#include "levelsfilter.h"
 #include "imagelevels.h"
-#include "imageguidewidget.h"
+#include "imageregionwidget.h"
 
 using namespace KDcrawIface;
 
@@ -84,7 +82,8 @@ public:
     
     enum ColorPicker
     {
-        BlackTonal=0,
+        NoPicker   = -1,
+        BlackTonal = 0,
         GrayTonal,
         WhiteTonal
     };
@@ -103,7 +102,6 @@ public:
 
         destinationPreviewData(0),
         histoSegments(0),
-        currentPreviewMode(0),
         pickerBox(0),
         resetButton(0),
         autoButton(0),
@@ -137,7 +135,6 @@ public:
     uchar*              destinationPreviewData;
 
     int                 histoSegments;
-    int                 currentPreviewMode;
 
     QWidget*            pickerBox;
 
@@ -161,7 +158,7 @@ public:
     DGradientSlider*    inputLevels;
     DGradientSlider*    outputLevels;
 
-    ImageGuideWidget*   previewWidget;
+    ImageRegionWidget*  previewWidget;
 
     ImageLevels*        levels;
 
@@ -171,7 +168,7 @@ public:
 };
 
 AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
-                : EditorTool(parent),
+                : EditorToolThreaded(parent),
                   d(new AdjustLevelsToolPriv)
 {
     setObjectName("adjustlevels");
@@ -186,10 +183,7 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->previewWidget = new ImageGuideWidget;
-    d->previewWidget->setWhatsThis(i18n("Here you can see the image's "
-                                        "level-adjustments preview. You can pick a spot on the image "
-                                        "to see the corresponding level in the histogram."));
+    d->previewWidget = new ImageRegionWidget;
     setToolView(d->previewWidget);
     setPreviewModeMask(PreviewToolBar::AllPreviewModes);
 
@@ -200,22 +194,24 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
                                 EditorToolSettings::Load|
                                 EditorToolSettings::SaveAs|
                                 EditorToolSettings::Ok|
-                                EditorToolSettings::Cancel);
+                                EditorToolSettings::Cancel|
+                                EditorToolSettings::Try);
 
     d->gboxSettings->setTools(EditorToolSettings::Histogram);
     d->gboxSettings->setHistogramType(Digikam::LRGBA);
 
     // we don't need to use the Gradient widget in this tool
     d->gboxSettings->histogramBox()->setGradientVisible(false);
-
+    
+    // -------------------------------------------------------------
 
     d->levelsHistogramWidget = new HistogramWidget(256, 140, d->originalImage->bits(),
                                                              d->originalImage->width(),
                                                              d->originalImage->height(),
                                                              d->originalImage->sixteenBit(),
                                                              d->gboxSettings->plainPage(), false);
-    d->levelsHistogramWidget->setWhatsThis( i18n("This is the histogram drawing of the selected channel "
-                                                 "from the original image."));
+    d->levelsHistogramWidget->setWhatsThis(i18n("This is the histogram drawing of the selected channel "
+                                                "from the original image."));
 
     // -------------------------------------------------------------
 
@@ -223,6 +219,7 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
     d->inputLevels->setWhatsThis( i18n("Select the input intensity of the histogram here."));
     d->inputLevels->setToolTip( i18n( "Input intensity." ) );
     d->inputLevels->installEventFilter(this);
+    d->gboxSettings->histogramBox()->setHistogramMargin(d->inputLevels->gradientOffset());
 
     d->outputLevels = new DGradientSlider();
     d->outputLevels->setWhatsThis( i18n("Select the output intensity of the histogram here."));
@@ -359,15 +356,16 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
     // -------------------------------------------------------------
     // Channels and scale selection slots.
 
-    connect(d->previewWidget, SIGNAL(spotPositionChangedFromOriginal(const Digikam::DColor&, const QPoint&)),
-            this, SLOT(slotSpotColorChanged(const Digikam::DColor&)));
-
-    connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget(const Digikam::DColor&, const QPoint&)),
-            this, SLOT(slotColorSelectedFromTarget(const Digikam::DColor&)));
-
     connect(d->previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));
 
+    connect(d->previewWidget, SIGNAL(signalCapturedPointFromOriginal(const Digikam::DColor&, const QPoint&)),
+            this, SLOT(slotSpotColorChanged(const Digikam::DColor&)));
+/*
+    connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget(const Digikam::DColor&, const QPoint&)),
+            this, SLOT(slotColorSelectedFromTarget(const Digikam::DColor&)));
+*/
+            
     // -------------------------------------------------------------
     // Color sliders and spinbox slots.
 
@@ -408,7 +406,7 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
             this, SLOT(slotResetCurrentChannel()));
 
     connect(d->pickerColorButtonGroup, SIGNAL(buttonReleased(int)),
-            this, SLOT(slotPickerColorButtonActived()));
+            this, SLOT(slotPickerColorButtonActived(int)));
 }
 
 AdjustLevelsTool::~AdjustLevelsTool()
@@ -483,7 +481,7 @@ bool AdjustLevelsTool::eventFilter(QObject *obj, QEvent *ev)
     else
     {
         // pass the event on to the parent class
-        return EditorTool::eventFilter(obj, ev);
+        return EditorToolThreaded::eventFilter(obj, ev);
     }
 }
 
@@ -501,11 +499,11 @@ void AdjustLevelsTool::slotShowOutputHistogramGuide(double v)
     d->gboxSettings->histogramBox()->histogram()->setHistogramGuideByColor(color);
 }
 
-void AdjustLevelsTool::slotPickerColorButtonActived()
+void AdjustLevelsTool::slotPickerColorButtonActived(int type)
 {
-    // Save previous rendering mode and toggle to original image.
-    d->currentPreviewMode = d->previewWidget->previewMode();
-    d->previewWidget->slotPreviewModeChanged(PreviewToolBar::PreviewOriginalImage);
+    if (type == AdjustLevelsToolPriv::NoPicker) return;
+
+    d->previewWidget->setCapturePointMode(true);
 }
 
 void AdjustLevelsTool::slotSpotColorChanged(const DColor& color)
@@ -537,9 +535,7 @@ void AdjustLevelsTool::slotSpotColorChanged(const DColor& color)
     // Refresh the current levels config.
     slotChannelChanged();
 
-    // restore previous rendering mode.
-    d->previewWidget->slotPreviewModeChanged(d->currentPreviewMode);
-
+    d->previewWidget->setCapturePointMode(false);
     slotEffect();
 }
 
@@ -612,6 +608,7 @@ void AdjustLevelsTool::adjustSlidersAndSpinboxes(int minIn, double gamIn, int ma
 void AdjustLevelsTool::adjustSliders(int minIn, double gamIn, int maxIn, int minOut, int maxOut)
 {
     d->inputLevels->blockSignals(true);
+    d->gammaInput->blockSignals(true);
     d->outputLevels->blockSignals(true);
 
     d->inputLevels->setLeftValue((double)minIn/(double)d->histoSegments);
@@ -626,6 +623,7 @@ void AdjustLevelsTool::adjustSliders(int minIn, double gamIn, int maxIn, int min
     d->levels->setLevelHighOutputValue(d->gboxSettings->histogramBox()->channel(), maxOut);
 
     d->inputLevels->blockSignals(false);
+    d->gammaInput->blockSignals(false);
     d->outputLevels->blockSignals(false);
 
     slotTimer();
@@ -808,60 +806,74 @@ void AdjustLevelsTool::slotResetSettings()
     d->gboxSettings->histogramBox()->histogram()->reset();
 }
 
-void AdjustLevelsTool::slotEffect()
+void AdjustLevelsTool::prepareEffect()
 {
-    ImageIface* iface = d->previewWidget->imageIface();
-    uchar* orgData    = iface->getPreviewImage();
-    int w             = iface->previewWidth();
-    int h             = iface->previewHeight();
-    bool sb           = iface->previewSixteenBit();
+    kapp->setOverrideCursor(Qt::WaitCursor);
+    toolSettings()->setEnabled(false);
+    toolView()->setEnabled(false);
 
-    // Create the new empty destination image data space.
+    LevelsContainer settings;
+    for (int i=0 ; i<5 ; ++i)
+    {
+        settings.lInput[i]  = d->levels->getLevelLowInputValue(i);
+        settings.hInput[i]  = d->levels->getLevelHighInputValue(i);
+        settings.lOutput[i] = d->levels->getLevelLowOutputValue(i);
+        settings.hOutput[i] = d->levels->getLevelHighOutputValue(i);
+        settings.gamma[i]   = d->levels->getLevelGammaValue(i);
+    }    
+    
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
+
+    DImg preview = d->previewWidget->getOriginalRegionImage(true);
+    setFilter(new LevelsFilter(&preview, this, settings));
+}
+
+void AdjustLevelsTool::putPreviewData()
+{
+    DImg preview = filter()->getTargetImage();
+    d->previewWidget->setPreviewImage(preview);
+
+    // Update histogram.
 
     if (d->destinationPreviewData)
        delete [] d->destinationPreviewData;
 
-    d->destinationPreviewData = new uchar[w*h*(sb ? 8 : 4)];
-
-    // Calculate the LUT to apply on the image.
-    d->levels->levelsLutSetup(AlphaChannel);
-
-    // Apply the lut to the image.
-    d->levels->levelsLutProcess(orgData, d->destinationPreviewData, w, h);
-
-    iface->putPreviewImage(d->destinationPreviewData);
-    d->previewWidget->updatePreview();
-
-    // Update histogram.
-    d->gboxSettings->histogramBox()->histogram()->updateData(d->destinationPreviewData, w, h, sb, 0, 0, 0, false);
-
-    delete [] orgData;
+    d->destinationPreviewData = preview.copyBits();
+    d->gboxSettings->histogramBox()->histogram()->updateData(d->destinationPreviewData,
+                                                             preview.width(), preview.height(), preview.sixteenBit(),
+                                                             0, 0, 0, false);
 }
 
-void AdjustLevelsTool::finalRendering()
+void AdjustLevelsTool::prepareFinal()
 {
-    kapp->setOverrideCursor( Qt::WaitCursor );
-    ImageIface* iface = d->previewWidget->imageIface();
-    uchar* orgData    = iface->getOriginalImage();
-    int w             = iface->originalWidth();
-    int h             = iface->originalHeight();
-    bool sb           = iface->originalSixteenBit();
+    toolSettings()->setEnabled(false);
+    toolView()->setEnabled(false);
 
-    // Create the new empty destination image data space.
-    uchar* desData = new uchar[w*h*(sb ? 8 : 4)];
+    LevelsContainer settings;
+    for (int i=0 ; i<5 ; ++i)
+    {
+        settings.lInput[i]  = d->levels->getLevelLowInputValue(i);
+        settings.hInput[i]  = d->levels->getLevelHighInputValue(i);
+        settings.lOutput[i] = d->levels->getLevelLowOutputValue(i);
+        settings.hOutput[i] = d->levels->getLevelHighOutputValue(i);
+        settings.gamma[i]   = d->levels->getLevelGammaValue(i);
+    } 
 
-    // Calculate the LUT to apply on the image.
-    d->levels->levelsLutSetup(AlphaChannel);
+    ImageIface iface(0, 0);
+    setFilter(new LevelsFilter(iface.getOriginalImg(), this, settings));
+}
 
-    // Apply the lut to the image.
-    d->levels->levelsLutProcess(orgData, desData, w, h);
+void AdjustLevelsTool::putFinalData()
+{
+    ImageIface iface(0, 0);
+    iface.putOriginalImage(i18n("Adjust Levels"), filter()->getTargetImage().bits());
+}
 
-    iface->putOriginalImage(i18n("Adjust Level"), desData);
+void AdjustLevelsTool::renderingFinished()
+{
     kapp->restoreOverrideCursor();
-
-    delete [] orgData;
-    delete [] desData;
+    toolSettings()->setEnabled(true);
+    toolView()->setEnabled(true);
 }
 
 void AdjustLevelsTool::slotLoadSettings()

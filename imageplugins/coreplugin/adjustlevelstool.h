@@ -40,7 +40,7 @@ namespace DigikamImagesPluginCore
 
 class AdjustLevelsToolPriv;
 
-class AdjustLevelsTool : public EditorTool
+class AdjustLevelsTool : public EditorToolThreaded
 {
     Q_OBJECT
 
@@ -49,21 +49,11 @@ public:
     AdjustLevelsTool(QObject* parent);
     ~AdjustLevelsTool();
 
-private:
-
-    void readSettings();
-    void writeSettings();
-    void finalRendering();
-    void adjustSliders(int minIn, double gamIn, int maxIn, int minOut, int maxOut);
-    void adjustSlidersAndSpinboxes(int minIn, double gamIn, int maxIn, int minOut, int maxOut);
-    bool eventFilter(QObject*, QEvent*);
-
 private Q_SLOTS:
 
     void slotSaveAsSettings();
     void slotLoadSettings();
     void slotResetSettings();
-    void slotEffect();
     void slotResetCurrentChannel();
     void slotAutoLevels();
     void slotChannelChanged();
@@ -76,10 +66,25 @@ private Q_SLOTS:
     void slotAdjustMaxOutputSpinBox(double val);
     void slotSpotColorChanged(const Digikam::DColor& color);
     void slotColorSelectedFromTarget(const Digikam::DColor& color);
-    void slotPickerColorButtonActived();
+    void slotPickerColorButtonActived(int);
     void slotShowInputHistogramGuide(double v);
     void slotShowOutputHistogramGuide(double v);
 
+private:
+
+    void readSettings();
+    void writeSettings();
+    void prepareEffect();
+    void prepareFinal();
+    void abortPreview();
+    void putPreviewData();
+    void putFinalData();
+    void renderingFinished();
+
+    void adjustSliders(int minIn, double gamIn, int maxIn, int minOut, int maxOut);
+    void adjustSlidersAndSpinboxes(int minIn, double gamIn, int maxIn, int minOut, int maxOut);
+    bool eventFilter(QObject*, QEvent*);
+    
 private:
 
     AdjustLevelsToolPriv* const d;

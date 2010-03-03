@@ -82,7 +82,7 @@ public:
 
     uchar*              destinationPreviewData;
 
-    BCGSettings*        bcgSettings;
+    BCGSettings*        settingsView;
     ImageRegionWidget*  previewWidget;
     EditorToolSettings* gboxSettings;
 };
@@ -111,13 +111,13 @@ BCGTool::BCGTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->bcgSettings = new BCGSettings(d->gboxSettings->plainPage());
+    d->settingsView = new BCGSettings(d->gboxSettings->plainPage());
     setToolSettings(d->gboxSettings);
     init();
 
     // -------------------------------------------------------------
 
-    connect(d->bcgSettings, SIGNAL(signalSettingsChanged()),
+    connect(d->settingsView, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotTimer()));
 
     connect(d->previewWidget, SIGNAL(signalResized()),
@@ -139,7 +139,7 @@ void BCGTool::readSettings()
 
     d->gboxSettings->histogramBox()->setChannel((ChannelType)group.readEntry(d->configHistogramChannelEntry, (int)LuminosityChannel));
     d->gboxSettings->histogramBox()->setScale((HistogramScale)group.readEntry(d->configHistogramScaleEntry,  (int)LogScaleHistogram));
-    d->bcgSettings->readSettings(group);
+    d->settingsView->readSettings(group);
 }
 
 void BCGTool::writeSettings()
@@ -149,14 +149,14 @@ void BCGTool::writeSettings()
 
     group.writeEntry(d->configHistogramChannelEntry, (int)d->gboxSettings->histogramBox()->channel());
     group.writeEntry(d->configHistogramScaleEntry,   (int)d->gboxSettings->histogramBox()->scale());
-    d->bcgSettings->writeSettings(group);
+    d->settingsView->writeSettings(group);
 
     config->sync();
 }
 
 void BCGTool::slotResetSettings()
 {
-    d->bcgSettings->resetToDefault();
+    d->settingsView->resetToDefault();
     slotEffect();
 }
 
@@ -166,7 +166,7 @@ void BCGTool::prepareEffect()
     toolSettings()->setEnabled(false);
     toolView()->setEnabled(false);
 
-    BCGContainer settings = d->bcgSettings->settings();
+    BCGContainer settings = d->settingsView->settings();
 
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 
@@ -195,7 +195,7 @@ void BCGTool::prepareFinal()
     toolSettings()->setEnabled(false);
     toolView()->setEnabled(false);
 
-    BCGContainer settings = d->bcgSettings->settings();
+    BCGContainer settings = d->settingsView->settings();
 
     ImageIface iface(0, 0);
     setFilter(new BCGFilter(iface.getOriginalImg(), this, settings));

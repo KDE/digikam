@@ -6,7 +6,7 @@
  * Date        : 2008-07-03
  * Description : a color gradient slider
  *
- * Copyright (C) 2008 by Gilles Caulier<caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2010 by Gilles Caulier<caulier dot gilles at gmail dot com>
  * Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
  *
  * This program is free software; you can redistribute it
@@ -75,7 +75,7 @@ public:
     QColor           rightColor;
     QColor           middleColor;
 
-    DGradientSlider *parent;
+    DGradientSlider* parent;
 
     Cursor           activeCursor;
 
@@ -99,7 +99,7 @@ public:
     }
 };
 
-DGradientSlider::DGradientSlider(QWidget *parent)
+DGradientSlider::DGradientSlider(QWidget* parent)
                : QWidget(parent), d(new DGradientSliderPriv)
 {
     d->parent = this;
@@ -113,11 +113,16 @@ DGradientSlider::~DGradientSlider()
     delete d;
 }
 
-inline void drawCursorAt(QPainter& painter, double pos, const QColor& brushColor, 
-                         int width, int height, int gradientWidth)
+int DGradientSlider::gradientOffset() const
+{
+    return d->gradientOffset();
+}
+    
+void DGradientSlider::drawCursorAt(QPainter& painter, double pos, const QColor& brushColor, 
+                                   int width, int height, int gradientWidth)
 {
     painter.setBrush( brushColor );
-    int pos2 = (int)(gradientWidth * pos);
+    int pos2  = (int)(gradientWidth * pos);
     QPoint points[3];
     points[0] = QPoint(pos2, 3 * height - 1);
     points[1] = QPoint(pos2 + width / 2, 2 * height);
@@ -172,7 +177,7 @@ inline bool isCursorClicked(const QPoint& pos, double cursorPos,
             (pos.x() <= (pos2 + width)));
 }
 
-void DGradientSlider::mousePressEvent(QMouseEvent *e)
+void DGradientSlider::mousePressEvent(QMouseEvent* e)
 {
     if( e->button() == Qt::LeftButton )
     {
@@ -201,7 +206,7 @@ void DGradientSlider::mouseReleaseEvent(QMouseEvent*)
     d->activeCursor = DGradientSliderPriv::NoCursor;
 }
 
-void DGradientSlider::mouseMoveEvent(QMouseEvent *e)
+void DGradientSlider::mouseMoveEvent(QMouseEvent* e)
 {
     double v = ( e->pos().x() - d->gradientOffset() ) / (double) d->gradientWidth();
     switch(d->activeCursor)
