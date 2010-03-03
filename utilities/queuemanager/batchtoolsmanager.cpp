@@ -46,6 +46,7 @@
 #include "channelmixer.h"
 #include "bwconvert.h"
 #include "whitebalance.h"
+#include "curvesadjust.h"
 
 namespace Digikam
 {
@@ -90,6 +91,7 @@ BatchToolsManager::BatchToolsManager(QObject* parent)
     registerTool(new ChannelMixer(this));
     registerTool(new BWConvert(this));
     registerTool(new WhiteBalance(this));
+    registerTool(new CurvesAdjust(this));
 }
 
 BatchToolsManager::~BatchToolsManager()

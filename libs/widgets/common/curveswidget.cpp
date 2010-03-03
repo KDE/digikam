@@ -525,14 +525,11 @@ void CurvesWidget::curveTypeChanged()
         case ImageCurves::CURVE_SMOOTH:
 
             //  pick representative points from the curve and make them control points
-
-            for (int i = 0; i <= 8; ++i)
+            int index;
+            for (int i = 0; i <= 16; ++i)
             {
-                int index = CLAMP(i * m_imageHistogram->getHistogramSegments() / 8,
-                                  0, m_imageHistogram->getMaxSegmentIndex());
-
-                d->curves->setCurvePoint(m_channelType, i * 2,
-                                         QPoint(index, d->curves->getCurveValue(m_channelType, index)));
+                index = CLAMP(i * m_imageHistogram->getHistogramSegments() / 16, 0, m_imageHistogram->getMaxSegmentIndex());
+                d->curves->setCurvePoint(m_channelType, i, QPoint(index, d->curves->getCurveValue(m_channelType, index)));
             }
 
             d->curves->curvesCalculateCurve(m_channelType);
