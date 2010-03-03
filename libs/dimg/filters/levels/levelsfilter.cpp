@@ -48,10 +48,9 @@ LevelsFilter::~LevelsFilter()
 
 void LevelsFilter::filterImage()
 {
-    int i;
     ImageLevels levels(m_orgImage.sixteenBit());
 
-    for (i=0 ; i<5 ; ++i)
+    for (int i=0 ; i<5 ; ++i)
     {
         postProgress(i*10);
         levels.setLevelLowInputValue(i,   m_settings.lInput[i]);
