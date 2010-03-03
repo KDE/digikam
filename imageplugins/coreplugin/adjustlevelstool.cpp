@@ -79,6 +79,16 @@ namespace DigikamImagesPluginCore
 
 class AdjustLevelsToolPriv
 {
+
+public:
+    
+    enum ColorPicker
+    {
+        BlackTonal=0,
+        GrayTonal,
+        WhiteTonal
+    };
+
 public:
 
     AdjustLevelsToolPriv() :
@@ -283,11 +293,11 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
                                     "input levels on the Red, Green, Blue, and Luminosity channels."));
 
     d->pickerColorButtonGroup = new QButtonGroup(d->pickerBox);
-    d->pickerColorButtonGroup->addButton(d->pickBlack, BlackTonal);
-    d->pickerColorButtonGroup->addButton(d->pickGray, GrayTonal);
-    d->pickerColorButtonGroup->addButton(d->pickWhite, WhiteTonal);
+    d->pickerColorButtonGroup->addButton(d->pickBlack, AdjustLevelsToolPriv::BlackTonal);
+    d->pickerColorButtonGroup->addButton(d->pickGray,  AdjustLevelsToolPriv::GrayTonal);
+    d->pickerColorButtonGroup->addButton(d->pickWhite, AdjustLevelsToolPriv::WhiteTonal);
 
-    QHBoxLayout *pickerBoxLayout = new QHBoxLayout;
+    QHBoxLayout* pickerBoxLayout = new QHBoxLayout;
     pickerBoxLayout->setMargin(0);
     pickerBoxLayout->setSpacing(0);
     pickerBoxLayout->addWidget(d->pickBlack);
@@ -312,7 +322,7 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
                                       "from the currently selected channel "
                                       "will be reset to the default values."));
 
-    QLabel *space = new QLabel();
+    QLabel* space = new QLabel();
     space->setFixedWidth(d->gboxSettings->spacingHint());
 
     QHBoxLayout* l3 = new QHBoxLayout();
@@ -324,23 +334,22 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QGridLayout* mainLayout = new QGridLayout();
-    mainLayout->setSpacing(d->gboxSettings->spacingHint());
-    mainLayout->addWidget(d->levelsHistogramWidget, 0, 1, 1, 5);
-    mainLayout->addWidget(d->inputLevels,           1, 0, 1, 7);
-    mainLayout->addWidget(d->minInput,              2, 1, 1, 1);
-    mainLayout->addWidget(d->maxInput,              2, 5, 1, 1);
-    mainLayout->addWidget(d->gammaInput,            3, 0, 1, 7);
-    mainLayout->addWidget(d->outputLevels,          4, 0, 1, 7);
-    mainLayout->addWidget(d->minOutput,             5, 1, 1, 1);
-    mainLayout->addWidget(d->maxOutput,             5, 5, 1, 1);
-    mainLayout->addLayout(l3,                       6, 0, 1, 7);
-    mainLayout->setRowStretch(7, 10);
-    mainLayout->setColumnStretch(2, 10);
-    mainLayout->setColumnStretch(4, 10);
-    mainLayout->setMargin(0);
-    mainLayout->setSpacing(d->gboxSettings->spacingHint());
-    d->gboxSettings->plainPage()->setLayout(mainLayout);
+    QGridLayout* grid = new QGridLayout();
+    grid->addWidget(d->levelsHistogramWidget, 0, 1, 1, 5);
+    grid->addWidget(d->inputLevels,           1, 0, 1, 7);
+    grid->addWidget(d->minInput,              2, 1, 1, 1);
+    grid->addWidget(d->maxInput,              2, 5, 1, 1);
+    grid->addWidget(d->gammaInput,            3, 0, 1, 7);
+    grid->addWidget(d->outputLevels,          4, 0, 1, 7);
+    grid->addWidget(d->minOutput,             5, 1, 1, 1);
+    grid->addWidget(d->maxOutput,             5, 5, 1, 1);
+    grid->addLayout(l3,                       6, 0, 1, 7);
+    grid->setRowStretch(7, 10);
+    grid->setColumnStretch(2, 10);
+    grid->setColumnStretch(4, 10);
+    grid->setMargin(0);
+    grid->setSpacing(d->gboxSettings->spacingHint());
+    d->gboxSettings->plainPage()->setLayout(grid);
 
     // -------------------------------------------------------------
 
@@ -348,7 +357,6 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
     init();
 
     // -------------------------------------------------------------
-
     // Channels and scale selection slots.
 
     connect(d->previewWidget, SIGNAL(spotPositionChangedFromOriginal(const Digikam::DColor&, const QPoint&)),
@@ -410,6 +418,87 @@ AdjustLevelsTool::~AdjustLevelsTool()
 
     delete d->levels;
     delete d;
+}
+
+// See B.K.O #146636: use event filter with all level slider to display a
+// guide over level histogram.
+bool AdjustLevelsTool::eventFilter(QObject *obj, QEvent *ev)
+{
+    if ( obj == d->inputLevels )
+    {
+        if ( ev->type() == QEvent::MouseButtonPress)
+        {
+            connect(d->inputLevels, SIGNAL(leftValueChanged(double)),
+                    this, SLOT(slotShowInputHistogramGuide(double)));
+
+            connect(d->inputLevels, SIGNAL(rightValueChanged(double)),
+                    this, SLOT(slotShowInputHistogramGuide(double)));
+
+            return false;
+        }
+        if ( ev->type() == QEvent::MouseButtonRelease)
+        {
+            disconnect(d->inputLevels, SIGNAL(leftValueChanged(double)),
+                       this, SLOT(slotShowInputHistogramGuide(double)));
+
+            disconnect(d->inputLevels, SIGNAL(rightValueChanged(double)),
+                       this, SLOT(slotShowInputHistogramGuide(double)));
+
+            d->levelsHistogramWidget->reset();
+            return false;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    if ( obj == d->outputLevels )
+    {
+        if ( ev->type() == QEvent::MouseButtonPress)
+        {
+            connect(d->outputLevels, SIGNAL(leftValueChanged(double)),
+                    this, SLOT(slotShowOutputHistogramGuide(double)));
+
+            connect(d->outputLevels, SIGNAL(rightValueChanged(double)),
+                    this, SLOT(slotShowOutputHistogramGuide(double)));
+
+            return false;
+        }
+        if ( ev->type() == QEvent::MouseButtonRelease)
+        {
+            disconnect(d->outputLevels, SIGNAL(leftValueChanged(double)),
+                       this, SLOT(slotShowOutputHistogramGuide(double)));
+
+            disconnect(d->outputLevels, SIGNAL(rightValueChanged(double)),
+                       this, SLOT(slotShowOutputHistogramGuide(double)));
+
+            d->gboxSettings->histogramBox()->histogram()->reset();
+            return false;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    else
+    {
+        // pass the event on to the parent class
+        return EditorTool::eventFilter(obj, ev);
+    }
+}
+
+void AdjustLevelsTool::slotShowInputHistogramGuide(double v)
+{
+    int val = (int)(v * d->histoSegments);
+    DColor color(val, val, val, val, d->originalImage->sixteenBit());
+    d->levelsHistogramWidget->setHistogramGuideByColor(color);
+}
+
+void AdjustLevelsTool::slotShowOutputHistogramGuide(double v)
+{
+    int val = (int)(v * d->histoSegments);
+    DColor color(val, val, val, val, d->originalImage->sixteenBit());
+    d->gboxSettings->histogramBox()->histogram()->setHistogramGuideByColor(color);
 }
 
 void AdjustLevelsTool::slotPickerColorButtonActived()
@@ -565,62 +654,6 @@ void AdjustLevelsTool::slotAutoLevels()
     slotEffect();
 }
 
-void AdjustLevelsTool::slotEffect()
-{
-    ImageIface* iface = d->previewWidget->imageIface();
-    uchar* orgData    = iface->getPreviewImage();
-    int w             = iface->previewWidth();
-    int h             = iface->previewHeight();
-    bool sb           = iface->previewSixteenBit();
-
-    // Create the new empty destination image data space.
-    d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
-
-    if (d->destinationPreviewData)
-       delete [] d->destinationPreviewData;
-
-    d->destinationPreviewData = new uchar[w*h*(sb ? 8 : 4)];
-
-    // Calculate the LUT to apply on the image.
-    d->levels->levelsLutSetup(AlphaChannel);
-
-    // Apply the lut to the image.
-    d->levels->levelsLutProcess(orgData, d->destinationPreviewData, w, h);
-
-    iface->putPreviewImage(d->destinationPreviewData);
-    d->previewWidget->updatePreview();
-
-    // Update histogram.
-    d->gboxSettings->histogramBox()->histogram()->updateData(d->destinationPreviewData, w, h, sb, 0, 0, 0, false);
-
-    delete [] orgData;
-}
-
-void AdjustLevelsTool::finalRendering()
-{
-    kapp->setOverrideCursor( Qt::WaitCursor );
-    ImageIface* iface = d->previewWidget->imageIface();
-    uchar* orgData    = iface->getOriginalImage();
-    int w             = iface->originalWidth();
-    int h             = iface->originalHeight();
-    bool sb           = iface->originalSixteenBit();
-
-    // Create the new empty destination image data space.
-    uchar* desData = new uchar[w*h*(sb ? 8 : 4)];
-
-    // Calculate the LUT to apply on the image.
-    d->levels->levelsLutSetup(AlphaChannel);
-
-    // Apply the lut to the image.
-    d->levels->levelsLutProcess(orgData, desData, w, h);
-
-    iface->putOriginalImage(i18n("Adjust Level"), desData);
-    kapp->restoreOverrideCursor();
-
-    delete [] orgData;
-    delete [] desData;
-}
-
 void AdjustLevelsTool::slotChannelChanged()
 {
     int channel = d->gboxSettings->histogramBox()->channel();
@@ -767,12 +800,68 @@ void AdjustLevelsTool::writeSettings()
 void AdjustLevelsTool::slotResetSettings()
 {
     for (int channel = 0 ; channel < 5 ; ++channel)
-       d->levels->levelsChannelReset(channel);
+        d->levels->levelsChannelReset(channel);
 
     // Refresh the current levels config.
     slotChannelChanged();
     d->levelsHistogramWidget->reset();
     d->gboxSettings->histogramBox()->histogram()->reset();
+}
+
+void AdjustLevelsTool::slotEffect()
+{
+    ImageIface* iface = d->previewWidget->imageIface();
+    uchar* orgData    = iface->getPreviewImage();
+    int w             = iface->previewWidth();
+    int h             = iface->previewHeight();
+    bool sb           = iface->previewSixteenBit();
+
+    // Create the new empty destination image data space.
+    d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
+
+    if (d->destinationPreviewData)
+       delete [] d->destinationPreviewData;
+
+    d->destinationPreviewData = new uchar[w*h*(sb ? 8 : 4)];
+
+    // Calculate the LUT to apply on the image.
+    d->levels->levelsLutSetup(AlphaChannel);
+
+    // Apply the lut to the image.
+    d->levels->levelsLutProcess(orgData, d->destinationPreviewData, w, h);
+
+    iface->putPreviewImage(d->destinationPreviewData);
+    d->previewWidget->updatePreview();
+
+    // Update histogram.
+    d->gboxSettings->histogramBox()->histogram()->updateData(d->destinationPreviewData, w, h, sb, 0, 0, 0, false);
+
+    delete [] orgData;
+}
+
+void AdjustLevelsTool::finalRendering()
+{
+    kapp->setOverrideCursor( Qt::WaitCursor );
+    ImageIface* iface = d->previewWidget->imageIface();
+    uchar* orgData    = iface->getOriginalImage();
+    int w             = iface->originalWidth();
+    int h             = iface->originalHeight();
+    bool sb           = iface->originalSixteenBit();
+
+    // Create the new empty destination image data space.
+    uchar* desData = new uchar[w*h*(sb ? 8 : 4)];
+
+    // Calculate the LUT to apply on the image.
+    d->levels->levelsLutSetup(AlphaChannel);
+
+    // Apply the lut to the image.
+    d->levels->levelsLutProcess(orgData, desData, w, h);
+
+    iface->putOriginalImage(i18n("Adjust Level"), desData);
+    kapp->restoreOverrideCursor();
+
+    delete [] orgData;
+    delete [] desData;
 }
 
 void AdjustLevelsTool::slotLoadSettings()
@@ -815,87 +904,6 @@ void AdjustLevelsTool::slotSaveAsSettings()
 
     // Refresh the current levels config.
     slotChannelChanged();
-}
-
-// See B.K.O #146636: use event filter with all level slider to display a
-// guide over level histogram.
-bool AdjustLevelsTool::eventFilter(QObject *obj, QEvent *ev)
-{
-    if ( obj == d->inputLevels )
-    {
-        if ( ev->type() == QEvent::MouseButtonPress)
-        {
-            connect(d->inputLevels, SIGNAL(leftValueChanged(double)),
-                    this, SLOT(slotShowInputHistogramGuide(double)));
-
-            connect(d->inputLevels, SIGNAL(rightValueChanged(double)),
-                    this, SLOT(slotShowInputHistogramGuide(double)));
-
-            return false;
-        }
-        if ( ev->type() == QEvent::MouseButtonRelease)
-        {
-            disconnect(d->inputLevels, SIGNAL(leftValueChanged(double)),
-                       this, SLOT(slotShowInputHistogramGuide(double)));
-
-            disconnect(d->inputLevels, SIGNAL(rightValueChanged(double)),
-                       this, SLOT(slotShowInputHistogramGuide(double)));
-
-            d->levelsHistogramWidget->reset();
-            return false;
-        }
-        else
-        {
-            return false;
-        }
-    }
-    if ( obj == d->outputLevels )
-    {
-        if ( ev->type() == QEvent::MouseButtonPress)
-        {
-            connect(d->outputLevels, SIGNAL(leftValueChanged(double)),
-                    this, SLOT(slotShowOutputHistogramGuide(double)));
-
-            connect(d->outputLevels, SIGNAL(rightValueChanged(double)),
-                    this, SLOT(slotShowOutputHistogramGuide(double)));
-
-            return false;
-        }
-        if ( ev->type() == QEvent::MouseButtonRelease)
-        {
-            disconnect(d->outputLevels, SIGNAL(leftValueChanged(double)),
-                       this, SLOT(slotShowOutputHistogramGuide(double)));
-
-            disconnect(d->outputLevels, SIGNAL(rightValueChanged(double)),
-                       this, SLOT(slotShowOutputHistogramGuide(double)));
-
-            d->gboxSettings->histogramBox()->histogram()->reset();
-            return false;
-        }
-        else
-        {
-            return false;
-        }
-    }
-    else
-    {
-        // pass the event on to the parent class
-        return EditorTool::eventFilter(obj, ev);
-    }
-}
-
-void AdjustLevelsTool::slotShowInputHistogramGuide(double v)
-{
-    int val = (int)(v * d->histoSegments);
-    DColor color(val, val, val, val, d->originalImage->sixteenBit());
-    d->levelsHistogramWidget->setHistogramGuideByColor(color);
-}
-
-void AdjustLevelsTool::slotShowOutputHistogramGuide(double v)
-{
-    int val = (int)(v * d->histoSegments);
-    DColor color(val, val, val, val, d->originalImage->sixteenBit());
-    d->gboxSettings->histogramBox()->histogram()->setHistogramGuideByColor(color);
 }
 
 }  // namespace DigikamImagesPluginCore

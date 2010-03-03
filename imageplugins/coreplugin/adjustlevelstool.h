@@ -46,7 +46,7 @@ class AdjustLevelsTool : public EditorTool
 
 public:
 
-    AdjustLevelsTool(QObject *parent);
+    AdjustLevelsTool(QObject* parent);
     ~AdjustLevelsTool();
 
 private:
@@ -79,15 +79,6 @@ private Q_SLOTS:
     void slotPickerColorButtonActived();
     void slotShowInputHistogramGuide(double v);
     void slotShowOutputHistogramGuide(double v);
-
-private:
-
-    enum ColorPicker
-    {
-        BlackTonal=0,
-        GrayTonal,
-        WhiteTonal
-    };
 
 private:
 
