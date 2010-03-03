@@ -41,10 +41,10 @@
 namespace Digikam
 {
 
-AutoLevelsFilter::AutoLevelsFilter(DImg* orgImage, DImg* refImage, QObject* parent)
-                : DImgThreadedFilter(orgImage, parent, "AutoLevelsFilter")
+AutoLevelsFilter::AutoLevelsFilter(DImg* orgImage, const DImg* refImage, QObject* parent)
+                : DImgThreadedFilter(orgImage, parent, "AutoLevelsFilter"),
+                  m_refImage(*refImage)
 {
-    m_refImage = refImage->copy();
     initFilter();
 }
 

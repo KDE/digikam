@@ -42,7 +42,7 @@ class DIGIKAM_EXPORT NormalizeFilter : public DImgThreadedFilter
 
 public:
 
-    NormalizeFilter(DImg* orgImage, DImg* refImage, QObject* parent=0);
+    NormalizeFilter(DImg* orgImage, const DImg* refImage, QObject* parent=0);
     virtual ~NormalizeFilter();
 
 private:
@@ -59,7 +59,7 @@ private:
         double          max;
     };
 
-    DImg m_refImage;
+    const DImg m_refImage;
 };
 
 }  // namespace Digikam

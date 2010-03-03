@@ -42,7 +42,7 @@ class DIGIKAM_EXPORT EqualizeFilter : public DImgThreadedFilter
 
 public:
 
-    EqualizeFilter(DImg* orgImage, DImg* refImage, QObject* parent=0);
+    EqualizeFilter(DImg* orgImage, const DImg* refImage, QObject* parent=0);
     virtual ~EqualizeFilter();
 
 private:
@@ -68,7 +68,7 @@ private:
         unsigned int alpha;
     };
 
-    DImg m_refImage;
+    const DImg m_refImage;
 };
 
 }  // namespace Digikam

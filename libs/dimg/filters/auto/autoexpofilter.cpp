@@ -34,10 +34,10 @@
 namespace Digikam
 {
 
-AutoExpoFilter::AutoExpoFilter(DImg* orgImage, DImg* refImage, QObject* parent)
-                : WBFilter(orgImage, parent)
+AutoExpoFilter::AutoExpoFilter(DImg* orgImage, const DImg* refImage, QObject* parent)
+                : WBFilter(orgImage, parent),
+                  m_refImage(*refImage)
 {
-    m_refImage = refImage->copy();
     initFilter();
 }
 

@@ -40,10 +40,10 @@
 namespace Digikam
 {
 
-StretchFilter::StretchFilter(DImg* orgImage, DImg* refImage, QObject* parent)
-             : DImgThreadedFilter(orgImage, parent, "StretchFilter")
+StretchFilter::StretchFilter(DImg* orgImage, const DImg* refImage, QObject* parent)
+             : DImgThreadedFilter(orgImage, parent, "StretchFilter"),
+               m_refImage(*refImage)
 {
-    m_refImage = refImage->copy();
     initFilter();
 }
 

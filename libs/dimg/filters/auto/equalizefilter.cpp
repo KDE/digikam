@@ -40,10 +40,10 @@
 namespace Digikam
 {
 
-EqualizeFilter::EqualizeFilter(DImg* orgImage, DImg* refImage, QObject* parent)
-              : DImgThreadedFilter(orgImage, parent, "EqualizeFilter")
+EqualizeFilter::EqualizeFilter(DImg* orgImage, const DImg* refImage, QObject* parent)
+              : DImgThreadedFilter(orgImage, parent, "EqualizeFilter"),
+                m_refImage(*refImage)
 {
-    m_refImage = refImage->copy();
     initFilter();
 }
 

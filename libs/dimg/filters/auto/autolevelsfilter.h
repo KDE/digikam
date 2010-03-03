@@ -42,7 +42,7 @@ class DIGIKAM_EXPORT AutoLevelsFilter : public DImgThreadedFilter
 
 public:
 
-    AutoLevelsFilter(DImg* orgImage, DImg* refImage, QObject* parent=0);
+    AutoLevelsFilter(DImg* orgImage, const DImg* refImage, QObject* parent=0);
     virtual ~AutoLevelsFilter();
 
 private:
@@ -52,7 +52,7 @@ private:
 
 private:
 
-    DImg m_refImage;
+    const DImg m_refImage;
 };
 
 }  // namespace Digikam

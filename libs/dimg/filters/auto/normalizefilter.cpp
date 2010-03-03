@@ -39,10 +39,10 @@
 namespace Digikam
 {
 
-NormalizeFilter::NormalizeFilter(DImg* orgImage, DImg* refImage, QObject* parent)
-               : DImgThreadedFilter(orgImage, parent, "NormalizeFilter")
+NormalizeFilter::NormalizeFilter(DImg* orgImage, const DImg* refImage, QObject* parent)
+               : DImgThreadedFilter(orgImage, parent, "NormalizeFilter"),
+                 m_refImage(*refImage)
 {
-    m_refImage = refImage->copy();
     initFilter();
 }
 

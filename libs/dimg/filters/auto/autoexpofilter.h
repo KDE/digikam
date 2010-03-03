@@ -42,7 +42,7 @@ class DIGIKAM_EXPORT AutoExpoFilter : public WBFilter
 
 public:
 
-    AutoExpoFilter(DImg* orgImage, DImg* refImage, QObject* parent=0);
+    AutoExpoFilter(DImg* orgImage, const DImg* refImage, QObject* parent=0);
     virtual ~AutoExpoFilter();
 
 private:
@@ -51,7 +51,7 @@ private:
 
 private:
 
-    DImg m_refImage;
+    const DImg m_refImage;
 };
 
 }  // namespace Digikam
