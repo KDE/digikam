@@ -48,11 +48,11 @@ public:
     {
         for (int i=0 ; i<5 ; ++i)
         {
-            m_settings.lInput[i]  = 0);
-            m_settings.hInput[i]  = 65535);
-            m_settings.lOutput[i] = 0);
-            m_settings.hOutput[i] = 65535);
-            m_settings.gamma[i]   = 1.0);
+            lInput[i]  = 0;
+            hInput[i]  = 65535;
+            lOutput[i] = 0;
+            hOutput[i] = 65535;
+            gamma[i]   = 1.0;
         }
     };
     
