@@ -156,9 +156,9 @@ void WBFilter::autoWBAdjustementFromColor(const QColor& tc, double& temperature,
     kDebug() << "Green component:" << green;
 }
 
-void WBFilter::autoExposureAdjustement(DImg* img, double& black, double& expo)
+void WBFilter::autoExposureAdjustement(const DImg* img, double& black, double& expo)
 {
-    uchar* data = img->bits();
+    const uchar* data = img->bits();
     int width   = img->width();
     int height  = img->height();
     bool sb     = img->sixteenBit();
