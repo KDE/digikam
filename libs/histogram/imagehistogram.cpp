@@ -82,7 +82,7 @@ public:
     bool                  valid;
 
     /** Image information.*/
-    uchar*                imageData;
+    const uchar*         imageData;
     uint                  imageWidth;
     uint                  imageHeight;
 
@@ -99,13 +99,13 @@ ImageHistogram::ImageHistogram(const DImg& image, QObject *parent)
     setup(image.bits(), image.width(), image.height(), image.sixteenBit());
 }
 
-ImageHistogram::ImageHistogram(uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits, QObject *parent)
+ImageHistogram::ImageHistogram(const uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits, QObject *parent)
               : QThread(parent), d(new ImageHistogramPriv)
 {
     setup(i_data, i_w, i_h, i_sixteenBits);
 }
 
-void ImageHistogram::setup(uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits)
+void ImageHistogram::setup(const uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits)
 {
     d->imageData     = i_data;
     d->imageWidth    = i_w;
@@ -227,7 +227,7 @@ void ImageHistogram::calculate()
     else                                  // 8 bits images.
     {
         uchar blue, green, red, alpha;
-        uchar *data = d->imageData;
+        const uchar *data = d->imageData;
 
         for (i = 0 ; (i < d->imageHeight*d->imageWidth*4) && d->runningFlag ; i+=4)
         {
