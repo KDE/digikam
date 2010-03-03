@@ -91,6 +91,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 064 ==> 228802 : Copy paste doesn't work.
 065 ==> 227064 : digiKam 1.1.0: crash on image download.
 066 ==> 228807 : dancing thumbs in album view.
-067 ==> 
+067 ==> 214303 : Position of preview type buttons is inconsistent across different tools.
+068 ==> 
 
 
