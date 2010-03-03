@@ -21,6 +21,7 @@ BatchQueueManager : new tool to convert images color space.
 BatchQueueManager : new tool to mix color channel.
 BatchQueueManager : new tool to convert to Black and White.
 BatchQueueManager : new tool to adjust White Balance.
+BatchQueueManager : new tool to adjust Curves.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
