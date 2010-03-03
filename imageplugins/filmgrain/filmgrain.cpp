@@ -40,7 +40,7 @@
 // Local includes
 
 #include "dimg.h"
-#include "dimggaussianblur.h"
+#include "blurfilter.h"
 #include "imagecurves.h"
 #include "imagehistogram.h"
 #include "globals.h"
@@ -134,7 +134,7 @@ void FilmGrain::filterImage()
     }
 
     // Smooth grain mask using gaussian blur with radius 1.
-    DImgGaussianBlur(this, grain, grain, 25, 30, 1);
+    BlurFilter(this, grain, grain, 25, 30, 1);
 
     // Normally, film grain tends to be most noticeable in the midtones, and much less
     // so in the shadows and highlights. Adjust histogram curve to adjust grain like this.

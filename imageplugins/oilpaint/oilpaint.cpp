@@ -36,13 +36,12 @@
 // Local includes
 
 #include "dimg.h"
-#include "dimggaussianblur.h"
 #include "dimgimagefilters.h"
 
 namespace DigikamOilPaintImagesPlugin
 {
 
-OilPaint::OilPaint(Digikam::DImg *orgImage, QObject *parent, int brushSize, int smoothness)
+OilPaint::OilPaint(Digikam::DImg* orgImage, QObject* parent, int brushSize, int smoothness)
         : Digikam::DImgThreadedFilter(orgImage, parent, "OilPaint")
 {
     m_brushSize  = brushSize;

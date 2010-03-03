@@ -1,6 +1,6 @@
 INSTALL(FILES dimgthreadedfilter.h 
               dimgimagefilters.h 
-              dimggaussianblur.h 
+              fx/blurfilter.h 
               cb/cbfilter.h 
               cb/cbsettings.h 
               curves/imagecurves.h

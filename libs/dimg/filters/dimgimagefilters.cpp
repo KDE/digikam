@@ -39,7 +39,7 @@
 
 #include "imagehistogram.h"
 #include "dcolor.h"
-#include "dimggaussianblur.h"
+#include "blurfilter.h"
 #include "dimgsharpen.h"
 #include "dimgunsharpmask.h"
 #include "dimgrefocus.h"
@@ -99,7 +99,7 @@ void DImgImageFilters::gaussianBlurImage(uchar *data, int width, int height, boo
     if (radius <= 0) return;
 
     DImg orgImage(width, height, sixteenBit, true, data);
-    DImgGaussianBlur *filter = new DImgGaussianBlur(&orgImage, 0L, radius);
+    BlurFilter* filter = new BlurFilter(&orgImage, 0L, radius);
     filter->startFilterDirectly();
     DImg imDest = filter->getTargetImage();
     memcpy( data, imDest.bits(), imDest.numBytes() );

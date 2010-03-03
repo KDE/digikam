@@ -40,8 +40,7 @@
 
 #include "dimg.h"
 #include "dcolor.h"
-#include "dimgimagefilters.h"
-#include "dimggaussianblur.h"
+#include "blurfilter.h"
 
 namespace Digikam
 {
@@ -72,7 +71,7 @@ void DImgUnsharpMask::filterImage()
        return;
     }
 
-    DImgGaussianBlur(this, m_orgImage, m_destImage, 0, 10, (int)(m_radius));
+    BlurFilter(this, m_orgImage, m_destImage, 0, 10, (int)(m_radius));
 
     quantum          = m_destImage.sixteenBit() ? 65535 : 255;
     quantumThreshold = quantum*m_threshold;

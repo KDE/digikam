@@ -40,7 +40,7 @@
 // Local includes
 
 #include "dimg.h"
-#include "dimggaussianblur.h"
+#include "blurfilter.h"
 #include "stretchfilter.h"
 #include "mixerfilter.h"
 #include "dimgimagefilters.h"
@@ -99,7 +99,7 @@ void Charcoal::filterImage()
 
     // -- Applying Gaussian blur effect ---------------------------------------
 
-    DImgGaussianBlur(this, m_destImage, m_destImage, 80, 85, (int)(m_smooth/10.0));
+    BlurFilter(this, m_destImage, m_destImage, 80, 85, (int)(m_smooth/10.0));
 
     if (m_cancel)
         return;

@@ -29,6 +29,7 @@
 
 #include "digikam_export.h"
 #include "dimgthreadedfilter.h"
+#include "globals.h"
 
 namespace Digikam
 {

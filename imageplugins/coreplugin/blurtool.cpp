@@ -46,7 +46,7 @@
 
 // Local includes
 
-#include "dimggaussianblur.h"
+#include "blurfilter.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imageregionwidget.h"
@@ -159,7 +159,7 @@ void BlurTool::prepareEffect()
     toolView()->setEnabled(false);
 
     DImg img = d->previewWidget->getOriginalRegionImage();
-    setFilter(new DImgGaussianBlur(&img, this, d->radiusInput->value()));
+    setFilter(new BlurFilter(&img, this, d->radiusInput->value()));
 }
 
 void BlurTool::prepareFinal()
@@ -175,7 +175,7 @@ void BlurTool::prepareFinal()
     bool hasAlpha    = iface.originalHasAlpha();
     DImg orgImage = DImg(w, h, sixteenBit, hasAlpha ,data);
     delete [] data;
-    setFilter(new DImgGaussianBlur(&orgImage, this, d->radiusInput->value()));
+    setFilter(new BlurFilter(&orgImage, this, d->radiusInput->value()));
 }
 
 void BlurTool::putPreviewData()

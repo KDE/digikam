@@ -44,12 +44,12 @@
 // Local includes
 
 #include "dimg.h"
-#include "dimggaussianblur.h"
+#include "blurfilter.h"
 
 namespace DigikamBlurFXImagesPlugin
 {
 
-BlurFX::BlurFX(Digikam::DImg *orgImage, QObject *parent, int blurFXType, int distance, int level)
+BlurFX::BlurFX(Digikam::DImg* orgImage, QObject* parent, int blurFXType, int distance, int level)
       : Digikam::DImgThreadedFilter(orgImage, parent, "BlurFX")
 {
     m_blurFXType = blurFXType;
@@ -396,7 +396,7 @@ void BlurFX::focusBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage,
         int yMaxBlur = yMax + BlurRadius;
         Digikam::DImg areaImage = orgImage->copy(xMinBlur, yMaxBlur, xMaxBlur - xMinBlur, yMaxBlur - yMinBlur);
 
-        Digikam::DImgGaussianBlur(this, *orgImage, *destImage, 10, 75, BlurRadius);
+        Digikam::BlurFilter(this, *orgImage, *destImage, 10, 75, BlurRadius);
 
         // I am unsure about differences of 1 pixel
         destImage->bitBltImage(&areaImage, xMinBlur, yMinBlur);
@@ -413,7 +413,7 @@ void BlurFX::focusBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage,
         memcpy(pResBits, data, orgImage->numBytes());
 
         // Gaussian blur using the BlurRadius parameter.
-        Digikam::DImgGaussianBlur(this, *orgImage, *destImage, 10, 80, BlurRadius);
+        Digikam::BlurFilter(this, *orgImage, *destImage, 10, 80, BlurRadius);
     }
 
     // Blending results.

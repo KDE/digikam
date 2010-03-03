@@ -6,7 +6,7 @@
  * Date        : 2005-17-07
  * Description : A Gaussian Blur threaded image filter.
  *
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009      by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "dimggaussianblur.h"
+#include "blurfilter.h"
 
 /** Don't use CImg interface (keyboard/mouse interaction) */
 #define cimg_display 0
@@ -46,24 +46,31 @@ using namespace cimg_library;
 namespace Digikam
 {
 
-DImgGaussianBlur::DImgGaussianBlur(DImg *orgImage, QObject *parent, double radius)
-                : DImgThreadedFilter(orgImage, parent, "GaussianBlur")
+BlurFilter::BlurFilter(DImg* orgImage, QObject* parent, double radius)
+          : DImgThreadedFilter(orgImage, parent, "GaussianBlur")
 {
     m_radius = radius;
     initFilter();
 }
 
-DImgGaussianBlur::DImgGaussianBlur(DImgThreadedFilter *parentFilter,
-                                   const DImg& orgImage, const DImg& destImage,
-                                   int progressBegin, int progressEnd, double radius)
-                : DImgThreadedFilter(parentFilter, orgImage, destImage, progressBegin, progressEnd,
-                                     parentFilter->filterName() + ": GaussianBlur")
+BlurFilter::BlurFilter(DImgThreadedFilter* parentFilter,
+                       const DImg& orgImage, const DImg& destImage,
+                       int progressBegin, int progressEnd, double radius)
+          : DImgThreadedFilter(parentFilter, orgImage, destImage, progressBegin, progressEnd,
+                               parentFilter->filterName() + ": GaussianBlur")
 {
     m_radius = radius;
     filterImage();
 }
 
-void DImgGaussianBlur::filterImage()
+BlurFilter::BlurFilter(uchar* bits, uint width, uint height, bool sixteenBits, double radius)
+          : DImgThreadedFilter()
+{
+    m_radius = radius;
+    gaussianBlurImage(bits, width, height, sixteenBits, radius);
+}
+
+void BlurFilter::filterImage()
 {
     gaussianBlurImage(m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(),
                       m_orgImage.sixteenBit(), m_radius);
@@ -71,11 +78,11 @@ void DImgGaussianBlur::filterImage()
 
 /** Function to apply the Gaussian Blur on an image*/
 
-void DImgGaussianBlur::gaussianBlurImage(uchar *data, int width, int height, bool sixteenBit, double radius)
+void BlurFilter::gaussianBlurImage(uchar* data, int width, int height, bool sixteenBit, double radius)
 {
     if (!data || !width || !height)
     {
-       kWarning() << ("DImgGaussianBlur::gaussianBlurImage: no image data available!");
+       kWarning() << ("BlurFilter::gaussianBlurImage: no image data available!");
        return;
     }
 
@@ -86,7 +93,7 @@ void DImgGaussianBlur::gaussianBlurImage(uchar *data, int width, int height, boo
        return;
     }
 
-    kDebug() << "DImgGaussianBlur::Process Computation...";
+    kDebug() << "BlurFilter::Process Computation...";
 
     if (!sixteenBit)           // 8 bits image.
     {
@@ -98,7 +105,7 @@ void DImgGaussianBlur::gaussianBlurImage(uchar *data, int width, int height, boo
         img.blur(radius);
 
         // Copy CImg onto destination.
-        kDebug() << "DImgGaussianBlur::Finalization...";
+        kDebug() << "BlurFilter::Finalization...";
 
         uchar *ptr = m_destImage.bits();
         for (int y = 0; y < height; ++y)
@@ -124,7 +131,7 @@ void DImgGaussianBlur::gaussianBlurImage(uchar *data, int width, int height, boo
         img.blur(radius);
 
         // Copy CImg onto destination.
-        kDebug() << "DImgGaussianBlur::Finalization...";
+        kDebug() << "BlurFilter::Finalization...";
 
         unsigned short *ptr = (unsigned short *)m_destImage.bits();
         for (int y = 0; y < height; ++y)

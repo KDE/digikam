@@ -6,7 +6,7 @@
  * Date        : 2005-17-07
  * Description : A Gaussian Blur threaded image filter.
  *
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009      by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIMGGAUSSIAN_BLUR_H
-#define DIMGGAUSSIAN_BLUR_H
+#ifndef BLURFILTER_H
+#define BLURFILTER_H
 
 // Local includes
 
@@ -33,18 +33,20 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT DImgGaussianBlur : public DImgThreadedFilter
+class DIGIKAM_EXPORT BlurFilter : public DImgThreadedFilter
 {
 
 public:
 
-    explicit DImgGaussianBlur(DImg *orgImage, QObject *parent=0, double radius=3.0);
+    explicit BlurFilter(DImg* orgImage, QObject* parent=0, double radius=3.0);
 
     // Constructor for slave mode: execute immediately in current thread with specified master filter
-    explicit DImgGaussianBlur(DImgThreadedFilter *parentFilter, const DImg& orgImage, const DImg& destImage,
-                              int progressBegin=0, int progressEnd=100, double radius=3.0);
+    explicit BlurFilter(DImgThreadedFilter* parentFilter, const DImg& orgImage, const DImg& destImage,
+                        int progressBegin=0, int progressEnd=100, double radius=3.0);
 
-    ~DImgGaussianBlur(){};
+    BlurFilter(uchar* bits, uint width, uint height, bool sixteenBit, double radius=3.0);                        
+                        
+    ~BlurFilter(){};
 
 private:  // Gaussian blur filter data.
 
@@ -52,11 +54,11 @@ private:  // Gaussian blur filter data.
 
 private:  // Gaussian blur filter methods.
 
-    virtual void filterImage();
+    void filterImage();
 
-    void gaussianBlurImage(uchar *data, int width, int height, bool sixteenBit, double radius);
+    void gaussianBlurImage(uchar* data, int width, int height, bool sixteenBit, double radius);
 };
 
 }  // namespace Digikam
 
-#endif /* DIMGGAUSSIAN_BLUR_H */
+#endif /* BLURFILTER_H */

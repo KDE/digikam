@@ -40,7 +40,7 @@
 // Local includes
 
 #include "dimg.h"
-#include "dimggaussianblur.h"
+#include "blurfilter.h"
 #include "mixerfilter.h"
 #include "globals.h"
 
@@ -117,7 +117,7 @@ void InfraredFilter::filterImage()
     // This way simulate Infrared film dispersion for the highlights.
 
     DImg BWBlurImage(Width, Height, sixteenBit);
-    DImgGaussianBlur(this, BWImage, BWBlurImage, 10, 20, blurRadius);
+    BlurFilter(this, BWImage, BWBlurImage, 10, 20, blurRadius);
 
     // save a memcpy
     pOverlayBits = BWBlurImage.bits();
