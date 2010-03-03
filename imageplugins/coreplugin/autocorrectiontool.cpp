@@ -111,7 +111,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->correctionTools = new PreviewList(parent);
+    d->correctionTools = new PreviewList(this);
 
     item = d->correctionTools->addItem(new AutoLevelsFilter(&thumbImage, iface.getOriginalImg()),
                                        i18n("Auto Levels"), AutoLevelsCorrection);
@@ -188,7 +188,7 @@ AutoCorrectionTool::~AutoCorrectionTool()
 {
     if (d->destinationPreviewData)
        delete [] d->destinationPreviewData;
-
+    delete d->correctionTools;
     delete d;
 }
 
