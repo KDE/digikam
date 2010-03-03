@@ -9,7 +9,7 @@ contentawareresizing        DONE                 TODO                  TODO
 
 coreplugin
   /adjustcurves             DONE                 DONE                  DONE
-  /adjustlevels             TODO                 TODO                  TODO
+  /adjustlevels             DONE                 DONE                  TODO
   /autocorrectiontool       DONE                 DONE                  DONE
   /bcgtool                  DONE                 DONE                  DONE
   /blurtool                 DONE                 DONE                  TODO
