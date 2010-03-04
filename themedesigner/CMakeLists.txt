@@ -46,6 +46,7 @@ INCLUDE_DIRECTORIES(
                      ../utilities/imageeditor/editor
                      ../utilities/imageeditor/canvas
                      ../utilities/imageeditor/printiface
+                     ../utilities/imageeditor/widgets
 
                      # specific libs and utilities
                      ../libs/themeengine
