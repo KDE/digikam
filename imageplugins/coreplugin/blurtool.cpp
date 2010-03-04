@@ -154,12 +154,18 @@ void BlurTool::slotResetSettings()
 
 void BlurTool::prepareEffect()
 {
-    QApplication::setOverrideCursor(Qt::WaitCursor);
+    kapp->setOverrideCursor(Qt::WaitCursor);
     toolSettings()->setEnabled(false);
     toolView()->setEnabled(false);
 
     DImg img = d->previewWidget->getOriginalRegionImage();
     setFilter(new BlurFilter(&img, this, d->radiusInput->value()));
+}
+
+void BlurTool::putPreviewData()
+{
+    DImg preview = filter()->getTargetImage();
+    d->previewWidget->setPreviewImage(preview);
 }
 
 void BlurTool::prepareFinal()
@@ -168,32 +174,18 @@ void BlurTool::prepareFinal()
     toolView()->setEnabled(false);
 
     ImageIface iface(0, 0);
-    uchar *data      = iface.getOriginalImage();
-    int w            = iface.originalWidth();
-    int h            = iface.originalHeight();
-    bool sixteenBit  = iface.originalSixteenBit();
-    bool hasAlpha    = iface.originalHasAlpha();
-    DImg orgImage = DImg(w, h, sixteenBit, hasAlpha ,data);
-    delete [] data;
-    setFilter(new BlurFilter(&orgImage, this, d->radiusInput->value()));
-}
-
-void BlurTool::putPreviewData()
-{
-    DImg imDest = filter()->getTargetImage();
-    d->previewWidget->setPreviewImage(imDest);
+    setFilter(new BlurFilter(iface.getOriginalImg(), this, d->radiusInput->value()));
 }
 
 void BlurTool::putFinalData()
 {
     ImageIface iface(0, 0);
-    DImg imDest = filter()->getTargetImage();
-    iface.putOriginalImage(i18n("Gaussian Blur"), imDest.bits());
+    iface.putOriginalImage(i18n("Gaussian Blur"), filter()->getTargetImage().bits());
 }
 
 void BlurTool::renderingFinished()
 {
-    QApplication::restoreOverrideCursor();
+    kapp->restoreOverrideCursor();
     toolSettings()->setEnabled(true);
     toolView()->setEnabled(true);
 }

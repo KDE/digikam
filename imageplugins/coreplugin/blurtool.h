@@ -42,7 +42,7 @@ class BlurTool : public EditorToolThreaded
 
 public:
 
-    BlurTool(QObject *parent);
+    BlurTool(QObject* parent);
     ~BlurTool();
 
 private Q_SLOTS:

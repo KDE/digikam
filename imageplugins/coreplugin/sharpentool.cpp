@@ -94,7 +94,6 @@ SharpenTool::SharpenTool(QObject* parent)
                                 EditorToolSettings::SaveAs|
                                 EditorToolSettings::Try);
 
-
     d->previewWidget = new ImageRegionWidget;
 
     d->sharpSettings = new SharpSettings(d->gboxSettings->plainPage());
@@ -132,13 +131,6 @@ void SharpenTool::slotSettingsChanged()
             break;
         }
     }
-}
-
-void SharpenTool::renderingFinished()
-{
-    toolView()->setEnabled(true);
-    toolSettings()->setEnabled(true);
-    slotSettingsChanged();
 }
 
 void SharpenTool::readSettings()
@@ -208,17 +200,15 @@ void SharpenTool::prepareEffect()
     }
 }
 
+void SharpenTool::putPreviewData()
+{
+    DImg preview = filter()->getTargetImage();
+    d->previewWidget->setPreviewImage(preview);
+}
+
 void SharpenTool::prepareFinal()
 {
     ImageIface iface(0, 0);
-    uchar *data     = iface.getOriginalImage();
-    int w           = iface.originalWidth();
-    int h           = iface.originalHeight();
-    bool sixteenBit = iface.originalSixteenBit();
-    bool hasAlpha   = iface.originalHasAlpha();
-    DImg orgImage   = DImg(w, h, sixteenBit, hasAlpha ,data);
-    delete [] data;
-
     toolView()->setEnabled(false);
     toolSettings()->setEnabled(false);
     SharpContainer settings = d->sharpSettings->settings();
@@ -233,7 +223,7 @@ void SharpenTool::prepareFinal()
             if (radius < 1.0) sigma = radius;
             else sigma = sqrt(radius);
 
-            setFilter(new DImgSharpen(&orgImage, this, radius, sigma));
+            setFilter(new DImgSharpen(iface.getOriginalImg(), this, radius, sigma));
             break;
         }
 
@@ -243,7 +233,7 @@ void SharpenTool::prepareFinal()
             double a  = settings.umAmount;
             double th = settings.umThreshold;
 
-            setFilter(new DImgUnsharpMask(&orgImage, this, r, a, th));
+            setFilter(new DImgUnsharpMask(iface.getOriginalImg(), this, r, a, th));
             break;
         }
 
@@ -255,44 +245,45 @@ void SharpenTool::prepareFinal()
             double g   = settings.rfGauss;
             int    ms  = settings.rfMatrix;
 
-            setFilter(new DImgRefocus(&orgImage, this, ms, r, g, c, n));
+            setFilter(new DImgRefocus(iface.getOriginalImg(), this, ms, r, g, c, n));
             break;
         }
     }
 }
 
-void SharpenTool::putPreviewData()
-{
-    DImg imDest = filter()->getTargetImage();
-    d->previewWidget->setPreviewImage(imDest);
-}
-
 void SharpenTool::putFinalData()
 {
     ImageIface iface(0, 0);
-    DImg imDest = filter()->getTargetImage();
     SharpContainer settings = d->sharpSettings->settings();
 
     switch (settings.method)
     {
         case SharpContainer::SimpleSharp:
         {
-            iface.putOriginalImage(i18n("Sharpen"), imDest.bits());
+            iface.putOriginalImage(i18n("Sharpen"), filter()->getTargetImage().bits());
             break;
         }
 
         case SharpContainer::UnsharpMask:
         {
-            iface.putOriginalImage(i18n("Unsharp Mask"), imDest.bits());
+            iface.putOriginalImage(i18n("Unsharp Mask"), filter()->getTargetImage().bits());
             break;
         }
 
         case SharpContainer::Refocus:
         {
-            iface.putOriginalImage(i18n("Refocus"), imDest.bits());
+            iface.putOriginalImage(i18n("Refocus"), filter()->getTargetImage().bits());
             break;
         }
     }
+}
+
+void SharpenTool::renderingFinished()
+{
+    kapp->restoreOverrideCursor();
+    toolView()->setEnabled(true);
+    toolSettings()->setEnabled(true);
+    slotSettingsChanged();
 }
 
 void SharpenTool::slotLoadSettings()
