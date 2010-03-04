@@ -6,8 +6,8 @@
  * Date        : 2005-05-25
  * Description : Raindrop threaded image filter.
  *
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * Original RainDrop algorithm copyrighted 2004-2005 by
  * Pieter Z. Voloshyn <pieter dot voloshyn at gmail dot com>.
@@ -25,7 +25,6 @@
  *
  * ============================================================ */
 
-
 #include "raindrop.h"
 
 // C++ includes
@@ -41,13 +40,12 @@
 // Local includes
 
 #include "dimg.h"
-#include "dimgimagefilters.h"
 
 namespace DigikamRainDropImagesPlugin
 {
 
-RainDrop::RainDrop(Digikam::DImg *orgImage, QObject *parent, int drop,
-                   int amount, int coeff, QRect *selection)
+RainDrop::RainDrop(Digikam::DImg* orgImage, QObject* parent, int drop,
+                   int amount, int coeff, QRect* selection)
         : Digikam::DImgThreadedFilter(orgImage, parent, "RainDrop")
 {
     m_drop   = drop;
@@ -67,7 +65,7 @@ RainDrop::RainDrop(Digikam::DImg *orgImage, QObject *parent, int drop,
     initFilter();
 }
 
-void RainDrop::filterImage(void)
+void RainDrop::filterImage()
 {
     int w = m_orgImage.width();
     int h = m_orgImage.height();
@@ -133,7 +131,7 @@ void RainDrop::filterImage(void)
  *                     will be applied, after this, a shadow will be applied too.
  *                     and after this, a blur function will finish the effect.
  */
-void RainDrop::rainDropsImage(Digikam::DImg *orgImage, Digikam::DImg *destImage, int MinDropSize, int MaxDropSize,
+void RainDrop::rainDropsImage(Digikam::DImg* orgImage, Digikam::DImg* destImage, int MinDropSize, int MaxDropSize,
                               int Amount, int Coeff, bool bLimitRange, int progressMin, int progressMax)
 {
     bool   bResp;
@@ -212,8 +210,8 @@ void RainDrop::rainDropsImage(Digikam::DImg *orgImage, Digikam::DImg *destImage,
     delete [] pStatusBits;
 }
 
-bool RainDrop::CreateRainDrop(uchar *pBits, int Width, int Height, bool sixteenBit, int bytesDepth,
-                              uchar *pResBits, uchar* pStatusBits,
+bool RainDrop::CreateRainDrop(uchar* pBits, int Width, int Height, bool sixteenBit, int bytesDepth,
+                              uchar* pResBits, uchar* pStatusBits,
                               int X, int Y, int DropSize, double Coeff, bool bLimitRange)
 {
     register int w, h, nw1, nh1, nw2, nh2;
@@ -409,7 +407,7 @@ bool RainDrop::CreateRainDrop(uchar *pBits, int Width, int Height, bool sixteenB
 }
 
 
-bool RainDrop::CanBeDropped(int Width, int Height, uchar *pStatusBits, int X, int Y,
+bool RainDrop::CanBeDropped(int Width, int Height, uchar* pStatusBits, int X, int Y,
                             int DropSize, bool bLimitRange)
 {
     register int w, h, i = 0;
@@ -439,7 +437,7 @@ bool RainDrop::CanBeDropped(int Width, int Height, uchar *pStatusBits, int X, in
     return (true);
 }
 
-bool RainDrop::SetDropStatusBits (int Width, int Height, uchar *pStatusBits,
+bool RainDrop::SetDropStatusBits (int Width, int Height, uchar* pStatusBits,
                                   int X, int Y, int DropSize)
 {
     register int w, h, i = 0;

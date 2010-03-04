@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2005-24-01
- * Description : misc image filters
+ * Description : pixels antialiasing filter
  *
  * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -24,7 +24,7 @@
  *
  * ============================================================ */
 
-#include "dimgimagefilters.h"
+#include "pixelsaliasfilter.h"
 
 // C++ includes
 
@@ -45,7 +45,7 @@ namespace Digikam
 
 /** Function to perform pixel antialiasing with 8 bits/color/pixel images. This method is used to smooth target
     image in transformation  method like free rotation or shear tool. */
-void DImgImageFilters::pixelAntiAliasing(uchar *data, int Width, int Height, double X, double Y,
+void PixelsAliasFilter::pixelAntiAliasing(uchar *data, int Width, int Height, double X, double Y,
                                          uchar *A, uchar *R, uchar *G, uchar *B)
 {
     int nX, nY, j;
@@ -91,7 +91,7 @@ void DImgImageFilters::pixelAntiAliasing(uchar *data, int Width, int Height, dou
 
 /** Function to perform pixel antialiasing with 16 bits/color/pixel images. This method is used to smooth target
     image in transformation  method like free rotation or shear tool. */
-void DImgImageFilters::pixelAntiAliasing16(unsigned short *data, int Width, int Height, double X, double Y,
+void PixelsAliasFilter::pixelAntiAliasing16(unsigned short *data, int Width, int Height, double X, double Y,
                                            unsigned short *A, unsigned short *R, unsigned short *G,
                                            unsigned short *B)
 {
@@ -135,5 +135,12 @@ void DImgImageFilters::pixelAntiAliasing16(unsigned short *data, int Width, int 
     *R = CLAMP065535((int)lfTotalR);
     *A = CLAMP065535((int)lfTotalA);
 }
+
+inline int PixelsAliasFilter::setPositionAdjusted (int Width, int Height, int X, int Y)
+{
+    X = (X < 0) ? 0 : (X >= Width ) ? Width  - 1 : X;
+    Y = (Y < 0) ? 0 : (Y >= Height) ? Height - 1 : Y;
+    return (Y*Width*4 + 4*X);
+};
 
 }  // namespace Digikam

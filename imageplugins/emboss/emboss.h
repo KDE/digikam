@@ -6,8 +6,8 @@
  * Date        : 2005-05-25
  * Description : Emboss threaded image filter.
  *
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * Original Emboss algorithm copyrighted 2004 by 
  * Pieter Z. Voloshyn <pieter dot voloshyn at gmail dot com>.
@@ -40,15 +40,15 @@ class Emboss : public Digikam::DImgThreadedFilter
 
 public:
 
-    explicit Emboss(Digikam::DImg *orgImage, QObject *parent=0, int depth=30);
+    explicit Emboss(Digikam::DImg* orgImage, QObject* parent=0, int depth=30);
     ~Emboss(){};
 
 private:  
 
-    virtual void filterImage(void);
+    void filterImage();
 
 
-    void embossImage(Digikam::DImg *orgImage, Digikam::DImg *destImage, int d);
+    void embossImage(Digikam::DImg* orgImage, Digikam::DImg* destImage, int d);
 
     // Function to limit the max and min values defined by the developer.
 

@@ -7,7 +7,7 @@
  * Description : a digiKam image plugin to reduce
  *               vignetting on an image.
  *
- * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010      by Julien Narboux <julien at narboux dot fr>
  *
  * This program is free software; you can redistribute it
@@ -22,7 +22,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "antivignettingtool.moc"
 
@@ -57,14 +56,12 @@
 
 #include "antivignetting.h"
 #include "daboutdata.h"
-#include "dimgimagefilters.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imageguidewidget.h"
 #include "version.h"
 
 using namespace KDcrawIface;
-using namespace Digikam;
 
 namespace DigikamAntiVignettingImagesPlugin
 {

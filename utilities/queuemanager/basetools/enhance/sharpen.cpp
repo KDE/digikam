@@ -38,7 +38,6 @@
 // Local includes
 
 #include "dimg.h"
-#include "dimgimagefilters.h"
 #include "dimgrefocus.h"
 #include "dimgsharpen.h"
 #include "dimgunsharpmask.h"
@@ -54,7 +53,7 @@ Sharpen::Sharpen(QObject* parent)
     setToolDescription(i18n("A tool to sharpen images"));
     setToolIcon(KIcon(SmallIcon("sharpenimage")));
 
-    QWidget *box   = new QWidget;
+    QWidget* box   = new QWidget;
     m_settingsView = new SharpSettings(box);
     setSettingsWidget(box);
 
@@ -151,7 +150,7 @@ bool Sharpen::toolOperations()
     int filterType  = settings()["SharpenFilterType"].toInt();
     uint width      = image().width();
     uint height     = image().height();
-    uchar *data     = image().bits();
+    uchar* data     = image().bits();
     bool sixteenBit = image().sixteenBit();
 
     switch (filterType)
@@ -167,11 +166,10 @@ bool Sharpen::toolOperations()
                 sigma = sqrt(radius);
 
             DImg orgImage(width, height, sixteenBit, true, data);
-            DImgSharpen* filter = new DImgSharpen(&orgImage, 0L, radius, sigma);
-            filter->startFilterDirectly();
-            DImg imDest = filter->getTargetImage();
-            memcpy( data, imDest.bits(), imDest.numBytes() );
-            delete filter;
+            DImgSharpen filter(&orgImage, 0L, radius, sigma);
+            filter.startFilterDirectly();
+            DImg imDest = filter.getTargetImage();
+            memcpy(data, imDest.bits(), imDest.numBytes() );
             break;
         }
 
@@ -182,11 +180,10 @@ bool Sharpen::toolOperations()
             double th = settings()["UnsharpMaskThreshold"].toDouble();
 
             DImg orgImage(width, height, sixteenBit, true, data);
-            DImgUnsharpMask* filter = new DImgUnsharpMask(&orgImage, 0L, r, a, th);
-            filter->startFilterDirectly();
-            DImg imDest = filter->getTargetImage();
-            memcpy( data, imDest.bits(), imDest.numBytes());
-            delete filter;
+            DImgUnsharpMask filter(&orgImage, 0L, r, a, th);
+            filter.startFilterDirectly();
+            DImg imDest = filter.getTargetImage();
+            memcpy(data, imDest.bits(), imDest.numBytes());
             break;
         }
 
@@ -199,12 +196,10 @@ bool Sharpen::toolOperations()
             int matrixSize     = settings()["RefocusMatrixSize"].toInt();
 
             DImg orgImage(width, height, sixteenBit, true, data);
-            DImgRefocus* filter = new DImgRefocus(&orgImage, 0L, matrixSize,
-                                                  radius, gauss, correlation, noise);
-            filter->startFilterDirectly();
-            DImg imDest = filter->getTargetImage();
-            memcpy( data, imDest.bits(), imDest.numBytes());
-            delete filter;
+            DImgRefocus filter(&orgImage, 0L, matrixSize, radius, gauss, correlation, noise);
+            filter.startFilterDirectly();
+            DImg imDest = filter.getTargetImage();
+            memcpy(data, imDest.bits(), imDest.numBytes());
             break;
         }
     }

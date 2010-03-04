@@ -6,7 +6,7 @@
  * Date        : 2005-07-18
  * Description : Free rotation threaded image filter.
  *
- * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009      by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
@@ -25,7 +25,6 @@
 // Degrees to radian conversion coeff (PI/180). To optimize computation.
 #define DEG2RAD 0.017453292519943
 
-
 #include "freerotation.h"
 
 // C++ includes
@@ -36,12 +35,12 @@
 // Local includes
 
 #include "dimg.h"
-#include "dimgimagefilters.h"
+#include "pixelsaliasfilter.h"
 
 namespace DigikamFreeRotationImagesPlugin
 {
 
-FreeRotation::FreeRotation(Digikam::DImg *orgImage, QObject *parent, double angle, bool antialiasing,
+FreeRotation::FreeRotation(Digikam::DImg* orgImage, QObject* parent, double angle, bool antialiasing,
                            int autoCrop, QColor backgroundColor, int orgW, int orgH)
             : Digikam::DImgThreadedFilter(orgImage, parent, "FreeRotation")
 {
@@ -103,7 +102,7 @@ double FreeRotation::calculateAngle(const QPoint& p1, const QPoint& p2)
     return angle;
 }
 
-void FreeRotation::filterImage(void)
+void FreeRotation::filterImage()
 {
     int          progress;
     register int w, h, nw, nh, j, i = 0;
@@ -114,7 +113,7 @@ void FreeRotation::filterImage(void)
     int nWidth  = m_orgImage.width();
     int nHeight = m_orgImage.height();
 
-    uchar *pBits            = m_orgImage.bits();
+    uchar* pBits            = m_orgImage.bits();
     unsigned short *pBits16 = (unsigned short*)m_orgImage.bits();
 
     // first of all, we need to calculate the sin and cos of the given angle
@@ -156,10 +155,10 @@ void FreeRotation::filterImage(void)
 
     m_destImage.fill( Digikam::DColor(m_backgroundColor.rgb(), sixteenBit) );
 
-    uchar *pResBits            = m_destImage.bits();
-    unsigned short *pResBits16 = (unsigned short *)m_destImage.bits();
+    uchar* pResBits            = m_destImage.bits();
+    unsigned short* pResBits16 = (unsigned short *)m_destImage.bits();
 
-    Digikam::DImgImageFilters filters;
+    Digikam::PixelsAliasFilter alias;
 
     // main loop
 
@@ -181,13 +180,13 @@ void FreeRotation::filterImage(void)
                 if (m_antiAlias)
                 {
                     if (!sixteenBit)
-                        filters.pixelAntiAliasing(pBits, nWidth, nHeight, lfx, lfy,
-                                                  &pResBits[i+3], &pResBits[i+2],
-                                                  &pResBits[i+1], &pResBits[i]);
+                        alias.pixelAntiAliasing(pBits, nWidth, nHeight, lfx, lfy,
+                                                &pResBits[i+3], &pResBits[i+2],
+                                                &pResBits[i+1], &pResBits[i]);
                     else
-                        filters.pixelAntiAliasing16(pBits16, nWidth, nHeight, lfx, lfy,
-                                                    &pResBits16[i+3], &pResBits16[i+2],
-                                                    &pResBits16[i+1], &pResBits16[i]);
+                        alias.pixelAntiAliasing16(pBits16, nWidth, nHeight, lfx, lfy,
+                                                  &pResBits16[i+3], &pResBits16[i+2],
+                                                  &pResBits16[i+1], &pResBits16[i]);
                 }
                 else
                 {

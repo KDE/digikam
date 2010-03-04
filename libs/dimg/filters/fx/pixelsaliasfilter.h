@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2005-24-01
- * Description : misc image filters
+ * Description : pixels antialiasing filter
  *
  * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIMGIMAGE_FILTERS_H
-#define DIMGIMAGE_FILTERS_H
+#ifndef PIXELSALIASFILTERS_H
+#define PIXELSALIASFILTERS_H
 
 // C++ includes
 
@@ -36,21 +36,12 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT DImgImageFilters
+class DIGIKAM_EXPORT PixelsAliasFilter
 {
 public:
 
-    DImgImageFilters(){};
-    ~DImgImageFilters(){};
-
-private:    // Private methods used internally.
-
-    inline int setPositionAdjusted (int Width, int Height, int X, int Y)
-    {
-       X = (X < 0) ? 0 : (X >= Width ) ? Width  - 1 : X;
-       Y = (Y < 0) ? 0 : (Y >= Height) ? Height - 1 : Y;
-       return (Y*Width*4 + 4*X);
-    };
+    PixelsAliasFilter(){};
+    ~PixelsAliasFilter(){};
 
 public:   // Public methods.
 
@@ -59,8 +50,12 @@ public:   // Public methods.
 
     void pixelAntiAliasing16(unsigned short* data, int Width, int Height, double X, double Y,
                              unsigned short* A, unsigned short* R, unsigned short* G, unsigned short* B);
+
+private:
+
+    inline int setPositionAdjusted (int Width, int Height, int X, int Y);
 };
 
 }  // namespace Digikam
 
-#endif /* DIMGIMAGE_FILTERS_H */
+#endif /* PIXELSALIASFILTERS_H */

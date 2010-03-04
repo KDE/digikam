@@ -6,8 +6,8 @@
  * Date        : 2005-05-25
  * Description : Raindrop threaded image filter.
  * 
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * 
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,25 +39,25 @@ class RainDrop : public Digikam::DImgThreadedFilter
 
 public:
     
-    explicit RainDrop(Digikam::DImg *orgImage, QObject *parent=0, int drop=80,
-                      int amount=150, int coeff=30, QRect *selection=0L);
+    explicit RainDrop(Digikam::DImg* orgImage, QObject* parent=0, int drop=80,
+                      int amount=150, int coeff=30, QRect* selection=0L);
     
     ~RainDrop(){};
 
 private:
 
-    virtual void filterImage(void);
+    void filterImage();
 
-    void rainDropsImage(Digikam::DImg *orgImage, Digikam::DImg *destImage, int MinDropSize, int MaxDropSize,
+    void rainDropsImage(Digikam::DImg* orgImage, Digikam::DImg* destImage, int MinDropSize, int MaxDropSize,
                         int Amount, int Coeff, bool bLimitRange, int progressMin, int progressMax);
 
-    bool CreateRainDrop(uchar *pBits, int Width, int Height, bool sixteenBit, int bytesDepth,
-                        uchar *pResBits, uchar* pStatusBits,
+    bool CreateRainDrop(uchar* pBits, int Width, int Height, bool sixteenBit, int bytesDepth,
+                        uchar* pResBits, uchar *pStatusBits,
                         int X, int Y, int DropSize, double Coeff, bool bLimitRange);
 
-    bool CanBeDropped(int Width, int Height, uchar *pStatusBits, int X, int Y, int DropSize, bool bLimitRange);
+    bool CanBeDropped(int Width, int Height, uchar* pStatusBits, int X, int Y, int DropSize, bool bLimitRange);
 
-    bool SetDropStatusBits (int Width, int Height, uchar *pStatusBits, int X, int Y, int DropSize);
+    bool SetDropStatusBits(int Width, int Height, uchar* pStatusBits, int X, int Y, int DropSize);
 
     // A color is represented in RGB value (e.g. 0xFFFFFF is white color). 
     // But R, G and B values has 256 values to be used so, this function analyzes 

@@ -46,7 +46,6 @@
 #include "colorgradientwidget.h"
 #include "dcolor.h"
 #include "dimg.h"
-#include "dimgimagefilters.h"
 #include "editortoolsettings.h"
 #include "histogrambox.h"
 #include "histogramwidget.h"

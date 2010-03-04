@@ -36,7 +36,6 @@
 
 #include "dimg.h"
 #include "dcolor.h"
-#include "dimgimagefilters.h"
 #include "matrix.h"
 
 #define MAX_MATRIX_SIZE 25
@@ -49,7 +48,7 @@ int DImgRefocus::maxMatrixSize()
     return MAX_MATRIX_SIZE;
 }
 
-DImgRefocus::DImgRefocus(DImg *orgImage, QObject *parent, int matrixSize, double radius,
+DImgRefocus::DImgRefocus(DImg* orgImage, QObject* parent, int matrixSize, double radius,
                          double gauss, double correlation, double noise)
            : DImgThreadedFilter(orgImage, parent, "Refocus")
 {
@@ -73,7 +72,7 @@ DImgRefocus::~DImgRefocus()
     cancelFilter();
 }
 
-void DImgRefocus::filterImage(void)
+void DImgRefocus::filterImage()
 {
     bool sb = m_orgImage.sixteenBit();
     bool a  = m_orgImage.hasAlpha();
@@ -170,7 +169,7 @@ void DImgRefocus::refocusImage(uchar* data, int width, int height, bool sixteenB
     delete matrix;
 }
 
-void DImgRefocus::convolveImage(uchar *orgData, uchar *destData, int width, int height,
+void DImgRefocus::convolveImage(uchar* orgData, uchar* destData, int width, int height,
                                 bool sixteenBit, const double *const matrix, int mat_size)
 {
     int progress;
@@ -277,7 +276,7 @@ void DImgRefocus::convolveImage(uchar *orgData, uchar *destData, int width, int 
         progress = (int)(((double)y1 * 100.0) / height);
         if (progress%5 == 0)
             postProgress( progress );
-        }
+    }
 }
 
 }  // namespace DigikamImagesPluginCore

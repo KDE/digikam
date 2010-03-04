@@ -38,7 +38,7 @@ class AntiVignetting : public DImgThreadedFilter
 
 public:
 
-    explicit AntiVignetting(DImg *orgImage, QObject *parent=0, double density=2.0,
+    explicit AntiVignetting(DImg* orgImage, QObject* parent=0, double density=2.0,
                             double power=1.0, double innerradius=1.0, double outerradius=1.0, double xshift=0, double yshift=0,
                             bool anti=true);
 

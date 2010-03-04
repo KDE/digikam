@@ -56,14 +56,11 @@
 
 // Local includes
 
-#include "dimgimagefilters.h"
-#include "contentawareresizer.h"
-#include "daboutdata.h"
 #include "rexpanderbox.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imageguidewidget.h"
-#include "version.h"
+#include "contentawareresizer.h"
 
 using namespace Digikam;
 using namespace KDcrawIface;

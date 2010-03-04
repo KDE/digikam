@@ -6,11 +6,8 @@
  * Date  : 2005-01-18
  * Description : a widget class to edit perspective.
  *
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- *
- * Matrix3 implementation inspired from gimp 2.0
- * Copyright (C) 1995 Spencer Kimball and Peter Mattis
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -57,12 +54,12 @@
 
 #include "triangle.h"
 #include "imageiface.h"
-#include "dimgimagefilters.h"
+#include "pixelsaliasfilter.h"
 
 namespace DigikamPerspectiveImagesPlugin
 {
 
-PerspectiveWidget::PerspectiveWidget(int w, int h, QWidget *parent)
+PerspectiveWidget::PerspectiveWidget(int w, int h, QWidget* parent)
                  : QWidget(parent)
 {
     setAttribute(Qt::WA_DeleteOnClose);
@@ -554,7 +551,7 @@ void PerspectiveWidget::transformAffine(Digikam::DImg *orgImage, Digikam::DImg *
 
     //destImage->fill(background);
 
-    Digikam::DImgImageFilters filters;
+    Digikam::PixelsAliasFilter alias;
 
     // Find the inverse of the transformation matrix
     m.invert();
@@ -629,20 +626,18 @@ void PerspectiveWidget::transformAffine(Digikam::DImg *orgImage, Digikam::DImg *
 
                     if (sixteenBit)
                     {
-                        unsigned short *d16 = (unsigned short *)d;
-                        filters.pixelAntiAliasing16((unsigned short *)data,
-                                                  width, height, finalU, finalV, d16+3, d16+2, d16+1, d16);
+                        unsigned short* d16 = (unsigned short*)d;
+                        alias.pixelAntiAliasing16((unsigned short*)data, width, height, finalU, finalV, d16+3, d16+2, d16+1, d16);
                     }
                     else
                     {
-                        filters.pixelAntiAliasing(data, width, height, finalU, finalV,
-                                                                  d+3, d+2, d+1, d);
+                        alias.pixelAntiAliasing(data, width, height, finalU, finalV, d+3, d+2, d+1, d);
                     }
                 }
                 else
                 {
-                    int u = iu - u1;
-                    int v = iv - v1;
+                    int u  = iu - u1;
+                    int v  = iv - v1;
                     offset = (v * width * bytesDepth) + (u * bytesDepth);
                     color.setColor(data + offset, sixteenBit);
                     color.setPixel(d);
@@ -675,14 +670,14 @@ void PerspectiveWidget::transformAffine(Digikam::DImg *orgImage, Digikam::DImg *
     delete [] dest;
 }
 
-void PerspectiveWidget::paintEvent( QPaintEvent * )
+void PerspectiveWidget::paintEvent(QPaintEvent*)
 {
     QPainter p(this);
     p.drawPixmap(0, 0, *m_pixmap);
     p.end();
 }
 
-void PerspectiveWidget::resizeEvent(QResizeEvent * e)
+void PerspectiveWidget::resizeEvent(QResizeEvent* e)
 {
     int old_w = m_w;
     int old_h = m_h;
@@ -719,7 +714,7 @@ void PerspectiveWidget::resizeEvent(QResizeEvent * e)
     updatePixmap();
 }
 
-void PerspectiveWidget::mousePressEvent ( QMouseEvent * e )
+void PerspectiveWidget::mousePressEvent(QMouseEvent* e)
 {
     if ( e->button() == Qt::LeftButton &&
          m_rect.contains( e->x(), e->y() ))
@@ -740,7 +735,7 @@ void PerspectiveWidget::mousePressEvent ( QMouseEvent * e )
     }
 }
 
-void PerspectiveWidget::mouseReleaseEvent ( QMouseEvent * e )
+void PerspectiveWidget::mouseReleaseEvent(QMouseEvent* e)
 {
     if ( m_currentResizing != ResizingNone )
     {
@@ -763,7 +758,7 @@ void PerspectiveWidget::mouseReleaseEvent ( QMouseEvent * e )
     }
 }
 
-void PerspectiveWidget::mouseMoveEvent ( QMouseEvent * e )
+void PerspectiveWidget::mouseMoveEvent(QMouseEvent* e)
 {
     m_validPerspective = true;
 

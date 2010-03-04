@@ -6,7 +6,7 @@
  * Date        : 2005-07-18
  * Description : Free rotation threaded image filter.
  *
- * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009      by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
@@ -42,7 +42,7 @@ class FreeRotation : public Digikam::DImgThreadedFilter
 
 public:
 
-    explicit FreeRotation(Digikam::DImg *orgImage, QObject *parent=0, double angle=0.0,
+    explicit FreeRotation(Digikam::DImg* orgImage, QObject* parent=0, double angle=0.0,
                           bool antialiasing=true, int autoCrop=NoAutoCrop, QColor backgroundColor=Qt::black,
                           int orgW=0, int orgH=0);
 
@@ -64,7 +64,7 @@ public:
 
 private:
 
-    virtual void filterImage(void);
+    void filterImage();
 
     inline int setPosition (int Width, int X, int Y)
     {

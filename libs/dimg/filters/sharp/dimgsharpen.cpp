@@ -6,7 +6,7 @@
  * Date        : 2005-17-07
  * Description : A Sharpen threaded image filter.
  *
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Original Sharpen algorithm copyright 2002
  * by Daniel M. Duley <mosfet@kde.org> from KImageEffect API.
@@ -38,14 +38,10 @@
 
 #include <kdebug.h>
 
-// Local includes
-
-#include "dimgimagefilters.h"
-
 namespace Digikam
 {
 
-DImgSharpen::DImgSharpen(DImg *orgImage, QObject *parent, double radius, double sigma)
+DImgSharpen::DImgSharpen(DImg* orgImage, QObject* parent, double radius, double sigma)
            : DImgThreadedFilter(orgImage, parent, "Sharpen")
 {
     m_radius = radius;
@@ -53,7 +49,7 @@ DImgSharpen::DImgSharpen(DImg *orgImage, QObject *parent, double radius, double 
     initFilter();
 }
 
-DImgSharpen::DImgSharpen(DImgThreadedFilter *parentFilter,
+DImgSharpen::DImgSharpen(DImgThreadedFilter* parentFilter,
                          const DImg& orgImage, const DImg& destImage,
                          int progressBegin, int progressEnd, double radius, double sigma)
            : DImgThreadedFilter(parentFilter, orgImage, destImage, progressBegin, progressEnd,

@@ -6,8 +6,8 @@
  * Date        : 2005-07-18
  * Description : Distortion FX threaded image filter.
  *
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * Original Distortion algorithms copyrighted 2004-2005 by
  * Pieter Z. Voloshyn <pieter dot voloshyn at gmail dot com>.
@@ -43,12 +43,12 @@
 // Local includes
 
 #include "dimg.h"
-#include "dimgimagefilters.h"
+#include "pixelsaliasfilter.h"
 
 namespace DigikamDistortionFXImagesPlugin
 {
 
-DistortionFX::DistortionFX(Digikam::DImg *orgImage, QObject *parent, int effectType,
+DistortionFX::DistortionFX(Digikam::DImg* orgImage, QObject* parent, int effectType,
                            int level, int iteration, bool antialiasing)
             : Digikam::DImgThreadedFilter(orgImage, parent, "DistortionFX")
 {
@@ -60,12 +60,12 @@ DistortionFX::DistortionFX(Digikam::DImg *orgImage, QObject *parent, int effectT
     initFilter();
 }
 
-void DistortionFX::filterImage(void)
+void DistortionFX::filterImage()
 {
     int w = m_orgImage.width();
     int h = m_orgImage.height();
-    int   l     = m_level;
-    int   f     = m_iteration;
+    int l = m_level;
+    int f = m_iteration;
 
     switch (m_effectType)
     {
@@ -141,8 +141,8 @@ void DistortionFX::filterImage(void)
     Antialias if requested.
 */
 void DistortionFX::setPixelFromOther(int Width, int Height, bool sixteenBit, int bytesDepth,
-                                            uchar *data, uchar *pResBits,
-                                            int w, int h, double nw, double nh, bool AntiAlias)
+                                     uchar* data, uchar* pResBits,
+                                     int w, int h, double nw, double nh, bool AntiAlias)
 {
     Digikam::DColor color;
     int offset, offsetOther;
@@ -151,17 +151,17 @@ void DistortionFX::setPixelFromOther(int Width, int Height, bool sixteenBit, int
 
     if (AntiAlias)
     {
-        uchar *ptr = pResBits + offset;
+        uchar* ptr = pResBits + offset;
         if (sixteenBit)
         {
-            unsigned short *ptr16 = (unsigned short *)ptr;
-            Digikam::DImgImageFilters().pixelAntiAliasing16((unsigned short *)data, Width, Height, nw, nh,
-                    ptr16+3, ptr16+2, ptr16+1, ptr16);
+            unsigned short* ptr16 = (unsigned short*)ptr;
+            Digikam::PixelsAliasFilter().pixelAntiAliasing16((unsigned short*)data, Width, Height, nw, nh,
+                                                             ptr16+3, ptr16+2, ptr16+1, ptr16);
         }
         else
         {
-            Digikam::DImgImageFilters().pixelAntiAliasing(data, Width, Height, nw, nh,
-                    ptr+3, ptr+2, ptr+1, ptr);
+            Digikam::PixelsAliasFilter().pixelAntiAliasing(data, Width, Height, nw, nh,
+                                                           ptr+3, ptr+2, ptr+1, ptr);
         }
     }
     else
@@ -188,7 +188,7 @@ void DistortionFX::setPixelFromOther(int Width, int Height, bool sixteenBit, int
  *                     Its pure trigonometry. I think if you study hard the code you
  *                     understand very well.
  */
-void DistortionFX::fisheye(Digikam::DImg *orgImage, Digikam::DImg *destImage, double Coeff, bool AntiAlias)
+void DistortionFX::fisheye(Digikam::DImg* orgImage, Digikam::DImg* destImage, double Coeff, bool AntiAlias)
 {
     if (Coeff == 0.0) return;
 

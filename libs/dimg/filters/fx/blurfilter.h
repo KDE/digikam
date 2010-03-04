@@ -29,6 +29,7 @@
 
 #include "digikam_export.h"
 #include "dimgthreadedfilter.h"
+#include "globals.h"
 
 namespace Digikam
 {
@@ -43,14 +44,14 @@ public:
     // Constructor for slave mode: execute immediately in current thread with specified master filter
     explicit BlurFilter(DImgThreadedFilter* parentFilter, const DImg& orgImage, const DImg& destImage,
                         int progressBegin=0, int progressEnd=100, double radius=3.0);
-
+                        
     ~BlurFilter(){};
 
-private:
+private:  
 
     double m_radius;
 
-private:
+private:  
 
     void filterImage();
     void gaussianBlurImage(uchar* data, int width, int height, bool sixteenBit, double radius);

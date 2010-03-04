@@ -6,7 +6,7 @@
  * Date        : 2005-07-18
  * Description : Shear tool threaded image filter.
  *
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Original Shear algorithms copyrighted 2005 by
  * Pieter Z. Voloshyn <pieter dot voloshyn at gmail dot com>.
@@ -38,12 +38,12 @@
 // Local includes
 
 #include "dimg.h"
-#include "dimgimagefilters.h"
+#include "pixelsaliasfilter.h"
 
 namespace DigikamShearToolImagesPlugin
 {
 
-Shear::Shear(Digikam::DImg *orgImage, QObject *parent, float hAngle, float vAngle,
+Shear::Shear(Digikam::DImg* orgImage, QObject* parent, float hAngle, float vAngle,
              bool antialiasing, QColor backgroundColor, int orgW, int orgH)
      : Digikam::DImgThreadedFilter(orgImage, parent, "sheartool")
 {
@@ -57,7 +57,7 @@ Shear::Shear(Digikam::DImg *orgImage, QObject *parent, float hAngle, float vAngl
     initFilter();
 }
 
-void Shear::filterImage(void)
+void Shear::filterImage()
 {
     int          progress;
     register int x, y, p = 0, pt;
@@ -70,8 +70,8 @@ void Shear::filterImage(void)
     int nWidth  = m_orgImage.width();
     int nHeight = m_orgImage.height();
 
-    uchar *pBits            = m_orgImage.bits();
-    unsigned short *pBits16 = (unsigned short*)m_orgImage.bits();
+    uchar* pBits            = m_orgImage.bits();
+    unsigned short* pBits16 = (unsigned short*)m_orgImage.bits();
 
     // get beta ( complementary ) angle for horizontal and vertical angles
     horz_beta_angle = ( ( ( m_hAngle < 0.0 ) ? 180.0 : 90.0 ) - m_hAngle ) * DEG2RAD;
@@ -126,10 +126,10 @@ void Shear::filterImage(void)
     m_destImage = Digikam::DImg(new_width, new_height, sixteenBit, m_orgImage.hasAlpha());
     m_destImage.fill( Digikam::DColor(m_backgroundColor.rgb(), sixteenBit) );
 
-    uchar *pResBits            = m_destImage.bits();
-    unsigned short *pResBits16 = (unsigned short *)m_destImage.bits();
+    uchar* pResBits            = m_destImage.bits();
+    unsigned short* pResBits16 = (unsigned short *)m_destImage.bits();
 
-    Digikam::DImgImageFilters filters;
+    Digikam::PixelsAliasFilter alias;
 
     for( y = 0; y < new_height; ++y)
     {
@@ -145,13 +145,13 @@ void Shear::filterImage(void)
                 if ( m_antiAlias )
                 {
                     if (!sixteenBit)
-                        filters.pixelAntiAliasing(pBits, nWidth, nHeight, nx, ny,
-                                                  &pResBits[p+3], &pResBits[p+2],
-                                                  &pResBits[p+1], &pResBits[p]);
+                        alias.pixelAntiAliasing(pBits, nWidth, nHeight, nx, ny,
+                                                &pResBits[p+3], &pResBits[p+2],
+                                                &pResBits[p+1], &pResBits[p]);
                     else
-                        filters.pixelAntiAliasing16(pBits16, nWidth, nHeight, nx, ny,
-                                                    &pResBits16[p+3], &pResBits16[p+2],
-                                                    &pResBits16[p+1], &pResBits16[p]);
+                        alias.pixelAntiAliasing16(pBits16, nWidth, nHeight, nx, ny,
+                                                  &pResBits16[p+3], &pResBits16[p+2],
+                                                  &pResBits16[p+1], &pResBits16[p]);
                 }
                 else
                 {

@@ -6,8 +6,8 @@
  * Date        : 2005-07-18
  * Description : Distortion FX threaded image filter.
  *
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * Original Distortion algorithms copyrighted 2004-2005 by 
  * Pieter Z. Voloshyn <pieter dot voloshyn at gmail dot com>.
@@ -44,8 +44,8 @@ class DistortionFX : public Digikam::DImgThreadedFilter
 
 public:
 
-    explicit DistortionFX(Digikam::DImg *orgImage, QObject *parent=0, int effectType=0,
-                 int level=0, int iteration=0, bool antialiasing=true);
+    explicit DistortionFX(Digikam::DImg* orgImage, QObject* parent=0, int effectType=0,
+                          int level=0, int iteration=0, bool antialiasing=true);
 
     ~DistortionFX(){};
 
@@ -73,7 +73,7 @@ public:
 
 private:
 
-    virtual void filterImage(void);
+    void filterImage();
 
     // Backported from ImageProcessing version 2
     void fisheye(Digikam::DImg *orgImage, Digikam::DImg *destImage, double Coeff, bool AntiAlias=true);

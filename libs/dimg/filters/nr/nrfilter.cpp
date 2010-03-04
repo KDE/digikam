@@ -33,7 +33,6 @@
 
 #include "dimg.h"
 #include "dcolor.h"
-#include "dimgimagefilters.h"
 
 namespace Digikam
 {

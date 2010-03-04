@@ -1,5 +1,4 @@
 INSTALL(FILES dimgthreadedfilter.h 
-              dimgimagefilters.h 
               fx/blurfilter.h 
               cb/cbfilter.h 
               cb/cbsettings.h 

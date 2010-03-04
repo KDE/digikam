@@ -6,8 +6,8 @@
  * Date  : 2005-01-18
  * Description : a widget class to edit perspective.
  *
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -58,7 +58,7 @@ Q_OBJECT
 
 public:
 
-    PerspectiveWidget(int width, int height, QWidget *parent=0);
+    PerspectiveWidget(int width, int height, QWidget* parent=0);
     ~PerspectiveWidget();
 
     QRect  getTargetSize();
@@ -94,23 +94,23 @@ Q_SIGNALS:
 
 protected:
 
-    void paintEvent( QPaintEvent *e );
-    void resizeEvent( QResizeEvent * e );
-    void mousePressEvent ( QMouseEvent * e );
-    void mouseReleaseEvent ( QMouseEvent * e );
-    void mouseMoveEvent ( QMouseEvent * e );
+    void paintEvent(QPaintEvent*);
+    void resizeEvent(QResizeEvent*);
+    void mousePressEvent(QMouseEvent*);
+    void mouseReleaseEvent(QMouseEvent*);
+    void mouseMoveEvent(QMouseEvent*);
 
 private:  // Widget methods.
 
     void   updatePixmap();
 
-    void   transformAffine(Digikam::DImg *orgImage, Digikam::DImg *destImage,
+    void   transformAffine(Digikam::DImg* orgImage, Digikam::DImg* destImage,
                            const Matrix& matrix, Digikam::DColor background);
 
     QPoint buildPerspective(QPoint orignTopLeft, QPoint orignBottomRight,
                             QPoint transTopLeft, QPoint transTopRight,
                             QPoint transBottomLeft, QPoint transBottomRight,
-                            Digikam::DImg *orgImage=0, Digikam::DImg *destImage=0,
+                            Digikam::DImg* orgImage=0, Digikam::DImg* destImage=0,
                             Digikam::DColor background=Digikam::DColor());
 
 private:
@@ -130,7 +130,7 @@ private:
     bool                 m_inverseTransformation;
     bool                 m_validPerspective;
 
-    uint                *m_data;
+    uint*                m_data;
     int                  m_w;
     int                  m_h;
     int                  m_origW;
@@ -164,9 +164,9 @@ private:
     // 60 points will be stored to compute a grid of 15x15 lines.
     QPolygon             m_grid;
 
-    QPixmap             *m_pixmap;
+    QPixmap*             m_pixmap;
 
-    Digikam::ImageIface *m_iface;
+    Digikam::ImageIface* m_iface;
     Digikam::DImg        m_previewImage;
 };
 

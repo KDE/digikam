@@ -6,8 +6,8 @@
  * Date        : 2005-05-25
  * Description : Oil Painting threaded image filter.
  * 
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * 
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -37,18 +37,17 @@ class OilPaint : public Digikam::DImgThreadedFilter
 
 public:
 
-    explicit OilPaint(Digikam::DImg *orgImage, QObject *parent=0, int brushSize=1, int smoothness=30);
+    explicit OilPaint(Digikam::DImg* orgImage, QObject* parent=0, int brushSize=1, int smoothness=30);
 
     ~OilPaint(){};
 
 private:  
 
-    virtual void filterImage(void);
+    void filterImage();
 
     void oilpaintImage(Digikam::DImg& orgImage, Digikam::DImg& destImage, int BrushSize, int Smoothness);
 
-    Digikam::DColor MostFrequentColor (Digikam::DImg& src,
-                            int X, int Y, int Radius, int Intensity);
+    Digikam::DColor MostFrequentColor(Digikam::DImg& src, int X, int Y, int Radius, int Intensity);
 
     // Function to calculate the color intensity and return the luminance (Y)
     // component of YIQ color model.
@@ -57,14 +56,14 @@ private:
 
 private:  
 
-    uchar *m_intensityCount;
+    uchar* m_intensityCount;
 
     int    m_brushSize;
     int    m_smoothness;
 
-    uint  *m_averageColorR;
-    uint  *m_averageColorG;
-    uint  *m_averageColorB;
+    uint*  m_averageColorR;
+    uint*  m_averageColorG;
+    uint*  m_averageColorB;
 };
 
 }  // namespace DigikamOilPaintImagesPlugin
