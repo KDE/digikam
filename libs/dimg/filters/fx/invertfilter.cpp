@@ -45,27 +45,18 @@ InvertFilter::InvertFilter(DImgThreadedFilter* parentFilter,
     filterImage();
 }
 
+/** Performs image colors inversion. This tool is used for negate image
+    resulting of a positive film scanned.
+ */
 void InvertFilter::filterImage()
 {
-    invertImage(m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(),
-                m_orgImage.sixteenBit());
-}
+    m_destImage.putImageData(m_orgImage.bits());
 
-/** Performs image colors inversion. This tool is used for negate image
-    resulting of a positive film scanned.*/
-void InvertFilter::invertImage(uchar* data, int w, int h, bool sixteenBit)
-{
-    if (!data || !w || !h)
-    {
-       kWarning() << ("no image data available!");
-       return;
-    }
-
-    if (!sixteenBit)        // 8 bits image.
+    if (!m_destImage.sixteenBit())        // 8 bits image.
     {
         uchar* ptr = m_destImage.bits();
 
-        for (int i = 0 ; i < w*h ; ++i)
+        for (uint i = 0 ; i < m_destImage.numPixels() ; ++i)
         {
             ptr[0] = 255 - ptr[0];
             ptr[1] = 255 - ptr[1];
@@ -78,7 +69,7 @@ void InvertFilter::invertImage(uchar* data, int w, int h, bool sixteenBit)
     {
         unsigned short* ptr = (unsigned short*)m_destImage.bits();
 
-        for (int i = 0 ; i < w*h ; ++i)
+        for (uint i = 0 ; i < m_destImage.numPixels() ; ++i)
         {
             ptr[0] = 65535 - ptr[0];
             ptr[1] = 65535 - ptr[1];
