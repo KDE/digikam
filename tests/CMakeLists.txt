@@ -220,6 +220,7 @@ TARGET_LINK_LIBRARIES(albummodeltest
                       ${QT_QTGUI_LIBRARY}
                       ${QT_QTTEST_LIBRARY}
                       ${GPHOTO2_LIBRARIES}
+                      ${KIPI_LIBRARIES}
                       digikamdatabase
                       digikamcore
                       )
