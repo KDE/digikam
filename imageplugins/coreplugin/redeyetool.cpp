@@ -60,7 +60,7 @@
 
 #include "colorgradientwidget.h"
 #include "dimg.h"
-#include "dimgimagefilters.h"
+#include "blurfilter.h"
 #include "editortoolsettings.h"
 #include "histogramwidget.h"
 #include "histogrambox.h"
@@ -547,9 +547,9 @@ void RedEyeTool::redEyeFilter(DImg& selection)
     // Now, we will blur only the transparency pixels from the mask.
 
     DImg mask2 = mask.copy();
-    DImgImageFilters filter;
-    filter.gaussianBlurImage(mask2.bits(), mask2.width(), mask2.height(),
-                             mask2.sixteenBit(), d->smoothLevel->value());
+    BlurFilter blur(&mask2, 0L, d->smoothLevel->value());
+    blur.startFilterDirectly();
+    mask2.putImageData(blur.getTargetImage().bits());
 
     if (!selection.sixteenBit())         // 8 bits image.
     {

@@ -63,21 +63,14 @@ BlurFilter::BlurFilter(DImgThreadedFilter* parentFilter,
     filterImage();
 }
 
-BlurFilter::BlurFilter(uchar* bits, uint width, uint height, bool sixteenBits, double radius)
-          : DImgThreadedFilter()
-{
-    m_radius = radius;
-    gaussianBlurImage(bits, width, height, sixteenBits, radius);
-}
-
 void BlurFilter::filterImage()
 {
     gaussianBlurImage(m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(),
                       m_orgImage.sixteenBit(), m_radius);
 }
 
-/** Function to apply the Gaussian Blur on an image*/
-
+/** Function to apply the Gaussian Blur on an image. 
+ */
 void BlurFilter::gaussianBlurImage(uchar* data, int width, int height, bool sixteenBit, double radius)
 {
     if (!data || !width || !height)

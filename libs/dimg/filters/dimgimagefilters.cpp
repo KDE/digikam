@@ -85,27 +85,6 @@ void DImgImageFilters::invertImage(uchar *data, int w, int h, bool sixteenBit)
     }
 }
 
-/** Function to apply the GaussianBlur on an image. This method do not use a
-    dedicated thread.*/
-void DImgImageFilters::gaussianBlurImage(uchar *data, int width, int height, bool sixteenBit, int radius)
-{
-    if (!data || !width || !height)
-    {
-       kWarning() << ("DImgImageFilters::gaussianBlurImage: no image data available!");
-       return;
-    }
-
-    if (radius > 100) radius = 100;
-    if (radius <= 0) return;
-
-    DImg orgImage(width, height, sixteenBit, true, data);
-    BlurFilter* filter = new BlurFilter(&orgImage, 0L, radius);
-    filter->startFilterDirectly();
-    DImg imDest = filter->getTargetImage();
-    memcpy( data, imDest.bits(), imDest.numBytes() );
-    delete filter;
-}
-
 /** Function to apply the sharpen filter on an image. This method do not use a
     dedicated thread.*/
 void DImgImageFilters::sharpenImage(uchar *data, int width, int height, bool sixteenBit, int radius)

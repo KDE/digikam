@@ -56,8 +56,6 @@ public:   // Public methods.
 
     void invertImage(uchar* data, int w, int h, bool sixteenBit);
     
-    void gaussianBlurImage(uchar* data, int width, int height, bool sixteenBit, int radius);
-    
     void sharpenImage(uchar* data, int width, int height, bool sixteenBit, int radius);
     
     void unsharpMaskImage(uchar* data, int width, int height, bool sixteenBit,
