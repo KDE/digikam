@@ -39,51 +39,9 @@
 
 #include "imagehistogram.h"
 #include "dcolor.h"
-#include "blurfilter.h"
-#include "dimgsharpen.h"
-#include "dimgunsharpmask.h"
-#include "dimgrefocus.h"
 
 namespace Digikam
 {
-
-/** Performs image colors inversion. This tool is used for negate image
-    resulting of a positive film scanned.*/
-void DImgImageFilters::invertImage(uchar *data, int w, int h, bool sixteenBit)
-{
-    if (!data || !w || !h)
-    {
-       kWarning() << ("DImgImageFilters::invertImage: no image data available!");
-       return;
-    }
-
-    if (!sixteenBit)        // 8 bits image.
-    {
-        uchar *ptr = data;
-
-        for (int i = 0 ; i < w*h ; ++i)
-        {
-            ptr[0] = 255 - ptr[0];
-            ptr[1] = 255 - ptr[1];
-            ptr[2] = 255 - ptr[2];
-            ptr[3] = 255 - ptr[3];
-            ptr += 4;
-        }
-    }
-    else               // 16 bits image.
-    {
-        unsigned short *ptr = (unsigned short *)data;
-
-        for (int i = 0 ; i < w*h ; ++i)
-        {
-            ptr[0] = 65535 - ptr[0];
-            ptr[1] = 65535 - ptr[1];
-            ptr[2] = 65535 - ptr[2];
-            ptr[3] = 65535 - ptr[3];
-            ptr += 4;
-        }
-    }
-}
 
 /** Function to perform pixel antialiasing with 8 bits/color/pixel images. This method is used to smooth target
     image in transformation  method like free rotation or shear tool. */

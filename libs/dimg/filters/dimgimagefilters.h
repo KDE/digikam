@@ -54,8 +54,6 @@ private:    // Private methods used internally.
 
 public:   // Public methods.
 
-    void invertImage(uchar* data, int w, int h, bool sixteenBit);
-
     void pixelAntiAliasing(uchar* data, int Width, int Height, double X, double Y,
                            uchar* A, uchar* R, uchar* G, uchar* B);
 

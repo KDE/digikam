@@ -39,7 +39,7 @@
 // Local includes
 
 #include "dimg.h"
-#include "dimgimagefilters.h"
+#include "invertfilter.h"
 #include "imageiface.h"
 #include "editortooliface.h"
 #include "iccprofilescombobox.h"
@@ -289,16 +289,9 @@ void ImagePlugin_Core::slotInvert()
     kapp->setOverrideCursor(Qt::WaitCursor);
 
     ImageIface iface(0, 0);
-
-    uchar* data     = iface.getOriginalImage();
-    int w           = iface.originalWidth();
-    int h           = iface.originalHeight();
-    bool sixteenBit = iface.originalSixteenBit();
-
-    DImgImageFilters filter;
-    filter.invertImage(data, w, h, sixteenBit);
-    iface.putOriginalImage(i18n("Invert"), data);
-    delete [] data;
+    InvertFilter invert(iface.getOriginalImg(), 0L);
+    invert.startFilterDirectly();
+    iface.putOriginalImage(i18n("Invert"), invert.getTargetImage().bits());
 
     kapp->restoreOverrideCursor();
 }

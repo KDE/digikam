@@ -43,7 +43,7 @@
 #include "blurfilter.h"
 #include "stretchfilter.h"
 #include "mixerfilter.h"
-#include "dimgimagefilters.h"
+#include "invertfilter.h"
 
 namespace DigikamCharcoalImagesPlugin
 {
@@ -82,7 +82,7 @@ void Charcoal::filterImage()
         return;
     }
 
-    double *kernel = new double[kernelWidth*kernelWidth];
+    double* kernel = new double[kernelWidth*kernelWidth];
 
     if (!kernel)
     {
@@ -116,8 +116,10 @@ void Charcoal::filterImage()
 
     // -- Inverting image color -----------------------------------------------
 
-    DImgImageFilters().invertImage(m_destImage.bits(), m_destImage.width(),
-                                   m_destImage.height(), m_destImage.sixteenBit());
+    InvertFilter invert(&m_destImage);
+    invert.startFilterDirectly();
+    m_destImage.putImageData(invert.getTargetImage().bits());
+        
     postProgress( 95 );
     if (m_cancel)
         return;
@@ -185,10 +187,10 @@ bool Charcoal::convolveImage(const unsigned int order, const double *kernel)
     uint height     = m_destImage.height();
     uint width      = m_destImage.width();
     bool sixteenBit = m_destImage.sixteenBit();
-    uchar *ddata    = m_destImage.bits();
+    uchar* ddata    = m_destImage.bits();
     int ddepth      = m_destImage.bytesDepth();
 
-    uchar *sdata    = m_orgImage.bits();
+    uchar* sdata    = m_orgImage.bits();
     int sdepth      = m_orgImage.bytesDepth();
 
     double maxClamp = m_destImage.sixteenBit() ? 16777215.0 : 65535.0;

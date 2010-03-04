@@ -37,10 +37,6 @@
 
 #include <kdebug.h>
 
-// Local includes
-
-#include "dimgimagefilters.h"
-
 using namespace cimg_library;
 
 namespace Digikam
@@ -75,7 +71,7 @@ void BlurFilter::gaussianBlurImage(uchar* data, int width, int height, bool sixt
 {
     if (!data || !width || !height)
     {
-       kWarning() << ("BlurFilter::gaussianBlurImage: no image data available!");
+       kWarning() << ("no image data available!");
        return;
     }
 
