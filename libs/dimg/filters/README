@@ -3,7 +3,7 @@ bw      : Black and White.
 bcg     : Brighness / Contrast / Gamma.
 cb      : Color Balance Correction.
 curves  : Histogram Curves Correction.
-fx      : Color Effects.
+fx      : Special Effects.
 hsl     : Hue / Saturation / Lightness.
 icc     : Color Management.
 levels  : Histogram Levels Correction.
