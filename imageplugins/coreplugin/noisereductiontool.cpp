@@ -97,12 +97,6 @@ NoiseReductionTool::~NoiseReductionTool()
     delete d;
 }
 
-void NoiseReductionTool::renderingFinished()
-{
-    d->nrSettings->setEnabled(true);
-    toolView()->setEnabled(true);
-}
-
 void NoiseReductionTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
@@ -126,6 +120,7 @@ void NoiseReductionTool::slotResetSettings()
 
 void NoiseReductionTool::prepareEffect()
 {
+    kapp->setOverrideCursor(Qt::WaitCursor);
     toolSettings()->setEnabled(false);
     toolView()->setEnabled(false);
 
@@ -155,6 +150,13 @@ void NoiseReductionTool::putFinalData()
 {
     ImageIface iface(0, 0);
     iface.putOriginalImage(i18n("Noise Reduction"), filter()->getTargetImage().bits());
+}
+
+void NoiseReductionTool::renderingFinished()
+{
+    kapp->restoreOverrideCursor();
+    toolSettings()->setEnabled(true);
+    toolView()->setEnabled(true);
 }
 
 void NoiseReductionTool::slotLoadSettings()
