@@ -85,62 +85,6 @@ void DImgImageFilters::invertImage(uchar *data, int w, int h, bool sixteenBit)
     }
 }
 
-/** Function to apply the sharpen filter on an image. This method do not use a
-    dedicated thread.*/
-void DImgImageFilters::sharpenImage(uchar *data, int width, int height, bool sixteenBit, int radius)
-{
-    if (!data || !width || !height)
-    {
-       kWarning() << ("DImgImageFilters::sharpenImage: no image data available!");
-       return;
-    }
-
-    if (radius > 100) radius = 100;
-    if (radius <= 0) return;
-
-    DImg orgImage(width, height, sixteenBit, true, data);
-    DImgSharpen *filter = new DImgSharpen(&orgImage, 0L, radius);
-    filter->startFilterDirectly();
-    DImg imDest = filter->getTargetImage();
-    memcpy(data, imDest.bits(), imDest.numBytes());
-    delete filter;
-}
-
-void DImgImageFilters::unsharpMaskImage(uchar *data, int width, int height, bool sixteenBit,
-        int radius, double amount, double threshold)
-{
-    if (!data || !width || !height)
-    {
-       kWarning() << ("DImgImageFilters::unsharpMaskImage: no image data available!");
-       return;
-    }
-
-    DImg orgImage(width, height, sixteenBit, true, data);
-    DImgUnsharpMask *filter = new DImgUnsharpMask(&orgImage, 0L, radius, amount, threshold);
-    filter->startFilterDirectly();
-    DImg imDest = filter->getTargetImage();
-    memcpy(data, imDest.bits(), imDest.numBytes());
-    delete filter;
-}
-
-void DImgImageFilters::refocusImage(uchar *data, int width, int height, bool sixteenBit,
-        int matrixSize, double radius, double gauss, double correlation, double noise)
-{
-    if (!data || !width || !height)
-    {
-       kWarning() << ("DImgImageFilters::refocusImage: no image data available!");
-       return;
-    }
-
-    DImg orgImage(width, height, sixteenBit, true, data);
-    DImgRefocus *filter = new DImgRefocus(&orgImage, 0L, matrixSize,
-            radius, gauss, correlation, noise);
-    filter->startFilterDirectly();
-    DImg imDest = filter->getTargetImage();
-    memcpy(data, imDest.bits(), imDest.numBytes());
-    delete filter;
-}
-
 /** Function to perform pixel antialiasing with 8 bits/color/pixel images. This method is used to smooth target
     image in transformation  method like free rotation or shear tool. */
 void DImgImageFilters::pixelAntiAliasing(uchar *data, int Width, int Height, double X, double Y,
