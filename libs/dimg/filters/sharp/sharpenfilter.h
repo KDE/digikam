@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIMGSHARPEN_H
-#define DIMGSHARPEN_H
+#ifndef SHARPENFILTER_H
+#define SHARPENFILTER_H
 
 // Local includes
 
@@ -33,18 +33,18 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT DImgSharpen : public DImgThreadedFilter
+class DIGIKAM_EXPORT SharpenFilter : public DImgThreadedFilter
 {
 
 public:
 
-    explicit DImgSharpen(DImg* orgImage, QObject* parent=0, double radius=0.0, double sigma=1.0);
+    explicit SharpenFilter(DImg* orgImage, QObject* parent=0, double radius=0.0, double sigma=1.0);
 
     // Constructor for slave mode: execute immediately in current thread with specified master filter
-    DImgSharpen(DImgThreadedFilter* parentFilter, const DImg& orgImage, const DImg& destImage,
-                int progressBegin=0, int progressEnd=100, double radius=0.0, double sigma=1.0);
+    SharpenFilter(DImgThreadedFilter* parentFilter, const DImg& orgImage, const DImg& destImage,
+                  int progressBegin=0, int progressEnd=100, double radius=0.0, double sigma=1.0);
 
-    ~DImgSharpen(){};
+    ~SharpenFilter(){};
 
 private:
 
@@ -52,7 +52,7 @@ private:
 
     void sharpenImage(double radius, double sigma);
 
-    bool convolveImage(const unsigned int order, const double *kernel);
+    bool convolveImage(const unsigned int order, const double* kernel);
 
     int  getOptimalKernelWidth(double radius, double sigma);
 
@@ -64,4 +64,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* DIMGSHARPEN_H */
+#endif /* SHARPENFILTER_H */

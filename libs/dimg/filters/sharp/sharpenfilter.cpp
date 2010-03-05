@@ -27,7 +27,7 @@
 #define SQ2PI   2.50662827463100024161235523934010416269302368164062
 #define Epsilon 1.0e-12
 
-#include "dimgsharpen.h"
+#include "sharpenfilter.h"
 
 // C++ includes
 
@@ -41,19 +41,19 @@
 namespace Digikam
 {
 
-DImgSharpen::DImgSharpen(DImg* orgImage, QObject* parent, double radius, double sigma)
-           : DImgThreadedFilter(orgImage, parent, "Sharpen")
+SharpenFilter::SharpenFilter(DImg* orgImage, QObject* parent, double radius, double sigma)
+             : DImgThreadedFilter(orgImage, parent, "Sharpen")
 {
     m_radius = radius;
     m_sigma  = sigma;
     initFilter();
 }
 
-DImgSharpen::DImgSharpen(DImgThreadedFilter* parentFilter,
-                         const DImg& orgImage, const DImg& destImage,
-                         int progressBegin, int progressEnd, double radius, double sigma)
-           : DImgThreadedFilter(parentFilter, orgImage, destImage, progressBegin, progressEnd,
-                                parentFilter->filterName() + ": Sharpen")
+SharpenFilter::SharpenFilter(DImgThreadedFilter* parentFilter,
+                             const DImg& orgImage, const DImg& destImage,
+                             int progressBegin, int progressEnd, double radius, double sigma)
+             : DImgThreadedFilter(parentFilter, orgImage, destImage, progressBegin, progressEnd,
+                                  parentFilter->filterName() + ": Sharpen")
 {
     m_radius = radius;
     m_sigma  = sigma;
@@ -66,14 +66,14 @@ DImgSharpen::DImgSharpen(DImgThreadedFilter* parentFilter,
         memcpy(destImage.bits(), m_destImage.bits(), m_destImage.numBytes());
 }
 
-void DImgSharpen::filterImage()
+void SharpenFilter::filterImage()
 {
     sharpenImage(m_radius, m_sigma);
 }
 
 /** Function to apply the sharpen filter on an image*/
 
-void DImgSharpen::sharpenImage(double radius, double sigma)
+void SharpenFilter::sharpenImage(double radius, double sigma)
 {
     if (m_orgImage.isNull())
     {
@@ -124,7 +124,7 @@ void DImgSharpen::sharpenImage(double radius, double sigma)
     delete [] kernel;
 }
 
-bool DImgSharpen::convolveImage(const unsigned int order, const double *kernel)
+bool SharpenFilter::convolveImage(const unsigned int order, const double* kernel)
 {
     uint    x, y;
     int     mx, my, sx, sy, mcx, mcy, progress;
@@ -210,7 +210,7 @@ bool DImgSharpen::convolveImage(const unsigned int order, const double *kernel)
     return(true);
 }
 
-int DImgSharpen::getOptimalKernelWidth(double radius, double sigma)
+int SharpenFilter::getOptimalKernelWidth(double radius, double sigma)
 {
     double        normalize, value;
     long          kernelWidth;

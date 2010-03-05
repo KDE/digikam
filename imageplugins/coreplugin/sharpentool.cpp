@@ -46,9 +46,9 @@
 // Local includes
 
 #include "sharpsettings.h"
-#include "dimgrefocus.h"
-#include "dimgsharpen.h"
-#include "dimgunsharpmask.h"
+#include "refocusfilter.h"
+#include "sharpenfilter.h"
+#include "unsharpmaskfilter.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imageregionwidget.h"
@@ -170,7 +170,7 @@ void SharpenTool::prepareEffect()
             if (radius < 1.0) sigma = radius;
             else sigma = sqrt(radius);
 
-            setFilter(new DImgSharpen(&img, this, radius, sigma));
+            setFilter(new SharpenFilter(&img, this, radius, sigma));
             break;
         }
 
@@ -181,7 +181,7 @@ void SharpenTool::prepareEffect()
             double a  = settings.umAmount;
             double th = settings.umThreshold;
 
-            setFilter(new DImgUnsharpMask(&img, this, r, a, th));
+            setFilter(new UnsharpMaskFilter(&img, this, r, a, th));
             break;
         }
 
@@ -194,7 +194,7 @@ void SharpenTool::prepareEffect()
             double g   = settings.rfGauss;
             int    ms  = settings.rfMatrix;
 
-            setFilter(new DImgRefocus(&img, this, ms, r, g, c, n));
+            setFilter(new RefocusFilter(&img, this, ms, r, g, c, n));
             break;
         }
     }
@@ -223,7 +223,7 @@ void SharpenTool::prepareFinal()
             if (radius < 1.0) sigma = radius;
             else sigma = sqrt(radius);
 
-            setFilter(new DImgSharpen(iface.getOriginalImg(), this, radius, sigma));
+            setFilter(new SharpenFilter(iface.getOriginalImg(), this, radius, sigma));
             break;
         }
 
@@ -233,7 +233,7 @@ void SharpenTool::prepareFinal()
             double a  = settings.umAmount;
             double th = settings.umThreshold;
 
-            setFilter(new DImgUnsharpMask(iface.getOriginalImg(), this, r, a, th));
+            setFilter(new UnsharpMaskFilter(iface.getOriginalImg(), this, r, a, th));
             break;
         }
 
@@ -245,7 +245,7 @@ void SharpenTool::prepareFinal()
             double g   = settings.rfGauss;
             int    ms  = settings.rfMatrix;
 
-            setFilter(new DImgRefocus(iface.getOriginalImg(), this, ms, r, g, c, n));
+            setFilter(new RefocusFilter(iface.getOriginalImg(), this, ms, r, g, c, n));
             break;
         }
     }

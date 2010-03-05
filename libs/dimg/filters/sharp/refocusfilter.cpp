@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "dimgrefocus.h"
+#include "refocusfilter.h"
 
 // C++ includes
 
@@ -43,14 +43,14 @@
 namespace Digikam
 {
 
-int DImgRefocus::maxMatrixSize()
+int RefocusFilter::maxMatrixSize()
 {
     return MAX_MATRIX_SIZE;
 }
 
-DImgRefocus::DImgRefocus(DImg* orgImage, QObject* parent, int matrixSize, double radius,
-                         double gauss, double correlation, double noise)
-           : DImgThreadedFilter(orgImage, parent, "Refocus")
+RefocusFilter::RefocusFilter(DImg* orgImage, QObject* parent, int matrixSize, double radius,
+                             double gauss, double correlation, double noise)
+             : DImgThreadedFilter(orgImage, parent, "Refocus")
 {
     m_matrixSize  = matrixSize;
     m_radius      = radius;
@@ -63,16 +63,16 @@ DImgRefocus::DImgRefocus(DImg* orgImage, QObject* parent, int matrixSize, double
 
     // initialize intermediate image
     m_preImage = DImg(orgImage->width()+4*MAX_MATRIX_SIZE,
-            orgImage->height()+4*MAX_MATRIX_SIZE,
-            orgImage->sixteenBit(), orgImage->hasAlpha());
+                      orgImage->height()+4*MAX_MATRIX_SIZE,
+                      orgImage->sixteenBit(), orgImage->hasAlpha());
 }
 
-DImgRefocus::~DImgRefocus()
+RefocusFilter::~RefocusFilter()
 {
     cancelFilter();
 }
 
-void DImgRefocus::filterImage()
+void RefocusFilter::filterImage()
 {
     bool sb = m_orgImage.sixteenBit();
     bool a  = m_orgImage.hasAlpha();
@@ -138,14 +138,14 @@ void DImgRefocus::filterImage()
     m_destImage.bitBltImage(&m_preImage, 2*MAX_MATRIX_SIZE, 2*MAX_MATRIX_SIZE, w, h, 0, 0);
 }
 
-void DImgRefocus::refocusImage(uchar* data, int width, int height, bool sixteenBit,
+void RefocusFilter::refocusImage(uchar* data, int width, int height, bool sixteenBit,
                                int matrixSize, double radius, double gauss,
                                double correlation, double noise)
 {
     CMat *matrix=0;
 
     // Compute matrix
-    kDebug() << "DImgRefocus::Compute matrix...";
+    kDebug() << "RefocusFilter::Compute matrix...";
 
     CMat circle, gaussian, convolution;
 
@@ -161,7 +161,7 @@ void DImgRefocus::refocusImage(uchar* data, int width, int height, bool sixteenB
     RefocusMatrix::finish_c_mat (&circle);
 
     // Apply deconvolution kernel to image.
-    kDebug() << "DImgRefocus::Apply Matrix to image...";
+    kDebug() << "RefocusFilter::Apply Matrix to image...";
     convolveImage(data, m_preImage.bits(), width, height, sixteenBit,
                   matrix->data, 2 * matrixSize + 1);
 
@@ -169,12 +169,12 @@ void DImgRefocus::refocusImage(uchar* data, int width, int height, bool sixteenB
     delete matrix;
 }
 
-void DImgRefocus::convolveImage(uchar* orgData, uchar* destData, int width, int height,
-                                bool sixteenBit, const double *const matrix, int mat_size)
+void RefocusFilter::convolveImage(uchar* orgData, uchar* destData, int width, int height,
+                                bool sixteenBit, const double* const matrix, int mat_size)
 {
     int progress;
-    unsigned short *orgData16  = (unsigned short *)orgData;
-    unsigned short *destData16 = (unsigned short *)destData;
+    unsigned short* orgData16  = (unsigned short*)orgData;
+    unsigned short* destData16 = (unsigned short*)destData;
 
     double valRed, valGreen, valBlue;
     int    x1, y1, x2, y2, index1, index2;

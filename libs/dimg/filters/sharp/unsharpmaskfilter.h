@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIMGUNSHARPMASK_H_
-#define DIMGUNSHARPMASK_H_
+#ifndef UNSHARPMASKFILTER_H
+#define UNSHARPMASKFILTER_H
 
 // Local includes
 
@@ -34,19 +34,19 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT DImgUnsharpMask : public DImgThreadedFilter
+class DIGIKAM_EXPORT UnsharpMaskFilter : public DImgThreadedFilter
 {
 
 public:
 
-    explicit DImgUnsharpMask(DImg *orgImage, QObject *parent=0, int radius=1,
+    explicit UnsharpMaskFilter(DImg* orgImage, QObject* parent=0, int radius=1,
                              double amount=1.0, double threshold=0.05);
 
     // Constructor for slave mode: execute immediately in current thread with specified master filter
-    // DImgUnsharpMask(DImgThreadedFilter *parentFilter, const DImg& orgImage, const DImg& destImage,
+    // UnsharpMaskFilter(DImgThreadedFilter *parentFilter, const DImg& orgImage, const DImg& destImage,
     //            int progressBegin=0, int progressEnd=100, double radius=0.0, double sigma=1.0);
 
-    ~DImgUnsharpMask(){};
+    ~UnsharpMaskFilter(){};
 
 private:
 
@@ -62,4 +62,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* DIMGUNSHARPMASK_H_ */
+#endif /* UNSHARPMASKFILTER_H */

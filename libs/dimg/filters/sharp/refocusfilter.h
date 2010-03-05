@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIMGREFOCUS_H
-#define DIMGREFOCUS_H
+#ifndef REFOCUSFILTER_H
+#define REFOCUSFILTER_H
 
 // Local includes
 
@@ -34,15 +34,15 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT DImgRefocus : public DImgThreadedFilter
+class DIGIKAM_EXPORT RefocusFilter : public DImgThreadedFilter
 {
 
 public:
 
-    explicit DImgRefocus(DImg* orgImage, QObject* parent=0, int matrixSize=5, double radius=0.9,
-                         double gauss=0.0, double correlation=0.5, double noise=0.01);
+    explicit RefocusFilter(DImg* orgImage, QObject* parent=0, int matrixSize=5, double radius=0.9,
+                           double gauss=0.0, double correlation=0.5, double noise=0.01);
 
-    ~DImgRefocus();
+    ~RefocusFilter();
 
     static int maxMatrixSize();
 
@@ -55,7 +55,7 @@ private:
                       double correlation, double noise);
 
     void convolveImage(uchar* orgData, uchar* destData, int width, int height,
-                       bool sixteenBit, const double *const matrix, int mat_size);
+                       bool sixteenBit, const double* const matrix, int mat_size);
 
 private:
 
@@ -71,4 +71,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* DIMGREFOCUS_H */
+#endif /* REFOCUSFILTER_H */

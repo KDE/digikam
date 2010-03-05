@@ -54,7 +54,7 @@
 
 // Local includes
 
-#include "dimgrefocus.h"
+#include "refocusfilter.h"
 #include "rexpanderbox.h"
 
 using namespace KDcrawIface;
@@ -255,7 +255,7 @@ SharpSettings::SharpSettings(QWidget* parent)
 
     QLabel *label9 = new QLabel(i18n("Matrix size:"), refocusSettings);
     d->matrixSize  = new RIntNumInput(refocusSettings);
-    d->matrixSize->setRange(0, DImgRefocus::maxMatrixSize(), 1);
+    d->matrixSize->setRange(0, RefocusFilter::maxMatrixSize(), 1);
     d->matrixSize->setSliderEnabled(true);
     d->matrixSize->setDefaultValue(5);
     d->matrixSize->setWhatsThis( i18n("This parameter determines the size of the transformation matrix. "

@@ -38,9 +38,9 @@
 // Local includes
 
 #include "dimg.h"
-#include "dimgrefocus.h"
-#include "dimgsharpen.h"
-#include "dimgunsharpmask.h"
+#include "refocusfilter.h"
+#include "sharpenfilter.h"
+#include "unsharpmaskfilter.h"
 #include "sharpsettings.h"
 
 namespace Digikam
@@ -161,7 +161,7 @@ bool Sharpen::toolOperations()
             else
                 sigma = sqrt(radius);
 
-            DImgSharpen filter(&image(), 0L, radius, sigma);
+            SharpenFilter filter(&image(), 0L, radius, sigma);
             filter.startFilterDirectly();
             image().putImageData(filter.getTargetImage().bits());
             break;
@@ -173,7 +173,7 @@ bool Sharpen::toolOperations()
             double a  = settings()["UnsharpMaskAmount"].toDouble();
             double th = settings()["UnsharpMaskThreshold"].toDouble();
 
-            DImgUnsharpMask filter(&image(), 0L, r, a, th);
+            UnsharpMaskFilter filter(&image(), 0L, r, a, th);
             filter.startFilterDirectly();
             image().putImageData(filter.getTargetImage().bits());
             break;
@@ -187,7 +187,7 @@ bool Sharpen::toolOperations()
             double gauss       = settings()["RefocusGauss"].toDouble();
             int matrixSize     = settings()["RefocusMatrixSize"].toInt();
 
-            DImgRefocus filter(&image(), 0L, matrixSize, radius, gauss, correlation, noise);
+            RefocusFilter filter(&image(), 0L, matrixSize, radius, gauss, correlation, noise);
             filter.startFilterDirectly();
             image().putImageData(filter.getTargetImage().bits());
             break;

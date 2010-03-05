@@ -25,7 +25,7 @@
  *
  * ============================================================ */
 
-#include "dimgunsharpmask.h"
+#include "unsharpmaskfilter.h"
 
 // C++ includes
 
@@ -45,9 +45,9 @@
 namespace Digikam
 {
 
-DImgUnsharpMask::DImgUnsharpMask(DImg *orgImage, QObject *parent, int radius,
-                                 double amount, double threshold)
-               : DImgThreadedFilter(orgImage, parent, "UnsharpMask")
+UnsharpMaskFilter::UnsharpMaskFilter(DImg* orgImage, QObject* parent, int radius,
+                                     double amount, double threshold)
+                 : DImgThreadedFilter(orgImage, parent, "UnsharpMask")
 {
     m_radius    = radius;
     m_amount    = amount;
@@ -55,7 +55,7 @@ DImgUnsharpMask::DImgUnsharpMask(DImg *orgImage, QObject *parent, int radius,
     initFilter();
 }
 
-void DImgUnsharpMask::filterImage()
+void UnsharpMaskFilter::filterImage()
 {
     int      progress;
     long int quantum;
