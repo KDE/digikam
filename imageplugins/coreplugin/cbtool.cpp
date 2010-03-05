@@ -113,6 +113,8 @@ CBTool::CBTool(QObject* parent)
 
     connect(d->previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));
+
+    slotTimer();
 }
 
 CBTool::~CBTool()

@@ -116,6 +116,8 @@ HSLTool::HSLTool(QObject* parent)
 
     connect(d->hslSettings, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotTimer()));
+
+    slotTimer();
 }
 
 HSLTool::~HSLTool()
@@ -203,6 +205,7 @@ void HSLTool::putFinalData()
 
 void HSLTool::renderingFinished()
 {
+    QApplication::restoreOverrideCursor();
     toolSettings()->setEnabled(true);
     toolView()->setEnabled(true);
 }
