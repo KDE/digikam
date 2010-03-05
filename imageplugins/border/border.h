@@ -6,9 +6,9 @@
  * Date        : 2005-05-25
  * Description : border threaded image filter.
  *
- * Copyright 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright 2009      by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -36,12 +36,14 @@
 
 #include "dimgthreadedfilter.h"
 
+using namespace Digikam;
+
 namespace DigikamBorderImagesPlugin
 {
 
 class BorderPriv;
 
-class Border : public Digikam::DImgThreadedFilter
+class Border : public DImgThreadedFilter
 {
 
 public:
@@ -72,51 +74,51 @@ public:
 public:
 
     /** Constructor using settings to preserve aspect ratio of image. */
-    explicit Border(Digikam::DImg *orgImage, QObject *parent=0, int orgWidth=0, int orgHeight=0,
+    explicit Border(DImg *orgImage, QObject *parent=0, int orgWidth=0, int orgHeight=0,
                     QString borderPath=QString(), int borderType=SolidBorder, float borderPercent=0.1,
-                    Digikam::DColor solidColor = Digikam::DColor(),
-                    Digikam::DColor niepceBorderColor = Digikam::DColor(),
-                    Digikam::DColor niepceLineColor = Digikam::DColor(),
-                    Digikam::DColor bevelUpperLeftColor = Digikam::DColor(),
-                    Digikam::DColor bevelLowerRightColor = Digikam::DColor(),
-                    Digikam::DColor decorativeFirstColor = Digikam::DColor(),
-                    Digikam::DColor decorativeSecondColor = Digikam::DColor());
+                    DColor solidColor = DColor(),
+                    DColor niepceBorderColor = DColor(),
+                    DColor niepceLineColor = DColor(),
+                    DColor bevelUpperLeftColor = DColor(),
+                    DColor bevelLowerRightColor = DColor(),
+                    DColor decorativeFirstColor = DColor(),
+                    DColor decorativeSecondColor = DColor());
 
     /** Constructor using settings to not-preserve aspect ratio of image. */
-    explicit Border(Digikam::DImg *orgImage, QObject *parent=0, int orgWidth=0, int orgHeight=0,
+    explicit Border(DImg *orgImage, QObject *parent=0, int orgWidth=0, int orgHeight=0,
                     QString borderPath=QString(), int borderType=SolidBorder,
                     int borderWidth1=100, int borderWidth2=20, int borderWidth3=20, int borderWidth4=10,
-                    Digikam::DColor solidColor = Digikam::DColor(),
-                    Digikam::DColor niepceBorderColor = Digikam::DColor(),
-                    Digikam::DColor niepceLineColor = Digikam::DColor(),
-                    Digikam::DColor bevelUpperLeftColor = Digikam::DColor(),
-                    Digikam::DColor bevelLowerRightColor = Digikam::DColor(),
-                    Digikam::DColor decorativeFirstColor = Digikam::DColor(),
-                    Digikam::DColor decorativeSecondColor = Digikam::DColor());
+                    DColor solidColor = DColor(),
+                    DColor niepceBorderColor = DColor(),
+                    DColor niepceLineColor = DColor(),
+                    DColor bevelUpperLeftColor = DColor(),
+                    DColor bevelLowerRightColor = DColor(),
+                    DColor decorativeFirstColor = DColor(),
+                    DColor decorativeSecondColor = DColor());
 
     ~Border();
 
 private:
 
-    virtual void filterImage(void);
+    void filterImage();
 
     /** Methods to preserve aspect ratio of image. */
-    void solid(Digikam::DImg& src, Digikam::DImg& dest, const Digikam::DColor& fg, int borderWidth);
-    void niepce(Digikam::DImg& src, Digikam::DImg& dest, const Digikam::DColor& fg, int borderWidth,
-                const Digikam::DColor& bg, int lineWidth);
-    void bevel(Digikam::DImg& src, Digikam::DImg& dest, const Digikam::DColor& topColor,
-               const Digikam::DColor& btmColor, int borderWidth);
-    void pattern(Digikam::DImg& src, Digikam::DImg& dest, int borderWidth, const Digikam::DColor& firstColor,
-                 const Digikam::DColor& secondColor, int firstWidth, int secondWidth);
+    void solid(DImg& src, DImg& dest, const DColor& fg, int borderWidth);
+    void niepce(DImg& src, DImg& dest, const DColor& fg, int borderWidth,
+                const DColor& bg, int lineWidth);
+    void bevel(DImg& src, DImg& dest, const DColor& topColor,
+               const DColor& btmColor, int borderWidth);
+    void pattern(DImg& src, DImg& dest, int borderWidth, const DColor& firstColor,
+                 const DColor& secondColor, int firstWidth, int secondWidth);
 
     /** Methods to not-preserve aspect ratio of image. */
-    void solid2(Digikam::DImg& src, Digikam::DImg& dest, const Digikam::DColor& fg, int borderWidth);
-    void niepce2(Digikam::DImg& src, Digikam::DImg& dest, const Digikam::DColor& fg, int borderWidth,
-                 const Digikam::DColor& bg, int lineWidth);
-    void bevel2(Digikam::DImg& src, Digikam::DImg& dest, const Digikam::DColor& topColor,
-                const Digikam::DColor& btmColor, int borderWidth);
-    void pattern2(Digikam::DImg& src, Digikam::DImg& dest, int borderWidth, const Digikam::DColor& firstColor,
-                  const Digikam::DColor& secondColor, int firstWidth, int secondWidth);
+    void solid2(DImg& src, DImg& dest, const DColor& fg, int borderWidth);
+    void niepce2(DImg& src, DImg& dest, const DColor& fg, int borderWidth,
+                 const DColor& bg, int lineWidth);
+    void bevel2(DImg& src, DImg& dest, const DColor& topColor,
+                const DColor& btmColor, int borderWidth);
+    void pattern2(DImg& src, DImg& dest, int borderWidth, const DColor& firstColor,
+                  const DColor& secondColor, int firstWidth, int secondWidth);
 
 private:
 

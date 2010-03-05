@@ -33,7 +33,6 @@
 
 // KDE includes
 
-#include <kaboutdata.h>
 #include <kapplication.h>
 #include <kcolorbutton.h>
 #include <kconfig.h>
@@ -53,14 +52,11 @@
 // Local includes
 
 #include "border.h"
-#include "daboutdata.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imageguidewidget.h"
-#include "version.h"
 
 using namespace KDcrawIface;
-using namespace Digikam;
 
 namespace DigikamBorderImagesPlugin
 {
@@ -213,7 +209,7 @@ BorderTool::BorderTool(QObject* parent)
     else
         d->borderWidth->setRange(1, w/2, 1);
 
-    KSeparator *line2 = new KSeparator(Qt::Horizontal);
+    KSeparator* line2 = new KSeparator(Qt::Horizontal);
 
     // -------------------------------------------------------------------
 
@@ -262,11 +258,11 @@ BorderTool::BorderTool(QObject* parent)
     connect(d->borderWidth, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));
 
-    connect(d->firstColorButton, SIGNAL(changed(const QColor &)),
-            this, SLOT(slotColorForegroundChanged(const QColor &)));
+    connect(d->firstColorButton, SIGNAL(changed(const QColor&)),
+            this, SLOT(slotColorForegroundChanged(const QColor&)));
 
-    connect(d->secondColorButton, SIGNAL(changed(const QColor &)),
-            this, SLOT(slotColorBackgroundChanged(const QColor &)));
+    connect(d->secondColorButton, SIGNAL(changed(const QColor&)),
+            this, SLOT(slotColorBackgroundChanged(const QColor&)));
 }
 
 BorderTool::~BorderTool()
@@ -277,7 +273,7 @@ BorderTool::~BorderTool()
 void BorderTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(d->configGroupName);
+    KConfigGroup group        = config->group(d->configGroupName);
 
     blockWidgetSignals(true);
 
@@ -291,12 +287,12 @@ void BorderTool::readSettings()
     QColor gray1(192, 192, 192);
     QColor gray2(128, 128, 128);
 
-    d->solidColor = group.readEntry(d->configSolidColorEntry,                       black);
-    d->niepceBorderColor = group.readEntry(d->configNiepceBorderColorEntry,         white);
-    d->niepceLineColor = group.readEntry(d->configNiepceLineColorEntry,             black);
-    d->bevelUpperLeftColor = group.readEntry(  d->configBevelUpperLeftColorEntry,   gray1);
-    d->bevelLowerRightColor = group.readEntry( d->configBevelLowerRightColorEntry,  gray2);
-    d->decorativeFirstColor = group.readEntry( d->configDecorativeFirstColorEntry,  black);
+    d->solidColor            = group.readEntry(d->configSolidColorEntry,            black);
+    d->niepceBorderColor     = group.readEntry(d->configNiepceBorderColorEntry,     white);
+    d->niepceLineColor       = group.readEntry(d->configNiepceLineColorEntry,       black);
+    d->bevelUpperLeftColor   = group.readEntry(  d->configBevelUpperLeftColorEntry, gray1);
+    d->bevelLowerRightColor  = group.readEntry( d->configBevelLowerRightColorEntry, gray2);
+    d->decorativeFirstColor  = group.readEntry( d->configDecorativeFirstColorEntry, black);
     d->decorativeSecondColor = group.readEntry(d->configDecorativeSecondColorEntry, black);
 
     blockWidgetSignals(false);
@@ -307,13 +303,12 @@ void BorderTool::readSettings()
 void BorderTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(d->configGroupName);
+    KConfigGroup group        = config->group(d->configGroupName);
 
-    group.writeEntry(d->configBorderTypeEntry,          d->borderType->currentIndex());
-    group.writeEntry(d->configBorderPercentEntry,       d->borderPercent->value());
-    group.writeEntry(d->configBorderWidthEntry,         d->borderWidth->value());
-    group.writeEntry(d->configPreserveAspectRatioEntry, d->preserveAspectRatio->isChecked());
-
+    group.writeEntry(d->configBorderTypeEntry,            d->borderType->currentIndex());
+    group.writeEntry(d->configBorderPercentEntry,         d->borderPercent->value());
+    group.writeEntry(d->configBorderWidthEntry,           d->borderWidth->value());
+    group.writeEntry(d->configPreserveAspectRatioEntry,   d->preserveAspectRatio->isChecked());
     group.writeEntry(d->configSolidColorEntry,            d->solidColor);
     group.writeEntry(d->configNiepceBorderColorEntry,     d->niepceBorderColor);
     group.writeEntry(d->configNiepceLineColorEntry,       d->niepceLineColor);
@@ -523,8 +518,7 @@ void BorderTool::prepareEffect()
 
     if (d->preserveAspectRatio->isChecked())
     {
-        setFilter(dynamic_cast<DImgThreadedFilter *>(
-                  new Border(&previewImage, this, orgWidth, orgHeight,
+        setFilter(new Border(&previewImage, this, orgWidth, orgHeight,
                              border, borderType, d->borderPercent->value()/100.0,
                              DColor(d->solidColor, sixteenBit),
                              DColor(d->niepceBorderColor, sixteenBit),
@@ -532,12 +526,11 @@ void BorderTool::prepareEffect()
                              DColor(d->bevelUpperLeftColor, sixteenBit),
                              DColor(d->bevelLowerRightColor, sixteenBit),
                              DColor(d->decorativeFirstColor, sixteenBit),
-                             DColor(d->decorativeSecondColor, sixteenBit))));
+                             DColor(d->decorativeSecondColor, sixteenBit)));
     }
     else
     {
-        setFilter(dynamic_cast<DImgThreadedFilter *>(
-                  new Border(&previewImage, this, orgWidth, orgHeight,
+        setFilter(new Border(&previewImage, this, orgWidth, orgHeight,
                              border, borderType, borderWidth,
                              (int)(20.0*ratio), (int)(20.0*ratio), 3,
                              DColor(d->solidColor, sixteenBit),
@@ -546,7 +539,7 @@ void BorderTool::prepareEffect()
                              DColor(d->bevelUpperLeftColor, sixteenBit),
                              DColor(d->bevelLowerRightColor, sixteenBit),
                              DColor(d->decorativeFirstColor, sixteenBit),
-                             DColor(d->decorativeSecondColor, sixteenBit))));
+                             DColor(d->decorativeSecondColor, sixteenBit)));
     }
 }
 
@@ -574,8 +567,7 @@ void BorderTool::prepareFinal()
 
     if (d->preserveAspectRatio->isChecked())
     {
-        setFilter(dynamic_cast<DImgThreadedFilter *>(
-                  new Border(&orgImage, this, orgWidth, orgHeight,
+        setFilter(new Border(&orgImage, this, orgWidth, orgHeight,
                              border, borderType, borderRatio,
                              DColor(d->solidColor, sixteenBit),
                              DColor(d->niepceBorderColor, sixteenBit),
@@ -583,12 +575,11 @@ void BorderTool::prepareFinal()
                              DColor(d->bevelUpperLeftColor, sixteenBit),
                              DColor(d->bevelLowerRightColor, sixteenBit),
                              DColor(d->decorativeFirstColor, sixteenBit),
-                             DColor(d->decorativeSecondColor, sixteenBit))));
+                             DColor(d->decorativeSecondColor, sixteenBit)));
     }
     else
     {
-        setFilter(dynamic_cast<DImgThreadedFilter *>(
-                  new Border(&orgImage, this, orgWidth, orgHeight,
+        setFilter(new Border(&orgImage, this, orgWidth, orgHeight,
                              border, borderType, borderWidth, 15, 15, 10,
                              DColor(d->solidColor, sixteenBit),
                              DColor(d->niepceBorderColor, sixteenBit),
@@ -596,11 +587,11 @@ void BorderTool::prepareFinal()
                              DColor(d->bevelUpperLeftColor, sixteenBit),
                              DColor(d->bevelLowerRightColor, sixteenBit),
                              DColor(d->decorativeFirstColor, sixteenBit),
-                             DColor(d->decorativeSecondColor, sixteenBit))));
+                             DColor(d->decorativeSecondColor, sixteenBit)));
     }
 }
 
-void BorderTool::putPreviewData(void)
+void BorderTool::putPreviewData()
 {
     ImageIface* iface = d->previewWidget->imageIface();
     int w = iface->previewWidth();
@@ -619,7 +610,7 @@ void BorderTool::putPreviewData(void)
     d->previewWidget->updatePreview();
 }
 
-void BorderTool::putFinalData(void)
+void BorderTool::putFinalData()
 {
     ImageIface iface(0, 0);
 

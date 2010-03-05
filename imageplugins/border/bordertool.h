@@ -36,18 +36,20 @@
 
 class QColor;
 
+using namespace Digikam;
+
 namespace DigikamBorderImagesPlugin
 {
 
 class BorderToolPriv;
 
-class BorderTool : public Digikam::EditorToolThreaded
+class BorderTool : public EditorToolThreaded
 {
     Q_OBJECT
 
 public:
 
-    BorderTool(QObject *parent);
+    BorderTool(QObject* parent);
     ~BorderTool();
 
 private Q_SLOTS:
