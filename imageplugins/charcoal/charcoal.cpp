@@ -119,7 +119,7 @@ void Charcoal::filterImage()
     InvertFilter invert(&m_destImage);
     invert.startFilterDirectly();
     m_destImage.putImageData(invert.getTargetImage().bits());
-        
+
     postProgress( 95 );
     if (m_cancel)
         return;
@@ -134,7 +134,7 @@ void Charcoal::filterImage()
     MixerFilter mixer(&m_destImage, 0L, settings);
     mixer.startFilterDirectly();
     m_destImage.putImageData(mixer.getTargetImage().bits());
-    
+
     postProgress( 100 );
     if (m_cancel)
         return;
