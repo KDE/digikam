@@ -27,19 +27,22 @@
 
 // Local includes
 
+#include "digikam_export.h"
 #include "dimgthreadedfilter.h"
+#include "globals.h"
 
-using namespace Digikam;
-
-namespace DigikamFilmGrainImagesPlugin
+namespace Digikam
 {
 
-class FilmGrainFilter : public DImgThreadedFilter
+class DIGIKAM_EXPORT FilmGrainFilter : public DImgThreadedFilter
 {
 
 public:
 
     explicit FilmGrainFilter(DImg* orgImage, QObject* parent=0, int sensibility=400);
+    // Constructor for slave mode: execute immediately in current thread with specified master filter
+    explicit FilmGrainFilter(DImgThreadedFilter* parentFilter, const DImg& orgImage, const DImg& destImage,
+                             int progressBegin=0, int progressEnd=100, int sensibility=400);    
     ~FilmGrainFilter(){};
 
 private:
@@ -51,6 +54,6 @@ private:
     int m_sensibility;
 };
 
-}  // namespace DigikamFilmGrainImagesPlugin
+}  // namespace Digikam
 
 #endif /* FILMGRAINFILTER_H */

@@ -42,7 +42,7 @@
 #include "dimg.h"
 #include "globals.h"
 
-namespace DigikamFilmGrainImagesPlugin
+namespace Digikam
 {
 
 FilmGrainFilter::FilmGrainFilter(DImg* orgImage, QObject* parent, int sensibility)
@@ -50,6 +50,16 @@ FilmGrainFilter::FilmGrainFilter(DImg* orgImage, QObject* parent, int sensibilit
 {
     m_sensibility = sensibility;
     initFilter();
+}
+
+FilmGrainFilter::FilmGrainFilter(DImgThreadedFilter* parentFilter,
+                                 const DImg& orgImage, const DImg& destImage,
+                                 int progressBegin, int progressEnd, int sensibility)
+          : DImgThreadedFilter(parentFilter, orgImage, destImage, progressBegin, progressEnd,
+                               parentFilter->filterName() + ": FilmGrain")
+{
+    m_sensibility = sensibility;
+    filterImage();
 }
 
 void FilmGrainFilter::filterImage()
@@ -101,4 +111,4 @@ void FilmGrainFilter::filterImage()
     }
 }
 
-}  // namespace DigikamFilmGrainImagesPlugin
+}  // namespace Digikam
