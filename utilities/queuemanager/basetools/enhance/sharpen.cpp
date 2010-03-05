@@ -148,10 +148,6 @@ bool Sharpen::toolOperations()
         return false;
 
     int filterType  = settings()["SharpenFilterType"].toInt();
-    uint width      = image().width();
-    uint height     = image().height();
-    uchar* data     = image().bits();
-    bool sixteenBit = image().sixteenBit();
 
     switch (filterType)
     {
@@ -165,11 +161,9 @@ bool Sharpen::toolOperations()
             else
                 sigma = sqrt(radius);
 
-            DImg orgImage(width, height, sixteenBit, true, data);
-            DImgSharpen filter(&orgImage, 0L, radius, sigma);
+            DImgSharpen filter(&image(), 0L, radius, sigma);
             filter.startFilterDirectly();
-            DImg imDest = filter.getTargetImage();
-            memcpy(data, imDest.bits(), imDest.numBytes() );
+            image().putImageData(filter.getTargetImage().bits());
             break;
         }
 
@@ -179,11 +173,9 @@ bool Sharpen::toolOperations()
             double a  = settings()["UnsharpMaskAmount"].toDouble();
             double th = settings()["UnsharpMaskThreshold"].toDouble();
 
-            DImg orgImage(width, height, sixteenBit, true, data);
-            DImgUnsharpMask filter(&orgImage, 0L, r, a, th);
+            DImgUnsharpMask filter(&image(), 0L, r, a, th);
             filter.startFilterDirectly();
-            DImg imDest = filter.getTargetImage();
-            memcpy(data, imDest.bits(), imDest.numBytes());
+            image().putImageData(filter.getTargetImage().bits());
             break;
         }
 
@@ -195,11 +187,9 @@ bool Sharpen::toolOperations()
             double gauss       = settings()["RefocusGauss"].toDouble();
             int matrixSize     = settings()["RefocusMatrixSize"].toInt();
 
-            DImg orgImage(width, height, sixteenBit, true, data);
-            DImgRefocus filter(&orgImage, 0L, matrixSize, radius, gauss, correlation, noise);
+            DImgRefocus filter(&image(), 0L, matrixSize, radius, gauss, correlation, noise);
             filter.startFilterDirectly();
-            DImg imDest = filter.getTargetImage();
-            memcpy(data, imDest.bits(), imDest.numBytes());
+            image().putImageData(filter.getTargetImage().bits());
             break;
         }
     }
