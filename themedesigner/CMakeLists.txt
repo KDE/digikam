@@ -69,6 +69,7 @@ INCLUDE_DIRECTORIES(
                      ../utilities/queuemanager/basetools/color
                      ../utilities/queuemanager/basetools/convert
                      ../utilities/queuemanager/basetools/enhance
+                     ../utilities/queuemanager/basetools/filters
                      ../utilities/queuemanager/basetools/transform
                      ../utilities/queuemanager/basetools/metadata
                      ../utilities/queuemanager/basetools/decorate

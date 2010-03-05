@@ -64,6 +64,7 @@ INCLUDE_DIRECTORIES(
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/queuemanager/basetools/color
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/queuemanager/basetools/convert
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/queuemanager/basetools/enhance
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/queuemanager/basetools/filters
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/queuemanager/basetools/transform
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/queuemanager/basetools/metadata
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/queuemanager/basetools/decorate

@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-05-03
- * Description : blur image batch tool.
+ * Description : a batch tool to addd film grain to images.
  *
  * Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef BLUR_H_
-#define BLUR_H_
+#ifndef FILMGRAIN_H_
+#define FILMGRAIN_H_
 
 #include "batchtool.h"
 
@@ -35,14 +35,14 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-class Blur : public BatchTool
+class FilmGrain : public BatchTool
 {
     Q_OBJECT
 
 public:
 
-    Blur(QObject* parent=0);
-    ~Blur();
+    FilmGrain(QObject* parent=0);
+    ~FilmGrain();
 
     BatchToolSettings defaultSettings();
 
@@ -57,9 +57,9 @@ private Q_SLOTS:
 
 private:
 
-    RDoubleNumInput* m_radiusInput;
+    RIntNumInput* m_sensibilityInput;
 };
 
 } // namespace Digikam
 
-#endif /* BLUR_H_ */
+#endif /* FILMGRAIN_H_ */

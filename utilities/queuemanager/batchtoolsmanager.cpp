@@ -48,6 +48,7 @@
 #include "bwconvert.h"
 #include "whitebalance.h"
 #include "curvesadjust.h"
+#include "filmgrain.h"
 
 namespace Digikam
 {
@@ -71,19 +72,24 @@ BatchToolsManager::BatchToolsManager(QObject* parent)
     registerTool(new Convert2TIFF(this));
     registerTool(new Convert2JP2(this));
     registerTool(new Convert2PGF(this));
+
     // Transform
     registerTool(new Rotate(this));
     registerTool(new Flip(this));
     registerTool(new Resize(this));
+
     // Decorate
     registerTool(new WaterMark(this));
+
     // Metadata
     registerTool(new AssignTemplate(this));
+
     // Enhance
     registerTool(new Blur(this));
     registerTool(new Sharpen(this));
     registerTool(new NoiseReduction(this));
     registerTool(new Restoration(this));
+
     // Color
     registerTool(new BCGCorrection(this));
     registerTool(new HSLCorrection(this));
@@ -94,6 +100,9 @@ BatchToolsManager::BatchToolsManager(QObject* parent)
     registerTool(new BWConvert(this));
     registerTool(new WhiteBalance(this));
     registerTool(new CurvesAdjust(this));
+
+    // Filters
+    registerTool(new FilmGrain(this));
 }
 
 BatchToolsManager::~BatchToolsManager()
