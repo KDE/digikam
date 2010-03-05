@@ -40,56 +40,44 @@
 namespace DigikamEmbossImagesPlugin
 {
 
-Emboss::Emboss(Digikam::DImg* orgImage, QObject* parent, int depth)
-      : Digikam::DImgThreadedFilter(orgImage, parent, "Emboss")
+Emboss::Emboss(DImg* orgImage, QObject* parent, int depth)
+      : DImgThreadedFilter(orgImage, parent, "Emboss")
 {
     m_depth = depth;
     initFilter();
 }
 
-void Emboss::filterImage()
-{
-    embossImage(&m_orgImage, &m_destImage, m_depth);
-}
-
-// This method have been ported from Pieter Z. Voloshyn algorithm code.
-
-/* Function to apply the Emboss effect
- *
- * data             => The image data in RGBA mode.
- * Width            => Width of image.
- * Height           => Height of image.
- * d                => Emboss value
+/** Function to apply the Emboss effect
+ *  This method have been ported from Pieter Z. Voloshyn algorithm code.
  *
  * Theory           => This is an amazing effect. And the theory is very simple to
  *                     understand. You get the difference between the colors and
  *                     increase it. After this, get the gray tone
  */
-
-void Emboss::embossImage(Digikam::DImg* orgImage, Digikam::DImg* destImage, int d)
+void Emboss::filterImage()
 {
-    int Width       = orgImage->width();
-    int Height      = orgImage->height();
-    uchar* data     = orgImage->bits();
-    bool sixteenBit = orgImage->sixteenBit();
-    int bytesDepth  = orgImage->bytesDepth();
-    uchar* Bits     = destImage->bits();
+    int Width       = m_orgImage.width();
+    int Height      = m_orgImage.height();
+    uchar* data     = m_orgImage.bits();
+    bool sixteenBit = m_orgImage.sixteenBit();
+    int bytesDepth  = m_orgImage.bytesDepth();
+    uchar* Bits     = m_destImage.bits();
 
     // Initial copy
-    memcpy (Bits, data, destImage->numBytes());
+    memcpy(Bits, data, m_destImage.numBytes());
 
-    double Depth = d / 10.0;
+    double Depth = m_depth / 10.0;
 
     int    progress;
     int    red, green, blue, gray;
-    Digikam::DColor color, colorOther;
+    DColor color, colorOther;
     int    offset, offsetOther;
 
     for (int h = 0 ; !m_cancel && (h < Height) ; ++h)
     {
         for (int w = 0 ; !m_cancel && (w < Width) ; ++w)
         {
-            offset = getOffset(Width, w, h, bytesDepth);
+            offset      = getOffset(Width, w, h, bytesDepth);
             offsetOther = getOffset(Width, w + Lim_Max (w, 1, Width), h + Lim_Max (h, 1, Height), bytesDepth);
 
             color.setColor(Bits + offset, sixteenBit);
@@ -101,7 +89,7 @@ void Emboss::embossImage(Digikam::DImg* orgImage, Digikam::DImg* destImage, int 
                 green = abs ((int)((color.green() - colorOther.green()) * Depth + 32768));
                 blue  = abs ((int)((color.blue()  - colorOther.blue())  * Depth + 32768));
 
-                gray = CLAMP065535 ((red + green + blue) / 3);
+                gray  = CLAMP065535 ((red + green + blue) / 3);
             }
             else
             {
@@ -109,7 +97,7 @@ void Emboss::embossImage(Digikam::DImg* orgImage, Digikam::DImg* destImage, int 
                 green = abs ((int)((color.green() - colorOther.green()) * Depth + 128));
                 blue  = abs ((int)((color.blue()  - colorOther.blue())  * Depth + 128));
 
-                gray = CLAMP0255 ((red + green + blue) / 3);
+                gray  = CLAMP0255 ((red + green + blue) / 3);
             }
 
             // Overwrite RGB values to destination. Alpha remains unchanged.
@@ -123,6 +111,21 @@ void Emboss::embossImage(Digikam::DImg* orgImage, Digikam::DImg* destImage, int 
         if ( progress%5 == 0 )
             postProgress( progress );
     }
+}
+
+/** Function to limit the max and min values defined by the developer.
+ */
+int Emboss::Lim_Max (int Now, int Up, int Max)
+{
+    --Max;
+    while (Now > Max - Up)
+        --Up;
+    return (Up);
+}
+
+int Emboss::getOffset(int Width, int X, int Y, int bytesDepth)
+{
+    return (Y * Width * bytesDepth) + (X * bytesDepth);
 }
 
 }  // namespace DigikamEmbossImagesPlugin
