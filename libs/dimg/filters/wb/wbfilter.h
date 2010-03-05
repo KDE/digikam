@@ -81,7 +81,6 @@ class DIGIKAM_EXPORT WBFilter : public DImgThreadedFilter
 public:
 
     explicit WBFilter(DImg* orgImage, QObject* parent=0, const WBContainer& settings=WBContainer());
-    WBFilter(uchar* data, uint width, uint height, bool sixteenBit, const WBContainer& settings=WBContainer());
     virtual ~WBFilter();
 
     static void autoExposureAdjustement(const DImg* img, double& black, double& expo);
@@ -89,7 +88,7 @@ public:
 
 protected:
 
-    virtual void filterImage();
+    void filterImage();
 
   protected:
 

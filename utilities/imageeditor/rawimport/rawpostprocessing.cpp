@@ -87,8 +87,11 @@ void RawPostProcessing::rawPostProcessing()
         settings.gamma        = 1.0;
         settings.saturation   = m_customRawSettings.saturation;
         settings.green        = 1.0;
-        WBFilter wb(m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(), m_orgImage.sixteenBit(), settings);
+        WBFilter wb(&m_orgImage, 0L, settings);
+        wb.startFilterDirectly();
+        m_orgImage.putImageData(wb.getTargetImage().bits());   
     }
+    
     postProgress(30);
 
     if (m_customRawSettings.lightness != 0.0 || m_customRawSettings.contrast != 1.0 || m_customRawSettings.gamma != 1.0)
@@ -101,6 +104,7 @@ void RawPostProcessing::rawPostProcessing()
         bcg.startFilterDirectly();
         m_orgImage.putImageData(bcg.getTargetImage().bits());    
     }
+    
     postProgress(45);
 
     if (!m_customRawSettings.curveAdjust.isEmpty())
@@ -112,6 +116,7 @@ void RawPostProcessing::rawPostProcessing()
         curves.startFilterDirectly();
         m_orgImage.putImageData(curves.getTargetImage().bits());
     }
+    
     postProgress(60);
 
     if (!m_customRawSettings.levelsAdjust.isEmpty())
@@ -131,6 +136,7 @@ void RawPostProcessing::rawPostProcessing()
         levels.levelsLutProcess(m_orgImage.bits(), tmp.bits(), m_orgImage.width(), m_orgImage.height());
         memcpy(m_orgImage.bits(), tmp.bits(), tmp.numBytes());
     }
+    
     postProgress(75);
 
     m_destImage = m_orgImage;

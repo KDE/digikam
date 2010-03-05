@@ -84,25 +84,6 @@ WBFilter::WBFilter(DImg* orgImage, QObject* parent, const WBContainer& settings)
     initFilter();
 }
 
-WBFilter::WBFilter(uchar* data, uint width, uint height, bool sixteenBit, const WBContainer& settings)
-        : DImgThreadedFilter(),
-          d(new WBFilterPriv)
-{
-    m_settings = settings;
-    d->WP      = sixteenBit ? 65536 : 256;
-    d->rgbMax  = sixteenBit ? 65536 : 256;
-
-    // Set final lut.
-    setRGBmult();
-    d->mr = d->mb = 1.0;
-    if (d->clipSat) d->mg = 1.0;
-    setLUTv();
-    setRGBmult();
-
-    // Apply White balance adjustments.
-    adjustWhiteBalance(data, width, height, sixteenBit);
-}
-
 WBFilter::~WBFilter()
 {
     delete d;

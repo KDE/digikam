@@ -309,8 +309,11 @@ void RAWLoader::postProcess(DImgLoaderObserver* observer)
         settings.gamma        = 1.0;
         settings.saturation   = m_customRawSettings.saturation;
         settings.green        = 1.0;
-        WBFilter wb(imageData(), imageWidth(), imageHeight(), m_rawDecodingSettings.sixteenBitsImage, settings);
+        WBFilter wb(m_image, 0L, settings);
+        wb.startFilterDirectly();
+        m_image->putImageData(wb.getTargetImage().bits());       
     }
+    
     if (observer) observer->progressInfo(m_image, 0.92F);
 
     if (m_customRawSettings.lightness != 0.0 ||
@@ -325,6 +328,7 @@ void RAWLoader::postProcess(DImgLoaderObserver* observer)
         bcg.startFilterDirectly();
         m_image->putImageData(bcg.getTargetImage().bits());        
     }
+    
     if (observer) observer->progressInfo(m_image, 0.94F);
 
     if (!m_customRawSettings.curveAdjust.isEmpty())
@@ -337,6 +341,7 @@ void RAWLoader::postProcess(DImgLoaderObserver* observer)
         curves.curvesLutProcess(imageData(), tmp.bits(), imageWidth(), imageHeight());
         memcpy(imageData(), tmp.bits(), tmp.numBytes());
     }
+    
     if (observer) observer->progressInfo(m_image, 0.96F);
 
     if (!m_customRawSettings.levelsAdjust.isEmpty())
@@ -356,6 +361,7 @@ void RAWLoader::postProcess(DImgLoaderObserver* observer)
         levels.levelsLutProcess(imageData(), tmp.bits(), imageWidth(), imageHeight());
         memcpy(imageData(), tmp.bits(), tmp.numBytes());
     }
+    
     if (observer) observer->progressInfo(m_image, 0.98F);
 }
 
