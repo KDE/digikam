@@ -43,7 +43,7 @@ public:
                          double gauss=0.0, double correlation=0.5, double noise=0.01);
 
     ~DImgRefocus();
-    
+
     static int maxMatrixSize();
 
 private:
@@ -60,7 +60,7 @@ private:
 private:
 
     DImg   m_preImage;
-    
+
     int    m_matrixSize;
 
     double m_radius;

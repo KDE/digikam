@@ -6,7 +6,7 @@
  * Date        : 2005-17-07
  * Description : A Sharpen threaded image filter.
  *
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009 by Matthias Welwarsky <matze at welwarsky dot de>
  *
  * Original Sharpen algorithm copyright 2002
