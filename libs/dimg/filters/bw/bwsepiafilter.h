@@ -85,8 +85,8 @@ public:
         BWSeleniumTone,
         BWPlatinumTone,
         BWGreenTone
-    };  
-  
+    };
+
 public:
 
     BWSepiaContainer()
@@ -121,7 +121,7 @@ public:
     int             toneType;
 
     double          strength;
-    
+
     CurvesContainer curvesPrm;
 
     BCGContainer    bcgPrm;
@@ -142,7 +142,7 @@ private:
     void filterImage();
 
     DImg getThumbnailForEffect(DImg& img);
-    
+
     void blackAndWhiteConversion(DImg& img, int type);
     void applyChannelMixer(DImg& img);
     void applyInfraredFilter(DImg& img, int sensibility);
