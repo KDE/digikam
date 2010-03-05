@@ -41,7 +41,7 @@ public:
 
     ~OilPaint(){};
 
-private:  
+private:
 
     void filterImage();
 
@@ -54,7 +54,7 @@ private:
     inline double GetIntensity(uint Red, uint Green, uint Blue)
            { return Red * 0.3 + Green * 0.59 + Blue * 0.11; };
 
-private:  
+private:
 
     uchar* m_intensityCount;
 

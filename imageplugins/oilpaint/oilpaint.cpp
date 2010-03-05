@@ -47,7 +47,7 @@ OilPaint::OilPaint(Digikam::DImg* orgImage, QObject* parent, int brushSize, int 
     initFilter();
 }
 
-void OilPaint::filterImage(void)
+void OilPaint::filterImage()
 {
     oilpaintImage(m_orgImage, m_destImage, m_brushSize, m_smoothness);
 }
