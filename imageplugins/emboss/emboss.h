@@ -43,7 +43,7 @@ public:
     explicit Emboss(Digikam::DImg* orgImage, QObject* parent=0, int depth=30);
     ~Emboss(){};
 
-private:  
+private:
 
     void filterImage();
 
@@ -65,7 +65,7 @@ private:
         return (Y * Width * bytesDepth) + (X * bytesDepth);
     };
 
-private:  
+private:
 
     int m_depth;
 };

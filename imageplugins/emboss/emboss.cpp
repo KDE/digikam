@@ -40,7 +40,7 @@
 namespace DigikamEmbossImagesPlugin
 {
 
-Emboss::Emboss(Digikam::DImg *orgImage, QObject *parent, int depth)
+Emboss::Emboss(Digikam::DImg* orgImage, QObject* parent, int depth)
       : Digikam::DImgThreadedFilter(orgImage, parent, "Emboss")
 {
     m_depth = depth;
@@ -66,7 +66,7 @@ void Emboss::filterImage()
  *                     increase it. After this, get the gray tone
  */
 
-void Emboss::embossImage(Digikam::DImg *orgImage, Digikam::DImg *destImage, int d)
+void Emboss::embossImage(Digikam::DImg* orgImage, Digikam::DImg* destImage, int d)
 {
     int Width       = orgImage->width();
     int Height      = orgImage->height();
