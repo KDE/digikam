@@ -97,7 +97,9 @@ void RawPostProcessing::rawPostProcessing()
         settings.brightness = m_customRawSettings.lightness;
         settings.contrast   = m_customRawSettings.contrast;
         settings.gamma      = m_customRawSettings.gamma;
-        BCGFilter bcg(m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(), m_orgImage.sixteenBit(), settings);
+        BCGFilter bcg(&m_orgImage, 0L, settings);
+        bcg.startFilterDirectly();
+        m_orgImage.putImageData(bcg.getTargetImage().bits());    
     }
     postProgress(45);
 

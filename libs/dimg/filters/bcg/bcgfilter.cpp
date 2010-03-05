@@ -61,18 +61,6 @@ BCGFilter::BCGFilter(DImg* orgImage, QObject* parent, const BCGContainer& settin
     initFilter();
 }
 
-BCGFilter::BCGFilter(uchar* bits, uint width, uint height, bool sixteenBits, const BCGContainer& settings)
-         : DImgThreadedFilter(),
-           d(new BCGFilterPriv)
-{
-    d->settings = settings;
-    reset();
-    setGamma(d->settings.gamma);
-    setBrightness(d->settings.brightness);
-    setContrast(d->settings.contrast);
-    applyBCG(bits, width, height, sixteenBits);
-}
-
 BCGFilter::~BCGFilter()
 {
     delete d;

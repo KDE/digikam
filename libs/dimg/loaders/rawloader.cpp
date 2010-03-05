@@ -321,7 +321,9 @@ void RAWLoader::postProcess(DImgLoaderObserver* observer)
         settings.brightness = m_customRawSettings.lightness;
         settings.contrast   = m_customRawSettings.contrast;
         settings.gamma      = m_customRawSettings.gamma;
-        BCGFilter bcg(imageData(), imageWidth(), imageHeight(), m_rawDecodingSettings.sixteenBitsImage, settings);
+        BCGFilter bcg(m_image, 0L, settings);
+        bcg.startFilterDirectly();
+        m_image->putImageData(bcg.getTargetImage().bits());        
     }
     if (observer) observer->progressInfo(m_image, 0.94F);
 
