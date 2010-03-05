@@ -98,7 +98,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 068 ==> 163286 : Accurate histogram preview required.
 069 ==> 229287 : Crash in digiKam when renaming with directory.
 070 ==> 148540 : Improvements of adding noise tool.
-071 ==> 
+071 ==> 229340 : digiKam Crashes When Saving PNG Files.
+072 ==> 
 
 
 
