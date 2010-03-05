@@ -96,9 +96,15 @@ void FilmGrainFilter::filterImage()
 #else
             nRand = (rand() % noise);
 #endif
-
-            l += nRand;
-
+            nRand = nRand - noise/2.0;
+            if (!sb)
+            {
+              l = CLAMP0255(l+nRand);
+            }
+            else
+            {
+              l = CLAMP065535(l+nRand);
+            }
             color.setRGB(h, s, l, sb);
             m_destImage.setPixelColor(x, y, color);
         }

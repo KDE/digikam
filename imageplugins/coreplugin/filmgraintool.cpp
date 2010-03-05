@@ -101,7 +101,7 @@ FilmGrainTool::FilmGrainTool(QObject* parent)
 
     QLabel *label1      = new QLabel(i18n("Sensitivity (ISO):"));
     d->sensibilityInput = new RIntNumInput;
-    d->sensibilityInput->setRange(800, 6400, 10);
+    d->sensibilityInput->setRange(800, 51200, 100);
     d->sensibilityInput->setSliderEnabled(true);
     d->sensibilityInput->setDefaultValue(2400);
     d->sensibilityInput->setWhatsThis(i18n("Set here the film ISO-sensitivity to use for "
