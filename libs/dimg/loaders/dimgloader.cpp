@@ -7,7 +7,7 @@
  * Description : DImg image loader interface
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -59,7 +59,7 @@ bool DImgLoader::hasLoadedData() const
     return m_loadFlags & LoadImageData;
 }
 
-int DImgLoader::granularity(DImgLoaderObserver *observer, int total, float progressSlice)
+int DImgLoader::granularity(DImgLoaderObserver* observer, int total, float progressSlice)
 {
     // Splits expect total value into the chunks where checks shall occur
     // and combines this with a possible correction factor from observer.
@@ -146,9 +146,12 @@ void DImgLoader::imageSetEmbbededText(const QString& key, const QString& text)
 
 unsigned char* DImgLoader::new_failureTolerant(size_t size)
 {
-    try {
+    try
+    {
         return new uchar[size];
-    } catch (std::bad_alloc &ex) {
+    }
+    catch (std::bad_alloc& ex)
+    {
         kError() << "Failed to allocate chunk of memory of size" << size << ex.what();
         return 0;
     }
@@ -156,9 +159,12 @@ unsigned char* DImgLoader::new_failureTolerant(size_t size)
 
 unsigned short* DImgLoader::new_short_failureTolerant(size_t size)
 {
-    try {
+    try
+    {
         return new unsigned short[size];
-    } catch (std::bad_alloc &ex) {
+    }
+    catch (std::bad_alloc& ex)
+    {
         kError() << "Failed to allocate chunk of memory of size" << size << ex.what();
         return 0;
     }
