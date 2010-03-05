@@ -1,7 +1,7 @@
 
 SET(digikamimageplugin_filmgrain_PART_SRCS imageplugin_filmgrain.cpp
                                            filmgraintool.cpp
-                                           filmgrain.cpp
+                                           filmgrainfilter.cpp
    )
 
 KDE4_ADD_PLUGIN(digikamimageplugin_filmgrain ${digikamimageplugin_filmgrain_PART_SRCS})

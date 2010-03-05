@@ -33,7 +33,6 @@
 
 // KDE includes
 
-#include <kaboutdata.h>
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
@@ -48,13 +47,11 @@
 
 // Local includes
 
-#include "daboutdata.h"
 #include "dimg.h"
 #include "editortoolsettings.h"
-#include "filmgrain.h"
+#include "filmgrainfilter.h"
 #include "imageiface.h"
 #include "imageregionwidget.h"
-#include "version.h"
 
 using namespace KDcrawIface;
 
@@ -142,18 +139,13 @@ FilmGrainTool::~FilmGrainTool()
     delete d;
 }
 
-void FilmGrainTool::renderingFinished()
-{
-    d->sensibilityInput->setEnabled(true);
-    toolView()->setEnabled(true);
-}
-
 void FilmGrainTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
     d->sensibilityInput->blockSignals(true);
-    d->sensibilityInput->setValue(group.readEntry(d->configSensitivityAdjustmentEntry, d->sensibilityInput->defaultValue()));
+    d->sensibilityInput->setValue(group.readEntry(d->configSensitivityAdjustmentEntry, 
+                                                  d->sensibilityInput->defaultValue()));
     d->sensibilityInput->blockSignals(false);
 }
 
@@ -174,25 +166,25 @@ void FilmGrainTool::slotResetSettings()
 
 void FilmGrainTool::prepareEffect()
 {
-    d->sensibilityInput->setEnabled(false);
+    toolSettings()->setEnabled(false);
     toolView()->setEnabled(false);
     
     DImg image = d->previewWidget->getOriginalRegionImage();
     int s      = d->sensibilityInput->value();
 
-    setFilter(dynamic_cast<DImgThreadedFilter*>(new FilmGrain(&image, this, s)));
+    setFilter(new FilmGrainFilter(&image, this, s));
 }
 
 void FilmGrainTool::prepareFinal()
 {
-    d->sensibilityInput->setEnabled(false);
+    toolSettings()->setEnabled(false);
     toolView()->setEnabled(false);    
 
     int s = d->sensibilityInput->value();
 
     ImageIface iface(0, 0);
 
-    setFilter(dynamic_cast<DImgThreadedFilter*>(new FilmGrain(iface.getOriginalImg(), this, s)));
+    setFilter(new FilmGrainFilter(iface.getOriginalImg(), this, s));
 }
 
 void FilmGrainTool::putPreviewData()
@@ -204,6 +196,12 @@ void FilmGrainTool::putFinalData()
 {
     ImageIface iface(0, 0);
     iface.putOriginalImage(i18n("Film Grain"), filter()->getTargetImage().bits());
+}
+
+void FilmGrainTool::renderingFinished()
+{
+    toolSettings()->setEnabled(true);
+    toolView()->setEnabled(true);
 }
 
 }  // namespace DigikamFilmGrainImagesPlugin

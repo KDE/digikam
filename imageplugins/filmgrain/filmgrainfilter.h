@@ -4,10 +4,10 @@
  * http://www.digikam.org
  *
  * Date        : 2005-05-25
- * Description : FilmGrain threaded image filter.
+ * Description : filter to add Film Grain to image.
  * 
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2005-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * 
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,8 +22,8 @@
  * 
  * ============================================================ */
   
-#ifndef FILMGRAIN_H
-#define FILMGRAIN_H
+#ifndef FILMGRAINFILTER_H
+#define FILMGRAINFILTER_H
 
 // Local includes
 
@@ -34,14 +34,13 @@ using namespace Digikam;
 namespace DigikamFilmGrainImagesPlugin
 {
 
-class FilmGrain : public DImgThreadedFilter
+class FilmGrainFilter : public DImgThreadedFilter
 {
 
 public:
 
-    explicit FilmGrain(DImg* orgImage, QObject* parent=0, int sensibility=12);
-
-    ~FilmGrain(){};
+    explicit FilmGrainFilter(DImg* orgImage, QObject* parent=0, int sensibility=400);
+    ~FilmGrainFilter(){};
 
 private:
 
@@ -54,4 +53,4 @@ private:
 
 }  // namespace DigikamFilmGrainImagesPlugin
 
-#endif /* FILMGRAIN_H */
+#endif /* FILMGRAINFILTER_H */
