@@ -63,7 +63,8 @@ private Q_SLOTS:
     void slotSharpen();
     void slotNoiseReduction();
     void slotRedEye();
-
+    void slotFilmGrain();
+    
     void slotBCG();
     void slotCB();
     void slotHSL();

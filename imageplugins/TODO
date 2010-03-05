@@ -16,6 +16,7 @@ coreplugin
   /bwsepiatool              DONE                 DONE                  DONE
   /cbtool                   DONE                 DONE                  DONE
   /channelmixer             DONE                 DONE                  DONE
+  /filmgrain                DONE                 DONE                  TODO
   /hsltool                  DONE                 DONE                  DONE
   /noisereductiontool       DONE                 DONE                  DONE
   /profileconversiontool    DONE                 DONE                  DONE
@@ -26,7 +27,6 @@ coreplugin
 
 distortionfx                DONE                 TODO                  TODO
 emboss                      DONE                 DONE                  TODO
-filmgrain                   DONE                 DONE                  TODO
 freerotation                DONE                  NO                   TODO
 hotpixels                   DONE                 DONE                  TODO
 inpainting                  DONE                  NO                    NO

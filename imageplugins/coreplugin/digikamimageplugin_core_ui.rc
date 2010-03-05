@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="19" name="digikamimageplugin_core" >
+<gui version="20" name="digikamimageplugin_core" >
 
  <MenuBar>
 
@@ -23,18 +23,23 @@
       <Action name="implugcore_colormanagement" />
       <Separator />
    </Menu>
+   
    <Menu name="Enhance"><text>Enh&amp;ance</text>
       <Action name="implugcore_sharpen" />
       <Action name="implugcore_blur" />
       <Action name="implugcore_noisereduction" />
       <Separator />
       <Action name="implugcore_redeye" />
-  </Menu>
+   </Menu>
 
-  <Menu name="Transform" ><text>Tra&amp;nsform</text>
+   <Menu name="Transform" ><text>Tra&amp;nsform</text>
       <Action name="implugcore_resize" />
       <Action name="implugcore_ratiocrop" />
-  </Menu>
+   </Menu>
+
+   <Menu name="Filters" ><text>F&amp;ilters</text>
+      <Action name="implugcore_filmgrain" />
+   </Menu>
 
  </MenuBar>
 

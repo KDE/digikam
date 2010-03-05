@@ -55,7 +55,7 @@
 
 using namespace KDcrawIface;
 
-namespace DigikamFilmGrainImagesPlugin
+namespace DigikamImagesPluginCore
 {
 
 class FilmGrainToolPriv
@@ -204,4 +204,4 @@ void FilmGrainTool::renderingFinished()
     toolView()->setEnabled(true);
 }
 
-}  // namespace DigikamFilmGrainImagesPlugin
+}  // namespace DigikamImagesPluginCore
