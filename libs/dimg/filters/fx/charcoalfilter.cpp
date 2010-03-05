@@ -8,9 +8,6 @@
  *
  * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
- * Original Charcoal algorithm copyright 2002
- * by Daniel M. Duley <mosfet@kde.org> from KImageEffect API.
- *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -27,7 +24,7 @@
 #define SQ2PI   2.50662827463100024161235523934010416269302368164062
 #define Epsilon 1.0e-12
 
-#include "charcoal.h"
+#include "charcoalfilter.h"
 
 // C++ includes
 
@@ -45,11 +42,11 @@
 #include "mixerfilter.h"
 #include "invertfilter.h"
 
-namespace DigikamCharcoalImagesPlugin
+namespace Digikam
 {
 
-Charcoal::Charcoal(DImg* orgImage, QObject* parent, double pencil, double smooth)
-        : DImgThreadedFilter(orgImage, parent, "Charcoal")
+CharcoalFilter::CharcoalFilter(DImg* orgImage, QObject* parent, double pencil, double smooth)
+              : DImgThreadedFilter(orgImage, parent, "Charcoal")
 {
     m_pencil = pencil;
     m_smooth = smooth;
@@ -57,7 +54,7 @@ Charcoal::Charcoal(DImg* orgImage, QObject* parent, double pencil, double smooth
     initFilter();
 }
 
-void Charcoal::filterImage()
+void CharcoalFilter::filterImage()
 {
     if (m_orgImage.isNull())
     {
@@ -140,7 +137,7 @@ void Charcoal::filterImage()
         return;
 }
 
-bool Charcoal::convolveImage(const unsigned int order, const double *kernel)
+bool CharcoalFilter::convolveImage(const unsigned int order, const double *kernel)
 {
     uint    x, y;
     int     mx, my, sx, sy, mcx, mcy, progress;
@@ -245,7 +242,7 @@ bool Charcoal::convolveImage(const unsigned int order, const double *kernel)
     return(true);
 }
 
-int Charcoal::getOptimalKernelWidth(double radius, double sigma)
+int CharcoalFilter::getOptimalKernelWidth(double radius, double sigma)
 {
     double        normalize, value;
     long          kernelWidth;
@@ -273,4 +270,4 @@ int Charcoal::getOptimalKernelWidth(double radius, double sigma)
     return((int)kernelWidth-2);
 }
 
-}  // namespace DigikamCharcoalImagesPlugin
+}  // namespace Digikam

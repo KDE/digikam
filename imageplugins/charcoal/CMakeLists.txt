@@ -1,7 +1,6 @@
 
 SET(digikamimageplugin_charcoal_PART_SRCS  imageplugin_charcoal.cpp
                                            charcoaltool.cpp 
-                                           charcoal.cpp
    )
 
 KDE4_ADD_PLUGIN(digikamimageplugin_charcoal ${digikamimageplugin_charcoal_PART_SRCS})

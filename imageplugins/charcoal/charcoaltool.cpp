@@ -7,7 +7,7 @@
  * Description : a digikam image editor plugin to
  *               simulate charcoal drawing.
  *
- * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #include "charcoaltool.moc"
 
 // Qt includes
@@ -32,7 +31,6 @@
 
 // KDE includes
 
-#include <kaboutdata.h>
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
@@ -48,16 +46,13 @@
 
 // Local includes
 
-#include "charcoal.h"
-#include "daboutdata.h"
+#include "charcoalfilter.h"
 #include "dimg.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imageregionwidget.h"
-#include "version.h"
 
 using namespace KDcrawIface;
-using namespace Digikam;
 
 namespace DigikamCharcoalImagesPlugin
 {
@@ -139,7 +134,7 @@ CharcoalTool::CharcoalTool(QObject* parent)
     d->gboxSettings->plainPage()->setLayout(mainLayout);
 
     // -------------------------------------------------------------
-    
+
     setPreviewModeMask(PreviewToolBar::AllPreviewModes);
     setToolSettings(d->gboxSettings);
     setToolView(d->previewWidget);
@@ -149,13 +144,6 @@ CharcoalTool::CharcoalTool(QObject* parent)
 CharcoalTool::~CharcoalTool()
 {
     delete d;
-}
-
-void CharcoalTool::renderingFinished()
-{
-    toolView()->setEnabled(true);
-    d->pencilInput->setEnabled(true);
-    d->smoothInput->setEnabled(true);
 }
 
 void CharcoalTool::readSettings()
@@ -191,28 +179,26 @@ void CharcoalTool::slotResetSettings()
 
 void CharcoalTool::prepareEffect()
 {
-    d->pencilInput->setEnabled(false);
-    d->smoothInput->setEnabled(false);
+    toolSettings()->setEnabled(false);
     toolView()->setEnabled(false);
 
     double pencil = (double)d->pencilInput->value()/10.0;
     double smooth = (double)d->smoothInput->value();
     DImg image    = d->previewWidget->getOriginalRegionImage();
 
-    setFilter(dynamic_cast<DImgThreadedFilter*>(new Charcoal(&image, this, pencil, smooth)));
+    setFilter(new CharcoalFilter(&image, this, pencil, smooth));
 }
 
 void CharcoalTool::prepareFinal()
 {
-    d->pencilInput->setEnabled(false);
-    d->smoothInput->setEnabled(false);
+    toolSettings()->setEnabled(false);
     toolView()->setEnabled(false);
 
     double pencil = (double)d->pencilInput->value()/10.0;
     double smooth = (double)d->smoothInput->value();
 
     ImageIface iface(0, 0);
-    setFilter(dynamic_cast<DImgThreadedFilter*>(new Charcoal(iface.getOriginalImg(), this, pencil, smooth)));
+    setFilter(new CharcoalFilter(iface.getOriginalImg(), this, pencil, smooth));
 }
 
 void CharcoalTool::putPreviewData()
@@ -224,6 +210,12 @@ void CharcoalTool::putFinalData()
 {
     ImageIface iface(0, 0);
     iface.putOriginalImage(i18n("Charcoal"), filter()->getTargetImage().bits());
+}
+
+void CharcoalTool::renderingFinished()
+{
+    toolView()->setEnabled(true);
+    toolSettings()->setEnabled(true);
 }
 
 }  // namespace DigikamCharcoalImagesPlugin

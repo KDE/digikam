@@ -91,8 +91,8 @@ public:
         channelMixerAction(0),
         curvesAction(0),
         levelsAction(0),
-        profileMenuAction(0),
-        filmgrainAction(0)
+        filmgrainAction(0),
+        profileMenuAction(0)
         {}
 
     KAction*               redeyeAction;
@@ -114,7 +114,7 @@ public:
     KAction*               curvesAction;
     KAction*               levelsAction;
     KAction*               filmgrainAction;
-    
+
     IccProfilesMenuAction* profileMenuAction;
 };
 
@@ -207,7 +207,7 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QVariantList &)
     actionCollection()->addAction("implugcore_adjustlevels", d->levelsAction );
     connect(d->levelsAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotLevelsAdjust()));
-            
+
     //-------------------------------
     // Enhance menu actions
 
@@ -249,12 +249,12 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QVariantList &)
 
     //-------------------------------
     // Filter menu actions.
-            
+
     d->filmgrainAction  = new KAction(KIcon("filmgrain"), i18n("Add Film Grain..."), this);
     actionCollection()->addAction("implugcore_filmgrain", d->filmgrainAction );
     connect(d->filmgrainAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotFilmGrain()));            
-            
+            this, SLOT(slotFilmGrain()));
+
     //-------------------------------
     // Init. menu actions.
 

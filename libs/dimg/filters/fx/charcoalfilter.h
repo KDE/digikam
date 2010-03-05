@@ -21,25 +21,25 @@
  *
  * ============================================================ */
 
-#ifndef CHARCOAL_H
-#define CHARCOAL_H
+#ifndef CHARCOALFILTER_H
+#define CHARCOALFILTER_H
 
 // Local includes
 
+#include "digikam_export.h"
 #include "dimgthreadedfilter.h"
+#include "globals.h"
 
-using namespace Digikam;
-
-namespace DigikamCharcoalImagesPlugin
+namespace Digikam
 {
 
-class Charcoal : public DImgThreadedFilter
+class DIGIKAM_EXPORT CharcoalFilter : public DImgThreadedFilter
 {
 
 public:
 
-    explicit Charcoal(DImg* orgImage, QObject* parent=0, double pencil=5.0, double smooth=10.0);
-    ~Charcoal(){};
+    explicit CharcoalFilter(DImg* orgImage, QObject* parent=0, double pencil=5.0, double smooth=10.0);
+    ~CharcoalFilter(){};
 
 private:
 
@@ -53,6 +53,6 @@ private:
     double m_smooth;
 };
 
-}  // namespace DigikamCharcoalImagesPlugin
+}  // namespace Digikam
 
-#endif /* CHARCOAL_H */
+#endif /* CHARCOALFILTER_H */
