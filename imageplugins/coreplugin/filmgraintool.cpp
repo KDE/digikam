@@ -126,7 +126,7 @@ FilmGrainTool::FilmGrainTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    connect(d->sensibilityInput, SIGNAL(valueChanged (int)),
+    connect(d->sensibilityInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));
 
     // -------------------------------------------------------------
