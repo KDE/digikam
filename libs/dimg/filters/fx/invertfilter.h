@@ -42,7 +42,7 @@ public:
     // Constructor for slave mode: execute immediately in current thread with specified master filter
     explicit InvertFilter(DImgThreadedFilter* parentFilter, const DImg& orgImage, const DImg& destImage,
                           int progressBegin=0, int progressEnd=100);
-                        
+
     ~InvertFilter(){};
 
 private:
