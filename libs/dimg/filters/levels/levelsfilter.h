@@ -55,7 +55,7 @@ public:
             gamma[i]   = 1.0;
         }
     };
-    
+
     ~LevelsContainer(){};
 
 public:
@@ -64,7 +64,7 @@ public:
     int    hInput[5];
     int    lOutput[5];
     int    hOutput[5];
-    
+
     double gamma[5];
 };
 
