@@ -24,6 +24,7 @@ BatchQueueManager : new tool to convert to Black and White.
 BatchQueueManager : new tool to adjust White Balance.
 BatchQueueManager : new tool to adjust Curves.
 BatchQueueManager : new tool to blur images.
+BatchQueueManager : new tool to add Film Grain to images.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
