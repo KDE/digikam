@@ -613,7 +613,8 @@ void BorderTool::putPreviewData()
 void BorderTool::putFinalData()
 {
     ImageIface iface(0, 0);
-    iface.putOriginalImage(i18n("Add Border"), filter()->getTargetImage().bits());
+    DImg targetImage = filter()->getTargetImage();
+    iface.putOriginalImage(i18n("Add Border"), targetImage.bits(), targetImage.width(), targetImage.height()); 
 }
 
 QString BorderTool::getBorderPath(int border)
