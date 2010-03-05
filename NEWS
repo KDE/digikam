@@ -96,6 +96,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 067 ==> 214303 : Position of preview type buttons is inconsistent across different tools.
 068 ==> 163286 : Accurate histogram preview required.
 069 ==> 229287 : Crash in digiKam when renaming with directory.
-070 ==> 
+070 ==> 148540 : Improvements of adding noise tool.
+071 ==> 
+
 
 
