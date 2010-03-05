@@ -3,10 +3,9 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2009-05-02
- * Description : sharpen image batch tool.
+ * Date        : 2010-05-03
+ * Description : blur image batch tool.
  *
- * Copyright (C) 2009 by Matthias Welwarsky <matze at welwarsky dot de>
  * Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -22,24 +21,28 @@
  *
  * ============================================================ */
 
-#ifndef SHARPEN_H_
-#define SHARPEN_H_
+#ifndef BLUR_H_
+#define BLUR_H_
 
 #include "batchtool.h"
+
+// LibKDcraw includes
+
+#include <libkdcraw/rnuminput.h>
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
 
-class SharpSettings;
-
-class Sharpen : public BatchTool
+class Blur : public BatchTool
 {
     Q_OBJECT
 
 public:
 
-    Sharpen(QObject* parent=0);
-    ~Sharpen();
+    Blur(QObject* parent=0);
+    ~Blur();
 
     BatchToolSettings defaultSettings();
 
@@ -54,7 +57,7 @@ private Q_SLOTS:
 
 private:
 
-    SharpSettings* m_settingsView;
+    RDoubleNumInput* m_radiusInput;
 };
 
 } // namespace Digikam

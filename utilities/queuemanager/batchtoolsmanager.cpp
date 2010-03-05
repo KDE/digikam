@@ -37,6 +37,7 @@
 #include "restoration.h"
 #include "rotate.h"
 #include "sharpen.h"
+#include "blur.h"
 #include "watermark.h"
 #include "noisereduction.h"
 #include "bcgcorrection.h"
@@ -79,6 +80,7 @@ BatchToolsManager::BatchToolsManager(QObject* parent)
     // Metadata
     registerTool(new AssignTemplate(this));
     // Enhance
+    registerTool(new Blur(this));
     registerTool(new Sharpen(this));
     registerTool(new NoiseReduction(this));
     registerTool(new Restoration(this));

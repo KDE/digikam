@@ -91,7 +91,7 @@ BlurTool::BlurTool(QObject* parent)
 
     // --------------------------------------------------------
 
-    QLabel *label  = new QLabel(i18n("Smoothness:"));
+    QLabel* label  = new QLabel(i18n("Smoothness:"));
     d->radiusInput = new RDoubleNumInput();
     d->radiusInput->setRange(0.0, 120.0, 0.1);
     d->radiusInput->setDefaultValue(0.0);
@@ -101,13 +101,13 @@ BlurTool::BlurTool(QObject* parent)
 
     // --------------------------------------------------------
 
-    QGridLayout* mainLayout = new QGridLayout( );
-    mainLayout->addWidget(label,          0, 0, 1, 2);
-    mainLayout->addWidget(d->radiusInput, 1, 0, 1, 2);
-    mainLayout->setRowStretch(2, 10);
-    mainLayout->setMargin(d->gboxSettings->spacingHint());
-    mainLayout->setSpacing(d->gboxSettings->spacingHint());
-    d->gboxSettings->plainPage()->setLayout(mainLayout);
+    QGridLayout* grid = new QGridLayout( );
+    grid->addWidget(label,          0, 0, 1, 2);
+    grid->addWidget(d->radiusInput, 1, 0, 1, 2);
+    grid->setRowStretch(2, 10);
+    grid->setMargin(d->gboxSettings->spacingHint());
+    grid->setSpacing(d->gboxSettings->spacingHint());
+    d->gboxSettings->plainPage()->setLayout(grid);
 
     // --------------------------------------------------------
 

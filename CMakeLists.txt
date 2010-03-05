@@ -499,7 +499,9 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${libclapack_SRCS}
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/dimgthreadedfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/blurfilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/invertfilter.cpp                ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/pixelsaliasfilter.cpp        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/auto/autolevelsfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/invertfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/pixelsaliasfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/auto/autolevelsfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/auto/autoexpofilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/auto/equalizefilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/auto/stretchfilter.cpp
@@ -1007,6 +1009,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/convert/convert2jp2.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/convert/convert2pgf.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/enhance/restoration.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/enhance/blur.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/enhance/sharpen.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/enhance/noisereduction.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/transform/rotate.cpp
