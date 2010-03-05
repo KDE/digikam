@@ -25,25 +25,25 @@
  *
  * ============================================================ */
 
-#ifndef EMBOSS_H
-#define EMBOSS_H
+#ifndef EMBOSSFILTER_H
+#define EMBOSSFILTER_H
 
 // Local includes
 
+#include "digikam_export.h"
 #include "dimgthreadedfilter.h"
+#include "globals.h"
 
-using namespace Digikam;
-
-namespace DigikamEmbossImagesPlugin
+namespace Digikam
 {
 
-class Emboss : public DImgThreadedFilter
+class DIGIKAM_EXPORT EmbossFilter : public DImgThreadedFilter
 {
 
 public:
 
-    explicit Emboss(DImg* orgImage, QObject* parent=0, int depth=30);
-    ~Emboss(){};
+    explicit EmbossFilter(DImg* orgImage, QObject* parent=0, int depth=30);
+    ~EmbossFilter(){};
 
 private:
 
@@ -57,6 +57,6 @@ private:
     int m_depth;
 };
 
-}  // namespace DigikamEmbossImagesPlugin
+}  // namespace Digikam
 
-#endif /* EMBOSS_H */
+#endif /* EMBOSSFILTER_H */

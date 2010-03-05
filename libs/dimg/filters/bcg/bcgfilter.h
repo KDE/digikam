@@ -31,8 +31,6 @@
 #include "dimgthreadedfilter.h"
 #include "globals.h"
 
-using namespace Digikam;
-
 namespace Digikam
 {
 

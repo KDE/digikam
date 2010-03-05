@@ -7,8 +7,8 @@
  * Description : a digiKam image editor plugin to emboss
  *               an image.
  *
- * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-
 #include "embosstool.moc"
 
 // Qt includes
@@ -33,7 +32,6 @@
 
 // KDE includes
 
-#include <kaboutdata.h>
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
@@ -49,13 +47,11 @@
 // Local includes
 
 #include "editortoolsettings.h"
-#include "emboss.h"
+#include "embossfilter.h"
 #include "imageiface.h"
 #include "imageregionwidget.h"
-#include "version.h"
 
 using namespace KDcrawIface;
-using namespace Digikam;
 
 namespace DigikamEmbossImagesPlugin
 {
@@ -137,12 +133,6 @@ EmbossTool::~EmbossTool()
     delete d;
 }
 
-void EmbossTool::renderingFinished()
-{
-    d->depthInput->setEnabled(true);
-    toolView()->setEnabled(true);
-}
-
 void EmbossTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
@@ -173,24 +163,24 @@ void EmbossTool::slotResetSettings()
 
 void EmbossTool::prepareEffect()
 {
-    d->depthInput->setEnabled(false);
+    toolSettings()->setEnabled(false);
     toolView()->setEnabled(false);
-    
+
     DImg image = d->previewWidget->getOriginalRegionImage();
     int depth  = d->depthInput->value();
 
-    setFilter(dynamic_cast<DImgThreadedFilter*>(new Emboss(&image, this, depth)));
+    setFilter(new EmbossFilter(&image, this, depth));
 }
 
 void EmbossTool::prepareFinal()
 {
-    d->depthInput->setEnabled(false);
+    toolSettings()->setEnabled(false);
     toolView()->setEnabled(false);
-    
+
     int depth = d->depthInput->value();
 
     ImageIface iface(0, 0);
-    setFilter(dynamic_cast<DImgThreadedFilter*>(new Emboss(iface.getOriginalImg(), this, depth)));
+    setFilter(new EmbossFilter(iface.getOriginalImg(), this, depth));
 }
 
 void EmbossTool::putPreviewData()
@@ -201,8 +191,13 @@ void EmbossTool::putPreviewData()
 void EmbossTool::putFinalData()
 {
     ImageIface iface(0, 0);
-
     iface.putOriginalImage(i18n("Emboss"), filter()->getTargetImage().bits());
+}
+
+void EmbossTool::renderingFinished()
+{
+    toolSettings()->setEnabled(false);
+    toolView()->setEnabled(true);
 }
 
 }  // namespace DigikamEmbossImagesPlugin

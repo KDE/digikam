@@ -30,12 +30,14 @@
 
 #include "editortool.h"
 
+using namespace Digikam;
+
 namespace DigikamEmbossImagesPlugin
 {
 
 class EmbossToolPriv;
 
-class EmbossTool : public Digikam::EditorToolThreaded
+class EmbossTool : public EditorToolThreaded
 {
     Q_OBJECT
 

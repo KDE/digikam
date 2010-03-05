@@ -1,7 +1,6 @@
 
 SET(digikamimageplugin_emboss_PART_SRCS imageplugin_emboss.cpp
                                         embosstool.cpp 
-                                        emboss.cpp 
    )
 
 KDE4_ADD_PLUGIN(digikamimageplugin_emboss ${digikamimageplugin_emboss_PART_SRCS})

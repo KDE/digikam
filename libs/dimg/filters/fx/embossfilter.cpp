@@ -25,7 +25,7 @@
  *
  * ============================================================ */
 
-#include "emboss.h"
+#include "embossfilter.h"
 
 // C++ includes
 
@@ -37,24 +37,24 @@
 #include "dimg.h"
 #include "globals.h"
 
-namespace DigikamEmbossImagesPlugin
+namespace Digikam
 {
 
-Emboss::Emboss(DImg* orgImage, QObject* parent, int depth)
-      : DImgThreadedFilter(orgImage, parent, "Emboss")
+EmbossFilter::EmbossFilter(DImg* orgImage, QObject* parent, int depth)
+            : DImgThreadedFilter(orgImage, parent, "Emboss")
 {
     m_depth = depth;
     initFilter();
 }
 
-/** Function to apply the Emboss effect
+/** Function to apply the EmbossFilter effect
  *  This method have been ported from Pieter Z. Voloshyn algorithm code.
  *
  * Theory           => This is an amazing effect. And the theory is very simple to
  *                     understand. You get the difference between the colors and
  *                     increase it. After this, get the gray tone
  */
-void Emboss::filterImage()
+void EmbossFilter::filterImage()
 {
     int Width       = m_orgImage.width();
     int Height      = m_orgImage.height();
@@ -115,7 +115,7 @@ void Emboss::filterImage()
 
 /** Function to limit the max and min values defined by the developer.
  */
-int Emboss::Lim_Max (int Now, int Up, int Max)
+int EmbossFilter::Lim_Max (int Now, int Up, int Max)
 {
     --Max;
     while (Now > Max - Up)
@@ -123,7 +123,7 @@ int Emboss::Lim_Max (int Now, int Up, int Max)
     return (Up);
 }
 
-int Emboss::getOffset(int Width, int X, int Y, int bytesDepth)
+int EmbossFilter::getOffset(int Width, int X, int Y, int bytesDepth)
 {
     return (Y * Width * bytesDepth) + (X * bytesDepth);
 }
