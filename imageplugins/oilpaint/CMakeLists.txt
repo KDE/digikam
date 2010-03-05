@@ -1,7 +1,6 @@
 
 SET(digikamimageplugin_oilpaint_PART_SRCS imageplugin_oilpaint.cpp
                                           oilpainttool.cpp 
-                                          oilpaint.cpp 
    )
 
 KDE4_ADD_PLUGIN(digikamimageplugin_oilpaint ${digikamimageplugin_oilpaint_PART_SRCS})

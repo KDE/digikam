@@ -25,7 +25,7 @@
  *
  * ============================================================ */
 
-#include "oilpaint.h"
+#include "oilpaintfilter.h"
 
 // C++ includes
 
@@ -36,62 +36,49 @@
 
 #include "dimg.h"
 
-namespace DigikamOilPaintImagesPlugin
+namespace Digikam
 {
 
-OilPaint::OilPaint(Digikam::DImg* orgImage, QObject* parent, int brushSize, int smoothness)
-        : Digikam::DImgThreadedFilter(orgImage, parent, "OilPaint")
+OilPaintFilter::OilPaintFilter(DImg* orgImage, QObject* parent, int brushSize, int smoothness)
+              : DImgThreadedFilter(orgImage, parent, "OilPaintFilter")
 {
     m_brushSize  = brushSize;
     m_smoothness = smoothness;
     initFilter();
 }
 
-void OilPaint::filterImage()
-{
-    oilpaintImage(m_orgImage, m_destImage, m_brushSize, m_smoothness);
-}
-
-// This method have been ported from Pieter Z. Voloshyn algorithm code.
-
-/* Function to apply the OilPaint effect.
+/** Function to apply the OilPaintFilter effect.
+ *  This method have been ported from Pieter Z. Voloshyn algorithm code.
  *
- * data             => The image data in RGBA mode.
- * w                => Width of image.
- * h                => Height of image.
- * BrushSize        => Brush size.
- * Smoothness       => Smooth value.
- *
- * Theory           => Using MostFrequentColor function we take the main color in
- *                     a matrix and simply write at the original position.
+ *  Theory           => Using MostFrequentColor function we take the main color in
+ *                      a matrix and simply write at the original position.
  */
-
-void OilPaint::oilpaintImage(Digikam::DImg& orgImage, Digikam::DImg& destImage, int BrushSize, int Smoothness)
+void OilPaintFilter::filterImage()
 {
     int    progress;
-    Digikam::DColor mostFrequentColor;
+    DColor mostFrequentColor;
     int    w,h;
 
-    mostFrequentColor.setSixteenBit(orgImage.sixteenBit());
-    w = (int)orgImage.width();
-    h = (int)orgImage.height();
-    uchar *dest    = destImage.bits();
-    int bytesDepth = orgImage.bytesDepth();
-    uchar *dptr;
+    mostFrequentColor.setSixteenBit(m_orgImage.sixteenBit());
+    w              = (int)m_orgImage.width();
+    h              = (int)m_orgImage.height();
+    uchar* dest    = m_destImage.bits();
+    int bytesDepth = m_orgImage.bytesDepth();
+    uchar* dptr;
 
     // Allocate some arrays to be used.
     // Do this here once for all to save a few million new / delete operations
-    m_intensityCount = new uchar[Smoothness + 1];
-    m_averageColorR  = new uint[Smoothness + 1];
-    m_averageColorG  = new uint[Smoothness + 1];
-    m_averageColorB  = new uint[Smoothness + 1];
+    m_intensityCount = new uchar[m_smoothness + 1];
+    m_averageColorR  = new uint[m_smoothness + 1];
+    m_averageColorG  = new uint[m_smoothness + 1];
+    m_averageColorB  = new uint[m_smoothness + 1];
 
     for (int h2 = 0; !m_cancel && (h2 < h); ++h2)
     {
         for (int w2 = 0; !m_cancel && (w2 < w); ++w2)
         {
-            mostFrequentColor = MostFrequentColor(orgImage, w2, h2, BrushSize, Smoothness);
-            dptr = dest + w2*bytesDepth + (w*h2*bytesDepth);
+            mostFrequentColor = MostFrequentColor(m_orgImage, w2, h2, m_brushSize, m_smoothness);
+            dptr              = dest + w2*bytesDepth + (w*h2*bytesDepth);
             mostFrequentColor.setPixel(dptr);
         }
 
@@ -107,9 +94,7 @@ void OilPaint::oilpaintImage(Digikam::DImg& orgImage, Digikam::DImg& destImage, 
     delete [] m_averageColorB;
 }
 
-// This method have been ported from Pieter Z. Voloshyn algorithm code.
-
-/* Function to determine the most frequent color in a matrix
+/** Function to determine the most frequent color in a matrix
  *
  * Bits             => Bits array
  * Width            => Image width
@@ -122,22 +107,21 @@ void OilPaint::oilpaintImage(Digikam::DImg& orgImage, Digikam::DImg& destImage, 
  * Theory           => This function creates a matrix with the analyzed pixel in
  *                     the center of this matrix and find the most frequently color
  */
-
-Digikam::DColor OilPaint::MostFrequentColor(Digikam::DImg& src, int X, int Y, int Radius, int Intensity)
+DColor OilPaintFilter::MostFrequentColor(DImg& src, int X, int Y, int Radius, int Intensity)
 {
     int  i, w, h, I, Width, Height;
     uint red, green, blue;
 
-    uchar *dest = src.bits();
-    int bytesDepth = src.bytesDepth();
-    uchar *sptr;
+    uchar* dest     = src.bits();
+    int bytesDepth  = src.bytesDepth();
+    uchar* sptr;
     bool sixteenBit = src.sixteenBit();
 
-    Digikam::DColor mostFrequentColor;
+    DColor mostFrequentColor;
 
     double Scale = Intensity / (sixteenBit ? 65535.0 : 255.0);
-    Width  = (int)src.width();
-    Height = (int)src.height();
+    Width        = (int)src.width();
+    Height       = (int)src.height();
 
     // Erase the array
     memset(m_intensityCount, 0, (Intensity + 1) * sizeof (uchar));
@@ -150,8 +134,8 @@ Digikam::DColor OilPaint::MostFrequentColor(Digikam::DImg& src, int X, int Y, in
 
             if ((w >= 0) && (w < Width) && (h >= 0) && (h < Height))
             {
-                sptr = dest + w*bytesDepth + (Width*h*bytesDepth);
-                Digikam::DColor color(sptr, sixteenBit);
+                sptr          = dest + w*bytesDepth + (Width*h*bytesDepth);
+                DColor color(sptr, sixteenBit);
                 red           = (uint)color.red();
                 green         = (uint)color.green();
                 blue          = (uint)color.blue();
@@ -191,11 +175,19 @@ Digikam::DColor OilPaint::MostFrequentColor(Digikam::DImg& src, int X, int Y, in
     mostFrequentColor = src.getPixelColor(X, Y);
 
     // Overwrite RGB values to destination.
-    mostFrequentColor.setRed(m_averageColorR[I] / MaxInstance);
+    mostFrequentColor.setRed(m_averageColorR[I]   / MaxInstance);
     mostFrequentColor.setGreen(m_averageColorG[I] / MaxInstance);
-    mostFrequentColor.setBlue(m_averageColorB[I] / MaxInstance);
+    mostFrequentColor.setBlue(m_averageColorB[I]  / MaxInstance);
 
     return mostFrequentColor;
 }
 
-}  // namespace DigikamOilPaintImagesPlugin
+/** Function to calculate the color intensity and return the luminance (Y)
+  * component of YIQ color model.
+  */
+double OilPaintFilter::GetIntensity(uint Red, uint Green, uint Blue)
+{
+    return Red * 0.3 + Green * 0.59 + Blue * 0.11;
+}
+
+}  // namespace Digikam
