@@ -37,7 +37,7 @@ INCLUDE_DIRECTORIES(../utilities/imageeditor/editor
 ADD_SUBDIRECTORY( blurfx )
 ADD_SUBDIRECTORY( border )
 ADD_SUBDIRECTORY( charcoal )
-ADD_SUBDIRECTORY( colorfx )
+ADD_SUBDIRECTORY( fxfilters )
 ADD_SUBDIRECTORY( coreplugin )
 ADD_SUBDIRECTORY( distortionfx )
 ADD_SUBDIRECTORY( emboss )
@@ -58,4 +58,3 @@ ADD_SUBDIRECTORY( localcontrast )
 IF(GLIB2_FOUND)
     ADD_SUBDIRECTORY( contentawareresizing )
 ENDIF(GLIB2_FOUND)
-

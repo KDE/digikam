@@ -37,19 +37,19 @@ namespace Digikam
 class DColor;
 }
 
-namespace DigikamColorFXImagesPlugin
+namespace DigikamFxFiltersImagePlugin
 {
 
-class ColorFXToolPriv;
+class ColorFxToolPriv;
 
-class ColorFXTool : public EditorTool
+class ColorFxTool : public EditorTool
 {
     Q_OBJECT
 
 public:
 
-    ColorFXTool(QObject* parent);
-    ~ColorFXTool();
+    ColorFxTool(QObject* parent);
+    ~ColorFxTool();
 
 private:
 
@@ -75,19 +75,9 @@ private Q_SLOTS:
 
 private:
 
-    enum ColorFXTypes
-    {
-        Solarize=0,
-        Vivid,
-        Neon,
-        FindEdges
-    };
-
-private:
-
-    ColorFXToolPriv* const d;
+    ColorFxToolPriv* const d;
 };
 
-}  // namespace DigikamColorFXImagesPlugin
+}  // namespace DigikamFxFiltersImagePlugin
 
 #endif /* COLORFXTOOL_H */

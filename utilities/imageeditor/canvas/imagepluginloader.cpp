@@ -64,6 +64,7 @@ static const char* ObsoleteImagePluginsList[] =
      "digikamimageplugin_adjustcurves",   // Merged to core plugin since 1.2.0.
      "digikamimageplugin_adjustlevels",   // Merged to core plugin since 1.2.0.
      "digikamimageplugin_filmgrain",      // Merged to core plugin since 1.2.0.
+     "digikamimageplugin_colorfx",        // Merged to "FxFilters" plugin since 1.2.0.
      "-1"
 };
 

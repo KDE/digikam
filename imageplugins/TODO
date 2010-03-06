@@ -4,7 +4,6 @@ Editor tools pending task
 blurfx                      DONE                 DONE                  TODO
 border                      DONE                  NO                   TODO
 charcoal                    DONE                 DONE                  TODO
-colorfx                     TODO                 TODO                  TODO
 contentawareresizing        DONE                 TODO                  TODO
 
 coreplugin
@@ -28,6 +27,10 @@ coreplugin
 distortionfx                DONE                 TODO                  TODO
 emboss                      DONE                 DONE                  TODO
 freerotation                DONE                  NO                   TODO
+
+fxfilters
+  /colorfx                  TODO                 TODO                  TODO
+
 hotpixels                   DONE                 DONE                  TODO
 inpainting                  DONE                  NO                    NO
 inserttext                   NO                   NO                    NO
