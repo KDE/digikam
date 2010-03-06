@@ -119,8 +119,8 @@ ChannelMixerTool::ChannelMixerTool(QObject* parent)
                                 EditorToolSettings::Load|
                                 EditorToolSettings::SaveAs|
                                 EditorToolSettings::Ok|
-                                EditorToolSettings::Cancel|
-                                EditorToolSettings::Try);
+                                EditorToolSettings::Cancel);
+//                                EditorToolSettings::Try);
 
     d->gboxSettings->setTools(EditorToolSettings::Histogram);
     d->gboxSettings->setHistogramType(RGB);
