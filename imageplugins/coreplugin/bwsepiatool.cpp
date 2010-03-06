@@ -91,7 +91,7 @@ BWSepiaTool::BWSepiaTool(QObject* parent)
            : EditorToolThreaded(parent), d(new BWSepiaToolPriv)
 {
     setObjectName("convertbw");
-    setToolName(i18n("Black && White"));
+    setToolName(i18n("Black & White"));
     setToolIcon(SmallIcon("bwtonal"));
     setToolHelp("blackandwhitetool.anchor");
 
