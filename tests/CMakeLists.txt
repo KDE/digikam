@@ -211,11 +211,13 @@ SET(albummodeltest_SRCS
 )
 KDE4_ADD_UNIT_TEST(albummodeltest ${albummodeltest_SRCS})
 TARGET_LINK_LIBRARIES(albummodeltest
-                      ${KDE4_KDECORE_LIBS}
+                      ${KDE4_KIO_LIBS}
                       ${QT_QTGUI_LIBRARY}
                       ${QT_QTTEST_LIBRARY}
+                      ${QT_QTXML_LIBRARY}
                       ${GPHOTO2_LIBRARIES}
                       ${KIPI_LIBRARIES}
+                      ${KDCRAW_LIBRARIES}
                       digikamdatabase
                       digikamcore
                       )
