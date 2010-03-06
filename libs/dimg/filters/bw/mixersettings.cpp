@@ -124,7 +124,7 @@ MixerSettings::MixerSettings(QWidget* parent)
 
     QLabel* redLabel  = new QLabel(i18n("Red:"));
     d->redGain        = new RDoubleNumInput;
-    d->redGain->setDecimals(0);
+    d->redGain->setDecimals(1);
     d->redGain->setRange(-200.0, 200.0, 1);
     d->redGain->setDefaultValue(0);
     d->redGain->setWhatsThis(i18n("Select the red color gain, as a percentage, "
@@ -132,7 +132,7 @@ MixerSettings::MixerSettings(QWidget* parent)
 
     QLabel* greenLabel = new QLabel(i18n("Green:"));
     d->greenGain       = new RDoubleNumInput;
-    d->greenGain->setDecimals(0);
+    d->greenGain->setDecimals(1);
     d->greenGain->setRange(-200.0, 200.0, 1);
     d->greenGain->setDefaultValue(0);
     d->greenGain->setWhatsThis(i18n("Select the green color gain, as a percentage, "
@@ -140,7 +140,7 @@ MixerSettings::MixerSettings(QWidget* parent)
 
     QLabel* blueLabel = new QLabel(i18n("Blue:"));
     d->blueGain       = new RDoubleNumInput;
-    d->blueGain->setDecimals(0);
+    d->blueGain->setDecimals(1);
     d->blueGain->setRange(-200.0, 200.0, 1);
     d->blueGain->setDefaultValue(0);
     d->blueGain->setWhatsThis(i18n("Select the blue color gain, as a percentage, "
@@ -366,13 +366,13 @@ void MixerSettings::updateSettingsWidgets()
 void MixerSettings::slotMonochromeActived(bool mono)
 {
     d->mixerSettings.bMonochrome = d->monochrome->isChecked();
-    emit signalMonochromeActived(mono);  
+    emit signalMonochromeActived(mono);
 }
 
 void MixerSettings::slotLuminosityChanged(bool)
 {
     d->mixerSettings.bPreserveLum = d->preserveLuminosity->isChecked();
-    emit signalSettingsChanged();  
+    emit signalSettingsChanged();
 }
 
 MixerContainer MixerSettings::settings() const
@@ -422,7 +422,7 @@ void MixerSettings::readSettings(KConfigGroup& group)
 {
     MixerContainer prm;
     MixerContainer defaultPrm = defaultSettings();
-    
+
     prm.bMonochrome    = group.readEntry(d->configMonochromeEntry,         defaultPrm.bMonochrome);
     prm.bPreserveLum   = group.readEntry(d->configPreserveLuminosityEntry, defaultPrm.bPreserveLum);
 
