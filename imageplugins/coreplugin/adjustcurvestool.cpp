@@ -110,8 +110,8 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
                                 EditorToolSettings::Load|
                                 EditorToolSettings::SaveAs|
                                 EditorToolSettings::Ok|
-                                EditorToolSettings::Cancel|
-                                EditorToolSettings::Try);
+                                EditorToolSettings::Cancel);
+//                                EditorToolSettings::Try);
 
     // we don't need to use the Gradient widget in this tool
     d->gboxSettings->histogramBox()->setGradientVisible(false);
@@ -124,8 +124,8 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
     vbox->addWidget(d->settingsView);
     vbox->addStretch(10);
     vbox->setMargin(0);
-    vbox->setSpacing(0);    
-    
+    vbox->setSpacing(0);
+
     setToolSettings(d->gboxSettings);
     init();
 
@@ -133,13 +133,13 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
 
     connect(d->settingsView, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotTimer()));
-            
+
     connect(d->gboxSettings, SIGNAL(signalChannelChanged()),
             this, SLOT(slotChannelChanged()));
 
     connect(d->gboxSettings, SIGNAL(signalScaleChanged()),
             this, SLOT(slotScaleChanged()));
-            
+
     connect(d->previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotEffect()));
 
@@ -147,10 +147,10 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
             d->settingsView, SLOT(slotSpotColorChanged(const Digikam::DColor&)));
 
     connect(d->settingsView, SIGNAL(signalSpotColorChanged()),
-            this, SLOT(slotSpotColorChanged()));          
-            
+            this, SLOT(slotSpotColorChanged()));
+
     connect(d->settingsView, SIGNAL(signalChannelReset(int)),
-            this, SLOT(slotResetCurrentChannel())); 
+            this, SLOT(slotResetCurrentChannel()));
 
 /*
     connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget(const Digikam::DColor&, const QPoint&)),
@@ -295,7 +295,7 @@ void AdjustCurvesTool::renderingFinished()
 void AdjustCurvesTool::slotLoadSettings()
 {
     d->settingsView->loadSettings();
-    
+
     // Refresh the current curves config.
     slotChannelChanged();
     slotEffect();
