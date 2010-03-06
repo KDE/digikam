@@ -52,10 +52,12 @@ private Q_SLOTS:
 
     void slotColorEffects();
     void slotCharcoal();
+    void slotEmboss();
 
 private:
 
-    KAction *m_charcoalAction;
+    KAction* m_embossAction;
+    KAction* m_charcoalAction;
     KAction* m_colorEffectsAction;
 };
 

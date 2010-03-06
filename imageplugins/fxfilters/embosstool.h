@@ -32,7 +32,7 @@
 
 using namespace Digikam;
 
-namespace DigikamEmbossImagesPlugin
+namespace DigikamFxFiltersImagePlugin
 {
 
 class EmbossToolPriv;
@@ -65,6 +65,6 @@ private:
     EmbossToolPriv* const d;
 };
 
-}  // namespace DigikamEmbossImagesPlugin
+}  // namespace DigikamFxFiltersImagePlugin
 
 #endif /* EMBOSSTOOL_H */

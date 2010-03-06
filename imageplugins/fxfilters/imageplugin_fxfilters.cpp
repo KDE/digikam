@@ -37,6 +37,7 @@
 
 #include "colorfxtool.h"
 #include "charcoaltool.h"
+#include "embosstool.h"
 
 using namespace DigikamFxFiltersImagePlugin;
 
@@ -51,10 +52,15 @@ ImagePlugin_FxFilters::ImagePlugin_FxFilters(QObject* parent, const QVariantList
     connect(m_colorEffectsAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotColorEffects()));
 
-    m_charcoalAction  = new KAction(KIcon("charcoaltool"), i18n("Charcoal Drawing..."), this);
+    m_charcoalAction = new KAction(KIcon("charcoaltool"), i18n("Charcoal Drawing..."), this);
     actionCollection()->addAction("imageplugin_charcoal", m_charcoalAction  );
     connect(m_charcoalAction, SIGNAL(triggered(bool)),
             this, SLOT(slotCharcoal()));
+
+    m_embossAction = new KAction(KIcon("embosstool"), i18n("Emboss..."), this);
+    actionCollection()->addAction("imageplugin_emboss", m_embossAction );
+    connect(m_embossAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotEmboss()));
 
     setXMLFile( "digikamimageplugin_fxfilters_ui.rc" );
 
@@ -69,6 +75,7 @@ void ImagePlugin_FxFilters::setEnabledActions(bool b)
 {
     m_charcoalAction->setEnabled(b);
     m_colorEffectsAction->setEnabled(b);
+    m_embossAction->setEnabled(b);
 }
 
 void ImagePlugin_FxFilters::slotColorEffects()
@@ -80,5 +87,11 @@ void ImagePlugin_FxFilters::slotColorEffects()
 void ImagePlugin_FxFilters::slotCharcoal()
 {
     CharcoalTool* tool = new CharcoalTool(this);
+    loadTool(tool);
+}
+
+void ImagePlugin_FxFilters::slotEmboss()
+{
+    EmbossTool* tool = new EmbossTool(this);
     loadTool(tool);
 }

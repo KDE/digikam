@@ -53,7 +53,7 @@
 
 using namespace KDcrawIface;
 
-namespace DigikamEmbossImagesPlugin
+namespace DigikamFxFiltersImagePlugin
 {
 
 class EmbossToolPriv
@@ -200,4 +200,4 @@ void EmbossTool::renderingFinished()
     toolView()->setEnabled(true);
 }
 
-}  // namespace DigikamEmbossImagesPlugin
+}  // namespace DigikamFxFiltersImagePlugin

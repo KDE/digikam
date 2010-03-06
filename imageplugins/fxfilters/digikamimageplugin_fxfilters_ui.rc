@@ -9,6 +9,7 @@
 
   <Menu name="Filters" ><text>F&amp;ilters</text>
    <Action name="imageplugin_charcoal" />
+   <Action name="imageplugin_emboss" />
   </Menu>
 
  </MenuBar>
