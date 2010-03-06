@@ -138,6 +138,8 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* parent)
     connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget(const Digikam::DColor&, const QPoint&)),
             this, SLOT(slotColorSelectedFromTarget(const Digikam::DColor&)));
 */
+
+    slotTimer();
 }
 
 WhiteBalanceTool::~WhiteBalanceTool()
