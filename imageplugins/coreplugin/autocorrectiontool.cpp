@@ -106,8 +106,8 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
     d->gboxSettings->setTools(EditorToolSettings::Histogram);
     d->gboxSettings->setButtons(EditorToolSettings::Default|
                                 EditorToolSettings::Ok|
-                                EditorToolSettings::Cancel|
-                                EditorToolSettings::Try);
+                                EditorToolSettings::Cancel);
+//                                EditorToolSettings::Try);
 
     // -------------------------------------------------------------
 
@@ -130,7 +130,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
                                "altering its hue. This is often a \"magic fix\" for "
                                "images that are dim or washed out.</p>"));
 
-                               
+
     item = d->correctionTools->addItem(new EqualizeFilter(&thumbImage, iface.getOriginalImg()),
                                        i18n("Equalize"), EqualizeCorrection);
     item->setWhatsThis(0, i18n("<b>Equalize</b>:"
@@ -195,7 +195,7 @@ AutoCorrectionTool::~AutoCorrectionTool()
 void AutoCorrectionTool::slotInit()
 {
     EditorToolThreaded::slotInit();
-    d->correctionTools->startFilters();    
+    d->correctionTools->startFilters();
 }
 
 void AutoCorrectionTool::readSettings()
@@ -238,7 +238,7 @@ void AutoCorrectionTool::prepareEffect()
 
     ImageIface iface(0, 0);
     DImg preview = d->previewWidget->getOriginalRegionImage(true);
-    
+
     autoCorrection(&preview, iface.getOriginalImg(), d->correctionTools->currentId());
 }
 
@@ -246,7 +246,7 @@ void AutoCorrectionTool::putPreviewData()
 {
     DImg preview = filter()->getTargetImage();
     d->previewWidget->setPreviewImage(preview);
-    
+
     // Update histogram.
 
     if (d->destinationPreviewData)
