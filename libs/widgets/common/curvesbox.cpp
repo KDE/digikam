@@ -240,8 +240,8 @@ void CurvesBox::setup()
 
     // -------------------------------------------------------------
 
-    //connect(d->curvesWidget, SIGNAL(signalCurvesChanged()),
-    //        this, SIGNAL(signalCurvesChanged()));
+    connect(d->curvesWidget, SIGNAL(signalCurvesChanged()),
+            this, SIGNAL(signalCurvesChanged()));
 
     connect(d->pickerType, SIGNAL(buttonReleased(int)),
             this, SIGNAL(signalPickerChanged(int)));
