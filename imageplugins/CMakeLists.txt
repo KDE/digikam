@@ -36,7 +36,6 @@ INCLUDE_DIRECTORIES(../utilities/imageeditor/editor
 
 ADD_SUBDIRECTORY( blurfx )
 ADD_SUBDIRECTORY( border )
-ADD_SUBDIRECTORY( charcoal )
 ADD_SUBDIRECTORY( fxfilters )
 ADD_SUBDIRECTORY( coreplugin )
 ADD_SUBDIRECTORY( distortionfx )

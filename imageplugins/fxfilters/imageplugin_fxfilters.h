@@ -51,9 +51,11 @@ public:
 private Q_SLOTS:
 
     void slotColorEffects();
+    void slotCharcoal();
 
 private:
 
+    KAction *m_charcoalAction;
     KAction* m_colorEffectsAction;
 };
 

@@ -3,7 +3,6 @@ Editor tools pending task
                         Multithreaded      Zommable Preview        Port to BQM
 blurfx                      DONE                 DONE                  TODO
 border                      DONE                  NO                   TODO
-charcoal                    DONE                 DONE                  TODO
 contentawareresizing        DONE                 TODO                  TODO
 
 coreplugin
@@ -30,6 +29,7 @@ freerotation                DONE                  NO                   TODO
 
 fxfilters
   /colorfx                  TODO                 TODO                  TODO
+  /charcoal                 DONE                 DONE                  TODO
 
 hotpixels                   DONE                 DONE                  TODO
 inpainting                  DONE                  NO                    NO

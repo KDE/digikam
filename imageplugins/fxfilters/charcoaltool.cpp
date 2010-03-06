@@ -54,7 +54,7 @@
 
 using namespace KDcrawIface;
 
-namespace DigikamCharcoalImagesPlugin
+namespace DigikamFxFiltersImagePlugin
 {
 
 class CharcoalToolPriv
@@ -218,4 +218,4 @@ void CharcoalTool::renderingFinished()
     toolSettings()->setEnabled(true);
 }
 
-}  // namespace DigikamCharcoalImagesPlugin
+}  // namespace DigikamFxFiltersImagePlugin

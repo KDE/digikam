@@ -1,10 +1,14 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="10" name="digikamimageplugin_fxfilters" >
+<gui version="11" name="digikamimageplugin_fxfilters" >
 
  <MenuBar>
 
   <Menu name="Color" ><text>&amp;Color</text>
    <Action name="imageplugin_colorfx" />
+  </Menu>
+
+  <Menu name="Filters" ><text>F&amp;ilters</text>
+   <Action name="imageplugin_charcoal" />
   </Menu>
 
  </MenuBar>

@@ -36,6 +36,7 @@
 // Local includes
 
 #include "colorfxtool.h"
+#include "charcoaltool.h"
 
 using namespace DigikamFxFiltersImagePlugin;
 
@@ -50,6 +51,11 @@ ImagePlugin_FxFilters::ImagePlugin_FxFilters(QObject* parent, const QVariantList
     connect(m_colorEffectsAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotColorEffects()));
 
+    m_charcoalAction  = new KAction(KIcon("charcoaltool"), i18n("Charcoal Drawing..."), this);
+    actionCollection()->addAction("imageplugin_charcoal", m_charcoalAction  );
+    connect(m_charcoalAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotCharcoal()));
+
     setXMLFile( "digikamimageplugin_fxfilters_ui.rc" );
 
     kDebug() << "ImagePlugin_FxFilters plugin loaded";
@@ -61,11 +67,18 @@ ImagePlugin_FxFilters::~ImagePlugin_FxFilters()
 
 void ImagePlugin_FxFilters::setEnabledActions(bool b)
 {
+    m_charcoalAction->setEnabled(b);
     m_colorEffectsAction->setEnabled(b);
 }
 
 void ImagePlugin_FxFilters::slotColorEffects()
 {
     ColorFxTool* tool = new ColorFxTool(this);
+    loadTool(tool);
+}
+
+void ImagePlugin_FxFilters::slotCharcoal()
+{
+    CharcoalTool* tool = new CharcoalTool(this);
     loadTool(tool);
 }
