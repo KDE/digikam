@@ -106,8 +106,8 @@ BCGTool::BCGTool(QObject* parent)
     d->gboxSettings->setTools(EditorToolSettings::Histogram);
     d->gboxSettings->setButtons(EditorToolSettings::Default|
                                 EditorToolSettings::Ok|
-                                EditorToolSettings::Cancel|
-                                EditorToolSettings::Try);
+                                EditorToolSettings::Cancel);
+//                                EditorToolSettings::Try);
 
     // -------------------------------------------------------------
 
