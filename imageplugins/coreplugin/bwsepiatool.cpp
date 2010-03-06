@@ -130,6 +130,9 @@ BWSepiaTool::BWSepiaTool(QObject* parent)
 
 BWSepiaTool::~BWSepiaTool()
 {
+    delete d->previewWidget;
+    delete d->gboxSettings;
+
     if (d->destinationPreviewData)
        delete [] d->destinationPreviewData;
 
