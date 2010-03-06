@@ -24,12 +24,12 @@ coreplugin
   /whitebalance             DONE                 DONE                  DONE
 
 distortionfx                DONE                 TODO                  TODO
-emboss                      DONE                 DONE                  TODO
 freerotation                DONE                  NO                   TODO
 
 fxfilters
   /colorfx                  TODO                 TODO                  TODO
   /charcoal                 DONE                 DONE                  TODO
+  /emboss                   DONE                 DONE                  TODO
 
 hotpixels                   DONE                 DONE                  TODO
 inpainting                  DONE                  NO                    NO
