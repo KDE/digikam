@@ -45,20 +45,28 @@
 namespace Digikam
 {
 
-FilmGrainFilter::FilmGrainFilter(DImg* orgImage, QObject* parent, int sensibility)
+FilmGrainFilter::FilmGrainFilter(DImg* orgImage, QObject* parent, int sensibility, int shadows, int midtones, int highlights)
                : DImgThreadedFilter(orgImage, parent, "FilmGrain")
 {
     m_sensibility = sensibility;
+    m_shadows     = shadows;
+    m_midtones    = midtones;
+    m_highlights  = highlights;
+    
     initFilter();
 }
 
 FilmGrainFilter::FilmGrainFilter(DImgThreadedFilter* parentFilter,
                                  const DImg& orgImage, const DImg& destImage,
-                                 int progressBegin, int progressEnd, int sensibility)
+                                 int progressBegin, int progressEnd, int sensibility, int shadows, int midtones, int highlights)
           : DImgThreadedFilter(parentFilter, orgImage, destImage, progressBegin, progressEnd,
                                parentFilter->filterName() + ": FilmGrain")
 {
     m_sensibility = sensibility;
+    m_shadows     = shadows;
+    m_midtones    = midtones;
+    m_highlights  = highlights;
+    
     filterImage();
 }
 
@@ -88,15 +96,20 @@ void FilmGrainFilter::filterImage()
     {
         for (int y = 0; !m_cancel && y < height; ++y)
         {
+            double lightness;
+            int local_noise;
             color = m_orgImage.getPixelColor(x, y);
             color.getHSL(&h, &s, &l);
-
+            lightness= l / (sb ? 65535.0 : 255.0); 
+            local_noise = interpolate(m_shadows,m_midtones,m_highlights,lightness) * noise+1;
+            
 #ifndef _WIN32
-            nRand = (rand_r(&seed) % noise);
+            nRand = (rand_r(&seed) % local_noise);
 #else
-            nRand = (rand() % noise);
+            nRand = (rand() % local_noise);
 #endif
-            nRand = nRand - noise/2.0;
+            nRand = nRand - local_noise/2.0;
+            
             if (!sb)
             {
               l = CLAMP0255(l+nRand);
@@ -115,6 +128,24 @@ void FilmGrainFilter::filterImage()
         if (progress%5 == 0)
             postProgress( progress );
     }
+}
+
+double FilmGrainFilter::interpolate(int shadows,int midtones,int highlights, double x)
+{
+  double s = (shadows   +100)/200.0;
+  double m = (midtones  +100)/200.0; 
+  double h = (highlights+100)/200.0;
+  
+  if (x>=0 && x <=0.5)
+  {
+      return (s+2*(m-s)*x);
+  }
+  else if (x>=0.5 && x <=1.0)
+  {
+      return (2*(h-m)*x+2*m-h);
+  }
+  else
+      return 1.0;
 }
 
 }  // namespace Digikam

@@ -74,7 +74,10 @@ public:
     const QString       configSensitivityAdjustmentEntry;
 
     RIntNumInput*       sensibilityInput;
-
+    RIntNumInput*       shadowsInput; 
+    RIntNumInput*       midtonesInput;
+    RIntNumInput*       highlightsInput;
+    
     ImageRegionWidget*  previewWidget;
     EditorToolSettings* gboxSettings;
 };
@@ -106,13 +109,48 @@ FilmGrainTool::FilmGrainTool(QObject* parent)
     d->sensibilityInput->setDefaultValue(2400);
     d->sensibilityInput->setWhatsThis(i18n("Set here the film ISO-sensitivity to use for "
                                            "simulating the film graininess."));
+  
+    // -------------------------------------------------------------
 
+    QLabel *label2     = new QLabel(i18n("Shadows:"));
+    d->highlightsInput = new RIntNumInput;
+    d->highlightsInput->setRange(-100, 100, 1);
+    d->highlightsInput->setSliderEnabled(true);
+    d->highlightsInput->setDefaultValue(0);
+    d->highlightsInput->setWhatsThis(i18n("Set how much the filter affects highlights."));
+    
+    // -------------------------------------------------------------
+
+    QLabel *label3   = new QLabel(i18n("Midtones:"));
+    d->midtonesInput = new RIntNumInput;
+    d->midtonesInput->setRange(-100, 100, 1);
+    d->midtonesInput->setSliderEnabled(true);
+    d->midtonesInput->setDefaultValue(0);
+    d->midtonesInput->setWhatsThis(i18n("Set how much the filter affects midtones."));
+    
+ 
+    // -------------------------------------------------------------
+
+    QLabel *label4      = new QLabel(i18n("Highlights:"));
+    d->shadowsInput = new RIntNumInput;
+    d->shadowsInput->setRange(-100, 100, 1);
+    d->shadowsInput->setSliderEnabled(true);
+    d->shadowsInput->setDefaultValue(0);
+    d->shadowsInput->setWhatsThis(i18n("Set how much the filter affects shadows."));
+  
+    
     // -------------------------------------------------------------
 
     QGridLayout* mainLayout = new QGridLayout;
     mainLayout->addWidget(label1,              0, 0, 1, 1);
     mainLayout->addWidget(d->sensibilityInput, 1, 0, 1, 1);
-    mainLayout->setRowStretch(2, 10);
+    mainLayout->addWidget(label2,              2, 0, 1, 1);
+    mainLayout->addWidget(d->shadowsInput,     3, 0, 1, 1);  
+    mainLayout->addWidget(label3,              4, 0, 1, 1);
+    mainLayout->addWidget(d->midtonesInput,    5, 0, 1, 1); 
+    mainLayout->addWidget(label4,              6, 0, 1, 1); 
+    mainLayout->addWidget(d->highlightsInput,  7, 0, 1, 1);
+    mainLayout->setRowStretch(8, 10);
     mainLayout->setMargin(d->gboxSettings->spacingHint());
     mainLayout->setSpacing(d->gboxSettings->spacingHint());
     d->gboxSettings->plainPage()->setLayout(mainLayout);
@@ -169,10 +207,13 @@ void FilmGrainTool::prepareEffect()
     toolSettings()->setEnabled(false);
     toolView()->setEnabled(false);
     
-    DImg image = d->previewWidget->getOriginalRegionImage();
-    int s      = d->sensibilityInput->value();
+    DImg image     = d->previewWidget->getOriginalRegionImage();
+    int s          = d->sensibilityInput->value();
+    int shadows    = d->shadowsInput->value();
+    int midtones   = d->midtonesInput->value();
+    int highlights =d->highlightsInput->value();
 
-    setFilter(new FilmGrainFilter(&image, this, s));
+    setFilter(new FilmGrainFilter(&image, this, s, shadows, midtones, highlights));
 }
 
 void FilmGrainTool::prepareFinal()

@@ -39,19 +39,24 @@ class DIGIKAM_EXPORT FilmGrainFilter : public DImgThreadedFilter
 
 public:
 
-    explicit FilmGrainFilter(DImg* orgImage, QObject* parent=0, int sensibility=400);
+    explicit FilmGrainFilter(DImg* orgImage, QObject* parent=0, int sensibility=400, int shadows=100, int midtones = 100, int highlights=100);
     // Constructor for slave mode: execute immediately in current thread with specified master filter
     explicit FilmGrainFilter(DImgThreadedFilter* parentFilter, const DImg& orgImage, const DImg& destImage,
-                             int progressBegin=0, int progressEnd=100, int sensibility=400);    
+                             int progressBegin=0, int progressEnd=100, 
+                             int sensibility=400, int shadows=100, int midtones = 100, int highlights=100);    
     ~FilmGrainFilter(){};
 
 private:
 
     void filterImage();
-
+    double interpolate(int shadows, int midtones, int highlights, double x);
+    
 private:
 
     int m_sensibility;
+    int m_shadows;
+    int m_midtones;
+    int m_highlights;
 };
 
 }  // namespace Digikam
