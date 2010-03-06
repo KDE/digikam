@@ -79,7 +79,7 @@ class AdjustLevelsToolPriv
 {
 
 public:
-    
+
     enum ColorPicker
     {
         NoPicker   = -1,
@@ -194,15 +194,15 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
                                 EditorToolSettings::Load|
                                 EditorToolSettings::SaveAs|
                                 EditorToolSettings::Ok|
-                                EditorToolSettings::Cancel|
-                                EditorToolSettings::Try);
+                                EditorToolSettings::Cancel);
+//                                EditorToolSettings::Try);
 
     d->gboxSettings->setTools(EditorToolSettings::Histogram);
     d->gboxSettings->setHistogramType(Digikam::LRGBA);
 
     // we don't need to use the Gradient widget in this tool
     d->gboxSettings->histogramBox()->setGradientVisible(false);
-    
+
     // -------------------------------------------------------------
 
     d->levelsHistogramWidget = new HistogramWidget(256, 140, d->originalImage->bits(),
@@ -365,7 +365,7 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
     connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget(const Digikam::DColor&, const QPoint&)),
             this, SLOT(slotColorSelectedFromTarget(const Digikam::DColor&)));
 */
-            
+
     // -------------------------------------------------------------
     // Color sliders and spinbox slots.
 
@@ -798,8 +798,8 @@ void AdjustLevelsTool::prepareEffect()
         settings.lOutput[i] = d->levels->getLevelLowOutputValue(i);
         settings.hOutput[i] = d->levels->getLevelHighOutputValue(i);
         settings.gamma[i]   = d->levels->getLevelGammaValue(i);
-    }    
-    
+    }
+
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 
     DImg preview = d->previewWidget->getOriginalRegionImage(true);
@@ -835,7 +835,7 @@ void AdjustLevelsTool::prepareFinal()
         settings.lOutput[i] = d->levels->getLevelLowOutputValue(i);
         settings.hOutput[i] = d->levels->getLevelHighOutputValue(i);
         settings.gamma[i]   = d->levels->getLevelGammaValue(i);
-    } 
+    }
 
     ImageIface iface(0, 0);
     setFilter(new LevelsFilter(iface.getOriginalImg(), this, settings));
