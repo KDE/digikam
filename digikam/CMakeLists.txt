@@ -149,6 +149,8 @@ KDE4_ADD_KCFG_FILES(digikamcore_LIB_SRCS
 
 KDE4_ADD_LIBRARY(digikamcore SHARED ${digikamcore_LIB_SRCS})
 
+ADD_DEPENDENCIES(digikamcore digikam-svnversion)
+
 TARGET_LINK_LIBRARIES(digikamcore
                       ${KDE4_KDECORE_LIBS}
                       ${KDE4_KIO_LIBS}
