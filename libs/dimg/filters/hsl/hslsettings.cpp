@@ -173,6 +173,8 @@ void HSLSettings::slotHSChanged(int h, int s)
     d->HSPreview->setHS(hue, sat);
     d->hInput->blockSignals(false);
     d->sInput->blockSignals(false);
+
+    emit signalSettingsChanged();
 }
 
 void HSLSettings::slotHChanged(double h)
