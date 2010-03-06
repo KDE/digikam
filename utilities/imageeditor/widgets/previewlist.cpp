@@ -211,7 +211,7 @@ public:
 PreviewList::PreviewList(QObject* parent)
            : QTreeWidget(), d(new PreviewListPriv)
 {
-    d->wrapper = new PreviewThreadWrapper(parent);
+    d->wrapper = new PreviewThreadWrapper(this);
     
     setSelectionMode(QAbstractItemView::SingleSelection);
     setDropIndicatorShown(true);
