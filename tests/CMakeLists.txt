@@ -208,12 +208,6 @@ SET(albummodeltest_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/template/templatelist.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/template/templatemanager.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/template/templatepanel.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/iccprofiles/iccprofilescombobox.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dialogs/dprogressdlg.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/loaders/jp2ksettings.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/loaders/pgfsettings.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/loaders/pngsettings.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/loaders/tiffsettings.cpp
 )
 KDE4_ADD_UNIT_TEST(albummodeltest ${albummodeltest_SRCS})
 TARGET_LINK_LIBRARIES(albummodeltest
