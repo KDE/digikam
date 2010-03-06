@@ -103,9 +103,9 @@ void CharcoalFilter::filterImage()
 
     // -- Applying stretch contrast color effect -------------------------------
 
-    StretchFilter strech(&m_destImage, &m_destImage);
-    strech.startFilterDirectly();
-    m_destImage.putImageData(strech.getTargetImage().bits());
+    StretchFilter stretch(&m_destImage, &m_destImage);
+    stretch.startFilterDirectly();
+    m_destImage.putImageData(stretch.getTargetImage().bits());
 
     postProgress( 90 );
     if (m_cancel)
