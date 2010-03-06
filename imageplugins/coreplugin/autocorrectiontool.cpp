@@ -178,7 +178,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
     // -------------------------------------------------------------
 
     connect(d->correctionTools, SIGNAL(itemSelectionChanged()),
-            this, SLOT(slotTimer()));
+            this, SLOT(slotEffect()));
 
     connect(d->previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotTimer()));
