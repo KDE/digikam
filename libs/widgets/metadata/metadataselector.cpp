@@ -346,15 +346,15 @@ void MetadataSelectorView::cleanUpMdKeyItem()
         MdKeyListViewItem *item = dynamic_cast<MdKeyListViewItem*>(*it);
         if (item)
         {
-            int childs   = item->childCount();
+            int children   = item->childCount();
             int visibles = 0;
-            for (int i = 0 ; i < childs; ++i)
+            for (int i = 0 ; i < children; ++i)
             {
                 QTreeWidgetItem* citem = (*it)->child(i);
                 if (!citem->isHidden())
                     ++visibles;
             }
-            if (!childs || !visibles)
+            if (!children || !visibles)
                 item->setHidden(true);
         }
         ++it;
