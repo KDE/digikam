@@ -46,7 +46,7 @@ class SetupLightTablePriv
 public:
 
     SetupLightTablePriv() :
-        configGroupName("LightTable Settings"), 
+        configGroupName("LightTable Settings"),
         configFullScreenHideToolBarEntry("FullScreen Hide ToolBar"),
         configAutoSyncPreviewEntry("Auto Sync Preview"),
         configAutoLoadRightPanelEntry("Auto Load Right Panel"),
@@ -60,7 +60,7 @@ public:
         clearOnClose(0)
     {}
 
-    const QString configGroupName; 
+    const QString configGroupName;
     const QString configFullScreenHideToolBarEntry;
     const QString configAutoSyncPreviewEntry;
     const QString configAutoLoadRightPanelEntry;
@@ -104,7 +104,7 @@ SetupLightTable::SetupLightTable(QWidget* parent)
                                              "will make it take longer to load images, only use it if you have "
                                              "a fast computer.</p>"
                                              "<p><b>Note:</b> for Raw image, an half size version of Raw data "
-                                             "is used instead embeded JPEG preview.</p>"));
+                                             "is used instead embedded JPEG preview.</p>"));
 
     d->hideToolBar  = new QCheckBox(i18n("H&ide toolbar in fullscreen mode"), interfaceOptionsGroup);
 

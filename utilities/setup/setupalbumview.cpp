@@ -203,7 +203,7 @@ SetupAlbumView::SetupAlbumView(QWidget* parent)
                                                    "will make it take longer to load images, only use it if you have "
                                                    "a fast computer.</p>"
                                                    "<p><b>Note:</b> for Raw image, an half size version of Raw data "
-                                                   "is used instead embeded JPEG preview.</p>"));
+                                                   "is used instead embedded JPEG preview.</p>"));
 
     grid3->setMargin(KDialog::spacingHint());
     grid3->setSpacing(KDialog::spacingHint());
