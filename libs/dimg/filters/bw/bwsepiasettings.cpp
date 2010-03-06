@@ -133,10 +133,10 @@ BWSepiaSettings::BWSepiaSettings(QWidget* parent, DImg* img)
 
     QGridLayout* grid = new QGridLayout(parent);
 
-    d->tab = new KTabWidget(parent);
+    d->tab = new KTabWidget(this);
 
     PreviewListItem* item = 0;
-    d->bwFilm             = new PreviewList(parent);
+    d->bwFilm             = new PreviewList;
     int type              = BWSepiaContainer::BWGeneric;
 
     item = d->bwFilm->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18nc("generic black and white film", "Generic"), type);
@@ -233,9 +233,9 @@ BWSepiaSettings::BWSepiaSettings(QWidget* parent, DImg* img)
 
     // -------------------------------------------------------------
 
-    QWidget* vbox     = new QWidget(d->tab);
+    QWidget* vbox     = new QWidget();
     QVBoxLayout* vlay = new QVBoxLayout(vbox);
-    d->bwFilters      = new PreviewList(parent);
+    d->bwFilters      = new PreviewList(vbox);
 
     type = BWSepiaContainer::BWNoFilter;
     item = d->bwFilters->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("No Lens Filter"), type);
@@ -285,7 +285,7 @@ BWSepiaSettings::BWSepiaSettings(QWidget* parent, DImg* img)
                                "<p>Simulate black and white film exposure using a blue filter. "
                                "This accentuates haze and fog. Used for dye transfer and contrast effects.</p>"));
 
-    d->strengthInput = new RIntNumInput();
+    d->strengthInput = new RIntNumInput(vbox);
     d->strengthInput->input()->setLabel(i18n("Strength:"), Qt::AlignLeft | Qt::AlignVCenter);
     d->strengthInput->setRange(1, 5, 1);
     d->strengthInput->setSliderEnabled(true);
@@ -299,7 +299,7 @@ BWSepiaSettings::BWSepiaSettings(QWidget* parent, DImg* img)
 
     // -------------------------------------------------------------
 
-    d->bwTone = new PreviewList(parent);
+    d->bwTone = new PreviewList;
 
     type = BWSepiaContainer::BWNoTone;
     item = d->bwTone->addItem(new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type)), i18n("No Tone Filter"), type);
@@ -347,8 +347,8 @@ BWSepiaSettings::BWSepiaSettings(QWidget* parent, DImg* img)
 
     QWidget* curveBox = new QWidget();
     // NOTE: add a method to be able to use curves widget without image data as simple curve editor.
-    if (!img->isNull()) d->curvesBox = new CurvesBox(256, 192, img->bits(), img->width(), img->height(), img->sixteenBit());
-    else                d->curvesBox = new CurvesBox(256, 192, (uchar*)"\x00\x00\x00\x00\x00\x00\x00\x00", 1, 1, true);
+    if (!img->isNull()) d->curvesBox = new CurvesBox(256, 192, img->bits(), img->width(), img->height(), img->sixteenBit(), curveBox);
+    else                d->curvesBox = new CurvesBox(256, 192, (uchar*)"\x00\x00\x00\x00\x00\x00\x00\x00", 1, 1, true, curveBox);
     d->curvesBox->enableCurveTypes(true);
     d->curvesBox->enableResetButton(true);
     d->curvesBox->setWhatsThis( i18n("This is the curve adjustment of the image luminosity"));
