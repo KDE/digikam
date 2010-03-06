@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="20" name="digikamimageplugin_core" >
+<gui version="21" name="digikamimageplugin_core" >
 
  <MenuBar>
 
@@ -46,7 +46,5 @@
  <ToolBar name="mainToolBar" >
       <text>Main Toolbar</text>
  </ToolBar>
-
- <ActionProperties/>
 
 </gui>
