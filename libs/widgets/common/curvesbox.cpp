@@ -356,7 +356,6 @@ void CurvesBox::setChannel(ChannelType channel)
     }
 
     d->curveType->button(d->curvesWidget->curves()->getCurveType(channel))->setChecked(true);
-    d->curvesWidget->repaint();
 }
 
 ChannelType CurvesBox::channel() const
