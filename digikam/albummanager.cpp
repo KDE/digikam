@@ -2203,9 +2203,6 @@ bool AlbumManager::moveTAlbum(TAlbum* album, TAlbum *newParent, QString& errMsg)
     emit signalAlbumMoved(album);
     d->currentlyMovingAlbum = 0;
 
-    // update tag count
-    getTagItemsCount();
-
     return true;
 }
 

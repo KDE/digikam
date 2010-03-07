@@ -268,6 +268,10 @@ protected:
     /// If you do not use setCountMap, excludeChildrenCount and includeChildrenCount, you can set a count here.
     void setCount(Album *album, int count);
 
+protected Q_SLOTS:
+
+    void slotAlbumMoved(Album *album);
+
 private:
 
     void updateCount(Album *album);

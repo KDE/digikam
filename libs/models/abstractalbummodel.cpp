@@ -524,6 +524,9 @@ AbstractCountingAlbumModel::AbstractCountingAlbumModel(Album::Type albumType, Al
                                                        QObject *parent)
                            : AbstractSpecificAlbumModel(albumType, rootAlbum, rootBehavior, parent)
 {
+    connect(AlbumManager::instance(), SIGNAL(signalAlbumMoved(Album*)),
+            this, SLOT(slotAlbumMoved(Album*)));
+
     m_showCount = false;
 }
 
@@ -683,9 +686,12 @@ QString AbstractCountingAlbumModel::albumName(Album *album) const
 
 void AbstractCountingAlbumModel::albumCleared(Album *album)
 {
-    m_countMap.remove(album->id());
-    m_countHashReady.remove(album->id());
-    m_includeChildrenAlbums.remove(album->id());
+    if (!AlbumManager::instance()->isMovingAlbum(album))
+    {
+        m_countMap.remove(album->id());
+        m_countHashReady.remove(album->id());
+        m_includeChildrenAlbums.remove(album->id());
+    }
 }
 
 void AbstractCountingAlbumModel::allAlbumsCleared()
@@ -693,6 +699,12 @@ void AbstractCountingAlbumModel::allAlbumsCleared()
     m_countMap.clear();
     m_countHashReady.clear();
     m_includeChildrenAlbums.clear();
+}
+
+void AbstractCountingAlbumModel::slotAlbumMoved(Album *)
+{
+    // need to update counts of all parents
+    setCountMap(m_countMap);
 }
 
 // ------------------------------------------------------------------
