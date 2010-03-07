@@ -26,6 +26,7 @@ INCLUDE_DIRECTORIES( ../showfoto/setup
                      ../libs/dimg/filters/levels
                      ../libs/dimg/filters/curves
                      ../libs/dimg/filters/wb
+                     ../libs/dimg/filters/transform
                      ../libs/dmetadata
                      ../libs/themeengine
                      ../libs/curves
