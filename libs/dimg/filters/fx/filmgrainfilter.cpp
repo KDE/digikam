@@ -41,27 +41,42 @@
 namespace Digikam
 {
 
-FilmGrainFilter::FilmGrainFilter(DImg* orgImage, QObject* parent, int sensibility, int shadows, int midtones, int highlights)
+FilmGrainFilter::FilmGrainFilter(DImg* orgImage, QObject* parent, 
+                                 int lum_sensibility, int lum_shadows, int lum_midtones, int lum_highlights,
+                                 int chroma_sensibility, int chroma_shadows, int chroma_midtones, int chroma_highlights)
                : DImgThreadedFilter(orgImage, parent, "FilmGrain")
 {
-    m_sensibility = sensibility;
-    m_shadows     = shadows;
-    m_midtones    = midtones;
-    m_highlights  = highlights;
+    m_lum_sensibility    = lum_sensibility;
+    m_lum_shadows        = lum_shadows;
+    m_lum_midtones       = lum_midtones;
+    m_lum_highlights     = lum_highlights;
+    
+    m_chroma_sensibility = chroma_sensibility;
+    m_chroma_shadows     = chroma_shadows;
+    m_chroma_midtones    = chroma_midtones;
+    m_chroma_highlights  = chroma_highlights;
     
     initFilter();
 }
 
 FilmGrainFilter::FilmGrainFilter(DImgThreadedFilter* parentFilter,
                                  const DImg& orgImage, const DImg& destImage,
-                                 int progressBegin, int progressEnd, int sensibility, int shadows, int midtones, int highlights)
+                                 int progressBegin, int progressEnd, 
+                                 int lum_sensibility, int lum_shadows, int lum_midtones, int lum_highlights,
+                                 int chroma_sensibility, int chroma_shadows, int chroma_midtones, int chroma_highlights
+                                 )
           : DImgThreadedFilter(parentFilter, orgImage, destImage, progressBegin, progressEnd,
                                parentFilter->filterName() + ": FilmGrain")
-{
-    m_sensibility = sensibility;
-    m_shadows     = shadows;
-    m_midtones    = midtones;
-    m_highlights  = highlights;
+{   
+    m_lum_sensibility    = lum_sensibility;
+    m_lum_shadows        = lum_shadows;
+    m_lum_midtones       = lum_midtones;
+    m_lum_highlights     = lum_highlights;
+    
+    m_chroma_sensibility = chroma_sensibility;
+    m_chroma_shadows     = chroma_shadows;
+    m_chroma_midtones    = chroma_midtones;
+    m_chroma_highlights  = chroma_highlights;
     
     filterImage();
 }
@@ -69,8 +84,9 @@ FilmGrainFilter::FilmGrainFilter(DImgThreadedFilter* parentFilter,
 void FilmGrainFilter::filterImage()
 {
     // m_sensibility: 800..6400
-    if (m_sensibility <= 0) return;
-
+    if (m_lum_sensibility <= 0) return;
+    if (m_chroma_sensibility <= 0) return;
+    
     DColor color;
     int    h, s, l;
     int    progress;
@@ -78,7 +94,8 @@ void FilmGrainFilter::filterImage()
     int  width   = m_orgImage.width();
     int  height  = m_orgImage.height();
     bool sb      = m_orgImage.sixteenBit();
-    int  noise   = ((m_sensibility+200) / 1000) * 3 * (sb ? 256 : 1);
+    int  lum_noise    = ((m_lum_sensibility   +200) / 1000) * 3 * (sb ? 256 : 1);
+    int  chroma_noise = ((m_chroma_sensibility+200) / 1000) * 3 * (sb ? 256 : 1);
     
     qsrand(1); // noise will always be the same
 
@@ -86,14 +103,16 @@ void FilmGrainFilter::filterImage()
     {
         for (int y = 0; !m_cancel && y < height; ++y)
         {
-            double lightness;
-            int local_noise;
+            double lightness, hue;
+            int local_lum_noise, local_chroma_noise;
             color = m_orgImage.getPixelColor(x, y);
             color.getHSL(&h, &s, &l);
-            lightness= l / (sb ? 65535.0 : 255.0); 
-            local_noise = interpolate(m_shadows,m_midtones,m_highlights,lightness) * noise+1;
-            
-            l = randomize(l,sb, local_noise);
+            lightness = l / (sb ? 65535.0 : 255.0);
+            hue       = h / (sb ? 65535.0 : 255.0);
+            local_lum_noise    = interpolate(m_lum_shadows   ,m_lum_midtones   ,m_lum_highlights   ,lightness) * lum_noise   +1;
+            local_chroma_noise = interpolate(m_chroma_shadows,m_chroma_midtones,m_chroma_highlights,hue      ) * chroma_noise+1;
+            l = randomize(l,sb, local_lum_noise);
+            h = randomize(h,sb, local_chroma_noise);
             
             color.setRGB(h, s, l, sb);
             m_destImage.setPixelColor(x, y, color);

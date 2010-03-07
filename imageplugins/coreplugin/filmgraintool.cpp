@@ -52,6 +52,7 @@
 #include "filmgrainfilter.h"
 #include "imageiface.h"
 #include "imageregionwidget.h"
+#include "rexpanderbox.h"
 
 using namespace KDcrawIface;
 
@@ -65,7 +66,8 @@ public:
     FilmGrainToolPriv() :
         configGroupName("filmgrain Tool"),
         configSensitivityAdjustmentEntry("SensitivityAdjustment"),
-        sensibilityInput(0),
+        sensibilityLumInput(0),
+        sensibilityChromaInput(0),
         previewWidget(0),
         gboxSettings(0)
         {}
@@ -73,10 +75,16 @@ public:
     const QString       configGroupName;
     const QString       configSensitivityAdjustmentEntry;
 
-    RIntNumInput*       sensibilityInput;
-    RIntNumInput*       shadowsInput; 
-    RIntNumInput*       midtonesInput;
-    RIntNumInput*       highlightsInput;
+    RIntNumInput*       sensibilityLumInput;
+    RIntNumInput*       shadowsLumInput; 
+    RIntNumInput*       midtonesLumInput;
+    RIntNumInput*       highlightsLumInput;
+    RIntNumInput*       sensibilityChromaInput;
+    RIntNumInput*       shadowsChromaInput; 
+    RIntNumInput*       midtonesChromaInput;
+    RIntNumInput*       highlightsChromaInput;
+    
+    RExpanderBox*       expanderBox;
     
     ImageRegionWidget*  previewWidget;
     EditorToolSettings* gboxSettings;
@@ -100,59 +108,128 @@ FilmGrainTool::FilmGrainTool(QObject* parent)
                                 EditorToolSettings::Cancel);
 
     // -------------------------------------------------------------
-
-    QLabel *label1      = new QLabel(i18n("Sensitivity (ISO):"));
-    d->sensibilityInput = new RIntNumInput;
-    d->sensibilityInput->setRange(800, 51200, 100);
-    d->sensibilityInput->setSliderEnabled(true);
-    d->sensibilityInput->setDefaultValue(2400);
-    d->sensibilityInput->setWhatsThis(i18n("Set here the film ISO-sensitivity to use for "
+    
+    QWidget* firstPage = new QWidget();
+    QGridLayout* grid1 = new QGridLayout(firstPage);
+    
+    // -------------------------------------------------------------
+    
+    QLabel *label1         = new QLabel(i18n("Sensitivity (ISO):"),firstPage);
+    d->sensibilityLumInput = new RIntNumInput(firstPage);
+    d->sensibilityLumInput->setRange(800, 51200, 100);
+    d->sensibilityLumInput->setSliderEnabled(true);
+    d->sensibilityLumInput->setDefaultValue(2400);
+    d->sensibilityLumInput->setWhatsThis(i18n("Set here the film ISO-sensitivity to use for "
                                            "simulating the film graininess."));
   
     // -------------------------------------------------------------
 
-    QLabel *label2     = new QLabel(i18n("Shadows:"));
-    d->highlightsInput = new RIntNumInput;
-    d->highlightsInput->setRange(-100, 100, 1);
-    d->highlightsInput->setSliderEnabled(true);
-    d->highlightsInput->setDefaultValue(-100);
-    d->highlightsInput->setWhatsThis(i18n("Set how much the filter affects highlights."));
+    QLabel *label2        = new QLabel(i18n("Shadows:"),firstPage);
+    d->highlightsLumInput = new RIntNumInput(firstPage);
+    d->highlightsLumInput->setRange(-100, 100, 1);
+    d->highlightsLumInput->setSliderEnabled(true);
+    d->highlightsLumInput->setDefaultValue(-100);
+    d->highlightsLumInput->setWhatsThis(i18n("Set how much the filter affects highlights."));
     
     // -------------------------------------------------------------
 
-    QLabel *label3   = new QLabel(i18n("Midtones:"));
-    d->midtonesInput = new RIntNumInput;
-    d->midtonesInput->setRange(-100, 100, 1);
-    d->midtonesInput->setSliderEnabled(true);
-    d->midtonesInput->setDefaultValue(0);
-    d->midtonesInput->setWhatsThis(i18n("Set how much the filter affects midtones."));
+    QLabel *label3      = new QLabel(i18n("Midtones:"),firstPage);
+    d->midtonesLumInput = new RIntNumInput(firstPage);
+    d->midtonesLumInput->setRange(-100, 100, 1);
+    d->midtonesLumInput->setSliderEnabled(true);
+    d->midtonesLumInput->setDefaultValue(0);
+    d->midtonesLumInput->setWhatsThis(i18n("Set how much the filter affects midtones."));
     
  
     // -------------------------------------------------------------
 
-    QLabel *label4      = new QLabel(i18n("Highlights:"));
-    d->shadowsInput = new RIntNumInput;
-    d->shadowsInput->setRange(-100, 100, 1);
-    d->shadowsInput->setSliderEnabled(true);
-    d->shadowsInput->setDefaultValue(-100);
-    d->shadowsInput->setWhatsThis(i18n("Set how much the filter affects shadows."));
+    QLabel *label4     = new QLabel(i18n("Highlights:"),firstPage);
+    d->shadowsLumInput = new RIntNumInput(firstPage);
+    d->shadowsLumInput->setRange(-100, 100, 1);
+    d->shadowsLumInput->setSliderEnabled(true);
+    d->shadowsLumInput->setDefaultValue(-100);
+    d->shadowsLumInput->setWhatsThis(i18n("Set how much the filter affects shadows."));
   
+    grid1->addWidget(label1,                    1, 0, 1, 1);
+    grid1->addWidget(d->sensibilityLumInput,    2, 0, 1, 1);
+    grid1->addWidget(label2,                    3, 0, 1, 1);
+    grid1->addWidget(d->shadowsLumInput,        4, 0, 1, 1);  
+    grid1->addWidget(label3,                    5, 0, 1, 1);
+    grid1->addWidget(d->midtonesLumInput,       6, 0, 1, 1); 
+    grid1->addWidget(label4,                    7, 0, 1, 1); 
+    grid1->addWidget(d->highlightsLumInput,     8, 0, 1, 1);
+    grid1->setMargin(d->gboxSettings->spacingHint());
+    grid1->setSpacing(d->gboxSettings->spacingHint());
     
     // -------------------------------------------------------------
 
+    QWidget* secondPage = new QWidget();
+    QGridLayout* grid2  = new QGridLayout( secondPage );
+
+    QLabel *label5            = new QLabel(i18n("Sensitivity (ISO):"),secondPage);
+    d->sensibilityChromaInput = new RIntNumInput(secondPage);
+    d->sensibilityChromaInput->setRange(800, 51200, 100);
+    d->sensibilityChromaInput->setSliderEnabled(true);
+    d->sensibilityChromaInput->setDefaultValue(2400);
+    d->sensibilityChromaInput->setWhatsThis(i18n("Set here the film ISO-sensitivity to use for "
+                                           "simulating the film graininess."));
+  
+    // -------------------------------------------------------------
+
+    QLabel *label6           = new QLabel(i18n("Shadows:"),secondPage);
+    d->highlightsChromaInput = new RIntNumInput(secondPage);
+    d->highlightsChromaInput->setRange(-100, 100, 1);
+    d->highlightsChromaInput->setSliderEnabled(true);
+    d->highlightsChromaInput->setDefaultValue(-100);
+    d->highlightsChromaInput->setWhatsThis(i18n("Set how much the filter affects highlights."));
+    
+    // -------------------------------------------------------------
+    
+    QLabel *label7         = new QLabel(i18n("Midtones:"),secondPage);
+    d->midtonesChromaInput = new RIntNumInput(secondPage);
+    d->midtonesChromaInput->setRange(-100, 100, 1);
+    d->midtonesChromaInput->setSliderEnabled(true);
+    d->midtonesChromaInput->setDefaultValue(0);
+    d->midtonesChromaInput->setWhatsThis(i18n("Set how much the filter affects midtones."));
+    
+ 
+    // -------------------------------------------------------------
+
+    QLabel *label8        = new QLabel(i18n("Highlights:"),secondPage);
+    d->shadowsChromaInput = new RIntNumInput(secondPage);
+    d->shadowsChromaInput->setRange(-100, 100, 1);
+    d->shadowsChromaInput->setSliderEnabled(true);
+    d->shadowsChromaInput->setDefaultValue(-100);
+    d->shadowsChromaInput->setWhatsThis(i18n("Set how much the filter affects shadows."));
+      
+    grid2->addWidget(label5,                    1, 0, 1, 1);
+    grid2->addWidget(d->sensibilityChromaInput, 2, 0, 1, 1);
+    grid2->addWidget(label6,                    3, 0, 1, 1);
+    grid2->addWidget(d->shadowsChromaInput,     4, 0, 1, 1);  
+    grid2->addWidget(label7,                    5, 0, 1, 1);
+    grid2->addWidget(d->midtonesChromaInput,    6, 0, 1, 1); 
+    grid2->addWidget(label8,                    7, 0, 1, 1); 
+    grid2->addWidget(d->highlightsChromaInput,  8, 0, 1, 1);
+    grid2->setMargin(d->gboxSettings->spacingHint());
+    grid2->setSpacing(d->gboxSettings->spacingHint());
+    
+    // -------------------------------------------------------------
+
+    d->expanderBox = new RExpanderBox();
+    d->expanderBox->setObjectName("Noise Expander");
+    d->expanderBox->addItem(firstPage, SmallIcon("filmgrain"), i18n("Luminance noise"),
+                            QString("LuminanceSettingsContainer"), true);
+    d->expanderBox->addItem(secondPage, SmallIcon("filmgrain"), i18n("Chrominance noise"),
+                            QString("ChrominanceSettingsContainer"), true);
+    d->expanderBox->addStretch();
+
     QGridLayout* mainLayout = new QGridLayout;
-    mainLayout->addWidget(label1,              0, 0, 1, 1);
-    mainLayout->addWidget(d->sensibilityInput, 1, 0, 1, 1);
-    mainLayout->addWidget(label2,              2, 0, 1, 1);
-    mainLayout->addWidget(d->shadowsInput,     3, 0, 1, 1);  
-    mainLayout->addWidget(label3,              4, 0, 1, 1);
-    mainLayout->addWidget(d->midtonesInput,    5, 0, 1, 1); 
-    mainLayout->addWidget(label4,              6, 0, 1, 1); 
-    mainLayout->addWidget(d->highlightsInput,  7, 0, 1, 1);
-    mainLayout->setRowStretch(8, 10);
+    mainLayout->addWidget(d->expanderBox,        0, 0, 1, 1);
+    mainLayout->setRowStretch(0, 10);
     mainLayout->setMargin(d->gboxSettings->spacingHint());
     mainLayout->setSpacing(d->gboxSettings->spacingHint());
     d->gboxSettings->plainPage()->setLayout(mainLayout);
+    
 
     // -------------------------------------------------------------
 
@@ -163,13 +240,21 @@ FilmGrainTool::FilmGrainTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    connect(d->sensibilityInput, SIGNAL(valueChanged(int)),
+    connect(d->sensibilityLumInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));
-    connect(d->shadowsInput, SIGNAL(valueChanged(int)),
+    connect(d->shadowsLumInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));
-    connect(d->midtonesInput, SIGNAL(valueChanged(int)),
+    connect(d->midtonesLumInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));
-    connect(d->highlightsInput, SIGNAL(valueChanged(int)),
+    connect(d->highlightsLumInput, SIGNAL(valueChanged(int)),
+            this, SLOT(slotTimer()));  
+    connect(d->sensibilityChromaInput, SIGNAL(valueChanged(int)),
+            this, SLOT(slotTimer()));
+    connect(d->shadowsChromaInput, SIGNAL(valueChanged(int)),
+            this, SLOT(slotTimer()));
+    connect(d->midtonesChromaInput, SIGNAL(valueChanged(int)),
+            this, SLOT(slotTimer()));
+    connect(d->highlightsChromaInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));
     // -------------------------------------------------------------
 
@@ -185,25 +270,25 @@ void FilmGrainTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
-    d->sensibilityInput->blockSignals(true);
-    d->sensibilityInput->setValue(group.readEntry(d->configSensitivityAdjustmentEntry, 
-                                                  d->sensibilityInput->defaultValue()));
-    d->sensibilityInput->blockSignals(false);
+    d->sensibilityLumInput->blockSignals(true);
+    d->sensibilityLumInput->setValue(group.readEntry(d->configSensitivityAdjustmentEntry, 
+                                                  d->sensibilityLumInput->defaultValue()));
+    d->sensibilityLumInput->blockSignals(false);
 }
 
 void FilmGrainTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
-    group.writeEntry(d->configSensitivityAdjustmentEntry, d->sensibilityInput->value());
+    group.writeEntry(d->configSensitivityAdjustmentEntry, d->sensibilityLumInput->value());
     config->sync();
 }
 
 void FilmGrainTool::slotResetSettings()
 {
-    d->sensibilityInput->blockSignals(true);
-    d->sensibilityInput->slotReset();
-    d->sensibilityInput->blockSignals(false);
+    d->sensibilityLumInput->blockSignals(true);
+    d->sensibilityLumInput->slotReset();
+    d->sensibilityLumInput->blockSignals(false);
 }
 
 void FilmGrainTool::prepareEffect()
@@ -212,12 +297,18 @@ void FilmGrainTool::prepareEffect()
     toolView()->setEnabled(false);
     
     DImg image     = d->previewWidget->getOriginalRegionImage();
-    int s          = d->sensibilityInput->value();
-    int shadows    = d->shadowsInput->value();
-    int midtones   = d->midtonesInput->value();
-    int highlights =d->highlightsInput->value();
-
-    setFilter(new FilmGrainFilter(&image, this, s, shadows, midtones, highlights));
+    int lum_s          = d->sensibilityLumInput->value();
+    int lum_shadows    = d->shadowsLumInput->value();
+    int lum_midtones   = d->midtonesLumInput->value();
+    int lum_highlights = d->highlightsLumInput->value();
+    int chroma_s          = d->sensibilityChromaInput->value();
+    int chroma_shadows    = d->shadowsChromaInput->value();
+    int chroma_midtones   = d->midtonesChromaInput->value();
+    int chroma_highlights = d->highlightsChromaInput->value();
+    
+    setFilter(new FilmGrainFilter(&image, this, 
+                                  lum_s, lum_shadows, lum_midtones, lum_highlights,
+                                  chroma_s, chroma_shadows, chroma_midtones, chroma_highlights));
 }
 
 void FilmGrainTool::prepareFinal()
@@ -225,14 +316,20 @@ void FilmGrainTool::prepareFinal()
     toolSettings()->setEnabled(false);
     toolView()->setEnabled(false);    
 
-    int s = d->sensibilityInput->value();
-    int shadows    = d->shadowsInput->value();
-    int midtones   = d->midtonesInput->value();
-    int highlights =d->highlightsInput->value();
+    int lum_s          = d->sensibilityLumInput->value();
+    int lum_shadows    = d->shadowsLumInput->value();
+    int lum_midtones   = d->midtonesLumInput->value();
+    int lum_highlights = d->highlightsLumInput->value();
+    int chroma_s          = d->sensibilityChromaInput->value();
+    int chroma_shadows    = d->shadowsChromaInput->value();
+    int chroma_midtones   = d->midtonesChromaInput->value();
+    int chroma_highlights = d->highlightsChromaInput->value();
     
     ImageIface iface(0, 0);
 
-    setFilter(new FilmGrainFilter(iface.getOriginalImg(), this, s, shadows, midtones, highlights));
+    setFilter(new FilmGrainFilter(iface.getOriginalImg(), this, 
+                                  lum_s, lum_shadows, lum_midtones, lum_highlights,
+                                  chroma_s, chroma_shadows, chroma_midtones, chroma_highlights));
 }
 
 void FilmGrainTool::putPreviewData()
