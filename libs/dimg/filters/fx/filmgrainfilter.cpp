@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2005-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010      by Julien Narboux <julien at narboux dot fr>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -27,11 +28,6 @@
 // C++ includes
 
 #include <cmath>
-#include <cstdlib>
-
-// Qt includes
-
-#include <QDateTime>
 
 // KDE includes
 
@@ -77,20 +73,14 @@ void FilmGrainFilter::filterImage()
 
     DColor color;
     int    h, s, l;
-    int    nRand, progress;
+    int    progress;
 
     int  width   = m_orgImage.width();
     int  height  = m_orgImage.height();
     bool sb      = m_orgImage.sixteenBit();
     int  noise   = ((m_sensibility+200) / 1000) * 3 * (sb ? 256 : 1);
     
-    QDateTime dt = QDateTime::currentDateTime();
-    QDateTime Y2000( QDate(2000, 1, 1), QTime(0, 0, 0) );
-    uint seed    = (uint) dt.secsTo(Y2000);
-
-#ifdef _WIN32
-    srand(seed);
-#endif
+    qsrand(1); // noise will always be the same
 
     for (int x = 0; !m_cancel && x < width; ++x)
     {
@@ -103,21 +93,8 @@ void FilmGrainFilter::filterImage()
             lightness= l / (sb ? 65535.0 : 255.0); 
             local_noise = interpolate(m_shadows,m_midtones,m_highlights,lightness) * noise+1;
             
-#ifndef _WIN32
-            nRand = (rand_r(&seed) % local_noise);
-#else
-            nRand = (rand() % local_noise);
-#endif
-            nRand = nRand - local_noise/2.0;
+            l = randomize(l,sb, local_noise);
             
-            if (!sb)
-            {
-              l = CLAMP0255(l+nRand);
-            }
-            else
-            {
-              l = CLAMP065535(l+nRand);
-            }
             color.setRGB(h, s, l, sb);
             m_destImage.setPixelColor(x, y, color);
         }
@@ -128,6 +105,19 @@ void FilmGrainFilter::filterImage()
         if (progress%5 == 0)
             postProgress( progress );
     }
+}
+
+int FilmGrainFilter::randomize(int value, bool sixteenbit, int range)
+{
+    int nRand = (qrand() % range) - range/2.0;            
+    if (!sixteenbit)
+        {
+            return (CLAMP0255(value+nRand));
+        }
+    else
+        {
+            return CLAMP065535(value+nRand);
+        }
 }
 
 double FilmGrainFilter::interpolate(int shadows,int midtones,int highlights, double x)

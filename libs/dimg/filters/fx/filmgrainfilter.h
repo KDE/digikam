@@ -50,6 +50,7 @@ private:
 
     void filterImage();
     double interpolate(int shadows, int midtones, int highlights, double x);
+    int    randomize  (int value, bool sixteenbit, int range);
     
 private:
 
