@@ -120,6 +120,18 @@ FIND_PACKAGE(Kdcraw)
 FIND_PACKAGE(Kexiv2)
 FIND_PACKAGE(Kipi)
 
+# Extract version of libjpeg so that we can use the appropriate dir
+# See bug #227313, #228483
+file(READ "${JPEG_INCLUDE_DIR}/jpeglib.h" jpeglib_h_content)
+string(REGEX REPLACE ".*#define +JPEG_LIB_VERSION +([0-9]+).*" "\\1" jpeglib_version "${jpeglib_h_content}")
+message(STATUS "Identified libjpeg version: ${jpeglib_version}")
+
+if ("${jpeglib_version}" LESS 80)
+    set(DIGIKAM_LIBJPEG_DIR libjpeg-62)
+else ("${jpeglib_version}" LESS 80)
+    set(DIGIKAM_LIBJPEG_DIR libjpeg-80)
+endif ("${jpeglib_version}" LESS 80)
+
 # Check KDcraw version installed to compile fine.
 IF(NOT WIN32)
     FIND_PACKAGE(PkgConfig)
@@ -593,7 +605,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     KDE4_NO_ENABLE_FINAL(libjpegutils)
     SET(libjpegutils_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils/jpegutils.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils/transupp.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils/${DIGIKAM_LIBJPEG_DIR}/transupp.cpp
        )
 
     IF(MSVC)

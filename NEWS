@@ -103,4 +103,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 073 ==> 229574 : Moving tags doesn't update the "tag counter" next to the tag name.
 074 ==> 229690 : No picture on thumb bar icon.
 075 ==> 229793 : Drop image file in digiKam.
-076 ==> 
+076 ==> 228483 : digikam-1.1.0 with system libjpeg-8 breaks image rotation.
+077 ==> 

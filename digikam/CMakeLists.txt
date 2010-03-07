@@ -23,6 +23,7 @@ INCLUDE_DIRECTORIES(
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/curves
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/levels
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/jpegutils
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/jpegutils/${DIGIKAM_LIBJPEG_DIR}
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/greycstoration
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/threadimageio
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/template

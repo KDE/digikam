@@ -89,6 +89,9 @@
 #endif /* NEED_SHORT_EXTERNAL_NAMES */
 
 
+namespace Digikam
+{
+
 /*
  * Codes for supported types of image transformations.
  */
@@ -208,3 +211,6 @@ EXTERN(void) jcopy_markers_setup
 EXTERN(void) jcopy_markers_execute
 	JPP((j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
 	     JCOPY_OPTION option));
+
+} // namespace Digikam
+
