@@ -411,6 +411,8 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
 
     connect(d->pickerColorButtonGroup, SIGNAL(buttonReleased(int)),
             this, SLOT(slotPickerColorButtonActived(int)));
+
+    slotTimer();
 }
 
 AdjustLevelsTool::~AdjustLevelsTool()
@@ -597,14 +599,26 @@ void AdjustLevelsTool::slotAdjustSliders()
     adjustSliders(d->minInput->value(), d->gammaInput->value(),
                   d->maxInput->value(), d->minOutput->value(),
                   d->maxOutput->value());
+
+    slotTimer();
 }
 
 void AdjustLevelsTool::adjustSlidersAndSpinboxes(int minIn, double gamIn, int maxIn, int minOut, int maxOut)
 {
+    d->minInput->blockSignals(true);
+    d->maxInput->blockSignals(true);
+    d->minOutput->blockSignals(true);
+    d->maxOutput->blockSignals(true);
+
     d->minInput->setValue(minIn);
     d->maxInput->setValue(maxIn);
     d->minOutput->setValue(minOut);
     d->maxOutput->setValue(maxOut);
+
+    d->minInput->blockSignals(false);
+    d->maxInput->blockSignals(false);
+    d->minOutput->blockSignals(false);
+    d->maxOutput->blockSignals(false);
 
     adjustSliders(minIn, gamIn, maxIn, minOut, maxOut);
 }
@@ -629,8 +643,6 @@ void AdjustLevelsTool::adjustSliders(int minIn, double gamIn, int maxIn, int min
     d->inputLevels->blockSignals(false);
     d->gammaInput->blockSignals(false);
     d->outputLevels->blockSignals(false);
-
-    slotTimer();
 }
 
 void AdjustLevelsTool::slotResetCurrentChannel()
@@ -642,7 +654,6 @@ void AdjustLevelsTool::slotResetCurrentChannel()
     d->levelsHistogramWidget->reset();
 
     slotEffect();
-    d->gboxSettings->histogramBox()->histogram()->reset();
 }
 
 void AdjustLevelsTool::slotAutoLevels()
@@ -741,6 +752,7 @@ void AdjustLevelsTool::readSettings()
     d->maxInput->setValue(d->levels->getLevelHighInputValue(d->gboxSettings->histogramBox()->channel()));
     d->maxOutput->setValue(d->levels->getLevelHighOutputValue(d->gboxSettings->histogramBox()->channel()));
     slotChannelChanged();
+    slotScaleChanged();
 }
 
 void AdjustLevelsTool::writeSettings()
@@ -785,7 +797,8 @@ void AdjustLevelsTool::slotResetSettings()
     // Refresh the current levels config.
     slotChannelChanged();
     d->levelsHistogramWidget->reset();
-    d->gboxSettings->histogramBox()->histogram()->reset();
+
+    slotEffect();
 }
 
 void AdjustLevelsTool::prepareEffect()
@@ -877,6 +890,8 @@ void AdjustLevelsTool::slotLoadSettings()
 
     // Refresh the current levels config.
     slotChannelChanged();
+
+    slotEffect();
 }
 
 void AdjustLevelsTool::slotSaveAsSettings()
