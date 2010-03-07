@@ -56,16 +56,13 @@
 
 // Local includes
 
-#include "daboutdata.h"
 #include "dimg.h"
 #include "editortoolsettings.h"
-#include "freerotation.h"
+#include "freerotationfilter.h"
 #include "imageiface.h"
 #include "imageguidewidget.h"
 #include "rexpanderbox.h"
-#include "version.h"
 
-using namespace Digikam;
 using namespace KDcrawIface;
 
 namespace DigikamFreeRotationImagesPlugin
@@ -181,7 +178,7 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     d->autoCropCB->addItem(i18nc("no autocrop", "None"));
     d->autoCropCB->addItem(i18n("Widest Area"));
     d->autoCropCB->addItem(i18n("Largest Area"));
-    d->autoCropCB->setDefaultIndex(FreeRotation::NoAutoCrop);
+    d->autoCropCB->setDefaultIndex(FreeRotationFilter::NoAutoCrop);
     d->autoCropCB->setWhatsThis(i18n("Select the method to process image auto-cropping "
                                      "to remove black frames around a rotated image here."));
 
@@ -278,7 +275,7 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    KSeparator *line  = new KSeparator(Qt::Horizontal);
+    KSeparator* line  = new KSeparator(Qt::Horizontal);
 
     d->expanderBox = new RExpanderBox;
     d->expanderBox->setObjectName("FreeRotationTool Expander");
@@ -403,19 +400,11 @@ void FreeRotationTool::prepareEffect()
     bool antialiasing = d->antialiasInput->isChecked();
     int autocrop      = d->autoCropCB->currentIndex();
     QColor background = toolView()->backgroundRole();
-
     ImageIface* iface = d->previewWidget->imageIface();
     int orgW          = iface->originalWidth();
     int orgH          = iface->originalHeight();
-
-    uchar *data = iface->getPreviewImage();
-    DImg image(iface->previewWidth(), iface->previewHeight(), iface->previewSixteenBit(),
-                        iface->previewHasAlpha(), data);
-    delete [] data;
-
-    setFilter(dynamic_cast<DImgThreadedFilter *>(
-                       new FreeRotation(&image, this, angle, antialiasing, autocrop,
-                                        background, orgW, orgH)));
+    DImg preview      = iface->getPreviewImg();
+    setFilter(new FreeRotationFilter(&preview, this, angle, antialiasing, autocrop, background, orgW, orgH));
 }
 
 void FreeRotationTool::prepareFinal()
@@ -428,52 +417,41 @@ void FreeRotationTool::prepareFinal()
     QColor background = Qt::black;
 
     ImageIface iface(0, 0);
-    int orgW = iface.originalWidth();
-    int orgH = iface.originalHeight();
-
-    uchar *data = iface.getOriginalImage();
-    DImg orgImage(orgW, orgH, iface.originalSixteenBit(),
-                           iface.originalHasAlpha(), data);
-    delete [] data;
-
-    setFilter(dynamic_cast<DImgThreadedFilter *>(
-                       new FreeRotation(&orgImage, this, angle, antialiasing, autocrop,
-                                        background, orgW, orgH)));
+    int orgW       = iface.originalWidth();
+    int orgH       = iface.originalHeight();
+    DImg* orgImage = iface.getOriginalImg();
+    setFilter(new FreeRotationFilter(orgImage, this, angle, antialiasing, autocrop, background, orgW, orgH));
 }
 
-void FreeRotationTool::putPreviewData(void)
+void FreeRotationTool::putPreviewData()
 {
     ImageIface* iface = d->previewWidget->imageIface();
     int w             = iface->previewWidth();
     int h             = iface->previewHeight();
 
     DImg imTemp = filter()->getTargetImage().smoothScale(w, h, Qt::KeepAspectRatio);
-    DImg imDest( w, h, filter()->getTargetImage().sixteenBit(),
-                                filter()->getTargetImage().hasAlpha() );
+    DImg imDest(w, h, filter()->getTargetImage().sixteenBit(), filter()->getTargetImage().hasAlpha());
 
     QColor background = toolView()->backgroundRole();
-    imDest.fill( DColor(background, filter()->getTargetImage().sixteenBit()) );
+    imDest.fill(DColor(background, filter()->getTargetImage().sixteenBit()));
     imDest.bitBltImage(&imTemp, (w-imTemp.width())/2, (h-imTemp.height())/2);
 
-    iface->putPreviewImage((imDest.smoothScale(iface->previewWidth(),
-                                               iface->previewHeight())).bits());
-
+    iface->putPreviewImage((imDest.smoothScale(iface->previewWidth(), iface->previewHeight())).bits());
     d->previewWidget->updatePreview();
-    QSize newSize = dynamic_cast<FreeRotation *>(filter())->getNewSize();
+
     QString temp;
-    int new_w = (newSize.width()  == -1) ? iface->originalWidth()  : newSize.width();
-    int new_h = (newSize.height() == -1) ? iface->originalHeight() : newSize.height();
+    QSize newSize = dynamic_cast<FreeRotationFilter*>(filter())->getNewSize();
+    int new_w     = (newSize.width()  == -1) ? iface->originalWidth()  : newSize.width();
+    int new_h     = (newSize.height() == -1) ? iface->originalHeight() : newSize.height();
     d->newWidthLabel->setText(temp.setNum(new_w)  + i18n(" px") );
     d->newHeightLabel->setText(temp.setNum(new_h) + i18n(" px") );
 }
 
-void FreeRotationTool::putFinalData(void)
+void FreeRotationTool::putFinalData()
 {
     ImageIface iface(0, 0);
     DImg targetImage = filter()->getTargetImage();
-    iface.putOriginalImage(i18n("Free Rotation"),
-                           targetImage.bits(),
-                           targetImage.width(), targetImage.height());
+    iface.putOriginalImage(i18n("Free Rotation"), targetImage.bits(), targetImage.width(), targetImage.height());
 }
 
 void FreeRotationTool::renderingFinished()
@@ -510,7 +488,6 @@ QString FreeRotationTool::centerString(const QString& str, int maxLength)
     {
         QString delimiter(" ");
         int times = (diff / 2);
-
 
 #if QT_VERSION >= 0x040500
         tmp.prepend(delimiter.repeated(times));
@@ -665,7 +642,7 @@ double FreeRotationTool::calculateAutoAngle()
     {
         return 0.0;
     }
-    return FreeRotation::calculateAngle(d->autoAdjustPoint1, d->autoAdjustPoint2);
+    return FreeRotationFilter::calculateAngle(d->autoAdjustPoint1, d->autoAdjustPoint2);
 }
 
 void FreeRotationTool::setPointInvalid(QPoint& p)

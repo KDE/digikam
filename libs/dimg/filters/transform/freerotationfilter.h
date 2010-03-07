@@ -7,7 +7,7 @@
  * Description : Free rotation threaded image filter.
  *
  * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009      by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef FREE_ROTATION_H
-#define FREE_ROTATION_H
+#ifndef FREE_ROTATION_FILTER_H
+#define FREE_ROTATION_FILTER_H
 
 // Qt includes
 
@@ -32,23 +32,25 @@
 
 // Local includes
 
+#include "digikam_export.h"
 #include "dimgthreadedfilter.h"
+#include "globals.h"
 
-namespace DigikamFreeRotationImagesPlugin
+namespace Digikam
 {
 
-class FreeRotation : public Digikam::DImgThreadedFilter
+class DIGIKAM_EXPORT FreeRotationFilter : public DImgThreadedFilter
 {
 
 public:
 
-    explicit FreeRotation(Digikam::DImg* orgImage, QObject* parent=0, double angle=0.0,
-                          bool antialiasing=true, int autoCrop=NoAutoCrop, QColor backgroundColor=Qt::black,
-                          int orgW=0, int orgH=0);
+    explicit FreeRotationFilter(DImg* orgImage, QObject* parent=0, double angle=0.0,
+                                bool antialiasing=true, int autoCrop=NoAutoCrop, const QColor& backgroundColor=Qt::black,
+                                int orgW=0, int orgH=0);
 
-    ~FreeRotation(){};
+    ~FreeRotationFilter(){};
 
-    QSize getNewSize(void){ return m_newSize; };
+    QSize getNewSize(){ return m_newSize; };
 
     static double calculateAngle(int x1, int y1, int x2, int y2);
     static double calculateAngle(const QPoint& p1, const QPoint& p2);
@@ -93,6 +95,6 @@ private:
     QColor m_backgroundColor;
 };
 
-}  // namespace DigikamFreeRotationImagesPlugin
+}  // namespace Digikam
 
-#endif /* FREE_ROTATION_H */
+#endif /* FREE_ROTATION_FILTER_H */

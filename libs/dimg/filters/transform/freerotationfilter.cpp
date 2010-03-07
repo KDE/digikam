@@ -7,7 +7,7 @@
  * Description : Free rotation threaded image filter.
  *
  * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009      by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -25,7 +25,7 @@
 // Degrees to radian conversion coeff (PI/180). To optimize computation.
 #define DEG2RAD 0.017453292519943
 
-#include "freerotation.h"
+#include "freerotationfilter.h"
 
 // C++ includes
 
@@ -37,12 +37,12 @@
 #include "dimg.h"
 #include "pixelsaliasfilter.h"
 
-namespace DigikamFreeRotationImagesPlugin
+namespace Digikam
 {
 
-FreeRotation::FreeRotation(Digikam::DImg* orgImage, QObject* parent, double angle, bool antialiasing,
-                           int autoCrop, QColor backgroundColor, int orgW, int orgH)
-            : Digikam::DImgThreadedFilter(orgImage, parent, "FreeRotation")
+FreeRotationFilter::FreeRotationFilter(DImg* orgImage, QObject* parent, double angle, bool antialiasing,
+                           int autoCrop, const QColor& backgroundColor, int orgW, int orgH)
+            : DImgThreadedFilter(orgImage, parent, "FreeRotation")
 {
     m_angle           = angle;
     m_orgW            = orgW;
@@ -54,7 +54,7 @@ FreeRotation::FreeRotation(Digikam::DImg* orgImage, QObject* parent, double angl
     initFilter();
 }
 
-double FreeRotation::calculateAngle(int x1, int y1, int x2, int y2)
+double FreeRotationFilter::calculateAngle(int x1, int y1, int x2, int y2)
 {
     QPoint p1(x1, y1);
     QPoint p2(x2, y2);
@@ -62,7 +62,7 @@ double FreeRotation::calculateAngle(int x1, int y1, int x2, int y2)
     return calculateAngle(p1, p2);
 }
 
-double FreeRotation::calculateAngle(const QPoint& p1, const QPoint& p2)
+double FreeRotationFilter::calculateAngle(const QPoint& p1, const QPoint& p2)
 {
     // check for invalid points. This should have been handled by the calling method,
     // but we want to be really sure here
@@ -102,7 +102,7 @@ double FreeRotation::calculateAngle(const QPoint& p1, const QPoint& p2)
     return angle;
 }
 
-void FreeRotation::filterImage()
+void FreeRotationFilter::filterImage()
 {
     int          progress;
     register int w, h, nw, nh, j, i = 0;
@@ -148,17 +148,17 @@ void FreeRotation::filterImage()
 
     bool sixteenBit = m_orgImage.sixteenBit();
 
-    m_destImage = Digikam::DImg(nNewWidth, nNewHeight, sixteenBit, m_orgImage.hasAlpha());
+    m_destImage = DImg(nNewWidth, nNewHeight, sixteenBit, m_orgImage.hasAlpha());
 
     if (m_destImage.isNull())
         return;
 
-    m_destImage.fill( Digikam::DColor(m_backgroundColor.rgb(), sixteenBit) );
+    m_destImage.fill( DColor(m_backgroundColor.rgb(), sixteenBit) );
 
     uchar* pResBits            = m_destImage.bits();
     unsigned short* pResBits16 = (unsigned short *)m_destImage.bits();
 
-    Digikam::PixelsAliasFilter alias;
+    PixelsAliasFilter alias;
 
     // main loop
 
@@ -249,9 +249,9 @@ void FreeRotation::filterImage()
 
             if (!autoCrop.isValid())
             {
-                m_destImage = Digikam::DImg(m_orgImage.width(), m_orgImage.height(), m_orgImage.sixteenBit(),
+                m_destImage = DImg(m_orgImage.width(), m_orgImage.height(), m_orgImage.sixteenBit(),
                                             m_orgImage.hasAlpha());
-                m_destImage.fill(Digikam::DColor(m_backgroundColor.rgb(), sixteenBit));
+                m_destImage.fill(DColor(m_backgroundColor.rgb(), sixteenBit));
                 m_newSize = QSize();
             }
             else
@@ -308,9 +308,9 @@ void FreeRotation::filterImage()
 
             if (!autoCrop.isValid())
             {
-                m_destImage = Digikam::DImg(m_orgImage.width(), m_orgImage.height(), m_orgImage.sixteenBit(),
+                m_destImage = DImg(m_orgImage.width(), m_orgImage.height(), m_orgImage.sixteenBit(),
                                             m_orgImage.hasAlpha());
-                m_destImage.fill(Digikam::DColor(m_backgroundColor.rgb(), sixteenBit));
+                m_destImage.fill(DColor(m_backgroundColor.rgb(), sixteenBit));
                 m_newSize = QSize();
             }
             else
@@ -342,4 +342,4 @@ void FreeRotation::filterImage()
     }
 }
 
-}  // namespace DigikamFreeRotationImagesPlugin
+}  // namespace Digikam

@@ -7,8 +7,8 @@
  * Description : a digiKam image editor plugin to process image
  *               free rotation.
  *
- * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009      by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -33,18 +33,20 @@
 class QPixmap;
 class QString;
 
+using namespace Digikam;
+
 namespace DigikamFreeRotationImagesPlugin
 {
 
 class FreeRotationToolPriv;
 
-class FreeRotationTool : public Digikam::EditorToolThreaded
+class FreeRotationTool : public EditorToolThreaded
 {
     Q_OBJECT
 
 public:
 
-    FreeRotationTool(QObject *parent);
+    FreeRotationTool(QObject* parent);
     ~FreeRotationTool();
 
 public Q_SLOTS:
