@@ -97,8 +97,7 @@ FilmGrainTool::FilmGrainTool(QObject* parent)
     
     d->gboxSettings->setButtons(EditorToolSettings::Default|
                                 EditorToolSettings::Ok|
-                                EditorToolSettings::Cancel|
-                                EditorToolSettings::Try);
+                                EditorToolSettings::Cancel);
 
     // -------------------------------------------------------------
 
@@ -166,7 +165,12 @@ FilmGrainTool::FilmGrainTool(QObject* parent)
 
     connect(d->sensibilityInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));
-
+    connect(d->shadowsInput, SIGNAL(valueChanged(int)),
+            this, SLOT(slotTimer()));
+    connect(d->midtonesInput, SIGNAL(valueChanged(int)),
+            this, SLOT(slotTimer()));
+    connect(d->highlightsInput, SIGNAL(valueChanged(int)),
+            this, SLOT(slotTimer()));
     // -------------------------------------------------------------
 
     slotTimer();
@@ -222,10 +226,13 @@ void FilmGrainTool::prepareFinal()
     toolView()->setEnabled(false);    
 
     int s = d->sensibilityInput->value();
-
+    int shadows    = d->shadowsInput->value();
+    int midtones   = d->midtonesInput->value();
+    int highlights =d->highlightsInput->value();
+    
     ImageIface iface(0, 0);
 
-    setFilter(new FilmGrainFilter(iface.getOriginalImg(), this, s));
+    setFilter(new FilmGrainFilter(iface.getOriginalImg(), this, s, shadows, midtones, highlights));
 }
 
 void FilmGrainTool::putPreviewData()
