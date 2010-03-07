@@ -68,6 +68,7 @@ static const char* ObsoleteImagePluginsList[] =
      "digikamimageplugin_charcoal",       // Merged to "FxFilters" plugin since 1.2.0.
      "digikamimageplugin_emboss",         // Merged to "FxFilters" plugin since 1.2.0.
      "digikamimageplugin_oilpaint",       // Merged to "FxFilters" plugin since 1.2.0.
+     "digikamimageplugin_blurfx",         // Merged to "FxFilters" plugin since 1.2.0.
      "-1"
 };
 

@@ -4,6 +4,7 @@ SET(digikamimageplugin_fxfilters_PART_SRCS imageplugin_fxfilters.cpp
                                            charcoaltool.cpp
                                            embosstool.cpp
                                            oilpainttool.cpp
+                                           blurfxtool.cpp
    )
 
 KDE4_ADD_PLUGIN(digikamimageplugin_fxfilters ${digikamimageplugin_fxfilters_PART_SRCS})

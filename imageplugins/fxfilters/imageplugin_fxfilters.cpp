@@ -39,6 +39,7 @@
 #include "charcoaltool.h"
 #include "embosstool.h"
 #include "oilpainttool.h"
+#include "blurfxtool.h"
 
 using namespace DigikamFxFiltersImagePlugin;
 
@@ -68,6 +69,11 @@ ImagePlugin_FxFilters::ImagePlugin_FxFilters(QObject* parent, const QVariantList
     connect(m_oilpaintAction, SIGNAL(triggered(bool) ),
             this ,SLOT(slotOilPaint()));
 
+    m_blurfxAction = new KAction(KIcon("blurfx"), i18n("Blur Effects..."), this);
+    actionCollection()->addAction("imageplugin_blurfx", m_blurfxAction );
+    connect(m_blurfxAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotBlurFX()));
+
     setXMLFile( "digikamimageplugin_fxfilters_ui.rc" );
 
     kDebug() << "ImagePlugin_FxFilters plugin loaded";
@@ -83,6 +89,7 @@ void ImagePlugin_FxFilters::setEnabledActions(bool b)
     m_colorEffectsAction->setEnabled(b);
     m_embossAction->setEnabled(b);
     m_oilpaintAction->setEnabled(b);
+    m_blurfxAction->setEnabled(b);
 }
 
 void ImagePlugin_FxFilters::slotColorEffects()
@@ -106,5 +113,11 @@ void ImagePlugin_FxFilters::slotEmboss()
 void ImagePlugin_FxFilters::slotOilPaint()
 {
     OilPaintTool* tool = new OilPaintTool(this);
+    loadTool(tool);
+}
+
+void ImagePlugin_FxFilters::slotBlurFX()
+{
+    BlurFXTool* tool = new BlurFXTool(this);
     loadTool(tool);
 }

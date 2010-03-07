@@ -56,7 +56,7 @@
 
 using namespace KDcrawIface;
 
-namespace DigikamBlurFXImagesPlugin
+namespace DigikamFxFiltersImagePlugin
 {
 
 class BlurFXToolPriv
@@ -443,4 +443,4 @@ void BlurFXTool::blockWidgetSignals(bool b)
     d->levelInput->blockSignals(b);
 }
 
-}  // namespace DigikamBlurFXImagesPlugin
+}  // namespace DigikamFxFiltersImagePlugin

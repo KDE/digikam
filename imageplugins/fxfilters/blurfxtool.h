@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace DigikamBlurFXImagesPlugin
+namespace DigikamFxFiltersImagePlugin
 {
 
 class BlurFXToolPriv;
@@ -66,6 +66,6 @@ private:
     BlurFXToolPriv* const d;
 };
 
-}  // namespace DigikamBlurFXImagesPlugin
+}  // namespace DigikamFxFiltersImagePlugin
 
 #endif /* BLURFXTOOL_H */
