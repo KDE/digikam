@@ -30,6 +30,7 @@ fxfilters
   /colorfx                  TODO                 TODO                  TODO
   /charcoal                 DONE                 DONE                  TODO
   /emboss                   DONE                 DONE                  TODO
+  /oilpaint                 DONE                 DONE                  TODO
 
 hotpixels                   DONE                 DONE                  TODO
 inpainting                  DONE                  NO                    NO
@@ -41,7 +42,6 @@ lenscorrection
   /vignetting               DONE                 TODO                  TODO
 
 localcontrast               DONE                 TODO                  TODO
-oilpaint                    DONE                 DONE                  TODO
 perspective                  NO                   NO                    NO
 raindrop                    DONE                  NO                   TODO
 restoration                 DONE                 DONE                  DONE

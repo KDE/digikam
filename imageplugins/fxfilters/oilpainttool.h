@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace DigikamOilPaintImagesPlugin
+namespace DigikamFxFiltersImagePlugin
 {
 
 class OilPaintToolPriv;
@@ -64,6 +64,6 @@ private:
     OilPaintToolPriv* const d;
 };
 
-}  // namespace DigikamOilPaintImagesPlugin
+}  // namespace DigikamFxFiltersImagePlugin
 
 #endif /* OILPAINTTOOL_H */

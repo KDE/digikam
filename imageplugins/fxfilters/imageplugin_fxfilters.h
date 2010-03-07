@@ -53,9 +53,11 @@ private Q_SLOTS:
     void slotColorEffects();
     void slotCharcoal();
     void slotEmboss();
+    void slotOilPaint();
 
 private:
 
+    KAction* m_oilpaintAction;
     KAction* m_embossAction;
     KAction* m_charcoalAction;
     KAction* m_colorEffectsAction;

@@ -55,7 +55,7 @@
 
 using namespace KDcrawIface;
 
-namespace DigikamOilPaintImagesPlugin
+namespace DigikamFxFiltersImagePlugin
 {
 
 class OilPaintToolPriv
@@ -220,4 +220,4 @@ void OilPaintTool::renderingFinished()
     toolView()->setEnabled(true);
 }
 
-}  // namespace DigikamOilPaintImagesPlugin
+}  // namespace DigikamFxFiltersImagePlugin

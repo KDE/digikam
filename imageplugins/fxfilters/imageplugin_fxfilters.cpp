@@ -38,6 +38,7 @@
 #include "colorfxtool.h"
 #include "charcoaltool.h"
 #include "embosstool.h"
+#include "oilpainttool.h"
 
 using namespace DigikamFxFiltersImagePlugin;
 
@@ -62,6 +63,11 @@ ImagePlugin_FxFilters::ImagePlugin_FxFilters(QObject* parent, const QVariantList
     connect(m_embossAction, SIGNAL(triggered(bool)),
             this, SLOT(slotEmboss()));
 
+    m_oilpaintAction = new KAction(KIcon("oilpaint"), i18n("Oil Paint..."), this);
+    actionCollection()->addAction("imageplugin_oilpaint", m_oilpaintAction);
+    connect(m_oilpaintAction, SIGNAL(triggered(bool) ),
+            this ,SLOT(slotOilPaint()));
+
     setXMLFile( "digikamimageplugin_fxfilters_ui.rc" );
 
     kDebug() << "ImagePlugin_FxFilters plugin loaded";
@@ -76,6 +82,7 @@ void ImagePlugin_FxFilters::setEnabledActions(bool b)
     m_charcoalAction->setEnabled(b);
     m_colorEffectsAction->setEnabled(b);
     m_embossAction->setEnabled(b);
+    m_oilpaintAction->setEnabled(b);
 }
 
 void ImagePlugin_FxFilters::slotColorEffects()
@@ -93,5 +100,11 @@ void ImagePlugin_FxFilters::slotCharcoal()
 void ImagePlugin_FxFilters::slotEmboss()
 {
     EmbossTool* tool = new EmbossTool(this);
+    loadTool(tool);
+}
+
+void ImagePlugin_FxFilters::slotOilPaint()
+{
+    OilPaintTool* tool = new OilPaintTool(this);
     loadTool(tool);
 }
