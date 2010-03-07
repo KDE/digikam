@@ -121,6 +121,7 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* parent)
     ImageIface iface(0, 0);
     QVBoxLayout* vbox = new QVBoxLayout(d->gboxSettings->plainPage());
     d->settingsView   = new CurvesSettings(d->gboxSettings->plainPage(), iface.getOriginalImg());
+    d->gboxSettings->histogramBox()->setContentsMargins(d->settingsView->curvesLeftOffset(), 0, 0, 0);
     vbox->addWidget(d->settingsView);
     vbox->addStretch(10);
     vbox->setMargin(0);

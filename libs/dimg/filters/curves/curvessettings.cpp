@@ -282,4 +282,9 @@ void CurvesSettings::saveAsSettings()
     }
 }
 
+int CurvesSettings::curvesLeftOffset() const
+{
+    return d->curvesBox->curvesLeftOffset();
+}
+
 }  // namespace Digikam

@@ -430,4 +430,15 @@ void CurvesBox::setCurveGuide(const DColor& color)
     d->curvesWidget->setCurveGuide(color);
 }
 
+int CurvesBox::curvesLeftOffset() const
+{
+    // width of spacer column between gradient and curves
+    int offset = 2;
+    if (!d->vGradient->isHidden())
+    {
+        offset += d->vGradient->width();
+    }
+    return offset;
+}
+
 } // namespace Digikam

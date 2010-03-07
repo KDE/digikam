@@ -95,6 +95,8 @@ public:
     void readCurveSettings(KConfigGroup& group, QString prefix);
     void writeCurveSettings(KConfigGroup& group, QString prefix);
 
+    int curvesLeftOffset() const;
+
     ImageCurves* curves() const;
 
 Q_SIGNALS:
