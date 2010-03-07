@@ -129,6 +129,9 @@ void EditorToolIface::loadTool(EditorTool* tool)
     updateExposureSettings();
     updateICCSettings();
     setToolInfoMessage(QString());
+
+    connect(d->editor, SIGNAL(signalPreviewModeChanged(int)),
+            d->tool, SLOT(slotPreviewModeChanged()));
 }
 
 void EditorToolIface::unLoadTool()
