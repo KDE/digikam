@@ -136,6 +136,7 @@ void BatchThumbsGenerator::slotRebuildThumbs()
 
 #endif
 
+    // remove non-image files from the list
     QStringList::iterator it = d->allPicturesPath.begin();
     while (it != d->allPicturesPath.end())
     {
