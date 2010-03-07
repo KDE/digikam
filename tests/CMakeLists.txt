@@ -7,6 +7,7 @@ INCLUDE_DIRECTORIES(
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/fx
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/icc
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/transform
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/loaders
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dmetadata
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/models
@@ -125,7 +126,7 @@ TARGET_LINK_LIBRARIES(statesavingobjecttest
 #------------------------------------------------------------------------
 
 SET(freerotationtest_SRCS
-    ${CMAKE_CURRENT_SOURCE_DIR}/../imageplugins/freerotation/freerotation.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/transform/freerotationfilter.cpp
     freerotationtest.cpp
 )
 KDE4_ADD_UNIT_TEST(freerotationtest ${freerotationtest_SRCS})
