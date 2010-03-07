@@ -115,7 +115,7 @@ FilmGrainTool::FilmGrainTool(QObject* parent)
     d->highlightsInput = new RIntNumInput;
     d->highlightsInput->setRange(-100, 100, 1);
     d->highlightsInput->setSliderEnabled(true);
-    d->highlightsInput->setDefaultValue(0);
+    d->highlightsInput->setDefaultValue(-100);
     d->highlightsInput->setWhatsThis(i18n("Set how much the filter affects highlights."));
     
     // -------------------------------------------------------------
@@ -134,7 +134,7 @@ FilmGrainTool::FilmGrainTool(QObject* parent)
     d->shadowsInput = new RIntNumInput;
     d->shadowsInput->setRange(-100, 100, 1);
     d->shadowsInput->setSliderEnabled(true);
-    d->shadowsInput->setDefaultValue(0);
+    d->shadowsInput->setDefaultValue(-100);
     d->shadowsInput->setWhatsThis(i18n("Set how much the filter affects shadows."));
   
     
