@@ -56,9 +56,11 @@ private Q_SLOTS:
     void slotOilPaint();
     void slotBlurFX();
     void slotDistortionFX();
+    void slotRainDrop();
 
 private:
 
+    KAction* m_raindropAction;
     KAction* m_distortionfxAction;
     KAction* m_blurfxAction;
     KAction* m_oilpaintAction;

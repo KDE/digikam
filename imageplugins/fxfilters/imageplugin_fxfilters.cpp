@@ -41,6 +41,7 @@
 #include "oilpainttool.h"
 #include "blurfxtool.h"
 #include "distortionfxtool.h"
+#include "raindroptool.h"
 
 using namespace DigikamFxFiltersImagePlugin;
 
@@ -75,10 +76,15 @@ ImagePlugin_FxFilters::ImagePlugin_FxFilters(QObject* parent, const QVariantList
     connect(m_blurfxAction, SIGNAL(triggered(bool)),
             this, SLOT(slotBlurFX()));
 
-    m_distortionfxAction  = new KAction(KIcon("distortionfx"), i18n("Distortion Effects..."), this);
+    m_distortionfxAction = new KAction(KIcon("distortionfx"), i18n("Distortion Effects..."), this);
     actionCollection()->addAction("imageplugin_distortionfx", m_distortionfxAction );
     connect(m_distortionfxAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotDistortionFX()));
+
+    m_raindropAction = new KAction(KIcon("raindrop"), i18n("Raindrops..."), this);
+    actionCollection()->addAction("imageplugin_raindrop", m_raindropAction );
+    connect(m_raindropAction, SIGNAL(triggered(bool) ),
+            this, SLOT(slotRainDrop()));
 
     setXMLFile( "digikamimageplugin_fxfilters_ui.rc" );
 
@@ -97,6 +103,7 @@ void ImagePlugin_FxFilters::setEnabledActions(bool b)
     m_oilpaintAction->setEnabled(b);
     m_blurfxAction->setEnabled(b);
     m_distortionfxAction->setEnabled(b);
+    m_raindropAction->setEnabled(b);
 }
 
 void ImagePlugin_FxFilters::slotColorEffects()
@@ -132,5 +139,11 @@ void ImagePlugin_FxFilters::slotBlurFX()
 void ImagePlugin_FxFilters::slotDistortionFX()
 {
     DistortionFXTool* tool = new DistortionFXTool(this);
+    loadTool(tool);
+}
+
+void ImagePlugin_FxFilters::slotRainDrop()
+{
+    RainDropTool* tool = new RainDropTool(this);
     loadTool(tool);
 }

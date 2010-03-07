@@ -32,6 +32,7 @@ fxfilters
   /emboss                   DONE                 DONE                  TODO
   /oilpaint                 DONE                 DONE                  TODO
   /blurfx                   DONE                 DONE                  TODO
+  /raindrop                 DONE                  NO                   TODO
 
 hotpixels                   DONE                 DONE                  TODO
 inpainting                  DONE                  NO                    NO
@@ -44,7 +45,6 @@ lenscorrection
 
 localcontrast               DONE                 TODO                  TODO
 perspective                  NO                   NO                    NO
-raindrop                    DONE                  NO                   TODO
 restoration                 DONE                 DONE                  DONE
 sheartool                   DONE                  NO                   TODO
 superimpose                  NO                   NO                    NO

@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace DigikamRainDropImagesPlugin
+namespace DigikamFxFiltersImagePlugin
 {
 
 class RainDropToolPriv;
@@ -65,6 +65,6 @@ private:
     RainDropToolPriv* const d;
 };
 
-}  // namespace DigikamRainDropImagesPlugin
+}  // namespace DigikamFxFiltersImagePlugin
 
 #endif /* RAINDROPTOOL_H */

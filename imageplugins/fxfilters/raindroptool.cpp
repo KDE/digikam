@@ -55,7 +55,7 @@
 
 using namespace KDcrawIface;
 
-namespace DigikamRainDropImagesPlugin
+namespace DigikamFxFiltersImagePlugin
 {
 
 class RainDropToolPriv
@@ -272,4 +272,4 @@ void RainDropTool::blockWidgetSignals(bool b)
     d->coeffInput->blockSignals(b);
 }
 
-}  // namespace DigikamRainDropImagesPlugin
+}  // namespace DigikamFxFiltersImagePlugin
