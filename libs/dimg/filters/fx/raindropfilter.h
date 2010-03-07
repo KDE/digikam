@@ -5,49 +5,51 @@
  *
  * Date        : 2005-05-25
  * Description : Raindrop threaded image filter.
- * 
+ *
  * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * 
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
-  
-#ifndef RAINDROP_H
-#define RAINDROP_H
+
+#ifndef RAINDROPFILTER_H
+#define RAINDROPFILTER_H
 
 // Local includes
 
+#include "digikam_export.h"
 #include "dimgthreadedfilter.h"
+#include "globals.h"
 
 class QRect;
 
-namespace DigikamRainDropImagesPlugin
+namespace Digikam
 {
 
-class RainDrop : public Digikam::DImgThreadedFilter
+class DIGIKAM_EXPORT RainDropFilter : public DImgThreadedFilter
 {
 
 public:
 
-    explicit RainDrop(Digikam::DImg* orgImage, QObject* parent=0, int drop=80,
-                      int amount=150, int coeff=30, QRect* selection=0L);
-    ~RainDrop(){};
+    explicit RainDropFilter(DImg* orgImage, QObject* parent=0, int drop=80,
+                            int amount=150, int coeff=30, QRect* selection=0L);
+    ~RainDropFilter(){};
 
 private:
 
     void filterImage();
 
-    void rainDropsImage(Digikam::DImg* orgImage, Digikam::DImg* destImage, int MinDropSize, int MaxDropSize,
+    void rainDropsImage(DImg* orgImage, DImg* destImage, int MinDropSize, int MaxDropSize,
                         int Amount, int Coeff, bool bLimitRange, int progressMin, int progressMax);
 
     bool CreateRainDrop(uchar* pBits, int Width, int Height, bool sixteenBit, int bytesDepth,
@@ -58,8 +60,8 @@ private:
 
     bool SetDropStatusBits(int Width, int Height, uchar* pStatusBits, int X, int Y, int DropSize);
 
-    // A color is represented in RGB value (e.g. 0xFFFFFF is white color). 
-    // But R, G and B values has 256 values to be used so, this function analyzes 
+    // A color is represented in RGB value (e.g. 0xFFFFFF is white color).
+    // But R, G and B values has 256 values to be used so, this function analyzes
     // the value and limits to this range.
     inline int LimitValues8(int ColorValue)
     {
@@ -99,6 +101,6 @@ private:
     int m_selectedH;
 };
 
-}  // namespace DigikamRainDropImagesPlugin
+}  // namespace Digikam
 
-#endif /* RAINDROP_H */
+#endif /* RAINDROPFILTER_H */

@@ -25,7 +25,7 @@
  *
  * ============================================================ */
 
-#include "raindrop.h"
+#include "raindropfilter.h"
 
 // C++ includes
 
@@ -41,12 +41,12 @@
 
 #include "dimg.h"
 
-namespace DigikamRainDropImagesPlugin
+namespace Digikam
 {
 
-RainDrop::RainDrop(Digikam::DImg* orgImage, QObject* parent, int drop,
-                   int amount, int coeff, QRect* selection)
-        : Digikam::DImgThreadedFilter(orgImage, parent, "RainDrop")
+RainDropFilter::RainDropFilter(DImg* orgImage, QObject* parent, int drop,
+                               int amount, int coeff, QRect* selection)
+              : DImgThreadedFilter(orgImage, parent, "RainDrop")
 {
     m_drop   = drop;
     m_amount = amount;
@@ -65,7 +65,7 @@ RainDrop::RainDrop(Digikam::DImg* orgImage, QObject* parent, int drop,
     initFilter();
 }
 
-void RainDrop::filterImage()
+void RainDropFilter::filterImage()
 {
     int w = m_orgImage.width();
     int h = m_orgImage.height();
@@ -75,9 +75,9 @@ void RainDrop::filterImage()
 
     if (m_selectedW && m_selectedH)
     {
-        Digikam::DImg zone1, zone2, zone3, zone4,
-                      zone1Dest, zone2Dest, zone3Dest, zone4Dest,
-                      selectedImg;
+        DImg zone1, zone2, zone3, zone4,
+             zone1Dest, zone2Dest, zone3Dest, zone4Dest,
+             selectedImg;
         selectedImg = m_orgImage.copy(m_selectedX, m_selectedY, m_selectedW, m_selectedH);
 
         // Cut the original image in 4 areas without clipping region.
@@ -87,10 +87,10 @@ void RainDrop::filterImage()
         zone3 = m_orgImage.copy(m_selectedX, m_selectedY + m_selectedH, m_selectedX + m_selectedW, h);
         zone4 = m_orgImage.copy(m_selectedX + m_selectedW, 0, w, h);
 
-        zone1Dest = Digikam::DImg(zone1.width(), zone1.height(), zone1.sixteenBit(), zone1.hasAlpha());
-        zone2Dest = Digikam::DImg(zone2.width(), zone2.height(), zone2.sixteenBit(), zone2.hasAlpha());
-        zone3Dest = Digikam::DImg(zone3.width(), zone3.height(), zone3.sixteenBit(), zone3.hasAlpha());
-        zone4Dest = Digikam::DImg(zone4.width(), zone4.height(), zone4.sixteenBit(), zone4.hasAlpha());
+        zone1Dest = DImg(zone1.width(), zone1.height(), zone1.sixteenBit(), zone1.hasAlpha());
+        zone2Dest = DImg(zone2.width(), zone2.height(), zone2.sixteenBit(), zone2.hasAlpha());
+        zone3Dest = DImg(zone3.width(), zone3.height(), zone3.sixteenBit(), zone3.hasAlpha());
+        zone4Dest = DImg(zone4.width(), zone4.height(), zone4.sixteenBit(), zone4.hasAlpha());
 
         // Apply effect on each area.
 
@@ -131,8 +131,8 @@ void RainDrop::filterImage()
  *                     will be applied, after this, a shadow will be applied too.
  *                     and after this, a blur function will finish the effect.
  */
-void RainDrop::rainDropsImage(Digikam::DImg* orgImage, Digikam::DImg* destImage, int MinDropSize, int MaxDropSize,
-                              int Amount, int Coeff, bool bLimitRange, int progressMin, int progressMax)
+void RainDropFilter::rainDropsImage(DImg* orgImage, DImg* destImage, int MinDropSize, int MaxDropSize,
+                                    int Amount, int Coeff, bool bLimitRange, int progressMin, int progressMax)
 {
     bool   bResp;
     int    nRandSize, i;
@@ -210,16 +210,16 @@ void RainDrop::rainDropsImage(Digikam::DImg* orgImage, Digikam::DImg* destImage,
     delete [] pStatusBits;
 }
 
-bool RainDrop::CreateRainDrop(uchar* pBits, int Width, int Height, bool sixteenBit, int bytesDepth,
-                              uchar* pResBits, uchar* pStatusBits,
-                              int X, int Y, int DropSize, double Coeff, bool bLimitRange)
+bool RainDropFilter::CreateRainDrop(uchar* pBits, int Width, int Height, bool sixteenBit, int bytesDepth,
+                                    uchar* pResBits, uchar* pStatusBits,
+                                    int X, int Y, int DropSize, double Coeff, bool bLimitRange)
 {
     register int w, h, nw1, nh1, nw2, nh2;
     int          nHalfSize = DropSize / 2;
     int          nBright;
     double       lfRadius, lfOldRadius, lfAngle, lfDiv;
 
-    Digikam::DColor imageData;
+    DColor imageData;
 
     uint nTotalR, nTotalG, nTotalB, offset;
     int nBlurPixels, nBlurRadius;
@@ -401,14 +401,15 @@ bool RainDrop::CreateRainDrop(uchar* pBits, int Width, int Height, bool sixteenB
         SetDropStatusBits (Width, Height, pStatusBits, X, Y, DropSize);
     }
     else
+    {
         return (false);
+    }
 
     return (true);
 }
 
-
-bool RainDrop::CanBeDropped(int Width, int Height, uchar* pStatusBits, int X, int Y,
-                            int DropSize, bool bLimitRange)
+bool RainDropFilter::CanBeDropped(int Width, int Height, uchar* pStatusBits, int X, int Y,
+                                  int DropSize, bool bLimitRange)
 {
     register int w, h, i = 0;
     int nHalfSize = DropSize / 2;
@@ -437,8 +438,8 @@ bool RainDrop::CanBeDropped(int Width, int Height, uchar* pStatusBits, int X, in
     return (true);
 }
 
-bool RainDrop::SetDropStatusBits (int Width, int Height, uchar* pStatusBits,
-                                  int X, int Y, int DropSize)
+bool RainDropFilter::SetDropStatusBits(int Width, int Height, uchar* pStatusBits,
+                                       int X, int Y, int DropSize)
 {
     register int w, h, i = 0;
     int nHalfSize = DropSize / 2;
@@ -461,4 +462,4 @@ bool RainDrop::SetDropStatusBits (int Width, int Height, uchar* pStatusBits,
     return (true);
 }
 
-}  // namespace DigikamRainDropImagesPlugin
+}  // namespace Digikam

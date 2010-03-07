@@ -33,7 +33,6 @@
 
 // KDE includes
 
-#include <kaboutdata.h>
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
@@ -49,15 +48,12 @@
 
 // Local includes
 
-#include "daboutdata.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imageguidewidget.h"
-#include "raindrop.h"
-#include "version.h"
+#include "raindropfilter.h"
 
 using namespace KDcrawIface;
-using namespace Digikam;
 
 namespace DigikamRainDropImagesPlugin
 {
@@ -171,13 +167,6 @@ RainDropTool::~RainDropTool()
     delete d;
 }
 
-void RainDropTool::renderingFinished()
-{
-    d->dropInput->setEnabled(true);
-    d->amountInput->setEnabled(true);
-    d->coeffInput->setEnabled(true);
-}
-
 void RainDropTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
@@ -232,8 +221,7 @@ void RainDropTool::prepareEffect()
     QRect selection( iface->selectedXOrg(), iface->selectedYOrg(),
                      iface->selectedWidth(), iface->selectedHeight() );
 
-    setFilter(dynamic_cast<DImgThreadedFilter *>(
-                       new RainDrop(iface->getOriginalImg(), this, drop, amount, coeff, &selection)));
+    setFilter(new RainDropFilter(iface->getOriginalImg(), this, drop, amount, coeff, &selection));
 }
 
 void RainDropTool::prepareFinal()
@@ -252,27 +240,29 @@ void RainDropTool::prepareFinal()
     QRect selection( iface.selectedXOrg(), iface.selectedYOrg(),
                      iface.selectedWidth(), iface.selectedHeight() );
 
-    setFilter(dynamic_cast<DImgThreadedFilter *>(
-                       new RainDrop(iface.getOriginalImg(), this, drop, amount, coeff, &selection)));
+    setFilter(new RainDropFilter(iface.getOriginalImg(), this, drop, amount, coeff, &selection));
 }
 
-void RainDropTool::putPreviewData(void)
+void RainDropTool::putPreviewData()
 {
     ImageIface* iface = d->previewWidget->imageIface();
-
-    DImg imDest = filter()->getTargetImage()
-            .smoothScale(iface->previewWidth(), iface->previewHeight());
+    DImg imDest       = filter()->getTargetImage().smoothScale(iface->previewWidth(), iface->previewHeight());
     iface->putPreviewImage(imDest.bits());
 
     d->previewWidget->updatePreview();
 }
 
-void RainDropTool::putFinalData(void)
+void RainDropTool::putFinalData()
 {
     ImageIface iface(0, 0);
+    iface.putOriginalImage(i18n("RainDrop"), filter()->getTargetImage().bits());
+}
 
-    iface.putOriginalImage(i18n("RainDrop"),
-                           filter()->getTargetImage().bits());
+void RainDropTool::renderingFinished()
+{
+    d->dropInput->setEnabled(true);
+    d->amountInput->setEnabled(true);
+    d->coeffInput->setEnabled(true);
 }
 
 void RainDropTool::blockWidgetSignals(bool b)

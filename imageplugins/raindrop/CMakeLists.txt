@@ -1,7 +1,6 @@
 
 SET(digikamimageplugin_raindrop_PART_SRCS imageplugin_raindrop.cpp
                                           raindroptool.cpp 
-                                          raindrop.cpp 
    )
 
 KDE4_ADD_PLUGIN(digikamimageplugin_raindrop ${digikamimageplugin_raindrop_PART_SRCS})
