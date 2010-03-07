@@ -23,12 +23,12 @@ coreplugin
   /sharpentool              DONE                 DONE                  DONE
   /whitebalance             DONE                 DONE                  DONE
 
-distortionfx                DONE                 TODO                  TODO
 freerotation                DONE                  NO                   TODO
 
 fxfilters
   /colorfx                  TODO                 TODO                  TODO
   /charcoal                 DONE                 DONE                  TODO
+  /distortionfx             DONE                 TODO                  TODO
   /emboss                   DONE                 DONE                  TODO
   /oilpaint                 DONE                 DONE                  TODO
   /blurfx                   DONE                 DONE                  TODO

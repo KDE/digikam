@@ -40,6 +40,7 @@
 #include "embosstool.h"
 #include "oilpainttool.h"
 #include "blurfxtool.h"
+#include "distortionfxtool.h"
 
 using namespace DigikamFxFiltersImagePlugin;
 
@@ -74,6 +75,11 @@ ImagePlugin_FxFilters::ImagePlugin_FxFilters(QObject* parent, const QVariantList
     connect(m_blurfxAction, SIGNAL(triggered(bool)),
             this, SLOT(slotBlurFX()));
 
+    m_distortionfxAction  = new KAction(KIcon("distortionfx"), i18n("Distortion Effects..."), this);
+    actionCollection()->addAction("imageplugin_distortionfx", m_distortionfxAction );
+    connect(m_distortionfxAction, SIGNAL(triggered(bool) ),
+            this, SLOT(slotDistortionFX()));
+
     setXMLFile( "digikamimageplugin_fxfilters_ui.rc" );
 
     kDebug() << "ImagePlugin_FxFilters plugin loaded";
@@ -90,6 +96,7 @@ void ImagePlugin_FxFilters::setEnabledActions(bool b)
     m_embossAction->setEnabled(b);
     m_oilpaintAction->setEnabled(b);
     m_blurfxAction->setEnabled(b);
+    m_distortionfxAction->setEnabled(b);
 }
 
 void ImagePlugin_FxFilters::slotColorEffects()
@@ -119,5 +126,11 @@ void ImagePlugin_FxFilters::slotOilPaint()
 void ImagePlugin_FxFilters::slotBlurFX()
 {
     BlurFXTool* tool = new BlurFXTool(this);
+    loadTool(tool);
+}
+
+void ImagePlugin_FxFilters::slotDistortionFX()
+{
+    DistortionFXTool* tool = new DistortionFXTool(this);
     loadTool(tool);
 }

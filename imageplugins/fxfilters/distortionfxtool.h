@@ -34,7 +34,7 @@
 
 using namespace Digikam;
 
-namespace DigikamDistortionFXImagesPlugin
+namespace DigikamFxFiltersImagePlugin
 {
 
 class DistortionFXToolPriv;
@@ -68,6 +68,6 @@ private:
     DistortionFXToolPriv* const d;
 };
 
-}  // namespace DigikamDistortionFXImagesPlugin
+}  // namespace DigikamFxFiltersImagePlugin
 
 #endif /* DISTORTIONFXTOOL_H */

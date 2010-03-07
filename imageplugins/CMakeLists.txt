@@ -37,7 +37,6 @@ INCLUDE_DIRECTORIES(../utilities/imageeditor/editor
 ADD_SUBDIRECTORY( border )
 ADD_SUBDIRECTORY( fxfilters )
 ADD_SUBDIRECTORY( coreplugin )
-ADD_SUBDIRECTORY( distortionfx )
 ADD_SUBDIRECTORY( freerotation )
 ADD_SUBDIRECTORY( hotpixels )
 ADD_SUBDIRECTORY( inpainting )

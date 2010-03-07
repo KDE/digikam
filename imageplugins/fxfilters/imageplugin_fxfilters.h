@@ -55,9 +55,11 @@ private Q_SLOTS:
     void slotEmboss();
     void slotOilPaint();
     void slotBlurFX();
+    void slotDistortionFX();
 
 private:
 
+    KAction* m_distortionfxAction;
     KAction* m_blurfxAction;
     KAction* m_oilpaintAction;
     KAction* m_embossAction;
