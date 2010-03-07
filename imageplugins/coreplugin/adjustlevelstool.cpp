@@ -212,6 +212,8 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
                                                              d->gboxSettings->plainPage(), false);
     d->levelsHistogramWidget->setWhatsThis(i18n("This is the histogram drawing of the selected channel "
                                                 "from the original image."));
+    QHBoxLayout* inputLevelsLayout = new QHBoxLayout;
+    inputLevelsLayout->addWidget(d->levelsHistogramWidget);
 
     // -------------------------------------------------------------
 
@@ -220,6 +222,8 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
     d->inputLevels->setToolTip( i18n( "Input intensity." ) );
     d->inputLevels->installEventFilter(this);
     d->gboxSettings->histogramBox()->setHistogramMargin(d->inputLevels->gradientOffset());
+    inputLevelsLayout->setContentsMargins(d->inputLevels->gradientOffset(), 0,
+                                          d->inputLevels->gradientOffset(), 0);
 
     d->outputLevels = new DGradientSlider();
     d->outputLevels->setWhatsThis( i18n("Select the output intensity of the histogram here."));
@@ -332,7 +336,7 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* parent)
     // -------------------------------------------------------------
 
     QGridLayout* grid = new QGridLayout();
-    grid->addWidget(d->levelsHistogramWidget, 0, 1, 1, 5);
+    grid->addLayout(inputLevelsLayout,        0, 0, 1, 7);
     grid->addWidget(d->inputLevels,           1, 0, 1, 7);
     grid->addWidget(d->minInput,              2, 1, 1, 1);
     grid->addWidget(d->maxInput,              2, 5, 1, 1);
