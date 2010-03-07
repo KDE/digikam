@@ -6,8 +6,8 @@
  * Date        : 2005-05-25
  * Description : Blur FX threaded image filter.
  *
- * Copyright 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * Original Blur algorithms copyrighted 2004 by
  * Pieter Z. Voloshyn <pieter dot voloshyn at gmail dot com>.
@@ -30,24 +30,25 @@
 
 // Local includes
 
+#include "digikam_export.h"
 #include "dimgthreadedfilter.h"
+#include "globals.h"
 
-namespace DigikamBlurFXImagesPlugin
+namespace Digikam
 {
 
-class BlurFX : public Digikam::DImgThreadedFilter
+class DIGIKAM_EXPORT BlurFXFilter : public DImgThreadedFilter
 {
 
 public:
 
-    explicit BlurFX(Digikam::DImg *orgImage, QObject *parent=0, int blurFXType=ZoomBlur,
+    explicit BlurFXFilter(DImg* orgImage, QObject* parent=0, int blurFXType=ZoomBlur,
                     int distance=100, int level=45);
-
-    ~BlurFX(){};
+    ~BlurFXFilter(){};
 
 public:
 
-    enum BlurFXTypes
+    enum BlurFXFilterTypes
     {
         ZoomBlur = 0,
         RadialBlur,
@@ -61,42 +62,36 @@ public:
         Mosaic
     };
 
-private:  // BlurFX filter data.
+private:
 
-    int m_blurFXType;
-    int m_distance;
-    int m_level;
-
-private:  // BlurFX filter methods.
-
-    virtual void filterImage(void);
+    void filterImage();
 
     // Backported from ImageProcessing version 1
-    void softenerBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage);
-    void shakeBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Distance);
-    void frostGlass(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Frost);
+    void softenerBlur(DImg *orgImage, DImg *destImage);
+    void shakeBlur(DImg *orgImage, DImg *destImage, int Distance);
+    void frostGlass(DImg *orgImage, DImg *destImage, int Frost);
 
     // Backported from ImageProcessing version 2
-    void zoomBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage,
+    void zoomBlur(DImg *orgImage, DImg *destImage,
                   int X, int Y, int Distance, QRect pArea=QRect());
-    void radialBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage,
+    void radialBlur(DImg *orgImage, DImg *destImage,
                     int X, int Y, int Distance, QRect pArea=QRect());
-    void focusBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage,
+    void focusBlur(DImg *orgImage, DImg *destImage,
                    int X, int Y, int BlurRadius, int BlendRadius,
                    bool bInversed=false, QRect pArea=QRect());
-    void farBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Distance);
-    void motionBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Distance, double Angle=0.0);
-    void smartBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Radius, int Strength);
-    void mosaic(Digikam::DImg *orgImage, Digikam::DImg *destImage, int SizeW, int SizeH);
+    void farBlur(DImg *orgImage, DImg *destImage, int Distance);
+    void motionBlur(DImg *orgImage, DImg *destImage, int Distance, double Angle=0.0);
+    void smartBlur(DImg *orgImage, DImg *destImage, int Radius, int Strength);
+    void mosaic(DImg *orgImage, DImg *destImage, int SizeW, int SizeH);
 
-private:  // Internal filter methods.
+private:
 
-    void MakeConvolution(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Radius, int Kernel[]);
+    void MakeConvolution(DImg *orgImage, DImg *destImage, int Radius, int Kernel[]);
 
-    Digikam::DColor RandomColor(uchar *Bits, int Width, int Height, bool sixteenBit, int bytesDepth,
-                                int X, int Y, int Radius,
-                                int alpha, uint *randomSeed, int range, uchar *IntensityCount,
-                                uint *AverageColorR, uint *AverageColorG, uint *AverageColorB);
+    DColor RandomColor(uchar *Bits, int Width, int Height, bool sixteenBit, int bytesDepth,
+                       int X, int Y, int Radius,
+                       int alpha, uint *randomSeed, int range, uchar *IntensityCount,
+                       uint *AverageColorR, uint *AverageColorG, uint *AverageColorB);
 
     // Return the limit defined the max and min values.
     inline int Lim_Max(int Now, int Up, int Max)
@@ -184,8 +179,13 @@ private:  // Internal filter methods.
         return (false);
     };
 
+private:
+
+    int m_blurFXType;
+    int m_distance;
+    int m_level;
 };
 
-}  // namespace DigikamBlurFXImagesPlugin
+}  // namespace Digikam
 
 #endif /* BLURFX_H */

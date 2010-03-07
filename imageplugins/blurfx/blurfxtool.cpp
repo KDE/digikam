@@ -34,7 +34,6 @@
 
 // KDE includes
 
-#include <kaboutdata.h>
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
@@ -50,15 +49,12 @@
 
 // Local includes
 
-#include "blurfx.h"
-#include "daboutdata.h"
+#include "blurfxfilter.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imageregionwidget.h"
-#include "version.h"
 
 using namespace KDcrawIface;
-using namespace Digikam;
 
 namespace DigikamBlurFXImagesPlugin
 {
@@ -135,7 +131,7 @@ BlurFXTool::BlurFXTool(QObject* parent)
     d->effectType->addItem(i18n("Smart Blur"));
     d->effectType->addItem(i18n("Frost Glass"));
     d->effectType->addItem(i18n("Mosaic"));
-    d->effectType->setDefaultIndex(BlurFX::ZoomBlur);
+    d->effectType->setDefaultIndex(BlurFXFilter::ZoomBlur);
     d->effectType->setWhatsThis(i18n("<p>Select the blurring effect to apply to image.</p>"
                                      "<p><b>Zoom Blur</b>:  blurs the image along radial lines starting from "
                                      "a specified center point. This simulates the blur of a zooming camera.</p>"
@@ -201,38 +197,6 @@ BlurFXTool::~BlurFXTool()
     delete d;
 }
 
-void BlurFXTool::renderingFinished()
-{
-    toolView()->setEnabled(true);
-    d->effectTypeLabel->setEnabled(true);
-    d->effectType->setEnabled(true);
-    d->distanceInput->setEnabled(true);
-    d->distanceLabel->setEnabled(true);
-
-    switch (d->effectType->currentIndex())
-    {
-       case BlurFX::ZoomBlur:
-       case BlurFX::RadialBlur:
-       case BlurFX::FarBlur:
-       case BlurFX::ShakeBlur:
-       case BlurFX::FrostGlass:
-       case BlurFX::Mosaic:
-          break;
-
-       case BlurFX::MotionBlur:
-       case BlurFX::FocusBlur:
-       case BlurFX::SmartBlur:
-          d->levelInput->setEnabled(true);
-          d->levelLabel->setEnabled(true);
-          break;
-
-       case BlurFX::SoftenerBlur:
-          d->distanceInput->setEnabled(false);
-          d->distanceLabel->setEnabled(false);
-          break;
-    }
-}
-
 void BlurFXTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
@@ -290,25 +254,25 @@ void BlurFXTool::slotEffectTypeChanged(int type)
 
     switch (type)
     {
-       case BlurFX::ZoomBlur:
+       case BlurFXFilter::ZoomBlur:
           break;
 
-       case BlurFX::RadialBlur:
-       case BlurFX::FrostGlass:
+       case BlurFXFilter::RadialBlur:
+       case BlurFXFilter::FrostGlass:
           d->distanceInput->setRange(0, 10, 1);
           d->distanceInput->setSliderEnabled(true);
           d->distanceInput->setValue(3);
           break;
 
-       case BlurFX::FarBlur:
+       case BlurFXFilter::FarBlur:
           d->distanceInput->setRange(0, 20, 1);
           d->distanceInput->setSliderEnabled(true);
           d->distanceInput->input()->setMaximum(20);
           d->distanceInput->setValue(10);
           break;
 
-       case BlurFX::MotionBlur:
-       case BlurFX::FocusBlur:
+       case BlurFXFilter::MotionBlur:
+       case BlurFXFilter::FocusBlur:
           d->distanceInput->setRange(0, 100, 1);
           d->distanceInput->setSliderEnabled(true);
           d->distanceInput->setValue(20);
@@ -316,18 +280,18 @@ void BlurFXTool::slotEffectTypeChanged(int type)
           d->levelLabel->setEnabled(true);
           break;
 
-       case BlurFX::SoftenerBlur:
+       case BlurFXFilter::SoftenerBlur:
           d->distanceInput->setEnabled(false);
           d->distanceLabel->setEnabled(false);
           break;
 
-       case BlurFX::ShakeBlur:
+       case BlurFXFilter::ShakeBlur:
           d->distanceInput->setRange(0, 100, 1);
           d->distanceInput->setSliderEnabled(true);
           d->distanceInput->setValue(20);
           break;
 
-       case BlurFX::SmartBlur:
+       case BlurFXFilter::SmartBlur:
           d->distanceInput->setRange(0, 20, 1);
           d->distanceInput->setSliderEnabled(true);
           d->distanceInput->setValue(3);
@@ -338,7 +302,7 @@ void BlurFXTool::slotEffectTypeChanged(int type)
           d->levelInput->setValue(128);
           break;
 
-       case BlurFX::Mosaic:
+       case BlurFXFilter::Mosaic:
           d->distanceInput->setRange(0, 50, 1);
           d->distanceInput->setSliderEnabled(true);
           d->distanceInput->setValue(3);
@@ -364,22 +328,22 @@ void BlurFXTool::prepareEffect()
 
     switch (d->effectType->currentIndex())
     {
-       case BlurFX::ZoomBlur:
-       case BlurFX::RadialBlur:
-       case BlurFX::FocusBlur:
+       case BlurFXFilter::ZoomBlur:
+       case BlurFXFilter::RadialBlur:
+       case BlurFXFilter::FocusBlur:
        {
             ImageIface iface(0, 0);
             image = *iface.getOriginalImg();
             break;
        }
 
-       case BlurFX::FarBlur:
-       case BlurFX::MotionBlur:
-       case BlurFX::SoftenerBlur:
-       case BlurFX::ShakeBlur:
-       case BlurFX::SmartBlur:
-       case BlurFX::FrostGlass:
-       case BlurFX::Mosaic:
+       case BlurFXFilter::FarBlur:
+       case BlurFXFilter::MotionBlur:
+       case BlurFXFilter::SoftenerBlur:
+       case BlurFXFilter::ShakeBlur:
+       case BlurFXFilter::SmartBlur:
+       case BlurFXFilter::FrostGlass:
+       case BlurFXFilter::Mosaic:
            image = d->previewWidget->getOriginalRegionImage();
            break;
     }
@@ -388,7 +352,7 @@ void BlurFXTool::prepareEffect()
     int dist  = d->distanceInput->value();
     int level = d->levelInput->value();
 
-    setFilter(dynamic_cast<DImgThreadedFilter*>(new BlurFX(&image, this, type, dist, level)));
+    setFilter(new BlurFXFilter(&image, this, type, dist, level));
 }
 
 void BlurFXTool::prepareFinal()
@@ -406,29 +370,29 @@ void BlurFXTool::prepareFinal()
     int level = d->levelInput->value();
 
     ImageIface iface(0, 0);
-    setFilter(dynamic_cast<DImgThreadedFilter *>(new BlurFX(iface.getOriginalImg(), this, type, dist, level)));
+    setFilter(new BlurFXFilter(iface.getOriginalImg(), this, type, dist, level));
 }
 
 void BlurFXTool::putPreviewData()
 {
     switch (d->effectType->currentIndex())
     {
-        case BlurFX::ZoomBlur:
-        case BlurFX::RadialBlur:
-        case BlurFX::FocusBlur:
+        case BlurFXFilter::ZoomBlur:
+        case BlurFXFilter::RadialBlur:
+        case BlurFXFilter::FocusBlur:
         {
             QRect pRect  = d->previewWidget->getOriginalImageRegionToRender();
             DImg destImg = filter()->getTargetImage().copy(pRect);
             d->previewWidget->setPreviewImage(destImg);
             break;
         }
-        case BlurFX::FarBlur:
-        case BlurFX::MotionBlur:
-        case BlurFX::SoftenerBlur:
-        case BlurFX::ShakeBlur:
-        case BlurFX::SmartBlur:
-        case BlurFX::FrostGlass:
-        case BlurFX::Mosaic:
+        case BlurFXFilter::FarBlur:
+        case BlurFXFilter::MotionBlur:
+        case BlurFXFilter::SoftenerBlur:
+        case BlurFXFilter::ShakeBlur:
+        case BlurFXFilter::SmartBlur:
+        case BlurFXFilter::FrostGlass:
+        case BlurFXFilter::Mosaic:
             d->previewWidget->setPreviewImage(filter()->getTargetImage());
             break;
     }
@@ -438,6 +402,38 @@ void BlurFXTool::putFinalData()
 {
     ImageIface iface(0, 0);
     iface.putOriginalImage(i18n("Blur Effects"), filter()->getTargetImage().bits());
+}
+
+void BlurFXTool::renderingFinished()
+{
+    toolView()->setEnabled(true);
+    d->effectTypeLabel->setEnabled(true);
+    d->effectType->setEnabled(true);
+    d->distanceInput->setEnabled(true);
+    d->distanceLabel->setEnabled(true);
+
+    switch (d->effectType->currentIndex())
+    {
+       case BlurFXFilter::ZoomBlur:
+       case BlurFXFilter::RadialBlur:
+       case BlurFXFilter::FarBlur:
+       case BlurFXFilter::ShakeBlur:
+       case BlurFXFilter::FrostGlass:
+       case BlurFXFilter::Mosaic:
+          break;
+
+       case BlurFXFilter::MotionBlur:
+       case BlurFXFilter::FocusBlur:
+       case BlurFXFilter::SmartBlur:
+          d->levelInput->setEnabled(true);
+          d->levelLabel->setEnabled(true);
+          break;
+
+       case BlurFXFilter::SoftenerBlur:
+          d->distanceInput->setEnabled(false);
+          d->distanceLabel->setEnabled(false);
+          break;
+    }
 }
 
 void BlurFXTool::blockWidgetSignals(bool b)

@@ -1,7 +1,6 @@
 
 SET(digikamimageplugin_blurfx_PART_SRCS imageplugin_blurfx.cpp
-                                        blurfxtool.cpp 
-                                        blurfx.cpp 
+                                        blurfxtool.cpp
    )
 
 KDE4_ADD_PLUGIN(digikamimageplugin_blurfx ${digikamimageplugin_blurfx_PART_SRCS})

@@ -6,8 +6,8 @@
  * Date        : 2005-05-25
  * Description : Blur FX threaded image filter.
  *
- * Copyright 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * Original Blur algorithms copyrighted 2004 by
  * Pieter Z. Voloshyn <pieter dot voloshyn at gmail dot com>.
@@ -25,11 +25,9 @@
  *
  * ============================================================ */
 
-// Represents 1
 #define ANGLE_RATIO  0.017453292519943295769236907685
 
-
-#include "blurfx.h"
+#include "blurfxfilter.h"
 
 // C++ includes
 
@@ -46,11 +44,11 @@
 #include "dimg.h"
 #include "blurfilter.h"
 
-namespace DigikamBlurFXImagesPlugin
+namespace Digikam
 {
 
-BlurFX::BlurFX(Digikam::DImg* orgImage, QObject* parent, int blurFXType, int distance, int level)
-      : Digikam::DImgThreadedFilter(orgImage, parent, "BlurFX")
+BlurFXFilter::BlurFXFilter(DImg* orgImage, QObject* parent, int blurFXType, int distance, int level)
+            : DImgThreadedFilter(orgImage, parent, "BlurFX")
 {
     m_blurFXType = blurFXType;
     m_distance   = distance;
@@ -59,7 +57,7 @@ BlurFX::BlurFX(Digikam::DImg* orgImage, QObject* parent, int blurFXType, int dis
     initFilter();
 }
 
-void BlurFX::filterImage(void)
+void BlurFXFilter::filterImage()
 {
     int w = m_orgImage.width();
     int h = m_orgImage.height();
@@ -124,7 +122,7 @@ void BlurFX::filterImage(void)
  *                     This radius is always from the center to out of the image, we
  *                     calc a proportional radius from the center.
  */
-void BlurFX::zoomBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int X, int Y, int Distance, QRect pArea)
+void BlurFXFilter::zoomBlur(DImg *orgImage, DImg *destImage, int X, int Y, int Distance, QRect pArea)
 {
     if (Distance <= 1) return;
     int progress;
@@ -155,7 +153,7 @@ void BlurFX::zoomBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int X, 
     int sumR, sumG, sumB, nCount;
     double lfRadius, lfNewRadius, lfRadMax, lfAngle;
 
-    Digikam::DColor color;
+    DColor color;
     int offset;
 
     lfRadMax = sqrt (Height * Height + Width * Width);
@@ -240,7 +238,7 @@ void BlurFX::zoomBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int X, 
  *                     angle. After this, we sum this pixel with others with the same
  *                     radius, but different angles. Here I'm using degrees angles.
  */
-void BlurFX::radialBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int X, int Y, int Distance, QRect pArea)
+void BlurFXFilter::radialBlur(DImg *orgImage, DImg *destImage, int X, int Y, int Distance, QRect pArea)
 {
     if (Distance <= 1) return;
     int progress;
@@ -270,7 +268,7 @@ void BlurFX::radialBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int X
     int sumR, sumG, sumB, nw, nh;
     double Radius, Angle, AngleRad;
 
-    Digikam::DColor color;
+    DColor color;
     int offset;
 
     double *nMultArray = new double[Distance * 2 + 1];
@@ -356,7 +354,7 @@ void BlurFX::radialBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int X
  * pArea            => Preview area.
  *
  */
-void BlurFX::focusBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage,
+void BlurFXFilter::focusBlur(DImg *orgImage, DImg *destImage,
                        int X, int Y, int BlurRadius, int BlendRadius,
                        bool bInversed, QRect pArea)
 {
@@ -394,9 +392,9 @@ void BlurFX::focusBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage,
         int xMaxBlur = xMax + BlurRadius;
         int yMinBlur = yMin - BlurRadius;
         int yMaxBlur = yMax + BlurRadius;
-        Digikam::DImg areaImage = orgImage->copy(xMinBlur, yMaxBlur, xMaxBlur - xMinBlur, yMaxBlur - yMinBlur);
+        DImg areaImage = orgImage->copy(xMinBlur, yMaxBlur, xMaxBlur - xMinBlur, yMaxBlur - yMinBlur);
 
-        Digikam::BlurFilter(this, *orgImage, *destImage, 10, 75, BlurRadius);
+        BlurFilter(this, *orgImage, *destImage, 10, 75, BlurRadius);
 
         // I am unsure about differences of 1 pixel
         destImage->bitBltImage(&areaImage, xMinBlur, yMinBlur);
@@ -413,7 +411,7 @@ void BlurFX::focusBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage,
         memcpy(pResBits, data, orgImage->numBytes());
 
         // Gaussian blur using the BlurRadius parameter.
-        Digikam::BlurFilter(this, *orgImage, *destImage, 10, 80, BlurRadius);
+        BlurFilter(this, *orgImage, *destImage, 10, 80, BlurRadius);
     }
 
     // Blending results.
@@ -422,12 +420,12 @@ void BlurFX::focusBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage,
     double lfRadius;
     int offset;
 
-    Digikam::DColor colorOrgImage, colorBlurredImage;
+    DColor colorOrgImage, colorBlurredImage;
     int alpha;
     uchar *ptr;
 
     // get composer for default blending
-    Digikam::DColorComposer *composer = Digikam::DColorComposer::getComposer(Digikam::DColorComposer::PorterDuffNone);
+    DColorComposer *composer = DColorComposer::getComposer(DColorComposer::PorterDuffNone);
 
     int nh = 0, nw = 0;
 
@@ -512,7 +510,7 @@ void BlurFX::focusBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage,
  *                     We sum all the pixels with value = 1 and apply at the pixel with*
  *                     the position "C".
  */
-void BlurFX::farBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Distance)
+void BlurFXFilter::farBlur(DImg *orgImage, DImg *destImage, int Distance)
 {
     if (Distance < 1) return;
 
@@ -559,7 +557,7 @@ void BlurFX::farBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Dist
  *                     with correction between pixels.
  */
 
-void BlurFX::smartBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Radius, int Strength)
+void BlurFXFilter::smartBlur(DImg *orgImage, DImg *destImage, int Radius, int Strength)
 {
     if (Radius <= 0) return;
 
@@ -577,7 +575,7 @@ void BlurFX::smartBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Ra
     if (sixteenBit)
         StrengthRange = (StrengthRange + 1) * 256 - 1;
 
-    Digikam::DColor color, radiusColor, radiusColorBlur;
+    DColor color, radiusColor, radiusColorBlur;
     int offset, loopOffset;
 
     uchar* pBlur    = new uchar[orgImage->numBytes()];
@@ -728,7 +726,7 @@ void BlurFX::smartBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Ra
  *                     will taking near pixels. After this we blur (add and do a
  *                     division).
  */
-void BlurFX::motionBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Distance, double Angle)
+void BlurFXFilter::motionBlur(DImg *orgImage, DImg *destImage, int Distance, double Angle)
 {
     if (Distance == 0) return;
     int progress;
@@ -740,7 +738,7 @@ void BlurFX::motionBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int D
     int bytesDepth  = orgImage->bytesDepth();
     uchar* pResBits = destImage->bits();
 
-    Digikam::DColor color;
+    DColor color;
     int offset;
 
     // we try to avoid division by 0 (zero)
@@ -828,7 +826,7 @@ void BlurFX::motionBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int D
  *                     blur with 3x3 dimentions, in light tones, we apply a blur with
  *                     5x5 dimentions. Easy, hun?
  */
-void BlurFX::softenerBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage)
+void BlurFXFilter::softenerBlur(DImg *orgImage, DImg *destImage)
 {
     int progress;
 
@@ -842,7 +840,7 @@ void BlurFX::softenerBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage)
     int SomaR = 0, SomaG = 0, SomaB = 0;
     int Gray;
 
-    Digikam::DColor color, colorSoma;
+    DColor color, colorSoma;
     int offset, offsetSoma;
 
     int grayLimit = sixteenBit ? 32767 : 127;
@@ -932,7 +930,7 @@ void BlurFX::softenerBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage)
  *                    different positions (top, button, left and right), with these 4
  *                    layers, we join all the pixels.
  */
-void BlurFX::shakeBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Distance)
+void BlurFXFilter::shakeBlur(DImg *orgImage, DImg *destImage, int Distance)
 {
     int progress;
 
@@ -943,7 +941,7 @@ void BlurFX::shakeBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Di
     int bytesDepth  = orgImage->bytesDepth();
     uchar* pResBits = destImage->bits();
 
-    Digikam::DColor color, colorLayer, color1, color2, color3, color4;
+    DColor color, colorLayer, color1, color2, color3, color4;
     int offset, offsetLayer;
 
     int numBytes = orgImage->numBytes();
@@ -1032,7 +1030,7 @@ void BlurFX::shakeBlur(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Di
  * Theory           => Similar to Diffuse effect, but the random byte is defined
  *                     in a matrix. Diffuse uses a random diagonal byte.
  */
-void BlurFX::frostGlass(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Frost)
+void BlurFXFilter::frostGlass(DImg *orgImage, DImg *destImage, int Frost)
 {
     int progress;
 
@@ -1047,7 +1045,7 @@ void BlurFX::frostGlass(Digikam::DImg *orgImage, Digikam::DImg *destImage, int F
 
     int h, w;
 
-    Digikam::DColor color;
+    DColor color;
     int offset;
 
     // Randomize.
@@ -1109,7 +1107,7 @@ void BlurFX::frostGlass(Digikam::DImg *orgImage, Digikam::DImg *destImage, int F
  *                     center pixel.
  *                     Now the function scan the rows from the top (like photoshop).
  */
-void BlurFX::mosaic(Digikam::DImg *orgImage, Digikam::DImg *destImage, int SizeW, int SizeH)
+void BlurFXFilter::mosaic(DImg *orgImage, DImg *destImage, int SizeW, int SizeH)
 {
     int progress;
 
@@ -1125,7 +1123,7 @@ void BlurFX::mosaic(Digikam::DImg *orgImage, Digikam::DImg *destImage, int SizeW
     if (SizeH < 1) SizeH = 1;
     if ((SizeW == 1) && (SizeH == 1)) return;
 
-    Digikam::DColor color;
+    DColor color;
     int offsetCenter, offset;
 
     // this loop will never look for transparent colors
@@ -1175,12 +1173,12 @@ void BlurFX::mosaic(Digikam::DImg *orgImage, Digikam::DImg *destImage, int SizeW
  *
  * Theory            => This function takes from a distinct matrix a random color
  */
-Digikam::DColor BlurFX::RandomColor(uchar *Bits, int Width, int Height, bool sixteenBit, int bytesDepth,
+DColor BlurFXFilter::RandomColor(uchar *Bits, int Width, int Height, bool sixteenBit, int bytesDepth,
                                     int X, int Y, int Radius,
                                     int alpha, uint *randomSeed, int range, uchar *IntensityCount,
                                     uint *AverageColorR, uint *AverageColorG, uint *AverageColorB)
 {
-    Digikam::DColor color;
+    DColor color;
     int offset;
 
     int w, h, counter = 0;
@@ -1224,7 +1222,7 @@ Digikam::DColor BlurFX::RandomColor(uchar *Bits, int Width, int Height, bool six
 
     // check for m_cancel here before entering the do loop (will crash with SIGFPE otherwise)
     if (m_cancel)
-        return Digikam::DColor(0, 0, 0, 0, sixteenBit);
+        return DColor(0, 0, 0, 0, sixteenBit);
 
     int RandNumber, count, Index, ErrorCount = 0;
     int J;
@@ -1256,7 +1254,7 @@ Digikam::DColor BlurFX::RandomColor(uchar *Bits, int Width, int Height, bool six
     while ((IntensityCount[J] == 0) && (ErrorCount <= counter)  && !m_cancel);
 
     if (m_cancel)
-        return Digikam::DColor(0, 0, 0, 0, sixteenBit);
+        return DColor(0, 0, 0, 0, sixteenBit);
 
 
     color.setSixteenBit(sixteenBit);
@@ -1291,7 +1289,7 @@ Digikam::DColor BlurFX::RandomColor(uchar *Bits, int Width, int Height, bool six
  *                     this, but the trick here its to store the sum used by the
  *                     previous pixel, so we sum with the other pixels that wasn't get
  */
-void BlurFX::MakeConvolution (Digikam::DImg *orgImage, Digikam::DImg *destImage, int Radius, int Kernel[])
+void BlurFXFilter::MakeConvolution (DImg *orgImage, DImg *destImage, int Radius, int Kernel[])
 {
     if (Radius <= 0) return;
 
@@ -1308,7 +1306,7 @@ void BlurFX::MakeConvolution (Digikam::DImg *orgImage, Digikam::DImg *destImage,
     int nSumR, nSumG, nSumB, nCount;
     int nKernelWidth = Radius * 2 + 1;
     int range = sixteenBit ? 65536 : 256;
-    Digikam::DColor color;
+    DColor color;
     int offset;
 
     uchar* pBlur = new uchar[orgImage->numBytes()];
@@ -1452,4 +1450,4 @@ void BlurFX::MakeConvolution (Digikam::DImg *orgImage, Digikam::DImg *destImage,
     delete [] pBlur;
 }
 
-}  // namespace DigikamBlurFXImagesPlugin
+}  // namespace Digikam
