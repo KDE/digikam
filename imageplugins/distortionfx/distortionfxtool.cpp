@@ -37,7 +37,6 @@
 
 // KDE includes
 
-#include <kaboutdata.h>
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
@@ -56,16 +55,13 @@
 
 // Local includes
 
-#include "daboutdata.h"
 #include "dimg.h"
-#include "distortionfx.h"
+#include "distortionfxfilter.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imageguidewidget.h"
-#include "version.h"
 
 using namespace KDcrawIface;
-using namespace Digikam;
 
 namespace DigikamDistortionFXImagesPlugin
 {
@@ -147,7 +143,7 @@ DistortionFXTool::DistortionFXTool(QObject* parent)
     d->effectType->addItem(i18n("Polar Coordinates"));
     d->effectType->addItem(i18n("Unpolar Coordinates"));
     d->effectType->addItem(i18n("Tile"));
-    d->effectType->setDefaultIndex(DistortionFX::FishEye);
+    d->effectType->setDefaultIndex(DistortionFXFilter::FishEye);
     d->effectType->setWhatsThis(i18n("<p>Here, select the type of effect to apply to an image.</p>"
                                      "<p><b>Fish Eyes</b>: warps the photograph around a 3D spherical shape to "
                                             "reproduce the common photograph 'Fish Eyes' effect.</p>"
@@ -224,45 +220,6 @@ DistortionFXTool::~DistortionFXTool()
     delete d;
 }
 
-void DistortionFXTool::renderingFinished()
-{
-    d->effectTypeLabel->setEnabled(true);
-    d->effectType->setEnabled(true);
-    d->levelInput->setEnabled(true);
-    d->levelLabel->setEnabled(true);
-    d->iterationInput->setEnabled(true);
-    d->iterationLabel->setEnabled(true);
-
-    switch (d->effectType->currentIndex())
-    {
-        case DistortionFX::FishEye:
-        case DistortionFX::Twirl:
-        case DistortionFX::CilindricalHor:
-        case DistortionFX::CilindricalVert:
-        case DistortionFX::CilindricalHV:
-        case DistortionFX::Caricature:
-        case DistortionFX::MultipleCorners:
-            break;
-
-        case DistortionFX::PolarCoordinates:
-        case DistortionFX::UnpolarCoordinates:
-            d->levelInput->setEnabled(false);
-            d->levelLabel->setEnabled(false);
-            break;
-
-        case DistortionFX::WavesHorizontal:
-        case DistortionFX::WavesVertical:
-        case DistortionFX::BlockWaves1:
-        case DistortionFX::BlockWaves2:
-        case DistortionFX::CircularWaves1:
-        case DistortionFX::CircularWaves2:
-        case DistortionFX::Tile:
-            d->iterationInput->setEnabled(true);
-            d->iterationLabel->setEnabled(true);
-            break;
-    }
-}
-
 void DistortionFXTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
@@ -272,7 +229,7 @@ void DistortionFXTool::readSettings()
     d->iterationInput->blockSignals(true);
     d->levelInput->blockSignals(true);
 
-    d->effectType->setCurrentIndex(group.readEntry(d->configEffectTypeEntry,       (int)DistortionFX::FishEye));
+    d->effectType->setCurrentIndex(group.readEntry(d->configEffectTypeEntry,       (int)DistortionFXFilter::FishEye));
     d->iterationInput->setValue(group.readEntry(d->configIterationAdjustmentEntry, 10));
     d->levelInput->setValue(group.readEntry(d->configLevelAdjustmentEntry,         50));
 
@@ -324,35 +281,35 @@ void DistortionFXTool::slotEffectTypeChanged(int type)
 
     switch (type)
     {
-        case DistortionFX::Twirl:
+        case DistortionFXFilter::Twirl:
             d->levelInput->setRange(-50, 50, 1);
             d->levelInput->setSliderEnabled(true);
             d->levelInput->setValue(10);
             break;
 
-        case DistortionFX::FishEye:
-        case DistortionFX::CilindricalHor:
-        case DistortionFX::CilindricalVert:
-        case DistortionFX::CilindricalHV:
-        case DistortionFX::Caricature:
+        case DistortionFXFilter::FishEye:
+        case DistortionFXFilter::CilindricalHor:
+        case DistortionFXFilter::CilindricalVert:
+        case DistortionFXFilter::CilindricalHV:
+        case DistortionFXFilter::Caricature:
             d->levelInput->setRange(0, 200, 1);
             d->levelInput->setSliderEnabled(true);
             d->levelInput->setValue(50);
             break;
 
-        case DistortionFX::MultipleCorners:
+        case DistortionFXFilter::MultipleCorners:
             d->levelInput->setRange(1, 10, 1);
             d->levelInput->setSliderEnabled(true);
             d->levelInput->setValue(4);
             break;
 
-        case DistortionFX::WavesHorizontal:
-        case DistortionFX::WavesVertical:
-        case DistortionFX::BlockWaves1:
-        case DistortionFX::BlockWaves2:
-        case DistortionFX::CircularWaves1:
-        case DistortionFX::CircularWaves2:
-        case DistortionFX::Tile:
+        case DistortionFXFilter::WavesHorizontal:
+        case DistortionFXFilter::WavesVertical:
+        case DistortionFXFilter::BlockWaves1:
+        case DistortionFXFilter::BlockWaves2:
+        case DistortionFXFilter::CircularWaves1:
+        case DistortionFXFilter::CircularWaves2:
+        case DistortionFXFilter::Tile:
             d->iterationInput->setEnabled(true);
             d->iterationLabel->setEnabled(true);
             d->iterationInput->setRange(0, 200, 1);
@@ -360,8 +317,8 @@ void DistortionFXTool::slotEffectTypeChanged(int type)
             d->iterationInput->setValue(10);
             break;
 
-        case DistortionFX::PolarCoordinates:
-        case DistortionFX::UnpolarCoordinates:
+        case DistortionFXFilter::PolarCoordinates:
+        case DistortionFXFilter::UnpolarCoordinates:
             d->levelInput->setEnabled(false);
             d->levelLabel->setEnabled(false);
             break;
@@ -387,14 +344,12 @@ void DistortionFXTool::prepareEffect()
     int e = d->effectType->currentIndex();
 
     ImageIface* iface = d->previewWidget->imageIface();
-
-    uchar *data = iface->getPreviewImage();
+    uchar* data       = iface->getPreviewImage();
     DImg image(iface->previewWidth(), iface->previewHeight(), iface->previewSixteenBit(),
                         iface->previewHasAlpha(), data);
     delete [] data;
 
-    setFilter(dynamic_cast<DImgThreadedFilter *>(
-                       new DistortionFX(&image, this, e, l, f)));
+    setFilter(new DistortionFXFilter(&image, this, e, l, f));
 }
 
 void DistortionFXTool::prepareFinal()
@@ -412,27 +367,61 @@ void DistortionFXTool::prepareFinal()
 
     ImageIface iface(0, 0);
 
-    setFilter(dynamic_cast<DImgThreadedFilter *>(
-                       new DistortionFX(iface.getOriginalImg(), this, e, l, f)));
+    setFilter(new DistortionFXFilter(iface.getOriginalImg(), this, e, l, f));
 }
 
-void DistortionFXTool::putPreviewData(void)
+void DistortionFXTool::putPreviewData()
 {
     ImageIface* iface = d->previewWidget->imageIface();
-
-    DImg imDest = filter()->getTargetImage()
-            .smoothScale(iface->previewWidth(), iface->previewHeight());
+    DImg imDest       = filter()->getTargetImage().smoothScale(iface->previewWidth(), iface->previewHeight());
     iface->putPreviewImage(imDest.bits());
 
     d->previewWidget->updatePreview();
 }
 
-void DistortionFXTool::putFinalData(void)
+void DistortionFXTool::putFinalData()
 {
     ImageIface iface(0, 0);
+    iface.putOriginalImage(i18n("Distortion Effects"), filter()->getTargetImage().bits());
+}
 
-    iface.putOriginalImage(i18n("Distortion Effects"),
-                           filter()->getTargetImage().bits());
+void DistortionFXTool::renderingFinished()
+{
+    d->effectTypeLabel->setEnabled(true);
+    d->effectType->setEnabled(true);
+    d->levelInput->setEnabled(true);
+    d->levelLabel->setEnabled(true);
+    d->iterationInput->setEnabled(true);
+    d->iterationLabel->setEnabled(true);
+
+    switch (d->effectType->currentIndex())
+    {
+        case DistortionFXFilter::FishEye:
+        case DistortionFXFilter::Twirl:
+        case DistortionFXFilter::CilindricalHor:
+        case DistortionFXFilter::CilindricalVert:
+        case DistortionFXFilter::CilindricalHV:
+        case DistortionFXFilter::Caricature:
+        case DistortionFXFilter::MultipleCorners:
+            break;
+
+        case DistortionFXFilter::PolarCoordinates:
+        case DistortionFXFilter::UnpolarCoordinates:
+            d->levelInput->setEnabled(false);
+            d->levelLabel->setEnabled(false);
+            break;
+
+        case DistortionFXFilter::WavesHorizontal:
+        case DistortionFXFilter::WavesVertical:
+        case DistortionFXFilter::BlockWaves1:
+        case DistortionFXFilter::BlockWaves2:
+        case DistortionFXFilter::CircularWaves1:
+        case DistortionFXFilter::CircularWaves2:
+        case DistortionFXFilter::Tile:
+            d->iterationInput->setEnabled(true);
+            d->iterationLabel->setEnabled(true);
+            break;
+    }
 }
 
 }  // namespace DigikamDistortionFXImagesPlugin

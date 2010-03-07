@@ -25,8 +25,8 @@
  *
  * ============================================================ */
 
-#ifndef BLURFX_H
-#define BLURFX_H
+#ifndef BLURFXFILTER_H
+#define BLURFXFILTER_H
 
 // Local includes
 
@@ -188,4 +188,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* BLURFX_H */
+#endif /* BLURFXFILTER_H */

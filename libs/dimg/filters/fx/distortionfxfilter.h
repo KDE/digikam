@@ -9,7 +9,7 @@
  * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
- * Original Distortion algorithms copyrighted 2004-2005 by 
+ * Original Distortion algorithms copyrighted 2004-2005 by
  * Pieter Z. Voloshyn <pieter dot voloshyn at gmail dot com>.
  *
  * This program is free software; you can redistribute it
@@ -17,16 +17,16 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
-  
-#ifndef DISTORTION_FX_H
-#define DISTORTION_FX_H
+
+#ifndef DISTORTION_FX_FILTER_H
+#define DISTORTION_FX_FILTER_H
 
 // Qt includes
 
@@ -34,20 +34,22 @@
 
 // Local includes
 
+#include "digikam_export.h"
 #include "dimgthreadedfilter.h"
+#include "globals.h"
 
-namespace DigikamDistortionFXImagesPlugin
+namespace Digikam
 {
 
-class DistortionFX : public Digikam::DImgThreadedFilter
+class DIGIKAM_EXPORT DistortionFXFilter : public DImgThreadedFilter
 {
 
 public:
 
-    explicit DistortionFX(Digikam::DImg* orgImage, QObject* parent=0, int effectType=0,
-                          int level=0, int iteration=0, bool antialiasing=true);
+    explicit DistortionFXFilter(DImg* orgImage, QObject* parent=0, int effectType=0,
+                                int level=0, int iteration=0, bool antialiasing=true);
 
-    ~DistortionFX(){};
+    ~DistortionFXFilter(){};
 
 public:
 
@@ -76,20 +78,20 @@ private:
     void filterImage();
 
     // Backported from ImageProcessing version 2
-    void fisheye(Digikam::DImg *orgImage, Digikam::DImg *destImage, double Coeff, bool AntiAlias=true);
-    void twirl(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Twirl, bool AntiAlias=true);
-    void cilindrical(Digikam::DImg *orgImage, Digikam::DImg *destImage, double Coeff, 
+    void fisheye(DImg *orgImage, DImg *destImage, double Coeff, bool AntiAlias=true);
+    void twirl(DImg *orgImage, DImg *destImage, int Twirl, bool AntiAlias=true);
+    void cilindrical(DImg *orgImage, DImg *destImage, double Coeff,
                      bool Horizontal, bool Vertical, bool AntiAlias=true);
-    void multipleCorners(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Factor, bool AntiAlias=true);
-    void polarCoordinates(Digikam::DImg *orgImage, Digikam::DImg *destImage, bool Type, bool AntiAlias=true);
-    void circularWaves(Digikam::DImg *orgImage, Digikam::DImg *destImage, int X, int Y, double Amplitude, 
+    void multipleCorners(DImg *orgImage, DImg *destImage, int Factor, bool AntiAlias=true);
+    void polarCoordinates(DImg *orgImage, DImg *destImage, bool Type, bool AntiAlias=true);
+    void circularWaves(DImg *orgImage, DImg *destImage, int X, int Y, double Amplitude,
                        double Frequency, double Phase, bool WavesType, bool AntiAlias=true);
 
     // Backported from ImageProcessing version 1
-    void waves(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Amplitude, int Frequency, 
+    void waves(DImg *orgImage, DImg *destImage, int Amplitude, int Frequency,
                bool FillSides, bool Direction);
-    void blockWaves(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Amplitude, int Frequency, bool Mode);
-    void tile(Digikam::DImg *orgImage, Digikam::DImg *destImage, int WSize, int HSize, int Random);
+    void blockWaves(DImg *orgImage, DImg *destImage, int Amplitude, int Frequency, bool Mode);
+    void tile(DImg *orgImage, DImg *destImage, int WSize, int HSize, int Random);
 
     void setPixelFromOther(int Width, int Height, bool sixteenBit, int bytesDepth,
                            uchar *data, uchar *pResBits,
@@ -109,7 +111,7 @@ private:
     */
 
     // Return the limit defined the max and min values.
-    inline int Lim_Max(int Now, int Up, int Max) 
+    inline int Lim_Max(int Now, int Up, int Max)
     {
         --Max;
         while (Now > Max - Up) --Up;
@@ -144,6 +146,6 @@ private:
     int  m_effectType;
 };
 
-}  // namespace DigikamDistortionFXImagesPlugin
+}  // namespace Digikam
 
-#endif /* DISTORTION_FX_H */
+#endif /* DISTORTION_FX_FILTER_H */

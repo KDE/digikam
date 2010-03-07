@@ -25,11 +25,9 @@
  *
  * ============================================================ */
 
-// Represents 1
 #define ANGLE_RATIO        0.017453292519943295769236907685
 
-
-#include "distortionfx.h"
+#include "distortionfxfilter.h"
 
 // C++ includes
 
@@ -45,12 +43,12 @@
 #include "dimg.h"
 #include "pixelsaliasfilter.h"
 
-namespace DigikamDistortionFXImagesPlugin
+namespace Digikam
 {
 
-DistortionFX::DistortionFX(Digikam::DImg* orgImage, QObject* parent, int effectType,
+DistortionFXFilter::DistortionFXFilter(DImg* orgImage, QObject* parent, int effectType,
                            int level, int iteration, bool antialiasing)
-            : Digikam::DImgThreadedFilter(orgImage, parent, "DistortionFX")
+                  : DImgThreadedFilter(orgImage, parent, "DistortionFX")
 {
     m_effectType = effectType;
     m_level      = level;
@@ -60,7 +58,7 @@ DistortionFX::DistortionFX(Digikam::DImg* orgImage, QObject* parent, int effectT
     initFilter();
 }
 
-void DistortionFX::filterImage()
+void DistortionFXFilter::filterImage()
 {
     int w = m_orgImage.width();
     int h = m_orgImage.height();
@@ -140,11 +138,11 @@ void DistortionFX::filterImage()
     Write value of pixel w|h in data to pixel nw|nh in pResBits.
     Antialias if requested.
 */
-void DistortionFX::setPixelFromOther(int Width, int Height, bool sixteenBit, int bytesDepth,
+void DistortionFXFilter::setPixelFromOther(int Width, int Height, bool sixteenBit, int bytesDepth,
                                      uchar* data, uchar* pResBits,
                                      int w, int h, double nw, double nh, bool AntiAlias)
 {
-    Digikam::DColor color;
+    DColor color;
     int offset, offsetOther;
 
     offset = getOffset(Width, w, h, bytesDepth);
@@ -155,12 +153,12 @@ void DistortionFX::setPixelFromOther(int Width, int Height, bool sixteenBit, int
         if (sixteenBit)
         {
             unsigned short* ptr16 = (unsigned short*)ptr;
-            Digikam::PixelsAliasFilter().pixelAntiAliasing16((unsigned short*)data, Width, Height, nw, nh,
+            PixelsAliasFilter().pixelAntiAliasing16((unsigned short*)data, Width, Height, nw, nh,
                                                              ptr16+3, ptr16+2, ptr16+1, ptr16);
         }
         else
         {
-            Digikam::PixelsAliasFilter().pixelAntiAliasing(data, Width, Height, nw, nh,
+            PixelsAliasFilter().pixelAntiAliasing(data, Width, Height, nw, nh,
                                                            ptr+3, ptr+2, ptr+1, ptr);
         }
     }
@@ -188,7 +186,7 @@ void DistortionFX::setPixelFromOther(int Width, int Height, bool sixteenBit, int
  *                     Its pure trigonometry. I think if you study hard the code you
  *                     understand very well.
  */
-void DistortionFX::fisheye(Digikam::DImg* orgImage, Digikam::DImg* destImage, double Coeff, bool AntiAlias)
+void DistortionFXFilter::fisheye(DImg* orgImage, DImg* destImage, double Coeff, bool AntiAlias)
 {
     if (Coeff == 0.0) return;
 
@@ -205,7 +203,7 @@ void DistortionFX::fisheye(Digikam::DImg* orgImage, Digikam::DImg* destImage, do
     int progress;
     int nHalfW = Width / 2, nHalfH = Height / 2;
 
-    Digikam::DColor color;
+    DColor color;
     int offset;
 
     double lfXScale = 1.0, lfYScale = 1.0;
@@ -274,7 +272,7 @@ void DistortionFX::fisheye(Digikam::DImg* orgImage, Digikam::DImg* destImage, do
  * Theory           => Take spiral studies, you will understand better, I'm studying
  *                     hard on this effect, because it is not too fast.
  */
-void DistortionFX::twirl(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Twirl, bool AntiAlias)
+void DistortionFXFilter::twirl(DImg *orgImage, DImg *destImage, int Twirl, bool AntiAlias)
 {
     // if twirl value is zero, we do nothing
 
@@ -291,7 +289,7 @@ void DistortionFX::twirl(Digikam::DImg *orgImage, Digikam::DImg *destImage, int 
     int h, w;
     double tw, th, nh, nw;
 
-    Digikam::DColor color;
+    DColor color;
     int offset;
 
     int progress;
@@ -372,7 +370,7 @@ void DistortionFX::twirl(Digikam::DImg *orgImage, Digikam::DImg *destImage, int 
  *                     Spherize use the same function but in a rectangular
  *                     environment.
  */
-void DistortionFX::cilindrical(Digikam::DImg *orgImage, Digikam::DImg *destImage, double Coeff,
+void DistortionFXFilter::cilindrical(DImg *orgImage, DImg *destImage, double Coeff,
                                bool Horizontal, bool Vertical, bool AntiAlias)
 
 {
@@ -455,7 +453,7 @@ void DistortionFX::cilindrical(Digikam::DImg *orgImage, Digikam::DImg *destImage
  *                     I multiply the angle by 2, the result is an image like this
  *                     If we multiply by 3, we can create the SixCorners effect.
  */
-void DistortionFX::multipleCorners(Digikam::DImg *orgImage, Digikam::DImg *destImage, int Factor, bool AntiAlias)
+void DistortionFXFilter::multipleCorners(DImg *orgImage, DImg *destImage, int Factor, bool AntiAlias)
 {
     if (Factor == 0) return;
 
@@ -519,7 +517,7 @@ void DistortionFX::multipleCorners(Digikam::DImg *orgImage, Digikam::DImg *destI
  * Theory           => Similar to PolarCoordinates from Photoshop. We apply the polar
  *                     transformation in a proportional (Height and Width) radius.
  */
-void DistortionFX::polarCoordinates(Digikam::DImg *orgImage, Digikam::DImg *destImage, bool Type, bool AntiAlias)
+void DistortionFXFilter::polarCoordinates(DImg *orgImage, DImg *destImage, bool Type, bool AntiAlias)
 {
     int Width       = orgImage->width();
     int Height      = orgImage->height();
@@ -601,7 +599,7 @@ void DistortionFX::polarCoordinates(Digikam::DImg *orgImage, Digikam::DImg *dest
  * Theory           => Similar to Waves effect, but here I apply a senoidal function
  *                     with the angle point.
  */
-void DistortionFX::circularWaves(Digikam::DImg *orgImage, Digikam::DImg *destImage, int X, int Y, double Amplitude,
+void DistortionFXFilter::circularWaves(DImg *orgImage, DImg *destImage, int X, int Y, double Amplitude,
                                  double Frequency, double Phase, bool WavesType, bool AntiAlias)
 {
     if (Amplitude < 0.0) Amplitude = 0.0;
@@ -664,7 +662,7 @@ void DistortionFX::circularWaves(Digikam::DImg *orgImage, Digikam::DImg *destIma
  * Theory           => This is an amazing effect, very funny, and very simple to
  *                     understand. You just need understand how sin and cos works.
  */
-void DistortionFX::waves(Digikam::DImg *orgImage, Digikam::DImg *destImage,
+void DistortionFXFilter::waves(DImg *orgImage, DImg *destImage,
                          int Amplitude, int Frequency,
                          bool FillSides, bool Direction)
 {
@@ -735,7 +733,7 @@ void DistortionFX::waves(Digikam::DImg *orgImage, Digikam::DImg *destImage,
  * Theory           => This is an amazing effect, very funny when amplitude and
  *                     frequency are small values.
  */
-void DistortionFX::blockWaves(Digikam::DImg *orgImage, Digikam::DImg *destImage,
+void DistortionFXFilter::blockWaves(DImg *orgImage, DImg *destImage,
                               int Amplitude, int Frequency, bool Mode)
 {
     if (Amplitude < 0) Amplitude = 0;
@@ -751,7 +749,7 @@ void DistortionFX::blockWaves(Digikam::DImg *orgImage, Digikam::DImg *destImage,
     int nw, nh, progress;
     double Radius;
 
-    Digikam::DColor color;
+    DColor color;
     int offset, offsetOther;
 
     int nHalfW = Width / 2, nHalfH = Height / 2;
@@ -807,7 +805,7 @@ void DistortionFX::blockWaves(Digikam::DImg *orgImage, Digikam::DImg *destImage,
  *                     replace in a position with a random distance from the original
  *                     position.
  */
-void DistortionFX::tile(Digikam::DImg *orgImage, Digikam::DImg *destImage,
+void DistortionFXFilter::tile(DImg *orgImage, DImg *destImage,
                         int WSize, int HSize, int Random)
 {
     if (WSize < 1)  WSize = 1;
@@ -859,7 +857,7 @@ void DistortionFX::tile(Digikam::DImg *orgImage, Digikam::DImg *destImage,
  *                     so, we can build an oval circumference
  */
  /*
-double DistortionFX::maximumRadius(int Height, int Width, double Angle)
+double DistortionFXFilter::maximumRadius(int Height, int Width, double Angle)
 {
     double MaxRad, MinRad;
     double Radius, DegAngle = fabs (Angle * 57.295);    // Rads -> Degrees
@@ -876,4 +874,4 @@ double DistortionFX::maximumRadius(int Height, int Width, double Angle)
 }
  */
 
-}  // namespace DigikamDistortionFXImagesPlugin
+}  // namespace Digikam
