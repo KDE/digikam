@@ -662,14 +662,18 @@ void ImagePropertiesColorsTab::updateStatistics()
 
 void ImagePropertiesColorsTab::getICCData()
 {
-    if (d->image.getIccProfile().isNull())
+    if (DImg::fileFormat(d->currentFilePath) == DImg::RAW)
     {
-        d->iccProfileWidget->setLoadingFailed();
+        d->iccProfileWidget->setUncalibratedColor();
     }
-    else
+    else if (!d->image.getIccProfile().isNull())
     {
         d->embedded_profile = d->image.getIccProfile();
         d->iccProfileWidget->loadProfile(d->currentFilePath, d->embedded_profile);
+    }
+    else
+    {
+        d->iccProfileWidget->setLoadingFailed();
     }
 }
 
