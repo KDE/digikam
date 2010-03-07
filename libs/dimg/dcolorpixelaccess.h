@@ -6,8 +6,8 @@
  * Date        : 2005-03-02
  * Description : methods to access on pixels color
  *
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -25,14 +25,14 @@
 #ifndef DCOLORPIXELACCESS_H
 #define DCOLORPIXELACCESS_H
 
-namespace Digikam 
+namespace Digikam
 {
 
 // These methods are used in quite a few image effects,
 // typically in loops iterating the data.
 // Providing them as inline methods allows the compiler to optimize better.
 
-inline void DColor::setColor(const uchar *data, bool sixteenBit)
+inline void DColor::setColor(const uchar* data, bool sixteenBit)
 {
     m_sixteenBit = sixteenBit;
 
@@ -57,11 +57,11 @@ inline void DColor::setPixel(uchar *data) const
 {
     if (sixteenBit())       // 16 bits image.
     {
-        unsigned short *data16 = (unsigned short *)data;
-        data16[0] = (unsigned short)blue();
-        data16[1] = (unsigned short)green();
-        data16[2] = (unsigned short)red();
-        data16[3] = (unsigned short)alpha();
+        unsigned short* data16 = (unsigned short*)data;
+        data16[0]              = (unsigned short)blue();
+        data16[1]              = (unsigned short)green();
+        data16[2]              = (unsigned short)red();
+        data16[3]              = (unsigned short)alpha();
     }
     else                    // 8 bits image.
     {
@@ -71,7 +71,6 @@ inline void DColor::setPixel(uchar *data) const
         data[3] = (uchar)alpha();
     }
 }
-
 
 }  // namespace Digikam 
 
