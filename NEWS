@@ -101,4 +101,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 071 ==> 229340 : digiKam Crashes When Saving PNG Files.
 072 ==> 229664 : Curves Widget not working anymore in BWSepia Plugin
 073 ==> 229574 : Moving tags doesn't update the "tag counter" next to the tag name.
-074 ==> 
+074 ==> 229690 : No picture on thumb bar icon
+075 ==> 

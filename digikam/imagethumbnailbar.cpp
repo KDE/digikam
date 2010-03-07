@@ -137,24 +137,21 @@ void ImageThumbnailBar::setScrollBarPolicy(Qt::ScrollBarPolicy policy)
     }
 }
 
-void ImageThumbnailBar::setFlow(QListView::Flow newFlow)
+void ImageThumbnailBar::setFlow(QListView::Flow flow)
 {
     setWrapping(false);
 
-    if (newFlow == flow())
-        return;
-
-    ImageCategorizedView::setFlow(newFlow);
+    ImageCategorizedView::setFlow(flow);
 
     ImageThumbnailDelegate *del = static_cast<ImageThumbnailDelegate*>(delegate());
-    del->setFlow(newFlow);
+    del->setFlow(flow);
 
     // Reset the minimum and maximum sizes.
     setMinimumSize(QSize(0, 0));
     setMaximumSize(QSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX));
 
     // Adjust minimum and maximum width to thumbnail sizes.
-    if (newFlow == TopToBottom)
+    if (flow == TopToBottom)
     {
         setMinimumWidth(del->minimumSize() + verticalScrollBar()->sizeHint().width());
         setMaximumWidth(del->maximumSize() + verticalScrollBar()->sizeHint().width());
