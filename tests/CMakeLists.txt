@@ -144,7 +144,7 @@ SET(searchtextbartest_SRCS
 )
 KDE4_ADD_UNIT_TEST(searchtextbartest ${searchtextbartest_SRCS})
 TARGET_LINK_LIBRARIES(searchtextbartest
-                      ${KDE4_KDECORE_LIBS}
+                      ${KDE4_KDEUI_LIBS}
                       ${QT_QTGUI_LIBRARY}
                       ${QT_QTTEST_LIBRARY}
                       digikamcore
@@ -219,6 +219,7 @@ TARGET_LINK_LIBRARIES(albummodeltest
                       ${GPHOTO2_LIBRARIES}
                       ${KIPI_LIBRARIES}
                       ${KDCRAW_LIBRARIES}
+                      ${KEXIV2_LIBRARIES}
                       digikamdatabase
                       digikamcore
                       )
