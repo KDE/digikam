@@ -817,7 +817,7 @@
 			     <statement mode="query">CREATE TABLE Settings         
                             (keyword LONGTEXT CHARACTER SET utf8 NOT NULL,
                              value LONGTEXT CHARACTER SET utf8,
-                             UNIQUE(keyword(333))
+                             UNIQUE(keyword(333)))
                  </statement>
 			</dbaction>
 		     <!-- Thumbnails Indexes DB -->
