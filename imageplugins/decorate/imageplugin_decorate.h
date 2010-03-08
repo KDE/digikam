@@ -52,9 +52,11 @@ private Q_SLOTS:
 
     void slotInsertText();
     void slotBorder();
+    void slotTexture();
 
 private:
 
+    KAction* m_textureAction;
     KAction* m_borderAction;
     KAction* m_insertTextAction;
 };

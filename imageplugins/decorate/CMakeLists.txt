@@ -1,10 +1,11 @@
 
-ADD_SUBDIRECTORY(borderpatterns)
+ADD_SUBDIRECTORY(borderpatterns texturepatterns)
 
 SET(digikamimageplugin_decorate_PART_SRCS imageplugin_decorate.cpp
                                           inserttextwidget.cpp
                                           inserttexttool.cpp
                                           bordertool.cpp
+                                          texturetool.cpp
    )
 
 KDE4_ADD_PLUGIN(digikamimageplugin_decorate ${digikamimageplugin_decorate_PART_SRCS})

@@ -38,6 +38,7 @@
 
 #include "inserttexttool.h"
 #include "bordertool.h"
+#include "texturetool.h"
 
 using namespace DigikamDecorateImagePlugin;
 
@@ -57,6 +58,11 @@ ImagePlugin_Decorate::ImagePlugin_Decorate(QObject *parent, const QVariantList &
     actionCollection()->addAction("imageplugin_border", m_borderAction );
     connect(m_borderAction, SIGNAL(triggered(bool)),
             this, SLOT(slotBorder()));            
+
+    m_textureAction = new KAction(KIcon("texture"), i18n("Apply Texture..."), this);
+    actionCollection()->addAction("imageplugin_texture", m_textureAction );
+    connect(m_textureAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotTexture()));            
             
     setXMLFile("digikamimageplugin_decorate_ui.rc");
 
@@ -71,6 +77,7 @@ void ImagePlugin_Decorate::setEnabledActions(bool b)
 {
     m_insertTextAction->setEnabled(b);
     m_borderAction->setEnabled(b);
+    m_textureAction->setEnabled(b);
 }
 
 void ImagePlugin_Decorate::slotInsertText()
@@ -82,5 +89,11 @@ void ImagePlugin_Decorate::slotInsertText()
 void ImagePlugin_Decorate::slotBorder()
 {
     BorderTool* tool = new BorderTool(this);
+    loadTool(tool);
+}
+
+void ImagePlugin_Decorate::slotTexture()
+{
+    TextureTool* tool = new TextureTool(this);
     loadTool(tool);
 }
