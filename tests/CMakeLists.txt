@@ -126,7 +126,6 @@ TARGET_LINK_LIBRARIES(statesavingobjecttest
 #------------------------------------------------------------------------
 
 SET(freerotationtest_SRCS
-    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/transform/freerotationfilter.cpp
     freerotationtest.cpp
 )
 KDE4_ADD_UNIT_TEST(freerotationtest ${freerotationtest_SRCS})
