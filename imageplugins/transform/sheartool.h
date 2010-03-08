@@ -30,7 +30,7 @@
 
 using namespace Digikam;
 
-namespace DigikamShearToolImagesPlugin
+namespace DigikamTransformImagePlugin
 {
 
 class ShearToolPriv;
@@ -64,6 +64,6 @@ private:
     ShearToolPriv* const d;
 };
 
-}  // namespace DigikamShearToolImagesPlugin
+}  // namespace DigikamTransformImagePlugin
 
 #endif /* SHEARTOOL_H */

@@ -38,6 +38,7 @@
 
 #include "perspectivetool.h"
 #include "freerotationtool.h"
+#include "sheartool.h"
 
 using namespace DigikamTransformImagePlugin;
 
@@ -51,7 +52,14 @@ ImagePlugin_Transform::ImagePlugin_Transform(QObject* parent, const QVariantList
     actionCollection()->addAction("imageplugin_perspective", m_perspectiveAction );
     connect(m_perspectiveAction, SIGNAL(triggered(bool)),
             this, SLOT(slotPerspective()));
-            
+
+    m_sheartoolAction = new KAction(KIcon("shear"), i18n("Shear..."), this);
+    actionCollection()->addAction("imageplugin_sheartool", m_sheartoolAction );
+    connect(m_sheartoolAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotShearTool()));
+
+    //-----------------------------------------------------------------------------------
+    
     QString pluginName(i18n("Free Rotation"));
 
     // we want to have an actionCategory for this plugin (if possible), set a name for it
@@ -93,11 +101,18 @@ void ImagePlugin_Transform::setEnabledActions(bool b)
 {
     m_perspectiveAction->setEnabled(b);
     m_freerotationAction->setEnabled(b);
+    m_sheartoolAction->setEnabled(b);
 }
 
 void ImagePlugin_Transform::slotPerspective()
 {
     PerspectiveTool* tool = new PerspectiveTool(this);
+    loadTool(tool);
+}
+
+void ImagePlugin_Transform::slotShearTool()
+{
+    ShearTool* tool = new ShearTool(this);
     loadTool(tool);
 }
 

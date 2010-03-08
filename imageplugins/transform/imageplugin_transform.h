@@ -58,9 +58,11 @@ private Q_SLOTS:
 
     void slotPerspective();
     void slotFreeRotation();
+    void slotShearTool();
 
 private:
 
+    KAction* m_sheartoolAction;
     KAction* m_freerotationAction;
     KAction* m_perspectiveAction;
 };

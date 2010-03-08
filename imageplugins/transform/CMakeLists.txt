@@ -1,6 +1,7 @@
 
 SET(digikamimageplugin_transform_PART_SRCS imageplugin_transform.cpp
                                            freerotationtool.cpp
+                                           sheartool.cpp
                                            perspectivetool.cpp
                                            perspectivewidget.cpp 
                                            triangle.cpp 

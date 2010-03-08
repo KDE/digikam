@@ -1,11 +1,12 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="8" name="digikamimageplugin_transform" >
+<gui version="9" name="digikamimageplugin_transform" >
 
  <MenuBar>
 
   <Menu name="Transform" ><text>Tra&amp;nsform</text>
    <Action name="imageplugin_perspective" />
    <Action name="imageplugin_freerotation" />
+   <Action name="imageplugin_sheartool" />   
   </Menu>
 
  </MenuBar>
@@ -17,6 +18,7 @@
  <ActionProperties>
    <Action shortcut="" name="imageplugin_perspective" />
    <Action shortcut="" name="imageplugin_freerotation" />   
+   <Action shortcut="" name="imageplugin_sheartool" />   
  </ActionProperties>
 
 </gui>

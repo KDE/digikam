@@ -56,7 +56,7 @@
 
 using namespace KDcrawIface;
 
-namespace DigikamShearToolImagesPlugin
+namespace DigikamTransformImagePlugin
 {
 
 class ShearToolPriv
@@ -363,4 +363,4 @@ void ShearTool::renderingFinished()
     kapp->restoreOverrideCursor();
 }
 
-}  // namespace DigikamShearToolImagesPlugin
+}  // namespace DigikamTransformImagePlugin
