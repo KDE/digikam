@@ -44,7 +44,7 @@
 
 #include "dimg.h"
 
-namespace DigikamBorderImagesPlugin
+namespace Digikam
 {
 
 class BorderFilterPriv
@@ -95,16 +95,16 @@ public:
 };
 
 BorderFilter::BorderFilter(DImg* image, QObject* parent, int orgWidth, int orgHeight,
-                           QString borderPath, int borderType, float borderPercent,
-                           DColor solidColor,
-                           DColor niepceBorderColor,
-                           DColor niepceLineColor,
-                           DColor bevelUpperLeftColor,
-                           DColor bevelLowerRightColor,
-                           DColor decorativeFirstColor,
-                           DColor decorativeSecondColor)
-      : DImgThreadedFilter(image, parent, "Border"),
-        d(new BorderFilterPriv)
+                           const QString& borderPath, int borderType, float borderPercent,
+                           const DColor& solidColor,
+                           const DColor& niepceBorderColor,
+                           const DColor& niepceLineColor,
+                           const DColor& bevelUpperLeftColor,
+                           const DColor& bevelLowerRightColor,
+                           const DColor& decorativeFirstColor,
+                           const DColor& decorativeSecondColor)
+           : DImgThreadedFilter(image, parent, "Border"),
+             d(new BorderFilterPriv)
 {
     d->orgWidth        = orgWidth;
     d->orgHeight       = orgHeight;
@@ -132,17 +132,17 @@ BorderFilter::BorderFilter(DImg* image, QObject* parent, int orgWidth, int orgHe
 }
 
 BorderFilter::BorderFilter(DImg* orgImage, QObject* parent, int orgWidth, int orgHeight,
-                           QString borderPath, int borderType,
+                           const QString& borderPath, int borderType,
                            int borderWidth1, int borderWidth2, int borderWidth3, int borderWidth4,
-                           DColor solidColor,
-                           DColor niepceBorderColor,
-                           DColor niepceLineColor,
-                           DColor bevelUpperLeftColor,
-                           DColor bevelLowerRightColor,
-                           DColor decorativeFirstColor,
-                           DColor decorativeSecondColor)
-      : DImgThreadedFilter(orgImage, parent, "Border"),
-        d(new BorderFilterPriv)
+                           const DColor& solidColor,
+                           const DColor& niepceBorderColor,
+                           const DColor& niepceLineColor,
+                           const DColor& bevelUpperLeftColor,
+                           const DColor& bevelLowerRightColor,
+                           const DColor& decorativeFirstColor,
+                           const DColor& decorativeSecondColor)
+            : DImgThreadedFilter(orgImage, parent, "Border"),
+              d(new BorderFilterPriv)
 {
     d->orgWidth              = orgWidth;
     d->orgHeight             = orgHeight;
@@ -251,7 +251,7 @@ void BorderFilter::solid(DImg& src, DImg& dest, const DColor& fg, int borderWidt
 }
 
 void BorderFilter::niepce(DImg& src, DImg& dest, const DColor& fg,
-                    int borderWidth, const DColor& bg, int lineWidth)
+                          int borderWidth, const DColor& bg, int lineWidth)
 {
     DImg tmp;
     solid(src, tmp, bg, lineWidth);
@@ -259,7 +259,7 @@ void BorderFilter::niepce(DImg& src, DImg& dest, const DColor& fg,
 }
 
 void BorderFilter::bevel(DImg& src, DImg& dest, const DColor& topColor,
-                   const DColor& btmColor, int borderWidth)
+                         const DColor& btmColor, int borderWidth)
 {
     int width, height;
 
@@ -336,8 +336,8 @@ void BorderFilter::bevel(DImg& src, DImg& dest, const DColor& topColor,
 }
 
 void BorderFilter::pattern(DImg& src, DImg& dest, int borderWidth,
-                     const DColor& firstColor, const DColor& secondColor,
-                     int firstWidth, int secondWidth)
+                           const DColor& firstColor, const DColor& secondColor,
+                           int firstWidth, int secondWidth)
 {
     // Original image with the first solid border around.
     DImg tmp;
@@ -392,13 +392,13 @@ void BorderFilter::pattern(DImg& src, DImg& dest, int borderWidth,
 void BorderFilter::solid2(DImg& src, DImg& dest, const DColor& fg, int borderWidth)
 {
     dest = DImg(src.width() + borderWidth*2, src.height() + borderWidth*2,
-                         src.sixteenBit(), src.hasAlpha());
+                src.sixteenBit(), src.hasAlpha());
     dest.fill(fg);
     dest.bitBltImage(&src, borderWidth, borderWidth);
 }
 
 void BorderFilter::niepce2(DImg& src, DImg& dest, const DColor& fg, int borderWidth,
-                     const DColor& bg, int lineWidth)
+                           const DColor& bg, int lineWidth)
 {
     DImg tmp;
     solid2(src, tmp, bg, lineWidth);
@@ -406,7 +406,7 @@ void BorderFilter::niepce2(DImg& src, DImg& dest, const DColor& fg, int borderWi
 }
 
 void BorderFilter::bevel2(DImg& src, DImg& dest, const DColor& topColor,
-                    const DColor& btmColor, int borderWidth)
+                          const DColor& btmColor, int borderWidth)
 {
     int x, y;
     int wc;
@@ -452,8 +452,8 @@ void BorderFilter::bevel2(DImg& src, DImg& dest, const DColor& topColor,
 }
 
 void BorderFilter::pattern2(DImg& src, DImg& dest, int borderWidth,
-                      const DColor& firstColor, const DColor& secondColor,
-                      int firstWidth, int secondWidth)
+                            const DColor& firstColor, const DColor& secondColor,
+                            int firstWidth, int secondWidth)
 {
     // Border tile.
 
@@ -490,4 +490,4 @@ void BorderFilter::pattern2(DImg& src, DImg& dest, int borderWidth,
     dest.bitBltImage(&tmp, borderWidth, borderWidth);
 }
 
-}  // namespace DigikamBorderImagesPlugin
+}  // namespace Digikam

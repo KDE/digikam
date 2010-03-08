@@ -506,10 +506,7 @@ void BorderTool::prepareEffect()
     int w             = iface->previewWidth();
     int h             = iface->previewHeight();
     bool sixteenBit   = iface->previewSixteenBit();
-    uchar *data       = iface->getPreviewImage();
-    DImg previewImage(w, h, sixteenBit,
-                      iface->previewHasAlpha(), data);
-    delete [] data;
+    DImg preview      = iface->getPreviewImg();
 
     int borderType  = d->borderType->currentIndex();
     float ratio     = (float)w/(float)orgWidth;
@@ -518,7 +515,7 @@ void BorderTool::prepareEffect()
 
     if (d->preserveAspectRatio->isChecked())
     {
-        setFilter(new BorderFilter(&previewImage, this, orgWidth, orgHeight,
+        setFilter(new BorderFilter(&preview, this, orgWidth, orgHeight,
                                    border, borderType, d->borderPercent->value()/100.0,
                                    DColor(d->solidColor, sixteenBit),
                                    DColor(d->niepceBorderColor, sixteenBit),
@@ -530,7 +527,7 @@ void BorderTool::prepareEffect()
     }
     else
     {
-        setFilter(new BorderFilter(&previewImage, this, orgWidth, orgHeight,
+        setFilter(new BorderFilter(&preview, this, orgWidth, orgHeight,
                                    border, borderType, borderWidth,
                                    (int)(20.0*ratio), (int)(20.0*ratio), 3,
                                    DColor(d->solidColor, sixteenBit),
@@ -560,14 +557,11 @@ void BorderTool::prepareFinal()
     int orgWidth    = iface.originalWidth();
     int orgHeight   = iface.originalHeight();
     bool sixteenBit = iface.previewSixteenBit();
-    uchar *data     = iface.getOriginalImage();
-    DImg orgImage(orgWidth, orgHeight, sixteenBit,
-                           iface.originalHasAlpha(), data);
-    delete [] data;
+    DImg* orgImage  = iface.getOriginalImg();
 
     if (d->preserveAspectRatio->isChecked())
     {
-        setFilter(new BorderFilter(&orgImage, this, orgWidth, orgHeight,
+        setFilter(new BorderFilter(orgImage, this, orgWidth, orgHeight,
                                    border, borderType, borderRatio,
                                    DColor(d->solidColor, sixteenBit),
                                    DColor(d->niepceBorderColor, sixteenBit),
@@ -579,7 +573,7 @@ void BorderTool::prepareFinal()
     }
     else
     {
-        setFilter(new BorderFilter(&orgImage, this, orgWidth, orgHeight,
+        setFilter(new BorderFilter(orgImage, this, orgWidth, orgHeight,
                                    border, borderType, borderWidth, 15, 15, 10,
                                    DColor(d->solidColor, sixteenBit),
                                    DColor(d->niepceBorderColor, sixteenBit),
@@ -598,8 +592,7 @@ void BorderTool::putPreviewData()
     int h             = iface->previewHeight();
 
     DImg imTemp = filter()->getTargetImage().smoothScale(w, h, Qt::KeepAspectRatio);
-    DImg imDest(w, h, filter()->getTargetImage().sixteenBit(),
-                      filter()->getTargetImage().hasAlpha());
+    DImg imDest(w, h, filter()->getTargetImage().sixteenBit(), filter()->getTargetImage().hasAlpha());
 
     imDest.fill(DColor(d->previewWidget->palette().color(QPalette::Background).rgb(),
                 filter()->getTargetImage().sixteenBit()) );

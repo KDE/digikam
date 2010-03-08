@@ -4,10 +4,10 @@
  * http://www.digikam.org
  *
  * Date        : 2005-05-25
- * Description : Texture threaded image filter.
+ * Description : TextureFilter threaded image filter.
  *
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,8 +22,7 @@
  *
  * ============================================================ */
 
-
-#include "texture.h"
+#include "texturefilter.h"
 
 // C++ includes
 
@@ -38,11 +37,11 @@
 
 #include "dimg.h"
 
-namespace DigikamTextureImagesPlugin
+namespace Digikam
 {
 
-Texture::Texture(Digikam::DImg *orgImage, QObject *parent, int blendGain, QString texturePath)
-       : Digikam::DImgThreadedFilter(orgImage, parent, "Texture")
+TextureFilter::TextureFilter(DImg* orgImage, QObject* parent, int blendGain, const QString& texturePath)
+             : DImgThreadedFilter(orgImage, parent, "Texture")
 {
     m_blendGain   = blendGain;
     m_texturePath = texturePath;
@@ -67,20 +66,20 @@ inline static int intMult16(uint a, uint b)
     return ((t >> 16) + t) >> 16;
 }
 
-void Texture::filterImage(void)
+void TextureFilter::filterImage(void)
 {
     // Texture tile.
 
-    int w = m_orgImage.width();
-    int h = m_orgImage.height();
+    int w           = m_orgImage.width();
+    int h           = m_orgImage.height();
     int bytesDepth  = m_orgImage.bytesDepth();
     bool sixteenBit = m_orgImage.sixteenBit();
 
     kDebug() << "Texture File: " << m_texturePath;
-    Digikam::DImg texture(m_texturePath);
+    DImg texture(m_texturePath);
     if ( texture.isNull() ) return;
 
-    Digikam::DImg textureImg(w, h, m_orgImage.sixteenBit(), m_orgImage.hasAlpha());
+    DImg textureImg(w, h, m_orgImage.sixteenBit(), m_orgImage.hasAlpha());
 
     texture.convertToDepthOfImage(&textureImg);
 
@@ -99,7 +98,7 @@ void Texture::filterImage(void)
     uchar* pOutBits = m_destImage.bits();
     uint offset;
 
-    Digikam::DColor teData, transData, inData, outData;
+    DColor teData, transData, inData, outData;
     uchar *ptr, *dptr, *tptr;
     int progress;
 
@@ -187,4 +186,4 @@ void Texture::filterImage(void)
     }
 }
 
-}  // namespace DigikamTextureImagesPlugin
+}  // namespace Digikam

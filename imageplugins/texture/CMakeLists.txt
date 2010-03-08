@@ -3,7 +3,6 @@ ADD_SUBDIRECTORY( patterns )
 
 SET(digikamimageplugin_texture_PART_SRCS imageplugin_texture.cpp
                                          texturetool.cpp 
-                                         texture.cpp 
    )
 
 KDE4_ADD_PLUGIN(digikamimageplugin_texture ${digikamimageplugin_texture_PART_SRCS})

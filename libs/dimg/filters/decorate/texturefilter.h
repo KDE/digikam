@@ -4,10 +4,10 @@
  * http://www.digikam.org
  *
  * Date        : 2005-05-25
- * Description : Texture threaded image filter.
+ * Description : TextureFilter threaded image filter.
  * 
- * Copyright (C) 2005-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * 
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,8 +22,8 @@
  * 
  * ============================================================ */
   
-#ifndef TEXTURE_H
-#define TEXTURE_H
+#ifndef TEXTUREFILTER_H
+#define TEXTUREFILTER_H
 
 // Qt includes
 
@@ -31,24 +31,26 @@
 
 // Local includes
 
+#include "digikam_export.h"
 #include "dimgthreadedfilter.h"
+#include "globals.h"
 
-namespace DigikamTextureImagesPlugin
+namespace Digikam
 {
 
-class Texture : public Digikam::DImgThreadedFilter
+class DIGIKAM_EXPORT TextureFilter : public DImgThreadedFilter
 {
 
 public:
 
-    explicit Texture(Digikam::DImg *orgImage, QObject *parent=0, int blendGain=200,
-                     QString texturePath=QString());
+    explicit TextureFilter(DImg* orgImage, QObject* parent=0, int blendGain=200,
+                           const QString& texturePath=QString());
 
-    ~Texture(){};
+    ~TextureFilter(){};
 
 private:  
 
-    virtual void filterImage(void);
+    void filterImage();
 
 private:  
 
@@ -57,6 +59,6 @@ private:
     QString m_texturePath;
 };
 
-}  // namespace DigikamTextureImagesPlugin
+}  // namespace Digikam
 
-#endif /* TEXTURE_H */
+#endif /* TEXTUREFILTER_H */

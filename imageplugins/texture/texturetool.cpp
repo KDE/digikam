@@ -6,8 +6,8 @@
  * Date        : 2005-03-10
  * Description : a plugin to apply texture over an image
  *
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #include "texturetool.moc"
 
 // Qt includes
@@ -33,7 +32,6 @@
 
 // KDE includes
 
-#include <kaboutdata.h>
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
@@ -50,16 +48,13 @@
 
 // Local includes
 
-#include "daboutdata.h"
 #include "dimg.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imageregionwidget.h"
-#include "texture.h"
-#include "version.h"
+#include "texturefilter.h"
 
 using namespace KDcrawIface;
-using namespace Digikam;
 
 namespace DigikamTextureImagesPlugin
 {
@@ -170,13 +165,6 @@ TextureTool::~TextureTool()
     delete d;
 }
 
-void TextureTool::renderingFinished()
-{
-    d->textureType->setEnabled(true);
-    d->blendGain->setEnabled(true);
-    toolView()->setEnabled(true);
-}
-
 void TextureTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
@@ -215,30 +203,26 @@ void TextureTool::slotResetSettings()
 
 void TextureTool::prepareEffect()
 {
-    d->textureType->setEnabled(false);
-    d->blendGain->setEnabled(false);
+    toolSettings()->setEnabled(false);    
     toolView()->setEnabled(false);    
 
     DImg image      = d->previewWidget->getOriginalRegionImage();
     QString texture = getTexturePath( d->textureType->currentIndex() );
+    int b           = 255 - d->blendGain->value();
 
-    int b = 255 - d->blendGain->value();
-
-    setFilter(dynamic_cast<DImgThreadedFilter*>(new Texture(&image, this, b, texture)));
+    setFilter(new TextureFilter(&image, this, b, texture));
 }
 
 void TextureTool::prepareFinal()
 {
-    d->textureType->setEnabled(false);
-    d->blendGain->setEnabled(false);
+    toolSettings()->setEnabled(false);    
     toolView()->setEnabled(false);    
-
-    int b = 255 - d->blendGain->value();
 
     ImageIface iface(0, 0);
     QString texture = getTexturePath( d->textureType->currentIndex() );
+    int b           = 255 - d->blendGain->value();
 
-    setFilter(dynamic_cast<DImgThreadedFilter*>(new Texture(iface.getOriginalImg(), this, b, texture)));
+    setFilter(new TextureFilter(iface.getOriginalImg(), this, b, texture));
 }
 
 void TextureTool::putPreviewData()
@@ -250,6 +234,12 @@ void TextureTool::putFinalData()
 {
     ImageIface iface(0, 0);
     iface.putOriginalImage(i18n("Texture"), filter()->getTargetImage().bits());
+}
+
+void TextureTool::renderingFinished()
+{
+    toolSettings()->setEnabled(true);    
+    toolView()->setEnabled(true);
 }
 
 QString TextureTool::getTexturePath(int texture)

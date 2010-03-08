@@ -3,7 +3,6 @@ ADD_SUBDIRECTORY( patterns )
 
 SET(digikamimageplugin_border_PART_SRCS imageplugin_border.cpp
                                         bordertool.cpp 
-                                        borderfilter.cpp 
    )
 
 KDE4_ADD_PLUGIN(digikamimageplugin_border ${digikamimageplugin_border_PART_SRCS})

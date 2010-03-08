@@ -34,16 +34,16 @@
 
 // Local includes
 
+#include "digikam_export.h"
 #include "dimgthreadedfilter.h"
+#include "globals.h"
 
-using namespace Digikam;
-
-namespace DigikamBorderImagesPlugin
+namespace Digikam
 {
 
 class BorderFilterPriv;
 
-class BorderFilter : public DImgThreadedFilter
+class DIGIKAM_EXPORT BorderFilter : public DImgThreadedFilter
 {
 
 public:
@@ -74,27 +74,27 @@ public:
 public:
 
     /** Constructor using settings to preserve aspect ratio of image. */
-    explicit BorderFilter(DImg *orgImage, QObject *parent=0, int orgWidth=0, int orgHeight=0,
-                          QString borderPath=QString(), int borderType=SolidBorder, float borderPercent=0.1,
-                          DColor solidColor = DColor(),
-                          DColor niepceBorderColor = DColor(),
-                          DColor niepceLineColor = DColor(),
-                          DColor bevelUpperLeftColor = DColor(),
-                          DColor bevelLowerRightColor = DColor(),
-                          DColor decorativeFirstColor = DColor(),
-                          DColor decorativeSecondColor = DColor());
+    explicit BorderFilter(DImg* orgImage, QObject* parent=0, int orgWidth=0, int orgHeight=0,
+                          const QString& borderPath=QString(), int borderType=SolidBorder, float borderPercent=0.1,
+                          const DColor& solidColor = DColor(),
+                          const DColor& niepceBorderColor = DColor(),
+                          const DColor& niepceLineColor = DColor(),
+                          const DColor& bevelUpperLeftColor = DColor(),
+                          const DColor& bevelLowerRightColor = DColor(),
+                          const DColor& decorativeFirstColor = DColor(),
+                          const DColor& decorativeSecondColor = DColor());
 
     /** Constructor using settings to not-preserve aspect ratio of image. */
-    explicit BorderFilter(DImg *orgImage, QObject *parent=0, int orgWidth=0, int orgHeight=0,
-                          QString borderPath=QString(), int borderType=SolidBorder,
+    explicit BorderFilter(DImg* orgImage, QObject* parent=0, int orgWidth=0, int orgHeight=0,
+                          const QString& borderPath=QString(), int borderType=SolidBorder,
                           int borderWidth1=100, int borderWidth2=20, int borderWidth3=20, int borderWidth4=10,
-                          DColor solidColor = DColor(),
-                          DColor niepceBorderColor = DColor(),
-                          DColor niepceLineColor = DColor(),
-                          DColor bevelUpperLeftColor = DColor(),
-                          DColor bevelLowerRightColor = DColor(),
-                          DColor decorativeFirstColor = DColor(),
-                          DColor decorativeSecondColor = DColor());
+                          const DColor& solidColor = DColor(),
+                          const DColor& niepceBorderColor = DColor(),
+                          const DColor& niepceLineColor = DColor(),
+                          const DColor& bevelUpperLeftColor = DColor(),
+                          const DColor& bevelLowerRightColor = DColor(),
+                          const DColor& decorativeFirstColor = DColor(),
+                          const DColor& decorativeSecondColor = DColor());
 
     ~BorderFilter();
 
@@ -125,6 +125,6 @@ private:
     BorderFilterPriv* const d;
 };
 
-}  // namespace DigikamBorderImagesPlugin
+}  // namespace Digikam
 
 #endif /* BORDERFILTER_H */
