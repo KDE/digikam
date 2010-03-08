@@ -27,8 +27,7 @@
 // Degrees to radian conversion coeff (PI/180). To optimize computation.
 #define DEG2RAD 0.017453292519943
 
-
-#include "shear.h"
+#include "shearfilter.h"
 
 // C++ includes
 
@@ -40,12 +39,12 @@
 #include "dimg.h"
 #include "pixelsaliasfilter.h"
 
-namespace DigikamShearToolImagesPlugin
+namespace Digikam
 {
 
-Shear::Shear(Digikam::DImg* orgImage, QObject* parent, float hAngle, float vAngle,
-             bool antialiasing, QColor backgroundColor, int orgW, int orgH)
-     : Digikam::DImgThreadedFilter(orgImage, parent, "sheartool")
+ShearFilter::ShearFilter(DImg* orgImage, QObject* parent, float hAngle, float vAngle,
+                         bool antialiasing, const QColor& backgroundColor, int orgW, int orgH)
+     : DImgThreadedFilter(orgImage, parent, "sheartool")
 {
     m_hAngle          = hAngle;
     m_vAngle          = vAngle;
@@ -57,7 +56,7 @@ Shear::Shear(Digikam::DImg* orgImage, QObject* parent, float hAngle, float vAngl
     initFilter();
 }
 
-void Shear::filterImage()
+void ShearFilter::filterImage()
 {
     int          progress;
     register int x, y, p = 0, pt;
@@ -122,14 +121,13 @@ void Shear::filterImage()
     // allocates a new image with the new size
 
     bool sixteenBit = m_orgImage.sixteenBit();
-
-    m_destImage = Digikam::DImg(new_width, new_height, sixteenBit, m_orgImage.hasAlpha());
-    m_destImage.fill( Digikam::DColor(m_backgroundColor.rgb(), sixteenBit) );
+    m_destImage     = DImg(new_width, new_height, sixteenBit, m_orgImage.hasAlpha());
+    m_destImage.fill( DColor(m_backgroundColor.rgb(), sixteenBit) );
 
     uchar* pResBits            = m_destImage.bits();
     unsigned short* pResBits16 = (unsigned short *)m_destImage.bits();
 
-    Digikam::PixelsAliasFilter alias;
+    PixelsAliasFilter alias;
 
     for( y = 0; y < new_height; ++y)
     {
@@ -175,13 +173,11 @@ void Shear::filterImage()
     }
 
     // To compute the rotated destination image size using original image dimensions.
-    int W = (int)(fabs(m_orgH * ( ( m_hAngle < 0.0 ) ? sin( horz_beta_angle ) : cos( horz_beta_angle ))))+
-            m_orgW;
-    int H = (int)(fabs(m_orgW * ( ( m_vAngle < 0.0 ) ? sin( vert_beta_angle ) : cos( vert_beta_angle ))))+
-            m_orgH;
+    int W = (int)(fabs(m_orgH * ( ( m_hAngle < 0.0 ) ? sin( horz_beta_angle ) : cos( horz_beta_angle )))) + m_orgW;
+    int H = (int)(fabs(m_orgW * ( ( m_vAngle < 0.0 ) ? sin( vert_beta_angle ) : cos( vert_beta_angle )))) + m_orgH;
 
     m_newSize.setWidth(W);
     m_newSize.setHeight(H);
 }
 
-}  // namespace DigikamShearToolImagesPlugin
+}  // namespace Digikam

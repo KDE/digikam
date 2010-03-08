@@ -6,7 +6,7 @@
  * Date        : 2004-12-23
  * Description : a plugin to shear an image
  *
- * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -28,12 +28,14 @@
 
 #include "editortool.h"
 
+using namespace Digikam;
+
 namespace DigikamShearToolImagesPlugin
 {
 
 class ShearToolPriv;
 
-class ShearTool : public Digikam::EditorToolThreaded
+class ShearTool : public EditorToolThreaded
 {
     Q_OBJECT
 
@@ -51,11 +53,11 @@ private:
 
     void readSettings();
     void writeSettings();
-    void prepareEffect(void);
-    void prepareFinal(void);
-    void putPreviewData(void);
-    void putFinalData(void);
-    void renderingFinished(void);
+    void prepareEffect();
+    void prepareFinal();
+    void putPreviewData();
+    void putFinalData();
+    void renderingFinished();
 
 private:
 

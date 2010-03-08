@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SHEAR_H
-#define SHEAR_H
+#ifndef SHEARFILTER_H
+#define SHEARFILTER_H
 
 // Qt includes
 
@@ -31,19 +31,21 @@
 
 // Local includes
 
+#include "digikam_export.h"
 #include "dimgthreadedfilter.h"
+#include "globals.h"
 
-namespace DigikamShearToolImagesPlugin
+namespace Digikam
 {
 
-class Shear : public Digikam::DImgThreadedFilter
+class DIGIKAM_EXPORT ShearFilter : public DImgThreadedFilter
 {
 
 public:
 
-    explicit Shear(Digikam::DImg* orgImage, QObject* parent=0, float hAngle=0.0, float vAngle=0.0,
-              bool antialiasing=true, QColor backgroundColor=Qt::black, int orgW=0, int orgH=0);
-    ~Shear(){};
+    explicit ShearFilter(DImg* orgImage, QObject* parent=0, float hAngle=0.0, float vAngle=0.0,
+              bool antialiasing=true, const QColor& backgroundColor=Qt::black, int orgW=0, int orgH=0);
+    ~ShearFilter(){};
 
     QSize getNewSize(void){ return m_newSize; };
 
@@ -78,6 +80,6 @@ private:
     QSize  m_newSize;
 };
 
-}  // namespace DigikamShearToolImagesPlugin
+}  // namespace Digikam
 
-#endif /* SHEAR_H */
+#endif /* SHEARFILTER_H */
