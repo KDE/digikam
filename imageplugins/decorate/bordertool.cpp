@@ -504,7 +504,6 @@ void BorderTool::prepareEffect()
     int orgWidth      = iface->originalWidth();
     int orgHeight     = iface->originalHeight();
     int w             = iface->previewWidth();
-    int h             = iface->previewHeight();
     bool sixteenBit   = iface->previewSixteenBit();
     DImg preview      = iface->getPreviewImg();
 
@@ -615,7 +614,7 @@ QString BorderTool::getBorderPath(int border)
     QString pattern;
 
     switch (border)
-       {
+    {
        case BorderFilter::PineBorder:
           pattern = "pine-pattern";
           break;
@@ -682,7 +681,7 @@ QString BorderTool::getBorderPath(int border)
 
        default:
           return QString();
-       }
+    }
 
     return (KStandardDirs::locate("data", QString("digikam/data/") + pattern + QString(".png")));
 }
