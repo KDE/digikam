@@ -18,6 +18,7 @@ INCLUDE_DIRECTORIES( ../showfoto/setup
                      ../libs/dimg/filters/auto
                      ../libs/dimg/filters/bcg
                      ../libs/dimg/filters/bw
+                     ../libs/dimg/filters/decorate
                      ../libs/dimg/filters/fx
                      ../libs/dimg/filters/hsl
                      ../libs/dimg/filters/icc
