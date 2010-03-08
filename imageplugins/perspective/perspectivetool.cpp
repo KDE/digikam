@@ -6,8 +6,8 @@
  * Date        : 2005-02-17
  * Description : a plugin to change image perspective .
  *
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -37,31 +37,24 @@
 
 // KDE includes
 
-#include <kaboutdata.h>
 #include <kapplication.h>
 #include <kcolorbutton.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kcursor.h>
 #include <kglobal.h>
-#include <khelpmenu.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kmenu.h>
 #include <kpushbutton.h>
 #include <kseparator.h>
 #include <kstandarddirs.h>
 
 // Local includes
 
-#include "daboutdata.h"
 #include "dimg.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
 #include "perspectivewidget.h"
-#include "version.h"
-
-using namespace Digikam;
 
 namespace DigikamPerspectiveImagesPlugin
 {
@@ -118,9 +111,9 @@ PerspectiveTool::PerspectiveTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QFrame *frame   = new QFrame(0);
+    QFrame *frame    = new QFrame(0);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-    QVBoxLayout* l  = new QVBoxLayout(frame);
+    QVBoxLayout* l   = new QVBoxLayout(frame);
     d->previewWidget = new PerspectiveWidget(525, 350, frame);
     l->addWidget(d->previewWidget);
     d->previewWidget->setWhatsThis(i18n("This is the perspective transformation operation preview. "
@@ -131,67 +124,67 @@ PerspectiveTool::PerspectiveTool(QObject* parent)
     // -------------------------------------------------------------
 
     QString temp;
-    Digikam::ImageIface iface(0, 0);
+    ImageIface iface(0, 0);
 
     d->gboxSettings = new EditorToolSettings;
     d->gboxSettings->setTools(EditorToolSettings::ColorGuide);
 
     // -------------------------------------------------------------
 
-    QLabel *label1   = new QLabel(i18n("New width:"));
+    QLabel* label1   = new QLabel(i18n("New width:"));
     d->newWidthLabel = new QLabel(temp.setNum( iface.originalWidth()) + i18n(" px"));
     d->newWidthLabel->setAlignment( Qt::AlignBottom | Qt::AlignRight );
 
-    QLabel *label2    = new QLabel(i18n("New height:"));
+    QLabel* label2    = new QLabel(i18n("New height:"));
     d->newHeightLabel = new QLabel(temp.setNum( iface.originalHeight()) + i18n(" px"));
     d->newHeightLabel->setAlignment( Qt::AlignBottom | Qt::AlignRight );
 
     // -------------------------------------------------------------
 
-    KSeparator *line         = new KSeparator (Qt::Horizontal);
-    QLabel *angleLabel       = new QLabel(i18n("Angles (in degrees):"));
-    QLabel *label3           = new QLabel(i18n("  Top left:"));
+    KSeparator* line         = new KSeparator (Qt::Horizontal);
+    QLabel* angleLabel       = new QLabel(i18n("Angles (in degrees):"));
+    QLabel* label3           = new QLabel(i18n("  Top left:"));
     d->topLeftAngleLabel     = new QLabel;
-    QLabel *label4           = new QLabel(i18n("  Top right:"));
+    QLabel* label4           = new QLabel(i18n("  Top right:"));
     d->topRightAngleLabel    = new QLabel;
-    QLabel *label5           = new QLabel(i18n("  Bottom left:"));
+    QLabel* label5           = new QLabel(i18n("  Bottom left:"));
     d->bottomLeftAngleLabel  = new QLabel;
-    QLabel *label6           = new QLabel(i18n("  Bottom right:"));
+    QLabel* label6           = new QLabel(i18n("  Bottom right:"));
     d->bottomRightAngleLabel = new QLabel;
 
     // -------------------------------------------------------------
 
-    KSeparator *line2          = new KSeparator (Qt::Horizontal);
+    KSeparator* line2          = new KSeparator (Qt::Horizontal);
     d->drawWhileMovingCheckBox = new QCheckBox(i18n("Draw preview while moving"));
     d->drawGridCheckBox        = new QCheckBox(i18n("Draw grid"));
     d->inverseTransformation   = new QCheckBox(i18n("Inverse transformation"));
 
     // -------------------------------------------------------------
 
-    QGridLayout *mainLayout = new QGridLayout;
-    mainLayout->addWidget(label1,                       0, 0, 1, 1);
-    mainLayout->addWidget(d->newWidthLabel,             0, 1, 1, 2);
-    mainLayout->addWidget(label2,                       1, 0, 1, 1);
-    mainLayout->addWidget(d->newHeightLabel,            1, 1, 1, 2);
-    mainLayout->addWidget(line,                         2, 0, 1, 3);
-    mainLayout->addWidget(angleLabel,                   3, 0, 1, 3);
-    mainLayout->addWidget(label3,                       4, 0, 1, 1);
-    mainLayout->addWidget(d->topLeftAngleLabel,         4, 1, 1, 2);
-    mainLayout->addWidget(label4,                       5, 0, 1, 1);
-    mainLayout->addWidget(d->topRightAngleLabel,        5, 1, 1, 2);
-    mainLayout->addWidget(label5,                       6, 0, 1, 1);
-    mainLayout->addWidget(d->bottomLeftAngleLabel,      6, 1, 1, 2);
-    mainLayout->addWidget(label6,                       7, 0, 1, 1);
-    mainLayout->addWidget(d->bottomRightAngleLabel,     7, 1, 1, 2);
-    mainLayout->addWidget(line2,                        8, 0, 1, 3);
-    mainLayout->addWidget(d->drawWhileMovingCheckBox,   9, 0, 1, 3);
-    mainLayout->addWidget(d->drawGridCheckBox,         10, 0, 1, 3);
-    mainLayout->addWidget(d->inverseTransformation,    11, 0, 1, 3);
-    mainLayout->setColumnStretch(1, 10);
-    mainLayout->setRowStretch(12, 10);
-    mainLayout->setMargin(d->gboxSettings->spacingHint());
-    mainLayout->setSpacing(d->gboxSettings->spacingHint());
-    d->gboxSettings->plainPage()->setLayout(mainLayout);
+    QGridLayout* grid = new QGridLayout;
+    grid->addWidget(label1,                       0, 0, 1, 1);
+    grid->addWidget(d->newWidthLabel,             0, 1, 1, 2);
+    grid->addWidget(label2,                       1, 0, 1, 1);
+    grid->addWidget(d->newHeightLabel,            1, 1, 1, 2);
+    grid->addWidget(line,                         2, 0, 1, 3);
+    grid->addWidget(angleLabel,                   3, 0, 1, 3);
+    grid->addWidget(label3,                       4, 0, 1, 1);
+    grid->addWidget(d->topLeftAngleLabel,         4, 1, 1, 2);
+    grid->addWidget(label4,                       5, 0, 1, 1);
+    grid->addWidget(d->topRightAngleLabel,        5, 1, 1, 2);
+    grid->addWidget(label5,                       6, 0, 1, 1);
+    grid->addWidget(d->bottomLeftAngleLabel,      6, 1, 1, 2);
+    grid->addWidget(label6,                       7, 0, 1, 1);
+    grid->addWidget(d->bottomRightAngleLabel,     7, 1, 1, 2);
+    grid->addWidget(line2,                        8, 0, 1, 3);
+    grid->addWidget(d->drawWhileMovingCheckBox,   9, 0, 1, 3);
+    grid->addWidget(d->drawGridCheckBox,         10, 0, 1, 3);
+    grid->addWidget(d->inverseTransformation,    11, 0, 1, 3);
+    grid->setColumnStretch(1, 10);
+    grid->setRowStretch(12, 10);
+    grid->setMargin(d->gboxSettings->spacingHint());
+    grid->setSpacing(d->gboxSettings->spacingHint());
+    d->gboxSettings->plainPage()->setLayout(grid);
 
     // -------------------------------------------------------------
 
@@ -231,7 +224,7 @@ void PerspectiveTool::readSettings()
 {
     QColor defaultGuideColor(Qt::red);
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(d->configGroupName);
+    KConfigGroup group        = config->group(d->configGroupName);
 
     d->drawWhileMovingCheckBox->setChecked(group.readEntry( d->configDrawWhileMovingEntry,       true));
     d->drawGridCheckBox->setChecked(group.readEntry(        d->configDrawGridEntry,              false));
@@ -244,7 +237,7 @@ void PerspectiveTool::readSettings()
 void PerspectiveTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group(d->configGroupName);
+    KConfigGroup group        = config->group(d->configGroupName);
 
     group.writeEntry(d->configDrawWhileMovingEntry,       d->drawWhileMovingCheckBox->isChecked());
     group.writeEntry(d->configDrawGridEntry,              d->drawGridCheckBox->isChecked());

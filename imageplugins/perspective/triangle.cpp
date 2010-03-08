@@ -6,7 +6,7 @@
  * Date        : 2005-01-18
  * Description : triangle geometry calculation class.
  *
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -29,11 +29,10 @@
 #include <cstdlib>
 #include <cmath>
 
-
 namespace DigikamPerspectiveImagesPlugin
 {
 
-Triangle::Triangle(QPoint A, QPoint B, QPoint C)
+Triangle::Triangle(const QPoint& A, const QPoint& B, const QPoint& C)
 {
     m_a = distanceP2P(B, C);
     m_b = distanceP2P(A, C);
