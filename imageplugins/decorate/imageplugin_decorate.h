@@ -6,7 +6,7 @@
  * Date        : 2005-02-14
  * Description : a plugin to insert a text over an image.
  *
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEPLUGIN_INSERTTEXT_H
-#define IMAGEPLUGIN_INSERTTEXT_H
+#ifndef IMAGEPLUGIN_DECORATE_H
+#define IMAGEPLUGIN_DECORATE_H
 
 // Qt includes
 
@@ -35,14 +35,16 @@
 
 class KAction;
 
-class ImagePlugin_InsertText : public Digikam::ImagePlugin
+using namespace Digikam;
+
+class ImagePlugin_Decorate : public ImagePlugin
 {
     Q_OBJECT
 
 public:
 
-    ImagePlugin_InsertText(QObject *parent, const QVariantList& args);
-    ~ImagePlugin_InsertText();
+    ImagePlugin_Decorate(QObject* parent, const QVariantList& args);
+    ~ImagePlugin_Decorate();
 
     void setEnabledActions(bool enable);
 
@@ -52,7 +54,7 @@ private Q_SLOTS:
 
 private:
 
-    KAction *m_insertTextAction;
+    KAction* m_insertTextAction;
 };
 
-#endif /* IMAGEPLUGIN_INSERTTEXT_H */
+#endif /* IMAGEPLUGIN_DECORATE_H */

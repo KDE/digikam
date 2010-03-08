@@ -6,8 +6,8 @@
  * Date        : 2005-02-14
  * Description : a widget to insert a text over an image.
  *
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -54,7 +54,9 @@ namespace Digikam
 class ImageIface;
 }
 
-namespace DigikamInsertTextImagesPlugin
+using namespace Digikam;
+
+namespace DigikamDecorateImagePlugin
 {
 
 enum Action
@@ -93,8 +95,8 @@ public:
     InsertTextWidget(int w, int h, QWidget *parent=0);
     ~InsertTextWidget();
 
-    Digikam::ImageIface* imageIface();
-    Digikam::DImg        makeInsertText(void);
+    ImageIface* imageIface();
+    DImg        makeInsertText();
 
     void   setText(QString text, QFont font, QColor color, int alignMode,
                    bool border, bool transparent, int rotation);
@@ -105,14 +107,14 @@ public:
 
 protected:
 
-    void paintEvent(QPaintEvent *e);
-    void resizeEvent(QResizeEvent * e);
-    void mousePressEvent(QMouseEvent * e);
-    void mouseReleaseEvent(QMouseEvent * e);
-    void mouseMoveEvent(QMouseEvent * e);
+    void paintEvent(QPaintEvent*);
+    void resizeEvent(QResizeEvent*);
+    void mousePressEvent(QMouseEvent*);
+    void mouseReleaseEvent(QMouseEvent*);
+    void mouseMoveEvent(QMouseEvent*);
 
-    void makePixmap(void);
-    QRect composeImage(Digikam::DImg *image, QPainter *destPainter,
+    void makePixmap();
+    QRect composeImage(DImg *image, QPainter *destPainter,
                        int x, int y,
                        QFont font, float pointSize, int textRotation, QColor textColor,
                        int alignMode, const QString& textString,
@@ -124,6 +126,6 @@ private:
     InsertTextWidgetPriv* const d;
 };
 
-}  // namespace DigikamInsertTextImagesPlugin
+}  // namespace DigikamDecorateImagePlugin
 
 #endif /* INSERTTEXTWIDGET_H */

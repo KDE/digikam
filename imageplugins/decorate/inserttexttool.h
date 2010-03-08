@@ -6,8 +6,8 @@
  * Date        : 2005-02-14
  * Description : a plugin to insert a text over an image.
  *
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -31,18 +31,20 @@
 
 class QFont;
 
-namespace DigikamInsertTextImagesPlugin
+using namespace Digikam;
+
+namespace DigikamDecorateImagePlugin
 {
 
 class InsertTextToolPriv;
 
-class InsertTextTool : public Digikam::EditorTool
+class InsertTextTool : public EditorTool
 {
     Q_OBJECT
 
 public:
 
-    InsertTextTool(QObject *parent);
+    InsertTextTool(QObject* parent);
     ~InsertTextTool();
 
 Q_SIGNALS:
@@ -67,6 +69,6 @@ private:
     InsertTextToolPriv* const d;
 };
 
-}  // namespace DigikamInsertTextImagesPlugin
+}  // namespace DigikamDecorateImagePlugin
 
 #endif /* INSERTTEXTTOOL_H */

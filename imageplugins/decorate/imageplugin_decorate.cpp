@@ -6,7 +6,7 @@
  * Date        : 2005-02-14
  * Description : a plugin to insert a text over an image.
  *
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,8 +21,7 @@
  *
  * ============================================================ */
 
-
-#include "imageplugin_inserttext.moc"
+#include "imageplugin_decorate.moc"
 
 // KDE includes
 
@@ -39,38 +38,36 @@
 
 #include "inserttexttool.h"
 
-using namespace DigikamInsertTextImagesPlugin;
+using namespace DigikamDecorateImagePlugin;
 
-K_PLUGIN_FACTORY( InsertTextFactory, registerPlugin<ImagePlugin_InsertText>(); )
-K_EXPORT_PLUGIN ( InsertTextFactory("digikamimageplugin_inserttext") )
+K_PLUGIN_FACTORY( DecorateFactory, registerPlugin<ImagePlugin_Decorate>(); )
+K_EXPORT_PLUGIN ( DecorateFactory("digikamimageplugin_decorate") )
 
-ImagePlugin_InsertText::ImagePlugin_InsertText(QObject *parent, const QVariantList &)
-                      : Digikam::ImagePlugin(parent, "ImagePlugin_InsertText")
+ImagePlugin_Decorate::ImagePlugin_Decorate(QObject *parent, const QVariantList &)
+                    : ImagePlugin(parent, "ImagePlugin_Decorate")
 {
     m_insertTextAction = new KAction(KIcon("insert-text"), i18n("Insert Text..."), this);
     m_insertTextAction->setShortcut(KShortcut(Qt::SHIFT+Qt::CTRL+Qt::Key_T));
-
+    actionCollection()->addAction("imageplugin_inserttext", m_insertTextAction );
     connect(m_insertTextAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotInsertText()));
 
-    actionCollection()->addAction("imageplugin_inserttext", m_insertTextAction );
+    setXMLFile("digikamimageplugin_decorate_ui.rc");
 
-    setXMLFile("digikamimageplugin_inserttext_ui.rc");
-
-    kDebug() << "ImagePlugin_InsertText plugin loaded";
+    kDebug() << "ImagePlugin_Decorate plugin loaded";
 }
 
-ImagePlugin_InsertText::~ImagePlugin_InsertText()
+ImagePlugin_Decorate::~ImagePlugin_Decorate()
 {
 }
 
-void ImagePlugin_InsertText::setEnabledActions(bool enable)
+void ImagePlugin_Decorate::setEnabledActions(bool b)
 {
-    m_insertTextAction->setEnabled(enable);
+    m_insertTextAction->setEnabled(b);
 }
 
-void ImagePlugin_InsertText::slotInsertText()
+void ImagePlugin_Decorate::slotInsertText()
 {
-    InsertTextTool *tool = new InsertTextTool(this);
+    InsertTextTool* tool = new InsertTextTool(this);
     loadTool(tool);
 }

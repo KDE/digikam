@@ -6,8 +6,8 @@
  * Date        : 2005-02-14
  * Description : a widget to insert a text over an image.
  *
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,7 +21,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "inserttextwidget.moc"
 
@@ -50,9 +49,7 @@
 
 #include "imageiface.h"
 
-using namespace Digikam;
-
-namespace DigikamInsertTextImagesPlugin
+namespace DigikamDecorateImagePlugin
 {
 
 class InsertTextWidgetPriv
@@ -112,7 +109,7 @@ InsertTextWidget::InsertTextWidget(int w, int h, QWidget *parent)
 {
     d->currentMoving = false;
 
-    d->iface  = new Digikam::ImageIface(w, h);
+    d->iface  = new ImageIface(w, h);
     d->data   = d->iface->getPreviewImage();
     d->w      = d->iface->previewWidth();
     d->h      = d->iface->previewHeight();
@@ -138,7 +135,7 @@ InsertTextWidget::~InsertTextWidget()
     delete d;
 }
 
-Digikam::ImageIface* InsertTextWidget::imageIface()
+ImageIface* InsertTextWidget::imageIface()
 {
     return d->iface;
 }
@@ -224,7 +221,7 @@ QRect InsertTextWidget::getPositionHint()
     return hint;
 }
 
-Digikam::DImg InsertTextWidget::makeInsertText(void)
+DImg InsertTextWidget::makeInsertText(void)
 {
     int orgW = d->iface->originalWidth();
     int orgH = d->iface->originalHeight();
@@ -245,20 +242,20 @@ Digikam::DImg InsertTextWidget::makeInsertText(void)
     }
 
     // Get original image
-    Digikam::DImg image = d->iface->getOriginalImg()->copy();
+    DImg image = d->iface->getOriginalImg()->copy();
 
     int borderWidth = qMax(1, (int)lroundf(ratioW));
     // compose and draw result on image
     composeImage(&image, 0, x, y,
-                  d->textFont, d->textFont.pointSizeF(),
-                  d->textRotation, d->textColor, d->alignMode, d->textString,
-                  d->textTransparent, d->backgroundColor,
-                  d->textBorder ? BORDER_NORMAL : BORDER_NONE, borderWidth, borderWidth);
+                 d->textFont, d->textFont.pointSizeF(),
+                 d->textRotation, d->textColor, d->alignMode, d->textString,
+                 d->textTransparent, d->backgroundColor,
+                 d->textBorder ? BORDER_NORMAL : BORDER_NONE, borderWidth, borderWidth);
 
     return image;
 }
 
-void InsertTextWidget::makePixmap(void)
+void InsertTextWidget::makePixmap()
 {
     int orgW = d->iface->originalWidth();
     int orgH = d->iface->originalHeight();
@@ -279,8 +276,8 @@ void InsertTextWidget::makePixmap(void)
     }
 
     // get preview image data
-    uchar *data = d->iface->getPreviewImage();
-    Digikam::DImg image(d->iface->previewWidth(), d->iface->previewHeight(), d->iface->previewSixteenBit(),
+    uchar* data = d->iface->getPreviewImage();
+    DImg image(d->iface->previewWidth(), d->iface->previewHeight(), d->iface->previewSixteenBit(),
                         d->iface->previewHasAlpha(), data);
     delete [] data;
 
@@ -313,13 +310,13 @@ void InsertTextWidget::makePixmap(void)
     d->textRect.setSize(textRect.size());
 }
 
-/*
+/**
    Take data from image, draw text at x|y with specified parameters.
    If destPainter is null, draw to image,
    if destPainter is not null, draw directly using the painter.
    Returns modified area of image.
 */
-QRect InsertTextWidget::composeImage(Digikam::DImg *image, QPainter *destPainter,
+QRect InsertTextWidget::composeImage(DImg* image, QPainter *destPainter,
                                      int x, int y,
                                      QFont font, float pointSize, int textRotation, QColor textColor,
                                      int alignMode, const QString& textString,
@@ -332,7 +329,7 @@ QRect InsertTextWidget::composeImage(Digikam::DImg *image, QPainter *destPainter
         cannot be done with QPixmap.
         The current solution cuts out the text area, lets Qt do its drawing, converts back and blits to original.
     */
-    Digikam::DColorComposer *composer = Digikam::DColorComposer::getComposer(Digikam::DColorComposer::PorterDuffNone);
+    DColorComposer* composer = DColorComposer::getComposer(DColorComposer::PorterDuffNone);
 
     int maxWidth, maxHeight;
     if (x == -1 && y == -1)
@@ -451,7 +448,7 @@ QRect InsertTextWidget::composeImage(Digikam::DImg *image, QPainter *destPainter
                             fontHeight + borderWidth + 2 * spacing );
 
     // cut out the text area
-    Digikam::DImg textArea = image->copy(drawRect);
+    DImg textArea = image->copy(drawRect);
 
     if (textArea.isNull())
         return QRect();
@@ -459,8 +456,8 @@ QRect InsertTextWidget::composeImage(Digikam::DImg *image, QPainter *destPainter
     // compose semi-transparent background over textArea
     if (transparentBackground)
     {
-        Digikam::DImg transparentLayer(textAreaBackgroundRect.width(), textAreaBackgroundRect.height(), textArea.sixteenBit(), true);
-        Digikam::DColor transparent(backgroundColor);
+        DImg transparentLayer(textAreaBackgroundRect.width(), textAreaBackgroundRect.height(), textArea.sixteenBit(), true);
+        DColor transparent(backgroundColor);
         transparent.setAlpha(d->transparency);
         if (image->sixteenBit())
             transparent.convertToSixteenBit();
@@ -469,7 +466,7 @@ QRect InsertTextWidget::composeImage(Digikam::DImg *image, QPainter *destPainter
                                textAreaBackgroundRect.x(), textAreaBackgroundRect.y());
     }
 
-    Digikam::DImg textNotDrawn;
+    DImg textNotDrawn;
     if (textArea.sixteenBit())
     {
         textNotDrawn = textArea.copy();
@@ -540,14 +537,14 @@ QRect InsertTextWidget::composeImage(Digikam::DImg *image, QPainter *destPainter
     {
         // convert to QImage, then to DImg
         QImage pixmapImage = pixmap.toImage();
-        Digikam::DImg textDrawn(pixmapImage.width(), pixmapImage.height(), false, true, pixmapImage.bits());
+        DImg textDrawn(pixmapImage.width(), pixmapImage.height(), false, true, pixmapImage.bits());
 
         // This does not work: during the conversion, colors are altered significantly (diffs of 1 to 10 in each component),
         // so we cannot find out which pixels have actually been touched.
         /*
         // Compare the result of drawing with the previous version.
         // Set all unchanged pixels to transparent
-        Digikam::DColor color, ncolor;
+        DColor color, ncolor;
         uchar *ptr, *nptr;
         ptr = textDrawn.bits();
         nptr = textNotDrawn.bits();
@@ -585,14 +582,14 @@ QRect InsertTextWidget::composeImage(Digikam::DImg *image, QPainter *destPainter
     return drawRect;
 }
 
-void InsertTextWidget::paintEvent( QPaintEvent * )
+void InsertTextWidget::paintEvent(QPaintEvent *)
 {
     QPainter p(this);
     p.drawPixmap(0, 0, *d->pixmap);
     p.end();
 }
 
-void InsertTextWidget::resizeEvent(QResizeEvent * e)
+void InsertTextWidget::resizeEvent(QResizeEvent* e)
 {
     blockSignals(true);
     delete d->pixmap;
@@ -631,7 +628,7 @@ void InsertTextWidget::resizeEvent(QResizeEvent * e)
     blockSignals(false);
 }
 
-void InsertTextWidget::mousePressEvent ( QMouseEvent * e )
+void InsertTextWidget::mousePressEvent(QMouseEvent* e)
 {
     if ( e->button() == Qt::LeftButton &&
          d->textRect.contains( e->x(), e->y() ) )
@@ -643,13 +640,13 @@ void InsertTextWidget::mousePressEvent ( QMouseEvent * e )
     }
 }
 
-void InsertTextWidget::mouseReleaseEvent ( QMouseEvent * )
+void InsertTextWidget::mouseReleaseEvent(QMouseEvent*)
 {
     setCursor ( Qt::ArrowCursor );
     d->currentMoving = false;
 }
 
-void InsertTextWidget::mouseMoveEvent ( QMouseEvent * e )
+void InsertTextWidget::mouseMoveEvent(QMouseEvent* e)
 {
     if ( rect().contains( e->x(), e->y() ) )
     {
@@ -678,4 +675,4 @@ void InsertTextWidget::mouseMoveEvent ( QMouseEvent * e )
     }
 }
 
-}  // namespace DigikamInsertTextImagesPlugin
+}  // namespace DigikamDecorateImagePlugin

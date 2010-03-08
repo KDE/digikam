@@ -1,7 +1,7 @@
 Editor tools pending task
 
                         Multithreaded      Zommable Preview        Port to BQM
-border                      DONE                  NO                   TODO
+
 contentawareresizing        DONE                 TODO                  TODO
 
 coreplugin
@@ -22,6 +22,10 @@ coreplugin
   /sharpentool              DONE                 DONE                  DONE
   /whitebalance             DONE                 DONE                  DONE
 
+decorate
+  /border                   DONE                  NO                   TODO
+  /inserttext                NO                   NO                    NO
+  /texture                  DONE                 DONE                  TODO
 
 fxfilters
   /colorfx                  TODO                 TODO                  TODO
@@ -34,7 +38,6 @@ fxfilters
 
 hotpixels                   DONE                 DONE                  TODO
 inpainting                  DONE                  NO                    NO
-inserttext                   NO                   NO                    NO
 
 lenscorrection
   /autocorrection           DONE                 TODO                  TODO
@@ -44,7 +47,6 @@ lenscorrection
 localcontrast               DONE                 TODO                  TODO
 restoration                 DONE                 DONE                  DONE
 superimpose                  NO                   NO                    NO
-texture                     DONE                 DONE                  TODO
 
 transform
   /freerotation             DONE                  NO                   TODO
