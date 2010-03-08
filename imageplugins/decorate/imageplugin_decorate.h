@@ -46,14 +46,16 @@ public:
     ImagePlugin_Decorate(QObject* parent, const QVariantList& args);
     ~ImagePlugin_Decorate();
 
-    void setEnabledActions(bool enable);
+    void setEnabledActions(bool b);
 
 private Q_SLOTS:
 
     void slotInsertText();
+    void slotBorder();
 
 private:
 
+    KAction* m_borderAction;
     KAction* m_insertTextAction;
 };
 

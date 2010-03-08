@@ -37,6 +37,7 @@
 // Local includes
 
 #include "inserttexttool.h"
+#include "bordertool.h"
 
 using namespace DigikamDecorateImagePlugin;
 
@@ -52,6 +53,11 @@ ImagePlugin_Decorate::ImagePlugin_Decorate(QObject *parent, const QVariantList &
     connect(m_insertTextAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotInsertText()));
 
+    m_borderAction = new KAction(KIcon("bordertool"), i18n("Add Border..."), this);
+    actionCollection()->addAction("imageplugin_border", m_borderAction );
+    connect(m_borderAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotBorder()));            
+            
     setXMLFile("digikamimageplugin_decorate_ui.rc");
 
     kDebug() << "ImagePlugin_Decorate plugin loaded";
@@ -64,10 +70,17 @@ ImagePlugin_Decorate::~ImagePlugin_Decorate()
 void ImagePlugin_Decorate::setEnabledActions(bool b)
 {
     m_insertTextAction->setEnabled(b);
+    m_borderAction->setEnabled(b);
 }
 
 void ImagePlugin_Decorate::slotInsertText()
 {
     InsertTextTool* tool = new InsertTextTool(this);
+    loadTool(tool);
+}
+
+void ImagePlugin_Decorate::slotBorder()
+{
+    BorderTool* tool = new BorderTool(this);
     loadTool(tool);
 }

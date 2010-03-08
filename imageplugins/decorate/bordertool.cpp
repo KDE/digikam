@@ -58,7 +58,7 @@
 
 using namespace KDcrawIface;
 
-namespace DigikamBorderImagesPlugin
+namespace DigikamDecorateImagePlugin
 {
 
 class BorderToolPriv
@@ -711,4 +711,4 @@ void BorderTool::blockWidgetSignals(bool b)
     d->preserveAspectRatio->blockSignals(b);
 }
 
-}  // namespace DigikamBorderImagesPlugin
+}  // namespace DigikamDecorateImagePlugin

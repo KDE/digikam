@@ -75,6 +75,8 @@ static const char* ObsoleteImagePluginsList[] =
      "digikamimageplugin_freerotation",   // Merged to "Transform" plugin since 1.2.0.
      "digikamimageplugin_sheartool",      // Merged to "Transform" plugin since 1.2.0.
      "digikamimageplugin_insertext",      // Merged to "Decorate" plugin since 1.2.0.
+     "digikamimageplugin_border",         // Merged to "Decorate" plugin since 1.2.0.
+     "digikamimageplugin_texture",        // Merged to "Decorate" plugin since 1.2.0.
      "-1"
 };
 

@@ -38,7 +38,7 @@ class QColor;
 
 using namespace Digikam;
 
-namespace DigikamBorderImagesPlugin
+namespace DigikamDecorateImagePlugin
 {
 
 class BorderToolPriv;
@@ -79,6 +79,6 @@ private:
     BorderToolPriv* const d;
 };
 
-}  // namespace DigikamBorderImagesPlugin
+}  // namespace DigikamDecorateImagePlugin
 
 #endif /* BORDERTOOL_H */
