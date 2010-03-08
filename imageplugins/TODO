@@ -22,7 +22,6 @@ coreplugin
   /sharpentool              DONE                 DONE                  DONE
   /whitebalance             DONE                 DONE                  DONE
 
-freerotation                DONE                  NO                   TODO
 
 fxfilters
   /colorfx                  TODO                 TODO                  TODO
@@ -43,8 +42,12 @@ lenscorrection
   /vignetting               DONE                 TODO                  TODO
 
 localcontrast               DONE                 TODO                  TODO
-perspective                  NO                   NO                    NO
 restoration                 DONE                 DONE                  DONE
-sheartool                   DONE                  NO                   TODO
 superimpose                  NO                   NO                    NO
 texture                     DONE                 DONE                  TODO
+
+transform
+  /freerotation             DONE                  NO                   TODO
+  /perspective               NO                   NO                    NO
+  /sheartool                DONE                  NO                   TODO
+

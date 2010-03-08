@@ -72,6 +72,7 @@ static const char* ObsoleteImagePluginsList[] =
      "digikamimageplugin_distortionfx",   // Merged to "FxFilters" plugin since 1.2.0.
      "digikamimageplugin_raindrop",       // Merged to "FxFilters" plugin since 1.2.0.
      "digikamimageplugin_perspective",    // Merged to "Transform" plugin since 1.2.0.
+     "digikamimageplugin_freerotation",    // Merged to "Transform" plugin since 1.2.0.
      "-1"
 };
 

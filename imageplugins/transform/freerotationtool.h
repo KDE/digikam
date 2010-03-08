@@ -35,7 +35,7 @@ class QString;
 
 using namespace Digikam;
 
-namespace DigikamFreeRotationImagesPlugin
+namespace DigikamTransformImagePlugin
 {
 
 class FreeRotationToolPriv;
@@ -88,6 +88,6 @@ private:
     FreeRotationToolPriv* const d;
 };
 
-}  // namespace DigikamFreeRotationImagesPlugin
+}  // namespace DigikamTransformImagePlugin
 
 #endif /* FREEROTATIONTOOL_H */

@@ -48,12 +48,20 @@ public:
 
     void setEnabledActions(bool b);
 
+Q_SIGNALS:
+
+    void signalPoint1Action();
+    void signalPoint2Action();
+    void signalAutoAdjustAction();
+    
 private Q_SLOTS:
 
     void slotPerspective();
+    void slotFreeRotation();
 
 private:
 
+    KAction* m_freerotationAction;
     KAction* m_perspectiveAction;
 };
 

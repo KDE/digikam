@@ -65,7 +65,7 @@
 
 using namespace KDcrawIface;
 
-namespace DigikamFreeRotationImagesPlugin
+namespace DigikamTransformImagePlugin
 {
 
 class FreeRotationToolPriv
@@ -679,4 +679,4 @@ QString FreeRotationTool::repeatString(const QString& str, int times)
     return tmp;
 }
 
-}  // namespace DigikamFreeRotationImagesPlugin
+}  // namespace DigikamTransformImagePlugin

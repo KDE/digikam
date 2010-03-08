@@ -1,5 +1,6 @@
 
 SET(digikamimageplugin_transform_PART_SRCS imageplugin_transform.cpp
+                                           freerotationtool.cpp
                                            perspectivetool.cpp
                                            perspectivewidget.cpp 
                                            triangle.cpp 
@@ -16,6 +17,7 @@ TARGET_LINK_LIBRARIES(
     ${KDE4_KIO_LIBS}
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}
+    ${KDCRAW_LIBRARIES}
     )
 
 INSTALL(TARGETS digikamimageplugin_transform DESTINATION ${PLUGIN_INSTALL_DIR})
