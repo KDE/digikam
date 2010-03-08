@@ -26,7 +26,7 @@
 #ifndef IMAGEEFFECT_PERSPECTIVE_MATRIX_H
 #define IMAGEEFFECT_PERSPECTIVE_MATRIX_H
 
-namespace DigikamPerspectiveImagesPlugin
+namespace DigikamTransformImagePlugin
 {
 
 class Matrix
@@ -47,7 +47,7 @@ public:
      *
      * Translates the matrix by x and y.
      */
-    void   translate(double x, double y);
+    void translate(double x, double y);
 
     /**
     * scale:
@@ -56,14 +56,14 @@ public:
     *
     * Scales the matrix by x and y
     */
-    void   scale(double x, double y);
+    void scale(double x, double y);
 
     /**
     * invert:
     *
     * Inverts this matrix.
     */
-    void   invert();
+    void invert();
 
     /**
     * multiply:
@@ -71,7 +71,7 @@ public:
     *
     * Multiplies this matrix with another matrix
     */
-    void   multiply(const Matrix& matrix1);
+    void multiply(const Matrix& matrix1);
 
     /**
     * transformPoint:
@@ -82,7 +82,7 @@ public:
     *
     * Transforms a point in 2D as specified by the transformation matrix.
     */
-    void   transformPoint(double x, double y, double *newx, double *newy) const;
+    void transformPoint(double x, double y, double* newx, double* newy) const;
 
     /**
     * determinant:
@@ -101,6 +101,6 @@ public:
     double coeff[3][3];
 };
 
-}  // namespace DigikamPerspectiveImagesPlugin
+}  // namespace DigikamTransformImagePlugin
 
 #endif // IMAGEEFFECT_PERSPECTIVE_MATRIX_H

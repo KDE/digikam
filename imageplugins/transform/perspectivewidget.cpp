@@ -56,7 +56,7 @@
 #include "imageiface.h"
 #include "pixelsaliasfilter.h"
 
-namespace DigikamPerspectiveImagesPlugin
+namespace DigikamTransformImagePlugin
 {
 
 PerspectiveWidget::PerspectiveWidget(int w, int h, QWidget* parent)
@@ -74,13 +74,13 @@ PerspectiveWidget::PerspectiveWidget(int w, int h, QWidget* parent)
     m_guideColor            = Qt::red;
     m_guideSize             = 1;
 
-    m_iface        = new Digikam::ImageIface(w, h);
+    m_iface        = new ImageIface(w, h);
     uchar *data    = m_iface->setPreviewImageSize(w, h);
     m_w            = m_iface->previewWidth();
     m_h            = m_iface->previewHeight();
     m_origW        = m_iface->originalWidth();
     m_origH        = m_iface->originalHeight();
-    m_previewImage = Digikam::DImg(m_w, m_h, m_iface->previewSixteenBit(), m_iface->previewHasAlpha(), data, false);
+    m_previewImage = DImg(m_w, m_h, m_iface->previewSixteenBit(), m_iface->previewHasAlpha(), data, false);
 
     m_pixmap = new QPixmap(w, h);
 
@@ -96,7 +96,7 @@ PerspectiveWidget::~PerspectiveWidget()
     delete m_pixmap;
 }
 
-Digikam::ImageIface* PerspectiveWidget::imageIface()
+ImageIface* PerspectiveWidget::imageIface()
 {
     return m_iface;
 }
@@ -186,10 +186,10 @@ void PerspectiveWidget::reset()
 
 void PerspectiveWidget::applyPerspectiveAdjustment()
 {
-    Digikam::DImg *orgImage = m_iface->getOriginalImg();
-    Digikam::DImg destImage(orgImage->width(), orgImage->height(), orgImage->sixteenBit(), orgImage->hasAlpha());
+    DImg *orgImage = m_iface->getOriginalImg();
+    DImg destImage(orgImage->width(), orgImage->height(), orgImage->sixteenBit(), orgImage->hasAlpha());
 
-    Digikam::DColor background(0, 0, 0, orgImage->hasAlpha() ? 0 : 255, orgImage->sixteenBit());
+    DColor background(0, 0, 0, orgImage->hasAlpha() ? 0 : 255, orgImage->sixteenBit());
 
     // Perform perspective adjustment.
 
@@ -200,7 +200,7 @@ void PerspectiveWidget::applyPerspectiveAdjustment()
 
     // Perform an auto-cropping around the image.
 
-    Digikam::DImg targetImg = destImage.copy(getTargetSize());
+    DImg targetImg = destImage.copy(getTargetSize());
 
     // Update target image.
     m_iface->putOriginalImage(i18n("Perspective Adjustment"),
@@ -296,10 +296,10 @@ void PerspectiveWidget::updatePixmap()
     {
         // Create preview image
 
-        Digikam::DImg destImage(m_previewImage.width(), m_previewImage.height(),
+        DImg destImage(m_previewImage.width(), m_previewImage.height(),
                                 m_previewImage.sixteenBit(), m_previewImage.hasAlpha());
 
-        Digikam::DColor background(palette().color(QPalette::Background));
+        DColor background(palette().color(QPalette::Background));
 
         m_transformedCenter = buildPerspective(QPoint(0, 0), QPoint(m_w, m_h),
                                                m_topLeftPoint, m_topRightPoint,
@@ -377,11 +377,11 @@ void PerspectiveWidget::updatePixmap()
                                   getAngleBottomLeft(), getAngleBottomRight(), m_validPerspective);
 }
 
-QPoint PerspectiveWidget::buildPerspective(QPoint orignTopLeft, QPoint orignBottomRight,
-                                           QPoint transTopLeft, QPoint transTopRight,
-                                           QPoint transBottomLeft, QPoint transBottomRight,
-                                           Digikam::DImg *orgImage, Digikam::DImg *destImage,
-                                           Digikam::DColor background)
+QPoint PerspectiveWidget::buildPerspective(const QPoint& orignTopLeft, const QPoint& orignBottomRight,
+                                           const QPoint& transTopLeft, const QPoint& transTopRight,
+                                           const QPoint& transBottomLeft, const QPoint& transBottomRight,
+                                           DImg* orgImage, DImg* destImage,
+                                           DColor background)
 {
     Matrix matrix, transform;
     double  scalex;
@@ -510,8 +510,8 @@ QPoint PerspectiveWidget::buildPerspective(QPoint orignTopLeft, QPoint orignBott
     return QPoint(lround(newCenterX), lround(newCenterY));
 }
 
-void PerspectiveWidget::transformAffine(Digikam::DImg *orgImage, Digikam::DImg *destImage,
-                                        const Matrix& matrix, Digikam::DColor background)
+void PerspectiveWidget::transformAffine(DImg* orgImage, DImg* destImage,
+                                        const Matrix& matrix, DColor background)
 {
     Matrix      m(matrix), inv(matrix);
 
@@ -537,7 +537,7 @@ void PerspectiveWidget::transformAffine(Digikam::DImg *orgImage, Digikam::DImg *
     int         bytesDepth;
     int         offset;
     uchar      *dest, *d;
-    Digikam::DColor color;
+    DColor color;
 
     bytesDepth  = orgImage->bytesDepth();
     data        = orgImage->bits();
@@ -551,7 +551,7 @@ void PerspectiveWidget::transformAffine(Digikam::DImg *orgImage, Digikam::DImg *
 
     //destImage->fill(background);
 
-    Digikam::PixelsAliasFilter alias;
+    PixelsAliasFilter alias;
 
     // Find the inverse of the transformation matrix
     m.invert();
@@ -688,7 +688,7 @@ void PerspectiveWidget::resizeEvent(QResizeEvent* e)
     uchar *data    = m_iface->setPreviewImageSize(w, h);
     m_w            = m_iface->previewWidth();
     m_h            = m_iface->previewHeight();
-    m_previewImage = Digikam::DImg(m_w, m_h, m_iface->previewSixteenBit(), m_iface->previewHasAlpha(), data, false);
+    m_previewImage = DImg(m_w, m_h, m_iface->previewSixteenBit(), m_iface->previewHasAlpha(), data, false);
 
     m_pixmap      = new QPixmap(w, h);
     QRect oldRect = m_rect;
@@ -882,4 +882,4 @@ void PerspectiveWidget::mouseMoveEvent(QMouseEvent* e)
     }
 }
 
-}  // namespace DigikamPerspectiveImagesPlugin
+}  // namespace DigikamTransformImagePlugin

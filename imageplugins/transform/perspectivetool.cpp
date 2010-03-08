@@ -56,7 +56,7 @@
 #include "imageiface.h"
 #include "perspectivewidget.h"
 
-namespace DigikamPerspectiveImagesPlugin
+namespace DigikamTransformImagePlugin
 {
 
 class PerspectiveToolPriv
@@ -279,4 +279,4 @@ void PerspectiveTool::slotInverseTransformationChanged(bool b)
     d->previewWidget->slotInverseTransformationChanged(b);
 }
 
-}  // namespace DigikamPerspectiveImagesPlugin
+}  // namespace DigikamTransformImagePlugin

@@ -33,7 +33,7 @@
 #include <cstring>
 
 
-namespace DigikamPerspectiveImagesPlugin
+namespace DigikamTransformImagePlugin
 {
 
 static double identityMatrix[3][3] = { { 1.0, 0.0, 0.0 },
@@ -173,4 +173,4 @@ double Matrix::determinant() const
     return determinant;
 }
 
-}  // namespace DigikamPerspectiveImagesPlugin
+}  // namespace DigikamTransformImagePlugin

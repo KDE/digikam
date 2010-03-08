@@ -28,7 +28,7 @@
 
 #include <QPoint>
 
-namespace DigikamPerspectiveImagesPlugin
+namespace DigikamTransformImagePlugin
 {
 
 class Triangle
@@ -54,6 +54,6 @@ private:
     float m_c;
 };
 
-}  // namespace DigikamPerspectiveImagesPlugin
+}  // namespace DigikamTransformImagePlugin
 
 #endif /* TRIANGLE_H */

@@ -29,7 +29,7 @@
 #include <cstdlib>
 #include <cmath>
 
-namespace DigikamPerspectiveImagesPlugin
+namespace DigikamTransformImagePlugin
 {
 
 Triangle::Triangle(const QPoint& A, const QPoint& B, const QPoint& C)
@@ -60,4 +60,4 @@ float Triangle::distanceP2P(const QPoint& p1, const QPoint& p2)
                  abs( p2.y()-p1.y() ) * abs( p2.y()-p1.y() ) ));
 }
 
-}  // namespace DigikamPerspectiveImagesPlugin
+}  // namespace DigikamTransformImagePlugin

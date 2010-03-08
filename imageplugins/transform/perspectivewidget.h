@@ -49,7 +49,9 @@ namespace Digikam
 class ImageIface;
 }
 
-namespace DigikamPerspectiveImagesPlugin
+using namespace Digikam;
+
+namespace DigikamTransformImagePlugin
 {
 
 class PerspectiveWidget : public QWidget
@@ -75,7 +77,7 @@ public:
 
     void  applyPerspectiveAdjustment();
 
-    Digikam::ImageIface* imageIface();
+    ImageIface* imageIface();
 
 public Q_SLOTS:
 
@@ -104,14 +106,14 @@ private:  // Widget methods.
 
     void   updatePixmap();
 
-    void   transformAffine(Digikam::DImg* orgImage, Digikam::DImg* destImage,
-                           const Matrix& matrix, Digikam::DColor background);
+    void   transformAffine(DImg* orgImage, DImg* destImage,
+                           const Matrix& matrix, DColor background);
 
-    QPoint buildPerspective(QPoint orignTopLeft, QPoint orignBottomRight,
-                            QPoint transTopLeft, QPoint transTopRight,
-                            QPoint transBottomLeft, QPoint transBottomRight,
-                            Digikam::DImg* orgImage=0, Digikam::DImg* destImage=0,
-                            Digikam::DColor background=Digikam::DColor());
+    QPoint buildPerspective(const QPoint& orignTopLeft, const QPoint& orignBottomRight,
+                            const QPoint& transTopLeft, const QPoint& transTopRight,
+                            const QPoint& transBottomLeft, const QPoint& transBottomRight,
+                            DImg* orgImage=0, DImg* destImage=0,
+                            DColor background=DColor());
 
 private:
 
@@ -124,52 +126,52 @@ private:
         ResizingBottomRight
     };
 
-    bool                 m_antiAlias;
-    bool                 m_drawWhileMoving;
-    bool                 m_drawGrid;
-    bool                 m_inverseTransformation;
-    bool                 m_validPerspective;
+    bool        m_antiAlias;
+    bool        m_drawWhileMoving;
+    bool        m_drawGrid;
+    bool        m_inverseTransformation;
+    bool        m_validPerspective;
 
-    uint*                m_data;
-    int                  m_w;
-    int                  m_h;
-    int                  m_origW;
-    int                  m_origH;
+    uint*       m_data;
+    int         m_w;
+    int         m_h;
+    int         m_origW;
+    int         m_origH;
 
-    int                  m_currentResizing;
+    int         m_currentResizing;
 
-    int                  m_guideSize;
+    int         m_guideSize;
 
-    QRect                m_rect;
+    QRect       m_rect;
 
     // Transformed center area for mouse position control.
 
-    QPoint               m_transformedCenter;
+    QPoint      m_transformedCenter;
 
     // Draggable local region selection corners.
 
-    QRect                m_topLeftCorner;
-    QRect                m_topRightCorner;
-    QRect                m_bottomLeftCorner;
-    QRect                m_bottomRightCorner;
+    QRect       m_topLeftCorner;
+    QRect       m_topRightCorner;
+    QRect       m_bottomLeftCorner;
+    QRect       m_bottomRightCorner;
 
-    QPoint               m_topLeftPoint;
-    QPoint               m_topRightPoint;
-    QPoint               m_bottomLeftPoint;
-    QPoint               m_bottomRightPoint;
-    QPoint               m_spot;
+    QPoint      m_topLeftPoint;
+    QPoint      m_topRightPoint;
+    QPoint      m_bottomLeftPoint;
+    QPoint      m_bottomRightPoint;
+    QPoint      m_spot;
 
-    QColor               m_guideColor;
+    QColor      m_guideColor;
 
     // 60 points will be stored to compute a grid of 15x15 lines.
-    QPolygon             m_grid;
+    QPolygon    m_grid;
 
-    QPixmap*             m_pixmap;
+    QPixmap*    m_pixmap;
 
-    Digikam::ImageIface* m_iface;
-    Digikam::DImg        m_previewImage;
+    ImageIface* m_iface;
+    DImg        m_previewImage;
 };
 
-}  // namespace DigikamPerspectiveImagesPlugin
+}  // namespace DigikamTransformImagePlugin
 
 #endif /* PERSPECTIVEWIDGET_H */
