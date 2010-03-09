@@ -50,33 +50,34 @@ namespace Digikam
 
 static const char* ObsoleteImagePluginsList[] =
 {
-     "digikamimageplugin_blowup",         // Merged with "Resize" tool since 0.9.2.
-     "digikamimageplugin_solarize",       // Renamed "ColorFx" since 0.9.2.
-     "digikamimageplugin_unsharp",        // Merged with "Sharpen" tool since 0.9.2.
-     "digikamimageplugin_refocus",        // Merged with "Sharpen" tool since 0.9.2.
-     "digikamimageplugin_despeckle",      // Renamed "Noise Reduction" since 0.9.2.
-     "digikamimageplugin_antivignetting", // Merged with "Lens Correction" since 0.10.0.
-     "digikamimageplugin_lensdistortion", // Merged with "Lens Correction" since 0.10.0.
-     "digikamimageplugin_noisereduction", // Merged to core plugin since 1.0.0-rc.
-     "digikamimageplugin_infrared",       // Merged to core plugin with B&W converter since 1.2.0.
-     "digikamimageplugin_whitebalance",   // Merged to core plugin since 1.2.0.
-     "digikamimageplugin_channelmixer",   // Merged to core plugin since 1.2.0.
-     "digikamimageplugin_adjustcurves",   // Merged to core plugin since 1.2.0.
-     "digikamimageplugin_adjustlevels",   // Merged to core plugin since 1.2.0.
-     "digikamimageplugin_filmgrain",      // Merged to core plugin since 1.2.0.
-     "digikamimageplugin_colorfx",        // Merged to "FxFilters" plugin since 1.2.0.
-     "digikamimageplugin_charcoal",       // Merged to "FxFilters" plugin since 1.2.0.
-     "digikamimageplugin_emboss",         // Merged to "FxFilters" plugin since 1.2.0.
-     "digikamimageplugin_oilpaint",       // Merged to "FxFilters" plugin since 1.2.0.
-     "digikamimageplugin_blurfx",         // Merged to "FxFilters" plugin since 1.2.0.
-     "digikamimageplugin_distortionfx",   // Merged to "FxFilters" plugin since 1.2.0.
-     "digikamimageplugin_raindrop",       // Merged to "FxFilters" plugin since 1.2.0.
-     "digikamimageplugin_perspective",    // Merged to "Transform" plugin since 1.2.0.
-     "digikamimageplugin_freerotation",   // Merged to "Transform" plugin since 1.2.0.
-     "digikamimageplugin_sheartool",      // Merged to "Transform" plugin since 1.2.0.
-     "digikamimageplugin_inserttext",     // Merged to "Decorate" plugin since 1.2.0.
-     "digikamimageplugin_border",         // Merged to "Decorate" plugin since 1.2.0.
-     "digikamimageplugin_texture",        // Merged to "Decorate" plugin since 1.2.0.
+     "digikamimageplugin_blowup",                   // Merged with "Resize" tool since 0.9.2.
+     "digikamimageplugin_solarize",                 // Renamed "ColorFx" since 0.9.2.
+     "digikamimageplugin_unsharp",                  // Merged with "Sharpen" tool since 0.9.2.
+     "digikamimageplugin_refocus",                  // Merged with "Sharpen" tool since 0.9.2.
+     "digikamimageplugin_despeckle",                // Renamed "Noise Reduction" since 0.9.2.
+     "digikamimageplugin_antivignetting",           // Merged with "Lens Correction" since 0.10.0.
+     "digikamimageplugin_lensdistortion",           // Merged with "Lens Correction" since 0.10.0.
+     "digikamimageplugin_noisereduction",           // Merged to core plugin since 1.0.0-rc.
+     "digikamimageplugin_infrared",                 // Merged to core plugin with B&W converter since 1.2.0.
+     "digikamimageplugin_whitebalance",             // Merged to core plugin since 1.2.0.
+     "digikamimageplugin_channelmixer",             // Merged to core plugin since 1.2.0.
+     "digikamimageplugin_adjustcurves",             // Merged to core plugin since 1.2.0.
+     "digikamimageplugin_adjustlevels",             // Merged to core plugin since 1.2.0.
+     "digikamimageplugin_filmgrain",                // Merged to core plugin since 1.2.0.
+     "digikamimageplugin_colorfx",                  // Merged to "FxFilters" plugin since 1.2.0.
+     "digikamimageplugin_charcoal",                 // Merged to "FxFilters" plugin since 1.2.0.
+     "digikamimageplugin_emboss",                   // Merged to "FxFilters" plugin since 1.2.0.
+     "digikamimageplugin_oilpaint",                 // Merged to "FxFilters" plugin since 1.2.0.
+     "digikamimageplugin_blurfx",                   // Merged to "FxFilters" plugin since 1.2.0.
+     "digikamimageplugin_distortionfx",             // Merged to "FxFilters" plugin since 1.2.0.
+     "digikamimageplugin_raindrop",                 // Merged to "FxFilters" plugin since 1.2.0.
+     "digikamimageplugin_perspective",              // Merged to "Transform" plugin since 1.2.0.
+     "digikamimageplugin_freerotation",             // Merged to "Transform" plugin since 1.2.0.
+     "digikamimageplugin_sheartool",                // Merged to "Transform" plugin since 1.2.0.
+     "digikamimageplugin_contentawareresizing",     // Merged to "Transform" plugin since 1.2.0.
+     "digikamimageplugin_inserttext",               // Merged to "Decorate" plugin since 1.2.0.
+     "digikamimageplugin_border",                   // Merged to "Decorate" plugin since 1.2.0.
+     "digikamimageplugin_texture",                  // Merged to "Decorate" plugin since 1.2.0.
      "-1"
 };
 
