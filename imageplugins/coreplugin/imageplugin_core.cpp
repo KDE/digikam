@@ -61,6 +61,7 @@
 #include "adjustcurvestool.h"
 #include "adjustlevelstool.h"
 #include "filmgraintool.h"
+#include "localcontrasttool.h"
 
 using namespace DigikamImagesPluginCore;
 
@@ -92,6 +93,7 @@ public:
         curvesAction(0),
         levelsAction(0),
         filmgrainAction(0),
+        localContrastAction(0),
         profileMenuAction(0)
         {}
 
@@ -114,6 +116,8 @@ public:
     KAction*               curvesAction;
     KAction*               levelsAction;
     KAction*               filmgrainAction;
+    KAction*               localContrastAction;
+    
 
     IccProfilesMenuAction* profileMenuAction;
 };
@@ -233,6 +237,11 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QVariantList &)
     connect(d->noiseReductionAction, SIGNAL(triggered(bool)),
             this, SLOT(slotNoiseReduction()));
 
+    d->localContrastAction = new KAction(KIcon("contrast"), i18n("Local Contrast..."), this);
+    actionCollection()->addAction("implugcore_localcontrast", d->localContrastAction );
+    connect(d->localContrastAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotLocalContrast()));
+            
     //-------------------------------
     // Transform menu actions.
 
@@ -294,6 +303,7 @@ void ImagePlugin_Core::setEnabledActions(bool b)
     d->curvesAction->setEnabled(b);
     d->levelsAction->setEnabled(b);
     d->filmgrainAction->setEnabled(b);
+    d->localContrastAction->setEnabled(b);
 }
 
 void ImagePlugin_Core::slotInvert()
@@ -527,5 +537,11 @@ void ImagePlugin_Core::slotLevelsAdjust()
 void ImagePlugin_Core::slotFilmGrain()
 {
     FilmGrainTool* tool = new FilmGrainTool(this);
+    loadTool(tool);
+}
+
+void ImagePlugin_Core::slotLocalContrast()
+{
+    LocalContrastTool* tool = new LocalContrastTool(this);
     loadTool(tool);
 }

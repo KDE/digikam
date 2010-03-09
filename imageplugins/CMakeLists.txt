@@ -46,5 +46,4 @@ ADD_SUBDIRECTORY( lenscorrection )
 ADD_SUBDIRECTORY( restoration )
 ADD_SUBDIRECTORY( superimpose )
 ADD_SUBDIRECTORY( transform )
-ADD_SUBDIRECTORY( localcontrast )
 

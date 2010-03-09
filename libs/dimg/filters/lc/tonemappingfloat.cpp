@@ -38,7 +38,6 @@ namespace Digikam
 ToneMappingFloat::ToneMappingFloat()
                 : ToneMappingBase()
 {
-    par.info_fast_mode = false;
 }
 
 ToneMappingFloat::~ToneMappingFloat()
@@ -56,36 +55,36 @@ void ToneMappingFloat::process_rgb_image(float* img, int sizex, int sizey)
     for (int i=0 ; i < (size*3) ; i++)
         srcimg[i] = img[i];
 
-    if (par.stretch_contrast)
+    if (m_par->stretch_contrast)
     {
         stretch_contrast(img,size*3);
     }
 
     int pos = 0;
 
-    for (int nstage=0 ; !par.cancel() && (nstage < TONEMAPPING_MAX_STAGES) ; nstage++)
+    for (int nstage=0 ; !m_par->cancel() && (nstage < TONEMAPPING_MAX_STAGES) ; nstage++)
     {
-        if (par.stage[nstage].enabled)
+        if (m_par->stage[nstage].enabled)
         {
             // compute the desatured image
 
             pos = 0;
 
-            for (int i=0 ; !par.cancel() && (i < size) ; i++)
+            for (int i=0 ; !m_par->cancel() && (i < size) ; i++)
             {
                 blurimage[i] = (float)((img[pos]+img[pos+1]+img[pos+2])/3.0);
                 pos += 3;
             }
 
-            current_process_power_value = par.get_power(nstage);
+            m_current_process_power_value = m_par->get_power(nstage);
 
             // blur
 
-            inplace_blur(blurimage, sizex,sizey, par.get_blur(nstage));
+            inplace_blur(blurimage, sizex,sizey, m_par->get_blur(nstage));
 
             pos = 0;
 
-            for (int i=0 ; !par.cancel() && (i<size) ; i++)
+            for (int i=0 ; !m_par->cancel() && (i<size) ; i++)
             {
                 float src_r  = img[pos];
                 float src_g  = img[pos+1];
@@ -105,17 +104,17 @@ void ToneMappingFloat::process_rgb_image(float* img, int sizex, int sizey)
             }
         }
 
-        par.postProgress(30 + nstage*10);
+        m_par->postProgress(30 + nstage*10);
     }
 
-    int high_saturation_value = 100-par.high_saturation;
-    int low_saturation_value  = 100-par.low_saturation;
+    int high_saturation_value = 100-m_par->high_saturation;
+    int low_saturation_value  = 100-m_par->low_saturation;
 
-    if ((par.high_saturation != 100) || (par.low_saturation != 100))
+    if ((m_par->high_saturation != 100) || (m_par->low_saturation != 100))
     {
         int pos = 0;
 
-        for (int i=0 ; !par.cancel() && (i < size) ; i++)
+        for (int i=0 ; !m_par->cancel() && (i < size) ; i++)
         {
             float src_h, src_s, src_v;
             float dest_h, dest_s, dest_v;
@@ -126,7 +125,7 @@ void ToneMappingFloat::process_rgb_image(float* img, int sizex, int sizey)
             if (dest_v>src_v)
             {
                 float s1     = (float)(dest_saturation*src_v/(dest_v+1.0/255.0));
-                dest_saturation = (float)((low_saturation_value*s1+par.low_saturation*dest_saturation)*0.01);
+                dest_saturation = (float)((low_saturation_value*s1+m_par->low_saturation*dest_saturation)*0.01);
             }
 
             hsv2rgb(dest_h, dest_saturation, dest_v, img[pos], img[pos+1], img[pos+2]);
@@ -135,11 +134,11 @@ void ToneMappingFloat::process_rgb_image(float* img, int sizex, int sizey)
         }
     }
 
-    par.postProgress(70);
+    m_par->postProgress(70);
 
     // Unsharp Mask filter
 
-    if (par.unsharp_mask.enabled)
+    if (m_par->unsharp_mask.enabled)
     {
         float* val = new float[size];
 
@@ -147,22 +146,22 @@ void ToneMappingFloat::process_rgb_image(float* img, int sizex, int sizey)
 
         int pos = 0;
 
-        for (int i=0 ; !par.cancel() && (i < size) ; i++)
+        for (int i=0 ; !m_par->cancel() && (i < size) ; i++)
         {
             val[i] = blurimage[i] = (float)((img[pos]+img[pos+1]+img[pos+2])/3.0);
             //val[i] = blurimage[i] = (float)(max3(img[pos],img[pos+1],img[pos+2]));
             pos += 3;
         }
 
-        float blur_value = par.get_unsharp_mask_blur();
+        float blur_value = m_par->get_unsharp_mask_blur();
         inplace_blur(blurimage, sizex, sizey, blur_value);
 
         pos              = 0;
-        float pow        = (float)(2.5*par.get_unsharp_mask_power());
-        float threshold  = (float)(par.unsharp_mask.threshold*pow/250.0);
+        float pow        = (float)(2.5*m_par->get_unsharp_mask_power());
+        float threshold  = (float)(m_par->unsharp_mask.threshold*pow/250.0);
         float threshold2 = threshold/2;
 
-        for (int i=0 ; !par.cancel() && (i < size) ; i++)
+        for (int i=0 ; !m_par->cancel() && (i < size) ; i++)
         {
             float dval     = (val[i]-blurimage[i])*pow;
             float abs_dval = fabs(dval);
@@ -204,12 +203,12 @@ void ToneMappingFloat::process_rgb_image(float* img, int sizex, int sizey)
     delete [] srcimg;
     delete [] blurimage;
 
-    par.postProgress(80);
+    m_par->postProgress(80);
 }
 
 void ToneMappingFloat::update_preprocessed_values()
 {
-    par.postProgress(20);
+    m_par->postProgress(20);
 }
 
 void ToneMappingFloat::process_16bit_rgb_image(unsigned short int* img, int sizex, int sizey)
@@ -218,7 +217,7 @@ void ToneMappingFloat::process_16bit_rgb_image(unsigned short int* img, int size
     float* tmpimage       = new float[size*3];
     const float inv_65536 = 1.0/65536.0;
 
-    for (int i=0 ; !par.cancel() && (i < size*3) ; i++)
+    for (int i=0 ; !m_par->cancel() && (i < size*3) ; i++)
     {
         //convert to floating point
         tmpimage[i] = (float)(img[i]/65535.0);
@@ -229,7 +228,7 @@ void ToneMappingFloat::process_16bit_rgb_image(unsigned short int* img, int size
     //convert back to 8 bits (with dithering)
     int pos = 0;
 
-    for (int i=0 ; !par.cancel() && (i < size) ; i++)
+    for (int i=0 ; !m_par->cancel() && (i < size) ; i++)
     {
         float dither = ((rand()/65536)%65536)*inv_65536;
         img[pos]     = (int)(tmpimage[pos]  *65535.0+dither);
@@ -240,7 +239,7 @@ void ToneMappingFloat::process_16bit_rgb_image(unsigned short int* img, int size
 
     delete [] tmpimage;
 
-    par.postProgress(90);
+    m_par->postProgress(90);
 }
 
 void ToneMappingFloat::process_8bit_rgb_image(unsigned char* img, int sizex, int sizey)
@@ -249,7 +248,7 @@ void ToneMappingFloat::process_8bit_rgb_image(unsigned char* img, int sizex, int
     float* tmpimage     = new float[size*3];
     const float inv_256 = 1.0/256.0;
 
-    for (int i=0 ; !par.cancel() && (i < size*3) ; i++)
+    for (int i=0 ; !m_par->cancel() && (i < size*3) ; i++)
     {
         //convert to floating point
         tmpimage[i] = (float)(img[i]/255.0);
@@ -260,7 +259,7 @@ void ToneMappingFloat::process_8bit_rgb_image(unsigned char* img, int sizex, int
     //convert back to 8 bits (with dithering)
     int pos=0;
 
-    for (int i=0 ; !par.cancel() && (i < size) ; i++)
+    for (int i=0 ; !m_par->cancel() && (i < size) ; i++)
     {
         float dither = ((rand()/256)%256)*inv_256;
         img[pos]     = (int)(tmpimage[pos]  *255.0+dither);
@@ -270,12 +269,12 @@ void ToneMappingFloat::process_8bit_rgb_image(unsigned char* img, int sizex, int
     }
 
     delete [] tmpimage;
-    par.postProgress(90);
+    m_par->postProgress(90);
 }
 
 void ToneMappingFloat::inplace_blur(float* data, int sizex, int sizey, float blur)
 {
-    blur /= preview_zoom;
+    blur /= m_preview_zoom;
 
     if (blur < 0.3) return;
 
@@ -286,15 +285,15 @@ void ToneMappingFloat::inplace_blur(float* data, int sizex, int sizey, float blu
     a *= a;
     float denormal_remove = (float)(1e-15);
 
-    for (int stage=0 ; !par.cancel() && (stage < 2) ; stage++)
+    for (int stage=0 ; !m_par->cancel() && (stage < 2) ; stage++)
     {
-        for (int y=0 ; !par.cancel() && (y < sizey) ; y++)
+        for (int y=0 ; !m_par->cancel() && (y < sizey) ; y++)
         {
             int pos   = y*sizex;
             float old = data[pos];
             pos++;
 
-            for (int x=1 ; !par.cancel() && (x < sizex) ; x++)
+            for (int x=1 ; !m_par->cancel() && (x < sizex) ; x++)
             {
                 old       = (data[pos]*(1-a)+old*a)+denormal_remove;
                 data[pos] = old;
@@ -303,7 +302,7 @@ void ToneMappingFloat::inplace_blur(float* data, int sizex, int sizey, float blu
 
             pos = y*sizex+sizex-1;
 
-            for (int x=1 ; !par.cancel() && (x < sizex) ; x++)
+            for (int x=1 ; !m_par->cancel() && (x < sizex) ; x++)
             {
                 old       = (data[pos]*(1-a)+old*a)+denormal_remove;
                 data[pos] = old;
@@ -311,12 +310,12 @@ void ToneMappingFloat::inplace_blur(float* data, int sizex, int sizey, float blu
             }
         }
 
-        for (int x=0 ; !par.cancel() && (x < sizex) ; x++)
+        for (int x=0 ; !m_par->cancel() && (x < sizex) ; x++)
         {
             int pos   = x;
             float old = data[pos];
 
-            for (int y=1 ; !par.cancel() && (y < sizey) ; y++)
+            for (int y=1 ; !m_par->cancel() && (y < sizey) ; y++)
             {
                 old       = (data[pos]*(1-a)+old*a)+denormal_remove;
                 data[pos] = old;
@@ -325,7 +324,7 @@ void ToneMappingFloat::inplace_blur(float* data, int sizex, int sizey, float blu
 
             pos = x+sizex*(sizey-1);
 
-            for (int y=1 ; !par.cancel() && (y < sizey) ; y++)
+            for (int y=1 ; !m_par->cancel() && (y < sizey) ; y++)
             {
                 old       = (data[pos]*(1-a)+old*a)+denormal_remove;
                 data[pos] = old;
@@ -345,7 +344,7 @@ void ToneMappingFloat::stretch_contrast(float* data, int datasize)
     for (unsigned int i=0 ; i < histogram_size ; i++)
 	histogram[i] = 0;
 
-    for (unsigned int i=0 ; !par.cancel() && (i < (unsigned int)datasize) ; i++)
+    for (unsigned int i=0 ; !m_par->cancel() && (i < (unsigned int)datasize) ; i++)
     {
         int m = (int)(data[i]*(histogram_size-1));
         if (m < 0) m = 0;
@@ -360,7 +359,7 @@ void ToneMappingFloat::stretch_contrast(float* data, int datasize)
     unsigned int sum_min     = 0;
     unsigned int sum_max     = 0;
 
-    for (unsigned int i=0 ; !par.cancel() && (i < histogram_size) ; i++)
+    for (unsigned int i=0 ; !m_par->cancel() && (i < histogram_size) ; i++)
     {
         sum_min += histogram[i];
         if (sum_min > desired_sum)
@@ -370,7 +369,7 @@ void ToneMappingFloat::stretch_contrast(float* data, int datasize)
         }
     }
 
-    for (int i = histogram_size-1 ; !par.cancel() && (i >= 0) ; i--)
+    for (int i = histogram_size-1 ; !m_par->cancel() && (i >= 0) ; i--)
     {
         sum_max += histogram[i];
 
@@ -390,7 +389,7 @@ void ToneMappingFloat::stretch_contrast(float* data, int datasize)
     float min_src_val = (float)(min/255.0);
     float max_src_val = (float)(max/255.0);
 
-    for (int i=0 ; !par.cancel() && (i < datasize) ; i++)
+    for (int i=0 ; !m_par->cancel() && (i < datasize) ; i++)
     {
         //stretch the contrast
         float x = data[i];

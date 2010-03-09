@@ -32,7 +32,7 @@
 
 using namespace Digikam;
 
-namespace DigikamLocalContrastImagesPlugin
+namespace DigikamImagesPluginCore
 {
 
 class LocalContrastToolPriv;
@@ -56,7 +56,7 @@ private:
     void putFinalData();
     void renderingFinished();
 
-    ToneMappingParameters createParams() const;
+    ToneMappingParameters* createParams() const;
 
 private Q_SLOTS:
 
@@ -73,6 +73,6 @@ private:
     LocalContrastToolPriv* const d;
 };
 
-}  // namespace DigikamLocalContrastImagesPlugin
+}  // namespace DigikamImagesPluginCore
 
 #endif /* LOCALCONTRASTTOOL_H */

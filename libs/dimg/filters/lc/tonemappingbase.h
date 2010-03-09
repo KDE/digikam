@@ -46,138 +46,138 @@ public:
     virtual ~ToneMappingBase();
 
     float func(float x1, float x2);
-    void  apply_parameters(const ToneMappingParameters& inpar);
+    void  apply_parameters(ToneMappingParameters* par);
 
+    ToneMappingParameters* get_parameters() const
+    {
+        return m_par;
+    };
+    
     void set_enabled(int nstage, bool enabled)
     {
-        par.stage[nstage].enabled=enabled;
+        m_par->stage[nstage].enabled=enabled;
     };
 
     void set_info_fast_mode(bool value)
     {
-        par.info_fast_mode=value;
+        m_par->info_fast_mode=value;
     };
 
     void set_unsharp_mask_enabled(bool value)
     {
-        par.unsharp_mask.enabled = value;
+        m_par->unsharp_mask.enabled = value;
     };
 
     void set_unsharp_mask_power(float value)
     {
         if (value < 0.0) value = 0.0;
         if (value > 100.0) value = 100.0;
-        par.unsharp_mask.power = value;
+        m_par->unsharp_mask.power = value;
     };
 
     void set_unsharp_mask_blur(float value)
     {
         if (value < 0.0) value = 0.0;
         if (value > 5000.0) value = 5000.0;
-        par.unsharp_mask.blur = value;
+        m_par->unsharp_mask.blur = value;
     };
 
     void set_unsharp_mask_threshold(int value)
     {
         if (value < 0) value = 0;
         if (value > 100) value = 100;
-        par.unsharp_mask.threshold = value;
+        m_par->unsharp_mask.threshold = value;
     };
         
-    ToneMappingParameters get_parameters()
-    {
-        return par;
-    };
-
     float get_enabled(int nstage)
     {
-        return par.stage[nstage].enabled;
+        return m_par->stage[nstage].enabled;
     };
 
     float get_blur(int nstage)
     {
-        return par.stage[nstage].blur;
+        return m_par->stage[nstage].blur;
     };
 
     float get_power(int nstage)
     {
-        return par.stage[nstage].power;
+        return m_par->stage[nstage].power;
     };
 
     int get_low_saturation()
     {
-        return par.low_saturation;
+        return m_par->low_saturation;
     };
 
     int get_high_saturation()
     {
-        return par.high_saturation;
+        return m_par->high_saturation;
     };
 
     bool get_stretch_contrast()
     {
-        return par.stretch_contrast;
+        return m_par->stretch_contrast;
     };
 
     int get_function_id()
     {
-        return par.function_id;
+        return m_par->function_id;
     };
 
     bool get_info_fast_mode()
     {
-        return par.info_fast_mode;
+        return m_par->info_fast_mode;
     };
 
     bool get_unsharp_mask_enabled(bool /*value*/)
     {
-        return par.unsharp_mask.enabled;
+        return m_par->unsharp_mask.enabled;
     };
 
     float get_unsharp_mask_power(float /*value*/)
     {
-        return par.unsharp_mask.power;
+        return m_par->unsharp_mask.power;
     };
 
     float get_unsharp_mask_(float /*value*/)
     {
-        return par.unsharp_mask.blur;
+        return m_par->unsharp_mask.blur;
     };
 
     int get_unsharp_mask_threshold(int /*value*/)
     {
-        return par.unsharp_mask.threshold;
+        return m_par->unsharp_mask.threshold;
     };
 
     void set_current_stage(int nstage)
     {
-        current_process_power_value = par.get_power(nstage);
+        m_current_process_power_value = m_par->get_power(nstage);
     };
 
     void set_preview_zoom(float val)
     {
-        if ((val > 0.001) && (val < 1000.0)) preview_zoom = val;
+        if ((val > 0.001) && (val < 1000.0)) m_preview_zoom = val;
     };
 
     virtual void set_blur(int nstage, float value);      // 1..5000
     virtual void set_power(int nstage, float value);     // 0..100.0
-    virtual void set_low_saturation(int value);             // 0..100
-    virtual void set_high_saturation(int value);            // 0..100
+    virtual void set_low_saturation(int value);          // 0..100
+    virtual void set_high_saturation(int value);         // 0..100
     virtual void set_stretch_contrast(bool value);
-    virtual void set_function_id (int value);               // 0..1
+    virtual void set_function_id (int value);            // 0..1
 
-    virtual void process_8bit_rgb_image(unsigned char *img, int sizex, int sizey)=0;
+    virtual void process_8bit_rgb_image(unsigned char* img, int sizex, int sizey)=0;
     virtual void update_preprocessed_values()=0;
 
 protected:
 
     // used for zoom on previews
-    float              preview_zoom;
+    float                  m_preview_zoom;
 
-    ToneMappingParameters par;
+    ToneMappingParameters* m_par;
 
     // preprocessed values
-    float              current_process_power_value;
+    float                  m_current_process_power_value;
 };
 
 } // namespace Digikam

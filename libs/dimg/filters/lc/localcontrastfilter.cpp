@@ -39,7 +39,7 @@ static void CallbackForToneMapping(void* data, int progress)
 {
     if (data)
     {
-        LocalContrastFilter *d = static_cast<LocalContrastFilter*>(data);
+        LocalContrastFilter* d = static_cast<LocalContrastFilter*>(data);
         if (d) return d->progressCallback(progress);
     }
 }
@@ -48,23 +48,18 @@ class LocalContrastFilterPriv
 {
 public:
 
-    LocalContrastFilterPriv()
-    {
-        tonemappingFloat = 0;
-    }
+    LocalContrastFilterPriv(){}
 
-    ToneMappingParameters par;
-
-    ToneMappingFloat*     tonemappingFloat;
+    ToneMappingFloat tonemappingFloat;
 };
 
-LocalContrastFilter::LocalContrastFilter(DImg* image, QObject* parent, const ToneMappingParameters& par)
+LocalContrastFilter::LocalContrastFilter(DImg* image, QObject* parent, ToneMappingParameters* par)
                    : DImgThreadedFilter(image, parent, "LocalContrast"),
                      d(new LocalContrastFilterPriv)
 {
-    d->par = par;
-    d->par.setCancel(&m_cancel);
-    d->par.setProgressCallBackFunction(this, CallbackForToneMapping);
+    par->setCancel(&m_cancel);
+    par->setProgressCallBackFunction(this, CallbackForToneMapping);
+    d->tonemappingFloat.apply_parameters(par);
 
     initFilter();
 }
@@ -77,9 +72,6 @@ LocalContrastFilter::~LocalContrastFilter()
 void LocalContrastFilter::filterImage()
 {
     progressCallback(0);
-
-    d->tonemappingFloat = new ToneMappingFloat();
-    d->tonemappingFloat->apply_parameters(d->par);
 
     // Process image
 
@@ -103,7 +95,7 @@ void LocalContrastFilter::filterImage()
 
             progressCallback(10);
 
-            d->tonemappingFloat->process_16bit_rgb_image(data, m_orgImage.width(), m_orgImage.height());
+            d->tonemappingFloat.process_16bit_rgb_image(data, m_orgImage.width(), m_orgImage.height());
 
             for(uint x=0; !m_cancel && (x < m_orgImage.width()); x++)
             {
@@ -134,7 +126,7 @@ void LocalContrastFilter::filterImage()
 
             progressCallback(10);
 
-            d->tonemappingFloat->process_8bit_rgb_image(data, m_orgImage.width(), m_orgImage.height());
+            d->tonemappingFloat.process_8bit_rgb_image(data, m_orgImage.width(), m_orgImage.height());
 
             for(uint x=0; !m_cancel && (x < m_orgImage.width()); x++)
             {
@@ -149,7 +141,6 @@ void LocalContrastFilter::filterImage()
         }
     }
 
-    delete d->tonemappingFloat;
     progressCallback(100);
 }
 

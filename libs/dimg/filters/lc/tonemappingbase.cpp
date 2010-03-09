@@ -38,8 +38,8 @@ namespace Digikam
 
 ToneMappingBase::ToneMappingBase()
 {
-    current_process_power_value = 20.0;
-    preview_zoom                = 1.0;
+    m_current_process_power_value = 20.0;
+    m_preview_zoom                = 1.0;
 }
 
 ToneMappingBase::~ToneMappingBase()
@@ -50,40 +50,40 @@ void ToneMappingBase::set_blur(int nstage, float value)
 {
     if (value < 0) value = 0;
     if (value > 10000.0) value = 10000.0;
-    par.stage[nstage].blur = value;
+    m_par->stage[nstage].blur = value;
 }
 
 void ToneMappingBase::set_power(int nstage, float value)
 {
     if (value < 0) value = 0;
     if (value > 100.0) value = 100.0;
-    par.stage[nstage].power = value;
+    m_par->stage[nstage].power = value;
 }
 
 void ToneMappingBase::set_low_saturation(int value)
 {
     if (value < 0) value = 0;
     if (value > 100) value = 100;
-    par.low_saturation = value;
+    m_par->low_saturation = value;
 }
 
 void ToneMappingBase::set_high_saturation(int value)
 {
     if (value < 0) value = 0;
     if (value > 100) value = 100;
-    par.high_saturation = value;
+    m_par->high_saturation = value;
 }
 
 void ToneMappingBase::set_stretch_contrast(bool value)
 {
-    par.stretch_contrast = value;
+    m_par->stretch_contrast = value;
 }
 
 void ToneMappingBase::set_function_id (int value)
 {
     if (value < 0) value = 0;
     if (value > 1) value = 1;
-    par.function_id = value;
+    m_par->function_id = value;
 }
 
 float ToneMappingBase::func(float x1, float x2)
@@ -93,9 +93,9 @@ float ToneMappingBase::func(float x1, float x2)
 
     /*
     //test function
-    if (par.function_id==1)
+    if (m_par->function_id==1)
     {
-        p=pow(0.1,fabs((x2*2.0-1.0))*current_process_power_value*0.02);
+        p=pow(0.1,fabs((x2*2.0-1.0))*m_current_process_power_value*0.02);
         if (x2<0.5) result=pow(x1,p);
         else result=1.0-pow(1.0-x1,p);
         return result;
@@ -103,7 +103,7 @@ float ToneMappingBase::func(float x1, float x2)
     //test function
     if (function_id==1)
     {
-        p=current_process_power_value*0.3+1e-4;
+        p=m_current_process_power_value*0.3+1e-4;
         x2=1.0/(1.0+exp(-(x2*2.0-1.0)*p*0.5));
         float f=1.0/(1.0+exp((1.0-(x1-x2+0.5)*2.0)*p));
         float m0=1.0/(1.0+exp((1.0-(-x2+0.5)*2.0)*p));
@@ -113,15 +113,15 @@ float ToneMappingBase::func(float x1, float x2)
     };
     */
 
-    switch (par.function_id)
+    switch (m_par->function_id)
     {
         case 0:  //power function
-            p = (float)(pow((double)10.0,(double)fabs((x2*2.0-1.0))*current_process_power_value*0.02));
+            p = (float)(pow((double)10.0,(double)fabs((x2*2.0-1.0))*m_current_process_power_value*0.02));
             if (x2 >= 0.5) result = pow(x1,p);
             else result = (float)(1.0-pow((double)1.0-x1,(double)p));
             break;
         case 1:  //linear function
-            p = (float)(1.0/(1+exp(-(x2*2.0-1.0)*current_process_power_value*0.04)));
+            p = (float)(1.0/(1+exp(-(x2*2.0-1.0)*m_current_process_power_value*0.04)));
             result = (x1 < p) ? (float)(x1*(1.0-p)/p) : (float)((1.0-p)+(x1-p)*p/(1.0-p));
             break;
     };
@@ -129,18 +129,18 @@ float ToneMappingBase::func(float x1, float x2)
     return result;
 }
 
-void ToneMappingBase::apply_parameters(const ToneMappingParameters& inpar)
+void ToneMappingBase::apply_parameters(ToneMappingParameters* par)
 {
-    par = inpar;
-    set_low_saturation(par.low_saturation);
-    set_high_saturation(par.high_saturation);
-    set_stretch_contrast(par.stretch_contrast);
-    set_function_id(par.function_id);
+    m_par = par;
+    set_low_saturation(m_par->low_saturation);
+    set_high_saturation(m_par->high_saturation);
+    set_stretch_contrast(m_par->stretch_contrast);
+    set_function_id(m_par->function_id);
 
     for (int i=0 ; i < TONEMAPPING_MAX_STAGES ; i++)
     {
-        set_power(i, par.stage[i].power);
-        set_blur(i, par.stage[i].blur);
+        set_power(i, m_par->stage[i].power);
+        set_blur(i, m_par->stage[i].blur);
     };
 
     update_preprocessed_values();

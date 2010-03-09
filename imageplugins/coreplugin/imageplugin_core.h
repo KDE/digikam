@@ -79,7 +79,8 @@ private Q_SLOTS:
     void slotChannelMixer();
     void slotCurvesAdjust();
     void slotLevelsAdjust();
-    
+    void slotLocalContrast();
+
     void slotRatioCrop();
     void slotResize();
 

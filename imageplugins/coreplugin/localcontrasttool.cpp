@@ -66,7 +66,7 @@
 
 using namespace KDcrawIface;
 
-namespace DigikamLocalContrastImagesPlugin
+namespace DigikamImagesPluginCore
 {
 
 class LocalContrastToolPriv
@@ -86,7 +86,6 @@ public:
         configPower4Entry("Power4"),
         configBlur4Entry("Blur4"),
         configStretchContrastEntry("StretchContrast"),
-        configFastModeEntry("FastMode"),
         configStageOneEntry("StageOne"),
         configStageTwoEntry("StageTwo"),
         configStageThreeEntry("StageThree"),
@@ -94,7 +93,6 @@ public:
         configFunctionInputEntry("FunctionInput"),
 
         stretchContrastCheck(0),
-        fastModeCheck(0),
         stageOne(0),
         stageTwo(0),
         stageThree(0),
@@ -143,7 +141,6 @@ public:
     const QString       configFunctionInputEntry;
 
     QCheckBox*          stretchContrastCheck;
-    QCheckBox*          fastModeCheck;
     QCheckBox*          stageOne;
     QCheckBox*          stageTwo;
     QCheckBox*          stageThree;
@@ -246,13 +243,6 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->fastModeCheck = new QCheckBox(i18n("Fast mode"), firstPage);
-    d->fastModeCheck->setWhatsThis(i18n("<b>Fast mode</b>: There are available two ways to do the tonemapping: using a "
-                                        "very fast algorithm, which might produce artifacts on the image or a more precise "
-                                        "algorithm, which is slower."));
-    d->fastModeCheck->setChecked(false);
-    d->fastModeCheck->setVisible(false);   // disable for the moment...
-
     grid1->addWidget(label1,                    0, 0, 1, 1);
     grid1->addWidget(d->functionInput,          0, 1, 1, 1);
     grid1->addWidget(d->stretchContrastCheck,   1, 0, 1, 1);
@@ -260,7 +250,6 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
     grid1->addWidget(d->highSaturationInput,    2, 1, 1, 1);
     grid1->addWidget(label3,                    3, 0, 1, 1);
     grid1->addWidget(d->lowSaturationInput,     3, 1, 1, 1);
-    grid1->addWidget(d->fastModeCheck,          4, 0, 1, 1);
     grid1->setMargin(d->gboxSettings->spacingHint());
     grid1->setSpacing(d->gboxSettings->spacingHint());
 
@@ -516,7 +505,6 @@ void LocalContrastTool::readSettings()
     d->powerInput3->setValue(group.readEntry(d->configPower3Entry,                     d->powerInput3->defaultValue()));
     d->powerInput4->setValue(group.readEntry(d->configPower4Entry,                     d->powerInput4->defaultValue()));
     d->stretchContrastCheck->setChecked(group.readEntry(d->configStretchContrastEntry, false));
-    d->fastModeCheck->setChecked(group.readEntry(d->configFastModeEntry,               false));
     d->stageOne->setChecked(group.readEntry(d->configStageOneEntry,                    false));
     d->stageTwo->setChecked(group.readEntry(d->configStageTwoEntry,                    false));
     d->stageThree->setChecked(group.readEntry(d->configStageThreeEntry,                false));
@@ -548,7 +536,6 @@ void LocalContrastTool::writeSettings()
     group.writeEntry(d->configPower3Entry,          d->powerInput3->value());
     group.writeEntry(d->configPower4Entry,          d->powerInput4->value());
     group.writeEntry(d->configStretchContrastEntry, d->stretchContrastCheck->isChecked());
-    group.writeEntry(d->configFastModeEntry,        d->fastModeCheck->isChecked());
     group.writeEntry(d->configStageOneEntry,        d->stageOne->isChecked());
     group.writeEntry(d->configStageTwoEntry,        d->stageTwo->isChecked());
     group.writeEntry(d->configStageThreeEntry,      d->stageThree->isChecked());
@@ -574,7 +561,6 @@ void LocalContrastTool::slotResetSettings()
     d->powerInput4->slotReset();
     d->blurInput4->slotReset();
     d->stretchContrastCheck->setChecked(false);
-    d->fastModeCheck->setChecked(false);
     d->stageOne->setChecked(false);
     d->stageTwo->setChecked(false);
     d->stageThree->setChecked(false);
@@ -583,45 +569,45 @@ void LocalContrastTool::slotResetSettings()
     d->expanderBox->setEnabled(true);
 }
 
-ToneMappingParameters LocalContrastTool::createParams() const
+ToneMappingParameters* LocalContrastTool::createParams() const
 {
-    ToneMappingParameters par;
+    ToneMappingParameters* par = new ToneMappingParameters;
 
     // Setting general parameters
-    par.info_fast_mode   = d->fastModeCheck->isChecked();
-    par.low_saturation   = d->lowSaturationInput->value();
-    par.high_saturation  = d->highSaturationInput->value();
-    par.stretch_contrast = d->stretchContrastCheck->isChecked();
-    par.function_id      = d->functionInput->currentIndex();
+    par->info_fast_mode   = false;
+    par->low_saturation   = d->lowSaturationInput->value();
+    par->high_saturation  = d->highSaturationInput->value();
+    par->stretch_contrast = d->stretchContrastCheck->isChecked();
+    par->function_id      = d->functionInput->currentIndex();
 
     // Setting stages parameters
-    par.stage[0].enabled = d->stageOne->isChecked();
-    par.stage[1].enabled = d->stageTwo->isChecked();
-    par.stage[2].enabled = d->stageThree->isChecked();
-    par.stage[3].enabled = d->stageFour->isChecked();
+    par->stage[0].enabled = d->stageOne->isChecked();
+    par->stage[1].enabled = d->stageTwo->isChecked();
+    par->stage[2].enabled = d->stageThree->isChecked();
+    par->stage[3].enabled = d->stageFour->isChecked();
 
-    if (par.stage[0].enabled)
+    if (par->stage[0].enabled)
     {
-        par.stage[0].power = d->powerInput1->value();
-        par.stage[0].blur = d->blurInput1->value();
+        par->stage[0].power = d->powerInput1->value();
+        par->stage[0].blur = d->blurInput1->value();
     }
 
-    if (par.stage[1].enabled)
+    if (par->stage[1].enabled)
     {
-        par.stage[1].power = d->powerInput2->value();
-        par.stage[1].blur = d->blurInput2->value();
+        par->stage[1].power = d->powerInput2->value();
+        par->stage[1].blur = d->blurInput2->value();
     }
 
-    if (par.stage[2].enabled)
+    if (par->stage[2].enabled)
     {
-        par.stage[2].power = d->powerInput3->value();
-        par.stage[2].blur = d->blurInput3->value();
+        par->stage[2].power = d->powerInput3->value();
+        par->stage[2].blur = d->blurInput3->value();
     }
 
-    if (par.stage[3].enabled)
+    if (par->stage[3].enabled)
     {
-        par.stage[3].power = d->powerInput4->value();
-        par.stage[3].blur = d->blurInput4->value();
+        par->stage[3].power = d->powerInput4->value();
+        par->stage[3].blur = d->blurInput4->value();
     }
 
     return par;
@@ -680,7 +666,6 @@ void LocalContrastTool::slotLoadSettings()
 
         blockSignals(true);
         d->stretchContrastCheck->setChecked( stream.readLine().toInt() );
-        d->fastModeCheck->setChecked( stream.readLine().toInt() );
         d->stageOne->setChecked( stream.readLine().toInt() );
         d->stageTwo->setChecked( stream.readLine().toInt() );
         d->stageThree->setChecked( stream.readLine().toInt() );
@@ -723,7 +708,6 @@ void LocalContrastTool::slotSaveAsSettings()
         stream << "# Photograph Local Contrast Configuration File\n";
 
         stream << d->stretchContrastCheck->isChecked() << "\n";
-        stream << d->fastModeCheck->isChecked() << "\n";
         stream << d->stageOne->isChecked() << "\n";
         stream << d->stageTwo->isChecked() << "\n";
         stream << d->stageThree->isChecked() << "\n";
@@ -749,4 +733,4 @@ void LocalContrastTool::slotSaveAsSettings()
     file.close();
 }
 
-} // namespace DigikamNoiseReductionImagesPlugin
+} // namespace DigikamImagesPluginCore
