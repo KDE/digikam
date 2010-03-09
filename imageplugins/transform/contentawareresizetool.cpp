@@ -659,12 +659,17 @@ void ContentAwareResizeTool::disableSettings()
 
 void ContentAwareResizeTool::contentAwareResizeCore(DImg* image, int target_width, int target_height, const QImage& mask)
 {
-    setFilter(new ContentAwareFilter(image, target_width, target_height,
-                                     d->stepInput->value(), d->rigidityInput->value(),
-                                     d->sideSwitchInput->value(),
-                                     (LqrEnergyFuncBuiltinType)d->funcInput->currentIndex(),
-                                     (LqrResizeOrder)d->resizeOrderInput->currentIndex(),
-                                     mask, d->preserveSkinTones->isChecked(), this));
+    ContentAwareContainer settings;
+    settings.preserve_skin_tones = d->preserveSkinTones->isChecked();
+    settings.width               = target_width;
+    settings.height              = target_height;
+    settings.step                = d->stepInput->value();
+    settings.side_switch_freq    = d->sideSwitchInput->value();
+    settings.rigidity            = d->rigidityInput->value();
+    settings.mask                = mask;
+    settings.func                = (LqrEnergyFuncBuiltinType)d->funcInput->currentIndex();
+    settings.resize_order        = (LqrResizeOrder)d->resizeOrderInput->currentIndex();
+    setFilter(new ContentAwareFilter(image, this, settings));
 }
 
 void ContentAwareResizeTool::prepareEffect()

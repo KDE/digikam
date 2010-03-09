@@ -60,37 +60,28 @@ public:
 
     ContentAwareFilterPriv()
     {
-        width    = 0;
-        height   = 0;
         carver   = 0;
         progress = 0;
     }
 
-    uint         width;
-    uint         height;
+    ContentAwareContainer settings;      
 
-    LqrCarver*   carver;
-    LqrProgress* progress;
+    LqrCarver*            carver;
+    LqrProgress*          progress;
 
 };
 
-ContentAwareFilter::ContentAwareFilter(DImg* orgImage, uint width, uint height,
-                                         int step, double rigidity, int side_switch_freq,
-                                         LqrEnergyFuncBuiltinType func,
-                                         LqrResizeOrder resize_order, const QImage& mask,
-                                         bool preserve_skin_tones, QObject* parent)
+ContentAwareFilter::ContentAwareFilter(DImg* orgImage, QObject* parent, const ContentAwareContainer& settings)
                    : DImgThreadedFilter(orgImage, parent, "ContentAwareFilter"),
                      d(new ContentAwareFilterPriv)
 {
     initFilter();
 
-    s_stage   = false;
-    s_resiser = this;
-    d->width  = width;
-    d->height = height;
-
-    d->carver = lqr_carver_new_ext(m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(), 4,
-                                   m_orgImage.sixteenBit() ? LQR_COLDEPTH_16I : LQR_COLDEPTH_8I);
+    s_stage     = false;
+    s_resiser   = this;
+    d->settings = settings;
+    d->carver   = lqr_carver_new_ext(m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(), 4,
+                                     m_orgImage.sixteenBit() ? LQR_COLDEPTH_16I : LQR_COLDEPTH_8I);
 
     if (d->carver)
     {
@@ -100,7 +91,7 @@ ContentAwareFilter::ContentAwareFilter(DImg* orgImage, uint width, uint height,
         lqr_carver_set_preserve_input_image(d->carver);
 
         // Initialize the carver object
-        lqr_carver_init(d->carver, step, rigidity);
+        lqr_carver_init(d->carver, d->settings.step, d->settings.rigidity);
 
         // Create a progress object
         d->progress = lqr_progress_new();
@@ -109,26 +100,26 @@ ContentAwareFilter::ContentAwareFilter(DImg* orgImage, uint width, uint height,
         lqr_progress_set_end(d->progress, s_carverProgressEnd);
         lqr_carver_set_progress(d->carver, d->progress);
 
-        lqr_carver_set_side_switch_frequency(d->carver,side_switch_freq);
+        lqr_carver_set_side_switch_frequency(d->carver, d->settings.side_switch_freq);
 
         // Set enlargement steps as suggested by Carlo Baldassi
         lqr_carver_set_enl_step(d->carver, 1.5);
 
         // Choose a gradient function
-        lqr_carver_set_energy_function_builtin(d->carver, func);
+        lqr_carver_set_energy_function_builtin(d->carver, d->settings.func);
 
         // Choose the resize order
-        if (resize_order == 0)
+        if (d->settings.resize_order == 0)
             lqr_carver_set_resize_order(d->carver, LQR_RES_ORDER_HOR);
         else
             lqr_carver_set_resize_order(d->carver, LQR_RES_ORDER_VERT);
 
         // Set a bias if any mask
-        if (!mask.isNull())
-            buildBias(mask);
+        if (!d->settings.mask.isNull())
+            buildBias(d->settings.mask);
 
         // Set skin tone mask if option is activated
-        if (preserve_skin_tones)
+        if (d->settings.preserve_skin_tones)
             buildSkinToneBias();
     }
 }
@@ -162,11 +153,11 @@ void ContentAwareFilter::filterImage()
     uint  w   = 0;
     uint  h   = 0;
 
-    s_wResize = (m_orgImage.width()  == d->width)  ? false : true;
-    s_hResize = (m_orgImage.height() == d->height) ? false : true;
+    s_wResize = (m_orgImage.width()  == d->settings.width)  ? false : true;
+    s_hResize = (m_orgImage.height() == d->settings.height) ? false : true;
 
     // Liquid rescale
-    lqr_carver_resize(d->carver, d->width, d->height);
+    lqr_carver_resize(d->carver, d->settings.width, d->settings.height);
     
     if (m_cancel) return;
 

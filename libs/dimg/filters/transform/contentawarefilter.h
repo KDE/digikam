@@ -38,11 +38,47 @@
 #include "dcolor.h"
 #include "digikam_export.h"
 #include "dimgthreadedfilter.h"
-#include "globals.h"
 
 namespace Digikam
 {
 
+class DIGIKAM_EXPORT ContentAwareContainer
+{
+
+public:
+
+    ContentAwareContainer()
+    {
+        preserve_skin_tones = false;
+        width               = 0;
+        height              = 0;
+        step                = 1; 
+        side_switch_freq    = 4; 
+        rigidity            = 0.0;
+        func                = LQR_EF_GRAD_XABS;
+        resize_order        = LQR_RES_ORDER_HOR;
+    };
+
+    ~ContentAwareContainer(){};
+
+public:
+
+    bool                     preserve_skin_tones;
+
+    uint                     width;
+    uint                     height;
+    
+    int                      step; 
+    int                      side_switch_freq;
+
+    double                   rigidity;
+
+    QImage                   mask; 
+
+    LqrEnergyFuncBuiltinType func;
+    LqrResizeOrder           resize_order;
+};  
+  
 class ContentAwareFilterPriv;
 
 class DIGIKAM_EXPORT ContentAwareFilter : public DImgThreadedFilter
@@ -50,11 +86,7 @@ class DIGIKAM_EXPORT ContentAwareFilter : public DImgThreadedFilter
 
 public:
 
-    ContentAwareFilter(DImg* orgImage, uint width, uint height,
-                       int step=1, double rigidity=0.0, int side_switch_freq=4, 
-                       LqrEnergyFuncBuiltinType func=LQR_EF_GRAD_XABS,
-                       LqrResizeOrder resize_order=LQR_RES_ORDER_HOR, const QImage& mask=QImage(), 
-                       bool preserve_skin_tones=false, QObject* parent=0);
+    ContentAwareFilter(DImg* orgImage, QObject* parent=0, const ContentAwareContainer& settings =ContentAwareContainer());
     ~ContentAwareFilter();
 
     void progressCallback(int progress);
