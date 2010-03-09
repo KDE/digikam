@@ -438,7 +438,7 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
 
     setToolSettings(d->gboxSettings);
     setToolView(d->previewWidget);
-    setPreviewModeMask(PreviewToolBar::AllPreviewModes);    
+    setPreviewModeMask(PreviewToolBar::AllPreviewModes);
 
     init();
 }
@@ -617,7 +617,7 @@ void LocalContrastTool::prepareEffect()
 {
     d->expanderBox->setEnabled(false);
     toolView()->setEnabled(false);
-    
+
     DImg image = d->previewWidget->getOriginalRegionImage(true);
     setFilter(new LocalContrastFilter(&image, this, createParams()));
 }
@@ -626,7 +626,7 @@ void LocalContrastTool::prepareFinal()
 {
     d->expanderBox->setEnabled(false);
     toolView()->setEnabled(false);
-    
+
     ImageIface iface(0, 0);
     setFilter(new LocalContrastFilter(iface.getOriginalImg(), this, createParams()));
 }
