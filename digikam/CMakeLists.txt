@@ -179,10 +179,6 @@ TARGET_LINK_LIBRARIES(digikamcore
                       ${KDCRAW_LIBRARIES}
                       ${KEXIV2_LIBRARIES}
                       ${KIPI_LIBRARIES}
-
-                      # For Contents Aware Resizer filter.
-                      ${GLIB2_LIBRARIES}
-                      ${liblqr_LIBS}
               )
 
 IF(MARBLEWIDGET_FOUND)
@@ -192,6 +188,11 @@ ENDIF(MARBLEWIDGET_FOUND)
 IF(Q_WS_X11)
     TARGET_LINK_LIBRARIES(digikamcore ${X11_LIBRARIES})
 ENDIF(Q_WS_X11)
+
+# For Contents Aware Resizer filter.
+IF(LQR-1_FOUND)
+    TARGET_LINK_LIBRARIES(digikamcore ${GLIB2_LIBRARIES} ${liblqr_LIBS})
+ENDIF(LQR-1_FOUND)
 
 SET_TARGET_PROPERTIES(digikamcore PROPERTIES VERSION 1.0.0 SOVERSION 1)
 IF(WIN32)
