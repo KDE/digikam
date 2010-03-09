@@ -59,7 +59,7 @@ LocalContrastFilter::LocalContrastFilter(DImg* image, QObject* parent, ToneMappi
 {
     par->setCancel(&m_cancel);
     par->setProgressCallBackFunction(this, CallbackForToneMapping);
-    d->tonemapping.apply_parameters(par);
+    d->tonemapping.set_parameters(par);
 
     initFilter();
 }

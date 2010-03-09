@@ -130,7 +130,7 @@ float ToneMapping::func(float x1, float x2)
     return result;
 }
 
-void ToneMapping::apply_parameters(ToneMappingParameters* par)
+void ToneMapping::set_parameters(ToneMappingParameters* par)
 {
     m_par = par;
     set_low_saturation(m_par->low_saturation);

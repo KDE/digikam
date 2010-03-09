@@ -45,13 +45,18 @@ public:
     ToneMapping();
     virtual ~ToneMapping();
 
+    void  set_parameters(ToneMappingParameters* par);
+    ToneMappingParameters* get_parameters() const;
+
     void  process_8bit_rgb_image(unsigned char* img, int sizex, int sizey);
     void  process_16bit_rgb_image(unsigned short int* img, int sizex, int sizey);
-    void  process_rgb_image(float* img, int sizex, int sizey);
 
+private:
+
+    void  process_rgb_image(float* img, int sizex, int sizey);
     float func(float x1, float x2);
-    void  apply_parameters(ToneMappingParameters* par);
     void  update_preprocessed_values();
+
     void  set_current_stage(int nstage);
     void  set_preview_zoom(float val);
 
@@ -73,8 +78,6 @@ public:
     void  inplace_blur(float* data, int sizex, int sizey, float blur);
     void  stretch_contrast(float* data, int datasize);
 
-    ToneMappingParameters* get_parameters() const;
-
     void  set_info_fast_mode(bool value);
     bool  get_info_fast_mode();
 
@@ -83,18 +86,16 @@ public:
     void  set_unsharp_mask_blur(float value);
     void  set_unsharp_mask_threshold(int value);
 
-    bool  get_unsharp_mask_enabled(bool /*value*/);
-    float get_unsharp_mask_power(float /*value*/);
-    float get_unsharp_mask_(float /*value*/);
-    int   get_unsharp_mask_threshold(int /*value*/);
+    bool  get_unsharp_mask_enabled(bool value);
+    float get_unsharp_mask_power(float value);
+    float get_unsharp_mask_(float value);
+    int   get_unsharp_mask_threshold(int value);
 
     void  set_enabled(int nstage, bool enabled);
     float get_enabled(int nstage);
 
     int   get_low_saturation();
     int   get_high_saturation();
-
-private:
 
     inline void rgb2hsv(const float& r, const float& g, const float& b, float& h, float& s, float& v);
     inline void hsv2rgb(const float& h, const float& s, const float& v, float& r, float& g, float& b);
