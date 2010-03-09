@@ -63,9 +63,18 @@ public:
     void loadSettings();
     void saveAsSettings();
 
+    ToneMappingParameters* createParams() const;
+
 Q_SIGNALS:
 
     void signalSettingsChanged();
+
+private Q_SLOTS:
+
+    void slotStage1Enabled(bool);
+    void slotStage2Enabled(bool);
+    void slotStage3Enabled(bool);
+    void slotStage4Enabled(bool);
 
 private:
 
