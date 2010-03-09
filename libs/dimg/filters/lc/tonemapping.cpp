@@ -31,63 +31,63 @@
 
 // Local includes.
 
-#include "tonemappingbase.h"
+#include "tonemapping.h"
 
 namespace Digikam
 {
 
-ToneMappingBase::ToneMappingBase()
+ToneMapping::ToneMapping()
 {
     m_current_process_power_value = 20.0;
     m_preview_zoom                = 1.0;
 }
 
-ToneMappingBase::~ToneMappingBase()
+ToneMapping::~ToneMapping()
 {
     delete m_par;
 }
 
-void ToneMappingBase::set_blur(int nstage, float value)
+void ToneMapping::set_blur(int nstage, float value)
 {
     if (value < 0) value = 0;
     if (value > 10000.0) value = 10000.0;
     m_par->stage[nstage].blur = value;
 }
 
-void ToneMappingBase::set_power(int nstage, float value)
+void ToneMapping::set_power(int nstage, float value)
 {
     if (value < 0) value = 0;
     if (value > 100.0) value = 100.0;
     m_par->stage[nstage].power = value;
 }
 
-void ToneMappingBase::set_low_saturation(int value)
+void ToneMapping::set_low_saturation(int value)
 {
     if (value < 0) value = 0;
     if (value > 100) value = 100;
     m_par->low_saturation = value;
 }
 
-void ToneMappingBase::set_high_saturation(int value)
+void ToneMapping::set_high_saturation(int value)
 {
     if (value < 0) value = 0;
     if (value > 100) value = 100;
     m_par->high_saturation = value;
 }
 
-void ToneMappingBase::set_stretch_contrast(bool value)
+void ToneMapping::set_stretch_contrast(bool value)
 {
     m_par->stretch_contrast = value;
 }
 
-void ToneMappingBase::set_function_id (int value)
+void ToneMapping::set_function_id (int value)
 {
     if (value < 0) value = 0;
     if (value > 1) value = 1;
     m_par->function_id = value;
 }
 
-float ToneMappingBase::func(float x1, float x2)
+float ToneMapping::func(float x1, float x2)
 {
     float result = 0.5;
     float p;
@@ -130,7 +130,7 @@ float ToneMappingBase::func(float x1, float x2)
     return result;
 }
 
-void ToneMappingBase::apply_parameters(ToneMappingParameters* par)
+void ToneMapping::apply_parameters(ToneMappingParameters* par)
 {
     m_par = par;
     set_low_saturation(m_par->low_saturation);
@@ -147,7 +147,7 @@ void ToneMappingBase::apply_parameters(ToneMappingParameters* par)
     update_preprocessed_values();
 }
 
-void ToneMappingBase::process_rgb_image(float* img, int sizex, int sizey)
+void ToneMapping::process_rgb_image(float* img, int sizex, int sizey)
 {
     update_preprocessed_values();
 
@@ -309,12 +309,12 @@ void ToneMappingBase::process_rgb_image(float* img, int sizex, int sizey)
     m_par->postProgress(80);
 }
 
-void ToneMappingBase::update_preprocessed_values()
+void ToneMapping::update_preprocessed_values()
 {
     m_par->postProgress(20);
 }
 
-void ToneMappingBase::process_16bit_rgb_image(unsigned short int* img, int sizex, int sizey)
+void ToneMapping::process_16bit_rgb_image(unsigned short int* img, int sizex, int sizey)
 {
     int size              = sizex*sizey;
     float* tmpimage       = new float[size*3];
@@ -345,7 +345,7 @@ void ToneMappingBase::process_16bit_rgb_image(unsigned short int* img, int sizex
     m_par->postProgress(90);
 }
 
-void ToneMappingBase::process_8bit_rgb_image(unsigned char* img, int sizex, int sizey)
+void ToneMapping::process_8bit_rgb_image(unsigned char* img, int sizex, int sizey)
 {
     int size            = sizex*sizey;
     float* tmpimage     = new float[size*3];
@@ -375,7 +375,7 @@ void ToneMappingBase::process_8bit_rgb_image(unsigned char* img, int sizex, int 
     m_par->postProgress(90);
 }
 
-void ToneMappingBase::inplace_blur(float* data, int sizex, int sizey, float blur)
+void ToneMapping::inplace_blur(float* data, int sizex, int sizey, float blur)
 {
     blur /= m_preview_zoom;
 
@@ -437,7 +437,7 @@ void ToneMappingBase::inplace_blur(float* data, int sizex, int sizey, float blur
     }
 }
 
-void ToneMappingBase::stretch_contrast(float* data, int datasize)
+void ToneMapping::stretch_contrast(float* data, int datasize)
 {
     //stretch the contrast
     const unsigned int histogram_size=256;

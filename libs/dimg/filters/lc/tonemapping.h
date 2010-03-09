@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef TONE_MAPPING_BASE_H
-#define TONE_MAPPING_BASE_H
+#ifndef TONE_MAPPING_H
+#define TONE_MAPPING_H
 
 // C++ includes.
 
@@ -37,13 +37,13 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT ToneMappingBase
+class DIGIKAM_EXPORT ToneMapping
 {
 
 public:
 
-    ToneMappingBase();
-    virtual ~ToneMappingBase();
+    ToneMapping();
+    virtual ~ToneMapping();
 
     void process_8bit_rgb_image(unsigned char* img, int sizex, int sizey);
     void process_16bit_rgb_image(unsigned short int* img, int sizex, int sizey);
@@ -271,4 +271,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // TONE_MAPPING_BASE_H
+#endif // TONE_MAPPING_H

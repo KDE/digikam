@@ -30,7 +30,7 @@
 
 // Tonemapping includes
 
-#include "tonemappingbase.h"
+#include "tonemapping.h"
 
 namespace Digikam
 {
@@ -50,7 +50,7 @@ public:
 
     LocalContrastFilterPriv(){}
 
-    ToneMappingBase tonemapping;
+    ToneMapping tonemapping;
 };
 
 LocalContrastFilter::LocalContrastFilter(DImg* image, QObject* parent, ToneMappingParameters* par)
