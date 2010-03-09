@@ -12,6 +12,7 @@ INCLUDE_DIRECTORIES(
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/decorate
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/fx
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/icc
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/lc
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/nr
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/sharp
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/cb

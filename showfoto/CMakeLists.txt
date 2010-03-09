@@ -22,6 +22,7 @@ INCLUDE_DIRECTORIES( ../showfoto/setup
                      ../libs/dimg/filters/fx
                      ../libs/dimg/filters/hsl
                      ../libs/dimg/filters/icc
+                     ../libs/dimg/filters/lc
                      ../libs/dimg/filters/nr
                      ../libs/dimg/filters/sharp
                      ../libs/dimg/filters/levels
