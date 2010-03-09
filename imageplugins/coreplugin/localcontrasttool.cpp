@@ -7,7 +7,7 @@
  * Description : a plugin to enhance image with local contrasts (as human eye does).
  *
  * Copyright (C) 2009 by Julien Pontabry <julien dot pontabry at gmail dot com>
- * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -36,7 +36,6 @@
 
 // KDE includes
 
-#include <kaboutdata.h>
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kfiledialog.h>
@@ -55,14 +54,12 @@
 
 // Local includes
 
-#include "daboutdata.h"
 #include "dimg.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imageregionwidget.h"
 #include "localcontrastfilter.h"
 #include "rexpanderbox.h"
-#include "version.h"
 
 using namespace KDcrawIface;
 
@@ -243,13 +240,13 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    grid1->addWidget(label1,                    0, 0, 1, 1);
-    grid1->addWidget(d->functionInput,          0, 1, 1, 1);
-    grid1->addWidget(d->stretchContrastCheck,   1, 0, 1, 1);
-    grid1->addWidget(label2,                    2, 0, 1, 1);
-    grid1->addWidget(d->highSaturationInput,    2, 1, 1, 1);
-    grid1->addWidget(label3,                    3, 0, 1, 1);
-    grid1->addWidget(d->lowSaturationInput,     3, 1, 1, 1);
+    grid1->addWidget(label1,                  0, 0, 1, 1);
+    grid1->addWidget(d->functionInput,        0, 1, 1, 1);
+    grid1->addWidget(d->stretchContrastCheck, 1, 0, 1, 1);
+    grid1->addWidget(label2,                  2, 0, 1, 1);
+    grid1->addWidget(d->highSaturationInput,  2, 1, 1, 1);
+    grid1->addWidget(label3,                  3, 0, 1, 1);
+    grid1->addWidget(d->lowSaturationInput,   3, 1, 1, 1);
     grid1->setMargin(d->gboxSettings->spacingHint());
     grid1->setSpacing(d->gboxSettings->spacingHint());
 
@@ -290,9 +287,6 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
     grid2->setMargin(d->gboxSettings->spacingHint());
     grid2->setSpacing(d->gboxSettings->spacingHint());
 
-    connect(d->stageOne,SIGNAL(toggled(bool)),
-            this, SLOT(slotStage1Enabled(bool)));
-
     // -------------------------------------------------------------
 
     QWidget* thirdPage = new QWidget();
@@ -329,9 +323,6 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
     grid3->addWidget(d->blurInput2,  2, 1, 1, 1);
     grid3->setMargin(d->gboxSettings->spacingHint());
     grid3->setSpacing(d->gboxSettings->spacingHint());
-
-    connect(d->stageTwo,SIGNAL(toggled(bool)),
-            this, SLOT(slotStage2Enabled(bool)));
 
     // -------------------------------------------------------------
 
@@ -370,9 +361,6 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
     grid4->setMargin(d->gboxSettings->spacingHint());
     grid4->setSpacing(d->gboxSettings->spacingHint());
 
-    connect(d->stageThree,SIGNAL(toggled(bool)),
-            this, SLOT(slotStage3Enabled(bool)));
-
     // -------------------------------------------------------------
 
     QWidget* fifthPage = new QWidget();
@@ -410,9 +398,6 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
     grid5->setMargin(d->gboxSettings->spacingHint());
     grid5->setSpacing(d->gboxSettings->spacingHint());
 
-    connect(d->stageFour,SIGNAL(toggled(bool)),
-            this, SLOT(slotStage4Enabled(bool)));
-
     // -------------------------------------------------------------
 
     d->expanderBox = new RExpanderBox;
@@ -439,6 +424,20 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
     setToolSettings(d->gboxSettings);
     setToolView(d->previewWidget);
     setPreviewModeMask(PreviewToolBar::AllPreviewModes);
+
+    // -------------------------------------------------------------
+
+    connect(d->stageOne,SIGNAL(toggled(bool)),
+            this, SLOT(slotStage1Enabled(bool)));
+
+    connect(d->stageTwo,SIGNAL(toggled(bool)),
+            this, SLOT(slotStage2Enabled(bool)));
+
+    connect(d->stageThree,SIGNAL(toggled(bool)),
+            this, SLOT(slotStage3Enabled(bool)));
+
+    connect(d->stageFour,SIGNAL(toggled(bool)),
+            this, SLOT(slotStage4Enabled(bool)));
 
     init();
 }
@@ -589,25 +588,25 @@ ToneMappingParameters* LocalContrastTool::createParams() const
     if (par->stage[0].enabled)
     {
         par->stage[0].power = d->powerInput1->value();
-        par->stage[0].blur = d->blurInput1->value();
+        par->stage[0].blur  = d->blurInput1->value();
     }
 
     if (par->stage[1].enabled)
     {
         par->stage[1].power = d->powerInput2->value();
-        par->stage[1].blur = d->blurInput2->value();
+        par->stage[1].blur  = d->blurInput2->value();
     }
 
     if (par->stage[2].enabled)
     {
         par->stage[2].power = d->powerInput3->value();
-        par->stage[2].blur = d->blurInput3->value();
+        par->stage[2].blur  = d->blurInput3->value();
     }
 
     if (par->stage[3].enabled)
     {
         par->stage[3].power = d->powerInput4->value();
-        par->stage[3].blur = d->blurInput4->value();
+        par->stage[3].blur  = d->blurInput4->value();
     }
 
     return par;
