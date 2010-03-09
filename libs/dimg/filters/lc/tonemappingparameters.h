@@ -47,7 +47,7 @@ public:
     ~ToneMappingParameters();
 
     ToneMappingParameters& operator=(const ToneMappingParameters& prm);
-    
+
     void  setCancel(bool* b);
     bool  cancel();
 
@@ -63,7 +63,7 @@ public:
 public:
 
     bool info_fast_mode;
-    
+
     bool stretch_contrast;
 
     int  low_saturation;

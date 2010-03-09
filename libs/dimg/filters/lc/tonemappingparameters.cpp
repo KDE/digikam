@@ -38,7 +38,7 @@
 #include "tonemappingparameters.h"
 
 #ifdef Q_CC_MSVC
-	#pragma warning ( disable : 4800 )	// forcing value to bool 'true' or 'false' (performance warning)
+    #pragma warning ( disable : 4800 )   // forcing value to bool 'true' or 'false' (performance warning)
 #endif
 
 namespace Digikam
@@ -62,13 +62,13 @@ public:
     /** For progress CallBack method from User interface
      */
     ToneMappingCallbackPtr callBack;
-    void*                  data;  
-};  
-    
+    void*                  data;
+};
+
 ToneMappingParameters::ToneMappingParameters()
 {
     d = new ToneMappingParametersPriv;
-    
+
     info_fast_mode   = true;
     high_saturation  = 100;
     low_saturation   = 100;
@@ -126,7 +126,7 @@ void ToneMappingParameters::postProgress(int progress)
 float ToneMappingParameters::get_power(int nstage)
 {
     float power = stage[nstage].power;
-    power          = (float)(pow(power/100.0, 1.5)*100.0);
+    power       = (float)(pow(power/100.0, 1.5)*100.0);
     return power;
 }
 
@@ -138,7 +138,7 @@ float ToneMappingParameters::get_blur(int nstage)
 float ToneMappingParameters::get_unsharp_mask_power()
 {
     float power = unsharp_mask.power;
-    power          = (float)(pow(power/100.0, 3.0)*10.0);
+    power       = (float)(pow(power/100.0, 3.0)*10.0);
     return power;
 }
 
