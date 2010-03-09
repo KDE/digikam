@@ -32,7 +32,7 @@
 
 #include "tonemappingfloat.h"
 
-namespace DigikamLocalContrastImagesPlugin
+namespace Digikam
 {
 
 static void CallbackForToneMapping(void* data, int progress)
@@ -162,4 +162,4 @@ void LocalContrastFilter::progressCallback(int progress)
     }
 }
 
-} // namespace DigikamLocalContrastFilterImagesPlugin
+} // namespace Digikam

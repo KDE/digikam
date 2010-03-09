@@ -27,12 +27,13 @@
 
 // Local includes.
 
+#include "digikam_export.h"
 #include "tonemappingbase.h"
 
-namespace DigikamLocalContrastImagesPlugin
+namespace Digikam
 {
 
-class ToneMappingFloat : public ToneMappingBase
+class DIGIKAM_EXPORT ToneMappingFloat : public ToneMappingBase
 {
 
 public:
@@ -42,24 +43,24 @@ public:
 
     void process_8bit_rgb_image(unsigned char* img, int sizex, int sizey);
     void process_16bit_rgb_image(unsigned short int* img, int sizex, int sizey);
-    void process_rgb_image(REALTYPE* img, int sizex, int sizey);
+    void process_rgb_image(float* img, int sizex, int sizey);
     void update_preprocessed_values();
 
 private:
 
-    void inplace_blur(REALTYPE* data, int sizex, int sizey, REALTYPE blur);
-    void stretch_contrast(REALTYPE* data, int datasize);
+    void inplace_blur(float* data, int sizex, int sizey, float blur);
+    void stretch_contrast(float* data, int datasize);
 
-    inline void rgb2hsv(const REALTYPE& r, const REALTYPE& g, const REALTYPE& b,
-                        REALTYPE& h, REALTYPE& s, REALTYPE& v)
+    inline void rgb2hsv(const float& r, const float& g, const float& b,
+                        float& h, float& s, float& v)
     {
-        REALTYPE maxrg = (r>g) ? r : g;
-        REALTYPE max   = (maxrg>b) ? maxrg : b;
+        float maxrg = (r>g) ? r : g;
+        float max   = (maxrg>b) ? maxrg : b;
 
-        REALTYPE minrg = (r<g) ? r : g;
-        REALTYPE min   = (minrg<b) ? minrg : b;
+        float minrg = (r<g) ? r : g;
+        float min   = (minrg<b) ? minrg : b;
 
-        REALTYPE delta = max-min;
+        float delta = max-min;
 
         //hue
         if (min == max)
@@ -70,18 +71,18 @@ private:
         {
             if (max == r)
             {
-                h = (REALTYPE)(fmod(60.0*(g-b)/delta+360.0, 360.0));
+                h = (float)(fmod(60.0*(g-b)/delta+360.0, 360.0));
             }
             else
             {
                 if (max == g)
                 {
-                    h = (REALTYPE)(60.0*(b-r)/delta+120.0);
+                    h = (float)(60.0*(b-r)/delta+120.0);
                 }
                 else
                 {
                     //max==b
-                    h = (REALTYPE)(60.0*(r-g)/delta+240.0);
+                    h = (float)(60.0*(r-g)/delta+240.0);
                 }
             }
         }
@@ -93,23 +94,23 @@ private:
         }
         else
         {
-            s = (REALTYPE)(1.0-min/max);
+            s = (float)(1.0-min/max);
         }
 
         //value
         v = max;
     };
 
-    inline void hsv2rgb(const REALTYPE& h, const REALTYPE& s, const REALTYPE& v,
-                        REALTYPE& r, REALTYPE& g, REALTYPE& b)
+    inline void hsv2rgb(const float& h, const float& s, const float& v,
+                        float& r, float& g, float& b)
     {
-        REALTYPE hfi = (REALTYPE)(floor(h/60.0));
-        REALTYPE f   = (REALTYPE)((h/60.0)-hfi);
+        float hfi = (float)(floor(h/60.0));
+        float f   = (float)((h/60.0)-hfi);
         int hi       = ((int)hfi)%6;
 
-        REALTYPE p   = (REALTYPE)(v*(1.0-s));
-        REALTYPE q   = (REALTYPE)(v*(1.0-f*s));
-        REALTYPE t   = (REALTYPE)(v*(1.0-(1.0-f)*s));
+        float p   = (float)(v*(1.0-s));
+        float q   = (float)(v*(1.0-f*s));
+        float t   = (float)(v*(1.0-(1.0-f)*s));
 
         switch (hi)
         {
@@ -135,6 +136,6 @@ private:
     }
 };
 
-} // namespace DigikamNoiseReductionImagesPlugin
+} // namespace Digikam
 
 #endif // TONE_MAPPING_FLOAT_H

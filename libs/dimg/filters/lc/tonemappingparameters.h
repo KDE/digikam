@@ -25,20 +25,20 @@
 #ifndef TONE_MAPPING_PARAMETERS_H
 #define TONE_MAPPING_PARAMETERS_H
 
-#ifndef REALTYPE
-#define REALTYPE float
-#endif
-
 #define TONEMAPPING_MAX_STAGES 4
 
-namespace DigikamLocalContrastImagesPlugin
+// Local includes
+
+#include "digikam_export.h"
+
+namespace Digikam
 {
 
 typedef void (*ToneMappingCallbackPtr)(void* data, int progress);
 
 class ToneMappingParametersPriv;
 
-class ToneMappingParameters
+class DIGIKAM_EXPORT ToneMappingParameters
 {
 
 public:
@@ -48,17 +48,17 @@ public:
 
     ToneMappingParameters& operator=(const ToneMappingParameters& prm);
     
-    void     setCancel(bool* b);
-    bool     cancel();
+    void  setCancel(bool* b);
+    bool  cancel();
 
-    void     setProgressCallBackFunction(void* data=0, ToneMappingCallbackPtr cb=0);
-    void     postProgress(int progress);
+    void  setProgressCallBackFunction(void* data=0, ToneMappingCallbackPtr cb=0);
+    void  postProgress(int progress);
 
-    REALTYPE get_power(int nstage);
-    REALTYPE get_blur(int nstage);
+    float get_power(int nstage);
+    float get_blur(int nstage);
 
-    REALTYPE get_unsharp_mask_power();
-    REALTYPE get_unsharp_mask_blur();
+    float get_unsharp_mask_power();
+    float get_unsharp_mask_blur();
 
 public:
 
@@ -72,18 +72,18 @@ public:
 
     struct
     {
-        bool     enabled;
-        REALTYPE power;
-        REALTYPE blur;
+        bool  enabled;
+        float power;
+        float blur;
     }
     stage[TONEMAPPING_MAX_STAGES];
 
     struct
     {
-        bool     enabled;       // digiKam Unsharp Mask settings:
-        REALTYPE blur;          // Radius    : 0.00 - 120.00
-        REALTYPE power;         // Amount    : 0.0  - 5.0
-        int      threshold;     // threshold : 0.00 - 1.00
+        bool  enabled;       // digiKam Unsharp Mask settings:
+        float blur;          // Radius    : 0.00 - 120.00
+        float power;         // Amount    : 0.0  - 5.0
+        int   threshold;     // threshold : 0.00 - 1.00
     }
     unsharp_mask;
 
@@ -92,6 +92,6 @@ private:
     ToneMappingParametersPriv* d;
 };
 
-} // namespace DigikamNoiseReductionImagesPlugin
+} // namespace Digikam
 
 #endif // TONE_MAPPING_PARAMETERS_H

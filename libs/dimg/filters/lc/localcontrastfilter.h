@@ -31,17 +31,19 @@
 
 // Local includes
 
+#include "digikam_export.h"
 #include "dimgthreadedfilter.h"
+#include "globals.h"
 #include "tonemappingparameters.h"
 
 using namespace Digikam;
 
-namespace DigikamLocalContrastImagesPlugin
+namespace Digikam
 {
 
 class LocalContrastFilterPriv;
 
-class LocalContrastFilter : public DImgThreadedFilter
+class DIGIKAM_EXPORT LocalContrastFilter : public DImgThreadedFilter
 {
 
 public:
@@ -60,6 +62,6 @@ private:
     LocalContrastFilterPriv* const d;
 };
 
-} // namespace DigikamLocalContrastImagesPlugin
+} // namespace Digikam
 
 #endif /* LOCALCONTRASTFILTER_H */

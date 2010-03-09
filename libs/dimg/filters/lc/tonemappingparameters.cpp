@@ -41,7 +41,7 @@
 	#pragma warning ( disable : 4800 )	// forcing value to bool 'true' or 'false' (performance warning)
 #endif
 
-namespace DigikamLocalContrastImagesPlugin
+namespace Digikam
 {
 
 class ToneMappingParametersPriv
@@ -123,28 +123,28 @@ void ToneMappingParameters::postProgress(int progress)
     d->callBack(d->data, progress);
 }
 
-REALTYPE ToneMappingParameters::get_power(int nstage)
+float ToneMappingParameters::get_power(int nstage)
 {
-    REALTYPE power = stage[nstage].power;
-    power          = (REALTYPE)(pow(power/100.0, 1.5)*100.0);
+    float power = stage[nstage].power;
+    power          = (float)(pow(power/100.0, 1.5)*100.0);
     return power;
 }
 
-REALTYPE ToneMappingParameters::get_blur(int nstage)
+float ToneMappingParameters::get_blur(int nstage)
 {
     return stage[nstage].blur;
 }
 
-REALTYPE ToneMappingParameters::get_unsharp_mask_power()
+float ToneMappingParameters::get_unsharp_mask_power()
 {
-    REALTYPE power = unsharp_mask.power;
-    power          = (REALTYPE)(pow(power/100.0, 3.0)*10.0);
+    float power = unsharp_mask.power;
+    power          = (float)(pow(power/100.0, 3.0)*10.0);
     return power;
 }
 
-REALTYPE ToneMappingParameters::get_unsharp_mask_blur()
+float ToneMappingParameters::get_unsharp_mask_blur()
 {
     return unsharp_mask.blur;
 }
 
-} // namespace DigikamNoiseReductionImagesPlugin
+} // namespace Digikam

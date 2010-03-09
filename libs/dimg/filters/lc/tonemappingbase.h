@@ -31,12 +31,13 @@
 
 // Local includes.
 
+#include "digikam_export.h"
 #include "tonemappingparameters.h"
 
-namespace DigikamLocalContrastImagesPlugin
+namespace Digikam
 {
 
-class ToneMappingBase
+class DIGIKAM_EXPORT ToneMappingBase
 {
 
 public:
@@ -44,8 +45,8 @@ public:
     ToneMappingBase();
     virtual ~ToneMappingBase();
 
-    REALTYPE func(REALTYPE x1,REALTYPE x2);
-    void     apply_parameters(const ToneMappingParameters& inpar);
+    float func(float x1, float x2);
+    void  apply_parameters(const ToneMappingParameters& inpar);
 
     void set_enabled(int nstage, bool enabled)
     {
@@ -88,17 +89,17 @@ public:
         return par;
     };
 
-    REALTYPE get_enabled(int nstage)
+    float get_enabled(int nstage)
     {
         return par.stage[nstage].enabled;
     };
 
-    REALTYPE get_blur(int nstage)
+    float get_blur(int nstage)
     {
         return par.stage[nstage].blur;
     };
 
-    REALTYPE get_power(int nstage)
+    float get_power(int nstage)
     {
         return par.stage[nstage].power;
     };
@@ -153,13 +154,13 @@ public:
         current_process_power_value = par.get_power(nstage);
     };
 
-    void set_preview_zoom(REALTYPE val)
+    void set_preview_zoom(float val)
     {
         if ((val > 0.001) && (val < 1000.0)) preview_zoom = val;
     };
 
-    virtual void set_blur(int nstage, REALTYPE value);      // 1..5000
-    virtual void set_power(int nstage, REALTYPE value);     // 0..100.0
+    virtual void set_blur(int nstage, float value);      // 1..5000
+    virtual void set_power(int nstage, float value);     // 0..100.0
     virtual void set_low_saturation(int value);             // 0..100
     virtual void set_high_saturation(int value);            // 0..100
     virtual void set_stretch_contrast(bool value);
@@ -171,14 +172,14 @@ public:
 protected:
 
     // used for zoom on previews
-    REALTYPE              preview_zoom;
+    float              preview_zoom;
 
     ToneMappingParameters par;
 
     // preprocessed values
-    REALTYPE              current_process_power_value;
+    float              current_process_power_value;
 };
 
-} // namespace DigikamNoiseReductionImagesPlugin
+} // namespace Digikam
 
 #endif // TONE_MAPPING_BASE_H

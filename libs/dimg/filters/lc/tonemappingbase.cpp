@@ -33,7 +33,7 @@
 
 #include "tonemappingbase.h"
 
-namespace DigikamLocalContrastImagesPlugin
+namespace Digikam
 {
 
 ToneMappingBase::ToneMappingBase()
@@ -46,14 +46,14 @@ ToneMappingBase::~ToneMappingBase()
 {
 }
 
-void ToneMappingBase::set_blur(int nstage, REALTYPE value)
+void ToneMappingBase::set_blur(int nstage, float value)
 {
     if (value < 0) value = 0;
     if (value > 10000.0) value = 10000.0;
     par.stage[nstage].blur = value;
 }
 
-void ToneMappingBase::set_power(int nstage, REALTYPE value)
+void ToneMappingBase::set_power(int nstage, float value)
 {
     if (value < 0) value = 0;
     if (value > 100.0) value = 100.0;
@@ -86,10 +86,10 @@ void ToneMappingBase::set_function_id (int value)
     par.function_id = value;
 }
 
-REALTYPE ToneMappingBase::func(REALTYPE x1, REALTYPE x2)
+float ToneMappingBase::func(float x1, float x2)
 {
-    REALTYPE result = 0.5;
-    REALTYPE p;
+    float result = 0.5;
+    float p;
 
     /*
     //test function
@@ -105,9 +105,9 @@ REALTYPE ToneMappingBase::func(REALTYPE x1, REALTYPE x2)
     {
         p=current_process_power_value*0.3+1e-4;
         x2=1.0/(1.0+exp(-(x2*2.0-1.0)*p*0.5));
-        REALTYPE f=1.0/(1.0+exp((1.0-(x1-x2+0.5)*2.0)*p));
-        REALTYPE m0=1.0/(1.0+exp((1.0-(-x2+0.5)*2.0)*p));
-        REALTYPE m1=1.0/(1.0+exp((1.0-(-x2+1.5)*2.0)*p));
+        float f=1.0/(1.0+exp((1.0-(x1-x2+0.5)*2.0)*p));
+        float m0=1.0/(1.0+exp((1.0-(-x2+0.5)*2.0)*p));
+        float m1=1.0/(1.0+exp((1.0-(-x2+1.5)*2.0)*p));
         result=(f-m0)/(m1-m0);
         return result;
     };
@@ -116,13 +116,13 @@ REALTYPE ToneMappingBase::func(REALTYPE x1, REALTYPE x2)
     switch (par.function_id)
     {
         case 0:  //power function
-            p = (REALTYPE)(pow((double)10.0,(double)fabs((x2*2.0-1.0))*current_process_power_value*0.02));
+            p = (float)(pow((double)10.0,(double)fabs((x2*2.0-1.0))*current_process_power_value*0.02));
             if (x2 >= 0.5) result = pow(x1,p);
-            else result = (REALTYPE)(1.0-pow((double)1.0-x1,(double)p));
+            else result = (float)(1.0-pow((double)1.0-x1,(double)p));
             break;
         case 1:  //linear function
-            p = (REALTYPE)(1.0/(1+exp(-(x2*2.0-1.0)*current_process_power_value*0.04)));
-            result = (x1 < p) ? (REALTYPE)(x1*(1.0-p)/p) : (REALTYPE)((1.0-p)+(x1-p)*p/(1.0-p));
+            p = (float)(1.0/(1+exp(-(x2*2.0-1.0)*current_process_power_value*0.04)));
+            result = (x1 < p) ? (float)(x1*(1.0-p)/p) : (float)((1.0-p)+(x1-p)*p/(1.0-p));
             break;
     };
 
@@ -146,4 +146,4 @@ void ToneMappingBase::apply_parameters(const ToneMappingParameters& inpar)
     update_preprocessed_values();
 }
 
-} // namespace DigikamNoiseReductionImagesPlugin
+} // namespace Digikam
