@@ -7,6 +7,7 @@
  * Description : LDR ToneMapper <http://zynaddsubfx.sourceforge.net/other/tonemapping>.
  *
  * Copyright (C) 2009 by Nasca Octavian Paul <zynaddsubfx at yahoo dot com>
+ * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com> 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -126,18 +127,6 @@ REALTYPE ToneMappingBase::func(REALTYPE x1, REALTYPE x2)
     };
 
     return result;
-}
-
-void ToneMappingBase::save_parameters(const char *filename)
-{
-    par.save_parameters(filename);
-}
-
-bool ToneMappingBase::load_parameters(const char *filename)
-{
-    if (!par.load_parameters(filename)) return false;
-    apply_parameters(par);
-    return true;
 }
 
 void ToneMappingBase::apply_parameters(const ToneMappingParameters& inpar)

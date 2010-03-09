@@ -7,6 +7,7 @@
  * Description : LDR ToneMapper.
  *
  * Copyright (C) 2009 by Nasca Octavian Paul <zynaddsubfx at yahoo dot com>
+ * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -46,9 +47,6 @@ public:
     REALTYPE func(REALTYPE x1,REALTYPE x2);
     void     apply_parameters(const ToneMappingParameters& inpar);
 
-    void save_parameters(const char *filename);
-    bool load_parameters(const char *filename);
-        
     void set_enabled(int nstage, bool enabled)
     {
         par.stage[nstage].enabled=enabled;
@@ -169,7 +167,7 @@ public:
 
     virtual void process_8bit_rgb_image(unsigned char *img, int sizex, int sizey)=0;
     virtual void update_preprocessed_values()=0;
-    
+
 protected:
 
     // used for zoom on previews
