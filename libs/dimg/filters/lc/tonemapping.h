@@ -37,6 +37,8 @@
 namespace Digikam
 {
 
+class ToneMappingPriv;
+
 class DIGIKAM_EXPORT ToneMapping
 {
 
@@ -101,6 +103,8 @@ private:
     inline void hsv2rgb(const float& h, const float& s, const float& v, float& r, float& g, float& b);
 
 private:
+
+    ToneMappingPriv* const d;
 
     // used for zoom on previews
     float                  m_preview_zoom;
