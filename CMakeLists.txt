@@ -571,11 +571,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
        )
 
     IF(GLIB2_FOUND)
-        # Disable liblqr C code warnings.
-        FOREACH(_curentfile ${liblqr_SRCS})
-            SET_SOURCE_FILES_PROPERTIES(${_curentfile} PROPERTIES COMPILE_FLAGS -w)
-        ENDFOREACH(_curentfile ${liblqr_SRCS})
-
         SET(libdimgfilters_SRCS ${libdimgfilters_SRCS}
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/transform/contentawarefilter.cpp
             ${liblqr_SRCS}
