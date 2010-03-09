@@ -7,7 +7,7 @@
  * Description : LDR ToneMapper <http://zynaddsubfx.sourceforge.net/other/tonemapping>.
  *
  * Copyright (C) 2009 by Nasca Octavian Paul <zynaddsubfx at yahoo dot com>
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -45,13 +45,13 @@ ToneMappingFloat::~ToneMappingFloat()
 {
 }
 
-void ToneMappingFloat::process_rgb_image(REALTYPE *img, int sizex, int sizey)
+void ToneMappingFloat::process_rgb_image(REALTYPE* img, int sizex, int sizey)
 {
     update_preprocessed_values();
 
     int size            = sizex*sizey;
-    REALTYPE *blurimage = new REALTYPE[size];
-    REALTYPE *srcimg    = new REALTYPE[size*3];
+    REALTYPE* blurimage = new REALTYPE[size];
+    REALTYPE* srcimg    = new REALTYPE[size*3];
 
     for (int i=0 ; i < (size*3) ; i++)
         srcimg[i] = img[i];
@@ -212,10 +212,10 @@ void ToneMappingFloat::update_preprocessed_values()
     par.postProgress(20);
 }
 
-void ToneMappingFloat::process_16bit_rgb_image(unsigned short int *img, int sizex, int sizey)
+void ToneMappingFloat::process_16bit_rgb_image(unsigned short int* img, int sizex, int sizey)
 {
     int size              = sizex*sizey;
-    REALTYPE *tmpimage    = new REALTYPE[size*3];
+    REALTYPE* tmpimage    = new REALTYPE[size*3];
     const float inv_65536 = 1.0/65536.0;
 
     for (int i=0 ; !par.cancel() && (i < size*3) ; i++)
@@ -243,10 +243,10 @@ void ToneMappingFloat::process_16bit_rgb_image(unsigned short int *img, int size
     par.postProgress(90);
 }
 
-void ToneMappingFloat::process_8bit_rgb_image(unsigned char *img, int sizex, int sizey)
+void ToneMappingFloat::process_8bit_rgb_image(unsigned char* img, int sizex, int sizey)
 {
     int size            = sizex*sizey;
-    REALTYPE *tmpimage  = new REALTYPE[size*3];
+    REALTYPE* tmpimage  = new REALTYPE[size*3];
     const float inv_256 = 1.0/256.0;
 
     for (int i=0 ; !par.cancel() && (i < size*3) ; i++)
@@ -273,7 +273,7 @@ void ToneMappingFloat::process_8bit_rgb_image(unsigned char *img, int sizex, int
     par.postProgress(90);
 }
 
-void ToneMappingFloat::inplace_blur(REALTYPE *data, int sizex, int sizey, REALTYPE blur)
+void ToneMappingFloat::inplace_blur(REALTYPE* data, int sizex, int sizey, REALTYPE blur)
 {
     blur /= preview_zoom;
 
@@ -335,7 +335,7 @@ void ToneMappingFloat::inplace_blur(REALTYPE *data, int sizex, int sizey, REALTY
     }
 }
 
-void ToneMappingFloat::stretch_contrast(REALTYPE *data, int datasize)
+void ToneMappingFloat::stretch_contrast(REALTYPE* data, int datasize)
 {
     //stretch the contrast
     const unsigned int histogram_size=256;
@@ -397,9 +397,9 @@ void ToneMappingFloat::stretch_contrast(REALTYPE *data, int datasize)
         x          = (x-min_src_val)/(max_src_val-min_src_val);
 
         if (x < 0.0)
-    	    x = 0.0;
+            x = 0.0;
         if (x > 1.0)
-    	    x = 1.0;
+            x = 1.0;
 
         data[i]    = x;
     }
