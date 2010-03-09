@@ -697,82 +697,93 @@ void LocalContrastSettings::writeSettings(KConfigGroup& group)
 
 void LocalContrastSettings::loadSettings()
 {
-/*
-    KUrl loadWhiteBalanceFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
-                                             QString( "*" ), kapp->activeWindow(),
-                                             QString(i18n("White Color Balance Settings File to Load")));
-    if (loadWhiteBalanceFile.isEmpty())
+    KUrl loadFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
+                    QString( "*" ), kapp->activeWindow(),
+                    QString( i18n("Photograph Local Contrast Settings File to Load")) );
+    if ( loadFile.isEmpty() )
         return;
 
-    QFile file(loadWhiteBalanceFile.toLocalFile());
+    QFile file(loadFile.toLocalFile());
 
-    if (file.open(QIODevice::ReadOnly))
+    if ( file.open(QIODevice::ReadOnly) )
     {
-        QTextStream stream(&file);
-
-        if (stream.readLine() != "# White Color Balance Configuration File V2")
+        QTextStream stream( &file );
+        if ( stream.readLine() != "# Photograph Local Contrast Configuration File" )
         {
             KMessageBox::error(kapp->activeWindow(),
-                               i18n("\"%1\" is not a White Color Balance settings text file.",
-                               loadWhiteBalanceFile.fileName()));
+                               i18n("\"%1\" is not a Photograph Local Contrast settings text file.",
+                                    loadFile.fileName()));
             file.close();
             return;
         }
 
         blockSignals(true);
-        d->temperatureInput->setValue(stream.readLine().toDouble());
-        d->darkInput->setValue(stream.readLine().toDouble());
-        d->blackInput->setValue(stream.readLine().toDouble());
-        d->mainExposureInput->setValue(stream.readLine().toDouble());
-        d->fineExposureInput->setValue(stream.readLine().toDouble());
-        d->gammaInput->setValue(stream.readLine().toDouble());
-        d->saturationInput->setValue(stream.readLine().toDouble());
-        d->greenInput->setValue(stream.readLine().toDouble());
-        slotTemperatureChanged(d->temperatureInput->value());
+        d->stretchContrastCheck->setChecked( stream.readLine().toInt() );
+        d->stageOne->setChecked( stream.readLine().toInt() );
+        d->stageTwo->setChecked( stream.readLine().toInt() );
+        d->stageThree->setChecked( stream.readLine().toInt() );
+        d->stageFour->setChecked( stream.readLine().toInt() );
+        d->lowSaturationInput->setValue( stream.readLine().toInt() );
+        d->highSaturationInput->setValue( stream.readLine().toInt() );
+        d->functionInput->setCurrentIndex( stream.readLine().toInt() );
+        d->powerInput1->setValue( stream.readLine().toDouble() );
+        d->blurInput1->setValue( stream.readLine().toDouble() );
+        d->powerInput2->setValue( stream.readLine().toDouble() );
+        d->blurInput2->setValue( stream.readLine().toDouble() );
+        d->powerInput3->setValue( stream.readLine().toDouble() );
+        d->blurInput3->setValue( stream.readLine().toDouble() );
+        d->powerInput4->setValue( stream.readLine().toDouble() );
+        d->blurInput4->setValue( stream.readLine().toDouble() );
         blockSignals(false);
     }
     else
     {
         KMessageBox::error(kapp->activeWindow(),
-                           i18n("Cannot load settings from the White Color Balance text file."));
+                           i18n("Cannot load settings from the Photograph Local Contrast text file."));
     }
 
     file.close();
-*/
 }
 
 void LocalContrastSettings::saveAsSettings()
 {
-/*
-    KUrl saveWhiteBalanceFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
-                                             QString( "*" ), kapp->activeWindow(),
-                                             QString( i18n("White Color Balance Settings File to Save")));
-    if ( saveWhiteBalanceFile.isEmpty() )
-       return;
+    KUrl saveFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
+                    QString( "*" ), kapp->activeWindow(),
+                    QString( i18n("Photograph Local Contrast Settings File to Save")) );
+    if ( saveFile.isEmpty() )
+        return;
 
-    QFile file(saveWhiteBalanceFile.toLocalFile());
+    QFile file(saveFile.toLocalFile());
 
     if ( file.open(QIODevice::WriteOnly) )
     {
         QTextStream stream( &file );
-        stream << "# White Color Balance Configuration File V2\n";
-        stream << d->temperatureInput->value() << "\n";
-        stream << d->darkInput->value() << "\n";
-        stream << d->blackInput->value() << "\n";
-        stream << d->mainExposureInput->value() << "\n";
-        stream << d->fineExposureInput->value() << "\n";
-        stream << d->gammaInput->value() << "\n";
-        stream << d->saturationInput->value() << "\n";
-        stream << d->greenInput->value() << "\n";
+        stream << "# Photograph Local Contrast Configuration File\n";
+
+        stream << d->stretchContrastCheck->isChecked() << "\n";
+        stream << d->stageOne->isChecked() << "\n";
+        stream << d->stageTwo->isChecked() << "\n";
+        stream << d->stageThree->isChecked() << "\n";
+        stream << d->stageFour->isChecked() << "\n";
+        stream << d->lowSaturationInput->value() << "\n";
+        stream << d->highSaturationInput->value() << "\n";
+        stream << d->functionInput->currentIndex() << "\n";
+        stream << d->powerInput1->value() << "\n";
+        stream << d->blurInput1->value() << "\n";
+        stream << d->powerInput2->value() << "\n";
+        stream << d->blurInput2->value() << "\n";
+        stream << d->powerInput3->value() << "\n";
+        stream << d->blurInput3->value() << "\n";
+        stream << d->powerInput4->value() << "\n";
+        stream << d->blurInput4->value() << "\n";
     }
     else
     {
         KMessageBox::error(kapp->activeWindow(),
-                           i18n("Cannot save settings to the White Color Balance text file."));
+                           i18n("Cannot save settings to the Photograph Local Contrast text file."));
     }
 
     file.close();
-*/
 }
 
 }  // namespace Digikam
