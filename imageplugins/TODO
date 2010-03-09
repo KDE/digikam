@@ -2,8 +2,6 @@ Editor tools pending task
 
                         Multithreaded      Zommable Preview        Port to BQM
 
-contentawareresizing        DONE                 TODO                  TODO
-
 coreplugin
   /adjustcurves             DONE                 DONE                  DONE
   /adjustlevels             DONE                 DONE                  TODO
@@ -52,4 +50,4 @@ transform
   /freerotation             DONE                  NO                   TODO
   /perspective               NO                   NO                    NO
   /sheartool                DONE                  NO                   TODO
-
+  /contentawareresizing     DONE                 TODO                  TODO
