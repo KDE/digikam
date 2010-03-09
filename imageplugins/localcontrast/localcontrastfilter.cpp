@@ -7,7 +7,7 @@
  * Description : a plugin to enhance image with local contrasts (as human eye does).
  *
  * Copyright (C) 2009 by Julien Pontabry <julien dot pontabry at gmail dot com>
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "localcontrast.h"
+#include "localcontrastfilter.h"
 
 // KDE includes
 
@@ -35,52 +35,51 @@
 namespace DigikamLocalContrastImagesPlugin
 {
 
-static void CallbackForToneMapping(void *data, int progress)
+static void CallbackForToneMapping(void* data, int progress)
 {
     if (data)
     {
-        LocalContrast *d = static_cast<LocalContrast*>(data);
+        LocalContrastFilter *d = static_cast<LocalContrastFilter*>(data);
         if (d) return d->progressCallback(progress);
     }
 }
 
-class LocalContrastPriv
+class LocalContrastFilterPriv
 {
 public:
 
-    LocalContrastPriv()
+    LocalContrastFilterPriv()
     {
-        par              = 0;
         tonemappingFloat = 0;
     }
 
-    ToneMappingParameters* par;
+    ToneMappingParameters par;
 
-    ToneMappingFloat*      tonemappingFloat;
+    ToneMappingFloat*     tonemappingFloat;
 };
 
-LocalContrast::LocalContrast(DImg *image, ToneMappingParameters *par, QObject *parent)
-             : Digikam::DImgThreadedFilter(image, parent, "LocalContrast"),
-               d(new LocalContrastPriv)
+LocalContrastFilter::LocalContrastFilter(DImg* image, QObject* parent, const ToneMappingParameters& par)
+                   : DImgThreadedFilter(image, parent, "LocalContrast"),
+                     d(new LocalContrastFilterPriv)
 {
-    d->par              = par;
-    d->par->setCancel(&m_cancel);
-    d->par->setProgressCallBackFunction(this, CallbackForToneMapping);
+    d->par = par;
+    d->par.setCancel(&m_cancel);
+    d->par.setProgressCallBackFunction(this, CallbackForToneMapping);
 
     initFilter();
 }
 
-LocalContrast::~LocalContrast()
+LocalContrastFilter::~LocalContrastFilter()
 {
     delete d;
 }
 
-void LocalContrast::filterImage()
+void LocalContrastFilter::filterImage()
 {
     progressCallback(0);
 
     d->tonemappingFloat = new ToneMappingFloat();
-    d->tonemappingFloat->apply_parameters(*d->par);
+    d->tonemappingFloat->apply_parameters(d->par);
 
     // Process image
 
@@ -92,8 +91,8 @@ void LocalContrast::filterImage()
         if(m_orgImage.sixteenBit())
         {
             // sixteen bit image
-            unsigned short *data    = new unsigned short[size];
-            unsigned short *dataImg = (unsigned short*)(m_orgImage.bits());
+            unsigned short* data    = new unsigned short[size];
+            unsigned short* dataImg = (unsigned short*)(m_orgImage.bits());
 
             for(i=0, j=0; !m_cancel && (i < size); i+=3, j+=4)
             {
@@ -124,7 +123,7 @@ void LocalContrast::filterImage()
         {
             // eight bit image
 
-            uchar *data = new uchar[size];
+            uchar* data = new uchar[size];
 
             for(i=0, j=0; !m_cancel && (i < size); i+=3, j+=4)
             {
@@ -154,7 +153,7 @@ void LocalContrast::filterImage()
     progressCallback(100);
 }
 
-void LocalContrast::progressCallback(int progress)
+void LocalContrastFilter::progressCallback(int progress)
 {
     if (progress%5 == 0)
     {
@@ -163,4 +162,4 @@ void LocalContrast::progressCallback(int progress)
     }
 }
 
-} // namespace DigikamLocalContrastImagesPlugin
+} // namespace DigikamLocalContrastFilterImagesPlugin

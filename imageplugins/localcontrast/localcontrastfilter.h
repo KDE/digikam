@@ -7,7 +7,7 @@
  * Description : a plugin to enhance image with local contrasts (as human eye does).
  *
  * Copyright (C) 2009 by Julien Pontabry <julien dot pontabry at gmail dot com>
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef LOCALCONTRAST_H
-#define LOCALCONTRAST_H
+#ifndef LOCALCONTRASTFILTER_H
+#define LOCALCONTRASTFILTER_H
 
 // Qt includes
 
@@ -39,15 +39,15 @@ using namespace Digikam;
 namespace DigikamLocalContrastImagesPlugin
 {
 
-class LocalContrastPriv;
+class LocalContrastFilterPriv;
 
-class LocalContrast : public Digikam::DImgThreadedFilter
+class LocalContrastFilter : public DImgThreadedFilter
 {
 
 public:
 
-    LocalContrast(DImg *image, ToneMappingParameters *par, QObject *parent=0);
-    ~LocalContrast();
+    LocalContrastFilter(DImg* image, QObject* parent=0, const ToneMappingParameters& par=ToneMappingParameters());
+    ~LocalContrastFilter();
 
     void progressCallback(int progress);
 
@@ -57,9 +57,9 @@ private:
 
 private:
 
-    LocalContrastPriv* const d;
+    LocalContrastFilterPriv* const d;
 };
 
 } // namespace DigikamLocalContrastImagesPlugin
 
-#endif /* LOCALCONTRAST_H */
+#endif /* LOCALCONTRASTFILTER_H */

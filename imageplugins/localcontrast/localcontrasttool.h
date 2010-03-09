@@ -7,6 +7,7 @@
  * Description : a plugin to enhance image with local contrasts (as human eye does).
  *
  * Copyright (C) 2009 by Julien Pontabry <julien dot pontabry at gmail dot com>
+ * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -29,12 +30,14 @@
 #include "editortool.h"
 #include "tonemappingparameters.h"
 
+using namespace Digikam;
+
 namespace DigikamLocalContrastImagesPlugin
 {
 
 class LocalContrastToolPriv;
 
-class LocalContrastTool : public Digikam::EditorToolThreaded
+class LocalContrastTool : public EditorToolThreaded
 {
     Q_OBJECT
 
@@ -47,12 +50,13 @@ private:
 
     void readSettings();
     void writeSettings();
-    ToneMappingParameters *createParams();
     void prepareEffect();
     void prepareFinal();
     void putPreviewData();
     void putFinalData();
     void renderingFinished();
+
+    ToneMappingParameters createParams() const;
 
 private Q_SLOTS:
 

@@ -1,7 +1,7 @@
 
 SET(digikamimageplugin_localcontrast_PART_SRCS imageplugin_localcontrast.cpp
-                                               localcontrast.cpp
                                                localcontrasttool.cpp
+                                               localcontrastfilter.cpp
                                                tonemappingbase.cpp
                                                tonemappingfloat.cpp
                                                tonemappingparameters.cpp

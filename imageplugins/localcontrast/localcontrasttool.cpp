@@ -7,6 +7,7 @@
  * Description : a plugin to enhance image with local contrasts (as human eye does).
  *
  * Copyright (C) 2009 by Julien Pontabry <julien dot pontabry at gmail dot com>
+ * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com> 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -59,12 +60,11 @@
 #include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imageregionwidget.h"
-#include "localcontrast.h"
+#include "localcontrastfilter.h"
 #include "rexpanderbox.h"
 #include "version.h"
 
 using namespace KDcrawIface;
-using namespace Digikam;
 
 namespace DigikamLocalContrastImagesPlugin
 {
@@ -202,7 +202,7 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
     QWidget* firstPage = new QWidget();
     QGridLayout* grid1 = new QGridLayout(firstPage);
 
-    QLabel *label1     = new QLabel(i18n("Function:"), firstPage);
+    QLabel* label1     = new QLabel(i18n("Function:"), firstPage);
     d->functionInput   = new RComboBox(firstPage);
     d->functionInput->addItem(i18n("Power"));
     d->functionInput->addItem(i18n("Linear"));
@@ -222,7 +222,7 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QLabel *label2         = new QLabel(i18n("Highlights saturation:"), firstPage);
+    QLabel* label2         = new QLabel(i18n("Highlights saturation:"), firstPage);
     d->highSaturationInput = new RIntNumInput(firstPage);
     d->highSaturationInput->setRange(0, 100, 1);
     d->highSaturationInput->setDefaultValue(50);
@@ -234,7 +234,7 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QLabel *label3        = new QLabel(i18n("Shadow saturation:"), firstPage);
+    QLabel* label3        = new QLabel(i18n("Shadow saturation:"), firstPage);
     d->lowSaturationInput = new RIntNumInput(firstPage);
     d->lowSaturationInput->setRange(0, 100, 1);
     d->lowSaturationInput->setDefaultValue(50);
@@ -583,45 +583,45 @@ void LocalContrastTool::slotResetSettings()
     d->expanderBox->setEnabled(true);
 }
 
-ToneMappingParameters *LocalContrastTool::createParams()
+ToneMappingParameters LocalContrastTool::createParams() const
 {
-    ToneMappingParameters *par = new ToneMappingParameters();
+    ToneMappingParameters par;
 
     // Setting general parameters
-    par->info_fast_mode   = d->fastModeCheck->isChecked();
-    par->low_saturation   = d->lowSaturationInput->value();
-    par->high_saturation  = d->highSaturationInput->value();
-    par->stretch_contrast = d->stretchContrastCheck->isChecked();
-    par->function_id      = d->functionInput->currentIndex();
+    par.info_fast_mode   = d->fastModeCheck->isChecked();
+    par.low_saturation   = d->lowSaturationInput->value();
+    par.high_saturation  = d->highSaturationInput->value();
+    par.stretch_contrast = d->stretchContrastCheck->isChecked();
+    par.function_id      = d->functionInput->currentIndex();
 
     // Setting stages parameters
-    par->stage[0].enabled = d->stageOne->isChecked();
-    par->stage[1].enabled = d->stageTwo->isChecked();
-    par->stage[2].enabled = d->stageThree->isChecked();
-    par->stage[3].enabled = d->stageFour->isChecked();
+    par.stage[0].enabled = d->stageOne->isChecked();
+    par.stage[1].enabled = d->stageTwo->isChecked();
+    par.stage[2].enabled = d->stageThree->isChecked();
+    par.stage[3].enabled = d->stageFour->isChecked();
 
-    if(par->stage[0].enabled)
+    if (par.stage[0].enabled)
     {
-        par->stage[0].power = d->powerInput1->value();
-        par->stage[0].blur = d->blurInput1->value();
+        par.stage[0].power = d->powerInput1->value();
+        par.stage[0].blur = d->blurInput1->value();
     }
 
-    if(par->stage[1].enabled)
+    if (par.stage[1].enabled)
     {
-        par->stage[1].power = d->powerInput2->value();
-        par->stage[1].blur = d->blurInput2->value();
+        par.stage[1].power = d->powerInput2->value();
+        par.stage[1].blur = d->blurInput2->value();
     }
 
-    if(par->stage[2].enabled)
+    if (par.stage[2].enabled)
     {
-        par->stage[2].power = d->powerInput3->value();
-        par->stage[2].blur = d->blurInput3->value();
+        par.stage[2].power = d->powerInput3->value();
+        par.stage[2].blur = d->blurInput3->value();
     }
 
-    if(par->stage[3].enabled)
+    if (par.stage[3].enabled)
     {
-        par->stage[3].power = d->powerInput4->value();
-        par->stage[3].blur = d->blurInput4->value();
+        par.stage[3].power = d->powerInput4->value();
+        par.stage[3].blur = d->blurInput4->value();
     }
 
     return par;
@@ -632,10 +632,8 @@ void LocalContrastTool::prepareEffect()
     d->expanderBox->setEnabled(false);
     toolView()->setEnabled(false);
     
-    ToneMappingParameters *par = createParams();
-    DImg image                 = d->previewWidget->getOriginalRegionImage();
-
-    setFilter(dynamic_cast<DImgThreadedFilter*>(new LocalContrast(&image, par, this)));
+    DImg image = d->previewWidget->getOriginalRegionImage(true);
+    setFilter(new LocalContrastFilter(&image, this, createParams()));
 }
 
 void LocalContrastTool::prepareFinal()
@@ -643,10 +641,8 @@ void LocalContrastTool::prepareFinal()
     d->expanderBox->setEnabled(false);
     toolView()->setEnabled(false);
     
-    ToneMappingParameters *par = createParams();
-
     ImageIface iface(0, 0);
-    setFilter(dynamic_cast<DImgThreadedFilter *>(new LocalContrast(iface.getOriginalImg(), par, this)));
+    setFilter(new LocalContrastFilter(iface.getOriginalImg(), this, createParams()));
 }
 
 void LocalContrastTool::putPreviewData()
