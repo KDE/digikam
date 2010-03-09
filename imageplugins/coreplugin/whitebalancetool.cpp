@@ -295,7 +295,7 @@ void WhiteBalanceTool::slotLoadSettings()
 
 void WhiteBalanceTool::slotSaveAsSettings()
 {
-    d->settingsView->loadSettings();
+    d->settingsView->saveSettings();
 }
 
 }  // namespace DigikamImagesPluginCore
