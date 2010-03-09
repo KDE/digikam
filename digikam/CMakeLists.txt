@@ -102,6 +102,9 @@ SET_SOURCE_FILES_PROPERTIES(${libclapack_SRCS} PROPERTIES COMPILE_FLAGS "-w")
 # Disable libpgf warnings.
 SET_SOURCE_FILES_PROPERTIES(${libpgf_SRCS} PROPERTIES COMPILE_FLAGS "-w")
 
+# Disable liblqr C code warnings.
+SET_SOURCE_FILES_PROPERTIES(${liblqr_SRCS} PROPERTIES COMPILE_FLAGS "-w")
+
 SET(digikamcore_LIB_SRCS
                         # basic libs
                         ${libdimg_SRCS}
@@ -190,9 +193,9 @@ IF(Q_WS_X11)
 ENDIF(Q_WS_X11)
 
 # For Contents Aware Resizer filter.
-IF(LQR-1_FOUND)
+IF(GLIB2_FOUND)
     TARGET_LINK_LIBRARIES(digikamcore ${GLIB2_LIBRARIES} ${liblqr_LIBS})
-ENDIF(LQR-1_FOUND)
+ENDIF(GLIB2_FOUND)
 
 SET_TARGET_PROPERTIES(digikamcore PROPERTIES VERSION 1.0.0 SOVERSION 1)
 IF(WIN32)
