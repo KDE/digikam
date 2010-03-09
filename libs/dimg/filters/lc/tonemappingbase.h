@@ -52,7 +52,7 @@ public:
     {
         return m_par;
     };
-    
+
     void set_enabled(int nstage, bool enabled)
     {
         m_par->stage[nstage].enabled=enabled;
@@ -88,7 +88,7 @@ public:
         if (value > 100) value = 100;
         m_par->unsharp_mask.threshold = value;
     };
-        
+
     float get_enabled(int nstage)
     {
         return m_par->stage[nstage].enabled;
