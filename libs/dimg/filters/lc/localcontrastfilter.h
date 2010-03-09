@@ -57,6 +57,59 @@ private:
 
     void filterImage();
 
+    void  set_parameters(ToneMappingParameters* par);
+    ToneMappingParameters* get_parameters() const;
+
+    void  process_8bit_rgb_image(unsigned char* img, int sizex, int sizey);
+    void  process_16bit_rgb_image(unsigned short int* img, int sizex, int sizey);
+
+    void  process_rgb_image(float* img, int sizex, int sizey);
+    float func(float x1, float x2);
+    void  update_preprocessed_values();
+
+    void  set_current_stage(int nstage);
+    void  set_preview_zoom(float val);
+
+    void  set_blur(int nstage, float value);      // 1..5000
+    float get_blur(int nstage);
+
+    void  set_power(int nstage, float value);     // 0..100.0
+    float get_power(int nstage);
+
+    void  set_low_saturation(int value);          // 0..100
+    void  set_high_saturation(int value);         // 0..100
+
+    void  set_stretch_contrast(bool value);
+    bool  get_stretch_contrast();
+
+    void  set_function_id (int value);            // 0..1
+    int   get_function_id();
+
+    void  inplace_blur(float* data, int sizex, int sizey, float blur);
+    void  stretch_contrast(float* data, int datasize);
+
+    void  set_info_fast_mode(bool value);
+    bool  get_info_fast_mode();
+
+    void  set_unsharp_mask_enabled(bool value);
+    void  set_unsharp_mask_power(float value);
+    void  set_unsharp_mask_blur(float value);
+    void  set_unsharp_mask_threshold(int value);
+
+    bool  get_unsharp_mask_enabled(bool value);
+    float get_unsharp_mask_power(float value);
+    float get_unsharp_mask_(float value);
+    int   get_unsharp_mask_threshold(int value);
+
+    void  set_enabled(int nstage, bool enabled);
+    float get_enabled(int nstage);
+
+    int   get_low_saturation();
+    int   get_high_saturation();
+
+    inline void rgb2hsv(const float& r, const float& g, const float& b, float& h, float& s, float& v);
+    inline void hsv2rgb(const float& h, const float& s, const float& v, float& r, float& g, float& b);
+
 private:
 
     LocalContrastFilterPriv* const d;
