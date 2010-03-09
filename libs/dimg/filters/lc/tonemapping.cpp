@@ -507,4 +507,194 @@ void ToneMapping::stretch_contrast(float* data, int datasize)
     }
 }
 
+ToneMappingParameters* ToneMapping::get_parameters() const
+{
+    return m_par;
+}
+
+void ToneMapping::set_enabled(int nstage, bool enabled)
+{
+    m_par->stage[nstage].enabled=enabled;
+}
+
+void ToneMapping::set_info_fast_mode(bool value)
+{
+    m_par->info_fast_mode=value;
+}
+
+void ToneMapping::set_unsharp_mask_enabled(bool value)
+{
+    m_par->unsharp_mask.enabled = value;
+}
+
+void ToneMapping::set_unsharp_mask_power(float value)
+{
+    if (value < 0.0) value = 0.0;
+    if (value > 100.0) value = 100.0;
+    m_par->unsharp_mask.power = value;
+}
+
+void ToneMapping::set_unsharp_mask_blur(float value)
+{
+    if (value < 0.0) value = 0.0;
+    if (value > 5000.0) value = 5000.0;
+    m_par->unsharp_mask.blur = value;
+}
+
+void ToneMapping::set_unsharp_mask_threshold(int value)
+{
+    if (value < 0) value = 0;
+    if (value > 100) value = 100;
+    m_par->unsharp_mask.threshold = value;
+}
+
+float ToneMapping::get_enabled(int nstage)
+{
+    return m_par->stage[nstage].enabled;
+}
+
+float ToneMapping::get_blur(int nstage)
+{
+    return m_par->stage[nstage].blur;
+}
+
+float ToneMapping::get_power(int nstage)
+{
+    return m_par->stage[nstage].power;
+}
+
+int ToneMapping::get_low_saturation()
+{
+    return m_par->low_saturation;
+}
+
+int ToneMapping::get_high_saturation()
+{
+    return m_par->high_saturation;
+}
+
+bool ToneMapping::get_stretch_contrast()
+{
+    return m_par->stretch_contrast;
+}
+
+int ToneMapping::get_function_id()
+{
+    return m_par->function_id;
+}
+
+bool ToneMapping::get_info_fast_mode()
+{
+    return m_par->info_fast_mode;
+}
+
+bool ToneMapping::get_unsharp_mask_enabled(bool /*value*/)
+{
+    return m_par->unsharp_mask.enabled;
+}
+
+float ToneMapping::get_unsharp_mask_power(float /*value*/)
+{
+    return m_par->unsharp_mask.power;
+}
+
+float ToneMapping::get_unsharp_mask_(float /*value*/)
+{
+    return m_par->unsharp_mask.blur;
+}
+
+int ToneMapping::get_unsharp_mask_threshold(int /*value*/)
+{
+    return m_par->unsharp_mask.threshold;
+}
+
+void ToneMapping::set_current_stage(int nstage)
+{
+    m_current_process_power_value = m_par->get_power(nstage);
+}
+
+void ToneMapping::set_preview_zoom(float val)
+{
+    if ((val > 0.001) && (val < 1000.0)) m_preview_zoom = val;
+}
+
+void ToneMapping::rgb2hsv(const float& r, const float& g, const float& b, float& h, float& s, float& v)
+{
+    float maxrg = (r>g) ? r : g;
+    float max   = (maxrg>b) ? maxrg : b;
+    float minrg = (r<g) ? r : g;
+    float min   = (minrg<b) ? minrg : b;
+    float delta = max-min;
+
+    //hue
+    if (min == max)
+    {
+        h = 0.0;
+    }
+    else
+    {
+        if (max == r)
+        {
+            h = (float)(fmod(60.0*(g-b)/delta+360.0, 360.0));
+        }
+        else
+        {
+            if (max == g)
+            {
+                h = (float)(60.0*(b-r)/delta+120.0);
+            }
+            else
+            {
+                //max==b
+                h = (float)(60.0*(r-g)/delta+240.0);
+            }
+        }
+    }
+
+    //saturation
+    if (max < 1e-6)
+    {
+        s = 0;
+    }
+    else
+    {
+        s = (float)(1.0-min/max);
+    }
+
+    //value
+    v = max;
+};
+
+void ToneMapping::hsv2rgb(const float& h, const float& s, const float& v, float& r, float& g, float& b)
+{
+    float hfi = (float)(floor(h/60.0));
+    float f   = (float)((h/60.0)-hfi);
+    int hi    = ((int)hfi)%6;
+    float p   = (float)(v*(1.0-s));
+    float q   = (float)(v*(1.0-f*s));
+    float t   = (float)(v*(1.0-(1.0-f)*s));
+
+    switch (hi)
+    {
+        case 0:
+            r = v ; g = t ; b = p;
+            break;
+        case 1:
+            r = q ; g = v ; b = p;
+            break;
+        case 2:
+            r = p ; g = v ; b = t;
+            break;
+        case 3:
+            r = p ; g = q ; b = v;
+            break;
+        case 4:
+            r = t ; g = p; b = v;
+            break;
+        case 5:
+            r = v ; g = p ; b = q;
+            break;
+    }
+}
+
 } // namespace Digikam
