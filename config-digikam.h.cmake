@@ -13,6 +13,9 @@
 /* Define to 1 if GPhoto2 shared library is installed */
 #cmakedefine HAVE_GPHOTO2 1
 
+/* Define to 1 if Glib2 shared library is installed */
+#cmakedefine HAVE_GLIB2 1
+
 /* Define to 1 if an external liblqr-1 shared library have been found */
 #cmakedefine USE_EXT_LIBLQR-1 1
 

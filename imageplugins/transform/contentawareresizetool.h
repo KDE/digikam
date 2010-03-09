@@ -32,7 +32,7 @@
 
 using namespace Digikam;
 
-namespace DigikamContentAwareResizingImagesPlugin
+namespace DigikamTransformImagePlugin
 {
 
 class ContentAwareResizeToolPriv;
@@ -75,6 +75,6 @@ private:
     ContentAwareResizeToolPriv* const d;
 };
 
-} // namespace DigikamContentAwareResizingImagesPlugin
+} // namespace DigikamTransformImagePlugin
 
 #endif /*CONTENT_AWARE_RESIZE_TOOL_H*/

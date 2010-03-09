@@ -8,6 +8,12 @@ SET(digikamimageplugin_transform_PART_SRCS imageplugin_transform.cpp
                                            matrix.cpp 
    )
 
+IF(GLIB2_FOUND)
+    SET(digikamimageplugin_transform_PART_SRCS ${digikamimageplugin_transform_PART_SRCS}
+        contentawareresizetool.cpp    
+       )
+ENDIF(GLIB2_FOUND)
+
 KDE4_ADD_PLUGIN(digikamimageplugin_transform ${digikamimageplugin_transform_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(

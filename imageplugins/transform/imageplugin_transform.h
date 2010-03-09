@@ -59,9 +59,11 @@ private Q_SLOTS:
     void slotPerspective();
     void slotFreeRotation();
     void slotShearTool();
+    void slotContentAwareResizing();
 
 private:
 
+    KAction* m_contentAwareResizingAction;
     KAction* m_sheartoolAction;
     KAction* m_freerotationAction;
     KAction* m_perspectiveAction;

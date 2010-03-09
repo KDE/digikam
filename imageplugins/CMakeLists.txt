@@ -47,6 +47,3 @@ ADD_SUBDIRECTORY( superimpose )
 ADD_SUBDIRECTORY( transform )
 ADD_SUBDIRECTORY( localcontrast )
 
-IF(GLIB2_FOUND)
-    ADD_SUBDIRECTORY( contentawareresizing )
-ENDIF(GLIB2_FOUND)

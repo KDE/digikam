@@ -64,7 +64,7 @@
 
 using namespace KDcrawIface;
 
-namespace DigikamContentAwareResizingImagesPlugin
+namespace DigikamTransformImagePlugin
 {
 
 class ContentAwareResizeToolPriv
@@ -825,4 +825,4 @@ void ContentAwareResizeTool::slotMaskPenSizeChanged(int size)
     d->previewWidget->setMaskPenSize(size);
 }
 
-} // namespace DigikamContentAwareResizingImagesPlugin
+} // namespace DigikamTransformImagePlugin

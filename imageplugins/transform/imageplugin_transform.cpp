@@ -36,9 +36,14 @@
 
 // Local includes
 
+#include "config-digikam.h"
 #include "perspectivetool.h"
 #include "freerotationtool.h"
 #include "sheartool.h"
+
+#ifdef HAVE_GLIB2
+#include "contentawareresizetool.h"
+#endif /* HAVE_GLIB2 */            
 
 using namespace DigikamTransformImagePlugin;
 
@@ -57,6 +62,16 @@ ImagePlugin_Transform::ImagePlugin_Transform(QObject* parent, const QVariantList
     actionCollection()->addAction("imageplugin_sheartool", m_sheartoolAction );
     connect(m_sheartoolAction, SIGNAL(triggered(bool)),
             this, SLOT(slotShearTool()));
+
+#ifdef HAVE_GLIB2
+
+    m_contentAwareResizingAction = new KAction(KIcon("transform-scale"), i18n("Liquid Rescale..."), this);
+    // m_contentAwareResizingAction->setShortcut(KShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_C));
+    actionCollection()->addAction("imageplugin_contentawareresizing", m_contentAwareResizingAction);
+    connect(m_contentAwareResizingAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotContentAwareResizing()));
+
+#endif /* HAVE_GLIB2 */            
 
     //-----------------------------------------------------------------------------------
     
@@ -102,6 +117,9 @@ void ImagePlugin_Transform::setEnabledActions(bool b)
     m_perspectiveAction->setEnabled(b);
     m_freerotationAction->setEnabled(b);
     m_sheartoolAction->setEnabled(b);
+#ifdef HAVE_GLIB2
+    m_contentAwareResizingAction->setEnabled(b);
+#endif /* HAVE_GLIB2 */            
 }
 
 void ImagePlugin_Transform::slotPerspective()
@@ -114,6 +132,14 @@ void ImagePlugin_Transform::slotShearTool()
 {
     ShearTool* tool = new ShearTool(this);
     loadTool(tool);
+}
+
+void ImagePlugin_Transform::slotContentAwareResizing()
+{
+#ifdef HAVE_GLIB2
+    ContentAwareResizeTool* tool = new ContentAwareResizeTool(this);
+    loadTool(tool);
+#endif /* HAVE_GLIB2 */            
 }
 
 void ImagePlugin_Transform::slotFreeRotation()
