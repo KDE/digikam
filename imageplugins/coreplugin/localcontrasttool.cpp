@@ -57,6 +57,7 @@
 #include "dimg.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
+#include "histogramwidget.h"
 #include "imageregionwidget.h"
 #include "localcontrastfilter.h"
 #include "localcontrastsettings.h"
@@ -73,12 +74,20 @@ public:
 
     LocalContrastToolPriv() :
         configGroupName("localcontrast Tool"),
+        configHistogramChannelEntry("Histogram Channel"),
+        configHistogramScaleEntry("Histogram Scale"),
+
+        destinationPreviewData(0),
         settingsView(0),
         previewWidget(0),
         gboxSettings(0)
         {}
 
     const QString          configGroupName;
+    const QString          configHistogramChannelEntry;
+    const QString          configHistogramScaleEntry;
+
+    uchar*                 destinationPreviewData;
 
     LocalContrastSettings* settingsView;
     ImageRegionWidget*     previewWidget;
@@ -100,6 +109,7 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
     // -------------------------------------------------------------
 
     d->gboxSettings = new EditorToolSettings;
+    d->gboxSettings->setTools(EditorToolSettings::Histogram);
     d->gboxSettings->setButtons(EditorToolSettings::Default|
                                 EditorToolSettings::Ok|
                                 EditorToolSettings::Cancel|
@@ -114,10 +124,16 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
     init();
 
     // -------------------------------------------------------------
+
+    connect(d->previewWidget, SIGNAL(signalResized()),
+            this, SLOT(slotEffect()));
 }
 
 LocalContrastTool::~LocalContrastTool()
 {
+    if (d->destinationPreviewData)
+       delete [] d->destinationPreviewData;
+
     delete d;
 }
 
@@ -125,6 +141,9 @@ void LocalContrastTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
+
+    d->gboxSettings->histogramBox()->setChannel((ChannelType)group.readEntry(d->configHistogramChannelEntry, (int)LuminosityChannel));
+    d->gboxSettings->histogramBox()->setScale((HistogramScale)group.readEntry(d->configHistogramScaleEntry,  (int)LogScaleHistogram));
     d->settingsView->readSettings(group);
 }
 
@@ -133,6 +152,8 @@ void LocalContrastTool::writeSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
 
+    group.writeEntry(d->configHistogramChannelEntry, (int)d->gboxSettings->histogramBox()->channel());
+    group.writeEntry(d->configHistogramScaleEntry,   (int)d->gboxSettings->histogramBox()->scale());
     d->settingsView->writeSettings(group);
     group.sync();
 }
@@ -162,7 +183,18 @@ void LocalContrastTool::prepareFinal()
 
 void LocalContrastTool::putPreviewData()
 {
-    d->previewWidget->setPreviewImage(filter()->getTargetImage());
+    DImg preview = filter()->getTargetImage();
+    d->previewWidget->setPreviewImage(preview);
+
+    // Update histogram.
+
+    if (d->destinationPreviewData)
+       delete [] d->destinationPreviewData;
+
+    d->destinationPreviewData = preview.copyBits();
+    d->gboxSettings->histogramBox()->histogram()->updateData(d->destinationPreviewData,
+                                                             preview.width(), preview.height(), preview.sixteenBit(),
+                                                             0, 0, 0, false);
 }
 
 void LocalContrastTool::putFinalData()
