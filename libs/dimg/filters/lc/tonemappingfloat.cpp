@@ -57,7 +57,7 @@ void ToneMappingFloat::process_rgb_image(float* img, int sizex, int sizey)
 
     if (m_par->stretch_contrast)
     {
-        stretch_contrast(img,size*3);
+        stretch_contrast(img, size*3);
     }
 
     int pos = 0;
@@ -80,7 +80,7 @@ void ToneMappingFloat::process_rgb_image(float* img, int sizex, int sizey)
 
             // blur
 
-            inplace_blur(blurimage, sizex,sizey, m_par->get_blur(nstage));
+            inplace_blur(blurimage, sizex, sizey, m_par->get_blur(nstage));
 
             pos = 0;
 
@@ -124,7 +124,7 @@ void ToneMappingFloat::process_rgb_image(float* img, int sizex, int sizey)
             float dest_saturation = (float)((src_s*high_saturation_value+dest_s*(100.0-high_saturation_value))*0.01);
             if (dest_v>src_v)
             {
-                float s1     = (float)(dest_saturation*src_v/(dest_v+1.0/255.0));
+                float s1        = (float)(dest_saturation*src_v/(dest_v+1.0/255.0));
                 dest_saturation = (float)((low_saturation_value*s1+m_par->low_saturation*dest_saturation)*0.01);
             }
 

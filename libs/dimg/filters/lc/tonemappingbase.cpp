@@ -44,6 +44,7 @@ ToneMappingBase::ToneMappingBase()
 
 ToneMappingBase::~ToneMappingBase()
 {
+    delete m_par;
 }
 
 void ToneMappingBase::set_blur(int nstage, float value)
