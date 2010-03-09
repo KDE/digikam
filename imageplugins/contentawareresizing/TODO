@@ -5,7 +5,7 @@ Speed:
 - study parallelization of the carving process
 
 Implementation:
-- make the plugin thread safe
+- make the plugin thread safe: see libliqr progress indicator static methods.
 
 Gui:
 - Add picture preview of the seams and of the energy
