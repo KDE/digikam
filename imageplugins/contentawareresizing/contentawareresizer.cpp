@@ -7,7 +7,7 @@
  * Description : Content aware resizer class.
  *
  * Copyright (C) 2009 by Julien Pontabry <julien dot pontabry at ulp dot u-strasbg dot fr>
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -40,9 +40,9 @@ namespace DigikamContentAwareResizingImagesPlugin
 {
 
 // Static methods.
-LqrRetVal s_carverProgressInit(const gchar *init_message);
+LqrRetVal s_carverProgressInit(const gchar* init_message);
 LqrRetVal s_carverProgressUpdate(gdouble percentage);
-LqrRetVal s_carverProgressEnd(const gchar *end_message);
+LqrRetVal s_carverProgressEnd(const gchar* end_message);
 
 // Static members.
 
@@ -52,7 +52,7 @@ bool s_stage                   = false;
 bool s_wResize                 = false;
 bool s_hResize                 = false;
 
-ContentAwareResizer *s_resiser = 0;
+ContentAwareResizer* s_resiser = 0;
 
 class ContentAwareResizerPriv
 {
@@ -74,12 +74,12 @@ public:
 
 };
 
-ContentAwareResizer::ContentAwareResizer(DImg *orgImage, uint width, uint height,
+ContentAwareResizer::ContentAwareResizer(DImg* orgImage, uint width, uint height,
                                          int step, double rigidity, int side_switch_freq,
                                          LqrEnergyFuncBuiltinType func,
                                          LqrResizeOrder resize_order, const QImage& mask,
-                                         bool preserve_skin_tones, QObject *parent)
-                   : Digikam::DImgThreadedFilter(orgImage, parent, "ContentAwareResizer"),
+                                         bool preserve_skin_tones, QObject* parent)
+                   : DImgThreadedFilter(orgImage, parent, "ContentAwareResizer"),
                      d(new ContentAwareResizerPriv)
 {
     initFilter();
@@ -143,13 +143,13 @@ ContentAwareResizer::~ContentAwareResizer()
 
 void ContentAwareResizer::getEnergyImage()
 {
-    if(!d->carver) return;
+    if (!d->carver) return;
 
-    int w = lqr_carver_get_width(d->carver);
-    int h = lqr_carver_get_height(d->carver);
-    guchar * buff = (guchar *) malloc (w*h*3*sizeof(guchar));
+    int w        = lqr_carver_get_width(d->carver);
+    int h        = lqr_carver_get_height(d->carver);
+    guchar* buff = (guchar*) malloc(w*h*3*sizeof(guchar));
     
-    lqr_carver_get_energy_image(d->carver,buff,1,LQR_COLDEPTH_8I,LQR_RGBA_IMAGE);
+    lqr_carver_get_energy_image(d->carver, buff, 1, LQR_COLDEPTH_8I, LQR_RGBA_IMAGE);
     
 }
     
@@ -167,6 +167,7 @@ void ContentAwareResizer::filterImage()
 
     // Liquid rescale
     lqr_carver_resize(d->carver, d->width, d->height);
+    
     if (m_cancel) return;
 
     // Create a new image
@@ -177,9 +178,9 @@ void ContentAwareResizer::filterImage()
     // Write pixels in the DImg structure image
     lqr_carver_scan_reset(d->carver);
 
-    void           *rgb=0;
-    uchar          *rgbOut8=0;
-    unsigned short *rgbOut16=0;
+    void*           rgb=0;
+    uchar*          rgbOut8=0;
+    unsigned short* rgbOut16=0;
 
     if (m_orgImage.sixteenBit())
     {
@@ -253,7 +254,7 @@ void ContentAwareResizer::buildBias(const QImage& mask)
     {
         for(int y=0; y < mask.height(); ++y)
         {
-            pixColor = QColor::fromRgba(mask.pixel(x,y));
+            pixColor = QColor::fromRgba(mask.pixel(x, y));
             pixColor.getRgb(&r, &g, &b, &a);
             gdouble bias=0.0;
 
@@ -262,7 +263,7 @@ void ContentAwareResizer::buildBias(const QImage& mask)
             if (r == 255)
                 bias=-1000000.0;
 
-            lqr_carver_bias_add_xy(d->carver,bias,x,y);
+            lqr_carver_bias_add_xy(d->carver,bias, x, y);
         }
     }
 }

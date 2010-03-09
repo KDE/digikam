@@ -7,7 +7,7 @@
  * Description : Content aware resizer class.
  *
  * Copyright (C) 2009 by Julien Pontabry <julien dot pontabry at ulp dot u-strasbg dot fr>
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -45,16 +45,16 @@ namespace DigikamContentAwareResizingImagesPlugin
 
 class ContentAwareResizerPriv;
 
-class ContentAwareResizer : public Digikam::DImgThreadedFilter
+class ContentAwareResizer : public DImgThreadedFilter
 {
 
 public:
 
-    ContentAwareResizer(DImg *orgImage, uint width, uint height,
+    ContentAwareResizer(DImg* orgImage, uint width, uint height,
                         int step=1, double rigidity=0.0, int side_switch_freq=4, 
                         LqrEnergyFuncBuiltinType func=LQR_EF_GRAD_XABS,
                         LqrResizeOrder resize_order=LQR_RES_ORDER_HOR, const QImage& mask=QImage(), 
-                        bool preserve_skin_tones=false, QObject *parent=0);
+                        bool preserve_skin_tones=false, QObject* parent=0);
     ~ContentAwareResizer();
 
     void progressCallback(int progress);
