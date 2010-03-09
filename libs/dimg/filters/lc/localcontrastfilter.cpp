@@ -30,7 +30,7 @@
 
 // Tonemapping includes
 
-#include "tonemappingfloat.h"
+#include "tonemappingbase.h"
 
 namespace Digikam
 {
@@ -50,7 +50,7 @@ public:
 
     LocalContrastFilterPriv(){}
 
-    ToneMappingFloat tonemappingFloat;
+    ToneMappingBase tonemapping;
 };
 
 LocalContrastFilter::LocalContrastFilter(DImg* image, QObject* parent, ToneMappingParameters* par)
@@ -59,7 +59,7 @@ LocalContrastFilter::LocalContrastFilter(DImg* image, QObject* parent, ToneMappi
 {
     par->setCancel(&m_cancel);
     par->setProgressCallBackFunction(this, CallbackForToneMapping);
-    d->tonemappingFloat.apply_parameters(par);
+    d->tonemapping.apply_parameters(par);
 
     initFilter();
 }
@@ -95,7 +95,7 @@ void LocalContrastFilter::filterImage()
 
             progressCallback(10);
 
-            d->tonemappingFloat.process_16bit_rgb_image(data, m_orgImage.width(), m_orgImage.height());
+            d->tonemapping.process_16bit_rgb_image(data, m_orgImage.width(), m_orgImage.height());
 
             for(uint x=0; !m_cancel && (x < m_orgImage.width()); x++)
             {
@@ -126,7 +126,7 @@ void LocalContrastFilter::filterImage()
 
             progressCallback(10);
 
-            d->tonemappingFloat.process_8bit_rgb_image(data, m_orgImage.width(), m_orgImage.height());
+            d->tonemapping.process_8bit_rgb_image(data, m_orgImage.width(), m_orgImage.height());
 
             for(uint x=0; !m_cancel && (x < m_orgImage.width()); x++)
             {
