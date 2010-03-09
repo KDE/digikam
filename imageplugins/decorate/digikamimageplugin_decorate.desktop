@@ -1,11 +1,9 @@
 [Desktop Entry]
 Name=ImagePlugin_Decorate
-Name[x-test]=xxImagePlugin_Decoratexx
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=A tool to decorate image
-Comment[x-test]=xxA tool to decorate imagexx
 
 X-KDE-Library=digikamimageplugin_decorate
 author=Gilles Caulier, caulier dot gilles at gmail dot com
