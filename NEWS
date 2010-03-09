@@ -108,7 +108,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 078 ==> 230008 : digiKam Nikon fetching pictures.
 079 ==> 229470 : digiKam fails to start with QCursor: Cannot create bitmap cursor; invalid bitmap(s).
 080 ==> 221992 : "local contrast" settings make no difference.
-081 ==> 
+081 ==> 230003 : Zoombar slider adjustments below 100% are hard to archieve. [patch]
+082 ==>
 
 
 

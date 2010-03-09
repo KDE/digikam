@@ -25,6 +25,7 @@
 
 // Local includes
 
+#include "dzoombar.h"
 #include "previewwidget.h"
 #include "canvas.h"
 #include "thumbnailsize.h"
@@ -225,13 +226,7 @@ void EditorStackView::slotZoomSliderChanged(int size)
     if (viewMode() == ToolViewMode && !previewWidget())
         return;
 
-    double h    = (double)ThumbnailSize::Huge;
-    double s    = (double)ThumbnailSize::Small;
-    double zmin = zoomMin();
-    double zmax = zoomMax();
-    double b    = (zmin-(zmax*s/h))/(1-s/h);
-    double a    = (zmax-b)/h;
-    double z    = a*size+b;
+    double z = DZoomBar::zoomFromSize(size, zoomMin(), zoomMax());
 
     if (viewMode() == CanvasMode)
     {
