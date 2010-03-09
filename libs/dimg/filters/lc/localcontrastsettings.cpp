@@ -521,15 +521,28 @@ ToneMappingParameters* LocalContrastSettings::createParams() const
 ToneMappingParameters LocalContrastSettings::settings() const
 {
     ToneMappingParameters prm;
-/*
-    prm.black       = d->blackInput->value();
-    prm.exposition  = d->mainExposureInput->value() + d->fineExposureInput->value();
-    prm.temperature = d->temperatureInput->value();
-    prm.green       = d->greenInput->value();
-    prm.dark        = d->darkInput->value();
-    prm.gamma       = d->gammaInput->value();
-    prm.saturation  = d->saturationInput->value();
-*/
+
+    prm.stretch_contrast = d->stretchContrastCheck->isChecked();
+    prm.low_saturation   = d->lowSaturationInput->value();
+    prm.high_saturation  = d->highSaturationInput->value();
+    prm.function_id      = d->functionInput->currentIndex();
+
+    prm.stage[0].enabled = d->stageOne->isChecked();
+    prm.stage[0].power   = d->powerInput1->value();
+    prm.stage[0].blur    = d->blurInput1->value();
+
+    prm.stage[1].enabled = d->stageTwo->isChecked();
+    prm.stage[1].power   = d->powerInput2->value();
+    prm.stage[1].blur    = d->blurInput2->value();
+
+    prm.stage[2].enabled = d->stageThree->isChecked();
+    prm.stage[2].power   = d->powerInput3->value();
+    prm.stage[2].blur    = d->blurInput3->value();
+
+    prm.stage[3].enabled = d->stageFour->isChecked();
+    prm.stage[3].power   = d->powerInput4->value();
+    prm.stage[3].blur    = d->blurInput4->value();
+
     return prm;
 }
 
@@ -538,9 +551,9 @@ void LocalContrastSettings::setSettings(const ToneMappingParameters& settings)
     blockSignals(true);
     d->expanderBox->setEnabled(false);
 
+    d->stretchContrastCheck->setChecked(settings.stretch_contrast);
     d->lowSaturationInput->setValue(settings.low_saturation);
     d->highSaturationInput->setValue(settings.high_saturation);
-    d->stretchContrastCheck->setChecked(settings.stretch_contrast);
     d->functionInput->setCurrentIndex(settings.function_id);
 
     d->stageOne->setChecked(settings.stage[0].enabled);
@@ -574,9 +587,9 @@ void LocalContrastSettings::resetToDefault()
 {
     blockSignals(true);
 
+    d->stretchContrastCheck->setChecked(false);
     d->lowSaturationInput->slotReset();
     d->highSaturationInput->slotReset();
-    d->stretchContrastCheck->setChecked(false);
     d->functionInput->slotReset();
 
     d->stageOne->setChecked(false);
@@ -601,15 +614,28 @@ void LocalContrastSettings::resetToDefault()
 ToneMappingParameters LocalContrastSettings::defaultSettings() const
 {
     ToneMappingParameters prm;
-/*
-    prm.black       = d->blackInput->defaultValue();
-    prm.exposition  = d->mainExposureInput->defaultValue() + d->fineExposureInput->defaultValue();
-    prm.temperature = d->temperatureInput->defaultValue();
-    prm.green       = d->greenInput->defaultValue();
-    prm.dark        = d->darkInput->defaultValue();
-    prm.gamma       = d->gammaInput->defaultValue();
-    prm.saturation  = d->saturationInput->defaultValue();
-*/
+
+    prm.stretch_contrast = false;
+    prm.low_saturation   = d->lowSaturationInput->defaultValue();
+    prm.high_saturation  = d->highSaturationInput->defaultValue();
+    prm.function_id      = d->functionInput->defaultIndex();
+
+    prm.stage[0].enabled = false;
+    prm.stage[0].power   = d->powerInput1->defaultValue();
+    prm.stage[0].blur    = d->blurInput1->defaultValue();
+
+    prm.stage[1].enabled = false;
+    prm.stage[1].power   = d->powerInput2->defaultValue();
+    prm.stage[1].blur    = d->blurInput2->defaultValue();
+
+    prm.stage[2].enabled = false;
+    prm.stage[2].power   = d->powerInput3->defaultValue();
+    prm.stage[2].blur    = d->blurInput3->defaultValue();
+
+    prm.stage[3].enabled = false;
+    prm.stage[3].power   = d->powerInput4->defaultValue();
+    prm.stage[3].blur    = d->blurInput4->defaultValue();
+
     return prm;
 }
 
@@ -639,29 +665,34 @@ void LocalContrastSettings::readSettings(KConfigGroup& group)
     prm.stage[3].power   = group.readEntry(d->configPower4Entry,          d->powerInput4->defaultValue());
     prm.stage[3].blur    = group.readEntry(d->configBlur4Entry,           d->blurInput4->defaultValue());
 
-/*  NOTE: not yet managed
-    prm.unsharp_mask.enabled   = ;
-    prm.unsharp_mask.blur      = ;
-    prm.unsharp_mask.power     = ;
-    prm.unsharp_mask.threshold = ;
-*/
-
     setSettings(prm);
 }
 
 void LocalContrastSettings::writeSettings(KConfigGroup& group)
 {
     ToneMappingParameters prm = settings();
-/*
-    group.writeEntry(d->configDarkInputEntry,        d->darkInput->value());
-    group.writeEntry(d->configBlackInputEntry,       d->blackInput->value());
-    group.writeEntry(d->configMainExposureEntry,     d->mainExposureInput->value());
-    group.writeEntry(d->configFineExposureEntry,     d->fineExposureInput->value());
-    group.writeEntry(d->configGammaInputEntry,       d->gammaInput->value());
-    group.writeEntry(d->configSaturationInputEntry,  d->saturationInput->value());
-    group.writeEntry(d->configGreenInputEntry,       d->greenInput->value());
-    group.writeEntry(d->configTemperatureInputEntry, d->temperatureInput->value());
-*/
+
+    group.writeEntry(d->configStretchContrastEntry, prm.stretch_contrast);
+    group.writeEntry(d->configLowSaturationEntry,   prm.low_saturation);
+    group.writeEntry(d->configHighSaturationEntry,  prm.high_saturation);
+    group.writeEntry(d->configFunctionInputEntry,   prm.function_id);
+
+    group.writeEntry(d->configStageOneEntry,        prm.stage[0].enabled);
+    group.writeEntry(d->configPower1Entry,          prm.stage[0].power);
+    group.writeEntry(d->configBlur1Entry,           prm.stage[0].blur);
+
+    group.writeEntry(d->configStageTwoEntry,        prm.stage[1].enabled);
+    group.writeEntry(d->configPower2Entry,          prm.stage[1].power);
+    group.writeEntry(d->configBlur2Entry,           prm.stage[1].blur);
+
+    group.writeEntry(d->configStageThreeEntry,      prm.stage[2].enabled);
+    group.writeEntry(d->configPower3Entry,          prm.stage[2].power);
+    group.writeEntry(d->configBlur3Entry,           prm.stage[2].blur);
+
+    group.writeEntry(d->configStageFourEntry,       prm.stage[3].enabled);
+    group.writeEntry(d->configPower4Entry,          prm.stage[3].power);
+    group.writeEntry(d->configBlur4Entry,           prm.stage[3].blur);
+    d->expanderBox->writeSettings();
 }
 
 void LocalContrastSettings::loadSettings()
