@@ -67,44 +67,87 @@ ToneMapping::~ToneMapping()
     delete d;
 }
 
-void ToneMapping::set_blur(int nstage, float value)
+void ToneMapping::set_parameters(ToneMappingParameters* par)
 {
-    if (value < 0) value = 0;
-    if (value > 10000.0) value = 10000.0;
-    d->par->stage[nstage].blur = value;
+    d->par = par;
+    set_low_saturation(d->par->low_saturation);
+    set_high_saturation(d->par->high_saturation);
+    set_stretch_contrast(d->par->stretch_contrast);
+    set_function_id(d->par->function_id);
+
+    for (int i=0 ; i < TONEMAPPING_MAX_STAGES ; i++)
+    {
+        set_power(i, d->par->stage[i].power);
+        set_blur(i, d->par->stage[i].blur);
+    };
+
+    update_preprocessed_values();
 }
 
-void ToneMapping::set_power(int nstage, float value)
+ToneMappingParameters* ToneMapping::get_parameters() const
 {
-    if (value < 0) value = 0;
-    if (value > 100.0) value = 100.0;
-    d->par->stage[nstage].power = value;
+    return d->par;
 }
 
-void ToneMapping::set_low_saturation(int value)
+void ToneMapping::process_8bit_rgb_image(unsigned char* img, int sizex, int sizey)
 {
-    if (value < 0) value = 0;
-    if (value > 100) value = 100;
-    d->par->low_saturation = value;
+    int size            = sizex*sizey;
+    float* tmpimage     = new float[size*3];
+    const float inv_256 = 1.0/256.0;
+
+    for (int i=0 ; !d->par->cancel() && (i < size*3) ; i++)
+    {
+        // convert to floating point
+        tmpimage[i] = (float)(img[i]/255.0);
+    }
+
+    process_rgb_image(tmpimage, sizex, sizey);
+
+    // convert back to 8 bits (with dithering)
+    int pos=0;
+
+    for (int i=0 ; !d->par->cancel() && (i < size) ; i++)
+    {
+        float dither = ((rand()/256)%256)*inv_256;
+        img[pos]     = (int)(tmpimage[pos]  *255.0+dither);
+        img[pos+1]   = (int)(tmpimage[pos+1]*255.0+dither);
+        img[pos+2]   = (int)(tmpimage[pos+2]*255.0+dither);
+        pos += 3;
+    }
+
+    delete [] tmpimage;
+    d->par->postProgress(90);
 }
 
-void ToneMapping::set_high_saturation(int value)
+void ToneMapping::process_16bit_rgb_image(unsigned short int* img, int sizex, int sizey)
 {
-    if (value < 0) value = 0;
-    if (value > 100) value = 100;
-    d->par->high_saturation = value;
-}
+    int size              = sizex*sizey;
+    float* tmpimage       = new float[size*3];
+    const float inv_65536 = 1.0/65536.0;
 
-void ToneMapping::set_stretch_contrast(bool value)
-{
-    d->par->stretch_contrast = value;
-}
+    for (int i=0 ; !d->par->cancel() && (i < size*3) ; i++)
+    {
+        // convert to floating point
+        tmpimage[i] = (float)(img[i]/65535.0);
+    }
 
-void ToneMapping::set_function_id (int value)
-{
-    if (value < 0) value = 0;
-    if (value > 1) value = 1;
-    d->par->function_id = value;
+    process_rgb_image(tmpimage, sizex, sizey);
+
+    // convert back to 8 bits (with dithering)
+    int pos = 0;
+
+    for (int i=0 ; !d->par->cancel() && (i < size) ; i++)
+    {
+        float dither = ((rand()/65536)%65536)*inv_65536;
+        img[pos]     = (int)(tmpimage[pos]  *65535.0+dither);
+        img[pos+1]   = (int)(tmpimage[pos+1]*65535.0+dither);
+        img[pos+2]   = (int)(tmpimage[pos+2]*65535.0+dither);
+        pos+=3;
+    }
+
+    delete [] tmpimage;
+
+    d->par->postProgress(90);
 }
 
 float ToneMapping::func(float x1, float x2)
@@ -148,23 +191,6 @@ float ToneMapping::func(float x1, float x2)
     };
 
     return result;
-}
-
-void ToneMapping::set_parameters(ToneMappingParameters* par)
-{
-    d->par = par;
-    set_low_saturation(d->par->low_saturation);
-    set_high_saturation(d->par->high_saturation);
-    set_stretch_contrast(d->par->stretch_contrast);
-    set_function_id(d->par->function_id);
-
-    for (int i=0 ; i < TONEMAPPING_MAX_STAGES ; i++)
-    {
-        set_power(i, d->par->stage[i].power);
-        set_blur(i, d->par->stage[i].blur);
-    };
-
-    update_preprocessed_values();
 }
 
 void ToneMapping::process_rgb_image(float* img, int sizex, int sizey)
@@ -334,67 +360,6 @@ void ToneMapping::update_preprocessed_values()
     d->par->postProgress(20);
 }
 
-void ToneMapping::process_16bit_rgb_image(unsigned short int* img, int sizex, int sizey)
-{
-    int size              = sizex*sizey;
-    float* tmpimage       = new float[size*3];
-    const float inv_65536 = 1.0/65536.0;
-
-    for (int i=0 ; !d->par->cancel() && (i < size*3) ; i++)
-    {
-        // convert to floating point
-        tmpimage[i] = (float)(img[i]/65535.0);
-    }
-
-    process_rgb_image(tmpimage, sizex, sizey);
-
-    // convert back to 8 bits (with dithering)
-    int pos = 0;
-
-    for (int i=0 ; !d->par->cancel() && (i < size) ; i++)
-    {
-        float dither = ((rand()/65536)%65536)*inv_65536;
-        img[pos]     = (int)(tmpimage[pos]  *65535.0+dither);
-        img[pos+1]   = (int)(tmpimage[pos+1]*65535.0+dither);
-        img[pos+2]   = (int)(tmpimage[pos+2]*65535.0+dither);
-        pos+=3;
-    }
-
-    delete [] tmpimage;
-
-    d->par->postProgress(90);
-}
-
-void ToneMapping::process_8bit_rgb_image(unsigned char* img, int sizex, int sizey)
-{
-    int size            = sizex*sizey;
-    float* tmpimage     = new float[size*3];
-    const float inv_256 = 1.0/256.0;
-
-    for (int i=0 ; !d->par->cancel() && (i < size*3) ; i++)
-    {
-        // convert to floating point
-        tmpimage[i] = (float)(img[i]/255.0);
-    }
-
-    process_rgb_image(tmpimage, sizex, sizey);
-
-    // convert back to 8 bits (with dithering)
-    int pos=0;
-
-    for (int i=0 ; !d->par->cancel() && (i < size) ; i++)
-    {
-        float dither = ((rand()/256)%256)*inv_256;
-        img[pos]     = (int)(tmpimage[pos]  *255.0+dither);
-        img[pos+1]   = (int)(tmpimage[pos+1]*255.0+dither);
-        img[pos+2]   = (int)(tmpimage[pos+2]*255.0+dither);
-        pos += 3;
-    }
-
-    delete [] tmpimage;
-    d->par->postProgress(90);
-}
-
 void ToneMapping::inplace_blur(float* data, int sizex, int sizey, float blur)
 {
     blur /= d->preview_zoom;
@@ -527,11 +492,6 @@ void ToneMapping::stretch_contrast(float* data, int datasize)
     }
 }
 
-ToneMappingParameters* ToneMapping::get_parameters() const
-{
-    return d->par;
-}
-
 void ToneMapping::set_enabled(int nstage, bool enabled)
 {
     d->par->stage[nstage].enabled=enabled;
@@ -636,6 +596,46 @@ void ToneMapping::set_current_stage(int nstage)
 void ToneMapping::set_preview_zoom(float val)
 {
     if ((val > 0.001) && (val < 1000.0)) d->preview_zoom = val;
+}
+
+void ToneMapping::set_blur(int nstage, float value)
+{
+    if (value < 0) value = 0;
+    if (value > 10000.0) value = 10000.0;
+    d->par->stage[nstage].blur = value;
+}
+
+void ToneMapping::set_power(int nstage, float value)
+{
+    if (value < 0) value = 0;
+    if (value > 100.0) value = 100.0;
+    d->par->stage[nstage].power = value;
+}
+
+void ToneMapping::set_low_saturation(int value)
+{
+    if (value < 0) value = 0;
+    if (value > 100) value = 100;
+    d->par->low_saturation = value;
+}
+
+void ToneMapping::set_high_saturation(int value)
+{
+    if (value < 0) value = 0;
+    if (value > 100) value = 100;
+    d->par->high_saturation = value;
+}
+
+void ToneMapping::set_stretch_contrast(bool value)
+{
+    d->par->stretch_contrast = value;
+}
+
+void ToneMapping::set_function_id (int value)
+{
+    if (value < 0) value = 0;
+    if (value > 1) value = 1;
+    d->par->function_id = value;
 }
 
 void ToneMapping::rgb2hsv(const float& r, const float& g, const float& b, float& h, float& s, float& v)
