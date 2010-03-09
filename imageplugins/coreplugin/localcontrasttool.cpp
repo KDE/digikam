@@ -148,7 +148,7 @@ void LocalContrastTool::prepareEffect()
     toolView()->setEnabled(false);
 
     DImg image = d->previewWidget->getOriginalRegionImage(true);
-    setFilter(new LocalContrastFilter(&image, this, createParams()));
+    setFilter(new LocalContrastFilter(&image, this, d->settingsView->createParams()));
 }
 
 void LocalContrastTool::prepareFinal()
@@ -157,7 +157,7 @@ void LocalContrastTool::prepareFinal()
     toolView()->setEnabled(false);
 
     ImageIface iface(0, 0);
-    setFilter(new LocalContrastFilter(iface.getOriginalImg(), this, createParams()));
+    setFilter(new LocalContrastFilter(iface.getOriginalImg(), this, d->settingsView->createParams()));
 }
 
 void LocalContrastTool::putPreviewData()
@@ -186,7 +186,7 @@ void LocalContrastTool::slotLoadSettings()
 
 void LocalContrastTool::slotSaveAsSettings()
 {
-    d->settingsView->saveSettings();
+    d->settingsView->saveAsSettings();
 }
 
 } // namespace DigikamImagesPluginCore
