@@ -105,6 +105,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 075 ==> 229793 : Drop image file in digiKam.
 076 ==> 228483 : digiKam 1.1.0 with system libjpeg-8 breaks image rotation.
 077 ==> 187431 : Gui too big for eeepc.
-078 ==> 230008 : DigiKam Nikon fetching pictures.
-079 ==> 
+078 ==> 230008 : digiKam Nikon fetching pictures.
+079 ==> 229470 : digiKam fails to start with QCursor: Cannot create bitmap cursor; invalid bitmap(s).
+080 ==> 
+
 
