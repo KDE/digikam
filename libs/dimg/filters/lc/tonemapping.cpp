@@ -47,13 +47,13 @@ public:
         par                         = 0;
     }
 
+    // preprocessed values
+    float                  current_process_power_value;
+
     // used for zoom on previews
     float                  preview_zoom;
 
     ToneMappingParameters* par;
-
-    // preprocessed values
-    float                  current_process_power_value;
 };
 
 ToneMapping::ToneMapping()
