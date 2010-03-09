@@ -6,6 +6,7 @@
  * Date        : 2009-08-09
  * Description : a plugin to enhance image with local contrasts (as human eye does).
  *
+ * Copyright (C) 2009 by Nasca Octavian Paul <zynaddsubfx at yahoo dot com>
  * Copyright (C) 2009 by Julien Pontabry <julien dot pontabry at gmail dot com>
  * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -31,15 +32,6 @@
 namespace Digikam
 {
 
-static void CallbackForLocalContrastFilter(void* data, int progress)
-{
-    if (data)
-    {
-        LocalContrastFilter* d = static_cast<LocalContrastFilter*>(data);
-        if (d) return d->progressCallback(progress);
-    }
-}
-
 class LocalContrastFilterPriv
 {
 public:
@@ -64,10 +56,7 @@ LocalContrastFilter::LocalContrastFilter(DImg* image, QObject* parent, ToneMappi
                    : DImgThreadedFilter(image, parent, "LocalContrast"),
                      d(new LocalContrastFilterPriv)
 {
-    par->setCancel(&m_cancel);
-    par->setProgressCallBackFunction(this, CallbackForLocalContrastFilter);
     set_parameters(par);
-
     initFilter();
 }
 
@@ -79,7 +68,7 @@ LocalContrastFilter::~LocalContrastFilter()
 
 void LocalContrastFilter::filterImage()
 {
-    progressCallback(0);
+    postProgress(0);
 
     // Process image
 
@@ -101,7 +90,7 @@ void LocalContrastFilter::filterImage()
                 data[i+2] = dataImg[j+2];
             }
 
-            progressCallback(10);
+            postProgress(10);
 
             process_16bit_rgb_image(data, m_orgImage.width(), m_orgImage.height());
 
@@ -132,7 +121,7 @@ void LocalContrastFilter::filterImage()
                 data[i+2] = m_orgImage.bits()[j+2];
             }
 
-            progressCallback(10);
+            postProgress(10);
 
             process_8bit_rgb_image(data, m_orgImage.width(), m_orgImage.height());
 
@@ -149,16 +138,7 @@ void LocalContrastFilter::filterImage()
         }
     }
 
-    progressCallback(100);
-}
-
-void LocalContrastFilter::progressCallback(int progress)
-{
-    if (progress%5 == 0)
-    {
-        postProgress(progress);
-//        kDebug() << "ToneMapping progress: " << progress;
-    }
+    postProgress(100);
 }
 
 void LocalContrastFilter::set_parameters(ToneMappingParameters* par)
@@ -189,7 +169,7 @@ void LocalContrastFilter::process_8bit_rgb_image(unsigned char* img, int sizex, 
     float* tmpimage     = new float[size*3];
     const float inv_256 = 1.0/256.0;
 
-    for (int i=0 ; !d->par->cancel() && (i < size*3) ; i++)
+    for (int i=0 ; !m_cancel && (i < size*3) ; i++)
     {
         // convert to floating point
         tmpimage[i] = (float)(img[i]/255.0);
@@ -200,7 +180,7 @@ void LocalContrastFilter::process_8bit_rgb_image(unsigned char* img, int sizex, 
     // convert back to 8 bits (with dithering)
     int pos=0;
 
-    for (int i=0 ; !d->par->cancel() && (i < size) ; i++)
+    for (int i=0 ; !m_cancel && (i < size) ; i++)
     {
         float dither = ((rand()/256)%256)*inv_256;
         img[pos]     = (int)(tmpimage[pos]  *255.0+dither);
@@ -210,7 +190,7 @@ void LocalContrastFilter::process_8bit_rgb_image(unsigned char* img, int sizex, 
     }
 
     delete [] tmpimage;
-    d->par->postProgress(90);
+    postProgress(90);
 }
 
 void LocalContrastFilter::process_16bit_rgb_image(unsigned short int* img, int sizex, int sizey)
@@ -219,7 +199,7 @@ void LocalContrastFilter::process_16bit_rgb_image(unsigned short int* img, int s
     float* tmpimage       = new float[size*3];
     const float inv_65536 = 1.0/65536.0;
 
-    for (int i=0 ; !d->par->cancel() && (i < size*3) ; i++)
+    for (int i=0 ; !m_cancel && (i < size*3) ; i++)
     {
         // convert to floating point
         tmpimage[i] = (float)(img[i]/65535.0);
@@ -230,7 +210,7 @@ void LocalContrastFilter::process_16bit_rgb_image(unsigned short int* img, int s
     // convert back to 8 bits (with dithering)
     int pos = 0;
 
-    for (int i=0 ; !d->par->cancel() && (i < size) ; i++)
+    for (int i=0 ; !m_cancel && (i < size) ; i++)
     {
         float dither = ((rand()/65536)%65536)*inv_65536;
         img[pos]     = (int)(tmpimage[pos]  *65535.0+dither);
@@ -241,7 +221,7 @@ void LocalContrastFilter::process_16bit_rgb_image(unsigned short int* img, int s
 
     delete [] tmpimage;
 
-    d->par->postProgress(90);
+    postProgress(90);
 }
 
 float LocalContrastFilter::func(float x1, float x2)
@@ -305,7 +285,7 @@ void LocalContrastFilter::process_rgb_image(float* img, int sizex, int sizey)
 
     int pos = 0;
 
-    for (int nstage=0 ; !d->par->cancel() && (nstage < TONEMAPPING_MAX_STAGES) ; nstage++)
+    for (int nstage=0 ; !m_cancel && (nstage < TONEMAPPING_MAX_STAGES) ; nstage++)
     {
         if (d->par->stage[nstage].enabled)
         {
@@ -313,7 +293,7 @@ void LocalContrastFilter::process_rgb_image(float* img, int sizex, int sizey)
 
             pos = 0;
 
-            for (int i=0 ; !d->par->cancel() && (i < size) ; i++)
+            for (int i=0 ; !m_cancel && (i < size) ; i++)
             {
                 blurimage[i] = (float)((img[pos]+img[pos+1]+img[pos+2])/3.0);
                 pos += 3;
@@ -327,7 +307,7 @@ void LocalContrastFilter::process_rgb_image(float* img, int sizex, int sizey)
 
             pos = 0;
 
-            for (int i=0 ; !d->par->cancel() && (i<size) ; i++)
+            for (int i=0 ; !m_cancel && (i<size) ; i++)
             {
                 float src_r  = img[pos];
                 float src_g  = img[pos+1];
@@ -347,7 +327,7 @@ void LocalContrastFilter::process_rgb_image(float* img, int sizex, int sizey)
             }
         }
 
-        d->par->postProgress(30 + nstage*10);
+        postProgress(30 + nstage*10);
     }
 
     int high_saturation_value = 100-d->par->high_saturation;
@@ -357,7 +337,7 @@ void LocalContrastFilter::process_rgb_image(float* img, int sizex, int sizey)
     {
         int pos = 0;
 
-        for (int i=0 ; !d->par->cancel() && (i < size) ; i++)
+        for (int i=0 ; !m_cancel && (i < size) ; i++)
         {
             float src_h, src_s, src_v;
             float dest_h, dest_s, dest_v;
@@ -377,7 +357,7 @@ void LocalContrastFilter::process_rgb_image(float* img, int sizex, int sizey)
         }
     }
 
-    d->par->postProgress(70);
+    postProgress(70);
 
     // Unsharp Mask filter
 
@@ -389,7 +369,7 @@ void LocalContrastFilter::process_rgb_image(float* img, int sizex, int sizey)
 
         int pos = 0;
 
-        for (int i=0 ; !d->par->cancel() && (i < size) ; i++)
+        for (int i=0 ; !m_cancel && (i < size) ; i++)
         {
             val[i] = blurimage[i] = (float)((img[pos]+img[pos+1]+img[pos+2])/3.0);
             //val[i] = blurimage[i] = (float)(max3(img[pos],img[pos+1],img[pos+2]));
@@ -404,7 +384,7 @@ void LocalContrastFilter::process_rgb_image(float* img, int sizex, int sizey)
         float threshold  = (float)(d->par->unsharp_mask.threshold*pow/250.0);
         float threshold2 = threshold/2;
 
-        for (int i=0 ; !d->par->cancel() && (i < size) ; i++)
+        for (int i=0 ; !m_cancel && (i < size) ; i++)
         {
             float dval     = (val[i]-blurimage[i])*pow;
             float abs_dval = fabs(dval);
@@ -446,12 +426,12 @@ void LocalContrastFilter::process_rgb_image(float* img, int sizex, int sizey)
     delete [] srcimg;
     delete [] blurimage;
 
-    d->par->postProgress(80);
+    postProgress(80);
 }
 
 void LocalContrastFilter::update_preprocessed_values()
 {
-    d->par->postProgress(20);
+    postProgress(20);
 }
 
 void LocalContrastFilter::inplace_blur(float* data, int sizex, int sizey, float blur)
@@ -467,15 +447,15 @@ void LocalContrastFilter::inplace_blur(float* data, int sizex, int sizey, float 
     a *= a;
     float denormal_remove = (float)(1e-15);
 
-    for (int stage=0 ; !d->par->cancel() && (stage < 2) ; stage++)
+    for (int stage=0 ; !m_cancel && (stage < 2) ; stage++)
     {
-        for (int y=0 ; !d->par->cancel() && (y < sizey) ; y++)
+        for (int y=0 ; !m_cancel && (y < sizey) ; y++)
         {
             int pos   = y*sizex;
             float old = data[pos];
             pos++;
 
-            for (int x=1 ; !d->par->cancel() && (x < sizex) ; x++)
+            for (int x=1 ; !m_cancel && (x < sizex) ; x++)
             {
                 old       = (data[pos]*(1-a)+old*a)+denormal_remove;
                 data[pos] = old;
@@ -484,7 +464,7 @@ void LocalContrastFilter::inplace_blur(float* data, int sizex, int sizey, float 
 
             pos = y*sizex+sizex-1;
 
-            for (int x=1 ; !d->par->cancel() && (x < sizex) ; x++)
+            for (int x=1 ; !m_cancel && (x < sizex) ; x++)
             {
                 old       = (data[pos]*(1-a)+old*a)+denormal_remove;
                 data[pos] = old;
@@ -492,12 +472,12 @@ void LocalContrastFilter::inplace_blur(float* data, int sizex, int sizey, float 
             }
         }
 
-        for (int x=0 ; !d->par->cancel() && (x < sizex) ; x++)
+        for (int x=0 ; !m_cancel && (x < sizex) ; x++)
         {
             int pos   = x;
             float old = data[pos];
 
-            for (int y=1 ; !d->par->cancel() && (y < sizey) ; y++)
+            for (int y=1 ; !m_cancel && (y < sizey) ; y++)
             {
                 old       = (data[pos]*(1-a)+old*a)+denormal_remove;
                 data[pos] = old;
@@ -506,7 +486,7 @@ void LocalContrastFilter::inplace_blur(float* data, int sizex, int sizey, float 
 
             pos = x+sizex*(sizey-1);
 
-            for (int y=1 ; !d->par->cancel() && (y < sizey) ; y++)
+            for (int y=1 ; !m_cancel && (y < sizey) ; y++)
             {
                 old       = (data[pos]*(1-a)+old*a)+denormal_remove;
                 data[pos] = old;
@@ -526,7 +506,7 @@ void LocalContrastFilter::stretch_contrast(float* data, int datasize)
     for (unsigned int i=0 ; i < histogram_size ; i++)
     histogram[i] = 0;
 
-    for (unsigned int i=0 ; !d->par->cancel() && (i < (unsigned int)datasize) ; i++)
+    for (unsigned int i=0 ; !m_cancel && (i < (unsigned int)datasize) ; i++)
     {
         int m = (int)(data[i]*(histogram_size-1));
         if (m < 0) m = 0;
@@ -541,7 +521,7 @@ void LocalContrastFilter::stretch_contrast(float* data, int datasize)
     unsigned int sum_min     = 0;
     unsigned int sum_max     = 0;
 
-    for (unsigned int i=0 ; !d->par->cancel() && (i < histogram_size) ; i++)
+    for (unsigned int i=0 ; !m_cancel && (i < histogram_size) ; i++)
     {
         sum_min += histogram[i];
         if (sum_min > desired_sum)
@@ -551,7 +531,7 @@ void LocalContrastFilter::stretch_contrast(float* data, int datasize)
         }
     }
 
-    for (int i = histogram_size-1 ; !d->par->cancel() && (i >= 0) ; i--)
+    for (int i = histogram_size-1 ; !m_cancel && (i >= 0) ; i--)
     {
         sum_max += histogram[i];
 
@@ -571,7 +551,7 @@ void LocalContrastFilter::stretch_contrast(float* data, int datasize)
     float min_src_val = (float)(min/255.0);
     float max_src_val = (float)(max/255.0);
 
-    for (int i=0 ; !d->par->cancel() && (i < datasize) ; i++)
+    for (int i=0 ; !m_cancel && (i < datasize) ; i++)
     {
         //stretch the contrast
         float x = data[i];

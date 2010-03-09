@@ -44,31 +44,8 @@
 namespace Digikam
 {
 
-class ToneMappingParametersPriv
-{
-public:
-
-    ToneMappingParametersPriv()
-    {
-        cancel   = 0;
-        data     = 0;
-        callBack = 0;
-    };
-
-    /** To cancel computation from user interface.
-    */
-    bool*                  cancel;
-
-    /** For progress CallBack method from User interface
-     */
-    ToneMappingCallbackPtr callBack;
-    void*                  data;
-};
-
 ToneMappingParameters::ToneMappingParameters()
 {
-    d = new ToneMappingParametersPriv;
-
     info_fast_mode   = true;
     high_saturation  = 100;
     low_saturation   = 100;
@@ -90,37 +67,6 @@ ToneMappingParameters::ToneMappingParameters()
 
 ToneMappingParameters::~ToneMappingParameters()
 {
-    delete d;
-}
-
-ToneMappingParameters& ToneMappingParameters::operator=(const ToneMappingParameters& prm)
-{
-    d = prm.d;
-    return *this;
-}
-
-bool ToneMappingParameters::cancel()
-{
-    if (d->cancel)
-        return *d->cancel;
-
-    return false;
-}
-
-void ToneMappingParameters::setCancel(bool* b)
-{
-    d->cancel = b;
-}
-
-void ToneMappingParameters::setProgressCallBackFunction(void* data, ToneMappingCallbackPtr cb)
-{
-    d->callBack = cb;
-    d->data     = data;
-}
-
-void ToneMappingParameters::postProgress(int progress)
-{
-    d->callBack(d->data, progress);
 }
 
 float ToneMappingParameters::get_power(int nstage)

@@ -34,8 +34,6 @@
 namespace Digikam
 {
 
-typedef void (*ToneMappingCallbackPtr)(void* data, int progress);
-
 class ToneMappingParametersPriv;
 
 class DIGIKAM_EXPORT ToneMappingParameters
@@ -45,14 +43,6 @@ public:
 
     ToneMappingParameters();
     ~ToneMappingParameters();
-
-    ToneMappingParameters& operator=(const ToneMappingParameters& prm);
-
-    void  setCancel(bool* b);
-    bool  cancel();
-
-    void  setProgressCallBackFunction(void* data=0, ToneMappingCallbackPtr cb=0);
-    void  postProgress(int progress);
 
     float get_power(int nstage);
     float get_blur(int nstage);
@@ -86,10 +76,6 @@ public:
         int   threshold;     // threshold : 0.00 - 1.00
     }
     unsharp_mask;
-
-private:
-
-    ToneMappingParametersPriv* d;
 };
 
 } // namespace Digikam
