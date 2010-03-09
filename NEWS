@@ -109,7 +109,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 079 ==> 229470 : digiKam fails to start with QCursor: Cannot create bitmap cursor; invalid bitmap(s).
 080 ==> 221992 : "local contrast" settings make no difference.
 081 ==> 230003 : Zoombar slider adjustments below 100% are hard to archieve. [patch]
-082 ==>
+082 ==> 228810 : need to roll over again on a thumb to correct the rating.
+083 ==>
 
 
 

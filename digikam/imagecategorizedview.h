@@ -148,11 +148,13 @@ protected:
     void currentChanged(const QModelIndex& index, const QModelIndex& previous);
     void paintEvent(QPaintEvent *e);
     void selectionChanged(const QItemSelection &, const QItemSelection &);
+    void updateGeometries();
     ImageModelDragDropHandler *dragDropHandler() const;
 
 private Q_SLOTS:
 
     void slotFileChanged(const QString& filePath);
+    void slotDelayedEnter();
 
 private:
 
