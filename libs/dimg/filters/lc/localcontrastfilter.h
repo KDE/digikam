@@ -48,7 +48,7 @@ class DIGIKAM_EXPORT LocalContrastFilter : public DImgThreadedFilter
 
 public:
 
-    LocalContrastFilter(DImg* image, QObject* parent, ToneMappingParameters* par);
+    LocalContrastFilter(DImg* image, QObject* parent=0, const ToneMappingParameters& par=ToneMappingParameters());
     ~LocalContrastFilter();
 
     void progressCallback(int progress);
@@ -57,8 +57,8 @@ private:
 
     void filterImage();
 
-    void  set_parameters(ToneMappingParameters* par);
-    ToneMappingParameters* get_parameters() const;
+    void  set_parameters(const ToneMappingParameters& par);
+    ToneMappingParameters get_parameters() const;
 
     void  process_8bit_rgb_image(unsigned char* img, int sizex, int sizey);
     void  process_16bit_rgb_image(unsigned short int* img, int sizex, int sizey);

@@ -63,8 +63,6 @@ public:
     void loadSettings();
     void saveAsSettings();
 
-    ToneMappingParameters* createParams() const;
-
 Q_SIGNALS:
 
     void signalSettingsChanged();

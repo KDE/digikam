@@ -412,28 +412,6 @@ LocalContrastSettings::LocalContrastSettings(QWidget* parent)
 
     connect(d->stageFour,SIGNAL(toggled(bool)),
             this, SLOT(slotStage4Enabled(bool)));
-
-/*    connect(d->darkInput, SIGNAL(valueChanged(double)),
-            this, SIGNAL(signalSettingsChanged()));
-
-    connect(d->blackInput, SIGNAL(valueChanged(double)),
-            this, SIGNAL(signalSettingsChanged()));
-
-    connect(d->mainExposureInput, SIGNAL(valueChanged(double)),
-            this, SIGNAL(signalSettingsChanged()));
-
-    connect(d->fineExposureInput, SIGNAL(valueChanged(double)),
-            this, SIGNAL(signalSettingsChanged()));
-
-    connect(d->gammaInput, SIGNAL(valueChanged(double)),
-            this, SIGNAL(signalSettingsChanged()));
-
-    connect(d->saturationInput, SIGNAL(valueChanged(double)),
-            this, SIGNAL(signalSettingsChanged()));
-
-    connect(d->greenInput, SIGNAL(valueChanged(double)),
-            this, SIGNAL(signalSettingsChanged()));
-*/
 }
 
 LocalContrastSettings::~LocalContrastSettings()
@@ -472,50 +450,6 @@ void LocalContrastSettings::slotStage4Enabled(bool b)
     d->powerInput4->setEnabled(b);
     d->label11->setEnabled(b);
     d->blurInput4->setEnabled(b);
-}
-
-ToneMappingParameters* LocalContrastSettings::createParams() const
-{
-    ToneMappingParameters* par = new ToneMappingParameters;
-
-    // Setting general parameters
-    par->info_fast_mode   = false;
-    par->low_saturation   = d->lowSaturationInput->value();
-    par->high_saturation  = d->highSaturationInput->value();
-    par->stretch_contrast = d->stretchContrastCheck->isChecked();
-    par->function_id      = d->functionInput->currentIndex();
-
-    // Setting stages parameters
-    par->stage[0].enabled = d->stageOne->isChecked();
-    par->stage[1].enabled = d->stageTwo->isChecked();
-    par->stage[2].enabled = d->stageThree->isChecked();
-    par->stage[3].enabled = d->stageFour->isChecked();
-
-    if (par->stage[0].enabled)
-    {
-        par->stage[0].power = d->powerInput1->value();
-        par->stage[0].blur  = d->blurInput1->value();
-    }
-
-    if (par->stage[1].enabled)
-    {
-        par->stage[1].power = d->powerInput2->value();
-        par->stage[1].blur  = d->blurInput2->value();
-    }
-
-    if (par->stage[2].enabled)
-    {
-        par->stage[2].power = d->powerInput3->value();
-        par->stage[2].blur  = d->blurInput3->value();
-    }
-
-    if (par->stage[3].enabled)
-    {
-        par->stage[3].power = d->powerInput4->value();
-        par->stage[3].blur  = d->blurInput4->value();
-    }
-
-    return par;
 }
 
 ToneMappingParameters LocalContrastSettings::settings() const

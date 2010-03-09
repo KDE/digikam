@@ -169,7 +169,7 @@ void LocalContrastTool::prepareEffect()
     toolView()->setEnabled(false);
 
     DImg image = d->previewWidget->getOriginalRegionImage(true);
-    setFilter(new LocalContrastFilter(&image, this, d->settingsView->createParams()));
+    setFilter(new LocalContrastFilter(&image, this, d->settingsView->settings()));
 }
 
 void LocalContrastTool::prepareFinal()
@@ -178,7 +178,7 @@ void LocalContrastTool::prepareFinal()
     toolView()->setEnabled(false);
 
     ImageIface iface(0, 0);
-    setFilter(new LocalContrastFilter(iface.getOriginalImg(), this, d->settingsView->createParams()));
+    setFilter(new LocalContrastFilter(iface.getOriginalImg(), this, d->settingsView->settings()));
 }
 
 void LocalContrastTool::putPreviewData()

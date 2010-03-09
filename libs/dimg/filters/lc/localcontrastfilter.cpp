@@ -40,19 +40,18 @@ public:
     {
         current_process_power_value = 20.0;
         preview_zoom                = 1.0;
-        par                         = 0;
     }
 
     // preprocessed values
-    float                  current_process_power_value;
+    float                 current_process_power_value;
 
     // used for zoom on previews
-    float                  preview_zoom;
+    float                 preview_zoom;
 
-    ToneMappingParameters* par;
+    ToneMappingParameters par;
 };
 
-LocalContrastFilter::LocalContrastFilter(DImg* image, QObject* parent, ToneMappingParameters* par)
+LocalContrastFilter::LocalContrastFilter(DImg* image, QObject* parent, const ToneMappingParameters& par)
                    : DImgThreadedFilter(image, parent, "LocalContrast"),
                      d(new LocalContrastFilterPriv)
 {
@@ -62,7 +61,6 @@ LocalContrastFilter::LocalContrastFilter(DImg* image, QObject* parent, ToneMappi
 
 LocalContrastFilter::~LocalContrastFilter()
 {
-    delete d->par;
     delete d;
 }
 
@@ -141,24 +139,24 @@ void LocalContrastFilter::filterImage()
     postProgress(100);
 }
 
-void LocalContrastFilter::set_parameters(ToneMappingParameters* par)
+void LocalContrastFilter::set_parameters(const ToneMappingParameters& par)
 {
     d->par = par;
-    set_low_saturation(d->par->low_saturation);
-    set_high_saturation(d->par->high_saturation);
-    set_stretch_contrast(d->par->stretch_contrast);
-    set_function_id(d->par->function_id);
+    set_low_saturation(d->par.low_saturation);
+    set_high_saturation(d->par.high_saturation);
+    set_stretch_contrast(d->par.stretch_contrast);
+    set_function_id(d->par.function_id);
 
     for (int i=0 ; i < TONEMAPPING_MAX_STAGES ; i++)
     {
-        set_power(i, d->par->stage[i].power);
-        set_blur(i, d->par->stage[i].blur);
+        set_power(i, d->par.stage[i].power);
+        set_blur(i, d->par.stage[i].blur);
     };
 
     update_preprocessed_values();
 }
 
-ToneMappingParameters* LocalContrastFilter::get_parameters() const
+ToneMappingParameters LocalContrastFilter::get_parameters() const
 {
     return d->par;
 }
@@ -231,7 +229,7 @@ float LocalContrastFilter::func(float x1, float x2)
 
     /*
     //test function
-    if (d->par->function_id==1)
+    if (d->par.function_id==1)
     {
         p=pow(0.1,fabs((x2*2.0-1.0))*d->current_process_power_value*0.02);
         if (x2<0.5) result=pow(x1,p);
@@ -251,7 +249,7 @@ float LocalContrastFilter::func(float x1, float x2)
     };
     */
 
-    switch (d->par->function_id)
+    switch (d->par.function_id)
     {
         case 0:  //power function
             p = (float)(pow((double)10.0,(double)fabs((x2*2.0-1.0))*d->current_process_power_value*0.02));
@@ -278,7 +276,7 @@ void LocalContrastFilter::process_rgb_image(float* img, int sizex, int sizey)
     for (int i=0 ; i < (size*3) ; i++)
         srcimg[i] = img[i];
 
-    if (d->par->stretch_contrast)
+    if (d->par.stretch_contrast)
     {
         stretch_contrast(img, size*3);
     }
@@ -287,7 +285,7 @@ void LocalContrastFilter::process_rgb_image(float* img, int sizex, int sizey)
 
     for (int nstage=0 ; !m_cancel && (nstage < TONEMAPPING_MAX_STAGES) ; nstage++)
     {
-        if (d->par->stage[nstage].enabled)
+        if (d->par.stage[nstage].enabled)
         {
             // compute the desatured image
 
@@ -299,11 +297,11 @@ void LocalContrastFilter::process_rgb_image(float* img, int sizex, int sizey)
                 pos += 3;
             }
 
-            d->current_process_power_value = d->par->get_power(nstage);
+            d->current_process_power_value = d->par.get_power(nstage);
 
             // blur
 
-            inplace_blur(blurimage, sizex, sizey, d->par->get_blur(nstage));
+            inplace_blur(blurimage, sizex, sizey, d->par.get_blur(nstage));
 
             pos = 0;
 
@@ -330,10 +328,10 @@ void LocalContrastFilter::process_rgb_image(float* img, int sizex, int sizey)
         postProgress(30 + nstage*10);
     }
 
-    int high_saturation_value = 100-d->par->high_saturation;
-    int low_saturation_value  = 100-d->par->low_saturation;
+    int high_saturation_value = 100-d->par.high_saturation;
+    int low_saturation_value  = 100-d->par.low_saturation;
 
-    if ((d->par->high_saturation != 100) || (d->par->low_saturation != 100))
+    if ((d->par.high_saturation != 100) || (d->par.low_saturation != 100))
     {
         int pos = 0;
 
@@ -348,7 +346,7 @@ void LocalContrastFilter::process_rgb_image(float* img, int sizex, int sizey)
             if (dest_v>src_v)
             {
                 float s1        = (float)(dest_saturation*src_v/(dest_v+1.0/255.0));
-                dest_saturation = (float)((low_saturation_value*s1+d->par->low_saturation*dest_saturation)*0.01);
+                dest_saturation = (float)((low_saturation_value*s1+d->par.low_saturation*dest_saturation)*0.01);
             }
 
             hsv2rgb(dest_h, dest_saturation, dest_v, img[pos], img[pos+1], img[pos+2]);
@@ -361,7 +359,7 @@ void LocalContrastFilter::process_rgb_image(float* img, int sizex, int sizey)
 
     // Unsharp Mask filter
 
-    if (d->par->unsharp_mask.enabled)
+    if (d->par.unsharp_mask.enabled)
     {
         float* val = new float[size];
 
@@ -376,12 +374,12 @@ void LocalContrastFilter::process_rgb_image(float* img, int sizex, int sizey)
             pos += 3;
         }
 
-        float blur_value = d->par->get_unsharp_mask_blur();
+        float blur_value = d->par.get_unsharp_mask_blur();
         inplace_blur(blurimage, sizex, sizey, blur_value);
 
         pos              = 0;
-        float pow        = (float)(2.5*d->par->get_unsharp_mask_power());
-        float threshold  = (float)(d->par->unsharp_mask.threshold*pow/250.0);
+        float pow        = (float)(2.5*d->par.get_unsharp_mask_power());
+        float threshold  = (float)(d->par.unsharp_mask.threshold*pow/250.0);
         float threshold2 = threshold/2;
 
         for (int i=0 ; !m_cancel && (i < size) ; i++)
@@ -568,103 +566,103 @@ void LocalContrastFilter::stretch_contrast(float* data, int datasize)
 
 void LocalContrastFilter::set_enabled(int nstage, bool enabled)
 {
-    d->par->stage[nstage].enabled=enabled;
+    d->par.stage[nstage].enabled=enabled;
 }
 
 void LocalContrastFilter::set_info_fast_mode(bool value)
 {
-    d->par->info_fast_mode=value;
+    d->par.info_fast_mode=value;
 }
 
 void LocalContrastFilter::set_unsharp_mask_enabled(bool value)
 {
-    d->par->unsharp_mask.enabled = value;
+    d->par.unsharp_mask.enabled = value;
 }
 
 void LocalContrastFilter::set_unsharp_mask_power(float value)
 {
     if (value < 0.0) value = 0.0;
     if (value > 100.0) value = 100.0;
-    d->par->unsharp_mask.power = value;
+    d->par.unsharp_mask.power = value;
 }
 
 void LocalContrastFilter::set_unsharp_mask_blur(float value)
 {
     if (value < 0.0) value = 0.0;
     if (value > 5000.0) value = 5000.0;
-    d->par->unsharp_mask.blur = value;
+    d->par.unsharp_mask.blur = value;
 }
 
 void LocalContrastFilter::set_unsharp_mask_threshold(int value)
 {
     if (value < 0) value = 0;
     if (value > 100) value = 100;
-    d->par->unsharp_mask.threshold = value;
+    d->par.unsharp_mask.threshold = value;
 }
 
 float LocalContrastFilter::get_enabled(int nstage)
 {
-    return d->par->stage[nstage].enabled;
+    return d->par.stage[nstage].enabled;
 }
 
 float LocalContrastFilter::get_blur(int nstage)
 {
-    return d->par->stage[nstage].blur;
+    return d->par.stage[nstage].blur;
 }
 
 float LocalContrastFilter::get_power(int nstage)
 {
-    return d->par->stage[nstage].power;
+    return d->par.stage[nstage].power;
 }
 
 int LocalContrastFilter::get_low_saturation()
 {
-    return d->par->low_saturation;
+    return d->par.low_saturation;
 }
 
 int LocalContrastFilter::get_high_saturation()
 {
-    return d->par->high_saturation;
+    return d->par.high_saturation;
 }
 
 bool LocalContrastFilter::get_stretch_contrast()
 {
-    return d->par->stretch_contrast;
+    return d->par.stretch_contrast;
 }
 
 int LocalContrastFilter::get_function_id()
 {
-    return d->par->function_id;
+    return d->par.function_id;
 }
 
 bool LocalContrastFilter::get_info_fast_mode()
 {
-    return d->par->info_fast_mode;
+    return d->par.info_fast_mode;
 }
 
 bool LocalContrastFilter::get_unsharp_mask_enabled(bool /*value*/)
 {
-    return d->par->unsharp_mask.enabled;
+    return d->par.unsharp_mask.enabled;
 }
 
 float LocalContrastFilter::get_unsharp_mask_power(float /*value*/)
 {
-    return d->par->unsharp_mask.power;
+    return d->par.unsharp_mask.power;
 }
 
 float LocalContrastFilter::get_unsharp_mask_(float /*value*/)
 {
-    return d->par->unsharp_mask.blur;
+    return d->par.unsharp_mask.blur;
 }
 
 int LocalContrastFilter::get_unsharp_mask_threshold(int /*value*/)
 {
-    return d->par->unsharp_mask.threshold;
+    return d->par.unsharp_mask.threshold;
 }
 
 void LocalContrastFilter::set_current_stage(int nstage)
 {
-    d->current_process_power_value = d->par->get_power(nstage);
+    d->current_process_power_value = d->par.get_power(nstage);
 }
 
 void LocalContrastFilter::set_preview_zoom(float val)
@@ -676,40 +674,40 @@ void LocalContrastFilter::set_blur(int nstage, float value)
 {
     if (value < 0) value = 0;
     if (value > 10000.0) value = 10000.0;
-    d->par->stage[nstage].blur = value;
+    d->par.stage[nstage].blur = value;
 }
 
 void LocalContrastFilter::set_power(int nstage, float value)
 {
     if (value < 0) value = 0;
     if (value > 100.0) value = 100.0;
-    d->par->stage[nstage].power = value;
+    d->par.stage[nstage].power = value;
 }
 
 void LocalContrastFilter::set_low_saturation(int value)
 {
     if (value < 0) value = 0;
     if (value > 100) value = 100;
-    d->par->low_saturation = value;
+    d->par.low_saturation = value;
 }
 
 void LocalContrastFilter::set_high_saturation(int value)
 {
     if (value < 0) value = 0;
     if (value > 100) value = 100;
-    d->par->high_saturation = value;
+    d->par.high_saturation = value;
 }
 
 void LocalContrastFilter::set_stretch_contrast(bool value)
 {
-    d->par->stretch_contrast = value;
+    d->par.stretch_contrast = value;
 }
 
 void LocalContrastFilter::set_function_id (int value)
 {
     if (value < 0) value = 0;
     if (value > 1) value = 1;
-    d->par->function_id = value;
+    d->par.function_id = value;
 }
 
 void LocalContrastFilter::rgb2hsv(const float& r, const float& g, const float& b, float& h, float& s, float& v)
