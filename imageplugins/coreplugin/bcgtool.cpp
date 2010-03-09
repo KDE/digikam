@@ -72,6 +72,7 @@ public:
         configHistogramScaleEntry("Histogram Scale"),
 
         destinationPreviewData(0),
+        settingsView(0),
         previewWidget(0),
         gboxSettings(0)
         {}
