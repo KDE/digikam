@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef CONTENT_AWARE_RESIZER_H
-#define CONTENT_AWARE_RESIZER_H
+#ifndef CONTENT_AWARE_FILTER_H
+#define CONTENT_AWARE_FILTER_H
 
 // Qt includes
 
@@ -36,26 +36,26 @@
 // Local includes
 
 #include "dcolor.h"
+#include "digikam_export.h"
 #include "dimgthreadedfilter.h"
+#include "globals.h"
 
-using namespace Digikam;
-
-namespace DigikamContentAwareResizingImagesPlugin
+namespace Digikam
 {
 
-class ContentAwareResizerPriv;
+class ContentAwareFilterPriv;
 
-class ContentAwareResizer : public DImgThreadedFilter
+class DIGIKAM_EXPORT ContentAwareFilter : public DImgThreadedFilter
 {
 
 public:
 
-    ContentAwareResizer(DImg* orgImage, uint width, uint height,
-                        int step=1, double rigidity=0.0, int side_switch_freq=4, 
-                        LqrEnergyFuncBuiltinType func=LQR_EF_GRAD_XABS,
-                        LqrResizeOrder resize_order=LQR_RES_ORDER_HOR, const QImage& mask=QImage(), 
-                        bool preserve_skin_tones=false, QObject* parent=0);
-    ~ContentAwareResizer();
+    ContentAwareFilter(DImg* orgImage, uint width, uint height,
+                       int step=1, double rigidity=0.0, int side_switch_freq=4, 
+                       LqrEnergyFuncBuiltinType func=LQR_EF_GRAD_XABS,
+                       LqrResizeOrder resize_order=LQR_RES_ORDER_HOR, const QImage& mask=QImage(), 
+                       bool preserve_skin_tones=false, QObject* parent=0);
+    ~ContentAwareFilter();
 
     void progressCallback(int progress);
 
@@ -71,9 +71,9 @@ private:
     
 private:
 
-    ContentAwareResizerPriv* const d;
+    ContentAwareFilterPriv* const d;
 };
 
-} // namespace DigikamContentAwareResizingImagesPlugin
+} // namespace Digikam
 
-#endif /*CONTENT_AWARE_RESIZER_H*/
+#endif /*CONTENT_AWARE_FILTER_H*/

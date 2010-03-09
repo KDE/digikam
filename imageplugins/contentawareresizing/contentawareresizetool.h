@@ -7,7 +7,7 @@
  * Description : Content aware resizing tool.
  *
  * Copyright (C) 2009 by Julien Pontabry <julien dot pontabry at ulp dot u-strasbg dot fr>
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -37,13 +37,13 @@ namespace DigikamContentAwareResizingImagesPlugin
 
 class ContentAwareResizeToolPriv;
 
-class ContentAwareResizeTool : public Digikam::EditorToolThreaded
+class ContentAwareResizeTool : public EditorToolThreaded
 {
     Q_OBJECT
 
 public:
 
-    ContentAwareResizeTool(QObject *parent);
+    ContentAwareResizeTool(QObject* parent);
     ~ContentAwareResizeTool();
 
 private:
@@ -57,7 +57,7 @@ private:
     void renderingFinished();
     void blockWidgetSignals(bool b);
     void disableSettings();
-    void contentAwareResizeCore(DImg *image, int target_width, int target_height, QImage mask);
+    void contentAwareResizeCore(DImg* image, int target_width, int target_height, const QImage& mask);
     void enableMaskSettings(bool b);
     void enableContentAwareSettings(bool b);
 

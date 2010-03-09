@@ -178,6 +178,10 @@ TARGET_LINK_LIBRARIES(digikamcore
                       ${KDCRAW_LIBRARIES}
                       ${KEXIV2_LIBRARIES}
                       ${KIPI_LIBRARIES}
+
+                      # For Contents Aware Resizer filter.
+                      ${GLIB2_LIBRARIES}
+                      ${liblqr_LIBS}
               )
 
 IF(MARBLEWIDGET_FOUND)

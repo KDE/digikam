@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "contentawareresizer.h"
+#include "contentawarefilter.h"
 
 // Qt includes
 
@@ -36,7 +36,7 @@
 
 #include <kdebug.h>
 
-namespace DigikamContentAwareResizingImagesPlugin
+namespace Digikam
 {
 
 // Static methods.
@@ -52,13 +52,13 @@ bool s_stage                   = false;
 bool s_wResize                 = false;
 bool s_hResize                 = false;
 
-ContentAwareResizer* s_resiser = 0;
+ContentAwareFilter* s_resiser = 0;
 
-class ContentAwareResizerPriv
+class ContentAwareFilterPriv
 {
 public:
 
-    ContentAwareResizerPriv()
+    ContentAwareFilterPriv()
     {
         width    = 0;
         height   = 0;
@@ -74,13 +74,13 @@ public:
 
 };
 
-ContentAwareResizer::ContentAwareResizer(DImg* orgImage, uint width, uint height,
+ContentAwareFilter::ContentAwareFilter(DImg* orgImage, uint width, uint height,
                                          int step, double rigidity, int side_switch_freq,
                                          LqrEnergyFuncBuiltinType func,
                                          LqrResizeOrder resize_order, const QImage& mask,
                                          bool preserve_skin_tones, QObject* parent)
-                   : DImgThreadedFilter(orgImage, parent, "ContentAwareResizer"),
-                     d(new ContentAwareResizerPriv)
+                   : DImgThreadedFilter(orgImage, parent, "ContentAwareFilter"),
+                     d(new ContentAwareFilterPriv)
 {
     initFilter();
 
@@ -133,7 +133,7 @@ ContentAwareResizer::ContentAwareResizer(DImg* orgImage, uint width, uint height
     }
 }
 
-ContentAwareResizer::~ContentAwareResizer()
+ContentAwareFilter::~ContentAwareFilter()
 {
     if (d->carver)
         lqr_carver_destroy(d->carver);
@@ -141,7 +141,7 @@ ContentAwareResizer::~ContentAwareResizer()
     delete d;
 }
 
-void ContentAwareResizer::getEnergyImage()
+void ContentAwareFilter::getEnergyImage()
 {
     if (!d->carver) return;
 
@@ -153,7 +153,7 @@ void ContentAwareResizer::getEnergyImage()
     
 }
     
-void ContentAwareResizer::filterImage()
+void ContentAwareFilter::filterImage()
 {
     if (!d->carver) return;
 
@@ -200,7 +200,7 @@ void ContentAwareResizer::filterImage()
     }
 }
 
-void ContentAwareResizer::progressCallback(int progress)
+void ContentAwareFilter::progressCallback(int progress)
 {
     if (progress%5 == 0)
         postProgress( progress );
@@ -208,7 +208,7 @@ void ContentAwareResizer::progressCallback(int progress)
     //kDebug() << "Content Aware Resizing: " << progress << " %";
 }
 
-void ContentAwareResizer::cancelFilter()
+void ContentAwareFilter::cancelFilter()
 {
     // Handle cancel operations with lqr library.
     kDebug() << "Stop LibLqr computation...";
@@ -216,7 +216,7 @@ void ContentAwareResizer::cancelFilter()
     DImgThreadedFilter::cancelFilter();
 }
 
-bool ContentAwareResizer::isSkinTone(const DColor& color)
+bool ContentAwareFilter::isSkinTone(const DColor& color)
 {
     // NOTE: color is previously converted to eight bits.
     double R = color.red()   / 255.0;
@@ -231,7 +231,7 @@ bool ContentAwareResizer::isSkinTone(const DColor& color)
           );
 }
 
-void ContentAwareResizer::buildSkinToneBias()
+void ContentAwareFilter::buildSkinToneBias()
 {
     DColor c;
     for(uint x=0; x < m_orgImage.width(); ++x)
@@ -246,7 +246,7 @@ void ContentAwareResizer::buildSkinToneBias()
     }
 }
 
-void ContentAwareResizer::buildBias(const QImage& mask)
+void ContentAwareFilter::buildBias(const QImage& mask)
 {
     QColor pixColor;
     int    r,g,b,a;
@@ -320,4 +320,4 @@ LqrRetVal s_carverProgressEnd(const gchar* /*end_message*/)
     return LQR_OK;
 }
 
-} // namespace DigikamContentAwareResizingImagesPlugin
+} // namespace Digikam
