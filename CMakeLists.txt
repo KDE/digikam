@@ -548,6 +548,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/icc/iccsettingscontainer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/icc/iccsettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lc/localcontrastfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lc/localcontrastsettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lc/tonemappingbase.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lc/tonemappingfloat.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lc/tonemappingparameters.cpp
