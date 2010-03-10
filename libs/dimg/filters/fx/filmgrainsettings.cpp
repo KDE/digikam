@@ -3,8 +3,8 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2010-02-09
- * Description : BCG settings view.
+ * Date        : 2010-03-10
+ * Description : Film Grain settings view.
  *
  * Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "bcgsettings.moc"
+#include "filmgrainsettings.moc"
 
 // Qt includes
 
@@ -58,11 +58,11 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-class BCGSettingsPriv
+class FilmGrainSettingsPriv
 {
 public:
 
-    BCGSettingsPriv() :
+    FilmGrainSettingsPriv() :
         configBrightnessAdjustmentEntry("BrightnessAdjustment"),
         configContrastAdjustmentEntry("ContrastAdjustment"),
         configGammaAdjustmentEntry("GammaAdjustment"),
@@ -81,9 +81,9 @@ public:
     RDoubleNumInput* gInput;
 };
 
-BCGSettings::BCGSettings(QWidget* parent)
-           : QWidget(parent),
-             d(new BCGSettingsPriv)
+FilmGrainSettings::FilmGrainSettings(QWidget* parent)
+                 : QWidget(parent),
+                   d(new FilmGrainSettingsPriv)
 {
     QGridLayout* grid = new QGridLayout(parent);
 
@@ -132,32 +132,34 @@ BCGSettings::BCGSettings(QWidget* parent)
             this, SIGNAL(signalSettingsChanged()));
 }
 
-BCGSettings::~BCGSettings()
+FilmGrainSettings::~FilmGrainSettings()
 {
     delete d;
 }
 
-BCGContainer BCGSettings::settings() const
+FilmGrainContainer FilmGrainSettings::settings() const
 {
-    BCGContainer prm;
-
+    FilmGrainContainer prm;
+/*
     prm.brightness = (double)d->bInput->value()/250.0;
     prm.contrast   = (double)(d->cInput->value()/100.0) + 1.00;
     prm.gamma      = d->gInput->value();
-
+*/
     return prm;
 }
 
-void BCGSettings::setSettings(const BCGContainer& settings)
+void FilmGrainSettings::setSettings(const FilmGrainContainer& settings)
 {
     blockSignals(true);
+/*
     d->bInput->setValue((int)(settings.brightness*250.0));
     d->cInput->setValue((int)((settings.contrast-1.0)*100.0));
     d->gInput->setValue(settings.gamma);
+*/  
     blockSignals(false);
 }
 
-void BCGSettings::resetToDefault()
+void FilmGrainSettings::resetToDefault()
 {
     blockSignals(true);
     d->bInput->slotReset();
@@ -166,36 +168,37 @@ void BCGSettings::resetToDefault()
     blockSignals(false);
 }
 
-BCGContainer BCGSettings::defaultSettings() const
+FilmGrainContainer FilmGrainSettings::defaultSettings() const
 {
-    BCGContainer prm;
-
+    FilmGrainContainer prm;
+/*
     prm.brightness = (double)d->bInput->defaultValue()/250.0;
     prm.contrast   = (double)(d->cInput->defaultValue()/100.0) + 1.00;
     prm.gamma      = d->gInput->defaultValue();
-
+*/
     return prm;
 }
 
-void BCGSettings::readSettings(KConfigGroup& group)
+void FilmGrainSettings::readSettings(KConfigGroup& group)
 {
-    BCGContainer prm;
-    BCGContainer defaultPrm = defaultSettings();
-
+    FilmGrainContainer prm;
+    FilmGrainContainer defaultPrm = defaultSettings();
+/*
     prm.brightness = group.readEntry(d->configBrightnessAdjustmentEntry, defaultPrm.brightness);
     prm.contrast   = group.readEntry(d->configContrastAdjustmentEntry,   defaultPrm.contrast);
     prm.gamma      = group.readEntry(d->configGammaAdjustmentEntry,      defaultPrm.gamma);
-
+*/
     setSettings(prm);
 }
 
-void BCGSettings::writeSettings(KConfigGroup& group)
+void FilmGrainSettings::writeSettings(KConfigGroup& group)
 {
-    BCGContainer prm = settings();
-
+    FilmGrainContainer prm = settings();
+/*
     group.writeEntry(d->configBrightnessAdjustmentEntry, prm.brightness);
     group.writeEntry(d->configContrastAdjustmentEntry,   prm.contrast);
     group.writeEntry(d->configGammaAdjustmentEntry,      prm.gamma);
+*/    
 }
 
 }  // namespace Digikam

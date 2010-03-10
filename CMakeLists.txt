@@ -520,6 +520,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/charcoalfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/embossfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/filmgrainfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/filmgrainsettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/invertfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/pixelsaliasfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/oilpaintfilter.cpp

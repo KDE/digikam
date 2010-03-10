@@ -3,8 +3,8 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2010-02-09
- * Description : BCG settings view.
+ * Date        : 2010-03-10
+ * Description : Film Grain settings view.
  *
  * Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef BCGSETTINGS_H
-#define BCGSETTINGS_H
+#ifndef FILMGRAINSETTINGS_H
+#define FILMGRAINSETTINGS_H
 
 // Local includes
 
@@ -35,27 +35,27 @@
 // Local includes
 
 #include "digikam_export.h"
-#include "bcgfilter.h"
+#include "filmgrainfilter.h"
 
 namespace Digikam
 {
 
-class BCGSettingsPriv;
+class FilmGrainSettingsPriv;
 
-class DIGIKAM_EXPORT BCGSettings : public QWidget
+class DIGIKAM_EXPORT FilmGrainSettings : public QWidget
 {
     Q_OBJECT
 
 public:
 
-    BCGSettings(QWidget* parent);
-    ~BCGSettings();
+    FilmGrainSettings(QWidget* parent);
+    ~FilmGrainSettings();
 
-    BCGContainer defaultSettings() const;
+    FilmGrainContainer defaultSettings() const;
     void resetToDefault();
 
-    BCGContainer settings() const;
-    void setSettings(const BCGContainer& settings);
+    FilmGrainContainer settings() const;
+    void setSettings(const FilmGrainContainer& settings);
 
     void readSettings(KConfigGroup& group);
     void writeSettings(KConfigGroup& group);
@@ -66,9 +66,9 @@ Q_SIGNALS:
 
 private:
 
-    BCGSettingsPriv* const d;
+    FilmGrainSettingsPriv* const d;
 };
 
 }  // namespace Digikam
 
-#endif /* BCGSETTINGS_H */
+#endif /* FILMGRAINSETTINGS_H */
