@@ -329,7 +329,10 @@ void LocalContrastFilter::process_rgb_image(float* img, int sizex, int sizey)
     int low_saturation_value  = 100-d->par.low_saturation;
 
     if ((d->par.high_saturation != 100) || (d->par.low_saturation != 100))
-    {
+    {      
+        kDebug() << "high_saturation : " << d->par.high_saturation;
+        kDebug() << "low_saturation : " << d->par.low_saturation;
+        
         int pos = 0;
 
         for (int i=0 ; !m_cancel && (i < size) ; i++)
