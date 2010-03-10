@@ -228,7 +228,7 @@ FilmGrainTool::FilmGrainTool(QObject* parent)
     grid->setRowStretch(0, 10);
     grid->setMargin(d->gboxSettings->spacingHint());
     grid->setSpacing(d->gboxSettings->spacingHint());
-    d->gboxSettings->plainPage()->setLayout(mainLayout);
+    d->gboxSettings->plainPage()->setLayout(grid);
     
     // -------------------------------------------------------------
 
