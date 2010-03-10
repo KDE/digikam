@@ -5,6 +5,7 @@
  *
  * Date        : 2009-08-09
  * Description : Enhance image with local contrasts (as human eye does).
+ *               LDR ToneMapper <http://zynaddsubfx.sourceforge.net/other/tonemapping>
  *
  * Copyright (C) 2009 by Julien Pontabry <julien dot pontabry at gmail dot com>
  * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -34,7 +35,7 @@
 #include "digikam_export.h"
 #include "dimgthreadedfilter.h"
 #include "globals.h"
-#include "tonemappingparameters.h"
+#include "localcontrastcontainer.h"
 
 using namespace Digikam;
 
@@ -48,7 +49,7 @@ class DIGIKAM_EXPORT LocalContrastFilter : public DImgThreadedFilter
 
 public:
 
-    LocalContrastFilter(DImg* image, QObject* parent=0, const ToneMappingParameters& par=ToneMappingParameters());
+    LocalContrastFilter(DImg* image, QObject* parent=0, const LocalContrastContainer& par=LocalContrastContainer());
     ~LocalContrastFilter();
 
     void progressCallback(int progress);
@@ -57,8 +58,8 @@ private:
 
     void filterImage();
 
-    void  set_parameters(const ToneMappingParameters& par);
-    ToneMappingParameters get_parameters() const;
+    void  set_parameters(const LocalContrastContainer& par);
+    LocalContrastContainer get_parameters() const;
 
     void  process_8bit_rgb_image(unsigned char* img, int sizex, int sizey);
     void  process_16bit_rgb_image(unsigned short int* img, int sizex, int sizey);

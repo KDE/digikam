@@ -35,16 +35,12 @@
 
 // Local includes.
 
-#include "tonemappingparameters.h"
-
-#ifdef Q_CC_MSVC
-    #pragma warning ( disable : 4800 )   // forcing value to bool 'true' or 'false' (performance warning)
-#endif
+#include "localcontrastcontainer.h"
 
 namespace Digikam
 {
 
-ToneMappingParameters::ToneMappingParameters()
+LocalContrastContainer::LocalContrastContainer()
 {
     info_fast_mode   = true;
     high_saturation  = 100;
@@ -65,30 +61,30 @@ ToneMappingParameters::ToneMappingParameters()
     unsharp_mask.threshold = 0;
 }
 
-ToneMappingParameters::~ToneMappingParameters()
+LocalContrastContainer::~LocalContrastContainer()
 {
 }
 
-float ToneMappingParameters::get_power(int nstage)
+float LocalContrastContainer::get_power(int nstage)
 {
     float power = stage[nstage].power;
     power       = (float)(pow(power/100.0, 1.5)*100.0);
     return power;
 }
 
-float ToneMappingParameters::get_blur(int nstage)
+float LocalContrastContainer::get_blur(int nstage)
 {
     return stage[nstage].blur;
 }
 
-float ToneMappingParameters::get_unsharp_mask_power()
+float LocalContrastContainer::get_unsharp_mask_power()
 {
     float power = unsharp_mask.power;
     power       = (float)(pow(power/100.0, 3.0)*10.0);
     return power;
 }
 
-float ToneMappingParameters::get_unsharp_mask_blur()
+float LocalContrastContainer::get_unsharp_mask_blur()
 {
     return unsharp_mask.blur;
 }

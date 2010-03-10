@@ -38,7 +38,7 @@
 #include "dimg.h"
 #include "localcontrastfilter.h"
 #include "localcontrastsettings.h"
-#include "tonemappingparameters.h"
+#include "localcontrastcontainer.h"
 
 namespace Digikam
 {
@@ -65,7 +65,7 @@ LocalContrast::~LocalContrast()
 BatchToolSettings LocalContrast::defaultSettings()
 {
     BatchToolSettings prm;
-    ToneMappingParameters defaultPrm = m_settingsView->defaultSettings();
+    LocalContrastContainer defaultPrm = m_settingsView->defaultSettings();
 /*
     prm.insert("Brightness", (double)defaultPrm.brightness);
     prm.insert("Contrast",   (double)defaultPrm.contrast);
@@ -76,7 +76,7 @@ BatchToolSettings LocalContrast::defaultSettings()
 
 void LocalContrast::slotAssignSettings2Widget()
 {
-    ToneMappingParameters prm;
+    LocalContrastContainer prm;
 /*
     prm.brightness = settings()["Brightness"].toDouble();
     prm.contrast   = settings()["Contrast"].toDouble();
@@ -88,7 +88,7 @@ void LocalContrast::slotAssignSettings2Widget()
 void LocalContrast::slotSettingsChanged()
 {
     BatchToolSettings prm;
-    ToneMappingParameters currentPrm = m_settingsView->settings();
+    LocalContrastContainer currentPrm = m_settingsView->settings();
 /*
     prm.insert("Brightness", (double)currentPrm.brightness);
     prm.insert("Contrast",   (double)currentPrm.contrast);
@@ -101,7 +101,7 @@ bool LocalContrast::toolOperations()
 {
     if (!loadToDImg()) return false;
 
-    ToneMappingParameters prm;
+    LocalContrastContainer prm;
 /*
     prm.brightness = settings()["Brightness"].toDouble();
     prm.contrast   = settings()["Contrast"].toDouble();

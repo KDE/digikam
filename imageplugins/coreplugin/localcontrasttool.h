@@ -28,7 +28,6 @@
 // Local includes
 
 #include "editortool.h"
-#include "tonemappingparameters.h"
 
 using namespace Digikam;
 

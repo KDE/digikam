@@ -4,7 +4,8 @@
  * http://www.digikam.org
  *
  * Date        : 2009-08-09
- * Description : LDR ToneMapper <http://zynaddsubfx.sourceforge.net/other/tonemapping>.
+ * Description : Local Contrast settings container
+ *               LDR ToneMapper <http://zynaddsubfx.sourceforge.net/other/tonemapping>
  *
  * Copyright (C) 2009 by Nasca Octavian Paul <zynaddsubfx at yahoo dot com>
  * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -22,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef TONE_MAPPING_PARAMETERS_H
-#define TONE_MAPPING_PARAMETERS_H
+#ifndef LOCALCONTRASTCONTAINER_H
+#define LOCALCONTRASTCONTAINER_H
 
 #define TONEMAPPING_MAX_STAGES 4
 
@@ -36,13 +37,13 @@ namespace Digikam
 
 class ToneMappingParametersPriv;
 
-class DIGIKAM_EXPORT ToneMappingParameters
+class DIGIKAM_EXPORT LocalContrastContainer
 {
 
 public:
 
-    ToneMappingParameters();
-    ~ToneMappingParameters();
+    LocalContrastContainer();
+    ~LocalContrastContainer();
 
     float get_power(int nstage);
     float get_blur(int nstage);
@@ -80,4 +81,4 @@ public:
 
 } // namespace Digikam
 
-#endif // TONE_MAPPING_PARAMETERS_H
+#endif // LOCALCONTRASTCONTAINER_H

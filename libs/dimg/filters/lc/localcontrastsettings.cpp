@@ -5,6 +5,7 @@
  *
  * Date        : 2010-03-09
  * Description : Local Contrast settings view.
+ *               LDR ToneMapper <http://zynaddsubfx.sourceforge.net/other/tonemapping>
  *
  * Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -452,9 +453,9 @@ void LocalContrastSettings::slotStage4Enabled(bool b)
     d->blurInput4->setEnabled(b);
 }
 
-ToneMappingParameters LocalContrastSettings::settings() const
+LocalContrastContainer LocalContrastSettings::settings() const
 {
-    ToneMappingParameters prm;
+    LocalContrastContainer prm;
 
     prm.stretch_contrast = d->stretchContrastCheck->isChecked();
     prm.low_saturation   = d->lowSaturationInput->value();
@@ -480,7 +481,7 @@ ToneMappingParameters LocalContrastSettings::settings() const
     return prm;
 }
 
-void LocalContrastSettings::setSettings(const ToneMappingParameters& settings)
+void LocalContrastSettings::setSettings(const LocalContrastContainer& settings)
 {
     blockSignals(true);
     d->expanderBox->setEnabled(false);
@@ -545,9 +546,9 @@ void LocalContrastSettings::resetToDefault()
     blockSignals(false);
 }
 
-ToneMappingParameters LocalContrastSettings::defaultSettings() const
+LocalContrastContainer LocalContrastSettings::defaultSettings() const
 {
-    ToneMappingParameters prm;
+    LocalContrastContainer prm;
 
     prm.stretch_contrast = false;
     prm.low_saturation   = d->lowSaturationInput->defaultValue();
@@ -575,8 +576,8 @@ ToneMappingParameters LocalContrastSettings::defaultSettings() const
 
 void LocalContrastSettings::readSettings(KConfigGroup& group)
 {
-    ToneMappingParameters prm;
-    ToneMappingParameters defaultPrm = defaultSettings();
+    LocalContrastContainer prm;
+    LocalContrastContainer defaultPrm = defaultSettings();
 
     prm.stretch_contrast = group.readEntry(d->configStretchContrastEntry, false);
     prm.low_saturation   = group.readEntry(d->configLowSaturationEntry,   d->lowSaturationInput->defaultValue());
@@ -604,7 +605,7 @@ void LocalContrastSettings::readSettings(KConfigGroup& group)
 
 void LocalContrastSettings::writeSettings(KConfigGroup& group)
 {
-    ToneMappingParameters prm = settings();
+    LocalContrastContainer prm = settings();
 
     group.writeEntry(d->configStretchContrastEntry, prm.stretch_contrast);
     group.writeEntry(d->configLowSaturationEntry,   prm.low_saturation);

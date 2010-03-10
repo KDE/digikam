@@ -59,11 +59,10 @@
 #include "imageiface.h"
 #include "histogramwidget.h"
 #include "imageregionwidget.h"
+#include "rexpanderbox.h"
 #include "localcontrastfilter.h"
 #include "localcontrastsettings.h"
-#include "rexpanderbox.h"
-
-using namespace KDcrawIface;
+#include "localcontrastcontainer.h"
 
 namespace DigikamImagesPluginCore
 {
@@ -212,7 +211,7 @@ void LocalContrastTool::renderingFinished()
 void LocalContrastTool::slotLoadSettings()
 {
     d->settingsView->loadSettings();
-//    d->gboxSettings->histogramBox()->histogram()->reset();
+    d->gboxSettings->histogramBox()->histogram()->reset();
     slotEffect();
 }
 

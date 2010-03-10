@@ -5,6 +5,7 @@
  *
  * Date        : 2009-08-09
  * Description : Enhance image with local contrasts (as human eye does).
+ *               LDR ToneMapper <http://zynaddsubfx.sourceforge.net/other/tonemapping>
  *
  * Copyright (C) 2009 by Nasca Octavian Paul <zynaddsubfx at yahoo dot com>
  * Copyright (C) 2009 by Julien Pontabry <julien dot pontabry at gmail dot com>
@@ -48,10 +49,10 @@ public:
     // used for zoom on previews
     float                 preview_zoom;
 
-    ToneMappingParameters par;
+    LocalContrastContainer par;
 };
 
-LocalContrastFilter::LocalContrastFilter(DImg* image, QObject* parent, const ToneMappingParameters& par)
+LocalContrastFilter::LocalContrastFilter(DImg* image, QObject* parent, const LocalContrastContainer& par)
                    : DImgThreadedFilter(image, parent, "LocalContrast"),
                      d(new LocalContrastFilterPriv)
 {
@@ -139,7 +140,7 @@ void LocalContrastFilter::filterImage()
     postProgress(100);
 }
 
-void LocalContrastFilter::set_parameters(const ToneMappingParameters& par)
+void LocalContrastFilter::set_parameters(const LocalContrastContainer& par)
 {
     d->par = par;
     set_low_saturation(d->par.low_saturation);
@@ -156,7 +157,7 @@ void LocalContrastFilter::set_parameters(const ToneMappingParameters& par)
     update_preprocessed_values();
 }
 
-ToneMappingParameters LocalContrastFilter::get_parameters() const
+LocalContrastContainer LocalContrastFilter::get_parameters() const
 {
     return d->par;
 }
