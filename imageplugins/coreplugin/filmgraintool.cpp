@@ -65,16 +65,36 @@ public:
 
     FilmGrainToolPriv() :
         configGroupName("filmgrain Tool"),
-        configSensitivityAdjustmentEntry("SensitivityAdjustment"),
+        configSensitivityLumAdjustmentEntry("SensitivityLumAdjustment"),
+        configShadowsLumAdjustmentEntry("ShadowsLumAdjustment"),
+        configMidtonesLumAdjustmentEntry("MidtonesLumAdjustment"),
+        configHighlightsLumAdjustmentEntry("HighlightsLumAdjustment"),
+        configSensitivityChromaAdjustmentEntry("SensitivityChromaAdjustment"),
+        configShadowsChromaAdjustmentEntry("ShadowsChromaAdjustment"),
+        configMidtonesChromaAdjustmentEntry("MidtonesChromaAdjustment"),
+        configHighlightsChromaAdjustmentEntry("HighlightsChromaAdjustment"),
         sensibilityLumInput(0),
+        shadowsLumInput(0),
+        midtonesLumInput(0),
+        highlightsLumInput(0),
         sensibilityChromaInput(0),
+        shadowsChromaInput(0),
+        midtonesChromaInput(0),
+        highlightsChromaInput(0),       
         previewWidget(0),
         gboxSettings(0)
         {}
 
     const QString       configGroupName;
-    const QString       configSensitivityAdjustmentEntry;
-
+    const QString       configSensitivityLumAdjustmentEntry;
+    const QString       configShadowsLumAdjustmentEntry;
+    const QString       configMidtonesLumAdjustmentEntry;
+    const QString       configHighlightsLumAdjustmentEntry;
+    const QString       configSensitivityChromaAdjustmentEntry;
+    const QString       configShadowsChromaAdjustmentEntry;
+    const QString       configMidtonesChromaAdjustmentEntry;
+    const QString       configHighlightsChromaAdjustmentEntry;
+    
     RIntNumInput*       sensibilityLumInput;
     RIntNumInput*       shadowsLumInput; 
     RIntNumInput*       midtonesLumInput;
@@ -278,17 +298,44 @@ void FilmGrainTool::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
-    d->sensibilityLumInput->blockSignals(true);
-    d->sensibilityLumInput->setValue(group.readEntry(d->configSensitivityAdjustmentEntry, 
+    
+    blockSignals(true);
+    
+    d->sensibilityLumInput->setValue(group.readEntry(d->configSensitivityLumAdjustmentEntry, 
                                                      d->sensibilityLumInput->defaultValue()));
-    d->sensibilityLumInput->blockSignals(false);
+    d->shadowsLumInput->setValue(group.readEntry(d->configShadowsLumAdjustmentEntry, 
+                                                     d->shadowsLumInput->defaultValue())); 
+    d->midtonesLumInput->setValue(group.readEntry(d->configMidtonesLumAdjustmentEntry, 
+                                                     d->midtonesLumInput->defaultValue()));
+    d->highlightsLumInput->setValue(group.readEntry(d->configHighlightsLumAdjustmentEntry, 
+                                                     d->highlightsLumInput->defaultValue()));
+                                                     
+    d->sensibilityChromaInput->setValue(group.readEntry(d->configSensitivityChromaAdjustmentEntry, 
+                                                     d->sensibilityChromaInput->defaultValue()));
+    d->shadowsChromaInput->setValue(group.readEntry(d->configShadowsChromaAdjustmentEntry, 
+                                                     d->shadowsChromaInput->defaultValue()));
+    d->midtonesChromaInput->setValue(group.readEntry(d->configMidtonesChromaAdjustmentEntry, 
+                                                     d->midtonesChromaInput->defaultValue()));
+    d->highlightsChromaInput->setValue(group.readEntry(d->configHighlightsChromaAdjustmentEntry, 
+                                                     d->highlightsChromaInput->defaultValue()));
+    blockSignals(false);
 }
 
 void FilmGrainTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
-    group.writeEntry(d->configSensitivityAdjustmentEntry, d->sensibilityLumInput->value());
+
+    group.writeEntry(d->configSensitivityLumAdjustmentEntry,    d->sensibilityLumInput->value());
+    group.writeEntry(d->configShadowsLumAdjustmentEntry,        d->shadowsLumInput->value());
+    group.writeEntry(d->configMidtonesLumAdjustmentEntry,       d->midtonesLumInput->value());
+    group.writeEntry(d->configHighlightsLumAdjustmentEntry,     d->highlightsLumInput->value());
+    
+    group.writeEntry(d->configSensitivityChromaAdjustmentEntry, d->sensibilityChromaInput->value());
+    group.writeEntry(d->configShadowsChromaAdjustmentEntry,     d->shadowsChromaInput->value());
+    group.writeEntry(d->configMidtonesChromaAdjustmentEntry,    d->midtonesChromaInput->value());
+    group.writeEntry(d->configHighlightsChromaAdjustmentEntry,  d->highlightsChromaInput->value());
+
     config->sync();
 }
 
