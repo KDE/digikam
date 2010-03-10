@@ -40,14 +40,10 @@ public:
     LocalContrastFilterPriv()
     {
         current_process_power_value = 20.0;
-        preview_zoom                = 1.0;
     }
 
     // preprocessed values
-    float                 current_process_power_value;
-
-    // used for zoom on previews
-    float                 preview_zoom;
+    float                  current_process_power_value;
 
     LocalContrastContainer par;
 };
@@ -435,8 +431,6 @@ void LocalContrastFilter::update_preprocessed_values()
 
 void LocalContrastFilter::inplace_blur(float* data, int sizex, int sizey, float blur)
 {
-    blur /= d->preview_zoom;
-
     if (blur < 0.3) return;
 
     float a = (float)(exp(log(0.25)/blur));
@@ -654,11 +648,6 @@ int LocalContrastFilter::get_unsharp_mask_threshold(int /*value*/)
 void LocalContrastFilter::set_current_stage(int nstage)
 {
     d->current_process_power_value = d->par.get_power(nstage);
-}
-
-void LocalContrastFilter::set_preview_zoom(float val)
-{
-    if ((val > 0.001) && (val < 1000.0)) d->preview_zoom = val;
 }
 
 void LocalContrastFilter::set_blur(int nstage, float value)

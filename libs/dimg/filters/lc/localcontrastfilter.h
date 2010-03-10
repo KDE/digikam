@@ -69,7 +69,6 @@ private:
     void  update_preprocessed_values();
 
     void  set_current_stage(int nstage);
-    void  set_preview_zoom(float val);
 
     void  set_blur(int nstage, float value);      // 1..5000
     float get_blur(int nstage);
