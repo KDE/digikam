@@ -579,7 +579,7 @@ void LocalContrastFilter::rgb2hsv(const float& r, const float& g, const float& b
 
     //value
     v = max;
-};
+}
 
 void LocalContrastFilter::hsv2rgb(const float& h, const float& s, const float& v, float& r, float& g, float& b)
 {
