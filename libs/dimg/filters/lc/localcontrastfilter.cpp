@@ -343,7 +343,7 @@ void LocalContrastFilter::process_rgb_image(float* img, int sizex, int sizey)
             rgb2hsv(img[pos], img[pos+1], img[pos+2], dest_h, dest_s, dest_v);
 
             float dest_saturation = (float)((src_s*high_saturation_value+dest_s*(100.0-high_saturation_value))*0.01);
-            if (dest_v>src_v)
+            if (dest_v > src_v)
             {
                 float s1        = (float)(dest_saturation*src_v/(dest_v+1.0/255.0));
                 dest_saturation = (float)((low_saturation_value*s1+d->par.low_saturation*dest_saturation)*0.01);
@@ -404,12 +404,12 @@ void LocalContrastFilter::process_rgb_image(float* img, int sizex, int sizey)
             float g   = img[pos+1]+dval;
             float b   = img[pos+2]+dval;
 
-            if (r<0.0) r = 0.0;
-            if (r>1.0) r = 1.0;
-            if (g<0.0) g = 0.0;
-            if (g>1.0) g = 1.0;
-            if (b<0.0) b = 0.0;
-            if (b>1.0) b = 1.0;
+            if (r < 0.0) r = 0.0;
+            if (r > 1.0) r = 1.0;
+            if (g < 0.0) g = 0.0;
+            if (g > 1.0) g = 1.0;
+            if (b < 0.0) b = 0.0;
+            if (b > 1.0) b = 1.0;
 
             img[pos]   = r;
             img[pos+1] = g;
