@@ -34,20 +34,51 @@
 namespace Digikam
 {
 
+class DIGIKAM_EXPORT FilmGrainContainer
+{
+
+public:
+
+    FilmGrainContainer()
+    {
+        lum_sensibility    = 400;
+        lum_shadows        = 100;
+        lum_midtones       = 100; 
+        lum_highlights     = 100;
+
+        chroma_sensibility = 400;
+        chroma_shadows     = 100;
+        chroma_midtones    = 100;
+        chroma_highlights  = 100;
+    };
+
+    ~FilmGrainContainer(){};
+
+public:
+
+    int lum_sensibility;
+    int lum_shadows;
+    int lum_midtones;
+    int lum_highlights;
+
+    int chroma_sensibility;
+    int chroma_shadows; 
+    int chroma_midtones;
+    int chroma_highlights;
+};
+
+// -----------------------------------------------------------------------------------------------
+  
 class DIGIKAM_EXPORT FilmGrainFilter : public DImgThreadedFilter
 {
 
 public:
 
-    explicit FilmGrainFilter(DImg* orgImage, QObject* parent=0, 
-                             int lum_sensibility=400, int lum_shadows=100, int lum_midtones = 100, int lum_highlights=100,
-                             int chroma_sensibility=400, int chroma_shadows=100, int chroma_midtones = 100, int chroma_highlights=100);
+    explicit FilmGrainFilter(DImg* orgImage, QObject* parent=0, const FilmGrainContainer& settings=FilmGrainContainer());
     // Constructor for slave mode: execute immediately in current thread with specified master filter
     explicit FilmGrainFilter(DImgThreadedFilter* parentFilter, const DImg& orgImage, const DImg& destImage,
-                             int progressBegin=0, int progressEnd=100, 
-                             int lum_sensibility=400, int lum_shadows=100, int lum_midtones = 100, int lum_highlights=100,
-                             int chroma_sensibility=400, int chroma_shadows=100, int chroma_midtones = 100, int chroma_highlights=100
-                             );    
+                             int progressBegin=0, int progressEnd=100,
+                             const FilmGrainContainer& settings=FilmGrainContainer());    
     ~FilmGrainFilter(){};
 
 private:
@@ -58,14 +89,7 @@ private:
     
 private:
 
-    int m_lum_sensibility;
-    int m_lum_shadows;
-    int m_lum_midtones;
-    int m_lum_highlights;
-    int m_chroma_sensibility;
-    int m_chroma_shadows;
-    int m_chroma_midtones;
-    int m_chroma_highlights;
+    FilmGrainContainer m_settings;
 };
 
 }  // namespace Digikam

@@ -104,9 +104,19 @@ bool FilmGrain::toolOperations()
     if (!loadToDImg())
         return false;
 
-    double sensibility = settings()["Sensibility"].toInt();
+    FilmGrainContainer prm;
+    prm.lum_sensibility    = settings()["Sensibility"].toInt();
+/*
+    prm.lum_shadows        = ;
+    prm.lum_midtones       = ;
+    prm.lum_highlights     = ;
+    prm.chroma_sensibility = ;
+    prm.chroma_shadows     = ; 
+    prm.chroma_midtones    = ;
+    prm.chroma_highlights  = ;
+*/    
 
-    FilmGrainFilter fg(&image(), 0L, sensibility);
+    FilmGrainFilter fg(&image(), 0L, prm);
     fg.startFilterDirectly();
     image().putImageData(fg.getTargetImage().bits());
 

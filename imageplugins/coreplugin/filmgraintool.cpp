@@ -303,19 +303,18 @@ void FilmGrainTool::prepareEffect()
     toolSettings()->setEnabled(false);
     toolView()->setEnabled(false);
     
-    DImg image            = d->previewWidget->getOriginalRegionImage(true);
-    int lum_s             = d->sensibilityLumInput->value();
-    int lum_shadows       = d->shadowsLumInput->value();
-    int lum_midtones      = d->midtonesLumInput->value();
-    int lum_highlights    = d->highlightsLumInput->value();
-    int chroma_s          = d->sensibilityChromaInput->value();
-    int chroma_shadows    = d->shadowsChromaInput->value();
-    int chroma_midtones   = d->midtonesChromaInput->value();
-    int chroma_highlights = d->highlightsChromaInput->value();
+    FilmGrainContainer prm;
+    prm.lum_sensibility    = d->sensibilityLumInput->value();
+    prm.lum_shadows        = d->shadowsLumInput->value();
+    prm.lum_midtones       = d->midtonesLumInput->value();
+    prm.lum_highlights     = d->highlightsLumInput->value();
+    prm.chroma_sensibility = d->sensibilityChromaInput->value();
+    prm.chroma_shadows     = d->shadowsChromaInput->value(); 
+    prm.chroma_midtones    = d->midtonesChromaInput->value();
+    prm.chroma_highlights  = d->highlightsChromaInput->value();
+    DImg image             = d->previewWidget->getOriginalRegionImage(true);
     
-    setFilter(new FilmGrainFilter(&image, this, 
-                                  lum_s, lum_shadows, lum_midtones, lum_highlights,
-                                  chroma_s, chroma_shadows, chroma_midtones, chroma_highlights));
+    setFilter(new FilmGrainFilter(&image, this, prm));
 }
 
 void FilmGrainTool::prepareFinal()
@@ -323,19 +322,18 @@ void FilmGrainTool::prepareFinal()
     toolSettings()->setEnabled(false);
     toolView()->setEnabled(false);    
 
-    int lum_s             = d->sensibilityLumInput->value();
-    int lum_shadows       = d->shadowsLumInput->value();
-    int lum_midtones      = d->midtonesLumInput->value();
-    int lum_highlights    = d->highlightsLumInput->value();
-    int chroma_s          = d->sensibilityChromaInput->value();
-    int chroma_shadows    = d->shadowsChromaInput->value();
-    int chroma_midtones   = d->midtonesChromaInput->value();
-    int chroma_highlights = d->highlightsChromaInput->value();
+    FilmGrainContainer prm;
+    prm.lum_sensibility    = d->sensibilityLumInput->value();
+    prm.lum_shadows        = d->shadowsLumInput->value();
+    prm.lum_midtones       = d->midtonesLumInput->value();
+    prm.lum_highlights     = d->highlightsLumInput->value();
+    prm.chroma_sensibility = d->sensibilityChromaInput->value();
+    prm.chroma_shadows     = d->shadowsChromaInput->value(); 
+    prm.chroma_midtones    = d->midtonesChromaInput->value();
+    prm.chroma_highlights  = d->highlightsChromaInput->value();
     
     ImageIface iface(0, 0);
-    setFilter(new FilmGrainFilter(iface.getOriginalImg(), this, 
-                                  lum_s, lum_shadows, lum_midtones, lum_highlights,
-                                  chroma_s, chroma_shadows, chroma_midtones, chroma_highlights));
+    setFilter(new FilmGrainFilter(iface.getOriginalImg(), this, prm));
 }
 
 void FilmGrainTool::putPreviewData()
