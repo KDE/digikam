@@ -173,7 +173,7 @@ FilmGrainTool::FilmGrainTool(QObject* parent)
     d->sensibilityChromaInput->setSliderEnabled(true);
     d->sensibilityChromaInput->setDefaultValue(2400);
     d->sensibilityChromaInput->setWhatsThis(i18n("Set here the film ISO-sensitivity to use for "
-                                           "simulating the film graininess."));
+                                                 "simulating the CCD noise."));
   
     // -------------------------------------------------------------
 
