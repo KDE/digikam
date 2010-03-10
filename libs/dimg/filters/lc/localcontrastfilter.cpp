@@ -567,12 +567,7 @@ void LocalContrastFilter::stretch_contrast(float* data, int datasize)
 
 void LocalContrastFilter::set_enabled(int nstage, bool enabled)
 {
-    d->par.stage[nstage].enabled=enabled;
-}
-
-void LocalContrastFilter::set_info_fast_mode(bool value)
-{
-    d->par.info_fast_mode=value;
+    d->par.stage[nstage].enabled = enabled;
 }
 
 void LocalContrastFilter::set_unsharp_mask_enabled(bool value)
@@ -634,11 +629,6 @@ bool LocalContrastFilter::get_stretch_contrast()
 int LocalContrastFilter::get_function_id()
 {
     return d->par.function_id;
-}
-
-bool LocalContrastFilter::get_info_fast_mode()
-{
-    return d->par.info_fast_mode;
 }
 
 bool LocalContrastFilter::get_unsharp_mask_enabled(bool /*value*/)

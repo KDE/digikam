@@ -42,10 +42,9 @@ namespace Digikam
 
 LocalContrastContainer::LocalContrastContainer()
 {
-    info_fast_mode   = true;
+    stretch_contrast = true;
     high_saturation  = 100;
     low_saturation   = 100;
-    stretch_contrast = true;
     function_id      = 0;
 
     for (int i = 0 ; i < TONEMAPPING_MAX_STAGES ; i++)

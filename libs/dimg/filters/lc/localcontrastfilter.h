@@ -89,9 +89,6 @@ private:
     void  inplace_blur(float* data, int sizex, int sizey, float blur);
     void  stretch_contrast(float* data, int datasize);
 
-    void  set_info_fast_mode(bool value);
-    bool  get_info_fast_mode();
-
     void  set_unsharp_mask_enabled(bool value);
     void  set_unsharp_mask_power(float value);
     void  set_unsharp_mask_blur(float value);

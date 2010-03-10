@@ -53,8 +53,6 @@ public:
 
 public:
 
-    bool info_fast_mode;
-
     bool stretch_contrast;
 
     int  low_saturation;
