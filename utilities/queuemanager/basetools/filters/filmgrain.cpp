@@ -39,6 +39,7 @@
 
 #include "dimg.h"
 #include "filmgrainfilter.h"
+#include "filmgrainsettings.h"
 
 namespace Digikam
 {
@@ -50,25 +51,11 @@ FilmGrain::FilmGrain(QObject* parent)
     setToolDescription(i18n("A tool to add film grain"));
     setToolIcon(KIcon(SmallIcon("filmgrain")));
 
-    QWidget* box  = new QWidget;
-    QLabel* label = new QLabel(i18n("Sensitivity (ISO):"));
-    m_sensibilityInput = new RIntNumInput();
-    m_sensibilityInput->setRange(800, 6400, 10);
-    m_sensibilityInput->setSliderEnabled(true);
-    m_sensibilityInput->setDefaultValue(2400);
-    m_sensibilityInput->setWhatsThis(i18n("Set here the film ISO-sensitivity to use for "
-                                          "simulating the film graininess."));    
-    
-    QGridLayout* grid = new QGridLayout(box);
-    grid->addWidget(label,              0, 0, 1, 2);
-    grid->addWidget(m_sensibilityInput, 1, 0, 1, 2);
-    grid->setRowStretch(2, 10);
-    grid->setMargin(KDialog::spacingHint());
-    grid->setSpacing(KDialog::spacingHint());
-    
+    QWidget* box   = new QWidget;
+    m_settingsView = new FilmGrainSettings(box);
     setSettingsWidget(box);
 
-    connect(m_sensibilityInput, SIGNAL(valueChanged(int)),
+    connect(m_settingsView, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotSettingsChanged()));
 }
 
@@ -78,25 +65,50 @@ FilmGrain::~FilmGrain()
 
 BatchToolSettings FilmGrain::defaultSettings()
 {
-    BatchToolSettings settings;
+    BatchToolSettings prm;
+    FilmGrainContainer defaultPrm = m_settingsView->defaultSettings();
 
-    settings.insert("Sensibility", (int)m_sensibilityInput->defaultValue());
+    prm.insert("lum_sensibility",    (int)defaultPrm.lum_sensibility);
+    prm.insert("lum_shadows",        (int)defaultPrm.lum_shadows);
+    prm.insert("lum_midtones",       (int)defaultPrm.lum_midtones);
+    prm.insert("lum_highlights",     (int)defaultPrm.lum_highlights);
+    prm.insert("chroma_sensibility", (int)defaultPrm.chroma_sensibility);
+    prm.insert("chroma_shadows",     (int)defaultPrm.chroma_shadows);
+    prm.insert("chroma_midtones",    (int)defaultPrm.chroma_midtones);
+    prm.insert("chroma_highlights",  (int)defaultPrm.chroma_highlights);
 
-    return settings;
+    return prm;
 }
 
 void FilmGrain::slotAssignSettings2Widget()
 {
-    m_sensibilityInput->setValue(settings()["Sensibility"].toInt());
+    FilmGrainContainer prm;
+    prm.lum_sensibility    = settings()["lum_sensibility"].toInt();
+    prm.lum_shadows        = settings()["lum_shadows"].toInt();
+    prm.lum_midtones       = settings()["lum_midtones"].toInt();
+    prm.lum_highlights     = settings()["lum_highlights"].toInt();
+    prm.chroma_sensibility = settings()["chroma_sensibility"].toInt();
+    prm.chroma_shadows     = settings()["chroma_shadows"].toInt();
+    prm.chroma_midtones    = settings()["chroma_midtones"].toInt();
+    prm.chroma_highlights  = settings()["chroma_highlights"].toInt();
+    m_settingsView->setSettings(prm);
 }
 
 void FilmGrain::slotSettingsChanged()
 {
-    BatchToolSettings settings;
+    BatchToolSettings prm;
+    FilmGrainContainer currentPrm = m_settingsView->settings();
 
-    settings.insert("Sensibility", (int)m_sensibilityInput->value());
-    
-    setSettings(settings);
+    prm.insert("lum_sensibility",    (int)currentPrm.lum_sensibility);
+    prm.insert("lum_shadows",        (int)currentPrm.lum_shadows);
+    prm.insert("lum_midtones",       (int)currentPrm.lum_midtones);
+    prm.insert("lum_highlights",     (int)currentPrm.lum_highlights);
+    prm.insert("chroma_sensibility", (int)currentPrm.chroma_sensibility);
+    prm.insert("chroma_shadows",     (int)currentPrm.chroma_shadows);
+    prm.insert("chroma_midtones",    (int)currentPrm.chroma_midtones);
+    prm.insert("chroma_highlights",  (int)currentPrm.chroma_highlights);
+
+    setSettings(prm);
 }
 
 bool FilmGrain::toolOperations()
@@ -105,16 +117,14 @@ bool FilmGrain::toolOperations()
         return false;
 
     FilmGrainContainer prm;
-    prm.lum_sensibility    = settings()["Sensibility"].toInt();
-/*
-    prm.lum_shadows        = ;
-    prm.lum_midtones       = ;
-    prm.lum_highlights     = ;
-    prm.chroma_sensibility = ;
-    prm.chroma_shadows     = ; 
-    prm.chroma_midtones    = ;
-    prm.chroma_highlights  = ;
-*/    
+    prm.lum_sensibility    = settings()["lum_sensibility"].toInt();
+    prm.lum_shadows        = settings()["lum_shadows"].toInt();
+    prm.lum_midtones       = settings()["lum_midtones"].toInt();
+    prm.lum_highlights     = settings()["lum_highlights"].toInt();
+    prm.chroma_sensibility = settings()["chroma_sensibility"].toInt();
+    prm.chroma_shadows     = settings()["chroma_shadows"].toInt();
+    prm.chroma_midtones    = settings()["chroma_midtones"].toInt();
+    prm.chroma_highlights  = settings()["chroma_highlights"].toInt();
 
     FilmGrainFilter fg(&image(), 0L, prm);
     fg.startFilterDirectly();

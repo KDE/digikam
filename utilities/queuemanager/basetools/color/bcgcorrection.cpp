@@ -49,7 +49,7 @@ BCGCorrection::BCGCorrection(QObject* parent)
     setToolDescription(i18n("A tool to fix Brightness/Contrast/Gamma."));
     setToolIcon(KIcon(SmallIcon("contrast")));
 
-    QWidget *box   = new QWidget;
+    QWidget* box   = new QWidget;
     m_settingsView = new BCGSettings(box);
     setSettingsWidget(box);
 

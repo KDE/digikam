@@ -35,6 +35,8 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
+class FilmGrainSettings;
+
 class FilmGrain : public BatchTool
 {
     Q_OBJECT
@@ -57,7 +59,7 @@ private Q_SLOTS:
 
 private:
 
-    RIntNumInput* m_sensibilityInput;
+    FilmGrainSettings* m_settingsView;
 };
 
 } // namespace Digikam
