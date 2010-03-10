@@ -221,13 +221,13 @@ LocalContrastSettings::LocalContrastSettings(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    grid1->addWidget(label1,                  0, 0, 1, 1);
+    grid1->addWidget(label1,                  0, 0, 1, 2);
     grid1->addWidget(d->functionInput,        0, 1, 1, 1);
     grid1->addWidget(d->stretchContrastCheck, 1, 0, 1, 1);
-    grid1->addWidget(label2,                  2, 0, 1, 1);
-    grid1->addWidget(d->highSaturationInput,  2, 1, 1, 1);
-    grid1->addWidget(label3,                  3, 0, 1, 1);
-    grid1->addWidget(d->lowSaturationInput,   3, 1, 1, 1);
+    grid1->addWidget(label2,                  2, 0, 1, 2);
+    grid1->addWidget(d->highSaturationInput,  3, 0, 1, 2);
+    grid1->addWidget(label3,                  4, 0, 1, 2);
+    grid1->addWidget(d->lowSaturationInput,   5, 0, 1, 2);
     grid1->setMargin(KDialog::spacingHint());
     grid1->setSpacing(KDialog::spacingHint());
 
