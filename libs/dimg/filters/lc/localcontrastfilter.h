@@ -70,6 +70,9 @@ private:
 
     void  set_current_stage(int nstage);
 
+    void  set_enabled(int nstage, bool enabled);
+    float get_enabled(int nstage);
+    
     void  set_blur(int nstage, float value);      // 1..5000
     float get_blur(int nstage);
 
@@ -77,7 +80,10 @@ private:
     float get_power(int nstage);
 
     void  set_low_saturation(int value);          // 0..100
+    int   get_low_saturation();
+
     void  set_high_saturation(int value);         // 0..100
+    int   get_high_saturation();
 
     void  set_stretch_contrast(bool value);
     bool  get_stretch_contrast();
@@ -97,12 +103,6 @@ private:
     float get_unsharp_mask_power(float value);
     float get_unsharp_mask_(float value);
     int   get_unsharp_mask_threshold(int value);
-
-    void  set_enabled(int nstage, bool enabled);
-    float get_enabled(int nstage);
-
-    int   get_low_saturation();
-    int   get_high_saturation();
 
     inline void rgb2hsv(const float& r, const float& g, const float& b, float& h, float& s, float& v);
     inline void hsv2rgb(const float& h, const float& s, const float& v, float& r, float& g, float& b);
