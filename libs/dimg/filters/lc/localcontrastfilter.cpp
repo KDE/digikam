@@ -223,15 +223,19 @@ float LocalContrastFilter::func(float x1, float x2)
     switch (d->par.function_id)
     {
         case 0:  //power function
+        {
             p = (float)(pow((double)10.0,(double)fabs((x2*2.0-1.0))*d->current_process_power_value*0.02));
             if (x2 >= 0.5) result = pow(x1,p);
             else result = (float)(1.0-pow((double)1.0-x1,(double)p));
             break;
+        }
         case 1:  //linear function
-            p = (float)(1.0/(1+exp(-(x2*2.0-1.0)*d->current_process_power_value*0.04)));
+        {
+            p      = (float)(1.0/(1+exp(-(x2*2.0-1.0)*d->current_process_power_value*0.04)));
             result = (x1 < p) ? (float)(x1*(1.0-p)/p) : (float)((1.0-p)+(x1-p)*p/(1.0-p));
             break;
-    };
+        }
+    }
 
     return result;
 }
@@ -445,7 +449,7 @@ void LocalContrastFilter::inplace_blur(float* data, int sizex, int sizey, float 
             {
                 old       = (data[pos]*(1-a)+old*a)+denormal_remove;
                 data[pos] = old;
-                pos += sizex;
+                pos       += sizex;
             }
 
             pos = x+sizex*(sizey-1);
@@ -454,7 +458,7 @@ void LocalContrastFilter::inplace_blur(float* data, int sizex, int sizey, float 
             {
                 old       = (data[pos]*(1-a)+old*a)+denormal_remove;
                 data[pos] = old;
-                pos -= sizex;
+                pos       -= sizex;
             }
         }
     }
