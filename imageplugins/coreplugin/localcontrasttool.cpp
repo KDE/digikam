@@ -99,7 +99,7 @@ LocalContrastTool::LocalContrastTool(QObject* parent)
 {
     setObjectName("localcontrast");
     setToolName(i18n("Local Contrast"));
-    setToolIcon(SmallIcon("contrast"));
+    setToolIcon(SmallIcon("tonemap"));
 
     d->previewWidget = new ImageRegionWidget;
     setToolView(d->previewWidget);

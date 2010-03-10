@@ -48,7 +48,7 @@ LocalContrast::LocalContrast(QObject* parent)
 {
     setToolTitle(i18n("Local Contrast"));
     setToolDescription(i18n("A tool to emulate tone mapping."));
-    setToolIcon(KIcon(SmallIcon("contrast")));
+    setToolIcon(KIcon(SmallIcon("tonemap")));
 
     QWidget* box   = new QWidget;
     m_settingsView = new LocalContrastSettings(box);
