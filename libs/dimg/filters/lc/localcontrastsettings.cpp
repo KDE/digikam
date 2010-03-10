@@ -619,26 +619,26 @@ void LocalContrastSettings::readSettings(KConfigGroup& group)
     LocalContrastContainer prm;
     LocalContrastContainer defaultPrm = defaultSettings();
 
-    prm.stretch_contrast = group.readEntry(d->configStretchContrastEntry, false);
-    prm.low_saturation   = group.readEntry(d->configLowSaturationEntry,   d->lowSaturationInput->defaultValue());
-    prm.high_saturation  = group.readEntry(d->configHighSaturationEntry,  d->highSaturationInput->defaultValue());
-    prm.function_id      = group.readEntry(d->configFunctionInputEntry,   d->functionInput->defaultIndex());
+    prm.stretch_contrast = group.readEntry(d->configStretchContrastEntry, defaultPrm.stretch_contrast);
+    prm.low_saturation   = group.readEntry(d->configLowSaturationEntry,   defaultPrm.low_saturation);
+    prm.high_saturation  = group.readEntry(d->configHighSaturationEntry,  defaultPrm.high_saturation);
+    prm.function_id      = group.readEntry(d->configFunctionInputEntry,   defaultPrm.function_id);
 
-    prm.stage[0].enabled = group.readEntry(d->configStageOneEntry,        false);
-    prm.stage[0].power   = group.readEntry(d->configPower1Entry,          d->powerInput1->defaultValue());
-    prm.stage[0].blur    = group.readEntry(d->configBlur1Entry,           d->blurInput1->defaultValue());
+    prm.stage[0].enabled = group.readEntry(d->configStageOneEntry,        defaultPrm.stage[0].enabled);
+    prm.stage[0].power   = group.readEntry(d->configPower1Entry,          defaultPrm.stage[0].power);
+    prm.stage[0].blur    = group.readEntry(d->configBlur1Entry,           defaultPrm.stage[0].blur);
 
-    prm.stage[1].enabled = group.readEntry(d->configStageTwoEntry,        false);
-    prm.stage[1].power   = group.readEntry(d->configPower2Entry,          d->powerInput2->defaultValue());
-    prm.stage[1].blur    = group.readEntry(d->configBlur2Entry,           d->blurInput2->defaultValue());
+    prm.stage[1].enabled = group.readEntry(d->configStageTwoEntry,        defaultPrm.stage[1].enabled);
+    prm.stage[1].power   = group.readEntry(d->configPower2Entry,          defaultPrm.stage[1].power);
+    prm.stage[1].blur    = group.readEntry(d->configBlur2Entry,           defaultPrm.stage[1].blur);
 
-    prm.stage[2].enabled = group.readEntry(d->configStageThreeEntry,      false);
-    prm.stage[2].power   = group.readEntry(d->configPower3Entry,          d->powerInput3->defaultValue());
-    prm.stage[2].blur    = group.readEntry(d->configBlur3Entry,           d->blurInput3->defaultValue());
+    prm.stage[2].enabled = group.readEntry(d->configStageThreeEntry,      defaultPrm.stage[2].enabled);
+    prm.stage[2].power   = group.readEntry(d->configPower3Entry,          defaultPrm.stage[2].power);
+    prm.stage[2].blur    = group.readEntry(d->configBlur3Entry,           defaultPrm.stage[2].blur);
 
-    prm.stage[3].enabled = group.readEntry(d->configStageFourEntry,       false);
-    prm.stage[3].power   = group.readEntry(d->configPower4Entry,          d->powerInput4->defaultValue());
-    prm.stage[3].blur    = group.readEntry(d->configBlur4Entry,           d->blurInput4->defaultValue());
+    prm.stage[3].enabled = group.readEntry(d->configStageFourEntry,       defaultPrm.stage[3].enabled);
+    prm.stage[3].power   = group.readEntry(d->configPower4Entry,          defaultPrm.stage[3].power);
+    prm.stage[3].blur    = group.readEntry(d->configBlur4Entry,           defaultPrm.stage[3].blur);
 
     setSettings(prm);
 }
