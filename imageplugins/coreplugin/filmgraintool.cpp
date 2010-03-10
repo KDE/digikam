@@ -105,7 +105,8 @@ FilmGrainTool::FilmGrainTool(QObject* parent)
     
     d->gboxSettings->setButtons(EditorToolSettings::Default|
                                 EditorToolSettings::Ok|
-                                EditorToolSettings::Cancel);
+                                EditorToolSettings::Cancel|
+                                EditorToolSettings::Try);
 
     // -------------------------------------------------------------
     
@@ -114,7 +115,7 @@ FilmGrainTool::FilmGrainTool(QObject* parent)
     
     // -------------------------------------------------------------
     
-    QLabel* label1         = new QLabel(i18n("Sensitivity (ISO):"),firstPage);
+    QLabel* label1         = new QLabel(i18n("Sensitivity (ISO):"), firstPage);
     d->sensibilityLumInput = new RIntNumInput(firstPage);
     d->sensibilityLumInput->setRange(800, 51200, 100);
     d->sensibilityLumInput->setSliderEnabled(true);
@@ -124,7 +125,7 @@ FilmGrainTool::FilmGrainTool(QObject* parent)
   
     // -------------------------------------------------------------
 
-    QLabel* label2        = new QLabel(i18n("Shadows:"),firstPage);
+    QLabel* label2        = new QLabel(i18n("Shadows:"), firstPage);
     d->highlightsLumInput = new RIntNumInput(firstPage);
     d->highlightsLumInput->setRange(-100, 100, 1);
     d->highlightsLumInput->setSliderEnabled(true);
@@ -133,7 +134,7 @@ FilmGrainTool::FilmGrainTool(QObject* parent)
     
     // -------------------------------------------------------------
 
-    QLabel* label3      = new QLabel(i18n("Midtones:"),firstPage);
+    QLabel* label3      = new QLabel(i18n("Midtones:"), firstPage);
     d->midtonesLumInput = new RIntNumInput(firstPage);
     d->midtonesLumInput->setRange(-100, 100, 1);
     d->midtonesLumInput->setSliderEnabled(true);
@@ -143,7 +144,7 @@ FilmGrainTool::FilmGrainTool(QObject* parent)
  
     // -------------------------------------------------------------
 
-    QLabel* label4     = new QLabel(i18n("Highlights:"),firstPage);
+    QLabel* label4     = new QLabel(i18n("Highlights:"), firstPage);
     d->shadowsLumInput = new RIntNumInput(firstPage);
     d->shadowsLumInput->setRange(-100, 100, 1);
     d->shadowsLumInput->setSliderEnabled(true);
@@ -166,7 +167,7 @@ FilmGrainTool::FilmGrainTool(QObject* parent)
     QWidget* secondPage = new QWidget();
     QGridLayout* grid2  = new QGridLayout( secondPage );
 
-    QLabel* label5            = new QLabel(i18n("Sensitivity (ISO):"),secondPage);
+    QLabel* label5            = new QLabel(i18n("Sensitivity (ISO):"), secondPage);
     d->sensibilityChromaInput = new RIntNumInput(secondPage);
     d->sensibilityChromaInput->setRange(800, 51200, 100);
     d->sensibilityChromaInput->setSliderEnabled(true);
@@ -176,7 +177,7 @@ FilmGrainTool::FilmGrainTool(QObject* parent)
   
     // -------------------------------------------------------------
 
-    QLabel* label6           = new QLabel(i18n("Shadows:"),secondPage);
+    QLabel* label6           = new QLabel(i18n("Shadows:"), secondPage);
     d->highlightsChromaInput = new RIntNumInput(secondPage);
     d->highlightsChromaInput->setRange(-100, 100, 1);
     d->highlightsChromaInput->setSliderEnabled(true);
@@ -185,7 +186,7 @@ FilmGrainTool::FilmGrainTool(QObject* parent)
     
     // -------------------------------------------------------------
     
-    QLabel* label7         = new QLabel(i18n("Midtones:"),secondPage);
+    QLabel* label7         = new QLabel(i18n("Midtones:"), secondPage);
     d->midtonesChromaInput = new RIntNumInput(secondPage);
     d->midtonesChromaInput->setRange(-100, 100, 1);
     d->midtonesChromaInput->setSliderEnabled(true);
@@ -195,7 +196,7 @@ FilmGrainTool::FilmGrainTool(QObject* parent)
  
     // -------------------------------------------------------------
 
-    QLabel* label8        = new QLabel(i18n("Highlights:"),secondPage);
+    QLabel* label8        = new QLabel(i18n("Highlights:"), secondPage);
     d->shadowsChromaInput = new RIntNumInput(secondPage);
     d->shadowsChromaInput->setRange(-100, 100, 1);
     d->shadowsChromaInput->setSliderEnabled(true);
@@ -219,7 +220,7 @@ FilmGrainTool::FilmGrainTool(QObject* parent)
     d->expanderBox->setObjectName("Noise Expander");
     d->expanderBox->addItem(firstPage, SmallIcon("filmgrain"), i18n("Luminance noise"),
                             QString("LuminanceSettingsContainer"), true);
-    d->expanderBox->addItem(secondPage, SmallIcon("filmgrain"), i18n("Chrominance noise"),
+    d->expanderBox->addItem(secondPage, SmallIcon("camera-photo"), i18n("Chrominance noise"),
                             QString("ChrominanceSettingsContainer"), true);
     d->expanderBox->addStretch();
 
