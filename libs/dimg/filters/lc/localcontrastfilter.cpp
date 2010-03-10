@@ -53,7 +53,6 @@ LocalContrastFilter::LocalContrastFilter(DImg* image, QObject* parent, const Loc
                      d(new LocalContrastFilterPriv)
 {
     d->par = par;
-    update_preprocessed_values();
     initFilter();
 }
 
@@ -239,8 +238,6 @@ float LocalContrastFilter::func(float x1, float x2)
 
 void LocalContrastFilter::process_rgb_image(float* img, int sizex, int sizey)
 {
-    update_preprocessed_values();
-
     int size         = sizex*sizey;
     float* blurimage = new float[size];
     float* srcimg    = new float[size*3];
@@ -403,11 +400,6 @@ void LocalContrastFilter::process_rgb_image(float* img, int sizex, int sizey)
     postProgress(80);
 }
 
-void LocalContrastFilter::update_preprocessed_values()
-{
-    postProgress(20);
-}
-
 void LocalContrastFilter::inplace_blur(float* data, int sizex, int sizey, float blur)
 {
     if (blur < 0.3) return;
@@ -536,21 +528,6 @@ void LocalContrastFilter::stretch_contrast(float* data, int datasize)
 
         data[i] = x;
     }
-}
-
-float LocalContrastFilter::get_blur(int nstage)
-{
-    return d->par.stage[nstage].blur;
-}
-
-float LocalContrastFilter::get_power(int nstage)
-{
-    return d->par.stage[nstage].power;
-}
-
-float LocalContrastFilter::get_unsharp_mask_power(float /*value*/)
-{
-    return d->par.unsharp_mask.power;
 }
 
 void LocalContrastFilter::rgb2hsv(const float& r, const float& g, const float& b, float& h, float& s, float& v)

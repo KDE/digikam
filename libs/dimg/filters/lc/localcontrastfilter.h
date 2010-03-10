@@ -68,13 +68,6 @@ private:
     inline void rgb2hsv(const float& r, const float& g, const float& b, float& h, float& s, float& v);
     inline void hsv2rgb(const float& h, const float& s, const float& v, float& r, float& g, float& b);
 
-    void  update_preprocessed_values();
-
-    float get_blur(int nstage);
-    float get_power(int nstage);
-
-    float get_unsharp_mask_power(float value);
-
 private:
 
     LocalContrastFilterPriv* const d;
