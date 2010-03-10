@@ -333,20 +333,21 @@ void LocalContrastFilter::process_rgb_image(float* img, int sizex, int sizey)
         kDebug() << "high_saturation : " << d->par.high_saturation;
         kDebug() << "low_saturation : " << d->par.low_saturation;
         
-        int pos = 0;
+        float src_h,  src_s,  src_v;
+        float dest_h, dest_s, dest_v;
+        float dest_saturation, s1;
+        int   pos = 0;
 
         for (int i=0 ; !m_cancel && (i < size) ; i++)
         {
-            float src_h, src_s, src_v;
-            float dest_h, dest_s, dest_v;
             rgb2hsv(srcimg[pos], srcimg[pos+1], srcimg[pos+2], src_h, src_s, src_v);
             rgb2hsv(img[pos], img[pos+1], img[pos+2], dest_h, dest_s, dest_v);
 
-            float dest_saturation = (float)((src_s*high_saturation_value+dest_s*(100.0-high_saturation_value))*0.01);
+            dest_saturation = (float)((src_s*high_saturation_value + dest_s*(100.0-high_saturation_value))*0.01);
             if (dest_v > src_v)
             {
-                float s1        = (float)(dest_saturation*src_v/(dest_v+1.0/255.0));
-                dest_saturation = (float)((low_saturation_value*s1+d->par.low_saturation*dest_saturation)*0.01);
+                s1              = (float)(dest_saturation*src_v/(dest_v+1.0/255.0));
+                dest_saturation = (float)((low_saturation_value*s1 + d->par.low_saturation*dest_saturation)*0.01);
             }
 
             hsv2rgb(dest_h, dest_saturation, dest_v, img[pos], img[pos+1], img[pos+2]);
