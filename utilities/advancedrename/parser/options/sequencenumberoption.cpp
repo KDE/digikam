@@ -85,7 +85,8 @@ void SequenceNumberOption::slotTokenTriggered(const QString& token)
         int step   = dlg->ui->step->value();
 
         result = QString("%1").arg("#", digits, QChar('#'));
-        if (start > 1)
+
+        if (start > 1 || step > 1)
         {
             result.append(QString("[%1").arg(QString::number(start)));
 
