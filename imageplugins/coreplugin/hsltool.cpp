@@ -158,7 +158,7 @@ void HSLTool::slotResetSettings()
 
 void HSLTool::prepareEffect()
 {
-    QApplication::setOverrideCursor(Qt::WaitCursor);
+    kapp->setOverrideCursor(Qt::WaitCursor);
     toolSettings()->setEnabled(false);
     toolView()->setEnabled(false);
 
@@ -187,7 +187,6 @@ void HSLTool::putPreviewData()
 
 void HSLTool::prepareFinal()
 {
-    QApplication::setOverrideCursor(Qt::WaitCursor);
     toolSettings()->setEnabled(false);
     toolView()->setEnabled(false);
 
@@ -205,7 +204,7 @@ void HSLTool::putFinalData()
 
 void HSLTool::renderingFinished()
 {
-    QApplication::restoreOverrideCursor();
+    kapp->restoreOverrideCursor();
     toolSettings()->setEnabled(true);
     toolView()->setEnabled(true);
 }
