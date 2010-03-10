@@ -193,14 +193,14 @@ LocalContrastSettings::LocalContrastSettings(QWidget* parent)
     d->stretchContrastCheck = new QCheckBox(i18n("Stretch contrast"), firstPage);
     d->stretchContrastCheck->setWhatsThis(i18n("<b>Stretch contrast</b>: This stretches the contrast of the original image. "
                                                "It is applied before the tonemapping process."));
-    d->stretchContrastCheck->setChecked(false);
+    d->stretchContrastCheck->setChecked(true);
 
     // -------------------------------------------------------------
 
     QLabel* label2         = new QLabel(i18n("Highlights saturation:"), firstPage);
     d->highSaturationInput = new RIntNumInput(firstPage);
     d->highSaturationInput->setRange(0, 100, 1);
-    d->highSaturationInput->setDefaultValue(50);
+    d->highSaturationInput->setDefaultValue(100);
     d->highSaturationInput->setSliderEnabled(true);
     d->highSaturationInput->setObjectName("highSaturationInput");
     d->highSaturationInput->setWhatsThis(i18n("<b>Highlights saturation</b>: Usually the (perceived) saturation is "
@@ -212,7 +212,7 @@ LocalContrastSettings::LocalContrastSettings(QWidget* parent)
     QLabel* label3        = new QLabel(i18n("Shadow saturation:"), firstPage);
     d->lowSaturationInput = new RIntNumInput(firstPage);
     d->lowSaturationInput->setRange(0, 100, 1);
-    d->lowSaturationInput->setDefaultValue(50);
+    d->lowSaturationInput->setDefaultValue(100);
     d->lowSaturationInput->setSliderEnabled(true);
     d->lowSaturationInput->setObjectName("lowSaturationInput");
     d->lowSaturationInput->setWhatsThis(i18n("<b>Shadow saturation</b>: Usually the (perceived) saturation is "
@@ -238,7 +238,7 @@ LocalContrastSettings::LocalContrastSettings(QWidget* parent)
 
     d->stageOne         = new QCheckBox(i18n("Enabled"), secondPage);
     d->stageOne->setWhatsThis(i18n("Check to enable this stage."));
-    d->stageOne->setChecked(false);
+    d->stageOne->setChecked(true);
     d->stageOne->setObjectName("stageOne");
 
     // -------------------------------------------------------------
@@ -246,7 +246,7 @@ LocalContrastSettings::LocalContrastSettings(QWidget* parent)
     d->label4      = new QLabel(i18n("Power:"), secondPage);
     d->powerInput1 = new RDoubleNumInput(firstPage);
     d->powerInput1->input()->setRange(0.0, 100.0, 1.0, true);
-    d->powerInput1->setDefaultValue(50.0);
+    d->powerInput1->setDefaultValue(30.0);
     d->powerInput1->setObjectName("powerInput1");
     d->powerInput1->setWhatsThis(i18n("<b>Power</b>: How strong the effect is applied."));
 
@@ -255,7 +255,7 @@ LocalContrastSettings::LocalContrastSettings(QWidget* parent)
     d->label5      = new QLabel(i18n("Blur:"), secondPage);
     d->blurInput1  = new RDoubleNumInput(firstPage);
     d->blurInput1->input()->setRange(0.0, 1000.0, 1.0, true);
-    d->blurInput1->setDefaultValue(500.0);
+    d->blurInput1->setDefaultValue(80.0);
     d->blurInput1->setObjectName("blurInput1");
     d->blurInput1->setWhatsThis(i18n("<b>Blur</b>: How strong the image is blurred before combining with the original "
                                      "image and with the tonemapping function."));
@@ -283,7 +283,7 @@ LocalContrastSettings::LocalContrastSettings(QWidget* parent)
     d->label6      = new QLabel(i18n("Power:"), thirdPage);
     d->powerInput2 = new RDoubleNumInput(thirdPage);
     d->powerInput2->input()->setRange(0.0, 100.0, 1.0, true);
-    d->powerInput2->setDefaultValue(50.0);
+    d->powerInput2->setDefaultValue(30.0);
     d->powerInput2->setObjectName("powerInput2");
     d->powerInput2->setWhatsThis(i18n("<b>Power</b>: How strong the effect is applied."));
 
@@ -292,7 +292,7 @@ LocalContrastSettings::LocalContrastSettings(QWidget* parent)
     d->label7     = new QLabel(i18n("Blur:"), thirdPage);
     d->blurInput2 = new RDoubleNumInput(thirdPage);
     d->blurInput2->input()->setRange(0.0, 1000.0, 1.0, true);
-    d->blurInput2->setDefaultValue(500.0);
+    d->blurInput2->setDefaultValue(80.0);
     d->blurInput2->setObjectName("blurInput2");
     d->blurInput2->setWhatsThis(i18n("<b>Blur</b>: How strong the image is blurred before combining with the original "
                                      "image and with the tonemapping function."));
@@ -320,7 +320,7 @@ LocalContrastSettings::LocalContrastSettings(QWidget* parent)
     d->label8      = new QLabel(i18n("Power:"), fourthPage);
     d->powerInput3 = new RDoubleNumInput(fourthPage);
     d->powerInput3->input()->setRange(0.0, 100.0, 1.0, true);
-    d->powerInput3->setDefaultValue(50.0);
+    d->powerInput3->setDefaultValue(30.0);
     d->powerInput3->setObjectName("powerInput3");
     d->powerInput3->setWhatsThis(i18n("<b>Power</b>: How strong the effect is applied."));
 
@@ -329,7 +329,7 @@ LocalContrastSettings::LocalContrastSettings(QWidget* parent)
     d->label9     = new QLabel(i18n("Blur:"), fourthPage);
     d->blurInput3 = new RDoubleNumInput(fourthPage);
     d->blurInput3->input()->setRange(0.0, 1000.0, 1.0, true);
-    d->blurInput3->setDefaultValue(500.0);
+    d->blurInput3->setDefaultValue(80.0);
     d->blurInput3->setObjectName("blurInput3");
     d->blurInput3->setWhatsThis(i18n("<b>Blur</b>: How strong the image is blurred before combining with the original "
                                      "image and with the tonemapping function."));
@@ -357,7 +357,7 @@ LocalContrastSettings::LocalContrastSettings(QWidget* parent)
     d->label10     = new QLabel(i18n("Power:"), fifthPage);
     d->powerInput4 = new RDoubleNumInput(fifthPage);
     d->powerInput4->input()->setRange(0.0, 100.0, 1.0, true);
-    d->powerInput4->setDefaultValue(50.0);
+    d->powerInput4->setDefaultValue(30.0);
     d->powerInput4->setObjectName("powerInput4");
     d->powerInput4->setWhatsThis(i18n("<b>Power</b>: How strong the effect is applied."));
 
@@ -366,7 +366,7 @@ LocalContrastSettings::LocalContrastSettings(QWidget* parent)
     d->label11    = new QLabel(i18n("Blur:"), fifthPage);
     d->blurInput4 = new RDoubleNumInput(fifthPage);
     d->blurInput4->input()->setRange(0.0, 1000.0, 1.0, true);
-    d->blurInput4->setDefaultValue(500.0);
+    d->blurInput4->setDefaultValue(80.0);
     d->blurInput4->setObjectName("blurInput4");
     d->blurInput4->setWhatsThis(i18n("<b>Blur</b>: How strong the image is blurred before combining with the original "
                                      "image and with the tonemapping function."));
@@ -562,12 +562,12 @@ void LocalContrastSettings::resetToDefault()
 {
     blockSignals(true);
 
-    d->stretchContrastCheck->setChecked(false);
+    d->stretchContrastCheck->setChecked(true);
     d->lowSaturationInput->slotReset();
     d->highSaturationInput->slotReset();
     d->functionInput->slotReset();
 
-    d->stageOne->setChecked(false);
+    d->stageOne->setChecked(true);
     d->powerInput1->slotReset();
     d->blurInput1->slotReset();
 
@@ -590,12 +590,12 @@ LocalContrastContainer LocalContrastSettings::defaultSettings() const
 {
     LocalContrastContainer prm;
 
-    prm.stretch_contrast = false;
+    prm.stretch_contrast = true;
     prm.low_saturation   = d->lowSaturationInput->defaultValue();
     prm.high_saturation  = d->highSaturationInput->defaultValue();
     prm.function_id      = d->functionInput->defaultIndex();
 
-    prm.stage[0].enabled = false;
+    prm.stage[0].enabled = true;
     prm.stage[0].power   = d->powerInput1->defaultValue();
     prm.stage[0].blur    = d->blurInput1->defaultValue();
 
