@@ -49,6 +49,7 @@
 #include "whitebalance.h"
 #include "curvesadjust.h"
 #include "filmgrain.h"
+#include "localcontrast.h"
 
 namespace Digikam
 {
@@ -89,7 +90,8 @@ BatchToolsManager::BatchToolsManager(QObject* parent)
     registerTool(new Sharpen(this));
     registerTool(new NoiseReduction(this));
     registerTool(new Restoration(this));
-
+    registerTool(new LocalContrast(this));
+    
     // Color
     registerTool(new BCGCorrection(this));
     registerTool(new HSLCorrection(this));

@@ -413,6 +413,42 @@ LocalContrastSettings::LocalContrastSettings(QWidget* parent)
 
     connect(d->stageFour,SIGNAL(toggled(bool)),
             this, SLOT(slotStage4Enabled(bool)));
+
+    connect(d->lowSaturationInput, SIGNAL(valueChanged(int)),
+            this, SIGNAL(signalSettingsChanged()));
+
+    connect(d->highSaturationInput, SIGNAL(valueChanged(int)),
+            this, SIGNAL(signalSettingsChanged()));
+            
+    connect(d->powerInput1, SIGNAL(valueChanged(double)),
+            this, SIGNAL(signalSettingsChanged()));
+
+    connect(d->blurInput1, SIGNAL(valueChanged(double)),
+            this, SIGNAL(signalSettingsChanged()));
+
+    connect(d->powerInput2, SIGNAL(valueChanged(double)),
+            this, SIGNAL(signalSettingsChanged()));
+
+    connect(d->blurInput2, SIGNAL(valueChanged(double)),
+            this, SIGNAL(signalSettingsChanged()));
+
+    connect(d->powerInput3, SIGNAL(valueChanged(double)),
+            this, SIGNAL(signalSettingsChanged()));
+
+    connect(d->blurInput3, SIGNAL(valueChanged(double)),
+            this, SIGNAL(signalSettingsChanged()));
+
+    connect(d->powerInput4, SIGNAL(valueChanged(double)),
+            this, SIGNAL(signalSettingsChanged()));
+
+    connect(d->blurInput4, SIGNAL(valueChanged(double)),
+            this, SIGNAL(signalSettingsChanged()));
+            
+    connect(d->functionInput, SIGNAL(currentIndexChanged(int)),
+            this, SIGNAL(signalSettingsChanged()));
+            
+    connect(d->stretchContrastCheck, SIGNAL(toggled(bool)),
+            this, SIGNAL(signalSettingsChanged()));
 }
 
 LocalContrastSettings::~LocalContrastSettings()
@@ -426,6 +462,7 @@ void LocalContrastSettings::slotStage1Enabled(bool b)
     d->powerInput1->setEnabled(b);
     d->label5->setEnabled(b);
     d->blurInput1->setEnabled(b);
+    emit signalSettingsChanged();
 }
 
 void LocalContrastSettings::slotStage2Enabled(bool b)
@@ -435,6 +472,7 @@ void LocalContrastSettings::slotStage2Enabled(bool b)
     d->powerInput2->setEnabled(b);
     d->label7->setEnabled(b);
     d->blurInput2->setEnabled(b);
+    emit signalSettingsChanged();
 }
 
 void LocalContrastSettings::slotStage3Enabled(bool b)
@@ -443,6 +481,7 @@ void LocalContrastSettings::slotStage3Enabled(bool b)
     d->powerInput3->setEnabled(b);
     d->label9->setEnabled(b);
     d->blurInput3->setEnabled(b);
+    emit signalSettingsChanged();
 }
 
 void LocalContrastSettings::slotStage4Enabled(bool b)
@@ -451,6 +490,7 @@ void LocalContrastSettings::slotStage4Enabled(bool b)
     d->powerInput4->setEnabled(b);
     d->label11->setEnabled(b);
     d->blurInput4->setEnabled(b);
+    emit signalSettingsChanged();
 }
 
 LocalContrastContainer LocalContrastSettings::settings() const
