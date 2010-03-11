@@ -5,8 +5,10 @@ INCLUDE_DIRECTORIES(autocorrection
                     ${CMAKE_CURRENT_BINARY_DIR}/../../
                    )
 
-SET(autocorrection_SRCS autocorrection/autocorrectiontool.cpp 
+SET(autocorrection_SRCS autocorrection/autocorrectiontool.cpp
                         autocorrection/lensfunfilter.cpp
+                        autocorrection/lensfunsettings.cpp
+                        autocorrection/lensfuniface.cpp
    )
 
 SET(distortion_SRCS distortion/lensdistortiontool.cpp

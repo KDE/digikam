@@ -52,6 +52,7 @@
 #include "imageiface.h"
 #include "imageguidewidget.h"
 #include "lensfunfilter.h"
+#include "lensfunsettings.h"
 
 namespace DigikamAutoCorrectionImagesPlugin
 {
