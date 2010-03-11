@@ -10,6 +10,7 @@ INCLUDE_DIRECTORIES(
                      ../libs/dimg/filters/decorate
                      ../libs/dimg/filters/fx
                      ../libs/dimg/filters/hsl
+                     ../libs/dimg/filters/greycstoration
                      ../libs/dimg/filters/icc
                      ../libs/dimg/filters/lc
                      ../libs/dimg/filters/nr
@@ -21,13 +22,8 @@ INCLUDE_DIRECTORIES(
                      ../libs/dimg/filters/transform
                      ../libs/dmetadata
                      ../libs/histogram
-                     ../libs/curves
-                     ../libs/levels
-                     ../libs/lprof/
                      ../libs/jpegutils
-                     ../libs/greycstoration
                      ../libs/threadimageio
-                     ../libs/whitebalance
                      ../libs/models
                      ../libs/template
 

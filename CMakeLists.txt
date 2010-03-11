@@ -122,15 +122,15 @@ FIND_PACKAGE(Kipi)
 
 # Extract version of libjpeg so that we can use the appropriate dir
 # See bug #227313, #228483
-file(READ "${JPEG_INCLUDE_DIR}/jpeglib.h" jpeglib_h_content)
-string(REGEX REPLACE ".*#define +JPEG_LIB_VERSION +([0-9]+).*" "\\1" jpeglib_version "${jpeglib_h_content}")
-message(STATUS "Identified libjpeg version: ${jpeglib_version}")
+FILE(READ "${JPEG_INCLUDE_DIR}/jpeglib.h" jpeglib_h_content)
+STRING(REGEX REPLACE ".*#define +JPEG_LIB_VERSION +([0-9]+).*" "\\1" jpeglib_version "${jpeglib_h_content}")
+MESSAGE(STATUS "Identified libjpeg version: ${jpeglib_version}")
 
-if ("${jpeglib_version}" LESS 80)
-    set(DIGIKAM_LIBJPEG_DIR libjpeg-62)
-else ("${jpeglib_version}" LESS 80)
-    set(DIGIKAM_LIBJPEG_DIR libjpeg-80)
-endif ("${jpeglib_version}" LESS 80)
+IF ("${jpeglib_version}" LESS 80)
+    SET(DIGIKAM_LIBJPEG_DIR libjpeg-62)
+ELSE ("${jpeglib_version}" LESS 80)
+    SET(DIGIKAM_LIBJPEG_DIR libjpeg-80)
+ENDIF ("${jpeglib_version}" LESS 80)
 
 # Check KDcraw version installed to compile fine.
 IF(NOT WIN32)
@@ -568,6 +568,8 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/wb/wbsettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/transform/freerotationfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/transform/shearfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/greycstoration/greycstorationiface.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/greycstoration/greycstorationwidget.cpp
        )
 
     IF(GLIB2_FOUND)
@@ -577,6 +579,9 @@ IF(DIGIKAM_CAN_BE_COMPILED)
            )
     ENDIF(GLIB2_FOUND)
 
+    # For CImg.h
+    SET_SOURCE_FILES_PROPERTIES(${libdimgfilters_SRCS} PROPERTIES COMPILE_FLAGS ${KDE4_ENABLE_EXCEPTIONS})
+
     SET(libdmetadata_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/metadatainfo.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/photoinfocontainer.cpp
@@ -585,17 +590,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/template.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/captionvalues.cpp
        )
-
-    # CImg.h version 1.2.8 do not compile fine with gcc 4.3.
-    # See B.K.O #163118: digikam-0.9.4_beta5 compilation hangs with gcc 4.3
-    # This is a temporary solution until CImg.h will be fixed.
-    KDE4_NO_ENABLE_FINAL(libgreycstoration)
-    SET(libgreycstoration_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/greycstoration/greycstorationiface.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/greycstoration/greycstorationwidget.cpp
-       )
-
-    SET_SOURCE_FILES_PROPERTIES(${libgreycstoration_SRCS} PROPERTIES COMPILE_FLAGS ${KDE4_ENABLE_EXCEPTIONS})
 
     SET(libhistogram_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/histogram/imagehistogram.cpp

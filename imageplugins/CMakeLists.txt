@@ -4,10 +4,6 @@ INCLUDE_DIRECTORIES(../utilities/imageeditor/editor
                     ../utilities/imageeditor/canvas
                     ../utilities/imageeditor/widgets
                     ../libs/histogram
-                    ../libs/levels
-                    ../libs/curves
-                    ../libs/greycstoration
-                    ../libs/whitebalance
                     ../libs/widgets/common
                     ../libs/widgets/iccprofiles
                     ../libs/dialogs
@@ -18,6 +14,7 @@ INCLUDE_DIRECTORIES(../utilities/imageeditor/editor
                     ../libs/dimg/filters/bcg
                     ../libs/dimg/filters/bw
                     ../libs/dimg/filters/hsl
+                    ../libs/dimg/filters/greycstoration
                     ../libs/dimg/filters/decorate
                     ../libs/dimg/filters/fx
                     ../libs/dimg/filters/icc
