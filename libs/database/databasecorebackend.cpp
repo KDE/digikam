@@ -124,7 +124,7 @@ QSqlDatabase DatabaseCoreBackendPrivate::databaseForThread()
            kDebug(50003) << "Error while opening the database. Details: [" << db.lastError() << "]";
 
         QObject::connect(thread, SIGNAL(finished()),
-                            q, SLOT(slotThreadFinished(additionalID)));
+                            q, SLOT(slotThreadFinished()));
     }
 #ifdef DATABASCOREBACKEND_DEBUG
     else
@@ -341,8 +341,16 @@ bool DatabaseCoreBackendPrivate::checkDatabaseError(const SqlQuery& query)
 
 //            bool ret = QMetaObject::invokeMethod(errorHandler, SLOT(connectionError(DatabaseErrorAnswer *)),
 //                                      Qt::QueuedConnection, Q_ARG(DatabaseErrorAnswer*, this));
+
+            // If we are unable to call the DatabaseErrorHandler, we refuse any queries
             kDebug(50003)<< "Invoke method returns ["<< ret <<"]";
-            queryOperationWait();
+            if (ret)
+            {
+                queryOperationWait();
+            }else
+            {
+                operationStatus = DatabaseCoreBackend::AbortQueries;
+            }
         }
 
         switch (operationStatus)

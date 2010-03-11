@@ -95,42 +95,54 @@ namespace Digikam
 
     }
 
+    bool DatabaseGUIErrorHandler::checkDatabaseConnection(){
+        // now we try to connect periodically to the database
+        DatabaseConnectionChecker connectionChecker(parameters);
+
+        QWidget* parent = QWidget::find(0);
+        KProgressDialog *dialog = new KProgressDialog(parent);
+        dialog->progressBar()->setMinimum(0);
+        dialog->progressBar()->setMaximum(0);
+        dialog->setModal(true);
+        dialog->setLabelText(i18n("Error while opening the database.\nDigikam will try to automatically reconnect to the database."));
+        connectionChecker.setDialog(dialog);
+        dialog->connect(&connectionChecker, SIGNAL(done()), SLOT(accept()));
+        connectionChecker.start();
+
+
+        // We use a QPointer because the dialog may get deleted
+        // during exec() if the parent of the dialog gets deleted.
+        // In that case the QPointer will reset to 0.
+        QPointer<KDialog> guardedDialog = dialog;
+
+        guardedDialog->exec();
+        connectionChecker.stop=true;
+
+        // simple for loop to ensure, the connection thread is closed
+        connectionChecker.wait();
+
+        bool result;
+        if ( dialog->wasCancelled() )
+        {
+            result=false;
+        }else
+        {
+            result=true;
+        }
+
+        delete (KDialog *) guardedDialog;
+        return result;
+    }
+
     void DatabaseGUIErrorHandler::databaseError(DatabaseErrorAnswer *answer,  const SqlQuery& query){
         if (query.lastError().type() == QSqlError::ConnectionError || query.lastError().number()==2006){
-            // now we try to connect periodically to the database
-            DatabaseConnectionChecker connectionChecker(parameters);
-
-            QWidget* parent = QWidget::find(0);
-            KProgressDialog *dialog = new KProgressDialog(parent);
-            dialog->progressBar()->setMinimum(0);
-            dialog->progressBar()->setMaximum(0);
-            dialog->setModal(true);
-            dialog->setLabelText(i18n("Error while opening the database.\nDigikam will try to automatically reconnect to the database."));
-            connectionChecker.setDialog(dialog);
-            dialog->connect(&connectionChecker, SIGNAL(done()), SLOT(accept()));
-            connectionChecker.start();
-
-
-            // We use a QPointer because the dialog may get deleted
-            // during exec() if the parent of the dialog gets deleted.
-            // In that case the QPointer will reset to 0.
-            QPointer<KDialog> guardedDialog = dialog;
-
-            guardedDialog->exec();
-            connectionChecker.stop=true;
-
-            // simple for loop to ensure, the connection thread is closed
-            connectionChecker.wait();
-
-            if ( dialog->wasCancelled() )
+            if ( checkDatabaseConnection() )
             {
                 answer->connectionErrorAbortQueries();
             }else
             {
                 answer->connectionErrorContinueQueries();
             }
-
-            delete (KDialog *) guardedDialog;
         }else
         {
             QWidget* parent = QWidget::find(0);

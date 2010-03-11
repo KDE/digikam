@@ -688,6 +688,25 @@ bool AlbumManager::setDatabase(const QString dbType, const QString dbName, const
     DatabaseGUIErrorHandler *handler = new DatabaseGUIErrorHandler(DatabaseAccess::parameters());
     DatabaseAccess::initDatabaseErrorHandler(handler);
 
+    if (!handler->checkDatabaseConnection())
+    {
+        KMessageBox::error(0, i18n("<p>Failed to open the database. "
+                                               "</p><p>You cannot use digiKam without a working database. "
+                                               "digiKam will attempt to start now, but it will <b>not</b> be functional. "
+                                               "Please check the database settings in the <b>configuration menu</b>.</p>"
+                                               ));
+
+        DatabaseAccess::setParameters(DatabaseParameters::parametersFromConfig( "",
+                                                                                "",
+                                                                                "",
+                                                                                -1,
+                                                                                "",
+                                                                                "",
+                                                                                ""),
+                                                                                DatabaseAccess::DatabaseSlave);
+        return true;
+    }
+
     // still suspended from above
     ScanController::instance()->resumeCollectionScan();
 

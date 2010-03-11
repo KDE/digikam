@@ -63,6 +63,7 @@ public:
     DatabaseGUIErrorHandler(const DatabaseParameters parameters);
     ~DatabaseGUIErrorHandler();
 
+    bool checkDatabaseConnection();
 
 private:
     DatabaseParameters parameters;
