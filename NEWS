@@ -113,7 +113,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 082 ==> 228810 : Need to roll over again on a thumb to correct the rating.
 083 ==> 210259 : Scan crashed on multi-layer TIFFs.
 084 ==> 229344 : digiKam starting up - loading kipi-plugins.
-085 ==> 
+085 ==> 229578 : Metadata is not correctly updated when just assigning tags.
+086
 
 
 
