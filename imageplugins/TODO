@@ -14,7 +14,6 @@ coreplugin
   /profileconversiontool    DONE                 DONE                  DONE
   /whitebalance             DONE                 DONE                  DONE
   /filmgrain                DONE                 DONE                  DONE
-  /redeyetool               DONE                 TODO                   NO
 
 decorate
   /border                   DONE                  NO                   TODO
@@ -41,6 +40,7 @@ enhance
   /restoration              DONE                 DONE                  DONE
   /blurtool                 DONE                 DONE                  DONE
   /localcontrast            DONE                 DONE                  DONE
+  /redeyetool               DONE                 TODO                   NO
 
 transform
   /ratiocrop                DONE                  NO                    NO
