@@ -59,7 +59,7 @@ public:
 
 private Q_SLOTS:
 
-    void slotNoiseReduction();
+    void slotLocalContrast();
     void slotRedEye();
     
     void slotBCG();
@@ -76,7 +76,6 @@ private Q_SLOTS:
     void slotChannelMixer();
     void slotCurvesAdjust();
     void slotLevelsAdjust();
-    void slotLocalContrast();
 
     void slotUpdateColorSpaceMenu();
     void slotSetupICC();

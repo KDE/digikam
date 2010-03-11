@@ -43,7 +43,7 @@
 #include "imageregionwidget.h"
 #include "nrsettings.h"
 
-namespace DigikamImagesPluginCore
+namespace DigikamEnhanceImagePlugin
 {
 
 class NoiseReductionToolPriv
@@ -169,4 +169,4 @@ void NoiseReductionTool::slotSaveAsSettings()
     d->nrSettings->saveAsSettings();
 }
 
-}  // namespace DigikamImagesPluginCore
+}  // namespace DigikamEnhanceImagePlugin

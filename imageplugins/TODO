@@ -15,9 +15,7 @@ coreplugin
   /profileconversiontool    DONE                 DONE                  DONE
   /whitebalance             DONE                 DONE                  DONE
   /filmgrain                DONE                 DONE                  DONE
-  /noisereductiontool       DONE                 DONE                  DONE
   /redeyetool               DONE                 TODO                   NO
-  /sharpentool              DONE                 DONE                  DONE
 
 decorate
   /border                   DONE                  NO                   TODO
@@ -39,6 +37,8 @@ lenscorrection
   /vignetting               DONE                 TODO                  TODO
 
 enhance
+  /noisereductiontool       DONE                 DONE                  DONE
+  /sharpentool              DONE                 DONE                  DONE
   /restoration              DONE                 DONE                  DONE
   /blurtool                 DONE                 DONE                  DONE
 

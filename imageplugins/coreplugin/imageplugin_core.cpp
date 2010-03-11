@@ -49,7 +49,6 @@
 #include "bwsepiatool.h"
 #include "hsltool.h"
 #include "profileconversiontool.h"
-#include "noisereductiontool.h"
 #include "redeyetool.h"
 #include "cbtool.h"
 #include "whitebalancetool.h"
@@ -78,7 +77,6 @@ public:
         BWAction(0),
         convertTo8Bits(0),
         convertTo16Bits(0),
-        noiseReductionAction(0),
         whitebalanceAction(0),
         channelMixerAction(0),
         curvesAction(0),
@@ -96,7 +94,6 @@ public:
     KAction*               BWAction;
     KAction*               convertTo8Bits;
     KAction*               convertTo16Bits;
-    KAction*               noiseReductionAction;
     KAction*               whitebalanceAction;
     KAction*               channelMixerAction;
     KAction*               curvesAction;
@@ -206,11 +203,6 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QVariantList &)
     connect(d->redeyeAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotRedEye()));
 
-    d->noiseReductionAction = new KAction(KIcon("noisereduction"), i18n("Noise Reduction..."), this);
-    actionCollection()->addAction("implugcore_noisereduction", d->noiseReductionAction );
-    connect(d->noiseReductionAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotNoiseReduction()));
-
     d->localContrastAction = new KAction(KIcon("contrast"), i18n("Local Contrast..."), this);
     actionCollection()->addAction("implugcore_localcontrast", d->localContrastAction );
     connect(d->localContrastAction, SIGNAL(triggered(bool)),
@@ -245,7 +237,6 @@ void ImagePlugin_Core::setEnabledActions(bool b)
     d->BWAction->setEnabled(b);
     d->HSLAction->setEnabled(b);
     d->profileMenuAction->setEnabled(b);
-    d->noiseReductionAction->setEnabled(b);
     d->whitebalanceAction->setEnabled(b);
     d->channelMixerAction->setEnabled(b);
     d->curvesAction->setEnabled(b);
@@ -424,12 +415,6 @@ void ImagePlugin_Core::slotBW()
 void ImagePlugin_Core::slotHSL()
 {
     HSLTool* tool = new HSLTool(this);
-    loadTool(tool);
-}
-
-void ImagePlugin_Core::slotNoiseReduction()
-{
-    NoiseReductionTool* tool = new NoiseReductionTool(this);
     loadTool(tool);
 }
 

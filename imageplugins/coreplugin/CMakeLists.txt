@@ -9,11 +9,10 @@ SET(digikamimageplugin_core_PART_SRCS autocorrectiontool.cpp
                                       channelmixertool.cpp
                                       adjustcurvestool.cpp
                                       adjustlevelstool.cpp
-                                      localcontrasttool.cpp
                                       imageplugin_core.cpp
 
                                       redeyetool.cpp
-                                      noisereductiontool.cpp
+                                      localcontrasttool.cpp
    )
 
 

@@ -30,7 +30,7 @@
 
 using namespace Digikam;
 
-namespace DigikamImagesPluginCore
+namespace DigikamEnhanceImagePlugin
 {
 
 class NoiseReductionToolPriv;
@@ -65,6 +65,6 @@ private:
     NoiseReductionToolPriv* const d;
 };
 
-}  // namespace DigikamImagesPluginCore
+}  // namespace DigikamEnhanceImagePlugin
 
 #endif /* NOISEREDUCTIONTOOL_H */

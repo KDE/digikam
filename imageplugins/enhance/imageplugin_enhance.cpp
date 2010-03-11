@@ -39,6 +39,7 @@
 #include "restorationtool.h"
 #include "blurtool.h"
 #include "sharpentool.h"
+#include "noisereductiontool.h"
 
 using namespace DigikamEnhanceImagePlugin;
 
@@ -46,7 +47,7 @@ K_PLUGIN_FACTORY( EnhanceFactory, registerPlugin<ImagePlugin_Enhance>(); )
 K_EXPORT_PLUGIN ( EnhanceFactory("digikamimageplugin_enhance") )
 
 ImagePlugin_Enhance::ImagePlugin_Enhance(QObject* parent, const QVariantList&)
-                       : ImagePlugin(parent, "ImagePlugin_Enhance")
+                   : ImagePlugin(parent, "ImagePlugin_Enhance")
 {
     m_restorationAction  = new KAction(KIcon("restoration"), i18n("Restoration..."), this);
     actionCollection()->addAction("imageplugin_restoration", m_restorationAction);
@@ -63,6 +64,11 @@ ImagePlugin_Enhance::ImagePlugin_Enhance(QObject* parent, const QVariantList&)
     connect(m_blurAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotBlur()));            
 
+    m_noiseReductionAction = new KAction(KIcon("noisereduction"), i18n("Noise Reduction..."), this);
+    actionCollection()->addAction("imageplugin_noisereduction", m_noiseReductionAction);
+    connect(m_noiseReductionAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotNoiseReduction()));
+            
     setXMLFile( "digikamimageplugin_enhance_ui.rc" );
 
     kDebug() << "ImagePlugin_Enhance plugin loaded";
@@ -77,6 +83,7 @@ void ImagePlugin_Enhance::setEnabledActions(bool b)
     m_restorationAction->setEnabled(b);
     m_blurAction->setEnabled(b);
     m_sharpenAction->setEnabled(b);    
+    m_noiseReductionAction->setEnabled(b);
 }
 
 void ImagePlugin_Enhance::slotRestoration()
@@ -94,5 +101,11 @@ void ImagePlugin_Enhance::slotBlur()
 void ImagePlugin_Enhance::slotSharpen()
 {
     SharpenTool* tool = new SharpenTool(this);
+    loadTool(tool);
+}
+
+void ImagePlugin_Enhance::slotNoiseReduction()
+{
+    NoiseReductionTool* tool = new NoiseReductionTool(this);
     loadTool(tool);
 }
