@@ -79,7 +79,7 @@
 
 using namespace KDcrawIface;
 
-namespace DigikamImagesPluginCore
+namespace DigikamTransformImagePlugin
 {
 
 class ResizeImage : public DImgThreadedFilter
@@ -677,4 +677,4 @@ void ResizeTool::slotSaveAsSettings()
     file.close();
 }
 
-}  // namespace DigikamImagesPluginCore
+}  // namespace DigikamTransformImagePlugin

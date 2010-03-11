@@ -34,7 +34,7 @@
 
 using namespace Digikam;
 
-namespace DigikamImagesPluginCore
+namespace DigikamTransformImagePlugin
 {
 
 class ResizeToolPriv;
@@ -73,6 +73,6 @@ private:
     ResizeToolPriv* const d;
 };
 
-}  // namespace DigikamImagesPluginCore
+}  // namespace DigikamTransformImagePlugin
 
 #endif /* RESIZE_TOOL_H */

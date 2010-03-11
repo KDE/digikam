@@ -49,7 +49,6 @@
 #include "bwsepiatool.h"
 #include "hsltool.h"
 #include "profileconversiontool.h"
-#include "resizetool.h"
 #include "blurtool.h"
 #include "noisereductiontool.h"
 #include "ratiocroptool.h"
@@ -82,7 +81,6 @@ public:
         invertAction(0),
         BWAction(0),
         aspectRatioCropAction(0),
-        resizeAction(0),
         sharpenAction(0),
         blurAction(0),
         convertTo8Bits(0),
@@ -105,7 +103,6 @@ public:
     KAction*               invertAction;
     KAction*               BWAction;
     KAction*               aspectRatioCropAction;
-    KAction*               resizeAction;
     KAction*               sharpenAction;
     KAction*               blurAction;
     KAction*               convertTo8Bits;
@@ -250,12 +247,6 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QVariantList &)
     connect(d->aspectRatioCropAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotRatioCrop()));
 
-
-    d->resizeAction = new KAction(KIcon("transform-scale"), i18n("&Resize..."), this);
-    actionCollection()->addAction("implugcore_resize", d->resizeAction);
-    connect(d->resizeAction, SIGNAL(triggered()),
-            this, SLOT(slotResize()));
-
     //-------------------------------
     // Filter menu actions.
 
@@ -295,7 +286,6 @@ void ImagePlugin_Core::setEnabledActions(bool b)
     d->HSLAction->setEnabled(b);
     d->sharpenAction->setEnabled(b);
     d->aspectRatioCropAction->setEnabled(b);
-    d->resizeAction->setEnabled(b);
     d->profileMenuAction->setEnabled(b);
     d->noiseReductionAction->setEnabled(b);
     d->whitebalanceAction->setEnabled(b);
@@ -495,12 +485,6 @@ void ImagePlugin_Core::slotSharpen()
 void ImagePlugin_Core::slotRatioCrop()
 {
     RatioCropTool* tool = new RatioCropTool(this);
-    loadTool(tool);
-}
-
-void ImagePlugin_Core::slotResize()
-{
-    ResizeTool* tool = new ResizeTool(this);
     loadTool(tool);
 }
 

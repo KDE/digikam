@@ -40,6 +40,7 @@
 #include "perspectivetool.h"
 #include "freerotationtool.h"
 #include "sheartool.h"
+#include "resizetool.h"
 
 #ifdef HAVE_GLIB2
 #include "contentawareresizetool.h"
@@ -63,6 +64,11 @@ ImagePlugin_Transform::ImagePlugin_Transform(QObject* parent, const QVariantList
     connect(m_sheartoolAction, SIGNAL(triggered(bool)),
             this, SLOT(slotShearTool()));
 
+    m_resizeAction = new KAction(KIcon("transform-scale"), i18n("&Resize..."), this);
+    actionCollection()->addAction("imageplugin_resize", m_resizeAction);
+    connect(m_resizeAction, SIGNAL(triggered()),
+            this, SLOT(slotResize()));
+            
 #ifdef HAVE_GLIB2
 
     m_contentAwareResizingAction = new KAction(KIcon("transform-scale"), i18n("Liquid Rescale..."), this);
@@ -114,6 +120,7 @@ ImagePlugin_Transform::~ImagePlugin_Transform()
 
 void ImagePlugin_Transform::setEnabledActions(bool b)
 {
+    m_resizeAction->setEnabled(b);
     m_perspectiveAction->setEnabled(b);
     m_freerotationAction->setEnabled(b);
     m_sheartoolAction->setEnabled(b);
@@ -131,6 +138,12 @@ void ImagePlugin_Transform::slotPerspective()
 void ImagePlugin_Transform::slotShearTool()
 {
     ShearTool* tool = new ShearTool(this);
+    loadTool(tool);
+}
+
+void ImagePlugin_Transform::slotResize()
+{
+    ResizeTool* tool = new ResizeTool(this);
     loadTool(tool);
 }
 

@@ -17,7 +17,6 @@ coreplugin
   /noisereductiontool       DONE                 DONE                  DONE
   /profileconversiontool    DONE                 DONE                  DONE
   /redeyetool               DONE                 TODO                   NO
-  /resizetool               DONE                 TODO                  DONE
   /sharpentool              DONE                 DONE                  DONE
   /whitebalance             DONE                 DONE                  DONE
 
@@ -47,6 +46,7 @@ restoration                 DONE                 DONE                  DONE
 superimpose                  NO                   NO                    NO
 
 transform
+  /resizetool               DONE                 TODO                  DONE
   /freerotation             DONE                  NO                   TODO
   /perspective               NO                   NO                    NO
   /sheartool                DONE                  NO                   TODO

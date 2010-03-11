@@ -8,7 +8,6 @@ SET(digikamimageplugin_core_PART_SRCS
     ../../imageplugins/coreplugin/profileconversiontool.cpp
     ../../imageplugins/coreplugin/blurtool.cpp
     ../../imageplugins/coreplugin/imageplugin_core.cpp
-    ../../imageplugins/coreplugin/resizetool.cpp
     ../../imageplugins/coreplugin/redeyetool.cpp
     ../../imageplugins/coreplugin/cbtool.cpp
     ../../imageplugins/coreplugin/whitebalancetool.cpp
