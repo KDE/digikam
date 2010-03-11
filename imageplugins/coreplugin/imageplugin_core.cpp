@@ -58,7 +58,6 @@
 #include "channelmixertool.h"
 #include "adjustcurvestool.h"
 #include "adjustlevelstool.h"
-#include "filmgraintool.h"
 #include "localcontrasttool.h"
 
 using namespace DigikamImagesPluginCore;
@@ -88,7 +87,6 @@ public:
         channelMixerAction(0),
         curvesAction(0),
         levelsAction(0),
-        filmgrainAction(0),
         localContrastAction(0),
         profileMenuAction(0)
         {}
@@ -109,7 +107,6 @@ public:
     KAction*               channelMixerAction;
     KAction*               curvesAction;
     KAction*               levelsAction;
-    KAction*               filmgrainAction;
     KAction*               localContrastAction;
     
     IccProfilesMenuAction* profileMenuAction;
@@ -236,14 +233,6 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QVariantList &)
             this, SLOT(slotLocalContrast()));
             
     //-------------------------------
-    // Filter menu actions.
-
-    d->filmgrainAction  = new KAction(KIcon("filmgrain"), i18n("Add Film Grain..."), this);
-    actionCollection()->addAction("implugcore_filmgrain", d->filmgrainAction );
-    connect(d->filmgrainAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotFilmGrain()));
-
-    //-------------------------------
     // Init. menu actions.
 
     setXMLFile("digikamimageplugin_core_ui.rc");
@@ -279,7 +268,6 @@ void ImagePlugin_Core::setEnabledActions(bool b)
     d->channelMixerAction->setEnabled(b);
     d->curvesAction->setEnabled(b);
     d->levelsAction->setEnabled(b);
-    d->filmgrainAction->setEnabled(b);
     d->localContrastAction->setEnabled(b);
 }
 
@@ -496,12 +484,6 @@ void ImagePlugin_Core::slotCurvesAdjust()
 void ImagePlugin_Core::slotLevelsAdjust()
 {
     AdjustLevelsTool* tool = new AdjustLevelsTool(this);
-    loadTool(tool);
-}
-
-void ImagePlugin_Core::slotFilmGrain()
-{
-    FilmGrainTool* tool = new FilmGrainTool(this);
     loadTool(tool);
 }
 

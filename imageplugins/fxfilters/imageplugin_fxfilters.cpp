@@ -42,6 +42,7 @@
 #include "blurfxtool.h"
 #include "distortionfxtool.h"
 #include "raindroptool.h"
+#include "filmgraintool.h"
 
 using namespace DigikamFxFiltersImagePlugin;
 
@@ -52,17 +53,17 @@ ImagePlugin_FxFilters::ImagePlugin_FxFilters(QObject* parent, const QVariantList
                      : ImagePlugin(parent, "ImagePlugin_FxFilters")
 {
     m_colorEffectsAction = new KAction(KIcon("colorfx"), i18n("Color Effects..."), this);
-    actionCollection()->addAction("imageplugin_colorfx", m_colorEffectsAction );
+    actionCollection()->addAction("imageplugin_colorfx", m_colorEffectsAction);
     connect(m_colorEffectsAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotColorEffects()));
 
     m_charcoalAction = new KAction(KIcon("charcoaltool"), i18n("Charcoal Drawing..."), this);
-    actionCollection()->addAction("imageplugin_charcoal", m_charcoalAction  );
+    actionCollection()->addAction("imageplugin_charcoal", m_charcoalAction);
     connect(m_charcoalAction, SIGNAL(triggered(bool)),
             this, SLOT(slotCharcoal()));
 
     m_embossAction = new KAction(KIcon("embosstool"), i18n("Emboss..."), this);
-    actionCollection()->addAction("imageplugin_emboss", m_embossAction );
+    actionCollection()->addAction("imageplugin_emboss", m_embossAction);
     connect(m_embossAction, SIGNAL(triggered(bool)),
             this, SLOT(slotEmboss()));
 
@@ -72,7 +73,7 @@ ImagePlugin_FxFilters::ImagePlugin_FxFilters(QObject* parent, const QVariantList
             this ,SLOT(slotOilPaint()));
 
     m_blurfxAction = new KAction(KIcon("blurfx"), i18n("Blur Effects..."), this);
-    actionCollection()->addAction("imageplugin_blurfx", m_blurfxAction );
+    actionCollection()->addAction("imageplugin_blurfx", m_blurfxAction);
     connect(m_blurfxAction, SIGNAL(triggered(bool)),
             this, SLOT(slotBlurFX()));
 
@@ -82,9 +83,14 @@ ImagePlugin_FxFilters::ImagePlugin_FxFilters(QObject* parent, const QVariantList
             this, SLOT(slotDistortionFX()));
 
     m_raindropAction = new KAction(KIcon("raindrop"), i18n("Raindrops..."), this);
-    actionCollection()->addAction("imageplugin_raindrop", m_raindropAction );
+    actionCollection()->addAction("imageplugin_raindrop", m_raindropAction);
     connect(m_raindropAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotRainDrop()));
+            
+    m_filmgrainAction  = new KAction(KIcon("filmgrain"), i18n("Add Film Grain..."), this);
+    actionCollection()->addAction("imageplugin_filmgrain", m_filmgrainAction);
+    connect(m_filmgrainAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotFilmGrain()));            
 
     setXMLFile( "digikamimageplugin_fxfilters_ui.rc" );
 
@@ -104,6 +110,7 @@ void ImagePlugin_FxFilters::setEnabledActions(bool b)
     m_blurfxAction->setEnabled(b);
     m_distortionfxAction->setEnabled(b);
     m_raindropAction->setEnabled(b);
+    m_filmgrainAction->setEnabled(b);    
 }
 
 void ImagePlugin_FxFilters::slotColorEffects()
@@ -145,5 +152,11 @@ void ImagePlugin_FxFilters::slotDistortionFX()
 void ImagePlugin_FxFilters::slotRainDrop()
 {
     RainDropTool* tool = new RainDropTool(this);
+    loadTool(tool);
+}
+
+void ImagePlugin_FxFilters::slotFilmGrain()
+{
+    FilmGrainTool* tool = new FilmGrainTool(this);
     loadTool(tool);
 }

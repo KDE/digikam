@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="15" name="digikamimageplugin_fxfilters" >
+<gui version="16" name="digikamimageplugin_fxfilters" >
 
  <MenuBar>
 
@@ -14,6 +14,7 @@
    <Action name="imageplugin_blurfx" />
    <Action name="imageplugin_distortionfx" />
    <Action name="imageplugin_raindrop" />
+   <Action name="imageplugin_filmgrain" />   
   </Menu>
 
  </MenuBar>

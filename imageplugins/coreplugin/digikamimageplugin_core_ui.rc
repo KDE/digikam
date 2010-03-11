@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="24" name="digikamimageplugin_core" >
+<gui version="25" name="digikamimageplugin_core" >
 
  <MenuBar>
 
@@ -31,10 +31,6 @@
       <Action name="implugcore_localcontrast" />
       <Separator />
       <Action name="implugcore_redeye" />
-   </Menu>
-
-   <Menu name="Filters" ><text>F&amp;ilters</text>
-      <Action name="implugcore_filmgrain" />
    </Menu>
 
  </MenuBar>

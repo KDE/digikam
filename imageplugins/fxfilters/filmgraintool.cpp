@@ -54,7 +54,7 @@
 #include "imageiface.h"
 #include "imageregionwidget.h"
 
-namespace DigikamImagesPluginCore
+namespace DigikamFxFiltersImagePlugin
 {
 
 class FilmGrainToolPriv
@@ -181,4 +181,4 @@ void FilmGrainTool::renderingFinished()
     toolView()->setEnabled(true);
 }
 
-}  // namespace DigikamImagesPluginCore
+}  // namespace DigikamFxFiltersImagePlugin

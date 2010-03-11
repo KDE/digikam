@@ -63,7 +63,6 @@ static const char* ObsoleteImagePluginsList[] =
      "digikamimageplugin_channelmixer",             // Merged to core plugin since 1.2.0.
      "digikamimageplugin_adjustcurves",             // Merged to core plugin since 1.2.0.
      "digikamimageplugin_adjustlevels",             // Merged to core plugin since 1.2.0.
-     "digikamimageplugin_filmgrain",                // Merged to core plugin since 1.2.0.
      "digikamimageplugin_localcontrast",            // Merged to core plugin since 1.2.0.
      "digikamimageplugin_colorfx",                  // Merged to "FxFilters" plugin since 1.2.0.
      "digikamimageplugin_charcoal",                 // Merged to "FxFilters" plugin since 1.2.0.
@@ -72,6 +71,7 @@ static const char* ObsoleteImagePluginsList[] =
      "digikamimageplugin_blurfx",                   // Merged to "FxFilters" plugin since 1.2.0.
      "digikamimageplugin_distortionfx",             // Merged to "FxFilters" plugin since 1.2.0.
      "digikamimageplugin_raindrop",                 // Merged to "FxFilters" plugin since 1.2.0.
+     "digikamimageplugin_filmgrain",                // Merged to "FxFilters" plugin since 1.2.0.
      "digikamimageplugin_perspective",              // Merged to "Transform" plugin since 1.2.0.
      "digikamimageplugin_freerotation",             // Merged to "Transform" plugin since 1.2.0.
      "digikamimageplugin_sheartool",                // Merged to "Transform" plugin since 1.2.0.

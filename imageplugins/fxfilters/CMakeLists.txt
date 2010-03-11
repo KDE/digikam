@@ -7,6 +7,7 @@ SET(digikamimageplugin_fxfilters_PART_SRCS imageplugin_fxfilters.cpp
                                            blurfxtool.cpp
                                            distortionfxtool.cpp
                                            raindroptool.cpp
+                                           filmgraintool.cpp
    )
 
 KDE4_ADD_PLUGIN(digikamimageplugin_fxfilters ${digikamimageplugin_fxfilters_PART_SRCS})

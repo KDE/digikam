@@ -57,9 +57,11 @@ private Q_SLOTS:
     void slotBlurFX();
     void slotDistortionFX();
     void slotRainDrop();
+    void slotFilmGrain();    
 
 private:
 
+    KAction* m_filmgrainAction;  
     KAction* m_raindropAction;
     KAction* m_distortionfxAction;
     KAction* m_blurfxAction;

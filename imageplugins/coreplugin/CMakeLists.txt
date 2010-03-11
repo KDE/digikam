@@ -12,7 +12,6 @@ SET(digikamimageplugin_core_PART_SRCS
     ../../imageplugins/coreplugin/sharpentool.cpp
     ../../imageplugins/coreplugin/noisereductiontool.cpp
     ../../imageplugins/coreplugin/hsltool.cpp
-    ../../imageplugins/coreplugin/filmgraintool.cpp
     ../../imageplugins/coreplugin/channelmixertool.cpp
     ../../imageplugins/coreplugin/adjustcurvestool.cpp
     ../../imageplugins/coreplugin/adjustlevelstool.cpp

@@ -32,7 +32,7 @@
 
 using namespace Digikam;
 
-namespace DigikamImagesPluginCore
+namespace DigikamFxFiltersImagePlugin
 {
 
 class FilmGrainToolPriv;
@@ -65,6 +65,6 @@ private:
     FilmGrainToolPriv* const d;
 };
 
-}  // namespace DigikamImagesPluginCore
+}  // namespace DigikamFxFiltersImagePlugin
 
 #endif /* FILMGRAINTOOL_H */
