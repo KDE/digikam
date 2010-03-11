@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="13" name="digikamimageplugin_enhance" >
+<gui version="14" name="digikamimageplugin_enhance" >
 
  <MenuBar>
 
@@ -8,6 +8,7 @@
       <Action name="imageplugin_blur" />
       <Action name="imageplugin_sharpen" />      
       <Action name="imageplugin_noisereduction" />      
+      <Action name="imageplugin_localcontrast" />      
   </Menu>
 
  </MenuBar>
@@ -20,7 +21,8 @@
       <Action shortcut="" name="imageplugin_restoration" />
       <Action shortcut="" name="imageplugin_blur" />
       <Action shortcut="" name="imageplugin_sharpen" />     
-      <Action shortcut="" name="imageplugin_noisereduction" />      
+      <Action shortcut="" name="imageplugin_noisereduction" />  
+      <Action shortcut="" name="imageplugin_localcontrast" />            
  </ActionProperties>
 
 </gui>

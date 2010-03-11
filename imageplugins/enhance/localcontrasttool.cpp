@@ -64,7 +64,7 @@
 #include "localcontrastsettings.h"
 #include "localcontrastcontainer.h"
 
-namespace DigikamImagesPluginCore
+namespace DigikamEnhanceImagePlugin
 {
 
 class LocalContrastToolPriv
@@ -220,4 +220,4 @@ void LocalContrastTool::slotSaveAsSettings()
     d->settingsView->saveAsSettings();
 }
 
-} // namespace DigikamImagesPluginCore
+} // namespace DigikamEnhanceImagePlugin

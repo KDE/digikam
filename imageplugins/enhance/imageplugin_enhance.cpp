@@ -40,6 +40,7 @@
 #include "blurtool.h"
 #include "sharpentool.h"
 #include "noisereductiontool.h"
+#include "localcontrasttool.h"
 
 using namespace DigikamEnhanceImagePlugin;
 
@@ -68,7 +69,12 @@ ImagePlugin_Enhance::ImagePlugin_Enhance(QObject* parent, const QVariantList&)
     actionCollection()->addAction("imageplugin_noisereduction", m_noiseReductionAction);
     connect(m_noiseReductionAction, SIGNAL(triggered(bool)),
             this, SLOT(slotNoiseReduction()));
-            
+
+    m_localContrastAction = new KAction(KIcon("contrast"), i18n("Local Contrast..."), this);
+    actionCollection()->addAction("imageplugin_localcontrast", m_localContrastAction);
+    connect(m_localContrastAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotLocalContrast()));
+                        
     setXMLFile( "digikamimageplugin_enhance_ui.rc" );
 
     kDebug() << "ImagePlugin_Enhance plugin loaded";
@@ -84,6 +90,7 @@ void ImagePlugin_Enhance::setEnabledActions(bool b)
     m_blurAction->setEnabled(b);
     m_sharpenAction->setEnabled(b);    
     m_noiseReductionAction->setEnabled(b);
+    m_localContrastAction->setEnabled(b);    
 }
 
 void ImagePlugin_Enhance::slotRestoration()
@@ -107,5 +114,11 @@ void ImagePlugin_Enhance::slotSharpen()
 void ImagePlugin_Enhance::slotNoiseReduction()
 {
     NoiseReductionTool* tool = new NoiseReductionTool(this);
+    loadTool(tool);
+}
+
+void ImagePlugin_Enhance::slotLocalContrast()
+{
+    LocalContrastTool* tool = new LocalContrastTool(this);
     loadTool(tool);
 }

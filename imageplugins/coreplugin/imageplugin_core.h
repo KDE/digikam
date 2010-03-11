@@ -59,7 +59,6 @@ public:
 
 private Q_SLOTS:
 
-    void slotLocalContrast();
     void slotRedEye();
     
     void slotBCG();

@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace DigikamImagesPluginCore
+namespace DigikamEnhanceImagePlugin
 {
 
 class LocalContrastToolPriv;
@@ -66,6 +66,6 @@ private:
     LocalContrastToolPriv* const d;
 };
 
-}  // namespace DigikamImagesPluginCore
+}  // namespace DigikamEnhanceImagePlugin
 
 #endif /* LOCALCONTRASTTOOL_H */

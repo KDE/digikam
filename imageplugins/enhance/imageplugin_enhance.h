@@ -54,13 +54,15 @@ private Q_SLOTS:
     void slotBlur();    
     void slotSharpen();
     void slotNoiseReduction();
+    void slotLocalContrast();    
 
 private:
 
     KAction* m_restorationAction;
     KAction* m_blurAction;
     KAction* m_sharpenAction;
-    KAction* m_noiseReductionAction;    
+    KAction* m_noiseReductionAction;
+    KAction* m_localContrastAction;    
 };
 
 #endif /* IMAGEPLUGIN_ENHANCE_H */

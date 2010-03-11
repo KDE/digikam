@@ -55,7 +55,6 @@
 #include "channelmixertool.h"
 #include "adjustcurvestool.h"
 #include "adjustlevelstool.h"
-#include "localcontrasttool.h"
 
 using namespace DigikamImagesPluginCore;
 
@@ -81,7 +80,6 @@ public:
         channelMixerAction(0),
         curvesAction(0),
         levelsAction(0),
-        localContrastAction(0),
         profileMenuAction(0)
         {}
 
@@ -98,7 +96,6 @@ public:
     KAction*               channelMixerAction;
     KAction*               curvesAction;
     KAction*               levelsAction;
-    KAction*               localContrastAction;
     
     IccProfilesMenuAction* profileMenuAction;
 };
@@ -203,11 +200,6 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QVariantList &)
     connect(d->redeyeAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotRedEye()));
 
-    d->localContrastAction = new KAction(KIcon("contrast"), i18n("Local Contrast..."), this);
-    actionCollection()->addAction("implugcore_localcontrast", d->localContrastAction );
-    connect(d->localContrastAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotLocalContrast()));
-            
     //-------------------------------
     // Init. menu actions.
 
@@ -241,7 +233,6 @@ void ImagePlugin_Core::setEnabledActions(bool b)
     d->channelMixerAction->setEnabled(b);
     d->curvesAction->setEnabled(b);
     d->levelsAction->setEnabled(b);
-    d->localContrastAction->setEnabled(b);
 }
 
 void ImagePlugin_Core::slotInvert()
@@ -442,8 +433,3 @@ void ImagePlugin_Core::slotLevelsAdjust()
     loadTool(tool);
 }
 
-void ImagePlugin_Core::slotLocalContrast()
-{
-    LocalContrastTool* tool = new LocalContrastTool(this);
-    loadTool(tool);
-}
