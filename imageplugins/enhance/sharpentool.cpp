@@ -53,7 +53,7 @@
 #include "imageiface.h"
 #include "imageregionwidget.h"
 
-namespace DigikamImagesPluginCore
+namespace DigikamEnhanceImagePlugin
 {
 
 class SharpenToolPriv
@@ -296,4 +296,4 @@ void SharpenTool::slotSaveAsSettings()
     d->sharpSettings->saveAsSettings();
 }
 
-}  // namespace DigikamImagesPluginCore
+}  // namespace DigikamEnhanceImagePlugin

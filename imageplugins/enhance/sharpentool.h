@@ -30,7 +30,7 @@
 
 using namespace Digikam;
 
-namespace DigikamImagesPluginCore
+namespace DigikamEnhanceImagePlugin
 {
 
 class SharpenToolPriv;
@@ -66,6 +66,6 @@ private:
     SharpenToolPriv* const d;
 };
 
-}  // namespace DigikamImagesPluginCore
+}  // namespace DigikamEnhanceImagePlugin
 
 #endif /* SHARPENTOOL_H */

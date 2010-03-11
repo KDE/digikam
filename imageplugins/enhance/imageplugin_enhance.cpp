@@ -38,6 +38,7 @@
 
 #include "restorationtool.h"
 #include "blurtool.h"
+#include "sharpentool.h"
 
 using namespace DigikamEnhanceImagePlugin;
 
@@ -52,7 +53,11 @@ ImagePlugin_Enhance::ImagePlugin_Enhance(QObject* parent, const QVariantList&)
     connect(m_restorationAction, SIGNAL(triggered(bool)),
             this, SLOT(slotRestoration()));
             
-
+    m_sharpenAction = new KAction(KIcon("sharpenimage"), i18n("Sharpen..."), this);
+    actionCollection()->addAction("imageplugin_sharpen", m_sharpenAction);
+    connect(m_sharpenAction, SIGNAL(triggered(bool) ),
+            this, SLOT(slotSharpen()));
+            
     m_blurAction = new KAction(KIcon("blurimage"), i18n("Blur..."), this);
     actionCollection()->addAction("imageplugin_blur", m_blurAction);
     connect(m_blurAction, SIGNAL(triggered(bool) ),
@@ -70,7 +75,8 @@ ImagePlugin_Enhance::~ImagePlugin_Enhance()
 void ImagePlugin_Enhance::setEnabledActions(bool b)
 {
     m_restorationAction->setEnabled(b);
-    m_blurAction->setEnabled(b);    
+    m_blurAction->setEnabled(b);
+    m_sharpenAction->setEnabled(b);    
 }
 
 void ImagePlugin_Enhance::slotRestoration()
@@ -82,5 +88,11 @@ void ImagePlugin_Enhance::slotRestoration()
 void ImagePlugin_Enhance::slotBlur()
 {
     BlurTool* tool = new BlurTool(this);
+    loadTool(tool);
+}
+
+void ImagePlugin_Enhance::slotSharpen()
+{
+    SharpenTool* tool = new SharpenTool(this);
     loadTool(tool);
 }

@@ -50,7 +50,6 @@
 #include "hsltool.h"
 #include "profileconversiontool.h"
 #include "noisereductiontool.h"
-#include "sharpentool.h"
 #include "redeyetool.h"
 #include "cbtool.h"
 #include "whitebalancetool.h"
@@ -77,7 +76,6 @@ public:
         autoCorrectionAction(0),
         invertAction(0),
         BWAction(0),
-        sharpenAction(0),
         convertTo8Bits(0),
         convertTo16Bits(0),
         noiseReductionAction(0),
@@ -96,7 +94,6 @@ public:
     KAction*               autoCorrectionAction;
     KAction*               invertAction;
     KAction*               BWAction;
-    KAction*               sharpenAction;
     KAction*               convertTo8Bits;
     KAction*               convertTo16Bits;
     KAction*               noiseReductionAction;
@@ -202,11 +199,6 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QVariantList &)
     //-------------------------------
     // Enhance menu actions
 
-    d->sharpenAction = new KAction(KIcon("sharpenimage"), i18n("Sharpen..."), this);
-    actionCollection()->addAction("implugcore_sharpen", d->sharpenAction );
-    connect(d->sharpenAction, SIGNAL(triggered(bool) ),
-            this, SLOT(slotSharpen()));
-
     d->redeyeAction = new KAction(KIcon("redeyes"), i18n("Red Eye..."), this);
     d->redeyeAction->setWhatsThis( i18n( "This filter can be used to correct red eyes in a photo. "
                                         "Select a region including the eyes to use this option.") );
@@ -252,7 +244,6 @@ void ImagePlugin_Core::setEnabledActions(bool b)
     d->autoCorrectionAction->setEnabled(b);
     d->BWAction->setEnabled(b);
     d->HSLAction->setEnabled(b);
-    d->sharpenAction->setEnabled(b);
     d->profileMenuAction->setEnabled(b);
     d->noiseReductionAction->setEnabled(b);
     d->whitebalanceAction->setEnabled(b);
@@ -433,12 +424,6 @@ void ImagePlugin_Core::slotBW()
 void ImagePlugin_Core::slotHSL()
 {
     HSLTool* tool = new HSLTool(this);
-    loadTool(tool);
-}
-
-void ImagePlugin_Core::slotSharpen()
-{
-    SharpenTool* tool = new SharpenTool(this);
     loadTool(tool);
 }
 

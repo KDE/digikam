@@ -52,11 +52,13 @@ private Q_SLOTS:
 
     void slotRestoration();
     void slotBlur();    
+    void slotSharpen();
 
 private:
 
     KAction* m_restorationAction;
     KAction* m_blurAction;
+    KAction* m_sharpenAction;
 };
 
 #endif /* IMAGEPLUGIN_ENHANCE_H */
