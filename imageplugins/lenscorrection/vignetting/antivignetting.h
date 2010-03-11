@@ -54,6 +54,7 @@ private:
     unsigned short clamp16bits(double x);
     double         attenuation(double r1, double r2, double distcenter);
     double         real_attenuation(double r1, double r2, double distcenter);
+
 private:
 
     bool   m_normalize;
@@ -65,7 +66,7 @@ private:
     double m_power;
     double m_inner_radius;
     double m_outer_radius;
-    
+
     bool   m_add_vignetting;
 };
 

@@ -65,9 +65,9 @@ AntiVignetting::AntiVignetting(DImg* orgImage, QObject* parent, double density,
 
 void AntiVignetting::filterImage()
 {
-    int     progress;
-    int     col, row, xd, td, yd, p;
-    int     xsize, ysize, diagonal, erad, irad, xctr, yctr;
+    int    progress;
+    int    col, row, xd, td, yd, p;
+    int    xsize, ysize, diagonal, erad, irad, xctr, yctr;
 
     uchar* NewBits = m_destImage.bits();
     uchar* data    = m_orgImage.bits();
@@ -79,23 +79,23 @@ void AntiVignetting::filterImage()
     int Height = m_orgImage.height();
 
     // Determine the shift in pixels from the shift in percentage.
-    m_xshift = m_xshift*Height/200.0;
-    m_yshift = m_yshift*Width /200.0;
+    m_xshift   = m_xshift*Height/200.0;
+    m_yshift   = m_yshift*Width /200.0;
 
     // Determine the outer radius of the filter.  This is the half diagonal
     // measure of the image multiplied by the radius factor.
 
-    xsize = (Height + 1) / 2;
-    ysize = (Width  + 1) / 2;
-    erad = approx(hypothenuse(xsize,ysize) * m_outer_radius);
-    irad = approx(hypothenuse(xsize,ysize) * m_outer_radius * m_inner_radius);
+    xsize    = (Height + 1) / 2;
+    ysize    = (Width  + 1) / 2;
+    erad     = approx(hypothenuse(xsize,ysize) * m_outer_radius);
+    irad     = approx(hypothenuse(xsize,ysize) * m_outer_radius * m_inner_radius);
 
     xsize    = ((Height + 1) / 2) + abs(m_xshift);
     ysize    = ((Width  + 1) / 2) + abs(m_yshift);
     diagonal = approx(hypothenuse(xsize,ysize)) +  1;
- 
-    xctr = ((Height + 1) / 2) + m_xshift;
-    yctr = ((Width  + 1) / 2) + m_yshift;
+
+    xctr     = ((Height + 1) / 2) + m_xshift;
+    yctr     = ((Width  + 1) / 2) + m_yshift;
 
     for (row = 0 ; !m_cancel && (row < Width) ; ++row)
     {
@@ -103,8 +103,7 @@ void AntiVignetting::filterImage()
 
         for (col = 0 ; !m_cancel && (col < Height) ; ++col)
         {
-            p = (col * Width + row)*4;
-
+            p  = (col * Width + row)*4;
             xd = abs(xctr - col);
             td = (sqrt((xd * xd) + (yd * yd)) + 0.5);
 
@@ -115,7 +114,7 @@ void AntiVignetting::filterImage()
                 NewBits[p+2] = clamp8bits(data[p+2] * real_attenuation(irad,erad,td));
                 NewBits[p+3] = data[p+3];
             }
-            else               // 16 bits image.
+            else                                // 16 bits image.
             {
                 NewBits16[ p ] = clamp16bits(data16[ p ] * real_attenuation(erad/2,erad,td));
                 NewBits16[p+1] = clamp16bits(data16[p+1] * real_attenuation(erad/2,erad,td));
