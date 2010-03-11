@@ -148,8 +148,6 @@ ImagePluginLoader::~ImagePluginLoader()
         ImagePlugin *plugin = d->pluginMap.value(name);
         KService::Ptr service = d->pluginServiceMap.value(name);
         delete plugin;
-        //if (service)
-          //  KLibLoader::self()->unloadLibrary(service->library());
     }
     delete d;
     m_instance = 0;
@@ -161,46 +159,6 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& pluginsToLoad)
         d->splash->message(i18n("Loading Image Plugins"));
 
     int cpt = 0;
-
-    // Load plugin core at the first time.
-
-    KService::Ptr corePlugin = d->pluginServiceMap.value("ImagePlugin_Core");
-
-    if (corePlugin && !pluginIsLoaded(corePlugin->name()) )
-    {
-        QString error;
-
-        ImagePlugin* plugin = corePlugin->createInstance<ImagePlugin>(this, QVariantList(), &error);
-
-        if (plugin && (dynamic_cast<KXMLGUIClient*>(plugin) != 0))
-        {
-            d->pluginMap[corePlugin->name()] = plugin;
-
-            kDebug() << "ImagePluginLoader: Loaded plugin " << corePlugin->name();
-
-            ++cpt;
-
-            // --------------------------------------------------------
-
-            // fix old ui file layout
-            UiFileValidator validator(plugin->localXMLFile());
-            if (!validator.isValid())
-            {
-                kDebug() << "Old ui file layout detected: " << corePlugin->name();
-                validator.fixConfigFile();
-            }
-        }
-        else
-        {
-            kWarning() << "ImagePluginLoader: createInstance returned 0 for "
-                            << corePlugin->name()
-                            << " (" << corePlugin->library() << ")"
-                            << " with error: "
-                            << error;
-        }
-    }
-
-    // Load all other image plugins after (make a coherent menu construction in Image Editor).
 
     foreach (const QString& name, pluginsToLoad)
     {
@@ -236,10 +194,10 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& pluginsToLoad)
             else
             {
                 kWarning() << "ImagePluginLoader: createInstance returned 0 for "
-                                << service->name()
-                                << " (" << service->library() << ")"
-                                << " with error: "
-                                << error;
+                           << service->name()
+                           << " (" << service->library() << ")"
+                           << " with error: "
+                           << error;
             }
         }
     }
@@ -265,11 +223,6 @@ ImagePlugin* ImagePluginLoader::pluginInstance(const QString& libraryName)
     }
 
     return 0;
-}
-
-ImagePlugin* ImagePluginLoader::corePluginInstance()
-{
-    return pluginIsLoaded("ImagePlugin_Core");
 }
 
 bool ImagePluginLoader::pluginLibraryIsLoaded(const QString& libraryName)
