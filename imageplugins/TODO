@@ -34,16 +34,13 @@ fxfilters
   /blurfx                   DONE                 DONE                  TODO
   /raindrop                 DONE                  NO                   TODO
 
-hotpixels                   DONE                 DONE                  TODO
-inpainting                  DONE                  NO                    NO
-
 lenscorrection
   /autocorrection           DONE                 TODO                  TODO
   /distortion               DONE                 TODO                  TODO
   /vignetting               DONE                 TODO                  TODO
 
-restoration                 DONE                 DONE                  DONE
-superimpose                  NO                   NO                    NO
+enhance
+  /restoration               DONE                 DONE                  DONE
 
 transform
   /ratiocrop                DONE                  NO                    NO
@@ -52,3 +49,7 @@ transform
   /perspective               NO                   NO                    NO
   /sheartool                DONE                  NO                   TODO
   /contentawareresizing     DONE                 TODO                  TODO
+
+superimpose                  NO                   NO                    NO
+hotpixels                   DONE                 DONE                  TODO
+inpainting                  DONE                  NO                    NO
