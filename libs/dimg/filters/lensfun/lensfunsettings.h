@@ -40,10 +40,9 @@ class RComboBox;
 class RDoubleNumInput;
 }
 
-using namespace Digikam;
 using namespace KDcrawIface;
 
-namespace DigikamAutoCorrectionImagesPlugin
+namespace Digikam
 {
 
 class DIGIKAM_EXPORT LensFunSettings : public QWidget
@@ -68,7 +67,7 @@ public:
 
 public Q_SLOTS:
 
-    void findFromMetadata(const Digikam::DMetadata&);
+    void findFromMetadata(const DMetadata&);
 
 Q_SIGNALS:
 
@@ -105,6 +104,6 @@ private:
     LensFunIface*    m_klf;
 };
 
-}  // namespace DigikamAutoCorrectionImagesPlugin
+}  // namespace Digikam
 
 #endif /* LENSFUNSETTINGS_H */

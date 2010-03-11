@@ -33,7 +33,7 @@ extern "C"
 
 #include "digikam_export.h"
 
-namespace DigikamAutoCorrectionImagesPlugin
+namespace Digikam
 {
 
 class DIGIKAM_EXPORT LensFunIface
@@ -84,6 +84,6 @@ private:
     float                  m_subjectDistance;
 };
 
-}  // namespace DigikamAutoCorrectionImagesPlugin
+}  // namespace Digikam
 
 #endif /* LENSFUNIFACE_H */

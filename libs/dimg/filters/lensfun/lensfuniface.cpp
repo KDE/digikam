@@ -24,7 +24,7 @@
 
 #include <kdebug.h>
 
-namespace DigikamAutoCorrectionImagesPlugin
+namespace Digikam
 {
 
 LensFunIface::LensFunIface()
@@ -93,4 +93,4 @@ LensFunIface::correctionData LensFunIface::getCorrectionData()
 }
 #endif
 
-}  // namespace DigikamAutoCorrectionImagesPlugin
+}  // namespace Digikam

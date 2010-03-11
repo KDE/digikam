@@ -30,7 +30,7 @@
 
 #include <kdebug.h>
 
-namespace DigikamAutoCorrectionImagesPlugin
+namespace Digikam
 {
 
 LensFunFilter::LensFunFilter(DImg* orgImage, QObject* parent, LensFunIface* klf)
@@ -105,21 +105,23 @@ void LensFunFilter::filterImage()
 
     int loop   = 0;
     int lwidth = m_orgImage.width() * 2 * 3;
-    float *pos = new float[lwidth];
+    float* pos = new float[lwidth];
 
     // Stage 1: TCA correction
 
     if ( m_klf->m_filterCCA )
     {
         m_orgImage.prepareSubPixelAccess(); // init lanczos kernel
+
         for (unsigned int y=0; !m_cancel && (y < m_orgImage.height()); ++y)
         {
             if (m_lfModifier->ApplySubpixelDistortion(0.0, y, m_orgImage.width(), 1, pos))
             {
-                float *src = pos;
+                float* src = pos;
+
                 for (unsigned x = 0; !m_cancel && (x < m_destImage.width()); ++x)
                 {
-                    Digikam::DColor destPixel(0, 0, 0, 0xFFFF, m_destImage.sixteenBit());
+                    DColor destPixel(0, 0, 0, 0xFFFF, m_destImage.sixteenBit());
 
                     destPixel.setRed  (m_orgImage.getSubPixelColorFast(src[0], src[1]).red()   );
                     destPixel.setGreen(m_orgImage.getSubPixelColorFast(src[2], src[3]).green() );
@@ -146,7 +148,8 @@ void LensFunFilter::filterImage()
 
     // Stage 2: Color Correction: Vignetting and CCI
 
-    uchar *data = m_destImage.bits();
+    uchar* data = m_destImage.bits();
+
     if ( m_klf->m_filterVig || m_klf->m_filterCCI )
     {
         loop         = 0;
@@ -182,14 +185,15 @@ void LensFunFilter::filterImage()
         loop = 0;
 
         // we need a deep copy first
-        Digikam::DImg tempImage(m_destImage.width(), m_destImage.height(), m_destImage.sixteenBit(), m_destImage.hasAlpha());
+        DImg tempImage(m_destImage.width(), m_destImage.height(), m_destImage.sixteenBit(), m_destImage.hasAlpha());
         m_destImage.prepareSubPixelAccess(); // init lanczos kernel
 
         for (unsigned long y=0; !m_cancel && (y < tempImage.height()); ++y)
         {
             if (m_lfModifier->ApplyGeometryDistortion(0.0, y, tempImage.width(), 1, pos))
             {
-                float *src = pos;
+                float* src = pos;
+
                 for (unsigned long x = 0; !m_cancel && (x < tempImage.width()); ++x, ++loop)
                 {
                     //qDebug (" ZZ %f %f %i %i", src[0], src[1], (int)src[0], (int)src[1]);
@@ -218,4 +222,4 @@ void LensFunFilter::filterImage()
     m_lfModifier->Destroy();
 }
 
-}  // namespace DigikamAutoCorrectionImagesPlugin
+}  // namespace Digikam

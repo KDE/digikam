@@ -35,9 +35,7 @@ extern "C"
 #include "lensfuniface.h"
 #include "digikam_export.h"
 
-using namespace Digikam;
-
-namespace DigikamAutoCorrectionImagesPlugin
+namespace Digikam
 {
 
 class DIGIKAM_EXPORT LensFunFilter : public DImgThreadedFilter
@@ -61,6 +59,6 @@ private:
     lfModifier*   m_lfModifier;
 };
 
-}  // namespace DigikamAutoCorrectionImagesPlugin
+}  // namespace Digikam
 
 #endif /* LENSFUNFILTER_H */

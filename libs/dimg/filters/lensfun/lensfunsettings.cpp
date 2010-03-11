@@ -42,10 +42,10 @@
 
 // Local includes
 
-Q_DECLARE_METATYPE( DigikamAutoCorrectionImagesPlugin::LensFunSettings::DevicePtr )
-Q_DECLARE_METATYPE( DigikamAutoCorrectionImagesPlugin::LensFunSettings::LensPtr )
+Q_DECLARE_METATYPE( Digikam::LensFunSettings::DevicePtr )
+Q_DECLARE_METATYPE( Digikam::LensFunSettings::LensPtr )
 
-namespace DigikamAutoCorrectionImagesPlugin
+namespace Digikam
 {
 
 LensFunSettings::LensFunSettings(QWidget *parent)
@@ -144,7 +144,7 @@ LensFunSettings::Device LensFunSettings::getDevice()
 }
 #endif
 
-void LensFunSettings::findFromMetadata(const Digikam::DMetadata& meta)
+void LensFunSettings::findFromMetadata(const DMetadata& meta)
 {
     m_metadata = meta;
     findFromMetadata();
@@ -166,7 +166,7 @@ void LensFunSettings::findFromMetadata()
         m_exifUsage->setEnabled(true);
     }
 
-    Digikam::PhotoInfoContainer photoInfo = m_metadata.getPhotographInformation();
+    PhotoInfoContainer photoInfo = m_metadata.getPhotographInformation();
 
     QString make  = photoInfo.make;
     QString model = photoInfo.model;
@@ -296,7 +296,7 @@ void LensFunSettings::slotUseExif(int mode)
 
 void LensFunSettings::slotUpdateCombos()
 {
-    const lfCamera* const *it = m_klf->m_lfCameras;
+    const lfCamera* const* it = m_klf->m_lfCameras;
 
     // reset box
     m_model->combo()->clear();
@@ -348,13 +348,13 @@ void LensFunSettings::slotUpdateLensCombo()
         return;
     }
 
-    const lfLens **lenses = m_klf->m_lfDb->FindLenses( dev, NULL, NULL );
+    const lfLens** lenses = m_klf->m_lfDb->FindLenses( dev, NULL, NULL );
     m_klf->m_cropFactor   = dev->CropFactor;
 
     while (lenses && *lenses)
     {
         LensFunSettings::LensPtr lens = *lenses;
-        QVariant b                      = qVariantFromValue(lens);
+        QVariant b                    = qVariantFromValue(lens);
         m_lens->combo()->addItem((*lenses)->Model, b);
         ++lenses;
     }
@@ -379,4 +379,4 @@ void LensFunSettings::setDevice(Device& /*d*/)
     slotUpdateCombos();
 }
 
-}  // namespace DigikamAutoCorrectionImagesPlugin
+}  // namespace Digikam
