@@ -1,17 +1,18 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="16" name="digikamimageplugin_enhance" >
+<gui version="17" name="digikamimageplugin_enhance" >
 
  <MenuBar>
 
   <Menu name="Enhance" ><text>Enh&amp;ance</text>
       <Action name="imageplugin_restoration" />
       <Action name="imageplugin_blur" />
-      <Action name="imageplugin_sharpen" />      
-      <Action name="imageplugin_noisereduction" />      
+      <Action name="imageplugin_sharpen" />
+      <Action name="imageplugin_noisereduction" />
       <Action name="imageplugin_localcontrast" />
-      <Action name="imageplugin_inpainting" />      
-      <Separator />      
-      <Action name="imageplugin_redeye" />      
+      <Action name="imageplugin_inpainting" />
+      <Separator />
+      <Action name="imageplugin_redeye" />
+      <Action name="imageplugin_inpainting" />
   </Menu>
 
  </MenuBar>
@@ -23,11 +24,11 @@
  <ActionProperties>
       <Action shortcut="" name="imageplugin_restoration" />
       <Action shortcut="" name="imageplugin_blur" />
-      <Action shortcut="" name="imageplugin_sharpen" />     
-      <Action shortcut="" name="imageplugin_noisereduction" />  
+      <Action shortcut="" name="imageplugin_sharpen" />
+      <Action shortcut="" name="imageplugin_noisereduction" />
       <Action shortcut="" name="imageplugin_localcontrast" />
       <Action shortcut="" name="imageplugin_redeye" />
-      <Action shortcut="" name="imageplugin_inpainting" />      
+      <Action shortcut="" name="imageplugin_inpainting" />
 </ActionProperties>
 
 </gui>
