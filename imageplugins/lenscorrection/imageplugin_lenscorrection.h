@@ -47,13 +47,11 @@ public:
 
 private Q_SLOTS:
 
-    void slotAutoCorrection();
     void slotLensDistortion();
     void slotAntiVignetting();
 
 private:
 
-    KAction *m_autoCorrectionAction;
     KAction *m_lensdistortionAction;
     KAction *m_antivignettingAction;
 };

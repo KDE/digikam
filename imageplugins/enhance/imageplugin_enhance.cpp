@@ -44,6 +44,11 @@
 #include "redeyetool.h"
 #include "imageiface.h"
 #include "inpaintingtool.h"
+#include "config-digikam.h"
+
+#ifdef HAVE_LENSFUN
+#include "lensautofixtool.h"
+#endif // HAVE_LENSFUN
 
 using namespace DigikamEnhanceImagePlugin;
 
@@ -57,16 +62,16 @@ ImagePlugin_Enhance::ImagePlugin_Enhance(QObject* parent, const QVariantList&)
     actionCollection()->addAction("imageplugin_restoration", m_restorationAction);
     connect(m_restorationAction, SIGNAL(triggered(bool)),
             this, SLOT(slotRestoration()));
-            
+
     m_sharpenAction = new KAction(KIcon("sharpenimage"), i18n("Sharpen..."), this);
     actionCollection()->addAction("imageplugin_sharpen", m_sharpenAction);
     connect(m_sharpenAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotSharpen()));
-            
+
     m_blurAction = new KAction(KIcon("blurimage"), i18n("Blur..."), this);
     actionCollection()->addAction("imageplugin_blur", m_blurAction);
     connect(m_blurAction, SIGNAL(triggered(bool) ),
-            this, SLOT(slotBlur()));            
+            this, SLOT(slotBlur()));
 
     m_noiseReductionAction = new KAction(KIcon("noisereduction"), i18n("Noise Reduction..."), this);
     actionCollection()->addAction("imageplugin_noisereduction", m_noiseReductionAction);
@@ -91,8 +96,16 @@ ImagePlugin_Enhance::ImagePlugin_Enhance(QObject* parent, const QVariantList&)
                                             "To use this option, select a region to in-paint.") );
     connect(m_inPaintingAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotInPainting()));
-            
-            
+
+#ifdef HAVE_LENSFUN
+
+    m_lensAutoFixAction = new KAction(KIcon("lensdistortion"), i18n("Auto-Correction..."), this);
+    actionCollection()->addAction("imageplugin_lensautofix", m_lensAutoFixAction );
+    connect(m_lensAutoFixAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotLensAutoFix()));
+
+#endif // HAVE_LENSFUN
+
     setXMLFile( "digikamimageplugin_enhance_ui.rc" );
 
     kDebug() << "ImagePlugin_Enhance plugin loaded";
@@ -106,11 +119,15 @@ void ImagePlugin_Enhance::setEnabledActions(bool b)
 {
     m_restorationAction->setEnabled(b);
     m_blurAction->setEnabled(b);
-    m_sharpenAction->setEnabled(b);    
+    m_sharpenAction->setEnabled(b);
     m_noiseReductionAction->setEnabled(b);
-    m_localContrastAction->setEnabled(b);    
-    m_redeyeAction->setEnabled(b);    
-    m_inPaintingAction->setEnabled(b);    
+    m_localContrastAction->setEnabled(b);
+    m_redeyeAction->setEnabled(b);
+    m_inPaintingAction->setEnabled(b);
+
+#ifdef HAVE_LENSFUN
+    m_lensAutoFixAction->setEnabled(b);
+#endif // HAVE_LENSFUN
 }
 
 void ImagePlugin_Enhance::slotRestoration()
@@ -186,3 +203,10 @@ void ImagePlugin_Enhance::slotInPainting()
     loadTool(tool);
 }
 
+void ImagePlugin_Enhance::slotLensAutoFix()
+{
+#ifdef HAVE_LENSFUN
+    LensAutoFixTool* tool = new LensAutoFixTool(this);
+    loadTool(tool);
+#endif // HAVE_LENSFUN
+}

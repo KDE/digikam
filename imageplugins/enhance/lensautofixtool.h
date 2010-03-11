@@ -19,8 +19,8 @@
  *
  * ============================================================ */
 
-#ifndef AUTOCORRECTIONTOOL_H
-#define AUTOCORRECTIONTOOL_H
+#ifndef LENSAUTOFIXTOOL_H
+#define LENSAUTOFIXTOOL_H
 
 // Local includes
 
@@ -28,19 +28,19 @@
 
 using namespace Digikam;
 
-namespace DigikamAutoCorrectionImagesPlugin
+namespace DigikamEnhanceImagePlugin
 {
 
-class AutoCorrectionToolPriv;
+class LensAutoFixToolPriv;
 
-class AutoCorrectionTool : public EditorToolThreaded
+class LensAutoFixTool : public EditorToolThreaded
 {
     Q_OBJECT
 
 public:
 
-    AutoCorrectionTool(QObject* parent);
-    ~AutoCorrectionTool();
+    LensAutoFixTool(QObject* parent);
+    ~LensAutoFixTool();
 
 private Q_SLOTS:
 
@@ -60,9 +60,9 @@ private:
 
 private:
 
-    AutoCorrectionToolPriv* const d;
+    LensAutoFixToolPriv* const d;
 };
 
-}  // namespace DigikamAutoCorrectionImagesPlugin
+}  // namespace DigikamEnhanceImagePlugin
 
-#endif /* AUTOCORRECTIONTOOL_H */
+#endif /* LENSAUTOFIXTOOL_H */

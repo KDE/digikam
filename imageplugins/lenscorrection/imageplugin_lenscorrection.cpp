@@ -36,13 +36,6 @@
 
 // Local includes
 
-#include "config-digikam.h"
-
-#ifdef HAVE_LENSFUN
-#include "autocorrectiontool.h"
-using namespace DigikamAutoCorrectionImagesPlugin;
-#endif // HAVE_LENSFUN
-
 #include "antivignettingtool.h"
 #include "lensdistortiontool.h"
 
@@ -56,16 +49,6 @@ ImagePlugin_LensCorrection::ImagePlugin_LensCorrection(QObject *parent, const QV
                           : Digikam::ImagePlugin(parent, "ImagePlugin_LensCorrection")
 {
     setActionCategory(i18n("Lens Correction"));
-
-#ifdef HAVE_LENSFUN
-
-    m_autoCorrectionAction  = new KAction(KIcon("lensdistortion"), i18n("Auto-Correction..."), this);
-    actionCollection()->addAction("imageplugin_autocorrection", m_autoCorrectionAction );
-
-    connect(m_autoCorrectionAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotAutoCorrection()));
-
-#endif // HAVE_LENSFUN
 
     m_lensdistortionAction  = new KAction(KIcon("lensdistortion"), i18n("Distortion..."), this);
     actionCollection()->addAction("imageplugin_lensdistortion", m_lensdistortionAction );
@@ -90,20 +73,8 @@ ImagePlugin_LensCorrection::~ImagePlugin_LensCorrection()
 
 void ImagePlugin_LensCorrection::setEnabledActions(bool enable)
 {
-#ifdef HAVE_LENSFUN
-    m_autoCorrectionAction->setEnabled(enable);
-#endif // HAVE_LENSFUN
-
     m_lensdistortionAction->setEnabled(enable);
     m_antivignettingAction->setEnabled(enable);
-}
-
-void ImagePlugin_LensCorrection::slotAutoCorrection()
-{
-#ifdef HAVE_LENSFUN
-    AutoCorrectionTool *tool = new AutoCorrectionTool(this);
-    loadTool(tool);
-#endif // HAVE_LENSFUN
 }
 
 void ImagePlugin_LensCorrection::slotLensDistortion()

@@ -51,22 +51,24 @@ public:
 private Q_SLOTS:
 
     void slotRestoration();
-    void slotBlur();    
+    void slotBlur();
     void slotSharpen();
     void slotNoiseReduction();
     void slotLocalContrast();
-    void slotRedEye();    
+    void slotRedEye();
     void slotInPainting();
+    void slotLensAutoFix();
 
 private:
 
+    KAction* m_lensAutoFixAction;
     KAction* m_redeyeAction;
     KAction* m_restorationAction;
     KAction* m_blurAction;
     KAction* m_sharpenAction;
     KAction* m_noiseReductionAction;
     KAction* m_localContrastAction;
-    KAction* m_inPaintingAction;    
+    KAction* m_inPaintingAction;
 };
 
 #endif /* IMAGEPLUGIN_ENHANCE_H */

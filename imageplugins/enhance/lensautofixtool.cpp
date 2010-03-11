@@ -19,7 +19,7 @@
  *
  * ============================================================ */
 
-#include "autocorrectiontool.moc"
+#include "lensautofixtool.moc"
 
 // Qt includes
 
@@ -54,14 +54,14 @@
 #include "lensfunfilter.h"
 #include "lensfunsettings.h"
 
-namespace DigikamAutoCorrectionImagesPlugin
+namespace DigikamEnhanceImagePlugin
 {
 
-class AutoCorrectionToolPriv
+class LensAutoFixToolPriv
 {
 public:
 
-    AutoCorrectionToolPriv() :
+    LensAutoFixToolPriv() :
         configGroupName("Lens Auto-Correction Tool"),
         configCCAEntry("CCA"),
         configVignettingEntry("Vignetting"),
@@ -103,9 +103,9 @@ public:
     EditorToolSettings* gboxSettings;
 };
 
-AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
+LensAutoFixTool::LensAutoFixTool(QObject* parent)
                   : EditorToolThreaded(parent),
-                    d(new AutoCorrectionToolPriv)
+                    d(new LensAutoFixToolPriv)
 {
     setObjectName("lensautocorrection");
     setToolName(i18n("Lens Auto-Correction"));
@@ -188,12 +188,12 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
     QTimer::singleShot(0, this, SLOT(slotResetSettings()));
 }
 
-AutoCorrectionTool::~AutoCorrectionTool()
+LensAutoFixTool::~LensAutoFixTool()
 {
     delete d;
 }
 
-void AutoCorrectionTool::slotLensChanged()
+void LensAutoFixTool::slotLensChanged()
 {
     d->filterCCA->setEnabled(d->cameraSelector->getKLFObject()->supportsCCA());
     d->filterVig->setEnabled(d->cameraSelector->getKLFObject()->supportsVig());
@@ -203,7 +203,7 @@ void AutoCorrectionTool::slotLensChanged()
     slotSetFilters();
 }
 
-void AutoCorrectionTool::slotSetFilters()
+void LensAutoFixTool::slotSetFilters()
 {
     d->cameraSelector->getKLFObject()->setCorrection(
         (d->filterCCA->checkState()  == Qt::Checked && d->filterCCA->isEnabled())  ? true : false,
@@ -216,7 +216,7 @@ void AutoCorrectionTool::slotSetFilters()
     slotTimer();
 }
 
-void AutoCorrectionTool::readSettings()
+void LensAutoFixTool::readSettings()
 {
     d->gboxSettings->blockSignals(true);
     KSharedConfig::Ptr config = KGlobal::config();
@@ -232,7 +232,7 @@ void AutoCorrectionTool::readSettings()
     slotSetFilters();
 }
 
-void AutoCorrectionTool::writeSettings()
+void LensAutoFixTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
@@ -250,7 +250,7 @@ void AutoCorrectionTool::writeSettings()
     group.sync();
 }
 
-void AutoCorrectionTool::slotResetSettings()
+void LensAutoFixTool::slotResetSettings()
 {
     d->gboxSettings->blockSignals(true);
 
@@ -265,7 +265,7 @@ void AutoCorrectionTool::slotResetSettings()
     d->gboxSettings->blockSignals(false);
 }
 
-void AutoCorrectionTool::prepareEffect()
+void LensAutoFixTool::prepareEffect()
 {
     d->gboxSettings->setEnabled(false);
 
@@ -305,7 +305,7 @@ void AutoCorrectionTool::prepareEffect()
     setFilter(new LensFunFilter(&image, this, d->cameraSelector->getKLFObject()));
 }
 
-void AutoCorrectionTool::prepareFinal()
+void LensAutoFixTool::prepareFinal()
 {
     d->gboxSettings->setEnabled(false);
 
@@ -318,22 +318,22 @@ void AutoCorrectionTool::prepareFinal()
     delete [] data;
 }
 
-void AutoCorrectionTool::putPreviewData()
+void LensAutoFixTool::putPreviewData()
 {
     DImg imDest = filter()->getTargetImage();
     d->previewWidget->imageIface()->putPreviewImage(imDest.bits());
     d->previewWidget->updatePreview();
 }
 
-void AutoCorrectionTool::putFinalData()
+void LensAutoFixTool::putFinalData()
 {
     ImageIface iface(0, 0);
     iface.putOriginalImage(i18n("Lens Auto-Correction"), filter()->getTargetImage().bits());
 }
 
-void AutoCorrectionTool::renderingFinished()
+void LensAutoFixTool::renderingFinished()
 {
     d->gboxSettings->setEnabled(true);
 }
 
-}  // namespace DigikamAutoCorrectionImagesPlugin
+}  // namespace DigikamEnhanceImagePlugin
