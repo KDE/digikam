@@ -21,6 +21,7 @@ INCLUDE_DIRECTORIES(
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/curves
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/wb
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/transform
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/lensfun
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dmetadata
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/histogram
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/jpegutils
@@ -90,6 +91,9 @@ INCLUDE_DIRECTORIES(
                      ${TIFF_INCLUDE_DIR}
                    )
 
+IF(LENSFUN_LIBRARY)
+   INCLUDE_DIRECTORIES(${LENSFUN_INCLUDE_DIR})
+ENDIF(LENSFUN_LIBRARY)
 
 # Shared libdigikamcore ################################################################
 
@@ -190,8 +194,12 @@ ENDIF(Q_WS_X11)
 
 # For Contents Aware Resizer filter.
 IF(GLIB2_FOUND)
-TARGET_LINK_LIBRARIES(digikamcore ${GLIB2_LIBRARIES} ${liblqr_LIBS})
+    TARGET_LINK_LIBRARIES(digikamcore ${GLIB2_LIBRARIES} ${liblqr_LIBS})
 ENDIF(GLIB2_FOUND)
+
+IF(LENSFUN_LIBRARY)
+    TARGET_LINK_LIBRARIES(digikamcore ${LENSFUN_LIBRARY})
+ENDIF(LENSFUN_LIBRARY)
 
 SET_TARGET_PROPERTIES(digikamcore PROPERTIES VERSION 1.0.0 SOVERSION 1)
 IF(WIN32)

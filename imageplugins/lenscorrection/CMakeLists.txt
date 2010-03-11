@@ -6,9 +6,6 @@ INCLUDE_DIRECTORIES(autocorrection
                    )
 
 SET(autocorrection_SRCS autocorrection/autocorrectiontool.cpp
-                        autocorrection/lensfunfilter.cpp
-                        autocorrection/lensfunsettings.cpp
-                        autocorrection/lensfuniface.cpp
    )
 
 SET(distortion_SRCS distortion/lensdistortiontool.cpp

@@ -29,10 +29,14 @@ extern "C"
 #include <lensfun.h>
 }
 
+// local includes
+
+#include "digikam_export.h"
+
 namespace DigikamAutoCorrectionImagesPlugin
 {
 
-class LensFunIface
+class DIGIKAM_EXPORT LensFunIface
 {
     friend class LensFunSettings;
     friend class LensFunFilter;

@@ -33,13 +33,14 @@ extern "C"
 
 #include "dimgthreadedfilter.h"
 #include "lensfuniface.h"
+#include "digikam_export.h"
 
 using namespace Digikam;
 
 namespace DigikamAutoCorrectionImagesPlugin
 {
 
-class LensFunFilter : public DImgThreadedFilter
+class DIGIKAM_EXPORT LensFunFilter : public DImgThreadedFilter
 {
 
 public:

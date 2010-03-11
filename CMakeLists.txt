@@ -579,6 +579,15 @@ IF(DIGIKAM_CAN_BE_COMPILED)
            )
     ENDIF(GLIB2_FOUND)
 
+    IF(LENSFUN_LIBRARY)
+        SET(libdimgfilters_SRCS ${libdimgfilters_SRCS}
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lensfun/lensfunfilter.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lensfun/lensfunsettings.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lensfun/lensfuniface.cpp
+            ${liblqr_SRCS}
+           )
+    ENDIF(LENSFUN_LIBRARY)
+
     # For CImg.h
     SET_SOURCE_FILES_PROPERTIES(${libdimgfilters_SRCS} PROPERTIES COMPILE_FLAGS ${KDE4_ENABLE_EXCEPTIONS})
 

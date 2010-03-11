@@ -30,6 +30,7 @@
 
 #include "dmetadata.h"
 #include "lensfunfilter.h"
+#include "digikam_export.h"
 
 class QCheckBox;
 
@@ -45,7 +46,7 @@ using namespace KDcrawIface;
 namespace DigikamAutoCorrectionImagesPlugin
 {
 
-class LensFunSettings : public QWidget
+class DIGIKAM_EXPORT LensFunSettings : public QWidget
 {
     Q_OBJECT
 
