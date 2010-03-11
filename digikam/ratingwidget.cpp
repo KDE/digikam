@@ -206,6 +206,11 @@ void RatingWidget::stopFading()
     update();
 }
 
+void RatingWidget::setVisibleImmediately()
+{
+    setFadingValue(255);
+}
+
 QPixmap RatingWidget::starPixmapDisabled() const
 {
     return d->disPixmap;

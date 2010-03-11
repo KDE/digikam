@@ -319,10 +319,10 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* parent)
     connect(d->histogramBox->histogram(), SIGNAL(signalHistogramComputationFailed(void)),
             this, SLOT(slotHistogramComputationFailed(void)));
 
-    connect(d->histogramBox, SIGNAL(signalChannelChanged()),
+    connect(d->histogramBox, SIGNAL(signalChannelChanged(ChannelType)),
             this, SLOT(slotChannelChanged()));
 
-    connect(d->histogramBox, SIGNAL(signalScaleChanged()),
+    connect(d->histogramBox, SIGNAL(signalScaleChanged(HistogramScale)),
             this, SLOT(slotScaleChanged()));
 
     // -------------------------------------------------------------
@@ -662,14 +662,18 @@ void ImagePropertiesColorsTab::updateStatistics()
 
 void ImagePropertiesColorsTab::getICCData()
 {
-    if (d->image.getIccProfile().isNull())
+    if (DImg::fileFormat(d->currentFilePath) == DImg::RAW)
     {
-        d->iccProfileWidget->setLoadingFailed();
+        d->iccProfileWidget->setUncalibratedColor();
     }
-    else
+    else if (!d->image.getIccProfile().isNull())
     {
         d->embedded_profile = d->image.getIccProfile();
         d->iccProfileWidget->loadProfile(d->currentFilePath, d->embedded_profile);
+    }
+    else
+    {
+        d->iccProfileWidget->setLoadingFailed();
     }
 }
 

@@ -6,7 +6,7 @@
  * Date        : 2008-11-24
  * Description : JPEG image Converter batch tool.
  *
- * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -44,7 +44,7 @@ namespace Digikam
 {
 
 Convert2JPEG::Convert2JPEG(QObject* parent)
-            : BatchTool("Convert2JPEG", BaseTool, parent)
+            : BatchTool("Convert2JPEG", ConvertTool, parent)
 {
     setToolTitle(i18n("Convert To JPEG"));
     setToolDescription(i18n("A tool to convert images to JPEG format."));

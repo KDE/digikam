@@ -1,6 +1,6 @@
 PROJECT(digikam)
 
-OPTION(ENABLE_THEMEDESIGNER "Build digiKam theme designer (default=OFF)" OFF)
+#OPTION(ENABLE_THEMEDESIGNER "Build digiKam theme designer (default=OFF)" OFF)
 OPTION(ENABLE_THUMBS_DB "Build digiKam with thumbnails database support (default=ON)" ON)
 SET(SERVERCMD_MYSQL "/usr/sbin/mysqld" CACHE STRING "Mysql Daemon executable (default=/usr/sbin/mysqld)")
 SET(INITCMD_MYSQL   "/usr/bin/mysql_install_db" CACHE STRING "Mysql executable for DB initialization (default=/usr/bin/mysql_install_db)")
@@ -14,7 +14,7 @@ SET(DIGIKAM_MINOR_VERSION "2")
 SET(DIGIKAM_PATCH_VERSION "0")
 
 #digiKam release date
-SET(DIGIKAM_RELEASE_DATE "2010-XX-XX")
+SET(DIGIKAM_RELEASE_DATE "2010-03-28")
 
 # Suffix to add at end of version string. Usual values are:
 # "-svn"   : alpha code unstable from svn. Do not use in production
@@ -122,6 +122,18 @@ FIND_PACKAGE(Kdcraw)
 FIND_PACKAGE(Kexiv2)
 FIND_PACKAGE(Kipi)
 
+# Extract version of libjpeg so that we can use the appropriate dir
+# See bug #227313, #228483
+FILE(READ "${JPEG_INCLUDE_DIR}/jpeglib.h" jpeglib_h_content)
+STRING(REGEX REPLACE ".*#define +JPEG_LIB_VERSION +([0-9]+).*" "\\1" jpeglib_version "${jpeglib_h_content}")
+MESSAGE(STATUS "Identified libjpeg version: ${jpeglib_version}")
+
+IF ("${jpeglib_version}" LESS 80)
+    SET(DIGIKAM_LIBJPEG_DIR libjpeg-62)
+ELSE ("${jpeglib_version}" LESS 80)
+    SET(DIGIKAM_LIBJPEG_DIR libjpeg-80)
+ENDIF ("${jpeglib_version}" LESS 80)
+
 # Check KDcraw version installed to compile fine.
 IF(NOT WIN32)
     FIND_PACKAGE(PkgConfig)
@@ -172,6 +184,7 @@ MACRO_BOOL_TO_01(LENSFUN_FOUND HAVE_LENSFUN)
 
 # Check GLib2 library for liquid rescale tool.
 MACRO_OPTIONAL_FIND_PACKAGE(GLIB2)
+MACRO_BOOL_TO_01(GLIB2_FOUND HAVE_GLIB2)
 
 MACRO_OPTIONAL_FIND_PACKAGE(Lqr-1)
 MACRO_BOOL_TO_01(LQR-1_FOUND USE_EXT_LIBLQR-1)
@@ -409,37 +422,38 @@ IF(DIGIKAM_CAN_BE_COMPILED)
 
     IF(GLIB2_FOUND)
         INCLUDE_DIRECTORIES(${GLIB2_INCLUDE_DIR})
+
+        IF(LQR-1_FOUND)
+
+            INCLUDE_DIRECTORIES(${LQR-1_INCLUDE_DIRS})
+            SET(liblqr_LIBS ${LQR-1_LIBRARIES})
+
+        ELSE(LQR-1_FOUND)
+
+            INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty)
+            INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lqr)
+
+            SET(liblqr_SRCS
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lqr/lqr_carver_bias.c
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lqr/lqr_carver.c
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lqr/lqr_carver_list.c
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lqr/lqr_carver_rigmask.c
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lqr/lqr_cursor.c
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lqr/lqr_gradient.c
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lqr/lqr_progress.c
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lqr/lqr_vmap.c
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lqr/lqr_vmap_list.c
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lqr/lqr_energy.c
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lqr/lqr_rwindow.c
+            )
+
+            IF(WIN32)
+                ADD_DEFINITIONS(-DLQR_DISABLE_DECLSPEC)
+            ENDIF(WIN32)
+
+        ENDIF(LQR-1_FOUND)
+
     ENDIF(GLIB2_FOUND)
-
-    IF(LQR-1_FOUND)
-
-        INCLUDE_DIRECTORIES(${LQR-1_INCLUDE_DIRS})
-        SET(liblqr_LIBS ${LQR-1_LIBRARIES})
-
-    ELSE(LQR-1_FOUND)
-
-        INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty)
-        INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lqr)
-
-        SET(liblqr_SRCS
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lqr/lqr_carver_bias.c
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lqr/lqr_carver.c
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lqr/lqr_carver_list.c
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lqr/lqr_carver_rigmask.c
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lqr/lqr_cursor.c
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lqr/lqr_gradient.c
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lqr/lqr_progress.c
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lqr/lqr_vmap.c
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lqr/lqr_vmap_list.c
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lqr/lqr_energy.c
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/lqr/lqr_rwindow.c
-          )
-
-        IF(WIN32)
-            ADD_DEFINITIONS(-DLQR_DISABLE_DECLSPEC)
-        ENDIF(WIN32)
-
-    ENDIF(LQR-1_FOUND)
 
     # ==================================================================================================
     # Common targets parts
@@ -506,8 +520,19 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     SET(libdimgfilters_SRCS
         ${libclapack_SRCS}
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/dimgthreadedfilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/dimgimagefilters.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/dimggaussianblur.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/decorate/borderfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/decorate/texturefilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/blurfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/blurfxfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/distortionfxfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/charcoalfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/embossfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/filmgrainfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/filmgrainsettings.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/invertfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/pixelsaliasfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/oilpaintfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/raindropfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/auto/autolevelsfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/auto/autoexpofilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/auto/equalizefilter.cpp
@@ -532,11 +557,14 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/icc/icctransformfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/icc/iccsettingscontainer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/icc/iccsettings.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lc/localcontrastfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lc/localcontrastsettings.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lc/localcontrastcontainer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/nr/nrfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/nr/nrsettings.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/sharp/dimgsharpen.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/sharp/dimgunsharpmask.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/sharp/dimgrefocus.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/sharp/sharpenfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/sharp/unsharpmaskfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/sharp/refocusfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/sharp/matrix.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/sharp/sharpsettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/levels/imagelevels.cpp
@@ -546,7 +574,21 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/curves/curvessettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/wb/wbfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/wb/wbsettings.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/transform/freerotationfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/transform/shearfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/greycstoration/greycstorationfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/greycstoration/greycstorationsettings.cpp
        )
+
+    IF(GLIB2_FOUND)
+        SET(libdimgfilters_SRCS ${libdimgfilters_SRCS}
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/transform/contentawarefilter.cpp
+            ${liblqr_SRCS}
+           )
+    ENDIF(GLIB2_FOUND)
+
+    # For CImg.h
+    SET_SOURCE_FILES_PROPERTIES(${libdimgfilters_SRCS} PROPERTIES COMPILE_FLAGS ${KDE4_ENABLE_EXCEPTIONS})
 
     SET(libdmetadata_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/metadatainfo.cpp
@@ -556,17 +598,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/template.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/captionvalues.cpp
        )
-
-    # CImg.h version 1.2.8 do not compile fine with gcc 4.3.
-    # See B.K.O #163118: digikam-0.9.4_beta5 compilation hangs with gcc 4.3
-    # This is a temporary solution until CImg.h will be fixed.
-    KDE4_NO_ENABLE_FINAL(libgreycstoration)
-    SET(libgreycstoration_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/greycstoration/greycstorationiface.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/greycstoration/greycstorationwidget.cpp
-       )
-
-    SET_SOURCE_FILES_PROPERTIES(${libgreycstoration_SRCS} PROPERTIES COMPILE_FLAGS ${KDE4_ENABLE_EXCEPTIONS})
 
     SET(libhistogram_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/histogram/imagehistogram.cpp
@@ -593,7 +624,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     KDE4_NO_ENABLE_FINAL(libjpegutils)
     SET(libjpegutils_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils/jpegutils.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils/transupp.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils/${DIGIKAM_LIBJPEG_DIR}/transupp.cpp
        )
 
     IF(MSVC)
@@ -1019,12 +1050,15 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/color/channelmixer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/color/bwconvert.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/color/whitebalance.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/color/curvesadjust.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/convert/convert2jpeg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/convert/convert2png.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/convert/convert2tiff.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/convert/convert2jp2.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/convert/convert2pgf.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/enhance/restoration.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/enhance/localcontrast.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/enhance/blur.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/enhance/sharpen.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/enhance/noisereduction.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/transform/rotate.cpp
@@ -1032,6 +1066,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/transform/resize.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/decorate/watermark.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/metadata/assigntemplate.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/filters/filmgrain.cpp
        )
 
     SET(libcameragui_SRCS
@@ -1146,7 +1181,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/digikamview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/dio.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/editablesearchtreeview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/folderviewtooltip.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/icongroupitem.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/iconitem.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/iconview.cpp

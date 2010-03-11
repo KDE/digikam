@@ -6,7 +6,7 @@
  * Date        : 2008-11-24
  * Description : Available batch tools list.
  *
- * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -49,7 +49,7 @@ class ToolListViewGroup : public QTreeWidgetItem
 public:
 
 
-    ToolListViewGroup(QTreeWidget *parent, BatchTool::BatchToolGroup group);
+    ToolListViewGroup(QTreeWidget* parent, BatchTool::BatchToolGroup group);
     virtual ~ToolListViewGroup();
 
     BatchTool::BatchToolGroup toolGroup() const;
@@ -67,14 +67,14 @@ class ToolListViewItem : public QTreeWidgetItem
 public:
 
 
-    ToolListViewItem(ToolListViewGroup *parent, BatchTool* tool);
+    ToolListViewItem(ToolListViewGroup* parent, BatchTool* tool);
     virtual ~ToolListViewItem();
 
     BatchTool* tool() const;
 
 private:
 
-    BatchTool *m_tool;
+    BatchTool* m_tool;
 };
 
 // -------------------------------------------------------------------------
@@ -85,7 +85,7 @@ class ToolsListView : public QTreeWidget
 
 public:
 
-    ToolsListView(QWidget *parent);
+    ToolsListView(QWidget* parent);
     virtual ~ToolsListView();
 
     BatchToolsList toolsList();

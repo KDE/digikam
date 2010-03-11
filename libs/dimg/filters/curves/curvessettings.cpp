@@ -92,10 +92,23 @@ CurvesSettings::CurvesSettings(QWidget* parent, DImg* img)
                 d(new CurvesSettingsPriv)
 {
     d->histoSegments  = img->sixteenBit() ? 65535 : 255;
-    QGridLayout* grid = new QGridLayout(parent);
-    d->curvesBox      = new CurvesBox(256, 256, img->bits(), img->width(), img->height(), img->sixteenBit());
+    QGridLayout* grid = new QGridLayout(this);
+    
+    // NOTE: add a method to be able to use curves widget without image data as simple curve editor.
+    if (!img->isNull())
+    {
+        d->curvesBox = new CurvesBox(256, 192, img->bits(), img->width(), img->height(), img->sixteenBit());
+        d->curvesBox->enableControlWidgets(true);
+    }
+    else
+    {
+        d->curvesBox = new CurvesBox(256, 192, (uchar*)"\x00\x00\x00\x00\x00\x00\x00\x00", 1, 1, true);
+        d->curvesBox->enablePickers(false);
+        d->curvesBox->enableResetButton(true);
+        d->curvesBox->enableCurveTypes(true);
+    }
+  
     d->curvesBox->enableGradients(true);
-    d->curvesBox->enableControlWidgets(true);
 
     grid->addWidget(d->curvesBox, 0, 0, 1, 1);
     grid->setRowStretch(1, 10);
@@ -119,7 +132,7 @@ CurvesSettings::~CurvesSettings()
     delete d;
 }
 
-void CurvesSettings::setChannel(ChannelType channel)
+void CurvesSettings::setCurrentChannel(ChannelType channel)
 {
     d->curvesBox->setChannel(channel);
 }
@@ -218,15 +231,6 @@ void CurvesSettings::resetToDefault()
 CurvesContainer CurvesSettings::defaultSettings() const
 {
     CurvesContainer prm;
-/*
-    prm.black       = d->blackInput->defaultValue();
-    prm.exposition  = d->mainExposureInput->defaultValue() + d->fineExposureInput->defaultValue();
-    prm.temperature = d->temperatureInput->defaultValue();
-    prm.green       = d->greenInput->defaultValue();
-    prm.dark        = d->darkInput->defaultValue();
-    prm.gamma       = d->gammaInput->defaultValue();
-    prm.saturation  = d->saturationInput->defaultValue();
-*/
     return prm;
 }
 
@@ -276,6 +280,11 @@ void CurvesSettings::saveAsSettings()
                            i18n("Cannot save to the Gimp curves text file."));
         return;
     }
+}
+
+int CurvesSettings::curvesLeftOffset() const
+{
+    return d->curvesBox->curvesLeftOffset();
 }
 
 }  // namespace Digikam

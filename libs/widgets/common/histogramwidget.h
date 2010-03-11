@@ -105,13 +105,8 @@ public:
 
 public:
 
-    int             m_channelType;         // Channel type to draw.
-    int             m_scaleType;           // Scale to use for drawing.
-    void            setRenderingType(HistogramRenderingType type);
+    void setRenderingType(HistogramRenderingType type);
     ImageHistogram *currentHistogram();    // Currently rendered histogram, depending on current rendering type
-
-    ImageHistogram *m_imageHistogram;      // Full image.
-    ImageHistogram *m_selectionHistogram;  // Image selection.
 
 Q_SIGNALS:
 
@@ -124,6 +119,8 @@ public Q_SLOTS:
 
     void slotMinValueChanged(int min);
     void slotMaxValueChanged(int max);
+    void setChannelType(ChannelType channel);
+    void setScaleType(HistogramScale scale);
 
 protected Q_SLOTS:
 

@@ -1,0 +1,17 @@
+TODO list for content aware resizing.
+
+Speed:
+- study how to perform "real time" seamcarving by using Lqr properly
+- study parallelization of the carving process
+
+Implementation:
+- make the plugin thread safe: see libliqr progress indicator static methods.
+
+Gui:
+- Add picture preview of the seams and of the energy
+- Mouse wheel should change brush size
+- Skin tones should be previewed as an orange mask
+
+Features:
+- Add more energy functions (prewit and sobel filter for instance)
+- Add a button to rescale down and up automatically to remove the red mask

@@ -70,7 +70,7 @@ void AlbumModelTest::initTestCase()
 
     tempSuffix = "albummodeltest-" + QTime::currentTime().toString();
     dbPath = QDir::temp().absolutePath() + QString("/") + tempSuffix;
-    ;
+
     if (QDir::temp().exists(tempSuffix))
     {
         QString msg = QString("Error creating temp path") + dbPath;

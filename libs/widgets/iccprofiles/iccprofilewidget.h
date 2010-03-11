@@ -59,6 +59,7 @@ public:
 
     void    setLoadingFailed();
     void    setDataLoading();
+    void    setUncalibratedColor();
 
     bool  setProfile(const IccProfile& profile = IccProfile());
     IccProfile getProfile() const;

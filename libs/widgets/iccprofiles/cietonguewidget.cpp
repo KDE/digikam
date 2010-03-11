@@ -162,6 +162,7 @@ public:
         loadingImageMode     = false;
         loadingImageSucess   = false;
         needUpdatePixmap     = false;
+        uncalibratedColor    = false;
         hMonitorProfile      = 0;
         hXYZProfile          = 0;
         hXFORM               = 0;
@@ -176,6 +177,7 @@ public:
     bool             loadingImageMode;
     bool             loadingImageSucess;
     bool             needUpdatePixmap;
+    bool             uncalibratedColor;
 
     int              xBias;
     int              yBias;
@@ -269,6 +271,7 @@ bool CIETongueWidget::setProfileData(const QByteArray& profileData)
     }
 
     d->loadingImageMode = false;
+    d->uncalibratedColor = false;
 
     d->progressTimer->stop();
     d->needUpdatePixmap = true;
@@ -301,6 +304,9 @@ bool CIETongueWidget::setProfileFromFile(const KUrl& file)
         d->profileDataAvailable = false;
         d->loadingImageSucess   = false;
     }
+
+    d->loadingImageMode = false;
+    d->uncalibratedColor = false;
 
     d->progressTimer->stop();
     d->needUpdatePixmap = true;
@@ -706,6 +712,16 @@ void CIETongueWidget::loadingFailed()
     update();
 }
 
+void CIETongueWidget::uncalibratedColor()
+{
+    d->progressTimer->stop();
+    d->progressCount      = 0;
+    d->loadingImageMode   = false;
+    d->loadingImageSucess = false;
+    d->uncalibratedColor  = true;
+    update();
+}
+
 void CIETongueWidget::updatePixmap()
 {
     d->needUpdatePixmap = false;
@@ -797,7 +813,7 @@ void CIETongueWidget::paintEvent(QPaintEvent*)
         return;
     }
 
-    // No profile data to show.
+    // No profile data to show, or RAW file
 
     if (!d->profileDataAvailable || (!d->loadingImageMode && !d->loadingImageSucess))
     {
@@ -808,9 +824,18 @@ void CIETongueWidget::paintEvent(QPaintEvent*)
 
         p.setPen(pen);
         p.drawRect(0, 0, width(), height());
-        p.setPen(Qt::red);
-        p.drawText(0, 0, width(), height(), Qt::AlignCenter,
-                   i18n("No profile available..."));
+
+        if (d->uncalibratedColor)
+        {
+            p.drawText(0, 0, width(), height(), Qt::AlignCenter,
+                    i18n("Uncalibrated color space"));
+        }
+        else
+        {
+            p.setPen(Qt::red);
+            p.drawText(0, 0, width(), height(), Qt::AlignCenter,
+                    i18n("No profile available..."));
+        }
 
         return;
     }

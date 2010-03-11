@@ -6,7 +6,7 @@
  * Date        : 2008-07-03
  * Description : a color gradient slider
  *
- * Copyright (C) 2008 by Gilles Caulier<caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2010 by Gilles Caulier<caulier dot gilles at gmail dot com>
  * Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
  *
  * This program is free software; you can redistribute it
@@ -41,33 +41,34 @@ class DGradientSliderPriv;
 
 class DIGIKAM_EXPORT DGradientSlider : public QWidget
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
 
-    DGradientSlider(QWidget *parent=0);
+    DGradientSlider(QWidget* parent=0);
     virtual ~DGradientSlider();
 
     void showMiddleCursor(bool b);
     double leftValue() const;
     double rightValue() const;
     double middleValue() const;
+    int    gradientOffset() const;
 
     void setColors(const QColor& lcolor, const QColor& rcolor);
 
-  public Q_SLOTS:
+public Q_SLOTS:
 
     void setLeftValue(double);
     void setRightValue(double);
     void setMiddleValue(double);
 
-  Q_SIGNALS:
+Q_SIGNALS:
 
     void leftValueChanged(double);
     void rightValueChanged(double);
     void middleValueChanged(double);
 
-  protected:
+protected:
 
     void paintEvent(QPaintEvent*);
     void mousePressEvent(QMouseEvent*);
@@ -75,11 +76,13 @@ class DIGIKAM_EXPORT DGradientSlider : public QWidget
     void mouseMoveEvent(QMouseEvent*);
     void leaveEvent(QEvent*);
 
-  private:
+private:
 
     void adjustMiddleValue(double newLeftValue, double newRightValue);
-
-  private:
+    inline void drawCursorAt(QPainter& painter, double pos, const QColor& brushColor, 
+                             int width, int height, int gradientWidth);
+                                          
+private:
 
     DGradientSliderPriv* const d;
 };

@@ -32,7 +32,7 @@
 
 namespace Digikam
 {
-  
+
 class DIGIKAM_EXPORT InfraredContainer
 {
 

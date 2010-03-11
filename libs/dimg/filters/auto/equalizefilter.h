@@ -42,15 +42,15 @@ class DIGIKAM_EXPORT EqualizeFilter : public DImgThreadedFilter
 
 public:
 
-    EqualizeFilter(DImg* orgImage, DImg* refImage, QObject* parent=0);
+    EqualizeFilter(DImg* orgImage, const DImg* refImage, QObject* parent=0);
     virtual ~EqualizeFilter();
 
 private:
 
     void filterImage();
     void equalizeImage();
-                
-private:     
+
+private:
 
     struct double_packet
     {
@@ -67,8 +67,8 @@ private:
         unsigned int blue;
         unsigned int alpha;
     };
-    
-    DImg m_refImage;
+
+    const DImg m_refImage;
 };
 
 }  // namespace Digikam

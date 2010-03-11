@@ -39,10 +39,10 @@
 namespace Digikam
 {
 
-NormalizeFilter::NormalizeFilter(DImg* orgImage, DImg* refImage, QObject* parent)
-               : DImgThreadedFilter(orgImage, parent, "NormalizeFilter")
+NormalizeFilter::NormalizeFilter(DImg* orgImage, const DImg* refImage, QObject* parent)
+               : DImgThreadedFilter(orgImage, parent, "NormalizeFilter"),
+                 m_refImage(*refImage)
 {
-    m_refImage = refImage->copy();
     initFilter();
 }
 
@@ -68,13 +68,13 @@ void NormalizeFilter::normalizeImage()
     uint           i;
     unsigned short range;
     int            progress;
-    
+
     if (m_orgImage.sixteenBit() != m_refImage.sixteenBit())
     {
         kDebug() << "Ref. image and Org. has different bits depth"; 
         return;
     }
-    
+
     bool sixteenBit = m_orgImage.sixteenBit();
     int segments    = sixteenBit ? NUM_SEGMENTS_16BIT : NUM_SEGMENTS_8BIT;
 

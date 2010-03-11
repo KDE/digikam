@@ -6,7 +6,7 @@
  * Date        : 2009-02-10
  * Description : flip image batch tool.
  *
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -45,19 +45,19 @@ namespace Digikam
 {
 
 Flip::Flip(QObject* parent)
-    : BatchTool("Flip", BaseTool, parent)
+    : BatchTool("Flip", TransformTool, parent)
 {
     setToolTitle(i18n("Flip"));
     setToolDescription(i18n("A tool to flip images horizontally or vertically."));
     setToolIcon(KIcon(SmallIcon("object-flip-vertical")));
 
-    KVBox *vbox   = new KVBox;
-    QLabel *label = new QLabel(vbox);
+    KVBox* vbox   = new KVBox;
+    QLabel* label = new QLabel(vbox);
     m_comboBox    = new KComboBox(vbox);
     m_comboBox->insertItem(DImg::HORIZONTAL, i18n("Horizontal"));
     m_comboBox->insertItem(DImg::VERTICAL,   i18n("Vertical"));
     label->setText(i18n("Flip:"));
-    QLabel *space = new QLabel(vbox);
+    QLabel* space = new QLabel(vbox);
     vbox->setStretchFactor(space, 10);
 
     setSettingsWidget(vbox);

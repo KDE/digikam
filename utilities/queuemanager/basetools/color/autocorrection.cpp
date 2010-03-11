@@ -48,14 +48,14 @@ namespace Digikam
 {
 
 AutoCorrection::AutoCorrection(QObject* parent)
-              : BatchTool("AutoCorrection", BaseTool, parent)
+              : BatchTool("AutoCorrection", ColorTool, parent)
 {
     setToolTitle(i18n("Color Auto-correction"));
     setToolDescription(i18n("A tool to automatically correct image colors."));
     setToolIcon(KIcon(SmallIcon("autocorrection")));
 
-    KVBox *vbox   = new KVBox;
-    QLabel *label = new QLabel(vbox);
+    KVBox* vbox   = new KVBox;
+    QLabel* label = new QLabel(vbox);
     m_comboBox    = new KComboBox(vbox);
     m_comboBox->insertItem(AutoLevelsCorrection,      i18n("Auto Levels"));
     m_comboBox->insertItem(NormalizeCorrection,       i18n("Normalize"));
@@ -63,7 +63,7 @@ AutoCorrection::AutoCorrection(QObject* parent)
     m_comboBox->insertItem(StretchContrastCorrection, i18n("Stretch Contrast"));
     m_comboBox->insertItem(AutoExposureCorrection,    i18n("Auto Exposure"));
     label->setText(i18n("Filter:"));
-    QLabel *space = new QLabel(vbox);
+    QLabel* space = new QLabel(vbox);
     vbox->setStretchFactor(space, 10);
 
     setSettingsWidget(vbox);
@@ -126,9 +126,9 @@ bool AutoCorrection::toolOperations()
         }
         case StretchContrastCorrection:
         {
-            StretchFilter strech(&image(), &image());
-            strech.startFilterDirectly();
-            image().putImageData(strech.getTargetImage().bits());
+            StretchFilter stretch(&image(), &image());
+            stretch.startFilterDirectly();
+            image().putImageData(stretch.getTargetImage().bits());
             break;
         }
         case AutoExposureCorrection:

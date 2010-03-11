@@ -47,7 +47,7 @@ class DIGIKAM_EXPORT ImageHistogram : public QThread
 
 public:
 
-    ImageHistogram(uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits, QObject *parent = 0);
+    ImageHistogram(const uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits, QObject *parent = 0);
     explicit ImageHistogram(const DImg& image, QObject *parent = 0);
     ~ImageHistogram();
 
@@ -84,7 +84,7 @@ protected:
 
 private:
 
-    void setup(uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits);
+    void setup(const uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits);
     void postProgress(bool starting, bool success);
 
 private:

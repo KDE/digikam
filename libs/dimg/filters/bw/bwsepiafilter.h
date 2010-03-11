@@ -32,6 +32,7 @@
 #include "dimgthreadedfilter.h"
 #include "globals.h"
 #include "bcgfilter.h"
+#include "curvesfilter.h"
 #include "tonalityfilter.h"
 
 using namespace Digikam;
@@ -84,8 +85,8 @@ public:
         BWSeleniumTone,
         BWPlatinumTone,
         BWGreenTone
-    };  
-  
+    };
+
 public:
 
     BWSepiaContainer()
@@ -112,18 +113,18 @@ public:
 
 public:
 
-    bool         preview;
+    bool            preview;
 
-    int          previewType;
-    int          filmType;
-    int          filterType;
-    int          toneType;
+    int             previewType;
+    int             filmType;
+    int             filterType;
+    int             toneType;
 
-    double       strength;
-    
-    QPolygon     curveVals;
+    double          strength;
 
-    BCGContainer bcgPrm;
+    CurvesContainer curvesPrm;
+
+    BCGContainer    bcgPrm;
 };
 
 // -----------------------------------------------------------------------------------------------
@@ -141,7 +142,7 @@ private:
     void filterImage();
 
     DImg getThumbnailForEffect(DImg& img);
-    
+
     void blackAndWhiteConversion(DImg& img, int type);
     void applyChannelMixer(DImg& img);
     void applyInfraredFilter(DImg& img, int sensibility);

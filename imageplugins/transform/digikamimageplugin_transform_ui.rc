@@ -1,0 +1,30 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<gui version="12" name="digikamimageplugin_transform" >
+
+ <MenuBar>
+
+  <Menu name="Transform" ><text>Tra&amp;nsform</text>
+   <Action name="imageplugin_resize" />
+   <Action name="imageplugin_perspective" />
+   <Action name="imageplugin_freerotation" />
+   <Action name="imageplugin_sheartool" />
+   <Action name="imageplugin_contentawareresizing" />   
+   <Action name="imageplugin_ratiocrop" />   
+  </Menu>
+
+ </MenuBar>
+
+ <ToolBar name="mainToolBar" >
+  <text>Main Toolbar</text>
+ </ToolBar>
+
+ <ActionProperties>
+   <Action shortcut="" name="imageplugin_ratiocrop" /> 
+   <Action shortcut="" name="imageplugin_resize" />
+   <Action shortcut="" name="imageplugin_perspective" />
+   <Action shortcut="" name="imageplugin_freerotation" />   
+   <Action shortcut="" name="imageplugin_sheartool" />   
+   <Action shortcut="" name="imageplugin_contentawareresizing" />   
+ </ActionProperties>
+
+</gui>

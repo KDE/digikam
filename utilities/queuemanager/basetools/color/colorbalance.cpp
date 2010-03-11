@@ -43,13 +43,13 @@ namespace Digikam
 {
 
 ColorBalance::ColorBalance(QObject* parent)
-             : BatchTool("ColorBalance", BaseTool, parent)
+             : BatchTool("ColorBalance", ColorTool, parent)
 {
     setToolTitle(i18n("Color Balance"));
     setToolDescription(i18n("A tool to adjust color balance."));
     setToolIcon(KIcon(SmallIcon("adjustrgb")));
 
-    QWidget *box   = new QWidget;
+    QWidget* box   = new QWidget;
     m_settingsView = new CBSettings(box);
     setSettingsWidget(box);
 

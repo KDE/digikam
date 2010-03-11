@@ -6,7 +6,7 @@
  * Date        : 2008-11-24
  * Description : Available batch tools list.
  *
- * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -54,9 +54,33 @@ ToolListViewGroup::ToolListViewGroup(QTreeWidget *parent, BatchTool::BatchToolGr
 
     switch(m_group)
     {
-        case BatchTool::BaseTool:
+        case BatchTool::ColorTool:
             setIcon(0, SmallIcon("digikam"));
-            setText(0, i18n("Base Tools"));
+            setText(0, i18n("Color"));
+            break;
+        case BatchTool::EnhanceTool:
+            setIcon(0, SmallIcon("digikam"));
+            setText(0, i18n("Enhance"));
+            break;
+        case BatchTool::TransformTool:
+            setIcon(0, SmallIcon("digikam"));
+            setText(0, i18n("Transform"));
+            break;
+        case BatchTool::DecorateTool:
+            setIcon(0, SmallIcon("digikam"));
+            setText(0, i18n("Decorate"));
+            break;
+        case BatchTool::FiltersTool:
+            setIcon(0, SmallIcon("digikam"));
+            setText(0, i18n("Filters"));
+            break;
+        case BatchTool::ConvertTool:
+            setIcon(0, SmallIcon("digikam"));
+            setText(0, i18n("Convert"));
+            break;
+        case BatchTool::MetadataTool:
+            setIcon(0, SmallIcon("digikam"));
+            setText(0, i18n("Metadata"));
             break;
         case BatchTool::KipiTool:
             setIcon(0, SmallIcon("kipi"));
@@ -80,7 +104,7 @@ BatchTool::BatchToolGroup ToolListViewGroup::toolGroup() const
 
 // ---------------------------------------------------------------------------
 
-ToolListViewItem::ToolListViewItem(ToolListViewGroup *parent, BatchTool* tool)
+ToolListViewItem::ToolListViewItem(ToolListViewGroup* parent, BatchTool* tool)
                 : QTreeWidgetItem(parent)
 {
     setDisabled(false);
@@ -106,7 +130,7 @@ BatchTool* ToolListViewItem::tool() const
 
 // ---------------------------------------------------------------------------
 
-ToolsListView::ToolsListView(QWidget *parent)
+ToolsListView::ToolsListView(QWidget* parent)
              : QTreeWidget(parent)
 {
     setContextMenuPolicy(Qt::CustomContextMenu);
@@ -160,7 +184,7 @@ bool ToolsListView::removeTool(BatchTool* tool)
     while (*it)
     {
         ToolListViewItem* item = dynamic_cast<ToolListViewItem*>(*it);
-        if (item->tool() == tool)
+        if (item && item->tool() == tool)
         {
             delete item;
             return true;
@@ -176,7 +200,7 @@ ToolListViewGroup* ToolsListView::findToolGroup(BatchTool::BatchToolGroup group)
     while (*it)
     {
         ToolListViewGroup* item = dynamic_cast<ToolListViewGroup*>(*it);
-        if (item->toolGroup() == group)
+        if (item && item->toolGroup() == group)
             return item;
 
         ++it;
@@ -191,7 +215,7 @@ bool ToolsListView::findTool(BatchTool* tool)
     while (*it)
     {
         ToolListViewItem* item = dynamic_cast<ToolListViewItem*>(*it);
-        if (item->tool() == tool)
+        if (item && item->tool() == tool)
             return true;
 
         ++it;
@@ -260,7 +284,7 @@ void ToolsListView::slotAssignTools()
 
 QMimeData* ToolsListView::mimeData(const QList<QTreeWidgetItem*> items) const
 {
-    QMimeData *mimeData = new QMimeData();
+    QMimeData* mimeData = new QMimeData();
     QByteArray encodedData;
 
     QDataStream stream(&encodedData, QIODevice::WriteOnly);
@@ -287,7 +311,7 @@ QMap<int, QString> ToolsListView::itemsToMap(const QList<QTreeWidgetItem*> items
 void ToolsListView::slotContextMenu()
 {
     KMenu popmenu(this);
-    KAction *action = new KAction(KIcon("bqm-add"), i18n("Assign tools"), this);
+    KAction* action = new KAction(KIcon("bqm-add"), i18n("Assign tools"), this);
     connect(action, SIGNAL(triggered(bool) ),
             this, SLOT(slotAssignTools()));
 

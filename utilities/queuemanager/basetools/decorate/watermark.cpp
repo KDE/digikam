@@ -6,7 +6,7 @@
  * Date        : 2009-02-28
  * Description : batch tool to add visible watermark.
  *
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -52,7 +52,7 @@
 // Local includes
 
 #include "dimg.h"
-#include "dimgimagefilters.h"
+#include "blurfilter.h"
 
 namespace Digikam
 {
@@ -93,33 +93,34 @@ public:
 };
 
 WaterMark::WaterMark(QObject* parent)
-         : BatchTool("WaterMark", BaseTool, parent), d(new WaterMarkPriv)
+         : BatchTool("WaterMark", DecorateTool, parent),
+           d(new WaterMarkPriv)
 {
     setToolTitle(i18n("Add Watermark"));
     setToolDescription(i18n("A tool to add a visible watermark"));
     setToolIcon(KIcon(SmallIcon("insert-text")));
 
-    KVBox *vbox = new KVBox;
+    KVBox* vbox = new KVBox;
     vbox->setSpacing(KDialog::spacingHint());
     vbox->setMargin(0);
 
-    QLabel *label = new QLabel(vbox);
+    QLabel* label = new QLabel(vbox);
     d->textEdit   = new KLineEdit(vbox);
     d->textEdit->setClearButtonShown(true);
     d->textEdit->setClickMessage(i18n("Enter your watermark string here."));
     label->setText(i18n("Text:"));
 
-    QLabel *label2       = new QLabel(vbox);
+    QLabel* label2       = new QLabel(vbox);
     d->fontChooserWidget = new KFontComboBox(vbox);
     d->fontChooserWidget->setWhatsThis( i18n("Here you can choose the font to be used."));
     label2->setText(i18n("Font:"));
 
-    QLabel *label3     = new QLabel(vbox);
+    QLabel* label3     = new QLabel(vbox);
     d->fontColorButton = new KColorButton(Qt::black, vbox);
     d->fontColorButton->setWhatsThis(i18n("Set here the font color to use."));
     label3->setText(i18n("Font Color:"));
 
-    QLabel *label4 = new QLabel(vbox);
+    QLabel* label4 = new QLabel(vbox);
     d->comboBox    = new KComboBox(vbox);
     d->comboBox->insertItem(WaterMarkPriv::TopLeft,     i18n("Top left"));
     d->comboBox->insertItem(WaterMarkPriv::TopRight,    i18n("Top right"));
@@ -127,7 +128,7 @@ WaterMark::WaterMark(QObject* parent)
     d->comboBox->insertItem(WaterMarkPriv::BottomRight, i18n("Bottom right"));
     label4->setText(i18n("Corner:"));
 
-    QLabel *label5  = new QLabel(vbox);
+    QLabel* label5  = new QLabel(vbox);
     d->stringLength = new KIntNumInput(vbox);
     d->stringLength->setRange(10, 90);
     d->stringLength->setValue(25);
@@ -135,7 +136,7 @@ WaterMark::WaterMark(QObject* parent)
     d->stringLength->setWhatsThis(i18n("Enter the string length as a percent of the image width here."));
     label5->setText(i18n("length (%):"));
 
-    QLabel *space = new QLabel(vbox);
+    QLabel* space = new QLabel(vbox);
     vbox->setStretchFactor(space, 10);
 
     setSettingsWidget(vbox);
@@ -257,9 +258,9 @@ bool WaterMark::toolOperations()
                                   grayTransLayer.width(), grayTransLayer.height(),
                                   radius, radius);
 
-    DImgImageFilters filters;
-    filters.gaussianBlurImage(backgroundLayer.bits(), backgroundLayer.width(),
-                              backgroundLayer.height(), backgroundLayer.sixteenBit(), radius);
+    BlurFilter blur(&backgroundLayer, 0L, radius);
+    blur.startFilterDirectly();
+    backgroundLayer.putImageData(blur.getTargetImage().bits());
 
     image().bitBlendImage(composer, &backgroundLayer, 0, 0,
                           backgroundLayer.width(), backgroundLayer.height(),

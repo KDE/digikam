@@ -43,9 +43,11 @@
 
 #include "album.h"
 #include "albumdb.h"
+#include "albuminfo.h"
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "databaseaccess.h"
+#include "imageinfo.h"
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
 #include "thumbnaildatabaseaccess.h"
@@ -120,7 +122,7 @@ void BatchThumbsGenerator::slotRebuildThumbs()
 
     if (!d->rebuildAll)
     {
-        QHash<QString, int> filePaths = ThumbnailDatabaseAccess().db()->getValidFilePaths();
+        QHash<QString, int> filePaths = ThumbnailDatabaseAccess().db()->getFilePathsWithThumbnail();
 
         QStringList::iterator it = d->allPicturesPath.begin();
         while (it != d->allPicturesPath.end())
@@ -133,6 +135,17 @@ void BatchThumbsGenerator::slotRebuildThumbs()
     }
 
 #endif
+
+    // remove non-image files from the list
+    QStringList::iterator it = d->allPicturesPath.begin();
+    while (it != d->allPicturesPath.end())
+    {
+        ImageInfo info((*it));
+        if (info.category() != DatabaseItem::Image)
+            it = d->allPicturesPath.erase(it);
+        else
+            ++it;
+    }
 
     setMaximum(d->allPicturesPath.count());
 

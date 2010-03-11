@@ -43,13 +43,13 @@ namespace Digikam
 {
 
 BCGCorrection::BCGCorrection(QObject* parent)
-             : BatchTool("BCGCorrection", BaseTool, parent)
+             : BatchTool("BCGCorrection", ColorTool, parent)
 {
     setToolTitle(i18n("BCG Correction"));
     setToolDescription(i18n("A tool to fix Brightness/Contrast/Gamma."));
     setToolIcon(KIcon(SmallIcon("contrast")));
 
-    QWidget *box   = new QWidget;
+    QWidget* box   = new QWidget;
     m_settingsView = new BCGSettings(box);
     setSettingsWidget(box);
 

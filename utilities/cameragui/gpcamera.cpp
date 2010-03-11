@@ -1419,8 +1419,8 @@ bool GPCamera::cameraAbout(QString& about)
     // here we need to make sure whitespace and newlines
     // are converted to HTML properly
     about = Qt::convertFromPlainText(QString(abt.text), Qt::WhiteSpacePre);
-    about.append("<br><br>To report problems about this driver, please contact "
-                      "the gphoto2 team at:<br><br>http://gphoto.org/bugs");
+    about.append("<br/><br/>To report problems about this driver, please contact "
+                      "the gphoto2 team at:<br/><br/>http://gphoto.org/bugs");
 
     delete d->status;
     d->status = 0;

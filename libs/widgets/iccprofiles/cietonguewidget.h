@@ -67,6 +67,7 @@ public:
 
     void loadingStarted();
     void loadingFailed();
+    void uncalibratedColor();
 
 protected:
 

@@ -6,7 +6,7 @@
  * Date        : 2009-02-19
  * Description : Restoration batch tool.
  *
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -40,21 +40,20 @@
 // Local includes
 
 #include "dimg.h"
-#include "greycstorationsettings.h"
 
 namespace Digikam
 {
 
 Restoration::Restoration(QObject* parent)
-           : BatchTool("Restoration", BaseTool, parent), m_cimgIface(0)
+           : BatchTool("Restoration", EnhanceTool, parent), m_cimgIface(0)
 {
     setToolTitle(i18n("Restoration"));
     setToolDescription(i18n("A tool to restore photographs based on Greystoration."));
     setToolIcon(KIcon(SmallIcon("restoration")));
 
-    KVBox *vbox   = new KVBox;
+    KVBox* vbox   = new KVBox;
 
-    KUrlLabel *cimgLogoLabel = new KUrlLabel(vbox);
+    KUrlLabel* cimgLogoLabel = new KUrlLabel(vbox);
     cimgLogoLabel->setText(QString());
     cimgLogoLabel->setUrl("http://cimg.sourceforge.net");
     cimgLogoLabel->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-cimg.png")));
@@ -72,7 +71,7 @@ Restoration::Restoration(QObject* parent)
                                    "<b>Reduce Texturing</b>: reduce image artifacts, such as paper texture, or Moire patterns "
                                    "on scanned images.</p>"));
 
-    QLabel *space = new QLabel(vbox);
+    QLabel* space = new QLabel(vbox);
     vbox->setStretchFactor(space, 10);
 
     setSettingsWidget(vbox);
@@ -110,7 +109,7 @@ bool Restoration::toolOperations()
 
     int type = settings()["RestorationMethod"].toInt();
 
-    GreycstorationSettings settings;
+    GreycstorationContainer settings;
     settings.setRestorationDefaultSettings();
 
     switch(type)
@@ -140,8 +139,8 @@ bool Restoration::toolOperations()
         }
     }
 
-    m_cimgIface = new GreycstorationIface(this);
-    m_cimgIface->setMode(GreycstorationIface::Restore);
+    m_cimgIface = new GreycstorationFilter(this);
+    m_cimgIface->setMode(GreycstorationFilter::Restore);
     m_cimgIface->setOriginalImage(image());
     m_cimgIface->setSettings(settings);
     m_cimgIface->setup();

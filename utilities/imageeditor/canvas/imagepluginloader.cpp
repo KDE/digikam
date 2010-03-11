@@ -50,19 +50,38 @@ namespace Digikam
 
 static const char* ObsoleteImagePluginsList[] =
 {
-     "digikamimageplugin_blowup",         // Merged with "Resize" tool since 0.9.2.
-     "digikamimageplugin_solarize",       // Renamed "ColorFx" since 0.9.2.
-     "digikamimageplugin_unsharp",        // Merged with "Sharpen" tool since 0.9.2.
-     "digikamimageplugin_refocus",        // Merged with "Sharpen" tool since 0.9.2.
-     "digikamimageplugin_despeckle",      // Renamed "Noise Reduction" since 0.9.2.
-     "digikamimageplugin_antivignetting", // Merged with "Lens Correction" since 0.10.0.
-     "digikamimageplugin_lensdistortion", // Merged with "Lens Correction" since 0.10.0.
-     "digikamimageplugin_noisereduction", // Merged to core plugin since 1.0.0-rc.
-     "digikamimageplugin_infrared",       // Merged to core plugin with B&W converter since 1.2.0.
-     "digikamimageplugin_whitebalance",   // Merged to core plugin since 1.2.0.
-     "digikamimageplugin_channelmixer",   // Merged to core plugin since 1.2.0.
-     "digikamimageplugin_adjustcurves",   // Merged to core plugin since 1.2.0.
-     "digikamimageplugin_adjustlevels",   // Merged to core plugin since 1.2.0.
+     "digikamimageplugin_blowup",                   // Merged with "Resize" tool since 0.9.2.
+     "digikamimageplugin_solarize",                 // Renamed "ColorFx" since 0.9.2.
+     "digikamimageplugin_unsharp",                  // Merged with "Sharpen" tool since 0.9.2.
+     "digikamimageplugin_refocus",                  // Merged with "Sharpen" tool since 0.9.2.
+     "digikamimageplugin_despeckle",                // Renamed "Noise Reduction" since 0.9.2.
+     "digikamimageplugin_antivignetting",           // Merged with "Lens Correction" since 0.10.0.
+     "digikamimageplugin_lensdistortion",           // Merged with "Lens Correction" since 0.10.0.
+     "digikamimageplugin_noisereduction",           // Merged to core plugin since 1.0.0-rc.
+     "digikamimageplugin_infrared",                 // Merged to core plugin with B&W converter since 1.2.0.
+     "digikamimageplugin_whitebalance",             // Merged to core plugin since 1.2.0.
+     "digikamimageplugin_channelmixer",             // Merged to core plugin since 1.2.0.
+     "digikamimageplugin_adjustcurves",             // Merged to core plugin since 1.2.0.
+     "digikamimageplugin_adjustlevels",             // Merged to core plugin since 1.2.0.
+     "digikamimageplugin_localcontrast",            // Merged to core plugin since 1.2.0.
+     "digikamimageplugin_colorfx",                  // Merged to "FxFilters" plugin since 1.2.0.
+     "digikamimageplugin_charcoal",                 // Merged to "FxFilters" plugin since 1.2.0.
+     "digikamimageplugin_emboss",                   // Merged to "FxFilters" plugin since 1.2.0.
+     "digikamimageplugin_oilpaint",                 // Merged to "FxFilters" plugin since 1.2.0.
+     "digikamimageplugin_blurfx",                   // Merged to "FxFilters" plugin since 1.2.0.
+     "digikamimageplugin_distortionfx",             // Merged to "FxFilters" plugin since 1.2.0.
+     "digikamimageplugin_raindrop",                 // Merged to "FxFilters" plugin since 1.2.0.
+     "digikamimageplugin_filmgrain",                // Merged to "FxFilters" plugin since 1.2.0.
+     "digikamimageplugin_perspective",              // Merged to "Transform" plugin since 1.2.0.
+     "digikamimageplugin_freerotation",             // Merged to "Transform" plugin since 1.2.0.
+     "digikamimageplugin_sheartool",                // Merged to "Transform" plugin since 1.2.0.
+     "digikamimageplugin_contentawareresizing",     // Merged to "Transform" plugin since 1.2.0.
+     "digikamimageplugin_inserttext",               // Merged to "Decorate" plugin since 1.2.0.
+     "digikamimageplugin_border",                   // Merged to "Decorate" plugin since 1.2.0.
+     "digikamimageplugin_texture",                  // Merged to "Decorate" plugin since 1.2.0.
+     "digikamimageplugin_restoration",              // Merged to "Enhance" plugin since 1.2.0.
+     "digikamimageplugin_inpainting",               // Merged to "Enhance" plugin since 1.2.0.
+     "digikamimageplugin_core",                     // Renamed "Color" plugin since 1.2.0.
      "-1"
 };
 
@@ -129,8 +148,6 @@ ImagePluginLoader::~ImagePluginLoader()
         ImagePlugin *plugin = d->pluginMap.value(name);
         KService::Ptr service = d->pluginServiceMap.value(name);
         delete plugin;
-        //if (service)
-          //  KLibLoader::self()->unloadLibrary(service->library());
     }
     delete d;
     m_instance = 0;
@@ -142,46 +159,6 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& pluginsToLoad)
         d->splash->message(i18n("Loading Image Plugins"));
 
     int cpt = 0;
-
-    // Load plugin core at the first time.
-
-    KService::Ptr corePlugin = d->pluginServiceMap.value("ImagePlugin_Core");
-
-    if (corePlugin && !pluginIsLoaded(corePlugin->name()) )
-    {
-        QString error;
-
-        ImagePlugin* plugin = corePlugin->createInstance<ImagePlugin>(this, QVariantList(), &error);
-
-        if (plugin && (dynamic_cast<KXMLGUIClient*>(plugin) != 0))
-        {
-            d->pluginMap[corePlugin->name()] = plugin;
-
-            kDebug() << "ImagePluginLoader: Loaded plugin " << corePlugin->name();
-
-            ++cpt;
-
-            // --------------------------------------------------------
-
-            // fix old ui file layout
-            UiFileValidator validator(plugin->localXMLFile());
-            if (!validator.isValid())
-            {
-                kDebug() << "Old ui file layout detected: " << corePlugin->name();
-                validator.fixConfigFile();
-            }
-        }
-        else
-        {
-            kWarning() << "ImagePluginLoader: createInstance returned 0 for "
-                            << corePlugin->name()
-                            << " (" << corePlugin->library() << ")"
-                            << " with error: "
-                            << error;
-        }
-    }
-
-    // Load all other image plugins after (make a coherent menu construction in Image Editor).
 
     foreach (const QString& name, pluginsToLoad)
     {
@@ -217,10 +194,10 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& pluginsToLoad)
             else
             {
                 kWarning() << "ImagePluginLoader: createInstance returned 0 for "
-                                << service->name()
-                                << " (" << service->library() << ")"
-                                << " with error: "
-                                << error;
+                           << service->name()
+                           << " (" << service->library() << ")"
+                           << " with error: "
+                           << error;
             }
         }
     }
@@ -246,11 +223,6 @@ ImagePlugin* ImagePluginLoader::pluginInstance(const QString& libraryName)
     }
 
     return 0;
-}
-
-ImagePlugin* ImagePluginLoader::corePluginInstance()
-{
-    return pluginIsLoaded("ImagePlugin_Core");
 }
 
 bool ImagePluginLoader::pluginLibraryIsLoaded(const QString& libraryName)

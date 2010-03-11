@@ -43,13 +43,13 @@ namespace Digikam
 {
 
 WhiteBalance::WhiteBalance(QObject* parent)
-            : BatchTool("WhiteBalance", BaseTool, parent)
+            : BatchTool("WhiteBalance", ColorTool, parent)
 {
     setToolTitle(i18n("White Balance"));
     setToolDescription(i18n("A tool to adjust White Balance."));
     setToolIcon(KIcon(SmallIcon("whitebalance")));
 
-    QWidget *box   = new QWidget;
+    QWidget* box   = new QWidget;
     m_settingsView = new WBSettings(box);
     m_settingsView->showAdvancedButtons(false);
     setSettingsWidget(box);

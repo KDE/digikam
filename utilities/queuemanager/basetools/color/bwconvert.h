@@ -44,6 +44,10 @@ public:
 
     BatchToolSettings defaultSettings();
 
+public Q_SLOTS:
+
+    void slotResetSettingsToDefault();
+    
 private:
 
     bool toolOperations();

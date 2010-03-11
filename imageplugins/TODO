@@ -1,47 +1,55 @@
 Editor tools pending task
 
                         Multithreaded      Zommable Preview        Port to BQM
-blurfx                      DONE                 DONE                  TODO
-border                      DONE                  NO                   TODO
-charcoal                    DONE                 DONE                  TODO
-colorfx                     TODO                 TODO                  TODO
-contentawareresizing        DONE                 TODO                  TODO
 
-coreplugin
-  /adjustcurves             TODO                 TODO                  TODO
-  /adjustlevels             TODO                 TODO                  TODO
+color
+  /adjustcurves             DONE                 DONE                  DONE
+  /adjustlevels             DONE                 DONE                  TODO
   /autocorrectiontool       DONE                 DONE                  DONE
   /bcgtool                  DONE                 DONE                  DONE
-  /blurtool                 DONE                 DONE                  TODO
   /bwsepiatool              DONE                 DONE                  DONE
   /cbtool                   DONE                 DONE                  DONE
   /channelmixer             DONE                 DONE                  DONE
   /hsltool                  DONE                 DONE                  DONE
-  /noisereductiontool       DONE                 DONE                  DONE
   /profileconversiontool    DONE                 DONE                  DONE
-  /redeyetool               DONE                 TODO                   NO
-  /resizetool               DONE                 TODO                  DONE
-  /sharpentool              DONE                 DONE                  DONE
   /whitebalance             DONE                 DONE                  DONE
 
-distortionfx                DONE                 TODO                  TODO
-emboss                      DONE                 DONE                  TODO
-filmgrain                   DONE                 DONE                  TODO
-freerotation                DONE                  NO                   TODO
-hotpixels                   DONE                 DONE                  TODO
-inpainting                  DONE                  NO                    NO
-inserttext                   NO                   NO                    NO
+decorate
+  /border                   DONE                  NO                   TODO
+  /inserttext                NO                   NO                    NO
+  /texture                  DONE                 DONE                  TODO
+
+fxfilters
+  /colorfx                  TODO                 TODO                  TODO
+  /charcoal                 DONE                 DONE                  TODO
+  /distortionfx             DONE                 TODO                  TODO
+  /emboss                   DONE                 DONE                  TODO
+  /oilpaint                 DONE                 DONE                  TODO
+  /blurfx                   DONE                 DONE                  TODO
+  /raindrop                 DONE                  NO                   TODO
+  /filmgrain                DONE                 DONE                  DONE
 
 lenscorrection
   /autocorrection           DONE                 TODO                  TODO
   /distortion               DONE                 TODO                  TODO
   /vignetting               DONE                 TODO                  TODO
 
-localcontrast               DONE                 TODO                  TODO
-oilpaint                    DONE                 DONE                  TODO
-perspective                  NO                   NO                    NO
-raindrop                    DONE                  NO                   TODO
-restoration                 DONE                 DONE                  DONE
-sheartool                   DONE                  NO                   TODO
+enhance
+  /noisereductiontool       DONE                 DONE                  DONE
+  /sharpentool              DONE                 DONE                  DONE
+  /restoration              DONE                 DONE                  DONE
+  /blurtool                 DONE                 DONE                  DONE
+  /localcontrast            DONE                 DONE                  DONE
+  /redeyetool               DONE                 TODO                   NO
+  /inpainting               DONE                  NO                    NO
+
+transform
+  /ratiocrop                DONE                  NO                    NO
+  /resizetool               DONE                 TODO                  DONE
+  /freerotation             DONE                  NO                   TODO
+  /perspective               NO                   NO                    NO
+  /sheartool                DONE                  NO                   TODO
+  /contentawareresizing     DONE                 TODO                  TODO
+
 superimpose                  NO                   NO                    NO
-texture                     DONE                 DONE                  TODO
+hotpixels                   DONE                 DONE                  TODO

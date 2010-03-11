@@ -45,7 +45,7 @@
 #include "icctransform.h"
 #include "imagehistogram.h"
 #include "imagelevels.h"
-#include "imagecurves.h"
+#include "curvesfilter.h"
 #include "bcgfilter.h"
 #include "wbfilter.h"
 #include "globals.h"
@@ -309,8 +309,11 @@ void RAWLoader::postProcess(DImgLoaderObserver* observer)
         settings.gamma        = 1.0;
         settings.saturation   = m_customRawSettings.saturation;
         settings.green        = 1.0;
-        WBFilter wb(imageData(), imageWidth(), imageHeight(), m_rawDecodingSettings.sixteenBitsImage, settings);
+        WBFilter wb(m_image, 0L, settings);
+        wb.startFilterDirectly();
+        m_image->putImageData(wb.getTargetImage().bits());       
     }
+    
     if (observer) observer->progressInfo(m_image, 0.92F);
 
     if (m_customRawSettings.lightness != 0.0 ||
@@ -321,20 +324,23 @@ void RAWLoader::postProcess(DImgLoaderObserver* observer)
         settings.brightness = m_customRawSettings.lightness;
         settings.contrast   = m_customRawSettings.contrast;
         settings.gamma      = m_customRawSettings.gamma;
-        BCGFilter bcg(imageData(), imageWidth(), imageHeight(), m_rawDecodingSettings.sixteenBitsImage, settings);
+        BCGFilter bcg(m_image, 0L, settings);
+        bcg.startFilterDirectly();
+        m_image->putImageData(bcg.getTargetImage().bits());        
     }
+    
     if (observer) observer->progressInfo(m_image, 0.94F);
 
     if (!m_customRawSettings.curveAdjust.isEmpty())
     {
-        DImg tmp(imageWidth(), imageHeight(), m_rawDecodingSettings.sixteenBitsImage);
-        ImageCurves curves(m_rawDecodingSettings.sixteenBitsImage);
-        curves.setCurvePoints(LuminosityChannel, m_customRawSettings.curveAdjust);
-        curves.curvesCalculateCurve(LuminosityChannel);
-        curves.curvesLutSetup(AlphaChannel);
-        curves.curvesLutProcess(imageData(), tmp.bits(), imageWidth(), imageHeight());
-        memcpy(imageData(), tmp.bits(), tmp.numBytes());
+        CurvesContainer settings;
+        settings.curvesType   = ImageCurves::CURVE_SMOOTH;
+        settings.lumCurveVals = m_customRawSettings.curveAdjust;
+        CurvesFilter curves(m_image, 0L, settings);
+        curves.startFilterDirectly();
+        m_image->putImageData(curves.getTargetImage().bits());
     }
+    
     if (observer) observer->progressInfo(m_image, 0.96F);
 
     if (!m_customRawSettings.levelsAdjust.isEmpty())
@@ -354,6 +360,7 @@ void RAWLoader::postProcess(DImgLoaderObserver* observer)
         levels.levelsLutProcess(imageData(), tmp.bits(), imageWidth(), imageHeight());
         memcpy(imageData(), tmp.bits(), tmp.numBytes());
     }
+    
     if (observer) observer->progressInfo(m_image, 0.98F);
 }
 

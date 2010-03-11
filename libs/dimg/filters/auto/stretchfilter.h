@@ -42,15 +42,15 @@ class DIGIKAM_EXPORT StretchFilter : public DImgThreadedFilter
 
 public:
 
-    StretchFilter(DImg* orgImage, DImg* refImage, QObject* parent=0);
+    StretchFilter(DImg* orgImage, const DImg* refImage, QObject* parent=0);
     virtual ~StretchFilter();
 
 private:
 
     void filterImage();
     void stretchContrastImage();
-            
-private:     
+
+private:
 
     struct double_packet
     {
@@ -66,9 +66,9 @@ private:
         unsigned int green;
         unsigned int blue;
         unsigned int alpha;
-    };  
-  
-    DImg m_refImage;    
+    };
+
+    const DImg m_refImage;
 };
 
 }  // namespace Digikam

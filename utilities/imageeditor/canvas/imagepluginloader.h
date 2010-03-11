@@ -60,7 +60,6 @@ public:
     bool pluginLibraryIsLoaded(const QString& libraryName);
 
     ImagePlugin* pluginInstance(const QString& libraryName);
-    ImagePlugin* corePluginInstance();
 
 private:
 

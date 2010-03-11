@@ -67,8 +67,10 @@ public:
     void saveAsSettings();
 
     void setScale(HistogramScale type);
-    void setChannel(ChannelType channel);
-    
+    void setCurrentChannel(ChannelType channel);
+
+    int curvesLeftOffset() const;
+
 Q_SIGNALS:
 
     void signalSettingsChanged();

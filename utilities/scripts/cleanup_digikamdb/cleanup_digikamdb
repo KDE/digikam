@@ -152,7 +152,7 @@ curdir=$(pwd)
 # -----------------------------------------------------------------------------
 
 # try to enter the database directory
-cd $db_dir 2&> /dev/null
+cd "$db_dir" 2&> /dev/null
 if [ $? = 0 ]; then
     db_out="$output_str_database:"
     echo -e "$output_str_location:\t$(pwd)"

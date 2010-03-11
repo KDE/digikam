@@ -50,7 +50,7 @@ class HotPixelsTool : public Digikam::EditorToolThreaded
 
 public:
 
-    HotPixelsTool(QObject *parent);
+    HotPixelsTool(QObject* parent);
     ~HotPixelsTool();
 
 private Q_SLOTS:
@@ -67,7 +67,6 @@ private:
     void writeSettings();
     void prepareEffect();
     void prepareFinal();
-    void abortPreview();
     void putPreviewData();
     void putFinalData();
     void renderingFinished();

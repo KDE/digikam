@@ -82,8 +82,6 @@ public:
     void enableCurveTypes(bool enable);
     void enableControlWidgets(bool enable);
 
-    void setScale(HistogramScale type);
-    void setChannel(ChannelType channel);
     void setCurveGuide(const DColor& color);
 
     int  picker() const;
@@ -97,6 +95,8 @@ public:
     void readCurveSettings(KConfigGroup& group, QString prefix);
     void writeCurveSettings(KConfigGroup& group, QString prefix);
 
+    int curvesLeftOffset() const;
+
     ImageCurves* curves() const;
 
 Q_SIGNALS:
@@ -105,6 +105,11 @@ Q_SIGNALS:
     void signalCurvesChanged();
     void signalChannelReset(int);
     void signalCurveTypeChanged(int);
+
+public Q_SLOTS:
+
+    void setChannel(ChannelType channel);
+    void setScale(HistogramScale scale);
 
 private Q_SLOTS:
 

@@ -40,10 +40,10 @@
 namespace Digikam
 {
 
-EqualizeFilter::EqualizeFilter(DImg* orgImage, DImg* refImage, QObject* parent)
-              : DImgThreadedFilter(orgImage, parent, "EqualizeFilter")
+EqualizeFilter::EqualizeFilter(DImg* orgImage, const DImg* refImage, QObject* parent)
+              : DImgThreadedFilter(orgImage, parent, "EqualizeFilter"),
+                m_refImage(*refImage)
 {
-    m_refImage = refImage->copy();
     initFilter();
 }
 
@@ -73,7 +73,7 @@ void EqualizeFilter::equalizeImage()
     struct int_packet*    equalize_map;
     register int          i;
     int                   progress;
-    
+
     if (m_orgImage.sixteenBit() != m_refImage.sixteenBit())
     {
         kDebug() << "Ref. image and Org. has different bits depth"; 

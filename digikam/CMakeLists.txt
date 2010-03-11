@@ -9,21 +9,22 @@ INCLUDE_DIRECTORIES(
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/bcg
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/bw
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/hsl
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/decorate
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/fx
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/greycstoration
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/icc
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/lc
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/nr
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/sharp
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/cb
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/levels
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/curves
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/wb
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/whitebalance
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dimg/filters/transform
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dmetadata
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/histogram
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/curves
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/levels
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/jpegutils
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/greycstoration
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/jpegutils/${DIGIKAM_LIBJPEG_DIR}
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/threadimageio
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/template
 
@@ -64,6 +65,7 @@ INCLUDE_DIRECTORIES(
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/queuemanager/basetools/color
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/queuemanager/basetools/convert
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/queuemanager/basetools/enhance
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/queuemanager/basetools/filters
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/queuemanager/basetools/transform
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/queuemanager/basetools/metadata
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/queuemanager/basetools/decorate
@@ -97,6 +99,9 @@ SET_SOURCE_FILES_PROPERTIES(${libclapack_SRCS} PROPERTIES COMPILE_FLAGS "-w")
 # Disable libpgf warnings.
 SET_SOURCE_FILES_PROPERTIES(${libpgf_SRCS} PROPERTIES COMPILE_FLAGS "-w")
 
+# Disable liblqr C code warnings.
+SET_SOURCE_FILES_PROPERTIES(${liblqr_SRCS} PROPERTIES COMPILE_FLAGS "-w")
+
 SET(digikamcore_LIB_SRCS
                         # basic libs
                         ${libdimg_SRCS}
@@ -110,7 +115,6 @@ SET(digikamcore_LIB_SRCS
                         ${liblevels_SRCS}
                         ${liblprof_SRCS}
                         ${libjpegutils_SRCS}
-                        ${libgreycstoration_SRCS}
                         ${libthreadimageio_SRCS}
                         ${libthemeengine_SRCS}
                         ${libpgf_SRCS}
@@ -148,6 +152,8 @@ KDE4_ADD_KCFG_FILES(digikamcore_LIB_SRCS
 
 KDE4_ADD_LIBRARY(digikamcore SHARED ${digikamcore_LIB_SRCS})
 
+ADD_DEPENDENCIES(digikamcore digikam-svnversion)
+
 TARGET_LINK_LIBRARIES(digikamcore
                       ${KDE4_KDECORE_LIBS}
                       ${KDE4_KIO_LIBS}
@@ -181,6 +187,11 @@ ENDIF(MARBLEWIDGET_FOUND)
 IF(Q_WS_X11)
     TARGET_LINK_LIBRARIES(digikamcore ${X11_LIBRARIES})
 ENDIF(Q_WS_X11)
+
+# For Contents Aware Resizer filter.
+IF(GLIB2_FOUND)
+TARGET_LINK_LIBRARIES(digikamcore ${GLIB2_LIBRARIES} ${liblqr_LIBS})
+ENDIF(GLIB2_FOUND)
 
 SET_TARGET_PROPERTIES(digikamcore PROPERTIES VERSION 1.0.0 SOVERSION 1)
 IF(WIN32)

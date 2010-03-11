@@ -46,13 +46,13 @@ namespace Digikam
 {
 
 NoiseReduction::NoiseReduction(QObject* parent)
-              : BatchTool("NoiseReduction", BaseTool, parent)
+              : BatchTool("NoiseReduction", EnhanceTool, parent)
 {
     setToolTitle(i18n("Noise Reduction"));
     setToolDescription(i18n("A tool to remove photograph noise using wavelets."));
     setToolIcon(KIcon(SmallIcon("noisereduction")));
 
-    QWidget *box   = new QWidget;
+    QWidget* box   = new QWidget;
     m_settingsView = new NRSettings(box);
     setSettingsWidget(box);
 

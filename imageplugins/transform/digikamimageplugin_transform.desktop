@@ -1,0 +1,18 @@
+[Desktop Entry]
+Name=ImagePlugin_Transform
+Name[pt]=ImagePlugin_Transform
+Name[sv]=Insticksprogram för omvandling
+Name[uk]=ImagePlugin_Transform
+Name[x-test]=xxImagePlugin_Transformxx
+
+Type=Service
+ServiceTypes=Digikam/ImagePlugin
+Encoding=UTF-8
+Comment=A tool to transform image geometry
+Comment[pt]=Uma ferramenta para transformar a geometria das imagens
+Comment[sv]=Ett verktyg för att omvandla bildernas geometri
+Comment[uk]=Інструмент для зміни геометричних параметрів зображення
+Comment[x-test]=xxA tool to transform image geometryxx
+
+X-KDE-Library=digikamimageplugin_transform
+author=Gilles Caulier, caulier dot gilles at gmail dot com

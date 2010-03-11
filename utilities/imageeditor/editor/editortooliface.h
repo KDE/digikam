@@ -64,11 +64,15 @@ public:
     void setToolStopProgress();
 
     void setToolInfoMessage(const QString& txt);
-    
+
     void setupICC();
 
     void updateExposureSettings();
     void updateICCSettings();
+
+Q_SIGNALS:
+
+    void signalPreviewModeChanged();
 
 public Q_SLOTS:
 

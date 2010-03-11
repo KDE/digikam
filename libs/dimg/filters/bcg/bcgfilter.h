@@ -31,8 +31,6 @@
 #include "dimgthreadedfilter.h"
 #include "globals.h"
 
-using namespace Digikam;
-
 namespace Digikam
 {
 
@@ -71,7 +69,6 @@ class DIGIKAM_EXPORT BCGFilter : public DImgThreadedFilter
 public:
 
     explicit BCGFilter(DImg* orgImage, QObject* parent=0, const BCGContainer& settings=BCGContainer());
-    BCGFilter(uchar* bits, uint width, uint height, bool sixteenBits, const BCGContainer& settings=BCGContainer());
     virtual ~BCGFilter();
 
 private:

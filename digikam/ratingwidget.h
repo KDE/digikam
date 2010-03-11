@@ -56,6 +56,7 @@ public:
 
     void startFading();
     void stopFading();
+    void setVisibleImmediately();
 
     void setVisible(bool visible);
 

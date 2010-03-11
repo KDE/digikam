@@ -102,7 +102,7 @@ public:
     DatabaseCoreBackend::QueryState insertThumbnail(const DatabaseThumbnailInfo &info, QVariant *lastInsertId = 0);
     DatabaseCoreBackend::QueryState replaceThumbnail(const DatabaseThumbnailInfo &info);
 
-    QHash<QString, int> getValidFilePaths();
+    QHash<QString, int> getFilePathsWithThumbnail();
 
 private:
 

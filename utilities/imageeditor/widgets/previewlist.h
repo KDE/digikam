@@ -107,7 +107,7 @@ class DIGIKAM_EXPORT PreviewList : public QTreeWidget
 
 public:
 
-    PreviewList(QObject* parent);
+    PreviewList(QObject* parent = 0);
     ~PreviewList();
 
     PreviewListItem* addItem(DImgThreadedFilter* filter, const QString& txt, int id);

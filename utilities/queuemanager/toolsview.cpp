@@ -6,7 +6,7 @@
  * Date        : 2009-04-20
  * Description : a view to available tools in tab view.
  *
- * Copyright (C) 2009 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -60,7 +60,7 @@ public:
     DHistoryView*  historyView;
 };
 
-ToolsView::ToolsView(QWidget *parent)
+ToolsView::ToolsView(QWidget* parent)
          : KTabWidget(parent), d(new ToolsViewPriv)
 {
     setTabBarHidden(false);
@@ -74,7 +74,13 @@ ToolsView::ToolsView(QWidget *parent)
 
     d->baseTools = new ToolsListView(this);
     d->baseTools->setWhatsThis(i18n("This is the list of digiKam batch tools available."));
-    new ToolListViewGroup(d->baseTools, BatchTool::BaseTool);
+    new ToolListViewGroup(d->baseTools, BatchTool::ColorTool);
+    new ToolListViewGroup(d->baseTools, BatchTool::EnhanceTool);
+    new ToolListViewGroup(d->baseTools, BatchTool::TransformTool);
+    new ToolListViewGroup(d->baseTools, BatchTool::DecorateTool);
+    new ToolListViewGroup(d->baseTools, BatchTool::FiltersTool);
+    new ToolListViewGroup(d->baseTools, BatchTool::ConvertTool);
+    new ToolListViewGroup(d->baseTools, BatchTool::MetadataTool);
     addTab(d->baseTools, SmallIcon("digikam"), i18n("Base Tools"));
 
 //    d->customTools = new ToolsListView(this);
@@ -119,7 +125,13 @@ void ToolsView::addTool(BatchTool* tool)
 
     switch(tool->toolGroup())
     {
-        case BatchTool::BaseTool:
+        case BatchTool::ColorTool:
+        case BatchTool::EnhanceTool:
+        case BatchTool::TransformTool:
+        case BatchTool::DecorateTool:
+        case BatchTool::FiltersTool:
+        case BatchTool::ConvertTool:
+        case BatchTool::MetadataTool:
             d->baseTools->addTool(tool);
             break;
         case BatchTool::KipiTool:
@@ -139,7 +151,13 @@ bool ToolsView::removeTool(BatchTool* tool)
     {
         switch(tool->toolGroup())
         {
-            case BatchTool::BaseTool:
+            case BatchTool::ColorTool:
+            case BatchTool::EnhanceTool:
+            case BatchTool::TransformTool:
+            case BatchTool::DecorateTool:
+            case BatchTool::FiltersTool:
+            case BatchTool::ConvertTool:
+            case BatchTool::MetadataTool:
                 ret = d->baseTools->removeTool(tool);
                 break;
             case BatchTool::KipiTool:

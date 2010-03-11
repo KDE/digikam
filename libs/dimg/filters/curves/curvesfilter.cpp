@@ -64,7 +64,7 @@ void CurvesFilter::filterImage()
 
         curves.setCurveValues(BlueChannel, m_settings.blueCurveVals);
         postProgress(50);
-        
+
         curves.setCurveValues(AlphaChannel, m_settings.alphaCurveVals);
         postProgress(60);
     }
@@ -81,18 +81,18 @@ void CurvesFilter::filterImage()
 
         curves.setCurvePoints(BlueChannel, m_settings.blueCurveVals);
         postProgress(50);
-        
+
         curves.setCurvePoints(AlphaChannel, m_settings.alphaCurveVals);
         postProgress(60);
     }
-        
+
     m_destImage = DImg(m_orgImage.width(), m_orgImage.height(), m_orgImage.sixteenBit(), m_orgImage.hasAlpha());
     postProgress(70);
-    
+
     // Process all channels curves
     curves.curvesLutSetup(AlphaChannel);
     postProgress(80);
-    
+
     curves.curvesLutProcess(m_orgImage.bits(), m_destImage.bits(), m_orgImage.width(), m_orgImage.height());
     postProgress(90);
 }

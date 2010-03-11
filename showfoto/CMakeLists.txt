@@ -10,7 +10,6 @@ INCLUDE_DIRECTORIES( ../showfoto/setup
                      ../libs/widgets/metadata
                      ../libs/widgets/iccprofiles
                      ../libs/jpegutils
-                     ../libs/greycstoration
                      ../libs/imageproperties
                      ../libs/dimg
                      ../libs/dimg/loaders
@@ -18,20 +17,20 @@ INCLUDE_DIRECTORIES( ../showfoto/setup
                      ../libs/dimg/filters/auto
                      ../libs/dimg/filters/bcg
                      ../libs/dimg/filters/bw
+                     ../libs/dimg/filters/decorate
                      ../libs/dimg/filters/fx
+                     ../libs/dimg/filters/greycstoration
                      ../libs/dimg/filters/hsl
                      ../libs/dimg/filters/icc
+                     ../libs/dimg/filters/lc
                      ../libs/dimg/filters/nr
                      ../libs/dimg/filters/sharp
                      ../libs/dimg/filters/levels
                      ../libs/dimg/filters/curves
                      ../libs/dimg/filters/wb
+                     ../libs/dimg/filters/transform
                      ../libs/dmetadata
                      ../libs/themeengine
-                     ../libs/curves
-                     ../libs/levels
-                     ../libs/lprof
-                     ../libs/whitebalance
                      ../libs/histogram
                      ../libs/threadimageio
                      ../libs/dialogs

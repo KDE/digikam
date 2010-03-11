@@ -1,5 +1,5 @@
 *********************************************************************************************************
-digiKam 1.2.0 - Release date: 2010-XX-XX
+digiKam 1.2.0 - Release date: 2010-03-28
 
 NEW FEATURES:
 
@@ -12,6 +12,8 @@ ImageEditor       : Auto Color Correction tool is multithreaded and use a zoomab
 ImageEditor       : Channel Mixer tool is multithreaded and use a zoomable preview widget.
 ImageEditor       : Black and White tool is multithreaded and use a zoomable preview widget.
 ImageEditor       : White Balance tool is multithreaded and use a zoomable preview widget.
+ImageEditor       : Adjust Curves tool is multithreaded and use a zoomable preview widget.
+ImageEditor       : Adjust Levels tool is multithreaded and use a zoomable preview widget.
 
 BatchQueueManager : new tool to fix Brightness/Contrast/gamma.
 BatchQueueManager : new tool to adjust Color Balance.
@@ -20,6 +22,10 @@ BatchQueueManager : new tool to convert images color space.
 BatchQueueManager : new tool to mix color channel.
 BatchQueueManager : new tool to convert to Black and White.
 BatchQueueManager : new tool to adjust White Balance.
+BatchQueueManager : new tool to adjust Curves.
+BatchQueueManager : new tool to blur images.
+BatchQueueManager : new tool to add Film Grain to images.
+BatchQueueManager : new tool to apply Local Contrast (LDR tone mapping).
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
@@ -88,6 +94,27 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 063 ==> 225722 : Selection in editor should not darken image.
 064 ==> 228802 : Copy paste doesn't work.
 065 ==> 227064 : digiKam 1.1.0: crash on image download.
-066 ==> 
+066 ==> 228807 : Dancing thumbs in album view.
+067 ==> 214303 : Position of preview type buttons is inconsistent across different tools.
+068 ==> 163286 : Accurate histogram preview required.
+069 ==> 229287 : Crash in digiKam when renaming with directory.
+070 ==> 148540 : Improvements of adding noise tool.
+071 ==> 229340 : digiKam Crashes When Saving PNG Files.
+072 ==> 229664 : Curves Widget not working anymore in BWSepia Plugin.
+073 ==> 229574 : Moving tags doesn't update the "tag counter" next to the tag name.
+074 ==> 229690 : No picture on thumb bar icon.
+075 ==> 229793 : Drop image file in digiKam.
+076 ==> 228483 : digiKam 1.1.0 with system libjpeg-8 breaks image rotation.
+077 ==> 187431 : Gui too big for eeepc.
+078 ==> 230008 : digiKam Nikon fetching pictures.
+079 ==> 229470 : digiKam fails to start with QCursor: Cannot create bitmap cursor; invalid bitmap(s).
+080 ==> 221992 : "local contrast" settings make no difference.
+081 ==> 230003 : Zoombar slider adjustments below 100% are hard to archieve. [patch]
+082 ==> 228810 : Need to roll over again on a thumb to correct the rating.
+083 ==> 210259 : Scan crashed on multi-layer TIFFs.
+084 ==> 229344 : digiKam starting up - loading kipi-plugins.
+085 ==> 
+
+
 
 

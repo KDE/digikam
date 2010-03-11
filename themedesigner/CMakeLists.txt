@@ -7,24 +7,23 @@ INCLUDE_DIRECTORIES(
                      ../libs/dimg/filters/auto
                      ../libs/dimg/filters/bcg
                      ../libs/dimg/filters/bw
+                     ../libs/dimg/filters/decorate
                      ../libs/dimg/filters/fx
                      ../libs/dimg/filters/hsl
+                     ../libs/dimg/filters/greycstoration
                      ../libs/dimg/filters/icc
+                     ../libs/dimg/filters/lc
                      ../libs/dimg/filters/nr
                      ../libs/dimg/filters/sharp
                      ../libs/dimg/filters/cb
                      ../libs/dimg/filters/levels
                      ../libs/dimg/filters/curves
                      ../libs/dimg/filters/wb
+                     ../libs/dimg/filters/transform
                      ../libs/dmetadata
                      ../libs/histogram
-                     ../libs/curves
-                     ../libs/levels
-                     ../libs/lprof/
                      ../libs/jpegutils
-                     ../libs/greycstoration
                      ../libs/threadimageio
-                     ../libs/whitebalance
                      ../libs/models
                      ../libs/template
 
@@ -46,6 +45,7 @@ INCLUDE_DIRECTORIES(
                      ../utilities/imageeditor/editor
                      ../utilities/imageeditor/canvas
                      ../utilities/imageeditor/printiface
+                     ../utilities/imageeditor/widgets
 
                      # specific libs and utilities
                      ../libs/themeengine
@@ -68,6 +68,7 @@ INCLUDE_DIRECTORIES(
                      ../utilities/queuemanager/basetools/color
                      ../utilities/queuemanager/basetools/convert
                      ../utilities/queuemanager/basetools/enhance
+                     ../utilities/queuemanager/basetools/filters
                      ../utilities/queuemanager/basetools/transform
                      ../utilities/queuemanager/basetools/metadata
                      ../utilities/queuemanager/basetools/decorate

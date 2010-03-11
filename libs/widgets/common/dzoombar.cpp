@@ -243,20 +243,21 @@ int DZoomBar::sizeFromZoom(double zoom, double zmin, double zmax)
 {
     double h = (double)ThumbnailSize::Huge;
     double s = (double)ThumbnailSize::Small;
-    double b = (zmin-(zmax*s/h))/(1-s/h);
-    double a = (zmax-b)/h;
-    int size = (int)((zoom - b) /a);
-    return size;
+    double zoomN = log(zoom)/log(2);
+    double zminN = log(zmin)/log(2);
+    double zmaxN = log(zmax)/log(2);
+    double zval = (zoomN-zminN)/(zmaxN-zminN);
+    return (int)(zval*(h - s) + s);
 }
 
 double DZoomBar::zoomFromSize(int size, double zmin, double zmax)
 {
     double h = (double)ThumbnailSize::Huge;
     double s = (double)ThumbnailSize::Small;
-    double b = (zmin-(zmax*s/h))/(1-s/h);
-    double a = (zmax-b)/h;
-    double z = a*size+b;
-    return z;
+    double zminN = log(zmin)/log(2);
+    double zmaxN = log(zmax)/log(2);
+    double zval = (size - s)/(h - s);
+    return pow(2, zval*(zmaxN-zminN) + zminN);
 }
 
 void DZoomBar::triggerZoomTrackerToolTip()

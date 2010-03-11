@@ -6,7 +6,7 @@
  * Date        : 2009-02-10
  * Description : rotate image batch tool.
  *
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,13 +47,13 @@ namespace Digikam
 {
 
 Rotate::Rotate(QObject* parent)
-      : BatchTool("Rotate", BaseTool, parent)
+      : BatchTool("Rotate", TransformTool, parent)
 {
     setToolTitle(i18n("Rotate"));
     setToolDescription(i18n("A tool to rotate images by 90/180/270 degrees."));
     setToolIcon(KIcon(SmallIcon("object-rotate-right")));
 
-    KVBox *vbox = new KVBox;
+    KVBox* vbox = new KVBox;
     m_useExif   = new QCheckBox(i18n("Use Exif Orientation"), vbox);
 
     m_label     = new QLabel(vbox);
@@ -63,7 +63,7 @@ Rotate::Rotate(QObject* parent)
     m_comboBox->insertItem(DImg::ROT270, i18n("270 degrees"));
     m_label->setText(i18n("Angle:"));
 
-    QLabel *space = new QLabel(vbox);
+    QLabel* space = new QLabel(vbox);
     vbox->setStretchFactor(space, 10);
 
     setSettingsWidget(vbox);

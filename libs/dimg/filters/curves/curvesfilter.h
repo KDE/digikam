@@ -52,12 +52,28 @@ public:
     CurvesContainer()
     {
         curvesType = ImageCurves::CURVE_FREE;
+
+        // Construct linear curves.
+        lumCurveVals.resize(MAX_SEGMENT_16BIT+1);
+        redCurveVals.resize(MAX_SEGMENT_16BIT+1);
+        greenCurveVals.resize(MAX_SEGMENT_16BIT+1);
+        blueCurveVals.resize(MAX_SEGMENT_16BIT+1);
+        alphaCurveVals.resize(MAX_SEGMENT_16BIT+1);
+
+        for (int i = 0 ; i <= MAX_SEGMENT_16BIT ; ++i)
+        {
+            lumCurveVals.setPoint(i, i, i);
+            redCurveVals.setPoint(i, i, i);
+            greenCurveVals.setPoint(i, i, i);
+            blueCurveVals.setPoint(i, i, i);
+            alphaCurveVals.setPoint(i, i, i);
+        }
     };
-    
+
     ~CurvesContainer(){};
 
 public:
-  
+ 
     ImageCurves::CurveType curvesType;      // Smooth : QPolygon have size of 18 points.
                                             // Free   : QPolygon have size of 255 or 65535 values.
 

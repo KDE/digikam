@@ -28,6 +28,7 @@
 #include <QHelpEvent>
 #include <QScrollBar>
 #include <QStyle>
+#include <QTimer>
 
 // KDE includes
 
@@ -101,6 +102,8 @@ public:
 
     qlonglong                scrollToItemId;
 
+    QTimer                  *delayedEnterTimer;
+
     QMouseEvent             *currentMouseEvent;
 };
 
@@ -113,6 +116,13 @@ ImageCategorizedView::ImageCategorizedView(QWidget *parent)
 
     LoadingCacheInterface::connectToSignalFileChanged(this,
             SLOT(slotFileChanged(const QString &)));
+
+    d->delayedEnterTimer = new QTimer(this);
+    d->delayedEnterTimer->setInterval(10);
+    d->delayedEnterTimer->setSingleShot(true);
+
+    connect(d->delayedEnterTimer, SIGNAL(timeout()),
+            this, SLOT(slotDelayedEnter()));
 }
 
 ImageCategorizedView::~ImageCategorizedView()
@@ -382,6 +392,20 @@ void ImageCategorizedView::removeOverlay(ImageDelegateOverlay *overlay)
 {
     d->delegate->removeOverlay(overlay);
     overlay->setView(0);
+}
+
+void ImageCategorizedView::updateGeometries()
+{
+    DCategorizedView::updateGeometries();
+    d->delayedEnterTimer->start();
+}
+
+void ImageCategorizedView::slotDelayedEnter()
+{
+    // re-emit entered() for index under mouse (after layout).
+    QModelIndex mouseIndex = indexAt(mapFromGlobal(QCursor::pos()));
+    if (mouseIndex.isValid())
+        emit KCategorizedView::entered(mouseIndex);
 }
 
 void ImageCategorizedView::addSelectionOverlay()

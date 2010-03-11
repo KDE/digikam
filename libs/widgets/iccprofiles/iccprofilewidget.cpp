@@ -219,6 +219,11 @@ void ICCProfileWidget::setLoadingFailed()
     d->cieTongue->loadingFailed();
 }
 
+void ICCProfileWidget::setUncalibratedColor()
+{
+    d->cieTongue->uncalibratedColor();
+}
+
 QString ICCProfileWidget::getMetadataTitle()
 {
     return i18n("ICC Color Profile Information");

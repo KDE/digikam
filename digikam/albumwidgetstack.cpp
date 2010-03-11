@@ -101,10 +101,6 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
     d->thumbBarDock->setWidget(d->thumbBar);
     d->thumbBarDock->setObjectName("mainwindow_thumbbar");
 
-    // To prevent flicker effect with content when user change icon view filter
-    // if scrollbar appears or disapears.
-    d->thumbBar->setScrollBarPolicy(Qt::ScrollBarAsNeeded);
-
     d->welcomePageView = new WelcomePageView(this);
     d->mediaPlayerView = new MediaPlayerView(this);
 

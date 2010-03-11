@@ -1,6 +1,5 @@
 INSTALL(FILES dimgthreadedfilter.h 
-              dimgimagefilters.h 
-              dimggaussianblur.h 
+              fx/blurfilter.h 
               cb/cbfilter.h 
               cb/cbsettings.h 
               curves/imagecurves.h
@@ -11,8 +10,8 @@ INSTALL(FILES dimgthreadedfilter.h
               levels/imagelevels.h
               nr/nrfilter.h 
               nr/nrsettings.h
-              sharp/dimgsharpen.h 
-              sharp/dimgunsharpmask.h
-              sharp/dimgrefocus.h 
+              sharp/sharpenfilter.h 
+              sharp/unsharpmaskfilter.h
+              sharp/refocusfilter.h 
          DESTINATION ${INCLUDE_INSTALL_DIR}/digikam COMPONENT Devel)
 

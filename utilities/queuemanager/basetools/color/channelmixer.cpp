@@ -45,7 +45,7 @@ namespace Digikam
 {
 
 ChannelMixer::ChannelMixer(QObject* parent)
-            : BatchTool("ChannelMixer", BaseTool, parent)
+            : BatchTool("ChannelMixer", ColorTool, parent)
 {
     setToolTitle(i18n("Channel Mixer"));
     setToolDescription(i18n("A tool to mix color channel."));
@@ -61,8 +61,7 @@ ChannelMixer::ChannelMixer(QObject* parent)
     m_channelCB->addItem(i18n("Blue"),  QVariant(BlueChannel));
 
     m_settingsView = new MixerSettings(vbox);
-
-    QLabel* space = new QLabel(vbox);
+    QLabel* space  = new QLabel(vbox);
     vbox->setStretchFactor(space, 10);
 
     setSettingsWidget(vbox);

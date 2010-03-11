@@ -125,7 +125,7 @@ void EditorTool::setToolView(QWidget* view)
     d->view->blockSignals(true);
 
     ImageGuideWidget* wgt = dynamic_cast<ImageGuideWidget*>(d->view);
-    if (wgt)    
+    if (wgt)
     {
         connect(d->view, SIGNAL(spotPositionChangedFromOriginal(const Digikam::DColor&, const QPoint&)),
                 this, SLOT(slotUpdateSpotInfo(const Digikam::DColor&, const QPoint&)));
@@ -239,6 +239,11 @@ void EditorTool::slotCloseTool()
     slotCancel();
 }
 
+void EditorTool::slotPreviewModeChanged()
+{
+    slotEffect();
+}
+
 void EditorTool::ICCSettingsChanged()
 {
     ImageGuideWidget* view = dynamic_cast<ImageGuideWidget*>(d->view);
@@ -272,7 +277,7 @@ void EditorTool::slotUpdateSpotInfo(const Digikam::DColor& col, const QPoint& po
     setToolInfoMessage(i18n("(%1,%2) RGBA:%3,%4,%5,%6",
                             point.x(), point.y(),
                             color.red(), color.green(),
-                            color.blue(), color.alpha()));                              
+                            color.blue(), color.alpha()));
 }
 
 // ----------------------------------------------------------------
@@ -326,6 +331,8 @@ DImgThreadedFilter* EditorToolThreaded::filter() const
 
 void EditorToolThreaded::setFilter(DImgThreadedFilter* filter)
 {
+    if (d->threadedFilter)
+        delete d->threadedFilter;
     d->threadedFilter = filter;
 
     connect(d->threadedFilter, SIGNAL(started()),

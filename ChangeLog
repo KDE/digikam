@@ -23087,11 +23087,11 @@
       chronological order or not.
       Factorize code.
       Bug fix : there is a race condition between camera gui and camera
-      controler when thumbnails are processed:
+      controller when thumbnails are processed:
       camera controller switch randomly between busy state or not when
       camera gui fill the list of item thumbs to get one by one.
       A new method fill all thumbs to get in a first time : camera
-      controler will be still busy during this task.
+      controller will be still busy during this task.
       BUGS: 193124
       BUGS: 188051
 
@@ -71079,7 +71079,7 @@
 2007-07-11 14:33  cgilles
 
 	* utilities/cameragui/cameracontroller.cpp: digiKam from trunk :
-	  Camera controler is now ported to KDE4/Qt4
+	  Camera controller is now ported to KDE4/Qt4
 
 	  Marcel: this part use QThread as others multithreaded parts of
 	  digiKam. The old CustomEvent implementation must be remplaced
@@ -90756,7 +90756,7 @@
 	  utilities/cameragui/cameraui.cpp,
 	  utilities/cameragui/downloadsettingscontainer.h: digikam form
 	  trunk : code simplification about download method parameters in
-	  camera controler implementation. We using a simple settings
+	  camera controller implementation. We using a simple settings
 	  container instead a large comple of parameters.
 
 2006-07-21 05:39  cgilles
@@ -94741,7 +94741,7 @@
 2006-05-07 22:41  cgilles
 
 	* utilities/cameragui/cameraui.cpp: digikam from trunk : camera gui
-	  : delete controler in destructor
+	  : delete controller in destructor
 
 2006-05-07 22:21  cgilles
 

@@ -44,7 +44,18 @@ class DIGIKAM_EXPORT LevelsContainer
 
 public:
 
-    LevelsContainer(){};
+    LevelsContainer()
+    {
+        for (int i=0 ; i<5 ; ++i)
+        {
+            lInput[i]  = 0;
+            hInput[i]  = 65535;
+            lOutput[i] = 0;
+            hOutput[i] = 65535;
+            gamma[i]   = 1.0;
+        }
+    };
+
     ~LevelsContainer(){};
 
 public:
@@ -53,7 +64,7 @@ public:
     int    hInput[5];
     int    lOutput[5];
     int    hOutput[5];
-    
+
     double gamma[5];
 };
 

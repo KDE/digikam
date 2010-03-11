@@ -6,7 +6,7 @@
  * Date        : 2009-02-21
  * Description : a view to show Queue Settings.
  *
- * Copyright (C) 2009 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -84,7 +84,7 @@ public:
     AdvancedRenameWidget* advancedRenameWidget;
 };
 
-QueueSettingsView::QueueSettingsView(QWidget *parent)
+QueueSettingsView::QueueSettingsView(QWidget* parent)
                  : KTabWidget(parent), d(new QueueSettingsViewPriv)
 {
     setTabBarHidden(false);
@@ -101,15 +101,15 @@ QueueSettingsView::QueueSettingsView(QWidget *parent)
 
     // --------------------------------------------------------
 
-    QScrollArea *sv = new QScrollArea(this);
+    QScrollArea* sv = new QScrollArea(this);
     QWidget *panel  = new QWidget(sv->viewport());
     sv->setWidget(panel);
     sv->setWidgetResizable(true);
 
-    QVBoxLayout *layout    = new QVBoxLayout(panel);
+    QVBoxLayout* layout    = new QVBoxLayout(panel);
     d->conflictLabel       = new QLabel(i18n("If Target File Exists:"), panel);
     QWidget *conflictBox   = new QWidget(panel);
-    QVBoxLayout *vlay      = new QVBoxLayout(conflictBox);
+    QVBoxLayout* vlay      = new QVBoxLayout(conflictBox);
     d->conflictButtonGroup = new QButtonGroup(conflictBox);
     d->overwriteButton     = new QRadioButton(i18n("Overwrite automatically"), conflictBox);
     d->promptButton        = new QRadioButton(i18n("Open rename-file dialog"), conflictBox);
@@ -133,7 +133,7 @@ QueueSettingsView::QueueSettingsView(QWidget *parent)
 
     // --------------------------------------------------------
 
-    QScrollArea *sv2 = new QScrollArea(this);
+    QScrollArea* sv2 = new QScrollArea(this);
     KVBox *vbox2     = new KVBox(sv2->viewport());
     sv2->setWidget(vbox2);
     sv2->setWidgetResizable(true);
@@ -145,7 +145,7 @@ QueueSettingsView::QueueSettingsView(QWidget *parent)
 
     d->renameManual         = new QRadioButton(i18n("Customize filenames:"), vbox2);
     d->advancedRenameWidget = new AdvancedRenameWidget(vbox2);
-    QWidget *space          = new QWidget(vbox2);
+    QWidget* space          = new QWidget(vbox2);
 
     d->renamingButtonGroup->setExclusive(true);
     d->renamingButtonGroup->addButton(d->renameOriginal, QueueSettings::USEORIGINAL);

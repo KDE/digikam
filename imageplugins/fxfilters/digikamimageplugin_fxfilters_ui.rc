@@ -1,0 +1,26 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<gui version="16" name="digikamimageplugin_fxfilters" >
+
+ <MenuBar>
+
+  <Menu name="Color" ><text>&amp;Color</text>
+   <Action name="imageplugin_colorfx" />
+  </Menu>
+
+  <Menu name="Filters" ><text>F&amp;ilters</text>
+   <Action name="imageplugin_charcoal" />
+   <Action name="imageplugin_emboss" />
+   <Action name="imageplugin_oilpaint" />
+   <Action name="imageplugin_blurfx" />
+   <Action name="imageplugin_distortionfx" />
+   <Action name="imageplugin_raindrop" />
+   <Action name="imageplugin_filmgrain" />   
+  </Menu>
+
+ </MenuBar>
+
+ <ToolBar name="mainToolBar" >
+  <text>Main Toolbar</text>
+ </ToolBar>
+
+</gui>

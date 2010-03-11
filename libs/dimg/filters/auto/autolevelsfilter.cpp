@@ -41,10 +41,10 @@
 namespace Digikam
 {
 
-AutoLevelsFilter::AutoLevelsFilter(DImg* orgImage, DImg* refImage, QObject* parent)
-                : DImgThreadedFilter(orgImage, parent, "AutoLevelsFilter")
+AutoLevelsFilter::AutoLevelsFilter(DImg* orgImage, const DImg* refImage, QObject* parent)
+                : DImgThreadedFilter(orgImage, parent, "AutoLevelsFilter"),
+                  m_refImage(*refImage)
 {
-    m_refImage = refImage->copy();
     initFilter();
 }
 
@@ -70,12 +70,12 @@ void AutoLevelsFilter::autoLevelsCorrectionImage()
         kDebug() << "Ref. image and Org. has different bits depth"; 
         return;
     }
-    
+
     uchar* data     = m_orgImage.bits(); 
     int w           = m_orgImage.width();
     int h           = m_orgImage.height();
     bool sixteenBit = m_orgImage.sixteenBit();
-    
+
     uchar* desData            = 0;
     ImageHistogram* histogram = 0;
     ImageLevels* levels       = 0;
@@ -122,7 +122,7 @@ void AutoLevelsFilter::autoLevelsCorrectionImage()
         levels->levelsLutSetup(AlphaChannel);
         postProgress(60);
     }
-    
+
     // Apply the lut to the image.
     if (!m_cancel)
     {
