@@ -34,7 +34,7 @@ INCLUDE_DIRECTORIES(../utilities/imageeditor/editor
                     ${KDCRAW_INCLUDE_DIR}
                    )
 
-ADD_SUBDIRECTORY( coreplugin )
+ADD_SUBDIRECTORY( color )
 ADD_SUBDIRECTORY( decorate )
 ADD_SUBDIRECTORY( enhance )
 ADD_SUBDIRECTORY( fxfilters )

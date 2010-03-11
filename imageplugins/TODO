@@ -2,7 +2,7 @@ Editor tools pending task
 
                         Multithreaded      Zommable Preview        Port to BQM
 
-coreplugin
+color
   /adjustcurves             DONE                 DONE                  DONE
   /adjustlevels             DONE                 DONE                  TODO
   /autocorrectiontool       DONE                 DONE                  DONE
@@ -13,7 +13,6 @@ coreplugin
   /hsltool                  DONE                 DONE                  DONE
   /profileconversiontool    DONE                 DONE                  DONE
   /whitebalance             DONE                 DONE                  DONE
-  /filmgrain                DONE                 DONE                  DONE
 
 decorate
   /border                   DONE                  NO                   TODO
@@ -28,6 +27,7 @@ fxfilters
   /oilpaint                 DONE                 DONE                  TODO
   /blurfx                   DONE                 DONE                  TODO
   /raindrop                 DONE                  NO                   TODO
+  /filmgrain                DONE                 DONE                  DONE
 
 lenscorrection
   /autocorrection           DONE                 TODO                  TODO
