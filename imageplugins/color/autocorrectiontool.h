@@ -35,7 +35,7 @@
 
 using namespace Digikam;
 
-namespace DigikamImagesPluginCore
+namespace DigikamColorImagePlugin
 {
 
 class AutoCorrectionToolPriv;
@@ -82,6 +82,6 @@ private:
     AutoCorrectionToolPriv* const d;
 };
 
-}  // namespace DigikamImagesPluginCore
+}  // namespace DigikamColorImagePlugin
 
 #endif /* AUTOCORRECTIONTOOL_H */

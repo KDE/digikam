@@ -17,7 +17,7 @@ KDE4_ADD_PLUGIN(digikamimageplugin_color ${digikamimageplugin_color_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(
     digikamimageplugin_color
-    digikamcolor
+    digikamcore
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KIO_LIBS}
