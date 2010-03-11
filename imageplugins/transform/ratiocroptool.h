@@ -32,18 +32,20 @@
 
 class QRect;
 
-namespace DigikamImagesPluginCore
+using namespace Digikam;
+
+namespace DigikamTransformImagePlugin
 {
 
 class RatioCropToolPriv;
 
-class RatioCropTool : public Digikam::EditorTool
+class RatioCropTool : public EditorTool
 {
     Q_OBJECT
 
 public:
 
-    RatioCropTool(QObject *parent);
+    RatioCropTool(QObject* parent);
     ~RatioCropTool();
 
 private:
@@ -87,6 +89,6 @@ private:
     RatioCropToolPriv* const d;
 };
 
-}  // namespace DigikamImagesPluginCore
+}  // namespace DigikamTransformImagePlugin
 
 #endif /* RATIOCROPTOOL_H */

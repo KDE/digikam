@@ -41,6 +41,7 @@
 #include "freerotationtool.h"
 #include "sheartool.h"
 #include "resizetool.h"
+#include "ratiocroptool.h"
 
 #ifdef HAVE_GLIB2
 #include "contentawareresizetool.h"
@@ -55,12 +56,12 @@ ImagePlugin_Transform::ImagePlugin_Transform(QObject* parent, const QVariantList
                      : ImagePlugin(parent, "ImagePlugin_Transform")
 {
     m_perspectiveAction = new KAction(KIcon("perspective"), i18n("Perspective Adjustment..."), this);
-    actionCollection()->addAction("imageplugin_perspective", m_perspectiveAction );
+    actionCollection()->addAction("imageplugin_perspective", m_perspectiveAction);
     connect(m_perspectiveAction, SIGNAL(triggered(bool)),
             this, SLOT(slotPerspective()));
 
     m_sheartoolAction = new KAction(KIcon("shear"), i18n("Shear..."), this);
-    actionCollection()->addAction("imageplugin_sheartool", m_sheartoolAction );
+    actionCollection()->addAction("imageplugin_sheartool", m_sheartoolAction);
     connect(m_sheartoolAction, SIGNAL(triggered(bool)),
             this, SLOT(slotShearTool()));
 
@@ -68,6 +69,11 @@ ImagePlugin_Transform::ImagePlugin_Transform(QObject* parent, const QVariantList
     actionCollection()->addAction("imageplugin_resize", m_resizeAction);
     connect(m_resizeAction, SIGNAL(triggered()),
             this, SLOT(slotResize()));
+            
+    m_aspectRatioCropAction = new KAction(KIcon("ratiocrop"), i18n("Aspect Ratio Crop..."), this);
+    actionCollection()->addAction("imageplugin_ratiocrop", m_aspectRatioCropAction);
+    connect(m_aspectRatioCropAction, SIGNAL(triggered(bool) ),
+            this, SLOT(slotRatioCrop()));            
             
 #ifdef HAVE_GLIB2
 
@@ -124,6 +130,8 @@ void ImagePlugin_Transform::setEnabledActions(bool b)
     m_perspectiveAction->setEnabled(b);
     m_freerotationAction->setEnabled(b);
     m_sheartoolAction->setEnabled(b);
+    m_aspectRatioCropAction->setEnabled(b);
+    
 #ifdef HAVE_GLIB2
     m_contentAwareResizingAction->setEnabled(b);
 #endif /* HAVE_GLIB2 */            
@@ -144,6 +152,12 @@ void ImagePlugin_Transform::slotShearTool()
 void ImagePlugin_Transform::slotResize()
 {
     ResizeTool* tool = new ResizeTool(this);
+    loadTool(tool);
+}
+
+void ImagePlugin_Transform::slotRatioCrop()
+{
+    RatioCropTool* tool = new RatioCropTool(this);
     loadTool(tool);
 }
 

@@ -51,7 +51,6 @@
 #include "profileconversiontool.h"
 #include "blurtool.h"
 #include "noisereductiontool.h"
-#include "ratiocroptool.h"
 #include "sharpentool.h"
 #include "redeyetool.h"
 #include "cbtool.h"
@@ -80,7 +79,6 @@ public:
         autoCorrectionAction(0),
         invertAction(0),
         BWAction(0),
-        aspectRatioCropAction(0),
         sharpenAction(0),
         blurAction(0),
         convertTo8Bits(0),
@@ -102,7 +100,6 @@ public:
     KAction*               autoCorrectionAction;
     KAction*               invertAction;
     KAction*               BWAction;
-    KAction*               aspectRatioCropAction;
     KAction*               sharpenAction;
     KAction*               blurAction;
     KAction*               convertTo8Bits;
@@ -115,7 +112,6 @@ public:
     KAction*               filmgrainAction;
     KAction*               localContrastAction;
     
-
     IccProfilesMenuAction* profileMenuAction;
 };
 
@@ -240,14 +236,6 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QVariantList &)
             this, SLOT(slotLocalContrast()));
             
     //-------------------------------
-    // Transform menu actions.
-
-    d->aspectRatioCropAction = new KAction(KIcon("ratiocrop"), i18n("Aspect Ratio Crop..."), this);
-    actionCollection()->addAction("implugcore_ratiocrop", d->aspectRatioCropAction );
-    connect(d->aspectRatioCropAction, SIGNAL(triggered(bool) ),
-            this, SLOT(slotRatioCrop()));
-
-    //-------------------------------
     // Filter menu actions.
 
     d->filmgrainAction  = new KAction(KIcon("filmgrain"), i18n("Add Film Grain..."), this);
@@ -285,7 +273,6 @@ void ImagePlugin_Core::setEnabledActions(bool b)
     d->BWAction->setEnabled(b);
     d->HSLAction->setEnabled(b);
     d->sharpenAction->setEnabled(b);
-    d->aspectRatioCropAction->setEnabled(b);
     d->profileMenuAction->setEnabled(b);
     d->noiseReductionAction->setEnabled(b);
     d->whitebalanceAction->setEnabled(b);
@@ -479,12 +466,6 @@ void ImagePlugin_Core::slotHSL()
 void ImagePlugin_Core::slotSharpen()
 {
     SharpenTool* tool = new SharpenTool(this);
-    loadTool(tool);
-}
-
-void ImagePlugin_Core::slotRatioCrop()
-{
-    RatioCropTool* tool = new RatioCropTool(this);
     loadTool(tool);
 }
 

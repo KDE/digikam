@@ -1,6 +1,4 @@
 
-INCLUDE_DIRECTORIES(../../imageplugins/coreplugin/ratiocrop)
-
 SET(digikamimageplugin_core_PART_SRCS
     ../../imageplugins/coreplugin/autocorrectiontool.cpp
     ../../imageplugins/coreplugin/bcgtool.cpp
@@ -19,8 +17,6 @@ SET(digikamimageplugin_core_PART_SRCS
     ../../imageplugins/coreplugin/adjustcurvestool.cpp
     ../../imageplugins/coreplugin/adjustlevelstool.cpp
     ../../imageplugins/coreplugin/localcontrasttool.cpp
-    ../../imageplugins/coreplugin/ratiocrop/imageselectionwidget.cpp
-    ../../imageplugins/coreplugin/ratiocrop/ratiocroptool.cpp
    )
 
 

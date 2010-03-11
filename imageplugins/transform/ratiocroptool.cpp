@@ -65,9 +65,8 @@
 #include "rexpanderbox.h"
 
 using namespace KDcrawIface;
-using namespace Digikam;
 
-namespace DigikamImagesPluginCore
+namespace DigikamTransformImagePlugin
 {
 
 class RatioCropToolPriv
@@ -995,4 +994,4 @@ void RatioCropTool::blockWidgetSignals(bool b)
     d->yInput->blockSignals(b);
 }
 
-}  // namespace DigikamImagesPluginCore
+}  // namespace DigikamTransformImagePlugin

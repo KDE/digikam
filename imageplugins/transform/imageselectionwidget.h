@@ -37,7 +37,7 @@ namespace Digikam
 class ImageIface;
 }
 
-namespace DigikamImagesPluginCore
+namespace DigikamTransformImagePlugin
 {
 
 class ImageSelectionWidgetPriv;
@@ -190,6 +190,6 @@ private:
     ImageSelectionWidgetPriv* const d;
 };
 
-}  // namespace DigikamImagesPluginCore
+}  // namespace DigikamTransformImagePlugin
 
 #endif /* IMAGESELECTIONWIDGET_H */

@@ -7,18 +7,18 @@ coreplugin
   /adjustlevels             DONE                 DONE                  TODO
   /autocorrectiontool       DONE                 DONE                  DONE
   /bcgtool                  DONE                 DONE                  DONE
-  /blurtool                 DONE                 DONE                  DONE
   /bwsepiatool              DONE                 DONE                  DONE
   /cbtool                   DONE                 DONE                  DONE
   /channelmixer             DONE                 DONE                  DONE
-  /filmgrain                DONE                 DONE                  DONE
   /hsltool                  DONE                 DONE                  DONE
   /localcontrast            DONE                 DONE                  DONE
-  /noisereductiontool       DONE                 DONE                  DONE
   /profileconversiontool    DONE                 DONE                  DONE
+  /whitebalance             DONE                 DONE                  DONE
+  /filmgrain                DONE                 DONE                  DONE
+  /noisereductiontool       DONE                 DONE                  DONE
   /redeyetool               DONE                 TODO                   NO
   /sharpentool              DONE                 DONE                  DONE
-  /whitebalance             DONE                 DONE                  DONE
+  /blurtool                 DONE                 DONE                  DONE
 
 decorate
   /border                   DONE                  NO                   TODO
@@ -46,6 +46,7 @@ restoration                 DONE                 DONE                  DONE
 superimpose                  NO                   NO                    NO
 
 transform
+  /ratiocrop                DONE                  NO                    NO
   /resizetool               DONE                 TODO                  DONE
   /freerotation             DONE                  NO                   TODO
   /perspective               NO                   NO                    NO

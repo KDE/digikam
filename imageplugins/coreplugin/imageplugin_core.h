@@ -81,8 +81,6 @@ private Q_SLOTS:
     void slotLevelsAdjust();
     void slotLocalContrast();
 
-    void slotRatioCrop();
-
     void slotUpdateColorSpaceMenu();
     void slotSetupICC();
 

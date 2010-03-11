@@ -35,7 +35,6 @@
 // 1/PHI
 #define INVPHI   0.61803398874989479F
 
-
 #include "imageselectionwidget.moc"
 
 // C++ includes
@@ -63,7 +62,6 @@
 
 // KDE includes
 
-
 #include <kstandarddirs.h>
 #include <kcursor.h>
 #include <kglobal.h>
@@ -74,7 +72,7 @@
 #include "imageiface.h"
 #include "dimg.h"
 
-namespace DigikamImagesPluginCore
+namespace DigikamTransformImagePlugin
 {
 
 class ImageSelectionWidgetPriv
@@ -1392,4 +1390,4 @@ void ImageSelectionWidget::setIsDrawingSelection(bool draw)
     d->isDrawingSelection = draw;
 }
 
-}  // namespace DigikamImagesPluginCore
+}  // namespace DigikamTransformImagePlugin
