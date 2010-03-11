@@ -4,10 +4,9 @@
  * http://www.digikam.org
  *
  * Date        : 2005-03-26
- * Description : a digiKam image editor plugin to restore
- *               a photograph
+ * Description : a digiKam image editor plugin to enhance photograph
  *
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "imageplugin_restoration.moc"
+#include "imageplugin_enhance.moc"
 
 // KDE includes
 
@@ -39,36 +38,36 @@
 
 #include "restorationtool.h"
 
-using namespace DigikamRestorationImagesPlugin;
+using namespace DigikamEnhanceImagePlugin;
 
-K_PLUGIN_FACTORY( RestorationFactory, registerPlugin<ImagePlugin_Restoration>(); )
-K_EXPORT_PLUGIN ( RestorationFactory("digikamimageplugin_restoration") )
+K_PLUGIN_FACTORY( EnhanceFactory, registerPlugin<ImagePlugin_Enhance>(); )
+K_EXPORT_PLUGIN ( EnhanceFactory("digikamimageplugin_enhance") )
 
-ImagePlugin_Restoration::ImagePlugin_Restoration(QObject *parent, const QVariantList &)
-                       : Digikam::ImagePlugin(parent, "ImagePlugin_Restoration")
+ImagePlugin_Enhance::ImagePlugin_Enhance(QObject* parent, const QVariantList&)
+                       : ImagePlugin(parent, "ImagePlugin_Enhance")
 {
-    m_restorationAction  = new KAction(KIcon("restoration"), i18n("Restoration..."), this);
+    m_restorationAction  = new KAction(KIcon("restoration"), i18n("Enhance..."), this);
     actionCollection()->addAction("imageplugin_restoration", m_restorationAction );
 
     connect(m_restorationAction, SIGNAL(triggered(bool)),
             this, SLOT(slotRestoration()));
 
-    setXMLFile( "digikamimageplugin_restoration_ui.rc" );
+    setXMLFile( "digikamimageplugin_enhance_ui.rc" );
 
-    kDebug() << "ImagePlugin_Restoration plugin loaded";
+    kDebug() << "ImagePlugin_Enhance plugin loaded";
 }
 
-ImagePlugin_Restoration::~ImagePlugin_Restoration()
+ImagePlugin_Enhance::~ImagePlugin_Enhance()
 {
 }
 
-void ImagePlugin_Restoration::setEnabledActions(bool enable)
+void ImagePlugin_Enhance::setEnabledActions(bool e)
 {
-    m_restorationAction->setEnabled(enable);
+    m_restorationAction->setEnabled(e);
 }
 
-void ImagePlugin_Restoration::slotRestoration()
+void ImagePlugin_Enhance::slotRestoration()
 {
-    RestorationTool *tool = new RestorationTool(this);
+    RestorationTool* tool = new RestorationTool(this);
     loadTool(tool);
 }

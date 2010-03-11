@@ -33,7 +33,7 @@ class QString;
 
 using namespace Digikam;
 
-namespace DigikamRestorationImagesPlugin
+namespace DigikamEnhanceImagePlugin
 {
 
 class RestorationToolPriv;
@@ -80,6 +80,6 @@ private:
     RestorationToolPriv* const d;
 };
 
-}  // namespace DigikamRestorationImagesPlugin
+}  // namespace DigikamEnhanceImagePlugin
 
 #endif /* RESTORATIONTOOL_H */

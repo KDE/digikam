@@ -4,10 +4,9 @@
  * http://www.digikam.org
  *
  * Date        : 2005-03-26
- * Description : a digiKam image editor plugin to restore
- *               a photograph
+ * Description : a digiKam image editor plugin to enhance photograph
  *
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEPLUGIN_RESTORATION_H
-#define IMAGEPLUGIN_RESTORATION_H
+#ifndef IMAGEPLUGIN_ENHANCE_H
+#define IMAGEPLUGIN_ENHANCE_H
 
 // Qt includes
 
@@ -36,16 +35,18 @@
 
 class KAction;
 
-class ImagePlugin_Restoration : public Digikam::ImagePlugin
+using namespace Digikam;
+
+class ImagePlugin_Enhance : public ImagePlugin
 {
     Q_OBJECT
 
 public:
 
-    ImagePlugin_Restoration(QObject *parent, const QVariantList& args);
-    ~ImagePlugin_Restoration();
+    ImagePlugin_Enhance(QObject* parent, const QVariantList& args);
+    ~ImagePlugin_Enhance();
 
-    void setEnabledActions(bool enable);
+    void setEnabledActions(bool e);
 
 private Q_SLOTS:
 
@@ -53,7 +54,7 @@ private Q_SLOTS:
 
 private:
 
-    KAction *m_restorationAction;
+    KAction* m_restorationAction;
 };
 
-#endif /* IMAGEPLUGIN_RESTORATION_H */
+#endif /* IMAGEPLUGIN_ENHANCE_H */

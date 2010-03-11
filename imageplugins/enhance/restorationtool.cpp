@@ -57,7 +57,7 @@
 #include "imageregionwidget.h"
 #include "version.h"
 
-namespace DigikamRestorationImagesPlugin
+namespace DigikamEnhanceImagePlugin
 {
 
 class RestorationToolPriv
@@ -405,4 +405,4 @@ void RestorationTool::slotSaveAsSettings()
     file.close();
 }
 
-}  // namespace DigikamRestorationImagesPlugin
+}  // namespace DigikamEnhanceImagePlugin

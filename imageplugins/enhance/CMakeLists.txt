@@ -1,12 +1,12 @@
 
-SET(digikamimageplugin_restoration_PART_SRCS imageplugin_restoration.cpp
-                                             restorationtool.cpp 
+SET(digikamimageplugin_enhance_PART_SRCS imageplugin_enhance.cpp
+                                         restorationtool.cpp 
    )
 
-KDE4_ADD_PLUGIN(digikamimageplugin_restoration ${digikamimageplugin_restoration_PART_SRCS})
+KDE4_ADD_PLUGIN(digikamimageplugin_enhance ${digikamimageplugin_enhance_PART_SRCS})
 
 TARGET_LINK_LIBRARIES(
-    digikamimageplugin_restoration
+    digikamimageplugin_enhance
     digikamcore
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
@@ -15,6 +15,6 @@ TARGET_LINK_LIBRARIES(
     ${QT_QTGUI_LIBRARY}
     )
 
-INSTALL(TARGETS digikamimageplugin_restoration DESTINATION ${PLUGIN_INSTALL_DIR} )
-INSTALL(FILES digikamimageplugin_restoration_ui.rc DESTINATION ${DATA_INSTALL_DIR}/digikam)
-INSTALL(FILES digikamimageplugin_restoration.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+INSTALL(TARGETS digikamimageplugin_enhance DESTINATION ${PLUGIN_INSTALL_DIR} )
+INSTALL(FILES digikamimageplugin_enhance_ui.rc DESTINATION ${DATA_INSTALL_DIR}/digikam)
+INSTALL(FILES digikamimageplugin_enhance.desktop DESTINATION ${SERVICES_INSTALL_DIR})

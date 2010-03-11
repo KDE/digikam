@@ -79,6 +79,7 @@ static const char* ObsoleteImagePluginsList[] =
      "digikamimageplugin_inserttext",               // Merged to "Decorate" plugin since 1.2.0.
      "digikamimageplugin_border",                   // Merged to "Decorate" plugin since 1.2.0.
      "digikamimageplugin_texture",                  // Merged to "Decorate" plugin since 1.2.0.
+     "digikamimageplugin_restoration",              // Merged to "Enhance" plugin since 1.2.0.
      "-1"
 };
 
