@@ -13,7 +13,7 @@ coreplugin
   /channelmixer             DONE                 DONE                  DONE
   /filmgrain                DONE                 DONE                  DONE
   /hsltool                  DONE                 DONE                  DONE
-  /localcontrast            DONE                 DONE                  TODO
+  /localcontrast            DONE                 DONE                  DONE
   /noisereductiontool       DONE                 DONE                  DONE
   /profileconversiontool    DONE                 DONE                  DONE
   /redeyetool               DONE                 TODO                   NO
