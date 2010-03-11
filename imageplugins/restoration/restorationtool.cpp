@@ -52,7 +52,7 @@
 
 #include "editortoolsettings.h"
 #include "greycstorationfilter.h"
-#include "greycstorationwidget.h"
+#include "greycstorationsettings.h"
 #include "imageiface.h"
 #include "imageregionwidget.h"
 #include "version.h"
@@ -87,29 +87,29 @@ public:
         gboxSettings(0)
         {}
 
-    const QString         configGroupName;
-    const QString         configPresetEntry;
-    const QString         configFastApproxEntry;
-    const QString         configInterpolationEntry;
-    const QString         configAmplitudeEntry;
-    const QString         configSharpnessEntry;
-    const QString         configAnisotropyEntry;
-    const QString         configAlphaEntry;
-    const QString         configSigmaEntry;
-    const QString         configGaussPrecEntry;
-    const QString         configDlEntry;
-    const QString         configDaEntry;
-    const QString         configIterationEntry;
-    const QString         configTileEntry;
-    const QString         configBTileEntry;
+    const QString           configGroupName;
+    const QString           configPresetEntry;
+    const QString           configFastApproxEntry;
+    const QString           configInterpolationEntry;
+    const QString           configAmplitudeEntry;
+    const QString           configSharpnessEntry;
+    const QString           configAnisotropyEntry;
+    const QString           configAlphaEntry;
+    const QString           configSigmaEntry;
+    const QString           configGaussPrecEntry;
+    const QString           configDlEntry;
+    const QString           configDaEntry;
+    const QString           configIterationEntry;
+    const QString           configTileEntry;
+    const QString           configBTileEntry;
 
-    KTabWidget*           mainTab;
+    KTabWidget*             mainTab;
 
-    KComboBox*            restorationTypeCB;
+    KComboBox*              restorationTypeCB;
 
-    GreycstorationWidget* settingsWidget;
-    ImageRegionWidget*    previewWidget;
-    EditorToolSettings*   gboxSettings;
+    GreycstorationSettings* settingsWidget;
+    ImageRegionWidget*      previewWidget;
+    EditorToolSettings*     gboxSettings;
 };
 
 RestorationTool::RestorationTool(QObject* parent)
@@ -166,7 +166,7 @@ RestorationTool::RestorationTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->settingsWidget = new GreycstorationWidget( d->mainTab );
+    d->settingsWidget = new GreycstorationSettings( d->mainTab );
     gridSettings->addWidget(d->mainTab,                               0, 1, 1, 1);
     gridSettings->addWidget(new QLabel(d->gboxSettings->plainPage()), 1, 1, 1, 1);
     gridSettings->setMargin(d->gboxSettings->spacingHint());

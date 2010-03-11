@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef GREYCSTORATION_WIDGET_H
-#define GREYCSTORATION_WIDGET_H
+#ifndef GREYCSTORATION_SETTINGS_H
+#define GREYCSTORATION_SETTINGS_H
 
 // Qt includes
 
@@ -39,16 +39,16 @@ class KTabWidget;
 namespace Digikam
 {
 
-class GreycstorationWidgetPriv;
+class GreycstorationSettingsPriv;
 
-class DIGIKAM_EXPORT GreycstorationWidget : public QObject
+class DIGIKAM_EXPORT GreycstorationSettings : public QObject
 {
     Q_OBJECT
 
 public:
 
-    GreycstorationWidget(KTabWidget* parent);
-    ~GreycstorationWidget();
+    GreycstorationSettings(KTabWidget* parent);
+    ~GreycstorationSettings();
 
     void setSettings(const GreycstorationContainer& settings);
     GreycstorationContainer settings() const;
@@ -62,9 +62,9 @@ public:
 
 private:
 
-    GreycstorationWidgetPriv* const d;
+    GreycstorationSettingsPriv* const d;
 };
 
 } // namespace Digikam
 
-#endif /* GREYCSTORATION_WIDGET_H */
+#endif /* GREYCSTORATION_SETTINGS_H */

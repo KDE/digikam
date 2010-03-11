@@ -75,7 +75,7 @@
 #include "editortooliface.h"
 #include "dimgthreadedfilter.h"
 #include "greycstorationfilter.h"
-#include "greycstorationwidget.h"
+#include "greycstorationsettings.h"
 
 using namespace KDcrawIface;
 
@@ -157,48 +157,48 @@ public:
         settingsWidget(0)
         {}
 
-    const QString         configGroupName;
-    const QString         configFastApproxEntry;
-    const QString         configInterpolationEntry;
-    const QString         configAmplitudeEntry;
-    const QString         configSharpnessEntry;
-    const QString         configAnisotropyEntry;
-    const QString         configAlphaEntry;
-    const QString         configSigmaEntry;
-    const QString         configGaussPrecEntry;
-    const QString         configDlEntry;
-    const QString         configDaEntry;
-    const QString         configIterationEntry;
-    const QString         configTileEntry;
-    const QString         configBTileEntry;
+    const QString           configGroupName;
+    const QString           configFastApproxEntry;
+    const QString           configInterpolationEntry;
+    const QString           configAmplitudeEntry;
+    const QString           configSharpnessEntry;
+    const QString           configAnisotropyEntry;
+    const QString           configAlphaEntry;
+    const QString           configSigmaEntry;
+    const QString           configGaussPrecEntry;
+    const QString           configDlEntry;
+    const QString           configDaEntry;
+    const QString           configIterationEntry;
+    const QString           configTileEntry;
+    const QString           configBTileEntry;
 
-    int                   orgWidth;
-    int                   orgHeight;
-    int                   prevW;
-    int                   prevH;
+    int                     orgWidth;
+    int                     orgHeight;
+    int                     prevW;
+    int                     prevH;
 
-    double                prevWP;
-    double                prevHP;
+    double                  prevWP;
+    double                  prevHP;
 
-    QLabel*               restorationTips;
+    QLabel*                 restorationTips;
 
-    QCheckBox*            preserveRatioBox;
-    QCheckBox*            useGreycstorationBox;
+    QCheckBox*              preserveRatioBox;
+    QCheckBox*              useGreycstorationBox;
 
-    KTabWidget*           mainTab;
+    KTabWidget*             mainTab;
 
-    KUrlLabel*            cimgLogoLabel;
+    KUrlLabel*              cimgLogoLabel;
 
-    ImageGuideWidget*     previewWidget;
+    ImageGuideWidget*       previewWidget;
 
-    RIntNumInput*         wInput;
-    RIntNumInput*         hInput;
+    RIntNumInput*           wInput;
+    RIntNumInput*           hInput;
 
-    RDoubleNumInput*      wpInput;
-    RDoubleNumInput*      hpInput;
+    RDoubleNumInput*        wpInput;
+    RDoubleNumInput*        hpInput;
 
-    EditorToolSettings*   gboxSettings;
-    GreycstorationWidget* settingsWidget;
+    EditorToolSettings*     gboxSettings;
+    GreycstorationSettings* settingsWidget;
 };
 
 // -------------------------------------------------------------
@@ -308,7 +308,7 @@ ResizeTool::ResizeTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->settingsWidget = new GreycstorationWidget(d->mainTab);
+    d->settingsWidget = new GreycstorationSettings(d->mainTab);
 
     gridSettings->addWidget(d->mainTab,                               0, 1, 1, 1);
     gridSettings->addWidget(new QLabel(d->gboxSettings->plainPage()), 1, 1, 1, 1);

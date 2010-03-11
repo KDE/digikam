@@ -70,7 +70,7 @@
 #include "daboutdata.h"
 #include "editortoolsettings.h"
 #include "greycstorationfilter.h"
-#include "greycstorationwidget.h"
+#include "greycstorationsettings.h"
 #include "imageiface.h"
 #include "imageguidewidget.h"
 #include "version.h"
@@ -107,40 +107,40 @@ public:
         gboxSettings(0)
         {}
 
-    const QString         configGroupName;
-    const QString         configFastApproxEntry;
-    const QString         configInterpolationEntry;
-    const QString         configAmplitudeEntry;
-    const QString         configSharpnessEntry;
-    const QString         configAnisotropyEntry;
-    const QString         configAlphaEntry;
-    const QString         configSigmaEntry;
-    const QString         configGaussPrecEntry;
-    const QString         configDlEntry;
-    const QString         configDaEntry;
-    const QString         configIterationEntry;
-    const QString         configTileEntry;
-    const QString         configBTileEntry;
-    const QString         configPresetEntry;
+    const QString           configGroupName;
+    const QString           configFastApproxEntry;
+    const QString           configInterpolationEntry;
+    const QString           configAmplitudeEntry;
+    const QString           configSharpnessEntry;
+    const QString           configAnisotropyEntry;
+    const QString           configAlphaEntry;
+    const QString           configSigmaEntry;
+    const QString           configGaussPrecEntry;
+    const QString           configDlEntry;
+    const QString           configDaEntry;
+    const QString           configIterationEntry;
+    const QString           configTileEntry;
+    const QString           configBTileEntry;
+    const QString           configPresetEntry;
+  
+    bool                    isComputed;
 
-    bool                  isComputed;
+    QRect                   maskRect;
 
-    QRect                 maskRect;
+    QImage                  maskImage;
 
-    QImage                maskImage;
+    KTabWidget*             mainTab;
 
-    KTabWidget*           mainTab;
+    KComboBox*              inpaintingTypeCB;
 
-    KComboBox*            inpaintingTypeCB;
+    DImg                    originalImage;
+    DImg                    cropImage;
 
-    DImg                  originalImage;
-    DImg                  cropImage;
+    GreycstorationSettings* settingsWidget;
 
-    GreycstorationWidget* settingsWidget;
+    ImageGuideWidget*       previewWidget;
 
-    ImageGuideWidget*     previewWidget;
-
-    EditorToolSettings*   gboxSettings;
+    EditorToolSettings*     gboxSettings;
 };
 
 InPaintingTool::InPaintingTool(QObject* parent)
@@ -206,7 +206,7 @@ InPaintingTool::InPaintingTool(QObject* parent)
     // -------------------------------------------------------------
 
     QLabel* spacer    = new QLabel();
-    d->settingsWidget = new GreycstorationWidget(d->mainTab);
+    d->settingsWidget = new GreycstorationSettings(d->mainTab);
 
     // -------------------------------------------------------------
 

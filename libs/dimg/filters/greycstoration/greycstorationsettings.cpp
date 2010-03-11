@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "greycstorationwidget.moc"
+#include "greycstorationsettings.moc"
 
 // Qt includes
 
@@ -48,12 +48,12 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-class GreycstorationWidgetPriv
+class GreycstorationSettingsPriv
 {
 
 public:
 
-    GreycstorationWidgetPriv()
+    GreycstorationSettingsPriv()
     {
         parent             = 0;
         advancedPage       = 0;
@@ -121,9 +121,9 @@ public:
     RIntNumInput    *tileInput;
 };
 
-GreycstorationWidget::GreycstorationWidget(KTabWidget* parent)
-                    : QObject(static_cast<QObject*>(parent)),
-                      d(new GreycstorationWidgetPriv)
+GreycstorationSettings::GreycstorationSettings(KTabWidget* parent)
+                      : QObject(static_cast<QObject*>(parent)),
+                        d(new GreycstorationSettingsPriv)
 {
     d->parent = parent;
 
@@ -257,12 +257,12 @@ GreycstorationWidget::GreycstorationWidget(KTabWidget* parent)
     grid2->setSpacing(KDialog::spacingHint());
 }
 
-GreycstorationWidget::~GreycstorationWidget()
+GreycstorationSettings::~GreycstorationSettings()
 {
     delete d;
 }
 
-void GreycstorationWidget::setEnabled(bool b)
+void GreycstorationSettings::setEnabled(bool b)
 {
     d->generalPage->setEnabled(b);
     d->advancedPage->setEnabled(b);
@@ -270,7 +270,7 @@ void GreycstorationWidget::setEnabled(bool b)
     d->parent->setTabEnabled(d->parent->indexOf(d->advancedPage), b);
 }
 
-void GreycstorationWidget::setSettings(const GreycstorationContainer& settings)
+void GreycstorationSettings::setSettings(const GreycstorationContainer& settings)
 {
     blockSignals(true);
     d->alphaInput->setValue(settings.alpha);
@@ -289,7 +289,7 @@ void GreycstorationWidget::setSettings(const GreycstorationContainer& settings)
     blockSignals(false);
 }
 
-void GreycstorationWidget::setDefaultSettings(const GreycstorationContainer& settings)
+void GreycstorationSettings::setDefaultSettings(const GreycstorationContainer& settings)
 {
     blockSignals(true);
     d->alphaInput->setDefaultValue(settings.alpha);
@@ -308,7 +308,7 @@ void GreycstorationWidget::setDefaultSettings(const GreycstorationContainer& set
     blockSignals(false);
 }
 
-GreycstorationContainer GreycstorationWidget::settings() const
+GreycstorationContainer GreycstorationSettings::settings() const
 {
     GreycstorationContainer settings;
 
@@ -329,7 +329,7 @@ GreycstorationContainer GreycstorationWidget::settings() const
     return settings;
 }
 
-bool GreycstorationWidget::loadSettings(QFile& file, const QString& header)
+bool GreycstorationSettings::loadSettings(QFile& file, const QString& header)
 {
     QTextStream stream( &file );
 
@@ -358,7 +358,7 @@ bool GreycstorationWidget::loadSettings(QFile& file, const QString& header)
     return true;
 }
 
-void GreycstorationWidget::saveSettings(QFile& file, const QString& header)
+void GreycstorationSettings::saveSettings(QFile& file, const QString& header)
 {
     GreycstorationContainer prm = settings();
     QTextStream stream( &file );
