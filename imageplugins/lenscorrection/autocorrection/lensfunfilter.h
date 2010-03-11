@@ -4,7 +4,7 @@
  * Description : a plugin to fix automatically camera lens aberrations
  *
  * Copyright (C) 2008 by Adrian Schroeter <adrian at suse dot de>
- * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -19,8 +19,8 @@
  *
  * ============================================================ */
 
-#ifndef KLENSFUN_H
-#define KLENSFUN_H
+#ifndef LENSFUNFILTER_H
+#define LENSFUNFILTER_H
 
 // Lib LensFun includes
 
@@ -46,22 +46,25 @@ class RComboBox;
 class RDoubleNumInput;
 }
 
+using namespace Digikam;
+using namespace KDcrawIface;
+
 namespace DigikamAutoCorrectionImagesPlugin
 {
 
-class KLensFun
+class LensFunIface
 {
-    friend class KLFDeviceSelector;
-    friend class KLensFunFilter;
+    friend class LensFunSettings;
+    friend class LensFunFilter;
 
 public:
 
-    KLensFun();
-    virtual ~KLensFun();
+    LensFunIface();
+    virtual ~LensFunIface();
 
 //    typedef QMap<QString, QString> correctionData;
-    void setCorrection(bool CCA, bool Vignettation, bool CCI, bool Distortion, bool Geometry);
 //    correctionData getCorrectionData();
+    void setCorrection(bool CCA, bool Vignettation, bool CCI, bool Distortion, bool Geometry);
 
     bool supportsDistortion();
     bool supportsCCA();
@@ -76,71 +79,71 @@ protected:
 private:
 
     // my configuration
-    bool m_init;
-    bool m_filterCCA;
-    bool m_filterVig;
-    bool m_filterCCI;
-    bool m_filterDist;
-    bool m_filterGeom;
+    bool                   m_init;
+    bool                   m_filterCCA;
+    bool                   m_filterVig;
+    bool                   m_filterCCI;
+    bool                   m_filterDist;
+    bool                   m_filterGeom;
 
     // Database items
-    lfDatabase              *m_lfDb;
-    const lfCamera * const  *m_lfCameras;
-    const lfLens           **m_lfLenses;
-    const lfMount           *m_lfMounts;
+    lfDatabase*            m_lfDb;
+    const lfCamera* const* m_lfCameras;
+    const lfLens**         m_lfLenses;
+    const lfMount*         m_lfMounts;
 
     // To be used for modification
-    const lfLens *m_usedLens;
-    float         m_cropFactor;
-    float         m_focalLength;
-    float         m_aperture;
-    float         m_subjectDistance;
+    const lfLens*          m_usedLens;
+    float                  m_cropFactor;
+    float                  m_focalLength;
+    float                  m_aperture;
+    float                  m_subjectDistance;
 };
 
 // -------------------------------------------------------------------
 
-class KLensFunFilter : public Digikam::DImgThreadedFilter
+class LensFunFilter : public DImgThreadedFilter
 {
 
 public:
 
-    KLensFunFilter(Digikam::DImg *origImage, QObject *parent, KLensFun*);
-    ~KLensFunFilter(){};
+    LensFunFilter(DImg* origImage, QObject* parent, LensFunIface*);
+    ~LensFunFilter(){};
 
 private:
 
-    virtual void filterImage();
+    void filterImage();
 
 private:
 
-    QObject    *m_parent;
+    QObject*      m_parent;
 
-    KLensFun   *m_klf;
+    LensFunIface* m_klf;
 
-    lfModifier *m_lfModifier;
+    lfModifier*   m_lfModifier;
 };
 
 // -------------------------------------------------------------------
 
-class KLFDeviceSelector : public QWidget
+class LensFunSettings : public QWidget
 {
     Q_OBJECT
 
 public:
 
-    typedef QMap<QString,QString>  Device;
-    typedef const lfCamera        *DevicePtr;
-    typedef const lfLens          *LensPtr;
+    typedef QMap<QString,QString> Device;
+    typedef const lfCamera*       DevicePtr;
+    typedef const lfLens*         LensPtr;
 
 public:
 
-    KLFDeviceSelector(QWidget *parent);
-    virtual ~KLFDeviceSelector();
+    LensFunSettings(QWidget* parent);
+    virtual ~LensFunSettings();
 
 //    Device getDevice();
     void setDevice(Device&);
 
-    KLensFun *getKLFObject(){ return m_klf; };
+    LensFunIface* getKLFObject(){ return m_klf; };
 
 public Q_SLOTS:
 
@@ -166,21 +169,21 @@ private:
 
 private:
 
-    QCheckBox                    *m_exifUsage;
+    QCheckBox*       m_exifUsage;
 
-    KDcrawIface::RComboBox       *m_make;
-    KDcrawIface::RComboBox       *m_model;
-    KDcrawIface::RComboBox       *m_lens;
+    RComboBox*       m_make;
+    RComboBox*       m_model;
+    RComboBox*       m_lens;
 
-    KDcrawIface::RDoubleNumInput *m_focal;
-    KDcrawIface::RDoubleNumInput *m_aperture;
-    KDcrawIface::RDoubleNumInput *m_distance;
+    RDoubleNumInput* m_focal;
+    RDoubleNumInput* m_aperture;
+    RDoubleNumInput* m_distance;
 
-    Digikam::DMetadata   m_metadata;
+    DMetadata        m_metadata;
 
-    KLensFun            *m_klf;
+    LensFunIface*    m_klf;
 };
 
 }  // namespace DigikamAutoCorrectionImagesPlugin
 
-#endif /* KLENSFUN_H */
+#endif /* LENSFUNFILTER_H */

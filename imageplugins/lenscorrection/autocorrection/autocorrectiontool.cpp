@@ -35,7 +35,6 @@
 
 // KDE includes
 
-#include <kaboutdata.h>
 #include <kapplication.h>
 #include <kcombobox.h>
 #include <kconfig.h>
@@ -48,15 +47,11 @@
 
 // Local includes
 
-#include "daboutdata.h"
 #include "dmetadata.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imageguidewidget.h"
-#include "klensfun.h"
-#include "version.h"
-
-using namespace Digikam;
+#include "lensfunfilter.h"
 
 namespace DigikamAutoCorrectionImagesPlugin
 {
@@ -101,7 +96,7 @@ public:
     QCheckBox*          filterDist;
     QCheckBox*          filterGeom;
 
-    KLFDeviceSelector*  cameraSelector;
+    LensFunSettings*    cameraSelector;
 
     ImageGuideWidget*   previewWidget;
     EditorToolSettings* gboxSettings;
@@ -118,12 +113,12 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
     d->previewWidget = new ImageGuideWidget(0, true, ImageGuideWidget::HVGuideMode);
     setToolView(d->previewWidget);
     setPreviewModeMask(PreviewToolBar::AllPreviewModes);
-    
+
     // -------------------------------------------------------------
 
     d->gboxSettings   = new EditorToolSettings;
     QGridLayout *grid = new QGridLayout(d->gboxSettings->plainPage());
-    d->cameraSelector = new KLFDeviceSelector(d->gboxSettings->plainPage());
+    d->cameraSelector = new LensFunSettings(d->gboxSettings->plainPage());
     KSeparator *line  = new KSeparator(Qt::Horizontal, d->gboxSettings->plainPage());
 
     // -------------------------------------------------------------
@@ -259,8 +254,8 @@ void AutoCorrectionTool::slotResetSettings()
     d->gboxSettings->blockSignals(true);
 
     // Read Exif information ...
-    DImg      *img = d->previewWidget->imageIface()->getOriginalImg();
-    DMetadata  meta;
+    DImg* img = d->previewWidget->imageIface()->getOriginalImg();
+    DMetadata meta;
     meta.setExif(img->getExif());
     meta.setIptc(img->getIptc());
     meta.setXmp(img->getXmp());
@@ -273,11 +268,11 @@ void AutoCorrectionTool::prepareEffect()
 {
     d->gboxSettings->setEnabled(false);
 
-    ImageIface* iface          = d->previewWidget->imageIface();
-    uchar *data                = iface->getPreviewImage();
-    int w                      = iface->previewWidth();
-    int h                      = iface->previewHeight();
-    bool sb                    = iface->previewSixteenBit();
+    ImageIface* iface = d->previewWidget->imageIface();
+    uchar* data       = iface->getPreviewImage();
+    int w             = iface->previewWidth();
+    int h             = iface->previewHeight();
+    bool sb           = iface->previewSixteenBit();
 
     DImg image(w, h, sb, false, data);
 
@@ -299,16 +294,14 @@ void AutoCorrectionTool::prepareEffect()
         p2.end();
         DImg grid(pix.toImage());
 
-        DColorComposer *composer = DColorComposer::getComposer(DColorComposer::PorterDuffNone);
+        DColorComposer* composer                  = DColorComposer::getComposer(DColorComposer::PorterDuffNone);
         DColorComposer::MultiplicationFlags flags = DColorComposer::NoMultiplication;
 
         // Do alpha blending of template on dest image
         image.bitBlendImage(composer, &grid, 0, 0, w, h, 0, 0, flags);
     }
 
-    setFilter(dynamic_cast<DImgThreadedFilter *>
-                       (new KLensFunFilter(&image, this, d->cameraSelector->getKLFObject())));
-
+    setFilter(new LensFunFilter(&image, this, d->cameraSelector->getKLFObject()));
 }
 
 void AutoCorrectionTool::prepareFinal()
@@ -316,12 +309,10 @@ void AutoCorrectionTool::prepareFinal()
     d->gboxSettings->setEnabled(false);
 
     ImageIface iface(0, 0);
-    uchar *data = iface.getOriginalImage();
-    DImg originalImage(iface.originalWidth(), iface.originalHeight(),
-                                iface.originalSixteenBit(), iface.originalHasAlpha(), data);
+    uchar* data = iface.getOriginalImage();
+    DImg originalImage(iface.originalWidth(), iface.originalHeight(), iface.originalSixteenBit(), iface.originalHasAlpha(), data);
 
-    setFilter(dynamic_cast<DImgThreadedFilter *>
-                       (new KLensFunFilter( &originalImage, this, d->cameraSelector->getKLFObject())));
+    setFilter(new LensFunFilter(&originalImage, this, d->cameraSelector->getKLFObject()));
 
     delete [] data;
 }

@@ -4,7 +4,7 @@
  * Description : a plugin to fix automatically camera lens aberrations
  *
  * Copyright (C) 2008 by Adrian Schroeter <adrian at suse dot de>
- * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -18,7 +18,7 @@
  *
  * ============================================================ */
 
-#include "klensfun.moc"
+#include "lensfunfilter.moc"
 
 // Qt includes
 
@@ -43,31 +43,28 @@
 
 // Local includes
 
-
-Q_DECLARE_METATYPE( DigikamAutoCorrectionImagesPlugin::KLFDeviceSelector::DevicePtr )
-Q_DECLARE_METATYPE( DigikamAutoCorrectionImagesPlugin::KLFDeviceSelector::LensPtr )
-
-using namespace KDcrawIface;
+Q_DECLARE_METATYPE( DigikamAutoCorrectionImagesPlugin::LensFunSettings::DevicePtr )
+Q_DECLARE_METATYPE( DigikamAutoCorrectionImagesPlugin::LensFunSettings::LensPtr )
 
 namespace DigikamAutoCorrectionImagesPlugin
 {
 
-KLensFun::KLensFun()
+LensFunIface::LensFunIface()
 {
     m_init = false;
     init();
 }
 
-KLensFun::~KLensFun()
+LensFunIface::~LensFunIface()
 {
     if (m_init)
     {
     }
 }
 
-bool KLensFun::init()
+bool LensFunIface::init()
 {
-    m_lfDb = lf_db_new();
+    m_lfDb       = lf_db_new();
     m_lfDb->Load();
     m_lfCameras  = m_lfDb->GetCameras();
     m_init       = true;
@@ -79,7 +76,7 @@ bool KLensFun::init()
     return true;
 }
 
-void KLensFun::setCorrection(bool CCA, bool Vig, bool CCI, bool Dist, bool Geom)
+void LensFunIface::setCorrection(bool CCA, bool Vig, bool CCI, bool Dist, bool Geom)
 {
     m_filterCCA  = CCA;
     m_filterVig  = Vig;
@@ -88,7 +85,7 @@ void KLensFun::setCorrection(bool CCA, bool Vig, bool CCI, bool Dist, bool Geom)
     m_filterGeom = Geom;
 }
 
-bool KLensFun::supportsDistortion()
+bool LensFunIface::supportsDistortion()
 {
     if (m_usedLens == NULL) return false;
 
@@ -96,7 +93,7 @@ bool KLensFun::supportsDistortion()
     return m_usedLens->InterpolateDistortion(m_focalLength, res);
 }
 
-bool KLensFun::supportsCCA()
+bool LensFunIface::supportsCCA()
 {
     if (m_usedLens == NULL) return false;
 
@@ -104,7 +101,7 @@ bool KLensFun::supportsCCA()
     return m_usedLens->InterpolateTCA(m_focalLength, res);
 }
 
-bool KLensFun::supportsVig()
+bool LensFunIface::supportsVig()
 {
     if (m_usedLens == NULL) return false;
 
@@ -113,17 +110,17 @@ bool KLensFun::supportsVig()
 }
 
 #if 0
-KLensFun::correctionData KLensFun::getCorrectionData()
+LensFunIface::correctionData LensFunIface::getCorrectionData()
 {
 }
 #endif
 
 // -------------------------------------------------------------------
 
-KLFDeviceSelector::KLFDeviceSelector(QWidget *parent)
-                 : QWidget(parent)
+LensFunSettings::LensFunSettings(QWidget *parent)
+               : QWidget(parent)
 {
-    m_klf              = new KLensFun();
+    m_klf              = new LensFunIface();
     QGridLayout* grid  = new QGridLayout(this);
     m_exifUsage        = new QCheckBox(i18n("Use Metadata"), this);
 
@@ -136,18 +133,18 @@ KLFDeviceSelector::KLFDeviceSelector(QWidget *parent)
     m_lens             = new RComboBox(this);
     m_lens->setDefaultIndex(0);
 
-    QLabel *makeLabel  = new QLabel(i18nc("camera make", "Make:"), this);
-    QLabel *modelLabel = new QLabel(i18nc("camera model", "Model:"), this);
-    QLabel *lensLabel  = new QLabel(i18nc("camera lens", "Lens:"), this);
+    QLabel* makeLabel  = new QLabel(i18nc("camera make", "Make:"), this);
+    QLabel* modelLabel = new QLabel(i18nc("camera model", "Model:"), this);
+    QLabel* lensLabel  = new QLabel(i18nc("camera lens", "Lens:"), this);
 
     m_exifUsage->setEnabled(false);
     m_exifUsage->setCheckState(Qt::Unchecked);
     m_exifUsage->setWhatsThis(i18n("Set this option to try to guess the right camera/lens settings "
                                    "from the image metadata (as Exif or XMP)."));
 
-    QLabel *focalLabel = new QLabel(i18n("Focal Length:"), this);
-    QLabel *aperLabel  = new QLabel(i18n("Aperture:"), this);
-    QLabel *distLabel  = new QLabel(i18n("Subject Distance:"), this);
+    QLabel* focalLabel = new QLabel(i18n("Focal Length:"), this);
+    QLabel* aperLabel  = new QLabel(i18n("Aperture:"), this);
+    QLabel* distLabel  = new QLabel(i18n("Subject Distance:"), this);
 
     m_focal = new RDoubleNumInput(this);
     m_focal->setDecimals(1);
@@ -201,30 +198,30 @@ KLFDeviceSelector::KLFDeviceSelector(QWidget *parent)
     connect(m_distance, SIGNAL(valueChanged(double)),
             this, SLOT(slotDistanceChanged(double)));
 
-    KLFDeviceSelector::Device firstDevice; // empty strings
+    LensFunSettings::Device firstDevice; // empty strings
 //    setDevice( firstDevice );
 }
 
-KLFDeviceSelector::~KLFDeviceSelector()
+LensFunSettings::~LensFunSettings()
 {
     delete m_klf;
 }
 
 #if 0
-KLFDeviceSelector::Device KLFDeviceSelector::getDevice()
+LensFunSettings::Device LensFunSettings::getDevice()
 {
 }
 #endif
 
-void KLFDeviceSelector::findFromMetadata(const Digikam::DMetadata& meta)
+void LensFunSettings::findFromMetadata(const Digikam::DMetadata& meta)
 {
     m_metadata = meta;
     findFromMetadata();
 }
 
-void KLFDeviceSelector::findFromMetadata()
+void LensFunSettings::findFromMetadata()
 {
-//    KLFDeviceSelector::Device firstDevice; // empty strings
+//    LensFunSettings::Device firstDevice; // empty strings
 //    setDevice( firstDevice );
 
     if (m_metadata.isEmpty())
@@ -331,25 +328,25 @@ void KLFDeviceSelector::findFromMetadata()
     }
 }
 
-void KLFDeviceSelector::slotFocalChanged(double f)
+void LensFunSettings::slotFocalChanged(double f)
 {
     m_klf->m_focalLength = f;
     emit signalLensSettingsChanged();
 }
 
-void KLFDeviceSelector::slotApertureChanged(double a)
+void LensFunSettings::slotApertureChanged(double a)
 {
     m_klf->m_aperture = a;
     emit signalLensSettingsChanged();
 }
 
-void KLFDeviceSelector::slotDistanceChanged(double d)
+void LensFunSettings::slotDistanceChanged(double d)
 {
     m_klf->m_subjectDistance = d;
     emit signalLensSettingsChanged();
 }
 
-void KLFDeviceSelector::slotUseExif(int mode)
+void LensFunSettings::slotUseExif(int mode)
 {
     if (mode == Qt::Checked)
     {
@@ -366,7 +363,7 @@ void KLFDeviceSelector::slotUseExif(int mode)
     }
 }
 
-void KLFDeviceSelector::slotUpdateCombos()
+void LensFunSettings::slotUpdateCombos()
 {
     const lfCamera* const *it = m_klf->m_lfCameras;
 
@@ -393,7 +390,7 @@ void KLFDeviceSelector::slotUpdateCombos()
        // Fill models for current selected maker
        if ( (*it)->Model && (*it)->Maker == m_make->combo()->currentText() )
        {
-            KLFDeviceSelector::DevicePtr dev;
+            LensFunSettings::DevicePtr dev;
             dev        = *it;
             QVariant b = qVariantFromValue(dev);
             m_model->combo()->addItem( (*it)->Model, b );
@@ -408,12 +405,12 @@ void KLFDeviceSelector::slotUpdateCombos()
     slotUpdateLensCombo();
 }
 
-void KLFDeviceSelector::slotUpdateLensCombo()
+void LensFunSettings::slotUpdateLensCombo()
 {
     m_lens->combo()->clear();
 
     QVariant v    = m_model->combo()->itemData( m_model->currentIndex() );
-    DevicePtr dev = v.value<KLFDeviceSelector::DevicePtr>();
+    DevicePtr dev = v.value<LensFunSettings::DevicePtr>();
     if (!dev)
     {
         kDebug() << "slotUpdateLensCombo() => Device is null!";
@@ -425,7 +422,7 @@ void KLFDeviceSelector::slotUpdateLensCombo()
 
     while (lenses && *lenses)
     {
-        KLFDeviceSelector::LensPtr lens = *lenses;
+        LensFunSettings::LensPtr lens = *lenses;
         QVariant b                      = qVariantFromValue(lens);
         m_lens->combo()->addItem((*lenses)->Model, b);
         ++lenses;
@@ -435,10 +432,10 @@ void KLFDeviceSelector::slotUpdateLensCombo()
     emit(signalLensSettingsChanged());
 }
 
-void KLFDeviceSelector::slotLensSelected()
+void LensFunSettings::slotLensSelected()
 {
     QVariant v        = m_lens->combo()->itemData( m_lens->currentIndex() );
-    m_klf->m_usedLens = v.value<KLFDeviceSelector::LensPtr>();
+    m_klf->m_usedLens = v.value<LensFunSettings::LensPtr>();
 
     if ( m_klf->m_cropFactor <= 0.0 ) // this should not happen
         m_klf->m_cropFactor = m_klf->m_usedLens->CropFactor;
@@ -446,15 +443,15 @@ void KLFDeviceSelector::slotLensSelected()
     emit(signalLensSettingsChanged());
 }
 
-void KLFDeviceSelector::setDevice( Device &/*d*/ )
+void LensFunSettings::setDevice( Device &/*d*/ )
 {
     slotUpdateCombos();
 }
 
 // -------------------------------------------------------------------
 
-KLensFunFilter::KLensFunFilter(Digikam::DImg *orgImage, QObject *parent, KLensFun *klf)
-              : Digikam::DImgThreadedFilter(orgImage, parent, "LensCorrection")
+LensFunFilter::LensFunFilter(DImg* orgImage, QObject* parent, LensFunIface* klf)
+             : DImgThreadedFilter(orgImage, parent, "LensCorrection")
 {
     m_klf    = klf;
     m_parent = parent;
@@ -462,7 +459,7 @@ KLensFunFilter::KLensFunFilter(Digikam::DImg *orgImage, QObject *parent, KLensFu
     initFilter();
 }
 
-void KLensFunFilter::filterImage()
+void LensFunFilter::filterImage()
 {
 #if 0
     if (!opts.Crop)
