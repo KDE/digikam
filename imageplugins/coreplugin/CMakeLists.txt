@@ -1,21 +1,21 @@
 
-SET(digikamimageplugin_core_PART_SRCS
-    ../../imageplugins/coreplugin/autocorrectiontool.cpp
-    ../../imageplugins/coreplugin/bcgtool.cpp
-    ../../imageplugins/coreplugin/bwsepiatool.cpp
-    ../../imageplugins/coreplugin/profileconversiontool.cpp
-    ../../imageplugins/coreplugin/blurtool.cpp
-    ../../imageplugins/coreplugin/imageplugin_core.cpp
-    ../../imageplugins/coreplugin/redeyetool.cpp
-    ../../imageplugins/coreplugin/cbtool.cpp
-    ../../imageplugins/coreplugin/whitebalancetool.cpp
-    ../../imageplugins/coreplugin/sharpentool.cpp
-    ../../imageplugins/coreplugin/noisereductiontool.cpp
-    ../../imageplugins/coreplugin/hsltool.cpp
-    ../../imageplugins/coreplugin/channelmixertool.cpp
-    ../../imageplugins/coreplugin/adjustcurvestool.cpp
-    ../../imageplugins/coreplugin/adjustlevelstool.cpp
-    ../../imageplugins/coreplugin/localcontrasttool.cpp
+SET(digikamimageplugin_core_PART_SRCS autocorrectiontool.cpp
+                                      bcgtool.cpp
+                                      bwsepiatool.cpp
+                                      profileconversiontool.cpp
+                                      cbtool.cpp
+                                      whitebalancetool.cpp
+                                      hsltool.cpp
+                                      channelmixertool.cpp
+                                      adjustcurvestool.cpp
+                                      adjustlevelstool.cpp
+                                      localcontrasttool.cpp
+                                      imageplugin_core.cpp
+
+                                      redeyetool.cpp
+                                      sharpentool.cpp
+                                      noisereductiontool.cpp
+                                      blurtool.cpp
    )
 
 
