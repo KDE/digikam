@@ -11,7 +11,7 @@ SET(distortion_SRCS distortion/lensdistortiontool.cpp
    )
 
 SET(vignetting_SRCS vignetting/antivignettingtool.cpp
-                    vignetting/antivignetting.cpp)
+                    vignetting/antivignettingfilter.cpp)
 
 SET(digikamimageplugin_lenscorrection_PART_SRCS imageplugin_lenscorrection.cpp
                                                 ${distortion_SRCS}

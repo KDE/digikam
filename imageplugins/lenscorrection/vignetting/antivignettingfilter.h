@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef ANTIVIGNETTING_H
-#define ANTIVIGNETTING_H
+#ifndef ANTIVIGNETTINGFILTER_H
+#define ANTIVIGNETTINGFILTER_H
 
 // Local includes
 
@@ -33,16 +33,17 @@ using namespace Digikam;
 namespace DigikamAntiVignettingImagesPlugin
 {
 
-class AntiVignetting : public DImgThreadedFilter
+class AntiVignettingFilter : public DImgThreadedFilter
 {
 
 public:
 
-    explicit AntiVignetting(DImg* orgImage, QObject* parent=0, double density=2.0,
-                            double power=1.0, double innerradius=1.0, double outerradius=1.0, double xshift=0, double yshift=0,
-                            bool anti=true);
+    explicit AntiVignettingFilter(DImg* orgImage, QObject* parent=0, double density=2.0,
+                                  double power=1.0, double innerradius=1.0, double outerradius=1.0,
+                                  double xshift=0, double yshift=0,
+                                  bool anti=true);
 
-    ~AntiVignetting(){};
+    ~AntiVignettingFilter(){};
 
 private:
 
@@ -72,4 +73,4 @@ private:
 
 }  // namespace DigikamAntiVignettingImagesPlugin
 
-#endif /* ANTIVIGNETTING_H */
+#endif /* ANTIVIGNETTINGFILTER_H */

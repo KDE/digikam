@@ -54,7 +54,7 @@
 
 // Local includes
 
-#include "antivignetting.h"
+#include "antivignettingfilter.h"
 #include "daboutdata.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
@@ -120,7 +120,7 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
     d->previewWidget = new ImageGuideWidget(0, false, ImageGuideWidget::HVGuideMode);
     setToolView(d->previewWidget);
     setPreviewModeMask(PreviewToolBar::UnSplitPreviewModes);
-    
+
     // -------------------------------------------------------------
 
     d->gboxSettings = new EditorToolSettings;
@@ -158,7 +158,7 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
     d->powerInput->input()->setRange(1.0, 4.0, 0.05, true);
     d->powerInput->setDefaultValue(1.5);
     d->powerInput->setWhatsThis(i18n("This value is used as the exponent controlling the "
-                                     "fall-off in density from the inner circle of the filter " 
+                                     "fall-off in density from the inner circle of the filter "
                                      "to the outer circle."));
 
     // -------------------------------------------------------------
@@ -241,10 +241,10 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
 
     connect(d->innerRadiusInput, SIGNAL(valueChanged (double)),
             this, SLOT(slotTimer()));
-            
+
     connect(d->outerRadiusInput, SIGNAL(valueChanged (double)),
             this, SLOT(slotTimer()));
-            
+
     connect(d->xOffsetInput, SIGNAL(valueChanged (double)),
             this, SLOT(slotTimer()));
 
@@ -272,12 +272,12 @@ void AntiVignettingTool::readSettings()
 
     blockWidgetSignals(true);
 
-    d->densityInput->setValue(group.readEntry(d->configDensityAdjustmentEntry,       d->densityInput->defaultValue()));
-    d->powerInput->setValue(group.readEntry(d->configPowerAdjustmentEntry,           d->powerInput->defaultValue()));
-    d->innerRadiusInput->setValue(group.readEntry(d->configInnerRadiusAdjustmentEntry,    d->innerRadiusInput->defaultValue()));
-    d->outerRadiusInput->setValue(group.readEntry(d->configOuterRadiusAdjustmentEntry,    d->outerRadiusInput->defaultValue()));
-   
-    d->addVignettingCheck->setChecked(group.readEntry(d->configAddVignettingEntry,   false));
+    d->densityInput->setValue(group.readEntry(d->configDensityAdjustmentEntry,         d->densityInput->defaultValue()));
+    d->powerInput->setValue(group.readEntry(d->configPowerAdjustmentEntry,             d->powerInput->defaultValue()));
+    d->innerRadiusInput->setValue(group.readEntry(d->configInnerRadiusAdjustmentEntry, d->innerRadiusInput->defaultValue()));
+    d->outerRadiusInput->setValue(group.readEntry(d->configOuterRadiusAdjustmentEntry, d->outerRadiusInput->defaultValue()));
+
+    d->addVignettingCheck->setChecked(group.readEntry(d->configAddVignettingEntry,     false));
     blockWidgetSignals(false);
 
     slotEffect();
@@ -288,11 +288,11 @@ void AntiVignettingTool::writeSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
 
-    group.writeEntry(d->configDensityAdjustmentEntry,    d->densityInput->value());
-    group.writeEntry(d->configPowerAdjustmentEntry,      d->powerInput->value());
-    group.writeEntry(d->configInnerRadiusAdjustmentEntry,d->innerRadiusInput->value());
-    group.writeEntry(d->configOuterRadiusAdjustmentEntry,d->innerRadiusInput->value());
-    group.writeEntry(d->configAddVignettingEntry,        d->addVignettingCheck->isChecked());
+    group.writeEntry(d->configDensityAdjustmentEntry,     d->densityInput->value());
+    group.writeEntry(d->configPowerAdjustmentEntry,       d->powerInput->value());
+    group.writeEntry(d->configInnerRadiusAdjustmentEntry, d->innerRadiusInput->value());
+    group.writeEntry(d->configOuterRadiusAdjustmentEntry, d->innerRadiusInput->value());
+    group.writeEntry(d->configAddVignettingEntry,         d->addVignettingCheck->isChecked());
 
     group.sync();
 }
@@ -317,7 +317,7 @@ void AntiVignettingTool::enableSettings(bool b)
 {
     d->densityInput->setEnabled(b);
     d->powerInput->setEnabled(b);
-    d->innerRadiusInput->setEnabled(b);  
+    d->innerRadiusInput->setEnabled(b);
     d->outerRadiusInput->setEnabled(b);
     d->xOffsetInput->setEnabled(b);
     d->yOffsetInput->setEnabled(b);
@@ -348,8 +348,8 @@ void AntiVignettingTool::prepareEffect()
     // Compute preview mask.
     DImg preview(ps.width(), ps.height(), false);
     memset(preview.bits(), 255, preview.numBytes());
-    AntiVignetting maskPreview(&preview, 0, dens, power, innerrad, outerrad, xoffset, yoffset, addvignetting);
-    maskPreview.startFilterDirectly();       // Run filter without to use multithreading.
+    AntiVignettingFilter maskPreview(&preview, 0, dens, power, innerrad, outerrad, xoffset, yoffset, addvignetting);
+    maskPreview.startFilterDirectly();
     QPixmap pix = maskPreview.getTargetImage().convertToPixmap();
     QPainter pt(&pix);
     pt.setPen(QPen(Qt::black, 1));
@@ -357,8 +357,7 @@ void AntiVignettingTool::prepareEffect()
     pt.end();
     d->maskPreviewLabel->setPixmap(pix);
 
-    setFilter(dynamic_cast<DImgThreadedFilter*>(
-                       new AntiVignetting(&imTemp, this, dens, power, innerrad, outerrad, xoffset, yoffset, addvignetting)));
+    setFilter(new AntiVignettingFilter(&imTemp, this, dens, power, innerrad, outerrad, xoffset, yoffset, addvignetting));
 }
 
 void AntiVignettingTool::prepareFinal()
@@ -375,18 +374,14 @@ void AntiVignettingTool::prepareFinal()
 
     ImageIface iface(0, 0);
 
-    setFilter(dynamic_cast<DImgThreadedFilter*>(
-                       new AntiVignetting(iface.getOriginalImg(), this, dens, power, innerrad, outerrad, xoffset, yoffset, addvignetting)));
+    setFilter(new AntiVignettingFilter(iface.getOriginalImg(), this, dens, power, innerrad, outerrad, xoffset, yoffset, addvignetting));
 }
 
 void AntiVignettingTool::putPreviewData()
 {
     ImageIface* iface = d->previewWidget->imageIface();
-
-    DImg imDest = filter()->getTargetImage()
-            .smoothScale(iface->previewWidth(), iface->previewHeight());
+    DImg imDest       = filter()->getTargetImage().smoothScale(iface->previewWidth(), iface->previewHeight());
     iface->putPreviewImage(imDest.bits());
-
     d->previewWidget->updatePreview();
 }
 

@@ -29,18 +29,20 @@
 
 #include "editortool.h"
 
+using namespace Digikam;
+
 namespace DigikamAntiVignettingImagesPlugin
 {
 
 class AntiVignettingToolPriv;
 
-class AntiVignettingTool : public Digikam::EditorToolThreaded
+class AntiVignettingTool : public EditorToolThreaded
 {
     Q_OBJECT
 
 public:
 
-    AntiVignettingTool(QObject *parent);
+    AntiVignettingTool(QObject* parent);
     ~AntiVignettingTool();
 
 private Q_SLOTS:

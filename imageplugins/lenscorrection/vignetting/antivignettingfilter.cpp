@@ -9,7 +9,7 @@
  * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010      by Julien Narboux <julien at narboux dot fr>
  *
- * Original AntiVignetting algorithm copyrighted 2003 by
+ * Original AntiVignettingFilter algorithm copyrighted 2003 by
  * John Walker from 'pnmctrfilt' implementation. See
  * http://www.fourmilab.ch/netpbm/pnmctrfilt for more
  * information.
@@ -27,7 +27,7 @@
  *
  * ============================================================ */
 
-#include "antivignetting.h"
+#include "antivignettingfilter.h"
 
 // C++ includes
 
@@ -45,10 +45,11 @@
 namespace DigikamAntiVignettingImagesPlugin
 {
 
-AntiVignetting::AntiVignetting(DImg* orgImage, QObject* parent, double density,
-                               double power, double innerradius,  double outerradius, double yshift, double xshift,
-                               bool addvignetting)
-              : DImgThreadedFilter(orgImage, parent, "AntiVignetting")
+AntiVignettingFilter::AntiVignettingFilter(DImg* orgImage, QObject* parent, double density,
+                                           double power, double innerradius,  double outerradius,
+                                           double yshift, double xshift,
+                                           bool addvignetting)
+                    : DImgThreadedFilter(orgImage, parent, "AntiVignettingFilter")
 {
     m_density        = density;
     m_power          = power;
@@ -63,7 +64,7 @@ AntiVignetting::AntiVignetting(DImg* orgImage, QObject* parent, double density,
 
 // This method is inspired from John Walker 'pnmctrfilt' algorithm code.
 
-void AntiVignetting::filterImage()
+void AntiVignettingFilter::filterImage()
 {
     int    progress;
     int    col, row, xd, td, yd, p;
@@ -130,27 +131,27 @@ void AntiVignetting::filterImage()
     }
 }
 
-int AntiVignetting::approx(double x)
+int AntiVignettingFilter::approx(double x)
 {
     return ((int) x+0.5);
 }
 
-double AntiVignetting::hypothenuse(double x, double y)
+double AntiVignettingFilter::hypothenuse(double x, double y)
 {
     return (sqrt (x*x + y*y));
 }
 
-double AntiVignetting::attenuation(double r1, double r2, double dist_center)
+double AntiVignettingFilter::attenuation(double r1, double r2, double dist_center)
 {
     if (dist_center < r1)
        return 1.0;
     else if (dist_center > r2)
        return 1.0+m_density;
-    else 
+    else
        return (1.0+m_density*(pow ((dist_center-r1)/(r2-r1), m_power)));
 }
 
-double AntiVignetting::real_attenuation(double r1, double r2, double dist_center)
+double AntiVignettingFilter::real_attenuation(double r1, double r2, double dist_center)
 {
     if (!m_add_vignetting)
        return (attenuation(r1, r2, dist_center));
@@ -158,7 +159,7 @@ double AntiVignetting::real_attenuation(double r1, double r2, double dist_center
        return (1.0 / attenuation(r1, r2, dist_center));
 }
 
-uchar AntiVignetting::clamp8bits(double x)
+uchar AntiVignettingFilter::clamp8bits(double x)
 {
     if (x < 0)
         return 0;
@@ -168,7 +169,7 @@ uchar AntiVignetting::clamp8bits(double x)
         return ((uchar) x);
 }
 
-unsigned short  AntiVignetting::clamp16bits(double x)
+unsigned short  AntiVignettingFilter::clamp16bits(double x)
 {
     if (x < 0)
         return 0;
