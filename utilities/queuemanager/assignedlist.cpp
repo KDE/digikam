@@ -486,8 +486,6 @@ void AssignedListView::slotQueueSelected(int, const QueueSettings&, const Assign
             addTool(it.key(), it.value());
         blockSignals(false);
     }
-
-    emit signalAssignedToolsChanged(assignedList());
 }
 
 void AssignedListView::slotSettingsChanged(const BatchToolSet& set)
