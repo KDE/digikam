@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace DigikamImagesPluginCore
+namespace DigikamColorImagePlugin
 {
 
 class BWSepiaToolPriv;
@@ -67,6 +67,6 @@ private:
     BWSepiaToolPriv* const d;
 };
 
-}  // namespace DigikamImagesPluginCore
+}  // namespace DigikamColorImagePlugin
 
 #endif /* BWSEPIATOOL_H */

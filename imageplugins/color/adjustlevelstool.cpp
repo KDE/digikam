@@ -72,7 +72,7 @@
 
 using namespace KDcrawIface;
 
-namespace DigikamImagesPluginCore
+namespace DigikamColorImagePlugin
 {
 
 class AdjustLevelsToolPriv
@@ -915,4 +915,4 @@ void AdjustLevelsTool::slotSaveAsSettings()
     slotChannelChanged();
 }
 
-}  // namespace DigikamImagesPluginCore
+}  // namespace DigikamColorImagePlugin

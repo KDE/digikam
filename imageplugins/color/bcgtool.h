@@ -32,7 +32,7 @@
 
 using namespace Digikam;
 
-namespace DigikamImagesPluginCore
+namespace DigikamColorImagePlugin
 {
 
 class BCGToolPriv;
@@ -65,6 +65,6 @@ private:
     BCGToolPriv* const d;
 };
 
-}  // namespace DigikamImagesPluginCore
+}  // namespace DigikamColorImagePlugin
 
 #endif /* BCGTOOL_H */

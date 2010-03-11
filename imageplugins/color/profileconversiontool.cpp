@@ -52,7 +52,7 @@
 #include "imageiface.h"
 #include "imageregionwidget.h"
 
-namespace DigikamImagesPluginCore
+namespace DigikamColorImagePlugin
 {
 
 class ProfileConversionToolPriv
@@ -286,4 +286,4 @@ void ProfileConversionTool::fastConversion(const IccProfile& profile)
     iface.putOriginalIccProfile(imDest.getIccProfile());
 }
 
-}  // namespace DigikamImagesPluginCore
+}  // namespace DigikamColorImagePlugin

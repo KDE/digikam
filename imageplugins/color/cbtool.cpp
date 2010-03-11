@@ -53,7 +53,7 @@
 
 using namespace KDcrawIface;
 
-namespace DigikamImagesPluginCore
+namespace DigikamColorImagePlugin
 {
 
 class CBToolPriv
@@ -207,4 +207,4 @@ void CBTool::renderingFinished()
     toolView()->setEnabled(true);
 }
 
-}  // namespace DigikamImagesPluginCore
+}  // namespace DigikamColorImagePlugin

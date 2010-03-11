@@ -35,7 +35,7 @@ class DColor;
 
 using namespace Digikam;
 
-namespace DigikamImagesPluginCore
+namespace DigikamColorImagePlugin
 {
 
 class AdjustCurvesToolPriv;
@@ -76,6 +76,6 @@ private:
     AdjustCurvesToolPriv* const d;
 };
 
-}  // namespace DigikamImagesPluginCore
+}  // namespace DigikamColorImagePlugin
 
 #endif /* ADJUSTCURVESTOOL_H */

@@ -57,7 +57,7 @@
 
 using namespace KDcrawIface;
 
-namespace DigikamImagesPluginCore
+namespace DigikamColorImagePlugin
 {
 
 class WhiteBalanceToolPriv
@@ -298,4 +298,4 @@ void WhiteBalanceTool::slotSaveAsSettings()
     d->settingsView->saveAsSettings();
 }
 
-}  // namespace DigikamImagesPluginCore
+}  // namespace DigikamColorImagePlugin

@@ -69,7 +69,7 @@
 
 using namespace KDcrawIface;
 
-namespace DigikamImagesPluginCore
+namespace DigikamColorImagePlugin
 {
 
 class ChannelMixerToolPriv
@@ -274,4 +274,4 @@ void ChannelMixerTool::slotSaveAsSettings()
     d->settingsView->saveAsSettings();
 }
 
-}  // namespace DigikamImagesPluginCore
+}  // namespace DigikamColorImagePlugin

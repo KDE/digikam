@@ -50,7 +50,7 @@
 
 using namespace Digikam;
 
-namespace DigikamImagesPluginCore
+namespace DigikamColorImagePlugin
 {
 
 class AutoCorrectionToolPriv
@@ -343,4 +343,4 @@ void AutoCorrectionTool::autoCorrection(DImg* img, DImg* ref, int type)
     }
 }
 
-}  // namespace DigikamImagesPluginCore
+}  // namespace DigikamColorImagePlugin

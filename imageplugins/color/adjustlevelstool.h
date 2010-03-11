@@ -35,7 +35,7 @@ class DColor;
 
 using namespace Digikam;
 
-namespace DigikamImagesPluginCore
+namespace DigikamColorImagePlugin
 {
 
 class AdjustLevelsToolPriv;
@@ -90,6 +90,6 @@ private:
     AdjustLevelsToolPriv* const d;
 };
 
-}  // namespace DigikamImagesPluginCore
+}  // namespace DigikamColorImagePlugin
 
 #endif /* ADJUSTLEVELSTOOL_H */

@@ -32,7 +32,7 @@
 
 using namespace Digikam;
 
-namespace DigikamImagesPluginCore
+namespace DigikamColorImagePlugin
 {
 
 class ProfileConversionToolPriv;
@@ -71,6 +71,6 @@ private:
     ProfileConversionToolPriv* const d;
 };
 
-}  // namespace DigikamImagesPluginCore
+}  // namespace DigikamColorImagePlugin
 
 #endif /* PROFILECONVERSIONTOOL_H */

@@ -30,7 +30,7 @@
 
 using namespace Digikam;
 
-namespace DigikamImagesPluginCore
+namespace DigikamColorImagePlugin
 {
 
 class ChannelMixerToolPriv;
@@ -70,6 +70,6 @@ private:
     ChannelMixerToolPriv* const d;
 };
 
-}  // namespace DigikamImagesPluginCore
+}  // namespace DigikamColorImagePlugin
 
 #endif /* CHANNELMIXERTOOL_H */

@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-06-04
- * Description : digiKam image editor plugin core
+ * Description : digiKam image editor plugin to correct color
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEPLUGIN_CORE_H
-#define IMAGEPLUGIN_CORE_H
+#ifndef IMAGEPLUGIN_COLOR_H
+#define IMAGEPLUGIN_COLOR_H
 
 // Qt includes
 
@@ -41,16 +41,16 @@ namespace Digikam
 
 using namespace Digikam;
 
-class ImagePlugin_CorePriv;
+class ImagePlugin_ColorPriv;
 
-class ImagePlugin_Core : public ImagePlugin
+class ImagePlugin_Color : public ImagePlugin
 {
     Q_OBJECT
 
 public:
 
-    ImagePlugin_Core(QObject* parent, const QVariantList& args);
-    ~ImagePlugin_Core();
+    ImagePlugin_Color(QObject* parent, const QVariantList& args);
+    ~ImagePlugin_Color();
 
     void setEnabledSelectionActions(bool b);
     void setEnabledActions(bool b);
@@ -79,7 +79,7 @@ private Q_SLOTS:
 
 private:
 
-    ImagePlugin_CorePriv* const d;
+    ImagePlugin_ColorPriv* const d;
 };
 
-#endif /* IMAGEPLUGIN_CORE_H */
+#endif /* IMAGEPLUGIN_COLOR_H */

@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace DigikamImagesPluginCore
+namespace DigikamColorImagePlugin
 {
 
 class HSLToolPriv;
@@ -64,6 +64,6 @@ private:
     HSLToolPriv* const d;
 };
 
-}  // namespace DigikamImagesPluginCore
+}  // namespace DigikamColorImagePlugin
 
 #endif /* HSLTOOL_H */

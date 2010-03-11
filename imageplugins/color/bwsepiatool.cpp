@@ -54,7 +54,7 @@
 
 using namespace KDcrawIface;
 
-namespace DigikamImagesPluginCore
+namespace DigikamColorImagePlugin
 {
 
 class BWSepiaToolPriv
@@ -246,4 +246,4 @@ void BWSepiaTool::slotSaveAsSettings()
     d->bwsepiaSettings->saveAsSettings();
 }
 
-}  // namespace DigikamImagesPluginCore
+}  // namespace DigikamColorImagePlugin

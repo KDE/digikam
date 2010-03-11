@@ -52,7 +52,7 @@
 
 using namespace KDcrawIface;
 
-namespace DigikamImagesPluginCore
+namespace DigikamColorImagePlugin
 {
 
 class HSLToolPriv
@@ -209,4 +209,4 @@ void HSLTool::renderingFinished()
     toolView()->setEnabled(true);
 }
 
-}  // namespace DigikamImagesPluginCore
+}  // namespace DigikamColorImagePlugin

@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-06-04
- * Description : digiKam image editor plugin core
+ * Description : digiKam image editor plugin to correct color
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "imageplugin_core.moc"
+#include "imageplugin_color.moc"
 
 // KDE includes
 
@@ -55,17 +55,17 @@
 #include "adjustcurvestool.h"
 #include "adjustlevelstool.h"
 
-using namespace DigikamImagesPluginCore;
+using namespace DigikamColorImagePlugin;
 
-K_PLUGIN_FACTORY( CorePluginFactory, registerPlugin<ImagePlugin_Core>(); )
-K_EXPORT_PLUGIN ( CorePluginFactory("digikamimageplugin_core") )
+K_PLUGIN_FACTORY( ColorPluginFactory, registerPlugin<ImagePlugin_Color>(); )
+K_EXPORT_PLUGIN ( ColorPluginFactory("digikamimageplugin_color") )
 
-class ImagePlugin_CorePriv
+class ImagePlugin_ColorPriv
 {
 
 public:
 
-    ImagePlugin_CorePriv() :
+    ImagePlugin_ColorPriv() :
         BCGAction(0),
         HSLAction(0),
         CBAction(0),
@@ -97,58 +97,58 @@ public:
     IccProfilesMenuAction* profileMenuAction;
 };
 
-ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QVariantList &)
-                : ImagePlugin(parent, "ImagePlugin_Core"),
-                  d(new ImagePlugin_CorePriv)
+ImagePlugin_Color::ImagePlugin_Color(QObject* parent, const QVariantList&)
+                 : ImagePlugin(parent, "ImagePlugin_Color"),
+                   d(new ImagePlugin_ColorPriv)
 {
     //-------------------------------
     // Colors menu actions
 
     d->BCGAction = new KAction(KIcon("contrast"), i18n("Brightness/Contrast/Gamma..."), this);
-    actionCollection()->addAction("implugcore_bcg", d->BCGAction );
+    actionCollection()->addAction("imageplugin_bcg", d->BCGAction );
     connect(d->BCGAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotBCG()));
 
     // NOTE: Photoshop 7 use CTRL+U.
     d->HSLAction = new KAction(KIcon("adjusthsl"), i18n("Hue/Saturation/Lightness..."), this);
     d->HSLAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_U));
-    actionCollection()->addAction("implugcore_hsl", d->HSLAction );
+    actionCollection()->addAction("imageplugin_hsl", d->HSLAction );
     connect(d->HSLAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotHSL()));
 
     // NOTE: Photoshop 7 use CTRL+B.
     d->CBAction = new KAction(KIcon("adjustrgb"), i18n("Color Balance..."), this);
     d->CBAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_B));
-    actionCollection()->addAction("implugcore_rgb", d->CBAction );
+    actionCollection()->addAction("imageplugin_rgb", d->CBAction );
     connect(d->CBAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotCB()));
 
     // NOTE: Photoshop 7 use CTRL+SHIFT+B with
     d->autoCorrectionAction = new KAction(KIcon("autocorrection"), i18n("Auto-Correction..."), this);
     d->autoCorrectionAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_B));
-    actionCollection()->addAction("implugcore_autocorrection", d->autoCorrectionAction );
+    actionCollection()->addAction("imageplugin_autocorrection", d->autoCorrectionAction );
     connect(d->autoCorrectionAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotAutoCorrection()));
 
     // NOTE: Photoshop 7 use CTRL+I.
     d->invertAction = new KAction(KIcon("invertimage"), i18n("Invert"), this);
     d->invertAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_I));
-    actionCollection()->addAction("implugcore_invert", d->invertAction );
+    actionCollection()->addAction("imageplugin_invert", d->invertAction );
     connect(d->invertAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotInvert()));
 
     d->convertTo8Bits = new KAction(KIcon("depth16to8"), i18n("8 bits"), this);
-    actionCollection()->addAction("implugcore_convertto8bits", d->convertTo8Bits );
+    actionCollection()->addAction("imageplugin_convertto8bits", d->convertTo8Bits );
     connect(d->convertTo8Bits, SIGNAL(triggered(bool) ),
             this, SLOT(slotConvertTo8Bits()));
 
     d->convertTo16Bits = new KAction(KIcon("depth8to16"), i18n("16 bits"), this);
-    actionCollection()->addAction("implugcore_convertto16bits", d->convertTo16Bits );
+    actionCollection()->addAction("imageplugin_convertto16bits", d->convertTo16Bits );
     connect(d->convertTo16Bits, SIGNAL(triggered(bool) ),
             this, SLOT(slotConvertTo16Bits()));
 
     d->profileMenuAction = new IccProfilesMenuAction(KIcon("colormanagement"), i18n("Color Space Conversion"), this);
-    actionCollection()->addAction("implugcore_colormanagement", d->profileMenuAction );
+    actionCollection()->addAction("imageplugin_colormanagement", d->profileMenuAction );
     connect(d->profileMenuAction, SIGNAL(triggered(const IccProfile&)),
             this, SLOT(slotConvertToColorSpace(const IccProfile&)));
 
@@ -158,50 +158,50 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QVariantList &)
     slotUpdateColorSpaceMenu();
 
     d->BWAction = new KAction(KIcon("bwtonal"), i18n("Black && White..."), this);
-    actionCollection()->addAction("implugcore_blackwhite", d->BWAction );
+    actionCollection()->addAction("imageplugin_blackwhite", d->BWAction );
     connect(d->BWAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotBW()));
 
     d->whitebalanceAction = new KAction(KIcon("whitebalance"), i18n("White Balance..."), this);
     d->whitebalanceAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_W));
-    actionCollection()->addAction("implugcore_whitebalance", d->whitebalanceAction );
+    actionCollection()->addAction("imageplugin_whitebalance", d->whitebalanceAction );
     connect(d->whitebalanceAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotWhiteBalance()));
 
     d->channelMixerAction = new KAction(KIcon("channelmixer"), i18n("Channel Mixer..."), this);
     d->channelMixerAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_H));
-    actionCollection()->addAction("implugcore_channelmixer", d->channelMixerAction );
+    actionCollection()->addAction("imageplugin_channelmixer", d->channelMixerAction );
     connect(d->channelMixerAction, SIGNAL(triggered(bool)),
             this, SLOT(slotChannelMixer()));
 
     d->curvesAction = new KAction(KIcon("adjustcurves"), i18n("Curves Adjust..."), this);
     // NOTE: Photoshop 7 use CTRL+M (but it's used in KDE to toogle menu bar).
     d->curvesAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_M));
-    actionCollection()->addAction("implugcore_adjustcurves", d->curvesAction);
+    actionCollection()->addAction("imageplugin_adjustcurves", d->curvesAction);
     connect(d->curvesAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotCurvesAdjust()));
 
     d->levelsAction  = new KAction(KIcon("adjustlevels"), i18n("Levels Adjust..."), this);
     d->levelsAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_L));
-    actionCollection()->addAction("implugcore_adjustlevels", d->levelsAction );
+    actionCollection()->addAction("imageplugin_adjustlevels", d->levelsAction );
     connect(d->levelsAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotLevelsAdjust()));
 
-    setXMLFile("digikamimageplugin_core_ui.rc");
+    setXMLFile("digikamimageplugin_color_ui.rc");
 
-    kDebug() << "ImagePlugin_Core plugin loaded";
+    kDebug() << "ImagePlugin_Color plugin loaded";
 }
 
-ImagePlugin_Core::~ImagePlugin_Core()
+ImagePlugin_Color::~ImagePlugin_Color()
 {
     delete d;
 }
 
-void ImagePlugin_Core::setEnabledSelectionActions(bool)
+void ImagePlugin_Color::setEnabledSelectionActions(bool)
 {
 }
 
-void ImagePlugin_Core::setEnabledActions(bool b)
+void ImagePlugin_Color::setEnabledActions(bool b)
 {
     d->convertTo8Bits->setEnabled(b);
     d->convertTo16Bits->setEnabled(b);
@@ -218,7 +218,7 @@ void ImagePlugin_Core::setEnabledActions(bool b)
     d->levelsAction->setEnabled(b);
 }
 
-void ImagePlugin_Core::slotInvert()
+void ImagePlugin_Color::slotInvert()
 {
     kapp->setOverrideCursor(Qt::WaitCursor);
 
@@ -230,7 +230,7 @@ void ImagePlugin_Core::slotInvert()
     kapp->restoreOverrideCursor();
 }
 
-void ImagePlugin_Core::slotConvertTo8Bits()
+void ImagePlugin_Color::slotConvertTo8Bits()
 {
     ImageIface iface(0, 0);
 
@@ -246,7 +246,7 @@ void ImagePlugin_Core::slotConvertTo8Bits()
                         i18n("Performing this operation will reduce image color quality. "
                              "Do you want to continue?"), QString(),
                         KStandardGuiItem::cont(), KStandardGuiItem::cancel(),
-                        QString("ImagePluginCore16To8Bits")) == KMessageBox::Cancel)
+                        QString("ImagePluginColor16To8Bits")) == KMessageBox::Cancel)
            return;
     }
 
@@ -255,7 +255,7 @@ void ImagePlugin_Core::slotConvertTo8Bits()
     kapp->restoreOverrideCursor();
 }
 
-void ImagePlugin_Core::slotConvertTo16Bits()
+void ImagePlugin_Color::slotConvertTo16Bits()
 {
     ImageIface iface(0, 0);
 
@@ -270,25 +270,25 @@ void ImagePlugin_Core::slotConvertTo16Bits()
     kapp->restoreOverrideCursor();
 }
 
-void ImagePlugin_Core::slotBCG()
+void ImagePlugin_Color::slotBCG()
 {
     BCGTool* tool = new BCGTool(this);
     loadTool(tool);
 }
 
-void ImagePlugin_Core::slotCB()
+void ImagePlugin_Color::slotCB()
 {
     CBTool* tool = new CBTool(this);
     loadTool(tool);
 }
 
-void ImagePlugin_Core::slotAutoCorrection()
+void ImagePlugin_Color::slotAutoCorrection()
 {
     AutoCorrectionTool* tool = new AutoCorrectionTool(this);
     loadTool(tool);
 }
 
-void ImagePlugin_Core::slotConvertToColorSpace(const IccProfile& profile)
+void ImagePlugin_Color::slotConvertToColorSpace(const IccProfile& profile)
 {
     ImageIface iface(0, 0);
 
@@ -303,7 +303,7 @@ void ImagePlugin_Core::slotConvertToColorSpace(const IccProfile& profile)
     kapp->restoreOverrideCursor();
 }
 
-void ImagePlugin_Core::slotUpdateColorSpaceMenu()
+void ImagePlugin_Color::slotUpdateColorSpaceMenu()
 {
     d->profileMenuAction->clear();
 
@@ -348,49 +348,49 @@ void ImagePlugin_Core::slotUpdateColorSpaceMenu()
             this, SLOT(slotProfileConversionTool()));
 }
 
-void ImagePlugin_Core::slotSetupICC()
+void ImagePlugin_Color::slotSetupICC()
 {
     EditorToolIface::editorToolIface()->setupICC();
 }
 
-void ImagePlugin_Core::slotProfileConversionTool()
+void ImagePlugin_Color::slotProfileConversionTool()
 {
     ProfileConversionTool* tool = new ProfileConversionTool(this);
     connect(tool, SIGNAL(okClicked()), this, SLOT(slotUpdateColorSpaceMenu()));
     loadTool(tool);
 }
 
-void ImagePlugin_Core::slotBW()
+void ImagePlugin_Color::slotBW()
 {
     BWSepiaTool* tool = new BWSepiaTool(this);
     loadTool(tool);
 }
 
-void ImagePlugin_Core::slotHSL()
+void ImagePlugin_Color::slotHSL()
 {
     HSLTool* tool = new HSLTool(this);
     loadTool(tool);
 }
 
-void ImagePlugin_Core::slotWhiteBalance()
+void ImagePlugin_Color::slotWhiteBalance()
 {
     WhiteBalanceTool* tool = new WhiteBalanceTool(this);
     loadTool(tool);
 }
 
-void ImagePlugin_Core::slotChannelMixer()
+void ImagePlugin_Color::slotChannelMixer()
 {
     ChannelMixerTool* tool = new ChannelMixerTool(this);
     loadTool(tool);
 }
 
-void ImagePlugin_Core::slotCurvesAdjust()
+void ImagePlugin_Color::slotCurvesAdjust()
 {
     AdjustCurvesTool* tool = new AdjustCurvesTool(this);
     loadTool(tool);
 }
 
-void ImagePlugin_Core::slotLevelsAdjust()
+void ImagePlugin_Color::slotLevelsAdjust()
 {
     AdjustLevelsTool* tool = new AdjustLevelsTool(this);
     loadTool(tool);

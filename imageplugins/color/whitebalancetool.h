@@ -37,7 +37,7 @@ class DColor;
 
 using namespace Digikam;
 
-namespace DigikamImagesPluginCore
+namespace DigikamColorImagePlugin
 {
 
 class WhiteBalanceToolPriv;
@@ -76,6 +76,6 @@ private:
     WhiteBalanceToolPriv* const d;
 };
 
-}  // namespace DigikamImagesPluginCore
+}  // namespace DigikamColorImagePlugin
 
 #endif /* WHITEBALANCETOOL_H */

@@ -58,7 +58,7 @@
 #include "imageiface.h"
 #include "imageregionwidget.h"
 
-namespace DigikamImagesPluginCore
+namespace DigikamColorImagePlugin
 {
 
 class AdjustCurvesToolPriv
@@ -307,4 +307,4 @@ void AdjustCurvesTool::slotSaveAsSettings()
     d->settingsView->saveAsSettings();
 }
 
-}  // namespace DigikamImagesPluginCore
+}  // namespace DigikamColorImagePlugin
