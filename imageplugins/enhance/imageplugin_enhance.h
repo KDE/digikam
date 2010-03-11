@@ -46,15 +46,17 @@ public:
     ImagePlugin_Enhance(QObject* parent, const QVariantList& args);
     ~ImagePlugin_Enhance();
 
-    void setEnabledActions(bool e);
+    void setEnabledActions(bool b);
 
 private Q_SLOTS:
 
     void slotRestoration();
+    void slotBlur();    
 
 private:
 
     KAction* m_restorationAction;
+    KAction* m_blurAction;
 };
 
 #endif /* IMAGEPLUGIN_ENHANCE_H */

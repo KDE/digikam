@@ -1,10 +1,11 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="8" name="digikamimageplugin_enhance" >
+<gui version="10" name="digikamimageplugin_enhance" >
 
  <MenuBar>
 
   <Menu name="Enhance" ><text>Enh&amp;ance</text>
       <Action name="imageplugin_restoration" />
+      <Action name="imageplugin_blur" />
   </Menu>
 
  </MenuBar>
@@ -15,6 +16,7 @@
 
  <ActionProperties>
       <Action shortcut="" name="imageplugin_restoration" />
+      <Action shortcut="" name="imageplugin_blur" />
  </ActionProperties>
 
 </gui>

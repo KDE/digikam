@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace DigikamImagesPluginCore
+namespace DigikamEnhanceImagePlugin
 {
 
 class BlurToolPriv;
@@ -64,6 +64,6 @@ private:
     BlurToolPriv* const d;
 };
 
-}  // namespace DigikamImagesPluginCore
+}  // namespace DigikamEnhanceImagePlugin
 
 #endif /* BLURTOOL_H */

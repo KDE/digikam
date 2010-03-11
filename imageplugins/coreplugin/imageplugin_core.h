@@ -59,7 +59,6 @@ public:
 
 private Q_SLOTS:
 
-    void slotBlur();
     void slotSharpen();
     void slotNoiseReduction();
     void slotRedEye();

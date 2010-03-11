@@ -49,7 +49,6 @@
 #include "bwsepiatool.h"
 #include "hsltool.h"
 #include "profileconversiontool.h"
-#include "blurtool.h"
 #include "noisereductiontool.h"
 #include "sharpentool.h"
 #include "redeyetool.h"
@@ -79,7 +78,6 @@ public:
         invertAction(0),
         BWAction(0),
         sharpenAction(0),
-        blurAction(0),
         convertTo8Bits(0),
         convertTo16Bits(0),
         noiseReductionAction(0),
@@ -99,7 +97,6 @@ public:
     KAction*               invertAction;
     KAction*               BWAction;
     KAction*               sharpenAction;
-    KAction*               blurAction;
     KAction*               convertTo8Bits;
     KAction*               convertTo16Bits;
     KAction*               noiseReductionAction;
@@ -205,11 +202,6 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QVariantList &)
     //-------------------------------
     // Enhance menu actions
 
-    d->blurAction = new KAction(KIcon("blurimage"), i18n("Blur..."), this);
-    actionCollection()->addAction("implugcore_blur", d->blurAction );
-    connect(d->blurAction, SIGNAL(triggered(bool) ),
-            this, SLOT(slotBlur()));
-
     d->sharpenAction = new KAction(KIcon("sharpenimage"), i18n("Sharpen..."), this);
     actionCollection()->addAction("implugcore_sharpen", d->sharpenAction );
     connect(d->sharpenAction, SIGNAL(triggered(bool) ),
@@ -256,7 +248,6 @@ void ImagePlugin_Core::setEnabledActions(bool b)
     d->invertAction->setEnabled(b);
     d->BCGAction->setEnabled(b);
     d->CBAction->setEnabled(b);
-    d->blurAction->setEnabled(b);
     d->redeyeAction->setEnabled(b);
     d->autoCorrectionAction->setEnabled(b);
     d->BWAction->setEnabled(b);
@@ -332,12 +323,6 @@ void ImagePlugin_Core::slotBCG()
 void ImagePlugin_Core::slotCB()
 {
     CBTool* tool = new CBTool(this);
-    loadTool(tool);
-}
-
-void ImagePlugin_Core::slotBlur()
-{
-    BlurTool* tool = new BlurTool(this);
     loadTool(tool);
 }
 

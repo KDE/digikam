@@ -15,7 +15,6 @@ SET(digikamimageplugin_core_PART_SRCS autocorrectiontool.cpp
                                       redeyetool.cpp
                                       sharpentool.cpp
                                       noisereductiontool.cpp
-                                      blurtool.cpp
    )
 
 

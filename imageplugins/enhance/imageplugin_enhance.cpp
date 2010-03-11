@@ -37,6 +37,7 @@
 // Local includes
 
 #include "restorationtool.h"
+#include "blurtool.h"
 
 using namespace DigikamEnhanceImagePlugin;
 
@@ -46,11 +47,16 @@ K_EXPORT_PLUGIN ( EnhanceFactory("digikamimageplugin_enhance") )
 ImagePlugin_Enhance::ImagePlugin_Enhance(QObject* parent, const QVariantList&)
                        : ImagePlugin(parent, "ImagePlugin_Enhance")
 {
-    m_restorationAction  = new KAction(KIcon("restoration"), i18n("Enhance..."), this);
-    actionCollection()->addAction("imageplugin_restoration", m_restorationAction );
-
+    m_restorationAction  = new KAction(KIcon("restoration"), i18n("Restoration..."), this);
+    actionCollection()->addAction("imageplugin_restoration", m_restorationAction);
     connect(m_restorationAction, SIGNAL(triggered(bool)),
             this, SLOT(slotRestoration()));
+            
+
+    m_blurAction = new KAction(KIcon("blurimage"), i18n("Blur..."), this);
+    actionCollection()->addAction("imageplugin_blur", m_blurAction);
+    connect(m_blurAction, SIGNAL(triggered(bool) ),
+            this, SLOT(slotBlur()));            
 
     setXMLFile( "digikamimageplugin_enhance_ui.rc" );
 
@@ -61,13 +67,20 @@ ImagePlugin_Enhance::~ImagePlugin_Enhance()
 {
 }
 
-void ImagePlugin_Enhance::setEnabledActions(bool e)
+void ImagePlugin_Enhance::setEnabledActions(bool b)
 {
-    m_restorationAction->setEnabled(e);
+    m_restorationAction->setEnabled(b);
+    m_blurAction->setEnabled(b);    
 }
 
 void ImagePlugin_Enhance::slotRestoration()
 {
     RestorationTool* tool = new RestorationTool(this);
+    loadTool(tool);
+}
+
+void ImagePlugin_Enhance::slotBlur()
+{
+    BlurTool* tool = new BlurTool(this);
     loadTool(tool);
 }

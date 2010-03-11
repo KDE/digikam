@@ -1,6 +1,7 @@
 
 SET(digikamimageplugin_enhance_PART_SRCS imageplugin_enhance.cpp
                                          restorationtool.cpp 
+                                         blurtool.cpp
    )
 
 KDE4_ADD_PLUGIN(digikamimageplugin_enhance ${digikamimageplugin_enhance_PART_SRCS})
@@ -13,6 +14,7 @@ TARGET_LINK_LIBRARIES(
     ${KDE4_KIO_LIBS}
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}
+    ${KDCRAW_LIBRARIES}
     )
 
 INSTALL(TARGETS digikamimageplugin_enhance DESTINATION ${PLUGIN_INSTALL_DIR} )

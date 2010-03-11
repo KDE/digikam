@@ -53,7 +53,7 @@
 
 using namespace KDcrawIface;
 
-namespace DigikamImagesPluginCore
+namespace DigikamEnhanceImagePlugin
 {
 
 class BlurToolPriv
@@ -190,4 +190,4 @@ void BlurTool::renderingFinished()
     toolView()->setEnabled(true);
 }
 
-}  // namespace DigikamImagesPluginCore
+}  // namespace DigikamEnhanceImagePlugin
