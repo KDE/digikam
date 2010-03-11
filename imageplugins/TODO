@@ -19,7 +19,7 @@ decorate
   /inserttext                NO                   NO                    NO
   /texture                  DONE                 DONE                  TODO
 
-fxfilters
+filters
   /colorfx                  TODO                 TODO                  TODO
   /charcoal                 DONE                 DONE                  TODO
   /distortionfx             DONE                 TODO                  TODO
