@@ -6,6 +6,7 @@ SET(digikamimageplugin_enhance_PART_SRCS imageplugin_enhance.cpp
                                          noisereductiontool.cpp
                                          localcontrasttool.cpp
                                          redeyetool.cpp
+                                         inpaintingtool.cpp 
    )
 
 KDE4_ADD_PLUGIN(digikamimageplugin_enhance ${digikamimageplugin_enhance_PART_SRCS})

@@ -39,7 +39,7 @@
 
 using namespace Digikam;
 
-namespace DigikamInPaintingImagesPlugin
+namespace DigikamEnhanceImagePlugin
 {
 
 class InPaintingPassivePopup : public KPassivePopup
@@ -103,6 +103,6 @@ private:
     InPaintingToolPriv* const d;
 };
 
-}  // namespace DigikamInPaintingImagesPlugin
+}  // namespace DigikamEnhanceImagePlugin
 
 #endif /* INPAINTINGTOOL_H */

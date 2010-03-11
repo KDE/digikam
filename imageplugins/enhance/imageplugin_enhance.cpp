@@ -43,6 +43,7 @@
 #include "localcontrasttool.h"
 #include "redeyetool.h"
 #include "imageiface.h"
+#include "inpaintingtool.h"
 
 using namespace DigikamEnhanceImagePlugin;
 
@@ -83,6 +84,14 @@ ImagePlugin_Enhance::ImagePlugin_Enhance(QObject* parent, const QVariantList&)
     actionCollection()->addAction("implugcore_redeye", m_redeyeAction);
     connect(m_redeyeAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotRedEye()));
+
+    m_inPaintingAction = new KAction(KIcon("inpainting"), i18n("In-painting..."), this);
+    m_inPaintingAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_E));
+    m_inPaintingAction->setWhatsThis( i18n( "This filter can be used to in-paint a part in a photo. "
+                                            "To use this option, select a region to in-paint.") );
+    connect(m_inPaintingAction, SIGNAL(triggered(bool) ),
+            this, SLOT(slotInPainting()));
+            
             
     setXMLFile( "digikamimageplugin_enhance_ui.rc" );
 
@@ -101,6 +110,7 @@ void ImagePlugin_Enhance::setEnabledActions(bool b)
     m_noiseReductionAction->setEnabled(b);
     m_localContrastAction->setEnabled(b);    
     m_redeyeAction->setEnabled(b);    
+    m_inPaintingAction->setEnabled(b);    
 }
 
 void ImagePlugin_Enhance::slotRestoration()
@@ -152,3 +162,27 @@ void ImagePlugin_Enhance::slotRedEye()
     RedEyeTool* tool = new RedEyeTool(this);
     loadTool(tool);
 }
+
+void ImagePlugin_Enhance::slotInPainting()
+{
+    ImageIface iface(0, 0);
+
+    int w = iface.selectedWidth();
+    int h = iface.selectedHeight();
+
+    if (!w || !h)
+    {
+        InPaintingPassivePopup* popup = new InPaintingPassivePopup(kapp->activeWindow());
+        popup->setView(i18n("In-Painting Photograph Tool"),
+                       i18n("To use this tool, you need to select a region "
+                            "to in-paint."));
+        popup->setAutoDelete(true);
+        popup->setTimeout(2500);
+        popup->show();
+        return;
+    }
+
+    InPaintingTool *tool = new InPaintingTool(this);
+    loadTool(tool);
+}
+

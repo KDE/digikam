@@ -41,6 +41,7 @@ enhance
   /blurtool                 DONE                 DONE                  DONE
   /localcontrast            DONE                 DONE                  DONE
   /redeyetool               DONE                 TODO                   NO
+  /inpainting               DONE                  NO                    NO
 
 transform
   /ratiocrop                DONE                  NO                    NO
@@ -52,4 +53,3 @@ transform
 
 superimpose                  NO                   NO                    NO
 hotpixels                   DONE                 DONE                  TODO
-inpainting                  DONE                  NO                    NO

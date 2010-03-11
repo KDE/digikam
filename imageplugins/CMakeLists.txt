@@ -40,7 +40,6 @@ ADD_SUBDIRECTORY( enhance )
 ADD_SUBDIRECTORY( fxfilters )
 ADD_SUBDIRECTORY( transform )
 ADD_SUBDIRECTORY( hotpixels )
-ADD_SUBDIRECTORY( inpainting )
 ADD_SUBDIRECTORY( lenscorrection )
 ADD_SUBDIRECTORY( superimpose )
 

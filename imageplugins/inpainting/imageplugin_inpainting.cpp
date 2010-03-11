@@ -53,7 +53,6 @@ ImagePlugin_InPainting::ImagePlugin_InPainting(QObject *parent, const QVariantLi
     m_inPaintingAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_E));
     m_inPaintingAction->setWhatsThis( i18n( "This filter can be used to in-paint a part in a photo. "
                                             "To use this option, select a region to in-paint.") );
-
     connect(m_inPaintingAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotInPainting()));
 
@@ -73,28 +72,3 @@ void ImagePlugin_InPainting::setEnabledActions(bool enable)
     m_inPaintingAction->setEnabled(enable);
 }
 
-void ImagePlugin_InPainting::slotInPainting()
-{
-
-    ImageIface iface(0, 0);
-
-    int w = iface.selectedWidth();
-    int h = iface.selectedHeight();
-
-    if (!w || !h)
-    {
-        InPaintingPassivePopup* popup = new InPaintingPassivePopup(kapp->activeWindow());
-        popup->setView(i18n("In-Painting Photograph Tool"),
-                       i18n("To use this tool, you need to select a region "
-                            "to in-paint."));
-        popup->setAutoDelete(true);
-        popup->setTimeout(2500);
-        popup->show();
-        return;
-    }
-
-    // -- run the dlg ----------------------------------------------
-
-    InPaintingTool *tool = new InPaintingTool(this);
-    loadTool(tool);
-}

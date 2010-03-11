@@ -47,17 +47,14 @@
 
 // KDE includes
 
-#include <kaboutdata.h>
 #include <kapplication.h>
 #include <kcombobox.h>
 #include <kcursor.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
-#include <khelpmenu.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kmenu.h>
 #include <kmessagebox.h>
 #include <kpassivepopup.h>
 #include <kstandarddirs.h>
@@ -67,15 +64,13 @@
 
 // Local includes
 
-#include "daboutdata.h"
 #include "editortoolsettings.h"
 #include "greycstorationfilter.h"
 #include "greycstorationsettings.h"
 #include "imageiface.h"
 #include "imageguidewidget.h"
-#include "version.h"
 
-namespace DigikamInPaintingImagesPlugin
+namespace DigikamEnhanceImagePlugin
 {
 
 class InPaintingToolPriv
@@ -493,4 +488,4 @@ void InPaintingTool::slotSaveAsSettings()
     file.close();
 }
 
-}  // namespace DigikamInPaintingImagesPlugin
+}  // namespace DigikamEnhanceImagePlugin
