@@ -74,9 +74,8 @@
 #include "editortoolsettings.h"
 #include "editortooliface.h"
 #include "dimgthreadedfilter.h"
-#include "greycstorationiface.h"
+#include "greycstorationfilter.h"
 #include "greycstorationwidget.h"
-#include "greycstorationsettings.h"
 
 using namespace KDcrawIface;
 
@@ -88,7 +87,7 @@ class ResizeImage : public DImgThreadedFilter
 
 public:
 
-    ResizeImage(DImg *orgImage, int newWidth, int newHeight, QObject *parent=0)
+    ResizeImage(DImg* orgImage, int newWidth, int newHeight, QObject* parent=0)
         : DImgThreadedFilter(orgImage, parent, "resizeimage")
 
     {
@@ -342,7 +341,7 @@ ResizeTool::ResizeTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    GreycstorationSettings defaults;
+    GreycstorationContainer defaults;
     defaults.setResizeDefaultSettings();
     d->settingsWidget->setDefaultSettings(defaults);
 
@@ -359,54 +358,54 @@ void ResizeTool::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
 
-    GreycstorationSettings settings;
-    GreycstorationSettings defaults;
+    GreycstorationContainer prm;
+    GreycstorationContainer defaults;
     defaults.setResizeDefaultSettings();
 
-    settings.fastApprox = group.readEntry(d->configFastApproxEntry,    defaults.fastApprox);
-    settings.interp     = group.readEntry(d->configInterpolationEntry, defaults.interp);
-    settings.amplitude  = group.readEntry(d->configAmplitudeEntry,     (double)defaults.amplitude);
-    settings.sharpness  = group.readEntry(d->configSharpnessEntry,     (double)defaults.sharpness);
-    settings.anisotropy = group.readEntry(d->configAnisotropyEntry,    (double)defaults.anisotropy);
-    settings.alpha      = group.readEntry(d->configAlphaEntry,         (double)defaults.alpha);
-    settings.sigma      = group.readEntry(d->configSigmaEntry,         (double)defaults.sigma);
-    settings.gaussPrec  = group.readEntry(d->configGaussPrecEntry,     (double)defaults.gaussPrec);
-    settings.dl         = group.readEntry(d->configDlEntry,            (double)defaults.dl);
-    settings.da         = group.readEntry(d->configDaEntry,            (double)defaults.da);
-    settings.nbIter     = group.readEntry(d->configIterationEntry,     defaults.nbIter);
-    settings.tile       = group.readEntry(d->configTileEntry,          defaults.tile);
-    settings.btile      = group.readEntry(d->configBTileEntry,         defaults.btile);
-    d->settingsWidget->setSettings(settings);
+    prm.fastApprox = group.readEntry(d->configFastApproxEntry,    defaults.fastApprox);
+    prm.interp     = group.readEntry(d->configInterpolationEntry, defaults.interp);
+    prm.amplitude  = group.readEntry(d->configAmplitudeEntry,     (double)defaults.amplitude);
+    prm.sharpness  = group.readEntry(d->configSharpnessEntry,     (double)defaults.sharpness);
+    prm.anisotropy = group.readEntry(d->configAnisotropyEntry,    (double)defaults.anisotropy);
+    prm.alpha      = group.readEntry(d->configAlphaEntry,         (double)defaults.alpha);
+    prm.sigma      = group.readEntry(d->configSigmaEntry,         (double)defaults.sigma);
+    prm.gaussPrec  = group.readEntry(d->configGaussPrecEntry,     (double)defaults.gaussPrec);
+    prm.dl         = group.readEntry(d->configDlEntry,            (double)defaults.dl);
+    prm.da         = group.readEntry(d->configDaEntry,            (double)defaults.da);
+    prm.nbIter     = group.readEntry(d->configIterationEntry,     defaults.nbIter);
+    prm.tile       = group.readEntry(d->configTileEntry,          defaults.tile);
+    prm.btile      = group.readEntry(d->configBTileEntry,         defaults.btile);
+    d->settingsWidget->setSettings(prm);
 }
 
 void ResizeTool::writeSettings()
 {
-    GreycstorationSettings settings = d->settingsWidget->getSettings();
-    KConfigGroup group              = KGlobal::config()->group(d->configGroupName);
+    GreycstorationContainer prm = d->settingsWidget->settings();
+    KConfigGroup group          = KGlobal::config()->group(d->configGroupName);
 
-    group.writeEntry(d->configFastApproxEntry,    settings.fastApprox);
-    group.writeEntry(d->configInterpolationEntry, settings.interp);
-    group.writeEntry(d->configAmplitudeEntry,     (double)settings.amplitude);
-    group.writeEntry(d->configSharpnessEntry,     (double)settings.sharpness);
-    group.writeEntry(d->configAnisotropyEntry,    (double)settings.anisotropy);
-    group.writeEntry(d->configAlphaEntry,         (double)settings.alpha);
-    group.writeEntry(d->configSigmaEntry,         (double)settings.sigma);
-    group.writeEntry(d->configGaussPrecEntry,     (double)settings.gaussPrec);
-    group.writeEntry(d->configDlEntry,            (double)settings.dl);
-    group.writeEntry(d->configDaEntry,            (double)settings.da);
-    group.writeEntry(d->configIterationEntry,     settings.nbIter);
-    group.writeEntry(d->configTileEntry,          settings.tile);
-    group.writeEntry(d->configBTileEntry,         settings.btile);
+    group.writeEntry(d->configFastApproxEntry,    prm.fastApprox);
+    group.writeEntry(d->configInterpolationEntry, prm.interp);
+    group.writeEntry(d->configAmplitudeEntry,     (double)prm.amplitude);
+    group.writeEntry(d->configSharpnessEntry,     (double)prm.sharpness);
+    group.writeEntry(d->configAnisotropyEntry,    (double)prm.anisotropy);
+    group.writeEntry(d->configAlphaEntry,         (double)prm.alpha);
+    group.writeEntry(d->configSigmaEntry,         (double)prm.sigma);
+    group.writeEntry(d->configGaussPrecEntry,     (double)prm.gaussPrec);
+    group.writeEntry(d->configDlEntry,            (double)prm.dl);
+    group.writeEntry(d->configDaEntry,            (double)prm.da);
+    group.writeEntry(d->configIterationEntry,     prm.nbIter);
+    group.writeEntry(d->configTileEntry,          prm.tile);
+    group.writeEntry(d->configBTileEntry,         prm.btile);
     group.writeEntry("RestorePhotograph",         d->useGreycstorationBox->isChecked());
     group.sync();
 }
 
 void ResizeTool::slotResetSettings()
 {
-    GreycstorationSettings settings;
-    settings.setResizeDefaultSettings();
+    GreycstorationContainer prm;
+    prm.setResizeDefaultSettings();
 
-    d->settingsWidget->setSettings(settings);
+    d->settingsWidget->setSettings(prm);
     d->useGreycstorationBox->setChecked(false);
     slotRestorationToggled(d->useGreycstorationBox->isChecked());
 
@@ -519,19 +518,18 @@ void ResizeTool::prepareEffect()
 
     if (d->useGreycstorationBox->isChecked())
     {
-        setFilter(dynamic_cast<DImgThreadedFilter*>(
-                  new GreycstorationIface(&imTemp,
-                                          d->settingsWidget->getSettings(),
-                                          GreycstorationIface::Resize,
-                                          new_w, new_h,
-                                          QImage(),
-                                          this)));
+        setFilter(new GreycstorationFilter(&imTemp,
+                                           d->settingsWidget->settings(),
+                                           GreycstorationFilter::Resize,
+                                           new_w, new_h,
+                                           QImage(),
+                                           this));
     }
     else
     {
         // See B.K.O #152192: CImg resize() sound like defective or unadapted
         // to resize image without good quality.
-        setFilter(dynamic_cast<DImgThreadedFilter*>(new ResizeImage(&imTemp, new_w, new_h, this)));
+        setFilter(new ResizeImage(&imTemp, new_w, new_h, this));
     }
 }
 
@@ -554,23 +552,22 @@ void ResizeTool::prepareFinal()
 
     if (d->useGreycstorationBox->isChecked())
     {
-        setFilter(dynamic_cast<DImgThreadedFilter*>(
-                  new GreycstorationIface(iface.getOriginalImg(),
-                                          d->settingsWidget->getSettings(),
-                                          GreycstorationIface::Resize,
-                                          d->wInput->value(),
-                                          d->hInput->value(),
-                                          QImage(),
-                                          this)));
+        setFilter(new GreycstorationFilter(iface.getOriginalImg(),
+                                           d->settingsWidget->settings(),
+                                           GreycstorationFilter::Resize,
+                                           d->wInput->value(),
+                                           d->hInput->value(),
+                                           QImage(),
+                                           this));
     }
     else
     {
         // See B.K.O #152192: CImg resize() sound like defective or unadapted
         // to resize image without good quality.
-        setFilter(dynamic_cast<DImgThreadedFilter*>(new ResizeImage(iface.getOriginalImg(),
-                                                    d->wInput->value(),
-                                                    d->hInput->value(),
-                                                    this)));
+        setFilter(new ResizeImage(iface.getOriginalImg(),
+                                  d->wInput->value(),
+                                  d->hInput->value(),
+                                  this));
     }
 }
 
@@ -580,8 +577,7 @@ void ResizeTool::putPreviewData()
     int w             = iface->previewWidth();
     int h             = iface->previewHeight();
     DImg imTemp       = filter()->getTargetImage().smoothScale(w, h, Qt::KeepAspectRatio);
-    DImg imDest(w, h, filter()->getTargetImage().sixteenBit(),
-                filter()->getTargetImage().hasAlpha());
+    DImg imDest(w, h, filter()->getTargetImage().sixteenBit(), filter()->getTargetImage().hasAlpha());
 
     QColor background = toolView()->backgroundRole();
     imDest.fill(DColor(background, filter()->getTargetImage().sixteenBit()));

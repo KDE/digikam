@@ -7,7 +7,7 @@
  * Description : a digiKam image editor plugin to restore
  *               a photograph
  *
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -51,14 +51,11 @@
 // Local includes
 
 #include "editortoolsettings.h"
-#include "greycstorationiface.h"
-#include "greycstorationsettings.h"
+#include "greycstorationfilter.h"
 #include "greycstorationwidget.h"
 #include "imageiface.h"
 #include "imageregionwidget.h"
 #include "version.h"
-
-using namespace Digikam;
 
 namespace DigikamRestorationImagesPlugin
 {
@@ -195,7 +192,7 @@ RestorationTool::RestorationTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    GreycstorationSettings defaults;
+    GreycstorationContainer defaults;
     defaults.setRestorationDefaultSettings();
     d->settingsWidget->setDefaultSettings(defaults);
 }
@@ -216,24 +213,24 @@ void RestorationTool::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
 
-    GreycstorationSettings settings;
-    GreycstorationSettings defaults;
+    GreycstorationContainer prm;
+    GreycstorationContainer defaults;
     defaults.setRestorationDefaultSettings();
 
-    settings.fastApprox = group.readEntry(d->configFastApproxEntry,    defaults.fastApprox);
-    settings.interp     = group.readEntry(d->configInterpolationEntry, defaults.interp);
-    settings.amplitude  = group.readEntry(d->configAmplitudeEntry,     (double)defaults.amplitude);
-    settings.sharpness  = group.readEntry(d->configSharpnessEntry,     (double)defaults.sharpness);
-    settings.anisotropy = group.readEntry(d->configAnisotropyEntry,    (double)defaults.anisotropy);
-    settings.alpha      = group.readEntry(d->configAlphaEntry,         (double)defaults.alpha);
-    settings.sigma      = group.readEntry(d->configSigmaEntry,         (double)defaults.sigma);
-    settings.gaussPrec  = group.readEntry(d->configGaussPrecEntry,     (double)defaults.gaussPrec);
-    settings.dl         = group.readEntry(d->configDlEntry,            (double)defaults.dl);
-    settings.da         = group.readEntry(d->configDaEntry,            (double)defaults.da);
-    settings.nbIter     = group.readEntry(d->configIterationEntry,     defaults.nbIter);
-    settings.tile       = group.readEntry(d->configTileEntry,          defaults.tile);
-    settings.btile      = group.readEntry(d->configBTileEntry,         defaults.btile);
-    d->settingsWidget->setSettings(settings);
+    prm.fastApprox = group.readEntry(d->configFastApproxEntry,    defaults.fastApprox);
+    prm.interp     = group.readEntry(d->configInterpolationEntry, defaults.interp);
+    prm.amplitude  = group.readEntry(d->configAmplitudeEntry,     (double)defaults.amplitude);
+    prm.sharpness  = group.readEntry(d->configSharpnessEntry,     (double)defaults.sharpness);
+    prm.anisotropy = group.readEntry(d->configAnisotropyEntry,    (double)defaults.anisotropy);
+    prm.alpha      = group.readEntry(d->configAlphaEntry,         (double)defaults.alpha);
+    prm.sigma      = group.readEntry(d->configSigmaEntry,         (double)defaults.sigma);
+    prm.gaussPrec  = group.readEntry(d->configGaussPrecEntry,     (double)defaults.gaussPrec);
+    prm.dl         = group.readEntry(d->configDlEntry,            (double)defaults.dl);
+    prm.da         = group.readEntry(d->configDaEntry,            (double)defaults.da);
+    prm.nbIter     = group.readEntry(d->configIterationEntry,     defaults.nbIter);
+    prm.tile       = group.readEntry(d->configTileEntry,          defaults.tile);
+    prm.btile      = group.readEntry(d->configBTileEntry,         defaults.btile);
+    d->settingsWidget->setSettings(prm);
 
     int p = group.readEntry(d->configPresetEntry, (int)NoPreset);
     d->restorationTypeCB->setCurrentIndex(p);
@@ -245,24 +242,24 @@ void RestorationTool::readSettings()
 
 void RestorationTool::writeSettings()
 {
-    GreycstorationSettings settings = d->settingsWidget->getSettings();
-    KSharedConfig::Ptr config       = KGlobal::config();
-    KConfigGroup group              = config->group(d->configGroupName);
+    GreycstorationContainer prm = d->settingsWidget->settings();
+    KSharedConfig::Ptr config   = KGlobal::config();
+    KConfigGroup group          = config->group(d->configGroupName);
 
     group.writeEntry(d->configPresetEntry,        d->restorationTypeCB->currentIndex());
-    group.writeEntry(d->configFastApproxEntry,    settings.fastApprox);
-    group.writeEntry(d->configInterpolationEntry, settings.interp);
-    group.writeEntry(d->configAmplitudeEntry,     (double)settings.amplitude);
-    group.writeEntry(d->configSharpnessEntry,     (double)settings.sharpness);
-    group.writeEntry(d->configAnisotropyEntry,    (double)settings.anisotropy);
-    group.writeEntry(d->configAlphaEntry,         (double)settings.alpha);
-    group.writeEntry(d->configSigmaEntry,         (double)settings.sigma);
-    group.writeEntry(d->configGaussPrecEntry,     (double)settings.gaussPrec);
-    group.writeEntry(d->configDlEntry,            (double)settings.dl);
-    group.writeEntry(d->configDaEntry,            (double)settings.da);
-    group.writeEntry(d->configIterationEntry,     settings.nbIter);
-    group.writeEntry(d->configTileEntry,          settings.tile);
-    group.writeEntry(d->configBTileEntry,         settings.btile);
+    group.writeEntry(d->configFastApproxEntry,    prm.fastApprox);
+    group.writeEntry(d->configInterpolationEntry, prm.interp);
+    group.writeEntry(d->configAmplitudeEntry,     (double)prm.amplitude);
+    group.writeEntry(d->configSharpnessEntry,     (double)prm.sharpness);
+    group.writeEntry(d->configAnisotropyEntry,    (double)prm.anisotropy);
+    group.writeEntry(d->configAlphaEntry,         (double)prm.alpha);
+    group.writeEntry(d->configSigmaEntry,         (double)prm.sigma);
+    group.writeEntry(d->configGaussPrecEntry,     (double)prm.gaussPrec);
+    group.writeEntry(d->configDlEntry,            (double)prm.dl);
+    group.writeEntry(d->configDaEntry,            (double)prm.da);
+    group.writeEntry(d->configIterationEntry,     prm.nbIter);
+    group.writeEntry(d->configTileEntry,          prm.tile);
+    group.writeEntry(d->configBTileEntry,         prm.btile);
     group.sync();
 }
 
@@ -278,7 +275,7 @@ void RestorationTool::slotResetValues(int i)
 
 void RestorationTool::slotResetSettings()
 {
-    GreycstorationSettings settings;
+    GreycstorationContainer settings;
     settings.setRestorationDefaultSettings();
 
     switch(d->restorationTypeCB->currentIndex())
@@ -323,9 +320,9 @@ void RestorationTool::prepareEffect()
     
     DImg previewImage = d->previewWidget->getOriginalRegionImage();
 
-    setFilter(dynamic_cast<DImgThreadedFilter*>(new GreycstorationIface(&previewImage,
-                                                d->settingsWidget->getSettings(), GreycstorationIface::Restore,
-                                                0, 0, QImage(), this)));
+    setFilter(new GreycstorationFilter(&previewImage,
+                                       d->settingsWidget->settings(), GreycstorationFilter::Restore,
+                                       0, 0, QImage(), this));
 }
 
 void RestorationTool::prepareFinal()
@@ -334,13 +331,13 @@ void RestorationTool::prepareFinal()
     toolView()->setEnabled(false);
     
     ImageIface iface(0, 0);
-    uchar *data = iface.getOriginalImage();
+    uchar* data = iface.getOriginalImage();
     DImg originalImage(iface.originalWidth(), iface.originalHeight(),
                        iface.originalSixteenBit(), iface.originalHasAlpha(), data);
 
-    setFilter(dynamic_cast<DImgThreadedFilter*>(new GreycstorationIface(&originalImage,
-                                                d->settingsWidget->getSettings(), GreycstorationIface::Restore,
-                                                0, 0, QImage(), this)));
+    setFilter(new GreycstorationFilter(&originalImage,
+              d->settingsWidget->settings(), GreycstorationFilter::Restore,
+              0, 0, QImage(), this));
 
     delete [] data;
 }

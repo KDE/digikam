@@ -6,7 +6,7 @@
  * Date        : 2008-07-11
  * Description : shared libraries list dialog
  *
- * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -75,7 +75,7 @@ extern "C"
 // Local includes
 
 #include "daboutdata.h"
-#include "greycstorationiface.h"
+#include "greycstorationfilter.h"
 #include "pgfutils.h"
 
 namespace Digikam
@@ -119,7 +119,7 @@ LibsInfoDlg::LibsInfoDlg(QWidget *parent)
     list.insert(i18n("LibTIFF"),                     QString(TIFFLIB_VERSION_STR).replace('\n', ' '));
     list.insert(i18n("LibJPEG"),                     QString::number(JPEG_LIB_VERSION));
     list.insert(i18n("LibJasper"),                   QString(jas_getversion()));
-    list.insert(i18n("LibCImg"),                     GreycstorationIface::cimgVersionString());
+    list.insert(i18n("LibCImg"),                     GreycstorationFilter::cimgVersionString());
     list.insert(i18n("LibLCMS"),                     QString::number(LCMS_VERSION));
     list.insert(i18n("LibPGF"),                      libPGFVersion());
 

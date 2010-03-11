@@ -6,7 +6,7 @@
  * Date        : 2007-09-13
  * Description : Greycstoration settings widgets
  *
- * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -121,7 +121,7 @@ public:
     RIntNumInput    *tileInput;
 };
 
-GreycstorationWidget::GreycstorationWidget(KTabWidget *parent)
+GreycstorationWidget::GreycstorationWidget(KTabWidget* parent)
                     : QObject(static_cast<QObject*>(parent)),
                       d(new GreycstorationWidgetPriv)
 {
@@ -231,9 +231,9 @@ GreycstorationWidget::GreycstorationWidget(KTabWidget *parent)
 
     d->interpolationLabel = new QLabel(i18n("Interpolation:"), d->advancedPage);
     d->interpolationBox   = new RComboBox(d->advancedPage);
-    d->interpolationBox->insertItem(GreycstorationSettings::NearestNeighbor, i18n("Nearest Neighbor"));
-    d->interpolationBox->insertItem(GreycstorationSettings::Linear, i18n("Linear"));
-    d->interpolationBox->insertItem(GreycstorationSettings::RungeKutta, i18n("Runge-Kutta"));
+    d->interpolationBox->insertItem(GreycstorationContainer::NearestNeighbor, i18n("Nearest Neighbor"));
+    d->interpolationBox->insertItem(GreycstorationContainer::Linear, i18n("Linear"));
+    d->interpolationBox->insertItem(GreycstorationContainer::RungeKutta, i18n("Runge-Kutta"));
     d->interpolationBox->setWhatsThis( i18n("Select the right interpolation method for the "
                                             "desired image quality."));
 
@@ -270,7 +270,7 @@ void GreycstorationWidget::setEnabled(bool b)
     d->parent->setTabEnabled(d->parent->indexOf(d->advancedPage), b);
 }
 
-void GreycstorationWidget::setSettings(GreycstorationSettings settings)
+void GreycstorationWidget::setSettings(const GreycstorationContainer& settings)
 {
     blockSignals(true);
     d->alphaInput->setValue(settings.alpha);
@@ -289,7 +289,7 @@ void GreycstorationWidget::setSettings(GreycstorationSettings settings)
     blockSignals(false);
 }
 
-void GreycstorationWidget::setDefaultSettings(GreycstorationSettings settings)
+void GreycstorationWidget::setDefaultSettings(const GreycstorationContainer& settings)
 {
     blockSignals(true);
     d->alphaInput->setDefaultValue(settings.alpha);
@@ -308,9 +308,9 @@ void GreycstorationWidget::setDefaultSettings(GreycstorationSettings settings)
     blockSignals(false);
 }
 
-GreycstorationSettings GreycstorationWidget::getSettings()
+GreycstorationContainer GreycstorationWidget::settings() const
 {
-    GreycstorationSettings settings;
+    GreycstorationContainer settings;
 
     settings.fastApprox = d->fastApproxCBox->isChecked();
     settings.interp     = d->interpolationBox->currentIndex();
@@ -338,21 +338,21 @@ bool GreycstorationWidget::loadSettings(QFile& file, const QString& header)
 
     blockSignals(true);
 
-    GreycstorationSettings settings;
-    settings.fastApprox = stream.readLine().toInt();
-    settings.interp     = stream.readLine().toInt();
-    settings.amplitude  = stream.readLine().toDouble();
-    settings.sharpness  = stream.readLine().toDouble();
-    settings.anisotropy = stream.readLine().toDouble();
-    settings.alpha      = stream.readLine().toDouble();
-    settings.sigma      = stream.readLine().toDouble();
-    settings.gaussPrec  = stream.readLine().toDouble();
-    settings.dl         = stream.readLine().toDouble();
-    settings.da         = stream.readLine().toDouble();
-    settings.nbIter     = stream.readLine().toInt();
-    settings.tile       = stream.readLine().toInt();
-    settings.btile      = stream.readLine().toInt();
-    setSettings(settings);
+    GreycstorationContainer prm;
+    prm.fastApprox = stream.readLine().toInt();
+    prm.interp     = stream.readLine().toInt();
+    prm.amplitude  = stream.readLine().toDouble();
+    prm.sharpness  = stream.readLine().toDouble();
+    prm.anisotropy = stream.readLine().toDouble();
+    prm.alpha      = stream.readLine().toDouble();
+    prm.sigma      = stream.readLine().toDouble();
+    prm.gaussPrec  = stream.readLine().toDouble();
+    prm.dl         = stream.readLine().toDouble();
+    prm.da         = stream.readLine().toDouble();
+    prm.nbIter     = stream.readLine().toInt();
+    prm.tile       = stream.readLine().toInt();
+    prm.btile      = stream.readLine().toInt();
+    setSettings(prm);
 
     blockSignals(false);
     return true;
@@ -360,22 +360,22 @@ bool GreycstorationWidget::loadSettings(QFile& file, const QString& header)
 
 void GreycstorationWidget::saveSettings(QFile& file, const QString& header)
 {
-    GreycstorationSettings settings = getSettings();
+    GreycstorationContainer prm = settings();
     QTextStream stream( &file );
     stream << header << "\n";
-    stream << settings.fastApprox << "\n";
-    stream << settings.interp << "\n";
-    stream << settings.amplitude << "\n";
-    stream << settings.sharpness << "\n";
-    stream << settings.anisotropy << "\n";
-    stream << settings.alpha << "\n";
-    stream << settings.sigma << "\n";
-    stream << settings.gaussPrec << "\n";
-    stream << settings.dl << "\n";
-    stream << settings.da << "\n";
-    stream << settings.nbIter << "\n";
-    stream << settings.tile << "\n";
-    stream << settings.btile << "\n";
+    stream << prm.fastApprox << "\n";
+    stream << prm.interp << "\n";
+    stream << prm.amplitude << "\n";
+    stream << prm.sharpness << "\n";
+    stream << prm.anisotropy << "\n";
+    stream << prm.alpha << "\n";
+    stream << prm.sigma << "\n";
+    stream << prm.gaussPrec << "\n";
+    stream << prm.dl << "\n";
+    stream << prm.da << "\n";
+    stream << prm.nbIter << "\n";
+    stream << prm.tile << "\n";
+    stream << prm.btile << "\n";
 }
 
 } // namespace Digikam

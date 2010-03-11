@@ -6,7 +6,7 @@
  * Date        : 2009-02-19
  * Description : Restoration batch tool.
  *
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -27,7 +27,7 @@
 // Local includes
 
 #include "batchtool.h"
-#include "greycstorationiface.h"
+#include "greycstorationfilter.h"
 
 class KComboBox;
 
@@ -65,9 +65,9 @@ private:
         ReduceTexturing
     };
 
-    KComboBox           *m_comboBox;
+    KComboBox*            m_comboBox;
 
-    GreycstorationIface *m_cimgIface;
+    GreycstorationFilter* m_cimgIface;
 };
 
 }  // namespace Digikam

@@ -3,17 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2006-21-07
- * Description : Greycstoration settings container.
+ * Date        : 2007-12-03
+ * Description : Greycstoration interface.
  *
- * Copyright (C) 2007 by Gilles Caulier <caulier dot gilles at gmail dot com> 
- *
- * For a full settings description, look at this url :
- * http://www.greyc.ensicaen.fr/~dtschump/greycstoration/guide.html
- *
- * For demonstration of settings, look at this url :
- *
- * http://www.greyc.ensicaen.fr/~dtschump/greycstoration/demonstration.html
+ * Copyright (C) 2007-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -28,17 +21,27 @@
  *
  * ============================================================ */
 
-#ifndef GREYCSTORATIONSETTINGS_H
-#define GREYCSTORATIONSETTINGS_H
+#ifndef GREYCSTORATIONFILTER_H
+#define GREYCSTORATIONFILTER_H
+
+// Qt includes
+
+#include <QtGui/QImage>
 
 // Local includes
 
+#include "dimg.h"
+#include "dimgthreadedfilter.h"
 #include "digikam_export.h"
+
+class QObject;
 
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT GreycstorationSettings
+class GreycstorationFilterPriv;
+
+class DIGIKAM_EXPORT GreycstorationContainer
 {
 
 public:
@@ -52,12 +55,12 @@ public:
 
 public:
 
-    GreycstorationSettings()
+    GreycstorationContainer()
     {
         setRestorationDefaultSettings();
     };
 
-    ~GreycstorationSettings(){};
+    ~GreycstorationContainer(){};
 
     void setRestorationDefaultSettings()
     {
@@ -139,6 +142,67 @@ public:
     float da;
 };
 
+// --------------------------------------------------------------------------
+
+class DIGIKAM_EXPORT GreycstorationFilter : public DImgThreadedFilter
+{
+
+public:
+
+    enum MODE
+    {
+        Restore = 0,
+        InPainting,
+        Resize,
+        SimpleResize    // Mode to resize image without to use Greycstoration algorithm.
+    };
+
+public:
+
+    /** Contructor without argument. Before to use it,
+        you need to call in order: setSettings(), setMode(), optionally setInPaintingMask(), 
+        setOriginalImage(), and necessary setup() at end.
+     */
+    GreycstorationFilter(QObject *parent=0);
+
+    /** Contructor with all arguments. Ready to use.
+     */
+    GreycstorationFilter(DImg *orgImage,
+                        const GreycstorationContainer& settings,
+                        int mode=Restore,
+                        int newWidth=0, int newHeight=0,
+                        const QImage& inPaintingMask=QImage(),
+                        QObject *parent=0);
+
+    ~GreycstorationFilter();
+
+    void setMode(int mode, int newWidth=0, int newHeight=0);
+    void setSettings(const GreycstorationContainer& settings);
+    void setInPaintingMask(const QImage& inPaintingMask);
+
+    void setup();
+
+    virtual void cancelFilter();
+
+    static QString cimgVersionString();
+
+private:
+
+    virtual void initFilter();
+    virtual void filterImage();
+
+    void computeChildrenThreads();
+    void restoration();
+    void inpainting();
+    void resize();
+    void simpleResize();
+    void iterationLoop(uint iter);
+
+private:
+
+    GreycstorationFilterPriv* const d;
+};
+
 }  // namespace Digikam
 
-#endif  // GREYCSTORATIONSETTINGS_H
+#endif /* GREYCSTORATIONFILTER_H */

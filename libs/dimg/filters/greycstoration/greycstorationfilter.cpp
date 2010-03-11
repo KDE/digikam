@@ -6,7 +6,7 @@
  * Date        : 2007-12-03
  * Description : Greycstoration interface.
  *
- * Copyright (C) 2007-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -26,7 +26,7 @@
 /** Only print debug information on the console */
 #define cimg_debug 1
 
-#include "greycstorationiface.h"
+#include "greycstorationfilter.h"
 
 // C++ includes
 
@@ -56,10 +56,6 @@
 
 #include <solid/device.h>
 
-// Local includes
-
-#include "greycstorationsettings.h"
-
 // CImg includes
 
 #include "CImg.h"
@@ -69,50 +65,50 @@ using namespace cimg_library;
 namespace Digikam
 {
 
-class GreycstorationIfacePriv
+class GreycstorationFilterPriv
 {
 
 public:
 
-    GreycstorationIfacePriv()
+    GreycstorationFilterPriv()
     {
-        mode               = GreycstorationIface::Restore;
+        mode               = GreycstorationFilter::Restore;
         gfact              = 1.0;
         computationThreads = 2;
     }
 
-    float                  gfact;
+    float                   gfact;
 
-    int                    computationThreads;  // Number of threads used by CImg during computation.
-    int                    mode;                // The interface running mode.
+    int                     computationThreads;  // Number of threads used by CImg during computation.
+    int                     mode;                // The interface running mode.
 
-    QSize                  newSize;
-    QImage                 inPaintingMask;      // Mask for inpainting.
+    QSize                   newSize;
+    QImage                  inPaintingMask;      // Mask for inpainting.
 
-    GreycstorationSettings settings;            // Current Greycstoraion algorithm settings.
+    GreycstorationContainer settings;            // Current Greycstoraion algorithm settings.
 
-    CImg<>                 img;                 // Main image.
-    CImg<uchar>            mask;                // The mask used with inpaint or resize mode
+    CImg<>                  img;                 // Main image.
+    CImg<uchar>             mask;                // The mask used with inpaint or resize mode
 };
 
-GreycstorationIface::GreycstorationIface(QObject *parent)
-                   : DImgThreadedFilter(parent),
-                     d(new GreycstorationIfacePriv)
+GreycstorationFilter::GreycstorationFilter(QObject* parent)
+                    : DImgThreadedFilter(parent),
+                      d(new GreycstorationFilterPriv)
 {
     setOriginalImage(DImg());
-    setSettings(GreycstorationSettings());
+    setSettings(GreycstorationContainer());
     setMode(Restore);
     setInPaintingMask(QImage());
 }
 
-GreycstorationIface::GreycstorationIface(DImg *orgImage,
-                                         const GreycstorationSettings& settings,
-                                         int mode,
-                                         int newWidth, int newHeight,
-                                         const QImage& inPaintingMask,
-                                         QObject *parent)
+GreycstorationFilter::GreycstorationFilter(DImg* orgImage,
+                                           const GreycstorationContainer& settings,
+                                           int mode,
+                                           int newWidth, int newHeight,
+                                           const QImage& inPaintingMask,
+                                           QObject* parent)
                    : DImgThreadedFilter(parent),
-                     d(new GreycstorationIfacePriv)
+                     d(new GreycstorationFilterPriv)
 {
     setOriginalImage(orgImage->copyImageData());
     setSettings(settings);
@@ -121,38 +117,38 @@ GreycstorationIface::GreycstorationIface(DImg *orgImage,
     setup();
 }
 
-GreycstorationIface::~GreycstorationIface()
+GreycstorationFilter::~GreycstorationFilter()
 {
     delete d;
 }
 
-void GreycstorationIface::setSettings(const GreycstorationSettings& settings)
+void GreycstorationFilter::setSettings(const GreycstorationContainer& settings)
 {
     d->settings = settings;
 }
 
-void GreycstorationIface::setMode(int mode, int newWidth, int newHeight)
+void GreycstorationFilter::setMode(int mode, int newWidth, int newHeight)
 {
     d->mode = mode;
     d->newSize = QSize(newWidth, newHeight);
 }
 
-void GreycstorationIface::setInPaintingMask(const QImage& inPaintingMask)
+void GreycstorationFilter::setInPaintingMask(const QImage& inPaintingMask)
 {
     d->inPaintingMask = inPaintingMask;
 }
 
-void GreycstorationIface::computeChildrenThreads()
+void GreycstorationFilter::computeChildrenThreads()
 {
     // Check number of CPU with Solid interface.
 
     const int numProcs    = qMax(Solid::Device::listFromType(Solid::DeviceInterface::Processor).count(), 1);
     const int maxThreads  = 16;
     d->computationThreads = qMin(maxThreads, 2 + ((numProcs - 1) * 2));
-    kDebug() << "GreycstorationIface::Computation threads: " << d->computationThreads;
+    kDebug() << "GreycstorationFilter::Computation threads: " << d->computationThreads;
 }
 
-void GreycstorationIface::setup()
+void GreycstorationFilter::setup()
 {
     computeChildrenThreads();
 
@@ -163,7 +159,7 @@ void GreycstorationIface::setup()
     {
         m_destImage = DImg(d->newSize.width(), d->newSize.height(),
                            m_orgImage.sixteenBit(), m_orgImage.hasAlpha());
-        kDebug() << "GreycstorationIface::Resize: new size: ("
+        kDebug() << "GreycstorationFilter::Resize: new size: ("
                       << d->newSize.width() << ", " << d->newSize.height() << ")";
     }
     else
@@ -175,7 +171,7 @@ void GreycstorationIface::setup()
     initFilter();
 }
 
-QString GreycstorationIface::cimgVersionString()
+QString GreycstorationFilter::cimgVersionString()
 {
     return QString::number(cimg_version);
 }
@@ -183,7 +179,7 @@ QString GreycstorationIface::cimgVersionString()
 // We need to re-implement this method from DImgThreadedFilter class because
 // target image size can be different from original if d->mode = Resize.
 
-void GreycstorationIface::initFilter()
+void GreycstorationFilter::initFilter()
 {
     // (left out here: creation of m_destImage)
 
@@ -191,7 +187,7 @@ void GreycstorationIface::initFilter()
         startFilterDirectly();
 }
 
-void GreycstorationIface::cancelFilter()
+void GreycstorationFilter::cancelFilter()
 {
     // Because Greycstoration algorithm run in a child thread, we need
     // to stop it before to stop this thread.
@@ -206,11 +202,11 @@ void GreycstorationIface::cancelFilter()
     DImgThreadedFilter::cancelFilter();
 }
 
-void GreycstorationIface::filterImage()
+void GreycstorationFilter::filterImage()
 {
     register int x, y;
 
-    kDebug() << "GreycstorationIface::Initialization...";
+    kDebug() << "Initialization...";
 
     uchar* data = m_orgImage.bits();
     int width   = m_orgImage.width();
@@ -228,7 +224,7 @@ void GreycstorationIface::filterImage()
                  get_permute_axes("yzvx");
     }
 
-    kDebug() << "GreycstorationIface::Process Computation...";
+    kDebug() << "Process Computation...";
 
     try
     {
@@ -253,7 +249,7 @@ void GreycstorationIface::filterImage()
     }
     catch(...)         // Everything went wrong.
     {
-       kDebug() << "GreycstorationIface::Error during Greycstoration filter computation!";
+       kDebug() << "Error during Greycstoration filter computation!";
 
        if (m_parent)
            emit finished(false);
@@ -266,7 +262,7 @@ void GreycstorationIface::filterImage()
 
     // Copy CImg onto destination.
 
-    kDebug() << "GreycstorationIface::Finalization...";
+    kDebug() << "Finalization...";
 
     uchar* newData = m_destImage.bits();
     int newWidth   = m_destImage.width();
@@ -308,7 +304,7 @@ void GreycstorationIface::filterImage()
     }
 }
 
-void GreycstorationIface::restoration()
+void GreycstorationFilter::restoration()
 {
     for (uint iter = 0 ; !m_cancel && (iter < d->settings.nbIter) ; ++iter)
     {
@@ -336,7 +332,7 @@ void GreycstorationIface::restoration()
     }
 }
 
-void GreycstorationIface::inpainting()
+void GreycstorationFilter::inpainting()
 {
     if (!d->inPaintingMask.isNull())
     {
@@ -392,7 +388,7 @@ void GreycstorationIface::inpainting()
     }
 }
 
-void GreycstorationIface::resize()
+void GreycstorationFilter::resize()
 {
     const bool anchor       = true;   // Anchor original pixels.
     const unsigned int init = 5;      // Initial estimate (1=block, 3=linear, 5=bicubic).
@@ -436,7 +432,7 @@ void GreycstorationIface::resize()
     }
 }
 
-void GreycstorationIface::simpleResize()
+void GreycstorationFilter::simpleResize()
 {
     const unsigned int method = 3;      // Initial estimate (0, none, 1=block, 3=linear, 4=grid, 5=bicubic).
 
@@ -452,7 +448,7 @@ void GreycstorationIface::simpleResize()
     d->img.resize(w, h, -100, -100, method);
 }
 
-void GreycstorationIface::iterationLoop(uint iter)
+void GreycstorationFilter::iterationLoop(uint iter)
 {
     uint mp  = 0;
     uint p   = 0;
