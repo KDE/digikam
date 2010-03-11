@@ -1,26 +1,26 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="33" name="digikamimageplugin_core" >
+<gui version="34" name="digikamimageplugin_color" >
 
  <MenuBar>
 
    <Menu name="Color"><text>&amp;Color</text>
-      <Action name="implugcore_autocorrection" />
-      <Action name="implugcore_bcg" />
-      <Action name="implugcore_hsl" />
-      <Action name="implugcore_rgb" />
+      <Action name="imageplugin_autocorrection" />
+      <Action name="imageplugin_bcg" />
+      <Action name="imageplugin_hsl" />
+      <Action name="imageplugin_rgb" />
       <Separator />
-      <Action name="implugcore_invert" />
-      <Action name="implugcore_blackwhite" />
-      <Action name="implugcore_whitebalance" />
-      <Action name="implugcore_channelmixer" />
-      <Action name="implugcore_adjustcurves" />
-      <Action name="implugcore_adjustlevels" />
+      <Action name="imageplugin_invert" />
+      <Action name="imageplugin_blackwhite" />
+      <Action name="imageplugin_whitebalance" />
+      <Action name="imageplugin_channelmixer" />
+      <Action name="imageplugin_adjustcurves" />
+      <Action name="imageplugin_adjustlevels" />
       <Menu name="Depth"><text>&amp;Depth</text>
-          <Action name="implugcore_convertto8bits" />
-          <Action name="implugcore_convertto16bits" />
+          <Action name="imageplugin_convertto8bits" />
+          <Action name="imageplugin_convertto16bits" />
       </Menu>
       <Separator />
-      <Action name="implugcore_colormanagement" />
+      <Action name="imageplugin_colormanagement" />
       <Separator />
    </Menu>
 
