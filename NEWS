@@ -114,7 +114,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 083 ==> 210259 : Scan crashed on multi-layer TIFFs.
 084 ==> 229344 : digiKam starting up - loading kipi-plugins.
 085 ==> 229578 : Metadata is not correctly updated when just assigning tags.
-086
+086 ==> 230323 : ShowFoto and Digikam opening Olympus E-P2 ORF file will crash.
+087 ==> 
 
 
 
