@@ -10,8 +10,6 @@ SET(digikamimageplugin_core_PART_SRCS autocorrectiontool.cpp
                                       adjustcurvestool.cpp
                                       adjustlevelstool.cpp
                                       imageplugin_core.cpp
-
-                                      redeyetool.cpp
    )
 
 

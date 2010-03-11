@@ -43,7 +43,7 @@ class DColor;
 
 using namespace Digikam;
 
-namespace DigikamImagesPluginCore
+namespace DigikamEnhanceImagePlugin
 {
 
 class RedEyePassivePopup : public KPassivePopup
@@ -105,6 +105,6 @@ private:
     RedEyeToolPriv* const d;
 };
 
-}  // namespace DigikamImagesPluginCore
+}  // namespace DigikamEnhanceImagePlugin
 
 #endif /* REDEYETOOL_H */

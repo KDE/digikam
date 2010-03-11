@@ -58,8 +58,6 @@ public:
     typedef Digikam::IccProfile IccProfile; // to make signal/slot work
 
 private Q_SLOTS:
-
-    void slotRedEye();
     
     void slotBCG();
     void slotCB();

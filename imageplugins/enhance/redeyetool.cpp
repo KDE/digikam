@@ -69,7 +69,7 @@
 
 using namespace KDcrawIface;
 
-namespace DigikamImagesPluginCore
+namespace DigikamEnhanceImagePlugin
 {
 
 class RedEyeToolPriv
@@ -603,4 +603,4 @@ void RedEyeTool::redEyeFilter(DImg& selection)
     delete composer;
 }
 
-}  // namespace DigikamImagesPluginCore
+}  // namespace DigikamEnhanceImagePlugin

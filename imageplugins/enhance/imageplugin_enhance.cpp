@@ -41,6 +41,8 @@
 #include "sharpentool.h"
 #include "noisereductiontool.h"
 #include "localcontrasttool.h"
+#include "redeyetool.h"
+#include "imageiface.h"
 
 using namespace DigikamEnhanceImagePlugin;
 
@@ -74,7 +76,14 @@ ImagePlugin_Enhance::ImagePlugin_Enhance(QObject* parent, const QVariantList&)
     actionCollection()->addAction("imageplugin_localcontrast", m_localContrastAction);
     connect(m_localContrastAction, SIGNAL(triggered(bool)),
             this, SLOT(slotLocalContrast()));
-                        
+
+    m_redeyeAction = new KAction(KIcon("redeyes"), i18n("Red Eye..."), this);
+    m_redeyeAction->setWhatsThis(i18n("This filter can be used to correct red eyes in a photo. "
+                                      "Select a region including the eyes to use this option."));
+    actionCollection()->addAction("implugcore_redeye", m_redeyeAction);
+    connect(m_redeyeAction, SIGNAL(triggered(bool) ),
+            this, SLOT(slotRedEye()));
+            
     setXMLFile( "digikamimageplugin_enhance_ui.rc" );
 
     kDebug() << "ImagePlugin_Enhance plugin loaded";
@@ -91,6 +100,7 @@ void ImagePlugin_Enhance::setEnabledActions(bool b)
     m_sharpenAction->setEnabled(b);    
     m_noiseReductionAction->setEnabled(b);
     m_localContrastAction->setEnabled(b);    
+    m_redeyeAction->setEnabled(b);    
 }
 
 void ImagePlugin_Enhance::slotRestoration()
@@ -120,5 +130,25 @@ void ImagePlugin_Enhance::slotNoiseReduction()
 void ImagePlugin_Enhance::slotLocalContrast()
 {
     LocalContrastTool* tool = new LocalContrastTool(this);
+    loadTool(tool);
+}
+
+void ImagePlugin_Enhance::slotRedEye()
+{
+    ImageIface iface(0, 0);
+
+    if (!iface.selectedWidth() || !iface.selectedHeight())
+    {
+        RedEyePassivePopup* popup = new RedEyePassivePopup(kapp->activeWindow());
+        popup->setView(i18n("Red-Eye Correction Tool"),
+                       i18n("You need to select a region including the eyes to use "
+                            "the red-eye correction tool"));
+        popup->setAutoDelete(true);
+        popup->setTimeout(2500);
+        popup->show();
+        return;
+    }
+
+    RedEyeTool* tool = new RedEyeTool(this);
     loadTool(tool);
 }

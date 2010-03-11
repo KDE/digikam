@@ -54,10 +54,12 @@ private Q_SLOTS:
     void slotBlur();    
     void slotSharpen();
     void slotNoiseReduction();
-    void slotLocalContrast();    
+    void slotLocalContrast();
+    void slotRedEye();    
 
 private:
 
+    KAction* m_redeyeAction;
     KAction* m_restorationAction;
     KAction* m_blurAction;
     KAction* m_sharpenAction;

@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="32" name="digikamimageplugin_core" >
+<gui version="33" name="digikamimageplugin_core" >
 
  <MenuBar>
 
@@ -23,13 +23,8 @@
       <Action name="implugcore_colormanagement" />
       <Separator />
    </Menu>
-   
-   <Menu name="Enhance"><text>Enh&amp;ance</text>
-      <Separator />
-      <Action name="implugcore_redeye" />
-   </Menu>
 
- </MenuBar>
+</MenuBar>
 
  <ToolBar name="mainToolBar" >
       <text>Main Toolbar</text>

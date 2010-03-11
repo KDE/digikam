@@ -49,7 +49,6 @@
 #include "bwsepiatool.h"
 #include "hsltool.h"
 #include "profileconversiontool.h"
-#include "redeyetool.h"
 #include "cbtool.h"
 #include "whitebalancetool.h"
 #include "channelmixertool.h"
@@ -67,7 +66,6 @@ class ImagePlugin_CorePriv
 public:
 
     ImagePlugin_CorePriv() :
-        redeyeAction(0),
         BCGAction(0),
         HSLAction(0),
         CBAction(0),
@@ -83,7 +81,6 @@ public:
         profileMenuAction(0)
         {}
 
-    KAction*               redeyeAction;
     KAction*               BCGAction;
     KAction*               HSLAction;
     KAction*               CBAction;
@@ -190,19 +187,6 @@ ImagePlugin_Core::ImagePlugin_Core(QObject *parent, const QVariantList &)
     connect(d->levelsAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotLevelsAdjust()));
 
-    //-------------------------------
-    // Enhance menu actions
-
-    d->redeyeAction = new KAction(KIcon("redeyes"), i18n("Red Eye..."), this);
-    d->redeyeAction->setWhatsThis( i18n( "This filter can be used to correct red eyes in a photo. "
-                                        "Select a region including the eyes to use this option.") );
-    actionCollection()->addAction("implugcore_redeye", d->redeyeAction );
-    connect(d->redeyeAction, SIGNAL(triggered(bool) ),
-            this, SLOT(slotRedEye()));
-
-    //-------------------------------
-    // Init. menu actions.
-
     setXMLFile("digikamimageplugin_core_ui.rc");
 
     kDebug() << "ImagePlugin_Core plugin loaded";
@@ -224,7 +208,6 @@ void ImagePlugin_Core::setEnabledActions(bool b)
     d->invertAction->setEnabled(b);
     d->BCGAction->setEnabled(b);
     d->CBAction->setEnabled(b);
-    d->redeyeAction->setEnabled(b);
     d->autoCorrectionAction->setEnabled(b);
     d->BWAction->setEnabled(b);
     d->HSLAction->setEnabled(b);
@@ -302,26 +285,6 @@ void ImagePlugin_Core::slotCB()
 void ImagePlugin_Core::slotAutoCorrection()
 {
     AutoCorrectionTool* tool = new AutoCorrectionTool(this);
-    loadTool(tool);
-}
-
-void ImagePlugin_Core::slotRedEye()
-{
-    ImageIface iface(0, 0);
-
-    if (!iface.selectedWidth() || !iface.selectedHeight())
-    {
-        RedEyePassivePopup* popup = new RedEyePassivePopup(kapp->activeWindow());
-        popup->setView(i18n("Red-Eye Correction Tool"),
-                       i18n("You need to select a region including the eyes to use "
-                            "the red-eye correction tool"));
-        popup->setAutoDelete(true);
-        popup->setTimeout(2500);
-        popup->show();
-        return;
-    }
-
-    RedEyeTool* tool = new RedEyeTool(this);
     loadTool(tool);
 }
 
