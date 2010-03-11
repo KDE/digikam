@@ -54,9 +54,33 @@ ToolListViewGroup::ToolListViewGroup(QTreeWidget *parent, BatchTool::BatchToolGr
 
     switch(m_group)
     {
-        case BatchTool::BaseTool:
+        case BatchTool::ColorTool:
             setIcon(0, SmallIcon("digikam"));
-            setText(0, i18n("Base Tools"));
+            setText(0, i18n("Color"));
+            break;
+        case BatchTool::EnhanceTool:
+            setIcon(0, SmallIcon("digikam"));
+            setText(0, i18n("Enhance"));
+            break;
+        case BatchTool::TransformTool:
+            setIcon(0, SmallIcon("digikam"));
+            setText(0, i18n("Transform"));
+            break;
+        case BatchTool::DecorateTool:
+            setIcon(0, SmallIcon("digikam"));
+            setText(0, i18n("Decorate"));
+            break;
+        case BatchTool::FiltersTool:
+            setIcon(0, SmallIcon("digikam"));
+            setText(0, i18n("Filters"));
+            break;
+        case BatchTool::ConvertTool:
+            setIcon(0, SmallIcon("digikam"));
+            setText(0, i18n("Convert"));
+            break;
+        case BatchTool::MetadataTool:
+            setIcon(0, SmallIcon("digikam"));
+            setText(0, i18n("Metadata"));
             break;
         case BatchTool::KipiTool:
             setIcon(0, SmallIcon("kipi"));
@@ -160,7 +184,7 @@ bool ToolsListView::removeTool(BatchTool* tool)
     while (*it)
     {
         ToolListViewItem* item = dynamic_cast<ToolListViewItem*>(*it);
-        if (item->tool() == tool)
+        if (item && item->tool() == tool)
         {
             delete item;
             return true;
@@ -176,7 +200,7 @@ ToolListViewGroup* ToolsListView::findToolGroup(BatchTool::BatchToolGroup group)
     while (*it)
     {
         ToolListViewGroup* item = dynamic_cast<ToolListViewGroup*>(*it);
-        if (item->toolGroup() == group)
+        if (item && item->toolGroup() == group)
             return item;
 
         ++it;
@@ -191,7 +215,7 @@ bool ToolsListView::findTool(BatchTool* tool)
     while (*it)
     {
         ToolListViewItem* item = dynamic_cast<ToolListViewItem*>(*it);
-        if (item->tool() == tool)
+        if (item && item->tool() == tool)
             return true;
 
         ++it;

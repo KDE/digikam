@@ -6,7 +6,7 @@
  * Date        : 2009-02-17
  * Description : resize image batch tool.
  *
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -46,13 +46,13 @@ namespace Digikam
 {
 
 Resize::Resize(QObject* parent)
-      : BatchTool("Resize", BaseTool, parent)
+      : BatchTool("Resize", TransformTool, parent)
 {
     setToolTitle(i18n("Resize"));
     setToolDescription(i18n("A tool to resize images with a customized length."));
     setToolIcon(KIcon(SmallIcon("transform-scale")));
 
-    KVBox *vbox   = new KVBox;
+    KVBox* vbox   = new KVBox;
     m_labelPreset = new QLabel(i18n("Preset Length:"), vbox);
     m_comboBox    = new KComboBox(vbox);
     m_comboBox->insertItem(Tiny,   i18np("Tiny (1 pixel)",   "Tiny (%1 pixels)",   presetLengthValue(Tiny)));
@@ -67,7 +67,7 @@ Resize::Resize(QObject* parent)
     m_customLength->setRange(100, 4000);
     m_customLength->setSliderEnabled(true);
 
-    QLabel *space = new QLabel(vbox);
+    QLabel* space = new QLabel(vbox);
     vbox->setStretchFactor(space, 10);
 
     setSettingsWidget(vbox);

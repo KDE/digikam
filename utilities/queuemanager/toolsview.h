@@ -6,7 +6,7 @@
  * Date        : 2009-04-20
  * Description : a view to available tools in tab view.
  *
- * Copyright (C) 2009 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -44,7 +44,7 @@ class ToolsView : public KTabWidget
 
 public:
 
-    ToolsView(QWidget *parent=0);
+    ToolsView(QWidget* parent=0);
     ~ToolsView();
 
     void addTool(BatchTool* tool);

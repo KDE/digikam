@@ -6,7 +6,7 @@
  * Date        : 2008-11-24
  * Description : Batch Tool Container.
  *
- * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -360,7 +360,7 @@ bool BatchTool::apply()
             QPolygon pol = it.value().value<QPolygon>();
             int size     = pol.size() > 20 ? 20 : pol.size();
             QString tmp;
-            
+
             for (int i=0 ; i<size ; ++i)
             {
                 tmp.append("(");
@@ -369,7 +369,7 @@ bool BatchTool::apply()
                 tmp.append(QString::number(pol.point(i).y()));
                 tmp.append(") ");
             }
-                
+
             kDebug() << "   " << it.key() << ": " << tmp;
         }
         else

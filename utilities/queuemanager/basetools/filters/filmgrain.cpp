@@ -45,7 +45,7 @@ namespace Digikam
 {
 
 FilmGrain::FilmGrain(QObject* parent)
-         : BatchTool("FilmGrain", BaseTool, parent)
+         : BatchTool("FilmGrain", FiltersTool, parent)
 {
     setToolTitle(i18n("Film Grain"));
     setToolDescription(i18n("A tool to add film grain"));

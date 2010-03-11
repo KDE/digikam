@@ -93,7 +93,7 @@ public:
 };
 
 WaterMark::WaterMark(QObject* parent)
-         : BatchTool("WaterMark", BaseTool, parent),
+         : BatchTool("WaterMark", DecorateTool, parent),
            d(new WaterMarkPriv)
 {
     setToolTitle(i18n("Add Watermark"));

@@ -43,13 +43,13 @@ namespace Digikam
 {
 
 HSLCorrection::HSLCorrection(QObject* parent)
-             : BatchTool("HSLCorrection", BaseTool, parent)
+             : BatchTool("HSLCorrection", ColorTool, parent)
 {
     setToolTitle(i18n("HSL Correction"));
     setToolDescription(i18n("A tool to fix Hue/Saturation/Lightness."));
     setToolIcon(KIcon(SmallIcon("adjusthsl")));
 
-    QWidget *box   = new QWidget;
+    QWidget* box   = new QWidget;
     m_settingsView = new HSLSettings(box);
     setSettingsWidget(box);
 

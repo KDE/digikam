@@ -45,7 +45,7 @@ namespace Digikam
 {
 
 ChannelMixer::ChannelMixer(QObject* parent)
-            : BatchTool("ChannelMixer", BaseTool, parent)
+            : BatchTool("ChannelMixer", ColorTool, parent)
 {
     setToolTitle(i18n("Channel Mixer"));
     setToolDescription(i18n("A tool to mix color channel."));

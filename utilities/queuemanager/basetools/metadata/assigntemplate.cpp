@@ -6,7 +6,7 @@
  * Date        : 2009-03-04
  * Description : assign metadata template batch tool.
  *
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,17 +47,17 @@ namespace Digikam
 {
 
 AssignTemplate::AssignTemplate(QObject* parent)
-        : BatchTool("AssignTemplate", BaseTool, parent)
+              : BatchTool("AssignTemplate", MetadataTool, parent)
 {
     setToolTitle(i18n("Apply Metadata Template"));
     setToolDescription(i18n("A tool to apply template metadata"));
     setToolIcon(KIcon(SmallIcon("application-xml")));
 
-    KVBox *vbox        = new KVBox;
+    KVBox* vbox        = new KVBox;
     m_templateSelector = new TemplateSelector(vbox);
     m_templateViewer   = new TemplateViewer(vbox);
 
-    QLabel *space = new QLabel(vbox);
+    QLabel* space = new QLabel(vbox);
     vbox->setStretchFactor(space, 10);
 
     setSettingsWidget(vbox);

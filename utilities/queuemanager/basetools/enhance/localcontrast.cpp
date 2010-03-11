@@ -44,7 +44,7 @@ namespace Digikam
 {
 
 LocalContrast::LocalContrast(QObject* parent)
-             : BatchTool("LocalContrast", BaseTool, parent)
+             : BatchTool("LocalContrast", EnhanceTool, parent)
 {
     setToolTitle(i18n("Local Contrast"));
     setToolDescription(i18n("A tool to emulate tone mapping."));

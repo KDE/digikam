@@ -45,7 +45,7 @@ namespace Digikam
 {
 
 Restoration::Restoration(QObject* parent)
-           : BatchTool("Restoration", BaseTool, parent), m_cimgIface(0)
+           : BatchTool("Restoration", EnhanceTool, parent), m_cimgIface(0)
 {
     setToolTitle(i18n("Restoration"));
     setToolDescription(i18n("A tool to restore photographs based on Greystoration."));

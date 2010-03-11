@@ -47,7 +47,7 @@ namespace Digikam
 {
 
 Sharpen::Sharpen(QObject* parent)
-       : BatchTool("Sharpen", BaseTool, parent)
+       : BatchTool("Sharpen", EnhanceTool, parent)
 {
     setToolTitle(i18n("Sharpen Image"));
     setToolDescription(i18n("A tool to sharpen images"));

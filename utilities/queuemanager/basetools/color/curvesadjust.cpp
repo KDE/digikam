@@ -46,7 +46,7 @@ namespace Digikam
 {
 
 CurvesAdjust::CurvesAdjust(QObject* parent)
-            : BatchTool("CurvesAdjust", BaseTool, parent)
+            : BatchTool("CurvesAdjust", ColorTool, parent)
 {
     setToolTitle(i18n("Curves Adjust"));
     setToolDescription(i18n("A tool to perform curves adjustments."));

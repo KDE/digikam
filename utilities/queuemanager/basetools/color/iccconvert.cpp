@@ -47,7 +47,7 @@ namespace Digikam
 {
 
 IccConvert::IccConvert(QObject* parent)
-          : BatchTool("IccConvert", BaseTool, parent)
+          : BatchTool("IccConvert", ColorTool, parent)
 {
     setToolTitle(i18n("ICC Convert"));
     setToolDescription(i18n("A tool to convert image to a color space."));

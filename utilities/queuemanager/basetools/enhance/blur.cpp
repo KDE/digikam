@@ -44,7 +44,7 @@ namespace Digikam
 {
 
 Blur::Blur(QObject* parent)
-    : BatchTool("Blur", BaseTool, parent)
+    : BatchTool("Blur", EnhanceTool, parent)
 {
     setToolTitle(i18n("Blur Image"));
     setToolDescription(i18n("A tool to blur images"));
