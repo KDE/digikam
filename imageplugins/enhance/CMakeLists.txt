@@ -1,5 +1,8 @@
 INCLUDE_DIRECTORIES(hotpixels)
 
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR}/../../
+                   )
+
 SET(digikamimageplugin_enhance_PART_SRCS imageplugin_enhance.cpp
                                          restorationtool.cpp
                                          blurtool.cpp
