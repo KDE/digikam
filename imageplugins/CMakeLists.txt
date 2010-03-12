@@ -41,6 +41,5 @@ ADD_SUBDIRECTORY( enhance )
 ADD_SUBDIRECTORY( filters )
 ADD_SUBDIRECTORY( transform )
 ADD_SUBDIRECTORY( hotpixels )
-ADD_SUBDIRECTORY( lenscorrection )
 ADD_SUBDIRECTORY( superimpose )
 

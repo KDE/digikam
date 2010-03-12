@@ -45,6 +45,7 @@
 #include "imageiface.h"
 #include "inpaintingtool.h"
 #include "antivignettingtool.h"
+#include "lensdistortiontool.h"
 #include "config-digikam.h"
 
 #ifdef HAVE_LENSFUN
@@ -98,10 +99,15 @@ ImagePlugin_Enhance::ImagePlugin_Enhance(QObject* parent, const QVariantList&)
     connect(m_inPaintingAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotInPainting()));
 
-    m_antivignettingAction  = new KAction(KIcon("antivignetting"), i18n("Vignetting Correction..."), this);
+    m_antivignettingAction = new KAction(KIcon("antivignetting"), i18n("Vignetting Correction..."), this);
     actionCollection()->addAction("imageplugin_antivignetting", m_antivignettingAction);
     connect(m_antivignettingAction, SIGNAL(triggered(bool)),
             this, SLOT(slotAntiVignetting()));
+
+    m_lensdistortionAction = new KAction(KIcon("lensdistortion"), i18n("Distortion..."), this);
+    actionCollection()->addAction("imageplugin_lensdistortion", m_lensdistortionAction);
+    connect(m_lensdistortionAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotLensDistortion()));
 
 #ifdef HAVE_LENSFUN
 
@@ -131,10 +137,17 @@ void ImagePlugin_Enhance::setEnabledActions(bool b)
     m_redeyeAction->setEnabled(b);
     m_inPaintingAction->setEnabled(b);
     m_antivignettingAction->setEnabled(b);
+    m_lensdistortionAction->setEnabled(b);
 
 #ifdef HAVE_LENSFUN
     m_lensAutoFixAction->setEnabled(b);
 #endif // HAVE_LENSFUN
+}
+
+void ImagePlugin_Enhance::slotLensDistortion()
+{
+    LensDistortionTool* tool = new LensDistortionTool(this);
+    loadTool(tool);
 }
 
 void ImagePlugin_Enhance::slotRestoration()

@@ -60,7 +60,7 @@
 
 using namespace KDcrawIface;
 
-namespace DigikamLensDistortionImagesPlugin
+namespace DigikamEnhanceImagePlugin
 {
 
 class LensDistortionToolPriv
@@ -350,4 +350,4 @@ void LensDistortionTool::blockWidgetSignals(bool b)
     d->brightenInput->blockSignals(b);
 }
 
-}  // namespace DigikamLensDistortionImagesPlugin
+}  // namespace DigikamEnhanceImagePlugin

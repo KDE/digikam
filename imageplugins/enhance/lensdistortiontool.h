@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace DigikamLensDistortionImagesPlugin
+namespace DigikamEnhanceImagePlugin
 {
 
 class LensDistortionToolPriv;
@@ -66,6 +66,6 @@ private:
     LensDistortionToolPriv* const d;
 };
 
-}  // namespace DigikamLensDistortionImagesPlugin
+}  // namespace DigikamEnhanceImagePlugin
 
 #endif /* LENSDISTORTIONTOOL_H */
