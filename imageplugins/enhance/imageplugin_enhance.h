@@ -58,9 +58,11 @@ private Q_SLOTS:
     void slotRedEye();
     void slotInPainting();
     void slotLensAutoFix();
+    void slotAntiVignetting();
 
 private:
 
+    KAction* m_antivignettingAction;
     KAction* m_lensAutoFixAction;
     KAction* m_redeyeAction;
     KAction* m_restorationAction;

@@ -48,12 +48,10 @@ public:
 private Q_SLOTS:
 
     void slotLensDistortion();
-    void slotAntiVignetting();
 
 private:
 
     KAction *m_lensdistortionAction;
-    KAction *m_antivignettingAction;
 };
 
 #endif /* IMAGEPLUGIN_LENSCORRECTION_H */

@@ -7,6 +7,7 @@ SET(digikamimageplugin_enhance_PART_SRCS imageplugin_enhance.cpp
                                          localcontrasttool.cpp
                                          redeyetool.cpp
                                          inpaintingtool.cpp
+                                         antivignettingtool.cpp
    )
 
 IF(LENSFUN_LIBRARY)

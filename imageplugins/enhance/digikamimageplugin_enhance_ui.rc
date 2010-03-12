@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="18" name="digikamimageplugin_enhance" >
+<gui version="19" name="digikamimageplugin_enhance" >
 
  <MenuBar>
 
@@ -16,6 +16,7 @@
 
       <Menu name="Lens" ><text>&amp;Lens</text>
           <Action name="imageplugin_lensautofix" />
+          <Action name="imageplugin_antivignetting" />
       </Menu>
   </Menu>
 
@@ -34,6 +35,7 @@
       <Action shortcut="" name="imageplugin_redeye" />
       <Action shortcut="" name="imageplugin_inpainting" />
       <Action shortcut="" name="imageplugin_lensautofix" />
+      <Action shortcut="" name="imageplugin_antivignetting" />
 </ActionProperties>
 
 </gui>

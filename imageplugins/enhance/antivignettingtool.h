@@ -7,7 +7,7 @@
  * Description : a digiKam image plugin to reduce
  *               vignetting on an image.
  *
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace DigikamAntiVignettingImagesPlugin
+namespace DigikamEnhanceImagePlugin
 {
 
 class AntiVignettingToolPriv;
@@ -66,6 +66,6 @@ private:
     AntiVignettingToolPriv* const d;
 };
 
-}  // namespace DigikamAntiVignettingImagesPlugin
+}  // namespace DigikamEnhanceImagePlugin
 
 #endif /* ANTIVIGNETTINGTOOL_H */

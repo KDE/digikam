@@ -36,7 +36,6 @@
 
 // Local includes
 
-#include "antivignettingtool.h"
 #include "lensdistortiontool.h"
 
 using namespace DigikamAntiVignettingImagesPlugin;
@@ -56,12 +55,6 @@ ImagePlugin_LensCorrection::ImagePlugin_LensCorrection(QObject *parent, const QV
     connect(m_lensdistortionAction, SIGNAL(triggered(bool)),
             this, SLOT(slotLensDistortion()));
 
-    m_antivignettingAction  = new KAction(KIcon("antivignetting"), i18n("Vignetting Correction..."), this);
-    actionCollection()->addAction("imageplugin_antivignetting", m_antivignettingAction );
-
-    connect(m_antivignettingAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotAntiVignetting()));
-
     setXMLFile("digikamimageplugin_lenscorrection_ui.rc");
 
     kDebug() << "ImagePlugin_LensCorrection plugin loaded";
@@ -74,17 +67,10 @@ ImagePlugin_LensCorrection::~ImagePlugin_LensCorrection()
 void ImagePlugin_LensCorrection::setEnabledActions(bool enable)
 {
     m_lensdistortionAction->setEnabled(enable);
-    m_antivignettingAction->setEnabled(enable);
 }
 
 void ImagePlugin_LensCorrection::slotLensDistortion()
 {
     LensDistortionTool *tool = new LensDistortionTool(this);
-    loadTool(tool);
-}
-
-void ImagePlugin_LensCorrection::slotAntiVignetting()
-{
-    AntiVignettingTool *tool = new AntiVignettingTool(this);
     loadTool(tool);
 }

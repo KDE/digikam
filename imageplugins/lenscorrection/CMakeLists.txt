@@ -1,6 +1,5 @@
 
 INCLUDE_DIRECTORIES(distortion
-                    vignetting
                     ${CMAKE_CURRENT_BINARY_DIR}/../../
                    )
 
@@ -10,11 +9,9 @@ SET(distortion_SRCS distortion/lensdistortiontool.cpp
                     distortion/pixelaccess.cpp
    )
 
-SET(vignetting_SRCS vignetting/antivignettingtool.cpp)
-
 SET(digikamimageplugin_lenscorrection_PART_SRCS imageplugin_lenscorrection.cpp
                                                 ${distortion_SRCS}
-                                                ${vignetting_SRCS})
+)
 
 KDE4_ADD_PLUGIN(digikamimageplugin_lenscorrection ${digikamimageplugin_lenscorrection_PART_SRCS})
 

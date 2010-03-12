@@ -63,7 +63,7 @@
 
 using namespace KDcrawIface;
 
-namespace DigikamAntiVignettingImagesPlugin
+namespace DigikamEnhanceImagePlugin
 {
 
 class AntiVignettingToolPriv
@@ -406,4 +406,4 @@ void AntiVignettingTool::blockWidgetSignals(bool b)
     d->addVignettingCheck->blockSignals(b);
 }
 
-}  // namespace DigikamAntiVignettingImagesPlugin
+}  // namespace DigikamEnhanceImagePlugin
