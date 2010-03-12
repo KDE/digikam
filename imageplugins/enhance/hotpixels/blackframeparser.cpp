@@ -50,7 +50,7 @@
 #include <kio/netaccess.h>
 #include <kio/job.h>
 
-namespace DigikamHotPixelsImagesPlugin
+namespace DigikamEnhanceImagePlugin
 {
 
 BlackFrameParser::BlackFrameParser(QObject *parent)
@@ -188,7 +188,7 @@ void BlackFrameParser::consolidatePixels(QList<HotPixel>& list)
 
             //find any intersecting hotpixels below tmp
             int i = list.indexOf(tmp);
-            
+
             if (i == -1) point_below_it = list.end();
             else         point_below_it = list.begin() + i;
 
@@ -218,4 +218,4 @@ void BlackFrameParser::validateAndConsolidate(HotPixel* a, HotPixel* b)
     a->luminosity = qMax(a->luminosity, b->luminosity);
 }
 
-}  // namespace DigikamHotPixelsImagesPlugin
+}  // namespace DigikamEnhanceImagePlugin

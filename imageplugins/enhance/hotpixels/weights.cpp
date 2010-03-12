@@ -7,7 +7,7 @@
  * Description : a class to calculate filter weights
  *
  * Copyright (C) 2005-2006 by Unai Garro <ugarro at users dot sourceforge dot net>
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -30,7 +30,7 @@
 #include <cstring>
 
 
-namespace DigikamHotPixelsImagesPlugin
+namespace DigikamEnhanceImagePlugin
 {
 
 Weights::Weights(const Weights& w)
@@ -294,4 +294,4 @@ double Weights::polyTerm (const size_t i_coeff, const int x, const int y, const 
     return (double)result;
 }
 
-}  // namespace DigikamHotPixelsImagesPlugin
+}  // namespace DigikamEnhanceImagePlugin

@@ -64,7 +64,7 @@
 using namespace KDcrawIface;
 using namespace Digikam;
 
-namespace DigikamHotPixelsImagesPlugin
+namespace DigikamEnhanceImagePlugin
 {
 
 class HotPixelsToolPriv
@@ -116,7 +116,7 @@ HotPixelsTool::HotPixelsTool(QObject* parent)
                                 EditorToolSettings::Ok|
                                 EditorToolSettings::Cancel|
                                 EditorToolSettings::Try);
-                                
+
     QGridLayout* grid = new QGridLayout(d->gboxSettings->plainPage());
 
     QLabel *filterMethodLabel = new QLabel(i18n("Filter:"), d->gboxSettings->plainPage());
@@ -273,7 +273,7 @@ void HotPixelsTool::prepareFinal()
     d->filterMethodCombo->setEnabled(false);
     d->blackFrameListView->setEnabled(false);
     toolView()->setEnabled(false);
-    
+
     int interpolationMethod = d->filterMethodCombo->currentIndex();
 
     ImageIface iface(0, 0);
@@ -308,4 +308,4 @@ void HotPixelsTool::slotBlackFrame(const QList<HotPixel>& hpList, const KUrl& bl
     slotEffect();
 }
 
-}  // namespace DigikamHotPixelsImagesPlugin
+}  // namespace DigikamEnhanceImagePlugin

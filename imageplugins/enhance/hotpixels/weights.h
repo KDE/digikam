@@ -7,7 +7,7 @@
  * Description : a class to calculate filter weights
  *
  * Copyright (C) 2005-2006 by Unai Garro <ugarro at users dot sourceforge dot net>
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -30,10 +30,10 @@
 #include <QList>
 #include <QRect>
 
-namespace DigikamHotPixelsImagesPlugin
+namespace DigikamEnhanceImagePlugin
 {
 
-class Weights 
+class Weights
 {
 public:
 
@@ -46,7 +46,7 @@ public:
         if (!mWeightMatrices) return;
         for (int i = 0 ; i < mPositions.count() ; ++i)
         {
-            for (unsigned int j = 0; j < mHeight; ++j) 
+            for (unsigned int j = 0; j < mHeight; ++j)
                 delete[] mWeightMatrices[i][j];
         }
     }
@@ -83,10 +83,10 @@ private:
     unsigned int   mCoefficientNumber;
     bool           mTwoDim;
     unsigned int   mPolynomeOrder;
-    double ***     mWeightMatrices;    //Stores a list of weight matrices
+    double***      mWeightMatrices;    //Stores a list of weight matrices
     QList <QPoint> mPositions;
 };
 
-}  // namespace DigikamHotPixelsImagesPlugin
+}  // namespace DigikamEnhanceImagePlugin
 
 #endif  // WEIGHTS_H

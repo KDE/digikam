@@ -40,6 +40,7 @@ enhance
   /autocorrection           DONE                 TODO                  TODO
   /distortion               DONE                 TODO                  TODO
   /vignetting               DONE                 TODO                  TODO
+  /hotpixels                DONE                 DONE                  TODO
 
 transform
   /ratiocrop                DONE                  NO                    NO
@@ -50,4 +51,3 @@ transform
   /contentawareresizing     DONE                 TODO                  TODO
 
 superimpose                  NO                   NO                    NO
-hotpixels                   DONE                 DONE                  TODO

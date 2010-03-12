@@ -1,3 +1,4 @@
+INCLUDE_DIRECTORIES(hotpixels)
 
 SET(digikamimageplugin_enhance_PART_SRCS imageplugin_enhance.cpp
                                          restorationtool.cpp
@@ -9,6 +10,11 @@ SET(digikamimageplugin_enhance_PART_SRCS imageplugin_enhance.cpp
                                          inpaintingtool.cpp
                                          antivignettingtool.cpp
                                          lensdistortiontool.cpp
+                                         hotpixels/weights.cpp
+                                         hotpixels/blackframeparser.cpp
+                                         hotpixels/blackframelistview.cpp
+                                         hotpixels/hotpixelfixer.cpp
+                                         hotpixels/hotpixelstool.cpp
    )
 
 IF(LENSFUN_LIBRARY)

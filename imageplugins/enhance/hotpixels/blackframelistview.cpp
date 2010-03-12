@@ -32,7 +32,7 @@
 #include <QPainter>
 #include <QPixmap>
 
-namespace DigikamHotPixelsImagesPlugin
+namespace DigikamEnhanceImagePlugin
 {
 
 BlackFrameListView::BlackFrameListView(QWidget* parent)
@@ -141,4 +141,4 @@ QPixmap BlackFrameListViewItem::thumb(const QSize& size)
     return thumb;
 }
 
-}  // namespace DigikamHotPixelsImagesPlugin
+}  // namespace DigikamEnhanceImagePlugin

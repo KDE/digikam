@@ -39,7 +39,7 @@
 #include "hotpixel.h"
 #include "weights.h"
 
-namespace DigikamHotPixelsImagesPlugin
+namespace DigikamEnhanceImagePlugin
 {
 
 class HotPixelFixer : public Digikam::DImgThreadedFilter
@@ -90,6 +90,6 @@ private:
     QList<HotPixel> m_hpList;
 };
 
-}  // namespace DigikamHotPixelsImagesPlugin
+}  // namespace DigikamEnhanceImagePlugin
 
 #endif  // HOTPIXELFIXER_H

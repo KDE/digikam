@@ -39,7 +39,7 @@
 
 class KUrl;
 
-namespace DigikamHotPixelsImagesPlugin
+namespace DigikamEnhanceImagePlugin
 {
 
 class HotPixelsToolPriv;
@@ -76,6 +76,6 @@ private:
     HotPixelsToolPriv* const d;
 };
 
-}  // namespace DigikamHotPixelsImagesPlugin
+}  // namespace DigikamEnhanceImagePlugin
 
 #endif /* HOTPIXELSTOOL_H */

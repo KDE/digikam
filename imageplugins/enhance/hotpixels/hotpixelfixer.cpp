@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #include "hotpixelfixer.h"
 
 // C++ includes
@@ -54,7 +53,7 @@
 # define DBL_MAX 1e37
 #endif
 
-namespace DigikamHotPixelsImagesPlugin
+namespace DigikamEnhanceImagePlugin
 {
 
 HotPixelFixer::HotPixelFixer(Digikam::DImg* orgImage, QObject* parent, const QList<HotPixel>& hpList,
@@ -296,4 +295,4 @@ void HotPixelFixer::weightPixels (Digikam::DImg& img, HotPixel& px, int method, 
     }
 }
 
-}  // namespace DigikamHotPixelsImagesPlugin
+}  // namespace DigikamEnhanceImagePlugin

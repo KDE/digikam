@@ -46,6 +46,7 @@
 #include "inpaintingtool.h"
 #include "antivignettingtool.h"
 #include "lensdistortiontool.h"
+#include "hotpixelstool.h"
 #include "config-digikam.h"
 
 #ifdef HAVE_LENSFUN
@@ -109,6 +110,11 @@ ImagePlugin_Enhance::ImagePlugin_Enhance(QObject* parent, const QVariantList&)
     connect(m_lensdistortionAction, SIGNAL(triggered(bool)),
             this, SLOT(slotLensDistortion()));
 
+    m_hotpixelsAction  = new KAction(KIcon("hotpixels"), i18n("Hot Pixels..."), this);
+    actionCollection()->addAction("imageplugin_hotpixels", m_hotpixelsAction);
+    connect(m_hotpixelsAction, SIGNAL(triggered(bool) ),
+            this, SLOT(slotHotPixels()));
+
 #ifdef HAVE_LENSFUN
 
     m_lensAutoFixAction = new KAction(KIcon("lensautofix"), i18n("Auto-Correction..."), this);
@@ -138,10 +144,17 @@ void ImagePlugin_Enhance::setEnabledActions(bool b)
     m_inPaintingAction->setEnabled(b);
     m_antivignettingAction->setEnabled(b);
     m_lensdistortionAction->setEnabled(b);
+    m_hotpixelsAction->setEnabled(b);
 
 #ifdef HAVE_LENSFUN
     m_lensAutoFixAction->setEnabled(b);
 #endif // HAVE_LENSFUN
+}
+
+void ImagePlugin_Enhance::slotHotPixels()
+{
+    HotPixelsTool* tool = new HotPixelsTool(this);
+    loadTool(tool);
 }
 
 void ImagePlugin_Enhance::slotLensDistortion()

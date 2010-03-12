@@ -60,9 +60,11 @@ private Q_SLOTS:
     void slotLensAutoFix();
     void slotAntiVignetting();
     void slotLensDistortion();
+    void slotHotPixels();
 
 private:
 
+    KAction* m_hotpixelsAction;
     KAction* m_lensdistortionAction;
     KAction* m_antivignettingAction;
     KAction* m_lensAutoFixAction;

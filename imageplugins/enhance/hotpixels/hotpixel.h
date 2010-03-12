@@ -6,7 +6,7 @@
  * Date        : 2005-03-27
  * Description : Threaded image filter to fix hot pixels
  *
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2005-2006 by Unai Garro <ugarro at users dot sourceforge dot net>
  *
  * This program is free software; you can redistribute it
@@ -29,7 +29,7 @@
 
 #include <QRect>
 
-namespace DigikamHotPixelsImagesPlugin
+namespace DigikamEnhanceImagePlugin
 {
 
 class HotPixel
@@ -46,7 +46,7 @@ public:
 
     bool operator==(const HotPixel p) const
     {
-        //we can say they're same hotpixel spot if they 
+        //we can say they're same hotpixel spot if they
         //touch(next to) each other horizontally or vertically, not diagonal corners
         //return (rect.intersects(p.rect));
         return (rect != p.rect) && (x() + width() >= p.x() && x() <= p.x() + p.width()
@@ -69,6 +69,6 @@ private:
     }
 };
 
-}  // namespace DigikamHotPixelsImagesPlugin
+}  // namespace DigikamEnhanceImagePlugin
 
 #endif  // HOTPIXEL_H
