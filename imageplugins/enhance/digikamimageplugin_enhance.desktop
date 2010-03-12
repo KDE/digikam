@@ -1,12 +1,10 @@
 [Desktop Entry]
 Name=ImagePlugin_Enhance
-Name[x-test]=xxImagePlugin_Enhancexx
 
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=digiKam plugin to enhance photograph
-Comment[x-test]=xxdigiKam plugin to enhance photographxx
 
 X-KDE-Library=digikamimageplugin_enhance
 author=Gilles Caulier, caulier dot gilles at gmail dot com

@@ -1,11 +1,9 @@
 [Desktop Entry]
 Name=ImagePlugin_Color
-Name[x-test]=xxImagePlugin_Colorxx
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=A tool to correct colors of image
-Comment[x-test]=xxA tool to correct colors of imagexx
 
 X-KDE-Library=digikamimageplugin_color
 author=Caulier Gilles, caulier dot gilles at gmail dot com
