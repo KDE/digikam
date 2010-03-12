@@ -20,7 +20,7 @@ INCLUDE_DIRECTORIES(
                      ../libs/dimg/filters/curves
                      ../libs/dimg/filters/wb
                      ../libs/dimg/filters/transform
-                     ../libs/dimg/filters/lensfun
+                     ../libs/dimg/filters/lens
                      ../libs/dmetadata
                      ../libs/histogram
                      ../libs/jpegutils

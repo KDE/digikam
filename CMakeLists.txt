@@ -570,6 +570,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/transform/shearfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/greycstoration/greycstorationfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/greycstoration/greycstorationsettings.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/antivignettingfilter.cpp
        )
 
     IF(GLIB2_FOUND)
@@ -581,9 +582,9 @@ IF(DIGIKAM_CAN_BE_COMPILED)
 
     IF(LENSFUN_LIBRARY)
         SET(libdimgfilters_SRCS ${libdimgfilters_SRCS}
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lensfun/lensfunfilter.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lensfun/lensfunsettings.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lensfun/lensfuniface.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/lensfunfilter.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/lensfunsettings.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/lensfuniface.cpp
             ${liblqr_SRCS}
            )
     ENDIF(LENSFUN_LIBRARY)

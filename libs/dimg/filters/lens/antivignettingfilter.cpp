@@ -42,7 +42,7 @@
 
 #include "dimg.h"
 
-namespace DigikamAntiVignettingImagesPlugin
+namespace Digikam
 {
 
 AntiVignettingFilter::AntiVignettingFilter(DImg* orgImage, QObject* parent, double density,
@@ -179,4 +179,4 @@ unsigned short  AntiVignettingFilter::clamp16bits(double x)
         return ((unsigned short) x);
 }
 
-}  // namespace DigikamAntiVignettingImagesPlugin
+}  // namespace Digikam

@@ -27,13 +27,12 @@
 // Local includes
 
 #include "dimgthreadedfilter.h"
+#include "digikam_export.h"
 
-using namespace Digikam;
-
-namespace DigikamAntiVignettingImagesPlugin
+namespace Digikam
 {
 
-class AntiVignettingFilter : public DImgThreadedFilter
+class DIGIKAM_EXPORT AntiVignettingFilter : public DImgThreadedFilter
 {
 
 public:
@@ -71,6 +70,6 @@ private:
     bool   m_add_vignetting;
 };
 
-}  // namespace DigikamAntiVignettingImagesPlugin
+}  // namespace Digikam
 
 #endif /* ANTIVIGNETTINGFILTER_H */
