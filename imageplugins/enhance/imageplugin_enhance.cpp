@@ -111,7 +111,7 @@ ImagePlugin_Enhance::ImagePlugin_Enhance(QObject* parent, const QVariantList&)
 
 #ifdef HAVE_LENSFUN
 
-    m_lensAutoFixAction = new KAction(KIcon("lensdistortion"), i18n("Auto-Correction..."), this);
+    m_lensAutoFixAction = new KAction(KIcon("lensautofix"), i18n("Auto-Correction..."), this);
     actionCollection()->addAction("imageplugin_lensautofix", m_lensAutoFixAction );
     connect(m_lensAutoFixAction, SIGNAL(triggered(bool)),
             this, SLOT(slotLensAutoFix()));
