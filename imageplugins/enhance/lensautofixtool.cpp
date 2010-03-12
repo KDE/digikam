@@ -104,8 +104,8 @@ public:
 };
 
 LensAutoFixTool::LensAutoFixTool(QObject* parent)
-                  : EditorToolThreaded(parent),
-                    d(new LensAutoFixToolPriv)
+               : EditorToolThreaded(parent),
+                 d(new LensAutoFixToolPriv)
 {
     setObjectName("lensautocorrection");
     setToolName(i18n("Lens Auto-Correction"));
@@ -118,9 +118,9 @@ LensAutoFixTool::LensAutoFixTool(QObject* parent)
     // -------------------------------------------------------------
 
     d->gboxSettings   = new EditorToolSettings;
-    QGridLayout *grid = new QGridLayout(d->gboxSettings->plainPage());
+    QGridLayout* grid = new QGridLayout(d->gboxSettings->plainPage());
     d->cameraSelector = new LensFunSettings(d->gboxSettings->plainPage());
-    KSeparator *line  = new KSeparator(Qt::Horizontal, d->gboxSettings->plainPage());
+    KSeparator* line  = new KSeparator(Qt::Horizontal, d->gboxSettings->plainPage());
 
     // -------------------------------------------------------------
 
@@ -270,12 +270,7 @@ void LensAutoFixTool::prepareEffect()
     d->gboxSettings->setEnabled(false);
 
     ImageIface* iface = d->previewWidget->imageIface();
-    uchar* data       = iface->getPreviewImage();
-    int w             = iface->previewWidth();
-    int h             = iface->previewHeight();
-    bool sb           = iface->previewSixteenBit();
-
-    DImg image(w, h, sb, false, data);
+    DImg preview      = iface->getPreviewImg();
 
     if (d->showGrid->isChecked())
     {
@@ -287,7 +282,7 @@ void LensAutoFixTool::prepareEffect()
         p1.drawLine(0, 5, 9, 5);
         p1.end();
 
-        QPixmap pix(w, h);
+        QPixmap pix(preview.size());
         pix.fill(Qt::transparent);
         QPainter p2(&pix);
         p2.setPen(QPen(Qt::gray, 1));
@@ -299,10 +294,10 @@ void LensAutoFixTool::prepareEffect()
         DColorComposer::MultiplicationFlags flags = DColorComposer::NoMultiplication;
 
         // Do alpha blending of template on dest image
-        image.bitBlendImage(composer, &grid, 0, 0, w, h, 0, 0, flags);
+        preview.bitBlendImage(composer, &grid, 0, 0, preview.width(), preview.height(), 0, 0, flags);
     }
 
-    setFilter(new LensFunFilter(&image, this, d->cameraSelector->getKLFObject()));
+    setFilter(new LensFunFilter(&preview, this, d->cameraSelector->getKLFObject()));
 }
 
 void LensAutoFixTool::prepareFinal()
@@ -310,18 +305,12 @@ void LensAutoFixTool::prepareFinal()
     d->gboxSettings->setEnabled(false);
 
     ImageIface iface(0, 0);
-    uchar* data = iface.getOriginalImage();
-    DImg originalImage(iface.originalWidth(), iface.originalHeight(), iface.originalSixteenBit(), iface.originalHasAlpha(), data);
-
-    setFilter(new LensFunFilter(&originalImage, this, d->cameraSelector->getKLFObject()));
-
-    delete [] data;
+    setFilter(new LensFunFilter(iface.getOriginalImg(), this, d->cameraSelector->getKLFObject()));
 }
 
 void LensAutoFixTool::putPreviewData()
 {
-    DImg imDest = filter()->getTargetImage();
-    d->previewWidget->imageIface()->putPreviewImage(imDest.bits());
+    d->previewWidget->imageIface()->putPreviewImage(filter()->getTargetImage().bits());
     d->previewWidget->updatePreview();
 }
 
