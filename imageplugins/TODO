@@ -29,11 +29,6 @@ filters
   /raindrop                 DONE                  NO                   TODO
   /filmgrain                DONE                 DONE                  DONE
 
-lenscorrection
-  /autocorrection           DONE                 TODO                  TODO
-  /distortion               DONE                 TODO                  TODO
-  /vignetting               DONE                 TODO                  TODO
-
 enhance
   /noisereductiontool       DONE                 DONE                  DONE
   /sharpentool              DONE                 DONE                  DONE
@@ -42,6 +37,9 @@ enhance
   /localcontrast            DONE                 DONE                  DONE
   /redeyetool               DONE                 TODO                   NO
   /inpainting               DONE                  NO                    NO
+  /autocorrection           DONE                 TODO                  TODO
+  /distortion               DONE                 TODO                  TODO
+  /vignetting               DONE                 TODO                  TODO
 
 transform
   /ratiocrop                DONE                  NO                    NO
