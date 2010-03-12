@@ -109,7 +109,7 @@ LensAutoFixTool::LensAutoFixTool(QObject* parent)
 {
     setObjectName("lensautocorrection");
     setToolName(i18n("Lens Auto-Correction"));
-    setToolIcon(SmallIcon("lensdistortion"));
+    setToolIcon(SmallIcon("lensautofix"));
 
     d->previewWidget = new ImageGuideWidget(0, true, ImageGuideWidget::HVGuideMode);
     setToolView(d->previewWidget);
