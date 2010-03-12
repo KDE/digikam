@@ -108,7 +108,7 @@ void FilmGrain::slotSettingsChanged()
     prm.insert("chroma_midtones",    (int)currentPrm.chroma_midtones);
     prm.insert("chroma_highlights",  (int)currentPrm.chroma_highlights);
 
-    setSettings(prm);
+    BatchTool::slotSettingsChanged(prm);
 }
 
 bool FilmGrain::toolOperations()

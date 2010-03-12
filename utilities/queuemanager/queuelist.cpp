@@ -807,6 +807,18 @@ AssignedBatchTools QueueListView::assignedTools()
 void QueueListView::slotAssignedToolsChanged(const AssignedBatchTools& tools)
 {
     setAssignedTools(tools);
+
+    //reset all items
+    QTreeWidgetItemIterator it(this);
+    while (*it)
+    {
+        QueueListViewItem* item = dynamic_cast<QueueListViewItem*>(*it);
+        if (item)
+        {
+            item->reset();
+        }
+        it++;
+    }
 }
 
 void QueueListView::updateDestFileNames()

@@ -80,7 +80,7 @@ void Convert2TIFF::slotSettingsChanged()
 {
     BatchToolSettings settings;
     settings.insert("compress", m_settings->getCompression());
-    setSettings(settings);
+    BatchTool::slotSettingsChanged(settings);
 }
 
 QString Convert2TIFF::outputSuffix() const

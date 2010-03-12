@@ -179,10 +179,15 @@ void BatchTool::slotResetSettingsToDefault()
     setSettings(defaultSettings());
 }
 
+void BatchTool::slotSettingsChanged(const BatchToolSettings& settings)
+{
+    setSettings(settings);
+    emit signalSettingsChanged(d->settings);
+}
+
 void BatchTool::setSettings(const BatchToolSettings& settings)
 {
     d->settings = settings;
-    emit signalSettingsChanged(d->settings);
 }
 
 void BatchTool::setInputUrl(const KUrl& inputUrl)

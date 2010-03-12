@@ -88,7 +88,7 @@ void IccConvert::slotSettingsChanged()
 
     prm.insert("ProfilePath", currentProf.filePath());
 
-    setSettings(prm);
+    BatchTool::slotSettingsChanged(prm);
 }
 
 bool IccConvert::toolOperations()

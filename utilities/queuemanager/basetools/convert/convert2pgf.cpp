@@ -84,7 +84,7 @@ void Convert2PGF::slotSettingsChanged()
     BatchToolSettings settings;
     settings.insert("quality",  m_settings->getCompressionValue());
     settings.insert("lossless", m_settings->getLossLessCompression());
-    setSettings(settings);
+    BatchTool::slotSettingsChanged(settings);
 }
 
 QString Convert2PGF::outputSuffix() const

@@ -80,7 +80,7 @@ void Convert2PNG::slotSettingsChanged()
 {
     BatchToolSettings settings;
     settings.insert("Quality", m_settings->getCompressionValue());
-    setSettings(settings);
+    BatchTool::slotSettingsChanged(settings);
 }
 
 QString Convert2PNG::outputSuffix() const

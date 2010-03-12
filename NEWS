@@ -116,7 +116,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 085 ==> 229578 : Metadata is not correctly updated when just assigning tags.
 086 ==> 230323 : ShowFoto and digiKam opening Olympus E-P2 ORF file will crash.
 087 ==> 229108 : digiKam doesn't display all images after and upgrade.
-088 ==> 
+088 ==> 201591 : Restart queue in Batch queue manager.
+089 ==>
 
 
 

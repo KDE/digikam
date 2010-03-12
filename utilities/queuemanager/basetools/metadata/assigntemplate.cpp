@@ -89,7 +89,7 @@ void AssignTemplate::slotSettingsChanged()
     m_templateViewer->setTemplate(m_templateSelector->getTemplate());
     BatchToolSettings settings;
     settings.insert("TemplateTitle", m_templateSelector->getTemplate().templateTitle());
-    setSettings(settings);
+    BatchTool::slotSettingsChanged(settings);
 }
 
 bool AssignTemplate::toolOperations()

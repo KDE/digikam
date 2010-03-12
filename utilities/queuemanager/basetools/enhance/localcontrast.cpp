@@ -145,7 +145,7 @@ void LocalContrast::slotSettingsChanged()
     prm.insert("stage4_power",     currentPrm.stage[3].power);
     prm.insert("stage4_blur",      currentPrm.stage[3].blur);
     
-    setSettings(prm);
+    BatchTool::slotSettingsChanged(prm);
 }
 
 bool LocalContrast::toolOperations()

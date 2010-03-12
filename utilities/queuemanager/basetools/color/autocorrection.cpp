@@ -92,7 +92,7 @@ void AutoCorrection::slotSettingsChanged()
 {
     BatchToolSettings settings;
     settings.insert("AutoCorrectionFilter", (int)m_comboBox->currentIndex());
-    setSettings(settings);
+    BatchTool::slotSettingsChanged(settings);
 }
 
 bool AutoCorrection::toolOperations()

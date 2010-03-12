@@ -91,7 +91,7 @@ void ColorBalance::slotSettingsChanged()
     prm.insert("Green", (double)currentPrm.green);
     prm.insert("Blue",  (double)currentPrm.blue);
 
-    setSettings(prm);
+    BatchTool::slotSettingsChanged(prm);
 }
 
 bool ColorBalance::toolOperations()

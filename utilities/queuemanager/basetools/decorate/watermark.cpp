@@ -190,7 +190,7 @@ void WaterMark::slotSettingsChanged()
     settings.insert("Color",  d->fontColorButton->color());
     settings.insert("Corner", (int)d->comboBox->currentIndex());
     settings.insert("Length", (int)d->stringLength->value());
-    setSettings(settings);
+    BatchTool::slotSettingsChanged(settings);
 }
 
 bool WaterMark::toolOperations()

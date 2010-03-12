@@ -84,7 +84,7 @@ void Convert2JPEG::slotSettingsChanged()
     BatchToolSettings settings;
     settings.insert("Quality",     m_settings->getCompressionValue());
     settings.insert("SubSampling", m_settings->getSubSamplingValue());
-    setSettings(settings);
+    BatchTool::slotSettingsChanged(settings);
 }
 
 QString Convert2JPEG::outputSuffix() const
