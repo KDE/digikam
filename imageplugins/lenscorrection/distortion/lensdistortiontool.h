@@ -6,8 +6,8 @@
  * Date        : 2004-12-27
  * Description : a plugin to reduce lens distortions to an image.
  *
- * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -29,18 +29,20 @@
 
 #include "editortool.h"
 
+using namespace Digikam;
+
 namespace DigikamLensDistortionImagesPlugin
 {
 
 class LensDistortionToolPriv;
 
-class LensDistortionTool : public Digikam::EditorToolThreaded
+class LensDistortionTool : public EditorToolThreaded
 {
     Q_OBJECT
 
 public:
 
-    LensDistortionTool(QObject *parent);
+    LensDistortionTool(QObject* parent);
     ~LensDistortionTool();
 
 private Q_SLOTS:

@@ -38,7 +38,6 @@
 
 #include "lensdistortiontool.h"
 
-using namespace DigikamAntiVignettingImagesPlugin;
 using namespace DigikamLensDistortionImagesPlugin;
 
 K_PLUGIN_FACTORY( LensCorrectionFactory, registerPlugin<ImagePlugin_LensCorrection>(); )

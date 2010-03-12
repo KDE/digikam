@@ -6,8 +6,8 @@
  * Date        : 2004-12-27
  * Description : a plugin to reduce lens distortions to an image.
  *
- * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,7 +21,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "lensdistortiontool.moc"
 
@@ -40,7 +39,6 @@
 
 // KDE includes
 
-#include <kaboutdata.h>
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
@@ -55,15 +53,12 @@
 
 // Local includes
 
-#include "daboutdata.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imageguidewidget.h"
-#include "lensdistortion.h"
-#include "version.h"
+#include "lensdistortionfilter.h"
 
 using namespace KDcrawIface;
-using namespace Digikam;
 
 namespace DigikamLensDistortionImagesPlugin
 {
@@ -299,14 +294,13 @@ void LensDistortionTool::prepareEffect()
     double r = d->rescaleInput->value();
     double b = d->brightenInput->value();
 
-    LensDistortion transformPreview(&d->previewRasterImage, 0, m, e, r, b, 0, 0);
-    transformPreview.startFilterDirectly();       // Run filter without to use multithreading.
+    LensDistortionFilter transformPreview(&d->previewRasterImage, 0, m, e, r, b, 0, 0);
+    transformPreview.startFilterDirectly();
     d->maskPreviewLabel->setPixmap(transformPreview.getTargetImage().convertToPixmap());
 
     ImageIface* iface = d->previewWidget->imageIface();
 
-    setFilter(dynamic_cast<DImgThreadedFilter *>(
-                       new LensDistortion(iface->getOriginalImg(), this, m, e, r, b, 0, 0)));
+    setFilter(new LensDistortionFilter(iface->getOriginalImg(), this, m, e, r, b, 0, 0));
 }
 
 void LensDistortionTool::prepareFinal()
@@ -322,17 +316,13 @@ void LensDistortionTool::prepareFinal()
     double b = d->brightenInput->value();
 
     ImageIface iface(0, 0);
-
-    setFilter(dynamic_cast<DImgThreadedFilter *>(
-                       new LensDistortion(iface.getOriginalImg(), this, m, e, r, b, 0, 0)));
+    setFilter(new LensDistortionFilter(iface.getOriginalImg(), this, m, e, r, b, 0, 0));
 }
 
 void LensDistortionTool::putPreviewData()
 {
     ImageIface* iface = d->previewWidget->imageIface();
-
-    DImg imDest = filter()->getTargetImage()
-            .smoothScale(iface->previewWidth(), iface->previewHeight());
+    DImg imDest       = filter()->getTargetImage().smoothScale(iface->previewWidth(), iface->previewHeight());
     iface->putPreviewImage(imDest.bits());
 
     d->previewWidget->updatePreview();
@@ -341,9 +331,7 @@ void LensDistortionTool::putPreviewData()
 void LensDistortionTool::putFinalData()
 {
     ImageIface iface(0, 0);
-
-    iface.putOriginalImage(i18n("Lens Distortion"),
-                           filter()->getTargetImage().bits());
+    iface.putOriginalImage(i18n("Lens Distortion"), filter()->getTargetImage().bits());
 }
 
 void LensDistortionTool::renderingFinished()

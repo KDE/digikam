@@ -5,7 +5,7 @@ INCLUDE_DIRECTORIES(distortion
 
 
 SET(distortion_SRCS distortion/lensdistortiontool.cpp
-                    distortion/lensdistortion.cpp
+                    distortion/lensdistortionfilter.cpp
                     distortion/pixelaccess.cpp
    )
 
