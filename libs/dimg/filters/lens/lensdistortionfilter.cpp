@@ -34,10 +34,10 @@
 #include "dimg.h"
 #include "pixelaccess.h"
 
-namespace DigikamLensDistortionImagesPlugin
+namespace Digikam
 {
 
-LensDistortionFilter::LensDistortionFilter(DImg *orgImage, QObject *parent, double main,
+LensDistortionFilter::LensDistortionFilter(DImg* orgImage, QObject* parent, double main,
                                            double edge, double rescale, double brighten,
                                            int center_x, int center_y)
                     : DImgThreadedFilter(orgImage, parent, "LensDistortionFilter")
@@ -132,4 +132,4 @@ void LensDistortionFilter::filterImage()
     delete pa;
 }
 
-}  // namespace DigikamLensDistortionImagesPlugin
+}  // namespace Digikam

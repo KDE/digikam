@@ -6,8 +6,8 @@
  * Date        : 2004-12-27
  * Description : access pixels method for lens distortion algorithm.
  *
- * Copyright (C) 2004-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #include "pixelaccess.h"
 
 // C++ includes
@@ -31,15 +30,10 @@
 #include <cmath>
 #include <cstdlib>
 
-// KDE includes
-
-
-
-
-namespace DigikamLensDistortionImagesPlugin
+namespace Digikam
 {
 
-PixelAccess::PixelAccess(Digikam::DImg *srcImage)
+PixelAccess::PixelAccess(DImg* srcImage)
 {
     m_image       = srcImage;
 
@@ -53,7 +47,7 @@ PixelAccess::PixelAccess(Digikam::DImg *srcImage)
 
     for ( int i = 0 ; i < PixelAccessRegions ; ++i )
     {
-        m_buffer[i] = new Digikam::DImg(m_image->copy(0, 0, m_width, m_height));
+        m_buffer[i] = new DImg(m_image->copy(0, 0, m_width, m_height));
 
         m_tileMinX[i] = 1;
         m_tileMaxX[i] = m_width - 2;
@@ -76,7 +70,7 @@ uchar* PixelAccess::pixelAccessAddress(int i, int j)
 // Swap region[n] with region[0].
 void PixelAccess::pixelAccessSelectRegion(int n)
 {
-    Digikam::DImg *temp;
+    DImg* temp;
     int    a, b, c, d;
     int    i;
 
@@ -148,7 +142,7 @@ void PixelAccess::pixelAccessReposition(int xInt, int yInt)
     {
         // some data is off edge of image
 
-        m_buffer[0]->fill(Digikam::DColor(0,0,0,0, m_sixteenBit));
+        m_buffer[0]->fill(DColor(0,0,0,0, m_sixteenBit));
 
         // This could probably be done by bitBltImage but I did not figure out how,
         // so leave the working code here. And no, it is not this:
@@ -172,9 +166,9 @@ void PixelAccess::pixelAccessReposition(int xInt, int yInt)
 
 void PixelAccess::pixelAccessGetCubic(double srcX, double srcY, double brighten, uchar* dst)
 {
-    int     xInt, yInt;
-    double  dx, dy;
-    uchar  *corner;
+    int    xInt, yInt;
+    double dx, dy;
+    uchar* corner;
 
     xInt = (int)floor(srcX);
     dx   = srcX - xInt;
@@ -313,4 +307,4 @@ void PixelAccess::cubicInterpolate(uchar* src, int rowStride, uchar* dst,
     }
 }
 
-}  // namespace DigikamLensDistortionImagesPlugin
+}  // namespace Digikam

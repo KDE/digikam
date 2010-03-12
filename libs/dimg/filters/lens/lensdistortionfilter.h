@@ -28,13 +28,12 @@
 // Local includes
 
 #include "dimgthreadedfilter.h"
+#include "digikam_export.h"
 
-using namespace Digikam;
-
-namespace DigikamLensDistortionImagesPlugin
+namespace Digikam
 {
 
-class LensDistortionFilter : public DImgThreadedFilter
+class DIGIKAM_EXPORT LensDistortionFilter : public DImgThreadedFilter
 {
 
 public:
@@ -60,6 +59,6 @@ private:
     double m_brighten;
 };
 
-}  // namespace DigikamLensDistortionImagesPlugin
+}  // namespace Digikam
 
 #endif /* LENS_DISTORTION_FILTER_H */

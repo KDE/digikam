@@ -5,8 +5,6 @@ INCLUDE_DIRECTORIES(distortion
 
 
 SET(distortion_SRCS distortion/lensdistortiontool.cpp
-                    distortion/lensdistortionfilter.cpp
-                    distortion/pixelaccess.cpp
    )
 
 SET(digikamimageplugin_lenscorrection_PART_SRCS imageplugin_lenscorrection.cpp
