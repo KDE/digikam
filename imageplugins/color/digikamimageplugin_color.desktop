@@ -1,9 +1,17 @@
 [Desktop Entry]
 Name=ImagePlugin_Color
+Name[pt]=ImagePlugin_Color
+Name[sv]=Färginsticksprogram
+Name[uk]=ImagePlugin_Color
+Name[x-test]=xxImagePlugin_Colorxx
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=A tool to correct colors of image
+Comment[pt]=Uma ferramenta para corrigir as cores de uma imagem
+Comment[sv]=Ett verktyg för att korrigera färger i bilder
+Comment[uk]=Інструмент для виправлення кольорів зображення
+Comment[x-test]=xxA tool to correct colors of imagexx
 
 X-KDE-Library=digikamimageplugin_color
 author=Caulier Gilles, caulier dot gilles at gmail dot com

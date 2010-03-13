@@ -2,6 +2,7 @@
 Name=ImagePlugin_Decorate
 Name[nb]=ImagePlugin_Decorate
 Name[pt]=ImagePlugin_Decorate
+Name[pt_BR]=ImagePlugin_Decorate
 Name[sv]=Bildinsticksprogram för dekoration
 Name[uk]=ImagePlugin_Decorate
 Name[x-test]=xxImagePlugin_Decoratexx
@@ -11,6 +12,7 @@ Encoding=UTF-8
 Comment=A tool to decorate image
 Comment[nb]=Et verktøy for dekorere bildet
 Comment[pt]=Uma ferramenta para decorar imagens
+Comment[pt_BR]=Uma ferramenta para decorar imagens
 Comment[sv]=Ett verktyg för att dekorera bilder
 Comment[uk]=Інструмент для декорування зображень
 Comment[x-test]=xxA tool to decorate imagexx

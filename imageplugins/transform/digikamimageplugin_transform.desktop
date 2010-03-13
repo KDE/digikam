@@ -2,6 +2,7 @@
 Name=ImagePlugin_Transform
 Name[nb]=ImagePlugin_Transform
 Name[pt]=ImagePlugin_Transform
+Name[pt_BR]=ImagePlugin_Transform
 Name[sv]=Insticksprogram för omvandling
 Name[uk]=ImagePlugin_Transform
 Name[x-test]=xxImagePlugin_Transformxx
@@ -12,6 +13,7 @@ Encoding=UTF-8
 Comment=A tool to transform image geometry
 Comment[nb]=Et verktøy for å omforme bildegeometrien
 Comment[pt]=Uma ferramenta para transformar a geometria das imagens
+Comment[pt_BR]=Uma ferramenta para transformar a geometria das imagens
 Comment[sv]=Ett verktyg för att omvandla bildernas geometri
 Comment[uk]=Інструмент для зміни геометричних параметрів зображення
 Comment[x-test]=xxA tool to transform image geometryxx
