@@ -65,9 +65,7 @@ int main(int argc, char *argv[])
     options.add("+[file(s) or folder(s)]", ki18n("File(s) or folder(s) to open"));
     KCmdLineArgs::addCmdLineOptions( options );
 
-#if KEXIV2_VERSION >= 0x000300
     KExiv2Iface::KExiv2::initializeExiv2();
-#endif
 
     KApplication app;
 
@@ -88,9 +86,7 @@ int main(int argc, char *argv[])
 
     int ret = app.exec();
 
-#if KEXIV2_VERSION >= 0x000300
     KExiv2Iface::KExiv2::cleanupExiv2();
-#endif
 
     return ret;
 }

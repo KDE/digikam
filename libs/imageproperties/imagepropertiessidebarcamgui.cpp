@@ -172,7 +172,7 @@ void ImagePropertiesSideBarCamGui::slotChangedTab(QWidget* tab)
     {
         d->cameraItemTab->setCurrentItem(d->itemInfo,
                                          d->cameraItem->getDownloadName(),
-#if KEXIV2_VERSION >= 0x01000
+#if KEXIV2_VERSION >= 0x010000
                                          d->metaData.getExifEncoded(),
 #else
                                          d->metaData.getExif(),
