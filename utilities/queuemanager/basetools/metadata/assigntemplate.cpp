@@ -80,7 +80,17 @@ BatchToolSettings AssignTemplate::defaultSettings()
 void AssignTemplate::slotAssignSettings2Widget()
 {
     QString title = settings()["TemplateTitle"].toString();
-    Template t    = TemplateManager::defaultManager()->findByTitle(title);
+
+    Template t;
+    if (title == Template::removeTemplateTitle())
+    {
+        t.setTemplateTitle(Template::removeTemplateTitle());
+    }
+    else if (title.isEmpty())
+    {}
+    else
+        t = TemplateManager::defaultManager()->findByTitle(title);
+
     m_templateSelector->setTemplate(t);
 }
 
