@@ -1,11 +1,17 @@
 [Desktop Entry]
 Name=ImagePlugin_Enhance
+Name[pt]=ImagePlugin_Enhance
+Name[sv]=Förbättringsinsticksprogram
+Name[uk]=ImagePlugin_Enhance
 Name[x-test]=xxImagePlugin_Enhancexx
 
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=digiKam plugin to enhance photograph
+Comment[pt]=Um 'plugin' do digiKam para melhorar as fotografias
+Comment[sv]=Digikam insticksprogram för att förbättra ett fotografi
+Comment[uk]=Додаток покращення якості фотографії для digiKam
 Comment[x-test]=xxdigiKam plugin to enhance photographxx
 
 X-KDE-Library=digikamimageplugin_enhance

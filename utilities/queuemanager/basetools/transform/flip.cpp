@@ -88,7 +88,7 @@ void Flip::slotSettingsChanged()
 {
     BatchToolSettings settings;
     settings.insert("Flip", m_comboBox->currentIndex());
-    setSettings(settings);
+    BatchTool::slotSettingsChanged(settings);
 }
 
 bool Flip::toolOperations()

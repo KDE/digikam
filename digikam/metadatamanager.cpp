@@ -303,26 +303,28 @@ void MetadataManagerDatabaseWorker::changeTags(const QList<ImageInfo>& infos, co
 
     QList<ImageInfo> forWriting;
 
-    ScanController::instance()->suspendCollectionScan();
-    DatabaseTransaction transaction;
-    foreach(const ImageInfo& info, infos)
     {
-
-        hub.load(info);
-
-        for (QList<int>::const_iterator tagIt = tagIDs.constBegin(); tagIt != tagIDs.constEnd(); ++tagIt)
+        ScanController::instance()->suspendCollectionScan();
+        DatabaseTransaction transaction;
+        foreach(const ImageInfo& info, infos)
         {
-            hub.setTag(*tagIt, addOrRemove);
+
+            hub.load(info);
+
+            for (QList<int>::const_iterator tagIt = tagIDs.constBegin(); tagIt != tagIDs.constEnd(); ++tagIt)
+            {
+                hub.setTag(*tagIt, addOrRemove);
+            }
+
+            hub.write(info, MetadataHub::PartialWrite);
+
+            if (hub.willWriteMetadata(MetadataHub::FullWriteIfChanged) && d->shallSendForWriting(info.id()))
+                forWriting << info;
+
+            d->dbProcessedOne();
         }
-
-        hub.write(info, MetadataHub::PartialWrite);
-
-        if (hub.willWriteMetadata(MetadataHub::FullWriteIfChanged) && d->shallSendForWriting(info.id()))
-            forWriting << info;
-
-        d->dbProcessedOne();
+        ScanController::instance()->resumeCollectionScan();
     }
-    ScanController::instance()->resumeCollectionScan();
 
     // send for writing file metadata
     if (!forWriting.isEmpty())
@@ -343,20 +345,22 @@ void MetadataManagerDatabaseWorker::assignRating(const QList<ImageInfo>& infos, 
 
     QList<ImageInfo> forWriting;
 
-    ScanController::instance()->suspendCollectionScan();
-    DatabaseTransaction transaction;
-    foreach (const ImageInfo& info, infos)
     {
-        hub.load(info);
-        hub.setRating(rating);
-        hub.write(info, MetadataHub::PartialWrite);
+        ScanController::instance()->suspendCollectionScan();
+        DatabaseTransaction transaction;
+        foreach (const ImageInfo& info, infos)
+        {
+            hub.load(info);
+            hub.setRating(rating);
+            hub.write(info, MetadataHub::PartialWrite);
 
-        if (hub.willWriteMetadata(MetadataHub::FullWriteIfChanged) && d->shallSendForWriting(info.id()))
-            forWriting << info;
+            if (hub.willWriteMetadata(MetadataHub::FullWriteIfChanged) && d->shallSendForWriting(info.id()))
+                forWriting << info;
 
-        d->dbProcessedOne();
+            d->dbProcessedOne();
+        }
+        ScanController::instance()->resumeCollectionScan();
     }
-    ScanController::instance()->resumeCollectionScan();
 
     // send for writing file metadata
     if (!forWriting.isEmpty())

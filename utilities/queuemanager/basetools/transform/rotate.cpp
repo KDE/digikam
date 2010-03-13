@@ -103,7 +103,7 @@ void Rotate::slotSettingsChanged()
     BatchToolSettings settings;
     settings.insert("UseExif",  m_useExif->isChecked());
     settings.insert("Rotation", m_comboBox->currentIndex());
-    setSettings(settings);
+    BatchTool::slotSettingsChanged(settings);
 }
 
 bool Rotate::toolOperations()

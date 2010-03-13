@@ -106,7 +106,7 @@ void WhiteBalance::slotSettingsChanged()
     prm.insert("saturation",  (double)currentPrm.saturation);
     prm.insert("exposition",  (double)currentPrm.exposition);
 
-    setSettings(prm);
+    BatchTool::slotSettingsChanged(prm);
 }
 
 bool WhiteBalance::toolOperations()

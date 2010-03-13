@@ -670,9 +670,34 @@ bool MetadataHub::write(DImg& image, WriteMode writeMode, const MetadataWriteSet
 
     // See DImgLoader::readMetadata() and saveMetadata()
     DMetadata metadata;
-    metadata.setData(image.getMetadata());
+    metadata.setComments(image.getComments());
+    metadata.setExif(image.getExif());
+    metadata.setIptc(image.getIptc());
+    metadata.setXmp(image.getXmp());
 
-    return write(metadata, writeMode, settings);
+    if (write(metadata, writeMode, settings))
+    {
+        // Do not insert null data into metaData map:
+        // Even if byte array is null, if there is a key in the map, it will
+        // be interpreted as "There was data, so write it again to the file".
+        if (metadata.hasComments())
+            image.setComments(metadata.getComments());
+
+#if KEXIV2_VERSION >= 0x010000
+        if (metadata.hasExif())
+            image.setExif(metadata.getExifEncoded());
+#else
+        if (metadata.hasExif())
+            image.setExif(metadata.getExif());
+#endif
+        
+        if (metadata.hasIptc())
+            image.setIptc(metadata.getIptc());
+        if (metadata.hasXmp())
+            image.setXmp(metadata.getXmp());
+        return true;
+    }
+    return false;
 }
 
 bool MetadataHub::willWriteMetadata(WriteMode writeMode, const MetadataWriteSettings& settings) const

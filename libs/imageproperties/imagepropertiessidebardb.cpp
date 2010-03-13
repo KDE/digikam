@@ -213,7 +213,11 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
         {
             if (m_image)
             {
-                DMetadata data(m_image->getMetadata());
+                DMetadata data;
+                data.setComments(m_image->getComments());
+                data.setExif(m_image->getExif());
+                data.setIptc(m_image->getIptc());
+                data.setXmp(m_image->getXmp());
                 m_metadataTab->setCurrentData(data, m_currentURL.fileName());
             }
             else
@@ -250,7 +254,11 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
         {
             if (m_image)
             {
-                DMetadata data(m_image->getMetadata());
+                DMetadata data;
+                data.setComments(m_image->getComments());
+                data.setExif(m_image->getExif());
+                data.setIptc(m_image->getIptc());
+                data.setXmp(m_image->getXmp());
                 m_metadataTab->setCurrentData(data, m_currentURL.fileName());
             }
             else

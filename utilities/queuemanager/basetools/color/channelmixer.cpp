@@ -170,7 +170,7 @@ void ChannelMixer::slotSettingsChanged()
     prm.insert("blackGreenGain", (double)currentPrm.blackGreenGain);
     prm.insert("blackBlueGain",  (double)currentPrm.blackBlueGain);
 
-    setSettings(prm);
+    BatchTool::slotSettingsChanged(prm);
 }
 
 bool ChannelMixer::toolOperations()

@@ -96,7 +96,7 @@ void Blur::slotSettingsChanged()
 
     settings.insert("Radius", (double)m_radiusInput->value());
     
-    setSettings(settings);
+    BatchTool::slotSettingsChanged(settings);
 }
 
 bool Blur::toolOperations()

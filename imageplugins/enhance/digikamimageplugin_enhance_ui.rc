@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="17" name="digikamimageplugin_enhance" >
+<gui version="21" name="digikamimageplugin_enhance" >
 
  <MenuBar>
 
@@ -10,9 +10,15 @@
       <Action name="imageplugin_noisereduction" />
       <Action name="imageplugin_localcontrast" />
       <Action name="imageplugin_inpainting" />
+      <Action name="imageplugin_hotpixels" />
       <Separator />
       <Action name="imageplugin_redeye" />
-      <Action name="imageplugin_inpainting" />
+
+      <Menu name="Lens" ><text>&amp;Lens</text>
+          <Action name="imageplugin_lensautofix" />
+          <Action name="imageplugin_antivignetting" />
+          <Action name="imageplugin_lensdistortion" />
+      </Menu>
   </Menu>
 
  </MenuBar>
@@ -29,6 +35,10 @@
       <Action shortcut="" name="imageplugin_localcontrast" />
       <Action shortcut="" name="imageplugin_redeye" />
       <Action shortcut="" name="imageplugin_inpainting" />
+      <Action shortcut="" name="imageplugin_lensautofix" />
+      <Action shortcut="" name="imageplugin_antivignetting" />
+      <Action shortcut="" name="imageplugin_lensdistortion" />
+      <Action shortcut="" name="imageplugin_hotpixels" />
 </ActionProperties>
 
 </gui>

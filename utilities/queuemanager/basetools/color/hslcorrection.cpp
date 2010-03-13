@@ -91,7 +91,7 @@ void HSLCorrection::slotSettingsChanged()
     prm.insert("Saturation", (double)currentPrm.saturation);
     prm.insert("Lightness",  (double)currentPrm.lightness);
 
-    setSettings(prm);
+    BatchTool::slotSettingsChanged(prm);
 }
 
 bool HSLCorrection::toolOperations()

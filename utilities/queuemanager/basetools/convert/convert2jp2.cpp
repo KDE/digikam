@@ -84,7 +84,7 @@ void Convert2JP2::slotSettingsChanged()
     BatchToolSettings settings;
     settings.insert("quality",  m_settings->getCompressionValue());
     settings.insert("lossless", m_settings->getLossLessCompression());
-    setSettings(settings);
+    BatchTool::slotSettingsChanged(settings);
 }
 
 QString Convert2JP2::outputSuffix() const

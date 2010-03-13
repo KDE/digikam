@@ -110,7 +110,7 @@ void BWConvert::slotSettingsChanged()
     prm.insert("strength",   (double)currentPrm.strength);
     prm.insert("curves",     currentPrm.curvesPrm.lumCurveVals);
 
-    setSettings(prm);
+    BatchTool::slotSettingsChanged(prm);
 }
 
 bool BWConvert::toolOperations()

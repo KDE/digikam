@@ -578,6 +578,9 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/transform/shearfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/greycstoration/greycstorationfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/greycstoration/greycstorationsettings.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/antivignettingfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/lensdistortionfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/pixelaccess.cpp
        )
 
     IF(GLIB2_FOUND)
@@ -586,6 +589,15 @@ IF(DIGIKAM_CAN_BE_COMPILED)
             ${liblqr_SRCS}
            )
     ENDIF(GLIB2_FOUND)
+
+    IF(LENSFUN_LIBRARY)
+        SET(libdimgfilters_SRCS ${libdimgfilters_SRCS}
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/lensfunfilter.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/lensfunsettings.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/lensfuniface.cpp
+            ${liblqr_SRCS}
+           )
+    ENDIF(LENSFUN_LIBRARY)
 
     # For CImg.h
     SET_SOURCE_FILES_PROPERTIES(${libdimgfilters_SRCS} PROPERTIES COMPILE_FLAGS ${KDE4_ENABLE_EXCEPTIONS})

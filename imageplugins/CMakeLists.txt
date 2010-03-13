@@ -26,6 +26,7 @@ INCLUDE_DIRECTORIES(../utilities/imageeditor/editor
                     ../libs/dimg/filters/curves
                     ../libs/dimg/filters/wb
                     ../libs/dimg/filters/transform
+                    ../libs/dimg/filters/lens
                     ../libs/threadimageio
                     ../libs/dmetadata
                     ../libs/themeengine
@@ -37,9 +38,7 @@ INCLUDE_DIRECTORIES(../utilities/imageeditor/editor
 ADD_SUBDIRECTORY( color )
 ADD_SUBDIRECTORY( decorate )
 ADD_SUBDIRECTORY( enhance )
-ADD_SUBDIRECTORY( fxfilters )
+ADD_SUBDIRECTORY( filters )
 ADD_SUBDIRECTORY( transform )
-ADD_SUBDIRECTORY( hotpixels )
-ADD_SUBDIRECTORY( lenscorrection )
 ADD_SUBDIRECTORY( superimpose )
 

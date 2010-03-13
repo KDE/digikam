@@ -19,7 +19,7 @@ decorate
   /inserttext                NO                   NO                    NO
   /texture                  DONE                 DONE                  TODO
 
-fxfilters
+filters
   /colorfx                  TODO                 TODO                  TODO
   /charcoal                 DONE                 DONE                  TODO
   /distortionfx             DONE                 TODO                  TODO
@@ -29,11 +29,6 @@ fxfilters
   /raindrop                 DONE                  NO                   TODO
   /filmgrain                DONE                 DONE                  DONE
 
-lenscorrection
-  /autocorrection           DONE                 TODO                  TODO
-  /distortion               DONE                 TODO                  TODO
-  /vignetting               DONE                 TODO                  TODO
-
 enhance
   /noisereductiontool       DONE                 DONE                  DONE
   /sharpentool              DONE                 DONE                  DONE
@@ -42,6 +37,10 @@ enhance
   /localcontrast            DONE                 DONE                  DONE
   /redeyetool               DONE                 TODO                   NO
   /inpainting               DONE                  NO                    NO
+  /autocorrection           DONE                 TODO                  TODO
+  /distortion               DONE                 TODO                  TODO
+  /vignetting               DONE                 TODO                  TODO
+  /hotpixels                DONE                 DONE                  TODO
 
 transform
   /ratiocrop                DONE                  NO                    NO
@@ -52,4 +51,3 @@ transform
   /contentawareresizing     DONE                 TODO                  TODO
 
 superimpose                  NO                   NO                    NO
-hotpixels                   DONE                 DONE                  TODO

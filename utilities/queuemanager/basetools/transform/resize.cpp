@@ -112,7 +112,7 @@ void Resize::slotSettingsChanged()
     settings.insert("LengthPreset", m_comboBox->currentIndex());
     settings.insert("UseCustom",    m_useCustom->isChecked());
     settings.insert("LengthCustom", m_customLength->value());
-    setSettings(settings);
+    BatchTool::slotSettingsChanged(settings);
 }
 
 int Resize::presetLengthValue(WidthPreset preset)

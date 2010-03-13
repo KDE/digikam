@@ -80,7 +80,17 @@ BatchToolSettings AssignTemplate::defaultSettings()
 void AssignTemplate::slotAssignSettings2Widget()
 {
     QString title = settings()["TemplateTitle"].toString();
-    Template t    = TemplateManager::defaultManager()->findByTitle(title);
+
+    Template t;
+    if (title == Template::removeTemplateTitle())
+    {
+        t.setTemplateTitle(Template::removeTemplateTitle());
+    }
+    else if (title.isEmpty())
+    {}
+    else
+        t = TemplateManager::defaultManager()->findByTitle(title);
+
     m_templateSelector->setTemplate(t);
 }
 
@@ -89,7 +99,7 @@ void AssignTemplate::slotSettingsChanged()
     m_templateViewer->setTemplate(m_templateSelector->getTemplate());
     BatchToolSettings settings;
     settings.insert("TemplateTitle", m_templateSelector->getTemplate().templateTitle());
-    setSettings(settings);
+    BatchTool::slotSettingsChanged(settings);
 }
 
 bool AssignTemplate::toolOperations()
@@ -98,7 +108,10 @@ bool AssignTemplate::toolOperations()
 
     QString title = settings()["TemplateTitle"].toString();
 
-    DMetadata meta(image().getMetadata());
+    DMetadata meta;
+    meta.setExif(image().getExif());
+    meta.setIptc(image().getIptc());
+    meta.setXmp(image().getXmp());
 
     if (title == Template::removeTemplateTitle())
     {
@@ -115,7 +128,13 @@ bool AssignTemplate::toolOperations()
         meta.setMetadataTemplate(t);
     }
 
-    image().setMetadata(meta.data());
+#if KEXIV2_VERSION >= 0x010000
+    image().setExif(meta.getExifEncoded());
+#else
+    image().setExif(meta.getExif());
+#endif
+    image().setIptc(meta.getIptc());
+    image().setXmp(meta.getXmp());
 
     return (savefromDImg());
 }

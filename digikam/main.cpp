@@ -88,9 +88,7 @@ int main(int argc, char *argv[])
     options.add("database-directory <dir>", ki18n("Start digikam with the database file found in the directory <dir>"));
     KCmdLineArgs::addCmdLineOptions( options );
 
-#if KEXIV2_VERSION >= 0x000300
     KExiv2Iface::KExiv2::initializeExiv2();
-#endif
 
     KApplication app;
 
@@ -194,9 +192,7 @@ int main(int argc, char *argv[])
 
     int ret = app.exec();
 
-#if KEXIV2_VERSION >= 0x000300
     KExiv2Iface::KExiv2::cleanupExiv2();
-#endif
 
     return ret;
 }

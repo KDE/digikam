@@ -967,6 +967,8 @@ bool AlbumManager::setDatabase(const QString dbType, const QString dbName, const
 
     // -- ---------------------------------------------------------
 
+    d->dirWatchBlackList.clear();
+
 #ifdef USE_THUMBS_DB
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
@@ -993,7 +995,6 @@ bool AlbumManager::setDatabase(const QString dbType, const QString dbName, const
     // -- ---------------------------------------------------------
 
     // measures to filter out KDirWatch signals caused by database operations
-    d->dirWatchBlackList.clear();
     DatabaseParameters params = DatabaseAccess::parameters();
     if (params.isSQLite())
     {

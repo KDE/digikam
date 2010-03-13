@@ -35,7 +35,6 @@
 // Local includes
 
 #include "digikam_export.h"
-#include "dmetadatadata.h"
 #include "dshareddata.h"
 #include "iccprofile.h"
 
@@ -97,7 +96,7 @@ public:
     unsigned char*          data;
     LANCZOS_DATA_TYPE*      lanczos_func;
 
-    KExiv2Data              metaData;
+    QMap<int, QByteArray>   metaData;
     QMap<QString, QVariant> attributes;
     QMap<QString, QString>  embeddedText;
     IccProfile              iccProfile;

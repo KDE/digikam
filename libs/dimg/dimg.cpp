@@ -251,7 +251,7 @@ void DImg::resetMetaData()
 {
     m_priv->attributes.clear();
     m_priv->embeddedText.clear();
-    m_priv->metaData = KExiv2Data();
+    m_priv->metaData.clear();
 }
 
 uchar* DImg::stripImageData()
@@ -264,11 +264,20 @@ uchar* DImg::stripImageData()
 
 void DImg::copyMetaData(const DImgPrivate* src)
 {
-    m_priv->metaData     = src->metaData;
     m_priv->attributes   = src->attributes;
     m_priv->embeddedText = src->embeddedText;
     m_priv->iccProfile   = src->iccProfile;
     //FIXME: what about sharing and deleting lanczos_func?
+
+    // since qbytearrays are explicitly shared, we need to make sure that they are
+    // detached from any shared references
+
+    for (QMap<int, QByteArray>::const_iterator it = src->metaData.constBegin();
+         it != src->metaData.constEnd(); ++it)
+    {
+        // Insert a deep copy...
+        m_priv->metaData.insert(it.key(), QByteArray(it.value()));
+    }
 }
 
 void DImg::copyImageData(const DImgPrivate* src)
@@ -823,24 +832,68 @@ DRawDecoding DImg::rawDecodingSettings() const
         return DRawDecoding();
 }
 
+QByteArray DImg::getComments() const
+{
+    return metadata(COM);
+}
+
+QByteArray DImg::getExif() const
+{
+    return metadata(EXIF);
+}
+
+QByteArray DImg::getIptc() const
+{
+    return metadata(IPTC);
+}
+
 IccProfile DImg::getIccProfile() const
 {
     return m_priv->iccProfile;
 }
 
+QByteArray DImg::getXmp() const
+{
+    return metadata(XMP);
+}
+
+void DImg::setComments(const QByteArray& commentsData)
+{
+    m_priv->metaData.insert(COM, commentsData);
+}
+
+void DImg::setExif(const QByteArray& exifData)
+{
+    m_priv->metaData.insert(EXIF, exifData);
+}
+
+void DImg::setIptc(const QByteArray& iptcData)
+{
+    m_priv->metaData.insert(IPTC, iptcData);
+}
+
 void DImg::setIccProfile(const IccProfile& profile)
 {
     m_priv->iccProfile = profile;
+    m_priv->metaData.insert(ICC, m_priv->iccProfile.data());
 }
 
-KExiv2Data DImg::getMetadata() const
+void DImg::setXmp(const QByteArray& xmpData)
 {
-    return m_priv->metaData;
+    m_priv->metaData.insert(XMP, xmpData);
 }
 
-void DImg::setMetadata(const KExiv2Data& data)
+QByteArray DImg::metadata(DImg::METADATA key) const
 {
-    m_priv->metaData = data;
+    typedef QMap<int, QByteArray> MetaDataMap;
+
+    for (MetaDataMap::const_iterator it = m_priv->metaData.constBegin(); it != m_priv->metaData.constEnd(); ++it)
+    {
+        if (it.key() == key)
+            return it.value();
+    }
+
+    return QByteArray();
 }
 
 uint DImg::numBytes() const
@@ -2064,6 +2117,9 @@ void DImg::convertDepth(int depth)
 
 void DImg::fill(const DColor& color)
 {
+    if (isNull())
+        return;
+
     // caching
     uint dim = width() * height() * 4;
 
@@ -2133,7 +2189,10 @@ QByteArray DImg::getUniqueHash(const QString& filePath)
 void DImg::updateMetadata(const QString& destMimeType, const QString& originalFileName, bool resetExifOrientationTag)
 {
     // Get image Exif/IPTC data.
-    DMetadata meta(getMetadata());
+    DMetadata meta;
+    meta.setExif(getExif());
+    meta.setIptc(getIptc());
+    meta.setXmp(getXmp());
 
     // Update IPTC preview.
     // NOTE: see B.K.O #130525. a JPEG segment is limited to 64K. If the IPTC byte array is
@@ -2182,7 +2241,13 @@ void DImg::updateMetadata(const QString& destMimeType, const QString& originalFi
         meta.setImageOrientation(DMetadata::ORIENTATION_NORMAL);
 
     // Store new Exif/IPTC/XMP data into image.
-    setMetadata(meta.data());
+#if KEXIV2_VERSION >= 0x010000
+        setExif(meta.getExifEncoded());
+#else
+        setExif(meta.getExif());
+#endif
+    setIptc(meta.getIptc());
+    setXmp(meta.getXmp());
 }
 
 }  // namespace Digikam

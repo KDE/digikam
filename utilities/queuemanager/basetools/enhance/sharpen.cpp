@@ -139,7 +139,7 @@ void Sharpen::slotSettingsChanged()
     settings.insert("RefocusGauss",         (double)prm.rfGauss);
     settings.insert("RefocusMatrixSize",    (int)prm.rfMatrix);
 
-    setSettings(settings);
+    BatchTool::slotSettingsChanged(settings);
 }
 
 bool Sharpen::toolOperations()

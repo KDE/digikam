@@ -91,7 +91,7 @@ void BCGCorrection::slotSettingsChanged()
     prm.insert("Contrast",   (double)currentPrm.contrast);
     prm.insert("Gamma",      (double)currentPrm.gamma);
 
-    setSettings(prm);
+    BatchTool::slotSettingsChanged(prm);
 }
 
 bool BCGCorrection::toolOperations()

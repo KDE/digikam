@@ -81,6 +81,8 @@ static const char* ObsoleteImagePluginsList[] =
      "digikamimageplugin_texture",                  // Merged to "Decorate" plugin since 1.2.0.
      "digikamimageplugin_restoration",              // Merged to "Enhance" plugin since 1.2.0.
      "digikamimageplugin_inpainting",               // Merged to "Enhance" plugin since 1.2.0.
+     "digikamimageplugin_lenscorrection",           // Merged to "Enhance" plugin since 1.2.0.
+     "digikamimageplugin_hotpixels",                // Merged to "Enhance" plugin since 1.2.0.
      "digikamimageplugin_core",                     // Renamed "Color" plugin since 1.2.0.
      "-1"
 };

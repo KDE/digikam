@@ -112,7 +112,7 @@ void NoiseReduction::slotSettingsChanged()
     prm.insert("CrSoftness",    (double)currentPrm.softness[1]);
     prm.insert("CbSoftness",    (double)currentPrm.softness[2]);
 
-    setSettings(prm);
+    BatchTool::slotSettingsChanged(prm);
 }
 
 bool NoiseReduction::toolOperations()

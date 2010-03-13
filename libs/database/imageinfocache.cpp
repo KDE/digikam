@@ -42,13 +42,16 @@ ImageInfoCache::ImageInfoCache()
     DatabaseWatch *dbwatch = DatabaseAccess::databaseWatch();
 
     connect(dbwatch, SIGNAL(imageChange(const ImageChangeset &)),
-            this, SLOT(slotImageChanged(const ImageChangeset &)));
+            this, SLOT(slotImageChanged(const ImageChangeset &)),
+            Qt::DirectConnection);
 
     connect(dbwatch, SIGNAL(imageTagChange(const ImageTagChangeset &)),
-            this, SLOT(slotImageTagChanged(const ImageTagChangeset &)));
+            this, SLOT(slotImageTagChanged(const ImageTagChangeset &)),
+            Qt::DirectConnection);
 
     connect(dbwatch, SIGNAL(albumChange(const AlbumChangeset &)),
-            this, SLOT(slotAlbumChange(const AlbumChangeset &)));
+            this, SLOT(slotAlbumChange(const AlbumChangeset &)),
+            Qt::DirectConnection);
 }
 
 ImageInfoCache::~ImageInfoCache()

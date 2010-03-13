@@ -1,13 +1,31 @@
+INCLUDE_DIRECTORIES(hotpixels)
+
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR}/../../
+                   )
 
 SET(digikamimageplugin_enhance_PART_SRCS imageplugin_enhance.cpp
-                                         restorationtool.cpp 
+                                         restorationtool.cpp
                                          blurtool.cpp
                                          sharpentool.cpp
                                          noisereductiontool.cpp
                                          localcontrasttool.cpp
                                          redeyetool.cpp
-                                         inpaintingtool.cpp 
+                                         inpaintingtool.cpp
+                                         antivignettingtool.cpp
+                                         lensdistortiontool.cpp
+                                         hotpixels/weights.cpp
+                                         hotpixels/blackframeparser.cpp
+                                         hotpixels/blackframelistview.cpp
+                                         hotpixels/hotpixelfixer.cpp
+                                         hotpixels/hotpixelstool.cpp
    )
+
+IF(LENSFUN_LIBRARY)
+    INCLUDE_DIRECTORIES(${LENSFUN_INCLUDE_DIR})
+    SET(digikamimageplugin_enhance_PART_SRCS ${digikamimageplugin_enhance_PART_SRCS}
+        lensautofixtool.cpp
+       )
+ENDIF(LENSFUN_LIBRARY)
 
 KDE4_ADD_PLUGIN(digikamimageplugin_enhance ${digikamimageplugin_enhance_PART_SRCS})
 
@@ -20,7 +38,12 @@ TARGET_LINK_LIBRARIES(
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}
     ${KDCRAW_LIBRARIES}
+    ${KEXIV2_LIBRARIES}
     )
+
+IF(LENSFUN_LIBRARY)
+   TARGET_LINK_LIBRARIES(digikamimageplugin_enhance ${LENSFUN_LIBRARY})
+ENDIF(LENSFUN_LIBRARY)
 
 INSTALL(TARGETS digikamimageplugin_enhance DESTINATION ${PLUGIN_INSTALL_DIR} )
 INSTALL(FILES digikamimageplugin_enhance_ui.rc DESTINATION ${DATA_INSTALL_DIR}/digikam)

@@ -44,6 +44,14 @@
 #include "redeyetool.h"
 #include "imageiface.h"
 #include "inpaintingtool.h"
+#include "antivignettingtool.h"
+#include "lensdistortiontool.h"
+#include "hotpixelstool.h"
+#include "config-digikam.h"
+
+#ifdef HAVE_LENSFUN
+#include "lensautofixtool.h"
+#endif // HAVE_LENSFUN
 
 using namespace DigikamEnhanceImagePlugin;
 
@@ -57,16 +65,16 @@ ImagePlugin_Enhance::ImagePlugin_Enhance(QObject* parent, const QVariantList&)
     actionCollection()->addAction("imageplugin_restoration", m_restorationAction);
     connect(m_restorationAction, SIGNAL(triggered(bool)),
             this, SLOT(slotRestoration()));
-            
+
     m_sharpenAction = new KAction(KIcon("sharpenimage"), i18n("Sharpen..."), this);
     actionCollection()->addAction("imageplugin_sharpen", m_sharpenAction);
     connect(m_sharpenAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotSharpen()));
-            
+
     m_blurAction = new KAction(KIcon("blurimage"), i18n("Blur..."), this);
     actionCollection()->addAction("imageplugin_blur", m_blurAction);
     connect(m_blurAction, SIGNAL(triggered(bool) ),
-            this, SLOT(slotBlur()));            
+            this, SLOT(slotBlur()));
 
     m_noiseReductionAction = new KAction(KIcon("noisereduction"), i18n("Noise Reduction..."), this);
     actionCollection()->addAction("imageplugin_noisereduction", m_noiseReductionAction);
@@ -91,8 +99,31 @@ ImagePlugin_Enhance::ImagePlugin_Enhance(QObject* parent, const QVariantList&)
                                             "To use this option, select a region to in-paint.") );
     connect(m_inPaintingAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotInPainting()));
-            
-            
+
+    m_antivignettingAction = new KAction(KIcon("antivignetting"), i18n("Vignetting Correction..."), this);
+    actionCollection()->addAction("imageplugin_antivignetting", m_antivignettingAction);
+    connect(m_antivignettingAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotAntiVignetting()));
+
+    m_lensdistortionAction = new KAction(KIcon("lensdistortion"), i18n("Distortion..."), this);
+    actionCollection()->addAction("imageplugin_lensdistortion", m_lensdistortionAction);
+    connect(m_lensdistortionAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotLensDistortion()));
+
+    m_hotpixelsAction  = new KAction(KIcon("hotpixels"), i18n("Hot Pixels..."), this);
+    actionCollection()->addAction("imageplugin_hotpixels", m_hotpixelsAction);
+    connect(m_hotpixelsAction, SIGNAL(triggered(bool) ),
+            this, SLOT(slotHotPixels()));
+
+#ifdef HAVE_LENSFUN
+
+    m_lensAutoFixAction = new KAction(KIcon("lensautofix"), i18n("Auto-Correction..."), this);
+    actionCollection()->addAction("imageplugin_lensautofix", m_lensAutoFixAction );
+    connect(m_lensAutoFixAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotLensAutoFix()));
+
+#endif // HAVE_LENSFUN
+
     setXMLFile( "digikamimageplugin_enhance_ui.rc" );
 
     kDebug() << "ImagePlugin_Enhance plugin loaded";
@@ -106,11 +137,30 @@ void ImagePlugin_Enhance::setEnabledActions(bool b)
 {
     m_restorationAction->setEnabled(b);
     m_blurAction->setEnabled(b);
-    m_sharpenAction->setEnabled(b);    
+    m_sharpenAction->setEnabled(b);
     m_noiseReductionAction->setEnabled(b);
-    m_localContrastAction->setEnabled(b);    
-    m_redeyeAction->setEnabled(b);    
-    m_inPaintingAction->setEnabled(b);    
+    m_localContrastAction->setEnabled(b);
+    m_redeyeAction->setEnabled(b);
+    m_inPaintingAction->setEnabled(b);
+    m_antivignettingAction->setEnabled(b);
+    m_lensdistortionAction->setEnabled(b);
+    m_hotpixelsAction->setEnabled(b);
+
+#ifdef HAVE_LENSFUN
+    m_lensAutoFixAction->setEnabled(b);
+#endif // HAVE_LENSFUN
+}
+
+void ImagePlugin_Enhance::slotHotPixels()
+{
+    HotPixelsTool* tool = new HotPixelsTool(this);
+    loadTool(tool);
+}
+
+void ImagePlugin_Enhance::slotLensDistortion()
+{
+    LensDistortionTool* tool = new LensDistortionTool(this);
+    loadTool(tool);
 }
 
 void ImagePlugin_Enhance::slotRestoration()
@@ -186,3 +236,16 @@ void ImagePlugin_Enhance::slotInPainting()
     loadTool(tool);
 }
 
+void ImagePlugin_Enhance::slotLensAutoFix()
+{
+#ifdef HAVE_LENSFUN
+    LensAutoFixTool* tool = new LensAutoFixTool(this);
+    loadTool(tool);
+#endif // HAVE_LENSFUN
+}
+
+void ImagePlugin_Enhance::slotAntiVignetting()
+{
+    AntiVignettingTool* tool = new AntiVignettingTool(this);
+    loadTool(tool);
+}

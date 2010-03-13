@@ -134,7 +134,7 @@ void CurvesAdjust::slotSettingsChanged()
     prm.insert("blueCurveVals",  currentPrm.blueCurveVals);
     prm.insert("alphaCurveVals", currentPrm.alphaCurveVals);
 
-    setSettings(prm);
+    BatchTool::slotSettingsChanged(prm);
 }
 
 bool CurvesAdjust::toolOperations()

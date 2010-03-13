@@ -100,7 +100,7 @@ void Restoration::slotSettingsChanged()
 {
     BatchToolSettings settings;
     settings.insert("RestorationMethod", (int)m_comboBox->currentIndex());
-    setSettings(settings);
+    BatchTool::slotSettingsChanged(settings);
 }
 
 bool Restoration::toolOperations()

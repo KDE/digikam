@@ -151,7 +151,9 @@ public:
     QPixmap               convertToPixmap(DImg& img);
 
     IccProfile            getEmbeddedICC();
-    KExiv2Data            getMetadata();
+    QByteArray            getExif();
+    QByteArray            getIptc();
+    QByteArray            getXmp();
 
     QString               getImageFileName();
     QString               getImageFilePath();

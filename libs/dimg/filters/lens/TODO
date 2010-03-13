@@ -1,0 +1,32 @@
+TODO for Lensfun tool.
+
+This is a digikam image plugin for using the lensfun library.
+See http://lensfun.berlios.de for details.
+This plugin is intended to be used for automatic correction
+of "errors" of your used lens. However, this can only work
+when your lens is known and the variances are covered in the
+database.
+
+Until now, it seems there is only data for geometry and
+distortion correction in the lensfun database. This plugin
+does already contain code to do the color and CA corrections,
+but this could not have been tested yet.
+
+I will get in contact with the lensfun people to see how
+to follow up on this (or if I am just to stupid to see it ;)
+
+In short, this plugin is maybe almost complete, but this
+could not have been verified yet. So this plugin is not really
+usefull for now and should get disabled before release, if
+there is no matured database or we have added a tool to
+create new database entries.
+
+adrian@suse.de
+http://en.opensuse.org/Users:adrianSuSE
+
+//---------------------------------------------------------------
+
+TODO for vignetting tool.
+
+- add support for adding vignette by changing the gamma
+- add support for different shapes ? (rectancle, ellipse, etc)

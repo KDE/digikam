@@ -181,6 +181,7 @@ Q_SIGNALS:
 public Q_SLOTS:
 
     void slotResetSettingsToDefault();
+    void slotSettingsChanged(const BatchToolSettings& settings);
 
 protected:
 
