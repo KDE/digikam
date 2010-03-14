@@ -44,7 +44,6 @@ public:
 
 private Q_SLOTS:
 
-    void slotSetFilters();
     void slotLensChanged();
     void slotResetSettings();
 

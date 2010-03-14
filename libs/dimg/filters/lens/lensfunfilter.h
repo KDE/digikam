@@ -22,29 +22,50 @@
 #ifndef LENSFUNFILTER_H
 #define LENSFUNFILTER_H
 
-// Lib LensFun includes
-
-extern "C"
-{
-#include <lensfun.h>
-}
-
 // Local includes
 
 #include "dimgthreadedfilter.h"
-#include "lensfuniface.h"
 #include "digikam_export.h"
 
 namespace Digikam
 {
+
+class LensFunIface;
+class LensFunFilterPriv;
+
+class DIGIKAM_EXPORT LensFunContainer
+{
+
+public:
+
+    LensFunContainer()
+    {
+        filterCCA  = true;
+        filterVig  = true;
+        filterCCI  = true;
+        filterDist = true;
+        filterGeom = true;
+    };
+
+    ~LensFunContainer(){};
+
+public:
+
+    bool filterCCA;
+    bool filterVig;
+    bool filterCCI;
+    bool filterDist;
+    bool filterGeom;
+};
 
 class DIGIKAM_EXPORT LensFunFilter : public DImgThreadedFilter
 {
 
 public:
 
-    LensFunFilter(DImg* origImage, QObject* parent, LensFunIface*);
-    ~LensFunFilter(){};
+    LensFunFilter(DImg* origImage, QObject* parent, LensFunIface* iface,
+                  const LensFunContainer& settings=LensFunContainer());
+    ~LensFunFilter();
 
 private:
 
@@ -52,11 +73,7 @@ private:
 
 private:
 
-    QObject*      m_parent;
-
-    LensFunIface* m_klf;
-
-    lfModifier*   m_lfModifier;
+    LensFunFilterPriv* const d;
 };
 
 }  // namespace Digikam

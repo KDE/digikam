@@ -28,22 +28,14 @@
 
 // Local includes
 
-#include "dmetadata.h"
 #include "lensfunfilter.h"
 #include "digikam_export.h"
 
 class QCheckBox;
 
-namespace KDcrawIface
-{
-class RComboBox;
-class RDoubleNumInput;
-}
-
-using namespace KDcrawIface;
-
 namespace Digikam
 {
+class LensFunSettingsPriv;
 
 class DIGIKAM_EXPORT LensFunSettings : public QWidget
 {
@@ -51,57 +43,31 @@ class DIGIKAM_EXPORT LensFunSettings : public QWidget
 
 public:
 
-    typedef QMap<QString,QString> Device;
-    typedef const lfCamera*       DevicePtr;
-    typedef const lfLens*         LensPtr;
-
-public:
-
-    LensFunSettings(QWidget* parent);
+    LensFunSettings(QWidget* parent=0);
     virtual ~LensFunSettings();
 
-//    Device getDevice();
-    void setDevice(Device&);
+    void setEnabledCCA(bool b);
+    void setEnabledVig(bool b);
+    void setEnabledCCI(bool b);
+    void setEnabledDist(bool b);
+    void setEnabledGeom(bool b);
 
-    LensFunIface* getKLFObject(){ return m_klf; };
+    LensFunContainer defaultSettings() const;
+    void resetToDefault();
 
-public Q_SLOTS:
+    LensFunContainer settings() const;
+    void setSettings(const LensFunContainer& settings);
 
-    void findFromMetadata(const DMetadata&);
+    void readSettings(KConfigGroup& group);
+    void writeSettings(KConfigGroup& group);
 
 Q_SIGNALS:
 
-    void signalLensSettingsChanged();
-
-protected Q_SLOTS:
-
-    void slotUpdateCombos();
-    void slotUpdateLensCombo();
-    void slotUseExif(int);
-    void slotLensSelected();
-    void slotFocalChanged(double);
-    void slotApertureChanged(double);
-    void slotDistanceChanged(double);
+    void signalSettingsChanged();
 
 private:
 
-    void findFromMetadata();
-
-private:
-
-    QCheckBox*       m_exifUsage;
-
-    RComboBox*       m_make;
-    RComboBox*       m_model;
-    RComboBox*       m_lens;
-
-    RDoubleNumInput* m_focal;
-    RDoubleNumInput* m_aperture;
-    RDoubleNumInput* m_distance;
-
-    DMetadata        m_metadata;
-
-    LensFunIface*    m_klf;
+    LensFunSettingsPriv* const d;
 };
 
 }  // namespace Digikam
