@@ -213,6 +213,21 @@ void ActionThread::run()
                     ad3.index   = index;
                     emit finished(ad3);
                 }
+                else if (d->cancel)
+                {
+                    ActionData ad4;
+                    ad4.fileUrl = t->item.itemUrl;
+                    ad4.status  = ActionData::TaskCanceled;
+                    ad4.index   = index;
+                    emit finished(ad4);
+
+                    ActionData ad5;
+                    ad5.fileUrl = t->item.itemUrl;
+                    ad5.status  = ActionData::BatchCanceled;
+                    emit finished(ad5);
+
+                    break;
+                }
                 else
                 {
                     ActionData ad4;

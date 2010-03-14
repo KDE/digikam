@@ -115,6 +115,7 @@ private:
     void processing(const KUrl& url);
     void processed(const KUrl& url, const KUrl& tmp);
     void processingFailed(const KUrl& url);
+    void processingCanceled(const KUrl& url);
     void processingAborted();
 
     QueueMgrWindow();

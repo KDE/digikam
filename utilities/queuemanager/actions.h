@@ -47,9 +47,11 @@ public:
         BatchStarted,
         BatchDone,
         BatchFailed,
+        BatchCanceled,
         TaskStarted,
         TaskDone,
-        TaskFailed
+        TaskFailed,
+        TaskCanceled
     };
 
 public:
