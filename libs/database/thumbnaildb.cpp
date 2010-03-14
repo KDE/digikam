@@ -185,7 +185,7 @@ DatabaseCoreBackend::QueryState ThumbnailDB::insertThumbnail(const DatabaseThumb
     lastQueryState= d->db->execSql("INSERT INTO Thumbnails (type, modificationDate, orientationHint, data) VALUES (?, ?, ?, ?);",
                         info.type, info.modificationDate, info.orientationHint, info.data,
                         0, &id);
-    if (DatabaseCoreBackend::NoErrors!=lastQueryState)
+    if (DatabaseCoreBackend::NoErrors==lastQueryState)
     {
         *lastInsertId=id.toInt();
     }else
