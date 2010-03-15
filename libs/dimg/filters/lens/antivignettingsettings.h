@@ -59,6 +59,8 @@ public:
 
     void readSettings(KConfigGroup& group);
     void writeSettings(KConfigGroup& group);
+    
+    void setMaskPreviewPixmap(const QPixmap& pix);
 
 Q_SIGNALS:
 

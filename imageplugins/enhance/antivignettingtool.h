@@ -58,8 +58,6 @@ private:
     void putPreviewData();
     void putFinalData();
     void renderingFinished();
-    void enableSettings(bool b);
-    void blockWidgetSignals(bool b);
 
 private:
 
