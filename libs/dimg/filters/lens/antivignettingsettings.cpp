@@ -209,26 +209,30 @@ AntiVignettingSettings::AntiVignettingSettings(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    connect(d->densityInput, SIGNAL(valueChanged (double)),
+    connect(d->densityInput, SIGNAL(valueChanged(double)),
             this, SLOT(slotSettingsChanged()));
 
-    connect(d->powerInput, SIGNAL(valueChanged (double)),
+    connect(d->powerInput, SIGNAL(valueChanged(double)),
             this, SLOT(slotSettingsChanged()));
 
-    connect(d->innerRadiusInput, SIGNAL(valueChanged (double)),
+    connect(d->innerRadiusInput, SIGNAL(valueChanged(double)),
             this, SLOT(slotSettingsChanged()));
 
-    connect(d->outerRadiusInput, SIGNAL(valueChanged (double)),
+    connect(d->outerRadiusInput, SIGNAL(valueChanged(double)),
             this, SLOT(slotSettingsChanged()));
 
-    connect(d->xOffsetInput, SIGNAL(valueChanged (double)),
+    connect(d->xOffsetInput, SIGNAL(valueChanged(double)),
             this, SLOT(slotSettingsChanged()));
 
-    connect(d->yOffsetInput, SIGNAL(valueChanged (double)),
+    connect(d->yOffsetInput, SIGNAL(valueChanged(double)),
             this, SLOT(slotSettingsChanged()));
 
     connect(d->addVignettingCheck, SIGNAL(toggled(bool)),
             this, SLOT(slotSettingsChanged()));
+
+    // -------------------------------------------------------------
+    
+    slotSettingsChanged();
 }
 
 AntiVignettingSettings::~AntiVignettingSettings()

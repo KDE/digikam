@@ -50,6 +50,7 @@
 #include "curvesadjust.h"
 #include "filmgrain.h"
 #include "localcontrast.h"
+#include "antivignetting.h"
 
 namespace Digikam
 {
@@ -91,6 +92,7 @@ BatchToolsManager::BatchToolsManager(QObject* parent)
     registerTool(new NoiseReduction(this));
     registerTool(new Restoration(this));
     registerTool(new LocalContrast(this));
+    registerTool(new AntiVignetting(this));
 
     // Color
     registerTool(new BCGCorrection(this));
