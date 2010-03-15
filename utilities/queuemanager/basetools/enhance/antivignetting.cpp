@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "noisereduction.moc"
+#include "antivignetting.moc"
 
 // Qt includes
 
@@ -39,101 +39,92 @@
 // Local includes
 
 #include "dimg.h"
-#include "nrfilter.h"
-#include "nrsettings.h"
+#include "antivignettingfilter.h"
+#include "antivignettingsettings.h"
 
 namespace Digikam
 {
 
-NoiseReduction::NoiseReduction(QObject* parent)
-              : BatchTool("NoiseReduction", EnhanceTool, parent)
+AntiVignetting::AntiVignetting(QObject* parent)
+              : BatchTool("AntiVignetting", EnhanceTool, parent)
 {
-    setToolTitle(i18n("Noise Reduction"));
-    setToolDescription(i18n("A tool to remove photograph noise using wavelets."));
-    setToolIcon(KIcon(SmallIcon("noisereduction")));
+    setToolTitle(i18n("Anti-Vignetting"));
+    setToolDescription(i18n("A tool to remove/add vignetting to photograph."));
+    setToolIcon(KIcon(SmallIcon("antivignetting")));
 
     QWidget* box   = new QWidget;
-    m_settingsView = new NRSettings(box);
+    m_settingsView = new AntiVignettingSettings(box);
     setSettingsWidget(box);
 
     connect(m_settingsView, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotSettingsChanged()));
 }
 
-NoiseReduction::~NoiseReduction()
+AntiVignetting::~AntiVignetting()
 {
 }
 
-BatchToolSettings NoiseReduction::defaultSettings()
+BatchToolSettings AntiVignetting::defaultSettings()
 {
     BatchToolSettings prm;
-    NRContainer defaultPrm = m_settingsView->defaultSettings();
+    AntiVignettingContainer defaultPrm = m_settingsView->defaultSettings();
 
-    prm.insert("LeadThreshold", (double)defaultPrm.leadThreshold);
-    prm.insert("LeadSoftness",  (double)defaultPrm.leadSoftness);
-    prm.insert("Advanced",      (bool)defaultPrm.advanced);
-    prm.insert("YThreshold",    (double)defaultPrm.thresholds[0]);
-    prm.insert("CrThreshold",   (double)defaultPrm.thresholds[1]);
-    prm.insert("CbThreshold",   (double)defaultPrm.thresholds[2]);
-    prm.insert("YSoftness",     (double)defaultPrm.softness[0]);
-    prm.insert("CrSoftness",    (double)defaultPrm.softness[1]);
-    prm.insert("CbSoftness",    (double)defaultPrm.softness[2]);
-
+    prm.insert("addvignetting", (bool)defaultPrm.addvignetting);
+    prm.insert("density",       (double)defaultPrm.density);
+    prm.insert("power",         (double)defaultPrm.power);
+    prm.insert("innerradius",   (double)defaultPrm.innerradius);
+    prm.insert("outerradius",   (double)defaultPrm.outerradius);
+    prm.insert("xshift",        (double)defaultPrm.xshift);
+    prm.insert("yshift",        (double)defaultPrm.yshift);
+    
     return prm;
 }
 
-void NoiseReduction::slotAssignSettings2Widget()
+void AntiVignetting::slotAssignSettings2Widget()
 {
-    NRContainer prm;
-    prm.leadThreshold = settings()["LeadThreshold"].toDouble();
-    prm.leadSoftness  = settings()["LeadSoftness"].toDouble();
-    prm.advanced      = settings()["Advanced"].toBool();
-    prm.thresholds[0] = settings()["YThreshold"].toDouble();
-    prm.thresholds[1] = settings()["CrThreshold"].toDouble();
-    prm.thresholds[2] = settings()["CbThreshold"].toDouble();
-    prm.softness[0]   = settings()["YSoftness"].toDouble();
-    prm.softness[1]   = settings()["CrSoftness"].toDouble();
-    prm.softness[2]   = settings()["CbSoftness"].toDouble();
+    AntiVignettingContainer prm;
+    prm.addvignetting = settings()["addvignetting"].toBool();
+    prm.density       = settings()["density"].toDouble();
+    prm.power         = settings()["power"].toDouble();
+    prm.innerradius   = settings()["innerradius"].toDouble();
+    prm.outerradius   = settings()["outerradius"].toDouble();
+    prm.xshift        = settings()["xshift"].toDouble();
+    prm.yshift        = settings()["yshift"].toDouble();
     m_settingsView->setSettings(prm);
 }
 
-void NoiseReduction::slotSettingsChanged()
+void AntiVignetting::slotSettingsChanged()
 {
     BatchToolSettings prm;
-    NRContainer currentPrm = m_settingsView->settings();
+    AntiVignettingContainer currentPrm = m_settingsView->settings();
 
-    prm.insert("LeadThreshold", (double)currentPrm.leadThreshold);
-    prm.insert("LeadSoftness",  (double)currentPrm.leadSoftness);
-    prm.insert("Advanced",      (bool)currentPrm.advanced);
-    prm.insert("YThreshold",    (double)currentPrm.thresholds[0]);
-    prm.insert("CrThreshold",   (double)currentPrm.thresholds[1]);
-    prm.insert("CbThreshold",   (double)currentPrm.thresholds[2]);
-    prm.insert("YSoftness",     (double)currentPrm.softness[0]);
-    prm.insert("CrSoftness",    (double)currentPrm.softness[1]);
-    prm.insert("CbSoftness",    (double)currentPrm.softness[2]);
+    prm.insert("addvignetting", (bool)currentPrm.addvignetting);
+    prm.insert("density",       (double)currentPrm.density);
+    prm.insert("power",         (double)currentPrm.power);
+    prm.insert("innerradius",   (double)currentPrm.innerradius);
+    prm.insert("outerradius",   (double)currentPrm.outerradius);
+    prm.insert("xshift",        (double)currentPrm.xshift);
+    prm.insert("yshift",        (double)currentPrm.yshift);
 
     BatchTool::slotSettingsChanged(prm);
 }
 
-bool NoiseReduction::toolOperations()
+bool AntiVignetting::toolOperations()
 {
     if (!loadToDImg()) return false;
 
-    NRContainer prm;
-    prm.leadThreshold = settings()["LeadThreshold"].toDouble();
-    prm.leadSoftness  = settings()["LeadSoftness"].toDouble();
-    prm.advanced      = settings()["Advanced"].toBool();
-    prm.thresholds[0] = settings()["YThreshold"].toDouble();
-    prm.thresholds[1] = settings()["CrThreshold"].toDouble();
-    prm.thresholds[2] = settings()["CbThreshold"].toDouble();
-    prm.softness[0]   = settings()["YSoftness"].toDouble();
-    prm.softness[1]   = settings()["CrSoftness"].toDouble();
-    prm.softness[2]   = settings()["CbSoftness"].toDouble();
+    AntiVignettingContainer prm;
+    prm.addvignetting = settings()["addvignetting"].toBool();
+    prm.density       = settings()["density"].toDouble();
+    prm.power         = settings()["power"].toDouble();
+    prm.innerradius   = settings()["innerradius"].toDouble();
+    prm.outerradius   = settings()["outerradius"].toDouble();
+    prm.xshift        = settings()["xshift"].toDouble();
+    prm.yshift        = settings()["yshift"].toDouble();
 
-    NRFilter wnr(&image(), 0L, prm);
-    wnr.startFilterDirectly();
-    DImg trg = wnr.getTargetImage();
-    image().putImageData(trg.bits());
+    AntiVignettingFilter vig(&image(), 0L, prm);
+    vig.startFilterDirectly();
+    image().putImageData(vig.getTargetImage().bits());
 
     return (savefromDImg());
 }
