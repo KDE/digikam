@@ -26,6 +26,7 @@ BatchQueueManager : new tool to adjust Curves.
 BatchQueueManager : new tool to blur images.
 BatchQueueManager : new tool to add Film Grain to images.
 BatchQueueManager : new tool to apply Local Contrast (LDR tone mapping).
+BatchQueueManager : new tool to add/remove vignetting.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
