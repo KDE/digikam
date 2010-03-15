@@ -118,7 +118,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 086 ==> 230323 : ShowFoto and digiKam opening Olympus E-P2 ORF file will crash.
 087 ==> 229108 : digiKam doesn't display all images after and upgrade.
 088 ==> 201591 : Restart queue in Batch queue manager.
-089 ==>
+089 ==> 223003 : Cancelling duplicate search doesn't remove waiting cursor.
+090 ==>
 
 
 
