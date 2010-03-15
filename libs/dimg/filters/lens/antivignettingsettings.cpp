@@ -31,6 +31,8 @@
 #include <QFile>
 #include <QTextStream>
 #include <QCheckBox>
+#include <QPainter>
+#include <QPixmap>
 
 // KDE includes
 
@@ -208,25 +210,25 @@ AntiVignettingSettings::AntiVignettingSettings(QWidget* parent)
     // -------------------------------------------------------------
 
     connect(d->densityInput, SIGNAL(valueChanged (double)),
-            this, SIGNAL(signalSettingsChanged()));
+            this, SLOT(slotSettingsChanged()));
 
     connect(d->powerInput, SIGNAL(valueChanged (double)),
-            this, SIGNAL(signalSettingsChanged()));
+            this, SLOT(slotSettingsChanged()));
 
     connect(d->innerRadiusInput, SIGNAL(valueChanged (double)),
-            this, SIGNAL(signalSettingsChanged()));
+            this, SLOT(slotSettingsChanged()));
 
     connect(d->outerRadiusInput, SIGNAL(valueChanged (double)),
-            this, SIGNAL(signalSettingsChanged()));
+            this, SLOT(slotSettingsChanged()));
 
     connect(d->xOffsetInput, SIGNAL(valueChanged (double)),
-            this, SIGNAL(signalSettingsChanged()));
+            this, SLOT(slotSettingsChanged()));
 
     connect(d->yOffsetInput, SIGNAL(valueChanged (double)),
-            this, SIGNAL(signalSettingsChanged()));
+            this, SLOT(slotSettingsChanged()));
 
     connect(d->addVignettingCheck, SIGNAL(toggled(bool)),
-            this, SIGNAL(signalSettingsChanged()));
+            this, SLOT(slotSettingsChanged()));
 }
 
 AntiVignettingSettings::~AntiVignettingSettings()
@@ -304,9 +306,21 @@ void AntiVignettingSettings::writeSettings(KConfigGroup& group)
     group.writeEntry(d->configYOffsetEntry,               prm.yshift);
 }
 
-void AntiVignettingSettings::setMaskPreviewPixmap(const QPixmap& pix)
+void AntiVignettingSettings::slotSettingsChanged()
 {
+    // Compute preview mask.
+    DImg preview(120, 120, false);
+    memset(preview.bits(), 255, preview.numBytes());
+    AntiVignettingFilter maskPreview(&preview, 0, settings());
+    maskPreview.startFilterDirectly();
+    QPixmap pix = maskPreview.getTargetImage().convertToPixmap();
+    QPainter pt(&pix);
+    pt.setPen(QPen(Qt::black, 1));
+    pt.drawRect(0, 0, pix.width(), pix.height());
+    pt.end();
     d->maskPreviewLabel->setPixmap(pix);
+    
+    emit signalSettingsChanged();
 }
 
 }  // namespace Digikam

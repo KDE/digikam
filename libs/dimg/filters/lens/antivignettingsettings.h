@@ -66,6 +66,10 @@ Q_SIGNALS:
 
     void signalSettingsChanged();
 
+private Q_SLOTS:
+    
+    void slotSettingsChanged();
+    
 private:
 
     AntiVignettingSettingsPriv* const d;

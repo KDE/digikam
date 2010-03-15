@@ -146,25 +146,11 @@ void AntiVignettingTool::prepareEffect()
     AntiVignettingContainer settings = d->settingsView->settings();
 
     ImageIface* iface = d->previewWidget->imageIface();
-    int orgWidth               = iface->originalWidth();
-    int orgHeight              = iface->originalHeight();
-    int previewWidth           = iface->previewWidth();
-    int previewHeight          = iface->previewHeight();
-    DImg imTemp                = iface->getOriginalImg()->smoothScale(previewWidth, previewHeight, Qt::KeepAspectRatio);
-    QSize ps(orgWidth, orgHeight);
-    ps.scale(QSize(120, 120), Qt::KeepAspectRatio);
-
-    // Compute preview mask.
-    DImg preview(ps.width(), ps.height(), false);
-    memset(preview.bits(), 255, preview.numBytes());
-    AntiVignettingFilter maskPreview(&preview, 0, settings);
-    maskPreview.startFilterDirectly();
-    QPixmap pix = maskPreview.getTargetImage().convertToPixmap();
-    QPainter pt(&pix);
-    pt.setPen(QPen(Qt::black, 1));
-    pt.drawRect(0, 0, pix.width(), pix.height());
-    pt.end();
-    d->settingsView->setMaskPreviewPixmap(pix);
+    int orgWidth      = iface->originalWidth();
+    int orgHeight     = iface->originalHeight();
+    int previewWidth  = iface->previewWidth();
+    int previewHeight = iface->previewHeight();
+    DImg imTemp       = iface->getOriginalImg()->smoothScale(previewWidth, previewHeight, Qt::KeepAspectRatio);
 
     setFilter(new AntiVignettingFilter(&imTemp, this, settings));
 }
