@@ -32,15 +32,45 @@
 namespace Digikam
 {
 
+class DIGIKAM_EXPORT AntiVignettingContainer
+{
+
+public:
+
+    AntiVignettingContainer()
+    {
+        addvignetting = true;
+        density       = 2.0;
+        power         = 1.0;
+        innerradius   = 1.0;
+        outerradius   = 1.0;
+        xshift        = 0.0;
+        yshift        = 0.0;
+    };
+
+    ~AntiVignettingContainer(){};
+
+public:
+
+    bool   addvignetting;
+
+    double density;
+    double power;
+    double innerradius;
+    double outerradius;
+    double xshift;
+    double yshift;
+};
+
+// -----------------------------------------------------------------------------------------------
+
 class DIGIKAM_EXPORT AntiVignettingFilter : public DImgThreadedFilter
 {
 
 public:
 
-    explicit AntiVignettingFilter(DImg* orgImage, QObject* parent=0, double density=2.0,
-                                  double power=1.0, double innerradius=1.0, double outerradius=1.0,
-                                  double xshift=0, double yshift=0,
-                                  bool anti=true);
+    explicit AntiVignettingFilter(DImg* orgImage, QObject* parent=0,
+                                  const AntiVignettingContainer& settings=AntiVignettingContainer());
 
     ~AntiVignettingFilter(){};
 
@@ -57,17 +87,7 @@ private:
 
 private:
 
-    bool   m_normalize;
-
-    int    m_xshift;
-    int    m_yshift;
-
-    double m_density;
-    double m_power;
-    double m_inner_radius;
-    double m_outer_radius;
-
-    bool   m_add_vignetting;
+    AntiVignettingContainer m_settings;
 };
 
 }  // namespace Digikam

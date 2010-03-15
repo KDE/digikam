@@ -328,13 +328,14 @@ void AntiVignettingTool::prepareEffect()
 {
     enableSettings(false);
 
-    double dens           = d->densityInput->value();
-    double power          = d->powerInput->value();
-    double innerrad       = d->innerRadiusInput->value();
-    double outerrad       = d->outerRadiusInput->value();
-    bool   addvignetting  = d->addVignettingCheck->isChecked();
-    double xoffset        = d->xOffsetInput->value();
-    double yoffset        = d->yOffsetInput->value();
+    AntiVignettingContainer settings;
+    settings.density       = d->densityInput->value();
+    settings.power         = d->powerInput->value();
+    settings.innerradius   = d->innerRadiusInput->value();
+    settings.outerradius   = d->outerRadiusInput->value();
+    settings.addvignetting = d->addVignettingCheck->isChecked();
+    settings.xshift        = d->xOffsetInput->value();
+    settings.yshift        = d->yOffsetInput->value();
 
     ImageIface* iface = d->previewWidget->imageIface();
     int orgWidth               = iface->originalWidth();
@@ -348,7 +349,7 @@ void AntiVignettingTool::prepareEffect()
     // Compute preview mask.
     DImg preview(ps.width(), ps.height(), false);
     memset(preview.bits(), 255, preview.numBytes());
-    AntiVignettingFilter maskPreview(&preview, 0, dens, power, innerrad, outerrad, xoffset, yoffset, addvignetting);
+    AntiVignettingFilter maskPreview(&preview, 0, settings);
     maskPreview.startFilterDirectly();
     QPixmap pix = maskPreview.getTargetImage().convertToPixmap();
     QPainter pt(&pix);
@@ -357,31 +358,31 @@ void AntiVignettingTool::prepareEffect()
     pt.end();
     d->maskPreviewLabel->setPixmap(pix);
 
-    setFilter(new AntiVignettingFilter(&imTemp, this, dens, power, innerrad, outerrad, xoffset, yoffset, addvignetting));
+    setFilter(new AntiVignettingFilter(&imTemp, this, settings));
 }
 
 void AntiVignettingTool::prepareFinal()
 {
     enableSettings(false);
 
-    double dens          = d->densityInput->value();
-    double power         = d->powerInput->value();
-    double innerrad      = d->innerRadiusInput->value();
-    double outerrad      = d->outerRadiusInput->value();
-    bool   addvignetting = d->addVignettingCheck->isChecked();
-    double xoffset       = d->xOffsetInput->value();
-    double yoffset       = d->yOffsetInput->value();
+    AntiVignettingContainer settings;
+    settings.density       = d->densityInput->value();
+    settings.power         = d->powerInput->value();
+    settings.innerradius   = d->innerRadiusInput->value();
+    settings.outerradius   = d->outerRadiusInput->value();
+    settings.addvignetting = d->addVignettingCheck->isChecked();
+    settings.xshift        = d->xOffsetInput->value();
+    settings.yshift        = d->yOffsetInput->value();
 
     ImageIface iface(0, 0);
-
-    setFilter(new AntiVignettingFilter(iface.getOriginalImg(), this, dens, power, innerrad, outerrad, xoffset, yoffset, addvignetting));
+    setFilter(new AntiVignettingFilter(iface.getOriginalImg(), this, settings));
 }
 
 void AntiVignettingTool::putPreviewData()
 {
     ImageIface* iface = d->previewWidget->imageIface();
-    DImg imDest       = filter()->getTargetImage().smoothScale(iface->previewWidth(), iface->previewHeight());
-    iface->putPreviewImage(imDest.bits());
+    DImg preview      = filter()->getTargetImage().smoothScale(iface->previewWidth(), iface->previewHeight());
+    iface->putPreviewImage(preview.bits());
     d->previewWidget->updatePreview();
 }
 

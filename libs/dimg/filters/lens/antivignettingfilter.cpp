@@ -45,22 +45,16 @@
 namespace Digikam
 {
 
-AntiVignettingFilter::AntiVignettingFilter(DImg* orgImage, QObject* parent, double density,
-                                           double power, double innerradius,  double outerradius,
-                                           double yshift, double xshift,
-                                           bool addvignetting)
+AntiVignettingFilter::AntiVignettingFilter(DImg* orgImage, QObject* parent,
+                                           const AntiVignettingContainer& settings)
                     : DImgThreadedFilter(orgImage, parent, "AntiVignettingFilter")
 {
-    m_density        = density;
-    m_power          = power;
-    m_inner_radius   = innerradius;
-    m_outer_radius   = outerradius;
-    m_xshift         = xshift;
-    m_yshift         = yshift;
-    m_add_vignetting = addvignetting;
-
+    m_settings = settings;
     initFilter();
 }
+
+    bool   addvignetting;
+
 
 // This method is inspired from John Walker 'pnmctrfilt' algorithm code.
 
@@ -80,23 +74,23 @@ void AntiVignettingFilter::filterImage()
     int Height = m_orgImage.height();
 
     // Determine the shift in pixels from the shift in percentage.
-    m_xshift   = m_xshift*Height/200.0;
-    m_yshift   = m_yshift*Width /200.0;
+    m_settings.xshift   = m_settings.xshift*Height/200.0;
+    m_settings.yshift   = m_settings.yshift*Width /200.0;
 
     // Determine the outer radius of the filter.  This is the half diagonal
     // measure of the image multiplied by the radius factor.
 
     xsize    = (Height + 1) / 2;
     ysize    = (Width  + 1) / 2;
-    erad     = approx(hypothenuse(xsize,ysize) * m_outer_radius);
-    irad     = approx(hypothenuse(xsize,ysize) * m_outer_radius * m_inner_radius);
+    erad     = approx(hypothenuse(xsize,ysize) * m_settings.outerradius);
+    irad     = approx(hypothenuse(xsize,ysize) * m_settings.outerradius * m_settings.innerradius);
 
-    xsize    = ((Height + 1) / 2) + abs(m_xshift);
-    ysize    = ((Width  + 1) / 2) + abs(m_yshift);
+    xsize    = ((Height + 1) / 2) + abs(m_settings.xshift);
+    ysize    = ((Width  + 1) / 2) + abs(m_settings.yshift);
     diagonal = approx(hypothenuse(xsize,ysize)) +  1;
 
-    xctr     = ((Height + 1) / 2) + m_xshift;
-    yctr     = ((Width  + 1) / 2) + m_yshift;
+    xctr     = ((Height + 1) / 2) + m_settings.xshift;
+    yctr     = ((Width  + 1) / 2) + m_settings.yshift;
 
     for (row = 0 ; !m_cancel && (row < Width) ; ++row)
     {
@@ -146,14 +140,14 @@ double AntiVignettingFilter::attenuation(double r1, double r2, double dist_cente
     if (dist_center < r1)
        return 1.0;
     else if (dist_center > r2)
-       return 1.0+m_density;
+       return 1.0+m_settings.density;
     else
-       return (1.0+m_density*(pow ((dist_center-r1)/(r2-r1), m_power)));
+       return (1.0+m_settings.density*(pow ((dist_center-r1)/(r2-r1), m_settings.power)));
 }
 
 double AntiVignettingFilter::real_attenuation(double r1, double r2, double dist_center)
 {
-    if (!m_add_vignetting)
+    if (!m_settings.addvignetting)
        return (attenuation(r1, r2, dist_center));
     else
        return (1.0 / attenuation(r1, r2, dist_center));
