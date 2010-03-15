@@ -39,7 +39,7 @@ enhance
   /inpainting               DONE                  NO                    NO
   /autocorrection           DONE                 TODO                  TODO
   /distortion               DONE                 TODO                  TODO
-  /vignetting               DONE                 TODO                  TODO
+  /vignetting               DONE                  NO                   DONE
   /hotpixels                DONE                 DONE                  TODO
 
 transform
