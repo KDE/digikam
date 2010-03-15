@@ -37,7 +37,6 @@
 
 // KDE includes
 
-#include <kaboutdata.h>
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
@@ -55,11 +54,9 @@
 // Local includes
 
 #include "antivignettingfilter.h"
-#include "daboutdata.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imageguidewidget.h"
-#include "version.h"
 
 using namespace KDcrawIface;
 
@@ -142,7 +139,7 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QLabel *label1  = new QLabel(i18n("Amount:"));
+    QLabel* label1  = new QLabel(i18n("Amount:"));
     d->densityInput = new RDoubleNumInput();
     d->densityInput->setDecimals(1);
     d->densityInput->input()->setRange(0.05, 5.0, 0.05, true);
@@ -152,7 +149,7 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QLabel *label2 = new QLabel(i18n("Feather:"));
+    QLabel* label2 = new QLabel(i18n("Feather:"));
     d->powerInput  = new RDoubleNumInput();
     d->powerInput->setDecimals(1);
     d->powerInput->input()->setRange(1.0, 4.0, 0.05, true);
@@ -163,29 +160,29 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QLabel *label3 = new QLabel(i18n("Inner Radius:"));
+    QLabel* label3      = new QLabel(i18n("Inner Radius:"));
     d->innerRadiusInput = new RDoubleNumInput();
     d->innerRadiusInput->setDecimals(1);
     d->innerRadiusInput->input()->setRange(0.0, 0.9, 0.05, true);
     d->innerRadiusInput->setDefaultValue(0.5);
     d->innerRadiusInput->setWhatsThis(i18n("This value is the radius of the inner circle of the filter. "
-                                      "In the inner circle the image is preserved. "
-                                      "It is expressed as a multiple of the outer radius of the filter."));
+                                           "In the inner circle the image is preserved. "
+                                           "It is expressed as a multiple of the outer radius of the filter."));
 
     // -------------------------------------------------------------
 
-    QLabel *label4 = new QLabel(i18n("Outer Radius:"));
+    QLabel* label4      = new QLabel(i18n("Outer Radius:"));
     d->outerRadiusInput = new RDoubleNumInput();
     d->outerRadiusInput->setDecimals(1);
     d->outerRadiusInput->input()->setRange(0.1, 2.0, 0.05, true);
     d->outerRadiusInput->setDefaultValue(1.0);
     d->outerRadiusInput->setWhatsThis(i18n("This value is the radius of the outer circle of the filter. "
-                                      "Outside the outer circle the effect of the filter is at its maximum. "
-                                      "It is expressed as a multiple of the diagonal of the image."));
+                                           "Outside the outer circle the effect of the filter is at its maximum. "
+                                           "It is expressed as a multiple of the diagonal of the image."));
 
     // -------------------------------------------------------------
 
-    QLabel *label5 = new QLabel(i18n("X offset:"));
+    QLabel* label5  = new QLabel(i18n("X offset:"));
     d->xOffsetInput = new RDoubleNumInput();
     d->xOffsetInput->setDecimals(0);
     d->xOffsetInput->input()->setRange(-100, 100, 1, true);
@@ -194,37 +191,37 @@ AntiVignettingTool::AntiVignettingTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    QLabel *label6 = new QLabel(i18n("Y offset:"));
+    QLabel* label6  = new QLabel(i18n("Y offset:"));
     d->yOffsetInput = new RDoubleNumInput();
     d->yOffsetInput->setDecimals(0);
     d->yOffsetInput->input()->setRange(-100, 100, 1, true);
     d->yOffsetInput->setDefaultValue(0);
     d->yOffsetInput->setWhatsThis(i18n("Y offset "));
 
-    KSeparator *line = new KSeparator (Qt::Horizontal);
+    KSeparator* line = new KSeparator (Qt::Horizontal);
 
     // -------------------------------------------------------------
 
-    QGridLayout* mainLayout = new QGridLayout();
-    mainLayout->addWidget(d->maskPreviewLabel,    0, 0, 1, 3);
-    mainLayout->addWidget(label1,                 1, 0, 1, 3);
-    mainLayout->addWidget(d->densityInput,        2, 0, 1, 3);
-    mainLayout->addWidget(label2,                 3, 0, 1, 3);
-    mainLayout->addWidget(d->powerInput,          4, 0, 1, 3);
-    mainLayout->addWidget(label3,                 5, 0, 1, 3);
-    mainLayout->addWidget(d->innerRadiusInput,    6, 0, 1, 3);
-    mainLayout->addWidget(label4,                 7, 0, 1, 3);
-    mainLayout->addWidget(d->outerRadiusInput,    8, 0, 1, 3);
-    mainLayout->addWidget(label5,                 9, 0, 1, 3);
-    mainLayout->addWidget(d->xOffsetInput,        10, 0, 1, 3);
-    mainLayout->addWidget(label6,                 11, 0, 1, 3);
-    mainLayout->addWidget(d->yOffsetInput,        12, 0, 1, 3);
-    mainLayout->addWidget(line,                   13, 0, 1, 3);
-    mainLayout->addWidget(d->addVignettingCheck,  14, 0, 1, 3);
-    mainLayout->setRowStretch(15, 10);
-    mainLayout->setMargin(d->gboxSettings->spacingHint());
-    mainLayout->setSpacing(d->gboxSettings->spacingHint());
-    d->gboxSettings->plainPage()->setLayout(mainLayout);
+    QGridLayout* grid = new QGridLayout();
+    grid->addWidget(d->maskPreviewLabel,    0, 0, 1, 3);
+    grid->addWidget(label1,                 1, 0, 1, 3);
+    grid->addWidget(d->densityInput,        2, 0, 1, 3);
+    grid->addWidget(label2,                 3, 0, 1, 3);
+    grid->addWidget(d->powerInput,          4, 0, 1, 3);
+    grid->addWidget(label3,                 5, 0, 1, 3);
+    grid->addWidget(d->innerRadiusInput,    6, 0, 1, 3);
+    grid->addWidget(label4,                 7, 0, 1, 3);
+    grid->addWidget(d->outerRadiusInput,    8, 0, 1, 3);
+    grid->addWidget(label5,                 9, 0, 1, 3);
+    grid->addWidget(d->xOffsetInput,        10, 0, 1, 3);
+    grid->addWidget(label6,                 11, 0, 1, 3);
+    grid->addWidget(d->yOffsetInput,        12, 0, 1, 3);
+    grid->addWidget(line,                   13, 0, 1, 3);
+    grid->addWidget(d->addVignettingCheck,  14, 0, 1, 3);
+    grid->setRowStretch(15, 10);
+    grid->setMargin(d->gboxSettings->spacingHint());
+    grid->setSpacing(d->gboxSettings->spacingHint());
+    d->gboxSettings->plainPage()->setLayout(grid);
 
     // -------------------------------------------------------------
 
