@@ -57,8 +57,6 @@
 #include "imageiface.h"
 #include "imageguidewidget.h"
 
-using namespace KDcrawIface;
-
 namespace DigikamEnhanceImagePlugin
 {
 
