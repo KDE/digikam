@@ -165,17 +165,18 @@ DatabaseCoreBackend::QueryState ThumbnailDB::insertFilePath(const QString &path,
 DatabaseCoreBackend::QueryState ThumbnailDB::removeByUniqueHash(const QString &uniqueHash, int fileSize)
 {
     // UniqueHashes + FilePaths entries are removed by trigger
-    return d->db->execSql("DELETE FROM Thumbnails WHERE id IN "
-                   " (SELECT thumbId FROM UniqueHashes WHERE uniqueHash=? AND fileSize=?);",
-                   uniqueHash, fileSize);
+    QMap<QString, QVariant> parameters;
+    parameters.insert(":uniqueHash", uniqueHash);
+    parameters.insert(":filesize", fileSize);
+    return d->db->execDBAction(d->db->getDBAction(QString("Delete_Thumbnail_ByUniqueHashId")), parameters);
 }
 
 DatabaseCoreBackend::QueryState ThumbnailDB::removeByFilePath(const QString &path)
 {
     // UniqueHashes + FilePaths entries are removed by trigger
-    return d->db->execSql("DELETE FROM Thumbnails WHERE id IN "
-                   " (SELECT thumbId FROM FilePaths WHERE path=?);",
-                   path);
+    QMap<QString, QVariant> parameters;
+    parameters.insert(":path", path);
+    return d->db->execDBAction(d->db->getDBAction(QString("Delete_Thumbnail_ByPath")), parameters);
 }
 
 DatabaseCoreBackend::QueryState ThumbnailDB::insertThumbnail(const DatabaseThumbnailInfo &info, QVariant *lastInsertId)

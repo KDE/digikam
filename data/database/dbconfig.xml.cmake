@@ -476,6 +476,14 @@
  			<dbaction name="Migrate_Write_Settings" mode="query"><statement mode="query">
 				INSERT INTO Settings (keyword, value) VALUES (:keyword, :value);
 			</statement></dbaction>
+
+			<dbaction name="Delete_Thumbnail_ByPath" mode="query"><statement mode="query">
+				DELETE FROM Thumbnails WHERE id IN  (SELECT thumbId FROM FilePaths WHERE path=:path);
+			</statement></dbaction>
+
+			<dbaction name="Delete_Thumbnail_ByUniqueHashId" mode="query"><statement mode="query">
+				DELETE FROM Thumbnails WHERE id IN (SELECT thumbId FROM UniqueHashes WHERE uniqueHash=:uniqueHash AND fileSize=:filesize);
+			</statement></dbaction>
 						
 		</dbactions>
 	</database>
@@ -825,11 +833,8 @@
 		     <dbaction name="CreateIndex_2" mode="transaction"><statement mode="plain">CREATE INDEX id_filePaths ON FilePaths (thumbId);</statement></dbaction>
 		     
 		     <!-- Thumbnails Trigger DB -->
-		     <dbaction name="CreateTrigger_1" mode="transaction"><statement mode="plain">CREATE TRIGGER delete_thumbnails BEFORE DELETE ON Thumbnails 
-                             FOR EACH ROW BEGIN 
-                              DELETE FROM UniqueHashes WHERE UniqueHashes.thumbId = OLD.id; 
-                              DELETE FROM FilePaths WHERE FilePaths.thumbId = OLD.id; 
-                             END;</statement></dbaction>
+		     <dbaction name="CreateTrigger_1" mode="transaction"></dbaction>
+		     
 			<!-- Migration Statements -->
 			<dbaction name="Migrate_Cleanup_DB" mode="query"><statement mode="plain">
 				DROP TABLE IF EXISTS AlbumRoots, Albums, DownloadHistory, FilePaths, ImageComments, ImageCopyright, ImageHaarMatrix, ImageInformation, ImageMetadata, ImagePositions, ImageProperties, ImageTags, Images, Searches, Settings, Tags, TagsTree, Thumbnails, UniqueHashes;
@@ -943,7 +948,37 @@
  			<dbaction name="Migrate_Write_Settings" mode="transaction"><statement mode="query">
 				INSERT INTO Settings (keyword, value) VALUES (:keyword, :value);
 			</statement></dbaction>			 				 
-						 				 
+
+			<dbaction name="Delete_Thumbnail_ByPath" mode="query">
+				<statement mode="query">
+					SELECT @thumbsId := thumbId FROM FilePaths WHERE path=:path
+				</statement>
+				<statement mode="query">
+					DELETE FROM UniqueHashes WHERE UniqueHashes.thumbId = @thumbsId;
+				</statement>
+				<statement mode="query">
+					DELETE FROM FilePaths WHERE FilePaths.thumbId = @thumbsId;
+				</statement>
+				<statement mode="query">
+					DELETE FROM Thumbnails WHERE id = @thumbsId;
+				</statement>
+			</dbaction>
+
+			<dbaction name="Delete_Thumbnail_ByUniqueHashId" mode="query">
+				<statement mode="query">
+					SELECT @thumbsId := thumbId FROM UniqueHashes WHERE uniqueHash=:uniqueHash AND fileSize=:filesize
+				</statement>			
+				<statement mode="query">
+					DELETE FROM UniqueHashes WHERE UniqueHashes.thumbId = @thumbsId;
+				</statement>
+				<statement mode="query">
+					DELETE FROM FilePaths WHERE FilePaths.thumbId = @thumbsId;
+				</statement>
+				<statement mode="query">
+					DELETE FROM Thumbnails WHERE id = @thumbsId;
+				</statement>
+			</dbaction>
+			
 		</dbactions>
 	</database>
 </databaseconfig>
