@@ -40,9 +40,11 @@
 namespace Digikam
 {
 
-FreeRotationFilter::FreeRotationFilter(DImg* orgImage, QObject* parent, double angle, bool antialiasing,
-                           int autoCrop, const QColor& backgroundColor, int orgW, int orgH)
-            : DImgThreadedFilter(orgImage, parent, "FreeRotation")
+FreeRotationFilter::FreeRotationFilter(DImg* orgImage, QObject* parent, 
+                                       double angle, bool antialiasing,
+                                       int autoCrop, const QColor& backgroundColor, 
+                                       int orgW, int orgH)
+                  : DImgThreadedFilter(orgImage, parent, "FreeRotation")
 {
     m_angle           = angle;
     m_orgW            = orgW;
@@ -136,19 +138,18 @@ void FreeRotationFilter::filterImage()
 
     // getting the destination's center position
 
-    nhdx =  nNewWidth / 2;
+    nhdx = nNewWidth  / 2;
     nhdy = nNewHeight / 2;
 
     // getting the source's center position
 
-    nhsx =  nWidth / 2;
+    nhsx = nWidth  / 2;
     nhsy = nHeight / 2;
 
     // now, we have to alloc a new image
 
     bool sixteenBit = m_orgImage.sixteenBit();
-
-    m_destImage = DImg(nNewWidth, nNewHeight, sixteenBit, m_orgImage.hasAlpha());
+    m_destImage     = DImg(nNewWidth, nNewHeight, sixteenBit, m_orgImage.hasAlpha());
 
     if (m_destImage.isNull())
         return;
@@ -243,16 +244,16 @@ void FreeRotationFilter::filterImage()
             // 'Widest Area' method (by Renchi Raju).
 
             autoCrop.setX((int) (nHeight * sin(absAngle * DEG2RAD)));
-            autoCrop.setY((int) (nWidth * sin(absAngle * DEG2RAD)));
-            autoCrop.setWidth((int) (nNewWidth - 2* nHeight * sin(absAngle * DEG2RAD)));
-            autoCrop.setHeight((int) (nNewHeight - 2* nWidth * sin(absAngle * DEG2RAD)));
+            autoCrop.setY((int) (nWidth  * sin(absAngle * DEG2RAD)));
+            autoCrop.setWidth((int)  (nNewWidth  - 2* nHeight * sin(absAngle * DEG2RAD)));
+            autoCrop.setHeight((int) (nNewHeight - 2* nWidth  * sin(absAngle * DEG2RAD)));
 
             if (!autoCrop.isValid())
             {
                 m_destImage = DImg(m_orgImage.width(), m_orgImage.height(), m_orgImage.sixteenBit(),
                                             m_orgImage.hasAlpha());
                 m_destImage.fill(DColor(m_backgroundColor.rgb(), sixteenBit));
-                m_newSize = QSize();
+                m_newSize   = QSize();
             }
             else
             {
@@ -311,12 +312,12 @@ void FreeRotationFilter::filterImage()
                 m_destImage = DImg(m_orgImage.width(), m_orgImage.height(), m_orgImage.sixteenBit(),
                                             m_orgImage.hasAlpha());
                 m_destImage.fill(DColor(m_backgroundColor.rgb(), sixteenBit));
-                m_newSize = QSize();
+                m_newSize   = QSize();
             }
             else
             {
                 m_destImage = m_destImage.copy(autoCrop);
-                gamma = atan((float) m_orgH / (float) m_orgW);
+                gamma       = atan((float) m_orgH / (float) m_orgW);
 
                 if (absAngle < 90.0)
                 {
@@ -333,6 +334,7 @@ void FreeRotationFilter::filterImage()
             }
             break;
         }
+        
         default: // No auto cropping.
         {
             m_newSize.setWidth(W);

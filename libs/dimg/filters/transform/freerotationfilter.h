@@ -45,7 +45,8 @@ class DIGIKAM_EXPORT FreeRotationFilter : public DImgThreadedFilter
 public:
 
     explicit FreeRotationFilter(DImg* orgImage, QObject* parent=0, double angle=0.0,
-                                bool antialiasing=true, int autoCrop=NoAutoCrop, const QColor& backgroundColor=Qt::black,
+                                bool antialiasing=true, int autoCrop=NoAutoCrop, 
+                                const QColor& backgroundColor=Qt::black,
                                 int orgW=0, int orgH=0);
 
     ~FreeRotationFilter(){};
@@ -70,14 +71,14 @@ private:
 
     inline int setPosition (int Width, int X, int Y)
     {
-       return (Y *Width*4 + 4*X);
+        return (Y *Width*4 + 4*X);
     };
 
     inline bool isInside (int Width, int Height, int X, int Y)
     {
-       bool bIsWOk = ((X < 0) ? false : (X >= Width ) ? false : true);
-       bool bIsHOk = ((Y < 0) ? false : (Y >= Height) ? false : true);
-       return (bIsWOk && bIsHOk);
+        bool bIsWOk = ((X < 0) ? false : (X >= Width ) ? false : true);
+        bool bIsHOk = ((Y < 0) ? false : (Y >= Height) ? false : true);
+        return (bIsWOk && bIsHOk);
     };
 
 private:
