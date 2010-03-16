@@ -214,6 +214,7 @@ GPSSearchView::GPSSearchView(QWidget *parent, SearchModel *searchModel,
     d->searchTreeView = new EditableSearchTreeView(this, searchModel, searchModificationHelper);
     d->searchTreeView->filteredModel()->setFilterSearchType(DatabaseSearch::MapSearch);
     d->searchTreeView->filteredModel()->setListTemporarySearches(true);
+    d->searchTreeView->setAlbumManagerCurrentAlbum(true);
     d->searchGPSBar   = new SearchTextBar(this, "GPSSearchViewSearchGPSBar");
     d->searchGPSBar->setModel(d->searchTreeView->filteredModel(), AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
     d->searchGPSBar->setFilterModel(d->searchTreeView->albumFilterModel());
@@ -341,7 +342,7 @@ void GPSSearchView::setActive(bool val)
 
 void GPSSearchView::changeAlbumFromHistory(SAlbum *album)
 {
-    d->searchTreeView->slotSelectSAlbum(album);
+    d->searchTreeView->slotSelectAlbum(album);
 }
 
 void GPSSearchView::slotSaveGPSSAlbum()

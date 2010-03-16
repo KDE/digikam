@@ -87,6 +87,7 @@ AlbumFolderViewSideBarWidget::AlbumFolderViewSideBarWidget(QWidget *parent,
     d->albumFolderView->setObjectName("AlbumFolderView");
     d->albumFolderView->setConfigGroup(getConfigGroup());
     d->albumFolderView->setExpandNewCurrentItem(true);
+    d->albumFolderView->setAlbumManagerCurrentAlbum(true);
     d->searchTextBar   = new SearchTextBar(this, "DigikamViewFolderSearchBar");
     d->searchTextBar->setHighlightOnResult(true);
     d->searchTextBar->setModel(model, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
@@ -190,6 +191,7 @@ TagViewSideBarWidget::TagViewSideBarWidget(QWidget *parent, TagModel *model) :
     d->tagFolderView = new TagFolderView(this, model);
     d->tagFolderView->setConfigGroup(getConfigGroup());
     d->tagFolderView->setExpandNewCurrentItem(true);
+    d->tagFolderView->setAlbumManagerCurrentAlbum(true);
     d->tagSearchBar  = new SearchTextBar(this, "DigikamViewTagSearchBar");
     d->tagSearchBar->setHighlightOnResult(true);
     d->tagSearchBar->setModel(model, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
@@ -508,6 +510,7 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget *parent, SearchModel *searc
     d->timeLineFolderView->setConfigGroup(getConfigGroup());
     d->timeLineFolderView->filteredModel()->listTimelineSearches();
     d->timeLineFolderView->filteredModel()->setListTemporarySearches(false);
+    d->timeLineFolderView->setAlbumManagerCurrentAlbum(true);
     d->searchDateBar      = new SearchTextBar(this, "TimeLineViewSearchDateBar");
     d->searchDateBar->setModel(d->timeLineFolderView->filteredModel(),
                                AbstractAlbumModel::AlbumIdRole,
@@ -824,6 +827,7 @@ SearchSideBarWidget::SearchSideBarWidget(QWidget *parent,
     d->searchTreeView->setConfigGroup(getConfigGroup());
     d->searchTreeView->filteredModel()->listNormalSearches();
     d->searchTreeView->filteredModel()->setListTemporarySearches(true);
+    d->searchTreeView->setAlbumManagerCurrentAlbum(true);
     d->searchSearchBar  = new SearchTextBar(this, "DigikamViewSearchSearchBar");
     d->searchSearchBar->setModel(d->searchTreeView->filteredModel(),
                                  AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);

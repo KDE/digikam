@@ -130,6 +130,7 @@ public:
         selectAlbumOnClick(false),
         selectOnContextMenu(true),
         enableContextMenu(false),
+        setInAlbumManager(false),
         configSelectionEntry("Selection"),
         configExpansionEntry("Expansion"),
         configCurrentIndexEntry("CurrentIndex"),
@@ -146,6 +147,7 @@ public:
     bool selectAlbumOnClick;
     bool selectOnContextMenu;
     bool enableContextMenu;
+    bool setInAlbumManager;
 
     QMap<int, State> statesByAlbumId;
     QMap<int, State> searchBackup;
@@ -379,10 +381,16 @@ void AbstractAlbumTreeView::setSearchTextSettings(const SearchTextSettings& sett
     m_albumFilterModel->setSearchTextSettings(settings);
 }
 
+void AbstractAlbumTreeView::setAlbumManagerCurrentAlbum(bool set)
+{
+    d->setInAlbumManager = set;
+}
+
 void AbstractAlbumTreeView::slotSelectAlbum(Album *album, bool selectInAlbumManager)
 {
     setCurrentIndex(albumFilterModel()->indexForAlbum(album));
-    if (selectInAlbumManager)
+    // check local and global flag
+    if (selectInAlbumManager && d->setInAlbumManager)
     {
         AlbumManager::instance()->setCurrentAlbum(album);
     }
@@ -815,8 +823,7 @@ void AbstractAlbumTreeView::contextMenuEvent(QContextMenuEvent *event)
         return;
     }
 
-    Album *album = albumFilterModel()->albumForIndex(
-                    indexAt(event->pos()));
+    Album *album = albumFilterModel()->albumForIndex(indexAt(event->pos()));
 
     if (!showContextMenuAt(event, album))
     {
@@ -840,7 +847,6 @@ void AbstractAlbumTreeView::contextMenuEvent(QContextMenuEvent *event)
 
     QAction* choice = cmhelper.exec(QCursor::pos());
     handleCustomContextMenuAction(choice, albumPointer);
-
 }
 
 void AbstractAlbumTreeView::setSelectOnContextMenu(bool select)
@@ -1240,7 +1246,7 @@ SAlbum* SearchTreeView::currentAlbum() const
 
 void SearchTreeView::slotSelectSAlbum(SAlbum *salbum)
 {
-    slotSelectAlbum(salbum);
+    slotSelectAlbum(salbum, true);
 }
 
 // --------------------------------------- //
