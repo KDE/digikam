@@ -44,44 +44,19 @@ public:
     FreeRotationFilterPriv() :
         DEG2RAD(0.017453292519943)
     {
-        angle           = 0.0;
-        antiAlias       = true;
-        autoCrop        = FreeRotationFilter::NoAutoCrop;
-        backgroundColor = Qt::black;
-        orgW            = 0;
-        orgH            = 0;
     }
 
     // Degrees to radian conversion coeff (PI/180). To optimize computation.
     const double DEG2RAD; 
 
-    bool         antiAlias;
-
-    int          autoCrop;
-    int          orgW;
-    int          orgH;
-
-    double       angle;
-
-    QSize        newSize;
-
-    QColor       backgroundColor;
+    FreeRotationContainer settings;
 };
 
-FreeRotationFilter::FreeRotationFilter(DImg* orgImage, QObject* parent, 
-                                       double angle, bool antialiasing,
-                                       int autoCrop, const QColor& backgroundColor, 
-                                       int orgW, int orgH)
+FreeRotationFilter::FreeRotationFilter(DImg* orgImage, QObject* parent, const FreeRotationContainer& settings)
                   : DImgThreadedFilter(orgImage, parent, "FreeRotation"),
                     d(new FreeRotationFilterPriv)
 {
-    d->angle           = angle;
-    d->orgW            = orgW;
-    d->orgH            = orgH;
-    d->antiAlias       = antialiasing;
-    d->autoCrop        = autoCrop;
-    d->backgroundColor = backgroundColor;
-
+    d->settings = settings;
     initFilter();
 }
 
@@ -92,7 +67,7 @@ FreeRotationFilter::~FreeRotationFilter()
 
 QSize FreeRotationFilter::getNewSize() const 
 {
-    return d->newSize;
+    return d->settings.newSize;
 }
 
 double FreeRotationFilter::calculateAngle(int x1, int y1, int x2, int y2)
@@ -159,8 +134,8 @@ void FreeRotationFilter::filterImage()
 
     // first of all, we need to calculate the sin and cos of the given angle
 
-    lfSin = sin(d->angle * -d->DEG2RAD);
-    lfCos = cos(d->angle * -d->DEG2RAD);
+    lfSin = sin(d->settings.angle * -d->DEG2RAD);
+    lfCos = cos(d->settings.angle * -d->DEG2RAD);
 
     // now, we have to calc the new size for the destination image
 
@@ -193,7 +168,7 @@ void FreeRotationFilter::filterImage()
     if (m_destImage.isNull())
         return;
 
-    m_destImage.fill( DColor(d->backgroundColor.rgb(), sixteenBit) );
+    m_destImage.fill( DColor(d->settings.backgroundColor.rgb(), sixteenBit) );
 
     uchar* pResBits            = m_destImage.bits();
     unsigned short* pResBits16 = (unsigned short *)m_destImage.bits();
@@ -217,7 +192,7 @@ void FreeRotationFilter::filterImage()
 
             if (isInside (nWidth, nHeight, (int)lfx, (int)lfy))
             {
-                if (d->antiAlias)
+                if (d->settings.antiAlias)
                 {
                     if (!sixteenBit)
                         alias.pixelAntiAliasing(pBits, nWidth, nHeight, lfx, lfy,
@@ -254,7 +229,7 @@ void FreeRotationFilter::filterImage()
 
     // Compute the rotated destination image size using original image dimensions.
     int    W, H;
-    double absAngle = fabs(d->angle);
+    double absAngle = fabs(d->settings.angle);
 
     // stop here when no angle was set
     if (absAngle == 0.0)
@@ -264,21 +239,21 @@ void FreeRotationFilter::filterImage()
 
     if (absAngle < 90.0)
     {
-        W = (int)(d->orgW * cos(absAngle * d->DEG2RAD) + d->orgH * sin(absAngle * d->DEG2RAD));
-        H = (int)(d->orgH * cos(absAngle * d->DEG2RAD) + d->orgW * sin(absAngle * d->DEG2RAD));
+        W = (int)(d->settings.orgW * cos(absAngle * d->DEG2RAD) + d->settings.orgH * sin(absAngle * d->DEG2RAD));
+        H = (int)(d->settings.orgH * cos(absAngle * d->DEG2RAD) + d->settings.orgW * sin(absAngle * d->DEG2RAD));
     }
     else
     {
-        H = (int)(d->orgW * cos((absAngle-90.0) * d->DEG2RAD) + d->orgH * sin((absAngle-90.0) * d->DEG2RAD));
-        W = (int)(d->orgH * cos((absAngle-90.0) * d->DEG2RAD) + d->orgW * sin((absAngle-90.0) * d->DEG2RAD));
+        H = (int)(d->settings.orgW * cos((absAngle-90.0) * d->DEG2RAD) + d->settings.orgH * sin((absAngle-90.0) * d->DEG2RAD));
+        W = (int)(d->settings.orgH * cos((absAngle-90.0) * d->DEG2RAD) + d->settings.orgW * sin((absAngle-90.0) * d->DEG2RAD));
     }
 
     // Auto-cropping destination image without black holes around.
     QRect autoCrop;
 
-    switch (d->autoCrop)
+    switch (d->settings.autoCrop)
     {
-        case WidestArea:
+        case FreeRotationContainer::WidestArea:
         {
             // 'Widest Area' method (by Renchi Raju).
 
@@ -291,19 +266,19 @@ void FreeRotationFilter::filterImage()
             {
                 m_destImage = DImg(m_orgImage.width(), m_orgImage.height(), m_orgImage.sixteenBit(),  
                                    m_orgImage.hasAlpha());
-                m_destImage.fill(DColor(d->backgroundColor.rgb(), sixteenBit));
-                d->newSize   = QSize();
+                m_destImage.fill(DColor(d->settings.backgroundColor.rgb(), sixteenBit));
+                d->settings.newSize   = QSize();
             }
             else
             {
                 m_destImage = m_destImage.copy(autoCrop);
-                d->newSize.setWidth((int)  (W - 2* d->orgH * sin(absAngle * d->DEG2RAD)));
-                d->newSize.setHeight((int) (H - 2* d->orgW * sin(absAngle * d->DEG2RAD)));
+                d->settings.newSize.setWidth((int)  (W - 2* d->settings.orgH * sin(absAngle * d->DEG2RAD)));
+                d->settings.newSize.setHeight((int) (H - 2* d->settings.orgW * sin(absAngle * d->DEG2RAD)));
             }
             break;
         }
 
-        case LargestArea:
+        case FreeRotationContainer::LargestArea:
         {
             // 'Largest Area' method (by Gerhard Kulzer).
 
@@ -350,25 +325,25 @@ void FreeRotationFilter::filterImage()
             {
                 m_destImage = DImg(m_orgImage.width(), m_orgImage.height(), m_orgImage.sixteenBit(),
                                    m_orgImage.hasAlpha());
-                m_destImage.fill(DColor(d->backgroundColor.rgb(), sixteenBit));
-                d->newSize   = QSize();
+                m_destImage.fill(DColor(d->settings.backgroundColor.rgb(), sixteenBit));
+                d->settings.newSize   = QSize();
             }
             else
             {
                 m_destImage = m_destImage.copy(autoCrop);
-                gamma       = atan((float) d->orgH / (float) d->orgW);
+                gamma       = atan((float) d->settings.orgH / (float) d->settings.orgW);
 
                 if (absAngle < 90.0)
                 {
-                    d->newSize.setWidth((int) ((float) d->orgH / cos(absAngle * d->DEG2RAD) / (tan(gamma) + 
+                    d->settings.newSize.setWidth((int) ((float) d->settings.orgH / cos(absAngle * d->DEG2RAD) / (tan(gamma) + 
                                        tan(absAngle * d->DEG2RAD))));
-                    d->newSize.setHeight((int) ((float) d->newSize.width() * tan(gamma)));
+                    d->settings.newSize.setHeight((int) ((float) d->settings.newSize.width() * tan(gamma)));
                 }
                 else
                 {
-                    d->newSize.setHeight((int) ((float) d->orgH / cos((absAngle - 90.0) * d->DEG2RAD) /
+                    d->settings.newSize.setHeight((int) ((float) d->settings.orgH / cos((absAngle - 90.0) * d->DEG2RAD) /
                                         (tan(gamma) + tan((absAngle - 90.0) * d->DEG2RAD))));
-                    d->newSize.setWidth((int) ((float) d->newSize.height() * tan(gamma)));
+                    d->settings.newSize.setWidth((int) ((float) d->settings.newSize.height() * tan(gamma)));
                 }
             }
             break;
@@ -376,8 +351,8 @@ void FreeRotationFilter::filterImage()
         
         default: // No auto cropping.
         {
-            d->newSize.setWidth(W);
-            d->newSize.setHeight(H);
+            d->settings.newSize.setWidth(W);
+            d->settings.newSize.setHeight(H);
             break;
         }
     }

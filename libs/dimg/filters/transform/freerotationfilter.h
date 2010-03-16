@@ -41,30 +41,59 @@ namespace Digikam
 
 class FreeRotationFilterPriv;
 
-class DIGIKAM_EXPORT FreeRotationFilter : public DImgThreadedFilter
+class DIGIKAM_EXPORT FreeRotationContainer
 {
-
 public:
-
-    explicit FreeRotationFilter(DImg* orgImage, QObject* parent=0, double angle=0.0,
-                                bool antialiasing=true, int autoCrop=NoAutoCrop, 
-                                const QColor& backgroundColor=Qt::black,
-                                int orgW=0, int orgH=0);
-
-    virtual ~FreeRotationFilter();
-
-    QSize getNewSize() const;
-    static double calculateAngle(int x1, int y1, int x2, int y2);
-    static double calculateAngle(const QPoint& p1, const QPoint& p2);
-
-public:
-
+    
     enum AutoCropTypes
     {
         NoAutoCrop = 0,
         WidestArea,
         LargestArea
     };
+    
+public:
+
+    FreeRotationContainer()
+    {
+        angle           = 0.0;
+        antiAlias       = true;
+        autoCrop        = NoAutoCrop;
+        backgroundColor = Qt::black;
+        orgW            = 0;
+        orgH            = 0;
+    };
+
+    ~FreeRotationContainer(){};
+
+public:
+    
+    bool   antiAlias;
+
+    int    autoCrop;
+    int    orgW;
+    int    orgH;
+    
+    double angle;
+
+    QSize  newSize;
+
+    QColor backgroundColor;
+};
+
+class DIGIKAM_EXPORT FreeRotationFilter : public DImgThreadedFilter
+{
+
+public:
+
+    explicit FreeRotationFilter(DImg* orgImage, QObject* parent=0, 
+                                const FreeRotationContainer& settings=FreeRotationContainer());
+
+    virtual ~FreeRotationFilter();
+
+    QSize getNewSize() const;
+    static double calculateAngle(int x1, int y1, int x2, int y2);
+    static double calculateAngle(const QPoint& p1, const QPoint& p2);
 
 private:
 

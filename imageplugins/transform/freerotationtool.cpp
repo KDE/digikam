@@ -178,7 +178,7 @@ FreeRotationTool::FreeRotationTool(QObject* parent)
     d->autoCropCB->addItem(i18nc("no autocrop", "None"));
     d->autoCropCB->addItem(i18n("Widest Area"));
     d->autoCropCB->addItem(i18n("Largest Area"));
-    d->autoCropCB->setDefaultIndex(FreeRotationFilter::NoAutoCrop);
+    d->autoCropCB->setDefaultIndex(FreeRotationContainer::NoAutoCrop);
     d->autoCropCB->setWhatsThis(i18n("Select the method to process image auto-cropping "
                                      "to remove black frames around a rotated image here."));
 
@@ -396,31 +396,33 @@ void FreeRotationTool::prepareEffect()
     kapp->setOverrideCursor(Qt::WaitCursor);
     d->expanderBox->setEnabled(false);
 
-    double angle      = d->angleInput->value() + d->fineAngleInput->value();
-    bool antialiasing = d->antialiasInput->isChecked();
-    int autocrop      = d->autoCropCB->currentIndex();
-    QColor background = toolView()->backgroundRole();
-    ImageIface* iface = d->previewWidget->imageIface();
-    int orgW          = iface->originalWidth();
-    int orgH          = iface->originalHeight();
-    DImg preview      = iface->getPreviewImg();
-    setFilter(new FreeRotationFilter(&preview, this, angle, antialiasing, autocrop, background, orgW, orgH));
+    FreeRotationContainer settings;
+    ImageIface* iface        = d->previewWidget->imageIface();
+    DImg preview             = iface->getPreviewImg();
+    settings.angle           = d->angleInput->value() + d->fineAngleInput->value();
+    settings.antiAlias       = d->antialiasInput->isChecked();
+    settings.autoCrop        = d->autoCropCB->currentIndex();
+    settings.backgroundColor = toolView()->backgroundRole();
+    settings.orgW            = iface->originalWidth();
+    settings.orgH            = iface->originalHeight();
+    setFilter(new FreeRotationFilter(&preview, this, settings));
 }
 
 void FreeRotationTool::prepareFinal()
 {
     d->expanderBox->setEnabled(false);
 
-    double angle      = d->angleInput->value() + d->fineAngleInput->value();
-    bool antialiasing = d->antialiasInput->isChecked();
-    int autocrop      = d->autoCropCB->currentIndex();
-    QColor background = Qt::black;
-
+    FreeRotationContainer settings;
     ImageIface iface(0, 0);
-    int orgW       = iface.originalWidth();
-    int orgH       = iface.originalHeight();
-    DImg* orgImage = iface.getOriginalImg();
-    setFilter(new FreeRotationFilter(orgImage, this, angle, antialiasing, autocrop, background, orgW, orgH));
+    DImg* orgImage           = iface.getOriginalImg();
+    settings.angle           = d->angleInput->value() + d->fineAngleInput->value();
+    settings.antiAlias       = d->antialiasInput->isChecked();
+    settings.autoCrop        = d->autoCropCB->currentIndex();
+    settings.backgroundColor = Qt::black;
+    settings.orgW            = iface.originalWidth();
+    settings.orgH            = iface.originalHeight();
+    
+    setFilter(new FreeRotationFilter(orgImage, this, settings));
 }
 
 void FreeRotationTool::putPreviewData()

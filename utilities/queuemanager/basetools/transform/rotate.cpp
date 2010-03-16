@@ -185,7 +185,9 @@ bool Rotate::toolOperations()
                 default:      // Custom value
                               // there is no loss less methode to turn JPEG image with a custom angle.
                     if (!loadToDImg()) return false;
-                    FreeRotationFilter fr(&image(), 0L, (double)angle);
+                    FreeRotationContainer settings;
+                    settings.angle = angle;
+                    FreeRotationFilter fr(&image(), 0L, settings);
                     fr.startFilterDirectly();
                     DImg trg = fr.getTargetImage();
                     image().putImageData(trg.width(), trg.height(), trg.sixteenBit(), trg.hasAlpha(), trg.bits());
@@ -255,7 +257,9 @@ bool Rotate::toolOperations()
                 image().rotate(DImg::ROT270);
                 break;
             default:      // Custom value
-                FreeRotationFilter fr(&image(), 0L, (double)angle);
+                FreeRotationContainer settings;
+                settings.angle = angle;
+                FreeRotationFilter fr(&image(), 0L, settings);
                 fr.startFilterDirectly();
                 DImg trg = fr.getTargetImage();
                 image().putImageData(trg.width(), trg.height(), trg.sixteenBit(), trg.hasAlpha(), trg.bits());
