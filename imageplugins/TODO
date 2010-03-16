@@ -48,7 +48,7 @@ enhance
 transform
   /ratiocrop                DONE                  NO                    NO
   /resizetool               DONE                 TODO                  DONE
-  /freerotation             DONE                  NO                   TODO
+  /freerotation             DONE                  NO                   DONE
   /perspective               NO                   NO                    NO
   /sheartool                DONE                  NO                   TODO
   /contentawareresizing     DONE                 TODO                  TODO
