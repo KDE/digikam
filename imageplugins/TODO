@@ -13,6 +13,9 @@ color
   /hsltool                  DONE                 DONE                  DONE
   /profileconversiontool    DONE                 DONE                  DONE
   /whitebalance             DONE                 DONE                  DONE
+  /Invert                    NO                   NO                   DONE
+  /Convert 8/16 bits         NO                   NO                   TODO
+  /Convert 16/18 bits        NO                   NO                   TODO
 
 decorate
   /border                   DONE                  NO                   TODO

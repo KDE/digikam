@@ -1046,6 +1046,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/color/bwconvert.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/color/whitebalance.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/color/curvesadjust.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/color/invert.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/convert/convert2jpeg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/convert/convert2png.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/convert/convert2tiff.cpp

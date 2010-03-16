@@ -51,6 +51,7 @@
 #include "filmgrain.h"
 #include "localcontrast.h"
 #include "antivignetting.h"
+#include "invert.h"
 
 namespace Digikam
 {
@@ -104,6 +105,7 @@ BatchToolsManager::BatchToolsManager(QObject* parent)
     registerTool(new BWConvert(this));
     registerTool(new WhiteBalance(this));
     registerTool(new CurvesAdjust(this));
+    registerTool(new Invert(this));
 
     // Filters
     registerTool(new FilmGrain(this));
