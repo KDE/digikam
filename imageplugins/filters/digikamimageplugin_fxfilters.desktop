@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=ImagePlugin_FxFilters
+Name[ca]=ImagePlugin_FxFilters
 Name[et]=ImagePlugin_FxFilters
 Name[nb]=ImagePlugin_FxFilters
 Name[pt]=ImagePlugin_FxFilters
@@ -11,6 +12,7 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Special effect filters plugin for digiKam
+Comment[ca]=Connector pel digiKam de filtres d'efectes especials
 Comment[et]=DigiKami eriefektifiltrite plugin
 Comment[nb]=digiKam programtillegg for spesialeffekter
 Comment[pt]=Um 'plugin' do de efeitos especiais para o digiKam

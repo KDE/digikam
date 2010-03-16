@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=ImagePlugin_Color
+Name[ca]=ImagePlugin_Color
 Name[pt]=ImagePlugin_Color
 Name[sv]=Färginsticksprogram
 Name[uk]=ImagePlugin_Color
@@ -8,6 +9,7 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=A tool to correct colors of image
+Comment[ca]=Una eina per corregir els colors de les imatges
 Comment[pt]=Uma ferramenta para corrigir as cores de uma imagem
 Comment[sv]=Ett verktyg för att korrigera färger i bilder
 Comment[uk]=Інструмент для виправлення кольорів зображення

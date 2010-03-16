@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=ImagePlugin_Enhance
+Name[ca]=ImagePlugin_Enhance
 Name[pt]=ImagePlugin_Enhance
 Name[sv]=Förbättringsinsticksprogram
 Name[uk]=ImagePlugin_Enhance
@@ -9,6 +10,7 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=digiKam plugin to enhance photograph
+Comment[ca]=Connector pel digiKam per realçar una fotografia
 Comment[pt]=Um 'plugin' do digiKam para melhorar as fotografias
 Comment[sv]=Digikam insticksprogram för att förbättra ett fotografi
 Comment[uk]=Додаток покращення якості фотографії для digiKam
