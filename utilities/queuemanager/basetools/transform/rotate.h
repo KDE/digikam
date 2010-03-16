@@ -28,13 +28,12 @@
 
 #include "batchtool.h"
 
-class QLabel;
-class QCheckBox;
-
-class KComboBox;
+using namespace KDcrawIface;
 
 namespace Digikam
 {
+  
+class RotatePriv;
 
 class Rotate : public BatchTool
 {
@@ -58,11 +57,7 @@ private Q_SLOTS:
 
 private:
 
-    QLabel*    m_label;
-
-    QCheckBox* m_useExif;
-
-    KComboBox* m_comboBox;
+    RotatePriv* const d;
 };
 
 }  // namespace Digikam
