@@ -53,6 +53,7 @@
 #include "antivignetting.h"
 #include "invert.h"
 #include "convert8to16.h"
+#include "convert16to8.h"
 
 namespace Digikam
 {
@@ -108,6 +109,7 @@ BatchToolsManager::BatchToolsManager(QObject* parent)
     registerTool(new CurvesAdjust(this));
     registerTool(new Invert(this));
     registerTool(new Convert8to16(this));
+    registerTool(new Convert16to8(this));
 
     // Filters
     registerTool(new FilmGrain(this));
