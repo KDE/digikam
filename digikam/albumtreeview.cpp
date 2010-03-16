@@ -414,7 +414,7 @@ void AbstractAlbumTreeView::mousePressEvent(QMouseEvent *e)
         QModelIndex index = indexVisuallyAt(e->pos());
         if (index.isValid())
         {
-            AlbumManager::instance()->setCurrentAlbum(m_albumFilterModel->albumForIndex(index));
+            slotSelectAlbum(m_albumFilterModel->albumForIndex(index), true);
         }
     }
 
