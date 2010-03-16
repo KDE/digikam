@@ -25,16 +25,13 @@
 
 // Qt includes
 
-#include <QLabel>
 #include <QWidget>
 
 // KDE includes
 
-#include <kcombobox.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
-#include <kurllabel.h>
 
 // Local includes
 
@@ -132,8 +129,7 @@ bool NoiseReduction::toolOperations()
 
     NRFilter wnr(&image(), 0L, prm);
     wnr.startFilterDirectly();
-    DImg trg = wnr.getTargetImage();
-    image().putImageData(trg.bits());
+    image().putImageData(wnr.getTargetImage().bits());
 
     return (savefromDImg());
 }

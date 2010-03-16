@@ -148,8 +148,7 @@ bool Restoration::toolOperations()
 
     if (isCancelled()) return false;
 
-    DImg trg    = m_cimgIface->getTargetImage();
-    image().putImageData(trg.bits());
+    image().putImageData(m_cimgIface->getTargetImage().bits());
     delete m_cimgIface;
     m_cimgIface = 0;
 
