@@ -73,9 +73,14 @@ public:
 
 public:
 
-    /** Constructor using settings to preserve aspect ratio of image. */
-    explicit BorderFilter(DImg* orgImage, QObject* parent=0, int orgWidth=0, int orgHeight=0,
-                          const QString& borderPath=QString(), int borderType=SolidBorder, float borderPercent=0.1,
+    /** Constructor using settings to preserve aspect ratio of image. 
+     */
+    explicit BorderFilter(DImg* orgImage, QObject* parent=0, 
+                          int   orgWidth=0, 
+                          int   orgHeight=0,
+                          const QString& borderPath=QString(), 
+                          int   borderType=SolidBorder, 
+                          float borderPercent=0.1,
                           const DColor& solidColor = DColor(),
                           const DColor& niepceBorderColor = DColor(),
                           const DColor& niepceLineColor = DColor(),
@@ -84,10 +89,14 @@ public:
                           const DColor& decorativeFirstColor = DColor(),
                           const DColor& decorativeSecondColor = DColor());
 
-    /** Constructor using settings to not-preserve aspect ratio of image. */
-    explicit BorderFilter(DImg* orgImage, QObject* parent=0, int orgWidth=0, int orgHeight=0,
-                          const QString& borderPath=QString(), int borderType=SolidBorder,
-                          int borderWidth1=100, int borderWidth2=20, int borderWidth3=20, int borderWidth4=10,
+    /** Constructor using settings to not-preserve aspect ratio of image. 
+     */
+    explicit BorderFilter(DImg* orgImage, QObject* parent=0, 
+                          int   orgWidth=0, 
+                          int   orgHeight=0,
+                          const QString& borderPath=QString(), 
+                          int   borderType=SolidBorder,
+                          int   borderWidth1=100, int borderWidth2=20, int borderWidth3=20, int borderWidth4=10,
                           const DColor& solidColor = DColor(),
                           const DColor& niepceBorderColor = DColor(),
                           const DColor& niepceLineColor = DColor(),

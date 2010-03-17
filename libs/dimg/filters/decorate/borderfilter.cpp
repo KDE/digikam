@@ -94,8 +94,10 @@ public:
     DColor  decorativeSecondColor;
 };
 
-BorderFilter::BorderFilter(DImg* image, QObject* parent, int orgWidth, int orgHeight,
-                           const QString& borderPath, int borderType, float borderPercent,
+BorderFilter::BorderFilter(DImg* image, QObject* parent, 
+                           int orgWidth, int orgHeight,
+                           const QString& borderPath, int borderType, 
+                           float borderPercent,
                            const DColor& solidColor,
                            const DColor& niepceBorderColor,
                            const DColor& niepceLineColor,
@@ -125,13 +127,13 @@ BorderFilter::BorderFilter(DImg* image, QObject* parent, int orgWidth, int orgHe
     d->bevelLowerRightColor  = bevelLowerRightColor;
     d->decorativeFirstColor  = decorativeFirstColor;
     d->decorativeSecondColor = decorativeSecondColor;
-
     d->preserveAspectRatio   = true;
 
     initFilter();
 }
 
-BorderFilter::BorderFilter(DImg* orgImage, QObject* parent, int orgWidth, int orgHeight,
+BorderFilter::BorderFilter(DImg* orgImage, QObject* parent, 
+                           int orgWidth, int orgHeight,
                            const QString& borderPath, int borderType,
                            int borderWidth1, int borderWidth2, int borderWidth3, int borderWidth4,
                            const DColor& solidColor,
