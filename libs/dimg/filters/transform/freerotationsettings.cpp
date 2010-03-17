@@ -155,7 +155,7 @@ FreeRotationSettings::~FreeRotationSettings()
 FreeRotationContainer FreeRotationSettings::settings() const
 {
     FreeRotationContainer prm;
-    prm.angle     = d->angleInput->value() + d->fineAngleInput->value();
+    prm.angle     = (double)d->angleInput->value() + d->fineAngleInput->value();
     prm.antiAlias = d->antialiasInput->isChecked();
     prm.autoCrop  = d->autoCropCB->currentIndex();
     return prm;
@@ -165,8 +165,8 @@ void FreeRotationSettings::setSettings(const FreeRotationContainer& settings)
 {
     blockSignals(true);
 
-    d->angleInput->setValue(int(settings.angle));
-    d->fineAngleInput->setValue(settings.angle - d->angleInput->value());
+    d->angleInput->setValue((int)(settings.angle));
+    d->fineAngleInput->setValue(settings.angle - (double)d->angleInput->value());
     d->antialiasInput->setChecked(settings.antiAlias);
     d->autoCropCB->setCurrentIndex(settings.autoCrop);
 
