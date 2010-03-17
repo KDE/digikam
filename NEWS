@@ -15,21 +15,22 @@ ImageEditor       : White Balance tool is multithreaded and use a zoomable previ
 ImageEditor       : Adjust Curves tool is multithreaded and use a zoomable preview widget.
 ImageEditor       : Adjust Levels tool is multithreaded and use a zoomable preview widget.
 
-BatchQueueManager : new tool to fix Brightness/Contrast/gamma.
-BatchQueueManager : new tool to adjust Color Balance.
-BatchQueueManager : new tool to fix Hue/Saturation/Lightness.
-BatchQueueManager : new tool to convert images color space.
-BatchQueueManager : new tool to mix color channel.
-BatchQueueManager : new tool to convert to Black and White.
-BatchQueueManager : new tool to adjust White Balance.
-BatchQueueManager : new tool to adjust Curves.
-BatchQueueManager : new tool to blur images.
-BatchQueueManager : new tool to add Film Grain to images.
-BatchQueueManager : new tool to apply Local Contrast (LDR tone mapping).
-BatchQueueManager : new tool to add/remove vignetting.
-BatchQueueManager : new tool to invert image colors.
-BatchQueueManager : new tool to convert color bits depth.
+BatchQueueManager : New tool to fix Brightness/Contrast/gamma.
+BatchQueueManager : New tool to adjust Color Balance.
+BatchQueueManager : New tool to fix Hue/Saturation/Lightness.
+BatchQueueManager : New tool to convert images color space.
+BatchQueueManager : New tool to mix color channel.
+BatchQueueManager : New tool to convert to Black and White.
+BatchQueueManager : New tool to adjust White Balance.
+BatchQueueManager : New tool to adjust Curves.
+BatchQueueManager : New tool to blur images.
+BatchQueueManager : New tool to add Film Grain to images.
+BatchQueueManager : New tool to apply Local Contrast (LDR tone mapping).
+BatchQueueManager : New tool to add/remove vignetting.
+BatchQueueManager : New tool to invert image colors.
+BatchQueueManager : New tool to convert color bits depth.
 BatchQueueManager : Rotate tool support Free Rotation adjustments.
+BatchQueueManager : It's now possible to Stop and restart a processed queue.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
