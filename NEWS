@@ -29,6 +29,7 @@ BatchQueueManager : new tool to apply Local Contrast (LDR tone mapping).
 BatchQueueManager : new tool to add/remove vignetting.
 BatchQueueManager : new tool to invert image colors.
 BatchQueueManager : new tool to convert color bits depth.
+BatchQueueManager : Rotate tool support Free Rotation adjustments.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
@@ -112,7 +113,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 078 ==> 230008 : digiKam Nikon fetching pictures.
 079 ==> 229470 : digiKam fails to start with QCursor: Cannot create bitmap cursor; invalid bitmap(s).
 080 ==> 221992 : "local contrast" settings make no difference.
-081 ==> 230003 : Zoombar slider adjustments below 100% are hard to archieve. [patch]
+081 ==> 230003 : Zoombar slider adjustments below 100% are hard to archieve [patch].
 082 ==> 228810 : Need to roll over again on a thumb to correct the rating.
 083 ==> 210259 : Scan crashed on multi-layer TIFFs.
 084 ==> 229344 : digiKam starting up - loading kipi-plugins.
