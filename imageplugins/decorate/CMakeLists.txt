@@ -1,5 +1,5 @@
 
-ADD_SUBDIRECTORY(borderpatterns texturepatterns)
+ADD_SUBDIRECTORY(texturepatterns)
 
 SET(digikamimageplugin_decorate_PART_SRCS imageplugin_decorate.cpp
                                           inserttextwidget.cpp

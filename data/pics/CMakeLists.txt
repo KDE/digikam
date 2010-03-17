@@ -1,3 +1,5 @@
+ADD_SUBDIRECTORY(borderpatterns)
+
 # digiKam files ######################################################
 
 INSTALL(FILES tag.png
