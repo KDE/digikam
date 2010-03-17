@@ -143,14 +143,14 @@ BorderTool::BorderTool(QObject* parent)
     d->previewWidget = new ImageGuideWidget(0, false, ImageGuideWidget::HVGuideMode);
     setToolView(d->previewWidget);
     setPreviewModeMask(PreviewToolBar::UnSplitPreviewModes);
-    
+
     // -------------------------------------------------------------
 
     d->gboxSettings = new EditorToolSettings;
 
     // -------------------------------------------------------------
 
-    QLabel *label1 = new QLabel(i18n("Type:"));
+    QLabel* label1 = new QLabel(i18n("Type:"));
     d->borderType  = new RComboBox( );
     d->borderType->addItem(i18nc("solid border type", "Solid"));
     // NOTE: Niepce is a real name. This is the first guy in the world to have built a camera.
@@ -175,7 +175,7 @@ BorderTool::BorderTool(QObject* parent)
     d->borderType->setDefaultIndex(BorderFilter::SolidBorder);
     d->borderType->setWhatsThis( i18n("Select the border type to add around the image here."));
 
-    KSeparator *line1 = new KSeparator(Qt::Horizontal);
+    KSeparator* line1 = new KSeparator(Qt::Horizontal);
 
     // -------------------------------------------------------------------
 
@@ -220,24 +220,24 @@ BorderTool::BorderTool(QObject* parent)
 
     // -------------------------------------------------------------------
 
-    QGridLayout* mainLayout = new QGridLayout();
-    mainLayout->addWidget(label1,                  0, 0, 1, 3);
-    mainLayout->addWidget(d->borderType,           1, 0, 1, 3);
-    mainLayout->addWidget(line1,                   2, 0, 1, 3);
-    mainLayout->addWidget(d->preserveAspectRatio,  3, 0, 1, 3);
-    mainLayout->addWidget(d->labelBorderPercent,   4, 0, 1, 3);
-    mainLayout->addWidget(d->borderPercent,        5, 0, 1, 3);
-    mainLayout->addWidget(d->labelBorderWidth,     6, 0, 1, 3);
-    mainLayout->addWidget(d->borderWidth,          7, 0, 1, 3);
-    mainLayout->addWidget(line2,                   8, 0, 1, 3);
-    mainLayout->addWidget(d->labelForeground,      9, 0, 1, 1);
-    mainLayout->addWidget(d->firstColorButton,     9, 1, 1, 2);
-    mainLayout->addWidget(d->labelBackground,     10, 0, 1, 1);
-    mainLayout->addWidget(d->secondColorButton,   10, 1, 1, 2);
-    mainLayout->setRowStretch(11, 10);
-    mainLayout->setMargin(d->gboxSettings->spacingHint());
-    mainLayout->setSpacing(d->gboxSettings->spacingHint());
-    d->gboxSettings->plainPage()->setLayout(mainLayout);
+    QGridLayout* grid = new QGridLayout();
+    grid->addWidget(label1,                  0, 0, 1, 3);
+    grid->addWidget(d->borderType,           1, 0, 1, 3);
+    grid->addWidget(line1,                   2, 0, 1, 3);
+    grid->addWidget(d->preserveAspectRatio,  3, 0, 1, 3);
+    grid->addWidget(d->labelBorderPercent,   4, 0, 1, 3);
+    grid->addWidget(d->borderPercent,        5, 0, 1, 3);
+    grid->addWidget(d->labelBorderWidth,     6, 0, 1, 3);
+    grid->addWidget(d->borderWidth,          7, 0, 1, 3);
+    grid->addWidget(line2,                   8, 0, 1, 3);
+    grid->addWidget(d->labelForeground,      9, 0, 1, 1);
+    grid->addWidget(d->firstColorButton,     9, 1, 1, 2);
+    grid->addWidget(d->labelBackground,     10, 0, 1, 1);
+    grid->addWidget(d->secondColorButton,   10, 1, 1, 2);
+    grid->setRowStretch(11, 10);
+    grid->setMargin(d->gboxSettings->spacingHint());
+    grid->setSpacing(d->gboxSettings->spacingHint());
+    d->gboxSettings->plainPage()->setLayout(grid);
 
     // -------------------------------------------------------------
 
@@ -282,18 +282,13 @@ void BorderTool::readSettings()
     d->borderWidth->setValue(group.readEntry(d->configBorderWidthEntry,      d->borderWidth->defaultValue()));
     d->preserveAspectRatio->setChecked(group.readEntry(d->configPreserveAspectRatioEntry, true));
 
-    QColor black(0, 0, 0);
-    QColor white(255, 255, 255);
-    QColor gray1(192, 192, 192);
-    QColor gray2(128, 128, 128);
-
-    d->solidColor            = group.readEntry(d->configSolidColorEntry,            black);
-    d->niepceBorderColor     = group.readEntry(d->configNiepceBorderColorEntry,     white);
-    d->niepceLineColor       = group.readEntry(d->configNiepceLineColorEntry,       black);
-    d->bevelUpperLeftColor   = group.readEntry(  d->configBevelUpperLeftColorEntry, gray1);
-    d->bevelLowerRightColor  = group.readEntry( d->configBevelLowerRightColorEntry, gray2);
-    d->decorativeFirstColor  = group.readEntry( d->configDecorativeFirstColorEntry, black);
-    d->decorativeSecondColor = group.readEntry(d->configDecorativeSecondColorEntry, black);
+    d->solidColor            = group.readEntry(d->configSolidColorEntry,            QColor(0, 0, 0));
+    d->niepceBorderColor     = group.readEntry(d->configNiepceBorderColorEntry,     QColor(255, 255, 255));
+    d->niepceLineColor       = group.readEntry(d->configNiepceLineColorEntry,       QColor(0, 0, 0));
+    d->bevelUpperLeftColor   = group.readEntry(  d->configBevelUpperLeftColorEntry, QColor(192, 192, 192));
+    d->bevelLowerRightColor  = group.readEntry( d->configBevelLowerRightColorEntry, QColor(128, 128, 128));
+    d->decorativeFirstColor  = group.readEntry( d->configDecorativeFirstColorEntry, QColor(0, 0, 0));
+    d->decorativeSecondColor = group.readEntry(d->configDecorativeSecondColorEntry, QColor(0, 0, 0));
 
     blockWidgetSignals(false);
 
@@ -507,10 +502,10 @@ void BorderTool::prepareEffect()
     bool sixteenBit   = iface->previewSixteenBit();
     DImg preview      = iface->getPreviewImg();
 
-    int borderType  = d->borderType->currentIndex();
-    float ratio     = (float)w/(float)orgWidth;
-    int borderWidth = (int)((float)d->borderWidth->value()*ratio);
-    QString border  = getBorderPath( d->borderType->currentIndex() );
+    int borderType    = d->borderType->currentIndex();
+    float ratio       = (float)w/(float)orgWidth;
+    int borderWidth   = (int)((float)d->borderWidth->value()*ratio);
+    QString border    = getBorderPath( d->borderType->currentIndex() );
 
     if (d->preserveAspectRatio->isChecked())
     {
@@ -547,16 +542,15 @@ void BorderTool::prepareFinal()
     d->firstColorButton->setEnabled(false);
     d->secondColorButton->setEnabled(false);
 
+    ImageIface iface(0, 0);
     int borderType    = d->borderType->currentIndex();
     int borderWidth   = d->borderWidth->value();
     float borderRatio = d->borderPercent->value()/100.0f;
     QString border    = getBorderPath( d->borderType->currentIndex() );
-
-    ImageIface iface(0, 0);
-    int orgWidth    = iface.originalWidth();
-    int orgHeight   = iface.originalHeight();
-    bool sixteenBit = iface.previewSixteenBit();
-    DImg* orgImage  = iface.getOriginalImg();
+    int orgWidth      = iface.originalWidth();
+    int orgHeight     = iface.originalHeight();
+    bool sixteenBit   = iface.previewSixteenBit();
+    DImg* orgImage    = iface.getOriginalImg();
 
     if (d->preserveAspectRatio->isChecked())
     {
@@ -589,8 +583,7 @@ void BorderTool::putPreviewData()
     ImageIface* iface = d->previewWidget->imageIface();
     int w             = iface->previewWidth();
     int h             = iface->previewHeight();
-
-    DImg imTemp = filter()->getTargetImage().smoothScale(w, h, Qt::KeepAspectRatio);
+    DImg imTemp       = filter()->getTargetImage().smoothScale(w, h, Qt::KeepAspectRatio);
     DImg imDest(w, h, filter()->getTargetImage().sixteenBit(), filter()->getTargetImage().hasAlpha());
 
     imDest.fill(DColor(d->previewWidget->palette().color(QPalette::Background).rgb(),
