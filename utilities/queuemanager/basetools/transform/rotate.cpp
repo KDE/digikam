@@ -139,7 +139,7 @@ void Rotate::slotAssignSettings2Widget()
     d->useExif->setChecked(settings()["useExif"].toBool());
     d->comboBox->setCurrentIndex(settings()["rotation"].toInt());
     FreeRotationContainer prm;
-    prm.angle     = settings()["angle"].toInt();
+    prm.angle     = settings()["angle"].toDouble();
     prm.antiAlias = settings()["antiAlias"].toBool();
     prm.autoCrop  = settings()["autoCrop"].toInt();
     d->frSettings->setSettings(prm);
@@ -168,7 +168,7 @@ bool Rotate::toolOperations()
     FreeRotationContainer prm;
     bool useExif  = settings()["useExif"].toBool();
     int rotation  = settings()["rotation"].toInt();
-    prm.angle     = settings()["angle"].toInt();
+    prm.angle     = settings()["angle"].toDouble();
     prm.antiAlias = settings()["antiAlias"].toBool();
     prm.autoCrop  = settings()["autoCrop"].toInt();
 
