@@ -262,11 +262,22 @@ BorderContainer BorderSettings::settings() const
 void BorderSettings::setSettings(const BorderContainer& settings)
 {
     blockSignals(true);
-/*
-    d->bInput->setValue((int)(settings.brightness*250.0));
-    d->cInput->setValue((int)((settings.contrast-1.0)*100.0));
-    d->gInput->setValue(settings.gamma);
-*/    
+
+    d->preserveAspectRatio->setChecked(settings.preserveAspectRatio);
+    d->borderType->setCurrentIndex(settings.borderType);
+    d->borderWidth->setValue(settings.borderWidth1);
+    d->borderPercent->setValue(settings.borderPercent * 100.0);
+
+    d->solidColor            = settings.solidColor.getQColor();
+    d->niepceBorderColor     = settings.niepceBorderColor.getQColor();
+    d->niepceLineColor       = settings.niepceLineColor.getQColor();
+    d->bevelUpperLeftColor   = settings.bevelUpperLeftColor.getQColor();
+    d->bevelLowerRightColor  = settings.bevelLowerRightColor.getQColor();
+    d->decorativeFirstColor  = settings.decorativeFirstColor.getQColor();
+    d->decorativeSecondColor = settings.decorativeSecondColor.getQColor();
+    
+    slotBorderTypeChanged(settings.borderType);
+    
     blockSignals(false);
 }
 
