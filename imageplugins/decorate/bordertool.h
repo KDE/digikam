@@ -29,7 +29,6 @@
 // Qt includes
 
 #include <QString>
-#include <QColor>
 
 // Local includes
 
@@ -54,10 +53,6 @@ public:
 private Q_SLOTS:
 
     void slotResetSettings();
-    void slotPreserveAspectRatioToggled(bool);
-    void slotBorderTypeChanged(int borderType);
-    void slotColorForegroundChanged(const QColor& color);
-    void slotColorBackgroundChanged(const QColor& color);
 
 private:
 
@@ -68,10 +63,6 @@ private:
     void putPreviewData();
     void putFinalData();
     void renderingFinished();
-    void toggleBorderSlider(bool b);
-    void blockWidgetSignals(bool b);
-
-    QString getBorderPath(int border);
 
 private:
 
