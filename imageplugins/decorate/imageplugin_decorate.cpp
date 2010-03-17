@@ -39,6 +39,7 @@
 #include "inserttexttool.h"
 #include "bordertool.h"
 #include "texturetool.h"
+#include "superimposetool.h"
 
 using namespace DigikamDecorateImagePlugin;
 
@@ -63,7 +64,12 @@ ImagePlugin_Decorate::ImagePlugin_Decorate(QObject *parent, const QVariantList &
     actionCollection()->addAction("imageplugin_texture", m_textureAction );
     connect(m_textureAction, SIGNAL(triggered(bool)),
             this, SLOT(slotTexture()));            
-            
+
+    m_superimposeAction = new KAction(KIcon("superimpose"), i18n("Template Superimpose..."), this);
+    actionCollection()->addAction("imageplugin_superimpose", m_superimposeAction );
+    connect(m_superimposeAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotSuperImpose()));
+
     setXMLFile("digikamimageplugin_decorate_ui.rc");
 
     kDebug() << "ImagePlugin_Decorate plugin loaded";
@@ -78,6 +84,7 @@ void ImagePlugin_Decorate::setEnabledActions(bool b)
     m_insertTextAction->setEnabled(b);
     m_borderAction->setEnabled(b);
     m_textureAction->setEnabled(b);
+    m_superimposeAction->setEnabled(b);
 }
 
 void ImagePlugin_Decorate::slotInsertText()
@@ -95,5 +102,11 @@ void ImagePlugin_Decorate::slotBorder()
 void ImagePlugin_Decorate::slotTexture()
 {
     TextureTool* tool = new TextureTool(this);
+    loadTool(tool);
+}
+
+void ImagePlugin_Decorate::slotSuperImpose()
+{
+    SuperImposeTool* tool = new SuperImposeTool(this);
     loadTool(tool);
 }

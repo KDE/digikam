@@ -21,6 +21,7 @@ decorate
   /border                   DONE                  NO                   TODO
   /inserttext                NO                   NO                    NO
   /texture                  DONE                 DONE                  TODO
+  /superimpose               NO                   NO                    NO
 
 filters
   /colorfx                  TODO                 TODO                  TODO
@@ -53,4 +54,3 @@ transform
   /sheartool                DONE                  NO                   TODO
   /contentawareresizing     DONE                 TODO                  TODO
 
-superimpose                  NO                   NO                    NO

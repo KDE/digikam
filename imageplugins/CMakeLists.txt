@@ -40,5 +40,4 @@ ADD_SUBDIRECTORY( decorate )
 ADD_SUBDIRECTORY( enhance )
 ADD_SUBDIRECTORY( filters )
 ADD_SUBDIRECTORY( transform )
-ADD_SUBDIRECTORY( superimpose )
 

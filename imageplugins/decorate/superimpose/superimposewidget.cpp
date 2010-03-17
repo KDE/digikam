@@ -7,8 +7,8 @@
  * Description : a Digikam image editor plugin for superimpose a
  *               template to an image.
  *
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,7 +22,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "superimposewidget.moc"
 
@@ -48,10 +47,10 @@
 
 #include "superimpose.h"
 
-namespace DigikamSuperImposeImagesPlugin
+namespace DigikamDecorateImagePlugin
 {
 
-SuperImposeWidget::SuperImposeWidget(int w, int h, QWidget *parent)
+SuperImposeWidget::SuperImposeWidget(int w, int h, QWidget* parent)
                  : QWidget(parent)
 {
     setAttribute(Qt::WA_DeleteOnClose);
@@ -73,14 +72,14 @@ SuperImposeWidget::~SuperImposeWidget()
     delete m_pixmap;
 }
 
-Digikam::DImg SuperImposeWidget::makeSuperImpose(void)
+Digikam::DImg SuperImposeWidget::makeSuperImpose()
 {
     Digikam::ImageIface iface(0, 0);
     SuperImpose superimpose(iface.getOriginalImg(), &m_template, m_currentSelection);
     return superimpose.getTargetImage();
 }
 
-void SuperImposeWidget::resetEdit(void)
+void SuperImposeWidget::resetEdit()
 {
     m_zoomFactor = 1.0;
     m_currentSelection = QRect(m_w/2 - m_rect.width()/2, m_h/2 - m_rect.height()/2,
@@ -89,7 +88,7 @@ void SuperImposeWidget::resetEdit(void)
     repaint();
 }
 
-void SuperImposeWidget::makePixmap(void)
+void SuperImposeWidget::makePixmap()
 {
     Digikam::ImageIface iface(0, 0);
     SuperImpose superimpose(iface.getOriginalImg(), &m_templateScaled, m_currentSelection);
@@ -332,4 +331,4 @@ void SuperImposeWidget::setEditModeCursor()
     }
 }
 
-}  // namespace DigikamSuperImposeImagesPlugin
+}  // namespace DigikamDecorateImagePlugin

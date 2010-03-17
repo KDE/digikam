@@ -6,7 +6,7 @@
  * Date        : 2006-18-03
  * Description : Superimpose filter.
  *
- * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,10 +21,9 @@
  *
  * ============================================================ */
 
-
 #include "superimpose.h"
 
-namespace DigikamSuperImposeImagesPlugin
+namespace DigikamDecorateImagePlugin
 {
 
 SuperImpose::SuperImpose(Digikam::DImg *orgImage, Digikam::DImg *templ,
@@ -39,7 +38,7 @@ SuperImpose::SuperImpose(Digikam::DImg *orgImage, Digikam::DImg *templ,
     filterImage();
 }
 
-void SuperImpose::filterImage(void)
+void SuperImpose::filterImage()
 {
     if (m_template.isNull())
         return;
@@ -66,4 +65,4 @@ void SuperImpose::filterImage(void)
     delete composer;
 }
 
-} // namespace DigikamSuperImposeImagesPlugin
+} // namespace DigikamDecorateImagePlugin
