@@ -122,7 +122,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 088 ==> 201591 : Restart queue in Batch queue manager.
 089 ==> 223003 : Cancelling duplicate search doesn't remove waiting cursor.
 090 ==> 230358 : Selected album does not match containing items.
-091 ==> 
+091 ==> 231048 : Monochrome tool shows plain grey preview.
+092 ==> 
 
 
 
