@@ -27,6 +27,7 @@
 // Local includes
 
 #include <QWidget>
+#include <QColor>
 
 // KDE includes
 
@@ -60,10 +61,23 @@ public:
     void readSettings(KConfigGroup& group);
     void writeSettings(KConfigGroup& group);
 
+    static QString getBorderPath(int border);    
+    
 Q_SIGNALS:
 
     void signalSettingsChanged();
 
+private Q_SLOTS:
+    
+    void slotPreserveAspectRatioToggled(bool);
+    void slotBorderTypeChanged(int borderType);
+    void slotColorForegroundChanged(const QColor& color);
+    void slotColorBackgroundChanged(const QColor& color);
+
+private: 
+    
+    void toggleBorderSlider(bool b);
+    
 private:
 
     BorderSettingsPriv* const d;

@@ -72,6 +72,27 @@ BorderFilter::BorderFilter(DImg* image, QObject* parent, const BorderContainer& 
 {
     d->settings = settings;
 
+    if (m_orgImage.sixteenBit())
+    {
+        d->settings.solidColor.convertToSixteenBit();
+        d->settings.niepceBorderColor.convertToSixteenBit();
+        d->settings.niepceLineColor.convertToSixteenBit();
+        d->settings.bevelUpperLeftColor.convertToSixteenBit();
+        d->settings.bevelLowerRightColor.convertToSixteenBit();
+        d->settings.decorativeFirstColor.convertToSixteenBit();
+        d->settings.decorativeSecondColor.convertToSixteenBit();
+    }
+    else
+    {
+        d->settings.solidColor.convertToEightBit();
+        d->settings.niepceBorderColor.convertToEightBit();
+        d->settings.niepceLineColor.convertToEightBit();
+        d->settings.bevelUpperLeftColor.convertToEightBit();
+        d->settings.bevelLowerRightColor.convertToEightBit();
+        d->settings.decorativeFirstColor.convertToEightBit();
+        d->settings.decorativeSecondColor.convertToEightBit();
+    }
+    
     if (d->settings.preserveAspectRatio)
     {
         d->orgRatio        = (float)d->settings.orgWidth / (float)d->settings.orgHeight;
