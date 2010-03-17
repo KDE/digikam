@@ -43,7 +43,7 @@ namespace Digikam
 
 class BorderFilterPriv;
 
-class DIGIKAM_EXPORT BorderFilter : public DImgThreadedFilter
+class DIGIKAM_EXPORT BorderContainer
 {
 
 public:
@@ -70,42 +70,67 @@ public:
         RockBorder,
         WallBorder
     };
+    
+public:
+
+    BorderContainer()
+    {
+        preserveAspectRatio   = true;
+        orgWidth              = 0;
+        orgHeight             = 0;
+        borderType            = 0;
+        borderPercent         = 0.1;
+        borderWidth1          = 0;
+        borderWidth2          = 0;
+        borderWidth3          = 0;
+        borderWidth4          = 0;
+        solidColor            = DColor(QColor(0, 0, 0));
+        niepceBorderColor     = DColor(QColor(255, 255, 255));
+        niepceLineColor       = DColor(QColor(0, 0, 0));
+        bevelUpperLeftColor   = DColor(QColor(192, 192, 192));
+        bevelLowerRightColor  = DColor(QColor(128, 128, 128));
+        decorativeFirstColor  = DColor(QColor(0, 0, 0));
+        decorativeSecondColor = DColor(QColor(0, 0, 0));
+    };
+
+    ~BorderContainer(){};
+
+public:
+
+    bool    preserveAspectRatio;
+
+    int     orgWidth;
+    int     orgHeight;
+
+    int     borderType;
+
+    int     borderWidth1;
+    int     borderWidth2;
+    int     borderWidth3;
+    int     borderWidth4;
+
+    float   borderPercent;
+    
+    QString borderPath;
+
+    DColor  solidColor;
+    DColor  niepceBorderColor;
+    DColor  niepceLineColor;
+    DColor  bevelUpperLeftColor;
+    DColor  bevelLowerRightColor;
+    DColor  decorativeFirstColor;
+    DColor  decorativeSecondColor;
+};
+
+class DIGIKAM_EXPORT BorderFilter : public DImgThreadedFilter
+{
 
 public:
 
     /** Constructor using settings to preserve aspect ratio of image. 
      */
-    explicit BorderFilter(DImg* orgImage, QObject* parent=0, 
-                          int   orgWidth=0, 
-                          int   orgHeight=0,
-                          const QString& borderPath=QString(), 
-                          int   borderType=SolidBorder, 
-                          float borderPercent=0.1,
-                          const DColor& solidColor = DColor(),
-                          const DColor& niepceBorderColor = DColor(),
-                          const DColor& niepceLineColor = DColor(),
-                          const DColor& bevelUpperLeftColor = DColor(),
-                          const DColor& bevelLowerRightColor = DColor(),
-                          const DColor& decorativeFirstColor = DColor(),
-                          const DColor& decorativeSecondColor = DColor());
-
-    /** Constructor using settings to not-preserve aspect ratio of image. 
-     */
-    explicit BorderFilter(DImg* orgImage, QObject* parent=0, 
-                          int   orgWidth=0, 
-                          int   orgHeight=0,
-                          const QString& borderPath=QString(), 
-                          int   borderType=SolidBorder,
-                          int   borderWidth1=100, int borderWidth2=20, int borderWidth3=20, int borderWidth4=10,
-                          const DColor& solidColor = DColor(),
-                          const DColor& niepceBorderColor = DColor(),
-                          const DColor& niepceLineColor = DColor(),
-                          const DColor& bevelUpperLeftColor = DColor(),
-                          const DColor& bevelLowerRightColor = DColor(),
-                          const DColor& decorativeFirstColor = DColor(),
-                          const DColor& decorativeSecondColor = DColor());
-
-    ~BorderFilter();
+    explicit BorderFilter(DImg* orgImage, QObject* parent=0, const BorderContainer& settings = BorderContainer());
+    virtual ~BorderFilter();
 
 private:
 

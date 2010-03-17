@@ -172,7 +172,7 @@ BorderTool::BorderTool(QObject* parent)
     d->borderType->addItem(i18n("Decorative Granite"));
     d->borderType->addItem(i18n("Decorative Rock"));
     d->borderType->addItem(i18n("Decorative Wall"));
-    d->borderType->setDefaultIndex(BorderFilter::SolidBorder);
+    d->borderType->setDefaultIndex(BorderContainer::SolidBorder);
     d->borderType->setWhatsThis( i18n("Select the border type to add around the image here."));
 
     KSeparator* line1 = new KSeparator(Qt::Horizontal);
@@ -334,7 +334,7 @@ void BorderTool::slotResetSettings()
 
     blockWidgetSignals(false);
 
-    slotBorderTypeChanged(BorderFilter::SolidBorder);
+    slotBorderTypeChanged(BorderContainer::SolidBorder);
 }
 
 void BorderTool::renderingFinished()
@@ -352,34 +352,34 @@ void BorderTool::slotColorForegroundChanged(const QColor& color)
 {
     switch (d->borderType->currentIndex())
     {
-        case BorderFilter::SolidBorder:
+        case BorderContainer::SolidBorder:
             d->solidColor = color;
             break;
 
-        case BorderFilter::NiepceBorder:
+        case BorderContainer::NiepceBorder:
             d->niepceBorderColor = color;
             break;
 
-        case BorderFilter::BeveledBorder:
+        case BorderContainer::BeveledBorder:
             d->bevelUpperLeftColor = color;
             break;
 
-        case BorderFilter::PineBorder:
-        case BorderFilter::WoodBorder:
-        case BorderFilter::PaperBorder:
-        case BorderFilter::ParqueBorder:
-        case BorderFilter::IceBorder:
-        case BorderFilter::LeafBorder:
-        case BorderFilter::MarbleBorder:
-        case BorderFilter::RainBorder:
-        case BorderFilter::CratersBorder:
-        case BorderFilter::DriedBorder:
-        case BorderFilter::PinkBorder:
-        case BorderFilter::StoneBorder:
-        case BorderFilter::ChalkBorder:
-        case BorderFilter::GraniteBorder:
-        case BorderFilter::RockBorder:
-        case BorderFilter::WallBorder:
+        case BorderContainer::PineBorder:
+        case BorderContainer::WoodBorder:
+        case BorderContainer::PaperBorder:
+        case BorderContainer::ParqueBorder:
+        case BorderContainer::IceBorder:
+        case BorderContainer::LeafBorder:
+        case BorderContainer::MarbleBorder:
+        case BorderContainer::RainBorder:
+        case BorderContainer::CratersBorder:
+        case BorderContainer::DriedBorder:
+        case BorderContainer::PinkBorder:
+        case BorderContainer::StoneBorder:
+        case BorderContainer::ChalkBorder:
+        case BorderContainer::GraniteBorder:
+        case BorderContainer::RockBorder:
+        case BorderContainer::WallBorder:
             d->decorativeFirstColor = color;
             break;
     }
@@ -391,34 +391,34 @@ void BorderTool::slotColorBackgroundChanged(const QColor& color)
 {
     switch (d->borderType->currentIndex())
     {
-        case BorderFilter::SolidBorder:
+        case BorderContainer::SolidBorder:
             d->solidColor = color;
             break;
 
-        case BorderFilter::NiepceBorder:
+        case BorderContainer::NiepceBorder:
             d->niepceLineColor = color;
             break;
 
-        case BorderFilter::BeveledBorder:
+        case BorderContainer::BeveledBorder:
             d->bevelLowerRightColor = color;
             break;
 
-        case BorderFilter::PineBorder:
-        case BorderFilter::WoodBorder:
-        case BorderFilter::PaperBorder:
-        case BorderFilter::ParqueBorder:
-        case BorderFilter::IceBorder:
-        case BorderFilter::LeafBorder:
-        case BorderFilter::MarbleBorder:
-        case BorderFilter::RainBorder:
-        case BorderFilter::CratersBorder:
-        case BorderFilter::DriedBorder:
-        case BorderFilter::PinkBorder:
-        case BorderFilter::StoneBorder:
-        case BorderFilter::ChalkBorder:
-        case BorderFilter::GraniteBorder:
-        case BorderFilter::RockBorder:
-        case BorderFilter::WallBorder:
+        case BorderContainer::PineBorder:
+        case BorderContainer::WoodBorder:
+        case BorderContainer::PaperBorder:
+        case BorderContainer::ParqueBorder:
+        case BorderContainer::IceBorder:
+        case BorderContainer::LeafBorder:
+        case BorderContainer::MarbleBorder:
+        case BorderContainer::RainBorder:
+        case BorderContainer::CratersBorder:
+        case BorderContainer::DriedBorder:
+        case BorderContainer::PinkBorder:
+        case BorderContainer::StoneBorder:
+        case BorderContainer::ChalkBorder:
+        case BorderContainer::GraniteBorder:
+        case BorderContainer::RockBorder:
+        case BorderContainer::WallBorder:
             d->decorativeSecondColor = color;
             break;
     }
@@ -440,42 +440,42 @@ void BorderTool::slotBorderTypeChanged(int borderType)
 
     switch (borderType)
     {
-        case BorderFilter::SolidBorder:
+        case BorderContainer::SolidBorder:
             d->firstColorButton->setColor(d->solidColor);
             d->secondColorButton->setEnabled(false);
             d->labelBackground->setEnabled(false);
             break;
 
-        case BorderFilter::NiepceBorder:
+        case BorderContainer::NiepceBorder:
             d->firstColorButton->setWhatsThis(i18n("Set here the color of the main border."));
             d->secondColorButton->setWhatsThis(i18n("Set here the color of the line."));
             d->firstColorButton->setColor(d->niepceBorderColor);
             d->secondColorButton->setColor(d->niepceLineColor);
             break;
 
-        case BorderFilter::BeveledBorder:
+        case BorderContainer::BeveledBorder:
             d->firstColorButton->setWhatsThis(i18n("Set here the color of the upper left area."));
             d->secondColorButton->setWhatsThis(i18n("Set here the color of the lower right area."));
             d->firstColorButton->setColor(d->bevelUpperLeftColor);
             d->secondColorButton->setColor(d->bevelLowerRightColor);
             break;
 
-        case BorderFilter::PineBorder:
-        case BorderFilter::WoodBorder:
-        case BorderFilter::PaperBorder:
-        case BorderFilter::ParqueBorder:
-        case BorderFilter::IceBorder:
-        case BorderFilter::LeafBorder:
-        case BorderFilter::MarbleBorder:
-        case BorderFilter::RainBorder:
-        case BorderFilter::CratersBorder:
-        case BorderFilter::DriedBorder:
-        case BorderFilter::PinkBorder:
-        case BorderFilter::StoneBorder:
-        case BorderFilter::ChalkBorder:
-        case BorderFilter::GraniteBorder:
-        case BorderFilter::RockBorder:
-        case BorderFilter::WallBorder:
+        case BorderContainer::PineBorder:
+        case BorderContainer::WoodBorder:
+        case BorderContainer::PaperBorder:
+        case BorderContainer::ParqueBorder:
+        case BorderContainer::IceBorder:
+        case BorderContainer::LeafBorder:
+        case BorderContainer::MarbleBorder:
+        case BorderContainer::RainBorder:
+        case BorderContainer::CratersBorder:
+        case BorderContainer::DriedBorder:
+        case BorderContainer::PinkBorder:
+        case BorderContainer::StoneBorder:
+        case BorderContainer::ChalkBorder:
+        case BorderContainer::GraniteBorder:
+        case BorderContainer::RockBorder:
+        case BorderContainer::WallBorder:
             d->firstColorButton->setWhatsThis(i18n("Set here the color of the first line."));
             d->secondColorButton->setWhatsThis(i18n("Set here the color of the second line."));
             d->firstColorButton->setColor(d->decorativeFirstColor);
@@ -496,42 +496,32 @@ void BorderTool::prepareEffect()
     d->preserveAspectRatio->setEnabled(false);
 
     ImageIface* iface = d->previewWidget->imageIface();
-    int orgWidth      = iface->originalWidth();
-    int orgHeight     = iface->originalHeight();
-    int w             = iface->previewWidth();
-    bool sixteenBit   = iface->previewSixteenBit();
     DImg preview      = iface->getPreviewImg();
-
-    int borderType    = d->borderType->currentIndex();
-    float ratio       = (float)w/(float)orgWidth;
+    bool sixteenBit   = iface->previewSixteenBit();
+    int w             = iface->previewWidth();
+    float ratio       = (float)w/(float)iface->originalWidth();
     int borderWidth   = (int)((float)d->borderWidth->value()*ratio);
-    QString border    = getBorderPath( d->borderType->currentIndex() );
 
-    if (d->preserveAspectRatio->isChecked())
-    {
-        setFilter(new BorderFilter(&preview, this, orgWidth, orgHeight,
-                                   border, borderType, d->borderPercent->value()/100.0,
-                                   DColor(d->solidColor, sixteenBit),
-                                   DColor(d->niepceBorderColor, sixteenBit),
-                                   DColor(d->niepceLineColor, sixteenBit),
-                                   DColor(d->bevelUpperLeftColor, sixteenBit),
-                                   DColor(d->bevelLowerRightColor, sixteenBit),
-                                   DColor(d->decorativeFirstColor, sixteenBit),
-                                   DColor(d->decorativeSecondColor, sixteenBit)));
-    }
-    else
-    {
-        setFilter(new BorderFilter(&preview, this, orgWidth, orgHeight,
-                                   border, borderType, borderWidth,
-                                   (int)(20.0*ratio), (int)(20.0*ratio), 3,
-                                   DColor(d->solidColor, sixteenBit),
-                                   DColor(d->niepceBorderColor, sixteenBit),
-                                   DColor(d->niepceLineColor, sixteenBit),
-                                   DColor(d->bevelUpperLeftColor, sixteenBit),
-                                   DColor(d->bevelLowerRightColor, sixteenBit),
-                                   DColor(d->decorativeFirstColor, sixteenBit),
-                                   DColor(d->decorativeSecondColor, sixteenBit)));
-    }
+    BorderContainer settings;
+    settings.preserveAspectRatio   = d->preserveAspectRatio->isChecked();
+    settings.orgWidth              = iface->originalWidth();
+    settings.orgHeight             = iface->originalHeight();
+    settings.borderType            = d->borderType->currentIndex();
+    settings.borderWidth1          = borderWidth;
+    settings.borderWidth2          = (int)(20.0*ratio);
+    settings.borderWidth3          = (int)(20.0*ratio);
+    settings.borderWidth4          = 3;
+    settings.borderPercent         = d->borderPercent->value()/100.0;
+    settings.borderPath            = getBorderPath( d->borderType->currentIndex() );
+    settings.solidColor            = DColor(d->solidColor,            sixteenBit);
+    settings.niepceBorderColor     = DColor(d->niepceBorderColor,     sixteenBit);
+    settings.niepceLineColor       = DColor(d->niepceLineColor,       sixteenBit);
+    settings.bevelUpperLeftColor   = DColor(d->bevelUpperLeftColor,   sixteenBit);
+    settings.bevelLowerRightColor  = DColor(d->bevelLowerRightColor,  sixteenBit);
+    settings.decorativeFirstColor  = DColor(d->decorativeFirstColor,  sixteenBit);
+    settings.decorativeSecondColor = DColor(d->decorativeSecondColor, sixteenBit);
+    
+    setFilter(new BorderFilter(&preview, this, settings));
 }
 
 void BorderTool::prepareFinal()
@@ -543,39 +533,29 @@ void BorderTool::prepareFinal()
     d->secondColorButton->setEnabled(false);
 
     ImageIface iface(0, 0);
-    int borderType    = d->borderType->currentIndex();
-    int borderWidth   = d->borderWidth->value();
-    float borderRatio = d->borderPercent->value()/100.0f;
-    QString border    = getBorderPath( d->borderType->currentIndex() );
-    int orgWidth      = iface.originalWidth();
-    int orgHeight     = iface.originalHeight();
-    bool sixteenBit   = iface.previewSixteenBit();
     DImg* orgImage    = iface.getOriginalImg();
-
-    if (d->preserveAspectRatio->isChecked())
-    {
-        setFilter(new BorderFilter(orgImage, this, orgWidth, orgHeight,
-                                   border, borderType, borderRatio,
-                                   DColor(d->solidColor, sixteenBit),
-                                   DColor(d->niepceBorderColor, sixteenBit),
-                                   DColor(d->niepceLineColor, sixteenBit),
-                                   DColor(d->bevelUpperLeftColor, sixteenBit),
-                                   DColor(d->bevelLowerRightColor, sixteenBit),
-                                   DColor(d->decorativeFirstColor, sixteenBit),
-                                   DColor(d->decorativeSecondColor, sixteenBit)));
-    }
-    else
-    {
-        setFilter(new BorderFilter(orgImage, this, orgWidth, orgHeight,
-                                   border, borderType, borderWidth, 15, 15, 10,
-                                   DColor(d->solidColor, sixteenBit),
-                                   DColor(d->niepceBorderColor, sixteenBit),
-                                   DColor(d->niepceLineColor, sixteenBit),
-                                   DColor(d->bevelUpperLeftColor, sixteenBit),
-                                   DColor(d->bevelLowerRightColor, sixteenBit),
-                                   DColor(d->decorativeFirstColor, sixteenBit),
-                                   DColor(d->decorativeSecondColor, sixteenBit)));
-    }
+    bool sixteenBit   = iface.previewSixteenBit();
+    
+    BorderContainer settings;
+    settings.preserveAspectRatio   = d->preserveAspectRatio->isChecked();
+    settings.orgWidth              = iface.originalWidth();
+    settings.orgHeight             = iface.originalHeight();
+    settings.borderType            = d->borderType->currentIndex();
+    settings.borderWidth1          = d->borderWidth->value();
+    settings.borderWidth2          = 15;
+    settings.borderWidth3          = 15;
+    settings.borderWidth4          = 10;
+    settings.borderPercent         = d->borderPercent->value()/100.0;
+    settings.borderPath            = getBorderPath( d->borderType->currentIndex() );
+    settings.solidColor            = DColor(d->solidColor,            sixteenBit);
+    settings.niepceBorderColor     = DColor(d->niepceBorderColor,     sixteenBit);
+    settings.niepceLineColor       = DColor(d->niepceLineColor,       sixteenBit);
+    settings.bevelUpperLeftColor   = DColor(d->bevelUpperLeftColor,   sixteenBit);
+    settings.bevelLowerRightColor  = DColor(d->bevelLowerRightColor,  sixteenBit);
+    settings.decorativeFirstColor  = DColor(d->decorativeFirstColor,  sixteenBit);
+    settings.decorativeSecondColor = DColor(d->decorativeSecondColor, sixteenBit);
+    
+    setFilter(new BorderFilter(orgImage, this, settings));
 }
 
 void BorderTool::putPreviewData()
@@ -608,67 +588,67 @@ QString BorderTool::getBorderPath(int border)
 
     switch (border)
     {
-       case BorderFilter::PineBorder:
+       case BorderContainer::PineBorder:
           pattern = "pine-pattern";
           break;
 
-       case BorderFilter::WoodBorder:
+       case BorderContainer::WoodBorder:
           pattern = "wood-pattern";
           break;
 
-       case BorderFilter::PaperBorder:
+       case BorderContainer::PaperBorder:
           pattern = "paper-pattern";
           break;
 
-       case BorderFilter::ParqueBorder:
+       case BorderContainer::ParqueBorder:
           pattern = "parque-pattern";
           break;
 
-       case BorderFilter::IceBorder:
+       case BorderContainer::IceBorder:
           pattern = "ice-pattern";
           break;
 
-       case BorderFilter::LeafBorder:
+       case BorderContainer::LeafBorder:
           pattern = "leaf-pattern";
           break;
 
-       case BorderFilter::MarbleBorder:
+       case BorderContainer::MarbleBorder:
           pattern = "marble-pattern";
           break;
 
-       case BorderFilter::RainBorder:
+       case BorderContainer::RainBorder:
           pattern = "rain-pattern";
           break;
 
-       case BorderFilter::CratersBorder:
+       case BorderContainer::CratersBorder:
           pattern = "craters-pattern";
           break;
 
-       case BorderFilter::DriedBorder:
+       case BorderContainer::DriedBorder:
           pattern = "dried-pattern";
           break;
 
-       case BorderFilter::PinkBorder:
+       case BorderContainer::PinkBorder:
           pattern = "pink-pattern";
           break;
 
-       case BorderFilter::StoneBorder:
+       case BorderContainer::StoneBorder:
           pattern = "stone-pattern";
           break;
 
-       case BorderFilter::ChalkBorder:
+       case BorderContainer::ChalkBorder:
           pattern = "chalk-pattern";
           break;
 
-       case BorderFilter::GraniteBorder:
+       case BorderContainer::GraniteBorder:
           pattern = "granit-pattern";
           break;
 
-       case BorderFilter::RockBorder:
+       case BorderContainer::RockBorder:
           pattern = "rock-pattern";
           break;
 
-       case BorderFilter::WallBorder:
+       case BorderContainer::WallBorder:
           pattern = "wall-pattern";
           break;
 
