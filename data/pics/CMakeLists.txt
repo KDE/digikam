@@ -1,4 +1,4 @@
-ADD_SUBDIRECTORY(borderpatterns)
+ADD_SUBDIRECTORY(borderpatterns texturepatterns)
 
 # digiKam files ######################################################
 
