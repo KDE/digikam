@@ -18,7 +18,7 @@ color
   /Convert 16/18 bits        NO                   NO                   DONE
 
 decorate
-  /border                   DONE                  NO                   TODO
+  /border                   DONE                  NO                   DONE
   /inserttext                NO                   NO                    NO
   /texture                  DONE                 DONE                  TODO
   /superimpose               NO                   NO                    NO

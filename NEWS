@@ -29,6 +29,7 @@ BatchQueueManager : New tool to apply Local Contrast (LDR tone mapping).
 BatchQueueManager : New tool to add/remove vignetting.
 BatchQueueManager : New tool to invert image colors.
 BatchQueueManager : New tool to convert color bits depth.
+BatchQueueManager : New tool to add border around images.
 BatchQueueManager : Rotate tool support Free Rotation adjustments.
 BatchQueueManager : It's now possible to Stop and restart a processed queue.
 
