@@ -99,7 +99,7 @@ void FilmGrainFilter::filterImage()
             l                  = randomize(l,sb, local_lum_noise);
             h                  = randomize(h,sb, local_chroma_noise);
             
-            color.setRGB(h, s, l, sb);
+            color.setHSL(h, s, l, sb);
             m_destImage.setPixelColor(x, y, color);
         }
 

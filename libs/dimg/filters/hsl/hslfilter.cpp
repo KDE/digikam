@@ -199,7 +199,7 @@ void HSLFilter::applyHSL(DImg& image)
             color.getHSL(&hue, &sat, &lig);
 
             // convert HSL to RGB
-            color.setRGB(d->htransfer16[hue], d->stransfer16[sat], d->ltransfer16[lig], sixteenBit);
+            color.setHSL(d->htransfer16[hue], d->stransfer16[sat], d->ltransfer16[lig], sixteenBit);
 
             data[2] = color.red();
             data[1] = color.green();
@@ -224,7 +224,7 @@ void HSLFilter::applyHSL(DImg& image)
             color.getHSL(&hue, &sat, &lig);
 
             // convert HSL to RGB
-            color.setRGB(d->htransfer[hue], d->stransfer[sat], d->ltransfer[lig], sixteenBit);
+            color.setHSL(d->htransfer[hue], d->stransfer[sat], d->ltransfer[lig], sixteenBit);
 
             data[2] = color.red();
             data[1] = color.green();

@@ -195,7 +195,7 @@ void DColor::getHSL(int* h, int* s, int* l) const
     *l = lround(lig * range);
 }
 
-void DColor::setRGB(int h, int s, int l, bool sixteenBit)
+void DColor::setHSL(int h, int s, int l, bool sixteenBit)
 {
     double hue;
     double lightness;
@@ -284,5 +284,30 @@ void DColor::setRGB(int h, int s, int l, bool sixteenBit)
     else
         m_alpha = 255;
 }
+
+void DColor::getYCbCr(int* y, int* cb, int* cr)
+{
+    int offset = (m_sixteenBit ? 32568 : 128);
+    *y         = lround(+0.2990 * m_red + (+0.5870) * m_green + (+0.1140) * m_blue);
+    *cb        = lround(-0.1687 * m_red + (-0.3313) * m_green + (+0.5000) * m_blue + offset);
+    *cr        = lround(+0.5000 * m_red - (+0.4187) * m_green - (+0.0813) * m_blue + offset);
+}
+
+void DColor::setYCbCr(int y, int cb, int cr, bool sixteenBit)
+{
+    int offset = (sixteenBit ? 32568 : 128);
+    m_red      = lround(y + 1.40200 * (cr - offset));
+    m_green    = lround(y - 0.34414 * (cb - offset) - 0.71414 * (cr - offset));
+    m_blue     = lround(y + 1.77200 * (cb - offset));
+
+    m_sixteenBit = sixteenBit;
+    
+    // Fully opaque color.
+    if (m_sixteenBit)
+        m_alpha = 65535;
+    else
+        m_alpha = 255;
+}
+
 
 }  // namespace Digikam

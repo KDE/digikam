@@ -118,8 +118,22 @@ public:
         sixteenBit determines both how the HSL values are interpreted
         and the sixteenBit value of this color after this operation.
     */
-    void setRGB(int h, int s, int l, bool sixteenBit);
+    void setHSL(int h, int s, int l, bool sixteenBit);
 
+    /** Return the current RGB color values of this color
+        in the YCrCb color space.
+        Alpha is ignored for the conversion.
+    */
+    void getYCbCr(int* y, int* cb, int* cr);
+
+    /** Set the RGB color values of this color
+        to the given YCrCb values converted to RGB.
+        Alpha is set to be fully opaque.
+        sixteenBit determines both how the YCrCb values are interpreted
+        and the sixteenBit value of this color after this operation.
+    */
+    void setYCbCr(int y, int cb, int cr, bool sixteenBit);
+    
 private:
 
     int  m_red;
