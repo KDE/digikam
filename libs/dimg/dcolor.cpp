@@ -287,16 +287,23 @@ void DColor::setHSL(int h, int s, int l, bool sixteenBit)
 
 void DColor::getYCbCr(double* y, double* cb, double* cr)
 {
-    *y            =  0.2990 * m_red + 0.5870 * m_green + 0.1140 * m_blue;
-    *cb           = -0.1687 * m_red - 0.3313 * m_green + 0.5000 * m_blue + 0.5;
-    *cr           =  0.5000 * m_red - 0.4187 * m_green - 0.0813 * m_blue + 0.5;
+    double r = m_red   / (m_sixteenBit ? 65535.0 : 255.0);
+    double g = m_green / (m_sixteenBit ? 65535.0 : 255.0);
+    double b = m_blue  / (m_sixteenBit ? 65535.0 : 255.0);
+    *y       =  0.2990 * r + 0.5870 * g + 0.1140 * b;
+    *cb      = -0.1687 * r - 0.3313 * g + 0.5000 * b + 0.5;
+    *cr      =  0.5000 * r - 0.4187 * g - 0.0813 * b + 0.5;
 }
 
 void DColor::setYCbCr(double y, double cb, double cr, bool sixteenBit)
 {
-    m_red         = lround(y + 1.40200 * (cr - 0.5));
-    m_green       = lround(y - 0.34414 * (cb - 0.5) - 0.71414 * (cr - 0.5));
-    m_blue        = lround(y + 1.77200 * (cb - 0.5));
+    double r = y + 1.40200 * (cr - 0.5);
+    double g = y - 0.34414 * (cb - 0.5) - 0.71414 * (cr - 0.5);
+    double b = y + 1.77200 * (cb - 0.5);
+    
+    m_red    = lround(r * (sixteenBit ? 65535.0 : 255.0));
+    m_green  = lround(g * (sixteenBit ? 65535.0 : 255.0));
+    m_blue   = lround(b * (sixteenBit ? 65535.0 : 255.0));
 
     m_sixteenBit = sixteenBit;
     
