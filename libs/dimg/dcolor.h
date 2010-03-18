@@ -124,7 +124,7 @@ public:
         in the YCrCb color space.
         Alpha is ignored for the conversion.
     */
-    void getYCbCr(int* y, int* cb, int* cr);
+    void getYCbCr(double* y, double* cb, double* cr);
 
     /** Set the RGB color values of this color
         to the given YCrCb values converted to RGB.
@@ -132,7 +132,7 @@ public:
         sixteenBit determines both how the YCrCb values are interpreted
         and the sixteenBit value of this color after this operation.
     */
-    void setYCbCr(int y, int cb, int cr, bool sixteenBit);
+    void setYCbCr(double y, double cb, double cr, bool sixteenBit);
     
 private:
 

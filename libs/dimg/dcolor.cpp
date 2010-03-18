@@ -285,20 +285,18 @@ void DColor::setHSL(int h, int s, int l, bool sixteenBit)
         m_alpha = 255;
 }
 
-void DColor::getYCbCr(int* y, int* cb, int* cr)
+void DColor::getYCbCr(double* y, double* cb, double* cr)
 {
-    double offset = (m_sixteenBit ? 32568.0 : 128.0);
-    *y            = lround( 0.2990 * m_red + 0.5870 * m_green + 0.1140 * m_blue);
-    *cb           = lround(-0.1687 * m_red - 0.3313 * m_green + 0.5000 * m_blue + offset);
-    *cr           = lround( 0.5000 * m_red - 0.4187 * m_green - 0.0813 * m_blue + offset);
+    *y            =  0.2990 * m_red + 0.5870 * m_green + 0.1140 * m_blue;
+    *cb           = -0.1687 * m_red - 0.3313 * m_green + 0.5000 * m_blue + 0.5;
+    *cr           =  0.5000 * m_red - 0.4187 * m_green - 0.0813 * m_blue + 0.5;
 }
 
-void DColor::setYCbCr(int y, int cb, int cr, bool sixteenBit)
+void DColor::setYCbCr(double y, double cb, double cr, bool sixteenBit)
 {
-    double offset = (sixteenBit ? 32568.0 : 128.0);
-    m_red         = lround(y + 1.40200 * (cr - offset));
-    m_green       = lround(y - 0.34414 * (cb - offset) - 0.71414 * (cr - offset));
-    m_blue        = lround(y + 1.77200 * (cb - offset));
+    m_red         = lround(y + 1.40200 * (cr - 0.5));
+    m_green       = lround(y - 0.34414 * (cb - 0.5) - 0.71414 * (cr - 0.5));
+    m_blue        = lround(y + 1.77200 * (cb - 0.5));
 
     m_sixteenBit = sixteenBit;
     
@@ -308,6 +306,5 @@ void DColor::setYCbCr(int y, int cb, int cr, bool sixteenBit)
     else
         m_alpha = 255;
 }
-
 
 }  // namespace Digikam
