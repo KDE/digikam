@@ -327,7 +327,6 @@ void NRFilter::hatTransform (float* temp, float* base, int st, int size, int sc)
 
 void NRFilter::srgb2ycbcr(float** fimg, int size)
 {
-    /* using JPEG conversion here - expecting all channels to be in [0:255] range */
     float y, cb, cr;
 
     for (int i = 0; i < size; i++)
@@ -343,7 +342,6 @@ void NRFilter::srgb2ycbcr(float** fimg, int size)
 
 void NRFilter::ycbcr2srgb(float** fimg, int size)
 {
-    /* using JPEG conversion here - expecting all channels to be in [0:255] range */
     float r, g, b;
 
     for (int i = 0; i < size; i++)
