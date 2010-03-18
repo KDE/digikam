@@ -127,8 +127,10 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 090 ==> 230358 : Selected album does not match containing items.
 091 ==> 231048 : Monochrome tool shows plain grey preview.
 092 ==> 222774 : Many (but not all) tags have been lost after multiple albums facility added.
-093 ==> 
-
+093 ==> 226504 : when moving assigned tag in the keywords hierachy it becomes unassigned.
+094 ==> 220415 : Clicking the + in the Album tree expands and just collapses subdirs again.
+095 ==> 207881 : Album order differs in import dialog.
+096 ==>
 
 
 
