@@ -53,10 +53,10 @@ public:
     float*      fimg[3];
     float*      buffer[3];
 
-    NRContainer settings;  
+    NRContainer settings;
 };
-  
-NRFilter::NRFilter(DImg *orgImage, QObject *parent, const NRContainer& settings)
+
+NRFilter::NRFilter(DImg* orgImage, QObject* parent, const NRContainer& settings)
         : DImgThreadedFilter(orgImage, parent, "NRFilter"),
           d(new NRFilterPriv)
 {
@@ -185,7 +185,7 @@ void NRFilter::filterImage()
 void NRFilter::waveletDenoise(float* fimg[3], unsigned int width, unsigned int height,
                               float threshold, double softness)
 {
-    float        *temp=0, thold;
+    float*       temp=0, thold;
     unsigned int i, lev, lpass, hpass, size, col, row;
     double       stdev[5];
     unsigned int samples[5];
