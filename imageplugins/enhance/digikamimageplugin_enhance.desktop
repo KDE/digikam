@@ -7,6 +7,7 @@ Name[pt_BR]=ImagePlugin_Enhance
 Name[sv]=Förbättringsinsticksprogram
 Name[uk]=ImagePlugin_Enhance
 Name[x-test]=xxImagePlugin_Enhancexx
+Name[zh_CN]=ImagePlugin_Enhance
 
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
@@ -19,6 +20,7 @@ Comment[pt_BR]=Plug-in do digiKam para melhorar as fotografias
 Comment[sv]=Digikam insticksprogram för att förbättra ett fotografi
 Comment[uk]=Додаток покращення якості фотографії для digiKam
 Comment[x-test]=xxdigiKam plugin to enhance photographxx
+Comment[zh_CN]=digiKam 优化照片插件
 
 X-KDE-Library=digikamimageplugin_enhance
 author=Gilles Caulier, caulier dot gilles at gmail dot com

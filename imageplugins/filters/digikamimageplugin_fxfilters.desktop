@@ -8,6 +8,7 @@ Name[pt_BR]=ImagePlugin_FxFilters
 Name[sv]=Bildinsticksprogram för effektfilter
 Name[uk]=ImagePlugin_FxFilters
 Name[x-test]=xxImagePlugin_FxFiltersxx
+Name[zh_CN]=ImagePlugin_FxFilters
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
@@ -20,6 +21,7 @@ Comment[pt_BR]=Plug-in do digiKam de filtros de efeitos especiais
 Comment[sv]=Digikam insticksprogram med specialeffektfilter
 Comment[uk]=Додаток фільтрів спеціальних ефектів digiKam
 Comment[x-test]=xxSpecial effect filters plugin for digiKamxx
+Comment[zh_CN]=digiKam 特效滤镜插件
 
 X-KDE-Library=digikamimageplugin_fxfilters
 author=Caulier Gilles, caulier dot gilles at gmail dot com

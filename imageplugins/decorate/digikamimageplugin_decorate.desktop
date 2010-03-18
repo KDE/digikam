@@ -8,6 +8,7 @@ Name[pt_BR]=ImagePlugin_Decorate
 Name[sv]=Bildinsticksprogram för dekoration
 Name[uk]=ImagePlugin_Decorate
 Name[x-test]=xxImagePlugin_Decoratexx
+Name[zh_CN]=ImagePlugin_Decorate
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
@@ -20,6 +21,7 @@ Comment[pt_BR]=Uma ferramenta para decorar imagens
 Comment[sv]=Ett verktyg för att dekorera bilder
 Comment[uk]=Інструмент для декорування зображень
 Comment[x-test]=xxA tool to decorate imagexx
+Comment[zh_CN]=一个装饰图像的工具
 
 X-KDE-Library=digikamimageplugin_decorate
 author=Gilles Caulier, caulier dot gilles at gmail dot com
