@@ -68,12 +68,14 @@ void FilmGrainFilter::filterImage()
     DColor color;
     int    h, s, l;
     int    progress;
-
-    int  width        = m_orgImage.width();
-    int  height       = m_orgImage.height();
-    bool sb           = m_orgImage.sixteenBit();
-    int  lum_noise    = ((m_settings.lum_sensibility   +200) / 1000) * 3 * (sb ? 256 : 1);
-    int  chroma_noise = ((m_settings.chroma_sensibility+200) / 1000) * 3 * (sb ? 256 : 1);
+    double lightness, hue;
+    int    local_lum_noise, local_chroma_noise;  
+    
+    int    width        = m_orgImage.width();
+    int    height       = m_orgImage.height();
+    bool   sb           = m_orgImage.sixteenBit();
+    int    lum_noise    = ((m_settings.lum_sensibility   +200) / 1000) * 3 * (sb ? 256 : 1);
+    int    chroma_noise = ((m_settings.chroma_sensibility+200) / 1000) * 3 * (sb ? 256 : 1);
     
     qsrand(1); // noise will always be the same
 
@@ -81,9 +83,6 @@ void FilmGrainFilter::filterImage()
     {
         for (int y = 0; !m_cancel && y < height; ++y)
         {
-            double lightness, hue;
-            int    local_lum_noise, local_chroma_noise;
-            
             color              = m_orgImage.getPixelColor(x, y);
             color.getHSL(&h, &s, &l);
             
