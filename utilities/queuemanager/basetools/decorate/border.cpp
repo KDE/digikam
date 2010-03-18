@@ -3,10 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2009-02-28
- * Description : batch tool to add visible watermark.
+ * Date        : 2010-03-17
+ * Description : batch tool to add border.
  *
- * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,289 +21,149 @@
  *
  * ============================================================ */
 
-#include "watermark.moc"
-
-// C++ includes
-
-#include <cmath>
+#include "border.moc"
 
 // Qt includes
 
-#include <QFontMetrics>
-#include <QLabel>
-#include <QPainter>
-#include <QPen>
-#include <QPoint>
-#include <QRect>
 #include <QWidget>
 
 // KDE includes
 
-#include <kcolorbutton.h>
-#include <kcombobox.h>
-#include <kdialog.h>
-#include <kfontcombobox.h>
 #include <kiconloader.h>
-#include <klineedit.h>
 #include <klocale.h>
-#include <knuminput.h>
-#include <kvbox.h>
+#include <kdebug.h>
 
 // Local includes
 
 #include "dimg.h"
-#include "blurfilter.h"
+#include "borderfilter.h"
+#include "bordersettings.h"
 
 namespace Digikam
 {
 
-class WaterMarkPriv
+Border::Border(QObject* parent)
+      : BatchTool("Border", DecorateTool, parent)
 {
+    setToolTitle(i18n("Add Border"));
+    setToolDescription(i18n("A tool to add a border around images"));
+    setToolIcon(KIcon(SmallIcon("bordertool")));
 
-public:
+    QWidget* box   = new QWidget;
+    m_settingsView = new BorderSettings(box);
+    m_settingsView->resetToDefault();
+    setSettingsWidget(box);
 
-    enum WaterMarkPositon
-    {
-        TopLeft=0,
-        TopRight,
-        BottomLeft,
-        BottomRight
-    };
-
-public:
-
-    WaterMarkPriv()
-    {
-        textEdit          = 0;
-        stringLength      = 0;
-        fontChooserWidget = 0;
-        fontColorButton   = 0;
-        comboBox          = 0;
-    }
-
-    KLineEdit*     textEdit;
-
-    KIntNumInput*  stringLength;
-
-    KFontComboBox* fontChooserWidget;
-
-    KColorButton*  fontColorButton;
-
-    KComboBox*     comboBox;
-};
-
-WaterMark::WaterMark(QObject* parent)
-         : BatchTool("WaterMark", DecorateTool, parent),
-           d(new WaterMarkPriv)
-{
-    setToolTitle(i18n("Add Watermark"));
-    setToolDescription(i18n("A tool to add a visible watermark"));
-    setToolIcon(KIcon(SmallIcon("insert-text")));
-
-    KVBox* vbox = new KVBox;
-    vbox->setSpacing(KDialog::spacingHint());
-    vbox->setMargin(0);
-
-    QLabel* label = new QLabel(vbox);
-    d->textEdit   = new KLineEdit(vbox);
-    d->textEdit->setClearButtonShown(true);
-    d->textEdit->setClickMessage(i18n("Enter your watermark string here."));
-    label->setText(i18n("Text:"));
-
-    QLabel* label2       = new QLabel(vbox);
-    d->fontChooserWidget = new KFontComboBox(vbox);
-    d->fontChooserWidget->setWhatsThis( i18n("Here you can choose the font to be used."));
-    label2->setText(i18n("Font:"));
-
-    QLabel* label3     = new QLabel(vbox);
-    d->fontColorButton = new KColorButton(Qt::black, vbox);
-    d->fontColorButton->setWhatsThis(i18n("Set here the font color to use."));
-    label3->setText(i18n("Font Color:"));
-
-    QLabel* label4 = new QLabel(vbox);
-    d->comboBox    = new KComboBox(vbox);
-    d->comboBox->insertItem(WaterMarkPriv::TopLeft,     i18n("Top left"));
-    d->comboBox->insertItem(WaterMarkPriv::TopRight,    i18n("Top right"));
-    d->comboBox->insertItem(WaterMarkPriv::BottomLeft,  i18n("Bottom left"));
-    d->comboBox->insertItem(WaterMarkPriv::BottomRight, i18n("Bottom right"));
-    label4->setText(i18n("Corner:"));
-
-    QLabel* label5  = new QLabel(vbox);
-    d->stringLength = new KIntNumInput(vbox);
-    d->stringLength->setRange(10, 90);
-    d->stringLength->setValue(25);
-    d->stringLength->setSliderEnabled(true);
-    d->stringLength->setWhatsThis(i18n("Enter the string length as a percent of the image width here."));
-    label5->setText(i18n("length (%):"));
-
-    QLabel* space = new QLabel(vbox);
-    vbox->setStretchFactor(space, 10);
-
-    setSettingsWidget(vbox);
-
-    connect(d->comboBox, SIGNAL(activated(int)),
-            this, SLOT(slotSettingsChanged()));
-
-    connect(d->fontChooserWidget, SIGNAL(currentFontChanged(const QFont&)),
-            this, SLOT(slotSettingsChanged()));
-
-    connect(d->fontColorButton, SIGNAL(changed(const QColor&)),
-            this, SLOT(slotSettingsChanged()));
-
-    connect(d->textEdit, SIGNAL(textChanged(const QString&)),
-            this, SLOT(slotSettingsChanged()));
-
-    connect(d->stringLength, SIGNAL(valueChanged(int)),
+    connect(m_settingsView, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotSettingsChanged()));
 }
 
-WaterMark::~WaterMark()
+Border::~Border()
 {
-    delete d;
 }
 
-BatchToolSettings WaterMark::defaultSettings()
+BatchToolSettings Border::defaultSettings()
 {
-    BatchToolSettings settings;
-    settings.insert("Text",   QString());
-    settings.insert("Font",   QFont());
-    settings.insert("Color",  Qt::black);
-    settings.insert("Corner", WaterMarkPriv::BottomRight);
-    settings.insert("Length", 25);
-    return settings;
+    BatchToolSettings prm;
+    BorderContainer defaultPrm = m_settingsView->defaultSettings();
+
+    prm.insert("preserveAspectRatio",   defaultPrm.preserveAspectRatio);
+    prm.insert("orgWidth",              defaultPrm.orgWidth);
+    prm.insert("orgHeight",             defaultPrm.orgHeight);
+    prm.insert("borderType",            defaultPrm.borderType);
+    prm.insert("borderWidth1",          defaultPrm.borderWidth1);
+    prm.insert("borderWidth2",          defaultPrm.borderWidth2);
+    prm.insert("borderWidth3",          defaultPrm.borderWidth3);
+    prm.insert("borderWidth4",          defaultPrm.borderWidth4);
+    prm.insert("borderPercent",         defaultPrm.borderPercent);
+    prm.insert("borderPath",            defaultPrm.borderPath);
+    prm.insert("solidColor",            defaultPrm.solidColor);
+    prm.insert("niepceBorderColor",     defaultPrm.niepceBorderColor);
+    prm.insert("niepceLineColor",       defaultPrm.niepceLineColor);
+    prm.insert("bevelUpperLeftColor",   defaultPrm.bevelUpperLeftColor);
+    prm.insert("bevelLowerRightColor",  defaultPrm.bevelLowerRightColor);
+    prm.insert("decorativeFirstColor",  defaultPrm.decorativeFirstColor);
+    prm.insert("decorativeSecondColor", defaultPrm.decorativeSecondColor);
+
+    return prm;
 }
 
-void WaterMark::slotAssignSettings2Widget()
+void Border::slotAssignSettings2Widget()
 {
-    d->textEdit->setText(settings()["Text"].toString());
-    d->fontChooserWidget->setFont(settings()["Font"].toString());
-    d->fontColorButton->setColor(settings()["Color"].toString());
-    d->comboBox->setCurrentIndex(settings()["Corner"].toInt());
-    d->stringLength->setValue(settings()["Length"].toInt());
+    BorderContainer prm;
+
+    prm.preserveAspectRatio   = settings()["preserveAspectRatio"].toBool();
+    prm.borderType            = settings()["borderType"].toInt();
+    prm.borderWidth1          = settings()["borderWidth1"].toInt();
+    prm.borderWidth2          = settings()["borderWidth2"].toInt();
+    prm.borderWidth3          = settings()["borderWidth3"].toInt();
+    prm.borderWidth4          = settings()["borderWidth4"].toInt();
+    prm.borderPercent         = settings()["borderPercent"].toDouble();
+    prm.borderPath            = settings()["borderPath"].toString();
+    prm.solidColor            = settings()["solidColor"].value<QColor>();
+    prm.niepceBorderColor     = settings()["niepceBorderColor"].value<QColor>();
+    prm.niepceLineColor       = settings()["niepceLineColor"].value<QColor>();
+    prm.bevelUpperLeftColor   = settings()["bevelUpperLeftColor"].value<QColor>();
+    prm.bevelLowerRightColor  = settings()["bevelLowerRightColor"].value<QColor>();
+    prm.decorativeFirstColor  = settings()["decorativeFirstColor"].value<QColor>();
+    prm.decorativeSecondColor = settings()["decorativeSecondColor"].value<QColor>();
+
+    m_settingsView->setSettings(prm);
 }
 
-void WaterMark::slotSettingsChanged()
+void Border::slotSettingsChanged()
 {
-    BatchToolSettings settings;
-    settings.insert("Text",   d->textEdit->text());
-    settings.insert("Font",   d->fontChooserWidget->currentFont());
-    settings.insert("Color",  d->fontColorButton->color());
-    settings.insert("Corner", (int)d->comboBox->currentIndex());
-    settings.insert("Length", (int)d->stringLength->value());
-    BatchTool::slotSettingsChanged(settings);
+    BatchToolSettings prm;
+    BorderContainer currentPrm = m_settingsView->settings();
+
+    prm.insert("preserveAspectRatio",   currentPrm.preserveAspectRatio);
+    prm.insert("borderType",            currentPrm.borderType);
+    prm.insert("borderWidth1",          currentPrm.borderWidth1);
+    prm.insert("borderWidth2",          currentPrm.borderWidth2);
+    prm.insert("borderWidth3",          currentPrm.borderWidth3);
+    prm.insert("borderWidth4",          currentPrm.borderWidth4);
+    prm.insert("borderPercent",         currentPrm.borderPercent);
+    prm.insert("borderPath",            currentPrm.borderPath);
+    prm.insert("solidColor",            currentPrm.solidColor);
+    prm.insert("niepceBorderColor",     currentPrm.niepceBorderColor);
+    prm.insert("niepceLineColor",       currentPrm.niepceLineColor);
+    prm.insert("bevelUpperLeftColor",   currentPrm.bevelUpperLeftColor);
+    prm.insert("bevelLowerRightColor",  currentPrm.bevelLowerRightColor);
+    prm.insert("decorativeFirstColor",  currentPrm.decorativeFirstColor);
+    prm.insert("decorativeSecondColor", currentPrm.decorativeSecondColor);
+
+    BatchTool::slotSettingsChanged(prm);
 }
 
-bool WaterMark::toolOperations()
+bool Border::toolOperations()
 {
     if (!loadToDImg()) return false;
 
-    const int radius = 10;
-    const int margin = 5;   // Relative of image dimenssions (percents)
-    QString text     = settings()["Text"].toString();
-    QFont font       = settings()["Font"].toString();
-    QColor color     = settings()["Color"].toString();
-    int corner       = settings()["Corner"].toInt();
-    int length       = settings()["Length"].toInt();
-    int alignMode;
+    BorderContainer prm;
+    prm.preserveAspectRatio   = settings()["preserveAspectRatio"].toBool();
+    prm.borderType            = settings()["borderType"].toInt();
+    prm.borderWidth1          = settings()["borderWidth1"].toInt();
+    prm.borderWidth2          = settings()["borderWidth2"].toInt();
+    prm.borderWidth3          = settings()["borderWidth3"].toInt();
+    prm.borderWidth4          = settings()["borderWidth4"].toInt();
+    prm.borderPercent         = settings()["borderPercent"].toDouble();
+    prm.borderPath            = settings()["borderPath"].toString();
+    prm.solidColor            = settings()["solidColor"].value<QColor>();
+    prm.niepceBorderColor     = settings()["niepceBorderColor"].value<QColor>();
+    prm.niepceLineColor       = settings()["niepceLineColor"].value<QColor>();
+    prm.bevelUpperLeftColor   = settings()["bevelUpperLeftColor"].value<QColor>();
+    prm.bevelLowerRightColor  = settings()["bevelLowerRightColor"].value<QColor>();
+    prm.decorativeFirstColor  = settings()["decorativeFirstColor"].value<QColor>();
+    prm.decorativeSecondColor = settings()["decorativeSecondColor"].value<QColor>();
+    prm.orgWidth              = image().width();
+    prm.orgHeight             = image().height();
 
-    if (text.isEmpty()) return false;
-
-    int size = queryFontSize(text, font, length);
-    if (size == 0) return false;
-
-    font.setPointSizeF(size);
-    QFontMetrics fontMt(font);
-    QRect fontRect = fontMt.boundingRect(0, 0, image().width(), image().height(), 0, text);
-    int mrgW       = lround(image().width()  * (margin / 100.0));
-    int mrgH       = lround(image().height() * (margin / 100.0));
-
-    switch(corner)
-    {
-        case WaterMarkPriv::TopLeft:
-            fontRect.moveTopLeft(QPoint(mrgW, mrgH));
-            alignMode = Qt::AlignLeft;
-            break;
-        case WaterMarkPriv::TopRight:
-            fontRect.moveTopRight(QPoint(image().width()-mrgW, mrgH));
-            alignMode = Qt::AlignRight;
-            break;
-        case WaterMarkPriv::BottomLeft:
-            fontRect.moveBottomLeft(QPoint(mrgW, image().height()-mrgH));
-            alignMode = Qt::AlignLeft;
-            break;
-        default :    // BottomRight
-            fontRect.moveBottomRight(QPoint(image().width()-mrgW, image().height()-mrgH));
-            alignMode = Qt::AlignRight;
-            break;
-    }
-
-    DColorComposer *composer = DColorComposer::getComposer(DColorComposer::PorterDuffNone);
-
-    // Add a transparent layer.
-    QRect backgroundRect(fontRect.x()-radius, fontRect.y()-radius,
-                         fontRect.width()+2*radius, fontRect.height()+2*radius);
-    DImg backgroundLayer(backgroundRect.width(), backgroundRect.height(), image().sixteenBit(), true);
-    DColor transparent(QColor(0, 0, 0));
-    transparent.setAlpha(0);
-    if (image().sixteenBit()) transparent.convertToSixteenBit();
-    backgroundLayer.fill(transparent);
-
-    DImg grayTransLayer(fontRect.width(), fontRect.height(), image().sixteenBit(), true);
-    DColor grayTrans(QColor(0xCC, 0xCC, 0xCC));
-    grayTrans.setAlpha(0xCC);
-    if (image().sixteenBit()) grayTrans.convertToSixteenBit();
-    grayTransLayer.fill(grayTrans);
-
-    backgroundLayer.bitBlendImage(composer, &grayTransLayer, 0, 0,
-                                  grayTransLayer.width(), grayTransLayer.height(),
-                                  radius, radius);
-
-    BlurFilter blur(&backgroundLayer, 0L, radius);
-    blur.startFilterDirectly();
-    backgroundLayer.putImageData(blur.getTargetImage().bits());
-
-    image().bitBlendImage(composer, &backgroundLayer, 0, 0,
-                          backgroundLayer.width(), backgroundLayer.height(),
-                          backgroundRect.x(), backgroundRect.y());
-
-    // Draw text
-    QImage img = image().copyQImage(fontRect);
-    QPainter p(&img);
-    p.setPen(QPen(color, 1));
-    p.setFont(font);
-    p.save();
-    p.drawText(0, 0, fontRect.width(), fontRect.height(), alignMode, text);
-    p.restore();
-    p.end();
-
-    DImg textDrawn(img);
-
-    // convert to 16 bit if needed
-    textDrawn.convertToDepthOfImage(&image());
-
-    // now compose to original: only pixels affected by drawing text and border are changed, not whole area
-    image().bitBlendImage(composer, &textDrawn, 0, 0, textDrawn.width(), textDrawn.height(),
-                          fontRect.x(), fontRect.y());
-
-    delete composer;
+    BorderFilter bd(&image(), 0L, prm);
+    bd.startFilterDirectly();
+    DImg trg = bd.getTargetImage();
+    image().putImageData(trg.width(), trg.height(), trg.sixteenBit(), trg.hasAlpha(), trg.bits());
 
     return (savefromDImg());
-}
-
-int WaterMark::queryFontSize(const QString& text, const QFont& font, int length)
-{
-    // Find font size using relative length compared to image width.
-    QFont fnt = font;
-    QRect fontRect;
-    for (int i = 1 ; i <= 1000 ; ++i)
-    {
-        fnt.setPointSizeF(i);
-        QFontMetrics fontMt(fnt);
-        fontRect = fontMt.boundingRect(0, 0, image().width(), image().height(), 0, text);
-        if (fontRect.width() > lround((image().width() * length)/100.0))
-            return (i-1);
-    }
-    return 0;
 }
 
 }  // namespace Digikam

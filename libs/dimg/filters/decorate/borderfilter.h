@@ -70,7 +70,7 @@ public:
         RockBorder,
         WallBorder
     };
-    
+
 public:
 
     BorderContainer()
@@ -84,13 +84,13 @@ public:
         borderWidth2          = 0;
         borderWidth3          = 0;
         borderWidth4          = 0;
-        solidColor            = DColor(QColor(0, 0, 0));
-        niepceBorderColor     = DColor(QColor(255, 255, 255));
-        niepceLineColor       = DColor(QColor(0, 0, 0));
-        bevelUpperLeftColor   = DColor(QColor(192, 192, 192));
-        bevelLowerRightColor  = DColor(QColor(128, 128, 128));
-        decorativeFirstColor  = DColor(QColor(0, 0, 0));
-        decorativeSecondColor = DColor(QColor(0, 0, 0));
+        solidColor            = QColor(0, 0, 0);
+        niepceBorderColor     = QColor(255, 255, 255);
+        niepceLineColor       = QColor(0, 0, 0);
+        bevelUpperLeftColor   = QColor(192, 192, 192);
+        bevelLowerRightColor  = QColor(128, 128, 128);
+        decorativeFirstColor  = QColor(0, 0, 0);
+        decorativeSecondColor = QColor(0, 0, 0);
     };
 
     ~BorderContainer(){};
@@ -109,17 +109,17 @@ public:
     int     borderWidth3;
     int     borderWidth4;
 
-    float   borderPercent;
-    
+    double  borderPercent;
+
     QString borderPath;
 
-    DColor  solidColor;
-    DColor  niepceBorderColor;
-    DColor  niepceLineColor;
-    DColor  bevelUpperLeftColor;
-    DColor  bevelLowerRightColor;
-    DColor  decorativeFirstColor;
-    DColor  decorativeSecondColor;
+    QColor  solidColor;
+    QColor  niepceBorderColor;
+    QColor  niepceLineColor;
+    QColor  bevelUpperLeftColor;
+    QColor  bevelLowerRightColor;
+    QColor  decorativeFirstColor;
+    QColor  decorativeSecondColor;
 };
 
 class DIGIKAM_EXPORT BorderFilter : public DImgThreadedFilter
@@ -127,7 +127,7 @@ class DIGIKAM_EXPORT BorderFilter : public DImgThreadedFilter
 
 public:
 
-    /** Constructor using settings to preserve aspect ratio of image. 
+    /** Constructor using settings to preserve aspect ratio of image.
      */
     explicit BorderFilter(DImg* orgImage, QObject* parent=0, const BorderContainer& settings = BorderContainer());
     virtual ~BorderFilter();

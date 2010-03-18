@@ -117,7 +117,7 @@ public:
     QColor              niepceBorderColor;
     QColor              niepceLineColor;
     QColor              solidColor;
-    
+
     KColorButton*       firstColorButton;
     KColorButton*       secondColorButton;
 
@@ -239,7 +239,7 @@ BorderSettings::~BorderSettings()
 BorderContainer BorderSettings::settings() const
 {
     BorderContainer prm;
-    
+
     prm.preserveAspectRatio   = d->preserveAspectRatio->isChecked();
     prm.borderType            = d->borderType->currentIndex();
     prm.borderWidth1          = d->borderWidth->value();
@@ -248,14 +248,14 @@ BorderContainer BorderSettings::settings() const
     prm.borderWidth4          = 10;
     prm.borderPercent         = d->borderPercent->value()/100.0;
     prm.borderPath            = getBorderPath( d->borderType->currentIndex() );
-    prm.solidColor            = DColor(d->solidColor);
-    prm.niepceBorderColor     = DColor(d->niepceBorderColor);
-    prm.niepceLineColor       = DColor(d->niepceLineColor);
-    prm.bevelUpperLeftColor   = DColor(d->bevelUpperLeftColor);
-    prm.bevelLowerRightColor  = DColor(d->bevelLowerRightColor);
-    prm.decorativeFirstColor  = DColor(d->decorativeFirstColor);
-    prm.decorativeSecondColor = DColor(d->decorativeSecondColor);
-    
+    prm.solidColor            = d->solidColor;
+    prm.niepceBorderColor     = d->niepceBorderColor;
+    prm.niepceLineColor       = d->niepceLineColor;
+    prm.bevelUpperLeftColor   = d->bevelUpperLeftColor;
+    prm.bevelLowerRightColor  = d->bevelLowerRightColor;
+    prm.decorativeFirstColor  = d->decorativeFirstColor;
+    prm.decorativeSecondColor = d->decorativeSecondColor;
+
     return prm;
 }
 
@@ -268,16 +268,16 @@ void BorderSettings::setSettings(const BorderContainer& settings)
     d->borderWidth->setValue(settings.borderWidth1);
     d->borderPercent->setValue(settings.borderPercent * 100.0);
 
-    d->solidColor            = settings.solidColor.getQColor();
-    d->niepceBorderColor     = settings.niepceBorderColor.getQColor();
-    d->niepceLineColor       = settings.niepceLineColor.getQColor();
-    d->bevelUpperLeftColor   = settings.bevelUpperLeftColor.getQColor();
-    d->bevelLowerRightColor  = settings.bevelLowerRightColor.getQColor();
-    d->decorativeFirstColor  = settings.decorativeFirstColor.getQColor();
-    d->decorativeSecondColor = settings.decorativeSecondColor.getQColor();
-    
+    d->solidColor            = settings.solidColor;
+    d->niepceBorderColor     = settings.niepceBorderColor;
+    d->niepceLineColor       = settings.niepceLineColor;
+    d->bevelUpperLeftColor   = settings.bevelUpperLeftColor;
+    d->bevelLowerRightColor  = settings.bevelLowerRightColor;
+    d->decorativeFirstColor  = settings.decorativeFirstColor;
+    d->decorativeSecondColor = settings.decorativeSecondColor;
+
     slotBorderTypeChanged(settings.borderType);
-    
+
     blockSignals(false);
 }
 
@@ -295,12 +295,12 @@ BorderContainer BorderSettings::defaultSettings() const
 void BorderSettings::readSettings(KConfigGroup& group)
 {
     blockSignals(true);
-    
+
     d->borderType->setCurrentIndex(group.readEntry(d->configBorderTypeEntry, d->borderType->defaultIndex()));
     d->borderPercent->setValue(group.readEntry(d->configBorderPercentEntry,  d->borderPercent->defaultValue()));
     d->borderWidth->setValue(group.readEntry(d->configBorderWidthEntry,      d->borderWidth->defaultValue()));
     d->preserveAspectRatio->setChecked(group.readEntry(d->configPreserveAspectRatioEntry, true));
-    
+
     d->solidColor            = group.readEntry(d->configSolidColorEntry,            QColor(0, 0, 0));
     d->niepceBorderColor     = group.readEntry(d->configNiepceBorderColorEntry,     QColor(255, 255, 255));
     d->niepceLineColor       = group.readEntry(d->configNiepceLineColorEntry,       QColor(0, 0, 0));
@@ -308,7 +308,7 @@ void BorderSettings::readSettings(KConfigGroup& group)
     d->bevelLowerRightColor  = group.readEntry(d->configBevelLowerRightColorEntry,  QColor(128, 128, 128));
     d->decorativeFirstColor  = group.readEntry(d->configDecorativeFirstColorEntry,  QColor(0, 0, 0));
     d->decorativeSecondColor = group.readEntry(d->configDecorativeSecondColorEntry, QColor(0, 0, 0));
-    
+
     blockSignals(false);
     slotBorderTypeChanged(d->borderType->currentIndex());
 }
@@ -325,7 +325,7 @@ void BorderSettings::writeSettings(KConfigGroup& group)
     group.writeEntry(d->configBevelUpperLeftColorEntry,   d->bevelUpperLeftColor);
     group.writeEntry(d->configBevelLowerRightColorEntry,  d->bevelLowerRightColor);
     group.writeEntry(d->configDecorativeFirstColorEntry,  d->decorativeFirstColor);
-    group.writeEntry(d->configDecorativeSecondColorEntry, d->decorativeSecondColor);  
+    group.writeEntry(d->configDecorativeSecondColorEntry, d->decorativeSecondColor);
 }
 
 void BorderSettings::slotColorForegroundChanged(const QColor& color)

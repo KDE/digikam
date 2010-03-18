@@ -62,44 +62,38 @@ public:
     int             border2ndWidth;
 
     float           orgRatio;
-    
+
+    DColor  solidColor;
+    DColor  niepceBorderColor;
+    DColor  niepceLineColor;
+    DColor  bevelUpperLeftColor;
+    DColor  bevelLowerRightColor;
+    DColor  decorativeFirstColor;
+    DColor  decorativeSecondColor;
+
     BorderContainer settings;
 };
 
 BorderFilter::BorderFilter(DImg* image, QObject* parent, const BorderContainer& settings)
-           : DImgThreadedFilter(image, parent, "Border"),
+            : DImgThreadedFilter(image, parent, "Border"),
              d(new BorderFilterPriv)
 {
     d->settings = settings;
+    d->solidColor            = DColor(d->settings.solidColor,            m_orgImage.sixteenBit());
+    d->niepceBorderColor     = DColor(d->settings.niepceBorderColor,     m_orgImage.sixteenBit());
+    d->niepceLineColor       = DColor(d->settings.niepceLineColor,       m_orgImage.sixteenBit());
+    d->bevelUpperLeftColor   = DColor(d->settings.bevelUpperLeftColor,   m_orgImage.sixteenBit());
+    d->bevelLowerRightColor  = DColor(d->settings.bevelLowerRightColor,  m_orgImage.sixteenBit());
+    d->decorativeFirstColor  = DColor(d->settings.decorativeFirstColor,  m_orgImage.sixteenBit());
+    d->decorativeSecondColor = DColor(d->settings.decorativeSecondColor, m_orgImage.sixteenBit());
 
-    if (m_orgImage.sixteenBit())
-    {
-        d->settings.solidColor.convertToSixteenBit();
-        d->settings.niepceBorderColor.convertToSixteenBit();
-        d->settings.niepceLineColor.convertToSixteenBit();
-        d->settings.bevelUpperLeftColor.convertToSixteenBit();
-        d->settings.bevelLowerRightColor.convertToSixteenBit();
-        d->settings.decorativeFirstColor.convertToSixteenBit();
-        d->settings.decorativeSecondColor.convertToSixteenBit();
-    }
-    else
-    {
-        d->settings.solidColor.convertToEightBit();
-        d->settings.niepceBorderColor.convertToEightBit();
-        d->settings.niepceLineColor.convertToEightBit();
-        d->settings.bevelUpperLeftColor.convertToEightBit();
-        d->settings.bevelLowerRightColor.convertToEightBit();
-        d->settings.decorativeFirstColor.convertToEightBit();
-        d->settings.decorativeSecondColor.convertToEightBit();
-    }
-    
     if (d->settings.preserveAspectRatio)
     {
         d->orgRatio        = (float)d->settings.orgWidth / (float)d->settings.orgHeight;
         int size           = (image->width() > image->height()) ? image->height() : image->width();
         d->borderMainWidth = (int)(size * d->settings.borderPercent);
         d->border2ndWidth  = (int)(size * 0.005);
-        
+
         // Clamp internal border with to 1 pixel to be visible with small image.
         if (d->border2ndWidth < 1) d->border2ndWidth = 1;
     }
@@ -118,27 +112,27 @@ void BorderFilter::filterImage()
     {
       case BorderContainer::SolidBorder:
             if (d->settings.preserveAspectRatio)
-                solid(m_orgImage, m_destImage, d->settings.solidColor, d->borderMainWidth);
+                solid(m_orgImage, m_destImage, d->solidColor, d->borderMainWidth);
             else
-                solid2(m_orgImage, m_destImage, d->settings.solidColor, d->settings.borderWidth1);
+                solid2(m_orgImage, m_destImage, d->solidColor, d->settings.borderWidth1);
             break;
 
         case BorderContainer::NiepceBorder:
             if (d->settings.preserveAspectRatio)
-                niepce(m_orgImage, m_destImage, d->settings.niepceBorderColor, d->borderMainWidth,
-                       d->settings.niepceLineColor, d->border2ndWidth);
+                niepce(m_orgImage, m_destImage, d->niepceBorderColor, d->borderMainWidth,
+                       d->niepceLineColor, d->border2ndWidth);
             else
-                niepce2(m_orgImage, m_destImage, d->settings.niepceBorderColor, d->settings.borderWidth1,
-                        d->settings.niepceLineColor, d->settings.borderWidth4);
+                niepce2(m_orgImage, m_destImage, d->niepceBorderColor, d->settings.borderWidth1,
+                        d->niepceLineColor, d->settings.borderWidth4);
             break;
 
         case BorderContainer::BeveledBorder:
             if (d->settings.preserveAspectRatio)
-                bevel(m_orgImage, m_destImage, d->settings.bevelUpperLeftColor,
-                      d->settings.bevelLowerRightColor, d->borderMainWidth);
+                bevel(m_orgImage, m_destImage, d->bevelUpperLeftColor,
+                      d->bevelLowerRightColor, d->borderMainWidth);
             else
-                bevel2(m_orgImage, m_destImage, d->settings.bevelUpperLeftColor,
-                       d->settings.bevelLowerRightColor, d->settings.borderWidth1);
+                bevel2(m_orgImage, m_destImage, d->bevelUpperLeftColor,
+                       d->bevelLowerRightColor, d->settings.borderWidth1);
             break;
 
         case BorderContainer::PineBorder:
@@ -159,11 +153,11 @@ void BorderFilter::filterImage()
         case BorderContainer::WallBorder:
             if (d->settings.preserveAspectRatio)
                 pattern(m_orgImage, m_destImage, d->borderMainWidth,
-                        d->settings.decorativeFirstColor, d->settings.decorativeSecondColor,
+                        d->decorativeFirstColor, d->decorativeSecondColor,
                         d->border2ndWidth, d->border2ndWidth);
             else
                 pattern2(m_orgImage, m_destImage, d->settings.borderWidth1,
-                         d->settings.decorativeFirstColor, d->settings.decorativeSecondColor,
+                         d->decorativeFirstColor, d->decorativeSecondColor,
                          d->settings.borderWidth2, d->settings.borderWidth2);
             break;
     }

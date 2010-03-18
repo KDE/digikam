@@ -3,10 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2009-02-28
- * Description : batch tool to add visible watermark.
+ * Date        : 2010-03-17
+ * Description : batch tool to add border.
  *
- * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,12 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef WATERMARK_H
-#define WATERMARK_H
-
-// Qt includes
-
-#include <QFont>
+#ifndef BORDER_H
+#define BORDER_H
 
 // Local includes
 
@@ -35,16 +31,16 @@
 namespace Digikam
 {
 
-class WaterMarkPriv;
+class BorderSettings;
 
-class WaterMark : public BatchTool
+class Border : public BatchTool
 {
     Q_OBJECT
 
 public:
 
-    WaterMark(QObject* parent=0);
-    ~WaterMark();
+    Border(QObject* parent=0);
+    ~Border();
 
     BatchToolSettings defaultSettings();
 
@@ -56,11 +52,10 @@ private Q_SLOTS:
 private:
 
     bool toolOperations();
-    int  queryFontSize(const QString& text, const QFont& font, int length);
 
 private:
 
-    WaterMarkPriv* const d;
+    BorderSettings* m_settingsView;
 };
 
 }  // namespace Digikam

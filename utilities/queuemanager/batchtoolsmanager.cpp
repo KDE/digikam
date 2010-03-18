@@ -54,6 +54,7 @@
 #include "invert.h"
 #include "convert8to16.h"
 #include "convert16to8.h"
+#include "border.h"
 
 namespace Digikam
 {
@@ -85,6 +86,7 @@ BatchToolsManager::BatchToolsManager(QObject* parent)
 
     // Decorate
     registerTool(new WaterMark(this));
+    registerTool(new Border(this));
 
     // Metadata
     registerTool(new AssignTemplate(this));
