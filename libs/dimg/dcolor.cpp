@@ -6,7 +6,7 @@
  * Date        : 2005-12-02
  * Description : 8-16 bits color container.
  *
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * RGB<->HLS transformation algorithms are inspired from methods
  * describe at this url :
@@ -27,6 +27,10 @@
 
 #include "dcolor.h"
 
+// KDE includes
+
+#include <kdebug.h>
+
 namespace Digikam
 {
 
@@ -44,9 +48,19 @@ DColor::DColor(const DColor& color)
 DColor::DColor(const QColor& color, bool sixteenBit)
 {
     // initialize as eight bit
-    m_red        = color.red();
-    m_green      = color.green();
-    m_blue       = color.blue();
+    if (color.isValid())
+    {
+        m_red   = color.red();
+        m_green = color.green();
+        m_blue  = color.blue();
+    }
+    else
+    {
+        kDebug() << "QColor is invalid. reset color component to zero";
+        m_red   = 0;
+        m_green = 0;
+        m_blue  = 0;
+    }
     m_alpha      = 255;
     m_sixteenBit = false;
 
