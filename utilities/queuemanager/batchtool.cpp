@@ -187,7 +187,7 @@ void BatchTool::setNoSettingsWidget()
 
 void BatchTool::slotResetSettingsToDefault()
 {
-    setSettings(defaultSettings());
+    slotSettingsChanged(defaultSettings());
 }
 
 void BatchTool::slotSettingsChanged(const BatchToolSettings& settings)
