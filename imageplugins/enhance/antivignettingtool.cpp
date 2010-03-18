@@ -146,8 +146,6 @@ void AntiVignettingTool::prepareEffect()
     AntiVignettingContainer settings = d->settingsView->settings();
 
     ImageIface* iface = d->previewWidget->imageIface();
-    int orgWidth      = iface->originalWidth();
-    int orgHeight     = iface->originalHeight();
     int previewWidth  = iface->previewWidth();
     int previewHeight = iface->previewHeight();
     DImg imTemp       = iface->getOriginalImg()->smoothScale(previewWidth, previewHeight, Qt::KeepAspectRatio);
