@@ -29,11 +29,13 @@
 #include <QDateTime>
 #include <QFileInfo>
 #include <QWidget>
+#include <QLabel>
 #include <QPolygon>
 
 // KDE includes
 
 #include <kdebug.h>
+#include <klocale.h>
 
 // Local includes
 
@@ -174,9 +176,18 @@ void BatchTool::setSettingsWidget(QWidget* settingsWidget)
     d->settingsWidget = settingsWidget;
 }
 
+void BatchTool::setNoSettingsWidget()
+{
+    QLabel* label = new QLabel;
+    label->setText(i18n("No setting available"));
+    label->setAlignment(Qt::AlignCenter);
+    label->setWordWrap(true);
+    setSettingsWidget(label);
+}
+
 void BatchTool::slotResetSettingsToDefault()
 {
-    setSettings(defaultSettings());
+    slotSettingsChanged(defaultSettings());
 }
 
 void BatchTool::slotSettingsChanged(const BatchToolSettings& settings)

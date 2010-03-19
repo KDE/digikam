@@ -39,60 +39,71 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT FreeRotationFilter : public DImgThreadedFilter
+class FreeRotationFilterPriv;
+
+class DIGIKAM_EXPORT FreeRotationContainer
 {
-
 public:
-
-    explicit FreeRotationFilter(DImg* orgImage, QObject* parent=0, double angle=0.0,
-                                bool antialiasing=true, int autoCrop=NoAutoCrop, const QColor& backgroundColor=Qt::black,
-                                int orgW=0, int orgH=0);
-
-    ~FreeRotationFilter(){};
-
-    QSize getNewSize(){ return m_newSize; };
-
-    static double calculateAngle(int x1, int y1, int x2, int y2);
-    static double calculateAngle(const QPoint& p1, const QPoint& p2);
-
-public:
-
+    
     enum AutoCropTypes
     {
         NoAutoCrop = 0,
         WidestArea,
         LargestArea
     };
+    
+public:
+
+    FreeRotationContainer()
+    {
+        angle           = 0.0;
+        antiAlias       = true;
+        autoCrop        = NoAutoCrop;
+        backgroundColor = Qt::black;
+        orgW            = 0;
+        orgH            = 0;
+    };
+
+    ~FreeRotationContainer(){};
+
+public:
+    
+    bool   antiAlias;
+
+    int    autoCrop;
+    int    orgW;
+    int    orgH;
+    
+    double angle;
+
+    QSize  newSize;
+
+    QColor backgroundColor;
+};
+
+class DIGIKAM_EXPORT FreeRotationFilter : public DImgThreadedFilter
+{
+
+public:
+
+    explicit FreeRotationFilter(DImg* orgImage, QObject* parent=0, 
+                                const FreeRotationContainer& settings=FreeRotationContainer());
+
+    virtual ~FreeRotationFilter();
+
+    QSize getNewSize() const;
+    static double calculateAngle(int x1, int y1, int x2, int y2);
+    static double calculateAngle(const QPoint& p1, const QPoint& p2);
 
 private:
 
     void filterImage();
-
-    inline int setPosition (int Width, int X, int Y)
-    {
-       return (Y *Width*4 + 4*X);
-    };
-
-    inline bool isInside (int Width, int Height, int X, int Y)
-    {
-       bool bIsWOk = ((X < 0) ? false : (X >= Width ) ? false : true);
-       bool bIsHOk = ((Y < 0) ? false : (Y >= Height) ? false : true);
-       return (bIsWOk && bIsHOk);
-    };
+    inline int setPosition (int Width, int X, int Y);
+    inline bool isInside (int Width, int Height, int X, int Y);
 
 private:
 
-    bool   m_antiAlias;
-
-    int    m_autoCrop;
-    int    m_orgW;
-    int    m_orgH;
-
-    double m_angle;
-
-    QSize  m_newSize;
-
-    QColor m_backgroundColor;
+    FreeRotationFilterPriv* const d;
 };
 
 }  // namespace Digikam

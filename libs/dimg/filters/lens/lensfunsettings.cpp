@@ -35,348 +35,178 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-// LibKDcraw includes
-
-#include <libkdcraw/rnuminput.h>
-#include <libkdcraw/rcombobox.h>
-
 // Local includes
-
-Q_DECLARE_METATYPE( Digikam::LensFunSettings::DevicePtr )
-Q_DECLARE_METATYPE( Digikam::LensFunSettings::LensPtr )
 
 namespace Digikam
 {
 
-LensFunSettings::LensFunSettings(QWidget *parent)
-               : QWidget(parent)
+class LensFunSettingsPriv
 {
-    m_klf              = new LensFunIface();
-    QGridLayout* grid  = new QGridLayout(this);
-    m_exifUsage        = new QCheckBox(i18n("Use Metadata"), this);
+public:
 
-    m_make             = new RComboBox(this);
-    m_make->setDefaultIndex(0);
+    LensFunSettingsPriv() :
+        configCCAEntry("CCA"),
+        configVignettingEntry("Vignetting"),
+        configCCIEntry("CCI"),
+        configDistortionEntry("Distortion"),
+        configGeometryEntry("Geometry"),
 
-    m_model            = new RComboBox(this);
-    m_model->setDefaultIndex(0);
+        filterCCA(0),
+        filterVig(0),
+        filterCCI(0),
+        filterDist(0),
+        filterGeom(0)
+        {}
 
-    m_lens             = new RComboBox(this);
-    m_lens->setDefaultIndex(0);
+    const QString configCCAEntry;
+    const QString configVignettingEntry;
+    const QString configCCIEntry;
+    const QString configDistortionEntry;
+    const QString configGeometryEntry;
 
-    QLabel* makeLabel  = new QLabel(i18nc("camera make", "Make:"), this);
-    QLabel* modelLabel = new QLabel(i18nc("camera model", "Model:"), this);
-    QLabel* lensLabel  = new QLabel(i18nc("camera lens", "Lens:"), this);
+    QCheckBox*    filterCCA;
+    QCheckBox*    filterVig;
+    QCheckBox*    filterCCI;
+    QCheckBox*    filterDist;
+    QCheckBox*    filterGeom;
+};
 
-    m_exifUsage->setEnabled(false);
-    m_exifUsage->setCheckState(Qt::Unchecked);
-    m_exifUsage->setWhatsThis(i18n("Set this option to try to guess the right camera/lens settings "
-                                   "from the image metadata (as Exif or XMP)."));
+LensFunSettings::LensFunSettings(QWidget* parent)
+               : QWidget(parent),
+                 d(new LensFunSettingsPriv)
+{
+    QGridLayout* grid = new QGridLayout(this);
 
-    QLabel* focalLabel = new QLabel(i18n("Focal Length:"), this);
-    QLabel* aperLabel  = new QLabel(i18n("Aperture:"), this);
-    QLabel* distLabel  = new QLabel(i18n("Subject Distance:"), this);
+    d->filterCCA  = new QCheckBox(i18n("Chromatic Aberration"));
+    d->filterCCA->setWhatsThis(i18n("Chromatic aberration is easily recognized as color fringes "
+                                    "towards the image corners. CA is due to a varying lens focus "
+                                    "for different colors."));
+    d->filterVig  = new QCheckBox(i18n("Vignetting"));
+    d->filterVig->setWhatsThis(i18n("Vignetting refers to an image darkening, mostly in the corners. "
+                                    "Optical and natural vignetting can be canceled out with this option, "
+                                    "whereas mechanical vignetting will not be cured."));
+    d->filterCCI  = new QCheckBox(i18n("Color Correction"));
+    d->filterCCI->setWhatsThis(i18n("All lenses have a slight color tinge to them, "
+                                    "mostly due to the anti-reflective coating. "
+                                    "The tinge can be canceled when the respective data is known for the lens."));
+    d->filterDist = new QCheckBox(i18n("Distortion"));
+    d->filterDist->setWhatsThis(i18n("Distortion refers to an image deformation, which is most pronounced "
+                                     "towards the corners. These Seidel aberrations are known as pincushion "
+                                     "and barrel distortions."));
+    d->filterGeom = new QCheckBox(i18n("Geometry"));
+    d->filterGeom->setWhatsThis(i18n("Four geometries are handled here: Rectilinear (99 percent of all lenses), "
+                                     "Fisheye, Cylindrical, Equirectangular."));
 
-    m_focal = new RDoubleNumInput(this);
-    m_focal->setDecimals(1);
-    m_focal->input()->setRange(1.0, 1000.0, 0.01, true);
-    m_focal->setDefaultValue(1.0);
-
-    m_aperture = new RDoubleNumInput(this);
-    m_aperture->setDecimals(1);
-    m_aperture->input()->setRange(1.1, 64.0, 0.1, true);
-    m_aperture->setDefaultValue(1.1);
-
-    m_distance = new RDoubleNumInput(this);
-    m_distance->setDecimals(1);
-    m_distance->input()->setRange(0.0, 100.0, 0.1, true);
-    m_distance->setDefaultValue(0.0);
-
-    grid->addWidget(m_exifUsage, 0, 0, 1, 3);
-    grid->addWidget(makeLabel,   1, 0, 1, 3);
-    grid->addWidget(m_make,      2, 0, 1, 3);
-    grid->addWidget(modelLabel,  3, 0, 1, 3);
-    grid->addWidget(m_model,     4, 0, 1, 3);
-    grid->addWidget(lensLabel,   5, 0, 1, 3);
-    grid->addWidget(m_lens,      6, 0, 1, 3);
-    grid->addWidget(focalLabel,  7, 0, 1, 1);
-    grid->addWidget(m_focal,     7, 1, 1, 2);
-    grid->addWidget(aperLabel,   8, 0, 1, 1);
-    grid->addWidget(m_aperture,  8, 1, 1, 2);
-    grid->addWidget(distLabel,   9, 0, 1, 1);
-    grid->addWidget(m_distance,  9, 1, 1, 2);
-    grid->setMargin(0);
+    grid->addWidget(d->filterCCA,  0, 0, 1, 2);
+    grid->addWidget(d->filterVig,  1, 0, 1, 2);
+    grid->addWidget(d->filterCCI,  2, 0, 1, 2);
+    grid->addWidget(d->filterDist, 3, 0, 1, 2);
+    grid->addWidget(d->filterGeom, 4, 0, 1, 2);
+    grid->setRowStretch(5, 10);
+    grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(KDialog::spacingHint());
 
-    connect(m_exifUsage, SIGNAL(stateChanged(int)),
-            this, SLOT(slotUseExif(int)));
+    connect(d->filterCCA, SIGNAL(toggled(bool)),
+            this, SIGNAL(signalSettingsChanged()));
 
-    connect(m_make, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(slotUpdateCombos()));
+    connect(d->filterVig, SIGNAL(toggled(bool)),
+            this, SIGNAL(signalSettingsChanged()));
 
-    connect(m_model, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(slotUpdateLensCombo()));
+    connect(d->filterCCI, SIGNAL(toggled(bool)),
+            this, SIGNAL(signalSettingsChanged()));
 
-    connect(m_lens, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(slotLensSelected()));
+    connect(d->filterDist, SIGNAL(toggled(bool)),
+            this, SIGNAL(signalSettingsChanged()));
 
-    connect(m_focal, SIGNAL(valueChanged(double)),
-            this, SLOT(slotFocalChanged(double)));
-
-    connect(m_aperture, SIGNAL(valueChanged(double)),
-            this, SLOT(slotApertureChanged(double)));
-
-    connect(m_distance, SIGNAL(valueChanged(double)),
-            this, SLOT(slotDistanceChanged(double)));
-
-    LensFunSettings::Device firstDevice; // empty strings
-//    setDevice( firstDevice );
+    connect(d->filterGeom, SIGNAL(toggled(bool)),
+            this, SIGNAL(signalSettingsChanged()));
 }
 
 LensFunSettings::~LensFunSettings()
 {
-    delete m_klf;
+    delete d;
 }
 
-#if 0
-LensFunSettings::Device LensFunSettings::getDevice()
+void LensFunSettings::setEnabledCCA(bool b)
 {
-}
-#endif
-
-void LensFunSettings::findFromMetadata(const DMetadata& meta)
-{
-    m_metadata = meta;
-    findFromMetadata();
+    d->filterCCA->setEnabled(b);
 }
 
-void LensFunSettings::findFromMetadata()
+void LensFunSettings::setEnabledVig(bool b)
 {
-//    LensFunSettings::Device firstDevice; // empty strings
-//    setDevice( firstDevice );
-
-    if (m_metadata.isEmpty())
-    {
-        m_exifUsage->setCheckState(Qt::Unchecked);
-        m_exifUsage->setEnabled(false);
-    }
-    else
-    {
-        m_exifUsage->setCheckState(Qt::Checked);
-        m_exifUsage->setEnabled(true);
-    }
-
-    PhotoInfoContainer photoInfo = m_metadata.getPhotographInformation();
-
-    QString make  = photoInfo.make;
-    QString model = photoInfo.model;
-    QString lens  = photoInfo.lens;
-
-    // ------------------------------------------------------------------------------------------------
-
-    int makerIdx = m_make->combo()->findText(make);
-    if (makerIdx >= 0)
-    {
-        m_make->setCurrentIndex(makerIdx);
-        m_make->setEnabled(false);
-    }
-
-    slotUpdateCombos();
-    int modelIdx = m_model->combo()->findText(model);
-    if (modelIdx >= 0)
-    {
-        m_model->setCurrentIndex(modelIdx);
-        m_model->setEnabled(false);
-        slotUpdateLensCombo();
-    }
-
-    // The LensFun DB has the Maker before the Lens model name.
-    // We use here the Camera Maker, because the Lens Maker seems not to be
-    // part of the Exif data. This is of course bad for 3rd party lenses, but
-    // they seem anyway not to have Exif entries usually :/
-    int lensIdx = m_lens->combo()->findText(lens);
-    if (lensIdx < 0)
-       lensIdx = m_lens->combo()->findText(make + ' ' + lens);
-
-    if (lensIdx >= 0)
-    {
-        // found lens model directly, best case :)
-        m_lens->setCurrentIndex(lensIdx);
-        m_lens->setEnabled(false);
-    }
-    else
-    {
-        // Lens not found, try to reduce the list according to the values we have
-        // FIXME: Implement removal of not matching lenses ...
-        m_lens->setEnabled(true);
-    }
-
-    kDebug() << "Search for Lens: " << make << " :: " << lens
-             << "< and found: >" << m_lens->combo()->itemText(0) + '<';
-
-    QString temp = photoInfo.focalLength;
-    if (!temp.isEmpty())
-    {
-        double focal = temp.mid(0, temp.length() -3).toDouble(); // HACK: strip the " mm" at the end ...
-        kDebug() << "Focal Length: " << focal;
-        m_focal->setValue(focal);
-        m_focal->setEnabled(false);
-    }
-
-    temp = photoInfo.aperture;
-    if (!temp.isEmpty())
-    {
-        double aperture = temp.mid(1).toDouble();
-        kDebug() << "Aperture: " << aperture;
-        m_aperture->setValue(aperture);
-        m_aperture->setEnabled(false);
-    }
-
-    // ------------------------------------------------------------------------------------------------
-    // Try to get subject distance value.
-
-    // From standard Exif.
-    temp = m_metadata.getExifTagString("Exif.Photo.SubjectDistance");
-    if (temp.isEmpty())
-    {
-        // From standard XMP.
-        temp = m_metadata.getXmpTagString("Xmp.exif.SubjectDistance");
-        if (temp.isEmpty())
-        {
-            // From Canon Makernote.
-            temp = m_metadata.getExifTagString("Exif.CanonSi.SubjectDistance");
-
-            // TODO: Add here others Makernotes tags.
-        }
-    }
-
-    if (!temp.isEmpty())
-    {
-        double distance = temp.toDouble();
-        kDebug() << "Subject Distance: " << distance;
-        m_distance->setValue(distance);
-        m_distance->setEnabled(false);
-    }
+    d->filterVig->setEnabled(b);
 }
 
-void LensFunSettings::slotFocalChanged(double f)
+void LensFunSettings::setEnabledCCI(bool b)
 {
-    m_klf->m_focalLength = f;
-    emit signalLensSettingsChanged();
+    d->filterCCI->setEnabled(b);
 }
 
-void LensFunSettings::slotApertureChanged(double a)
+void LensFunSettings::setEnabledDist(bool b)
 {
-    m_klf->m_aperture = a;
-    emit signalLensSettingsChanged();
+    d->filterDist->setEnabled(b);
 }
 
-void LensFunSettings::slotDistanceChanged(double d)
+void LensFunSettings::setEnabledGeom(bool b)
 {
-    m_klf->m_subjectDistance = d;
-    emit signalLensSettingsChanged();
+    d->filterGeom->setEnabled(b);
 }
 
-void LensFunSettings::slotUseExif(int mode)
+LensFunContainer LensFunSettings::settings() const
 {
-    if (mode == Qt::Checked)
-    {
-        findFromMetadata();
-    }
-    else
-    {
-        m_make->setEnabled(true);
-        m_model->setEnabled(true);
-        m_lens->setEnabled(true);
-        m_focal->setEnabled(true);
-        m_aperture->setEnabled(true);
-        m_distance->setEnabled(true);
-    }
+    LensFunContainer prm;
+
+    prm.filterCCA  = (d->filterCCA->isChecked()  && d->filterCCA->isEnabled());
+    prm.filterVig  = (d->filterVig->isChecked()  && d->filterVig->isEnabled());
+    prm.filterCCI  = (d->filterCCI->isChecked()  && d->filterCCI->isEnabled());
+    prm.filterDist = (d->filterDist->isChecked() && d->filterDist->isEnabled());
+    prm.filterGeom = (d->filterGeom->isChecked() && d->filterGeom->isEnabled());
+
+    return prm;
 }
 
-void LensFunSettings::slotUpdateCombos()
+void LensFunSettings::setSettings(const LensFunContainer& settings)
 {
-    const lfCamera* const* it = m_klf->m_lfCameras;
-
-    // reset box
-    m_model->combo()->clear();
-
-    bool firstRun = false;
-    if ( m_make->combo()->count() == 0 )
-       firstRun = true;
-
-    while ( *it )
-    {
-       if ( firstRun )
-       {
-           // Maker DB does not change, so we fill it only once.
-           if ( (*it)->Maker )
-           {
-                QString t( (*it)->Maker );
-                if ( m_make->combo()->findText( t, Qt::MatchExactly ) < 0 )
-                    m_make->addItem( t );
-           }
-       }
-
-       // Fill models for current selected maker
-       if ( (*it)->Model && (*it)->Maker == m_make->combo()->currentText() )
-       {
-            LensFunSettings::DevicePtr dev;
-            dev        = *it;
-            QVariant b = qVariantFromValue(dev);
-            m_model->combo()->addItem( (*it)->Model, b );
-       }
-
-       ++it;
-    }
-    m_make->combo()->model()->sort(0, Qt::AscendingOrder);
-    m_model->combo()->model()->sort(0, Qt::AscendingOrder);
-
-    // Fill Lens list for current Maker & Model
-    slotUpdateLensCombo();
+    blockSignals(true);
+    d->filterCCA->setChecked(settings.filterCCA);
+    d->filterVig->setChecked(settings.filterVig);
+    d->filterCCI->setChecked(settings.filterCCI);
+    d->filterDist->setChecked(settings.filterDist);
+    d->filterGeom->setChecked(settings.filterGeom);
+    blockSignals(false);
 }
 
-void LensFunSettings::slotUpdateLensCombo()
+void LensFunSettings::resetToDefault()
 {
-    m_lens->combo()->clear();
-
-    QVariant v    = m_model->combo()->itemData( m_model->currentIndex() );
-    DevicePtr dev = v.value<LensFunSettings::DevicePtr>();
-    if (!dev)
-    {
-        kDebug() << "slotUpdateLensCombo() => Device is null!";
-        return;
-    }
-
-    const lfLens** lenses = m_klf->m_lfDb->FindLenses( dev, NULL, NULL );
-    m_klf->m_cropFactor   = dev->CropFactor;
-
-    while (lenses && *lenses)
-    {
-        LensFunSettings::LensPtr lens = *lenses;
-        QVariant b                    = qVariantFromValue(lens);
-        m_lens->combo()->addItem((*lenses)->Model, b);
-        ++lenses;
-    }
-    m_lens->combo()->model()->sort(0, Qt::AscendingOrder);
-
-    emit(signalLensSettingsChanged());
+    setSettings(LensFunContainer());
 }
 
-void LensFunSettings::slotLensSelected()
+LensFunContainer LensFunSettings::defaultSettings() const
 {
-    QVariant v        = m_lens->combo()->itemData( m_lens->currentIndex() );
-    m_klf->m_usedLens = v.value<LensFunSettings::LensPtr>();
-
-    if ( m_klf->m_cropFactor <= 0.0 ) // this should not happen
-        m_klf->m_cropFactor = m_klf->m_usedLens->CropFactor;
-
-    emit(signalLensSettingsChanged());
+    LensFunContainer prm;
+    return prm;
 }
 
-void LensFunSettings::setDevice(Device& /*d*/)
+void LensFunSettings::readSettings(KConfigGroup& group)
 {
-    slotUpdateCombos();
+    LensFunContainer prm;
+    LensFunContainer defaultPrm = defaultSettings();
+    d->filterCCA->setChecked(group.readEntry(d->configCCAEntry,         true));
+    d->filterVig->setChecked(group.readEntry(d->configVignettingEntry,  true));
+    d->filterCCI->setChecked(group.readEntry(d->configCCIEntry,         true));
+    d->filterDist->setChecked(group.readEntry(d->configDistortionEntry, true));
+    d->filterGeom->setChecked(group.readEntry(d->configGeometryEntry,   true));
+    setSettings(prm);
+}
+
+void LensFunSettings::writeSettings(KConfigGroup& group)
+{
+    LensFunContainer prm = settings();
+    if ( d->filterCCA->isEnabled() )  group.writeEntry(d->configCCAEntry,        (d->filterCCA->isChecked()));
+    if ( d->filterVig->isEnabled() )  group.writeEntry(d->configVignettingEntry, (d->filterVig->isChecked()));
+    if ( d->filterCCI->isEnabled() )  group.writeEntry(d->configCCIEntry,        (d->filterCCI->isChecked()));
+    if ( d->filterDist->isEnabled() ) group.writeEntry(d->configDistortionEntry, (d->filterDist->isChecked()));
+    if ( d->filterGeom->isEnabled() ) group.writeEntry(d->configGeometryEntry,   (d->filterGeom->isChecked()));
 }
 
 }  // namespace Digikam

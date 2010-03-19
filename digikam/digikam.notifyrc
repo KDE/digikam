@@ -1,8 +1,8 @@
 [Global]
 IconName=digikam
 Comment=digiKam
-Comment[ca]=DigiKam
-Comment[ca@valencia]=DigiKam
+Comment[ca]=digiKam
+Comment[ca@valencia]=digiKam
 Comment[cs]=digiKam
 Comment[da]=digiKam
 Comment[de]=digiKam
@@ -21,6 +21,7 @@ Comment[nl]=digiKam
 Comment[pa]=ਡਿਜਿਕੈਮ
 Comment[pt]=digiKam
 Comment[pt_BR]=digiKam
+Comment[sk]=digiKam
 Comment[sv]=Digikam
 Comment[th]=ดิจิแคม - digiKam
 Comment[uk]=digiKam

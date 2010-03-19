@@ -6,7 +6,7 @@
  * Date        : 2006-18-03
  * Description : Superimpose filter.
  *
- * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -33,7 +33,7 @@
 #include "dimg.h"
 #include "dcolor.h"
 
-namespace DigikamSuperImposeImagesPlugin
+namespace DigikamDecorateImagePlugin
 {
 
 class SuperImpose
@@ -50,7 +50,7 @@ public:
 
 private:
 
-    void filterImage(void);
+    void filterImage();
 
 private:
 
@@ -62,6 +62,6 @@ private:
     Digikam::DColorComposer::CompositingOperation m_compositeRule;
 };
 
-} // namespace DigikamSuperImposeImagesPlugin
+} // namespace DigikamDecorateImagePlugin
 
 #endif /* SUPERIMPOSE_H */

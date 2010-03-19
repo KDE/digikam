@@ -139,6 +139,13 @@ public:
     virtual void doLoadState();
     virtual void doSaveState();
 
+    /**
+     * Some treeviews shall control the global current album kept by AlbumManager.
+     * Other treeview are self-contained and shall not change the current album.
+     * Default: false
+     */
+    void setAlbumManagerCurrentAlbum(bool setCurrentAlbum);
+
 public Q_SLOTS:
 
     void setSearchTextSettings(const SearchTextSettings& settings);
@@ -147,8 +154,8 @@ public Q_SLOTS:
      * Selects the given album.
      *
      * @param album album to select
-     * @param selectInAlbumManager if <code>true</code>, the album will be
-     *                             selected in the album manager
+     * @param selectInAlbumManager the album will be set as current album, if both
+     * this parameter is true and setAlbumManagerCurrentAlbum() was set to true.
      */
     void slotSelectAlbum(Album *album, bool selectInAlbumManager = true);
 

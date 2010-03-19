@@ -57,8 +57,6 @@
 #include "imageiface.h"
 #include "imageregionwidget.h"
 
-using namespace KDcrawIface;
-
 namespace DigikamColorImagePlugin
 {
 

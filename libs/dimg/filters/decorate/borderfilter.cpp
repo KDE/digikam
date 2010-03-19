@@ -53,37 +53,15 @@ public:
 
     BorderFilterPriv()
     {
-        preserveAspectRatio = false;
-        orgWidth            = 0;
-        orgHeight           = 0;
-        borderType          = 0;
-        borderWidth1        = 0;
-        borderWidth2        = 0;
-        borderWidth3        = 0;
-        borderWidth4        = 0;
-        borderMainWidth     = 0;
-        border2ndWidth      = 0;
-        orgRatio            = 0.0f;
+        borderMainWidth = 0;
+        border2ndWidth  = 0;
+        orgRatio        = 0.0f;
     }
 
-    bool    preserveAspectRatio;
+    int             borderMainWidth;
+    int             border2ndWidth;
 
-    int     orgWidth;
-    int     orgHeight;
-
-    int     borderType;
-
-    int     borderWidth1;
-    int     borderWidth2;
-    int     borderWidth3;
-    int     borderWidth4;
-
-    int     borderMainWidth;
-    int     border2ndWidth;
-
-    float   orgRatio;
-
-    QString borderPath;
+    float           orgRatio;
 
     DColor  solidColor;
     DColor  niepceBorderColor;
@@ -92,78 +70,33 @@ public:
     DColor  bevelLowerRightColor;
     DColor  decorativeFirstColor;
     DColor  decorativeSecondColor;
+
+    BorderContainer settings;
 };
 
-BorderFilter::BorderFilter(DImg* image, QObject* parent, int orgWidth, int orgHeight,
-                           const QString& borderPath, int borderType, float borderPercent,
-                           const DColor& solidColor,
-                           const DColor& niepceBorderColor,
-                           const DColor& niepceLineColor,
-                           const DColor& bevelUpperLeftColor,
-                           const DColor& bevelLowerRightColor,
-                           const DColor& decorativeFirstColor,
-                           const DColor& decorativeSecondColor)
-           : DImgThreadedFilter(image, parent, "Border"),
+BorderFilter::BorderFilter(DImg* image, QObject* parent, const BorderContainer& settings)
+            : DImgThreadedFilter(image, parent, "Border"),
              d(new BorderFilterPriv)
 {
-    d->orgWidth        = orgWidth;
-    d->orgHeight       = orgHeight;
-    d->orgRatio        = (float)d->orgWidth / (float)d->orgHeight;
-    d->borderType      = borderType;
-    d->borderPath      = borderPath;
-    int size           = (image->width() > image->height()) ? image->height() : image->width();
-    d->borderMainWidth = (int)(size * borderPercent);
-    d->border2ndWidth  = (int)(size * 0.005);
+    d->settings = settings;
+    d->solidColor            = DColor(d->settings.solidColor,            m_orgImage.sixteenBit());
+    d->niepceBorderColor     = DColor(d->settings.niepceBorderColor,     m_orgImage.sixteenBit());
+    d->niepceLineColor       = DColor(d->settings.niepceLineColor,       m_orgImage.sixteenBit());
+    d->bevelUpperLeftColor   = DColor(d->settings.bevelUpperLeftColor,   m_orgImage.sixteenBit());
+    d->bevelLowerRightColor  = DColor(d->settings.bevelLowerRightColor,  m_orgImage.sixteenBit());
+    d->decorativeFirstColor  = DColor(d->settings.decorativeFirstColor,  m_orgImage.sixteenBit());
+    d->decorativeSecondColor = DColor(d->settings.decorativeSecondColor, m_orgImage.sixteenBit());
 
-    // Clamp internal border with to 1 pixel to be visible with small image.
-    if (d->border2ndWidth < 1) d->border2ndWidth = 1;
+    if (d->settings.preserveAspectRatio)
+    {
+        d->orgRatio        = (float)d->settings.orgWidth / (float)d->settings.orgHeight;
+        int size           = (image->width() > image->height()) ? image->height() : image->width();
+        d->borderMainWidth = (int)(size * d->settings.borderPercent);
+        d->border2ndWidth  = (int)(size * 0.005);
 
-    d->solidColor            = solidColor;
-    d->niepceBorderColor     = niepceBorderColor;
-    d->niepceLineColor       = niepceLineColor;
-    d->bevelUpperLeftColor   = bevelUpperLeftColor;
-    d->bevelLowerRightColor  = bevelLowerRightColor;
-    d->decorativeFirstColor  = decorativeFirstColor;
-    d->decorativeSecondColor = decorativeSecondColor;
-
-    d->preserveAspectRatio   = true;
-
-    initFilter();
-}
-
-BorderFilter::BorderFilter(DImg* orgImage, QObject* parent, int orgWidth, int orgHeight,
-                           const QString& borderPath, int borderType,
-                           int borderWidth1, int borderWidth2, int borderWidth3, int borderWidth4,
-                           const DColor& solidColor,
-                           const DColor& niepceBorderColor,
-                           const DColor& niepceLineColor,
-                           const DColor& bevelUpperLeftColor,
-                           const DColor& bevelLowerRightColor,
-                           const DColor& decorativeFirstColor,
-                           const DColor& decorativeSecondColor)
-            : DImgThreadedFilter(orgImage, parent, "Border"),
-              d(new BorderFilterPriv)
-{
-    d->orgWidth              = orgWidth;
-    d->orgHeight             = orgHeight;
-
-    d->borderType            = borderType;
-    d->borderWidth1          = borderWidth1;
-    d->borderWidth2          = borderWidth2;
-    d->borderWidth3          = borderWidth3;
-    d->borderWidth4          = borderWidth4;
-
-    d->solidColor            = solidColor;
-    d->niepceBorderColor     = niepceBorderColor;
-    d->niepceLineColor       = niepceLineColor;
-    d->bevelUpperLeftColor   = bevelUpperLeftColor;
-    d->bevelLowerRightColor  = bevelLowerRightColor;
-    d->decorativeFirstColor  = decorativeFirstColor;
-    d->decorativeSecondColor = decorativeSecondColor;
-
-    d->borderPath            = borderPath;
-
-    d->preserveAspectRatio   = false;
+        // Clamp internal border with to 1 pixel to be visible with small image.
+        if (d->border2ndWidth < 1) d->border2ndWidth = 1;
+    }
 
     initFilter();
 }
@@ -175,57 +108,57 @@ BorderFilter::~BorderFilter()
 
 void BorderFilter::filterImage()
 {
-    switch (d->borderType)
+    switch (d->settings.borderType)
     {
-        case SolidBorder:
-            if (d->preserveAspectRatio)
+      case BorderContainer::SolidBorder:
+            if (d->settings.preserveAspectRatio)
                 solid(m_orgImage, m_destImage, d->solidColor, d->borderMainWidth);
             else
-                solid2(m_orgImage, m_destImage, d->solidColor, d->borderWidth1);
+                solid2(m_orgImage, m_destImage, d->solidColor, d->settings.borderWidth1);
             break;
 
-        case NiepceBorder:
-            if (d->preserveAspectRatio)
+        case BorderContainer::NiepceBorder:
+            if (d->settings.preserveAspectRatio)
                 niepce(m_orgImage, m_destImage, d->niepceBorderColor, d->borderMainWidth,
                        d->niepceLineColor, d->border2ndWidth);
             else
-                niepce2(m_orgImage, m_destImage, d->niepceBorderColor, d->borderWidth1,
-                        d->niepceLineColor, d->borderWidth4);
+                niepce2(m_orgImage, m_destImage, d->niepceBorderColor, d->settings.borderWidth1,
+                        d->niepceLineColor, d->settings.borderWidth4);
             break;
 
-        case BeveledBorder:
-            if (d->preserveAspectRatio)
+        case BorderContainer::BeveledBorder:
+            if (d->settings.preserveAspectRatio)
                 bevel(m_orgImage, m_destImage, d->bevelUpperLeftColor,
                       d->bevelLowerRightColor, d->borderMainWidth);
             else
                 bevel2(m_orgImage, m_destImage, d->bevelUpperLeftColor,
-                       d->bevelLowerRightColor, d->borderWidth1);
+                       d->bevelLowerRightColor, d->settings.borderWidth1);
             break;
 
-        case PineBorder:
-        case WoodBorder:
-        case PaperBorder:
-        case ParqueBorder:
-        case IceBorder:
-        case LeafBorder:
-        case MarbleBorder:
-        case RainBorder:
-        case CratersBorder:
-        case DriedBorder:
-        case PinkBorder:
-        case StoneBorder:
-        case ChalkBorder:
-        case GraniteBorder:
-        case RockBorder:
-        case WallBorder:
-            if (d->preserveAspectRatio)
+        case BorderContainer::PineBorder:
+        case BorderContainer::WoodBorder:
+        case BorderContainer::PaperBorder:
+        case BorderContainer::ParqueBorder:
+        case BorderContainer::IceBorder:
+        case BorderContainer::LeafBorder:
+        case BorderContainer::MarbleBorder:
+        case BorderContainer::RainBorder:
+        case BorderContainer::CratersBorder:
+        case BorderContainer::DriedBorder:
+        case BorderContainer::PinkBorder:
+        case BorderContainer::StoneBorder:
+        case BorderContainer::ChalkBorder:
+        case BorderContainer::GraniteBorder:
+        case BorderContainer::RockBorder:
+        case BorderContainer::WallBorder:
+            if (d->settings.preserveAspectRatio)
                 pattern(m_orgImage, m_destImage, d->borderMainWidth,
                         d->decorativeFirstColor, d->decorativeSecondColor,
                         d->border2ndWidth, d->border2ndWidth);
             else
-                pattern2(m_orgImage, m_destImage, d->borderWidth1,
+                pattern2(m_orgImage, m_destImage, d->settings.borderWidth1,
                          d->decorativeFirstColor, d->decorativeSecondColor,
-                         d->borderWidth2, d->borderWidth2);
+                         d->settings.borderWidth2, d->settings.borderWidth2);
             break;
     }
 }
@@ -234,17 +167,17 @@ void BorderFilter::filterImage()
 
 void BorderFilter::solid(DImg& src, DImg& dest, const DColor& fg, int borderWidth)
 {
-    if (d->orgWidth > d->orgHeight)
+    if (d->settings.orgWidth > d->settings.orgHeight)
     {
         int height = src.height() + borderWidth*2;
-        dest = DImg((int)(height*d->orgRatio), height, src.sixteenBit(), src.hasAlpha());
+        dest       = DImg((int)(height*d->orgRatio), height, src.sixteenBit(), src.hasAlpha());
         dest.fill(fg);
         dest.bitBltImage(&src, (dest.width()-src.width())/2, borderWidth);
     }
     else
     {
         int width = src.width() + borderWidth*2;
-        dest = DImg(width, (int)(width/d->orgRatio), src.sixteenBit(), src.hasAlpha());
+        dest      = DImg(width, (int)(width/d->orgRatio), src.sixteenBit(), src.hasAlpha());
         dest.fill(fg);
         dest.bitBltImage(&src, borderWidth, (dest.height()-src.height())/2);
     }
@@ -263,7 +196,7 @@ void BorderFilter::bevel(DImg& src, DImg& dest, const DColor& topColor,
 {
     int width, height;
 
-    if (d->orgWidth > d->orgHeight)
+    if (d->settings.orgWidth > d->settings.orgHeight)
     {
         height = src.height() + borderWidth*2;
         width  = (int)(height*d->orgRatio);
@@ -329,7 +262,7 @@ void BorderFilter::bevel(DImg& src, DImg& dest, const DColor& topColor,
         }
     }
 
-    if (d->orgWidth > d->orgHeight)
+    if (d->settings.orgWidth > d->settings.orgHeight)
         dest.bitBltImage(&src, (dest.width() - src.width()) / 2, borderWidth);
     else
         dest.bitBltImage(&src, borderWidth, (dest.height() - src.height()) / 2);
@@ -346,7 +279,7 @@ void BorderFilter::pattern(DImg& src, DImg& dest, int borderWidth,
     // Border tiled image using pattern with second solid border around.
     int width, height;
 
-    if (d->orgWidth > d->orgHeight)
+    if (d->settings.orgWidth > d->settings.orgHeight)
     {
         height = tmp.height() + borderWidth*2;
         width  = (int)(height*d->orgRatio);
@@ -358,8 +291,8 @@ void BorderFilter::pattern(DImg& src, DImg& dest, int borderWidth,
     }
 
     DImg tmp2(width, height, tmp.sixteenBit(), tmp.hasAlpha());
-    kDebug() << "Border File:" << d->borderPath;
-    DImg border(d->borderPath);
+    kDebug() << "Border File:" << d->settings.borderPath;
+    DImg border(d->settings.borderPath);
     if ( border.isNull() )
         return;
 
@@ -376,7 +309,7 @@ void BorderFilter::pattern(DImg& src, DImg& dest, int borderWidth,
     solid(tmp2, dest, secondColor, secondWidth);
 
     // Merge both images to one.
-    if (d->orgWidth > d->orgHeight)
+    if (d->settings.orgWidth > d->settings.orgHeight)
     {
         dest.bitBltImage(&tmp, (dest.width()-tmp.width())/2, borderWidth);
     }
@@ -457,11 +390,11 @@ void BorderFilter::pattern2(DImg& src, DImg& dest, int borderWidth,
 {
     // Border tile.
 
-    int w = d->orgWidth + borderWidth*2;
-    int h = d->orgHeight + borderWidth*2;
+    int w = d->settings.orgWidth + borderWidth*2;
+    int h = d->settings.orgHeight + borderWidth*2;
 
-    kDebug() << "Border File:" << d->borderPath;
-    DImg border(d->borderPath);
+    kDebug() << "Border File:" << d->settings.borderPath;
+    DImg border(d->settings.borderPath);
     if ( border.isNull() )
         return;
 

@@ -43,7 +43,7 @@ namespace Digikam
 
 class BorderFilterPriv;
 
-class DIGIKAM_EXPORT BorderFilter : public DImgThreadedFilter
+class DIGIKAM_EXPORT BorderContainer
 {
 
 public:
@@ -73,30 +73,64 @@ public:
 
 public:
 
-    /** Constructor using settings to preserve aspect ratio of image. */
-    explicit BorderFilter(DImg* orgImage, QObject* parent=0, int orgWidth=0, int orgHeight=0,
-                          const QString& borderPath=QString(), int borderType=SolidBorder, float borderPercent=0.1,
-                          const DColor& solidColor = DColor(),
-                          const DColor& niepceBorderColor = DColor(),
-                          const DColor& niepceLineColor = DColor(),
-                          const DColor& bevelUpperLeftColor = DColor(),
-                          const DColor& bevelLowerRightColor = DColor(),
-                          const DColor& decorativeFirstColor = DColor(),
-                          const DColor& decorativeSecondColor = DColor());
+    BorderContainer()
+    {
+        preserveAspectRatio   = true;
+        orgWidth              = 0;
+        orgHeight             = 0;
+        borderType            = 0;
+        borderPercent         = 0.1;
+        borderWidth1          = 0;
+        borderWidth2          = 0;
+        borderWidth3          = 0;
+        borderWidth4          = 0;
+        solidColor            = QColor(0, 0, 0);
+        niepceBorderColor     = QColor(255, 255, 255);
+        niepceLineColor       = QColor(0, 0, 0);
+        bevelUpperLeftColor   = QColor(192, 192, 192);
+        bevelLowerRightColor  = QColor(128, 128, 128);
+        decorativeFirstColor  = QColor(0, 0, 0);
+        decorativeSecondColor = QColor(0, 0, 0);
+    };
 
-    /** Constructor using settings to not-preserve aspect ratio of image. */
-    explicit BorderFilter(DImg* orgImage, QObject* parent=0, int orgWidth=0, int orgHeight=0,
-                          const QString& borderPath=QString(), int borderType=SolidBorder,
-                          int borderWidth1=100, int borderWidth2=20, int borderWidth3=20, int borderWidth4=10,
-                          const DColor& solidColor = DColor(),
-                          const DColor& niepceBorderColor = DColor(),
-                          const DColor& niepceLineColor = DColor(),
-                          const DColor& bevelUpperLeftColor = DColor(),
-                          const DColor& bevelLowerRightColor = DColor(),
-                          const DColor& decorativeFirstColor = DColor(),
-                          const DColor& decorativeSecondColor = DColor());
+    ~BorderContainer(){};
 
-    ~BorderFilter();
+public:
+
+    bool    preserveAspectRatio;
+
+    int     orgWidth;
+    int     orgHeight;
+
+    int     borderType;
+
+    int     borderWidth1;
+    int     borderWidth2;
+    int     borderWidth3;
+    int     borderWidth4;
+
+    double  borderPercent;
+
+    QString borderPath;
+
+    QColor  solidColor;
+    QColor  niepceBorderColor;
+    QColor  niepceLineColor;
+    QColor  bevelUpperLeftColor;
+    QColor  bevelLowerRightColor;
+    QColor  decorativeFirstColor;
+    QColor  decorativeSecondColor;
+};
+
+class DIGIKAM_EXPORT BorderFilter : public DImgThreadedFilter
+{
+
+public:
+
+    /** Constructor using settings to preserve aspect ratio of image.
+     */
+    explicit BorderFilter(DImg* orgImage, QObject* parent=0, const BorderContainer& settings = BorderContainer());
+    virtual ~BorderFilter();
 
 private:
 

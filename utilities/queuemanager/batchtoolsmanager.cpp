@@ -50,6 +50,11 @@
 #include "curvesadjust.h"
 #include "filmgrain.h"
 #include "localcontrast.h"
+#include "antivignetting.h"
+#include "invert.h"
+#include "convert8to16.h"
+#include "convert16to8.h"
+#include "border.h"
 
 namespace Digikam
 {
@@ -81,6 +86,7 @@ BatchToolsManager::BatchToolsManager(QObject* parent)
 
     // Decorate
     registerTool(new WaterMark(this));
+    registerTool(new Border(this));
 
     // Metadata
     registerTool(new AssignTemplate(this));
@@ -91,6 +97,7 @@ BatchToolsManager::BatchToolsManager(QObject* parent)
     registerTool(new NoiseReduction(this));
     registerTool(new Restoration(this));
     registerTool(new LocalContrast(this));
+    registerTool(new AntiVignetting(this));
 
     // Color
     registerTool(new BCGCorrection(this));
@@ -102,6 +109,9 @@ BatchToolsManager::BatchToolsManager(QObject* parent)
     registerTool(new BWConvert(this));
     registerTool(new WhiteBalance(this));
     registerTool(new CurvesAdjust(this));
+    registerTool(new Invert(this));
+    registerTool(new Convert8to16(this));
+    registerTool(new Convert16to8(this));
 
     // Filters
     registerTool(new FilmGrain(this));

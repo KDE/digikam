@@ -50,7 +50,8 @@ public:
         SuccessEntry,
         WarningEntry,
         ErrorEntry,
-        ProgressEntry
+        ProgressEntry,
+        CancelEntry
     };
 
 public:

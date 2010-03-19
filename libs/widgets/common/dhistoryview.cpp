@@ -73,6 +73,10 @@ public:
             case DHistoryView::ProgressEntry:
                 setIcon(0, SmallIcon("dialog-information"));
                 break;
+            case DHistoryView::CancelEntry:
+                setIcon(0, SmallIcon("dialog-cancel"));
+                setTextColor(2, Qt::darkBlue);
+                break;
             default:
                 setIcon(0, SmallIcon("dialog-information"));
         }

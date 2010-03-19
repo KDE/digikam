@@ -6,7 +6,7 @@
  * Date        : 2008-08-11
  * Description : Raw import settings box
  *
- * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -91,7 +91,7 @@ public:
         optionCustomWBGreenEntry("Custom White Balance Green"),
         optionFourColorRGBEntry("Four Color RGB"),
         optionUnclipColorsEntry("Unclip Color"),
-        optionDontStretchPxielsEntry("Dont Stretch Pixels"),
+        optionDontStretchPixelsEntry("Dont Stretch Pixels"),
         optionNoiseReductionEntry("Use Noise Reduction"),
         optionMedianFilterPassesEntry("Median Filter Passes"),
         optionNRThresholdEntry("NR Threshold"),
@@ -145,7 +145,7 @@ public:
     const QString optionCustomWBGreenEntry;
     const QString optionFourColorRGBEntry;
     const QString optionUnclipColorsEntry;
-    const QString optionDontStretchPxielsEntry;
+    const QString optionDontStretchPixelsEntry;
     const QString optionNoiseReductionEntry;
     const QString optionMedianFilterPassesEntry;
     const QString optionNRThresholdEntry;
@@ -201,12 +201,12 @@ public:
 
 };
 
-RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
+RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget* parent)
               : EditorToolSettings(parent), d(new RawSettingsBoxPriv)
 {
     setButtons(Default|Ok|Cancel);
     setTools(Histogram);
-    setHistogramType(Digikam::LRGBC);
+    setHistogramType(LRGBC);
 
     QGridLayout* gridSettings = new QGridLayout(plainPage());
 
@@ -217,10 +217,10 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
                                  DcrawSettingsWidget::SIXTEENBITS | DcrawSettingsWidget::COLORSPACE);
     d->decodingSettingsBox->setObjectName("RawSettingsBox Expander");
 
-    KFileDialog *inputDlg  = d->decodingSettingsBox->inputProfileUrlEdit()->fileDialog();
+    KFileDialog* inputDlg  = d->decodingSettingsBox->inputProfileUrlEdit()->fileDialog();
     inputDlg->setPreviewWidget(new ICCPreviewWidget(inputDlg));
 
-    KFileDialog *outputDlg = d->decodingSettingsBox->outputProfileUrlEdit()->fileDialog();
+    KFileDialog* outputDlg = d->decodingSettingsBox->outputProfileUrlEdit()->fileDialog();
     outputDlg->setPreviewWidget(new ICCPreviewWidget(outputDlg));
 
     d->abortBtn = new QPushButton(d->rawdecodingBox);
@@ -313,7 +313,7 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
     ColorGradientWidget* vGradient = new ColorGradientWidget(Qt::Vertical, 10, d->curveBox);
     vGradient->setColors( QColor( "white" ), QColor( "black" ) );
 
-    QLabel *spacev = new QLabel(d->curveBox);
+    QLabel* spacev = new QLabel(d->curveBox);
     spacev->setFixedWidth(1);
 
     d->curveWidget = new CurvesWidget(256, 192, d->curveBox);
@@ -326,7 +326,7 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
     d->resetCurveBtn->setAutoRaise(true);
     d->resetCurveBtn->setToolTip(i18n("Reset curve to linear"));
 
-    QLabel *spaceh = new QLabel(d->curveBox);
+    QLabel* spaceh = new QLabel(d->curveBox);
     spaceh->setFixedHeight(1);
 
     ColorGradientWidget *hGradient = new ColorGradientWidget(Qt::Horizontal, 10, d->curveBox);
@@ -376,7 +376,7 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget *parent)
 
     // ---------------------------------------------------------------
 
-    gridSettings->addWidget(d->tabView,   0, 0, 1, 5);
+    gridSettings->addWidget(d->tabView, 0, 0, 1, 5);
 #if KDCRAW_VERSION <= 0x000500
     gridSettings->setRowStretch(0, 10);
 #endif
@@ -493,7 +493,7 @@ void RawSettingsBox::readSettings()
     d->decodingSettingsBox->setUnclipColor(group.readEntry(
                     d->optionUnclipColorsEntry, 0));
     d->decodingSettingsBox->setDontStretchPixels(group.readEntry(
-                    d->optionDontStretchPxielsEntry, false)); // krazy:exclude=spelling
+                    d->optionDontStretchPixelsEntry, false));
     d->decodingSettingsBox->setNoiseReduction(group.readEntry(
                     d->optionNoiseReductionEntry, false));
     d->decodingSettingsBox->setMedianFilterPasses(group.readEntry(
@@ -573,7 +573,7 @@ void RawSettingsBox::writeSettings()
                     d->decodingSettingsBox->useFourColor());
     group.writeEntry(d->optionUnclipColorsEntry,
                     d->decodingSettingsBox->unclipColor());
-    group.writeEntry(d->optionDontStretchPxielsEntry,
+    group.writeEntry(d->optionDontStretchPixelsEntry,
                     d->decodingSettingsBox->useDontStretchPixels()); // krazy:exclude=spelling
     group.writeEntry(d->optionNoiseReductionEntry,
                     d->decodingSettingsBox->useNoiseReduction());

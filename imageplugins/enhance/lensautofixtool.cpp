@@ -51,8 +51,10 @@
 #include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imageguidewidget.h"
+#include "lensfuniface.h"
 #include "lensfunfilter.h"
 #include "lensfunsettings.h"
+#include "lensfuncameraselector.h"
 
 namespace DigikamEnhanceImagePlugin
 {
@@ -63,44 +65,28 @@ public:
 
     LensAutoFixToolPriv() :
         configGroupName("Lens Auto-Correction Tool"),
-        configCCAEntry("CCA"),
-        configVignettingEntry("Vignetting"),
-        configCCIEntry("CCI"),
-        configDistortionEntry("Distortion"),
-        configGeometryEntry("Geometry"),
 
         maskPreviewLabel(0),
         showGrid(0),
-        filterCCA(0),
-        filterVig(0),
-        filterCCI(0),
-        filterDist(0),
-        filterGeom(0),
+        settingsView(0),
         cameraSelector(0),
+        lfIface(0),
         previewWidget(0),
         gboxSettings(0)
         {}
 
-    const QString       configGroupName;
-    const QString       configCCAEntry;
-    const QString       configVignettingEntry;
-    const QString       configCCIEntry;
-    const QString       configDistortionEntry;
-    const QString       configGeometryEntry;
+    const QString          configGroupName;
 
-    QLabel*             maskPreviewLabel;
+    QLabel*                maskPreviewLabel;
 
-    QCheckBox*          showGrid;
-    QCheckBox*          filterCCA;
-    QCheckBox*          filterVig;
-    QCheckBox*          filterCCI;
-    QCheckBox*          filterDist;
-    QCheckBox*          filterGeom;
+    QCheckBox*             showGrid;
 
-    LensFunSettings*    cameraSelector;
+    LensFunSettings*       settingsView;
+    LensFunCameraSelector* cameraSelector;
+    LensFunIface*          lfIface;
 
-    ImageGuideWidget*   previewWidget;
-    EditorToolSettings* gboxSettings;
+    ImageGuideWidget*      previewWidget;
+    EditorToolSettings*    gboxSettings;
 };
 
 LensAutoFixTool::LensAutoFixTool(QObject* parent)
@@ -111,6 +97,8 @@ LensAutoFixTool::LensAutoFixTool(QObject* parent)
     setToolName(i18n("Lens Auto-Correction"));
     setToolIcon(SmallIcon("lensautofix"));
 
+    d->lfIface       = new LensFunIface();
+
     d->previewWidget = new ImageGuideWidget(0, true, ImageGuideWidget::HVGuideMode);
     setToolView(d->previewWidget);
     setPreviewModeMask(PreviewToolBar::AllPreviewModes);
@@ -119,43 +107,21 @@ LensAutoFixTool::LensAutoFixTool(QObject* parent)
 
     d->gboxSettings   = new EditorToolSettings;
     QGridLayout* grid = new QGridLayout(d->gboxSettings->plainPage());
-    d->cameraSelector = new LensFunSettings(d->gboxSettings->plainPage());
+    d->cameraSelector = new LensFunCameraSelector(d->lfIface, d->gboxSettings->plainPage());
     KSeparator* line  = new KSeparator(Qt::Horizontal, d->gboxSettings->plainPage());
 
     // -------------------------------------------------------------
 
-    d->showGrid   = new QCheckBox(i18n("Show grid"), d->gboxSettings->plainPage());
+    d->showGrid     = new QCheckBox(i18n("Show grid"), d->gboxSettings->plainPage());
     d->showGrid->setWhatsThis(i18n("Set this option to visualize the correction grid to be applied."));
 
-    d->filterCCA  = new QCheckBox(i18n("Chromatic Aberration"), d->gboxSettings->plainPage());
-    d->filterCCA->setWhatsThis(i18n("Chromatic aberration is easily recognized as color fringes "
-                                    "towards the image corners. CA is due to a varying lens focus "
-                                    "for different colors."));
-    d->filterVig  = new QCheckBox(i18n("Vignetting"), d->gboxSettings->plainPage());
-    d->filterVig->setWhatsThis(i18n("Vignetting refers to an image darkening, mostly in the corners. "
-                                    "Optical and natural vignetting can be canceled out with this option, "
-                                    "whereas mechanical vignetting will not be cured."));
-    d->filterCCI  = new QCheckBox(i18n("Color Correction"), d->gboxSettings->plainPage());
-    d->filterCCI->setWhatsThis(i18n("All lenses have a slight color tinge to them, "
-                                    "mostly due to the anti-reflective coating. "
-                                    "The tinge can be canceled when the respective data is known for the lens."));
-    d->filterDist = new QCheckBox(i18n("Distortion"), d->gboxSettings->plainPage());
-    d->filterDist->setWhatsThis(i18n("Distortion refers to an image deformation, which is most pronounced "
-                                     "towards the corners. These Seidel aberrations are known as pincushion "
-                                     "and barrel distortions."));
-    d->filterGeom = new QCheckBox(i18n("Geometry"), d->gboxSettings->plainPage());
-    d->filterGeom->setWhatsThis(i18n("Four geometries are handled here: Rectilinear (99 percent of all lenses), "
-                                     "Fisheye, Cylindrical, Equirectangular."));
+    d->settingsView = new LensFunSettings(d->gboxSettings->plainPage());
 
     grid->addWidget(d->showGrid,       0, 0, 1, 2);
     grid->addWidget(d->cameraSelector, 1, 0, 1, 2);
     grid->addWidget(line,              2, 0, 1, 2);
-    grid->addWidget(d->filterCCA,      3, 0, 1, 2);
-    grid->addWidget(d->filterVig,      4, 0, 1, 2);
-    grid->addWidget(d->filterCCI,      5, 0, 1, 2);
-    grid->addWidget(d->filterDist,     6, 0, 1, 2);
-    grid->addWidget(d->filterGeom,     7, 0, 1, 2);
-    grid->setRowStretch(8, 10);
+    grid->addWidget(d->settingsView,   3, 0, 1, 2);
+    grid->setRowStretch(4, 10);
     grid->setMargin(d->gboxSettings->spacingHint());
     grid->setSpacing(d->gboxSettings->spacingHint());
 
@@ -164,55 +130,31 @@ LensAutoFixTool::LensAutoFixTool(QObject* parent)
 
     // -------------------------------------------------------------
 
+    connect(d->settingsView, SIGNAL(signalSettingsChanged()),
+            this, SLOT(slotTimer()));
+
     connect(d->cameraSelector, SIGNAL(signalLensSettingsChanged()),
             this, SLOT(slotLensChanged()));
 
-    connect(d->showGrid, SIGNAL(stateChanged(int)),
-            this, SLOT(slotSetFilters()));
-
-    connect(d->filterCCA, SIGNAL(stateChanged(int)),
-            this, SLOT(slotSetFilters()));
-
-    connect(d->filterVig, SIGNAL(stateChanged(int)),
-            this, SLOT(slotSetFilters()));
-
-    connect(d->filterCCI, SIGNAL(stateChanged(int)),
-            this, SLOT(slotSetFilters()));
-
-    connect(d->filterDist, SIGNAL(stateChanged(int)),
-            this, SLOT(slotSetFilters()));
-
-    connect(d->filterGeom, SIGNAL(stateChanged(int)),
-            this, SLOT(slotSetFilters()));
+    connect(d->showGrid, SIGNAL(toggled(bool)),
+            this, SLOT(slotTimer()));
 
     QTimer::singleShot(0, this, SLOT(slotResetSettings()));
 }
 
 LensAutoFixTool::~LensAutoFixTool()
 {
+    delete d->lfIface;
     delete d;
 }
 
 void LensAutoFixTool::slotLensChanged()
 {
-    d->filterCCA->setEnabled(d->cameraSelector->getKLFObject()->supportsCCA());
-    d->filterVig->setEnabled(d->cameraSelector->getKLFObject()->supportsVig());
-    d->filterCCI->setEnabled(d->cameraSelector->getKLFObject()->supportsVig());
-    d->filterDist->setEnabled(d->cameraSelector->getKLFObject()->supportsDistortion());
-    d->filterGeom->setEnabled(d->cameraSelector->getKLFObject()->supportsDistortion());
-    slotSetFilters();
-}
-
-void LensAutoFixTool::slotSetFilters()
-{
-    d->cameraSelector->getKLFObject()->setCorrection(
-        (d->filterCCA->checkState()  == Qt::Checked && d->filterCCA->isEnabled())  ? true : false,
-        (d->filterVig->checkState()  == Qt::Checked && d->filterVig->isEnabled())  ? true : false,
-        (d->filterCCI->checkState()  == Qt::Checked && d->filterCCI->isEnabled())  ? true : false,
-        (d->filterDist->checkState() == Qt::Checked && d->filterDist->isEnabled()) ? true : false,
-        (d->filterGeom->checkState() == Qt::Checked && d->filterGeom->isEnabled()) ? true : false
-     );
-
+    d->settingsView->setEnabledCCA(d->lfIface->supportsCCA());
+    d->settingsView->setEnabledVig(d->lfIface->supportsVig());
+    d->settingsView->setEnabledCCI(d->lfIface->supportsVig());
+    d->settingsView->setEnabledDist(d->lfIface->supportsDistortion());
+    d->settingsView->setEnabledGeom(d->lfIface->supportsDistortion());
     slotTimer();
 }
 
@@ -222,31 +164,16 @@ void LensAutoFixTool::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
 
-    d->filterCCA->setCheckState(group.readEntry(d->configCCAEntry, true)         ? Qt::Checked : Qt::Unchecked);
-    d->filterVig->setCheckState(group.readEntry(d->configVignettingEntry, true)  ? Qt::Checked : Qt::Unchecked);
-    d->filterCCI->setCheckState(group.readEntry(d->configCCIEntry, true)         ? Qt::Checked : Qt::Unchecked);
-    d->filterDist->setCheckState(group.readEntry(d->configDistortionEntry, true) ? Qt::Checked : Qt::Unchecked);
-    d->filterGeom->setCheckState(group.readEntry(d->configGeometryEntry, true)   ? Qt::Checked : Qt::Unchecked);
-
+    d->settingsView->readSettings(group);
     d->gboxSettings->blockSignals(false);
-    slotSetFilters();
+    slotTimer();
 }
 
 void LensAutoFixTool::writeSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
-    if ( d->filterCCA->isEnabled() )
-        group.writeEntry(d->configCCAEntry,        (d->filterCCA->checkState() == Qt::Checked)  ? true : false);
-    if ( d->filterVig->isEnabled() )
-        group.writeEntry(d->configVignettingEntry, (d->filterVig->checkState() == Qt::Checked)  ? true : false);
-    if ( d->filterCCI->isEnabled() )
-        group.writeEntry(d->configCCIEntry,        (d->filterCCI->checkState() == Qt::Checked)  ? true : false);
-    if ( d->filterDist->isEnabled() )
-        group.writeEntry(d->configDistortionEntry, (d->filterDist->checkState() == Qt::Checked) ? true : false);
-    if ( d->filterGeom->isEnabled() )
-        group.writeEntry(d->configGeometryEntry,   (d->filterGeom->checkState() == Qt::Checked) ? true : false);
-
+    d->settingsView->writeSettings(group);
     group.sync();
 }
 
@@ -267,7 +194,11 @@ void LensAutoFixTool::slotResetSettings()
 
 void LensAutoFixTool::prepareEffect()
 {
-    d->gboxSettings->setEnabled(false);
+    // Settings information must be get before to disable settings view.
+    LensFunContainer settings = d->settingsView->settings();
+
+    toolSettings()->setEnabled(false);
+    toolView()->setEnabled(false);
 
     ImageIface* iface = d->previewWidget->imageIface();
     DImg preview      = iface->getPreviewImg();
@@ -297,15 +228,19 @@ void LensAutoFixTool::prepareEffect()
         preview.bitBlendImage(composer, &grid, 0, 0, preview.width(), preview.height(), 0, 0, flags);
     }
 
-    setFilter(new LensFunFilter(&preview, this, d->cameraSelector->getKLFObject()));
+    setFilter(new LensFunFilter(&preview, this, d->lfIface, settings));
 }
 
 void LensAutoFixTool::prepareFinal()
 {
-    d->gboxSettings->setEnabled(false);
+    // Settings information must be get before to disable settings view.
+    LensFunContainer settings = d->settingsView->settings();
+
+    toolSettings()->setEnabled(false);
+    toolView()->setEnabled(false);
 
     ImageIface iface(0, 0);
-    setFilter(new LensFunFilter(iface.getOriginalImg(), this, d->cameraSelector->getKLFObject()));
+    setFilter(new LensFunFilter(iface.getOriginalImg(), this, d->lfIface, settings));
 }
 
 void LensAutoFixTool::putPreviewData()
@@ -322,7 +257,8 @@ void LensAutoFixTool::putFinalData()
 
 void LensAutoFixTool::renderingFinished()
 {
-    d->gboxSettings->setEnabled(true);
+    toolSettings()->setEnabled(true);
+    toolView()->setEnabled(true);
 }
 
 }  // namespace DigikamEnhanceImagePlugin

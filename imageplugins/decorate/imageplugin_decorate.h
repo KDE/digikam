@@ -53,9 +53,11 @@ private Q_SLOTS:
     void slotInsertText();
     void slotBorder();
     void slotTexture();
+    void slotSuperImpose();
 
 private:
 
+    KAction* m_superimposeAction;
     KAction* m_textureAction;
     KAction* m_borderAction;
     KAction* m_insertTextAction;

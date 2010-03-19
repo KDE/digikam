@@ -53,10 +53,10 @@ public:
     float*      fimg[3];
     float*      buffer[3];
 
-    NRContainer settings;  
+    NRContainer settings;
 };
-  
-NRFilter::NRFilter(DImg *orgImage, QObject *parent, const NRContainer& settings)
+
+NRFilter::NRFilter(DImg* orgImage, QObject* parent, const NRContainer& settings)
         : DImgThreadedFilter(orgImage, parent, "NRFilter"),
           d(new NRFilterPriv)
 {
@@ -185,7 +185,7 @@ void NRFilter::filterImage()
 void NRFilter::waveletDenoise(float* fimg[3], unsigned int width, unsigned int height,
                               float threshold, double softness)
 {
-    float        *temp=0, thold;
+    float*       temp=0, thold;
     unsigned int i, lev, lpass, hpass, size, col, row;
     double       stdev[5];
     unsigned int samples[5];
@@ -327,7 +327,6 @@ void NRFilter::hatTransform (float* temp, float* base, int st, int size, int sc)
 
 void NRFilter::srgb2ycbcr(float** fimg, int size)
 {
-    /* using JPEG conversion here - expecting all channels to be in [0:255] range */
     float y, cb, cr;
 
     for (int i = 0; i < size; i++)
@@ -343,7 +342,6 @@ void NRFilter::srgb2ycbcr(float** fimg, int size)
 
 void NRFilter::ycbcr2srgb(float** fimg, int size)
 {
-    /* using JPEG conversion here - expecting all channels to be in [0:255] range */
     float r, g, b;
 
     for (int i = 0; i < size; i++)

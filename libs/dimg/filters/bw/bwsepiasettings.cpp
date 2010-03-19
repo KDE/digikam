@@ -83,7 +83,7 @@ public:
         configBWFilterEntry("BW Filter"),
         configBWFilmEntry("BW Film"),
         configBWToneEntry("BW Tone"),
-        configContrastAdjustmentEntry("ContrastAdjustment"),
+        configContrastAdjustmentEntry("ContrastValueAdjustment"),
         configStrengthAdjustmentEntry("StrengthAdjustment"),
         configCurveEntry("BWSepiaCurve"),
         bwFilters(0),

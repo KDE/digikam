@@ -47,20 +47,13 @@ bool LensFunIface::init()
     m_lfCameras  = m_lfDb->GetCameras();
     m_init       = true;
     m_usedLens   = NULL;
-    m_filterCCA  = true;
-    m_filterVig  = true;
-    m_filterDist = true;
 
     return true;
 }
 
-void LensFunIface::setCorrection(bool CCA, bool Vig, bool CCI, bool Dist, bool Geom)
+void LensFunIface::setSettings(const LensFunContainer& settings)
 {
-    m_filterCCA  = CCA;
-    m_filterVig  = Vig;
-    m_filterCCI  = CCI;
-    m_filterDist = Dist;
-    m_filterGeom = Geom;
+    m_settings = settings;
 }
 
 bool LensFunIface::supportsDistortion()

@@ -7,8 +7,8 @@
  * Description : a Digikam image editor plugin for superimpose a 
  *               template to an image.
  *
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,7 +47,7 @@
 
 class QPixmap;
 
-namespace DigikamSuperImposeImagesPlugin
+namespace DigikamDecorateImagePlugin
 {
 
 enum Action
@@ -63,14 +63,14 @@ Q_OBJECT
 
 public:
 
-    SuperImposeWidget(int w, int h, QWidget *parent=0);
+    SuperImposeWidget(int w, int h, QWidget* parent=0);
     ~SuperImposeWidget();
 
     void   setEditMode(int mode);
-    void   resetEdit(void);
-    QRect  getCurrentSelection(void);
-    QSize  getTemplateSize(void);
-    Digikam::DImg makeSuperImpose(void);
+    void   resetEdit();
+    QRect  getCurrentSelection();
+    QSize  getTemplateSize();
+    Digikam::DImg makeSuperImpose();
 
 public Q_SLOTS:
 
@@ -79,11 +79,11 @@ public Q_SLOTS:
 
 protected:
 
-    void paintEvent( QPaintEvent *e );
-    void resizeEvent( QResizeEvent * e );
-    void mousePressEvent ( QMouseEvent * e );
-    void mouseReleaseEvent ( QMouseEvent * e );
-    void mouseMoveEvent ( QMouseEvent * e );
+    void paintEvent(QPaintEvent*);
+    void resizeEvent(QResizeEvent*);
+    void mousePressEvent(QMouseEvent*);
+    void mouseReleaseEvent(QMouseEvent*);
+    void mouseMoveEvent(QMouseEvent*);
 
     bool zoomSelection(float deltaZoomFactor);
     void moveSelection(int x, int y);
@@ -100,7 +100,7 @@ private:
     int            m_editMode;
     float          m_zoomFactor;
 
-    QPixmap       *m_pixmap;            // For image region selection manipulations.
+    QPixmap*       m_pixmap;            // For image region selection manipulations.
 
     QRect          m_rect;              // For mouse drag position.
     QRect          m_currentSelection;  // Region selection in image displayed in the widget.
@@ -109,6 +109,6 @@ private:
     Digikam::DImg  m_templateScaled;    // Template scaled to preview widget
 };
 
-}  // namespace DigikamSuperImposeImagesPlugin
+}  // namespace DigikamDecorateImagePlugin
 
 #endif /* SUPERIMPOSEWIDGET_H */

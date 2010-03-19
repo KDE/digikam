@@ -1,3 +1,5 @@
+ADD_SUBDIRECTORY(borderpatterns texturepatterns)
+
 # digiKam files ######################################################
 
 INSTALL(FILES tag.png

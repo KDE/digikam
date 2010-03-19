@@ -62,17 +62,17 @@ public:
 
     enum BatchToolGroup
     {
-        BaseTool = 0,
-        KipiTool,
-        CustomTool,
+        BaseTool = 0,             // digiKam core tools.
+        KipiTool,                 // Exported kipi-plugins tools.
+        CustomTool,               // List of tools grouped and customized by users.
 
-        ColorTool,
-        EnhanceTool,
-        TransformTool,
-        DecorateTool,
-        FiltersTool,
-        ConvertTool,
-        MetadataTool
+        ColorTool,                // Tools to manage image colors (Curves, BCG, etc...)
+        EnhanceTool,              // Tools to ehance images (NR, sharp, etc...) 
+        TransformTool,            // Tools to transform images geometry (resize, rotate, flip, etc...)
+        DecorateTool,             // Tools to decorate images (Border, watermark, etc...)
+        FiltersTool,              // Tools to apply filters and special effects (film grain, BlurFx, etc...)
+        ConvertTool,              // Tools to convert images format (PNG, JPEG, TIFF, etc...)
+        MetadataTool              // Tools to play with metadata.
     };
 
 public:
@@ -80,35 +80,61 @@ public:
     BatchTool(const QString& name, BatchToolGroup group, QObject* parent=0);
     ~BatchTool();
 
+    /** Return group of tool. See BatchToolGroup enum for details.
+     */
     BatchToolGroup toolGroup() const;
 
+    /** Manage Tool title on settings view.
+     */
     void setToolTitle(const QString& toolTitle);
     QString toolTitle() const;
 
+    /** Manage Tool description on settings view.
+     */
     void setToolDescription(const QString& toolDescription);
     QString toolDescription() const;
 
+    /** Manage Tool icon on settings view.
+     */
     void setToolIcon(const KIcon& toolIcon);
     KIcon toolIcon() const;
 
+    /** Assign no settings view to tool. A label is just displayed.
+     */
+    void setNoSettingsWidget();
+    
+    /** Manage customized settings widget on settings view.
+     */
     void setSettingsWidget(QWidget* settingsWidget);
     QWidget* settingsWidget() const;
 
+    /** Manage settings values to tool. See BatchToolSettings container for details.
+     */
     void setSettings(const BatchToolSettings& settings);
     BatchToolSettings settings();
 
+    /** Manage current input url processed by this tool.
+     */
     void setInputUrl(const KUrl& inputUrl);
     KUrl inputUrl() const;
 
+    /** Manage current output url processed by this tool.
+     */
     void setOutputUrl(const KUrl& outputUrl);
     KUrl outputUrl() const;
 
+    /** Manage current working url used by this tool to process items.
+     */
     void setWorkingUrl(const KUrl& workingUrl);
     KUrl workingUrl() const;
-
+    
+    /** Manage instance of current image data container loaded by this tool.
+     */
     void setImageData(const DImg& img);
     DImg imageData() const;
 
+    /** Manage flag properties to indicate if this tool is last one to process on current item.
+     */
     void setLastChainedTool(bool last);
     bool isLastChainedTool() const;
 

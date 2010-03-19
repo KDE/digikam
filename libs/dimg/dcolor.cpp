@@ -6,7 +6,7 @@
  * Date        : 2005-12-02
  * Description : 8-16 bits color container.
  *
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * RGB<->HLS transformation algorithms are inspired from methods
  * describe at this url :
@@ -27,6 +27,10 @@
 
 #include "dcolor.h"
 
+// KDE includes
+
+#include <kdebug.h>
+
 namespace Digikam
 {
 
@@ -44,9 +48,19 @@ DColor::DColor(const DColor& color)
 DColor::DColor(const QColor& color, bool sixteenBit)
 {
     // initialize as eight bit
-    m_red        = color.red();
-    m_green      = color.green();
-    m_blue       = color.blue();
+    if (color.isValid())
+    {
+        m_red   = color.red();
+        m_green = color.green();
+        m_blue  = color.blue();
+    }
+    else
+    {
+        kDebug() << "QColor is invalid. reset color component to zero";
+        m_red   = 0;
+        m_green = 0;
+        m_blue  = 0;
+    }
     m_alpha      = 255;
     m_sixteenBit = false;
 
@@ -181,7 +195,7 @@ void DColor::getHSL(int* h, int* s, int* l) const
     *l = lround(lig * range);
 }
 
-void DColor::setRGB(int h, int s, int l, bool sixteenBit)
+void DColor::setHSL(int h, int s, int l, bool sixteenBit)
 {
     double hue;
     double lightness;
@@ -264,6 +278,35 @@ void DColor::setRGB(int h, int s, int l, bool sixteenBit)
 
     m_sixteenBit = sixteenBit;
 
+    // Fully opaque color.
+    if (m_sixteenBit)
+        m_alpha = 65535;
+    else
+        m_alpha = 255;
+}
+
+void DColor::getYCbCr(double* y, double* cb, double* cr)
+{
+    double r = m_red   / (m_sixteenBit ? 65535.0 : 255.0);
+    double g = m_green / (m_sixteenBit ? 65535.0 : 255.0);
+    double b = m_blue  / (m_sixteenBit ? 65535.0 : 255.0);
+    *y       =  0.2990 * r + 0.5870 * g + 0.1140 * b;
+    *cb      = -0.1687 * r - 0.3313 * g + 0.5000 * b + 0.5;
+    *cr      =  0.5000 * r - 0.4187 * g - 0.0813 * b + 0.5;
+}
+
+void DColor::setYCbCr(double y, double cb, double cr, bool sixteenBit)
+{
+    double r = y + 1.40200 * (cr - 0.5);
+    double g = y - 0.34414 * (cb - 0.5) - 0.71414 * (cr - 0.5);
+    double b = y + 1.77200 * (cb - 0.5);
+    
+    m_red    = lround(r * (sixteenBit ? 65535.0 : 255.0));
+    m_green  = lround(g * (sixteenBit ? 65535.0 : 255.0));
+    m_blue   = lround(b * (sixteenBit ? 65535.0 : 255.0));
+
+    m_sixteenBit = sixteenBit;
+    
     // Fully opaque color.
     if (m_sixteenBit)
         m_alpha = 65535;

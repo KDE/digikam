@@ -79,7 +79,7 @@ void TonalityFilter::filterImage()
 
             lig = lround(0.3 * ptr[2] + 0.59 * ptr[1] + 0.11 * ptr[0]);
 
-            mask.setRGB(hue, sat, lig, sixteenBit);
+            mask.setHSL(hue, sat, lig, sixteenBit);
 
             ptr[0] = (uchar)mask.blue();
             ptr[1] = (uchar)mask.green();
@@ -101,7 +101,7 @@ void TonalityFilter::filterImage()
 
             lig = lround(0.3 * ptr[2] + 0.59 * ptr[1] + 0.11 * ptr[0]);
 
-            mask.setRGB(hue, sat, lig, sixteenBit);
+            mask.setHSL(hue, sat, lig, sixteenBit);
 
             ptr[0] = (unsigned short)mask.blue();
             ptr[1] = (unsigned short)mask.green();

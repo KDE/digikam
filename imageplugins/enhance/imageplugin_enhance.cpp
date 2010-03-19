@@ -94,6 +94,7 @@ ImagePlugin_Enhance::ImagePlugin_Enhance(QObject* parent, const QVariantList&)
             this, SLOT(slotRedEye()));
 
     m_inPaintingAction = new KAction(KIcon("inpainting"), i18n("In-painting..."), this);
+    actionCollection()->addAction("imageplugin_inpainting", m_inPaintingAction);
     m_inPaintingAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_E));
     m_inPaintingAction->setWhatsThis( i18n( "This filter can be used to in-paint a part in a photo. "
                                             "To use this option, select a region to in-paint.") );

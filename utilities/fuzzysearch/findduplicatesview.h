@@ -90,7 +90,6 @@ private Q_SLOTS:
 
 private:
 
-    void cancelFindDuplicates(KJob* job);
     void enableControlWidgets(bool);
     bool checkForValidSettings();
 

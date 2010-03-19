@@ -7,8 +7,8 @@
  * Description : a Digikam image editor plugin for superimpose a
  *               template to an image.
  *
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -41,7 +41,6 @@
 
 // KDE includes
 
-#include <kaboutdata.h>
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kcursor.h>
@@ -56,18 +55,16 @@
 
 // Local includes
 
-#include "daboutdata.h"
 #include "dimg.h"
 #include "dirselectwidget.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
 #include "superimposewidget.h"
 #include "thumbbar.h"
-#include "version.h"
 
 using namespace Digikam;
 
-namespace DigikamSuperImposeImagesPlugin
+namespace DigikamDecorateImagePlugin
 {
 
 class SuperImposeToolPriv
@@ -304,4 +301,4 @@ void SuperImposeTool::finalRendering()
     d->thumbnailsBar->setEnabled(true);
 }
 
-}  // namespace DigikamSuperImposeImagesPlugin
+}  // namespace DigikamDecorateImagePlugin

@@ -61,19 +61,21 @@ FilmGrainFilter::FilmGrainFilter(DImgThreadedFilter* parentFilter,
 
 void FilmGrainFilter::filterImage()
 {
-    // m_sensibility: 800..6400
-    if (m_settings.lum_sensibility <= 0) return;
-    if (m_settings.chroma_sensibility <= 0) return;
+    // m_intensity: 800..6400
+    if (m_settings.lum_intensity <= 0) return;
+    if (m_settings.chroma_intensity <= 0) return;
     
     DColor color;
     int    h, s, l;
     int    progress;
-
-    int  width        = m_orgImage.width();
-    int  height       = m_orgImage.height();
-    bool sb           = m_orgImage.sixteenBit();
-    int  lum_noise    = ((m_settings.lum_sensibility   +200) / 1000) * 3 * (sb ? 256 : 1);
-    int  chroma_noise = ((m_settings.chroma_sensibility+200) / 1000) * 3 * (sb ? 256 : 1);
+    double lightness, hue;
+    int    local_lum_noise, local_chroma_noise;  
+    
+    int    width        = m_orgImage.width();
+    int    height       = m_orgImage.height();
+    bool   sb           = m_orgImage.sixteenBit();
+    int    lum_noise    = m_settings.lum_intensity    * (sb ? 256 : 1);
+    int    chroma_noise = m_settings.chroma_intensity * (sb ? 256 : 1);
     
     qsrand(1); // noise will always be the same
 
@@ -81,25 +83,31 @@ void FilmGrainFilter::filterImage()
     {
         for (int y = 0; !m_cancel && y < height; ++y)
         {
-            double lightness, hue;
-            int    local_lum_noise, local_chroma_noise;
-            
             color              = m_orgImage.getPixelColor(x, y);
             color.getHSL(&h, &s, &l);
+
+            if (m_settings.addLuminanceNoise)
+            {
+                lightness          = l / (sb ? 65535.0 : 255.0);
             
-            lightness          = l / (sb ? 65535.0 : 255.0);
-            hue                = h / (sb ? 65535.0 : 255.0);
+                local_lum_noise    = interpolate(m_settings.lum_shadows, m_settings.lum_midtones, 
+                                                 m_settings.lum_highlights, lightness) * lum_noise+1;
+                                                 
+                l                  = randomize(l,sb, local_lum_noise);
+
+            }
             
-            local_lum_noise    = interpolate(m_settings.lum_shadows, m_settings.lum_midtones, 
-                                             m_settings.lum_highlights, lightness) * lum_noise+1;
-                                          
-            local_chroma_noise = interpolate(m_settings.chroma_shadows, m_settings.chroma_midtones, 
-                                             m_settings.chroma_highlights, hue) * chroma_noise+1;
+            if (m_settings.addChrominanceNoise)
+            {
+                hue                = h / (sb ? 65535.0 : 255.0);
+
+                local_chroma_noise = interpolate(m_settings.chroma_shadows, m_settings.chroma_midtones, 
+                                                 m_settings.chroma_highlights, hue) * chroma_noise+1;
                                              
-            l                  = randomize(l,sb, local_lum_noise);
-            h                  = randomize(h,sb, local_chroma_noise);
+                h                  = randomize(h,sb, local_chroma_noise);
+            }
             
-            color.setRGB(h, s, l, sb);
+            color.setHSL(h, s, l, sb);
             m_destImage.setPixelColor(x, y, color);
         }
 

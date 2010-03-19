@@ -78,10 +78,10 @@ public:
         tagSelectCB          = 0;
         albumModel           = 0;
         tagModel             = 0;
-        cancelFindDuplicates = false;
+        searchJob            = NULL;
     }
 
-    bool                         cancelFindDuplicates;
+    KIO::Job*                    searchJob;
 
     QLabel*                      includeAlbumsLabel;
     QLabel*                      similarityLabel;
@@ -404,6 +404,7 @@ void FindDuplicatesView::slotFindDuplicates()
     job->addMetaData("albumids",   albumsIdList.join(","));
     job->addMetaData("tagids",     tagsIdList.join(","));
     job->addMetaData("threshold",  QString::number(thresh));
+    d->searchJob = job;
 
     connect(job, SIGNAL(result(KJob*)),
             this, SLOT(slotDuplicatesSearchResult(KJob*)));
@@ -415,24 +416,16 @@ void FindDuplicatesView::slotFindDuplicates()
             this, SLOT(slotDuplicatesSearchProcessedAmount(KJob *, KJob::Unit, qulonglong)));
 }
 
-void FindDuplicatesView::cancelFindDuplicates(KJob* job)
-{
-    if (!job)
-        return;
-
-    job->kill();
-    d->cancelFindDuplicates = false;
-
-    enableControlWidgets(true);
-    kapp->restoreOverrideCursor();
-
-    populateTreeView();
-}
-
 void FindDuplicatesView::slotCancelButtonPressed()
-{
-    d->cancelFindDuplicates = true;
-    kapp->setOverrideCursor(Qt::WaitCursor);
+{   
+    if (d->searchJob)
+    {
+        d->searchJob->kill();
+        d->searchJob = NULL;
+
+        enableControlWidgets(true);
+        populateTreeView();
+    }
 }
 
 void FindDuplicatesView::slotDuplicatesSearchTotalAmount(KJob*, KJob::Unit, qulonglong amount)
@@ -441,16 +434,15 @@ void FindDuplicatesView::slotDuplicatesSearchTotalAmount(KJob*, KJob::Unit, qulo
     d->progressBar->setProgressTotalSteps(amount);
 }
 
-void FindDuplicatesView::slotDuplicatesSearchProcessedAmount(KJob* job, KJob::Unit, qulonglong amount)
+void FindDuplicatesView::slotDuplicatesSearchProcessedAmount(KJob*, KJob::Unit, qulonglong amount)
 {
     d->progressBar->setProgressValue(amount);
-
-    if (d->cancelFindDuplicates)
-        cancelFindDuplicates(job);
 }
 
 void FindDuplicatesView::slotDuplicatesSearchResult(KJob*)
 {
+    d->searchJob = NULL;
+
     enableControlWidgets(true);
     populateTreeView();
 }

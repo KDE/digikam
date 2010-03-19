@@ -3,12 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2005-01-04
- * Description : a Digikam image editor plugin for superimpose a
- *               template to an image.
+ * Date        : 2010-03-15
+ * Description : Anti-vignetting batch tool.
  *
- * Copyright (C) 2005-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -23,38 +21,43 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEPLUGIN_SUPERIMPOSE_H
-#define IMAGEPLUGIN_SUPERIMPOSE_H
-
-// Qt includes
-
-#include <QVariant>
+#ifndef ANTIVIGNETTING_H
+#define ANTIVIGNETTING_H
 
 // Local includes
 
-#include "imageplugin.h"
-#include "digikam_export.h"
+#include "batchtool.h"
 
-class KAction;
+namespace Digikam
+{
 
-class ImagePlugin_SuperImpose : public Digikam::ImagePlugin
+class AntiVignettingSettings;
+
+class AntiVignetting : public BatchTool
 {
     Q_OBJECT
 
 public:
 
-    ImagePlugin_SuperImpose(QObject *parent, const QVariantList& args);
-    ~ImagePlugin_SuperImpose();
+    AntiVignetting(QObject* parent=0);
+    ~AntiVignetting();
 
-    void setEnabledActions(bool enable);
-
-private Q_SLOTS:
-
-    void slotSuperImpose();
+    BatchToolSettings defaultSettings();
 
 private:
 
-    KAction *m_superimposeAction;
+    bool toolOperations();
+
+private Q_SLOTS:
+
+    void slotAssignSettings2Widget();
+    void slotSettingsChanged();
+
+private:
+
+    AntiVignettingSettings* m_settingsView;
 };
 
-#endif /* IMAGEPLUGIN_SUPERIMPOSE_H */
+}  // namespace Digikam
+
+#endif /* ANTIVIGNETTING_H */

@@ -521,6 +521,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${libclapack_SRCS}
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/dimgthreadedfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/decorate/borderfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/decorate/bordersettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/decorate/texturefilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/blurfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/blurfxfilter.cpp
@@ -575,10 +576,12 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/wb/wbfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/wb/wbsettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/transform/freerotationfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/transform/freerotationsettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/transform/shearfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/greycstoration/greycstorationfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/greycstoration/greycstorationsettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/antivignettingfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/antivignettingsettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/lensdistortionfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/pixelaccess.cpp
        )
@@ -593,9 +596,9 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     IF(LENSFUN_LIBRARY)
         SET(libdimgfilters_SRCS ${libdimgfilters_SRCS}
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/lensfunfilter.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/lensfunsettings.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/lensfuncameraselector.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/lensfuniface.cpp
-            ${liblqr_SRCS}
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/lensfunsettings.cpp
            )
     ENDIF(LENSFUN_LIBRARY)
 
@@ -1056,6 +1059,8 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/batchtool.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/color/autocorrection.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/color/bcgcorrection.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/color/convert8to16.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/color/convert16to8.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/color/hslcorrection.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/color/colorbalance.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/color/iccconvert.cpp
@@ -1063,6 +1068,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/color/bwconvert.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/color/whitebalance.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/color/curvesadjust.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/color/invert.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/convert/convert2jpeg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/convert/convert2png.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/convert/convert2tiff.cpp
@@ -1073,9 +1079,11 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/enhance/blur.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/enhance/sharpen.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/enhance/noisereduction.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/enhance/antivignetting.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/transform/rotate.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/transform/flip.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/transform/resize.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/decorate/border.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/decorate/watermark.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/metadata/assigntemplate.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/filters/filmgrain.cpp

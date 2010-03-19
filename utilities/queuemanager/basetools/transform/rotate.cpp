@@ -31,37 +31,71 @@
 
 // KDE includes
 
-#include <kcombobox.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kvbox.h>
 #include <kdebug.h>
+
+// LibKDcraw includes
+
+#include <libkdcraw/rcombobox.h>
 
 // Local includes
 
 #include "dimg.h"
 #include "dmetadata.h"
 #include "jpegutils.h"
+#include "freerotationfilter.h"
+#include "freerotationsettings.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
 
+class RotatePriv
+{
+public:
+
+    RotatePriv() :
+        CUSTOM_ANGLE(DImg::ROT270+1),
+        label(0),
+        useExif(0),
+        frSettings(0)
+        {}
+
+    const int             CUSTOM_ANGLE;
+
+    QLabel*               label;
+
+    QCheckBox*            useExif;
+
+    RComboBox*            comboBox;
+
+    FreeRotationSettings* frSettings;
+};
+
 Rotate::Rotate(QObject* parent)
-      : BatchTool("Rotate", TransformTool, parent)
+      : BatchTool("Rotate", TransformTool, parent),
+        d(new RotatePriv)
 {
     setToolTitle(i18n("Rotate"));
-    setToolDescription(i18n("A tool to rotate images by 90/180/270 degrees."));
+    setToolDescription(i18n("A tool to rotate images."));
     setToolIcon(KIcon(SmallIcon("object-rotate-right")));
 
-    KVBox* vbox = new KVBox;
-    m_useExif   = new QCheckBox(i18n("Use Exif Orientation"), vbox);
+    KVBox* vbox  = new KVBox;
+    d->useExif   = new QCheckBox(i18n("Use Exif Orientation"), vbox);
 
-    m_label     = new QLabel(vbox);
-    m_comboBox  = new KComboBox(vbox);
-    m_comboBox->insertItem(DImg::ROT90,  i18n("90 degrees"));
-    m_comboBox->insertItem(DImg::ROT180, i18n("180 degrees"));
-    m_comboBox->insertItem(DImg::ROT270, i18n("270 degrees"));
-    m_label->setText(i18n("Angle:"));
+    d->label     = new QLabel(vbox);
+    d->comboBox  = new RComboBox(vbox);
+    d->comboBox->insertItem(DImg::ROT90,     i18n("90 degrees"));
+    d->comboBox->insertItem(DImg::ROT180,    i18n("180 degrees"));
+    d->comboBox->insertItem(DImg::ROT270,    i18n("270 degrees"));
+    d->comboBox->insertItem(d->CUSTOM_ANGLE, i18n("Custom"));
+    d->comboBox->setDefaultIndex(DImg::ROT90);
+    d->label->setText(i18n("Angle:"));
+
+    d->frSettings = new FreeRotationSettings(vbox);
 
     QLabel* space = new QLabel(vbox);
     vbox->setStretchFactor(space, 10);
@@ -70,48 +104,75 @@ Rotate::Rotate(QObject* parent)
 
     setNeedResetExifOrientation(true);
 
-    connect(m_comboBox, SIGNAL(activated(int)),
+    connect(d->comboBox, SIGNAL(activated(int)),
             this, SLOT(slotSettingsChanged()));
 
-    connect(m_useExif, SIGNAL(toggled(bool)),
+    connect(d->useExif, SIGNAL(toggled(bool)),
             this, SLOT(slotSettingsChanged()));
+
+    connect(d->frSettings, SIGNAL(signalSettingsChanged()),
+            this, SLOT(slotSettingsChanged()));
+
+    slotSettingsChanged();
 }
 
 Rotate::~Rotate()
 {
+    delete d;
 }
 
 BatchToolSettings Rotate::defaultSettings()
 {
     BatchToolSettings settings;
-    settings.insert("UseExif",  true);
-    settings.insert("Rotation", DImg::ROT90);
+    FreeRotationContainer defaultPrm = d->frSettings->defaultSettings();
+
+    settings.insert("useExif",   true);
+    settings.insert("rotation",  d->comboBox->defaultIndex());
+    settings.insert("angle",     defaultPrm.angle);
+    settings.insert("antiAlias", defaultPrm.antiAlias);
+    settings.insert("autoCrop",  defaultPrm.autoCrop);
     return settings;
 }
 
 void Rotate::slotAssignSettings2Widget()
 {
-    m_useExif->setChecked(settings()["UseExif"].toBool());
-    m_comboBox->setCurrentIndex(settings()["Rotation"].toInt());
+    d->useExif->setChecked(settings()["useExif"].toBool());
+    d->comboBox->setCurrentIndex(settings()["rotation"].toInt());
+    FreeRotationContainer prm;
+    prm.angle     = settings()["angle"].toDouble();
+    prm.antiAlias = settings()["antiAlias"].toBool();
+    prm.autoCrop  = settings()["autoCrop"].toInt();
+    d->frSettings->setSettings(prm);
 }
 
 void Rotate::slotSettingsChanged()
 {
-    m_comboBox->setEnabled(!m_useExif->isChecked());
-    m_label->setEnabled(!m_useExif->isChecked());
+    d->label->setEnabled(!d->useExif->isChecked());
+    d->comboBox->setEnabled(!d->useExif->isChecked());
+    d->frSettings->setEnabled(d->comboBox->isEnabled() && d->comboBox->currentIndex() == d->CUSTOM_ANGLE);
 
     BatchToolSettings settings;
-    settings.insert("UseExif",  m_useExif->isChecked());
-    settings.insert("Rotation", m_comboBox->currentIndex());
+    FreeRotationContainer currentPrm = d->frSettings->settings();
+
+    settings.insert("useExif",   d->useExif->isChecked());
+    settings.insert("rotation",  d->comboBox->currentIndex());
+    settings.insert("angle",     currentPrm.angle);
+    settings.insert("antiAlias", currentPrm.antiAlias);
+    settings.insert("autoCrop",  currentPrm.autoCrop);
+
     BatchTool::slotSettingsChanged(settings);
 }
 
 bool Rotate::toolOperations()
 {
-    bool useExif      = settings()["UseExif"].toBool();
-    DImg::ANGLE angle = (DImg::ANGLE)(settings()["Rotation"].toInt());
+    FreeRotationContainer prm;
+    bool useExif  = settings()["useExif"].toBool();
+    int rotation  = settings()["rotation"].toInt();
+    prm.angle     = settings()["angle"].toDouble();
+    prm.antiAlias = settings()["antiAlias"].toBool();
+    prm.autoCrop  = settings()["autoCrop"].toInt();
 
-    // JPEG image : lossless method.
+    // JPEG image : lossless method if non-custom rotation angle.
 
     if (isJpegImage(inputUrl().toLocalFile()) && image().isNull())
     {
@@ -122,7 +183,7 @@ bool Rotate::toolOperations()
         }
         else
         {
-            switch(angle)
+            switch(rotation)
             {
                 case DImg::ROT90:
                     return (exifTransform(inputUrl().toLocalFile(), inputUrl().fileName(), outputUrl().toLocalFile(), Rotate90));
@@ -133,9 +194,14 @@ bool Rotate::toolOperations()
                 case DImg::ROT270:
                     return (exifTransform(inputUrl().toLocalFile(), inputUrl().fileName(), outputUrl().toLocalFile(), Rotate270));
                     break;
-                default:
-                    kDebug() << "Unknow rotate action";
-                    return false;
+                default:      // Custom value
+                              // there is no loss less methode to turn JPEG image with a custom angle.
+                    if (!loadToDImg()) return false;
+                    FreeRotationFilter fr(&image(), 0L, prm);
+                    fr.startFilterDirectly();
+                    DImg trg = fr.getTargetImage();
+                    image().putImageData(trg.width(), trg.height(), trg.sixteenBit(), trg.hasAlpha(), trg.bits());
+                    return (savefromDImg());
                     break;
             }
         }
@@ -189,7 +255,24 @@ bool Rotate::toolOperations()
     }
     else
     {
-        image().rotate(angle);
+        switch(rotation)
+        {
+            case DImg::ROT90:
+                image().rotate(DImg::ROT90);
+                break;
+            case DImg::ROT180:
+                image().rotate(DImg::ROT180);
+                break;
+            case DImg::ROT270:
+                image().rotate(DImg::ROT270);
+                break;
+            default:      // Custom value
+                FreeRotationFilter fr(&image(), 0L, prm);
+                fr.startFilterDirectly();
+                DImg trg = fr.getTargetImage();
+                image().putImageData(trg.width(), trg.height(), trg.sixteenBit(), trg.hasAlpha(), trg.bits());
+                break;
+        }
     }
 
     return (savefromDImg());

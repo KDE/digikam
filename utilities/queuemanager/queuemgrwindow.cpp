@@ -982,6 +982,12 @@ void QueueMgrWindow::slotAction(const ActionData& ad)
             processOne();
             break;
         }
+        case ActionData::BatchCanceled:
+        {
+            processingCanceled(ad.fileUrl);
+            processOne();
+            break;
+        }
         case ActionData::TaskStarted:
         {
             d->assignedList->setCurrentTool(ad.index);
@@ -997,6 +1003,13 @@ void QueueMgrWindow::slotAction(const ActionData& ad)
             break;
         }
         case ActionData::TaskFailed:
+        {
+            d->currentTaskItem->setCanceled();
+            d->currentTaskItem = 0;
+            d->statusProgressBar->setProgressValue(d->statusProgressBar->progressValue()+1);
+            break;
+        }
+        case ActionData::TaskCanceled:
         {
             d->currentTaskItem->setCanceled();
             d->currentTaskItem = 0;
@@ -1063,7 +1076,7 @@ void QueueMgrWindow::processed(const KUrl& url, const KUrl& tmp)
                 case KIO::R_CANCEL:
                 {
                     slotStop();
-                    addHistoryMessage(i18n("Process Cancelled..."), DHistoryView::WarningEntry);
+                    addHistoryMessage(i18n("Process Cancelled..."), DHistoryView::CancelEntry);
                     return;
                     break;
                 }
@@ -1122,6 +1135,20 @@ void QueueMgrWindow::processingFailed(const KUrl&)
     {
         d->currentProcessItem->setCanceled();
         addHistoryMessage(i18n("Failed to process item..."), DHistoryView::ErrorEntry);
+    }
+
+    if (d->currentTaskItem)
+        d->currentTaskItem->setCanceled();
+
+    d->currentProcessItem = 0;
+}
+
+void QueueMgrWindow::processingCanceled(const KUrl&)
+{
+    if (d->currentProcessItem)
+    {
+        d->currentProcessItem->setCanceled();
+        addHistoryMessage(i18n("Process Cancelled..."), DHistoryView::CancelEntry);
     }
 
     if (d->currentTaskItem)

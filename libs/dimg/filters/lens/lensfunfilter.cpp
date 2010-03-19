@@ -30,16 +30,42 @@
 
 #include <kdebug.h>
 
+// Local includes
+
+#include "lensfuniface.h"
+
 namespace Digikam
 {
 
-LensFunFilter::LensFunFilter(DImg* orgImage, QObject* parent, LensFunIface* klf)
-             : DImgThreadedFilter(orgImage, parent, "LensCorrection")
+class LensFunFilterPriv
 {
-    m_klf    = klf;
-    m_parent = parent;
+public:
+
+    LensFunFilterPriv()
+    {
+        iface    = 0;
+        modifier = 0;
+    }
+
+    LensFunIface* iface;
+
+    lfModifier*   modifier;
+};
+
+LensFunFilter::LensFunFilter(DImg* orgImage, QObject* parent, LensFunIface* iface,
+                             const LensFunContainer& settings)
+             : DImgThreadedFilter(orgImage, parent, "LensCorrection"),
+               d(new LensFunFilterPriv)
+{
+    d->iface = iface;
+    d->iface->setSettings(settings);
 
     initFilter();
+}
+
+LensFunFilter::~LensFunFilter()
+{
+    delete d;
 }
 
 void LensFunFilter::filterImage()
@@ -54,37 +80,37 @@ void LensFunFilter::filterImage()
 #endif
 
     int modifyFlags = 0;
-    if ( m_klf->m_filterDist )
+    if ( d->iface->m_settings.filterDist )
        modifyFlags |= LF_MODIFY_DISTORTION;
-    if ( m_klf->m_filterGeom )
+    if ( d->iface->m_settings.filterGeom )
        modifyFlags |= LF_MODIFY_GEOMETRY;
-    if ( m_klf->m_filterCCA )
+    if ( d->iface->m_settings.filterCCA )
        modifyFlags |= LF_MODIFY_TCA;
-    if ( m_klf->m_filterVig )
+    if ( d->iface->m_settings.filterVig )
        modifyFlags |= LF_MODIFY_VIGNETTING;
-    if ( m_klf->m_filterCCI )
+    if ( d->iface->m_settings.filterCCI )
        modifyFlags |= LF_MODIFY_CCI;
 
     // Init lensfun lib, we are working on the full image.
 
     lfPixelFormat colorDepth = m_orgImage.bytesDepth() == 4 ? LF_PF_U8 : LF_PF_U16;
 
-    m_lfModifier = lfModifier::Create(m_klf->m_usedLens,
-                                      m_klf->m_cropFactor,
-                                      m_orgImage.width(),
-                                      m_orgImage.height());
+    d->modifier = lfModifier::Create(d->iface->m_usedLens,
+                                     d->iface->m_cropFactor,
+                                     m_orgImage.width(),
+                                     m_orgImage.height());
 
-    int modflags = m_lfModifier->Initialize(m_klf->m_usedLens,
-                                            colorDepth,
-                                            m_klf->m_focalLength,
-                                            m_klf->m_aperture,
-                                            m_klf->m_subjectDistance,
-                                            m_klf->m_cropFactor,
-                                            LF_RECTILINEAR,
-                                            modifyFlags,
-                                            0/*no inverse*/);
+    int modflags = d->modifier->Initialize(d->iface->m_usedLens,
+                                           colorDepth,
+                                           d->iface->m_focalLength,
+                                           d->iface->m_aperture,
+                                           d->iface->m_subjectDistance,
+                                           d->iface->m_cropFactor,
+                                           LF_RECTILINEAR,
+                                           modifyFlags,
+                                           0/*no inverse*/);
 
-    if (!m_lfModifier)
+    if (!d->modifier)
     {
         kError() << "ERROR: cannot initialize LensFun Modifier.";
         return;
@@ -92,9 +118,9 @@ void LensFunFilter::filterImage()
 
     // Calc necessary steps for progress bar
 
-    int steps = m_klf->m_filterCCA                             ? 1 : 0 +
-                ( m_klf->m_filterVig || m_klf->m_filterCCI )   ? 1 : 0 +
-                ( m_klf->m_filterDist || m_klf->m_filterGeom ) ? 1 : 0;
+    int steps = d->iface->m_settings.filterCCA                                         ? 1 : 0 +
+                ( d->iface->m_settings.filterVig  || d->iface->m_settings.filterCCI )  ? 1 : 0 +
+                ( d->iface->m_settings.filterDist || d->iface->m_settings.filterGeom ) ? 1 : 0;
 
     kDebug() << "LensFun Modifier Flags: " << modflags << "  Steps:" << steps;
 
@@ -109,13 +135,13 @@ void LensFunFilter::filterImage()
 
     // Stage 1: TCA correction
 
-    if ( m_klf->m_filterCCA )
+    if ( d->iface->m_settings.filterCCA )
     {
         m_orgImage.prepareSubPixelAccess(); // init lanczos kernel
 
         for (unsigned int y=0; !m_cancel && (y < m_orgImage.height()); ++y)
         {
-            if (m_lfModifier->ApplySubpixelDistortion(0.0, y, m_orgImage.width(), 1, pos))
+            if (d->modifier->ApplySubpixelDistortion(0.0, y, m_orgImage.width(), 1, pos))
             {
                 float* src = pos;
 
@@ -150,20 +176,20 @@ void LensFunFilter::filterImage()
 
     uchar* data = m_destImage.bits();
 
-    if ( m_klf->m_filterVig || m_klf->m_filterCCI )
+    if ( d->iface->m_settings.filterVig || d->iface->m_settings.filterCCI )
     {
         loop         = 0;
         float offset = 0.0;
 
         if ( steps == 3 )
             offset = 33.3;
-        else if (steps == 2 && m_klf->m_filterCCA)
+        else if (steps == 2 && d->iface->m_settings.filterCCA)
             offset = 50.0;
 
         for (unsigned int y=0; !m_cancel && (y < m_destImage.height()); ++y)
         {
-            if (m_lfModifier->ApplyColorModification(data, 0.0, y, m_destImage.width(),
-                                                     1, m_destImage.bytesDepth(), 0))
+            if (d->modifier->ApplyColorModification(data, 0.0, y, m_destImage.width(),
+                                                    1, m_destImage.bytesDepth(), 0))
             {
                 data += m_destImage.height() * m_destImage.bytesDepth();
                 ++loop;
@@ -180,7 +206,7 @@ void LensFunFilter::filterImage()
 
     // Stage 3: Distortion and Geometry
 
-    if ( m_klf->m_filterDist || m_klf->m_filterGeom )
+    if ( d->iface->m_settings.filterDist || d->iface->m_settings.filterGeom )
     {
         loop = 0;
 
@@ -190,7 +216,7 @@ void LensFunFilter::filterImage()
 
         for (unsigned long y=0; !m_cancel && (y < tempImage.height()); ++y)
         {
-            if (m_lfModifier->ApplyGeometryDistortion(0.0, y, tempImage.width(), 1, pos))
+            if (d->modifier->ApplyGeometryDistortion(0.0, y, tempImage.width(), 1, pos))
             {
                 float* src = pos;
 
@@ -219,7 +245,7 @@ void LensFunFilter::filterImage()
     // clean up
 
     delete [] pos;
-    m_lfModifier->Destroy();
+    d->modifier->Destroy();
 }
 
 }  // namespace Digikam

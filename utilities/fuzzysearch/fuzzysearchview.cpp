@@ -228,6 +228,7 @@ FuzzySearchView::FuzzySearchView(SearchModel *searchModel,
                                                           searchModificationHelper);
     d->searchTreeView->filteredModel()->listHaarSearches();
     d->searchTreeView->filteredModel()->setListTemporarySearches(true);
+    d->searchTreeView->setAlbumManagerCurrentAlbum(true);
     d->searchFuzzyBar        = new SearchTextBar(d->folderView, "FuzzySearchViewSearchFuzzyBar");
     d->searchFuzzyBar->setModel(d->searchTreeView->filteredModel(),
                                 AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);

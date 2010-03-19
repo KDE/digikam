@@ -6,7 +6,7 @@
  * Date        : 2005-12-02
  * Description : 8-16 bits color container.
  *
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -118,8 +118,22 @@ public:
         sixteenBit determines both how the HSL values are interpreted
         and the sixteenBit value of this color after this operation.
     */
-    void setRGB(int h, int s, int l, bool sixteenBit);
+    void setHSL(int h, int s, int l, bool sixteenBit);
 
+    /** Return the current RGB color values of this color
+        in the YCrCb color space.
+        Alpha is ignored for the conversion.
+    */
+    void getYCbCr(double* y, double* cb, double* cr);
+
+    /** Set the RGB color values of this color
+        to the given YCrCb values converted to RGB.
+        Alpha is set to be fully opaque.
+        sixteenBit determines both how the YCrCb values are interpreted
+        and the sixteenBit value of this color after this operation.
+    */
+    void setYCbCr(double y, double cb, double cr, bool sixteenBit);
+    
 private:
 
     int  m_red;

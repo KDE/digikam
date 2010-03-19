@@ -32,23 +32,24 @@ extern "C"
 // local includes
 
 #include "digikam_export.h"
+#include "lensfunfilter.h"
 
 namespace Digikam
 {
 
 class DIGIKAM_EXPORT LensFunIface
 {
-    friend class LensFunSettings;
-    friend class LensFunFilter;
 
 public:
 
     LensFunIface();
     virtual ~LensFunIface();
 
-//    typedef QMap<QString, QString> correctionData;
-//    correctionData getCorrectionData();
-    void setCorrection(bool CCA, bool Vignettation, bool CCI, bool Distortion, bool Geometry);
+/*
+    typedef QMap<QString, QString> correctionData;
+    correctionData getCorrectionData();
+*/
+    void setSettings(const LensFunContainer& settings);
 
     bool supportsDistortion();
     bool supportsCCA();
@@ -64,11 +65,8 @@ private:
 
     // my configuration
     bool                   m_init;
-    bool                   m_filterCCA;
-    bool                   m_filterVig;
-    bool                   m_filterCCI;
-    bool                   m_filterDist;
-    bool                   m_filterGeom;
+
+    LensFunContainer       m_settings;
 
     // Database items
     lfDatabase*            m_lfDb;
@@ -82,6 +80,9 @@ private:
     float                  m_focalLength;
     float                  m_aperture;
     float                  m_subjectDistance;
+
+    friend class LensFunCameraSelector;
+    friend class LensFunFilter;
 };
 
 }  // namespace Digikam

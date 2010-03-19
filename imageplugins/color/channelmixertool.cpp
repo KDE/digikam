@@ -172,7 +172,6 @@ void ChannelMixerTool::slotChannelChanged()
         d->gboxSettings->histogramBox()->setGradientColors(QColor("black"), QColor("white"));
 
     d->settingsView->setCurrentChannel(d->gboxSettings->histogramBox()->channel());
-    slotEffect();
 }
 
 void ChannelMixerTool::prepareEffect()
