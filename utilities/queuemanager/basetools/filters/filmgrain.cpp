@@ -53,6 +53,7 @@ FilmGrain::FilmGrain(QObject* parent)
 
     QWidget* box   = new QWidget;
     m_settingsView = new FilmGrainSettings(box);
+    m_settingsView->resetToDefault();
     setSettingsWidget(box);
 
     connect(m_settingsView, SIGNAL(signalSettingsChanged()),
