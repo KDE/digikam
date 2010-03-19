@@ -85,18 +85,27 @@ void FilmGrainFilter::filterImage()
         {
             color              = m_orgImage.getPixelColor(x, y);
             color.getHSL(&h, &s, &l);
+
+            if (m_settings.addLuminanceNoise)
+            {
+                lightness          = l / (sb ? 65535.0 : 255.0);
             
-            lightness          = l / (sb ? 65535.0 : 255.0);
-            hue                = h / (sb ? 65535.0 : 255.0);
+                local_lum_noise    = interpolate(m_settings.lum_shadows, m_settings.lum_midtones, 
+                                                 m_settings.lum_highlights, lightness) * lum_noise+1;
+                                                 
+                l                  = randomize(l,sb, local_lum_noise);
+
+            }
             
-            local_lum_noise    = interpolate(m_settings.lum_shadows, m_settings.lum_midtones, 
-                                             m_settings.lum_highlights, lightness) * lum_noise+1;
-                                          
-            local_chroma_noise = interpolate(m_settings.chroma_shadows, m_settings.chroma_midtones, 
-                                             m_settings.chroma_highlights, hue) * chroma_noise+1;
+            if (m_settings.addChrominanceNoise)
+            {
+                hue                = h / (sb ? 65535.0 : 255.0);
+
+                local_chroma_noise = interpolate(m_settings.chroma_shadows, m_settings.chroma_midtones, 
+                                                 m_settings.chroma_highlights, hue) * chroma_noise+1;
                                              
-            l                  = randomize(l,sb, local_lum_noise);
-            h                  = randomize(h,sb, local_chroma_noise);
+                h                  = randomize(h,sb, local_chroma_noise);
+            }
             
             color.setHSL(h, s, l, sb);
             m_destImage.setPixelColor(x, y, color);

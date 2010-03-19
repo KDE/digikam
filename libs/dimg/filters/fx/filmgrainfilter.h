@@ -41,30 +41,34 @@ public:
 
     FilmGrainContainer()
     {
-        lum_intensity     = 400;
-        lum_shadows       = 100;
-        lum_midtones      = 100; 
-        lum_highlights    = 100;
+        addLuminanceNoise   = true;
+        lum_intensity       = 400;
+        lum_shadows         = 100;
+        lum_midtones        = 100; 
+        lum_highlights      = 100;
 
-        chroma_intensity  = 400;
-        chroma_shadows    = 100;
-        chroma_midtones   = 100;
-        chroma_highlights = 100;
+        addChrominanceNoise = false;
+        chroma_intensity    = 400;
+        chroma_shadows      = 100;
+        chroma_midtones     = 100;
+        chroma_highlights   = 100;
     };
 
     ~FilmGrainContainer(){};
 
 public:
 
-    int lum_intensity;
-    int lum_shadows;
-    int lum_midtones;
-    int lum_highlights;
+    bool addLuminanceNoise;
+    int  lum_intensity;
+    int  lum_shadows;
+    int  lum_midtones;
+    int  lum_highlights;
 
-    int chroma_intensity;
-    int chroma_shadows; 
-    int chroma_midtones;
-    int chroma_highlights;
+    bool addChrominanceNoise;
+    int  chroma_intensity;
+    int  chroma_shadows; 
+    int  chroma_midtones;
+    int  chroma_highlights;
 };
 
 // -----------------------------------------------------------------------------------------------
