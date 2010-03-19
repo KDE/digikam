@@ -241,6 +241,9 @@ FilmGrainSettings::FilmGrainSettings(QWidget* parent)
 
     // -------------------------------------------------------------
 
+    connect(d->addLuminanceNoise, SIGNAL(toggled(bool)),
+            this, SLOT(slotAddLuminanceNoise(bool)));
+            
     connect(d->intensityLumInput, SIGNAL(valueChanged(int)),
             this, SIGNAL(signalSettingsChanged()));
             
@@ -252,6 +255,9 @@ FilmGrainSettings::FilmGrainSettings(QWidget* parent)
             
     connect(d->highlightsLumInput, SIGNAL(valueChanged(int)),
             this, SIGNAL(signalSettingsChanged()));
+
+    connect(d->addChrominanceNoise, SIGNAL(toggled(bool)),
+            this, SLOT(slotAddChrominanceNoise(bool)));
             
     connect(d->intensityChromaInput, SIGNAL(valueChanged(int)),
             this, SIGNAL(signalSettingsChanged()));
@@ -271,6 +277,24 @@ FilmGrainSettings::~FilmGrainSettings()
     delete d;
 }
 
+void FilmGrainSettings::slotAddLuminanceNoise(bool b)
+{
+    d->intensityLumInput->setEnabled(b);
+    d->shadowsLumInput->setEnabled(b);
+    d->midtonesLumInput->setEnabled(b);
+    d->highlightsLumInput->setEnabled(b);
+    emit signalSettingsChanged();
+}
+
+void FilmGrainSettings::slotAddChrominanceNoise(bool b)
+{
+    d->intensityChromaInput->setEnabled(b);
+    d->shadowsChromaInput->setEnabled(b);
+    d->midtonesChromaInput->setEnabled(b);
+    d->highlightsChromaInput->setEnabled(b);
+    emit signalSettingsChanged();
+}
+ 
 FilmGrainContainer FilmGrainSettings::settings() const
 {
     FilmGrainContainer prm;
