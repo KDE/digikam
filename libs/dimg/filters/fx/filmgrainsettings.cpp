@@ -112,7 +112,7 @@ FilmGrainSettings::FilmGrainSettings(QWidget* parent)
     
     // -------------------------------------------------------------
     
-    QLabel* label1       = new QLabel(i18n("intensity:"), firstPage);
+    QLabel* label1       = new QLabel(i18n("Intensity:"), firstPage);
     d->intensityLumInput = new RIntNumInput(firstPage);
     d->intensityLumInput->setRange(1, 100, 1);
     d->intensityLumInput->setSliderEnabled(true);
