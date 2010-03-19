@@ -415,10 +415,10 @@ void AbstractAlbumTreeView::mousePressEvent(QMouseEvent *e)
         if (index.isValid())
         {
             // check local and global flag
-            if (selectInAlbumManager && d->setInAlbumManager)
+/*            if (selectInAlbumManager && d->setInAlbumManager)
             {
                 AlbumManager::instance()->setCurrentAlbum(album);
-            }
+            }*/
         }
     }
 

@@ -63,38 +63,38 @@ class FilmGrainSettingsPriv
 public:
 
     FilmGrainSettingsPriv() :
-        configSensitivityLumAdjustmentEntry("SensitivityLumAdjustment"),
+        configIntensityLumAdjustmentEntry("IntensityLumAdjustment"),
         configShadowsLumAdjustmentEntry("ShadowsLumAdjustment"),
         configMidtonesLumAdjustmentEntry("MidtonesLumAdjustment"),
         configHighlightsLumAdjustmentEntry("HighlightsLumAdjustment"),
-        configSensitivityChromaAdjustmentEntry("SensitivityChromaAdjustment"),
+        configIntensityChromaAdjustmentEntry("IntensityChromaAdjustment"),
         configShadowsChromaAdjustmentEntry("ShadowsChromaAdjustment"),
         configMidtonesChromaAdjustmentEntry("MidtonesChromaAdjustment"),
         configHighlightsChromaAdjustmentEntry("HighlightsChromaAdjustment"),
-        sensibilityLumInput(0),
+        intensityLumInput(0),
         shadowsLumInput(0),
         midtonesLumInput(0),
         highlightsLumInput(0),
-        sensibilityChromaInput(0),
+        intensityChromaInput(0),
         shadowsChromaInput(0),
         midtonesChromaInput(0),
         highlightsChromaInput(0)
         {}
 
-    const QString configSensitivityLumAdjustmentEntry;
+    const QString configIntensityLumAdjustmentEntry;
     const QString configShadowsLumAdjustmentEntry;
     const QString configMidtonesLumAdjustmentEntry;
     const QString configHighlightsLumAdjustmentEntry;
-    const QString configSensitivityChromaAdjustmentEntry;
+    const QString configIntensityChromaAdjustmentEntry;
     const QString configShadowsChromaAdjustmentEntry;
     const QString configMidtonesChromaAdjustmentEntry;
     const QString configHighlightsChromaAdjustmentEntry;
     
-    RIntNumInput* sensibilityLumInput;
+    RIntNumInput* intensityLumInput;
     RIntNumInput* shadowsLumInput; 
     RIntNumInput* midtonesLumInput;
     RIntNumInput* highlightsLumInput;
-    RIntNumInput* sensibilityChromaInput;
+    RIntNumInput* intensityChromaInput;
     RIntNumInput* shadowsChromaInput; 
     RIntNumInput* midtonesChromaInput;
     RIntNumInput* highlightsChromaInput;
@@ -106,19 +106,19 @@ FilmGrainSettings::FilmGrainSettings(QWidget* parent)
                  : QWidget(parent),
                    d(new FilmGrainSettingsPriv)
 {
-    QGridLayout* grid = new QGridLayout(parent);
+    QGridLayout* grid  = new QGridLayout(parent);
     QWidget* firstPage = new QWidget();
     QGridLayout* grid1 = new QGridLayout(firstPage);
     
     // -------------------------------------------------------------
     
-    QLabel* label1         = new QLabel(i18n("Sensitivity (ISO):"), firstPage);
-    d->sensibilityLumInput = new RIntNumInput(firstPage);
-    d->sensibilityLumInput->setRange(800, 51200, 100);
-    d->sensibilityLumInput->setSliderEnabled(true);
-    d->sensibilityLumInput->setDefaultValue(2400);
-    d->sensibilityLumInput->setWhatsThis(i18n("Set here the film ISO-sensitivity to use for "
-                                              "simulating the film graininess."));
+    QLabel* label1       = new QLabel(i18n("intensity:"), firstPage);
+    d->intensityLumInput = new RIntNumInput(firstPage);
+    d->intensityLumInput->setRange(1, 100, 1);
+    d->intensityLumInput->setSliderEnabled(true);
+    d->intensityLumInput->setDefaultValue(25);
+    d->intensityLumInput->setWhatsThis(i18n("Set here the film ISO-sensitivity to use for "
+                                            "simulating the film graininess."));
   
     // -------------------------------------------------------------
 
@@ -149,7 +149,7 @@ FilmGrainSettings::FilmGrainSettings(QWidget* parent)
     d->shadowsLumInput->setWhatsThis(i18n("Set how much the filter affects shadows."));
   
     grid1->addWidget(label1,                    1, 0, 1, 1);
-    grid1->addWidget(d->sensibilityLumInput,    2, 0, 1, 1);
+    grid1->addWidget(d->intensityLumInput,    2, 0, 1, 1);
     grid1->addWidget(label2,                    3, 0, 1, 1);
     grid1->addWidget(d->shadowsLumInput,        4, 0, 1, 1);  
     grid1->addWidget(label3,                    5, 0, 1, 1);
@@ -164,13 +164,13 @@ FilmGrainSettings::FilmGrainSettings(QWidget* parent)
     QWidget* secondPage = new QWidget();
     QGridLayout* grid2  = new QGridLayout( secondPage );
 
-    QLabel* label5            = new QLabel(i18n("Sensitivity (ISO):"), secondPage);
-    d->sensibilityChromaInput = new RIntNumInput(secondPage);
-    d->sensibilityChromaInput->setRange(800, 51200, 100);
-    d->sensibilityChromaInput->setSliderEnabled(true);
-    d->sensibilityChromaInput->setDefaultValue(2400);
-    d->sensibilityChromaInput->setWhatsThis(i18n("Set here the film ISO-sensitivity to use for "
-                                                 "simulating the CCD noise."));
+    QLabel* label5          = new QLabel(i18n("Intensity:"), secondPage);
+    d->intensityChromaInput = new RIntNumInput(secondPage);
+    d->intensityChromaInput->setRange(1, 100, 1);
+    d->intensityChromaInput->setSliderEnabled(true);
+    d->intensityChromaInput->setDefaultValue(25);
+    d->intensityChromaInput->setWhatsThis(i18n("Set here the film ISO-sensitivity to use for "
+                                               "simulating the CCD noise."));
   
     // -------------------------------------------------------------
 
@@ -201,7 +201,7 @@ FilmGrainSettings::FilmGrainSettings(QWidget* parent)
     d->shadowsChromaInput->setWhatsThis(i18n("Set how much the filter affects shadows."));
       
     grid2->addWidget(label5,                    1, 0, 1, 1);
-    grid2->addWidget(d->sensibilityChromaInput, 2, 0, 1, 1);
+    grid2->addWidget(d->intensityChromaInput, 2, 0, 1, 1);
     grid2->addWidget(label6,                    3, 0, 1, 1);
     grid2->addWidget(d->shadowsChromaInput,     4, 0, 1, 1);  
     grid2->addWidget(label7,                    5, 0, 1, 1);
@@ -228,7 +228,7 @@ FilmGrainSettings::FilmGrainSettings(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    connect(d->sensibilityLumInput, SIGNAL(valueChanged(int)),
+    connect(d->intensityLumInput, SIGNAL(valueChanged(int)),
             this, SIGNAL(signalSettingsChanged()));
             
     connect(d->shadowsLumInput, SIGNAL(valueChanged(int)),
@@ -240,7 +240,7 @@ FilmGrainSettings::FilmGrainSettings(QWidget* parent)
     connect(d->highlightsLumInput, SIGNAL(valueChanged(int)),
             this, SIGNAL(signalSettingsChanged()));
             
-    connect(d->sensibilityChromaInput, SIGNAL(valueChanged(int)),
+    connect(d->intensityChromaInput, SIGNAL(valueChanged(int)),
             this, SIGNAL(signalSettingsChanged()));
             
     connect(d->shadowsChromaInput, SIGNAL(valueChanged(int)),
@@ -261,11 +261,11 @@ FilmGrainSettings::~FilmGrainSettings()
 FilmGrainContainer FilmGrainSettings::settings() const
 {
     FilmGrainContainer prm;
-    prm.lum_sensibility    = d->sensibilityLumInput->value();
+    prm.lum_intensity    = d->intensityLumInput->value();
     prm.lum_shadows        = d->shadowsLumInput->value();
     prm.lum_midtones       = d->midtonesLumInput->value();
     prm.lum_highlights     = d->highlightsLumInput->value();
-    prm.chroma_sensibility = d->sensibilityChromaInput->value();
+    prm.chroma_intensity = d->intensityChromaInput->value();
     prm.chroma_shadows     = d->shadowsChromaInput->value(); 
     prm.chroma_midtones    = d->midtonesChromaInput->value();
     prm.chroma_highlights  = d->highlightsChromaInput->value();
@@ -276,11 +276,11 @@ void FilmGrainSettings::setSettings(const FilmGrainContainer& settings)
 {
     blockSignals(true);
 
-    d->sensibilityLumInput->setValue(settings.lum_sensibility);
+    d->intensityLumInput->setValue(settings.lum_intensity);
     d->shadowsLumInput->setValue(settings.lum_shadows);
     d->midtonesLumInput->setValue(settings.lum_midtones);
     d->highlightsLumInput->setValue(settings.lum_highlights);
-    d->sensibilityChromaInput->setValue(settings.chroma_sensibility);
+    d->intensityChromaInput->setValue(settings.chroma_intensity);
     d->shadowsChromaInput->setValue(settings.chroma_shadows); 
     d->midtonesChromaInput->setValue(settings.chroma_midtones);
     d->highlightsChromaInput->setValue(settings.chroma_highlights);
@@ -291,11 +291,11 @@ void FilmGrainSettings::setSettings(const FilmGrainContainer& settings)
 void FilmGrainSettings::resetToDefault()
 {
     blockSignals(true);
-    d->sensibilityLumInput->slotReset();
+    d->intensityLumInput->slotReset();
     d->shadowsLumInput->slotReset();
     d->midtonesLumInput->slotReset();
     d->highlightsLumInput->slotReset();
-    d->sensibilityChromaInput->slotReset();
+    d->intensityChromaInput->slotReset();
     d->shadowsChromaInput->slotReset();
     d->midtonesChromaInput->slotReset();
     d->highlightsChromaInput->slotReset();
@@ -305,11 +305,11 @@ void FilmGrainSettings::resetToDefault()
 FilmGrainContainer FilmGrainSettings::defaultSettings() const
 {
     FilmGrainContainer prm;
-    prm.lum_sensibility    = d->sensibilityLumInput->defaultValue();
+    prm.lum_intensity    = d->intensityLumInput->defaultValue();
     prm.lum_shadows        = d->shadowsLumInput->defaultValue();
     prm.lum_midtones       = d->midtonesLumInput->defaultValue();
     prm.lum_highlights     = d->highlightsLumInput->defaultValue();
-    prm.chroma_sensibility = d->sensibilityChromaInput->defaultValue();
+    prm.chroma_intensity = d->intensityChromaInput->defaultValue();
     prm.chroma_shadows     = d->shadowsChromaInput->defaultValue(); 
     prm.chroma_midtones    = d->midtonesChromaInput->defaultValue();
     prm.chroma_highlights  = d->highlightsChromaInput->defaultValue();
@@ -321,11 +321,11 @@ void FilmGrainSettings::readSettings(KConfigGroup& group)
     FilmGrainContainer prm;
     FilmGrainContainer defaultPrm = defaultSettings();
 
-    prm.lum_sensibility    = group.readEntry(d->configSensitivityLumAdjustmentEntry,    defaultPrm.lum_sensibility);
+    prm.lum_intensity    = group.readEntry(d->configIntensityLumAdjustmentEntry,    defaultPrm.lum_intensity);
     prm.lum_shadows        = group.readEntry(d->configShadowsLumAdjustmentEntry,        defaultPrm.lum_shadows);
     prm.lum_midtones       = group.readEntry(d->configMidtonesLumAdjustmentEntry,       defaultPrm.lum_midtones);
     prm.lum_highlights     = group.readEntry(d->configHighlightsLumAdjustmentEntry,     defaultPrm.lum_highlights);
-    prm.chroma_sensibility = group.readEntry(d->configSensitivityChromaAdjustmentEntry, defaultPrm.chroma_sensibility);
+    prm.chroma_intensity = group.readEntry(d->configIntensityChromaAdjustmentEntry, defaultPrm.chroma_intensity);
     prm.chroma_shadows     = group.readEntry(d->configShadowsChromaAdjustmentEntry,     defaultPrm.chroma_shadows);
     prm.chroma_midtones    = group.readEntry(d->configMidtonesChromaAdjustmentEntry,    defaultPrm.chroma_midtones);
     prm.chroma_highlights  = group.readEntry(d->configHighlightsChromaAdjustmentEntry,  defaultPrm.chroma_highlights);
@@ -337,12 +337,12 @@ void FilmGrainSettings::writeSettings(KConfigGroup& group)
 {
     FilmGrainContainer prm = settings();
 
-    group.writeEntry(d->configSensitivityLumAdjustmentEntry,    prm.lum_sensibility);
+    group.writeEntry(d->configIntensityLumAdjustmentEntry,    prm.lum_intensity);
     group.writeEntry(d->configShadowsLumAdjustmentEntry,        prm.lum_shadows);
     group.writeEntry(d->configMidtonesLumAdjustmentEntry,       prm.lum_midtones);
     group.writeEntry(d->configHighlightsLumAdjustmentEntry,     prm.lum_highlights);
     
-    group.writeEntry(d->configSensitivityChromaAdjustmentEntry, prm.chroma_sensibility);
+    group.writeEntry(d->configIntensityChromaAdjustmentEntry, prm.chroma_intensity);
     group.writeEntry(d->configShadowsChromaAdjustmentEntry,     prm.chroma_shadows);
     group.writeEntry(d->configMidtonesChromaAdjustmentEntry,    prm.chroma_midtones);
     group.writeEntry(d->configHighlightsChromaAdjustmentEntry,  prm.chroma_highlights);

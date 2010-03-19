@@ -41,27 +41,27 @@ public:
 
     FilmGrainContainer()
     {
-        lum_sensibility    = 400;
-        lum_shadows        = 100;
-        lum_midtones       = 100; 
-        lum_highlights     = 100;
+        lum_intensity     = 400;
+        lum_shadows       = 100;
+        lum_midtones      = 100; 
+        lum_highlights    = 100;
 
-        chroma_sensibility = 400;
-        chroma_shadows     = 100;
-        chroma_midtones    = 100;
-        chroma_highlights  = 100;
+        chroma_intensity  = 400;
+        chroma_shadows    = 100;
+        chroma_midtones   = 100;
+        chroma_highlights = 100;
     };
 
     ~FilmGrainContainer(){};
 
 public:
 
-    int lum_sensibility;
+    int lum_intensity;
     int lum_shadows;
     int lum_midtones;
     int lum_highlights;
 
-    int chroma_sensibility;
+    int chroma_intensity;
     int chroma_shadows; 
     int chroma_midtones;
     int chroma_highlights;
