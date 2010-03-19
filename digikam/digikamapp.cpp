@@ -2358,6 +2358,10 @@ void DigikamApp::slotKipiPluginPlug()
         QStringList pluginActionsDisabled;
         pluginActionsDisabled << QString("raw_converter_single");  // Obsolete since 0.9.5 and new Raw Import tool.
         pluginActionsDisabled << QString("batch_rename_images");   // Obsolete since 1.0.0, replaced by AdvancedRename.
+        pluginActionsDisabled << QString("batch_border_images");   // Obsolete since 1.2.0, replaced by BQM border tool.
+        pluginActionsDisabled << QString("batch_convert_images");  // Obsolete since 1.2.0, replaced by BQM convert tools.
+        pluginActionsDisabled << QString("batch_color_images");    // Obsolete since 1.2.0, replaced by BQM color tools.
+        pluginActionsDisabled << QString("batch_filter_images");   // Obsolete since 1.2.0, replaced by BQM enhance tools.
 
         // Add actions to kipipluginsActionCollection
         QList<QAction*> allPluginActions = plugin->actionCollection()->actions();
