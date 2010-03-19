@@ -91,7 +91,7 @@ BWSepiaTool::BWSepiaTool(QObject* parent)
            : EditorToolThreaded(parent), d(new BWSepiaToolPriv)
 {
     setObjectName("convertbw");
-    setToolName(i18n("Black & White"));
+    setToolName(i18n("Black and White"));
     setToolIcon(SmallIcon("bwtonal"));
     setToolHelp("blackandwhitetool.anchor");
 
@@ -224,7 +224,7 @@ void BWSepiaTool::prepareFinal()
 void BWSepiaTool::putFinalData()
 {
     ImageIface iface(0, 0);
-    iface.putOriginalImage(i18n("Convert to Black && White"), filter()->getTargetImage().bits());
+    iface.putOriginalImage(i18n("Convert to Black and White"), filter()->getTargetImage().bits());
 }
 
 void BWSepiaTool::renderingFinished()
