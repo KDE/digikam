@@ -130,7 +130,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 093 ==> 226504 : when moving assigned tag in the keywords hierachy it becomes unassigned.
 094 ==> 220415 : Clicking the + in the Album tree expands and just collapses subdirs again.
 095 ==> 207881 : Album order differs in import dialog.
-096 ==>
+096 ==> 231361 : Digikam crash when trying to open NIKON NEF format photos from camera.
+097 ==>
 
 
 
