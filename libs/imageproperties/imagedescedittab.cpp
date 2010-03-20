@@ -366,11 +366,9 @@ ImageDescEditTab::~ImageDescEditTab()
     //slotChangingItems();
 
     KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(QString("Tag List View"));
+    KConfigGroup group       = config->group("Image Properties SideBar");
+    group.writeEntry("ImageDescEditTab Tab", d->tabWidget->currentIndex());
     group.sync();
-    KConfigGroup group2       = config->group("Image Properties SideBar");
-    group2.writeEntry("ImageDescEditTab Tab", d->tabWidget->currentIndex());
-    group2.sync();
 
     d->tagCheckView->saveState();
     d->tagsSearchBar->saveState();
