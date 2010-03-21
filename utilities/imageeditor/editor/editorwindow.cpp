@@ -956,51 +956,7 @@ void EditorWindow::applyStandardSettings()
 
     // -- GUI Settings -------------------------------------------------------
 
-    // Check if the thumbnail size in the config file is splitter based (the
-    // old method), and convert to dock based if needed.
-    if (group.hasKey(d->configSplitterStateEntry))
-    {
-        // Read splitter state from config file
-        QByteArray state;
-        state = QByteArray::fromBase64(group.readEntry(d->configSplitterStateEntry, state));
-
-        // Do a cheap check: a splitter state with 3 windows is always 34 bytes.
-        if (state.count() == 34)
-        {
-            // Read the state in streamwise fashion.
-            QDataStream stream(state);
-
-            // The first 8 bytes are resp. the magic number and the version
-            // (which should be 0, otherwise it's not saved with an older
-            // digiKam version). Then follows the list of window sizes.
-            qint32 marker;
-            qint32 version = -1;
-            QList<int> sizesList;
-
-            stream >> marker;
-            stream >> version;
-            if (version == 0)
-            {
-                stream >> sizesList;
-                if (sizesList.count() == 3)
-                {
-                    kDebug() << "Found splitter based config, converting to dockbar";
-                    // Remove the first entry (the thumbbar) and write the rest
-                    // back. Then it should be fine.
-                    sizesList.removeFirst();
-                    QByteArray newData;
-                    QDataStream newStream(&newData, QIODevice::WriteOnly);
-                    newStream << marker;
-                    newStream << version;
-                    newStream << sizesList;
-                    char s[24];
-                    int numBytes = stream.readRawData(s, 24);
-                    newStream.writeRawData(s, numBytes);
-                    group.writeEntry(d->configSplitterStateEntry, newData.toBase64());
-                }
-            }
-        }
-    }
+    d->legacyUpdateSplitterState(group);
     m_splitter->restoreState(group);
 
     d->fullScreenHideToolBar = group.readEntry(d->configFullScreenHideToolBarEntry, false);
@@ -1016,6 +972,7 @@ void EditorWindow::applyStandardSettings()
 
 void EditorWindow::saveStandardSettings()
 {
+
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(CONFIG_GROUP_NAME);
 
@@ -1031,6 +988,7 @@ void EditorWindow::saveStandardSettings()
     d->previewToolBar->writeSettings(group);
 
     config->sync();
+
 }
 
 /** Method used by Editor Tools. Only tools based on imageregionwidget support zoomming.
