@@ -22,6 +22,7 @@
  * ============================================================ */
 
 #include "lighttablewindow.moc"
+#include "lighttablewindow_p.h"
 
 // Qt includes
 
@@ -75,7 +76,6 @@
 #include "thumbbardock.h"
 #include "thumbnailsize.h"
 #include "lighttablepreview.h"
-#include "lighttablewindow_p.h"
 #include "uifilevalidator.h"
 #include "albummodel.h"
 

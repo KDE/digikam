@@ -507,14 +507,14 @@ void LightTablePreview::viewportPaintExtraData()
 
         if (!d->loadFullImageSize)
         {
-            if (d->imageInfo.format().startsWith("RAW"))
+            if (d->imageInfo.format().startsWith(QLatin1String("RAW")))
                 text = i18n("Embedded JPEG Preview");
             else
                 text = i18n("Reduced Size Preview");
         }
         else
         {
-            if (d->imageInfo.format().startsWith("RAW"))
+            if (d->imageInfo.format().startsWith(QLatin1String("RAW")))
                 text = i18n("Half Size Raw Preview");
             else
                 text = i18n("Full Size Preview");

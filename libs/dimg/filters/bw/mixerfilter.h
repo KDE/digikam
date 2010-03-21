@@ -90,7 +90,7 @@ class DIGIKAM_EXPORT MixerFilter : public DImgThreadedFilter
 
 public:
 
-    MixerFilter(DImg* orgImage, QObject* parent=0, const MixerContainer& settings=MixerContainer());
+    explicit MixerFilter(DImg* orgImage, QObject* parent=0, const MixerContainer& settings=MixerContainer());
     virtual ~MixerFilter();
 
 private:

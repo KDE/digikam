@@ -65,7 +65,7 @@ class DIGIKAM_EXPORT InfraredFilter : public DImgThreadedFilter
 
 public:
 
-    InfraredFilter(DImg* orgImage, QObject* parent=0, const InfraredContainer& settings=InfraredContainer());
+    explicit InfraredFilter(DImg* orgImage, QObject* parent=0, const InfraredContainer& settings=InfraredContainer());
     ~InfraredFilter(){};
 
 private:

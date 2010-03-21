@@ -22,6 +22,8 @@
  *
  * ============================================================ */
 
+#include "localcontrastcontainer.h"
+
 // C++ includes.
 
 #include <cstdio>
@@ -32,10 +34,6 @@
 // KDE includes
 
 #include <kdebug.h>
-
-// Local includes.
-
-#include "localcontrastcontainer.h"
 
 namespace Digikam
 {

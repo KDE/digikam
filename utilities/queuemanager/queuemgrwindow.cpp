@@ -22,6 +22,7 @@
  * ============================================================ */
 
 #include "queuemgrwindow.moc"
+#include "queuemgrwindow_p.h"
 
 // Qt includes
 
@@ -90,7 +91,6 @@
 #include "sidebar.h"
 #include "uifilevalidator.h"
 #include "knotificationwrapper.h"
-#include "queuemgrwindow_p.h"
 
 namespace Digikam
 {

@@ -134,7 +134,7 @@ class DIGIKAM_EXPORT BWSepiaFilter : public DImgThreadedFilter
 
 public:
 
-    BWSepiaFilter(DImg* orgImage, QObject* parent=0, const BWSepiaContainer& settings=BWSepiaContainer());
+    explicit BWSepiaFilter(DImg* orgImage, QObject* parent=0, const BWSepiaContainer& settings=BWSepiaContainer());
     virtual ~BWSepiaFilter();
 
 private:

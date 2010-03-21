@@ -46,7 +46,6 @@
 #include <kstandarddirs.h>
 #include <kcolorbutton.h>
 #include <kseparator.h>
-#include <kstandarddirs.h>
 
 // LibKDcraw includes
 

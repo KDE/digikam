@@ -50,7 +50,6 @@
 // Local includes
 
 #include "albumsettings.h"
-#include "imagethumbnaildelegate.h"
 #include "imagealbumfiltermodel.h"
 #include "imagealbummodel.h"
 #include "imagedragdrop.h"
