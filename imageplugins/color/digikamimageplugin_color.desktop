@@ -2,6 +2,7 @@
 Name=ImagePlugin_Color
 Name[ca]=ImagePlugin_Color
 Name[ca@valencia]=ImagePlugin_Color
+Name[da]=ImagePlugin_Color
 Name[et]=ImagePlugin_Color
 Name[pt]=ImagePlugin_Color
 Name[pt_BR]=ImagePlugin_Color
@@ -16,6 +17,7 @@ Encoding=UTF-8
 Comment=A tool to correct colors of image
 Comment[ca]=Una eina per corregir els colors de les imatges
 Comment[ca@valencia]=Una eina per corregir els colors de les imatges
+Comment[da]=Et værktøj til at korrigere et billedes farver
 Comment[et]=Tööriist pildi värvide parandamiseks
 Comment[pt]=Uma ferramenta para corrigir as cores de uma imagem
 Comment[pt_BR]=Uma ferramenta para corrigir as cores das imagens
