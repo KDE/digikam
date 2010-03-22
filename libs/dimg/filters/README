@@ -1,16 +1,17 @@
-auto      : Auto Color Correction.
-bw        : Black and White.
-bcg       : Brighness / Contrast / Gamma.
-cb        : Color Balance Correction.
-curves    : Histogram Curves Correction.
-decorate  : Decorative Effects.
-fx        : Special Effects.
-hsl       : Hue / Saturation / Lightness.
-icc       : Color Management.
-levels    : Histogram Levels Correction.
-lens      : Misc lens correction filters.
-lc        : Local Contrast (LDR Tonemapping).
-nr        : Wavelets Noise Reduction.
-sharp     : Sharp / Unsharp Mask / Refocus
-transform : Change Image Geometry.
-wb        : White Balance.
+auto          : Auto Color Correction.
+bw            : Black and White.
+bcg           : Brighness / Contrast / Gamma.
+cb            : Color Balance Correction.
+curves        : Histogram Curves Correction.
+decorate      : Decorative Effects.
+fx            : Special Effects.
+greystoration : CImg library interface for Greystoration filter.
+hsl           : Hue / Saturation / Lightness.
+icc           : Color Management.
+levels        : Histogram Levels Correction.
+lens          : Misc lens correction filters.
+lc            : Local Contrast (LDR Tonemapping).
+nr            : Wavelets Noise Reduction.
+sharp         : Sharp / Unsharp Mask / Refocus
+transform     : Change Image Geometry.
+wb            : White Balance.
