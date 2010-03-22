@@ -88,9 +88,14 @@ public:
 private:
 
     void filterImage();
+
+    // Luminance methods.
     double interpolate(int shadows, int midtones, int highlights, double x);
     int    randomize  (int value, bool sixteenbit, int range);
-    
+
+    // Chrominance methods.
+    double randomizeChroma(double value, int range);
+
 private:
 
     FilmGrainContainer m_settings;

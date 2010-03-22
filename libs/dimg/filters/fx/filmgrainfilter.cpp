@@ -23,6 +23,9 @@
  *
  * ============================================================ */
 
+// Uncomment this line to use experimental code about Chrominace noise adjustements.
+//#define ENABLE_CHROMINANCE_CODE 1
+
 #include "filmgrainfilter.h"
 
 // C++ includes
@@ -54,7 +57,7 @@ FilmGrainFilter::FilmGrainFilter(DImgThreadedFilter* parentFilter,
                                  const FilmGrainContainer& settings)
                : DImgThreadedFilter(parentFilter, orgImage, destImage, progressBegin, progressEnd,
                                     parentFilter->filterName() + ": FilmGrain")
-{   
+{
     m_settings = settings;
     filterImage();
 }
@@ -63,20 +66,21 @@ void FilmGrainFilter::filterImage()
 {
     if (m_settings.lum_intensity <= 0) return;
     if (m_settings.chroma_intensity <= 0) return;
-    
+
     DColor color;
     int    h, s, l;
     int    progress;
+    double ye, cb, cr;
     double lightness, hue;
     int    local_lum_noise;
-    int    local_chroma_noise;  
-    
+    int    local_chroma_noise;
+
     int    width        = m_orgImage.width();
     int    height       = m_orgImage.height();
     bool   sb           = m_orgImage.sixteenBit();
     int    lum_noise    = m_settings.lum_intensity    * (sb ? 256 : 1);
     int    chroma_noise = m_settings.chroma_intensity * (sb ? 256 : 1);
-    
+
     qsrand(1); // noise will always be the same
 
     for (int x = 0; !m_cancel && x < width; ++x)
@@ -89,25 +93,55 @@ void FilmGrainFilter::filterImage()
             if (m_settings.addLuminanceNoise)
             {
                 lightness       = l / (sb ? 65535.0 : 255.0);
-            
+
                 local_lum_noise = interpolate(m_settings.lum_shadows, m_settings.lum_midtones, 
-                                                 m_settings.lum_highlights, lightness) * lum_noise+1;
-                                                 
-                l               = randomize(l,sb, local_lum_noise);
+                                              m_settings.lum_highlights, lightness) * lum_noise+1;
+
+                l               = randomize(l, sb, local_lum_noise);
 
             }
-            
+
+#ifndef ENABLE_CHROMINANCE_CODE
+
             if (m_settings.addChrominanceNoise)
             {
                 hue                = h / (sb ? 65535.0 : 255.0);
 
                 local_chroma_noise = interpolate(m_settings.chroma_shadows, m_settings.chroma_midtones, 
                                                  m_settings.chroma_highlights, hue) * chroma_noise+1;
-                                             
-                h                  = randomize(h,sb, local_chroma_noise);
+
+                h                  = randomize(h, sb, local_chroma_noise);
             }
-            
+
             color.setHSL(h, s, l, sb);
+
+#else
+
+            color.setHSL(h, s, l, sb);
+
+            if (m_settings.addChrominanceNoise)
+            {
+                color.getYCbCr(&ye, &cb, &cr);
+
+                // Adjust Chrominance blue noise.
+
+                local_chroma_noise = interpolate(m_settings.chroma_shadows, m_settings.chroma_midtones, 
+                                                 m_settings.chroma_highlights, cb) * chroma_noise+1;
+
+                cb                 = randomize(cb, sb, local_chroma_noise);
+
+                // Adjust Chrominance red noise.
+
+                local_chroma_noise = interpolate(m_settings.chroma_shadows, m_settings.chroma_midtones, 
+                                                 m_settings.chroma_highlights, cr) * chroma_noise+1;
+
+                cr                 = randomize(cr, sb, local_chroma_noise);
+
+                color.setYCbCr(ye, cb, cr, sb);
+            }
+
+#endif
+
             m_destImage.setPixelColor(x, y, color);
         }
 
@@ -121,15 +155,21 @@ void FilmGrainFilter::filterImage()
 
 int FilmGrainFilter::randomize(int value, bool sixteenbit, int range)
 {
-    int nRand = (qrand() % range) - range/2.0;            
+    int nRand = (qrand() % range) - range/2.0;
     if (!sixteenbit)
     {
-        return (CLAMP0255(value+nRand));
+        return (CLAMP0255(value + nRand));
     }
     else
     {
-        return CLAMP065535(value+nRand);
+        return CLAMP065535(value + nRand);
     }
+}
+
+double FilmGrainFilter::randomizeChroma(double value, int range)
+{
+    double nRand = (double)((qrand() % range) - range/2.0);
+    return (value + nRand);
 }
 
 double FilmGrainFilter::interpolate(int shadows, int midtones, int highlights, double x)
@@ -137,7 +177,7 @@ double FilmGrainFilter::interpolate(int shadows, int midtones, int highlights, d
     double s = (shadows   +100)/200.0;
     double m = (midtones  +100)/200.0; 
     double h = (highlights+100)/200.0;
-    
+
     if (x>=0 && x <=0.5)
     {
         return (s+2*(m-s)*x);
