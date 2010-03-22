@@ -112,10 +112,10 @@ public:
     QLabel*       label6;
     QLabel*       label7;
     QLabel*       label8;
-    
+
     QCheckBox*    addLuminanceNoise;
     QCheckBox*    addChrominanceNoise;
-    
+
     RIntNumInput* intensityLumInput;
     RIntNumInput* shadowsLumInput; 
     RIntNumInput* midtonesLumInput;
@@ -124,7 +124,7 @@ public:
     RIntNumInput* shadowsChromaInput; 
     RIntNumInput* midtonesChromaInput;
     RIntNumInput* highlightsChromaInput;
-    
+
     RExpanderBox* expanderBox;
 };
 
@@ -135,7 +135,7 @@ FilmGrainSettings::FilmGrainSettings(QWidget* parent)
     QGridLayout* grid  = new QGridLayout(parent);
     QWidget* firstPage = new QWidget();
     QGridLayout* grid1 = new QGridLayout(firstPage);
-    
+
     // -------------------------------------------------------------
 
     d->addLuminanceNoise = new QCheckBox(i18n("Add Luminance Noise"));
@@ -146,7 +146,7 @@ FilmGrainSettings::FilmGrainSettings(QWidget* parent)
     d->intensityLumInput->setDefaultValue(25);
     d->intensityLumInput->setWhatsThis(i18n("Set here the film ISO-sensitivity to use for "
                                             "simulating the film graininess."));
-  
+
     // -------------------------------------------------------------
 
     d->label2             = new QLabel(i18n("Shadows:"), firstPage);
@@ -155,7 +155,7 @@ FilmGrainSettings::FilmGrainSettings(QWidget* parent)
     d->highlightsLumInput->setSliderEnabled(true);
     d->highlightsLumInput->setDefaultValue(-100);
     d->highlightsLumInput->setWhatsThis(i18n("Set how much the filter affects highlights."));
-    
+
     // -------------------------------------------------------------
 
     d->label3           = new QLabel(i18n("Midtones:"), firstPage);
@@ -164,8 +164,7 @@ FilmGrainSettings::FilmGrainSettings(QWidget* parent)
     d->midtonesLumInput->setSliderEnabled(true);
     d->midtonesLumInput->setDefaultValue(0);
     d->midtonesLumInput->setWhatsThis(i18n("Set how much the filter affects midtones."));
-    
- 
+
     // -------------------------------------------------------------
 
     d->label4          = new QLabel(i18n("Highlights:"), firstPage);
@@ -179,14 +178,14 @@ FilmGrainSettings::FilmGrainSettings(QWidget* parent)
     grid1->addWidget(d->label1,                 1, 0, 1, 1);
     grid1->addWidget(d->intensityLumInput,      2, 0, 1, 1);
     grid1->addWidget(d->label2,                 3, 0, 1, 1);
-    grid1->addWidget(d->shadowsLumInput,        4, 0, 1, 1);  
+    grid1->addWidget(d->shadowsLumInput,        4, 0, 1, 1);
     grid1->addWidget(d->label3,                 5, 0, 1, 1);
-    grid1->addWidget(d->midtonesLumInput,       6, 0, 1, 1); 
-    grid1->addWidget(d->label4,                 7, 0, 1, 1); 
+    grid1->addWidget(d->midtonesLumInput,       6, 0, 1, 1);
+    grid1->addWidget(d->label4,                 7, 0, 1, 1);
     grid1->addWidget(d->highlightsLumInput,     8, 0, 1, 1);
     grid1->setMargin(KDialog::spacingHint());
     grid1->setSpacing(KDialog::spacingHint());
-    
+
     // -------------------------------------------------------------
 
     QWidget* secondPage = new QWidget();
@@ -200,7 +199,7 @@ FilmGrainSettings::FilmGrainSettings(QWidget* parent)
     d->intensityChromaInput->setDefaultValue(25);
     d->intensityChromaInput->setWhatsThis(i18n("Set here the film ISO-sensitivity to use for "
                                                "simulating the CCD noise."));
-  
+
     // -------------------------------------------------------------
 
     d->label6                = new QLabel(i18n("Shadows:"), secondPage);
@@ -209,17 +208,16 @@ FilmGrainSettings::FilmGrainSettings(QWidget* parent)
     d->highlightsChromaInput->setSliderEnabled(true);
     d->highlightsChromaInput->setDefaultValue(-100);
     d->highlightsChromaInput->setWhatsThis(i18n("Set how much the filter affects highlights."));
-    
+
     // -------------------------------------------------------------
-    
+
     d->label7              = new QLabel(i18n("Midtones:"), secondPage);
     d->midtonesChromaInput = new RIntNumInput(secondPage);
     d->midtonesChromaInput->setRange(-100, 100, 1);
     d->midtonesChromaInput->setSliderEnabled(true);
     d->midtonesChromaInput->setDefaultValue(0);
     d->midtonesChromaInput->setWhatsThis(i18n("Set how much the filter affects midtones."));
-    
- 
+
     // -------------------------------------------------------------
 
     d->label8             = new QLabel(i18n("Highlights:"), secondPage);
@@ -228,7 +226,7 @@ FilmGrainSettings::FilmGrainSettings(QWidget* parent)
     d->shadowsChromaInput->setSliderEnabled(true);
     d->shadowsChromaInput->setDefaultValue(-100);
     d->shadowsChromaInput->setWhatsThis(i18n("Set how much the filter affects shadows."));
-    
+
     grid2->addWidget(d->addChrominanceNoise,    0, 0, 1, 1);
     grid2->addWidget(d->label5,                 1, 0, 1, 1);
     grid2->addWidget(d->intensityChromaInput,   2, 0, 1, 1);
@@ -240,7 +238,7 @@ FilmGrainSettings::FilmGrainSettings(QWidget* parent)
     grid2->addWidget(d->highlightsChromaInput,  8, 0, 1, 1);
     grid2->setMargin(KDialog::spacingHint());
     grid2->setSpacing(KDialog::spacingHint());    
-    
+
     // -------------------------------------------------------------
 
     d->expanderBox = new RExpanderBox();
@@ -260,31 +258,31 @@ FilmGrainSettings::FilmGrainSettings(QWidget* parent)
 
     connect(d->addLuminanceNoise, SIGNAL(toggled(bool)),
             this, SLOT(slotAddLuminanceNoise(bool)));
-            
+
     connect(d->intensityLumInput, SIGNAL(valueChanged(int)),
             this, SIGNAL(signalSettingsChanged()));
-            
+
     connect(d->shadowsLumInput, SIGNAL(valueChanged(int)),
             this, SIGNAL(signalSettingsChanged()));
-            
+
     connect(d->midtonesLumInput, SIGNAL(valueChanged(int)),
             this, SIGNAL(signalSettingsChanged()));
-            
+
     connect(d->highlightsLumInput, SIGNAL(valueChanged(int)),
             this, SIGNAL(signalSettingsChanged()));
 
     connect(d->addChrominanceNoise, SIGNAL(toggled(bool)),
             this, SLOT(slotAddChrominanceNoise(bool)));
-            
+
     connect(d->intensityChromaInput, SIGNAL(valueChanged(int)),
             this, SIGNAL(signalSettingsChanged()));
-            
+
     connect(d->shadowsChromaInput, SIGNAL(valueChanged(int)),
             this, SIGNAL(signalSettingsChanged()));
-            
+
     connect(d->midtonesChromaInput, SIGNAL(valueChanged(int)),
             this, SIGNAL(signalSettingsChanged()));
-            
+
     connect(d->highlightsChromaInput, SIGNAL(valueChanged(int)),
             this, SIGNAL(signalSettingsChanged()));
 }
@@ -319,7 +317,7 @@ void FilmGrainSettings::slotAddChrominanceNoise(bool b)
     d->highlightsChromaInput->setEnabled(b);
     emit signalSettingsChanged();
 }
- 
+
 FilmGrainContainer FilmGrainSettings::settings() const
 {
     FilmGrainContainer prm;
@@ -352,7 +350,7 @@ void FilmGrainSettings::setSettings(const FilmGrainContainer& settings)
     d->highlightsChromaInput->setValue(settings.chroma_highlights);
     slotAddLuminanceNoise(settings.addLuminanceNoise);
     slotAddChrominanceNoise(settings.addChrominanceNoise);
-    
+
     blockSignals(false);
 }
 
@@ -371,17 +369,17 @@ void FilmGrainSettings::readSettings(KConfigGroup& group)
     FilmGrainContainer prm;
     FilmGrainContainer defaultPrm = defaultSettings();
 
-    prm.addLuminanceNoise   = group.readEntry(d->configAddLumNoiseEntry,                true);    
+    prm.addLuminanceNoise   = group.readEntry(d->configAddLumNoiseEntry,                true);
     prm.lum_intensity       = group.readEntry(d->configIntensityLumAdjustmentEntry,     defaultPrm.lum_intensity);
     prm.lum_shadows         = group.readEntry(d->configShadowsLumAdjustmentEntry,       defaultPrm.lum_shadows);
     prm.lum_midtones        = group.readEntry(d->configMidtonesLumAdjustmentEntry,      defaultPrm.lum_midtones);
     prm.lum_highlights      = group.readEntry(d->configHighlightsLumAdjustmentEntry,    defaultPrm.lum_highlights);
-    prm.addChrominanceNoise = group.readEntry(d->configAddChromaNoiseEntry,             false);    
+    prm.addChrominanceNoise = group.readEntry(d->configAddChromaNoiseEntry,             false);
     prm.chroma_intensity    = group.readEntry(d->configIntensityChromaAdjustmentEntry,  defaultPrm.chroma_intensity);
     prm.chroma_shadows      = group.readEntry(d->configShadowsChromaAdjustmentEntry,    defaultPrm.chroma_shadows);
     prm.chroma_midtones     = group.readEntry(d->configMidtonesChromaAdjustmentEntry,   defaultPrm.chroma_midtones);
     prm.chroma_highlights   = group.readEntry(d->configHighlightsChromaAdjustmentEntry, defaultPrm.chroma_highlights);
-                                                     
+
     setSettings(prm);
 }
 
@@ -394,7 +392,7 @@ void FilmGrainSettings::writeSettings(KConfigGroup& group)
     group.writeEntry(d->configShadowsLumAdjustmentEntry,        prm.lum_shadows);
     group.writeEntry(d->configMidtonesLumAdjustmentEntry,       prm.lum_midtones);
     group.writeEntry(d->configHighlightsLumAdjustmentEntry,     prm.lum_highlights);
-    
+
     group.writeEntry(d->configAddChromaNoiseEntry,              prm.addChrominanceNoise);
     group.writeEntry(d->configIntensityChromaAdjustmentEntry,   prm.chroma_intensity);
     group.writeEntry(d->configShadowsChromaAdjustmentEntry,     prm.chroma_shadows);

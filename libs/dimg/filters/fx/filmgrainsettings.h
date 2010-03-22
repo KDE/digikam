@@ -64,8 +64,8 @@ Q_SIGNALS:
 
     void signalSettingsChanged();
 
-private Q_SLOTS:    
-    
+private Q_SLOTS:
+
     void slotAddLuminanceNoise(bool);
     void slotAddChrominanceNoise(bool);
 
