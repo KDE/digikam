@@ -61,7 +61,6 @@ FilmGrainFilter::FilmGrainFilter(DImgThreadedFilter* parentFilter,
 
 void FilmGrainFilter::filterImage()
 {
-    // m_intensity: 800..6400
     if (m_settings.lum_intensity <= 0) return;
     if (m_settings.chroma_intensity <= 0) return;
     
@@ -69,7 +68,8 @@ void FilmGrainFilter::filterImage()
     int    h, s, l;
     int    progress;
     double lightness, hue;
-    int    local_lum_noise, local_chroma_noise;  
+    int    local_lum_noise;
+    int    local_chroma_noise;  
     
     int    width        = m_orgImage.width();
     int    height       = m_orgImage.height();
@@ -83,17 +83,17 @@ void FilmGrainFilter::filterImage()
     {
         for (int y = 0; !m_cancel && y < height; ++y)
         {
-            color              = m_orgImage.getPixelColor(x, y);
+            color = m_orgImage.getPixelColor(x, y);
             color.getHSL(&h, &s, &l);
 
             if (m_settings.addLuminanceNoise)
             {
-                lightness          = l / (sb ? 65535.0 : 255.0);
+                lightness       = l / (sb ? 65535.0 : 255.0);
             
-                local_lum_noise    = interpolate(m_settings.lum_shadows, m_settings.lum_midtones, 
+                local_lum_noise = interpolate(m_settings.lum_shadows, m_settings.lum_midtones, 
                                                  m_settings.lum_highlights, lightness) * lum_noise+1;
                                                  
-                l                  = randomize(l,sb, local_lum_noise);
+                l               = randomize(l,sb, local_lum_noise);
 
             }
             
