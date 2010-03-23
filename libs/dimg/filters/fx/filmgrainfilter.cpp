@@ -24,7 +24,7 @@
  * ============================================================ */
 
 // Uncomment this line to use experimental code about Chrominace noise adjustements.
-//#define ENABLE_CHROMINANCE_CODE 1
+//#define ENABLE_EXPERIMENTAL_CHROMINANCE_CODE 1
 
 #include "filmgrainfilter.h"
 
@@ -74,13 +74,15 @@ void FilmGrainFilter::filterImage()
     double ye, cb, cr;
     double lightness, hue;
     int    local_lum_noise;
-    int    local_chroma_noise;
+    int    local_hue_noise;
+    double local_chroma_noise;
 
     int    width        = m_orgImage.width();
     int    height       = m_orgImage.height();
     bool   sb           = m_orgImage.sixteenBit();
     int    lum_noise    = m_settings.lum_intensity    * (sb ? 256 : 1);
-    int    chroma_noise = m_settings.chroma_intensity * (sb ? 256 : 1);
+    int    hue_noise    = m_settings.chroma_intensity * (sb ? 256 : 1);
+    double chroma_noise = m_settings.chroma_intensity * (sb ? 256.0 : 1.0);
 
     qsrand(1); // noise will always be the same
 
@@ -96,22 +98,22 @@ void FilmGrainFilter::filterImage()
                 lightness       = l / (sb ? 65535.0 : 255.0);
 
                 local_lum_noise = interpolate(m_settings.lum_shadows, m_settings.lum_midtones, 
-                                              m_settings.lum_highlights, lightness) * lum_noise+1;
+                                              m_settings.lum_highlights, lightness) * lum_noise +1;
 
                 l               = randomize(l, sb, local_lum_noise);
 
             }
 
-#ifndef ENABLE_CHROMINANCE_CODE
+#ifndef ENABLE_EXPERIMENTAL_CHROMINANCE_CODE
 
             if (m_settings.addChrominanceNoise)
             {
-                hue                = h / (sb ? 65535.0 : 255.0);
+                hue             = h / (sb ? 65535.0 : 255.0);
 
-                local_chroma_noise = interpolate(m_settings.chroma_shadows, m_settings.chroma_midtones, 
-                                                 m_settings.chroma_highlights, hue) * chroma_noise+1;
+                local_hue_noise = interpolate(m_settings.chroma_shadows, m_settings.chroma_midtones, 
+                                              m_settings.chroma_highlights, hue) * hue_noise +1;
 
-                h                  = randomize(h, sb, local_chroma_noise);
+                h               = randomize(h, sb, local_hue_noise);
             }
 
             color.setHSL(h, s, l, sb);
@@ -119,26 +121,31 @@ void FilmGrainFilter::filterImage()
             Q_UNUSED(ye);
             Q_UNUSED(cb);
             Q_UNUSED(cr);
+            Q_UNUSED(chroma_noise);
+            Q_UNUSED(local_chroma_noise);
 
 #else
 
             color.setHSL(h, s, l, sb);
-
+            
             if (m_settings.addChrominanceNoise)
             {
                 color.getYCbCr(&ye, &cb, &cr);
 
+//                kDebug() << "RGB: " << color.red() << ", " << color.green() << ", " << color.blue();
+//                kDebug() << "YUV: " << ye << ", " << cb << ", " << cr;
+
                 // Adjust Chrominance blue noise.
 
                 local_chroma_noise = interpolate(m_settings.chroma_shadows, m_settings.chroma_midtones, 
-                                                 m_settings.chroma_highlights, cb) * chroma_noise+1;
+                                                 m_settings.chroma_highlights, cb) * chroma_noise+1.0;
 
                 cb                 = randomizeChroma(cb, sb, local_chroma_noise);
 
                 // Adjust Chrominance red noise.
 
                 local_chroma_noise = interpolate(m_settings.chroma_shadows, m_settings.chroma_midtones, 
-                                                 m_settings.chroma_highlights, cr) * chroma_noise+1;
+                                                 m_settings.chroma_highlights, cr) * chroma_noise+1.0;
 
                 cr                 = randomizeChroma(cr, sb, local_chroma_noise);
 
@@ -146,6 +153,8 @@ void FilmGrainFilter::filterImage()
             }
 
             Q_UNUSED(hue);
+            Q_UNUSED(hue_noise);
+            Q_UNUSED(local_hue_noise);
 
 #endif
 
@@ -173,24 +182,17 @@ int FilmGrainFilter::randomize(int value, bool sixteenbit, int range)
     }
 }
 
-double FilmGrainFilter::randomizeChroma(double value, bool sixteenbit, int range)
-{
-    double nRand = (double)((qrand() % range) - range/2.0) / (sixteenbit ? 65535.0 : 255.0);
-//    kDebug() << "value:" << value << "  range:" << range << "   nRand:" << nRand;
-    return (value + nRand);
-}
-
 double FilmGrainFilter::interpolate(int shadows, int midtones, int highlights, double x)
 {
     double s = (shadows   +100)/200.0;
     double m = (midtones  +100)/200.0; 
     double h = (highlights+100)/200.0;
 
-    if (x>=0 && x <=0.5)
+    if (x >= 0.0 && x <= 0.5)
     {
         return (s+2*(m-s)*x);
     }
-    else if (x>=0.5 && x <=1.0)
+    else if (x >= 0.5 && x <= 1.0)
     {
         return (2*(h-m)*x+2*m-h);
     }
@@ -198,6 +200,21 @@ double FilmGrainFilter::interpolate(int shadows, int midtones, int highlights, d
     {
         return 1.0;
     }
+}
+
+double FilmGrainFilter::randomizeChroma(double value, bool sixteenbit, double range)
+{
+    // About YCbCr color space details, see this Url : http://en.allexperts.com/e/y/yc/ycbcr.htm
+    
+    double nRand = ((double)(qrand() % (int)range) - range/2.0) / (sixteenbit ? 65535.0 : 255.0);
+//    kDebug() << "value:" << value << "  range:" << range << "   nRand:" << nRand;
+
+    double ret   = value + nRand;
+    
+    if (ret < 0.0) return 0.0;
+    if (ret > 1.0) return 1.0;
+    
+    return ret;
 }
 
 }  // namespace Digikam
