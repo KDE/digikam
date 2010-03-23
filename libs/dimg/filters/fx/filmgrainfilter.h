@@ -94,7 +94,7 @@ private:
     int    randomize  (int value, bool sixteenbit, int range);
 
     // Chrominance methods.
-    double randomizeChroma(double value, int range);
+    double randomizeChroma(double value, bool sixteenbit, int range);
 
 private:
 

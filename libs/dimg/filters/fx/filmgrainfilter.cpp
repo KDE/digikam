@@ -30,6 +30,7 @@
 
 // C++ includes
 
+#include <cstdlib>
 #include <cmath>
 
 // KDE includes
@@ -114,6 +115,10 @@ void FilmGrainFilter::filterImage()
             }
 
             color.setHSL(h, s, l, sb);
+            
+            Q_UNUSED(ye);
+            Q_UNUSED(cb);
+            Q_UNUSED(cr);
 
 #else
 
@@ -128,17 +133,19 @@ void FilmGrainFilter::filterImage()
                 local_chroma_noise = interpolate(m_settings.chroma_shadows, m_settings.chroma_midtones, 
                                                  m_settings.chroma_highlights, cb) * chroma_noise+1;
 
-                cb                 = randomize(cb, sb, local_chroma_noise);
+                cb                 = randomizeChroma(cb, sb, local_chroma_noise);
 
                 // Adjust Chrominance red noise.
 
                 local_chroma_noise = interpolate(m_settings.chroma_shadows, m_settings.chroma_midtones, 
                                                  m_settings.chroma_highlights, cr) * chroma_noise+1;
 
-                cr                 = randomize(cr, sb, local_chroma_noise);
+                cr                 = randomizeChroma(cr, sb, local_chroma_noise);
 
                 color.setYCbCr(ye, cb, cr, sb);
             }
+
+            Q_UNUSED(hue);
 
 #endif
 
@@ -166,9 +173,10 @@ int FilmGrainFilter::randomize(int value, bool sixteenbit, int range)
     }
 }
 
-double FilmGrainFilter::randomizeChroma(double value, int range)
+double FilmGrainFilter::randomizeChroma(double value, bool sixteenbit, int range)
 {
-    double nRand = (double)((qrand() % range) - range/2.0);
+    double nRand = (double)((qrand() % range) - range/2.0) / (sixteenbit ? 65535.0 : 255.0);
+//    kDebug() << "value:" << value << "  range:" << range << "   nRand:" << nRand;
     return (value + nRand);
 }
 
