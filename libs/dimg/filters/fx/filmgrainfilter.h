@@ -30,6 +30,7 @@
 #include "digikam_export.h"
 #include "dimgthreadedfilter.h"
 #include "globals.h"
+#include "dcolor.h"
 
 namespace Digikam
 {
@@ -89,12 +90,9 @@ private:
 
     void filterImage();
 
-    // Luminance methods.
-    double interpolate(int shadows, int midtones, int highlights, double x);
-    int    randomize  (int value, bool sixteenbit, int range);
-
-    // Chrominance methods.
-    double randomizeChroma(double value, bool sixteenbit, double range);
+    double interpolate(int shadows, int midtones, int highlights, const DColor& col);
+    void   randomizeLuma(DColor& col, double range);
+    void   randomizeChroma(DColor& col, double range);
 
 private:
 
