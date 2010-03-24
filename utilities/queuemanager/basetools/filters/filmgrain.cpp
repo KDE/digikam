@@ -69,12 +69,12 @@ BatchToolSettings FilmGrain::defaultSettings()
     BatchToolSettings prm;
     FilmGrainContainer defaultPrm = m_settingsView->defaultSettings();
 
-    prm.insert("addLuminanceNoise",   (int)defaultPrm.addLuminanceNoise);
+    prm.insert("addLuminanceNoise",   (bool)defaultPrm.addLuminanceNoise);
     prm.insert("lum_intensity",       (int)defaultPrm.lum_intensity);
     prm.insert("lum_shadows",         (int)defaultPrm.lum_shadows);
     prm.insert("lum_midtones",        (int)defaultPrm.lum_midtones);
     prm.insert("lum_highlights",      (int)defaultPrm.lum_highlights);
-    prm.insert("addChrominanceNoise", (int)defaultPrm.addChrominanceNoise);
+    prm.insert("addChrominanceNoise", (bool)defaultPrm.addChrominanceNoise);
     prm.insert("chroma_intensity",    (int)defaultPrm.chroma_intensity);
     prm.insert("chroma_shadows",      (int)defaultPrm.chroma_shadows);
     prm.insert("chroma_midtones",     (int)defaultPrm.chroma_midtones);
@@ -104,12 +104,12 @@ void FilmGrain::slotSettingsChanged()
     BatchToolSettings prm;
     FilmGrainContainer currentPrm = m_settingsView->settings();
 
-    prm.insert("addLuminanceNoise",   (int)currentPrm.addLuminanceNoise);
+    prm.insert("addLuminanceNoise",   (bool)currentPrm.addLuminanceNoise);
     prm.insert("lum_intensity",       (int)currentPrm.lum_intensity);
     prm.insert("lum_shadows",         (int)currentPrm.lum_shadows);
     prm.insert("lum_midtones",        (int)currentPrm.lum_midtones);
     prm.insert("lum_highlights",      (int)currentPrm.lum_highlights);
-    prm.insert("addChrominanceNoise", (int)currentPrm.addChrominanceNoise);    
+    prm.insert("addChrominanceNoise", (bool)currentPrm.addChrominanceNoise);    
     prm.insert("chroma_intensity",    (int)currentPrm.chroma_intensity);
     prm.insert("chroma_shadows",      (int)currentPrm.chroma_shadows);
     prm.insert("chroma_midtones",     (int)currentPrm.chroma_midtones);
