@@ -63,7 +63,7 @@ FilmGrainFilter::FilmGrainFilter(DImgThreadedFilter* parentFilter,
 void FilmGrainFilter::filterImage()
 {
     // NOTE: about YCbCr (YUV) color space details, see this Url : http://en.allexperts.com/e/y/yc/ycbcr.htm
-  
+
     if (m_settings.lum_intensity <= 0) return;
     if (m_settings.chroma_intensity <= 0) return;
 
@@ -119,10 +119,10 @@ void FilmGrainFilter::randomizeLuma(DColor& col, double range)
 {
     double y, cb, cr;
     col.getYCbCr(&y, &cb, &cr);
-    
+
     double nRand = ((double)(qrand() % (int)range) - range/2.0) / (col.sixteenBit() ? 65535.0 : 255.0);
     y            = CLAMP(y + nRand, 0.0, 1.0);
-    
+
     col.setYCbCr(y, cb, cr, col.sixteenBit());
 }
 
@@ -130,7 +130,7 @@ void FilmGrainFilter::randomizeChroma(DColor& col, double range)
 {
     double y, cb, cr;
     col.getYCbCr(&y, &cb, &cr);
-  
+
     double nRand = ((double)(qrand() % (int)range) - range/2.0) / (col.sixteenBit() ? 65535.0 : 255.0);
     cb           = CLAMP(cb + nRand, 0.0, 1.0);
     cr           = CLAMP(cr + nRand, 0.0, 1.0);
@@ -146,7 +146,7 @@ double FilmGrainFilter::interpolate(int shadows, int midtones, int highlights, c
 
     double y, cb, cr;
     col.getYCbCr(&y, &cb, &cr);
-        
+
     if (y >= 0.0 && y <= 0.5)
     {
         return (s+2*(m-s)*y);
