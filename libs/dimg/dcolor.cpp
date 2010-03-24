@@ -26,6 +26,7 @@
  * ============================================================ */
 
 #include "dcolor.h"
+#include "globals.h"
 
 // KDE includes
 
@@ -300,10 +301,11 @@ void DColor::setYCbCr(double y, double cb, double cr, bool sixteenBit)
     double r = y + 1.40200 * (cr - 0.5);
     double g = y - 0.34414 * (cb - 0.5) - 0.71414 * (cr - 0.5);
     double b = y + 1.77200 * (cb - 0.5);
+    double q = (sixteenBit ? 65535.0 : 255.0);
     
-    m_red    = lround(r * (sixteenBit ? 65535.0 : 255.0));
-    m_green  = lround(g * (sixteenBit ? 65535.0 : 255.0));
-    m_blue   = lround(b * (sixteenBit ? 65535.0 : 255.0));
+    m_red    = CLAMP((int)lround(r * q), 0, (int)q);
+    m_green  = CLAMP((int)lround(g * q), 0, (int)q);
+    m_blue   = CLAMP((int)lround(b * q), 0, (int)q);
 
     m_sixteenBit = sixteenBit;
     
