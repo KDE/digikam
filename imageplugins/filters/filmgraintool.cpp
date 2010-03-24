@@ -148,7 +148,7 @@ void FilmGrainTool::prepareEffect()
     toolView()->setEnabled(false);
     
     FilmGrainContainer prm = d->settingsView->settings();
-    DImg image             = d->previewWidget->getOriginalRegionImage(true);
+    DImg image             = d->previewWidget->getOriginalRegionImage();
     
     setFilter(new FilmGrainFilter(&image, this, prm));
 }
