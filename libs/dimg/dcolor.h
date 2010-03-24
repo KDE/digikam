@@ -124,7 +124,7 @@ public:
         in the YCrCb color space.
         Alpha is ignored for the conversion.
     */
-    void getYCbCr(double* y, double* cb, double* cr);
+    void getYCbCr(double* y, double* cb, double* cr) const;
 
     /** Set the RGB color values of this color
         to the given YCrCb values converted to RGB.

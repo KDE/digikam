@@ -286,7 +286,7 @@ void DColor::setHSL(int h, int s, int l, bool sixteenBit)
         m_alpha = 255;
 }
 
-void DColor::getYCbCr(double* y, double* cb, double* cr)
+void DColor::getYCbCr(double* y, double* cb, double* cr) const
 {
     double r = m_red   / (m_sixteenBit ? 65535.0 : 255.0);
     double g = m_green / (m_sixteenBit ? 65535.0 : 255.0);
