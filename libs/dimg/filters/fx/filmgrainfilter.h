@@ -118,7 +118,7 @@ private:
     inline double interpolate(int shadows, int midtones, int highlights, const DColor& col);
     inline double randomizeUniform(double range, bool sixteenbits);
     inline double randomizeGauss(double sigma, bool sixteenbits);
-    inline double randomizePoisson(double lambda, int photonNumber, bool sixteenbits);
+    inline double randomizePoisson(double lambda, bool sixteenbits);
     inline void   adjustYCbCr(DColor& col, double range, double nRand, int channel);
 
 private:
