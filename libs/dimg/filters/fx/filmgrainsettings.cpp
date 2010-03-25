@@ -179,7 +179,7 @@ FilmGrainSettings::FilmGrainSettings(QWidget* parent)
 
     d->sizeLabel        = new QLabel(i18n("Grain Size:"), commonPage);
     d->grainSizeInput   = new RIntNumInput(commonPage);
-    d->grainSizeInput->setRange(1, 10, 1);
+    d->grainSizeInput->setRange(1, 5, 1);
     d->grainSizeInput->setSliderEnabled(true);
     d->grainSizeInput->setDefaultValue(1);
     d->grainSizeInput->setWhatsThis(i18n("Set here the graininess size of film."));
