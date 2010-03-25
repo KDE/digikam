@@ -94,6 +94,8 @@ void FilmGrainFilter::filterImage()
     if (d->settings.lumaIntensity <= 0)       return;
     if (d->settings.chromaBlueIntensity <= 0) return;
     if (d->settings.chromaRedIntensity <= 0)  return;
+    if (!d->settings.addLuminanceNoise && !d->settings.addChrominanceBlueNoise &&
+        !d->settings.addChrominanceRedNoise)  return;
 
     DColor refCol, color;
     int    progress, posX, posY;
