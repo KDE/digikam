@@ -185,7 +185,7 @@ void FilmGrainFilter::adjustYCbCr(DColor& col, double range, double nRand, int c
     col.getYCbCr(&y, &cb, &cr);
 
     if (d->settings.photoDistribution)
-        n2 = randomizePoisson(range, col.sixteenBit());
+        n2 = randomizePoisson((d->settings.grainSize/2.0)*(range/1.414), col.sixteenBit());
     else 
         n2 = randomizeGauss((d->settings.grainSize/2.0)*(range/1.414), col.sixteenBit());
 
@@ -232,7 +232,7 @@ double FilmGrainFilter::randomizePoisson(double lambda, bool sixteenbits)
     }
     while (p >= L && k <= r);
 
-    return (((double)k - 1.0) / (double)r);
+    return ((double)(k - 1) / (double)r);
 }
 
 double FilmGrainFilter::interpolate(int shadows, int midtones, int highlights, const DColor& col)
