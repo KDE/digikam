@@ -91,11 +91,15 @@ FilmGrainFilter::~FilmGrainFilter()
  */
 void FilmGrainFilter::filterImage()
 {
-    if (d->settings.lumaIntensity <= 0)       return;
-    if (d->settings.chromaBlueIntensity <= 0) return;
-    if (d->settings.chromaRedIntensity <= 0)  return;
-    if (!d->settings.addLuminanceNoise && !d->settings.addChrominanceBlueNoise &&
-        !d->settings.addChrominanceRedNoise)  return;
+    if (d->settings.lumaIntensity <= 0       ||
+        d->settings.chromaBlueIntensity <= 0 ||
+        d->settings.chromaRedIntensity <= 0  ||
+        (!d->settings.addLuminanceNoise && !d->settings.addChrominanceBlueNoise &&
+         !d->settings.addChrominanceRedNoise))
+        {
+            m_destImage = m_orgImage;
+            return;
+        }
 
     DColor refCol, color;
     int    progress, posX, posY;
@@ -143,8 +147,9 @@ void FilmGrainFilter::filterImage()
             {
                 for (int zy = 0; !m_cancel && zy < d->settings.grainSize; ++zy)
                 {
-                    posX  = x + zx;
-                    posY  = y + zy;
+                    posX = x + zx;
+                    posY = y + zy;
+
                     if (posX < width && posY < height)
                     {
                         color = m_orgImage.getPixelColor(posX, posY);
