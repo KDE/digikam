@@ -358,18 +358,21 @@ FilmGrainSettings::FilmGrainSettings(QWidget* parent)
     d->expanderBox = new RExpanderBox();
     d->expanderBox->setObjectName("Noise Expander");
     
-    d->expanderBox->addItem(commonPage, SmallIcon("filmgrain"), i18n("Common Settings"),
+    d->expanderBox->addItem(commonPage, SmallIcon("system-run"), 
+                            i18n("Common Settings"),
                             QString("CommonSettingsContainer"), true);
-    d->expanderBox->addItem(firstPage, SmallIcon("filmgrain"), i18n("Luminance Noise"),
+    d->expanderBox->addItem(firstPage, KStandardDirs::locate("data", "digikam/data/colors-luma.png"),
+                            i18n("Luminance Noise"),
                             QString("LuminanceSettingsContainer"), true);
-    d->expanderBox->addItem(secondPage, SmallIcon("camera-photo"), i18n("Chrominance Blue Noise"),
+    d->expanderBox->addItem(secondPage, KStandardDirs::locate("data", "digikam/data/colors-chromablue.png"), 
+                            i18n("Chrominance Blue Noise"),
                             QString("ChrominanceBlueSettingsContainer"), true);
-    d->expanderBox->addItem(thirdPage, SmallIcon("camera-photo"), i18n("Chrominance Red Noise"),
+    d->expanderBox->addItem(thirdPage, KStandardDirs::locate("data", "digikam/data/colors-chromared.png"), 
+                            i18n("Chrominance Red Noise"),
                             QString("ChrominanceRedSettingsContainer"), true);
     d->expanderBox->addStretch();
 
     grid->addWidget(d->expanderBox, 0, 0, 1, 1);
-    grid->setRowStretch(1, 10);
     grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(KDialog::spacingHint());
 
