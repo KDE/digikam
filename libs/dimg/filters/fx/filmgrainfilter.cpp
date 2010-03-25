@@ -235,9 +235,10 @@ double FilmGrainFilter::randomizePoisson(double lambda, bool sixteenbits)
         k++;
         p = p * (qrand() / (double)RAND_MAX);
     }
-    while(!m_cancel && p >= L);
+    while(!m_cancel && p > L);
 
-    return ((double)(k - 1) / (sixteenbits ? 65535.0 : 255.0));
+    
+    return (((double)(k - 1)  - lambda) / (sixteenbits ? 65535.0 : 255.0));
 }
 
 double FilmGrainFilter::interpolate(int shadows, int midtones, int highlights, const DColor& col)
