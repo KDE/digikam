@@ -222,12 +222,14 @@ double FilmGrainFilter::randomizePoisson(double lambda, int photonNumber, bool s
     double L = exp (-lambda);
     uint   k = 0;
     double p = 1.0;
+
     do
     {
         k++;
-        p = p * qrand () / (double)RAND_MAX;
+        p = p * qrand() / (double)RAND_MAX;
     }
     while (p >= L && k <= r);
+
     return (((double)k - 1.0 + randomizePoisson(lambda, photonNumber-1, sixteenbits)) / (double)r);
 }
 
