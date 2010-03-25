@@ -83,10 +83,14 @@ FilmGrainFilter::~FilmGrainFilter()
     delete d;
 }    
     
+/** This method have been implemented following this report in bugzilla :
+    https://bugs.kde.org/show_bug.cgi?id=148540
+    We use YCbCr color space to perform noise addition. Please follow this url for
+    details about this color space :
+    http://en.allexperts.com/e/y/yc/ycbcr.htm
+ */    
 void FilmGrainFilter::filterImage()
 {
-    // NOTE: about YCbCr (YUV) color space details, see this Url : http://en.allexperts.com/e/y/yc/ycbcr.htm
-
     if (d->settings.lumaIntensity <= 0)       return;
     if (d->settings.chromaBlueIntensity <= 0) return;
     if (d->settings.chromaRedIntensity <= 0)  return;
