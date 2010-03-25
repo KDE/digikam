@@ -94,8 +94,7 @@ void FilmGrainFilter::filterImage()
     if (d->settings.lumaIntensity <= 0       ||
         d->settings.chromaBlueIntensity <= 0 ||
         d->settings.chromaRedIntensity <= 0  ||
-        (!d->settings.addLuminanceNoise && !d->settings.addChrominanceBlueNoise &&
-         !d->settings.addChrominanceRedNoise))
+        !d->settings.isDirty())
         {
             m_destImage = m_orgImage;
             return;

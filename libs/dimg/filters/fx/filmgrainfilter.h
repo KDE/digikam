@@ -67,6 +67,11 @@ public:
     };
 
     ~FilmGrainContainer(){};
+    
+    bool isDirty()
+    {
+        return (addLuminanceNoise || addChrominanceBlueNoise || addChrominanceRedNoise);
+    };
 
 public:
 

@@ -179,6 +179,7 @@ void FilmGrainTool::renderingFinished()
 {
     toolSettings()->setEnabled(true);
     toolView()->setEnabled(true);
+    toolSettings()->enableButton(EditorToolSettings::Ok, d->settingsView->settings().isDirty());
 }
 
 }  // namespace DigikamFxFiltersImagePlugin
