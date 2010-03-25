@@ -45,6 +45,7 @@ public:
     FilmGrainContainer()
     {
         grainSize               = 1;
+        photoDistribution       = false;
 
         addLuminanceNoise       = true;
         lumaIntensity           = 25;
@@ -70,6 +71,7 @@ public:
 public:
 
     int  grainSize;
+    bool photoDistribution;
 
     bool addLuminanceNoise;
     int  lumaIntensity;
@@ -111,6 +113,7 @@ private:
     inline double interpolate(int shadows, int midtones, int highlights, const DColor& col);
     inline double randomizeUniform(double range, bool sixteenbits);
     inline double randomizeGauss(double sigma, bool sixteenbits);
+    inline double randomizePoisson(double lambda, int photonNumber, bool sixteenbits);
     inline void   adjustYCbCr(DColor& col, double range, double nRand, int channel);
 
 private:

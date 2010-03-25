@@ -70,6 +70,7 @@ BatchToolSettings FilmGrain::defaultSettings()
     FilmGrainContainer defaultPrm = m_settingsView->defaultSettings();
 
     prm.insert("grainSize",               (int)defaultPrm.grainSize);
+    prm.insert("photoDistribution",       (bool)defaultPrm.photoDistribution);
     prm.insert("addLuminanceNoise",       (bool)defaultPrm.addLuminanceNoise);
     prm.insert("lumaIntensity",           (int)defaultPrm.lumaIntensity);
     prm.insert("lumaShadows",             (int)defaultPrm.lumaShadows);
@@ -93,6 +94,7 @@ void FilmGrain::slotAssignSettings2Widget()
 {
     FilmGrainContainer prm;
     prm.grainSize               = settings()["grainSize"].toInt();
+    prm.photoDistribution       = settings()["photoDistribution"].toBool();    
     prm.addLuminanceNoise       = settings()["addLuminanceNoise"].toBool();
     prm.lumaIntensity           = settings()["lumaIntensity"].toInt();
     prm.lumaShadows             = settings()["lumaShadows"].toInt();
@@ -117,6 +119,7 @@ void FilmGrain::slotSettingsChanged()
     FilmGrainContainer currentPrm = m_settingsView->settings();
 
     prm.insert("grainSize",               (int)currentPrm.grainSize);
+    prm.insert("photoDistribution",       (bool)currentPrm.photoDistribution);
     prm.insert("addLuminanceNoise",       (bool)currentPrm.addLuminanceNoise);
     prm.insert("lumaIntensity",           (int)currentPrm.lumaIntensity);
     prm.insert("lumaShadows",             (int)currentPrm.lumaShadows);
@@ -143,6 +146,7 @@ bool FilmGrain::toolOperations()
 
     FilmGrainContainer prm;
     prm.grainSize               = settings()["grainSize"].toInt();
+    prm.photoDistribution       = settings()["photoDistribution"].toBool();
     prm.addLuminanceNoise       = settings()["addLuminanceNoise"].toBool();
     prm.lumaIntensity           = settings()["lumaIntensity"].toInt();
     prm.lumaShadows             = settings()["lumaShadows"].toInt();

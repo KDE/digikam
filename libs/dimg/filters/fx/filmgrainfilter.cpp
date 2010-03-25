@@ -175,10 +175,14 @@ void FilmGrainFilter::filterImage()
 
 void FilmGrainFilter::adjustYCbCr(DColor& col, double range, double nRand, int channel)
 {
-    double y, cb, cr;
+    double y, cb, cr, n2;
     col.getYCbCr(&y, &cb, &cr);
 
-    double n2 = randomizeGauss((d->settings.grainSize/2.0)*(range/1.414), col.sixteenBit());
+    if (d->settings.photoDistribution)
+        n2 = randomizePoisson((d->settings.grainSize/2.0)*(range/1.414), d->settings.grainSize, col.sixteenBit());
+    else 
+        n2 = randomizeGauss((d->settings.grainSize/2.0)*(range/1.414), col.sixteenBit());
+    
     switch (channel)
     {
         case FilmGrainFilterPriv::Luma:
@@ -205,6 +209,24 @@ double FilmGrainFilter::randomizeGauss(double sigma, bool sixteenbits)
   while ((u = qrand () / (double) RAND_MAX) == 0.0);
   v = qrand () / (double) RAND_MAX;
   return (sigma * sqrt(-2 * log (u)) * cos(2 * M_PI * v)) / (sixteenbits ? 65535.0 : 255.0);
+}
+
+double FilmGrainFilter::randomizePoisson(double lambda, int photonNumber, bool sixteenbits)
+{
+    if (photonNumber == 0)
+        return 0.0;
+  
+    uint   r = (sixteenbits ? 65535 : 255);
+    double L = exp (-lambda);
+    uint   k = 0;
+    double p = 1.0;
+    do
+    {
+        k++;
+        p = p * qrand () / (double)RAND_MAX;
+    }
+    while (p >= L && k <= r);
+    return (((double)k - 1.0 + randomizePoisson(lambda, photonNumber-1, sixteenbits)) / (double)r);
 }
 
 double FilmGrainFilter::interpolate(int shadows, int midtones, int highlights, const DColor& col)

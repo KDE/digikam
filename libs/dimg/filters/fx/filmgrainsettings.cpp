@@ -64,6 +64,7 @@ public:
 
     FilmGrainSettingsPriv() :
         configGrainSizeEntry("GrainSizeEntry"),
+        configPhotoDistributionEntry("PhotoDistributionEntry"),
         configAddLumNoiseEntry("AddLumNoiseEntry"),
         configIntensityLumAdjustmentEntry("IntensityLumAdjustment"),
         configShadowsLumAdjustmentEntry("ShadowsLumAdjustment"),
@@ -79,6 +80,7 @@ public:
         configShadowsChromaRedAdjustmentEntry("ShadowsChromaRedAdjustment"),
         configMidtonesChromaRedAdjustmentEntry("MidtonesChromaRedAdjustment"),
         configHighlightsChromaRedAdjustmentEntry("HighlightsChromaRedAdjustment"),
+        sizeLabel(0),
         label1(0),
         label2(0),
         label3(0),
@@ -91,6 +93,7 @@ public:
         label10(0),
         label11(0),
         label12(0),
+        photoDistribution(0),
         addLuminanceNoise(0),
         addChrominanceBlueNoise(0),
         addChrominanceRedNoise(0),
@@ -110,6 +113,7 @@ public:
         {}
 
     const QString configGrainSizeEntry;
+    const QString configPhotoDistributionEntry;
     const QString configAddLumNoiseEntry;
     const QString configIntensityLumAdjustmentEntry;
     const QString configShadowsLumAdjustmentEntry;
@@ -125,7 +129,8 @@ public:
     const QString configShadowsChromaRedAdjustmentEntry;
     const QString configMidtonesChromaRedAdjustmentEntry;
     const QString configHighlightsChromaRedAdjustmentEntry;
-    
+
+    QLabel*       sizeLabel;
     QLabel*       label1;
     QLabel*       label2;
     QLabel*       label3;
@@ -139,6 +144,7 @@ public:
     QLabel*       label11;
     QLabel*       label12;
 
+    QCheckBox*    photoDistribution;
     QCheckBox*    addLuminanceNoise;
     QCheckBox*    addChrominanceBlueNoise;
     QCheckBox*    addChrominanceRedNoise;
@@ -165,20 +171,35 @@ FilmGrainSettings::FilmGrainSettings(QWidget* parent)
                    d(new FilmGrainSettingsPriv)
 {
     QGridLayout* grid = new QGridLayout(parent);
+
+    // -------------------------------------------------------------
     
-    QLabel* sizeLabel = new QLabel(i18n("Grain Size:"));
-    d->grainSizeInput = new RIntNumInput();
+    QWidget* commonPage = new QWidget();
+    QGridLayout* grid0  = new QGridLayout(commonPage);
+
+    d->sizeLabel        = new QLabel(i18n("Grain Size:"), commonPage);
+    d->grainSizeInput   = new RIntNumInput(commonPage);
     d->grainSizeInput->setRange(1, 10, 1);
     d->grainSizeInput->setSliderEnabled(true);
     d->grainSizeInput->setDefaultValue(1);
     d->grainSizeInput->setWhatsThis(i18n("Set here the graininess size of film."));
+
+    d->photoDistribution = new QCheckBox(i18n("Photographic Distribution"), commonPage);
+    d->photoDistribution->setWhatsThis(i18n("Set on this option to render grain using a photon statistic distribution. "
+                                            "This require more computation and can take a while."));    
+
+    grid0->addWidget(d->sizeLabel,         0, 0, 1, 1);
+    grid0->addWidget(d->grainSizeInput,    1, 0, 1, 1);
+    grid0->addWidget(d->photoDistribution, 2, 0, 1, 1);
+    grid0->setMargin(KDialog::spacingHint());
+    grid0->setSpacing(KDialog::spacingHint());
     
-    QWidget* firstPage = new QWidget();
-    QGridLayout* grid1 = new QGridLayout(firstPage);
-
     // -------------------------------------------------------------
+    
+    QWidget* firstPage   = new QWidget();
+    QGridLayout* grid1   = new QGridLayout(firstPage);
 
-    d->addLuminanceNoise = new QCheckBox(i18n("Add Luminance Noise"));
+    d->addLuminanceNoise = new QCheckBox(i18n("Add Luminance Noise"), firstPage);
     d->label1            = new QLabel(i18n("Intensity:"), firstPage);
     d->intensityLumInput = new RIntNumInput(firstPage);
     d->intensityLumInput->setRange(1, 100, 1);
@@ -231,7 +252,7 @@ FilmGrainSettings::FilmGrainSettings(QWidget* parent)
     QWidget* secondPage = new QWidget();
     QGridLayout* grid2  = new QGridLayout( secondPage );
 
-    d->addChrominanceBlueNoise  = new QCheckBox(i18n("Add Chrominance Blue Noise"));
+    d->addChrominanceBlueNoise  = new QCheckBox(i18n("Add Chrominance Blue Noise"), secondPage);
     d->label5                   = new QLabel(i18n("Intensity:"), secondPage);
     d->intensityChromaBlueInput = new RIntNumInput(secondPage);
     d->intensityChromaBlueInput->setRange(1, 100, 1);
@@ -284,9 +305,9 @@ FilmGrainSettings::FilmGrainSettings(QWidget* parent)
     QWidget* thirdPage = new QWidget();
     QGridLayout* grid3 = new QGridLayout( thirdPage );
 
-    d->addChrominanceRedNoise  = new QCheckBox(i18n("Add Chrominance Red Noise"));
-    d->label9                  = new QLabel(i18n("Intensity:"), secondPage);
-    d->intensityChromaRedInput = new RIntNumInput(secondPage);
+    d->addChrominanceRedNoise  = new QCheckBox(i18n("Add Chrominance Red Noise"), thirdPage);
+    d->label9                  = new QLabel(i18n("Intensity:"), thirdPage);
+    d->intensityChromaRedInput = new RIntNumInput(thirdPage);
     d->intensityChromaRedInput->setRange(1, 100, 1);
     d->intensityChromaRedInput->setSliderEnabled(true);
     d->intensityChromaRedInput->setDefaultValue(25);
@@ -295,8 +316,8 @@ FilmGrainSettings::FilmGrainSettings(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    d->label10               = new QLabel(i18n("Shadows:"), secondPage);
-    d->shadowsChromaRedInput = new RIntNumInput(secondPage);
+    d->label10               = new QLabel(i18n("Shadows:"), thirdPage);
+    d->shadowsChromaRedInput = new RIntNumInput(thirdPage);
     d->shadowsChromaRedInput->setRange(-100, 100, 1);
     d->shadowsChromaRedInput->setSliderEnabled(true);
     d->shadowsChromaRedInput->setDefaultValue(-100);
@@ -304,8 +325,8 @@ FilmGrainSettings::FilmGrainSettings(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    d->label11                = new QLabel(i18n("Midtones:"), secondPage);
-    d->midtonesChromaRedInput = new RIntNumInput(secondPage);
+    d->label11                = new QLabel(i18n("Midtones:"), thirdPage);
+    d->midtonesChromaRedInput = new RIntNumInput(thirdPage);
     d->midtonesChromaRedInput->setRange(-100, 100, 1);
     d->midtonesChromaRedInput->setSliderEnabled(true);
     d->midtonesChromaRedInput->setDefaultValue(0);
@@ -313,8 +334,8 @@ FilmGrainSettings::FilmGrainSettings(QWidget* parent)
 
     // -------------------------------------------------------------
 
-    d->label12                  = new QLabel(i18n("Highlights:"), secondPage);
-    d->highlightsChromaRedInput = new RIntNumInput(secondPage);
+    d->label12                  = new QLabel(i18n("Highlights:"), thirdPage);
+    d->highlightsChromaRedInput = new RIntNumInput(thirdPage);
     d->highlightsChromaRedInput->setRange(-100, 100, 1);
     d->highlightsChromaRedInput->setSliderEnabled(true);
     d->highlightsChromaRedInput->setDefaultValue(-100);
@@ -336,24 +357,28 @@ FilmGrainSettings::FilmGrainSettings(QWidget* parent)
 
     d->expanderBox = new RExpanderBox();
     d->expanderBox->setObjectName("Noise Expander");
-    d->expanderBox->addItem(firstPage, SmallIcon("filmgrain"), i18n("Luminance noise"),
+    
+    d->expanderBox->addItem(commonPage, SmallIcon("filmgrain"), i18n("Common Settings"),
+                            QString("CommonSettingsContainer"), true);
+    d->expanderBox->addItem(firstPage, SmallIcon("filmgrain"), i18n("Luminance Noise"),
                             QString("LuminanceSettingsContainer"), true);
-    d->expanderBox->addItem(secondPage, SmallIcon("camera-photo"), i18n("Chrominance blue noise"),
+    d->expanderBox->addItem(secondPage, SmallIcon("camera-photo"), i18n("Chrominance Blue Noise"),
                             QString("ChrominanceBlueSettingsContainer"), true);
-    d->expanderBox->addItem(thirdPage, SmallIcon("camera-photo"), i18n("Chrominance red noise"),
+    d->expanderBox->addItem(thirdPage, SmallIcon("camera-photo"), i18n("Chrominance Red Noise"),
                             QString("ChrominanceRedSettingsContainer"), true);
     d->expanderBox->addStretch();
 
-    grid->addWidget(sizeLabel,         0, 0, 1, 1);
-    grid->addWidget(d->grainSizeInput, 1, 0, 1, 1);
-    grid->addWidget(d->expanderBox,    2, 0, 1, 1);
-    grid->setRowStretch(2, 10);
+    grid->addWidget(d->expanderBox, 0, 0, 1, 1);
+    grid->setRowStretch(1, 10);
     grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(KDialog::spacingHint());
 
     // -------------------------------------------------------------
 
     connect(d->grainSizeInput, SIGNAL(valueChanged(int)),
+            this, SIGNAL(signalSettingsChanged()));
+
+    connect(d->photoDistribution, SIGNAL(toggled(bool)),
             this, SIGNAL(signalSettingsChanged()));
             
     connect(d->addLuminanceNoise, SIGNAL(toggled(bool)),
@@ -450,6 +475,7 @@ FilmGrainContainer FilmGrainSettings::settings() const
 {
     FilmGrainContainer prm;
     prm.grainSize               = d->grainSizeInput->value();
+    prm.photoDistribution       = d->photoDistribution->isChecked();
     prm.addLuminanceNoise       = d->addLuminanceNoise->isChecked();
     prm.lumaIntensity           = d->intensityLumInput->value();
     prm.lumaShadows             = d->shadowsLumInput->value();
@@ -473,6 +499,7 @@ void FilmGrainSettings::setSettings(const FilmGrainContainer& settings)
     blockSignals(true);
 
     d->grainSizeInput->setValue(settings.grainSize);
+    d->photoDistribution->setChecked(settings.photoDistribution);
     d->addLuminanceNoise->setChecked(settings.addLuminanceNoise);
     d->intensityLumInput->setValue(settings.lumaIntensity);
     d->shadowsLumInput->setValue(settings.lumaShadows);
@@ -511,17 +538,18 @@ void FilmGrainSettings::readSettings(KConfigGroup& group)
     FilmGrainContainer defaultPrm = defaultSettings();
 
     prm.grainSize               = group.readEntry(d->configGrainSizeEntry,                      defaultPrm.grainSize);
-    prm.addLuminanceNoise       = group.readEntry(d->configAddLumNoiseEntry,                    true);
+    prm.photoDistribution       = group.readEntry(d->configPhotoDistributionEntry,              defaultPrm.photoDistribution);
+    prm.addLuminanceNoise       = group.readEntry(d->configAddLumNoiseEntry,                    defaultPrm.addLuminanceNoise);
     prm.lumaIntensity           = group.readEntry(d->configIntensityLumAdjustmentEntry,         defaultPrm.lumaIntensity);
     prm.lumaShadows             = group.readEntry(d->configShadowsLumAdjustmentEntry,           defaultPrm.lumaShadows);
     prm.lumaMidtones            = group.readEntry(d->configMidtonesLumAdjustmentEntry,          defaultPrm.lumaMidtones);
     prm.lumaHighlights          = group.readEntry(d->configHighlightsLumAdjustmentEntry,        defaultPrm.lumaHighlights);
-    prm.addChrominanceBlueNoise = group.readEntry(d->configAddChromaBlueNoiseEntry,             false);
+    prm.addChrominanceBlueNoise = group.readEntry(d->configAddChromaBlueNoiseEntry,             defaultPrm.addChrominanceBlueNoise);
     prm.chromaBlueIntensity     = group.readEntry(d->configIntensityChromaBlueAdjustmentEntry,  defaultPrm.chromaBlueIntensity);
     prm.chromaBlueShadows       = group.readEntry(d->configShadowsChromaBlueAdjustmentEntry,    defaultPrm.chromaBlueShadows);
     prm.chromaBlueMidtones      = group.readEntry(d->configMidtonesChromaBlueAdjustmentEntry,   defaultPrm.chromaBlueMidtones);
     prm.chromaBlueHighlights    = group.readEntry(d->configHighlightsChromaBlueAdjustmentEntry, defaultPrm.chromaBlueHighlights);
-    prm.addChrominanceRedNoise  = group.readEntry(d->configAddChromaRedNoiseEntry,              false);
+    prm.addChrominanceRedNoise  = group.readEntry(d->configAddChromaRedNoiseEntry,              defaultPrm.addChrominanceRedNoise);
     prm.chromaRedIntensity      = group.readEntry(d->configIntensityChromaRedAdjustmentEntry,   defaultPrm.chromaRedIntensity);
     prm.chromaRedShadows        = group.readEntry(d->configShadowsChromaRedAdjustmentEntry,     defaultPrm.chromaRedShadows);
     prm.chromaRedMidtones       = group.readEntry(d->configMidtonesChromaRedAdjustmentEntry,    defaultPrm.chromaRedMidtones);
@@ -535,6 +563,7 @@ void FilmGrainSettings::writeSettings(KConfigGroup& group)
     FilmGrainContainer prm = settings();
 
     group.writeEntry(d->configGrainSizeEntry,                      prm.grainSize);
+    group.writeEntry(d->configPhotoDistributionEntry,              prm.photoDistribution);
     
     group.writeEntry(d->configAddLumNoiseEntry,                    prm.addLuminanceNoise);
     group.writeEntry(d->configIntensityLumAdjustmentEntry,         prm.lumaIntensity);
