@@ -55,8 +55,8 @@ public:
         ChromaRed
     };
 
-    FilmGrainContainer settings;  
-}; 
+    FilmGrainContainer settings;
+};
 
 FilmGrainFilter::FilmGrainFilter(DImg* orgImage, QObject* parent, const FilmGrainContainer& settings)
                : DImgThreadedFilter(orgImage, parent, "FilmGrain"),
@@ -81,14 +81,14 @@ FilmGrainFilter::FilmGrainFilter(DImgThreadedFilter* parentFilter,
 FilmGrainFilter::~FilmGrainFilter()
 {
     delete d;
-}    
-    
+}
+
 /** This method have been implemented following this report in bugzilla :
     https://bugs.kde.org/show_bug.cgi?id=148540
     We use YCbCr color space to perform noise addition. Please follow this url for
     details about this color space :
     http://en.allexperts.com/e/y/yc/ycbcr.htm
- */    
+ */
 void FilmGrainFilter::filterImage()
 {
     if (d->settings.lumaIntensity <= 0)       return;
@@ -158,7 +158,7 @@ void FilmGrainFilter::filterImage()
                         if (d->settings.addChrominanceRedNoise)
                             adjustYCbCr(color, local_chroma_red_range, local_chroma_red_noise,
                                         FilmGrainFilterPriv::ChromaRed);
-                        
+
                         m_destImage.setPixelColor(posX, posY, color);
                     }
                 }
@@ -182,7 +182,7 @@ void FilmGrainFilter::adjustYCbCr(DColor& col, double range, double nRand, int c
         n2 = randomizePoisson((d->settings.grainSize/2.0)*(range/1.414), d->settings.grainSize, col.sixteenBit());
     else 
         n2 = randomizeGauss((d->settings.grainSize/2.0)*(range/1.414), col.sixteenBit());
-    
+
     switch (channel)
     {
         case FilmGrainFilterPriv::Luma:
@@ -215,7 +215,7 @@ double FilmGrainFilter::randomizePoisson(double lambda, int photonNumber, bool s
 {
     if (photonNumber == 0)
         return 0.0;
-  
+
     uint   r = (sixteenbits ? 65535 : 255);
     double L = exp (-lambda);
     uint   k = 0;
