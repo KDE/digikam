@@ -69,16 +69,22 @@ BatchToolSettings FilmGrain::defaultSettings()
     BatchToolSettings prm;
     FilmGrainContainer defaultPrm = m_settingsView->defaultSettings();
 
-    prm.insert("addLuminanceNoise",   (bool)defaultPrm.addLuminanceNoise);
-    prm.insert("lum_intensity",       (int)defaultPrm.lum_intensity);
-    prm.insert("lum_shadows",         (int)defaultPrm.lum_shadows);
-    prm.insert("lum_midtones",        (int)defaultPrm.lum_midtones);
-    prm.insert("lum_highlights",      (int)defaultPrm.lum_highlights);
-    prm.insert("addChrominanceNoise", (bool)defaultPrm.addChrominanceNoise);
-    prm.insert("chroma_intensity",    (int)defaultPrm.chroma_intensity);
-    prm.insert("chroma_shadows",      (int)defaultPrm.chroma_shadows);
-    prm.insert("chroma_midtones",     (int)defaultPrm.chroma_midtones);
-    prm.insert("chroma_highlights",   (int)defaultPrm.chroma_highlights);
+    prm.insert("grainSize",               (int)defaultPrm.grainSize);
+    prm.insert("addLuminanceNoise",       (bool)defaultPrm.addLuminanceNoise);
+    prm.insert("lumaIntensity",           (int)defaultPrm.lumaIntensity);
+    prm.insert("lumaShadows",             (int)defaultPrm.lumaShadows);
+    prm.insert("lumaMidtones",            (int)defaultPrm.lumaMidtones);
+    prm.insert("lumaHighlights",          (int)defaultPrm.lumaHighlights);
+    prm.insert("addChrominanceBlueNoise", (bool)defaultPrm.addChrominanceBlueNoise);
+    prm.insert("chromaBlueIntensity",     (int)defaultPrm.chromaBlueIntensity);
+    prm.insert("chromaBlueShadows",       (int)defaultPrm.chromaBlueShadows);
+    prm.insert("chromaBlueMidtones",      (int)defaultPrm.chromaBlueMidtones);
+    prm.insert("chromaBlueHighlights",    (int)defaultPrm.chromaBlueHighlights);
+    prm.insert("addChrominanceRedNoise",  (bool)defaultPrm.addChrominanceRedNoise);
+    prm.insert("chromaRedIntensity",      (int)defaultPrm.chromaRedIntensity);
+    prm.insert("chromaRedShadows",        (int)defaultPrm.chromaRedShadows);
+    prm.insert("chromaRedMidtones",       (int)defaultPrm.chromaRedMidtones);
+    prm.insert("chromaRedHighlights",     (int)defaultPrm.chromaRedHighlights);
 
     return prm;
 }
@@ -86,16 +92,22 @@ BatchToolSettings FilmGrain::defaultSettings()
 void FilmGrain::slotAssignSettings2Widget()
 {
     FilmGrainContainer prm;
-    prm.addLuminanceNoise   = settings()["addLuminanceNoise"].toBool();
-    prm.lum_intensity       = settings()["lum_intensity"].toInt();
-    prm.lum_shadows         = settings()["lum_shadows"].toInt();
-    prm.lum_midtones        = settings()["lum_midtones"].toInt();
-    prm.lum_highlights      = settings()["lum_highlights"].toInt();
-    prm.addChrominanceNoise = settings()["addChrominanceNoise"].toBool();
-    prm.chroma_intensity    = settings()["chroma_intensity"].toInt();
-    prm.chroma_shadows      = settings()["chroma_shadows"].toInt();
-    prm.chroma_midtones     = settings()["chroma_midtones"].toInt();
-    prm.chroma_highlights   = settings()["chroma_highlights"].toInt();
+    prm.grainSize               = settings()["grainSize"].toInt();
+    prm.addLuminanceNoise       = settings()["addLuminanceNoise"].toBool();
+    prm.lumaIntensity           = settings()["lumaIntensity"].toInt();
+    prm.lumaShadows             = settings()["lumaShadows"].toInt();
+    prm.lumaMidtones            = settings()["lumaMidtones"].toInt();
+    prm.lumaHighlights          = settings()["lumaHighlights"].toInt();
+    prm.addChrominanceBlueNoise = settings()["addChrominanceBlueNoise"].toBool();
+    prm.chromaBlueIntensity     = settings()["chromaBlueIntensity"].toInt();
+    prm.chromaBlueShadows       = settings()["chromaBlueShadows"].toInt();
+    prm.chromaBlueMidtones      = settings()["chromaBlueMidtones"].toInt();
+    prm.chromaBlueHighlights    = settings()["chromaBlueHighlights"].toInt();
+    prm.addChrominanceRedNoise  = settings()["addChrominanceRedNoise"].toBool();
+    prm.chromaRedIntensity      = settings()["chromaRedIntensity"].toInt();
+    prm.chromaRedShadows        = settings()["chromaRedShadows"].toInt();
+    prm.chromaRedMidtones       = settings()["chromaRedMidtones"].toInt();
+    prm.chromaRedHighlights     = settings()["chromaRedHighlights"].toInt();
     m_settingsView->setSettings(prm);
 }
 
@@ -104,16 +116,22 @@ void FilmGrain::slotSettingsChanged()
     BatchToolSettings prm;
     FilmGrainContainer currentPrm = m_settingsView->settings();
 
-    prm.insert("addLuminanceNoise",   (bool)currentPrm.addLuminanceNoise);
-    prm.insert("lum_intensity",       (int)currentPrm.lum_intensity);
-    prm.insert("lum_shadows",         (int)currentPrm.lum_shadows);
-    prm.insert("lum_midtones",        (int)currentPrm.lum_midtones);
-    prm.insert("lum_highlights",      (int)currentPrm.lum_highlights);
-    prm.insert("addChrominanceNoise", (bool)currentPrm.addChrominanceNoise);    
-    prm.insert("chroma_intensity",    (int)currentPrm.chroma_intensity);
-    prm.insert("chroma_shadows",      (int)currentPrm.chroma_shadows);
-    prm.insert("chroma_midtones",     (int)currentPrm.chroma_midtones);
-    prm.insert("chroma_highlights",   (int)currentPrm.chroma_highlights);
+    prm.insert("grainSize",               (int)currentPrm.grainSize);
+    prm.insert("addLuminanceNoise",       (bool)currentPrm.addLuminanceNoise);
+    prm.insert("lumaIntensity",           (int)currentPrm.lumaIntensity);
+    prm.insert("lumaShadows",             (int)currentPrm.lumaShadows);
+    prm.insert("lumaMidtones",            (int)currentPrm.lumaMidtones);
+    prm.insert("lumaHighlights",          (int)currentPrm.lumaHighlights);
+    prm.insert("addChrominanceBlueNoise", (bool)currentPrm.addChrominanceBlueNoise);    
+    prm.insert("chromaBlueIntensity",     (int)currentPrm.chromaBlueIntensity);
+    prm.insert("chromaBlueShadows",       (int)currentPrm.chromaBlueShadows);
+    prm.insert("chromaBlueMidtones",      (int)currentPrm.chromaBlueMidtones);
+    prm.insert("chromaBlueHighlights",    (int)currentPrm.chromaBlueHighlights);
+    prm.insert("addChrominanceRedNoise",  (bool)currentPrm.addChrominanceRedNoise);    
+    prm.insert("chromaRedIntensity",      (int)currentPrm.chromaRedIntensity);
+    prm.insert("chromaRedShadows",        (int)currentPrm.chromaRedShadows);
+    prm.insert("chromaRedMidtones",       (int)currentPrm.chromaRedMidtones);
+    prm.insert("chromaRedHighlights",     (int)currentPrm.chromaRedHighlights);
 
     BatchTool::slotSettingsChanged(prm);
 }
@@ -124,16 +142,22 @@ bool FilmGrain::toolOperations()
         return false;
 
     FilmGrainContainer prm;
-    prm.addLuminanceNoise   = settings()["addLuminanceNoise"].toBool();
-    prm.lum_intensity       = settings()["lum_intensity"].toInt();
-    prm.lum_shadows         = settings()["lum_shadows"].toInt();
-    prm.lum_midtones        = settings()["lum_midtones"].toInt();
-    prm.lum_highlights      = settings()["lum_highlights"].toInt();
-    prm.addChrominanceNoise = settings()["addChrominanceNoise"].toBool();    
-    prm.chroma_intensity    = settings()["chroma_intensity"].toInt();
-    prm.chroma_shadows      = settings()["chroma_shadows"].toInt();
-    prm.chroma_midtones     = settings()["chroma_midtones"].toInt();
-    prm.chroma_highlights   = settings()["chroma_highlights"].toInt();
+    prm.grainSize               = settings()["grainSize"].toInt();
+    prm.addLuminanceNoise       = settings()["addLuminanceNoise"].toBool();
+    prm.lumaIntensity           = settings()["lumaIntensity"].toInt();
+    prm.lumaShadows             = settings()["lumaShadows"].toInt();
+    prm.lumaMidtones            = settings()["lumaMidtones"].toInt();
+    prm.lumaHighlights          = settings()["lumaHighlights"].toInt();
+    prm.addChrominanceBlueNoise = settings()["addChrominanceBlueNoise"].toBool();    
+    prm.chromaBlueIntensity     = settings()["chromaBlueIntensity"].toInt();
+    prm.chromaBlueShadows       = settings()["chromaBlueShadows"].toInt();
+    prm.chromaBlueMidtones      = settings()["chromaBlueMidtones"].toInt();
+    prm.chromaBlueHighlights    = settings()["chromaBlueHighlights"].toInt();
+    prm.addChrominanceRedNoise  = settings()["addChrominanceRedNoise"].toBool();    
+    prm.chromaRedIntensity      = settings()["chromaRedIntensity"].toInt();
+    prm.chromaRedShadows        = settings()["chromaRedShadows"].toInt();
+    prm.chromaRedMidtones       = settings()["chromaRedMidtones"].toInt();
+    prm.chromaRedHighlights     = settings()["chromaRedHighlights"].toInt();
 
     FilmGrainFilter fg(&image(), 0L, prm);
     fg.startFilterDirectly();

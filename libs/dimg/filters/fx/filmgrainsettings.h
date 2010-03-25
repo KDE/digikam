@@ -67,7 +67,8 @@ Q_SIGNALS:
 private Q_SLOTS:
 
     void slotAddLuminanceNoise(bool);
-    void slotAddChrominanceNoise(bool);
+    void slotAddChrominanceBlueNoise(bool);
+    void slotAddChrominanceRedNoise(bool);
 
 private:
 

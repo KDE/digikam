@@ -42,10 +42,27 @@
 namespace Digikam
 {
 
-FilmGrainFilter::FilmGrainFilter(DImg* orgImage, QObject* parent, const FilmGrainContainer& settings)
-               : DImgThreadedFilter(orgImage, parent, "FilmGrain")
+class FilmGrainFilterPriv
 {
-    m_settings = settings;
+public:
+
+    FilmGrainFilterPriv(){}
+
+    enum YUVChannel
+    {
+        Luma = 0,
+        ChromaBlue,
+        ChromaRed
+    };
+
+    FilmGrainContainer settings;  
+}; 
+
+FilmGrainFilter::FilmGrainFilter(DImg* orgImage, QObject* parent, const FilmGrainContainer& settings)
+               : DImgThreadedFilter(orgImage, parent, "FilmGrain"),
+                 d(new FilmGrainFilterPriv)
+{
+    d->settings = settings;
     initFilter();
 }
 
@@ -54,57 +71,94 @@ FilmGrainFilter::FilmGrainFilter(DImgThreadedFilter* parentFilter,
                                  int progressBegin, int progressEnd,
                                  const FilmGrainContainer& settings)
                : DImgThreadedFilter(parentFilter, orgImage, destImage, progressBegin, progressEnd,
-                                    parentFilter->filterName() + ": FilmGrain")
+                                    parentFilter->filterName() + ": FilmGrain"),
+                 d(new FilmGrainFilterPriv)
 {
-    m_settings = settings;
+    d->settings = settings;
     filterImage();
 }
 
+FilmGrainFilter::~FilmGrainFilter()
+{
+    delete d;
+}    
+    
 void FilmGrainFilter::filterImage()
 {
     // NOTE: about YCbCr (YUV) color space details, see this Url : http://en.allexperts.com/e/y/yc/ycbcr.htm
 
-    if (m_settings.lum_intensity <= 0) return;
-    if (m_settings.chroma_intensity <= 0) return;
+    if (d->settings.lumaIntensity <= 0)       return;
+    if (d->settings.chromaBlueIntensity <= 0) return;
+    if (d->settings.chromaRedIntensity <= 0)  return;
 
-    DColor color;
-    int    progress;
-    double local_luma_noise;
-    double local_chroma_noise;
+    DColor refCol, color;
+    int    progress, posX, posY;
+    double local_luma_noise, local_luma_range;
+    double local_chroma_blue_noise, local_chroma_blue_range;
+    double local_chroma_red_noise, local_chroma_red_range;
 
-    int    width        = m_orgImage.width();
-    int    height       = m_orgImage.height();
-    bool   sb           = m_orgImage.sixteenBit();
-    int    luma_noise   = m_settings.lum_intensity    * (sb ? 256.0 : 1.0);
-    double chroma_noise = m_settings.chroma_intensity * (sb ? 256.0 : 1.0);
+    int    width             = m_orgImage.width();
+    int    height            = m_orgImage.height();
+    bool   sb                = m_orgImage.sixteenBit();
+    int    luma_noise        = d->settings.lumaIntensity       * (sb ? 256.0 : 1.0);
+    double chroma_blue_noise = d->settings.chromaBlueIntensity * (sb ? 256.0 : 1.0);
+    double chroma_red_noise  = d->settings.chromaRedIntensity  * (sb ? 256.0 : 1.0);
 
     qsrand(1); // noise will always be the same
 
-    for (int x = 0; !m_cancel && x < width; ++x)
+    for (int x = 0; !m_cancel && x < width; x += d->settings.grainSize)
     {
-        for (int y = 0; !m_cancel && y < height; ++y)
+        for (int y = 0; !m_cancel && y < height; y += d->settings.grainSize)
         {
-            color = m_orgImage.getPixelColor(x, y);
+            refCol = m_orgImage.getPixelColor(x, y);
 
-            if (m_settings.addLuminanceNoise)
+            if (d->settings.addLuminanceNoise)
             {
-                local_luma_noise = interpolate(m_settings.lum_shadows, m_settings.lum_midtones, 
-                                               m_settings.lum_highlights, color) * luma_noise + 1.0;
-
-                randomizeLuma(color, local_luma_noise);
+                local_luma_range = interpolate(d->settings.lumaShadows, d->settings.lumaMidtones, 
+                                               d->settings.lumaHighlights, refCol) * luma_noise + 1.0;
+                local_luma_noise = randomizeUniform(local_luma_range, sb);
             }
 
-            if (m_settings.addChrominanceNoise)
+            if (d->settings.addChrominanceBlueNoise)
             {
-                // Adjust Chrominance blue noise.
-
-                local_chroma_noise = interpolate(m_settings.chroma_shadows, m_settings.chroma_midtones, 
-                                                 m_settings.chroma_highlights, color) * chroma_noise + 1.0;
-
-                randomizeChroma(color, local_chroma_noise);
+                local_chroma_blue_range = interpolate(d->settings.chromaBlueShadows, d->settings.chromaBlueMidtones, 
+                                                      d->settings.chromaBlueHighlights, refCol) * chroma_blue_noise + 1.0;
+                local_chroma_blue_noise = randomizeUniform(local_chroma_blue_range, sb);
             }
 
-            m_destImage.setPixelColor(x, y, color);
+            if (d->settings.addChrominanceRedNoise)
+            {
+                local_chroma_red_range = interpolate(d->settings.chromaRedShadows, d->settings.chromaRedMidtones, 
+                                                     d->settings.chromaRedHighlights, refCol) * chroma_red_noise + 1.0;
+                local_chroma_red_noise = randomizeUniform(local_chroma_red_range, sb);
+            }
+
+            for (int zx = 0; !m_cancel && zx < d->settings.grainSize; ++zx)
+            {
+                for (int zy = 0; !m_cancel && zy < d->settings.grainSize; ++zy)
+                {
+                    posX  = x + zx;
+                    posY  = y + zy;
+                    if (posX < width && posY < height)
+                    {
+                        color = m_orgImage.getPixelColor(posX, posY);
+
+                        if (d->settings.addLuminanceNoise)
+                            adjustYCbCr(color, local_luma_range, local_luma_noise, 
+                                        FilmGrainFilterPriv::Luma);
+
+                        if (d->settings.addChrominanceBlueNoise)
+                            adjustYCbCr(color, local_chroma_blue_range, local_chroma_blue_noise,
+                                        FilmGrainFilterPriv::ChromaBlue);
+
+                        if (d->settings.addChrominanceRedNoise)
+                            adjustYCbCr(color, local_chroma_red_range, local_chroma_red_noise,
+                                        FilmGrainFilterPriv::ChromaRed);
+                        
+                        m_destImage.setPixelColor(posX, posY, color);
+                    }
+                }
+            }
         }
 
         // Update progress bar in dialog.
@@ -115,34 +169,45 @@ void FilmGrainFilter::filterImage()
     }
 }
 
-void FilmGrainFilter::randomizeLuma(DColor& col, double range)
+void FilmGrainFilter::adjustYCbCr(DColor& col, double range, double nRand, int channel)
 {
     double y, cb, cr;
     col.getYCbCr(&y, &cb, &cr);
 
-    double nRand = ((double)(qrand() % (int)range) - range/2.0) / (col.sixteenBit() ? 65535.0 : 255.0);
-    y            = CLAMP(y + nRand, 0.0, 1.0);
-
+    double n2 = randomizeGauss((d->settings.grainSize/2.0)*(range/1.414), col.sixteenBit());
+    switch (channel)
+    {
+        case FilmGrainFilterPriv::Luma:
+            y  = CLAMP(y  + nRand + n2, 0.0, 1.0);
+            break;
+        case FilmGrainFilterPriv::ChromaBlue:
+            cb = CLAMP(cb + nRand + n2, 0.0, 1.0);
+            break;
+        default:       // ChromaRed
+            cr = CLAMP(cr + nRand + n2, 0.0, 1.0);
+            break;
+    }
     col.setYCbCr(y, cb, cr, col.sixteenBit());
 }
 
-void FilmGrainFilter::randomizeChroma(DColor& col, double range)
+double FilmGrainFilter::randomizeUniform(double range, bool sixteenbits)
 {
-    double y, cb, cr;
-    col.getYCbCr(&y, &cb, &cr);
+    return ((double)(qrand() % (int)range) - range/2.0) / (sixteenbits ? 65535.0 : 255.0);
+}
 
-    double nRand = ((double)(qrand() % (int)range) - range/2.0) / (col.sixteenBit() ? 65535.0 : 255.0);
-    cb           = CLAMP(cb + nRand, 0.0, 1.0);
-    cr           = CLAMP(cr + nRand, 0.0, 1.0);
-
-    col.setYCbCr(y, cb, cr, col.sixteenBit());
+double FilmGrainFilter::randomizeGauss(double sigma, bool sixteenbits)
+{
+  double u, v;
+  while ((u = qrand () / (double) RAND_MAX) == 0.0);
+  v = qrand () / (double) RAND_MAX;
+  return (sigma * sqrt(-2 * log (u)) * cos(2 * M_PI * v)) / (sixteenbits ? 65535.0 : 255.0);
 }
 
 double FilmGrainFilter::interpolate(int shadows, int midtones, int highlights, const DColor& col)
 {
-    double s = (shadows   +100)/200.0;
-    double m = (midtones  +100)/200.0; 
-    double h = (highlights+100)/200.0;
+    double s = (shadows    + 100.0) / 200.0;
+    double m = (midtones   + 100.0) / 200.0; 
+    double h = (highlights + 100.0) / 200.0;
 
     double y, cb, cr;
     col.getYCbCr(&y, &cb, &cr);

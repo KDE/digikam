@@ -34,6 +34,8 @@
 
 namespace Digikam
 {
+  
+class FilmGrainFilterPriv;  
 
 class DIGIKAM_EXPORT FilmGrainContainer
 {
@@ -42,34 +44,50 @@ public:
 
     FilmGrainContainer()
     {
-        addLuminanceNoise   = true;
-        lum_intensity       = 25;
-        lum_shadows         = -100;
-        lum_midtones        = 0; 
-        lum_highlights      = -100;
+        grainSize               = 1;
 
-        addChrominanceNoise = false;
-        chroma_intensity    = 25;
-        chroma_shadows      = -100;
-        chroma_midtones     = 0;
-        chroma_highlights   = -100;
+        addLuminanceNoise       = true;
+        lumaIntensity           = 25;
+        lumaShadows             = -100;
+        lumaMidtones            = 0; 
+        lumaHighlights          = -100;
+
+        addChrominanceBlueNoise = false;
+        chromaBlueIntensity     = 25;
+        chromaBlueShadows       = -100;
+        chromaBlueMidtones      = 0;
+        chromaBlueHighlights    = -100;
+
+        addChrominanceRedNoise  = false;
+        chromaRedIntensity      = 25;
+        chromaRedShadows        = -100;
+        chromaRedMidtones       = 0;
+        chromaRedHighlights     = -100;
     };
 
     ~FilmGrainContainer(){};
 
 public:
 
-    bool addLuminanceNoise;
-    int  lum_intensity;
-    int  lum_shadows;
-    int  lum_midtones;
-    int  lum_highlights;
+    int  grainSize;
 
-    bool addChrominanceNoise;
-    int  chroma_intensity;
-    int  chroma_shadows; 
-    int  chroma_midtones;
-    int  chroma_highlights;
+    bool addLuminanceNoise;
+    int  lumaIntensity;
+    int  lumaShadows;
+    int  lumaMidtones;
+    int  lumaHighlights;
+
+    bool addChrominanceBlueNoise;
+    int  chromaBlueIntensity;
+    int  chromaBlueShadows; 
+    int  chromaBlueMidtones;
+    int  chromaBlueHighlights;
+
+    bool addChrominanceRedNoise;
+    int  chromaRedIntensity;
+    int  chromaRedShadows; 
+    int  chromaRedMidtones;
+    int  chromaRedHighlights;
 };
 
 // -----------------------------------------------------------------------------------------------
@@ -84,19 +102,20 @@ public:
     explicit FilmGrainFilter(DImgThreadedFilter* parentFilter, const DImg& orgImage, const DImg& destImage,
                              int progressBegin=0, int progressEnd=100,
                              const FilmGrainContainer& settings=FilmGrainContainer());
-    ~FilmGrainFilter(){};
+    ~FilmGrainFilter();
 
 private:
 
     void filterImage();
 
-    double interpolate(int shadows, int midtones, int highlights, const DColor& col);
-    void   randomizeLuma(DColor& col, double range);
-    void   randomizeChroma(DColor& col, double range);
+    inline double interpolate(int shadows, int midtones, int highlights, const DColor& col);
+    inline double randomizeUniform(double range, bool sixteenbits);
+    inline double randomizeGauss(double sigma, bool sixteenbits);
+    inline void   adjustYCbCr(DColor& col, double range, double nRand, int channel);
 
 private:
 
-    FilmGrainContainer m_settings;
+    FilmGrainFilterPriv* const d;
 };
 
 }  // namespace Digikam
