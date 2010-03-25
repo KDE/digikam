@@ -43,16 +43,16 @@ public:
     FilmGrainContainer()
     {
         addLuminanceNoise   = true;
-        lum_intensity       = 400;
-        lum_shadows         = 100;
-        lum_midtones        = 100; 
-        lum_highlights      = 100;
+        lum_intensity       = 25;
+        lum_shadows         = -100;
+        lum_midtones        = 0; 
+        lum_highlights      = -100;
 
         addChrominanceNoise = false;
-        chroma_intensity    = 400;
-        chroma_shadows      = 100;
-        chroma_midtones     = 100;
-        chroma_highlights   = 100;
+        chroma_intensity    = 25;
+        chroma_shadows      = -100;
+        chroma_midtones     = 0;
+        chroma_highlights   = -100;
     };
 
     ~FilmGrainContainer(){};
