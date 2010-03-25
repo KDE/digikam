@@ -212,7 +212,13 @@ double FilmGrainFilter::randomizeUniform(double range, bool sixteenbits)
 double FilmGrainFilter::randomizeGauss(double sigma, bool sixteenbits)
 {
     double u, v;
-    while ((u = qrand () / (double) RAND_MAX) == 0.0);
+
+    do
+    {
+	u = qrand() / (double)RAND_MAX;
+    }
+    while(!m_cancel && u == 0.0);
+
     v = qrand () / (double) RAND_MAX;
     return (sigma * sqrt(-2 * log (u)) * cos(2 * M_PI * v)) / (sixteenbits ? 65535.0 : 255.0);
 }
@@ -223,16 +229,15 @@ double FilmGrainFilter::randomizePoisson(double lambda, bool sixteenbits)
     double L = exp(-lambda);
     uint   k = 0;
     double p = 1.0;
-    uint   r = (sixteenbits ? 65535 : 255);
 
     do
     {
         k++;
         p = p * (qrand() / (double)RAND_MAX);
     }
-    while (p >= L && k <= r);
+    while(!m_cancel && p >= L);
 
-    return ((double)(k - 1) / (double)r);
+    return ((double)(k - 1) / (sixteenbits ? 65535.0 : 255.0));
 }
 
 double FilmGrainFilter::interpolate(int shadows, int midtones, int highlights, const DColor& col)
