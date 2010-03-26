@@ -67,7 +67,7 @@ public:
     };
 
     ~FilmGrainContainer(){};
-    
+
     bool isDirty()
     {
         return (addLuminanceNoise || addChrominanceBlueNoise || addChrominanceRedNoise);
@@ -86,7 +86,7 @@ public:
 
     bool addChrominanceBlueNoise;
     int  chromaBlueIntensity;
-    int  chromaBlueShadows; 
+    int  chromaBlueShadows;
     int  chromaBlueMidtones;
     int  chromaBlueHighlights;
 

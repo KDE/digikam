@@ -59,11 +59,11 @@ public:
         ChromaBlue,
         ChromaRed
     };
-    
+
     double leadLumaNoise;
     double leadChromaBlueNoise;
     double leadChromaRedNoise;
-    
+
     FilmGrainContainer settings;
 };
 
@@ -119,7 +119,7 @@ void FilmGrainFilter::filterImage()
 
     DColor refCol, matCol;
     int    progress, posX, posY;
-    
+
     // Reference point noise adjustements.
     double refLumaNoise,       refLumaRange;
     double refChromaBlueNoise, refChromaBlueRange;
@@ -129,7 +129,7 @@ void FilmGrainFilter::filterImage()
     double matLumaNoise,       matLumaRange;
     double matChromaBlueNoise, matChromaBlueRange;
     double matChromaRedNoise,  matChromaRedRange;
-    
+
     int    width           = m_orgImage.width();
     int    height          = m_orgImage.height();
     d->leadLumaNoise       = d->settings.lumaIntensity       * (m_orgImage.sixteenBit() ? 256.0 : 1.0);
@@ -173,7 +173,7 @@ void FilmGrainFilter::filterImage()
                             else
                                 adjustYCbCr(matCol, refLumaRange, refLumaNoise, FilmGrainFilterPriv::Luma);
                         }
-                            
+
                         if (d->settings.addChrominanceBlueNoise)
                         {
                             if (((refChromaBlueRange - matChromaBlueRange) / refChromaBlueRange) > 0.1)
@@ -231,6 +231,10 @@ void FilmGrainFilter::computeNoiseSettings(const DColor& col,
     }
 }
 
+/** This method apply grain adjustement on a pixel color channel from YCrCb color space.
+    NRand is the lead uniform noise set from matrix used to scan whole image step by step.
+    Additionaly noise is applied on pixel using Poisson or Gausian distribution.
+ */
 void FilmGrainFilter::adjustYCbCr(DColor& col, double range, double nRand, int channel)
 {
     double y, cb, cr, n2;
@@ -253,7 +257,7 @@ void FilmGrainFilter::adjustYCbCr(DColor& col, double range, double nRand, int c
             cr = CLAMP(cr + nRand + n2, 0.0, 1.0);
             break;
     }
-    
+
     col.setYCbCr(y, cb, cr, col.sixteenBit());
 }
 
@@ -285,6 +289,9 @@ double FilmGrainFilter::randomizePoisson(double lambda)
     return (randomizeGauss( sqrt( lambda * d->settings.grainSize * d->settings.grainSize) ));
 }
 
+/** This method interpolate gain adjustements to apply grain on shadows, midtones and highlights colors.
+    The output value is a coefficient computed between 0 and 1.0.
+ */
 double FilmGrainFilter::interpolate(int shadows, int midtones, int highlights, const DColor& col)
 {
     double s = (shadows    + 100.0) / 200.0;
