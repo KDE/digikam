@@ -106,12 +106,12 @@ void FilmGrainFilter::filterImage()
     double refChromaBlueNoise, refChromaBlueRange;
     double refChromaRedNoise,  refChromaRedRange;
 
-    int    width             = m_orgImage.width();
-    int    height            = m_orgImage.height();
-    bool   sb                = m_orgImage.sixteenBit();
-    int    luma_noise        = d->settings.lumaIntensity       * (sb ? 256.0 : 1.0);
-    double chroma_blue_noise = d->settings.chromaBlueIntensity * (sb ? 256.0 : 1.0);
-    double chroma_red_noise  = d->settings.chromaRedIntensity  * (sb ? 256.0 : 1.0);
+    int    width           = m_orgImage.width();
+    int    height          = m_orgImage.height();
+    bool   sb              = m_orgImage.sixteenBit();
+    int    lumaNoise       = d->settings.lumaIntensity       * (sb ? 256.0 : 1.0);
+    double chromaBlueNoise = d->settings.chromaBlueIntensity * (sb ? 256.0 : 1.0);
+    double chromaRedNoise  = d->settings.chromaRedIntensity  * (sb ? 256.0 : 1.0);
 
     qsrand(1); // noise will always be the same
 
@@ -132,21 +132,21 @@ void FilmGrainFilter::filterImage()
             if (d->settings.addLuminanceNoise)
             {
                 refLumaRange = interpolate(d->settings.lumaShadows, d->settings.lumaMidtones, 
-                                           d->settings.lumaHighlights, refCol) * luma_noise + 1.0;
+                                           d->settings.lumaHighlights, refCol) * lumaNoise + 1.0;
                 refLumaNoise = randomizeUniform(refLumaRange, sb);
             }
 
             if (d->settings.addChrominanceBlueNoise)
             {
                 refChromaBlueRange = interpolate(d->settings.chromaBlueShadows, d->settings.chromaBlueMidtones, 
-                                                 d->settings.chromaBlueHighlights, refCol) * chroma_blue_noise + 1.0;
+                                                 d->settings.chromaBlueHighlights, refCol) * chromaBlueNoise + 1.0;
                 refChromaBlueNoise = randomizeUniform(refChromaBlueRange, sb);
             }
 
             if (d->settings.addChrominanceRedNoise)
             {
                 refChromaRedRange = interpolate(d->settings.chromaRedShadows, d->settings.chromaRedMidtones, 
-                                                d->settings.chromaRedHighlights, refCol) * chroma_red_noise + 1.0;
+                                                d->settings.chromaRedHighlights, refCol) * chromaRedNoise + 1.0;
                 refChromaRedNoise = randomizeUniform(refChromaRedRange, sb);
             }
 
@@ -218,15 +218,15 @@ double FilmGrainFilter::randomizeUniform(double range, bool sixteenbits)
 
 double FilmGrainFilter::randomizeGauss(double sigma, bool sixteenbits)
 {
-    double u, v;
+    double u;
 
     do
     {
-	u = qrand() / (double)RAND_MAX;
+        u = qrand() / (double)RAND_MAX;
     }
     while (!m_cancel && u == 0.0);
 
-    v = qrand () / (double) RAND_MAX;
+    double v = qrand () / (double) RAND_MAX;
     return (sigma * sqrt(-2 * log (u)) * cos(2 * M_PI * v)) / (sixteenbits ? 65535.0 : 255.0);
 }
 
