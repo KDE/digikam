@@ -271,7 +271,8 @@ double FilmGrainFilter::randomizeUniform(double range)
     return ((double)(qrand() % (int)range) - range/2.0) ;
 }
 
-/** This method compute Guaussian noise value used to randomize all matrix point.
+/** This method compute Guaussian noise value used to randomize all matrix points.
+    This value is added to lead noise value.
  */
 double FilmGrainFilter::randomizeGauss(double sigma)
 {
@@ -287,7 +288,8 @@ double FilmGrainFilter::randomizeGauss(double sigma)
     return (sigma * sqrt(-2 * log (u)) * cos(2 * M_PI * v)) ;
 }
 
-/** This method compute Poisson noise value used to randomize all matrix point.
+/** This method compute Poisson noise value used to randomize all matrix points.
+    This value is added to lead noise value.
     Poisson noise is more realist to simulate photon noise apply on analog film.
     NOTE: see approximation of Poisson noise using Gauss algorithm from noise.c code take from :
           http://registry.gimp.org/node/13016
@@ -299,7 +301,7 @@ double FilmGrainFilter::randomizePoisson(double lambda)
 }
 
 /** This method interpolate gain adjustements to apply grain on shadows, midtones and highlights colors.
-    The output value is a coefficient computed between 0 and 1.0.
+    The output value is a coefficient computed between 0.0 and 1.0.
  */
 double FilmGrainFilter::interpolate(int shadows, int midtones, int highlights, const DColor& col)
 {
