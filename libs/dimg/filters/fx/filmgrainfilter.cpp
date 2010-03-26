@@ -102,9 +102,9 @@ void FilmGrainFilter::filterImage()
 
     DColor refCol, color;
     int    progress, posX, posY;
-    double local_luma_noise,        local_luma_range;
-    double local_chroma_blue_noise, local_chroma_blue_range;
-    double local_chroma_red_noise,  local_chroma_red_range;
+    double refLumaNoise,       refLumaRange;
+    double refChromaBlueNoise, refChromaBlueRange;
+    double refChromaRedNoise,  refChromaRedRange;
 
     int    width             = m_orgImage.width();
     int    height            = m_orgImage.height();
@@ -131,23 +131,23 @@ void FilmGrainFilter::filterImage()
 
             if (d->settings.addLuminanceNoise)
             {
-                local_luma_range = interpolate(d->settings.lumaShadows, d->settings.lumaMidtones, 
-                                               d->settings.lumaHighlights, refCol) * luma_noise + 1.0;
-                local_luma_noise = randomizeUniform(local_luma_range, sb);
+                refLumaRange = interpolate(d->settings.lumaShadows, d->settings.lumaMidtones, 
+                                           d->settings.lumaHighlights, refCol) * luma_noise + 1.0;
+                refLumaNoise = randomizeUniform(refLumaRange, sb);
             }
 
             if (d->settings.addChrominanceBlueNoise)
             {
-                local_chroma_blue_range = interpolate(d->settings.chromaBlueShadows, d->settings.chromaBlueMidtones, 
-                                                      d->settings.chromaBlueHighlights, refCol) * chroma_blue_noise + 1.0;
-                local_chroma_blue_noise = randomizeUniform(local_chroma_blue_range, sb);
+                refChromaBlueRange = interpolate(d->settings.chromaBlueShadows, d->settings.chromaBlueMidtones, 
+                                                 d->settings.chromaBlueHighlights, refCol) * chroma_blue_noise + 1.0;
+                refChromaBlueNoise = randomizeUniform(refChromaBlueRange, sb);
             }
 
             if (d->settings.addChrominanceRedNoise)
             {
-                local_chroma_red_range = interpolate(d->settings.chromaRedShadows, d->settings.chromaRedMidtones, 
-                                                     d->settings.chromaRedHighlights, refCol) * chroma_red_noise + 1.0;
-                local_chroma_red_noise = randomizeUniform(local_chroma_red_range, sb);
+                refChromaRedRange = interpolate(d->settings.chromaRedShadows, d->settings.chromaRedMidtones, 
+                                                d->settings.chromaRedHighlights, refCol) * chroma_red_noise + 1.0;
+                refChromaRedNoise = randomizeUniform(refChromaRedRange, sb);
             }
 
             // Grain size matrix processing.
@@ -164,16 +164,13 @@ void FilmGrainFilter::filterImage()
                         color = m_orgImage.getPixelColor(posX, posY);
 
                         if (d->settings.addLuminanceNoise)
-                            adjustYCbCr(color, local_luma_range, local_luma_noise, 
-                                        FilmGrainFilterPriv::Luma);
+                            adjustYCbCr(color, refLumaRange, refLumaNoise, FilmGrainFilterPriv::Luma);
 
                         if (d->settings.addChrominanceBlueNoise)
-                            adjustYCbCr(color, local_chroma_blue_range, local_chroma_blue_noise,
-                                        FilmGrainFilterPriv::ChromaBlue);
+                            adjustYCbCr(color, refChromaBlueRange, refChromaBlueNoise, FilmGrainFilterPriv::ChromaBlue);
 
                         if (d->settings.addChrominanceRedNoise)
-                            adjustYCbCr(color, local_chroma_red_range, local_chroma_red_noise,
-                                        FilmGrainFilterPriv::ChromaRed);
+                            adjustYCbCr(color, refChromaRedRange, refChromaRedNoise, FilmGrainFilterPriv::ChromaRed);
 
                         m_destImage.setPixelColor(posX, posY, color);
                     }
