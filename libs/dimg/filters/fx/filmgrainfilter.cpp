@@ -106,12 +106,12 @@ void FilmGrainFilter::filterImage()
     double refChromaBlueNoise, refChromaBlueRange;
     double refChromaRedNoise,  refChromaRedRange;
 
-    int    width           = m_orgImage.width();
-    int    height          = m_orgImage.height();
-    bool   sb              = m_orgImage.sixteenBit();
-    int    lumaNoise       = d->settings.lumaIntensity       * (sb ? 256.0 : 1.0);
-    double chromaBlueNoise = d->settings.chromaBlueIntensity * (sb ? 256.0 : 1.0);
-    double chromaRedNoise  = d->settings.chromaRedIntensity  * (sb ? 256.0 : 1.0);
+    int    width               = m_orgImage.width();
+    int    height              = m_orgImage.height();
+    bool   sb                  = m_orgImage.sixteenBit();
+    int    leadLumaNoise       = d->settings.lumaIntensity       * (sb ? 256.0 : 1.0);
+    double leadChromaBlueNoise = d->settings.chromaBlueIntensity * (sb ? 256.0 : 1.0);
+    double leadChromaRedNoise  = d->settings.chromaRedIntensity  * (sb ? 256.0 : 1.0);
 
     qsrand(1); // noise will always be the same
 
@@ -132,21 +132,21 @@ void FilmGrainFilter::filterImage()
             if (d->settings.addLuminanceNoise)
             {
                 refLumaRange = interpolate(d->settings.lumaShadows, d->settings.lumaMidtones, 
-                                           d->settings.lumaHighlights, refCol) * lumaNoise + 1.0;
+                                           d->settings.lumaHighlights, refCol) * leadLumaNoise + 1.0;
                 refLumaNoise = randomizeUniform(refLumaRange, sb);
             }
 
             if (d->settings.addChrominanceBlueNoise)
             {
                 refChromaBlueRange = interpolate(d->settings.chromaBlueShadows, d->settings.chromaBlueMidtones, 
-                                                 d->settings.chromaBlueHighlights, refCol) * chromaBlueNoise + 1.0;
+                                                 d->settings.chromaBlueHighlights, refCol) * leadChromaBlueNoise + 1.0;
                 refChromaBlueNoise = randomizeUniform(refChromaBlueRange, sb);
             }
 
             if (d->settings.addChrominanceRedNoise)
             {
                 refChromaRedRange = interpolate(d->settings.chromaRedShadows, d->settings.chromaRedMidtones, 
-                                                d->settings.chromaRedHighlights, refCol) * chromaRedNoise + 1.0;
+                                                d->settings.chromaRedHighlights, refCol) * leadChromaRedNoise + 1.0;
                 refChromaRedNoise = randomizeUniform(refChromaRedRange, sb);
             }
 
