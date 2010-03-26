@@ -278,19 +278,11 @@ double FilmGrainFilter::randomizeGauss(double sigma)
 
 double FilmGrainFilter::randomizePoisson(double lambda)
 {
-    // NOTE: see algorithm from wikipedia page: http://en.wikipedia.org/wiki/Poisson_distribution
-    double L = exp(-lambda);
-    uint   k = 0;
-    double p = 1.0;
-
-    do
-    {
-        k++;
-        p = p * (qrand() / (double)RAND_MAX);
-    }
-    while (!m_cancel && p > L);
-
-    return (((double)(k - 1)  - lambda) / (m_orgImage.sixteenBit() ? 65535.0 : 255.0));
+    /* NOTE: see approximation of Poisson noise using Gauss algorithm from noise.c code take from :
+             http://registry.gimp.org/node/13016
+             This method is very fast compared to real Poisson noise generator.
+    */
+    return (randomizeGauss( sqrt( lambda * d->settings.grainSize * d->settings.grainSize) ));
 }
 
 double FilmGrainFilter::interpolate(int shadows, int midtones, int highlights, const DColor& col)
