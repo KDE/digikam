@@ -102,9 +102,9 @@ void FilmGrainFilter::filterImage()
 
     DColor refCol, color;
     int    progress, posX, posY;
-    double local_luma_noise, local_luma_range;
+    double local_luma_noise,        local_luma_range;
     double local_chroma_blue_noise, local_chroma_blue_range;
-    double local_chroma_red_noise, local_chroma_red_range;
+    double local_chroma_red_noise,  local_chroma_red_range;
 
     int    width             = m_orgImage.width();
     int    height            = m_orgImage.height();
@@ -119,6 +119,14 @@ void FilmGrainFilter::filterImage()
     {
         for (int y = 0; !m_cancel && y < height; y += d->settings.grainSize)
         {
+            // To emulate grain size we use a matrix [grainSize x grainSize].
+            // We will parse whole image using grainSize step. Color from a reference point located 
+            // on the top left corner of matrix will be used to apply noise on whole matrix.
+            // In first, for each matrix processed over the image, we compute the lead noise value 
+            // using Uniform noise generator.
+            // In second time, all others points from the matrix are process to add suplemental noise 
+            // generated with Gaussian or Poisson noise generator.
+
             refCol = m_orgImage.getPixelColor(x, y);
 
             if (d->settings.addLuminanceNoise)
@@ -141,6 +149,8 @@ void FilmGrainFilter::filterImage()
                                                      d->settings.chromaRedHighlights, refCol) * chroma_red_noise + 1.0;
                 local_chroma_red_noise = randomizeUniform(local_chroma_red_range, sb);
             }
+
+            // Grain size matrix processing.
 
             for (int zx = 0; !m_cancel && zx < d->settings.grainSize; ++zx)
             {
@@ -217,7 +227,7 @@ double FilmGrainFilter::randomizeGauss(double sigma, bool sixteenbits)
     {
 	u = qrand() / (double)RAND_MAX;
     }
-    while(!m_cancel && u == 0.0);
+    while (!m_cancel && u == 0.0);
 
     v = qrand () / (double) RAND_MAX;
     return (sigma * sqrt(-2 * log (u)) * cos(2 * M_PI * v)) / (sixteenbits ? 65535.0 : 255.0);
@@ -235,16 +245,15 @@ double FilmGrainFilter::randomizePoisson(double lambda, bool sixteenbits)
         k++;
         p = p * (qrand() / (double)RAND_MAX);
     }
-    while(!m_cancel && p > L);
+    while (!m_cancel && p > L);
 
-    
     return (((double)(k - 1)  - lambda) / (sixteenbits ? 65535.0 : 255.0));
 }
 
 double FilmGrainFilter::interpolate(int shadows, int midtones, int highlights, const DColor& col)
 {
     double s = (shadows    + 100.0) / 200.0;
-    double m = (midtones   + 100.0) / 200.0; 
+    double m = (midtones   + 100.0) / 200.0;
     double h = (highlights + 100.0) / 200.0;
 
     double y, cb, cr;
