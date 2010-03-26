@@ -204,6 +204,8 @@ void FilmGrainFilter::filterImage()
     }
 }
 
+/** This method compute lead noise of reference matrix point used to similate graininess size
+ */
 void FilmGrainFilter::computeNoiseSettings(const DColor& col,
                                            double& luRange, double& luNoise,
                                            double& cbRange, double& cbNoise,
@@ -261,11 +263,16 @@ void FilmGrainFilter::adjustYCbCr(DColor& col, double range, double nRand, int c
     col.setYCbCr(y, cb, cr, col.sixteenBit());
 }
 
+/** This method compute uniform noise value used to randomize matrix reference point.
+    This value is lead noise apply to image.
+ */
 double FilmGrainFilter::randomizeUniform(double range)
 {
     return ((double)(qrand() % (int)range) - range/2.0) ;
 }
 
+/** This method compute Guaussian noise value used to randomize all matrix point.
+ */
 double FilmGrainFilter::randomizeGauss(double sigma)
 {
     double u;
@@ -280,12 +287,14 @@ double FilmGrainFilter::randomizeGauss(double sigma)
     return (sigma * sqrt(-2 * log (u)) * cos(2 * M_PI * v)) ;
 }
 
+/** This method compute Poisson noise value used to randomize all matrix point.
+    Poisson noise is more realist to simulate photon noise apply on analog film.
+    NOTE: see approximation of Poisson noise using Gauss algorithm from noise.c code take from :
+          http://registry.gimp.org/node/13016
+          This method is very fast compared to real Poisson noise generator.
+ */
 double FilmGrainFilter::randomizePoisson(double lambda)
 {
-    /* NOTE: see approximation of Poisson noise using Gauss algorithm from noise.c code take from :
-             http://registry.gimp.org/node/13016
-             This method is very fast compared to real Poisson noise generator.
-    */
     return (randomizeGauss( sqrt( lambda * d->settings.grainSize * d->settings.grainSize) ));
 }
 
