@@ -109,12 +109,27 @@ void FilmGrainFilter::filterImage()
             return;
         }
 
-    DColor refCol, color;
+    // To emulate grain size we use a matrix [grainSize x grainSize].
+    // We will parse whole image using grainSize step. Color from a reference point located 
+    // on the top left corner of matrix will be used to apply noise on whole matrix.
+    // In first, for each matrix processed over the image, we compute the lead noise value 
+    // using Uniform noise generator.
+    // In second time, all others points from the matrix are process to add suplemental noise 
+    // generated with Gaussian or Poisson noise generator.
+
+    DColor refCol, matCol;
     int    progress, posX, posY;
+    
+    // Reference point noise adjustements.
     double refLumaNoise,       refLumaRange;
     double refChromaBlueNoise, refChromaBlueRange;
     double refChromaRedNoise,  refChromaRedRange;
 
+    // Current matrix point noise adjustements.
+    double matLumaNoise,       matLumaRange;
+    double matChromaBlueNoise, matChromaBlueRange;
+    double matChromaRedNoise,  matChromaRedRange;
+    
     int    width           = m_orgImage.width();
     int    height          = m_orgImage.height();
     d->leadLumaNoise       = d->settings.lumaIntensity       * (m_orgImage.sixteenBit() ? 256.0 : 1.0);
@@ -127,19 +142,11 @@ void FilmGrainFilter::filterImage()
     {
         for (int y = 0; !m_cancel && y < height; y += d->settings.grainSize)
         {
-            // To emulate grain size we use a matrix [grainSize x grainSize].
-            // We will parse whole image using grainSize step. Color from a reference point located 
-            // on the top left corner of matrix will be used to apply noise on whole matrix.
-            // In first, for each matrix processed over the image, we compute the lead noise value 
-            // using Uniform noise generator.
-            // In second time, all others points from the matrix are process to add suplemental noise 
-            // generated with Gaussian or Poisson noise generator.
-
             refCol = m_orgImage.getPixelColor(x, y);
-            computeNoise(refCol, 
-                         refLumaRange,       refLumaNoise,
-                         refChromaBlueRange, refChromaBlueNoise,
-                         refChromaRedRange,  refChromaRedNoise);
+            computeNoiseSettings(refCol, 
+                                 refLumaRange,       refLumaNoise,
+                                 refChromaBlueRange, refChromaBlueNoise,
+                                 refChromaRedRange,  refChromaRedNoise);
 
             // Grain size matrix processing.
 
@@ -152,18 +159,38 @@ void FilmGrainFilter::filterImage()
 
                     if (posX < width && posY < height)
                     {
-                        color = m_orgImage.getPixelColor(posX, posY);
+                         matCol = m_orgImage.getPixelColor(posX, posY);
+
+                         computeNoiseSettings(matCol, 
+                                              matLumaRange,       matLumaNoise,
+                                              matChromaBlueRange, matChromaBlueNoise,
+                                              matChromaRedRange,  matChromaRedNoise);
 
                         if (d->settings.addLuminanceNoise)
-                            adjustYCbCr(color, refLumaRange, refLumaNoise, FilmGrainFilterPriv::Luma);
-
+                        {
+                            if (((refLumaRange - matLumaRange) / refLumaRange) > 0.1)
+                                adjustYCbCr(matCol, matLumaRange, matLumaNoise, FilmGrainFilterPriv::Luma);
+                            else
+                                adjustYCbCr(matCol, refLumaRange, refLumaNoise, FilmGrainFilterPriv::Luma);
+                        }
+                            
                         if (d->settings.addChrominanceBlueNoise)
-                            adjustYCbCr(color, refChromaBlueRange, refChromaBlueNoise, FilmGrainFilterPriv::ChromaBlue);
+                        {
+                            if (((refChromaBlueRange - matChromaBlueRange) / refChromaBlueRange) > 0.1)
+                                adjustYCbCr(matCol, matChromaBlueRange, matChromaBlueNoise, FilmGrainFilterPriv::ChromaBlue);
+                            else
+                                adjustYCbCr(matCol, refChromaBlueRange, refChromaBlueNoise, FilmGrainFilterPriv::ChromaBlue);
+                        }
 
                         if (d->settings.addChrominanceRedNoise)
-                            adjustYCbCr(color, refChromaRedRange, refChromaRedNoise, FilmGrainFilterPriv::ChromaRed);
+                        {
+                            if (((refChromaRedRange - matChromaRedRange) / refChromaRedRange) > 0.1)
+                                adjustYCbCr(matCol, matChromaRedRange, matChromaRedNoise, FilmGrainFilterPriv::ChromaBlue);
+                            else
+                                adjustYCbCr(matCol, refChromaRedRange, refChromaRedNoise, FilmGrainFilterPriv::ChromaRed);
+                        }
 
-                        m_destImage.setPixelColor(posX, posY, color);
+                        m_destImage.setPixelColor(posX, posY, matCol);
                     }
                 }
             }
@@ -177,10 +204,10 @@ void FilmGrainFilter::filterImage()
     }
 }
 
-void FilmGrainFilter::computeNoise(const DColor& col,
-                                   double& luRange, double& luNoise,
-                                   double& cbRange, double& cbNoise,
-                                   double& crRange, double& crNoise)
+void FilmGrainFilter::computeNoiseSettings(const DColor& col,
+                                           double& luRange, double& luNoise,
+                                           double& cbRange, double& cbNoise,
+                                           double& crRange, double& crNoise)
 {
     if (d->settings.addLuminanceNoise)
     {
