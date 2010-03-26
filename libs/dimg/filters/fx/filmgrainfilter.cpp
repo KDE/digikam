@@ -213,21 +213,21 @@ void FilmGrainFilter::computeNoiseSettings(const DColor& col,
     {
         luRange = interpolate(d->settings.lumaShadows, d->settings.lumaMidtones, 
                               d->settings.lumaHighlights, col) * d->leadLumaNoise + 1.0;
-        luNoise = randomizeUniform(luRange);
+        luNoise = randomizeUniform(luRange)/ (m_orgImage.sixteenBit() ? 65535.0 : 255.0);
     }
 
     if (d->settings.addChrominanceBlueNoise)
     {
         cbRange = interpolate(d->settings.chromaBlueShadows, d->settings.chromaBlueMidtones, 
                               d->settings.chromaBlueHighlights, col) * d->leadChromaBlueNoise + 1.0;
-        cbNoise = randomizeUniform(cbRange);
+        cbNoise = randomizeUniform(cbRange)/ (m_orgImage.sixteenBit() ? 65535.0 : 255.0);
     }
 
     if (d->settings.addChrominanceRedNoise)
     {
         crRange = interpolate(d->settings.chromaRedShadows, d->settings.chromaRedMidtones, 
                               d->settings.chromaRedHighlights, col) * d->leadChromaRedNoise + 1.0;
-        crNoise = randomizeUniform(crRange);
+        crNoise = randomizeUniform(crRange)/ (m_orgImage.sixteenBit() ? 65535.0 : 255.0);
     }
 }
 
@@ -237,9 +237,9 @@ void FilmGrainFilter::adjustYCbCr(DColor& col, double range, double nRand, int c
     col.getYCbCr(&y, &cb, &cr);
 
     if (d->settings.photoDistribution)
-        n2 = randomizePoisson((d->settings.grainSize/2.0)*(range/1.414));
+        n2 = randomizePoisson((d->settings.grainSize/2.0)*(range/1.414)) / (m_orgImage.sixteenBit() ? 65535.0 : 255.0);
     else 
-        n2 = randomizeGauss((d->settings.grainSize/2.0)*(range/1.414));
+        n2 = randomizeGauss((d->settings.grainSize/2.0)*(range/1.414))   / (m_orgImage.sixteenBit() ? 65535.0 : 255.0);
 
     switch (channel)
     {
@@ -259,7 +259,7 @@ void FilmGrainFilter::adjustYCbCr(DColor& col, double range, double nRand, int c
 
 double FilmGrainFilter::randomizeUniform(double range)
 {
-    return ((double)(qrand() % (int)range) - range/2.0) / (m_orgImage.sixteenBit() ? 65535.0 : 255.0);
+    return ((double)(qrand() % (int)range) - range/2.0) ;
 }
 
 double FilmGrainFilter::randomizeGauss(double sigma)
@@ -273,7 +273,7 @@ double FilmGrainFilter::randomizeGauss(double sigma)
     while (!m_cancel && u == 0.0);
 
     double v = qrand () / (double) RAND_MAX;
-    return (sigma * sqrt(-2 * log (u)) * cos(2 * M_PI * v)) / (m_orgImage.sixteenBit() ? 65535.0 : 255.0);
+    return (sigma * sqrt(-2 * log (u)) * cos(2 * M_PI * v)) ;
 }
 
 double FilmGrainFilter::randomizePoisson(double lambda)
