@@ -115,10 +115,14 @@ private:
 
     void filterImage();
 
+    inline void computeNoise(const DColor& col,
+                             double& luRange, double& luNoise,
+                             double& cbRange, double& cbNoise,
+                             double& crRange, double& crNoise);
     inline double interpolate(int shadows, int midtones, int highlights, const DColor& col);
-    inline double randomizeUniform(double range, bool sixteenbits);
-    inline double randomizeGauss(double sigma, bool sixteenbits);
-    inline double randomizePoisson(double lambda, bool sixteenbits);
+    inline double randomizeUniform(double range);
+    inline double randomizeGauss(double sigma);
+    inline double randomizePoisson(double lambda);
     inline void   adjustYCbCr(DColor& col, double range, double nRand, int channel);
 
 private:

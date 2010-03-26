@@ -46,7 +46,12 @@ class FilmGrainFilterPriv
 {
 public:
 
-    FilmGrainFilterPriv(){}
+    FilmGrainFilterPriv()
+    {
+        leadLumaNoise       = 1.0;
+        leadChromaBlueNoise = 1.0;
+        leadChromaRedNoise  = 1.0;
+    }
 
     enum YUVChannel
     {
@@ -54,7 +59,11 @@ public:
         ChromaBlue,
         ChromaRed
     };
-
+    
+    double leadLumaNoise;
+    double leadChromaBlueNoise;
+    double leadChromaRedNoise;
+    
     FilmGrainContainer settings;
 };
 
@@ -106,12 +115,11 @@ void FilmGrainFilter::filterImage()
     double refChromaBlueNoise, refChromaBlueRange;
     double refChromaRedNoise,  refChromaRedRange;
 
-    int    width               = m_orgImage.width();
-    int    height              = m_orgImage.height();
-    bool   sb                  = m_orgImage.sixteenBit();
-    int    leadLumaNoise       = d->settings.lumaIntensity       * (sb ? 256.0 : 1.0);
-    double leadChromaBlueNoise = d->settings.chromaBlueIntensity * (sb ? 256.0 : 1.0);
-    double leadChromaRedNoise  = d->settings.chromaRedIntensity  * (sb ? 256.0 : 1.0);
+    int    width           = m_orgImage.width();
+    int    height          = m_orgImage.height();
+    d->leadLumaNoise       = d->settings.lumaIntensity       * (m_orgImage.sixteenBit() ? 256.0 : 1.0);
+    d->leadChromaBlueNoise = d->settings.chromaBlueIntensity * (m_orgImage.sixteenBit() ? 256.0 : 1.0);
+    d->leadChromaRedNoise  = d->settings.chromaRedIntensity  * (m_orgImage.sixteenBit() ? 256.0 : 1.0);
 
     qsrand(1); // noise will always be the same
 
@@ -128,27 +136,10 @@ void FilmGrainFilter::filterImage()
             // generated with Gaussian or Poisson noise generator.
 
             refCol = m_orgImage.getPixelColor(x, y);
-
-            if (d->settings.addLuminanceNoise)
-            {
-                refLumaRange = interpolate(d->settings.lumaShadows, d->settings.lumaMidtones, 
-                                           d->settings.lumaHighlights, refCol) * leadLumaNoise + 1.0;
-                refLumaNoise = randomizeUniform(refLumaRange, sb);
-            }
-
-            if (d->settings.addChrominanceBlueNoise)
-            {
-                refChromaBlueRange = interpolate(d->settings.chromaBlueShadows, d->settings.chromaBlueMidtones, 
-                                                 d->settings.chromaBlueHighlights, refCol) * leadChromaBlueNoise + 1.0;
-                refChromaBlueNoise = randomizeUniform(refChromaBlueRange, sb);
-            }
-
-            if (d->settings.addChrominanceRedNoise)
-            {
-                refChromaRedRange = interpolate(d->settings.chromaRedShadows, d->settings.chromaRedMidtones, 
-                                                d->settings.chromaRedHighlights, refCol) * leadChromaRedNoise + 1.0;
-                refChromaRedNoise = randomizeUniform(refChromaRedRange, sb);
-            }
+            computeNoise(refCol, 
+                         refLumaRange,       refLumaNoise,
+                         refChromaBlueRange, refChromaBlueNoise,
+                         refChromaRedRange,  refChromaRedNoise);
 
             // Grain size matrix processing.
 
@@ -186,15 +177,42 @@ void FilmGrainFilter::filterImage()
     }
 }
 
+void FilmGrainFilter::computeNoise(const DColor& col,
+                                   double& luRange, double& luNoise,
+                                   double& cbRange, double& cbNoise,
+                                   double& crRange, double& crNoise)
+{
+    if (d->settings.addLuminanceNoise)
+    {
+        luRange = interpolate(d->settings.lumaShadows, d->settings.lumaMidtones, 
+                              d->settings.lumaHighlights, col) * d->leadLumaNoise + 1.0;
+        luNoise = randomizeUniform(luRange);
+    }
+
+    if (d->settings.addChrominanceBlueNoise)
+    {
+        cbRange = interpolate(d->settings.chromaBlueShadows, d->settings.chromaBlueMidtones, 
+                              d->settings.chromaBlueHighlights, col) * d->leadChromaBlueNoise + 1.0;
+        cbNoise = randomizeUniform(cbRange);
+    }
+
+    if (d->settings.addChrominanceRedNoise)
+    {
+        crRange = interpolate(d->settings.chromaRedShadows, d->settings.chromaRedMidtones, 
+                              d->settings.chromaRedHighlights, col) * d->leadChromaRedNoise + 1.0;
+        crNoise = randomizeUniform(crRange);
+    }
+}
+
 void FilmGrainFilter::adjustYCbCr(DColor& col, double range, double nRand, int channel)
 {
     double y, cb, cr, n2;
     col.getYCbCr(&y, &cb, &cr);
 
     if (d->settings.photoDistribution)
-        n2 = randomizePoisson((d->settings.grainSize/2.0)*(range/1.414), col.sixteenBit());
+        n2 = randomizePoisson((d->settings.grainSize/2.0)*(range/1.414));
     else 
-        n2 = randomizeGauss((d->settings.grainSize/2.0)*(range/1.414), col.sixteenBit());
+        n2 = randomizeGauss((d->settings.grainSize/2.0)*(range/1.414));
 
     switch (channel)
     {
@@ -208,15 +226,16 @@ void FilmGrainFilter::adjustYCbCr(DColor& col, double range, double nRand, int c
             cr = CLAMP(cr + nRand + n2, 0.0, 1.0);
             break;
     }
+    
     col.setYCbCr(y, cb, cr, col.sixteenBit());
 }
 
-double FilmGrainFilter::randomizeUniform(double range, bool sixteenbits)
+double FilmGrainFilter::randomizeUniform(double range)
 {
-    return ((double)(qrand() % (int)range) - range/2.0) / (sixteenbits ? 65535.0 : 255.0);
+    return ((double)(qrand() % (int)range) - range/2.0) / (m_orgImage.sixteenBit() ? 65535.0 : 255.0);
 }
 
-double FilmGrainFilter::randomizeGauss(double sigma, bool sixteenbits)
+double FilmGrainFilter::randomizeGauss(double sigma)
 {
     double u;
 
@@ -227,10 +246,10 @@ double FilmGrainFilter::randomizeGauss(double sigma, bool sixteenbits)
     while (!m_cancel && u == 0.0);
 
     double v = qrand () / (double) RAND_MAX;
-    return (sigma * sqrt(-2 * log (u)) * cos(2 * M_PI * v)) / (sixteenbits ? 65535.0 : 255.0);
+    return (sigma * sqrt(-2 * log (u)) * cos(2 * M_PI * v)) / (m_orgImage.sixteenBit() ? 65535.0 : 255.0);
 }
 
-double FilmGrainFilter::randomizePoisson(double lambda, bool sixteenbits)
+double FilmGrainFilter::randomizePoisson(double lambda)
 {
     // NOTE: see algorithm from wikipedia page: http://en.wikipedia.org/wiki/Poisson_distribution
     double L = exp(-lambda);
@@ -244,7 +263,7 @@ double FilmGrainFilter::randomizePoisson(double lambda, bool sixteenbits)
     }
     while (!m_cancel && p > L);
 
-    return (((double)(k - 1)  - lambda) / (sixteenbits ? 65535.0 : 255.0));
+    return (((double)(k - 1)  - lambda) / (m_orgImage.sixteenBit() ? 65535.0 : 255.0));
 }
 
 double FilmGrainFilter::interpolate(int shadows, int midtones, int highlights, const DColor& col)
