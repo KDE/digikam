@@ -32,13 +32,12 @@
 
 // Local includes
 
-#include "digikam_export.h"
 #include <pollthread.h>
 
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT DatabaseServer : public QObject
+class DatabaseServer : public QObject
 {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.kde.digikam.DatabaseServer")

@@ -34,7 +34,7 @@
 
 #include "digikam_export.h"
 
-class DIGIKAM_EXPORT DatabaseServerStarter : public QObject
+class DIGIKAM_DATABASE_EXPORT DatabaseServerStarter : public QObject
 {
     Q_OBJECT
 

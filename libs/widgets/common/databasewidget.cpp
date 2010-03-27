@@ -27,6 +27,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kglobalsettings.h>
+#include <ktemporaryfile.h>
 
 // QT includes
 #include <QGridLayout>

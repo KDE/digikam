@@ -39,7 +39,6 @@
 #include <kurl.h>
 
 // Local includes
-#include "digikam_export.h"
 #include "albumsettings.h"
 #include "databaseparameters.h"
 
@@ -47,7 +46,7 @@ namespace Digikam
 {
 
 
-class DIGIKAM_EXPORT DatabaseWidget : public QWidget
+class DatabaseWidget : public QWidget
 {
     Q_OBJECT
 

@@ -32,7 +32,6 @@
 #include <kdialog.h>
 
 // Local includes
-#include "digikam_export.h"
 #include "databasewidget.h"
 #include "databasebackend.h"
 #include "databasecopymanager.h"
@@ -40,7 +39,7 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT DatabaseCopyThread : public QThread
+class DatabaseCopyThread : public QThread
 {
         Q_OBJECT
 
@@ -58,7 +57,7 @@ class DIGIKAM_EXPORT DatabaseCopyThread : public QThread
 };
 
 
-class DIGIKAM_EXPORT MigrationDlg : public KDialog
+class MigrationDlg : public KDialog
 {
     Q_OBJECT
 

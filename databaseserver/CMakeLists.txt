@@ -21,6 +21,7 @@ QT4_ADD_DBUS_ADAPTOR(digikamdatabaseserver_SRCS org.kde.digikam.DatabaseServer.x
 KDE4_ADD_EXECUTABLE(digikamdatabaseserver ${digikamdatabaseserver_SRCS})
 
 TARGET_LINK_LIBRARIES(digikamdatabaseserver
+                      ${KDE4_KDECORE_LIBS}
 #                      ${KDE4_SOLID_LIBS}
 #                      ${KIPI_LIBRARIES}
 #                      ${KEXIV2_LIBRARIES}

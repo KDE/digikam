@@ -32,7 +32,7 @@
 
 namespace Digikam
 {
-    class DIGIKAM_EXPORT DatabaseCopyManager : public QObject
+    class DIGIKAM_DATABASE_EXPORT DatabaseCopyManager : public QObject
     {
         Q_OBJECT
 
