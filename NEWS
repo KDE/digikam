@@ -14,8 +14,10 @@ ImageEditor       : Black and White tool is multithreaded and use a zoomable pre
 ImageEditor       : White Balance tool is multithreaded and use a zoomable preview widget.
 ImageEditor       : Adjust Curves tool is multithreaded and use a zoomable preview widget.
 ImageEditor       : Adjust Levels tool is multithreaded and use a zoomable preview widget.
-ImageEditor       : FilmGrain tool use now YCrCb color space to add noise. Graininess size can be adjusted
-                    with an option to set-up photographic distribution of noise 
+ImageEditor       : Complete rewrite of the FilmGrain tool. 
+                    FilmGrain tool use now YCrCb color space to add noise. Graininess size can be adjusted
+                    with an option to set-up photographic distribution of noise. 
+                    Different amounts of noise can be added to highlights, shadows and midtones.
 
 BatchQueueManager : New tool to fix Brightness/Contrast/gamma.
 BatchQueueManager : New tool to adjust Color Balance.
