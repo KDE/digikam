@@ -7,6 +7,7 @@
  * Description : HSL settings view.
  *
  * Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010      by Julien Narboux <julien at narboux dot fr>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -101,29 +102,29 @@ HSLSettings::HSLSettings(QWidget* parent)
                                     "saturation adjustments."));
     d->HSPreview->setMinimumSize(256, 15);
 
-    QLabel *label2 = new QLabel(i18n("Hue:"));
+    QLabel* label2 = new QLabel(i18n("Hue:"));
     d->hInput      = new RDoubleNumInput();
     d->hInput->setDecimals(0);
     d->hInput->input()->setRange(-180.0, 180.0, 1.0, true);
     d->hInput->setDefaultValue(0.0);
     d->hInput->setWhatsThis(i18n("Set here the hue adjustment of the image."));
 
-    QLabel *label3 = new QLabel(i18n("Saturation:"));
+    QLabel* label3 = new QLabel(i18n("Saturation:"));
     d->sInput      = new RDoubleNumInput();
     d->sInput->setDecimals(2);
     d->sInput->input()->setRange(-100.0, 100.0, 0.01, true);
     d->sInput->setDefaultValue(0.0);
     d->sInput->setWhatsThis(i18n("Set here the saturation adjustment of the image."));
 
-    QLabel *label4 = new QLabel(i18n("Vibrance:"));
+    QLabel* label4 = new QLabel(i18n("Vibrance:"));
     d->vInput      = new RDoubleNumInput();
     d->vInput->setDecimals(2);
     d->vInput->input()->setRange(-100.0, 100.0, 0.01, true);
     d->vInput->setDefaultValue(0.0);
     d->vInput->setWhatsThis(i18n("Set here the vibrance adjustment of the image."
                                  "Vibrance performs selective saturation on less saturated colors and avoiding skin tones."));
- 
-    QLabel *label5 = new QLabel(i18n("Lightness:"));
+
+    QLabel* label5 = new QLabel(i18n("Lightness:"));
     d->lInput      = new RDoubleNumInput();
     d->lInput->setDecimals(2);
     d->lInput->input()->setRange(-100.0, 100.0, 0.01, true);
@@ -159,10 +160,10 @@ HSLSettings::HSLSettings(QWidget* parent)
 
     connect(d->sInput, SIGNAL(valueChanged(double)),
             this, SIGNAL(signalSettingsChanged()));
-            
+
     connect(d->vInput, SIGNAL(valueChanged(double)),
             this, SIGNAL(signalSettingsChanged()));
-            
+
     connect(d->lInput, SIGNAL(valueChanged(double)),
             this, SIGNAL(signalSettingsChanged()));
 }
@@ -280,7 +281,7 @@ void HSLSettings::writeSettings(KConfigGroup& group)
 
     group.writeEntry(d->configHueAdjustmentEntry,        prm.hue);
     group.writeEntry(d->configSaturationAdjustmentEntry, prm.saturation);
-    group.writeEntry(d->configVibranceAdjustmentEntry, prm.vibrance);
+    group.writeEntry(d->configVibranceAdjustmentEntry,   prm.vibrance);
     group.writeEntry(d->configLighnessAdjustmentEntry,   prm.lightness);
 }
 

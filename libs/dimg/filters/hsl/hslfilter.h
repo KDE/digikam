@@ -80,11 +80,11 @@ private:
     void setLightness(double val);
     void applyHSL(DImg& image);
     int  vibranceBias(int sat, int hue, int vib, bool sixteenbit);
-    
+
 private:
 
     HSLFilterPriv* const d;
-    
+
 };
 
 }  // namespace Digikam
