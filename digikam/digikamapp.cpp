@@ -25,6 +25,7 @@
  * ============================================================ */
 
 #include "digikamapp.moc"
+#include "digikamapp_p.h"
 
 // Qt includes
 
@@ -132,7 +133,6 @@
 #include "themeengine.h"
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
-#include "digikamapp_p.h"
 #include "dmetadata.h"
 #include "uifilevalidator.h"
 

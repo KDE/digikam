@@ -69,6 +69,7 @@ BatchToolSettings HSLCorrection::defaultSettings()
     prm.insert("Hue",        (double)defaultPrm.hue);
     prm.insert("Saturation", (double)defaultPrm.saturation);
     prm.insert("Lightness",  (double)defaultPrm.lightness);
+    prm.insert("Vibrance",   (double)defaultPrm.vibrance);
 
     return prm;
 }
@@ -79,6 +80,7 @@ void HSLCorrection::slotAssignSettings2Widget()
     prm.hue        = settings()["Hue"].toDouble();
     prm.saturation = settings()["Saturation"].toDouble();
     prm.lightness  = settings()["Lightness"].toDouble();
+    prm.vibrance   = settings()["Vibrance"].toDouble();
     m_settingsView->setSettings(prm);
 }
 
@@ -90,6 +92,7 @@ void HSLCorrection::slotSettingsChanged()
     prm.insert("Hue",        (double)currentPrm.hue);
     prm.insert("Saturation", (double)currentPrm.saturation);
     prm.insert("Lightness",  (double)currentPrm.lightness);
+    prm.insert("Vibrance",   (double)currentPrm.vibrance);
 
     BatchTool::slotSettingsChanged(prm);
 }
@@ -102,6 +105,7 @@ bool HSLCorrection::toolOperations()
     prm.hue        = settings()["Hue"].toDouble();
     prm.saturation = settings()["Saturation"].toDouble();
     prm.lightness  = settings()["Lightness"].toDouble();
+    prm.vibrance   = settings()["Vibrance"].toDouble();
 
     HSLFilter hsl(&image(), 0L, prm);
     hsl.startFilterDirectly();

@@ -55,6 +55,9 @@ INSTALL(FILES splash-digikam.png
               assistant-preview.png
               assistant-openfile.png
               assistant-scancollection.png
+              colors-luma.png
+              colors-chromablue.png
+              colors-chromared.png
          DESTINATION ${DATA_INSTALL_DIR}/digikam/data 
        )
 

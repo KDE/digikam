@@ -7,6 +7,7 @@
  * Description : Hue/Saturation/Lightness image filter.
  *
  * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010      by Julien Narboux <julien at narboux dot fr>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -176,6 +177,33 @@ void HSLFilter::setLightness(double val)
     }
 }
 
+int HSLFilter::vibranceBias(int sat, int hue, int vib, bool sixteenbit)
+{
+    double ratio;
+    int localsat;
+    double normalized_hue = hue / (sixteenbit ? 65535.0: 255.0);
+
+    if (normalized_hue>0.85 || normalized_hue <0.2)
+    {
+      ratio = 0.3;
+    }
+    else
+    {
+      ratio = 1.0;
+    }
+
+    localsat = lround((sat * (100.0 + vib*ratio)) / 100.0 );
+
+    if (sixteenbit)
+    {
+       return(CLAMP065535(localsat));
+    }
+    else
+    {
+      return(CLAMP0255(localsat));
+    }
+}
+
 void HSLFilter::applyHSL(DImg& image)
 {
     if (image.isNull())
@@ -185,6 +213,7 @@ void HSLFilter::applyHSL(DImg& image)
     uint   numberOfPixels = image.numPixels();
     int    progress;
     int    hue, sat, lig;
+    int    vib = d->settings.vibrance;
     DColor color;
 
     if (sixteenBit)                   // 16 bits image.
@@ -199,7 +228,7 @@ void HSLFilter::applyHSL(DImg& image)
             color.getHSL(&hue, &sat, &lig);
 
             // convert HSL to RGB
-            color.setHSL(d->htransfer16[hue], d->stransfer16[sat], d->ltransfer16[lig], sixteenBit);
+            color.setHSL(d->htransfer16[hue], vibranceBias(d->stransfer16[sat],hue,vib,sixteenBit), d->ltransfer16[lig], sixteenBit);
 
             data[2] = color.red();
             data[1] = color.green();
@@ -224,7 +253,7 @@ void HSLFilter::applyHSL(DImg& image)
             color.getHSL(&hue, &sat, &lig);
 
             // convert HSL to RGB
-            color.setHSL(d->htransfer[hue], d->stransfer[sat], d->ltransfer[lig], sixteenBit);
+            color.setHSL(d->htransfer[hue], vibranceBias(d->stransfer[sat],hue,vib,sixteenBit), d->ltransfer[lig], sixteenBit);
 
             data[2] = color.red();
             data[1] = color.green();

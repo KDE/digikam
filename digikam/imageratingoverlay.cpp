@@ -122,8 +122,8 @@ void ImageRatingOverlay::slotEntered(const QModelIndex& index)
     AbstractWidgetDelegateOverlay::slotEntered(index);
 
     // see bug 228810, this is a small workaround
-    if (m_widget && m_widget->isVisible() && m_index.isValid() && index == m_index)
-        ratingWidget()->setVisibleImmediately();
+//    if (m_widget && m_widget->isVisible() && m_index.isValid() && index == m_index)
+//        ratingWidget()->setVisibleImmediately();
 
     m_index = index;
 

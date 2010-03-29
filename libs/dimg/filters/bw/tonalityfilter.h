@@ -66,7 +66,7 @@ class DIGIKAM_EXPORT TonalityFilter : public DImgThreadedFilter
 
 public:
 
-    TonalityFilter(DImg* orgImage, QObject* parent=0, const TonalityContainer& settings=TonalityContainer());
+    explicit TonalityFilter(DImg* orgImage, QObject* parent=0, const TonalityContainer& settings=TonalityContainer());
     virtual ~TonalityFilter();
 
 private:

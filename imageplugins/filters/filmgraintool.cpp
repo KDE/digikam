@@ -148,7 +148,7 @@ void FilmGrainTool::prepareEffect()
     toolView()->setEnabled(false);
     
     FilmGrainContainer prm = d->settingsView->settings();
-    DImg image             = d->previewWidget->getOriginalRegionImage(true);
+    DImg image             = d->previewWidget->getOriginalRegionImage();
     
     setFilter(new FilmGrainFilter(&image, this, prm));
 }
@@ -179,6 +179,7 @@ void FilmGrainTool::renderingFinished()
 {
     toolSettings()->setEnabled(true);
     toolView()->setEnabled(true);
+    toolSettings()->enableButton(EditorToolSettings::Ok, d->settingsView->settings().isDirty());
 }
 
 }  // namespace DigikamFxFiltersImagePlugin

@@ -7,6 +7,7 @@
  * Description : HSL settings view.
  *
  * Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010      by Julien Narboux <julien at narboux dot fr>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -61,22 +62,26 @@ public:
     HSLSettingsPriv() :
         configHueAdjustmentEntry("HueAdjustment"),
         configSaturationAdjustmentEntry("SaturationAdjustment"),
+        configVibranceAdjustmentEntry("VibranceAdjustment"),
         configLighnessAdjustmentEntry("LighnessAdjustment"),
         HSSelector(0),
         hInput(0),
         sInput(0),
+        vInput(0),
         lInput(0),
         HSPreview(0)
         {}
 
     const QString           configHueAdjustmentEntry;
     const QString           configSaturationAdjustmentEntry;
+    const QString           configVibranceAdjustmentEntry;
     const QString           configLighnessAdjustmentEntry;
 
     KHueSaturationSelector* HSSelector;
 
     RDoubleNumInput*        hInput;
     RDoubleNumInput*        sInput;
+    RDoubleNumInput*        vInput;
     RDoubleNumInput*        lInput;
 
     HSPreviewWidget*        HSPreview;
@@ -97,21 +102,29 @@ HSLSettings::HSLSettings(QWidget* parent)
                                     "saturation adjustments."));
     d->HSPreview->setMinimumSize(256, 15);
 
-    QLabel *label2 = new QLabel(i18n("Hue:"));
+    QLabel* label2 = new QLabel(i18n("Hue:"));
     d->hInput      = new RDoubleNumInput();
     d->hInput->setDecimals(0);
     d->hInput->input()->setRange(-180.0, 180.0, 1.0, true);
     d->hInput->setDefaultValue(0.0);
     d->hInput->setWhatsThis(i18n("Set here the hue adjustment of the image."));
 
-    QLabel *label3 = new QLabel(i18n("Saturation:"));
+    QLabel* label3 = new QLabel(i18n("Saturation:"));
     d->sInput      = new RDoubleNumInput();
     d->sInput->setDecimals(2);
     d->sInput->input()->setRange(-100.0, 100.0, 0.01, true);
     d->sInput->setDefaultValue(0.0);
     d->sInput->setWhatsThis(i18n("Set here the saturation adjustment of the image."));
 
-    QLabel *label4 = new QLabel(i18n("Lightness:"));
+    QLabel* label4 = new QLabel(i18n("Vibrance:"));
+    d->vInput      = new RDoubleNumInput();
+    d->vInput->setDecimals(2);
+    d->vInput->input()->setRange(-100.0, 100.0, 0.01, true);
+    d->vInput->setDefaultValue(0.0);
+    d->vInput->setWhatsThis(i18n("Set here the vibrance adjustment of the image."
+                                 "Vibrance performs selective saturation on less saturated colors and avoiding skin tones."));
+
+    QLabel* label5 = new QLabel(i18n("Lightness:"));
     d->lInput      = new RDoubleNumInput();
     d->lInput->setDecimals(2);
     d->lInput->input()->setRange(-100.0, 100.0, 0.01, true);
@@ -125,10 +138,12 @@ HSLSettings::HSLSettings(QWidget* parent)
     grid->addWidget(label2,        2, 0, 1, 1);
     grid->addWidget(d->hInput,     2, 1, 1, 4);
     grid->addWidget(label3,        3, 0, 1, 1);
-    grid->addWidget(d->sInput,     3, 1, 1, 4);
+    grid->addWidget(d->sInput,     3, 1, 1, 4); 
     grid->addWidget(label4,        4, 0, 1, 1);
-    grid->addWidget(d->lInput,     4, 1, 1, 4);
-    grid->setRowStretch(5, 10);
+    grid->addWidget(d->vInput,     4, 1, 1, 4);
+    grid->addWidget(label5,        5, 0, 1, 1);
+    grid->addWidget(d->lInput,     5, 1, 1, 4);
+    grid->setRowStretch(6, 10);
     grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(KDialog::spacingHint());
 
@@ -146,8 +161,8 @@ HSLSettings::HSLSettings(QWidget* parent)
     connect(d->sInput, SIGNAL(valueChanged(double)),
             this, SIGNAL(signalSettingsChanged()));
 
-    connect(d->sInput, SIGNAL(valueChanged(double)),
-            this, SLOT(slotSChanged(double)));
+    connect(d->vInput, SIGNAL(valueChanged(double)),
+            this, SIGNAL(signalSettingsChanged()));
 
     connect(d->lInput, SIGNAL(valueChanged(double)),
             this, SIGNAL(signalSettingsChanged()));
@@ -207,6 +222,7 @@ HSLContainer HSLSettings::settings() const
 
     prm.hue        = d->hInput->value();
     prm.saturation = d->sInput->value();
+    prm.vibrance   = d->vInput->value();
     prm.lightness  = d->lInput->value();
 
     return prm;
@@ -217,6 +233,7 @@ void HSLSettings::setSettings(const HSLContainer& settings)
     blockSignals(true);
     d->hInput->setValue(settings.hue);
     d->sInput->setValue(settings.saturation);
+    d->vInput->setValue(settings.vibrance);
     d->lInput->setValue(settings.lightness);
     slotHChanged(settings.hue);
     slotSChanged(settings.saturation);
@@ -228,6 +245,7 @@ void HSLSettings::resetToDefault()
     blockSignals(true);
     d->hInput->slotReset();
     d->sInput->slotReset();
+    d->vInput->slotReset();
     d->lInput->slotReset();
     blockSignals(false);
 }
@@ -238,6 +256,7 @@ HSLContainer HSLSettings::defaultSettings() const
 
     prm.hue        = d->hInput->defaultValue();
     prm.saturation = d->sInput->defaultValue();
+    prm.vibrance   = d->vInput->defaultValue();
     prm.lightness  = d->lInput->defaultValue();
 
     return prm;
@@ -250,6 +269,7 @@ void HSLSettings::readSettings(KConfigGroup& group)
 
     prm.hue        = group.readEntry(d->configHueAdjustmentEntry,        defaultPrm.hue);
     prm.saturation = group.readEntry(d->configSaturationAdjustmentEntry, defaultPrm.saturation);
+    prm.vibrance   = group.readEntry(d->configVibranceAdjustmentEntry,   defaultPrm.vibrance);
     prm.lightness  = group.readEntry(d->configLighnessAdjustmentEntry,   defaultPrm.lightness);
 
     setSettings(prm);
@@ -261,6 +281,7 @@ void HSLSettings::writeSettings(KConfigGroup& group)
 
     group.writeEntry(d->configHueAdjustmentEntry,        prm.hue);
     group.writeEntry(d->configSaturationAdjustmentEntry, prm.saturation);
+    group.writeEntry(d->configVibranceAdjustmentEntry,   prm.vibrance);
     group.writeEntry(d->configLighnessAdjustmentEntry,   prm.lightness);
 }
 

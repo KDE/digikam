@@ -10,11 +10,11 @@ SET(INITCMD_MYSQL   "/usr/bin/mysql_install_db" CACHE STRING "Mysql executable f
 
 # digiKam version
 SET(DIGIKAM_MAJOR_VERSION "1")
-SET(DIGIKAM_MINOR_VERSION "2")
+SET(DIGIKAM_MINOR_VERSION "3")
 SET(DIGIKAM_PATCH_VERSION "0")
 
 #digiKam release date
-SET(DIGIKAM_RELEASE_DATE "2010-03-28")
+SET(DIGIKAM_RELEASE_DATE "2010-05-30")
 
 # Suffix to add at end of version string. Usual values are:
 # "-svn"   : alpha code unstable from svn. Do not use in production
@@ -137,7 +137,7 @@ ENDIF ("${jpeglib_version}" LESS 80)
 # Check KDcraw version installed to compile fine.
 IF(NOT WIN32)
     FIND_PACKAGE(PkgConfig)
-    PKG_CHECK_MODULES(Kdcraw libkdcraw>=0.4.0)
+    PKG_CHECK_MODULES(Kdcraw libkdcraw>=1.2.0)
     IF(Kdcraw_FOUND)
         SET(KDCRAW_FOR_DIGIKAM TRUE)
     ELSE(Kdcraw_FOUND)

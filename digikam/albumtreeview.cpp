@@ -414,11 +414,11 @@ void AbstractAlbumTreeView::mousePressEvent(QMouseEvent *e)
         QModelIndex index = indexVisuallyAt(e->pos());
         if (index.isValid())
         {
-            // check local and global flag
-/*            if (selectInAlbumManager && d->setInAlbumManager)
+            Album *album = albumFilterModel()->albumForIndex(index);
+            if (album && d->setInAlbumManager)
             {
                 AlbumManager::instance()->setCurrentAlbum(album);
-            }*/
+            }
         }
     }
 

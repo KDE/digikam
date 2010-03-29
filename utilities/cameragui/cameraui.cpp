@@ -24,6 +24,7 @@
  * ============================================================ */
 
 #include "cameraui.moc"
+#include "cameraui_p.h"
 
 // Qt includes
 
@@ -122,7 +123,6 @@
 #include "cameracontroller.h"
 #include "cameralist.h"
 #include "cameratype.h"
-#include "cameraui_p.h"
 #include "cameranamehelper.h"
 #include "uifilevalidator.h"
 #include "knotificationwrapper.h"

@@ -49,7 +49,7 @@ class DIGIKAM_EXPORT LocalContrastFilter : public DImgThreadedFilter
 
 public:
 
-    LocalContrastFilter(DImg* image, QObject* parent=0, const LocalContrastContainer& par=LocalContrastContainer());
+    explicit LocalContrastFilter(DImg* image, QObject* parent=0, const LocalContrastContainer& par=LocalContrastContainer());
     ~LocalContrastFilter();
 
 private:

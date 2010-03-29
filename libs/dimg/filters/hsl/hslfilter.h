@@ -46,6 +46,7 @@ public:
     {
         hue        = 0.0;
         saturation = 0.0;
+        vibrance   = 0.0;
         lightness  = 0.0;
     };
 
@@ -55,6 +56,7 @@ public:
 
     double hue;
     double saturation;
+    double vibrance;
     double lightness;
 };
 
@@ -77,10 +79,12 @@ private:
     void setSaturation(double val);
     void setLightness(double val);
     void applyHSL(DImg& image);
+    int  vibranceBias(int sat, int hue, int vib, bool sixteenbit);
 
 private:
 
     HSLFilterPriv* const d;
+
 };
 
 }  // namespace Digikam

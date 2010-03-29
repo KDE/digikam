@@ -28,13 +28,35 @@
 
 // Qt includes
 
-#include <QString>
+#include <QCheckBox>
 #include <QDateTime>
+#include <QLabel>
+#include <QString>
 
 // KDE includes
 
-#include <kurl.h>
+#include <kcombobox.h>
+#include <khelpmenu.h>
+#include <kio/previewjob.h>
 #include <kselectaction.h>
+#include <ktoggleaction.h>
+#include <kurl.h>
+
+// Local includes
+
+#include "cameracontroller.h"
+#include "cameraiconview.h"
+#include "dlogoaction.h"
+#include "dzoombar.h"
+#include "freespacewidget.h"
+#include "imagepropertiessidebarcamgui.h"
+#include "kdatetimeedit.h"
+#include "renamecustomizer.h"
+#include "rexpanderbox.h"
+#include "sidebar.h"
+#include "statusnavigatebar.h"
+#include "statusprogressbar.h"
+#include "templateselector.h"
 
 namespace Digikam
 {

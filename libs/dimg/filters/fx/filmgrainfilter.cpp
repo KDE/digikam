@@ -27,6 +27,7 @@
 
 // C++ includes
 
+#include <cstdlib>
 #include <cmath>
 
 // KDE includes
@@ -41,10 +42,37 @@
 namespace Digikam
 {
 
-FilmGrainFilter::FilmGrainFilter(DImg* orgImage, QObject* parent, const FilmGrainContainer& settings)
-               : DImgThreadedFilter(orgImage, parent, "FilmGrain")
+class FilmGrainFilterPriv
 {
-    m_settings = settings;
+public:
+
+    FilmGrainFilterPriv()
+    {
+        leadLumaNoise       = 1.0;
+        leadChromaBlueNoise = 1.0;
+        leadChromaRedNoise  = 1.0;
+    }
+
+    enum YUVChannel
+    {
+        Luma = 0,
+        ChromaBlue,
+        ChromaRed
+    };
+
+    double div;
+    double leadLumaNoise;
+    double leadChromaBlueNoise;
+    double leadChromaRedNoise;
+
+    FilmGrainContainer settings;
+};
+
+FilmGrainFilter::FilmGrainFilter(DImg* orgImage, QObject* parent, const FilmGrainContainer& settings)
+               : DImgThreadedFilter(orgImage, parent, "FilmGrain"),
+                 d(new FilmGrainFilterPriv)
+{
+    d->settings = settings;
     initFilter();
 }
 
@@ -53,62 +81,121 @@ FilmGrainFilter::FilmGrainFilter(DImgThreadedFilter* parentFilter,
                                  int progressBegin, int progressEnd,
                                  const FilmGrainContainer& settings)
                : DImgThreadedFilter(parentFilter, orgImage, destImage, progressBegin, progressEnd,
-                                    parentFilter->filterName() + ": FilmGrain")
-{   
-    m_settings = settings;
+                                    parentFilter->filterName() + ": FilmGrain"),
+                 d(new FilmGrainFilterPriv)
+{
+    d->settings = settings;
     filterImage();
 }
 
+FilmGrainFilter::~FilmGrainFilter()
+{
+    delete d;
+}
+
+/** This method have been implemented following this report in bugzilla :
+    https://bugs.kde.org/show_bug.cgi?id=148540
+    We use YCbCr color space to perform noise addition. Please follow this url for
+    details about this color space :
+    http://en.allexperts.com/e/y/yc/ycbcr.htm
+ */
 void FilmGrainFilter::filterImage()
 {
-    // m_intensity: 800..6400
-    if (m_settings.lum_intensity <= 0) return;
-    if (m_settings.chroma_intensity <= 0) return;
-    
-    DColor color;
-    int    h, s, l;
-    int    progress;
-    double lightness, hue;
-    int    local_lum_noise, local_chroma_noise;  
-    
-    int    width        = m_orgImage.width();
-    int    height       = m_orgImage.height();
-    bool   sb           = m_orgImage.sixteenBit();
-    int    lum_noise    = m_settings.lum_intensity    * (sb ? 256 : 1);
-    int    chroma_noise = m_settings.chroma_intensity * (sb ? 256 : 1);
-    
+    if (d->settings.lumaIntensity <= 0       ||
+        d->settings.chromaBlueIntensity <= 0 ||
+        d->settings.chromaRedIntensity <= 0  ||
+        !d->settings.isDirty())
+        {
+            m_destImage = m_orgImage;
+            return;
+        }
+
+    // To emulate grain size we use a matrix [grainSize x grainSize].
+    // We will parse whole image using grainSize step. Color from a reference point located
+    // on the top left corner of matrix will be used to apply noise on whole matrix.
+    // In first, for each matrix processed over the image, we compute the lead noise value
+    // using Uniform noise generator.
+    // In second time, all others points from the matrix are process to add suplemental noise
+    // generated with Gaussian or Poisson noise generator.
+
+    DColor refCol, matCol;
+    int    progress, posX, posY;
+
+    // Reference point noise adjustements.
+    double refLumaNoise,       refLumaRange;
+    double refChromaBlueNoise, refChromaBlueRange;
+    double refChromaRedNoise,  refChromaRedRange;
+
+    // Current matrix point noise adjustements.
+    double matLumaNoise,       matLumaRange;
+    double matChromaBlueNoise, matChromaBlueRange;
+    double matChromaRedNoise,  matChromaRedRange;
+
+    int    width           = m_orgImage.width();
+    int    height          = m_orgImage.height();
+    d->div                 = m_orgImage.sixteenBit() ? 65535.0 : 255.0;
+    d->leadLumaNoise       = d->settings.lumaIntensity       * (m_orgImage.sixteenBit() ? 256.0 : 1.0);
+    d->leadChromaBlueNoise = d->settings.chromaBlueIntensity * (m_orgImage.sixteenBit() ? 256.0 : 1.0);
+    d->leadChromaRedNoise  = d->settings.chromaRedIntensity  * (m_orgImage.sixteenBit() ? 256.0 : 1.0);
+
     qsrand(1); // noise will always be the same
 
-    for (int x = 0; !m_cancel && x < width; ++x)
+    for (int x = 0; !m_cancel && x < width; x += d->settings.grainSize)
     {
-        for (int y = 0; !m_cancel && y < height; ++y)
+        for (int y = 0; !m_cancel && y < height; y += d->settings.grainSize)
         {
-            color              = m_orgImage.getPixelColor(x, y);
-            color.getHSL(&h, &s, &l);
+            refCol = m_orgImage.getPixelColor(x, y);
+            computeNoiseSettings(refCol,
+                                 refLumaRange,       refLumaNoise,
+                                 refChromaBlueRange, refChromaBlueNoise,
+                                 refChromaRedRange,  refChromaRedNoise);
 
-            if (m_settings.addLuminanceNoise)
+            // Grain size matrix processing.
+
+            for (int zx = 0; !m_cancel && zx < d->settings.grainSize; ++zx)
             {
-                lightness          = l / (sb ? 65535.0 : 255.0);
-            
-                local_lum_noise    = interpolate(m_settings.lum_shadows, m_settings.lum_midtones, 
-                                                 m_settings.lum_highlights, lightness) * lum_noise+1;
-                                                 
-                l                  = randomize(l,sb, local_lum_noise);
+                for (int zy = 0; !m_cancel && zy < d->settings.grainSize; ++zy)
+                {
+                    posX = x + zx;
+                    posY = y + zy;
 
-            }
-            
-            if (m_settings.addChrominanceNoise)
-            {
-                hue                = h / (sb ? 65535.0 : 255.0);
+                    if (posX < width && posY < height)
+                    {
+                         matCol = m_orgImage.getPixelColor(posX, posY);
 
-                local_chroma_noise = interpolate(m_settings.chroma_shadows, m_settings.chroma_midtones, 
-                                                 m_settings.chroma_highlights, hue) * chroma_noise+1;
-                                             
-                h                  = randomize(h,sb, local_chroma_noise);
+                         computeNoiseSettings(matCol,
+                                              matLumaRange,       matLumaNoise,
+                                              matChromaBlueRange, matChromaBlueNoise,
+                                              matChromaRedRange,  matChromaRedNoise);
+
+                        if (d->settings.addLuminanceNoise)
+                        {
+                            if (((refLumaRange - matLumaRange) / refLumaRange) > 0.1)
+                                adjustYCbCr(matCol, matLumaRange, matLumaNoise, FilmGrainFilterPriv::Luma);
+                            else
+                                adjustYCbCr(matCol, refLumaRange, refLumaNoise, FilmGrainFilterPriv::Luma);
+                        }
+
+                        if (d->settings.addChrominanceBlueNoise)
+                        {
+                            if (((refChromaBlueRange - matChromaBlueRange) / refChromaBlueRange) > 0.1)
+                                adjustYCbCr(matCol, matChromaBlueRange, matChromaBlueNoise, FilmGrainFilterPriv::ChromaBlue);
+                            else
+                                adjustYCbCr(matCol, refChromaBlueRange, refChromaBlueNoise, FilmGrainFilterPriv::ChromaBlue);
+                        }
+
+                        if (d->settings.addChrominanceRedNoise)
+                        {
+                            if (((refChromaRedRange - matChromaRedRange) / refChromaRedRange) > 0.1)
+                                adjustYCbCr(matCol, matChromaRedRange, matChromaRedNoise, FilmGrainFilterPriv::ChromaBlue);
+                            else
+                                adjustYCbCr(matCol, refChromaRedRange, refChromaRedNoise, FilmGrainFilterPriv::ChromaRed);
+                        }
+
+                        m_destImage.setPixelColor(posX, posY, matCol);
+                    }
+                }
             }
-            
-            color.setHSL(h, s, l, sb);
-            m_destImage.setPixelColor(x, y, color);
         }
 
         // Update progress bar in dialog.
@@ -119,32 +206,121 @@ void FilmGrainFilter::filterImage()
     }
 }
 
-int FilmGrainFilter::randomize(int value, bool sixteenbit, int range)
+/** This method compute lead noise of reference matrix point used to similate graininess size
+ */
+void FilmGrainFilter::computeNoiseSettings(const DColor& col,
+                                           double& luRange, double& luNoise,
+                                           double& cbRange, double& cbNoise,
+                                           double& crRange, double& crNoise)
 {
-    int nRand = (qrand() % range) - range/2.0;            
-    if (!sixteenbit)
+    if (d->settings.addLuminanceNoise)
     {
-        return (CLAMP0255(value+nRand));
+        luRange = interpolate(d->settings.lumaShadows, d->settings.lumaMidtones,
+                              d->settings.lumaHighlights, col) * d->leadLumaNoise + 1.0;
+        luNoise = randomizeUniform(luRange)/ d->div;
     }
-    else
+
+    if (d->settings.addChrominanceBlueNoise)
     {
-        return CLAMP065535(value+nRand);
+        cbRange = interpolate(d->settings.chromaBlueShadows, d->settings.chromaBlueMidtones,
+                              d->settings.chromaBlueHighlights, col) * d->leadChromaBlueNoise + 1.0;
+        cbNoise = randomizeUniform(cbRange)/ d->div;
+    }
+
+    if (d->settings.addChrominanceRedNoise)
+    {
+        crRange = interpolate(d->settings.chromaRedShadows, d->settings.chromaRedMidtones,
+                              d->settings.chromaRedHighlights, col) * d->leadChromaRedNoise + 1.0;
+        crNoise = randomizeUniform(crRange)/ d->div;
     }
 }
 
-double FilmGrainFilter::interpolate(int shadows, int midtones, int highlights, double x)
+/** This method apply grain adjustement on a pixel color channel from YCrCb color space.
+    NRand is the lead uniform noise set from matrix used to scan whole image step by step.
+    Additionaly noise is applied on pixel using Poisson or Gausian distribution.
+ */
+void FilmGrainFilter::adjustYCbCr(DColor& col, double range, double nRand, int channel)
 {
-    double s = (shadows   +100)/200.0;
-    double m = (midtones  +100)/200.0; 
-    double h = (highlights+100)/200.0;
-    
-    if (x>=0 && x <=0.5)
+    double y, cb, cr, n2;
+    col.getYCbCr(&y, &cb, &cr);
+
+    if (d->settings.photoDistribution)
+        n2 = randomizePoisson((d->settings.grainSize/2.0)*(range/1.414)) / d->div;
+    else
+        n2 = randomizeGauss((d->settings.grainSize/2.0)*(range/1.414))   / d->div;
+
+    switch (channel)
     {
-        return (s+2*(m-s)*x);
+        case FilmGrainFilterPriv::Luma:
+            y  = CLAMP(y  + nRand + n2, 0.0, 1.0);
+            break;
+        case FilmGrainFilterPriv::ChromaBlue:
+            cb = CLAMP(cb + nRand + n2, 0.0, 1.0);
+            break;
+        default:       // ChromaRed
+            cr = CLAMP(cr + nRand + n2, 0.0, 1.0);
+            break;
     }
-    else if (x>=0.5 && x <=1.0)
+
+    col.setYCbCr(y, cb, cr, col.sixteenBit());
+}
+
+/** This method compute uniform noise value used to randomize matrix reference point.
+    This value is lead noise apply to image.
+ */
+double FilmGrainFilter::randomizeUniform(double range)
+{
+    return ((double)(qrand() % (int)range) - range/2.0) ;
+}
+
+/** This method compute Guaussian noise value used to randomize all matrix points.
+    This value is added to lead noise value.
+ */
+double FilmGrainFilter::randomizeGauss(double sigma)
+{
+    double u;
+
+    do
     {
-        return (2*(h-m)*x+2*m-h);
+        u = qrand() / (double)RAND_MAX;
+    }
+    while (!m_cancel && u == 0.0);
+
+    double v = qrand () / (double) RAND_MAX;
+    return (sigma * sqrt(-2 * log (u)) * cos(2 * M_PI * v)) ;
+}
+
+/** This method compute Poisson noise value used to randomize all matrix points.
+    This value is added to lead noise value.
+    Poisson noise is more realist to simulate photon noise apply on analog film.
+    NOTE: see approximation of Poisson noise using Gauss algorithm from noise.c code take from :
+          http://registry.gimp.org/node/13016
+          This method is very fast compared to real Poisson noise generator.
+ */
+double FilmGrainFilter::randomizePoisson(double lambda)
+{
+    return (randomizeGauss( sqrt( lambda * d->settings.grainSize * d->settings.grainSize) ));
+}
+
+/** This method interpolate gain adjustements to apply grain on shadows, midtones and highlights colors.
+    The output value is a coefficient computed between 0.0 and 1.0.
+ */
+double FilmGrainFilter::interpolate(int shadows, int midtones, int highlights, const DColor& col)
+{
+    double s = (shadows    + 100.0) / 200.0;
+    double m = (midtones   + 100.0) / 200.0;
+    double h = (highlights + 100.0) / 200.0;
+
+    double y, cb, cr;
+    col.getYCbCr(&y, &cb, &cr);
+
+    if (y >= 0.0 && y <= 0.5)
+    {
+        return (s+2*(m-s)*y);
+    }
+    else if (y >= 0.5 && y <= 1.0)
+    {
+        return (2*(h-m)*y+2*m-h);
     }
     else
     {

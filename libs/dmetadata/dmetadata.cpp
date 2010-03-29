@@ -709,7 +709,7 @@ bool DMetadata::setMetadataTemplate(const Template& t) const
     QStringList newList;
     foreach(QString str, list) // krazy:exclude=foreach
     {
-        if (str.startsWith("XMP"))
+        if (str.startsWith(QLatin1String("XMP")))
         {
             str.replace(0, 3, "IPTC");
         }

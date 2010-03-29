@@ -31,6 +31,7 @@
 // KDE includes
 
 #include <kaction.h>
+#include <kselectaction.h>
 #include <ksqueezedtextlabel.h>
 
 // Local includes

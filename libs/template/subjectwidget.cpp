@@ -499,7 +499,7 @@ bool SubjectWidget::loadSubjectCodesFromXML(const KUrl& url)
          it != d->subMap.end(); ++it)
     {
         QString name, keyPrefix;
-        if (it.key().endsWith("00000"))
+        if (it.key().endsWith(QLatin1String("00000")))
         {
             keyPrefix = it.key().left(3);
             name      = it.value().name;
@@ -508,7 +508,7 @@ bool SubjectWidget::loadSubjectCodesFromXML(const KUrl& url)
                 it2 != d->subMap.end(); ++it2)
             {
                 if (it2.key().startsWith(keyPrefix) &&
-                    !it2.key().endsWith("00000"))
+                    !it2.key().endsWith(QLatin1String("00000")))
                 {
                     it2.value().name = name;
                 }
@@ -522,7 +522,7 @@ bool SubjectWidget::loadSubjectCodesFromXML(const KUrl& url)
          it != d->subMap.end(); ++it)
     {
         QString matter, keyPrefix;
-        if (it.key().endsWith("000"))
+        if (it.key().endsWith(QLatin1String("000")))
         {
             keyPrefix = it.key().left(5);
             matter    = it.value().matter;
@@ -531,7 +531,7 @@ bool SubjectWidget::loadSubjectCodesFromXML(const KUrl& url)
                 it2 != d->subMap.end(); ++it2)
             {
                 if (it2.key().startsWith(keyPrefix) &&
-                    !it2.key().endsWith("000"))
+                    !it2.key().endsWith(QLatin1String("000")))
                 {
                     it2.value().matter = matter;
                 }

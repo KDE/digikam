@@ -40,6 +40,10 @@
 #include <kxmlguiwindow.h>
 #include <kurl.h>
 
+// Libkdcraw includes
+
+#include <libkdcraw/kdcraw.h>
+
 // Local includes
 
 #include "gpiteminfo.h"

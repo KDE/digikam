@@ -86,7 +86,7 @@ class DIGIKAM_EXPORT ContentAwareFilter : public DImgThreadedFilter
 
 public:
 
-    ContentAwareFilter(DImg* orgImage, QObject* parent=0, const ContentAwareContainer& settings =ContentAwareContainer());
+    explicit ContentAwareFilter(DImg* orgImage, QObject* parent = 0, const ContentAwareContainer& settings = ContentAwareContainer());
     ~ContentAwareFilter();
 
     void progressCallback(int progress);

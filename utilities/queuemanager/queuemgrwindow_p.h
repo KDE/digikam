@@ -26,17 +26,28 @@
 
 // Qt includes
 
+#include <qlabel.h>
 #include <qstring.h>
 
 // KDE includes
 
 #include <kaction.h>
 #include <kiconloader.h>
+#include <kselectaction.h>
+#include <ktoggleaction.h>
 
 // Local includes
 
+#include "actionthread.h"
+#include "assignedlist.h"
+#include "dlogoaction.h"
+#include "queuelist.h"
+#include "queuepool.h"
+#include "queuesettingsview.h"
 #include "statusprogressbar.h"
 #include "sidebar.h"
+#include "toolsettingsview.h"
+#include "toolsview.h"
 
 namespace Digikam
 {

@@ -30,6 +30,11 @@
 #include <qlist.h>
 #include <qstring.h>
 
+// KDE includes
+
+#include <kconfiggroup.h>
+#include <kdebug.h>
+
 class QDialog;
 class QEventLoop;
 class QLabel;
@@ -56,97 +61,110 @@ class EditorWindowPriv
 
 public:
 
-    EditorWindowPriv()
+    EditorWindowPriv() :
+        configAutoBrightnessEntry("AutoBrightness"),
+        configAutoZoomEntry("AutoZoom"),
+        configBackgroundColorEntry("BackgroundColor"),
+        configCaBlueMultiplierEntry("caBlueMultiplier"),
+        configCaRedMultiplierEntry("caRedMultiplier"),
+        configCustomWhiteBalanceEntry("CustomWhiteBalance"),
+        configCustomWhiteBalanceGreenEntry("CustomWhiteBalanceGreen"),
+        configDontStretchPixelsEntry("DontStretchPixels"),
+        configEnableCACorrectionEntry("EnableCACorrection"),
+        configEnableNoiseReductionEntry("EnableNoiseReduction"),
+        configFullScreenEntry("FullScreen"),
+        configFullScreenHideThumbBarEntry("FullScreenHideThumbBar"),
+        configFullScreenHideToolBarEntry("FullScreen Hide ToolBar"),
+        configJpeg2000CompressionEntry("JPEG2000Compression"),
+        configJpeg2000LossLessEntry("JPEG2000LossLess"),
+        configJpegCompressionEntry("JPEGCompression"),
+        configJpegSubSamplingEntry("JPEGSubSampling"),
+        configMedianFilterPassesEntry("MedianFilterPasses"),
+        configNRThresholdEntry("NRThreshold"),
+        configOverExposureColorEntry("OverExposureColor"),
+        configOverExposureIndicatorEntry("OverExposureIndicator"),
+        configPgfCompressionEntry("PGFCompression"),
+        configPgfLossLessEntry("PGFLossLess"),
+        configPngCompressionEntry("PNGCompression"),
+        configRAWBrightnessEntry("RAWBrightness"),
+        configRAWQualityEntry("RAWQuality"),
+        configRGBInterpolate4ColorsEntry("RGBInterpolate4Colors"),
+        configSixteenBitsImageEntry("SixteenBitsImage"),
+        configSlideShowDelayEntry("SlideShowDelay"),
+        configSlideShowLoopEntry("SlideShowLoop"),
+        configSlideShowPrintApertureFocalEntry("SlideShowPrintApertureFocal"),
+        configSlideShowPrintCommentEntry("SlideShowPrintComment"),
+        configSlideShowPrintDateEntry("SlideShowPrintDate"),
+        configSlideShowPrintExpoSensitivityEntry("SlideShowPrintExpoSensitivity"),
+        configSlideShowPrintMakeModelEntry("SlideShowPrintMakeModel"),
+        configSlideShowPrintNameEntry("SlideShowPrintName"),
+        configSlideShowPrintRatingEntry("SlideShowPrintRating"),
+        configSlideShowStartCurrentEntry("SlideShowStartCurrent"),
+        configSplitterStateEntry("SplitterState"),
+        configTiffCompressionEntry("TIFFCompression"),
+        configUnclipColorsEntry("UnclipColors"),
+        configUnderExposureColorEntry("UnderExposureColor"),
+        configUnderExposureIndicatorEntry("UnderExposureIndicator"),
+        configUseRawImportToolEntry("UseRawImportTool"),
+        configUseThemeBackgroundColorEntry("UseThemeBackgroundColor"),
+        configVerticalSplitterSizesEntry("Vertical Splitter Sizes"),
+        configVerticalSplitterStateEntry("Vertical Splitter State"),
+        configWhiteBalanceEntry("WhiteBalance"),
+
+        removeFullScreenButton(false),
+        fullScreenHideToolBar(false),
+
+        cmViewIndicator(0),
+        underExposureIndicator(0),
+        overExposureIndicator(0),
+
+        infoLabel(0),
+
+        imagepluginsActionCollection(0),
+
+        contributeAction(0),
+        copyAction(0),
+        cropAction(0),
+        donateMoneyAction(0),
+        filePrintAction(0),
+        flipHorizAction(0),
+        flipVertAction(0),
+        libsInfoAction(0),
+        rawCameraListAction(0),
+        rotateLeftAction(0),
+        rotateRightAction(0),
+        selectAllAction(0),
+        selectNoneAction(0),
+        slideShowAction(0),
+        softProofOptionsAction(0),
+        zoomFitToSelectAction(0),
+        zoomMinusAction(0),
+        zoomPlusAction(0),
+        zoomTo100percents(0),
+
+        undoSignalMapper(0),
+        redoSignalMapper(0),
+
+        waitingLoop(0),
+        currentWindowModalDialog(0),
+
+        zoomFitToWindowAction(0),
+        viewCMViewAction(0),
+        viewSoftProofAction(0),
+        viewUnderExpoAction(0),
+        viewOverExpoAction(0),
+        showMenuBarAction(0),
+
+        ICCSettings(0),
+
+        zoomBar(0),
+        previewToolBar(0),
+
+        exposureSettings(0),
+
+        toolIface(0)
+
     {
-        configAutoBrightnessEntry                = "AutoBrightness";
-        configAutoZoomEntry                      = "AutoZoom";
-        configBackgroundColorEntry               = "BackgroundColor";
-        configCaBlueMultiplierEntry              = "caBlueMultiplier";
-        configCaRedMultiplierEntry               = "caRedMultiplier";
-        configCustomWhiteBalanceEntry            = "CustomWhiteBalance";
-        configCustomWhiteBalanceGreenEntry       = "CustomWhiteBalanceGreen";
-        configDontStretchPixelsEntry             = "DontStretchPixels";
-        configEnableCACorrectionEntry            = "EnableCACorrection";
-        configEnableNoiseReductionEntry          = "EnableNoiseReduction";
-        configFullScreenEntry                    = "FullScreen";
-        configFullScreenHideThumbBarEntry        = "FullScreenHideThumbBar";
-        configFullScreenHideToolBarEntry         = "FullScreen Hide ToolBar";
-        configJpeg2000CompressionEntry           = "JPEG2000Compression";
-        configJpeg2000LossLessEntry              = "JPEG2000LossLess";
-        configJpegCompressionEntry               = "JPEGCompression";
-        configJpegSubSamplingEntry               = "JPEGSubSampling";
-        configMedianFilterPassesEntry            = "MedianFilterPasses";
-        configNRThresholdEntry                   = "NRThreshold";
-        configOverExposureColorEntry             = "OverExposureColor";
-        configOverExposureIndicatorEntry         = "OverExposureIndicator";
-        configPgfCompressionEntry                = "PGFCompression";
-        configPgfLossLessEntry                   = "PGFLossLess";
-        configPngCompressionEntry                = "PNGCompression";
-        configRAWBrightnessEntry                 = "RAWBrightness";
-        configRAWQualityEntry                    = "RAWQuality";
-        configRGBInterpolate4ColorsEntry         = "RGBInterpolate4Colors";
-        configSixteenBitsImageEntry              = "SixteenBitsImage";
-        configSlideShowDelayEntry                = "SlideShowDelay";
-        configSlideShowLoopEntry                 = "SlideShowLoop";
-        configSlideShowPrintApertureFocalEntry   = "SlideShowPrintApertureFocal";
-        configSlideShowPrintCommentEntry         = "SlideShowPrintComment";
-        configSlideShowPrintDateEntry            = "SlideShowPrintDate";
-        configSlideShowPrintExpoSensitivityEntry = "SlideShowPrintExpoSensitivity";
-        configSlideShowPrintMakeModelEntry       = "SlideShowPrintMakeModel";
-        configSlideShowPrintNameEntry            = "SlideShowPrintName";
-        configSlideShowPrintRatingEntry          = "SlideShowPrintRating";
-        configSlideShowStartCurrentEntry         = "SlideShowStartCurrent";
-        configSplitterStateEntry                 = "SplitterState";
-        configTiffCompressionEntry               = "TIFFCompression";
-        configUnclipColorsEntry                  = "UnclipColors";
-        configUnderExposureColorEntry            = "UnderExposureColor";
-        configUnderExposureIndicatorEntry        = "UnderExposureIndicator";
-        configUseRawImportToolEntry              = "UseRawImportTool";
-        configUseThemeBackgroundColorEntry       = "UseThemeBackgroundColor";
-        configVerticalSplitterSizesEntry         = "Vertical Splitter Sizes";
-        configVerticalSplitterStateEntry         = "Vertical Splitter State";
-        configWhiteBalanceEntry                  = "WhiteBalance";
-        removeFullScreenButton       = false;
-        fullScreenHideToolBar        = false;
-        infoLabel                    = 0;
-        donateMoneyAction            = 0;
-        viewCMViewAction             = 0;
-        filePrintAction              = 0;
-        copyAction                   = 0;
-        cropAction                   = 0;
-        rotateLeftAction             = 0;
-        rotateRightAction            = 0;
-        flipHorizAction              = 0;
-        flipVertAction               = 0;
-        ICCSettings                  = 0;
-        exposureSettings             = 0;
-        underExposureIndicator       = 0;
-        overExposureIndicator        = 0;
-        cmViewIndicator              = 0;
-        viewUnderExpoAction          = 0;
-        viewOverExpoAction           = 0;
-        slideShowAction              = 0;
-        zoomFitToWindowAction        = 0;
-        zoomFitToSelectAction        = 0;
-        zoomPlusAction               = 0;
-        zoomMinusAction              = 0;
-        zoomTo100percents            = 0;
-        selectAllAction              = 0;
-        selectNoneAction             = 0;
-        waitingLoop                  = 0;
-        currentWindowModalDialog     = 0;
-        undoSignalMapper             = 0;
-        redoSignalMapper             = 0;
-        rawCameraListAction          = 0;
-        libsInfoAction               = 0;
-        contributeAction             = 0;
-        toolIface                    = 0;
-        showMenuBarAction            = 0;
-        imagepluginsActionCollection = 0;
-        viewSoftProofAction          = 0;
-        softProofOptionsAction       = 0;
-        previewToolBar               = 0;
-        zoomBar                      = 0;
     }
 
     ~EditorWindowPriv()
@@ -213,25 +231,25 @@ public:
 
     KActionCollection*         imagepluginsActionCollection;
 
-    KAction*                   donateMoneyAction;
     KAction*                   contributeAction;
-    KAction*                   filePrintAction;
     KAction*                   copyAction;
     KAction*                   cropAction;
-    KAction*                   zoomPlusAction;
-    KAction*                   zoomMinusAction;
-    KAction*                   zoomTo100percents;
-    KAction*                   zoomFitToSelectAction;
-    KAction*                   rotateLeftAction;
-    KAction*                   rotateRightAction;
+    KAction*                   donateMoneyAction;
+    KAction*                   filePrintAction;
     KAction*                   flipHorizAction;
     KAction*                   flipVertAction;
-    KAction*                   slideShowAction;
+    KAction*                   libsInfoAction;
+    KAction*                   rawCameraListAction;
+    KAction*                   rotateLeftAction;
+    KAction*                   rotateRightAction;
     KAction*                   selectAllAction;
     KAction*                   selectNoneAction;
-    KAction*                   rawCameraListAction;
-    KAction*                   libsInfoAction;
+    KAction*                   slideShowAction;
     KAction*                   softProofOptionsAction;
+    KAction*                   zoomFitToSelectAction;
+    KAction*                   zoomMinusAction;
+    KAction*                   zoomPlusAction;
+    KAction*                   zoomTo100percents;
 
     QSignalMapper*             undoSignalMapper;
     QSignalMapper*             redoSignalMapper;
@@ -256,6 +274,58 @@ public:
     ExposureSettingsContainer* exposureSettings;
 
     EditorToolIface*           toolIface;
+
+    void legacyUpdateSplitterState(KConfigGroup &group)
+    {
+
+        // Check if the thumbnail size in the config file is splitter based (the
+        // old method), and convert to dock based if needed.
+        if (group.hasKey(configSplitterStateEntry))
+        {
+            // Read splitter state from config file
+            QByteArray state;
+            state = QByteArray::fromBase64(group.readEntry(configSplitterStateEntry, state));
+
+            // Do a cheap check: a splitter state with 3 windows is always 34 bytes.
+            if (state.count() == 34)
+            {
+                // Read the state in streamwise fashion.
+                QDataStream stream(state);
+
+                // The first 8 bytes are resp. the magic number and the version
+                // (which should be 0, otherwise it's not saved with an older
+                // digiKam version). Then follows the list of window sizes.
+                qint32 marker;
+                qint32 version = -1;
+                QList<int> sizesList;
+
+                stream >> marker;
+                stream >> version;
+                if (version == 0)
+                {
+                    stream >> sizesList;
+                    if (sizesList.count() == 3)
+                    {
+                        kDebug() << "Found splitter based config, converting to dockbar";
+                        // Remove the first entry (the thumbbar) and write the rest
+                        // back. Then it should be fine.
+                        sizesList.removeFirst();
+                        QByteArray newData;
+                        QDataStream newStream(&newData, QIODevice::WriteOnly);
+                        newStream << marker;
+                        newStream << version;
+                        newStream << sizesList;
+                        char s[24];
+                        int numBytes = stream.readRawData(s, 24);
+                        newStream.writeRawData(s, numBytes);
+                        group.writeEntry(configSplitterStateEntry, newData.toBase64());
+                    }
+                }
+            }
+        }
+
+    }
+
 };
 
 }  // namespace Digikam
