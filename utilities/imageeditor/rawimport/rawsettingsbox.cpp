@@ -85,25 +85,6 @@ public:
         optionGroupName("RAW Import Settings"),
         optionHistogramChannelEntry("Histogram Channel"),
         optionHistogramScaleEntry("Histogram Scale"),
-        optionDecodeSixteenBitEntry("SixteenBitsImage"),
-        optionWhiteBalanceEntry("White Balance"),
-        optionCustomWhiteBalanceEntry("Custom White Balance"),
-        optionCustomWBGreenEntry("Custom White Balance Green"),
-        optionFourColorRGBEntry("Four Color RGB"),
-        optionUnclipColorsEntry("Unclip Color"),
-        optionDontStretchPixelsEntry("Dont Stretch Pixels"),
-        optionNoiseReductionEntry("Use Noise Reduction"),
-        optionMedianFilterPassesEntry("Median Filter Passes"),
-        optionNRThresholdEntry("NR Threshold"),
-        optionUseCACorrectionEntry("EnableCACorrection"),
-        optionCARedMultiplierEntry("caRedMultiplier"),
-        optionCABlueMultiplierEntry("caBlueMultiplier"),
-        optionAutoBrightnessEntry("AutoBrightness"),
-        optionDecodingQualityEntry("Decoding Quality"),
-        optionInputColorSpaceEntry("Input Color Space"),
-        optionOutputColorSpaceEntry("Output Color Space"),
-        optionInputColorProfileEntry("Input Color Profile"),
-        optionOutputColorProfileEntry("Output Color Profile"),
         optionBrightnessEntry("Brightness"),
         optionContrastEntry("Contrast"),
         optionGammaEntry("Gamma"),
@@ -139,25 +120,6 @@ public:
     const QString optionGroupName;
     const QString optionHistogramChannelEntry;
     const QString optionHistogramScaleEntry;
-    const QString optionDecodeSixteenBitEntry;
-    const QString optionWhiteBalanceEntry;
-    const QString optionCustomWhiteBalanceEntry;
-    const QString optionCustomWBGreenEntry;
-    const QString optionFourColorRGBEntry;
-    const QString optionUnclipColorsEntry;
-    const QString optionDontStretchPixelsEntry;
-    const QString optionNoiseReductionEntry;
-    const QString optionMedianFilterPassesEntry;
-    const QString optionNRThresholdEntry;
-    const QString optionUseCACorrectionEntry;
-    const QString optionCARedMultiplierEntry;
-    const QString optionCABlueMultiplierEntry;
-    const QString optionAutoBrightnessEntry;
-    const QString optionDecodingQualityEntry;
-    const QString optionInputColorSpaceEntry;
-    const QString optionOutputColorSpaceEntry;
-    const QString optionInputColorProfileEntry;
-    const QString optionOutputColorProfileEntry;
     const QString optionBrightnessEntry;
     const QString optionContrastEntry;
     const QString optionGammaEntry;
@@ -448,7 +410,7 @@ void RawSettingsBox::setPostProcessedImage(DImg& img)
 
 void RawSettingsBox::resetSettings()
 {
-    d->decodingSettingsBox->setDefaultSettings();
+    d->decodingSettingsBox->resetToDefault();
     d->brightnessInput->slotReset();
     d->contrastInput->slotReset();
     d->gammaInput->slotReset();
@@ -478,79 +440,18 @@ void RawSettingsBox::readSettings()
     histogramBox()->setScale((HistogramScale)group.readEntry(d->optionHistogramScaleEntry,
                     (int) LogScaleHistogram));
 
-    d->decodingSettingsBox->setSixteenBits(group.readEntry(
-                    d->optionDecodeSixteenBitEntry, false));
-    d->decodingSettingsBox->setWhiteBalance(
-                    (DRawDecoding::WhiteBalance) group.readEntry(
-                                    d->optionWhiteBalanceEntry,
-                                    (int) DRawDecoding::CAMERA));
-    d->decodingSettingsBox->setCustomWhiteBalance(group.readEntry(
-                    d->optionCustomWhiteBalanceEntry, 6500));
-    d->decodingSettingsBox->setCustomWhiteBalanceGreen(group.readEntry(
-                    d->optionCustomWBGreenEntry, 1.0));
-    d->decodingSettingsBox->setFourColor(group.readEntry(
-                    d->optionFourColorRGBEntry, false));
-    d->decodingSettingsBox->setUnclipColor(group.readEntry(
-                    d->optionUnclipColorsEntry, 0));
-    d->decodingSettingsBox->setDontStretchPixels(group.readEntry(
-                    d->optionDontStretchPixelsEntry, false));
-    d->decodingSettingsBox->setNoiseReduction(group.readEntry(
-                    d->optionNoiseReductionEntry, false));
-    d->decodingSettingsBox->setMedianFilterPasses(group.readEntry(
-                    d->optionMedianFilterPassesEntry, 0));
-    d->decodingSettingsBox->setNRThreshold(group.readEntry(
-                    d->optionNRThresholdEntry, 100));
-    d->decodingSettingsBox->setUseCACorrection(group.readEntry(
-                    d->optionUseCACorrectionEntry, false));
-    d->decodingSettingsBox->setcaRedMultiplier(group.readEntry(
-                    d->optionCARedMultiplierEntry, 1.0));
-    d->decodingSettingsBox->setcaBlueMultiplier(group.readEntry(
-                    d->optionCABlueMultiplierEntry, 1.0));
-#if KDCRAW_VERSION >= 0x000500
-    d->decodingSettingsBox->setAutoBrightness(group.readEntry(
-                    d->optionAutoBrightnessEntry, true));
-#endif
-    d->decodingSettingsBox->setQuality(
-                    (DRawDecoding::DecodingQuality) group.readEntry(
-                                    d->optionDecodingQualityEntry,
-                                    (int) (DRawDecoding::BILINEAR)));
-
-    d->decodingSettingsBox->setInputColorSpace(
-                    (DRawDecoding::InputColorSpace) group.readEntry(
-                                    d->optionInputColorSpaceEntry,
-                                    (int) (DRawDecoding::NOINPUTCS)));
-
-    d->decodingSettingsBox->setOutputColorSpace(
-                    (DRawDecoding::OutputColorSpace) group.readEntry(
-                                    d->optionOutputColorSpaceEntry,
-                                    (int) (DRawDecoding::SRGB)));
-
-    d->decodingSettingsBox->setInputColorProfile(group.readEntry(
-                    d->optionInputColorProfileEntry, QString()));
-    d->decodingSettingsBox->setOutputColorProfile(group.readEntry(
-                    d->optionOutputColorProfileEntry, QString()));
+    d->decodingSettingsBox->readSettings(group);
 
     d->brightnessInput->setValue(group.readEntry(d->optionBrightnessEntry, 0));
     d->contrastInput->setValue(group.readEntry(d->optionContrastEntry, 0));
     d->gammaInput->setValue(group.readEntry(d->optionGammaEntry, 1.0));
     d->saturationInput->setValue(group.readEntry(d->optionSaturationEntry, 1.0));
-    d->fineExposureInput->setValue(group.readEntry(d->optionFineExposureEntry,
-                    0.0));
+    d->fineExposureInput->setValue(group.readEntry(d->optionFineExposureEntry, 0.0));
 
     d->curveWidget->restoreCurve(group, d->optionCurvePrefix);
 
     d->tabView->setCurrentIndex(group.readEntry(d->optionSettingsPageEntry, 0));
-#if KDCRAW_VERSION <= 0x000500
-    d->decodingSettingsBox->setCurrentIndex(group.readEntry(
-                    d->optionDecodingSettingsTabEntry,
-                    (int) DcrawSettingsWidget::DEMOSAICING));
-#else
-    d->decodingSettingsBox->readSettings();
-#endif
     d->postProcessSettingsBox->readSettings();
-
-//    slotChannelChanged();
-//    slotScaleChanged(histogramScale());
 }
 
 void RawSettingsBox::writeSettings()
@@ -561,46 +462,8 @@ void RawSettingsBox::writeSettings()
     group.writeEntry(d->optionHistogramChannelEntry, (int)histogramBox()->channel());
     group.writeEntry(d->optionHistogramScaleEntry, (int)histogramBox()->scale());
 
-    group.writeEntry(d->optionDecodeSixteenBitEntry,
-                    d->decodingSettingsBox->sixteenBits());
-    group.writeEntry(d->optionWhiteBalanceEntry,
-                    (int) d->decodingSettingsBox->whiteBalance());
-    group.writeEntry(d->optionCustomWhiteBalanceEntry,
-                    d->decodingSettingsBox->customWhiteBalance());
-    group.writeEntry(d->optionCustomWBGreenEntry,
-                    d->decodingSettingsBox->customWhiteBalanceGreen());
-    group.writeEntry(d->optionFourColorRGBEntry,
-                    d->decodingSettingsBox->useFourColor());
-    group.writeEntry(d->optionUnclipColorsEntry,
-                    d->decodingSettingsBox->unclipColor());
-    group.writeEntry(d->optionDontStretchPixelsEntry,
-                    d->decodingSettingsBox->useDontStretchPixels()); // krazy:exclude=spelling
-    group.writeEntry(d->optionNoiseReductionEntry,
-                    d->decodingSettingsBox->useNoiseReduction());
-    group.writeEntry(d->optionMedianFilterPassesEntry,
-                    d->decodingSettingsBox->medianFilterPasses());
-    group.writeEntry(d->optionNRThresholdEntry,
-                    d->decodingSettingsBox->NRThreshold());
-    group.writeEntry(d->optionUseCACorrectionEntry,
-                    d->decodingSettingsBox->useCACorrection());
-    group.writeEntry(d->optionCARedMultiplierEntry,
-                    d->decodingSettingsBox->caRedMultiplier());
-    group.writeEntry(d->optionCABlueMultiplierEntry,
-                    d->decodingSettingsBox->caBlueMultiplier());
-    group.writeEntry(d->optionDecodingQualityEntry,
-                    (int) d->decodingSettingsBox->quality());
-    group.writeEntry(d->optionInputColorSpaceEntry,
-                    (int) d->decodingSettingsBox->inputColorSpace());
-    group.writeEntry(d->optionOutputColorSpaceEntry,
-                    (int) d->decodingSettingsBox->outputColorSpace());
-    group.writeEntry(d->optionInputColorProfileEntry,
-                    d->decodingSettingsBox->inputColorProfile());
-    group.writeEntry(d->optionOutputColorProfileEntry,
-                    d->decodingSettingsBox->outputColorProfile());
-#if KDCRAW_VERSION >= 0x000500
-    group.writeEntry(d->optionAutoBrightnessEntry,
-                    d->decodingSettingsBox->useAutoBrightness());
-#endif
+    d->decodingSettingsBox->writeSettings(group);
+    
     group.writeEntry(d->optionBrightnessEntry, d->brightnessInput->value());
     group.writeEntry(d->optionContrastEntry, d->contrastInput->value());
     group.writeEntry(d->optionGammaEntry, d->gammaInput->value());
@@ -610,37 +473,34 @@ void RawSettingsBox::writeSettings()
     d->curveWidget->saveCurve(group, d->optionCurvePrefix);
 
     group.writeEntry(d->optionSettingsPageEntry, d->tabView->currentIndex());
-#if KDCRAW_VERSION <= 0x000500
-    group.writeEntry(d->optionDecodingSettingsTabEntry,
-                    d->decodingSettingsBox->currentIndex());
-#endif
+
     group.sync();
 }
 
 DRawDecoding RawSettingsBox::settings()
 {
-    DRawDecoding settings;
-    settings.sixteenBitsImage        = d->decodingSettingsBox->sixteenBits();
-    settings.whiteBalance            = d->decodingSettingsBox->whiteBalance();
-    settings.customWhiteBalance      = d->decodingSettingsBox->customWhiteBalance();
-    settings.customWhiteBalanceGreen = d->decodingSettingsBox->customWhiteBalanceGreen();
-    settings.RGBInterpolate4Colors   = d->decodingSettingsBox->useFourColor();
-    settings.unclipColors            = d->decodingSettingsBox->unclipColor();
-    settings.DontStretchPixels       = d->decodingSettingsBox->useDontStretchPixels();
-    settings.enableNoiseReduction    = d->decodingSettingsBox->useNoiseReduction();
-    settings.medianFilterPasses      = d->decodingSettingsBox->medianFilterPasses();
-    settings.NRThreshold             = d->decodingSettingsBox->NRThreshold();
-    settings.enableCACorrection      = d->decodingSettingsBox->useCACorrection();
-    settings.caMultiplier[0]         = d->decodingSettingsBox->caRedMultiplier();
-    settings.caMultiplier[1]         = d->decodingSettingsBox->caBlueMultiplier();
-    settings.RAWQuality              = d->decodingSettingsBox->quality();
-    settings.inputColorSpace         = d->decodingSettingsBox->inputColorSpace();
-    settings.outputColorSpace        = d->decodingSettingsBox->outputColorSpace();
-    settings.inputProfile            = d->decodingSettingsBox->inputColorProfile();
-    settings.outputProfile           = d->decodingSettingsBox->outputColorProfile();
-#if KDCRAW_VERSION >= 0x000500
-    settings.autoBrightness          = d->decodingSettingsBox->useAutoBrightness();
-#endif
+    DRawDecoding settings;    
+    RawDecodingSettings prm          = d->decodingSettingsBox->settings();
+    
+    settings.sixteenBitsImage        = prm.sixteenBitsImage;
+    settings.whiteBalance            = prm.whiteBalance;
+    settings.customWhiteBalance      = prm.customWhiteBalance;
+    settings.customWhiteBalanceGreen = prm.customWhiteBalanceGreen;
+    settings.RGBInterpolate4Colors   = prm.RGBInterpolate4Colors;
+    settings.unclipColors            = prm.unclipColors;
+    settings.dontStretchPixels       = prm.dontStretchPixels;
+    settings.enableNoiseReduction    = prm.enableNoiseReduction;
+    settings.medianFilterPasses      = prm.medianFilterPasses;
+    settings.NRThreshold             = prm.NRThreshold;
+    settings.enableCACorrection      = prm.enableCACorrection;
+    settings.caMultiplier[0]         = prm.caMultiplier[0];
+    settings.caMultiplier[1]         = prm.caMultiplier[1];
+    settings.RAWQuality              = prm.RAWQuality;
+    settings.inputColorSpace         = prm.inputColorSpace;
+    settings.outputColorSpace        = prm.outputColorSpace;
+    settings.inputProfile            = prm.inputProfile;
+    settings.outputProfile           = prm.outputProfile;
+    settings.autoBrightness          = prm.autoBrightness;
 
     settings.lightness               = (double)d->brightnessInput->value()/250.0;
     settings.contrast                = (double)(d->contrastInput->value()/100.0) + 1.00;

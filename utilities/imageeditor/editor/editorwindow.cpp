@@ -937,7 +937,7 @@ void EditorWindow::applyStandardSettings()
     m_IOFileSettings->rawDecodingSettings.customWhiteBalance      = group.readEntry(d->configCustomWhiteBalanceEntry, 6500);
     m_IOFileSettings->rawDecodingSettings.customWhiteBalanceGreen = group.readEntry(d->configCustomWhiteBalanceGreenEntry, 1.0);
     m_IOFileSettings->rawDecodingSettings.RGBInterpolate4Colors   = group.readEntry(d->configRGBInterpolate4ColorsEntry, false);
-    m_IOFileSettings->rawDecodingSettings.DontStretchPixels       = group.readEntry(d->configDontStretchPixelsEntry, false);
+    m_IOFileSettings->rawDecodingSettings.dontStretchPixels       = group.readEntry(d->configDontStretchPixelsEntry, false);
     m_IOFileSettings->rawDecodingSettings.enableNoiseReduction    = group.readEntry(d->configEnableNoiseReductionEntry, false);
     m_IOFileSettings->rawDecodingSettings.unclipColors            = group.readEntry(d->configUnclipColorsEntry, 0);
     m_IOFileSettings->rawDecodingSettings.RAWQuality              = (DRawDecoding::DecodingQuality)
@@ -949,9 +949,7 @@ void EditorWindow::applyStandardSettings()
     m_IOFileSettings->rawDecodingSettings.caMultiplier[1]         = group.readEntry(d->configCaBlueMultiplierEntry, 1.0);
     m_IOFileSettings->rawDecodingSettings.brightness              = group.readEntry(d->configRAWBrightnessEntry, 1.0);
     m_IOFileSettings->rawDecodingSettings.medianFilterPasses      = group.readEntry(d->configMedianFilterPassesEntry, 0);
-#if KDCRAW_VERSION >= 0x000500
     m_IOFileSettings->rawDecodingSettings.autoBrightness          = group.readEntry(d->configAutoBrightnessEntry, true);
-#endif
     m_IOFileSettings->useRAWImport                                = group.readEntry(d->configUseRawImportToolEntry, false);
 
     // -- GUI Settings -------------------------------------------------------
