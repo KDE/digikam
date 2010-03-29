@@ -135,7 +135,7 @@ ENDIF ("${jpeglib_version}" LESS 80)
 # Check KDcraw version installed to compile fine.
 IF(NOT WIN32)
     FIND_PACKAGE(PkgConfig)
-    PKG_CHECK_MODULES(Kdcraw libkdcraw>=1.2.0)
+    PKG_CHECK_MODULES(Kdcraw libkdcraw>=1.1.0)
     IF(Kdcraw_FOUND)
         SET(KDCRAW_FOR_DIGIKAM TRUE)
     ELSE(Kdcraw_FOUND)
@@ -215,7 +215,7 @@ PRINT_LIBRARY_STATUS("libjasper" "http://www.ece.uvic.ca/~mdadams/jasper" "" JAS
 PRINT_LIBRARY_STATUS("liblcms" "http://www.littlecms.com" "" LCMS_FOUND)
 PRINT_LIBRARY_STATUS("libkipi" "http://www.digikam.org/sharedlibs" " (version >= 0.2.0)" KIPI_FOUND)
 PRINT_LIBRARY_STATUS("libkexiv2" "http://www.digikam.org/sharedlibs" " (version >= 0.5.0)" KEXIV2_FOR_DIGIKAM)
-PRINT_LIBRARY_STATUS("libkdcraw" "http://www.digikam.org/sharedlibs" " (version >= 1.2.0)" KDCRAW_FOR_DIGIKAM)
+PRINT_LIBRARY_STATUS("libkdcraw" "http://www.digikam.org/sharedlibs" " (version >= 1.1.0)" KDCRAW_FOR_DIGIKAM)
 
 # ================================================================
 

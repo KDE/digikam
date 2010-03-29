@@ -217,21 +217,21 @@ void FilmGrainFilter::computeNoiseSettings(const DColor& col,
     {
         luRange = interpolate(d->settings.lumaShadows, d->settings.lumaMidtones,
                               d->settings.lumaHighlights, col) * d->leadLumaNoise + 1.0;
-        luNoise = randomizeUniform(luRange)/ d->div;
+        luNoise = randomizeUniform(luRange);
     }
 
     if (d->settings.addChrominanceBlueNoise)
     {
         cbRange = interpolate(d->settings.chromaBlueShadows, d->settings.chromaBlueMidtones,
                               d->settings.chromaBlueHighlights, col) * d->leadChromaBlueNoise + 1.0;
-        cbNoise = randomizeUniform(cbRange)/ d->div;
+        cbNoise = randomizeUniform(cbRange);
     }
 
     if (d->settings.addChrominanceRedNoise)
     {
         crRange = interpolate(d->settings.chromaRedShadows, d->settings.chromaRedMidtones,
                               d->settings.chromaRedHighlights, col) * d->leadChromaRedNoise + 1.0;
-        crNoise = randomizeUniform(crRange)/ d->div;
+        crNoise = randomizeUniform(crRange);
     }
 }
 
@@ -245,20 +245,20 @@ void FilmGrainFilter::adjustYCbCr(DColor& col, double range, double nRand, int c
     col.getYCbCr(&y, &cb, &cr);
 
     if (d->settings.photoDistribution)
-        n2 = randomizePoisson((d->settings.grainSize/2.0)*(range/1.414)) / d->div;
+        n2 = randomizePoisson((d->settings.grainSize/2.0)*(range/1.414));
     else
-        n2 = randomizeGauss((d->settings.grainSize/2.0)*(range/1.414))   / d->div;
+        n2 = randomizeGauss((d->settings.grainSize/2.0)*(range/1.414));
 
     switch (channel)
     {
         case FilmGrainFilterPriv::Luma:
-            y  = CLAMP(y  + nRand + n2, 0.0, 1.0);
+            y  = CLAMP(y  + (nRand + n2)/ d->div, 0.0, 1.0);
             break;
         case FilmGrainFilterPriv::ChromaBlue:
-            cb = CLAMP(cb + nRand + n2, 0.0, 1.0);
+            cb = CLAMP(cb + (nRand + n2)/ d->div, 0.0, 1.0);
             break;
         default:       // ChromaRed
-            cr = CLAMP(cr + nRand + n2, 0.0, 1.0);
+            cr = CLAMP(cr + (nRand + n2)/ d->div, 0.0, 1.0);
             break;
     }
 
