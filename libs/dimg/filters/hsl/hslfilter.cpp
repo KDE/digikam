@@ -181,9 +181,9 @@ int HSLFilter::vibranceBias(int sat, int hue, int vib, bool sixteenbit)
 {
     double ratio;
     int localsat;
-//    double normalized_hue = hue / (sixteenbit ? 65535.0: 255.0);
+    double normalized_hue = hue / (sixteenbit ? 65535.0: 255.0);
 
-    if (hue>0.85 || hue <0.2)
+    if (normalized_hue>0.85 || normalized_hue <0.2)
     {
       ratio = 0.3;
     }
