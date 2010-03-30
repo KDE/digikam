@@ -911,6 +911,9 @@ void EditorWindow::applyStandardSettings()
 
     // -- RAW images decoding settings ------------------------------------------------------
 
+    m_IOFileSettings->useRAWImport = group.readEntry(d->configUseRawImportToolEntry, false);
+    m_IOFileSettings->rawDecodingSettings.readSettings(group);
+
     // If digiKam Color Management is enable, no need to correct color of decoded RAW image,
     // else, sRGB color workspace will be used.
 
@@ -930,27 +933,6 @@ void EditorWindow::applyStandardSettings()
     {
         m_IOFileSettings->rawDecodingSettings.outputColorSpace = DRawDecoding::SRGB;
     }
-
-    m_IOFileSettings->rawDecodingSettings.sixteenBitsImage        = group.readEntry(d->configSixteenBitsImageEntry, false);
-    m_IOFileSettings->rawDecodingSettings.whiteBalance            = (DRawDecoding::WhiteBalance)group.readEntry(d->configWhiteBalanceEntry,
-                                                                    (int)DRawDecoding::CAMERA);
-    m_IOFileSettings->rawDecodingSettings.customWhiteBalance      = group.readEntry(d->configCustomWhiteBalanceEntry, 6500);
-    m_IOFileSettings->rawDecodingSettings.customWhiteBalanceGreen = group.readEntry(d->configCustomWhiteBalanceGreenEntry, 1.0);
-    m_IOFileSettings->rawDecodingSettings.RGBInterpolate4Colors   = group.readEntry(d->configRGBInterpolate4ColorsEntry, false);
-    m_IOFileSettings->rawDecodingSettings.DontStretchPixels       = group.readEntry(d->configDontStretchPixelsEntry, false);
-    m_IOFileSettings->rawDecodingSettings.enableNoiseReduction    = group.readEntry(d->configEnableNoiseReductionEntry, false);
-    m_IOFileSettings->rawDecodingSettings.unclipColors            = group.readEntry(d->configUnclipColorsEntry, 0);
-    m_IOFileSettings->rawDecodingSettings.RAWQuality              = (DRawDecoding::DecodingQuality)
-                                                                    group.readEntry(d->configRAWQualityEntry,
-                                                                    (int)DRawDecoding::BILINEAR);
-    m_IOFileSettings->rawDecodingSettings.NRThreshold             = group.readEntry(d->configNRThresholdEntry, 100);
-    m_IOFileSettings->rawDecodingSettings.enableCACorrection      = group.readEntry(d->configEnableCACorrectionEntry, false);
-    m_IOFileSettings->rawDecodingSettings.caMultiplier[0]         = group.readEntry(d->configCaRedMultiplierEntry, 1.0);
-    m_IOFileSettings->rawDecodingSettings.caMultiplier[1]         = group.readEntry(d->configCaBlueMultiplierEntry, 1.0);
-    m_IOFileSettings->rawDecodingSettings.brightness              = group.readEntry(d->configRAWBrightnessEntry, 1.0);
-    m_IOFileSettings->rawDecodingSettings.medianFilterPasses      = group.readEntry(d->configMedianFilterPassesEntry, 0);
-    m_IOFileSettings->rawDecodingSettings.autoBrightness          = group.readEntry(d->configAutoBrightnessEntry, true);
-    m_IOFileSettings->useRAWImport                                = group.readEntry(d->configUseRawImportToolEntry, false);
 
     // -- GUI Settings -------------------------------------------------------
 

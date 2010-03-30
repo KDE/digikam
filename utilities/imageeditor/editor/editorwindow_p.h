@@ -62,16 +62,8 @@ class EditorWindowPriv
 public:
 
     EditorWindowPriv() :
-        configAutoBrightnessEntry("AutoBrightness"),
         configAutoZoomEntry("AutoZoom"),
         configBackgroundColorEntry("BackgroundColor"),
-        configCaBlueMultiplierEntry("caBlueMultiplier"),
-        configCaRedMultiplierEntry("caRedMultiplier"),
-        configCustomWhiteBalanceEntry("CustomWhiteBalance"),
-        configCustomWhiteBalanceGreenEntry("CustomWhiteBalanceGreen"),
-        configDontStretchPixelsEntry("DontStretchPixels"),
-        configEnableCACorrectionEntry("EnableCACorrection"),
-        configEnableNoiseReductionEntry("EnableNoiseReduction"),
         configFullScreenEntry("FullScreen"),
         configFullScreenHideThumbBarEntry("FullScreenHideThumbBar"),
         configFullScreenHideToolBarEntry("FullScreen Hide ToolBar"),
@@ -79,17 +71,11 @@ public:
         configJpeg2000LossLessEntry("JPEG2000LossLess"),
         configJpegCompressionEntry("JPEGCompression"),
         configJpegSubSamplingEntry("JPEGSubSampling"),
-        configMedianFilterPassesEntry("MedianFilterPasses"),
-        configNRThresholdEntry("NRThreshold"),
         configOverExposureColorEntry("OverExposureColor"),
         configOverExposureIndicatorEntry("OverExposureIndicator"),
         configPgfCompressionEntry("PGFCompression"),
         configPgfLossLessEntry("PGFLossLess"),
         configPngCompressionEntry("PNGCompression"),
-        configRAWBrightnessEntry("RAWBrightness"),
-        configRAWQualityEntry("RAWQuality"),
-        configRGBInterpolate4ColorsEntry("RGBInterpolate4Colors"),
-        configSixteenBitsImageEntry("SixteenBitsImage"),
         configSlideShowDelayEntry("SlideShowDelay"),
         configSlideShowLoopEntry("SlideShowLoop"),
         configSlideShowPrintApertureFocalEntry("SlideShowPrintApertureFocal"),
@@ -102,14 +88,12 @@ public:
         configSlideShowStartCurrentEntry("SlideShowStartCurrent"),
         configSplitterStateEntry("SplitterState"),
         configTiffCompressionEntry("TIFFCompression"),
-        configUnclipColorsEntry("UnclipColors"),
         configUnderExposureColorEntry("UnderExposureColor"),
         configUnderExposureIndicatorEntry("UnderExposureIndicator"),
         configUseRawImportToolEntry("UseRawImportTool"),
         configUseThemeBackgroundColorEntry("UseThemeBackgroundColor"),
         configVerticalSplitterSizesEntry("Vertical Splitter Sizes"),
         configVerticalSplitterStateEntry("Vertical Splitter State"),
-        configWhiteBalanceEntry("WhiteBalance"),
 
         removeFullScreenButton(false),
         fullScreenHideToolBar(false),
@@ -171,16 +155,8 @@ public:
     {
     }
 
-    QString                    configAutoBrightnessEntry;
     QString                    configAutoZoomEntry;
     QString                    configBackgroundColorEntry;
-    QString                    configCaBlueMultiplierEntry;
-    QString                    configCaRedMultiplierEntry;
-    QString                    configCustomWhiteBalanceEntry;
-    QString                    configCustomWhiteBalanceGreenEntry;
-    QString                    configDontStretchPixelsEntry;
-    QString                    configEnableCACorrectionEntry;
-    QString                    configEnableNoiseReductionEntry;
     QString                    configFullScreenEntry;
     QString                    configFullScreenHideThumbBarEntry;
     QString                    configFullScreenHideToolBarEntry;
@@ -188,17 +164,11 @@ public:
     QString                    configJpeg2000LossLessEntry;
     QString                    configJpegCompressionEntry;
     QString                    configJpegSubSamplingEntry;
-    QString                    configMedianFilterPassesEntry;
-    QString                    configNRThresholdEntry;
     QString                    configOverExposureColorEntry;
     QString                    configOverExposureIndicatorEntry;
     QString                    configPgfCompressionEntry;
     QString                    configPgfLossLessEntry;
     QString                    configPngCompressionEntry;
-    QString                    configRAWBrightnessEntry;
-    QString                    configRAWQualityEntry;
-    QString                    configRGBInterpolate4ColorsEntry;
-    QString                    configSixteenBitsImageEntry;
     QString                    configSlideShowDelayEntry;
     QString                    configSlideShowLoopEntry;
     QString                    configSlideShowPrintApertureFocalEntry;
@@ -211,14 +181,12 @@ public:
     QString                    configSlideShowStartCurrentEntry;
     QString                    configSplitterStateEntry;
     QString                    configTiffCompressionEntry;
-    QString                    configUnclipColorsEntry;
     QString                    configUnderExposureColorEntry;
     QString                    configUnderExposureIndicatorEntry;
     QString                    configUseRawImportToolEntry;
     QString                    configUseThemeBackgroundColorEntry;
     QString                    configVerticalSplitterSizesEntry;
     QString                    configVerticalSplitterStateEntry;
-    QString                    configWhiteBalanceEntry;
 
     bool                       removeFullScreenButton;
     bool                       fullScreenHideToolBar;

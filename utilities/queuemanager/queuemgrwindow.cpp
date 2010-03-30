@@ -528,7 +528,9 @@ void QueueMgrWindow::applySettings()
 
     DRawDecoding         rawDecodingSettings;
     ICCSettingsContainer ICCSettings = IccSettings::instance()->settings();
-
+    
+    rawDecodingSettings.readSettings(group);
+    
     if (ICCSettings.enableCM)
     {
         if (ICCSettings.defaultUncalibratedBehavior & ICCSettingsContainer::AutomaticColors)
@@ -545,28 +547,6 @@ void QueueMgrWindow::applySettings()
     {
         rawDecodingSettings.outputColorSpace = DRawDecoding::SRGB;
     }
-
-    rawDecodingSettings.sixteenBitsImage        = group.readEntry("SixteenBitsImage", false);
-    rawDecodingSettings.whiteBalance            = (DRawDecoding::WhiteBalance)group.readEntry("WhiteBalance",
-                                                                    (int)DRawDecoding::CAMERA);
-    rawDecodingSettings.customWhiteBalance      = group.readEntry("CustomWhiteBalance", 6500);
-    rawDecodingSettings.customWhiteBalanceGreen = group.readEntry("CustomWhiteBalanceGreen", 1.0);
-    rawDecodingSettings.RGBInterpolate4Colors   = group.readEntry("RGBInterpolate4Colors", false);
-    rawDecodingSettings.DontStretchPixels       = group.readEntry("DontStretchPixels", false);
-    rawDecodingSettings.enableNoiseReduction    = group.readEntry("EnableNoiseReduction", false);
-    rawDecodingSettings.unclipColors            = group.readEntry("UnclipColors", 0);
-    rawDecodingSettings.RAWQuality              = (DRawDecoding::DecodingQuality)
-                                                                    group.readEntry("RAWQuality",
-                                                                    (int)DRawDecoding::BILINEAR);
-    rawDecodingSettings.NRThreshold             = group.readEntry("NRThreshold", 100);
-    rawDecodingSettings.enableCACorrection      = group.readEntry("EnableCACorrection", false);
-    rawDecodingSettings.caMultiplier[0]         = group.readEntry("caRedMultiplier", 1.0);
-    rawDecodingSettings.caMultiplier[1]         = group.readEntry("caBlueMultiplier", 1.0);
-    rawDecodingSettings.brightness              = group.readEntry("RAWBrightness", 1.0);
-    rawDecodingSettings.medianFilterPasses      = group.readEntry("MedianFilterPasses", 0);
-#if KDCRAW_VERSION >= 0x000500
-    rawDecodingSettings.autoBrightness          = group.readEntry("AutoBrightness", true);
-#endif
 
     d->thread->setRawDecodingSettings(rawDecodingSettings);
 }
