@@ -165,7 +165,7 @@ bool RatingWidget::hasFading() const
 void RatingWidget::setFadingValue(int value)
 {
     d->fadingValue = value;
-    if (d->fadingValue >= 255)
+    if (d->fadingValue >= 255 && d->fadingTimeLine)
     {
         d->fadingTimeLine->stop();
     }

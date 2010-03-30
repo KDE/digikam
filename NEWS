@@ -8,5 +8,5 @@ General        : libkdcraw dependency set to 1.1.0 version.
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 232632 : Tar will not compile DRawDecoding? has no member named DontStretchPixels.
-002 ==> 
-
+002 ==> 232628 : Crash on startup in RatingWidget.
+003 ==> 
