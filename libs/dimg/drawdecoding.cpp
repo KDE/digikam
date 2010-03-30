@@ -53,7 +53,7 @@ DRawDecoding::DRawDecoding(const RawDecodingSettings& prm)
     outputColorSpace        = prm.outputColorSpace;
     inputProfile            = prm.inputProfile;
     outputProfile           = prm.outputProfile;
-    autoBrightness          = prm.autoBrightness;    
+    autoBrightness          = prm.autoBrightness;
 
     resetPostProcessingSettings();
 }
@@ -64,7 +64,7 @@ DRawDecoding::~DRawDecoding()
 
 void DRawDecoding::optimizeTimeLoading()
 {
-    KDcrawIface::RawDecodingSettings::optimizeTimeLoading();
+    RawDecodingSettings::optimizeTimeLoading();
     resetPostProcessingSettings();
 }
 
