@@ -2,6 +2,8 @@ PROJECT(digikam)
 
 #OPTION(ENABLE_THEMEDESIGNER "Build digiKam theme designer (default=OFF)" OFF)
 OPTION(ENABLE_THUMBS_DB "Build digiKam with thumbnails database support (default=ON)" ON)
+SET(SERVERCMD_MYSQL "/usr/sbin/mysqld" CACHE STRING "Mysql Daemon executable (default=/usr/sbin/mysqld)")
+SET(INITCMD_MYSQL   "/usr/bin/mysql_install_db" CACHE STRING "Mysql executable for DB initialization (default=/usr/bin/mysql_install_db)")
 
 # ==================================================================================================
 # Information to update before to release this package.
@@ -215,7 +217,7 @@ PRINT_LIBRARY_STATUS("libjasper" "http://www.ece.uvic.ca/~mdadams/jasper" "" JAS
 PRINT_LIBRARY_STATUS("liblcms" "http://www.littlecms.com" "" LCMS_FOUND)
 PRINT_LIBRARY_STATUS("libkipi" "http://www.digikam.org/sharedlibs" " (version >= 0.2.0)" KIPI_FOUND)
 PRINT_LIBRARY_STATUS("libkexiv2" "http://www.digikam.org/sharedlibs" " (version >= 0.5.0)" KEXIV2_FOR_DIGIKAM)
-PRINT_LIBRARY_STATUS("libkdcraw" "http://www.digikam.org/sharedlibs" " (version >= 1.1.0)" KDCRAW_FOR_DIGIKAM)
+PRINT_LIBRARY_STATUS("libkdcraw" "http://www.digikam.org/sharedlibs" " (version >= 0.4.0)" KDCRAW_FOR_DIGIKAM)
 
 # ================================================================
 
@@ -309,6 +311,7 @@ ELSE(DOXYGEN_FOUND)
     MESSAGE(STATUS " You will not be able to to generate the API documentation.")
     MESSAGE(STATUS " This does not affect building digiKam in any way.")
     MESSAGE(STATUS "")
+    
 ENDIF(DOXYGEN_FOUND)
 
 IF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND JASPER_FOUND AND KDCRAW_FOR_DIGIKAM AND KEXIV2_FOUND AND KIPI_FOUND)
@@ -318,6 +321,11 @@ ELSE(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND AND JASPER_FOUND
     MESSAGE(FATAL_ERROR " digiKam will be compiled................. NO  (Look README file for more details about dependencies)")
     SET(DIGIKAM_CAN_BE_COMPILED false)
 ENDIF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND JASPER_FOUND AND KDCRAW_FOR_DIGIKAM AND KEXIV2_FOUND AND KIPI_FOUND)
+
+	MESSAGE(STATUS "")
+    MESSAGE(STATUS "Database server settings")
+    MESSAGE(STATUS " Using mysqld path (set by SERVERCMD_MYSQL)......[${SERVERCMD_MYSQL}]")
+	MESSAGE(STATUS " Using mysql-init path..(set by INITCMD_MYSQL)...[${INITCMD_MYSQL}]")
 
 MESSAGE(STATUS "----------------------------------------------------------------------------------")
 MESSAGE(STATUS "")
@@ -823,7 +831,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/filesaveoptionsdlg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/imagedialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/rawcameradlg.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/libsinfodlg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/libsinfodlg.cpp        
        )
 
     SET(libdeletedialog_SRCS
@@ -852,6 +860,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/cameraselection.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/cameralist.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/cameratype.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupdatabase.cpp 
        )
 
     SET(libkipiiface_SRCS
@@ -908,15 +917,16 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch/batchsyncmetadata.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch/fingerprintsgenerator.cpp
        )
-
+       
     SET(libdatabasecore_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databasecorebackend.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseparameters.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/thumbnaildatabaseaccess.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/thumbnaildb.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/thumbnailschemaupdater.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseconfigelement.cpp        
        )
-
+       
     SET(libdatabase_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/albumdb.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/albumdb_sqlite2.cpp
@@ -945,8 +955,16 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagescanner.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/namefilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/searchxml.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/schemaupdater.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/schemaupdater.cpp        
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/upgradedb_sqlite2tosqlite3.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databasecopymanager.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseserverstarter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlquery.cpp
+       )
+
+    SET(libdatabaseui_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/databasewidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/migrationdlg.cpp
        )
 
     SET(pgfutils_SRCS
@@ -1226,6 +1244,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/treefolderitem.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/searchmodificationhelper.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/welcomepageview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/databaseerrorhandler.cpp
        )
 
     SET(libdigikamhelpers_SRCS
@@ -1239,6 +1258,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     ADD_SUBDIRECTORY(kioslave)
     ADD_SUBDIRECTORY(showfoto)
     ADD_SUBDIRECTORY(imageplugins)
+    ADD_SUBDIRECTORY(databaseserver)
 
     IF(KDE4_BUILD_TESTS)
         MACRO_OPTIONAL_ADD_SUBDIRECTORY(tests)

@@ -97,14 +97,14 @@ int main(int argc, char *argv[])
     QString version           = group.readEntry("Version", QString());
 
     group                     = config->group("Album Settings");
-    QString dbPath            = group.readEntry("Database File Path", QString());
+    QString dbName            = group.readEntry("Database File Path", QString());
     QString firstAlbumPath;
 
     // 0.9 legacy
-    if (dbPath.isEmpty() && group.hasKey("Album Path"))
+    if (dbName.isEmpty() && group.hasKey("Album Path"))
     {
-        dbPath = group.readEntry("Album Path", QString());
-        group.writeEntry("Database File Path", dbPath);
+        dbName = group.readEntry("Album Path", QString());
+        group.writeEntry("Database File Path", dbName);
         group.sync();
     }
 
@@ -115,10 +115,10 @@ int main(int argc, char *argv[])
     if (args && args->isSet("database-directory"))
     {
         priorityDbPath = true;
-        dbPath = args->getOption("database-directory");
+        dbName = args->getOption("database-directory");
     }
 
-    QFileInfo dirInfo(dbPath);
+    QFileInfo dirInfo(dbName);
 
     // version 0.6 was the version when the new Albums Library
     // storage was implemented
@@ -133,26 +133,25 @@ int main(int argc, char *argv[])
             return 1;
 
         firstAlbumPath = firstRun.firstAlbumPath();
-        dbPath         = firstRun.databasePath();
-
-        AlbumManager::checkDatabaseDirsAfterFirstRun(dbPath, firstAlbumPath);
+        dbName         = firstRun.databasePath();
+        AlbumManager::checkDatabaseDirsAfterFirstRun(dbName, firstAlbumPath);
     }
 
-    kDebug() << "Database Path: " << dbPath;
+    kDebug(50003) << "Database Path: " << dbName;
 
     // Check if SQLite Qt4 plugin is available.
 
-    if (!QSqlDatabase::isDriverAvailable("QSQLITE"))
+    if (!QSqlDatabase::isDriverAvailable("QSQLITE") || !QSqlDatabase::isDriverAvailable("QMYSQL"))
     {
 	if (QSqlDatabase::drivers().isEmpty())
 	{
-            KMessageBox::error(0, i18n("Run-time Qt4 SQLite database plugin is not available - "
+            KMessageBox::error(0, i18n("Run-time Qt4 SQLite or MySQL database plugin is not available - "
                                        "please install it.\n"
                                        "There is no database plugin installed on your computer."));
 	}
 	else
 	{
-            KMessageBox::errorList(0, i18n("Run-time Qt4 SQLite database plugin is not available - "
+            KMessageBox::errorList(0, i18n("Run-time Qt4 SQLite or MySQL database plugin is not available - "
                                            "please install it.\n"
                                            "Database plugins installed on your computer are listed below:"),
                                    QSqlDatabase::drivers());
@@ -162,10 +161,11 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    // initialize database
-    AlbumManager* man = AlbumManager::instance();
-    if (!man->setDatabase(dbPath, priorityDbPath, firstAlbumPath))
-        return 1;
+//TODO is this really needed?
+//    // initialize database
+//    AlbumManager* man = AlbumManager::instance();
+//    if (!man->setDatabase("QSQLITE", dbName, QString(), -1, priorityDbPath, firstAlbumPath))
+//        return 1;
 
     DigikamApp *digikam = new DigikamApp();
 

@@ -26,6 +26,8 @@
 
 // Qt includes
 
+#include <QMap>
+#include <QMutex>
 #include <QObject>
 #include <QString>
 #include <QStringList>
@@ -35,12 +37,47 @@
 
 #include "digikam_export.h"
 #include "databaseparameters.h"
+#include "sqlquery.h"
 
 namespace Digikam
 {
 
 class ThumbnailSchemaUpdater;
 class DatabaseCoreBackendPrivate;
+
+class DIGIKAM_EXPORT DatabaseErrorAnswer
+{
+public:
+    virtual ~DatabaseErrorAnswer() {};
+    virtual void connectionErrorContinueQueries() = 0;
+    virtual void connectionErrorAbortQueries() = 0;
+};
+
+class DIGIKAM_EXPORT DatabaseErrorHandler : public QObject
+{
+    Q_OBJECT
+
+public Q_SLOTS:
+
+    /** In the situation of a connection error,
+     *  all threads will be waiting with their queries
+     *  and this method is called.
+     *  This method can display an error dialog and try to repair
+     *  the connection.
+     *  It must then call either connectionErrorContinueQueries()
+     *  or connectionErrorAbortQueries().
+     */
+    virtual void databaseError(DatabaseErrorAnswer *answer, const SqlQuery &query) = 0;
+
+};
+
+class DIGIKAM_EXPORT DatabaseLocking
+{
+public:
+    DatabaseLocking();
+    QMutex mutex;
+    int    lockCount;
+};
 
 class DIGIKAM_EXPORT DatabaseCoreBackend : public QObject
 {
@@ -53,8 +90,8 @@ public:
      *  shall be unique for this backend object.
      *  It will be used to create unique connection names per backend and thread.
      */
-    DatabaseCoreBackend(const QString &backendName);
-    DatabaseCoreBackend(const QString &backendName, DatabaseCoreBackendPrivate &dd);
+    DatabaseCoreBackend(const QString &backendName, DatabaseLocking *locking);
+    DatabaseCoreBackend(const QString &backendName, DatabaseLocking *locking, DatabaseCoreBackendPrivate &dd);
     ~DatabaseCoreBackend();
 
     /**
@@ -80,6 +117,24 @@ public:
      * Shall only be called from the thread that called open().
      */
     void close();
+
+    enum QueryState
+    {
+        /**
+         * No errors occurred while executing the query.
+         */
+        NoErrors,
+
+        /**
+         * An SQLError has occurred while executing the query.
+         */
+        SQLError,
+
+        /**
+         * An connection error has occured while executing the query.
+         */
+        ConnectionError
+    };
 
     enum Status
     {
@@ -112,62 +167,121 @@ public:
     bool isReady() const { return status() == OpenSchemaChecked; }
 
     /**
+     * Add a DatabaseErrorHandler. This object must be created in the main thread.
+     * If a database error occurs, this object can handle problem solving and user interaction.
+     */
+    void setDatabaseErrorHandler(DatabaseErrorHandler *handler);
+
+    enum QueryOperationStatus
+    {
+        ExecuteNormal,
+        Wait,
+        AbortQueries
+    };
+
+    /**
+     * TODO: API docs
+     */
+    databaseAction getDBAction(const QString &actionName);
+    QueryState execDBAction(const databaseAction &action, QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
+    QueryState execDBAction(const databaseAction &action, const QMap<QString, QVariant>& bindingMap,
+                      QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
+    QSqlQuery execDBActionQuery(const databaseAction &action, const QMap<QString, QVariant>& bindingMap);
+
+    /**
      * Executes the SQL statement, and write the returned data into the values list.
      * If you are not interested in the returned data, set values to 0.
      * Methods are provided for up to four bound values (positional binding), or for a list of bound values.
      * If you want the last inserted id (and your query is suitable), sett lastInsertId to the address of a QVariant.
      */
-    bool execSql(const QString& sql, QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
-    bool execSql(const QString& sql, const QVariant& boundValue1,
+    QueryState execSql(const QString& sql, QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
+    QueryState execSql(const QString& sql, const QVariant& boundValue1,
                  QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
-    bool execSql(const QString& sql,
+    QueryState execSql(const QString& sql,
                  const QVariant& boundValue1, const QVariant& boundValue2,
                  QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
-    bool execSql(const QString& sql,
+    QueryState execSql(const QString& sql,
                  const QVariant& boundValue1, const QVariant& boundValue2, const QVariant& boundValue3,
                  QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
-    bool execSql(const QString& sql,
+    QueryState execSql(const QString& sql,
                  const QVariant& boundValue1, const QVariant& boundValue2,
                  const QVariant& boundValue3, const QVariant& boundValue4,
                  QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
-    bool execSql(const QString& sql, const QList<QVariant>& boundValues, QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
+    QueryState execSql(const QString& sql, const QList<QVariant>& boundValues, QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
+
+    QueryState handleQueryResult(SqlQuery &query, QList<QVariant>* values, QVariant *lastInsertId);
+
+    /**
+     * Method which accepts a map for named binding
+     */
+    QueryState execSql(const QString& sql, const QMap<QString, QVariant>& bindingMap,
+                 QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
+    /**
+     * Calls exec on the query, and handles debug output if something went wrong.
+     * The query is not prepared, which can be fail in certain situations
+     * (e.g. trigger statements on QMYSQL).
+     */
+    QueryState execDirectSql(const QString& query);
+
+
 
     /**
      * Executes the statement and returns the query object.
      * Methods are provided for up to four bound values (positional binding), or for a list of bound values.
      */
-    QSqlQuery execQuery(const QString& sql);
-    QSqlQuery execQuery(const QString& sql, const QVariant& boundValue1);
-    QSqlQuery execQuery(const QString& sql,
+    SqlQuery execQuery(const QString& sql);
+    SqlQuery execQuery(const QString& sql, const QVariant& boundValue1);
+    SqlQuery execQuery(const QString& sql,
                         const QVariant& boundValue1, const QVariant& boundValue2);
-    QSqlQuery execQuery(const QString& sql,
+    SqlQuery execQuery(const QString& sql,
                         const QVariant& boundValue1, const QVariant& boundValue2, const QVariant& boundValue3);
-    QSqlQuery execQuery(const QString& sql,
+    SqlQuery execQuery(const QString& sql,
                         const QVariant& boundValue1, const QVariant& boundValue2,
                         const QVariant& boundValue3, const QVariant& boundValue4);
-    QSqlQuery execQuery(const QString& sql, const QList<QVariant>& boundValues);
+    SqlQuery execQuery(const QString& sql, const QList<QVariant>& boundValues);
+
+    /**
+     * Method which accept a hashmap with key, values which are used for named binding
+     */
+    SqlQuery execQuery(const QString& sql, const QMap<QString, QVariant>& bindingMap);
+
 
     /**
      * Calls exec/execBatch on the query, and handles debug output if something went wrong
      */
-    bool exec(QSqlQuery& query);
-    bool execBatch(QSqlQuery& query);
+    bool exec(SqlQuery& query);
+    bool execBatch(SqlQuery& query);
 
     /**
      * Creates a query object prepared with the statement, waiting for bound values
      */
-    QSqlQuery prepareQuery(const QString& sql);
+    SqlQuery prepareQuery(const QString& sql);
+    /**
+     * Creates an empty query object waiting for the statement
+     */
+    SqlQuery getQuery();
+    /**
+     * Creates a faithful copy of the passed query, with the current db connection.
+     */
+    SqlQuery copyQuery(const SqlQuery& old);
 
-    QList<QVariant> readToList(QSqlQuery& query);
+    /**
+     * Called with a failed query. Handles certain known errors and debug output.
+     * If it returns true, reexecute the query; if it returns false, return it as failed.
+     * Pass the number of retries already done for this query to help with some decisions.
+     */
+    bool queryErrorHandling(const SqlQuery& query, int retries);
+
+    QList<QVariant> readToList(SqlQuery& query);
 
     /**
      * Begin a database transaction
      */
-    bool beginTransaction();
+    DatabaseCoreBackend::QueryState beginTransaction();
     /**
      * Commit the current database transaction
      */
-    bool commitTransaction();
+    DatabaseCoreBackend::QueryState commitTransaction();
     /**
      * Rollback the current database transaction
      */
@@ -192,6 +306,13 @@ public:
      * It may be empty.
      */
     QString lastError();
+
+    /**
+     * Returns the last error that occurred on this database.
+     * Use DatabaseAccess::lastError for errors presented to the user.
+     * It may be empty.
+     */
+    QSqlError lastSQLError();
 
 /*
     Qt SQL driver supported features

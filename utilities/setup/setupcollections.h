@@ -52,12 +52,8 @@ public:
 private:
 
     void readSettings();
-    void checkDBPath();
 
 private Q_SLOTS:
-
-    void slotChangeDatabasePath(const KUrl&);
-    void slotDatabasePathEdited(const QString&);
 
 private:
 

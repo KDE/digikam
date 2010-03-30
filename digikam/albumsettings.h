@@ -344,6 +344,34 @@ public:
      */
     StringComparisonType getStringComparisonType() const;
 
+
+    QString getDatabaseType() const;
+    void setDatabaseType(const QString &databaseType);
+
+    QString getDatabaseConnectoptions() const;
+    void setDatabaseConnectoptions(const QString &connectoptions);
+
+    QString getDatabaseName() const;
+    void setDatabaseName(const QString &databaseName);
+
+    QString getDatabaseNameThumbnails() const;
+    void setDatabaseNameThumbnails(const QString &databaseNameThumbnails);
+
+    QString getDatabaseHostName() const;
+    void setDatabaseHostName(const QString &hostName);
+
+    QString getDatabasePassword() const;
+    void setDatabasePassword(const QString &password);
+
+    int getDatabasePort() const;
+    void setDatabasePort(int port);
+
+    QString getDatabaseUserName() const;
+    void setDatabaseUserName(const QString &userName);
+
+    bool getInternalDatabaseServer() const;
+    void setInternalDatabaseServer(const bool useInternalDBServer);
+
 private:
 
     friend class AlbumSettingsCreator;

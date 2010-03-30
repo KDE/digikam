@@ -298,6 +298,7 @@ SET(digikam_SRCS ${libdimgimagewindow_SRCS}
                  ${libfirstrun_SRCS}
                  ${libtemplate_SRCS}
                  ${libadvancedrename_SRCS}
+                 ${libdatabaseui_SRCS}
 
                  main.cpp
     )
@@ -336,7 +337,6 @@ IF(MARBLEWIDGET_FOUND)
 ENDIF(MARBLEWIDGET_FOUND)
 
 INSTALL(TARGETS digikam ${INSTALL_TARGETS_DEFAULT_ARGS})
-
 
 # Others Files to install #######################################################
 

@@ -57,6 +57,7 @@
 #include "imagequerybuilder.h"
 #include "dmetadata.h"
 #include "haariface.h"
+#include "sqlquery.h"
 
 namespace Digikam
 {
@@ -237,29 +238,19 @@ void ImageLister::listAlbum(ImageListerReceiver *receiver,
 void ImageLister::listTag(ImageListerReceiver *receiver, int tagId)
 {
     QList<QVariant> values;
+    QMap<QString, QVariant> parameters;
+    parameters.insert(":tagPID", tagId);
+    parameters.insert(":tagID",  tagId);
 
-    QString query = QString( "SELECT DISTINCT Images.id, Images.name, Images.album, "
-                             "       Albums.albumRoot, "
-                             "       ImageInformation.rating, Images.category, "
-                             "       ImageInformation.format, ImageInformation.creationDate, "
-                             "       Images.modificationDate, Images.fileSize, "
-                             "       ImageInformation.width, ImageInformation.height "
-                             " FROM Images "
-                             "       INNER JOIN ImageInformation ON Images.id=ImageInformation.imageid "
-                             "       INNER JOIN Albums ON Albums.id=Images.album "
-                             " WHERE Images.status=1 AND Images.id IN "
-                             "       (SELECT imageid FROM ImageTags "
-                             "        WHERE tagid=? ");
-
+    DatabaseAccess access;
+    
     if (m_recursive)
     {
-        query += "OR tagid IN (SELECT id FROM TagsTree WHERE pid=?)); ";
-        DatabaseAccess().backend()->execSql( query, tagId, tagId, &values );
+      access.backend()->execDBAction(access.backend()->getDBAction(QString("listTagRecursive")), parameters, &values);
     }
     else
     {
-        query += "); ";
-        DatabaseAccess().backend()->execSql( query, tagId, &values );
+      access.backend()->execDBAction(access.backend()->getDBAction(QString("listTag")), parameters, &values);
     }
 
     QSet<int> albumRoots = albumRootsToList();
@@ -557,7 +548,7 @@ void ImageLister::listFromIdList(ImageListerReceiver *receiver, QList<qlonglong>
         executionSuccess = query.execBatch
         */
         DatabaseAccess access;
-        QSqlQuery query = access.backend()->prepareQuery(QString(
+        SqlQuery query = access.backend()->prepareQuery(QString(
                              "SELECT DISTINCT Images.id, Images.name, Images.album, "
                              "       Albums.albumRoot, "
                              "       ImageInformation.rating, Images.category, "

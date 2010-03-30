@@ -90,6 +90,9 @@ public:
     void enableAlbumBackwardHistory(bool enable);
     void enableAlbumForwardHistory(bool enable);
 
+    void startInternalDatabase();
+    void stopInternalDatabase();
+
     DigikamView *view() const;
     AlbumIconViewFilter *iconViewFilter() const;
 
@@ -186,6 +189,7 @@ private Q_SLOTS:
     void slotConfNotifications();
     void slotToggleFullScreen();
 
+    void slotDatabaseMigration();
     void slotDatabaseRescan();
     void slotRebuildThumbnails();
     void slotWriteMetadataToAllImages();

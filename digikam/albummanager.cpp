@@ -72,6 +72,7 @@ extern "C"
 #include <kio/job.h>
 #include <kdirwatch.h>
 #include <kconfiggroup.h>
+#include <kwindowsystem.h>
 #include <kdebug.h>
 
 // Local includes
@@ -82,6 +83,7 @@ extern "C"
 #include "collectionmanager.h"
 #include "collectionlocation.h"
 #include "databaseaccess.h"
+#include "thumbnaildatabaseaccess.h"
 #include "databaseurl.h"
 #include "databaseparameters.h"
 #include "databasethumbnailinfoprovider.h"
@@ -93,6 +95,8 @@ extern "C"
 #include "thumbnailloadthread.h"
 #include "upgradedb_sqlite2tosqlite3.h"
 #include "config-digikam.h"
+#include "setupcollections.h"
+#include "digikamapp.h"
 
 namespace Digikam
 {
@@ -170,7 +174,11 @@ public:
     bool                        changed;
     bool                        hasPriorizedDbPath;
 
-    QString                     dbPath;
+    QString                     dbType;
+    QString                     dbName;
+    QString                     dbHostName;
+    int                         dbPort;
+    bool                        dbInternalServer;
 
     QList<QDateTime>            dbPathModificationDateList;
     QList<QString>              dirWatchBlackList;
@@ -345,9 +353,13 @@ void AlbumManager::cleanUp()
     d->dirWatch = 0;
 }
 
-bool AlbumManager::databaseEqual(const QString& dbPath) const
+bool AlbumManager::databaseEqual(const QString& dbType, const QString& dbName, const QString& dbHostName, int dbPort, bool dbInternalServer) const
 {
-    return d->dbPath == dbPath;
+    return d->dbType == dbType
+           && d->dbName == dbName
+           && d->dbHostName == dbHostName
+           && d->dbPort == dbPort
+           && d->dbInternalServer == dbInternalServer;
 }
 
 static bool moveToBackup(const QFileInfo& info)
@@ -430,104 +442,127 @@ void AlbumManager::checkDatabaseDirsAfterFirstRun(const QString& dbPath, const Q
     }
 }
 
-void AlbumManager::changeDatabase(const QString& dbPath)
+void AlbumManager::changeDatabase(const QString& dbType, const QString& dbName, const QString& dbThumbnailsName, const QString& dbHostName, int dbPort, const QString &dbUser, const QString &dbPasswd, const QString &dbConnectOptions, bool internalServer)
 {
-    if (d->dbPath == dbPath)
-        return;
-
     // if there is no file at the new place, copy old one
     DatabaseParameters params = DatabaseAccess::parameters();
-    if (params.isSQLite())
-    {
-        QDir oldDir(d->dbPath);
-        QDir newDir(dbPath);
-        QFileInfo oldFile(params.SQLiteDatabaseFile());
-        QFileInfo newFile(newDir, oldFile.fileName());
+
+    // New database type SQLITE
+    if (dbType == "SQLITE"){
+        QDir newDir(dbName);
+        QFileInfo newFile(newDir, QString("digikam4.db"));
+
         if (!newFile.exists())
-        {
-            QFileInfo digikam3DB(newDir, "digikam3.db");
-            QFileInfo digikamVeryOldDB(newDir, "digikam.db");
-
-            if (digikam3DB.exists() || digikamVeryOldDB.exists())
             {
-                KGuiItem copyCurrent(i18n("Copy Current Database"), "edit-copy");
-                KGuiItem startFresh(i18n("Create New Database"), "document-new");
-                KGuiItem upgrade(i18n("Upgrade Database"), "view-refresh");
-                int result = KMessageBox::warningYesNoCancel(0,
-                                    i18n("<p>You have chosen the folder \"%1\" as the new place to store the database. "
-                                         "A database file from an older version of digiKam is found in this folder.</p> "
-                                        "<p>Would you like to upgrade the old database file, start with a new database, "
-                                        "or copy the current database to this location and continue using it?</p> ",
-                                        newDir.path()),
-                                    i18n("New database folder"),
-                                    upgrade, startFresh, copyCurrent);
+                QFileInfo digikam3DB(newDir, "digikam3.db");
+                QFileInfo digikamVeryOldDB(newDir, "digikam.db");
 
-                if (result == KMessageBox::Yes)
+                if (digikam3DB.exists() || digikamVeryOldDB.exists())
                 {
-                    // SchemaUpdater expects Album Path to point to the album root of the 0.9 db file.
-                    // Restore this situation.
-                    KSharedConfigPtr config = KGlobal::config();
-                    KConfigGroup group = config->group("Album Settings");
-                    group.writeEntry("Album Path", newDir.path());
-                    group.sync();
+                    KGuiItem copyCurrent(i18n("Copy Current Database"), "edit-copy");
+                    KGuiItem startFresh(i18n("Create New Database"), "document-new");
+                    KGuiItem upgrade(i18n("Upgrade Database"), "view-refresh");
+                    int result = -1;
+                    if (params.isSQLite())
+                    {
+                        result = KMessageBox::warningYesNoCancel(0,
+                                            i18n("<p>You have chosen the folder \"%1\" as the new place to store the database. "
+                                                 "A database file from an older version of digiKam is found in this folder.</p> "
+                                                "<p>Would you like to upgrade the old database file, start with a new database, "
+                                                "or copy the current database to this location and continue using it?</p> ",
+                                                newDir.path()),
+                                            i18n("New database folder"),
+                                            upgrade, startFresh, copyCurrent);
+                    }else{
+                        result = KMessageBox::warningYesNo(0,
+                                            i18n("<p>You have chosen the folder \"%1\" as the new place to store the database. "
+                                                 "A database file from an older version of digiKam is found in this folder.</p> "
+                                                "<p>Would you like to upgrade the old database file or start with a new database?</p>",
+                                                newDir.path()),
+                                            i18n("New database folder"),
+                                            upgrade, startFresh);
+                    }
+
+                    if (result == KMessageBox::Yes)
+                    {
+                        // SchemaUpdater expects Album Path to point to the album root of the 0.9 db file.
+                        // Restore this situation.
+                        KSharedConfigPtr config = KGlobal::config();
+                        KConfigGroup group = config->group("Album Settings");
+                        group.writeEntry("Album Path", newDir.path());
+                        group.sync();
+                    }
+                    else if (result == KMessageBox::No)
+                    {
+                        moveToBackup(digikam3DB);
+                        moveToBackup(digikamVeryOldDB);
+                    }
+                    else if (result == KMessageBox::Cancel)
+                    {
+                        QDir oldDir(d->dbName);
+                        QFileInfo oldFile(params.SQLiteDatabaseFile());
+                        copyToNewLocation(oldFile, newFile, i18n("Failed to copy the old database file (\"%1\") "
+                                                                 "to its new location (\"%2\"). "
+                                                                 "Trying to upgrade old databases.",
+                                                                 oldFile.filePath(), newFile.filePath()));
+                    }
                 }
-                else if (result == KMessageBox::No)
+                else
                 {
-                    moveToBackup(digikam3DB);
-                    moveToBackup(digikamVeryOldDB);
-                }
-                else if (result == KMessageBox::Cancel)
-                {
-                    copyToNewLocation(oldFile, newFile, i18n("Failed to copy the old database file (\"%1\") "
-                                                             "to its new location (\"%2\"). "
-                                                             "Trying to upgrade old databases.",
-                                                             oldFile.filePath(), newFile.filePath()));
+                    int result = KMessageBox::Yes;
+                    if (params.isSQLite())
+                    {
+                    KGuiItem copyCurrent(i18n("Copy Current Database"), "edit-copy");
+                    KGuiItem startFresh(i18n("Create New Database"), "document-new");
+                        result = KMessageBox::warningYesNo(0,
+                                            i18n("<p>You have chosen the folder \"%1\" as the new place to store the database.</p>"
+                                                "<p>Would you like to copy the current database to this location "
+                                                "and continue using it, or start with a new database?</p> ",
+                                                newDir.path()),
+                                            i18n("New database folder"),
+                                            startFresh, copyCurrent);
+                    }
+
+                    if (result == KMessageBox::No)
+                    {
+                        QDir oldDir(d->dbName);
+                        QFileInfo oldFile(params.SQLiteDatabaseFile());
+                        copyToNewLocation(oldFile, newFile);
+                    }
                 }
             }
             else
             {
-
-                KGuiItem copyCurrent(i18n("Copy Current Database"), "edit-copy");
-                KGuiItem startFresh(i18n("Create New Database"), "document-new");
-                int result = KMessageBox::warningYesNo(0,
-                                    i18n("<p>You have chosen the folder \"%1\" as the new place to store the database.</p>"
-                                        "<p>Would you like to copy the current database to this location "
-                                        "and continue using it, or start with a new database?</p> ",
-                                        newDir.path()),
-                                    i18n("New database folder"),
-                                    startFresh, copyCurrent);
-
-                if (result == KMessageBox::No)
+                int result = KMessageBox::No;
+                if (params.isSQLite())
                 {
-                    copyToNewLocation(oldFile, newFile);
+                    KGuiItem replaceItem(i18n("Copy Current Database"), "edit-copy");
+                    KGuiItem useExistingItem(i18n("Use Existing File"), "document-open");
+                    result = KMessageBox::warningYesNo(0,
+                                        i18n("<p>You have chosen the folder \"%1\" as the new place to store the database. "
+                                             "There is already a database file in this location.</p> "
+                                             "<p>Would you like to use this existing file as the new database, or remove it "
+                                             "and copy the current database to this place?</p> ",
+                                              newDir.path()),
+                                        i18n("New database folder"),
+                                        replaceItem, useExistingItem);
+                }
+                if (result == KMessageBox::Yes)
+                {
+                    // first backup
+                    if (moveToBackup(newFile))
+                    {
+                        QDir oldDir(d->dbName);
+                        QFileInfo oldFile(params.SQLiteDatabaseFile());
+
+                        // then copy
+                       copyToNewLocation(oldFile, newFile);
+                    }
                 }
             }
-        }
-        else
-        {
-            KGuiItem replaceItem(i18n("Copy Current Database"), "edit-copy");
-            KGuiItem useExistingItem(i18n("Use Existing File"), "document-open");
-            int result = KMessageBox::warningYesNo(0,
-                                i18n("<p>You have chosen the folder \"%1\" as the new place to store the database. "
-                                     "There is already a database file in this location.</p> "
-                                     "<p>Would you like to use this existing file as the new database, or remove it "
-                                     "and copy the current database to this place?</p> ",
-                                      newDir.path()),
-                                i18n("New database folder"),
-                                replaceItem, useExistingItem);
-            if (result == KMessageBox::Yes)
-            {
-                // first backup
-                if (moveToBackup(newFile))
-                {
-                    // then copy
-                   copyToNewLocation(oldFile, newFile);
-                }
-            }
-        }
     }
 
-    if (setDatabase(dbPath, false))
+    if (setDatabase(dbType, dbName, dbThumbnailsName, dbHostName, dbPort, dbUser, dbPasswd, dbConnectOptions, internalServer, false))
     {
         QApplication::setOverrideCursor(Qt::WaitCursor);
         startScan();
@@ -536,32 +571,42 @@ void AlbumManager::changeDatabase(const QString& dbPath)
     }
 }
 
-bool AlbumManager::setDatabase(const QString& dbPath, bool priority, const QString& suggestedAlbumRoot)
+bool AlbumManager::setDatabase(const QString dbType, const QString dbName, const QString dbThumbnailsName, const QString dbHostName, int dbPort, const QString dbUser, const QString dbPasswd, const QString dbConnectOptions, bool internalServer, bool priority, const QString suggestedAlbumRoot)
 {
-    if (dbPath.isEmpty())
-        return false;
+    // ensure, embedded database is loaded
+    if (internalServer)
+    {
+        DigikamApp::instance()->startInternalDatabase();
+    }else
+    {
+        DigikamApp::instance()->stopInternalDatabase();
+    }
 
     // This is to ensure that the setup does not overrule the command line.
     // Replace with a better solution?
+    /*
     if (priority)
     {
         d->hasPriorizedDbPath = true;
     }
-    else if (d->hasPriorizedDbPath && !d->dbPath.isNull())
+    else if (d->hasPriorizedDbPath && !d->dbName.isNull())
     {
         // ignore change without priority
         // true means, don't exit()
         return true;
     }
-
-    if (d->dbPath == dbPath)
-        return true;
+    */
 
     // shutdown possibly running collection scans. Must call resumeCollectionScan further down.
     ScanController::instance()->cancelAllAndSuspendCollectionScan();
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
-    d->dbPath  = dbPath;
+    d->dbType     = dbType;
+    d->dbName     = dbName;
+    d->dbHostName = dbHostName;
+    d->dbPort     = dbPort;
+    d->dbInternalServer = internalServer;
+
     d->changed = true;
 
     disconnect(CollectionManager::instance(), 0, this, 0);
@@ -615,8 +660,52 @@ bool AlbumManager::setDatabase(const QString& dbPath, bool priority, const QStri
 
     // -- Database initialization -------------------------------------------------
 
-    DatabaseAccess::setParameters(DatabaseParameters::parametersForSQLiteDefaultFile(d->dbPath),
-                                  DatabaseAccess::MainApplication);
+    QString databaseName = dbName;
+    QString thumbnailDatabaseName = dbThumbnailsName;
+
+    // SQLite specifics
+    if (AlbumSettings::instance()->getDatabaseType().isEmpty())
+        AlbumSettings::instance()->setDatabaseType("QSQLITE");
+
+    if (AlbumSettings::instance()->getDatabaseType() == "QSQLITE")
+    {
+        if (AlbumSettings::instance()->getDatabaseName().isEmpty())
+            databaseName = dbName;
+        QString databasePath = databaseName;
+        databaseName = QDir::cleanPath(databasePath + '/' + "digikam4.db");
+        thumbnailDatabaseName = QDir::cleanPath(databasePath + '/' + "thumbnails-digikam.db");
+    }
+    kDebug(50003) << "Using database settings: DBType ["<< dbType <<"] DBName ["<< dbName <<"] DBThumbnailsName ["<< dbThumbnailsName <<"] DBHostName ["<< dbHostName <<"] DBPort ["<< dbPort <<"] DBUser ["<< dbUser <<"] DBConnectOptions ["<< dbConnectOptions <<"]";
+    DatabaseAccess::setParameters(DatabaseParameters::parametersFromConfig(dbType,
+                                                                           databaseName,
+                                                                           dbHostName,
+                                                                           dbPort,
+                                                                           dbUser,
+                                                                           dbPasswd,
+                                                                           dbConnectOptions),
+                                                                           DatabaseAccess::MainApplication);
+
+    DatabaseGUIErrorHandler *handler = new DatabaseGUIErrorHandler(DatabaseAccess::parameters());
+    DatabaseAccess::initDatabaseErrorHandler(handler);
+
+    if (!handler->checkDatabaseConnection())
+    {
+        KMessageBox::error(0, i18n("<p>Failed to open the database. "
+                                               "</p><p>You cannot use digiKam without a working database. "
+                                               "digiKam will attempt to start now, but it will <b>not</b> be functional. "
+                                               "Please check the database settings in the <b>configuration menu</b>.</p>"
+                                               ));
+
+        DatabaseAccess::setParameters(DatabaseParameters::parametersFromConfig( "",
+                                                                                "",
+                                                                                "",
+                                                                                -1,
+                                                                                "",
+                                                                                "",
+                                                                                ""),
+                                                                                DatabaseAccess::DatabaseSlave);
+        return true;
+    }
 
     // still suspended from above
     ScanController::instance()->resumeCollectionScan();
@@ -655,6 +744,40 @@ bool AlbumManager::setDatabase(const QString& dbPath, bool priority, const QStri
             return false;
     }
 
+    /*
+    bool abort=false;
+    do
+    {
+        if (advice==ScanController::ContinueWithoutDatabase)
+        {
+            QApplication::restoreOverrideCursor();
+            int result = KMessageBox::warningYesNoCancel(0, i18n("Error while opening the database."
+                                                                "<p>Error was: %1</p>",
+                                                                DatabaseAccess().lastError()),
+                                                            i18n("Database Connection Error"),
+                                                        KGuiItem(i18n("Retry")),
+                                                        KGuiItem(i18n("DB Setup")),
+                                                        KGuiItem(i18n("Abort")));
+
+            if (result == KMessageBox::Cancel)
+            {
+                advice = ScanController::AbortImmediately;
+            }else if (result == KMessageBox::No)
+            {
+                if ( Setup::execSinglePage(0, Setup::DatabasePage) == false)
+                {
+                    abort=true;
+                }
+            }
+            QApplication::setOverrideCursor(Qt::WaitCursor);
+        }
+        else
+        {
+            // In this case the user can't do anything and we must abort
+            abort=true;
+        }
+    } while(abort==false && advice==ScanController::ContinueWithoutDatabase);
+    */
     // -- Locale Checking ---------------------------------------------------------
 
     QString currLocale(QTextCodec::codecForLocale()->name());
@@ -849,10 +972,22 @@ bool AlbumManager::setDatabase(const QString& dbPath, bool priority, const QStri
 #ifdef USE_THUMBS_DB
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
-    // Initialize thumbnail database
-    QFileInfo thumbFile(d->dbPath, "thumbnails-digikam.db");
-    ThumbnailLoadThread::initializeThumbnailDatabase(thumbFile.filePath(), new DatabaseThumbnailInfoProvider());
-    d->dirWatchBlackList << "thumbnails-digikam.db" << "thumbnails-digikam.db-journal";
+    if (dbType=="QSQLITE")
+    {
+        d->dirWatchBlackList << "thumbnails-digikam.db" << "thumbnails-digikam.db-journal";
+    }
+
+    ThumbnailLoadThread::initializeThumbnailDatabase(dbType,
+            thumbnailDatabaseName,
+            dbHostName,
+            dbPort,
+            dbUser,
+            dbPasswd,
+            dbConnectOptions,
+            new DatabaseThumbnailInfoProvider());
+
+    DatabaseGUIErrorHandler *thumbnailsDBHandler = new DatabaseGUIErrorHandler(ThumbnailDatabaseAccess::parameters());
+    ThumbnailDatabaseAccess::initDatabaseErrorHandler(thumbnailsDBHandler);
 
     QApplication::restoreOverrideCursor();
 #endif

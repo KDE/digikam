@@ -44,7 +44,7 @@ Q_OBJECT
 
 public:
 
-    DatabaseBackend();
+    DatabaseBackend(DatabaseLocking *locking, const QString &backendName="digikamDatabase-");
     ~DatabaseBackend();
 
     /** Sets the global database watch */

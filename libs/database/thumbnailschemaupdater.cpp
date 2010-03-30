@@ -66,7 +66,8 @@ bool ThumbnailSchemaUpdater::update()
 {
     bool success = startUpdates();
     // even on failure, try to set current version - it may have incremented
-    m_access->db()->setSetting("DBVersion",QString::number(m_currentVersion));
+    if (m_currentVersion)
+        m_access->db()->setSetting("DBThumbnailsVersion", QString::number(m_currentVersion));
     return success;
 }
 
@@ -83,18 +84,24 @@ bool ThumbnailSchemaUpdater::startUpdates()
     if (tables.contains("Thumbnails"))
     {
         // Find out schema version of db file
-        QString version = m_access->db()->getSetting("DBVersion");
-        QString versionRequired = m_access->db()->getSetting("DBVersionRequired");
-        //kDebug() << "Have a database structure version " << version;
+        QString version = m_access->db()->getSetting("DBThumbnailsVersion");
+        QString versionRequired = m_access->db()->getSetting("DBThumbnailsVersionRequired");
+        kDebug(50003) << "Have a database structure version " << version;
 
-        // We absolutely require the DBVersion setting
+        // mini schema update
+        if (version.isEmpty() && m_access->parameters().isSQLite())
+        {
+            version = m_access->db()->getSetting("DBVersion");
+        }
+
+        // We absolutely require the DBThumbnailsVersion setting
         if (version.isEmpty())
         {
             // Something is damaged. Give up.
-            kError() << "DBVersion not available! Giving up schema upgrading.";
+            kError(50003) << "DBThumbnailsVersion not available! Giving up schema upgrading.";
             QString errorMsg = i18n(
                     "The database is not valid: "
-                    "the \"DBVersion\" setting does not exist. "
+                    "the \"DBThumbnailsVersion\" setting does not exist. "
                     "The current database schema version cannot be verified. "
                     "Try to start with an empty database. "
                                    );
@@ -141,7 +148,7 @@ bool ThumbnailSchemaUpdater::startUpdates()
     }
     else
     {
-        //kDebug() << "No database file available";
+        //kDebug(50003) << "No database file available";
         DatabaseParameters parameters = m_access->parameters();
         // No legacy handling: start with a fresh db
         if (!createDatabase())
@@ -186,6 +193,8 @@ bool ThumbnailSchemaUpdater::createDatabase()
 
 bool ThumbnailSchemaUpdater::createTablesV1()
 {
+    m_access->backend()->execDBAction(m_access->backend()->getDBAction(QString("CreateThumbnailsDB")));
+    /*
     if (!m_access->backend()->execSql(
                     QString("CREATE TABLE Thumbnails "
                             "(id INTEGER PRIMARY KEY, "
@@ -223,24 +232,31 @@ bool ThumbnailSchemaUpdater::createTablesV1()
     {
         return false;
     }
+    */
 
     return true;
 }
 
 bool ThumbnailSchemaUpdater::createIndicesV1()
 {
+    m_access->backend()->execDBAction(m_access->backend()->getDBAction(QString("CreateIndex_1")));
+    m_access->backend()->execDBAction(m_access->backend()->getDBAction(QString("CreateIndex_2")));
+    /*
     m_access->backend()->execSql("CREATE INDEX id_uniqueHashes ON UniqueHashes (thumbId);");
-    m_access->backend()->execSql("CREATE INDEX id_filePaths ON FilePaths (thumbId);");
+    m_access->backend()->execSql("CREATE INDEX id_filePaths ON FilePaths (thumbId);"); */
     return true;
 }
 
 bool ThumbnailSchemaUpdater::createTriggersV1()
 {
+    m_access->backend()->execDBAction(m_access->backend()->getDBAction(QString("CreateTrigger_1")));
+    /*
     m_access->backend()->execSql("CREATE TRIGGER delete_thumbnails DELETE ON Thumbnails "
                                  "BEGIN "
                                  " DELETE FROM UniqueHashes WHERE UniqueHashes.thumbId = OLD.id; "
                                  " DELETE FROM FilePaths WHERE FilePaths.thumbId = OLD.id; "
                                  "END;");
+                                 */
     return true;
 }
 

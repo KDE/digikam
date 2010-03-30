@@ -28,22 +28,30 @@
 
 #include <QString>
 
+// Local includes
+#include "albumdb.h"
+#include "databaseaccess.h"
+#include "databasebackend.h"
+#include "databaseparameters.h"
+
 namespace Digikam
 {
 
 class DatabaseAccess;
 class InitializationObserver;
 
-class SchemaUpdater
+class DIGIKAM_DATABASE_EXPORT SchemaUpdater
 {
 public:
 
-    SchemaUpdater(DatabaseAccess *access);
+    SchemaUpdater(AlbumDB *albumDB, DatabaseBackend *backend, DatabaseParameters parameters);
 
     static int schemaVersion();
     static int filterSettingsVersion();
     bool update();
     void setObserver(InitializationObserver *observer);
+    const QString getLastErrorMessage();
+    void setDatabaseAccess(DatabaseAccess *access);
 
 private:
 
@@ -77,8 +85,14 @@ private:
 
     int                     m_currentVersion;
 
-    DatabaseAccess         *m_access;
+    DatabaseBackend         *m_Backend;
+    AlbumDB                 *m_AlbumDB;
+    DatabaseParameters      m_Parameters;
 
+    // legacy
+    DatabaseAccess          *m_access;
+
+    QString                 m_LastErrorMessage;
     InitializationObserver *m_observer;
 };
 

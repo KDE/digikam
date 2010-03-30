@@ -43,6 +43,7 @@ extern "C"
 #include <QFile>
 #include <QFileInfo>
 #include <QDir>
+#include <QVariant>
 
 // KDE includes
 
@@ -127,6 +128,12 @@ void AlbumDB::deleteAlbumRoot(int rootId)
 {
     d->db->execSql( QString("DELETE FROM AlbumRoots WHERE id=?;"),
                     rootId );
+    QMap<QString, QVariant> parameters;
+    parameters.insert(":albumRoot", rootId);
+    if (DatabaseCoreBackend::NoErrors!=d->db->execDBAction(d->db->getDBAction(QString("deleteAlbumRoot")), parameters))
+    {
+       return;
+    }
     d->db->recordChangeset(AlbumRootChangeset(rootId, AlbumRootChangeset::Deleted));
 }
 
@@ -424,8 +431,12 @@ bool AlbumDB::getAlbumIcon(int albumID, int *albumRootId, QString *iconRelativeP
 
 void AlbumDB::deleteAlbum(int albumID)
 {
-    d->db->execSql( QString("DELETE FROM Albums WHERE id=?;"),
-                    albumID );
+    QMap<QString, QVariant> parameters;
+    parameters.insert(":albumId", albumID);
+    if (DatabaseCoreBackend::NoErrors!=d->db->execDBAction(d->db->getDBAction(QString("deleteAlbumID")), parameters))
+    {
+       return;
+    }
     d->db->recordChangeset(AlbumChangeset(albumID, AlbumChangeset::Deleted));
 }
 
@@ -446,8 +457,13 @@ void AlbumDB::makeStaleAlbum(int albumID)
     QString newRelativePath = values[0].toString() + '-' + values[1].toString();
 
     // delete older stale albums
-    d->db->execSql( QString("DELETE FROM Albums WHERE albumRoot=0 AND relativePath=?;"),
-                    newRelativePath );
+    QMap<QString, QVariant> parameters;
+    parameters.insert(":albumRoot", 0);
+    parameters.insert(":relativePath", newRelativePath);
+    if (DatabaseCoreBackend::NoErrors!=d->db->execDBAction(d->db->getDBAction(QString("deleteAlbumRootPath")), parameters))
+    {
+       return;
+    }
 
     // now do our update
     d->db->execSql( QString("UPDATE Albums SET albumRoot=0, relativePath=? WHERE id=?;"),
@@ -459,7 +475,12 @@ void AlbumDB::makeStaleAlbum(int albumID)
 
 void AlbumDB::deleteStaleAlbums()
 {
-    d->db->execSql( QString("DELETE FROM Albums WHERE albumRoot=0;") );
+    QMap<QString, QVariant> parameters;
+    parameters.insert(":albumRoot", 0);
+    if (DatabaseCoreBackend::NoErrors!=d->db->execDBAction(d->db->getDBAction(QString("deleteAlbumRoot")), parameters))
+    {
+       return;
+    }
     // deliberately no changeset here, is done above
 }
 
@@ -467,13 +488,12 @@ int AlbumDB::addTag(int parentTagID, const QString& name, const QString& iconKDE
                     qlonglong iconID)
 {
     QVariant id;
-    if (!d->db->execSql( QString("INSERT INTO Tags (pid, name) "
-                                 "VALUES( ?, ?);"),
-                         parentTagID,
-                         name,
-                         0, &id) )
+    QMap<QString, QVariant> parameters;
+    parameters.insert(":tagPID", parentTagID);
+    parameters.insert(":tagname", name);
+    if (DatabaseCoreBackend::NoErrors!=d->db->execDBAction(d->db->getDBAction(QString("InsertTag")), parameters, 0 , &id))
     {
-        return -1;
+       return -1;
     }
 
     if (!iconKDE.isEmpty())
@@ -495,8 +515,14 @@ int AlbumDB::addTag(int parentTagID, const QString& name, const QString& iconKDE
 
 void AlbumDB::deleteTag(int tagID)
 {
-    d->db->execSql( QString("DELETE FROM Tags WHERE id=?;"),
-                    tagID );
+    /*
+    QString("DELETE FROM Tags WHERE id=?;"),
+                    tagID */
+
+    QMap<QString, QVariant> bindingMap;
+    bindingMap.insert(QString(":tagID"), tagID);
+
+    d->db->execDBAction(d->db->getDBAction("DeleteTag"), bindingMap );
     d->db->recordChangeset(TagChangeset(tagID, TagChangeset::Deleted));
 }
 
@@ -1886,7 +1912,7 @@ void AlbumDB::addItemTag(int albumID, const QString& name, int tagID)
 
 void AlbumDB::addTagsToItems(QList<qlonglong> imageIDs, QList<int> tagIDs)
 {
-    QSqlQuery query = d->db->prepareQuery("REPLACE INTO ImageTags (imageid, tagid) VALUES(?, ?);");
+    SqlQuery query = d->db->prepareQuery("REPLACE INTO ImageTags (imageid, tagid) VALUES(?, ?);");
 
     QVariantList images;
     QVariantList tags;
@@ -1932,7 +1958,7 @@ void AlbumDB::removeItemAllTags(qlonglong imageID, QList<int> currentTagIds)
 
 void AlbumDB::removeTagsFromItems(QList<qlonglong> imageIDs, QList<int> tagIDs)
 {
-    QSqlQuery query = d->db->prepareQuery("DELETE FROM ImageTags WHERE imageID=? AND tagid=?;");
+    SqlQuery query = d->db->prepareQuery("DELETE FROM ImageTags WHERE imageID=? AND tagid=?;");
 
     QVariantList images;
     QVariantList tags;
@@ -2114,7 +2140,7 @@ QMap<QString,int> AlbumDB::getImageFormatStatistics()
 {
     QMap<QString, int>  map;
 
-    QSqlQuery query;
+    SqlQuery query;
     query = d->db->prepareQuery("SELECT COUNT(*), II.format "
                                 "FROM ImageInformation AS II "
                                 "   INNER JOIN Images ON II.imageid=images.id "
@@ -2537,46 +2563,30 @@ QStringList AlbumDB::getItemURLsInAlbum(int albumID, ItemSortOrder sortOrder)
     if (albumRootPath.isNull())
         return QStringList();
 
-    QString sqlString;
+    QMap<QString, QVariant> bindingMap;
+    bindingMap.insert(QString(":albumID"), albumID);
+
     switch(sortOrder)
     {
         case ByItemName:
-            sqlString = QString("SELECT Albums.relativePath, Images.name "
-                                 "FROM Images INNER JOIN Albums ON Albums.id=Images.album "
-                                 "WHERE Albums.id=? "
-                                 "ORDER BY Images.name COLLATE NOCASE;");
+            d->db->execDBAction(d->db->getDBAction(QString("getItemURLsInAlbumByItemName")), bindingMap, &values);
             break;
         case ByItemPath:
             // Don't collate on the path - this is to maintain the same behavior
             // that happens when sort order is "By Path"
-            sqlString = QString("SELECT Albums.relativePath, Images.name "
-                                 "FROM Images INNER JOIN Albums ON Albums.id=Images.album "
-                                 "WHERE Albums.id=? "
-                                 "ORDER BY Albums.relativePath,Images.name;");
+            d->db->execDBAction(d->db->getDBAction(QString("getItemURLsInAlbumByItemPath")), bindingMap, &values);
             break;
         case ByItemDate:
-            sqlString = QString("SELECT Albums.relativePath, Images.name "
-                                 "FROM Images INNER JOIN Albums ON Albums.id=Images.album "
-                                 "            INNER JOIN ImageInformation ON ImageInformation.imageid=Images.id "
-                                 "WHERE Albums.id=? "
-                                 "ORDER BY ImageInformation.creationDate;");
+            d->db->execDBAction(d->db->getDBAction(QString("getItemURLsInAlbumByItemDate")), bindingMap, &values);
             break;
         case ByItemRating:
-            sqlString = QString("SELECT Albums.relativePath, Images.name "
-                                 "FROM Images INNER JOIN Albums ON Albums.id=Images.album "
-                                 "            INNER JOIN ImageInformation ON ImageInformation.imageid=Images.id "
-                                 "WHERE Albums.id=? "
-                                 "ORDER BY ImageInformation.rating DESC;");
+            d->db->execDBAction(d->db->getDBAction(QString("getItemURLsInAlbumByItemRating")), bindingMap, &values);
             break;
         case NoItemSorting:
         default:
-            sqlString = QString("SELECT Albums.relativePath, Images.name "
-                                 "FROM Images INNER JOIN Albums ON Albums.id=Images.album "
-                                 "WHERE Albums.id=?;");
+            d->db->execDBAction(d->db->getDBAction(QString("getItemURLsInAlbumNoItemSorting")), bindingMap, &values);
             break;
     }
-    // all statements take one bound value
-    d->db->execSql(sqlString, albumID, &values);
 
     QStringList urls;
     QString relativePath, name;
@@ -2728,24 +2738,18 @@ QStringList AlbumDB::getItemURLsInTag(int tagID, bool recursive)
     QList<QVariant> values;
 
     QString imagesIdClause;
-    QList<QVariant> boundValues;
+    
+    QMap<QString, QVariant> bindingMap;
+    bindingMap.insert(QString(":tagID"), tagID);
+      
     if (recursive)
     {
-        imagesIdClause = QString("SELECT imageid FROM ImageTags "
-                                 " WHERE tagid=? "
-                                 " OR tagid IN (SELECT id FROM TagsTree WHERE pid=?)");
-        boundValues << tagID << tagID;
+      d->db->execDBAction(d->db->getDBAction(QString("GetItemURLsInTagRecursive")), bindingMap, &values);
     }
     else
     {
-        imagesIdClause = QString("SELECT imageid FROM ImageTags WHERE tagid=?");
-        boundValues << tagID;
+      d->db->execDBAction(d->db->getDBAction(QString("GetItemURLsInTag")), bindingMap, &values);
     }
-
-    d->db->execSql( QString("SELECT Albums.albumRoot, Albums.relativePath, Images.name "
-                            "FROM Images JOIN Albums ON Albums.id=Images.album "
-                            "WHERE Images.status=1 AND Images.id IN (%1);")
-                    .arg(imagesIdClause), boundValues, &values );
 
     QStringList urls;
     QString albumRootPath, relativePath, name;
@@ -2771,16 +2775,14 @@ QList<qlonglong> AlbumDB::getItemIDsInTag(int tagID, bool recursive)
     QList<qlonglong> itemIDs;
     QList<QVariant> values;
 
+    QMap<QString, QVariant> parameters;
+    parameters.insert(":tagPID", tagID);
+    parameters.insert(":tagID",  tagID);
+
     if (recursive)
-        d->db->execSql( QString("SELECT imageid FROM ImageTags JOIN Images ON ImageTags.imageid=Images.id "
-                                " WHERE Images.status=1 AND "
-                                " ( tagid=? "
-                                "   OR tagid IN (SELECT id FROM TagsTree WHERE pid=?) );"),
-                        tagID, tagID, &values );
+	d->db->execDBAction(d->db->getDBAction(QString("getItemIDsInTagRecursive")), parameters, &values);
     else
-        d->db->execSql( QString("SELECT imageid FROM ImageTags JOIN Images ON ImageTags.imageid=Images.id "
-                                " WHERE Images.status=1 AND tagid=?;"),
-                 tagID, &values );
+        d->db->execDBAction(d->db->getDBAction(QString("getItemIDsInTag")), parameters, &values);
 
     for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd(); ++it)
     {
@@ -2909,7 +2911,7 @@ void AlbumDB::removeItemsFromAlbum(int albumID)
 
 void AlbumDB::removeItems(QList<qlonglong> itemIDs, QList<int> albumIDs)
 {
-    QSqlQuery query = d->db->prepareQuery( QString("UPDATE Images SET status=?, album=NULL WHERE id=?;") );
+    SqlQuery query = d->db->prepareQuery( QString("UPDATE Images SET status=?, album=NULL WHERE id=?;") );
 
     QVariantList imageIds;
     QVariantList status;
@@ -2936,7 +2938,7 @@ void AlbumDB::deleteRemovedItems()
 
 void AlbumDB::deleteRemovedItems(QList<int> albumIds)
 {
-    QSqlQuery query = d->db->prepareQuery( QString("DELETE FROM Images WHERE status=? AND album=?;") );
+    SqlQuery query = d->db->prepareQuery( QString("DELETE FROM Images WHERE status=? AND album=?;") );
 
     QVariantList albumBindIds;
     QVariantList status;
@@ -2962,8 +2964,13 @@ void AlbumDB::renameAlbum(int albumID, int newAlbumRoot, const QString& newRelat
         return;
 
     // first delete any stale albums left behind
-    d->db->execSql( QString("DELETE FROM Albums WHERE relativePath=? AND albumRoot=?;"),
-                    newRelativePath, albumRoot );
+    QMap<QString, QVariant> parameters;
+    parameters.insert(":albumRoot", albumRoot);
+    parameters.insert(":relativePath", newRelativePath);
+    if (DatabaseCoreBackend::NoErrors!=d->db->execDBAction(d->db->getDBAction(QString("deleteAlbumRootPath")), parameters))
+    {
+       return;
+    }
 
     // now update the album
     d->db->execSql( QString("UPDATE Albums SET albumRoot=?, relativePath=? WHERE id=? AND albumRoot=?;"),

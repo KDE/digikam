@@ -46,6 +46,7 @@
 #include "databasefields.h"
 #include "databaseaccess.h"
 #include "digikam_export.h"
+#include "sqlquery.h"
 
 namespace Digikam
 {
@@ -1113,7 +1114,7 @@ public:
     static QStringList imageCommentsFieldList(DatabaseFields::ImageComments fields);
     static void addBoundValuePlaceholders(QString& query, int count);
 
-private:
+public:
 
     friend class Digikam::DatabaseAccess;
 

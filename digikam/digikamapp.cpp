@@ -67,6 +67,7 @@
 #include <kstandardaction.h>
 #include <kstandarddirs.h>
 #include <kstandardshortcut.h>
+#include <migrationdlg.h>
 #include <ktip.h>
 #include <ktoggleaction.h>
 #include <ktogglefullscreenaction.h>
@@ -135,6 +136,8 @@
 #include "dmetadata.h"
 #include "uifilevalidator.h"
 
+#include "databaseserverstarter.h"
+
 using KIO::Job;
 using KIO::UDSEntryList;
 using KIO::UDSEntry;
@@ -182,6 +185,14 @@ DigikamApp::DigikamApp()
     if(d->splashScreen)
         d->splashScreen->message(i18n("Scan Albums"));
 
+    new DigikamAdaptor(this);
+    QDBusConnection::sessionBus().registerObject("/Digikam", this);
+    QDBusConnection::sessionBus().registerService("org.kde.digikam-"
+                            + QString::number(QCoreApplication::instance()->applicationPid()));
+
+
+    AlbumManager::instance()->setDatabase(AlbumSettings::instance()->getDatabaseType(), AlbumSettings::instance()->getDatabaseName(), AlbumSettings::instance()->getDatabaseNameThumbnails(), AlbumSettings::instance()->getDatabaseHostName(), AlbumSettings::instance()->getDatabasePort(), AlbumSettings::instance()->getDatabaseUserName(), AlbumSettings::instance()->getDatabasePassword(), AlbumSettings::instance()->getDatabaseConnectoptions(), AlbumSettings::instance()->getInternalDatabaseServer(), true);
+
     // collection scan
     if (d->config->group("General Settings").readEntry("Scan At Start", true) ||
         !CollectionScanner::databaseInitialScanDone())
@@ -191,11 +202,6 @@ DigikamApp::DigikamApp()
 
     if(d->splashScreen)
         d->splashScreen->message(i18n("Initializing..."));
-
-    new DigikamAdaptor(this);
-    QDBusConnection::sessionBus().registerObject("/Digikam", this);
-    QDBusConnection::sessionBus().registerService("org.kde.digikam-"
-                            + QString::number(QCoreApplication::instance()->applicationPid()));
 
     // ensure creation
     AlbumSettings::instance();
@@ -305,12 +311,31 @@ DigikamApp::~DigikamApp()
     ThumbnailLoadThread::cleanUp();
     AlbumThumbnailLoader::instance()->cleanUp();
     LoadingCacheInterface::cleanUp();
+
+    // close database server
+    if (AlbumSettings::instance()->getInternalDatabaseServer())
+    {
+        stopInternalDatabase();
+    }
+
     m_instance = 0;
 
     delete d->modelCollection;
 
     delete d;
 }
+
+
+void DigikamApp::startInternalDatabase()
+{
+    DatabaseServerStarter::startServerManagerProcess();
+}
+
+void DigikamApp::stopInternalDatabase()
+{
+
+}
+
 
 DigikamApp* DigikamApp::instance()
 {
@@ -1173,6 +1198,12 @@ void DigikamApp::setupActions()
     bqmAction->setShortcut(KShortcut(Qt::Key_B));
     connect(bqmAction, SIGNAL(triggered()), d->view, SLOT(slotQueueMgr()));
     actionCollection()->addAction("queue_manager", bqmAction);
+
+    // -----------------------------------------------------------
+
+    KAction *databaseMigrationAction = new KAction(KIcon("view-refresh"), i18n("Database Migration"), this);
+    connect(databaseMigrationAction, SIGNAL(triggered()), this, SLOT(slotDatabaseMigration()));
+    actionCollection()->addAction("database_migration", databaseMigrationAction);
 
     // -----------------------------------------------------------
 
@@ -2138,9 +2169,9 @@ void DigikamApp::slotSetupChanged()
     //if(AlbumSettings::instance()->getAlbumLibraryPath() != AlbumManager::instance()->getLibraryPath())
       //  d->view->clearHistory();
 
-    if (!AlbumManager::instance()->databaseEqual(AlbumSettings::instance()->getDatabaseFilePath()))
+    if (!AlbumManager::instance()->databaseEqual(AlbumSettings::instance()->getDatabaseType(), AlbumSettings::instance()->getDatabaseName(), AlbumSettings::instance()->getDatabaseHostName(), AlbumSettings::instance()->getDatabasePort(), AlbumSettings::instance()->getInternalDatabaseServer()))
     {
-        AlbumManager::instance()->changeDatabase(AlbumSettings::instance()->getDatabaseFilePath());
+        AlbumManager::instance()->changeDatabase(AlbumSettings::instance()->getDatabaseType(), AlbumSettings::instance()->getDatabaseName(),  AlbumSettings::instance()->getDatabaseNameThumbnails(), AlbumSettings::instance()->getDatabaseHostName(), AlbumSettings::instance()->getDatabasePort(), AlbumSettings::instance()->getDatabaseUserName(), AlbumSettings::instance()->getDatabasePassword(), AlbumSettings::instance()->getDatabaseConnectoptions(), AlbumSettings::instance()->getInternalDatabaseServer());
     }
 
     if(AlbumSettings::instance()->getShowFolderTreeViewItemsCount())
@@ -2473,6 +2504,12 @@ void DigikamApp::slotThemeChanged()
     d->themeMenuAction->setCurrentItem(index);
 }
 
+void DigikamApp::slotDatabaseMigration()
+{
+    MigrationDlg dlg(this);
+    dlg.exec();
+}
+
 void DigikamApp::slotDatabaseRescan()
 {
     ScanController::instance()->completeCollectionScan();
@@ -2621,7 +2658,6 @@ void DigikamApp::slotTogglePreview(bool t)
     // View menu
     d->albumSortAction->setEnabled(!t);
     d->imageSortAction->setEnabled(!t);
-    d->imageGroupAction->setEnabled(!t);
     d->showBarAction->setEnabled(t);
 
     if (t) d->zoomBar->setBarMode(DZoomBar::PreviewZoomCtrl);

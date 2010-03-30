@@ -92,8 +92,10 @@ void AlbumModelTest::initTestCase()
 
     AlbumManager::checkDatabaseDirsAfterFirstRun(QDir::temp().absoluteFilePath(
                     tempSuffix), QDir::temp().absoluteFilePath(tempSuffix));
-    bool dbChangeGood = AlbumManager::instance()->setDatabase(
-                    QDir::temp().absoluteFilePath(tempSuffix), false,
+    bool setDatabase(const QString dbType, const QString dbName, const QString dbThumbnailsName, const QString dbHostName, int dbPort, const QString dbUser, const QString dbPasswd, const QString dbConnectOptions, bool internalServer, bool priority, const QString suggestedAlbumRoot = QString());
+    bool dbChangeGood = AlbumManager::instance()->setDatabase("QSQLITE",
+                    QDir::temp().absoluteFilePath(tempSuffix),
+                    QString(), QString(), -1, QString(), QString(), QString(), false, false,
                     QDir::temp().absoluteFilePath(tempSuffix));
     QVERIFY2(dbChangeGood, "Could not set temp album db");
     QList<CollectionLocation> locs =
