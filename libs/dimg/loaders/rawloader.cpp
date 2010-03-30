@@ -342,26 +342,6 @@ void RAWLoader::postProcess(DImgLoaderObserver* observer)
     }
     
     if (observer) observer->progressInfo(m_image, 0.96F);
-
-    if (!m_customRawSettings.levelsAdjust.isEmpty())
-    {
-        DImg tmp(imageWidth(), imageHeight(), m_rawDecodingSettings.sixteenBitsImage);
-        ImageLevels levels(m_rawDecodingSettings.sixteenBitsImage);
-        int j=0;
-        for (int i = 0 ; i < 4; ++i)
-        {
-            levels.setLevelLowInputValue(i,   m_customRawSettings.levelsAdjust[j++]);
-            levels.setLevelHighInputValue(i,  m_customRawSettings.levelsAdjust[j++]);
-            levels.setLevelLowOutputValue(i,  m_customRawSettings.levelsAdjust[j++]);
-            levels.setLevelHighOutputValue(i, m_customRawSettings.levelsAdjust[j++]);
-        }
-
-        levels.levelsLutSetup(AlphaChannel);
-        levels.levelsLutProcess(imageData(), tmp.bits(), imageWidth(), imageHeight());
-        memcpy(imageData(), tmp.bits(), tmp.numBytes());
-    }
-    
-    if (observer) observer->progressInfo(m_image, 0.98F);
 }
 
 }  // namespace Digikam

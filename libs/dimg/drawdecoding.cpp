@@ -57,7 +57,7 @@ DRawDecoding::DRawDecoding(const RawDecodingSettings& prm)
 
     resetPostProcessingSettings();
 }    
-   
+
 DRawDecoding::~DRawDecoding()
 {
 }
@@ -95,8 +95,7 @@ bool DRawDecoding::operator==(const DRawDecoding& other) const
            gamma         == other.gamma        &&
            saturation    == other.saturation   &&
            exposureComp  == other.exposureComp &&
-           curveAdjust   == other.curveAdjust  &&
-           levelsAdjust  == other.levelsAdjust;
+           curveAdjust   == other.curveAdjust;
 }
 
 }  // namespace Digikam

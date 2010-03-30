@@ -61,7 +61,7 @@ public:
     /** Standard destructor 
      */
     virtual ~DRawDecoding();
-
+    
     /** Method to use a settings to optimize time loading, for example to compute image histogram 
      */
     void optimizeTimeLoading();
@@ -101,10 +101,6 @@ public:
     /** Luminosity curve adjustments.
     */
     QPolygon curveAdjust;
-
-    /** Levels adjustments: 4 channels (L, R, G, B * 2 values).
-    */
-    QList<int> levelsAdjust;
 };
 
 }  // namespace Digikam

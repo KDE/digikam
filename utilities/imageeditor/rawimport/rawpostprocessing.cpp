@@ -75,7 +75,7 @@ void RawPostProcessing::rawPostProcessing()
         return;
     }
 
-    postProgress(15);
+    postProgress(20);
 
     if (m_customRawSettings.exposureComp != 0.0 || m_customRawSettings.saturation != 1.0)
     {
@@ -92,7 +92,7 @@ void RawPostProcessing::rawPostProcessing()
         m_orgImage.putImageData(wb.getTargetImage().bits());   
     }
     
-    postProgress(30);
+    postProgress(40);
 
     if (m_customRawSettings.lightness != 0.0 || m_customRawSettings.contrast != 1.0 || m_customRawSettings.gamma != 1.0)
     {
@@ -105,7 +105,7 @@ void RawPostProcessing::rawPostProcessing()
         m_orgImage.putImageData(bcg.getTargetImage().bits());    
     }
     
-    postProgress(45);
+    postProgress(60);
 
     if (!m_customRawSettings.curveAdjust.isEmpty())
     {
@@ -117,27 +117,7 @@ void RawPostProcessing::rawPostProcessing()
         m_orgImage.putImageData(curves.getTargetImage().bits());
     }
     
-    postProgress(60);
-
-    if (!m_customRawSettings.levelsAdjust.isEmpty())
-    {
-        DImg tmp(m_orgImage.width(), m_orgImage.height(), m_orgImage.sixteenBit());
-        ImageLevels levels(m_orgImage.sixteenBit());
-        int j=0;
-        for (int i = 0 ; i < 4; ++i)
-        {
-            levels.setLevelLowInputValue(i, m_customRawSettings.levelsAdjust[j++]);
-            levels.setLevelHighInputValue(i, m_customRawSettings.levelsAdjust[j++]);
-            levels.setLevelLowOutputValue(i, m_customRawSettings.levelsAdjust[j++]);
-            levels.setLevelHighOutputValue(i, m_customRawSettings.levelsAdjust[j++]);
-        }
-
-        levels.levelsLutSetup(AlphaChannel);
-        levels.levelsLutProcess(m_orgImage.bits(), tmp.bits(), m_orgImage.width(), m_orgImage.height());
-        memcpy(m_orgImage.bits(), tmp.bits(), tmp.numBytes());
-    }
-    
-    postProgress(75);
+    postProgress(80);
 
     m_destImage = m_orgImage;
 
