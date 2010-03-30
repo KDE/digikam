@@ -56,7 +56,7 @@ DRawDecoding::DRawDecoding(const RawDecodingSettings& prm)
     autoBrightness          = prm.autoBrightness;    
 
     resetPostProcessingSettings();
-}    
+}
 
 DRawDecoding::~DRawDecoding()
 {

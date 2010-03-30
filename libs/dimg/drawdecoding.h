@@ -57,11 +57,11 @@ public:
     /** Copy constructor. Creates a copy of a RawDecodingSettings object.
      */
     DRawDecoding(const RawDecodingSettings& prm);
-    
+
     /** Standard destructor 
      */
     virtual ~DRawDecoding();
-    
+
     /** Method to use a settings to optimize time loading, for example to compute image histogram 
      */
     void optimizeTimeLoading();
@@ -74,6 +74,8 @@ public:
      */
     bool postProcessingSettingsIsDirty();
 
+    /** Equality operator.
+     */
     bool operator==(const DRawDecoding& other) const;
 
 public:
