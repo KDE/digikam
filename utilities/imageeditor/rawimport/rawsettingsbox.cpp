@@ -479,39 +479,16 @@ void RawSettingsBox::writeSettings()
 
 DRawDecoding RawSettingsBox::settings()
 {
-    DRawDecoding settings;    
-    RawDecodingSettings prm          = d->decodingSettingsBox->settings();
-    
-    settings.sixteenBitsImage        = prm.sixteenBitsImage;
-    settings.whiteBalance            = prm.whiteBalance;
-    settings.customWhiteBalance      = prm.customWhiteBalance;
-    settings.customWhiteBalanceGreen = prm.customWhiteBalanceGreen;
-    settings.RGBInterpolate4Colors   = prm.RGBInterpolate4Colors;
-    settings.unclipColors            = prm.unclipColors;
-    settings.DontStretchPixels       = prm.DontStretchPixels;
-    settings.enableNoiseReduction    = prm.enableNoiseReduction;
-    settings.medianFilterPasses      = prm.medianFilterPasses;
-    settings.NRThreshold             = prm.NRThreshold;
-    settings.enableCACorrection      = prm.enableCACorrection;
-    settings.caMultiplier[0]         = prm.caMultiplier[0];
-    settings.caMultiplier[1]         = prm.caMultiplier[1];
-    settings.RAWQuality              = prm.RAWQuality;
-    settings.inputColorSpace         = prm.inputColorSpace;
-    settings.outputColorSpace        = prm.outputColorSpace;
-    settings.inputProfile            = prm.inputProfile;
-    settings.outputProfile           = prm.outputProfile;
-    settings.autoBrightness          = prm.autoBrightness;
+    DRawDecoding settings(d->decodingSettingsBox->settings());    
 
-    settings.lightness               = (double)d->brightnessInput->value()/250.0;
-    settings.contrast                = (double)(d->contrastInput->value()/100.0) + 1.00;
-    settings.gamma                   = d->gammaInput->value();
-    settings.saturation              = d->saturationInput->value();
-    settings.exposureComp            = d->fineExposureInput->value();
+    settings.lightness    = (double)d->brightnessInput->value()/250.0;
+    settings.contrast     = (double)(d->contrastInput->value()/100.0) + 1.00;
+    settings.gamma        = d->gammaInput->value();
+    settings.saturation   = d->saturationInput->value();
+    settings.exposureComp = d->fineExposureInput->value();
 
     if (d->curveWidget->curves()->isDirty())
-    {
-        settings.curveAdjust         = d->curveWidget->curves()->getCurvePoints(LuminosityChannel);
-    }
+        settings.curveAdjust = d->curveWidget->curves()->getCurvePoints(LuminosityChannel);
 
     return settings;
 }

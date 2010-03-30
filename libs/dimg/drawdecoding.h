@@ -57,6 +57,33 @@ public:
         resetPostProcessingSettings();
     };
 
+    /** Copy constructor. Creates a copy of a RawDecodingSettings object.
+     */
+    DRawDecoding(const RawDecodingSettings& prm)
+    {
+        sixteenBitsImage        = prm.sixteenBitsImage;
+        whiteBalance            = prm.whiteBalance;
+        customWhiteBalance      = prm.customWhiteBalance;
+        customWhiteBalanceGreen = prm.customWhiteBalanceGreen;
+        RGBInterpolate4Colors   = prm.RGBInterpolate4Colors;
+        unclipColors            = prm.unclipColors;
+        DontStretchPixels       = prm.DontStretchPixels;
+        enableNoiseReduction    = prm.enableNoiseReduction;
+        medianFilterPasses      = prm.medianFilterPasses;
+        NRThreshold             = prm.NRThreshold;
+        enableCACorrection      = prm.enableCACorrection;
+        caMultiplier[0]         = prm.caMultiplier[0];
+        caMultiplier[1]         = prm.caMultiplier[1];
+        RAWQuality              = prm.RAWQuality;
+        inputColorSpace         = prm.inputColorSpace;
+        outputColorSpace        = prm.outputColorSpace;
+        inputProfile            = prm.inputProfile;
+        outputProfile           = prm.outputProfile;
+        autoBrightness          = prm.autoBrightness;    
+
+        resetPostProcessingSettings();
+    };    
+    
     /** Standard destructor 
      */
     virtual ~DRawDecoding(){};
