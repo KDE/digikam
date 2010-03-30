@@ -937,7 +937,7 @@ void EditorWindow::applyStandardSettings()
     m_IOFileSettings->rawDecodingSettings.customWhiteBalance      = group.readEntry(d->configCustomWhiteBalanceEntry, 6500);
     m_IOFileSettings->rawDecodingSettings.customWhiteBalanceGreen = group.readEntry(d->configCustomWhiteBalanceGreenEntry, 1.0);
     m_IOFileSettings->rawDecodingSettings.RGBInterpolate4Colors   = group.readEntry(d->configRGBInterpolate4ColorsEntry, false);
-    m_IOFileSettings->rawDecodingSettings.dontStretchPixels       = group.readEntry(d->configDontStretchPixelsEntry, false);
+    m_IOFileSettings->rawDecodingSettings.DontStretchPixels       = group.readEntry(d->configDontStretchPixelsEntry, false);
     m_IOFileSettings->rawDecodingSettings.enableNoiseReduction    = group.readEntry(d->configEnableNoiseReductionEntry, false);
     m_IOFileSettings->rawDecodingSettings.unclipColors            = group.readEntry(d->configUnclipColorsEntry, 0);
     m_IOFileSettings->rawDecodingSettings.RAWQuality              = (DRawDecoding::DecodingQuality)

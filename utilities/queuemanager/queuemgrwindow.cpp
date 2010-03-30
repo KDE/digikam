@@ -552,7 +552,7 @@ void QueueMgrWindow::applySettings()
     rawDecodingSettings.customWhiteBalance      = group.readEntry("CustomWhiteBalance", 6500);
     rawDecodingSettings.customWhiteBalanceGreen = group.readEntry("CustomWhiteBalanceGreen", 1.0);
     rawDecodingSettings.RGBInterpolate4Colors   = group.readEntry("RGBInterpolate4Colors", false);
-    rawDecodingSettings.dontStretchPixels       = group.readEntry("DontStretchPixels", false);
+    rawDecodingSettings.DontStretchPixels       = group.readEntry("DontStretchPixels", false);
     rawDecodingSettings.enableNoiseReduction    = group.readEntry("EnableNoiseReduction", false);
     rawDecodingSettings.unclipColors            = group.readEntry("UnclipColors", 0);
     rawDecodingSettings.RAWQuality              = (DRawDecoding::DecodingQuality)

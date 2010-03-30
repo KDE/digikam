@@ -488,7 +488,7 @@ DRawDecoding RawSettingsBox::settings()
     settings.customWhiteBalanceGreen = prm.customWhiteBalanceGreen;
     settings.RGBInterpolate4Colors   = prm.RGBInterpolate4Colors;
     settings.unclipColors            = prm.unclipColors;
-    settings.dontStretchPixels       = prm.dontStretchPixels;
+    settings.DontStretchPixels       = prm.DontStretchPixels;
     settings.enableNoiseReduction    = prm.enableNoiseReduction;
     settings.medianFilterPasses      = prm.medianFilterPasses;
     settings.NRThreshold             = prm.NRThreshold;
