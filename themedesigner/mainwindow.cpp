@@ -32,6 +32,7 @@
 #include <QGroupBox>
 #include <QLabel>
 #include <QSplitter>
+#include <QTreeWidget>
 #include <QVBoxLayout>
 
 // KDE includes
@@ -49,8 +50,6 @@
 // Local includes
 
 #include "albumsettings.h"
-#include "folderitem.h"
-#include "folderview.h"
 #include "imagepropertiestab.h"
 #include "theme.h"
 #include "themediconview.h"
@@ -63,24 +62,24 @@ class MainWindowPriv
 {
 public:
 
-    MainWindowPriv()
+    MainWindowPriv() :
+        bevelLabel(0),
+        gradientLabel(0),
+        begColorLabel(0),
+        endColorLabel(0),
+        borderColorLabel(0),
+        addBorderCheck(0),
+        propertyCombo(0),
+        bevelCombo(0),
+        gradientCombo(0),
+        endColorBtn(0),
+        begColorBtn(0),
+        borderColorBtn(0),
+        treeView(0),
+        iconView(0),
+        propView(0),
+        theme(0)
     {
-        bevelLabel       = 0;
-        gradientLabel    = 0;
-        begColorLabel    = 0;
-        endColorLabel    = 0;
-        borderColorLabel = 0;
-        propertyCombo    = 0;
-        bevelCombo       = 0;
-        gradientCombo    = 0;
-        addBorderCheck   = 0;
-        endColorBtn      = 0;
-        begColorBtn      = 0;
-        borderColorBtn   = 0;
-        folderView       = 0;
-        iconView         = 0;
-        propView         = 0;
-        theme            = 0;
     }
 
     QLabel*             bevelLabel;
@@ -104,7 +103,7 @@ public:
     KColorButton*       begColorBtn;
     KColorButton*       borderColorBtn;
 
-    FolderView*         folderView;
+    QTreeWidget*        treeView;
     ThemedIconView*     iconView;
     ImagePropertiesTab* propView;
     Theme*              theme;
@@ -142,7 +141,7 @@ MainWindow::MainWindow()
     splitter->setOrientation(Qt::Horizontal);
     splitter->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
 
-    d->folderView = new FolderView(splitter);
+    d->treeView   = new QTreeWidget(splitter);
     d->iconView   = new ThemedIconView(splitter);
     d->propView   = new ImagePropertiesTab(splitter);
 
@@ -279,20 +278,24 @@ MainWindow::MainWindow()
 
     // ------------------------------------------------------------------------
 
-    d->folderView->addColumn("My Albums");
-    d->folderView->setResizeMode(Q3ListView::LastColumn);
-    d->folderView->setRootIsDecorated(true);
+    d->treeView->setColumnCount(1);
+    d->treeView->setHeaderLabel("My Albums");
+    d->treeView->setRootIsDecorated(true);
 
     KIconLoader *iconLoader = KIconLoader::global();
+
+    QTreeWidgetItem *root = new QTreeWidgetItem(d->treeView, QStringList(QString("Album Root")));
+    root->setIcon(0, iconLoader->loadIcon("folder", KIconLoader::NoGroup, 32));
+    d->treeView->insertTopLevelItem(0, root);
+
+    QList<QTreeWidgetItem*> items;
     for (int i=0; i<10; ++i)
     {
-        FolderItem* folderItem = new FolderItem(d->folderView, QString("Album %1").arg(i));
-        folderItem->setPixmap(0, iconLoader->loadIcon("folder", KIconLoader::NoGroup, 32));
-        if (i == 2)
-        {
-            d->folderView->setSelected(folderItem, true);
-        }
+        QTreeWidgetItem *item = new QTreeWidgetItem(root, QStringList(QString("Album %1").arg(i)));
+        item->setIcon(0, iconLoader->loadIcon("folder", KIconLoader::NoGroup, 32));
+        items.append(item);
     }
+    root->addChildren(items);
 
     // ------------------------------------------------------------------------
 
