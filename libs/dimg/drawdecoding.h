@@ -52,84 +52,29 @@ public:
 
     /** Standard constructor with default settings 
      */
-    DRawDecoding()
-    {
-        resetPostProcessingSettings();
-    };
+    DRawDecoding();
 
     /** Copy constructor. Creates a copy of a RawDecodingSettings object.
      */
-    DRawDecoding(const RawDecodingSettings& prm)
-    {
-        sixteenBitsImage        = prm.sixteenBitsImage;
-        whiteBalance            = prm.whiteBalance;
-        customWhiteBalance      = prm.customWhiteBalance;
-        customWhiteBalanceGreen = prm.customWhiteBalanceGreen;
-        RGBInterpolate4Colors   = prm.RGBInterpolate4Colors;
-        unclipColors            = prm.unclipColors;
-        DontStretchPixels       = prm.DontStretchPixels;
-        enableNoiseReduction    = prm.enableNoiseReduction;
-        medianFilterPasses      = prm.medianFilterPasses;
-        NRThreshold             = prm.NRThreshold;
-        enableCACorrection      = prm.enableCACorrection;
-        caMultiplier[0]         = prm.caMultiplier[0];
-        caMultiplier[1]         = prm.caMultiplier[1];
-        RAWQuality              = prm.RAWQuality;
-        inputColorSpace         = prm.inputColorSpace;
-        outputColorSpace        = prm.outputColorSpace;
-        inputProfile            = prm.inputProfile;
-        outputProfile           = prm.outputProfile;
-        autoBrightness          = prm.autoBrightness;    
-
-        resetPostProcessingSettings();
-    };    
+    DRawDecoding(const RawDecodingSettings& prm);
     
     /** Standard destructor 
      */
-    virtual ~DRawDecoding(){};
+    virtual ~DRawDecoding();
 
     /** Method to use a settings to optimize time loading, for example to compute image histogram 
      */
-    void optimizeTimeLoading()
-    {
-        KDcrawIface::RawDecodingSettings::optimizeTimeLoading();
-        resetPostProcessingSettings();
-    };
+    void optimizeTimeLoading();
 
     /** Method to reset to default values all Raw processing settings.
      */
-    void resetPostProcessingSettings()
-    {
-        lightness    = 0.0;
-        contrast     = 1.0;
-        gamma        = 1.0;
-        saturation   = 1.0;
-        exposureComp = 0.0;
-        curveAdjust  = QPolygon();
-    };
+    void resetPostProcessingSettings();
 
     /** Method to check is a post-processing setting have been changed 
      */
-    bool postProcessingSettingsIsDirty()
-    {
-        return (lightness    != 0.0    ||
-                contrast     != 1.0    ||
-                gamma        != 1.0    ||
-                saturation   != 1.0    ||
-                exposureComp != 0.0    ||
-                !curveAdjust.isEmpty());
-    }
+    bool postProcessingSettingsIsDirty();
 
-    bool operator==(const DRawDecoding& other) const
-    {
-        return lightness     == other.lightness &&
-               contrast      == other.contrast &&
-               gamma         == other.gamma &&
-               saturation    == other.saturation &&
-               exposureComp  == other.exposureComp &&
-               curveAdjust   == other.curveAdjust &&
-               levelsAdjust  == other.levelsAdjust;
-    }
+    bool operator==(const DRawDecoding& other) const;
 
 public:
 
