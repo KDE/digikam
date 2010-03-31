@@ -618,12 +618,6 @@ void AlbumSettings::readSettings()
         d->databaseConnectoptions=QString::fromLatin1("UNIX_SOCKET=%1/mysql.socket").arg(miscDir);
     }
 
-
-
-#ifdef HAVE_NEPOMUK
-
-    group = config->group(d->configGroupNepomuk);
-
     /*
      * Check if a old digikam instance was running before and have left an database entry.
      * This have a higher priority as the other settings.
@@ -635,6 +629,11 @@ void AlbumSettings::readSettings()
         d->databaseName=oldDatabaseFilePath;
         d->databaseNameThumbnails=oldDatabaseFilePath;
     }
+
+
+#ifdef HAVE_NEPOMUK
+
+    group = config->group(d->configGroupNepomuk);
 
     d->syncToDigikam         = group.readEntry(d->configSyncNepomuktoDigikamEntry, false);
     d->syncToNepomuk         = group.readEntry(d->configSyncDigikamtoNepomukEntry, false);
