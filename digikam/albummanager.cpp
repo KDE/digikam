@@ -577,13 +577,15 @@ bool AlbumManager::setDatabase(const QString dbType, const QString dbName, const
     if (internalServer)
     {
         DigikamApp::instance()->startInternalDatabase();
-    }else
+    }
+    else
     {
         DigikamApp::instance()->stopInternalDatabase();
     }
 
     // This is to ensure that the setup does not overrule the command line.
     // Replace with a better solution?
+    Q_UNUSED(priority)
     /*
     if (priority)
     {
