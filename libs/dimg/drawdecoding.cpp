@@ -54,6 +54,7 @@ DRawDecoding::DRawDecoding(const RawDecodingSettings& prm)
     inputProfile            = prm.inputProfile;
     outputProfile           = prm.outputProfile;
     autoBrightness          = prm.autoBrightness;
+    fixColorsHighlights     = prm.fixColorsHighlights;
 
     resetPostProcessingSettings();
 }
