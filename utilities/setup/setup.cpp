@@ -7,7 +7,7 @@
  * Description : digiKam setup dialog.
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi at pooh.tam.uiuc.edu>
- * Copyright (C) 2003-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2003-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Album
@@ -68,7 +68,7 @@ public:
 
     SetupPrivate()
     {
-        page_database = 0;
+        page_database    = 0;
         page_collections = 0;
         page_albumView   = 0;
         page_tooltip     = 0;
@@ -105,7 +105,7 @@ public:
         pluginsPage      = 0;
     }
 
-    KPageWidgetItem  *page_database;
+    KPageWidgetItem*  page_database;
     KPageWidgetItem*  page_collections;
     KPageWidgetItem*  page_albumView;
     KPageWidgetItem*  page_tooltip;
@@ -123,7 +123,7 @@ public:
     KPageWidgetItem*  page_camera;
     KPageWidgetItem*  page_misc;
 
-    SetupDatabase    *databasePage;
+    SetupDatabase*    databasePage;
     SetupCollections* collectionsPage;
     SetupAlbumView*   albumViewPage;
     SetupToolTip*     tooltipPage;
@@ -140,6 +140,8 @@ public:
     SetupCamera*      cameraPage;
     SetupMisc*        miscPage;
     SetupPlugins*     pluginsPage;
+
+public:
 
     KPageWidgetItem*  pageItem(Setup::Page page);
 };
@@ -158,7 +160,7 @@ Setup::Setup(QWidget* parent)
     d->page_database    = addPage(d->databasePage, i18n("Database"));
     d->page_database->setHeader(i18n("<qt>Database Settings<br/>"
                                    "<i>Customize database settings</i></qt>"));
-    d->page_database->setIcon(KIcon("folder-image"));
+    d->page_database->setIcon(KIcon("server-database"));
 
     d->collectionsPage  = new SetupCollections(this);
     d->page_collections = addPage(d->collectionsPage, i18n("Collections"));
@@ -258,10 +260,10 @@ Setup::Setup(QWidget* parent)
 
     for (int page = 0; page != SetupPageEnumLast; ++page)
     {
-        KPageWidgetItem *item = d->pageItem((Page)page);
+        KPageWidgetItem* item = d->pageItem((Page)page);
         if (!item)
             continue;
-        QWidget *wgt            = item->widget();
+        QWidget* wgt            = item->widget();
         QScrollArea *scrollArea = qobject_cast<QScrollArea*>(wgt);
         if (scrollArea)
             scrollArea->setFrameShape(QFrame::NoFrame);
@@ -342,7 +344,7 @@ bool Setup::exec(Page page)
     return exec(0, page);
 }
 
-bool Setup::exec(QWidget *parent, Page page)
+bool Setup::exec(QWidget* parent, Page page)
 {
     QPointer<Setup> setup = new Setup(parent);
     setup->showPage(page);
@@ -356,7 +358,7 @@ bool Setup::execSinglePage(Page page)
     return execSinglePage(0, page);
 }
 
-bool Setup::execSinglePage(QWidget *parent, Page page)
+bool Setup::execSinglePage(QWidget* parent, Page page)
 {
     QPointer<Setup> setup = new Setup(parent);
     setup->showPage(page);
@@ -366,7 +368,7 @@ bool Setup::execSinglePage(QWidget *parent, Page page)
     return success;
 }
 
-bool Setup::execTemplateEditor(QWidget *parent, const Template& t)
+bool Setup::execTemplateEditor(QWidget* parent, const Template& t)
 {
     QPointer<Setup> setup = new Setup(parent);
     setup->showPage(TemplatePage);
@@ -422,7 +424,7 @@ void Setup::slotOkClicked()
 
 void Setup::showPage(Setup::Page page)
 {
-    KPageWidgetItem *item = 0;
+    KPageWidgetItem* item = 0;
     if (page == LastPageUsed)
     {
         KSharedConfig::Ptr config = KGlobal::config();
@@ -441,7 +443,31 @@ void Setup::showPage(Setup::Page page)
     setCurrentPage(item);
 }
 
-KPageWidgetItem *SetupPrivate::pageItem(Setup::Page page)
+Setup::Page Setup::activePageIndex()
+{
+    KPageWidgetItem* cur = currentPage();
+
+    if (cur == d->page_collections) return CollectionsPage;
+    if (cur == d->page_albumView)   return AlbumViewPage;
+    if (cur == d->page_tooltip)     return ToolTipPage;
+    if (cur == d->page_metadata)    return MetadataPage;
+    if (cur == d->page_template)    return TemplatePage;
+    if (cur == d->page_category)    return CategoryPage;
+    if (cur == d->page_mime)        return MimePage;
+    if (cur == d->page_lighttable)  return LightTablePage;
+    if (cur == d->page_editor)      return EditorPage;
+    if (cur == d->page_dcraw)       return DcrawPage;
+    if (cur == d->page_iofiles)     return IOFilesPage;
+    if (cur == d->page_slideshow)   return SlideshowPage;
+    if (cur == d->page_icc)         return ICCPage;
+    if (cur == d->page_plugins)     return KipiPluginsPage;
+    if (cur == d->page_camera)      return CameraPage;
+    if (cur == d->page_misc)        return MiscellaneousPage;
+
+    return DatabasePage;
+}
+
+KPageWidgetItem* SetupPrivate::pageItem(Setup::Page page)
 {
     switch(page)
     {
@@ -482,30 +508,6 @@ KPageWidgetItem *SetupPrivate::pageItem(Setup::Page page)
         default:
             return 0;
     }
-}
-
-Setup::Page Setup::activePageIndex()
-{
-    KPageWidgetItem *cur = currentPage();
-
-    if (cur == d->page_collections) return CollectionsPage;
-    if (cur == d->page_albumView)   return AlbumViewPage;
-    if (cur == d->page_tooltip)     return ToolTipPage;
-    if (cur == d->page_metadata)    return MetadataPage;
-    if (cur == d->page_template)    return TemplatePage;
-    if (cur == d->page_category)    return CategoryPage;
-    if (cur == d->page_mime)        return MimePage;
-    if (cur == d->page_lighttable)  return LightTablePage;
-    if (cur == d->page_editor)      return EditorPage;
-    if (cur == d->page_dcraw)       return DcrawPage;
-    if (cur == d->page_iofiles)     return IOFilesPage;
-    if (cur == d->page_slideshow)   return SlideshowPage;
-    if (cur == d->page_icc)         return ICCPage;
-    if (cur == d->page_plugins)     return KipiPluginsPage;
-    if (cur == d->page_camera)      return CameraPage;
-    if (cur == d->page_misc)        return MiscellaneousPage;
-
-    return DatabasePage;
 }
 
 }  // namespace Digikam
