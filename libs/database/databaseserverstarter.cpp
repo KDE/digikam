@@ -91,6 +91,7 @@ void DatabaseServerStarter::startServerManagerProcess(const QString dbType)
     sem.acquire();
     if (!isServerRegistered())
     {
+	// FIXME: this way is not portable. Use Cmake config to get install path.
         const QString dbServerMgrPath("/usr/bin/digikamdatabaseserver");
         if ( dbServerMgrPath.isEmpty() )
             kDebug(50003) << "No path to digikamdatabaseserver set in server manager configuration!";
