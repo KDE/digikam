@@ -339,9 +339,6 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget* parent)
     // ---------------------------------------------------------------
 
     gridSettings->addWidget(d->tabView, 0, 0, 1, 5);
-#if KDCRAW_VERSION <= 0x000500
-    gridSettings->setRowStretch(0, 10);
-#endif
     gridSettings->setColumnStretch(2, 10);
     gridSettings->setSpacing(spacingHint());
     gridSettings->setMargin(0);
@@ -463,7 +460,7 @@ void RawSettingsBox::writeSettings()
     group.writeEntry(d->optionHistogramScaleEntry, (int)histogramBox()->scale());
 
     d->decodingSettingsBox->writeSettings(group);
-    
+
     group.writeEntry(d->optionBrightnessEntry, d->brightnessInput->value());
     group.writeEntry(d->optionContrastEntry, d->contrastInput->value());
     group.writeEntry(d->optionGammaEntry, d->gammaInput->value());
@@ -479,7 +476,7 @@ void RawSettingsBox::writeSettings()
 
 DRawDecoding RawSettingsBox::settings()
 {
-    DRawDecoding settings(d->decodingSettingsBox->settings());    
+    DRawDecoding settings(d->decodingSettingsBox->settings());
 
     settings.lightness    = (double)d->brightnessInput->value()/250.0;
     settings.contrast     = (double)(d->contrastInput->value()/100.0) + 1.00;
