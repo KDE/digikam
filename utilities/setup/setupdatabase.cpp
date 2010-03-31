@@ -6,7 +6,7 @@
  * Date        : 2009-11-14
  * Description : database setup tab
  *
- * Copyright (C) 2009 by Holger Foerster <Hamsi2k at freenet dot de>
+ * Copyright (C) 2009-2010 by Holger Foerster <Hamsi2k at freenet dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-#include "setupdatabase.h"
 #include "setupdatabase.moc"
 
 // Qt includes
@@ -69,15 +68,16 @@ public:
 
     SetupDatabasePriv()
     {
-        mainDialog       = 0;
+        mainDialog     = 0;
+        databaseWidget = 0;
     }
 
-    KPageDialog             *mainDialog;
-    DatabaseWidget          *databaseWidget;
+    KPageDialog*    mainDialog;
+    DatabaseWidget* databaseWidget;
 };
 
 SetupDatabase::SetupDatabase(KPageDialog* dialog, QWidget* parent)
-                : QScrollArea(parent), d(new SetupDatabasePriv)
+             : QScrollArea(parent), d(new SetupDatabasePriv)
 {
     d->mainDialog  = dialog;
     d->databaseWidget = new DatabaseWidget(viewport());
@@ -90,9 +90,6 @@ SetupDatabase::SetupDatabase(KPageDialog* dialog, QWidget* parent)
 
     readSettings();
     adjustSize();
-
-    // --------------------------------------------------------
-
 }
 
 SetupDatabase::~SetupDatabase()
@@ -105,11 +102,11 @@ void SetupDatabase::applySettings()
     AlbumSettings* settings = AlbumSettings::instance();
     if (!settings) return;
 
-    if (d->databaseWidget->databaseType->currentText()=="QSQLITE"){
+    if (d->databaseWidget->databaseType->currentText()=="QSQLITE")
+    {
         QString newPath = d->databaseWidget->databasePathEdit->url().path();
         QDir oldDir(d->databaseWidget->originalDbPath);
         QDir newDir(newPath);
-
 
         if (oldDir != newDir || d->databaseWidget->databaseType->currentText()!=d->databaseWidget->originalDbType)
         {
@@ -128,7 +125,9 @@ void SetupDatabase::applySettings()
 
             settings->saveSettings();
         }
-    }else{
+    }
+    else
+    {
         if (d->databaseWidget->internalServer->isChecked())
         {
             DatabaseParameters internalServerParameters = DatabaseParameters::parametersFromConfig(d->databaseWidget->databaseType->currentText());
@@ -141,7 +140,8 @@ void SetupDatabase::applySettings()
             settings->setDatabasePort(internalServerParameters.port);
             settings->setDatabaseUserName(internalServerParameters.userName);
             settings->setDatabasePassword(internalServerParameters.password);
-        }else
+        }
+        else
         {
             settings->setInternalDatabaseServer(d->databaseWidget->internalServer->isChecked());
             settings->setDatabaseType(d->databaseWidget->databaseType->currentText());
@@ -180,9 +180,14 @@ void SetupDatabase::readSettings()
     /* Now set the type according the database type from the settings.
      * If no item is found, ignore the setting.
      */
-    for (int i=0; i<d->databaseWidget->databaseType->count(); i++){
-        kDebug(50003) << "Comparing comboboxentry on index ["<< i <<"] [" << d->databaseWidget->databaseType->itemText(i) << "] with ["<< settings->getDatabaseType() << "]";
-        if (d->databaseWidget->databaseType->itemText(i)==settings->getDatabaseType()){
+    for (int i=0; i<d->databaseWidget->databaseType->count(); i++)
+    {
+        kDebug(50003) << "Comparing comboboxentry on index ["<< i <<"] [" 
+                      << d->databaseWidget->databaseType->itemText(i) 
+                      << "] with ["<< settings->getDatabaseType() << "]";
+
+        if (d->databaseWidget->databaseType->itemText(i)==settings->getDatabaseType())
+        {
             d->databaseWidget->databaseType->setCurrentIndex(i);
             d->databaseWidget->setDatabaseInputFields(d->databaseWidget->databaseType->itemText(i));
         }
