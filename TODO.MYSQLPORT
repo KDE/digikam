@@ -30,3 +30,10 @@ MySQL support files to review
  AM            utilities/setup/databaseconnectionwidget.h   [License: GPL (v2+)]
  AM            utilities/setup/setupdatabase.cpp   [License: GPL (v2+)]           DONE
  AM            utilities/setup/setupdatabase.h   [License: GPL (v2+)]             DONE
+
+TODO List
+---------
+
+- Shutdown internal database server when digiKam is down.
+- Fix path to database server program to be portable. Use CMake config as well.
+
