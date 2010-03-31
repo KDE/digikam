@@ -6,7 +6,7 @@
  * Date        : 2010-01-08
  * Description : database server starter
  *
- * Copyright (C) 2009 by Holger Foerster <Hamsi2k at freenet dot de>
+ * Copyright (C) 2009-2010 by Holger Foerster <Hamsi2k at freenet dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -25,6 +25,7 @@
 #define DATABASESERVER_H_
 
 // QT includes
+
 #include <QProcess>
 #include <QString>
 #include <QDBusAbstractAdaptor>
@@ -34,17 +35,23 @@
 
 #include "digikam_export.h"
 
+namespace Digikam
+{
+
 class DIGIKAM_DATABASE_EXPORT DatabaseServerStarter : public QObject
 {
     Q_OBJECT
 
     public:
-        DatabaseServerStarter(QObject *parent);
+
+        DatabaseServerStarter(QObject* parent);
         static void startServerManagerProcess(const QString dbType="QMYSQL");
 
     private:
+
         static bool isServerRegistered();
 };
 
+}  // namespace Digikam
 
 #endif /* DATABASESERVER_H_ */

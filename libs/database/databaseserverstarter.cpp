@@ -6,7 +6,7 @@
  * Date        : 2010-01-08
  * Description : database server starter
  *
- * Copyright (C) 2009 by Holger Foerster <Hamsi2k at freenet dot de>
+ * Copyright (C) 2009-2010 by Holger Foerster <Hamsi2k at freenet dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -20,13 +20,11 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
+
 #include <databaseserverstarter.h>
 
-// KDE includes
-#include <kdebug.h>
-#include <kstandarddirs.h>
-
 // Qt includes
+
 #include <QString>
 #include <QList>
 #include <QStringList>
@@ -48,6 +46,14 @@
 #include <QApplication>
 #include <QThread>
 
+// KDE includes
+
+#include <kdebug.h>
+#include <kstandarddirs.h>
+
+namespace Digikam
+{
+
 // For whatever reason, these methods are "static protected"
 class sotoSleep : public QThread
 {
@@ -67,9 +73,8 @@ public:
     }
 };
 
-// Local includes
-
-DatabaseServerStarter::DatabaseServerStarter(QObject *parent=0): QObject(parent)
+DatabaseServerStarter::DatabaseServerStarter(QObject* parent=0)
+    : QObject(parent)
 {
 }
 
@@ -82,55 +87,57 @@ void DatabaseServerStarter::startServerManagerProcess(const QString dbType)
      * 3. If not, start the database server manager
      * 4. Release semaphore lock
      */
-  QSystemSemaphore sem("DigikamDBSrvAccess", 1, QSystemSemaphore::Open);
-  sem.acquire();
-  if (!isServerRegistered())
-  {
-      const QString dbServerMgrPath("/usr/bin/digikamdatabaseserver");
-      if ( dbServerMgrPath.isEmpty() )
-        kDebug(50003) << "No path to digikamdatabaseserver set in server manager configuration!";
+    QSystemSemaphore sem("DigikamDBSrvAccess", 1, QSystemSemaphore::Open);
+    sem.acquire();
+    if (!isServerRegistered())
+    {
+        const QString dbServerMgrPath("/usr/bin/digikamdatabaseserver");
+        if ( dbServerMgrPath.isEmpty() )
+            kDebug(50003) << "No path to digikamdatabaseserver set in server manager configuration!";
 
-      const QStringList arguments;
+        const QStringList arguments;
 
-      bool result = QProcess::startDetached( dbServerMgrPath, arguments );
-      if ( !result ) {
-        kDebug(50003) << "Could not start database server manager !";
-        kDebug(50003) << "executable:" << dbServerMgrPath;
-        kDebug(50003) << "arguments:" << arguments;
-      }
-  }
+        bool result = QProcess::startDetached( dbServerMgrPath, arguments );
+        if ( !result )
+        {
+            kDebug(50003) << "Could not start database server manager !";
+            kDebug(50003) << "executable:" << dbServerMgrPath;
+            kDebug(50003) << "arguments:" << arguments;
+        }
+    }
 
+    // wait until the server has successfully registered on DBUS
+    // TODO Use another way for that! Sleep isn't good :-/
+    for (int i=0; i<30; i++)
+    {
+        if (!isServerRegistered())
+        {
+            sotoSleep sleepThread;
+            sleepThread.sleep(2);
+            sleepThread.wait();
+        }
+        else
+        {
+            break;
+        }
+    }
 
-
-  // wait until the server has successfully registered on DBUS
-  // TODO Use another way for that! Sleep isn't good :-/
-  for (int i=0; i<30; i++)
-  {
-      if (!isServerRegistered())
-      {
-          sotoSleep sleepThread;
-          sleepThread.sleep(2);
-          sleepThread.wait();
-      }else
-      {
-          break;
-      }
-  }
-  QDBusInterface dbus_iface("org.kde.digikam.DatabaseServer", "/DatabaseServer");
-  QDBusMessage stateMsg = dbus_iface.call("isRunning");
-  if (!stateMsg.arguments().at(0).toBool())
-  {
-      QList<QVariant> arguments;
-      arguments.append(dbType);
-      dbus_iface.callWithArgumentList(QDBus::Block, "startDatabaseProcess", arguments);
-  }
-  sem.release();
+    QDBusInterface dbus_iface("org.kde.digikam.DatabaseServer", "/DatabaseServer");
+    QDBusMessage stateMsg = dbus_iface.call("isRunning");
+    if (!stateMsg.arguments().at(0).toBool())
+    {
+        QList<QVariant> arguments;
+        arguments.append(dbType);
+        dbus_iface.callWithArgumentList(QDBus::Block, "startDatabaseProcess", arguments);
+    }
+    sem.release();
 }
 
 bool DatabaseServerStarter::isServerRegistered()
 {
-    QDBusConnectionInterface *interface = QDBusConnection::sessionBus().interface();
-    QDBusReply<QStringList> reply = interface->registeredServiceNames();
+    QDBusConnectionInterface* interface = QDBusConnection::sessionBus().interface();
+    QDBusReply<QStringList> reply       = interface->registeredServiceNames();
+
     if (reply.isValid())
     {
         QStringList serviceNames = reply.value();
@@ -138,3 +145,5 @@ bool DatabaseServerStarter::isServerRegistered()
     }
     return false;
 }
+
+}  // namespace Digikam
