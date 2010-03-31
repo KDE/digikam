@@ -1,0 +1,32 @@
+MySQL support files to review
+-----------------------------
+
+ AM            databaseserver/databaseserver.cpp   [License: GPL (v2+)]
+ AM            databaseserver/databaseserver.h   [License: GPL (v2+)]
+ AM            databaseserver/main.cpp   [License: GPL (v2+)]
+ AM            databaseserver/pollthread.cpp   [License: GPL (v2+)]
+ AM            databaseserver/pollthread.h   [License: GPL (v2+)]
+
+ AM            digikam/databaseerrorhandler.cpp   [License: GPL (v2+)]
+ AM            digikam/databaseerrorhandler.h   [License: GPL (v2+)]
+
+ AM            libs/database/databaseconfigelement.cpp   [License: GPL (v2+)]
+ AM            libs/database/databaseconfigelement.h   [License: GPL (v2+)]
+ AM            libs/database/databasecopymanager.cpp   [License: GPL (v2+)]
+ AM            libs/database/databasecopymanager.h   [License: GPL (v2+)]
+
+ AM            libs/database/databaseserverstarter.cpp   [License: GPL (v2+)]     DONE
+ AM            libs/database/databaseserverstarter.h   [License: GPL (v2+)]       DONE
+
+ AM            libs/database/sqlquery.cpp   [License: GPL (v2+)]
+ AM            libs/database/sqlquery.h   [License: GPL (v2+)]
+
+ AM            libs/dialogs/migrationdlg.cpp   [License: GPL (v2+)]               DONE
+ AM            libs/dialogs/migrationdlg.h   [License: GPL (v2+)]                 DONE
+
+ AM            libs/widgets/common/databasewidget.cpp   [License: GPL (v2+)]
+ AM            libs/widgets/common/databasewidget.h   [License: GPL (v2+)]
+
+ AM            utilities/setup/databaseconnectionwidget.h   [License: GPL (v2+)]
+ AM            utilities/setup/setupdatabase.cpp   [License: GPL (v2+)]           DONE
+ AM            utilities/setup/setupdatabase.h   [License: GPL (v2+)]             DONE
