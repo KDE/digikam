@@ -1,4 +1,4 @@
-Files listed below must be moved to libkexiv2 1.0.0 for KDE 4.4 to be shared with kipi-plugins/metadataedit.
+Files listed below must be moved to libkexiv2 1.0.0 for KDE 4.5 to be shared with kipi-plugins/metadataedit.
 
 msgtextedit.cpp
 msgtextedit.h
