@@ -122,14 +122,14 @@ void FilmGrainFilter::filterImage()
     int    progress, posX, posY;
 
     // Reference point noise adjustements.
-    double refLumaNoise,       refLumaRange;
-    double refChromaBlueNoise, refChromaBlueRange;
-    double refChromaRedNoise,  refChromaRedRange;
+    double refLumaNoise=0.0,       refLumaRange=0.0;
+    double refChromaBlueNoise=0.0, refChromaBlueRange=0.0;
+    double refChromaRedNoise=0.0,  refChromaRedRange=0.0;
 
     // Current matrix point noise adjustements.
-    double matLumaNoise,       matLumaRange;
-    double matChromaBlueNoise, matChromaBlueRange;
-    double matChromaRedNoise,  matChromaRedRange;
+    double matLumaNoise=0.0,       matLumaRange=0.0;
+    double matChromaBlueNoise=0.0, matChromaBlueRange=0.0;
+    double matChromaRedNoise=0.0,  matChromaRedRange=0.0;
 
     int    width           = m_orgImage.width();
     int    height          = m_orgImage.height();
