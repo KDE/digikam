@@ -620,14 +620,21 @@ void AlbumSettings::readSettings()
 
     /*
      * Check if a old digikam instance was running before and have left an database entry.
-     * This have a higher priority as the other settings.
+     * This has a higher priority as the other settings.
      */
+    group  = config->group(d->configGroupDefault);
     QString oldDatabaseFilePath = group.readEntry("Database File Path", QString());
     if (oldDatabaseFilePath.isEmpty()==false)
     {
         d->databaseType="QSQLITE";
         d->databaseName=oldDatabaseFilePath;
         d->databaseNameThumbnails=oldDatabaseFilePath;
+
+        d->databaseHostName=QString("");
+        d->databasePort=-1;
+        d->databaseUserName=QString("");
+        d->databasePassword=QString("");
+        d->databaseConnectoptions=QString("");
     }
 
 
