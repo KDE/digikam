@@ -6,7 +6,7 @@
  * Date        : 2009-11-14
  * Description : database migration dialog
  *
- * Copyright (C) 2009 by Holger Foerster <Hamsi2k at freenet dot de>
+ * Copyright (C) 2009-2010 by Holger Foerster <Hamsi2k at freenet dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -25,13 +25,16 @@
 #define MIGRATIONDLG_H
 
 // QT includes
+
 #include <QThread>
 #include <QProgressBar>
 
 // KDE includes
+
 #include <kdialog.h>
 
 // Local includes
+
 #include "databasewidget.h"
 #include "databasebackend.h"
 #include "databasecopymanager.h"
@@ -41,21 +44,22 @@ namespace Digikam
 
 class DatabaseCopyThread : public QThread
 {
-        Q_OBJECT
+    Q_OBJECT
 
-        public:
-            DatabaseCopyThread(QWidget* parent);
-            bool stop;
-            void run();
+    public:
+        DatabaseCopyThread(QWidget* parent);
+        bool stop;
+        void run();
 
-            void init(DatabaseParameters fromDatabaseWidget, DatabaseParameters toDatabaseWidget);
-            DatabaseCopyManager copyManager;
+        void init(DatabaseParameters fromDatabaseWidget, DatabaseParameters toDatabaseWidget);
+        DatabaseCopyManager copyManager;
 
-        private:
-            DatabaseParameters fromDatabaseParameters;
-            DatabaseParameters toDatabaseParameters;
+    private:
+        DatabaseParameters fromDatabaseParameters;
+        DatabaseParameters toDatabaseParameters;
 };
 
+// --------------------------------------------------------------------
 
 class MigrationDlg : public KDialog
 {
@@ -67,6 +71,7 @@ public:
     ~MigrationDlg();
 
 private Q_SLOTS:
+
     void performCopy();
     void unlockInputFields();
     void lockInputFields();
@@ -74,20 +79,25 @@ private Q_SLOTS:
     void handleFinish(int finishState, QString errorMsg);
     void handleStepStarted(QString stepName);
     void handleSmallStepStarted(int currValue, int maxValue);
-private:
 
-//    MigrationDlgPriv* const d;
-    DatabaseWidget *fromDatabaseWidget;
-    DatabaseWidget *toDatabaseWidget;
-    QPushButton    *migrateButton;
-    QPushButton    *cancelButton;
-    QLabel         *overallStepTitle;
-    QProgressBar   *progressBar;
-    QProgressBar   *progressBarSmallStep;
-    DatabaseCopyThread *copyThread;
+
+private:
 
     void setupMainArea();
     void dataInit();
+
+private:
+
+    DatabaseWidget*     fromDatabaseWidget;
+    DatabaseWidget*     toDatabaseWidget;
+    QPushButton*        migrateButton;
+    QPushButton*        cancelButton;
+    QLabel*             overallStepTitle;
+    QProgressBar*       progressBar;
+    QProgressBar*       progressBarSmallStep;
+    DatabaseCopyThread* copyThread;
+
+//    MigrationDlgPriv* const d;
 };
 
 }  // namespace Digikam
