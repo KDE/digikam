@@ -173,7 +173,7 @@ FilmGrainSettings::FilmGrainSettings(QWidget* parent)
     QGridLayout* grid = new QGridLayout(parent);
 
     // -------------------------------------------------------------
-    
+
     QWidget* commonPage = new QWidget();
     QGridLayout* grid0  = new QGridLayout(commonPage);
 
@@ -192,10 +192,9 @@ FilmGrainSettings::FilmGrainSettings(QWidget* parent)
     grid0->addWidget(d->grainSizeInput,    1, 0, 1, 1);
     grid0->addWidget(d->photoDistribution, 2, 0, 1, 1);
     grid0->setMargin(KDialog::spacingHint());
-    grid0->setSpacing(KDialog::spacingHint());
-    
+
     // -------------------------------------------------------------
-    
+
     QWidget* firstPage   = new QWidget();
     QGridLayout* grid1   = new QGridLayout(firstPage);
 
@@ -298,8 +297,8 @@ FilmGrainSettings::FilmGrainSettings(QWidget* parent)
     grid2->addWidget(d->label8,                    7, 0, 1, 1); 
     grid2->addWidget(d->highlightsChromaBlueInput, 8, 0, 1, 1);
     grid2->setMargin(KDialog::spacingHint());
-    grid2->setSpacing(KDialog::spacingHint());    
-    
+    grid2->setSpacing(KDialog::spacingHint());
+
     // -------------------------------------------------------------
 
     QWidget* thirdPage = new QWidget();
@@ -383,7 +382,7 @@ FilmGrainSettings::FilmGrainSettings(QWidget* parent)
 
     connect(d->photoDistribution, SIGNAL(toggled(bool)),
             this, SIGNAL(signalSettingsChanged()));
-            
+
     connect(d->addLuminanceNoise, SIGNAL(toggled(bool)),
             this, SLOT(slotAddLuminanceNoise(bool)));
 
@@ -567,7 +566,7 @@ void FilmGrainSettings::writeSettings(KConfigGroup& group)
 
     group.writeEntry(d->configGrainSizeEntry,                      prm.grainSize);
     group.writeEntry(d->configPhotoDistributionEntry,              prm.photoDistribution);
-    
+
     group.writeEntry(d->configAddLumNoiseEntry,                    prm.addLuminanceNoise);
     group.writeEntry(d->configIntensityLumAdjustmentEntry,         prm.lumaIntensity);
     group.writeEntry(d->configShadowsLumAdjustmentEntry,           prm.lumaShadows);
