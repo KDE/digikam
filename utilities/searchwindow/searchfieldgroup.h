@@ -30,6 +30,10 @@
 #include <QSet>
 #include <QWidget>
 
+// LibKDcraw includes
+
+#include <libkdcraw/rexpanderbox.h>
+
 // Local includes
 
 #include "searchxml.h"
@@ -38,7 +42,7 @@ class QGridLayout;
 class QLabel;
 class QVBoxLayout;
 
-class SearchField;
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -47,7 +51,6 @@ class SearchFieldGroupLabel;
 class SearchGroup;
 class SearchField;
 class VisibilityController;
-class RClickLabel;
 
 class SearchFieldGroup : public QWidget
 {

@@ -31,7 +31,6 @@
 
 // Local includes
 
-#include "rexpanderbox.h"
 #include "searchfields.h"
 #include "searchgroup.h"
 #include "searchutilities.h"

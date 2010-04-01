@@ -87,6 +87,7 @@
 
 #include <libkdcraw/version.h>
 #include <libkdcraw/kdcraw.h>
+#include <libkdcraw/rexpanderbox.h>
 
 // Local includes
 
@@ -94,7 +95,6 @@
 #include "statusprogressbar.h"
 #include "statusnavigatebar.h"
 #include "dlogoaction.h"
-#include "rexpanderbox.h"
 #include "thumbnailsize.h"
 #include "kdatetimeedit.h"
 #include "sidebar.h"
@@ -126,6 +126,8 @@
 #include "cameranamehelper.h"
 #include "uifilevalidator.h"
 #include "knotificationwrapper.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {

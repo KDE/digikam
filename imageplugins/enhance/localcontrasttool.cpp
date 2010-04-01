@@ -47,11 +47,6 @@
 #include <kstandarddirs.h>
 #include <ktabwidget.h>
 
-// LibKDcraw includes
-
-#include <libkdcraw/rnuminput.h>
-#include <libkdcraw/rcombobox.h>
-
 // Local includes
 
 #include "dimg.h"
@@ -59,7 +54,6 @@
 #include "imageiface.h"
 #include "histogramwidget.h"
 #include "imageregionwidget.h"
-#include "rexpanderbox.h"
 #include "localcontrastfilter.h"
 #include "localcontrastsettings.h"
 #include "localcontrastcontainer.h"

@@ -29,6 +29,10 @@
 #include <QWidget>
 #include <QList>
 
+// LibKDcraw includes
+
+#include <libkdcraw/rexpanderbox.h>
+
 // Local includes
 
 #include "searchview.h"
@@ -41,13 +45,14 @@ class QRadioButton;
 class QStackedLayout;
 class QVBoxLayout;
 
+using namespace KDcrawIface;
+
 namespace Digikam
 {
 
 class SearchGroupLabel;
 class SearchFieldGroup;
 class SearchFieldGroupLabel;
-class RClickLabel;
 
 class SearchGroup : public AbstractSearchGroupContainer
 {

@@ -34,7 +34,6 @@
 
 // Local includes
 
-#include "rexpanderbox.h"
 #include "searchutilities.h"
 
 namespace Digikam

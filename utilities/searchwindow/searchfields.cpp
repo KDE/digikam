@@ -53,6 +53,7 @@
 // LibKDcraw includes
 
 #include <libkdcraw/squeezedcombobox.h>
+#include <libkdcraw/rexpanderbox.h>
 
 // Local includes
 
@@ -66,7 +67,6 @@
 #include "imagescanner.h"
 #include "kdateedit.h"
 #include "ratingsearchutilities.h"
-#include "rexpanderbox.h"
 #include "searchfieldgroup.h"
 #include "searchwindow.h"
 

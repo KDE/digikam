@@ -49,6 +49,7 @@
 #include <libkdcraw/dcrawsettingswidget.h>
 #include <libkdcraw/rnuminput.h>
 #include <libkdcraw/version.h>
+#include <libkdcraw/rexpanderbox.h>
 
 // Local includes
 
@@ -60,7 +61,6 @@
 #include "imagecurves.h"
 #include "imagedialog.h"
 #include "imagehistogram.h"
-#include "rexpanderbox.h"
 #include "globals.h"
 
 using namespace KDcrawIface;

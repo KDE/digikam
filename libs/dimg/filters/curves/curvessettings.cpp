@@ -58,10 +58,10 @@
 
 #include <libkdcraw/rcombobox.h>
 #include <libkdcraw/rnuminput.h>
+#include <libkdcraw/rexpanderbox.h>
 
 // Local includes
 
-#include "rexpanderbox.h"
 #include "colorgradientwidget.h"
 
 using namespace KDcrawIface;

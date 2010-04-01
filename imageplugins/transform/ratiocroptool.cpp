@@ -56,13 +56,13 @@
 
 #include <libkdcraw/rcombobox.h>
 #include <libkdcraw/rnuminput.h>
+#include <libkdcraw/rexpanderbox.h>
 
 // Local includes
 
 #include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imageselectionwidget.h"
-#include "rexpanderbox.h"
 
 using namespace KDcrawIface;
 

@@ -44,13 +44,15 @@
 // LibKDcraw includes
 
 #include <libkdcraw/rnuminput.h>
+#include <libkdcraw/rexpanderbox.h>
 
 // Local includes
 
-#include "rexpanderbox.h"
 #include "iccprofilescombobox.h"
 #include "iccprofileinfodlg.h"
 #include "iccsettings.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {

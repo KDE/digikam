@@ -58,10 +58,7 @@
 
 #include <libkdcraw/rcombobox.h>
 #include <libkdcraw/rnuminput.h>
-
-// Local includes
-
-#include "rexpanderbox.h"
+#include <libkdcraw/rexpanderbox.h>
 
 using namespace KDcrawIface;
 

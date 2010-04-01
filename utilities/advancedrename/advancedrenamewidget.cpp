@@ -41,14 +41,19 @@
 #include <kiconloader.h>
 #include <klocale.h>
 
+// LibKDcraw includes
+
+#include <libkdcraw/rexpanderbox.h>
+
 // Local includes
 
 #include "advancedrenameinput.h"
 #include "dcursortracker.h"
 #include "defaultrenameparser.h"
 #include "dynamiclayout.h"
-#include "rexpanderbox.h"
 #include "tooltipcreator.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {

@@ -48,11 +48,11 @@
 
 // LibKDcraw includes
 
+#include <libkdcraw/rexpanderbox.h>
 #include <libkdcraw/rnuminput.h>
 
 // Local includes
 
-#include "rexpanderbox.h"
 #include "previewlist.h"
 #include "curvesbox.h"
 #include "curveswidget.h"

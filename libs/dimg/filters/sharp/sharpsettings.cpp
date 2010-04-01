@@ -51,11 +51,11 @@
 
 #include <libkdcraw/rcombobox.h>
 #include <libkdcraw/rnuminput.h>
+#include <libkdcraw/rexpanderbox.h>
 
 // Local includes
 
 #include "refocusfilter.h"
-#include "rexpanderbox.h"
 
 using namespace KDcrawIface;
 

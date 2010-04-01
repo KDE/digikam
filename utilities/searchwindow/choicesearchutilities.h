@@ -30,16 +30,19 @@
 #include <QList>
 #include <QVariant>
 
+// Libkdcraw includes
+
+#include <libkdcraw/rexpanderbox.h>
+
 // Local includes
 
 #include "searchxml.h"
 #include "comboboxutilities.h"
 
+using namespace KDcrawIface;
 
 namespace Digikam
 {
-
-class RSqueezedClickLabel;
 
 class ChoiceSearchModel : public QAbstractListModel
 {

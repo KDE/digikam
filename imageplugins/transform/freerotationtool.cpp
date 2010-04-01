@@ -48,6 +48,10 @@
 #include <klocale.h>
 #include <kseparator.h>
 
+// LibKDcraw includes
+
+#include <libkdcraw/rexpanderbox.h>
+
 // Local includes
 
 #include "dimg.h"
@@ -56,7 +60,6 @@
 #include "freerotationsettings.h"
 #include "imageiface.h"
 #include "imageguidewidget.h"
-#include "rexpanderbox.h"
 
 using namespace KDcrawIface;
 
