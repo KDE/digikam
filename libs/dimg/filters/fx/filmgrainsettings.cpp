@@ -48,10 +48,7 @@
 // LibKDcraw includes
 
 #include <libkdcraw/rnuminput.h>
-
-// Local includes
-
-#include "rexpanderbox.h"
+#include <libkdcraw/rexpanderbox.h>
 
 using namespace KDcrawIface;
 
@@ -94,9 +91,6 @@ public:
         label11(0),
         label12(0),
         photoDistribution(0),
-        addLuminanceNoise(0),
-        addChrominanceBlueNoise(0),
-        addChrominanceRedNoise(0),
         grainSizeInput(0),
         intensityLumInput(0),
         shadowsLumInput(0),
@@ -145,9 +139,6 @@ public:
     QLabel*       label12;
 
     QCheckBox*    photoDistribution;
-    QCheckBox*    addLuminanceNoise;
-    QCheckBox*    addChrominanceBlueNoise;
-    QCheckBox*    addChrominanceRedNoise;
 
     RIntNumInput* grainSizeInput;
     RIntNumInput* intensityLumInput;
@@ -198,7 +189,6 @@ FilmGrainSettings::FilmGrainSettings(QWidget* parent)
     QWidget* firstPage   = new QWidget();
     QGridLayout* grid1   = new QGridLayout(firstPage);
 
-    d->addLuminanceNoise = new QCheckBox(i18n("Add Luminance Noise"), firstPage);
     d->label1            = new QLabel(i18n("Intensity:"), firstPage);
     d->intensityLumInput = new RIntNumInput(firstPage);
     d->intensityLumInput->setRange(1, 100, 1);
@@ -234,15 +224,14 @@ FilmGrainSettings::FilmGrainSettings(QWidget* parent)
     d->highlightsLumInput->setDefaultValue(-100);
     d->highlightsLumInput->setWhatsThis(i18n("Set how much the filter affects shadows."));
 
-    grid1->addWidget(d->addLuminanceNoise,  0, 0, 1, 1);
-    grid1->addWidget(d->label1,             1, 0, 1, 1);
-    grid1->addWidget(d->intensityLumInput,  2, 0, 1, 1);
-    grid1->addWidget(d->label2,             3, 0, 1, 1);
-    grid1->addWidget(d->shadowsLumInput,    4, 0, 1, 1);
-    grid1->addWidget(d->label3,             5, 0, 1, 1);
-    grid1->addWidget(d->midtonesLumInput,   6, 0, 1, 1);
-    grid1->addWidget(d->label4,             7, 0, 1, 1);
-    grid1->addWidget(d->highlightsLumInput, 8, 0, 1, 1);
+    grid1->addWidget(d->label1,             0, 0, 1, 1);
+    grid1->addWidget(d->intensityLumInput,  1, 0, 1, 1);
+    grid1->addWidget(d->label2,             2, 0, 1, 1);
+    grid1->addWidget(d->shadowsLumInput,    3, 0, 1, 1);
+    grid1->addWidget(d->label3,             4, 0, 1, 1);
+    grid1->addWidget(d->midtonesLumInput,   5, 0, 1, 1);
+    grid1->addWidget(d->label4,             6, 0, 1, 1);
+    grid1->addWidget(d->highlightsLumInput, 7, 0, 1, 1);
     grid1->setMargin(KDialog::spacingHint());
     grid1->setSpacing(KDialog::spacingHint());
 
@@ -251,7 +240,6 @@ FilmGrainSettings::FilmGrainSettings(QWidget* parent)
     QWidget* secondPage = new QWidget();
     QGridLayout* grid2  = new QGridLayout( secondPage );
 
-    d->addChrominanceBlueNoise  = new QCheckBox(i18n("Add Chrominance Blue Noise"), secondPage);
     d->label5                   = new QLabel(i18n("Intensity:"), secondPage);
     d->intensityChromaBlueInput = new RIntNumInput(secondPage);
     d->intensityChromaBlueInput->setRange(1, 100, 1);
@@ -287,15 +275,14 @@ FilmGrainSettings::FilmGrainSettings(QWidget* parent)
     d->highlightsChromaBlueInput->setDefaultValue(-100);
     d->highlightsChromaBlueInput->setWhatsThis(i18n("Set how much the filter affects shadows."));
 
-    grid2->addWidget(d->addChrominanceBlueNoise,   0, 0, 1, 1);
-    grid2->addWidget(d->label5,                    1, 0, 1, 1);
-    grid2->addWidget(d->intensityChromaBlueInput,  2, 0, 1, 1);
-    grid2->addWidget(d->label6,                    3, 0, 1, 1);
-    grid2->addWidget(d->shadowsChromaBlueInput,    4, 0, 1, 1);  
-    grid2->addWidget(d->label7,                    5, 0, 1, 1);
-    grid2->addWidget(d->midtonesChromaBlueInput,   6, 0, 1, 1); 
-    grid2->addWidget(d->label8,                    7, 0, 1, 1); 
-    grid2->addWidget(d->highlightsChromaBlueInput, 8, 0, 1, 1);
+    grid2->addWidget(d->label5,                    0, 0, 1, 1);
+    grid2->addWidget(d->intensityChromaBlueInput,  1, 0, 1, 1);
+    grid2->addWidget(d->label6,                    2, 0, 1, 1);
+    grid2->addWidget(d->shadowsChromaBlueInput,    3, 0, 1, 1);
+    grid2->addWidget(d->label7,                    4, 0, 1, 1);
+    grid2->addWidget(d->midtonesChromaBlueInput,   5, 0, 1, 1);
+    grid2->addWidget(d->label8,                    6, 0, 1, 1);
+    grid2->addWidget(d->highlightsChromaBlueInput, 7, 0, 1, 1);
     grid2->setMargin(KDialog::spacingHint());
     grid2->setSpacing(KDialog::spacingHint());
 
@@ -304,7 +291,6 @@ FilmGrainSettings::FilmGrainSettings(QWidget* parent)
     QWidget* thirdPage = new QWidget();
     QGridLayout* grid3 = new QGridLayout( thirdPage );
 
-    d->addChrominanceRedNoise  = new QCheckBox(i18n("Add Chrominance Red Noise"), thirdPage);
     d->label9                  = new QLabel(i18n("Intensity:"), thirdPage);
     d->intensityChromaRedInput = new RIntNumInput(thirdPage);
     d->intensityChromaRedInput->setRange(1, 100, 1);
@@ -340,23 +326,22 @@ FilmGrainSettings::FilmGrainSettings(QWidget* parent)
     d->highlightsChromaRedInput->setDefaultValue(-100);
     d->highlightsChromaRedInput->setWhatsThis(i18n("Set how much the filter affects shadows."));
 
-    grid3->addWidget(d->addChrominanceRedNoise,   0, 0, 1, 1);
-    grid3->addWidget(d->label9,                   1, 0, 1, 1);
-    grid3->addWidget(d->intensityChromaRedInput,  2, 0, 1, 1);
-    grid3->addWidget(d->label10,                  3, 0, 1, 1);
-    grid3->addWidget(d->shadowsChromaRedInput,    4, 0, 1, 1);  
-    grid3->addWidget(d->label11,                  5, 0, 1, 1);
-    grid3->addWidget(d->midtonesChromaRedInput,   6, 0, 1, 1); 
-    grid3->addWidget(d->label12,                  7, 0, 1, 1); 
-    grid3->addWidget(d->highlightsChromaRedInput, 8, 0, 1, 1);
+    grid3->addWidget(d->label9,                   0, 0, 1, 1);
+    grid3->addWidget(d->intensityChromaRedInput,  1, 0, 1, 1);
+    grid3->addWidget(d->label10,                  2, 0, 1, 1);
+    grid3->addWidget(d->shadowsChromaRedInput,    3, 0, 1, 1);
+    grid3->addWidget(d->label11,                  4, 0, 1, 1);
+    grid3->addWidget(d->midtonesChromaRedInput,   5, 0, 1, 1);
+    grid3->addWidget(d->label12,                  6, 0, 1, 1);
+    grid3->addWidget(d->highlightsChromaRedInput, 7, 0, 1, 1);
     grid3->setMargin(KDialog::spacingHint());
-    grid3->setSpacing(KDialog::spacingHint());    
+    grid3->setSpacing(KDialog::spacingHint());
 
     // -------------------------------------------------------------
 
     d->expanderBox = new RExpanderBox();
     d->expanderBox->setObjectName("Noise Expander");
-    
+
     d->expanderBox->addItem(commonPage, SmallIcon("system-run"), 
                             i18n("Common Settings"),
                             QString("CommonSettingsContainer"), true);
@@ -369,7 +354,11 @@ FilmGrainSettings::FilmGrainSettings(QWidget* parent)
     d->expanderBox->addItem(thirdPage, KStandardDirs::locate("data", "digikam/data/colors-chromared.png"), 
                             i18n("Chrominance Red Noise"),
                             QString("ChrominanceRedSettingsContainer"), true);
+
     d->expanderBox->addStretch();
+    d->expanderBox->setCheckBoxVisible(1, true);
+    d->expanderBox->setCheckBoxVisible(2, true);
+    d->expanderBox->setCheckBoxVisible(3, true);
 
     grid->addWidget(d->expanderBox, 0, 0, 1, 1);
     grid->setMargin(KDialog::spacingHint());
@@ -383,8 +372,8 @@ FilmGrainSettings::FilmGrainSettings(QWidget* parent)
     connect(d->photoDistribution, SIGNAL(toggled(bool)),
             this, SIGNAL(signalSettingsChanged()));
 
-    connect(d->addLuminanceNoise, SIGNAL(toggled(bool)),
-            this, SLOT(slotAddLuminanceNoise(bool)));
+    connect(d->expanderBox, SIGNAL(signalItemToggled(int, bool)),
+            this, SLOT(slotItemToggled(int, bool)));
 
     connect(d->intensityLumInput, SIGNAL(valueChanged(int)),
             this, SIGNAL(signalSettingsChanged()));
@@ -398,9 +387,6 @@ FilmGrainSettings::FilmGrainSettings(QWidget* parent)
     connect(d->highlightsLumInput, SIGNAL(valueChanged(int)),
             this, SIGNAL(signalSettingsChanged()));
 
-    connect(d->addChrominanceBlueNoise, SIGNAL(toggled(bool)),
-            this, SLOT(slotAddChrominanceBlueNoise(bool)));
-
     connect(d->intensityChromaBlueInput, SIGNAL(valueChanged(int)),
             this, SIGNAL(signalSettingsChanged()));
 
@@ -412,9 +398,6 @@ FilmGrainSettings::FilmGrainSettings(QWidget* parent)
 
     connect(d->highlightsChromaBlueInput, SIGNAL(valueChanged(int)),
             this, SIGNAL(signalSettingsChanged()));
-
-    connect(d->addChrominanceRedNoise, SIGNAL(toggled(bool)),
-            this, SLOT(slotAddChrominanceRedNoise(bool)));
 
     connect(d->intensityChromaRedInput, SIGNAL(valueChanged(int)),
             this, SIGNAL(signalSettingsChanged()));
@@ -434,42 +417,48 @@ FilmGrainSettings::~FilmGrainSettings()
     delete d;
 }
 
-void FilmGrainSettings::slotAddLuminanceNoise(bool b)
+void FilmGrainSettings::slotItemToggled(int index, bool b)
 {
-    d->label1->setEnabled(b);
-    d->label2->setEnabled(b);
-    d->label3->setEnabled(b);
-    d->label4->setEnabled(b);
-    d->intensityLumInput->setEnabled(b);
-    d->shadowsLumInput->setEnabled(b);
-    d->midtonesLumInput->setEnabled(b);
-    d->highlightsLumInput->setEnabled(b);
-    emit signalSettingsChanged();
-}
+    switch (index)
+    {
+        case 1:
+        {
+            d->label1->setEnabled(b);
+            d->label2->setEnabled(b);
+            d->label3->setEnabled(b);
+            d->label4->setEnabled(b);
+            d->intensityLumInput->setEnabled(b);
+            d->shadowsLumInput->setEnabled(b);
+            d->midtonesLumInput->setEnabled(b);
+            d->highlightsLumInput->setEnabled(b);
+            break;
+        }
+        case 2:
+        {
+            d->label5->setEnabled(b);
+            d->label6->setEnabled(b);
+            d->label7->setEnabled(b);
+            d->label8->setEnabled(b);
+            d->intensityChromaBlueInput->setEnabled(b);
+            d->shadowsChromaBlueInput->setEnabled(b);
+            d->midtonesChromaBlueInput->setEnabled(b);
+            d->highlightsChromaBlueInput->setEnabled(b);
+            break;
+        }
+        case 3:
+        {
+            d->label9->setEnabled(b);
+            d->label10->setEnabled(b);
+            d->label11->setEnabled(b);
+            d->label12->setEnabled(b);
+            d->intensityChromaRedInput->setEnabled(b);
+            d->shadowsChromaRedInput->setEnabled(b);
+            d->midtonesChromaRedInput->setEnabled(b);
+            d->highlightsChromaRedInput->setEnabled(b);
+            break;
+        }
+    }
 
-void FilmGrainSettings::slotAddChrominanceBlueNoise(bool b)
-{
-    d->label5->setEnabled(b);
-    d->label6->setEnabled(b);
-    d->label7->setEnabled(b);
-    d->label8->setEnabled(b);
-    d->intensityChromaBlueInput->setEnabled(b);
-    d->shadowsChromaBlueInput->setEnabled(b);
-    d->midtonesChromaBlueInput->setEnabled(b);
-    d->highlightsChromaBlueInput->setEnabled(b);
-    emit signalSettingsChanged();
-}
-
-void FilmGrainSettings::slotAddChrominanceRedNoise(bool b)
-{
-    d->label9->setEnabled(b);
-    d->label10->setEnabled(b);
-    d->label11->setEnabled(b);
-    d->label12->setEnabled(b);
-    d->intensityChromaRedInput->setEnabled(b);
-    d->shadowsChromaRedInput->setEnabled(b);
-    d->midtonesChromaRedInput->setEnabled(b);
-    d->highlightsChromaRedInput->setEnabled(b);
     emit signalSettingsChanged();
 }
 
@@ -478,17 +467,17 @@ FilmGrainContainer FilmGrainSettings::settings() const
     FilmGrainContainer prm;
     prm.grainSize               = d->grainSizeInput->value();
     prm.photoDistribution       = d->photoDistribution->isChecked();
-    prm.addLuminanceNoise       = d->addLuminanceNoise->isChecked();
+    prm.addLuminanceNoise       = d->expanderBox->isChecked(1);
     prm.lumaIntensity           = d->intensityLumInput->value();
     prm.lumaShadows             = d->shadowsLumInput->value();
     prm.lumaMidtones            = d->midtonesLumInput->value();
     prm.lumaHighlights          = d->highlightsLumInput->value();
-    prm.addChrominanceBlueNoise = d->addChrominanceBlueNoise->isChecked();
+    prm.addChrominanceBlueNoise = d->expanderBox->isChecked(2);
     prm.chromaBlueIntensity     = d->intensityChromaBlueInput->value();
     prm.chromaBlueShadows       = d->shadowsChromaBlueInput->value(); 
     prm.chromaBlueMidtones      = d->midtonesChromaBlueInput->value();
     prm.chromaBlueHighlights    = d->highlightsChromaBlueInput->value();
-    prm.addChrominanceRedNoise  = d->addChrominanceRedNoise->isChecked();
+    prm.addChrominanceRedNoise  = d->expanderBox->isChecked(3);
     prm.chromaRedIntensity      = d->intensityChromaRedInput->value();
     prm.chromaRedShadows        = d->shadowsChromaRedInput->value(); 
     prm.chromaRedMidtones       = d->midtonesChromaRedInput->value();
@@ -502,24 +491,24 @@ void FilmGrainSettings::setSettings(const FilmGrainContainer& settings)
 
     d->grainSizeInput->setValue(settings.grainSize);
     d->photoDistribution->setChecked(settings.photoDistribution);
-    d->addLuminanceNoise->setChecked(settings.addLuminanceNoise);
+    d->expanderBox->setChecked(1, settings.addLuminanceNoise);
     d->intensityLumInput->setValue(settings.lumaIntensity);
     d->shadowsLumInput->setValue(settings.lumaShadows);
     d->midtonesLumInput->setValue(settings.lumaMidtones);
     d->highlightsLumInput->setValue(settings.lumaHighlights);
-    d->addChrominanceBlueNoise->setChecked(settings.addChrominanceBlueNoise);
+    d->expanderBox->setChecked(2, settings.addChrominanceBlueNoise);
     d->intensityChromaBlueInput->setValue(settings.chromaBlueIntensity);
     d->shadowsChromaBlueInput->setValue(settings.chromaBlueShadows); 
     d->midtonesChromaBlueInput->setValue(settings.chromaBlueMidtones);
     d->highlightsChromaBlueInput->setValue(settings.chromaBlueHighlights);
-    d->addChrominanceRedNoise->setChecked(settings.addChrominanceRedNoise);
+    d->expanderBox->setChecked(3, settings.addChrominanceRedNoise);
     d->intensityChromaRedInput->setValue(settings.chromaRedIntensity);
     d->shadowsChromaRedInput->setValue(settings.chromaRedShadows); 
     d->midtonesChromaRedInput->setValue(settings.chromaRedMidtones);
     d->highlightsChromaRedInput->setValue(settings.chromaRedHighlights);
-    slotAddLuminanceNoise(settings.addLuminanceNoise);
-    slotAddChrominanceBlueNoise(settings.addChrominanceBlueNoise);
-    slotAddChrominanceRedNoise(settings.addChrominanceRedNoise);
+    slotItemToggled(1, settings.addLuminanceNoise);
+    slotItemToggled(2, settings.addChrominanceBlueNoise);
+    slotItemToggled(3, settings.addChrominanceRedNoise);
 
     blockSignals(false);
 }
