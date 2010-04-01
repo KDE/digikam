@@ -12,6 +12,7 @@ INCLUDE_DIRECTORIES(
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dmetadata
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/models
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/template
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/themeengine
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/common
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/iccprofiles
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/imageplugins
@@ -25,6 +26,10 @@ INCLUDE_DIRECTORIES(
                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/cameragui
                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/canvas
                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/editor
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/widgets
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/kipiiface
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/lighttable
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/queuemanager
                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup
                     ${CMAKE_CURRENT_SOURCE_DIR}/../imageplugins/freerotation
                     ${CMAKE_CURRENT_SOURCE_DIR}/../digikam
