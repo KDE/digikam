@@ -42,6 +42,10 @@
 #include <ktoggleaction.h>
 #include <kurl.h>
 
+// LibKDcraw includes
+
+#include <libkdcraw/rexpanderbox.h>
+
 // Local includes
 
 #include "cameracontroller.h"
@@ -52,11 +56,12 @@
 #include "imagepropertiessidebarcamgui.h"
 #include "kdatetimeedit.h"
 #include "renamecustomizer.h"
-#include "rexpanderbox.h"
 #include "sidebar.h"
 #include "statusnavigatebar.h"
 #include "statusprogressbar.h"
 #include "templateselector.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {

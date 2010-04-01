@@ -32,10 +32,15 @@
 
 #include <kurl.h>
 
+// LibKDcraw includes
+
+#include <libkdcraw/rexpanderbox.h>
+
 // Local includes
 
 #include "digikam_export.h"
-#include "rexpanderbox.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {

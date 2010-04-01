@@ -28,9 +28,11 @@
 
 #include <QString>
 
-// Local includes
+// LibKDcraw includes
 
-#include "rexpanderbox.h"
+#include <libkdcraw/rexpanderbox.h>
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
