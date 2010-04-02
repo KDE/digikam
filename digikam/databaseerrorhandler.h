@@ -38,20 +38,24 @@ namespace Digikam
 
 class DatabaseConnectionChecker : public QThread
 {
+
     Q_OBJECT
 
-    public:
-        DatabaseConnectionChecker(const DatabaseParameters parameters);
-        bool stop;
-        void run();
-        void setDialog(QDialog* dialog);
+public:
 
-    private:
-        QDialog* dialog;
-        DatabaseParameters parameters;
+    DatabaseConnectionChecker(const DatabaseParameters parameters);
+    void run();
+    void setDialog(QDialog* dialog);
+    bool stop;
 
-    Q_SIGNALS:
-        void done();
+private:
+
+    QDialog* dialog;
+    DatabaseParameters parameters;
+
+Q_SIGNALS:
+
+    void done();
 };
 
 class DatabaseGUIErrorHandler : public DatabaseErrorHandler
@@ -66,10 +70,12 @@ public:
     bool checkDatabaseConnection();
 
 private:
+
     DatabaseParameters parameters;
     bool               refuseQueries;
 
 private Q_SLOTS:
+
     virtual void databaseError(DatabaseErrorAnswer *answer,  const SqlQuery& query);
 
 };
