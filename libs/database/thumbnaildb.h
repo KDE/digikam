@@ -37,6 +37,7 @@
 
 // Local includes
 
+#include "databasecorebackend.h"
 #include "sqlquery.h"
 #include "thumbnaildatabaseaccess.h"
 #include "digikam_export.h"

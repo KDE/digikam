@@ -36,6 +36,7 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "databaseerrorhandler.h"
 #include "databaseparameters.h"
 #include "sqlquery.h"
 
@@ -44,32 +45,6 @@ namespace Digikam
 
 class ThumbnailSchemaUpdater;
 class DatabaseCoreBackendPrivate;
-
-class DIGIKAM_EXPORT DatabaseErrorAnswer
-{
-public:
-    virtual ~DatabaseErrorAnswer() {};
-    virtual void connectionErrorContinueQueries() = 0;
-    virtual void connectionErrorAbortQueries() = 0;
-};
-
-class DIGIKAM_EXPORT DatabaseErrorHandler : public QObject
-{
-    Q_OBJECT
-
-public Q_SLOTS:
-
-    /** In the situation of a connection error,
-     *  all threads will be waiting with their queries
-     *  and this method is called.
-     *  This method can display an error dialog and try to repair
-     *  the connection.
-     *  It must then call either connectionErrorContinueQueries()
-     *  or connectionErrorAbortQueries().
-     */
-    virtual void databaseError(DatabaseErrorAnswer *answer, const SqlQuery &query) = 0;
-
-};
 
 class DIGIKAM_EXPORT DatabaseLocking
 {
