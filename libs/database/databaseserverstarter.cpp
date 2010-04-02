@@ -51,6 +51,10 @@
 #include <kdebug.h>
 #include <kstandarddirs.h>
 
+// Local includes
+
+#include "config-digikam.h"
+
 namespace Digikam
 {
 
@@ -91,8 +95,7 @@ void DatabaseServerStarter::startServerManagerProcess(const QString dbType)
     sem.acquire();
     if (!isServerRegistered())
     {
-	// FIXME: this way is not portable. Use Cmake config to get install path.
-        const QString dbServerMgrPath("/usr/bin/digikamdatabaseserver");
+        const QString dbServerMgrPath(LIBEXEC_INSTALL_DIR "/digikamdatabaseserver");
         if ( dbServerMgrPath.isEmpty() )
             kDebug(50003) << "No path to digikamdatabaseserver set in server manager configuration!";
 
@@ -114,7 +117,7 @@ void DatabaseServerStarter::startServerManagerProcess(const QString dbType)
         if (!isServerRegistered())
         {
             sotoSleep sleepThread;
-            sleepThread.sleep(2);
+            sleepThread.msleep(250);
             sleepThread.wait();
         }
         else
@@ -146,5 +149,11 @@ bool DatabaseServerStarter::isServerRegistered()
     }
     return false;
 }
+
+void DatabaseServerStarter::cleanUp()
+{
+    // for now, do nothing, the server will terminate on itself
+}
+
 
 }  // namespace Digikam

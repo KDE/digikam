@@ -46,6 +46,7 @@ class DIGIKAM_DATABASE_EXPORT DatabaseServerStarter : public QObject
 
         DatabaseServerStarter(QObject* parent);
         static void startServerManagerProcess(const QString dbType="QMYSQL");
+        static void cleanUp();
 
     private:
 

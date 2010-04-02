@@ -25,6 +25,7 @@
 /* Define to 1 if you have Nepomuk shared libraries installed */
 #cmakedefine HAVE_NEPOMUK 1
 
+#define LIBEXEC_INSTALL_DIR "${LIBEXEC_INSTALL_DIR}"
 
 /* debug area codes */
 #define AREACODE_GENERAL      ${AREA_CODE_GENERAL}

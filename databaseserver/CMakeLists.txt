@@ -36,4 +36,4 @@ TARGET_LINK_LIBRARIES(digikamdatabaseserver
                      )
 
 
-INSTALL(TARGETS digikamdatabaseserver ${INSTALL_TARGETS_DEFAULT_ARGS})
+INSTALL(TARGETS digikamdatabaseserver DESTINATION ${LIBEXEC_INSTALL_DIR})
