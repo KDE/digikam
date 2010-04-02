@@ -48,7 +48,6 @@
 #include <Soprano/QueryResultIterator>
 #include <Soprano/Statement>
 #include <Soprano/Vocabulary/NAO>
-#include <Soprano/Vocabulary/Xesam>
 #include <Soprano/Vocabulary/XMLSchema>
 
 // Local includes
@@ -65,6 +64,9 @@
 #include "databasewatch.h"
 #include "imageinfo.h"
 #include "imagelister.h"
+
+#include "nfo.h"
+#include "nie.h"
 
 namespace Digikam
 {
@@ -473,7 +475,7 @@ void NepomukService::syncToNepomuk(const QList<ImageInfo>& infos, SyncToNepomukS
     {
         ChangingNepomuk changing(d);
 
-        Nepomuk::Resource res(info.fileUrl(), Soprano::Vocabulary::Xesam::File() );
+        Nepomuk::Resource res(info.fileUrl(), Nepomuk::Vocabulary::NFO::FileDataObject() );
 
         if (syncSettings & SyncRating)
         {
@@ -543,7 +545,7 @@ void NepomukService::syncTagsToNepomuk(const QList<qlonglong>& imageIds, const Q
                 ImageInfo info(imageId);
                 if (!info.isNull())
                 {
-                    Nepomuk::Resource res(info.fileUrl(), Soprano::Vocabulary::Xesam::File());
+                    Nepomuk::Resource res(info.fileUrl(), Nepomuk::Vocabulary::NFO::FileDataObject());
 
                     if (addOrRemove)
                         res.addTag(tag);
@@ -570,7 +572,7 @@ void NepomukService::pushTagsToNepomuk(const QList<ImageInfo>& imageInfos)
                 Nepomuk::Tag tag = nepomukForDigikamTag(d->tagInfo(tagId));
                 if (tag.isValid())
                 {
-                    Nepomuk::Resource res(info.fileUrl(), Soprano::Vocabulary::Xesam::File());
+                    Nepomuk::Resource res(info.fileUrl(), Nepomuk::Vocabulary::NFO::FileDataObject());
 
                     res.addTag(tag);
 
@@ -641,7 +643,7 @@ void NepomukService::slotStatementRemoved(const Soprano::Statement& statement)
             return;
         kDebug() << "Removed tag" << subject.toN3() << statement.object().toN3() << d->changingNepomuk;
         Nepomuk::Resource res(subject.uri());
-        removeTagInDigikam(res.property(Soprano::Vocabulary::Xesam::url()).toString(), statement.object().uri());
+        removeTagInDigikam(res.property(Nepomuk::Vocabulary::NIE::url()).toString(), statement.object().uri());
     }
 }
 
@@ -654,15 +656,15 @@ static QString nepomukChangeQuery(const QString& predicate, const QDateTime& dat
 {
     return  QString("PREFIX nao: <%1> "
                     "PREFIX xls: <%2> "
-                    "PREFIX xesam: <%3> "
+                    "PREFIX nie: <%3> "
                     "SELECT DISTINCT ?path ?value "
                     " WHERE { GRAPH ?g { ?r %4 ?value . } . "
-                    " ?r xesam:url ?path ."
+                    " ?r nie:url ?path ."
                     " ?g nao:created ?t . "
                     " FILTER ( ?t > \"%5\"^^xls:dateTime ) . } ")
                     .arg(Soprano::Vocabulary::NAO::naoNamespace().toString())
                     .arg(Soprano::Vocabulary::XMLSchema::xsdNamespace().toString())
-                    .arg(Soprano::Vocabulary::Xesam::xesamNamespace().toString())
+                    .arg(Nepomuk::Vocabulary::NIE::nieNamespace().toString())
                     .arg(predicate)
                     .arg(Soprano::LiteralValue(dateTime).toString());
     /*
@@ -670,7 +672,7 @@ static QString nepomukChangeQuery(const QString& predicate, const QDateTime& dat
                             " FILTER ( ?t > %2 ) . } ")
                             .arg(Soprano::Node::literalToN3(lastSyncDate));
 
-                            .arg(Soprano::Node::resourceToN3(Soprano::Vocabulary::Xesam::url())
+                            .arg(Soprano::Node::resourceToN3(Nepomuk::Vocabulary::NIE::url())
     */
 }
 
@@ -756,7 +758,7 @@ void NepomukService::syncAddedImagesToDigikam(const QList<qlonglong> &ids)
 
         ChangingDB changing(d);
 
-        Nepomuk::Resource res(info.fileUrl(), Soprano::Vocabulary::Xesam::File());
+        Nepomuk::Resource res(info.fileUrl(), Nepomuk::Vocabulary::NFO::FileDataObject());
         Nepomuk::Variant rating = res.property(Soprano::Vocabulary::NAO::numericRating());
         if (rating.isValid())
             info.setRating(nepomukToDigikamRating(rating.toInt()));

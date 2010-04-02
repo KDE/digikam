@@ -251,6 +251,10 @@ IF (NEPOMUK_FOUND)
 
     SET(digikamnepomukservices_SRCS ${libnepomukservices_SRCS} )
 
+    include(SopranoAddOntology)
+    soprano_add_ontology(digikamnepomukservices_SRCS "${SHAREDDESKTOPONTOLOGIES_ROOT_DIR}/nie/nie.trig" "NIE" "Nepomuk::Vocabulary" "trig")
+    soprano_add_ontology(digikamnepomukservices_SRCS "${SHAREDDESKTOPONTOLOGIES_ROOT_DIR}/nie/nfo.trig" "NFO" "Nepomuk::Vocabulary" "trig")
+
     KDE4_ADD_PLUGIN(digikamnepomukservice ${digikamnepomukservices_SRCS})
 
     TARGET_LINK_LIBRARIES(digikamnepomukservice
