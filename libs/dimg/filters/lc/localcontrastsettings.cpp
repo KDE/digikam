@@ -89,10 +89,6 @@ public:
         configStageFourEntry("StageFour"),
         configFunctionInputEntry("FunctionInput"),
         stretchContrastCheck(0),
-        stageOne(0),
-        stageTwo(0),
-        stageThree(0),
-        stageFour(0),
         label4(0),
         label5(0),
         label6(0),
@@ -134,10 +130,6 @@ public:
     const QString       configFunctionInputEntry;
 
     QCheckBox*          stretchContrastCheck;
-    QCheckBox*          stageOne;
-    QCheckBox*          stageTwo;
-    QCheckBox*          stageThree;
-    QCheckBox*          stageFour;
 
     QLabel*             label4;
     QLabel*             label5;
@@ -232,12 +224,7 @@ LocalContrastSettings::LocalContrastSettings(QWidget* parent)
 
     QWidget* secondPage = new QWidget();
     QGridLayout* grid2  = new QGridLayout( secondPage );
-
-    d->stageOne         = new QCheckBox(i18n("Enabled"), secondPage);
-    d->stageOne->setWhatsThis(i18n("Check to enable this stage."));
-    d->stageOne->setChecked(true);
-    d->stageOne->setObjectName("stageOne");
-
+    
     // -------------------------------------------------------------
 
     d->label4      = new QLabel(i18n("Power:"), secondPage);
@@ -257,11 +244,10 @@ LocalContrastSettings::LocalContrastSettings(QWidget* parent)
     d->blurInput1->setWhatsThis(i18n("<b>Blur</b>: How strong the image is blurred before combining with the original "
                                      "image and with the tonemapping function."));
 
-    grid2->addWidget(d->stageOne,    0, 0, 1, 2);
-    grid2->addWidget(d->label4,      1, 0, 1, 1);
-    grid2->addWidget(d->powerInput1, 1, 1, 1, 1);
-    grid2->addWidget(d->label5,      2, 0, 1, 1);
-    grid2->addWidget(d->blurInput1,  2, 1, 1, 1);
+    grid2->addWidget(d->label4,      0, 0, 1, 1);
+    grid2->addWidget(d->powerInput1, 0, 1, 1, 1);
+    grid2->addWidget(d->label5,      1, 0, 1, 1);
+    grid2->addWidget(d->blurInput1,  1, 1, 1, 1);
     grid2->setMargin(KDialog::spacingHint());
     grid2->setSpacing(KDialog::spacingHint());
 
@@ -269,11 +255,6 @@ LocalContrastSettings::LocalContrastSettings(QWidget* parent)
 
     QWidget* thirdPage = new QWidget();
     QGridLayout* grid3 = new QGridLayout( thirdPage );
-
-    d->stageTwo = new QCheckBox(i18n("Enabled"), thirdPage);
-    d->stageTwo->setWhatsThis(i18n("Check to enable this stage."));
-    d->stageTwo->setChecked(false);
-    d->stageTwo->setObjectName("stageTwo");
 
     // -------------------------------------------------------------
 
@@ -294,11 +275,10 @@ LocalContrastSettings::LocalContrastSettings(QWidget* parent)
     d->blurInput2->setWhatsThis(i18n("<b>Blur</b>: How strong the image is blurred before combining with the original "
                                      "image and with the tonemapping function."));
 
-    grid3->addWidget(d->stageTwo,    0, 0, 1, 2);
-    grid3->addWidget(d->label6,      1, 0, 1, 1);
-    grid3->addWidget(d->powerInput2, 1, 1, 1, 1);
-    grid3->addWidget(d->label7,      2, 0, 1, 1);
-    grid3->addWidget(d->blurInput2,  2, 1, 1, 1);
+    grid3->addWidget(d->label6,      0, 0, 1, 1);
+    grid3->addWidget(d->powerInput2, 0, 1, 1, 1);
+    grid3->addWidget(d->label7,      1, 0, 1, 1);
+    grid3->addWidget(d->blurInput2,  1, 1, 1, 1);
     grid3->setMargin(KDialog::spacingHint());
     grid3->setSpacing(KDialog::spacingHint());
 
@@ -306,11 +286,6 @@ LocalContrastSettings::LocalContrastSettings(QWidget* parent)
 
     QWidget* fourthPage = new QWidget();
     QGridLayout* grid4  = new QGridLayout( fourthPage );
-
-    d->stageThree = new QCheckBox(i18n("Enabled"), fourthPage);
-    d->stageThree->setWhatsThis(i18n("Check to enable this stage."));
-    d->stageThree->setChecked(false);
-    d->stageThree->setObjectName("stageThree");
 
     // -------------------------------------------------------------
 
@@ -331,11 +306,10 @@ LocalContrastSettings::LocalContrastSettings(QWidget* parent)
     d->blurInput3->setWhatsThis(i18n("<b>Blur</b>: How strong the image is blurred before combining with the original "
                                      "image and with the tonemapping function."));
 
-    grid4->addWidget(d->stageThree,  0, 0, 1, 2);
-    grid4->addWidget(d->label8,      1, 0, 1, 1);
-    grid4->addWidget(d->powerInput3, 1, 1, 1, 1);
-    grid4->addWidget(d->label9,      2, 0, 1, 1);
-    grid4->addWidget(d->blurInput3,  2, 1, 1, 1);
+    grid4->addWidget(d->label8,      0, 0, 1, 1);
+    grid4->addWidget(d->powerInput3, 0, 1, 1, 1);
+    grid4->addWidget(d->label9,      1, 0, 1, 1);
+    grid4->addWidget(d->blurInput3,  1, 1, 1, 1);
     grid4->setMargin(KDialog::spacingHint());
     grid4->setSpacing(KDialog::spacingHint());
 
@@ -343,11 +317,6 @@ LocalContrastSettings::LocalContrastSettings(QWidget* parent)
 
     QWidget* fifthPage = new QWidget();
     QGridLayout* grid5 = new QGridLayout( fifthPage );
-
-    d->stageFour       = new QCheckBox(i18n("Enabled"), fifthPage);
-    d->stageFour->setWhatsThis(i18n("Check to enable this stage."));
-    d->stageFour->setChecked(false);
-    d->stageFour->setObjectName("stageFour");
 
     // -------------------------------------------------------------
 
@@ -368,11 +337,10 @@ LocalContrastSettings::LocalContrastSettings(QWidget* parent)
     d->blurInput4->setWhatsThis(i18n("<b>Blur</b>: How strong the image is blurred before combining with the original "
                                      "image and with the tonemapping function."));
 
-    grid5->addWidget(d->stageFour,   0, 0, 1, 2);
-    grid5->addWidget(d->label10,     1, 0, 1, 1);
-    grid5->addWidget(d->powerInput4, 1, 1, 1, 1);
-    grid5->addWidget(d->label11,     2, 0, 1, 1);
-    grid5->addWidget(d->blurInput4,  2, 1, 1, 1);
+    grid5->addWidget(d->label10,     0, 0, 1, 1);
+    grid5->addWidget(d->powerInput4, 0, 1, 1, 1);
+    grid5->addWidget(d->label11,     1, 0, 1, 1);
+    grid5->addWidget(d->blurInput4,  1, 1, 1, 1);
     grid5->setMargin(KDialog::spacingHint());
     grid5->setSpacing(KDialog::spacingHint());
 
@@ -391,25 +359,20 @@ LocalContrastSettings::LocalContrastSettings(QWidget* parent)
     d->expanderBox->addItem(fifthPage, SmallIcon("contrast"), i18n("Stage 4"),
                             QString("Stage4SettingsContainer"), true);
     d->expanderBox->addStretch();
-
+    d->expanderBox->setCheckBoxVisible(1, true);
+    d->expanderBox->setCheckBoxVisible(2, true);
+    d->expanderBox->setCheckBoxVisible(3, true);
+    d->expanderBox->setCheckBoxVisible(4, true);
+    
     grid->addWidget(d->expanderBox, 0, 0, 1, 1);
     grid->setRowStretch(0, 10);
     grid->setMargin(KDialog::spacingHint());
     grid->setSpacing(KDialog::spacingHint());
 
     // -------------------------------------------------------------
-
-    connect(d->stageOne,SIGNAL(toggled(bool)),
-            this, SLOT(slotStage1Enabled(bool)));
-
-    connect(d->stageTwo,SIGNAL(toggled(bool)),
-            this, SLOT(slotStage2Enabled(bool)));
-
-    connect(d->stageThree,SIGNAL(toggled(bool)),
-            this, SLOT(slotStage3Enabled(bool)));
-
-    connect(d->stageFour,SIGNAL(toggled(bool)),
-            this, SLOT(slotStage4Enabled(bool)));
+            
+    connect(d->expanderBox, SIGNAL(signalItemToggled(int, bool)),
+            this, SLOT(slotStageEnabled(int, bool)));
 
     connect(d->lowSaturationInput, SIGNAL(valueChanged(int)),
             this, SIGNAL(signalSettingsChanged()));
@@ -453,40 +416,43 @@ LocalContrastSettings::~LocalContrastSettings()
     delete d;
 }
 
-void LocalContrastSettings::slotStage1Enabled(bool b)
-{
-    d->label4->setEnabled(b);
-    d->powerInput1->setEnabled(b);
-    d->label5->setEnabled(b);
-    d->blurInput1->setEnabled(b);
-    emit signalSettingsChanged();
-}
-
-void LocalContrastSettings::slotStage2Enabled(bool b)
-{
-
-    d->label6->setEnabled(b);
-    d->powerInput2->setEnabled(b);
-    d->label7->setEnabled(b);
-    d->blurInput2->setEnabled(b);
-    emit signalSettingsChanged();
-}
-
-void LocalContrastSettings::slotStage3Enabled(bool b)
-{
-    d->label8->setEnabled(b);
-    d->powerInput3->setEnabled(b);
-    d->label9->setEnabled(b);
-    d->blurInput3->setEnabled(b);
-    emit signalSettingsChanged();
-}
-
-void LocalContrastSettings::slotStage4Enabled(bool b)
-{
-    d->label10->setEnabled(b);
-    d->powerInput4->setEnabled(b);
-    d->label11->setEnabled(b);
-    d->blurInput4->setEnabled(b);
+void LocalContrastSettings::slotStageEnabled(int index, bool b)
+{    
+    switch (index)
+    {
+        case 1:
+        {
+            d->label4->setEnabled(b);
+            d->powerInput1->setEnabled(b);
+            d->label5->setEnabled(b);
+            d->blurInput1->setEnabled(b);
+            break;
+        }
+        case 2:
+        {
+            d->label6->setEnabled(b);
+            d->powerInput2->setEnabled(b);
+            d->label7->setEnabled(b);
+            d->blurInput2->setEnabled(b);
+            break;
+        }
+        case 3:
+        { 
+            d->label8->setEnabled(b);
+            d->powerInput3->setEnabled(b);
+            d->label9->setEnabled(b);
+            d->blurInput3->setEnabled(b);
+            break;
+        }
+        case 4:
+        { 
+            d->label10->setEnabled(b);
+            d->powerInput4->setEnabled(b);
+            d->label11->setEnabled(b);
+            d->blurInput4->setEnabled(b);
+            break;
+        }  
+    }
     emit signalSettingsChanged();
 }
 
@@ -499,19 +465,19 @@ LocalContrastContainer LocalContrastSettings::settings() const
     prm.high_saturation  = d->highSaturationInput->value();
     prm.function_id      = d->functionInput->currentIndex();
 
-    prm.stage[0].enabled = d->stageOne->isChecked();
+    prm.stage[0].enabled = d->expanderBox->isChecked(1);
     prm.stage[0].power   = d->powerInput1->value();
     prm.stage[0].blur    = d->blurInput1->value();
 
-    prm.stage[1].enabled = d->stageTwo->isChecked();
+    prm.stage[1].enabled = d->expanderBox->isChecked(2);
     prm.stage[1].power   = d->powerInput2->value();
     prm.stage[1].blur    = d->blurInput2->value();
 
-    prm.stage[2].enabled = d->stageThree->isChecked();
+    prm.stage[2].enabled = d->expanderBox->isChecked(3);
     prm.stage[2].power   = d->powerInput3->value();
     prm.stage[2].blur    = d->blurInput3->value();
 
-    prm.stage[3].enabled = d->stageFour->isChecked();
+    prm.stage[3].enabled = d->expanderBox->isChecked(4);
     prm.stage[3].power   = d->powerInput4->value();
     prm.stage[3].blur    = d->blurInput4->value();
 
@@ -528,30 +494,32 @@ void LocalContrastSettings::setSettings(const LocalContrastContainer& settings)
     d->highSaturationInput->setValue(settings.high_saturation);
     d->functionInput->setCurrentIndex(settings.function_id);
 
-    d->stageOne->setChecked(settings.stage[0].enabled);
+    // d->stageOne->setChecked(settings.stage[0].enabled);
     d->powerInput1->setValue(settings.stage[0].power);
     d->blurInput1->setValue(settings.stage[0].blur);
 
-    d->stageTwo->setChecked(settings.stage[1].enabled);
+    //d->stageTwo->setChecked(settings.stage[1].enabled);
     d->powerInput2->setValue(settings.stage[1].power);
     d->blurInput2->setValue(settings.stage[1].blur);
 
-    d->stageThree->setChecked(settings.stage[2].enabled);
+    //d->stageThree->setChecked(settings.stage[2].enabled);
     d->powerInput3->setValue(settings.stage[2].power);
     d->blurInput3->setValue(settings.stage[2].blur);
 
-    d->stageFour->setChecked(settings.stage[3].enabled);
+    //d->stageFour->setChecked(settings.stage[3].enabled);
     d->powerInput4->setValue(settings.stage[3].power);
     d->blurInput4->setValue(settings.stage[3].blur);
 
     d->expanderBox->readSettings();
     d->expanderBox->setEnabled(true);
 
+    /*
     slotStage1Enabled(d->stageOne->isChecked());
     slotStage2Enabled(d->stageTwo->isChecked());
     slotStage3Enabled(d->stageThree->isChecked());
     slotStage4Enabled(d->stageFour->isChecked());
-
+ */
+    
     blockSignals(false);
 }
 
@@ -564,19 +532,19 @@ void LocalContrastSettings::resetToDefault()
     d->highSaturationInput->slotReset();
     d->functionInput->slotReset();
 
-    d->stageOne->setChecked(true);
+    d->expanderBox->setChecked(1,true);
     d->powerInput1->slotReset();
     d->blurInput1->slotReset();
 
-    d->stageTwo->setChecked(false);
+    d->expanderBox->setChecked(2,false);
     d->powerInput2->slotReset();
     d->blurInput2->slotReset();
 
-    d->stageThree->setChecked(false);
+    d->expanderBox->setChecked(3,false);  
     d->powerInput3->slotReset();
     d->blurInput3->slotReset();
-
-    d->stageFour->setChecked(false);
+    
+    d->expanderBox->setChecked(4,false);
     d->powerInput4->slotReset();
     d->blurInput4->slotReset();
 
@@ -691,10 +659,10 @@ void LocalContrastSettings::loadSettings()
 
         blockSignals(true);
         d->stretchContrastCheck->setChecked( stream.readLine().toInt() );
-        d->stageOne->setChecked( stream.readLine().toInt() );
-        d->stageTwo->setChecked( stream.readLine().toInt() );
-        d->stageThree->setChecked( stream.readLine().toInt() );
-        d->stageFour->setChecked( stream.readLine().toInt() );
+        //d->stageOne->setChecked( stream.readLine().toInt() );
+        //d->stageTwo->setChecked( stream.readLine().toInt() );
+        //d->stageThree->setChecked( stream.readLine().toInt() );
+        //d->stageFour->setChecked( stream.readLine().toInt() );
         d->lowSaturationInput->setValue( stream.readLine().toInt() );
         d->highSaturationInput->setValue( stream.readLine().toInt() );
         d->functionInput->setCurrentIndex( stream.readLine().toInt() );
@@ -733,10 +701,10 @@ void LocalContrastSettings::saveAsSettings()
         stream << "# Photograph Local Contrast Configuration File\n";
 
         stream << d->stretchContrastCheck->isChecked() << "\n";
-        stream << d->stageOne->isChecked() << "\n";
-        stream << d->stageTwo->isChecked() << "\n";
-        stream << d->stageThree->isChecked() << "\n";
-        stream << d->stageFour->isChecked() << "\n";
+        //stream << d->stageOne->isChecked() << "\n";
+        //stream << d->stageTwo->isChecked() << "\n";
+        //stream << d->stageThree->isChecked() << "\n";
+        //stream << d->stageFour->isChecked() << "\n";
         stream << d->lowSaturationInput->value() << "\n";
         stream << d->highSaturationInput->value() << "\n";
         stream << d->functionInput->currentIndex() << "\n";
