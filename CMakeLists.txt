@@ -182,14 +182,13 @@ FIND_PROGRAM( SERVERCMD_MYSQL mysqld
                     ENV MYSQLD_PATH )
 MESSAGE(STATUS "Found MySQL server executable at: ${SERVERCMD_MYSQL}")
 
+IF (NOT WIN32)
 FIND_PROGRAM( INITCMD_MYSQL mysql_install_db
               PATHS /usr/sbin /usr/local/sbin /usr/libexec /usr/local/libexec
                     /opt/mysql/libexec /usr/mysql/bin /opt/mysql/bin ${MYSQL_TOOLS_PATH}
                     ENV MYSQL_TOOLS_PATH )
 MESSAGE(STATUS "Found MySQL install_db executable at: ${INITCMD_MYSQL}")
-
-#SET(SERVERCMD_MYSQL "/usr/sbin/mysqld"          CACHE STRING "Mysql Daemon executable (default=/usr/sbin/mysqld)")
-#SET(INITCMD_MYSQL   "/usr/bin/mysql_install_db" CACHE STRING "Mysql executable for DB initialization (default=/usr/bin/mysql_install_db)")
+ENDIF (NOT WIN32)
 
 # ==================================================================================================
 # Optional dependencies
@@ -243,7 +242,9 @@ MESSAGE(STATUS "")
 
 PRINT_QTMODULE_STATUS("Qt4 SQL" QT_QTSQL_FOUND)
 PRINT_EXECUTABLE_STATUS("MySQL Server" mysqld MYSQLD_PATH SERVERCMD_MYSQL)
+IF (NOT WIN32)
 PRINT_EXECUTABLE_STATUS("MySQL install_db tool" mysql_install_db MYSQL_TOOLS_PATH INITCMD_MYSQL)
+ENDIF (NOT WIN32)
 PRINT_LIBRARY_STATUS("libtiff" "http://www.remotesensing.org/libtiff" "" TIFF_FOUND)
 PRINT_LIBRARY_STATUS("libpng" "http://www.libpng.org/pub/png/libpng.html" " (version >= 1.2.7)" PNG_FOUND)
 PRINT_LIBRARY_STATUS("libjasper" "http://www.ece.uvic.ca/~mdadams/jasper" "" JASPER_FOUND)
