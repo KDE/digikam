@@ -178,7 +178,7 @@ SET(albummodeltest_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/albumsettings.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/albumthumbnailloader.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/databaseerrorhandler.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/digikamapp.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/common/databasewidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/scancontroller.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/cameragui/dkcamera.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/cameragui/gpcamera.cpp

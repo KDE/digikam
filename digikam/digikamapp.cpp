@@ -315,7 +315,7 @@ DigikamApp::~DigikamApp()
     // close database server
     if (AlbumSettings::instance()->getInternalDatabaseServer())
     {
-        stopInternalDatabase();
+        DatabaseServerStarter::cleanUp();
     }
 
     m_instance = 0;
@@ -324,18 +324,6 @@ DigikamApp::~DigikamApp()
 
     delete d;
 }
-
-
-void DigikamApp::startInternalDatabase()
-{
-    DatabaseServerStarter::startServerManagerProcess();
-}
-
-void DigikamApp::stopInternalDatabase()
-{
-
-}
-
 
 DigikamApp* DigikamApp::instance()
 {

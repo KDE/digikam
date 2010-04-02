@@ -86,6 +86,7 @@ extern "C"
 #include "thumbnaildatabaseaccess.h"
 #include "databaseurl.h"
 #include "databaseparameters.h"
+#include "databaseserverstarter.h"
 #include "databasethumbnailinfoprovider.h"
 #include "databasewatch.h"
 #include "dio.h"
@@ -96,7 +97,6 @@ extern "C"
 #include "upgradedb_sqlite2tosqlite3.h"
 #include "config-digikam.h"
 #include "setupcollections.h"
-#include "digikamapp.h"
 
 namespace Digikam
 {
@@ -576,11 +576,7 @@ bool AlbumManager::setDatabase(const QString dbType, const QString dbName, const
     // ensure, embedded database is loaded
     if (internalServer)
     {
-        DigikamApp::instance()->startInternalDatabase();
-    }
-    else
-    {
-        DigikamApp::instance()->stopInternalDatabase();
+        DatabaseServerStarter::startServerManagerProcess();
     }
 
     // This is to ensure that the setup does not overrule the command line.
