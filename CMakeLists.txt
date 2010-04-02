@@ -1271,7 +1271,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/treefolderitem.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/searchmodificationhelper.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/welcomepageview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/databaseerrorhandler.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/databaseguierrorhandler.cpp
        )
 
     SET(libdigikamhelpers_SRCS

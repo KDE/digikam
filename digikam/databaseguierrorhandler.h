@@ -25,13 +25,20 @@
 #define DATABASEGUIERRORHANDLER_H
 
 // QT includes
-#include <qthread.h>
+
+#include <QMutex>
+#include <QPointer>
+#include <QThread>
+#include <QWaitCondition>
 
 // KDE includes
+
 #include <kprogressdialog.h>
 
 // Local includes
+
 #include "databasecorebackend.h"
+#include "databaseerrorhandler.h"
 
 namespace Digikam
 {
@@ -44,18 +51,28 @@ class DatabaseConnectionChecker : public QThread
 public:
 
     DatabaseConnectionChecker(const DatabaseParameters parameters);
-    void run();
-    void setDialog(QDialog* dialog);
-    bool stop;
+    bool checkSuccessful() const;
 
-private:
+public Q_SLOTS:
 
-    QDialog* dialog;
-    DatabaseParameters parameters;
+    void stopChecking();
+
+protected:
+
+    virtual void run();
 
 Q_SIGNALS:
 
+    void failedAttempt();
     void done();
+
+private:
+
+    bool               m_stop;
+    bool               m_success;
+    DatabaseParameters m_parameters;
+    QMutex             m_mutex;
+    QWaitCondition     m_condVar;
 };
 
 class DatabaseGUIErrorHandler : public DatabaseErrorHandler
@@ -64,19 +81,22 @@ class DatabaseGUIErrorHandler : public DatabaseErrorHandler
 
 public:
 
-    DatabaseGUIErrorHandler(const DatabaseParameters parameters);
+    DatabaseGUIErrorHandler(const DatabaseParameters& parameters);
     ~DatabaseGUIErrorHandler();
 
     bool checkDatabaseConnection();
 
-private:
-
-    DatabaseParameters parameters;
-    bool               refuseQueries;
+    virtual void databaseError(DatabaseErrorAnswer *answer,  const SqlQuery& query);
 
 private Q_SLOTS:
 
-    virtual void databaseError(DatabaseErrorAnswer *answer,  const SqlQuery& query);
+    void showProgressDialog();
+
+private:
+
+    DatabaseParameters         m_parameters;
+    QPointer<KProgressDialog>  m_dialog;
+    DatabaseConnectionChecker *m_checker;
 
 };
 
