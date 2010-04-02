@@ -37,48 +37,52 @@
 
 namespace Digikam
 {
+
 class SqlQuery : public QSqlQuery
+{
+public:
+
+    SqlQuery() : QSqlQuery()
     {
-        private:
-            QString query;
-        public:
-            SqlQuery() : QSqlQuery()
-            {
+    }
 
-            }
+    SqlQuery(const QSqlQuery &other) : QSqlQuery(other)
+    {
+    }
 
-            SqlQuery(const QSqlQuery &myQuery) : QSqlQuery(myQuery)
-            {
+    SqlQuery(QSqlDatabase db) : QSqlQuery(db)
+    {
+    }
 
-            }
-            SqlQuery(QSqlDatabase db) : QSqlQuery(db)
-            {
+    virtual SqlQuery& operator=(const SqlQuery& other)
+    {
+        QSqlQuery::operator=(other);
+        m_query = other.m_query;
+        return *this;
+    }
 
-            }
-            virtual SqlQuery& operator=(const SqlQuery& other)
-            {
-                QSqlQuery::operator=(other);
-                this->query = other.query;
-                return *this;
-            }
-            virtual bool prepare(const QString& query)
-            {
-                bool result = QSqlQuery::prepare(query);
-                this->query = query;
-                return result;
-            }
+    virtual bool prepare(const QString& query)
+    {
+        bool result = QSqlQuery::prepare(query);
+        m_query = query;
+        return result;
+    }
 
-            virtual QString lastQuery() const
-            {
-                return query;
-            }
+    virtual QString lastQuery() const
+    {
+        return m_query;
+    }
 
-            virtual ~SqlQuery()
-            {
+    virtual ~SqlQuery()
+    {
+    }
 
-            }
+private:
 
-    };
+    QString m_query;
+
+};
+
 }  // namespace Digikam
 
 #endif /* SQLQUERY_H */
