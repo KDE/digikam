@@ -2,8 +2,6 @@ PROJECT(digikam)
 
 #OPTION(ENABLE_THEMEDESIGNER "Build digiKam theme designer (default=OFF)" OFF)
 OPTION(ENABLE_THUMBS_DB "Build digiKam with thumbnails database support (default=ON)" ON)
-SET(SERVERCMD_MYSQL "/usr/sbin/mysqld" CACHE STRING "Mysql Daemon executable (default=/usr/sbin/mysqld)")
-SET(INITCMD_MYSQL   "/usr/bin/mysql_install_db" CACHE STRING "Mysql executable for DB initialization (default=/usr/bin/mysql_install_db)")
 
 # ==================================================================================================
 # Information to update before to release this package.
@@ -104,6 +102,23 @@ MACRO(PRINT_QTMODULE_STATUS NAME)
 
 ENDMACRO(PRINT_QTMODULE_STATUS)
 
+MACRO(PRINT_EXECUTABLE_STATUS NAME TECHNICAL_NAME PATH_VARIABLE)
+
+    SET(LIB_MESSAGE "${NAME} found")
+    FILL_WITH_DOTS(LIB_MESSAGE)
+
+    IF(${ARGN})
+        MESSAGE(STATUS " ${LIB_MESSAGE} YES")
+    ELSE(${ARGN})
+        MESSAGE(STATUS " ${LIB_MESSAGE} NO")
+        MESSAGE(STATUS "")
+        MESSAGE(STATUS " digiKam needs ${NAME}. You need to install the package containing the \"${TECHNICAL_NAME}\" executable.")
+        MESSAGE(STATUS " If you have this executable installed, please specify the folder containing it by ${PATH_VARIABLE}")
+        MESSAGE(SEND_ERROR "")
+    ENDIF(${ARGN})
+
+ENDMACRO(PRINT_EXECUTABLE_STATUS)
+
 # ==================================================================================================
 # Dependencies
 
@@ -160,6 +175,22 @@ ELSE(NOT WIN32)
     SET(KEXIV2_FOR_DIGIKAM TRUE)
 ENDIF(NOT WIN32)
 
+# Check MySQL executables
+FIND_PROGRAM( SERVERCMD_MYSQL mysqld
+              PATHS /usr/sbin /usr/local/sbin /usr/libexec /usr/local/libexec
+                    /opt/mysql/libexec /usr/mysql/bin /opt/mysql/sbin ${MYSQLD_PATH}
+                    ENV MYSQLD_PATH )
+MESSAGE(STATUS "Found MySQL server executable at: ${SERVERCMD_MYSQL}")
+
+FIND_PROGRAM( INITCMD_MYSQL mysql_install_db
+              PATHS /usr/sbin /usr/local/sbin /usr/libexec /usr/local/libexec
+                    /opt/mysql/libexec /usr/mysql/bin /opt/mysql/bin ${MYSQL_TOOLS_PATH}
+                    ENV MYSQL_TOOLS_PATH )
+MESSAGE(STATUS "Found MySQL install_db executable at: ${INITCMD_MYSQL}")
+
+#SET(SERVERCMD_MYSQL "/usr/sbin/mysqld"          CACHE STRING "Mysql Daemon executable (default=/usr/sbin/mysqld)")
+#SET(INITCMD_MYSQL   "/usr/bin/mysql_install_db" CACHE STRING "Mysql executable for DB initialization (default=/usr/bin/mysql_install_db)")
+
 # ==================================================================================================
 # Optional dependencies
 
@@ -211,6 +242,8 @@ MESSAGE(STATUS " digiKam ${DIGIKAM_VERSION_STRING} dependencies results   <http:
 MESSAGE(STATUS "")
 
 PRINT_QTMODULE_STATUS("Qt4 SQL" QT_QTSQL_FOUND)
+PRINT_EXECUTABLE_STATUS("MySQL Server" mysqld MYSQLD_PATH SERVERCMD_MYSQL)
+PRINT_EXECUTABLE_STATUS("MySQL install_db tool" mysql_install_db MYSQL_TOOLS_PATH INITCMD_MYSQL)
 PRINT_LIBRARY_STATUS("libtiff" "http://www.remotesensing.org/libtiff" "" TIFF_FOUND)
 PRINT_LIBRARY_STATUS("libpng" "http://www.libpng.org/pub/png/libpng.html" " (version >= 1.2.7)" PNG_FOUND)
 PRINT_LIBRARY_STATUS("libjasper" "http://www.ece.uvic.ca/~mdadams/jasper" "" JASPER_FOUND)
@@ -321,11 +354,6 @@ ELSE(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND AND JASPER_FOUND
     MESSAGE(FATAL_ERROR " digiKam will be compiled................. NO  (Look README file for more details about dependencies)")
     SET(DIGIKAM_CAN_BE_COMPILED false)
 ENDIF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND JASPER_FOUND AND KDCRAW_FOR_DIGIKAM AND KEXIV2_FOUND AND KIPI_FOUND)
-
-	MESSAGE(STATUS "")
-    MESSAGE(STATUS "Database server settings")
-    MESSAGE(STATUS " Using mysqld path (set by SERVERCMD_MYSQL)......[${SERVERCMD_MYSQL}]")
-	MESSAGE(STATUS " Using mysql-init path..(set by INITCMD_MYSQL)...[${INITCMD_MYSQL}]")
 
 MESSAGE(STATUS "----------------------------------------------------------------------------------")
 MESSAGE(STATUS "")
