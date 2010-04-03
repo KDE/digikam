@@ -44,6 +44,7 @@
 #include "databasewatch.h"
 #include "databasebackend.h"
 #include "databaseerrorhandler.h"
+#include "tagscache.h"
 
 namespace Digikam
 {
@@ -209,6 +210,7 @@ void DatabaseAccess::setParameters(const DatabaseParameters& parameters, Applica
         d->backend = new DatabaseBackend(&d->lock);
         d->backend->setDatabaseWatch(d->databaseWatch);
         d->db = new AlbumDB(d->backend);
+        TagsCache::instance()->initialize();
     }
 
     delete d->infoCache;

@@ -1001,6 +1001,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databasecopymanager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseserverstarter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlquery.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/tagscache.cpp
        )
 
     SET(libdatabaseui_SRCS
