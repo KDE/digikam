@@ -30,6 +30,7 @@
 #include "databasecorebackend.h"
 #include "databasecorebackend_p.h"
 #include "databasecorebackend.moc"
+#include "databaseerrorhandler.moc"
 
 // Qt includes
 
@@ -103,6 +104,7 @@ void DatabaseCoreBackendPrivate::init(const QString &name, DatabaseLocking *l)
     lock        = l;
 
     qRegisterMetaType<DatabaseErrorAnswer*>("DatabaseErrorAnswer*");
+    qRegisterMetaType<SqlQuery>("SqlQuery");
 }
 
 // "A connection can only be used from within the thread that created it.
@@ -245,48 +247,57 @@ void DatabaseCoreBackendPrivate::debugOutputFailedQuery(const QSqlQuery &query)
 {
     kDebug(50003) << "Failure executing query: ";
     kDebug(50003) << query.executedQuery();
-    kDebug(50003) << query.lastError().text() << query.lastError().number() << query.lastError().databaseText() << query.lastError().driverText();
+    kDebug(50003) << "Error messages:" << query.lastError().text() << query.lastError().number()
+                  << query.lastError().type() << query.lastError().databaseText()
+                  << query.lastError().driverText() << query.driver()->lastError();
     kDebug(50003) << "Bound values: " << query.boundValues().values();
 }
 
+
+DatabaseCoreBackendPrivate::ErrorLocker::ErrorLocker(DatabaseCoreBackendPrivate *d)
+    : count(0), d(d)
+{
+    // Why two mutexes? The main mutex is recursive and won't work with a condvar.
+
+    // acquire lock
+    d->lock->mutex.lock();
+    // store lock count
+    int count = d->lock->lockCount;
+    // set lock count to 0
+    d->lock->lockCount = 0;
+    // unlock
+    for (int i=0; i<count; ++i)
+        d->lock->mutex.unlock();
+
+    // lock condvar mutex (lock only if main mutex is locked)
+    d->errorLockMutex.lock();
+    // drop lock acquired in first line. Main mutex is now free.
+    // We maintain lock order (first main mutex, second error lock mutex)
+    // but we drop main mutex lock for waiting on the cond var.
+    d->lock->mutex.unlock();
+}
 
     /** This suspends the current thread if the query status as
      *  set by setFlag() is Wait and until the thread is woken with wakeAll().
      *  The DatabaseAccess mutex will be unlocked while waiting.
      */
-void DatabaseCoreBackendPrivate::queryOperationWait()
+void DatabaseCoreBackendPrivate::ErrorLocker::wait()
 {
-    // Why two mutexes? The main mutex is recursive and won't work with a condvar.
+    // we use a copy of the flag under lock of the errorLockMutex to be able to check it here
+    while (d->errorLockOperationStatus == DatabaseCoreBackend::Wait)
+        d->errorLockCondVar.wait(&d->errorLockMutex);  
+}
 
-    // acquire lock
-    lock->mutex.lock();
-    // store lock count
-    int count = lock->lockCount;
-    // set lock count to 0
-    lock->lockCount = 0;
-    // unlock
-    for (int i=0; i<count; ++i)
-        lock->mutex.unlock();
-
-    // lock condvar mutex (lock only if main mutex is locked)
-    errorLockMutex.lock();
-    // drop lock acquired in first line. Main mutex is now free.
-    // We maintain lock order (first main mutex, second error lock mutex)
-    // but we drop main mutex lock for waiting on the cond var.
-    lock->mutex.unlock();
-
-    // we need a copy of the flag under lock of the errorLockMutex to be able to check it here
-    while (errorLockOperationStatus == DatabaseCoreBackend::Wait)
-        errorLockCondVar.wait(&errorLockMutex);  
-
+DatabaseCoreBackendPrivate::ErrorLocker::~ErrorLocker()
+{
     // unlock condvar mutex. Both mutexes are now free.
-    errorLockMutex.unlock();
+    d->errorLockMutex.unlock();
 
     // lock main mutex as often as it was locked before
     for (int i=0; i<count; ++i)
-        lock->mutex.lock();
+        d->lock->mutex.lock();
     // update lock count
-    lock->lockCount = count;
+    d->lock->lockCount = count;
 }
 
     /** Set the wait flag to queryStatus. Typically, call this with Wait. */
@@ -313,7 +324,10 @@ void DatabaseCoreBackendPrivate::queryOperationWakeAll(DatabaseCoreBackend::Quer
 bool DatabaseCoreBackendPrivate::checkOperationStatus()
 {
     while (operationStatus == DatabaseCoreBackend::Wait)
-        queryOperationWait();
+    {
+        ErrorLocker locker(this);
+        locker.wait();
+    }
 
     if (operationStatus == DatabaseCoreBackend::ExecuteNormal)
         return true;
@@ -326,7 +340,7 @@ bool DatabaseCoreBackendPrivate::checkOperationStatus()
 /// Returns true if the query shall be retried
 bool DatabaseCoreBackendPrivate::checkDatabaseError(const SqlQuery& query)
 {
-    if (errorHandler!=0)
+    if (errorHandler)
     {
         handlingConnectionError = true;
         setQueryOperationFlag(DatabaseCoreBackend::Wait);
@@ -336,19 +350,17 @@ bool DatabaseCoreBackendPrivate::checkDatabaseError(const SqlQuery& query)
         }
         else
         {
-                        bool ret = QMetaObject::invokeMethod(errorHandler, "connectionError",
-                                                  Qt::QueuedConnection, Q_ARG(DatabaseErrorAnswer*, this), Q_ARG(const SqlQuery, query));
+            ErrorLocker locker(this);
+            bool called = QMetaObject::invokeMethod(errorHandler, "databaseError",
+                                                    Qt::QueuedConnection, Q_ARG(DatabaseErrorAnswer*, this), Q_ARG(const SqlQuery, query));
 
-//            bool ret = QMetaObject::invokeMethod(errorHandler, SLOT(connectionError(DatabaseErrorAnswer *)),
-//                                      Qt::QueuedConnection, Q_ARG(DatabaseErrorAnswer*, this));
-
-            // If we are unable to call the DatabaseErrorHandler, we refuse any queries
-            kDebug(50003)<< "Invoke method returns ["<< ret <<"]";
-            if (ret)
+            if (called)
             {
-                queryOperationWait();
-            }else
+                locker.wait();
+            }
+            else
             {
+                kError() << "Failed to invoke DatabaseErrorHandler. Aborting all queries.";
                 operationStatus = DatabaseCoreBackend::AbortQueries;
             }
         }
@@ -361,7 +373,8 @@ bool DatabaseCoreBackendPrivate::checkDatabaseError(const SqlQuery& query)
             case DatabaseCoreBackend::AbortQueries:
                 return false;
         }
-    }else
+    }
+    else
     {
         //TODO check if it's better to use an own error handler for kio slaves.
         // But for now, close only the database in the hope, that the next
@@ -545,7 +558,7 @@ bool DatabaseCoreBackend::open(const DatabaseParameters& parameters)
     {
         if (!database.isOpen())
         {
-            kDebug(50003) << "Error while opening the database. Error was [" <<  query.lastError() << "]. Trying again.";
+            kDebug(50003) << "Error while opening the database. Trying again.";
             if (queryErrorHandling(query, retries++))
             {
                 // TODO reopen the database
@@ -766,9 +779,10 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QMap<QString, 
 
     if (!bindingMap.isEmpty())
     {
-#ifdef DATABASCOREBACKEND_DEBUG
+        #ifdef DATABASCOREBACKEND_DEBUG
         kDebug(50003)<<"Prepare statement ["<< preparedString <<"] with binding map ["<< bindingMap <<"]";
-#endif
+        #endif
+
         QRegExp identifierRegExp(":[A-Za-z0-9]+");
         int pos=0;
 
@@ -776,16 +790,18 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QMap<QString, 
         {
             QString namedPlaceholder = identifierRegExp.cap(0);
             namedPlaceholderValues.append(bindingMap[namedPlaceholder]);
-#ifdef DATABASCOREBACKEND_DEBUG
+
+            #ifdef DATABASCOREBACKEND_DEBUG
             kDebug(50003)<<"Bind key ["<< namedPlaceholder <<"] to value ["<< bindingMap[namedPlaceholder] <<"]";
-#endif
+            #endif
+
             preparedString = preparedString.replace(pos, identifierRegExp.matchedLength(), "?");
             pos=0; // reset pos
         }
     }
-#ifdef DATABASCOREBACKEND_DEBUG
+    #ifdef DATABASCOREBACKEND_DEBUG
     kDebug(50003)<<"Prepared statement ["<< preparedString <<"] values ["<< namedPlaceholderValues <<"]";
-#endif
+    #endif
 
     SqlQuery query = prepareQuery(preparedString);
 
@@ -802,19 +818,20 @@ bool DatabaseCoreBackend::queryErrorHandling(const SqlQuery& query, int retries)
 {
     Q_D(DatabaseCoreBackend);
 
-    kDebug(50003) << "Detected error type [" << query.lastError().type() << "]";
+    d->debugOutputFailedQuery(query);
+
     if (d->isSQLiteLockError(query))
     {
         if (d->checkRetrySQLiteLockError(retries))
             return true;
-    }else
+    }
+    else
     {
         if (d->checkDatabaseError(query))
             return true;
         else
             return false;
     }
-    d->debugOutputFailedQuery(query);
     return false;
 }
 
@@ -861,15 +878,14 @@ bool DatabaseCoreBackend::exec(SqlQuery& query)
     int retries = 0;
     forever
     {
-#ifdef DATABASCOREBACKEND_DEBUG
+        #ifdef DATABASCOREBACKEND_DEBUG
         kDebug(50003) << "Trying to query ["<<query.lastQuery()<<"] values ["<< query.boundValues() <<"]";
-#endif
+        #endif
+
         if (query.exec())
             break;
         else
         {
-            kDebug(50003) << "Query IsOpen():" <<  query.driver()->lastError();
-            kDebug(50003) << "Error while executing query. Error was [" <<  query.lastError() << "]";
             if (queryErrorHandling(query, retries++))
             {
                 // TODO reopen the database
@@ -923,7 +939,7 @@ SqlQuery DatabaseCoreBackend::prepareQuery(const QString& sql)
             return query;
         else
         {
-            kDebug(50003) << "Prepare failed! Details: " << query.lastError();
+            kDebug(50003) << "Prepare failed!";
             if (queryErrorHandling(query, retries++))
             {
                 // TODO reopen the database

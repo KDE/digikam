@@ -68,7 +68,6 @@ public:
     // called by DatabaseErrorHandler, implementing DatabaseErrorAnswer
     virtual void connectionErrorContinueQueries();
     virtual void connectionErrorAbortQueries();
-    void queryOperationWait();
     void setQueryOperationFlag(DatabaseCoreBackend::QueryOperationStatus status);
     void queryOperationWakeAll(DatabaseCoreBackend::QueryOperationStatus status);
 
@@ -97,6 +96,18 @@ public:
     QWaitCondition      errorLockCondVar;
     DatabaseCoreBackend::QueryOperationStatus errorLockOperationStatus;
     bool                handlingConnectionError;
+
+    class ErrorLocker
+    {
+    public:
+        ErrorLocker(DatabaseCoreBackendPrivate *d);
+        ~ErrorLocker();
+        void wait();
+    private:
+        int count;
+        DatabaseCoreBackendPrivate* const d;
+    };
+    friend class ErrorLocker;
 
     DatabaseErrorHandler         *errorHandler;
 

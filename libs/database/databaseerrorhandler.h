@@ -42,8 +42,11 @@ public:
 
 class DIGIKAM_EXPORT DatabaseErrorHandler : public QObject
 {
-public:
+    Q_OBJECT
 
+public Q_SLOTS:
+
+    //Note: This is a slot, may be called by queued connection
     /** In the situation of a connection error,
      *  all threads will be waiting with their queries
      *  and this method is called.
