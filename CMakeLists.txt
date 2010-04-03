@@ -221,10 +221,23 @@ MACRO_BOOL_TO_01(LQR-1_FOUND USE_EXT_LIBLQR-1)
 
 MACRO_BOOL_TO_01(ENABLE_THUMBS_DB USE_THUMBS_DB)
 
-IF (${KDE_VERSION} VERSION_GREATER "4.2.70")
+IF (${KDE_VERSION} VERSION_GREATER "4.3.99")
     MACRO_OPTIONAL_FIND_PACKAGE(Nepomuk)
+    macro_log_feature(NEPOMUK_FOUND "Nepomuk" "The Nepomuk libraries"
+                      "http://www.kde.org" FALSE "" "Nepomuk extends the search and tagging")
+
+    MACRO_OPTIONAL_FIND_PACKAGE(SharedDesktopOntologies 0.2)
+    macro_log_feature(SHAREDDESKTOPONTOLOGIES_FOUND "Shared desktop ontologies" "Desktop ontologies"
+                      "http://oscaf.sourceforge.net" TRUE "0.2" "Ontologies necessary for the Nepomuk semantic desktop.")
+
+    IF (NEPOMUK_FOUND AND SHAREDDESKTOPONTOLOGIES_FOUND)
+        SET(NEPOMUK_FOUND TRUE)
+    ELSE (NEPOMUK_FOUND AND SHAREDDESKTOPONTOLOGIES_FOUND)
+        SET(NEPOMUK_FOUND TRUE)
+    ENDIF (NEPOMUK_FOUND AND SHAREDDESKTOPONTOLOGIES_FOUND)
+
     MACRO_BOOL_TO_01(NEPOMUK_FOUND HAVE_NEPOMUK)
-ENDIF (${KDE_VERSION} VERSION_GREATER "4.2.70")
+ENDIF (${KDE_VERSION} VERSION_GREATER "4.3.99")
 
 MACRO_OPTIONAL_FIND_PACKAGE(Doxygen)
 
@@ -304,11 +317,11 @@ ENDIF(MARBLEWIDGET_FOUND)
 IF(NEPOMUK_FOUND)
     MESSAGE(STATUS " Nepomuk libraries found.................. YES (optional)")
 ELSE(NEPOMUK_FOUND)
-    IF (${KDE_VERSION} VERSION_GREATER "4.2.70")
+    IF (${KDE_VERSION} VERSION_GREATER "4.4.0")
         MESSAGE(STATUS " Nepomuk libraries found.................. NO  (optional)")
-    ELSE (${KDE_VERSION} VERSION_GREATER "4.2.70")
-        MESSAGE(STATUS " Nepomuk libraries found.................. NO  (at least KDE 4.3 required)")
-    ENDIF (${KDE_VERSION} VERSION_GREATER "4.2.70")
+    ELSE (${KDE_VERSION} VERSION_GREATER "4.4.0")
+        MESSAGE(STATUS " Nepomuk libraries found.................. NO  (at least KDE 4.4 and shared-desktop-ontologies required)")
+    ENDIF (${KDE_VERSION} VERSION_GREATER "4.4.0")
     MESSAGE(STATUS "")
     MESSAGE(STATUS " digiKam will be compiled without support for the Nepomuk semantic desktop services.")
     MESSAGE(STATUS "")
