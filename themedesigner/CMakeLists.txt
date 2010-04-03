@@ -101,6 +101,7 @@ SET(digikamthemedesigner_SRCS
     ${libalbummodels_SRCS}
     ${libadvancedrename_SRCS}
     ${libtemplate_SRCS}
+    ${libdatabaseui_SRCS}
 
     main.cpp
     mainwindow.cpp
