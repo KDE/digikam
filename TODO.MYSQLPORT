@@ -36,6 +36,7 @@ TODO List
 
 - Shutdown internal database server when digiKam is down.
 - Help/Database Stats dialog is broken with MySql.
+- Add a KDebug aera dedicated to databaseserver.
 - Fix path to database server program to be portable. Use CMake config as well.   DONE
 
 
