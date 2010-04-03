@@ -196,6 +196,19 @@ public:
     int         albumRootId;
 };
 
+class TagShortInfo
+{
+public:
+
+    TagShortInfo() : id(0), pid(0) {};
+
+    bool isNull() { return id == 0; }
+
+    int     id;
+    int     pid;
+    QString name;
+};
+
 namespace DatabaseItem
 {
     enum Status

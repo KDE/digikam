@@ -292,7 +292,7 @@ QList<AlbumShortInfo> AlbumDB::getAlbumShortInfos()
     {
         AlbumShortInfo info;
 
-        info.id           = (*it).toLongLong();
+        info.id           = (*it).toInt();
         ++it;
         info.relativePath = (*it).toString();
         ++it;
@@ -303,6 +303,31 @@ QList<AlbumShortInfo> AlbumDB::getAlbumShortInfos()
     }
 
     return albumList;
+}
+
+QList<TagShortInfo> AlbumDB::getTagShortInfos()
+{
+    QList<QVariant> values;
+    d->db->execSql( QString("SELECT id, pid, name FROM Tags ORDER BY id;"),
+                    &values);
+
+    QList<TagShortInfo> tagList;
+
+    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
+    {
+        TagShortInfo info;
+
+        info.id           = (*it).toInt();
+        ++it;
+        info.pid          = (*it).toInt();
+        ++it;
+        info.name         = (*it).toString();
+        ++it;
+
+        tagList << info;
+    }
+
+    return tagList;
 }
 
 /*

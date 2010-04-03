@@ -185,6 +185,12 @@ public:
      */
     QList<AlbumShortInfo> getAlbumShortInfos();
 
+    /**
+     * Returns all tags in the database with their parent id and name,
+     * ordered by id.
+     */
+    QList<TagShortInfo> getTagShortInfos();
+
     // ----------- Operations on PAlbums -----------
 
     /**
