@@ -6,7 +6,7 @@
  * Date        : 2009-09-27
  * Description : gui database error handler
  *
- * Copyright (C) 2009 by Holger Foerster <Hamsi2k at freenet dot de>
+ * Copyright (C) 2009-2010 by Holger Foerster <Hamsi2k at freenet dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -25,5 +25,43 @@
 
 namespace Digikam
 {
+
+SqlQuery::SqlQuery()
+        : QSqlQuery()
+{
+}
+
+SqlQuery::SqlQuery(const QSqlQuery& other)
+        : QSqlQuery(other)
+{
+}
+
+SqlQuery::SqlQuery(QSqlDatabase db)
+        : QSqlQuery(db)
+{
+}
+
+SqlQuery::~SqlQuery()
+{
+}
+
+SqlQuery& SqlQuery::operator=(const SqlQuery& other)
+{
+    QSqlQuery::operator=(other);
+    m_query = other.m_query;
+    return *this;
+}
+
+bool SqlQuery::prepare(const QString& query)
+{
+    bool result = QSqlQuery::prepare(query);
+    m_query     = query;
+    return result;
+}
+
+QString SqlQuery::lastQuery() const
+{
+    return m_query;
+}
 
 } // namespace Digikam

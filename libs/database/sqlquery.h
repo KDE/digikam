@@ -3,12 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2004-06-18
- * Description :database album interface.
+ * Date        : 2009-09-27
+ * Description : gui database error handler
  *
- * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2010 by Holger Foerster <Hamsi2k at freenet dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -31,56 +29,30 @@
 #include <QSqlQuery>
 #include <QtCore/QString>
 
-// KDE includes
-
 // Local includes
+
+#include "digikam_export.h"
 
 namespace Digikam
 {
 
-class SqlQuery : public QSqlQuery
+class DIGIKAM_EXPORT SqlQuery : public QSqlQuery
 {
+
 public:
 
-    SqlQuery() : QSqlQuery()
-    {
-    }
+    SqlQuery();
+    SqlQuery(const QSqlQuery& other);
+    SqlQuery(QSqlDatabase db);
+    virtual ~SqlQuery();
 
-    SqlQuery(const QSqlQuery &other) : QSqlQuery(other)
-    {
-    }
-
-    SqlQuery(QSqlDatabase db) : QSqlQuery(db)
-    {
-    }
-
-    virtual SqlQuery& operator=(const SqlQuery& other)
-    {
-        QSqlQuery::operator=(other);
-        m_query = other.m_query;
-        return *this;
-    }
-
-    virtual bool prepare(const QString& query)
-    {
-        bool result = QSqlQuery::prepare(query);
-        m_query = query;
-        return result;
-    }
-
-    virtual QString lastQuery() const
-    {
-        return m_query;
-    }
-
-    virtual ~SqlQuery()
-    {
-    }
+    virtual SqlQuery& operator=(const SqlQuery& other);
+    virtual bool prepare(const QString& query);
+    virtual QString lastQuery() const;
 
 private:
 
     QString m_query;
-
 };
 
 }  // namespace Digikam

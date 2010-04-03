@@ -965,7 +965,8 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/thumbnaildatabaseaccess.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/thumbnaildb.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/thumbnailschemaupdater.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseconfigelement.cpp        
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseconfigelement.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlquery.cpp
        )
        
     SET(libdatabase_SRCS
@@ -1000,7 +1001,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/upgradedb_sqlite2tosqlite3.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databasecopymanager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseserverstarter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlquery.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/tagscache.cpp
        )
 
