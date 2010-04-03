@@ -18,8 +18,8 @@ MySQL support files to review
  AM            libs/database/databaseserverstarter.cpp   [License: GPL (v2+)]     DONE
  AM            libs/database/databaseserverstarter.h   [License: GPL (v2+)]       DONE
 
- AM            libs/database/sqlquery.cpp   [License: GPL (v2+)]
- AM            libs/database/sqlquery.h   [License: GPL (v2+)]
+ AM            libs/database/sqlquery.cpp   [License: GPL (v2+)]                  DONE
+ AM            libs/database/sqlquery.h   [License: GPL (v2+)]                    DONE
 
  AM            libs/dialogs/migrationdlg.cpp   [License: GPL (v2+)]               DONE
  AM            libs/dialogs/migrationdlg.h   [License: GPL (v2+)]                 DONE
