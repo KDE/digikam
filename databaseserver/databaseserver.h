@@ -25,6 +25,7 @@
 #define DATABASESERVER_H_
 
 // QT includes
+
 #include <QProcess>
 #include <QString>
 #include <QDBusAbstractAdaptor>
@@ -32,7 +33,7 @@
 
 // Local includes
 
-#include <pollthread.h>
+#include "pollthread.h"
 
 namespace Digikam
 {
@@ -42,27 +43,29 @@ class DatabaseServer : public QObject
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.kde.digikam.DatabaseServer")
 
-    public:
-        DatabaseServer(QCoreApplication *application);
-        void createDatabase();
-        void registerOnDBus();
-        void startPolling();
-        void startMYSQLDatabaseProcess();
+public:
 
-    public Q_SLOTS:
-        void startDatabaseProcess(const QString dbType);
-        void startDatabaseProcess();
-        void stopDatabaseProcess();
-        bool isRunning();
+    DatabaseServer(QCoreApplication* application);
+    void createDatabase();
+    void registerOnDBus();
+    void startPolling();
+    void startMYSQLDatabaseProcess();
 
+public Q_SLOTS:
 
-    private:
-        QProcess *mDatabaseProcess;
-        QString internalDBName;
-        QCoreApplication *app;
-        PollThread *pollThread;
+    void startDatabaseProcess(const QString dbType);
+    void startDatabaseProcess();
+    void stopDatabaseProcess();
+    bool isRunning();
+
+private:
+
+    QProcess*         mDatabaseProcess;
+    QString           internalDBName;
+    QCoreApplication* app;
+    PollThread*       pollThread;
 };
 
-}
+} // namespace Digikam
 
 #endif /* DATABASESERVER_H_ */

@@ -1,11 +1,11 @@
 MySQL support files to review
 -----------------------------
 
- AM            databaseserver/databaseserver.cpp   [License: GPL (v2+)]
- AM            databaseserver/databaseserver.h   [License: GPL (v2+)]
- AM            databaseserver/main.cpp   [License: GPL (v2+)]
- AM            databaseserver/pollthread.cpp   [License: GPL (v2+)]
- AM            databaseserver/pollthread.h   [License: GPL (v2+)]
+ AM            databaseserver/databaseserver.cpp   [License: GPL (v2+)]           DONE
+ AM            databaseserver/databaseserver.h   [License: GPL (v2+)]             DONE
+ AM            databaseserver/main.cpp   [License: GPL (v2+)]                     DONE
+ AM            databaseserver/pollthread.cpp   [License: GPL (v2+)]               DONE
+ AM            databaseserver/pollthread.h   [License: GPL (v2+)]                 DONE
 
  AM            digikam/databaseerrorhandler.cpp   [License: GPL (v2+)]
  AM            digikam/databaseerrorhandler.h   [License: GPL (v2+)]

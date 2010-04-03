@@ -20,22 +20,30 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-#include <qapplication.h>
-#include <qpushbutton.h>
-#include <QApplication>
-#include <databaseserver.h>
 
+// Qt includes
+
+#include <QApplication>
 #include <QDBusConnection>
 #include <QDBusInterface>
 #include <QDBusConnectionInterface>
 #include <QDBusReply>
+
+// KDE includes
+
 #include "kdebug.h"
+
+// Local includes.
+
+#include <databaseserver.h>
+
+using namespace Digikam;
 
 int main(int argc, char *argv[])
 {
     QCoreApplication app(argc, argv);
 
-    Digikam::DatabaseServer server(&app);
+    DatabaseServer server(&app);
     server.registerOnDBus();
     server.startPolling();
 

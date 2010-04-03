@@ -7,7 +7,7 @@
  * Description : polling thread checks if there are digikam
  *               components registered on DBus
  *
- * Copyright (C) 2009 by Holger Foerster <Hamsi2k at freenet dot de>
+ * Copyright (C) 2009-2010 by Holger Foerster <Hamsi2k at freenet dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,11 +22,10 @@
  *
  * ============================================================ */
 
-// KDE includes
-#include <kdebug.h>
-#include <kstandarddirs.h>
+#include "pollthread.moc"
 
 // Qt includes
+
 #include <QString>
 #include <QtGlobal>
 #include <QFile>
@@ -43,19 +42,28 @@
 #include <QThread>
 #include <QSystemSemaphore>
 
-// Local includes
-#include <pollthread.h>
+// KDE includes
 
-PollThread::PollThread(QObject *parent) : QThread(parent), stop(false), waitTime(10)
+#include <kdebug.h>
+#include <kstandarddirs.h>
+
+namespace Digikam
+{
+
+PollThread::PollThread(QObject* parent)
+          : QThread(parent), stop(false), waitTime(10)
 {
 }
 
 void PollThread::run()
 {
-    do{
+    do
+    {
         kDebug(50003) << "Waiting "<< waitTime <<" seconds...stop: ["<< stop <<"]";
         sleep(waitTime);
-    }while( !stop && checkDigikamInstancesRunning() );
+    }
+    while( !stop && checkDigikamInstancesRunning() );
+
     kDebug(50003) << "Shutting down database server";
     emit done();
 }
@@ -66,6 +74,7 @@ bool PollThread::checkDigikamInstancesRunning()
    sem.acquire();
    QDBusConnectionInterface *interface = QDBusConnection::sessionBus().interface();
    QDBusReply<QStringList> reply = interface->registeredServiceNames();
+
    if (reply.isValid())
    {
        QStringList serviceNames = reply.value();
@@ -85,3 +94,5 @@ bool PollThread::checkDigikamInstancesRunning()
    sem.release(1);
    return false;
 }
+
+} // namespace Digikam

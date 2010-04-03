@@ -7,7 +7,7 @@
  * Description : polling thread checks if there are digikam
  *               components registered on DBus
  *
- * Copyright (C) 2009 by Holger Foerster <Hamsi2k at freenet dot de>
+ * Copyright (C) 2009-2010 by Holger Foerster <Hamsi2k at freenet dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -25,27 +25,34 @@
 #ifndef POLLTHREAD_H_
 #define POLLTHREAD_H_
 
-// QT includes
+// Qt includes
+
 #include <QCoreApplication>
 #include <QThread>
 
-// Local includes
+namespace Digikam
+{
 
 class PollThread : public QThread
 {
     Q_OBJECT
-    public:
-        PollThread(QObject *application);
-        void run();
-        bool checkDigikamInstancesRunning();
 
-        bool stop;
-    Q_SIGNALS:
-        void done();
-    private:
-        int waitTime;
+public:
 
+    PollThread(QObject* application);
+    void run();
+    bool checkDigikamInstancesRunning();
+    bool stop;
+
+Q_SIGNALS:
+
+    void done();
+
+private:
+
+    int waitTime;
 };
 
+} // namespace Digikam
 
 #endif /* POLLTHREAD_H_ */
