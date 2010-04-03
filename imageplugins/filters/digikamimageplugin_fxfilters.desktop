@@ -2,6 +2,7 @@
 Name=ImagePlugin_FxFilters
 Name[ca]=ImagePlugin_FxFilters
 Name[ca@valencia]=ImagePlugin_FxFilters
+Name[cs]=ImagePlugin_FxFilters
 Name[da]=ImagePlugin_FxFilters
 Name[en_GB]=ImagePlugin_FxFilters
 Name[et]=ImagePlugin_FxFilters
@@ -19,6 +20,7 @@ Encoding=UTF-8
 Comment=Special effect filters plugin for digiKam
 Comment[ca]=Connector pel digiKam de filtres d'efectes especials
 Comment[ca@valencia]=Connector pel digiKam de filtres d'efectes especials
+Comment[cs]=Modul filtrů speciálních efektů digiKamu
 Comment[da]=digiKam-plugin med filtre med specialeffekter
 Comment[de]=digiKam-Modul für Spezialeffekte
 Comment[en_GB]=Special effect filters plugin for digiKam

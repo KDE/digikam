@@ -2,6 +2,7 @@
 Name=ImagePlugin_Enhance
 Name[ca]=ImagePlugin_Enhance
 Name[ca@valencia]=ImagePlugin_Enhance
+Name[cs]=ImagePlugin_Enhance
 Name[da]=ImagePlugin_Enhance
 Name[en_GB]=ImagePlugin_Enhance
 Name[et]=ImagePlugin_Enhance
@@ -20,6 +21,7 @@ Encoding=UTF-8
 Comment=digiKam plugin to enhance photograph
 Comment[ca]=Connector pel digiKam per realçar una fotografia
 Comment[ca@valencia]=Connector pel digiKam per realçar una fotografia
+Comment[cs]=Modul digiKamu pro vylepšování fotografií
 Comment[da]=digiKam-plugin til forbedring af fotografier
 Comment[de]=digiKam-Modul zur Bildverbesserung
 Comment[en_GB]=digiKam plugin to enhance photograph
