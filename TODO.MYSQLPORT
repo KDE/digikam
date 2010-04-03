@@ -7,8 +7,8 @@ MySQL support files to review
  AM            databaseserver/pollthread.cpp   [License: GPL (v2+)]               DONE
  AM            databaseserver/pollthread.h   [License: GPL (v2+)]                 DONE
 
- AM            digikam/databaseerrorhandler.cpp   [License: GPL (v2+)]
- AM            digikam/databaseerrorhandler.h   [License: GPL (v2+)]
+ AM            digikam/databaseerrorhandler.cpp   [License: GPL (v2+)]            DONE
+ AM            digikam/databaseerrorhandler.h   [License: GPL (v2+)]              DONE
 
  AM            libs/database/databaseconfigelement.cpp   [License: GPL (v2+)]
  AM            libs/database/databaseconfigelement.h   [License: GPL (v2+)]

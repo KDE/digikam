@@ -6,7 +6,7 @@
  * Date        : 2009-09-27
  * Description : gui database error handler
  *
- * Copyright (C) 2009 by Holger Foerster <Hamsi2k at freenet dot de>
+ * Copyright (C) 2009-2010 by Holger Foerster <Hamsi2k at freenet dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -24,7 +24,7 @@
 #ifndef DATABASEGUIERRORHANDLER_H
 #define DATABASEGUIERRORHANDLER_H
 
-// QT includes
+// Qt includes
 
 #include <QMutex>
 #include <QPointer>
@@ -45,7 +45,6 @@ namespace Digikam
 
 class DatabaseConnectionChecker : public QThread
 {
-
     Q_OBJECT
 
 public:
@@ -75,6 +74,8 @@ private:
     QWaitCondition     m_condVar;
 };
 
+// --------------------------------------------------------------
+
 class DatabaseGUIErrorHandler : public DatabaseErrorHandler
 {
     Q_OBJECT
@@ -86,7 +87,7 @@ public:
 
     bool checkDatabaseConnection();
 
-    virtual void databaseError(DatabaseErrorAnswer *answer,  const SqlQuery& query);
+    virtual void databaseError(DatabaseErrorAnswer* answer, const SqlQuery& query);
 
 private Q_SLOTS:
 
@@ -96,7 +97,7 @@ private:
 
     DatabaseParameters         m_parameters;
     QPointer<KProgressDialog>  m_dialog;
-    DatabaseConnectionChecker *m_checker;
+    DatabaseConnectionChecker* m_checker;
 
 };
 

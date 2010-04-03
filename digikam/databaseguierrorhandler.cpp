@@ -6,7 +6,7 @@
  * Date        : 2009-09-05
  * Description : gui database error handler
  *
- * Copyright (C) 2009 by Holger Foerster <Hamsi2k at freenet dot de>
+ * Copyright (C) 2009-2010 by Holger Foerster <Hamsi2k at freenet dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-#include "databaseguierrorhandler.h"
 #include "databaseguierrorhandler.moc"
 
 // Qt includes
@@ -33,6 +32,7 @@
 #include <QThread>
 
 // KDE includes
+
 #include <kdebug.h>
 #include <kmessagebox.h>
 #include <klocale.h>
@@ -40,13 +40,14 @@
 #include <kdialog.h>
 
 // Local includes
+
 #include <setup.h>
 
 namespace Digikam
 {
 
 DatabaseConnectionChecker::DatabaseConnectionChecker(DatabaseParameters parameters)
-    : m_stop(false), m_success(false), m_parameters(parameters)
+                         : m_stop(false), m_success(false), m_parameters(parameters)
 {
 }
 
@@ -104,9 +105,10 @@ bool DatabaseConnectionChecker::checkSuccessful() const
     return m_success;
 }
 
+// ---------------------------------------------------------------------------------------
 
 DatabaseGUIErrorHandler::DatabaseGUIErrorHandler(const DatabaseParameters& parameters)
-    : m_parameters(parameters), m_checker(0)
+                       : m_parameters(parameters), m_checker(0)
 {
 }
 
@@ -122,6 +124,7 @@ bool DatabaseGUIErrorHandler::checkDatabaseConnection()
 
     connect(m_checker, SIGNAL(failedAttempt()),
             this, SLOT(showProgressDialog()));
+
     connect(m_checker, SIGNAL(done()),
             &loop, SLOT(quit()));
 
@@ -158,7 +161,7 @@ void DatabaseGUIErrorHandler::showProgressDialog()
     m_dialog->show();
 }
 
-void DatabaseGUIErrorHandler::databaseError(DatabaseErrorAnswer *answer,  const SqlQuery& query)
+void DatabaseGUIErrorHandler::databaseError(DatabaseErrorAnswer* answer, const SqlQuery& query)
 {
     if (query.lastError().type() == QSqlError::ConnectionError || query.lastError().number()==2006)
     {
@@ -184,5 +187,3 @@ void DatabaseGUIErrorHandler::databaseError(DatabaseErrorAnswer *answer,  const 
 }
 
 }  // namespace Digikam
-
-
