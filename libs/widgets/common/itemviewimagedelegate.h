@@ -54,6 +54,8 @@ public:
     virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex & index) const;
     virtual QSize gridSize() const;
 
+    ThumbnailSize thumbnailSize() const;
+
     // reimplemented from DItemDelegate
     virtual void setThumbnailSize(const ThumbnailSize& thumbSize);
     virtual void setSpacing(int spacing);

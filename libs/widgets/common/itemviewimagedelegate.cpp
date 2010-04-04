@@ -115,6 +115,12 @@ ItemViewImageDelegate::~ItemViewImageDelegate()
     delete d;
 }
 
+ThumbnailSize ItemViewImageDelegate::thumbnailSize() const
+{
+    Q_D(const ItemViewImageDelegate);
+    return d->thumbSize;
+}
+
 void ItemViewImageDelegate::setThumbnailSize(const ThumbnailSize& thumbSize)
 {
     Q_D(ItemViewImageDelegate);

@@ -502,7 +502,7 @@ void ImageCategorizedView::paintEvent(QPaintEvent *e)
     if (thumbModel)
     {
         QModelIndexList indexesToThumbnail = categorizedIndexesIn(viewport()->rect());
-        thumbModel->prepareThumbnails(indexesToThumbnail);
+        thumbModel->prepareThumbnails(indexesToThumbnail, d->delegate->thumbnailSize());
     }
 
     DCategorizedView::paintEvent(e);

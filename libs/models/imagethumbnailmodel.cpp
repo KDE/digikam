@@ -90,6 +90,11 @@ void ImageThumbnailModel::setEmitDataChanged(bool emitSignal)
 
 void ImageThumbnailModel::prepareThumbnails(const QList<QModelIndex>& indexesToPrepare)
 {
+    prepareThumbnails(indexesToPrepare, d->thumbSize);
+}
+
+void ImageThumbnailModel::prepareThumbnails(const QList<QModelIndex>& indexesToPrepare, const ThumbnailSize& thumbSize)
+{
     if (!d->thread)
         return;
 
@@ -98,7 +103,7 @@ void ImageThumbnailModel::prepareThumbnails(const QList<QModelIndex>& indexesToP
     {
         filePaths << imageInfoRef(index).filePath();
     }
-    d->thread->findGroup(filePaths, d->thumbSize.size());
+    d->thread->findGroup(filePaths, thumbSize.size());
 }
 
 QVariant ImageThumbnailModel::data(const QModelIndex& index, int role) const

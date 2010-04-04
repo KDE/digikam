@@ -67,6 +67,7 @@ public:
 
     /** Prepare the thumbnail loading for the given indexes */
     void prepareThumbnails(const QList<QModelIndex>& indexesToPrepare);
+    void prepareThumbnails(const QList<QModelIndex>& indexesToPrepare, const ThumbnailSize& thumbSize);
 
     /** Handles the ThumbnailRole.
      *  If the pixmap is available, returns it in the QVariant.
