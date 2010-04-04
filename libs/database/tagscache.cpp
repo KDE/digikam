@@ -271,6 +271,16 @@ int TagsCache::tagForPath(const QString& tagPath)
     return tagID;
 }
 
+QList<int> TagsCache::tagsForPaths(const QStringList& tagPaths)
+{
+    QList<int> ids;
+    foreach (const QString& tagPath, tagPaths)
+    {
+        ids << tagForPath(tagPath);
+    }
+    return ids;
+}
+
 int TagsCache::createTag(const QString& tagPathToCreate)
 {
     // split full tag "url" into list of single tag names
@@ -348,17 +358,32 @@ int TagsCache::createTag(const QString& tagPathToCreate)
     return tagID;
 }
 
-QList<int> TagsCache::getTagsFromTagPaths(const QStringList& tagPaths, bool create)
+QList<int> TagsCache::createTags(const QStringList& tagPaths)
 {
     QList<int> ids;
     foreach (const QString& tagPath, tagPaths)
     {
-        int id = tagForPath(tagPath);
-        if (!id && create)
-            id = createTag(tagPath);
-        ids << id;
+        ids << createTag(tagPath);
     }
     return ids;
+}
+
+QList<int> TagsCache::getOrCreateTags(const QStringList& tagPaths)
+{
+    QList<int> ids;
+    foreach (const QString& tagPath, tagPaths)
+    {
+        ids << getOrCreateTag(tagPath);
+    }
+    return ids;
+}
+
+int TagsCache::getOrCreateTag(const QString& tagPath)
+{
+    int id = tagForPath(tagPath);
+    if (!id)
+        id = createTag(tagPath);
+    return id;
 }
 
 void TagsCache::slotTagChange(const TagChangeset& changeset)
@@ -368,6 +393,10 @@ void TagsCache::slotTagChange(const TagChangeset& changeset)
         d->needUpdateInfos = true;
         d->needUpdateHash  = true;
     }
+    if (changeset.operation() == TagChangeset::Added)
+        emit tagAdded(changeset.tagId());
+    else if (changeset.operation() == TagChangeset::Deleted)
+        emit tagDeleted(changeset.tagId());
 }
 
 }

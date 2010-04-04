@@ -80,22 +80,38 @@ public:
      * Returns the tag matched exactly by the given path.
      * The path can be given with or without leading slash.
      * Returns 0 if there is no such tag, or if tagPath is empty.
+     * If you want to create the tag if it does not yet exist,
+     * use getOrCreateTag.
      */
     int tagForPath(const QString& tagPath);
+    QList<int> tagsForPaths(const QStringList& tagPaths);
 
     /**
      * Add the tag described by the given tag path,
      * and all missing parent tags, to the database.
      * Returns the tag id.
+     * Use this if you know that tag path does not exist.
+     * If you are unsure, use getOrCreateTag.
      */
     int createTag(const QString& tagPathToCreate);
+    QList<int> createTags(const QStringList& tagPaths);
 
     /** A combination of tagForPath and createTag:
      *  Finds ids for the given tagPaths.
      *  If a tag does not exist yet and create is true, it will be created.
      *  Otherwise the id 0 is returned for this path.
      */
-    QList<int> getTagsFromTagPaths(const QStringList& tagPaths, bool create);
+    int getOrCreateTag(const QString& tagPath);
+    QList<int> getOrCreateTags(const QStringList& tagPaths);
+
+signals:
+
+    /** These signals are provided for convenience; for finer grained information
+        use DatabaseWatch. Use a queued connection if you carry out
+        longer operations from slots connected to these signals.
+    */
+    void tagAdded(int tagId);
+    void tagDeleted(int tagId);
 
 private Q_SLOTS:
 
