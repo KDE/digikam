@@ -783,9 +783,9 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
             switch (it.key())
             {
 
+/*
 #ifdef PNG_iTXt_SUPPORTED
-
-                // TODO : this code is not yet tested. It require libpng 1.3.0.
+                // TODO : this code requires libpng 1.3.0, it is not yet tested and crashes. See bug #229340.
 
                 case(DImg::COM):
                 {
@@ -800,6 +800,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
                     break;
                 }
 #endif
+*/
 
                 case(DImg::EXIF):
                 {
