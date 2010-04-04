@@ -46,17 +46,19 @@ class DatabaseCopyThread : public QThread
 {
     Q_OBJECT
 
-    public:
-        DatabaseCopyThread(QWidget* parent);
-        bool stop;
-        void run();
+public:
 
-        void init(DatabaseParameters fromDatabaseWidget, DatabaseParameters toDatabaseWidget);
-        DatabaseCopyManager copyManager;
+    DatabaseCopyThread(QWidget* parent);
+    bool stop;
+    void run();
 
-    private:
-        DatabaseParameters fromDatabaseParameters;
-        DatabaseParameters toDatabaseParameters;
+    void init(DatabaseParameters fromDatabaseWidget, DatabaseParameters toDatabaseWidget);
+    DatabaseCopyManager copyManager;
+
+private:
+
+    DatabaseParameters fromDatabaseParameters;
+    DatabaseParameters toDatabaseParameters;
 };
 
 // --------------------------------------------------------------------
