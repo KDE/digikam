@@ -315,6 +315,37 @@
 			  </statement>
 			</dbaction>
 
+            <dbaction name="listTagRecursive" mode="transaction">
+              <statement mode="query">  SELECT DISTINCT Images.id, Images.name, Images.album, 
+                                    Albums.albumRoot,
+                                    ImageInformation.rating, Images.category,
+                                    ImageInformation.format, ImageInformation.creationDate,
+                                    Images.modificationDate, Images.fileSize,
+                                    ImageInformation.width, ImageInformation.height
+                              FROM Images
+                                    INNER JOIN ImageInformation ON Images.id=ImageInformation.imageid
+                                    INNER JOIN Albums ON Albums.id=Images.album
+                              WHERE Images.status=1 AND Images.id IN
+                                    (SELECT imageid FROM ImageTags
+                                     WHERE tagid=:tagID OR tagid IN (SELECT id FROM TagsTree WHERE pid=:tagPID));
+              </statement>
+            </dbaction>
+
+            <dbaction name="listTag" mode="transaction">
+              <statement mode="query">  SELECT DISTINCT Images.id, Images.name, Images.album,
+                                    Albums.albumRoot,
+                                    ImageInformation.rating, Images.category,
+                                    ImageInformation.format, ImageInformation.creationDate,
+                                    Images.modificationDate, Images.fileSize,
+                                    ImageInformation.width, ImageInformation.height
+                              FROM Images
+                                    INNER JOIN ImageInformation ON Images.id=ImageInformation.imageid
+                                    INNER JOIN Albums ON Albums.id=Images.album
+                              WHERE Images.status=1 AND Images.id IN
+                                    (SELECT imageid FROM ImageTags
+                                     WHERE tagid=:tagID );
+              </statement>
+            </dbaction>
 			
 			<!-- Thumbnails Schema DB -->
 			<dbaction name="CreateThumbnailsDB" mode="transaction">
