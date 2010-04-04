@@ -6,7 +6,7 @@
  * Date        : 2009-06-27
  * Description : Database element configuration
  *
- * Copyright (C) 2009 by Holger Foerster <hamsi2k at freenet dot de>
+ * Copyright (C) 2009-2010 by Holger Foerster <hamsi2k at freenet dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-// Local includes.
+// Local includes
 
 #include "databaseconfigelement.h"
 

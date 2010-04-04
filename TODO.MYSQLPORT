@@ -10,8 +10,8 @@ MySQL support files to review
  AM            digikam/databaseerrorhandler.cpp   [License: GPL (v2+)]            DONE
  AM            digikam/databaseerrorhandler.h   [License: GPL (v2+)]              DONE
 
- AM            libs/database/databaseconfigelement.cpp   [License: GPL (v2+)]
- AM            libs/database/databaseconfigelement.h   [License: GPL (v2+)]
+ AM            libs/database/databaseconfigelement.cpp   [License: GPL (v2+)]     DONE
+ AM            libs/database/databaseconfigelement.h   [License: GPL (v2+)]       DONE
  AM            libs/database/databasecopymanager.cpp   [License: GPL (v2+)]
  AM            libs/database/databasecopymanager.h   [License: GPL (v2+)]
 
