@@ -137,7 +137,7 @@ public:
 
     RatingWidget                  *ratingWidget;
 
-    MetadataHub                    hub;
+    MetadataHubOnTheRoad           hub;
 
     TagModificationHelper         *tagModificationHelper;
     TagModel                      *tagModel;
@@ -306,12 +306,6 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
 
     connect(d->recentTagsMapper, SIGNAL(mapped(int)),
             this, SLOT(slotRecentTagsMenuActivated(int)));
-
-    connect(AlbumManager::instance(), SIGNAL(signalAlbumAboutToBeDeleted(Album *)),
-            this, SLOT(slotAlbumAboutToBeDeleted(Album *)));
-
-    connect(AlbumManager::instance(), SIGNAL(signalAlbumsCleared()),
-            this, SLOT(slotAlbumsCleared()));
 
     // Initialize ---------------------------------------------
 
@@ -712,7 +706,6 @@ void ImageDescEditTab::populateTags()
 
 void ImageDescEditTab::slotTagStateChanged(Album *album, Qt::CheckState checkState)
 {
-
     TAlbum *tag = dynamic_cast<TAlbum*> (album);
     if (!tag || d->ignoreTagChanges)
     {
@@ -729,7 +722,7 @@ void ImageDescEditTab::slotTagStateChanged(Album *album, Qt::CheckState checkSta
         isChecked = false;
         break;
     }
-    d->hub.setTag(tag, isChecked);
+    d->hub.setTag(tag->id(), isChecked);
 
     slotModified();
 }
@@ -823,7 +816,7 @@ void ImageDescEditTab::initializeTags(QModelIndex &parent)
         return;
     }
 
-    setTagState(tag, d->hub.tagStatus(tag));
+    setTagState(tag, d->hub.tagStatus(tag->id()));
 
     for (int row = 0; row < d->tagModel->rowCount(parent); ++row)
     {
@@ -1006,17 +999,6 @@ void ImageDescEditTab::reloadForMetadataChange(qlonglong imageId)
             }
         }
     }
-}
-
-void ImageDescEditTab::slotAlbumAboutToBeDeleted(Album *album)
-{
-    if (album->type() == Album::TAG && !AlbumManager::instance()->isMovingAlbum(album))
-        d->hub.notifyTagRemoved(static_cast<TAlbum*>(album));
-}
-
-void ImageDescEditTab::slotAlbumsCleared()
-{
-    d->hub.notifyTagsCleared();
 }
 
 void ImageDescEditTab::updateRecentTags()

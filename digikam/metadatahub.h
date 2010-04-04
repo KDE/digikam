@@ -48,7 +48,6 @@ namespace Digikam
 class AlbumSettings;
 class ImageInfo;
 class Template;
-class TAlbum;
 class MetadataHubPriv;
 
 class MetadataWriteSettings
@@ -118,26 +117,6 @@ public:
             bool operator==(Status otherstatus) { return otherstatus == status; }
     };
 
-    enum DatabaseMode
-    {
-        /**
-            Use this mode if
-                - the album manager is not available and/or
-                - metadata sets may contain tags that are not available from the AlbumManager
-            This situation occurs if new tags are imported from XMP/IPTC keywords.
-            This means that the album manager is not accessed, all methods depending on TAlbum*
-            (tags(), tagIDs(), setTag()) shall not be used.
-            The method write(ImageInfo) will create not yet existing tags in the database.
-        */
-        NewTagsImport,
-        /**
-            Use this mode if all tags are available from the AlbumManager.
-            This situation occurs if you load from ImageInfo objects.
-            All methods can be used.
-        */
-        ManagedTags
-    };
-
     enum WriteMode
     {
         /**
@@ -166,8 +145,9 @@ public:
         Constructs a MetadataHub.
         @param dbmode Determines if the database may be accessed or not. See the enum description above.
     */
-    MetadataHub(DatabaseMode dbmode = ManagedTags);
+    MetadataHub();
     ~MetadataHub();
+    /// Copies by value - no sharing involved.
     MetadataHub& operator=(const MetadataHub &);
     MetadataHub(const MetadataHub &);
 
@@ -263,7 +243,6 @@ public:
     Status ratingStatus()   const;
     Status templateStatus() const;
 
-    TagStatus tagStatus(TAlbum *album) const;
     TagStatus tagStatus(int albumId) const;
     TagStatus tagStatus(const QString& tagPath) const;
 
@@ -334,20 +313,12 @@ public:
         sets contained the tag. The hasTag value is true then.
         If MapMode (set in constructor) is false, returns an empty map.
     */
-    QMap<TAlbum *, TagStatus> tags() const;
+    QMap<int, TagStatus> tags() const;
     /**
         Similar to the method above.
         This method is less efficient internally.
     */
     QMap<int, TagStatus>   tagIDs() const;
-
-    /**
-        If you are keeping a MetadataHub over the scope of one
-        event loop run, listen to AlbumManager's signals about removal
-        of tags and call this method each time.
-    */
-    void notifyTagRemoved(TAlbum *);
-    void notifyTagsCleared();
 
     // --------------------------------------------------
 
@@ -358,7 +329,6 @@ public:
     void setComments(const CaptionsMap& comments, Status status = MetadataAvailable);
     void setRating(int rating, Status status = MetadataAvailable);
     void setMetadataTemplate(const Template& t, Status status = MetadataAvailable);
-    void setTag(TAlbum *tag, bool hasTag, Status status = MetadataAvailable);
     void setTag(int albumID, bool hasTag, Status status = MetadataAvailable);
 
     /**
@@ -367,15 +337,38 @@ public:
     */
     void resetChanged();
 
-private:
+protected:
 
     void load(const QDateTime& dateTime, const CaptionsMap& comment, int rating, const Template& t);
-    void loadTags(const QList<TAlbum *>& loadedTags);
+    void loadTags(const QList<int>& loadedTagIds);
     void loadTags(const QStringList& loadedTagPaths);
+    void notifyTagDeleted(int id);
 
 private:
 
     MetadataHubPriv* const d;
+};
+
+// --------------------------------------------------
+
+class MetadataHubOnTheRoad : public QObject, public MetadataHub
+{
+    Q_OBJECT
+
+    /** Use this class if you keep your MetadataHub for a longer time than
+     *  the current scope. It will watch for tag changes and update
+     *  its map, at least if it lives in a thread with an event loop to receive signals.
+     */
+
+public:
+
+    MetadataHubOnTheRoad(QObject *parent = 0);
+    MetadataHubOnTheRoad& operator=(const MetadataHub &);
+    MetadataHubOnTheRoad(const MetadataHub &);
+
+protected Q_SLOTS:
+
+    void slotTagDeleted(int tagId);
 };
 
 } // namespace Digikam
