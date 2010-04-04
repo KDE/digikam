@@ -25,19 +25,18 @@
 
 // Qt includes
 
-#include <QString>
 #include <QtGlobal>
 #include <QFile>
 #include <QFileInfo>
 #include <QDateTime>
 #include <QDir>
-#include <QProcess>
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QDBusConnection>
 #include <QDBusConnectionInterface>
 #include <QDBusReply>
+#include <QProcess>
 
 // KDE includes
 
@@ -46,17 +45,41 @@
 
 // Local includes
 
-#include <databaseserveradaptor.h>
-#include <databaseparameters.h>
+#include "pollthread.h"
+#include "databaseserveradaptor.h"
+#include "databaseparameters.h"
 
 namespace Digikam
 {
 
-DatabaseServer::DatabaseServer(QCoreApplication* application=0)
-              : QObject(application), app(application), pollThread(0)
+class DatabaseServerPriv
 {
-    mDatabaseProcess = 0;
-    internalDBName   = "digikam";
+
+public:
+
+    DatabaseServerPriv()
+    {
+        databaseProcess = 0;
+        app             = 0;
+        pollThread      = 0;
+        internalDBName  = QString("digikam");
+    }
+
+    QProcess*         databaseProcess;
+    QString           internalDBName;
+    QCoreApplication* app;
+    PollThread*       pollThread;
+};
+
+DatabaseServer::DatabaseServer(QCoreApplication* application=0)
+              : QObject(application), d(new DatabaseServerPriv)
+{
+    d->app = application;
+}
+
+DatabaseServer::~DatabaseServer()
+{
+    delete d;
 }
 
 void DatabaseServer::registerOnDBus()
@@ -68,10 +91,10 @@ void DatabaseServer::registerOnDBus()
 
 void DatabaseServer::startPolling()
 {
-    pollThread  = new PollThread(app);
-    pollThread->start();
+    d->pollThread = new PollThread(d->app);
+    d->pollThread->start();
 
-    connect(pollThread, SIGNAL(done()),
+    connect(d->pollThread, SIGNAL(done()),
             this, SLOT(stopDatabaseProcess()));
 }
 
@@ -113,13 +136,14 @@ void DatabaseServer::startMYSQLDatabaseProcess()
     DatabaseParameters internalServerParameters = DatabaseParameters::parametersFromConfig(dbType);
 
     //TODO Don't know if this is needed, because after the thread is finished, the database server manager should close
-    pollThread->stop = false;
+    d->pollThread->stop = false;
 
     // QString filepath = KStandardDirs::locate("data", "digikam/database/dbconfig.xml");
 
     //TODO Move the database command outside of the code to the dbconfig.xml file
     const QString mysqldPath(internalServerParameters.m_DatabaseConfigs[dbType].m_dbservercmd);
     //const QString mysqldPath("/usr/sbin/mysqld");
+
     if ( mysqldPath.isEmpty() )
         kDebug() << "No path to mysqld set in server configuration!";
 
@@ -249,9 +273,8 @@ void DatabaseServer::startMYSQLDatabaseProcess()
     arguments << QString::fromLatin1( "--datadir=%1/" ).arg( dataDir );
     arguments << QString::fromLatin1( "--socket=%1/mysql.socket" ).arg( miscDir );
 
-
     // init db
-    if (!QFile(dataDir+QDir::separator()+"mysql").exists())
+    if (!QFile(dataDir+QDir::separator() + QString("mysql")).exists())
     {
         QProcess initProcess;
         initProcess.start( mysqlInitCmd );
@@ -263,25 +286,26 @@ void DatabaseServer::startMYSQLDatabaseProcess()
         }
     }
 
-    mDatabaseProcess = new QProcess();
-    mDatabaseProcess->start( mysqldPath, arguments );
+    d->databaseProcess = new QProcess();
+    d->databaseProcess->start( mysqldPath, arguments );
 
-    if ( !mDatabaseProcess->waitForStarted() )
+    if ( !d->databaseProcess->waitForStarted() )
     {
         kDebug() << "Could not start database server!";
         kDebug() << "executable:" << mysqldPath;
         kDebug() << "arguments:" << arguments;
-        kDebug() << "process error:" << mDatabaseProcess->errorString();
+        kDebug() << "process error:" << d->databaseProcess->errorString();
     }
 
     const QLatin1String initCon( "initConnection" );
     {
-        QSqlDatabase db = QSqlDatabase::addDatabase( "QMYSQL", initCon );
+        QSqlDatabase db = QSqlDatabase::addDatabase( QString("QMYSQL"), initCon );
         db.setConnectOptions(QString::fromLatin1("UNIX_SOCKET=%1/mysql.socket").arg(miscDir));
         db.setUserName(QString("root"));
         db.setDatabaseName( QString() ); // might not exist yet, then connecting to the actual db will fail
+
         if ( !db.isValid() )
-        kDebug() << "Invalid database object during database server startup";
+            kDebug() << "Invalid database object during database server startup";
 
         bool opened = false;
         for ( int i = 0; i < 120; ++i )
@@ -289,24 +313,24 @@ void DatabaseServer::startMYSQLDatabaseProcess()
             opened = db.open();
             if ( opened )
                 break;
-            if ( mDatabaseProcess->waitForFinished( 500 ) )
+            if ( d->databaseProcess->waitForFinished( 500 ) )
             {
                 kDebug() << "Database process exited unexpectedly during initial connection!";
                 kDebug() << "executable:" << mysqldPath;
                 kDebug() << "arguments:" << arguments;
-                kDebug() << "stdout:" << mDatabaseProcess->readAllStandardOutput();
-                kDebug() << "stderr:" << mDatabaseProcess->readAllStandardError();
-                kDebug() << "exit code:" << mDatabaseProcess->exitCode();
-                kDebug() << "process error:" << mDatabaseProcess->errorString();
+                kDebug() << "stdout:" << d->databaseProcess->readAllStandardOutput();
+                kDebug() << "stderr:" << d->databaseProcess->readAllStandardError();
+                kDebug() << "exit code:" << d->databaseProcess->exitCode();
+                kDebug() << "process error:" << d->databaseProcess->errorString();
             }
         }
 
         if ( opened ) {
         {
             QSqlQuery query( db );
-            if ( !query.exec( QString::fromLatin1( "USE %1" ).arg( internalDBName ) ) )
+            if ( !query.exec( QString::fromLatin1( "USE %1" ).arg( d->internalDBName ) ) )
             {
-                kDebug() << "Failed to use database" << internalDBName;
+                kDebug() << "Failed to use database" << d->internalDBName;
                 kDebug() << "Query error:" << query.lastError().text();
                 kDebug() << "Database error:" << db.lastError().text();
                 kDebug() << "Trying to create database now...";
@@ -337,7 +361,9 @@ void DatabaseServer::createDatabase()
 {
     const QLatin1String initCon( "initConnection" );
     QSqlDatabase db = QSqlDatabase::addDatabase( "MYSQL", initCon );
-    db.setDatabaseName( QString() ); // might not exist yet, then connecting to the actual db will fail
+
+     // Might not exist yet, then connecting to the actual db will fail.
+     db.setDatabaseName( QString() );
 
     if ( !db.isValid() )
         kDebug() << "Invalid database object during initial database connection";
@@ -345,9 +371,10 @@ void DatabaseServer::createDatabase()
     if ( db.open() )
     {
         QSqlQuery query( db );
-        if ( !query.exec( QString::fromLatin1( "USE %1" ).arg( internalDBName ) ) )
+
+        if ( !query.exec( QString::fromLatin1( "USE %1" ).arg( d->internalDBName ) ) )
         {
-            kDebug() << "Failed to use database" << internalDBName;
+            kDebug() << "Failed to use database" << d->internalDBName;
             kDebug() << "Query error:" << query.lastError().text();
             kDebug() << "Database error:" << db.lastError().text();
             kDebug() << "Trying to create database now...";
@@ -358,7 +385,9 @@ void DatabaseServer::createDatabase()
                 kDebug() << "Query error:" << query.lastError().text();
                 kDebug() << "Database error:" << db.lastError().text();
             }
-        } // make sure query is destroyed before we close the db
+        }
+
+        // make sure query is destroyed before we close the db
         db.close();
     }
     QSqlDatabase::removeDatabase( initCon );
@@ -371,16 +400,16 @@ void DatabaseServer::createDatabase()
  */
 void DatabaseServer::stopDatabaseProcess()
 {
-    if ( !mDatabaseProcess )
+    if ( !d->databaseProcess )
         return;
 
-    mDatabaseProcess->terminate();
-    mDatabaseProcess->waitForFinished();
-    mDatabaseProcess->~QProcess();
-    mDatabaseProcess = 0;
-    pollThread->stop = true;
-    pollThread->wait();
-    app->exit(0);
+    d->databaseProcess->terminate();
+    d->databaseProcess->waitForFinished();
+    d->databaseProcess->~QProcess();
+    d->databaseProcess = 0;
+    d->pollThread->stop = true;
+    d->pollThread->wait();
+    d->app->exit(0);
 }
 
 /*
@@ -388,11 +417,12 @@ void DatabaseServer::stopDatabaseProcess()
  */
 bool DatabaseServer::isRunning()
 {
-    if (mDatabaseProcess == 0)
+    if (d->databaseProcess == 0)
     {
         return false;
     }
-    return mDatabaseProcess->state() == QProcess::Running;
+
+    return (d->databaseProcess->state() == QProcess::Running);
 }
 
 } // namespace Digikam

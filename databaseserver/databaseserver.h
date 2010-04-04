@@ -26,17 +26,15 @@
 
 // QT includes
 
-#include <QProcess>
 #include <QString>
 #include <QDBusAbstractAdaptor>
-#include <QCoreApplication>
 
-// Local includes
-
-#include "pollthread.h"
+class QCoreApplication;
 
 namespace Digikam
 {
+
+class DatabaseServerPriv;
 
 class DatabaseServer : public QObject
 {
@@ -46,6 +44,7 @@ class DatabaseServer : public QObject
 public:
 
     DatabaseServer(QCoreApplication* application);
+    ~DatabaseServer();
     void createDatabase();
     void registerOnDBus();
     void startPolling();
@@ -60,10 +59,7 @@ public Q_SLOTS:
 
 private:
 
-    QProcess*         mDatabaseProcess;
-    QString           internalDBName;
-    QCoreApplication* app;
-    PollThread*       pollThread;
+    DatabaseServerPriv* const d;
 };
 
 } // namespace Digikam
