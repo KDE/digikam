@@ -187,6 +187,11 @@ void RenameCustomizer::setStartIndex(int startIndex)
     d->advancedRenameWidget->parser()->init(settings);
 }
 
+void RenameCustomizer::reset()
+{
+    d->advancedRenameWidget->parser()->reset();
+}
+
 QString RenameCustomizer::newName(const QString& fileName, const QDateTime& dateTime) const
 {
 

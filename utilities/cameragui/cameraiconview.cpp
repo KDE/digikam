@@ -351,6 +351,7 @@ void CameraIconView::slotUpdateDownloadNames(bool hasSelection)
     // Camera items selection.
 
     // reset the start index
+    d->renamer->reset();
     d->renamer->setStartIndex(startIndex);
 
     for (IconItem* item = (revOrder?lastItem():firstItem()); item; (revOrder?item = item->prevItem():item=item->nextItem()))

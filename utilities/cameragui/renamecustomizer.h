@@ -65,6 +65,7 @@ public:
 
     int     startIndex() const;
     void    setStartIndex(int startIndex);
+    void    reset();
 
 Q_SIGNALS:
 
