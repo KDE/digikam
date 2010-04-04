@@ -15,6 +15,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 004 ==> 233109 : digiKam fails pre-compile checks on win32.
 005 ==> 229951 : Crash while scrolling library.
 006 ==> 228979 : digiKam crashed after saving a photograph to PGF format.
-007 ==> 
+007 ==> 195652 : digiKam crashed after rebuilding fingerprints.
+008 ==> 
 
 
