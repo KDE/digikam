@@ -155,9 +155,15 @@ public:
     };
 
     /**
+      * Return config read from XML,
+      * corresponding to this backend's database type.
+      */
+    DatabaseConfigElement configElement() const;
+
+    /**
      * TODO: API docs
      */
-    DatabaseAction getDBAction(const QString &actionName);
+    DatabaseAction getDBAction(const QString &actionName) const;
     QueryState execDBAction(const DatabaseAction &action, QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
     QueryState execDBAction(const DatabaseAction &action, const QMap<QString, QVariant>& bindingMap,
                       QList<QVariant>* values = 0, QVariant *lastInsertId = 0);

@@ -421,24 +421,37 @@ DatabaseCoreBackend::~DatabaseCoreBackend()
     delete d;
 }
 
-DatabaseAction DatabaseCoreBackend::getDBAction(const QString &actionName)
+DatabaseConfigElement DatabaseCoreBackend::configElement() const
 {
-    Q_D(DatabaseCoreBackend);
-    return d->parameters.databaseConfigs[d->parameters.databaseType].sqlStatements[actionName];
+    Q_D(const DatabaseCoreBackend);
+    return DatabaseConfigElement::element(d->parameters.databaseType);
 }
 
-DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDBAction(const DatabaseAction &action, QList<QVariant>* values, QVariant *lastInsertId)
+DatabaseAction DatabaseCoreBackend::getDBAction(const QString &actionName) const
+{
+    DatabaseAction action = configElement().sqlStatements.value(actionName);
+    if (action.name.isNull())
+        kError() << "No DB action defined for" << actionName << "! Implementation missing for this database type.";
+    return action;
+}
+
+DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDBAction(const DatabaseAction &action, QList<QVariant>* values,
+                                                                  QVariant *lastInsertId)
 {
     return execDBAction(action, QMap<QString, QVariant>(), values, lastInsertId);
 }
 
-DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDBAction(const DatabaseAction &action, const QMap<QString, QVariant>& bindingMap,
-                                       QList<QVariant>* values, QVariant *lastInsertId)
+DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDBAction(const DatabaseAction &action, const QMap<QString,
+                                                                  QVariant>& bindingMap, QList<QVariant>* values, QVariant *lastInsertId)
 {
     Q_D(DatabaseCoreBackend);
 
     DatabaseCoreBackend::QueryState returnResult = DatabaseCoreBackend::NoErrors;
     QSqlDatabase db = d->databaseForThread();
+
+    if (action.name.isNull())
+        kError() << "Attempt to execute null action";
+
     #ifdef DATABASCOREBACKEND_DEBUG
     kDebug(50003) << "Executing DBAction ["<<  action.name  <<"]";
     #endif
@@ -446,7 +459,7 @@ DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDBAction(const Database
     bool wrapInTransaction = (action.mode == QString("transaction"));
     if (wrapInTransaction)
     {
-        db.transaction();
+        beginTransaction();
     }
 
     foreach (DatabaseActionElement actionElement, action.dbActionElements)
@@ -464,17 +477,30 @@ DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDBAction(const Database
         {
             kDebug(50003) << "Error while executing DBAction ["<<  action.name  <<"] Statement ["<<actionElement.statement<<"]";
             returnResult = result;
+
+            /*
             if (wrapInTransaction && !db.rollback())
             {
                 kDebug(50003) << "Error while rollback changes of previous DBAction.";
             }
+            */
+
             break;
         }
     }
+
+    if (wrapInTransaction)
+    {
+        commitTransaction();
+    }
+
+    /*
     if (returnResult==DatabaseCoreBackend::NoErrors && wrapInTransaction && !db.commit())
     {
         kDebug(50003) << "Error while committing changes of previous DBAction.";
     }
+    */
+
     return returnResult;
 }
 
