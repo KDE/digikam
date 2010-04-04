@@ -14,6 +14,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 003 ==> 232875 : Compile 1.2.0 from tar or 1.3.0 from SVN Decorate / Texture gives me a blank target and will not apply.
 004 ==> 233109 : digiKam fails pre-compile checks on win32.
 005 ==> 229951 : Crash while scrolling library.
-006 ==> 
+006 ==> 228979 : digiKam crashed after saving a photograph to PGF format.
+007 ==> 
 
 
