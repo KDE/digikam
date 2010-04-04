@@ -44,6 +44,7 @@
 #include "imagecomments.h"
 #include "imagecopyright.h"
 #include "imageextendedproperties.h"
+#include "tagscache.h"
 
 namespace Digikam
 {
@@ -473,10 +474,9 @@ void ImageScanner::scanTags()
     QStringList keywords = var.toStringList();
     if (!keywords.isEmpty())
     {
-        DatabaseAccess access;
         // get tag ids, create if necessary
-        QList<int> tagIds = access.db()->getTagsFromTagPaths(keywords, true);
-        access.db()->addTagsToItems(QList<qlonglong>() << m_scanInfo.id, tagIds);
+        QList<int> tagIds = TagsCache::instance()->getOrCreateTags(keywords);
+        DatabaseAccess().db()->addTagsToItems(QList<qlonglong>() << m_scanInfo.id, tagIds);
     }
 }
 

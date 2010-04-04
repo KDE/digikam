@@ -41,6 +41,7 @@
 #include "imageinfodata.h"
 #include "imageinfocache.h"
 #include "imagescanner.h"
+#include "tagscache.h"
 
 namespace Digikam
 {
@@ -623,10 +624,8 @@ void ImageInfo::addTagPaths(const QStringList& tagPaths)
     if (!m_data)
         return;
 
-    DatabaseAccess access;
-    QList<int> list = access.db()->getTagsFromTagPaths(tagPaths, false);
-    for (int i=0; i<list.count(); ++i)
-        access.db()->addItemTag(m_data->id, list[i]);
+    QList<int> tagIds = TagsCache::instance()->tagsForPaths(tagPaths);
+    DatabaseAccess().db()->addTagsToItems(QList<qlonglong>() << m_data->id, tagIds);
 }
 
 ImageInfo ImageInfo::copyItem(int dstAlbumID, const QString& dstFileName)

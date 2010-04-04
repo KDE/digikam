@@ -46,6 +46,7 @@
 #include "dmetadata.h"
 #include "imageattributeswatch.h"
 #include "globals.h"
+#include "tagscache.h"
 
 namespace Digikam
 {
@@ -174,10 +175,8 @@ void KipiImageInfo::addAttributes(const QMap<QString, QVariant>& res)
         {
             QStringList tagspaths = attributes["tagspath"].toStringList();
 
-            DatabaseAccess access;
-            // get tag ids, create if necessary
-            QList<int> tagIds = access.db()->getTagsFromTagPaths(tagspaths, true);
-            access.db()->addTagsToItems(QList<qlonglong>() << m_info.id(), tagIds);
+            QList<int> tagIds = TagsCache::instance()->getOrCreateTags(tagspaths);
+            DatabaseAccess().db()->addTagsToItems(QList<qlonglong>() << m_info.id(), tagIds);
         }
 
         // Set digiKam Rating of picture into database.

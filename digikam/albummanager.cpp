@@ -98,6 +98,7 @@ extern "C"
 #include "upgradedb_sqlite2tosqlite3.h"
 #include "config-digikam.h"
 #include "setupcollections.h"
+#include "tagscache.h"
 
 namespace Digikam
 {
@@ -2198,7 +2199,7 @@ TAlbum* AlbumManager::createTAlbum(TAlbum* parent, const QString& name,
 AlbumList AlbumManager::findOrCreateTAlbums(const QStringList& tagPaths)
 {
     // find tag ids for tag paths in list, create if they don't exist
-    QList<int> tagIDs = DatabaseAccess().db()->getTagsFromTagPaths(tagPaths, true);
+    QList<int> tagIDs = TagsCache::instance()->getOrCreateTags(tagPaths);
 
     // create TAlbum objects for the newly created tags
     scanTAlbums();
