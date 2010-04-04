@@ -24,8 +24,8 @@ MySQL support files to review
  AM            libs/dialogs/migrationdlg.cpp   [License: GPL (v2+)]               DONE
  AM            libs/dialogs/migrationdlg.h   [License: GPL (v2+)]                 DONE
 
- AM            libs/widgets/common/databasewidget.cpp   [License: GPL (v2+)]
- AM            libs/widgets/common/databasewidget.h   [License: GPL (v2+)]
+ AM            libs/widgets/common/databasewidget.cpp   [License: GPL (v2+)]      DONE
+ AM            libs/widgets/common/databasewidget.h   [License: GPL (v2+)]        DONE
 
  AM            utilities/setup/databaseconnectionwidget.h   [License: GPL (v2+)]
  AM            utilities/setup/setupdatabase.cpp   [License: GPL (v2+)]           DONE

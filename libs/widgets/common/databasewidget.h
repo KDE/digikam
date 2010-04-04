@@ -6,7 +6,7 @@
  * Date        : 2009-11-14
  * Description : database migration dialog
  *
- * Copyright (C) 2009 by Holger Foerster <Hamsi2k at freenet dot de>
+ * Copyright (C) 2009-2010 by Holger Foerster <Hamsi2k at freenet dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -24,21 +24,24 @@
 #ifndef DATABASEWIDGET_H
 #define DATABASEWIDGET_H
 
-// QT includes
-#include <qstring.h>
-#include <qlabel.h>
-#include <qcombobox.h>
-#include <qlineedit.h>
-#include <qspinbox.h>
-#include <qcheckbox.h>
-#include <qgroupbox.h>
+// Qt includes
+
+#include <QString>
+#include <QLabel>
+#include <QComboBox>
+#include <QLineEdit>
+#include <QSpinBox>
+#include <QCheckBox>
+#include <QGroupBox>
 
 // KDE includes
+
 #include <kdialog.h>
 #include <kurlrequester.h>
 #include <kurl.h>
 
 // Local includes
+
 #include "albumsettings.h"
 #include "databaseparameters.h"
 
@@ -55,26 +58,26 @@ public:
     DatabaseWidget(QWidget* parent);
     ~DatabaseWidget();
 
-    KUrlRequester           *databasePathEdit;
-    QString                  originalDbPath;
-    QString                  originalDbType;
-    QLabel                  *databasePathLabel;
-    QComboBox               *databaseType;
-    QCheckBox               *internalServer;
-    QLineEdit               *databaseName;
-    QLineEdit               *databaseNameThumbnails;
-    QLineEdit               *hostName;
-    QSpinBox                *hostPort;
-    QLineEdit               *connectionOptions;
+    KUrlRequester* databasePathEdit;
+    QString        originalDbPath;
+    QString        originalDbType;
+    QLabel*        databasePathLabel;
+    QComboBox*     databaseType;
+    QCheckBox*     internalServer;
+    QSpinBox*      hostPort;
 
-    QLineEdit               *userName;
+    QLineEdit*     databaseName;
+    QLineEdit*     databaseNameThumbnails;
+    QLineEdit*     hostName;
+    QLineEdit*     connectionOptions;
+    QLineEdit*     userName;
+    QLineEdit*     password;
 
-    QLineEdit               *password;
-
-    QGroupBox               *expertSettings;
+    QGroupBox*     expertSettings;
 
 public:
-    void setParametersFromSettings(const AlbumSettings *settings);
+
+    void setParametersFromSettings(const AlbumSettings* settings);
     DatabaseParameters getDatabaseParameters();
 
 public Q_SLOTS:
@@ -86,6 +89,7 @@ public Q_SLOTS:
     void checkDatabaseConnection();
 
 private:
+
     void checkDBPath();
     void setupMainArea();
 };
