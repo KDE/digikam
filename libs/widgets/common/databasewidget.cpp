@@ -328,7 +328,6 @@ DatabaseParameters DatabaseWidget::getDatabaseParameters()
         parameters = DatabaseParameters::parametersFromConfig(databaseType->currentText());
         DatabaseServerStarter::startServerManagerProcess(databaseType->currentText());
     }
-    parameters.readConfig();
     return parameters;
 }
 

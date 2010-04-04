@@ -142,7 +142,7 @@ void DatabaseServer::startMYSQLDatabaseProcess()
     // QString filepath = KStandardDirs::locate("data", "digikam/database/dbconfig.xml");
 
     //TODO Move the database command outside of the code to the dbconfig.xml file
-    const QString mysqldPath(internalServerParameters.databaseConfigs[dbType].dbServerCmd);
+    const QString mysqldPath(DatabaseConfigElement::element(dbType).dbServerCmd);
     //const QString mysqldPath("/usr/sbin/mysqld");
 
     if ( mysqldPath.isEmpty() )
@@ -164,7 +164,7 @@ void DatabaseServer::startMYSQLDatabaseProcess()
     * TODO Move the database command outside of the code to the dbconfig.xml file.
     * Offer a variable to the dataDir. E.g. the command definition in the config file has to be: /usr/bin/mysql_install_db --user=digikam --datadir=$dataDir$
     */
-    const QString mysqlInitCmd(QString::fromLatin1("%1 --user=digikam --datadir=%2").arg(internalServerParameters.databaseConfigs[dbType].dbInitCmd, dataDir));
+    const QString mysqlInitCmd(QString::fromLatin1("%1 --user=digikam --datadir=%2").arg(DatabaseConfigElement::element(dbType).dbInitCmd, dataDir));
 
     if (!dirs.exists(akDir))
     {

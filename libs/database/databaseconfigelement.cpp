@@ -262,7 +262,7 @@ void DatabaseConfigElementLoader::readConfig()
 
 DatabaseConfigElement DatabaseConfigElement::element(const QString& databaseType)
 {
-    // I'm assuming unprotected read-only access is ok here, given that the data is static global
+    // Unprotected read-only access? Usually accessed under DatabaseAccess protection anyway
     return loader->databaseConfigs.value(databaseType);
 }
 
