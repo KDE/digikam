@@ -107,13 +107,15 @@ public:
 
     static void removeFromUrl(KUrl& url);
 
-	void readConfig();
-        QString m_DefaultDatabase;
-        QMap<QString, databaseconfigelement> m_DatabaseConfigs;
+    void readConfig();
+    QString defaultDatabase;
+    QMap<QString, DatabaseConfigElement> databaseConfigs;
+
 protected:
-        databaseconfigelement readDatabase(QDomElement& databaseElement);
-        void readDBActions(QDomElement& sqlStatementElements, databaseconfigelement& configElement);
-        void readStatements(QDomElement& sqlStatementElements, databaseconfigelement& configElement);
+
+    DatabaseConfigElement readDatabase(QDomElement& databaseElement);
+    void readDBActions(QDomElement& sqlStatementElements, DatabaseConfigElement& configElement);
+    void readStatements(QDomElement& sqlStatementElements, DatabaseConfigElement& configElement);
 
 };
 

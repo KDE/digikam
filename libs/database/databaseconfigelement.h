@@ -37,41 +37,43 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT databaseActionElement
-{
-    public:
-
-        QString m_Mode;
-        int     m_Order;
-        QString m_Statement;
-};
-
-class DIGIKAM_EXPORT databaseAction
-{
-    public:
-
-        QString                      m_Name;
-        QString                      m_Mode;
-        QList<databaseActionElement> m_DBActionElements;
-};
-
-class DIGIKAM_EXPORT databaseconfigelement
+class DIGIKAM_EXPORT DatabaseActionElement
 {
 public:
 
-    databaseconfigelement();
-    virtual ~databaseconfigelement();
+    DatabaseActionElement() : order(0) {}
 
-    QString                       m_DatabaseID;
-    QString                       m_HostName;
-    QString                       m_Port;
-    QString                       m_ConnectOptions;
-    QString                       m_DatabaseName;
-    QString                       m_UserName;
-    QString                       m_Password;
-    QString                       m_dbservercmd;
-    QString                       m_dbinitcmd;
-    QMap<QString, databaseAction> m_SQLStatements;
+    QString mode;
+    int     order;
+    QString statement;
+};
+
+class DIGIKAM_EXPORT DatabaseAction
+{
+public:
+
+    QString                      name;
+    QString                      mode;
+    QList<DatabaseActionElement> dbActionElements;
+};
+
+class DIGIKAM_EXPORT DatabaseConfigElement
+{
+public:
+
+    DatabaseConfigElement();
+    virtual ~DatabaseConfigElement();
+
+    QString                       databaseID;
+    QString                       hostName;
+    QString                       port;
+    QString                       connectOptions;
+    QString                       databaseName;
+    QString                       userName;
+    QString                       password;
+    QString                       dbServerCmd;
+    QString                       dbInitCmd;
+    QMap<QString, DatabaseAction> sqlStatements;
 };
 
 } // namespace Digikam

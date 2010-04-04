@@ -28,13 +28,13 @@
 namespace Digikam
 {
 
-databaseconfigelement::databaseconfigelement()
+DatabaseConfigElement::DatabaseConfigElement()
 {
     // TODO Auto-generated constructor stub
 
 }
 
-databaseconfigelement::~databaseconfigelement()
+DatabaseConfigElement::~DatabaseConfigElement()
 {
     // TODO Auto-generated destructor stub
 }

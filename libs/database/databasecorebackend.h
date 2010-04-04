@@ -157,11 +157,11 @@ public:
     /**
      * TODO: API docs
      */
-    databaseAction getDBAction(const QString &actionName);
-    QueryState execDBAction(const databaseAction &action, QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
-    QueryState execDBAction(const databaseAction &action, const QMap<QString, QVariant>& bindingMap,
+    DatabaseAction getDBAction(const QString &actionName);
+    QueryState execDBAction(const DatabaseAction &action, QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
+    QueryState execDBAction(const DatabaseAction &action, const QMap<QString, QVariant>& bindingMap,
                       QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
-    QSqlQuery execDBActionQuery(const databaseAction &action, const QMap<QString, QVariant>& bindingMap);
+    QSqlQuery execDBActionQuery(const DatabaseAction &action, const QMap<QString, QVariant>& bindingMap);
 
     /**
      * Executes the SQL statement, and write the returned data into the values list.

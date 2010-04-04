@@ -421,49 +421,48 @@ DatabaseCoreBackend::~DatabaseCoreBackend()
     delete d;
 }
 
-databaseAction DatabaseCoreBackend::getDBAction(const QString &actionName)
+DatabaseAction DatabaseCoreBackend::getDBAction(const QString &actionName)
 {
     Q_D(DatabaseCoreBackend);
-    return d->parameters.m_DatabaseConfigs[d->parameters.databaseType].m_SQLStatements[actionName];
+    return d->parameters.databaseConfigs[d->parameters.databaseType].sqlStatements[actionName];
 }
 
-DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDBAction(const databaseAction &action, QList<QVariant>* values, QVariant *lastInsertId)
+DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDBAction(const DatabaseAction &action, QList<QVariant>* values, QVariant *lastInsertId)
 {
     return execDBAction(action, QMap<QString, QVariant>(), values, lastInsertId);
 }
 
-DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDBAction(const databaseAction &action, const QMap<QString, QVariant>& bindingMap,
+DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDBAction(const DatabaseAction &action, const QMap<QString, QVariant>& bindingMap,
                                        QList<QVariant>* values, QVariant *lastInsertId)
 {
     Q_D(DatabaseCoreBackend);
 
     DatabaseCoreBackend::QueryState returnResult = DatabaseCoreBackend::NoErrors;
     QSqlDatabase db = d->databaseForThread();
+    #ifdef DATABASCOREBACKEND_DEBUG
+    kDebug(50003) << "Executing DBAction ["<<  action.name  <<"]";
+    #endif
 
-#ifdef DATABASCOREBACKEND_DEBUG
-    kDebug(50003) << "Executing DBAction ["<<  action.m_Name  <<"]";
-#endif
-
-    bool wrapInTransaction = (action.m_Mode == QString("transaction"));
+    bool wrapInTransaction = (action.mode == QString("transaction"));
     if (wrapInTransaction)
     {
         db.transaction();
     }
 
-    foreach (databaseActionElement actionElement, action.m_DBActionElements)
+    foreach (DatabaseActionElement actionElement, action.dbActionElements)
     {
         DatabaseCoreBackend::QueryState result;
-        if (actionElement.m_Mode==QString("query"))
+        if (actionElement.mode == QString("query"))
         {
-            result = execSql(actionElement.m_Statement, bindingMap, values, lastInsertId);
+            result = execSql(actionElement.statement, bindingMap, values, lastInsertId);
         }
         else
         {
-            result = execDirectSql(actionElement.m_Statement);
+            result = execDirectSql(actionElement.statement);
         }
-        if (result!=DatabaseCoreBackend::NoErrors)
+        if (result != DatabaseCoreBackend::NoErrors)
         {
-            kDebug(50003) << "Error while executing DBAction ["<<  action.m_Name  <<"] Statement ["<<actionElement.m_Statement<<"]";
+            kDebug(50003) << "Error while executing DBAction ["<<  action.name  <<"] Statement ["<<actionElement.statement<<"]";
             returnResult = result;
             if (wrapInTransaction && !db.rollback())
             {
@@ -474,35 +473,37 @@ DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDBAction(const database
     }
     if (returnResult==DatabaseCoreBackend::NoErrors && wrapInTransaction && !db.commit())
     {
-      kDebug(50003) << "Error while committing changes of previous DBAction.";
+        kDebug(50003) << "Error while committing changes of previous DBAction.";
     }
     return returnResult;
 }
 
-QSqlQuery DatabaseCoreBackend::execDBActionQuery(const databaseAction &action, const QMap<QString, QVariant>& bindingMap)
+QSqlQuery DatabaseCoreBackend::execDBActionQuery(const DatabaseAction &action, const QMap<QString, QVariant>& bindingMap)
 {
     Q_D(DatabaseCoreBackend);
 
     QSqlDatabase db = d->databaseForThread();
 
-#ifdef DATABASCOREBACKEND_DEBUG
-    kDebug(50003) << "Executing DBAction ["<<  action.m_Name  <<"]";
-#endif
+    #ifdef DATABASCOREBACKEND_DEBUG
+    kDebug(50003) << "Executing DBAction ["<<  action.name  <<"]";
+    #endif
 
     QSqlQuery result;
-    foreach (databaseActionElement actionElement, action.m_DBActionElements)
+    foreach (DatabaseActionElement actionElement, action.dbActionElements)
     {
-        if (actionElement.m_Mode==QString("query"))
+        if (actionElement.mode==QString("query"))
         {
-            result = execQuery(actionElement.m_Statement, bindingMap);
+            result = execQuery(actionElement.statement, bindingMap);
         }
         else
         {
             kDebug(50003) << "Error, only DBActions with mode 'query' are allowed at this call!";
         }
-        if (result.lastError().isValid() && result.lastError().number()!=0)
+
+        if (result.lastError().isValid() && result.lastError().number())
         {
-            kDebug(50003) << "Error while executing DBAction ["<<  action.m_Name  <<"] Statement ["<<actionElement.m_Statement<<"] Errornr. [" << result.lastError() << "]";
+            kDebug(50003) << "Error while executing DBAction ["<<  action.name
+                          <<"] Statement ["<<actionElement.statement<<"] Errornr. [" << result.lastError() << "]";
             break;
         }
     }
@@ -990,9 +991,9 @@ DatabaseCoreBackend::QueryState DatabaseCoreBackend::beginTransaction()
         {
             d->decrementTransactionCount();
             if (db.lastError().type() == QSqlError::ConnectionError)
-                   {
-                       return DatabaseCoreBackend::ConnectionError;
-                   }
+            {
+                return DatabaseCoreBackend::ConnectionError;
+            }
         }
         d->isInTransaction = true;
     }
@@ -1009,9 +1010,9 @@ DatabaseCoreBackend::QueryState DatabaseCoreBackend::commitTransaction()
         {
             d->incrementTransactionCount();
             if (db.lastError().type() == QSqlError::ConnectionError)
-                   {
-                       return DatabaseCoreBackend::ConnectionError;
-                   }
+            {
+                return DatabaseCoreBackend::ConnectionError;
+            }
         }
         d->isInTransaction = false;
         d->transactionFinished();
