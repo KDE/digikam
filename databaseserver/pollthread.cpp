@@ -59,12 +59,12 @@ void PollThread::run()
 {
     do
     {
-        kDebug(50003) << "Waiting "<< waitTime <<" seconds...stop: ["<< stop <<"]";
+        kDebug() << "Waiting "<< waitTime <<" seconds...stop: ["<< stop <<"]";
         sleep(waitTime);
     }
     while( !stop && checkDigikamInstancesRunning() );
 
-    kDebug(50003) << "Shutting down database server";
+    kDebug() << "Shutting down database server";
     emit done();
 }
 
@@ -84,7 +84,7 @@ bool PollThread::checkDigikamInstancesRunning()
        {
            if (service.startsWith(digikamService) || service.startsWith(digikamKioService))
            {
-               kDebug(50003) << "At least service ["<< service <<"] is using the database server";
+               kDebug() << "At least service ["<< service <<"] is using the database server";
                // At least one digikam/kio service was found
                sem.release(1);
                return true;

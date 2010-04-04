@@ -39,10 +39,11 @@ SET(DIGIKAM_VERSION_STRING
 # These codes will be set for every project specific path automatically, so
 # that you can use kDebug() without any usage of the area code throughout the
 # digiKam code base.
-SET(AREA_CODE_GENERAL       "50003")
-SET(AREA_CODE_KIOSLAVES     "50004")
-SET(AREA_CODE_SHOWFOTO      "50005")
-SET(AREA_CODE_IMAGEPLUGINS  "50006")
+SET(AREA_CODE_GENERAL        "50003")
+SET(AREA_CODE_KIOSLAVES      "50004")
+SET(AREA_CODE_SHOWFOTO       "50005")
+SET(AREA_CODE_IMAGEPLUGINS   "50006")
+SET(AREA_CODE_DATABASESERVER "50007")
 ADD_DEFINITIONS(-DKDE_DEFAULT_DEBUG_AREA=${AREA_CODE_GENERAL})
 
 MACRO(SET_DEBUG_AREA_CODE _areacode)
@@ -958,7 +959,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch/batchsyncmetadata.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch/fingerprintsgenerator.cpp
        )
-       
+
     SET(libdatabasecore_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databasecorebackend.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseparameters.cpp
@@ -968,7 +969,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseconfigelement.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlquery.cpp
        )
-       
+
     SET(libdatabase_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/albumdb.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/albumdb_sqlite2.cpp

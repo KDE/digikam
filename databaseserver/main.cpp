@@ -29,17 +29,13 @@
 #include <QDBusConnectionInterface>
 #include <QDBusReply>
 
-// KDE includes
-
-#include "kdebug.h"
-
 // Local includes.
 
 #include <databaseserver.h>
 
 using namespace Digikam;
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     QCoreApplication app(argc, argv);
 

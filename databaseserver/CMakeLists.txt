@@ -1,9 +1,9 @@
-# Digikam Database Server #######################################################
+SET_DEBUG_AREA_CODE(${AREA_CODE_DATABASESERVER})
 
 SET(digikamdatabaseserver_SRCS ${lib..._SRCS}
-				 databaseserver.cpp
-				 pollthread.cpp
-				 main.cpp
+                               databaseserver.cpp
+                               pollthread.cpp
+                               main.cpp
     )
 
 INCLUDE_DIRECTORIES(
