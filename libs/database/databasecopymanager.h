@@ -6,7 +6,7 @@
  * Date        : 2009-11-14
  * Description : database migration dialog
  *
- * Copyright (C) 2009 by Holger Foerster <Hamsi2k at freenet dot de>
+ * Copyright (C) 2009-2010 by Holger Foerster <Hamsi2k at freenet dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -20,41 +20,59 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
+
 #ifndef DATABASECOPYMANAGER_H
 #define DATABASECOPYMANAGER_H
 
-// QT includes
+// Qt includes
+
 #include <QObject>
 
 // Local includes
+
 #include "digikam_export.h"
 #include "databasebackend.h"
 
 namespace Digikam
 {
-    class DIGIKAM_DATABASE_EXPORT DatabaseCopyManager : public QObject
+
+class DIGIKAM_DATABASE_EXPORT DatabaseCopyManager : public QObject
+{
+    Q_OBJECT
+
+public:
+
+    enum FinishStates
     {
-        Q_OBJECT
-
-        public:
-            DatabaseCopyManager();
-            ~DatabaseCopyManager();
-            enum FinishStates{success, failed, canceled};
-            void copyDatabases(DatabaseParameters fromDBParameters, DatabaseParameters toDBParameters);
-
-        Q_SIGNALS:
-            void stepStarted(QString stepName);
-            void smallStepStarted(int currValue, int maxValue);
-            void finished(int finishState, QString errorMsg);
-
-        public Q_SLOTS:
-            void stopProcessing();
-
-        private:
-            bool isStopProcessing;
-            bool copyTable(DatabaseBackend &fromDBbackend, QString fromActionName, DatabaseBackend &toDBbackend, QString toActionName);
-            void handleClosing(bool isstopThread, DatabaseBackend &fromDBbackend, DatabaseBackend &toDBbackend);
-
+        success,
+        failed,
+        canceled
     };
-}
+
+public:
+
+    DatabaseCopyManager();
+    ~DatabaseCopyManager();
+
+    void copyDatabases(DatabaseParameters fromDBParameters, DatabaseParameters toDBParameters);
+
+Q_SIGNALS:
+
+    void stepStarted(QString stepName);
+    void smallStepStarted(int currValue, int maxValue);
+    void finished(int finishState, QString errorMsg);
+
+public Q_SLOTS:
+
+    void stopProcessing();
+
+private:
+
+    bool isStopProcessing;
+    bool copyTable(DatabaseBackend& fromDBbackend, QString fromActionName, DatabaseBackend& toDBbackend, QString toActionName);
+    void handleClosing(bool isstopThread, DatabaseBackend& fromDBbackend, DatabaseBackend& toDBbackend);
+};
+
+} // namespace Digikam
+
 #endif // DATABASECOPYMANAGER_H
