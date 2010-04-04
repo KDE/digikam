@@ -378,14 +378,6 @@ public:
                const QString& iconKDE, qlonglong iconID);
 
     /**
-     * Add tags for the item, create tags with the given paths if they do not yet exist
-     * @param tagPaths a list of tag paths
-     * @param create create new tags if necessary
-     * @returns a list of albumIDs of the tags in tagPaths
-     */
-    QList<int> getTagsFromTagPaths(const QStringList& tagPaths, bool create);
-
-    /**
      * Get a list of recently assigned tags (only last 6 tags are listed)
      * @return the list of recently assigned tags
      */

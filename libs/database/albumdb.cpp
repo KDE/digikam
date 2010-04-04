@@ -2317,6 +2317,7 @@ void AlbumDB::updateItem(qlonglong imageID, DatabaseItem::Category category,
                                                  | DatabaseFields::UniqueHash ));
 }
 
+/*
 QList<int> AlbumDB::getTagsFromTagPaths(const QStringList& keywordsList, bool create)
 {
     if (keywordsList.isEmpty())
@@ -2488,6 +2489,7 @@ QList<int> AlbumDB::getTagsFromTagPaths(const QStringList& keywordsList, bool cr
 
     return tagIDs;
 }
+*/
 
 int AlbumDB::getItemAlbum(qlonglong imageID)
 {
