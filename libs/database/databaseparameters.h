@@ -106,17 +106,6 @@ public:
     static DatabaseParameters parametersForSQLiteDefaultFile(const QString& directory);
 
     static void removeFromUrl(KUrl& url);
-
-    void readConfig();
-    QString defaultDatabase;
-    QMap<QString, DatabaseConfigElement> databaseConfigs;
-
-protected:
-
-    DatabaseConfigElement readDatabase(QDomElement& databaseElement);
-    void readDBActions(QDomElement& sqlStatementElements, DatabaseConfigElement& configElement);
-    void readStatements(QDomElement& sqlStatementElements, DatabaseConfigElement& configElement);
-
 };
 
 }  // namespace Digikam

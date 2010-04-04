@@ -61,8 +61,7 @@ class DIGIKAM_EXPORT DatabaseConfigElement
 {
 public:
 
-    DatabaseConfigElement();
-    virtual ~DatabaseConfigElement();
+    static DatabaseConfigElement  element(const QString& databaseType);
 
     QString                       databaseID;
     QString                       hostName;

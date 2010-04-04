@@ -32,16 +32,6 @@
 
 #include <QDir>
 #include <QFile>
-#include <QMessageBox>
-#include <QXmlStreamReader>
-#include <QIODevice>
-#include <QTextStream>
-#include <QtGlobal>
-#include <QtDebug>
-#include <QDomDocument>
-#include <QDomElement>
-#include <QDomNode>
-#include <QDomNodeList>
 
 // KDE includes
 
@@ -138,10 +128,7 @@ DatabaseParameters DatabaseParameters::parametersFromConfig(const QString databa
                                                             const QString databaseUserName, const QString databaseUserPassword,
                                                             const QString databaseConnectOptions)
 {
-	DatabaseParameters parameters;
-
-    // only the database name is needed
-	parameters.readConfig();
+    DatabaseParameters parameters;
 
     parameters.databaseType     = databaseType;
     parameters.databaseName     = databaseName;
@@ -159,17 +146,17 @@ DatabaseParameters DatabaseParameters::parametersFromConfig(const QString databa
     DatabaseParameters parameters;
 
     // only the database name is needed
-    parameters.readConfig();
+    DatabaseConfigElement config = DatabaseConfigElement::element(databaseType);
 
     parameters.databaseType     = databaseType;
-    parameters.databaseName     = parameters.databaseConfigs[databaseType].databaseName;
-    parameters.hostName         = parameters.databaseConfigs[databaseType].hostName;
-    parameters.userName         = parameters.databaseConfigs[databaseType].userName;
-    parameters.password         = parameters.databaseConfigs[databaseType].password;
-    parameters.port             = parameters.databaseConfigs[databaseType].port.toInt();
+    parameters.databaseName     = config.databaseName;
+    parameters.hostName         = config.hostName;
+    parameters.userName         = config.userName;
+    parameters.password         = config.password;
+    parameters.port             = config.port.toInt();
 
     const QString miscDir     = KStandardDirs::locateLocal("data", "digikam/db_misc");
-    QString connectOptions = parameters.databaseConfigs[databaseType].connectOptions;
+    QString connectOptions = config.connectOptions;
     connectOptions.replace(QString("$$DBMISCPATH$$"), miscDir);
 
     parameters.connectOptions   = connectOptions;
@@ -219,201 +206,6 @@ void DatabaseParameters::removeFromUrl(KUrl& url)
     url.removeQueryItem("port");
     url.removeQueryItem("userName");
     url.removeQueryItem("password");
-}
-
-void DatabaseParameters::readConfig()
-{
-    QString filepath = KStandardDirs::locate("data", "digikam/database/dbconfig.xml");
-    QFile file(filepath);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        #ifdef DATABASEPARAMETERS_DEBUG
-        kDebug(50003) << "Couldn't open file: " << file.fileName().toAscii();
-        #endif
-        return;
-    }
-
-    QDomDocument doc("DBConfig");
-    if (!doc.setContent(&file)){
-        file.close();
-        return;
-    }
-    file.close();
-
-    QDomElement element = doc.namedItem("databaseconfig").toElement();
-    if (element.isNull()){
-        #ifdef DATABASEPARAMETERS_DEBUG
-        kDebug(50003) << "Missing element <databaseconfig>.";
-        #endif
-        return;
-    }
-
-    QDomElement defaultDB =  element.namedItem("defaultDB").toElement();
-    if (defaultDB.isNull())
-    {
-        #ifdef DATABASEPARAMETERS_DEBUG
-        kDebug(50003) << "Missing element <defaultDB>.";
-        #endif
-        return;
-    }
-    defaultDatabase = defaultDB.text();
-
-    #ifdef DATABASEPARAMETERS_DEBUG
-    kDebug(50003) << "Default DB Node contains: " << defaultDatabase;
-    #endif
-
-    QDomElement databaseElement =  element.firstChildElement("database");
-    for( ; !databaseElement.isNull();  databaseElement=databaseElement.nextSiblingElement("database"))
-    {
-        DatabaseConfigElement l_DBCfgElement = readDatabase(databaseElement);
-        databaseConfigs.insert(l_DBCfgElement.databaseID, l_DBCfgElement);
-    }
-
-    #ifdef DATABASEPARAMETERS_DEBUG
-    kDebug(50003) << "Found entries: " << databaseConfigs.size();
-    foreach (const DatabaseConfigElement& configElement, databaseConfigs )
-    {
-        kDebug(50003) << "DatabaseID: " << configElement.databaseID;
-        kDebug(50003) << "HostName: " << configElement.hostName;
-        kDebug(50003) << "DatabaseName: " << configElement.databaseName;
-        kDebug(50003) << "UserName: " << configElement.userName;
-        kDebug(50003) << "Password: " << configElement.password;
-        kDebug(50003) << "Port: " << configElement.port;
-        kDebug(50003) << "ConnectOptions: " << configElement.connectOptions;
-        kDebug(50003) << "Database Server CMD: " << configElement.dbServerCmd;
-        kDebug(50003) << "Database Init CMD: " << configElement.dbInitCmd;
-
-
-        kDebug(50003) << "Statements:";
-
-        foreach (const QString actionKey, configElement.sqlStatements.keys()){
-            QList<databaseActionElement> l_DBActionElement = configElement.sqlStatements[actionKey].dBActionElements;
-            kDebug(50003) << "DBAction [" << actionKey << "] has [" << l_DBActionElement.size() << "] actions";
-            foreach (const databaseActionElement statement, l_DBActionElement){
-                kDebug(50003) << "\tMode ["<< statement.mode <<"] Value ["<< statement.statement <<"]";
-            }
-        }
-    }
-    #endif
-}
-
-DatabaseConfigElement DatabaseParameters::readDatabase(QDomElement &databaseElement)
-{
-    DatabaseConfigElement configElement;
-    configElement.databaseID="Unidentified";
-
-    if (!databaseElement.hasAttribute("name"))
-    {
-        kDebug(50003) << "Missing statement attribute <name>.";
-    }
-    configElement.databaseID = databaseElement.attribute("name");
-
-    QDomElement element =  databaseElement.namedItem("databaseName").toElement();
-    if (element.isNull())
-    {
-        kDebug(50003) << "Missing element <databaseName>.";
-    }
-    configElement.databaseName = element.text();
-
-    element =  databaseElement.namedItem("userName").toElement();
-    if (element.isNull())
-    {
-        kDebug(50003) << "Missing element <userName>.";
-    }
-    configElement.userName = element.text();
-
-    element =  databaseElement.namedItem("password").toElement();
-    if (element.isNull())
-    {
-        kDebug(50003) << "Missing element <password>.";
-    }
-    configElement.password = element.text();
-
-    element =  databaseElement.namedItem("hostName").toElement();
-    if (element.isNull())
-    {
-        kDebug(50003) << "Missing element <hostName>.";
-    }
-    configElement.hostName = element.text();
-
-    element =  databaseElement.namedItem("port").toElement();
-    if (element.isNull())
-    {
-        kDebug(50003) << "Missing element <port>.";
-    }
-    configElement.port = element.text();
-
-    element =  databaseElement.namedItem("connectoptions").toElement();
-    if (element.isNull())
-    {
-        kDebug(50003) << "Missing element <connectoptions>.";
-    }
-    configElement.connectOptions = element.text();
-
-    element =  databaseElement.namedItem("dbservercmd").toElement();
-    if (element.isNull())
-    {
-        kDebug(50003) << "Missing element <dbservercmd>.";
-    }
-    configElement.dbServerCmd = element.text();
-
-    element =  databaseElement.namedItem("dbinitcmd").toElement();
-    if (element.isNull())
-    {
-        kDebug(50003) << "Missing element <dbinitcmd>.";
-    }
-    configElement.dbInitCmd = element.text();
-
-    element =  databaseElement.namedItem("dbactions").toElement();
-    if (element.isNull())
-    {
-        kDebug(50003) << "Missing element <dbactions>.";
-    }
-    readDBActions(element, configElement);
-
-    return configElement;
-}
-
-void DatabaseParameters::readDBActions(QDomElement& sqlStatementElements, DatabaseConfigElement& configElement)
-{
-    QDomElement dbActionElement =  sqlStatementElements.firstChildElement("dbaction");
-    for( ; !dbActionElement.isNull();  dbActionElement=dbActionElement.nextSiblingElement("dbaction"))
-    {
-        if (!dbActionElement.hasAttribute("name"))
-        {
-            kDebug(50003) << "Missing statement attribute <name>.";
-        }
-        DatabaseAction action;
-        action.name = dbActionElement.attribute("name");
-        //kDebug(50003) << "Getting attribute " << dbActionElement.attribute("name");
-
-        if (dbActionElement.hasAttribute("mode"))
-        {
-            action.mode = dbActionElement.attribute("mode");
-        }
-        else
-        {
-            kDebug(50003) << "Missing statement attribute <mode>. Setting to default \"transaction\".";
-            action.mode = QString("transaction");
-        }
-
-
-        QDomElement databaseElement = dbActionElement.firstChildElement("statement");
-        for( ; !databaseElement.isNull();  databaseElement=databaseElement.nextSiblingElement("statement"))
-        {
-            if (!databaseElement.hasAttribute("mode"))
-            {
-                kDebug(50003) << "Missing statement attribute <mode>.";
-            }
-
-            DatabaseActionElement actionElement;
-            actionElement.mode      = databaseElement.attribute("mode");
-            actionElement.statement = databaseElement.text();
-
-            action.dbActionElements.append(actionElement);
-        }
-        configElement.sqlStatements.insert(action.name, action);
-    }
 }
 
 }  // namespace Digikam
