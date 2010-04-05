@@ -195,6 +195,34 @@ void LensFunCameraSelector::findFromMetadata()
     int lensIdx = m_lens->combo()->findText(lens);
     if (lensIdx < 0)
        lensIdx = m_lens->combo()->findText(make + ' ' + lens);
+    if (lensIdx < 0)
+    {
+        QString lensCutted = lens;
+        if (lensCutted.contains("Nikon"))
+        {
+            // adapt exiv2 strings to lensfun strings
+            lensCutted.replace("Nikon ", "");
+            lensCutted.replace("Zoom-", "");
+            lensCutted.replace("IF-ID", "ED-IF");
+        }
+        QVariant v    = m_model->combo()->itemData( m_model->currentIndex() );
+        DevicePtr dev = v.value<LensFunCameraSelector::DevicePtr>();
+        const lfLens** lenses = m_iface->m_lfDb->FindLenses( dev, NULL, lensCutted.toAscii().data() );
+        QString lensLF = "";
+        int count = 0;
+        while (lenses && *lenses)
+        {
+            LensFunCameraSelector::LensPtr lens = *lenses;
+            QVariant b                          = qVariantFromValue(lens);
+            lensLF =(*lenses)->Model;
+            ++lenses;
+            ++count;
+        }
+        if (count == 1)
+        {
+            lensIdx = m_lens->combo()->findText(lensLF);
+        }
+    }
 
     if (lensIdx >= 0)
     {
