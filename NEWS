@@ -19,6 +19,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 008 ==> 233287 : Introduction of TagsCache has broken compilation on win32.
 009 ==> 215737 : digiKam crash when imported from usb flash drive.
 010 ==> 216327 : Crashed when scanning for new pictures.
-011 ==> 
+011 ==> 215528 : Crashed after importing removabale storage.
+012 ==> 
 
 
