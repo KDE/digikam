@@ -108,7 +108,7 @@ class ChangingDB
 {
 public:
 
-    ChangingDB(TagsCachePriv *d)
+    ChangingDB(TagsCachePriv* d)
         : d(d)
     {
         d->changingDB = true;
@@ -123,13 +123,13 @@ public:
 class TagsCacheCreator { public: TagsCache object; };
 K_GLOBAL_STATIC(TagsCacheCreator, creator)
 
-TagsCache *TagsCache::instance()
+TagsCache* TagsCache::instance()
 {
     return &creator->object;
 }
 
 TagsCache::TagsCache()
-    : d(new TagsCachePriv)
+         : d(new TagsCachePriv)
 {
 }
 
@@ -183,8 +183,10 @@ QString TagsCache::tagPath(int id, LeadingSlashPolicy slashPolicy)
         else
             path = it->name + "/" + path;
     }
+
     if (slashPolicy == IncludeLeadingSlash)
         path.prepend("/");
+
     return path;
 }
 
@@ -232,6 +234,7 @@ int TagsCache::tagForPath(const QString& tagPath)
         tag = d->find(id);
         if (tag == d->infos.end())
             continue; // error
+
         int parentID = tag->pid;
 
         // Check hierarchy, from bottom to top
@@ -350,7 +353,6 @@ int TagsCache::createTag(const QString& tagPathToCreate)
             }
         }
 
-
         parentTagID      = tagID;
         parentTagExisted = false;
     }
@@ -386,7 +388,7 @@ int TagsCache::getOrCreateTag(const QString& tagPath)
     return id;
 }
 
-void TagsCache::slotTagChange(const TagChangeset& changeset)
+void TagsCache::slotTagChanged(const TagChangeset& changeset)
 {
     if (!d->changingDB && changeset.operation() != TagChangeset::IconChanged)
     {
@@ -399,5 +401,4 @@ void TagsCache::slotTagChange(const TagChangeset& changeset)
         emit tagDeleted(changeset.tagId());
 }
 
-}
-
+} // namespace Digikam

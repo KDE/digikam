@@ -40,7 +40,7 @@ class DIGIKAM_DATABASE_EXPORT TagsCache : public QObject
 
 public:
 
-    static TagsCache *instance();
+    static TagsCache* instance();
 
     enum LeadingSlashPolicy
     {
@@ -115,7 +115,7 @@ signals:
 
 private Q_SLOTS:
 
-    void slotTagChange(const TagChangeset& changeset);
+    void slotTagChanged(const TagChangeset& changeset);
 
 private:
 
