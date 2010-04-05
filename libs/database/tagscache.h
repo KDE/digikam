@@ -34,7 +34,7 @@ namespace Digikam
 
 class TagsCachePriv;
 
-class DIGIKAM_EXPORT TagsCache : public QObject
+class DIGIKAM_DATABASE_EXPORT TagsCache : public QObject
 {
     Q_OBJECT
 
