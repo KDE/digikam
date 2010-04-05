@@ -6,7 +6,7 @@
  * Date        : 2006-10-15
  * Description : IPTC subjects editor.
  *
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009      by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
@@ -79,32 +79,32 @@ public:
         optionsBox       = 0;
     }
 
-    typedef QMap<QString, SubjectData>  SubjectCodesMap;
+    typedef QMap<QString, SubjectData> SubjectCodesMap;
 
-    SubjectCodesMap                     subMap;
+    SubjectCodesMap                    subMap;
 
-    QStringList                         subjectsList;
+    QStringList                        subjectsList;
 
-    QWidget                            *optionsBox;
+    QWidget*                           optionsBox;
 
-    QPushButton                        *addSubjectButton;
-    QPushButton                        *delSubjectButton;
-    QPushButton                        *repSubjectButton;
+    QPushButton*                       addSubjectButton;
+    QPushButton*                       delSubjectButton;
+    QPushButton*                       repSubjectButton;
 
-    QLabel                             *iprLabel;
-    QLabel                             *refLabel;
-    QLabel                             *nameLabel;
-    QLabel                             *matterLabel;
-    QLabel                             *detailLabel;
+    QLabel*                            iprLabel;
+    QLabel*                            refLabel;
+    QLabel*                            nameLabel;
+    QLabel*                            matterLabel;
+    QLabel*                            detailLabel;
 
-    QButtonGroup                       *btnGroup;
+    QButtonGroup*                      btnGroup;
 
-    QRadioButton                       *stdBtn;
-    QRadioButton                       *customBtn;
+    QRadioButton*                      stdBtn;
+    QRadioButton*                      customBtn;
 
-    KComboBox                          *refCB;
+    KComboBox*                         refCB;
 
-    KListWidget                        *subjectsBox;
+    KListWidget*                       subjectsBox;
 };
 
 // --------------------------------------------------------------------------------
@@ -135,13 +135,13 @@ SubjectWidget::SubjectWidget(QWidget* parent)
     d->stdBtn        = new QRadioButton;
     d->customBtn     = new QRadioButton;
     d->refCB         = new KComboBox;
-    QLabel *codeLink = new QLabel(i18n("Use standard "
+    QLabel* codeLink = new QLabel(i18n("Use standard "
                                        "<b><a href='http://www.iptc.org/NewsCodes'>"
                                        "reference code</a></b>"));
     codeLink->setOpenExternalLinks(true);
     codeLink->setWordWrap(false);
 
-    QLabel *customLabel = new QLabel(i18n("Use custom definition"));
+    QLabel* customLabel = new QLabel(i18n("Use custom definition"));
 
     d->btnGroup->addButton(d->stdBtn,    SubjectWidgetPriv::STANDARD);
     d->btnGroup->addButton(d->customBtn, SubjectWidgetPriv::CUSTOM);
@@ -219,7 +219,7 @@ SubjectWidget::SubjectWidget(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QGridLayout *optionsBoxLayout = new QGridLayout;
+    QGridLayout* optionsBoxLayout = new QGridLayout;
     optionsBoxLayout->addWidget(d->stdBtn,      0, 0, 1, 1);
     optionsBoxLayout->addWidget(codeLink,       0, 1, 1, 2);
     optionsBoxLayout->addWidget(d->refCB,       0, 3, 1, 1);
@@ -242,7 +242,7 @@ SubjectWidget::SubjectWidget(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QGridLayout *mainLayout = new QGridLayout;
+    QGridLayout* mainLayout = new QGridLayout;
     mainLayout->setAlignment( Qt::AlignTop );
     mainLayout->addWidget(d->optionsBox,       0, 0, 1, 4);
     mainLayout->addWidget(d->subjectsBox,      1, 0, 5, 3);
@@ -358,7 +358,7 @@ QString SubjectWidget::buildSubject() const
 
 void SubjectWidget::slotDelSubject()
 {
-    QListWidgetItem *item = d->subjectsBox->currentItem();
+    QListWidgetItem* item = d->subjectsBox->currentItem();
     if (!item) return;
     d->subjectsBox->takeItem(d->subjectsBox->row(item));
     delete item;
@@ -408,7 +408,7 @@ void SubjectWidget::slotAddSubject()
     bool found = false;
     for (int i = 0 ; i < d->subjectsBox->count(); i++)
     {
-        QListWidgetItem *item = d->subjectsBox->item(i);
+        QListWidgetItem* item = d->subjectsBox->item(i);
         if (newSubject == item->text())
         {
             found = true;
@@ -560,7 +560,7 @@ QStringList SubjectWidget::subjectsList() const
 
     for (int i = 0 ; i < d->subjectsBox->count(); i++)
     {
-        QListWidgetItem *item = d->subjectsBox->item(i);
+        QListWidgetItem* item = d->subjectsBox->item(i);
         newSubjects.append(item->text());
     }
 

@@ -6,7 +6,7 @@
  * Date        : 2006-10-15
  * Description : IPTC subjects editor.
  *
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009      by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
@@ -96,13 +96,13 @@ protected:
 
 protected:
 
-    QLabel    *m_note;
+    QLabel*    m_note;
 
-    KLineEdit *m_iprEdit;
-    KLineEdit *m_refEdit;
-    KLineEdit *m_nameEdit;
-    KLineEdit *m_matterEdit;
-    KLineEdit *m_detailEdit;
+    KLineEdit* m_iprEdit;
+    KLineEdit* m_refEdit;
+    KLineEdit* m_nameEdit;
+    KLineEdit* m_matterEdit;
+    KLineEdit* m_detailEdit;
 
 private:
 
