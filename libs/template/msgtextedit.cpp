@@ -27,10 +27,6 @@
 #include <QPalette>
 #include <QPainter>
 
-// KDE includes.
-
-
-
 // Local includes.
 
 #include "msgtextedit.moc"
@@ -47,10 +43,10 @@ public:
     QString message;
 };
 
-MsgTextEdit::MsgTextEdit(QWidget *parent)
-           : KTextEdit(parent)
+MsgTextEdit::MsgTextEdit(QWidget* parent)
+           : KTextEdit(parent), d(new MsgTextEditPriv)
+
 {
-    d = new MsgTextEditPriv;
 }
 
 MsgTextEdit::~MsgTextEdit()
@@ -90,19 +86,19 @@ void MsgTextEdit::paintEvent(QPaintEvent* e)
     }
 }
 
-void MsgTextEdit::dropEvent(QDropEvent *e)
+void MsgTextEdit::dropEvent(QDropEvent* e)
 {
     viewport()->repaint();
     KTextEdit::dropEvent(e);
 }
 
-void MsgTextEdit::focusInEvent(QFocusEvent *e)
+void MsgTextEdit::focusInEvent(QFocusEvent* e)
 {
     viewport()->repaint();
     KTextEdit::focusInEvent(e);
 }
 
-void MsgTextEdit::focusOutEvent(QFocusEvent *e)
+void MsgTextEdit::focusOutEvent(QFocusEvent* e)
 {
     viewport()->repaint();
     KTextEdit::focusOutEvent(e);
