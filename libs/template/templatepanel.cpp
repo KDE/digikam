@@ -6,7 +6,7 @@
  * Date        : 2009-07-06
  * Description : metadata template settings panel.
  *
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -79,33 +79,33 @@ public:
     }
 
     // Rights template information panel.
-    KLineEdit       *authorsEdit;
-    KLineEdit       *authorsPositionEdit;
-    KLineEdit       *creditEdit;
-    KLineEdit       *sourceEdit;
-    KLineEdit       *instructionsEdit;
+    KLineEdit*       authorsEdit;
+    KLineEdit*       authorsPositionEdit;
+    KLineEdit*       creditEdit;
+    KLineEdit*       sourceEdit;
+    KLineEdit*       instructionsEdit;
 
-    AltLangStrEdit  *copyrightEdit;
-    AltLangStrEdit  *rightUsageEdit;
+    AltLangStrEdit*  copyrightEdit;
+    AltLangStrEdit*  rightUsageEdit;
 
     // Location template information panel.
-    CountrySelector *locationCountryCodeEdit;
-    KLineEdit       *locationProvinceStateEdit;
-    KLineEdit       *locationCityEdit;
-    KLineEdit       *locationSublocationEdit;
+    CountrySelector* locationCountryCodeEdit;
+    KLineEdit*       locationProvinceStateEdit;
+    KLineEdit*       locationCityEdit;
+    KLineEdit*       locationSublocationEdit;
 
     // Contact template information panel.
-    KLineEdit       *contactCityEdit;
-    KLineEdit       *contactCountryEdit;
-    KLineEdit       *contactAddressEdit;
-    KLineEdit       *contactPostalCodeEdit;
-    KLineEdit       *contactProvinceStateEdit;
-    KLineEdit       *contactEmailEdit;
-    KLineEdit       *contactPhoneEdit;
-    KLineEdit       *contactWebUrlEdit;
+    KLineEdit*       contactCityEdit;
+    KLineEdit*       contactCountryEdit;
+    KLineEdit*       contactAddressEdit;
+    KLineEdit*       contactPostalCodeEdit;
+    KLineEdit*       contactProvinceStateEdit;
+    KLineEdit*       contactEmailEdit;
+    KLineEdit*       contactPhoneEdit;
+    KLineEdit*       contactWebUrlEdit;
 
     // Subjects template information panel.
-    SubjectEdit     *subjects;
+    SubjectEdit*     subjects;
 };
 
 TemplatePanel::TemplatePanel(QWidget* parent)
@@ -113,10 +113,10 @@ TemplatePanel::TemplatePanel(QWidget* parent)
 {
     // -- Rights Template information panel -------------------------------------------------------------
 
-    QWidget *page1     = new QWidget(this);
+    QWidget* page1     = new QWidget(this);
     QGridLayout* grid1 = new QGridLayout(page1);
 
-    QLabel *label1     = new QLabel(i18n("Author Names:"), page1);
+    QLabel* label1     = new QLabel(i18n("Author Names:"), page1);
     d->authorsEdit     = new KLineEdit(page1);
     d->authorsEdit->setClearButtonShown(true);
     d->authorsEdit->setClickMessage(i18n("Enter the names of the photograph's creators. Use semi-colons as separator here."));
@@ -130,7 +130,7 @@ TemplatePanel::TemplatePanel(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QLabel *label2         = new QLabel(i18n("Authors' Positions:"), page1);
+    QLabel* label2         = new QLabel(i18n("Authors' Positions:"), page1);
     d->authorsPositionEdit = new KLineEdit(page1);
     d->authorsPositionEdit->setClearButtonShown(true);
     d->authorsPositionEdit->setClickMessage(i18n("Enter the job titles of the authors here."));
@@ -143,7 +143,7 @@ TemplatePanel::TemplatePanel(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QLabel *label3 = new QLabel(i18n("Credit:"), page1);
+    QLabel* label3 = new QLabel(i18n("Credit:"), page1);
     d->creditEdit  = new KLineEdit(page1);
     d->creditEdit->setClearButtonShown(true);
     d->creditEdit->setClickMessage(i18n("Enter the photograph credit here."));
@@ -192,7 +192,7 @@ TemplatePanel::TemplatePanel(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QLabel *label6 = new QLabel(i18n("Source:"), page1);
+    QLabel* label6 = new QLabel(i18n("Source:"), page1);
     d->sourceEdit  = new KLineEdit(page1);
     d->sourceEdit->setClearButtonShown(true);
     d->sourceEdit->setClickMessage(i18n("Enter the original owner of the photograph here."));
@@ -209,7 +209,7 @@ TemplatePanel::TemplatePanel(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QLabel *label7      = new QLabel(i18n("Instructions:"), page1);
+    QLabel* label7      = new QLabel(i18n("Instructions:"), page1);
     d->instructionsEdit = new KLineEdit(page1);
     d->instructionsEdit->setClearButtonShown(true);
     d->instructionsEdit->setClickMessage(i18n("Enter the editorial notice here."));
@@ -241,10 +241,10 @@ TemplatePanel::TemplatePanel(QWidget* parent)
 
     // -- Location Template information panel -------------------------------------------------------------
 
-    QWidget *page2             = new QWidget(this);
+    QWidget* page2             = new QWidget(this);
     QGridLayout* grid2         = new QGridLayout(page2);
 
-    QLabel *label9             = new QLabel(i18n("Country:"), page2);
+    QLabel* label9             = new QLabel(i18n("Country:"), page2);
     d->locationCountryCodeEdit = new CountrySelector(page2);
     label9->setBuddy(d->locationCountryCodeEdit);
     d->locationCountryCodeEdit->setWhatsThis(i18n("<p>Select here the country "
@@ -252,7 +252,7 @@ TemplatePanel::TemplatePanel(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QLabel *label10              = new QLabel(i18n("Province/State:"), page2);
+    QLabel* label10              = new QLabel(i18n("Province/State:"), page2);
     d->locationProvinceStateEdit = new KLineEdit(page2);
     d->locationProvinceStateEdit->setClearButtonShown(true);
     d->locationProvinceStateEdit->setClickMessage(i18n("Enter the province or state of contents here."));
@@ -262,7 +262,7 @@ TemplatePanel::TemplatePanel(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QLabel *label11     = new QLabel(i18n("City:"), page2);
+    QLabel* label11     = new QLabel(i18n("City:"), page2);
     d->locationCityEdit = new KLineEdit(page2);
     d->locationCityEdit->setClearButtonShown(true);
     d->locationCityEdit->setClickMessage(i18n("Enter the city of contents here."));
@@ -272,7 +272,7 @@ TemplatePanel::TemplatePanel(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QLabel *label12            = new QLabel(i18n("Sublocation:"), page2);
+    QLabel* label12            = new QLabel(i18n("Sublocation:"), page2);
     d->locationSublocationEdit = new KLineEdit(page2);
     d->locationSublocationEdit->setClearButtonShown(true);
     d->locationSublocationEdit->setClickMessage(i18n("Enter the city sublocation of contents here."));
@@ -300,10 +300,10 @@ TemplatePanel::TemplatePanel(QWidget* parent)
 
     // -- Contact Template information panel -------------------------------------------------------------
 
-    QWidget *page3     = new QWidget(this);
+    QWidget* page3     = new QWidget(this);
     QGridLayout* grid3 = new QGridLayout(page3);
 
-    QLabel *label13    = new QLabel(i18n("City:"), page3);
+    QLabel* label13    = new QLabel(i18n("City:"), page3);
     d->contactCityEdit = new KLineEdit(page3);
     d->contactCityEdit->setClearButtonShown(true);
     d->contactCityEdit->setClickMessage(i18n("Enter the city name of the lead author here."));
@@ -313,7 +313,7 @@ TemplatePanel::TemplatePanel(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QLabel *label14       = new QLabel(i18n("Country:"), page3);
+    QLabel* label14       = new QLabel(i18n("Country:"), page3);
     d->contactCountryEdit = new KLineEdit(page3);
     d->contactCountryEdit->setClearButtonShown(true);
     d->contactCountryEdit->setClickMessage(i18n("Enter the country name of the lead author here."));
@@ -323,7 +323,7 @@ TemplatePanel::TemplatePanel(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QLabel *label15       = new QLabel(i18n("Address:"), page3);
+    QLabel* label15       = new QLabel(i18n("Address:"), page3);
     d->contactAddressEdit = new KLineEdit(page3);
     d->contactAddressEdit->setClearButtonShown(true);
     d->contactAddressEdit->setClickMessage(i18n("Enter the address of the lead author here."));
@@ -333,7 +333,7 @@ TemplatePanel::TemplatePanel(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QLabel *label16          = new QLabel(i18n("Postal Code:"), page3);
+    QLabel* label16          = new QLabel(i18n("Postal Code:"), page3);
     d->contactPostalCodeEdit = new KLineEdit(page3);
     d->contactPostalCodeEdit->setClearButtonShown(true);
     d->contactPostalCodeEdit->setClickMessage(i18n("Enter the postal code of the lead author here."));
@@ -343,7 +343,7 @@ TemplatePanel::TemplatePanel(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QLabel *label17             = new QLabel(i18n("Province:"), page3);
+    QLabel* label17             = new QLabel(i18n("Province:"), page3);
     d->contactProvinceStateEdit = new KLineEdit(page3);
     d->contactProvinceStateEdit->setClearButtonShown(true);
     d->contactProvinceStateEdit->setClickMessage(i18n("Enter the province of the lead author here."));
@@ -353,7 +353,7 @@ TemplatePanel::TemplatePanel(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QLabel *label18     = new QLabel(i18n("Email:"), page3);
+    QLabel* label18     = new QLabel(i18n("Email:"), page3);
     d->contactEmailEdit = new KLineEdit(page3);
     d->contactEmailEdit->setClearButtonShown(true);
     d->contactEmailEdit->setClickMessage(i18n("Enter the email of the lead author here."));
@@ -363,7 +363,7 @@ TemplatePanel::TemplatePanel(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QLabel *label19     = new QLabel(i18n("Phone:"), page3);
+    QLabel* label19     = new QLabel(i18n("Phone:"), page3);
     d->contactPhoneEdit = new KLineEdit(page3);
     d->contactPhoneEdit->setClearButtonShown(true);
     d->contactPhoneEdit->setClickMessage(i18n("Enter the phone number of the lead author here."));
@@ -373,7 +373,7 @@ TemplatePanel::TemplatePanel(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QLabel *label20      = new QLabel(i18n("URL:"), page3);
+    QLabel* label20      = new QLabel(i18n("URL:"), page3);
     d->contactWebUrlEdit = new KLineEdit(page3);
     d->contactWebUrlEdit->setClearButtonShown(true);
     d->contactWebUrlEdit->setClickMessage(i18n("Enter the web site URL of the lead author here."));
@@ -409,7 +409,7 @@ TemplatePanel::TemplatePanel(QWidget* parent)
 
     // -- Subjects Template information panel -------------------------------------------------------------
 
-    QWidget *page4     = new QWidget(this);
+    QWidget* page4     = new QWidget(this);
     QGridLayout* grid4 = new QGridLayout(page4);
     d->subjects        = new SubjectEdit(page4);
 
