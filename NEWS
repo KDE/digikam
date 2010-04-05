@@ -18,6 +18,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 007 ==> 195652 : digiKam crashed after rebuilding fingerprints.
 008 ==> 233287 : Introduction of TagsCache has broken compilation on win32.
 009 ==> 215737 : digiKam crash when imported from usb flash drive.
-010 ==> 
+010 ==> 216327 : Crashed when scanning for new pictures.
+011 ==> 
 
 
