@@ -79,7 +79,7 @@ void DatabaseCopyManager::copyDatabases(DatabaseParameters fromDBParameters, Dat
     QMap<QString, QVariant> bindingMap;
 
     // Delete all tables
-    if (!DatabaseCoreBackend::NoErrors == toDBbackend.execDBAction(toDBbackend.getDBAction("Migrate_Cleanup_DB"), bindingMap))
+    if (toDBbackend.execDBAction(toDBbackend.getDBAction("Migrate_Cleanup_DB"), bindingMap) != DatabaseCoreBackend::NoErrors)
     {
         emit finished(DatabaseCopyManager::failed, i18n("Error while scrubbing the target database."));
         fromDBbackend.close();

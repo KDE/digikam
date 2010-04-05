@@ -93,7 +93,7 @@ public:
      */
     void close();
 
-    enum QueryState
+    enum QueryStateEnum
     {
         /**
          * No errors occurred while executing the query.
@@ -109,6 +109,19 @@ public:
          * An connection error has occured while executing the query.
          */
         ConnectionError
+    };
+
+    class QueryState
+    {
+    public:
+        QueryState() : value(DatabaseCoreBackend::NoErrors) {}
+        QueryState(QueryStateEnum value) : value(value) {}
+
+        operator QueryStateEnum() { return value; }
+        operator bool() { return value == DatabaseCoreBackend::NoErrors; }
+
+    private:
+        QueryStateEnum value;
     };
 
     enum Status
