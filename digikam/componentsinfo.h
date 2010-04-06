@@ -6,7 +6,7 @@
  * Date        : 2008-07-30
  * Description : digiKam components info dialog.
  *
- * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -44,6 +44,7 @@
 #include "libsinfodlg.h"
 #include "rawcameradlg.h"
 #include "dbstatdlg.h"
+#include "albumsettings.h"
 
 #ifdef HAVE_GPHOTO2
 
@@ -70,20 +71,31 @@ static inline void showDigikamComponentsInfo()
 
     list.insert(i18n("LibKipi"),    KIPI::Interface::version());
 
-    LibsInfoDlg *dlg = new LibsInfoDlg(kapp->activeWindow());
+    // Database Backend information
+
+    QString dbBe = AlbumSettings::instance()->getDatabaseType();
+    list.insert(i18n("Database backend"), dbBe);
+
+    if (dbBe != QString("QSQLITE"))
+    {
+        QString internal = AlbumSettings::instance()->getInternalDatabaseServer() ? i18n("Yes") : i18n("No");
+        list.insert(i18n("Internal server"), internal);
+    }
+
+    LibsInfoDlg* dlg = new LibsInfoDlg(kapp->activeWindow());
     dlg->setInfoMap(list);
     dlg->show();
 }
 
 static inline void showDigikamDatabaseStat()
 {
-    DBStatDlg *dlg = new DBStatDlg(kapp->activeWindow());
+    DBStatDlg* dlg = new DBStatDlg(kapp->activeWindow());
     dlg->show();
 }
 
 static inline void showRawCameraList()
 {
-    RawCameraDlg *dlg = new RawCameraDlg(kapp->activeWindow());
+    RawCameraDlg* dlg = new RawCameraDlg(kapp->activeWindow());
     dlg->show();
 }
 
