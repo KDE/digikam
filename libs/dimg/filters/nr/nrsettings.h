@@ -67,11 +67,6 @@ Q_SIGNALS:
 
     void signalSettingsChanged();
 
-private Q_SLOTS:
-
-    void slotAdvancedEnabled(bool);
-    void slotLeadSettingsChanged();
-
 private:
 
     NRSettingsPriv* const d;

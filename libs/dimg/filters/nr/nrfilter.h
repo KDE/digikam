@@ -42,9 +42,6 @@ public:
 
     NRContainer()
     {
-        leadThreshold = 1.2;
-        leadSoftness  = 0.9;
-        advanced      = false;
         thresholds[0] = 1.2;     // Y
         thresholds[1] = 1.2;     // Cr
         thresholds[2] = 1.2;     // Cb
@@ -56,16 +53,6 @@ public:
     ~NRContainer(){};
 
 public:
-
-    /** If false thresholds and softness values are the same for Y, Cr, and Cb
-        else, each chanel has a dedicated value.
-     */
-    bool   advanced;
-
-    /** General settings if advanced is false
-     */
-    double leadThreshold;
-    double leadSoftness;
 
     /** Separated values per chanel
      */

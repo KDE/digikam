@@ -66,9 +66,6 @@ BatchToolSettings NoiseReduction::defaultSettings()
     BatchToolSettings prm;
     NRContainer defaultPrm = m_settingsView->defaultSettings();
 
-    prm.insert("LeadThreshold", (double)defaultPrm.leadThreshold);
-    prm.insert("LeadSoftness",  (double)defaultPrm.leadSoftness);
-    prm.insert("Advanced",      (bool)defaultPrm.advanced);
     prm.insert("YThreshold",    (double)defaultPrm.thresholds[0]);
     prm.insert("CrThreshold",   (double)defaultPrm.thresholds[1]);
     prm.insert("CbThreshold",   (double)defaultPrm.thresholds[2]);
@@ -82,9 +79,6 @@ BatchToolSettings NoiseReduction::defaultSettings()
 void NoiseReduction::slotAssignSettings2Widget()
 {
     NRContainer prm;
-    prm.leadThreshold = settings()["LeadThreshold"].toDouble();
-    prm.leadSoftness  = settings()["LeadSoftness"].toDouble();
-    prm.advanced      = settings()["Advanced"].toBool();
     prm.thresholds[0] = settings()["YThreshold"].toDouble();
     prm.thresholds[1] = settings()["CrThreshold"].toDouble();
     prm.thresholds[2] = settings()["CbThreshold"].toDouble();
@@ -99,9 +93,6 @@ void NoiseReduction::slotSettingsChanged()
     BatchToolSettings prm;
     NRContainer currentPrm = m_settingsView->settings();
 
-    prm.insert("LeadThreshold", (double)currentPrm.leadThreshold);
-    prm.insert("LeadSoftness",  (double)currentPrm.leadSoftness);
-    prm.insert("Advanced",      (bool)currentPrm.advanced);
     prm.insert("YThreshold",    (double)currentPrm.thresholds[0]);
     prm.insert("CrThreshold",   (double)currentPrm.thresholds[1]);
     prm.insert("CbThreshold",   (double)currentPrm.thresholds[2]);
@@ -117,9 +108,6 @@ bool NoiseReduction::toolOperations()
     if (!loadToDImg()) return false;
 
     NRContainer prm;
-    prm.leadThreshold = settings()["LeadThreshold"].toDouble();
-    prm.leadSoftness  = settings()["LeadSoftness"].toDouble();
-    prm.advanced      = settings()["Advanced"].toBool();
     prm.thresholds[0] = settings()["YThreshold"].toDouble();
     prm.thresholds[1] = settings()["CrThreshold"].toDouble();
     prm.thresholds[2] = settings()["CbThreshold"].toDouble();
