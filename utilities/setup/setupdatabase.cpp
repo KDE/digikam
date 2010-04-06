@@ -56,8 +56,8 @@
 // Local includes
 
 #include "albumsettings.h"
-#include <databasewidget.h>
-#include <databaseparameters.h>
+#include "databasewidget.h"
+#include "databaseparameters.h"
 
 namespace Digikam
 {
@@ -102,7 +102,7 @@ void SetupDatabase::applySettings()
     AlbumSettings* settings = AlbumSettings::instance();
     if (!settings) return;
 
-    if (d->databaseWidget->databaseType->currentText()=="QSQLITE")
+    if (d->databaseWidget->databaseType->currentText() == QString("QSQLITE"))
     {
         QString newPath = d->databaseWidget->databasePathEdit->url().path();
         QDir oldDir(d->databaseWidget->originalDbPath);
