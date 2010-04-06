@@ -156,7 +156,7 @@ QString TagsCache::tagName(int id)
 
     QReadLocker locker(&d->lock);
     QList<TagShortInfo>::const_iterator it = d->find(id);
-    if (it != d->infos.end())
+    if (it != d->infos.constEnd())
         return it->name;
     return QString();
 }
@@ -176,7 +176,7 @@ QString TagsCache::tagPath(int id, LeadingSlashPolicy slashPolicy)
     QString path;
     QReadLocker locker(&d->lock);
     QList<TagShortInfo>::const_iterator it;
-    for (it = d->find(id); it != d->infos.end(); it = d->find(it->pid))
+    for (it = d->find(id); it != d->infos.constEnd(); it = d->find(it->pid))
     {
         if (path.isNull())
             path = it->name;
@@ -208,7 +208,7 @@ bool TagsCache::hasTag(int id)
 {
     d->checkInfos();
     QReadLocker locker(&d->lock);
-    return d->find(id) != d->infos.end();
+    return d->find(id) != d->infos.constEnd();
 }
 
 int TagsCache::tagForPath(const QString& tagPath)
@@ -232,7 +232,7 @@ int TagsCache::tagForPath(const QString& tagPath)
     foreach (int id, d->nameHash.values(tagName))
     {
         tag = d->find(id);
-        if (tag == d->infos.end())
+        if (tag == d->infos.constEnd())
             continue; // error
 
         int parentID = tag->pid;
@@ -314,7 +314,7 @@ int TagsCache::createTag(const QString& tagPathToCreate)
             foreach (int id, d->nameHash.values(tagName))
             {
                 tag = d->find(id);
-                if (tag != d->infos.end() && tag->pid == parentTagID)
+                if (tag != d->infos.constEnd() && tag->pid == parentTagID)
                 {
                     tagID = tag->id;
                     break;
