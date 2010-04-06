@@ -56,10 +56,6 @@ AssignTemplate::AssignTemplate(QObject* parent)
     KVBox* vbox        = new KVBox;
     m_templateSelector = new TemplateSelector(vbox);
     m_templateViewer   = new TemplateViewer(vbox);
-
-    QLabel* space = new QLabel(vbox);
-    vbox->setStretchFactor(space, 10);
-
     setSettingsWidget(vbox);
 
     connect(m_templateSelector, SIGNAL(signalTemplateSelected()),
@@ -87,9 +83,13 @@ void AssignTemplate::slotAssignSettings2Widget()
         t.setTemplateTitle(Template::removeTemplateTitle());
     }
     else if (title.isEmpty())
-    {}
+    {
+        // Nothing to do.
+    }
     else
+    {
         t = TemplateManager::defaultManager()->findByTitle(title);
+    }
 
     m_templateSelector->setTemplate(t);
 }
