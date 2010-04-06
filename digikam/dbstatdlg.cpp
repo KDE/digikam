@@ -104,7 +104,7 @@ DBStatDlg::DBStatDlg(QWidget* parent)
     if (dbBe != QString("QSQLITE"))
     {
         QString internal = AlbumSettings::instance()->getInternalDatabaseServer() ? i18n("Yes") : i18n("No");
-        new QTreeWidgetItem(listView(), QStringList() << i18n("Internal server") << internal);
+        new QTreeWidgetItem(listView(), QStringList() << i18n("Database internal server") << internal);
     }
 
     kapp->restoreOverrideCursor();

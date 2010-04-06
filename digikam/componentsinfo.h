@@ -79,7 +79,7 @@ static inline void showDigikamComponentsInfo()
     if (dbBe != QString("QSQLITE"))
     {
         QString internal = AlbumSettings::instance()->getInternalDatabaseServer() ? i18n("Yes") : i18n("No");
-        list.insert(i18n("Internal server"), internal);
+        list.insert(i18n("Database internal server"), internal);
     }
 
     LibsInfoDlg* dlg = new LibsInfoDlg(kapp->activeWindow());
