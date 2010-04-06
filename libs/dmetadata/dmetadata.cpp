@@ -6,8 +6,8 @@
  * Date        : 2006-02-23
  * Description : image metadata interface
  *
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -50,18 +50,18 @@
 #include "version.h"
 #include "globals.h"
 
-using namespace KExiv2Iface;
+using namespace KDcrawIface;
 
 namespace Digikam
 {
 
 DMetadata::DMetadata()
-         : KExiv2Iface::KExiv2()
+         : KExiv2()
 {
 }
 
 DMetadata::DMetadata(const QString& filePath)
-         : KExiv2Iface::KExiv2()
+         : KExiv2()
 {
     load(filePath);
 }
@@ -86,8 +86,8 @@ bool DMetadata::load(const QString& filePath) const
 
 bool DMetadata::loadUsingDcraw(const QString& filePath) const
 {
-    KDcrawIface::DcrawInfoContainer identify;
-    if (KDcrawIface::KDcraw::rawFileIdentify(identify, filePath))
+    DcrawInfoContainer identify;
+    if (KDcraw::rawFileIdentify(identify, filePath))
     {
         long int num=1, den=1;
 
