@@ -23,7 +23,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 011 ==> 215528 : Crashed after importing removabale storage.
 012 ==> 229340 : digiKam Crashes When Saving PNG Files, now 1.2.0 also.
 013 ==> 233253 : no thumbnails are displayed in tags, timeline or search mode.
-014 ==> 233418 : Apparent typo in slot in tagscache.cpp.
+014 ==> 233418 : Apparent slot typo in tagscache.cpp.
 015 ==> 
 
 
