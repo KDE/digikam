@@ -129,7 +129,7 @@ void GreycstorationFilter::setSettings(const GreycstorationContainer& settings)
 
 void GreycstorationFilter::setMode(int mode, int newWidth, int newHeight)
 {
-    d->mode = mode;
+    d->mode    = mode;
     d->newSize = QSize(newWidth, newHeight);
 }
 
@@ -270,7 +270,7 @@ void GreycstorationFilter::filterImage()
 
     if (!m_orgImage.sixteenBit())           // 8 bits image.
     {
-        uchar *ptr = newData;
+        uchar* ptr = newData;
 
         for (y = 0; y < newHeight; ++y)
         {
@@ -287,7 +287,7 @@ void GreycstorationFilter::filterImage()
     }
     else                                     // 16 bits image.
     {
-        unsigned short *ptr = (unsigned short *)newData;
+        unsigned short* ptr = (unsigned short*)newData;
 
         for (y = 0; y < newHeight; ++y)
         {
