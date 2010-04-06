@@ -99,7 +99,7 @@ public:
     QTreeWidget* listView;
 };
 
-InfoDlg::InfoDlg(QWidget *parent)
+InfoDlg::InfoDlg(QWidget* parent)
        : KDialog(parent), d(new InfoDlgPriv)
 {
     setButtons(Help|User1|Ok);
@@ -110,13 +110,13 @@ InfoDlg::InfoDlg(QWidget *parent)
     setCaption(i18n("Shared Libraries and Components Information"));
     setButtonText(User1, i18n("Copy to Clipboard"));
 
-    QWidget *page = new QWidget(this);
+    QWidget* page = new QWidget(this);
     setMainWidget(page);
     QGridLayout* grid = new QGridLayout(page);
 
     // --------------------------------------------------------
 
-    QLabel *logo = new QLabel(page);
+    QLabel* logo = new QLabel(page);
     if (KGlobal::mainComponent().aboutData()->appName() == QString("digikam"))
         logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
                                 .scaled(92, 92, Qt::KeepAspectRatio, Qt::SmoothTransformation));
@@ -126,7 +126,7 @@ InfoDlg::InfoDlg(QWidget *parent)
 
     // --------------------------------------------------------
 
-    QLabel *header = new QLabel(page);
+    QLabel* header = new QLabel(page);
     header->setWordWrap(true);
     header->setText(i18n("<font size=\"5\">%1</font><br/><b>Version %2</b>"
                          "<p>%3</p>",
