@@ -35,6 +35,7 @@ namespace Digikam
 class DIGIKAM_EXPORT DatabaseErrorAnswer
 {
 public:
+
     virtual ~DatabaseErrorAnswer() {};
     virtual void connectionErrorContinueQueries() = 0;
     virtual void connectionErrorAbortQueries() = 0;
@@ -46,7 +47,7 @@ class DIGIKAM_EXPORT DatabaseErrorHandler : public QObject
 
 public Q_SLOTS:
 
-    //Note: This is a slot, may be called by queued connection
+    // NOTE: This is a slot, may be called by queued connection
     /** In the situation of a connection error,
      *  all threads will be waiting with their queries
      *  and this method is called.
@@ -55,10 +56,8 @@ public Q_SLOTS:
      *  It must then call either connectionErrorContinueQueries()
      *  or connectionErrorAbortQueries().
      */
-    virtual void databaseError(DatabaseErrorAnswer *answer, const SqlQuery &query) = 0;
-
+    virtual void databaseError(DatabaseErrorAnswer* answer, const SqlQuery& query) = 0;
 };
-
 
 } // namespace Digikam
 

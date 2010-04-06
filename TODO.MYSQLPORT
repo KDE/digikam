@@ -7,8 +7,8 @@ MySQL support files to review
  AM            databaseserver/pollthread.cpp   [License: GPL (v2+)]               DONE
  AM            databaseserver/pollthread.h   [License: GPL (v2+)]                 DONE
 
- AM            digikam/databaseguierrorhandler.cpp   [License: GPL (v2+)]         TODO : d private
- AM            digikam/databaseguierrorhandler.h   [License: GPL (v2+)]           TODO : d private
+ AM            digikam/databaseguierrorhandler.cpp   [License: GPL (v2+)]         DONE
+ AM            digikam/databaseguierrorhandler.h   [License: GPL (v2+)]           DONE
 
  AM            libs/database/databaseconfigelement.cpp   [License: GPL (v2+)]     DONE
  AM            libs/database/databaseconfigelement.h   [License: GPL (v2+)]       DONE
@@ -35,5 +35,6 @@ TODO List
 - Help/Database Stats dialog is broken with MySql.
 - Add a KDebug aera dedicated to databaseserver.                                  DONE
 - Fix path to database server program to be portable. Use CMake config as well.   DONE
+- About/Components Info dialog must show which Qt4 DB backend plugin is used.
 
 

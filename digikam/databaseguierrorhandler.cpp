@@ -7,6 +7,7 @@
  * Description : gui database error handler
  *
  * Copyright (C) 2009-2010 by Holger Foerster <Hamsi2k at freenet dot de>
+ * Copyright (C) 2010 by Gilles Caulier<caulier dot gilles at gmail dot com> 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -46,45 +47,73 @@
 namespace Digikam
 {
 
-DatabaseConnectionChecker::DatabaseConnectionChecker(DatabaseParameters parameters)
-                         : m_stop(false), m_success(false), m_parameters(parameters)
+class DatabaseConnectionCheckerPriv
 {
+
+public:
+
+    DatabaseConnectionCheckerPriv()
+    {
+        stop    = false;
+        success = false;
+    }
+
+    bool               stop;
+    bool               success;
+
+    QMutex             mutex;
+    QWaitCondition     condVar;
+
+    DatabaseParameters parameters;
+};
+
+DatabaseConnectionChecker::DatabaseConnectionChecker(DatabaseParameters parameters)
+                         : d(new DatabaseConnectionCheckerPriv)
+{
+    d->parameters = parameters;
+}
+
+DatabaseConnectionChecker::~DatabaseConnectionChecker()
+{
+    delete d;
 }
 
 void DatabaseConnectionChecker::run()
 {
     QString databaseID("ConnectionTest");
-    QSqlDatabase databaseHandler = QSqlDatabase::addDatabase(m_parameters.databaseType, databaseID);
-    databaseHandler.setHostName(m_parameters.hostName);
-    databaseHandler.setPort(m_parameters.port);
+    QSqlDatabase databaseHandler = QSqlDatabase::addDatabase(d->parameters.databaseType, databaseID);
+    databaseHandler.setHostName(d->parameters.hostName);
+    databaseHandler.setPort(d->parameters.port);
 
-    databaseHandler.setDatabaseName(m_parameters.databaseName);
+    databaseHandler.setDatabaseName(d->parameters.databaseName);
 
-    databaseHandler.setUserName(m_parameters.userName);
-    databaseHandler.setPassword(m_parameters.password);
+    databaseHandler.setUserName(d->parameters.userName);
+    databaseHandler.setPassword(d->parameters.password);
 
-    databaseHandler.setConnectOptions(m_parameters.connectOptions);
+    databaseHandler.setConnectOptions(d->parameters.connectOptions);
 
     int iteration = 1;
-    while (!m_stop)
+    while (!d->stop)
     {
         if (databaseHandler.open())
         {
-            m_stop = true;
-            m_success = true;
+            d->stop = true;
+            d->success = true;
             databaseHandler.close();
             break;
         }
         else
         {
             emit failedAttempt();
-            m_success = false;
-            kError(50003) << "Error while opening the database. Error details [" << databaseHandler.lastError() << "]";
-            QMutexLocker lock(&m_mutex);
-            if (!m_stop)
+            d->success = false;
+            kError(50003) << "Error while opening the database. Error details [" 
+                          << databaseHandler.lastError() << "]";
+            QMutexLocker lock(&d->mutex);
+
+            if (!d->stop)
             {
                 int waitingTime = qMin(2000, iteration++*200);
-                m_condVar.wait(&m_mutex, waitingTime);
+                d->condVar.wait(&d->mutex, waitingTime);
             }
         }
     }
@@ -95,70 +124,89 @@ void DatabaseConnectionChecker::run()
 
 void DatabaseConnectionChecker::stopChecking()
 {
-    QMutexLocker lock(&m_mutex);
-    m_stop = true;
-    m_condVar.wakeAll();
+    QMutexLocker lock(&d->mutex);
+    d->stop = true;
+    d->condVar.wakeAll();
 }
 
 bool DatabaseConnectionChecker::checkSuccessful() const
 {
-    return m_success;
+    return d->success;
 }
 
 // ---------------------------------------------------------------------------------------
 
-DatabaseGUIErrorHandler::DatabaseGUIErrorHandler(const DatabaseParameters& parameters)
-                       : m_parameters(parameters), m_checker(0)
+class DatabaseGUIErrorHandlerPriv
 {
+
+public:
+
+    DatabaseGUIErrorHandlerPriv()
+    {
+        checker = 0;
+    }
+
+    QPointer<KProgressDialog>  dialog;
+
+    DatabaseParameters         parameters;
+    DatabaseConnectionChecker* checker;
+};
+
+DatabaseGUIErrorHandler::DatabaseGUIErrorHandler(const DatabaseParameters& parameters)
+                       : d(new DatabaseGUIErrorHandlerPriv)
+{
+    d->parameters = parameters;
 }
 
 DatabaseGUIErrorHandler::~DatabaseGUIErrorHandler()
 {
+    delete d;
 }
 
 bool DatabaseGUIErrorHandler::checkDatabaseConnection()
 {
     // now we try to connect periodically to the database
-    m_checker = new DatabaseConnectionChecker(m_parameters);
+    d->checker = new DatabaseConnectionChecker(d->parameters);
     QEventLoop loop;
 
-    connect(m_checker, SIGNAL(failedAttempt()),
+    connect(d->checker, SIGNAL(failedAttempt()),
             this, SLOT(showProgressDialog()));
 
-    connect(m_checker, SIGNAL(done()),
+    connect(d->checker, SIGNAL(done()),
             &loop, SLOT(quit()));
 
-    m_checker->start();
+    d->checker->start();
     loop.exec();
 
-    if (m_dialog)
-        delete m_dialog;
+    if (d->dialog)
+        delete d->dialog;
 
     // ensure that the connection thread is closed
-    m_checker->wait();
+    d->checker->wait();
 
-    bool result = m_checker->checkSuccessful();
-    delete m_checker;
+    bool result = d->checker->checkSuccessful();
+    delete d->checker;
     return result;
 }
 
 void DatabaseGUIErrorHandler::showProgressDialog()
 {
-    if (m_dialog || !m_checker)
+    if (d->dialog || !d->checker)
         return;
 
-    m_dialog = new KProgressDialog;
-    m_dialog->setModal(true);
-    m_dialog->setAttribute(Qt::WA_DeleteOnClose);
-    m_dialog->showCancelButton(true);
-    m_dialog->progressBar()->setMinimum(0);
-    m_dialog->progressBar()->setMaximum(0);
-    m_dialog->setLabelText(i18n("Error while opening the database.\nDigikam will try to automatically reconnect to the database."));
+    d->dialog = new KProgressDialog;
+    d->dialog->setModal(true);
+    d->dialog->setAttribute(Qt::WA_DeleteOnClose);
+    d->dialog->showCancelButton(true);
+    d->dialog->progressBar()->setMinimum(0);
+    d->dialog->progressBar()->setMaximum(0);
+    d->dialog->setLabelText(i18n("Error while opening the database.\n"
+                                "digiKam will try to automatically reconnect to the database."));
 
-    connect(m_dialog, SIGNAL(rejected()),
-            m_checker, SLOT(stopChecking()));
+    connect(d->dialog, SIGNAL(rejected()),
+            d->checker, SLOT(stopChecking()));
 
-    m_dialog->show();
+    d->dialog->show();
 }
 
 void DatabaseGUIErrorHandler::databaseError(DatabaseErrorAnswer* answer, const SqlQuery& query)
