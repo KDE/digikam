@@ -7,6 +7,7 @@
  * Description : database migration dialog
  *
  * Copyright (C) 2009-2010 by Holger Foerster <Hamsi2k at freenet dot de>
+ * Copyright (C) 2010 by Gilles Caulier<caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -30,6 +31,8 @@
 #include <QFormLayout>
 #include <QSqlDatabase>
 #include <QSqlError>
+#include <QLabel>
+#include <QGroupBox>
 
 // KDE includes
 
@@ -47,13 +50,30 @@
 namespace Digikam
 {
 
-DatabaseWidget::DatabaseWidget(QWidget* parent): QWidget(parent)
+class DatabaseWidgetPriv
+{
+
+public:
+
+    DatabaseWidgetPriv()
+    {
+        databasePathLabel = 0;
+        expertSettings    = 0;
+    }
+
+    QLabel*    databasePathLabel;
+    QGroupBox* expertSettings;
+};
+
+DatabaseWidget::DatabaseWidget(QWidget* parent)
+              : QWidget(parent), d(new DatabaseWidgetPriv)
 {
     setupMainArea();
 }
 
 DatabaseWidget::~DatabaseWidget()
 {
+    delete d;
 }
 
 void DatabaseWidget::setupMainArea()
@@ -67,20 +87,20 @@ void DatabaseWidget::setupMainArea()
 
     QGroupBox* dbPathBox = new QGroupBox(i18n("Database File Path"), this);
     QVBoxLayout* vlay    = new QVBoxLayout(dbPathBox);
-    databasePathLabel    = new QLabel(i18n("<p>The location where the database file will be stored on your system. "
+    d->databasePathLabel = new QLabel(i18n("<p>The location where the database file will be stored on your system. "
                                            "There is one common database file for all root albums.<br/>"
                                            "Write access is required to be able to edit image properties.</p>"
                                            "<p>Note: a remote file system, such as NFS, cannot be used here.</p><p></p>"),
                                            dbPathBox);
-    databasePathLabel->setWordWrap(true);
-    databasePathLabel->setFont(KGlobalSettings::smallestReadableFont());
+    d->databasePathLabel->setWordWrap(true);
+    d->databasePathLabel->setFont(KGlobalSettings::smallestReadableFont());
 
     databasePathEdit = new KUrlRequester(dbPathBox);
     databasePathEdit->setMode(KFile::Directory | KFile::LocalOnly);
 
-    QLabel *databaseTypeLabel           = new QLabel(i18n("Type"));
+    QLabel* databaseTypeLabel           = new QLabel(i18n("Type"));
     databaseType                        = new QComboBox();
-    QLabel *internalServerLabel         = new QLabel(i18n("Internal Server"));
+    QLabel* internalServerLabel         = new QLabel(i18n("Internal Server"));
     internalServer                      = new QCheckBox();
     QLabel* databaseNameLabel           = new QLabel(i18n("Schema Name"));
     databaseName                        = new QLineEdit();
@@ -92,22 +112,22 @@ void DatabaseWidget::setupMainArea()
     hostPort                            = new QSpinBox();
     hostPort->setMaximum(65536);
 
-    QLabel* connectionOptionsLabel = new QLabel(i18n("Database<br>Connection<br>Options"));
-    connectionOptions              = new QLineEdit();
+    QLabel* connectionOptionsLabel      = new QLabel(i18n("Database<br>Connection<br>Options"));
+    connectionOptions                   = new QLineEdit();
 
-    QLabel* userNameLabel          = new QLabel(i18n("User"));
-    userName                       = new QLineEdit();
+    QLabel* userNameLabel               = new QLabel(i18n("User"));
+    userName                            = new QLineEdit();
 
-    QLabel* passwordLabel          = new QLabel(i18n("Password"));
-    password                       = new QLineEdit();
+    QLabel* passwordLabel               = new QLabel(i18n("Password"));
+    password                            = new QLineEdit();
     password->setEchoMode(QLineEdit::Password);
 
     QPushButton* checkDatabaseConnectionButton = new QPushButton(i18n("Check DB Connection"));
 
-    expertSettings                   = new QGroupBox();
-    expertSettings->setFlat(true);
-    QFormLayout* expertSettinglayout = new QFormLayout();
-    expertSettings->setLayout(expertSettinglayout);
+    d->expertSettings                   = new QGroupBox();
+    d->expertSettings->setFlat(true);
+    QFormLayout* expertSettinglayout    = new QFormLayout();
+    d->expertSettings->setLayout(expertSettinglayout);
 
     expertSettinglayout->addRow(internalServerLabel, internalServer);
     expertSettinglayout->addRow(hostNameLabel, hostName);
@@ -122,9 +142,9 @@ void DatabaseWidget::setupMainArea()
 
     vlay->addWidget(databaseTypeLabel);
     vlay->addWidget(databaseType);
-    vlay->addWidget(databasePathLabel);
+    vlay->addWidget(d->databasePathLabel);
     vlay->addWidget(databasePathEdit);
-    vlay->addWidget(expertSettings);
+    vlay->addWidget(d->expertSettings);
     vlay->setSpacing(0);
     vlay->setMargin(KDialog::spacingHint());
 
@@ -201,17 +221,15 @@ void DatabaseWidget::setDatabaseInputFields(const QString& currentIndexStr)
 {
     if (currentIndexStr == QString("QSQLITE"))
     {
-        databasePathLabel->setVisible(true);
+        d->databasePathLabel->setVisible(true);
         databasePathEdit->setVisible(true);
-
-        expertSettings->setVisible(false);
+        d->expertSettings->setVisible(false);
     }
     else
     {
-        databasePathLabel->setVisible(false);
+        d->databasePathLabel->setVisible(false);
         databasePathEdit->setVisible(false);
-
-        expertSettings->setVisible(true);
+        d->expertSettings->setVisible(true);
     }
 
     adjustSize();

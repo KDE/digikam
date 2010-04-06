@@ -7,6 +7,7 @@
  * Description : database migration dialog
  *
  * Copyright (C) 2009-2010 by Holger Foerster <Hamsi2k at freenet dot de>
+ * Copyright (C) 2010 by Gilles Caulier<caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -27,12 +28,10 @@
 // Qt includes
 
 #include <QString>
-#include <QLabel>
 #include <QComboBox>
 #include <QLineEdit>
 #include <QSpinBox>
 #include <QCheckBox>
-#include <QGroupBox>
 
 // KDE includes
 
@@ -48,6 +47,7 @@
 namespace Digikam
 {
 
+class DatabaseWidgetPriv;
 
 class DatabaseWidget : public QWidget
 {
@@ -58,10 +58,10 @@ public:
     DatabaseWidget(QWidget* parent);
     ~DatabaseWidget();
 
-    KUrlRequester* databasePathEdit;
+public:
+
     QString        originalDbPath;
     QString        originalDbType;
-    QLabel*        databasePathLabel;
     QComboBox*     databaseType;
     QCheckBox*     internalServer;
     QSpinBox*      hostPort;
@@ -73,7 +73,7 @@ public:
     QLineEdit*     userName;
     QLineEdit*     password;
 
-    QGroupBox*     expertSettings;
+    KUrlRequester* databasePathEdit;
 
 public:
 
@@ -92,6 +92,10 @@ private:
 
     void checkDBPath();
     void setupMainArea();
+
+  private:
+
+    DatabaseWidgetPriv* const d;
 };
 
 }  // namespace Digikam
