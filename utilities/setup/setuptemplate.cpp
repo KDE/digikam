@@ -6,7 +6,7 @@
  * Date        : 2006-07-04
  * Description : metadata template setup page.
  *
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,11 +39,16 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 
+// LibKExiv2 includes
+
+#include <libkexiv2/altlangstredit.h>
+
 // Local includes
 
-#include "altlangstredit.h"
 #include "templatelist.h"
 #include "templatepanel.h"
+
+using namespace KExiv2Iface;
 
 namespace Digikam
 {
@@ -76,7 +81,7 @@ public:
 SetupTemplate::SetupTemplate(QWidget* parent)
              : QScrollArea(parent), d(new SetupTemplatePriv)
 {
-    QWidget *panel = new QWidget(viewport());
+    QWidget* panel = new QWidget(viewport());
     setWidget(panel);
     setWidgetResizable(true);
 
@@ -86,7 +91,7 @@ SetupTemplate::SetupTemplate(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QLabel *label0 = new QLabel(i18n("Template Title:"), panel);
+    QLabel* label0 = new QLabel(i18n("Template Title:"), panel);
     d->titleEdit   = new KLineEdit(panel);
     d->titleEdit->setClearButtonShown(true);
     d->titleEdit->setClickMessage(i18n("Enter the metadata template title here."));
@@ -100,7 +105,7 @@ SetupTemplate::SetupTemplate(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QLabel *note = new QLabel(i18n("<b>Note: These information are used to set "
+    QLabel* note = new QLabel(i18n("<b>Note: These information are used to set "
                    "<b><a href='http://en.wikipedia.org/wiki/Extensible_Metadata_Platform'>XMP</a></b> "
                    "and <b><a href='http://en.wikipedia.org/wiki/IPTC'>IPTC</a></b> tag contents. "
                    "There is no limitation with XMP, but note that IPTC text tags "
@@ -207,7 +212,7 @@ void SetupTemplate::setTemplate(const Template& t)
 
 void SetupTemplate::slotSelectionChanged()
 {
-    TemplateListItem *item = dynamic_cast<TemplateListItem*>(d->listView->currentItem());
+    TemplateListItem* item = dynamic_cast<TemplateListItem*>(d->listView->currentItem());
     if (!item)
     {
         d->delButton->setEnabled(false);
@@ -251,7 +256,7 @@ void SetupTemplate::slotAddTemplate()
 
 void SetupTemplate::slotDelTemplate()
 {
-    TemplateListItem *item = dynamic_cast<TemplateListItem*>(d->listView->currentItem());
+    TemplateListItem* item = dynamic_cast<TemplateListItem*>(d->listView->currentItem());
     if (item) delete item;
 }
 

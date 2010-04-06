@@ -6,7 +6,7 @@
  * Date        : 2009-07-13
  * Description : caption values container
  *
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,12 +22,6 @@
  * ============================================================ */
 
 #include "captionvalues.h"
-
-// KDE includes
-
-
-
-using namespace KExiv2Iface;
 
 namespace Digikam
 {
@@ -59,6 +53,8 @@ QDebug operator<<(QDebug dbg, const CaptionValues& val)
                   << val.date;
     return dbg.space();
 }
+
+// --------------------------------------------------------------------
 
 CaptionsMap::CaptionsMap()
 {

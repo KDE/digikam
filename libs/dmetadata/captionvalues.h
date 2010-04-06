@@ -6,7 +6,7 @@
  * Date        : 2009-07-13
  * Description : caption values container
  *
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -60,6 +60,8 @@ public:
 
 //! kDebug() stream operator. Writes values @a val to the debug output in a nicely formatted way.
 DIGIKAM_EXPORT QDebug operator<<(QDebug dbg, const CaptionValues& val);
+
+// --------------------------------------------------------------------
 
 /** A map used to store a list of Alternative Language values + author and date properties
     The map key is the language code following RFC3066 notation

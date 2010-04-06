@@ -6,7 +6,7 @@
  * Date        : 2009-07-12
  * Description : caption editor
  *
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,7 +32,9 @@
 
 // Local includes
 
-#include "altlangstredit.h"
+#include <libkexiv2/altlangstredit.h>
+
+using namespace KExiv2Iface;
 
 namespace Digikam
 {
@@ -47,9 +49,9 @@ public:
         authorEdit     = 0;
     }
 
-    KLineEdit      *authorEdit;
+    KLineEdit*      authorEdit;
 
-    AltLangStrEdit *altLangStrEdit;
+    AltLangStrEdit* altLangStrEdit;
 
     CaptionsMap     captionsValues;
 

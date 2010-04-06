@@ -166,7 +166,7 @@ ENDIF(NOT WIN32)
 # Check KExiv2 version installed to compile fine.
 IF(NOT WIN32)
     FIND_PACKAGE(PkgConfig)
-    PKG_CHECK_MODULES(Kexiv2 libkexiv2>=0.5.0)
+    PKG_CHECK_MODULES(Kexiv2 libkexiv2>=1.1.0)
     IF(Kexiv2_FOUND)
         SET(KEXIV2_FOR_DIGIKAM TRUE)
     ELSE(Kexiv2_FOUND)
@@ -264,7 +264,7 @@ PRINT_LIBRARY_STATUS("libpng" "http://www.libpng.org/pub/png/libpng.html" " (ver
 PRINT_LIBRARY_STATUS("libjasper" "http://www.ece.uvic.ca/~mdadams/jasper" "" JASPER_FOUND)
 PRINT_LIBRARY_STATUS("liblcms" "http://www.littlecms.com" "" LCMS_FOUND)
 PRINT_LIBRARY_STATUS("libkipi" "http://www.digikam.org/sharedlibs" " (version >= 0.2.0)" KIPI_FOUND)
-PRINT_LIBRARY_STATUS("libkexiv2" "http://www.digikam.org/sharedlibs" " (version >= 0.5.0)" KEXIV2_FOR_DIGIKAM)
+PRINT_LIBRARY_STATUS("libkexiv2" "http://www.digikam.org/sharedlibs" " (version >= 1.1.0)" KEXIV2_FOR_DIGIKAM)
 PRINT_LIBRARY_STATUS("libkdcraw" "http://www.digikam.org/sharedlibs" " (version >= 1.1.0)" KDCRAW_FOR_DIGIKAM)
 
 # ================================================================
@@ -858,10 +858,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/template/templateselector.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/template/templateviewer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/template/templatepanel.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/template/countryselector.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/template/msgtextedit.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/template/altlangstredit.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/template/subjectwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/template/subjectedit.cpp
        )
 

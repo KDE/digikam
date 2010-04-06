@@ -6,7 +6,7 @@
  * Date        : 2009-06-29
  * Description : metadata template viewer.
  *
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -36,12 +36,17 @@
 #include <kurllabel.h>
 #include <ktoolinvocation.h>
 
+// LibKExiv2 includes
+
+#include <libkexiv2/countryselector.h>
+
 // Local includes
 
-#include "countryselector.h"
 #include "imagepropertiestxtlabel.h"
 #include "template.h"
 #include "templatemanager.h"
+
+using namespace KExiv2Iface;
 
 namespace Digikam
 {
@@ -95,56 +100,56 @@ public:
 
     // IPTC Rights info.
 
-    DTextLabelName *names;
-    DTextLabelName *position;
-    DTextLabelName *credit;
-    DTextLabelName *copyright;
-    DTextLabelName *usages;
-    DTextLabelName *source;
-    DTextLabelName *instructions;
+    DTextLabelName* names;
+    DTextLabelName* position;
+    DTextLabelName* credit;
+    DTextLabelName* copyright;
+    DTextLabelName* usages;
+    DTextLabelName* source;
+    DTextLabelName* instructions;
 
-    DTextList      *namesList;
-    DTextBrowser   *labelPosition;
-    DTextBrowser   *labelCredit;
-    DTextBrowser   *labelCopyright;
-    DTextBrowser   *labelUsages;
-    DTextBrowser   *labelSource;
-    DTextBrowser   *labelInstructions;
+    DTextList*      namesList;
+    DTextBrowser*   labelPosition;
+    DTextBrowser*   labelCredit;
+    DTextBrowser*   labelCopyright;
+    DTextBrowser*   labelUsages;
+    DTextBrowser*   labelSource;
+    DTextBrowser*   labelInstructions;
 
     // IPTC Location info.
 
-    DTextLabelName *locationCountry;
-    DTextLabelName *locationProvinceState;
-    DTextLabelName *locationCity;
-    DTextLabelName *locationSublocation;
+    DTextLabelName* locationCountry;
+    DTextLabelName* locationProvinceState;
+    DTextLabelName* locationCity;
+    DTextLabelName* locationSublocation;
 
-    DTextBrowser   *labelLocationCountry;
-    DTextBrowser   *labelLocationProvinceState;
-    DTextBrowser   *labelLocationCity;
-    DTextBrowser   *labelLocationSublocation;
+    DTextBrowser*   labelLocationCountry;
+    DTextBrowser*   labelLocationProvinceState;
+    DTextBrowser*   labelLocationCity;
+    DTextBrowser*   labelLocationSublocation;
 
     // IPTC Contact info.
 
-    DTextLabelName *contactCity;
-    DTextLabelName *contactCountry;
-    DTextLabelName *contactAddress;
-    DTextLabelName *contactPostalCode;
-    DTextLabelName *contactProvinceState;
-    DTextLabelName *contactPhone;
-    DTextLabelName *contactEmail;
-    DTextLabelName *contactWebUrl;
+    DTextLabelName* contactCity;
+    DTextLabelName* contactCountry;
+    DTextLabelName* contactAddress;
+    DTextLabelName* contactPostalCode;
+    DTextLabelName* contactProvinceState;
+    DTextLabelName* contactPhone;
+    DTextLabelName* contactEmail;
+    DTextLabelName* contactWebUrl;
 
-    DTextBrowser   *labelContactCity;
-    DTextBrowser   *labelContactCountry;
-    DTextBrowser   *labelContactAddress;
-    DTextBrowser   *labelContactPostalCode;
-    DTextBrowser   *labelContactProvinceState;
-    DTextBrowser   *labelContactPhone;
-    KUrlLabel      *labelContactEmail;
-    KUrlLabel      *labelContactWebUrl;
+    DTextBrowser*   labelContactCity;
+    DTextBrowser*   labelContactCountry;
+    DTextBrowser*   labelContactAddress;
+    DTextBrowser*   labelContactPostalCode;
+    DTextBrowser*   labelContactProvinceState;
+    DTextBrowser*   labelContactPhone;
+    KUrlLabel*      labelContactEmail;
+    KUrlLabel*      labelContactWebUrl;
 
     // IPTC Subjects info.
-    DTextList      *subjectsList;
+    DTextList*      subjectsList;
 };
 
 TemplateViewer::TemplateViewer(QWidget* parent=0)
@@ -152,7 +157,7 @@ TemplateViewer::TemplateViewer(QWidget* parent=0)
 {
     setFrameStyle(QFrame::NoFrame);
 
-    KVBox *w1            = new KVBox(this);
+    KVBox* w1            = new KVBox(this);
     d->names             = new DTextLabelName(i18n("Names:"), w1);
     d->namesList         = new DTextList(QStringList(), w1);
     d->position          = new DTextLabelName(i18n("Position:"), w1);
@@ -182,7 +187,7 @@ TemplateViewer::TemplateViewer(QWidget* parent=0)
 
     // ------------------------------------------------------------------
 
-    KVBox *w2                     = new KVBox(this);
+    KVBox* w2                     = new KVBox(this);
     d->locationCity               = new DTextLabelName(i18n("City:"), w2);
     d->labelLocationCity          = new DTextBrowser(QString(), w2);
     d->locationSublocation        = new DTextLabelName(i18n("Sublocation:"), w2);
@@ -202,7 +207,7 @@ TemplateViewer::TemplateViewer(QWidget* parent=0)
 
     // ------------------------------------------------------------------
 
-    KVBox *w3                    = new KVBox(this);
+    KVBox* w3                    = new KVBox(this);
     d->contactAddress            = new DTextLabelName(i18n("Address:"), w3);
     d->labelContactAddress       = new DTextBrowser(QString(), w3);
     d->contactPostalCode         = new DTextLabelName(i18n("Postal Code:"), w3);
@@ -234,7 +239,7 @@ TemplateViewer::TemplateViewer(QWidget* parent=0)
 
     // ------------------------------------------------------------------
 
-    KVBox *w4       = new KVBox(this);
+    KVBox* w4       = new KVBox(this);
     d->subjectsList = new DTextList(QStringList(), w4);
 
     addItem(w4, SmallIcon("feed-subscribe"),

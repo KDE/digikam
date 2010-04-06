@@ -36,12 +36,17 @@
 #include <kicon.h>
 #include <klineedit.h>
 
+// LibKExiv2 includes
+
+#include <libkexiv2/altlangstredit.h>
+#include <libkexiv2/countryselector.h>
+
 // Local includes
 
-#include "altlangstredit.h"
-#include "countryselector.h"
 #include "templatelist.h"
 #include "subjectedit.h"
+
+using namespace KExiv2Iface;
 
 namespace Digikam
 {
