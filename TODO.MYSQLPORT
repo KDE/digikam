@@ -33,6 +33,7 @@ TODO List
 
 - Shutdown internal database server when digiKam is down.
 - Help/Database Stats dialog is broken with MySql.
+- Show which DB Qt4 plugin is used into Help/Components Info & DB Stats dialogs.
 - Add a KDebug aera dedicated to databaseserver.                                  DONE
 - Fix path to database server program to be portable. Use CMake config as well.   DONE
 
