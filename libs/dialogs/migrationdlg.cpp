@@ -7,6 +7,7 @@
  * Description : database migration dialog
  *
  * Copyright (C) 2009-2010 by Holger Foerster <Hamsi2k at freenet dot de>
+ * Copyright (C) 2010 by Gilles Caulier<caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -53,150 +54,205 @@
 
 namespace Digikam
 {
-    DatabaseCopyThread::DatabaseCopyThread(QWidget *parent) : QThread(parent)
+
+class DatabaseCopyThreadPriv
+{
+
+public:
+
+    DatabaseCopyThreadPriv(){}
+
+    DatabaseParameters fromDatabaseParameters;
+    DatabaseParameters toDatabaseParameters;
+};
+
+DatabaseCopyThread::DatabaseCopyThread(QWidget* parent) 
+                  : QThread(parent), d(new DatabaseCopyThreadPriv)
+{
+}
+
+DatabaseCopyThread::~DatabaseCopyThread()
+{
+    delete d;
+}
+
+void DatabaseCopyThread::run()
+{
+    copyManager.copyDatabases(d->fromDatabaseParameters, d->toDatabaseParameters);
+}
+
+void DatabaseCopyThread::init(DatabaseParameters fromDatabaseParameters, DatabaseParameters toDatabaseParameters)
+{
+    d->fromDatabaseParameters = fromDatabaseParameters;
+    d->toDatabaseParameters   = toDatabaseParameters;
+}
+
+// ---------------------------------------------------------------------------
+
+class MigrationDlgPriv
+{
+
+public:
+
+    MigrationDlgPriv()
     {
+        fromDatabaseWidget   = 0;
+        toDatabaseWidget     = 0;
+        migrateButton        = 0;
+        cancelButton         = 0;
+        overallStepTitle     = 0;
+        progressBar          = 0;
+        progressBarSmallStep = 0;
+        copyThread           = 0;
     }
 
-    void DatabaseCopyThread::run()
+    DatabaseWidget*     fromDatabaseWidget;
+    DatabaseWidget*     toDatabaseWidget;
+    QPushButton*        migrateButton;
+    QPushButton*        cancelButton;
+    QLabel*             overallStepTitle;
+    QProgressBar*       progressBar;
+    QProgressBar*       progressBarSmallStep;
+    DatabaseCopyThread* copyThread;
+};
+
+MigrationDlg::MigrationDlg(QWidget* parent)
+            : KDialog(parent), d(new MigrationDlgPriv)
+{
+    setupMainArea();
+}
+
+MigrationDlg::~MigrationDlg()
+{
+    d->copyThread->wait();
+    delete d;
+}
+
+void MigrationDlg::setupMainArea()
+{
+    d->copyThread                      = new DatabaseCopyThread(this);
+    d->fromDatabaseWidget              = new DatabaseWidget(this);
+    d->toDatabaseWidget                = new DatabaseWidget(this);
+    d->migrateButton                   = new QPushButton(i18n("Migrate ->"), this);
+    d->cancelButton                    = new QPushButton(i18n("Cancel"), this);
+    d->cancelButton->setEnabled(false);
+
+    QGroupBox* progressBox             = new QGroupBox(i18n("Progress Information"), this);
+    QVBoxLayout* vlay                  = new QVBoxLayout(progressBox);
+
+    d->progressBar                     = new QProgressBar(progressBox);
+    d->progressBar->setTextVisible(true);
+    d->progressBar->setRange(0,13);
+    d->progressBarSmallStep            = new QProgressBar(progressBox);
+    d->progressBarSmallStep->setTextVisible(true);
+
+    d->overallStepTitle = new QLabel(i18n("Step Progress"), progressBox);
+
+    vlay->addWidget(new QLabel(i18n("Overall Progress"), progressBox));
+    vlay->addWidget(d->progressBar);
+    vlay->addWidget(d->overallStepTitle);
+    vlay->addWidget(d->progressBarSmallStep);
+
+    QWidget* mainWidget = new QWidget;
+    QGridLayout* layout = new QGridLayout;
+    mainWidget->setLayout(layout);
+
+    layout->addWidget(d->fromDatabaseWidget,   0, 0, 4, 1);
+    layout->addWidget(d->migrateButton,        1, 1);
+    layout->addWidget(d->cancelButton,         2, 1);
+    layout->addWidget(d->toDatabaseWidget,     0, 2, 4, 1);
+    layout->addWidget(progressBox,          4, 0, 1, 3);
+//  layout->addWidget(d->progressBar,          4, 0, 1, 3);
+//  layout->addWidget(d->progressBarSmallStep, 5, 0, 1, 3);
+
+    setMainWidget(mainWidget);
+    dataInit();
+
+    // setup dialog
+    setButtons(Close);
+
+    connect(d->migrateButton, SIGNAL(clicked()), 
+            this, SLOT(performCopy()));
+
+    // connect signal handlers for copy d->copyThread
+    connect(&(d->copyThread->copyManager), SIGNAL(finished(int, QString)), 
+            this, SLOT(handleFinish(int, QString)));
+
+    connect(&(d->copyThread->copyManager), SIGNAL(stepStarted(QString)), 
+            this, SLOT(handleStepStarted(QString)));
+
+    connect(&(d->copyThread->copyManager), SIGNAL(smallStepStarted(int, int)), 
+            this, SLOT(handleSmallStepStarted(int, int)));
+
+    connect(this, SIGNAL(closeClicked()), 
+            &(d->copyThread->copyManager), SLOT(stopProcessing()));
+
+    connect(d->cancelButton, SIGNAL(clicked()), 
+            &(d->copyThread->copyManager), SLOT(stopProcessing()));
+}
+
+void MigrationDlg::performCopy()
+{
+    DatabaseParameters toDBParameters   = d->toDatabaseWidget->getDatabaseParameters();
+    DatabaseParameters fromDBParameters = d->fromDatabaseWidget->getDatabaseParameters();
+    d->copyThread->init(fromDBParameters, toDBParameters);
+
+    lockInputFields();
+    d->copyThread->start();
+}
+
+void MigrationDlg::dataInit()
+{
+    d->fromDatabaseWidget->setParametersFromSettings(AlbumSettings::instance());
+    d->toDatabaseWidget->setParametersFromSettings(AlbumSettings::instance());
+}
+
+void MigrationDlg::unlockInputFields()
+{
+    d->fromDatabaseWidget->setEnabled(true);
+    d->toDatabaseWidget->setEnabled(true);
+    d->migrateButton->setEnabled(true);
+    d->progressBar->setValue(0);
+    d->progressBarSmallStep->setValue(0);
+
+    d->cancelButton->setEnabled(false);
+}
+
+void MigrationDlg::lockInputFields()
+{
+      d->fromDatabaseWidget->setEnabled(false);
+      d->toDatabaseWidget->setEnabled(false);
+      d->migrateButton->setEnabled(false);
+      d->cancelButton->setEnabled(true);
+}
+
+void MigrationDlg::handleFinish(int finishState, QString errorMsg)
+{
+    switch (finishState)
     {
-        copyManager.copyDatabases(fromDatabaseParameters, toDatabaseParameters);
+        case DatabaseCopyManager::failed:   KMessageBox::error(this, errorMsg );
+                                            unlockInputFields();
+                                            break;
+        case DatabaseCopyManager::success:  KMessageBox::information(this, i18n("Database copied successfully.") );
+                                            unlockInputFields();
+                                            break;
+        case DatabaseCopyManager::canceled: KMessageBox::information(this, i18n("Database conversion canceled.") );
+                                            unlockInputFields();
+                                            break;
     }
+}
 
-    void DatabaseCopyThread::init(DatabaseParameters fromDatabaseParameters, DatabaseParameters toDatabaseParameters)
-    {
-        this->fromDatabaseParameters=fromDatabaseParameters;
-        this->toDatabaseParameters=toDatabaseParameters;
-    }
+void MigrationDlg::handleStepStarted(QString stepName)
+{
+    int progressBarValue = d->progressBar->value();
+    d->overallStepTitle->setText(i18n("Step Progress (%1)", stepName));
+    d->progressBar->setValue(++progressBarValue);
+}
 
-    MigrationDlg::MigrationDlg(QWidget* parent): KDialog(parent)
-    {
-        setupMainArea();
-    }
-
-    MigrationDlg::~MigrationDlg()
-    {
-        copyThread->wait();
-    }
-
-    void MigrationDlg::setupMainArea()
-    {
-        copyThread                      = new DatabaseCopyThread(this);
-        fromDatabaseWidget              = new DatabaseWidget(this);
-        toDatabaseWidget                = new DatabaseWidget(this);
-        migrateButton                   = new QPushButton(i18n("Migrate ->"), this);
-        cancelButton                    = new QPushButton(i18n("Cancel"), this);
-        cancelButton->setEnabled(false);
-
-        QGroupBox* progressBox          = new QGroupBox(i18n("Progress Information"), this);
-        QVBoxLayout* vlay               = new QVBoxLayout(progressBox);
-
-        progressBar                     = new QProgressBar(progressBox);
-        progressBar->setTextVisible(true);
-        progressBar->setRange(0,13);
-        progressBarSmallStep            = new QProgressBar(progressBox);
-        progressBarSmallStep->setTextVisible(true);
-
-        overallStepTitle = new QLabel(i18n("Step Progress"), progressBox);
-
-        vlay->addWidget(new QLabel(i18n("Overall Progress"), progressBox));
-        vlay->addWidget(progressBar);
-        vlay->addWidget(overallStepTitle);
-        vlay->addWidget(progressBarSmallStep);
-
-        QWidget* mainWidget = new QWidget;
-        QGridLayout* layout = new QGridLayout;
-        mainWidget->setLayout(layout);
-
-        layout->addWidget(fromDatabaseWidget,     0, 0, 4, 1);
-        layout->addWidget(migrateButton,          1, 1);
-        layout->addWidget(cancelButton,           2, 1);
-        layout->addWidget(toDatabaseWidget,       0, 2, 4, 1);
-        layout->addWidget(progressBox,            4, 0, 1, 3);
-//        layout->addWidget(progressBar,          4, 0, 1, 3);
-//        layout->addWidget(progressBarSmallStep, 5, 0, 1, 3);
-
-        setMainWidget(mainWidget);
-        dataInit();
-
-        // setup dialog
-        setButtons(Close);
-
-        connect(migrateButton, SIGNAL(clicked()), 
-                this, SLOT(performCopy()));
-
-        // connect signal handlers for copy copyThread
-        this->connect(&(copyThread->copyManager), SIGNAL(finished(int, QString)), SLOT(handleFinish(int, QString)));
-
-        this->connect(&(copyThread->copyManager), SIGNAL(stepStarted(QString)), SLOT(handleStepStarted(QString)));
-        this->connect(&(copyThread->copyManager), SIGNAL(smallStepStarted(int, int)), SLOT(handleSmallStepStarted(int, int)));
-
-        connect(cancelButton, SIGNAL(clicked()), &(copyThread->copyManager), SLOT(stopProcessing()));
-        this->connect(this, SIGNAL(closeClicked()), &(copyThread->copyManager), SLOT(stopProcessing()));
-    }
-
-    void MigrationDlg::performCopy()
-    {
-        DatabaseParameters toDBParameters   = toDatabaseWidget->getDatabaseParameters();
-        DatabaseParameters fromDBParameters = fromDatabaseWidget->getDatabaseParameters();
-        copyThread->init(fromDBParameters, toDBParameters);
-
-        lockInputFields();
-        copyThread->start();
-    }
-
-    void MigrationDlg::dataInit()
-    {
-        fromDatabaseWidget->setParametersFromSettings(AlbumSettings::instance());
-        toDatabaseWidget->setParametersFromSettings(AlbumSettings::instance());
-    }
-
-    void MigrationDlg::unlockInputFields()
-    {
-        fromDatabaseWidget->setEnabled(true);
-        toDatabaseWidget->setEnabled(true);
-        migrateButton->setEnabled(true);
-        progressBar->setValue(0);
-        progressBarSmallStep->setValue(0);
-
-        cancelButton->setEnabled(false);
-    }
-
-    void MigrationDlg::lockInputFields()
-    {
-         fromDatabaseWidget->setEnabled(false);
-         toDatabaseWidget->setEnabled(false);
-         migrateButton->setEnabled(false);
-
-         cancelButton->setEnabled(true);
-    }
-
-    void MigrationDlg::handleFinish(int finishState, QString errorMsg)
-    {
-        switch (finishState)
-        {
-            case DatabaseCopyManager::failed:   KMessageBox::error(this, errorMsg );
-                                                unlockInputFields();
-                                                break;
-            case DatabaseCopyManager::success:  KMessageBox::information(this, i18n("Database copied successfully.") );
-                                                unlockInputFields();
-                                                break;
-            case DatabaseCopyManager::canceled: KMessageBox::information(this, i18n("Database conversion canceled.") );
-                                                unlockInputFields();
-                                                break;
-        }
-    }
-
-    void MigrationDlg::handleStepStarted(QString stepName)
-    {
-        int progressBarValue = progressBar->value();
-        overallStepTitle->setText(i18n("Step Progress (%1)", stepName));
-        progressBar->setValue(++progressBarValue);
-    }
-
-    void MigrationDlg::handleSmallStepStarted(int currentValue, int maxValue)
-    {
-        progressBarSmallStep->setMaximum(maxValue);
-        progressBarSmallStep->setValue(currentValue);
-    }
+void MigrationDlg::handleSmallStepStarted(int currentValue, int maxValue)
+{
+    d->progressBarSmallStep->setMaximum(maxValue);
+    d->progressBarSmallStep->setValue(currentValue);
+}
 
 }  // namespace Digikam

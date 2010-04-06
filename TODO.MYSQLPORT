@@ -19,8 +19,8 @@ MySQL support files to review
  AM            libs/database/sqlquery.cpp   [License: GPL (v2+)]                  DONE
  AM            libs/database/sqlquery.h   [License: GPL (v2+)]                    DONE
 
- AM            libs/dialogs/migrationdlg.cpp   [License: GPL (v2+)]               TODO : d private
- AM            libs/dialogs/migrationdlg.h   [License: GPL (v2+)]                 TODO : d private
+ AM            libs/dialogs/migrationdlg.cpp   [License: GPL (v2+)]               DONE
+ AM            libs/dialogs/migrationdlg.h   [License: GPL (v2+)]                 DONE
 
  AM            libs/widgets/common/databasewidget.cpp   [License: GPL (v2+)]      TODO : d private
  AM            libs/widgets/common/databasewidget.h   [License: GPL (v2+)]        TODO : d private
@@ -35,6 +35,5 @@ TODO List
 - Help/Database Stats dialog is broken with MySql.
 - Add a KDebug aera dedicated to databaseserver.                                  DONE
 - Fix path to database server program to be portable. Use CMake config as well.   DONE
-- About/Components Info dialog must show which Qt4 DB backend plugin is used.
 
 
