@@ -117,7 +117,7 @@ public:
     const QString           configTileEntry;
     const QString           configBTileEntry;
     const QString           configPresetEntry;
-  
+
     bool                    isComputed;
 
     QRect                   maskRect;
@@ -146,11 +146,6 @@ InPaintingTool::InPaintingTool(QObject* parent)
     setToolName(i18n("In-painting"));
     setToolIcon(SmallIcon("inpainting"));
 
-    d->previewWidget = new ImageGuideWidget(0, false, ImageGuideWidget::HVGuideMode, Qt::red, 1, false, true);
-    d->previewWidget->setWhatsThis(i18n("The image selection preview with in-painting applied "
-                                        "is shown here."));
-    setToolView(d->previewWidget);
-
     // -------------------------------------------------------------
 
     d->gboxSettings = new EditorToolSettings;
@@ -163,16 +158,16 @@ InPaintingTool::InPaintingTool(QObject* parent)
 
     // -------------------------------------------------------------
 
-    d->mainTab         = new KTabWidget( d->gboxSettings->plainPage());
-    QWidget* firstPage = new QWidget(d->mainTab);
+    d->mainTab               = new KTabWidget( d->gboxSettings->plainPage());
+    QWidget* firstPage       = new QWidget(d->mainTab);
 
-    KUrlLabel *cimgLogoLabel = new KUrlLabel();
+    KUrlLabel* cimgLogoLabel = new KUrlLabel();
     cimgLogoLabel->setText(QString());
     cimgLogoLabel->setUrl("http://cimg.sourceforge.net");
     cimgLogoLabel->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-cimg.png")));
     cimgLogoLabel->setToolTip(i18n("Visit CImg library website"));
 
-    QLabel *typeLabel   = new QLabel(i18n("Filtering type:"));
+    QLabel* typeLabel   = new QLabel(i18n("Filtering type:"));
     typeLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     d->inpaintingTypeCB = new KComboBox();
     d->inpaintingTypeCB->addItem(i18nc("no inpainting type", "None"));
@@ -215,7 +210,14 @@ InPaintingTool::InPaintingTool(QObject* parent)
 
     // -------------------------------------------------------------
 
+    d->previewWidget = new ImageGuideWidget(0, false, ImageGuideWidget::HVGuideMode, Qt::red, 1, false, true);
+    d->previewWidget->setWhatsThis(i18n("The image selection preview with in-painting applied "
+                                        "is shown here."));
+
     setToolSettings(d->gboxSettings);
+    setToolView(d->previewWidget);
+    setPreviewModeMask(PreviewToolBar::UnSplitPreviewModes);
+    init();
 
     // -------------------------------------------------------------
 
@@ -230,7 +232,6 @@ InPaintingTool::InPaintingTool(QObject* parent)
     GreycstorationContainer defaults;
     defaults.setInpaintingDefaultSettings();
     d->settingsWidget->setDefaultSettings(defaults);
-    init();
 }
 
 InPaintingTool::~InPaintingTool()
@@ -278,8 +279,8 @@ void InPaintingTool::readSettings()
 void InPaintingTool::writeSettings()
 {
     GreycstorationContainer prm = d->settingsWidget->settings();
-    KSharedConfig::Ptr config  = KGlobal::config();
-    KConfigGroup group         = config->group(d->configGroupName);
+    KSharedConfig::Ptr config   = KGlobal::config();
+    KConfigGroup group          = config->group(d->configGroupName);
 
     group.writeEntry(d->configPresetEntry,        d->inpaintingTypeCB->currentIndex());
     group.writeEntry(d->configFastApproxEntry,    prm.fastApprox);
@@ -461,7 +462,9 @@ void InPaintingTool::slotLoadSettings()
         }
     }
     else
+    {
         KMessageBox::error(kapp->activeWindow(), i18n("Cannot load settings from the Photograph In-Painting text file."));
+    }
 
     file.close();
     d->inpaintingTypeCB->blockSignals(true);
