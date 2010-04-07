@@ -844,7 +844,7 @@ WorldMapThemeBtn::WorldMapThemeBtn(WorldMapWidget *map, QWidget *parent)
     d->mapThemeMenu->addSeparator();
 
     // settings for preview of the images in the clusters:
-    d->multiMarkerShowSingleImagesAction = d->mapThemeMenu->addAction(i18n("Previews single images"));
+    d->multiMarkerShowSingleImagesAction = d->mapThemeMenu->addAction(i18n("Preview single images"));
     d->multiMarkerShowSingleImagesAction->setCheckable(true);
     d->multiMarkerShowGroupImagesAction = d->mapThemeMenu->addAction(i18n("Preview grouped images"));
     d->multiMarkerShowGroupImagesAction->setCheckable(true);
