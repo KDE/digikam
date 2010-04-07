@@ -62,8 +62,8 @@ public:
                                     PreviewBothImagesVert     | PreviewBothImagesHorzCont |
                                     PreviewBothImagesVertCont | PreviewTargetImage        |
                                     PreviewToggleOnMouseOver,
-                                    
-        UnSplitPreviewModes       = PreviewOriginalImage | PreviewTargetImage | PreviewToggleOnMouseOver  
+
+        UnSplitPreviewModes       = PreviewOriginalImage | PreviewTargetImage | PreviewToggleOnMouseOver
 };
 
 public:
