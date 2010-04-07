@@ -30,7 +30,6 @@
 
 // KDE includes
 
-
 #include <khbox.h>
 #include <klineedit.h>
 #include <klocale.h>
@@ -46,7 +45,7 @@ SubjectEdit::SubjectEdit(QWidget* parent)
     // - ':' (\x3A)
     // - '?' (\x3F)
     QRegExp subjectRx("[^*:?]+$");
-    QValidator *subjectValidator = new QRegExpValidator(subjectRx, this);
+    QValidator* subjectValidator = new QRegExpValidator(subjectRx, this);
 
     // --------------------------------------------------------
 
