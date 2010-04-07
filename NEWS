@@ -25,6 +25,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 013 ==> 233253 : no thumbnails are displayed in tags, timeline or search mode.
 014 ==> 233418 : Apparent slot typo in tagscache.cpp.
 015 ==> 232720 : All Digikam Albums show zero items even though pictures exist.
-016 ==> 
+016 ==> 195373 : Crash while closing after loading folder with large images.
+017 ==> 
+
 
 
