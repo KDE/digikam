@@ -623,10 +623,9 @@ void AlbumSettings::readSettings()
      * This has a higher priority as the other settings.
      */
     group  = config->group(d->configGroupDefault);
-    QString oldDatabaseFilePathKey = "Database File Path";
-    if (group.hasKey(oldDatabaseFilePathKey))
+    if (group.hasKey(d->configDatabaseFilePathEntry))
     {
-		QString oldDatabaseFilePath = group.readEntry(oldDatabaseFilePathKey, QString());
+		QString oldDatabaseFilePath = group.readEntry(d->configDatabaseFilePathEntry, QString());
 		if (oldDatabaseFilePath.isEmpty()==false)
 		{
 			d->databaseType="QSQLITE";
@@ -643,8 +642,17 @@ void AlbumSettings::readSettings()
 		/*
 		 * After successful migrating, we can delete this entry now.
 		 */
-		group.deleteEntry(oldDatabaseFilePathKey);
+		group.deleteEntry(d->configDatabaseFilePathEntry);
     }
+
+    /*
+     *  Remove also the 0.9 legacy parameter - migration is currently done in main.cpp.
+     */
+	group  = config->group(d->configGroupDefault);
+	if (group.hasKey("Album Path"))
+	{
+		group.deleteEntry("Album Path");
+	}
 
 
 #ifdef HAVE_NEPOMUK

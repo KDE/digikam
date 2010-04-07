@@ -122,9 +122,12 @@ int main(int argc, char *argv[])
 
     // version 0.6 was the version when the new Albums Library
     // storage was implemented
-    if (version.startsWith(QLatin1String("0.5")) ||
-        !dirInfo.exists() ||
-        !dirInfo.isDir())
+    KConfigGroup databaseConfig = config->group("Database Settings");
+
+    kDebug(50003) << QString("") << databaseConfig.exists();
+    if (!databaseConfig.exists()
+    	 && (version.startsWith(QLatin1String("0.5"))
+    	     || !dirInfo.exists() || !dirInfo.isDir()))
     {
         // Run the first run assistant.
         AssistantDlg firstRun;
