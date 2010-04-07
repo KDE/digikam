@@ -456,7 +456,7 @@ void TemplatePanel::setTemplate(const Template& t)
     d->contactPhoneEdit->setText(t.contactInfo().phone);
     d->contactWebUrlEdit->setText(t.contactInfo().webUrl);
 
-    d->subjects->setSubjectList(t.IptcSubjects());
+    d->subjects->setSubjectsList(t.IptcSubjects());
 }
 
 Template TemplatePanel::getTemplate() const
