@@ -34,7 +34,6 @@
 
 // KDE includes
 
-#include <kaboutdata.h>
 #include <kapplication.h>
 #include <kcombobox.h>
 #include <kfiledialog.h>
@@ -55,7 +54,6 @@
 #include "greycstorationsettings.h"
 #include "imageiface.h"
 #include "imageregionwidget.h"
-#include "version.h"
 
 namespace DigikamEnhanceImagePlugin
 {
@@ -179,7 +177,7 @@ RestorationTool::RestorationTool(QObject* parent)
 
     setToolSettings(d->gboxSettings);
     setToolView(d->previewWidget);
-    setPreviewModeMask(PreviewToolBar::AllPreviewModes);       
+    setPreviewModeMask(PreviewToolBar::AllPreviewModes);
     init();
 
     // -------------------------------------------------------------
@@ -317,7 +315,7 @@ void RestorationTool::prepareEffect()
 {
     d->mainTab->setEnabled(false);
     toolView()->setEnabled(false);
-    
+
     DImg previewImage = d->previewWidget->getOriginalRegionImage();
 
     setFilter(new GreycstorationFilter(&previewImage,
@@ -329,7 +327,7 @@ void RestorationTool::prepareFinal()
 {
     d->mainTab->setEnabled(false);
     toolView()->setEnabled(false);
-    
+
     ImageIface iface(0, 0);
     uchar* data = iface.getOriginalImage();
     DImg originalImage(iface.originalWidth(), iface.originalHeight(),
@@ -378,7 +376,9 @@ void RestorationTool::slotLoadSettings()
         slotEffect();
     }
     else
+    {
         KMessageBox::error(kapp->activeWindow(), i18n("Cannot load settings from the Photograph Restoration text file."));
+    }
 
     file.close();
     d->restorationTypeCB->blockSignals(true);
