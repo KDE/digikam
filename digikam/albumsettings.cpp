@@ -623,18 +623,27 @@ void AlbumSettings::readSettings()
      * This has a higher priority as the other settings.
      */
     group  = config->group(d->configGroupDefault);
-    QString oldDatabaseFilePath = group.readEntry("Database File Path", QString());
-    if (oldDatabaseFilePath.isEmpty()==false)
+    QString oldDatabaseFilePathKey = "Database File Path";
+    if (group.hasKey(oldDatabaseFilePathKey))
     {
-        d->databaseType="QSQLITE";
-        d->databaseName=oldDatabaseFilePath;
-        d->databaseNameThumbnails=oldDatabaseFilePath;
+		QString oldDatabaseFilePath = group.readEntry(oldDatabaseFilePathKey, QString());
+		if (oldDatabaseFilePath.isEmpty()==false)
+		{
+			d->databaseType="QSQLITE";
+			d->databaseName=oldDatabaseFilePath;
+			d->databaseNameThumbnails=oldDatabaseFilePath;
 
-        d->databaseHostName=QString("");
-        d->databasePort=-1;
-        d->databaseUserName=QString("");
-        d->databasePassword=QString("");
-        d->databaseConnectoptions=QString("");
+			d->databaseHostName=QString("");
+			d->databasePort=-1;
+			d->databaseUserName=QString("");
+			d->databasePassword=QString("");
+			d->databaseConnectoptions=QString("");
+
+		}
+		/*
+		 * After successful migrating, we can delete this entry now.
+		 */
+		group.deleteEntry(oldDatabaseFilePathKey);
     }
 
 
