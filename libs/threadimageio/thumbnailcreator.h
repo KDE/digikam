@@ -7,8 +7,8 @@
  * Description : Loader for thumbnails
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2003-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2003-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -150,7 +150,7 @@ public:
     /**
      * Set a ThumbnailInfoProvider to provide custom ThumbnailInfos
      */
-    void setThumbnailInfoProvider(ThumbnailInfoProvider *provider);
+    void setThumbnailInfoProvider(ThumbnailInfoProvider* provider);
 
     /**
      * Return the thumbnail size, the maximum size of the QImage
@@ -178,27 +178,27 @@ public:
     void deleteThumbnailsFromDisk(const QString& filePath);
 
     /** Creates a default ThumbnailInfo for the given path using QFileInfo only */
-    static ThumbnailInfo fileThumbnailInfo(const QString &path);
+    static ThumbnailInfo fileThumbnailInfo(const QString& path);
 
 private:
 
     void initialize();
 
-    ThumbnailImage createThumbnail(const ThumbnailInfo &info);
-    QImage loadWithDImg(const QString& path, IccProfile *profile);
+    ThumbnailImage createThumbnail(const ThumbnailInfo& info);
+    QImage loadWithDImg(const QString& path, IccProfile* profile);
     QImage loadImagePreview(const DMetadata& metadata);
     QImage handleAlphaChannel(const QImage& thumb);
     int exifOrientation(const QString& filePath, const DMetadata& metadata, bool fromEmbeddedPreview);
-    QImage exifRotate(const QImage &thumb, int orientation);
+    QImage exifRotate(const QImage& thumb, int orientation);
     QImage loadPNG(const QString& path);
 
-    void storeInDatabase(const ThumbnailInfo &info, const ThumbnailImage &image);
-    ThumbnailImage loadFromDatabase(const ThumbnailInfo &info);
-    void deleteFromDatabase(const ThumbnailInfo &info);
+    void storeInDatabase(const ThumbnailInfo& info, const ThumbnailImage& image);
+    ThumbnailImage loadFromDatabase(const ThumbnailInfo& info);
+    void deleteFromDatabase(const ThumbnailInfo& info);
 
-    void storeFreedesktop(const ThumbnailInfo &info, const ThumbnailImage &image);
-    ThumbnailImage loadFreedesktop(const ThumbnailInfo &info);
-    void deleteFromDiskFreedesktop(const QString filePath);
+    void storeFreedesktop(const ThumbnailInfo& info, const ThumbnailImage& image);
+    ThumbnailImage loadFreedesktop(const ThumbnailInfo& info);
+    void deleteFromDiskFreedesktop(const QString& filePath);
     // implementations in thumbnailbasic.cpp
     static QString normalThumbnailDir();
     static QString largeThumbnailDir();

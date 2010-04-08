@@ -7,8 +7,8 @@
  * Description : Loader for thumbnails
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2003-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2003-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -255,7 +255,7 @@ void ThumbnailCreator::deleteThumbnailsFromDisk(const QString& filePath)
 // --------------- Thumbnail generation and image handling -----------------------
 
 
-ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo &info)
+ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info)
 {
     QString path = info.filePath;
     if (!info.isAccessible)
@@ -369,12 +369,12 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo &info)
     }
 
     ThumbnailImage image;
-    image.qimage = qimage;
+    image.qimage          = qimage;
     image.exifOrientation = exifOrientation(path, metadata, fromEmbeddedPreview);
     return image;
 }
 
-QImage ThumbnailCreator::loadWithDImg(const QString& path, IccProfile *profile)
+QImage ThumbnailCreator::loadWithDImg(const QString& path, IccProfile* profile)
 {
     DImg img;
     img.setAttribute("scaledLoadingSize", d->cachedSize);
@@ -501,7 +501,8 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
 
     if (dbInfo.type == DatabaseThumbnail::PGF)
     {
-        if (!writePGFImageData(image.qimage, dbInfo.data, 4))
+        // NOTE: see B.K.O #233094: using PGF compression level 3 don not blur image as level 4.
+        if (!writePGFImageData(image.qimage, dbInfo.data, 3))
         {
             kWarning() << "Cannot save PGF thumb in DB";
             return;
@@ -561,7 +562,8 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
             if (DatabaseCoreBackend::NoErrors != lastQueryState)
             {
                 continue;
-            }else
+            }
+            else
             {
                 dbInfo.id = id.toInt();
             }
@@ -717,16 +719,16 @@ void ThumbnailCreator::deleteFromDatabase(const ThumbnailInfo& info)
 ThumbnailInfo ThumbnailCreator::fileThumbnailInfo(const QString &path)
 {
     ThumbnailInfo info;
-    info.filePath = path;
+    info.filePath          = path;
     QFileInfo fileInfo(path);
-    info.isAccessible = fileInfo.exists();
+    info.isAccessible     = fileInfo.exists();
     if (!info.isAccessible)
         return info;
     info.modificationDate = fileInfo.lastModified();
     return info;
 }
 
-ThumbnailImage ThumbnailCreator::loadFreedesktop(const ThumbnailInfo &info)
+ThumbnailImage ThumbnailCreator::loadFreedesktop(const ThumbnailInfo& info)
 {
     QString uri       = thumbnailUri(info.filePath);
     QString thumbPath = thumbnailPath(info.filePath);
@@ -750,7 +752,7 @@ ThumbnailImage ThumbnailCreator::loadFreedesktop(const ThumbnailInfo &info)
     return ThumbnailImage();
 }
 
-void ThumbnailCreator::storeFreedesktop(const ThumbnailInfo &info, const ThumbnailImage &image)
+void ThumbnailCreator::storeFreedesktop(const ThumbnailInfo& info, const ThumbnailImage& image)
 {
     QString path = info.filePath;
     QImage qimage = image.qimage;
@@ -799,7 +801,7 @@ void ThumbnailCreator::storeFreedesktop(const ThumbnailInfo &info, const Thumbna
     }
 }
 
-void ThumbnailCreator::deleteFromDiskFreedesktop(const QString filePath)
+void ThumbnailCreator::deleteFromDiskFreedesktop(const QString& filePath)
 {
     QFile smallThumb(thumbnailPath(filePath, normalThumbnailDir()));
     QFile largeThumb(thumbnailPath(filePath, largeThumbnailDir()));
