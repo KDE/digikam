@@ -180,27 +180,27 @@ void HSLFilter::setLightness(double val)
 int HSLFilter::vibranceBias(int sat, int hue, int vib, bool sixteenbit)
 {
     double ratio;
-    int localsat;
+    int    localsat;
     double normalized_hue = hue / (sixteenbit ? 65535.0: 255.0);
 
     if (normalized_hue>0.85 || normalized_hue <0.2)
     {
-      ratio = 0.3;
+        ratio = 0.3;
     }
     else
     {
-      ratio = 1.0;
+        ratio = 1.0;
     }
 
     localsat = lround((sat * (100.0 + vib*ratio)) / 100.0 );
 
     if (sixteenbit)
     {
-       return(CLAMP065535(localsat));
+        return(CLAMP065535(localsat));
     }
     else
     {
-      return(CLAMP0255(localsat));
+        return(CLAMP0255(localsat));
     }
 }
 
@@ -213,7 +213,7 @@ void HSLFilter::applyHSL(DImg& image)
     uint   numberOfPixels = image.numPixels();
     int    progress;
     int    hue, sat, lig;
-    int    vib = d->settings.vibrance;
+    int    vib = (int)d->settings.vibrance;
     DColor color;
 
     if (sixteenBit)                   // 16 bits image.
@@ -228,7 +228,7 @@ void HSLFilter::applyHSL(DImg& image)
             color.getHSL(&hue, &sat, &lig);
 
             // convert HSL to RGB
-            color.setHSL(d->htransfer16[hue], vibranceBias(d->stransfer16[sat],hue,vib,sixteenBit), d->ltransfer16[lig], sixteenBit);
+            color.setHSL(d->htransfer16[hue], vibranceBias(d->stransfer16[sat], hue, vib, sixteenBit), d->ltransfer16[lig], sixteenBit);
 
             data[2] = color.red();
             data[1] = color.green();
