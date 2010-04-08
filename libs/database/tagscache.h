@@ -45,7 +45,7 @@ public:
     enum LeadingSlashPolicy
     {
         NoLeadingSlash,      /// "Places/Cities/Paris"
-        IncludeLeadingSlash ///  "/Places/Cities/Paris"
+        IncludeLeadingSlash  ///  "/Places/Cities/Paris"
     };
 
     /**
@@ -53,7 +53,7 @@ public:
      * For the tag Places/Cities/Paris, this is Paris.
      * If there is no tag for the given id a null string is returned.
      */
-    QString tagName(int id);
+    QString     tagName(int id);
     QStringList tagNames(const QList<int>& ids);
 
     /**
@@ -61,7 +61,7 @@ public:
      * For the tag Places/Cities/Paris, this is Places/Cities/Paris.
      * If there is no tag for the given id a null string is returned.
      */
-    QString tagPath(int id, LeadingSlashPolicy slashPolicy = IncludeLeadingSlash);
+    QString     tagPath(int id, LeadingSlashPolicy slashPolicy = IncludeLeadingSlash);
     QStringList tagPaths(const QList<int>& ids, LeadingSlashPolicy slashPolicy = IncludeLeadingSlash);
 
     /**
@@ -121,6 +121,7 @@ private:
 
     friend class DatabaseAccess;
     friend class TagsCacheCreator;
+
     TagsCache();
     ~TagsCache();
     void initialize();
@@ -128,6 +129,6 @@ private:
     TagsCachePriv* const d;
 };
 
-}
+} // namespace Digikam
 
 #endif // TAGSCACHE_H
