@@ -82,15 +82,15 @@ void AntiVignettingFilter::filterImage()
 
     xsize    = (Height + 1) / 2;
     ysize    = (Width  + 1) / 2;
-    erad     = approx(hypothenuse(xsize,ysize) * m_settings.outerradius);
-    irad     = approx(hypothenuse(xsize,ysize) * m_settings.outerradius * m_settings.innerradius);
+    erad     = approx(hypothenuse(xsize, ysize) * m_settings.outerradius);
+    irad     = approx(hypothenuse(xsize, ysize) * m_settings.outerradius * m_settings.innerradius);
 
-    xsize    = ((Height + 1) / 2) + abs(m_settings.xshift);
-    ysize    = ((Width  + 1) / 2) + abs(m_settings.yshift);
+    xsize    = (int)(((Height + 1.0) / 2.0) + fabs(m_settings.xshift));
+    ysize    = (int)(((Width  + 1.0) / 2.0) + fabs(m_settings.yshift));
     diagonal = approx(hypothenuse(xsize,ysize)) +  1;
 
-    xctr     = ((Height + 1) / 2) + m_settings.xshift;
-    yctr     = ((Width  + 1) / 2) + m_settings.yshift;
+    xctr     = (int)(((Height + 1.0) / 2.0) + m_settings.xshift);
+    yctr     = (int)(((Width  + 1.0) / 2.0) + m_settings.yshift);
 
     for (row = 0 ; !m_cancel && (row < Width) ; ++row)
     {
@@ -100,7 +100,7 @@ void AntiVignettingFilter::filterImage()
         {
             p  = (col * Width + row)*4;
             xd = abs(xctr - col);
-            td = (sqrt((xd * xd) + (yd * yd)) + 0.5);
+            td = (int)(sqrt((xd * xd) + (yd * yd)) + 0.5);
 
             if (!m_orgImage.sixteenBit())       // 8 bits image
             {
