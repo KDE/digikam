@@ -169,9 +169,9 @@ CBContainer CBSettings::settings() const
 void CBSettings::setSettings(const CBContainer& settings)
 {
     blockSignals(true);
-    d->rInput->setValue((int)(settings.red   * 100.0) - 100.0);
-    d->gInput->setValue((int)(settings.green * 100.0) - 100.0);
-    d->bInput->setValue((int)(settings.blue  * 100.0) - 100.0);
+    d->rInput->setValue((int)((settings.red   * 100.0) - 100.0));
+    d->gInput->setValue((int)((settings.green * 100.0) - 100.0));
+    d->bInput->setValue((int)((settings.blue  * 100.0) - 100.0));
     blockSignals(false);
 }
 
