@@ -26,7 +26,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 014 ==> 233418 : Apparent slot typo in tagscache.cpp.
 015 ==> 232720 : All Digikam Albums show zero items even though pictures exist.
 016 ==> 195373 : Crash while closing after loading folder with large images.
-017 ==> 
+017 ==> 223383 : digiKam crashes when selecting another album after exporting an album to Picasa.
+018 ==> 
+
 
 
 
