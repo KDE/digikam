@@ -262,7 +262,7 @@ void BorderSettings::setSettings(const BorderContainer& settings)
     d->preserveAspectRatio->setChecked(settings.preserveAspectRatio);
     d->borderType->setCurrentIndex(settings.borderType);
     d->borderWidth->setValue(settings.borderWidth1);
-    d->borderPercent->setValue(settings.borderPercent * 100.0);
+    d->borderPercent->setValue((int)(settings.borderPercent * 100.0));
 
     d->solidColor            = settings.solidColor;
     d->niepceBorderColor     = settings.niepceBorderColor;
