@@ -23,8 +23,11 @@
 #include "kcategorizedview.h"
 #include "kcategorizedview_p.h"
 
-#include <math.h> // trunc on C99 compliant systems
+#include <math.h>     // trunc on C99 compliant systems
+
+#if !defined(__MINGW32__)
 #include <kdefakes.h> // trunc for not C99 compliant systems
+#endif
 
 #include <QPainter>
 #include <QScrollBar>
