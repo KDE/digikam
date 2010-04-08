@@ -450,8 +450,8 @@ void BWSepiaSettings::setSettings(const BWSepiaContainer& settings)
     d->bwFilm->setCurrentId(settings.filmType);
     d->bwFilters->setCurrentId(settings.filterType);
     d->bwTone->setCurrentId(settings.toneType);
-    d->cInput->setValue((settings.bcgPrm.contrast - 1.00) * 100.0);
-    d->strengthInput->setValue(1.0 + (settings.strength-1.0) * 3.0);
+    d->cInput->setValue((int)((settings.bcgPrm.contrast - 1.00) * 100.0));
+    d->strengthInput->setValue((int)(1.0 + (settings.strength-1.0) * 3.0));
     d->curvesBox->curves()->setCurveValues(LuminosityChannel, settings.curvesPrm.lumCurveVals);
     d->curvesBox->update();
 
