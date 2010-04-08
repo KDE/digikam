@@ -127,7 +127,7 @@ void AntiVignettingFilter::filterImage()
 
 int AntiVignettingFilter::approx(double x)
 {
-    return ((int) x+0.5);
+    return ((int)(x + 0.5));
 }
 
 double AntiVignettingFilter::hypothenuse(double x, double y)
