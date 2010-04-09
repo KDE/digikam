@@ -26,6 +26,7 @@
 // QT includes
 
 #include <QSqlError>
+#include <QSqlDriver>
 
 // KDE Includes
 
@@ -242,18 +243,31 @@ bool DatabaseCopyManager::copyTable(DatabaseBackend &fromDBbackend, QString from
         columnNames.append(result.record().fieldName(i));
     }
 
-    kDebug(50003) << "Result size: ["<< result.size() << "]";
+    int resultSize = -1;
+    if (result.driver()->hasFeature(QSqlDriver::QuerySize))
+    {
+    	resultSize=result.size();
+    }else
+    {
+    	kDebug(50003) << "Driver doesn't support query size. We try to go to the last row and back to the current.";
+    	result.last();
+    	resultSize = result.at();
+    	result.first();
+    }
+    kDebug(50003) << "Result size: ["<< resultSize << "]";
+
     int resultCounter=0;
 
     while (result.next())
     {
+    	kDebug(50003) << "Query isOnValidRow ["<< result.isValid() <<"] isActive ["<< result.isActive() <<"] result size: ["<< result.size() << "]";
         if (isStopProcessing==true)
         {
             return false;
         }
 
-        // Send a signal to the GUI to entertain the user
-        emit smallStepStarted(++resultCounter, result.size());
+		// Send a signal to the GUI to entertain the user
+		emit smallStepStarted(++resultCounter, resultSize);
 
         // read the values from the fromDB into a hash
         QMap<QString, QVariant> tempBindingMap;
@@ -261,16 +275,16 @@ bool DatabaseCopyManager::copyTable(DatabaseBackend &fromDBbackend, QString from
 
         foreach (QString columnName, columnNames)
         {
-            // kDebug(50003) << "Column: ["<< columnName << "] value ["<<result.value(i)<<"]";
+            kDebug(50003) << "Column: ["<< columnName << "] value ["<<result.value(i)<<"]";
             tempBindingMap.insert(columnName.insert(0, ':'), result.value(i));
             i++;
         }
 
         // insert the previous requested values to the toDB
         DatabaseAction action = toDBbackend.getDBAction(toActionName);
-        DatabaseCoreBackend::QueryState result = toDBbackend.execDBAction(action, tempBindingMap);
+        DatabaseCoreBackend::QueryState queryStateResult = toDBbackend.execDBAction(action, tempBindingMap);
 
-        if (result != DatabaseCoreBackend::NoErrors && toDBbackend.lastSQLError().isValid() && toDBbackend.lastSQLError().number()!=0)
+        if (queryStateResult != DatabaseCoreBackend::NoErrors && toDBbackend.lastSQLError().isValid() && toDBbackend.lastSQLError().number()!=0)
         {
             kDebug(50003) << "Error while converting table data. Details: " << toDBbackend.lastSQLError();
             QString errorMsg = i18n("Error while converting the database. \n Details: %1", toDBbackend.lastSQLError().databaseText());
