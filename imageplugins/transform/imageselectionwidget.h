@@ -34,8 +34,10 @@
 
 namespace Digikam
 {
-class ImageIface;
+    class ImageIface;
 }
+
+using namespace Digikam;
 
 namespace DigikamTransformImagePlugin
 {
@@ -132,7 +134,7 @@ public:
     void  resetSelection();
     void  maxAspectSelection();
 
-    Digikam::ImageIface* imageIface();
+    ImageIface* imageIface();
 
 public Q_SLOTS:
 

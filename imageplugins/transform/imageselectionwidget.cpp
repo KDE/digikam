@@ -97,53 +97,53 @@ public:
     }
 
     // Golden guide types.
-    bool                 drawGoldenSection;
-    bool                 drawGoldenSpiralSection;
-    bool                 drawGoldenSpiral;
-    bool                 drawGoldenTriangle;
+    bool        drawGoldenSection;
+    bool        drawGoldenSpiralSection;
+    bool        drawGoldenSpiral;
+    bool        drawGoldenTriangle;
 
     // Golden guide translations.
-    bool                 flipHorGoldenGuide;
-    bool                 flipVerGoldenGuide;
+    bool        flipHorGoldenGuide;
+    bool        flipVerGoldenGuide;
 
-    bool                 moving;
-    bool                 autoOrientation;
-    bool                 preciseCrop;
+    bool        moving;
+    bool        autoOrientation;
+    bool        preciseCrop;
 
-    bool                 isDrawingSelection;
+    bool        isDrawingSelection;
 
-    int                  guideLinesType;
-    int                  guideSize;
+    int         guideLinesType;
+    int         guideSize;
 
-    int                  currentAspectRatioType;
-    int                  currentResizing;
-    int                  currentOrientation;
+    int         currentAspectRatioType;
+    int         currentResizing;
+    int         currentOrientation;
 
-    float                currentWidthRatioValue;
-    float                currentHeightRatioValue;
+    float       currentWidthRatioValue;
+    float       currentHeightRatioValue;
 
-    QPoint               lastPos;
+    QPoint      lastPos;
 
-    QRect                rect;
-    QRect                image;                   // Real image dimension.
-    QRect                regionSelection;         // Real size image selection.
-    QRect                localRegionSelection;    // Local size selection.
+    QRect       rect;
+    QRect       image;                   // Real image dimension.
+    QRect       regionSelection;         // Real size image selection.
+    QRect       localRegionSelection;    // Local size selection.
 
     // Draggable local region selection corners.
-    QRect                localTopLeftCorner;
-    QRect                localBottomLeftCorner;
-    QRect                localTopRightCorner;
-    QRect                localBottomRightCorner;
+    QRect       localTopLeftCorner;
+    QRect       localBottomLeftCorner;
+    QRect       localTopRightCorner;
+    QRect       localBottomRightCorner;
 
-    QPixmap*             pixmap;
-    QPixmap              grayOverLay;
-    QPixmap              previewPixmap;
+    QPixmap*    pixmap;
+    QPixmap     grayOverLay;
+    QPixmap     previewPixmap;
 
-    QColor               guideColor;
+    QColor      guideColor;
 
-    Digikam::DImg        preview;
+    DImg        preview;
 
-    Digikam::ImageIface* iface;
+    ImageIface* iface;
 };
 
 ImageSelectionWidget::ImageSelectionWidget(int w, int h, QWidget *parent)
@@ -186,13 +186,13 @@ void ImageSelectionWidget::setup(int w, int h,
     setMouseTracking(true);
     setAttribute(Qt::WA_DeleteOnClose);
 
-    d->iface        = new Digikam::ImageIface(w, h);
+    d->iface        = new ImageIface(w, h);
     uchar *data     = d->iface->getPreviewImage();
     int width       = d->iface->previewWidth();
     int height      = d->iface->previewHeight();
     bool sixteenBit = d->iface->previewSixteenBit();
     bool hasAlpha   = d->iface->previewHasAlpha();
-    d->preview      = Digikam::DImg(width, height, sixteenBit, hasAlpha, data);
+    d->preview      = DImg(width, height, sixteenBit, hasAlpha, data);
     delete [] data;
     d->preview.convertToEightBit();
     d->pixmap  = new QPixmap(w, h);
@@ -205,7 +205,7 @@ void ImageSelectionWidget::setup(int w, int h,
     setGoldenGuideTypes(true, false, false, false, false, false);
 }
 
-Digikam::ImageIface* ImageSelectionWidget::imageIface()
+ImageIface* ImageSelectionWidget::imageIface()
 {
     return d->iface;
 }
@@ -222,7 +222,7 @@ void ImageSelectionWidget::resizeEvent(QResizeEvent *e)
     int height      = d->iface->previewHeight();
     bool sixteenBit = d->iface->previewSixteenBit();
     bool hasAlpha   = d->iface->previewHasAlpha();
-    d->preview      = Digikam::DImg(width, height, sixteenBit, hasAlpha, data);
+    d->preview      = DImg(width, height, sixteenBit, hasAlpha, data);
     delete [] data;
     d->preview.convertToEightBit();
 
@@ -233,8 +233,8 @@ void ImageSelectionWidget::resizeEvent(QResizeEvent *e)
 
     // Drawing the gray overlay
     {
-        Digikam::DImg image = d->preview.copy();
-        uchar* ptr          = image.bits();
+        DImg image = d->preview.copy();
+        uchar* ptr = image.bits();
         uchar  r, g, b;
 
         int xlow  = d->rect.left();
