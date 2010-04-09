@@ -33,6 +33,8 @@
 #include "dimg.h"
 #include "dcolor.h"
 
+using namespace Digikam;
+
 namespace DigikamDecorateImagePlugin
 {
 
@@ -41,12 +43,12 @@ class SuperImpose
 
 public:
 
-    SuperImpose(Digikam::DImg *orgImage, Digikam::DImg *templ,
+    SuperImpose(DImg* orgImage, DImg* templ,
                 QRect orgImageSelection,
-                Digikam::DColorComposer::CompositingOperation
-                compositeRule = Digikam::DColorComposer::PorterDuffNone);
+                DColorComposer::CompositingOperation
+                compositeRule = DColorComposer::PorterDuffNone);
 
-    Digikam::DImg getTargetImage() { return m_destImage; }
+    DImg getTargetImage() { return m_destImage; }
 
 private:
 
@@ -54,12 +56,12 @@ private:
 
 private:
 
-    QRect                                         m_selection;
+    QRect                                m_selection;
 
-    Digikam::DImg                                 m_orgImage;
-    Digikam::DImg                                 m_template;
-    Digikam::DImg                                 m_destImage;
-    Digikam::DColorComposer::CompositingOperation m_compositeRule;
+    DImg                                 m_orgImage;
+    DImg                                 m_template;
+    DImg                                 m_destImage;
+    DColorComposer::CompositingOperation m_compositeRule;
 };
 
 } // namespace DigikamDecorateImagePlugin

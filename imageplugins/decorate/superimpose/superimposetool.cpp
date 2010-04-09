@@ -62,8 +62,6 @@
 #include "superimposewidget.h"
 #include "thumbbar.h"
 
-using namespace Digikam;
-
 namespace DigikamDecorateImagePlugin
 {
 

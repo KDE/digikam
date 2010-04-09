@@ -26,9 +26,9 @@
 namespace DigikamDecorateImagePlugin
 {
 
-SuperImpose::SuperImpose(Digikam::DImg *orgImage, Digikam::DImg *templ,
+SuperImpose::SuperImpose(DImg* orgImage, DImg* templ,
                          QRect orgImageSelection,
-                         Digikam::DColorComposer::CompositingOperation compositeRule)
+                         DColorComposer::CompositingOperation compositeRule)
 {
     m_orgImage      = *orgImage;
     m_template      = *templ;
@@ -54,10 +54,10 @@ void SuperImpose::filterImage()
     m_template.convertToDepthOfImage(&m_destImage);
 
     // get composer for compositing rule
-    Digikam::DColorComposer *composer = Digikam::DColorComposer::getComposer(m_compositeRule);
-    Digikam::DColorComposer::MultiplicationFlags flags = Digikam::DColorComposer::NoMultiplication;
-    if (m_compositeRule != Digikam::DColorComposer::PorterDuffNone)
-        flags = Digikam::DColorComposer::MultiplicationFlagsDImg;
+    DColorComposer *composer = DColorComposer::getComposer(m_compositeRule);
+    DColorComposer::MultiplicationFlags flags = DColorComposer::NoMultiplication;
+    if (m_compositeRule != DColorComposer::PorterDuffNone)
+        flags = DColorComposer::MultiplicationFlagsDImg;
 
     // do alpha blending of template on dest image
     m_destImage.bitBlendImage(composer, &m_template, 0, 0, templateWidth, templateHeight, 0, 0, flags);
