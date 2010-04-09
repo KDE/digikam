@@ -906,22 +906,16 @@ void ImageSelectionWidget::drawGoldenMean(QPainter& p, const QRect& R1,
 void ImageSelectionWidget::updatePixmap()
 {
     // Updated local selection region.
-    d->localRegionSelection.setTopLeft(
-            convertPoint(d->regionSelection.topLeft(), false));
-    d->localRegionSelection.setBottomRight(
-            convertPoint(d->regionSelection.bottomRight(), false));
+    d->localRegionSelection.setTopLeft(convertPoint(d->regionSelection.topLeft(), false));
+    d->localRegionSelection.setBottomRight(convertPoint(d->regionSelection.bottomRight(), false));
 
     // Updated dragging corners region.
-    d->localTopLeftCorner.setRect(d->localRegionSelection.left(),
-                                  d->localRegionSelection.top(), 8, 8);
-    d->localBottomLeftCorner.setRect(d->localRegionSelection.left(),
-                                     d->localRegionSelection.bottom() - 7, 8, 8);
-    d->localTopRightCorner.setRect(d->localRegionSelection.right() - 7,
-                                   d->localRegionSelection.top(), 8, 8);
-    d->localBottomRightCorner.setRect(d->localRegionSelection.right() - 7,
-                                      d->localRegionSelection.bottom() - 7, 8, 8);
+    d->localTopLeftCorner.setRect(d->localRegionSelection.left(),          d->localRegionSelection.top(),        8, 8);
+    d->localBottomLeftCorner.setRect(d->localRegionSelection.left(),       d->localRegionSelection.bottom() - 7, 8, 8);
+    d->localTopRightCorner.setRect(d->localRegionSelection.right() - 7,    d->localRegionSelection.top(),        8, 8);
+    d->localBottomRightCorner.setRect(d->localRegionSelection.right() - 7, d->localRegionSelection.bottom() - 7, 8, 8);
 
-    // Drawing background and image.
+    // Drawing background.
     d->pixmap->fill(palette().color(QPalette::Background));
 
     if (d->preview.isNull())
@@ -933,13 +927,13 @@ void ImageSelectionWidget::updatePixmap()
     int dh = d->localRegionSelection.height();
 
     QPainter p(d->pixmap);
-
     p.drawPixmap(d->rect.x(), d->rect.y(), d->grayOverLay);
 
     // Stop here if no selection to draw
     if (d->regionSelection.isEmpty() || !d->isDrawingSelection)
         return;
 
+    // Now draw the image.
     p.drawPixmap(d->localRegionSelection.left(), d->localRegionSelection.top(), d->previewPixmap,
                  sx, sy, dw, dh);
 
