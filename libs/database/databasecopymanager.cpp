@@ -236,13 +236,6 @@ bool DatabaseCopyManager::copyTable(DatabaseBackend &fromDBbackend, QString from
     QList<QString> columnNames;
     QSqlQuery result = fromDBbackend.execDBActionQuery(fromDBbackend.getDBAction(fromActionName), bindingMap) ;
 
-    int columnCount = result.record().count();
-    for (int i=0; i<columnCount; i++)
-    {
-//            kDebug(50003) << "Column: ["<< result.record().fieldName(i) << "]";
-        columnNames.append(result.record().fieldName(i));
-    }
-
     int resultSize = -1;
     if (result.driver()->hasFeature(QSqlDriver::QuerySize))
     {
@@ -251,10 +244,32 @@ bool DatabaseCopyManager::copyTable(DatabaseBackend &fromDBbackend, QString from
     {
     	kDebug(50003) << "Driver doesn't support query size. We try to go to the last row and back to the current.";
     	result.last();
-    	resultSize = result.at();
+    	/*
+    	 * Now get the current row. If this is not possible, a value lower than 0 will be returned.
+    	 * To not confuse the log reading user, we reset this value to 0.
+    	 */
+    	resultSize = result.at()<0 ? 0 : result.at();
     	result.first();
     }
     kDebug(50003) << "Result size: ["<< resultSize << "]";
+
+    /*
+     * If the sql query is forward only - perform the query again.
+     * This is not atomic, so it can be tend to different results between
+     * real database entries copied and shown at the progressbar.
+     */
+    if (result.isForwardOnly())
+    {
+    	result.finish();
+    	result = fromDBbackend.execDBActionQuery(fromDBbackend.getDBAction(fromActionName), bindingMap) ;
+    }
+
+    int columnCount = result.record().count();
+    for (int i=0; i<columnCount; i++)
+    {
+//            kDebug(50003) << "Column: ["<< result.record().fieldName(i) << "]";
+        columnNames.append(result.record().fieldName(i));
+    }
 
     int resultCounter=0;
 
