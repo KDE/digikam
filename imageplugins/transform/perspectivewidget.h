@@ -28,21 +28,17 @@
 // Qt includes
 
 #include <QWidget>
-#include <QPoint>
-#include <QPolygon>
-#include <QColor>
-#include <QRect>
-#include <QPixmap>
 #include <QResizeEvent>
 #include <QMouseEvent>
 #include <QPaintEvent>
+#include <QPoint>
+#include <QRect>
+#include <QColor>
 
 // Local includes
 
 #include "dimg.h"
 #include "matrix.h"
-
-class QPixmap;
 
 namespace Digikam
 {
@@ -53,6 +49,8 @@ using namespace Digikam;
 
 namespace DigikamTransformImagePlugin
 {
+
+class PerspectiveWidgetPriv;
 
 class PerspectiveWidget : public QWidget
 {
@@ -77,7 +75,7 @@ public:
 
     void  applyPerspectiveAdjustment();
 
-    ImageIface* imageIface();
+    ImageIface* imageIface() const;
 
 public Q_SLOTS:
 
@@ -117,59 +115,7 @@ private:  // Widget methods.
 
 private:
 
-    enum ResizingMode
-    {
-        ResizingNone = 0,
-        ResizingTopLeft,
-        ResizingTopRight,
-        ResizingBottomLeft,
-        ResizingBottomRight
-    };
-
-    bool        m_antiAlias;
-    bool        m_drawWhileMoving;
-    bool        m_drawGrid;
-    bool        m_inverseTransformation;
-    bool        m_validPerspective;
-
-    uint*       m_data;
-    int         m_w;
-    int         m_h;
-    int         m_origW;
-    int         m_origH;
-
-    int         m_currentResizing;
-
-    int         m_guideSize;
-
-    QRect       m_rect;
-
-    // Transformed center area for mouse position control.
-
-    QPoint      m_transformedCenter;
-
-    // Draggable local region selection corners.
-
-    QRect       m_topLeftCorner;
-    QRect       m_topRightCorner;
-    QRect       m_bottomLeftCorner;
-    QRect       m_bottomRightCorner;
-
-    QPoint      m_topLeftPoint;
-    QPoint      m_topRightPoint;
-    QPoint      m_bottomLeftPoint;
-    QPoint      m_bottomRightPoint;
-    QPoint      m_spot;
-
-    QColor      m_guideColor;
-
-    // 60 points will be stored to compute a grid of 15x15 lines.
-    QPolygon    m_grid;
-
-    QPixmap*    m_pixmap;
-
-    ImageIface* m_iface;
-    DImg        m_previewImage;
+    PerspectiveWidgetPriv* const d;
 };
 
 }  // namespace DigikamTransformImagePlugin
