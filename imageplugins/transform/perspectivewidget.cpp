@@ -292,7 +292,7 @@ void PerspectiveWidget::reset()
 
 void PerspectiveWidget::applyPerspectiveAdjustment()
 {
-    DImg *orgImage = d->iface->getOriginalImg();
+    DImg* orgImage = d->iface->getOriginalImg();
     DImg destImage(orgImage->width(), orgImage->height(), orgImage->sixteenBit(), orgImage->hasAlpha());
 
     DColor background(0, 0, 0, orgImage->hasAlpha() ? 0 : 255, orgImage->sixteenBit());
@@ -310,7 +310,7 @@ void PerspectiveWidget::applyPerspectiveAdjustment()
 
     // Update target image.
     d->iface->putOriginalImage(i18n("Perspective Adjustment"),
-                              targetImg.bits(), targetImg.width(), targetImg.height());
+                               targetImg.bits(), targetImg.width(), targetImg.height());
 }
 
 void PerspectiveWidget::slotInverseTransformationChanged(bool isEnabled)
@@ -356,11 +356,11 @@ void PerspectiveWidget::slotChangeGuideSize(int size)
 void PerspectiveWidget::updatePixmap()
 {
     d->topLeftCorner.setRect(d->topLeftPoint.x() + d->rect.topLeft().x(),
-                            d->topLeftPoint.y() + d->rect.topLeft().y(), 8, 8);
+                             d->topLeftPoint.y() + d->rect.topLeft().y(), 8, 8);
     d->topRightCorner.setRect(d->topRightPoint.x() - 7 + d->rect.topLeft().x(),
-                             d->topRightPoint.y() + d->rect.topLeft().y(), 8, 8);
+                              d->topRightPoint.y() + d->rect.topLeft().y(), 8, 8);
     d->bottomLeftCorner.setRect(d->bottomLeftPoint.x() + d->rect.topLeft().x(),
-                               d->bottomLeftPoint.y() - 7 + d->rect.topLeft().y(), 8, 8);
+                                d->bottomLeftPoint.y() - 7 + d->rect.topLeft().y(), 8, 8);
     d->bottomRightCorner.setRect(d->bottomRightPoint.x() - 7 + d->rect.topLeft().x(),
                                 d->bottomRightPoint.y() - 7 + d->rect.topLeft().y(), 8, 8);
 
@@ -421,8 +421,8 @@ void PerspectiveWidget::updatePixmap()
     else if (d->validPerspective)
     {
         d->transformedCenter = buildPerspective(QPoint(0, 0), QPoint(d->width, d->height),
-                                               d->topLeftPoint, d->topRightPoint,
-                                               d->bottomLeftPoint, d->bottomRightPoint);
+                                                d->topLeftPoint, d->topRightPoint,
+                                                d->bottomLeftPoint, d->bottomRightPoint);
     }
 
     // Drawing selection borders.
