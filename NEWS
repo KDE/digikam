@@ -28,7 +28,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 016 ==> 195373 : Crash while closing after loading folder with large images.
 017 ==> 223383 : digiKam crashes when selecting another album after exporting an album to Picasa.
 018 ==> 233458 : digiKam lost collection identified by volume uuid but its still present.
-019 ==> 
+019 ==> 233739 : Color management is disabled when using "Aspect Ratio Crop".
+020 ==> 
+
 
 
 
