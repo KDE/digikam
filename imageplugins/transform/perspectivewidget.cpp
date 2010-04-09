@@ -131,7 +131,7 @@ public:
     QPixmap*    pixmap;
 
     ImageIface* iface;
-    DImg        previewImage;
+    DImg        preview;
 };
 
 PerspectiveWidget::PerspectiveWidget(int w, int h, QWidget* parent)
@@ -141,13 +141,14 @@ PerspectiveWidget::PerspectiveWidget(int w, int h, QWidget* parent)
     setMinimumSize(w, h);
     setMouseTracking(true);
 
-    d->iface        = new ImageIface(w, h);
-    uchar* data     = d->iface->setPreviewImageSize(w, h);
-    d->width        = d->iface->previewWidth();
-    d->height       = d->iface->previewHeight();
-    d->origW        = d->iface->originalWidth();
-    d->origH        = d->iface->originalHeight();
-    d->previewImage = DImg(d->width, d->height, d->iface->previewSixteenBit(), d->iface->previewHasAlpha(), data, false);
+    d->iface    = new ImageIface(w, h);
+    uchar* data = d->iface->setPreviewImageSize(w, h);
+    d->width    = d->iface->previewWidth();
+    d->height   = d->iface->previewHeight();
+    d->origW    = d->iface->originalWidth();
+    d->origH    = d->iface->originalHeight();
+    d->preview  = DImg(d->width, d->height, d->iface->previewSixteenBit(), d->iface->previewHasAlpha(), data, false);
+    d->preview.setIccProfile( d->iface->getOriginalImg()->getIccProfile() );
 
     d->pixmap = new QPixmap(w, h);
     d->rect   = QRect(w/2-d->width/2, h/2-d->height/2, d->width, d->height);
@@ -161,6 +162,44 @@ PerspectiveWidget::~PerspectiveWidget()
     delete d->iface;
     delete d->pixmap;
     delete d;
+}
+
+void PerspectiveWidget::resizeEvent(QResizeEvent* e)
+{
+    int old_w = d->width;
+    int old_h = d->height;
+
+    delete d->pixmap;
+    int w       = e->size().width();
+    int h       = e->size().height();
+    uchar* data = d->iface->setPreviewImageSize(w, h);
+    d->width    = d->iface->previewWidth();
+    d->height   = d->iface->previewHeight();
+    d->preview  = DImg(d->width, d->height, d->iface->previewSixteenBit(), d->iface->previewHasAlpha(), data, false);
+    d->preview.setIccProfile( d->iface->getOriginalImg()->getIccProfile() );
+
+    d->pixmap     = new QPixmap(w, h);
+    QRect oldRect = d->rect;
+    d->rect       = QRect(w/2-d->width/2, h/2-d->height/2, d->width, d->height);
+
+    float xFactor = (float)d->rect.width()/(float)(oldRect.width());
+    float yFactor = (float)d->rect.height()/(float)(oldRect.height());
+
+    d->topLeftPoint      = QPoint(lroundf(d->topLeftPoint.x()*xFactor),
+                                 lroundf(d->topLeftPoint.y()*yFactor));
+    d->topRightPoint     = QPoint(lroundf(d->topRightPoint.x()*xFactor),
+                                 lroundf(d->topRightPoint.y()*yFactor));
+    d->bottomLeftPoint   = QPoint(lroundf(d->bottomLeftPoint.x()*xFactor),
+                                 lroundf(d->bottomLeftPoint.y()*yFactor));
+    d->bottomRightPoint  = QPoint(lroundf(d->bottomRightPoint.x()*xFactor),
+                                 lroundf(d->bottomRightPoint.y()*yFactor));
+    d->transformedCenter = QPoint(lroundf(d->transformedCenter.x()*xFactor),
+                                 lroundf(d->transformedCenter.y()*yFactor));
+
+    d->spot.setX((int)((float)d->spot.x() * ( (float)d->width / (float)old_w)));
+    d->spot.setY((int)((float)d->spot.y() * ( (float)d->height / (float)old_h)));
+
+    updatePixmap();
 }
 
 ImageIface* PerspectiveWidget::imageIface() const
@@ -350,35 +389,34 @@ void PerspectiveWidget::updatePixmap()
     if (d->inverseTransformation)
     {
         d->transformedCenter = buildPerspective(QPoint(0, 0), QPoint(d->width, d->height),
-                                               d->topLeftPoint, d->topRightPoint,
-                                               d->bottomLeftPoint, d->bottomRightPoint);
+                                                d->topLeftPoint, d->topRightPoint,
+                                                d->bottomLeftPoint, d->bottomRightPoint);
 
-        d->iface->putPreviewImage(d->previewImage.bits());
+        d->iface->putPreviewImage(d->preview.bits());
         d->iface->paint(d->pixmap, d->rect.x(), d->rect.y(),
-                       d->rect.width(), d->rect.height());
-
-    // if we are resizing with the mouse, compute and draw only if drawWhileMoving is set
+                        d->rect.width(), d->rect.height());
     }
+    // if we are resizing with the mouse, compute and draw only if drawWhileMoving is set
     else if ((d->currentResizing == PerspectiveWidgetPriv::ResizingNone || d->drawWhileMoving) && d->validPerspective)
     {
         // Create preview image
 
-        DImg destImage(d->previewImage.width(), d->previewImage.height(),
-                       d->previewImage.sixteenBit(), d->previewImage.hasAlpha());
+        DImg destImage(d->preview.width(), d->preview.height(),
+                       d->preview.sixteenBit(), d->preview.hasAlpha());
 
         DColor background(palette().color(QPalette::Background));
 
         d->transformedCenter = buildPerspective(QPoint(0, 0), QPoint(d->width, d->height),
-                                               d->topLeftPoint, d->topRightPoint,
-                                               d->bottomLeftPoint, d->bottomRightPoint,
-                                               &d->previewImage, &destImage, background);
+                                                d->topLeftPoint, d->topRightPoint,
+                                                d->bottomLeftPoint, d->bottomRightPoint,
+                                                &d->preview, &destImage, background);
 
         d->iface->putPreviewImage(destImage.bits());
 
         // Draw image
 
         d->iface->paint(d->pixmap, d->rect.x(), d->rect.y(),
-                       d->rect.width(), d->rect.height());
+                        d->rect.width(), d->rect.height());
     }
     else if (d->validPerspective)
     {
@@ -742,43 +780,6 @@ void PerspectiveWidget::paintEvent(QPaintEvent*)
     QPainter p(this);
     p.drawPixmap(0, 0, *d->pixmap);
     p.end();
-}
-
-void PerspectiveWidget::resizeEvent(QResizeEvent* e)
-{
-    int old_w = d->width;
-    int old_h = d->height;
-
-    delete d->pixmap;
-    int w          = e->size().width();
-    int h          = e->size().height();
-    uchar *data    = d->iface->setPreviewImageSize(w, h);
-    d->width            = d->iface->previewWidth();
-    d->height            = d->iface->previewHeight();
-    d->previewImage = DImg(d->width, d->height, d->iface->previewSixteenBit(), d->iface->previewHasAlpha(), data, false);
-
-    d->pixmap      = new QPixmap(w, h);
-    QRect oldRect = d->rect;
-    d->rect        = QRect(w/2-d->width/2, h/2-d->height/2, d->width, d->height);
-
-    float xFactor = (float)d->rect.width()/(float)(oldRect.width());
-    float yFactor = (float)d->rect.height()/(float)(oldRect.height());
-
-    d->topLeftPoint      = QPoint(lroundf(d->topLeftPoint.x()*xFactor),
-                                 lroundf(d->topLeftPoint.y()*yFactor));
-    d->topRightPoint     = QPoint(lroundf(d->topRightPoint.x()*xFactor),
-                                 lroundf(d->topRightPoint.y()*yFactor));
-    d->bottomLeftPoint   = QPoint(lroundf(d->bottomLeftPoint.x()*xFactor),
-                                 lroundf(d->bottomLeftPoint.y()*yFactor));
-    d->bottomRightPoint  = QPoint(lroundf(d->bottomRightPoint.x()*xFactor),
-                                 lroundf(d->bottomRightPoint.y()*yFactor));
-    d->transformedCenter = QPoint(lroundf(d->transformedCenter.x()*xFactor),
-                                 lroundf(d->transformedCenter.y()*yFactor));
-
-    d->spot.setX((int)((float)d->spot.x() * ( (float)d->width / (float)old_w)));
-    d->spot.setY((int)((float)d->spot.y() * ( (float)d->height / (float)old_h)));
-
-    updatePixmap();
 }
 
 void PerspectiveWidget::mousePressEvent(QMouseEvent* e)

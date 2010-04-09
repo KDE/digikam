@@ -194,10 +194,10 @@ void ImageSelectionWidget::setup(int w, int h,
     bool hasAlpha   = d->iface->previewHasAlpha();
     d->preview      = DImg(width, height, sixteenBit, hasAlpha, data);
     d->preview.setIccProfile( d->iface->getOriginalImg()->getIccProfile() );
-    delete [] data;
     d->preview.convertToEightBit();
-    d->pixmap = new QPixmap(w, h);
+    delete [] data;
 
+    d->pixmap = new QPixmap(w, h);
     d->image  = QRect(0, 0, d->iface->originalWidth(), d->iface->originalHeight());
     d->rect   = QRect(w/2-d->preview.width()/2, h/2-d->preview.height()/2,
                       d->preview.width(), d->preview.height());
@@ -224,11 +224,11 @@ void ImageSelectionWidget::resizeEvent(QResizeEvent *e)
     bool sixteenBit = d->iface->previewSixteenBit();
     bool hasAlpha   = d->iface->previewHasAlpha();
     d->preview      = DImg(width, height, sixteenBit, hasAlpha, data);
-    delete [] data;
+    d->preview.setIccProfile( d->iface->getOriginalImg()->getIccProfile() );
     d->preview.convertToEightBit();
+    delete [] data;
 
     d->pixmap = new QPixmap(w, h);
-
     d->rect   = QRect(w/2-d->preview.width()/2, h/2-d->preview.height()/2,
                       d->preview.width(), d->preview.height());
 
