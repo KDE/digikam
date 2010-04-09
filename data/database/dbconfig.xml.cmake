@@ -438,7 +438,7 @@
 				INSERT INTO ImageInformation (imageid, rating, creationDate, digitizationDate, orientation, width, height, format, colorDepth, colorModel) VALUES (:imageid, :rating, :creationDate, :digitizationDate, :orientation, :width, :height, :format, :colorDepth, :colorModel);
 			</statement></dbaction>
 			
-			<dbaction name="Migrate_Read_ImageMetadate" mode="query"><statement mode="query">
+			<dbaction name="Migrate_Read_ImageMetadata" mode="query"><statement mode="query">
 				SELECT imageid, make, model, lens, aperture, focalLength, focalLength35, exposureTime, exposureProgram, exposureMode, sensitivity, flash, whiteBalance, whiteBalanceColorTemperature, meteringMode, subjectDistance, subjectDistanceCategory FROM ImageMetadata;
 			</statement></dbaction>
 			<dbaction name="Migrate_Write_ImageMetadate" mode="query"><statement mode="query">
@@ -904,7 +904,7 @@
 				INSERT INTO ImageInformation (imageid, rating, creationDate, digitizationDate, orientation, width, height, format, colorDepth, colorModel) VALUES (:imageid, :rating, :creationDate, :digitizationDate, :orientation, :width, :height, :format, :colorDepth, :colorModel);
 			</statement></dbaction>
 			
-			<dbaction name="Migrate_Read_ImageMetadate" mode="transaction"><statement mode="query">
+			<dbaction name="Migrate_Read_ImageMetadata" mode="transaction"><statement mode="query">
 				SELECT imageid, make, model, lens, aperture, focalLength, focalLength35, exposureTime, exposureProgram, exposureMode, sensitivity, flash, whiteBalance, whiteBalanceColorTemperature, meteringMode, subjectDistance, subjectDistanceCategory FROM ImageMetadata;
 			</statement></dbaction>
 			<dbaction name="Migrate_Write_ImageMetadate" mode="transaction"><statement mode="query">
