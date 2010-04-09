@@ -92,13 +92,13 @@ Q_OBJECT
 
 public:
 
-    InsertTextWidget(int w, int h, QWidget *parent=0);
+    InsertTextWidget(int w, int h, QWidget* parent=0);
     ~InsertTextWidget();
 
-    ImageIface* imageIface();
+    ImageIface* imageIface() const;
     DImg        makeInsertText();
 
-    void   setText(QString text, QFont font, QColor color, int alignMode,
+    void   setText(const QString& text, const QFont& font, const QColor& color, int alignMode,
                    bool border, bool transparent, int rotation);
     void   resetEdit(void);
 
@@ -114,7 +114,7 @@ protected:
     void mouseMoveEvent(QMouseEvent*);
 
     void makePixmap();
-    QRect composeImage(DImg *image, QPainter *destPainter,
+    QRect composeImage(DImg* image, QPainter* destPainter,
                        int x, int y,
                        QFont font, float pointSize, int textRotation, QColor textColor,
                        int alignMode, const QString& textString,

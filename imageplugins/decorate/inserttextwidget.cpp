@@ -103,7 +103,7 @@ public:
     ImageIface* iface;
 };
 
-InsertTextWidget::InsertTextWidget(int w, int h, QWidget *parent)
+InsertTextWidget::InsertTextWidget(int w, int h, QWidget* parent)
                 : QWidget(parent),
                   d(new InsertTextWidgetPriv)
 {
@@ -135,7 +135,7 @@ InsertTextWidget::~InsertTextWidget()
     delete d;
 }
 
-ImageIface* InsertTextWidget::imageIface()
+ImageIface* InsertTextWidget::imageIface() const
 {
     return d->iface;
 }
@@ -148,7 +148,7 @@ void InsertTextWidget::resetEdit()
     repaint();
 }
 
-void InsertTextWidget::setText(QString text, QFont font, QColor color, int alignMode,
+void InsertTextWidget::setText(const QString& text, const QFont& font, const QColor& color, int alignMode,
                                bool border, bool transparent, int rotation)
 {
     d->textString      = text;
@@ -221,10 +221,10 @@ QRect InsertTextWidget::getPositionHint()
     return hint;
 }
 
-DImg InsertTextWidget::makeInsertText(void)
+DImg InsertTextWidget::makeInsertText()
 {
-    int orgW = d->iface->originalWidth();
-    int orgH = d->iface->originalHeight();
+    int orgW     = d->iface->originalWidth();
+    int orgH     = d->iface->originalHeight();
     float ratioW = (float)orgW/(float)d->w;
     float ratioH = (float)orgH/(float)d->h;
 
@@ -279,14 +279,16 @@ void InsertTextWidget::makePixmap()
     uchar* data = d->iface->getPreviewImage();
     DImg image(d->iface->previewWidth(), d->iface->previewHeight(), d->iface->previewSixteenBit(),
                         d->iface->previewHasAlpha(), data);
+    image.setIccProfile( d->iface->getOriginalImg()->getIccProfile() );
     delete [] data;
 
     // paint pixmap for drawing this widget
     // First, fill with background color
     d->pixmap->fill(palette().color(QPalette::Background));
     QPainter p(d->pixmap);
+
     // Convert image to pixmap and draw it
-    QPixmap imagePixmap = image.convertToPixmap();
+    QPixmap imagePixmap = d->iface->convertToPixmap(image);
     p.drawPixmap(d->rect.x(), d->rect.y(),
                  imagePixmap, 0, 0, imagePixmap.width(), imagePixmap.height());
 
@@ -296,10 +298,10 @@ void InsertTextWidget::makePixmap()
 
     // compose image and draw result directly on pixmap, with correct offset
     QRect textRect = composeImage(&image, &p, x, y,
-                                   d->textFont, d->textFont.pointSizeF() * ((ratioW > ratioH) ? ratioW : ratioH),
-                                   d->textRotation, d->textColor, d->alignMode, d->textString,
-                                   d->textTransparent, d->backgroundColor,
-                                   d->textBorder ? BORDER_NORMAL : BORDER_SUPPORT, 1, 1);
+                                  d->textFont, d->textFont.pointSizeF() * ((ratioW > ratioH) ? ratioW : ratioH),
+                                  d->textRotation, d->textColor, d->alignMode, d->textString,
+                                  d->textTransparent, d->backgroundColor,
+                                  d->textBorder ? BORDER_NORMAL : BORDER_SUPPORT, 1, 1);
 
     p.end();
 
@@ -316,7 +318,7 @@ void InsertTextWidget::makePixmap()
    if destPainter is not null, draw directly using the painter.
    Returns modified area of image.
 */
-QRect InsertTextWidget::composeImage(DImg* image, QPainter *destPainter,
+QRect InsertTextWidget::composeImage(DImg* image, QPainter* destPainter,
                                      int x, int y,
                                      QFont font, float pointSize, int textRotation, QColor textColor,
                                      int alignMode, const QString& textString,
@@ -473,12 +475,26 @@ QRect InsertTextWidget::composeImage(DImg* image, QPainter *destPainter,
         textNotDrawn.convertToEightBit();
     }
     else
+    {
         textNotDrawn = textArea;
+    }
 
     // We have no direct pixel access to font rendering, so now we need to use Qt/X11 for the drawing
 
     // convert text area to pixmap
-    QPixmap pixmap = textNotDrawn.convertToPixmap();
+    QPixmap pixmap;
+
+    if (destPainter)
+    {
+        // We working on tool preview, deal with CM as well
+        pixmap = d->iface->convertToPixmap(textNotDrawn);
+    }
+    else
+    {
+        // We working on target image. Do no apply double CM adjustement here.
+        pixmap = textNotDrawn.convertToPixmap();
+    }
+
     // paint on pixmap
     QPainter p(&pixmap);
     p.setPen( QPen(textColor, 1) ) ;
@@ -582,7 +598,7 @@ QRect InsertTextWidget::composeImage(DImg* image, QPainter *destPainter,
     return drawRect;
 }
 
-void InsertTextWidget::paintEvent(QPaintEvent *)
+void InsertTextWidget::paintEvent(QPaintEvent*)
 {
     QPainter p(this);
     p.drawPixmap(0, 0, *d->pixmap);
