@@ -57,7 +57,7 @@ SuperImposeWidget::SuperImposeWidget(int w, int h, QWidget* parent)
     m_pixmap   = new QPixmap(w, h);
     m_editMode = MOVE;
 
-    Digikam::ImageIface iface(0, 0);
+    ImageIface iface(0, 0);
     m_w = iface.originalWidth();
     m_h = iface.originalHeight();
 
@@ -72,9 +72,9 @@ SuperImposeWidget::~SuperImposeWidget()
     delete m_pixmap;
 }
 
-Digikam::DImg SuperImposeWidget::makeSuperImpose()
+DImg SuperImposeWidget::makeSuperImpose()
 {
-    Digikam::ImageIface iface(0, 0);
+    ImageIface iface(0, 0);
     SuperImpose superimpose(iface.getOriginalImg(), &m_template, m_currentSelection);
     return superimpose.getTargetImage();
 }
@@ -90,9 +90,9 @@ void SuperImposeWidget::resetEdit()
 
 void SuperImposeWidget::makePixmap()
 {
-    Digikam::ImageIface iface(0, 0);
+    ImageIface iface(0, 0);
     SuperImpose superimpose(iface.getOriginalImg(), &m_templateScaled, m_currentSelection);
-    Digikam::DImg image = superimpose.getTargetImage();
+    DImg image = superimpose.getTargetImage();
 
     m_pixmap->fill(palette().color(QPalette::Background));
     QPainter p(m_pixmap);
@@ -101,12 +101,12 @@ void SuperImposeWidget::makePixmap()
     p.end();
 }
 
-void SuperImposeWidget::resizeEvent(QResizeEvent * e)
+void SuperImposeWidget::resizeEvent(QResizeEvent* e)
 {
     blockSignals(true);
     delete m_pixmap;
-    int w = e->size().width();
-    int h = e->size().height();
+    int w    = e->size().width();
+    int h    = e->size().height();
     m_pixmap = new QPixmap(w, h);
 
     if (!m_template.isNull())
@@ -137,7 +137,7 @@ void SuperImposeWidget::resizeEvent(QResizeEvent * e)
     blockSignals(false);
 }
 
-void SuperImposeWidget::paintEvent( QPaintEvent * )
+void SuperImposeWidget::paintEvent(QPaintEvent*)
 {
     QPainter p(this);
     p.drawPixmap(0, 0, *m_pixmap);
@@ -246,7 +246,7 @@ bool SuperImposeWidget::zoomSelection(float deltaZoomFactor)
     return true;
 }
 
-void SuperImposeWidget::mousePressEvent ( QMouseEvent * e )
+void SuperImposeWidget::mousePressEvent(QMouseEvent* e)
 {
     if ( isEnabled() && e->button() == Qt::LeftButton &&
          rect().contains( e->x(), e->y() ) )
@@ -270,12 +270,12 @@ void SuperImposeWidget::mousePressEvent ( QMouseEvent * e )
     }
 }
 
-void SuperImposeWidget::mouseReleaseEvent ( QMouseEvent * )
+void SuperImposeWidget::mouseReleaseEvent(QMouseEvent*)
 {
     setEditModeCursor();
 }
 
-void SuperImposeWidget::mouseMoveEvent ( QMouseEvent * e )
+void SuperImposeWidget::mouseMoveEvent(QMouseEvent* e)
 {
     if ( isEnabled() )
     {

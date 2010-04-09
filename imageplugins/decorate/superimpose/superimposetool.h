@@ -32,12 +32,14 @@
 
 class KUrl;
 
+using namespace Digikam;
+
 namespace DigikamDecorateImagePlugin
 {
 
 class SuperImposeToolPriv;
 
-class SuperImposeTool : public Digikam::EditorTool
+class SuperImposeTool : public EditorTool
 {
     Q_OBJECT
 

@@ -53,11 +53,11 @@ public:
     KUrl             m_rootUrl;
 };
 
-DirSelectWidget::DirSelectWidget(QWidget* parent, const char* name, QString headerLabel)
+DirSelectWidget::DirSelectWidget(QWidget* parent, const char* name, const QString& headerLabel)
                : K3FileTreeView( parent), d(new DirSelectWidgetPrivate)
 {
     setObjectName(name);
-    addColumn( headerLabel );
+    addColumn(headerLabel);
 
     if ( headerLabel.isNull() )
         header()->hide();
@@ -65,12 +65,12 @@ DirSelectWidget::DirSelectWidget(QWidget* parent, const char* name, QString head
     setAlternateBackground(QColor());
 }
 
-DirSelectWidget::DirSelectWidget(KUrl rootUrl, KUrl currentUrl,
-                                 QWidget* parent, const char* name, QString headerLabel)
+DirSelectWidget::DirSelectWidget(const KUrl& rootUrl, const KUrl& currentUrl,
+                                 QWidget* parent, const char* name, const QString& headerLabel)
                : K3FileTreeView( parent), d(new DirSelectWidgetPrivate)
 {
     setObjectName(name);
-    addColumn( headerLabel );
+    addColumn(headerLabel);
 
     if ( headerLabel.isNull() )
         header()->hide();
@@ -121,7 +121,7 @@ void DirSelectWidget::load()
     }
 }
 
-void DirSelectWidget::setCurrentPath(KUrl currentUrl)
+void DirSelectWidget::setCurrentPath(const KUrl& currentUrl)
 {
     if ( !currentUrl.isValid() )
        return;
@@ -140,7 +140,7 @@ void DirSelectWidget::setCurrentPath(KUrl currentUrl)
     load();
 }
 
-void DirSelectWidget::setRootPath(KUrl rootUrl, KUrl currentUrl)
+void DirSelectWidget::setRootPath(const KUrl& rootUrl, const KUrl& currentUrl)
 {
     d->m_rootUrl = rootUrl;
     clear();
@@ -168,7 +168,7 @@ void DirSelectWidget::setRootPath(KUrl rootUrl, KUrl currentUrl)
              this, SLOT( slotFolderSelected(Q3ListViewItem *) ) );
 }
 
-KUrl DirSelectWidget::rootPath()
+KUrl DirSelectWidget::rootPath() const
 {
     return d->m_rootUrl;
 }

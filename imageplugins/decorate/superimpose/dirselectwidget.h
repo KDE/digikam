@@ -47,17 +47,17 @@ Q_OBJECT
 
 public:
 
-    explicit DirSelectWidget(QWidget* parent, const char* name=0, QString headerLabel=QString());
+    explicit DirSelectWidget(QWidget* parent, const char* name=0, const QString& headerLabel=QString());
 
-    explicit DirSelectWidget(KUrl rootUrl=KUrl("/"), KUrl currentUrl=KUrl(),
-                             QWidget* parent=0, const char* name=0, QString headerLabel=QString());
+    explicit DirSelectWidget(const KUrl& rootUrl=KUrl("/"), const KUrl& currentUrl=KUrl(),
+                             QWidget* parent=0, const char* name=0, const QString& headerLabel=QString());
 
     ~DirSelectWidget();
 
     KUrl path() const;
-    KUrl rootPath();
-    void setRootPath(KUrl rootUrl, KUrl currentUrl=KUrl(QString()));
-    void setCurrentPath(KUrl currentUrl);
+    KUrl rootPath() const;
+    void setRootPath(const KUrl& rootUrl, const KUrl& currentUrl=KUrl(QString()));
+    void setCurrentPath(const KUrl& currentUrl);
 
 Q_SIGNALS:
 
