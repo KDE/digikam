@@ -591,24 +591,7 @@ bool DImgInterface::hasChangesToSave()
 void DImgInterface::readMetadataFromFile(const QString& file)
 {
     DMetadata meta(file);
-
-    //TODO: code is essentially the same as DImgLoader::readMetadata,
-    //      put both in a common place.
-    if (!meta.getComments().isNull())
-        d->image.setComments(meta.getComments());
-
-#if KEXIV2_VERSION >= 0x010000
-    if (!meta.getExifEncoded().isNull())
-        d->image.setExif(meta.getExifEncoded());
-#else
-    if (!meta.getExif().isNull())
-        d->image.setExif(meta.getExif());
-#endif
-
-    if (!meta.getIptc().isNull())
-        d->image.setIptc(meta.getIptc());
-    if (!meta.getXmp().isNull())
-        d->image.setXmp(meta.getXmp());
+    d->image.setMetadata(meta.data());
 }
 
 void DImgInterface::clearUndoManager()
@@ -1025,19 +1008,9 @@ IccProfile DImgInterface::getEmbeddedICC()
     return d->image.getIccProfile();
 }
 
-QByteArray DImgInterface::getExif()
+KExiv2Data DImgInterface::getMetadata()
 {
-    return d->image.getExif();
-}
-
-QByteArray DImgInterface::getIptc()
-{
-    return d->image.getIptc();
-}
-
-QByteArray DImgInterface::getXmp()
-{
-    return d->image.getXmp();
+    return d->image.getMetadata();
 }
 
 QString DImgInterface::getImageFilePath()

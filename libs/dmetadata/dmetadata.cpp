@@ -66,6 +66,13 @@ DMetadata::DMetadata(const QString& filePath)
     load(filePath);
 }
 
+#if KEXIV2_VERSION >= 0x010000
+DMetadata::DMetadata(const KExiv2Data& data)
+         : KExiv2Iface::KExiv2(data)
+{
+}
+#endif
+
 DMetadata::~DMetadata()
 {
 }
@@ -1732,7 +1739,7 @@ KExiv2::AltLangMap DMetadata::toAltLangMap(const QVariant &var)
     return map;
 }
 
-// ---------- Scheduled to be moved to libkexiv2 --------------
+// ---------- Pushed to libkexiv2 for KDE 4.4 --------------
 
 bool DMetadata::addToXmpTagStringBag(const char *xmpTagName, const QStringList& entriesToAdd,
                                      bool setProgramName) const
@@ -1830,6 +1837,37 @@ bool DMetadata::removeXmpSubjects(const QStringList& subjectsToRemove, bool setP
 {
     return removeFromXmpTagStringBag("Xmp.iptc.SubjectCode", subjectsToRemove, setProgramName);
 }
-// End: Scheduled to be moved to libkexiv2
+// End: Pushed to libkexiv2 for KDE4.4
+
+//------------------------------------------------------------------------------------------------
+// Compatibility for < KDE 4.4.
+#if KEXIV2_VERSION < 0x010000
+DMetadata::DMetadata(const KExiv2Data& data)
+{
+    setData(data);
+}
+
+KExiv2Data DMetadata::data() const
+{
+    KExiv2Data data;
+    data.exifData = getExif();
+    data.iptcData = getIptc();
+    data.xmpData  = getXmp();
+    data.imageComments = getComments();
+    return data;
+}
+
+void DMetadata::setData(const KExiv2Data& data)
+{
+    setExif(data.exifData);
+    setIptc(data.iptcData);
+    setXmp(data.xmpData);
+    setComments(data.imageComments);
+}
+
+#endif
+// End: Compatibility for < KDE 4.4
+//------------------------------------------------------------------------------------------------
+
 
 }  // namespace Digikam

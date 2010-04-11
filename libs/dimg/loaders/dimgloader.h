@@ -85,12 +85,12 @@ protected:
     int                     imageBitsDepth();
     int                     imageBytesDepth();
 
-    QMap<int, QByteArray>&  imageMetaData();
     void                    imageSetIccProfile(const IccProfile& profile);
     QVariant                imageGetAttribute(const QString& key);
     void                    imageSetAttribute(const QString& key, const QVariant& value);
 
     QMap<QString, QString>& imageEmbeddedText();
+    KExiv2Data              imageMetadata();
     QString                 imageGetEmbbededText(const QString& key);
     void                    imageSetEmbbededText(const QString& key, const QString& text);
 

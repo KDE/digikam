@@ -562,10 +562,7 @@ bool jpegConvert(const QString& src, const QString& dest, const QString& documen
         DImg image(src);
 
         // Get image Exif/IPTC data.
-        DMetadata meta;
-        meta.setExif(image.getExif());
-        meta.setIptc(image.getIptc());
-        meta.setXmp(image.getXmp());
+        DMetadata meta(image.getMetadata());
 
         // Update IPTC preview.
         QImage preview = image.smoothScale(1280, 1024, Qt::KeepAspectRatio).copyQImage();
@@ -589,13 +586,7 @@ bool jpegConvert(const QString& src, const QString& dest, const QString& documen
         meta.setExifTagString("Exif.Image.DocumentName", documentName);
 
         // Store new Exif/IPTC data into image.
-#if KEXIV2_VERSION >= 0x010000
-        image.setExif(meta.getExifEncoded());
-#else
-        image.setExif(meta.getExif());
-#endif
-        image.setIptc(meta.getIptc());
-        image.setXmp(meta.getXmp());
+        image.setMetadata(meta.data());
 
         // And now save the image to a new file format.
 

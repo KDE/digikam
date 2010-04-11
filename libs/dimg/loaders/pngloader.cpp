@@ -763,6 +763,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
     text.compression = PNG_TEXT_COMPRESSION_zTXt;
     png_set_text(png_ptr, info_ptr, &(text), 1);
 
+/*
     // There is an unsolved problem in the following code block, see bug #151552.
     // If exiv2 supports writing to PNG, which it does since 0.18, this code is not needed
     // and should not be used therefore.
@@ -783,7 +784,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
             switch (it.key())
             {
 
-/*
+/  *
 #ifdef PNG_iTXt_SUPPORTED
                 // TODO : this code requires libpng 1.3.0, it is not yet tested and crashes. See bug #229340.
 
@@ -800,7 +801,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
                     break;
                 }
 #endif
-*/
+* /
 
                 case(DImg::EXIF):
                 {
@@ -842,6 +843,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver *observer)
             }
         }
     }
+*/
 
     if (observer)
         observer->progressInfo(m_image, 0.2F);

@@ -598,16 +598,7 @@ void ImageScanner::loadFromDisk()
     // faster than loading twice from disk
     if (m_hasMetadata)
     {
-        m_img.setComments(m_metadata.getComments());
-
-#if KEXIV2_VERSION >= 0x010000
-        m_img.setExif(m_metadata.getExifEncoded());
-#else
-        m_img.setExif(m_metadata.getExif());
-#endif
-
-        m_img.setIptc(m_metadata.getIptc());
-        m_img.setXmp(m_metadata.getXmp());
+        m_img.setMetadata(m_metadata.data());
     }
 }
 
