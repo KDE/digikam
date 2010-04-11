@@ -31,7 +31,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 019 ==> 233739 : Color management is disabled when using "Aspect Ratio Crop".
 020 ==> 233927 : Olympus raw file crashes thumbnail view.
 021 ==> 183171 : Decode and encode metadata once only.
-022 ==> 
+022 ==> 233987 : digiKam crashes after renaming two files using the #-character.
+023 ==> 
 
 
 
