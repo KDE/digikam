@@ -93,7 +93,8 @@ private:
 
     bool singleSelection() const;
     void setMetadataWidgetStatus(int status, QWidget *widget);
-    void reloadForMetadataChange(qlonglong imageId);
+    void metadataChange(qlonglong imageId);
+    void resetMetadataChangeInfo();
 
 private Q_SLOTS:
 
@@ -108,6 +109,7 @@ private Q_SLOTS:
     void slotTemplateSelected();
     void slotModified();
     void slotCreateNewTag();
+    void slotReloadForMetadataChange();
 
     void slotImageTagsChanged(qlonglong imageId);
     void slotImagesChanged(int albumId);

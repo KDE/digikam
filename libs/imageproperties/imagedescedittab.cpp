@@ -29,11 +29,12 @@
 
 // Qt includes
 
-#include <QToolButton>
-#include <QPushButton>
 #include <QGridLayout>
-#include <qscrollarea.h>
+#include <QPushButton>
+#include <QScrollArea>
 #include <QSignalMapper>
+#include <QTimer>
+#include <QToolButton>
 
 // KDE includes
 
@@ -54,6 +55,7 @@
 #include "albumthumbnailloader.h"
 #include "collectionscanner.h"
 #include "databasetransaction.h"
+#include "metadatamanager.h"
 #include "ratingwidget.h"
 #include "scancontroller.h"
 #include "tagcheckview.h"
@@ -142,6 +144,9 @@ public:
     TagModificationHelper         *tagModificationHelper;
     TagModel                      *tagModel;
 
+    QTimer                        *metadataChangeTimer;
+    QList<int>                     metadataChangeIds;
+
 };
 
 ImageDescEditTab::ImageDescEditTab(QWidget *parent)
@@ -150,6 +155,10 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
     setMargin(0);
     setSpacing(KDialog::spacingHint());
     d->tabWidget = new KTabWidget(this);
+
+    d->metadataChangeTimer = new QTimer(this);
+    d->metadataChangeTimer->setSingleShot(true);
+    d->metadataChangeTimer->setInterval(250);
 
     // Captions/Date/Rating view -----------------------------------
 
@@ -306,6 +315,9 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
 
     connect(d->recentTagsMapper, SIGNAL(mapped(int)),
             this, SLOT(slotRecentTagsMenuActivated(int)));
+
+    connect(d->metadataChangeTimer, SIGNAL(timeout()),
+            this, SLOT(slotReloadForMetadataChange()));
 
     // Initialize ---------------------------------------------
 
@@ -473,82 +485,12 @@ void ImageDescEditTab::slotApplyAllChanges()
     if (d->currInfos.isEmpty())
         return;
 
-    bool progressInfo                   = (d->currInfos.count() > 1);
-    MetadataWriteSettings writeSettings = MetadataHub::defaultWriteSettings();
+    MetadataManager::instance()->applyMetadata(d->currInfos, d->hub);
 
-    // debugging - use this to indicate reentry from event loop (kapp->processEvents)
-    // remove before final release
-    if (d->ignoreImageAttributesWatch)
-    {
-        kWarning() << "ImageDescEditTab::slotApplyAllChanges(): re-entering from event loop!";
-    }
-
-    // Create a local copy of the current state of the hub.
-    // The method may be called recursively from processEvents.
-    MetadataHub hub(d->hub);
-
-    // For the same reason as above, do this now
     d->modified = false;
     d->hub.resetChanged();
     d->applyBtn->setEnabled(false);
     d->revertBtn->setEnabled(false);
-
-    // we are now changing attributes ourselves
-    d->ignoreImageAttributesWatch = true;
-    AlbumLister::instance()->blockSignals(true);
-    ScanController::instance()->suspendCollectionScan();
-
-    // update database information
-    {
-        emit signalProgressBarMode(StatusProgressBar::ProgressBarMode,
-                                   i18n("Applying changes to images. Please wait..."));
-        int i=0;
-
-        DatabaseTransaction transaction;
-
-        foreach(const ImageInfo& info, d->currInfos)
-        {
-            // apply to database
-            hub.write(info);
-
-            emit signalProgressValue((int)((i++/(float)d->currInfos.count())*100.0));
-            if (progressInfo)
-                kapp->processEvents();
-        }
-    }
-
-    // update file metadata
-    {
-        emit signalProgressBarMode(StatusProgressBar::ProgressBarMode,
-                                   i18n("Writing metadata to files. Please wait..."));
-        int i = 0;
-
-        foreach(const ImageInfo& info, d->currInfos)
-        {
-            QString filePath = info.filePath();
-
-            // apply to file metadata
-            bool fileChanged = hub.write(filePath, MetadataHub::FullWrite, writeSettings);
-
-            // trigger db scan (to update file size etc.)
-            if (fileChanged)
-                ScanController::instance()->scanFileDirectly(filePath);
-
-            emit signalProgressValue((int)((i++/(float)d->currInfos.count())*100.0));
-            if (progressInfo)
-                kapp->processEvents();
-        }
-
-    }
-
-    ScanController::instance()->resumeCollectionScan();
-    AlbumLister::instance()->blockSignals(false);
-    d->ignoreImageAttributesWatch = false;
-
-    emit signalProgressBarMode(StatusProgressBar::TextMode, QString());
-
-    updateRecentTags();
-    updateTagsView();
 }
 
 void ImageDescEditTab::slotRevertAllChanges()
@@ -586,6 +528,7 @@ void ImageDescEditTab::setInfos(const ImageInfoList& infos)
         d->captionsEdit->reset();
         d->captionsEdit->blockSignals(false);
         d->currInfos.clear();
+        resetMetadataChangeInfo();
         setEnabled(false);
         return;
     }
@@ -593,6 +536,7 @@ void ImageDescEditTab::setInfos(const ImageInfoList& infos)
     setEnabled(true);
     d->currInfos = infos;
     d->modified  = false;
+    resetMetadataChangeInfo();
     d->hub = MetadataHub();
     d->applyBtn->setEnabled(false);
     d->revertBtn->setEnabled(false);
@@ -607,6 +551,7 @@ void ImageDescEditTab::setInfos(const ImageInfoList& infos)
     updateDate();
     updateTemplate();
     updateTagsView();
+    updateRecentTags();
     focusLastSelectedWidget();
 }
 
@@ -937,7 +882,7 @@ void ImageDescEditTab::slotImageTagsChanged(qlonglong imageId)
     if (d->ignoreImageAttributesWatch || d->modified)
         return;
 
-    reloadForMetadataChange(imageId);
+    metadataChange(imageId);
 }
 
 void ImageDescEditTab::slotImagesChanged(int albumId)
@@ -957,7 +902,7 @@ void ImageDescEditTab::slotImageRatingChanged(qlonglong imageId)
     if (d->ignoreImageAttributesWatch || d->modified)
         return;
 
-    reloadForMetadataChange(imageId);
+    metadataChange(imageId);
 }
 
 void ImageDescEditTab::slotImageCaptionChanged(qlonglong imageId)
@@ -965,7 +910,7 @@ void ImageDescEditTab::slotImageCaptionChanged(qlonglong imageId)
     if (d->ignoreImageAttributesWatch || d->modified)
         return;
 
-    reloadForMetadataChange(imageId);
+    metadataChange(imageId);
 }
 
 void ImageDescEditTab::slotImageDateChanged(qlonglong imageId)
@@ -973,18 +918,35 @@ void ImageDescEditTab::slotImageDateChanged(qlonglong imageId)
     if (d->ignoreImageAttributesWatch || d->modified)
         return;
 
-    reloadForMetadataChange(imageId);
+    metadataChange(imageId);
 }
 
 // private common code for above methods
-void ImageDescEditTab::reloadForMetadataChange(qlonglong imageId)
+void ImageDescEditTab::metadataChange(qlonglong imageId)
 {
-    if (d->currInfos.isEmpty())
+    d->metadataChangeIds << imageId;
+    d->metadataChangeTimer->start();
+}
+
+void ImageDescEditTab::resetMetadataChangeInfo()
+{
+    d->metadataChangeTimer->stop();
+    d->metadataChangeIds.clear();
+}
+
+void ImageDescEditTab::slotReloadForMetadataChange()
+{
+    // NOTE: What to do if d->modified? Reloading is no option.
+    // It may be a little change the user wants to ignore, or a large conflict.
+    if (d->currInfos.isEmpty() || d->modified)
+    {
+        resetMetadataChangeInfo();
         return;
+    }
 
     if (singleSelection())
     {
-        if (d->currInfos.first().id() == imageId)
+        if (d->metadataChangeIds.contains(d->currInfos.first().id()))
             setInfos(d->currInfos);
     }
     else
@@ -992,10 +954,10 @@ void ImageDescEditTab::reloadForMetadataChange(qlonglong imageId)
         // if image id is in our list, update
         foreach(const ImageInfo& info, d->currInfos)
         {
-            if (info.id() == imageId)
+            if (d->metadataChangeIds.contains(info.id()))
             {
                 setInfos(d->currInfos);
-                return;
+                break;
             }
         }
     }
