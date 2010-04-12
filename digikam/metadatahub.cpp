@@ -27,6 +27,8 @@
 // Qt includes
 
 #include <QFileInfo>
+#include <QMutex>
+#include <QMutexLocker>
 
 // KDE includes
 
@@ -377,6 +379,8 @@ template <class T> void MetadataHubPriv::loadSingleValue(const T& data, T& stora
 
 bool MetadataHub::write(ImageInfo info, WriteMode writeMode)
 {
+    applyChangeNotifications();
+
     bool changed = false;
 
     // find out in advance if we have something to write - needed for FullWriteIfChanged mode
@@ -462,6 +466,8 @@ bool MetadataHub::write(ImageInfo info, WriteMode writeMode)
 
 bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const MetadataWriteSettings& settings)
 {
+    applyChangeNotifications();
+
     bool dirty = false;
 
     metadata.setWriteRawFiles(settings.writeRawFiles);
@@ -591,6 +597,8 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
 
 bool MetadataHub::write(const QString& filePath, WriteMode writeMode, const MetadataWriteSettings& settings)
 {
+    applyChangeNotifications();
+
     // if no DMetadata object is needed at all, don't construct one -
     // important optimization if writing to file is turned off in setup!
     if (!willWriteMetadata(writeMode, settings))
@@ -608,6 +616,8 @@ bool MetadataHub::write(const QString& filePath, WriteMode writeMode, const Meta
 
 bool MetadataHub::write(DImg& image, WriteMode writeMode, const MetadataWriteSettings& settings)
 {
+    applyChangeNotifications();
+
     // if no DMetadata object is needed at all, don't construct one
     if (!willWriteMetadata(writeMode, settings))
         return false;
@@ -869,13 +879,35 @@ void MetadataHub::resetChanged()
     d->tagsChanged     = false;
 }
 
+void MetadataHub::applyChangeNotifications()
+{
+}
+
 // --------------------------------------------------
 
+class MetadataHubOnTheRoadPriv
+{
+public:
+
+    MetadataHubOnTheRoadPriv()
+    {
+    }
+
+    QMutex mutex;
+    QList<int> tagIds;
+};
+
 MetadataHubOnTheRoad::MetadataHubOnTheRoad(QObject *parent)
-    : QObject(parent)
+    : QObject(parent), d(new MetadataHubOnTheRoadPriv)
 {
     connect(TagsCache::instance(), SIGNAL(tagDeleted(int)),
-            this, SLOT(slotTagDeleted(int)));
+            this, SLOT(slotTagDeleted(int)),
+            Qt::DirectConnection);
+}
+
+MetadataHubOnTheRoad::~MetadataHubOnTheRoad()
+{
+    delete d;
 }
 
 MetadataHubOnTheRoad& MetadataHubOnTheRoad::operator=(const MetadataHub &other)
@@ -885,13 +917,33 @@ MetadataHubOnTheRoad& MetadataHubOnTheRoad::operator=(const MetadataHub &other)
 }
 
 MetadataHubOnTheRoad::MetadataHubOnTheRoad(const MetadataHub &other)
-    : QObject(0), MetadataHub(other)
+    : QObject(0), MetadataHub(other), d(new MetadataHubOnTheRoadPriv)
 {
+}
+
+MetadataHubOnTheRoad::MetadataHubOnTheRoad(const MetadataHubOnTheRoad &other, QObject *parent)
+    : QObject(parent), MetadataHub(other), d(new MetadataHubOnTheRoadPriv)
+{
+    applyChangeNotifications();
+}
+
+void MetadataHubOnTheRoad::applyChangeNotifications()
+{
+    QList<int> tagIds;
+    {
+        QMutexLocker locker(&d->mutex);
+        tagIds = d->tagIds;
+        d->tagIds.clear();
+    }
+
+    foreach (int tagId, tagIds)
+        notifyTagDeleted(tagId);
 }
 
 void MetadataHubOnTheRoad::slotTagDeleted(int tagId)
 {
-    notifyTagDeleted(tagId);
+    QMutexLocker locker(&d->mutex);
+    d->tagIds << tagId;
 }
 
 } // namespace Digikam

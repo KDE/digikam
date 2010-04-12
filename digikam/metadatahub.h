@@ -146,7 +146,7 @@ public:
         @param dbmode Determines if the database may be accessed or not. See the enum description above.
     */
     MetadataHub();
-    ~MetadataHub();
+    virtual ~MetadataHub();
     /// Copies by value - no sharing involved.
     MetadataHub& operator=(const MetadataHub &);
     MetadataHub(const MetadataHub &);
@@ -343,6 +343,7 @@ protected:
     void loadTags(const QList<int>& loadedTagIds);
     void loadTags(const QStringList& loadedTagPaths);
     void notifyTagDeleted(int id);
+    virtual void applyChangeNotifications();
 
 private:
 
@@ -350,6 +351,8 @@ private:
 };
 
 // --------------------------------------------------
+
+class MetadataHubOnTheRoadPriv;
 
 class MetadataHubOnTheRoad : public QObject, public MetadataHub
 {
@@ -365,10 +368,17 @@ public:
     MetadataHubOnTheRoad(QObject *parent = 0);
     MetadataHubOnTheRoad& operator=(const MetadataHub &);
     MetadataHubOnTheRoad(const MetadataHub &);
+    MetadataHubOnTheRoad(const MetadataHubOnTheRoad &, QObject *parent = 0);
+    ~MetadataHubOnTheRoad();
 
 protected Q_SLOTS:
 
     void slotTagDeleted(int tagId);
+
+private:
+
+    virtual void applyChangeNotifications();
+    MetadataHubOnTheRoadPriv* const d;
 };
 
 } // namespace Digikam
