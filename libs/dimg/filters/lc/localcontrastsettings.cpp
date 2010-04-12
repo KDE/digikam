@@ -494,19 +494,19 @@ void LocalContrastSettings::setSettings(const LocalContrastContainer& settings)
     d->highSaturationInput->setValue(settings.high_saturation);
     d->functionInput->setCurrentIndex(settings.function_id);
 
-    // d->stageOne->setChecked(settings.stage[0].enabled);
+    d->expanderBox->setChecked(1,settings.stage[0].enabled);
     d->powerInput1->setValue(settings.stage[0].power);
     d->blurInput1->setValue(settings.stage[0].blur);
 
-    //d->stageTwo->setChecked(settings.stage[1].enabled);
+    d->expanderBox->setChecked(2,settings.stage[1].enabled);
     d->powerInput2->setValue(settings.stage[1].power);
     d->blurInput2->setValue(settings.stage[1].blur);
 
-    //d->stageThree->setChecked(settings.stage[2].enabled);
+    d->expanderBox->setChecked(3,settings.stage[2].enabled);
     d->powerInput3->setValue(settings.stage[2].power);
     d->blurInput3->setValue(settings.stage[2].blur);
 
-    //d->stageFour->setChecked(settings.stage[3].enabled);
+    d->expanderBox->setChecked(4,settings.stage[3].enabled);
     d->powerInput4->setValue(settings.stage[3].power);
     d->blurInput4->setValue(settings.stage[3].blur);
 
@@ -659,10 +659,10 @@ void LocalContrastSettings::loadSettings()
 
         blockSignals(true);
         d->stretchContrastCheck->setChecked( stream.readLine().toInt() );
-        //d->stageOne->setChecked( stream.readLine().toInt() );
-        //d->stageTwo->setChecked( stream.readLine().toInt() );
-        //d->stageThree->setChecked( stream.readLine().toInt() );
-        //d->stageFour->setChecked( stream.readLine().toInt() );
+        d->expanderBox->setChecked(1, stream.readLine().toInt() );
+        d->expanderBox->setChecked(2, stream.readLine().toInt() );
+        d->expanderBox->setChecked(3, stream.readLine().toInt() );
+        d->expanderBox->setChecked(4, stream.readLine().toInt() );
         d->lowSaturationInput->setValue( stream.readLine().toInt() );
         d->highSaturationInput->setValue( stream.readLine().toInt() );
         d->functionInput->setCurrentIndex( stream.readLine().toInt() );
@@ -701,10 +701,10 @@ void LocalContrastSettings::saveAsSettings()
         stream << "# Photograph Local Contrast Configuration File\n";
 
         stream << d->stretchContrastCheck->isChecked() << "\n";
-        //stream << d->stageOne->isChecked() << "\n";
-        //stream << d->stageTwo->isChecked() << "\n";
-        //stream << d->stageThree->isChecked() << "\n";
-        //stream << d->stageFour->isChecked() << "\n";
+        stream << d->expanderBox->isChecked(1) << "\n";
+        stream << d->expanderBox->isChecked(2) << "\n";
+        stream << d->expanderBox->isChecked(3) << "\n";
+        stream << d->expanderBox->isChecked(4) << "\n";
         stream << d->lowSaturationInput->value() << "\n";
         stream << d->highSaturationInput->value() << "\n";
         stream << d->functionInput->currentIndex() << "\n";
