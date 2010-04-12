@@ -126,6 +126,18 @@ void MetadataManager::setExifOrientation(const QList<ImageInfo>& infos, int orie
     d->setExifOrientation(infos, orientation);
 }
 
+void MetadataManager::applyMetadata(const QList<ImageInfo>& infos, const MetadataHub& hub)
+{
+    d->schedulingForDB(infos.size());
+    d->applyMetadata(infos, new MetadataHubOnTheRoad(hub, this));
+}
+
+void MetadataManager::applyMetadata(const QList<ImageInfo>& infos, const MetadataHubOnTheRoad& hub)
+{
+    d->schedulingForDB(infos.size());
+    d->applyMetadata(infos, new MetadataHubOnTheRoad(hub, this));
+}
+
 // --------------------------------------------------------------------------------------
 
 MetadataManagerPriv::MetadataManagerPriv(MetadataManager *q)
@@ -151,11 +163,19 @@ MetadataManagerPriv::MetadataManagerPriv(MetadataManager *q)
     connect(this, SIGNAL(signalSetExifOrientation(const QList<ImageInfo> &, int)),
             dbWorker, SLOT(setExifOrientation(const QList<ImageInfo> &, int)));
 
+    connect(this, SIGNAL(signalApplyMetadata(const QList<ImageInfo>&, MetadataHub*)),
+            dbWorker, SLOT(applyMetadata(const QList<ImageInfo>&, MetadataHub*)));
+
+
     connect(dbWorker, SIGNAL(writeMetadataToFiles(const QList<ImageInfo> &)),
             fileWorker, SLOT(writeMetadataToFiles(const QList<ImageInfo> &)));
 
     connect(dbWorker, SIGNAL(writeOrientationToFiles(const QList<ImageInfo> &, int)),
             fileWorker, SLOT(writeOrientationToFiles(const QList<ImageInfo> &, int)));
+
+    connect(dbWorker, SIGNAL(writeMetadata(const QList<ImageInfo>&, MetadataHub*)),
+            fileWorker, SLOT(writeMetadata(const QList<ImageInfo>&, MetadataHub*)));
+
 
     connect(fileWorker, SIGNAL(imageDataChanged(const QString &, bool, bool)),
             this, SLOT(slotImageDataChanged(const QString &, bool, bool)));
@@ -382,6 +402,28 @@ void MetadataManagerDatabaseWorker::setExifOrientation(const QList<ImageInfo>& i
     d->dbFinished(infos.size());
 }
 
+void MetadataManagerDatabaseWorker::applyMetadata(const QList<ImageInfo>& infos, MetadataHub *hub)
+{
+    d->setDBAction(i18n("Applying metadata. Please wait..."));
+
+    ScanController::instance()->suspendCollectionScan();
+    {
+        DatabaseTransaction transaction;
+
+        foreach(const ImageInfo& info, infos)
+        {
+            // apply to database
+            hub->write(info);
+            d->dbProcessedOne();
+        }
+    }
+    ScanController::instance()->resumeCollectionScan();
+
+    d->schedulingForWrite(infos.size());
+    emit writeMetadata(infos, hub);
+    d->dbFinished(infos.size());
+}
+
 // ----------------------------------------------------------------------
 
 void MetadataManagerFileWorker::writeOrientationToFiles(const QList<ImageInfo>& infos, int orientation)
@@ -435,11 +477,35 @@ void MetadataManagerFileWorker::writeMetadataToFiles(const QList<ImageInfo>& inf
         QString filePath = info.filePath();
         bool fileChanged = hub.write(filePath, MetadataHub::FullWrite);
         if (fileChanged)
-        {
             ScanController::instance()->scanFileDirectly(filePath);
-            KUrl url = KUrl::fromPath(filePath);
-            ImageAttributesWatch::instance()->fileMetadataChanged(url);
-        }
+            // hub emits fileMetadataChanged
+
+        d->writtenToOne();
+    }
+    ScanController::instance()->resumeCollectionScan();
+
+    d->finishedWriting(infos.size());
+}
+
+void MetadataManagerFileWorker::writeMetadata(const QList<ImageInfo>& infos, MetadataHub *hub)
+{
+    d->setWriterAction(i18n("Writing metadata to files. Please wait..."));
+    d->startingToWrite(infos);
+
+    MetadataWriteSettings writeSettings = MetadataHub::defaultWriteSettings();
+
+    ScanController::instance()->suspendCollectionScan();
+    foreach(const ImageInfo& info, infos)
+    {
+        QString filePath = info.filePath();
+
+        // apply to file metadata
+        bool fileChanged = hub->write(filePath, MetadataHub::FullWrite, writeSettings);
+
+        // trigger db scan (to update file size etc.)
+        if (fileChanged)
+            ScanController::instance()->scanFileDirectly(filePath);
+            // hub emits fileMetadataChanged
 
         d->writtenToOne();
     }

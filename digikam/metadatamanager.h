@@ -31,6 +31,8 @@
 namespace Digikam
 {
 
+class MetadataHub;
+class MetadataHubOnTheRoad;
 class MetadataManagerPriv;
 
 class MetadataManager : public QObject
@@ -51,6 +53,8 @@ public Q_SLOTS:
     void removeTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs);
     void assignRating(const QList<ImageInfo>& infos, int rating);
     void setExifOrientation(const QList<ImageInfo>& infos, int orientation);
+    void applyMetadata(const QList<ImageInfo>& infos, const MetadataHub &hub);
+    void applyMetadata(const QList<ImageInfo>& infos, const MetadataHubOnTheRoad &hub);
 
 Q_SIGNALS:
 

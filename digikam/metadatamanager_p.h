@@ -61,6 +61,8 @@ public:
         { emit signalAssignRating(infos, rating); }
     void setExifOrientation(const QList<ImageInfo>& infos, int orientation)
         { emit signalSetExifOrientation(infos, orientation); }
+    void applyMetadata(const QList<ImageInfo>& infos, MetadataHub *hub)
+        { emit signalApplyMetadata(infos, hub); }
 
     int              dbTodo;
     int              dbDone;
@@ -116,6 +118,7 @@ Q_SIGNALS:
     void signalRemoveTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs);
     void signalAssignRating(const QList<ImageInfo>& infos, int rating);
     void signalSetExifOrientation(const QList<ImageInfo>& infos, int orientation);
+    void signalApplyMetadata(const QList<ImageInfo>& infos, MetadataHub *hub);
 
 };
 
@@ -162,11 +165,13 @@ public Q_SLOTS:
     void removeTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs);
     void assignRating(const QList<ImageInfo>& infos, int rating);
     void setExifOrientation(const QList<ImageInfo>& infos, int orientation);
+    void applyMetadata(const QList<ImageInfo>& infos, MetadataHub *hub);
 
 Q_SIGNALS:
 
     void writeMetadataToFiles(const QList<ImageInfo>& infos);
     void writeOrientationToFiles(const QList<ImageInfo>& infos, int orientation);
+    void writeMetadata(const QList<ImageInfo>& infos, MetadataHub *hub);
 
 protected:
 
@@ -186,6 +191,7 @@ public Q_SLOTS:
 
     void writeOrientationToFiles(const QList<ImageInfo>& infos, int orientation);
     void writeMetadataToFiles(const QList<ImageInfo>& infos);
+    void writeMetadata(const QList<ImageInfo>& infos, MetadataHub *hub);
 
 Q_SIGNALS:
 
