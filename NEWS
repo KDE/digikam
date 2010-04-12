@@ -33,7 +33,12 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 021 ==> 183171 : Decode and encode metadata once only.
 022 ==> 233987 : digiKam crashes after renaming two files using the #-character.
 023 ==> 227911 : digiKam unable to assign movie thumbnail as album thumbnail.
-024 ==> 
+024 ==> 234102 : Images are not displayed into the virtual album.
+025 ==> 233879 : Templates for XMP and IPTC not working.
+026 ==> 214340 : Crash occured when removing tags.
+027 ==> 
+
+
 
 
 
