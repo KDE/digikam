@@ -267,17 +267,27 @@ void LensFunCameraSelector::findFromMetadata()
     {
         // From standard XMP.
         temp = m_metadata.getXmpTagString("Xmp.exif.SubjectDistance");
-        if (temp.isEmpty())
-        {
-            // From Canon Makernote.
-            temp = m_metadata.getExifTagString("Exif.CanonSi.SubjectDistance");
-
-            // TODO: Add here others Makernotes tags.
-        }
     }
+    if (temp.isEmpty())
+    {
+        // From Canon Makernote.
+        temp = m_metadata.getExifTagString("Exif.CanonSi.SubjectDistance");
+    }
+    if (temp.isEmpty())
+    {
+        // From Nikon Makernote.
+        temp = m_metadata.getExifTagString("Exif.NikonLd2.FocusDistance");
+    }
+    if (temp.isEmpty())
+    {
+        // From Nikon Makernote.
+        temp = m_metadata.getExifTagString("Exif.NikonLd3.FocusDistance");
+    }
+    // TODO: Add here others Makernotes tags.
 
     if (!temp.isEmpty())
     {
+        temp = temp.replace(" m", "");
         double distance = temp.toDouble();
         kDebug() << "Subject Distance: " << distance;
         m_distance->setValue(distance);
