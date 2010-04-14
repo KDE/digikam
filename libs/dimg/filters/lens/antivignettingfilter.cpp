@@ -74,8 +74,8 @@ void AntiVignettingFilter::filterImage()
     int Height = m_orgImage.height();
 
     // Determine the shift in pixels from the shift in percentage.
-    m_settings.xshift   = m_settings.xshift*Height/200.0;
-    m_settings.yshift   = m_settings.yshift*Width /200.0;
+    m_settings.yshift   = m_settings.yshift*Height/200.0;
+    m_settings.xshift   = m_settings.xshift*Width /200.0;
 
     // Determine the outer radius of the filter.  This is the half diagonal
     // measure of the image multiplied by the radius factor.
@@ -85,22 +85,24 @@ void AntiVignettingFilter::filterImage()
     erad     = qRound(hypothenuse(xsize, ysize) * m_settings.outerradius);
     irad     = qRound(hypothenuse(xsize, ysize) * m_settings.outerradius * m_settings.innerradius);
 
-    xsize    = (int)(((Height + 1.0) / 2.0) + fabs(m_settings.xshift));
-    ysize    = (int)(((Width  + 1.0) / 2.0) + fabs(m_settings.yshift));
+    xsize    = qRound(Width  / 2.0 + fabs(m_settings.xshift));
+    ysize    = qRound(Height / 2.0 + fabs(m_settings.yshift));
+
     diagonal = qRound(hypothenuse(xsize,ysize)) +  1;
 
-    xctr     = (int)(((Height + 1.0) / 2.0) + m_settings.xshift);
-    yctr     = (int)(((Width  + 1.0) / 2.0) + m_settings.yshift);
+    xctr     = qRound(Width  / 2.0 + m_settings.xshift);
+    yctr     = qRound(Height / 2.0 + m_settings.yshift);
+
 
     for (row = 0 ; !m_cancel && (row < Width) ; ++row)
     {
-        yd = abs(yctr - row);
+        yd = abs(xctr - row);
 
         for (col = 0 ; !m_cancel && (col < Height) ; ++col)
         {
             p  = (col * Width + row)*4;
-            xd = abs(xctr - col);
-            td = (int)(sqrt((xd * xd) + (yd * yd)) + 0.5);
+            xd = abs(yctr - col);
+            td = qRound(hypothenuse(xd,yd));
 
             if (!m_orgImage.sixteenBit())       // 8 bits image
             {
@@ -111,9 +113,9 @@ void AntiVignettingFilter::filterImage()
             }
             else                                // 16 bits image.
             {
-                NewBits16[ p ] = clamp16bits(data16[ p ] * real_attenuation(erad/2,erad,td));
-                NewBits16[p+1] = clamp16bits(data16[p+1] * real_attenuation(erad/2,erad,td));
-                NewBits16[p+2] = clamp16bits(data16[p+2] * real_attenuation(erad/2,erad,td));
+                NewBits16[ p ] = clamp16bits(data16[ p ] * real_attenuation(irad,erad,td));
+                NewBits16[p+1] = clamp16bits(data16[p+1] * real_attenuation(irad,erad,td));
+                NewBits16[p+2] = clamp16bits(data16[p+2] * real_attenuation(irad,erad,td));
                 NewBits16[p+3] = data16[p+3];
             }
         }
@@ -125,7 +127,7 @@ void AntiVignettingFilter::filterImage()
     }
 }
 
-double AntiVignettingFilter::hypothenuse(double x, double y)
+inline double AntiVignettingFilter::hypothenuse(double x, double y)
 {
     return (sqrt (x*x + y*y));
 }
