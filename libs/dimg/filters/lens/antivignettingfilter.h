@@ -79,7 +79,6 @@ private:
     void filterImage();
 
     double         hypothenuse(double x, double y);
-    int            approx(double x);
     uchar          clamp8bits(double x);
     unsigned short clamp16bits(double x);
     double         attenuation(double r1, double r2, double distcenter);

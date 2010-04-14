@@ -82,12 +82,12 @@ void AntiVignettingFilter::filterImage()
 
     xsize    = (Height + 1) / 2;
     ysize    = (Width  + 1) / 2;
-    erad     = approx(hypothenuse(xsize, ysize) * m_settings.outerradius);
-    irad     = approx(hypothenuse(xsize, ysize) * m_settings.outerradius * m_settings.innerradius);
+    erad     = qRound(hypothenuse(xsize, ysize) * m_settings.outerradius);
+    irad     = qRound(hypothenuse(xsize, ysize) * m_settings.outerradius * m_settings.innerradius);
 
     xsize    = (int)(((Height + 1.0) / 2.0) + fabs(m_settings.xshift));
     ysize    = (int)(((Width  + 1.0) / 2.0) + fabs(m_settings.yshift));
-    diagonal = approx(hypothenuse(xsize,ysize)) +  1;
+    diagonal = qRound(hypothenuse(xsize,ysize)) +  1;
 
     xctr     = (int)(((Height + 1.0) / 2.0) + m_settings.xshift);
     yctr     = (int)(((Width  + 1.0) / 2.0) + m_settings.yshift);
@@ -123,11 +123,6 @@ void AntiVignettingFilter::filterImage()
         if (progress%5 == 0)
             postProgress( progress );
     }
-}
-
-int AntiVignettingFilter::approx(double x)
-{
-    return ((int)(x + 0.5));
 }
 
 double AntiVignettingFilter::hypothenuse(double x, double y)
