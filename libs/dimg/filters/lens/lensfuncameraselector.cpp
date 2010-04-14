@@ -173,6 +173,16 @@ void LensFunCameraSelector::findFromMetadata()
     // ------------------------------------------------------------------------------------------------
 
     int makerIdx = m_make->combo()->findText(make);
+    if (makerIdx < 0)
+    {
+        const lfCamera** makes = m_iface->m_lfDb->FindCameras( make.toAscii(), model.toAscii() );
+        QString makeLF = "";
+        if (makes && *makes)
+        {
+            makeLF =(*makes)->Maker;
+            makerIdx = m_make->combo()->findText(makeLF);
+        }
+    }
     if (makerIdx >= 0)
     {
         m_make->setCurrentIndex(makerIdx);
@@ -181,6 +191,22 @@ void LensFunCameraSelector::findFromMetadata()
 
     slotUpdateCombos();
     int modelIdx = m_model->combo()->findText(model);
+    if (modelIdx < 0)
+    {
+        const lfCamera** makes = m_iface->m_lfDb->FindCameras( make.toAscii(), model.toAscii() );
+        QString modelLF = "";
+        int count = 0;
+        while (makes && *makes)
+        {
+            modelLF =(*makes)->Model;
+            ++makes;
+            ++count;
+        }
+        if (count == 1)
+        {
+            modelIdx = m_model->combo()->findText(modelLF);
+        }
+    }
     if (modelIdx >= 0)
     {
         m_model->setCurrentIndex(modelIdx);
@@ -212,8 +238,6 @@ void LensFunCameraSelector::findFromMetadata()
         int count = 0;
         while (lenses && *lenses)
         {
-            LensFunCameraSelector::LensPtr lens = *lenses;
-            QVariant b                          = qVariantFromValue(lens);
             lensLF =(*lenses)->Model;
             ++lenses;
             ++count;
