@@ -65,8 +65,13 @@ bool readPGFImageData(const QByteArray& data, QImage& img)
         }
 
         img = QImage(pgfImg.Width(), pgfImg.Height(), QImage::Format_ARGB32);
+#ifdef __BIG_ENDIAN__
+        int map[] = {3, 2, 1, 0};
+#else
+        int map[] = {0, 1, 2, 3};
+#endif
         pgfImg.Read();
-        pgfImg.GetBitmap(img.bytesPerLine(), (UINT8*)img.bits(), img.depth());
+        pgfImg.GetBitmap(img.bytesPerLine(), (UINT8*)img.bits(), img.depth(), map);
     }
     catch(IOException& e)
     {
@@ -93,7 +98,11 @@ bool writePGFImageData(const QImage& img, QByteArray& data, int quality)
         // No need Alpha to optimize space on DB.
         if (img.format() != QImage::Format_ARGB32)
             img.convertToFormat(QImage::Format_ARGB32);
-
+#ifdef __BIG_ENDIAN__
+        int map[] = {3, 2, 1, 0};
+#else
+        int map[] = {0, 1, 2, 3};
+#endif
         CPGFImage pgfImg;
 
         PGFHeader header;
@@ -105,7 +114,7 @@ bool writePGFImageData(const QImage& img, QByteArray& data, int quality)
         header.mode     = ImageModeRGBA;
         header.background.rgbtBlue = header.background.rgbtGreen = header.background.rgbtRed = 0;
         pgfImg.SetHeader(header);
-        pgfImg.ImportBitmap(img.bytesPerLine(), (UINT8*)img.bits(), img.depth());
+        pgfImg.ImportBitmap(img.bytesPerLine(), (UINT8*)img.bits(), img.depth(), map);
 
         // TODO : optimize memory allocation...
         CPGFMemoryStream stream(256000);
@@ -193,7 +202,11 @@ bool loadPGFScaled(QImage& img, const QString& path, int maximumSize)
         if (i<0) i=0;
 
         pgf.Read(i);  // Read PGF image at reduced level i.
-        int map[] = { 0, 1, 2 };
+#ifdef __BIG_ENDIAN__
+        int map[] = {3, 2, 1, 0};
+#else
+        int map[] = {0, 1, 2, 3};
+#endif
         img = QImage(pgf.Width(i), pgf.Height(i), QImage::Format_RGB32);
 
 /*
