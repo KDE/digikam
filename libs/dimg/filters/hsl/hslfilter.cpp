@@ -177,7 +177,7 @@ void HSLFilter::setLightness(double val)
     }
 }
 
-int HSLFilter::vibranceBias(int sat, int hue, int vib, bool sixteenbit)
+int HSLFilter::vibranceBias(double sat, double hue, double vib, bool sixteenbit)
 {
     double ratio;
     int    localsat;
@@ -213,7 +213,7 @@ void HSLFilter::applyHSL(DImg& image)
     uint   numberOfPixels = image.numPixels();
     int    progress;
     int    hue, sat, lig;
-    int    vib = (int)d->settings.vibrance;
+    double vib = d->settings.vibrance;
     DColor color;
 
     if (sixteenBit)                   // 16 bits image.

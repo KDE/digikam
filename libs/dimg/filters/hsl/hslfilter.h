@@ -79,7 +79,7 @@ private:
     void setSaturation(double val);
     void setLightness(double val);
     void applyHSL(DImg& image);
-    int  vibranceBias(int sat, int hue, int vib, bool sixteenbit);
+    int  vibranceBias(double sat, double hue, double vib, bool sixteenbit);
 
 private:
 
