@@ -28,6 +28,7 @@ INCLUDE_DIRECTORIES(
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/jpegutils/${DIGIKAM_LIBJPEG_DIR}
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/threadimageio
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/template
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/threads
 
                      # widgets and dialogs
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/common
@@ -124,6 +125,7 @@ SET(digikamcore_LIB_SRCS
                         ${libpgf_SRCS}
                         ${pgfutils_SRCS}
                         ${libdigikamhelpers_SRCS}
+                        ${libtthread_SRCS}
 
                         # widgets and dialogs
                         ${libcommonwidgets_SRCS}
