@@ -74,7 +74,6 @@ public:
         histogram     = 0;
         histoSegments = 0;
         valid         = false;
-        runningFlag   = true;
     }
 
     /** The histogram data.*/
@@ -88,19 +87,16 @@ public:
 
     /** Numbers of histogram segments depending of image bytes depth*/
     int                   histoSegments;
-
-    /** Used to stop thread during calculations.*/
-    bool                  runningFlag;
 };
 
 ImageHistogram::ImageHistogram(const DImg& image, QObject *parent)
-              : QThread(parent), d(new ImageHistogramPriv)
+              : DynamicThread(parent), d(new ImageHistogramPriv)
 {
     setup(image.bits(), image.width(), image.height(), image.sixteenBit());
 }
 
 ImageHistogram::ImageHistogram(const uchar *i_data, uint i_w, uint i_h, bool i_sixteenBits, QObject *parent)
-              : QThread(parent), d(new ImageHistogramPriv)
+              : DynamicThread(parent), d(new ImageHistogramPriv)
 {
     setup(i_data, i_w, i_h, i_sixteenBits);
 }
@@ -154,7 +150,7 @@ void ImageHistogram::calculateInThread()
 
 void ImageHistogram::stopCalculation()
 {
-    d->runningFlag = false;
+    stop();
     wait();
 }
 
@@ -204,7 +200,7 @@ void ImageHistogram::calculate()
         unsigned short  blue, green, red, alpha;
         unsigned short *data = (unsigned short*)d->imageData;
 
-        for (i = 0 ; (i < d->imageHeight*d->imageWidth*4) && d->runningFlag ; i+=4)
+        for (i = 0 ; (i < d->imageHeight*d->imageWidth*4) && runningFlag() ; i+=4)
         {
             blue  = data[ i ];
             green = data[i+1];
@@ -229,7 +225,7 @@ void ImageHistogram::calculate()
         uchar blue, green, red, alpha;
         const uchar *data = d->imageData;
 
-        for (i = 0 ; (i < d->imageHeight*d->imageWidth*4) && d->runningFlag ; i+=4)
+        for (i = 0 ; (i < d->imageHeight*d->imageWidth*4) && runningFlag() ; i+=4)
         {
             blue  = data[ i ];
             green = data[i+1];
@@ -250,7 +246,7 @@ void ImageHistogram::calculate()
         }
     }
 
-    if (d->runningFlag)
+    if (runningFlag())
     {
         d->valid = true;
         emit calculationFinished(this, true);

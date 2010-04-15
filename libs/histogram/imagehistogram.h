@@ -32,6 +32,7 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "dynamicthread.h"
 
 class QObject;
 
@@ -41,7 +42,7 @@ namespace Digikam
 class ImageHistogramPriv;
 class DImg;
 
-class DIGIKAM_EXPORT ImageHistogram : public QThread
+class DIGIKAM_EXPORT ImageHistogram : public DynamicThread
 {
     Q_OBJECT
 
