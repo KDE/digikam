@@ -297,6 +297,19 @@ It will print a list of connection warnings after terminating the program.
 Moreover the complete console log of the last session is stored in
 /tmp/digikam.out.
 
+=========================================================================
+Finding duplicated code
+=========================================================================
+
+Code duplication should be avoided as bugs have to be fixed for every piece of
+duplicated code. The current duplication can be analyzed eg. with Simian:
+http://www.redhillconsulting.com.au/products/simian/
+
+In the digikam checkout directory run:
+java -jar simian.jar `find . -regex '.*\.cpp\|.*\.h' | grep -v 3rdparty`
+
+This prints out a list of duplicated code segments.
+
 =================================================================================
 API Documentation Validation, User Documentation Validation, Source Code Checking
 =================================================================================
