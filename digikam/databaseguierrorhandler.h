@@ -90,7 +90,8 @@ public:
 
     bool checkDatabaseConnection();
 
-    virtual void databaseError(DatabaseErrorAnswer* answer, const SqlQuery& query);
+    virtual void connectionError(DatabaseErrorAnswer* answer, const SqlQuery& query);
+    virtual void consultUserForError(DatabaseErrorAnswer* answer, const SqlQuery& query);
 
 private Q_SLOTS:
 

@@ -209,29 +209,27 @@ void DatabaseGUIErrorHandler::showProgressDialog()
     d->dialog->show();
 }
 
-void DatabaseGUIErrorHandler::databaseError(DatabaseErrorAnswer* answer, const SqlQuery& query)
+void DatabaseGUIErrorHandler::connectionError(DatabaseErrorAnswer* answer, const SqlQuery&)
 {
-    if (query.lastError().type() == QSqlError::ConnectionError || query.lastError().number()==2006)
+    if (checkDatabaseConnection())
     {
-        if (checkDatabaseConnection())
-        {
-            answer->connectionErrorAbortQueries();
-        }
-        else
-        {
-            answer->connectionErrorContinueQueries();
-        }
+        answer->connectionErrorAbortQueries();
     }
     else
     {
-        QWidget* parent = QWidget::find(0);
-        // Handle all other database errors
-        QString message = i18n("<p><b>A database error occurred.</b></p>"
-                                "Details:\n"
-                                "%1", query.lastError().text());
-        KMessageBox::error(parent, message);
-        answer->connectionErrorAbortQueries();
+        answer->connectionErrorContinueQueries();
     }
+}
+
+void DatabaseGUIErrorHandler::consultUserForError(DatabaseErrorAnswer* answer, const SqlQuery& query)
+{
+    //NOTE: not used at all currently.
+    QWidget* parent = QWidget::find(0);
+    // Handle all other database errors
+    QString message = i18n("<p><b>A database error occurred.</b></p>"
+                           "Details:\n %1", query.lastError().text());
+    KMessageBox::error(parent, message);
+    answer->connectionErrorAbortQueries();
 }
 
 }  // namespace Digikam

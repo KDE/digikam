@@ -59,12 +59,15 @@ public:
     bool isInMainThread() const;
     bool isInUIThread() const;
 
-    bool isSQLiteLockError(const QSqlQuery &query);
+    bool isSQLiteLockError(const SqlQuery &query);
     bool checkRetrySQLiteLockError(int retries);
+    bool isConnectionError(const SqlQuery &query);
+    bool needToConsultUserForError(const SqlQuery &query);
+    bool needToHandleWithErrorHandler(const SqlQuery &query);
     void debugOutputFailedQuery(const QSqlQuery &query);
 
     bool checkOperationStatus();
-    bool checkDatabaseError(const SqlQuery& query);
+    bool handleWithErrorHandler(const SqlQuery& query);
     // called by DatabaseErrorHandler, implementing DatabaseErrorAnswer
     virtual void connectionErrorContinueQueries();
     virtual void connectionErrorAbortQueries();
@@ -95,7 +98,6 @@ public:
     QMutex              errorLockMutex;
     QWaitCondition      errorLockCondVar;
     DatabaseCoreBackend::QueryOperationStatus errorLockOperationStatus;
-    bool                handlingConnectionError;
 
     class ErrorLocker
     {
