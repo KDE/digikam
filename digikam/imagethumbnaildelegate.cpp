@@ -40,6 +40,7 @@
 #include "imagedelegateoverlay.h"
 #include "imagemodel.h"
 #include "imagefiltermodel.h"
+#include "thumbnailloadthread.h"
 
 namespace Digikam
 {
@@ -91,7 +92,7 @@ void ImageThumbnailDelegate::setDefaultViewOptions(const QStyleOptionViewItem& o
 int ImageThumbnailDelegate::maximumSize() const
 {
     Q_D(const ImageThumbnailDelegate);
-    return ThumbnailSize::Huge + 2*d->radius + 2*d->margin;
+    return ThumbnailLoadThread::maximumThumbnailPixmapSize(true) + 2*d->radius + 2*d->margin;
 }
 
 int ImageThumbnailDelegate::minimumSize() const

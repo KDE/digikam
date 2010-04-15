@@ -63,6 +63,7 @@ protected:
 
     virtual void activated(const ImageInfo& info);
     virtual void slotSetupChanged();
+    virtual bool event(QEvent *);
 
 private:
 

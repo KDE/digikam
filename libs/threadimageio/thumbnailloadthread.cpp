@@ -217,6 +217,14 @@ int ThumbnailLoadThread::maximumThumbnailSize()
     return ThumbnailSize::Huge;
 }
 
+int ThumbnailLoadThread::maximumThumbnailPixmapSize(bool highlight)
+{
+    if (highlight)
+        return ThumbnailSize::Huge;
+    else
+        return ThumbnailSize::Huge + 2; // see slotThumbnailLoaded
+}
+
 void ThumbnailLoadThread::setExifRotate(int exifRotate)
 {
     d->exifRotate = exifRotate;

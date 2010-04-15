@@ -152,13 +152,15 @@ void ImageThumbnailBar::setFlow(QListView::Flow flow)
     // Adjust minimum and maximum width to thumbnail sizes.
     if (flow == TopToBottom)
     {
-        setMinimumWidth(del->minimumSize() + verticalScrollBar()->sizeHint().width());
-        setMaximumWidth(del->maximumSize() + verticalScrollBar()->sizeHint().width());
+        int viewportFullWidgetOffset = size().width() - viewport()->size().width();
+        setMinimumWidth(del->minimumSize() + viewportFullWidgetOffset);
+        setMaximumWidth(del->maximumSize() + viewportFullWidgetOffset);
     }
     else
     {
-        setMinimumHeight(del->minimumSize() + horizontalScrollBar()->sizeHint().height());
-        setMaximumHeight(del->maximumSize() + horizontalScrollBar()->sizeHint().height());
+        int viewportFullWidgetOffset = size().height() - viewport()->size().height();
+        setMinimumHeight(del->minimumSize() + viewportFullWidgetOffset);
+        setMaximumHeight(del->maximumSize() + viewportFullWidgetOffset);
     }
 
     setScrollBarPolicy(d->scrollPolicy);
@@ -185,5 +187,15 @@ void ImageThumbnailBar::assignRating(const QModelIndex &index, int rating)
 {
     MetadataManager::instance()->assignRating(QList<ImageInfo>() << imageFilterModel()->imageInfo(index), rating);
 }
+
+bool ImageThumbnailBar::event(QEvent *e)
+{
+    // reset widget max/min sizes
+    if (e->type() == QEvent::StyleChange)
+        setFlow(flow());
+
+    return ImageCategorizedView::event(e);
+}
+
 
 } // namespace Digikam

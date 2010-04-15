@@ -140,8 +140,10 @@ public:
     /**
      * Returns the maximum possible size of a thumbnail.
      * If you request a larger size, the thumbnail will not load.
+     * The size of the pixmap can slightly differ, especially when highlighting.
      */
     static int maximumThumbnailSize();
+    static int maximumThumbnailPixmapSize(bool withHighlighting);
 
     /**
      * Specify if the thumbnails shall be rotated by Exif.
