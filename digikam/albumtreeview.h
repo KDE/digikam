@@ -6,7 +6,7 @@
  * Date        : 2009-03-25
  * Description : Tree View for album models
  *
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -41,8 +41,8 @@
 namespace Digikam
 {
 
-class ContextMenuHelper;
-class TagModificationHelper;
+class  ContextMenuHelper;
+class  TagModificationHelper;
 struct State;
 
 class AbstractAlbumTreeViewPriv;
@@ -65,13 +65,13 @@ class AbstractAlbumTreeView : public QTreeView, public StateSavingObject
 public:
 
     /// Constructs an album model. If you supply 0 for filterModel, call setAlbumFilterModel afterwards.
-    explicit AbstractAlbumTreeView(AbstractSpecificAlbumModel *model,
-                                   AlbumFilterModel *filterModel,
-                                   QWidget *parent = 0);
+    explicit AbstractAlbumTreeView(AbstractSpecificAlbumModel* model,
+                                   AlbumFilterModel* filterModel,
+                                   QWidget* parent = 0);
     ~AbstractAlbumTreeView();
 
-    AbstractSpecificAlbumModel *albumModel() const;
-    AlbumFilterModel *albumFilterModel() const;
+    AbstractSpecificAlbumModel* albumModel() const;
+    AlbumFilterModel* albumFilterModel() const;
 
     /// Enable expanding of tree items on single click on the item (default: off)
     void setExpandOnSingleClick(bool doThat);
@@ -157,7 +157,7 @@ public Q_SLOTS:
      * @param selectInAlbumManager the album will be set as current album, if both
      * this parameter is true and setAlbumManagerCurrentAlbum() was set to true.
      */
-    void slotSelectAlbum(Album *album, bool selectInAlbumManager = true);
+    void slotSelectAlbum(Album* album, bool selectInAlbumManager = true);
 
     /**
      * Adapt the column sizes to the contents of the tree view.
@@ -179,7 +179,7 @@ public Q_SLOTS:
 Q_SIGNALS:
 
     /// Emitted when the currently selected album changes
-    void currentAlbumChanged(Album *currentAlbum);
+    void currentAlbumChanged(Album* currentAlbum);
     /// Emitted when the current selection changes. Use currentChanged unless in multi-selection mode.
     void selectedAlbumsChanged(QList<Album*> selectedAlbums);
 
@@ -209,7 +209,7 @@ protected:
      * @return true if a context menu shall be displayed at the event
      *         coordinates, else false
      */
-    virtual bool showContextMenuAt(QContextMenuEvent *event, Album *albumForEvent);
+    virtual bool showContextMenuAt(QContextMenuEvent* event, Album* albumForEvent);
 
     /**
      * Hook method that can be implemented to return a special icon used for the
@@ -233,7 +233,7 @@ protected:
      * @param album tag on which the context menu will be created. May be null if
      *              it is requested on no tag entry
      */
-    virtual void addCustomContextMenuActions(ContextMenuHelper &cmh, Album *album);
+    virtual void addCustomContextMenuActions(ContextMenuHelper& cmh, Album* album);
 
     /**
      * Hook method to handle the custom context menu actions that were added
@@ -244,35 +244,34 @@ protected:
      * @param album the tag on which the context menu was requested. May be null
      *              if there was no
      */
-    virtual void handleCustomContextMenuAction(QAction *action, AlbumPointer<Album> album);
+    virtual void handleCustomContextMenuAction(QAction* action, AlbumPointer<Album> album);
 
     // other stuff
 
-    void mousePressEvent(QMouseEvent *e);
+    void mousePressEvent(QMouseEvent* e);
 
-    void rowsInserted(const QModelIndex &index, int start, int end);
+    void rowsInserted(const QModelIndex& index, int start, int end);
     void rowsAboutToBeRemoved(const QModelIndex& parent, int start, int end);
     void startDrag(Qt::DropActions supportedActions);
-    void dragEnterEvent(QDragEnterEvent *e);
-    void dragMoveEvent(QDragMoveEvent *e);
-    void dragLeaveEvent(QDragLeaveEvent * e);
-    void dropEvent(QDropEvent *e);
+    void dragEnterEvent(QDragEnterEvent* e);
+    void dragMoveEvent(QDragMoveEvent* e);
+    void dragLeaveEvent(QDragLeaveEvent* e);
+    void dropEvent(QDropEvent* e);
 
-    virtual void middleButtonPressed(Album *a);
+    virtual void middleButtonPressed(Album* a);
     virtual QPixmap pixmapForDrag(const QStyleOptionViewItem& option, QList<QModelIndex> indexes);
 
-    void setAlbumFilterModel(AlbumFilterModel *filterModel);
+    void setAlbumFilterModel(AlbumFilterModel* filterModel);
 
-    AbstractSpecificAlbumModel *m_albumModel;
-    AlbumFilterModel           *m_albumFilterModel;
+    AbstractSpecificAlbumModel* m_albumModel;
+    AlbumFilterModel*           m_albumFilterModel;
 
-    bool     m_checkOnMiddleClick;
-    bool     m_restoreCheckState;
+    bool                        m_checkOnMiddleClick;
+    bool                        m_restoreCheckState;
 
 private:
 
-    void saveStateRecursive(const QModelIndex &index, QList<int> &selection,
-                    QList<int> &expansion);
+    void saveStateRecursive(const QModelIndex& index, QList<int>& selection, QList<int>& expansion);
 
     /**
      * Restores the state of the index and all sub-indexes if there is an entry
@@ -282,18 +281,18 @@ private:
      * @param index index to start restoring
      * @param stateStore states indexed by album id
      */
-    void restoreStateForHierarchy(const QModelIndex &index, QMap<int, Digikam::State> &stateStore);
+    void restoreStateForHierarchy(const QModelIndex& index, QMap<int, Digikam::State>& stateStore);
     /**
      * Restore the state for this index.
      */
-    void restoreState(const QModelIndex &index, QMap<int, Digikam::State> &stateStore);
+    void restoreState(const QModelIndex& index, QMap<int, Digikam::State>& stateStore);
 
     /**
      * Creates the context menu.
      *
      * @param event event that requested the menu
      */
-    void contextMenuEvent(QContextMenuEvent *event);
+    void contextMenuEvent(QContextMenuEvent* event);
 
 private Q_SLOTS:
 
@@ -304,7 +303,7 @@ private Q_SLOTS:
      * @param topLeft top left index of changed data
      * @param bottomRight index of changed data
      */
-    void adaptColumnsOnDataChange(const QModelIndex &topLeft, const QModelIndex &bottomRight);
+    void adaptColumnsOnDataChange(const QModelIndex& topLeft, const QModelIndex& bottomRight);
 
     /**
      * Adapt the column sizes to new contents. This can be connected to all
@@ -314,7 +313,7 @@ private Q_SLOTS:
      * @param start start row changed under the parent
      * @param end end row changed under the parent
      */
-    void adaptColumnsOnRowChange(const QModelIndex &parent, int start, int end);
+    void adaptColumnsOnRowChange(const QModelIndex& parent, int start, int end);
 
     /**
      * Adapts the column sizes if the layout changes.
@@ -325,12 +324,14 @@ private Q_SLOTS:
      * This slot is used to ensure that after searching for entries the correct
      * album is selected again. Therefore it tracks new selections.
      */
-    void currentAlbumChangedForBackupSelection(Album *currentAlbum);
+    void currentAlbumChangedForBackupSelection(Album* currentAlbum);
 
 private:
 
-    AbstractAlbumTreeViewPriv *d;
+    AbstractAlbumTreeViewPriv* d;
 };
+
+// -------------------------------------------------------------------------------------
 
 class AbstractCountingAlbumTreeView : public AbstractAlbumTreeView
 {
@@ -338,14 +339,14 @@ class AbstractCountingAlbumTreeView : public AbstractAlbumTreeView
 
 public:
 
-    explicit AbstractCountingAlbumTreeView(AbstractCountingAlbumModel *model,
-                                           AlbumFilterModel *filterModel,
-                                           QWidget *parent = 0);
-    explicit AbstractCountingAlbumTreeView(AbstractCountingAlbumModel *model, QWidget *parent = 0);
+    explicit AbstractCountingAlbumTreeView(AbstractCountingAlbumModel* model,
+                                           AlbumFilterModel* filterModel,
+                                           QWidget* parent = 0);
+    explicit AbstractCountingAlbumTreeView(AbstractCountingAlbumModel* model, QWidget* parent = 0);
 
 protected:
 
-    void setAlbumFilterModel(AlbumFilterModel *filterModel);
+    void setAlbumFilterModel(AlbumFilterModel* filterModel);
     virtual void rowsInserted(const QModelIndex& parent, int start, int end);
 
 private Q_SLOTS:
@@ -360,24 +361,28 @@ private:
     void setupConnections();
 };
 
+// -------------------------------------------------------------------------------------
+
 class AbstractCheckableAlbumTreeViewPriv;
+
 class AbstractCheckableAlbumTreeView : public AbstractCountingAlbumTreeView
 {
-Q_OBJECT
+    Q_OBJECT
+
 public:
 
     /// Models of these view _can_ be checkable, they need _not_. You need to enable it on the model.
 
-    explicit AbstractCheckableAlbumTreeView(AbstractCheckableAlbumModel *model,
-                                            CheckableAlbumFilterModel *filterModel,
-                                            QWidget *parent = 0);
-    explicit AbstractCheckableAlbumTreeView(AbstractCheckableAlbumModel *model, QWidget *parent = 0);
+    explicit AbstractCheckableAlbumTreeView(AbstractCheckableAlbumModel* model,
+                                            CheckableAlbumFilterModel* filterModel,
+                                            QWidget* parent = 0);
+    explicit AbstractCheckableAlbumTreeView(AbstractCheckableAlbumModel* model, QWidget* parent = 0);
 
     virtual ~AbstractCheckableAlbumTreeView();
 
     /// Manage check state through the model directly
-    AbstractCheckableAlbumModel *checkableModel() const;
-    CheckableAlbumFilterModel *checkableAlbumFilterModel() const;
+    AbstractCheckableAlbumModel* checkableModel() const;
+    CheckableAlbumFilterModel* checkableAlbumFilterModel() const;
 
     /// Enable checking on middle mouse button click (default: on)
     void setCheckOnMiddleClick(bool doThat);
@@ -403,47 +408,52 @@ public:
 
 protected:
 
-    virtual void middleButtonPressed(Album *a);
+    virtual void middleButtonPressed(Album* a);
     virtual void rowsInserted(const QModelIndex& parent, int start, int end);
 
 private:
 
-    void restoreCheckStateForHierarchy(const QModelIndex &index);
-    void restoreCheckState(const QModelIndex &index);
+    void restoreCheckStateForHierarchy(const QModelIndex& index);
+    void restoreCheckState(const QModelIndex& index);
 
-    AbstractCheckableAlbumTreeViewPriv *d;
-
+    AbstractCheckableAlbumTreeViewPriv* d;
 };
 
+// -------------------------------------------------------------------------------------
+
 class AlbumTreeViewPriv;
+
 class AlbumTreeView : public AbstractCheckableAlbumTreeView
 {
     Q_OBJECT
+
 public:
 
-    explicit AlbumTreeView(AlbumModel *model, QWidget *parent = 0);
+    explicit AlbumTreeView(AlbumModel* model, QWidget* parent = 0);
     virtual ~AlbumTreeView();
-    AlbumModel *albumModel() const;
-    PAlbum *currentAlbum() const;
-    PAlbum *albumForIndex(const QModelIndex &index) const;
+    AlbumModel* albumModel() const;
+    PAlbum* currentAlbum() const;
+    PAlbum* albumForIndex(const QModelIndex &index) const;
 
 private Q_SLOTS:
 
-    void slotDIOResult(KJob *job);
-
+    void slotDIOResult(KJob* job);
 };
+
+// -------------------------------------------------------------------------------------
 
 class TagTreeView : public AbstractCheckableAlbumTreeView
 {
     Q_OBJECT
+
 public:
 
-    explicit TagTreeView(TagModel *model, QWidget *parent = 0);
-    TagModel *albumModel() const;
-    TAlbum *currentAlbum() const;
-    TAlbum *albumForIndex(const QModelIndex &index) const;
+    explicit TagTreeView(TagModel* model, QWidget* parent = 0);
+    TagModel* albumModel() const;
+    TAlbum* currentAlbum() const;
+    TAlbum* albumForIndex(const QModelIndex &index) const;
 
-    TagModificationHelper *tagModificationHelper() const;
+    TagModificationHelper* tagModificationHelper() const;
 
 Q_SIGNALS:
 
@@ -451,43 +461,45 @@ Q_SIGNALS:
 
 protected:
 
-    TagModificationHelper *m_modificationHelper;
+    TagModificationHelper* m_modificationHelper;
 };
+
+// -------------------------------------------------------------------------------------
 
 class SearchTreeView : public AbstractCheckableAlbumTreeView
 {
     Q_OBJECT
+
 public:
 
-    SearchTreeView(QWidget *parent, SearchModel *searchModel);
+    SearchTreeView(QWidget* parent, SearchModel* searchModel);
     /// Note: not filtered by search type
-    SearchModel *albumModel() const;
+    SearchModel* albumModel() const;
     /// Contains only the searches with appropriate type - prefer to albumModel()
-    SearchFilterModel *filteredModel() const;
-    SAlbum *currentAlbum() const;
+    SearchFilterModel* filteredModel() const;
+    SAlbum* currentAlbum() const;
 
 public Q_SLOTS:
 
-    void slotSelectSAlbum(SAlbum *salbum);
+    void slotSelectSAlbum(SAlbum* salbum);
 
 protected:
 
-    SearchFilterModel *m_filteredModel;
+    SearchFilterModel* m_filteredModel;
 };
+
+// -------------------------------------------------------------------------------------
 
 class DateAlbumTreeView : public AbstractCountingAlbumTreeView
 {
 public:
 
-    DateAlbumTreeView(QWidget *parent, DateAlbumModel *dateAlbumModel);
-    DateAlbumModel *albumModel() const;
-    DAlbum *currentAlbum() const;
-    DAlbum *albumForIndex(const QModelIndex &index) const;
+    DateAlbumTreeView(QWidget* parent, DateAlbumModel* dateAlbumModel);
+    DateAlbumModel* albumModel() const;
+    DAlbum* currentAlbum() const;
+    DAlbum* albumForIndex(const QModelIndex &index) const;
 };
 
+} // namespace Digikam
 
-
-}
-
-#endif
-
+#endif // ALBUMTREEVIEW_H
