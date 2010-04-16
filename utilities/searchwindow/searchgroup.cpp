@@ -411,7 +411,7 @@ SearchGroupLabel::SearchGroupLabel(SearchViewThemedPartsCache *cache, SearchGrou
         QLabel *simpleLabel1      = new QLabel;
         //simpleLabel->setText(i18n("Find Pictures meeting all of these conditions"));
         //simpleLabel->setPixmap(SmallIcon("edit-find", 128));
-        simpleLabel1->setText(i18n("Search your collection<br/>for pictures meeting the following conditions"));
+        simpleLabel1->setText(i18n("<qt><p>Search your collection<br/>for pictures meeting the following conditions</p></qt>"));
         simpleLabel1->setObjectName("SearchGroupLabel_SimpleLabel");
         headerLayout->addStretch(3);
         headerLayout->addWidget(simpleLabel1);
