@@ -37,7 +37,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 025 ==> 233879 : Templates for XMP and IPTC not working.
 026 ==> 214340 : Crash occured when removing tags.
 027 ==> 233094 : libpgf relevant : thumbnails blurry (when scaling) on PowerPC platform (big-endian).
-028 ==> 
+028 ==> 233549 : [database] Stuck at saving new image.
+029 ==> 
+
 
 
 
