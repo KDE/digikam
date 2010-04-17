@@ -122,7 +122,7 @@ QSqlDatabase DatabaseCoreBackendPrivate::databaseForThread()
         // need to open a db for thread
         bool success = open(db);
         if (!success)
-           kDebug(50003) << "Error while opening the database. Details: [" << db.lastError() << "]";
+           kDebug() << "Error while opening the database. Details: [" << db.lastError() << "]";
 
         QObject::connect(thread, SIGNAL(finished()),
                             q, SLOT(slotThreadFinished()));
@@ -130,7 +130,7 @@ QSqlDatabase DatabaseCoreBackendPrivate::databaseForThread()
 #ifdef DATABASCOREBACKEND_DEBUG
     else
     {
-        kDebug(50003) << "Database ["<< connectionName(thread) <<"] already open for thread ["<< thread <<"].";
+        kDebug() << "Database ["<< connectionName(thread) <<"] already open for thread ["<< thread <<"].";
     }
 #endif
 
@@ -177,7 +177,7 @@ bool DatabaseCoreBackendPrivate::open(QSqlDatabase& db)
 
     if (success==false)
     {
-        kDebug(50003) << "Error while opening the database. Error was <" << db.lastError() << ">";
+        kDebug() << "Error while opening the database. Error was <" << db.lastError() << ">";
     }
 
     threadDatabases[thread]  = db;
@@ -248,24 +248,24 @@ bool DatabaseCoreBackendPrivate::checkRetrySQLiteLockError(int retries)
     if (!isInUIThread())
     {
         if (retries == 1)
-            kDebug(50003) << "Detected locked database file. Waiting at most 10s trying again.";
+            kDebug() << "Detected locked database file. Waiting at most 10s trying again.";
 
         sotoSleep::sleep(1);
         return true;
     }
 
-    kWarning(50003) << "Detected locked database file. There is an active transaction.";
+    kWarning() << "Detected locked database file. There is an active transaction.";
     return false;
 }
 
 void DatabaseCoreBackendPrivate::debugOutputFailedQuery(const QSqlQuery &query)
 {
-    kDebug(50003) << "Failure executing query: ";
-    kDebug(50003) << query.executedQuery();
-    kDebug(50003) << "Error messages:" << query.lastError().text() << query.lastError().number()
+    kDebug() << "Failure executing query:\n"
+             << query.executedQuery()
+             << "\nError messages:" << query.lastError().text() << query.lastError().number()
                   << query.lastError().type() << query.lastError().databaseText()
-                  << query.lastError().driverText() << query.driver()->lastError();
-    kDebug(50003) << "Bound values: " << query.boundValues().values();
+                  << query.lastError().driverText() << query.driver()->lastError()
+             << "\nBound values: " << query.boundValues().values();
 }
 
 
@@ -479,7 +479,7 @@ DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDBAction(const Database
         kError() << "Attempt to execute null action";
 
     #ifdef DATABASCOREBACKEND_DEBUG
-    kDebug(50003) << "Executing DBAction ["<<  action.name  <<"]";
+    kDebug() << "Executing DBAction ["<<  action.name  <<"]";
     #endif
 
     bool wrapInTransaction = (action.mode == QString("transaction"));
@@ -501,13 +501,13 @@ DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDBAction(const Database
         }
         if (result != DatabaseCoreBackend::NoErrors)
         {
-            kDebug(50003) << "Error while executing DBAction ["<<  action.name  <<"] Statement ["<<actionElement.statement<<"]";
+            kDebug() << "Error while executing DBAction ["<<  action.name  <<"] Statement ["<<actionElement.statement<<"]";
             returnResult = result;
 
             /*
             if (wrapInTransaction && !db.rollback())
             {
-                kDebug(50003) << "Error while rollback changes of previous DBAction.";
+                kDebug() << "Error while rollback changes of previous DBAction.";
             }
             */
 
@@ -523,7 +523,7 @@ DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDBAction(const Database
     /*
     if (returnResult==DatabaseCoreBackend::NoErrors && wrapInTransaction && !db.commit())
     {
-        kDebug(50003) << "Error while committing changes of previous DBAction.";
+        kDebug() << "Error while committing changes of previous DBAction.";
     }
     */
 
@@ -537,7 +537,7 @@ QSqlQuery DatabaseCoreBackend::execDBActionQuery(const DatabaseAction &action, c
     QSqlDatabase db = d->databaseForThread();
 
     #ifdef DATABASCOREBACKEND_DEBUG
-    kDebug(50003) << "Executing DBAction ["<<  action.name  <<"]";
+    kDebug() << "Executing DBAction ["<<  action.name  <<"]";
     #endif
 
     QSqlQuery result;
@@ -549,12 +549,12 @@ QSqlQuery DatabaseCoreBackend::execDBActionQuery(const DatabaseAction &action, c
         }
         else
         {
-            kDebug(50003) << "Error, only DBActions with mode 'query' are allowed at this call!";
+            kDebug() << "Error, only DBActions with mode 'query' are allowed at this call!";
         }
 
         if (result.lastError().isValid() && result.lastError().number())
         {
-            kDebug(50003) << "Error while executing DBAction ["<<  action.name
+            kDebug() << "Error while executing DBAction ["<<  action.name
                           <<"] Statement ["<<actionElement.statement<<"] Errornr. [" << result.lastError() << "]";
             break;
         }
@@ -567,7 +567,7 @@ void DatabaseCoreBackend::setDatabaseErrorHandler(DatabaseErrorHandler *handler)
     Q_D(DatabaseCoreBackend);
     if (handler!=0 && handler->thread() != QCoreApplication::instance()->thread())
     {
-        kError(50003) << "DatabaseErrorHandler must live in the main thread";
+        kError() << "DatabaseErrorHandler must live in the main thread";
         Q_ASSERT(false);
     }
     if (d->errorHandler!=0){
@@ -611,7 +611,7 @@ bool DatabaseCoreBackend::open(const DatabaseParameters& parameters)
     {
         if (!database.isOpen())
         {
-            kDebug(50003) << "Error while opening the database. Trying again.";
+            kDebug() << "Error while opening the database. Trying again.";
             if (queryErrorHandling(query, retries++))
             {
                 // TODO reopen the database
@@ -687,7 +687,7 @@ QList<QVariant> DatabaseCoreBackend::readToList(SqlQuery& query)
 	  list << query.value(i);	
     }
 #ifdef DATABASCOREBACKEND_DEBUG
-    kDebug(50003) << "Setting result value list ["<< list <<"]";
+    kDebug() << "Setting result value list ["<< list <<"]";
 #endif
     return list;
 }
@@ -701,11 +701,11 @@ DatabaseCoreBackend::QueryState DatabaseCoreBackend::handleQueryResult(SqlQuery 
             return DatabaseCoreBackend::ConnectionError;
         }
     }
-        if (lastInsertId)
-            (*lastInsertId) = query.lastInsertId();
-        if (values)
-            (*values) = readToList(query);
-        return DatabaseCoreBackend::NoErrors;
+    if (lastInsertId)
+        (*lastInsertId) = query.lastInsertId();
+    if (values)
+        (*values) = readToList(query);
+    return DatabaseCoreBackend::NoErrors;
 }
 
 DatabaseCoreBackend::QueryState DatabaseCoreBackend::execSql(const QString& sql, QList<QVariant>* values, QVariant *lastInsertId)
@@ -765,7 +765,7 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QVariant& boun
 {
     SqlQuery query = prepareQuery(sql);
 #ifdef DATABASCOREBACKEND_DEBUG
-    kDebug(50003) << "Trying to sql ["<< sql <<"] query ["<<query.lastQuery()<<"]";
+    kDebug() << "Trying to sql ["<< sql <<"] query ["<<query.lastQuery()<<"]";
 #endif
     query.bindValue(0, boundValue1);
     exec(query);
@@ -819,7 +819,7 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql)
 {
     SqlQuery query = prepareQuery(sql);
 #ifdef DATABASCOREBACKEND_DEBUG
-    kDebug(50003)<<"execQuery: Using statement ["<< query.lastQuery() <<"]";
+    kDebug()<<"execQuery: Using statement ["<< query.lastQuery() <<"]";
 #endif
     exec(query);
     return query;
@@ -833,7 +833,7 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QMap<QString, 
     if (!bindingMap.isEmpty())
     {
         #ifdef DATABASCOREBACKEND_DEBUG
-        kDebug(50003)<<"Prepare statement ["<< preparedString <<"] with binding map ["<< bindingMap <<"]";
+        kDebug()<<"Prepare statement ["<< preparedString <<"] with binding map ["<< bindingMap <<"]";
         #endif
 
         QRegExp identifierRegExp(":[A-Za-z0-9]+");
@@ -845,7 +845,7 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QMap<QString, 
             namedPlaceholderValues.append(bindingMap[namedPlaceholder]);
 
             #ifdef DATABASCOREBACKEND_DEBUG
-            kDebug(50003)<<"Bind key ["<< namedPlaceholder <<"] to value ["<< bindingMap[namedPlaceholder] <<"]";
+            kDebug()<<"Bind key ["<< namedPlaceholder <<"] to value ["<< bindingMap[namedPlaceholder] <<"]";
             #endif
 
             preparedString = preparedString.replace(pos, identifierRegExp.matchedLength(), "?");
@@ -853,7 +853,7 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QMap<QString, 
         }
     }
     #ifdef DATABASCOREBACKEND_DEBUG
-    kDebug(50003)<<"Prepared statement ["<< preparedString <<"] values ["<< namedPlaceholderValues <<"]";
+    kDebug()<<"Prepared statement ["<< preparedString <<"] values ["<< namedPlaceholderValues <<"]";
     #endif
 
     SqlQuery query = prepareQuery(preparedString);
@@ -932,7 +932,7 @@ bool DatabaseCoreBackend::exec(SqlQuery& query)
     forever
     {
         #ifdef DATABASCOREBACKEND_DEBUG
-        kDebug(50003) << "Trying to query ["<<query.lastQuery()<<"] values ["<< query.boundValues() <<"]";
+        kDebug() << "Trying to query ["<<query.lastQuery()<<"] values ["<< query.boundValues() <<"]";
         #endif
 
         if (query.exec())
@@ -992,7 +992,7 @@ SqlQuery DatabaseCoreBackend::prepareQuery(const QString& sql)
             return query;
         else
         {
-            kDebug(50003) << "Prepare failed!";
+            kDebug() << "Prepare failed!";
             if (queryErrorHandling(query, retries++))
             {
                 // TODO reopen the database
@@ -1009,14 +1009,14 @@ SqlQuery DatabaseCoreBackend::prepareQuery(const QString& sql)
 SqlQuery DatabaseCoreBackend::copyQuery(const SqlQuery& old)
 {
     SqlQuery query = getQuery();
-    kDebug(50003) << "Last query was ["<<old.lastQuery()<<"]";
+    kDebug() << "Last query was ["<<old.lastQuery()<<"]";
     query.prepare(old.lastQuery());
     query.setForwardOnly(old.isForwardOnly());
     // only for positional binding
     QList<QVariant> boundValues = old.boundValues().values();
     foreach (const QVariant &value, boundValues)
     {
-        kDebug(50003) << "Bind value to query ["<<value<<"]";
+        kDebug() << "Bind value to query ["<<value<<"]";
         query.addBindValue(value);
     }
     return query;
