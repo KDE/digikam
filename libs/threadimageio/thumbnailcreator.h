@@ -158,12 +158,18 @@ public:
      */
     int thumbnailSize() const;
     /**
-     * Return the cached image size, the size of the image that is stored on disk
-     * according to the FreeDesktop specification.
-     * This size is larger than thumbnailSize.
+     * Return the stored image size, the size of the image that is stored on disk
+     * (according to Storage Method).
+     * This size is possibly larger than thumbnailSize.
      * Possible values: 128 or 256.
      */
-    int cachedSize() const;
+    int storedSize() const;
+
+    /**
+     * Store the given image as thumbnail of the given path.
+     * Image should at least have storedSize().
+     */
+    void store(const QString& path, const QImage& image);
 
     /**
      * Returns the last error that occurred.

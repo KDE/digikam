@@ -148,7 +148,7 @@ int ThumbnailCreator::thumbnailSize() const
     return d->thumbnailSize;
 }
 
-int ThumbnailCreator::cachedSize() const
+int ThumbnailCreator::storedSize() const
 {
     return d->cachedSize;
 }
@@ -229,6 +229,36 @@ QImage ThumbnailCreator::load(const QString& path)
     }
 
     return image.qimage;
+}
+
+void ThumbnailCreator::store(const QString& path, const QImage& i)
+{
+    QImage qimage(i);
+    if (qimage.isNull())
+        return;
+    if (qimage.width() > d->cachedSize || qimage.height() > d->cachedSize)
+    {
+        qimage = qimage.scaled(d->cachedSize, d->cachedSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    }
+
+    // get info about path
+    ThumbnailInfo info;
+    if (d->infoProvider)
+        info = d->infoProvider->thumbnailInfo(path);
+    else
+        info = fileThumbnailInfo(path);
+
+    ThumbnailImage image;
+    image.qimage = qimage;
+    switch (d->thumbnailStorage)
+    {
+        case ThumbnailDatabase:
+            storeInDatabase(info, image);
+            break;
+        case FreeDesktopStandard:
+            storeFreedesktop(info, image);
+            break;
+    }
 }
 
 void ThumbnailCreator::deleteThumbnailsFromDisk(const QString& filePath)

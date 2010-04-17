@@ -525,16 +525,14 @@ void ThumbnailLoadThread::startKdePreviewJob()
         return;
 
     KUrl::List list;
-    int size = 0;
     foreach (const LoadingDescription& description, d->kdeTodo)
     {
         KUrl url = KUrl::fromPath(description.filePath);
-        size = description.previewParameters.size; // not a clean solution for multiple jobs
         list << url;
         d->kdeJobHash[url] = description;
     }
     d->kdeTodo.clear();
-    d->kdeJob = KIO::filePreview(list, size ? size : d->size); // dont know if size 0 is allowed
+    d->kdeJob = KIO::filePreview(list, d->creator->storedSize()); // dont know if size 0 is allowed
 
     connect(d->kdeJob, SIGNAL(gotPreview(const KFileItem &, const QPixmap &)),
             this, SLOT(gotKDEPreview(const KFileItem &, const QPixmap &)));
@@ -548,12 +546,20 @@ void ThumbnailLoadThread::startKdePreviewJob()
 
 void ThumbnailLoadThread::gotKDEPreview(const KFileItem& item, const QPixmap& kdepix)
 {
-    QPixmap pix(kdepix);
+    QPixmap pix;
     LoadingDescription description = d->kdeJobHash[item.url()];
 
-    // third and last attempt - load a mimetype specific icon
-    if (pix.isNull() && d->sendSurrogate)
+    if (kdepix.isNull())
+    {
+        // third and last attempt - load a mimetype specific icon
         pix = surrogatePixmap(description);
+    }
+    else
+    {
+        d->creator->store(description.filePath, kdepix.toImage());
+        pix = kdepix.scaled(description.previewParameters.size, description.previewParameters.size,
+                            Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    }
 
     // put into cache
     {
