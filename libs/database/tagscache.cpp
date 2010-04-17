@@ -76,6 +76,7 @@ public:
             QList<TagShortInfo> newInfos = DatabaseAccess().db()->getTagShortInfos();
             QWriteLocker locker(&lock);
             infos = newInfos;
+            needUpdateInfos = false;
         }
     }
 
@@ -90,6 +91,7 @@ public:
             {
                 nameHash.insert(info.name, info.id);
             }
+            needUpdateHash = false;
         }
     }
 
@@ -298,63 +300,63 @@ int TagsCache::createTag(const QString& tagPathToCreate)
     int  tagID            = 0;
     bool parentTagExisted = true;
 
-    // Traverse hierarchy from top to bottom
-    foreach (const QString& tagName, tagHierarchy)
-    {
-        tagID = 0;
+    QStringList tagsToCreate;
+    int parentTagIDForCreation = 0;
 
-        // if the parent tag did not exist, we need not check if the child exists
-        if (parentTagExisted)
+    {
+        QReadLocker locker(&d->lock);
+
+        // Traverse hierarchy from top to bottom
+        foreach (const QString& tagName, tagHierarchy)
         {
-            QReadLocker locker(&d->lock);
-            QList<TagShortInfo>::const_iterator tag;
-            // find the tag with tag name according to tagHierarchy,
-            // and parent ID identical to the ID of the tag we found in
-            // the previous run.
-            foreach (int id, d->nameHash.values(tagName))
+            tagID = 0;
+
+            // if the parent tag did not exist, we need not check if the child exists
+            if (parentTagExisted)
             {
-                tag = d->find(id);
-                if (tag != d->infos.constEnd() && tag->pid == parentTagID)
+                QList<TagShortInfo>::const_iterator tag;
+                // find the tag with tag name according to tagHierarchy,
+                // and parent ID identical to the ID of the tag we found in
+                // the previous run.
+                foreach (int id, d->nameHash.values(tagName))
                 {
-                    tagID = tag->id;
-                    break;
+                    tag = d->find(id);
+                    if (tag != d->infos.constEnd() && tag->pid == parentTagID)
+                    {
+                        tagID = tag->id;
+                        break;
+                    }
                 }
             }
+
+            if (tagID)
+            {
+                // tag already found in DB
+                parentTagID      = tagID;
+                parentTagExisted = true;
+                continue;
+            }
+            else
+            {
+                tagsToCreate << tagName;
+                if (parentTagExisted)
+                    parentTagIDForCreation = parentTagID;
+
+                parentTagID      = 0;
+                parentTagExisted = false;
+            }
         }
+    }
 
-        if (tagID != 0)
+    {
+        DatabaseAccess access;
+        foreach (const QString& tagName, tagsToCreate)
         {
-            // tag already found in DB
-            parentTagID = tagID;
-            continue;
-        }
-
-        // Tag does not yet exist in DB, add it
-        {
-            DatabaseAccess access;
-
-            ChangingDB changing(d);
-            tagID = access.db()->addTag(parentTagID, tagName, QString(), 0);
-
+            tagID = access.db()->addTag(parentTagIDForCreation, tagName, QString(), 0);
             if (tagID == -1)
-            {
-                // Something is wrong in database. Abort.
-                break;
-            }
-
-            // append to our list of existing tags (for following keywords)
-            TagShortInfo info;
-            info.id   = tagID;
-            info.pid  = parentTagID;
-            info.name = tagName;
-            {
-                QWriteLocker locker(&d->lock);
-                d->infos.append(info);
-            }
+                break; // something wrong with DB
+            parentTagIDForCreation = tagID;
         }
-
-        parentTagID      = tagID;
-        parentTagExisted = false;
     }
 
     return tagID;
