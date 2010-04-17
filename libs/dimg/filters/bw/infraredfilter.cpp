@@ -73,7 +73,7 @@ void InfraredFilter::filterImage()
     uchar* data     = m_destImage.bits();
 
     postProgress( 10 );
-    if (m_cancel) return;
+    if (!runningFlag()) return;
 
     // Infrared film variables depending on Sensibility.
     // We can reproduce famous Ilford SFX200 infrared film
@@ -90,7 +90,7 @@ void InfraredFilter::filterImage()
     DColor bwData, bwBlurData, maskData, overData, outData;
 
     postProgress( 20 );
-    if (m_cancel) return;
+    if (!runningFlag()) return;
 
     //------------------------------------------
     // 1 - Create GrayScale green boosted image.
@@ -111,7 +111,7 @@ void InfraredFilter::filterImage()
     BWImage.putImageData(mixer.getTargetImage().bits());
 
     postProgress( 30 );
-    if (m_cancel) return;
+    if (!runningFlag()) return;
 
     // Apply a Gaussian blur to the black and white image.
     // This way simulate Infrared film dispersion for the highlights.
@@ -123,7 +123,7 @@ void InfraredFilter::filterImage()
     pOverlayBits = BWBlurImage.bits();
 
     postProgress( 40 );
-    if (m_cancel) return;
+    if (!runningFlag()) return;
 
     //------------------------------------------
     // 2 - Merge Grayscale image & overlay mask.
@@ -135,9 +135,9 @@ void InfraredFilter::filterImage()
 
     outData.setSixteenBit(sixteenBit);
 
-    for (int x = 0; !m_cancel && x < Width; ++x)
+    for (int x = 0; runningFlag() && x < Width; ++x)
     {
-        for (int y = 0; !m_cancel && y < Height; ++y)
+        for (int y = 0; runningFlag() && y < Height; ++y)
         {
             offset = x*bytesDepth + (y*Width*bytesDepth);
 

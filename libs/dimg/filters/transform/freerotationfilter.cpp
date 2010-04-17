@@ -177,11 +177,11 @@ void FreeRotationFilter::filterImage()
 
     // main loop
 
-    for (h = 0; !m_cancel && (h < nNewHeight); ++h)
+    for (h = 0; runningFlag() && (h < nNewHeight); ++h)
     {
         nh = h - nhdy;
 
-        for (w = 0; !m_cancel && (w < nNewWidth); ++w)
+        for (w = 0; runningFlag() && (w < nNewWidth); ++w)
         {
             nw = w - nhdx;
 

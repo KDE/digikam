@@ -94,9 +94,9 @@ void LensDistortionFilter::filterImage()
     iLimit = dstWidth * step;
     jLimit = dstHeight * step;
 
-    for (int dstJ = 0 ; !m_cancel && (dstJ < jLimit) ; dstJ += step)
+    for (int dstJ = 0 ; runningFlag() && (dstJ < jLimit) ; dstJ += step)
     {
-        for (int dstI = 0 ; !m_cancel && (dstI < iLimit) ; dstI += step)
+        for (int dstI = 0 ; runningFlag() && (dstI < iLimit) ; dstI += step)
         {
             // Get source Coordinates.
             double radius_sq;

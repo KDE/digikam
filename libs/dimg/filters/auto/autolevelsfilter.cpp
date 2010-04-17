@@ -83,7 +83,7 @@ void AutoLevelsFilter::autoLevelsCorrectionImage()
     postProgress(10);
 
     // Create the new empty destination image data space.
-    if (!m_cancel)
+    if (runningFlag())
     {
         if (sixteenBit)
             desData = new uchar[w*h*8];
@@ -94,7 +94,7 @@ void AutoLevelsFilter::autoLevelsCorrectionImage()
     }
 
     // Create an histogram of the reference image.
-    if (!m_cancel)
+    if (runningFlag())
     {
         histogram = new ImageHistogram(m_refImage.bits(), m_refImage.width(), 
                                        m_refImage.height(), m_refImage.sixteenBit());
@@ -103,34 +103,34 @@ void AutoLevelsFilter::autoLevelsCorrectionImage()
     }
 
     // Create an empty instance of levels to use.
-    if (!m_cancel)
+    if (runningFlag())
     {
         levels = new ImageLevels(sixteenBit);
         postProgress(40);
     }
 
     // Initialize an auto levels correction of the histogram.
-    if (!m_cancel)
+    if (runningFlag())
     {
         levels->levelsAuto(histogram);
         postProgress(50);
     }
 
     // Calculate the LUT to apply on the image.
-    if (!m_cancel)
+    if (runningFlag())
     {
         levels->levelsLutSetup(AlphaChannel);
         postProgress(60);
     }
 
     // Apply the lut to the image.
-    if (!m_cancel)
+    if (runningFlag())
     {
         levels->levelsLutProcess(data, desData, w, h);
         postProgress(70);
     }
 
-    if (!m_cancel)
+    if (runningFlag())
     {
         if (sixteenBit)
             memcpy (data, desData, w*h*8);
@@ -144,7 +144,7 @@ void AutoLevelsFilter::autoLevelsCorrectionImage()
     delete histogram;
     delete levels;
 
-    if (!m_cancel)
+    if (runningFlag())
         postProgress(90);
 }
 

@@ -159,7 +159,7 @@ void ContentAwareFilter::filterImage()
     // Liquid rescale
     lqr_carver_resize(d->carver, d->settings.width, d->settings.height);
     
-    if (m_cancel) return;
+    if (!runningFlag()) return;
 
     // Create a new image
     w           = lqr_carver_get_width(d->carver);
@@ -175,7 +175,7 @@ void ContentAwareFilter::filterImage()
 
     if (m_orgImage.sixteenBit())
     {
-        while(!m_cancel && lqr_carver_scan_ext(d->carver, (gint*)&x, (gint*)&y, &rgb))
+        while(runningFlag() && lqr_carver_scan_ext(d->carver, (gint*)&x, (gint*)&y, &rgb))
         {
             rgbOut16 = (unsigned short*)rgb;
             m_destImage.setPixelColor(x, y, DColor(rgbOut16[2], rgbOut16[1], rgbOut16[0], 65535, true));
@@ -183,7 +183,7 @@ void ContentAwareFilter::filterImage()
     }
     else
     {
-        while(!m_cancel && lqr_carver_scan_ext(d->carver, (gint*)&x, (gint*)&y, &rgb))
+        while(runningFlag() && lqr_carver_scan_ext(d->carver, (gint*)&x, (gint*)&y, &rgb))
         {
             rgbOut8 = (uchar*)rgb;
             m_destImage.setPixelColor(x, y, DColor(rgbOut8[2], rgbOut8[1], rgbOut8[0], 255, false));

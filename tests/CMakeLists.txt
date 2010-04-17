@@ -12,6 +12,7 @@ INCLUDE_DIRECTORIES(
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dmetadata
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/models
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/template
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/threads
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/themeengine
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/common
                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/iccprofiles

@@ -38,6 +38,7 @@
 // Local includes
 
 #include "dimg.h"
+#include "dynamicthread.h"
 #include "digikam_export.h"
 
 class QObject;
@@ -45,7 +46,7 @@ class QObject;
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT DImgThreadedFilter : public QThread
+class DIGIKAM_EXPORT DImgThreadedFilter : public DynamicThread
 {
     Q_OBJECT
 
@@ -142,8 +143,7 @@ protected:
 
 protected:
 
-    /** Used to stop computation loop. */
-    bool                m_cancel;
+    bool                m_wasCancelled;
 
     /** The progress span that a slave filter uses in the parent filter's progress. */
     int                 m_progressBegin;

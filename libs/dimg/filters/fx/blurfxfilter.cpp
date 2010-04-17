@@ -162,9 +162,9 @@ void BlurFXFilter::zoomBlur(DImg *orgImage, DImg *destImage, int X, int Y, int D
     nCount = 0;
 
     // we have reached the main loop
-    for (h = yMin; !m_cancel && (h < yMax); ++h)
+    for (h = yMin; runningFlag() && (h < yMax); ++h)
     {
-        for (w = xMin; !m_cancel && (w < xMax); ++w)
+        for (w = xMin; runningFlag() && (w < xMax); ++w)
         {
             // ...we enter this loop to sum the bits
 
@@ -178,7 +178,7 @@ void BlurFXFilter::zoomBlur(DImg *orgImage, DImg *destImage, int X, int Y, int D
             lfAngle     = atan2 ((double)nh, (double)nw);
             lfNewRadius = (lfRadius * Distance) / lfRadMax;
 
-            for (r = 0; !m_cancel && (r <= lfNewRadius); ++r)
+            for (r = 0; runningFlag() && (r <= lfNewRadius); ++r)
             {
                 // we need to calc the positions
                 nw = (int)(X - (lfRadius - r) * cos (lfAngle));
@@ -281,9 +281,9 @@ void BlurFXFilter::radialBlur(DImg *orgImage, DImg *destImage, int X, int Y, int
 
     // we have reached the main loop
 
-    for (int h = yMin; !m_cancel && (h < yMax); ++h)
+    for (int h = yMin; runningFlag() && (h < yMax); ++h)
     {
-        for (int w = xMin; !m_cancel && (w < xMax); ++w)
+        for (int w = xMin; runningFlag() && (w < xMax); ++w)
         {
             // ...we enter this loop to sum the bits
 
@@ -296,7 +296,7 @@ void BlurFXFilter::radialBlur(DImg *orgImage, DImg *destImage, int X, int Y, int
             Radius   = sqrt (nw * nw + nh * nh);
             AngleRad = atan2 ((double)nh, (double)nw);
 
-            for (int a = -Distance; !m_cancel && (a <= Distance); ++a)
+            for (int a = -Distance; runningFlag() && (a <= Distance); ++a)
             {
                 Angle = AngleRad + nMultArray[a + Distance];
                 // we need to calc the positions
@@ -429,11 +429,11 @@ void BlurFXFilter::focusBlur(DImg *orgImage, DImg *destImage,
 
     int nh = 0, nw = 0;
 
-    for (int h = yMin; !m_cancel && (h < yMax); ++h)
+    for (int h = yMin; runningFlag() && (h < yMax); ++h)
     {
         nh = Y - h;
 
-        for (int w = xMin; !m_cancel && (w < xMax); ++w)
+        for (int w = xMin; runningFlag() && (w < xMax); ++w)
         {
             nw = X - w;
 
@@ -586,9 +586,9 @@ void BlurFXFilter::smartBlur(DImg *orgImage, DImg *destImage, int Radius, int St
 
     // we have reached the main loop
 
-    for (h = 0; !m_cancel && (h < Height); ++h)
+    for (h = 0; runningFlag() && (h < Height); ++h)
     {
-        for (w = 0; !m_cancel && (w < Width); ++w)
+        for (w = 0; runningFlag() && (w < Width); ++w)
         {
             // we initialize the variables
             sumR = sumG = sumB = nCount = 0;
@@ -598,7 +598,7 @@ void BlurFXFilter::smartBlur(DImg *orgImage, DImg *destImage, int Radius, int St
             color.setColor(data + offset, sixteenBit);
 
             // ...we enter this loop to sum the bits
-            for (a = -Radius; !m_cancel && (a <= Radius); ++a)
+            for (a = -Radius; runningFlag() && (a <= Radius); ++a)
             {
                 // verify if is inside the rect
                 if (IsInside( Width, Height, w + a, h))
@@ -648,9 +648,9 @@ void BlurFXFilter::smartBlur(DImg *orgImage, DImg *destImage, int Radius, int St
 
     // we have reached the second part of main loop
 
-    for (w = 0; !m_cancel && (w < Width); ++w)
+    for (w = 0; runningFlag() && (w < Width); ++w)
     {
-        for (h = 0;!m_cancel && ( h < Height); ++h)
+        for (h = 0;runningFlag() && ( h < Height); ++h)
         {
             // we initialize the variables
             sumR = sumG = sumB = nCount = 0;
@@ -660,7 +660,7 @@ void BlurFXFilter::smartBlur(DImg *orgImage, DImg *destImage, int Radius, int St
             color.setColor(data + offset, sixteenBit);
 
             // ...we enter this loop to sum the bits
-            for (a = -Radius; !m_cancel && (a <= Radius); ++a)
+            for (a = -Radius; runningFlag() && (a <= Radius); ++a)
             {
                 // verify if is inside the rect
                 if (IsInside( Width, Height, w, h + a))
@@ -766,15 +766,15 @@ void BlurFXFilter::motionBlur(DImg *orgImage, DImg *destImage, int Distance, dou
 
     // we have reached the main loop
 
-    for (int h = 0; !m_cancel && (h < Height); ++h)
+    for (int h = 0; runningFlag() && (h < Height); ++h)
     {
-        for (int w = 0; !m_cancel && (w < Width); ++w)
+        for (int w = 0; runningFlag() && (w < Width); ++w)
         {
             // we initialize the variables
             sumR = sumG = sumB = 0;
 
             // ...we enter this loop to sum the bits
-            for (int a = -Distance; !m_cancel && (a <= Distance); ++a)
+            for (int a = -Distance; runningFlag() && (a <= Distance); ++a)
             {
                 // we need to calc the positions
                 nw = w + lpXArray[a + Distance];
@@ -845,9 +845,9 @@ void BlurFXFilter::softenerBlur(DImg *orgImage, DImg *destImage)
 
     int grayLimit = sixteenBit ? 32767 : 127;
 
-    for (int h = 0; !m_cancel && (h < Height); ++h)
+    for (int h = 0; runningFlag() && (h < Height); ++h)
     {
-        for (int w = 0; !m_cancel && (w < Width); ++w)
+        for (int w = 0; runningFlag() && (w < Width); ++w)
         {
             SomaR = SomaG = SomaB = 0;
 
@@ -859,9 +859,9 @@ void BlurFXFilter::softenerBlur(DImg *orgImage, DImg *destImage)
             if (Gray > grayLimit)
             {
                 // 7x7
-                for (int a = -3; !m_cancel && (a <= 3); ++a)
+                for (int a = -3; runningFlag() && (a <= 3); ++a)
                 {
-                    for (int b = -3; !m_cancel && (b <= 3); ++b)
+                    for (int b = -3; runningFlag() && (b <= 3); ++b)
                     {
                         if ((h + a < 0) || (w + b < 0))
                             offsetSoma = offset;
@@ -885,9 +885,9 @@ void BlurFXFilter::softenerBlur(DImg *orgImage, DImg *destImage)
             else
             {
                 // 3x3
-                for (int a = -1; !m_cancel && (a <= 1); ++a)
+                for (int a = -1; runningFlag() && (a <= 1); ++a)
                 {
-                    for (int b = -1; !m_cancel && (b <= 1); ++b)
+                    for (int b = -1; runningFlag() && (b <= 1); ++b)
                     {
                         if ((h + a < 0) || (w + b < 0))
                             offsetSoma = offset;
@@ -952,9 +952,9 @@ void BlurFXFilter::shakeBlur(DImg *orgImage, DImg *destImage, int Distance)
 
     int h, w, nw, nh;
 
-    for (h = 0; !m_cancel && (h < Height); ++h)
+    for (h = 0; runningFlag() && (h < Height); ++h)
     {
-        for (w = 0; !m_cancel && (w < Width); ++w)
+        for (w = 0; runningFlag() && (w < Width); ++w)
         {
             offsetLayer = GetOffset(Width, w, h, bytesDepth);
 
@@ -986,9 +986,9 @@ void BlurFXFilter::shakeBlur(DImg *orgImage, DImg *destImage, int Distance)
             postProgress(progress);
     }
 
-    for (int h = 0; !m_cancel && (h < Height); ++h)
+    for (int h = 0; runningFlag() && (h < Height); ++h)
     {
-        for (int w = 0; !m_cancel && (w < Width); ++w)
+        for (int w = 0; runningFlag() && (w < Width); ++w)
         {
             offset = GetOffset(Width, w, h, bytesDepth);
             // read original data to preserve alpha
@@ -1062,9 +1062,9 @@ void BlurFXFilter::frostGlass(DImg *orgImage, DImg *destImage, int Frost)
     uint *AverageColorG   = new uint[range + 1];
     uint *AverageColorB   = new uint[range + 1];
 
-    for (h = 0; !m_cancel && (h < Height); ++h)
+    for (h = 0; runningFlag() && (h < Height); ++h)
     {
-        for (w = 0; !m_cancel && (w < Width); ++w)
+        for (w = 0; runningFlag() && (w < Width); ++w)
         {
             offset = GetOffset(Width, w, h, bytesDepth);
             // read color to preserve alpha
@@ -1128,9 +1128,9 @@ void BlurFXFilter::mosaic(DImg *orgImage, DImg *destImage, int SizeW, int SizeH)
 
     // this loop will never look for transparent colors
 
-    for (int h = 0; !m_cancel && (h < Height); h += SizeH)
+    for (int h = 0; runningFlag() && (h < Height); h += SizeH)
     {
-        for (int w = 0; !m_cancel && (w < Width); w += SizeW)
+        for (int w = 0; runningFlag() && (w < Width); w += SizeW)
         {
             // we have to find the center pixel for mosaic's rectangle
 
@@ -1139,9 +1139,9 @@ void BlurFXFilter::mosaic(DImg *orgImage, DImg *destImage, int SizeW, int SizeH)
 
             // now, we fill the mosaic's rectangle with the center pixel color
 
-            for (int subw = w; !m_cancel && (subw <= w + SizeW); ++subw)
+            for (int subw = w; runningFlag() && (subw <= w + SizeW); ++subw)
             {
-                for (int subh = h; !m_cancel && (subh <= h + SizeH); ++subh)
+                for (int subh = h; runningFlag() && (subh <= h + SizeH); ++subh)
                 {
                     // if is inside...
                     if (IsInside(Width, Height, subw, subh))
@@ -1192,9 +1192,9 @@ DColor BlurFXFilter::RandomColor(uchar *Bits, int Width, int Height, bool sixtee
     memset(AverageColorG,  0, (range + 1) * sizeof(uint));
     memset(AverageColorB,  0, (range + 1) * sizeof(uint));
 
-    for (w = X - Radius; !m_cancel && (w <= X + Radius); ++w)
+    for (w = X - Radius; runningFlag() && (w <= X + Radius); ++w)
     {
-        for (h = Y - Radius; !m_cancel && (h <= Y + Radius); ++h)
+        for (h = Y - Radius; runningFlag() && (h <= Y + Radius); ++h)
         {
             if ((w >= 0) && (w < Width) && (h >= 0) && (h < Height))
             {
@@ -1220,8 +1220,8 @@ DColor BlurFXFilter::RandomColor(uchar *Bits, int Width, int Height, bool sixtee
         }
     }
 
-    // check for m_cancel here before entering the do loop (will crash with SIGFPE otherwise)
-    if (m_cancel)
+    // check for runningFlag here before entering the do loop (will crash with SIGFPE otherwise)
+    if (!runningFlag())
         return DColor(0, 0, 0, 0, sixteenBit);
 
     int RandNumber, count, Index, ErrorCount = 0;
@@ -1246,14 +1246,14 @@ DColor BlurFXFilter::RandomColor(uchar *Bits, int Width, int Height, bool sixtee
             count += IntensityCount[Index];
             ++Index;
         }
-        while (count < RandNumber && !m_cancel);
+        while (count < RandNumber && runningFlag());
 
         J = Index - 1;
         ++ErrorCount;
     }
-    while ((IntensityCount[J] == 0) && (ErrorCount <= counter)  && !m_cancel);
+    while ((IntensityCount[J] == 0) && (ErrorCount <= counter)  && runningFlag());
 
-    if (m_cancel)
+    if (!runningFlag())
         return DColor(0, 0, 0, 0, sixteenBit);
 
 
@@ -1325,16 +1325,16 @@ void BlurFXFilter::MakeConvolution (DImg *orgImage, DImg *destImage, int Radius,
 
     // Now, we enter in the main loop
 
-    for (h = 0; !m_cancel && (h < Height); ++h)
+    for (h = 0; runningFlag() && (h < Height); ++h)
     {
-        for (w = 0; !m_cancel && (w < Width); ++w)
+        for (w = 0; runningFlag() && (w < Width); ++w)
         {
             // initialize the variables
             nSumR = nSumG = nSumB = nCount = 0;
 
             // first of all, we need to blur the horizontal lines
 
-            for (n = -Radius; !m_cancel && (n <= Radius); ++n)
+            for (n = -Radius; runningFlag() && (n <= Radius); ++n)
             {
                 // if is inside...
                 if (IsInside (Width, Height, w + n, h))
@@ -1386,15 +1386,15 @@ void BlurFXFilter::MakeConvolution (DImg *orgImage, DImg *destImage, int Radius,
     }
 
     // We enter in the second main loop
-    for (w = 0; !m_cancel && (w < Width); ++w)
+    for (w = 0; runningFlag() && (w < Width); ++w)
     {
-        for (h = 0; !m_cancel && (h < Height); ++h)
+        for (h = 0; runningFlag() && (h < Height); ++h)
         {
             // initialize the variables
             nSumR = nSumG = nSumB = nCount = 0;
 
             // first of all, we need to blur the vertical lines
-            for (n = -Radius; !m_cancel && (n <= Radius); ++n)
+            for (n = -Radius; runningFlag() && (n <= Radius); ++n)
             {
                 // if is inside...
                 if (IsInside(Width, Height, w, h + n))

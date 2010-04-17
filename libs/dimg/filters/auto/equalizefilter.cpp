@@ -110,7 +110,7 @@ void EqualizeFilter::equalizeImage()
     memset(&high,      0, sizeof(struct double_packet));
     memset(&low,       0, sizeof(struct double_packet));
 
-    for(i = 0 ; !m_cancel && (i < histogram->getHistogramSegments()) ; ++i)
+    for(i = 0 ; runningFlag() && (i < histogram->getHistogramSegments()) ; ++i)
     {
        intensity.red   += histogram->getValue(RedChannel, i);
        intensity.green += histogram->getValue(GreenChannel, i);
@@ -126,7 +126,7 @@ void EqualizeFilter::equalizeImage()
     memset(equalize_map, 0, histogram->getHistogramSegments()*sizeof(int_packet));
 
     // TODO magic number 256
-    for(i = 0 ; !m_cancel && (i < histogram->getHistogramSegments()) ; ++i)
+    for(i = 0 ; runningFlag() && (i < histogram->getHistogramSegments()) ; ++i)
     {
        if(high.red != low.red)
           equalize_map[i].red = (uint)(((256*histogram->getHistogramSegments() -1) *
@@ -161,7 +161,7 @@ void EqualizeFilter::equalizeImage()
         uchar  red, green, blue, alpha;
         uchar* ptr = data;
 
-        for (i = 0 ; !m_cancel && (i < size) ; ++i)
+        for (i = 0 ; runningFlag() && (i < size) ; ++i)
         {
             blue  = ptr[0];
             green = ptr[1];
@@ -196,7 +196,7 @@ void EqualizeFilter::equalizeImage()
         unsigned short  red, green, blue, alpha;
         unsigned short* ptr = (unsigned short *)data;
 
-        for (i = 0 ; !m_cancel && (i < size) ; ++i)
+        for (i = 0 ; runningFlag() && (i < size) ; ++i)
         {
             blue  = ptr[0];
             green = ptr[1];

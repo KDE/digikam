@@ -93,7 +93,7 @@ void NormalizeFilter::normalizeImage()
         uchar  red, green, blue;
         uchar* ptr = m_refImage.bits();
 
-        for (i = 0 ; !m_cancel && (i < refSize) ; ++i)
+        for (i = 0 ; runningFlag() && (i < refSize) ; ++i)
         {
             blue  = ptr[0];
             green = ptr[1];
@@ -116,7 +116,7 @@ void NormalizeFilter::normalizeImage()
         unsigned short  red, green, blue;
         unsigned short* ptr = (unsigned short*)m_refImage.bits();
 
-        for (i = 0 ; !m_cancel && (i < refSize) ; ++i)
+        for (i = 0 ; runningFlag() && (i < refSize) ; ++i)
         {
             blue  = ptr[0];
             green = ptr[1];
@@ -137,7 +137,7 @@ void NormalizeFilter::normalizeImage()
 
     // Calculate LUT.
 
-    if (!m_cancel)
+    if (runningFlag())
     {
         range = (unsigned short)(param.max - param.min);
 
@@ -164,7 +164,7 @@ void NormalizeFilter::normalizeImage()
         uchar  red, green, blue;
         uchar* ptr = data;
 
-        for (i = 0 ; !m_cancel && (i < size) ; ++i)
+        for (i = 0 ; runningFlag() && (i < size) ; ++i)
         {
             blue   = ptr[0];
             green  = ptr[1];
@@ -186,7 +186,7 @@ void NormalizeFilter::normalizeImage()
         unsigned short  red, green, blue;
         unsigned short* ptr = (unsigned short*)data;
 
-        for (i = 0 ; !m_cancel && (i < size) ; ++i)
+        for (i = 0 ; runningFlag() && (i < size) ; ++i)
         {
             blue   = ptr[0];
             green  = ptr[1];

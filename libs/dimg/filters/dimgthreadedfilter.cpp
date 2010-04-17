@@ -36,13 +36,12 @@ namespace Digikam
 {
 
 DImgThreadedFilter::DImgThreadedFilter(QObject* parent)
-                  : QThread()
+                  : DynamicThread()
 {
     setOriginalImage(DImg());
     setFilterName(QString());
     setParent(parent);
 
-    m_cancel          = false;
     m_master          = 0;
     m_slave           = 0;
     m_progressBegin   = 0;
@@ -52,14 +51,13 @@ DImgThreadedFilter::DImgThreadedFilter(QObject* parent)
 
 DImgThreadedFilter::DImgThreadedFilter(DImg* orgImage, QObject* parent,
                                        const QString& name)
-                  : QThread()
+                  : DynamicThread()
 {
     // remove meta data
     setOriginalImage(orgImage->copyImageData());
     setFilterName(name);
     setParent(parent);
 
-    m_cancel          = false;
     m_master          = 0;
     m_slave           = 0;
     m_progressBegin   = 0;
@@ -76,7 +74,6 @@ DImgThreadedFilter::DImgThreadedFilter(DImgThreadedFilter* master, const DImg& o
     setParent(0);
 
     m_destImage       = destImage;
-    m_cancel          = false;
     m_master          = master;
     m_slave           = 0;
     m_progressBegin   = progressBegin;
@@ -137,6 +134,7 @@ void DImgThreadedFilter::startFilterDirectly()
     {
         emit started();
 
+        m_wasCancelled = false;
         try
         {
             filterImage();
@@ -149,7 +147,7 @@ void DImgThreadedFilter::startFilterDirectly()
             return;
         }
 
-        emit finished(!m_cancel);
+        emit finished(!m_wasCancelled);
     }
     else  // No image data
     {
@@ -165,10 +163,12 @@ void DImgThreadedFilter::run()
 
 void DImgThreadedFilter::cancelFilter()
 {
-    m_cancel = true;
+    if (isRunning())
+        m_wasCancelled = true;
+    stop();
     if (m_slave)
     {
-        m_slave->m_cancel = true;
+        m_slave->stop();
         // do not wait on slave, it is not running in its own separate thread!
         //m_slave->cleanupFilter();
     }

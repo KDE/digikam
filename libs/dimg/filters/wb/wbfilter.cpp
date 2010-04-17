@@ -293,7 +293,7 @@ void WBFilter::adjustWhiteBalance(uchar* data, int width, int height, bool sixte
         uchar  red, green, blue;
         uchar* ptr = data;
 
-        for (j = 0 ; !m_cancel && (j < size) ; ++j)
+        for (j = 0 ; runningFlag() && (j < size) ; ++j)
         {
             int v, rv[3];
 
@@ -325,7 +325,7 @@ void WBFilter::adjustWhiteBalance(uchar* data, int width, int height, bool sixte
         unsigned short  red, green, blue;
         unsigned short* ptr = (unsigned short *)data;
 
-        for (j = 0 ; !m_cancel && (j < size) ; ++j)
+        for (j = 0 ; runningFlag() && (j < size) ; ++j)
         {
             int v, rv[3];
 

@@ -139,13 +139,13 @@ void LensFunFilter::filterImage()
     {
         m_orgImage.prepareSubPixelAccess(); // init lanczos kernel
 
-        for (unsigned int y=0; !m_cancel && (y < m_orgImage.height()); ++y)
+        for (unsigned int y=0; runningFlag() && (y < m_orgImage.height()); ++y)
         {
             if (d->modifier->ApplySubpixelDistortion(0.0, y, m_orgImage.width(), 1, pos))
             {
                 float* src = pos;
 
-                for (unsigned x = 0; !m_cancel && (x < m_destImage.width()); ++x)
+                for (unsigned x = 0; runningFlag() && (x < m_destImage.width()); ++x)
                 {
                     DColor destPixel(0, 0, 0, 0xFFFF, m_destImage.sixteenBit());
 
@@ -186,7 +186,7 @@ void LensFunFilter::filterImage()
         else if (steps == 2 && d->iface->m_settings.filterCCA)
             offset = 50.0;
 
-        for (unsigned int y=0; !m_cancel && (y < m_destImage.height()); ++y)
+        for (unsigned int y=0; runningFlag() && (y < m_destImage.height()); ++y)
         {
             if (d->modifier->ApplyColorModification(data, 0.0, y, m_destImage.width(),
                                                     1, m_destImage.bytesDepth(), 0))
@@ -214,13 +214,13 @@ void LensFunFilter::filterImage()
         DImg tempImage(m_destImage.width(), m_destImage.height(), m_destImage.sixteenBit(), m_destImage.hasAlpha());
         m_destImage.prepareSubPixelAccess(); // init lanczos kernel
 
-        for (unsigned long y=0; !m_cancel && (y < tempImage.height()); ++y)
+        for (unsigned long y=0; runningFlag() && (y < tempImage.height()); ++y)
         {
             if (d->modifier->ApplyGeometryDistortion(0.0, y, tempImage.width(), 1, pos))
             {
                 float* src = pos;
 
-                for (unsigned long x = 0; !m_cancel && (x < tempImage.width()); ++x, ++loop)
+                for (unsigned long x = 0; runningFlag() && (x < tempImage.width()); ++x, ++loop)
                 {
                     //qDebug (" ZZ %f %f %i %i", src[0], src[1], (int)src[0], (int)src[1]);
 

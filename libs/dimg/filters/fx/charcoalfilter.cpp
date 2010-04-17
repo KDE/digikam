@@ -98,7 +98,7 @@ void CharcoalFilter::filterImage()
 
     BlurFilter(this, m_destImage, m_destImage, 80, 85, (int)(m_smooth/10.0));
 
-    if (m_cancel)
+    if (!runningFlag())
         return;
 
     // -- Applying stretch contrast color effect -------------------------------
@@ -108,7 +108,7 @@ void CharcoalFilter::filterImage()
     m_destImage.putImageData(stretch.getTargetImage().bits());
 
     postProgress( 90 );
-    if (m_cancel)
+    if (!runningFlag())
         return;
 
     // -- Inverting image color -----------------------------------------------
@@ -118,7 +118,7 @@ void CharcoalFilter::filterImage()
     m_destImage.putImageData(invert.getTargetImage().bits());
 
     postProgress( 95 );
-    if (m_cancel)
+    if (!runningFlag())
         return;
 
     // -- Convert to neutral black & white ------------------------------------
@@ -133,7 +133,7 @@ void CharcoalFilter::filterImage()
     m_destImage.putImageData(mixer.getTargetImage().bits());
 
     postProgress( 100 );
-    if (m_cancel)
+    if (!runningFlag())
         return;
 }
 
@@ -194,22 +194,22 @@ bool CharcoalFilter::convolveImage(const unsigned int order, const double *kerne
 
     // --------------------------------------------------------
 
-    for (y = 0; !m_cancel && (y < height); ++y)
+    for (y = 0; runningFlag() && (y < height); ++y)
     {
         sy = y - (kernelWidth / 2);
 
-        for (x = 0; !m_cancel && (x < width); ++x)
+        for (x = 0; runningFlag() && (x < width); ++x)
         {
             k = normal_kernel;
             red = green = blue = alpha = 0;
             sy = y - (kernelWidth / 2);
 
-            for (mcy = 0; !m_cancel && (mcy < kernelWidth); ++mcy, ++sy)
+            for (mcy = 0; runningFlag() && (mcy < kernelWidth); ++mcy, ++sy)
             {
                 my = sy < 0 ? 0 : sy > (int) height - 1 ? height - 1 : sy;
                 sx = x + (-kernelWidth / 2);
 
-                for (mcx = 0; !m_cancel && (mcx < kernelWidth); ++mcx, ++sx)
+                for (mcx = 0; runningFlag() && (mcx < kernelWidth); ++mcx, ++sx)
                 {
                     mx = sx < 0 ? 0 : sx > (int) width - 1 ? width - 1 : sx;
                     DColor color(sdata + mx * sdepth + (width * my * sdepth), sixteenBit);

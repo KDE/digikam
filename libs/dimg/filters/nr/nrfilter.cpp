@@ -91,9 +91,9 @@ void NRFilter::filterImage()
 
     int j = 0;
 
-    for (int y = 0; !m_cancel && (y < height); y++)
+    for (int y = 0; runningFlag() && (y < height); y++)
     {
-        for (int x = 0; !m_cancel && (x < width); x++)
+        for (int x = 0; runningFlag() && (x < width); x++)
         {
             col           = m_orgImage.getPixelColor(x, y);
             d->fimg[0][j] = col.red()   / clip;
@@ -107,7 +107,7 @@ void NRFilter::filterImage()
 
     // do colour model conversion sRGB[0,1] -> YCrCb.
 
-    if (!m_cancel)
+    if (runningFlag())
     {
         srgb2ycbcr(d->fimg, width * height);
     }
@@ -116,7 +116,7 @@ void NRFilter::filterImage()
 
     // denoise the channels individually
 
-    for (int c = 0; !m_cancel && (c < 3); c++)
+    for (int c = 0; runningFlag() && (c < 3); c++)
     {
         d->buffer[0] = d->fimg[c];
 
@@ -132,7 +132,7 @@ void NRFilter::filterImage()
 
     // Retransform the image data to sRGB[0,1].
 
-    if (!m_cancel)
+    if (runningFlag())
     {
         ycbcr2srgb(d->fimg, width * height);
     }
@@ -141,7 +141,7 @@ void NRFilter::filterImage()
 
     // clip the values
 
-    for (int c = 0; !m_cancel && (c < 3); c++)
+    for (int c = 0; runningFlag() && (c < 3); c++)
     {
         for (int i = 0; i < width * height; i++)
         {
@@ -155,7 +155,7 @@ void NRFilter::filterImage()
 
     j = 0;
 
-    for (int y = 0; !m_cancel && (y < height); y++)
+    for (int y = 0; runningFlag() && (y < height); y++)
     {
         for (int x = 0; x < width; x++)
         {
@@ -194,10 +194,10 @@ void NRFilter::waveletDenoise(float* fimg[3], unsigned int width, unsigned int h
     temp  = new float[qMax(width, height)];
     hpass = 0;
 
-    for (lev = 0; !m_cancel && (lev < 5); ++lev)
+    for (lev = 0; runningFlag() && (lev < 5); ++lev)
     {
         lpass = ((lev & 1) + 1);
-        for (row = 0; !m_cancel && (row < height); ++row)
+        for (row = 0; runningFlag() && (row < height); ++row)
         {
             hatTransform(temp, fimg[hpass] + row * width, 1, width, 1 << lev);
             for (col = 0; col < width; ++col)
@@ -206,7 +206,7 @@ void NRFilter::waveletDenoise(float* fimg[3], unsigned int width, unsigned int h
             }
         }
 
-        for (col = 0; !m_cancel && (col < width); ++col)
+        for (col = 0; runningFlag() && (col < width); ++col)
         {
             hatTransform(temp, fimg[lpass] + col, width, height, 1 << lev);
             for (row = 0; row < height; ++row)
@@ -224,7 +224,7 @@ void NRFilter::waveletDenoise(float* fimg[3], unsigned int width, unsigned int h
 
         // calculate stdevs for all intensities
 
-        for (i = 0; !m_cancel && (i < size); ++i)
+        for (i = 0; runningFlag() && (i < size); ++i)
         {
             fimg[hpass][i] -= fimg[lpass][i];
 
@@ -266,7 +266,7 @@ void NRFilter::waveletDenoise(float* fimg[3], unsigned int width, unsigned int h
 
         // do thresholding
 
-        for (i = 0; !m_cancel && (i < size); ++i)
+        for (i = 0; runningFlag() && (i < size); ++i)
         {
             if (fimg[lpass][i] > 0.8)
             {
@@ -303,7 +303,7 @@ void NRFilter::waveletDenoise(float* fimg[3], unsigned int width, unsigned int h
         hpass = lpass;
     }
 
-    for (i = 0; !m_cancel && (i < size); ++i)
+    for (i = 0; runningFlag() && (i < size); ++i)
         fimg[0][i] = fimg[0][i] + fimg[lpass][i];
 
     delete [] temp;

@@ -94,11 +94,11 @@ void AntiVignettingFilter::filterImage()
     yctr     = qRound(Height / 2.0 + m_settings.yshift);
 
 
-    for (row = 0 ; !m_cancel && (row < Width) ; ++row)
+    for (row = 0 ; runningFlag() && (row < Width) ; ++row)
     {
         yd = abs(xctr - row);
 
-        for (col = 0 ; !m_cancel && (col < Height) ; ++col)
+        for (col = 0 ; runningFlag() && (col < Height) ; ++col)
         {
             p  = (col * Width + row)*4;
             xd = abs(yctr - col);

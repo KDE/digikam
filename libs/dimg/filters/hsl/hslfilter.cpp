@@ -220,7 +220,7 @@ void HSLFilter::applyHSL(DImg& image)
     {
         unsigned short* data = (unsigned short*) image.bits();
 
-        for (uint i=0; !m_cancel && (i<numberOfPixels); ++i)
+        for (uint i=0; runningFlag() && (i<numberOfPixels); ++i)
         {
             color = DColor(data[2], data[1], data[0], 0, sixteenBit);
 
@@ -245,7 +245,7 @@ void HSLFilter::applyHSL(DImg& image)
     {
         uchar* data = image.bits();
 
-        for (uint i=0; !m_cancel && (i<numberOfPixels); ++i)
+        for (uint i=0; runningFlag() && (i<numberOfPixels); ++i)
         {
             color = DColor(data[2], data[1], data[0], 0, sixteenBit);
 

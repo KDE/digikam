@@ -252,7 +252,7 @@ void StretchFilter::stretchContrastImage()
     memset(normalize_map, 0, histogram->getHistogramSegments()*sizeof(struct int_packet));
 
     // TODO magic number 256
-    for(i = 0 ; !m_cancel && (i <= (long)histogram->getMaxSegmentIndex()) ; ++i)
+    for(i = 0 ; runningFlag() && (i <= (long)histogram->getMaxSegmentIndex()) ; ++i)
     {
        if(i < (long) low.red)
           normalize_map[i].red = 0;
@@ -297,7 +297,7 @@ void StretchFilter::stretchContrastImage()
         uchar  red, green, blue, alpha;
         uchar* ptr = data;
 
-        for (i = 0 ; !m_cancel && (i < size) ; ++i)
+        for (i = 0 ; runningFlag() && (i < size) ; ++i)
         {
             blue  = ptr[0];
             green = ptr[1];
@@ -332,7 +332,7 @@ void StretchFilter::stretchContrastImage()
         unsigned short  red, green, blue, alpha;
         unsigned short* ptr = (unsigned short *)data;
 
-        for (i = 0 ; !m_cancel && (i < size) ; ++i)
+        for (i = 0 ; runningFlag() && (i < size) ; ++i)
         {
             blue  = ptr[0];
             green = ptr[1];

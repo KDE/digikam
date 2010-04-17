@@ -170,7 +170,7 @@ void RainDropFilter::rainDropsImage(DImg* orgImage, DImg* destImage, int MinDrop
     srand(seed);
 #endif
 
-    for (i = 0; !m_cancel && (i < Amount); ++i)
+    for (i = 0; runningFlag() && (i < Amount); ++i)
     {
         nCounter = 0;
 
@@ -192,7 +192,7 @@ void RainDropFilter::rainDropsImage(DImg* orgImage, DImg* destImage, int MinDrop
 
             ++nCounter;
         }
-        while ((bResp == false) && (nCounter < 10000) && !m_cancel);
+        while ((bResp == false) && (nCounter < 10000) && runningFlag());
 
         // Update the progress bar in dialog.
         if (nCounter >= 10000)
@@ -229,9 +229,9 @@ bool RainDropFilter::CreateRainDrop(uchar* pBits, int Width, int Height, bool si
         Coeff *= 0.01;
         lfDiv = (double)nHalfSize / log (Coeff * (double)nHalfSize + 1.0);
 
-        for (h = -nHalfSize; !m_cancel && (h <= nHalfSize); ++h)
+        for (h = -nHalfSize; runningFlag() && (h <= nHalfSize); ++h)
         {
-            for (w = -nHalfSize; !m_cancel && (w <= nHalfSize); ++w)
+            for (w = -nHalfSize; runningFlag() && (w <= nHalfSize); ++w)
             {
                 lfRadius = sqrt (h * h + w * w);
                 lfAngle = atan2 ((double)h, (double)w);
@@ -348,9 +348,9 @@ bool RainDropFilter::CreateRainDrop(uchar* pBits, int Width, int Height, bool si
 
         nBlurRadius = DropSize / 25 + 1;
 
-        for (h = -nHalfSize - nBlurRadius; !m_cancel && (h <= nHalfSize + nBlurRadius); ++h)
+        for (h = -nHalfSize - nBlurRadius; runningFlag() && (h <= nHalfSize + nBlurRadius); ++h)
         {
-            for (w = -nHalfSize - nBlurRadius; !m_cancel && (w <= nHalfSize + nBlurRadius); ++w)
+            for (w = -nHalfSize - nBlurRadius; runningFlag() && (w <= nHalfSize + nBlurRadius); ++w)
             {
                 lfRadius = sqrt (h * h + w * w);
 
@@ -359,9 +359,9 @@ bool RainDropFilter::CreateRainDrop(uchar* pBits, int Width, int Height, bool si
                     nTotalR = nTotalG = nTotalB = 0;
                     nBlurPixels = 0;
 
-                    for (nh1 = -nBlurRadius; !m_cancel && (nh1 <= nBlurRadius); ++nh1)
+                    for (nh1 = -nBlurRadius; runningFlag() && (nh1 <= nBlurRadius); ++nh1)
                     {
-                        for (nw1 = -nBlurRadius; !m_cancel && (nw1 <= nBlurRadius); ++nw1)
+                        for (nw1 = -nBlurRadius; runningFlag() && (nw1 <= nBlurRadius); ++nw1)
                         {
                             nw2 = X + w + nw1;
                             nh2 = Y + h + nh1;

@@ -163,23 +163,23 @@ bool SharpenFilter::convolveImage(const unsigned int order, const double* kernel
 
     double maxClamp = m_destImage.sixteenBit() ? 16777215.0 : 65535.0;
 
-    for(y=0 ; !m_cancel && (y < m_destImage.height()) ; ++y)
+    for(y=0 ; runningFlag() && (y < m_destImage.height()) ; ++y)
     {
         // FIXME: this calculation seems to be useless, since we already do it in the following loop
 //        sy = y-halfKernelWidth;
 
-        for(x=0 ; !m_cancel && (x < m_destImage.width()) ; ++x)
+        for(x=0 ; runningFlag() && (x < m_destImage.width()) ; ++x)
         {
             k   = normal_kernel;
             red = green = blue = alpha = 0;
             sy  = y-halfKernelWidth;
 
-            for(mcy=0 ; !m_cancel && (mcy < kernelWidth) ; ++mcy, ++sy)
+            for(mcy=0 ; runningFlag() && (mcy < kernelWidth) ; ++mcy, ++sy)
             {
                 my = sy < 0 ? 0 : sy > (int)m_destImage.height()-1 ? m_destImage.height()-1 : sy;
                 sx = x+(-halfKernelWidth);
 
-                for(mcx=0 ; !m_cancel && (mcx < kernelWidth) ; ++mcx, ++sx)
+                for(mcx=0 ; runningFlag() && (mcx < kernelWidth) ; ++mcx, ++sx)
                 {
                     mx     = sx < 0 ? 0 : sx > (int)m_destImage.width()-1 ? m_destImage.width()-1 : sx;
                     color  = m_orgImage.getPixelColor(mx, my);

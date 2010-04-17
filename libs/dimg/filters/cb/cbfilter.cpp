@@ -172,7 +172,7 @@ void CBFilter::applyCBFilter(DImg& image, double r, double g, double b, double a
     {
         uchar* data = (uchar*) image.bits();
 
-        for (uint i=0; !m_cancel && (i<size); ++i)
+        for (uint i=0; runningFlag() && (i<size); ++i)
         {
             data[0] = d->blueMap[data[0]];
             data[1] = d->greenMap[data[1]];
@@ -190,7 +190,7 @@ void CBFilter::applyCBFilter(DImg& image, double r, double g, double b, double a
     {
         ushort* data = (ushort*) image.bits();
 
-        for (uint i=0; !m_cancel && (i<size); ++i)
+        for (uint i=0; runningFlag() && (i<size); ++i)
         {
             data[0] = d->blueMap16[data[0]];
             data[1] = d->greenMap16[data[1]];

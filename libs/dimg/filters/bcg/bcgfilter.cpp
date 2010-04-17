@@ -137,7 +137,7 @@ void BCGFilter::applyBCG(uchar* bits, uint width, uint height, bool sixteenBits)
     {
         uchar* data = bits;
 
-        for (uint i=0; !m_cancel && (i<size); ++i)
+        for (uint i=0; runningFlag() && (i<size); ++i)
         {
             switch (d->settings.channel)
             {
@@ -171,7 +171,7 @@ void BCGFilter::applyBCG(uchar* bits, uint width, uint height, bool sixteenBits)
     {
         ushort* data = (ushort*)bits;
 
-        for (uint i=0; !m_cancel && (i<size); ++i)
+        for (uint i=0; runningFlag() && (i<size); ++i)
         {
             switch (d->settings.channel)
             {

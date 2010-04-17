@@ -73,9 +73,9 @@ void EmbossFilter::filterImage()
     DColor color, colorOther;
     int    offset, offsetOther;
 
-    for (int h = 0 ; !m_cancel && (h < Height) ; ++h)
+    for (int h = 0 ; runningFlag() && (h < Height) ; ++h)
     {
-        for (int w = 0 ; !m_cancel && (w < Width) ; ++w)
+        for (int w = 0 ; runningFlag() && (w < Width) ; ++w)
         {
             offset      = getOffset(Width, w, h, bytesDepth);
             offsetOther = getOffset(Width, w + Lim_Max (w, 1, Width), h + Lim_Max (h, 1, Height), bytesDepth);

@@ -73,9 +73,9 @@ void OilPaintFilter::filterImage()
     m_averageColorG  = new uint[m_smoothness + 1];
     m_averageColorB  = new uint[m_smoothness + 1];
 
-    for (int h2 = 0; !m_cancel && (h2 < h); ++h2)
+    for (int h2 = 0; runningFlag() && (h2 < h); ++h2)
     {
-        for (int w2 = 0; !m_cancel && (w2 < w); ++w2)
+        for (int w2 = 0; runningFlag() && (w2 < w); ++w2)
         {
             mostFrequentColor = MostFrequentColor(m_orgImage, w2, h2, m_brushSize, m_smoothness);
             dptr              = dest + w2*bytesDepth + (w*h2*bytesDepth);

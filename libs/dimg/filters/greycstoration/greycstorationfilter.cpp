@@ -257,7 +257,7 @@ void GreycstorationFilter::filterImage()
        return;
     }
 
-    if (m_cancel)
+    if (!runningFlag())
         return;
 
     // Copy CImg onto destination.
@@ -306,7 +306,7 @@ void GreycstorationFilter::filterImage()
 
 void GreycstorationFilter::restoration()
 {
-    for (uint iter = 0 ; !m_cancel && (iter < d->settings.nbIter) ; ++iter)
+    for (uint iter = 0 ; runningFlag() && (iter < d->settings.nbIter) ; ++iter)
     {
         // This function will start a thread running one iteration of the GREYCstoration filter.
         // It returns immediately, so you can do what you want after (update a progress bar for
@@ -357,11 +357,11 @@ void GreycstorationFilter::inpainting()
     else
     {
         kDebug() << "Inpainting image: mask is null!";
-        m_cancel = true;
+        stop();
         return;
     }
 
-    for (uint iter=0 ; !m_cancel && (iter < d->settings.nbIter) ; ++iter)
+    for (uint iter=0 ; runningFlag() && (iter < d->settings.nbIter) ; ++iter)
     {
         // This function will start a thread running one iteration of the GREYCstoration filter.
         // It returns immediately, so you can do what you want after (update a progress bar for
@@ -405,7 +405,7 @@ void GreycstorationFilter::resize()
 
     d->img.resize(w, h, 1, -100, init);
 
-    for (uint iter = 0 ; !m_cancel && (iter < d->settings.nbIter) ; ++iter)
+    for (uint iter = 0 ; runningFlag() && (iter < d->settings.nbIter) ; ++iter)
     {
         // This function will start a thread running one iteration of the GREYCstoration filter.
         // It returns immediately, so you can do what you want after (update a progress bar for
@@ -457,7 +457,7 @@ void GreycstorationFilter::iterationLoop(uint iter)
     {
         usleep(100000);
 
-        if (m_parent && !m_cancel)
+        if (m_parent && runningFlag())
         {
             // Update the progress bar in dialog. We simply computes the global
             // progression index (including all iterations).
@@ -471,7 +471,7 @@ void GreycstorationFilter::iterationLoop(uint iter)
             }
         }
     }
-    while (d->img.greycstoration_is_running() && !m_cancel);
+    while (d->img.greycstoration_is_running() && runningFlag());
 
     // A delay is require here. I suspect a sync problem between threads
     // used by GreycStoration algorithm.

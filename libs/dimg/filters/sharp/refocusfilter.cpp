@@ -182,9 +182,9 @@ void RefocusFilter::convolveImage(uchar* orgData, uchar* destData, int width, in
     const int imageSize  = width*height;
     const int mat_offset = mat_size / 2;
 
-    for (y1 = 0; !m_cancel && (y1 < height); ++y1)
+    for (y1 = 0; runningFlag() && (y1 < height); ++y1)
     {
-        for (x1 = 0; !m_cancel && (x1 < width); ++x1)
+        for (x1 = 0; runningFlag() && (x1 < width); ++x1)
         {
             valRed = valGreen = valBlue = 0.0;
 
@@ -193,10 +193,10 @@ void RefocusFilter::convolveImage(uchar* orgData, uchar* destData, int width, in
                 uchar red, green, blue;
                 uchar *ptr;
 
-                for (y2 = 0; !m_cancel && (y2 < mat_size); ++y2)
+                for (y2 = 0; runningFlag() && (y2 < mat_size); ++y2)
                 {
                     int y2_matsize = y2 * mat_size;
-                    for (x2 = 0; !m_cancel && (x2 < mat_size); ++x2)
+                    for (x2 = 0; runningFlag() && (x2 < mat_size); ++x2)
                     {
                         index1 = width * (y1 + y2 - mat_offset) +
                                  x1 + x2 - mat_offset;
@@ -234,10 +234,10 @@ void RefocusFilter::convolveImage(uchar* orgData, uchar* destData, int width, in
                 unsigned short red, green, blue;
                 unsigned short *ptr;
 
-                for (y2 = 0; !m_cancel && (y2 < mat_size); ++y2)
+                for (y2 = 0; runningFlag() && (y2 < mat_size); ++y2)
                 {
                     int y2_matsize = y2 * mat_size;
-                    for (x2 = 0; !m_cancel && (x2 < mat_size); ++x2)
+                    for (x2 = 0; runningFlag() && (x2 < mat_size); ++x2)
                     {
                         index1 = width * (y1 + y2 - mat_offset) +
                                  x1 + x2 - mat_offset;

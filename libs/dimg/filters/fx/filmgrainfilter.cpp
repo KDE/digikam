@@ -140,9 +140,9 @@ void FilmGrainFilter::filterImage()
 
     qsrand(1); // noise will always be the same
 
-    for (int x = 0; !m_cancel && x < width; x += d->settings.grainSize)
+    for (int x = 0; runningFlag() && x < width; x += d->settings.grainSize)
     {
-        for (int y = 0; !m_cancel && y < height; y += d->settings.grainSize)
+        for (int y = 0; runningFlag() && y < height; y += d->settings.grainSize)
         {
             refCol = m_orgImage.getPixelColor(x, y);
             computeNoiseSettings(refCol,
@@ -152,9 +152,9 @@ void FilmGrainFilter::filterImage()
 
             // Grain size matrix processing.
 
-            for (int zx = 0; !m_cancel && zx < d->settings.grainSize; ++zx)
+            for (int zx = 0; runningFlag() && zx < d->settings.grainSize; ++zx)
             {
-                for (int zy = 0; !m_cancel && zy < d->settings.grainSize; ++zy)
+                for (int zy = 0; runningFlag() && zy < d->settings.grainSize; ++zy)
                 {
                     posX = x + zx;
                     posY = y + zy;
@@ -284,7 +284,7 @@ double FilmGrainFilter::randomizeGauss(double sigma)
     {
         u = qrand() / (double)RAND_MAX;
     }
-    while (!m_cancel && u == 0.0);
+    while (runningFlag() && u == 0.0);
 
     double v = qrand () / (double) RAND_MAX;
     return (sigma * sqrt(-2 * log (u)) * cos(2 * M_PI * v)) ;

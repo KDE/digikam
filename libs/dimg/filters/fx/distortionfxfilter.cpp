@@ -219,11 +219,11 @@ void DistortionFXFilter::fisheye(DImg* orgImage, DImg* destImage, double Coeff, 
 
     // main loop
 
-    for (h = 0; !m_cancel && (h < Height); ++h)
+    for (h = 0; runningFlag() && (h < Height); ++h)
     {
         th = lfYScale * (double)(h - nHalfH);
 
-        for (w = 0; !m_cancel && (w < Width); ++w)
+        for (w = 0; runningFlag() && (w < Width); ++w)
         {
             tw = lfXScale * (double)(w - nHalfW);
 
@@ -310,11 +310,11 @@ void DistortionFXFilter::twirl(DImg *orgImage, DImg *destImage, int Twirl, bool 
 
     // main loop
 
-    for (h = 0; !m_cancel && (h < Height); ++h)
+    for (h = 0; runningFlag() && (h < Height); ++h)
     {
         th = lfYScale * (double)(h - nHalfH);
 
-        for (w = 0; !m_cancel && (w < Width); ++w)
+        for (w = 0; runningFlag() && (w < Width); ++w)
         {
             tw = lfXScale * (double)(w - nHalfW);
 
@@ -402,9 +402,9 @@ void DistortionFXFilter::cilindrical(DImg *orgImage, DImg *destImage, double Coe
 
     // main loop
 
-    for (h = 0; !m_cancel && (h < Height); ++h)
+    for (h = 0; runningFlag() && (h < Height); ++h)
     {
-        for (w = 0; !m_cancel && (w < Width); ++w)
+        for (w = 0; runningFlag() && (w < Width); ++w)
         {
             // we find the distance from the center
             nh = fabs ((double)(h - nHalfH));
@@ -475,9 +475,9 @@ void DistortionFXFilter::multipleCorners(DImg *orgImage, DImg *destImage, int Fa
 
     // main loop
 
-    for (h = 0; !m_cancel && (h < Height); ++h)
+    for (h = 0; runningFlag() && (h < Height); ++h)
     {
-        for (w = 0; !m_cancel && (w < Width); ++w)
+        for (w = 0; runningFlag() && (w < Width); ++w)
         {
             // we find the distance from the center
             nh = nHalfH - h;
@@ -543,11 +543,11 @@ void DistortionFXFilter::polarCoordinates(DImg *orgImage, DImg *destImage, bool 
 
     // main loop
 
-    for (h = 0; !m_cancel && (h < Height); ++h)
+    for (h = 0; runningFlag() && (h < Height); ++h)
     {
         th = lfYScale * (double)(h - nHalfH);
 
-        for (w = 0; !m_cancel && (w < Width); ++w)
+        for (w = 0; runningFlag() && (w < Width); ++w)
         {
             tw = lfXScale * (double)(w - nHalfW);
 
@@ -623,9 +623,9 @@ void DistortionFXFilter::circularWaves(DImg *orgImage, DImg *destImage, int X, i
 
     lfRadMax = sqrt (Height * Height + Width * Width);
 
-    for (h = 0; !m_cancel && (h < Height); ++h)
+    for (h = 0; runningFlag() && (h < Height); ++h)
     {
-        for (w = 0; !m_cancel && (w < Width); ++w)
+        for (w = 0; runningFlag() && (w < Width); ++w)
         {
             nw = X - w;
             nh = Y - h;
@@ -679,7 +679,7 @@ void DistortionFXFilter::waves(DImg *orgImage, DImg *destImage,
     {
         int tx;
 
-        for (h = 0; !m_cancel && (h < Height); ++h)
+        for (h = 0; runningFlag() && (h < Height); ++h)
         {
             tx = lround(Amplitude * sin ((Frequency * 2) * h * (M_PI / 180)));
             destImage->bitBltImage(orgImage, 0, h,  Width, 1,  tx, h);
@@ -701,7 +701,7 @@ void DistortionFXFilter::waves(DImg *orgImage, DImg *destImage,
     {
         int ty;
 
-        for (w = 0; !m_cancel && (w < Width); ++w)
+        for (w = 0; runningFlag() && (w < Width); ++w)
         {
             ty = lround(Amplitude * sin ((Frequency * 2) * w * (M_PI / 180)));
             destImage->bitBltImage(orgImage, w, 0, 1, Height, w, ty);
@@ -754,9 +754,9 @@ void DistortionFXFilter::blockWaves(DImg *orgImage, DImg *destImage,
 
     int nHalfW = Width / 2, nHalfH = Height / 2;
 
-    for (int w = 0; !m_cancel && (w < Width); ++w)
+    for (int w = 0; runningFlag() && (w < Width); ++w)
     {
-        for (int h = 0; !m_cancel && (h < Height); ++h)
+        for (int h = 0; runningFlag() && (h < Height); ++h)
         {
             nw = nHalfW - w;
             nh = nHalfH - h;
@@ -824,9 +824,9 @@ void DistortionFXFilter::tile(DImg *orgImage, DImg *destImage,
 
     int tx, ty, h, w, progress;
 
-    for (h = 0; !m_cancel && (h < Height); h += HSize)
+    for (h = 0; runningFlag() && (h < Height); h += HSize)
     {
-        for (w = 0; !m_cancel && (w < Width); w += WSize)
+        for (w = 0; runningFlag() && (w < Width); w += WSize)
         {
 #ifndef _WIN32
             tx = (int)(rand_r(&seed) % Random) - (Random / 2);
