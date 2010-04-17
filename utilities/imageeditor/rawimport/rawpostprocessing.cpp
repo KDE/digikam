@@ -56,6 +56,11 @@ RawPostProcessing::RawPostProcessing(DImgThreadedFilter* parentFilter,
     filterImage();
 }
 
+RawPostProcessing::~RawPostProcessing()
+{
+    cancelFilter();
+}
+
 void RawPostProcessing::filterImage()
 {
     rawPostProcessing();

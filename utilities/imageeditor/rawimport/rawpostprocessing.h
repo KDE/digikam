@@ -43,7 +43,7 @@ public:
     RawPostProcessing(DImgThreadedFilter* parentFilter, const DImg& orgImage, const DImg& destImage,
                       int progressBegin=0, int progressEnd=100, const DRawDecoding& settings=DRawDecoding());
 
-    ~RawPostProcessing(){};
+    ~RawPostProcessing();
 
 private:
 
