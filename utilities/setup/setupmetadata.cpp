@@ -32,6 +32,7 @@
 #include <QGridLayout>
 #include <QGroupBox>
 #include <QLabel>
+#include <QToolButton>
 #include <QVBoxLayout>
 
 // KDE includes
@@ -80,6 +81,7 @@ public:
         updateFileTimeStampBox  = 0;
         saveToNepomukBox        = 0;
         readFromNepomukBox      = 0;
+        resyncButton            = 0;
         tagsCfgPanel            = 0;
         tab                     = 0;
     }
@@ -99,6 +101,7 @@ public:
 
     QCheckBox*     saveToNepomukBox;
     QCheckBox*     readFromNepomukBox;
+    QToolButton*   resyncButton;
 
     KTabWidget*    tab;
 
@@ -265,7 +268,17 @@ SetupMetadata::SetupMetadata(QWidget* parent)
     gLayout3->addWidget(d->saveToNepomukBox);
     gLayout3->addWidget(d->readFromNepomukBox);
 
-    nepoLayout->addWidget(nepoGroup);
+    d->resyncButton = new QToolButton;
+    d->resyncButton->setText(i18n("Fully Resynchronize again"));
+    d->resyncButton->setIcon(SmallIcon("edit-redo"));
+    d->resyncButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    d->resyncButton->setCheckable(true);
+
+    connect(d->saveToNepomukBox, SIGNAL(toggled(bool)),
+            this, SLOT(slotNepomukToggled()));
+
+    connect(d->readFromNepomukBox, SIGNAL(toggled(bool)),
+            this, SLOT(slotNepomukToggled()));
 
     d->tab->addTab(nepoPanel, i18n("Nepomuk"));
 
@@ -308,6 +321,7 @@ SetupMetadata::SetupMetadata(QWidget* parent)
     nepoLayout->addWidget(nepoGroup);
     nepoLayout->addSpacing(KDialog::spacingHint());
     nepoLayout->addWidget(nepoBox);
+    nepoLayout->addWidget(d->resyncButton, 0, Qt::AlignRight);
     nepoLayout->addStretch();
 
 #endif // HAVE_NEPOMUK
@@ -360,6 +374,8 @@ void SetupMetadata::applySettings()
 #ifdef HAVE_NEPOMUK
     settings->setSyncDigikamToNepomuk(d->saveToNepomukBox->isChecked());
     settings->setSyncNepomukToDigikam(d->readFromNepomukBox->isChecked());
+    if (d->resyncButton->isEnabled() && d->resyncButton->isChecked())
+        settings->triggerResyncWithNepomuk();
 #endif
     settings->saveSettings();
 
@@ -384,6 +400,7 @@ void SetupMetadata::readSettings()
 #ifdef HAVE_NEPOMUK
     d->saveToNepomukBox->setChecked(settings->getSyncDigikamToNepomuk());
     d->readFromNepomukBox->setChecked(settings->getSyncNepomukToDigikam());
+    slotNepomukToggled();
 #endif
 }
 
@@ -398,6 +415,11 @@ void SetupMetadata::slotExifAutoRotateToggled(bool b)
         d->exifAutoRotateAsChanged = true;
     else
         d->exifAutoRotateAsChanged = false;
+}
+
+void SetupMetadata::slotNepomukToggled()
+{
+    d->resyncButton->setEnabled(d->saveToNepomukBox->isChecked() || d->readFromNepomukBox->isChecked());
 }
 
 }  // namespace Digikam

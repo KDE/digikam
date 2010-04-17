@@ -243,6 +243,9 @@ void NepomukService::enableSyncToDigikam(bool syncToDigikam)
 
         /*connect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(const CollectionImageChangeset &)),
                 this, SLOT(slotCollectionImageChange(const CollectionImageChangeset &)));*/
+
+        if (lastSyncToDigikam().isNull())
+            d->triggerSyncToDigikam();
     }
     else
     {
@@ -255,9 +258,6 @@ void NepomukService::enableSyncToDigikam(bool syncToDigikam)
         /*disconnect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(const CollectionImageChangeset &)),
                    this, SLOT(slotCollectionImageChange(const CollectionImageChangeset &)));*/
     }
-
-    if (lastSyncToDigikam().isNull())
-        d->triggerSyncToDigikam();
 }
 
 void NepomukService::enableSyncToNepomuk(bool syncToNepomuk)
@@ -302,6 +302,16 @@ void NepomukService::enableSyncToNepomuk(bool syncToNepomuk)
         disconnect(DatabaseAccess::databaseWatch(), SIGNAL(tagChange(const TagChangeset &)),
                    this, SLOT(slotTagChange(const TagChangeset &)));
     }
+}
+
+void NepomukService::triggerResync()
+{
+    clearSyncedToDigikam();
+    clearSyncedToNepomuk();
+    if (d->syncToNepomuk)
+        fullSyncDigikamToNepomuk();
+    if (d->syncToDigikam)
+        d->triggerSyncToDigikam();
 }
 
 void NepomukService::setDatabase(const QString &paramsUrl)
@@ -1009,6 +1019,16 @@ void NepomukService::markAsSyncedToDigikam()
 void NepomukService::markAsSyncedToNepomuk()
 {
     DatabaseAccess().db()->setSetting("InitialSyncDigikamToNepomuk-1", "yes");
+}
+
+void NepomukService::clearSyncedToDigikam()
+{
+    DatabaseAccess().db()->setSetting("SyncNepomukToDigikam-1-Time", QString());
+}
+
+void NepomukService::clearSyncedToNepomuk()
+{
+    DatabaseAccess().db()->setSetting("InitialSyncDigikamToNepomuk-1", QString());
 }
 
 void NepomukService::checkTagList()

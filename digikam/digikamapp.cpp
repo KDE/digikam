@@ -214,9 +214,6 @@ DigikamApp::DigikamApp()
     connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotSetupChanged()));
 
-    connect(AlbumSettings::instance(), SIGNAL(nepomukSettingsChanged()),
-             this, SLOT(slotNepomukSettingsChanged()));
-
     d->cameraMenu               = new KActionMenu(this);
     d->usbMediaMenu             = new KActionMenu(this);
     d->cardReaderMenu           = new KActionMenu(this);
@@ -2730,19 +2727,6 @@ void DigikamApp::slotShowMenuBar()
 void DigikamApp::moveEvent(QMoveEvent*)
 {
     emit signalWindowHasMoved();
-}
-
-void DigikamApp::slotNepomukSettingsChanged()
-{
-#ifdef HAVE_NEPOMUK
-    QDBusInterface interface("org.kde.nepomuk.services.digikamnepomukservice",
-                              "/digikamnepomukservice", "org.kde.digikam.DigikamNepomukService");
-    if (interface.isValid())
-    {
-        interface.call(QDBus::NoBlock, "enableSyncToDigikam", AlbumSettings::instance()->getSyncNepomukToDigikam());
-        interface.call(QDBus::NoBlock, "enableSyncToNepomuk", AlbumSettings::instance()->getSyncDigikamToNepomuk());
-    }
-#endif // HAVE_NEPOMUK
 }
 
 void DigikamApp::updateCameraMenu()

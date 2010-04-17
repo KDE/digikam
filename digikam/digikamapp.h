@@ -212,8 +212,6 @@ private Q_SLOTS:
     void slotImportAddFolders();
     void slotDIOResult(KJob*);
 
-    void slotNepomukSettingsChanged();
-
 private:
 
     DigikamAppPriv* const d;

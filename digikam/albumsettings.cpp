@@ -25,6 +25,10 @@
 
 #include "albumsettings.moc"
 
+// Qt includes
+
+#include <QDBusInterface>
+
 // KDE includes
 
 #include <kconfig.h>
@@ -356,7 +360,6 @@ public:
 
     //misc
     AlbumSettings::StringComparisonType stringComparisonType;
-
 };
 
 class AlbumSettingsCreator { public: AlbumSettings object; };
@@ -474,6 +477,9 @@ void AlbumSettings::init()
     d->syncToNepomuk                = false;
 
     d->stringComparisonType         = AlbumSettings::Natural;
+
+    connect(this, SIGNAL(nepomukSettingsChanged()),
+            this, SLOT(applyNepomukSettings()));
 }
 
 void AlbumSettings::readSettings()
@@ -1719,6 +1725,31 @@ void AlbumSettings::setStringComparisonType(AlbumSettings::StringComparisonType 
 AlbumSettings::StringComparisonType AlbumSettings::getStringComparisonType() const
 {
     return d->stringComparisonType;
+}
+
+void AlbumSettings::applyNepomukSettings() const
+{
+#ifdef HAVE_NEPOMUK
+    QDBusInterface interface("org.kde.nepomuk.services.digikamnepomukservice",
+                              "/digikamnepomukservice", "org.kde.digikam.DigikamNepomukService");
+    if (interface.isValid())
+    {
+        interface.call(QDBus::NoBlock, "enableSyncToDigikam", d->syncToDigikam);
+        interface.call(QDBus::NoBlock, "enableSyncToNepomuk", d->syncToNepomuk);
+    }
+#endif // HAVE_NEPOMUK
+}
+
+void AlbumSettings::triggerResyncWithNepomuk() const
+{
+#ifdef HAVE_NEPOMUK
+    QDBusInterface interface("org.kde.nepomuk.services.digikamnepomukservice",
+                              "/digikamnepomukservice", "org.kde.digikam.DigikamNepomukService");
+    if (interface.isValid())
+    {
+        interface.call(QDBus::NoBlock, "triggerResync");
+    }
+#endif // HAVE_NEPOMUK
 }
 
 

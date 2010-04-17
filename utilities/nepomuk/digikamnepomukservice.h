@@ -66,6 +66,7 @@ public Q_SLOTS:
     Q_SCRIPTABLE void setDatabase(const QString &parameters);
     Q_SCRIPTABLE void enableSyncToDigikam(bool syncToDigikam);
     Q_SCRIPTABLE void enableSyncToNepomuk(bool syncToNepomuk);
+    Q_SCRIPTABLE void triggerResync();
 
 protected Q_SLOTS:
 
@@ -113,8 +114,10 @@ protected:
     QString tagnameForNepomukTag(const QUrl& tagUri);
     QDateTime lastSyncToDigikam();
     void markAsSyncedToDigikam();
+    void clearSyncedToDigikam();
     bool hasSyncToNepomuk();
     void markAsSyncedToNepomuk();
+    void clearSyncedToNepomuk();
     void checkTagList();
     void checkTagMap();
     DatabaseParameters databaseParameters();

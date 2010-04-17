@@ -372,6 +372,11 @@ public:
     bool getInternalDatabaseServer() const;
     void setInternalDatabaseServer(const bool useInternalDBServer);
 
+public Q_SLOTS:
+
+    void applyNepomukSettings() const;
+    void triggerResyncWithNepomuk() const;
+
 private:
 
     friend class AlbumSettingsCreator;
