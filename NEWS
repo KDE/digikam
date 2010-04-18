@@ -41,7 +41,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 029 ==> 231598 : Metadata on Albums are lost when album moved from one collection to another.
 030 ==> 234567 : Setting the rating causes reset of the zoom.
 031 ==> 234594 : digiKam crashes when scanning tags.
-032 ==> 
+032 ==> 234022 : Renaming tool "loose" original filename.
+033 ==>
 
 
 
