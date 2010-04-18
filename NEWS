@@ -40,7 +40,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 028 ==> 233549 : [database] Stuck at saving new image.
 029 ==> 231598 : Metadata on Albums are lost when album moved from one collection to another.
 030 ==> 234567 : Setting the rating causes reset of the zoom.
-031 ==>
+031 ==> 234594 : digiKam crashes when scanning tags.
+032 ==> 
+
 
 
 
