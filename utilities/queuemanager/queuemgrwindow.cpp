@@ -304,6 +304,9 @@ void QueueMgrWindow::setupConnections()
     connect(d->queueSettingsView, SIGNAL(signalSettingsChanged(const QueueSettings&)),
             d->queuePool, SLOT(slotSettingsChanged(const QueueSettings&)));
 
+    connect(d->queueSettingsView, SIGNAL(signalSettingsChanged(const QueueSettings&)),
+            this, SLOT(slotQueueContentsChanged()));
+
     connect(d->queuePool, SIGNAL(signalQueueSelected(int, const QueueSettings&, const AssignedBatchTools&)),
             this, SLOT(slotQueueContentsChanged()));
 

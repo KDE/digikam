@@ -153,6 +153,7 @@ private:
     void keyPressEvent(QKeyEvent*);
     void focusOutEvent(QFocusEvent*);
     void leaveEvent(QEvent*);
+    void resetQueue();
 
 private:
 

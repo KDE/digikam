@@ -785,6 +785,7 @@ int QueueListView::pendingTasksCount()
 void QueueListView::setSettings(const QueueSettings& settings)
 {
     d->settings = settings;
+    resetQueue();
     updateDestFileNames();
 }
 
@@ -807,7 +808,11 @@ AssignedBatchTools QueueListView::assignedTools()
 void QueueListView::slotAssignedToolsChanged(const AssignedBatchTools& tools)
 {
     setAssignedTools(tools);
+    resetQueue();
+}
 
+void QueueListView::resetQueue()
+{
     //reset all items
     QTreeWidgetItemIterator it(this);
     while (*it)
