@@ -484,22 +484,24 @@ void CollectionScanner::scanAlbumRoot(const CollectionLocation& location)
 
 void CollectionScanner::scanForStaleAlbums(QList<CollectionLocation> locations)
 {
+    Q_UNUSED(locations);
     if (d->wantSignals)
         emit startScanningForStaleAlbums();
 
     QList<AlbumShortInfo> albumList = DatabaseAccess().db()->getAlbumShortInfos();
     QList<int> toBeDeleted;
 
+    /* see #231598
     QHash<int, CollectionLocation> albumRoots;
     foreach (const CollectionLocation& location, locations)
-        albumRoots[location.id()] = location;
+        albumRoots[location.id()] = location;*/
 
     QList<AlbumShortInfo>::const_iterator it;
     for (it = albumList.constBegin(); it != albumList.constEnd(); ++it)
     {
-        CollectionLocation location = albumRoots.value((*it).albumRootId);
+        CollectionLocation location = CollectionManager::instance()->locationForAlbumRootId((*it).albumRootId);
         // Only handle albums on available locations
-        if (!location.isNull())
+        if (location.isAvailable())
         {
             QFileInfo fileInfo(location.albumRootPath() + (*it).relativePath);
             if (!fileInfo.exists() || !fileInfo.isDir())
@@ -526,8 +528,8 @@ void CollectionScanner::scanForStaleAlbums(QList<CollectionLocation> locations)
             if (toBeDeletedIndex != -1)
             {
                 // check for existence of target
-                CollectionLocation location = albumRoots.value(it.key().albumRootId);
-                if (!location.isNull())
+                CollectionLocation location = CollectionManager::instance()->locationForAlbumRootId(it.key().albumRootId);
+                if (location.isAvailable())
                 {
                     QFileInfo fileInfo(location.albumRootPath() + it.key().relativePath);
                     if (fileInfo.exists() && fileInfo.isDir())
