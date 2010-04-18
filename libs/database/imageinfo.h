@@ -98,6 +98,7 @@ public:
     ImageInfo& operator=(const ImageInfo& info);
 
     bool operator==(const ImageInfo& info) const;
+    bool operator!=(const ImageInfo& info) const { return !operator==(info); }
     bool operator<(const ImageInfo& info) const;
     uint hash() const;
 

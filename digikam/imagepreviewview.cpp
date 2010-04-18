@@ -327,22 +327,24 @@ void ImagePreviewView::slotNextPreload()
     }
 
     if (d->loadFullImageSize)
-        d->previewThread->loadHighQuality(loadPath, AlbumSettings::instance()->getExifRotate());
+        d->previewPreloadThread->loadHighQuality(loadPath, AlbumSettings::instance()->getExifRotate());
     else
         d->previewPreloadThread->load(loadPath, d->previewSize, AlbumSettings::instance()->getExifRotate());
 }
 
 void ImagePreviewView::setImageInfo(const ImageInfo& info, const ImageInfo& previous, const ImageInfo& next)
 {
-    d->imageInfo = info;
+    if (d->imageInfo != info)
+    {
+        d->imageInfo = info;
+        if (!d->imageInfo.isNull())
+            setImagePath(info.filePath());
+        else
+            setImagePath();
+    }
 
     d->prevAction->setEnabled(!previous.isNull());
     d->nextAction->setEnabled(!next.isNull());
-
-    if (!d->imageInfo.isNull())
-        setImagePath(info.filePath());
-    else
-        setImagePath();
 
     setPreviousNextPaths(previous.filePath(), next.filePath());
 }
