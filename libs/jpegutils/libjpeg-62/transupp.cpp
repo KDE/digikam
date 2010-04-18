@@ -17,8 +17,12 @@
  */
 #define JPEG_INTERNALS
 
+extern "C"
+{
 #include "jinclude.h"
 #include "jpeglib.h"
+}
+
 #include "transupp.h"		/* My own external interface */
 
 namespace Digikam
