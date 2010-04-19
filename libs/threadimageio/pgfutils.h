@@ -42,11 +42,12 @@ namespace Digikam
     bool readPGFImageData(const QByteArray& data, QImage& img);
 
     /** QImage to PGF image data. 'quality' argument set compression ratio:
-        0 => lossless compression.
+        0 => lossless compression, as PNG.
         1 => Not loss less compression, wavelets based...
         2 =>
-        3 => Same compression ratio near than JPEG quality=85. image quality is valid.
-        >= 4 => provide artifacts due to  Downsampling. Do not use it...
+        3 =>
+        4 => Same compression ratio near than JPEG quality=85. image quality is valid for thumbnails.
+        >= 5 => provide artifacts due to down-sampling. Do not use it...
      */
     bool writePGFImageData(const QImage& img, QByteArray& data, int quality);
 

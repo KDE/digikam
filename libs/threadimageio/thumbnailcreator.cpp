@@ -531,8 +531,9 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
 
     if (dbInfo.type == DatabaseThumbnail::PGF)
     {
-        // NOTE: see B.K.O #233094: using PGF compression level 3 don not blur image as level 4.
-        if (!writePGFImageData(image.qimage, dbInfo.data, 3))
+        // NOTE: see B.K.O #233094: using PGF compression level 4 there. Do not use a value > 4,
+        // else image is blured due to donw-sampling.
+        if (!writePGFImageData(image.qimage, dbInfo.data, 4))
         {
             kWarning() << "Cannot save PGF thumb in DB";
             return;
