@@ -94,9 +94,9 @@ void RawPostProcessing::rawPostProcessing()
         settings.green        = 1.0;
         WBFilter wb(&m_orgImage, 0L, settings);
         wb.startFilterDirectly();
-        m_orgImage.putImageData(wb.getTargetImage().bits());   
+        m_orgImage.putImageData(wb.getTargetImage().bits());
     }
-    
+
     postProgress(40);
 
     if (m_customRawSettings.lightness != 0.0 || m_customRawSettings.contrast != 1.0 || m_customRawSettings.gamma != 1.0)
@@ -107,9 +107,9 @@ void RawPostProcessing::rawPostProcessing()
         settings.gamma      = m_customRawSettings.gamma;
         BCGFilter bcg(&m_orgImage, 0L, settings);
         bcg.startFilterDirectly();
-        m_orgImage.putImageData(bcg.getTargetImage().bits());    
+        m_orgImage.putImageData(bcg.getTargetImage().bits());
     }
-    
+
     postProgress(60);
 
     if (!m_customRawSettings.curveAdjust.isEmpty())
@@ -121,7 +121,7 @@ void RawPostProcessing::rawPostProcessing()
         curves.startFilterDirectly();
         m_orgImage.putImageData(curves.getTargetImage().bits());
     }
-    
+
     postProgress(80);
 
     m_destImage = m_orgImage;
