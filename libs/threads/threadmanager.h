@@ -46,19 +46,19 @@ class DIGIKAM_EXPORT ThreadManager : public QObject
 
 public:
 
-    static ThreadManager *instance();
+    static ThreadManager* instance();
 
-    void initialize(WorkerObject  *object);
-    void initialize(DynamicThread *dynamicThread);
+    void initialize(WorkerObject* object);
+    void initialize(DynamicThread* dynamicThread);
 
 public Q_SLOTS:
 
-    void schedule(WorkerObject  *object);
-    void schedule(QRunnable *runnable);
+    void schedule(WorkerObject* object);
+    void schedule(QRunnable* runnable);
 
 protected Q_SLOTS:
 
-    void slotDestroyed(QObject *object);
+    void slotDestroyed(QObject* object);
 
 protected:
 
@@ -69,8 +69,6 @@ protected:
     ThreadManagerPriv* const d;
 };
 
-}
+} // namespace Digikam
 
-#endif
-
-
+#endif // THREADMANAGER_H

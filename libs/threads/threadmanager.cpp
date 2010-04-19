@@ -49,7 +49,7 @@ class ParkingThread : public QThread
 {
 public:
 
-    ParkingThread(QObject *parent = 0)
+    ParkingThread(QObject* parent = 0)
         : QThread(parent), running(true)
     {
         start();
@@ -62,14 +62,14 @@ public:
         wait();
     }
 
-    void parkObject(QObject *object)
+    void parkObject(QObject* object)
     {
         object->moveToThread(this);
         QMutexLocker locker(&mutex);
         condVar.wakeAll();
     }
 
-    void moveToCurrentThread(QObject *parkedObject)
+    void moveToCurrentThread(QObject* parkedObject)
     {
         if (parkedObject->thread() == QThread::currentThread())
             return;
@@ -125,19 +125,22 @@ class WorkerObjectRunnable : public QRunnable
 {
 public:
 
-    WorkerObjectRunnable(WorkerObject *object, ParkingThread *parkingThread);
+    WorkerObjectRunnable(WorkerObject* object, ParkingThread* parkingThread);
 
 protected:
 
-    WorkerObject  *object;
-    ParkingThread *parkingThread;
+    WorkerObject*  object;
+    ParkingThread* parkingThread;
+
+protected:
 
     virtual void run();
 };
 
+// --------------------------------------------------------------------------------------------------
 
-WorkerObjectRunnable::WorkerObjectRunnable(WorkerObject *object, ParkingThread *parkingThread)
-   : object(object), parkingThread(parkingThread)
+WorkerObjectRunnable::WorkerObjectRunnable(WorkerObject* object, ParkingThread* parkingThread)
+                    : object(object), parkingThread(parkingThread)
 {
     setAutoDelete(true);
 }
@@ -164,6 +167,7 @@ void WorkerObjectRunnable::run()
     object->transitionToInactive();
 }
 
+// -------------------------------------------------------------------------------------------------
 
 class ThreadManagerPriv
 {
@@ -174,8 +178,8 @@ public:
         parkingThread = 0;
     }
 
-    ParkingThread *parkingThread;
-    QThreadPool   *pool;
+    ParkingThread* parkingThread;
+    QThreadPool*   pool;
 
     void changeMaxThreadCount(int diff)
     {
@@ -192,7 +196,7 @@ ThreadManager* ThreadManager::instance()
 }
 
 ThreadManager::ThreadManager()
-    : d(new ThreadManagerPriv)
+             : d(new ThreadManagerPriv)
 {
     d->parkingThread = new ParkingThread(this);
     d->pool          = new QThreadPool(this);
@@ -205,7 +209,7 @@ ThreadManager::~ThreadManager()
     delete d;
 }
 
-void ThreadManager::initialize(WorkerObject *object)
+void ThreadManager::initialize(WorkerObject* object)
 {
     connect(object, SIGNAL(destroyed(QObject*)),
             this, SLOT(slotDestroyed(QObject*)));
@@ -215,7 +219,7 @@ void ThreadManager::initialize(WorkerObject *object)
     d->parkingThread->parkObject(object);
 }
 
-void ThreadManager::initialize(DynamicThread *dynamicThread)
+void ThreadManager::initialize(DynamicThread* dynamicThread)
 {
     connect(dynamicThread, SIGNAL(destroyed(QObject*)),
             this, SLOT(slotDestroyed(QObject*)));
@@ -223,20 +227,19 @@ void ThreadManager::initialize(DynamicThread *dynamicThread)
     d->changeMaxThreadCount(+1);
 }
 
-void ThreadManager::schedule(WorkerObject *object)
+void ThreadManager::schedule(WorkerObject* object)
 {
     d->pool->start(new WorkerObjectRunnable(object, d->parkingThread));
 }
 
-void ThreadManager::schedule(QRunnable *runnable)
+void ThreadManager::schedule(QRunnable* runnable)
 {
     d->pool->start(runnable);
 }
 
-void ThreadManager::slotDestroyed(QObject *)
+void ThreadManager::slotDestroyed(QObject*)
 {
     d->changeMaxThreadCount(-1);
 }
 
-} // namespace
-
+} // namespace Digikam

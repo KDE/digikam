@@ -96,8 +96,6 @@ private:
     WorkerObjectPriv* const d;
 };
 
-}
+} // namespace Digikam
 
-#endif
-
-
+#endif // WORKEROBJECT_H

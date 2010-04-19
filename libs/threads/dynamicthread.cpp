@@ -44,7 +44,7 @@ class DynamicThreadPriv : public QRunnable
 {
 public:
 
-    DynamicThreadPriv(DynamicThread *q) : q(q)
+    DynamicThreadPriv(DynamicThread* q) : q(q)
     {
         setAutoDelete(false);
 
@@ -77,8 +77,8 @@ public:
     QWaitCondition condVar;
 };
 
-DynamicThread::DynamicThread(QObject *parent)
-    : QObject(parent), d(new DynamicThreadPriv(this))
+DynamicThread::DynamicThread(QObject* parent)
+             : QObject(parent), d(new DynamicThreadPriv(this))
 {
     setAutoDelete(false);
     ThreadManager::instance()->initialize(this);
@@ -151,6 +151,5 @@ bool DynamicThread::runningFlag() const
     return d->running;
 }
 
-
-} // namespace
+} // namespace Digikam
 

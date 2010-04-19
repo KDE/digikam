@@ -47,12 +47,12 @@ public:
     }
 
     WorkerObject::State state;
-    QMutex      mutex;
+    QMutex              mutex;
     QWaitCondition      condVar;
 };
 
 WorkerObject::WorkerObject()
-    : d(new WorkerObjectPriv)
+            : d(new WorkerObjectPriv)
 {
 }
 
@@ -73,7 +73,8 @@ void WorkerObject::wait()
 bool WorkerObject::connectAndSchedule(const QObject* sender, const char* signal, const char* method,
                            Qt::ConnectionType type) const
 {
-    connect(sender, signal, this, SLOT(schedule()));
+    connect(sender, signal,
+            this, SLOT(schedule()));
 
     return QObject::connect(sender, signal, method, type);
 }
@@ -92,7 +93,10 @@ bool WorkerObject::disconnectAndSchedule(const QObject* sender, const char* sign
                               const QObject* receiver, const char* method)
 {
     if (receiver == this)
-        connect(sender, signal, this, SLOT(schedule()));
+    {
+        connect(sender, signal,
+                this, SLOT(schedule()));
+    }
 
     return QObject::disconnect(sender, signal, receiver, method);
 }
@@ -168,5 +172,4 @@ void WorkerObject::transitionToInactive()
     }
 }
 
-} // namespace
-
+} // namespace Digikam

@@ -64,8 +64,8 @@ public:
     virtual ~DynamicThread();
 
     State state() const;
-    bool isRunning() const;
-    bool isFinished() const;
+    bool  isRunning() const;
+    bool  isFinished() const;
 
 public Q_SLOTS:
 
@@ -86,16 +86,14 @@ protected:
      *  and cleanup and return if false. */
     bool runningFlag() const;
 
-public:
-
 private:
 
     friend class DynamicThreadPriv;
     DynamicThreadPriv* const d;
 };
 
-}
+} // namespace Digikam
 
-#endif
+#endif // DYNAMICTHREAD_H
 
 
