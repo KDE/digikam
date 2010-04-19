@@ -60,6 +60,11 @@
 
 #include "CImg.h"
 
+extern "C"
+{
+    #include <unistd.h>
+}
+
 using namespace cimg_library;
 
 namespace Digikam
