@@ -178,6 +178,12 @@ public:
     void setHighlightPixmap(bool highlight);
 
     /**
+     * Computes the pixmap size for the give thumbnail size.
+     * These can differ when highlighting is turned on.
+     */
+    int thumbnailPixmapSize(int size) const;
+
+    /**
      * If you enable this, the thread will try hard to send a pixmap if thumbnail loading failed.
      * It will use standard system icons to replace the real thumbnail.
      * If you disable this, a null QPixmap will be sent.

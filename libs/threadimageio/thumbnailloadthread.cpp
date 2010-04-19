@@ -127,6 +127,9 @@ public:
     KIO::PreviewJob                *kdeJob;
 
     LoadingDescription createLoadingDescription(const QString filePath, int size);
+    bool hasHighlightingBorder() const;
+    int pixmapSizeForThumbnailSize(int thumbnailSize) const;
+    int thumbnailSizeForPixmapSize(int pixmapSize) const;
 };
 
 K_GLOBAL_STATIC(ThumbnailLoadThread, defaultIconViewObject)
@@ -265,11 +268,34 @@ bool ThumbnailLoadThread::find(const QString& filePath, QPixmap& retPixmap)
     return find(filePath, retPixmap, d->size);
 }
 
-LoadingDescription ThumbnailLoadThreadPriv::createLoadingDescription(const QString filePath, int size)
+int ThumbnailLoadThread::thumbnailPixmapSize(int size) const
+{
+    return d->pixmapSizeForThumbnailSize(size);
+}
+
+bool ThumbnailLoadThreadPriv::hasHighlightingBorder() const
+{
+    return highlight && size >= 10;
+}
+
+int ThumbnailLoadThreadPriv::pixmapSizeForThumbnailSize(int thumbnailSize) const
+{
+    if (hasHighlightingBorder())
+        return thumbnailSize + 2;
+    return thumbnailSize;
+}
+
+int ThumbnailLoadThreadPriv::thumbnailSizeForPixmapSize(int pixmapSize) const
 {
     // bug #206666: Do not cut off one-pixel line for highlighting border
-    if (highlight && size >= 10)
-        size -= 2;
+    if (hasHighlightingBorder())
+        return pixmapSize - 2;
+    return pixmapSize;
+}
+
+LoadingDescription ThumbnailLoadThreadPriv::createLoadingDescription(const QString filePath, int size)
+{
+    size = thumbnailSizeForPixmapSize(size);
 
     LoadingDescription description(filePath, size, exifRotate,
                                    LoadingDescription::NoColorConversion,
@@ -428,6 +454,7 @@ void ThumbnailLoadThread::load(const LoadingDescription& constDescription, bool 
 
 bool ThumbnailLoadThread::checkSize(int size)
 {
+    size = d->thumbnailSizeForPixmapSize(size);
     if (size <= 0)
     {
         kError() << "ThumbnailLoadThread::load: No thumbnail size specified. Refusing to load thumbnail.";

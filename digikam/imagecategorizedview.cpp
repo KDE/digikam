@@ -325,9 +325,10 @@ void ImageCategorizedView::setThumbnailSize(int size)
     setThumbnailSize(ThumbnailSize(size));
 }
 
-void ImageCategorizedView::setThumbnailSize(const ThumbnailSize& size)
+void ImageCategorizedView::setThumbnailSize(const ThumbnailSize& s)
 {
     //d->model->setThumbnailSize(size);
+    ThumbnailSize size(imageThumbnailModel()->thumbnailLoadThread()->thumbnailPixmapSize(s.size()));
     d->delegate->setThumbnailSize(size);
     //viewport()->update();
 }

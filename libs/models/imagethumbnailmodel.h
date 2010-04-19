@@ -55,6 +55,7 @@ public:
     /** Enable thumbnail loading and set the thread that shall be used.
      *  The thumbnail size of this thread will be adjusted. */
     void setThumbnailLoadThread(ThumbnailLoadThread *thread);
+    ThumbnailLoadThread *thumbnailLoadThread() const;
     /// Set the thumbnail size to use
     void setThumbnailSize(const ThumbnailSize& thumbSize);
     /** Enable emitting dataChanged() when a thumbnail becomes available.

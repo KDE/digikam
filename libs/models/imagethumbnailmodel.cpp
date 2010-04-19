@@ -72,6 +72,11 @@ void ImageThumbnailModel::setThumbnailLoadThread(ThumbnailLoadThread *thread)
             this, SLOT(slotThumbnailLoaded(const LoadingDescription &, const QPixmap&)));
 }
 
+ThumbnailLoadThread *ImageThumbnailModel::thumbnailLoadThread() const
+{
+    return d->thread;
+}
+
 ThumbnailSize ImageThumbnailModel::thumbnailSize() const
 {
     return d->thumbSize;
