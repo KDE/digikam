@@ -120,7 +120,7 @@ void ImageThumbnailDelegate::updateContentWidth()
     {
         maxSize = d->viewSize.width();
     }
-    d->thumbSize = maxSize - 2*d->radius - 2*d->margin;
+    d->thumbSize = ThumbnailLoadThread::thumbnailPixmapSize(true, maxSize - 2*d->radius - 2*d->margin);
 
     ImageDelegate::updateContentWidth();
 }

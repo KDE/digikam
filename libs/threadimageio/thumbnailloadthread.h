@@ -182,6 +182,7 @@ public:
      * These can differ when highlighting is turned on.
      */
     int thumbnailPixmapSize(int size) const;
+    static int thumbnailPixmapSize(bool withHighlight, int size);
 
     /**
      * If you enable this, the thread will try hard to send a pixmap if thumbnail loading failed.

@@ -273,6 +273,13 @@ int ThumbnailLoadThread::thumbnailPixmapSize(int size) const
     return d->pixmapSizeForThumbnailSize(size);
 }
 
+int ThumbnailLoadThread::thumbnailPixmapSize(bool withHighlight, int size)
+{
+    if (withHighlight && size >= 10)
+        return size + 2;
+    return size;
+}
+
 bool ThumbnailLoadThreadPriv::hasHighlightingBorder() const
 {
     return highlight && size >= 10;
