@@ -840,22 +840,20 @@ void QueueListView::updateDestFileNames()
         {
             // Update base name using queue renaming rules.
             ImageInfo info = item->info();
+            QFileInfo fi(info.filePath());
 
             // Update suffix using assigned batch tool rules.
             tools.itemUrl     = item->info().fileUrl();
+            QString newSuffix = tools.targetSuffix();
+            QString newName   = QString("%1.%2").arg(fi.completeBaseName()).arg(newSuffix);
 
-            QString  newName = info.filePath();
             if (settings().renamingRule == QueueSettings::CUSTOMIZE)
             {
                 ParseSettings settings(info);
                 settings.parseString = parseString;
-                settings.fileUrl     = KUrl(info.filePath());
+                settings.fileUrl     = KUrl(QString("%1/%2.%3").arg(fi.absolutePath()).arg(fi.completeBaseName()).arg(newSuffix));
                 newName              = p.parse(settings);
             }
-
-            QFileInfo fi(newName);
-            QString newSuffix = tools.targetSuffix();
-            newName   = QString("%1.%2").arg(fi.completeBaseName()).arg(newSuffix);
 
             item->setDestFileName(newName);
         }
