@@ -6,7 +6,7 @@
  * Date        : 2009-11-15
  * Description : Exiv2 library interface for KDE
  *
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,8 +32,11 @@ namespace Digikam
 {
 
 #if KEXIV2_VERSION >= 0x010000
+
 typedef KExiv2Iface::KExiv2Data KExiv2Data;
+
 #else
+
 // Compatibility with KDE < 4.4, emulating a KEXiv2Data container.
 class KEXIV2_EXPORT KExiv2Data
 {
@@ -43,10 +46,10 @@ public:
     QByteArray exifData;
     QByteArray iptcData;
     QByteArray xmpData;
-
 };
+
 #endif
 
-}
+} // namespace Digikam
 
 #endif /* KEXIV2_H */
