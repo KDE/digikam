@@ -970,6 +970,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/thumbnailschemaupdater.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseconfigelement.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/sqlquery.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/dbactiontype.cpp
        )
 
     SET(libdatabase_SRCS

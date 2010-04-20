@@ -37,6 +37,7 @@
 #include <QApplication>
 #include <QCoreApplication>
 #include <QHash>
+#include <QMap>
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QThread>
@@ -53,11 +54,10 @@
 // Local includes
 
 #include "thumbnailschemaupdater.h"
+#include "dbactiontype.h"
 
 namespace Digikam
 {
-
-
 
 DatabaseLocking::DatabaseLocking()
             : mutex(QMutex::Recursive), lockCount(0)// create a recursive mutex
@@ -83,6 +83,7 @@ public:
     }
 };
 
+
 DatabaseCoreBackendPrivate::DatabaseCoreBackendPrivate(DatabaseCoreBackend *backend)
                           : q(backend)
 {
@@ -101,9 +102,6 @@ void DatabaseCoreBackendPrivate::init(const QString &name, DatabaseLocking *l)
 
     backendName = name;
     lock        = l;
-
-    qRegisterMetaType<DatabaseErrorAnswer*>("DatabaseErrorAnswer*");
-    qRegisterMetaType<SqlQuery>("SqlQuery");
 }
 
 // "A connection can only be used from within the thread that created it.
@@ -842,13 +840,64 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QMap<QString, 
         while ((pos=identifierRegExp.indexIn(preparedString, pos))!=-1)
         {
             QString namedPlaceholder = identifierRegExp.cap(0);
-            namedPlaceholderValues.append(bindingMap[namedPlaceholder]);
+            QVariant placeHolderValue = bindingMap[namedPlaceholder];
+            // Check if this is a map - then we assume, that there is a custom field/value list
+            QString replaceStr;
+            if (placeHolderValue.userType() == qMetaTypeId<DBActionType>()){
+            	DBActionType actionType = placeHolderValue.value<DBActionType>();
+            	bool		isValue = actionType.isValue();
+            	QVariant 	value   = actionType.getActionValue();
+                if ( value.type()==QVariant::Hash || value.type()==QVariant::Map )
+                {
+                	QMap<QString, QVariant> placeHolderMap = value.toMap();
+                	for (int i=0; i<placeHolderMap.size(); i++){
+                		QString  &key 	= placeHolderMap.keys()[i];
+                		QVariant &value	= placeHolderMap[key];
+                		replaceStr.append(key);
+                		replaceStr.append("= ?");
+                		namedPlaceholderValues.append(value);
 
-            #ifdef DATABASCOREBACKEND_DEBUG
-            kDebug()<<"Bind key ["<< namedPlaceholder <<"] to value ["<< bindingMap[namedPlaceholder] <<"]";
-            #endif
+                		// Add a semicolon to the statement, if we are not on the last entry
+                		if (i<placeHolderMap.size()-1)
+                		{
+                			replaceStr.append(", ");
+                		}
+                	}
+                }
+                else if ( value.type()==QVariant::List || value.type()==QVariant::StringList )
+                {
+                	QList<QVariant> placeHolderList = value.toList();
+                	for (int i=0; i<placeHolderList.size(); i++){
+                		QVariant  &entry 	= placeHolderList[i];
+                		if (isValue)
+                		{
+                			replaceStr.append("?");
+                			namedPlaceholderValues.append(entry);
+                		}
+                		else
+                		{
+                			replaceStr.append(entry.value<QString>());
+                		}
 
-            preparedString = preparedString.replace(pos, identifierRegExp.matchedLength(), "?");
+                		// Add a semicolon to the statement, if we are not on the last entry
+                		if (i<placeHolderList.size()-1)
+                		{
+                			replaceStr.append(", ");
+                		}
+                	}
+                }
+            }
+			else
+            {
+				#ifdef DATABASCOREBACKEND_DEBUG
+				kDebug()<<"Bind key ["<< namedPlaceholder <<"] to value ["<< bindingMap[namedPlaceholder] <<"]";
+				#endif
+
+            	namedPlaceholderValues.append(bindingMap[namedPlaceholder]);
+            	replaceStr="?";
+            }
+
+            preparedString = preparedString.replace(pos, identifierRegExp.matchedLength(), replaceStr);
             pos=0; // reset pos
         }
     }

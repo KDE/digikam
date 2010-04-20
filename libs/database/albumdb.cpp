@@ -55,6 +55,7 @@ extern "C"
 #include "databasebackend.h"
 #include "collectionmanager.h"
 #include "collectionlocation.h"
+#include "dbactiontype.h"
 
 namespace Digikam
 {
@@ -1242,31 +1243,65 @@ void AlbumDB::changeImageInformation(qlonglong imageId, const QVariantList& info
     if (fields == DatabaseFields::ImageInformationNone)
         return;
 
-    QString query("UPDATE ImageInformation SET ");
+    // first delete any stale albums left behind
+	QStringList fieldNames = imageInformationFieldList(fields);
+    QMap<QString, QVariant> parameters;
 
-    QStringList fieldNames = imageInformationFieldList(fields);
-    Q_ASSERT(fieldNames.size()==infos.size());
-    query += fieldNames.join("=?,");
+    QMap<QString, QVariant> fieldValueMap;
+	for (int i=0; i<infos.size(); i++)
+	{
+	   const QVariant& value=infos[i];
+	   if (value.type() == QVariant::DateTime || value.type() == QVariant::Date)
+		   fieldValueMap.insert(fieldNames[i], value.toDateTime().toString(Qt::ISODate));
+	   else
+		   fieldValueMap.insert(fieldNames[i], value);
+	}
+	DBActionType fieldValueList;
+	fieldValueList.setValue(true); // In this case (map as object), the value flag is not important.
+	fieldValueList.setActionValue(fieldValueMap);
 
-    query += "=? WHERE imageid=?;";
+	DBActionType fieldList;
+	fieldList.setValue(false);
+	fieldList.setActionValue(fieldNames);
 
-    QVariantList boundValues;
-    // Take care for datetime values
-    if (fields & DatabaseFields::CreationDate || fields & DatabaseFields::DigitizationDate)
+	DBActionType valueList;
+	valueList.setValue(true);
+	valueList.setActionValue(infos);
+
+    parameters.insert(":imageid", imageId);
+    parameters.insert(":fieldValueList", qVariantFromValue(fieldValueList));
+    parameters.insert(":fieldList", qVariantFromValue (fieldList));
+    parameters.insert(":valueList", qVariantFromValue(valueList));
+    if (DatabaseCoreBackend::NoErrors!=d->db->execDBAction(d->db->getDBAction(QString("changeImageInformation")), parameters))
     {
-        foreach (const QVariant& value, infos)
-        {
-            if (value.type() == QVariant::DateTime || value.type() == QVariant::Date)
-                boundValues << value.toDateTime().toString(Qt::ISODate);
-            else
-                boundValues << value;
-        }
-        boundValues << imageId;
+       return;
     }
-    else
-        boundValues << infos << imageId;
 
-    d->db->execSql( query, boundValues );
+//    QString query("UPDATE ImageInformation SET ");
+//
+//    QStringList fieldNames = imageInformationFieldList(fields);
+//    Q_ASSERT(fieldNames.size()==infos.size());
+//    query += fieldNames.join("=?,");
+//
+//    query += "=? WHERE imageid=?;";
+//
+//    QVariantList boundValues;
+//    // Take care for datetime values
+//    if (fields & DatabaseFields::CreationDate || fields & DatabaseFields::DigitizationDate)
+//    {
+//        foreach (const QVariant& value, infos)
+//        {
+//            if (value.type() == QVariant::DateTime || value.type() == QVariant::Date)
+//                boundValues << value.toDateTime().toString(Qt::ISODate);
+//            else
+//                boundValues << value;
+//        }
+//        boundValues << imageId;
+//    }
+//    else
+//        boundValues << infos << imageId;
+//
+//    d->db->execSql( query, boundValues );
     d->db->recordChangeset(ImageChangeset(imageId, fields));
 }
 

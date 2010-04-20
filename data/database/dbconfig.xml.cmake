@@ -268,7 +268,11 @@
 				<statement mode="query">SELECT Albums.relativePath, Images.name FROM Images INNER JOIN Albums ON Albums.id=Images.album WHERE Albums.id=:albumID;</statement>
 			</dbaction>
 			
-			
+			<dbaction name="changeImageInformation" mode="transaction">
+			  <statement mode="query">INSERT INTO ImageInformation ( imageid, :fieldList ) VALUES ( :imageid, :valueList ) ON CONFLICT IGNORE;</statement>
+			  <statement mode="query">UPDATE ImageInformation SET :fieldValueList WHERE imageid=:imageid;</statement>
+			</dbaction>
+
 			<dbaction name="InsertTag" mode="transaction">
 				<statement mode="query">INSERT INTO Tags (pid, name) VALUES( :tagPID, :tagname);</statement>
 			</dbaction>
@@ -710,6 +714,10 @@
 			END;</statement>
 			</dbaction>
 			
+			<dbaction name="checkIfDatabaseExists" mode="transaction">
+				<statement mode="query">SELECT Albums.relativePath, Images.name FROM Images INNER JOIN Albums ON Albums.id=Images.album WHERE Albums.id=:albumID ORDER BY Images.name;</statement>
+			</dbaction>
+			
 			<dbaction name="getItemURLsInAlbumByItemName" mode="transaction">
 				<statement mode="query">SELECT Albums.relativePath, Images.name FROM Images INNER JOIN Albums ON Albums.id=Images.album WHERE Albums.id=:albumID ORDER BY Images.name;</statement>
 			</dbaction>
@@ -733,7 +741,9 @@
 				<statement mode="query">SELECT Albums.relativePath, Images.name FROM Images INNER JOIN Albums ON Albums.id=Images.album WHERE Albums.id=:albumID;</statement>
 			</dbaction>
 			
-			
+			<dbaction name="changeImageInformation" mode="transaction">
+			  <statement mode="query">INSERT INTO ImageInformation ( imageid, :fieldList ) VALUES ( :imageid, :valuelist ) ON DUPLICATE KEY UPDATE :fieldValueList;</statement>
+			</dbaction>
 			 
 			<dbaction name="InsertTag" mode="transaction">
 				<statement mode="plain">LOCK TABLE Tags WRITE;</statement>

@@ -174,12 +174,34 @@ public:
     DatabaseConfigElement configElement() const;
 
     /**
-     * TODO: API docs
+     * Returns a database action with name, specified in actionName,
+     * for the current database.
      */
     DatabaseAction getDBAction(const QString &actionName) const;
+
+    /**
+     * Performs the database action on the current database.
+     * Queries by the specified parameters mustn't have named parameters.
+     * The result values (if any) are stored within the values list.
+     */
     QueryState execDBAction(const DatabaseAction &action, QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
+
+    /**
+     * Performs the database action on the current database.
+     * Queries by the specified parameters can have named parameters which are
+     * substituded with values from the bindingMap parameter.
+     * The result values (if any) are stored within the values list.
+     */
     QueryState execDBAction(const DatabaseAction &action, const QMap<QString, QVariant>& bindingMap,
                       QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
+
+    /**
+     * Performs the database action on the current database.
+     * Queries by the specified parameters can have named parameters which are
+     * substituded with values from the bindingMap parameter.
+     * The result values (if any) are stored within the values list.
+     * This method returns the last query, which is used to handle special cases.
+     */
     QSqlQuery execDBActionQuery(const DatabaseAction &action, const QMap<QString, QVariant>& bindingMap);
 
     /**
@@ -203,10 +225,23 @@ public:
                  QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
     QueryState execSql(const QString& sql, const QList<QVariant>& boundValues, QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
 
+    /**
+     * Checks if there was a connection error. If so DatabaseCoreBackend::ConnectionError is returned.
+     * If not, the values are extracted from the query and inserted in the values list,
+     * the last insertion id is taken from the query
+     * and DatabaseCoreBackend::NoErrors is returned.
+     */
     QueryState handleQueryResult(SqlQuery &query, QList<QVariant>* values, QVariant *lastInsertId);
 
     /**
-     * Method which accepts a map for named binding
+     * Method which accepts a map for named binding.
+     * For special cases it's also possible to add a DBActionType which wraps another
+     * data object (also lists or maps) which can be used as field entry or as value
+     * (where it's prepared with positional binding). See more on DBActionType class.
+     * If the wrapped data object is an instance of list, then the elements are
+     * separated by comma.
+     * If the wrapped data object is an instance of map, then the elements are
+     * inserted in the following way: key1=value1, key2=value2,...,keyN=valueN.
      */
     QueryState execSql(const QString& sql, const QMap<QString, QVariant>& bindingMap,
                  QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
@@ -216,8 +251,6 @@ public:
      * (e.g. trigger statements on QMYSQL).
      */
     QueryState execDirectSql(const QString& query);
-
-
 
     /**
      * Executes the statement and returns the query object.
@@ -238,7 +271,6 @@ public:
      * Method which accept a hashmap with key, values which are used for named binding
      */
     SqlQuery execQuery(const QString& sql, const QMap<QString, QVariant>& bindingMap);
-
 
     /**
      * Calls exec/execBatch on the query, and handles debug output if something went wrong
@@ -266,6 +298,12 @@ public:
      */
     bool queryErrorHandling(const SqlQuery& query, int retries);
 
+    /**
+     * Reads data of returned result set into a list which is returned.
+     * The read process is column wise, which means
+     * all data elements of a row is read, then the resultset is switched
+     * to the next row.
+     */
     QList<QVariant> readToList(SqlQuery& query);
 
     /**
@@ -289,7 +327,7 @@ public:
     bool isInTransaction() const;
 
     /**
-     * Return a list with the names of the tables in the database
+     * Returns a list with the names of tables in the database.
      */
     QStringList tables();
 
@@ -342,10 +380,10 @@ protected:
     DatabaseCoreBackendPrivate * const d_ptr;
 
 private:
-
     Q_DECLARE_PRIVATE(DatabaseCoreBackend)
 };
 
 } // namespace Digikam
 
 #endif // DATABASECOREBACKEND_H
+
