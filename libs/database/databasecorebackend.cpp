@@ -847,28 +847,30 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QMap<QString, 
             	DBActionType actionType = placeHolderValue.value<DBActionType>();
             	bool		isValue = actionType.isValue();
             	QVariant 	value   = actionType.getActionValue();
-                if ( value.type()==QVariant::Hash || value.type()==QVariant::Map )
+                if ( value.type()==QVariant::Map )
                 {
                 	QMap<QString, QVariant> placeHolderMap = value.toMap();
-                	for (int i=0; i<placeHolderMap.size(); i++){
-                		QString  &key 	= placeHolderMap.keys()[i];
-                		QVariant &value	= placeHolderMap[key];
+                	QMap<QString, QVariant>::const_iterator iterator;
+                	for (iterator = placeHolderMap.constBegin(); iterator != placeHolderMap.constEnd(); ++iterator){
+                		QString  key 	= iterator.key();
+                		QVariant value	= iterator.value();
                 		replaceStr.append(key);
                 		replaceStr.append("= ?");
                 		namedPlaceholderValues.append(value);
 
                 		// Add a semicolon to the statement, if we are not on the last entry
-                		if (i<placeHolderMap.size()-1)
+                		if ((iterator+1) != placeHolderMap.constEnd())
                 		{
                 			replaceStr.append(", ");
                 		}
                 	}
                 }
-                else if ( value.type()==QVariant::List || value.type()==QVariant::StringList )
+                else if ( value.type()==QVariant::List )
                 {
                 	QList<QVariant> placeHolderList = value.toList();
-                	for (int i=0; i<placeHolderList.size(); i++){
-                		QVariant  &entry 	= placeHolderList[i];
+                	QList<QVariant>::const_iterator iterator;
+                	for (iterator = placeHolderList.constBegin(); iterator != placeHolderList.constEnd(); ++iterator){
+                		QVariant  entry 	= *iterator;
                 		if (isValue)
                 		{
                 			replaceStr.append("?");
@@ -880,7 +882,29 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QMap<QString, 
                 		}
 
                 		// Add a semicolon to the statement, if we are not on the last entry
-                		if (i<placeHolderList.size()-1)
+                		if ((iterator+1) != placeHolderList.constEnd())
+                		{
+                			replaceStr.append(", ");
+                		}
+                	}
+                }else if ( value.type()==QVariant::StringList )
+                {
+                	QStringList placeHolderList = value.toStringList();
+                	QStringList::const_iterator iterator;
+                	for (iterator = placeHolderList.constBegin(); iterator != placeHolderList.constEnd(); ++iterator){
+                		QString  entry 	= *iterator;
+                		if (isValue)
+                		{
+                			replaceStr.append("?");
+                			namedPlaceholderValues.append(entry);
+                		}
+                		else
+                		{
+                			replaceStr.append(entry);
+                		}
+
+                		// Add a semicolon to the statement, if we are not on the last entry
+                		if ((iterator+1) != placeHolderList.constEnd())
                 		{
                 			replaceStr.append(", ");
                 		}
