@@ -839,7 +839,12 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QMap<QString, 
 
         while ((pos=identifierRegExp.indexIn(preparedString, pos))!=-1)
         {
-            QString namedPlaceholder = identifierRegExp.cap(0);
+        	QString namedPlaceholder = identifierRegExp.cap(0);
+        	if (!bindingMap.contains(namedPlaceholder))
+        	{
+        		kError()<<"Missing place holder ["<< namedPlaceholder <<"] in binding map. Following values are defined for this action ["<< bindingMap.keys() <<"]. This is a setup error!";
+        		//TODO What should we do here? How can we cancel that action?
+        	}
             QVariant placeHolderValue = bindingMap[namedPlaceholder];
             // Check if this is a map - then we assume, that there is a custom field/value list
             QString replaceStr;
