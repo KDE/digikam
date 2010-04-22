@@ -742,7 +742,7 @@
 			</dbaction>
 			
 			<dbaction name="changeImageInformation" mode="transaction">
-			  <statement mode="query">INSERT INTO ImageInformation ( imageid, :fieldList ) VALUES ( :imageid, :valuelist ) ON DUPLICATE KEY UPDATE :fieldValueList;</statement>
+			  <statement mode="query">INSERT INTO ImageInformation ( imageid, :fieldList ) VALUES ( :imageid, :valueList ) ON DUPLICATE KEY UPDATE :fieldValueList;</statement>
 			</dbaction>
 			 
 			<dbaction name="InsertTag" mode="transaction">
