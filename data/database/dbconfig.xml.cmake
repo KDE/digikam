@@ -269,7 +269,7 @@
 			</dbaction>
 			
 			<dbaction name="changeImageInformation" mode="transaction">
-			  <statement mode="query">INSERT INTO ImageInformation ( imageid, :fieldList ) VALUES ( :imageid, :valueList ) ON CONFLICT IGNORE;</statement>
+			  <statement mode="query">INSERT OR IGNORE INTO ImageInformation ( imageid, :fieldList ) VALUES ( :imageid, :valueList );</statement>
 			  <statement mode="query">UPDATE ImageInformation SET :fieldValueList WHERE imageid=:imageid;</statement>
 			</dbaction>
 
