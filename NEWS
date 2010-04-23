@@ -43,5 +43,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 031 ==> 234594 : digiKam crashes when scanning tags.
 032 ==> 234022 : Renaming tool "loose" original filename.
 033 ==> 234569 : BQM: Changes in "Queue Settings" does not enable the Run button.
-034 ==>
+034 ==> 235158 : digiKam crashes when setting the rating [database relevant, DatabaseCoreBackend::execQuery].
+035 ==> 
 
