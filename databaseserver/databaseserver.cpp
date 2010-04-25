@@ -134,7 +134,7 @@ void DatabaseServer::startDatabaseProcess(const QString dbType)
 void DatabaseServer::startMYSQLDatabaseProcess()
 {
     const QString dbType("QMYSQL");
-    DatabaseParameters internalServerParameters = DatabaseParameters::parametersFromConfig(dbType);
+    DatabaseParameters internalServerParameters = DatabaseParameters::defaultParameters(dbType);
 
     //TODO Don't know if this is needed, because after the thread is finished, the database server manager should close
     d->pollThread->stop = false;

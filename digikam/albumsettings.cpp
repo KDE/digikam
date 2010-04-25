@@ -47,12 +47,13 @@
 // Local includes
 
 #include "config-digikam.h"
-#include "thumbnailsize.h"
-#include "mimefilter.h"
-#include "databaseaccess.h"
 #include "albumdb.h"
+#include "databaseaccess.h"
+#include "databaseparameters.h"
 #include "imagefiltersettings.h"
 #include "imagesortsettings.h"
+#include "mimefilter.h"
+#include "thumbnailsize.h"
 
 namespace Digikam
 {
@@ -67,20 +68,6 @@ public:
         configGroupMetadata("Metadata Settings"),
         configGroupNepomuk("Nepomuk Settings"),
         configGroupGeneral("General Settings"),
-        //TODO: Add database constants
-
-        configGroupDatabase("Database Settings"),
-        configInternalDatabaseServer("Internal Database Server"),
-        configDatabaseType("Database Type"),
-        configDatabaseName("Database Name"),
-        configDatabaseNameThumbnails("Database Name Thumbnails"),
-        configDatabaseHostName("Database Hostname"),
-        configDatabasePort("Database Port"),
-        configDatabaseUsername("Database Username"),
-        configDatabasePassword("Database Password"),
-        configDatabaseConnectOptions("Database Connectoptions"),
-
-        configDatabaseFilePathEntry("Database File Path"),
         configAlbumCollectionsEntry("Album Collections"),
         configAlbumSortOrderEntry("Album Sort Order"),
         configImageSortOrderEntry("Image Sort Order"),
@@ -158,18 +145,6 @@ public:
     const QString                       configGroupNepomuk;
     const QString                       configGroupGeneral;
 
-    const QString                       configGroupDatabase;
-    const QString                       configInternalDatabaseServer;
-    const QString                       configDatabaseType;
-    const QString                       configDatabaseName;
-    const QString                       configDatabaseNameThumbnails;
-    const QString                       configDatabaseHostName;
-    const QString                       configDatabasePort;
-    const QString                       configDatabaseUsername;
-    const QString                       configDatabasePassword;
-    const QString                       configDatabaseConnectOptions;
-
-    const QString                       configDatabaseFilePathEntry;
     const QString                       configAlbumCollectionsEntry;
     const QString                       configAlbumSortOrderEntry;
     const QString                       configImageSortOrderEntry;
@@ -327,16 +302,7 @@ public:
     QString                             currentTheme;
 
     // database settings
-    bool                                internalDatabaseServer;
-    QString                             databaseType;
-    QString                             databaseHostName;
-    QString                             databaseName;
-    QString                             databaseNameThumbnails;
-    QString                             databaseUserName;
-    QString                             databasePassword;
-    int                                 databasePort;
-    QString                             databaseConnectoptions;
-
+    DatabaseParameters                  databaseParams;
 
     // album settings
     QStringList                         albumCategoryNames;
@@ -598,68 +564,7 @@ void AlbumSettings::readSettings()
 
     // ---------------------------------------------------------------------
 
-    group = config->group(d->configGroupDatabase);
-    d->internalDatabaseServer   = group.readEntry(d->configInternalDatabaseServer, false); //TODO When using mysql as default set the default value to <true>
-    d->databaseType             = group.readEntry(d->configDatabaseType);
-    d->databaseName             = group.readEntry(d->configDatabaseName);
-    d->databaseNameThumbnails   = group.readEntry(d->configDatabaseNameThumbnails);
-    d->databaseHostName         = group.readEntry(d->configDatabaseHostName);
-    d->databasePort             = group.readEntry(d->configDatabasePort).toInt();
-    d->databaseUserName         = group.readEntry(d->configDatabaseUsername);
-    d->databasePassword         = group.readEntry(d->configDatabasePassword);
-    d->databaseConnectoptions   = group.readEntry(d->configDatabaseConnectOptions);
-
-    // Additional semantic checks for the database section.
-    // If the internal server should be started, then the connection options must be reset
-    if (d->internalDatabaseServer)
-    {
-        const QString miscDir     = KStandardDirs::locateLocal("data", "digikam/db_misc");
-        d->databaseType=QString("QMYSQL");
-        d->databaseName=QString("digikam");
-        d->databaseNameThumbnails=QString("digikam");
-        d->databaseHostName=QString("");
-        d->databasePort=-1;
-        d->databaseUserName=QString("root");
-        d->databasePassword=QString("");
-        d->databaseConnectoptions=QString::fromLatin1("UNIX_SOCKET=%1/mysql.socket").arg(miscDir);
-    }
-
-    /*
-     * Check if a old digikam instance was running before and have left an database entry.
-     * This has a higher priority as the other settings.
-     */
-    group  = config->group(d->configGroupDefault);
-    if (group.hasKey(d->configDatabaseFilePathEntry))
-    {
-		QString oldDatabaseFilePath = group.readEntry(d->configDatabaseFilePathEntry, QString());
-		if (oldDatabaseFilePath.isEmpty()==false)
-		{
-			d->databaseType="QSQLITE";
-			d->databaseName=oldDatabaseFilePath;
-			d->databaseNameThumbnails=oldDatabaseFilePath;
-
-			d->databaseHostName=QString("");
-			d->databasePort=-1;
-			d->databaseUserName=QString("");
-			d->databasePassword=QString("");
-			d->databaseConnectoptions=QString("");
-
-		}
-		/*
-		 * After successful migrating, we can delete this entry now.
-		 */
-		group.deleteEntry(d->configDatabaseFilePathEntry);
-    }
-
-    /*
-     *  Remove also the 0.9 legacy parameter - migration is currently done in main.cpp.
-     */
-	group  = config->group(d->configGroupDefault);
-	if (group.hasKey("Album Path"))
-	{
-		group.deleteEntry("Album Path");
-	}
-
+    d->databaseParams.readFromConfig();
 
 #ifdef HAVE_NEPOMUK
 
@@ -683,7 +588,6 @@ void AlbumSettings::saveSettings()
 
     KConfigGroup group = config->group(d->configGroupDefault);
 
-//    group.writeEntry(d->configDatabaseFilePathEntry,             d->databaseFilePath);
     group.writeEntry(d->configAlbumCollectionsEntry,             d->albumCategoryNames);
     group.writeEntry(d->configAlbumSortOrderEntry,               (int)d->albumSortOrder);
     group.writeEntry(d->configImageSortOrderEntry,               (int)d->imageSortOrder);
@@ -776,18 +680,8 @@ void AlbumSettings::saveSettings()
 
     // ---------------------------------------------------------------------
 
-    group = config->group(d->configGroupDatabase);
-    group.writeEntry(d->configInternalDatabaseServer, d->internalDatabaseServer);
-    group.writeEntry(d->configDatabaseType, d->databaseType);
-    group.writeEntry(d->configDatabaseName, d->databaseName);
-    group.writeEntry(d->configDatabaseNameThumbnails, d->databaseNameThumbnails);
-    group.writeEntry(d->configDatabaseHostName, d->databaseHostName);
-    group.writeEntry(d->configDatabasePort, d->databasePort);
-    group.writeEntry(d->configDatabaseUsername, d->databaseUserName);
-    group.writeEntry(d->configDatabasePassword, d->databasePassword);
-    group.writeEntry(d->configDatabaseConnectOptions, d->databaseConnectoptions);
+    d->databaseParams.writeToConfig();
 
-    // ---------------------------------------------------------------------
 #ifdef HAVE_NEPOMUK
 
     group = config->group(d->configGroupNepomuk);
@@ -807,12 +701,12 @@ void AlbumSettings::emitSetupChanged()
 
 QString AlbumSettings::getDatabaseFilePath() const
 {
-    return d->databaseName;
+    return d->databaseParams.databaseName;
 }
 
 void AlbumSettings::setDatabaseFilePath(const QString& path)
 {
-    d->databaseName = path;
+    d->databaseParams.databaseName = path;
 }
 
 void AlbumSettings::setShowSplashScreen(bool val)
@@ -1627,94 +1521,104 @@ bool AlbumSettings::getSyncDigikamToNepomuk() const
     return d->syncToNepomuk;
 }
 
-QString AlbumSettings::getDatabaseType() const
+DatabaseParameters AlbumSettings::getDatabaseParameters() const
 {
-    return d->databaseType;
-}
-void AlbumSettings::setDatabaseType(const QString &databaseType)
-{
-    d->databaseType = databaseType;
+    return d->databaseParams;
 }
 
+void AlbumSettings::setDatabaseParameters(const DatabaseParameters& params)
+{
+    d->databaseParams = params;
+}
+
+QString AlbumSettings::getDatabaseType() const
+{
+    return d->databaseParams.databaseType;
+}
+
+void AlbumSettings::setDatabaseType(const QString &databaseType)
+{
+    d->databaseParams.databaseType = databaseType;
+}
 
 QString AlbumSettings::getDatabaseConnectoptions() const
 {
-    return d->databaseConnectoptions;
+    return d->databaseParams.connectOptions;
 }
 
 QString AlbumSettings::getDatabaseName() const
 {
-    return d->databaseName;
+    return d->databaseParams.databaseName;
 }
 
 QString AlbumSettings::getDatabaseNameThumbnails() const
 {
-    return d->databaseNameThumbnails;
+    return d->databaseParams.databaseNameThumbnails;
 }
 
 QString AlbumSettings::getDatabaseHostName() const
 {
-    return d->databaseHostName;
+    return d->databaseParams.hostName;
 }
 
 QString AlbumSettings::getDatabasePassword() const
 {
-    return d->databasePassword;
+    return d->databaseParams.password;
 }
 
 int AlbumSettings::getDatabasePort() const
 {
-    return d->databasePort;
+    return d->databaseParams.port;
 }
 
 QString AlbumSettings::getDatabaseUserName() const
 {
-    return d->databaseUserName;
+    return d->databaseParams.userName;
 }
 
 bool AlbumSettings::getInternalDatabaseServer() const
 {
-    return d->internalDatabaseServer;
+    return d->databaseParams.internalServer;
 }
 
 void AlbumSettings::setDatabaseConnectoptions(const QString &connectoptions)
 {
-    d->databaseConnectoptions = connectoptions;
+    d->databaseParams.connectOptions = connectoptions;
 }
 
 void AlbumSettings::setDatabaseName(const QString &databaseName)
 {
-    d->databaseName = databaseName;
+    d->databaseParams.databaseName = databaseName;
 }
 
 void AlbumSettings::setDatabaseNameThumbnails(const QString &databaseNameThumbnails)
 {
-    d->databaseNameThumbnails = databaseNameThumbnails;
+    d->databaseParams.databaseNameThumbnails = databaseNameThumbnails;
 }
 
 void AlbumSettings::setDatabaseHostName(const QString &hostName)
 {
-    d->databaseHostName = hostName;
+    d->databaseParams.hostName = hostName;
 }
 
 void AlbumSettings::setDatabasePassword(const QString &password)
 {
-    d->databasePassword = password;
+    d->databaseParams.password = password;
 }
 
 void AlbumSettings::setDatabasePort(int port)
 {
-    d->databasePort = port;
+    d->databaseParams.port = port;
 }
 
 void AlbumSettings::setDatabaseUserName(const QString &userName)
 {
-    d->databaseUserName = userName;
+    d->databaseParams.userName = userName;
 }
 
 void AlbumSettings::setInternalDatabaseServer(const bool useInternalDBServer)
 {
-    d->internalDatabaseServer = useInternalDBServer;
+    d->databaseParams.internalServer = useInternalDBServer;
 }
 
 void AlbumSettings::setStringComparisonType(AlbumSettings::StringComparisonType val)

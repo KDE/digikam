@@ -42,6 +42,7 @@
 // Local includes
 
 #include "albuminfo.h"
+#include "databaseparameters.h"
 #include "digikam_export.h"
 
 class QDate;
@@ -107,7 +108,7 @@ public:
     * A return value of false during startup indicates termination of the program
     * (user is informed)
     */
-    bool setDatabase(const QString dbType, const QString dbName, const QString dbThumbnailsName, const QString dbHostName, int dbPort, const QString dbUser, const QString dbPasswd, const QString dbConnectOptions, bool internalServer, bool priority, const QString suggestedAlbumRoot = QString());
+    bool setDatabase(const DatabaseParameters& params, bool priority, const QString suggestedAlbumRoot = QString());
 
     /** Some checks for settings done in first run wizard */
     static void checkDatabaseDirsAfterFirstRun(const QString& dbPath, const QString& albumPath);
@@ -117,7 +118,7 @@ public:
     * Handles user notification about problems.
     * Call this instead of setDatabase when digikam is up and running.
     */
-    void changeDatabase(const QString& dbType, const QString& dbName, const QString& dbThumbnailsName, const QString& dbHostName, int dbPort, const QString &dbUser, const QString &dbPasswd, const QString &dbConnectOptions, bool internalServer);
+    void changeDatabase(const DatabaseParameters& params);
 
     /**
     * Stop ongoing operations, prepare for application shutdown

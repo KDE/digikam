@@ -130,7 +130,7 @@ void SetupDatabase::applySettings()
     {
         if (d->databaseWidget->internalServer->isChecked())
         {
-            DatabaseParameters internalServerParameters = DatabaseParameters::parametersFromConfig(d->databaseWidget->databaseType->currentText());
+            DatabaseParameters internalServerParameters = DatabaseParameters::defaultParameters(d->databaseWidget->databaseType->currentText());
             settings->setInternalDatabaseServer(true);
             settings->setDatabaseType(d->databaseWidget->databaseType->currentText());
             settings->setDatabaseName(internalServerParameters.databaseName);

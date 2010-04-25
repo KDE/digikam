@@ -343,7 +343,7 @@ DatabaseParameters DatabaseWidget::getDatabaseParameters()
     }
     else
     {
-        parameters = DatabaseParameters::parametersFromConfig(databaseType->currentText());
+        parameters = DatabaseParameters::defaultParameters(databaseType->currentText());
         DatabaseServerStarter::startServerManagerProcess(databaseType->currentText());
     }
     return parameters;

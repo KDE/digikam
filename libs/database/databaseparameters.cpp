@@ -7,6 +7,7 @@
  * Description : Storage container for database connection parameters.
  *
  * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010 by Holger Förster <hamsi2k at freenet dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -35,12 +36,25 @@
 
 // KDE includes
 
-#include <kstandarddirs.h>
 #include <kcodecs.h>
+#include <kconfiggroup.h>
 #include <kdebug.h>
+#include <kstandarddirs.h>
 
 namespace Digikam
 {
+
+static const char *configGroupDatabase = "Database Settings";
+static const char *configInternalDatabaseServer = "Internal Database Server";
+static const char *configDatabaseType = "Database Type";
+static const char *configDatabaseName = "Database Name";
+static const char *configDatabaseNameThumbnails = "Database Name Thumbnails";
+static const char *configDatabaseHostName = "Database Hostname";
+static const char *configDatabasePort = "Database Port";
+static const char *configDatabaseUsername = "Database Username";
+static const char *configDatabasePassword = "Database Password";
+static const char *configDatabaseConnectOptions = "Database Connectoptions";
+static const char *configDatabaseFilePathEntry = "Database File Path";
 
 DatabaseParameters::DatabaseParameters()
                   : port(-1)
@@ -52,17 +66,18 @@ DatabaseParameters::DatabaseParameters(const QString& type,
                                        const QString& connectOptions,
                                        const QString& hostName,
                                        int port,
+                                       bool internalServer,
                                        const QString& userName,
                                        const QString& password)
                   : databaseType(type), databaseName(databaseName),
                     connectOptions(connectOptions), hostName(hostName),
-                    port(port), userName(userName),
+                    port(port), internalServer(internalServer), userName(userName),
                     password(password)
 {
 }
 
 DatabaseParameters::DatabaseParameters(const KUrl& url)
-                  : port(-1)
+                  : port(-1), internalServer(false)
 {
     databaseType   = url.queryItem("databaseType");
     databaseName   = url.queryItem("databaseName");
@@ -71,6 +86,9 @@ DatabaseParameters::DatabaseParameters(const KUrl& url)
     QString queryPort = url.queryItem("port");
     if (!queryPort.isNull())
         port = queryPort.toInt();
+    QString queryServer = url.queryItem("internalServer");
+    if (!queryServer.isNull())
+        internalServer = (queryServer == "true");
     userName       = url.queryItem("userName");
     password       = url.queryItem("password");
 }
@@ -82,6 +100,7 @@ bool DatabaseParameters::operator==(const DatabaseParameters& other) const
            connectOptions == other.connectOptions &&
            hostName       == other.hostName &&
            port           == other.port &&
+           internalServer == other.internalServer &&
            userName       == other.userName &&
            password       == other.password;
 }
@@ -123,25 +142,132 @@ QByteArray DatabaseParameters::hash() const
     return md5.hexDigest();
 }
 
-DatabaseParameters DatabaseParameters::parametersFromConfig(const QString databaseType, const QString databaseName,
-                                                            const QString databaseHostName, int databasePort,
-                                                            const QString databaseUserName, const QString databaseUserPassword,
-                                                            const QString databaseConnectOptions)
+DatabaseParameters DatabaseParameters::parametersFromConfig(KSharedConfig::Ptr config, const QString& configGroup)
 {
     DatabaseParameters parameters;
-
-    parameters.databaseType     = databaseType;
-    parameters.databaseName     = databaseName;
-    parameters.hostName         = databaseHostName;
-    parameters.userName         = databaseUserName;
-    parameters.password         = databaseUserPassword;
-    parameters.port             = databasePort;
-    parameters.connectOptions   = databaseConnectOptions;
-
+    parameters.readFromConfig(config, configGroup);
     return parameters;
 }
 
-DatabaseParameters DatabaseParameters::parametersFromConfig(const QString databaseType)
+void DatabaseParameters::readFromConfig(KSharedConfig::Ptr config, const QString& configGroup)
+{
+    KConfigGroup group;
+    if (configGroup.isNull())
+        group = config->group(configGroupDatabase);
+    else
+        group = config->group(configGroup);
+
+    databaseType             = group.readEntry(configDatabaseType, QString());
+    databaseName             = group.readEntry(configDatabaseName, QString());
+    databaseNameThumbnails   = group.readEntry(configDatabaseNameThumbnails, QString());
+    hostName                 = group.readEntry(configDatabaseHostName, QString());
+    port                     = group.readEntry(configDatabasePort, -1);
+    userName                 = group.readEntry(configDatabaseUsername, QString());
+    password                 = group.readEntry(configDatabasePassword, QString());
+    connectOptions           = group.readEntry(configDatabaseConnectOptions, QString());
+    internalServer           = group.readEntry(configInternalDatabaseServer, false);
+                               //TODO When using mysql as default set default value to <true>
+
+    if (isSQLite())
+    {
+        if (databaseName.endsWith('/'))
+        {
+            QString path = databaseName;
+            databaseName = QDir::cleanPath(path + '/' + "digikam4.db");
+            databaseNameThumbnails = QDir::cleanPath(path + '/' + "thumbnails-digikam.db");
+        }
+    }
+}
+
+void DatabaseParameters::legacyAndDefaultChecks(const QString& suggestedPath, KSharedConfig::Ptr config)
+{
+    // Additional semantic checks for the database section.
+    // If the internal server should be started, then the connection options must be reset
+    if (internalServer)
+    {
+        const QString miscDir = KStandardDirs::locateLocal("data", "digikam/db_misc");
+        databaseType= "QMYSQL";
+        databaseName = "digikam";
+        databaseNameThumbnails = "digikam";
+        hostName = QString();
+        port = -1;
+        userName = "root";
+        password = QString();
+        connectOptions = QString::fromLatin1("UNIX_SOCKET=%1/mysql.socket").arg(miscDir);
+    }
+
+    /*
+     * Check if a old digikam instance or the First Run assistant have left a path entry.
+     * This has a higher priority as the other settings.
+     */
+    KConfigGroup group  = config->group("Album Settings");
+    if (group.hasKey(configDatabaseFilePathEntry))
+    {
+        QString oldDatabaseFilePath = group.readEntry(configDatabaseFilePathEntry, QString());
+        if (!oldDatabaseFilePath.isEmpty())
+        {
+            databaseType = "QSQLITE";
+            databaseName = oldDatabaseFilePath;
+            databaseNameThumbnails = oldDatabaseFilePath;
+
+            hostName = QString();
+            port = -1;
+            userName = QString();
+            password = QString();
+            connectOptions = QString();
+        }
+        // After successful migration, we can delete this entry now.
+        group.deleteEntry(configDatabaseFilePathEntry);
+    }
+    // Remove also the 0.9 legacy parameter - migration is currently done in main.cpp. */
+    if (group.hasKey("Album Path"))
+    {
+        group.deleteEntry("Album Path");
+    }
+
+    if (databaseType.isEmpty())
+    {
+        databaseType = "QSQLITE";
+    }
+
+    if (isSQLite())
+    {
+        if (databaseName.isEmpty())
+            databaseName = suggestedPath;
+    }
+}
+
+void DatabaseParameters::writeToConfig(KSharedConfig::Ptr config, const QString& configGroup) const
+{
+    KConfigGroup group;
+    if (configGroup.isNull())
+        group = config->group(configGroupDatabase);
+    else
+        group = config->group(configGroup);
+
+    QString dbName = databaseName;
+    QString dbNameThumbs = databaseNameThumbnails;
+
+    if (isSQLite())
+    {
+        if (dbName.endsWith("digikam4.db"))
+            dbName.chop(QString("digikam4.db").length());
+        if (dbNameThumbs.endsWith("thumbnails-digikam.db"))
+            dbNameThumbs.chop(QString("thumbnails-digikam.db").length());
+    }
+
+    group.writeEntry(configDatabaseType, databaseType);
+    group.writeEntry(configDatabaseName, dbName);
+    group.writeEntry(configDatabaseNameThumbnails, dbNameThumbs);
+    group.writeEntry(configDatabaseHostName, hostName);
+    group.writeEntry(configDatabasePort, port);
+    group.writeEntry(configDatabaseUsername, userName);
+    group.writeEntry(configDatabasePassword, password);
+    group.writeEntry(configDatabaseConnectOptions, connectOptions);
+    group.writeEntry(configInternalDatabaseServer, internalServer);
+}
+
+DatabaseParameters DatabaseParameters::defaultParameters(const QString databaseType)
 {
     DatabaseParameters parameters;
 
@@ -161,10 +287,16 @@ DatabaseParameters DatabaseParameters::parametersFromConfig(const QString databa
 
     parameters.connectOptions   = connectOptions;
 
-    kDebug(50003)<<"ConnectOptions "<< parameters.connectOptions;
+    kDebug(50003) << "ConnectOptions "<< parameters.connectOptions;
     return parameters;
 }
 
+DatabaseParameters DatabaseParameters::thumbnailParameters() const
+{
+    DatabaseParameters params = *this;
+    params.databaseName = databaseNameThumbnails;
+    return params;
+}
 
 DatabaseParameters DatabaseParameters::parametersForSQLite(const QString& databaseFile)
 {
@@ -191,6 +323,8 @@ void DatabaseParameters::insertInUrl(KUrl& url) const
         url.addQueryItem("hostName", hostName);
     if (port != -1)
         url.addQueryItem("port", QString::number(port));
+    if (internalServer)
+        url.addQueryItem("internalServer", "true");
     if (!userName.isNull())
         url.addQueryItem("userName", userName);
     if (!password.isNull())
@@ -204,8 +338,35 @@ void DatabaseParameters::removeFromUrl(KUrl& url)
     url.removeQueryItem("connectOptions");
     url.removeQueryItem("hostName");
     url.removeQueryItem("port");
+    url.removeQueryItem("internalServer");
     url.removeQueryItem("userName");
     url.removeQueryItem("password");
+}
+
+QDebug operator<<(QDebug dbg, const DatabaseParameters& p)
+{
+    dbg.nospace() << "DatabaseParameters: [ Type "
+                  << p.databaseType << ", ";
+    dbg.nospace() << "Name "
+                  << p.databaseName << " ";
+    dbg.nospace() << "(Thumbnails Name "
+                  << p.databaseNameThumbnails << "); ";
+
+    if (!p.connectOptions.isNull())
+        dbg.nospace() << "ConnectOptions: "
+                      << p.connectOptions << ", ";
+    if (!p.hostName.isNull())
+        dbg.nospace() << "Host Name and Port: "
+                      << p.hostName << " " << p.port << "; ";
+    if (p.internalServer)
+        dbg.nospace() << "Using an Internal Server; ";
+    if (!p.userName.isNull())
+        dbg.nospace() << "Username and Password: "
+                      << p.userName << ", " << p.password;
+
+    dbg.nospace() << "] ";
+
+    return dbg.space();
 }
 
 }  // namespace Digikam

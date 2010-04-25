@@ -45,6 +45,7 @@ namespace Digikam
 {
 
 class AlbumSettingsPrivate;
+class DatabaseParameters;
 
 class AlbumSettings : public QObject
 {
@@ -344,6 +345,8 @@ public:
      */
     StringComparisonType getStringComparisonType() const;
 
+    DatabaseParameters getDatabaseParameters() const;
+    void setDatabaseParameters(const DatabaseParameters& params);
 
     QString getDatabaseType() const;
     void setDatabaseType(const QString &databaseType);

@@ -124,7 +124,6 @@ int main(int argc, char *argv[])
     // storage was implemented
     KConfigGroup databaseConfig = config->group("Database Settings");
 
-    kDebug(50003) << QString("") << databaseConfig.exists();
     if (!databaseConfig.exists()
     	 && (version.startsWith(QLatin1String("0.5"))
     	     || !dirInfo.exists() || !dirInfo.isDir()))
@@ -140,24 +139,22 @@ int main(int argc, char *argv[])
         AlbumManager::checkDatabaseDirsAfterFirstRun(dbName, firstAlbumPath);
     }
 
-    kDebug(50003) << "Database Path: " << dbName;
-
     // Check if SQLite Qt4 plugin is available.
 
     if (!QSqlDatabase::isDriverAvailable("QSQLITE") || !QSqlDatabase::isDriverAvailable("QMYSQL"))
     {
-	if (QSqlDatabase::drivers().isEmpty())
-	{
+        if (QSqlDatabase::drivers().isEmpty())
+        {
             KMessageBox::error(0, i18n("Run-time Qt4 SQLite or MySQL database plugin is not available - "
-                                       "please install it.\n"
-                                       "There is no database plugin installed on your computer."));
-	}
-	else
-	{
+            "please install it.\n"
+            "There is no database plugin installed on your computer."));
+        }
+        else
+        {
             KMessageBox::errorList(0, i18n("Run-time Qt4 SQLite or MySQL database plugin is not available - "
-                                           "please install it.\n"
-                                           "Database plugins installed on your computer are listed below:"),
-                                   QSqlDatabase::drivers());
+            "please install it.\n"
+            "Database plugins installed on your computer are listed below:"),
+                                           QSqlDatabase::drivers());
         }
 
         kDebug() << "QT Sql drivers list: " << QSqlDatabase::drivers();

@@ -28,12 +28,12 @@
 
 #include <QString>
 #include <QtGlobal>
-#include <QXmlStreamReader>
-#include <QMap>
-#include <QDomElement>
 
 // KDE includes
 
+#include <kconfig.h>
+#include <kglobal.h>
+#include <ksharedconfig.h>
 #include <kurl.h>
 
 // Local includes
@@ -60,6 +60,7 @@ public:
                        const QString& connectOptions = QString(),
                        const QString& hostName = QString(),
                        int   port = -1,
+                       bool  internalServer = false,
                        const QString& userName = QString(),
                        const QString& password = QString());
 
@@ -70,9 +71,12 @@ public:
     QString databaseName;
     QString connectOptions;
     QString hostName;
-    int port;
+    int     port;
+    bool    internalServer;
     QString userName;
     QString password;
+
+    QString databaseNameThumbnails;
 
     void insertInUrl(KUrl& url) const;
     bool operator==(const DatabaseParameters& other) const;
@@ -91,12 +95,22 @@ public:
      */
     QByteArray hash() const;
 
-    static DatabaseParameters parametersFromConfig(const QString databaseType);
+    /** Return a set of default parameters for the give type */
+    static DatabaseParameters defaultParameters(const QString databaseType);
 
-    static DatabaseParameters parametersFromConfig(const QString databaseType, const QString databaseName,
-            const QString databaseHostName, int databasePort,
-            const QString databaseUserName, const QString databaseUserPassword,
-            const QString databaseConnectOptions);
+    static DatabaseParameters parametersFromConfig(KSharedConfig::Ptr config = KGlobal::config(),
+                                                   const QString& configGroup = QString());
+    /**
+     * Read and write parameters from config. You can specify the group,
+     * or use the default value.
+     */
+    void readFromConfig(KSharedConfig::Ptr config = KGlobal::config(), const QString& configGroup = QString());
+    void writeToConfig(KSharedConfig::Ptr config = KGlobal::config(), const QString& configGroup = QString()) const;
+
+    /** Replaces databaseName with databaseNameThumbnails. */
+    DatabaseParameters thumbnailParameters() const;
+
+    void legacyAndDefaultChecks(const QString& suggestedPath = QString(), KSharedConfig::Ptr config = KGlobal::config());
 
     /**
      * Convenience method to create a DatabaseParameters object for an
@@ -107,6 +121,8 @@ public:
 
     static void removeFromUrl(KUrl& url);
 };
+
+DIGIKAM_EXPORT QDebug operator<<(QDebug dbg, const DatabaseParameters& t);
 
 }  // namespace Digikam
 

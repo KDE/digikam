@@ -190,8 +190,7 @@ DigikamApp::DigikamApp()
     QDBusConnection::sessionBus().registerService("org.kde.digikam-"
                             + QString::number(QCoreApplication::instance()->applicationPid()));
 
-
-    AlbumManager::instance()->setDatabase(AlbumSettings::instance()->getDatabaseType(), AlbumSettings::instance()->getDatabaseName(), AlbumSettings::instance()->getDatabaseNameThumbnails(), AlbumSettings::instance()->getDatabaseHostName(), AlbumSettings::instance()->getDatabasePort(), AlbumSettings::instance()->getDatabaseUserName(), AlbumSettings::instance()->getDatabasePassword(), AlbumSettings::instance()->getDatabaseConnectoptions(), AlbumSettings::instance()->getInternalDatabaseServer(), true);
+    AlbumManager::instance()->setDatabase(AlbumSettings::instance()->getDatabaseParameters(), true);
 
     // collection scan
     if (d->config->group("General Settings").readEntry("Scan At Start", true) ||
@@ -2154,9 +2153,11 @@ void DigikamApp::slotSetupChanged()
     //if(AlbumSettings::instance()->getAlbumLibraryPath() != AlbumManager::instance()->getLibraryPath())
       //  d->view->clearHistory();
 
-    if (!AlbumManager::instance()->databaseEqual(AlbumSettings::instance()->getDatabaseType(), AlbumSettings::instance()->getDatabaseName(), AlbumSettings::instance()->getDatabaseHostName(), AlbumSettings::instance()->getDatabasePort(), AlbumSettings::instance()->getInternalDatabaseServer()))
+    if (!AlbumManager::instance()->databaseEqual(AlbumSettings::instance()->getDatabaseType(),
+                        AlbumSettings::instance()->getDatabaseName(), AlbumSettings::instance()->getDatabaseHostName(),
+                        AlbumSettings::instance()->getDatabasePort(), AlbumSettings::instance()->getInternalDatabaseServer()))
     {
-        AlbumManager::instance()->changeDatabase(AlbumSettings::instance()->getDatabaseType(), AlbumSettings::instance()->getDatabaseName(),  AlbumSettings::instance()->getDatabaseNameThumbnails(), AlbumSettings::instance()->getDatabaseHostName(), AlbumSettings::instance()->getDatabasePort(), AlbumSettings::instance()->getDatabaseUserName(), AlbumSettings::instance()->getDatabasePassword(), AlbumSettings::instance()->getDatabaseConnectoptions(), AlbumSettings::instance()->getInternalDatabaseServer());
+        AlbumManager::instance()->changeDatabase(AlbumSettings::instance()->getDatabaseParameters());
     }
 
     if(AlbumSettings::instance()->getShowFolderTreeViewItemsCount())
