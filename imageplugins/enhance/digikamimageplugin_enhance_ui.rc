@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="21" name="digikamimageplugin_enhance" >
+<gui version="22" name="digikamimageplugin_enhance" >
 
  <MenuBar>
 
@@ -39,6 +39,6 @@
       <Action shortcut="" name="imageplugin_antivignetting" />
       <Action shortcut="" name="imageplugin_lensdistortion" />
       <Action shortcut="" name="imageplugin_hotpixels" />
-</ActionProperties>
+ </ActionProperties>
 
 </gui>

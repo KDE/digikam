@@ -89,7 +89,7 @@ ImagePlugin_Enhance::ImagePlugin_Enhance(QObject* parent, const QVariantList&)
     m_redeyeAction = new KAction(KIcon("redeyes"), i18n("Red Eye..."), this);
     m_redeyeAction->setWhatsThis(i18n("This filter can be used to correct red eyes in a photo. "
                                       "Select a region including the eyes to use this option."));
-    actionCollection()->addAction("implugcore_redeye", m_redeyeAction);
+    actionCollection()->addAction("imageplugin_redeye", m_redeyeAction);
     connect(m_redeyeAction, SIGNAL(triggered(bool) ),
             this, SLOT(slotRedEye()));
 
