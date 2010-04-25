@@ -45,5 +45,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 033 ==> 234569 : BQM: Changes in "Queue Settings" does not enable the Run button.
 034 ==> 235158 : digiKam crashes when setting the rating [database relevant, DatabaseCoreBackend::execQuery].
 035 ==> 234545 : Red eye correction tool is missing from image editor.
-036 ==> 
+036 ==> 235368 : When right clic on RAW, the option "open with" is not there.
+037 ==> 
+
 
