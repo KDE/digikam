@@ -33,6 +33,9 @@
 
 #include "digikam_export.h"
 
+class QMutex;
+class QMutexLocker;
+
 namespace Digikam
 {
 
@@ -67,6 +70,8 @@ public:
     bool  isRunning() const;
     bool  isFinished() const;
 
+    void setEmitSignals(bool emitThem);
+
 public Q_SLOTS:
 
     void start();
@@ -77,6 +82,7 @@ public Q_SLOTS:
 
 Q_SIGNALS:
 
+    /// Emitted if emitSignals is enabled
     void started();
     void finished();
 
@@ -85,6 +91,24 @@ protected:
     /** In you run() method, you shall regularly check for runningFlag()
      *  and cleanup and return if false. */
     bool runningFlag() const;
+
+    /**
+     * This is the non-recursive mutex used to protect state variables
+     * and waiting in this class. You can use it if you want to protect
+     * your memory in the same scope as calling start, stop or wait,
+     * then using the QMutexLocker variants below. Note that when you have locked this mutex,
+     * you must use these variants, as the mutex is non-recursive.
+     */
+    QMutex *threadMutex() const;
+
+    /**
+     * Doing the same as start(), stop() and wait above, provide it
+     * with a locked QMutexLocker on mutex().
+     * Note the start() will unlock and relock for scheduling once, after state change.
+     */
+    void start(QMutexLocker &locker);
+    void stop(QMutexLocker &locker);
+    void wait(QMutexLocker &locker);
 
 private:
 

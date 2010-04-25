@@ -49,27 +49,18 @@ public:
         setAutoDelete(false);
 
         state = DynamicThread::Inactive;
+        running = false;
+        emitSignals = false;
     };
 
-    virtual void run()
-    {
-        {
-            QMutexLocker locker(&mutex);
-            state = DynamicThread::Running;
-        }
-        emit q->started();
-        q->run();
-        {
-            QMutexLocker locker(&mutex);
-            state = DynamicThread::Inactive;
-            condVar.wakeAll();
-        }
-        emit q->finished();
-    }
+    virtual void run();
+    bool transitionToRunning();
+    void transitionToInactive();
 
     DynamicThread* const q;
 
     volatile bool running;
+    volatile bool emitSignals;
 
     DynamicThread::State state;
 
@@ -86,6 +77,8 @@ DynamicThread::DynamicThread(QObject* parent)
 
 DynamicThread::~DynamicThread()
 {
+    stop();
+    wait();
     delete d;
 }
 
@@ -99,33 +92,61 @@ bool DynamicThread::isRunning() const
     return d->state == Scheduled || d->state == Running || d->state == Deactivating;
 }
 
+QMutex *DynamicThread::threadMutex() const
+{
+    return &d->mutex;
+}
+
 bool DynamicThread::isFinished() const
 {
     return d->state == Inactive;
 }
 
+void DynamicThread::setEmitSignals(bool emitThem)
+{
+    d->emitSignals = emitThem;
+}
+
 void DynamicThread::start()
 {
-    {
-        QMutexLocker locker(&d->mutex);
-        switch (d->state)
-        {
-            case Inactive:
-            case Deactivating:
-                d->state = Scheduled;
-                d->running = true;
-                break;
-            case Running:
-            case Scheduled:
-                return;
-        }
-    }
-    ThreadManager::instance()->schedule(d);
+    QMutexLocker locker(&d->mutex);
+    start(locker);
 }
 
 void DynamicThread::stop()
 {
     QMutexLocker locker(&d->mutex);
+    stop(locker);
+}
+
+void DynamicThread::wait()
+{
+    QMutexLocker locker(&d->mutex);
+    wait(locker);
+}
+
+void DynamicThread::start(QMutexLocker &locker)
+{
+    switch (d->state)
+    {
+        case Inactive:
+        case Deactivating:
+            d->state = Scheduled;
+            d->running = true;
+            break;
+        case Running:
+        case Scheduled:
+            return;
+    }
+
+    locker.unlock();
+    ThreadManager::instance()->schedule(d);
+    locker.relock();
+}
+
+void DynamicThread::stop(QMutexLocker &locker)
+{
+    Q_UNUSED(locker);
     switch (d->state)
     {
         case Scheduled:
@@ -139,9 +160,51 @@ void DynamicThread::stop()
     }
 }
 
-void DynamicThread::wait()
+bool DynamicThreadPriv::transitionToRunning()
 {
-    QMutexLocker locker(&d->mutex);
+    QMutexLocker locker(&mutex);
+    switch (state)
+    {
+        case DynamicThread::Scheduled:
+        case DynamicThread::Running:
+            state = DynamicThread::Running;
+            return true;
+        case DynamicThread::Deactivating:
+        default:
+            return false;
+    }
+}
+
+void DynamicThreadPriv::transitionToInactive()
+{
+    QMutexLocker locker(&mutex);
+    switch (state)
+    {
+        case DynamicThread::Scheduled:
+            return;
+        case DynamicThread::Deactivating:
+        default:
+            state = DynamicThread::Inactive;
+            condVar.wakeAll();
+            break;
+    }
+}
+
+void DynamicThreadPriv::run()
+{
+    if (emitSignals)
+        emit q->started();
+    if (transitionToRunning())
+        q->run();
+    if (emitSignals)
+        emit q->finished();
+    transitionToInactive();
+    // as soon as we are inactive, we may get deleted!
+}
+
+void DynamicThread::wait(QMutexLocker &locker)
+{
+    Q_UNUSED(locker);
     while (d->state != Inactive)
         d->condVar.wait(&d->mutex);
 }
