@@ -34,6 +34,7 @@ INCLUDE_DIRECTORIES( ../showfoto/setup
                      ../libs/themeengine
                      ../libs/histogram
                      ../libs/threadimageio
+                     ../libs/threads
                      ../libs/dialogs
                      ../utilities/setup
                      ../utilities/imageeditor/canvas

@@ -74,15 +74,6 @@ void LoadingTask::setStatus(LoadingTaskStatus status)
     m_loadingTaskStatus = status;
 }
 
-// This is a hack needed to prevent hanging when a K3Process-based loader (raw loader)
-// is waiting for the process to finish, but the main thread is waiting
-// for the thread to finish and no K3Process events are delivered.
-// Remove when porting to Qt4.
-bool LoadingTask::isShuttingDown()
-{
-    return m_thread->isShuttingDown();
-}
-
 //---------------------------------------------------------------------------------------------------
 
 SharedLoadingTask::SharedLoadingTask(LoadSaveThread* thread, LoadingDescription description,

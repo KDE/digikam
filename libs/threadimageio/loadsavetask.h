@@ -93,7 +93,6 @@ public:
 
     virtual void progressInfo(const DImg *, float progress);
     virtual bool continueQuery(const DImg *);
-    virtual bool isShuttingDown();
 
     virtual void setStatus(LoadingTaskStatus status);
 

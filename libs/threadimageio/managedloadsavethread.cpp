@@ -45,7 +45,7 @@ ManagedLoadSaveThread::~ManagedLoadSaveThread()
     {
         case TerminationPolicyTerminateLoading:
         {
-            QMutexLocker lock(&m_mutex);
+            QMutexLocker lock(threadMutex());
             if ( (loadingTask = checkLoadingTask(m_currentTask, LoadingTaskFilterAll)) )
                 loadingTask->setStatus(LoadingTask::LoadingTaskStatusStopping);
             removeLoadingTasks(LoadingDescription(QString()), LoadingTaskFilterAll);
@@ -53,7 +53,7 @@ ManagedLoadSaveThread::~ManagedLoadSaveThread()
         }
         case TerminationPolicyTerminatePreloading:
         {
-            QMutexLocker lock(&m_mutex);
+            QMutexLocker lock(threadMutex());
             if ( (loadingTask = checkLoadingTask(m_currentTask, LoadingTaskFilterPreloading)) )
                 loadingTask->setStatus(LoadingTask::LoadingTaskStatusStopping);
             removeLoadingTasks(LoadingDescription(QString()), LoadingTaskFilterPreloading);
@@ -116,7 +116,7 @@ void ManagedLoadSaveThread::load(LoadingDescription description, LoadingPolicy p
 
 void ManagedLoadSaveThread::load(LoadingDescription description, LoadingMode loadingMode, LoadingPolicy policy, AccessMode accessMode)
 {
-    QMutexLocker lock(&m_mutex);
+    QMutexLocker lock(threadMutex());
     LoadingTask *loadingTask  = 0;
     LoadingTask *existingTask = findExistingTask(description);
 
@@ -209,7 +209,7 @@ void ManagedLoadSaveThread::load(LoadingDescription description, LoadingMode loa
             m_todo.append(createLoadingTask(description, true, loadingMode, accessMode));
             break;
     }
-    m_condVar.wakeAll();
+    start(lock);
 }
 
 void ManagedLoadSaveThread::loadPreview(LoadingDescription description)
@@ -218,7 +218,7 @@ void ManagedLoadSaveThread::loadPreview(LoadingDescription description)
     // Preview threads typically only support preview tasks,
     // so no need to differentiate with normal loading tasks.
 
-    QMutexLocker lock(&m_mutex);
+    QMutexLocker lock(threadMutex());
     LoadingTask *loadingTask  = 0;
     LoadingTask *existingTask = findExistingTask(description);
 
@@ -247,7 +247,7 @@ void ManagedLoadSaveThread::loadPreview(LoadingDescription description)
     if (existingTask)
         return;
     m_todo.append(new PreviewLoadingTask(this, description));
-    m_condVar.wakeAll();
+    start(lock);
 }
 
 void ManagedLoadSaveThread::loadThumbnail(LoadingDescription description)
@@ -255,7 +255,7 @@ void ManagedLoadSaveThread::loadThumbnail(LoadingDescription description)
     // Thumbnail threads typically only support thumbnail tasks,
     // so no need to differentiate with normal loading tasks.
 
-    QMutexLocker lock(&m_mutex);
+    QMutexLocker lock(threadMutex());
     LoadingTask *existingTask = findExistingTask(description);
 
     // reuse task if it exists
@@ -268,13 +268,12 @@ void ManagedLoadSaveThread::loadThumbnail(LoadingDescription description)
     // append new loading task, put it in front of preloading tasks
     m_todo.prepend(new ThumbnailLoadingTask(this, description));
 
-    // append new loading task
-    m_condVar.wakeAll();
+    start(lock);
 }
 
 void ManagedLoadSaveThread::preloadThumbnail(LoadingDescription description)
 {
-    QMutexLocker lock(&m_mutex);
+    QMutexLocker lock(threadMutex());
     LoadingTask *existingTask = findExistingTask(description);
 
     // reuse task if it exists
@@ -287,14 +286,14 @@ void ManagedLoadSaveThread::preloadThumbnail(LoadingDescription description)
     task->setStatus(LoadingTask::LoadingTaskStatusPreloading);
     // append to the end of the list
     m_todo.append(task);
-    m_condVar.wakeAll();
+    start(lock);
 }
 
 void ManagedLoadSaveThread::prependThumbnailGroup(QList<LoadingDescription> descriptions)
 {
     // This method is meant to prepend a group of loading tasks after the current task,
     // in the order they are given here, pushing the existing tasks to the back respectively removing double tasks.
-    QMutexLocker lock(&m_mutex);
+    QMutexLocker lock(threadMutex());
 
     int index = 0;
     for (int i=0; i<descriptions.size(); ++i)
@@ -313,7 +312,7 @@ void ManagedLoadSaveThread::prependThumbnailGroup(QList<LoadingDescription> desc
         // insert new loading task, in the order given by descriptions list
         m_todo.insert(index++, new ThumbnailLoadingTask(this, descriptions[i]));
     }
-    m_condVar.wakeAll();
+    start(lock);
 }
 
 LoadingTask *ManagedLoadSaveThread::createLoadingTask(const LoadingDescription& description,
@@ -338,19 +337,19 @@ LoadingTask *ManagedLoadSaveThread::createLoadingTask(const LoadingDescription& 
 
 void ManagedLoadSaveThread::stopLoading(const QString& filePath, LoadingTaskFilter filter)
 {
-    QMutexLocker lock(&m_mutex);
+    QMutexLocker lock(threadMutex());
     removeLoadingTasks(LoadingDescription(filePath), filter);
 }
 
 void ManagedLoadSaveThread::stopLoading(const LoadingDescription& desc, LoadingTaskFilter filter)
 {
-    QMutexLocker lock(&m_mutex);
+    QMutexLocker lock(threadMutex());
     removeLoadingTasks(desc, filter);
 }
 
 void ManagedLoadSaveThread::stopSaving(const QString& filePath)
 {
-    QMutexLocker lock(&m_mutex);
+    QMutexLocker lock(threadMutex());
 
     // stop current task if it is matching the criteria
     if (m_currentTask && m_currentTask->type() == LoadSaveTask::TaskTypeSaving)
@@ -406,7 +405,7 @@ void ManagedLoadSaveThread::removeLoadingTasks(const LoadingDescription& descrip
 
 void ManagedLoadSaveThread::save(DImg& image, const QString& filePath, const QString& format)
 {
-    QMutexLocker lock(&m_mutex);
+    QMutexLocker lock(threadMutex());
     LoadingTask *loadingTask;
 
     // stop and postpone current task if it is a preloading task
@@ -424,7 +423,7 @@ void ManagedLoadSaveThread::save(DImg& image, const QString& filePath, const QSt
             break;
     }
     m_todo.insert(i, new SavingTask(this, image, filePath, format));
-    m_condVar.wakeAll();
+    start(lock);
 }
 
 }   // namespace Digikam

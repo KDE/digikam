@@ -60,8 +60,6 @@ LoadSaveThread::LoadSaveThread()
 {
     m_currentTask        = 0;
     m_notificationPolicy = NotificationPolicyTimeLimited;
-
-    start();
 }
 
 LoadSaveThread::~LoadSaveThread()
@@ -77,35 +75,30 @@ LoadSaveThread::~LoadSaveThread()
 
 void LoadSaveThread::shutdownThread()
 {
-    d->running = false;
-    {
-        QMutexLocker lock(&m_mutex);
-        m_condVar.wakeAll();
-    }
-
+    stop();
     wait();
 }
 
 void LoadSaveThread::load(LoadingDescription description)
 {
-    QMutexLocker lock(&m_mutex);
+    QMutexLocker lock(threadMutex());
     m_todo << new LoadingTask(this, description);
-    m_condVar.wakeAll();
+    start(lock);
 }
 
 void LoadSaveThread::save(DImg& image, const QString& filePath, const QString& format)
 {
-    QMutexLocker lock(&m_mutex);
+    QMutexLocker lock(threadMutex());
     m_todo << new SavingTask(this, image, filePath, format);
-    m_condVar.wakeAll();
+    start(lock);
 }
 
 void LoadSaveThread::run()
 {
-    while (d->running)
+    while (runningFlag())
     {
         {
-            QMutexLocker lock(&m_mutex);
+            QMutexLocker lock(threadMutex());
             if (d->lastTask)
             {
                 delete d->lastTask;
@@ -128,7 +121,7 @@ void LoadSaveThread::run()
                 }
             }
             else
-                m_condVar.wait(&m_mutex);
+                stop(lock);
         }
         if (m_currentTask)
             m_currentTask->execute();
@@ -147,7 +140,7 @@ void LoadSaveThread::taskHasFinished()
     // that has actually already finished (execute() in the loop above is of course not under mutex).
     // So we set m_currentTask to 0 immediately before the final message is emitted,
     // so that anyone who finds this task running as m_current task will get a message.
-    QMutexLocker lock(&m_mutex);
+    QMutexLocker lock(threadMutex());
     d->lastTask = m_currentTask;
     m_currentTask = 0;
 }
@@ -251,17 +244,6 @@ bool LoadSaveThread::querySendNotifyEvent()
             break;
     }
     return false;
-}
-
-
-// This is a hack needed to prevent hanging when a K3Process-based loader (raw loader)
-// is waiting for the process to finish, but the main thread is waiting
-// for the thread to finish and no K3Process events are delivered.
-// Remove when porting to Qt4.
-bool LoadSaveThread::isShuttingDown()
-{
-    // the condition is met after d->running is set to false in the destructor
-    return isRunning() && !d->running;
 }
 
 bool LoadSaveThread::exifRotate(DImg& image, const QString& filePath)

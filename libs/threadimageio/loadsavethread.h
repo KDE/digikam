@@ -38,6 +38,7 @@
 
 #include "dimg.h"
 #include "digikam_export.h"
+#include "dynamicthread.h"
 #include "loadingdescription.h"
 
 namespace Digikam
@@ -63,7 +64,7 @@ public:
     virtual void thumbnailLoaded(const LoadingDescription& loadingDescription, const QImage& img) = 0;
 };
 
-class DIGIKAM_EXPORT LoadSaveThread : public QThread, public LoadSaveNotifier
+class DIGIKAM_EXPORT LoadSaveThread : public DynamicThread, public LoadSaveNotifier
 {
     Q_OBJECT
 
@@ -104,8 +105,6 @@ public:
     void save(DImg& image, const QString& filePath, const QString& format);
 
     void setNotificationPolicy(NotificationPolicy notificationPolicy);
-
-    bool isShuttingDown();
 
     /**
      * Utility to make sure that an image is rotated according to Exif tag.
@@ -177,8 +176,6 @@ protected:
 protected:
 
     QMutex               m_mutex;
-
-    QWaitCondition       m_condVar;
 
     QList<LoadSaveTask*> m_todo;
 
