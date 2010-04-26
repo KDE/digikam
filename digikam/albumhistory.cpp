@@ -32,6 +32,8 @@
 // Local includes
 
 #include "album.h"
+#include "imageinfo.h"
+#include "albummanager.h"
 
 namespace Digikam
 {
@@ -65,11 +67,36 @@ public:
     QWidget* widget;
 };
 
+class HistoryPosition
+{
+public:
+
+    HistoryPosition()
+    {
+
+    };
+
+    HistoryPosition(ImageInfo c, KUrl::List s)
+    {
+        current  = c;
+        select = s;
+    };
+
+    bool operator==(const HistoryPosition& item)
+    {
+        return (current == item.current) && (select == item.select);
+    }
+
+    ImageInfo current;
+    KUrl::List select;
+};
+
 AlbumHistory::AlbumHistory()
 {
     m_backwardStack = new AlbumStack;
     m_forwardStack  = new AlbumStack;
     m_moving        = false;
+    m_blockSelection  = false;
 }
 
 AlbumHistory::~AlbumHistory()
@@ -342,6 +369,77 @@ bool AlbumHistory::isBackwardEmpty() const
     // the last album of the backwardStack is the currently shown
     // album, and therfore not really a previous album
     return (m_backwardStack->count() <= 1) ? true : false;
+}
+
+void AlbumHistory::slotAlbumSelected()
+{
+    Album* currentAlbum = AlbumManager::instance()->currentAlbum();
+    if (m_historyPos.contains(currentAlbum))
+    {
+        if (currentAlbum->type() == Album::PHYSICAL || currentAlbum->type() == Album::TAG)
+        {
+            m_blockSelection = true;
+            emit signalSetCurrent(m_historyPos[currentAlbum].current.id());
+        }
+    }
+}
+
+void AlbumHistory::slotAlbumCurrentChanged()
+{
+    Album* currentAlbum = AlbumManager::instance()->currentAlbum();
+    if (m_historyPos.contains(currentAlbum))
+    {
+        if (currentAlbum->type() == Album::PHYSICAL || currentAlbum->type() == Album::TAG)
+        {
+            if (m_historyPos[currentAlbum].select.size())
+            {
+                emit signalSetSelectedUrls(m_historyPos[currentAlbum].select);
+            }
+        }
+    }
+    m_blockSelection = false;
+}
+
+void AlbumHistory::slotCurrentChange(const ImageInfo& info)
+{
+    Album* currentAlbum = AlbumManager::instance()->currentAlbum();
+    m_historyPos[currentAlbum].current = info;
+}
+
+void AlbumHistory::slotImageSelected(const ImageInfoList& selectedImage)
+{
+    if (m_blockSelection)
+        return;
+    Album *currentAlbum = AlbumManager::instance()->currentAlbum();
+    if (m_historyPos.contains(currentAlbum))
+        m_historyPos[currentAlbum].select.clear();
+    for (int i = 0; i < selectedImage.count(); i++)
+    {
+        if (!m_historyPos[currentAlbum].select.contains(selectedImage[i].fileUrl()))
+        {
+            m_historyPos[currentAlbum].select.insert(0, selectedImage[i].fileUrl());
+        }
+    }
+}
+
+void AlbumHistory::slotClearSelectPAlbum(const ImageInfo& imageInfo)
+{
+    Album* album = dynamic_cast<Album*>(AlbumManager::instance()->findPAlbum(imageInfo.albumId()));
+    if (m_historyPos.contains(album))
+        m_historyPos[album].select.clear();
+}
+
+void AlbumHistory::slotClearSelectTAlbum(int id)
+{
+    Album* album = dynamic_cast<Album*>(AlbumManager::instance()->findTAlbum(id));
+    if (m_historyPos.contains(album))
+        m_historyPos[album].select.clear();
+}
+
+void AlbumHistory::slotAlbumDeleted(Album* album)
+{
+    if (m_historyPos.contains(album))
+        m_historyPos.remove(album);
 }
 
 }  // namespace Digikam

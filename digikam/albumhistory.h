@@ -30,14 +30,21 @@
 // Qt includes
 
 #include <QList>
+#include <QMap>
 #include <QObject>
 #include <QStringList>
+
+//KDE includes
+#include <KUrl>
 
 namespace Digikam
 {
 
 class Album;
 class HistoryItem;
+class HistoryPosition;
+class ImageInfo;
+class ImageInfoList;
 
 /**
  * Manages the history of the last visited albums.
@@ -67,6 +74,21 @@ public:
     bool            isForwardEmpty() const;
     bool            isBackwardEmpty() const;
 
+Q_SIGNALS:
+
+    void            signalSetCurrent(qlonglong imageId);
+    void            signalSetSelectedUrls(const KUrl::List&);
+
+public Q_SLOTS:
+
+    void            slotAlbumCurrentChanged();
+    void            slotAlbumDeleted(Album* album);
+    void            slotAlbumSelected();
+    void            slotClearSelectPAlbum(const ImageInfo& imageInfo);
+    void            slotClearSelectTAlbum(int id);
+    void            slotCurrentChange(const ImageInfo& info);
+    void            slotImageSelected(const ImageInfoList& selectedImage);
+
 private:
 
     HistoryItem*    getCurrentAlbum() const;
@@ -76,10 +98,12 @@ private:
 
     typedef QList<HistoryItem*> AlbumStack;
 
-    bool             m_moving;
+    bool            m_moving;
+    bool            m_blockSelection;
 
     AlbumStack      *m_backwardStack;
     AlbumStack      *m_forwardStack;
+    QMap<Album*, HistoryPosition> m_historyPos;
 };
 
 }  // namespace Digikam

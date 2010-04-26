@@ -495,6 +495,34 @@ void DigikamView::setupConnections()
 
     connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotSidebarTabTitleStyleChanged()));
+
+    // -- Album History -----------------
+    connect(this, SIGNAL(signalAlbumSelected(bool)),
+            d->albumHistory, SLOT(slotAlbumSelected()));
+
+    connect(this, SIGNAL(signalImageSelected(const ImageInfoList&, bool, bool, const ImageInfoList&)),
+            d->albumHistory, SLOT(slotImageSelected(const ImageInfoList&)));
+
+    connect(d->iconView, SIGNAL(currentChanged(const ImageInfo&)),
+            d->albumHistory, SLOT(slotCurrentChange(const ImageInfo&)));
+
+    connect(d->iconView, SIGNAL(gotoAlbumAndImageRequested(const ImageInfo&)),
+            d->albumHistory, SLOT(slotClearSelectPAlbum(const ImageInfo&)));
+
+    connect(d->iconView, SIGNAL(gotoTagAndImageRequested(int)),
+            d->albumHistory, SLOT(slotClearSelectTAlbum(int)));
+
+    connect(d->iconView->imageModel(), SIGNAL(imageInfosAdded(QList<ImageInfo>)),
+            d->albumHistory, SLOT(slotAlbumCurrentChanged()));
+
+    connect(d->albumHistory, SIGNAL(signalSetCurrent(qlonglong)),
+            d->iconView, SLOT(setCurrentWhenAvailable(qlonglong)));
+
+    connect(d->albumHistory, SIGNAL(signalSetSelectedUrls(KUrl::List)),
+            d->iconView, SLOT(setSelectedUrls(KUrl::List)));
+            
+    connect(d->albumManager, SIGNAL(signalAlbumDeleted(Album*)),
+            d->albumHistory, SLOT(slotAlbumDeleted(Album*)));
 }
 
 void DigikamView::connectIconViewFilter(AlbumIconViewFilter *filter)
