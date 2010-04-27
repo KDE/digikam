@@ -255,6 +255,54 @@ TagInfo::List AlbumDB::scanTags()
     return tList;
 }
 
+TagInfo AlbumDB::getTagInfo(int tagId)
+{
+    QList<QVariant> values;
+    d->db->execSql( "SELECT T.id, T.pid, T.name, A.relativePath, I.name, T.iconkde, A.albumRoot \n "
+                    "FROM Tags AS T \n"
+                    "  LEFT JOIN Images AS I ON I.id=T.icon \n "
+                    "  LEFT JOIN Albums AS A ON A.id=I.album "
+                    "WHERE T.id=?;",
+                    tagId, &values );
+
+    QString iconName, iconKDE, albumURL;
+    int iconAlbumRootId;
+
+    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
+    {
+        TagInfo info;
+
+        info.id     = (*it).toInt();
+        ++it;
+        info.pid    = (*it).toInt();
+        ++it;
+        info.name   = (*it).toString();
+        ++it;
+        albumURL    = (*it).toString();
+        ++it;
+        iconName    = (*it).toString();
+        ++it;
+        iconKDE     = (*it).toString();
+        ++it;
+        iconAlbumRootId = (*it).toInt(); // will be 0 if null
+        ++it;
+
+        if (albumURL.isEmpty())
+        {
+            info.icon = iconKDE;
+        }
+        else
+        {
+            info.iconAlbumRootId  = iconAlbumRootId;
+            info.iconRelativePath = albumURL + '/' + iconName;
+        }
+
+        return info;
+    }
+
+    return TagInfo();
+}
+
 SearchInfo::List AlbumDB::scanSearches()
 {
     SearchInfo::List searchList;

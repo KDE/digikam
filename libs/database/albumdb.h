@@ -173,6 +173,7 @@ public:
      * @return a list of tags and their attributes
      */
     TagInfo::List scanTags();
+    TagInfo getTagInfo(int tagId);
 
     /**
      * Returns all searches from the database

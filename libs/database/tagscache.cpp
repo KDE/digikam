@@ -213,6 +213,16 @@ bool TagsCache::hasTag(int id)
     return d->find(id) != d->infos.constEnd();
 }
 
+int TagsCache::parentTag(int id)
+{
+    d->checkInfos();
+    QReadLocker locker(&d->lock);
+    QList<TagShortInfo>::const_iterator tag = d->find(id);
+    if (tag != d->infos.constEnd())
+        return tag->pid;
+    return 0;
+}
+
 int TagsCache::tagForPath(const QString& tagPath)
 {
     // split full tag "url" into list of single tag names

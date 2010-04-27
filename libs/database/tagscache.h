@@ -70,6 +70,11 @@ public:
     bool hasTag(int id);
 
     /**
+     * Returns the parent tag id, or 0 if a toplevel tag or tag does not exist.
+     */
+    int parentTag(int id);
+
+    /**
      * Finds all tags with the given name.
      * For "Paris", this may give "Places/Cities/Paris" and "Places/USA/Texas/Paris".
      * If there is no tag with the given name at all, returns an empty list.
