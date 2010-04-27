@@ -46,6 +46,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 034 ==> 235158 : digiKam crashes when setting the rating [database relevant, DatabaseCoreBackend::execQuery].
 035 ==> 234545 : Red eye correction tool is missing from image editor.
 036 ==> 235368 : When right clic on RAW, the option "open with" is not there.
-037 ==> 
+037 ==> 235469 : digiKam Segmentation fault after 2 or 3 modifications.
+038 ==> 
+
 
 
