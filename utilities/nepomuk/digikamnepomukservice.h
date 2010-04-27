@@ -109,7 +109,6 @@ protected:
     void removeTagInDigikam(const KUrl& fileUrl, const QUrl& tag);
     void pushTagsToNepomuk(const QList<ImageInfo>& imageInfos);
 
-    QList<int> candidateDigikamTagsForTagName(const QString& tagname);
     int bestDigikamTagForTagName(const ImageInfo& info, const QString& tagName);
     QString tagnameForNepomukTag(const QUrl& tagUri);
     QDateTime lastSyncToDigikam();
@@ -118,8 +117,6 @@ protected:
     bool hasSyncToNepomuk();
     void markAsSyncedToNepomuk();
     void clearSyncedToNepomuk();
-    void checkTagList();
-    void checkTagMap();
     DatabaseParameters databaseParameters();
     KSharedConfig::Ptr digikamConfig();
 

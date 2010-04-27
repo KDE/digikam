@@ -64,6 +64,7 @@
 #include "databasewatch.h"
 #include "imageinfo.h"
 #include "imagelister.h"
+#include "tagscache.h"
 
 #include "nfo.h"
 #include "nie.h"
@@ -104,9 +105,6 @@ public:
     bool        changingDB;
     bool        changingNepomuk;
 
-    TagInfo::List tagList;
-    QMap<int, TagInfo> tagMap;
-
     QMultiHash<QUrl, WatchedNepomukProperty> ignoreUris;
 
     bool checkIgnoreUris(const QUrl& url, WatchedNepomukProperty property)
@@ -128,14 +126,6 @@ public:
 
         // always restart timer
         cleanIgnoreListTimer->start();
-    }
-
-    TagInfo tagInfo(int tagId)
-    {
-        foreach (const TagInfo &info, tagList)
-            if (info.id == tagId)
-                return info;
-        return TagInfo();
     }
 
     void triggerSyncToDigikam()
@@ -332,8 +322,6 @@ void NepomukService::connectToDatabase(const DatabaseParameters &params)
         return;
 
     d->isConnected = false;
-    d->tagList.clear();
-    d->tagMap.clear();
 
     if (params.isValid())
     {
@@ -376,6 +364,7 @@ void NepomukService::slotImageTagChange(const ImageTagChangeset& changeset)
 
     if (d->changingDB)
         return;
+    kDebug() << changeset.ids() << changeset.tags() << (changeset.operation()==ImageTagChangeset::Added);
 
     switch (changeset.operation())
     {
@@ -393,8 +382,6 @@ void NepomukService::slotImageTagChange(const ImageTagChangeset& changeset)
 
 void NepomukService::slotTagChange(const TagChangeset&)
 {
-    d->tagList.clear();
-    d->tagMap.clear();
 }
 
 void NepomukService::fullSyncDigikamToNepomuk()
@@ -485,7 +472,7 @@ void NepomukService::syncToNepomuk(const QList<ImageInfo>& infos, SyncToNepomukS
     {
         ChangingNepomuk changing(d);
 
-        Nepomuk::Resource res(info.fileUrl(), Nepomuk::Vocabulary::NFO::FileDataObject() );
+        Nepomuk::Resource res(info.fileUrl());
 
         if (syncSettings & SyncRating)
         {
@@ -511,30 +498,33 @@ void NepomukService::syncToNepomuk(const QList<ImageInfo>& infos, SyncToNepomukS
     }
 }
 
-// For now d->tagList is enough. If we need hierarchy information,
-// we need to move the core of AlbumManager to libdigikamdatabase
-
-static Nepomuk::Tag nepomukForDigikamTag(const TagInfo& info)
+static Nepomuk::Tag nepomukForDigikamTag(int tagId)
 {
-    if (info.id)
+    if (tagId)
     {
-        Nepomuk::Tag tag(info.name);
-        // from dolphin's panels/information/newtagdialog.cpp
-        tag.setLabel(info.name);
-        tag.addIdentifier(info.name);
+        QString tagName = TagsCache::instance()->tagName(tagId);
+        Nepomuk::Tag tag(tagName);
 
-        if (info.icon.isNull())
+        if (!tag.exists())
         {
-            // Don't think we can use actual large files for tag icon
-            /*
-            // album image icon
-            QString albumRootPath = CollectionManager::instance()->albumRootPath(info.iconAlbumRootId);
-            album->m_icon         = albumRootPath + info.iconRelativePath;
-            */
-        }
-        else
-        {
-            tag.addSymbol(info.icon);
+            // from dolphin's panels/information/newtagdialog.cpp
+            tag.setLabel(tagName);
+            tag.addIdentifier(tagName);
+
+            TagInfo info = DatabaseAccess().db()->getTagInfo(tagId);
+            if (info.icon.isNull())
+            {
+                // Don't think we can use actual large files for tag icon
+                /*
+                // album image icon
+                QString albumRootPath = CollectionManager::instance()->albumRootPath(info.iconAlbumRootId);
+                album->m_icon         = albumRootPath + info.iconRelativePath;
+                */
+            }
+            else
+            {
+                tag.addSymbol(info.icon);
+            }
         }
         return tag;
     }
@@ -543,11 +533,11 @@ static Nepomuk::Tag nepomukForDigikamTag(const TagInfo& info)
 
 void NepomukService::syncTagsToNepomuk(const QList<qlonglong>& imageIds, const QList<int>& tagIds, bool addOrRemove)
 {
-    checkTagList();
     foreach (int tagId, tagIds)
     {
         ChangingNepomuk changing(d);
-        Nepomuk::Tag tag = nepomukForDigikamTag(d->tagInfo(tagId));
+        Nepomuk::Tag tag = nepomukForDigikamTag(tagId);
+        kDebug() << tag.resourceUri();
         if (tag.isValid())
         {
             foreach (const qlonglong &imageId, imageIds)
@@ -555,14 +545,16 @@ void NepomukService::syncTagsToNepomuk(const QList<qlonglong>& imageIds, const Q
                 ImageInfo info(imageId);
                 if (!info.isNull())
                 {
-                    Nepomuk::Resource res(info.fileUrl(), Nepomuk::Vocabulary::NFO::FileDataObject());
+                    Nepomuk::Resource res(info.fileUrl());
+                    kDebug()<< res.resourceUri() << addOrRemove << res.properties();
 
                     if (addOrRemove)
                         res.addTag(tag);
                     else
-                        res.removeProperty(Soprano::Vocabulary::NAO::hasTag(), tag);
+                        res.removeProperty(Soprano::Vocabulary::NAO::hasTag(), tag.resourceUri());
 
                     d->addIgnoreUri(res.resourceUri(), NaoTags);
+                    kDebug()<< "after change:" << res.properties();
                 }
             }
         }
@@ -571,7 +563,6 @@ void NepomukService::syncTagsToNepomuk(const QList<qlonglong>& imageIds, const Q
 
 void NepomukService::pushTagsToNepomuk(const QList<ImageInfo>& imageInfos)
 {
-    checkTagList();
     foreach (const ImageInfo &info, imageInfos)
     {
         ChangingNepomuk changing(d);
@@ -579,10 +570,10 @@ void NepomukService::pushTagsToNepomuk(const QList<ImageInfo>& imageInfos)
         {
             foreach (int tagId, info.tagIds())
             {
-                Nepomuk::Tag tag = nepomukForDigikamTag(d->tagInfo(tagId));
+                Nepomuk::Tag tag = nepomukForDigikamTag(tagId);
                 if (tag.isValid())
                 {
-                    Nepomuk::Resource res(info.fileUrl(), Nepomuk::Vocabulary::NFO::FileDataObject());
+                    Nepomuk::Resource res(info.fileUrl());
 
                     res.addTag(tag);
 
@@ -908,7 +899,7 @@ void NepomukService::removeTagInDigikam(const KUrl& fileUrl, const QUrl& tag)
         return;
 
     QString tagName = tagnameForNepomukTag(tag);
-    QList<int> candidates = candidateDigikamTagsForTagName(tagName);
+    QList<int> candidates = TagsCache::instance()->tagsForName(tagName);
     if (candidates.isEmpty())
         return;
 
@@ -919,31 +910,12 @@ void NepomukService::removeTagInDigikam(const KUrl& fileUrl, const QUrl& tag)
     }
 }
 
-QList<int> NepomukService::candidateDigikamTagsForTagName(const QString& tagname)
-{
-    QList<int> candidates;
-
-    if (tagname.isEmpty())
-        return candidates;
-
-    checkTagList();
-
-    foreach (const TagInfo &info, d->tagList)
-    {
-        if (info.name == tagname)
-            candidates << info.id;
-    }
-    return candidates;
-}
-
 int NepomukService::bestDigikamTagForTagName(const ImageInfo& info, const QString& tagname)
 {
     if (tagname.isEmpty())
         return 0;
 
-    checkTagMap();
-
-    QList<int> candidates = candidateDigikamTagsForTagName(tagname);
+    QList<int> candidates = TagsCache::instance()->tagsForName(tagname);
 
     if (candidates.isEmpty())
     {
@@ -968,8 +940,7 @@ int NepomukService::bestDigikamTagForTagName(const ImageInfo& info, const QStrin
             int id = tagId;
             int score = 0;
             do {
-                const TagInfo &info = d->tagMap.value(id);
-                id = info.pid;
+                id = TagsCache::instance()->parentTag(id);
                 score++;
             } while (id);
 
@@ -1031,24 +1002,6 @@ void NepomukService::clearSyncedToNepomuk()
     DatabaseAccess().db()->setSetting("InitialSyncDigikamToNepomuk-1", QString());
 }
 
-void NepomukService::checkTagList()
-{
-    if (d->tagList.isEmpty())
-    {
-        d->tagList = DatabaseAccess().db()->scanTags();
-    }
-}
-
-void NepomukService::checkTagMap()
-{
-    if (d->tagMap.isEmpty())
-    {
-        checkTagList();
-        foreach (const TagInfo &info, d->tagList)
-            d->tagMap[info.id] = info;
-    }
-}
-
 DatabaseParameters NepomukService::databaseParameters()
 {
     // Check running digikam instance first
@@ -1079,13 +1032,11 @@ DatabaseParameters NepomukService::databaseParameters()
 
     // no running instance, read settings file
     KSharedConfig::Ptr config  = digikamConfig();
-    KConfigGroup group = config->group("Album Settings");
-    if (group.exists())
+    DatabaseParameters params = DatabaseParameters::parametersFromConfig(config);
+    if (!params.databaseName.isEmpty())
     {
-        QString dbPath = group.readEntry("Database File Path", QString());
-        kDebug() << "Using database path from config file:" << dbPath;
-        if (!dbPath.isEmpty())
-            return DatabaseParameters::parametersForSQLiteDefaultFile(dbPath);
+        kDebug() << "Using database path from config file:" << params;
+        return params;
     }
     return DatabaseParameters();
 }
