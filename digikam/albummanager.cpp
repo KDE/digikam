@@ -657,7 +657,15 @@ bool AlbumManager::setDatabase(const DatabaseParameters& newParams, bool priorit
 
     if (params.internalServer)
     {
-        DatabaseServerStarter::startServerManagerProcess();
+        DatabaseServerError result = DatabaseServerStarter::startServerManagerProcess();
+        if (result.getErrorType()!=DatabaseServerError::NoErrors)
+        {
+			QWidget* parent = QWidget::find(0);
+			QString message = i18n("<p><b>A error occurred during the internal server start.</b></p>"
+								   "Details:\n %1", result.getErrorText());
+			QApplication::setOverrideCursor(Qt::ArrowCursor);
+			KMessageBox::error(parent, message);
+        }
     }
 
     DatabaseAccess::setParameters(params, DatabaseAccess::MainApplication);

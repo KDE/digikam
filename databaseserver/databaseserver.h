@@ -28,7 +28,11 @@
 // QT includes
 
 #include <QString>
-#include <QDBusAbstractAdaptor>
+#include <QDBusVariant>
+#include <QObject>
+
+// Local includes
+#include "databaseservererror.h"
 
 class QCoreApplication;
 
@@ -46,15 +50,16 @@ public:
 
     DatabaseServer(QCoreApplication* application);
     ~DatabaseServer();
-    void createDatabase();
+    DatabaseServerError createDatabase();
     void registerOnDBus();
     void startPolling();
-    void startMYSQLDatabaseProcess();
+    DatabaseServerError startMYSQLDatabaseProcess();
+
+    QString convertStringListToString(const QStringList &inputList, const QString &delimiter);
 
 public Q_SLOTS:
-
-    void startDatabaseProcess(const QString dbType);
-    void startDatabaseProcess();
+    bool startDatabaseProcess(QString dbType, QDBusVariant &error);
+    bool startDatabaseProcess(QDBusVariant &error);
     void stopDatabaseProcess();
     bool isRunning();
 

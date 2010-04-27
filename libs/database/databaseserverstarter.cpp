@@ -39,7 +39,10 @@
 #include <QSqlError>
 #include <QDBusConnection>
 #include <QDBusConnectionInterface>
+#include <QDBusMetaType>
 #include <QDBusInterface>
+#include <QDBusVariant>
+#include <QVariant>
 #include <QDBusReply>
 #include <QProcess>
 #include <QSystemSemaphore>
@@ -50,6 +53,8 @@
 
 #include <kdebug.h>
 #include <kstandarddirs.h>
+#include <kmessagebox.h>
+#include <klocale.h>
 
 // Local includes
 
@@ -82,8 +87,21 @@ DatabaseServerStarter::DatabaseServerStarter(QObject* parent=0)
 {
 }
 
-void DatabaseServerStarter::startServerManagerProcess(const QString dbType)
+bool DatabaseServerStarter::init()
 {
+	if (qDBusRegisterMetaType<DatabaseServerError>()<0)
+	{
+		kError()<<"Error while registering DatabaseServerError class.";
+		return false;
+	}
+	return true;
+}
+
+bool DatabaseServerStarter::__init=DatabaseServerStarter::init();
+
+DatabaseServerError DatabaseServerStarter::startServerManagerProcess(const QString dbType)
+{
+	DatabaseServerError result;
     /*
      * TODO:
      * 1. Acquire semaphore lock on "DigikamDBSrvAccess"
@@ -130,11 +148,31 @@ void DatabaseServerStarter::startServerManagerProcess(const QString dbType)
     QDBusMessage stateMsg = dbus_iface.call("isRunning");
     if (!stateMsg.arguments().at(0).toBool())
     {
+    	DatabaseServerError error;
+
         QList<QVariant> arguments;
         arguments.append(dbType);
-        dbus_iface.callWithArgumentList(QDBus::Block, "startDatabaseProcess", arguments);
+
+        QDBusMessage reply = dbus_iface.callWithArgumentList(QDBus::Block, "startDatabaseProcess", arguments);
+        if (QDBusMessage::ErrorMessage==reply.type())
+        {
+        	result.setErrorType(DatabaseServerError::StartError);
+        	result.setErrorText(i18n("<p><b>Error while calling the database server starter.</b></p>"
+					   "Details:\n %1", reply.errorMessage()));
+        }else
+        {
+        	arguments = reply.arguments();
+
+        	QDBusVariant dbusVariant = qvariant_cast<QDBusVariant>(arguments[1]);
+			// retrieve the actual value stored in the D-Bus variant
+			QVariant dbusArgument = dbusVariant.variant();
+        	DatabaseServerError item = qdbus_cast<DatabaseServerError>(dbusArgument);
+        	result = item;
+        }
     }
     sem.release();
+
+    return result;
 }
 
 bool DatabaseServerStarter::isServerRegistered()

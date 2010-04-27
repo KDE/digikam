@@ -23,7 +23,7 @@ KDE4_ADD_EXECUTABLE(digikamdatabaseserver ${digikamdatabaseserver_SRCS})
 
 TARGET_LINK_LIBRARIES(digikamdatabaseserver
                       digikamcore
-                      digikamdatabase
+                      digikamdatabase                      
                       ${KDE4_KDECORE_LIBS}
                       ${QT_QTSQL_LIBRARY}
                       ${QT_QT3SUPPORT_LIBRARY}

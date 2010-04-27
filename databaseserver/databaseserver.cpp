@@ -42,6 +42,7 @@
 // KDE includes
 
 #include <kdebug.h>
+#include <klocale.h>
 #include <kstandarddirs.h>
 
 // Local includes
@@ -49,6 +50,7 @@
 #include "pollthread.h"
 #include "databaseserveradaptor.h"
 #include "databaseparameters.h"
+#include "databaseservererror.h"
 
 namespace Digikam
 {
@@ -76,6 +78,10 @@ DatabaseServer::DatabaseServer(QCoreApplication* application=0)
               : QObject(application), d(new DatabaseServerPriv)
 {
     d->app = application;
+    if (qDBusRegisterMetaType<DatabaseServerError>()<0)
+    {
+        kError()<<"Error while registering DatabaseServerError class.";
+    }
 }
 
 DatabaseServer::~DatabaseServer()
@@ -104,9 +110,9 @@ void DatabaseServer::startPolling()
  * TODO: Ensure that no other digikam dbms is running. Reusing this instance instead start a new one.
  * Maybe this can be done by DBUS communication or an PID file.
  */
-void DatabaseServer::startDatabaseProcess()
+bool DatabaseServer::startDatabaseProcess(QDBusVariant &error)
 {
-    startDatabaseProcess("QMYSQL");
+    return startDatabaseProcess("QMYSQL", error);
 }
 
 /*
@@ -114,15 +120,20 @@ void DatabaseServer::startDatabaseProcess()
  * TODO: Ensure that no other digikam dbms is running. Reusing this instance instead start a new one.
  * Maybe this can be done by DBUS communication or an PID file.
  */
-void DatabaseServer::startDatabaseProcess(const QString dbType)
+bool DatabaseServer::startDatabaseProcess(const QString dbType, QDBusVariant &error)
 {
     if (dbType == QString("QMYSQL"))
     {
-        startMYSQLDatabaseProcess();
+//        return QVariant::fromValue(startMYSQLDatabaseProcess());
+    	error=QDBusVariant(QVariant::fromValue(startMYSQLDatabaseProcess()));
+        return false;
     }
     else
     {
         kDebug() << "DBType ["<< dbType <<"] is not supported.";
+        DatabaseServerError errorDetails(DatabaseServerError::NotSupported, QString("DBType [%0] is not supported.").arg(dbType));
+        error=QDBusVariant(QVariant::fromValue(errorDetails));
+        return false;
     }
 }
 
@@ -131,8 +142,9 @@ void DatabaseServer::startDatabaseProcess(const QString dbType)
  * TODO: Ensure that no other digikam dbms is running. Reusing this instance instead start a new one.
  * Maybe this can be done by DBUS communication or an PID file.
  */
-void DatabaseServer::startMYSQLDatabaseProcess()
+DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
 {
+	DatabaseServerError result;
     const QString dbType("QMYSQL");
     DatabaseParameters internalServerParameters = DatabaseParameters::defaultParameters(dbType);
 
@@ -146,7 +158,10 @@ void DatabaseServer::startMYSQLDatabaseProcess()
     //const QString mysqldPath("/usr/sbin/mysqld");
 
     if ( mysqldPath.isEmpty() )
+    {
         kDebug() << "No path to mysqld set in server configuration!";
+        return DatabaseServerError(DatabaseServerError::StartError, i18n("No path to mysqld set in server configuration!"));
+    }
 
     // create the database directories if they don't exists
     //  const QString dataDir     = XdgBaseDirs::saveDir( "data", QLatin1String( "Digikam/db_data" ) );
@@ -189,7 +204,10 @@ void DatabaseServer::startMYSQLDatabaseProcess()
 
 
     if ( globalConfig.isEmpty() )
+    {
         kDebug() << "Did not find MySQL server default configuration (mysql-global.conf)";
+        return DatabaseServerError(DatabaseServerError::StartError, i18n("Did not find MySQL server default configuration (mysql-global.conf)!"));
+    }
 
     bool confUpdate = false;
     QFile actualFile ( actualConfig );
@@ -217,9 +235,11 @@ void DatabaseServer::startMYSQLDatabaseProcess()
         }
         else
         {
-            kDebug() << "Unable to create MySQL server configuration file.";
-            kDebug() << "This means that either the default configuration file (mysql-global.conf) was not readable";
-            kDebug() << "or the target file (mysql.conf) could not be written.";
+        	QString  str = i18n("Unable to create MySQL server configuration file.\n",
+								"This means that either the default configuration file (mysql-global.conf) was not readable\n",
+								"or the target file (mysql.conf) could not be written.");
+            kDebug() << str;
+            return DatabaseServerError(DatabaseServerError::StartError, str);
         }
     }
 
@@ -233,13 +253,25 @@ void DatabaseServer::startMYSQLDatabaseProcess()
         actualFile.setPermissions( allowedPerms );
 
     if ( dataDir.isEmpty() )
-        kDebug() << "Digikam server was not able not create database data directory";
+    {
+        QString  str = i18n("Digikam server was not able not create database data directory");
+        kDebug() << str;
+        return DatabaseServerError(DatabaseServerError::StartError, str);
+    }
 
     if ( akDir.isEmpty() )
-        kDebug() << "Digikam server was not able not create database log directory";
+    {
+    	QString  str = i18n("Digikam server was not able not create database log directory");
+    	kDebug() << str;
+    	return DatabaseServerError(DatabaseServerError::StartError, str);
+    }
 
     if ( miscDir.isEmpty() )
-        kDebug() << "Digikam server was not able not create database misc directory";
+    {
+    	QString  str = i18n("Digikam server was not able not create database misc directory");
+    	kDebug() << str;
+    	return DatabaseServerError(DatabaseServerError::StartError, str);
+    }
 
     // move mysql error log file out of the way
     const QFileInfo errorLog( dataDir + QDir::separator() + QString::fromLatin1( "mysql.err" ) );
@@ -281,9 +313,11 @@ void DatabaseServer::startMYSQLDatabaseProcess()
         initProcess.start( mysqlInitCmd );
         if ( !initProcess.waitForFinished())
         {
-            kDebug() << "Could not start database init command!";
-            kDebug() << "executable:" << mysqlInitCmd;
-            kDebug() << "process error:" << initProcess.errorString();
+        	QString  str = i18n("Could not start database init command!\n",
+								"Executable: %1\n",
+								"Process error:%2", mysqlInitCmd, initProcess.errorString());
+        	kDebug() << str;
+        	return DatabaseServerError(DatabaseServerError::StartError, str);
         }
     }
 
@@ -292,10 +326,13 @@ void DatabaseServer::startMYSQLDatabaseProcess()
 
     if ( !d->databaseProcess->waitForStarted() )
     {
-        kDebug() << "Could not start database server!";
-        kDebug() << "executable:" << mysqldPath;
-        kDebug() << "arguments:" << arguments;
-        kDebug() << "process error:" << d->databaseProcess->errorString();
+    	QString argumentStr = convertStringListToString(arguments, ", ");
+    	QString  str = i18n("Could not start database server!");
+    	str+=i18n("<p>Executable: %1</p>", mysqldPath);
+    	str+=i18n("<p>Arguments: %1</p>", argumentStr);
+    	str+=i18n("<p>Process error: %1</p>", d->databaseProcess->errorString());
+    	kDebug() << str;
+		return DatabaseServerError(DatabaseServerError::StartError, str);
     }
 
     const QLatin1String initCon( "initConnection" );
@@ -316,13 +353,20 @@ void DatabaseServer::startMYSQLDatabaseProcess()
                 break;
             if ( d->databaseProcess->waitForFinished( 500 ) )
             {
-                kDebug() << "Database process exited unexpectedly during initial connection!";
-                kDebug() << "executable:" << mysqldPath;
-                kDebug() << "arguments:" << arguments;
-                kDebug() << "stdout:" << d->databaseProcess->readAllStandardOutput();
-                kDebug() << "stderr:" << d->databaseProcess->readAllStandardError();
-                kDebug() << "exit code:" << d->databaseProcess->exitCode();
-                kDebug() << "process error:" << d->databaseProcess->errorString();
+            	kDebug() << "Database process exited unexpectedly during initial connection!";
+            	kDebug() << "executable: " << mysqldPath;
+				kDebug() << "arguments: " << arguments;
+				kDebug() << "stdout: " << d->databaseProcess->readAllStandardOutput();
+				kDebug() << "stderr: " << d->databaseProcess->readAllStandardError();
+				kDebug() << "exit code: " << d->databaseProcess->exitCode();
+				kDebug() << "process error: " << d->databaseProcess->errorString();
+
+            	QString  str = i18n("Database process exited unexpectedly during initial connection!",
+									"<p>Executable: %1</p>”",
+									"<p>Process error: %2</p>",
+									mysqldPath, d->databaseProcess->errorString());
+
+            	return DatabaseServerError(DatabaseServerError::StartError, str);
             }
         }
 
@@ -338,9 +382,11 @@ void DatabaseServer::startMYSQLDatabaseProcess()
 
                 if ( !query.exec( QLatin1String( "CREATE DATABASE digikam" ) ) )
                 {
-                    kDebug() << "Failed to create database";
-                    kDebug() << "Query error:" << query.lastError().text();
-                    kDebug() << "Database error:" << db.lastError().text();
+                	QString  str = i18n("Failed to create database",
+										"<p>Query error: %1</p>",
+										"<p>Database error: %2</p>", query.lastError().text(), db.lastError().text());
+                	kDebug() << str;
+					return DatabaseServerError(DatabaseServerError::StartError, str);
                 }
                 else
                 {
@@ -353,12 +399,13 @@ void DatabaseServer::startMYSQLDatabaseProcess()
     }
 
     QSqlDatabase::removeDatabase( initCon );
+    return result;
 }
 
 /*
  * Creates the initial database for the internal server instance.
  */
-void DatabaseServer::createDatabase()
+DatabaseServerError DatabaseServer::createDatabase()
 {
     const QLatin1String initCon( "initConnection" );
     QSqlDatabase db = QSqlDatabase::addDatabase( "MYSQL", initCon );
@@ -382,9 +429,11 @@ void DatabaseServer::createDatabase()
 
             if ( !query.exec( QLatin1String( "CREATE DATABASE digikam" ) ) )
             {
-                kDebug() << "Failed to create database";
-                kDebug() << "Query error:" << query.lastError().text();
-                kDebug() << "Database error:" << db.lastError().text();
+                QString str = i18n("Failed to create database",
+								   "<p>Query error: %1</p>",
+								   "<p>Database error: %2</p>",query.lastError().text(), db.lastError().text());
+                kDebug() << str;
+                return DatabaseServerError(DatabaseServerError::StartError, str);
             }
         }
 
@@ -392,6 +441,7 @@ void DatabaseServer::createDatabase()
         db.close();
     }
     QSqlDatabase::removeDatabase( initCon );
+    return DatabaseServerError(DatabaseServerError::NoErrors, QString());
 }
 
 /*
@@ -424,6 +474,23 @@ bool DatabaseServer::isRunning()
     }
 
     return (d->databaseProcess->state() == QProcess::Running);
+}
+
+QString DatabaseServer::convertStringListToString(const QStringList &inputList, const QString &delimiter)
+{
+	QString resultString;
+	QStringList::const_iterator iterator;
+	for (iterator = inputList.constBegin(); iterator != inputList.constEnd(); ++iterator){
+		QString  entry 	= *iterator;
+		resultString.append(entry);
+
+		// Add a semicolon to the statement, if we are not on the last entry
+		if ((iterator+1) != inputList.constEnd())
+		{
+			resultString.append(delimiter);
+		}
+	}
+	return resultString;
 }
 
 } // namespace Digikam

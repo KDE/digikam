@@ -34,6 +34,7 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "databaseservererror.h"
 
 namespace Digikam
 {
@@ -45,12 +46,14 @@ class DIGIKAM_DATABASE_EXPORT DatabaseServerStarter : public QObject
     public:
 
         DatabaseServerStarter(QObject* parent);
-        static void startServerManagerProcess(const QString dbType="QMYSQL");
+        static DatabaseServerError startServerManagerProcess(const QString dbType="QMYSQL");
         static void cleanUp();
 
     private:
 
         static bool isServerRegistered();
+        static bool __init;
+        static bool init();
 };
 
 }  // namespace Digikam
