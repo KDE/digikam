@@ -170,11 +170,11 @@ void DatabaseParameters::readFromConfig(KSharedConfig::Ptr config, const QString
 
     if (isSQLite())
     {
-        if (databaseName.endsWith('/'))
+        QFileInfo fileInfo(databaseName);
+        if (fileInfo.isDir())
         {
-            QString path = databaseName;
-            databaseName = QDir::cleanPath(path + '/' + "digikam4.db");
-            databaseNameThumbnails = QDir::cleanPath(path + '/' + "thumbnails-digikam.db");
+            databaseName = QDir::cleanPath(fileInfo.filePath() + '/' + "digikam4.db");
+            databaseNameThumbnails = QDir::cleanPath(fileInfo.filePath() + '/' + "thumbnails-digikam.db");
         }
     }
 }
