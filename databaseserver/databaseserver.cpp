@@ -235,8 +235,8 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
         }
         else
         {
-        	QString  str = i18n("Unable to create MySQL server configuration file.\n",
-								"This means that either the default configuration file (mysql-global.conf) was not readable\n",
+        	QString  str = i18n("Unable to create MySQL server configuration file.\n"
+								"This means that either the default configuration file (mysql-global.conf) was not readable\n"
 								"or the target file (mysql.conf) could not be written.");
             kDebug() << str;
             return DatabaseServerError(DatabaseServerError::StartError, str);
@@ -313,8 +313,8 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
         initProcess.start( mysqlInitCmd );
         if ( !initProcess.waitForFinished())
         {
-        	QString  str = i18n("Could not start database init command!\n",
-								"Executable: %1\n",
+        	QString  str = i18n("Could not start database init command!\n"
+								"Executable: %1\n"
 								"Process error:%2", mysqlInitCmd, initProcess.errorString());
         	kDebug() << str;
         	return DatabaseServerError(DatabaseServerError::StartError, str);
@@ -361,8 +361,8 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
 				kDebug() << "exit code: " << d->databaseProcess->exitCode();
 				kDebug() << "process error: " << d->databaseProcess->errorString();
 
-            	QString  str = i18n("Database process exited unexpectedly during initial connection!",
-									"<p>Executable: %1</p>”",
+            	QString  str = i18n("Database process exited unexpectedly during initial connection!"
+									"<p>Executable: %1</p>”"
 									"<p>Process error: %2</p>",
 									mysqldPath, d->databaseProcess->errorString());
 
@@ -382,8 +382,8 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
 
                 if ( !query.exec( QLatin1String( "CREATE DATABASE digikam" ) ) )
                 {
-                	QString  str = i18n("Failed to create database",
-										"<p>Query error: %1</p>",
+                	QString  str = i18n("Failed to create database"
+										"<p>Query error: %1</p>"
 										"<p>Database error: %2</p>", query.lastError().text(), db.lastError().text());
                 	kDebug() << str;
 					return DatabaseServerError(DatabaseServerError::StartError, str);
@@ -429,8 +429,8 @@ DatabaseServerError DatabaseServer::createDatabase()
 
             if ( !query.exec( QLatin1String( "CREATE DATABASE digikam" ) ) )
             {
-                QString str = i18n("Failed to create database",
-								   "<p>Query error: %1</p>",
+                QString str = i18n("Failed to create database"
+								   "<p>Query error: %1</p>"
 								   "<p>Database error: %2</p>",query.lastError().text(), db.lastError().text());
                 kDebug() << str;
                 return DatabaseServerError(DatabaseServerError::StartError, str);
