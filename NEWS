@@ -47,7 +47,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 035 ==> 234545 : Red eye correction tool is missing from image editor.
 036 ==> 235368 : When right clic on RAW, the option "open with" is not there.
 037 ==> 235469 : digiKam Segmentation fault after 2 or 3 modifications.
-038 ==> 
+038 ==> 235491 : Regression in rev. 1115803, SIGSEGV or SIGABRT in image filters in editor.
+039 ==> 
 
 
 
