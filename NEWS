@@ -51,7 +51,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 039 ==> 235589 : Build error String_literal_as_second_argument_to_i18n, databaseserver.cpp error.
 040 ==> 225533 : Digikam does not read metadata from Nepomuk.
 041 ==> 184444 : Customize Filename in Download window doesn't seem to work.
-042 ==>
+042 ==> 188525 : Problem with same names on download from mass storage camera using file renaming.
+043 ==>
 
 
 
