@@ -56,8 +56,8 @@ namespace Digikam
  * _
  * _abc
  * @endcode
- * A ParseObject must assign at least one token object, to make parsing work. More than one token can be assigned to a %ParseObject.
- * @see ParseObject::addToken()
+ * A Parseable must assign at least one token object, to make parsing work. More than one token can be assigned to a %Parseable.
+ * @see Parseable::addToken()
  *
  */
 class Token : public QObject

@@ -27,7 +27,7 @@
 // Local includes
 
 #include "modifier.h"
-#include "parseobjectdialog.h"
+#include "parseabledialog.h"
 
 class KLineEdit;
 class QCheckBox;
@@ -40,13 +40,13 @@ namespace Ui
 namespace Digikam
 {
 
-class ReplaceDialog : public ParseObjectDialog
+class ReplaceDialog : public ParseableDialog
 {
     Q_OBJECT
 
 public:
 
-    ReplaceDialog(ParseObject* parent);
+    ReplaceDialog(Parseable* parent);
     ~ReplaceDialog();
 
     Ui::ReplaceModifierDialogWidget* const ui;

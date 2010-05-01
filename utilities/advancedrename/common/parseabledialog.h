@@ -3,9 +3,9 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2009-11-20
+ * Date        : 2010-05-01
  * Description : a dialog that can be used to display a configuration
- *               dialog for a parse object
+ *               dialog for a parseable
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef PARSEOBJECTDIALOG_H
-#define PARSEOBJECTDIALOG_H
+#ifndef PARSEABLEDIALOG_H
+#define PARSEABLEDIALOG_H
 
 // KDE includes
 
@@ -32,18 +32,16 @@
 namespace Digikam
 {
 
-class ParseObject;
-
-class ParseObjectDialogPriv;
-
-class ParseObjectDialog : public KDialog
+class Parseable;
+class ParseableDialogPriv;
+class ParseableDialog : public KDialog
 {
     Q_OBJECT
 
 public:
 
-    ParseObjectDialog(ParseObject* parent);
-    virtual ~ParseObjectDialog();
+    ParseableDialog(Parseable* parent);
+    virtual ~ParseableDialog();
 
     void setSettingsWidget(QWidget* settingsWidget);
 
@@ -55,9 +53,9 @@ private:
 
 private:
 
-    ParseObjectDialogPriv* const d;
+    ParseableDialogPriv* const d;
 };
 
 } // namespace Digikam
 
-#endif /* PARSEOBJECTDIALOG_H */
+#endif /* PARSEABLEDIALOG_H */

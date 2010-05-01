@@ -27,20 +27,20 @@
 // Local includes
 
 #include "modifier.h"
-#include "parseobjectdialog.h"
+#include "parseabledialog.h"
 
 class KLineEdit;
 
 namespace Digikam
 {
 
-class DefaultValueDialog : public ParseObjectDialog
+class DefaultValueDialog : public ParseableDialog
 {
     Q_OBJECT
 
 public:
 
-    DefaultValueDialog(ParseObject* parent);
+    DefaultValueDialog(Parseable* parent);
     ~DefaultValueDialog();
 
     KLineEdit* valueInput;

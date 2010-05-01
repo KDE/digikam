@@ -28,7 +28,7 @@
 // Local includes
 
 #include "modifier.h"
-#include "parseobjectdialog.h"
+#include "parseabledialog.h"
 
 namespace Ui
 {
@@ -37,13 +37,13 @@ namespace Ui
 
 namespace Digikam
 {
-class FillDialog : public ParseObjectDialog
+class FillDialog : public ParseableDialog
 {
     Q_OBJECT
 
 public:
 
-    FillDialog(ParseObject* parent);
+    FillDialog(Parseable* parent);
     ~FillDialog();
 
     enum Alignment

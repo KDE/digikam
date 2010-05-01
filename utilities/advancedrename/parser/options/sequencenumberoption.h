@@ -27,7 +27,7 @@
 // Local includes
 
 #include "option.h"
-#include "parseobjectdialog.h"
+#include "parseabledialog.h"
 
 class KIntNumInput;
 
@@ -39,13 +39,13 @@ namespace Ui
 namespace Digikam
 {
 
-class SequenceNumberDialog : public ParseObjectDialog
+class SequenceNumberDialog : public ParseableDialog
 {
     Q_OBJECT
 
 public:
 
-    SequenceNumberDialog(ParseObject* parent);
+    SequenceNumberDialog(Parseable* parent);
     ~SequenceNumberDialog();
 
     Ui::SequenceNumberOptionDialogWidget* const ui;

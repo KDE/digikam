@@ -42,8 +42,8 @@
 namespace Digikam
 {
 
-RangeDialog::RangeDialog(ParseObject* parent)
-           : ParseObjectDialog(parent), ui(new Ui::RangeModifierDialogWidget())
+RangeDialog::RangeDialog(Parseable* parent)
+           : ParseableDialog(parent), ui(new Ui::RangeModifierDialogWidget())
 {
     QWidget* mainWidget = new QWidget(this);
     ui->setupUi(mainWidget);

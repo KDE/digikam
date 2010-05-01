@@ -3,8 +3,8 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2009-09-22
- * Description : an abstract parse object class
+ * Date        : 2010-05-01
+ * Description : an abstract parseable class
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "parseobject.moc"
+#include "parseable.moc"
 
 // Qt includes
 
@@ -39,11 +39,11 @@
 namespace Digikam
 {
 
-class ParseObjectPriv
+class ParseablePriv
 {
 public:
 
-    ParseObjectPriv() :
+    ParseablePriv() :
         useTokenMenu(false)
     {}
 
@@ -56,20 +56,20 @@ public:
     TokenList    tokens;
 };
 
-ParseObject::ParseObject(const QString& name)
-           : QObject(0), d(new ParseObjectPriv)
+Parseable::Parseable(const QString& name)
+           : QObject(0), d(new ParseablePriv)
 {
     setObjectName(name);
 }
 
-ParseObject::ParseObject(const QString& name, const QPixmap& icon)
-           : QObject(0), d(new ParseObjectPriv)
+Parseable::Parseable(const QString& name, const QPixmap& icon)
+           : QObject(0), d(new ParseablePriv)
 {
     setObjectName(name);
     setIcon(icon);
 }
 
-ParseObject::~ParseObject()
+Parseable::~Parseable()
 {
     foreach (Token* token, d->tokens)
     {
@@ -80,37 +80,37 @@ ParseObject::~ParseObject()
     delete d;
 }
 
-void ParseObject::setIcon(const QPixmap& pixmap)
+void Parseable::setIcon(const QPixmap& pixmap)
 {
     d->icon = pixmap;
 }
 
-QPixmap ParseObject::icon() const
+QPixmap Parseable::icon() const
 {
     return d->icon;
 }
 
-void ParseObject::setDescription(const QString& desc)
+void Parseable::setDescription(const QString& desc)
 {
     d->description = desc;
 }
 
-QString ParseObject::description() const
+QString Parseable::description() const
 {
     return d->description;
 }
 
-QRegExp& ParseObject::regExp() const
+QRegExp& Parseable::regExp() const
 {
     return d->regExp;
 }
 
-void ParseObject::setRegExp(const QRegExp& regExp)
+void Parseable::setRegExp(const QRegExp& regExp)
 {
     d->regExp = regExp;
 }
 
-QPushButton* ParseObject::createButton(const QString& name, const QIcon& icon)
+QPushButton* Parseable::createButton(const QString& name, const QIcon& icon)
 {
     const int maxHeight = 28;
 
@@ -123,7 +123,7 @@ QPushButton* ParseObject::createButton(const QString& name, const QIcon& icon)
     return button;
 }
 
-QPushButton* ParseObject::registerButton(QWidget* parent)
+QPushButton* Parseable::registerButton(QWidget* parent)
 {
     QPushButton* button = 0;
     button = createButton(objectName(), d->icon);
@@ -154,7 +154,7 @@ QPushButton* ParseObject::registerButton(QWidget* parent)
     return button;
 }
 
-QAction* ParseObject::registerMenu(QMenu* parent)
+QAction* Parseable::registerMenu(QMenu* parent)
 {
     QAction* action = 0;
     QList<QAction*> actions;
@@ -186,7 +186,7 @@ QAction* ParseObject::registerMenu(QMenu* parent)
     return action;
 }
 
-bool ParseObject::addToken(const QString& id, const QString& description, const QString& actionName)
+bool Parseable::addToken(const QString& id, const QString& description, const QString& actionName)
 {
     if (id.isEmpty() || description.isEmpty())
     {
@@ -211,34 +211,34 @@ bool ParseObject::addToken(const QString& id, const QString& description, const 
     return true;
 }
 
-void ParseObject::setUseTokenMenu(bool value)
+void Parseable::setUseTokenMenu(bool value)
 {
     d->useTokenMenu = value;
 }
 
-bool ParseObject::useTokenMenu() const
+bool Parseable::useTokenMenu() const
 {
     return d->useTokenMenu;
 }
 
-TokenList ParseObject::tokens() const
+TokenList Parseable::tokens() const
 {
     return d->tokens;
 }
 
-void ParseObject::slotTokenTriggered(const QString& token)
+void Parseable::slotTokenTriggered(const QString& token)
 {
     emit signalTokenTriggered(token);
 }
 
-bool ParseObject::tokenAtPosition(ParseResults& results, int pos)
+bool Parseable::tokenAtPosition(ParseResults& results, int pos)
 {
     int start;
     int length;
     return tokenAtPosition(results, pos, start, length);
 }
 
-bool ParseObject::tokenAtPosition(ParseResults& results, int pos, int& start, int& length)
+bool Parseable::tokenAtPosition(ParseResults& results, int pos, int& start, int& length)
 {
     bool found = false;
 
@@ -253,16 +253,16 @@ bool ParseObject::tokenAtPosition(ParseResults& results, int pos, int& start, in
     return found;
 }
 
-bool ParseObject::isValid() const
+bool Parseable::isValid() const
 {
     return (!d->tokens.isEmpty() && !d->regExp.isEmpty() && d->regExp.isValid());
 }
 
-void ParseObject::reset()
+void Parseable::reset()
 {
 }
 
-QString ParseObject::escapeToken(const QString& token)
+QString Parseable::escapeToken(const QString& token)
 {
     QString escaped = token;
 

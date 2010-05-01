@@ -31,14 +31,14 @@
 
 // Local includes
 
-#include "parseobject.h"
+#include "parseable.h"
 
 class  QAction;
 
 namespace Digikam
 {
 
-class Modifier : public ParseObject
+class Modifier : public Parseable
 {
     Q_OBJECT
 

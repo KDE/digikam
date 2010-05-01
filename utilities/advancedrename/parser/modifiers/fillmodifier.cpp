@@ -46,8 +46,8 @@
 
 namespace Digikam
 {
-FillDialog::FillDialog(ParseObject* parent)
-          : ParseObjectDialog(parent), ui(new Ui::FillModifierDialogWidget())
+FillDialog::FillDialog(Parseable* parent)
+          : ParseableDialog(parent), ui(new Ui::FillModifierDialogWidget())
 {
     QWidget* mainWidget = new QWidget(this);
     ui->setupUi(mainWidget);

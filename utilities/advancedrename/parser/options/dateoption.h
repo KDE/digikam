@@ -33,7 +33,7 @@
 // Local includes
 
 #include "option.h"
-#include "parseobjectdialog.h"
+#include "parseabledialog.h"
 
 namespace Ui
 {
@@ -75,7 +75,7 @@ private:
 
 // --------------------------------------------------------
 
-class DateOptionDialog : public ParseObjectDialog
+class DateOptionDialog : public ParseableDialog
 {
     Q_OBJECT
 
@@ -90,7 +90,7 @@ public:
 
 public:
 
-    DateOptionDialog(ParseObject* parent);
+    DateOptionDialog(Parseable* parent);
     ~DateOptionDialog();
 
     Ui::DateOptionDialogWidget* const ui;

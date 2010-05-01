@@ -43,8 +43,8 @@
 namespace Digikam
 {
 
-SequenceNumberDialog::SequenceNumberDialog(ParseObject* parent)
-                    : ParseObjectDialog(parent), ui(new Ui::SequenceNumberOptionDialogWidget())
+SequenceNumberDialog::SequenceNumberDialog(Parseable* parent)
+                    : ParseableDialog(parent), ui(new Ui::SequenceNumberOptionDialogWidget())
 {
     QWidget* mainWidget = new QWidget(this);
     ui->setupUi(mainWidget);

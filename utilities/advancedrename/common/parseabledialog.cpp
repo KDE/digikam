@@ -3,9 +3,9 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2009-11-20
+ * Date        : 2010-05-01
  * Description : a dialog that can be used to display a configuration
- *               dialog for a parse object
+ *               dialog for a parseable
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "parseobjectdialog.moc"
+#include "parseabledialog.moc"
 
 // Qt includes
 
@@ -38,16 +38,16 @@
 
 // Local includes
 
-#include "parseobject.h"
+#include "parseable.h"
 
 namespace Digikam
 {
 
-class ParseObjectDialogPriv
+class ParseableDialogPriv
 {
 public:
 
-    ParseObjectDialogPriv() :
+    ParseableDialogPriv() :
         dialogTitle(0),
         dialogDescription(0),
         dialogIcon(0),
@@ -60,8 +60,8 @@ public:
     QWidget* settingsWidget;
 };
 
-ParseObjectDialog::ParseObjectDialog(ParseObject* parent)
-                 : KDialog(0), d(new ParseObjectDialogPriv)
+ParseableDialog::ParseableDialog(Parseable* parent)
+                 : KDialog(0), d(new ParseableDialogPriv)
 {
     d->dialogTitle       = new QLabel(this);
     d->dialogDescription = new QLabel(this);
@@ -97,12 +97,12 @@ ParseObjectDialog::ParseObjectDialog(ParseObject* parent)
     setMainWidget(container);
 }
 
-ParseObjectDialog::~ParseObjectDialog()
+ParseableDialog::~ParseableDialog()
 {
     delete d;
 }
 
-void ParseObjectDialog::setDialogTitle(const QString& title)
+void ParseableDialog::setDialogTitle(const QString& title)
 {
     // remove ellipsis and "&&" from the string
     QString _title = title;
@@ -112,17 +112,17 @@ void ParseObjectDialog::setDialogTitle(const QString& title)
     setCaption(_title);
 }
 
-void ParseObjectDialog::setDialogDescription(const QString& description)
+void ParseableDialog::setDialogDescription(const QString& description)
 {
     d->dialogDescription->setText(description);
 }
 
-void ParseObjectDialog::setDialogIcon(const QPixmap& icon)
+void ParseableDialog::setDialogIcon(const QPixmap& icon)
 {
     d->dialogIcon->setPixmap(icon);
 }
 
-void ParseObjectDialog::setSettingsWidget(QWidget* settingsWidget)
+void ParseableDialog::setSettingsWidget(QWidget* settingsWidget)
 {
     if (d->settingsWidget)
     {

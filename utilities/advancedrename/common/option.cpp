@@ -46,13 +46,13 @@ public:
 };
 
 Option::Option(const QString& name, const QString& description)
-      : ParseObject(name), d(new OptionPriv)
+      : Parseable(name), d(new OptionPriv)
 {
     setDescription(description);
 }
 
 Option::Option(const QString& name, const QString& description, const QPixmap& icon)
-      : ParseObject(name, icon), d(new OptionPriv)
+      : Parseable(name, icon), d(new OptionPriv)
 {
     setDescription(description);
 }

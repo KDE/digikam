@@ -50,8 +50,8 @@
 namespace Digikam
 {
 
-MetadataOptionDialog::MetadataOptionDialog(ParseObject* parent)
-                    : ParseObjectDialog(parent),
+MetadataOptionDialog::MetadataOptionDialog(Parseable* parent)
+                    : ParseableDialog(parent),
                       metadataPanel(0), separatorLineEdit(0)
 {
     QWidget* mainWidget  = new QWidget(this);

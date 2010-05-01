@@ -38,8 +38,8 @@
 namespace Digikam
 {
 
-DefaultValueDialog::DefaultValueDialog(ParseObject* parent)
-                  : ParseObjectDialog(parent),
+DefaultValueDialog::DefaultValueDialog(Parseable* parent)
+                  : ParseableDialog(parent),
                     valueInput(0)
 {
     QString defaultValueStr = i18n("Default Value");

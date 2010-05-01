@@ -31,7 +31,7 @@
 // Local includes
 
 #include "option.h"
-#include "parseobjectdialog.h"
+#include "parseabledialog.h"
 
 class KLineEdit;
 
@@ -40,13 +40,13 @@ namespace Digikam
 
 class MetadataPanel;
 
-class MetadataOptionDialog : public ParseObjectDialog
+class MetadataOptionDialog : public ParseableDialog
 {
     Q_OBJECT
 
 public:
 
-    MetadataOptionDialog(ParseObject* parent);
+    MetadataOptionDialog(Parseable* parent);
     ~MetadataOptionDialog();
 
     MetadataPanel* metadataPanel;

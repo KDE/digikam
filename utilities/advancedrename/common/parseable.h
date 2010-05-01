@@ -3,8 +3,8 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2009-09-22
- * Description : an abstract parse object class
+ * Date        : 2010-05-01
+ * Description : an abstract parseable class
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef PARSEOBJECT_H
-#define PARSEOBJECT_H
+#ifndef PARSEABLE_H
+#define PARSEABLE_H
 
 // Qt includes
 
@@ -42,17 +42,16 @@ class QString;
 namespace Digikam
 {
 
-class ParseObjectPriv;
-
-class ParseObject : public QObject
+class ParseablePriv;
+class Parseable : public QObject
 {
     Q_OBJECT
 
 public:
 
-    ParseObject(const QString& name);
-    ParseObject(const QString& name, const QPixmap& icon);
-    virtual ~ParseObject();
+    Parseable(const QString& name);
+    Parseable(const QString& name, const QPixmap& icon);
+    virtual ~Parseable();
 
     /**
      * returns the currently assigned regExp object. Note that it is returned as a const ref, meaning
@@ -111,7 +110,7 @@ public:
     bool useTokenMenu() const;
 
     /**
-     * If multiple tokens have been assigned to a parseobject, a menu will be created.
+     * If multiple tokens have been assigned to a Parseable, a menu will be created.
      * If you want to display a menu for every defined token, set this method to 'true' and
      * re-implement the @see slotTokenTriggered method.
      * @param value boolean parameter to set token menu usage
@@ -164,9 +163,9 @@ private:
 
 private:
 
-    ParseObjectPriv* const d;
+    ParseablePriv* const d;
 };
 
 } // namespace Digikam
 
-#endif /* PARSEOBJECT_H */
+#endif /* PARSEABLE_H */

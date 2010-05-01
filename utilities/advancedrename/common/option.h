@@ -26,7 +26,7 @@
 
 // Local includes
 
-#include "parseobject.h"
+#include "parseable.h"
 #include "parseresults.h"
 
 class QRegExp;
@@ -36,7 +36,7 @@ namespace Digikam
 
 class OptionPriv;
 
-class Option : public ParseObject
+class Option : public Parseable
 {
     Q_OBJECT
 

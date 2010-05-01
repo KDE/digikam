@@ -93,8 +93,8 @@ QVariant DateFormat::formatType(QString identifier)
 
 // --------------------------------------------------------
 
-DateOptionDialog::DateOptionDialog(ParseObject* parent)
-                : ParseObjectDialog(parent), ui(new Ui::DateOptionDialogWidget)
+DateOptionDialog::DateOptionDialog(Parseable* parent)
+                : ParseableDialog(parent), ui(new Ui::DateOptionDialogWidget)
 {
     QWidget* mainWidget = new QWidget(this);
     ui->setupUi(mainWidget);

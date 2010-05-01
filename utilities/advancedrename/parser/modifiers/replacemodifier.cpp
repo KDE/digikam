@@ -36,14 +36,14 @@
 
 // Local includes
 
-#include "parseobjectdialog.h"
+#include "parseabledialog.h"
 #include "ui_replacemodifierdialogwidget.h"
 
 namespace Digikam
 {
 
-ReplaceDialog::ReplaceDialog(ParseObject* parent)
-             : ParseObjectDialog(parent), ui(new Ui::ReplaceModifierDialogWidget())
+ReplaceDialog::ReplaceDialog(Parseable* parent)
+             : ParseableDialog(parent), ui(new Ui::ReplaceModifierDialogWidget())
 {
     QWidget* mainWidget = new QWidget(this);
     ui->setupUi(mainWidget);

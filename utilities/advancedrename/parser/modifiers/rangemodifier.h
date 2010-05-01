@@ -27,7 +27,7 @@
 // Local includes
 
 #include "modifier.h"
-#include "parseobjectdialog.h"
+#include "parseabledialog.h"
 
 namespace Ui
 {
@@ -37,13 +37,13 @@ namespace Ui
 namespace Digikam
 {
 
-class RangeDialog : public ParseObjectDialog
+class RangeDialog : public ParseableDialog
 {
     Q_OBJECT
 
 public:
 
-    RangeDialog(ParseObject* parent);
+    RangeDialog(Parseable* parent);
     ~RangeDialog();
 
     Ui::RangeModifierDialogWidget* const ui;

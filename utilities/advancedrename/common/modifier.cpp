@@ -28,13 +28,13 @@ namespace Digikam
 {
 
 Modifier::Modifier(const QString& name, const QString& description)
-        : ParseObject(name)
+        : Parseable(name)
 {
     setDescription(description);
 }
 
 Modifier::Modifier(const QString& name, const QString& description, const QPixmap& icon)
-        : ParseObject(name, icon)
+        : Parseable(name, icon)
 {
     setDescription(description);
 }
