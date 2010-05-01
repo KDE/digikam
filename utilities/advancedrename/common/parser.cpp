@@ -285,7 +285,12 @@ ParseResults Parser::applyModifiers(const QString& parseString, ParseResults& re
                 {
                     settings.parseString       = modToken;
                     settings.currentResultsKey = key;
-                    modResult = mod->modify(settings, str2Modify);
+                    settings.str2Modify        = str2Modify;
+                    ParseResults modResults    = mod->parse(settings);
+                    if (!modResults.isEmpty() && modResults.values().length() == 1)
+                    {
+                        modResult = modResults.result(modResults.keys().first());
+                    }
                 }
 
                 // update result

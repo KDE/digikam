@@ -46,16 +46,16 @@ UniqueModifier::UniqueModifier()
     setRegExp(reg);
 }
 
-QString UniqueModifier::modifyOperation(const ParseSettings& settings, const QString& str2Modify)
+QString UniqueModifier::parseOperation(ParseSettings& settings)
 {
     ParseResults::ResultsKey key = settings.currentResultsKey;
-    cache[key] << str2Modify;
+    cache[key] << settings.str2Modify;
 
     const QRegExp& reg = regExp();
-    if (cache[key].count(str2Modify) > 1)
+    if (cache[key].count(settings.str2Modify) > 1)
     {
-        QString result = str2Modify;
-        int index      = cache[key].count(str2Modify) - 1;
+        QString result = settings.str2Modify;
+        int index      = cache[key].count(settings.str2Modify) - 1;
 
         bool ok     = true;
         int slength = reg.cap(2).toInt(&ok);
@@ -64,7 +64,7 @@ QString UniqueModifier::modifyOperation(const ParseSettings& settings, const QSt
         return result;
     }
 
-    return str2Modify;
+    return settings.str2Modify;
 }
 
 void UniqueModifier::reset()

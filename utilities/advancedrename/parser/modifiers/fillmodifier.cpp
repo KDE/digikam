@@ -84,7 +84,7 @@ FillModifier::FillModifier()
     setRegExp(reg);
 }
 
-QString FillModifier::modifyOperation(const ParseSettings& settings, const QString& str2Modify)
+QString FillModifier::parseOperation(ParseSettings& settings)
 {
     Q_UNUSED(settings);
 
@@ -106,7 +106,7 @@ QString FillModifier::modifyOperation(const ParseSettings& settings, const QStri
     }
 
     QChar character = (charstr.length() == 1) ? charstr.at(0) : QChar('_');
-    result = QString("%1").arg(str2Modify, length, character);
+    result = QString("%1").arg(settings.str2Modify, length, character);
     return result;
 }
 

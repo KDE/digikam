@@ -50,25 +50,25 @@ CaseModifier::CaseModifier()
     setRegExp(reg);
 }
 
-QString CaseModifier::modifyOperation(const ParseSettings& settings, const QString& str2Modify)
+QString CaseModifier::parseOperation(ParseSettings& settings)
 {
     Q_UNUSED(settings);
 
     const QRegExp& reg   = regExp();
     const QString& token = reg.cap(1);
-    QString result       = str2Modify;
+    QString result       = settings.str2Modify;
 
     if (token == QString("upper"))
     {
-        result = upper(str2Modify);
+        result = upper(settings.str2Modify);
     }
     else if (token == QString("firstupper"))
     {
-        result = firstupper(str2Modify);
+        result = firstupper(settings.str2Modify);
     }
     else if (token == QString("lower"))
     {
-        result = lower(str2Modify);
+        result = lower(settings.str2Modify);
     }
 
     return result;

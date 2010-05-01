@@ -79,6 +79,7 @@ public:
     QDateTime                dateTime;
 
     QString                  parseString;
+    QString                  str2Modify;
     ParseResults             results;
     ParseResults             invalidModifiers;
     ParseResults::ResultsKey currentResultsKey;
@@ -95,6 +96,7 @@ private:
         startIndex               = 1;
         useOriginalFileExtension = true;
         applyModifiers           = true;
+        str2Modify.clear();
     };
 
     void init(const ImageInfo& info)

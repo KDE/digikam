@@ -136,11 +136,26 @@ public:
      */
     static QString escapeToken(const QString& token);
 
+    /**
+     * TODO: describe me
+     * @param settings
+     * @return
+     */
+    virtual ParseResults parse(ParseSettings& settings) = 0;
+
 Q_SIGNALS:
 
     void signalTokenTriggered(const QString&);
 
+
 protected:
+
+    /**
+     * TODO: describe me
+     * @param settings
+     * @return
+     */
+    virtual QString parseOperation(ParseSettings& settings) = 0;
 
     /**
      * add a token to the parser, every parser should at least assign one token object

@@ -46,7 +46,7 @@ class UniqueModifier : public Modifier
 public:
 
     UniqueModifier();
-    virtual QString modifyOperation(const ParseSettings& settings, const QString& str2Modify);
+    virtual QString parseOperation(ParseSettings& settings);
     virtual void    reset();
 
 private:

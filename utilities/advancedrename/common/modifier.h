@@ -38,6 +38,7 @@ class  QAction;
 namespace Digikam
 {
 
+class ModifierPriv;
 class Modifier : public Parseable
 {
     Q_OBJECT
@@ -46,13 +47,17 @@ public:
 
     Modifier(const QString& name, const QString& description);
     Modifier(const QString& name, const QString& description, const QPixmap& icon);
-    virtual ~Modifier() {};
+    virtual ~Modifier();
 
-    QString modify(const ParseSettings& settings, const QString& str2Modify);
+    virtual ParseResults parse(ParseSettings& settings);
 
 protected:
 
-    virtual QString modifyOperation(const ParseSettings& settings, const QString& str2Modify) = 0;
+    virtual QString parseOperation(ParseSettings& settings) = 0;
+
+private:
+
+    ModifierPriv* const d;
 };
 
 typedef QList<Modifier*> ModifierList;

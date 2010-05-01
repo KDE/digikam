@@ -46,7 +46,7 @@ public:
     Option(const QString& name, const QString& description, const QPixmap& icon);
     virtual ~Option();
 
-    ParseResults parse(ParseSettings& settings);
+    virtual ParseResults parse(ParseSettings& settings);
 
 protected:
 

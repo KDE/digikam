@@ -108,14 +108,14 @@ void ReplaceModifier::slotTokenTriggered(const QString& token)
     emit signalTokenTriggered(result);
 }
 
-QString ReplaceModifier::modifyOperation(const ParseSettings& settings, const QString& str2Modify)
+QString ReplaceModifier::parseOperation(ParseSettings& settings)
 {
     Q_UNUSED(settings);
 
     const QRegExp& reg  = regExp();
     QString original    = reg.cap(1);
     QString replacement = reg.cap(2);
-    QString result      = str2Modify;
+    QString result      = settings.str2Modify;
     QString options     = reg.cap(4);
     Qt::CaseSensitivity caseType = (!options.isEmpty() && options.contains('i'))
                                    ? Qt::CaseInsensitive

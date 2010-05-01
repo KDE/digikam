@@ -27,42 +27,59 @@
 namespace Digikam
 {
 
+class ModifierPriv
+{
+public:
+
+    ModifierPriv()
+    {}
+
+    ParseResults parsedResults;
+};
+
 Modifier::Modifier(const QString& name, const QString& description)
-        : Parseable(name)
+        : Parseable(name), d(new ModifierPriv)
 {
     setDescription(description);
 }
 
 Modifier::Modifier(const QString& name, const QString& description, const QPixmap& icon)
-        : Parseable(name, icon)
+        : Parseable(name, icon), d(new ModifierPriv)
 {
     setDescription(description);
 }
 
-QString Modifier::modify(const ParseSettings& settings, const QString& str2Modify)
+Modifier::~Modifier()
 {
+    delete d;
+}
+
+ParseResults Modifier::parse(ParseSettings& settings)
+{
+    d->parsedResults.clear();
+
     if (settings.parseString.isEmpty())
     {
-        return QString();
+        return d->parsedResults;
     }
 
     const QRegExp& reg         = regExp();
     const QString& parseString = settings.parseString;
 
-    QString result;
-
     int pos = 0;
-    while (pos > -1)
+    pos = reg.indexIn(parseString, pos);
+    if (pos > -1)
     {
-        pos = reg.indexIn(parseString, pos);
-        if (pos > -1)
-        {
-            result += modifyOperation(settings, str2Modify);
-            pos += reg.matchedLength();
-        }
+        QString result = parseOperation(settings);
+        pos += reg.matchedLength();
+
+        ParseResults::ResultsKey   k(pos, reg.cap(0).count());
+        ParseResults::ResultsValue v(reg.cap(0), result);
+        d->parsedResults.addEntry(k, v);
+        pos += reg.matchedLength();
     }
 
-    return result;
+    return d->parsedResults;
 }
 
 } // namespace Digikam

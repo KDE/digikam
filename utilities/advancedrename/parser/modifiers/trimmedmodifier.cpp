@@ -43,10 +43,10 @@ TrimmedModifier::TrimmedModifier()
     setRegExp(reg);
 }
 
-QString TrimmedModifier::modifyOperation(const ParseSettings& settings, const QString& str2Modify)
+QString TrimmedModifier::parseOperation(ParseSettings& settings)
 {
     Q_UNUSED(settings);
-    return str2Modify.simplified();
+    return settings.str2Modify.simplified();
 }
 
 } // namespace Digikam
