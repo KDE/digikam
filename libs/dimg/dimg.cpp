@@ -496,7 +496,7 @@ QString DImg::formatToMimeType(FORMAT frm)
     {
         case(NONE):
         {
-            return false;
+            return format;
             break;
         }
         case(JPEG):
