@@ -41,6 +41,7 @@
 class QFocusEvent;
 class QKeyEvent;
 class QMouseEvent;
+class QEvent;
 
 namespace Digikam
 {
@@ -134,6 +135,10 @@ public Q_SLOTS:
     void slotClearTextAndHistory();
     void slotSetFocus();
 
+protected:
+
+    virtual void changeEvent(QEvent* e);
+
 private Q_SLOTS:
 
     void slotClearButtonPressed();
@@ -142,6 +147,7 @@ private:
 
     void readSettings();
     void writeSettings();
+    void enableHighlighter(bool enable);
 
 private:
 

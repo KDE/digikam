@@ -340,9 +340,7 @@ AdvancedRenameInput::~AdvancedRenameInput()
 void AdvancedRenameInput::setParser(Parser* parser)
 {
     d->lineEdit->setParser(parser);
-
-    delete d->highlighter;
-    d->highlighter = new Highlighter(d->lineEdit, parser);
+    enableHighlighter(true);
 }
 
 void AdvancedRenameInput::setText(const QString& text)
@@ -365,6 +363,28 @@ void AdvancedRenameInput::slotSetFocus()
 {
     d->lineEdit->setFocus();
     d->lineEdit->ensureCursorVisible();
+}
+
+void AdvancedRenameInput::enableHighlighter(bool enable)
+{
+    if (d->highlighter)
+    {
+        delete d->highlighter;
+    }
+
+    d->highlighter = enable ?
+            new Highlighter(d->lineEdit, d->lineEdit->parser()) :
+            0;
+}
+
+void AdvancedRenameInput::changeEvent(QEvent* e)
+{
+    KComboBox::changeEvent(e);
+
+    if (e->type() == QEvent::EnabledChange)
+    {
+        enableHighlighter(isEnabled());
+    }
 }
 
 void AdvancedRenameInput::slotClearButtonPressed()
