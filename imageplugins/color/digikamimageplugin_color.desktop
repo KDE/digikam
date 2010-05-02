@@ -17,6 +17,7 @@ Name[th]=ImagePlugin_Color
 Name[uk]=ImagePlugin_Color
 Name[x-test]=xxImagePlugin_Colorxx
 Name[zh_CN]=ImagePlugin_Color
+Name[zh_TW]=影像外掛程式_顏色
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
@@ -38,6 +39,7 @@ Comment[th]=เครื่องมือปรับแก้สีของ�
 Comment[uk]=Інструмент для виправлення кольорів зображення
 Comment[x-test]=xxA tool to correct colors of imagexx
 Comment[zh_CN]=一个校正图像颜色的工具
+Comment[zh_TW]=修正影像色彩的工具
 
 X-KDE-Library=digikamimageplugin_color
 author=Caulier Gilles, caulier dot gilles at gmail dot com

@@ -17,6 +17,7 @@ Name[th]=ImagePlugin_FxFilters
 Name[uk]=ImagePlugin_FxFilters
 Name[x-test]=xxImagePlugin_FxFiltersxx
 Name[zh_CN]=ImagePlugin_FxFilters
+Name[zh_TW]=影像外掛程式_效果濾鏡
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
@@ -38,6 +39,7 @@ Comment[th]=ส่วนเสริมของ digiKam สำหรับล�
 Comment[uk]=Додаток фільтрів спеціальних ефектів digiKam
 Comment[x-test]=xxSpecial effect filters plugin for digiKamxx
 Comment[zh_CN]=digiKam 特效滤镜插件
+Comment[zh_TW]=digiKam 的特效濾鏡外掛程式
 
 X-KDE-Library=digikamimageplugin_fxfilters
 author=Caulier Gilles, caulier dot gilles at gmail dot com

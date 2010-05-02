@@ -17,6 +17,7 @@ Name[th]=ImagePlugin_Decorate
 Name[uk]=ImagePlugin_Decorate
 Name[x-test]=xxImagePlugin_Decoratexx
 Name[zh_CN]=ImagePlugin_Decorate
+Name[zh_TW]=影像外掛程式_裝飾
 Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
@@ -38,6 +39,7 @@ Comment[th]=เครื่องมือในการตกแต่งป�
 Comment[uk]=Інструмент для декорування зображень
 Comment[x-test]=xxA tool to decorate imagexx
 Comment[zh_CN]=一个装饰图像的工具
+Comment[zh_TW]=裝飾影像的工具
 
 X-KDE-Library=digikamimageplugin_decorate
 author=Gilles Caulier, caulier dot gilles at gmail dot com
