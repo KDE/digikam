@@ -49,10 +49,11 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 037 ==> 235469 : digiKam Segmentation fault after 2 or 3 modifications.
 038 ==> 235491 : Regression in rev. 1115803, SIGSEGV or SIGABRT in image filters in editor.
 039 ==> 235589 : Build error String_literal_as_second_argument_to_i18n, databaseserver.cpp error.
-040 ==> 225533 : Digikam does not read metadata from Nepomuk.
+040 ==> 225533 : digiKam does not read metadata from Nepomuk.
 041 ==> 184444 : Customize Filename in Download window doesn't seem to work.
 042 ==> 188525 : Problem with same names on download from mass storage camera using file renaming.
-043 ==>
+043 ==> 230515 : Cash of digikam on closing program.
+044 ==> 
 
 
 
