@@ -54,7 +54,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 042 ==> 188525 : Problem with same names on download from mass storage camera using file renaming.
 043 ==> 230515 : Cash of digikam on closing program.
 044 ==> 235171 : digiKam crashes when saving ratings to a raw (nef) file.
-045 ==> 
+045 ==> 235600 : Color auto corrections are broken.
+046 ==> 
 
 
 

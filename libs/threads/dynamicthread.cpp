@@ -49,7 +49,7 @@ public:
         setAutoDelete(false);
 
         state = DynamicThread::Inactive;
-        running = false;
+        running = true;
         emitSignals = false;
     };
 
