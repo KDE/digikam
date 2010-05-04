@@ -326,7 +326,7 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
 
     if ( !d->databaseProcess->waitForStarted() )
     {
-    	QString argumentStr = convertStringListToString(arguments, ", ");
+    	QString argumentStr = arguments.join(", ");
     	QString  str = i18n("Could not start database server!");
     	str+=i18n("<p>Executable: %1</p>", mysqldPath);
     	str+=i18n("<p>Arguments: %1</p>", argumentStr);
@@ -474,23 +474,6 @@ bool DatabaseServer::isRunning()
     }
 
     return (d->databaseProcess->state() == QProcess::Running);
-}
-
-QString DatabaseServer::convertStringListToString(const QStringList &inputList, const QString &delimiter)
-{
-	QString resultString;
-	QStringList::const_iterator iterator;
-	for (iterator = inputList.constBegin(); iterator != inputList.constEnd(); ++iterator){
-		QString  entry 	= *iterator;
-		resultString.append(entry);
-
-		// Add a semicolon to the statement, if we are not on the last entry
-		if ((iterator+1) != inputList.constEnd())
-		{
-			resultString.append(delimiter);
-		}
-	}
-	return resultString;
 }
 
 } // namespace Digikam

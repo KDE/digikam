@@ -55,8 +55,6 @@ public:
     void startPolling();
     DatabaseServerError startMYSQLDatabaseProcess();
 
-    QString convertStringListToString(const QStringList &inputList, const QString &delimiter);
-
 public Q_SLOTS:
     bool startDatabaseProcess(QString dbType, QDBusVariant &error);
     bool startDatabaseProcess(QDBusVariant &error);
