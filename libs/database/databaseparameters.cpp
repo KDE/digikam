@@ -7,7 +7,7 @@
  * Description : Storage container for database connection parameters.
  *
  * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2010 by Holger Förster <hamsi2k at freenet dot de>
+ * Copyright (C) 2010 by Holger Fï¿½rster <hamsi2k at freenet dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -188,6 +188,7 @@ void DatabaseParameters::legacyAndDefaultChecks(const QString& suggestedPath, KS
         const QString miscDir = KStandardDirs::locateLocal("data", "digikam/db_misc");
         databaseType= "QMYSQL";
         databaseName = "digikam";
+        internalServer = false;
         databaseNameThumbnails = "digikam";
         hostName = QString();
         port = -1;
@@ -306,7 +307,7 @@ DatabaseParameters DatabaseParameters::parametersForSQLite(const QString& databa
 
 DatabaseParameters DatabaseParameters::parametersForSQLiteDefaultFile(const QString& directory)
 {
-    QString filePath = directory + '/' + "digikam4.db";
+    QString filePath = directory + QDir::separator() + "digikam4.db";
     filePath = QDir::cleanPath(filePath);
     return parametersForSQLite(filePath);
 }

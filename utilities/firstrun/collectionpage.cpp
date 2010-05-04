@@ -46,7 +46,7 @@
 #include <kdebug.h>
 
 // Local includes
-
+#include <databaseparameters.h>
 #include "version.h"
 
 namespace Digikam
@@ -168,9 +168,12 @@ void CollectionPage::saveSettings()
     KConfigGroup group        = config->group("General Settings");
     group.writeEntry("Version", digikam_version);
 
-    group = config->group("Album Settings");
-    group.writeEntry("Album Path",         d->rootAlbum);
-    group.writeEntry("Database File Path", d->dbPath);
+    DatabaseParameters params;
+    params.databaseType = "QSQLITE";
+    params.internalServer = false;
+    params.databaseName = d->dbPath + QDir::separator();
+    params.databaseNameThumbnails = d->dbPath + QDir::separator();
+    params.writeToConfig(config);
 
     config->sync();
 }
