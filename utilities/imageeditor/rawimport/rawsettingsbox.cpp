@@ -436,6 +436,8 @@ void RawSettingsBox::readSettings()
                     (int) LuminosityChannel));
     histogramBox()->setScale((HistogramScale)group.readEntry(d->optionHistogramScaleEntry,
                     (int) LogScaleHistogram));
+    curvesWidget()->setScaleType((HistogramScale)group.readEntry(d->optionHistogramScaleEntry,
+                    (int) LogScaleHistogram));
 
     d->decodingSettingsBox->readSettings(group);
 

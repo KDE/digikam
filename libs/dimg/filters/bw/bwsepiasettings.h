@@ -64,6 +64,8 @@ public:
     void loadSettings();
     void saveAsSettings();
 
+    void setScaleType(HistogramScale scale);
+
     void startPreviewFilters();
 
 Q_SIGNALS:

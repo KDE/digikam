@@ -61,6 +61,7 @@ private:
     void putPreviewData();
     void putFinalData();
     void renderingFinished();
+    void slotScaleChanged();
 
 private:
 

@@ -158,6 +158,7 @@ void BWSepiaTool::readSettings()
                     (int)LogScaleHistogram));
 
     d->bwsepiaSettings->readSettings(group);
+    slotScaleChanged();
 }
 
 void BWSepiaTool::writeSettings()
@@ -244,6 +245,11 @@ void BWSepiaTool::slotLoadSettings()
 void BWSepiaTool::slotSaveAsSettings()
 {
     d->bwsepiaSettings->saveAsSettings();
+}
+
+void BWSepiaTool::slotScaleChanged()
+{
+    d->bwsepiaSettings->setScaleType(d->gboxSettings->histogramBox()->scale());
 }
 
 }  // namespace DigikamColorImagePlugin

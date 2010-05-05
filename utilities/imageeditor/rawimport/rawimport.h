@@ -70,6 +70,7 @@ private Q_SLOTS:
     void slotDemosaicedImage();
     void slotLoadingFailed();
     void slotLoadingProgress(float);
+    void slotScaleChanged();
 
     void slotUpdatePreview();
     void slotAbort();

@@ -627,4 +627,9 @@ void BWSepiaSettings::saveAsSettings()
     file.close();
 }
 
+void BWSepiaSettings::setScaleType(HistogramScale scale)
+{
+    d->curvesBox->setScale(scale);
+}
+
 }  // namespace Digikam

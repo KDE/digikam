@@ -202,6 +202,11 @@ void RawImport::slotLoadingProgress(float v)
     EditorToolIface::editorToolIface()->setToolProgress((int)(v*100));
 }
 
+void RawImport::slotScaleChanged()
+{
+    d->settingsBox->curvesWidget()->setScaleType(d->settingsBox->histogramBox()->scale());
+}
+
 void RawImport::slotOk()
 {
     // NOTE: work around B.K.O #211810
