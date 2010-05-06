@@ -7,8 +7,8 @@
  * Description : a widget to display a welcome page
  *               on root album.
  *
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -94,7 +94,7 @@ void WelcomePageView::slotUrlOpen(const KUrl& url)
    KToolInvocation::invokeBrowser(url.url());
 }
 
-QString WelcomePageView::infoPage()
+QString WelcomePageView::infoPage() const
 {
     QStringList newFeatures;
     newFeatures << i18n("Designed from the ground-up for KDE4, using KDE4 technology:"
@@ -102,6 +102,7 @@ QString WelcomePageView::infoPage()
                         "<li>More comprehensive multimedia file handling using <a href=\"http://phonon.kde.org\">Phonon</a> interface;</li>"
                         "<li>Easy Geolocation with <a href=\"http://edu.kde.org/marble\">Marble</a> interface;</li>"
                         "<li>Social Semantic Desktop synchronization using <a href=\"http://nepomuk.semanticdesktop.org\">Nepomuk</a> interface.</li></ul>");
+    newFeatures << i18n("MySQL database support;");
     newFeatures << i18n("XMP metadata support;");
     newFeatures << i18n("TIFF/EP RAW metadata editing;");
     newFeatures << i18n("Customizable file storage for the digiKam database, supporting remote albums;");
@@ -193,7 +194,7 @@ QString WelcomePageView::infoPage()
     return info;
 }
 
-QByteArray WelcomePageView::fileToString(const QString& aFileName)
+QByteArray WelcomePageView::fileToString(const QString& aFileName) const
 {
     QByteArray   result;
     QFileInfo    info(aFileName);
@@ -222,36 +223,6 @@ QByteArray WelcomePageView::fileToString(const QString& aFileName)
 
     return result;
 }
-
-//QString WelcomePageView::updateInfoPageCss()
-//{
-//    QColor background = ThemeEngine::instance()->baseColor();
-//    QColor text       = ThemeEngine::instance()->textRegColor();
-//    QColor highlight  = ThemeEngine::instance()->textSpecialRegColor();
-//
-//    QString infoPageCss  = fileToString(KStandardDirs::locate("data", "digikam/about/infopage.css"));
-//    infoPageCss          = infoPageCss
-//                           .arg(background.name())                                                     // %1
-//                           .arg(text.name())                                                           // %2
-//                           .arg(highlight.name())                                                      // %3
-//                           .arg(highlight.name())                                                      // %4
-//                           .arg(highlight.name())                                                      // %5
-//                           .arg(background.name())                                                     // %6
-//                           .arg(background.name())                                                     // %7
-//                           .arg(KStandardDirs::locate("data", "digikam/about/top-middle.png"))         // %8
-//                           .arg(KStandardDirs::locate("data", "digikam/about/top-left-digikam.png"))   // %9
-//                           .arg(KStandardDirs::locate("data", "digikam/about/box-top-left.png"))       // %10
-//                           .arg(KStandardDirs::locate("data", "digikam/about/box-top-right.png"))      // %11
-//                           .arg(KStandardDirs::locate("data", "digikam/about/box-top-middle.png"))     // %12
-//                           .arg(KStandardDirs::locate("data", "digikam/about/box-middle-left.png"))    // %13
-//                           .arg(background.name())                                                     // %14
-//                           .arg(KStandardDirs::locate("data", "digikam/about/box-middle-right.png"))   // %15
-//                           .arg(KStandardDirs::locate("data", "digikam/about/box-bottom-left.png"))    // %16
-//                           .arg(KStandardDirs::locate("data", "digikam/about/box-bottom-right.png"))   // %17
-//                           .arg(KStandardDirs::locate("data", "digikam/about/box-bottom-middle.png")); // %18
-//
-//    return infoPageCss;
-//}
 
 void WelcomePageView::slotThemeChanged()
 {
