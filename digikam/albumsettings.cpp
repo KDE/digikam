@@ -701,12 +701,13 @@ void AlbumSettings::emitSetupChanged()
 
 QString AlbumSettings::getDatabaseFilePath() const
 {
-    return d->databaseParams.databaseName;
+    return d->databaseParams.getDatabasePath(d->databaseParams.databaseName);
 }
 
 void AlbumSettings::setDatabaseFilePath(const QString& path)
 {
-    d->databaseParams.databaseName = path;
+    d->databaseParams.databaseName = d->databaseParams.getDatabaseFilePath(path);
+    d->databaseParams.databaseNameThumbnails = d->databaseParams.getThumbsDatabaseFilePath(path);
 }
 
 void AlbumSettings::setShowSplashScreen(bool val)

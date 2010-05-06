@@ -168,15 +168,37 @@ void DatabaseParameters::readFromConfig(KSharedConfig::Ptr config, const QString
     internalServer           = group.readEntry(configInternalDatabaseServer, false);
                                //TODO When using mysql as default set default value to <true>
 
+    QString orgDatabaseName = databaseName;
+    databaseName = getDatabaseFilePath(orgDatabaseName);
+    databaseNameThumbnails = getThumbsDatabaseFilePath(orgDatabaseName);
+}
+
+QString DatabaseParameters::getDatabaseFilePath(const QString &dbPath) const
+{
+    QString result = dbPath;
     if (isSQLite())
-    {
-        QFileInfo fileInfo(databaseName);
-        if (fileInfo.isDir())
         {
-            databaseName = QDir::cleanPath(fileInfo.filePath() + '/' + "digikam4.db");
-            databaseNameThumbnails = QDir::cleanPath(fileInfo.filePath() + '/' + "thumbnails-digikam.db");
+            QFileInfo fileInfo(result);
+            if (fileInfo.isDir())
+            {
+                result = QDir::cleanPath(fileInfo.filePath() + '/' + "digikam4.db");
+            }
         }
-    }
+    return result;
+}
+
+QString DatabaseParameters::getThumbsDatabaseFilePath(const QString &thumbsDbPath) const
+{
+    QString result = thumbsDbPath;
+    if (isSQLite())
+        {
+            QFileInfo fileInfo(result);
+            if (fileInfo.isDir())
+            {
+                result = QDir::cleanPath(fileInfo.filePath() + '/' + "thumbnails-digikam.db");
+            }
+        }
+    return result;
 }
 
 void DatabaseParameters::legacyAndDefaultChecks(const QString& suggestedPath, KSharedConfig::Ptr config)
@@ -246,16 +268,8 @@ void DatabaseParameters::writeToConfig(KSharedConfig::Ptr config, const QString&
     else
         group = config->group(configGroup);
 
-    QString dbName = databaseName;
-    QString dbNameThumbs = databaseNameThumbnails;
-
-    if (isSQLite())
-    {
-        if (dbName.endsWith("digikam4.db"))
-            dbName.chop(QString("digikam4.db").length());
-        if (dbNameThumbs.endsWith("thumbnails-digikam.db"))
-            dbNameThumbs.chop(QString("thumbnails-digikam.db").length());
-    }
+    QString dbName = getDatabasePath(databaseName);
+    QString dbNameThumbs = getThumbsDatabasePath(databaseNameThumbnails);
 
     group.writeEntry(configDatabaseType, databaseType);
     group.writeEntry(configDatabaseName, dbName);
@@ -266,6 +280,28 @@ void DatabaseParameters::writeToConfig(KSharedConfig::Ptr config, const QString&
     group.writeEntry(configDatabasePassword, password);
     group.writeEntry(configDatabaseConnectOptions, connectOptions);
     group.writeEntry(configInternalDatabaseServer, internalServer);
+}
+
+QString DatabaseParameters::getDatabasePath(const QString& dbFilePath) const
+{
+    QString result = dbFilePath;
+    if (isSQLite())
+        {
+            if (result.endsWith("digikam4.db"))
+                result.chop(QString("digikam4.db").length());
+        }
+    return result;
+}
+
+QString DatabaseParameters::getThumbsDatabasePath(const QString& thumbsDbFilePath) const
+{
+    QString result = thumbsDbFilePath;
+    if (isSQLite())
+        {
+            if (result.endsWith("thumbnails-digikam.db"))
+                result.chop(QString("thumbnails-digikam.db").length());
+        }
+    return result;
 }
 
 DatabaseParameters DatabaseParameters::defaultParameters(const QString databaseType)

@@ -107,6 +107,11 @@ public:
     void readFromConfig(KSharedConfig::Ptr config = KGlobal::config(), const QString& configGroup = QString());
     void writeToConfig(KSharedConfig::Ptr config = KGlobal::config(), const QString& configGroup = QString()) const;
 
+    QString getDatabaseFilePath(const QString &dbPath) const;
+    QString getThumbsDatabaseFilePath(const QString &thumbsDbPath) const;
+    QString getDatabasePath(const QString& dbFilePath) const;
+    QString getThumbsDatabasePath(const QString& thumbsDbFilePath) const;
+
     /** Replaces databaseName with databaseNameThumbnails. */
     DatabaseParameters thumbnailParameters() const;
 
