@@ -48,10 +48,20 @@ public:
 
 public Q_SLOTS:
 
+    void assignTag(const ImageInfo& info, int tagID);
+    void assignTag(const QList<ImageInfo>& infos, int tagID);
+    void assignTags(const ImageInfo& info, const QList<int>& tagIDs);
     void assignTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs);
     void assignTags(const QList<int>& imageIds, const QList<int>& tagIDs);
+
+    void removeTag(const ImageInfo& info, int tagID);
+    void removeTag(const QList<ImageInfo>& infos, int tagID);
+    void removeTags(const ImageInfo& info, const QList<int>& tagIDs);
     void removeTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs);
+
+    void assignRating(const ImageInfo& infos, int rating);
     void assignRating(const QList<ImageInfo>& infos, int rating);
+
     void setExifOrientation(const QList<ImageInfo>& infos, int orientation);
     void applyMetadata(const QList<ImageInfo>& infos, const MetadataHub &hub);
     void applyMetadata(const QList<ImageInfo>& infos, const MetadataHubOnTheRoad &hub);

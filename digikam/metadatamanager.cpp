@@ -102,16 +102,51 @@ void MetadataManager::assignTags(const QList<int>& ids, const QList<int>& tagIDs
     assignTags(infos, tagIDs);
 }
 
+void MetadataManager::assignTag(const ImageInfo& info, int tagID)
+{
+    assignTags(QList<ImageInfo>() << info, QList<int>() << tagID);
+}
+
+void MetadataManager::assignTag(const QList<ImageInfo>& infos, int tagID)
+{
+    assignTags(infos, QList<int>() << tagID);
+}
+
+void MetadataManager::assignTags(const ImageInfo& info, const QList<int>& tagIDs)
+{
+    assignTags(QList<ImageInfo>() << info, tagIDs);
+}
+
 void MetadataManager::assignTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs)
 {
     d->schedulingForDB(infos.size());
     d->assignTags(infos, tagIDs);
 }
 
+void MetadataManager::removeTag(const ImageInfo& info, int tagID)
+{
+    removeTags(QList<ImageInfo>() << info, QList<int>() << tagID);
+}
+
+void MetadataManager::removeTag(const QList<ImageInfo>& infos, int tagID)
+{
+    removeTags(infos, QList<int>() << tagID);
+}
+
+void MetadataManager::removeTags(const ImageInfo& info, const QList<int>& tagIDs)
+{
+    removeTags(QList<ImageInfo>() << info, tagIDs);
+}
+
 void MetadataManager::removeTags(const QList<ImageInfo>& infos, const QList<int>& tagIDs)
 {
     d->schedulingForDB(infos.size());
     d->removeTags(infos, tagIDs);
+}
+
+void MetadataManager::assignRating(const ImageInfo& info, int rating)
+{
+    assignRating(QList<ImageInfo>() << info, rating);
 }
 
 void MetadataManager::assignRating(const QList<ImageInfo>& infos, int rating)
