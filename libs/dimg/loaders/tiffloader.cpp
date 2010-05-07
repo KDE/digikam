@@ -930,13 +930,8 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
     DMetadata metaDataToFile(filePath);
     metaDataToFile.setData(m_image->getMetadata());
-
-    // Remove all tags from IFD1 (Exif.Thumbnail.*, the thumbnail, see comment 29 on bug #211758)
-    KExiv2::MetaDataMap map = metaData.getExifTagsDataList(QStringList() << "Thumbnail");
-    for (KExiv2::MetaDataMap::const_iterator it = map.constBegin(); it != map.constEnd(); ++it)
-        metaData.removeExifTag(it.key().toAscii(), false);
-// See B.K.O #211758: disable tiff metadata update until we found where is the problem exactly.
-//    metaDataToFile.applyChanges();
+    metaDataToFile.removeExifThumbnail();
+    metaDataToFile.applyChanges();
 
     return true;
 }

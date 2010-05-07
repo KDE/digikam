@@ -216,6 +216,8 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         int height  = pgf.Height();
         uchar *data = 0;
 
+        QSize originalSize(width, height);
+
         if (m_loadFlags & LoadImageData)
         {
             // -------------------------------------------------------------------
@@ -271,6 +273,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         imageSetAttribute("format", "PGF");
         imageSetAttribute("originalColorModel", colorModel);
         imageSetAttribute("originalBitDepth", bitDepth);
+        imageSetAttribute("originalSize", originalSize);
 
 #ifdef WIN32
         CloseHandle(fd);

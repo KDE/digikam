@@ -173,6 +173,7 @@ void PreviewLoadingTask::execute()
 
     QImage qimage;
     bool fromEmbeddedPreview = false;
+    QSize originalSize;
 
     // -- Get the image preview --------------------------------
 
@@ -222,6 +223,11 @@ void PreviewLoadingTask::execute()
         {
             // convert from QImage
             m_img = DImg(qimage);
+
+            DMetadata metadata(m_loadingDescription.filePath);
+            #if KEXIV2_VERSION >= 0x010100
+            m_img.setAttribute("originalSize", metadata.getPixelSize());
+            #endif
             // mark as embedded preview (for Exif rotation)
             if (fromEmbeddedPreview)
             {
@@ -229,7 +235,6 @@ void PreviewLoadingTask::execute()
 
                 // If we loaded the embedded preview, the Exif of the RAW indicates
                 // the color space of the preview (see bug 195950 for NEF files)
-                DMetadata metadata(m_loadingDescription.filePath);
                 m_img.setIccProfile(metadata.getIccProfile());
             }
             // free memory
@@ -295,6 +300,11 @@ void PreviewLoadingTask::execute()
         {
             // convert from QImage
             m_img = DImg(qimage);
+
+            DMetadata metadata(m_loadingDescription.filePath);
+            #if KEXIV2_VERSION >= 0x010100
+            m_img.setAttribute("originalSize", metadata.getPixelSize());
+            #endif
             // mark as embedded preview (for Exif rotation)
             if (fromEmbeddedPreview)
             {
@@ -302,7 +312,6 @@ void PreviewLoadingTask::execute()
 
                 // If we loaded the embedded preview, the Exif of the RAW indicates
                 // the color space of the preview (see bug 195950 for NEF files)
-                DMetadata metadata(m_loadingDescription.filePath);
                 m_img.setIccProfile(metadata.getIccProfile());
             }
             // free memory

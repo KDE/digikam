@@ -215,6 +215,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     // read dimension (nominal values from header)
     int w = cinfo.image_width;
     int h = cinfo.image_height;
+    QSize originalSize(w,h);
 
     // Libjpeg handles the following conversions:
     // YCbCr => GRAYSCALE, YCbCr => RGB, GRAYSCALE => RGB, YCCK => CMYK
@@ -538,6 +539,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     imageSetAttribute("format", "JPEG");
     imageSetAttribute("originalColorModel", colorModel);
     imageSetAttribute("originalBitDepth", 8);
+    imageSetAttribute("originalSize", originalSize);
 
     return true;
 }

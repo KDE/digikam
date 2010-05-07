@@ -797,6 +797,17 @@ int DImg::originalBitDepth() const
     return m_priv->attributes.value("originalBitDepth").toInt();
 }
 
+QSize DImg::originalSize() const
+{
+    if (m_priv->attributes.contains("originalSize"))
+    {
+        QSize size = m_priv->attributes.value("originalSize").toSize();
+        if (size.isValid())
+            return size;
+    }
+    return size();
+}
+
 DImg::FORMAT DImg::detectedFormat() const
 {
     if (m_priv->attributes.contains("detectedFileFormat"))
@@ -2169,9 +2180,19 @@ void DImg::updateMetadata(const QString& destMimeType, const QString& originalFi
         meta.setImagePreview(preview);
     }
 
-    // Update Exif thumbnail.
-    QImage thumb = preview.scaled(160, 120, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-    meta.setExifThumbnail(thumb);
+    if (destMimeType.toUpper() == QString("TIFF") || destMimeType.toUpper() != QString("TIF"))
+    {
+        // With TIFF file, we don't store JPEG thumbnail, we even need to erase it and store
+        // a thumbnail at a special location. See bug #211758
+        QImage thumb = preview.scaled(160, 120, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        meta.setTiffThumbnail(thumb);
+    }
+    else
+    {
+        // Update Exif thumbnail.
+        QImage thumb = preview.scaled(160, 120, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        meta.setExifThumbnail(thumb);
+    }
 
     // Update Exif Image dimensions.
     meta.setImageDimensions(size());
