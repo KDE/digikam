@@ -56,9 +56,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 044 ==> 235171 : digiKam crashes when saving ratings to a raw (nef) file.
 045 ==> 235600 : Color auto corrections are broken.
 046 ==> 235902 : Preview of RAW image is nt updated if settings for import are changed.
-047 ==> 
-
-
-
-
-
+047 ==> 236002 : Photos not visible when starting in calendar view.
+048 ==> 

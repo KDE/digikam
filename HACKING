@@ -335,7 +335,7 @@ Generate API documentation
 
 To generate API documentation, you need to install:
 
-- Doxygen program (http://www.doxygen.org).
+- Doxygen program (http://www.doxygen.org)
 - Dot program (http://www.graphviz.org)
 
 After cmake generated a Makefile you can call 'make doc'. A new subfolder named

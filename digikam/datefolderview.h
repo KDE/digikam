@@ -74,6 +74,7 @@ public:
 private Q_SLOTS:
 
     void slotSelectionChanged(Album* selectedAlbum);
+    void slotAllAlbumsLoaded();
 
 private:
 

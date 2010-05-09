@@ -626,7 +626,7 @@ void AbstractAlbumTreeView::restoreState(const QModelIndex &index, QMap<int, Dig
         Digikam::State state = stateStore.value(album->id());
 
         /*
-        kDebug() << "Trying to restore state of album " << album->title()
+        kDebug() << "Trying to restore state of album " << album->title() << "(" <<album->id() << ")"
                  << ": state(selected = " << state.selected
                  << ", expanded = " << state.expanded
                  << ", currentIndex = " << state.currentIndex << ")" << this;
@@ -652,7 +652,7 @@ void AbstractAlbumTreeView::restoreState(const QModelIndex &index, QMap<int, Dig
         // restore the current index
         if (state.currentIndex)
         {
-            //kDebug() << "Setting current index" << album->title();
+            //kDebug() << "Setting current index" << album->title() << "(" << album->id() << ")";
             selectionModel()->setCurrentIndex(index, QItemSelectionModel::SelectCurrent
                                                    | QItemSelectionModel::Rows);
         }
@@ -706,7 +706,7 @@ void AbstractAlbumTreeView::scrollToSelectedAlbum()
     QModelIndexList selected = selectedIndexes();
     if (!selected.isEmpty())
     {
-        scrollTo(selected.first());
+        scrollTo(selected.first(), PositionAtCenter);
     }
 }
 

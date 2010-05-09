@@ -89,6 +89,13 @@ DateFolderView::DateFolderView(QWidget* parent, DateAlbumModel* dateAlbumModel)
 
     connect(d->dateTreeView, SIGNAL(currentAlbumChanged(Album*)),
             this, SLOT(slotSelectionChanged(Album*)));
+    // Loading of DAlbums may take longer that setting up the gui. Therefore
+    // the first call to setActive may not set the current album in the album
+    // manager as it is not yet loaded. To achieve this, we wait for loading
+    // DAlbums and set the active album in the album manager if this tab is
+    // active
+    connect(AlbumManager::instance(), SIGNAL(signalAllDAlbumsLoaded()),
+            this, SLOT(slotAllAlbumsLoaded()));
 }
 
 DateFolderView::~DateFolderView()
@@ -142,6 +149,14 @@ void DateFolderView::slotSelectionChanged(Album* selectedAlbum)
         QDate date = dalbum->date();
         d->monthview->setActive(true);
         d->monthview->setYearMonth(date.year(), date.month());
+    }
+}
+
+void DateFolderView::slotAllAlbumsLoaded() {
+    if (d->active) {
+        AlbumManager::instance()->setCurrentAlbum(
+                        d->dateTreeView->currentAlbum());
+        slotSelectionChanged(d->dateTreeView->currentAlbum());
     }
 }
 
