@@ -26,8 +26,9 @@
 
 // Qt includes
 
+#include <QMetaType>
 #include <QSqlQuery>
-#include <QtCore/QString>
+#include <QString>
 
 // Local includes
 
@@ -56,5 +57,7 @@ private:
 };
 
 }  // namespace Digikam
+
+Q_DECLARE_METATYPE(Digikam::SqlQuery)
 
 #endif /* SQLQUERY_H */

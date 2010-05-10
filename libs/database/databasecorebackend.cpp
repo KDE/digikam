@@ -102,6 +102,9 @@ void DatabaseCoreBackendPrivate::init(const QString &name, DatabaseLocking *l)
 
     backendName = name;
     lock        = l;
+
+    qRegisterMetaType<DatabaseErrorAnswer*>("DatabaseErrorAnswer*");
+    qRegisterMetaType<SqlQuery>("SqlQuery");
 }
 
 // "A connection can only be used from within the thread that created it.
@@ -275,7 +278,7 @@ DatabaseCoreBackendPrivate::ErrorLocker::ErrorLocker(DatabaseCoreBackendPrivate 
     // acquire lock
     d->lock->mutex.lock();
     // store lock count
-    int count = d->lock->lockCount;
+    count = d->lock->lockCount;
     // set lock count to 0
     d->lock->lockCount = 0;
     // unlock

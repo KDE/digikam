@@ -24,6 +24,10 @@
 #ifndef DATABASEERRORHANDLER_H
 #define DATABASEERRORHANDLER_H
 
+// Qt includes
+
+#include <QMetaType>
+
 // Local includes
 
 #include "digikam_export.h"
@@ -71,5 +75,7 @@ public Q_SLOTS:
 };
 
 } // namespace Digikam
+
+Q_DECLARE_METATYPE(Digikam::DatabaseErrorAnswer*)
 
 #endif // DATABASEERRORHANDLER_H
