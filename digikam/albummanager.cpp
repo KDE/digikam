@@ -575,23 +575,19 @@ void AlbumManager::changeDatabase(const DatabaseParameters& newParams)
     }
 }
 
-bool AlbumManager::setDatabase(const DatabaseParameters& newParams, bool priority, const QString suggestedAlbumRoot)
+bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, const QString suggestedAlbumRoot)
 {
     // This is to ensure that the setup does not overrule the command line.
-    // Replace with a better solution?
-    Q_UNUSED(priority)
-    /*
+    // TODO: there is a bug that setup is showing something different here.
     if (priority)
     {
         d->hasPriorizedDbPath = true;
     }
-    else if (d->hasPriorizedDbPath && !d->dbName.isNull())
+    else if (d->hasPriorizedDbPath)
     {
         // ignore change without priority
-        // true means, don't exit()
         return true;
     }
-    */
 
     // shutdown possibly running collection scans. Must call resumeCollectionScan further down.
     ScanController::instance()->cancelAllAndSuspendCollectionScan();
@@ -651,8 +647,6 @@ bool AlbumManager::setDatabase(const DatabaseParameters& newParams, bool priorit
     // -- Database initialization -------------------------------------------------
 
     // ensure, embedded database is loaded
-    DatabaseParameters params = newParams;
-    params.legacyAndDefaultChecks(suggestedAlbumRoot);
     kDebug() << params;
 
     if (params.internalServer)
@@ -660,11 +654,11 @@ bool AlbumManager::setDatabase(const DatabaseParameters& newParams, bool priorit
         DatabaseServerError result = DatabaseServerStarter::startServerManagerProcess();
         if (result.getErrorType()!=DatabaseServerError::NoErrors)
         {
-			QWidget* parent = QWidget::find(0);
-			QString message = i18n("<p><b>A error occurred during the internal server start.</b></p>"
-								   "Details:\n %1", result.getErrorText());
-			QApplication::setOverrideCursor(Qt::ArrowCursor);
-			KMessageBox::error(parent, message);
+            QWidget* parent = QWidget::find(0);
+            QString message = i18n("<p><b>A error occurred during the internal server start.</b></p>"
+            "Details:\n %1", result.getErrorText());
+            QApplication::setOverrideCursor(Qt::ArrowCursor);
+            KMessageBox::error(parent, message);
         }
     }
 

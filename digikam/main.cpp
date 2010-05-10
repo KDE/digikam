@@ -85,59 +85,12 @@ int main(int argc, char *argv[])
     options.add("download-from <path>", ki18n("Open camera dialog at <path>"));
     options.add("download-from-udi <udi>", ki18n("Open camera dialog for the device with Solid UDI <udi>"));
     options.add("detect-camera", ki18n("Automatically detect and open a connected gphoto2 camera"));
-    options.add("database-directory <dir>", ki18n("Start digikam with the database file found in the directory <dir>"));
+    options.add("database-directory <dir>", ki18n("Start digikam with the SQLite database file found in the directory <dir>"));
     KCmdLineArgs::addCmdLineOptions( options );
 
     KExiv2Iface::KExiv2::initializeExiv2();
 
     KApplication app;
-
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("General Settings");
-    QString version           = group.readEntry("Version", QString());
-
-    group                     = config->group("Album Settings");
-    QString dbName            = group.readEntry("Database File Path", QString());
-    QString firstAlbumPath;
-
-    // 0.9 legacy
-    if (dbName.isEmpty() && group.hasKey("Album Path"))
-    {
-        dbName = group.readEntry("Album Path", QString());
-        group.writeEntry("Database File Path", dbName);
-        group.sync();
-    }
-
-    KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
-
-    // TEMPORARY SOLUTION
-    bool priorityDbPath = false;
-    if (args && args->isSet("database-directory"))
-    {
-        priorityDbPath = true;
-        dbName = args->getOption("database-directory");
-    }
-
-    QFileInfo dirInfo(dbName);
-
-    // version 0.6 was the version when the new Albums Library
-    // storage was implemented
-    KConfigGroup databaseConfig = config->group("Database Settings");
-
-    if (!databaseConfig.exists()
-    	 && (version.startsWith(QLatin1String("0.5"))
-    	     || !dirInfo.exists() || !dirInfo.isDir()))
-    {
-        // Run the first run assistant.
-        AssistantDlg firstRun;
-        app.setTopWidget(&firstRun);
-        if (firstRun.exec() == QDialog::Rejected)
-            return 1;
-
-        firstAlbumPath = firstRun.firstAlbumPath();
-        dbName         = firstRun.databasePath();
-        AlbumManager::checkDatabaseDirsAfterFirstRun(dbName, firstAlbumPath);
-    }
 
     // Check if SQLite Qt4 plugin is available.
 
@@ -161,12 +114,58 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-//TODO is this really needed?
-//    // initialize database
-//    AlbumManager* man = AlbumManager::instance();
-//    if (!man->setDatabase("QSQLITE", dbName, QString(), -1, priorityDbPath, firstAlbumPath))
-//        return 1;
+    KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
 
+    QString commandLineDBPath;
+    if (args && args->isSet("database-directory"))
+    {
+        QFileInfo commandLineDBDir(commandLineDBPath);
+        if (!commandLineDBDir.exists() || !commandLineDBDir.isDir())
+        {
+            kError() << "The given database-directory does not exist or is not readable. Ignoring.";
+        }
+        else
+        {
+            commandLineDBPath = args->getOption("database-directory");
+        }
+    }
+
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group("General Settings");
+    QString version           = group.readEntry("Version", QString());
+    KConfigGroup mainConfig   = config->group("Album Settings");
+
+    QString firstAlbumPath;
+    DatabaseParameters params;
+
+    // Run the first run assistant if we have no or very old config
+    if (!mainConfig.exists() || (version.startsWith(QLatin1String("0.5"))))
+    {
+        AssistantDlg firstRun;
+        app.setTopWidget(&firstRun);
+        if (firstRun.exec() == QDialog::Rejected)
+            return 1;
+
+        // parameters are written to config
+        firstAlbumPath = firstRun.firstAlbumPath();
+        AlbumManager::checkDatabaseDirsAfterFirstRun(firstRun.databasePath(), firstAlbumPath);
+    }
+
+    if (!commandLineDBPath.isNull())
+    {
+        // command line option set?
+        params = DatabaseParameters::parametersForSQLiteDefaultFile(commandLineDBPath);
+    }
+    else
+    {
+        params = DatabaseParameters::parametersFromConfig(config);
+        params.legacyAndDefaultChecks(firstAlbumPath);
+    }
+
+    // initialize database
+    AlbumManager::instance()->setDatabase(params, !commandLineDBPath.isNull(), firstAlbumPath);
+
+    // create main window
     DigikamApp *digikam = new DigikamApp();
 
     app.setTopWidget(digikam);

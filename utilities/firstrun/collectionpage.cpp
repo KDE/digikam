@@ -168,11 +168,7 @@ void CollectionPage::saveSettings()
     KConfigGroup group        = config->group("General Settings");
     group.writeEntry("Version", digikam_version);
 
-    DatabaseParameters params;
-    params.databaseType = "QSQLITE";
-    params.internalServer = false;
-    params.databaseName = d->dbPath + QDir::separator();
-    params.databaseNameThumbnails = d->dbPath + QDir::separator();
+    DatabaseParameters params = DatabaseParameters::parametersForSQLiteDefaultFile(d->dbPath);
     params.writeToConfig(config);
 
     config->sync();

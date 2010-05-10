@@ -190,8 +190,6 @@ DigikamApp::DigikamApp()
     QDBusConnection::sessionBus().registerService("org.kde.digikam-"
                             + QString::number(QCoreApplication::instance()->applicationPid()));
 
-    AlbumManager::instance()->setDatabase(AlbumSettings::instance()->getDatabaseParameters(), true);
-
     // collection scan
     if (d->config->group("General Settings").readEntry("Scan At Start", true) ||
         !CollectionScanner::databaseInitialScanDone())
