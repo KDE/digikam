@@ -59,6 +59,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 047 ==> 236002 : Photos not visible when starting in calendar view.
 048 ==> 151156 : Removing the metadata (EXIF) pannel while loading another picture shows blank black picture!
 049 ==> 236127 : digiKam crashes sometimes, when changing the rating of a rawfile.
-050 ==> 
+050 ==> 236523 : Auto-rotating of RW2 images is broken.
+051 ==> 
 
 
