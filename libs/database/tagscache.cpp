@@ -364,7 +364,15 @@ int TagsCache::createTag(const QString& tagPathToCreate)
         {
             tagID = access.db()->addTag(parentTagIDForCreation, tagName, QString(), 0);
             if (tagID == -1)
+            {
                 break; // something wrong with DB
+            }
+            else
+            {
+                // change signals may be queued within a transaction. We know it changed.
+                d->needUpdateInfos = true;
+                d->needUpdateHash  = true;
+            }
             parentTagIDForCreation = tagID;
         }
     }
