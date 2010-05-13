@@ -45,6 +45,7 @@
 #include <QSqlDriver>
 #include <QtCore/QRegExp>
 
+#include <QFileInfo>
 
 // KDE includes
 
@@ -104,7 +105,7 @@ void DatabaseCoreBackendPrivate::init(const QString &name, DatabaseLocking *l)
     lock        = l;
 
     qRegisterMetaType<DatabaseErrorAnswer*>("DatabaseErrorAnswer*");
-    qRegisterMetaType<SqlQuery>("SqlQuery");
+    qRegisterMetaType<QSqlError>();
 }
 
 // "A connection can only be used from within the thread that created it.
@@ -223,28 +224,36 @@ bool DatabaseCoreBackendPrivate::isInUIThread() const
     return QThread::currentThread() == app->thread();
 }
 
-bool DatabaseCoreBackendPrivate::isSQLiteLockError(const SqlQuery &query)
+bool DatabaseCoreBackendPrivate::reconnectOnError() const
+{
+    return parameters.isMySQL();
+}
+
+bool DatabaseCoreBackendPrivate::isSQLiteLockError(const SqlQuery &query) const
 {
     return parameters.isSQLite() && query.lastError().number() == 5;
 }
 
-bool DatabaseCoreBackendPrivate::isConnectionError(const SqlQuery &query)
+bool DatabaseCoreBackendPrivate::isConnectionError(const SqlQuery &query) const
 {
+    // the backend returns connection error e.g. for Constraint Failed errors.
+    if (parameters.isSQLite())
+        return false;
     return query.lastError().type() == QSqlError::ConnectionError || query.lastError().number()==2006;
 }
 
-bool DatabaseCoreBackendPrivate::needToConsultUserForError(const SqlQuery &)
+bool DatabaseCoreBackendPrivate::needToConsultUserForError(const SqlQuery &) const
 {
     // no such conditions found and defined as yet
     return false;
 }
 
-bool DatabaseCoreBackendPrivate::needToHandleWithErrorHandler(const SqlQuery &query)
+bool DatabaseCoreBackendPrivate::needToHandleWithErrorHandler(const SqlQuery &query) const
 {
     return isConnectionError(query) || needToConsultUserForError(query);
 }
 
-bool DatabaseCoreBackendPrivate::checkRetrySQLiteLockError(int retries)
+bool DatabaseCoreBackendPrivate::checkRetrySQLiteLockError(int retries) const
 {
     if (!isInUIThread())
     {
@@ -259,7 +268,7 @@ bool DatabaseCoreBackendPrivate::checkRetrySQLiteLockError(int retries)
     return false;
 }
 
-void DatabaseCoreBackendPrivate::debugOutputFailedQuery(const QSqlQuery &query)
+void DatabaseCoreBackendPrivate::debugOutputFailedQuery(const QSqlQuery &query) const
 {
     kDebug() << "Failure executing query:\n"
              << query.executedQuery()
@@ -354,44 +363,45 @@ bool DatabaseCoreBackendPrivate::checkOperationStatus()
 }
 
 /// Returns true if the query shall be retried
-bool DatabaseCoreBackendPrivate::handleWithErrorHandler(const SqlQuery& query)
+bool DatabaseCoreBackendPrivate::handleWithErrorHandler(const SqlQuery *query)
 {
     if (errorHandler)
     {
         setQueryOperationFlag(DatabaseCoreBackend::Wait);
 
-        if (isInUIThread())
+        ErrorLocker locker(this);
+        bool called = false;
+        QSqlError lastError = query ? query->lastError() : databaseForThread().lastError();
+        QString lastQuery = query ? query->lastQuery() : QString();
+
+        if (!query || isConnectionError(*query))
         {
-            if (isConnectionError(query))
-                errorHandler->connectionError(this, query);
-            else if (needToConsultUserForError(query))
-                errorHandler->consultUserForError(this, query);
+            called = QMetaObject::invokeMethod(errorHandler, "connectionError", Qt::AutoConnection,
+                                               Q_ARG(DatabaseErrorAnswer*, this), Q_ARG(const QSqlError, lastError),
+                                               Q_ARG(const QString, lastQuery));
+        }
+        else if (needToConsultUserForError(*query))
+        {
+            called = QMetaObject::invokeMethod(errorHandler, "consultUserForError", Qt::AutoConnection,
+                                               Q_ARG(DatabaseErrorAnswer*, this), Q_ARG(const QSqlError, lastError),
+                                               Q_ARG(const QString, lastQuery));
         }
         else
         {
-            ErrorLocker locker(this);
-            bool called = false;
+            // unclear what to do.
+            errorLockOperationStatus = DatabaseCoreBackend::ExecuteNormal;
+            operationStatus = DatabaseCoreBackend::ExecuteNormal;
+            return true;
+        }
 
-            if (isConnectionError(query))
-            {
-                called= QMetaObject::invokeMethod(errorHandler, "connectionError", Qt::QueuedConnection,
-                                                  Q_ARG(DatabaseErrorAnswer*, this), Q_ARG(const SqlQuery, query));
-            }
-            else if (needToConsultUserForError(query))
-            {
-                called= QMetaObject::invokeMethod(errorHandler, "consultUserForError", Qt::QueuedConnection,
-                                                  Q_ARG(DatabaseErrorAnswer*, this), Q_ARG(const SqlQuery, query));
-            }
-
-            if (called)
-            {
-                locker.wait();
-            }
-            else
-            {
-                kError() << "Failed to invoke DatabaseErrorHandler. Aborting all queries.";
-                operationStatus = DatabaseCoreBackend::AbortQueries;
-            }
+        if (called)
+        {
+            locker.wait();
+        }
+        else
+        {
+            kError() << "Failed to invoke DatabaseErrorHandler. Aborting all queries.";
+            operationStatus = DatabaseCoreBackend::AbortQueries;
         }
 
         switch (operationStatus)
@@ -605,24 +615,18 @@ bool DatabaseCoreBackend::open(const DatabaseParameters& parameters)
 
     int retries = 0;
 
-    QSqlDatabase database = d->databaseForThread();
-    SqlQuery query(database);
-
     forever
     {
+        QSqlDatabase database = d->databaseForThread();
         if (!database.isOpen())
         {
             kDebug() << "Error while opening the database. Trying again.";
-            if (queryErrorHandling(query, retries++))
-            {
-                // TODO reopen the database
-                d->closeDatabaseForThread();
-                database = d->databaseForThread();
+            if (connectionErrorHandling(retries++))
                 continue;
-            }
             else
                 return false;
-        }else
+        }
+        else
             break;
     }
     d->status = Open;
@@ -948,11 +952,33 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QMap<QString, 
     return query;
 }
 
-bool DatabaseCoreBackend::queryErrorHandling(const SqlQuery& query, int retries)
+bool DatabaseCoreBackend::connectionErrorHandling(int /*retries*/)
+{
+    Q_D(DatabaseCoreBackend);
+
+    if (d->reconnectOnError())
+    {
+        if (d->handleWithErrorHandler(0))
+        {
+            d->closeDatabaseForThread();
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool DatabaseCoreBackend::queryErrorHandling(SqlQuery& query, int retries)
 {
     Q_D(DatabaseCoreBackend);
 
     d->debugOutputFailedQuery(query);
+
+    if (d->reconnectOnError())
+    {
+        d->closeDatabaseForThread();
+        query = copyQuery(query);
+    }
 
     if (d->isSQLiteLockError(query))
     {
@@ -961,7 +987,7 @@ bool DatabaseCoreBackend::queryErrorHandling(const SqlQuery& query, int retries)
     }
     else if (d->needToHandleWithErrorHandler(query))
     {
-        if (d->handleWithErrorHandler(query))
+        if (d->handleWithErrorHandler(&query))
             return true;
         else
             return false;
@@ -986,17 +1012,9 @@ DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDirectSql(const QString
         else
         {
             if (queryErrorHandling(query, retries++))
-            {
-                // Create a new database connection and retry
-                d->closeDatabaseForThread();
-                query = getQuery();
                 continue;
-            }
             else
-            {
-
                 return DatabaseCoreBackend::SQLError;
-            }
         }
     }
     return DatabaseCoreBackend::NoErrors;
@@ -1021,12 +1039,7 @@ bool DatabaseCoreBackend::exec(SqlQuery& query)
         else
         {
             if (queryErrorHandling(query, retries++))
-            {
-                // TODO reopen the database
-                d->closeDatabaseForThread();
-                query = copyQuery(query);
                 continue;
-            }
             else
                 return false;
         }
@@ -1049,11 +1062,7 @@ bool DatabaseCoreBackend::execBatch(SqlQuery& query)
         else
         {
             if (queryErrorHandling(query, retries++))
-            {
-                d->closeDatabaseForThread();
-                query = copyQuery(query);
                 continue;
-            }
             else
                 return false;
         }
@@ -1064,7 +1073,6 @@ bool DatabaseCoreBackend::execBatch(SqlQuery& query)
 
 SqlQuery DatabaseCoreBackend::prepareQuery(const QString& sql)
 {
-    Q_D(DatabaseCoreBackend);
     int retries=0;
     forever
     {
@@ -1075,12 +1083,7 @@ SqlQuery DatabaseCoreBackend::prepareQuery(const QString& sql)
         {
             kDebug() << "Prepare failed!";
             if (queryErrorHandling(query, retries++))
-            {
-                // TODO reopen the database
-                d->closeDatabaseForThread();
-                query = copyQuery(query);
                 continue;
-            }
             else
                 return query;
         }

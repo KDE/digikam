@@ -296,7 +296,14 @@ public:
      * If it returns true, reexecute the query; if it returns false, return it as failed.
      * Pass the number of retries already done for this query to help with some decisions.
      */
-    bool queryErrorHandling(const SqlQuery& query, int retries);
+    bool queryErrorHandling(SqlQuery& query, int retries);
+
+    /**
+     * Called when an attempted connection to the database failed.
+     * If it returns true, retry; if it returns false, bail out.
+     * Pass the number of connection retries to help with some decisions.
+     */
+    bool connectionErrorHandling(int retries);
 
     /**
      * Reads data of returned result set into a list which is returned.
@@ -384,6 +391,8 @@ private:
 };
 
 } // namespace Digikam
+
+Q_DECLARE_METATYPE(QSqlError)
 
 #endif // DATABASECOREBACKEND_H
 

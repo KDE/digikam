@@ -59,15 +59,16 @@ public:
     bool isInMainThread() const;
     bool isInUIThread() const;
 
-    bool isSQLiteLockError(const SqlQuery &query);
-    bool checkRetrySQLiteLockError(int retries);
-    bool isConnectionError(const SqlQuery &query);
-    bool needToConsultUserForError(const SqlQuery &query);
-    bool needToHandleWithErrorHandler(const SqlQuery &query);
-    void debugOutputFailedQuery(const QSqlQuery &query);
+    bool reconnectOnError() const;
+    bool isSQLiteLockError(const SqlQuery &query) const;
+    bool checkRetrySQLiteLockError(int retries) const;
+    bool isConnectionError(const SqlQuery &query) const;
+    bool needToConsultUserForError(const SqlQuery &query) const;
+    bool needToHandleWithErrorHandler(const SqlQuery &query) const;
+    void debugOutputFailedQuery(const QSqlQuery &query) const;
 
     bool checkOperationStatus();
-    bool handleWithErrorHandler(const SqlQuery& query);
+    bool handleWithErrorHandler(const SqlQuery *query);
     // called by DatabaseErrorHandler, implementing DatabaseErrorAnswer
     virtual void connectionErrorContinueQueries();
     virtual void connectionErrorAbortQueries();
