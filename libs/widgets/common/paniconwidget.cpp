@@ -118,19 +118,24 @@ void PanIconWidget::setImage(int previewWidth, int previewHeight, const QImage& 
 {
     QSize sz(image.width(), image.height());
     sz.scale(previewWidth, previewHeight, Qt::KeepAspectRatio);
-    d->width           = sz.width();
-    d->height          = sz.height();
-    d->orgWidth        = image.width();
-    d->orgHeight       = image.height();
-    d->zoomedOrgWidth  = image.width();
-    d->zoomedOrgHeight = image.height();
+    QImage scaledImg = image.scaled(sz.width(), sz.height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 
-    QImage scaledImg  = image.scaled(sz.width(), sz.height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    setImage(scaledImg, image.size());
+}
 
-    d->pixmap          = QPixmap(previewWidth, previewHeight);
+void PanIconWidget::setImage(const QImage& scaledPreviewImage, const QSize& fullImageSize)
+{
+    d->width           = scaledPreviewImage.width();
+    d->height          = scaledPreviewImage.height();
+    d->orgWidth        = fullImageSize.width();
+    d->orgHeight       = fullImageSize.height();
+    d->zoomedOrgWidth  = fullImageSize.width();
+    d->zoomedOrgHeight = fullImageSize.height();
+
+    d->pixmap          = QPixmap(d->width, d->height);
     d->pixmap.fill(palette().color(QPalette::Background));
     QPainter p(&d->pixmap);
-    p.drawImage(0, 0, scaledImg);
+    p.drawImage(0, 0, scaledPreviewImage);
 
     setFixedSize(d->width, d->height);
 
@@ -140,8 +145,8 @@ void PanIconWidget::setImage(int previewWidth, int previewHeight, const QImage& 
 
 void PanIconWidget::setImage(int previewWidth, int previewHeight, const DImg& image)
 {
-    DImg img(image);
-    setImage(previewWidth, previewHeight, img.copyQImage());
+    DImg img = DImg(image).smoothScale(previewWidth, previewHeight, Qt::KeepAspectRatio);
+    setImage(img.copyQImage(), image.size());
 }
 
 void PanIconWidget::slotZoomFactorChanged(double factor)

@@ -59,8 +59,9 @@ public:
 
     static QToolButton* button();
 
-    void setImage(int previewWidth, int previewHeight, const QImage& image);
-    void setImage(int previewWidth, int previewHeight, const DImg& image);
+    void setImage(int previewWidth, int previewHeight, const QImage& fullOriginalImage);
+    void setImage(int previewWidth, int previewHeight, const DImg& fullOriginalImage);
+    void setImage(const QImage& scaledPreviewImage, const QSize& fullImageSize);
 
     void  setRegionSelection(const QRect& regionSelection);
     QRect getRegionSelection();
