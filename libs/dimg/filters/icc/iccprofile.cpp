@@ -268,7 +268,7 @@ QByteArray IccProfile::data()
     {
         QFile file(d->filePath);
         if ( !file.open(QIODevice::ReadOnly) )
-            return false;
+            return QByteArray();
         d->data = file.readAll();
         file.close();
         return d->data;
