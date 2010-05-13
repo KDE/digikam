@@ -209,25 +209,25 @@ void DatabaseGUIErrorHandler::showProgressDialog()
     d->dialog->show();
 }
 
-void DatabaseGUIErrorHandler::connectionError(DatabaseErrorAnswer* answer, const SqlQuery&)
+void DatabaseGUIErrorHandler::connectionError(DatabaseErrorAnswer* answer, const QSqlError&, const QString&)
 {
     if (checkDatabaseConnection())
     {
-        answer->connectionErrorAbortQueries();
+        answer->connectionErrorContinueQueries();
     }
     else
     {
-        answer->connectionErrorContinueQueries();
+        answer->connectionErrorAbortQueries();
     }
 }
 
-void DatabaseGUIErrorHandler::consultUserForError(DatabaseErrorAnswer* answer, const SqlQuery& query)
+void DatabaseGUIErrorHandler::consultUserForError(DatabaseErrorAnswer* answer, const QSqlError& error, const QString&)
 {
     //NOTE: not used at all currently.
     QWidget* parent = QWidget::find(0);
     // Handle all other database errors
     QString message = i18n("<p><b>A database error occurred.</b></p>"
-                           "Details:\n %1", query.lastError().text());
+                           "Details:\n %1", error.text());
     KMessageBox::error(parent, message);
     answer->connectionErrorAbortQueries();
 }

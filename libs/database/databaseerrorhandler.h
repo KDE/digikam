@@ -27,11 +27,11 @@
 // Qt includes
 
 #include <QMetaType>
+#include <QSqlError>
 
 // Local includes
 
 #include "digikam_export.h"
-#include "sqlquery.h"
 
 namespace Digikam
 {
@@ -61,7 +61,7 @@ public Q_SLOTS:
      *  or connectionErrorAbortQueries().
      *  The method is guaranteed to be invoked in the UI thread.
      */
-    virtual void connectionError(DatabaseErrorAnswer* answer, const SqlQuery& query) = 0;
+    virtual void connectionError(DatabaseErrorAnswer* answer, const QSqlError& error, const QString& query) = 0;
 
     /** In the situation of an error requiring user intervention or information,
      *  all threads will be waiting with their queries
@@ -71,7 +71,7 @@ public Q_SLOTS:
      *  or connectionErrorAbortQueries().
      *  The method is guaranteed to be invoked in the UI thread.
      */
-    virtual void consultUserForError(DatabaseErrorAnswer* answer, const SqlQuery& query) = 0;
+    virtual void consultUserForError(DatabaseErrorAnswer* answer, const QSqlError& error, const QString& query) = 0;
 };
 
 } // namespace Digikam

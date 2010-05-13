@@ -90,8 +90,8 @@ public:
 
     bool checkDatabaseConnection();
 
-    virtual void connectionError(DatabaseErrorAnswer* answer, const SqlQuery& query);
-    virtual void consultUserForError(DatabaseErrorAnswer* answer, const SqlQuery& query);
+    virtual void connectionError(DatabaseErrorAnswer* answer, const QSqlError& error, const QString& query);
+    virtual void consultUserForError(DatabaseErrorAnswer* answer, const QSqlError& error, const QString& query);
 
 private Q_SLOTS:
 
