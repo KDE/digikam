@@ -367,7 +367,7 @@ void ScanController::completeCollectionScan(SplashScreen *splash)
     createProgressDialog();
     // we only need to count the files in advance
     //if we show a progress percentage in progress dialog
-    d->needTotalFiles = !d->splash;
+    d->needTotalFiles = (!d->splash || !CollectionScanner::databaseInitialScanDone());
 
     {
         QMutexLocker lock(&d->mutex);
