@@ -54,7 +54,9 @@ static const char *configDatabasePort = "Database Port";
 static const char *configDatabaseUsername = "Database Username";
 static const char *configDatabasePassword = "Database Password";
 static const char *configDatabaseConnectOptions = "Database Connectoptions";
+// legacy
 static const char *configDatabaseFilePathEntry = "Database File Path";
+static const char *configAlbumPathEntry = "Album Path";
 
 DatabaseParameters::DatabaseParameters()
                   : port(-1)
@@ -68,11 +70,12 @@ DatabaseParameters::DatabaseParameters(const QString& type,
                                        int port,
                                        bool internalServer,
                                        const QString& userName,
-                                       const QString& password)
+                                       const QString& password,
+                                       const QString& databaseNameThumbnails)
                   : databaseType(type), databaseName(databaseName),
                     connectOptions(connectOptions), hostName(hostName),
                     port(port), internalServer(internalServer), userName(userName),
-                    password(password)
+                    password(password), databaseNameThumbnails(databaseNameThumbnails)
 {
 }
 
@@ -120,6 +123,11 @@ bool DatabaseParameters::isValid() const
 bool DatabaseParameters::isSQLite() const
 {
     return databaseType == "QSQLITE";
+}
+
+bool DatabaseParameters::isMySQL() const
+{
+    return databaseType == "QMYSQL";
 }
 
 QString DatabaseParameters::SQLiteDatabaseFile() const
@@ -177,13 +185,13 @@ QString DatabaseParameters::getDatabaseFilePath(const QString &dbPath) const
 {
     QString result = dbPath;
     if (isSQLite())
+    {
+        QFileInfo fileInfo(result);
+        if (fileInfo.isDir())
         {
-            QFileInfo fileInfo(result);
-            if (fileInfo.isDir())
-            {
-                result = QDir::cleanPath(fileInfo.filePath() + '/' + "digikam4.db");
-            }
+            result = QDir::cleanPath(fileInfo.filePath() + QDir::separator() + "digikam4.db");
         }
+    }
     return result;
 }
 
@@ -191,13 +199,13 @@ QString DatabaseParameters::getThumbsDatabaseFilePath(const QString &thumbsDbPat
 {
     QString result = thumbsDbPath;
     if (isSQLite())
+    {
+        QFileInfo fileInfo(result);
+        if (fileInfo.isDir())
         {
-            QFileInfo fileInfo(result);
-            if (fileInfo.isDir())
-            {
-                result = QDir::cleanPath(fileInfo.filePath() + '/' + "thumbnails-digikam.db");
-            }
+            result = QDir::cleanPath(fileInfo.filePath() + QDir::separator() + "thumbnails-digikam.db");
         }
+    }
     return result;
 }
 
@@ -219,44 +227,43 @@ void DatabaseParameters::legacyAndDefaultChecks(const QString& suggestedPath, KS
         connectOptions = QString::fromLatin1("UNIX_SOCKET=%1/mysql.socket").arg(miscDir);
     }
 
-    /*
-     * Check if a old digikam instance or the First Run assistant have left a path entry.
-     * This has a higher priority as the other settings.
-     */
+    if (databaseType.isEmpty())
+    {
+        // Empty 1.3 config: migration from older versions
+        KConfigGroup group  = config->group("Album Settings");
+
+        QString databaseFilePath;
+
+        // 1.0 - 1.2 style database file path?
+        if (group.hasKey(configDatabaseFilePathEntry))
+            databaseFilePath = group.readEntry(configDatabaseFilePathEntry, QString());
+        // <= 0.9 style album path entry?
+        else if (group.hasKey(configAlbumPathEntry))
+            databaseFilePath = group.readEntry(configAlbumPathEntry, QString());
+        else if (!suggestedPath.isNull())
+            databaseFilePath = suggestedPath;
+
+
+        if (!databaseFilePath.isEmpty())
+        {
+            *this = parametersForSQLite(getDatabaseFilePath(databaseFilePath));
+        }
+
+        // Be aware that schema updating from  <= 0.9 requires reading the "Album Path", so dont remove it here
+    }
+}
+
+void DatabaseParameters::removeLegacyConfig(KSharedConfig::Ptr config)
+{
     KConfigGroup group  = config->group("Album Settings");
     if (group.hasKey(configDatabaseFilePathEntry))
     {
-        QString oldDatabaseFilePath = group.readEntry(configDatabaseFilePathEntry, QString());
-        if (!oldDatabaseFilePath.isEmpty())
-        {
-            databaseType = "QSQLITE";
-            databaseName = oldDatabaseFilePath;
-            databaseNameThumbnails = oldDatabaseFilePath;
-
-            hostName = QString();
-            port = -1;
-            userName = QString();
-            password = QString();
-            connectOptions = QString();
-        }
-        // After successful migration, we can delete this entry now.
         group.deleteEntry(configDatabaseFilePathEntry);
     }
-    // Remove also the 0.9 legacy parameter - migration is currently done in main.cpp. */
-    if (group.hasKey("Album Path"))
-    {
-        group.deleteEntry("Album Path");
-    }
 
-    if (databaseType.isEmpty())
+    if (group.hasKey(configAlbumPathEntry))
     {
-        databaseType = "QSQLITE";
-    }
-
-    if (isSQLite())
-    {
-        if (databaseName.isEmpty())
-            databaseName = suggestedPath;
+        group.deleteEntry(configAlbumPathEntry);
     }
 }
 
@@ -286,10 +293,10 @@ QString DatabaseParameters::getDatabasePath(const QString& dbFilePath) const
 {
     QString result = dbFilePath;
     if (isSQLite())
-        {
-            if (result.endsWith("digikam4.db"))
-                result.chop(QString("digikam4.db").length());
-        }
+    {
+        if (result.endsWith("digikam4.db"))
+            result.chop(QString("digikam4.db").length());
+    }
     return result;
 }
 
@@ -297,10 +304,10 @@ QString DatabaseParameters::getThumbsDatabasePath(const QString& thumbsDbFilePat
 {
     QString result = thumbsDbFilePath;
     if (isSQLite())
-        {
-            if (result.endsWith("thumbnails-digikam.db"))
-                result.chop(QString("thumbnails-digikam.db").length());
-        }
+    {
+        if (result.endsWith("thumbnails-digikam.db"))
+            result.chop(QString("thumbnails-digikam.db").length());
+    }
     return result;
 }
 
@@ -338,14 +345,14 @@ DatabaseParameters DatabaseParameters::thumbnailParameters() const
 DatabaseParameters DatabaseParameters::parametersForSQLite(const QString& databaseFile)
 {
     // only the database name is needed
-    return DatabaseParameters("QSQLITE", databaseFile);
+    DatabaseParameters params("QSQLITE", databaseFile);
+    params.databaseNameThumbnails = params.getThumbsDatabaseFilePath(params.getDatabasePath(databaseFile));
+    return params;
 }
 
 DatabaseParameters DatabaseParameters::parametersForSQLiteDefaultFile(const QString& directory)
 {
-    QString filePath = directory + QDir::separator() + "digikam4.db";
-    filePath = QDir::cleanPath(filePath);
-    return parametersForSQLite(filePath);
+    return parametersForSQLite(QDir::cleanPath(directory + QDir::separator() + "digikam4.db"));
 }
 
 void DatabaseParameters::insertInUrl(KUrl& url) const

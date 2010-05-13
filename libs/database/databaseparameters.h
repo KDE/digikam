@@ -62,7 +62,8 @@ public:
                        int   port = -1,
                        bool  internalServer = false,
                        const QString& userName = QString(),
-                       const QString& password = QString());
+                       const QString& password = QString(),
+                       const QString& databaseNameThumbnails = QString());
 
     DatabaseParameters(const KUrl& url);
     DatabaseParameters();
@@ -88,6 +89,7 @@ public:
     bool isValid() const;
 
     bool isSQLite() const;
+    bool isMySQL() const;
     QString SQLiteDatabaseFile() const;
 
     /**
@@ -116,6 +118,7 @@ public:
     DatabaseParameters thumbnailParameters() const;
 
     void legacyAndDefaultChecks(const QString& suggestedPath = QString(), KSharedConfig::Ptr config = KGlobal::config());
+    void removeLegacyConfig(KSharedConfig::Ptr config);
 
     /**
      * Convenience method to create a DatabaseParameters object for an
