@@ -42,7 +42,6 @@ class DIGIKAM_EXPORT SqlQuery : public QSqlQuery
 
 public:
 
-    SqlQuery();
     SqlQuery(const QSqlQuery& other);
     SqlQuery(QSqlDatabase db);
     virtual ~SqlQuery();
@@ -57,7 +56,5 @@ private:
 };
 
 }  // namespace Digikam
-
-Q_DECLARE_METATYPE(Digikam::SqlQuery)
 
 #endif /* SQLQUERY_H */

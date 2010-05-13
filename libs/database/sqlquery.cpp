@@ -26,11 +26,6 @@
 namespace Digikam
 {
 
-SqlQuery::SqlQuery()
-        : QSqlQuery()
-{
-}
-
 SqlQuery::SqlQuery(const QSqlQuery& other)
         : QSqlQuery(other)
 {

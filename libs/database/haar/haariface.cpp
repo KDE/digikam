@@ -218,7 +218,6 @@ public:
 
         // Variables for data read from DB
         DatabaseAccess      access;
-        SqlQuery           query;
         DatabaseBlob        blob;
         qlonglong           imageid;
         Haar::SignatureData targetSig;
@@ -226,7 +225,7 @@ public:
         // reference for easier access
         SignatureCache &signatureCache = *this->signatureCache;
 
-        query = access.backend()->prepareQuery(signatureQuery);
+        SqlQuery query = access.backend()->prepareQuery(signatureQuery);
         if (!access.backend()->exec(query))
             return;
 
@@ -534,7 +533,6 @@ QMap<qlonglong, double> HaarIface::searchDatabase(Haar::SignatureData *querySig,
 
     // Variables for data read from DB
     DatabaseAccess      access;
-    SqlQuery           query;
     DatabaseBlob        blob;
     qlonglong           imageid;
     Haar::SignatureData targetSig;
@@ -547,10 +545,14 @@ QMap<qlonglong, double> HaarIface::searchDatabase(Haar::SignatureData *querySig,
     // if no cache is used or the cache signature map is empty, query the database
     if ( !d->useSignatureCache || (signatureCache.isEmpty() && d->useSignatureCache) )
     {
+        QString queryText;
         if (filterByAlbumRoots)
-            query = access.backend()->prepareQuery(d->signatureByAlbumRootsQuery);
+            queryText = d->signatureByAlbumRootsQuery;
         else
-            query = access.backend()->prepareQuery(d->signatureQuery);
+            queryText = d->signatureQuery;
+
+        SqlQuery query = access.backend()->prepareQuery(queryText);
+
         if (!access.backend()->exec(query))
             return scores;
 
