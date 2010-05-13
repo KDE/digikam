@@ -284,7 +284,7 @@ void AdvancedRenameDialog::slotAddImages(const KUrl::List& urls)
     if (itemCount == 1 && !urls.isEmpty())
     {
         QFileInfo info(urls.first().toLocalFile());
-        d->advancedRenameWidget->setText(info.fileName());
+        d->advancedRenameWidget->setParseString(info.fileName());
         d->advancedRenameWidget->focusLineEdit();
         d->singleFileModeOldFilename = info.fileName();
     }
@@ -292,7 +292,7 @@ void AdvancedRenameDialog::slotAddImages(const KUrl::List& urls)
 
     enableButton(Ok, checkNewNames());
     initDialog(itemCount);
-    slotParseStringChanged(d->advancedRenameWidget->text());
+    slotParseStringChanged(d->advancedRenameWidget->parseString());
 }
 
 void AdvancedRenameDialog::initDialog(int count)
@@ -332,7 +332,7 @@ void AdvancedRenameDialog::readSettings()
 
     QSize s = group.readEntry(d->configDialogSizeEntry, QSize(d->minSizeDialog, d->minSizeDialog));
     resize(s);
-    d->advancedRenameWidget->setText(group.readEntry(d->configLastUsedRenamePatternEntry, QString()));
+    d->advancedRenameWidget->setParseString(group.readEntry(d->configLastUsedRenamePatternEntry, QString()));
 }
 
 void AdvancedRenameDialog::writeSettings()
@@ -347,7 +347,7 @@ void AdvancedRenameDialog::writeSettings()
     }
     else
     {
-        group.writeEntry(d->configLastUsedRenamePatternEntry, d->advancedRenameWidget->text());
+        group.writeEntry(d->configLastUsedRenamePatternEntry, d->advancedRenameWidget->parseString());
     }
 }
 

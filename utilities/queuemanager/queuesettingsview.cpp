@@ -205,7 +205,7 @@ void QueueSettingsView::slotResetSettings()
     // TODO: reset d->albumSel
     d->conflictButtonGroup->button(QueueSettings::ASKTOUSER)->setChecked(true);
     d->renamingButtonGroup->button(QueueSettings::USEORIGINAL)->setChecked(true);
-    d->advancedRenameWidget->clearText();
+    d->advancedRenameWidget->clearParseString();
     blockSignals(false);
     slotSettingsChanged();
 }
@@ -217,7 +217,7 @@ void QueueSettingsView::slotQueueSelected(int, const QueueSettings& settings, co
     d->conflictButtonGroup->button(btn)->setChecked(true);
     btn     = (int)settings.renamingRule;
     d->renamingButtonGroup->button(btn)->setChecked(true);
-    d->advancedRenameWidget->setText(settings.renamingParser);
+    d->advancedRenameWidget->setParseString(settings.renamingParser);
 }
 
 void QueueSettingsView::slotUpdateTrackerPos()
@@ -236,7 +236,7 @@ void QueueSettingsView::slotSettingsChanged()
     settings.conflictRule   = (QueueSettings::ConflictRule)d->conflictButtonGroup->checkedId();
     settings.targetUrl      = d->albumSel->currentAlbumUrl();
     settings.renamingRule   = (QueueSettings::RenamingRule)d->renamingButtonGroup->checkedId();
-    settings.renamingParser = d->advancedRenameWidget->text();
+    settings.renamingParser = d->advancedRenameWidget->parseString();
     d->advancedRenameWidget->setEnabled(settings.renamingRule == QueueSettings::CUSTOMIZE);
     emit signalSettingsChanged(settings);
 }

@@ -259,7 +259,7 @@ void RenameCustomizer::readSettings()
     slotRadioButtonClicked(def);
 
     d->renameDefaultCaseType->setCurrentIndex(chcaseT);
-    d->advancedRenameWidget->setText(manualRename);
+    d->advancedRenameWidget->setParseString(manualRename);
 }
 
 void RenameCustomizer::saveSettings()
@@ -269,7 +269,7 @@ void RenameCustomizer::saveSettings()
     KConfigGroup group = config->group("Camera Settings");
     group.writeEntry("Rename Method",        d->buttonGroup->checkedId());
     group.writeEntry("Case Type",            d->renameDefaultCaseType->currentIndex());
-    group.writeEntry("Manual Rename String", d->advancedRenameWidget->text());
+    group.writeEntry("Manual Rename String", d->advancedRenameWidget->parseString());
     config->sync();
 }
 

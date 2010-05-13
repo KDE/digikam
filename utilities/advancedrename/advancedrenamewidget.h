@@ -55,24 +55,57 @@ public:
     };
     Q_DECLARE_FLAGS(ControlWidgets, ControlWidget)
 
-    QString text() const;
-    void    setText(const QString& text);
-    void    clearText();
+    /**
+     * returns the current parse string
+     */
+    QString parseString() const;
+    /**
+     *
+     * sets the current parse string
+     * @param text the new parse string
+     */
+    void    setParseString(const QString& text);
+    /**
+     * resets the current parse string, the LineEdit widget will be empty
+     */
+    void    clearParseString();
 
-    /*
-     * clear the text as well as the history
+    /**
+     * clears the parse string as well as the history
      */
     void    clear();
 
+    /**
+     * sets the current parser. If a parser has already been assigned, it will
+     * be deleted first.
+     * @param parser a pointer to the new parser instance
+     */
     void    setParser(Parser* parser);
+    /**
+     * returns a pointer to the currently assigned parser
+     */
     Parser* parser();
 
+    /**
+     * evaluates the parse string and executes the parser
+     * @param settings information about the file to be renamed
+     * @return the new name of the file
+     */
     QString parse(ParseSettings& settings) const;
 
+    /**
+     * sets the layout of the control widgets
+     * @see ControlWidget
+     * @param mask a bitmask for setting the control widgets
+     */
     void setControlWidgets(ControlWidgets mask);
 
-    void setTooltipAlignment(Qt::Alignment alignment);
+    /**
+     * set focus for the LineEdit widget
+     */
     void focusLineEdit();
+
+    void setTooltipAlignment(Qt::Alignment alignment);
 
 Q_SIGNALS:
 
