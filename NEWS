@@ -61,7 +61,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 049 ==> 236127 : digiKam crashes sometimes, when changing the rating of a rawfile.
 050 ==> 236523 : Auto-rotating of RW2 images is broken.
 051 ==> 237178 : digiKam confuses disk partitions.
-052 ==> 
+052 ==> 236425 : digiKam editor crashes when saving multiple images.
+053 ==> 
 
 
 
