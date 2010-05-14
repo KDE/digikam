@@ -62,6 +62,9 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView *view, const QDropEvent *
 
     PAlbum *destAlbum = model()->albumForIndex(droppedOn);
 
+    if (!destAlbum)
+        return false;
+
     if (DAlbumDrag::canDecode(e->mimeData()))
     {
         KUrl::List urls;
@@ -70,6 +73,8 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView *view, const QDropEvent *
             return false;
 
         PAlbum *droppedAlbum = AlbumManager::instance()->findPAlbum(albumId);
+        if (!droppedAlbum)
+            return false;
 
         // TODO Copy?
         KMenu popMenu(view);
