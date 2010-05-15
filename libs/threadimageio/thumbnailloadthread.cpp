@@ -127,6 +127,8 @@ public:
     KIO::PreviewJob                *kdeJob;
 
     LoadingDescription createLoadingDescription(const QString filePath, int size);
+    bool makeAndCheckDescription(LoadingDescription *description, const QString& filePath, int size);
+    QList<LoadingDescription> makeDescriptions(const QStringList& filePaths, int size);
     bool hasHighlightingBorder() const;
     int pixmapSizeForThumbnailSize(int thumbnailSize) const;
     int thumbnailSizeForPixmapSize(int pixmapSize) const;
@@ -311,6 +313,41 @@ LoadingDescription ThumbnailLoadThreadPriv::createLoadingDescription(const QStri
     return description;
 }
 
+bool ThumbnailLoadThreadPriv::makeAndCheckDescription(LoadingDescription *description, const QString& filePath, int size)
+{
+    *description = createLoadingDescription(filePath, size);
+    QString cacheKey = description->cacheKey();
+
+    {
+        LoadingCache *cache = LoadingCache::cache();
+        LoadingCache::CacheLock lock(cache);
+        if (cache->hasThumbnailPixmap(cacheKey))
+            return false;
+    }
+
+    {
+        QMutexLocker lock(&resultsMutex);
+        if (collectedResults.contains(cacheKey))
+            return false;
+    }
+    return true;
+}
+
+QList<LoadingDescription> ThumbnailLoadThreadPriv::makeDescriptions(const QStringList& filePaths, int size)
+{
+    QList<LoadingDescription> descriptions;
+    {
+        foreach(const QString& filePath, filePaths)
+        {
+            LoadingDescription description;
+            if (!makeAndCheckDescription(&description, filePath, size))
+                continue;
+            descriptions << description;
+        }
+    }
+    return descriptions;
+}
+
 bool ThumbnailLoadThread::find(const QString& filePath, QPixmap& retPixmap, int size)
 {
     const QPixmap *pix;
@@ -383,30 +420,22 @@ void ThumbnailLoadThread::findGroup(const QStringList& filePaths, int size)
     if (!checkSize(size))
         return;
 
-    QList<LoadingDescription> descriptions;
-    {
-        LoadingCache *cache = LoadingCache::cache();
-        foreach(const QString& filePath, filePaths)
-        {
-            LoadingDescription description = d->createLoadingDescription(filePath, size);
-            QString cacheKey = description.cacheKey();
-
-            {
-                LoadingCache::CacheLock lock(cache);
-                if (cache->retrieveThumbnailPixmap(cacheKey))
-                    continue;
-            }
-
-            {
-                QMutexLocker lock(&d->resultsMutex);
-                if (d->collectedResults.contains(cacheKey))
-                    continue;
-            }
-
-            descriptions << description;
-        }
-    }
+    QList<LoadingDescription> descriptions = d->makeDescriptions(filePaths, size);
     ManagedLoadSaveThread::prependThumbnailGroup(descriptions);
+}
+
+void ThumbnailLoadThread::preloadGroup(const QStringList& filePaths)
+{
+    findGroup(filePaths, d->size);
+}
+
+void ThumbnailLoadThread::preloadGroup(const QStringList& filePaths, int size)
+{
+    if (!checkSize(size))
+        return;
+
+    QList<LoadingDescription> descriptions = d->makeDescriptions(filePaths, size);
+    ManagedLoadSaveThread::preloadThumbnailGroup(descriptions);
 }
 
 void ThumbnailLoadThread::preload(const QString& filePath)
@@ -416,23 +445,9 @@ void ThumbnailLoadThread::preload(const QString& filePath)
 
 void ThumbnailLoadThread::preload(const QString& filePath, int size)
 {
-    LoadingDescription description = d->createLoadingDescription(filePath, size);
-    QString cacheKey = description.cacheKey();
-
-    {
-        LoadingCache *cache = LoadingCache::cache();
-        LoadingCache::CacheLock lock(cache);
-        if (cache->retrieveThumbnailPixmap(cacheKey))
-            return;
-    }
-
-    {
-        QMutexLocker lock(&d->resultsMutex);
-        if (d->collectedResults.contains(cacheKey))
-            return;
-    }
-
-    load(description, true);
+    LoadingDescription description;
+    if (d->makeAndCheckDescription(&description, filePath, size))
+        load(description, true);
 }
 
 void ThumbnailLoadThread::load(const LoadingDescription& desc)
@@ -440,10 +455,8 @@ void ThumbnailLoadThread::load(const LoadingDescription& desc)
     load(desc, false);
 }
 
-void ThumbnailLoadThread::load(const LoadingDescription& constDescription, bool preload)
+void ThumbnailLoadThread::load(const LoadingDescription& description, bool preload)
 {
-    LoadingDescription description(constDescription);
-
     if (!checkSize(description.previewParameters.size))
         return;
 
