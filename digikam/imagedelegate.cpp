@@ -144,7 +144,7 @@ void ImageDelegate::paint(QPainter *p, const QStyleOptionViewItem& option, const
     QAbstractItemModel *model = const_cast<QAbstractItemModel*>(index.model());
     model->setData(index, d->thumbSize.size(), ImageModel::ThumbnailRole);
     QVariant thumbData = index.data(ImageModel::ThumbnailRole);
-    model->setData(index, d->thumbSize.size(), ImageModel::ThumbnailRole);
+    model->setData(index, QVariant(), ImageModel::ThumbnailRole);
 
     QRect actualPixmapRect = drawThumbnail(p, d->pixmapRect, pix, thumbData.value<QPixmap>());
     if (!actualPixmapRect.isNull())
