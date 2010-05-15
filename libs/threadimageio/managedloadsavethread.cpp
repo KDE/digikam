@@ -109,12 +109,13 @@ void ManagedLoadSaveThread::setTerminationPolicy(TerminationPolicy terminationPo
     m_terminationPolicy = terminationPolicy;
 }
 
-void ManagedLoadSaveThread::load(LoadingDescription description, LoadingPolicy policy)
+void ManagedLoadSaveThread::load(const LoadingDescription description, LoadingPolicy policy)
 {
     load(description, LoadingModeNormal, policy);
 }
 
-void ManagedLoadSaveThread::load(LoadingDescription description, LoadingMode loadingMode, LoadingPolicy policy, AccessMode accessMode)
+void ManagedLoadSaveThread::load(const LoadingDescription& description, LoadingMode loadingMode,
+                                 LoadingPolicy policy, AccessMode accessMode)
 {
     QMutexLocker lock(threadMutex());
     LoadingTask *loadingTask  = 0;
@@ -212,7 +213,7 @@ void ManagedLoadSaveThread::load(LoadingDescription description, LoadingMode loa
     start(lock);
 }
 
-void ManagedLoadSaveThread::loadPreview(LoadingDescription description)
+void ManagedLoadSaveThread::loadPreview(const LoadingDescription& description)
 {
     // This is similar to the LoadingPolicyFirstRemovePrevious policy with normal loading tasks.
     // Preview threads typically only support preview tasks,
@@ -250,7 +251,7 @@ void ManagedLoadSaveThread::loadPreview(LoadingDescription description)
     start(lock);
 }
 
-void ManagedLoadSaveThread::loadThumbnail(LoadingDescription description)
+void ManagedLoadSaveThread::loadThumbnail(const LoadingDescription& description)
 {
     // Thumbnail threads typically only support thumbnail tasks,
     // so no need to differentiate with normal loading tasks.
@@ -271,7 +272,7 @@ void ManagedLoadSaveThread::loadThumbnail(LoadingDescription description)
     start(lock);
 }
 
-void ManagedLoadSaveThread::preloadThumbnail(LoadingDescription description)
+void ManagedLoadSaveThread::preloadThumbnail(const LoadingDescription& description)
 {
     QMutexLocker lock(threadMutex());
     LoadingTask *existingTask = findExistingTask(description);
@@ -289,10 +290,38 @@ void ManagedLoadSaveThread::preloadThumbnail(LoadingDescription description)
     start(lock);
 }
 
-void ManagedLoadSaveThread::prependThumbnailGroup(QList<LoadingDescription> descriptions)
+void ManagedLoadSaveThread::preloadThumbnailGroup(const QList<LoadingDescription>& descriptions)
+{
+    if (descriptions.isEmpty())
+        return;
+    QMutexLocker lock(threadMutex());
+
+    foreach (const LoadingDescription &description, descriptions)
+    {
+        LoadingTask *existingTask = findExistingTask(description);
+
+        // reuse task if it exists
+        if (existingTask)
+            continue;
+
+        // create new loading task
+        ThumbnailLoadingTask *task = new ThumbnailLoadingTask(this, description);
+        // mark as preload task
+        task->setStatus(LoadingTask::LoadingTaskStatusPreloading);
+        // append to the end of the list
+        m_todo.append(task);
+    }
+    start(lock);
+}
+
+void ManagedLoadSaveThread::prependThumbnailGroup(const QList<LoadingDescription>& descriptions)
 {
     // This method is meant to prepend a group of loading tasks after the current task,
     // in the order they are given here, pushing the existing tasks to the back respectively removing double tasks.
+
+    if (descriptions.isEmpty())
+        return;
+
     QMutexLocker lock(threadMutex());
 
     int index = 0;
