@@ -64,7 +64,9 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 052 ==> 236425 : digiKam editor crashes when saving multiple images.
 053 ==> 237522 : Import doesn't rotate images according to exif orientation.
 054 ==> 237514 : digiKam fails to read the tag metadata when importing a digikam3.db database.
-055 ==> 
+055 ==> 237616 : Context menu "Move to Album" doesn't updated.
+056 ==> 
+
 
 
 
