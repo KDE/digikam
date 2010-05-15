@@ -114,6 +114,11 @@ public:
     QString getDatabasePath(const QString& dbFilePath) const;
     QString getThumbsDatabasePath(const QString& thumbsDbFilePath) const;
 
+    static QString databaseFileSQLite(const QString &folderOrFile);
+    static QString thumbnailDatabaseFileSQLite(const QString &folderOrFile);
+    static QString databaseDirectorySQLite(const QString& path);
+    static QString thumbnailDatabaseDirectorySQLite(const QString& path);
+
     /** Replaces databaseName with databaseNameThumbnails. */
     DatabaseParameters thumbnailParameters() const;
 

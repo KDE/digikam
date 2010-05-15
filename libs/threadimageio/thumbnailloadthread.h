@@ -113,10 +113,12 @@ public:
     void findGroup(const QStringList& filePaths, int size);
 
     /**
-     * Preload the thumbnail.
+     * Preload the thumbnail or thumbnail group.
      */
     void preload(const QString& filePath);
     void preload(const QString& filePath, int size);
+    void preloadGroup(const QStringList& filePaths);
+    void preloadGroup(const QStringList& filePaths, int size);
 
     /**
      * Load a thumbnail.

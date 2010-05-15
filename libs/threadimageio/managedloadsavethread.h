@@ -116,12 +116,13 @@ public:
 
 protected:
 
-    void load(LoadingDescription description, LoadingMode loadingMode,
+    void load(const LoadingDescription& description, LoadingMode loadingMode,
               LoadingPolicy policy = LoadingPolicyAppend, AccessMode mode = AccessModeReadWrite);
-    void loadPreview(LoadingDescription description);
-    void loadThumbnail(LoadingDescription description);
-    void preloadThumbnail(LoadingDescription description);
-    void prependThumbnailGroup(QList<LoadingDescription> descriptions);
+    void loadPreview(const LoadingDescription& description);
+    void loadThumbnail(const LoadingDescription& description);
+    void preloadThumbnail(const LoadingDescription& description);
+    void preloadThumbnailGroup(const QList<LoadingDescription>& descriptions);
+    void prependThumbnailGroup(const QList<LoadingDescription>& descriptions);
 
 private:
 

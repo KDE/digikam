@@ -48,6 +48,8 @@ public:
 
     ImageViewUtilities *utilities() const;
 
+    virtual void setThumbnailSize(const ThumbnailSize& size);
+
 public Q_SLOTS:
 
     void openInEditor(const ImageInfo& info);
