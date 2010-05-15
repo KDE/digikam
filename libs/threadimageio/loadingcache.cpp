@@ -177,14 +177,19 @@ void LoadingCache::setCacheSize(int megabytes)
 
 // --- Thumbnails ----
 
-const QImage *LoadingCache::retrieveThumbnail(const QString& cacheKey)
+const QImage *LoadingCache::retrieveThumbnail(const QString& cacheKey) const
 {
     return d->thumbnailImageCache[cacheKey];
 }
 
-const QPixmap *LoadingCache::retrieveThumbnailPixmap(const QString& cacheKey)
+const QPixmap *LoadingCache::retrieveThumbnailPixmap(const QString& cacheKey) const
 {
     return d->thumbnailPixmapCache[cacheKey];
+}
+
+bool LoadingCache::hasThumbnailPixmap(const QString& cacheKey) const
+{
+    return d->thumbnailPixmapCache.contains(cacheKey);
 }
 
 void LoadingCache::putThumbnail(const QString& cacheKey, const QImage& thumb, const QString& filePath)

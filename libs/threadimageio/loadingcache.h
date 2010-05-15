@@ -202,8 +202,10 @@ public:
      * Retrieves a thumbnail for the given filePath from the thumbnail cache,
      * or a 0 if the thumbnail is not found.
      */
-    const QImage *retrieveThumbnail(const QString& cacheKey);
-    const QPixmap *retrieveThumbnailPixmap(const QString& cacheKey);
+    const QImage *retrieveThumbnail(const QString& cacheKey) const;
+    const QPixmap *retrieveThumbnailPixmap(const QString& cacheKey) const;
+    bool hasThumbnailPixmap(const QString& cacheKey) const;
+
     /**
      * Puts a thumbnail into the thumbnail cache.
      */
