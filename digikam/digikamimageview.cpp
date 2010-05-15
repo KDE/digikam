@@ -82,6 +82,7 @@ DigikamImageView::DigikamImageView(QWidget *parent)
 
     imageAlbumModel()->setThumbnailLoadThread(ThumbnailLoadThread::defaultIconViewThread());
     setThumbnailSize((ThumbnailSize::Size)settings->getDefaultIconSize());
+    imageAlbumModel()->setPreloadThumbnails(true);
 
     imageModel()->setDragDropHandler(new ImageDragDropHandler(imageModel()));
     setDragEnabled(true);
