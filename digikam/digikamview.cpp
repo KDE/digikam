@@ -49,7 +49,7 @@
 #include "dzoombar.h"
 #include "imagealbummodel.h"
 #include "imageinfoalbumsjob.h"
-#include "imagepreviewview.h"
+#include "imagepreviewviewv2.h"
 #include "imagepropertiessidebardb.h"
 #include "imageviewutilities.h"
 #include "leftsidebarwidgets.h"
@@ -259,8 +259,6 @@ DigikamView::~DigikamView()
 
 void DigikamView::applySettings()
 {
-    d->albumWidgetStack->applySettings();
-
     foreach(SidebarWidget *sidebarWidget, d->leftSideBarWidgets)
     {
         sidebarWidget->applySettings();

@@ -34,6 +34,7 @@ INCLUDE_DIRECTORIES(
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/common
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/metadata
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/iccprofiles
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/graphicsview
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/imageproperties
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/dialogs
 
@@ -134,6 +135,7 @@ SET(digikamcore_LIB_SRCS
                         ${libmetadatawidgets_SRCS}
                         ${libdialogs_SRCS}
                         ${libimageproperties_SRCS}
+                        ${libgraphicsviewwidgets_SRCS}
 
                         # utilities
                         ${libslideshow_SRCS}

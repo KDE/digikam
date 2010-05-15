@@ -47,9 +47,10 @@
 #include "digikamview.h"
 #include "imagealbummodel.h"
 #include "imagealbumfiltermodel.h"
-#include "imagepreviewview.h"
+#include "imagepreviewviewv2.h"
 #include "imagethumbnailbar.h"
 #include "loadingcacheinterface.h"
+#include "previewlayout.h"
 #include "welcomepageview.h"
 #include "mediaplayerview.h"
 #include "thumbbardock.h"
@@ -84,7 +85,7 @@ public:
 
     DigikamImageView* imageIconView;
     ImageThumbnailBar*thumbBar;
-    ImagePreviewView* imagePreviewView;
+    ImagePreviewViewV2*imagePreviewView;
     MediaPlayerView*  mediaPlayerView;
     ThumbBarDock*     thumbBarDock;
     WelcomePageView*  welcomePageView;
@@ -94,7 +95,7 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
                 : QStackedWidget(parent), d(new AlbumWidgetStackPriv)
 {
     d->imageIconView    = new DigikamImageView(this);
-    d->imagePreviewView = new ImagePreviewView(this);
+    d->imagePreviewView = new ImagePreviewViewV2(this);
     d->thumbBarDock     = new ThumbBarDock();
     d->thumbBar         = new ImageThumbnailBar(d->thumbBarDock);
     d->thumbBar->setModels(d->imageIconView->imageModel(), d->imageIconView->imageFilterModel());
@@ -146,7 +147,7 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
     connect(d->imagePreviewView, SIGNAL(signalSlideShow()),
             this, SIGNAL(signalSlideShow()));
 
-    connect(d->imagePreviewView, SIGNAL(signalZoomFactorChanged(double)),
+    connect(d->imagePreviewView->layout(), SIGNAL(zoomFactorChanged(double)),
             this, SLOT(slotZoomFactorChanged(double)));
 
     connect(d->imagePreviewView, SIGNAL(signalInsert2LightTable()),
@@ -192,9 +193,6 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
 
     connect(d->mediaPlayerView, SIGNAL(signalBack2Album()),
             this, SIGNAL(signalBack2Album()));
-
-    LoadingCacheInterface::connectToSignalFileChanged(this,
-            SLOT(slotFileChanged(const QString&)));
 }
 
 AlbumWidgetStack::~AlbumWidgetStack()
@@ -234,7 +232,7 @@ DigikamImageView* AlbumWidgetStack::imageIconView()
     return d->imageIconView;
 }
 
-ImagePreviewView* AlbumWidgetStack::imagePreviewView()
+ImagePreviewViewV2* AlbumWidgetStack::imagePreviewView()
 {
     return d->imagePreviewView;
 }
@@ -338,21 +336,8 @@ void AlbumWidgetStack::slotZoomFactorChanged(double z)
         emit signalZoomFactorChanged(z);
 }
 
-void AlbumWidgetStack::slotFileChanged(const QString &path)
-{
-    // If item are updated from Icon View, and if we are in Preview Mode,
-    // We will check if the current item preview need to be reloaded.
-
-    if (previewMode() == PreviewAlbumMode ||
-        previewMode() == WelcomePageMode  ||
-        previewMode() == MediaPlayerMode)    // What we can do with media player ?
-        return;
-
-    if (path == imagePreviewView()->getImageInfo().filePath())
-        d->imagePreviewView->reload();
-}
-
 /*
+
 void AlbumWidgetStack::slotItemsAddedOrRemoved()
 {
     // do this before the check in the next line, to store this state in any case,
@@ -394,68 +379,62 @@ void AlbumWidgetStack::updateThumbbar()
 
 void AlbumWidgetStack::increaseZoom()
 {
-    d->imagePreviewView->slotIncreaseZoom();
+    d->imagePreviewView->layout()->increaseZoom();
 }
 
 void AlbumWidgetStack::decreaseZoom()
 {
-    d->imagePreviewView->slotDecreaseZoom();
+    d->imagePreviewView->layout()->decreaseZoom();
 }
 
 void AlbumWidgetStack::zoomTo100Percents()
 {
-    d->imagePreviewView->setZoomFactor(1.0);
+    d->imagePreviewView->layout()->setZoomFactor(1.0);
 }
 
 void AlbumWidgetStack::fitToWindow()
 {
-    d->imagePreviewView->fitToWindow();
+    d->imagePreviewView->layout()->fitToWindow();
 }
 
 void AlbumWidgetStack::toggleFitToWindowOr100()
 {
-    d->imagePreviewView->toggleFitToWindowOr100();
+    d->imagePreviewView->layout()->toggleFitToWindowOr100();
 }
 
 bool AlbumWidgetStack::maxZoom()
 {
-    return d->imagePreviewView->maxZoom();
+    return d->imagePreviewView->layout()->atMaxZoom();
 }
 
 bool AlbumWidgetStack::minZoom()
 {
-    return d->imagePreviewView->minZoom();
+    return d->imagePreviewView->layout()->atMinZoom();
 }
 
 void AlbumWidgetStack::setZoomFactor(double z)
 {
-    d->imagePreviewView->setZoomFactor(z);
+    d->imagePreviewView->layout()->setZoomFactor(z);
 }
 
 void AlbumWidgetStack::setZoomFactorSnapped(double z)
 {
-    d->imagePreviewView->setZoomFactorSnapped(z);
+    d->imagePreviewView->layout()->setZoomFactor(z);
 }
 
 double AlbumWidgetStack::zoomFactor()
 {
-    return d->imagePreviewView->zoomFactor();
+    return d->imagePreviewView->layout()->zoomFactor();
 }
 
 double AlbumWidgetStack::zoomMin()
 {
-    return d->imagePreviewView->zoomMin();
+    return d->imagePreviewView->layout()->minZoomFactor();
 }
 
 double AlbumWidgetStack::zoomMax()
 {
-    return d->imagePreviewView->zoomMax();
-}
-
-void AlbumWidgetStack::applySettings()
-{
-    AlbumSettings *settings = AlbumSettings::instance();
-    d->imagePreviewView->setLoadFullImageSize(settings->getPreviewLoadFullImageSize());
+    return d->imagePreviewView->layout()->maxZoomFactor();
 }
 
 }  // namespace Digikam
