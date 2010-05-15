@@ -90,7 +90,7 @@ public:
     ImageInfo nextInfo(const ImageInfo &info) { return nextInOrder(info, 1); }
 
     ThumbnailSize thumbnailSize() const;
-    void setThumbnailSize(const ThumbnailSize& size);
+    virtual void setThumbnailSize(const ThumbnailSize& size);
 
     /** If the model is categorized by an album, returns the album of the category
      *  that contains the position.

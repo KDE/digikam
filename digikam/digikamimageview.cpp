@@ -135,6 +135,12 @@ ImageViewUtilities *DigikamImageView::utilities() const
     return d->utilities;
 }
 
+void DigikamImageView::setThumbnailSize(const ThumbnailSize& size)
+{
+    imageThumbnailModel()->setPreloadThumbnailSize(size);
+    ImageCategorizedView::setThumbnailSize(size);
+}
+
 void DigikamImageView::slotSetupChanged()
 {
     setToolTipEnabled(AlbumSettings::instance()->showToolTipsIsValid());
