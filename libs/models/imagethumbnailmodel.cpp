@@ -27,6 +27,10 @@
 
 #include <QHash>
 
+// KDE includes
+
+#include <kdebug.h>
+
 // Local includes
 
 #include "thumbnailloadthread.h"
@@ -44,13 +48,22 @@ public:
         thread              = 0;
         thumbSize           = 0;
         lastGlobalThumbSize = 0;
+        preloadThumbSize    = 0;
         emitDataChanged     = true;
     }
 
     ThumbnailLoadThread       *thread;
     ThumbnailSize              thumbSize;
     ThumbnailSize              lastGlobalThumbSize;
+    ThumbnailSize              preloadThumbSize;
     bool                       emitDataChanged;
+
+    int preloadThumbnailSize() const
+    {
+        if (preloadThumbSize.size())
+            return preloadThumbSize.size();
+        return thumbSize.size();
+    }
 };
 
 ImageThumbnailModel::ImageThumbnailModel(QObject *parent)
@@ -88,9 +101,28 @@ void ImageThumbnailModel::setThumbnailSize(const ThumbnailSize& size)
     d->thumbSize = size;
 }
 
+void ImageThumbnailModel::setPreloadThumbnailSize(const ThumbnailSize& size)
+{
+    d->preloadThumbSize = size;
+}
+
 void ImageThumbnailModel::setEmitDataChanged(bool emitSignal)
 {
     d->emitDataChanged = emitSignal;
+}
+
+void ImageThumbnailModel::setPreloadThumbnails(bool preload)
+{
+    if (preload)
+    {
+        connect(this, SIGNAL(imageInfosAdded(const QList<ImageInfo>&)),
+                this, SLOT(preloadThumbnails(const QList<ImageInfo>&)));
+    }
+    else
+    {
+        disconnect(this, SIGNAL(imageInfosAdded(const QList<ImageInfo>&)),
+                   this, SLOT(preloadThumbnails(const QList<ImageInfo>&)));
+    }
 }
 
 void ImageThumbnailModel::prepareThumbnails(const QList<QModelIndex>& indexesToPrepare)
@@ -109,6 +141,32 @@ void ImageThumbnailModel::prepareThumbnails(const QList<QModelIndex>& indexesToP
         filePaths << imageInfoRef(index).filePath();
     }
     d->thread->findGroup(filePaths, thumbSize.size());
+}
+
+void ImageThumbnailModel::preloadThumbnails(const QList<ImageInfo>& infos)
+{
+    if (!d->thread)
+        return;
+
+    QStringList filePaths;
+    foreach(const ImageInfo& info, infos)
+    {
+        filePaths << info.filePath();
+    }
+    d->thread->preloadGroup(filePaths, d->preloadThumbnailSize());
+}
+
+void ImageThumbnailModel::preloadThumbnails(const QList<QModelIndex>& infos)
+{
+    if (!d->thread)
+        return;
+
+    QStringList filePaths;
+    foreach(const QModelIndex& index, infos)
+    {
+        filePaths << imageInfoRef(index).filePath();
+    }
+    d->thread->preloadGroup(filePaths, d->preloadThumbnailSize());
 }
 
 QVariant ImageThumbnailModel::data(const QModelIndex& index, int role) const
