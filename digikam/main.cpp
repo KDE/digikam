@@ -160,6 +160,8 @@ int main(int argc, char *argv[])
     {
         params = DatabaseParameters::parametersFromConfig(config);
         params.legacyAndDefaultChecks(firstAlbumPath);
+        // sync to config, for all first-run or upgrade situations
+        params.writeToConfig(config);
     }
 
     // initialize database
