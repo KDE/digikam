@@ -802,7 +802,7 @@ QSize DImg::originalSize() const
     if (m_priv->attributes.contains("originalSize"))
     {
         QSize size = m_priv->attributes.value("originalSize").toSize();
-        if (size.isValid())
+        if (size.isValid() && !size.isNull())
             return size;
     }
     return size();
