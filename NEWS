@@ -68,5 +68,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 056 ==> 237555 : digiKam crashed after moving two albums to the same destination album.
 057 ==> 219878 : Collection configuration: Configuration dialog is shown for 5 seconds after cancelling a scan for a new collection.
 058 ==> 232615 : Crash at closing image editor while importing raw.
-059 ==> 
+059 ==> 206127 : While saving data for multiple images, digikam blocks new changes.
+060 ==> 
+
 
