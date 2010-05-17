@@ -46,11 +46,13 @@ public:
     {
     }
 
-    void init(GraphicsDImgItem *q);
+    void init(GraphicsDImgItem* q);
 
-    DImg image;
+    DImg              image;
     ImageZoomSettings zoomSettings;
 };
+
+// -------------------------------------------------------------------------------
 
 class PreviewLoadThread;
 class DImgPreviewItem;
@@ -60,22 +62,22 @@ class DIGIKAM_EXPORT DImgPreviewItemPrivate : public GraphicsDImgItemPrivate
 public:
 
     DImgPreviewItemPrivate();
-    void init(DImgPreviewItem *q);
+    void init(DImgPreviewItem* q);
 
     DImgPreviewItem::State state;
-    bool               exifRotate;
-    int                previewSize;
+    bool                   exifRotate;
+    int                    previewSize;
 
-    QString            path;
-    bool               loadFullImageSize;
-    PreviewLoadThread *previewThread;
-    PreviewLoadThread *preloadThread;
-    QStringList        pathsToPreload;
+    QString                path;
+    bool                   loadFullImageSize;
+    PreviewLoadThread*     previewThread;
+    PreviewLoadThread*     preloadThread;
+    QStringList            pathsToPreload;
 };
 
-}
+} // namespace Digikam
 
-#endif
+#endif // DIMGITEMSPRIV_H
 
 
 
