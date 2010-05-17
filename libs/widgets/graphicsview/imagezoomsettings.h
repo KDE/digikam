@@ -39,6 +39,7 @@ namespace Digikam
 
 class DIGIKAM_EXPORT ImageZoomSettings
 {
+
 public:
 
     enum FitToSizeMode
@@ -46,6 +47,8 @@ public:
         AlwaysFit,
         OnlyScaleDown
     };
+
+public:
 
     ImageZoomSettings();
     ImageZoomSettings(const QSize& imageSize, const QSize& originalSize = QSize());
@@ -132,13 +135,11 @@ public:
 
 protected:
 
-
     QSizeF  m_size;
     double  m_zoom;
     double  m_zoomConst;
 };
 
-}
+} // namespace Digikam
 
-#endif
-
+#endif // IMAGEZOOMSETTINGS_H

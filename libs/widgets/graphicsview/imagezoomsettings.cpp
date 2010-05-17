@@ -42,12 +42,12 @@ namespace Digikam
 {
 
 ImageZoomSettings::ImageZoomSettings()
-    : m_zoom(1), m_zoomConst(1)
+                 : m_zoom(1), m_zoomConst(1)
 {
 }
 
 ImageZoomSettings::ImageZoomSettings(const QSize& imageSize, const QSize& originalSize)
-    : m_zoom(1), m_zoomConst(1)
+                 : m_zoom(1), m_zoomConst(1)
 {
     setImageSize(imageSize, originalSize);
 }
@@ -56,6 +56,7 @@ void ImageZoomSettings::setImageSize(const QSize& size, const QSize& originalSiz
 {
     kDebug() << size << originalSize;
     m_size = size;
+
     if (!originalSize.isNull() && originalSize.isValid())
         m_zoomConst = m_size.width() / double(originalSize.width());
     else
@@ -67,7 +68,7 @@ double ImageZoomSettings::zoomFactor() const
     return m_zoom * m_zoomConst;
 }
 
-QSizeF  ImageZoomSettings::imageSize() const
+QSizeF ImageZoomSettings::imageSize() const
 {
     return m_size;
 }
@@ -77,7 +78,7 @@ QSizeF ImageZoomSettings::originalImageSize() const
     return m_size / m_zoomConst;
 }
 
-QSizeF  ImageZoomSettings::zoomedSize() const
+QSizeF ImageZoomSettings::zoomedSize() const
 {
     return m_size * m_zoom;
 }
@@ -150,8 +151,10 @@ double ImageZoomSettings::snappedZoomStep(double nextZoom, const QSizeF& frameSi
     QList<double> snapValues;
     snapValues << 0.5;
     snapValues << 1.0;
+
     if (frameSize.isValid())
         snapValues << fitToSizeZoomFactor(frameSize);
+
     double currentZoom = zoomFactor();
     kDebug() << "From" << currentZoom << "to" << nextZoom << "case";
 
@@ -181,6 +184,7 @@ double ImageZoomSettings::snappedZoomFactor(double zoom, const QSizeF& frameSize
     QList<double> snapValues;
     snapValues << 0.5;
     snapValues << 1.0;
+
     if (frameSize.isValid())
         snapValues << fitToSizeZoomFactor(frameSize);
 
@@ -193,6 +197,4 @@ double ImageZoomSettings::snappedZoomFactor(double zoom, const QSizeF& frameSize
     return zoom;
 }
 
-
-}
-
+} // namespace Digikam
