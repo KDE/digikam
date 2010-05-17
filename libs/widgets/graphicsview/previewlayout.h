@@ -56,15 +56,17 @@ public:
     };
     Q_DECLARE_FLAGS(SetZoomFlags, SetZoomFlag)
 
-    SinglePhotoPreviewLayout(QObject *parent = 0);
+public:
+
+    SinglePhotoPreviewLayout(QObject* parent = 0);
     ~SinglePhotoPreviewLayout();
 
     /** Set the graphics view, and associated scene, to operate on. */
-    void setGraphicsView(QGraphicsView *view);
+    void setGraphicsView(QGraphicsView* view);
 
     /** Set the item to layout. For a SinglePhoto layout, typically,
      *  you can add only one item. */
-    void addItem(GraphicsDImgItem *item);
+    void addItem(GraphicsDImgItem* item);
 
     bool   isFitToWindow() const;
     double zoomFactor() const;
@@ -105,9 +107,9 @@ private:
 
     SinglePhotoPreviewLayoutPriv* const d;
 };
+
 Q_DECLARE_OPERATORS_FOR_FLAGS(SinglePhotoPreviewLayout::SetZoomFlags)
 
-}
+} // namespace Digikam
 
-#endif
-
+#endif // PREVIEWLAYOUT_H

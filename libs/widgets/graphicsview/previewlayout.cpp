@@ -46,45 +46,49 @@ public:
 
     SinglePhotoPreviewLayoutPriv()
     {
-        view = 0;
-        item = 0;
-        isFitToWindow = false;
-        previousZoom = 1;
-        zoomMultiplier       = 1.2;
-        minZoom              = 0.1;
-        maxZoom              = 12.0;
+        view           = 0;
+        item           = 0;
+        isFitToWindow  = false;
+        previousZoom   = 1;
+        zoomMultiplier = 1.2;
+        minZoom        = 0.1;
+        maxZoom        = 12.0;
     }
 
-    QGraphicsView *view;
-    GraphicsDImgItem *item;
+    QGraphicsView*    view;
+    GraphicsDImgItem* item;
 
-    bool isFitToWindow;
-    double previousZoom;
+    bool              isFitToWindow;
+    double            previousZoom;
 
-    double zoomMultiplier;
-    double maxZoom;
-    double minZoom;
+    double            zoomMultiplier;
+    double            maxZoom;
+    double            minZoom;
+
+public:
 
     ImageZoomSettings *zoomSettings() const
     {
         return item->zoomSettings();
     }
+
     QSizeF frameSize() const
     {
         kDebug() << view->maximumViewportSize();
         return view->maximumViewportSize();
     }
+
     QPointF zoomAnchor(const QPointF& given) const
     {
         if (!given.isNull())
             return given;
+
         return view->mapToScene(view->viewport()->rect().center());
     }
 };
 
-
-SinglePhotoPreviewLayout::SinglePhotoPreviewLayout(QObject *parent)
-    : QObject(parent), d(new SinglePhotoPreviewLayoutPriv)
+SinglePhotoPreviewLayout::SinglePhotoPreviewLayout(QObject* parent)
+                        : QObject(parent), d(new SinglePhotoPreviewLayoutPriv)
 {
 }
 
@@ -93,19 +97,21 @@ SinglePhotoPreviewLayout::~SinglePhotoPreviewLayout()
     delete d;
 }
 
-void SinglePhotoPreviewLayout::setGraphicsView(QGraphicsView *view)
+void SinglePhotoPreviewLayout::setGraphicsView(QGraphicsView* view)
 {
     d->view = view;
 }
 
-void SinglePhotoPreviewLayout::addItem(GraphicsDImgItem *item)
+void SinglePhotoPreviewLayout::addItem(GraphicsDImgItem* item)
 {
     if (d->item)
     {
         disconnect(d->item, SIGNAL(imageChanged()),
                    this, SLOT(updateZoomAndSize()));
     }
+
     d->item = item;
+
     if (d->item)
     {
         connect(d->item, SIGNAL(imageChanged()),
@@ -164,8 +170,8 @@ void SinglePhotoPreviewLayout::increaseZoom(const QPointF& center)
     QPointF anchor = d->zoomSettings()->mapZoomToImage(d->zoomAnchor(center));
 
     double zoom = d->zoomSettings()->zoomFactor() * d->zoomMultiplier;
-    zoom = qMin(zoom, d->maxZoom);
-    zoom = d->zoomSettings()->snappedZoomStep(zoom, d->frameSize());
+    zoom        = qMin(zoom, d->maxZoom);
+    zoom        = d->zoomSettings()->snappedZoomStep(zoom, d->frameSize());
     setZoomFactor(zoom);
 
     d->view->centerOn(d->zoomSettings()->mapImageToZoom(anchor));
@@ -177,10 +183,10 @@ void SinglePhotoPreviewLayout::decreaseZoom(const QPointF& center)
         return;
 
     QPointF anchor = d->zoomSettings()->mapZoomToImage(d->zoomAnchor(center));
+    double zoom    = d->zoomSettings()->zoomFactor() / d->zoomMultiplier;
+    zoom           = qMax(zoom, d->minZoom);
+    zoom           = d->zoomSettings()->snappedZoomStep(zoom, d->frameSize());
 
-    double zoom = d->zoomSettings()->zoomFactor() / d->zoomMultiplier;
-    zoom = qMax(zoom, d->minZoom);
-    zoom = d->zoomSettings()->snappedZoomStep(zoom, d->frameSize());
     setZoomFactor(zoom);
 
     d->view->centerOn(d->zoomSettings()->mapImageToZoom(anchor));
@@ -279,6 +285,4 @@ void SinglePhotoPreviewLayout::updateZoomAndSize()
     updateLayout();
 }
 
-
-}
-
+} // namespace Digikam
