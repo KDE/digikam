@@ -127,26 +127,32 @@ DImg::DImg(const QImage& image)
 {
     if (!image.isNull())
     {
-        QImage target = image.convertToFormat(QImage::Format_ARGB32);
+        QImage target;
+        if (image.format() == QImage::Format_RGB32 || image.format() == QImage::Format_ARGB32)
+            target = image;
+        else
+            target = image.convertToFormat(QImage::Format_ARGB32);
 
-        uint w      = target.width();
-        uint h      = target.height();
-        uchar* data = new uchar[w*h*4];
-        uint*  sptr = (uint*)target.bits();
-        uchar* dptr = data;
+        setImageData(true, image.width(), image.height(), false, image.hasAlphaChannel());
 
-        for (uint i = 0 ; i < w*h ; ++i)
+        if (allocateData())
         {
-            dptr[0] = qBlue(*sptr);
-            dptr[1] = qGreen(*sptr);
-            dptr[2] = qRed(*sptr);
-            dptr[3] = qAlpha(*sptr);
+            uint*  sptr = (uint*)target.bits();
+            uchar* dptr = m_priv->data;
+            const uint pixels = numPixels();
 
-            dptr += 4;
-            ++sptr;
+            for (uint i = 0 ; i < pixels ; ++i)
+            {
+                dptr[0] = qBlue(*sptr);
+                dptr[1] = qGreen(*sptr);
+                dptr[2] = qRed(*sptr);
+                dptr[3] = qAlpha(*sptr);
+
+                dptr += 4;
+                ++sptr;
+            }
         }
 
-        putImageData(w, h, false, image.hasAlphaChannel(), data, false);
     }
 }
 
