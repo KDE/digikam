@@ -41,31 +41,30 @@
 #include "dimgchilditem.h"
 #include "imagezoomsettings.h"
 
-
 namespace Digikam
 {
 
 
-GraphicsDImgItem::GraphicsDImgItem(QGraphicsItem *parent)
-    : QGraphicsItem(parent), d_ptr(new GraphicsDImgItemPrivate)
+GraphicsDImgItem::GraphicsDImgItem(QGraphicsItem* parent)
+                : QGraphicsItem(parent), d_ptr(new GraphicsDImgItemPrivate)
 {
     d_ptr->init(this);
 }
 
-GraphicsDImgItem::GraphicsDImgItem(GraphicsDImgItemPrivate& dd, QGraphicsItem *parent)
-    : QGraphicsItem(parent), d_ptr(&dd)
+GraphicsDImgItem::GraphicsDImgItem(GraphicsDImgItemPrivate& dd, QGraphicsItem* parent)
+                : QGraphicsItem(parent), d_ptr(&dd)
 {
     d_ptr->init(this);
 }
 
-void GraphicsDImgItemPrivate::init(GraphicsDImgItem *q)
+void GraphicsDImgItemPrivate::init(GraphicsDImgItem* q)
 {
     // ItemCoordinateCache is very slow, DeviceCoordinateCache makes severe render artifacts
     q->setCacheMode(QGraphicsItem::NoCache);
-    #if QT_VERSION >= 0x040600
+#if QT_VERSION >= 0x040600
     // This flag is crucial for our performance! Limits redrawing area.
     q->setFlag(QGraphicsItem::ItemUsesExtendedStyleOption);
-    #endif
+#endif
     q->setAcceptedMouseButtons(Qt::NoButton);
 }
 
@@ -94,9 +93,9 @@ void GraphicsDImgItem::sizeHasChanged()
 {
     QGraphicsItem::prepareGeometryChange();
 
-    foreach (QGraphicsItem *child, childItems())
+    foreach (QGraphicsItem* child, childItems())
     {
-        DImgChildItem *item = dynamic_cast<DImgChildItem*>(child);
+        DImgChildItem* item = dynamic_cast<DImgChildItem*>(child);
         if (item)
         {
             item->sizeHasChanged();
@@ -122,12 +121,12 @@ QRectF GraphicsDImgItem::boundingRect() const
     return QRectF(QPointF(0,0), d->zoomSettings.zoomedSize());
 }
 
-void GraphicsDImgItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget*)
+void GraphicsDImgItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget*)
 {
     Q_D(GraphicsDImgItem);
-    QRectF drawRect = option->exposedRect.intersected(boundingRect());
+    QRectF drawRect  = option->exposedRect.intersected(boundingRect());
     QRect sourceRect = d->zoomSettings.sourceRect(drawRect).toRect();
-    QSize destSize = drawRect.size().toSize();
+    QSize destSize   = drawRect.size().toSize();
     kDebug() << sourceRect << drawRect << drawRect.topLeft().toPoint() << destSize;
     DImg scaledImage = d->image.smoothScaleSection(sourceRect.x(), sourceRect.y(),
                                                    sourceRect.width(), sourceRect.height(),
@@ -148,7 +147,6 @@ void GraphicsDImgItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *
         setImage(DImg(pix.toImage()));
     */
 }
-
 
 /*
 void ImagePreviewViewV2::viewportPaintExtraData()
@@ -187,5 +185,4 @@ void ImagePreviewViewV2::viewportPaintExtraData()
 }
 */
 
-}
-
+} // namespace Digikam

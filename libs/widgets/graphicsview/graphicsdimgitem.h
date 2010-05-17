@@ -47,7 +47,7 @@ class DIGIKAM_EXPORT GraphicsDImgItem : public QObject, public QGraphicsItem
 
 public:
 
-    GraphicsDImgItem(QGraphicsItem *parent = 0);
+    GraphicsDImgItem(QGraphicsItem* parent = 0);
     ~GraphicsDImgItem();
 
     /**
@@ -57,12 +57,12 @@ public:
     void setImage(const DImg& img);
     DImg image() const;
 
-    const ImageZoomSettings *zoomSettings() const;
-    ImageZoomSettings *zoomSettings();
+    const ImageZoomSettings* zoomSettings() const;
+    ImageZoomSettings* zoomSettings();
 
     void sizeHasChanged();
     virtual QRectF boundingRect() const;
-    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+    virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
 
 Q_SIGNALS:
 
@@ -70,15 +70,14 @@ Q_SIGNALS:
 
 protected:
 
-    GraphicsDImgItem(GraphicsDImgItemPrivate &dd, QGraphicsItem *parent);
-    GraphicsDImgItemPrivate *const d_ptr;
+    GraphicsDImgItem(GraphicsDImgItemPrivate& dd, QGraphicsItem* parent);
+    GraphicsDImgItemPrivate* const d_ptr;
 
 private:
 
     Q_DECLARE_PRIVATE(GraphicsDImgItem)
 };
 
-}
+} // namespace Digikam
 
-#endif
-
+#endif // GRAPHICSDIMGITEM_H
