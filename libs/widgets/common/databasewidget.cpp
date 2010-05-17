@@ -7,7 +7,7 @@
  * Description : database migration dialog
  *
  * Copyright (C) 2009-2010 by Holger Foerster <Hamsi2k at freenet dot de>
- * Copyright (C) 2010 by Gilles Caulier<caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -36,6 +36,7 @@
 
 // KDE includes
 
+#include <kapplication.h>
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <kdebug.h>
@@ -44,8 +45,8 @@
 
 // Local includes
 
-#include <databaseparameters.h>
-#include <databaseserverstarter.h>
+#include "databaseparameters.h"
+#include "databaseserverstarter.h"
 
 namespace Digikam
 {
@@ -248,6 +249,10 @@ void DatabaseWidget::slotHandleInternalServerCheckbox(int enableFields)
 
 void DatabaseWidget::checkDatabaseConnection()
 {
+    // TODO : if chek DB connection operations can be threaded, use DBusyDlg dialog there...
+
+    kapp->setOverrideCursor(Qt::WaitCursor);
+
     QString databaseID("ConnectionTest");
     QSqlDatabase testDatabase     = QSqlDatabase::addDatabase(databaseType->currentText(), databaseID);
     DatabaseParameters parameters = getDatabaseParameters();
@@ -257,8 +262,11 @@ void DatabaseWidget::checkDatabaseConnection()
     testDatabase.setPassword(parameters.password);
     testDatabase.setConnectOptions(parameters.connectOptions);
 
+    kapp->restoreOverrideCursor();
+
     bool result = testDatabase.open();
-    if (result == true)
+
+    if (result)
     {
         KMessageBox::information(0, i18n("Database connection test successful."), i18n("Database connection test"));
     }
@@ -267,6 +275,7 @@ void DatabaseWidget::checkDatabaseConnection()
         KMessageBox::error(0, i18n("Database connection test was not successful. <p>Error was: %1</p>",
                                    testDatabase.lastError().text()), i18n("Database connection test") );
     }
+
     testDatabase.close();
     QSqlDatabase::removeDatabase(databaseID);
 }
