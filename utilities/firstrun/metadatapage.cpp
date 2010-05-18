@@ -6,7 +6,7 @@
  * Date        : 2009-28-04
  * Description : first run assistant dialog
  *
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -63,16 +63,16 @@ MetadataPage::MetadataPage(KAssistantDialog* dlg)
             : AssistantDlgPage(dlg, i18n("<b>Configure Metadata Storage to Files</b>")), 
               d(new MetadataPagePriv)
 {
-    KVBox *vbox    = new KVBox(this);
-    QLabel *label1 = new QLabel(vbox);
+    KVBox* vbox    = new KVBox(this);
+    QLabel* label1 = new QLabel(vbox);
     label1->setWordWrap(true);
     label1->setText(i18n("<qt>"
                          "<p>Set here if you want to store the information assigned to items in digiKam in the files' "
                          "metadata, to improve interoperability with others photo management programs:</p>"
                          "</qt>"));
 
-    QWidget *btns      = new QWidget(vbox);
-    QVBoxLayout *vlay  = new QVBoxLayout(btns);
+    QWidget* btns      = new QWidget(vbox);
+    QVBoxLayout* vlay  = new QVBoxLayout(btns);
 
     d->metadataStorage = new QButtonGroup(btns);
     d->doNothing       = new QRadioButton(btns);
@@ -89,7 +89,7 @@ MetadataPage::MetadataPage(KAssistantDialog* dlg)
     vlay->setMargin(KDialog::spacingHint());
     vlay->setSpacing(KDialog::spacingHint());
 
-    QLabel *label2 = new QLabel(vbox);
+    QLabel* label2 = new QLabel(vbox);
     label2->setWordWrap(true);
     label2->setText(i18n("<qt>"
                          "<p><i>Note:</i> recording information to the files' metadata can slow down photo "

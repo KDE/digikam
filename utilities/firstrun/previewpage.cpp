@@ -6,7 +6,7 @@
  * Date        : 2009-28-04
  * Description : first run assistant dialog
  *
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -63,15 +63,15 @@ PreviewPage::PreviewPage(KAssistantDialog* dlg)
            : AssistantDlgPage(dlg, i18n("<b>Configure Preview Behavior</b>")), 
              d(new PreviewPagePriv)
 {
-    KVBox *vbox    = new KVBox(this);
-    QLabel *label1 = new QLabel(vbox);
+    KVBox* vbox    = new KVBox(this);
+    QLabel* label1 = new QLabel(vbox);
     label1->setWordWrap(true);
     label1->setText(i18n("<qt>"
                          "<p>Set here how images are displayed in preview mode and on the light table:</p>"
                          "</qt>"));
 
-    QWidget *btns      = new QWidget(vbox);
-    QVBoxLayout *vlay  = new QVBoxLayout(btns);
+    QWidget* btns      = new QWidget(vbox);
+    QVBoxLayout* vlay  = new QVBoxLayout(btns);
 
     d->previewBehavour = new QButtonGroup(btns);
     d->loadReduced     = new QRadioButton(btns);
@@ -88,7 +88,7 @@ PreviewPage::PreviewPage(KAssistantDialog* dlg)
     vlay->setMargin(KDialog::spacingHint());
     vlay->setSpacing(KDialog::spacingHint());
 
-    QLabel *label2 = new QLabel(vbox);
+    QLabel* label2 = new QLabel(vbox);
     label2->setWordWrap(true);
     label2->setText(i18n("<qt>"
                          "<p><i>Note:</i> loading a reduced version of an image is faster but can differ "
@@ -113,10 +113,10 @@ void PreviewPage::saveSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
 
-    KConfigGroup group = config->group("Album Settings");
+    KConfigGroup group        = config->group("Album Settings");
     group.writeEntry("Preview Load Full Image Size", d->loadimage->isChecked());
 
-    group = config->group(QString("LightTable Settings"));
+    group                     = config->group(QString("LightTable Settings"));
     group.writeEntry("Load Full Image size", d->loadimage->isChecked());
 
     config->sync();

@@ -6,7 +6,7 @@
  * Date        : 2009-28-04
  * Description : first run assistant dialog
  *
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -63,15 +63,15 @@ RawPage::RawPage(KAssistantDialog* dlg)
        : AssistantDlgPage(dlg, i18n("<b>Configure Raw File Handling</b>")), 
          d(new RawPagePriv)
 {
-    KVBox *vbox    = new KVBox(this);
-    QLabel *label1 = new QLabel(vbox);
+    KVBox* vbox    = new KVBox(this);
+    QLabel* label1 = new QLabel(vbox);
     label1->setWordWrap(true);
     label1->setText(i18n("<qt>"
                         "<p>Set here how you want to open Raw images in the editor:</p>"
                         "</qt>"));
 
-    QWidget *btns     = new QWidget(vbox);
-    QVBoxLayout *vlay = new QVBoxLayout(btns);
+    QWidget* btns     = new QWidget(vbox);
+    QVBoxLayout* vlay = new QVBoxLayout(btns);
 
     d->rawHandling    = new QButtonGroup(btns);
     d->openDirectly   = new QRadioButton(btns);
@@ -88,7 +88,7 @@ RawPage::RawPage(KAssistantDialog* dlg)
     vlay->setMargin(KDialog::spacingHint());
     vlay->setSpacing(KDialog::spacingHint());
 
-    QLabel *label2 = new QLabel(vbox);
+    QLabel* label2 = new QLabel(vbox);
     label2->setWordWrap(true);
     label2->setText(i18n("<qt>"
                          "<p><i>Note:</i> the Raw import tool is designed for advanced users who "
