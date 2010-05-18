@@ -41,6 +41,7 @@ namespace Digikam
 
 class SinglePhotoPreviewLayoutPriv;
 class GraphicsDImgItem;
+class GraphicsDImgView;
 
 class DIGIKAM_EXPORT SinglePhotoPreviewLayout : public QObject
 {
@@ -62,7 +63,7 @@ public:
     ~SinglePhotoPreviewLayout();
 
     /** Set the graphics view, and associated scene, to operate on. */
-    void setGraphicsView(QGraphicsView* view);
+    void setGraphicsView(GraphicsDImgView* view);
 
     /** Set the item to layout. For a SinglePhoto layout, typically,
      *  you can add only one item. */
@@ -86,9 +87,10 @@ Q_SIGNALS:
 
 public Q_SLOTS:
 
-    void increaseZoom(const QPointF& anchor = QPointF());
-    void decreaseZoom(const QPointF& anchor = QPointF());
+    void increaseZoom(const QPoint& viewportAnchor = QPoint());
+    void decreaseZoom(const QPoint& viewportAnchor = QPoint());
     void setZoomFactor(double z, SetZoomFlags flags = JustSetFactor);
+    void setZoomFactor(double z, const QPoint& viewportAnchor, SetZoomFlags flags = JustSetFactor);
     void setZoomFactorSnapped(double z);
     void fitToWindow();
     /// Toggle between fitToWindow and previous zoom factor

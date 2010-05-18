@@ -35,6 +35,7 @@
 // Local includes
 
 #include "graphicsdimgitem.h"
+#include "graphicsdimgview.h"
 #include "imagezoomsettings.h"
 
 namespace Digikam
@@ -55,7 +56,7 @@ public:
         maxZoom        = 12.0;
     }
 
-    QGraphicsView*    view;
+    GraphicsDImgView* view;
     GraphicsDImgItem* item;
 
     bool              isFitToWindow;
@@ -76,14 +77,6 @@ public:
     {
         return view->maximumViewportSize();
     }
-
-    QPointF zoomAnchor(const QPointF& given) const
-    {
-        if (!given.isNull())
-            return given;
-
-        return view->mapToScene(view->viewport()->rect().center());
-    }
 };
 
 SinglePhotoPreviewLayout::SinglePhotoPreviewLayout(QObject* parent)
@@ -96,7 +89,7 @@ SinglePhotoPreviewLayout::~SinglePhotoPreviewLayout()
     delete d;
 }
 
-void SinglePhotoPreviewLayout::setGraphicsView(QGraphicsView* view)
+void SinglePhotoPreviewLayout::setGraphicsView(GraphicsDImgView* view)
 {
     d->view = view;
 }
@@ -161,39 +154,45 @@ void SinglePhotoPreviewLayout::setMinZoomFactor(double z)
     d->minZoom = z;
 }
 
-void SinglePhotoPreviewLayout::increaseZoom(const QPointF& center)
+void SinglePhotoPreviewLayout::increaseZoom(const QPoint& viewportAnchor)
 {
     if (!d->item || !d->view)
         return;
-
-    QPointF anchor = d->zoomSettings()->mapZoomToImage(d->zoomAnchor(center));
 
     double zoom = d->zoomSettings()->zoomFactor() * d->zoomMultiplier;
     zoom        = qMin(zoom, d->maxZoom);
     zoom        = d->zoomSettings()->snappedZoomStep(zoom, d->frameSize());
-    setZoomFactor(zoom);
-
-    d->view->centerOn(d->zoomSettings()->mapImageToZoom(anchor));
+    setZoomFactor(zoom, viewportAnchor);
 }
 
-void SinglePhotoPreviewLayout::decreaseZoom(const QPointF& center)
+void SinglePhotoPreviewLayout::decreaseZoom(const QPoint& viewportAnchor)
 {
     if (!d->item || !d->view)
         return;
 
-    QPointF anchor = d->zoomSettings()->mapZoomToImage(d->zoomAnchor(center));
     double zoom    = d->zoomSettings()->zoomFactor() / d->zoomMultiplier;
     zoom           = qMax(zoom, d->minZoom);
     zoom           = d->zoomSettings()->snappedZoomStep(zoom, d->frameSize());
-
-    setZoomFactor(zoom);
-
-    d->view->centerOn(d->zoomSettings()->mapImageToZoom(anchor));
+    setZoomFactor(zoom, viewportAnchor);
 }
 
 void SinglePhotoPreviewLayout::setZoomFactorSnapped(double z)
 {
     setZoomFactor(z, SnapZoomFactor);
+}
+
+void SinglePhotoPreviewLayout::setZoomFactor(double z, const QPoint& givenAnchor, SetZoomFlags flags)
+{
+    if (!d->item || !d->view)
+        return;
+
+    QPoint  viewportAnchor = givenAnchor.isNull() ? d->view->viewport()->rect().center() : givenAnchor;
+    QPointF sceneAnchor = d->view->mapToScene(viewportAnchor);
+    QPointF imageAnchor = d->zoomSettings()->mapZoomToImage(sceneAnchor);
+
+    setZoomFactor(z, flags);
+
+    d->view->scrollPointOnPoint(d->zoomSettings()->mapImageToZoom(imageAnchor), viewportAnchor);
 }
 
 void SinglePhotoPreviewLayout::setZoomFactor(double z, SetZoomFlags flags)
@@ -203,8 +202,6 @@ void SinglePhotoPreviewLayout::setZoomFactor(double z, SetZoomFlags flags)
 
     if (flags & SnapZoomFactor)
         z = d->zoomSettings()->snappedZoomFactor(z, d->frameSize());
-
-    //TODO: CenterView, keep center
 
     d->isFitToWindow = false;
     d->previousZoom  = d->zoomSettings()->zoomFactor();
@@ -216,6 +213,12 @@ void SinglePhotoPreviewLayout::setZoomFactor(double z, SetZoomFlags flags)
 
     emit fitToWindowToggled(d->isFitToWindow);
     emit zoomFactorChanged(d->zoomSettings()->zoomFactor());
+
+    if (flags & CenterView)
+    {
+        d->view->centerOn(d->view->scene()->sceneRect().width() / 2.0,
+                          d->view->scene()->sceneRect().height() / 2.0);
+    }
 }
 
 void SinglePhotoPreviewLayout::fitToWindow()
