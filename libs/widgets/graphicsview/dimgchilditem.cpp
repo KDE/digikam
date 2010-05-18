@@ -23,12 +23,9 @@
 
 #include "dimgchilditem.h"
 
-// Qt includes
-
 // Local includes
 
 #include "graphicsdimgitem.h"
-
 
 namespace Digikam
 {
@@ -38,8 +35,8 @@ class SimpleRectChildItem : public DImgChildItem
 {
 public:
 
-    /* * This is a simple example. Just create
-     *   new SimpleRectChildItem(item);
+    / ** This is a simple example. Just create
+     *  new SimpleRectChildItem(item);
      *  where item is a GrahpicsDImgItem,
      *  and at the center of the image,
      *  a rectangle of 1% the size of the image will be drawn.
@@ -71,8 +68,8 @@ public:
     QSizeF  relativeSize;
 };
 
-DImgChildItem::DImgChildItem(QGraphicsItem *parent)
-    : QGraphicsItem(parent), d(new DImgChildItemPriv)
+DImgChildItem::DImgChildItem(QGraphicsItem* parent)
+             : QGraphicsItem(parent), d(new DImgChildItemPriv)
 {
 }
 
@@ -129,5 +126,4 @@ QVariant DImgChildItem::itemChange(GraphicsItemChange change, const QVariant &va
 }
 */
 
-}
-
+} // namespace Digikam

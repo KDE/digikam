@@ -49,7 +49,7 @@ public:
      * From the set relative size, the boundingRect() is calculated.
      */
 
-    DImgChildItem(QGraphicsItem *parent = 0);
+    DImgChildItem(QGraphicsItem* parent = 0);
     ~DImgChildItem();
 
     /**
@@ -58,7 +58,7 @@ public:
      * Calls setPos() accordingly.
      */
     void setRelativePos(const QPointF& relativePosition);
-    void setRelativePos(qreal x, qreal y) { setRelativePos(QPointF(x,y)); }
+    void setRelativePos(qreal x, qreal y) { setRelativePos(QPointF(x, y)); }
 
     /**
      * Sets the size of this item, relative to the DImg displayed in the parent item.
@@ -86,7 +86,6 @@ private:
     DImgChildItemPriv *const d;
 };
 
-}
+} // namespace Digikam
 
-#endif
-
+#endif // DIMGCHILDITEM_H
