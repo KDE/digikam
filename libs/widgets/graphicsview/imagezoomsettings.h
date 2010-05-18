@@ -135,9 +135,9 @@ public:
 
 protected:
 
-    QSizeF  m_size;
-    double  m_zoom;
-    double  m_zoomConst;
+    QSizeF m_size;
+    double m_zoom;
+    double m_zoomConst;
 };
 
 } // namespace Digikam
