@@ -952,18 +952,21 @@ QString DMetadata::getLensDescription() const
 {
     QString lens;
     QStringList lensExifTags;
-    lensExifTags.append("Exif.CanonCs.Lens");        // Canon Cameras Makernote.
-    lensExifTags.append("Exif.Canon.0x0095");        // Alternative Canon Cameras Makernote.
+
+    lensExifTags.append("Exif.CanonCs.Lens");          // Canon Cameras Makernote.
+    lensExifTags.append("Exif.Canon.0x0095");          // Alternative Canon Cameras Makernote.
     lensExifTags.append("Exif.NikonLd1.LensIDNumber"); // Nikon Cameras Makernote.
     lensExifTags.append("Exif.NikonLd2.LensIDNumber"); // Nikon Cameras Makernote.
     lensExifTags.append("Exif.NikonLd3.LensIDNumber"); // Nikon Cameras Makernote.
-    lensExifTags.append("Exif.Minolta.LensID");      // Minolta Cameras Makernote.
-    lensExifTags.append("Exif.Pentax.LensType");     // Pentax Cameras Makernote.
-    lensExifTags.append("Exif.Panasonic.0x0051");    // Panasonic Cameras Makernote.
-    lensExifTags.append("Exif.Panasonic.0x0310");    // Panasonic Cameras Makernote.
-    lensExifTags.append("Exif.Sigma.LensRange");     // Sigma Cameras Makernote.
-    lensExifTags.append("Exif.Photo.0xFDEA");        // Nonstandard Exif tag set by Camera Raw.
-    // TODO : add Fuji, Olympus, Sony Cameras Makernotes.
+    lensExifTags.append("Exif.Minolta.LensID");        // Minolta Cameras Makernote.
+    lensExifTags.append("Exif.Sony2.LensID");        // Minolta Cameras Makernote.
+    lensExifTags.append("Exif.Pentax.LensType");       // Pentax Cameras Makernote.
+    lensExifTags.append("Exif.Panasonic.0x0051");      // Panasonic Cameras Makernote.
+    lensExifTags.append("Exif.Panasonic.0x0310");      // Panasonic Cameras Makernote.
+    lensExifTags.append("Exif.Sigma.LensRange");       // Sigma Cameras Makernote.
+    lensExifTags.append("Exif.Photo.0xFDEA");          // Nonstandard Exif tag set by Camera Raw.
+
+    // TODO : add Fuji, Olympus, Cameras Makernotes.
 
     // -------------------------------------------------------------------
     // Try to get Lens Data information from Exif.
