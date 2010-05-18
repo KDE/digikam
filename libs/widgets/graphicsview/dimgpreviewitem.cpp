@@ -38,7 +38,6 @@
 #include "loadingdescription.h"
 #include "previewloadthread.h"
 
-
 namespace Digikam
 {
 
@@ -51,21 +50,21 @@ DImgPreviewItemPrivate::DImgPreviewItemPrivate()
     previewThread     = 0;
 }
 
-DImgPreviewItem::DImgPreviewItem(QGraphicsItem *parent)
-    : GraphicsDImgItem(*new DImgPreviewItemPrivate, parent)
+DImgPreviewItem::DImgPreviewItem(QGraphicsItem* parent)
+               : GraphicsDImgItem(*new DImgPreviewItemPrivate, parent)
 {
     Q_D(DImgPreviewItem);
     d->init(this);
 }
 
-DImgPreviewItem::DImgPreviewItem(DImgPreviewItemPrivate &dd, QGraphicsItem *parent)
-    : GraphicsDImgItem(dd, parent)
+DImgPreviewItem::DImgPreviewItem(DImgPreviewItemPrivate& dd, QGraphicsItem* parent)
+               : GraphicsDImgItem(dd, parent)
 {
     Q_D(DImgPreviewItem);
     d->init(this);
 }
 
-void DImgPreviewItemPrivate::init(DImgPreviewItem *q)
+void DImgPreviewItemPrivate::init(DImgPreviewItem* q)
 {
     previewThread = new PreviewLoadThread;
     preloadThread = new PreviewLoadThread;
@@ -85,7 +84,7 @@ void DImgPreviewItemPrivate::init(DImgPreviewItem *q)
         previewSize = 2560;
 
     LoadingCacheInterface::connectToSignalFileChanged(q,
-            SLOT(slotFileChanged(const QString&)));
+        SLOT(slotFileChanged(const QString&)));
 }
 
 DImgPreviewItem::~DImgPreviewItem()
@@ -94,7 +93,7 @@ DImgPreviewItem::~DImgPreviewItem()
     delete d->previewThread;
 }
 
-void DImgPreviewItem::setDisplayingWidget(QWidget *widget)
+void DImgPreviewItem::setDisplayingWidget(QWidget* widget)
 {
     Q_D(DImgPreviewItem);
     d->previewThread->setDisplayingWidget(widget);
@@ -177,6 +176,7 @@ void DImgPreviewItem::slotGotImagePreview(const LoadingDescription& description,
         return;
 
     setImage(image);
+
     if (image.isNull())
     {
         d->state = ImageLoadingFailed;
@@ -196,6 +196,7 @@ void DImgPreviewItem::preloadNext()
         return;
 
     QString preloadPath = d->pathsToPreload.takeFirst();
+
     if (d->loadFullImageSize)
         d->preloadThread->loadHighQuality(preloadPath, d->exifRotate);
     else
@@ -209,5 +210,4 @@ void DImgPreviewItem::slotFileChanged(const QString& path)
         reload();
 }
 
-}
-
+} // namespace Digikam

@@ -56,10 +56,12 @@ public:
         ImageLoadingFailed
     };
 
-    DImgPreviewItem(QGraphicsItem *parent = 0);
+public:
+
+    DImgPreviewItem(QGraphicsItem* parent = 0);
     ~DImgPreviewItem();
 
-    void setDisplayingWidget(QWidget *widget);
+    void setDisplayingWidget(QWidget* widget);
     void setLoadFullImageSize(bool b);
     void setExifRotate(bool rotate);
 
@@ -79,7 +81,7 @@ Q_SIGNALS:
 
 protected:
 
-    DImgPreviewItem(DImgPreviewItemPrivate &dd, QGraphicsItem *parent = 0);
+    DImgPreviewItem(DImgPreviewItemPrivate& dd, QGraphicsItem* parent = 0);
 
 private Q_SLOTS:
 
@@ -92,7 +94,6 @@ private:
     Q_DECLARE_PRIVATE(DImgPreviewItem);
 };
 
-}
+} // namespace Digikam
 
-#endif
-
+#endif // DIMGPREVIEWITEM_H
