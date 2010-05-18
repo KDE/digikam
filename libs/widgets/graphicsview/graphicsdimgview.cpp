@@ -139,13 +139,12 @@ void GraphicsDImgView::mouseDoubleClickEvent(QMouseEvent* e)
 void GraphicsDImgView::mousePressEvent(QMouseEvent* e)
 {
     QGraphicsView::mousePressEvent(e);
-    kDebug() << e->isAccepted();
-
-    if (e->isAccepted())
-        return;
 
     d->mousePressPos    = QPoint();
     d->movingInProgress = false;
+
+    if (e->isAccepted())
+        return;
 
     if (e->button() == Qt::LeftButton || e->button() == Qt::MidButton)
     {
@@ -180,20 +179,16 @@ void GraphicsDImgView::mouseReleaseEvent(QMouseEvent* e)
 {
     QGraphicsView::mouseReleaseEvent(e);
 
-    kDebug() << bool(e->button() == Qt::LeftButton) << d->mousePressPos << d->movingInProgress;
-
     if ((e->button() == Qt::LeftButton || e->button() == Qt::MidButton) && !d->mousePressPos.isNull())
     {
         if (!d->movingInProgress && e->button() == Qt::LeftButton)
         {
-            kDebug() << "emit leftButtonClicked";
             emit leftButtonClicked();
             if (KGlobalSettings::singleClick())
                 emit activated();
         }
         else
         {
-            kDebug() << "finishPanning called";
             finishPanning();
         }
     }
