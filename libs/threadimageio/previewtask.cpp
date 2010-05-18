@@ -224,6 +224,10 @@ void PreviewLoadingTask::execute()
             // convert from QImage
             m_img = DImg(qimage);
 
+            DImg::FORMAT format = DImg::fileFormat(m_loadingDescription.filePath);
+            m_img.setAttribute("detectedFileFormat", format);
+            m_img.setAttribute("originalFilePath", m_loadingDescription.filePath);
+
             DMetadata metadata(m_loadingDescription.filePath);
             #if KEXIV2_VERSION >= 0x010100
             m_img.setAttribute("originalSize", metadata.getPixelSize());
@@ -300,6 +304,10 @@ void PreviewLoadingTask::execute()
         {
             // convert from QImage
             m_img = DImg(qimage);
+
+            DImg::FORMAT format = DImg::fileFormat(m_loadingDescription.filePath);
+            m_img.setAttribute("detectedFileFormat", format);
+            m_img.setAttribute("originalFilePath", m_loadingDescription.filePath);
 
             DMetadata metadata(m_loadingDescription.filePath);
             #if KEXIV2_VERSION >= 0x010100
