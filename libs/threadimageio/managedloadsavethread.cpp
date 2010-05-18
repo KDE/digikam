@@ -86,7 +86,7 @@ LoadingTask *ManagedLoadSaveThread::findExistingTask(const LoadingDescription& l
         if (m_currentTask->type() == LoadSaveTask::TaskTypeLoading)
         {
             loadingTask = (LoadingTask *)m_currentTask;
-            LoadingDescription taskDescription = loadingTask->loadingDescription();
+            const LoadingDescription& taskDescription = loadingTask->loadingDescription();
             if (taskDescription == loadingDescription)
                 return loadingTask;
         }

@@ -106,7 +106,7 @@ public:
         return m_loadingDescription.filePath;
     }
 
-    LoadingDescription loadingDescription() const
+    const LoadingDescription& loadingDescription() const
     {
         return m_loadingDescription;
     }
