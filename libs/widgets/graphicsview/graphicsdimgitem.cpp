@@ -45,14 +45,24 @@ namespace Digikam
 {
 
 
-GraphicsDImgItem::GraphicsDImgItem(QGraphicsItem* parent)
-                : QGraphicsItem(parent), d_ptr(new GraphicsDImgItemPrivate)
+GraphicsDImgItem::GraphicsDImgItem(QGraphicsItem *parent)
+#if QT_VERSION >= 0x040600
+                : QGraphicsObject(parent),
+#else
+                : QGraphicsItem(parent),
+#endif
+                  d_ptr(new GraphicsDImgItemPrivate)
 {
     d_ptr->init(this);
 }
 
 GraphicsDImgItem::GraphicsDImgItem(GraphicsDImgItemPrivate& dd, QGraphicsItem* parent)
-                : QGraphicsItem(parent), d_ptr(&dd)
+#if QT_VERSION >= 0x040600
+                : QGraphicsObject(parent),
+#else
+                : QGraphicsItem(parent),
+#endif
+                  d_ptr(&dd)
 {
     d_ptr->init(this);
 }

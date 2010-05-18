@@ -26,6 +26,11 @@
 
 // Qt includes
 
+#include <QtGlobal>
+#if QT_VERSION >= 0x040600
+#include <QGraphicsObject>
+#endif
+
 #include <QGraphicsItem>
 #include <QObject>
 
@@ -40,12 +45,14 @@ class DImg;
 class GraphicsDImgItemPrivate;
 class ImageZoomSettings;
 
-class DIGIKAM_EXPORT GraphicsDImgItem : public QObject, public QGraphicsItem
+class DIGIKAM_EXPORT GraphicsDImgItem
+#if QT_VERSION >= 0x040600
+    : public QGraphicsObject
+#else
+    : public QObject, public QGraphicsItem
+#endif
 {
     Q_OBJECT
-#if QT_VERSION >= 0x040600
-    Q_INTERFACES(QGraphicsItem)
-#endif
 
 public:
 
