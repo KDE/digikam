@@ -121,6 +121,57 @@ void GraphicsDImgView::installPanIcon()
             this, SLOT(slotCornerButtonPressed()));
 }
 
+void GraphicsDImgView::drawForeground(QPainter *p, const QRectF &rect)
+{
+    QGraphicsView::drawForeground(p, rect);
+
+    if (!d->movingInProgress)
+    {
+        QString text = d->item->userLoadingHint();
+        if (text.isNull())
+            return;
+
+        QRect viewportRect = viewport()->rect();
+        QRect fontRect = p->fontMetrics().boundingRect(viewportRect, 0, text);
+        QPoint drawingPoint(viewportRect.topRight().x() - fontRect.width() - 10,
+                            viewportRect.topRight().y() + 5);
+
+        QPointF sceneDrawingPoint = mapToScene(drawingPoint);
+        QRectF sceneDrawingRect(sceneDrawingPoint, fontRect.size());
+        if (!rect.intersects(sceneDrawingRect))
+            return;
+
+        drawText(p, sceneDrawingRect, text);
+    }
+}
+
+void GraphicsDImgView::drawText(QPainter* p, const QRectF& rect, const QString& text)
+{
+    p->save();
+
+    p->setRenderHint(QPainter::Antialiasing, true);
+    p->setBackgroundMode(Qt::TransparentMode);
+
+    // increase width by 5 and height by 2
+    QRectF textRect = rect.adjusted(0, 0, 5, 2);
+
+    // Draw background
+    p->setPen(Qt::black);
+    QColor semiTransBg = palette().color(QPalette::Window);
+    semiTransBg.setAlpha(190);
+    p->setBrush(semiTransBg);
+    //p->translate(0.5, 0.5);
+    p->drawRoundRect(textRect, 10.0, 10.0);
+
+    // Draw shadow and text
+    p->setPen(palette().color(QPalette::Window).dark(115));
+    p->drawText(textRect.translated(3, 1), text);
+    p->setPen(palette().color(QPalette::WindowText));
+    p->drawText(textRect.translated(2, 0), text);
+
+    p->restore();
+}
+
 void GraphicsDImgView::mouseDoubleClickEvent(QMouseEvent* e)
 {
     QGraphicsView::mouseDoubleClickEvent(e);

@@ -65,6 +65,9 @@ Q_SIGNALS:
 
 protected:
 
+    void drawForeground(QPainter *painter, const QRectF &rect);
+    void drawText(QPainter* p, const QRectF& rect, const QString& text);
+
     void setItem(DImgPreviewItem* item);
     void installPanIcon();
 

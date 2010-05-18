@@ -158,41 +158,4 @@ void GraphicsDImgItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
     */
 }
 
-/*
-void ImagePreviewViewV2::viewportPaintExtraData()
-{
-    if (!m_movingInProgress && d->isLoaded)
-    {
-        QPainter p(viewport());
-        p.setRenderHint(QPainter::Antialiasing, true);
-        p.setBackgroundMode(Qt::TransparentMode);
-        QFontMetrics fontMt = p.fontMetrics();
-
-        QString text;
-        QRect textRect, fontRect;
-        QRect region = contentsRect();
-        p.translate(region.topLeft());
-
-        if (!d->loadFullImageSize)
-        {
-            if (d->imageInfo.format().startsWith(QLatin1String("RAW")))
-                text = i18n("Embedded JPEG Preview");
-            else
-                text = i18n("Reduced Size Preview");
-        }
-        else
-        {
-            if (d->imageInfo.format().startsWith(QLatin1String("RAW")))
-                text = i18n("Half Size Raw Preview");
-            else
-                text = i18n("Full Size Preview");
-        }
-
-        fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text);
-        drawText(&p, QPoint(region.topRight().x()-fontRect.width()-10, region.topRight().y()+5), text);
-        p.end();
-    }
-}
-*/
-
 } // namespace Digikam
