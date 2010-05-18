@@ -204,10 +204,11 @@ void SinglePhotoPreviewLayout::setZoomFactor(double z, SetZoomFlags flags)
 
     if (flags & SnapZoomFactor)
         z = d->zoomSettings()->snappedZoomFactor(z, d->frameSize());
+
     //TODO: CenterView, keep center
 
     d->isFitToWindow = false;
-    d->previousZoom = d->zoomSettings()->zoomFactor();
+    d->previousZoom  = d->zoomSettings()->zoomFactor();
 
     d->zoomSettings()->setZoomFactor(z);
     d->item->sizeHasChanged();
@@ -224,7 +225,7 @@ void SinglePhotoPreviewLayout::fitToWindow()
         return;
 
     d->isFitToWindow = true;
-    d->previousZoom = d->zoomSettings()->zoomFactor();
+    d->previousZoom  = d->zoomSettings()->zoomFactor();
 
     d->zoomSettings()->fitToSize(d->frameSize(), ImageZoomSettings::OnlyScaleDown);
     d->item->sizeHasChanged();
