@@ -48,8 +48,8 @@ public:
     GraphicsDImgView(QWidget* parent = 0);
     ~GraphicsDImgView();
 
-    DImgPreviewItem *previewItem() const;
-    SinglePhotoPreviewLayout *layout() const;
+    DImgPreviewItem* previewItem() const;
+    SinglePhotoPreviewLayout* layout() const;
 
 Q_SIGNALS:
 
@@ -65,15 +65,15 @@ Q_SIGNALS:
 
 protected:
 
-    void setItem(DImgPreviewItem *item);
+    void setItem(DImgPreviewItem* item);
     void installPanIcon();
 
-    void mouseDoubleClickEvent(QMouseEvent *event);
-    void mousePressEvent(QMouseEvent *event);
-    void mouseMoveEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
-    void wheelEvent(QWheelEvent* e);
-    void resizeEvent(QResizeEvent *event);
+    void mouseDoubleClickEvent(QMouseEvent*);
+    void mousePressEvent(QMouseEvent*);
+    void mouseMoveEvent(QMouseEvent*);
+    void mouseReleaseEvent(QMouseEvent*);
+    void wheelEvent(QWheelEvent*);
+    void resizeEvent(QResizeEvent*);
 
     void startPanning(const QPoint& pos);
     void continuePanning(const QPoint& pos);
@@ -102,8 +102,7 @@ class DIGIKAM_EXPORT ImagePreviewView : public GraphicsDImgView
                       const QString& next = QString());
 };
 */
-}
 
+} // namespace Digikam
 
-#endif
-
+#endif // GRAPHICSDIMGVIEW_H

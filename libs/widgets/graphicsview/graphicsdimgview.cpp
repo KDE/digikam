@@ -42,40 +42,41 @@
 #include "imagezoomsettings.h"
 #include "paniconwidget.h"
 #include "previewlayout.h"
-
 #include "dimgchilditem.h"
+
 namespace Digikam
 {
 
 class GraphicsDImgViewPriv
 {
 public:
+
     GraphicsDImgViewPriv()
     {
-        scene = 0;
-        item = 0;
-        layout = 0;
-        cornerButton = 0;
-        panIconPopup = 0;
+        scene            = 0;
+        item             = 0;
+        layout           = 0;
+        cornerButton     = 0;
+        panIconPopup     = 0;
         movingInProgress = false;
     }
 
-    QGraphicsScene *scene;
-    DImgPreviewItem *item;
-    SinglePhotoPreviewLayout *layout;
+    QGraphicsScene*           scene;
+    DImgPreviewItem*          item;
+    SinglePhotoPreviewLayout* layout;
 
-    QToolButton *cornerButton;
-    KPopupFrame *panIconPopup;
+    QToolButton*              cornerButton;
+    KPopupFrame*              panIconPopup;
 
-    QPoint       mousePressPos;
-    QPoint       panningScrollPos;
-    bool         movingInProgress;
+    QPoint                    mousePressPos;
+    QPoint                    panningScrollPos;
+    bool                      movingInProgress;
 };
 
 GraphicsDImgView::GraphicsDImgView(QWidget* parent)
-    : QGraphicsView(parent), d(new GraphicsDImgViewPriv)
+                : QGraphicsView(parent), d(new GraphicsDImgViewPriv)
 {
-    d->scene = new QGraphicsScene(this);
+    d->scene  = new QGraphicsScene(this);
 
     setScene(d->scene);
     d->layout = new SinglePhotoPreviewLayout(this);
@@ -94,19 +95,19 @@ GraphicsDImgView::~GraphicsDImgView()
     delete d;
 }
 
-void GraphicsDImgView::setItem(DImgPreviewItem *item)
+void GraphicsDImgView::setItem(DImgPreviewItem* item)
 {
     d->item = item;
     d->scene->addItem(d->item);
     d->layout->addItem(d->item);
 }
 
-DImgPreviewItem *GraphicsDImgView::previewItem() const
+DImgPreviewItem* GraphicsDImgView::previewItem() const
 {
     return d->item;
 }
 
-SinglePhotoPreviewLayout *GraphicsDImgView::layout() const
+SinglePhotoPreviewLayout* GraphicsDImgView::layout() const
 {
     return d->layout;
 }
@@ -120,7 +121,7 @@ void GraphicsDImgView::installPanIcon()
             this, SLOT(slotCornerButtonPressed()));
 }
 
-void GraphicsDImgView::mouseDoubleClickEvent(QMouseEvent *e)
+void GraphicsDImgView::mouseDoubleClickEvent(QMouseEvent* e)
 {
     QGraphicsView::mouseDoubleClickEvent(e);
 
@@ -135,15 +136,15 @@ void GraphicsDImgView::mouseDoubleClickEvent(QMouseEvent *e)
     }
 }
 
-void GraphicsDImgView::mousePressEvent(QMouseEvent *e)
+void GraphicsDImgView::mousePressEvent(QMouseEvent* e)
 {
     QGraphicsView::mousePressEvent(e);
-kDebug() << e->isAccepted();
+    kDebug() << e->isAccepted();
 
     if (e->isAccepted())
         return;
 
-    d->mousePressPos = QPoint();
+    d->mousePressPos    = QPoint();
     d->movingInProgress = false;
 
     if (e->button() == Qt::LeftButton || e->button() == Qt::MidButton)
@@ -156,7 +157,7 @@ kDebug() << e->isAccepted();
     }
 }
 
-void GraphicsDImgView::mouseMoveEvent(QMouseEvent *e)
+void GraphicsDImgView::mouseMoveEvent(QMouseEvent* e)
 {
     QGraphicsView::mouseMoveEvent(e);
 
@@ -175,11 +176,12 @@ void GraphicsDImgView::mouseMoveEvent(QMouseEvent *e)
     }
 }
 
-void GraphicsDImgView::mouseReleaseEvent(QMouseEvent *e)
+void GraphicsDImgView::mouseReleaseEvent(QMouseEvent* e)
 {
     QGraphicsView::mouseReleaseEvent(e);
 
     kDebug() << bool(e->button() == Qt::LeftButton) << d->mousePressPos << d->movingInProgress;
+
     if ((e->button() == Qt::LeftButton || e->button() == Qt::MidButton) && !d->mousePressPos.isNull())
     {
         if (!d->movingInProgress && e->button() == Qt::LeftButton)
@@ -202,12 +204,12 @@ void GraphicsDImgView::mouseReleaseEvent(QMouseEvent *e)
     }
 
     d->movingInProgress = false;
-    d->mousePressPos   = QPoint();
+    d->mousePressPos    = QPoint();
 }
 
-void GraphicsDImgView::resizeEvent(QResizeEvent *event)
+void GraphicsDImgView::resizeEvent(QResizeEvent* e)
 {
-    QGraphicsView::resizeEvent(event);
+    QGraphicsView::resizeEvent(e);
     d->layout->updateZoomAndSize();
     emit resized();
 }
@@ -217,7 +219,7 @@ void GraphicsDImgView::startPanning(const QPoint& pos)
     if (horizontalScrollBar()->maximum() || verticalScrollBar()->maximum())
     {
         d->movingInProgress = true;
-        d->mousePressPos   = pos;
+        d->mousePressPos    = pos;
         d->panningScrollPos = QPoint(horizontalScrollBar()->value(), verticalScrollBar()->value());
         viewport()->setCursor(Qt::SizeAllCursor);
     }
@@ -272,7 +274,7 @@ void GraphicsDImgView::slotCornerButtonPressed()
     }
 
     d->panIconPopup    = new KPopupFrame(this);
-    PanIconWidget *pan = new PanIconWidget(d->panIconPopup);
+    PanIconWidget* pan = new PanIconWidget(d->panIconPopup);
 
     //connect(pan, SIGNAL(signalSelectionTakeFocus()),
       //      this, SIGNAL(signalContentTakeFocus()));
@@ -322,7 +324,4 @@ void GraphicsDImgView::slotPanIconSelectionMoved(const QRect& imageRect, bool b)
     }
 }
 
-
-
-}
-
+} // namespace Digikam
