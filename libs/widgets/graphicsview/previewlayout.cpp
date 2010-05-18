@@ -74,7 +74,6 @@ public:
 
     QSizeF frameSize() const
     {
-        kDebug() << view->maximumViewportSize();
         return view->maximumViewportSize();
     }
 
@@ -265,7 +264,6 @@ void SinglePhotoPreviewLayout::updateLayout()
 
     d->view->scene()->setSceneRect(d->item->boundingRect());
     d->item->setPos(0,0);
-    kDebug() << d->view->scene()->sceneRect();
 }
 
 void SinglePhotoPreviewLayout::updateZoomAndSize()
@@ -274,8 +272,7 @@ void SinglePhotoPreviewLayout::updateZoomAndSize()
     // that are smaller than the available space, only scale down.
     double fitZoom = d->zoomSettings()->fitToSizeZoomFactor(d->frameSize(), ImageZoomSettings::OnlyScaleDown);
     setMinZoomFactor(fitZoom);
-    setMaxZoomFactor(fitZoom*12.0);
-    kDebug() << fitZoom << minZoomFactor() << maxZoomFactor();
+    setMaxZoomFactor(12.0);
 
     // Is currently the zoom factor set to fit to window? Then set it again to fit the new size.
     if (zoomFactor() <= fitZoom || d->isFitToWindow)

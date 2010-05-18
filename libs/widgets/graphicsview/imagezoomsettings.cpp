@@ -54,7 +54,6 @@ ImageZoomSettings::ImageZoomSettings(const QSize& imageSize, const QSize& origin
 
 void ImageZoomSettings::setImageSize(const QSize& size, const QSize& originalSize)
 {
-    kDebug() << size << originalSize;
     m_size = size;
 
     if (!originalSize.isNull() && originalSize.isValid())
@@ -156,7 +155,6 @@ double ImageZoomSettings::snappedZoomStep(double nextZoom, const QSizeF& frameSi
         snapValues << fitToSizeZoomFactor(frameSize);
 
     double currentZoom = zoomFactor();
-    kDebug() << "From" << currentZoom << "to" << nextZoom << "case";
 
     if (currentZoom < nextZoom)
     {
@@ -170,7 +168,6 @@ double ImageZoomSettings::snappedZoomStep(double nextZoom, const QSizeF& frameSi
     {
         foreach (double z, snapValues)
         {
-            kDebug() << z << bool(currentZoom < nextZoom) << bool(currentZoom > z) << bool(nextZoom < z);
             if ((currentZoom > z) && (nextZoom < z))
                 return z;
         }

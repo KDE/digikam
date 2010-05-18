@@ -137,7 +137,6 @@ void GraphicsDImgItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
     QRectF drawRect  = option->exposedRect.intersected(boundingRect());
     QRect sourceRect = d->zoomSettings.sourceRect(drawRect).toRect();
     QSize destSize   = drawRect.size().toSize();
-    kDebug() << sourceRect << drawRect << drawRect.topLeft().toPoint() << destSize;
     DImg scaledImage = d->image.smoothScaleSection(sourceRect.x(), sourceRect.y(),
                                                    sourceRect.width(), sourceRect.height(),
                                                    destSize.width(), destSize.height());
