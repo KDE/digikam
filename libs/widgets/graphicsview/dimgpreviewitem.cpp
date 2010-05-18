@@ -31,6 +31,8 @@
 
 // KDE includes
 
+#include <klocale.h>
+
 // Local includes
 
 #include "imageinfo.h"
@@ -147,6 +149,50 @@ void DImgPreviewItem::setPreloadPaths(const QStringList& pathsToPreload)
     Q_D(DImgPreviewItem);
     d->pathsToPreload = pathsToPreload;
     preloadNext();
+}
+
+static bool approximates(const QSizeF& s1, const QSizeF& s2)
+{
+    if (s1 == s2)
+        return true;
+    double widthRatio = s1.width() / s2.width();
+    if (widthRatio < 0.98 || widthRatio > 1.02)
+        return false;
+    double heightRatio = s1.height() / s2.height();
+    if (heightRatio < 0.98 || heightRatio > 1.02)
+        return false;
+    return true;
+}
+
+QString DImgPreviewItem::userLoadingHint() const
+{
+    Q_D(const DImgPreviewItem);
+    switch (d->state)
+    {
+        case NoImage:
+            return QString();
+        case Loading:
+            return i18n("Loading...");
+        case ImageLoaded:
+        {
+            if (d->image.detectedFormat() == DImg::RAW)
+            {
+                if (d->image.attribute("fromRawEmbeddedPreview").toBool())
+                    return i18n("Embedded JPEG Preview");
+                else
+                    return i18n("Half Size Raw Preview");
+            }
+            else
+            {
+                if (approximates(d->image.originalSize(),d->image.size()))
+                    return i18n("Full Size Preview");
+                else
+                    return i18n("Reduced Size Preview");
+            }
+        }
+        case ImageLoadingFailed:
+            return i18n("Failed to load image");
+    }
 }
 
 void DImgPreviewItem::reload()
