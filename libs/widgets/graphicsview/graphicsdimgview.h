@@ -51,6 +51,12 @@ public:
     DImgPreviewItem* previewItem() const;
     SinglePhotoPreviewLayout* layout() const;
 
+    /** Scrolls the view such that scenePos (in scene coordinates
+     *  is displayed on the viewport at viewportPos (in viewport coordinates).
+     *  E.g., calling scrollPointOnPoint(scenePos, viewport()->rect().center()) is
+     *  equivalent to calling centerOn(scenePos). */
+    void scrollPointOnPoint(const QPointF& scenePos, const QPoint& viewportPos);
+
 Q_SIGNALS:
 
     void rightButtonClicked();

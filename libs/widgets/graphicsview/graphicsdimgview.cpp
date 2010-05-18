@@ -286,6 +286,26 @@ void GraphicsDImgView::finishPanning()
     viewport()->unsetCursor();
 }
 
+void GraphicsDImgView::scrollPointOnPoint(const QPointF& scenePos, const QPoint& viewportPos)
+{
+    // This is inspired from QGraphicsView's centerOn()
+    QPointF viewPoint = matrix().map(scenePos);
+
+    if (horizontalScrollBar()->maximum()) {
+        if (isRightToLeft()) {
+            qint64 horizontal = 0;
+            horizontal += horizontalScrollBar()->minimum();
+            horizontal += horizontalScrollBar()->maximum();
+            horizontal -= int(viewPoint.x() - viewportPos.x());
+            horizontalScrollBar()->setValue(horizontal);
+        } else {
+            horizontalScrollBar()->setValue(int(viewPoint.x() - viewportPos.x()));
+        }
+    }
+    if (verticalScrollBar()->maximum())
+        verticalScrollBar()->setValue(int(viewPoint.y() - viewportPos.y()));
+}
+
 void GraphicsDImgView::wheelEvent(QWheelEvent* e)
 {
     if (e->modifiers() & Qt::ShiftModifier)
