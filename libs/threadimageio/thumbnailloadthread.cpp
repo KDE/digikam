@@ -127,7 +127,7 @@ public:
     KIO::PreviewJob                *kdeJob;
 
     LoadingDescription createLoadingDescription(const QString filePath, int size);
-    bool makeAndCheckDescription(LoadingDescription *description, const QString& filePath, int size);
+    bool checkDescription(const LoadingDescription &description);
     QList<LoadingDescription> makeDescriptions(const QStringList& filePaths, int size);
     bool hasHighlightingBorder() const;
     int pixmapSizeForThumbnailSize(int thumbnailSize) const;
@@ -313,10 +313,9 @@ LoadingDescription ThumbnailLoadThreadPriv::createLoadingDescription(const QStri
     return description;
 }
 
-bool ThumbnailLoadThreadPriv::makeAndCheckDescription(LoadingDescription *description, const QString& filePath, int size)
+bool ThumbnailLoadThreadPriv::checkDescription(const LoadingDescription &description)
 {
-    *description = createLoadingDescription(filePath, size);
-    QString cacheKey = description->cacheKey();
+    QString cacheKey = description.cacheKey();
 
     {
         LoadingCache *cache = LoadingCache::cache();
@@ -337,10 +336,11 @@ QList<LoadingDescription> ThumbnailLoadThreadPriv::makeDescriptions(const QStrin
 {
     QList<LoadingDescription> descriptions;
     {
+        LoadingDescription description = createLoadingDescription(QString(), size);
         foreach(const QString& filePath, filePaths)
         {
-            LoadingDescription description;
-            if (!makeAndCheckDescription(&description, filePath, size))
+            description.filePath = filePath;
+            if (!checkDescription(description))
                 continue;
             descriptions << description;
         }
@@ -445,8 +445,8 @@ void ThumbnailLoadThread::preload(const QString& filePath)
 
 void ThumbnailLoadThread::preload(const QString& filePath, int size)
 {
-    LoadingDescription description;
-    if (d->makeAndCheckDescription(&description, filePath, size))
+    LoadingDescription description = d->createLoadingDescription(filePath, size);
+    if (d->checkDescription(description))
         load(description, true);
 }
 

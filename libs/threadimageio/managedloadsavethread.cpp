@@ -296,6 +296,7 @@ void ManagedLoadSaveThread::preloadThumbnailGroup(const QList<LoadingDescription
         return;
     QMutexLocker lock(threadMutex());
 
+    QList<LoadSaveTask*> todo;
     foreach (const LoadingDescription &description, descriptions)
     {
         LoadingTask *existingTask = findExistingTask(description);
@@ -309,9 +310,13 @@ void ManagedLoadSaveThread::preloadThumbnailGroup(const QList<LoadingDescription
         // mark as preload task
         task->setStatus(LoadingTask::LoadingTaskStatusPreloading);
         // append to the end of the list
-        m_todo.append(task);
+        todo << task;
     }
-    start(lock);
+    if (!todo.isEmpty())
+    {
+        m_todo << todo;
+        start(lock);
+    }
 }
 
 void ManagedLoadSaveThread::prependThumbnailGroup(const QList<LoadingDescription>& descriptions)
@@ -374,6 +379,19 @@ void ManagedLoadSaveThread::stopLoading(const LoadingDescription& desc, LoadingT
 {
     QMutexLocker lock(threadMutex());
     removeLoadingTasks(desc, filter);
+}
+
+void ManagedLoadSaveThread::stopAllTasks()
+{
+    QMutexLocker lock(threadMutex());
+    if (m_currentTask)
+    {
+        if (m_currentTask->type() == LoadSaveTask::TaskTypeSaving)
+            static_cast<SavingTask*>(m_currentTask)->setStatus(SavingTask::SavingTaskStatusStopping);
+        else if (m_currentTask->type() == LoadSaveTask::TaskTypeLoading)
+            static_cast<LoadingTask*>(m_currentTask)->setStatus(LoadingTask::LoadingTaskStatusStopping);
+    }
+    m_todo.clear();
 }
 
 void ManagedLoadSaveThread::stopSaving(const QString& filePath)
