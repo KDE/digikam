@@ -61,6 +61,7 @@ public:
     void setThumbnailSize(const ThumbnailSize& thumbSize);
     /// If you want to fix a size for preloading, do it here.
     void setPreloadThumbnailSize(const ThumbnailSize& thumbSize);
+    void setExifRotate(bool rotate);
     /**
      *  Enable emitting dataChanged() when a thumbnail becomes available.
      *  The thumbnailAvailable() signal will be emitted in any case.
@@ -100,9 +101,14 @@ public Q_SLOTS:
     /**
      *  Preload thumbnail for the given infos resp. indexes.
      *  Note: Use setPreloadThumbnails to automatically preload all entries in the model.
+     *  Note: This only ensures thumbnail generation. It is not guaranteed that pixmaps
+     *  are stored in the cache. For thumbnails that are expect to be drawn immediately,
+     *  include them in prepareThumbnails().
+     *  Note: Stops preloading of previously added thumbnails.
      */
     void preloadThumbnails(const QList<ImageInfo>&);
     void preloadThumbnails(const QList<QModelIndex>&);
+    void preloadAllThumbnails();
 
 Q_SIGNALS:
 

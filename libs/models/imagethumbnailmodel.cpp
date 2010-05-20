@@ -46,17 +46,21 @@ public:
     ImageThumbnailModelPriv()
     {
         thread              = 0;
+        preloadThread       = 0;
         thumbSize           = 0;
         lastGlobalThumbSize = 0;
         preloadThumbSize    = 0;
         emitDataChanged     = true;
+        exifRotate          = true;
     }
 
     ThumbnailLoadThread       *thread;
+    ThumbnailLoadThread       *preloadThread;
     ThumbnailSize              thumbSize;
     ThumbnailSize              lastGlobalThumbSize;
     ThumbnailSize              preloadThumbSize;
     bool                       emitDataChanged;
+    bool                       exifRotate;
 
     int preloadThumbnailSize() const
     {
@@ -74,6 +78,7 @@ ImageThumbnailModel::ImageThumbnailModel(QObject *parent)
 
 ImageThumbnailModel::~ImageThumbnailModel()
 {
+    delete d->preloadThread;
     delete d;
 }
 
@@ -115,14 +120,31 @@ void ImageThumbnailModel::setPreloadThumbnails(bool preload)
 {
     if (preload)
     {
-        connect(this, SIGNAL(imageInfosAdded(const QList<ImageInfo>&)),
-                this, SLOT(preloadThumbnails(const QList<ImageInfo>&)));
+        if (!d->preloadThread)
+        {
+            d->preloadThread = new ThumbnailLoadThread;
+            d->preloadThread->setPixmapRequested(false);
+            d->preloadThread->setExifRotate(d->exifRotate);
+        }
+        connect(this, SIGNAL(allRefreshingFinished()),
+                this, SLOT(preloadAllThumbnails()));
     }
     else
     {
-        disconnect(this, SIGNAL(imageInfosAdded(const QList<ImageInfo>&)),
-                   this, SLOT(preloadThumbnails(const QList<ImageInfo>&)));
+        delete d->preloadThread;
+        d->preloadThread = 0;
+        disconnect(this, SIGNAL(allRefreshingFinished()),
+                   this, SLOT(preloadAllThumbnails()));
     }
+}
+
+void ImageThumbnailModel::setExifRotate(bool rotate)
+{
+    d->exifRotate = rotate;
+    if (d->thread)
+        d->thread->setExifRotate(rotate);
+    if (d->preloadThread)
+        d->preloadThread->setExifRotate(rotate);
 }
 
 void ImageThumbnailModel::prepareThumbnails(const QList<QModelIndex>& indexesToPrepare)
@@ -145,7 +167,7 @@ void ImageThumbnailModel::prepareThumbnails(const QList<QModelIndex>& indexesToP
 
 void ImageThumbnailModel::preloadThumbnails(const QList<ImageInfo>& infos)
 {
-    if (!d->thread)
+    if (!d->preloadThread)
         return;
 
     QStringList filePaths;
@@ -153,12 +175,13 @@ void ImageThumbnailModel::preloadThumbnails(const QList<ImageInfo>& infos)
     {
         filePaths << info.filePath();
     }
-    d->thread->preloadGroup(filePaths, d->preloadThumbnailSize());
+    d->preloadThread->stopAllTasks();
+    d->preloadThread->preloadGroup(filePaths, d->preloadThumbnailSize());
 }
 
 void ImageThumbnailModel::preloadThumbnails(const QList<QModelIndex>& infos)
 {
-    if (!d->thread)
+    if (!d->preloadThread)
         return;
 
     QStringList filePaths;
@@ -166,7 +189,13 @@ void ImageThumbnailModel::preloadThumbnails(const QList<QModelIndex>& infos)
     {
         filePaths << imageInfoRef(index).filePath();
     }
-    d->thread->preloadGroup(filePaths, d->preloadThumbnailSize());
+    d->preloadThread->stopAllTasks();
+    d->preloadThread->preloadGroup(filePaths, d->preloadThumbnailSize());
+}
+
+void ImageThumbnailModel::preloadAllThumbnails()
+{
+    preloadThumbnails(imageInfos());
 }
 
 QVariant ImageThumbnailModel::data(const QModelIndex& index, int role) const
