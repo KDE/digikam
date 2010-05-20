@@ -417,15 +417,15 @@ QDebug operator<<(QDebug dbg, const DatabaseParameters& p)
     dbg.nospace() << "(Thumbnails Name "
                   << p.databaseNameThumbnails << "); ";
 
-    if (!p.connectOptions.isNull())
+    if (!p.connectOptions.isEmpty())
         dbg.nospace() << "ConnectOptions: "
                       << p.connectOptions << ", ";
-    if (!p.hostName.isNull())
+    if (!p.hostName.isEmpty())
         dbg.nospace() << "Host Name and Port: "
                       << p.hostName << " " << p.port << "; ";
     if (p.internalServer)
         dbg.nospace() << "Using an Internal Server; ";
-    if (!p.userName.isNull())
+    if (!p.userName.isEmpty())
         dbg.nospace() << "Username and Password: "
                       << p.userName << ", " << p.password;
 
