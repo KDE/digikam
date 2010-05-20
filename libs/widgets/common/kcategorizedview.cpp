@@ -1592,7 +1592,7 @@ void KCategorizedView::rowsInserted(const QModelIndex &parent,
     rowsInsertedArtifficial(parent, start, end);
 }
 
-int KCategorizedView::Private::categoryUpperBound(const QVector<QModelIndex> &modelIndexList, int begin, int averageSize)
+int KCategorizedView::Private::categoryUpperBound(SparseModelIndexVector &modelIndexList, int begin, int averageSize)
 {
     int end = modelIndexList.size();
     QString category = proxyModel->data(modelIndexList[begin],
@@ -1681,9 +1681,7 @@ void KCategorizedView::rowsInsertedArtifficial(const QModelIndex &parent,
     QString lastCategory = d->proxyModel->data(d->proxyModel->index(0, sortColumn), KCategorizedSortFilterProxyModel::CategoryDisplayRole).toString();
     int offset = -1;
 
-    QVector<QModelIndex> modelIndexList(rowCount);
-    for (int k = 0; k < rowCount; ++k)
-        modelIndexList[k] = d->proxyModel->index(k, sortColumn);
+    SparseModelIndexVector modelIndexList(rowCount, d->proxyModel, sortColumn);
 
     d->elementsInfo = QVector<struct Private::ElementInfo>(rowCount);
 
