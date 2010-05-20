@@ -360,7 +360,7 @@ void ImageModel::reAddImageInfos(const QList<ImageInfo>& infos)
 void ImageModel::reAddingFinished()
 {
     d->reAdding = false;
-    checkStartIncrementalRefresh();
+    cleanSituationChecks();
 }
 
 void ImageModel::startRefresh()
@@ -371,7 +371,7 @@ void ImageModel::startRefresh()
 void ImageModel::finishRefresh()
 {
     d->refreshing = false;
-    checkStartIncrementalRefresh();
+    cleanSituationChecks();
 }
 
 bool ImageModel::isRefreshing() const
@@ -379,7 +379,7 @@ bool ImageModel::isRefreshing() const
     return d->refreshing;
 }
 
-void ImageModel::checkStartIncrementalRefresh()
+void ImageModel::cleanSituationChecks()
 {
     // For starting an incremental refresh we want a clear situation:
     // Any remaining batches from non-incremental refreshing subclasses have been received in appendInfos(),
@@ -391,6 +391,10 @@ void ImageModel::checkStartIncrementalRefresh()
     {
         d->incrementalRefreshRequested = false;
         emit readyForIncrementalRefresh();
+    }
+    else
+    {
+        emit allRefreshingFinished();
     }
 }
 
