@@ -330,6 +330,15 @@ void PreviewLoadingTask::execute()
         if (m_img.isNull())
         {
             m_img.load(m_loadingDescription.filePath, this, m_loadingDescription.rawDecodingSettings);
+
+            // Now that we did a full load of the image, consider putting it in the cache
+            // but not for RAWs, there are so many cases to consider
+            if (!m_img.isNull() && m_img.detectedFormat() != DImg::RAW)
+            {
+                LoadingCache::CacheLock lock(cache);
+                LoadingDescription fullDescription(m_loadingDescription.filePath);
+                cache->putImage(fullDescription.cacheKey(), new DImg(m_img.copy()), m_loadingDescription.filePath);
+            }
         }
 
         if (m_img.isNull())

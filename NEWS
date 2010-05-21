@@ -71,7 +71,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 059 ==> 206127 : While saving data for multiple images, digikam blocks new changes.
 060 ==> 226239 : Clicking on windows ajust tool zoom the image but the view port does not correspond to the selection.
 061 ==> 211758 : Saving TIFF-16 compressed using exiv2 0.18 shows odd results.
-062 ==> 
+062 ==> 238338 : Sometimes digikam reads a wrong ICC profile from images.
+063 ==> 
 
 
 

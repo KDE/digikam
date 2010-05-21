@@ -135,6 +135,8 @@ QString LoadingDescription::cacheKey() const
         // Assumption: Size-limited previews are always eight bit and dont care for raw settings.
         if (previewParameters.size)
             return filePath + "-previewImage-" + QString::number(previewParameters.size);
+        else
+            return filePath + "-previewImage";
     }
 
     QString suffix;
@@ -180,6 +182,8 @@ QStringList LoadingDescription::lookupCacheKeys() const
     {
         if (previewParameters.size)
             cacheKeys << filePath + "-previewImage-" + QString::number(previewParameters.size);
+        // full size preview
+        cacheKeys << filePath + "-previewImage";
     }
 
     if (rawDecodingHint == RawDecodingDefaultSettings)
