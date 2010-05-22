@@ -44,6 +44,7 @@ static const QString KEY_ORIENTATION("Orientation");
 static const QString KEY_COLORDEPTH("ColorDepth");
 static const QString KEY_COLORMODEL("ColorModel");
 static const QString KEY_DEFAULTAUTHOR("DefaultAuthor");
+static const QString KEY_AUTHORS("Authors");
 
 namespace Digikam
 {
@@ -62,6 +63,7 @@ CommonKeys::CommonKeys()
     addId(KEY_ORIENTATION,     i18n("Image orientation"));
     addId(KEY_COLORDEPTH,      i18n("Color depth (bits per channel)"));
     addId(KEY_COLORMODEL,      i18n("Color model of the image"));
+    addId(KEY_AUTHORS,         i18n("A comma separated list of all authors"));
 }
 
 QString CommonKeys::getDbValue(const QString& key, ParseSettings& settings)
@@ -81,6 +83,21 @@ QString CommonKeys::getDbValue(const QString& key, ParseSettings& settings)
         if (!authors.isEmpty())
         {
             result = authors.at(0);
+        }
+    }
+    else if (key == KEY_AUTHORS)
+    {
+        QStringList authors = copyright.author();
+        if (!authors.isEmpty())
+        {
+            foreach (const QString& author, authors)
+            {
+                result += author + ",";
+            }
+        }
+        if (result.endsWith(","))
+        {
+            result.chop(1);
         }
     }
     else if (key == KEY_DIMENSION)
