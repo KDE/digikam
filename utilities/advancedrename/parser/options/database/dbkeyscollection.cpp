@@ -26,8 +26,9 @@
 namespace Digikam
 {
 
-DbKeysCollection::DbKeysCollection()
+DbKeysCollection::DbKeysCollection(const QString& name)
 {
+    this->name = name;
 }
 
 DbKeysCollection::~DbKeysCollection()
@@ -37,6 +38,11 @@ DbKeysCollection::~DbKeysCollection()
 QString DbKeysCollection::getValue(const QString& key, ParseSettings& settings)
 {
     return getDbValue(key, settings);
+}
+
+QString DbKeysCollection::collectionName() const
+{
+    return name;
 }
 
 void DbKeysCollection::addId(const QString& id, const QString& description)

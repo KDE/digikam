@@ -52,6 +52,7 @@ namespace Digikam
 {
 
 MetadataKeys::MetadataKeys()
+            : DbKeysCollection(i18n("Metadata Information"))
 {
     addId(KEY_MAKE,                         i18n("Make of the camera"));
     addId(KEY_MODEL,                        i18n("Model of the camera"));

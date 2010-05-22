@@ -50,6 +50,7 @@ namespace Digikam
 {
 
 CommonKeys::CommonKeys()
+          : DbKeysCollection(i18n("Common File Information"))
 {
     addId(KEY_DEFAULTCOMMENT,  i18n("Default comment of the image"));
     addId(KEY_DEFAULTAUTHOR,   i18n("Default author of the image"));

@@ -3,10 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2009-07-16
- * Description : metadata selector.
+ * Date        : 2010-05-22
+ * Description : database key selector.
  *
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -28,6 +28,8 @@
 #include <QTreeWidget>
 #include <QHeaderView>
 #include <QGridLayout>
+#include <QString>
+#include <QMap>
 
 // KDE includes
 
@@ -39,11 +41,12 @@
 
 #include "ditemtooltip.h"
 #include "dbkeyscollection.h"
+#include "dbheaderlistitem.h"
 
 namespace Digikam
 {
 
-DbKeySelectorItem::DbKeySelectorItem(QTreeWidget *parent, const QString& title, const QString& desc)
+DbKeySelectorItem::DbKeySelectorItem(DbHeaderListItem *parent, const QString& title, const QString& desc)
                  : QTreeWidgetItem(parent), m_key(title), m_description(desc)
 {
     setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable);
@@ -105,10 +108,17 @@ DbKeySelector::~DbKeySelector()
 void DbKeySelector::setKeysMap(const DbOptionKeysMap& map)
 {
     clear();
+    QMap<QString, DbHeaderListItem*> headers;
 
     for (DbOptionKeysMap::const_iterator it = map.constBegin(); it != map.constEnd(); ++it)
     {
-        new DbKeySelectorItem(this, it.key(), it.value()->ids().value(it.key()));
+        if (!headers.contains(it.value()->collectionName()))
+        {
+            headers.insert(it.value()->collectionName(), new DbHeaderListItem(this, it.value()->collectionName()));
+        }
+        new DbKeySelectorItem(headers.value(it.value()->collectionName()),
+                              it.key(),
+                              it.value()->ids().value(it.key()));
     }
 }
 
@@ -186,7 +196,7 @@ void DbKeySelectorView::slotSearchTextChanged(const SearchTextSettings& settings
     QTreeWidgetItemIterator it2(d->selector);
     while (*it2)
     {
-        DbKeySelectorItem *item = dynamic_cast<DbKeySelectorItem*>(*it2);
+        DbHeaderListItem *item = dynamic_cast<DbHeaderListItem*>(*it2);
         if (item)
             item->setHidden(false);
         ++it2;
@@ -213,7 +223,33 @@ void DbKeySelectorView::slotSearchTextChanged(const SearchTextSettings& settings
         ++it;
     }
 
+    removeChildlessHeaders();
     d->searchBar->slotSearchResult(atleastOneMatch);
 }
+
+
+void DbKeySelectorView::removeChildlessHeaders()
+{
+    QTreeWidgetItemIterator it(d->selector);
+    while (*it)
+    {
+        DbHeaderListItem *item = dynamic_cast<DbHeaderListItem*>(*it);
+        if (item)
+        {
+            int children   = item->childCount();
+            int visibles = 0;
+            for (int i = 0 ; i < children; ++i)
+            {
+                QTreeWidgetItem* citem = (*it)->child(i);
+                if (!citem->isHidden())
+                    ++visibles;
+            }
+            if (!children || !visibles)
+                item->setHidden(true);
+        }
+        ++it;
+    }
+}
+
 
 }  // namespace Digikam

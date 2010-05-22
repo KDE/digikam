@@ -41,11 +41,12 @@ class DbKeysCollection
 {
 public:
 
-    DbKeysCollection();
+    DbKeysCollection(const QString& name);
     virtual ~DbKeysCollection();
 
     QString getValue(const QString& key, ParseSettings& settings);
     DbKeyIdsMap ids() const;
+    QString collectionName() const;
 
 protected:
 
@@ -55,6 +56,7 @@ protected:
 private:
 
     DbKeyIdsMap idsMap;
+    QString     name;
 };
 
 } // namespace Digikam
