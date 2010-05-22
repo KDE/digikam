@@ -26,6 +26,10 @@
 namespace Digikam
 {
 
+DbOptionKey::DbOptionKey()
+{
+}
+
 DbOptionKey::DbOptionKey(const QString& name, const QString& description)
 {
     this->name          = name;

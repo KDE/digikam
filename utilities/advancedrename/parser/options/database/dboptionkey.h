@@ -34,6 +34,7 @@ class DbOptionKey
 {
 public:
 
+    DbOptionKey();
     DbOptionKey(const QString& name, const QString& description);
     virtual ~DbOptionKey();
 

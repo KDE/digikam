@@ -34,12 +34,16 @@ namespace Digikam
 class CategoryKey : public DbOptionKey
 {
 public:
-    CategoryKey();
+    CategoryKey(bool localized = false);
     virtual ~CategoryKey() {};
 
 protected:
 
     virtual QString getDbValue(ParseSettings& settings);
+
+private:
+
+    bool isLocalized;
 };
 
 } // namespace Digikam

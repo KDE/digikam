@@ -35,9 +35,20 @@
 namespace Digikam
 {
 
-CategoryKey::CategoryKey()
-           : DbOptionKey(QString("Category"), i18n("File category (e.g. Image, Audio, Movie)"))
+CategoryKey::CategoryKey(bool localized)
+           : DbOptionKey()
 {
+    name = QString("Category");
+    QString desc("File category");
+    QString desc2("e.g. Image, Audio, Movie)");
+    description = i18n("%1, %2", desc, desc2);
+
+    isLocalized = localized;
+    if (isLocalized)
+    {
+        name.append("Loc");
+        description = i18n("%1 (localized), %2", desc, desc2);
+    }
 }
 
 QString CategoryKey::getDbValue(ParseSettings& settings)
@@ -46,12 +57,22 @@ QString CategoryKey::getDbValue(ParseSettings& settings)
     QString result;
     switch (info.category())
     {
-        case DatabaseItem::UndefinedCategory: result = i18n("Undefined"); break;
-        case DatabaseItem::Image:             result = i18n("Image");     break;
-        case DatabaseItem::Video:             result = i18n("Video");     break;
-        case DatabaseItem::Audio:             result = i18n("Audio");     break;
+        case DatabaseItem::UndefinedCategory:
+            result = isLocalized ? i18n("Undefined") : QString("Undefined");
+            break;
+        case DatabaseItem::Image:
+            result = isLocalized ? i18n("Image") : QString("Image");
+            break;
+        case DatabaseItem::Video:
+            result = isLocalized ? i18n("Video") : QString("Video");
+            break;
+        case DatabaseItem::Audio:
+            result = isLocalized ? i18n("Audio") : QString("Audio");
+            break;
         case DatabaseItem::Other:
-        default:                              result = i18n("Other");     break;
+        default:
+            result = isLocalized ? i18n("Other") : QString("Other");
+            break;
     }
     return result;
 }

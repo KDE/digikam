@@ -100,6 +100,7 @@ DatabaseOption::~DatabaseOption()
 void DatabaseOption::registerKeys()
 {
     addDbOptionKey(new CategoryKey());
+    addDbOptionKey(new CategoryKey(true));
     addDbOptionKey(new DefaultCommentKey());
     addDbOptionKey(new RatingKey());
     addDbOptionKey(new FormatKey());
@@ -168,7 +169,10 @@ QString DatabaseOption::parseDatabase(const QString& keyword, ParseSettings& set
 
 void DatabaseOption::addDbOptionKey(DbOptionKey* key)
 {
-    if (!key) return;
+    if (!key || key->name.isEmpty() || key->description.isEmpty())
+    {
+        return;
+    }
     m_map.insert(key->name, key);
 }
 
