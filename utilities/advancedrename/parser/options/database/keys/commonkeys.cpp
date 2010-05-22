@@ -69,7 +69,7 @@ QString CommonKeys::getDbValue(const QString& key, ParseSettings& settings)
 
     if (key == KEY_DEFAULTCOMMENT)
     {
-        result = info.comment();
+        result = info.comment().simplified();
     }
     else if (key == KEY_DIMENSION)
     {
@@ -105,7 +105,7 @@ QString CommonKeys::getDbValue(const QString& key, ParseSettings& settings)
     }
     else if (key == KEY_FORMAT)
     {
-        result = info.format().simplified();
+        result = info.format();
     }
     else if (key == KEY_MEDIATYPE)
     {
