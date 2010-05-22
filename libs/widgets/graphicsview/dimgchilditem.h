@@ -37,8 +37,30 @@ namespace Digikam
 {
 
 class DImgChildItemPriv;
+class GraphicsDImgItem;
 
-class DIGIKAM_EXPORT DImgChildItem : public QGraphicsItem
+class DIGIKAM_EXPORT AbstractDImgChildItem : public QGraphicsItem
+{
+public:
+
+    AbstractDImgChildItem(QGraphicsItem* parent = 0);
+
+    /**
+     * When an AbstractDImgChildItem is added as a direct child of a
+     * GraphicsDImgItem, the method will be called whenever the size
+     * of the GraphicsDImgItem has changed, most notably after zooming.
+     * The item may choose to resize or reposition itself here.
+     */
+    virtual void sizeHasChanged() = 0;
+
+    /**
+     * If the parent item is a GraphicsDImgItem, return it,
+     * if the parent item is null or of a different class, returns 0.
+     */
+    GraphicsDImgItem *parentDImgItem() const;
+};
+
+class DIGIKAM_EXPORT DImgChildItem : public AbstractDImgChildItem
 {
 public:
 
@@ -79,7 +101,8 @@ public:
     virtual QRectF boundingRect() const;
 
     void updatePos();
-    void sizeHasChanged();
+
+    virtual void sizeHasChanged();
 
 private:
 

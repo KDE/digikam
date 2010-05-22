@@ -105,7 +105,7 @@ void GraphicsDImgItem::sizeHasChanged()
 
     foreach (QGraphicsItem* child, childItems())
     {
-        DImgChildItem* item = dynamic_cast<DImgChildItem*>(child);
+        AbstractDImgChildItem* item = dynamic_cast<AbstractDImgChildItem*>(child);
         if (item)
         {
             item->sizeHasChanged();

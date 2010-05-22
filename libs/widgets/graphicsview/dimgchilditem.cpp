@@ -56,6 +56,16 @@ public:
 };
 */
 
+AbstractDImgChildItem::AbstractDImgChildItem(QGraphicsItem* parent)
+            : QGraphicsItem(parent)
+{
+}
+
+GraphicsDImgItem *AbstractDImgChildItem::parentDImgItem() const
+{
+    return dynamic_cast<GraphicsDImgItem*>(parentItem());
+}
+
 class DImgChildItemPriv
 {
 public:
@@ -69,7 +79,7 @@ public:
 };
 
 DImgChildItem::DImgChildItem(QGraphicsItem* parent)
-             : QGraphicsItem(parent), d(new DImgChildItemPriv)
+             : AbstractDImgChildItem(parent), d(new DImgChildItemPriv)
 {
 }
 
