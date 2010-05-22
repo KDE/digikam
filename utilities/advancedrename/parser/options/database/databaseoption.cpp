@@ -41,6 +41,7 @@
 #include "imagecomments.h"
 #include "dbkeyselector.h"
 
+#include "categorykey.h"
 #include "defaultcommentkey.h"
 #include "ratingkey.h"
 #include "formatkey.h"
@@ -98,6 +99,7 @@ DatabaseOption::~DatabaseOption()
 
 void DatabaseOption::registerKeys()
 {
+    addDbOptionKey(new CategoryKey());
     addDbOptionKey(new DefaultCommentKey());
     addDbOptionKey(new RatingKey());
     addDbOptionKey(new FormatKey());
