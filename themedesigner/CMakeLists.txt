@@ -64,6 +64,7 @@ INCLUDE_DIRECTORIES(
                      ../utilities/advancedrename/common
                      ../utilities/advancedrename/parser
                      ../utilities/advancedrename/parser/options
+                     ../utilities/advancedrename/parser/options/database
                      ../utilities/advancedrename/parser/modifiers
                      ../utilities/queuemanager
                      ../utilities/queuemanager/basetools/color

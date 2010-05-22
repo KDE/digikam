@@ -3,9 +3,9 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2009-08-11
- * Description : the default parser for the AdvancedRename utility,
- *               includes all renaming options
+ * Date        : 2010-05-22
+ * Description : a parser for the AdvancedRename utility used for importing images,
+ *               excluding the database options
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "defaultrenameparser.h"
+#include "importrenameparser.h"
 
 // LibKExiv2 includes
 
@@ -32,7 +32,6 @@
 
 
 #include "cameranameoption.h"
-#include "databaseoption.h"
 #include "dateoption.h"
 #include "directorynameoption.h"
 #include "filepropertiesoption.h"
@@ -42,14 +41,9 @@
 namespace Digikam
 {
 
-DefaultRenameParser::DefaultRenameParser()
-                   : Parser()
+ImportRenameParser::ImportRenameParser()
+                  : Parser()
 {
-    /*
-     * RENAMING OPTIONS are defined in the inherited Parser classes
-     */
-
-
     /*
      * RENAMING OPTIONS
      */
@@ -58,7 +52,6 @@ DefaultRenameParser::DefaultRenameParser()
     registerOption(new CameraNameOption());
     registerOption(new SequenceNumberOption());
     registerOption(new DateOption());
-    registerOption(new DatabaseOption());
 
 #if KEXIV2_VERSION >= 0x010000
     registerOption(new MetadataOption());

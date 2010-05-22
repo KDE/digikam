@@ -27,6 +27,16 @@
 
 #include <QFileInfo>
 
+// local includes
+
+#include "casemodifier.h"
+#include "defaultvaluemodifier.h"
+#include "fillmodifier.h"
+#include "rangemodifier.h"
+#include "replacemodifier.h"
+#include "trimmedmodifier.h"
+#include "uniquemodifier.h"
+
 namespace Digikam
 {
 
@@ -49,6 +59,17 @@ public:
 Parser::Parser()
       : d(new ParserPriv)
 {
+    /*
+     * MODIFIERS
+     */
+    registerModifier(new CaseModifier());
+    registerModifier(new TrimmedModifier());
+    registerModifier(new UniqueModifier());
+    registerModifier(new DefaultValueModifier());
+    registerModifier(new ReplaceModifier());
+    registerModifier(new FillModifier());
+    registerModifier(new RangeModifier());
+
     init(ParseSettings());
 }
 

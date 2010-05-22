@@ -24,6 +24,8 @@ INCLUDE_DIRECTORIES(
                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser
                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/modifiers
                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options/database
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options/database/keys
                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/cameragui
                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/canvas
                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/editor
@@ -54,6 +56,7 @@ SET(advancedrenametest_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/common/parseresults.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/common/token.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/defaultrenameparser.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/importrenameparser.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/modifiers/casemodifier.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/modifiers/defaultvaluemodifier.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/modifiers/fillmodifier.cpp
@@ -62,6 +65,14 @@ SET(advancedrenametest_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/modifiers/trimmedmodifier.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/modifiers/uniquemodifier.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options/cameranameoption.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options/database/databaseoption.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options/database/dbkeyselector.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options/database/dboptionkey.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options/database/keys/defaultcommentkey.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options/database/keys/ratingkey.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options/database/keys/formatkey.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options/database/keys/dimensionkey.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options/database/keys/filesizekey.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options/dateoption.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options/directorynameoption.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options/filepropertiesoption.cpp
@@ -167,10 +178,10 @@ TARGET_LINK_LIBRARIES(filesaveoptionsboxtest
                       ${QT_QTTEST_LIBRARY}
                       digikamcore
                       )
-                      
-                 
+
+
 #------------------------------------------------------------------------
- 
+
 SET(albummodeltest_SRCS
     albummodeltest.cpp
     modeltest/modeltest.cpp

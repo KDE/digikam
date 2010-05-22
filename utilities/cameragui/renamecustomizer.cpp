@@ -47,6 +47,7 @@
 #include "parsesettings.h"
 #include "parser.h"
 #include "advancedrenamewidget.h"
+#include "importrenameparser.h"
 
 namespace Digikam
 {
@@ -133,6 +134,7 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
 
     d->renameCustom         = new QRadioButton(i18nc("Custom Image Renaming", "Customize"), this);
     d->advancedRenameWidget = new AdvancedRenameWidget(this);
+    d->advancedRenameWidget->setParser(new ImportRenameParser());
     d->advancedRenameWidget->setTooltipAlignment(Qt::AlignRight);
     d->buttonGroup->addButton(d->renameCustom, 2);
 
