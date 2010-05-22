@@ -26,12 +26,12 @@
 
 // local includes
 
-#include "dboptionkey.h"
+#include "dbkeyscollection.h"
 #include "parsesettings.h"
 
 namespace Digikam
 {
-class CommonKeys : public DbOptionKey
+class CommonKeys : public DbKeysCollection
 {
 public:
     CommonKeys();

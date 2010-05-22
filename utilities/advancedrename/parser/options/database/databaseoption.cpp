@@ -99,9 +99,9 @@ void DatabaseOption::registerKeys()
 
 void DatabaseOption::unregisterKeys()
 {
-    QSet<DbOptionKey*> alreadyDeleted;
+    QSet<DbKeysCollection*> alreadyDeleted;
 
-    foreach (DbOptionKey* key, m_map)
+    foreach (DbKeysCollection* key, m_map)
     {
         if (key && !alreadyDeleted.contains(key))
         {
@@ -155,14 +155,14 @@ QString DatabaseOption::parseDatabase(const QString& keyword, ParseSettings& set
         return QString();
     }
 
-    DbOptionKey* dbkey = 0;
+    DbKeysCollection* dbkey = 0;
     dbkey = m_map.value(keyword);
     if (!dbkey) return QString();
 
     return dbkey->getValue(keyword, settings);
 }
 
-void DatabaseOption::addDbOptionKey(DbOptionKey* key)
+void DatabaseOption::addDbOptionKey(DbKeysCollection* key)
 {
     if (!key) return;
 

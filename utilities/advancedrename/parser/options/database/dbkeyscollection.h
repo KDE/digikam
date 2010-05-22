@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DBOPTIONKEY_H
-#define DBOPTIONKEY_H
+#ifndef DBKEYSCOLLECTION_H
+#define DBKEYSCOLLECTION_H
 
 // Qt includes
 
@@ -37,12 +37,12 @@ namespace Digikam
 
 typedef QMap<QString, QString> DbKeyIdsMap;
 
-class DbOptionKey
+class DbKeysCollection
 {
 public:
 
-    DbOptionKey();
-    virtual ~DbOptionKey();
+    DbKeysCollection();
+    virtual ~DbKeysCollection();
 
     QString getValue(const QString& key, ParseSettings& settings);
     DbKeyIdsMap ids() const;
@@ -50,13 +50,13 @@ public:
 protected:
 
     virtual QString getDbValue(const QString& key, ParseSettings& settings) = 0;
-    void addKey(const QString& key, const QString& description);
+    void addId(const QString& id, const QString& description);
 
 private:
 
-    DbKeyIdsMap m_keywords;
+    DbKeyIdsMap idsMap;
 };
 
 } // namespace Digikam
 
-#endif /* DBOPTIONKEY_H */
+#endif /* DBKEYSCOLLECTION_H */

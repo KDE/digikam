@@ -38,7 +38,7 @@ class KLineEdit;
 
 namespace Digikam
 {
-class DbOptionKey;
+class DbKeysCollection;
 class DbKeySelectorView;
 
 class DatabaseOptionDialog : public ParseableDialog
@@ -56,7 +56,7 @@ public:
 
 // --------------------------------------------------------
 
-typedef QMap<QString, DbOptionKey*> DbOptionKeysMap;
+typedef QMap<QString, DbKeysCollection*> DbOptionKeysMap;
 
 // --------------------------------------------------------
 
@@ -80,7 +80,7 @@ private Q_SLOTS:
 private:
 
     QString parseDatabase(const QString& keyword, ParseSettings& settings);
-    void addDbOptionKey(DbOptionKey* key);
+    void addDbOptionKey(DbKeysCollection* key);
 
     void registerKeys();
     void unregisterKeys();

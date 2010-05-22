@@ -38,7 +38,7 @@
 // Local includes
 
 #include "ditemtooltip.h"
-#include "dboptionkey.h"
+#include "dbkeyscollection.h"
 
 namespace Digikam
 {

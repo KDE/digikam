@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-05-19
- * Description : a db option key
+ * Description : a base class for a database keys collection
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -21,36 +21,36 @@
  *
  * ============================================================ */
 
-#include "dboptionkey.h"
+#include "dbkeyscollection.h"
 
 namespace Digikam
 {
 
-DbOptionKey::DbOptionKey()
+DbKeysCollection::DbKeysCollection()
 {
 }
 
-DbOptionKey::~DbOptionKey()
+DbKeysCollection::~DbKeysCollection()
 {
 }
 
-QString DbOptionKey::getValue(const QString& key, ParseSettings& settings)
+QString DbKeysCollection::getValue(const QString& key, ParseSettings& settings)
 {
     return getDbValue(key, settings);
 }
 
-void DbOptionKey::addKey(const QString& key, const QString& description)
+void DbKeysCollection::addId(const QString& id, const QString& description)
 {
-    if (key.isEmpty() || description.isEmpty())
+    if (id.isEmpty() || description.isEmpty())
     {
         return;
     }
-    m_keywords.insert(key, description);
+    idsMap.insert(id, description);
 }
 
-DbKeyIdsMap DbOptionKey::ids() const
+DbKeyIdsMap DbKeysCollection::ids() const
 {
-    return m_keywords;
+    return idsMap;
 }
 
 } // namespace Digikam

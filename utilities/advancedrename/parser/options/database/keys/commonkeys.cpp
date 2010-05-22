@@ -48,17 +48,17 @@ namespace Digikam
 
 CommonKeys::CommonKeys()
 {
-    addKey(KEY_DEFAULTCOMMENT,  i18n("Default comment of the image"));
-    addKey(KEY_DIMENSION,       i18n("Image dimension"));
-    addKey(KEY_FILESIZE,        i18n("Image file size"));
-    addKey(KEY_FORMAT,          i18n("Format of the media file"));
-    addKey(KEY_MEDIATYPE,       i18n("Type of the media file"));
-    addKey(KEY_RATING,          i18n("Rating of the media file"));
-    addKey(KEY_HEIGHT,          i18n("Height of the media file"));
-    addKey(KEY_WIDTH,           i18n("Width of the media file"));
-    addKey(KEY_ORIENTATION,     i18n("Image orientation"));
-    addKey(KEY_COLORDEPTH,      i18n("Color depth (bits per channel)"));
-    addKey(KEY_COLORMODEL,      i18n("Color model of the image"));
+    addId(KEY_DEFAULTCOMMENT,  i18n("Default comment of the image"));
+    addId(KEY_DIMENSION,       i18n("Image dimension"));
+    addId(KEY_FILESIZE,        i18n("Image file size"));
+    addId(KEY_FORMAT,          i18n("Format of the media file"));
+    addId(KEY_MEDIATYPE,       i18n("Type of the media file"));
+    addId(KEY_RATING,          i18n("Rating of the media file"));
+    addId(KEY_HEIGHT,          i18n("Height of the media file"));
+    addId(KEY_WIDTH,           i18n("Width of the media file"));
+    addId(KEY_ORIENTATION,     i18n("Image orientation"));
+    addId(KEY_COLORDEPTH,      i18n("Color depth (bits per channel)"));
+    addId(KEY_COLORMODEL,      i18n("Color model of the image"));
 }
 
 QString CommonKeys::getDbValue(const QString& key, ParseSettings& settings)
