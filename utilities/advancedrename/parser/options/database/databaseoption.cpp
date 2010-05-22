@@ -41,12 +41,7 @@
 #include "imagecomments.h"
 #include "dbkeyselector.h"
 
-#include "defaultcommentkey.h"
-#include "dimensionkey.h"
-#include "filesizekey.h"
-#include "formatkey.h"
-#include "mediatypekey.h"
-#include "ratingkey.h"
+#include "commonkeys.h"
 
 namespace Digikam
 {
@@ -99,20 +94,20 @@ DatabaseOption::~DatabaseOption()
 
 void DatabaseOption::registerKeys()
 {
-    addDbOptionKey(new DefaultCommentKey());
-    addDbOptionKey(new DimensionKey());
-    addDbOptionKey(new FileSizeKey());
-    addDbOptionKey(new FormatKey());
-    addDbOptionKey(new MediaTypeKey());
-    addDbOptionKey(new MediaTypeKey(true));
-    addDbOptionKey(new RatingKey());
+    addDbOptionKey(new CommonKeys());
 }
 
 void DatabaseOption::unregisterKeys()
 {
+    QSet<DbOptionKey*> alreadyDeleted;
+
     foreach (DbOptionKey* key, m_map)
     {
-        if (key) delete key;
+        if (key && !alreadyDeleted.contains(key))
+        {
+            alreadyDeleted.insert(key);
+            delete key;
+        }
     }
     m_map.clear();
 }
@@ -164,16 +159,18 @@ QString DatabaseOption::parseDatabase(const QString& keyword, ParseSettings& set
     dbkey = m_map.value(keyword);
     if (!dbkey) return QString();
 
-    return dbkey->getValue(settings);
+    return dbkey->getValue(keyword, settings);
 }
 
 void DatabaseOption::addDbOptionKey(DbOptionKey* key)
 {
-    if (!key || key->name.isEmpty() || key->description.isEmpty())
+    if (!key) return;
+
+    DbKeyIdsMap map = key->ids();
+    for (DbKeyIdsMap::const_iterator it = map.constBegin(); it != map.constEnd(); ++it)
     {
-        return;
+        m_map.insert(it.key(), key);
     }
-    m_map.insert(key->name, key);
 }
 
 } // namespace Digikam

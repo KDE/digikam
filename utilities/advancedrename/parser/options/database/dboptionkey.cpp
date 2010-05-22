@@ -30,19 +30,27 @@ DbOptionKey::DbOptionKey()
 {
 }
 
-DbOptionKey::DbOptionKey(const QString& name, const QString& description)
-{
-    this->name          = name;
-    this->description   = description;
-}
-
 DbOptionKey::~DbOptionKey()
 {
 }
 
-QString DbOptionKey::getValue(ParseSettings& settings)
+QString DbOptionKey::getValue(const QString& key, ParseSettings& settings)
 {
-    return getDbValue(settings);
+    return getDbValue(key, settings);
+}
+
+void DbOptionKey::addKey(const QString& key, const QString& description)
+{
+    if (key.isEmpty() || description.isEmpty())
+    {
+        return;
+    }
+    m_keywords.insert(key, description);
+}
+
+DbKeyIdsMap DbOptionKey::ids() const
+{
+    return m_keywords;
 }
 
 } // namespace Digikam

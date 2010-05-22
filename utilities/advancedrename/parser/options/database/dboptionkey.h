@@ -24,28 +24,37 @@
 #ifndef DBOPTIONKEY_H
 #define DBOPTIONKEY_H
 
+// Qt includes
+
+#include <QMap>
+
 // local includes
 
 #include "parsesettings.h"
 
 namespace Digikam
 {
+
+typedef QMap<QString, QString> DbKeyIdsMap;
+
 class DbOptionKey
 {
 public:
 
     DbOptionKey();
-    DbOptionKey(const QString& name, const QString& description);
     virtual ~DbOptionKey();
 
-    QString getValue(ParseSettings& settings);
-
-    QString     name;
-    QString     description;
+    QString getValue(const QString& key, ParseSettings& settings);
+    DbKeyIdsMap ids() const;
 
 protected:
 
-    virtual QString getDbValue(ParseSettings& settings) = 0;
+    virtual QString getDbValue(const QString& key, ParseSettings& settings) = 0;
+    void addKey(const QString& key, const QString& description);
+
+private:
+
+    DbKeyIdsMap m_keywords;
 };
 
 } // namespace Digikam

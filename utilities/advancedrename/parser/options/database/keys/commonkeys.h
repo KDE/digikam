@@ -3,8 +3,8 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2010-05-19
- * Description : default comment key
+ * Date        : 2010-05-22
+ * Description : common information keys
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -21,28 +21,27 @@
  *
  * ============================================================ */
 
-#include "defaultcommentkey.h"
-
-// KDE includes
-
-#include <klocale.h>
+#ifndef COMMONKEYS_H
+#define COMMONKEYS_H
 
 // local includes
 
-#include "imageinfo.h"
+#include "dboptionkey.h"
+#include "parsesettings.h"
 
 namespace Digikam
 {
-
-DefaultCommentKey::DefaultCommentKey()
-                 : DbOptionKey(QString("DefaultComment"), i18n("Default comment of the image"))
+class CommonKeys : public DbOptionKey
 {
-}
+public:
+    CommonKeys();
+    virtual ~CommonKeys() {};
 
-QString DefaultCommentKey::getDbValue(ParseSettings& settings)
-{
-    ImageInfo info(settings.fileUrl);
-    return info.comment().simplified();
-}
+protected:
+
+    virtual QString getDbValue(const QString& key, ParseSettings& settings);
+};
 
 } // namespace Digikam
+
+#endif /* COMMONKEYS_H */

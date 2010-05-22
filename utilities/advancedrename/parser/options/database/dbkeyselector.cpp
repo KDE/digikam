@@ -108,7 +108,7 @@ void DbKeySelector::setKeysMap(const DbOptionKeysMap& map)
 
     for (DbOptionKeysMap::const_iterator it = map.constBegin(); it != map.constEnd(); ++it)
     {
-        new DbKeySelectorItem(this, it.value()->name, it.value()->description);
+        new DbKeySelectorItem(this, it.key(), it.value()->ids().value(it.key()));
     }
 }
 

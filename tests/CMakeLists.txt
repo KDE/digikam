@@ -68,12 +68,7 @@ SET(advancedrenametest_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options/database/databaseoption.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options/database/dbkeyselector.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options/database/dboptionkey.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options/database/keys/defaultcommentkey.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options/database/keys/ratingkey.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options/database/keys/formatkey.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options/database/keys/dimensionkey.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options/database/keys/filesizekey.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options/database/keys/mediatypekey.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options/database/keys/commonkeys.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options/dateoption.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options/directorynameoption.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options/filepropertiesoption.cpp
