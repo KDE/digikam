@@ -30,6 +30,7 @@
 // local includes
 
 #include "imageinfo.h"
+#include "imagecopyright.h"
 
 static const QString KEY_DEFAULTCOMMENT("DefaultComment");
 static const QString KEY_DIMENSION("Dimension");
@@ -42,6 +43,7 @@ static const QString KEY_WIDTH("Width");
 static const QString KEY_ORIENTATION("Orientation");
 static const QString KEY_COLORDEPTH("ColorDepth");
 static const QString KEY_COLORMODEL("ColorModel");
+static const QString KEY_DEFAULTAUTHOR("DefaultAuthor");
 
 namespace Digikam
 {
@@ -49,6 +51,7 @@ namespace Digikam
 CommonKeys::CommonKeys()
 {
     addId(KEY_DEFAULTCOMMENT,  i18n("Default comment of the image"));
+    addId(KEY_DEFAULTAUTHOR,   i18n("Default author of the image"));
     addId(KEY_DIMENSION,       i18n("Image dimension"));
     addId(KEY_FILESIZE,        i18n("Image file size"));
     addId(KEY_FORMAT,          i18n("Format of the media file"));
@@ -65,11 +68,20 @@ QString CommonKeys::getDbValue(const QString& key, ParseSettings& settings)
 {
     ImageInfo info(settings.fileUrl);
     ImageCommonContainer container = info.imageCommonContainer();
+    ImageCopyright copyright       = info.imageCopyright();
     QString result;
 
     if (key == KEY_DEFAULTCOMMENT)
     {
         result = info.comment().simplified();
+    }
+    else if (key == KEY_DEFAULTAUTHOR)
+    {
+        QStringList authors = copyright.author();
+        if (!authors.isEmpty())
+        {
+            result = authors.at(0);
+        }
     }
     else if (key == KEY_DIMENSION)
     {
