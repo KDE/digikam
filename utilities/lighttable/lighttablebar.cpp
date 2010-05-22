@@ -151,14 +151,14 @@ void LightTableBar::contentsMouseReleaseEvent(QMouseEvent* e)
         {
             cmhelper.addAction(leftPanelAction, true);
             cmhelper.addAction(rightPanelAction, true);
-            popmenu.addSeparator();
+            cmhelper.addSeparator();
             // ------------------------------------------------
             cmhelper.addAction(editAction);
             cmhelper.addAction(removeAction);
-            popmenu.addSeparator();
+            cmhelper.addSeparator();
             // ------------------------------------------------
             cmhelper.addRatingMenu();
-            popmenu.addSeparator();
+            cmhelper.addSeparator();
             // ------------------------------------------------
         }
         cmhelper.addAction(clearAllAction, true);

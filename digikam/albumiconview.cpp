@@ -580,25 +580,25 @@ void AlbumIconView::slotRightButtonClicked(IconItem *item, const QPoint&)
     cmhelper.addAction("image_edit");
     cmhelper.addServicesMenu(selectedItems());
     cmhelper.addKipiActions();
-    popmenu.addSeparator();
+    cmhelper.addSeparator();
     // --------------------------------------------------------
     cmhelper.addAction("image_find_similar");
     cmhelper.addActionLightTable();
     cmhelper.addQueueManagerMenu();
     cmhelper.addGotoMenu(selectedImageIDs);
     cmhelper.addAction("image_rename");
-    popmenu.addSeparator();
+    cmhelper.addSeparator();
     // --------------------------------------------------------
     cmhelper.addActionCopy(this, SLOT(slotCopy()));
     cmhelper.addActionPaste(this, SLOT(slotPaste()));
     cmhelper.addActionItemDelete(this, SLOT(slotDeleteSelectedItems()), selectedImageIDs.count());
-    popmenu.addSeparator();
+    cmhelper.addSeparator();
     // --------------------------------------------------------
     cmhelper.addActionThumbnail(selectedImageIDs, d->currentAlbum);
     // --------------------------------------------------------
     cmhelper.addAssignTagsMenu(selectedImageIDs);
     cmhelper.addRemoveTagsMenu(selectedImageIDs);
-    popmenu.addSeparator();
+    cmhelper.addSeparator();
     // --------------------------------------------------------
     cmhelper.addRatingMenu();
 

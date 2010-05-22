@@ -355,19 +355,19 @@ void LightTablePreview::slotContextMenu()
     cmhelper.addAction(zoomInAction);
     cmhelper.addAction(zoomOutAction);
     cmhelper.addAction(fitWindowAction);
-    popmenu.addSeparator();
+    cmhelper.addSeparator();
     // --------------------------------------------------------
     cmhelper.addAction(slideshowAction);
     cmhelper.addAction(editAction);
     cmhelper.addServicesMenu(selectedItems);
-    popmenu.addSeparator();
+    cmhelper.addSeparator();
     // --------------------------------------------------------
     cmhelper.addAction(trashAction);
-    popmenu.addSeparator();
+    cmhelper.addSeparator();
     // --------------------------------------------------------
     cmhelper.addAssignTagsMenu(idList);
     cmhelper.addRemoveTagsMenu(idList);
-    popmenu.addSeparator();
+    cmhelper.addSeparator();
     // --------------------------------------------------------
     cmhelper.addRatingMenu();
 
@@ -523,7 +523,7 @@ void LightTablePreview::viewportPaintExtraData()
         fontRect = fontMt.boundingRect(0, 0, contentsWidth(), contentsHeight(), 0, text);
         textRect.setTopLeft(QPoint(region.topRight().x()-fontRect.width()-20, region.topRight().y()+20));
         textRect.setSize( QSize(fontRect.width()+2, fontRect.height()+2) );
-        
+
         drawText(&p, QPoint(region.topRight().x()-fontRect.width()-20, region.topRight().y()+20), text);
         p.end();
     }

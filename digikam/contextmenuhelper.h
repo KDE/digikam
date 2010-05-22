@@ -111,12 +111,11 @@ public:
     /**
      * Add an action from the actionCollection.
      *
-     * This method will help you adding actions from the actionCollection. The actionCollection can
+     * This method adds actions from the actionCollection. The actionCollection can
      * be set in the constructor of the ContextMenuHelper class.
      *
      * @param name the name of the action in the actionCollection
      * @param addDisabled if set, disabled actions are added to the menu
-     * @see ContextMenuHelper()
      */
     void addAction(const char* name, bool addDisabled = false);
 
@@ -130,10 +129,6 @@ public:
      * @param addDisabled if set, disabled actions are added to the menu
      */
     void addAction(QAction* action, bool addDisabled = false);
-
-    void addSubMenu(KMenu *subMenu);
-
-    void addSeparator();
 
     /**
      * Add a temporary action and assign it to a custom slot.
@@ -332,6 +327,18 @@ public:
     void addBatchMenu();
 
     void addAlbumActions();
+
+    /**
+     * Add a submenu to the parent context menu.
+     *
+     * @param subMenu   the submenu to be added
+     */
+    void addSubMenu(KMenu *subMenu);
+
+    /**
+     * Add a separator to the context menu
+     */
+    void addSeparator();
 
     /**
      * Execute the registered parent menu and evaluate the triggered actions.
