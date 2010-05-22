@@ -46,11 +46,6 @@ DefaultRenameParser::DefaultRenameParser()
                    : Parser()
 {
     /*
-     * RENAMING OPTIONS are defined in the inherited Parser classes
-     */
-
-
-    /*
      * RENAMING OPTIONS
      */
     registerOption(new FilePropertiesOption());
@@ -63,10 +58,6 @@ DefaultRenameParser::DefaultRenameParser()
 #if KEXIV2_VERSION >= 0x010000
     registerOption(new MetadataOption());
 #endif
-
-    /*
-     * MODIFIERS are defined in the Parser base class
-     */
 }
 
 }  // namespace Digikam

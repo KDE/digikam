@@ -60,6 +60,10 @@ Parser::Parser()
       : d(new ParserPriv)
 {
     /*
+     * RENAMING OPTIONS are defined in the inherited Parser classes
+     */
+
+    /*
      * MODIFIERS
      */
     registerModifier(new CaseModifier());

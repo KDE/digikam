@@ -56,10 +56,6 @@ ImportRenameParser::ImportRenameParser()
 #if KEXIV2_VERSION >= 0x010000
     registerOption(new MetadataOption());
 #endif
-
-    /*
-     * MODIFIERS are defined in the Parser base class
-     */
 }
 
 }  // namespace Digikam
