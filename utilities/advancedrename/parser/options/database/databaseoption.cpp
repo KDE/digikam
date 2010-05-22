@@ -42,6 +42,7 @@
 #include "dbkeyselector.h"
 
 #include "commonkeys.h"
+#include "metadatakeys.h"
 
 namespace Digikam
 {
@@ -95,6 +96,7 @@ DatabaseOption::~DatabaseOption()
 void DatabaseOption::registerKeys()
 {
     addDbOptionKey(new CommonKeys());
+    addDbOptionKey(new MetadataKeys());
 }
 
 void DatabaseOption::unregisterKeys()
