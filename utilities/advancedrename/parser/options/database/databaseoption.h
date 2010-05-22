@@ -80,10 +80,10 @@ private Q_SLOTS:
 private:
 
     QString parseDatabase(const QString& keyword, ParseSettings& settings);
-    void addDbOptionKey(DbKeysCollection* key);
+    void addDbKeysCollection(DbKeysCollection* key);
 
-    void registerKeys();
-    void unregisterKeys();
+    void registerKeysCollection();
+    void unregisterKeysCollection();
 
 private:
 

@@ -85,21 +85,21 @@ DatabaseOption::DatabaseOption()
     reg.setMinimal(true);
     setRegExp(reg);
 
-    registerKeys();
+    registerKeysCollection();
 }
 
 DatabaseOption::~DatabaseOption()
 {
-    unregisterKeys();
+    unregisterKeysCollection();
 }
 
-void DatabaseOption::registerKeys()
+void DatabaseOption::registerKeysCollection()
 {
-    addDbOptionKey(new CommonKeys());
-    addDbOptionKey(new MetadataKeys());
+    addDbKeysCollection(new CommonKeys());
+    addDbKeysCollection(new MetadataKeys());
 }
 
-void DatabaseOption::unregisterKeys()
+void DatabaseOption::unregisterKeysCollection()
 {
     QSet<DbKeysCollection*> alreadyDeleted;
 
@@ -164,7 +164,7 @@ QString DatabaseOption::parseDatabase(const QString& keyword, ParseSettings& set
     return dbkey->getValue(keyword, settings);
 }
 
-void DatabaseOption::addDbOptionKey(DbKeysCollection* key)
+void DatabaseOption::addDbKeysCollection(DbKeysCollection* key)
 {
     if (!key) return;
 
