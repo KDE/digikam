@@ -31,11 +31,11 @@
 
 namespace Digikam
 {
-class CategoryKey : public DbOptionKey
+class MediaTypeKey : public DbOptionKey
 {
 public:
-    CategoryKey(bool localized = false);
-    virtual ~CategoryKey() {};
+    MediaTypeKey(bool localized = false);
+    virtual ~MediaTypeKey() {};
 
 protected:
 

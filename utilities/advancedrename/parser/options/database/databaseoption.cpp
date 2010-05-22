@@ -41,12 +41,12 @@
 #include "imagecomments.h"
 #include "dbkeyselector.h"
 
-#include "categorykey.h"
 #include "defaultcommentkey.h"
-#include "ratingkey.h"
-#include "formatkey.h"
 #include "dimensionkey.h"
 #include "filesizekey.h"
+#include "formatkey.h"
+#include "mediatypekey.h"
+#include "ratingkey.h"
 
 namespace Digikam
 {
@@ -99,13 +99,13 @@ DatabaseOption::~DatabaseOption()
 
 void DatabaseOption::registerKeys()
 {
-    addDbOptionKey(new CategoryKey());
-    addDbOptionKey(new CategoryKey(true));
     addDbOptionKey(new DefaultCommentKey());
-    addDbOptionKey(new RatingKey());
-    addDbOptionKey(new FormatKey());
     addDbOptionKey(new DimensionKey());
     addDbOptionKey(new FileSizeKey());
+    addDbOptionKey(new FormatKey());
+    addDbOptionKey(new MediaTypeKey());
+    addDbOptionKey(new MediaTypeKey(true));
+    addDbOptionKey(new RatingKey());
 }
 
 void DatabaseOption::unregisterKeys()
@@ -160,11 +160,11 @@ QString DatabaseOption::parseDatabase(const QString& keyword, ParseSettings& set
         return QString();
     }
 
-    DbOptionKey* dbok = 0;
-    dbok = m_map.value(keyword);
-    if (!dbok) return QString();
+    DbOptionKey* dbkey = 0;
+    dbkey = m_map.value(keyword);
+    if (!dbkey) return QString();
 
-    return dbok->getValue(settings);
+    return dbkey->getValue(settings);
 }
 
 void DatabaseOption::addDbOptionKey(DbOptionKey* key)

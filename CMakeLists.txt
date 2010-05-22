@@ -1222,7 +1222,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options/database/keys/formatkey.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options/database/keys/dimensionkey.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options/database/keys/filesizekey.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options/database/keys/categorykey.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options/database/keys/mediatypekey.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options/dateoption.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options/directorynameoption.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options/filepropertiesoption.cpp

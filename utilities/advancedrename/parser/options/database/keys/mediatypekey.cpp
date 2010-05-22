@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "categorykey.h"
+#include "mediatypekey.h"
 
 // KDE includes
 
@@ -35,23 +35,23 @@
 namespace Digikam
 {
 
-CategoryKey::CategoryKey(bool localized)
-           : DbOptionKey()
+MediaTypeKey::MediaTypeKey(bool localized)
+            : DbOptionKey()
 {
-    name = QString("Category");
-    QString desc("File category");
-    QString desc2("e.g. Image, Audio, Movie)");
-    description = i18n("%1, %2", desc, desc2);
+    name = QString("MediaType");
+    QString desc("Media type");
+    QString desc2("e.g. Image, Audio, Movie");
+    description = i18n("%1 (%2)", desc, desc2);
 
     isLocalized = localized;
     if (isLocalized)
     {
         name.append("Loc");
-        description = i18n("%1 (localized), %2", desc, desc2);
+        description = i18n("%1 (localized)", desc);
     }
 }
 
-QString CategoryKey::getDbValue(ParseSettings& settings)
+QString MediaTypeKey::getDbValue(ParseSettings& settings)
 {
     ImageInfo info(settings.fileUrl);
     QString result;
