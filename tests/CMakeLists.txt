@@ -71,6 +71,7 @@ SET(advancedrenametest_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options/database/dbheaderlistitem.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options/database/keys/commonkeys.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options/database/keys/metadatakeys.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options/database/keys/positionkeys.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options/dateoption.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options/directorynameoption.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options/filepropertiesoption.cpp

@@ -43,6 +43,7 @@
 
 #include "commonkeys.h"
 #include "metadatakeys.h"
+#include "positionkeys.h"
 
 namespace Digikam
 {
@@ -97,6 +98,7 @@ void DatabaseOption::registerKeysCollection()
 {
     addDbKeysCollection(new CommonKeys());
     addDbKeysCollection(new MetadataKeys());
+    addDbKeysCollection(new PositionKeys());
 }
 
 void DatabaseOption::unregisterKeysCollection()
