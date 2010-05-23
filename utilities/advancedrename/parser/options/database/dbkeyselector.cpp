@@ -108,6 +108,8 @@ DbKeySelector::~DbKeySelector()
 void DbKeySelector::setKeysMap(const DbOptionKeysMap& map)
 {
     clear();
+    setSortingEnabled(true);
+
     QMap<QString, DbHeaderListItem*> headers;
 
     for (DbOptionKeysMap::const_iterator it = map.constBegin(); it != map.constEnd(); ++it)
@@ -120,6 +122,9 @@ void DbKeySelector::setKeysMap(const DbOptionKeysMap& map)
                               it.key(),
                               it.value()->ids().value(it.key()));
     }
+
+    sortByColumn(0, Qt::AscendingOrder);
+    setSortingEnabled(false);
 }
 
 QStringList DbKeySelector::checkedKeysList()
