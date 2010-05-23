@@ -93,7 +93,7 @@ private Q_SLOTS:
 
 private:
 
-    Q_DECLARE_PRIVATE(DImgPreviewItem);
+    Q_DECLARE_PRIVATE(DImgPreviewItem)
 };
 
 } // namespace Digikam

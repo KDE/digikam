@@ -53,7 +53,7 @@ public:
     {
         JustSetFactor  = 0,
         CenterView     = 1 << 0,
-        SnapZoomFactor = 1 << 1,
+        SnapZoomFactor = 1 << 1
     };
     Q_DECLARE_FLAGS(SetZoomFlags, SetZoomFlag)
 
