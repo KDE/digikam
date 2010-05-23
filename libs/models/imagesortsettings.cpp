@@ -136,7 +136,7 @@ int ImageSortSettings::compareCategories(const ImageInfo& left, const ImageInfo&
             // return comparation result
             if (leftAlbum == rightAlbum)
                 return 0;
-            else if (lessThan(leftAlbum, rightAlbum, currentCategorizationSortOrder))
+            else if (lessThanByOrder(leftAlbum, rightAlbum, currentCategorizationSortOrder))
                 return -1;
             else
                 return 1;
@@ -153,39 +153,58 @@ int ImageSortSettings::compareCategories(const ImageInfo& left, const ImageInfo&
 
 bool ImageSortSettings::lessThan(const ImageInfo& left, const ImageInfo& right) const
 {
-    switch (sortRole)
+    int result = compare(left, right, sortRole);
+    if (result != 0)
+        return result < 0;
+    // are they identical?
+    if (left == right)
+        return false;
+    // If left and right equal for first sort order, use a hierarchy of all sort orders
+    if ( (result = compare(left, right, SortByFileName)) != 0)
+        return result < 0;
+    if ( (result = compare(left, right, SortByCreationDate)) != 0)
+        return result < 0;
+    if ( (result = compare(left, right, SortByModificationDate)) != 0)
+        return result < 0;
+    if ( (result = compare(left, right, SortByFilePath)) != 0)
+        return result < 0;
+    if ( (result = compare(left, right, SortByFileSize)) != 0)
+        return result < 0;
+    return false;
+}
+
+int ImageSortSettings::compare(const ImageInfo& left, const ImageInfo& right) const
+{
+    return compare(left, right, sortRole);
+}
+
+int ImageSortSettings::compare(const ImageInfo& left, const ImageInfo& right, SortRole role) const
+{
+    switch (role)
     {
         case SortByFileName:
-            return naturalCompare(left.name(), right.name(), currentSortOrder, sortCaseSensitivity) < 0;
+            return naturalCompare(left.name(), right.name(), currentSortOrder, sortCaseSensitivity);
         case SortByFilePath:
-            return naturalCompare(left.filePath(), right.filePath(), currentSortOrder, sortCaseSensitivity) < 0;
+            return naturalCompare(left.filePath(), right.filePath(), currentSortOrder, sortCaseSensitivity);
         case SortByFileSize:
-            return lessThan(left.fileSize(), right.fileSize(), currentSortOrder);
+            return compareByOrder(left.fileSize(), right.fileSize(), currentSortOrder);
         case SortByModificationDate:
-            return lessThan(left.modDateTime(), right.modDateTime(), currentSortOrder);
+            return compareByOrder(left.modDateTime(), right.modDateTime(), currentSortOrder);
         case SortByCreationDate:
-            return lessThan(left.dateTime(), right.dateTime(), currentSortOrder);
+            return compareByOrder(left.dateTime(), right.dateTime(), currentSortOrder);
         case SortByRating:
-        {
-            int leftRating = left.rating();
-            int rightRating = right.rating();
-            // second order sorting by name: Many images can have the same rating!
-            if (leftRating == rightRating)
-                return naturalCompare(left.name(), right.name(), currentSortOrder, sortCaseSensitivity) < 0;
-            return lessThan(leftRating, rightRating, currentSortOrder);
-        }
+            // I have the feeling that inverting the sort order for rating is the natural order
+            return - compareByOrder(left.rating(), right.rating(), currentSortOrder);
         case SortByImageSize:
         {
             QSize leftSize = left.dimensions();
             QSize rightSize = right.dimensions();
             int leftPixels = leftSize.width() * leftSize.height();
             int rightPixels = rightSize.width() * rightSize.height();
-            if (leftPixels == rightPixels)
-                return naturalCompare(left.name(), right.name(), currentSortOrder, sortCaseSensitivity) < 0;
-            return lessThan(leftPixels, rightPixels, currentSortOrder);
+            return compareByOrder(leftPixels, rightPixels, currentSortOrder);
         }
         default:
-            return false;
+            return 1;
     }
 }
 
