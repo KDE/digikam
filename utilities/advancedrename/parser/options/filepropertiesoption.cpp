@@ -32,7 +32,6 @@
 #include <kiconloader.h>
 #include <klocale.h>
 
-
 static const QString KEY_FILE("[file]");
 static const QString KEY_EXT("[ext]");
 static const QString KEY_USER("[user]");
