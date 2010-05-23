@@ -75,7 +75,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 062 ==> 238338 : Sometimes digikam reads a wrong ICC profile from images.
 063 ==> 214669 : Stange duplicated images behavior after fingerprints rebuild.
 064 ==> 230442 : Digikam crashes when clicking directory button in rename pictures dialog.
-065 ==>
+065 ==> 210612 : After rename in digiKam pictures preview are not possible.
+066 ==>
 
 
 
