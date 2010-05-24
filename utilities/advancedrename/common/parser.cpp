@@ -27,7 +27,19 @@
 
 #include <QFileInfo>
 
+// LibKExiv2 includes
+
+#include <libkexiv2/version.h>
+
 // local includes
+
+#include "cameranameoption.h"
+#include "databaseoption.h"
+#include "dateoption.h"
+#include "directorynameoption.h"
+#include "filepropertiesoption.h"
+#include "metadataoption.h"
+#include "sequencenumberoption.h"
 
 #include "casemodifier.h"
 #include "defaultvaluemodifier.h"
@@ -59,13 +71,19 @@ public:
 Parser::Parser()
       : d(new ParserPriv)
 {
-    /*
-     * RENAMING OPTIONS are defined in the inherited Parser classes
-     */
+    registerOption(new FilePropertiesOption());
+    registerOption(new DirectoryNameOption());
+    registerOption(new CameraNameOption());
+    registerOption(new SequenceNumberOption());
+    registerOption(new DateOption());
+    registerOption(new DatabaseOption());
 
-    /*
-     * MODIFIERS
-     */
+#if KEXIV2_VERSION >= 0x010000
+    registerOption(new MetadataOption());
+#endif
+
+    // --------------------------------------------------------
+
     registerModifier(new CaseModifier());
     registerModifier(new TrimmedModifier());
     registerModifier(new UniqueModifier());
@@ -73,6 +91,8 @@ Parser::Parser()
     registerModifier(new ReplaceModifier());
     registerModifier(new FillModifier());
     registerModifier(new RangeModifier());
+
+    // --------------------------------------------------------
 
     init(ParseSettings());
 }
@@ -139,6 +159,16 @@ void Parser::registerOption(Option* option)
     d->options.append(option);
 }
 
+void Parser::unregisterOption(Option* option)
+{
+    if (!option)
+    {
+        return;
+    }
+
+    d->options.removeAll(option);
+}
+
 void Parser::registerModifier(Modifier* modifier)
 {
     if (!modifier || !modifier->isValid())
@@ -147,6 +177,16 @@ void Parser::registerModifier(Modifier* modifier)
     }
 
     d->modifiers.append(modifier);
+}
+
+void Parser::unregisterModifier(Modifier* modifier)
+{
+    if (!modifier)
+    {
+        return;
+    }
+
+    d->modifiers.removeAll(modifier);
 }
 
 ParseResults Parser::results(ParseSettings& settings)

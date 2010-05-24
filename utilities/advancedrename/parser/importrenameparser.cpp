@@ -24,19 +24,9 @@
 
 #include "importrenameparser.h"
 
-// LibKExiv2 includes
+// local includes
 
-#include <libkexiv2/version.h>
-
-// Local includes
-
-
-#include "cameranameoption.h"
-#include "dateoption.h"
-#include "directorynameoption.h"
-#include "filepropertiesoption.h"
-#include "metadataoption.h"
-#include "sequencenumberoption.h"
+#include "databaseoption.h"
 
 namespace Digikam
 {
@@ -44,18 +34,18 @@ namespace Digikam
 ImportRenameParser::ImportRenameParser()
                   : Parser()
 {
-    /*
-     * RENAMING OPTIONS
-     */
-    registerOption(new FilePropertiesOption());
-    registerOption(new DirectoryNameOption());
-    registerOption(new CameraNameOption());
-    registerOption(new SequenceNumberOption());
-    registerOption(new DateOption());
+    // unregister options that are not suitable during import
+    OptionsList oplist = options();
 
-#if KEXIV2_VERSION >= 0x010000
-    registerOption(new MetadataOption());
-#endif
+    foreach (Option* option, oplist)
+    {
+        Option* toBeRemoved = 0;
+        toBeRemoved = dynamic_cast<DatabaseOption*>(option);
+        if (toBeRemoved)
+        {
+            unregisterOption(toBeRemoved);
+        }
+    }
 }
 
 }  // namespace Digikam
