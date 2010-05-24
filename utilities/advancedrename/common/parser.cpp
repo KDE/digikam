@@ -161,12 +161,16 @@ void Parser::registerOption(Option* option)
 
 void Parser::unregisterOption(Option* option)
 {
-    if (!option)
-    {
-        return;
-    }
+    if (!option) return;
 
-    d->options.removeAll(option);
+    for (OptionsList::iterator it = d->options.begin();
+         it != d->options.end(); )
+    {
+        if (*it == option)
+            it = d->options.erase(it);
+        else
+            ++it;
+    }
 }
 
 void Parser::registerModifier(Modifier* modifier)
@@ -181,12 +185,16 @@ void Parser::registerModifier(Modifier* modifier)
 
 void Parser::unregisterModifier(Modifier* modifier)
 {
-    if (!modifier)
-    {
-        return;
-    }
+    if (!modifier) return;
 
-    d->modifiers.removeAll(modifier);
+    for (ModifierList::iterator it = d->modifiers.begin();
+         it != d->modifiers.end(); )
+    {
+        if (*it == modifier)
+            it = d->modifiers.erase(it);
+        else
+            ++it;
+    }
 }
 
 ParseResults Parser::results(ParseSettings& settings)
