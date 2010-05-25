@@ -28,7 +28,7 @@
  <BaseColor value="#7F7F7F" />
  <TextRegularColor value="#000000" />
  <TextSelectedColor value="#FFFFFF" />
- <TextSpecialRegularColor value="#000000" />
+ <TextSpecialRegularColor value="#404040" />
  <TextSpecialSelectedColor value="#FFFFFF" />
  <BannerColor value="#1C1C1C" />
  <BannerColorTo value="#1C1C1C" />
