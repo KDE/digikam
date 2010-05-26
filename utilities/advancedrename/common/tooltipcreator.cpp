@@ -43,16 +43,13 @@ using namespace Digikam;
 namespace Digikam
 {
 
-TooltipCreator::TooltipCreator(Parser* _parser)
-              : parser(_parser)
+TooltipCreator& TooltipCreator::getInstance()
 {
+    static TooltipCreator m_instance;
+    return m_instance;
 }
 
-TooltipCreator::~TooltipCreator()
-{
-}
-
-QString TooltipCreator::tooltip()
+QString TooltipCreator::tooltip(Parser* parser)
 {
     if (!parser)
     {

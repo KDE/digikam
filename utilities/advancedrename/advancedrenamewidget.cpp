@@ -168,7 +168,7 @@ void AdvancedRenameWidget::createToolTip()
 {
     if (d->parser)
     {
-        d->tooltipTracker->setText(TooltipCreator(d->parser).tooltip());
+        d->tooltipTracker->setText(TooltipCreator::getInstance().tooltip(d->parser));
     }
     else
     {

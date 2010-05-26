@@ -37,12 +37,15 @@ class TooltipCreator
 {
 public:
 
-    TooltipCreator(Parser* parser);
-    virtual ~TooltipCreator();
+    ~TooltipCreator() {};
+    static TooltipCreator& getInstance();
 
-    QString tooltip();
+    QString tooltip(Parser* parser);
 
 private:
+
+    TooltipCreator() {};
+    TooltipCreator(const TooltipCreator&) {};
 
     // common methods
     QString markOption(const QString& str);
@@ -54,10 +57,6 @@ private:
     template <class T> QString createEntries(const QList<T*> &data);
     template <class T> QString createSection(const QString& sectionName, const QList<T*> &data, bool lastSection = false);
                        QString createHeader(const QString& str);
-
-private:
-
-    Parser* const parser;
 };
 
 } // namespace Digikam
