@@ -135,7 +135,6 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
     d->renameCustom         = new QRadioButton(i18nc("Custom Image Renaming", "Customize"), this);
     d->advancedRenameWidget = new AdvancedRenameWidget(this);
     d->advancedRenameWidget->setParser(new ImportRenameParser());
-    d->advancedRenameWidget->setTooltipAlignment(Qt::AlignRight);
     d->buttonGroup->addButton(d->renameCustom, 2);
 
     mainLayout->addWidget(d->renameDefault,        0, 0, 1, 2);
@@ -237,7 +236,6 @@ void RenameCustomizer::slotRadioButtonClicked(int id)
     btn->setChecked(true);
     d->renameDefaultBox->setEnabled( btn == d->renameDefault );
     d->advancedRenameWidget->setEnabled( btn == d->renameCustom );
-    d->advancedRenameWidget->slotHideToolTipTracker();
     slotRenameOptionsChanged();
 }
 
@@ -278,16 +276,6 @@ void RenameCustomizer::saveSettings()
 void RenameCustomizer::restoreFocus()
 {
     d->focusedWidget->setFocus();
-}
-
-void RenameCustomizer::slotUpdateTrackerPos()
-{
-    d->advancedRenameWidget->slotUpdateTrackerPos();
-}
-
-void RenameCustomizer::slotHideToolTipTracker()
-{
-    d->advancedRenameWidget->slotHideToolTipTracker();
 }
 
 }  // namespace Digikam

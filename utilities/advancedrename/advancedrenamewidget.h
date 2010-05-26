@@ -105,17 +105,10 @@ public:
      */
     void focusLineEdit();
 
-    void setTooltipAlignment(Qt::Alignment alignment);
-
 Q_SIGNALS:
 
     void signalTextChanged(const QString&);
     void signalReturnPressed();
-
-public Q_SLOTS:
-
-    void slotUpdateTrackerPos();
-    void slotHideToolTipTracker();
 
 private Q_SLOTS:
 

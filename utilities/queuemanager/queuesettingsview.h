@@ -99,8 +99,6 @@ Q_SIGNALS:
 public Q_SLOTS:
 
     void slotQueueSelected(int, const QueueSettings&, const AssignedBatchTools&);
-    void slotUpdateTrackerPos();
-    void slotHideToolTipTracker();
 
 private Q_SLOTS:
 
