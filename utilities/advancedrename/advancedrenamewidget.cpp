@@ -275,9 +275,9 @@ void AdvancedRenameWidget::setupWidgets()
      */
     delete d->tooltipDialog;
     d->tooltipDialog = new KDialog(this);
-    d->tooltipDialog->setCaption(i18n("Description of the renaming options"));
+    d->tooltipDialog->setCaption(i18n("Information"));
     d->tooltipDialog->setButtons(KDialog::Close);
-    d->tooltipDialog->resize(650, 500);
+    d->tooltipDialog->resize(650, 530);
     d->tooltipDialog->setMainWidget(new QTextEdit());
 
     delete d->renameInput;

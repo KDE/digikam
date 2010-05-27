@@ -103,7 +103,7 @@ QString TooltipCreator::markOption(const QString& str)
 QString TooltipCreator::createHeader(const QString& str)
 {
     QString result;
-    QString templateStr = QString("<tr><td style=\"background-color: %1;\" colspan=\"2\">"
+    QString templateStr = QString("<tr><td style=\"background-color: %1; padding:0.5em;\" colspan=\"2\">"
                                   "<nobr><font color=\"%2\"><center><b>%3"
                                   "</b></center></font></nobr></td></tr>")
                                   .arg(ThemeEngine::instance()->thumbSelColor().name())
