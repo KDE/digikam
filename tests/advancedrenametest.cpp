@@ -246,10 +246,10 @@ void AdvancedRenameWidgetTest::testChainedModifiers_data()
     QTest::addColumn<QString>("result");
 
     QTest::newRow("[file]*{upper}") << QString("[file]{firstupper}{upper}") << QString("ADVANCEDRENAME_TESTIMAGE.jpg");
-    QTest::newRow("[file]{3-}*")    << QString("[file]{3-}{firstupper}")    << QString("Vancedrename_Testimage.jpg");
+    QTest::newRow("[file]{range:3,}*") << QString("[file]{range:3,}{firstupper}")    << QString("Vancedrename_Testimage.jpg");
 
-    QTest::newRow("[file]{3-}{replace:\"name\",\"age\"}{firstupper}")
-            << QString("[file]{3-}{replace:\"name\",\"age\"}{firstupper}")
+    QTest::newRow("[file]{range:3,}{replace:\"name\",\"age\"}{firstupper}")
+            << QString("[file]{range:3,}{replace:\"name\",\"age\"}{firstupper}")
             << QString("Vancedreage_Testimage.jpg");
 }
 
@@ -404,10 +404,10 @@ void AdvancedRenameWidgetTest::testRangeModifier_data()
 
     QDateTime curdate = QDateTime::currentDateTime();
 
-    QTest::newRow("[file]{1}")    << QString("[file]{1}")   << QString("a.jpg");
-    QTest::newRow("[file]{3}")    << QString("[file]{3}")   << QString("v.jpg");
-    QTest::newRow("[file]{1-3}")  << QString("[file]{1-3}") << QString("adv.jpg");
-    QTest::newRow("[file]{3-}")   << QString("[file]{3-}")  << QString("vancedrename_testimage.jpg");
+    QTest::newRow("[file]{range:1}")    << QString("[file]{range:1}")   << QString("a.jpg");
+    QTest::newRow("[file]{range:3}")    << QString("[file]{range:3}")   << QString("v.jpg");
+    QTest::newRow("[file]{range:1,3}")  << QString("[file]{range:1,3}") << QString("adv.jpg");
+    QTest::newRow("[file]{range:3,}")   << QString("[file]{range:3,}")  << QString("vancedrename_testimage.jpg");
 }
 
 void AdvancedRenameWidgetTest::testRangeModifier()

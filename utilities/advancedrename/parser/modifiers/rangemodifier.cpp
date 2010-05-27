@@ -72,9 +72,9 @@ RangeModifier::RangeModifier()
              : Modifier(i18n("Range..."), i18n("Add only a specific range of a renaming option"),
                         SmallIcon("measure"))
 {
-    addToken("{||from|| - ||to||}", i18n("Extract a specific range (if omitted, '||to||' = end of string)"));
+    addToken("{range:||from||,||to||}", i18n("Extract a specific range (if '||to||' is omitted, go to the end of string)"));
 
-    QRegExp reg("\\{(\\d+)(-((-1|\\d+))?)?\\}");
+    QRegExp reg("\\{range:(\\d+)(,((-1|\\d+))?)?\\}");
     reg.setMinimal(true);
     setRegExp(reg);
 }
@@ -93,11 +93,11 @@ void RangeModifier::slotTokenTriggered(const QString& token)
 
         if (dlg->ui->toTheEndCheckBox->isChecked())
         {
-            result = QString("{%1-}").arg(QString::number(start));
+            result = QString("{range:%1,}").arg(QString::number(start));
         }
         else
         {
-            result = QString("{%1-%2}").arg(QString::number(start))
+            result = QString("{range:%1,%2}").arg(QString::number(start))
                                        .arg(QString::number(stop));
         }
     }
