@@ -63,12 +63,11 @@ MetadataOptionDialog::MetadataOptionDialog(Parseable* parent)
 
     // --------------------------------------------------------
 
-    // We only need the "SearchBar" and "ClearBtn" control elements.
-    // Also we need to reset the default selections
+    // We only need the "SearchBar" control element.
+    // We also need to reset the default selections.
     foreach (MetadataSelectorView* viewer, metadataPanel->viewers())
     {
-        viewer->setControlElements(MetadataSelectorView::SearchBar |
-                                   MetadataSelectorView::ClearBtn);
+        viewer->setControlElements(MetadataSelectorView::SearchBar);
 
         viewer->clearSelection();
     }
