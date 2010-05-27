@@ -43,7 +43,6 @@
 
 #include "casemodifier.h"
 #include "defaultvaluemodifier.h"
-#include "fillmodifier.h"
 #include "rangemodifier.h"
 #include "replacemodifier.h"
 #include "trimmedmodifier.h"
@@ -89,7 +88,6 @@ Parser::Parser()
     registerModifier(new UniqueModifier());
     registerModifier(new DefaultValueModifier());
     registerModifier(new ReplaceModifier());
-    registerModifier(new FillModifier());
     registerModifier(new RangeModifier());
 
     // --------------------------------------------------------
