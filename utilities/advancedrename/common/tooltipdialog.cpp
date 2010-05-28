@@ -31,10 +31,6 @@
 
 #include <klocale.h>
 
-// Local includes
-
-#include "parser.h"
-
 namespace Digikam
 {
 

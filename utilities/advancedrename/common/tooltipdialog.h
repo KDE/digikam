@@ -24,10 +24,6 @@
 #ifndef TOOLTIPDIALOG_H
 #define TOOLTIPDIALOG_H
 
-// Qt includes
-
-#include <QTextEdit>
-
 // KDE includes
 
 #include <kdialog.h>
@@ -35,7 +31,6 @@
 namespace Digikam
 {
 
-class Parser;
 class TooltipDialogPriv;
 class TooltipDialog : public KDialog
 {
