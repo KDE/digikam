@@ -56,16 +56,6 @@ public:
 };
 */
 
-AbstractDImgChildItem::AbstractDImgChildItem(QGraphicsItem* parent)
-            : QGraphicsItem(parent)
-{
-}
-
-GraphicsDImgItem *AbstractDImgChildItem::parentDImgItem() const
-{
-    return dynamic_cast<GraphicsDImgItem*>(parentItem());
-}
-
 class DImgChildItemPriv
 {
 public:
@@ -79,7 +69,7 @@ public:
 };
 
 DImgChildItem::DImgChildItem(QGraphicsItem* parent)
-             : AbstractDImgChildItem(parent), d(new DImgChildItemPriv)
+             : QGraphicsItem(parent), d(new DImgChildItemPriv)
 {
 }
 
@@ -98,6 +88,11 @@ void DImgChildItem::setRelativeSize(const QSizeF& relativeSize)
 {
     d->relativeSize = relativeSize;
     prepareGeometryChange();
+}
+
+GraphicsDImgItem *DImgChildItem::parentDImgItem() const
+{
+    return dynamic_cast<GraphicsDImgItem*>(parentItem());
 }
 
 void DImgChildItem::updatePos()

@@ -39,12 +39,11 @@ namespace Digikam
 class DImgChildItemPriv;
 class GraphicsDImgItem;
 
-class DIGIKAM_EXPORT AbstractDImgChildItem : public QGraphicsItem
+class DIGIKAM_EXPORT AbstractDImgItemChild
 {
 public:
 
-    AbstractDImgChildItem(QGraphicsItem* parent = 0);
-
+    virtual ~AbstractDImgItemChild() {}
     /**
      * When an AbstractDImgChildItem is added as a direct child of a
      * GraphicsDImgItem, the method will be called whenever the size
@@ -52,15 +51,9 @@ public:
      * The item may choose to resize or reposition itself here.
      */
     virtual void sizeHasChanged() = 0;
-
-    /**
-     * If the parent item is a GraphicsDImgItem, return it,
-     * if the parent item is null or of a different class, returns 0.
-     */
-    GraphicsDImgItem *parentDImgItem() const;
 };
 
-class DIGIKAM_EXPORT DImgChildItem : public AbstractDImgChildItem
+class DIGIKAM_EXPORT DImgChildItem : public QGraphicsItem, public AbstractDImgItemChild
 {
 public:
 
@@ -95,7 +88,13 @@ public:
         { setRelativePos(QPointF(x,y)); setRelativeSize(QSizeF(width, height)); }
 
     /**
-     * Implemented. Returns a rectangle starting at (0,0) (pos() in parent coordinates)
+     * If the parent item is a GraphicsDImgItem, return it,
+     * if the parent item is null or of a different class, returns 0.
+     */
+    GraphicsDImgItem *parentDImgItem() const;
+
+    /**
+     * Reimplemented. Returns a rectangle starting at (0,0) (pos() in parent coordinates)
      * and has a size determined by the relative size.
      */
     virtual QRectF boundingRect() const;
