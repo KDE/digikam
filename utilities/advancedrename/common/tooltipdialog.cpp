@@ -53,6 +53,7 @@ TooltipDialog::TooltipDialog(QWidget* parent)
              : KDialog(parent), d(new TooltipDialogPriv)
 {
     d->textEdit = new QTextEdit(this);
+    d->textEdit->setFrameStyle(QFrame::NoFrame);
     setCaption(i18n("Information"));
     setButtons(KDialog::Close);
     setMainWidget(d->textEdit);
