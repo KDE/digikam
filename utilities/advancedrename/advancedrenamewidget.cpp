@@ -36,7 +36,6 @@
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kdialog.h>
 #include <kicon.h>
 #include <kiconloader.h>
 #include <klocale.h>
@@ -51,6 +50,7 @@
 #include "defaultrenameparser.h"
 #include "dynamiclayout.h"
 #include "tooltipcreator.h"
+#include "tooltipdialog.h"
 
 using namespace KDcrawIface;
 
@@ -87,7 +87,7 @@ public:
 
     QWidget*             btnContainer;
 
-    KDialog*             tooltipDialog;
+    TooltipDialog*       tooltipDialog;
     AdvancedRenameInput* renameInput;
     Parser*              parser;
     RLabelExpander*      optionsLabel;
@@ -147,17 +147,11 @@ QString AdvancedRenameWidget::parse(ParseSettings& settings) const
 
 void AdvancedRenameWidget::createToolTip()
 {
-    QTextEdit *te = dynamic_cast<QTextEdit*>(d->tooltipDialog->mainWidget());
-    if (te)
+    d->tooltipDialog->clearTooltip();
+
+    if (d->parser)
     {
-        te->clear();
-
-        if (d->parser)
-        {
-            te->setHtml(TooltipCreator::getInstance().tooltip(d->parser));
-        }
-
-        te->setReadOnly(true);
+        d->tooltipDialog->setTooltip(TooltipCreator::getInstance().tooltip(d->parser));
     }
 }
 
@@ -274,11 +268,8 @@ void AdvancedRenameWidget::setupWidgets()
      * duplicate signal/slot connections.
      */
     delete d->tooltipDialog;
-    d->tooltipDialog = new KDialog(this);
-    d->tooltipDialog->setCaption(i18n("Information"));
-    d->tooltipDialog->setButtons(KDialog::Close);
+    d->tooltipDialog = new TooltipDialog(this);
     d->tooltipDialog->resize(650, 530);
-    d->tooltipDialog->setMainWidget(new QTextEdit());
 
     delete d->renameInput;
     d->renameInput = new AdvancedRenameInput;
