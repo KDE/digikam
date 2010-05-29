@@ -78,4 +78,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 065 ==> 210612 : After rename in digiKam pictures preview are not possible.
 066 ==> 211804 : Curves adjust: hard to use when Gray theme.
 067 ==> 229370 : ICC profile in Colors tab incorrect for nef raw images, also crashes digikam for some profiles.
-068 ==> 
+068 ==> 221281 : Crash in Image Editor after editing multiple (100+) pictures.
+069 ==> 
