@@ -160,7 +160,7 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
     if ( mysqldPath.isEmpty() )
     {
         kDebug() << "No path to mysqld set in server configuration!";
-        return DatabaseServerError(DatabaseServerError::StartError, i18n("No path to mysqld set in server configuration!"));
+        return DatabaseServerError(DatabaseServerError::StartError, i18n("No path to mysqld set in server configuration."));
     }
 
     // create the database directories if they don't exists
@@ -206,7 +206,7 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
     if ( globalConfig.isEmpty() )
     {
         kDebug() << "Did not find MySQL server default configuration (mysql-global.conf)";
-        return DatabaseServerError(DatabaseServerError::StartError, i18n("Did not find MySQL server default configuration (mysql-global.conf)!"));
+        return DatabaseServerError(DatabaseServerError::StartError, i18n("Did not find MySQL server default configuration (mysql-global.conf)."));
     }
 
     bool confUpdate = false;
@@ -313,7 +313,7 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
         initProcess.start( mysqlInitCmd );
         if ( !initProcess.waitForFinished())
         {
-        	QString  str = i18n("Could not start database init command!\n"
+        	QString  str = i18n("Could not start database init command.\n"
 								"Executable: %1\n"
 								"Process error:%2", mysqlInitCmd, initProcess.errorString());
         	kDebug() << str;
@@ -327,7 +327,7 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
     if ( !d->databaseProcess->waitForStarted() )
     {
     	QString argumentStr = arguments.join(", ");
-    	QString  str = i18n("Could not start database server!");
+    	QString  str = i18n("Could not start database server.");
     	str+=i18n("<p>Executable: %1</p>", mysqldPath);
     	str+=i18n("<p>Arguments: %1</p>", argumentStr);
     	str+=i18n("<p>Process error: %1</p>", d->databaseProcess->errorString());
@@ -361,7 +361,7 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
 				kDebug() << "exit code: " << d->databaseProcess->exitCode();
 				kDebug() << "process error: " << d->databaseProcess->errorString();
 
-            	QString  str = i18n("Database process exited unexpectedly during initial connection!"
+            	QString  str = i18n("Database process exited unexpectedly during initial connection."
 									"<p>Executable: %1</p>”"
 									"<p>Process error: %2</p>",
 									mysqldPath, d->databaseProcess->errorString());
