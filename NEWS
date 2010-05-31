@@ -79,4 +79,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 066 ==> 211804 : Curves adjust: hard to use when Gray theme.
 067 ==> 229370 : ICC profile in Colors tab incorrect for nef raw images, also crashes digikam for some profiles.
 068 ==> 221281 : Crash in Image Editor after editing multiple (100+) pictures.
-069 ==> 
+069 ==> 240269 : digiKam crash after update to 4.5 beta (4.4.80).
+070 ==> 
+
