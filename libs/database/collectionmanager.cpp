@@ -1150,14 +1150,19 @@ QString CollectionManager::albumRootPath(const KUrl& fileUrl)
     return albumRootPath(fileUrl.toLocalFile(KUrl::LeaveTrailingSlash));
 }
 
-QString CollectionManager::albumRootPath(const QString& filePath)
+QString CollectionManager::albumRootPath(const QString& givenPath)
 {
     DatabaseAccess access;
     foreach (AlbumRootLocation *location, d->locations)
     {
         QString rootPath = location->albumRootPath();
+        QString filePath = QDir::fromNativeSeparators(givenPath);
         if (!rootPath.isEmpty() && filePath.startsWith(rootPath))
-            return location->albumRootPath();
+        {
+            // see also bug #221155 for extra checks
+            if (filePath == rootPath || filePath.startsWith(rootPath + '/'))
+                return location->albumRootPath();
+        }
     }
     return QString();
 }
