@@ -80,6 +80,8 @@ public:
     void setParametersFromSettings(const AlbumSettings* settings);
     DatabaseParameters getDatabaseParameters();
 
+    QString currentDatabaseType() const;
+
 public Q_SLOTS:
 
     void slotChangeDatabasePath(const KUrl&);
