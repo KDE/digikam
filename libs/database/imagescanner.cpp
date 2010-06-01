@@ -150,7 +150,7 @@ bool lessThanForIdentity(const ItemScanInfo &a, const ItemScanInfo &b)
 bool ImageScanner::scanFromIdenticalFile()
 {
     // Get a list of other images that are identical. Source image shall not be included.
-    QList<ItemScanInfo> candidates = DatabaseAccess().db()->getIdenticalFiles((int)m_fileInfo.size(),
+    QList<ItemScanInfo> candidates = DatabaseAccess().db()->getIdenticalFiles(m_scanInfo.fileSize,
                                                             m_scanInfo.uniqueHash, m_scanInfo.id);
 
     if (!candidates.isEmpty())
@@ -189,6 +189,8 @@ void ImageScanner::prepareImage()
 {
     m_scanInfo.itemName         = m_fileInfo.fileName();
     m_scanInfo.modificationDate = m_fileInfo.lastModified();
+    // there is a limit here for file size <2TB
+    m_scanInfo.fileSize         = (int)m_fileInfo.size();
     // category is set by setCategory
 
     // the QByteArray is an ASCII hex string
@@ -199,25 +201,22 @@ void ImageScanner::addImage(int albumId)
 {
     prepareImage();
 
-    // there is a limit here for file size <2TB
-    int fileSize                = (int)m_fileInfo.size();
     m_scanInfo.albumID          = albumId;
     m_scanInfo.status           = DatabaseItem::Visible;
 
     kDebug() << "Adding new item" << m_fileInfo.filePath();
     m_scanInfo.id               = DatabaseAccess().db()->addItem(m_scanInfo.albumID, m_scanInfo.itemName,
                                                                  m_scanInfo.status, m_scanInfo.category,
-                                                                 m_scanInfo.modificationDate, fileSize,
+                                                                 m_scanInfo.modificationDate, m_scanInfo.fileSize,
                                                                  m_scanInfo.uniqueHash);
 }
 
 void ImageScanner::updateImage()
 {
     prepareImage();
-    int fileSize = (int)m_fileInfo.size();
 
     DatabaseAccess().db()->updateItem(m_scanInfo.id, m_scanInfo.category,
-                                      m_scanInfo.modificationDate, fileSize, m_scanInfo.uniqueHash);
+                                      m_scanInfo.modificationDate, m_scanInfo.fileSize, m_scanInfo.uniqueHash);
 }
 
 void ImageScanner::scanFile(ScanMode mode)

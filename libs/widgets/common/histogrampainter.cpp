@@ -149,10 +149,12 @@ public:
             }
             case LogScaleHistogram:
             {
-                if (value <= 0.0)
+                if (value == 0.0)
+                    return 0;
+                if (value < 0.0)
                 {
-                    kWarning() << "Scaling value < 0: " << value << ". Falling back to 1.0";
-                    return qMin((int) ((pixmapHeight * log(1.0)) / max), pixmapHeight);
+                    kWarning() << "Scaling value < 0: " << value << ". Assuming 0.";
+                    return 0;
                 }
                 return qMin((int) ((pixmapHeight * log(value)) / max), pixmapHeight);
             }

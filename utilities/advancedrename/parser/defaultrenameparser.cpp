@@ -24,59 +24,12 @@
 
 #include "defaultrenameparser.h"
 
-// LibKExiv2 includes
-
-#include <libkexiv2/version.h>
-
-// Local includes
-
-
-#include "cameranameoption.h"
-#include "dateoption.h"
-#include "directorynameoption.h"
-#include "filepropertiesoption.h"
-#include "metadataoption.h"
-#include "sequencenumberoption.h"
-
-#include "casemodifier.h"
-#include "defaultvaluemodifier.h"
-#include "fillmodifier.h"
-#include "rangemodifier.h"
-#include "replacemodifier.h"
-#include "trimmedmodifier.h"
-#include "uniquemodifier.h"
-
 namespace Digikam
 {
 
 DefaultRenameParser::DefaultRenameParser()
                    : Parser()
 {
-    /*
-     * RENAMING OPTIONS
-     */
-    registerOption(new FilePropertiesOption());
-    registerOption(new DirectoryNameOption());
-    registerOption(new CameraNameOption());
-    registerOption(new SequenceNumberOption());
-    registerOption(new DateOption());
-
-#if KEXIV2_VERSION >= 0x010000
-    registerOption(new MetadataOption());
-#endif
-
-    // --------------------------------------------------------
-
-    /*
-     * MODIFIERS
-     */
-    registerModifier(new CaseModifier());
-    registerModifier(new TrimmedModifier());
-    registerModifier(new UniqueModifier());
-    registerModifier(new DefaultValueModifier());
-    registerModifier(new ReplaceModifier());
-    registerModifier(new FillModifier());
-    registerModifier(new RangeModifier());
 }
 
 }  // namespace Digikam

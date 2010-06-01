@@ -185,7 +185,7 @@ void PreviewLoadingTask::execute()
         #if KEXIV2_VERSION >= 0x010000
         KExiv2Iface::KExiv2Previews previews(m_loadingDescription.filePath);
         // Only check the first and largest preview
-        if (!previews.isEmpty())
+        if (!previews.isEmpty() && continueQuery())
         {
             // require at least half preview size
             if (qMax(previews.width(), previews.height()) >= size / 2)
@@ -197,7 +197,7 @@ void PreviewLoadingTask::execute()
         }
         #else
         // Trying to load with dcraw: RAW files.
-        if (KDcrawIface::KDcraw::loadEmbeddedPreview(qimage, m_loadingDescription.filePath))
+        if (continueQuery() && KDcrawIface::KDcraw::loadEmbeddedPreview(qimage, m_loadingDescription.filePath))
         {
             // Discard if too small
             if (qMax(qimage.width(), qimage.height()) < size / 2)
@@ -207,22 +207,26 @@ void PreviewLoadingTask::execute()
         }
         #endif
 
-        if (qimage.isNull())
+        if (qimage.isNull() && continueQuery())
         {
             //TODO: Use DImg based loader instead?
             KDcrawIface::KDcraw::loadHalfPreview(qimage, m_loadingDescription.filePath);
         }
 
         // Try to extract Exif/IPTC preview.
-        if (qimage.isNull())
+        if (qimage.isNull() && continueQuery())
         {
             loadImagePreview(qimage, m_loadingDescription.filePath);
         }
 
-        if (!qimage.isNull())
+        if (!qimage.isNull() && continueQuery())
         {
             // convert from QImage
             m_img = DImg(qimage);
+
+            DImg::FORMAT format = DImg::fileFormat(m_loadingDescription.filePath);
+            m_img.setAttribute("detectedFileFormat", format);
+            m_img.setAttribute("originalFilePath", m_loadingDescription.filePath);
 
             DMetadata metadata(m_loadingDescription.filePath);
             #if KEXIV2_VERSION >= 0x010100
@@ -242,14 +246,14 @@ void PreviewLoadingTask::execute()
         }
 
         // DImg-dependent loading methods
-        if (m_img.isNull())
+        if (m_img.isNull() && continueQuery())
         {
             // Set a hint to try to load a JPEG or PGF with the fast scale-before-decoding method
             m_img.setAttribute("scaledLoadingSize", size);
             m_img.load(m_loadingDescription.filePath, this, m_loadingDescription.rawDecodingSettings);
         }
 
-        if (m_img.isNull())
+        if (m_img.isNull() && continueQuery())
         {
             kWarning() << "Cannot extract preview for " << m_loadingDescription.filePath;
         }
@@ -264,7 +268,7 @@ void PreviewLoadingTask::execute()
             {
                 KExiv2Iface::KExiv2Previews previews(m_loadingDescription.filePath);
                 // Only check the first and largest preview
-                if (!previews.isEmpty())
+                if (!previews.isEmpty() && continueQuery())
                 {
                     // discard if smaller than half preview
                     int acceptableWidth = lround(dcrawIdentify.imageSize.width() * 0.5);
@@ -279,7 +283,7 @@ void PreviewLoadingTask::execute()
             }
             #else
             // Trying to load with dcraw: RAW files.
-            if (qimage.isNull() && dcrawIdentify.isDecodable &&
+            if (qimage.isNull() && continueQuery() && dcrawIdentify.isDecodable &&
                 KDcrawIface::KDcraw::loadEmbeddedPreview(qimage, m_loadingDescription.filePath))
             {
                 // discard if smaller than half preview
@@ -290,16 +294,20 @@ void PreviewLoadingTask::execute()
             }
             #endif
 
-            if (qimage.isNull())
+            if (qimage.isNull() && continueQuery())
             {
                 KDcrawIface::KDcraw::loadHalfPreview(qimage, m_loadingDescription.filePath);
             }
         }
 
-        if (!qimage.isNull())
+        if (!qimage.isNull() && continueQuery())
         {
             // convert from QImage
             m_img = DImg(qimage);
+
+            DImg::FORMAT format = DImg::fileFormat(m_loadingDescription.filePath);
+            m_img.setAttribute("detectedFileFormat", format);
+            m_img.setAttribute("originalFilePath", m_loadingDescription.filePath);
 
             DMetadata metadata(m_loadingDescription.filePath);
             #if KEXIV2_VERSION >= 0x010100
@@ -319,35 +327,51 @@ void PreviewLoadingTask::execute()
         }
 
         // DImg-dependent loading methods
-        if (m_img.isNull())
+        if (m_img.isNull() && continueQuery())
         {
             m_img.load(m_loadingDescription.filePath, this, m_loadingDescription.rawDecodingSettings);
+
+            // Now that we did a full load of the image, consider putting it in the cache
+            // but not for RAWs, there are so many cases to consider
+            if (!m_img.isNull() && m_img.detectedFormat() != DImg::RAW)
+            {
+                LoadingCache::CacheLock lock(cache);
+                LoadingDescription fullDescription(m_loadingDescription.filePath);
+                cache->putImage(fullDescription.cacheKey(), new DImg(m_img.copy()), m_loadingDescription.filePath);
+            }
         }
 
-        if (m_img.isNull())
+        if (m_img.isNull() && continueQuery())
         {
             kWarning() << "Cannot extract preview for " << m_loadingDescription.filePath;
         }
     }
 
-    m_img.convertToEightBit();
-
-    // Reduce size of image:
-    // - only scale down if size is considerably larger
-    // - only scale down, do not scale up
-    QSize scaledSize = m_img.size();
-    if (needToScale(scaledSize, size))
+    if (continueQuery())
     {
-        scaledSize.scale(size, size, Qt::KeepAspectRatio);
-        m_img = m_img.smoothScale(scaledSize.width(), scaledSize.height());
+        m_img.convertToEightBit();
+
+        // Reduce size of image:
+        // - only scale down if size is considerably larger
+        // - only scale down, do not scale up
+        QSize scaledSize = m_img.size();
+        if (needToScale(scaledSize, size))
+        {
+            scaledSize.scale(size, size, Qt::KeepAspectRatio);
+            m_img = m_img.smoothScale(scaledSize.width(), scaledSize.height());
+        }
+
+        // Scale if hinted, Store previews rotated in the cache (?)
+        if (m_loadingDescription.previewParameters.exifRotate)
+            LoadSaveThread::exifRotate(m_img, m_loadingDescription.filePath);
+
+        // For previews, we put the image post processed in the cache
+        postProcess();
     }
-
-    // Scale if hinted, Store previews rotated in the cache (?)
-    if (m_loadingDescription.previewParameters.exifRotate)
-        LoadSaveThread::exifRotate(m_img, m_loadingDescription.filePath);
-
-    // For previews, we put the image post processed in the cache
-    postProcess();
+    else
+    {
+        m_img = DImg();
+    }
 
     {
         LoadingCache::CacheLock lock(cache);

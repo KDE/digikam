@@ -373,24 +373,24 @@ void ImagePreviewView::slotContextMenu()
     cmhelper.addAction(d->nextAction, true);
     cmhelper.addAction(d->back2AlbumAction);
     cmhelper.addGotoMenu(idList);
-    popmenu.addSeparator();
+    cmhelper.addSeparator();
     // --------------------------------------------------------
     cmhelper.addAction("image_edit");
     cmhelper.addServicesMenu(selectedItems);
     cmhelper.addKipiActions(idList);
-    popmenu.addSeparator();
+    cmhelper.addSeparator();
     // --------------------------------------------------------
     cmhelper.addAction("image_find_similar");
     cmhelper.addActionLightTable();
     cmhelper.addQueueManagerMenu();
-    popmenu.addSeparator();
+    cmhelper.addSeparator();
     // --------------------------------------------------------
     cmhelper.addActionItemDelete(this, SLOT(slotDeleteItem()));
-    popmenu.addSeparator();
+    cmhelper.addSeparator();
     // --------------------------------------------------------
     cmhelper.addAssignTagsMenu(idList);
     cmhelper.addRemoveTagsMenu(idList);
-    popmenu.addSeparator();
+    cmhelper.addSeparator();
     // --------------------------------------------------------
     cmhelper.addRatingMenu();
 

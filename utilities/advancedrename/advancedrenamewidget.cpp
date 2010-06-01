@@ -6,7 +6,7 @@
  * Date        : 2009-05-22
  * Description : a control widget for the AdvancedRename utility
  *
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -36,7 +36,6 @@
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kdialog.h>
 #include <kicon.h>
 #include <kiconloader.h>
 #include <klocale.h>
@@ -48,10 +47,10 @@
 // Local includes
 
 #include "advancedrenameinput.h"
-#include "dcursortracker.h"
 #include "defaultrenameparser.h"
 #include "dynamiclayout.h"
 #include "tooltipcreator.h"
+#include "tooltipdialog.h"
 
 using namespace KDcrawIface;
 
@@ -72,8 +71,7 @@ public:
         tooltipToggleButton(0),
         modifierToolButton(0),
         btnContainer(0),
-        tooltipTrackerAlignment(Qt::AlignLeft),
-        tooltipTracker(0),
+        tooltipDialog(0),
         renameInput(0),
         parser(0),
         optionsLabel(0),
@@ -89,9 +87,7 @@ public:
 
     QWidget*             btnContainer;
 
-    Qt::Alignment        tooltipTrackerAlignment;
-
-    DTipTracker*         tooltipTracker;
+    TooltipDialog*       tooltipDialog;
     AdvancedRenameInput* renameInput;
     Parser*              parser;
     RLabelExpander*      optionsLabel;
@@ -109,9 +105,6 @@ AdvancedRenameWidget::AdvancedRenameWidget(QWidget* parent)
 AdvancedRenameWidget::~AdvancedRenameWidget()
 {
     writeSettings();
-
-    // we need to delete it manually, because it has no parent
-    delete d->tooltipTracker;
 
     delete d->parser;
     delete d;
@@ -132,21 +125,9 @@ void AdvancedRenameWidget::clearParseString()
     d->renameInput->slotClearText();
 }
 
-void AdvancedRenameWidget::setTooltipAlignment(Qt::Alignment alignment)
-{
-    d->tooltipTrackerAlignment = alignment;
-    d->tooltipTracker->setTrackerAlignment(alignment);
-}
-
 void AdvancedRenameWidget::clear()
 {
     d->renameInput->slotClearTextAndHistory();
-}
-
-void AdvancedRenameWidget::slotHideToolTipTracker()
-{
-    d->tooltipToggleButton->setChecked(false);
-    slotToolTipButtonToggled(false);
 }
 
 QString AdvancedRenameWidget::parse(ParseSettings& settings) const
@@ -166,25 +147,22 @@ QString AdvancedRenameWidget::parse(ParseSettings& settings) const
 
 void AdvancedRenameWidget::createToolTip()
 {
+    d->tooltipDialog->clearTooltip();
+
     if (d->parser)
     {
-        d->tooltipTracker->setText(TooltipCreator(d->parser).tooltip());
-    }
-    else
-    {
-        d->tooltipTracker->clear();
+        d->tooltipDialog->setTooltip(TooltipCreator::getInstance().tooltip(d->parser));
     }
 }
 
 void AdvancedRenameWidget::slotToolTipButtonToggled(bool checked)
 {
-    d->tooltipTracker->setVisible(checked);
-    slotUpdateTrackerPos();
-}
-
-void AdvancedRenameWidget::slotUpdateTrackerPos()
-{
-    d->tooltipTracker->refresh();
+    Q_UNUSED(checked)
+    if (!d->tooltipDialog->isVisible())
+    {
+        d->tooltipDialog->show();
+    }
+    d->tooltipDialog->raise();
 }
 
 void AdvancedRenameWidget::setControlWidgets(ControlWidgets mask)
@@ -289,6 +267,10 @@ void AdvancedRenameWidget::setupWidgets()
      * So any widget that is created in here needs to be removed first, to avoid memory leaks and
      * duplicate signal/slot connections.
      */
+    delete d->tooltipDialog;
+    d->tooltipDialog = new TooltipDialog(this);
+    d->tooltipDialog->resize(650, 530);
+
     delete d->renameInput;
     d->renameInput = new AdvancedRenameInput;
     d->renameInput->setToolTip(i18n("<p>Enter your renaming pattern here. Use the access buttons to quickly add renaming "
@@ -298,7 +280,6 @@ void AdvancedRenameWidget::setupWidgets()
 
     delete d->tooltipToggleButton;
     d->tooltipToggleButton = new QToolButton;
-    d->tooltipToggleButton->setCheckable(true);
     d->tooltipToggleButton->setIcon(SmallIcon("dialog-information"));
     d->tooltipToggleButton->setToolTip(i18n("Show a list of all available options"));
 
@@ -325,17 +306,6 @@ void AdvancedRenameWidget::setupWidgets()
 
     // --------------------------------------------------------
 
-    // Although we delete every other widget in here, DON'T delete this one!
-    // It has a parent now and will be deleted automatically.
-    d->tooltipTracker = new DTipTracker(QString(), d->renameInput, Qt::AlignLeft);
-    d->tooltipTracker->setTextFormat(Qt::RichText);
-    d->tooltipTracker->setEnable(false);
-    d->tooltipTracker->setKeepOpen(true);
-    d->tooltipTracker->setOpenExternalLinks(true);
-    setTooltipAlignment(d->tooltipTrackerAlignment);
-
-    // --------------------------------------------------------
-
     delete layout();
     QGridLayout* mainLayout = new QGridLayout;
     mainLayout->addWidget(d->renameInput,         0, 0, 1, 1);
@@ -349,7 +319,7 @@ void AdvancedRenameWidget::setupWidgets()
 
     // --------------------------------------------------------
 
-    connect(d->tooltipToggleButton, SIGNAL(toggled(bool)),
+    connect(d->tooltipToggleButton, SIGNAL(clicked(bool)),
             this, SLOT(slotToolTipButtonToggled(bool)));
 
     connect(d->renameInput, SIGNAL(signalTextChanged(const QString&)),

@@ -227,6 +227,10 @@ To make a backtrace with GDB use following command:
 
 Post this backtrace at the right place (B.K.O or devel ML) for investigations by developers.
 
+For Windows users, take a look on this tutorial :
+
+http://techbase.kde.org/Development/Tutorials/Debugging/Debugging_on_MS_Windows
+
 ========================================================================
 Memory leak
 ========================================================================

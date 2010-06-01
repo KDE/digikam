@@ -59,9 +59,17 @@ public:
      *  Adheres to set categorization mode and current category sort order.
      */
     int compareCategories(const ImageInfo& left, const ImageInfo& right) const;
+
     /** Returns true if left is less than right.
      *  Adheres to current sort role and sort order. */
     bool lessThan(const ImageInfo& left, const ImageInfo& right) const;
+
+    /** Compares the ImageInfos left and right.
+     *  Return -1 if left is less than right, 1 if left is greater than right,
+     *  and 0 if left equals right comparing the current sort role's value.
+     *  Adheres to set sort role and sort order.
+     */
+    int compare(const ImageInfo& left, const ImageInfo& right) const;
 
     enum SortOrder
     {
@@ -113,6 +121,8 @@ public:
     Qt::SortOrder           currentSortOrder;
     Qt::CaseSensitivity     sortCaseSensitivity;
 
+    int compare(const ImageInfo& left, const ImageInfo& right, SortRole sortRole) const;
+
     // --- ---
 
     static Qt::SortOrder defaultSortOrderForCategorizationMode(CategorizationMode mode);
@@ -127,12 +137,24 @@ public:
 
     /** Returns a < b if sortOrder is Ascending, or b < a if order is descending */
     template <typename T>
-    static inline bool lessThan(const T &a, const T&b, Qt::SortOrder sortOrder)
+    static inline bool lessThanByOrder(const T &a, const T&b, Qt::SortOrder sortOrder)
     {
         if (sortOrder == Qt::AscendingOrder)
             return a < b;
         else
             return b < a;
+    }
+
+    /** Returns the usual compare result of -1, 0, or 1 for lessThan, equals and greaterThan. */
+    template <typename T>
+    static inline int compareValue(const T &a, const T&b)
+    {
+        if (a == b)
+            return 0;
+        if (a < b)
+            return -1;
+        else
+            return 1;
     }
 
     /** Takes a typical result from a compare method (0 is equal, -1 is less than, 1 is greater than)
@@ -143,6 +165,12 @@ public:
             return compareResult;
         else
             return - compareResult;
+    }
+
+    template <typename T>
+    static inline int compareByOrder(const T &a, const T&b, Qt::SortOrder sortOrder)
+    {
+        return compareByOrder(compareValue(a, b), sortOrder);
     }
 
     /** Compares the two string by natural comparison and adheres to given sort order */

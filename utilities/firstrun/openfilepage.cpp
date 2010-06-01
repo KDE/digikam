@@ -6,7 +6,7 @@
  * Date        : 2009-28-04
  * Description : first run assistant dialog
  *
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -67,15 +67,15 @@ OpenFilePage::OpenFilePage(KAssistantDialog* dlg)
             : AssistantDlgPage(dlg, i18n("<b>Configure Open File Behavior</b>")), 
               d(new OpenFilePagePriv)
 {
-    KVBox *vbox    = new KVBox(this);
-    QLabel *label1 = new QLabel(vbox);
+    KVBox* vbox    = new KVBox(this);
+    QLabel* label1 = new QLabel(vbox);
     label1->setWordWrap(true);
     label1->setText(i18n("<qt>"
                          "<p>Specify how images should be opened when right-clicked on in the icon view:</p>"
                          "</qt>"));
 
-    QWidget *btns      = new QWidget(vbox);
-    QVBoxLayout *vlay  = new QVBoxLayout(btns);
+    QWidget* btns       = new QWidget(vbox);
+    QVBoxLayout* vlay   = new QVBoxLayout(btns);
 
     d->openFileBehavour = new QButtonGroup(btns);
     d->openAsPreview    = new QRadioButton(btns);
@@ -92,7 +92,7 @@ OpenFilePage::OpenFilePage(KAssistantDialog* dlg)
     vlay->setMargin(KDialog::spacingHint());
     vlay->setSpacing(KDialog::spacingHint());
 
-    QLabel *label2 = new QLabel(vbox);
+    QLabel* label2 = new QLabel(vbox);
     label2->setWordWrap(true);
     label2->setText(i18n("<qt>"
                          "<p><i>Note:</i> using a preview is always faster than using the editor, "
@@ -116,10 +116,9 @@ OpenFilePage::~OpenFilePage()
 void OpenFilePage::saveSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
-
-    KConfigGroup group = config->group("Album Settings");
-    group.writeEntry("Item Right Click Action", (int)(d->openInEditor->isChecked() ? 
-                                                AlbumSettings::StartEditor : AlbumSettings::ShowPreview));
+    KConfigGroup group        = config->group("Album Settings");
+    group.writeEntry("Item Left Click Action", (int)(d->openInEditor->isChecked() ? 
+                                               AlbumSettings::StartEditor : AlbumSettings::ShowPreview));
 
     config->sync();
 }

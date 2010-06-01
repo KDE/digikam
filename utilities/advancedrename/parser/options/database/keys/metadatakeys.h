@@ -3,9 +3,8 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2009-09-14
- * Description : a modifier to fill a string with a character to
- *               match a certain length
+ * Date        : 2010-05-22
+ * Description : metadata information keys
  *
  * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
  *
@@ -22,56 +21,27 @@
  *
  * ============================================================ */
 
-#ifndef FILLMODIFIER_H
-#define FILLMODIFIER_H
+#ifndef METADATAKEYS_H
+#define METADATAKEYS_H
 
-// Local includes
+// local includes
 
-#include "modifier.h"
-#include "parseabledialog.h"
-
-namespace Ui
-{
-    class FillModifierDialogWidget;
-}
+#include "dbkeyscollection.h"
+#include "parsesettings.h"
 
 namespace Digikam
 {
-class FillDialog : public ParseableDialog
+class MetadataKeys : public DbKeysCollection
 {
-    Q_OBJECT
-
 public:
+    MetadataKeys();
+    virtual ~MetadataKeys() {};
 
-    FillDialog(Parseable* parent);
-    ~FillDialog();
+protected:
 
-    enum Alignment
-    {
-        Left = 0,
-        Right
-    };
-
-    Ui::FillModifierDialogWidget* const ui;
-};
-
-// --------------------------------------------------------
-
-class FillModifier : public Modifier
-{
-    Q_OBJECT
-
-public:
-
-    FillModifier();
-    virtual QString parseOperation(ParseSettings& settings);
-
-private Q_SLOTS:
-
-    void slotTokenTriggered(const QString& token);
+    virtual QString getDbValue(const QString& key, ParseSettings& settings);
 };
 
 } // namespace Digikam
 
-
-#endif /* FILLMODIFIER_H */
+#endif /* METADATAKEYS_H */

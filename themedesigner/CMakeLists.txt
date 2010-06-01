@@ -2,31 +2,32 @@
 INCLUDE_DIRECTORIES(
                      # basic libs
                      ../libs/dimg
-                     ../libs/dimg/loaders
                      ../libs/dimg/filters
                      ../libs/dimg/filters/auto
                      ../libs/dimg/filters/bcg
                      ../libs/dimg/filters/bw
+                     ../libs/dimg/filters/cb
+                     ../libs/dimg/filters/curves
                      ../libs/dimg/filters/decorate
                      ../libs/dimg/filters/fx
-                     ../libs/dimg/filters/hsl
                      ../libs/dimg/filters/greycstoration
+                     ../libs/dimg/filters/hsl
                      ../libs/dimg/filters/icc
                      ../libs/dimg/filters/lc
+                     ../libs/dimg/filters/lens
+                     ../libs/dimg/filters/levels
                      ../libs/dimg/filters/nr
                      ../libs/dimg/filters/sharp
-                     ../libs/dimg/filters/cb
-                     ../libs/dimg/filters/levels
-                     ../libs/dimg/filters/curves
-                     ../libs/dimg/filters/wb
                      ../libs/dimg/filters/transform
-                     ../libs/dimg/filters/lens
+                     ../libs/dimg/filters/wb
+                     ../libs/dimg/loaders
                      ../libs/dmetadata
                      ../libs/histogram
                      ../libs/jpegutils
-                     ../libs/threadimageio
                      ../libs/models
                      ../libs/template
+                     ../libs/threadimageio
+                     ../libs/threads
 
                      # widgets and dialogs
                      ../libs/widgets/common
@@ -64,6 +65,8 @@ INCLUDE_DIRECTORIES(
                      ../utilities/advancedrename/common
                      ../utilities/advancedrename/parser
                      ../utilities/advancedrename/parser/options
+                     ../utilities/advancedrename/parser/options/database
+                     ../utilities/advancedrename/parser/options/database/keys
                      ../utilities/advancedrename/parser/modifiers
                      ../utilities/queuemanager
                      ../utilities/queuemanager/basetools/color

@@ -6,7 +6,7 @@
  * Date        : 2009-28-04
  * Description : first run assistant dialog
  *
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -63,15 +63,15 @@ TooltipsPage::TooltipsPage(KAssistantDialog* dlg)
             : AssistantDlgPage(dlg, i18n("<b>Enabled Contextual Tooltips</b>")), 
               d(new TooltipsPagePriv)
 {
-    KVBox *vbox    = new KVBox(this);
-    QLabel *label1 = new QLabel(vbox);
+    KVBox* vbox    = new KVBox(this);
+    QLabel* label1 = new QLabel(vbox);
     label1->setWordWrap(true);
     label1->setText(i18n("<qt>"
                          "<p>Set here if you want to show contextual tooltips in icon-view and folder-view:</p>"
                          "</qt>"));
 
-    QWidget *btns       = new QWidget(vbox);
-    QVBoxLayout *vlay   = new QVBoxLayout(btns);
+    QWidget* btns       = new QWidget(vbox);
+    QVBoxLayout* vlay   = new QVBoxLayout(btns);
 
     d->tooltipsBehavour = new QButtonGroup(btns);
     d->hideTooltips     = new QRadioButton(btns);
@@ -88,7 +88,7 @@ TooltipsPage::TooltipsPage(KAssistantDialog* dlg)
     vlay->setMargin(KDialog::spacingHint());
     vlay->setSpacing(KDialog::spacingHint());
 
-    QLabel *label2 = new QLabel(vbox);
+    QLabel* label2 = new QLabel(vbox);
     label2->setWordWrap(true);
     label2->setText(i18n("<qt>"
                          "<p><i>Note:</i> tooltips show photograph and digiKam metadata on the fly, "

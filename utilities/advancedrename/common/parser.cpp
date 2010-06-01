@@ -27,6 +27,27 @@
 
 #include <QFileInfo>
 
+// LibKExiv2 includes
+
+#include <libkexiv2/version.h>
+
+// local includes
+
+#include "cameranameoption.h"
+#include "databaseoption.h"
+#include "dateoption.h"
+#include "directorynameoption.h"
+#include "filepropertiesoption.h"
+#include "metadataoption.h"
+#include "sequencenumberoption.h"
+
+#include "casemodifier.h"
+#include "defaultvaluemodifier.h"
+#include "rangemodifier.h"
+#include "replacemodifier.h"
+#include "trimmedmodifier.h"
+#include "uniquemodifier.h"
+
 namespace Digikam
 {
 
@@ -49,6 +70,28 @@ public:
 Parser::Parser()
       : d(new ParserPriv)
 {
+    registerOption(new FilePropertiesOption());
+    registerOption(new DirectoryNameOption());
+    registerOption(new CameraNameOption());
+    registerOption(new SequenceNumberOption());
+    registerOption(new DateOption());
+    registerOption(new DatabaseOption());
+
+#if KEXIV2_VERSION >= 0x010000
+    registerOption(new MetadataOption());
+#endif
+
+    // --------------------------------------------------------
+
+    registerModifier(new CaseModifier());
+    registerModifier(new TrimmedModifier());
+    registerModifier(new UniqueModifier());
+    registerModifier(new DefaultValueModifier());
+    registerModifier(new ReplaceModifier());
+    registerModifier(new RangeModifier());
+
+    // --------------------------------------------------------
+
     init(ParseSettings());
 }
 
@@ -114,6 +157,20 @@ void Parser::registerOption(Option* option)
     d->options.append(option);
 }
 
+void Parser::unregisterOption(Option* option)
+{
+    if (!option) return;
+
+    for (OptionsList::iterator it = d->options.begin();
+         it != d->options.end(); )
+    {
+        if (*it == option)
+            it = d->options.erase(it);
+        else
+            ++it;
+    }
+}
+
 void Parser::registerModifier(Modifier* modifier)
 {
     if (!modifier || !modifier->isValid())
@@ -122,6 +179,20 @@ void Parser::registerModifier(Modifier* modifier)
     }
 
     d->modifiers.append(modifier);
+}
+
+void Parser::unregisterModifier(Modifier* modifier)
+{
+    if (!modifier) return;
+
+    for (ModifierList::iterator it = d->modifiers.begin();
+         it != d->modifiers.end(); )
+    {
+        if (*it == modifier)
+            it = d->modifiers.erase(it);
+        else
+            ++it;
+    }
 }
 
 ParseResults Parser::results(ParseSettings& settings)

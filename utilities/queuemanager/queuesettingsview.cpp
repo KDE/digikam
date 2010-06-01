@@ -220,16 +220,6 @@ void QueueSettingsView::slotQueueSelected(int, const QueueSettings& settings, co
     d->advancedRenameWidget->setParseString(settings.renamingParser);
 }
 
-void QueueSettingsView::slotUpdateTrackerPos()
-{
-    d->advancedRenameWidget->slotUpdateTrackerPos();
-}
-
-void QueueSettingsView::slotHideToolTipTracker()
-{
-    d->advancedRenameWidget->slotHideToolTipTracker();
-}
-
 void QueueSettingsView::slotSettingsChanged()
 {
     QueueSettings settings;

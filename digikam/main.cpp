@@ -94,7 +94,8 @@ int main(int argc, char *argv[])
 
     // Check if SQLite Qt4 plugin is available.
 
-    if (!QSqlDatabase::isDriverAvailable("QSQLITE") || !QSqlDatabase::isDriverAvailable("QMYSQL"))
+    if (!QSqlDatabase::isDriverAvailable(DatabaseParameters::SQLiteDatabaseType())
+      || !QSqlDatabase::isDriverAvailable(DatabaseParameters::MySQLDatabaseType()))
     {
         if (QSqlDatabase::drivers().isEmpty())
         {
@@ -160,6 +161,8 @@ int main(int argc, char *argv[])
     {
         params = DatabaseParameters::parametersFromConfig(config);
         params.legacyAndDefaultChecks(firstAlbumPath);
+        // sync to config, for all first-run or upgrade situations
+        params.writeToConfig(config);
     }
 
     // initialize database

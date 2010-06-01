@@ -359,7 +359,7 @@ ELSE(DOXYGEN_FOUND)
     MESSAGE(STATUS " You will not be able to to generate the API documentation.")
     MESSAGE(STATUS " This does not affect building digiKam in any way.")
     MESSAGE(STATUS "")
-    
+
 ENDIF(DOXYGEN_FOUND)
 
 IF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND JASPER_FOUND AND KDCRAW_FOR_DIGIKAM AND KEXIV2_FOR_DIGIKAM AND KIPI_FOUND)
@@ -884,7 +884,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/filesaveoptionsdlg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/imagedialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/rawcameradlg.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/libsinfodlg.cpp        
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/libsinfodlg.cpp
        )
 
     SET(libdeletedialog_SRCS
@@ -913,7 +913,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/cameraselection.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/cameralist.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/cameratype.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupdatabase.cpp 
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupdatabase.cpp
        )
 
     SET(libkipiiface_SRCS
@@ -1010,7 +1010,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagescanner.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/namefilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/searchxml.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/schemaupdater.cpp        
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/schemaupdater.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/upgradedb_sqlite2tosqlite3.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databasecopymanager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseserverstarter.cpp
@@ -1208,20 +1208,28 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/option.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/parseable.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/parseabledialog.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/tooltipdialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/parser.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/parseresults.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/renamethread.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/token.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/common/tooltipcreator.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/defaultrenameparser.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/importrenameparser.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/modifiers/casemodifier.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/modifiers/defaultvaluemodifier.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/modifiers/fillmodifier.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/modifiers/rangemodifier.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/modifiers/replacemodifier.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/modifiers/trimmedmodifier.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/modifiers/uniquemodifier.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options/cameranameoption.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options/database/databaseoption.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options/database/dbkeyselector.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options/database/dbkeyscollection.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options/database/dbheaderlistitem.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options/database/keys/commonkeys.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options/database/keys/metadatakeys.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options/database/keys/positionkeys.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options/dateoption.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options/directorynameoption.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options/filepropertiesoption.cpp

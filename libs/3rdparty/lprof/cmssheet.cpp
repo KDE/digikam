@@ -916,7 +916,11 @@ void AllocateDataFormat(LPIT8 it8)
 {
     if (it8 -> DataFormat) return;    /* Already allocated */
 
-    it8 -> nSamples  = atoi(cmsxIT8GetProperty(it8, "NUMBER_OF_FIELDS"));
+    // work around a crash on invalid profile, see bug #229370
+    const char *numberOfFields = cmsxIT8GetProperty(it8, "NUMBER_OF_FIELDS");
+    if (numberOfFields)
+        it8 -> nSamples  = atoi(numberOfFields);
+    else it8 -> nSamples = 0;
 
     if (it8 -> nSamples <= 0) {
 

@@ -24,6 +24,30 @@
 class KCategorizedSortFilterProxyModel;
 class KCategoryDrawer;
 
+
+class SparseModelIndexVector : public QVector<QModelIndex>
+{
+public:
+    SparseModelIndexVector(int rowCount, QAbstractItemModel *model, int column)
+        : QVector<QModelIndex>(rowCount), model(model), column(column)
+    {
+    }
+
+    inline QModelIndex & operator[](int i)
+    {
+        QModelIndex &index = QVector<QModelIndex>::operator[](i);
+        if (!index.isValid())
+            index = model->index(i, column);
+        return index;
+    }
+private:
+    // not to be used
+    const QModelIndex & operator[](int i) const { return QVector<QModelIndex>::operator[](i); }
+
+    QAbstractItemModel *model;
+    int                 column;
+};
+
 /**
   * @internal
   */
@@ -121,7 +145,7 @@ public:
       * This method will, starting from the index at begin in the given (sorted) modelIndex List,
       * find the last index having the same category as the index to begin with.
       */
-    int categoryUpperBound(const QVector<QModelIndex> &modelIndexList, int begin, int averageSize = 0);
+    int categoryUpperBound(SparseModelIndexVector &modelIndexList, int begin, int averageSize = 0);
 
     /**
       * Returns a QItemSelection for all items intersection rect.

@@ -93,6 +93,14 @@ public:
     QString SQLiteDatabaseFile() const;
 
     /**
+     *  Returns the databaseType designating the said database.
+     *  If you have a DatabaseParameters object already, you can use isSQLite() as well.
+     *  These strings are identical to the driver identifiers in the Qt SQL module.
+     */
+    static QString SQLiteDatabaseType();
+    static QString MySQLDatabaseType();
+
+    /**
      * Creates a unique hash of the values stored in this object.
      */
     QByteArray hash() const;
@@ -109,10 +117,20 @@ public:
     void readFromConfig(KSharedConfig::Ptr config = KGlobal::config(), const QString& configGroup = QString());
     void writeToConfig(KSharedConfig::Ptr config = KGlobal::config(), const QString& configGroup = QString()) const;
 
-    QString getDatabaseFilePath(const QString &dbPath) const;
-    QString getThumbsDatabaseFilePath(const QString &thumbsDbPath) const;
-    QString getDatabasePath(const QString& dbFilePath) const;
-    QString getThumbsDatabasePath(const QString& thumbsDbFilePath) const;
+    /**
+     * In case of SQLite, the databaseName typically is a file. 
+     * With getDatabasePath, you can get the folder.
+     */
+    QString getDatabaseNameOrDir() const;
+    QString getThumbsDatabaseNameOrDir() const;
+
+    /**
+     * In case of SQLite, the databaseName typically is a file.
+     * Use this method if you set a file or a folder.
+     * For non-SQLite, this simply sets the database name.
+     */
+    void setDatabasePath(const QString& folderOrFileOrName);
+    void setThumbsDatabasePath(const QString& folderOrFileOrName);
 
     static QString databaseFileSQLite(const QString &folderOrFile);
     static QString thumbnailDatabaseFileSQLite(const QString &folderOrFile);

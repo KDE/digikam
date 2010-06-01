@@ -79,6 +79,9 @@ EditorTool::EditorTool(QObject* parent)
 
 EditorTool::~EditorTool()
 {
+    delete d->settings;
+    delete d->view;
+
     delete d;
 }
 

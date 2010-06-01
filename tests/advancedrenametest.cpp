@@ -246,10 +246,10 @@ void AdvancedRenameWidgetTest::testChainedModifiers_data()
     QTest::addColumn<QString>("result");
 
     QTest::newRow("[file]*{upper}") << QString("[file]{firstupper}{upper}") << QString("ADVANCEDRENAME_TESTIMAGE.jpg");
-    QTest::newRow("[file]{3-}*")    << QString("[file]{3-}{firstupper}")    << QString("Vancedrename_Testimage.jpg");
+    QTest::newRow("[file]{range:3,}*") << QString("[file]{range:3,}{firstupper}")    << QString("Vancedrename_Testimage.jpg");
 
-    QTest::newRow("[file]{3-}{replace:\"name\",\"age\"}{firstupper}")
-            << QString("[file]{3-}{replace:\"name\",\"age\"}{firstupper}")
+    QTest::newRow("[file]{range:3,}{replace:\"name\",\"age\"}{firstupper}")
+            << QString("[file]{range:3,}{replace:\"name\",\"age\"}{firstupper}")
             << QString("Vancedreage_Testimage.jpg");
 }
 
@@ -355,42 +355,6 @@ void AdvancedRenameWidgetTest::testUniqueModifier()
 #undef DIGITS_STR
 }
 
-void AdvancedRenameWidgetTest::testFillModifier_data()
-{
-    QTest::addColumn<QString>("parseString");
-    QTest::addColumn<QString>("result");
-
-    QTest::newRow("[file]{fill:30}")
-       << QString("[file]{fill:30}")  << QString("advancedrename_testimage______.jpg");
-
-    QTest::newRow("[file]{fill:30,l}")
-       << QString("[file]{fill:30,l}")  << QString("advancedrename_testimage______.jpg");
-
-    QTest::newRow("[file]{fill:30,r}")
-       << QString("[file]{fill:30,r}")  << QString("______advancedrename_testimage.jpg");
-
-    QTest::newRow("[file]{fill:30,l,\"x\"}")
-       << QString("[file]{fill:30,l,\"x\"}")  << QString("advancedrename_testimagexxxxxx.jpg");
-
-    QTest::newRow("[file]{fill:30,r,\"x\"}")
-       << QString("[file]{fill:30,r,\"x\"}")  << QString("xxxxxxadvancedrename_testimage.jpg");
-}
-
-void AdvancedRenameWidgetTest::testFillModifier()
-{
-    QFETCH(QString,   parseString);
-    QFETCH(QString,   result);
-
-    ParseSettings settings;
-    DefaultRenameParser parser;
-
-    settings.fileUrl     = filePath;
-    settings.parseString = parseString;
-
-    QString parsed = parser.parse(settings);
-    QCOMPARE(parsed, result);
-}
-
 void AdvancedRenameWidgetTest::testReplaceModifier_data()
 {
     QTest::addColumn<QString>("parseString");
@@ -440,10 +404,10 @@ void AdvancedRenameWidgetTest::testRangeModifier_data()
 
     QDateTime curdate = QDateTime::currentDateTime();
 
-    QTest::newRow("[file]{1}")    << QString("[file]{1}")   << QString("a.jpg");
-    QTest::newRow("[file]{3}")    << QString("[file]{3}")   << QString("v.jpg");
-    QTest::newRow("[file]{1-3}")  << QString("[file]{1-3}") << QString("adv.jpg");
-    QTest::newRow("[file]{3-}")   << QString("[file]{3-}")  << QString("vancedrename_testimage.jpg");
+    QTest::newRow("[file]{range:1}")    << QString("[file]{range:1}")   << QString("a.jpg");
+    QTest::newRow("[file]{range:3}")    << QString("[file]{range:3}")   << QString("v.jpg");
+    QTest::newRow("[file]{range:1,3}")  << QString("[file]{range:1,3}") << QString("adv.jpg");
+    QTest::newRow("[file]{range:3,}")   << QString("[file]{range:3,}")  << QString("vancedrename_testimage.jpg");
 }
 
 void AdvancedRenameWidgetTest::testRangeModifier()

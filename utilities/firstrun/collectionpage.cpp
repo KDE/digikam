@@ -6,7 +6,7 @@
  * Date        : 2009-28-04
  * Description : first run assistant dialog
  *
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -76,8 +76,8 @@ CollectionPage::CollectionPage(KAssistantDialog* dlg)
               : AssistantDlgPage(dlg, i18n("<b>Configure where images and metadata are stored</b>")),
                 d(new CollectionPagePriv)
 {
-    QWidget *widget      = new QWidget(this);
-    QVBoxLayout *vlayout = new QVBoxLayout(widget);
+    QWidget* widget      = new QWidget(this);
+    QVBoxLayout* vlayout = new QVBoxLayout(widget);
 
     QString picturesPath;
 #if KDE_IS_VERSION(4,1,61)
@@ -94,7 +94,7 @@ CollectionPage::CollectionPage(KAssistantDialog* dlg)
                                                 "include the slash in the translation", "/Pictures");
     }
 
-    QLabel *textLabel1 = new QLabel(widget);
+    QLabel* textLabel1 = new QLabel(widget);
     textLabel1->setWordWrap(true);
 #ifndef _WIN32
     textLabel1->setText(i18n("<p>Please enter a location where you want to store your images.</p> "
@@ -116,7 +116,7 @@ CollectionPage::CollectionPage(KAssistantDialog* dlg)
     d->rootAlbumPathRequester->setMode(KFile::Directory | KFile::LocalOnly);
     d->rootAlbumPathRequester->setUrl(picturesPath);
 
-    QLabel *textLabel3 = new QLabel(widget);
+    QLabel* textLabel3 = new QLabel(widget);
     textLabel3->setWordWrap(true);
     textLabel3->setText(i18n("<p>digiKam stores information and metadata about your images in a database file. "
                              "Please set the location of this file or accept the default.</p>"

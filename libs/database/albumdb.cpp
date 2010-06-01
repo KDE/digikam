@@ -1742,7 +1742,7 @@ QList<ItemScanInfo> AlbumDB::getIdenticalFiles(int fileSize, const QString& uniq
     QList<QVariant> values;
 
     // find items with same fingerprint
-    d->db->execSql( QString("SELECT id, album, name, status, category, modificationDate FROM Images "
+    d->db->execSql( QString("SELECT id, album, name, status, category, modificationDate, fileSize FROM Images "
                             " WHERE fileSize=? AND uniqueHash=?; "),
                     fileSize, uniqueHash,
                     &values );
@@ -1764,6 +1764,8 @@ QList<ItemScanInfo> AlbumDB::getIdenticalFiles(int fileSize, const QString& uniq
         ++it;
         info.modificationDate = ((*it).isNull() ? QDateTime()
                                     : QDateTime::fromString( (*it).toString(), Qt::ISODate ));
+        ++it;
+        info.fileSize         = (*it).toInt();
         ++it;
 
         // exclude one source id from list
@@ -2774,7 +2776,7 @@ QList<ItemScanInfo> AlbumDB::getItemScanInfos(int albumID)
 {
     QList<QVariant> values;
 
-    d->db->execSql( QString("SELECT id, album, name, status, category, modificationDate, uniqueHash "
+    d->db->execSql( QString("SELECT id, album, name, status, category, modificationDate, fileSize, uniqueHash "
                             "FROM Images WHERE album=?;"),
                     albumID,
                     &values );
@@ -2798,6 +2800,8 @@ QList<ItemScanInfo> AlbumDB::getItemScanInfos(int albumID)
         info.modificationDate = ((*it).isNull() ? QDateTime()
                                     : QDateTime::fromString( (*it).toString(), Qt::ISODate ));
         ++it;
+        info.fileSize         = (*it).toInt();
+        ++it;
         info.uniqueHash       = (*it).toString();
         ++it;
 
@@ -2811,7 +2815,7 @@ ItemScanInfo AlbumDB::getItemScanInfo(qlonglong imageID)
 {
     QList<QVariant> values;
 
-    d->db->execSql( QString("SELECT id, album, name, status, category, modificationDate, uniqueHash "
+    d->db->execSql( QString("SELECT id, album, name, status, category, modificationDate, fileSize, uniqueHash "
                             "FROM Images WHERE id=?;"),
                     imageID,
                     &values );
@@ -2834,6 +2838,8 @@ ItemScanInfo AlbumDB::getItemScanInfo(qlonglong imageID)
         ++it;
         info.modificationDate = ((*it).isNull() ? QDateTime()
             : QDateTime::fromString( (*it).toString(), Qt::ISODate ));
+        ++it;
+        info.fileSize         = (*it).toInt();
         ++it;
         info.uniqueHash       = (*it).toString();
         ++it;

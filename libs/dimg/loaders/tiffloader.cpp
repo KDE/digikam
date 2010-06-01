@@ -930,7 +930,9 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver *observer)
 
     DMetadata metaDataToFile(filePath);
     metaDataToFile.setData(m_image->getMetadata());
+    // see bug #211758 for these special steps needed when writing a TIFF
     metaDataToFile.removeExifThumbnail();
+    metaDataToFile.removeExifTag("Exif.Image.ProcessingSoftware");
     metaDataToFile.applyChanges();
 
     return true;

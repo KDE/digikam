@@ -109,6 +109,8 @@ public:
     // If filePath isNull, applies to all file paths.
     void stopSaving(const QString& filePath = QString());
 
+    void stopAllTasks();
+
     // Append a task to save the image to the task list
     void save(DImg& image, const QString& filePath, const QString& format);
 

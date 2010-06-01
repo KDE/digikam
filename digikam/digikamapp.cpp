@@ -232,7 +232,7 @@ DigikamApp::DigikamApp()
     setupActions();
     setupStatusBar();
     initGui();
-    
+
     applyMainWindowSettings(d->config->group("General Settings"));
 
     // Check ICC profiles repository availability
@@ -1406,6 +1406,12 @@ void DigikamApp::slotImageSelected(const ImageInfoList& selection, bool hasPrev,
         }
         case 1:
         {
+            // check if the selected item is really an image, if not, disable the edit action
+            if (selection.first().category() != DatabaseItem::Image)
+            {
+                d->imageViewAction->setEnabled(false);
+            }
+
             slotSetCheckedExifOrientationAction(selection.first());
 
             int index = listAll.indexOf(selection.first()) + 1;
@@ -2619,7 +2625,7 @@ void DigikamApp::slotZoomChanged(double zoom)
     double zmin = d->view->zoomMin();
     double zmax = d->view->zoomMax();
     d->zoomBar->setZoom(zoom, zmin, zmax);
-  
+
     if (!d->fullScreen && d->autoShowZoomToolTip)
         d->zoomBar->triggerZoomTrackerToolTip();
 }

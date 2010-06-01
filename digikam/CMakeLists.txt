@@ -81,6 +81,8 @@ INCLUDE_DIRECTORIES(
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/common
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options/database
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options/database/keys
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/modifiers
                      ${CMAKE_CURRENT_SOURCE_DIR}/../digikam
 

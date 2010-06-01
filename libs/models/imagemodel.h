@@ -188,6 +188,12 @@ Q_SIGNALS:
      *  This is guaranteed only for the scope of emitting this signal. */
     void readyForIncrementalRefresh();
 
+    /** Signals that the model has finished currently with all scheduled
+     *  refreshing, full or incremental, and all preprocessing.
+     *  The model is in polished, clean situation right now.
+     */
+    void allRefreshingFinished();
+
 public Q_SLOTS:
 
     void reAddImageInfos(const QList<ImageInfo>& infos);
@@ -229,7 +235,7 @@ private:
 
     void appendInfos(const QList<ImageInfo>& infos);
     void publiciseInfos(const QList<ImageInfo>& infos);
-    void checkStartIncrementalRefresh();
+    void cleanSituationChecks();
 
     ImageModelPriv *const d;
 };

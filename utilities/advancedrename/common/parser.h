@@ -84,7 +84,10 @@ public:
 protected:
 
     void registerOption(Option* option);
+    void unregisterOption(Option* option);
+
     void registerModifier(Modifier* modifier);
+    void unregisterModifier(Modifier* modifier);
 
 private:
 

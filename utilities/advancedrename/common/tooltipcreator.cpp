@@ -6,7 +6,7 @@
  * Date        : 2009-09-14
  * Description : a class to build the tooltip for a renameparser and its options
  *
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -43,16 +43,13 @@ using namespace Digikam;
 namespace Digikam
 {
 
-TooltipCreator::TooltipCreator(Parser* _parser)
-              : parser(_parser)
+TooltipCreator& TooltipCreator::getInstance()
 {
+    static TooltipCreator m_instance;
+    return m_instance;
 }
 
-TooltipCreator::~TooltipCreator()
-{
-}
-
-QString TooltipCreator::tooltip()
+QString TooltipCreator::tooltip(Parser* parser)
 {
     if (!parser)
     {
@@ -60,10 +57,12 @@ QString TooltipCreator::tooltip()
     }
 
     QString tooltip;
+    tooltip += "<html><head><title></title></head>";
+    tooltip += "<body>";
 
     tooltip += tableStart();
-    tooltip += createSection(i18n("Renaming Options"), parser->options());
-    tooltip += createSection(i18n("Modifiers"),        parser->modifiers(), true);
+    tooltip += createSection(i18n("Options"),   parser->options());
+    tooltip += createSection(i18n("Modifiers"), parser->modifiers(), true);
     tooltip += tableEnd();
 
     if (!parser->modifiers().isEmpty())
@@ -73,17 +72,20 @@ QString TooltipCreator::tooltip()
                         "they are applied in the order you assign them.</i></p>");
     }
 
+    tooltip += "</body>";
+    tooltip += "</html>";
+
     return tooltip;
 }
 
 QString TooltipCreator::tableStart()
 {
-    return QString("<qt><table cellspacing=\"0\" cellpadding=\"0\" border=\"0\">");
+    return QString("<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">");
 }
 
 QString TooltipCreator::tableEnd()
 {
-    return QString("</table></qt>");
+    return QString("</table>");
 }
 
 QString TooltipCreator::markOption(const QString& str)
@@ -101,11 +103,11 @@ QString TooltipCreator::markOption(const QString& str)
 QString TooltipCreator::createHeader(const QString& str)
 {
     QString result;
-    QString templateStr = QString("<tr bgcolor=\"%1\"><td colspan=\"2\">"
+    QString templateStr = QString("<tr><td style=\"background-color: %1; padding:0.25em;\" colspan=\"2\">"
                                   "<nobr><font color=\"%2\"><center><b>%3"
                                   "</b></center></font></nobr></td></tr>")
-                                  .arg(ThemeEngine::instance()->baseColor().name())
-                                  .arg(ThemeEngine::instance()->textRegColor().name());
+                                  .arg(ThemeEngine::instance()->thumbSelColor().name())
+                                  .arg(ThemeEngine::instance()->textSelColor().name());
 
     result += templateStr.arg(str);
     return result;
@@ -121,7 +123,7 @@ QString TooltipCreator::createEntries(const QList<T*> &data)
         foreach (Token* token, t->tokens())
         {
             result += QString("<tr>"
-                              "<td bgcolor=\"%1\">"
+                              "<td style=\"background-color: %1;\">"
                               "<font color=\"%2\"><b>&nbsp;%3&nbsp;</b></font></td>"
                               "<td>&nbsp;%4&nbsp;</td></tr>")
                               .arg(ThemeEngine::instance()->baseColor().name())

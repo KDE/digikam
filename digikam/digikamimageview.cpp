@@ -200,25 +200,25 @@ void DigikamImageView::showContextMenuOnInfo(QContextMenuEvent* event, const Ima
     cmhelper.addServicesMenu(selectedUrls());
     cmhelper.addGotoMenu(selectedImageIDs);
     cmhelper.addKipiActions(selectedImageIDs);
-    popmenu.addSeparator();
+    cmhelper.addSeparator();
     // --------------------------------------------------------
     cmhelper.addAction("image_find_similar");
     cmhelper.addActionLightTable();
     cmhelper.addQueueManagerMenu();
-    popmenu.addSeparator();
+    cmhelper.addSeparator();
     // --------------------------------------------------------
     cmhelper.addAction("image_rename");
     cmhelper.addAction("cut_album_selection");
     cmhelper.addAction("copy_album_selection");
     cmhelper.addAction("paste_album_selection");
     cmhelper.addActionItemDelete(this, SLOT(deleteSelected()), selectedImageIDs.count());
-    popmenu.addSeparator();
+    cmhelper.addSeparator();
     // --------------------------------------------------------
     cmhelper.addActionThumbnail(selectedImageIDs, currentAlbum());
     // --------------------------------------------------------
     cmhelper.addAssignTagsMenu(selectedImageIDs);
     cmhelper.addRemoveTagsMenu(selectedImageIDs);
-    popmenu.addSeparator();
+    cmhelper.addSeparator();
     // --------------------------------------------------------
     cmhelper.addRatingMenu();
 

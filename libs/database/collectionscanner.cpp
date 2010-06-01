@@ -37,6 +37,7 @@
 #include <QFileInfo>
 #include <QStringList>
 #include <QSet>
+#include <QTime>
 
 // KDE includes
 
@@ -204,6 +205,9 @@ void CollectionScanner::setObserver(CollectionScannerObserver *observer)
 
 void CollectionScanner::completeScan()
 {
+    QTime time;
+    time.start();
+
     emit startCompleteScan();
 
     // lock database
@@ -275,6 +279,8 @@ void CollectionScanner::completeScan()
     markDatabaseAsScanned();
 
     emit finishedCompleteScan();
+
+    kDebug() << "Complete scan took:" << time.elapsed() << "msecs.";
 }
 
 void CollectionScanner::partialScan(const QString& filePath)
@@ -730,6 +736,10 @@ void CollectionScanner::scanFileNormal(const QFileInfo& fi, const ItemScanInfo& 
                 // file has been modified
                 scanModifiedFile(fi, scanInfo);
             }
+        }
+        else if ((int)fi.size() != scanInfo.fileSize)
+        {
+            scanModifiedFile(fi, scanInfo);
         }
     }
 }

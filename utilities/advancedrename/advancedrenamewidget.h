@@ -6,7 +6,7 @@
  * Date        : 2009-05-22
  * Description : a control widget for the AdvancedRename utility
  *
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -105,17 +105,10 @@ public:
      */
     void focusLineEdit();
 
-    void setTooltipAlignment(Qt::Alignment alignment);
-
 Q_SIGNALS:
 
     void signalTextChanged(const QString&);
     void signalReturnPressed();
-
-public Q_SLOTS:
-
-    void slotUpdateTrackerPos();
-    void slotHideToolTipTracker();
 
 private Q_SLOTS:
 

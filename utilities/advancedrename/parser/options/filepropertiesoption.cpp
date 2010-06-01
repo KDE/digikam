@@ -6,7 +6,7 @@
  * Date        : 2009-08-08
  * Description : an option to provide file information to the parser
  *
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,6 +32,11 @@
 #include <kiconloader.h>
 #include <klocale.h>
 
+static const QString KEY_FILE("[file]");
+static const QString KEY_EXT("[ext]");
+static const QString KEY_USER("[user]");
+static const QString KEY_GROUP("[group]");
+
 namespace Digikam
 {
 
@@ -40,24 +45,24 @@ FilePropertiesOption::FilePropertiesOption()
 {
     setUseTokenMenu(true);
 
-    addToken("[file]", i18n("Filename"),
+    addToken(KEY_FILE, i18n("Filename"),
              i18nc("File name", "Name"));
 
-    addToken("[ext]", i18n("File extension, prepend with a '.' character, to modify the real file extension"),
+    addToken(KEY_EXT, i18n("File extension, prepend with a '.' character, to modify the real file extension"),
              i18nc("File extension", "Extension"));
 
-    addToken("[user]", i18n("Owner of the file"),
+    addToken(KEY_USER, i18n("Owner of the file"),
              i18nc("Owner of the file", "Owner"));
 
-    addToken("[group]", i18n("Group of the file"),
+    addToken(KEY_GROUP, i18n("Group of the file"),
              i18nc("Group of the file", "Group"));
 
     QString regExpStr;
     regExpStr.append('(');
-    regExpStr.append(escapeToken("[file]")).append('|');
-    regExpStr.append(escapeToken("[user]")).append('|');
-    regExpStr.append(escapeToken("[group]")).append('|');
-    regExpStr.append("(\\.?)").append(escapeToken("[ext]"));
+    regExpStr.append(escapeToken(KEY_FILE)).append('|');
+    regExpStr.append(escapeToken(KEY_USER)).append('|');
+    regExpStr.append(escapeToken(KEY_GROUP)).append('|');
+    regExpStr.append("(\\.?)").append(escapeToken(KEY_EXT));
     regExpStr.append(')');
 
     QRegExp reg(regExpStr);
@@ -73,23 +78,23 @@ QString FilePropertiesOption::parseOperation(ParseSettings& settings)
     const QRegExp& reg   = regExp();
     const QString& token = reg.cap(1);
 
-    if (token == QString("[file]"))
+    if (token == KEY_FILE)
     {
         result = fi.completeBaseName();
     }
-    else if (token == QString("[user]"))
+    else if (token == KEY_USER)
     {
         result = fi.owner();
     }
-    else if (token == QString("[group]"))
+    else if (token == KEY_GROUP)
     {
         result = fi.group();
     }
-    else if (token == QString("[ext]"))
+    else if (token == KEY_EXT)
     {
         result = fi.suffix();
     }
-    else if (token == QString(".[ext]"))
+    else if (token == QString("." + KEY_EXT))
     {
         result = '.' + fi.suffix();
         settings.useOriginalFileExtension = false;

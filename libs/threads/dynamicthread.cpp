@@ -48,9 +48,12 @@ public:
     {
         setAutoDelete(false);
 
-        state = DynamicThread::Inactive;
-        running = true;
-        emitSignals = false;
+        state            = DynamicThread::Inactive;
+        running          = true;
+        assignedThread   = 0;
+        emitSignals      = false;
+        priority         = QThread::InheritPriority;
+        previousPriority = QThread::InheritPriority;
     };
 
     virtual void run();
@@ -58,11 +61,15 @@ public:
     void transitionToInactive();
 
     DynamicThread* const q;
+    QThread* assignedThread;
 
     volatile bool running;
     volatile bool emitSignals;
 
     DynamicThread::State state;
+
+    QThread::Priority priority;
+    QThread::Priority previousPriority;
 
     QMutex         mutex;
     QWaitCondition condVar;
@@ -105,6 +112,24 @@ bool DynamicThread::isFinished() const
 void DynamicThread::setEmitSignals(bool emitThem)
 {
     d->emitSignals = emitThem;
+}
+
+void DynamicThread::setPriority(QThread::Priority priority)
+{
+    if (d->priority == priority)
+        return;
+    d->priority = priority;
+    if (d->priority != QThread::InheritPriority)
+    {
+        QMutexLocker locker(&d->mutex);
+        if (d->assignedThread)
+            d->assignedThread->setPriority(d->priority);
+    }
+}
+
+QThread::Priority DynamicThread::priority() const
+{
+    return d->priority;
 }
 
 void DynamicThread::start()
@@ -168,6 +193,14 @@ bool DynamicThreadPriv::transitionToRunning()
         case DynamicThread::Scheduled:
         case DynamicThread::Running:
             state = DynamicThread::Running;
+            assignedThread = QThread::currentThread();
+
+            previousPriority = assignedThread->priority();
+            if (priority != QThread::InheritPriority)
+            {
+                assignedThread->setPriority(priority);
+            }
+
             return true;
         case DynamicThread::Deactivating:
         default:
@@ -184,6 +217,12 @@ void DynamicThreadPriv::transitionToInactive()
             return;
         case DynamicThread::Deactivating:
         default:
+            if (previousPriority != QThread::InheritPriority)
+            {
+                assignedThread->setPriority(previousPriority);
+                previousPriority = QThread::InheritPriority;
+            }
+            assignedThread = 0;
             state = DynamicThread::Inactive;
             condVar.wakeAll();
             break;

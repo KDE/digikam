@@ -28,6 +28,7 @@
 
 #include <QObject>
 #include <QRunnable>
+#include <QThread>
 
 // Local includes
 
@@ -41,7 +42,7 @@ namespace Digikam
 
 class DynamicThreadPriv;
 
-class DynamicThread : public QObject, public QRunnable
+class DIGIKAM_EXPORT DynamicThread : public QObject, public QRunnable
 {
     Q_OBJECT
 
@@ -71,6 +72,15 @@ public:
     bool  isFinished() const;
 
     void setEmitSignals(bool emitThem);
+
+    /** Sets the priority for this dynamic thread.
+     *  Can be set anytime. If the thread is currently not running,
+     *  the priority will be set when it is run next time.
+     *  When you set QThread::InheritPriority (default), the
+     *  priority is not changed but inherited from the thread pool.
+     */
+    void setPriority(QThread::Priority priority);
+    QThread::Priority priority() const;
 
 public Q_SLOTS:
 

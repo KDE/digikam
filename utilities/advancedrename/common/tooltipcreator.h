@@ -6,7 +6,7 @@
  * Date        : 2009-09-14
  * Description : a class to build the tooltip for a renameparser and its options
  *
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -37,12 +37,15 @@ class TooltipCreator
 {
 public:
 
-    TooltipCreator(Parser* parser);
-    virtual ~TooltipCreator();
+    ~TooltipCreator() {};
+    static TooltipCreator& getInstance();
 
-    QString tooltip();
+    QString tooltip(Parser* parser);
 
 private:
+
+    TooltipCreator() {};
+    TooltipCreator(const TooltipCreator&) {};
 
     // common methods
     QString markOption(const QString& str);
@@ -54,10 +57,6 @@ private:
     template <class T> QString createEntries(const QList<T*> &data);
     template <class T> QString createSection(const QString& sectionName, const QList<T*> &data, bool lastSection = false);
                        QString createHeader(const QString& str);
-
-private:
-
-    Parser* const parser;
 };
 
 } // namespace Digikam

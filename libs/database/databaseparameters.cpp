@@ -133,6 +133,16 @@ bool DatabaseParameters::isMySQL() const
     return databaseType == "QMYSQL";
 }
 
+QString DatabaseParameters::SQLiteDatabaseType()
+{
+    return "QSQLITE";
+}
+
+QString DatabaseParameters::MySQLDatabaseType()
+{
+    return "QMYSQL";
+}
+
 QString DatabaseParameters::SQLiteDatabaseFile() const
 {
     if (isSQLite())
@@ -180,24 +190,26 @@ void DatabaseParameters::readFromConfig(KSharedConfig::Ptr config, const QString
 
     if (!databaseName.isNull())
     {
-        QString orgDatabaseName = databaseName;
-        databaseName = getDatabaseFilePath(orgDatabaseName);
-        databaseNameThumbnails = getThumbsDatabaseFilePath(orgDatabaseName);
+        QString orgName = databaseName;
+        setDatabasePath(orgName);
+        setThumbsDatabasePath(orgName);
     }
 }
 
-QString DatabaseParameters::getDatabaseFilePath(const QString &dbPath) const
+void DatabaseParameters::setDatabasePath(const QString& folderOrFileOrName)
 {
     if (isSQLite())
-        return databaseFileSQLite(dbPath);
-    return dbPath;
+        databaseName = databaseFileSQLite(folderOrFileOrName);
+    else
+        databaseName = folderOrFileOrName;
 }
 
-QString DatabaseParameters::getThumbsDatabaseFilePath(const QString &thumbsDbPath) const
+void DatabaseParameters::setThumbsDatabasePath(const QString& folderOrFileOrName)
 {
     if (isSQLite())
-        return thumbnailDatabaseFileSQLite(thumbsDbPath);
-    return thumbsDbPath;
+        databaseNameThumbnails = thumbnailDatabaseFileSQLite(folderOrFileOrName);
+    else
+        databaseNameThumbnails = folderOrFileOrName;
 }
 
 QString DatabaseParameters::databaseFileSQLite(const QString &folderOrFile)
@@ -282,8 +294,8 @@ void DatabaseParameters::writeToConfig(KSharedConfig::Ptr config, const QString&
     else
         group = config->group(configGroup);
 
-    QString dbName = getDatabasePath(databaseName);
-    QString dbNameThumbs = getThumbsDatabasePath(databaseNameThumbnails);
+    QString dbName = getDatabaseNameOrDir();
+    QString dbNameThumbs = getThumbsDatabaseNameOrDir();
 
     group.writeEntry(configDatabaseType, databaseType);
     group.writeEntry(configDatabaseName, dbName);
@@ -296,18 +308,18 @@ void DatabaseParameters::writeToConfig(KSharedConfig::Ptr config, const QString&
     group.writeEntry(configInternalDatabaseServer, internalServer);
 }
 
-QString DatabaseParameters::getDatabasePath(const QString& dbFilePath) const
+QString DatabaseParameters::getDatabaseNameOrDir() const
 {
     if (isSQLite())
-        return databaseDirectorySQLite(dbFilePath);
-    return dbFilePath;
+        return databaseDirectorySQLite(databaseName);
+    return databaseName;
 }
 
-QString DatabaseParameters::getThumbsDatabasePath(const QString& thumbsDbFilePath) const
+QString DatabaseParameters::getThumbsDatabaseNameOrDir() const
 {
     if (isSQLite())
-        return thumbnailDatabaseDirectorySQLite(thumbsDbFilePath);
-    return thumbsDbFilePath;
+        return thumbnailDatabaseDirectorySQLite(databaseNameThumbnails);
+    return databaseNameThumbnails;
 }
 
 QString DatabaseParameters::databaseDirectorySQLite(const QString& path)
@@ -367,7 +379,8 @@ DatabaseParameters DatabaseParameters::parametersForSQLite(const QString& databa
 {
     // only the database name is needed
     DatabaseParameters params("QSQLITE", databaseFile);
-    params.databaseNameThumbnails = params.getThumbsDatabaseFilePath(params.getDatabasePath(databaseFile));
+    params.setDatabasePath(databaseFile);
+    params.setThumbsDatabasePath(params.getDatabaseNameOrDir());
     return params;
 }
 
@@ -417,15 +430,15 @@ QDebug operator<<(QDebug dbg, const DatabaseParameters& p)
     dbg.nospace() << "(Thumbnails Name "
                   << p.databaseNameThumbnails << "); ";
 
-    if (!p.connectOptions.isNull())
+    if (!p.connectOptions.isEmpty())
         dbg.nospace() << "ConnectOptions: "
                       << p.connectOptions << ", ";
-    if (!p.hostName.isNull())
+    if (!p.hostName.isEmpty())
         dbg.nospace() << "Host Name and Port: "
                       << p.hostName << " " << p.port << "; ";
     if (p.internalServer)
         dbg.nospace() << "Using an Internal Server; ";
-    if (!p.userName.isNull())
+    if (!p.userName.isEmpty())
         dbg.nospace() << "Username and Password: "
                       << p.userName << ", " << p.password;
 
