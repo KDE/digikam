@@ -102,26 +102,18 @@ void SetupDatabase::applySettings()
     AlbumSettings* settings = AlbumSettings::instance();
     if (!settings) return;
 
-    if (d->databaseWidget->databaseType->currentText() == QString("QSQLITE"))
+    if (d->databaseWidget->currentDatabaseType() == QString(DatabaseParameters::SQLiteDatabaseType()))
     {
         QString newPath = d->databaseWidget->databasePathEdit->url().path();
         QDir oldDir(d->databaseWidget->originalDbPath);
         QDir newDir(newPath);
 
-        if (oldDir != newDir || d->databaseWidget->databaseType->currentText()!=d->databaseWidget->originalDbType)
+        if (oldDir != newDir || d->databaseWidget->currentDatabaseType() != d->databaseWidget->originalDbType)
         {
-            settings->setDatabaseType(d->databaseWidget->databaseType->currentText());
-            settings->setDatabaseName(newPath);
-            settings->setDatabaseNameThumbnails(newPath);
+            settings->setDatabaseParameters(DatabaseParameters::parametersForSQLiteDefaultFile(newPath));
 
             // clear other fields
             d->databaseWidget->internalServer->setChecked(false);
-            settings->setInternalDatabaseServer(false);
-            settings->setDatabaseConnectoptions("");
-            settings->setDatabaseHostName("");
-            settings->setDatabasePort(-1);
-            settings->setDatabaseUserName("");
-            settings->setDatabasePassword("");
 
             settings->saveSettings();
         }
@@ -130,9 +122,9 @@ void SetupDatabase::applySettings()
     {
         if (d->databaseWidget->internalServer->isChecked())
         {
-            DatabaseParameters internalServerParameters = DatabaseParameters::defaultParameters(d->databaseWidget->databaseType->currentText());
+            DatabaseParameters internalServerParameters = DatabaseParameters::defaultParameters(d->databaseWidget->currentDatabaseType());
             settings->setInternalDatabaseServer(true);
-            settings->setDatabaseType(d->databaseWidget->databaseType->currentText());
+            settings->setDatabaseType(d->databaseWidget->currentDatabaseType());
             settings->setDatabaseName(internalServerParameters.databaseName);
             settings->setDatabaseNameThumbnails(internalServerParameters.databaseName);
             settings->setDatabaseConnectoptions(internalServerParameters.connectOptions);
@@ -144,7 +136,7 @@ void SetupDatabase::applySettings()
         else
         {
             settings->setInternalDatabaseServer(d->databaseWidget->internalServer->isChecked());
-            settings->setDatabaseType(d->databaseWidget->databaseType->currentText());
+            settings->setDatabaseType(d->databaseWidget->currentDatabaseType());
             settings->setDatabaseName(d->databaseWidget->databaseName->text());
             settings->setDatabaseNameThumbnails(d->databaseWidget->databaseNameThumbnails->text());
             settings->setDatabaseConnectoptions(d->databaseWidget->connectionOptions->text());
