@@ -453,7 +453,7 @@ void AlbumManager::changeDatabase(const DatabaseParameters& newParams)
 
     // New database type SQLITE
     if (newParams.isSQLite()){
-        QDir newDir(newParams.databaseName);
+        QDir newDir(newParams.getDatabaseNameOrDir());
         QFileInfo newFile(newDir, QString("digikam4.db"));
 
         if (!newFile.exists())
@@ -657,8 +657,9 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
             QWidget* parent = QWidget::find(0);
             QString message = i18n("<p><b>An error occurred during the internal server start.</b></p>"
             "Details:\n %1", result.getErrorText());
-            QApplication::setOverrideCursor(Qt::ArrowCursor);
+            QApplication::changeOverrideCursor(Qt::ArrowCursor);
             KMessageBox::error(parent, message);
+            QApplication::changeOverrideCursor(Qt::WaitCursor);
         }
     }
 
@@ -676,6 +677,7 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
                                                ));
 
         DatabaseAccess::setParameters(DatabaseParameters(), DatabaseAccess::DatabaseSlave);
+        QApplication::restoreOverrideCursor();
         return true;
     }
 
