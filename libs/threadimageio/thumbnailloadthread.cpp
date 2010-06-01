@@ -426,7 +426,7 @@ void ThumbnailLoadThread::findGroup(const QStringList& filePaths, int size)
 
 void ThumbnailLoadThread::preloadGroup(const QStringList& filePaths)
 {
-    findGroup(filePaths, d->size);
+    preloadGroup(filePaths, d->size);
 }
 
 void ThumbnailLoadThread::preloadGroup(const QStringList& filePaths, int size)

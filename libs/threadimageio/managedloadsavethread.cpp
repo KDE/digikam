@@ -24,6 +24,10 @@
 
 #include "managedloadsavethread.h"
 
+// KDE includes
+
+#include <kdebug.h>
+
 // Local includes
 
 #include "loadsavetask.h"
@@ -391,6 +395,8 @@ void ManagedLoadSaveThread::stopAllTasks()
         else if (m_currentTask->type() == LoadSaveTask::TaskTypeLoading)
             static_cast<LoadingTask*>(m_currentTask)->setStatus(LoadingTask::LoadingTaskStatusStopping);
     }
+    foreach (LoadSaveTask *task, m_todo)
+        delete task;
     m_todo.clear();
 }
 
