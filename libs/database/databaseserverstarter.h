@@ -35,6 +35,7 @@
 
 #include "digikam_export.h"
 #include "databaseservererror.h"
+#include "databaseparameters.h"
 
 namespace Digikam
 {
@@ -46,7 +47,7 @@ class DIGIKAM_DATABASE_EXPORT DatabaseServerStarter : public QObject
     public:
 
         DatabaseServerStarter(QObject* parent);
-        static DatabaseServerError startServerManagerProcess(const QString dbType="QMYSQL");
+        static DatabaseServerError startServerManagerProcess(const QString dbType = DatabaseParameters::MySQLDatabaseType());
         static void cleanUp();
 
     private:
