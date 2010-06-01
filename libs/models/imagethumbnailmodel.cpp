@@ -125,6 +125,7 @@ void ImageThumbnailModel::setPreloadThumbnails(bool preload)
             d->preloadThread = new ThumbnailLoadThread;
             d->preloadThread->setPixmapRequested(false);
             d->preloadThread->setExifRotate(d->exifRotate);
+            d->preloadThread->setPriority(QThread::LowPriority);
         }
         connect(this, SIGNAL(allRefreshingFinished()),
                 this, SLOT(preloadAllThumbnails()));
@@ -196,6 +197,12 @@ void ImageThumbnailModel::preloadThumbnails(const QList<QModelIndex>& infos)
 void ImageThumbnailModel::preloadAllThumbnails()
 {
     preloadThumbnails(imageInfos());
+}
+
+void ImageThumbnailModel::imageInfosCleared()
+{
+    if (d->preloadThread)
+        d->preloadThread->stopAllTasks();
 }
 
 QVariant ImageThumbnailModel::data(const QModelIndex& index, int role) const

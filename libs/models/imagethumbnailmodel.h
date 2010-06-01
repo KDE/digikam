@@ -114,6 +114,10 @@ Q_SIGNALS:
 
     void thumbnailAvailable(const QModelIndex& index, int requestedSize);
 
+protected:
+
+    virtual void imageInfosCleared();
+
 protected Q_SLOTS:
 
     void slotThumbnailLoaded(const LoadingDescription& loadingDescription, const QPixmap& thumb);
