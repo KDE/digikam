@@ -234,7 +234,6 @@ WaterMark::WaterMark(QObject* parent)
     textSettingsGroupBoxLayout->addWidget(backgroundOpacityLabel );
     textSettingsGroupBoxLayout->addWidget(d->backgroundOpacity);
 
-
     d->imageSettingsGroupBox->setVisible(true);
     d->textSettingsGroupBox->setVisible(false);
 
