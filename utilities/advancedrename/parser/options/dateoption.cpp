@@ -34,6 +34,7 @@
 
 #include <kiconloader.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -249,20 +250,44 @@ QString DateOption::parseOperation(ParseSettings& settings)
         token.remove(0, 1);
     }
 
+    QDateTime dateTime = settings.dateTime;
+    if (dateTime.isNull() || !dateTime.isValid())
+    {
+        // lets try to re-read the file information
+        ImageInfo info(settings.fileUrl);
+        if (!info.isNull())
+        {
+            dateTime = info.dateTime();
+        }
+
+        if (dateTime.isNull() || !dateTime.isValid())
+        {
+            // still no date info, use Qt file information
+            QFileInfo fileInfo(settings.fileUrl.path());
+            dateTime = fileInfo.created();
+        }
+    }
+
+    // do we have a valid date?
+    if (dateTime.isNull())
+    {
+        return QString();
+    }
+
     QVariant v = df.formatType(token);
     if (v.isNull())
     {
-        result = settings.dateTime.toString(token);
+        result = dateTime.toString(token);
     }
     else
     {
         if (v.type() == QVariant::String)
         {
-            result = settings.dateTime.toString(v.toString());
+            result = dateTime.toString(v.toString());
         }
         else
         {
-            result = settings.dateTime.toString((Qt::DateFormat)v.toInt());
+            result = dateTime.toString((Qt::DateFormat)v.toInt());
         }
     }
 
