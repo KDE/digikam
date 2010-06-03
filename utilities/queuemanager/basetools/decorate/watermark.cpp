@@ -141,23 +141,23 @@ WaterMark::WaterMark(QObject* parent)
 
     d->useImageRadioButton = new QRadioButton(hbox);
     d->useImageRadioButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    QLabel* useImageLabel = new QLabel(hbox);
+    QLabel* useImageLabel  = new QLabel(hbox);
     useImageLabel ->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    d->useTextRadioButton = new QRadioButton(hbox);
+    d->useTextRadioButton  = new QRadioButton(hbox);
     d->useTextRadioButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    QLabel* useTextLabel = new QLabel(hbox);
+    QLabel* useTextLabel   = new QLabel(hbox);
     useTextLabel ->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     useImageLabel->setText(i18n("Image"));
     useTextLabel->setText(i18n("Text"));
 
     useImageLabel->setAlignment(Qt::AlignLeft);
     useTextLabel->setAlignment(Qt::AlignLeft);
-
     d->useImageRadioButton->setChecked(true);
 
     d->imageSettingsGroupBox = new QGroupBox(vbox);
     d->imageSettingsGroupBox->setTitle(i18n("Image settings"));
-    QVBoxLayout *imageSettingsGroupBoxLayout = new QVBoxLayout;
+    QVBoxLayout* imageSettingsGroupBoxLayout = new QVBoxLayout;
+    imageSettingsGroupBoxLayout->setMargin(KDialog::spacingHint());
     imageSettingsGroupBoxLayout->addStretch(1);
     d->imageSettingsGroupBox->setLayout(imageSettingsGroupBoxLayout);
 
@@ -170,7 +170,8 @@ WaterMark::WaterMark(QObject* parent)
 
     d->textSettingsGroupBox = new QGroupBox(vbox);
     d->textSettingsGroupBox->setTitle(i18n("Text settings"));
-    QVBoxLayout *textSettingsGroupBoxLayout = new QVBoxLayout;
+    QVBoxLayout* textSettingsGroupBoxLayout = new QVBoxLayout;
+    textSettingsGroupBoxLayout->setMargin(KDialog::spacingHint());
     textSettingsGroupBoxLayout->addStretch(1);
     d->textSettingsGroupBox->setLayout(textSettingsGroupBoxLayout);
 
@@ -181,7 +182,6 @@ WaterMark::WaterMark(QObject* parent)
     textEditLabel->setText(i18n("Watermark text:"));
     textSettingsGroupBoxLayout->addWidget(textEditLabel);
     textSettingsGroupBoxLayout->addWidget(d->textEdit);
-
 
     QLabel* label2       = new QLabel();
     d->fontChooserWidget = new KFontComboBox(vbox);
@@ -196,7 +196,6 @@ WaterMark::WaterMark(QObject* parent)
     label3->setText(i18n("Font color:"));
     textSettingsGroupBoxLayout->addWidget(label3);
     textSettingsGroupBoxLayout->addWidget(d->fontColorButton);
-
 
     QLabel* textOpacityLabel = new QLabel();
     textOpacityLabel->setText(i18n("Text opacity:"));
