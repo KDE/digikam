@@ -19,7 +19,7 @@ color
 
 decorate
   /border                   DONE                  NO                   DONE
-  /inserttext                NO                   NO                   TODO (though BQM Watermark tool)
+  /inserttext               TODO                  NO                   TODO (though BQM Watermark tool)
   /texture                  DONE                 DONE                  TODO
   /superimpose               NO                   NO                    NO
 
