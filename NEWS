@@ -1,5 +1,5 @@
 *********************************************************************************************************
-digiKam 1.3.0 - Release date: 2010-05-30
+digiKam 1.3.0 - Release date: 2010-06-06
 
 NEW FEATURES:
 
@@ -8,6 +8,7 @@ General        : New Database interface to support different database backend.
 General        : libkdcraw dependency set to 1.1.0 version.
 General        : libkexiv2 dependency set to 1.1.0 version.
 AdvancedRename : New option: database. Allows to rename files according to database values.
+QueueManager   : Add capability to apply an image waterwark over a photo.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
@@ -80,5 +81,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 067 ==> 229370 : ICC profile in Colors tab incorrect for nef raw images, also crashes digikam for some profiles.
 068 ==> 221281 : Crash in Image Editor after editing multiple (100+) pictures.
 069 ==> 240269 : digiKam crash after update to 4.5 beta (4.4.80).
-070 ==> 
+070 ==> 233409 : Image watermark in batch queue manager.
+071 ==> 
 
