@@ -82,5 +82,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 068 ==> 221281 : Crash in Image Editor after editing multiple (100+) pictures.
 069 ==> 240269 : digiKam crash after update to 4.5 beta (4.4.80).
 070 ==> 233409 : Image watermark in batch queue manager.
-071 ==> 
+071 ==> 231585 : Empty date for mod files.
+072 ==>
 
