@@ -25,7 +25,7 @@
 
 // Qt includes
 
-#include <QTextEdit>
+#include <QTextBrowser>
 
 // KDE includes
 
@@ -39,20 +39,22 @@ class TooltipDialogPriv
 public:
 
     TooltipDialogPriv() :
-        textEdit(0)
+        textBrowser(0)
     {}
 
-    QTextEdit* textEdit;
+    QTextBrowser* textBrowser;
 };
 
 TooltipDialog::TooltipDialog(QWidget* parent)
              : KDialog(parent), d(new TooltipDialogPriv)
 {
-    d->textEdit = new QTextEdit(this);
-    d->textEdit->setFrameStyle(QFrame::NoFrame);
+    d->textBrowser = new QTextBrowser(this);
+    d->textBrowser->setFrameStyle(QFrame::NoFrame);
+    d->textBrowser->setOpenLinks(true);
+    d->textBrowser->setOpenExternalLinks(true);
     setCaption(i18n("Information"));
     setButtons(KDialog::Close);
-    setMainWidget(d->textEdit);
+    setMainWidget(d->textBrowser);
 }
 
 TooltipDialog::~TooltipDialog()
@@ -63,13 +65,12 @@ TooltipDialog::~TooltipDialog()
 void TooltipDialog::setTooltip(const QString& tooltip)
 {
     clearTooltip();
-    d->textEdit->setHtml(tooltip);
-    d->textEdit->setReadOnly(true);
+    d->textBrowser->setHtml(tooltip);
 }
 
 void TooltipDialog::clearTooltip()
 {
-    d->textEdit->clear();
+    d->textBrowser->clear();
 }
 
 } // namespace Digikam
