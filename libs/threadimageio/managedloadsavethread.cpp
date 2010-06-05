@@ -420,7 +420,7 @@ void ManagedLoadSaveThread::stopSaving(const QString& filePath)
         LoadSaveTask *task = m_todo[i];
         if (task->type() ==  LoadSaveTask::TaskTypeSaving)
         {
-            SavingTask *savingTask = (SavingTask *)m_currentTask;
+            SavingTask *savingTask = static_cast<SavingTask *>(task);
             if (filePath.isNull() || savingTask->filePath() == filePath)
             {
                 delete m_todo.takeAt(i--);
