@@ -80,7 +80,6 @@ ImageThumbnailBar::ImageThumbnailBar(QWidget *parent)
     setUsePointingHandCursor(false);
     setScrollStepGranularity(5);
     setScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-    setSelectionMode(QAbstractItemView::SingleSelection); // actions on multiple items don't work anyways
 
     AlbumSettings *settings = AlbumSettings::instance();
 
