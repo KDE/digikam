@@ -182,6 +182,11 @@ void RatingWidget::setVisible(bool visible)
         stopFading();
 }
 
+int RatingWidget::maximumVisibleWidth() const
+{
+    return RatingMax * (d->disPixmap.width()+1);
+}
+
 void RatingWidget::startFading()
 {
     if (!hasFading()) return;

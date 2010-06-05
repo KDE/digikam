@@ -83,5 +83,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 069 ==> 240269 : digiKam crash after update to 4.5 beta (4.4.80).
 070 ==> 233409 : Image watermark in batch queue manager.
 071 ==> 231585 : Empty date for mod files.
-072 ==>
+072 ==> 238232 : Image rating widget in AlbumGUI is too sensitive.
+073 ==> 
 

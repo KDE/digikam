@@ -96,6 +96,11 @@ void ImageRatingOverlay::updatePosition()
         return;
 
     QRect rect = delegate()->ratingRect();
+    if (rect.width() > ratingWidget()->maximumVisibleWidth())
+    {
+        int offset = (rect.width() - ratingWidget()->maximumVisibleWidth()) / 2;
+        rect.adjust(offset, 0, -offset, 0);
+    }
     QRect visualRect = m_view->visualRect(m_index);
     rect.translate(visualRect.topLeft());
 
