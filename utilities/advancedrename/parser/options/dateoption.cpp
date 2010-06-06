@@ -232,7 +232,7 @@ DateOption::DateOption()
     addToken("[date:||key||]",    i18n("Date and time (||key|| = Standard|ISO|Text)"));
     addToken("[date:||format||]", i18n("Date and time") + " (" +  dateFormatLink + ')');
 
-    QRegExp reg("\\[date(:.*)?\\]");
+    QRegExp reg("\\[date(:(.*))?\\]");
     reg.setMinimal(true);
     setRegExp(reg);
 }
@@ -244,10 +244,14 @@ QString DateOption::parseOperation(ParseSettings& settings)
 
     const QRegExp& reg = regExp();
 
-    QString token = reg.cap(1);
-    if (!token.isEmpty())
+    QString token = reg.cap(2);
+
+    if ( !(token.isEmpty() || token.isNull()) &&
+          (token.startsWith('"') && token.endsWith('"'))
+       )
     {
-        token.remove(0, 1);
+        token = token.remove(0, 1);
+        token.chop(1);
     }
 
     QDateTime dateTime = settings.dateTime;
@@ -337,7 +341,7 @@ void DateOption::slotTokenTriggered(const QString& token)
                     dateString.remove(':');
                     break;
                 case DateFormat::Custom:
-                    dateString = tokenStr.arg(dlg->ui->customFormatInput->text());
+                    dateString = tokenStr.arg(QString("\"%1\"").arg(dlg->ui->customFormatInput->text()));
                     break;
                 default:
                     QString identifier = df.identifier((DateFormat::Type) index);
