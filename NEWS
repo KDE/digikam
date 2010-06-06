@@ -85,5 +85,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 071 ==> 231585 : Empty date for mod files.
 072 ==> 238232 : Image rating widget in AlbumGUI is too sensitive.
 073 ==> 209281 : digiKam crashes when dragging image to light table.
-074 ==> 
+074 ==> 240828 : Crash after cancelling save operation that was stuck.
+075 ==> 
+
 
