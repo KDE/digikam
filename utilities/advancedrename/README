@@ -52,7 +52,7 @@ colon, to make it the first matching group in the regular expression. For exampl
 
     QRegExp reg("\\[date(:(.*))\\]");
         or
-    QRegExp reg("\\[date(:.*)?\\]");
+    QRegExp reg("\\[date(:(.*))?\\]");
 
  The syntax highlighter tries to extract the first matching group and applies a
  different color to it.
