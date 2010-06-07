@@ -1,8 +1,9 @@
 *********************************************************************************************************
-digiKam 1.3.0 - Release date: 2010-06-07
+digiKam 1.3.0 - Release date: 2010-08-xx
 
 NEW FEATURES:
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
-001 ==> 
+001 ==> 238285 : Nikkor 18-200mm not detected by lens autocorrection.
+002 ==> 
