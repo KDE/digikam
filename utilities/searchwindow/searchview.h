@@ -6,7 +6,7 @@
  * Date        : 2008-01-20
  * Description : User interface for searches
  *
- * Copyright (C) 2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2008-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -34,6 +34,7 @@
 class QHBoxLayout;
 class QVBoxLayout;
 class QTimeLine;
+
 class KDialogButtonBox;
 class KPushButton;
 
@@ -65,12 +66,12 @@ public:
     // To contain common code of SearchView and SearchGroup,
     // as SearchGroups can have subgroups.
 
-    AbstractSearchGroupContainer(QWidget *parent = 0);
+    AbstractSearchGroupContainer(QWidget* parent = 0);
 
 public Q_SLOTS:
 
-    SearchGroup *addSearchGroup();
-    void removeSearchGroup(SearchGroup *group);
+    SearchGroup* addSearchGroup();
+    void removeSearchGroup(SearchGroup* group);
 
 protected:
 
@@ -85,7 +86,7 @@ protected:
     /// Collects the data from the same method of all contained groups (position relative to this widget)
     QList<QRect> startupAnimationAreaOfGroups() const;
     /// Re-implement: create and setup a search group
-    virtual SearchGroup *createSearchGroup() = 0;
+    virtual SearchGroup* createSearchGroup() = 0;
     /// Re-implement: Adds a newly created group to the layout structures
     virtual void addGroupToLayout(SearchGroup *group) = 0;
 
@@ -95,8 +96,8 @@ protected Q_SLOTS:
 
 protected:
 
-    int m_groupIndex;
-    QList<SearchGroup *> m_groups;
+    int                 m_groupIndex;
+    QList<SearchGroup*> m_groups;
 };
 
 // -------------------------------------------------------------------------
@@ -113,7 +114,7 @@ public:
     ~SearchView();
 
     void setup();
-    void setBottomBar(SearchViewBottomBar *bar);
+    void setBottomBar(SearchViewBottomBar* bar);
 
     void read(const QString& search);
     QString write();
@@ -140,11 +141,11 @@ public:
 
 protected:
 
-    virtual void paintEvent(QPaintEvent *e);
-    virtual void showEvent(QShowEvent *event);
+    virtual void paintEvent(QPaintEvent* e);
+    virtual void showEvent(QShowEvent* event);
 
-    virtual SearchGroup *createSearchGroup();
-    virtual void addGroupToLayout(SearchGroup *group);
+    virtual SearchGroup* createSearchGroup();
+    virtual void addGroupToLayout(SearchGroup* group);
     QPixmap cachedBannerPixmap(int w, int h);
 
 private:
@@ -160,7 +161,7 @@ class SearchViewBottomBar : public QWidget
 
 public:
 
-    explicit SearchViewBottomBar(SearchViewThemedPartsCache * cache, QWidget *parent = 0);
+    explicit SearchViewBottomBar(SearchViewThemedPartsCache* cache, QWidget* parent = 0);
 
 Q_SIGNALS:
 
@@ -172,13 +173,15 @@ Q_SIGNALS:
 
 protected:
 
-    virtual void paintEvent(QPaintEvent *);
+    virtual void paintEvent(QPaintEvent*);
 
-    SearchViewThemedPartsCache *m_themeCache;
-    QHBoxLayout                *m_mainLayout;
-    KDialogButtonBox           *m_buttonBox;
-    KPushButton                *m_addGroupsButton;
-    KPushButton                *m_resetButton;
+    QHBoxLayout*                m_mainLayout;
+
+    KDialogButtonBox*           m_buttonBox;
+    KPushButton*                m_addGroupsButton;
+    KPushButton*                m_resetButton;
+
+    SearchViewThemedPartsCache* m_themeCache;
 };
 
 } // namespace Digikam

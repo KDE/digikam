@@ -52,13 +52,13 @@ namespace Digikam
 {
 
 AbstractSearchGroupContainer::AbstractSearchGroupContainer(QWidget *parent)
-    : QWidget(parent), m_groupIndex(0)
+                            : QWidget(parent), m_groupIndex(0)
 {
 }
 
-SearchGroup *AbstractSearchGroupContainer::addSearchGroup()
+SearchGroup* AbstractSearchGroupContainer::addSearchGroup()
 {
-    SearchGroup *group = createSearchGroup();
+    SearchGroup* group = createSearchGroup();
     m_groups << group;
     addGroupToLayout(group);
     connect(group, SIGNAL(removeRequested()),
@@ -66,7 +66,7 @@ SearchGroup *AbstractSearchGroupContainer::addSearchGroup()
     return group;
 }
 
-void AbstractSearchGroupContainer::removeSearchGroup(SearchGroup *group)
+void AbstractSearchGroupContainer::removeSearchGroup(SearchGroup* group)
 {
     if (group->groupType() == SearchGroup::FirstGroup)
     {
@@ -78,7 +78,7 @@ void AbstractSearchGroupContainer::removeSearchGroup(SearchGroup *group)
     group->deleteLater();
 }
 
-void AbstractSearchGroupContainer::startReadingGroups(SearchXmlCachingReader &)
+void AbstractSearchGroupContainer::startReadingGroups(SearchXmlCachingReader&)
 {
     m_groupIndex = 0;
 }
@@ -109,7 +109,7 @@ void AbstractSearchGroupContainer::finishReadingGroups()
 
 void AbstractSearchGroupContainer::writeGroups(SearchXmlWriter& writer)
 {
-    foreach (SearchGroup *group, m_groups)
+    foreach (SearchGroup* group, m_groups)
         group->write(writer);
 }
 
@@ -121,7 +121,7 @@ void AbstractSearchGroupContainer::removeSendingSearchGroup()
 QList<QRect> AbstractSearchGroupContainer::startupAnimationAreaOfGroups() const
 {
     QList<QRect> list;
-    foreach (SearchGroup *group, m_groups)
+    foreach (SearchGroup* group, m_groups)
         list += group->startupAnimationArea();
     return list;
 }
@@ -134,17 +134,19 @@ public:
 
     SearchViewPrivate()
     {
-        layout        = 0;
-        bar           = 0;
-        timeline      = 0;
+        layout                 = 0;
+        bar                    = 0;
+        timeline               = 0;
         needAnimationForReadIn = false;
     }
 
-    QVBoxLayout         *layout;
-    SearchViewBottomBar *bar;
+    bool                     needAnimationForReadIn;
+
+    QVBoxLayout*             layout;
     QCache<QString, QPixmap> pixmapCache;
-    QTimeLine           *timeline;
-    bool                 needAnimationForReadIn;
+    QTimeLine*               timeline;
+
+    SearchViewBottomBar *bar;
 };
 
 SearchView::SearchView()
@@ -162,6 +164,7 @@ void SearchView::setup()
 {
     connect(ThemeEngine::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(setTheme()));
+
     setTheme();
 
     d->layout = new QVBoxLayout;
@@ -234,9 +237,9 @@ void SearchView::addGroupToLayout(SearchGroup *group)
     d->layout->insertWidget(d->layout->count()-1, group);
 }
 
-SearchGroup *SearchView::createSearchGroup()
+SearchGroup* SearchView::createSearchGroup()
 {
-    SearchGroup *group = new SearchGroup(this);
+    SearchGroup* group = new SearchGroup(this);
     group->setup(m_groups.isEmpty() ? SearchGroup::FirstGroup : SearchGroup::ChainGroup);
     return group;
 }
@@ -486,10 +489,11 @@ SearchViewBottomBar::SearchViewBottomBar(SearchViewThemedPartsCache * cache, QWi
                            QDialogButtonBox::RejectRole,
                            this,
                            SIGNAL(cancelPressed()));
-    m_buttonBox->addButton(KStandardGuiItem::test(),
-                           QDialogButtonBox::ApplyRole,
-                           this,
-                           SIGNAL(tryoutPressed()));
+    KPushButton* aBtn = m_buttonBox->addButton(KStandardGuiItem::apply(),
+                                               QDialogButtonBox::ApplyRole,
+                                               this,
+                                               SIGNAL(tryoutPressed()));
+    aBtn->setText(i18n("Try"));
     m_mainLayout->addWidget(m_buttonBox);
 
     setLayout(m_mainLayout);
