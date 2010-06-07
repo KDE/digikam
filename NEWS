@@ -1,5 +1,5 @@
 *********************************************************************************************************
-digiKam 1.3.0 - Release date: 2010-06-06
+digiKam 1.3.0 - Release date: 2010-06-07
 
 NEW FEATURES:
 
@@ -89,9 +89,4 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 075 ==> 233766 : Deadlock at changing from mysql to sqlite.
 076 ==> 240048 : Open images with double instead of single click.
 077 ==> 218633 : "Write Metadata to Selected Images" Very Slow for Large Number of Images.
-078 ==> 
-
-
-
-
-
+078 ==> 237565 : digiKam crash when unchecking KIPI external modules.
