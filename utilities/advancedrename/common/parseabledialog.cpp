@@ -7,7 +7,7 @@
  * Description : a dialog that can be used to display a configuration
  *               dialog for a parseable
  *
- * Copyright (C) 2009 by Andi Clemens <andi dot clemens at gmx dot net>
+ * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -61,7 +61,7 @@ public:
 };
 
 ParseableDialog::ParseableDialog(Parseable* parent)
-                 : KDialog(0), d(new ParseableDialogPriv)
+               : KDialog(0), d(new ParseableDialogPriv)
 {
     d->dialogTitle       = new QLabel(this);
     d->dialogDescription = new QLabel(this);
