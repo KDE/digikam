@@ -32,7 +32,6 @@
 
 // Local includes
 
-#include "digikam_export.h"
 #include "searchtextbar.h"
 #include "databaseoption.h"
 
@@ -40,7 +39,7 @@ namespace Digikam
 {
 class DbHeaderListItem;
 
-class DIGIKAM_EXPORT DbKeySelectorItem : public QTreeWidgetItem
+class DbKeySelectorItem : public QTreeWidgetItem
 {
 
 public:
@@ -59,7 +58,7 @@ private:
 
 // ------------------------------------------------------------------------------------
 
-class DIGIKAM_EXPORT DbKeySelector : public QTreeWidget
+class DbKeySelector : public QTreeWidget
 {
 
 public:
@@ -75,7 +74,7 @@ public:
 
 class DbKeySelectorViewPriv;
 
-class DIGIKAM_EXPORT DbKeySelectorView : public QWidget
+class DbKeySelectorView : public QWidget
 {
     Q_OBJECT
 

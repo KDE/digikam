@@ -31,14 +31,10 @@
 #include <QtGui/QTreeWidget>
 #include <QtGui/QTreeWidgetItem>
 
-// Local includes
-
-#include "digikam_export.h"
-
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT DbHeaderListItem : public QObject, public QTreeWidgetItem
+class DbHeaderListItem : public QObject, public QTreeWidgetItem
 {
     Q_OBJECT
 
