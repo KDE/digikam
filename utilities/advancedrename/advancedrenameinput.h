@@ -77,6 +77,8 @@ public:
     void    setParser(Parser* parser);
     Parser* parser();
 
+    void setAllowDirectoryCreation(bool allow);
+
 public Q_SLOTS:
 
     void slotSetText(const QString&);
@@ -118,6 +120,7 @@ public:
     ~AdvancedRenameInput();
 
     void setParser(Parser* parser);
+    void setAllowDirectoryCreation(bool allow);
 
     QString text() const;
     void    setText(const QString& text);

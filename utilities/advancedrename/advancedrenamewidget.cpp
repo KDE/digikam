@@ -100,6 +100,7 @@ AdvancedRenameWidget::AdvancedRenameWidget(QWidget* parent)
 {
     setupWidgets();
     setParser(new DefaultRenameParser());
+    setAllowDirectoryCreation(false);
 }
 
 AdvancedRenameWidget::~AdvancedRenameWidget()
@@ -240,6 +241,11 @@ void AdvancedRenameWidget::registerParserControls()
 Parser* AdvancedRenameWidget::parser()
 {
     return d->parser;
+}
+
+void AdvancedRenameWidget::setAllowDirectoryCreation(bool allow)
+{
+    d->renameInput->setAllowDirectoryCreation(allow);
 }
 
 void AdvancedRenameWidget::setParser(Parser* parser)

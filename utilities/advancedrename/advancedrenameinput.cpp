@@ -101,11 +101,13 @@ class AdvancedRenameLineEditPriv
 public:
 
     AdvancedRenameLineEditPriv() :
+        allowDirectoryCreation(false),
         verticalSliderPosition(INVALID),
         parseTimer(0),
         parser(0)
     {}
 
+    bool    allowDirectoryCreation;
     int     verticalSliderPosition;
     QTimer* parseTimer;
     Parser* parser;
@@ -160,6 +162,11 @@ AdvancedRenameLineEdit::~AdvancedRenameLineEdit()
     delete d;
 }
 
+void AdvancedRenameLineEdit::setAllowDirectoryCreation(bool allow)
+{
+    d->allowDirectoryCreation = allow;
+}
+
 void AdvancedRenameLineEdit::setParser(Parser* parser)
 {
     if (parser)
@@ -187,7 +194,7 @@ void AdvancedRenameLineEdit::keyPressEvent(QKeyEvent* e)
         e->setAccepted(false);
     }
     // the key "/" should not be allowed (QTextEdit is not able to use a QValidator, so we must do it in here)
-    else if (e->key() == Qt::Key_Slash)
+    else if (!d->allowDirectoryCreation && e->key() == Qt::Key_Slash)
     {
         // do nothing
     }
@@ -341,6 +348,11 @@ void AdvancedRenameInput::setParser(Parser* parser)
 {
     d->lineEdit->setParser(parser);
     enableHighlighter(true);
+}
+
+void AdvancedRenameInput::setAllowDirectoryCreation(bool allow)
+{
+    d->lineEdit->setAllowDirectoryCreation(allow);
 }
 
 void AdvancedRenameInput::setText(const QString& text)
