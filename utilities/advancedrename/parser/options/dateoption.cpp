@@ -267,7 +267,7 @@ QString DateOption::parseOperation(ParseSettings& settings)
         if (dateTime.isNull() || !dateTime.isValid())
         {
             // still no date info, use Qt file information
-            QFileInfo fileInfo(settings.fileUrl.path());
+            QFileInfo fileInfo(settings.fileUrl.toLocalFile());
             dateTime = fileInfo.created();
         }
     }
