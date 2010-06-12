@@ -3,6 +3,7 @@
 set KDEDIRS=E:\kde4-msvc
 set PATH=%PATH%;%KDEDIRS%\bin;%KDEDIRS%\plugins
 set KDE4_INSTALL_DIR=%KDEDIRS%
+set KDE4_INCLUDE_DIR=%KDEDIRS%\include
 set KDEDIRS=%KDEDIRS%
 set KDEROOT=%KDEDIRS%
 set QTMAKESPEC=%KDEDIRS%\mkspecs\win32-g++
