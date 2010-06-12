@@ -120,14 +120,14 @@ int main(int argc, char *argv[])
     QString commandLineDBPath;
     if (args && args->isSet("database-directory"))
     {
-        QFileInfo commandLineDBDir(commandLineDBPath);
+        QFileInfo commandLineDBDir(args->getOption("database-directory"));
         if (!commandLineDBDir.exists() || !commandLineDBDir.isDir())
         {
-            kError() << "The given database-directory does not exist or is not readable. Ignoring.";
+            kError() << "The given database-directory does not exist or is not readable. Ignoring." << commandLineDBDir.path();
         }
         else
         {
-            commandLineDBPath = args->getOption("database-directory");
+            commandLineDBPath = commandLineDBDir.path();
         }
     }
 
