@@ -11,4 +11,4 @@ set QTDIR=%KDEDIRS%
 set QT_INSTALL_DIR=%KDEDIRS%
 set SVN_EDITOR="C:\mc\mc -e"
 
-C:\mc\mc.exe
+call "C:\mc\mc.exe"

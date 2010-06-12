@@ -11,10 +11,9 @@ set QTDIR=%KDEDIRS%
 set QT_INSTALL_DIR=%KDEDIRS%
 set SVN_EDITOR="C:\mc\mc -e"
 
-
 call "C:\Program Files\Microsoft Visual Studio 9.0\VC\vcvarsall.bat"
 @set PATH=C:\Program Files\Microsoft Visual Studio 9.0\VC\bin;%PATH% 
 @set INCLUDE=C:\Program Files\Microsoft Visual Studio 9.0\VC\include;%INCLUDE% 
 @set LIB=C:\Program Files\Microsoft Visual Studio 9.0\VC\lib;%LIB%
 
-C:\mc\mc.exe
+call "C:\mc\mc.exe"
