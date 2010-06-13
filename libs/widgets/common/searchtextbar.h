@@ -40,6 +40,7 @@
 namespace Digikam
 {
 
+class AbstractAlbumModel;
 class AlbumFilterModel;
 
 class SearchTextBarPriv;
@@ -128,7 +129,9 @@ public:
      * @param uniqueIdRole a role for which the model will return a unique integer for each entry
      * @param displayRole the role to retrieve the text for completion, default is Qt::DisplayRole.
      */
-    void setModel(QPointer<QAbstractItemModel> model, int uniqueIdRole, int displayRole = Qt::DisplayRole);
+    void setModel(QAbstractItemModel *model, int uniqueIdRole, int displayRole = Qt::DisplayRole);
+    void setModel(AbstractAlbumModel *model);
+
 
     /**
      * Sets the filter model this text bar shall use to invoke filtering on and
@@ -139,7 +142,7 @@ public:
      *                    connections need to be created with
      *                    signalSearchTextSettings and slotSearchResult
      */
-    void setFilterModel(QPointer<AlbumFilterModel> filterModel);
+    void setFilterModel(AlbumFilterModel *filterModel);
 
     /**
      * Tells the current highlighting state of the text input indicated via the
@@ -169,15 +172,12 @@ Q_SIGNALS:
     void signalSearchTextSettings(const SearchTextSettings& settings);
 
 public Q_SLOTS:
+
     void slotSearchResult(bool match);
 
 private Q_SLOTS:
 
     void slotTextChanged(const QString&);
-    void slotRowsInserted(const QModelIndex &parent, int start, int end);
-    void slotRowsAboutToBeRemoved(const QModelIndex &parent, int start, int end);
-    void slotDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
-    void slotModelReset();
 
 protected:
 
@@ -187,10 +187,6 @@ protected:
 private:
 
     void contextMenuEvent(QContextMenuEvent* e);
-    void connectToModel(QAbstractItemModel *model);
-    void disconnectFromModel(QAbstractItemModel *model);
-    void sync(QAbstractItemModel *model);
-    void sync(QAbstractItemModel *model, const QModelIndex &index);
 
     /**
      * If hasCaseSensitive returns <code>true</code> this tells the search
