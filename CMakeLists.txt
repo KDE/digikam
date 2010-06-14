@@ -507,6 +507,9 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/dimgscale.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/dcolor.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/dcolorcomposer.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/dimagehistory.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filteraction.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/historyimageid.cpp
        )
 
     SET(libdimgloaders_SRCS

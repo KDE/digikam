@@ -197,8 +197,19 @@ void BCGTool::prepareFinal()
     toolView()->setEnabled(false);
 
     BCGContainer settings = d->settingsView->settings();
-
+    
+    QString filterName("BCGFilter");
+    int version = 1;
+    QHash<QString, QVariant> filterSettings;
+    filterSettings.insert("channel", QVariant(d->settingsView->settings().channel));
+    filterSettings.insert("brightness", QVariant(d->settingsView->settings().brightness));
+    filterSettings.insert("contrast", QVariant(d->settingsView->settings().contrast));
+    filterSettings.insert("gamma", QVariant(d->settingsView->settings().gamma));
+    
     ImageIface iface(0, 0);
+    
+    iface.getOriginalImg()->setFilterAction(filterName, version, Digikam::FilterAction::ReproducibleFilter, filterSettings);
+    
     setFilter(new BCGFilter(iface.getOriginalImg(), this, settings));
 }
 

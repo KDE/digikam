@@ -49,6 +49,7 @@ extern "C"
 #include <QMap>
 #include <QPixmap>
 #include <QSysInfo>
+#include <QDebug>
 
 // KDE includes
 
@@ -167,7 +168,10 @@ DImg::~DImg()
 
 DImg& DImg::operator=(const DImg& image)
 {
+  //kDebug() << "Original image: " << m_priv->imageHistory.entries().count() << " | " << &m_priv;
+  //kDebug() << "New image: " << image.m_priv->imageHistory.entries().count() << " | " << &(image.m_priv);
     m_priv = image.m_priv;
+    //kDebug() << "Original new image: " << m_priv->imageHistory.entries().count() << " | " << &m_priv;
     return *this;
 }
 
@@ -274,6 +278,7 @@ void DImg::copyMetaData(const DImgPrivate* src)
     m_priv->attributes   = src->attributes;
     m_priv->embeddedText = src->embeddedText;
     m_priv->iccProfile   = src->iccProfile;
+    m_priv->imageHistory = src->imageHistory;
     //FIXME: what about sharing and deleting lanczos_func?
 }
 
@@ -2213,6 +2218,80 @@ void DImg::updateMetadata(const QString& destMimeType, const QString& originalFi
 
     // Store new Exif/IPTC/XMP data into image.
     setMetadata(meta.data());
+    
+    if(!m_priv->imageHistory.isEmpty()) {
+        m_priv->imageHistory.toXml();
+    }
+}
+
+void DImg::setFilterAction(const QString& identifier, const int version, const FilterAction::Category category, QHash<QString, QVariant> values)
+{
+    // add the original file to the entries
+    if(m_priv->imageHistory.isEmpty())
+    {
+        QString fileUUID(getUniqueHash(m_priv->attributes.value("originalFilePath").toString()));
+        QString fileName(KUrl(m_priv->attributes.value("originalFilePath").toString()).fileName());
+        QDateTime fileCreateDate(QFileInfo(m_priv->attributes.value("originalFilePath").toString()).created());
+      
+        HistoryImageId h(fileUUID, fileUUID, fileName, fileCreateDate);
+        
+        m_priv->imageHistory << h;
+    }  
+    if(category == FilterAction::ComplexFilter || category == FilterAction::DocumentedHistory)
+    {
+      //create new file entry
+        QString fileUUID(getUniqueHash(m_priv->attributes.value("originalFilePath").toString()));
+        QString fileName(KUrl(m_priv->attributes.value("originalFilePath").toString()).fileName());
+        QDateTime fileCreateDate(QFileInfo(m_priv->attributes.value("originalFilePath").toString()).created());
+      
+        HistoryImageId h(fileUUID, fileUUID, fileName, fileCreateDate);
+        
+        m_priv->imageHistory << h;    
+    }
+    FilterAction f(identifier, version, category);
+    
+    QHashIterator<QString, QVariant> iter(values);
+    while (iter.hasNext()) 
+    {
+      iter.next();   
+      f.addParameter(iter.key(), iter.value());
+      //setFilterAction(identifier, version, category, iter.key(), iter.value());
+    }
+    
+    m_priv->imageHistory << f;
+}
+
+void DImg::setFilterAction(const QString& identifier, const int version, const FilterAction::Category category, QString param, const QVariant value)
+{
+    // add the original file to the entries
+    if(m_priv->imageHistory.isEmpty())
+    {
+        QString fileUUID(getUniqueHash(m_priv->attributes.value("originalFilePath").toString()));
+        QString fileName(KUrl(m_priv->attributes.value("originalFilePath").toString()).fileName());
+        QDateTime fileCreateDate(QFileInfo(m_priv->attributes.value("originalFilePath").toString()).created());
+      
+        HistoryImageId h(fileUUID, fileUUID, fileName, fileCreateDate);
+        
+        m_priv->imageHistory << h;
+    }  
+    if(category == FilterAction::ComplexFilter || category == FilterAction::DocumentedHistory)
+    {
+      //create new file entry
+        QString fileUUID(getUniqueHash(m_priv->attributes.value("originalFilePath").toString()));
+        QString fileName(KUrl(m_priv->attributes.value("originalFilePath").toString()).fileName());
+        QDateTime fileCreateDate(QFileInfo(m_priv->attributes.value("originalFilePath").toString()).created());
+      
+        HistoryImageId h(fileUUID, fileUUID, fileName, fileCreateDate);
+        
+        m_priv->imageHistory << h;    
+    }
+    
+    FilterAction f(identifier, version, category);
+    f.addParameter(param, value);
+    
+    m_priv->imageHistory << f;
+    
+    kDebug() << "FilterAction " << identifier << " with param " << param << ": " << value;
 }
 
 }  // namespace Digikam

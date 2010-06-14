@@ -37,6 +37,7 @@
 #include "digikam_export.h"
 #include "dmetadatadata.h"
 #include "dshareddata.h"
+#include "dimagehistory.h"
 #include "iccprofile.h"
 
 /** Lanczos kernel is precomputed in a table with this resolution
@@ -101,6 +102,7 @@ public:
     QMap<QString, QVariant> attributes;
     QMap<QString, QString>  embeddedText;
     IccProfile              iccProfile;
+    DImageHistory           imageHistory;
 };
 
 }  // namespace Digikam

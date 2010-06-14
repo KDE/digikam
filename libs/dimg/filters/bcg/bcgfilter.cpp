@@ -67,7 +67,7 @@ BCGFilter::~BCGFilter()
 }
 
 void BCGFilter::filterImage()
-{
+{ 
     setGamma(d->settings.gamma);
     setBrightness(d->settings.brightness);
     setContrast(d->settings.contrast);
@@ -201,6 +201,7 @@ void BCGFilter::applyBCG(uchar* bits, uint width, uint height, bool sixteenBits)
                 postProgress( progress );
         }
     }
+    
 }
 
 }  // namespace Digikam

@@ -68,6 +68,7 @@
 #include "dmetadata.h"
 #include "rawimport.h"
 #include "editortooliface.h"
+#include <../dimg/dimg.h>
 
 namespace Digikam
 {
@@ -541,7 +542,7 @@ void DImgInterface::saveAs(const QString& fileName, IOFileSettingsContainer *iof
 
     d->image.updateMetadata(mimeType, getImageFileName(), setExifOrientationTag);
 
-    d->thread->save(d->image, fileName, mimeType);
+    d->thread->save(d->image, fileName, mimeType); 
 }
 
 void DImgInterface::slotImageSaved(const QString& filePath, bool success)

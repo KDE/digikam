@@ -43,7 +43,9 @@
 #include "drawdecoding.h"
 #include "dcolor.h"
 #include "dcolorcomposer.h"
+#include "dimagehistory.h"
 #include "iccprofile.h"
+
 
 class QString;
 
@@ -301,6 +303,9 @@ public:
 
     void       setEmbeddedText(const QString& key, const QString& text);
     QString    embeddedText(const QString& key) const;
+    
+    void       setFilterAction(const QString& identifier, const int version, const Digikam::FilterAction::Category category, QString param, const QVariant value);
+    void       setFilterAction(const QString& identifier, const int version, const Digikam::FilterAction::Category category, QHash<QString, QVariant> values);
 
     /** Use this method to update lead metadata after image transformations.
         This fix Iptc preview, Exif thumbnail, image size information, etc.
