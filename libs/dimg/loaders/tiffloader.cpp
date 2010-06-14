@@ -176,7 +176,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
         return false;
     }
 
-    // TODO: check others TIFF color-spaces here. Actually, only RGB and MINISBLACK
+    // TODO: check others TIFF color-spaces here. Actually, only RGB, PALETTE and MINISBLACK
     // have been tested.
     // Complete description of TIFFTAG_PHOTOMETRIC tag can be found at this url:
     // http://www.awaresystems.be/imaging/tiff/tifftags/photometricinterpretation.html
@@ -184,6 +184,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver *observer)
     TIFFGetFieldDefaulted(tif, TIFFTAG_PHOTOMETRIC, &photometric);
     if (photometric != PHOTOMETRIC_RGB &&
         photometric != PHOTOMETRIC_MINISBLACK &&
+        photometric != PHOTOMETRIC_PALETTE &&
         m_loadFlags & LoadImageData)
     {
         kWarning() << "Can not handle image without RGB color-space: "
