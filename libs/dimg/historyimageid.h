@@ -30,6 +30,11 @@
 #include <QString>
 #include <QDateTime>
 
+#include "digikam_export.h"
+
+namespace Digikam 
+{
+
 class DIGIKAM_EXPORT HistoryImageId
 {
 public:
@@ -60,5 +65,5 @@ public:
      */
     QString m_fileUUID;
 };
-
+}
 #endif // HISTORYIMAGEID_H

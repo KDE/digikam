@@ -26,6 +26,9 @@
 
 #include "historyimageid.h"
 
+namespace Digikam 
+{
+
 HistoryImageId::HistoryImageId()
 {
 
@@ -64,4 +67,6 @@ bool HistoryImageId::isOriginalFile() const
       return true;
   }
   else return false;  
+}
+
 }
