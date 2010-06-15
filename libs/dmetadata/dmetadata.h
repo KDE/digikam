@@ -80,6 +80,9 @@ public:
     bool     setMetadataTemplate(const Template& t) const;
     Template getMetadataTemplate() const;
     bool     removeMetadataTemplate() const;
+    
+    QString getImageHistory() const;
+    bool    setImageHistory(QString& imageHistoryXml) const;
 
     /// Fills only the copyright values in the template. Use getMetadataTemplate() usually.
     /// Returns true if valid fields were read.

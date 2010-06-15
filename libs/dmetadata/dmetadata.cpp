@@ -491,6 +491,28 @@ bool DMetadata::setImageRating(int rating) const
     return true;
 }
 
+bool DMetadata::setImageHistory(QString& imageHistoryXml) const
+{
+    if (supportXmp())
+    {
+        if (!setXmpTagString("Xmp.digiKam.imageHistory", imageHistoryXml, false))
+            return false;
+        else return true;
+    }
+    return false;
+}
+
+QString DMetadata::getImageHistory() const
+{
+    if (hasXmp())
+    {
+        QString value = getXmpTagString("Xmp.digiKam.imageHistory", false);
+        kDebug() << value;
+        return value;
+    }
+}
+
+
 PhotoInfoContainer DMetadata::getPhotographInformation() const
 {
     PhotoInfoContainer photoInfo;
