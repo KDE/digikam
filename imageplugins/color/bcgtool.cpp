@@ -92,8 +92,10 @@ BCGTool::BCGTool(QObject* parent)
 {
     setObjectName("bcgadjust");
     setToolName(i18n("Brightness / Contrast / Gamma"));
+    setToolVersion(1);
     setToolIcon(SmallIcon("contrast"));
     setToolHelp("bcgadjusttool.anchor");
+    setToolCategory(FilterAction::ReproducibleFilter);
 
     d->previewWidget = new ImageRegionWidget;
     setToolView(d->previewWidget);
@@ -198,8 +200,6 @@ void BCGTool::prepareFinal()
 
     BCGContainer settings = d->settingsView->settings();
     
-    QString filterName("BCGFilter");
-    int version = 1;
     QHash<QString, QVariant> filterSettings;
     filterSettings.insert("channel", QVariant(d->settingsView->settings().channel));
     filterSettings.insert("brightness", QVariant(d->settingsView->settings().brightness));
@@ -208,7 +208,7 @@ void BCGTool::prepareFinal()
     
     ImageIface iface(0, 0);
     
-    iface.getOriginalImg()->setFilterAction(filterName, version, Digikam::FilterAction::ReproducibleFilter, filterSettings);
+    iface.getOriginalImg()->setFilterAction(toolName(), toolVersion(), toolCategory(), filterSettings);
     
     setFilter(new BCGFilter(iface.getOriginalImg(), this, settings));
 }

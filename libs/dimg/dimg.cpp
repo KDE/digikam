@@ -2215,13 +2215,15 @@ void DImg::updateMetadata(const QString& destMimeType, const QString& originalFi
     // Update Exif Orientation tag if necessary.
     if(resetExifOrientationTag)
         meta.setImageOrientation(DMetadata::ORIENTATION_NORMAL);
+    
+    if(!m_priv->imageHistory.isEmpty()) {
+        QString imageHistoryXml = m_priv->imageHistory.toXml();
+        meta.setImageHistory(imageHistoryXml);
+    }
 
     // Store new Exif/IPTC/XMP data into image.
     setMetadata(meta.data());
     
-    if(!m_priv->imageHistory.isEmpty()) {
-        m_priv->imageHistory.toXml();
-    }
 }
 
 void DImg::setFilterAction(const QString& identifier, const int version, const FilterAction::Category category, QHash<QString, QVariant> values)

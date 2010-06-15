@@ -6,9 +6,7 @@
  * Date        : 2010-06-02
  * Description : class for manipulating modifications changeset for non-destruct. editing
  *
- * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
+ * Copyright (C) 2010 by Marcel Wiesweg <marcel.wiesweg@gmx.de>
  * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -176,6 +174,7 @@ QString DImageHistory::toXml() const
           stream.writeStartElement("filter");
           stream.writeAttribute("filterName", entries().at(i).action.identifier());
           stream.writeAttribute("filterVersion", QString::number(entries().at(i).action.version()));
+          stream.writeAttribute("filterCategory", QString::number(entries().at(i).action.category()));
         
           stream.writeStartElement("params");
 
@@ -233,7 +232,22 @@ DImageHistory DImageHistory::fromXml(const QString& xml) //DImageHistory
                 }
          }
          else if(stream.name() == "filter") {
-                entry.action = FilterAction(stream.attributes().value("filterName").toString(), stream.attributes().value("filterVersion").toString().toInt(), FilterAction::ReproducibleFilter);
+                FilterAction::Category c;
+                switch(stream.attributes().value("filterCategory").toString().toInt()) {
+                  case 0: 
+                    c = FilterAction::ReproducibleFilter;
+                    break;
+                  case 1:
+                    c = FilterAction::ComplexFilter;
+                    break;
+                  case 2:
+                    c = FilterAction::ReproducibleFilter;
+                    break;
+                  default:
+                    c = FilterAction::ComplexFilter;
+                    break;
+                }
+                entry.action = FilterAction(stream.attributes().value("filterName").toString(), stream.attributes().value("filterVersion").toString().toInt(), c);
                 stream.readNextStartElement(); //params tag
                 if(stream.name() != "params") continue;
                 stream.readNext(); //param .. tag

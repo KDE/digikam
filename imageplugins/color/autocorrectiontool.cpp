@@ -88,8 +88,10 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* parent)
 {
     setObjectName("autocorrection");
     setToolName(i18n("Auto Correction"));
+    setToolVersion(1);
     setToolIcon(SmallIcon("autocorrection"));
     setToolHelp("autocolorcorrectiontool.anchor");
+    setToolCategory(FilterAction::ReproducibleFilter);
 
     // -------------------------------------------------------------
 
@@ -266,6 +268,9 @@ void AutoCorrectionTool::prepareFinal()
 
     int type = d->correctionTools->currentId();
     ImageIface iface(0, 0);
+    
+    iface.getOriginalImg()->setFilterAction(toolName(), toolVersion(), toolCategory(), "type", QVariant(type));
+    
     autoCorrection(iface.getOriginalImg(), iface.getOriginalImg(), type);
 }
 
