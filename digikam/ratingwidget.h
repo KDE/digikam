@@ -59,6 +59,7 @@ public:
     void setVisibleImmediately();
 
     void setVisible(bool visible);
+    int maximumVisibleWidth() const;
 
 Q_SIGNALS:
 

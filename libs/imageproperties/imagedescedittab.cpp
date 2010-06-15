@@ -100,7 +100,6 @@ public:
         templateViewer             = 0;
         tabWidget                  = 0;
         tagModel                   = 0;
-        tagModificationHelper      = 0;
         tagCheckView               = 0;
     }
 
@@ -141,7 +140,6 @@ public:
 
     MetadataHubOnTheRoad           hub;
 
-    TagModificationHelper         *tagModificationHelper;
     TagModel                      *tagModel;
 
     QTimer                        *metadataChangeTimer;
@@ -191,7 +189,6 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
                                      "'/' can be used to create a hierarchy of tags. "
                                      "',' can be used to create more than one hierarchy at the same time."));
 
-    d->tagModificationHelper = new TagModificationHelper(this, this);
     d->tagModel = new TagModel(AbstractAlbumModel::IncludeRootAlbum, this);
     d->tagModel->setCheckable(true);
     d->tagModel->setRootCheckable(false);
@@ -715,11 +712,12 @@ void ImageDescEditTab::slotCreateNewTag()
     {
         return;
     }
-    TAlbum *created = d->tagModificationHelper->slotTagNew(d->tagCheckView->currentAlbum(),
-                                         d->newTagEdit->text());
+    TAlbum *created = d->tagCheckView->tagModificationHelper()->
+                            slotTagNew(d->tagCheckView->currentAlbum(), d->newTagEdit->text());
     if (created)
     {
-        d->tagCheckView->slotSelectAlbum(created, false);
+        //d->tagCheckView->slotSelectAlbum(created);
+        d->newTagEdit->clear();
     }
 }
 

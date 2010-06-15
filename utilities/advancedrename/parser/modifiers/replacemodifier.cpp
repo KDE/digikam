@@ -65,7 +65,7 @@ ReplaceModifier::ReplaceModifier()
     addToken("{replace:\"||old||\", \"||new||\",||options||}",
              i18n("Replace text (||options||: ||r|| = regular expression, ||i|| = ignore case)"));
 
-    QRegExp reg("\\{replace:\"(.*)\",\"(.*)\"(,(r|ri|ir|i))?\\}");
+    QRegExp reg("\\{replace(:\"(.*)\",\"(.*)\"(,(r|ri|ir|i))?)\\}");
     reg.setMinimal(true);
     setRegExp(reg);
 }
@@ -113,10 +113,10 @@ QString ReplaceModifier::parseOperation(ParseSettings& settings)
     Q_UNUSED(settings);
 
     const QRegExp& reg  = regExp();
-    QString original    = reg.cap(1);
-    QString replacement = reg.cap(2);
+    QString original    = reg.cap(2);
+    QString replacement = reg.cap(3);
     QString result      = settings.str2Modify;
-    QString options     = reg.cap(4);
+    QString options     = reg.cap(5);
     Qt::CaseSensitivity caseType = (!options.isEmpty() && options.contains('i'))
                                    ? Qt::CaseInsensitive
                                    : Qt::CaseSensitive;

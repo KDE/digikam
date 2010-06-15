@@ -584,6 +584,7 @@ void QueueListView::slotAddItems(const ImageInfoList& list)
             d->thumbLoadThread->find(info.fileUrl().toLocalFile());
         }
     }
+    updateDestFileNames();
     emit signalQueueContentsChanged();
 }
 

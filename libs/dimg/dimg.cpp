@@ -2191,7 +2191,7 @@ void DImg::updateMetadata(const QString& destMimeType, const QString& originalFi
         meta.setImagePreview(preview);
     }
 
-    if (destMimeType.toUpper() == QString("TIFF") || destMimeType.toUpper() != QString("TIF"))
+    if (destMimeType.toUpper() == QString("TIFF") || destMimeType.toUpper() == QString("TIF"))
     {
         // With TIFF file, we don't store JPEG thumbnail, we even need to erase it and store
         // a thumbnail at a special location. See bug #211758

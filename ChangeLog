@@ -1,3 +1,3156 @@
+1.3.0 2010-06-07
+2010-06-07 14:34  cgilles
+
+	* utilities/searchwindow/searchview.cpp,
+	  utilities/searchwindow/searchview.h,
+	  utilities/searchwindow/searchwindow.cpp,
+	  utilities/searchwindow/searchwindow.h: in adv search window, it's
+	  better to use "Try" sentence instead "Test". To be homogenous
+	  with the rest of digiKam
+
+2010-06-07 12:35  cgilles
+
+	* NEWS: polish
+
+2010-06-07 12:29  cgilles
+
+	* NEWS: update
+
+2010-06-07 08:19  cgilles
+
+	* NEWS: update
+
+2010-06-06 22:47  cgilles
+
+	* NEWS: update
+
+2010-06-06 22:47  cgilles
+
+	* NEWS: update
+
+2010-06-06 22:41  cgilles
+
+	* NEWS: update
+
+2010-06-06 16:49  aclemens
+
+	* NEWS: update
+
+2010-06-06 08:13  aclemens
+
+	* utilities/advancedrename/README: fix example
+
+2010-06-06 08:11  aclemens
+
+	* utilities/advancedrename/TODO: I guess it is working fine the way
+	  it is, don't make things too complicated.
+
+2010-06-06 08:08  aclemens
+
+	* utilities/advancedrename/parser/options/dateoption.cpp: Fix regex
+	  for token parsing in the dateoption
+
+2010-06-06 08:08  aclemens
+
+	* utilities/advancedrename/parser/modifiers/rangemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/replacemodifier.cpp:
+	  Fix syntax highlighting
+
+2010-06-05 20:35  mwiesweg
+
+	* libs/threadimageio/managedloadsavethread.cpp: Fix copy-and-paste
+	  mistake.
+	  Funny: Code with obvious crash is almost three years old.
+	  
+	  CCBUG: 240828
+
+2010-06-05 16:25  eva
+
+	* utilities/queuemanager/queuelist.cpp: Fixing the following bug:
+	  Items added to an existing queue don't have the right destination
+	  path
+	  set.
+	  
+	  Not checked: wether settings are being set properly to new items
+	  
+	  Suggestion: don't store settings in items at all, then changes
+	  don't
+	  need
+	  to be propergated on every change. A queue has the same settings
+	  for all
+	  items anyways (or am I wrong here?)
+
+2010-06-05 15:01  mwiesweg
+
+	* NEWS, digikam/imageratingoverlay.cpp, digikam/ratingwidget.cpp,
+	  digikam/ratingwidget.h: Constrain the width of the rating widget
+	  in the rating overlay,
+	  so that clicks to the left or right of the visible stars do not
+	  change the rating.
+	  
+	  BUG: 238232
+
+2010-06-05 14:41  mwiesweg
+
+	* libs/imageproperties/imagedescedittab.cpp: For creating a tag
+	  from the line edit, use the tag modification helper of the tree
+	  view
+	  to make the check-new-tag functionality work.
+	  Optimize the workflow for creating several new tags in a row.
+	  
+	  CCBUG: 237452
+
+2010-06-05 12:49  eva
+
+	* digikam/imagethumbnailbar.cpp: removed single selection again.
+	  The thumbnailbar works fine, as DnD with
+	  multiple selections works actually fine. It seems the menu
+	  actions don't
+	  handle multiple selections in thumbnailbar as they do for
+	  albumiconview
+
+2010-06-05 12:09  eva
+
+	* digikam/imagethumbnailbar.cpp: disabled multiple selection in
+	  ThumbnailBar as actions on multiple items
+	  don't work anyways
+
+2010-06-03 22:46  cgilles
+
+	* utilities/queuemanager/basetools/decorate/watermark.cpp: fix
+	  layout
+
+2010-06-03 20:01  aclemens
+
+	* NEWS: update
+
+2010-06-03 20:00  aclemens
+
+	* utilities/advancedrename/parser/options/dateoption.cpp:
+	  Tripple-check datetime information in the parser. It should have
+	  been set already be the
+	  calling instance, but somehow it fails for CameraUI now.
+	  
+	  BUG:231585
+
+2010-06-03 18:06  aclemens
+
+	* utilities/advancedrename/common/tooltipdialog.cpp: Use
+	  QTextBrowser instead of QTextEdit to allow handling of
+	  hyperlinks.
+
+2010-06-03 09:14  cgilles
+
+	* imageplugins/TODO: update
+
+2010-06-03 09:07  cgilles
+
+	* NEWS: update
+
+2010-06-03 08:46  cgilles
+
+	* utilities/queuemanager/basetools/decorate/watermark.cpp: polish
+
+2010-06-03 08:43  cgilles
+
+	* utilities/queuemanager/basetools/decorate/watermark.cpp,
+	  utilities/queuemanager/basetools/decorate/watermark.h: apply
+	  patch #42716 from Mikkel Baekhoej Christensen to apply image
+	  watermark in BQM
+	  BUGS: 233409
+
+2010-06-03 08:06  cgilles
+
+	* imageplugins/TODO: update
+
+2010-06-02 20:56  aclemens
+
+	* tests/CMakeLists.txt: Avoid defining the content of
+	  libadvancedrename_SRCS twice.
+	  
+	  But why do we do it like this anyway?
+	  Why don't we use static libs for all the lib***_SRCS defines?
+	  For example AdvancedRename is compiled three times, for the
+	  digiKam target, for
+	  the tests target and for the themedesigner target.
+	  This is true for a lot of other things, too.
+	  
+	  Why don't we use static libs and just link them in the end?
+	  Other candidates would be libdigikamgui, libsearchwindow etc...
+	  
+	  Is there any reason why it is not done this way?
+	  
+	  CCMAIL:digikam-devel@kde.org
+
+2010-06-01 12:51  mwiesweg
+
+	* digikam/albummanager.cpp: Fix waiting cursor when new database
+	  fails.
+	  Properly get the database directory, not the filename, for
+	  checks.
+
+2010-06-01 12:51  mwiesweg
+
+	* digikam/albumsettings.cpp, utilities/setup/setupdatabase.cpp: Use
+	  new methods.
+	  Use DatabaseParameters directly to construct SQLite parameters.
+	  This solves
+	  all problems arising when switching to a different SQLite db
+	  file.
+
+2010-06-01 12:51  mwiesweg
+
+	* libs/widgets/common/databasewidget.cpp,
+	  libs/widgets/common/databasewidget.h: Use the text in the combo
+	  box for user-visible text, and the item data
+	  for the technical value (driver name)
+
+2010-06-01 12:51  mwiesweg
+
+	* databaseserver/databaseserver.cpp, digikam/main.cpp,
+	  libs/database/databaseserverstarter.h: Replace strings
+
+2010-06-01 12:51  mwiesweg
+
+	* libs/database/databaseparameters.cpp,
+	  libs/database/databaseparameters.h: Some restructuring.
+	  Use central method to retrieve the QSQLITE and QMYSQL strings.
+	  Reorganize and rename the methods that translate between folder
+	  and file for SQLite.
+
+2010-06-01 10:23  mwiesweg
+
+	* digikam/imagecategorizedview.cpp: Dont forget to map the proxy
+	  model indices to source.
+	  Thumbnails for the currently visible items will now again
+	  have the highest priority and be loaded from top to bottom,
+	  regardless of scrolling direction or paint order.
+
+2010-06-01 10:23  mwiesweg
+
+	* libs/models/imagethumbnailmodel.cpp,
+	  libs/models/imagethumbnailmodel.h: Set a low priority on the
+	  preload thread.
+	  Stop preloading already when image infos are cleared (typically,
+	  when another album is loaded)
+
+2010-06-01 10:23  mwiesweg
+
+	* libs/threadimageio/managedloadsavethread.cpp,
+	  libs/threadimageio/thumbnailloadthread.cpp: Fix leak and wrong
+	  method call
+
+2010-06-01 10:23  mwiesweg
+
+	* libs/threads/dynamicthread.cpp, libs/threads/dynamicthread.h:
+	  Allow to set a thread priority on a DynamicThread
+
+2010-05-31 21:57  cgilles
+
+	* NEWS: update
+
+2010-05-31 13:33  mwiesweg
+
+	* libs/widgets/common/histogrampainter.cpp: Remove bogus warning if
+	  value is 0.
+	  When value is negative, just return 0; log(1.0) was 0 anyway.
+
+2010-05-31 13:26  mwiesweg
+
+	* libs/database/collectionmanager.cpp: Also fix albumRootPath() as
+	  already done with collectionLocation()
+	  for the situation of two directories where the second one starts
+	  with
+	  the path of the first (~/pictures, ~/pictures2)
+	  
+	  CCBUG: 239902
+
+2010-05-30 17:51  coles
+
+	* databaseserver/databaseserver.cpp, digikam/albummanager.cpp,
+	  libs/dimg/filters/lens/antivignettingsettings.cpp,
+	  utilities/setup/setupalbumview.cpp,
+	  utilities/setup/setuplighttable.cpp: Proof-reading - corrected
+	  various minor errors.
+
+2010-05-30 06:55  scripty
+
+	* imageplugins/color/digikamimageplugin_color.desktop,
+	  imageplugins/decorate/digikamimageplugin_decorate.desktop,
+	  imageplugins/enhance/digikamimageplugin_enhance.desktop,
+	  imageplugins/filters/digikamimageplugin_fxfilters.desktop,
+	  imageplugins/transform/digikamimageplugin_transform.desktop:
+	  SVN_SILENT made messages (.desktop file)
+
+2010-05-29 20:57  cgilles
+
+	* NEWS: update
+
+2010-05-28 21:16  aclemens
+
+	* utilities/advancedrename/common/tooltipdialog.cpp,
+	  utilities/advancedrename/common/tooltipdialog.h: polish
+
+2010-05-28 21:15  aclemens
+
+	* utilities/advancedrename/common/tooltipdialog.cpp,
+	  utilities/advancedrename/common/tooltipdialog.h: polish
+
+2010-05-28 21:13  aclemens
+
+	* utilities/advancedrename/common/tooltipdialog.cpp: no frame in
+	  the tooltipdialog
+
+2010-05-28 20:29  aclemens
+
+	* CMakeLists.txt, tests/CMakeLists.txt,
+	  utilities/advancedrename/advancedrenamewidget.cpp,
+	  utilities/advancedrename/common/tooltipdialog.cpp,
+	  utilities/advancedrename/common/tooltipdialog.h: Use a separate
+	  TooltipDialog class
+
+2010-05-28 13:02  mwiesweg
+
+	* imageplugins/color/bwsepiatool.cpp,
+	  utilities/imageeditor/editor/editortool.cpp: No editor tool (one
+	  exception) cared to delete the preview widget
+	  and the settings widget. Usually, the preview widget hold a copy
+	  of the image data, which explains a significant memory leak
+	  each time a new tool is opened.
+	  
+	  Delete the two pointers in EditorTool to fix all current tools.
+	  
+	  CCBUG: 221281
+
+2010-05-28 13:02  mwiesweg
+
+	* libs/threadimageio/loadsavetask.h,
+	  libs/threadimageio/previewtask.cpp: Better support cancelling in
+	  the PreviewTask.
+	  Do not show a bogus error message when the task is cancelled.
+
+2010-05-27 21:02  aclemens
+
+	* utilities/advancedrename/common/tooltipcreator.cpp: polish header
+	  style
+
+2010-05-27 20:55  aclemens
+
+	* tests/advancedrenametest.cpp,
+	  utilities/advancedrename/parser/modifiers/rangemodifier.cpp:
+	  Change the range modifier token, be more verbose with names to
+	  match the other
+	  modifiers.
+
+2010-05-27 20:45  aclemens
+
+	* tests/advancedrenametest.cpp, tests/advancedrenametest.h: Fix
+	  test cases, remove all fill modifier related code
+
+2010-05-27 20:44  aclemens
+
+	* CMakeLists.txt, tests/CMakeLists.txt,
+	  utilities/advancedrename/common/parser.cpp,
+	  utilities/advancedrename/parser/modifiers/fillmodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/fillmodifier.h: Remove
+	  the "fill" modifier again. This one is rather useless, I don't
+	  think
+	  anybody will ever use this one.
+
+2010-05-27 20:31  aclemens
+
+	* utilities/advancedrename/parser/options/metadataoption.cpp:
+	  polish, to match the database rename option dialog
+
+2010-05-27 20:25  aclemens
+
+	* utilities/advancedrename/parser/options/directorynameoption.cpp,
+	  utilities/advancedrename/parser/options/directorynameoption.h:
+	  polish
+
+2010-05-27 20:21  aclemens
+
+	* utilities/advancedrename/advancedrenamewidget.cpp,
+	  utilities/advancedrename/common/tooltipcreator.cpp: polish
+
+2010-05-26 22:33  aclemens
+
+	* utilities/advancedrename/advancedrenamewidget.cpp,
+	  utilities/advancedrename/advancedrenamewidget.h,
+	  utilities/advancedrename/common/tooltipcreator.cpp,
+	  utilities/advancedrename/common/tooltipcreator.h: polish
+
+2010-05-26 22:01  aclemens
+
+	* utilities/advancedrename/advancedrenamedialog.cpp,
+	  utilities/advancedrename/advancedrenamewidget.cpp,
+	  utilities/advancedrename/advancedrenamewidget.h,
+	  utilities/advancedrename/common/tooltipcreator.cpp,
+	  utilities/cameragui/renamecustomizer.cpp,
+	  utilities/cameragui/renamecustomizer.h,
+	  utilities/queuemanager/queuemgrwindow.cpp,
+	  utilities/queuemanager/queuesettingsview.cpp,
+	  utilities/queuemanager/queuesettingsview.h: Get rid of the
+	  tooltip tracker. Use a dialog window instead:
+	  
+	  1. The window can be resized / moved
+	  2. On multiscreen machines, the dialog can be moved to the second
+	  monitor
+	  3. Fonts can be zoomed (CTRL + Mousewheel)
+	  4. HTML can be fully rendered (not possible with a QLabel widget)
+
+2010-05-26 20:22  aclemens
+
+	* utilities/advancedrename/advancedrenamewidget.cpp,
+	  utilities/advancedrename/common/tooltipcreator.cpp,
+	  utilities/advancedrename/common/tooltipcreator.h: polish
+
+2010-05-25 18:34  mwiesweg
+
+	* NEWS, libs/3rdparty/lprof/cmssheet.cpp: Work around a crash
+	  caused by somehow broken profile (or buggy lprof).
+	  After that, no crash occurs. Profile is not drawn on CIE tongue
+	  but
+	  I cannot fix that.
+	  
+	  BUG: 229370
+
+2010-05-25 08:16  scripty
+
+	* digikam/digikam.desktop,
+	  imageplugins/color/digikamimageplugin_color.desktop,
+	  imageplugins/decorate/digikamimageplugin_decorate.desktop,
+	  imageplugins/enhance/digikamimageplugin_enhance.desktop,
+	  imageplugins/filters/digikamimageplugin_fxfilters.desktop,
+	  imageplugins/transform/digikamimageplugin_transform.desktop,
+	  showfoto/showfoto.desktop: SVN_SILENT made messages (.desktop
+	  file, second try)
+
+2010-05-25 08:15  cgilles
+
+	* NEWS: update
+
+2010-05-25 08:15  cgilles
+
+	* data/themes/Gray: fix curves color with Gray theme
+	  BUGS: 211804
+
+2010-05-25 07:16  cgilles
+
+	* HACKING: update
+
+2010-05-24 16:07  mwiesweg
+
+	* libs/database/collectionscanner.cpp,
+	  libs/database/imagescanner.cpp: Regard a file as modified when
+	  its file size has changed, even if the modification
+	  date did not change.
+	  
+	  This seems necessary to prevent problems like bug 233222 to
+	  persist: Now the file
+	  may still be wrongly scanned during the copy operation, but at
+	  least at next
+	  rescan it will be corrected. Moreover it seems reasonable to
+	  assume a changed file
+	  when the file size changed (some operations will restore the
+	  modification date).
+	  
+	  Overhead: For my collections of 30000 images, scanning took 1550
+	  msec without the change
+	  and 1750 including the check, with hot caches. With cold caches,
+	  the scan took
+	  9300 msec in both cases, no significant difference here.
+	  
+	  Note: At first start with this check, there may be a good number
+	  of files rescanned.
+	  
+	  CCBUG: 233222
+	  CCMAIL: digikam-devel@kde.org
+
+2010-05-24 16:07  mwiesweg
+
+	* libs/database/albumdb.cpp, libs/database/albuminfo.h: Include the
+	  fileSize parameter in the ItemScanInfo structure
+
+2010-05-24 08:17  aclemens
+
+	* utilities/advancedrename/common/parser.cpp: Do not use
+	  removeAll() to remove an option or modifier from the list, this
+	  will
+	  lead to a memory leak.
+
+2010-05-24 08:00  aclemens
+
+	* utilities/advancedrename/common/parser.cpp,
+	  utilities/advancedrename/common/parser.h,
+	  utilities/advancedrename/parser/defaultrenameparser.cpp,
+	  utilities/advancedrename/parser/importrenameparser.cpp: Avoid
+	  code duplication, instead of registering all options again in the
+	  ImportRenameParser, unregister the ones not needed.
+
+2010-05-23 20:32  mwiesweg
+
+	* libs/models/imagesortsettings.cpp,
+	  libs/models/imagesortsettings.h: Sorting images: In the case that
+	  the primary sort role is equal,
+	  use a number of (hardcoded) secondary sort roles, file name,
+	  dates etc.
+
+2010-05-23 20:00  aclemens
+
+	* utilities/advancedrename/parser/options/filepropertiesoption.cpp:
+	  polish
+
+2010-05-23 19:59  aclemens
+
+	* utilities/advancedrename/parser/options/filepropertiesoption.cpp,
+	  utilities/advancedrename/parser/options/filepropertiesoption.h:
+	  refactor
+
+2010-05-23 11:58  aclemens
+
+	* NEWS: update
+
+2010-05-23 11:28  aclemens
+
+	* NEWS: update
+
+2010-05-23 07:52  aclemens
+
+	* utilities/advancedrename/parser/options/database/dbkeyscollection.h:
+	  Add some documentation
+
+2010-05-23 07:20  aclemens
+
+	* CMakeLists.txt, tests/CMakeLists.txt,
+	  utilities/advancedrename/parser/options/database/databaseoption.cpp,
+	  utilities/advancedrename/parser/options/database/keys/positionkeys.cpp,
+	  utilities/advancedrename/parser/options/database/keys/positionkeys.h:
+	  Add position information keys to the database renaming option
+
+2010-05-23 06:32  scripty
+
+	* imageplugins/color/digikamimageplugin_color.desktop,
+	  imageplugins/decorate/digikamimageplugin_decorate.desktop,
+	  imageplugins/enhance/digikamimageplugin_enhance.desktop,
+	  imageplugins/filters/digikamimageplugin_fxfilters.desktop,
+	  imageplugins/transform/digikamimageplugin_transform.desktop:
+	  SVN_SILENT made messages (.desktop file)
+
+2010-05-23 06:28  aclemens
+
+	* utilities/advancedrename/parser/options/database/dbkeyselector.cpp:
+	  sort columns while importing the DbOptionKeysMap
+
+2010-05-22 20:50  aclemens
+
+	* digikam/digikamapp.cpp: Do not enable the edit action for
+	  non-image items
+
+2010-05-22 20:29  aclemens
+
+	* digikam/albumiconview.cpp, digikam/contextmenuhelper.h,
+	  digikam/digikamimageview.cpp, digikam/imagepreviewview.cpp,
+	  utilities/advancedrename/parser/options/database/dbheaderlistitem.cpp,
+	  utilities/lighttable/lighttablebar.cpp,
+	  utilities/lighttable/lighttablepreview.cpp: polish
+
+2010-05-22 18:23  aclemens
+
+	* utilities/advancedrename/parser/options/metadataoption.cpp:
+	  polish
+
+2010-05-22 17:33  aclemens
+
+	* CMakeLists.txt, tests/CMakeLists.txt,
+	  utilities/advancedrename/parser/options/database/dbheaderlistitem.cpp,
+	  utilities/advancedrename/parser/options/database/dbheaderlistitem.h,
+	  utilities/advancedrename/parser/options/database/dbkeyscollection.cpp,
+	  utilities/advancedrename/parser/options/database/dbkeyscollection.h,
+	  utilities/advancedrename/parser/options/database/dbkeyselector.cpp,
+	  utilities/advancedrename/parser/options/database/dbkeyselector.h,
+	  utilities/advancedrename/parser/options/database/keys/commonkeys.cpp,
+	  utilities/advancedrename/parser/options/database/keys/metadatakeys.cpp:
+	  Add headers to the database key selector
+
+2010-05-22 14:56  aclemens
+
+	* utilities/advancedrename/parser/options/database/keys/commonkeys.cpp:
+	  Add all_authors_key to the CommonKeys
+
+2010-05-22 14:42  aclemens
+
+	* utilities/advancedrename/parser/options/database/keys/commonkeys.cpp:
+	  Add default author key to CommonKeys
+
+2010-05-22 14:32  aclemens
+
+	* utilities/advancedrename/parser/options/database/keys/commonkeys.cpp:
+	  Multiline comments must be simplified to avoid a messed up
+	  filename
+
+2010-05-22 14:23  aclemens
+
+	* utilities/advancedrename/parser/options/database/databaseoption.cpp,
+	  utilities/advancedrename/parser/options/database/databaseoption.h:
+	  polish
+
+2010-05-22 14:19  aclemens
+
+	* CMakeLists.txt, tests/CMakeLists.txt,
+	  utilities/advancedrename/parser/options/database/databaseoption.cpp,
+	  utilities/advancedrename/parser/options/database/keys/metadatakeys.cpp,
+	  utilities/advancedrename/parser/options/database/keys/metadatakeys.h:
+	  Metadata keys for database renaming option
+
+2010-05-22 14:08  cgilles
+
+	* NEWS: update
+
+2010-05-22 13:56  aclemens
+
+	* CMakeLists.txt, tests/CMakeLists.txt,
+	  utilities/advancedrename/parser/options/database/databaseoption.cpp,
+	  utilities/advancedrename/parser/options/database/databaseoption.h,
+	  utilities/advancedrename/parser/options/database/dbkeyscollection.cpp,
+	  utilities/advancedrename/parser/options/database/dbkeyscollection.h,
+	  utilities/advancedrename/parser/options/database/dbkeyselector.cpp,
+	  utilities/advancedrename/parser/options/database/dboptionkey.cpp,
+	  utilities/advancedrename/parser/options/database/dboptionkey.h,
+	  utilities/advancedrename/parser/options/database/keys/commonkeys.cpp,
+	  utilities/advancedrename/parser/options/database/keys/commonkeys.h:
+	  DbOptionKey => DbKeysCollection
+
+2010-05-22 13:45  aclemens
+
+	* CMakeLists.txt, tests/CMakeLists.txt,
+	  utilities/advancedrename/parser/options/database/databaseoption.cpp,
+	  utilities/advancedrename/parser/options/database/dbkeyselector.cpp,
+	  utilities/advancedrename/parser/options/database/dboptionkey.cpp,
+	  utilities/advancedrename/parser/options/database/dboptionkey.h,
+	  utilities/advancedrename/parser/options/database/keys/commonkeys.cpp,
+	  utilities/advancedrename/parser/options/database/keys/commonkeys.h,
+	  utilities/advancedrename/parser/options/database/keys/defaultcommentkey.cpp,
+	  utilities/advancedrename/parser/options/database/keys/defaultcommentkey.h,
+	  utilities/advancedrename/parser/options/database/keys/dimensionkey.cpp,
+	  utilities/advancedrename/parser/options/database/keys/dimensionkey.h,
+	  utilities/advancedrename/parser/options/database/keys/filesizekey.cpp,
+	  utilities/advancedrename/parser/options/database/keys/filesizekey.h,
+	  utilities/advancedrename/parser/options/database/keys/formatkey.cpp,
+	  utilities/advancedrename/parser/options/database/keys/formatkey.h,
+	  utilities/advancedrename/parser/options/database/keys/mediatypekey.cpp,
+	  utilities/advancedrename/parser/options/database/keys/mediatypekey.h,
+	  utilities/advancedrename/parser/options/database/keys/ratingkey.cpp,
+	  utilities/advancedrename/parser/options/database/keys/ratingkey.h:
+	  Merge common database keys
+
+2010-05-22 11:15  aclemens
+
+	* themedesigner/CMakeLists.txt: Fix themedesigner build
+
+2010-05-22 11:06  aclemens
+
+	* CMakeLists.txt, tests/CMakeLists.txt,
+	  utilities/advancedrename/parser/options/database/databaseoption.cpp,
+	  utilities/advancedrename/parser/options/database/keys/categorykey.cpp,
+	  utilities/advancedrename/parser/options/database/keys/categorykey.h,
+	  utilities/advancedrename/parser/options/database/keys/mediatypekey.cpp,
+	  utilities/advancedrename/parser/options/database/keys/mediatypekey.h:
+	  CategoryKey => MediaTypeKey
+
+2010-05-22 08:42  aclemens
+
+	* utilities/advancedrename/parser/options/database/databaseoption.cpp,
+	  utilities/advancedrename/parser/options/database/dboptionkey.cpp,
+	  utilities/advancedrename/parser/options/database/dboptionkey.h,
+	  utilities/advancedrename/parser/options/database/keys/categorykey.cpp,
+	  utilities/advancedrename/parser/options/database/keys/categorykey.h:
+	  Add an "isLocalized" parameter to the CategoryKey option.
+	  So you can either have a normal (english) or a localized category
+	  name.
+	  
+	  rename pattern: "[db:Category]_###
+	  => Image_001.jpg
+	  
+	  or (e.g. german localization)
+	  
+	  rename pattern: "[db:CategoryLoc]_###
+	  => Bild_001.jpg
+
+2010-05-22 08:18  aclemens
+
+	* CMakeLists.txt, tests/CMakeLists.txt,
+	  utilities/advancedrename/parser/options/database/databaseoption.cpp,
+	  utilities/advancedrename/parser/options/database/keys/categorykey.cpp,
+	  utilities/advancedrename/parser/options/database/keys/categorykey.h:
+	  New key for database renaming option: Category
+
+2010-05-22 07:58  aclemens
+
+	* utilities/advancedrename/common/parser.cpp,
+	  utilities/advancedrename/parser/defaultrenameparser.cpp,
+	  utilities/advancedrename/parser/importrenameparser.cpp: polish
+
+2010-05-22 07:42  aclemens
+
+	* CMakeLists.txt, digikam/CMakeLists.txt, tests/CMakeLists.txt,
+	  themedesigner/CMakeLists.txt,
+	  utilities/advancedrename/common/parser.cpp,
+	  utilities/advancedrename/parser/defaultrenameparser.cpp,
+	  utilities/advancedrename/parser/importrenameparser.cpp,
+	  utilities/advancedrename/parser/importrenameparser.h,
+	  utilities/advancedrename/parser/options/database,
+	  utilities/advancedrename/parser/options/database/databaseoption.cpp,
+	  utilities/advancedrename/parser/options/database/databaseoption.h,
+	  utilities/advancedrename/parser/options/database/dbkeyselector.cpp,
+	  utilities/advancedrename/parser/options/database/dbkeyselector.h,
+	  utilities/advancedrename/parser/options/database/dboptionkey.cpp,
+	  utilities/advancedrename/parser/options/database/dboptionkey.h,
+	  utilities/advancedrename/parser/options/database/keys,
+	  utilities/advancedrename/parser/options/database/keys/defaultcommentkey.cpp,
+	  utilities/advancedrename/parser/options/database/keys/defaultcommentkey.h,
+	  utilities/advancedrename/parser/options/database/keys/dimensionkey.cpp,
+	  utilities/advancedrename/parser/options/database/keys/dimensionkey.h,
+	  utilities/advancedrename/parser/options/database/keys/filesizekey.cpp,
+	  utilities/advancedrename/parser/options/database/keys/filesizekey.h,
+	  utilities/advancedrename/parser/options/database/keys/formatkey.cpp,
+	  utilities/advancedrename/parser/options/database/keys/formatkey.h,
+	  utilities/advancedrename/parser/options/database/keys/ratingkey.cpp,
+	  utilities/advancedrename/parser/options/database/keys/ratingkey.h,
+	  utilities/cameragui/renamecustomizer.cpp: Add new database
+	  renaming option.
+	  
+	  This option is used to add values from the database to the new
+	  filename.
+	  Right now only a few values are implemented, but the parser is
+	  easy to extend,
+	  so anybody who can think of new values can add them :-)
+	  
+	  The CameraUI will not have the database renaming option, because
+	  the images are
+	  not yet added to the database (sure).
+
+2010-05-21 12:30  mwiesweg
+
+	* NEWS, libs/threadimageio/loadingdescription.cpp,
+	  libs/threadimageio/previewtask.cpp: Previews are stored
+	  post-processed in the cache, full versions are not.
+	  That means for non-RAW images, we must distinguish by the cache
+	  key
+	  between the two even for full-size previews.
+	  In case of preview loading, the unprocessed full version can
+	  additionally
+	  be stored in the cache.
+	  
+	  BUG: 238338
+
+2010-05-21 10:59  mwiesweg
+
+	* NEWS, libs/dimg/loaders/tiffloader.cpp: Remove the
+	  ProcessingSoftware tag (0xb) when writing a TIFF file, because
+	  it makes libtiff generate a warning which is then user-visible in
+	  Gimp.
+	  
+	  Now finally, the Gimp is happy again with our TIFF files.
+	  
+	  BUG: 211758
+
+2010-05-20 13:23  mwiesweg
+
+	* libs/threadimageio/managedloadsavethread.cpp,
+	  libs/threadimageio/managedloadsavethread.h,
+	  libs/threadimageio/thumbnailloadthread.cpp: The one or other
+	  optimization, as found by callgrind.
+	  With thumbnail preloading, suddenly we have to deal with a high
+	  number of loading tasks.
+
+2010-05-20 13:23  mwiesweg
+
+	* libs/models/imagethumbnailmodel.cpp,
+	  libs/models/imagethumbnailmodel.h: Thumbnail preloading was too
+	  intrusive:
+	  - start preloading only after the model finished all loading
+	  - use a separate preloading thread
+	  - do not request pixmaps for the preloading, to avoid blocking
+	  the UI thread
+	  and flooding the cache
+
+2010-05-20 13:23  mwiesweg
+
+	* libs/database/databaseparameters.cpp: improve debug output
+
+2010-05-20 13:23  mwiesweg
+
+	* libs/models/imagemodel.cpp, libs/models/imagemodel.h: Emit a
+	  signal when all loading is done
+
+2010-05-20 13:22  mwiesweg
+
+	* libs/widgets/common/kcategorizedview.cpp,
+	  libs/widgets/common/kcategorizedview_p.h: There is still a bit of
+	  optimization to squeeze out of the icon view:
+	  Create only those model indexes that are needed (creating an
+	  index
+	  from the proxy model sets up data structures in the model)
+
+2010-05-18 14:16  mwiesweg
+
+	* libs/threadimageio/loadsavetask.h,
+	  libs/threadimageio/managedloadsavethread.cpp: Optimization: avoid
+	  creation of object (significant for findExistingTask())
+
+2010-05-18 14:16  mwiesweg
+
+	* libs/threadimageio/previewtask.cpp: Set format and filepath on
+	  preview
+
+2010-05-18 11:19  cgilles
+
+	* utilities/firstrun/assistantdlg.cpp,
+	  utilities/firstrun/assistantdlg.h,
+	  utilities/firstrun/assistantdlgpage.cpp,
+	  utilities/firstrun/assistantdlgpage.h,
+	  utilities/firstrun/collectionpage.cpp,
+	  utilities/firstrun/collectionpage.h,
+	  utilities/firstrun/metadatapage.cpp,
+	  utilities/firstrun/metadatapage.h,
+	  utilities/firstrun/previewpage.cpp,
+	  utilities/firstrun/previewpage.h, utilities/firstrun/rawpage.cpp,
+	  utilities/firstrun/rawpage.h,
+	  utilities/firstrun/startscanpage.cpp,
+	  utilities/firstrun/startscanpage.h,
+	  utilities/firstrun/tooltipspage.cpp,
+	  utilities/firstrun/tooltipspage.h,
+	  utilities/firstrun/welcomepage.cpp,
+	  utilities/firstrun/welcomepage.h: polish
+
+2010-05-18 11:11  cgilles
+
+	* utilities/firstrun/openfilepage.cpp,
+	  utilities/firstrun/openfilepage.h: Left is not Right and
+	  vice-versa (:=)))
+
+2010-05-18 11:04  cgilles
+
+	* libs/dmetadata/dmetadata.cpp: polish
+
+2010-05-18 10:52  cgilles
+
+	* libs/dmetadata/dmetadata.cpp: add Lens indentifier for Sony
+	  Camera
+
+2010-05-17 21:55  cgilles
+
+	* NEWS: update
+
+2010-05-17 19:30  mwiesweg
+
+	* libs/dimg/dimg.cpp: Use standard method to allocate data when
+	  constructing from QImage.
+	  This should avoid the crash and instead silently fail in the
+	  situation of the bug report.
+	  
+	  CCBUG: 237957
+
+2010-05-17 11:24  cgilles
+
+	* digikam/metadatahub.cpp, digikam/metadatahub.h: include moc file
+
+2010-05-17 09:24  cgilles
+
+	* libs/widgets/common/databasewidget.cpp,
+	  libs/widgets/common/databasewidget.h: set cursor as busy during
+	  check of DB connection.
+	  If these operation can be treaded, it can be better to use
+	  BusyDlg dialog here, as it done with Camera Autodetection
+	  process.
+
+2010-05-16 08:00  cgilles
+
+	* NEWS: update
+
+2010-05-16 07:55  cgilles
+
+	* NEWS: update
+
+2010-05-15 21:25  mghansen
+
+	* NEWS: Update NEWS, this bug was fixed by Marcel a long time ago
+	  and I forgot to report back.
+	  
+	  BUG: 219878
+
+2010-05-15 20:26  mwiesweg
+
+	* digikam/main.cpp: In main(), when we have the db params to use,
+	  write them to the config file.
+	  This is needed for all first-run or upgrade situations.
+	  
+	  CCBUG: 235928
+
+2010-05-15 16:57  cgilles
+
+	* NEWS: update
+
+2010-05-15 15:58  mwiesweg
+
+	* libs/dimg/dimg.cpp: extra check here not to return a null size
+
+2010-05-15 15:58  mwiesweg
+
+	* libs/database/databaseparameters.cpp,
+	  libs/database/databaseparameters.h: Fix problem upgrading the
+	  digikamrc file from 1.2 to 1.3:
+	  
+	  Separate out the logic to get the db file from a path for SQLite
+	  into static methods.
+	  The problem was that isSQLite() is false for a recently
+	  constructed argument,
+	  when calling parametersForSQLite().
+	  
+	  CCBUG: 235928
+
+2010-05-15 14:43  mwiesweg
+
+	* digikam/digikamimageview.cpp: Enable thumbnail preloading of all
+	  images in the model
+
+2010-05-15 14:43  mwiesweg
+
+	* digikam/digikamimageview.cpp, digikam/digikamimageview.h,
+	  digikam/imagecategorizedview.h: Adjust main view's thumbnail size
+	  for preloading
+
+2010-05-15 14:43  mwiesweg
+
+	* digikam/imagedelegate.cpp: should be a null QVariant to reset
+	  temporary size
+
+2010-05-15 14:43  mwiesweg
+
+	* libs/models/imagethumbnailmodel.cpp,
+	  libs/models/imagethumbnailmodel.h: Add facility to automatically
+	  preload thumbnails for all entries in the model
+	  
+	  CCBUG:237639
+
+2010-05-15 14:43  mwiesweg
+
+	* libs/threadimageio/thumbnailloadthread.cpp,
+	  libs/threadimageio/thumbnailloadthread.h: Add a method to preload
+	  a group.
+	  Consolidate code.
+
+2010-05-15 14:43  mwiesweg
+
+	* libs/threadimageio/loadingcache.cpp,
+	  libs/threadimageio/loadingcache.h: Properly const'ify.
+	  Add a method to check if an entry is in the cache.
+
+2010-05-15 14:42  mwiesweg
+
+	* libs/threadimageio/managedloadsavethread.cpp,
+	  libs/threadimageio/managedloadsavethread.h: Add a method to
+	  preload a group of thumbnails (in order).
+	  Properly const'ify signatures.
+
+2010-05-15 07:15  cgilles
+
+	* NEWS: update
+
+2010-05-14 18:05  cgilles
+
+	* TODO.MYSQLPORT: polish
+
+2010-05-14 17:35  cgilles
+
+	* NEWS: update
+
+2010-05-14 15:54  mwiesweg
+
+	* digikam/albumdragdrop.cpp: Check if dropped album (still) exists
+	  
+	  CCBUG: 237555
+
+2010-05-14 05:42  cgilles
+
+	* NEWS: update
+
+2010-05-13 20:32  cfeck
+
+	* libs/dimg/filters/icc/iccprofile.cpp: Fix return value
+
+2010-05-13 16:38  cgilles
+
+	* NEWS: update
+
+2010-05-13 13:50  mwiesweg
+
+	* libs/widgets/common/paniconwidget.cpp,
+	  libs/widgets/common/paniconwidget.h: Add a method that takes the
+	  prescaled preview image and the original image's size
+	  instead of the full original image and the preview's intended
+	  size.
+	  This avoid converting the full DImg to QImage, instead the DImg
+	  is scaled
+	  and the small variant converted to QImage.
+
+2010-05-13 13:50  mwiesweg
+
+	* libs/database/tagscache.cpp: When a new tag was added by
+	  TagsCache, invalidate the internal cache.
+	  When a transaction is active, the TagChangeset may arrive only
+	  later;
+	  but we know that the tag was changed.
+	  (this was the original SQL error that caused, though itself no
+	  problem,
+	  a lot of problems due to broken error handling in 235928)
+	  
+	  CCBUG: 235928
+
+2010-05-13 13:50  mwiesweg
+
+	* libs/database/databasecorebackend.cpp,
+	  libs/database/databasecorebackend.h,
+	  libs/database/databasecorebackend_p.h: Fix various bugs with SQL
+	  error handling:
+	  For SQLite, there is no sense in trying to close database and
+	  reconnect. In fact, the database
+	  will open again, but remain locked in this case, so that all
+	  subsequent statements fail.
+	  Limit connection error handling to MySQL.
+	  Restructure query error handling, reuse code.
+	  
+	  CCBUG: 235928
+
+2010-05-13 13:50  mwiesweg
+
+	* digikam/databaseguierrorhandler.cpp,
+	  digikam/databaseguierrorhandler.h,
+	  libs/database/databaseerrorhandler.h: Fix bug where logic was
+	  reverted.
+	  As there is no such thing as a null QSqlQuery, pass only the
+	  query text
+	  and the last error to the error handler.
+	  
+	  CCBUG: 235928
+
+2010-05-13 13:50  mwiesweg
+
+	* libs/database/databaseparameters.cpp,
+	  libs/database/databaseparameters.h: Some polishing.
+	  Streamline legacyAndDefaultChecks().
+	  Do not remove old entries in legacyAndDefaultChecks(), the "Album
+	  Path" is used by SchemaUpdater.
+	  
+	  CCBUG: 235928
+
+2010-05-13 13:36  mwiesweg
+
+	* digikam/scancontroller.cpp: Don't forget to order counting of
+	  total-files-to-scan in case the progress
+	  dialog is shown at first start
+	  
+	  CCBUG: 235928
+
+2010-05-13 13:35  mwiesweg
+
+	* libs/database/albumdb.cpp, libs/database/haar/haariface.cpp,
+	  libs/database/sqlquery.cpp, libs/database/sqlquery.h,
+	  libs/database/thumbnaildb.cpp: There is no real "null" QSqlQuery.
+	  In doubt, it is opened on the
+	  default database. Dont preted there was a null SqlQuery.
+
+2010-05-13 13:24  aclemens
+
+	* utilities/advancedrename/advancedrenamedialog.cpp,
+	  utilities/advancedrename/advancedrenamewidget.cpp,
+	  utilities/advancedrename/advancedrenamewidget.h,
+	  utilities/cameragui/renamecustomizer.cpp,
+	  utilities/queuemanager/queuesettingsview.cpp: some API changes;
+	  added some more documentation
+
+2010-05-12 16:12  cgilles
+
+	* NEWS: update
+
+2010-05-11 15:45  cgilles
+
+	* NEWS: update
+
+2010-05-10 20:54  mwiesweg
+
+	* digikam/albummanager.cpp, digikam/digikamapp.cpp,
+	  digikam/main.cpp, utilities/firstrun/collectionpage.cpp:
+	  Reorganize main():
+	  Move database initialization to main. Previously, for example,
+	  the first album root
+	  set in the FirstRun assistant was simply ignored.
+	  Try to structure it a bit more. Try to reinstate the command line
+	  parameter
+	  to set db dir, untested.
+	  
+	  CCBUG: 235928
+
+2010-05-10 20:54  mwiesweg
+
+	* libs/database/databasecorebackend.cpp,
+	  libs/database/databaseerrorhandler.h, libs/database/sqlquery.h: -
+	  fix stupid mistake taking lock count of mutex. Resulted in a few
+	  deadlocks.
+	  - prepare DatabaseErrorAnswer and SqlQuery for being sent in a
+	  queued signal
+	  
+	  CCBUG: 235928
+
+2010-05-10 10:54  cgilles
+
+	* NEWS: update
+
+2010-05-10 10:29  cgilles
+
+	* NEWS: update
+
+2010-05-10 06:41  scripty
+
+	* imageplugins/color/digikamimageplugin_color.desktop,
+	  imageplugins/decorate/digikamimageplugin_decorate.desktop,
+	  imageplugins/enhance/digikamimageplugin_enhance.desktop,
+	  imageplugins/filters/digikamimageplugin_fxfilters.desktop,
+	  imageplugins/transform/digikamimageplugin_transform.desktop:
+	  SVN_SILENT made messages (.desktop file)
+
+2010-05-09 12:02  jwienke
+
+	* HACKING, NEWS, digikam/albumtreeview.cpp,
+	  digikam/datefolderview.cpp, digikam/datefolderview.h: Fix loading
+	  of date album on application start.
+	  
+	  The problem was that DAlbums are created asynchronously. The
+	  sidebar tab was activated before the albums are loaded which
+	  resulted in setting 0x0 as current album because the tree view
+	  was not populated. To prevent this the DateFolderView now listens
+	  on signaleAllDAlbumsLoaded and re-sets the current album in the
+	  album manager if this signal occurs and the folder view is
+	  active.
+	  
+	  BUG: 236002
+
+2010-05-07 19:00  mwiesweg
+
+	* digikam/metadatamanager.cpp, digikam/metadatamanager.h: Add
+	  method signatures for convenience
+
+2010-05-07 19:00  mwiesweg
+
+	* libs/dimg/dimg.cpp, libs/dimg/dimg.h,
+	  libs/dimg/loaders/jpegloader.cpp,
+	  libs/dimg/loaders/pgfloader.cpp,
+	  libs/dimg/loaders/tiffloader.cpp,
+	  libs/threadimageio/previewtask.cpp: Use dedicated methods from
+	  libkexiv2 to set a TIFF thumbnail.
+	  Reenable metadata writing to TIFF for testing (not all problems
+	  solved).
+	  
+	  Provide original image size for JPEG and RAW from DImg.
+	  For RAWs, size is read with Exiv2.
+	  
+	  CCBUG: 211758
+
+2010-05-07 06:41  scripty
+
+	* digikam/digikam.notifyrc,
+	  imageplugins/color/digikamimageplugin_color.desktop,
+	  imageplugins/decorate/digikamimageplugin_decorate.desktop,
+	  imageplugins/enhance/digikamimageplugin_enhance.desktop,
+	  imageplugins/filters/digikamimageplugin_fxfilters.desktop,
+	  imageplugins/transform/digikamimageplugin_transform.desktop,
+	  utilities/imageeditor/editor/digikamimageplugin.desktop,
+	  utilities/nepomuk/digikamnepomukservice.desktop: SVN_SILENT made
+	  messages (.desktop file)
+
+2010-05-06 18:36  foerster
+
+	* digikam/albumsettings.cpp, libs/database/databaseparameters.cpp,
+	  libs/database/databaseparameters.h: Add methods to get a stripped
+	  database path and also add methods to get a full database file
+	  path.
+	  Using them in modified albumsettings class, which is used by the
+	  setup dialogs.
+	  
+	  This prevents showing a full file path in SQLite database
+	  settings.
+	  
+	  CCMAIL: marcel.wiesweg@gmx.de
+
+2010-05-06 08:13  cgilles
+
+	* digikam/welcomepageview.cpp, digikam/welcomepageview.h: update
+
+2010-05-06 08:09  cgilles
+
+	* NEWS: update
+
+2010-05-05 18:19  jmueller
+
+	* imageplugins/color/bwsepiatool.cpp,
+	  imageplugins/color/bwsepiatool.h,
+	  libs/dimg/filters/bw/bwsepiasettings.cpp,
+	  libs/dimg/filters/bw/bwsepiasettings.h,
+	  utilities/imageeditor/rawimport/rawimport.cpp,
+	  utilities/imageeditor/rawimport/rawimport.h,
+	  utilities/imageeditor/rawimport/rawsettingsbox.cpp: update curves
+	  scale type in b&w settings and raw import settings from histogram
+	  scale
+
+2010-05-04 11:10  foerster
+
+	* databaseserver/databaseserver.cpp,
+	  databaseserver/databaseserver.h: Don't invent the wheel twice.
+	  Using of stringlist.join() instead of an own method.
+
+2010-05-04 10:06  foerster
+
+	* libs/database/databaseparameters.cpp,
+	  utilities/firstrun/collectionpage.cpp: On first run dialog, save
+	  database settings with methods provided by DatabaseParameters to
+	  ensure the same settings format is used.
+	  This should be a fix: B.K.O. 235928.
+
+2010-05-03 15:49  mwiesweg
+
+	* NEWS, libs/threads/dynamicthread.cpp: Initialize the running flag
+	  to true.
+	  When it was set to false, the ImageHistogram would do nothing
+	  when
+	  executed directly in the current thread (not scheduled to its own
+	  thread),
+	  as the image plugins do it: the running flag was false, the
+	  histogram null.
+	  
+	  BUG: 235600
+
+2010-05-03 06:52  cgilles
+
+	* NEWS: update
+
+2010-05-03 06:50  cgilles
+
+	* NEWS: update
+
+2010-05-02 06:45  scripty
+
+	* imageplugins/color/digikamimageplugin_color.desktop,
+	  imageplugins/decorate/digikamimageplugin_decorate.desktop,
+	  imageplugins/enhance/digikamimageplugin_enhance.desktop,
+	  imageplugins/filters/digikamimageplugin_fxfilters.desktop,
+	  imageplugins/transform/digikamimageplugin_transform.desktop:
+	  SVN_SILENT made messages (.desktop file)
+
+2010-05-01 16:25  aclemens
+
+	* NEWS: update
+
+2010-05-01 16:25  aclemens
+
+	* NEWS: update
+
+2010-05-01 09:55  aclemens
+
+	* utilities/advancedrename/advancedrenameinput.cpp,
+	  utilities/advancedrename/advancedrenameinput.h: Disable syntax
+	  highlighting if widget has been disabled
+
+2010-05-01 08:55  aclemens
+
+	* utilities/advancedrename/common/modifier.cpp,
+	  utilities/advancedrename/common/modifier.h,
+	  utilities/advancedrename/common/option.h,
+	  utilities/advancedrename/common/parseable.h,
+	  utilities/advancedrename/common/parser.cpp,
+	  utilities/advancedrename/common/parsesettings.h,
+	  utilities/advancedrename/parser/modifiers/casemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/casemodifier.h,
+	  utilities/advancedrename/parser/modifiers/defaultvaluemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/defaultvaluemodifier.h,
+	  utilities/advancedrename/parser/modifiers/fillmodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/fillmodifier.h,
+	  utilities/advancedrename/parser/modifiers/rangemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/rangemodifier.h,
+	  utilities/advancedrename/parser/modifiers/replacemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/replacemodifier.h,
+	  utilities/advancedrename/parser/modifiers/trimmedmodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/trimmedmodifier.h,
+	  utilities/advancedrename/parser/modifiers/uniquemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/uniquemodifier.h: Use
+	  common interface in Option and Modifier parseables...
+
+2010-05-01 07:13  aclemens
+
+	* CMakeLists.txt, tests/CMakeLists.txt,
+	  utilities/advancedrename/common/modifier.cpp,
+	  utilities/advancedrename/common/modifier.h,
+	  utilities/advancedrename/common/option.cpp,
+	  utilities/advancedrename/common/option.h,
+	  utilities/advancedrename/common/parseable.cpp,
+	  utilities/advancedrename/common/parseable.h,
+	  utilities/advancedrename/common/parseabledialog.cpp,
+	  utilities/advancedrename/common/parseabledialog.h,
+	  utilities/advancedrename/common/parseobject.cpp,
+	  utilities/advancedrename/common/parseobject.h,
+	  utilities/advancedrename/common/parseobjectdialog.cpp,
+	  utilities/advancedrename/common/parseobjectdialog.h,
+	  utilities/advancedrename/common/token.h,
+	  utilities/advancedrename/parser/modifiers/defaultvaluemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/defaultvaluemodifier.h,
+	  utilities/advancedrename/parser/modifiers/fillmodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/fillmodifier.h,
+	  utilities/advancedrename/parser/modifiers/rangemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/rangemodifier.h,
+	  utilities/advancedrename/parser/modifiers/replacemodifier.cpp,
+	  utilities/advancedrename/parser/modifiers/replacemodifier.h,
+	  utilities/advancedrename/parser/options/dateoption.cpp,
+	  utilities/advancedrename/parser/options/dateoption.h,
+	  utilities/advancedrename/parser/options/metadataoption.cpp,
+	  utilities/advancedrename/parser/options/metadataoption.h,
+	  utilities/advancedrename/parser/options/sequencenumberoption.cpp,
+	  utilities/advancedrename/parser/options/sequencenumberoption.h:
+	  ParseObject => Parseable
+	  I will extract a more common interface in the future...
+
+2010-05-01 07:13  aclemens
+
+	* utilities/advancedrename/README: polish
+
+2010-05-01 06:09  aclemens
+
+	* libs/dimg/dimg.cpp: Fix warning: wrong return type
+
+2010-04-30 17:50  mwiesweg
+
+	* NEWS: update
+
+2010-04-30 11:17  cgilles
+
+	* NEWS: update
+
+2010-04-30 11:07  cgilles
+
+	* NEWS: update
+
+2010-04-29 06:42  scripty
+
+	* imageplugins/color/digikamimageplugin_color.desktop,
+	  imageplugins/decorate/digikamimageplugin_decorate.desktop,
+	  imageplugins/enhance/digikamimageplugin_enhance.desktop,
+	  imageplugins/filters/digikamimageplugin_fxfilters.desktop,
+	  imageplugins/transform/digikamimageplugin_transform.desktop:
+	  SVN_SILENT made messages (.desktop file)
+
+2010-04-28 22:21  pino
+
+	* tests/CMakeLists.txt: albummodeltest needs QtGui
+
+2010-04-28 00:45  cfeck
+
+	* databaseserver/databaseserver.cpp: SVN_SILENT build
+	  
+	  Putting a "," between the strings will make it separate
+	  arguments,
+	  and i18n() complains. Either use preprocessor concatenation (as
+	  in
+	  this commit), or use i18n()+i18n() etc. (the latter being
+	  dangerous,
+	  as it can easily lead to untranslatable "i18n puzzles").
+	  
+	  CCMAIL: hamsi2k@freenet.de
+
+2010-04-27 20:33  mwiesweg
+
+	* libs/database/databaseservererror.h: export macro
+
+2010-04-27 20:33  mwiesweg
+
+	* utilities/nepomuk/digikamnepomukservice.cpp,
+	  utilities/nepomuk/digikamnepomukservice.h: - fix two bugs
+	  introduced by the silent semantic API changes in Nepomuk:
+	  With the switch from file:// to nepomuk://res URIs, we must not
+	  pass FileDataObject
+	  as the second parameter to Nepomuk::Resource, if we want to
+	  retrieve the nepomuk: URI.
+	  When removing a tag property, we must pass the resourceURI of the
+	  tag, not the
+	  Resource object itself.
+	  - use TagsCache, remove own caching
+	  - Fix reading of db parameters, as changed recently for MySQL
+	  port
+
+2010-04-27 20:33  mwiesweg
+
+	* libs/database/albumdb.cpp, libs/database/albumdb.h,
+	  libs/database/tagscache.cpp, libs/database/tagscache.h: A method
+	  to get a single TagInfo, a method to get a tag's parent.
+
+2010-04-27 20:33  mwiesweg
+
+	* libs/database/databaseparameters.cpp: Fix the bug that a missing
+	  slash at the end of the db folder in config would cause failure.
+	  Really check if it's a directory.
+
+2010-04-27 18:01  foerster
+
+	* CMakeLists.txt, databaseserver/CMakeLists.txt,
+	  databaseserver/databaseserver.cpp,
+	  databaseserver/databaseserver.h,
+	  databaseserver/org.kde.digikam.DatabaseServer.xml,
+	  digikam/albummanager.cpp, libs/database/databaseservererror.cpp,
+	  libs/database/databaseservererror.h,
+	  libs/database/databaseserverstarter.cpp,
+	  libs/database/databaseserverstarter.h: Extended dbus interface of
+	  the databaseserver to retrieve detailled error information to the
+	  callee if the database can't started.
+	  This error information is shown in a message box, when the
+	  databaseserverstarter fails to setup the running environment.
+	  Therefore there is a new class "databaseservererror" which is a
+	  data container which
+	  contains the error information for the transfer over dbus .
+
+2010-04-27 07:44  cgilles
+
+	* NEWS: update
+
+2010-04-26 19:22  jmueller
+
+	* digikam/albumhistory.cpp, digikam/albumhistory.h,
+	  digikam/digikamview.cpp: Apply patch from konstantin krivakin.
+	  Thanks for contrubution! Timeline albums needed to be supported
+	  in History, too. Konstantin, could you extend your patch this
+	  way?
+	  
+	  CCBUGS: 229795
+	  
+	  Regards, Jens
+
+2010-04-25 20:14  mwiesweg
+
+	* libs/dimg/loaders/dimgloaderobserver.h,
+	  libs/threadimageio/loadsavetask.cpp,
+	  libs/threadimageio/loadsavetask.h,
+	  libs/threadimageio/loadsavethread.cpp,
+	  libs/threadimageio/loadsavethread.h,
+	  libs/threadimageio/managedloadsavethread.cpp,
+	  showfoto/CMakeLists.txt: Port the load/save framework to
+	  DynamicThread
+
+2010-04-25 20:14  mwiesweg
+
+	* libs/threads/dynamicthread.cpp, libs/threads/dynamicthread.h:
+	  Various fixes and improvements.
+	  Add API to share the mutex, so that the mutex-protected scope of
+	  state change can
+	  be also be used by subclasses.
+
+2010-04-25 20:13  mwiesweg
+
+	* databaseserver/databaseserver.cpp, digikam/albummanager.cpp,
+	  digikam/albummanager.h, digikam/albumsettings.cpp,
+	  digikam/albumsettings.h, digikam/digikamapp.cpp,
+	  digikam/main.cpp, libs/database/databaseparameters.cpp,
+	  libs/database/databaseparameters.h,
+	  libs/threadimageio/thumbnailloadthread.cpp,
+	  libs/threadimageio/thumbnailloadthread.h,
+	  libs/widgets/common/databasewidget.cpp, tests/albummodeltest.cpp,
+	  utilities/setup/setupdatabase.cpp: Cleanup and restructure
+	  loading of db parameters from config.
+	  We need it also in places like the nepomuk service,
+	  so move it from AlbumSettings into DatabaseParameters.
+	  Get rid of 8 arguments in method signature and just pass the
+	  params object.
+
+2010-04-25 17:54  cgilles
+
+	* NEWS: update
+
+2010-04-25 05:32  cgilles
+
+	* NEWS: update
+
+2010-04-25 05:31  cgilles
+
+	* imageplugins/enhance/digikamimageplugin_enhance_ui.rc,
+	  imageplugins/enhance/imageplugin_enhance.cpp: use right name for
+	  Red eyes tool action
+	  BUGS: 234545
+
+2010-04-23 13:13  cgilles
+
+	* NEWS: update
+
+2010-04-22 18:45  foerster
+
+	* libs/database/databasecorebackend.cpp: Added an helpful log entry
+	  in case that binding elements are missing.
+
+2010-04-22 18:24  foerster
+
+	* data/database/dbconfig.xml.cmake: Fixed another typo which leads
+	  to NULL values in a statement in mysql mode.
+
+2010-04-22 10:00  foerster
+
+	* libs/database/databasecorebackend.cpp: Only allow QStringList,
+	  List<QVariant> and Map<String, QVariant> as replacement
+	  containers.
+	  Using iterator on lists for faster data access.
+
+2010-04-22 08:57  foerster
+
+	* data/database/dbconfig.xml.cmake: Add correct statement on insert
+	  statement.
+
+2010-04-20 19:11  foerster
+
+	* CMakeLists.txt, data/database/dbconfig.xml.cmake,
+	  libs/database/albumdb.cpp, libs/database/databasecorebackend.cpp,
+	  libs/database/databasecorebackend.h,
+	  libs/database/dbactiontype.cpp, libs/database/dbactiontype.h:
+	  Added database specific statements for changeImageInformation().
+	  Extended the binding algorithm to handle also lists and maps for
+	  creating dynamic statements (partly at least).
+	  Therefore a DBActionType class is introduced to control whether
+	  the items should inserted as fields or as value entries.
+
+2010-04-19 20:44  aclemens
+
+	* NEWS,
+	  utilities/advancedrename/parser/options/filepropertiesoption.cpp,
+	  utilities/queuemanager/queuelist.cpp: Revert "do not update
+	  target suffix before advanced renaming take place...."
+	  
+	  This reverts commit 65f33ce4ba0d654d358b82b5cfc2e9d126961415.
+	  
+	  CCBUG:234022
+
+2010-04-19 20:03  mwiesweg
+
+	* digikam/imagethumbnaildelegate.cpp,
+	  libs/threadimageio/thumbnailloadthread.cpp,
+	  libs/threadimageio/thumbnailloadthread.h: For the preview
+	  thumbbar, also adjust the thumbnail size to reach 256
+	  
+	  CCBUG: 233094
+
+2010-04-19 19:48  mwiesweg
+
+	* digikam/imagecategorizedview.cpp,
+	  libs/models/imagethumbnailmodel.cpp,
+	  libs/models/imagethumbnailmodel.h,
+	  libs/threadimageio/thumbnailloadthread.cpp,
+	  libs/threadimageio/thumbnailloadthread.h: Correctly adjust
+	  thumbnail size to reach 256 in icon view.
+	  
+	  BBUG: 233094
+
+2010-04-19 13:59  cgilles
+
+	* libs/dimg/filters/greycstoration/greycstorationfilter.cpp:
+	  compile under win32
+
+2010-04-19 06:42  cgilles
+
+	* libs/threadimageio/pgfutils.h,
+	  libs/threadimageio/thumbnailcreator.cpp: restore PGF quality 4
+	  for thumb compression.
+	  Please check if thumbnails are not to blured there with this
+	  value, else, use only 3 instead...
+	  CCBUGS: 233094
+
+2010-04-19 06:36  cgilles
+
+	* libs/threads/dynamicthread.cpp, libs/threads/dynamicthread.h,
+	  libs/threads/threadmanager.cpp, libs/threads/threadmanager.h,
+	  libs/threads/workerobject.cpp, libs/threads/workerobject.h: just
+	  polish
+
+2010-04-19 06:26  cgilles
+
+	* libs/dmetadata/dmetadatadata.h: polish
+
+2010-04-19 06:27  cgilles
+
+	* utilities/imageeditor/rawimport/rawpostprocessing.cpp: polish
+
+2010-04-18 21:18  jmueller
+
+	* NEWS, utilities/queuemanager/queuelist.cpp,
+	  utilities/queuemanager/queuelist.h,
+	  utilities/queuemanager/queuemgrwindow.cpp: reset proccessed items
+	  when target path or target filename changes
+	  
+	  BUGS: 234569
+
+2010-04-18 20:29  jmueller
+
+	* NEWS, utilities/queuemanager/queuelist.cpp: do not update target
+	  suffix before advanced renaming take place, because advanced
+	  rename check if source path exist (I don't know if this check is
+	  needed - Andi?)
+	  
+	  BUGS: 234022
+
+2010-04-18 18:51  cgilles
+
+	* project/documents/digiKam-project-presentation.odp: added new
+	  page with team photo
+
+2010-04-18 18:12  cgilles
+
+	* NEWS: update
+
+2010-04-18 14:27  mwiesweg
+
+	* NEWS, digikam/imagepreviewview.cpp, libs/database/imageinfo.h:
+	  Changing a rating causes a refiltering of the model. There is no
+	  change in visible images,
+	  nonetheless somehow the currently selected image is reselected.
+	  Still no visible effect,
+	  but the preview gets the current image path set again, reloads it
+	  and resets the zoom.
+	  Just check if the newly set Image is the same as the current one,
+	  and dont reload in that case.
+	  
+	  Btw: Beautiful bug number. Next one is 345678 ;-)
+	  
+	  BUG: 234567
+
+2010-04-18 14:27  mwiesweg
+
+	* NEWS, libs/database/collectionscanner.cpp: When reading the album
+	  move hints and looking for the src collection, dont look it up
+	  in the list of currently scanned collections, but in the list of
+	  all collections -
+	  the src collection may be scanned previously or later.
+	  
+	  BUG: 231598
+
+2010-04-18 09:52  cgilles
+
+	* project/documents/digiKam-project-presentation.odp: add new page
+	  about project goal
+
+2010-04-18 09:47  cgilles
+
+	* project/bootstrap.bat, project/bootstrap.mandriva.2008,
+	  project/bootstrap.mandriva.2009, project/bootstrap.ubuntu.8.04,
+	  project/extractConfigGroups.py, project/project.kdevelop,
+	  project/rm_git_mergetool_leftovers, project/scripts,
+	  project/scripts/bootstrap.bat,
+	  project/scripts/bootstrap.mandriva,
+	  project/scripts/bootstrap.ubuntu,
+	  project/scripts/extractConfigGroups.py,
+	  project/scripts/rm_git_mergetool_leftovers,
+	  project/scripts/shell.bat, project/shell.bat: mv scripts to
+	  subdir
+
+2010-04-18 09:42  cgilles
+
+	* libs/jpegutils/libjpeg-80/transupp.cpp: wrap jpeglib header
+
+2010-04-18 09:41  cgilles
+
+	* libs/jpegutils/libjpeg-62/transupp.cpp: fix compilation
+
+2010-04-18 08:22  cgilles
+
+	* project/DBSCHEMA.ODS, project/ImageAnnotation.odt,
+	  project/documents/DBSCHEMA.ODS,
+	  project/documents/ImageAnnotation.odt,
+	  project/documents/porting2ModelView.ods,
+	  project/documents/unitsForInputWidgets.ods,
+	  project/porting2ModelView.ods, project/unitsForInputWidgets.ods:
+	  move doc at sub folder
+
+2010-04-17 19:06  cgilles
+
+	* project/documents/rgb2yuv.ods, project/rgb2yuv.ods: mv
+
+2010-04-17 18:13  cgilles
+
+	* NEWS: update
+	  --Cette ligne, et les suivantes ci-dessous, seront ignorée
+	  
+	  M NEWS
+
+2010-04-17 14:51  mwiesweg
+
+	* libs/dimg/filters/auto/autolevelsfilter.cpp,
+	  libs/dimg/filters/auto/equalizefilter.cpp,
+	  libs/dimg/filters/auto/normalizefilter.cpp,
+	  libs/dimg/filters/auto/stretchfilter.cpp,
+	  libs/dimg/filters/bcg/bcgfilter.cpp,
+	  libs/dimg/filters/bw/infraredfilter.cpp,
+	  libs/dimg/filters/cb/cbfilter.cpp,
+	  libs/dimg/filters/decorate/texturefilter.cpp,
+	  libs/dimg/filters/dimgthreadedfilter.cpp,
+	  libs/dimg/filters/dimgthreadedfilter.h,
+	  libs/dimg/filters/fx/blurfxfilter.cpp,
+	  libs/dimg/filters/fx/charcoalfilter.cpp,
+	  libs/dimg/filters/fx/distortionfxfilter.cpp,
+	  libs/dimg/filters/fx/embossfilter.cpp,
+	  libs/dimg/filters/fx/filmgrainfilter.cpp,
+	  libs/dimg/filters/fx/oilpaintfilter.cpp,
+	  libs/dimg/filters/fx/raindropfilter.cpp,
+	  libs/dimg/filters/greycstoration/greycstorationfilter.cpp,
+	  libs/dimg/filters/hsl/hslfilter.cpp,
+	  libs/dimg/filters/lc/localcontrastfilter.cpp,
+	  libs/dimg/filters/lens/antivignettingfilter.cpp,
+	  libs/dimg/filters/lens/lensdistortionfilter.cpp,
+	  libs/dimg/filters/lens/lensfunfilter.cpp,
+	  libs/dimg/filters/nr/nrfilter.cpp,
+	  libs/dimg/filters/sharp/refocusfilter.cpp,
+	  libs/dimg/filters/sharp/sharpenfilter.cpp,
+	  libs/dimg/filters/sharp/unsharpmaskfilter.cpp,
+	  libs/dimg/filters/transform/contentawarefilter.cpp,
+	  libs/dimg/filters/transform/freerotationfilter.cpp,
+	  libs/dimg/filters/wb/wbfilter.cpp, tests/CMakeLists.txt: Port
+	  threaded filters to be a DynamicThread.
+	  Mostly simple find-and-replace work.
+
+2010-04-17 14:23  mwiesweg
+
+	* utilities/imageeditor/rawimport/rawpostprocessing.cpp,
+	  utilities/imageeditor/rawimport/rawpostprocessing.h: Stop thread
+	  before destroying data
+	  
+	  CCBUG: 232615
+
+2010-04-17 13:59  mwiesweg
+
+	* libs/threadimageio/thumbnailcreator.cpp,
+	  libs/threadimageio/thumbnailcreator.h,
+	  libs/threadimageio/thumbnailloadthread.cpp: When loading a
+	  thumbnail with KDE (mostly videos) also store the result in the
+	  db.
+	  There is a quality loss because KDE provides only pixmaps, not
+	  QImages,
+	  but it's definitely faster for us.
+
+2010-04-17 13:22  mwiesweg
+
+	* digikam/albumsettings.cpp, digikam/albumsettings.h,
+	  digikam/digikamapp.cpp, digikam/digikamapp.h,
+	  utilities/nepomuk/digikamnepomukservice.cpp,
+	  utilities/nepomuk/digikamnepomukservice.h,
+	  utilities/setup/setupmetadata.cpp,
+	  utilities/setup/setupmetadata.h: Add a button that triggers a
+	  full Nepomuk resync.
+	  Move the DBus calls from DigikamApp to AlbumSettings.
+	  
+	  CCBUG: 234534
+
+2010-04-17 13:22  mwiesweg
+
+	* libs/database/tagscache.cpp: Set flags to false when info is
+	  updated.
+	  Some restructuring, disentangle locks.
+	  
+	  CCBUG: 234594
+
+2010-04-17 13:22  mwiesweg
+
+	* libs/database/databasecorebackend.cpp: polish kdebug
+
+2010-04-17 09:13  cgilles
+
+	* project/documents,
+	  project/documents/digiKam-project-presentation.odp: add documents
+	  sub folder
+	  new oo.org slides to talk about whole digiKam project. doc is in
+	  English
+
+2010-04-16 12:31  cgilles
+
+	* digikam/albumtreeview.cpp, digikam/albumtreeview.h: polish
+
+2010-04-16 12:22  cgilles
+
+	* digikam/datefolderview.cpp, digikam/datefolderview.h: polish
+
+2010-04-16 12:20  cgilles
+
+	* utilities/searchwindow/searchgroup.cpp: typo
+
+2010-04-16 06:15  scripty
+
+	* imageplugins/decorate/digikamimageplugin_decorate.desktop,
+	  imageplugins/filters/digikamimageplugin_fxfilters.desktop,
+	  imageplugins/transform/digikamimageplugin_transform.desktop:
+	  SVN_SILENT made messages (.desktop file)
+
+2010-04-15 21:38  jwienke
+
+	* HACKING: add Simian instructions for code duplication search
+
+2010-04-15 20:26  mwiesweg
+
+	* libs/histogram/imagehistogram.cpp,
+	  libs/histogram/imagehistogram.h: The easiest case for porting
+	  from a "static" to a "dynamic" thread, works
+	  well for me.
+
+2010-04-15 20:26  mwiesweg
+
+	* CMakeLists.txt, digikam/CMakeLists.txt,
+	  imageplugins/CMakeLists.txt, libs/threads,
+	  libs/threads/dynamicthread.cpp, libs/threads/dynamicthread.h,
+	  libs/threads/threadmanager.cpp, libs/threads/threadmanager.h,
+	  libs/threads/workerobject.cpp, libs/threads/workerobject.h: Some
+	  ideas on threading I had been in my mind for a longer time:
+	  We currently have a lot of threads started and sleeping around.
+	  Current technology
+	  like QThreadPool aims at having "runnables" instead that are
+	  assigned to
+	  threads from a pool. (same for task-based frameworks like
+	  threadweaver).
+	  These are some lightweight wrappers to adapt our current code,
+	  without
+	  any deep code changes, to use a QThreadPool. The intention is to
+	  use even
+	  more threading without worries about the number of open threads.
+	  
+	  Initial code, not thoroughly tested.
+
+2010-04-15 20:26  mwiesweg
+
+	* digikam/databaseguierrorhandler.cpp,
+	  digikam/databaseguierrorhandler.h,
+	  libs/database/databasecorebackend.cpp,
+	  libs/database/databasecorebackend_p.h,
+	  libs/database/databaseerrorhandler.h: The DatabaseErrorHandler is
+	  a great mechanism to give feedback to the user,
+	  mostly in the case of a MySQL connection error.
+	  It now came to be used a bit too often - for every db error that
+	  came along,
+	  and in that case, disabling all subsequent db actions.
+	  
+	  Move error classification to the backend. Use the error handler
+	  for connection
+	  errors only, the code to display a message box is currently
+	  unused.
+	  Tolerate the occasional SQL error (which should be debugged, but
+	  not impair
+	  user experience).
+	  
+	  Hope this fixes the problem. Johannes, can you test with your
+	  established testcase?
+	  
+	  CCBUG: 233549
+
+2010-04-15 19:29  mwiesweg
+
+	* digikam/imagethumbnailbar.cpp, digikam/imagethumbnailbar.h,
+	  digikam/imagethumbnaildelegate.cpp,
+	  libs/threadimageio/thumbnailloadthread.cpp,
+	  libs/threadimageio/thumbnailloadthread.h: Adjust the
+	  ImageThumbnailBar so that showing thumbnails up to full 256 is
+	  possible.
+	  For this we need to find out pixel-exactly which viewport size
+	  (we know the max value for
+	  that) corresponds to which widget size (which we can set a max
+	  value for).
+	  It seems to work to just take the difference of the two at one
+	  point of time.
+	  Additionally, add the two pixels used for the highlighting
+	  border.
+	  
+	  CCBUG: 233094
+
+2010-04-15 06:10  scripty
+
+	* imageplugins/color/digikamimageplugin_color.desktop,
+	  imageplugins/enhance/digikamimageplugin_enhance.desktop:
+	  SVN_SILENT made messages (.desktop file)
+
+2010-04-14 22:08  jmueller
+
+	* libs/dimg/filters/lens/lensfuncameraselector.cpp: do lensfun
+	  search not only for lenses, do it also for make and model
+	  
+	  CCBUGS: 184156
+
+2010-04-14 20:28  cgilles
+
+	* NEWS: update
+
+2010-04-14 19:38  cgilles
+
+	* libs/threadimageio/pgfutils.cpp, libs/threadimageio/pgfutils.h:
+	  polish
+
+2010-04-14 19:36  cgilles
+
+	* libs/threadimageio/pgfutils.cpp: patch from Raphael Schweizer to
+	  play properly with PGF image under PowerPC computer
+	  CCBUGS: 233094
+
+2010-04-14 15:13  jnarboux
+
+	* libs/dimg/filters/hsl/hslfilter.cpp,
+	  libs/dimg/filters/hsl/hslfilter.h: fix precision
+
+2010-04-14 14:59  jnarboux
+
+	* libs/dimg/filters/lens/antivignettingfilter.cpp: polish, fix
+	  swaping of x and y offsets, inline a function to increase
+	  efficiency
+
+2010-04-14 14:13  jnarboux
+
+	* libs/dimg/filters/lens/antivignettingfilter.cpp,
+	  libs/dimg/filters/lens/antivignettingfilter.h: polish: use qround
+
+2010-04-12 18:57  jmueller
+
+	* libs/dimg/filters/lens/lensfuncameraselector.cpp,
+	  libs/dmetadata/dmetadata.cpp: - set subject distance in lensfun
+	  plugin for nikon dslrs
+	  - support additional meta for older canon models
+
+2010-04-12 18:47  cgilles
+
+	* NEWS: update
+
+2010-04-12 16:38  mwiesweg
+
+	* libs/imageproperties/imagedescedittab.cpp,
+	  libs/imageproperties/imagedescedittab.h: Use MetadataManager to
+	  apply the MetadataHub changes. Removes another
+	  very annoying use of kapp->processEvents! Also some problems with
+	  continuing to change while applying, and with changes applied to
+	  wrong images
+	  should be fixed.
+	  We can no longer know which database change signal originate from
+	  our own changes,
+	  which means we have to reload in any case. This needs to be
+	  further refined.
+	  
+	  CCBUG: 206127
+
+2010-04-12 16:38  mwiesweg
+
+	* digikam/metadatamanager.cpp, digikam/metadatamanager.h,
+	  digikam/metadatamanager_p.h: Add the necessary signal/slots and
+	  connections to apply the changes
+	  stored in a metadata hub multithreaded to a list of ImageInfo.
+
+2010-04-12 16:38  mwiesweg
+
+	* digikam/metadatahub.cpp, digikam/metadatahub.h: Use a more robust
+	  approach to handle removing of tags.
+	  Previously this based was on an event loop, with no good
+	  influence
+	  on throwing an object across threads.
+
+2010-04-12 09:06  cgilles
+
+	* project/shell.bat: polish
+
+2010-04-12 06:20  jnarboux
+
+	* libs/dimg/filters/lc/localcontrastsettings.cpp: save/restore
+	  settings of expander box in local contrast plugin
+
+2010-04-11 22:13  cgilles
+
+	* NEWS: update
+
+2010-04-11 22:04  cgilles
+
+	* NEWS: update
+
+2010-04-11 15:06  mwiesweg
+
+	* libs/threadimageio/previewtask.cpp: These patches also got lost
+	  in between the branches:
+	  Use Exiv2's preview manager if available to select the RAW
+	  preview to display.
+	  (previous commit 1050937)
+
+2010-04-11 15:06  mwiesweg
+
+	* libs/dimg/loaders/tiffloader.cpp: Remove all Exif.Thumbnail.*
+	  tags when writing TIFF.
+	  
+	  CCBUG: 211758
+
+2010-04-11 15:06  mwiesweg
+
+	* NEWS, digikam/metadatahub.cpp,
+	  imageplugins/enhance/lensautofixtool.cpp,
+	  libs/database/imagescanner.cpp, libs/dimg/dimg.cpp,
+	  libs/dimg/dimg.h, libs/dimg/dimg_p.h,
+	  libs/dimg/loaders/dimgloader.cpp, libs/dimg/loaders/dimgloader.h,
+	  libs/dimg/loaders/pngloader.cpp,
+	  libs/dimg/loaders/tiffloader.cpp, libs/dmetadata/dmetadata.cpp,
+	  libs/dmetadata/dmetadata.h, libs/dmetadata/dmetadatadata.h,
+	  libs/imageproperties/imagepropertiessidebardb.cpp,
+	  libs/jpegutils/jpegutils.cpp,
+	  utilities/imageeditor/canvas/dimginterface.cpp,
+	  utilities/imageeditor/canvas/dimginterface.h,
+	  utilities/imageeditor/editor/imageiface.cpp,
+	  utilities/imageeditor/editor/imageiface.h,
+	  utilities/queuemanager/basetools/metadata/assigntemplate.cpp:
+	  These patches were lost in between all the branching.
+	  Recommitting.
+	  The bug is fixed when using a recent (KDE 4.4) libkexiv2.
+	  
+	  BUG: 183171
+
+2010-04-10 16:38  cgilles
+
+	* NEWS: update
+
+2010-04-09 20:14  foerster
+
+	* libs/database/databasecopymanager.cpp: Handle only forward
+	  queries by executing the query again.
+	  Also improve logging the result size.
+
+2010-04-09 19:07  foerster
+
+	* data/database/dbconfig.xml.cmake: DatabaseMigration: Fixed typo
+	  which prevents to copy image metadata.
+
+2010-04-09 19:04  foerster
+
+	* libs/database/databasecopymanager.cpp: SQLite doesn't support a
+	  query size request. Workaround for
+	  such databases is to go to the end of the query
+	  result and using then the current row number as result size.
+
+2010-04-09 13:07  cgilles
+
+	* imageplugins/decorate/superimpose/dirselectwidget.cpp,
+	  imageplugins/decorate/superimpose/dirselectwidget.h,
+	  imageplugins/decorate/superimpose/superimposetool.h,
+	  imageplugins/decorate/superimpose/superimposewidget.cpp: polish
+
+2010-04-09 12:58  cgilles
+
+	* imageplugins/decorate/superimpose/superimpose.cpp,
+	  imageplugins/decorate/superimpose/superimpose.h,
+	  imageplugins/decorate/superimpose/superimposetool.cpp,
+	  imageplugins/decorate/superimpose/superimposewidget.h: polish
+
+2010-04-09 12:45  cgilles
+
+	* imageplugins/decorate/inserttextwidget.cpp,
+	  imageplugins/decorate/inserttextwidget.h: Support Color
+	  Management in Insert Text tool preview
+	  CCBUGS: 233739
+
+2010-04-09 12:04  cgilles
+
+	* imageplugins/transform/perspectivewidget.cpp: polish
+
+2010-04-09 12:01  cgilles
+
+	* imageplugins/transform/imageselectionwidget.cpp,
+	  imageplugins/transform/perspectivewidget.cpp: polish
+
+2010-04-09 11:52  cgilles
+
+	* imageplugins/transform/perspectivewidget.cpp,
+	  imageplugins/transform/perspectivewidget.h: use d private
+	  container
+
+2010-04-09 10:57  cgilles
+
+	* NEWS: update
+
+2010-04-09 10:57  cgilles
+
+	* imageplugins/transform/imageselectionwidget.cpp: use color
+	  managed with Ratio crop preview widget
+	  BUGS: 233739
+
+2010-04-09 10:41  cgilles
+
+	* imageplugins/transform/imageselectionwidget.cpp: polish
+
+2010-04-09 10:38  cgilles
+
+	* imageplugins/transform/imageselectionwidget.cpp,
+	  imageplugins/transform/imageselectionwidget.h: using namespace
+
+2010-04-09 06:32  cgilles
+
+	* NEWS: update
+
+2010-04-08 17:14  foerster
+
+	* TODO.MYSQLPORT, libs/database/albumdb.cpp: MySql default behavior
+	  is to handle column/table names case sensitive. Now database
+	  statistics are working for this backend.
+	  Add some points to the TODO list.
+
+2010-04-08 15:48  mwiesweg
+
+	* CMakeLists.txt: Really disable Nepomuk compilation when shared
+	  ontologies are not found...
+
+2010-04-08 14:10  cgilles
+
+	* config-digikam.h.cmake: missing to patch this file to define
+	  debug area for database server
+
+2010-04-08 12:58  cgilles
+
+	* libs/threadimageio/thumbnailcreator.cpp,
+	  libs/threadimageio/thumbnailcreator.h,
+	  libs/threadimageio/thumbnailcreator_p.h: use PGF compression
+	  level 3 instead 4 to prevent bluring effect.
+	  Investigation still open about this problem.
+	  CCBUGS : 233094
+
+2010-04-08 11:40  cgilles
+
+	* libs/database/tagscache.h: fix win32 warnings
+
+2010-04-08 11:26  cgilles
+
+	* libs/widgets/common/kcategorizedview.cpp: Fix Win32 broken
+	  compilation
+	  
+	  Marcel,
+	  
+	  Under Win32 with MinGW env, compilation is broken. gcc do not
+	  find gid_t with this line :
+	  
+	  int getgrouplist(const char *, gid_t , gid_t *, int *);
+	  
+	  ... from kdefakes.h file. I don't know why...
+
+2010-04-08 11:04  cgilles
+
+	* libs/dimg/filters/lens/antivignettingfilter.cpp: Fix Win32
+	  Warnings.
+	  
+	  Julien,
+	  No need to re-invent the wheel. Look if QRound() macro is enough
+	  to replace approx() as well.
+	  
+	  http://doc.trolltech.com/4.5/qtglobal.html#qRound
+
+2010-04-08 11:01  cgilles
+
+	* libs/dimg/filters/lens/antivignettingfilter.cpp: Fix Win32
+	  warnings
+	  
+	  Julien,
+	  Same there. cast is not the right solution. Please, check if
+	  precision is lost or not in your algorithms.
+
+2010-04-08 10:52  cgilles
+
+	* libs/dimg/filters/hsl/hslfilter.cpp: Fix win32 warning
+	  
+	  Julien,
+	  Do you seen that Vibrance value is hosted by double and used as
+	  integer in your algorithm. Precision is lost???
+
+2010-04-08 10:46  cgilles
+
+	* libs/dimg/filters/bw/bwsepiasettings.cpp: fix win32 warnings
+
+2010-04-08 10:44  cgilles
+
+	* libs/dimg/filters/cb/cbsettings.cpp: fix win32 warnings
+
+2010-04-08 10:42  cgilles
+
+	* libs/dimg/filters/decorate/bordersettings.cpp: fix win32 warnings
+
+2010-04-08 07:25  cgilles
+
+	* NEWS: update
+
+2010-04-07 20:02  mghansen
+
+	* libs/imageproperties/worldmapwidget.cpp: Fix typo.
+
+2010-04-07 13:38  cgilles
+
+	* imageplugins/enhance/inpaintingtool.cpp: polish
+
+2010-04-07 13:01  cgilles
+
+	* imageplugins/enhance/restorationtool.cpp: polish
+
+2010-04-07 13:01  cgilles
+
+	* utilities/imageeditor/widgets/previewtoolbar.h: polish
+
+2010-04-07 11:06  foerster
+
+	* digikam/albumsettings.cpp, digikam/main.cpp: Also remove (legacy
+	  parameter) "Album Path" from the configuration.
+	  Adapted first run assistant call.
+
+2010-04-07 09:38  foerster
+
+	* TODO.MYSQLPORT, digikam/albumsettings.cpp: After a successful
+	  migration of the old database path entry, we must delete it from
+	  the digikamrc config file.
+	  This prevents an new migration attempt at the start of digikam
+	  and the user defined settings will not be overwritten.
+
+2010-04-07 08:18  cgilles
+
+	* libs/template/subjectedit.cpp: polish
+
+2010-04-07 07:34  cgilles
+
+	* libs/template/templatepanel.cpp: compile with last kexiv2
+
+2010-04-07 06:46  cgilles
+
+	* NEWS: update
+
+2010-04-06 22:01  mlaurent
+
+	* libs/database/tagscache.cpp: Fix iterator
+
+2010-04-06 20:09  jwienke
+
+	* tests/CMakeLists.txt: make tests compile again
+
+2010-04-06 18:10  cgilles
+
+	* TODO.MYSQLPORT: update
+
+2010-04-06 18:07  cgilles
+
+	* NEWS: update
+
+2010-04-06 13:53  cgilles
+
+	* digikam/CMakeLists.txt: uppercase
+
+2010-04-06 13:38  cgilles
+
+	* utilities/queuemanager/basetools/metadata/assigntemplate.cpp: fix
+	  layout
+
+2010-04-06 12:46  cgilles
+
+	* libs/dimg/filters/greycstoration/greycstorationfilter.cpp: polish
+
+2010-04-06 12:31  cgilles
+
+	* NEWS: update
+
+2010-04-06 12:32  cgilles
+
+	* TODO.MYSQLPORT: This one is very important for the future.
+	  I'm sure that users will ask to be able to setup db file paths
+	  somewhere in the computer, and not only in home dir.
+	  CCMAIL: marcel.wiesweg@gmx.de
+
+2010-04-06 12:25  cgilles
+
+	* digikam/componentsinfo.h, digikam/dbstatdlg.cpp: typo
+
+2010-04-06 11:08  cgilles
+
+	* TODO.MYSQLPORT, digikam/componentsinfo.h, digikam/dbstatdlg.cpp,
+	  digikam/dbstatdlg.h: add database backend info to help dialogs
+
+2010-04-06 10:48  cgilles
+
+	* utilities/setup/setupdatabase.cpp: polish
+
+2010-04-06 10:40  cgilles
+
+	* libs/dialogs/infodlg.cpp: polish
+
+2010-04-06 10:37  cgilles
+
+	* TODO.MYSQLPORT: update
+
+2010-04-06 10:33  cgilles
+
+	* TODO.MYSQLPORT: update
+
+2010-04-06 10:31  cgilles
+
+	* libs/widgets/common/databasewidget.cpp,
+	  libs/widgets/common/databasewidget.h: use d private container
+
+2010-04-06 09:56  cgilles
+
+	* TODO.MYSQLPORT, libs/dialogs/migrationdlg.cpp,
+	  libs/dialogs/migrationdlg.h: use d private containers
+
+2010-04-06 09:35  cgilles
+
+	* TODO.MYSQLPORT, digikam/databaseguierrorhandler.cpp,
+	  digikam/databaseguierrorhandler.h,
+	  libs/database/databaseerrorhandler.h: use d private containers
+
+2010-04-06 09:19  cgilles
+
+	* libs/dimg/filters/nr/nrfilter.h,
+	  libs/dimg/filters/nr/nrsettings.cpp,
+	  libs/dimg/filters/nr/nrsettings.h,
+	  utilities/queuemanager/basetools/enhance/noisereduction.cpp:
+	  simplify wavelets NR settings to YCrCb as well, to be homogenous
+	  with FilmGrain settings.
+	  Lead NR settings is now removed
+
+2010-04-06 08:00  cgilles
+
+	* CMakeLists.txt: polish
+
+2010-04-06 07:50  cgilles
+
+	* CMakeLists.txt, NEWS, README, libs/CMakeLists.txt,
+	  libs/dmetadata/captionvalues.cpp, libs/dmetadata/captionvalues.h,
+	  libs/imageproperties/captionedit.cpp,
+	  libs/imageproperties/captionedit.h, libs/template/CMakeLists.txt,
+	  libs/template/TODO, libs/template/altlangstredit.cpp,
+	  libs/template/altlangstredit.h,
+	  libs/template/countryselector.cpp,
+	  libs/template/countryselector.h, libs/template/msgtextedit.cpp,
+	  libs/template/msgtextedit.h, libs/template/subjectedit.h,
+	  libs/template/subjectwidget.cpp, libs/template/subjectwidget.h,
+	  libs/template/templatepanel.cpp,
+	  libs/template/templateviewer.cpp, libs/template/templateviewer.h,
+	  libs/template/topicset.iptc-subjectcode.xml,
+	  utilities/setup/setuptemplate.cpp,
+	  utilities/setup/setuptemplate.h: remove duplicates widget from
+	  digiKam core.
+	  Use libkexiv2 widget available from trunk
+	  set libkexiv2 dependency to 1.1.0. You need libkex2 from trunk
+	  now to compile digiKam 1.3.0
+	  CCMAIL: digikam-devel@kde.org
+
+2010-04-06 07:28  cgilles
+
+	* libs/dmetadata/dmetadata.cpp, libs/dmetadata/dmetadata.h: polish
+
+2010-04-06 06:48  cgilles
+
+	* libs/template/TODO: polish
+
+2010-04-06 06:48  cgilles
+
+	* libs/template/altlangstredit.cpp, libs/template/altlangstredit.h:
+	  polish
+
+2010-04-05 19:29  cgilles
+
+	* NEWS: update
+
+2010-04-05 19:28  cgilles
+
+	* libs/database/tagscache.cpp, libs/database/tagscache.h: Fix slot
+	  typo
+	  BUGS: 233418
+
+2010-04-05 19:12  cgilles
+
+	* libs/template/templatelist.cpp, libs/template/templatelist.h,
+	  libs/template/templatemanager.cpp,
+	  libs/template/templatemanager.h, libs/template/templatepanel.cpp,
+	  libs/template/templatepanel.h: polish
+
+2010-04-05 19:06  jmueller
+
+	* libs/dimg/filters/lens/lensfuncameraselector.cpp: before giving
+	  up try to find lens via lensfun search
+
+2010-04-05 19:03  cgilles
+
+	* libs/template/subjectedit.cpp, libs/template/subjectedit.h,
+	  libs/template/subjectwidget.cpp, libs/template/subjectwidget.h:
+	  polish
+
+2010-04-05 18:50  cgilles
+
+	* libs/template/msgtextedit.cpp, libs/template/msgtextedit.h:
+	  polish
+
+2010-04-05 18:03  jmueller
+
+	* libs/dmetadata/dmetadata.cpp: fix nikon lens string in metadata
+	  display for various models
+
+2010-04-05 13:41  mwiesweg
+
+	* NEWS, libs/database/databasecopymanager.cpp,
+	  libs/database/databasecorebackend.h: Checking for bool (with true
+	  = success) breaks when using an enum
+	  for error conditions, where success is 0.
+	  Apply a little syntactic sugar to make this work again -
+	  fixes searches and schema updating.
+	  
+	  BUG: 233253
+
+2010-04-05 10:55  cgilles
+
+	* NEWS: update
+
+2010-04-05 10:53  cgilles
+
+	* NEWS: update
+
+2010-04-05 10:52  cgilles
+
+	* NEWS: update
+
+2010-04-05 10:50  cgilles
+
+	* NEWS: update
+
+2010-04-05 10:30  mwiesweg
+
+	* NEWS, libs/database/tagscache.h: Use correct EXPORT macro
+	  
+	  BUG: 233287
+
+2010-04-04 21:37  mwiesweg
+
+	* databaseserver/databaseserver.cpp,
+	  libs/database/databaseconfigelement.cpp,
+	  libs/widgets/common/databasewidget.cpp: compile
+
+2010-04-04 21:37  mwiesweg
+
+	* data/database/dbconfig.xml.cmake: These were not implemented for
+	  SQLite...
+
+2010-04-04 21:37  mwiesweg
+
+	* libs/database/databasecorebackend.cpp,
+	  libs/database/databasecorebackend.h: - manual transaction
+	  handling was confusing the transaction stack counter.
+	  switch back to using the wrapper methods, and just don't roll
+	  back on our own
+	  - warn if an action is not implement in XML
+	  - use global config elements
+
+2010-04-04 21:37  mwiesweg
+
+	* libs/database/databaseconfigelement.cpp,
+	  libs/database/databaseconfigelement.h,
+	  libs/database/databaseparameters.cpp,
+	  libs/database/databaseparameters.h: Move loading code from
+	  DatabaseParameters to a global static place in
+	  DatabaseConfigElement.
+	  The config does not need to be loaded each time again but can be
+	  shared.
+	  Apart from that, it was never loaded in the IOSlaves (tag listing
+	  was broken)
+
+2010-04-04 21:37  mwiesweg
+
+	* databaseserver/databaseserver.cpp,
+	  libs/database/databaseconfigelement.cpp,
+	  libs/database/databaseconfigelement.h,
+	  libs/database/databasecopymanager.cpp,
+	  libs/database/databasecorebackend.cpp,
+	  libs/database/databasecorebackend.h,
+	  libs/database/databaseparameters.cpp,
+	  libs/database/databaseparameters.h: Code readability,
+	  capitalization, indentation
+
+2010-04-04 21:37  mwiesweg
+
+	* digikam/metadatahub.cpp, digikam/metadatahub.h,
+	  libs/imageproperties/imagedescedittab.cpp,
+	  libs/imageproperties/imagedescedittab.h: Remove dependency on
+	  Album/AlbumManager, use TagsCache and tag IDs.
+	  Add a QObject-based MetadataHubOnTheRoad watching for tag
+	  deletion on its own.
+	  Use this for ImageDescEditTag.
+
+2010-04-04 21:37  mwiesweg
+
+	* libs/database/albumdb.cpp, libs/database/albumdb.h: Remove
+	  getTagsFromTagsPath from AlbumDB, replaced by TagsCache.
+
+2010-04-04 21:37  mwiesweg
+
+	* digikam/albummanager.cpp, libs/database/imageinfo.cpp,
+	  libs/database/imagescanner.cpp,
+	  utilities/kipiiface/kipiimageinfo.cpp: Use TagsCache where
+	  applicable
+
+2010-04-04 21:37  mwiesweg
+
+	* libs/database/tagscache.cpp, libs/database/tagscache.h: Polish
+	  API.
+	  Add convenience signals.
+
+2010-04-04 21:36  mwiesweg
+
+	* digikam/imagecategorizedview.cpp,
+	  libs/models/imagethumbnailmodel.cpp,
+	  libs/models/imagethumbnailmodel.h,
+	  libs/widgets/common/itemviewimagedelegate.cpp,
+	  libs/widgets/common/itemviewimagedelegate.h: We now set the
+	  thumbnail size newly again each time in the delegate.
+	  Also do that for prepareThumbnails in the view.
+
+2010-04-04 21:36  mwiesweg
+
+	* libs/dimg/loaders/pngloader.cpp: Comment out section causing
+	  crash
+	  
+	  BUG: 229340
+
+2010-04-04 19:12  cgilles
+
+	* TODO.MYSQLPORT, databaseserver/databaseserver.cpp,
+	  databaseserver/databaseserver.h, libs/dialogs/migrationdlg.h:
+	  polish
+
+2010-04-04 19:02  cgilles
+
+	* databaseserver/databaseserver.cpp,
+	  databaseserver/databaseserver.h: use d private internal class
+
+2010-04-04 18:36  cgilles
+
+	* NEWS: update
+
+2010-04-04 16:13  cgilles
+
+	* NEWS: update
+
+2010-04-04 14:18  cgilles
+
+	* NEWS: update
+
+2010-04-04 10:35  aclemens
+
+	* utilities/cameragui/cameraiconview.cpp,
+	  utilities/cameragui/renamecustomizer.cpp,
+	  utilities/cameragui/renamecustomizer.h: Reset the parser properly
+	  in CameraUI
+	  
+	  CCBUG:230553
+
+2010-04-04 10:16  cgilles
+
+	* CMakeLists.txt, TODO.MYSQLPORT, databaseserver/CMakeLists.txt,
+	  databaseserver/databaseserver.cpp,
+	  databaseserver/databaseserver.h, databaseserver/main.cpp,
+	  databaseserver/pollthread.cpp: use dedicated kdebug area for
+	  digiKam database server
+
+2010-04-04 09:56  cgilles
+
+	* TODO.MYSQLPORT, libs/database/databasecopymanager.cpp,
+	  libs/database/databasecopymanager.h: code review
+
+2010-04-04 09:48  cgilles
+
+	* TODO.MYSQLPORT, libs/database/databaseconfigelement.cpp,
+	  libs/database/databaseconfigelement.h: code review
+
+2010-04-04 09:45  cgilles
+
+	* TODO.MYSQLPORT, utilities/setup/databaseconnectionwidget.h: this
+	  file not used
+
+2010-04-04 09:42  cgilles
+
+	* TODO.MYSQLPORT, libs/widgets/common/databasewidget.cpp,
+	  libs/widgets/common/databasewidget.h: code review, polish, coding
+	  style.
+
+2010-04-04 06:08  scripty
+
+	* imageplugins/color/digikamimageplugin_color.desktop,
+	  imageplugins/decorate/digikamimageplugin_decorate.desktop,
+	  imageplugins/enhance/digikamimageplugin_enhance.desktop,
+	  imageplugins/filters/digikamimageplugin_fxfilters.desktop,
+	  imageplugins/transform/digikamimageplugin_transform.desktop:
+	  SVN_SILENT made messages (.desktop file)
+
+2010-04-03 23:06  cgilles
+
+	* TODO.MYSQLPORT: update
+
+2010-04-03 23:05  cgilles
+
+	* CMakeLists.txt, libs/database/sqlquery.cpp,
+	  libs/database/sqlquery.h: this class is not exported. this will
+	  fix compilation under WIN32
+
+2010-04-03 19:01  cgilles
+
+	* TODO.MYSQLPORT, digikam/databaseguierrorhandler.cpp,
+	  digikam/databaseguierrorhandler.h: code review
+
+2010-04-03 18:56  cgilles
+
+	* README: update
+
+2010-04-03 18:55  cgilles
+
+	* TODO.MYSQLPORT: update
+
+2010-04-03 18:01  jwienke
+
+	* CMakeLists.txt, themedesigner/CMakeLists.txt: re-enable theme
+	  designer
+
+2010-04-03 17:36  jwienke
+
+	* CMakeLists.txt: correct library version
+
+2010-04-03 17:15  cgilles
+
+	* NEWS: update
+
+2010-04-03 17:09  cgilles
+
+	* TODO.MYSQLPORT, databaseserver/databaseserver.cpp,
+	  databaseserver/databaseserver.h, databaseserver/main.cpp,
+	  databaseserver/pollthread.cpp, databaseserver/pollthread.h: usaul
+	  code review, moc, namespace, coding style, indent, etc...
+
+2010-04-03 16:43  cgilles
+
+	* databaseserver/CMakeLists.txt: polish
+
+2010-04-03 14:40  mwiesweg
+
+	* CMakeLists.txt, libs/database/databaseaccess.cpp,
+	  libs/database/tagscache.cpp, libs/database/tagscache.h: TagsCache
+	  is a new singleton class caching the Tags table from the db.
+	  We have the long-standing problem that AlbumManager is only
+	  available
+	  from the UI thread, and storing TAlbum* is bad. The only
+	  alternative
+	  required AlbumDB::getTagsFromTagPaths reading the full Tags table
+	  each
+	  time again.
+	  TagsCache is thread-safe and allows fast look-up name -> ids,
+	  path -> id,
+	  id -> name, id -> path, and additionally implements
+	  getTagsFromTagPaths.
+
+2010-04-03 14:40  mwiesweg
+
+	* libs/database/albumdb.cpp, libs/database/albumdb.h,
+	  libs/database/albuminfo.h: Introduce a TagShortInfo, without
+	  caring for tag icons
+	  (and only reading from one table)
+
+2010-04-03 14:40  mwiesweg
+
+	* libs/database/databasecorebackend.cpp,
+	  libs/database/databasecorebackend_p.h,
+	  libs/database/databaseerrorhandler.h: Make DatabaseErrorHandler's
+	  method a slot again. Fix the invokeMethod call.
+	  Fix a possible missed wake call by splitting the waiting on
+	  errorLock
+	  in two parts (in a separate class)
+	  Some restructuring.
+
+2010-04-03 14:40  mwiesweg
+
+	* CMakeLists.txt: For Nepomuk support, require KDE 4.4 and
+	  shared-desktop-ontologies (which
+	  are required by kdebase-4.4 anyway)
+	  
+	  CCBUG: 225533
+
+2010-04-03 10:47  cgilles
+
+	* TODO.MYSQLPORT: update
+
+2010-04-03 10:47  cgilles
+
+	* TODO.MYSQLPORT: update. Help/DB stat dialog is broken with MySql
+	  CCMAIL: marcel.wiesweg@gmx.de
+
+2010-04-03 10:45  cgilles
+
+	* NEWS: update
+
+2010-04-03 06:27  scripty
+
+	* imageplugins/color/digikamimageplugin_color.desktop,
+	  imageplugins/decorate/digikamimageplugin_decorate.desktop,
+	  imageplugins/enhance/digikamimageplugin_enhance.desktop,
+	  imageplugins/filters/digikamimageplugin_fxfilters.desktop,
+	  imageplugins/transform/digikamimageplugin_transform.desktop:
+	  SVN_SILENT made messages (.desktop file)
+
+2010-04-02 20:47  mwiesweg
+
+	* CMakeLists.txt: Don't check for mysql_install_db on Win32.
+	  
+	  CCBUG: 233109
+
+2010-04-02 17:19  mwiesweg
+
+	* CMakeLists.txt, digikam/albummanager.cpp,
+	  digikam/databaseerrorhandler.cpp, digikam/databaseerrorhandler.h,
+	  digikam/databaseguierrorhandler.cpp,
+	  digikam/databaseguierrorhandler.h, tests/CMakeLists.txt: Change
+	  behavior in DatabaseGuiErrorHandler:
+	  Only show the dialog when the first connection attempt failed.
+	  Otherwise it is shortly flashing at startup.
+	  Rename the file to databaseguierrorhandler.h/cpp to avoid
+	  confusion
+	  with databaserrorhandler.h.
+
+2010-04-02 17:19  mwiesweg
+
+	* libs/database/databasecorebackend.h,
+	  libs/database/databaseerrorhandler.h,
+	  libs/database/thumbnaildb.h: Move declaration of the
+	  DatabaseErrorHandler interface to separate header file
+
+2010-04-02 17:19  mwiesweg
+
+	* libs/database/sqlquery.h: indentation and formatting
+
+2010-04-02 17:18  mwiesweg
+
+	* digikam/databaseerrorhandler.cpp, digikam/databaseerrorhandler.h:
+	  indentation
+
+2010-04-02 16:35  cgilles
+
+	* AUTHORS: update
+
+2010-04-02 16:32  cgilles
+
+	* data/pics/splash-showfoto.png: new showfoto 1.3.0 splashscreen
+	  from Dmitri Popov
+	  CCMAIL: dmpop@openoffice.org
+
+2010-04-02 13:00  mwiesweg
+
+	* digikam/CMakeLists.txt,
+	  utilities/nepomuk/digikamnepomukservice.cpp: Use NIE/NFO
+	  namespace instead of Xesam.
+	  Please complain if it does not build with KDE4.3.
+	  Need to test if bug is fixed.
+	  
+	  CCBUG: 225533
+
+2010-04-02 13:00  mwiesweg
+
+	* digikam/albummanager.cpp, digikam/digikamapp.cpp,
+	  tests/CMakeLists.txt: Remove DigikamApp dependency for starting
+	  database server, make AlbumModelTest compile again.
+
+2010-04-02 13:00  mwiesweg
+
+	* config-digikam.h.cmake, databaseserver/CMakeLists.txt,
+	  libs/database/databaseserverstarter.cpp,
+	  libs/database/databaseserverstarter.h: Install the database
+	  server into kde4/libexec; I hope it's the right indication
+	  to put such a helper executable in this place. Then we can also
+	  use the
+	  CMake-provided install path to call the binary, removing the
+	  hardcoded path.
+
+2010-04-02 13:00  mwiesweg
+
+	* CMakeLists.txt: Polish detection of MySQL executables in CMake.
+	  Verify that these programs exist, refuse to compile otherwise.
+	  
+	  TODO: make this an optional dependency?
+
+2010-04-02 13:00  mwiesweg
+
+	* libs/models/abstractalbummodel.cpp: Dont emit change event for
+	  albums not contained in model
+
+2010-04-02 11:10  cgilles
+
+	* AUTHORS: update
+
+2010-04-02 11:08  cgilles
+
+	* data/pics/splash-digikam.png: new digiKam 1.3.0 splash from
+	  Kalyan Varma
+	  CCMAIL: kalyan@rtns.org
+
+2010-04-02 06:55  jnarboux
+
+	* libs/dimg/filters/lc/localcontrastsettings.cpp,
+	  libs/dimg/filters/lc/localcontrastsettings.h: use new expander
+	  box with check box
+
+2010-04-01 22:20  pino
+
+	* tests/CMakeLists.txt: add more include directories needed for the
+	  tests
+
+2010-04-01 12:38  cgilles
+
+	* NEWS: update
+
+2010-04-01 12:37  cgilles
+
+	* data/pics/CMakeLists.txt: wrong cmake syntax to include subdir
+	  during compilation and install
+	  BUGS: 232875
+
+2010-04-01 12:34  cgilles
+
+	* data/pics/borderpatterns/CMakeLists.txt: polish
+
+2010-04-01 12:30  cgilles
+
+	* CMakeLists.txt, libs/imageproperties/cameraitempropertiestab.h,
+	  libs/imageproperties/imagepropertiestab.h,
+	  libs/template/templateviewer.h,
+	  libs/widgets/common/rexpanderbox.cpp,
+	  libs/widgets/common/rexpanderbox.h,
+	  utilities/cameragui/cameraui_p.h: bye bye
+	  Digikam::RExpanderBox...
+
+2010-04-01 12:24  cgilles
+
+	* imageplugins/enhance/localcontrasttool.cpp,
+	  imageplugins/transform/contentawareresizetool.cpp,
+	  imageplugins/transform/freerotationtool.cpp,
+	  imageplugins/transform/ratiocroptool.cpp,
+	  libs/dimg/filters/bcg/bcgsettings.cpp,
+	  libs/dimg/filters/bw/bwsepiasettings.cpp,
+	  libs/dimg/filters/bw/mixersettings.cpp,
+	  libs/dimg/filters/cb/cbsettings.cpp,
+	  libs/dimg/filters/curves/curvessettings.cpp,
+	  libs/dimg/filters/decorate/bordersettings.cpp,
+	  libs/dimg/filters/icc/iccprofilesettings.cpp,
+	  libs/dimg/filters/lc/localcontrastsettings.cpp,
+	  libs/dimg/filters/lens/antivignettingsettings.cpp,
+	  libs/dimg/filters/nr/nrsettings.cpp,
+	  libs/dimg/filters/sharp/sharpsettings.cpp,
+	  libs/dimg/filters/transform/freerotationsettings.cpp,
+	  libs/dimg/filters/wb/wbsettings.cpp,
+	  utilities/advancedrename/advancedrenamewidget.cpp,
+	  utilities/cameragui/cameraui.cpp,
+	  utilities/imageeditor/rawimport/rawsettingsbox.cpp,
+	  utilities/searchwindow/choicesearchutilities.cpp,
+	  utilities/searchwindow/choicesearchutilities.h,
+	  utilities/searchwindow/searchfieldgroup.cpp,
+	  utilities/searchwindow/searchfieldgroup.h,
+	  utilities/searchwindow/searchfields.cpp,
+	  utilities/searchwindow/searchgroup.cpp,
+	  utilities/searchwindow/searchgroup.h: use libkdcraw RExpanderBox
+	  instead internal version. No need to duplicates implementation
+
+2010-04-01 12:06  cgilles
+
+	* libs/dimg/filters/fx/filmgrainsettings.cpp,
+	  libs/dimg/filters/fx/filmgrainsettings.h: use new RExpanderBox
+	  from libkdcraw from trunk including checkbox in expander label
+
+2010-04-01 11:13  cgilles
+
+	* libs/dimg/filters/fx/filmgrainsettings.cpp: polish
+
+2010-04-01 06:38  scripty
+
+	* imageplugins/color/digikamimageplugin_color.desktop,
+	  imageplugins/decorate/digikamimageplugin_decorate.desktop,
+	  imageplugins/enhance/digikamimageplugin_enhance.desktop:
+	  SVN_SILENT made messages (.desktop file)
+
+2010-03-31 14:18  cgilles
+
+	* REVIEW, TODO.MYSQLPORT: update
+
+2010-03-31 14:06  cgilles
+
+	* libs/database/databaseserverstarter.cpp: add comment
+
+2010-03-31 14:05  cgilles
+
+	* REVIEW: files to review
+
+2010-03-31 14:02  cgilles
+
+	* utilities/setup/setupdatabase.cpp,
+	  utilities/setup/setupdatabase.h: polish
+
+2010-03-31 13:55  cgilles
+
+	* libs/database/databaseserverstarter.cpp,
+	  libs/database/databaseserverstarter.h: missing Digikam namespace.
+	  fix coding style and other polish
+
+2010-03-31 13:44  cgilles
+
+	* libs/dialogs/migrationdlg.cpp, libs/dialogs/migrationdlg.h:
+	  missing moc file
+
+2010-03-31 13:03  cgilles
+
+	* AUTHORS: give credit to Holger
+
+2010-03-31 13:01  cgilles
+
+	* digikam/digikamapp.cpp: there is a dialog there
+
+2010-03-31 13:00  foerster
+
+	* digikam/albumsettings.cpp: Using the right configuration group
+	  for old database settings.
+
+2010-03-31 12:59  cgilles
+
+	* digikam/digikamapp.cpp: use right icon there
+
+2010-03-31 12:59  cgilles
+
+	* libs/dimg/drawdecoding.cpp: fix missing option to copy
+
+2010-03-31 12:52  cgilles
+
+	* utilities/imageeditor/rawimport/rawsettingsbox.cpp: polish
+
+2010-03-31 10:56  cgilles
+
+	* libs/dimg/filters/fx/filmgrainfilter.cpp: fix compilation
+	  warnings
+
+2010-03-31 09:56  cgilles
+
+	* libs/template/TODO: this files must be moved to KDE4.5 (trunk)
+	  Jens, can you do it as well. since digiKam 1.3.0 depand of
+	  libkdcraw from trunk now, we ca also
+	  set dependency to libkexiv2 to trunk version and remove
+	  dupplicates implementation in digiKam/kipi-plugins.
+	  This si want mean that digiKam and kipi-plugins 1.3.0 will depand
+	  of libkexiv2 from trunk. libkexiv2 version
+	  ids must be updgrated of course.
+	  Thanks in advance
+	  CCMAIL: tschenser@gmx.de
+
+2010-03-31 08:30  cgilles
+
+	* utilities/setup/setup.cpp, utilities/setup/setup.h: use right
+	  icon for DB. polish
+
+2010-03-31 07:33  foerster
+
+	* digikam/albumsettings.cpp: Move the settings migration out of the
+	  nepomuk section.
+
+2010-03-31 06:58  cgilles
+
+	* digikam/albummanager.cpp: fix warning
+
+2010-03-30 21:40  jwienke
+
+	* themedesigner/mainwindow.cpp: Fix model view port problems of
+	  theme designer. Nevertheless, since the merge of the database
+	  branch this still doesn't compile. DatabaseWidget is missing as
+	  dependency. How to fix this? Holger?
+
+2010-03-30 18:33  foerster
+
+	* CMakeLists.txt, data/CMakeLists.txt, data/database,
+	  data/database/CMakeLists.txt, data/database/dbconfig.xml.cmake,
+	  data/database/mysql-global.conf, databaseserver,
+	  databaseserver/CMakeLists.txt, databaseserver/databaseserver.cpp,
+	  databaseserver/databaseserver.h, databaseserver/main.cpp,
+	  databaseserver/org.kde.digikam.DatabaseServer.xml,
+	  databaseserver/pollthread.cpp, databaseserver/pollthread.h,
+	  digikam/CMakeLists.txt, digikam/albummanager.cpp,
+	  digikam/albummanager.h, digikam/albumsettings.cpp,
+	  digikam/albumsettings.h, digikam/databaseerrorhandler.cpp,
+	  digikam/databaseerrorhandler.h, digikam/digikamapp.cpp,
+	  digikam/digikamapp.h, digikam/digikamui.rc, digikam/main.cpp,
+	  kioslave/digikamalbums.cpp, kioslave/digikamdates.cpp,
+	  kioslave/digikamsearch.cpp, kioslave/digikamtags.cpp,
+	  libs/database/albumdb.cpp, libs/database/albumdb.h,
+	  libs/database/databaseaccess.cpp, libs/database/databaseaccess.h,
+	  libs/database/databasebackend.cpp,
+	  libs/database/databasebackend.h,
+	  libs/database/databaseconfigelement.cpp,
+	  libs/database/databaseconfigelement.h,
+	  libs/database/databasecopymanager.cpp,
+	  libs/database/databasecopymanager.h,
+	  libs/database/databasecorebackend.cpp,
+	  libs/database/databasecorebackend.h,
+	  libs/database/databasecorebackend_p.h,
+	  libs/database/databaseparameters.cpp,
+	  libs/database/databaseparameters.h,
+	  libs/database/databaseserverstarter.cpp,
+	  libs/database/databaseserverstarter.h,
+	  libs/database/haar/haariface.cpp, libs/database/imagelister.cpp,
+	  libs/database/schemaupdater.cpp, libs/database/schemaupdater.h,
+	  libs/database/sqlquery.cpp, libs/database/sqlquery.h,
+	  libs/database/thumbnaildatabaseaccess.cpp,
+	  libs/database/thumbnaildatabaseaccess.h,
+	  libs/database/thumbnaildb.cpp, libs/database/thumbnaildb.h,
+	  libs/database/thumbnailschemaupdater.cpp,
+	  libs/database/upgradedb_sqlite2tosqlite3.cpp,
+	  libs/database/upgradedb_sqlite2tosqlite3.h,
+	  libs/dialogs/migrationdlg.cpp, libs/dialogs/migrationdlg.h,
+	  libs/threadimageio/thumbnailcreator.cpp,
+	  libs/threadimageio/thumbnailloadthread.cpp,
+	  libs/threadimageio/thumbnailloadthread.h,
+	  libs/widgets/common/databasewidget.cpp,
+	  libs/widgets/common/databasewidget.h, tests/CMakeLists.txt,
+	  tests/albummodeltest.cpp,
+	  utilities/setup/databaseconnectionwidget.h,
+	  utilities/setup/setup.cpp, utilities/setup/setup.h,
+	  utilities/setup/setupcollections.cpp,
+	  utilities/setup/setupcollections.h,
+	  utilities/setup/setupdatabase.cpp,
+	  utilities/setup/setupdatabase.h: Merged branch
+	  Digikam-DatabaseExt into trunk.
+	  
+	  Happy easter holidays :)
+
+2010-03-30 18:15  jwienke
+
+	* NEWS, digikam/ratingwidget.cpp: Fix crash in rating widget.
+	  
+	  Thanks for the hint.
+	  
+	  BUG: 232628
+
+2010-03-30 12:05  cgilles
+
+	* libs/dimg/drawdecoding.cpp: polish
+
+2010-03-30 12:01  cgilles
+
+	* libs/dimg/drawdecoding.cpp, libs/dimg/drawdecoding.h: polish
+
+2010-03-30 11:58  cgilles
+
+	* utilities/imageeditor/editor/editorwindow.cpp,
+	  utilities/imageeditor/editor/editorwindow_p.h,
+	  utilities/queuemanager/queuemgrwindow.cpp,
+	  utilities/setup/setupdcraw.cpp, utilities/setup/setupdcraw.h:
+	  remove warnings
+
+2010-03-30 10:51  cgilles
+
+	* libs/dimg/drawdecoding.cpp, libs/dimg/drawdecoding.h,
+	  libs/dimg/loaders/rawloader.cpp,
+	  utilities/imageeditor/rawimport/rawpostprocessing.cpp: remove
+	  levels adjust from post processed settings (never used)
+
+2010-03-30 09:21  cgilles
+
+	* NEWS: update
+
+2010-03-30 09:20  cgilles
+
+	* CMakeLists.txt: compile
+
+2010-03-30 09:20  cgilles
+
+	* libs/dimg/drawdecoding.cpp, libs/dimg/drawdecoding.h: add cpp
+	  file here
+
+2010-03-30 08:01  cgilles
+
+	* libs/dimg/drawdecoding.h,
+	  utilities/imageeditor/rawimport/rawsettingsbox.cpp: new copy
+	  constructor based on RawDecodingSettings object
+
+2010-03-30 07:38  cgilles
+
+	* utilities/imageeditor/editor/editorwindow.cpp,
+	  utilities/imageeditor/rawimport/rawsettingsbox.cpp,
+	  utilities/queuemanager/queuemgrwindow.cpp: compile with last
+	  revert in libkdcraw
+
+2010-03-30 07:36  cgilles
+
+	* libs/dimg/drawdecoding.h: polish
+
+2010-03-30 07:01  cgilles
+
+	* NEWS: update
+
+2010-03-29 21:55  cgilles
+
+	* CMakeLists.txt, README, libs/dimg/filters/fx/filmgrainfilter.cpp:
+	  libkdcraw depencency is 1.1.0, not 1.2.0
+
+2010-03-29 21:50  cgilles
+
+	* CMakeLists.txt: polish
+
+2010-03-29 15:00  cgilles
+
+	* CMakeLists.txt, README,
+	  utilities/imageeditor/editor/editorwindow.cpp,
+	  utilities/imageeditor/rawimport/rawsettingsbox.cpp,
+	  utilities/queuemanager/queuemgrwindow.cpp: set libkdcraw
+	  dependency to >= 1.2.0
+
+2010-03-29 11:40  cgilles
+
+	* CMakeLists.txt: 1.3.0 is open
+
+2010-03-29 07:29  jnarboux
+
+	* libs/dimg/filters/hsl/hslfilter.cpp: fix logic
+
+2010-03-29 06:41  cgilles
+
+	* NEWS: update
+
+2010-03-29 06:38  cgilles
+
+	* utilities/queuemanager/basetools/color/hslcorrection.cpp: HSL
+	  correction tool is also available in Batch Queue Manager. Don't
+	  forget to patch Vibrance management settings here, else, settings
+	  widget
+	  adjustment done by user will be ignored, and default value will
+	  be used instead.
+	  CCBUGS: 195561
+
+2010-03-29 06:31  cgilles
+
+	* project/NEWS.1.2.0: archive
+
+2010-03-29 06:23  cgilles
+
+	* libs/dimg/filters/hsl/hslfilter.cpp,
+	  libs/dimg/filters/hsl/hslfilter.h,
+	  libs/dimg/filters/hsl/hslsettings.cpp: fix warnings
+	  polish
+	  give credits to Julien
+
+2010-03-29 06:07  jnarboux
+
+	* libs/dimg/filters/hsl/hslfilter.cpp,
+	  libs/dimg/filters/hsl/hslfilter.h,
+	  libs/dimg/filters/hsl/hslsettings.cpp: First version of the
+	  vibrance slider in the HSL tool.
+	  
+	  CCBUGS: 195561
+
+2010-03-28 22:38  nlecureuil
+
+	* NEWS: Commits are open for release 1.3.0
+
+2010-03-28 22:17  nlecureuil
+
+	* ChangeLog: Prepare for 1.2.0
+
 1.2.0 2010-03-28
 --------------------------------------------------------------------------------
 2010-03-28 08:14  jnarboux

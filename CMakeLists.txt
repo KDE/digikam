@@ -8,11 +8,11 @@ OPTION(ENABLE_THUMBS_DB "Build digiKam with thumbnails database support (default
 
 # digiKam version
 SET(DIGIKAM_MAJOR_VERSION "1")
-SET(DIGIKAM_MINOR_VERSION "3")
+SET(DIGIKAM_MINOR_VERSION "4")
 SET(DIGIKAM_PATCH_VERSION "0")
 
 #digiKam release date
-SET(DIGIKAM_RELEASE_DATE "2010-05-30")
+SET(DIGIKAM_RELEASE_DATE "2010-08-xx")
 
 # Suffix to add at end of version string. Usual values are:
 # "-svn"   : alpha code unstable from svn. Do not use in production
@@ -757,6 +757,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/itemviewtooltip.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/kcategorizedview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/knotificationwrapper.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/modelcompletion.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/paniconwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/previewwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/searchtextbar.cpp

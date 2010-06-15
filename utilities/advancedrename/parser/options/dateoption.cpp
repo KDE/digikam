@@ -34,6 +34,7 @@
 
 #include <kiconloader.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -231,7 +232,7 @@ DateOption::DateOption()
     addToken("[date:||key||]",    i18n("Date and time (||key|| = Standard|ISO|Text)"));
     addToken("[date:||format||]", i18n("Date and time") + " (" +  dateFormatLink + ')');
 
-    QRegExp reg("\\[date(:.*)?\\]");
+    QRegExp reg("\\[date(:(.*))?\\]");
     reg.setMinimal(true);
     setRegExp(reg);
 }
@@ -243,26 +244,54 @@ QString DateOption::parseOperation(ParseSettings& settings)
 
     const QRegExp& reg = regExp();
 
-    QString token = reg.cap(1);
-    if (!token.isEmpty())
+    QString token = reg.cap(2);
+
+    if ( !(token.isEmpty() || token.isNull()) &&
+          (token.startsWith('"') && token.endsWith('"'))
+       )
     {
-        token.remove(0, 1);
+        token = token.remove(0, 1);
+        token.chop(1);
+    }
+
+    QDateTime dateTime = settings.dateTime;
+    if (dateTime.isNull() || !dateTime.isValid())
+    {
+        // lets try to re-read the file information
+        ImageInfo info(settings.fileUrl);
+        if (!info.isNull())
+        {
+            dateTime = info.dateTime();
+        }
+
+        if (dateTime.isNull() || !dateTime.isValid())
+        {
+            // still no date info, use Qt file information
+            QFileInfo fileInfo(settings.fileUrl.toLocalFile());
+            dateTime = fileInfo.created();
+        }
+    }
+
+    // do we have a valid date?
+    if (dateTime.isNull())
+    {
+        return QString();
     }
 
     QVariant v = df.formatType(token);
     if (v.isNull())
     {
-        result = settings.dateTime.toString(token);
+        result = dateTime.toString(token);
     }
     else
     {
         if (v.type() == QVariant::String)
         {
-            result = settings.dateTime.toString(v.toString());
+            result = dateTime.toString(v.toString());
         }
         else
         {
-            result = settings.dateTime.toString((Qt::DateFormat)v.toInt());
+            result = dateTime.toString((Qt::DateFormat)v.toInt());
         }
     }
 
@@ -312,7 +341,7 @@ void DateOption::slotTokenTriggered(const QString& token)
                     dateString.remove(':');
                     break;
                 case DateFormat::Custom:
-                    dateString = tokenStr.arg(dlg->ui->customFormatInput->text());
+                    dateString = tokenStr.arg(QString("\"%1\"").arg(dlg->ui->customFormatInput->text()));
                     break;
                 default:
                     QString identifier = df.identifier((DateFormat::Type) index);

@@ -169,6 +169,7 @@ AdvancedRenameDialog::AdvancedRenameDialog(QWidget* parent)
                     : KDialog(parent), d(new AdvancedRenameDialogPriv)
 {
     d->advancedRenameWidget = new AdvancedRenameWidget(this);
+    d->advancedRenameWidget->setAllowDirectoryCreation(true);
 
     // --------------------------------------------------------
 
@@ -213,12 +214,6 @@ AdvancedRenameDialog::AdvancedRenameDialog(QWidget* parent)
 
     connect(d->advancedRenameWidget, SIGNAL(signalReturnPressed()),
             this, SLOT(slotReturnPressed()));
-
-    connect(this, SIGNAL(signalWindowHasMoved()),
-            d->advancedRenameWidget, SLOT(slotUpdateTrackerPos()));
-
-    connect(this, SIGNAL(signalWindowLostFocus()),
-            d->advancedRenameWidget, SLOT(slotHideToolTipTracker()));
 }
 
 AdvancedRenameDialog::~AdvancedRenameDialog()

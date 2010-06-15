@@ -589,20 +589,20 @@ void PreviewWidget::viewportPaintEvent(QPaintEvent* e)
 void PreviewWidget::drawText(QPainter* p, const QPoint& corner, const QString& text)
 {
     p->save();
-    
+
     QFontMetrics fontMt = p->fontMetrics();
-    QRect fontRect = fontMt.boundingRect(text);
+    QRect fontRect      = fontMt.boundingRect(text);
     QRect textRect;
     textRect.setTopLeft(corner);
     textRect.setSize( QSize(fontRect.width()+5, fontRect.height()+2) );
-    
+
     // Draw background
     p->setPen(Qt::black);
     QColor semiTransBg = palette().color(QPalette::Window);
     semiTransBg.setAlpha(190);
     p->setBrush(semiTransBg);
     //p->translate(0.5, 0.5);
-    p->drawRoundRect(textRect, 10.0, 10.0);
+    p->drawRoundRect(textRect, 10, 10);
 
     // Draw shadow and text
     p->setPen(palette().color(QPalette::Window).dark(115));

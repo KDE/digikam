@@ -38,6 +38,7 @@
 #include <kactioncollection.h>
 #include <kapplication.h>
 #include <kmenu.h>
+#include <kmessagebox.h>
 #include <kmimetype.h>
 #include <krun.h>
 #include <kservice.h>
@@ -45,12 +46,16 @@
 #include <kstandardaction.h>
 #include <kurl.h>
 #include <kwindowsystem.h>
+#include <kdebug.h>
 
 // Local includes
 
+#include "albummanager.h"
+#include "albumdb.h"
 #include "advancedrenamedialog.h"
 #include "albumsettings.h"
 #include "contextmenuhelper.h"
+#include "databaseaccess.h"
 #include "ddragobjects.h"
 #include "digikamapp.h"
 #include "digikamimagedelegate.h"
@@ -399,7 +404,56 @@ void DigikamImageView::rename()
 
     if (dlg->exec() == KDialog::Accepted)
     {
-        d->renameThread->addNewNames(dlg->newNames());
+        NewNamesList newNamesList = dlg->newNames();
+
+        // we need to check if the destination folder(s) exist, if not, we ask the user if the folder should be created
+        DatabaseAccess access;
+
+        foreach (NewNameInfo newNameInfo, newNamesList)
+        {
+            ImageInfo info(newNameInfo.first);
+            KUrl _url = info.databaseUrl();
+
+            Digikam::DatabaseUrl dbUrlSrc(_url);
+            _url.setFileName(newNameInfo.second);
+            Digikam::DatabaseUrl dbUrlDst(_url);
+
+            int dstAlbumID = -1;
+            dstAlbumID     = access.db()->getAlbumForPath(dbUrlDst.albumRootId(), dbUrlDst.album(), false);
+
+            if (dstAlbumID == -1)
+            {
+                // if the new file name contains slashes, split the string and create each album separately
+                QFileInfo tmp(newNameInfo.second);
+                QStringList albums2BeCreated = tmp.path().split(QRegExp("\\/+"), QString::SkipEmptyParts);
+
+                PAlbum *parentPAlbum = AlbumManager::instance()->findPAlbum(info.albumId());
+                foreach (const QString &newAlbum, albums2BeCreated)
+                {
+                    PAlbum *newPAlbum = 0;
+                    QString errorMsg;
+
+                    newPAlbum = AlbumManager::instance()->createPAlbum(parentPAlbum,
+                                                                       newAlbum,
+                                                                       QString(),
+                                                                       QDate::currentDate(),
+                                                                       QString(),
+                                                                       errorMsg
+                    );
+
+                    if (newPAlbum == 0)
+                    {
+                        KMessageBox::error(this, errorMsg, i18n("Error"));
+                        return;
+                    }
+
+                    // all operations went fine, set the new album as parent
+                    parentPAlbum = newPAlbum;
+                }
+            }
+        }
+
+        d->renameThread->addNewNames(newNamesList);
         if (!d->renameThread->isRunning())
         {
             d->renameThread->start();
