@@ -1,20 +1,19 @@
 @echo off
 
-set KDEDIRS=E:\kde4-msvc
-set PATH=%PATH%;%KDEDIRS%\bin;%KDEDIRS%\plugins
-set KDE4_INSTALL_DIR=%KDEDIRS%
-set KDE4_INCLUDE_DIR=%KDEDIRS%\include
-set KDEDIRS=%KDEDIRS%
-set KDEROOT=%KDEDIRS%
-set QTMAKESPEC=%KDEDIRS%\mkspecs\win32-g++
-set QT_PLUGIN_PATH=%KDEDIRS%\plugins
-set QTDIR=%KDEDIRS%
-set QT_INSTALL_DIR=%KDEDIRS%
+set KDE4_INSTALL_DIR=E:\kde4-msvc
+set PATH=%PATH%;%KDE4_INSTALL_DIR%\bin;%KDE4_INSTALL_DIR%\plugins
+set KDE4_INCLUDE_DIR=%KDE4_INSTALL_DIR%\include
+set KDEDIRS=%KDE4_INSTALL_DIR%
+set KDEROOT=%KDE4_INSTALL_DIR%
+set QTMAKESPEC=%KDE4_INSTALL_DIR%\mkspecs\win32-g++
+set QT_PLUGIN_PATH=%KDE4_INSTALL_DIR%\plugins
+set QTDIR=%KDE4_INSTALL_DIR%
+set QT_INSTALL_DIR=%KDE4_INSTALL_DIR%
 set SVN_EDITOR="E:\mc\mc -e"
 
 call "C:\Program Files\Microsoft Visual Studio 9.0\VC\vcvarsall.bat"
-@set PATH=C:\Program Files\Microsoft Visual Studio 9.0\VC\bin;%PATH% 
-@set INCLUDE=C:\Program Files\Microsoft Visual Studio 9.0\VC\include;%INCLUDE% 
+@set PATH=C:\Program Files\Microsoft Visual Studio 9.0\VC\bin;%PATH%
+@set INCLUDE=C:\Program Files\Microsoft Visual Studio 9.0\VC\include;%INCLUDE%
 @set LIB=C:\Program Files\Microsoft Visual Studio 9.0\VC\lib;%LIB%
 
 call "E:\mc\mc.exe"
