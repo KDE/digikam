@@ -10,6 +10,6 @@ set QTMAKESPEC=%KDEDIRS%\mkspecs\win32-g++
 set QT_PLUGIN_PATH=%KDEDIRS%\plugins
 set QTDIR=%KDEDIRS%
 set QT_INSTALL_DIR=%KDEDIRS%
-set SVN_EDITOR="C:\mc\mc -e"
+set SVN_EDITOR="E:\mc\mc -e"
 
-call "C:\mc\mc.exe"
+call "E:\mc\mc.exe"
