@@ -2,6 +2,7 @@ QtScript interface for Digikam is a work taken up as a Part of
 Season of KDE.
 
 *********************README***************************************
+
 QtScript is a module added to the Qt API from version 4.3 onwards.
 It is available to all applications which use Qt internally(KDE applications).
 
@@ -10,11 +11,29 @@ Console.The user can dynamically send "signals" to digikam and trigger events.
 
 
 *********************TO DO****************************************
-1.  Make necessary changes to CMakeLists.txt file of digikam to add QtScript.
-2.  Use the Script Widget already available in kdelibs
-    /trunk/KDE/kdelibs/kjsembed/examples/kjsconsole
-    and embed it into the digikam main menu.
-3.  Ex
+
+1.Make necessary changes to CMakeLists.txt file of digikam to enable QtScript.
+2.Use the ScriptUI Widget already available in kdelibs
+  /trunk/KDE/kdelibs/kjsembed/examples/kjsconsole
+  and embed it into the digikam main menu.
+3.Expose a very small portion of digikam to QtScript (for testing purposes).
+4.Modify the Scripting Console to show available slots the moment the user
+  enters <object>. 
+  In other words provide dot completion.(Very helpful while prototyping).
+
+5.Extend and expose more of digikam.
+6.Test the part exposed (Devise a method to check if the part exposedbehaves)
+7.Document Changes
+8.Repeat 5,6,7 till satisfied
+
+9.Create a demo screen cast showing Digikam "scripted".
 
 *********************Design DoC************************************
- 
+1.The Script console UI would expose whole of QtAPI and portions of digikam. 
+2.The Scripting interface would have to work in two mode.
+   Interactive mode
+   Load Scripts from an external file (inside a fixed directory).
+3.To add more metadata to scripts there are two possible options:
+   a)Have a separate spec file like a .desktop file
+   b)Embedd all the necessary metadata like name of script author, script
+     name,version etc in the script itself.
