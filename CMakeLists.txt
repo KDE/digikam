@@ -222,14 +222,16 @@ MACRO_BOOL_TO_01(LQR-1_FOUND USE_EXT_LIBLQR-1)
 
 MACRO_BOOL_TO_01(ENABLE_THUMBS_DB USE_THUMBS_DB)
 
-IF (${KDE_VERSION} VERSION_GREATER "4.3.99")
+# Win32 compilation with Nepomuk is broken. It's temporally disabled.
+IF (NOT WIN32)
+    IF (${KDE_VERSION} VERSION_GREATER "4.3.99")
     MACRO_OPTIONAL_FIND_PACKAGE(Nepomuk)
     macro_log_feature(NEPOMUK_FOUND "Nepomuk" "The Nepomuk libraries"
-                      "http://www.kde.org" FALSE "" "Nepomuk extends the search and tagging")
+              "http://www.kde.org" FALSE "" "Nepomuk extends the search and tagging")
 
     MACRO_OPTIONAL_FIND_PACKAGE(SharedDesktopOntologies 0.2)
     macro_log_feature(SHAREDDESKTOPONTOLOGIES_FOUND "Shared desktop ontologies" "Desktop ontologies"
-                      "http://oscaf.sourceforge.net" TRUE "0.2" "Ontologies necessary for the Nepomuk semantic desktop.")
+              "http://oscaf.sourceforge.net" TRUE "0.2" "Ontologies necessary for the Nepomuk semantic desktop.")
 
     IF (NEPOMUK_FOUND AND SHAREDDESKTOPONTOLOGIES_FOUND)
         SET(NEPOMUK_FOUND TRUE)
@@ -238,7 +240,8 @@ IF (${KDE_VERSION} VERSION_GREATER "4.3.99")
     ENDIF (NEPOMUK_FOUND AND SHAREDDESKTOPONTOLOGIES_FOUND)
 
     MACRO_BOOL_TO_01(NEPOMUK_FOUND HAVE_NEPOMUK)
-ENDIF (${KDE_VERSION} VERSION_GREATER "4.3.99")
+    ENDIF (${KDE_VERSION} VERSION_GREATER "4.3.99")
+ENDIF (NOT WIN32)
 
 MACRO_OPTIONAL_FIND_PACKAGE(Doxygen)
 
@@ -257,7 +260,7 @@ MESSAGE(STATUS "")
 PRINT_QTMODULE_STATUS("Qt4 SQL" QT_QTSQL_FOUND)
 PRINT_EXECUTABLE_STATUS("MySQL Server" mysqld MYSQLD_PATH SERVERCMD_MYSQL)
 IF (NOT WIN32)
-PRINT_EXECUTABLE_STATUS("MySQL install_db tool" mysql_install_db MYSQL_TOOLS_PATH INITCMD_MYSQL)
+    PRINT_EXECUTABLE_STATUS("MySQL install_db tool" mysql_install_db MYSQL_TOOLS_PATH INITCMD_MYSQL)
 ENDIF (NOT WIN32)
 PRINT_LIBRARY_STATUS("libtiff" "http://www.remotesensing.org/libtiff" "" TIFF_FOUND)
 PRINT_LIBRARY_STATUS("libpng" "http://www.libpng.org/pub/png/libpng.html" " (version >= 1.2.7)" PNG_FOUND)
