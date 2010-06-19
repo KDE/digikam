@@ -94,10 +94,6 @@ DatabaseCoreBackendPrivate::DatabaseCoreBackendPrivate(DatabaseCoreBackend* back
     errorHandler    = 0;
 }
 
-DatabaseCoreBackendPrivate::~DatabaseCoreBackend()
-{
-}
-
 void DatabaseCoreBackendPrivate::init(const QString& name, DatabaseLocking* l)
 {
     QObject::connect(QCoreApplication::instance(), SIGNAL(aboutToQuit()),
