@@ -580,7 +580,7 @@ void DatabaseCoreBackend::setDatabaseErrorHandler(DatabaseErrorHandler* handler)
     }
     if (d->errorHandler!=0)
     {
-        d->errorHandler->~QObject();
+        d->errorHandler->~DatabaseErrorHandler();
     }
     d->errorHandler = handler;
 }
