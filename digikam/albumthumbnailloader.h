@@ -139,6 +139,7 @@ public:
     QPixmap getStandardTagIcon(RelativeSize size = NormalSize);
     QPixmap getStandardTagRootIcon(RelativeSize size = NormalSize);
     QPixmap getStandardTagIcon(TAlbum *album, RelativeSize size = NormalSize);
+    QPixmap getNewTagIcon(RelativeSize size = NormalSize);
 
     QPixmap getStandardAlbumIcon(RelativeSize size = NormalSize);
     QPixmap getStandardAlbumRootIcon(RelativeSize size = NormalSize);
