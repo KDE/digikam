@@ -573,15 +573,10 @@ QSqlQuery DatabaseCoreBackend::execDBActionQuery(const DatabaseAction& action, c
 void DatabaseCoreBackend::setDatabaseErrorHandler(DatabaseErrorHandler* handler)
 {
     Q_D(DatabaseCoreBackend);
-    if (handler!=0 && handler->thread() != QCoreApplication::instance()->thread())
-    {
-        kError() << "DatabaseErrorHandler must live in the main thread";
-        Q_ASSERT(false);
-    }
-    if (d->errorHandler!=0)
-    {
-        d->errorHandler->~DatabaseErrorHandler();
-    }
+
+    if (d->errorHandler)
+        delete d->errorHandler;
+
     d->errorHandler = handler;
 }
 
