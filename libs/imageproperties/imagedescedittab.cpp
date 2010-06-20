@@ -50,6 +50,7 @@
 
 #include "captionedit.h"
 #include "kdatetimeedit.h"
+#include "addtagslineedit.h"
 #include "albumsettings.h"
 #include "albumlister.h"
 #include "albumthumbnailloader.h"
@@ -127,7 +128,7 @@ public:
     KTabWidget                    *tabWidget;
 
     SearchTextBar                 *tagsSearchBar;
-    SearchTextBar                 *newTagEdit;
+    AddTagsLineEdit               *newTagEdit;
 
     ImageInfoList                  currInfos;
 
@@ -183,17 +184,21 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
 
     // Tags view ---------------------------------------------------
 
-    d->newTagEdit = new SearchTextBar(captionTagsArea, "ImageDescEditTabNewTagEdit", i18n("Enter new tag here..."));
-    d->newTagEdit->setCaseSensitive(false);
-    d->newTagEdit->setWhatsThis(i18n("Enter the text used to create new tags here. "
-                                     "'/' can be used to create a hierarchy of tags. "
-                                     "',' can be used to create more than one hierarchy at the same time."));
-
     d->tagModel = new TagModel(AbstractAlbumModel::IncludeRootAlbum, this);
     d->tagModel->setCheckable(true);
     d->tagModel->setRootCheckable(false);
     d->tagCheckView = new TagCheckView(captionTagsArea, d->tagModel);
     d->tagCheckView->setCheckNewTags(true);
+
+    d->newTagEdit = new AddTagsLineEdit(captionTagsArea);
+    d->newTagEdit->setTagModel(d->tagModel);
+    d->newTagEdit->setTagTreeView(d->tagCheckView);
+    //, "ImageDescEditTabNewTagEdit",
+    //d->newTagEdit->setCaseSensitive(false);
+    d->newTagEdit->setClickMessage(i18n("Enter new tag here..."));
+    //d->newTagEdit->setWhatsThis(i18n("Enter the text used to create new tags here. "
+    //                                 "'/' can be used to create a hierarchy of tags. "
+    //                                 "',' can be used to create more than one hierarchy at the same time."));
 
     KHBox *tagsSearch  = new KHBox(captionTagsArea);
     tagsSearch->setSpacing(KDialog::spacingHint());
@@ -298,8 +303,8 @@ ImageDescEditTab::ImageDescEditTab(QWidget *parent)
     connect(d->assignedTagsBtn, SIGNAL(toggled(bool)),
             this, SLOT(slotAssignedTagsToggled(bool)));
 
-    connect(d->newTagEdit, SIGNAL(returnPressed(const QString&)),
-            this, SLOT(slotCreateNewTag()));
+    connect(d->newTagEdit, SIGNAL(taggingActionActivated(const TaggingAction&)),
+            this, SLOT(slotTaggingActionActivated(const TaggingAction&)));
 
     connect(d->applyBtn, SIGNAL(clicked()),
             this, SLOT(slotApplyAllChanges()));
@@ -718,6 +723,29 @@ void ImageDescEditTab::slotCreateNewTag()
     {
         //d->tagCheckView->slotSelectAlbum(created);
         d->newTagEdit->clear();
+    }
+}
+
+void ImageDescEditTab::slotTaggingActionActivated(const TaggingAction& action)
+{
+    TAlbum *assigned = 0;
+    if (action.shallAssignTag())
+    {
+        assigned = AlbumManager::instance()->findTAlbum(action.tagId());
+        if (assigned)
+            d->tagModel->setChecked(assigned, true);
+    }
+    else if (action.shallCreateNewTag())
+    {
+        TAlbum *parent = AlbumManager::instance()->findTAlbum(action.parentTagId());
+        // tag is assigned automatically
+        assigned = d->tagCheckView->tagModificationHelper()->slotTagNew(parent, action.newTagName());
+    }
+
+    if (assigned)
+    {
+        d->newTagEdit->clear();
+        d->tagCheckView->scrollTo(d->tagCheckView->albumFilterModel()->indexForAlbum(assigned));
     }
 }
 

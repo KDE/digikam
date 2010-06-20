@@ -1233,6 +1233,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
        )
 
     SET(libdigikamgui_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/addtagslineedit.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumdragdrop.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/albumhistory.cpp
