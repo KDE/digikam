@@ -180,7 +180,7 @@ protected Q_SLOTS:
 
 private:
 
-    AddTagsCompletionBoxPriv *const d;;
+    AddTagsCompletionBoxPriv *const d;
 };
 
 
@@ -234,3 +234,4 @@ private:
 Q_DECLARE_METATYPE(Digikam::TaggingAction)
 
 #endif
+
