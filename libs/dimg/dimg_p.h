@@ -35,7 +35,7 @@
 // Local includes
 
 #include "digikam_export.h"
-#include "dmetadatadata.h"
+#include "dmetadata.h"
 #include "dshareddata.h"
 #include "iccprofile.h"
 
