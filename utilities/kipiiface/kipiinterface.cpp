@@ -31,6 +31,10 @@
 #include <klocale.h>
 #include <kdebug.h>
 
+// Qt includes
+
+#include <QAbstractItemModel>
+
 // Local includes
 
 #include "album.h"
@@ -51,11 +55,26 @@
 namespace Digikam
 {
 
+class KipiInterfacePrivate
+{
+public:
+
+    KipiInterfacePrivate()
+    : tagModel(0)
+    {
+    }
+
+    QAbstractItemModel* tagModel;
+
+};
+
 KipiInterface::KipiInterface(QObject *parent, const char *name)
-             : KIPI::Interface(parent, name)
+             : KIPI::Interface(parent, name), d(new KipiInterfacePrivate())
 {
     m_thumbLoadThread = ThumbnailLoadThread::defaultThread();
     m_albumManager    = AlbumManager::instance();
+
+    d->tagModel = 0;
 
     connect(DigikamApp::instance()->view(), SIGNAL(signalSelectionChanged(int)),
             this, SLOT(slotSelectionChanged(int)));
@@ -267,6 +286,17 @@ KIPI::ImageCollectionSelector* KipiInterface::imageCollectionSelector(QWidget *p
 KIPI::UploadWidget* KipiInterface::uploadWidget(QWidget *parent)
 {
     return (new KipiUploadWidget(this, parent));
+}
+
+QAbstractItemModel* KipiInterface::getTagTree()
+{
+
+    if(!d->tagModel)
+    {
+        QAbstractItemModel* newTagModel = new TagModel(AbstractAlbumModel::IncludeRootAlbum, NULL);
+        d->tagModel = newTagModel;
+    }
+    return d->tagModel;
 }
 
 #if KIPI_VERSION >= 0x000300

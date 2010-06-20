@@ -66,6 +66,8 @@ class Album;
 class PAlbum;
 class TAlbum;
 
+class KipiInterfacePrivate;
+
 class KipiInterface : public KIPI::Interface
 {
     Q_OBJECT
@@ -91,6 +93,7 @@ public:
 
     KIPI::ImageCollectionSelector* imageCollectionSelector(QWidget *parent);
     KIPI::UploadWidget* uploadWidget(QWidget *parent);
+    QAbstractItemModel* getTagTree();
 
 #if KIPI_VERSION >= 0x000300
     QVariant hostSetting(const QString& settingName);
@@ -111,6 +114,8 @@ private:
 
     AlbumManager        *m_albumManager;
     ThumbnailLoadThread *m_thumbLoadThread;
+
+    KipiInterfacePrivate* const d;
 };
 
 }  // namespace Digikam
