@@ -82,6 +82,13 @@ public:
     QList<int> tagsForName(const QString& tagName);
 
     /**
+     * Returns the id of the tag with the given name and parent tag.
+     * If parentId is 0, the tag is a toplevel tag.
+     * Returns 0 if there is no such tag.
+     */
+    int tagForName(const QString& tagName, int parentId = 0);
+
+    /**
      * Returns the tag matched exactly by the given path.
      * The path can be given with or without leading slash.
      * Returns 0 if there is no such tag, or if tagPath is empty.
