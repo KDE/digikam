@@ -188,6 +188,7 @@ TARGET_LINK_LIBRARIES(digikamcore
                       ${KDCRAW_LIBRARIES}
                       ${KEXIV2_LIBRARIES}
                       ${KIPI_LIBRARIES}
+                      ${KFACE_LIBRARIES}
               )
 
 IF(MARBLEWIDGET_FOUND)
@@ -243,6 +244,7 @@ TARGET_LINK_LIBRARIES(digikamdatabase
                       ${KDE4_SOLID_LIBS}
                       ${KEXIV2_LIBRARIES}
                       ${KDCRAW_LIBRARIES}
+                      ${KFACE_LIBRARIES}
                       ${QT_QTCORE_LIBRARY}
                       ${QT_QTGUI_LIBRARY}
                       ${QT_QTSQL_LIBRARY}
@@ -329,6 +331,7 @@ TARGET_LINK_LIBRARIES(digikam
                       ${KIPI_LIBRARIES}
                       ${KEXIV2_LIBRARIES}
                       ${KDCRAW_LIBRARIES}
+                      ${KFACE_LIBRARIES}
                       ${QT_QTSQL_LIBRARY}
                       ${QT_QT3SUPPORT_LIBRARY}
                       ${STRIGI_LIBRARIES}
