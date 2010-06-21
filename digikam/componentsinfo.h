@@ -40,7 +40,7 @@
 
 // LibKface includes
 
-#include <libkface/version.h>
+#include <libkface/kface.h>
 
 // Local includes
 
