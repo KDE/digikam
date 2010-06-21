@@ -137,6 +137,7 @@ FIND_PACKAGE(Jasper)
 FIND_PACKAGE(Kdcraw)
 FIND_PACKAGE(Kexiv2)
 FIND_PACKAGE(Kipi)
+FIND_PACKAGE(Kface)
 
 # Extract version of libjpeg so that we can use the appropriate dir
 # See bug #227313, #228483
@@ -266,6 +267,7 @@ PRINT_LIBRARY_STATUS("liblcms" "http://www.littlecms.com" "" LCMS_FOUND)
 PRINT_LIBRARY_STATUS("libkipi" "http://www.digikam.org/sharedlibs" " (version >= 0.2.0)" KIPI_FOUND)
 PRINT_LIBRARY_STATUS("libkexiv2" "http://www.digikam.org/sharedlibs" " (version >= 1.1.0)" KEXIV2_FOR_DIGIKAM)
 PRINT_LIBRARY_STATUS("libkdcraw" "http://www.digikam.org/sharedlibs" " (version >= 1.1.0)" KDCRAW_FOR_DIGIKAM)
+PRINT_LIBRARY_STATUS("libkface" "http://www.digikam.org/sharedlibs" " (version >= 0.1.0)" KFACE_FOUND)
 
 # ================================================================
 
@@ -432,6 +434,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
                     ${KDE4_DEFINITIONS}
                     ${KDCRAW_DEFINITIONS}
                     ${KEXIV2_DEFINITIONS}
+                    ${KFACE_DEFINITIONS}
                    )
 
     # QT3 support rules
@@ -445,6 +448,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     INCLUDE_DIRECTORIES(${KIPI_INCLUDE_DIR}
                         ${KEXIV2_INCLUDE_DIR}
                         ${KDCRAW_INCLUDE_DIR}
+                        ${KFACE_INCLUDE_DIR}
                         ${KDE4_INCLUDES}
                         ${QT_INCLUDES}
                         ${GPHOTO2_INCLUDE_DIRS}
