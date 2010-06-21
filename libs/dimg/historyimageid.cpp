@@ -29,42 +29,49 @@ namespace Digikam
 
 HistoryImageId::HistoryImageId()
 {
-
 }
 
-HistoryImageId::HistoryImageId(const QString& originalUUID, const QString& fileUUID, const QString& fileName, const QDateTime& creationDate)
+HistoryImageId::HistoryImageId(const QString& originalUUID, const QString& fileUUID, 
+                               const QString& fileName, const QDateTime& creationDate)
 {
-  m_originalUUID = originalUUID;
-  m_fileUUID = fileUUID;
-  m_fileName = fileName;
-  m_creationDate = creationDate;
+    m_originalUUID = originalUUID;
+    m_fileUUID = fileUUID;
+    m_fileName = fileName;
+    m_creationDate = creationDate;
 }
 
 bool HistoryImageId::matches(const Digikam::HistoryImageId& other) const
 {
-  if(m_originalUUID == other.m_originalUUID && m_fileUUID == other.m_fileUUID)
-  {
-      return true;
-  }
-  else return false;
+    if(m_originalUUID == other.m_originalUUID && m_fileUUID == other.m_fileUUID)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 bool HistoryImageId::isEmpty() const
 {
-  if(m_originalUUID.isEmpty() && m_fileUUID.isEmpty())
-  {
-      return true;
-  }
-  else return false;
+    if(m_originalUUID.isEmpty() && m_fileUUID.isEmpty())
+    {
+        return true;
+    }
+    else return false;
 }
 
 bool HistoryImageId::isOriginalFile() const
 {
-  if( ( !m_originalUUID.isEmpty() && m_fileUUID.isEmpty() ) || (!m_originalUUID.isEmpty() && (m_originalUUID == m_fileUUID) ) )
-  {
-      return true;
-  }
-  else return false;  
+    if( ( !m_originalUUID.isEmpty() && m_fileUUID.isEmpty() ) || 
+        (!m_originalUUID.isEmpty() && (m_originalUUID == m_fileUUID) ) )
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
-}
+} // namespace Digikam

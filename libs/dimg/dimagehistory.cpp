@@ -24,23 +24,22 @@
 
 #include "dimagehistory.h"
 
-
 // Qt includes
+
 #include <QFile>
 #include <QSharedData>
 #include <QBuffer>
 #include <QHashIterator>
 #include <QFileInfo>
+
 // KDE includes
 
 #include <kglobal.h>
 #include <KDebug>
 
-// Local includes
-
 namespace Digikam
 {
-  
+
 class ImageHistoryPriv : public QSharedData
 {
 public:
@@ -50,14 +49,14 @@ public:
         imageid = -1;
     }
 
-    qlonglong imageid;
+    qlonglong                   imageid;
     QList<DImageHistory::Entry> entries;
 };
 
 K_GLOBAL_STATIC(ImageHistoryPriv, imageHistoryPrivSharedNull)
 
 DImageHistory::DImageHistory()
-            : d(imageHistoryPrivSharedNull)
+             : d(imageHistoryPrivSharedNull)
 {
 }
 
@@ -91,7 +90,7 @@ int DImageHistory::size() const
     return d->entries.size();
 }
 
-DImageHistory &DImageHistory::operator<<(const FilterAction& action)
+DImageHistory& DImageHistory::operator<<(const FilterAction& action)
 {
     Entry entry;
     entry.action = action;
@@ -100,7 +99,7 @@ DImageHistory &DImageHistory::operator<<(const FilterAction& action)
     return *this;
 }
 
-DImageHistory &DImageHistory::operator<<(const HistoryImageId& imageId)
+DImageHistory& DImageHistory::operator<<(const HistoryImageId& imageId)
 {
     Entry entry;
     entry.referredImages = imageId;
@@ -112,7 +111,6 @@ DImageHistory& DImageHistory::operator<<(const Digikam::DImageHistory::Entry& en
     d->entries << entry;
     return *this;
 }
-
 
 QList<DImageHistory::Entry> &DImageHistory::entries()
 {
@@ -134,78 +132,82 @@ const HistoryImageId &DImageHistory::referredImages(int i) const
     return d->entries[i].referredImages;
 }
 
-
 QString DImageHistory::toXml() const
 {
-  QByteArray xmlHistory;
-  QBuffer buffer(&xmlHistory);
-  buffer.open(QBuffer::ReadWrite);
-  
-  QXmlStreamWriter stream(&buffer);
-  stream.setAutoFormatting(true);
-  stream.writeStartDocument();
-  
-  stream.writeStartElement("history");
-  
-  for(int i = 0; i < entries().count(); i++)
-  {
-      if(!entries().at(i).referredImages.isEmpty()) {
-          //this entry is a imageHistoryId
-          stream.writeStartElement("file");
-          stream.writeStartElement("fileParams");
-          
-          if(entries().at(i).referredImages.isOriginalFile()) {
-              stream.writeAttribute("type", "original");
-              stream.writeAttribute("fileUUID", entries().at(i).referredImages.m_originalUUID);
-          } else {
-              stream.writeAttribute("type", "intermediate");
-              stream.writeAttribute("fileUUID", entries().at(i).referredImages.m_fileUUID);          
-          }
-          
-          stream.writeAttribute("fileName", entries().at(i).referredImages.m_fileName);
-          stream.writeAttribute("filePath", entries().at(i).referredImages.m_fileName);
-              
-          stream.writeEndElement(); //fileParams
-          stream.writeEndElement(); //file     
-          
-      }
-      if(!entries().at(i).action.isNull()) {
-          //this entry is a filter
-          stream.writeStartElement("filter");
-          stream.writeAttribute("filterName", entries().at(i).action.identifier());
-          stream.writeAttribute("filterVersion", QString::number(entries().at(i).action.version()));
-          stream.writeAttribute("filterCategory", QString::number(entries().at(i).action.category()));
-        
-          stream.writeStartElement("params");
+    QByteArray xmlHistory;
+    QBuffer buffer(&xmlHistory);
+    buffer.open(QBuffer::ReadWrite);
 
-          if(!entries().at(i).action.parameters().isEmpty()) {
-              QHashIterator<QString, QVariant> iter(entries().at(i).action.parameters());
-              while (iter.hasNext()) 
-              {
-                iter.next();    
-                
-                stream.writeStartElement("param");
-                stream.writeAttribute("name", iter.key());
-                stream.writeAttribute("value", iter.value().toString());
-                stream.writeEndElement(); //param
-              }
-          }
-          
-          stream.writeEndElement(); //params
-          stream.writeEndElement(); //filter    
-      }
-  }
-  
-  stream.writeEndElement(); //history
-  
-  stream.writeEndDocument();
-  
-  buffer.close();
-  
-  kDebug() << xmlHistory;
-  
-  return QString(xmlHistory);
-  
+    QXmlStreamWriter stream(&buffer);
+    stream.setAutoFormatting(true);
+    stream.writeStartDocument();
+
+    stream.writeStartElement("history");
+
+    for(int i = 0; i < entries().count(); i++)
+    {
+        if(!entries().at(i).referredImages.isEmpty())
+        {
+            //this entry is a imageHistoryId
+            stream.writeStartElement("file");
+            stream.writeStartElement("fileParams");
+
+            if(entries().at(i).referredImages.isOriginalFile())
+            {
+                stream.writeAttribute("type", "original");
+                stream.writeAttribute("fileUUID", entries().at(i).referredImages.m_originalUUID);
+            }
+            else
+            {
+                stream.writeAttribute("type", "intermediate");
+                stream.writeAttribute("fileUUID", entries().at(i).referredImages.m_fileUUID);
+            }
+
+            stream.writeAttribute("fileName", entries().at(i).referredImages.m_fileName);
+            stream.writeAttribute("filePath", entries().at(i).referredImages.m_fileName);
+
+            stream.writeEndElement(); //fileParams
+            stream.writeEndElement(); //file     
+
+        }
+        if(!entries().at(i).action.isNull())
+        {
+            //this entry is a filter
+            stream.writeStartElement("filter");
+            stream.writeAttribute("filterName", entries().at(i).action.identifier());
+            stream.writeAttribute("filterVersion", QString::number(entries().at(i).action.version()));
+            stream.writeAttribute("filterCategory", QString::number(entries().at(i).action.category()));
+
+            stream.writeStartElement("params");
+
+            if(!entries().at(i).action.parameters().isEmpty())
+            {
+                QHashIterator<QString, QVariant> iter(entries().at(i).action.parameters());
+                while (iter.hasNext()) 
+                {
+                  iter.next();
+
+                  stream.writeStartElement("param");
+                  stream.writeAttribute("name", iter.key());
+                  stream.writeAttribute("value", iter.value().toString());
+                  stream.writeEndElement(); //param
+                }
+            }
+
+            stream.writeEndElement(); //params
+            stream.writeEndElement(); //filter
+        }
+    }
+
+    stream.writeEndElement(); //history
+
+    stream.writeEndDocument();
+
+    buffer.close();
+
+    kDebug() << xmlHistory;
+
+    return QString(xmlHistory);
 }
 
 DImageHistory DImageHistory::fromXml(const QString& xml) //DImageHistory
@@ -213,62 +215,90 @@ DImageHistory DImageHistory::fromXml(const QString& xml) //DImageHistory
    DImageHistory h;
    QXmlStreamReader stream(xml);
    QString originalUUID;
-   
-   while (!stream.atEnd()) {
-         Entry entry;
-         stream.readNextStartElement();
-         if(stream.name() == "file" && stream.tokenType() == QXmlStreamReader::StartElement) {
+
+   while (!stream.atEnd())
+   {
+        Entry entry;
+#if QT_VERSION >= 0x040600
+        stream.readNextStartElement();
+#else
+        // QXmlStreamReader::readNextStartElement doesn't exist in Qt-4.5
+        // this is the inlined method body, adapted from lines 656 - 665 of
+        // http://qt.gitorious.org/qt/qt/blobs/4.6/src/corelib/xml/qxmlstream.cpp
+        while ( stream.readNext() != QXmlStreamReader::Invalid )
+        {
+            if (stream.isEndElement() || stream.isStartElement()) break;
+        }
+#endif
+        if(stream.name() == "file" && stream.tokenType() == QXmlStreamReader::StartElement) 
+        {
+              stream.readNext();
+              stream.readNext();
+              if(stream.attributes().value("type") == "original")
+              {
+                  originalUUID = stream.attributes().value("fileUUID").toString();
+                  entry.referredImages = HistoryImageId(originalUUID, "", stream.attributes().value("fileName").toString(), QDateTime(QFileInfo(stream.attributes().value("filePath").toString()).created()));
+                  h << entry;
+                  continue;
+              }
+              else
+              {
+                  entry.referredImages = HistoryImageId(originalUUID, stream.attributes().value("fileUUID").toString(), stream.attributes().value("fileName").toString(), QDateTime(QFileInfo(stream.attributes().value("filePath").toString()).created()));
+                  //stream.readNextStartElement();
+              }
+        }
+        else if(stream.name() == "filter")
+        {
+              FilterAction::Category c;
+              switch(stream.attributes().value("filterCategory").toString().toInt())
+              {
+                case 0: 
+                  c = FilterAction::ReproducibleFilter;
+                  break;
+                case 1:
+                  c = FilterAction::ComplexFilter;
+                  break;
+                case 2:
+                  c = FilterAction::ReproducibleFilter;
+                  break;
+                default:
+                  c = FilterAction::ComplexFilter;
+                  break;
+              }
+              entry.action = FilterAction(stream.attributes().value("filterName").toString(), stream.attributes().value("filterVersion").toString().toInt(), c);
+#if QT_VERSION >= 0x040600
+              stream.readNextStartElement(); //params tag
+#else
+              // QXmlStreamReader::readNextStartElement doesn't exist in Qt-4.5
+              // this is the inlined method body, adapted from lines 656 - 665 of
+              // http://qt.gitorious.org/qt/qt/blobs/4.6/src/corelib/xml/qxmlstream.cpp
+              while ( stream.readNext() != QXmlStreamReader::Invalid )
+              {
+                  if (stream.isEndElement() || stream.isStartElement()) break;
+              }
+#endif
+
+              if(stream.name() != "params") continue;
+              stream.readNext(); //param .. tag
+              while(stream.name() != "params")
+              {
                 stream.readNext();
-                stream.readNext();
-                if(stream.attributes().value("type") == "original") {
-                    originalUUID = stream.attributes().value("fileUUID").toString();
-                    entry.referredImages = HistoryImageId(originalUUID, "", stream.attributes().value("fileName").toString(), QDateTime(QFileInfo(stream.attributes().value("filePath").toString()).created()));
-                    h << entry;
-                    continue;
-                }
-                else {
-                    entry.referredImages = HistoryImageId(originalUUID, stream.attributes().value("fileUUID").toString(), stream.attributes().value("fileName").toString(), QDateTime(QFileInfo(stream.attributes().value("filePath").toString()).created()));
-                    //stream.readNextStartElement();
-                }
-         }
-         else if(stream.name() == "filter") {
-                FilterAction::Category c;
-                switch(stream.attributes().value("filterCategory").toString().toInt()) {
-                  case 0: 
-                    c = FilterAction::ReproducibleFilter;
-                    break;
-                  case 1:
-                    c = FilterAction::ComplexFilter;
-                    break;
-                  case 2:
-                    c = FilterAction::ReproducibleFilter;
-                    break;
-                  default:
-                    c = FilterAction::ComplexFilter;
-                    break;
-                }
-                entry.action = FilterAction(stream.attributes().value("filterName").toString(), stream.attributes().value("filterVersion").toString().toInt(), c);
-                stream.readNextStartElement(); //params tag
-                if(stream.name() != "params") continue;
-                stream.readNext(); //param .. tag
-                while(stream.name() != "params") {
-                  stream.readNext();
-                    if(stream.name() == "param" && !stream.attributes().value("name").isEmpty()) {
-                        entry.action.addParameter(stream.attributes().value("name").toString(), stream.attributes().value("value").toString());
-                    }
-                }            
-         }
-         else continue;
-         
-         h << entry;
-   }
-   if (stream.hasError()) {
-         // do error handling
-   }
-  
-  return h;
+                  if(stream.name() == "param" && !stream.attributes().value("name").isEmpty())
+                  {
+                      entry.action.addParameter(stream.attributes().value("name").toString(), stream.attributes().value("value").toString());
+                  }
+              }
+        }
+        else continue;
+
+        h << entry;
+    }
+    if (stream.hasError())
+    {
+          // do error handling
+    }
+
+    return h;
 }
 
-
 } //namespace digikam
-

@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-
 #ifndef DIMAGEHISTORY_H
 #define DIMAGEHISTORY_H
 
@@ -37,8 +36,6 @@
 #include <QString>
 #include <QVariant>
 
-// KDE includes
-
 // Local includes
 
 #include "digikam_export.h"
@@ -47,8 +44,9 @@
 
 namespace Digikam
 {
+
 class ImageHistoryPriv;
-  
+
 class DIGIKAM_EXPORT DImageHistory
 {
 public:
@@ -87,9 +85,9 @@ public:
 
 private:
 
-    QSharedDataPointer<ImageHistoryPriv> d;  
+    QSharedDataPointer<ImageHistoryPriv> d;
 };
 
-}
+} // namespace Digikam
 
 #endif // DIMAGEHISTORY_H

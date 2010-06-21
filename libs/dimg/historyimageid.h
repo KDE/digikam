@@ -63,5 +63,7 @@ public:
      */
     QString m_fileUUID;
 };
-}
+
+} // namespace Digikam
+
 #endif // HISTORYIMAGEID_H
