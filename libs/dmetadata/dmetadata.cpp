@@ -510,8 +510,8 @@ QString DMetadata::getImageHistory() const
         kDebug() << value;
         return value;
     }
+    return false;
 }
-
 
 PhotoInfoContainer DMetadata::getPhotographInformation() const
 {
