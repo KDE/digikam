@@ -55,7 +55,7 @@ public:
     {
     public:
 
-        FilterAction action;
+        FilterAction   action;
         HistoryImageId referredImages;
     };
 
@@ -63,22 +63,22 @@ public:
     DImageHistory(const DImageHistory& other);
     ~DImageHistory();
 
-    DImageHistory &operator=(const DImageHistory& other);
+    DImageHistory& operator=(const DImageHistory& other);
 
     bool isNull() const;
     bool isEmpty() const;
 
     int size() const;
 
-    DImageHistory &operator<<(const FilterAction& action);
-    DImageHistory &operator<<(const HistoryImageId& imageId);
-    DImageHistory &operator<<(const Entry& entry);
+    DImageHistory& operator<<(const FilterAction& action);
+    DImageHistory& operator<<(const HistoryImageId& imageId);
+    DImageHistory& operator<<(const Entry& entry);
 
-    QList<DImageHistory::Entry> &entries();
-    const QList<DImageHistory::Entry> &entries() const;
+    QList<DImageHistory::Entry>& entries();
+    const QList<DImageHistory::Entry>& entries() const;
 
-    const FilterAction &action(int i) const;
-    const HistoryImageId &referredImages(int i) const;
+    const FilterAction& action(int i) const;
+    const HistoryImageId& referredImages(int i) const;
 
     QString toXml() const;
     static DImageHistory fromXml(const QString& xml);
