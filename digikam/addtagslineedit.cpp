@@ -49,7 +49,6 @@
 #include "modelcompletion.h"
 #include "tagscache.h"
 
-
 namespace Digikam
 {
 
@@ -95,12 +94,12 @@ TagModelCompletion::TagModelCompletion()
 {
 }
 
-void TagModelCompletion::setModel(TagModel *model)
+void TagModelCompletion::setModel(TagModel* model)
 {
     ModelCompletion::setModel(model, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
 }
 
-TagModel *TagModelCompletion::model() const
+TagModel* TagModelCompletion::model() const
 {
     return static_cast<TagModel*>(model());
 }
@@ -114,13 +113,15 @@ public:
     }
 
     void setAction(const TaggingAction& action) { m_action = action; }
-    TaggingAction &action() { return m_action; }
-    const TaggingAction action() const { return m_action; }
+    TaggingAction &action()                     { return m_action; }
+    const TaggingAction action() const          { return m_action; }
 
 protected:
 
     TaggingAction m_action;
 };
+
+// ---------------------------------------------------------------------------------------
 
 class AddTagsCompletionBoxPriv
 {
@@ -135,27 +136,27 @@ public:
     AddTagsCompletionBoxPriv()
     {
         upwardBox = false;
-        model = 0;
+        model     = 0;
     }
 
     bool upwardBox;
 
-    TagModel             *model;
-    AlbumPointer<TAlbum>  parentTag;
+    TagModel*             model;
+    AlbumPointer<TAlbum> parentTag;
 
-    AddTagsCompletionBoxItem *createItemForExistingTag(TAlbum *talbum, bool uniqueName);
-    AddTagsCompletionBoxItem *createItemForNewTag(const QString &newName, TAlbum *parent);
-    int maximumAvailableScreenHeight(const QPoint &globalPos);
+    AddTagsCompletionBoxItem* createItemForExistingTag(TAlbum* talbum, bool uniqueName);
+    AddTagsCompletionBoxItem* createItemForNewTag(const QString& newName, TAlbum* parent);
+    int maximumAvailableScreenHeight(const QPoint& globalPos);
 };
 
-AddTagsCompletionBox::AddTagsCompletionBox(QWidget *parent)
-            : KCompletionBox(parent), d(new AddTagsCompletionBoxPriv)
+AddTagsCompletionBox::AddTagsCompletionBox(QWidget* parent)
+                    : KCompletionBox(parent), d(new AddTagsCompletionBoxPriv)
 {
-    connect(this, SIGNAL(currentItemChanged(QListWidgetItem *, QListWidgetItem *)),
-            this, SLOT(slotCurrentItemChanged(QListWidgetItem *, QListWidgetItem *)));
+    connect(this, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)),
+            this, SLOT(slotCurrentItemChanged(QListWidgetItem*, QListWidgetItem*)));
 
-    connect(this, SIGNAL(itemActivated(QListWidgetItem *)),
-            this, SLOT(slotItemActivated(QListWidgetItem *)));
+    connect(this, SIGNAL(itemActivated(QListWidgetItem*)),
+            this, SLOT(slotItemActivated(QListWidgetItem*)));
 }
 
 AddTagsCompletionBox::~AddTagsCompletionBox()
@@ -163,12 +164,12 @@ AddTagsCompletionBox::~AddTagsCompletionBox()
     delete d;
 }
 
-void AddTagsCompletionBox::setTagModel(TagModel *model)
+void AddTagsCompletionBox::setTagModel(TagModel* model)
 {
     d->model = model;
 }
 
-AddTagsCompletionBoxItem *AddTagsCompletionBoxPriv::createItemForExistingTag(TAlbum *talbum, bool uniqueName)
+AddTagsCompletionBoxItem* AddTagsCompletionBoxPriv::createItemForExistingTag(TAlbum* talbum, bool uniqueName)
 {
     if (!talbum || talbum->isRoot())
         return 0;
@@ -197,7 +198,7 @@ AddTagsCompletionBoxItem *AddTagsCompletionBoxPriv::createItemForExistingTag(TAl
     return item;
 }
 
-AddTagsCompletionBoxItem *AddTagsCompletionBoxPriv::createItemForNewTag(const QString &newName, TAlbum *parent)
+AddTagsCompletionBoxItem* AddTagsCompletionBoxPriv::createItemForNewTag(const QString& newName, TAlbum* parent)
 {
     int parentTagId = parentTag ? parentTag->id() : 0;
 
@@ -228,12 +229,12 @@ void AddTagsCompletionBox::setItems(const QString& currentText, const QStringLis
 {
     clear();
 
-    int parentTagId = d->parentTag ? d->parentTag->id() : 0;
+    int parentTagId                                 = d->parentTag ? d->parentTag->id() : 0;
     // We use this action to find the right entry to select
-    TaggingAction defaultAction = makeDefaultTaggingAction(currentText, parentTagId);
+    TaggingAction defaultAction                     = makeDefaultTaggingAction(currentText, parentTagId);
 
-    AddTagsCompletionBoxItem *createItemUnderParent = d->createItemForNewTag(currentText, d->parentTag);
-    AddTagsCompletionBoxItem *createItemTopLevel    = d->createItemForNewTag(currentText, 0);
+    AddTagsCompletionBoxItem* createItemUnderParent = d->createItemForNewTag(currentText, d->parentTag);
+    AddTagsCompletionBoxItem* createItemTopLevel    = d->createItemForNewTag(currentText, 0);
 
     QList<AddTagsCompletionBoxItem*> assignItems;
     foreach (const QString &tagName, completionEntries)
@@ -242,7 +243,7 @@ void AddTagsCompletionBox::setItems(const QString& currentText, const QStringLis
         bool uniqueName = tagIds.count() == 1;
         foreach (int tagId, tagIds)
         {
-            AddTagsCompletionBoxItem *item = d->createItemForExistingTag(AlbumManager::instance()->findTAlbum(tagId), uniqueName);
+            AddTagsCompletionBoxItem* item = d->createItemForExistingTag(AlbumManager::instance()->findTAlbum(tagId), uniqueName);
             if (!item)
                 continue;
             assignItems << item;
@@ -256,7 +257,7 @@ void AddTagsCompletionBox::setItems(const QString& currentText, const QStringLis
         {
             addItem(createItemUnderParent);
             setCurrentItem(createItemUnderParent);
-            foreach (AddTagsCompletionBoxItem*item, assignItems)
+            foreach (AddTagsCompletionBoxItem* item, assignItems)
                 addItem(item);
             addItem(createItemTopLevel);
         }
@@ -264,14 +265,14 @@ void AddTagsCompletionBox::setItems(const QString& currentText, const QStringLis
         {
             addItem(createItemTopLevel);
             setCurrentItem(createItemTopLevel);
-            foreach (AddTagsCompletionBoxItem*item, assignItems)
+            foreach (AddTagsCompletionBoxItem* item, assignItems)
                 addItem(item);
             addItem(createItemUnderParent);
         }
     }
     else
     {
-        foreach (AddTagsCompletionBoxItem *item, assignItems)
+        foreach (AddTagsCompletionBoxItem* item, assignItems)
         {
             addItem(item);
             if (defaultAction == item->action())
@@ -302,7 +303,7 @@ void AddTagsCompletionBox::setCurrentCompletionText(const QString &completionTex
 
 QString AddTagsCompletionBox::currentCompletionText() const
 {
-    QListWidgetItem *current = currentItem();
+    QListWidgetItem* current = currentItem();
     if (current)
         return current->data(AddTagsCompletionBoxPriv::CompletionTextRole).toString();
     return QString();
@@ -310,29 +311,29 @@ QString AddTagsCompletionBox::currentCompletionText() const
 
 TaggingAction AddTagsCompletionBox::currentTaggingAction()
 {
-    AddTagsCompletionBoxItem *current = static_cast<AddTagsCompletionBoxItem*>(currentItem());
+    AddTagsCompletionBoxItem* current = static_cast<AddTagsCompletionBoxItem*>(currentItem());
     if (current)
         return current->action();
     return TaggingAction();
 }
 
-void AddTagsCompletionBox::setCurrentParentTag(const QModelIndex &index)
+void AddTagsCompletionBox::setCurrentParentTag(const QModelIndex& index)
 {
     d->parentTag = static_cast<TAlbum*>(AbstractAlbumModel::retrieveAlbum(index));
 }
 
-void AddTagsCompletionBox::setCurrentParentTag(TAlbum *album)
+void AddTagsCompletionBox::setCurrentParentTag(TAlbum* album)
 {
     d->parentTag = album;
 }
 
-void AddTagsCompletionBox::slotItemActivated(QListWidgetItem *item)
+void AddTagsCompletionBox::slotItemActivated(QListWidgetItem* item)
 {
     if (item)
         emit completionActivated(item->data(Qt::UserRole).toString());
 }
 
-void AddTagsCompletionBox::slotCurrentItemChanged(QListWidgetItem *current, QListWidgetItem *)
+void AddTagsCompletionBox::slotCurrentItemChanged(QListWidgetItem* current, QListWidgetItem*)
 {
     if (current)
     {
@@ -412,10 +413,10 @@ QRect AddTagsCompletionBox::calculateGeometry() const
         return QRect();
 
     const int frameHeight = 2*frameWidth();
-    int maxHeight = d->maximumAvailableScreenHeight(globalPositionHint());
-    int suggestedHeight = qMin(15, count()) * itemSizeHint.height();
+    int maxHeight         = d->maximumAvailableScreenHeight(globalPositionHint());
+    int suggestedHeight   = qMin(15, count()) * itemSizeHint.height();
     //kDebug() << itemSizeHint << maxHeight << suggestedHeight;
-    int h = qMin(maxHeight, suggestedHeight + frameHeight);
+    int h                 = qMin(maxHeight, suggestedHeight + frameHeight);
 
     int w = KListWidget::minimumSizeHint().width();
     if (parentWidget())
@@ -476,18 +477,21 @@ public:
         tagView       = 0;
     }
 
-    TagModelCompletion   *completion;
-    AddTagsCompletionBox *completionBox;
-    TagModel             *tagModel;
-    TagTreeView          *tagView;
+    TagModelCompletion*   completion;
+    AddTagsCompletionBox* completionBox;
+    TagModel*             tagModel;
+    TagTreeView*          tagView;
     TaggingAction         completionBoxAction;
 
-    TaggingAction makeTaggingAction(const QString& userText);
+public:
 
+    TaggingAction makeTaggingAction(const QString& userText);
 };
 
-AddTagsLineEdit::AddTagsLineEdit(QWidget *parent)
-            : KLineEdit(parent), d(new AddTagsLineEditPriv)
+// ---------------------------------------------------------------------------------------
+
+AddTagsLineEdit::AddTagsLineEdit(QWidget* parent)
+               : KLineEdit(parent), d(new AddTagsLineEditPriv)
 {
     setEnableSignals(true);
     setHandleSignals(false);
@@ -503,19 +507,25 @@ AddTagsLineEdit::AddTagsLineEdit(QWidget *parent)
 
     connect(d->completionBox, SIGNAL(currentCompletionTextChanged( const QString& )),
             this, SLOT(slotCompletionBoxTextChanged( const QString& )) );
+
     connect(d->completionBox, SIGNAL(currentTaggingActionChanged(const TaggingAction&)),
             this, SLOT(slotCompletionBoxTaggingActionChanged(const TaggingAction&)));
+
     connect(d->completionBox, SIGNAL(userCancelled( const QString& )),
             this, SLOT(slotCompletionBoxCancelled()));
+
     connect(d->completionBox, SIGNAL(completionActivated(QString)),
             this, SIGNAL(completionBoxActivated(QString)) );
 
     connect(this, SIGNAL(completion(const QString&)),
             this, SLOT(makeCompletion(const QString&)));
-    connect(this, SIGNAL(substringCompletion(const QString &)),
-            this, SLOT(makeSubstringCompletion(const QString &)));
+
+    connect(this, SIGNAL(substringCompletion(const QString&)),
+            this, SLOT(makeSubstringCompletion(const QString&)));
+
     connect(this, SIGNAL(textRotation(KCompletionBase::KeyBindingType)),
             this, SLOT(rotateText(KCompletionBase::KeyBindingType)));
+
     connect(this, SIGNAL(returnPressed(const QString&)),
             this, SLOT(slotReturnPressed(const QString&)));
 }
@@ -525,7 +535,7 @@ AddTagsLineEdit::~AddTagsLineEdit()
     delete d;
 }
 
-void AddTagsLineEdit::setTagModel(TagModel *model)
+void AddTagsLineEdit::setTagModel(TagModel* model)
 {
     d->tagModel = model;
     d->completion->setModel(model);
@@ -535,16 +545,16 @@ void AddTagsLineEdit::setTagModel(TagModel *model)
 void AddTagsLineEdit::setTagTreeView(TagTreeView *view)
 {
     if (d->tagView)
-        disconnect(d->tagView->selectionModel(), SIGNAL(currentChanged(const QModelIndex&, const QModelIndex &)),
-                   d->completionBox, SLOT(setCurrentParentTag(const QModelIndex &)));
+        disconnect(d->tagView->selectionModel(), SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
+                   d->completionBox, SLOT(setCurrentParentTag(const QModelIndex&)));
 
     d->tagView = view;
 
     if (d->tagView)
     {
         d->completionBox->setCurrentParentTag(d->tagView->currentIndex());
-        connect(d->tagView->selectionModel(), SIGNAL(currentChanged(const QModelIndex&, const QModelIndex &)),
-                d->completionBox, SLOT(setCurrentParentTag(const QModelIndex &)));
+        connect(d->tagView->selectionModel(), SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
+                d->completionBox, SLOT(setCurrentParentTag(const QModelIndex&)));
     }
 }
 
@@ -561,20 +571,20 @@ void AddTagsLineEdit::setCompletionObject(KCompletion* comp, bool)
     KCompletionBase::setCompletionObject(comp, false);
 }
 
-AddTagsCompletionBox *AddTagsLineEdit::completionBox() const
+AddTagsCompletionBox* AddTagsLineEdit::completionBox() const
 {
     return d->completionBox;
 }
 
-void AddTagsLineEdit::makeSubstringCompletion(const QString &)
+void AddTagsLineEdit::makeSubstringCompletion(const QString&)
 {
     setCompletedItems(compObj()->substringCompletion(text()));
 }
 
-void AddTagsLineEdit::makeCompletion(const QString &text)
+void AddTagsLineEdit::makeCompletion(const QString& text)
 {
     // Need to reimplement already because setCompletedItems is not virtual
-    KCompletion *comp = compObj();
+    KCompletion* comp = compObj();
     KGlobalSettings::Completion mode = completionMode();
 
     d->completionBoxAction = TaggingAction();
@@ -596,7 +606,9 @@ void AddTagsLineEdit::makeCompletion(const QString &text)
             }
         }
         else
+        {
             setCompletedItems(comp->allMatches());
+        }
     }
     else // Auto,  ShortAuto (Man) and Shell
     {
@@ -623,7 +635,9 @@ void AddTagsLineEdit::setCompletedItems(const QStringList &items, bool doAutoSug
         // The popup is visible already - do the matching on the initial string,
         // not on the currently selected one.
         txt = d->completionBox->cancelledText();
-    } else {
+    }
+    else
+    {
         txt = text();
     }
 
@@ -693,12 +707,11 @@ void AddTagsLineEdit::slotReturnPressed(const QString& text)
 
 TaggingAction AddTagsLineEditPriv::makeTaggingAction(const QString& text)
 {
-    TAlbum *parentTag = 0;
+    TAlbum* parentTag = 0;
     if (tagView)
         parentTag = tagView->currentAlbum();
     int parentTagId = parentTag ? parentTag->id() : 0;
     return makeDefaultTaggingAction(text, parentTagId);
 }
 
-}
-
+} // namespace Digikam
