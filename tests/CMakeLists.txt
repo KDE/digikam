@@ -54,6 +54,7 @@ KDE4_ADD_UNIT_TEST(advancedrenametest ${advancedrenametest_SRCS})
 TARGET_LINK_LIBRARIES(advancedrenametest
                       ${KDE4_KDEUI_LIBS}
                       ${KEXIV2_LIBRARIES}
+                      ${KDCRAW_LIBRARIES}
                       ${QT_QTGUI_LIBRARY}
                       ${QT_QTTEST_LIBRARY}
                       digikamdatabase
