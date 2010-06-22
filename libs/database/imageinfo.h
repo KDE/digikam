@@ -6,9 +6,9 @@
  * Date        : 2005-04-21
  * Description : Handling accesses to one image and associated data
  *
- * Copyright 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright (C) 2007-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -303,7 +303,7 @@ private:
 
 inline uint qHash(const ImageInfo& info) { return info.hash(); }
 
-DIGIKAM_EXPORT QDebug& operator<<(QDebug &stream, const ImageInfo &info);
+DIGIKAM_DATABASE_EXPORT QDebug& operator<<(QDebug& stream, const ImageInfo& info);
 
 }  // namespace Digikam
 
