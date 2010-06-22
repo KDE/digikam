@@ -35,7 +35,6 @@
 
 #include "modelcompletion.h"
 
-
 namespace Digikam
 {
 
@@ -101,10 +100,13 @@ public:
     int parentTagId() const    { return m_tagId; }
 
 protected:
+
     Type    m_type;
     int     m_tagId;
     QString m_tagName;
 };
+
+// ---------------------------------------------------------------------------------------
 
 class AddTagsCompletionBoxPriv;
 
@@ -121,7 +123,7 @@ public:
      *  a tag in the drop down box.
      */
 
-    AddTagsCompletionBox(QWidget *parent = 0);
+    AddTagsCompletionBox(QWidget* parent = 0);
     ~AddTagsCompletionBox();
 
     /** Updates the completion box. Gives the current text in the line edit
@@ -131,7 +133,7 @@ public:
     /** Optional: Reads a tag model and takes the currently selected tag into account
      *  when suggesting a parent tag for a new tag, and a default action.
      */
-    void setTagModel(TagModel *model);
+    void setTagModel(TagModel* model);
 
     /** Returns the current TaggingAction. When setItems was called, this is
      *  the default action. Changes when the user selected a different selection.
@@ -140,7 +142,7 @@ public:
 
     /** Returns the current completion text, the text for the current item for display in the line edit,
      *  while the text() of the current item can be user presentable and formatted.
-     */  
+     */
     QString currentCompletionText() const;
 
     // Reimplemented
@@ -155,7 +157,7 @@ public Q_SLOTS:
      *  If you set a tag model (setTagModel()), this is taken care for automatically.
      */
     void setCurrentParentTag(const QModelIndex& index);
-    void setCurrentParentTag(TAlbum *album);
+    void setCurrentParentTag(TAlbum* album);
 
 Q_SIGNALS:
 
@@ -175,14 +177,15 @@ protected:
 
 protected Q_SLOTS:
 
-    void slotItemActivated(QListWidgetItem *item);
-    void slotCurrentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
+    void slotItemActivated(QListWidgetItem* item);
+    void slotCurrentItemChanged(QListWidgetItem* current, QListWidgetItem* previous);
 
 private:
 
-    AddTagsCompletionBoxPriv *const d;
+    AddTagsCompletionBoxPriv* const d;
 };
 
+// ---------------------------------------------------------------------------------------
 
 class AddTagsLineEditPriv;
 
@@ -192,17 +195,17 @@ class AddTagsLineEdit : public KLineEdit
 
 public:
 
-    AddTagsLineEdit(QWidget *parent = 0);
+    AddTagsLineEdit(QWidget* parent = 0);
     ~AddTagsLineEdit();
 
     /** Set the tag model to use for completion. */
-    void setTagModel(TagModel *model);
+    void setTagModel(TagModel* model);
     /** Reads a tag treeview and takes the currently selected tag into account
      *  when suggesting a parent tag for a new tag, and a default action. */
-    void setTagTreeView(TagTreeView *treeView);
+    void setTagTreeView(TagTreeView* treeView);
 
     /// The custom completion box in use
-    AddTagsCompletionBox *completionBox() const;
+    AddTagsCompletionBox* completionBox() const;
 
 Q_SIGNALS:
 
@@ -211,27 +214,25 @@ Q_SIGNALS:
 
 protected Q_SLOTS:
 
-    virtual void makeCompletion(const QString &);
+    virtual void makeCompletion(const QString&);
     void setCompletedItems(const QStringList& items, bool autoSuggest=true);
-    void makeSubstringCompletion(const QString &);
+    void makeSubstringCompletion(const QString&);
     void slotCompletionBoxTextChanged(const QString& text);
     void slotCompletionBoxTaggingActionChanged(const TaggingAction& action);
     void slotCompletionBoxCancelled();
     void slotReturnPressed(const QString& text);
 
 protected:
-    
+
     void setCompletionObject(KCompletion* comp, bool dontuse=false);
 
 private:
 
-    AddTagsLineEditPriv *const d;
+    AddTagsLineEditPriv* const d;
 };
 
-
-}
+} // namespace Digikam
 
 Q_DECLARE_METATYPE(Digikam::TaggingAction)
 
-#endif
-
+#endif // ADDTAGSLINEEDIT_H
