@@ -101,7 +101,7 @@ void TagModelCompletion::setModel(TagModel* model)
 
 TagModel* TagModelCompletion::model() const
 {
-    return static_cast<TagModel*>(model());
+    return static_cast<TagModel*>(ModelCompletion::model());
 }
 
 class AddTagsCompletionBoxItem : public QListWidgetItem
