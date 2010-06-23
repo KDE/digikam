@@ -412,7 +412,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     # Using -fno-tree-pre is work around this problem.
 
     IF(CMAKE_COMPILER_IS_GNUCXX)
-        EXEC_PROGRAM(${CMAKE_CXX_COMPILER} ARGS --version OUTPUT_VARIABLE VERSION_GCC_INFO)
+        EXEC_PROGRAM(${CMAKE_CXX_COMPILER} ARGS ${CMAKE_CXX_COMPILER_ARG1} --version OUTPUT_VARIABLE VERSION_GCC_INFO)
         STRING(REGEX MATCH " [34]\\.[0-9]\\.[0-9]" GCC_VERSION "${VERSION_GCC_INFO}")
 
         # gcc on mac just reports: "gcc (GCC) 3.3 20030304 ..." without the patch level, handle this here:
