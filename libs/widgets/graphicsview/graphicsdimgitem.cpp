@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "graphicsdimgitem.h"
+#include "graphicsdimgitem.moc"
 #include "dimgitemspriv.h"
 
 // Qt includes
