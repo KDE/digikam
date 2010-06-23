@@ -44,7 +44,6 @@
 namespace Digikam
 {
 
-
 GraphicsDImgItem::GraphicsDImgItem(QGraphicsItem *parent)
 #if QT_VERSION >= 0x040600
                 : QGraphicsObject(parent),
