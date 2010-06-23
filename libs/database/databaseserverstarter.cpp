@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include <databaseserverstarter.h>
+#include "databaseserverstarter.moc"
 
 // Qt includes
 
@@ -66,6 +66,7 @@ namespace Digikam
 // For whatever reason, these methods are "static protected"
 class sotoSleep : public QThread
 {
+
 public:
 
     static void sleep(unsigned long secs)
@@ -83,25 +84,25 @@ public:
 };
 
 DatabaseServerStarter::DatabaseServerStarter(QObject* parent=0)
-    : QObject(parent)
+                     : QObject(parent)
 {
 }
 
 bool DatabaseServerStarter::init()
 {
-	if (qDBusRegisterMetaType<DatabaseServerError>()<0)
-	{
-		kError()<<"Error while registering DatabaseServerError class.";
-		return false;
-	}
-	return true;
+    if (qDBusRegisterMetaType<DatabaseServerError>() < 0)
+    {
+        kError()<<"Error while registering DatabaseServerError class.";
+        return false;
+    }
+    return true;
 }
 
 bool DatabaseServerStarter::__init=DatabaseServerStarter::init();
 
-DatabaseServerError DatabaseServerStarter::startServerManagerProcess(const QString dbType)
+DatabaseServerError DatabaseServerStarter::startServerManagerProcess(const QString& dbType)
 {
-	DatabaseServerError result;
+    DatabaseServerError result;
     /*
      * TODO:
      * 1. Acquire semaphore lock on "DigikamDBSrvAccess"
@@ -148,7 +149,7 @@ DatabaseServerError DatabaseServerStarter::startServerManagerProcess(const QStri
     QDBusMessage stateMsg = dbus_iface.call("isRunning");
     if (!stateMsg.arguments().at(0).toBool())
     {
-    	DatabaseServerError error;
+        DatabaseServerError error;
 
         QList<QVariant> arguments;
         arguments.append(dbType);
@@ -156,18 +157,18 @@ DatabaseServerError DatabaseServerStarter::startServerManagerProcess(const QStri
         QDBusMessage reply = dbus_iface.callWithArgumentList(QDBus::Block, "startDatabaseProcess", arguments);
         if (QDBusMessage::ErrorMessage==reply.type())
         {
-        	result.setErrorType(DatabaseServerError::StartError);
-        	result.setErrorText(i18n("<p><b>Error while calling the database server starter.</b></p>"
-					   "Details:\n %1", reply.errorMessage()));
+            result.setErrorType(DatabaseServerError::StartError);
+            result.setErrorText(i18n("<p><b>Error while calling the database server starter.</b></p>"
+                       "Details:\n %1", reply.errorMessage()));
         }else
         {
-        	arguments = reply.arguments();
+            arguments = reply.arguments();
 
-        	QDBusVariant dbusVariant = qvariant_cast<QDBusVariant>(arguments[1]);
-			// retrieve the actual value stored in the D-Bus variant
-			QVariant dbusArgument = dbusVariant.variant();
-        	DatabaseServerError item = qdbus_cast<DatabaseServerError>(dbusArgument);
-        	result = item;
+            QDBusVariant dbusVariant = qvariant_cast<QDBusVariant>(arguments[1]);
+            // retrieve the actual value stored in the D-Bus variant
+            QVariant dbusArgument = dbusVariant.variant();
+            DatabaseServerError item = qdbus_cast<DatabaseServerError>(dbusArgument);
+            result = item;
         }
     }
     sem.release();
@@ -192,6 +193,5 @@ void DatabaseServerStarter::cleanUp()
 {
     // for now, do nothing, the server will terminate on itself
 }
-
 
 }  // namespace Digikam
