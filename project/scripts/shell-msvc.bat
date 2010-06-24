@@ -12,8 +12,5 @@ set QT_INSTALL_DIR=%KDE4_INSTALL_DIR%
 set SVN_EDITOR="E:\mc\mc -e"
 
 call "C:\Program Files\Microsoft Visual Studio 9.0\VC\vcvarsall.bat"
-@set PATH=C:\Program Files\Microsoft Visual Studio 9.0\VC\bin;%PATH%
-@set INCLUDE=C:\Program Files\Microsoft Visual Studio 9.0\VC\include;%INCLUDE%
-@set LIB=C:\Program Files\Microsoft Visual Studio 9.0\VC\lib;%LIB%
 
 call "E:\mc\mc.exe"
