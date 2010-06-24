@@ -178,6 +178,7 @@ bool DImgLoader::readMetadata(const QString& filePath, DImg::FORMAT /*ff*/)
     }
 
     m_image->setMetadata(metaDataFromFile.data());
+    m_image->setImageHistory(DImageHistory::fromXml(metaDataFromFile.getImageHistory()));
 
     return true;
 }
