@@ -57,6 +57,7 @@ public:
 
         FilterAction   action;
         HistoryImageId referredImages;
+        bool isFilterEntry;
     };
 
     DImageHistory();

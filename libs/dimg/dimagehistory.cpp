@@ -94,6 +94,7 @@ DImageHistory& DImageHistory::operator<<(const FilterAction& action)
 {
     Entry entry;
     entry.action = action;
+    entry.isFilterEntry = true;
     d->entries << entry;
     kDebug() << "Entry added, total count " << d->entries.count();
     return *this;
@@ -103,6 +104,7 @@ DImageHistory& DImageHistory::operator<<(const HistoryImageId& imageId)
 {
     Entry entry;
     entry.referredImages = imageId;
+    entry.isFilterEntry = false;
     d->entries << entry;
     return *this;
 }
@@ -238,12 +240,14 @@ DImageHistory DImageHistory::fromXml(const QString& xml) //DImageHistory
               {
                   originalUUID = stream.attributes().value("fileUUID").toString();
                   entry.referredImages = HistoryImageId(originalUUID, "", stream.attributes().value("fileName").toString(), QDateTime(QFileInfo(stream.attributes().value("filePath").toString()).created()));
+                  entry.isFilterEntry = false;
                   h << entry;
                   continue;
               }
               else
               {
                   entry.referredImages = HistoryImageId(originalUUID, stream.attributes().value("fileUUID").toString(), stream.attributes().value("fileName").toString(), QDateTime(QFileInfo(stream.attributes().value("filePath").toString()).created()));
+                  entry.isFilterEntry = false;
                   //stream.readNextStartElement();
               }
         }
@@ -266,6 +270,7 @@ DImageHistory DImageHistory::fromXml(const QString& xml) //DImageHistory
                   break;
               }
               entry.action = FilterAction(stream.attributes().value("filterName").toString(), stream.attributes().value("filterVersion").toString().toInt(), c);
+              entry.isFilterEntry = true;
 #if QT_VERSION >= 0x040600
               stream.readNextStartElement(); //params tag
 #else
