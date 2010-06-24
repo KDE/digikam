@@ -171,6 +171,8 @@ DImgInterface::DImgInterface()
 
     connect( d->thread, SIGNAL(signalSavingProgress(const QString&, float)),
              this, SLOT(slotSavingProgress(const QString&, float)) );
+    
+    //readMetadataFromFile();
 }
 
 DImgInterface::~DImgInterface()
@@ -593,6 +595,7 @@ void DImgInterface::readMetadataFromFile(const QString& file)
 {
     DMetadata meta(file);
     d->image.setMetadata(meta.data());
+    d->image.setImageHistory(DImageHistory::fromXml(meta.getImageHistory()));
 }
 
 void DImgInterface::clearUndoManager()
