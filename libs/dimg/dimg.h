@@ -304,6 +304,10 @@ public:
     void       setEmbeddedText(const QString& key, const QString& text);
     QString    embeddedText(const QString& key) const;
     
+    DImageHistory getImageHistory() const;
+    void          setImageHistory(const DImageHistory& history);
+    bool          hasImageHistory() const;
+    
     void       setFilterAction(const QString& identifier, const int version, const Digikam::FilterAction::Category category, QString param, const QVariant value);
     void       setFilterAction(const QString& identifier, const int version, const Digikam::FilterAction::Category category, QHash<QString, QVariant> values);
 

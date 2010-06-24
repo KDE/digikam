@@ -2296,4 +2296,25 @@ void DImg::setFilterAction(const QString& identifier, const int version, const F
     kDebug() << "FilterAction " << identifier << " with param " << param << ": " << value;
 }
 
+DImageHistory DImg::getImageHistory() const
+{
+    return m_priv->imageHistory;
+}
+
+void DImg::setImageHistory(const DImageHistory& history)
+{
+    m_priv->imageHistory = history;
+}
+
+
+bool DImg::hasImageHistory() const
+{
+    if(m_priv->imageHistory.isEmpty())
+    {
+        return false;
+    }
+    else return true;
+}
+
+
 }  // namespace Digikam
