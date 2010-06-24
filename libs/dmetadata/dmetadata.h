@@ -83,6 +83,7 @@ public:
     
     QString getImageHistory() const;
     bool    setImageHistory(QString& imageHistoryXml) const;
+    bool    hasImageHistoryTag();
 
     /// Fills only the copyright values in the template. Use getMetadataTemplate() usually.
     /// Returns true if valid fields were read.

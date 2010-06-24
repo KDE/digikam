@@ -507,8 +507,21 @@ QString DMetadata::getImageHistory() const
     if (hasXmp())
     {
         QString value = getXmpTagString("Xmp.digiKam.imageHistory", false);
-        kDebug() << value;
+        kDebug() << "Loading image history " << value;
         return value;
+    }
+    return QString();
+}
+
+bool DMetadata::hasImageHistoryTag()
+{
+    if(hasXmp())
+    {
+        if(QString(getXmpTagString("Xmp.digiKam.imageHistory", false)).length() > 0)
+        {
+            return true;
+        }
+        else return false;
     }
     return false;
 }
