@@ -69,7 +69,7 @@ DImageHistory::~DImageHistory()
 {
 }
 
-DImageHistory &DImageHistory::operator=(const DImageHistory& other)
+DImageHistory& DImageHistory::operator=(const DImageHistory& other)
 {
     d = other.d;
     return *this;
@@ -221,17 +221,8 @@ DImageHistory DImageHistory::fromXml(const QString& xml) //DImageHistory
    while (!stream.atEnd())
    {
         Entry entry;
-#if QT_VERSION >= 0x040600
         stream.readNextStartElement();
-#else
-        // QXmlStreamReader::readNextStartElement doesn't exist in Qt-4.5
-        // this is the inlined method body, adapted from lines 656 - 665 of
-        // http://qt.gitorious.org/qt/qt/blobs/4.6/src/corelib/xml/qxmlstream.cpp
-        while ( stream.readNext() != QXmlStreamReader::Invalid )
-        {
-            if (stream.isEndElement() || stream.isStartElement()) break;
-        }
-#endif
+
         if(stream.name() == "file" && stream.tokenType() == QXmlStreamReader::StartElement) 
         {
               stream.readNext();
@@ -271,17 +262,7 @@ DImageHistory DImageHistory::fromXml(const QString& xml) //DImageHistory
               }
               entry.action = FilterAction(stream.attributes().value("filterName").toString(), stream.attributes().value("filterVersion").toString().toInt(), c);
               entry.isFilterEntry = true;
-#if QT_VERSION >= 0x040600
               stream.readNextStartElement(); //params tag
-#else
-              // QXmlStreamReader::readNextStartElement doesn't exist in Qt-4.5
-              // this is the inlined method body, adapted from lines 656 - 665 of
-              // http://qt.gitorious.org/qt/qt/blobs/4.6/src/corelib/xml/qxmlstream.cpp
-              while ( stream.readNext() != QXmlStreamReader::Invalid )
-              {
-                  if (stream.isEndElement() || stream.isStartElement()) break;
-              }
-#endif
 
               if(stream.name() != "params") continue;
               stream.readNext(); //param .. tag
