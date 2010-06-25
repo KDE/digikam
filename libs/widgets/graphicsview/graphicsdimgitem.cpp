@@ -45,22 +45,14 @@ namespace Digikam
 {
 
 GraphicsDImgItem::GraphicsDImgItem(QGraphicsItem *parent)
-#if QT_VERSION >= 0x040600
                 : QGraphicsObject(parent),
-#else
-                : QGraphicsItem(parent),
-#endif
                   d_ptr(new GraphicsDImgItemPrivate)
 {
     d_ptr->init(this);
 }
 
 GraphicsDImgItem::GraphicsDImgItem(GraphicsDImgItemPrivate& dd, QGraphicsItem* parent)
-#if QT_VERSION >= 0x040600
                 : QGraphicsObject(parent),
-#else
-                : QGraphicsItem(parent),
-#endif
                   d_ptr(&dd)
 {
     d_ptr->init(this);
@@ -70,10 +62,8 @@ void GraphicsDImgItemPrivate::init(GraphicsDImgItem* q)
 {
     // ItemCoordinateCache is very slow, DeviceCoordinateCache makes severe render artifacts
     q->setCacheMode(QGraphicsItem::NoCache);
-#if QT_VERSION >= 0x040600
     // This flag is crucial for our performance! Limits redrawing area.
     q->setFlag(QGraphicsItem::ItemUsesExtendedStyleOption);
-#endif
     q->setAcceptedMouseButtons(Qt::NoButton);
 }
 
