@@ -127,6 +127,7 @@ public:
         configSaveDateTimeEntry("Save Date Time"),
         configSaveRatingEntry("Save Rating"),
         configWriteRAWFilesEntry("Write RAW Files"),
+        configUseXMPSidecarEntry("Use XMP Sidecar"),
         configUpdateFileTimestampEntry("Update File Timestamp"),
         configShowSplashEntry("Show Splash"),
         configUseTrashEntry("Use Trash"),
@@ -204,6 +205,7 @@ public:
     const QString                       configSaveDateTimeEntry;
     const QString                       configSaveRatingEntry;
     const QString                       configWriteRAWFilesEntry;
+    const QString                       configUseXMPSidecarEntry;
     const QString                       configUpdateFileTimestampEntry;
     const QString                       configShowSplashEntry;
     const QString                       configUseTrashEntry;
@@ -280,6 +282,7 @@ public:
     bool                                saveRating;
 
     bool                                writeRawFiles;
+    bool                                useXMPSidecar;
     bool                                updateFileTimeStamp;
 
     // preview settings
@@ -429,6 +432,7 @@ void AlbumSettings::init()
     d->saveRating                   = false;
 
     d->writeRawFiles                = false;
+    d->useXMPSidecar                = false;
     d->updateFileTimeStamp          = false;
 
     d->previewLoadFullImageSize     = false;
@@ -548,6 +552,7 @@ void AlbumSettings::readSettings()
     d->saveRating             = group.readEntry(d->configSaveRatingEntry,       false);
 
     d->writeRawFiles          = group.readEntry(d->configWriteRAWFilesEntry,       false);
+    d->useXMPSidecar          = group.readEntry(d->configUseXMPSidecarEntry,       false);
     d->updateFileTimeStamp    = group.readEntry(d->configUpdateFileTimestampEntry, false);
 
     // ---------------------------------------------------------------------
@@ -664,6 +669,7 @@ void AlbumSettings::saveSettings()
     group.writeEntry(d->configSaveRatingEntry,          d->saveRating);
 
     group.writeEntry(d->configWriteRAWFilesEntry,       d->writeRawFiles);
+    group.writeEntry(d->configUseXMPSidecarEntry,       d->useXMPSidecar);
     group.writeEntry(d->configUpdateFileTimestampEntry, d->updateFileTimeStamp);
 
     // ---------------------------------------------------------------------
@@ -1063,6 +1069,16 @@ void AlbumSettings::setWriteRawFiles(bool val)
 bool AlbumSettings::getWriteRawFiles() const
 {
     return d->writeRawFiles;
+}
+
+void AlbumSettings::setUseXMPSidecar(bool val)
+{
+    d->useXMPSidecar = val;
+}
+
+bool AlbumSettings::getUseXMPSidecar() const
+{
+    return d->useXMPSidecar;
 }
 
 void AlbumSettings::setUpdateFileTimeStamp(bool val)

@@ -1754,6 +1754,7 @@ void AlbumIconView::slotSetExifOrientation( int orientation )
         DMetadata::ImageOrientation o = (DMetadata::ImageOrientation)orientation;
         metadata.setImageOrientation(o);
         metadata.setWriteRawFiles(AlbumSettings::instance()->getWriteRawFiles());
+        metadata.setUseXMPSidecar(AlbumSettings::instance()->getUseXMPSidecar());
 
         if (!metadata.applyChanges())
         {

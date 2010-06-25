@@ -76,6 +76,7 @@ public:
     bool saveTemplate;
     bool saveTags;
     bool writeRawFiles;
+    bool useXMPSidecar;
     bool updateFileTimeStamp;
 };
 

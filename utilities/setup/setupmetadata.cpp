@@ -78,6 +78,7 @@ public:
         saveDateTimeBox         = 0;
         saveTemplateBox         = 0;
         writeRawFilesBox        = 0;
+        useXMPSidecarBox        = 0;
         updateFileTimeStampBox  = 0;
         saveToNepomukBox        = 0;
         readFromNepomukBox      = 0;
@@ -97,6 +98,7 @@ public:
     QCheckBox*     saveDateTimeBox;
     QCheckBox*     saveTemplateBox;
     QCheckBox*     writeRawFilesBox;
+    QCheckBox*     useXMPSidecarBox;
     QCheckBox*     updateFileTimeStampBox;
 
     QCheckBox*     saveToNepomukBox;
@@ -173,6 +175,15 @@ SetupMetadata::SetupMetadata(QWidget* parent)
                                             "experimental, and is disabled by default."));
     d->writeRawFilesBox->setEnabled(KExiv2Iface::KExiv2::supportMetadataWritting("image/x-raw"));
 
+    d->useXMPSidecarBox = new QCheckBox(commonGroup);
+    d->useXMPSidecarBox->setText(i18n("&Read metadata from and write metadata to XMP sidecar files (experimental)"));
+    d->useXMPSidecarBox->setWhatsThis( i18n("Turn on this option to write metadata into XMP sidecar files, "
+                                            "and prefer metadata from XMP sidecar files when reading metadata."
+                                            "This feature requires the Exiv2 shared library, version >= 0.18.0. It is still "
+                                            "experimental, and is disabled by default."));
+    // TODO: Should perhaps do some testing for XMP sidecar support in libkexiv2
+    // d->useXMPSidecarBox->setEnabled(KExiv2Iface::KExiv2::supportXMPSidecar());
+
     d->updateFileTimeStampBox = new QCheckBox(commonGroup);
     d->updateFileTimeStampBox->setText(i18n("&Update file timestamp when metadata are saved"));
     d->updateFileTimeStampBox->setWhatsThis( i18n("Turn on this option to update file timestamps when metadata are saved."));
@@ -189,6 +200,7 @@ SetupMetadata::SetupMetadata(QWidget* parent)
     gLayout2->addWidget(d->saveDateTimeBox);
     gLayout2->addWidget(d->saveRatingBox);
     gLayout2->addWidget(d->writeRawFilesBox);
+    gLayout2->addWidget(d->useXMPSidecarBox);
     gLayout2->addWidget(d->updateFileTimeStampBox);
     gLayout2->setMargin(KDialog::spacingHint());
     gLayout2->setSpacing(0);
@@ -370,6 +382,7 @@ void SetupMetadata::applySettings()
     settings->setSaveTags(d->saveTagsBox->isChecked());
     settings->setSaveTemplate(d->saveTemplateBox->isChecked());
     settings->setWriteRawFiles(d->writeRawFilesBox->isChecked());
+    settings->setUseXMPSidecar(d->useXMPSidecarBox->isChecked());
     settings->setUpdateFileTimeStamp(d->updateFileTimeStampBox->isChecked());
 #ifdef HAVE_NEPOMUK
     settings->setSyncDigikamToNepomuk(d->saveToNepomukBox->isChecked());
@@ -396,6 +409,7 @@ void SetupMetadata::readSettings()
     d->saveTagsBox->setChecked(settings->getSaveTags());
     d->saveTemplateBox->setChecked(settings->getSaveTemplate());
     d->writeRawFilesBox->setChecked(settings->getWriteRawFiles());
+    d->useXMPSidecarBox->setChecked(settings->getUseXMPSidecar());
     d->updateFileTimeStampBox->setChecked(settings->getUpdateFileTimeStamp());
 #ifdef HAVE_NEPOMUK
     d->saveToNepomukBox->setChecked(settings->getSyncDigikamToNepomuk());

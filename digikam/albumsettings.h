@@ -209,6 +209,9 @@ public:
     void setWriteRawFiles(bool val);
     bool getWriteRawFiles() const;
 
+    void setUseXMPSidecar(bool val);
+    bool getUseXMPSidecar() const;
+
     void setUpdateFileTimeStamp(bool val);
     bool getUpdateFileTimeStamp() const;
 

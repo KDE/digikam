@@ -113,6 +113,7 @@ MetadataWriteSettings::MetadataWriteSettings()
     saveTemplate        = false;
     saveTags            = false;
     writeRawFiles       = false;
+    useXMPSidecar       = false;
     updateFileTimeStamp = false;
 }
 
@@ -124,6 +125,7 @@ MetadataWriteSettings::MetadataWriteSettings(AlbumSettings *albumSettings)
     saveTemplate        = albumSettings->getSaveTemplate();
     saveTags            = albumSettings->getSaveTags();
     writeRawFiles       = albumSettings->getWriteRawFiles();
+    useXMPSidecar       = albumSettings->getUseXMPSidecar();
     updateFileTimeStamp = albumSettings->getUpdateFileTimeStamp();
 }
 
@@ -471,6 +473,7 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
     bool dirty = false;
 
     metadata.setWriteRawFiles(settings.writeRawFiles);
+    metadata.setUseXMPSidecar(settings.useXMPSidecar);
 
 #if KEXIV2_VERSION >= 0x000600
     metadata.setUpdateFileTimeStamp(settings.updateFileTimeStamp);

@@ -310,6 +310,10 @@ QVariant KipiInterface::hostSetting(const QString& settingName)
     {
         return (AlbumSettings::instance()->getWriteRawFiles());
     }
+    else if (settingName == QString("UseXMPSidecar"))
+    {
+        return (AlbumSettings::instance()->getUseXMPSidecar());
+    }
     else if (settingName == QString("FileExtensions"))
     {
         // do not save this into a local variable, as this
