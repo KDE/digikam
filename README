@@ -91,7 +91,7 @@ libqt           >= 4.6.x                      http://www.qtsoftware.com         
 kdelibs         >= 4.3.x (4.4.x recommended)  http://www.kde.org                         Nepomuk support introduced with KDE 4.3.x.
 libkface        >= 0.1.0                      http://www.digikam.org/sharedlibs
 libkipi         >= 1.0.0                      http://www.digikam.org/sharedlibs
-libkexiv2       >= 1.1.0                      http://www.digikam.org/sharedlibs          Version from trunk KDE svn repository. Will be released with KDE 4.2. Exiv2 >= 0.18.2 shared library recommended.
+libkexiv2       >= 1.2.0                      http://www.digikam.org/sharedlibs          Version from trunk KDE svn repository. Will be released with KDE 4.2. Exiv2 >= 0.18.2 shared library recommended.
 libkdcraw       >= 1.1.0                      http://www.digikam.org/sharedlibs          Version from trunk KDE svn repository. Will be released with KDE 4.4.2.
 liblcms         >= 1.17.x                     http://www.littlecms.com
 libtiff         >= 3.8.2                      http://www.remotesensing.org/libtiff
@@ -101,8 +101,8 @@ libjasper       >= 1.7.x                      http://www.ece.uvic.ca/~mdadams/ja
 
 Optional :
 
-libkdepimlibs   >= 4.0.x (4.2.x recommended)  http://pim.kde.org                         To support KAddressBook entries.
-libmarblewidget >= 0.5.1 (0.6.x recommended)  http://edu.kde.org/marble                  To support Geolocation using Marble Widget.
+libkdepimlibs   >= 4.0.x (4.4.x recommended)  http://pim.kde.org                         To support KAddressBook entries.
+libmarblewidget >= 0.5.1 (0.7.x recommended)  http://edu.kde.org/marble                  To support Geolocation using Marble Widget.
 liblensfun      >= 0.1.0                      http://lensfun.berlios.de                  To support LensCorrection editor plugin.
 libgphoto2      >= 2.4.0                      http://www.gphoto.org                      To support Gphoto2 Cameras. 
 liblqr-1        >= 0.4.1                      http://liblqr.wikidot.com                  For Liquid Rescale tool. If no external libray is found, internal version is used instead. 
