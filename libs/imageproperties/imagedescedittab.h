@@ -49,6 +49,7 @@ namespace Digikam
 {
 class ImageInfo;
 class ImageDescEditTabPriv;
+class TaggingAction;
 
 class ImageDescEditTab : public KVBox
 {
@@ -109,6 +110,7 @@ private Q_SLOTS:
     void slotTemplateSelected();
     void slotModified();
     void slotCreateNewTag();
+    void slotTaggingActionActivated(const TaggingAction&);
     void slotReloadForMetadataChange();
 
     void slotImageTagsChanged(qlonglong imageId);

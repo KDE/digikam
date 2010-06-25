@@ -7,5 +7,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 238285 : Nikkor 18-200mm not detected by lens autocorrection.
 002 ==> 232233 : Databaseext-branch does not compile on Windows with mingw4.
-003 ==> 
+003 ==> 241782 : Tags, comments, author, etc. not written to metadata.
+004 ==> 232792 : digiKam crash when opening configuration.
+005 ==> 
+
 

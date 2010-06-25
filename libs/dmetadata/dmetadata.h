@@ -32,25 +32,24 @@
 // LibKExiv2 includes
 
 #include <libkexiv2/kexiv2.h>
+#include <libkexiv2/kexiv2data.h>
 #include <libkexiv2/version.h>
 
 // Local includes
 
-#include "dmetadatadata.h"
 #include "dimg.h"
 #include "captionvalues.h"
 #include "photoinfocontainer.h"
 #include "metadatainfo.h"
 #include "digikam_export.h"
 
-using namespace KExiv2Iface;
-
 namespace Digikam
 {
+
 class Template;
 class IccProfile;
 
-class DIGIKAM_EXPORT DMetadata : public KExiv2
+class DIGIKAM_EXPORT DMetadata : public KExiv2Iface::KExiv2
 {
 
 public:

@@ -26,6 +26,10 @@
 #ifndef DIMG_H
 #define DIMG_H
 
+// KExiv2 includes
+
+#include <libkexiv2/kexiv2data.h>
+
 // Qt includes
 
 #include <QtCore/QByteArray>
@@ -38,7 +42,6 @@
 // Local includes
 
 #include "digikam_export.h"
-#include "dmetadatadata.h"
 #include "dshareddata.h"
 #include "drawdecoding.h"
 #include "dcolor.h"
@@ -51,6 +54,8 @@ class QString;
 
 namespace Digikam
 {
+
+typedef KExiv2Iface::KExiv2Data KExiv2Data;
 
 class ExposureSettingsContainer;
 class DImgPrivate;

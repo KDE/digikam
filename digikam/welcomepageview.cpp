@@ -236,7 +236,7 @@ void WelcomePageView::slotThemeChanged()
     QString rtl              = kapp->isRightToLeft() ? QString("@import \"%1\";" ).arg(locationRtl)
                                                      : QString();
 
-    begin(KUrl(locationHtml));
+    begin(KUrl(locationHtml).toLocalFile());
 
     QString content = fileToString(locationHtml);
     content         = content.arg(infoPageCss)        // %1

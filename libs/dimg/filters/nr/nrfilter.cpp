@@ -464,10 +464,10 @@ void NRFilter::srgb2lab(float** fimg, int size)
     for (int i = 0; i < size; i++)
     {
         /* reference white */
-        fimg[0][i] /= 0.95047;
+        fimg[0][i] /= 0.95047F;
         /* (just for completeness)
         fimg[1][i] /= 1.00000; */
-        fimg[2][i] /= 1.08883;
+        fimg[2][i] /= 1.08883F;
 
         /* scale */
         if (fimg[0][i] > 216.0 / 24389.0)

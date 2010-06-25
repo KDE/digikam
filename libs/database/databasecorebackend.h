@@ -6,7 +6,7 @@
  * Date        : 2007-06-07
  * Description : Abstract database backend
  *
- * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -49,7 +49,11 @@ class DatabaseCoreBackendPrivate;
 class DIGIKAM_EXPORT DatabaseLocking
 {
 public:
+
     DatabaseLocking();
+
+public:
+
     QMutex mutex;
     int    lockCount;
 };
@@ -65,8 +69,8 @@ public:
      *  shall be unique for this backend object.
      *  It will be used to create unique connection names per backend and thread.
      */
-    DatabaseCoreBackend(const QString &backendName, DatabaseLocking *locking);
-    DatabaseCoreBackend(const QString &backendName, DatabaseLocking *locking, DatabaseCoreBackendPrivate &dd);
+    DatabaseCoreBackend(const QString &backendName, DatabaseLocking* locking);
+    DatabaseCoreBackend(const QString &backendName, DatabaseLocking* locking, DatabaseCoreBackendPrivate& dd);
     ~DatabaseCoreBackend();
 
     /**
@@ -85,7 +89,7 @@ public:
      * carry out upgrades if necessary.
      * Shall only be called from the thread that called open().
      */
-    bool initSchema(ThumbnailSchemaUpdater *updater);
+    bool initSchema(ThumbnailSchemaUpdater* updater);
 
     /**
      * Close the database connection.
@@ -114,6 +118,7 @@ public:
     class QueryState
     {
     public:
+
         QueryState() : value(DatabaseCoreBackend::NoErrors) {}
         QueryState(QueryStateEnum value) : value(value) {}
 
@@ -121,6 +126,7 @@ public:
         operator bool() { return value == DatabaseCoreBackend::NoErrors; }
 
     private:
+
         QueryStateEnum value;
     };
 
@@ -177,14 +183,14 @@ public:
      * Returns a database action with name, specified in actionName,
      * for the current database.
      */
-    DatabaseAction getDBAction(const QString &actionName) const;
+    DatabaseAction getDBAction(const QString& actionName) const;
 
     /**
      * Performs the database action on the current database.
      * Queries by the specified parameters mustn't have named parameters.
      * The result values (if any) are stored within the values list.
      */
-    QueryState execDBAction(const DatabaseAction &action, QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
+    QueryState execDBAction(const DatabaseAction& action, QList<QVariant>* values = 0, QVariant* lastInsertId = 0);
 
     /**
      * Performs the database action on the current database.
@@ -192,8 +198,8 @@ public:
      * substituded with values from the bindingMap parameter.
      * The result values (if any) are stored within the values list.
      */
-    QueryState execDBAction(const DatabaseAction &action, const QMap<QString, QVariant>& bindingMap,
-                      QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
+    QueryState execDBAction(const DatabaseAction& action, const QMap<QString, QVariant>& bindingMap,
+                            QList<QVariant>* values = 0, QVariant* lastInsertId = 0);
 
     /**
      * Performs the database action on the current database.
@@ -202,7 +208,7 @@ public:
      * The result values (if any) are stored within the values list.
      * This method returns the last query, which is used to handle special cases.
      */
-    QSqlQuery execDBActionQuery(const DatabaseAction &action, const QMap<QString, QVariant>& bindingMap);
+    QSqlQuery execDBActionQuery(const DatabaseAction& action, const QMap<QString, QVariant>& bindingMap);
 
     /**
      * Executes the SQL statement, and write the returned data into the values list.
@@ -210,20 +216,20 @@ public:
      * Methods are provided for up to four bound values (positional binding), or for a list of bound values.
      * If you want the last inserted id (and your query is suitable), sett lastInsertId to the address of a QVariant.
      */
-    QueryState execSql(const QString& sql, QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
+    QueryState execSql(const QString& sql, QList<QVariant>* values = 0, QVariant* lastInsertId = 0);
     QueryState execSql(const QString& sql, const QVariant& boundValue1,
-                 QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
+                       QList<QVariant>* values = 0, QVariant* lastInsertId = 0);
     QueryState execSql(const QString& sql,
-                 const QVariant& boundValue1, const QVariant& boundValue2,
-                 QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
+                       const QVariant& boundValue1, const QVariant& boundValue2,
+                       QList<QVariant>* values = 0, QVariant* lastInsertId = 0);
     QueryState execSql(const QString& sql,
-                 const QVariant& boundValue1, const QVariant& boundValue2, const QVariant& boundValue3,
-                 QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
+                       const QVariant& boundValue1, const QVariant& boundValue2, const QVariant& boundValue3,
+                       QList<QVariant>* values = 0, QVariant* lastInsertId = 0);
     QueryState execSql(const QString& sql,
-                 const QVariant& boundValue1, const QVariant& boundValue2,
-                 const QVariant& boundValue3, const QVariant& boundValue4,
-                 QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
-    QueryState execSql(const QString& sql, const QList<QVariant>& boundValues, QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
+                       const QVariant& boundValue1, const QVariant& boundValue2,
+                       const QVariant& boundValue3, const QVariant& boundValue4,
+                       QList<QVariant>* values = 0, QVariant* lastInsertId = 0);
+    QueryState execSql(const QString& sql, const QList<QVariant>& boundValues, QList<QVariant>* values = 0, QVariant* lastInsertId = 0);
 
     /**
      * Checks if there was a connection error. If so DatabaseCoreBackend::ConnectionError is returned.
@@ -231,7 +237,7 @@ public:
      * the last insertion id is taken from the query
      * and DatabaseCoreBackend::NoErrors is returned.
      */
-    QueryState handleQueryResult(SqlQuery &query, QList<QVariant>* values, QVariant *lastInsertId);
+    QueryState handleQueryResult(SqlQuery &query, QList<QVariant>* values, QVariant* lastInsertId);
 
     /**
      * Method which accepts a map for named binding.
@@ -244,7 +250,7 @@ public:
      * inserted in the following way: key1=value1, key2=value2,...,keyN=valueN.
      */
     QueryState execSql(const QString& sql, const QMap<QString, QVariant>& bindingMap,
-                 QList<QVariant>* values = 0, QVariant *lastInsertId = 0);
+                       QList<QVariant>* values = 0, QVariant* lastInsertId = 0);
     /**
      * Calls exec on the query, and handles debug output if something went wrong.
      * The query is not prepared, which can be fail in certain situations
@@ -259,12 +265,12 @@ public:
     SqlQuery execQuery(const QString& sql);
     SqlQuery execQuery(const QString& sql, const QVariant& boundValue1);
     SqlQuery execQuery(const QString& sql,
-                        const QVariant& boundValue1, const QVariant& boundValue2);
+                       const QVariant& boundValue1, const QVariant& boundValue2);
     SqlQuery execQuery(const QString& sql,
-                        const QVariant& boundValue1, const QVariant& boundValue2, const QVariant& boundValue3);
+                       const QVariant& boundValue1, const QVariant& boundValue2, const QVariant& boundValue3);
     SqlQuery execQuery(const QString& sql,
-                        const QVariant& boundValue1, const QVariant& boundValue2,
-                        const QVariant& boundValue3, const QVariant& boundValue4);
+                       const QVariant& boundValue1, const QVariant& boundValue2,
+                       const QVariant& boundValue3, const QVariant& boundValue4);
     SqlQuery execQuery(const QString& sql, const QList<QVariant>& boundValues);
 
     /**
@@ -384,9 +390,10 @@ private Q_SLOTS:
 
 protected:
 
-    DatabaseCoreBackendPrivate * const d_ptr;
+    DatabaseCoreBackendPrivate* const d_ptr;
 
 private:
+
     Q_DECLARE_PRIVATE(DatabaseCoreBackend)
 };
 
@@ -395,4 +402,3 @@ private:
 Q_DECLARE_METATYPE(QSqlError)
 
 #endif // DATABASECOREBACKEND_H
-

@@ -206,6 +206,24 @@ QList<int> TagsCache::tagsForName(const QString& tagName)
     return d->nameHash.values(tagName);
 }
 
+int TagsCache::tagForName(const QString& tagName, int parentId)
+{
+    d->checkNameHash();
+    QReadLocker locker(&d->lock);
+
+    QList<TagShortInfo>::const_iterator tag;
+    foreach (int id, d->nameHash.values(tagName))
+    {
+        tag = d->find(id);
+        if (tag == d->infos.constEnd())
+            continue; // error
+
+        if (tag->pid == parentId)
+            return tag->id;
+    }
+    return 0;
+}
+
 bool TagsCache::hasTag(int id)
 {
     d->checkInfos();

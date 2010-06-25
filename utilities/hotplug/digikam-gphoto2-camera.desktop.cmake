@@ -16,6 +16,7 @@ Name[fi]=Tunnista kamera ja lataa kuvat digiKamilla
 Name[fr]=Détection et téléchargement avec digiKam
 Name[gl]=Detección e descarga de digiKam
 Name[hne]=डिजिकैम पता लगिस अउ डाउनलोड करव
+Name[hu]=digiKam keresés és letöltés
 Name[is]=digiKam Finna og Hala niður
 Name[it]=Rileva e scarica con digiKam
 Name[ja]=digiKam 検出とダウンロード

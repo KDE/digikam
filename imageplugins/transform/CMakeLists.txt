@@ -5,12 +5,12 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR}/../../
 SET(digikamimageplugin_transform_PART_SRCS imageplugin_transform.cpp
                                            freerotationtool.cpp
                                            sheartool.cpp
-                                           resizetool.cpp                                           
-                                           
+                                           resizetool.cpp
+
                                            perspectivetool.cpp
-                                           perspectivewidget.cpp 
-                                           triangle.cpp 
-                                           matrix.cpp 
+                                           perspectivewidget.cpp
+                                           triangle.cpp
+                                           matrix.cpp
 
                                            imageselectionwidget.cpp
                                            ratiocroptool.cpp
@@ -18,7 +18,7 @@ SET(digikamimageplugin_transform_PART_SRCS imageplugin_transform.cpp
 
 IF(GLIB2_FOUND)
     SET(digikamimageplugin_transform_PART_SRCS ${digikamimageplugin_transform_PART_SRCS}
-        contentawareresizetool.cpp    
+        contentawareresizetool.cpp
        )
 ENDIF(GLIB2_FOUND)
 
@@ -33,6 +33,7 @@ TARGET_LINK_LIBRARIES(
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}
     ${KDCRAW_LIBRARIES}
+    ${QT_QT3SUPPORT_LIBRARY}
     )
 
 INSTALL(TARGETS digikamimageplugin_transform DESTINATION ${PLUGIN_INSTALL_DIR})

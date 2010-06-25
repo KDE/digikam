@@ -6,7 +6,7 @@
  * Date        : 2007-04-15
  * Description : Abstract database backend
  *
- * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -45,9 +45,9 @@ public:
 
     DatabaseCoreBackendPrivate(DatabaseCoreBackend *backend);
     virtual ~DatabaseCoreBackendPrivate() {}
-    void init(const QString &connectionName, DatabaseLocking *locking);
+    void init(const QString& connectionName, DatabaseLocking* locking);
 
-    QString connectionName(QThread *thread);
+    QString connectionName(QThread* thread);
 
     QSqlDatabase databaseForThread();
     void closeDatabaseForThread();
@@ -60,66 +60,72 @@ public:
     bool isInUIThread() const;
 
     bool reconnectOnError() const;
-    bool isSQLiteLockError(const SqlQuery &query) const;
+    bool isSQLiteLockError(const SqlQuery& query) const;
     bool checkRetrySQLiteLockError(int retries) const;
-    bool isConnectionError(const SqlQuery &query) const;
-    bool needToConsultUserForError(const SqlQuery &query) const;
-    bool needToHandleWithErrorHandler(const SqlQuery &query) const;
-    void debugOutputFailedQuery(const QSqlQuery &query) const;
+    bool isConnectionError(const SqlQuery& query) const;
+    bool needToConsultUserForError(const SqlQuery& query) const;
+    bool needToHandleWithErrorHandler(const SqlQuery& query) const;
+    void debugOutputFailedQuery(const QSqlQuery& query) const;
 
     bool checkOperationStatus();
-    bool handleWithErrorHandler(const SqlQuery *query);
+    bool handleWithErrorHandler(const SqlQuery* query);
     // called by DatabaseErrorHandler, implementing DatabaseErrorAnswer
     virtual void connectionErrorContinueQueries();
     virtual void connectionErrorAbortQueries();
     void setQueryOperationFlag(DatabaseCoreBackend::QueryOperationStatus status);
     void queryOperationWakeAll(DatabaseCoreBackend::QueryOperationStatus status);
 
-    virtual void transactionFinished() {}
+    virtual void transactionFinished() {};
+
+public:
 
     // this is always accessed in mutex context, no need for QThreadStorage
-    QHash<QThread*, QSqlDatabase> threadDatabases;
+    QHash<QThread*, QSqlDatabase>             threadDatabases;
     // this is not only db.isValid(), but also "parameters changed, need to reopen"
-    QHash<QThread*, int>          databasesValid;
+    QHash<QThread*, int>                      databasesValid;
     // for recursive transactions
-    QHash<QThread*, int>          transactionCount;
+    QHash<QThread*, int>                      transactionCount;
 
-    bool                          isInTransaction;
+    bool                                      isInTransaction;
 
-    QString                       backendName;
+    QString                                   backendName;
 
-    DatabaseParameters            parameters;
+    DatabaseParameters                        parameters;
 
-    DatabaseCoreBackend::Status   status;
+    DatabaseCoreBackend::Status               status;
 
-    DatabaseLocking              *lock;
+    DatabaseLocking*                          lock;
 
     DatabaseCoreBackend::QueryOperationStatus operationStatus;
 
-    QMutex              errorLockMutex;
-    QWaitCondition      errorLockCondVar;
+    QMutex                                    errorLockMutex;
+    QWaitCondition                            errorLockCondVar;
     DatabaseCoreBackend::QueryOperationStatus errorLockOperationStatus;
+
+    DatabaseErrorHandler*                     errorHandler;
+
+public :
 
     class ErrorLocker
     {
     public:
-        ErrorLocker(DatabaseCoreBackendPrivate *d);
+
+        ErrorLocker(DatabaseCoreBackendPrivate* d);
         ~ErrorLocker();
         void wait();
+
     private:
+
         int count;
         DatabaseCoreBackendPrivate* const d;
     };
     friend class ErrorLocker;
 
-    DatabaseErrorHandler         *errorHandler;
+public :
 
-    DatabaseCoreBackend* const    q;
-
+    DatabaseCoreBackend* const q;
 };
-
 
 }  // namespace Digikam
 
 #endif // DATABASECOREBACKEND_P_H
-

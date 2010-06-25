@@ -133,6 +133,11 @@ QPixmap AlbumThumbnailLoader::getStandardTagIcon(TAlbum *album, RelativeSize rel
         return getStandardTagIcon(relativeSize);
 }
 
+QPixmap AlbumThumbnailLoader::getNewTagIcon(RelativeSize relativeSize)
+{
+    return loadIcon("tag-new", computeIconSize(relativeSize));
+}
+
 QPixmap AlbumThumbnailLoader::getStandardAlbumIcon(RelativeSize relativeSize)
 {
     return loadIcon("folder", computeIconSize(relativeSize));

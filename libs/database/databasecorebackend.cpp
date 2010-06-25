@@ -6,7 +6,7 @@
  * Date        : 2007-04-15
  * Description : Abstract database backend
  *
- * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -61,7 +61,7 @@ namespace Digikam
 {
 
 DatabaseLocking::DatabaseLocking()
-            : mutex(QMutex::Recursive), lockCount(0)// create a recursive mutex
+               : mutex(QMutex::Recursive), lockCount(0) // create a recursive mutex
 {
 }
 
@@ -84,19 +84,17 @@ public:
     }
 };
 
-
-DatabaseCoreBackendPrivate::DatabaseCoreBackendPrivate(DatabaseCoreBackend *backend)
+DatabaseCoreBackendPrivate::DatabaseCoreBackendPrivate(DatabaseCoreBackend* backend)
                           : q(backend)
 {
 
     status          = DatabaseCoreBackend::Unavailable;
     isInTransaction = false;
     operationStatus = DatabaseCoreBackend::ExecuteNormal;
-    errorHandler = 0;
+    errorHandler    = 0;
 }
 
-
-void DatabaseCoreBackendPrivate::init(const QString &name, DatabaseLocking *l)
+void DatabaseCoreBackendPrivate::init(const QString& name, DatabaseLocking* l)
 {
     QObject::connect(QCoreApplication::instance(), SIGNAL(aboutToQuit()),
                      q, SLOT(slotMainThreadFinished()));
@@ -116,7 +114,7 @@ void DatabaseCoreBackendPrivate::init(const QString &name, DatabaseLocking *l)
 // finishing of the thread.
 QSqlDatabase DatabaseCoreBackendPrivate::databaseForThread()
 {
-    QThread *thread = QThread::currentThread();
+    QThread* thread = QThread::currentThread();
     QSqlDatabase db = threadDatabases[thread];
     int isValid = databasesValid[thread];
     if (!isValid || !db.isOpen())
@@ -127,7 +125,7 @@ QSqlDatabase DatabaseCoreBackendPrivate::databaseForThread()
            kDebug() << "Error while opening the database. Details: [" << db.lastError() << "]";
 
         QObject::connect(thread, SIGNAL(finished()),
-                            q, SLOT(slotThreadFinished()));
+                         q, SLOT(slotThreadFinished()));
     }
 #ifdef DATABASCOREBACKEND_DEBUG
     else
@@ -154,7 +152,7 @@ void DatabaseCoreBackendPrivate::closeDatabaseForThread()
     QSqlDatabase::removeDatabase(connectionName(thread));
 }
 
-QString DatabaseCoreBackendPrivate::connectionName(QThread *thread)
+QString DatabaseCoreBackendPrivate::connectionName(QThread* thread)
 {
     return backendName + QString::number((quintptr)thread);
 }
@@ -191,19 +189,19 @@ bool DatabaseCoreBackendPrivate::open(QSqlDatabase& db)
 
 bool DatabaseCoreBackendPrivate::incrementTransactionCount()
 {
-    QThread *thread = QThread::currentThread();
+    QThread* thread = QThread::currentThread();
     return !transactionCount[thread]++;
 }
 
 bool DatabaseCoreBackendPrivate::decrementTransactionCount()
 {
-    QThread *thread = QThread::currentThread();
+    QThread* thread = QThread::currentThread();
     return !--transactionCount[thread];
 }
 
 bool DatabaseCoreBackendPrivate::isInTransactionInOtherThread() const
 {
-    QThread *thread = QThread::currentThread();
+    QThread* thread = QThread::currentThread();
     QHash<QThread*, int>::const_iterator it;
     for (it=transactionCount.constBegin(); it != transactionCount.constEnd(); ++it)
         if (it.key() != thread && it.value())
@@ -218,7 +216,7 @@ bool DatabaseCoreBackendPrivate::isInMainThread() const
 
 bool DatabaseCoreBackendPrivate::isInUIThread() const
 {
-    QApplication *app = qobject_cast<QApplication *>(QCoreApplication::instance());
+    QApplication* app = qobject_cast<QApplication *>(QCoreApplication::instance());
     if (!app)
         return false;
     return QThread::currentThread() == app->thread();
@@ -229,12 +227,12 @@ bool DatabaseCoreBackendPrivate::reconnectOnError() const
     return parameters.isMySQL();
 }
 
-bool DatabaseCoreBackendPrivate::isSQLiteLockError(const SqlQuery &query) const
+bool DatabaseCoreBackendPrivate::isSQLiteLockError(const SqlQuery& query) const
 {
     return parameters.isSQLite() && query.lastError().number() == 5;
 }
 
-bool DatabaseCoreBackendPrivate::isConnectionError(const SqlQuery &query) const
+bool DatabaseCoreBackendPrivate::isConnectionError(const SqlQuery& query) const
 {
     // the backend returns connection error e.g. for Constraint Failed errors.
     if (parameters.isSQLite())
@@ -242,13 +240,13 @@ bool DatabaseCoreBackendPrivate::isConnectionError(const SqlQuery &query) const
     return query.lastError().type() == QSqlError::ConnectionError || query.lastError().number()==2006;
 }
 
-bool DatabaseCoreBackendPrivate::needToConsultUserForError(const SqlQuery &) const
+bool DatabaseCoreBackendPrivate::needToConsultUserForError(const SqlQuery&) const
 {
     // no such conditions found and defined as yet
     return false;
 }
 
-bool DatabaseCoreBackendPrivate::needToHandleWithErrorHandler(const SqlQuery &query) const
+bool DatabaseCoreBackendPrivate::needToHandleWithErrorHandler(const SqlQuery& query) const
 {
     return isConnectionError(query) || needToConsultUserForError(query);
 }
@@ -268,7 +266,7 @@ bool DatabaseCoreBackendPrivate::checkRetrySQLiteLockError(int retries) const
     return false;
 }
 
-void DatabaseCoreBackendPrivate::debugOutputFailedQuery(const QSqlQuery &query) const
+void DatabaseCoreBackendPrivate::debugOutputFailedQuery(const QSqlQuery& query) const
 {
     kDebug() << "Failure executing query:\n"
              << query.executedQuery()
@@ -279,8 +277,8 @@ void DatabaseCoreBackendPrivate::debugOutputFailedQuery(const QSqlQuery &query) 
 }
 
 
-DatabaseCoreBackendPrivate::ErrorLocker::ErrorLocker(DatabaseCoreBackendPrivate *d)
-    : count(0), d(d)
+DatabaseCoreBackendPrivate::ErrorLocker::ErrorLocker(DatabaseCoreBackendPrivate* d)
+                          : count(0), d(d)
 {
     // Why two mutexes? The main mutex is recursive and won't work with a condvar.
 
@@ -310,7 +308,7 @@ void DatabaseCoreBackendPrivate::ErrorLocker::wait()
 {
     // we use a copy of the flag under lock of the errorLockMutex to be able to check it here
     while (d->errorLockOperationStatus == DatabaseCoreBackend::Wait)
-        d->errorLockCondVar.wait(&d->errorLockMutex);  
+        d->errorLockCondVar.wait(&d->errorLockMutex);
 }
 
 DatabaseCoreBackendPrivate::ErrorLocker::~ErrorLocker()
@@ -345,7 +343,6 @@ void DatabaseCoreBackendPrivate::queryOperationWakeAll(DatabaseCoreBackend::Quer
     errorLockCondVar.wakeAll();
 }
 
-
 bool DatabaseCoreBackendPrivate::checkOperationStatus()
 {
     while (operationStatus == DatabaseCoreBackend::Wait)
@@ -363,16 +360,16 @@ bool DatabaseCoreBackendPrivate::checkOperationStatus()
 }
 
 /// Returns true if the query shall be retried
-bool DatabaseCoreBackendPrivate::handleWithErrorHandler(const SqlQuery *query)
+bool DatabaseCoreBackendPrivate::handleWithErrorHandler(const SqlQuery* query)
 {
     if (errorHandler)
     {
         setQueryOperationFlag(DatabaseCoreBackend::Wait);
 
         ErrorLocker locker(this);
-        bool called = false;
+        bool called         = false;
         QSqlError lastError = query ? query->lastError() : databaseForThread().lastError();
-        QString lastQuery = query ? query->lastQuery() : QString();
+        QString lastQuery   = query ? query->lastQuery() : QString();
 
         if (!query || isConnectionError(*query))
         {
@@ -441,13 +438,13 @@ void DatabaseCoreBackendPrivate::connectionErrorAbortQueries()
 // ---------------------------
 
 DatabaseCoreBackend::DatabaseCoreBackend(const QString &backendName, DatabaseLocking *locking)
-               : d_ptr(new DatabaseCoreBackendPrivate(this))
+                   : d_ptr(new DatabaseCoreBackendPrivate(this))
 {
     d_ptr->init(backendName, locking);
 }
 
 DatabaseCoreBackend::DatabaseCoreBackend(const QString &backendName, DatabaseLocking *locking, DatabaseCoreBackendPrivate &dd)
-               : d_ptr(&dd)
+                   : d_ptr(&dd)
 {
     d_ptr->init(backendName, locking);
 }
@@ -464,7 +461,7 @@ DatabaseConfigElement DatabaseCoreBackend::configElement() const
     return DatabaseConfigElement::element(d->parameters.databaseType);
 }
 
-DatabaseAction DatabaseCoreBackend::getDBAction(const QString &actionName) const
+DatabaseAction DatabaseCoreBackend::getDBAction(const QString& actionName) const
 {
     DatabaseAction action = configElement().sqlStatements.value(actionName);
     if (action.name.isNull())
@@ -472,19 +469,19 @@ DatabaseAction DatabaseCoreBackend::getDBAction(const QString &actionName) const
     return action;
 }
 
-DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDBAction(const DatabaseAction &action, QList<QVariant>* values,
-                                                                  QVariant *lastInsertId)
+DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDBAction(const DatabaseAction& action, QList<QVariant>* values,
+                                                                  QVariant* lastInsertId)
 {
     return execDBAction(action, QMap<QString, QVariant>(), values, lastInsertId);
 }
 
-DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDBAction(const DatabaseAction &action, const QMap<QString,
-                                                                  QVariant>& bindingMap, QList<QVariant>* values, QVariant *lastInsertId)
+DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDBAction(const DatabaseAction& action, const QMap<QString, QVariant>& bindingMap,
+                                                                  QList<QVariant>* values, QVariant* lastInsertId)
 {
     Q_D(DatabaseCoreBackend);
 
     DatabaseCoreBackend::QueryState returnResult = DatabaseCoreBackend::NoErrors;
-    QSqlDatabase db = d->databaseForThread();
+    QSqlDatabase db                              = d->databaseForThread();
 
     if (action.name.isNull())
         kError() << "Attempt to execute null action";
@@ -541,7 +538,7 @@ DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDBAction(const Database
     return returnResult;
 }
 
-QSqlQuery DatabaseCoreBackend::execDBActionQuery(const DatabaseAction &action, const QMap<QString, QVariant>& bindingMap)
+QSqlQuery DatabaseCoreBackend::execDBActionQuery(const DatabaseAction& action, const QMap<QString, QVariant>& bindingMap)
 {
     Q_D(DatabaseCoreBackend);
 
@@ -573,17 +570,13 @@ QSqlQuery DatabaseCoreBackend::execDBActionQuery(const DatabaseAction &action, c
     return result;
 }
 
-void DatabaseCoreBackend::setDatabaseErrorHandler(DatabaseErrorHandler *handler)
+void DatabaseCoreBackend::setDatabaseErrorHandler(DatabaseErrorHandler* handler)
 {
     Q_D(DatabaseCoreBackend);
-    if (handler!=0 && handler->thread() != QCoreApplication::instance()->thread())
-    {
-        kError() << "DatabaseErrorHandler must live in the main thread";
-        Q_ASSERT(false);
-    }
-    if (d->errorHandler!=0){
-        d->errorHandler->~QObject();
-    }
+
+    if (d->errorHandler)
+        delete d->errorHandler;
+
     d->errorHandler = handler;
 }
 
@@ -633,7 +626,7 @@ bool DatabaseCoreBackend::open(const DatabaseParameters& parameters)
     return true;
 }
 
-bool DatabaseCoreBackend::initSchema(ThumbnailSchemaUpdater *updater)
+bool DatabaseCoreBackend::initSchema(ThumbnailSchemaUpdater* updater)
 {
     Q_D(DatabaseCoreBackend);
     if (d->status == OpenSchemaChecked)
@@ -682,14 +675,14 @@ bool DatabaseCoreBackend::execSql(const QString& sql, QStringList* values)
 QList<QVariant> DatabaseCoreBackend::readToList(SqlQuery& query)
 {
     QList<QVariant> list;
-    
+
     QSqlRecord record = query.record();
     int count = record.count();
-    
+
     while (query.next())
     {
-        for (int i=0; i<count; ++i)	  
-	  list << query.value(i);	
+        for (int i=0; i<count; ++i)
+      list << query.value(i);
     }
 #ifdef DATABASCOREBACKEND_DEBUG
     kDebug() << "Setting result value list ["<< list <<"]";
@@ -697,7 +690,7 @@ QList<QVariant> DatabaseCoreBackend::readToList(SqlQuery& query)
     return list;
 }
 
-DatabaseCoreBackend::QueryState DatabaseCoreBackend::handleQueryResult(SqlQuery &query, QList<QVariant>* values, QVariant *lastInsertId)
+DatabaseCoreBackend::QueryState DatabaseCoreBackend::handleQueryResult(SqlQuery& query, QList<QVariant>* values, QVariant* lastInsertId)
 {
     if (!query.isActive())
     {
@@ -713,31 +706,31 @@ DatabaseCoreBackend::QueryState DatabaseCoreBackend::handleQueryResult(SqlQuery 
     return DatabaseCoreBackend::NoErrors;
 }
 
-DatabaseCoreBackend::QueryState DatabaseCoreBackend::execSql(const QString& sql, QList<QVariant>* values, QVariant *lastInsertId)
+DatabaseCoreBackend::QueryState DatabaseCoreBackend::execSql(const QString& sql, QList<QVariant>* values, QVariant* lastInsertId)
 {
     SqlQuery query = execQuery(sql);
     return handleQueryResult(query, values, lastInsertId);
 }
 
 DatabaseCoreBackend::QueryState DatabaseCoreBackend::execSql(const QString& sql, const QVariant& boundValue1,
-                              QList<QVariant>* values, QVariant *lastInsertId)
+                                                             QList<QVariant>* values, QVariant* lastInsertId)
 {
     SqlQuery query = execQuery(sql, boundValue1);
     return handleQueryResult(query, values, lastInsertId);
 }
 
 DatabaseCoreBackend::QueryState DatabaseCoreBackend::execSql(const QString& sql,
-                              const QVariant& boundValue1, const QVariant& boundValue2,
-                              QList<QVariant>* values, QVariant *lastInsertId)
+                                                             const QVariant& boundValue1, const QVariant& boundValue2,
+                                                             QList<QVariant>* values, QVariant* lastInsertId)
 {
     SqlQuery query = execQuery(sql, boundValue1, boundValue2);
     return handleQueryResult(query, values, lastInsertId);
 }
 
 DatabaseCoreBackend::QueryState DatabaseCoreBackend::execSql(const QString& sql,
-                              const QVariant& boundValue1, const QVariant& boundValue2, 
-                              const QVariant& boundValue3, QList<QVariant>* values, 
-                              QVariant *lastInsertId)
+                              const QVariant& boundValue1, const QVariant& boundValue2,
+                              const QVariant& boundValue3, QList<QVariant>* values,
+                              QVariant* lastInsertId)
 {
     SqlQuery query = execQuery(sql, boundValue1, boundValue2, boundValue3);
     return handleQueryResult(query, values, lastInsertId);
@@ -746,21 +739,21 @@ DatabaseCoreBackend::QueryState DatabaseCoreBackend::execSql(const QString& sql,
 DatabaseCoreBackend::QueryState DatabaseCoreBackend::execSql(const QString& sql,
                 const QVariant& boundValue1, const QVariant& boundValue2,
                 const QVariant& boundValue3, const QVariant& boundValue4,
-                QList<QVariant>* values, QVariant *lastInsertId)
+                QList<QVariant>* values, QVariant* lastInsertId)
 {
     SqlQuery query = execQuery(sql, boundValue1, boundValue2, boundValue3, boundValue4);
     return handleQueryResult(query, values, lastInsertId);
 }
 
 DatabaseCoreBackend::QueryState DatabaseCoreBackend::execSql(const QString& sql, const QList<QVariant>& boundValues,
-                              QList<QVariant>* values, QVariant *lastInsertId)
+                              QList<QVariant>* values, QVariant* lastInsertId)
 {
     SqlQuery query = execQuery(sql, boundValues);
     return handleQueryResult(query, values, lastInsertId);
 }
 
-DatabaseCoreBackend::QueryState DatabaseCoreBackend::execSql(const QString& sql, const QMap<QString, QVariant> &bindingMap,
-                                  QList<QVariant> *values, QVariant *lastInsertId)
+DatabaseCoreBackend::QueryState DatabaseCoreBackend::execSql(const QString& sql, const QMap<QString, QVariant>& bindingMap,
+                                                             QList<QVariant>* values, QVariant* lastInsertId)
 {
     SqlQuery query = execQuery(sql, bindingMap);
     return handleQueryResult(query, values, lastInsertId);
@@ -778,7 +771,7 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QVariant& boun
 }
 
 SqlQuery DatabaseCoreBackend::execQuery(const QString& sql,
-                                     const QVariant& boundValue1, const QVariant& boundValue2)
+                                        const QVariant& boundValue1, const QVariant& boundValue2)
 {
     SqlQuery query = prepareQuery(sql);
     query.bindValue(0, boundValue1);
@@ -788,7 +781,7 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql,
 }
 
 SqlQuery DatabaseCoreBackend::execQuery(const QString& sql,
-                                     const QVariant& boundValue1, const QVariant& boundValue2, const QVariant& boundValue3)
+                                        const QVariant& boundValue1, const QVariant& boundValue2, const QVariant& boundValue3)
 {
     SqlQuery query = prepareQuery(sql);
     query.bindValue(0, boundValue1);
@@ -799,8 +792,8 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql,
 }
 
 SqlQuery DatabaseCoreBackend::execQuery(const QString& sql,
-                                     const QVariant& boundValue1, const QVariant& boundValue2,
-                                     const QVariant& boundValue3, const QVariant& boundValue4)
+                                        const QVariant& boundValue1, const QVariant& boundValue2,
+                                        const QVariant& boundValue3, const QVariant& boundValue4)
 {
     SqlQuery query = prepareQuery(sql);
     query.bindValue(0, boundValue1);
@@ -846,91 +839,93 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QMap<QString, 
 
         while ((pos=identifierRegExp.indexIn(preparedString, pos))!=-1)
         {
-        	QString namedPlaceholder = identifierRegExp.cap(0);
-        	if (!bindingMap.contains(namedPlaceholder))
-        	{
-        		kError()<<"Missing place holder ["<< namedPlaceholder <<"] in binding map. Following values are defined for this action ["<< bindingMap.keys() <<"]. This is a setup error!";
-        		//TODO What should we do here? How can we cancel that action?
-        	}
+            QString namedPlaceholder = identifierRegExp.cap(0);
+            if (!bindingMap.contains(namedPlaceholder))
+            {
+                kError()<<"Missing place holder ["<< namedPlaceholder <<"] in binding map. Following values are defined for this action ["<< bindingMap.keys() <<"]. This is a setup error!";
+                //TODO What should we do here? How can we cancel that action?
+            }
             QVariant placeHolderValue = bindingMap[namedPlaceholder];
             // Check if this is a map - then we assume, that there is a custom field/value list
             QString replaceStr;
             if (placeHolderValue.userType() == qMetaTypeId<DBActionType>()){
-            	DBActionType actionType = placeHolderValue.value<DBActionType>();
-            	bool		isValue = actionType.isValue();
-            	QVariant 	value   = actionType.getActionValue();
+                DBActionType actionType = placeHolderValue.value<DBActionType>();
+                bool isValue            = actionType.isValue();
+                QVariant value          = actionType.getActionValue();
                 if ( value.type()==QVariant::Map )
                 {
-                	QMap<QString, QVariant> placeHolderMap = value.toMap();
-                	QMap<QString, QVariant>::const_iterator iterator;
-                	for (iterator = placeHolderMap.constBegin(); iterator != placeHolderMap.constEnd(); ++iterator){
-                		QString  key 	= iterator.key();
-                		QVariant value	= iterator.value();
-                		replaceStr.append(key);
-                		replaceStr.append("= ?");
-                		namedPlaceholderValues.append(value);
+                    QMap<QString, QVariant> placeHolderMap = value.toMap();
+                    QMap<QString, QVariant>::const_iterator iterator;
+                    for (iterator = placeHolderMap.constBegin(); iterator != placeHolderMap.constEnd(); ++iterator)
+                    {
+                        QString  key   = iterator.key();
+                        QVariant value = iterator.value();
+                        replaceStr.append(key);
+                        replaceStr.append("= ?");
+                        namedPlaceholderValues.append(value);
 
-                		// Add a semicolon to the statement, if we are not on the last entry
-                		if ((iterator+1) != placeHolderMap.constEnd())
-                		{
-                			replaceStr.append(", ");
-                		}
-                	}
+                        // Add a semicolon to the statement, if we are not on the last entry
+                        if ((iterator+1) != placeHolderMap.constEnd())
+                        {
+                            replaceStr.append(", ");
+                        }
+                    }
                 }
                 else if ( value.type()==QVariant::List )
                 {
-                	QList<QVariant> placeHolderList = value.toList();
-                	QList<QVariant>::const_iterator iterator;
-                	for (iterator = placeHolderList.constBegin(); iterator != placeHolderList.constEnd(); ++iterator){
-                		QVariant  entry 	= *iterator;
-                		if (isValue)
-                		{
-                			replaceStr.append("?");
-                			namedPlaceholderValues.append(entry);
-                		}
-                		else
-                		{
-                			replaceStr.append(entry.value<QString>());
-                		}
+                    QList<QVariant> placeHolderList = value.toList();
+                    QList<QVariant>::const_iterator iterator;
+                    for (iterator = placeHolderList.constBegin(); iterator != placeHolderList.constEnd(); ++iterator){
+                        QVariant  entry = *iterator;
+                        if (isValue)
+                        {
+                            replaceStr.append("?");
+                            namedPlaceholderValues.append(entry);
+                        }
+                        else
+                        {
+                            replaceStr.append(entry.value<QString>());
+                        }
 
-                		// Add a semicolon to the statement, if we are not on the last entry
-                		if ((iterator+1) != placeHolderList.constEnd())
-                		{
-                			replaceStr.append(", ");
-                		}
-                	}
-                }else if ( value.type()==QVariant::StringList )
+                        // Add a semicolon to the statement, if we are not on the last entry
+                        if ((iterator+1) != placeHolderList.constEnd())
+                        {
+                            replaceStr.append(", ");
+                        }
+                    }
+                }
+                else if ( value.type()==QVariant::StringList )
                 {
-                	QStringList placeHolderList = value.toStringList();
-                	QStringList::const_iterator iterator;
-                	for (iterator = placeHolderList.constBegin(); iterator != placeHolderList.constEnd(); ++iterator){
-                		QString  entry 	= *iterator;
-                		if (isValue)
-                		{
-                			replaceStr.append("?");
-                			namedPlaceholderValues.append(entry);
-                		}
-                		else
-                		{
-                			replaceStr.append(entry);
-                		}
+                    QStringList placeHolderList = value.toStringList();
+                    QStringList::const_iterator iterator;
+                    for (iterator = placeHolderList.constBegin(); iterator != placeHolderList.constEnd(); ++iterator){
+                        QString  entry = *iterator;
+                        if (isValue)
+                        {
+                            replaceStr.append("?");
+                            namedPlaceholderValues.append(entry);
+                        }
+                        else
+                        {
+                            replaceStr.append(entry);
+                        }
 
-                		// Add a semicolon to the statement, if we are not on the last entry
-                		if ((iterator+1) != placeHolderList.constEnd())
-                		{
-                			replaceStr.append(", ");
-                		}
-                	}
+                        // Add a semicolon to the statement, if we are not on the last entry
+                        if ((iterator+1) != placeHolderList.constEnd())
+                        {
+                            replaceStr.append(", ");
+                        }
+                    }
                 }
             }
-			else
+            else
             {
-				#ifdef DATABASCOREBACKEND_DEBUG
-				kDebug()<<"Bind key ["<< namedPlaceholder <<"] to value ["<< bindingMap[namedPlaceholder] <<"]";
-				#endif
+                #ifdef DATABASCOREBACKEND_DEBUG
+                kDebug()<<"Bind key ["<< namedPlaceholder <<"] to value ["<< bindingMap[namedPlaceholder] <<"]";
+                #endif
 
-            	namedPlaceholderValues.append(bindingMap[namedPlaceholder]);
-            	replaceStr="?";
+                namedPlaceholderValues.append(bindingMap[namedPlaceholder]);
+                replaceStr="?";
             }
 
             preparedString = preparedString.replace(pos, identifierRegExp.matchedLength(), replaceStr);

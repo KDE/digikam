@@ -7,8 +7,8 @@
  * Description : Handling accesss to one image and associated data
  *
  * Copyright (C) 2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,23 +48,23 @@ namespace Digikam
 
 ImageInfoData::ImageInfoData()
 {
-    id                      = -1;
-    albumId                 = -1;
-    albumRootId             = -1;
+    id                     = -1;
+    albumId                = -1;
+    albumRootId            = -1;
 
-    rating                  = -1;
-    category                = DatabaseItem::UndefinedCategory;
-    fileSize                = 0;
+    rating                 = -1;
+    category               = DatabaseItem::UndefinedCategory;
+    fileSize               = 0;
 
-    defaultCommentCached    = false;
-    ratingCached            = false;
-    categoryCached          = false;
-    formatCached            = false;
-    creationDateCached      = false;
-    modificationDateCached  = false;
-    fileSizeCached          = false;
-    imageSizeCached         = false;
-    tagIdsCached            = false;
+    defaultCommentCached   = false;
+    ratingCached           = false;
+    categoryCached         = false;
+    formatCached           = false;
+    creationDateCached     = false;
+    modificationDateCached = false;
+    fileSizeCached         = false;
+    imageSizeCached        = false;
+    tagIdsCached           = false;
 }
 
 ImageInfo::ImageInfo()
@@ -132,7 +132,7 @@ ImageInfo::ImageInfo(const KUrl& url)
     if (location.isNull())
     {
         m_data = 0;
-        qWarning() << "No location could be retrieved for url" << url; 
+        qWarning() << "No location could be retrieved for url" << url;
         return;
     }
     KUrl _url(url.directory());
@@ -159,7 +159,7 @@ ImageInfo::ImageInfo(const KUrl& url)
     if (!info.id)
     {
         m_data = 0;
-        qWarning() << "No itemShortInfo could be retrieved from the database for image" << name; 
+        qWarning() << "No itemShortInfo could be retrieved from the database for image" << name;
         return;
     }
 
@@ -647,7 +647,7 @@ ImageInfo ImageInfo::copyItem(int dstAlbumID, const QString& dstFileName)
     return ImageInfo(id);
 }
 
-QDebug& operator<<(QDebug &stream, const ImageInfo &info)
+QDebug& operator<<(QDebug& stream, const ImageInfo& info)
 {
     return stream << "ImageInfo [id = " << info.id() << ", databaseurl = "
                   << info.databaseUrl() << "]";

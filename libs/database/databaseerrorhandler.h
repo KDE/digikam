@@ -49,6 +49,11 @@ class DIGIKAM_EXPORT DatabaseErrorHandler : public QObject
 {
     Q_OBJECT
 
+public:
+
+    DatabaseErrorHandler(){};
+    ~DatabaseErrorHandler(){};
+
 public Q_SLOTS:
 
     // NOTE: These all need to be slots, possibly called by queued connection
