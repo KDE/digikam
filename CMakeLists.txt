@@ -168,7 +168,7 @@ ENDIF(NOT WIN32)
 # Check KExiv2 version installed to compile fine.
 IF(NOT WIN32)
     FIND_PACKAGE(PkgConfig)
-    PKG_CHECK_MODULES(Kexiv2 libkexiv2>=1.1.0)
+    PKG_CHECK_MODULES(Kexiv2 libkexiv2>=1.2.0)
     IF(Kexiv2_FOUND)
         SET(KEXIV2_FOR_DIGIKAM TRUE)
     ELSE(Kexiv2_FOUND)
