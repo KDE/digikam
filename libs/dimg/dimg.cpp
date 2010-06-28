@@ -2219,6 +2219,8 @@ void DImg::updateMetadata(const QString& destMimeType, const QString& originalFi
     if(!m_priv->imageHistory.isEmpty()) {
         QString imageHistoryXml = m_priv->imageHistory.toXml();
         meta.setImageHistory(imageHistoryXml);
+        DImageHistory di(m_priv->imageHistory.fromXml(imageHistoryXml));
+        di.toXml();
     }
 
     // Store new Exif/IPTC/XMP data into image.
@@ -2232,10 +2234,10 @@ void DImg::setFilterAction(const QString& identifier, const int version, const F
     if(m_priv->imageHistory.isEmpty())
     {
         QString fileUUID(getUniqueHash(m_priv->attributes.value("originalFilePath").toString()));
-        QString fileName(KUrl(m_priv->attributes.value("originalFilePath").toString()).fileName());
+        QString filePathAndName = m_priv->attributes.value("originalFilePath").toString();
         QDateTime fileCreateDate(QFileInfo(m_priv->attributes.value("originalFilePath").toString()).created());
       
-        HistoryImageId h(fileUUID, fileUUID, fileName, fileCreateDate);
+        HistoryImageId h(fileUUID, fileUUID, filePathAndName, fileCreateDate);
         
         m_priv->imageHistory << h;
     }  
@@ -2243,10 +2245,10 @@ void DImg::setFilterAction(const QString& identifier, const int version, const F
     {
       //create new file entry
         QString fileUUID(getUniqueHash(m_priv->attributes.value("originalFilePath").toString()));
-        QString fileName(KUrl(m_priv->attributes.value("originalFilePath").toString()).fileName());
+        QString filePathAndName = m_priv->attributes.value("originalFilePath").toString();
         QDateTime fileCreateDate(QFileInfo(m_priv->attributes.value("originalFilePath").toString()).created());
       
-        HistoryImageId h(fileUUID, fileUUID, fileName, fileCreateDate);
+        HistoryImageId h(fileUUID, fileUUID, filePathAndName, fileCreateDate);
         
         m_priv->imageHistory << h;    
     }
@@ -2269,10 +2271,10 @@ void DImg::setFilterAction(const QString& identifier, const int version, const F
     if(m_priv->imageHistory.isEmpty())
     {
         QString fileUUID(getUniqueHash(m_priv->attributes.value("originalFilePath").toString()));
-        QString fileName(KUrl(m_priv->attributes.value("originalFilePath").toString()).fileName());
+        QString filePathAndName = m_priv->attributes.value("originalFilePath").toString();
         QDateTime fileCreateDate(QFileInfo(m_priv->attributes.value("originalFilePath").toString()).created());
       
-        HistoryImageId h(fileUUID, fileUUID, fileName, fileCreateDate);
+        HistoryImageId h(fileUUID, fileUUID, filePathAndName, fileCreateDate);
         
         m_priv->imageHistory << h;
     }  
@@ -2280,10 +2282,10 @@ void DImg::setFilterAction(const QString& identifier, const int version, const F
     {
       //create new file entry
         QString fileUUID(getUniqueHash(m_priv->attributes.value("originalFilePath").toString()));
-        QString fileName(KUrl(m_priv->attributes.value("originalFilePath").toString()).fileName());
+        QString filePathAndName = m_priv->attributes.value("originalFilePath").toString();
         QDateTime fileCreateDate(QFileInfo(m_priv->attributes.value("originalFilePath").toString()).created());
       
-        HistoryImageId h(fileUUID, fileUUID, fileName, fileCreateDate);
+        HistoryImageId h(fileUUID, fileUUID, filePathAndName, fileCreateDate);
         
         m_priv->imageHistory << h;    
     }
@@ -2295,6 +2297,26 @@ void DImg::setFilterAction(const QString& identifier, const int version, const F
     
     kDebug() << "FilterAction " << identifier << " with param " << param << ": " << value;
 }
+
+void DImg::setFilterAction(const Digikam::FilterAction& action)
+{
+    // add the original file to the entries
+    if(m_priv->imageHistory.isEmpty())
+    {
+        QString fileUUID(getUniqueHash(m_priv->attributes.value("originalFilePath").toString()));
+        QString filePathAndName = m_priv->attributes.value("originalFilePath").toString();
+        QDateTime fileCreateDate(QFileInfo(m_priv->attributes.value("originalFilePath").toString()).created());
+
+        HistoryImageId h(fileUUID, fileUUID, filePathAndName, fileCreateDate);
+
+        m_priv->imageHistory << h;
+    }
+
+    m_priv->imageHistory << action;
+
+    kDebug() << "FilterAction added by reference";
+}
+
 
 DImageHistory DImg::getImageHistory() const
 {

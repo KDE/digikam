@@ -315,6 +315,7 @@ public:
     
     void       setFilterAction(const QString& identifier, const int version, const Digikam::FilterAction::Category category, QString param, const QVariant value);
     void       setFilterAction(const QString& identifier, const int version, const Digikam::FilterAction::Category category, QHash<QString, QVariant> values);
+    void       setFilterAction(const FilterAction& action);
 
     /** Use this method to update lead metadata after image transformations.
         This fix Iptc preview, Exif thumbnail, image size information, etc.
