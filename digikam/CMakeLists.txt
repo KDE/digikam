@@ -118,6 +118,7 @@ SET(digikamcore_LIB_SRCS
                         ${libdmetadata_SRCS}
                         ${libdatabasecore_SRCS}
                         ${libhistogram_SRCS}
+                        ${libversionmanager_SRCS}
                         ${libwhitebalance_SRCS}
                         ${libcurves_SRCS}
                         ${liblevels_SRCS}
