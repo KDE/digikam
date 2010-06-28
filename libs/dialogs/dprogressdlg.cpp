@@ -6,7 +6,7 @@
  * Date        : 2006-30-08
  * Description : a progress dialog for digiKam
  *
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -64,16 +64,16 @@ public:
     bool          allowCancel;
     bool          cancelled;
 
-    QLabel       *logo;
-    QLabel       *title;
-    QLabel       *label;
+    QLabel*       logo;
+    QLabel*       title;
+    QLabel*       label;
 
-    QTreeWidget  *actionsList;
+    QTreeWidget*  actionsList;
 
-    QProgressBar *progress;
+    QProgressBar* progress;
 };
 
-DProgressDlg::DProgressDlg(QWidget *parent, const QString& caption)
+DProgressDlg::DProgressDlg(QWidget* parent, const QString& caption)
             : KDialog(parent), d(new DProgressDlgPriv)
 {
     setCaption(caption);
@@ -81,12 +81,12 @@ DProgressDlg::DProgressDlg(QWidget *parent, const QString& caption)
     setDefaultButton(Cancel);
     setModal(true);
 
-    QWidget *page     = new QWidget(this);
+    QWidget* page     = new QWidget(this);
     setMainWidget(page);
 
     QGridLayout* grid = new QGridLayout(page);
 
-    QVBoxLayout *vlay = new QVBoxLayout();
+    QVBoxLayout* vlay = new QVBoxLayout();
     d->actionsList    = new QTreeWidget(page);
     d->label          = new QLabel(page);
     d->title          = new QLabel(page);
@@ -160,8 +160,8 @@ void DProgressDlg::setButtonGuiItem(const KGuiItem& item)
 
 void DProgressDlg::addedAction(const QPixmap& itemPix, const QString& text)
 {
-    QPixmap pix = itemPix;
-    QTreeWidgetItem *item = new QTreeWidgetItem(d->actionsList, QStringList() << QString() << text);
+    QPixmap pix           = itemPix;
+    QTreeWidgetItem* item = new QTreeWidgetItem(d->actionsList, QStringList() << QString() << text);
 
     if (pix.isNull())
     {
