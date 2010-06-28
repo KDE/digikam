@@ -35,6 +35,7 @@
 
 #include "digikam_export.h"
 #include "dimg.h"
+#include "dimagehistory.h"
 
 class QWidget;
 class QPixmap;
@@ -139,7 +140,10 @@ public:
     void   putImage(uchar* data, int w, int h);
     void   putImage(uchar* data, int w, int h, bool sixteenBit);
     void   putImage(const QString& caller, uchar* data, int w, int h);
+    //TODO: remove the variants not passing a FilterAction, once fully implemented
+    void   putImage(const QString& caller, const FilterAction& action, uchar* data, int w, int h);
     void   putImage(const QString& caller, uchar* data, int w, int h, bool sixteenBit);
+    void   putImage(const QString& caller, const FilterAction& action, uchar* data, int w, int h, bool sixteenBit);
 
     uchar* getImageSelection();
     void   putImageSelection(const QString& caller, uchar* data);
@@ -152,6 +156,8 @@ public:
 
     IccProfile            getEmbeddedICC();
     KExiv2Data            getMetadata();
+    DImageHistory         getImageHistory();
+    DImageHistory         getInitialImageHistory();
 
     QString               getImageFileName();
     QString               getImageFilePath();

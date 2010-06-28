@@ -128,7 +128,7 @@ public:
     QString                    savingFilename;
 
     DImg                       image;
-
+    DImageHistory              imageHistoryWhenLoaded;
     UndoManager*               undoMan;
 
     ICCSettingsContainer*      cmSettings;
@@ -311,7 +311,7 @@ void DImgInterface::resetValues()
     d->gamma          = 1.0f;
     d->contrast       = 1.0f;
     d->brightness     = 0.0f;
-
+    d->imageHistoryWhenLoaded = DImageHistory();
     d->undoMan->clear();
 }
 
@@ -357,6 +357,7 @@ void DImgInterface::slotImageLoaded(const LoadingDescription& loadingDescription
         d->width      = d->origWidth;
         d->height     = d->origHeight;
         valRet        = true;
+        d->imageHistoryWhenLoaded = d->image.getImageHistory();
 
         // Raw files are already rotated properly by dcraw. Only perform auto-rotation with non-RAW files.
         // We don't have a feedback from dcraw about auto-rotated RAW file during decoding. Well set transformed
@@ -576,7 +577,7 @@ void DImgInterface::switchToLastSaved(const QString& newFilename)
     // Higher level wants to use the current DImg object to represent the file
     // it has previously been saved to.
     d->filename = newFilename;
-
+    d->imageHistoryWhenLoaded = d->image.getImageHistory();
     d->image.switchOriginToLastSaved();
 }
 
@@ -908,14 +909,37 @@ uchar* DImgInterface::getImage()
     }
 }
 
+DImageHistory DImgInterface::getImageHistory()
+{
+    return d->image.getImageHistory();
+}
+
+DImageHistory DImgInterface::getInitialImageHistory()
+{
+    return d->imageHistoryWhenLoaded;
+}
+
+
 void DImgInterface::putImage(const QString& caller, uchar* data, int w, int h)
 {
     putImage(caller, data, w, h, d->image.sixteenBit());
 }
 
+void DImgInterface::putImage(const QString& caller, const FilterAction& action, uchar* data, int w, int h)
+{
+    putImage(caller, action, data, w, h, d->image.sixteenBit());
+}
+
 void DImgInterface::putImage(const QString& caller, uchar* data, int w, int h, bool sixteenBit)
 {
+    putImage(caller, FilterAction(), data, w, h, sixteenBit);
+}
+
+void DImgInterface::putImage(const QString& caller, const FilterAction& action, uchar* data, int w, int h, bool sixteenBit)
+{
     d->undoMan->addAction(new UndoActionIrreversible(this, caller));
+    //TODO: use action to write history, here, after set UndoAction is added
+    d->image.setFilterAction(action);
     putImage(data, w, h, sixteenBit);
 }
 

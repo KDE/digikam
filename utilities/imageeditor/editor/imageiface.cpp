@@ -257,6 +257,14 @@ void ImageIface::putOriginalImage(const QString& caller, uchar* data, int w, int
     DImgInterface::defaultInterface()->putImage(caller, data, w, h);
 }
 
+void ImageIface::putOriginalImage(const QString& caller, const FilterAction& action, uchar* data, int w, int h)
+{
+    if (!data)
+        return;
+
+    DImgInterface::defaultInterface()->putImage(caller, action, data, w, h);
+}
+
 void ImageIface::putOriginalIccProfile(const IccProfile& profile)
 {
     DImgInterface::defaultInterface()->putIccProfile( profile );
