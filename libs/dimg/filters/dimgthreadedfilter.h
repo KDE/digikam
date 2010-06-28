@@ -40,6 +40,7 @@
 #include "dimg.h"
 #include "dynamicthread.h"
 #include "digikam_export.h"
+#include "filteraction.h"
 
 class QObject;
 
@@ -53,13 +54,14 @@ class DIGIKAM_EXPORT DImgThreadedFilter : public DynamicThread
 public:
 
     /** Constructs a filter without argument.
-        You need to call setOriginalImage(), setFilterName(), and startFilter() 
+        You need to call setupFilter() and startFilter()
         to start the threaded computation.
         To run filter without to use multithreading, call startFilterDirectly().
     */
-    DImgThreadedFilter(QObject* parent=0);
+    DImgThreadedFilter(QObject* parent=0, const QString& name = QString());
 
     /** Constructs a filter with all arguments (ready to use).
+        The given original image will be copied.
         You need to call startFilter() to start the threaded computation.
         To run filter without to use multithreading, call startFilterDirectly().
     */
@@ -67,6 +69,12 @@ public:
                        const QString& name = QString());
 
     ~DImgThreadedFilter();
+
+    /** You need to call this and then start filter of you used
+     *  the constructor not settings and original image.
+     *  The original image's data will not be copied.
+     */
+    void setupFilter(const DImg& orgImage);
 
     void setOriginalImage(const DImg& orgImage);
     void setFilterName(const QString& name);
@@ -81,6 +89,22 @@ public:
     virtual void cancelFilter();
     /** Start computation of this filter, directly in this thread. */
     virtual void startFilterDirectly();
+
+    /** Returns the action description corresponding to currently set options */
+    //TODO: Remove default implementation and make these pure virtual, once implemented in all currently existing filters
+    virtual FilterAction filterAction() { return FilterAction(); }// = 0;
+    virtual void readParameters(const FilterAction&) {}// = 0;
+    /** Return the identifier for this filter in the image history */
+    virtual QString filterIdentifier() const { return QString(); }// = 0;
+    virtual QList<int> supportedVersions() const;
+
+    /** Set the filter version. A filter may implement different versions, to preserve
+     *  image history when the algorithm is changed.
+     *  Any value set here must be contained in supportedVersions, otherwise
+     *  this call will be ignored. Default value is 1.
+     */
+    void setFilterVersion(int version);
+    int filterVersion() const;
 
 Q_SIGNALS:
 
@@ -142,6 +166,8 @@ protected:
     virtual int modulateProgress(int progress);
 
 protected:
+
+    int                 m_version;
 
     bool                m_wasCancelled;
 

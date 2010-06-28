@@ -35,11 +35,11 @@
 namespace Digikam
 {
 
-DImgThreadedFilter::DImgThreadedFilter(QObject* parent)
+DImgThreadedFilter::DImgThreadedFilter(QObject* parent, const QString& name)
                   : DynamicThread()
 {
     setOriginalImage(DImg());
-    setFilterName(QString());
+    setFilterName(name);
     setParent(parent);
 
     m_master          = 0;
@@ -47,6 +47,7 @@ DImgThreadedFilter::DImgThreadedFilter(QObject* parent)
     m_progressBegin   = 0;
     m_progressSpan    = 100;
     m_progressCurrent = 0;
+    m_version         = 1;
 }
 
 DImgThreadedFilter::DImgThreadedFilter(DImg* orgImage, QObject* parent,
@@ -63,6 +64,7 @@ DImgThreadedFilter::DImgThreadedFilter(DImg* orgImage, QObject* parent,
     m_progressBegin   = 0;
     m_progressSpan    = 100;
     m_progressCurrent = 0;
+    m_version         = 1;
 }
 
 DImgThreadedFilter::DImgThreadedFilter(DImgThreadedFilter* master, const DImg& orgImage,
@@ -79,7 +81,8 @@ DImgThreadedFilter::DImgThreadedFilter(DImgThreadedFilter* master, const DImg& o
     m_progressBegin   = progressBegin;
     m_progressSpan    = progressEnd - progressBegin;
     m_progressCurrent = 0;
-    
+    m_version         = 1;
+
     m_master->setSlave(this);
 }
 
@@ -88,6 +91,12 @@ DImgThreadedFilter::~DImgThreadedFilter()
     cancelFilter();
     if (m_master)
         m_master->setSlave(0);
+}
+
+void DImgThreadedFilter::setupFilter(const DImg& orgImage)
+{
+    setOriginalImage(orgImage);
+    initFilter();
 }
 
 void DImgThreadedFilter::setOriginalImage(const DImg& orgImage)
@@ -103,6 +112,22 @@ void DImgThreadedFilter::setFilterName(const QString& name)
 void DImgThreadedFilter::setParent(QObject* parent)
 {
     m_parent = parent;
+}
+
+QList<int> DImgThreadedFilter::supportedVersions() const
+{
+    return QList<int>() << 1;
+}
+
+void DImgThreadedFilter::setFilterVersion(int version)
+{
+    if (supportedVersions().contains(version))
+        m_version = version;
+}
+
+int DImgThreadedFilter::filterVersion() const
+{
+    return m_version;
 }
 
 void DImgThreadedFilter::initFilter()
