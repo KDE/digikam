@@ -132,6 +132,9 @@ void EditorToolIface::loadTool(EditorTool* tool)
 
     connect(d->editor, SIGNAL(signalPreviewModeChanged(int)),
             d->tool, SLOT(slotPreviewModeChanged()));
+    
+    connect(d->tool, SIGNAL(okClicked()),
+            this, SLOT(slotToolApplied()));
 }
 
 void EditorToolIface::unLoadTool()
@@ -214,5 +217,11 @@ void EditorToolIface::setPreviewModeMask(int mask)
 {
     d->editor->setPreviewModeMask(mask);
 }
+
+void EditorToolIface::slotToolApplied()
+{
+    d->editor->saveNewVersion();
+}
+
 
 }  // namespace Digikam

@@ -1057,6 +1057,10 @@ bool ImageWindow::saveAs()
     return ( startingSaveAs(d->urlCurrent) );
 }
 
+bool ImageWindow::saveNewVersion() {
+    return ( startingSaveNewVersion(d->urlCurrent) );
+}
+
 KUrl ImageWindow::saveDestinationUrl()
 {
     return d->urlCurrent;

@@ -97,6 +97,7 @@ private:
 
     bool save();
     bool saveAs();
+    bool saveNewVersion();
     KUrl saveDestinationUrl();
     bool hasChangesToSave();
 
