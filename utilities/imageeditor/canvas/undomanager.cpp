@@ -62,6 +62,8 @@ public:
     UndoCache*          undoCache;
 
     DImgInterface*      dimgiface;
+
+    DImageHistory       historyAtOrigin;
 };
 
 UndoManager::UndoManager(DImgInterface* iface)

@@ -32,6 +32,7 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "dimagehistory.h"
 
 namespace Digikam
 {
@@ -51,10 +52,14 @@ public:
 
     QString getTitle() const;
 
+    /// The history before applying the change
+    DImageHistory getHistory() const;
+
 protected:
 
     DImgInterface *m_iface;
     QString        m_title;
+    DImageHistory  m_history;
 };
 
 // --------------------------------------------------------------------

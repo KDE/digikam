@@ -39,6 +39,7 @@ UndoAction::UndoAction(DImgInterface* iface)
           : m_iface(iface)
 {
     m_title = i18n("unknown");
+    m_history = iface->getImageHistory();
 }
 
 UndoAction::~UndoAction()
@@ -48,6 +49,11 @@ UndoAction::~UndoAction()
 QString UndoAction::getTitle() const
 {
     return m_title;
+}
+
+DImageHistory UndoAction::getHistory() const
+{
+    return m_history;
 }
 
 // ---------------------------------------------------------------------------------------------
