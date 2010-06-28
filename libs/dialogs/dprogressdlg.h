@@ -54,7 +54,6 @@ public:
 
     void setLabel(const QString& text);
     void setTitle(const QString& text);
-    void setActionListVSBarVisible(bool visible);
     void showCancelButton(bool show);
     void setAllowCancel(bool allowCancel);
     bool wasCancelled() const;

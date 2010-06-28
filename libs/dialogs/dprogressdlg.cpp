@@ -41,7 +41,7 @@
 #include <kapplication.h>
 #include <kiconloader.h>
 #include <kstandarddirs.h>
-
+#include <ksqueezedtextlabel.h>
 
 namespace Digikam
 {
@@ -53,7 +53,8 @@ public:
     DProgressDlgPriv()
     {
         progress    = 0;
-        actionsList = 0;
+        actionLabel = 0;
+        actionPix   = 0;
         logo        = 0;
         title       = 0;
         label       = 0;
@@ -61,16 +62,17 @@ public:
         cancelled   = false;
     }
 
-    bool          allowCancel;
-    bool          cancelled;
+    bool                allowCancel;
+    bool                cancelled;
 
-    QLabel*       logo;
-    QLabel*       title;
-    QLabel*       label;
+    QLabel*             logo;
+    QLabel*             title;
+    QLabel*             label;
 
-    QTreeWidget*  actionsList;
+    QLabel*             actionPix;
+    KSqueezedTextLabel* actionLabel;
 
-    QProgressBar* progress;
+    QProgressBar*       progress;
 };
 
 DProgressDlg::DProgressDlg(QWidget* parent, const QString& caption)
@@ -86,44 +88,28 @@ DProgressDlg::DProgressDlg(QWidget* parent, const QString& caption)
 
     QGridLayout* grid = new QGridLayout(page);
 
-    QVBoxLayout* vlay = new QVBoxLayout();
-    d->actionsList    = new QTreeWidget(page);
-    d->label          = new QLabel(page);
-    d->title          = new QLabel(page);
+    d->actionPix      = new QLabel(page);
+    d->actionLabel    = new KSqueezedTextLabel(page);
     d->logo           = new QLabel(page);
     d->progress       = new QProgressBar(page);
+    d->title          = new QLabel(page);
+    d->label          = new QLabel(page);
     d->label->setWordWrap(true);
-
-    vlay->addWidget(d->logo);
-    vlay->addWidget(d->progress);
-    vlay->addWidget(d->title);
-    vlay->addStretch();
 
     d->logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
                        .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
-    d->actionsList->setSortingEnabled(false);
-    d->actionsList->setRootIsDecorated(false);
-    d->actionsList->setSelectionMode(QAbstractItemView::NoSelection);
-    d->actionsList->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    d->actionsList->setAllColumnsShowFocus(true);
-    d->actionsList->setColumnCount(2);
-    d->actionsList->header()->hide();
-    d->actionsList->setColumnWidth(0, 40);
-    d->actionsList->setIconSize(QSize(32, 32));
-
-    QStringList labels;
-    labels.append("Thumb");        // no i18n here: hidden header
-    labels.append("Status");       // no i18n here: hidden header
-    d->actionsList->setHeaderLabels(labels);
-
-    grid->addLayout(vlay,           0, 0, 2, 1);
-    grid->addWidget(d->label,       0, 1, 1, 1);
-    grid->addWidget(d->actionsList, 1, 1, 1, 1);
+    grid->addWidget(d->logo,        0, 0, 3, 1);
+    grid->addWidget(d->label,       0, 1, 1, 2);
+    grid->addWidget(d->actionPix,   1, 1, 1, 1);
+    grid->addWidget(d->actionLabel, 1, 2, 1, 1);
+    grid->addWidget(d->progress,    2, 1, 1, 2);
+    grid->addWidget(d->title,       3, 1, 1, 2);
     grid->setSpacing(spacingHint());
     grid->setMargin(0);
-    grid->setRowStretch(1, 10);
-    grid->setColumnStretch(1, 10);
+    grid->setColumnStretch(2, 10);
+
+    setInitialSize(QSize(500, 150));
 
     connect(this, SIGNAL(cancelClicked()),
             this, SLOT(slotCancel()));
@@ -160,9 +146,7 @@ void DProgressDlg::setButtonGuiItem(const KGuiItem& item)
 
 void DProgressDlg::addedAction(const QPixmap& itemPix, const QString& text)
 {
-    QPixmap pix           = itemPix;
-    QTreeWidgetItem* item = new QTreeWidgetItem(d->actionsList, QStringList() << QString() << text);
-
+    QPixmap pix = itemPix;
     if (pix.isNull())
     {
         pix = DesktopIcon("image-missing", KIconLoader::SizeMedium);    // 32x32 px
@@ -172,13 +156,12 @@ void DProgressDlg::addedAction(const QPixmap& itemPix, const QString& text)
         pix = pix.scaled(32, 32, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     }
 
-    item->setIcon(0, pix);
-    d->actionsList->scrollToItem(item);
+    d->actionPix->setPixmap(pix);
+    d->actionLabel->setText(text);
 }
 
 void DProgressDlg::reset()
 {
-    d->actionsList->clear();
     d->progress->setValue(0);
 }
 
@@ -236,14 +219,6 @@ bool DProgressDlg::allowCancel() const
 bool DProgressDlg::wasCancelled() const
 {
     return d->cancelled;
-}
-
-void DProgressDlg::setActionListVSBarVisible(bool visible)
-{
-    if (!visible)
-        d->actionsList->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    else
-        d->actionsList->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 }
 
 }  // namespace Digikam

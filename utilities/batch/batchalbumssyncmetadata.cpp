@@ -90,7 +90,6 @@ BatchAlbumsSyncMetadata::BatchAlbumsSyncMetadata(QWidget* /*parent*/)
     setCaption(i18n("Sync All Images' Metadata"));
     setLabel(i18n("<b>Syncing the metadata of all images with the digiKam database. Please wait...</b>"));
     setButtonText(i18n("&Abort"));
-    resize(600, 300);
     QTimer::singleShot(0, this, SLOT(slotStart()));
 
     connect(d->imageInfoJob, SIGNAL(signalItemsInfo(const ImageInfoList&)),

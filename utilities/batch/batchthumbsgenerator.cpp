@@ -94,7 +94,6 @@ BatchThumbsGenerator::BatchThumbsGenerator(QWidget* /*parent*/, bool rebuildAll)
     setCaption(d->rebuildAll ? i18n("Rebuild All Thumbnails") : i18n("Build Missing Thumbnails"));
     setLabel(i18n("<b>Updating thumbnails database. Please wait...</b>"));
     setButtonText(i18n("&Abort"));
-    resize(600, 300);
 
     QTimer::singleShot(500, this, SLOT(slotRebuildThumbs()));
 }
