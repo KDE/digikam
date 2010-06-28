@@ -95,6 +95,7 @@ DProgressDlg::DProgressDlg(QWidget* parent, const QString& caption)
     d->title          = new QLabel(page);
     d->label          = new QLabel(page);
     d->label->setWordWrap(true);
+    d->actionPix->setFixedSize(QSize(32, 32));
 
     d->logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
                        .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
