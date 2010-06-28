@@ -7,6 +7,7 @@ INCLUDE_DIRECTORIES( dimg
                      jpegutils
                      greycstoration
                      threadimageio
+                     versionmanager
                      widgets/common
                      widgets/imageplugins
                      widgets/metadata
@@ -28,3 +29,4 @@ ADD_SUBDIRECTORY( dialogs )
 ADD_SUBDIRECTORY( widgets )
 ADD_SUBDIRECTORY( database )
 ADD_SUBDIRECTORY( imageproperties/markerclusterholderplugin )
+ADD_SUBDIRECTORY( versionmanager )
