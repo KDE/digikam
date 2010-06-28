@@ -575,6 +575,8 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     SET(libdimgfilters_SRCS
         ${libclapack_SRCS}
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/dimgthreadedfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/dimgfiltermanager.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/dimgfiltergenerator.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/decorate/borderfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/decorate/bordersettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/decorate/texturefilter.cpp
@@ -673,6 +675,10 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/histogram/imagehistogram.cpp
        )
 
+    SET(libversionmanager_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/versionmanager/versionmanager.cpp
+       )
+
     SET(libimageproperties_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiessidebar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiestab.cpp
@@ -760,6 +766,9 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/histogramwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/histogrampainter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/imagedelegateoverlay.cpp
+        #${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/imagefiltershistorytreeitem.cpp
+        #${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/imagefiltershistorymodel.cpp
+        #${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/imagefiltershistoryview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/itemviewhoverbutton.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/itemviewimagedelegate.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/itemviewtooltip.cpp
