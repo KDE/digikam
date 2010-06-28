@@ -199,16 +199,8 @@ void BCGTool::prepareFinal()
     toolView()->setEnabled(false);
 
     BCGContainer settings = d->settingsView->settings();
-    
-    QHash<QString, QVariant> filterSettings;
-    filterSettings.insert("channel", QVariant(d->settingsView->settings().channel));
-    filterSettings.insert("brightness", QVariant(d->settingsView->settings().brightness));
-    filterSettings.insert("contrast", QVariant(d->settingsView->settings().contrast));
-    filterSettings.insert("gamma", QVariant(d->settingsView->settings().gamma));
-    
+
     ImageIface iface(0, 0);
-    
-    iface.getOriginalImg()->setFilterAction(toolName(), toolVersion(), toolCategory(), filterSettings);
     
     setFilter(new BCGFilter(iface.getOriginalImg(), this, settings));
 }
@@ -216,7 +208,7 @@ void BCGTool::prepareFinal()
 void BCGTool::putFinalData()
 {
     ImageIface iface(0, 0);
-    iface.putOriginalImage(i18n("Brightness / Contrast / Gamma"), filter()->getTargetImage().bits());
+    iface.putOriginalImage(i18n("Brightness / Contrast / Gamma"), filter()->filterAction(), filter()->getTargetImage().bits());
 }
 
 void BCGTool::renderingFinished()

@@ -268,9 +268,6 @@ void AutoCorrectionTool::prepareFinal()
 
     int type = d->correctionTools->currentId();
     ImageIface iface(0, 0);
-    
-    iface.getOriginalImg()->setFilterAction(toolName(), toolVersion(), toolCategory(), "type", QVariant(type));
-    
     autoCorrection(iface.getOriginalImg(), iface.getOriginalImg(), type);
 }
 
@@ -304,7 +301,7 @@ void AutoCorrectionTool::putFinalData()
     }
 
     ImageIface iface(0, 0);
-    iface.putOriginalImage(name, filter()->getTargetImage().bits());
+    iface.putOriginalImage(name, filter()->filterAction(), filter()->getTargetImage().bits());
 
     kapp->restoreOverrideCursor();
 }
