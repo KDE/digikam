@@ -138,6 +138,7 @@
 #include "themeengine.h"
 #include "thumbbar.h"
 #include "thumbnailsize.h"
+#include "../versionmanager/versionmanager.h"
 
 namespace Digikam
 {
@@ -1897,6 +1898,147 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
 
     return true;
 }
+
+bool EditorWindow::startingSaveNewVersion(const KUrl& url)
+{
+    /*
+     *  This method is still more of an ugly hack that "just works". This will be rewritten.
+     */
+    kDebug() << "Saving new image version";
+
+    if (m_savingContext->savingState != SavingContextContainer::SavingStateNone)
+        return false;
+
+    m_savingContext->srcURL = url;
+
+    // restore old settings for the dialog
+    QFileInfo info(m_savingContext->srcURL.fileName());
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(CONFIG_GROUP_NAME);
+    const QString optionLastExtension = "LastSavedImageExtension";
+    QString ext               = group.readEntry(optionLastExtension, "png");
+    if (ext.isEmpty())
+    {
+        ext = "png";
+    }
+    bool editingOriginal = m_canvas->interface()->getInitialImageHistory().isEmpty();
+    //TODO: rewrite to use VersionManager::instance()-> ...
+    QString fileName = VersionManager::getVersionedFilename(m_savingContext->srcURL.directory(KUrl::ObeyTrailingSlash), info.fileName(), info.size(), editingOriginal, false);
+
+    // Determine the default filter from LastSavedImageTypeMime
+    QStringList writablePattern = getWritingFilters();
+    
+    KUrl newURL(m_savingContext->srcURL.directory(KUrl::ObeyTrailingSlash) + QString("/") + fileName);
+    kDebug() << "Writing file to " << newURL;
+
+#ifdef _WIN32
+    //-- Show Settings Dialog ----------------------------------------------
+/*
+    const QString configShowImageSettingsDialog="ShowImageSettingsDialog";
+    bool showDialog = group.readEntry(configShowImageSettingsDialog, true);
+    if (showDialog && options->discoverFormat(newURL.fileName(), DImg::NONE)!=DImg::NONE) {
+        FileSaveOptionsDlg *fileSaveOptionsDialog   = new FileSaveOptionsDlg(this, options);
+        options->slotImageFileFormatChanged(newURL.fileName());
+
+        if (d->currentWindowModalDialog)
+        {
+            // go application-modal - we will create utter confusion if descending into more than one window-modal dialog
+            fileSaveOptionsDialog->setModal(true);
+            result = fileSaveOptionsDialog->exec();
+        }
+        else
+        {
+            fileSaveOptionsDialog->setWindowModality(Qt::WindowModal);
+            d->currentWindowModalDialog = fileSaveOptionsDialog;
+            result = fileSaveOptionsDialog->exec();
+            d->currentWindowModalDialog = 0;
+        }
+        if (result != KFileDialog::Accepted || !fileSaveOptionsDialog)
+        {
+            return false;
+        }
+    }*/
+#endif
+
+    // Update file save settings in editor instance.
+    
+    //applyStandardSettings();
+
+    // select the format to save the image with
+//     bool validFormatSet = selectValidSavingFormat(imageFileSaveDialog->currentFilter(), newURL, autoFilter);
+// 
+//     if (!validFormatSet)
+//     {
+//         KMessageBox::error(this, i18n("Unable to determine the format to save the target image with."));
+//         return false;
+//     }
+// 
+//     if (!newURL.isValid())
+//     {
+//         KMessageBox::error(this, i18n("Failed to save file\n\"%1\"\nto\n\"%2\".",
+//                                       info.completeBaseName(),
+//                                       newURL.prettyUrl()));
+//         kWarning() << "target URL is not valid !";
+//         return false;
+//     }
+
+    //group.writeEntry(optionLastExtension, m_savingContext->format);
+    //config->sync();
+
+    // if new and original URL are equal use slotSave() ------------------------------
+/*
+    KUrl currURL(m_savingContext->srcURL);
+    currURL.cleanPath();
+    newURL.cleanPath();
+
+    if (currURL.equals(newURL))
+    {
+        slotSave();
+        return false;
+    }
+
+    // Check for overwrite ----------------------------------------------------------
+
+    QFileInfo fi(newURL.toLocalFile());
+    m_savingContext->destinationExisted = fi.exists();
+    if ( m_savingContext->destinationExisted )
+    {
+        int result =
+
+            KMessageBox::warningYesNo( this, i18n("A file named \"%1\" already "
+                                                  "exists. Are you sure you want "
+                                                  "to overwrite it?",
+                                                  newURL.fileName()),
+                                       i18n("Overwrite File?"),
+                                       KStandardGuiItem::overwrite(),
+                                       KStandardGuiItem::cancel() );
+
+        if (result != KMessageBox::Yes)
+            return false;
+*/
+        // There will be two message boxes if the file is not writable.
+        // This may be controversial, and it may be changed, but it was a deliberate decision.
+        if (!checkPermissions(newURL))
+            return false;
+   //}
+
+    // Now do the actual saving -----------------------------------------------------
+
+    setupTempSaveFile(newURL);
+
+    m_savingContext->destinationURL = newURL;
+    m_savingContext->originalFormat = m_canvas->currentImageFileFormat();
+    m_savingContext->savingState    = SavingContextContainer::SavingStateSaveAs;
+    m_savingContext->executedOperation = SavingContextContainer::SavingStateNone;
+    m_savingContext->abortingSaving = false;
+
+    m_canvas->saveAs(m_savingContext->saveTempFileName, m_IOFileSettings,
+                     m_setExifOrientationTag && (m_rotatedOrFlipped || m_canvas->exifRotated()),
+                     m_savingContext->format.toLower());
+
+    return true;
+}
+
 
 bool EditorWindow::checkPermissions(const KUrl& url)
 {

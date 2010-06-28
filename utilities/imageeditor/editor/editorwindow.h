@@ -165,6 +165,7 @@ protected:
     bool waitForSavingToComplete();
     void startingSave(const KUrl& url);
     bool startingSaveAs(const KUrl& url);
+    bool startingSaveNewVersion(const KUrl& url);
     bool checkPermissions(const KUrl& url);
     void moveFile();
     void colorManage();
@@ -191,6 +192,7 @@ protected:
     virtual void setupUserArea()=0;
     virtual bool saveAs()=0;
     virtual bool save()=0;
+    virtual bool saveNewVersion()=0;
 
     /**
      * Hook method that subclasses must implement to return the destination url
