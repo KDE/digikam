@@ -39,7 +39,7 @@ public:
 
     HistoryImageId();
     HistoryImageId(const QString& originalUUID, const QString& fileUUID,
-                   const QString& fileName, const QDateTime& creationDate);
+                   const QString& filePathAndName, const QDateTime& creationDate);
 
     bool matches(const HistoryImageId& other) const;
     bool isEmpty() const;
@@ -56,6 +56,8 @@ public:
     QDateTime m_creationDate;
     /// The filename of the referred file
     QString m_fileName;
+    /// The path of the referred file
+    QString m_filePath;
 
     /**
      * A unique identifier for the referred file. This id shall be changed each time

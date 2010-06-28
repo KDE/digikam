@@ -23,6 +23,7 @@
  * ============================================================ */
 
 #include "historyimageid.h"
+#include <QtCore/QFileInfo>
 
 namespace Digikam 
 {
@@ -32,11 +33,13 @@ HistoryImageId::HistoryImageId()
 }
 
 HistoryImageId::HistoryImageId(const QString& originalUUID, const QString& fileUUID, 
-                               const QString& fileName, const QDateTime& creationDate)
+                               const QString& filePathAndName, const QDateTime& creationDate)
 {
+    QFileInfo info(filePathAndName);
     m_originalUUID = originalUUID;
     m_fileUUID = fileUUID;
-    m_fileName = fileName;
+    m_fileName = info.fileName();
+    m_filePath = info.absolutePath();
     m_creationDate = creationDate;
 }
 
