@@ -52,6 +52,14 @@ public:
     BCGContainer settings;
 };
 
+BCGFilter::BCGFilter(QObject* parent)
+         : DImgThreadedFilter(parent, "BCGFilter"),
+           d(new BCGFilterPriv)
+{
+    reset();
+    initFilter();
+}
+
 BCGFilter::BCGFilter(DImg* orgImage, QObject* parent, const BCGContainer& settings)
          : DImgThreadedFilter(orgImage, parent, "BCGFilter"),
            d(new BCGFilterPriv)
@@ -64,6 +72,26 @@ BCGFilter::BCGFilter(DImg* orgImage, QObject* parent, const BCGContainer& settin
 BCGFilter::~BCGFilter()
 {
     delete d;
+}
+
+FilterAction BCGFilter::filterAction()
+{
+    FilterAction action(FilterIdentifier(), CurrentVersion());
+
+    action.addParameter("channel", d->settings.channel);
+    action.addParameter("brightness", d->settings.brightness);
+    action.addParameter("contrast", d->settings.contrast);
+    action.addParameter("gamma", d->settings.gamma);
+
+    return action;
+}
+
+void BCGFilter::readParameters(const FilterAction& action)
+{
+    d->settings.channel = action.parameter("channel").toInt();
+    d->settings.brightness = action.parameter("brightness").toDouble();
+    d->settings.contrast = action.parameter("contrast").toDouble();
+    d->settings.gamma = action.parameter("gamma").toDouble();
 }
 
 void BCGFilter::filterImage()

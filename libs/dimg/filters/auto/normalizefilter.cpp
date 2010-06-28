@@ -207,4 +207,15 @@ void NormalizeFilter::normalizeImage()
     delete [] param.lut;
 }
 
+FilterAction NormalizeFilter::filterAction()
+{
+    return FilterAction(FilterIdentifier(), CurrentVersion());
+}
+
+void NormalizeFilter::readParameters(const Digikam::FilterAction& action)
+{
+    return; //DImgThreadedFilter::readParameters(action);
+}
+
+
 }  // namespace Digikam

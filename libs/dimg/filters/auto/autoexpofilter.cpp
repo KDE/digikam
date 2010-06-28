@@ -57,4 +57,20 @@ void AutoExpoFilter::filterImage()
     WBFilter::filterImage();
 }
 
+FilterAction AutoExpoFilter::filterAction()
+{
+    FilterAction action(FilterIdentifier(), CurrentVersion());
+
+    action.addParameter("black", m_settings.black);
+    action.addParameter("exposition", m_settings.exposition);
+
+    return action;
+}
+
+void AutoExpoFilter::readParameters(const FilterAction& action)
+{
+    m_settings.black = action.parameter("black").toDouble();
+    m_settings.exposition = action.parameter("exposition").toDouble();
+}
+
 }  // namespace Digikam

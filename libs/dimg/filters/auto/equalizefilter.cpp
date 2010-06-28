@@ -230,4 +230,16 @@ void EqualizeFilter::equalizeImage()
     delete [] equalize_map;
 }
 
+FilterAction EqualizeFilter::filterAction()
+{
+    FilterAction action(FilterIdentifier(), CurrentVersion());
+    return action;
+}
+
+void EqualizeFilter::readParameters(const Digikam::FilterAction& action)
+{
+    return; //Digikam::DImgThreadedFilter::readParameters(action);
+}
+
+
 }  // namespace Digikam

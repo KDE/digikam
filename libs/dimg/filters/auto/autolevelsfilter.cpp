@@ -148,4 +148,15 @@ void AutoLevelsFilter::autoLevelsCorrectionImage()
         postProgress(90);
 }
 
+FilterAction AutoLevelsFilter::filterAction()
+{
+    FilterAction action(FilterIdentifier(), CurrentVersion());
+    return action;
+}
+
+void AutoLevelsFilter::readParameters(const FilterAction& action)
+{
+    return;
+}
+
 }  // namespace Digikam

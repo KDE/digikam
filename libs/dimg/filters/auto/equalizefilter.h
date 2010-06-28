@@ -41,7 +41,13 @@ class DIGIKAM_EXPORT EqualizeFilter : public DImgThreadedFilter
 {
 
 public:
-
+    static QString          FilterIdentifier() { return "digikam:equalizeFilter"; }
+    static QList<int>       SupportedVersions() { return QList<int>() << 1; }
+    static int              CurrentVersion() { return 1; }
+    virtual QString         filterIdentifier() const { return FilterIdentifier(); }
+    virtual FilterAction    filterAction();
+    void                    readParameters(const FilterAction& action);
+    
     EqualizeFilter(DImg* orgImage, const DImg* refImage, QObject* parent=0);
     virtual ~EqualizeFilter();
 
