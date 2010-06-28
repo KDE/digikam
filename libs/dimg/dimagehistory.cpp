@@ -49,6 +49,7 @@ public:
         imageid = -1;
     }
 
+    QString                     originalFile;
     qlonglong                   imageid;
     QList<DImageHistory::Entry> entries;
 };
@@ -67,6 +68,8 @@ DImageHistory::DImageHistory(const DImageHistory& other)
 
 DImageHistory::~DImageHistory()
 {
+    d->entries.clear();
+    
 }
 
 DImageHistory& DImageHistory::operator=(const DImageHistory& other)
@@ -108,11 +111,31 @@ DImageHistory& DImageHistory::operator<<(const HistoryImageId& imageId)
     d->entries << entry;
     return *this;
 }
+
 DImageHistory& DImageHistory::operator<<(const Digikam::DImageHistory::Entry& entry)
 {
     d->entries << entry;
     return *this;
 }
+
+bool DImageHistory::operator<(const Digikam::DImageHistory& other)
+{
+    if(d->entries.size() < other.size())
+    {
+        return true;
+    }
+    return false;
+}
+
+bool DImageHistory::operator>(const Digikam::DImageHistory& other)
+{
+    if(d->entries.size() > other.size())
+    {
+        return true;
+    }
+    return false;
+}
+
 
 QList<DImageHistory::Entry> &DImageHistory::entries()
 {
@@ -166,7 +189,7 @@ QString DImageHistory::toXml() const
             }
 
             stream.writeAttribute("fileName", entries().at(i).referredImages.m_fileName);
-            stream.writeAttribute("filePath", entries().at(i).referredImages.m_fileName);
+            stream.writeAttribute("filePath", entries().at(i).referredImages.m_filePath);
 
             stream.writeEndElement(); //fileParams
             stream.writeEndElement(); //file     
@@ -215,35 +238,42 @@ QString DImageHistory::toXml() const
 DImageHistory DImageHistory::fromXml(const QString& xml) //DImageHistory
 {
    DImageHistory h;
+   if(xml.isEmpty())
+   {
+       return h;
+   }
    QXmlStreamReader stream(xml);
    QString originalUUID;
 
    while (!stream.atEnd())
    {
         Entry entry;
-        stream.readNextStartElement();
+        stream.readNext();
 
         if(stream.name() == "file" && stream.tokenType() == QXmlStreamReader::StartElement) 
         {
+              kDebug() << "Parsing file tag";
               stream.readNext();
               stream.readNext();
               if(stream.attributes().value("type") == "original")
               {
                   originalUUID = stream.attributes().value("fileUUID").toString();
-                  entry.referredImages = HistoryImageId(originalUUID, "", stream.attributes().value("fileName").toString(), QDateTime(QFileInfo(stream.attributes().value("filePath").toString()).created()));
+                  entry.referredImages = HistoryImageId(originalUUID, "", stream.attributes().value("filePath").toString() + "/" + stream.attributes().value("fileName").toString(), QDateTime(QFileInfo(stream.attributes().value("filePath").toString()).created()));
                   entry.isFilterEntry = false;
                   h << entry;
+                  h.setOriginalFile(stream.attributes().value("filePath").toString() + "/" + stream.attributes().value("fileName").toString());
                   continue;
               }
               else
               {
-                  entry.referredImages = HistoryImageId(originalUUID, stream.attributes().value("fileUUID").toString(), stream.attributes().value("fileName").toString(), QDateTime(QFileInfo(stream.attributes().value("filePath").toString()).created()));
+                  entry.referredImages = HistoryImageId(originalUUID, stream.attributes().value("fileUUID").toString(), stream.attributes().value("filePath").toString() + "/" + stream.attributes().value("fileName").toString(), QDateTime(QFileInfo(stream.attributes().value("filePath").toString()).created()));
                   entry.isFilterEntry = false;
                   //stream.readNextStartElement();
               }
         }
-        else if(stream.name() == "filter")
+        else if(stream.name() == "filter" && stream.tokenType() == QXmlStreamReader::StartElement)
         {
+              kDebug() << "Parsing filter tag";
               FilterAction::Category c;
               switch(stream.attributes().value("filterCategory").toString().toInt())
               {
@@ -266,6 +296,7 @@ DImageHistory DImageHistory::fromXml(const QString& xml) //DImageHistory
 
               if(stream.name() != "params") continue;
               stream.readNext(); //param .. tag
+              kDebug() << "Parsing params tag";
               while(stream.name() != "params")
               {
                 stream.readNext();
@@ -286,5 +317,16 @@ DImageHistory DImageHistory::fromXml(const QString& xml) //DImageHistory
 
     return h;
 }
+
+QString DImageHistory::originalFile()
+{
+    return d->originalFile;
+}
+
+void DImageHistory::setOriginalFile(const QString& filePath)
+{
+    d->originalFile = filePath;
+}
+
 
 } //namespace digikam

@@ -74,12 +74,17 @@ public:
     DImageHistory& operator<<(const FilterAction& action);
     DImageHistory& operator<<(const HistoryImageId& imageId);
     DImageHistory& operator<<(const Entry& entry);
+    bool operator<(const DImageHistory& other);
+    bool operator>(const DImageHistory& other);
 
     QList<DImageHistory::Entry>& entries();
     const QList<DImageHistory::Entry>& entries() const;
 
     const FilterAction& action(int i) const;
     const HistoryImageId& referredImages(int i) const;
+    
+    void setOriginalFile(const QString& filePath);
+    QString originalFile();
 
     QString toXml() const;
     static DImageHistory fromXml(const QString& xml);
