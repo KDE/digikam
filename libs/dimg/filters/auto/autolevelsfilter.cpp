@@ -154,7 +154,7 @@ FilterAction AutoLevelsFilter::filterAction()
     return action;
 }
 
-void AutoLevelsFilter::readParameters(const FilterAction& action)
+void AutoLevelsFilter::readParameters(const FilterAction& /*action*/)
 {
     return;
 }

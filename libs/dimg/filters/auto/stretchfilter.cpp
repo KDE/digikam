@@ -372,10 +372,9 @@ FilterAction StretchFilter::filterAction()
     return FilterAction(FilterIdentifier(), CurrentVersion());
 }
 
-void StretchFilter::readParameters(const Digikam::FilterAction& action)
+void StretchFilter::readParameters(const Digikam::FilterAction& /*action*/)
 {
     return; //Digikam::DImgThreadedFilter::readParameters(action);
 }
-
 
 }  // namespace Digikam

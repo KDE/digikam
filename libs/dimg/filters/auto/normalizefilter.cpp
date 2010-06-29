@@ -212,7 +212,7 @@ FilterAction NormalizeFilter::filterAction()
     return FilterAction(FilterIdentifier(), CurrentVersion());
 }
 
-void NormalizeFilter::readParameters(const Digikam::FilterAction& action)
+void NormalizeFilter::readParameters(const Digikam::FilterAction& /*action*/)
 {
     return; //DImgThreadedFilter::readParameters(action);
 }
