@@ -1923,7 +1923,8 @@ bool EditorWindow::startingSaveNewVersion(const KUrl& url)
     }
     bool editingOriginal = m_canvas->interface()->getInitialImageHistory().isEmpty();
     //TODO: rewrite to use VersionManager::instance()-> ...
-    QString fileName = VersionManager::getVersionedFilename(m_savingContext->srcURL.directory(KUrl::ObeyTrailingSlash), info.fileName(), info.size(), editingOriginal, false);
+    QString fileName = VersionManager::instance()->getVersionedFilename(m_savingContext->srcURL.directory(KUrl::ObeyTrailingSlash), 
+                                                                        info.fileName(), info.size(), editingOriginal, false);
 
     // Determine the default filter from LastSavedImageTypeMime
     QStringList writablePattern = getWritingFilters();

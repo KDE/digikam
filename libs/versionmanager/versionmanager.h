@@ -26,16 +26,22 @@
 #define VERSIONMANAGER_H
 
 #include <QString>
+#include "digikam_export.h"
 
 namespace Digikam
 {
 
-class VersionManager
+class DIGIKAM_EXPORT VersionManager
 {
 public:
-
-    static QString getVersionedFilename(const QString& originalPath, const QString& originalName, 
+    VersionManager() {};
+    ~VersionManager() {};
+    static VersionManager *instance();
+    QString getVersionedFilename(const QString& originalPath, const QString& originalName, 
                                         qint64 fileSize, bool editingOriginal = true, bool fork = false);
+
+private:
+    static VersionManager *m_instance;
 };
 
 } // namespace Digikam

@@ -26,6 +26,7 @@
 
 #include <QFileInfo>
 #include <QDir>
+#include <QFile>
 
 // KDE includes
 
@@ -98,6 +99,15 @@ QString VersionManager::getVersionedFilename(const QString& originalPath, const 
 
     // FIXME: if space is not enough, do not return a null string there.
     return QString();
+}
+
+VersionManager *VersionManager::m_instance = 0;
+
+VersionManager *VersionManager::instance()
+{
+    if (!m_instance)
+        m_instance = new VersionManager;
+    return m_instance;
 }
 
 } // namespace Digikam
