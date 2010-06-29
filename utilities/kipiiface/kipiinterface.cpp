@@ -293,7 +293,7 @@ QAbstractItemModel* KipiInterface::getTagTree()
 
     if(!d->tagModel)
     {
-        QAbstractItemModel* newTagModel = new TagModel(AbstractAlbumModel::IncludeRootAlbum, NULL);
+        QAbstractItemModel* newTagModel = new TagModel(AbstractAlbumModel::IgnoreRootAlbum, NULL);
         d->tagModel = newTagModel;
     }
     return d->tagModel;
