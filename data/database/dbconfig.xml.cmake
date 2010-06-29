@@ -244,6 +244,11 @@
                     A.pid = NEW.id AND B.id = NEW.pid;
                 END;</statement>
             </dbaction>
+            
+            <!-- Migration from DB Version XXX to DB Version YYY -->
+            <dbaction name="updateSchemaFromXXXToYYY" mode="transaction">
+            </dbaction>
+            
 
             <dbaction name="getItemURLsInAlbumByItemName" mode="transaction">
                 <statement mode="query">SELECT Albums.relativePath, Images.name FROM Images INNER JOIN Albums ON Albums.id=Images.album WHERE Albums.id=:albumID ORDER BY Images.name COLLATE NOCASE;</statement>
@@ -558,7 +563,7 @@
                             category INTEGER NOT NULL,
                             modificationDate DATETIME,
                             fileSize INTEGER,
-                            uniqueHash VARCHAR(16),
+                            uniqueHash VARCHAR(32),
                             UNIQUE (album, name(332)));</statement>
             <statement mode="plain">CREATE TABLE ImageHaarMatrix
                             (imageid INTEGER PRIMARY KEY,
@@ -713,7 +718,13 @@
             ORDER BY parent.lft;
             END;</statement>
             </dbaction>
-
+            
+            <!-- Migration from DB Version XXX to DB Version YYY -->
+            <dbaction name="updateSchemaFromXXXToYYY" mode="transaction">
+                <statement mode="query">ALTER TABLE UniqueHashes CHANGE uniqueHash uniqueHash VARCHAR(32);</statement>
+                <statement mode="query">ALTER TABLE Images       CHANGE uniqueHash uniqueHash VARCHAR(32);</statement>
+            </dbaction>
+            
             <dbaction name="checkIfDatabaseExists" mode="transaction">
                 <statement mode="query">SELECT Albums.relativePath, Images.name FROM Images INNER JOIN Albums ON Albums.id=Images.album WHERE Albums.id=:albumID ORDER BY Images.name;</statement>
             </dbaction>
@@ -853,7 +864,7 @@
                             data LONGBLOB)
                 </statement>
                 <statement mode="query">CREATE TABLE UniqueHashes
-                            (uniqueHash VARCHAR(16),
+                            (uniqueHash VARCHAR(32),
                             fileSize INTEGER,
                             thumbId INTEGER,
                             UNIQUE(uniqueHash, fileSize))
