@@ -1901,92 +1901,49 @@ bool EditorWindow::startingSaveAs(const KUrl& url)
 
 bool EditorWindow::startingSaveNewVersion(const KUrl& url)
 {
-    /*
-     *  This method is still more of an ugly hack that "just works". This will be rewritten.
-     */
-    kDebug() << "Saving new image version";
+    kDebug() << "Saving new image using versioning";
 
     if (m_savingContext->savingState != SavingContextContainer::SavingStateNone)
         return false;
 
     m_savingContext->srcURL = url;
-
-    // restore old settings for the dialog
     QFileInfo info(m_savingContext->srcURL.fileName());
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(CONFIG_GROUP_NAME);
-    const QString optionLastExtension = "LastSavedImageExtension";
-    QString ext               = group.readEntry(optionLastExtension, "png");
-    if (ext.isEmpty())
-    {
-        ext = "png";
-    }
+
     bool editingOriginal = m_canvas->interface()->getInitialImageHistory().isEmpty();
-    //TODO: rewrite to use VersionManager::instance()-> ...
     QString fileName = VersionManager::instance()->getVersionedFilename(m_savingContext->srcURL.directory(KUrl::ObeyTrailingSlash), 
                                                                         info.fileName(), info.size(), editingOriginal, false);
 
-    // Determine the default filter from LastSavedImageTypeMime
-    QStringList writablePattern = getWritingFilters();
-    
+    if(fileName.isEmpty())
+    {
+        kWarning() << "Target file can't be determined, aborting saving";
+    }
     KUrl newURL(m_savingContext->srcURL.directory(KUrl::ObeyTrailingSlash) + QString("/") + fileName);
     kDebug() << "Writing file to " << newURL;
 
-#ifdef _WIN32
-    //-- Show Settings Dialog ----------------------------------------------
-/*
-    const QString configShowImageSettingsDialog="ShowImageSettingsDialog";
-    bool showDialog = group.readEntry(configShowImageSettingsDialog, true);
-    if (showDialog && options->discoverFormat(newURL.fileName(), DImg::NONE)!=DImg::NONE) {
-        FileSaveOptionsDlg *fileSaveOptionsDialog   = new FileSaveOptionsDlg(this, options);
-        options->slotImageFileFormatChanged(newURL.fileName());
-
-        if (d->currentWindowModalDialog)
-        {
-            // go application-modal - we will create utter confusion if descending into more than one window-modal dialog
-            fileSaveOptionsDialog->setModal(true);
-            result = fileSaveOptionsDialog->exec();
-        }
-        else
-        {
-            fileSaveOptionsDialog->setWindowModality(Qt::WindowModal);
-            d->currentWindowModalDialog = fileSaveOptionsDialog;
-            result = fileSaveOptionsDialog->exec();
-            d->currentWindowModalDialog = 0;
-        }
-        if (result != KFileDialog::Accepted || !fileSaveOptionsDialog)
-        {
-            return false;
-        }
-    }*/
-#endif
-
-    // Update file save settings in editor instance.
-    
-    //applyStandardSettings();
+    // TODO: Should these be applied when saving new version (to a new file)?
+    // applyStandardSettings();
 
     // select the format to save the image with
-//     bool validFormatSet = selectValidSavingFormat(imageFileSaveDialog->currentFilter(), newURL, autoFilter);
-// 
-//     if (!validFormatSet)
-//     {
-//         KMessageBox::error(this, i18n("Unable to determine the format to save the target image with."));
-//         return false;
-//     }
-// 
-//     if (!newURL.isValid())
-//     {
-//         KMessageBox::error(this, i18n("Failed to save file\n\"%1\"\nto\n\"%2\".",
-//                                       info.completeBaseName(),
-//                                       newURL.prettyUrl()));
-//         kWarning() << "target URL is not valid !";
-//         return false;
-//     }
+    // TODO: Which format should be the default to save to? Same as original? Or use everytime JPEG for example..
+/*    bool validFormatSet = selectValidSavingFormat(imageFileSaveDialog->currentFilter(), newURL, autoFilter);
 
-    //group.writeEntry(optionLastExtension, m_savingContext->format);
-    //config->sync();
+    if (!validFormatSet)
+    {
+        KMessageBox::error(this, i18n("Unable to determine the format to save the target image with."));
+        return false;
+    }
+*/
+    if (!newURL.isValid())
+    {
+        KMessageBox::error(this, i18n("Failed to save file\n\"%1\"\nto\n\"%2\".",
+                                      info.completeBaseName(),
+                                      newURL.prettyUrl()));
+        kWarning() << "target URL is not valid !";
+        return false;
+    }
 
     // if new and original URL are equal use slotSave() ------------------------------
+    // Marty 29.06.2010: slotSave() can't be used, because it asks for overwrite confirmation
 /*
     KUrl currURL(m_savingContext->srcURL);
     currURL.cleanPath();
@@ -1998,29 +1955,11 @@ bool EditorWindow::startingSaveNewVersion(const KUrl& url)
         return false;
     }
 
-    // Check for overwrite ----------------------------------------------------------
-
-    QFileInfo fi(newURL.toLocalFile());
-    m_savingContext->destinationExisted = fi.exists();
-    if ( m_savingContext->destinationExisted )
-    {
-        int result =
-
-            KMessageBox::warningYesNo( this, i18n("A file named \"%1\" already "
-                                                  "exists. Are you sure you want "
-                                                  "to overwrite it?",
-                                                  newURL.fileName()),
-                                       i18n("Overwrite File?"),
-                                       KStandardGuiItem::overwrite(),
-                                       KStandardGuiItem::cancel() );
-
-        if (result != KMessageBox::Yes)
-            return false;
 */
         // There will be two message boxes if the file is not writable.
         // This may be controversial, and it may be changed, but it was a deliberate decision.
-        if (!checkPermissions(newURL))
-            return false;
+    if (!checkPermissions(newURL))
+        return false;
    //}
 
     // Now do the actual saving -----------------------------------------------------
