@@ -20,6 +20,7 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
+
 #ifndef DIMGFILTERGENERATOR_H
 #define DIMGFILTERGENERATOR_H
 
@@ -42,8 +43,8 @@ class DIGIKAM_EXPORT DImgFilterGenerator
 {
 public:
 
-    DImgFilterGenerator() {};
-    virtual ~DImgFilterGenerator() {};
+    DImgFilterGenerator(){};
+    virtual ~DImgFilterGenerator(){};
 
     /// Returns a list with identifiers of supported filters
     virtual QStringList supportedFilters() = 0;
@@ -55,10 +56,13 @@ public:
     virtual bool isSupported(const QString& filterIdentifier, int version);
 
     /// Create the filter for the given combination of identifier and version
-    virtual DImgThreadedFilter *createFilter(const QString& filterIdentifier, int version) = 0;
+    virtual DImgThreadedFilter* createFilter(const QString& filterIdentifier, int version) = 0;
 };
 
+// ------------------------------------------------------------------------------------------------
+
 template <class T>
+
 class BasicDImgFilterGenerator : public DImgFilterGenerator
 {
 public:
@@ -85,7 +89,7 @@ public:
         if (filterIdentifier == T::FilterIdentifier() &&
             T::SupportedVersions().contains(version))
         {
-            T *t = new T;
+            T* t = new T;
             t->setFilterVersion(version);
             return t;
         }
@@ -93,6 +97,6 @@ public:
     }
 };
 
-}
+} // namespace Digikam
 
-#endif
+#endif // DIMGFILTERGENERATOR_H

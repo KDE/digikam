@@ -40,7 +40,7 @@ class DIGIKAM_EXPORT DImgFilterManager : public DImgFilterGenerator
 {
 public:
 
-    static DImgFilterManager *instance();
+    static DImgFilterManager* instance();
 
     virtual QStringList supportedFilters();
     virtual QList<int> supportedVersions(const QString& filterIdentifier);
@@ -53,8 +53,8 @@ public:
     /**
      * Registers all filter provided by this generator.
      */
-    void addGenerator(DImgFilterGenerator *generator);
-    void removeGenerator(DImgFilterGenerator *generator);
+    void addGenerator(DImgFilterGenerator* generator);
+    void removeGenerator(DImgFilterGenerator* generator);
 
 private:
 
@@ -62,10 +62,10 @@ private:
     DImgFilterManager();
     ~DImgFilterManager();
 
-    DImgFilterManagerPriv *const d;
+    DImgFilterManagerPriv* const d;
 
 };
 
-}
+} // namespace Digikam
 
-#endif
+#endif // DIMGFILTERMANAGER_H

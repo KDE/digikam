@@ -38,5 +38,4 @@ bool DImgFilterGenerator::isSupported(const QString& filterIdentifier, int versi
     return false;
 }
 
-}
-
+} // namespace Digikam

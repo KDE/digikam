@@ -36,7 +36,6 @@
 #include "bcgfilter.h"
 #include "dimgfiltermanager.h"
 
-
 namespace Digikam
 {
 
@@ -76,7 +75,7 @@ DImgFilterManager* DImgFilterManager::instance()
 }
 
 DImgFilterManager::DImgFilterManager()
-            : d(new DImgFilterManagerPriv)
+                 : d(new DImgFilterManagerPriv)
 {
     d->setupBuiltinGenerators();
     foreach (DImgFilterGenerator* gen, d->builtinGenerators)
@@ -88,7 +87,7 @@ DImgFilterManager::~DImgFilterManager()
     delete d;
 }
 
-void DImgFilterManager::addGenerator(DImgFilterGenerator *generator)
+void DImgFilterManager::addGenerator(DImgFilterGenerator* generator)
 {
     foreach (const QString& id, generator->supportedFilters())
     {
@@ -101,10 +100,10 @@ void DImgFilterManager::addGenerator(DImgFilterGenerator *generator)
     }
 }
 
-void DImgFilterManager::removeGenerator(DImgFilterGenerator *generator)
+void DImgFilterManager::removeGenerator(DImgFilterGenerator* generator)
 {
     QMap<QString, DImgFilterGenerator*>::iterator it;
-    for (it = d->filterMap.begin(); it != d->filterMap.end(); )
+    for ( it = d->filterMap.begin(); it != d->filterMap.end(); )
     {
         if (it.value() == generator)
             it = d->filterMap.erase(it);
@@ -120,7 +119,7 @@ QStringList DImgFilterManager::supportedFilters()
 
 QList<int> DImgFilterManager::supportedVersions(const QString& filterIdentifier)
 {
-    DImgFilterGenerator *gen = d->filterMap.value(filterIdentifier);
+    DImgFilterGenerator* gen = d->filterMap.value(filterIdentifier);
     if (gen)
         return gen->supportedVersions(filterIdentifier);
     return QList<int>();
@@ -133,19 +132,18 @@ bool DImgFilterManager::isSupported(const QString& filterIdentifier)
 
 bool DImgFilterManager::isSupported(const QString& filterIdentifier, int version)
 {
-    DImgFilterGenerator *gen = d->filterMap.value(filterIdentifier);
+    DImgFilterGenerator* gen = d->filterMap.value(filterIdentifier);
     if (gen)
         return gen->isSupported(filterIdentifier, version);
     return false;
 }
 
-DImgThreadedFilter *DImgFilterManager::createFilter(const QString& filterIdentifier, int version)
+DImgThreadedFilter* DImgFilterManager::createFilter(const QString& filterIdentifier, int version)
 {
-    DImgFilterGenerator *gen = d->filterMap.value(filterIdentifier);
+    DImgFilterGenerator* gen = d->filterMap.value(filterIdentifier);
     if (gen)
         return gen->createFilter(filterIdentifier, version);
     return 0;
 }
 
-}
-
+} // namespace Digikam
