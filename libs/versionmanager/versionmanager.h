@@ -27,13 +27,17 @@
 
 #include <QString>
 
-namespace Digikam {
+namespace Digikam
+{
 
 class VersionManager
 {
 public:
-  static QString getVersionedFilename(QString originalPath, QString originalName, qint64 fileSize, bool editingOriginal = true, bool fork = false);
+
+    static QString getVersionedFilename(const QString& originalPath, const QString& originalName, 
+                                        qint64 fileSize, bool editingOriginal = true, bool fork = false);
 };
 
-}
+} // namespace Digikam
+
 #endif // VERSIONMANAGER_H

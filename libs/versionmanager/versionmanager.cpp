@@ -37,60 +37,67 @@
 #include "versionmanager.h"
 #include "dmetadata.h"
 
-namespace Digikam {
-
-QString VersionManager::getVersionedFilename(QString originalPath, QString originalName, qint64 fileSize, bool editingOriginal, bool fork)
+namespace Digikam
 {
-  kDebug() << "Original path: " << originalPath << " | Original name: " << originalName << " | Editing original: " << editingOriginal;
-  //check if we have enough free space for another file
-  KDiskFreeSpaceInfo diskInfo = KDiskFreeSpaceInfo::freeSpaceInfo(originalPath);
-  if(diskInfo.isValid() && diskInfo.available() > fileSize * 2) {
-      //DMetadata metadata(originalPath + "/" + originalName);
-      QString newFileName;
-      
-      if(!editingOriginal)
-      {
-          //the user is editing some subversion of the original image
-          if(fork)
-          {
-              //user wants to create a fork of current version
-          }
-          else
-          {
-              kDebug() << "Subversion image, will use this version";
-              kDebug() << originalName;
-              return originalName;
-          }
-          
-      }
-      else {
-          //the user is editing the original image itself, determine last saved version number and create a new one
-          kDebug() << "Original image, will create a new version";
-          QFileInfo fileInfo(originalPath + QString("/") + originalName);
-          QDir dirInfo(originalPath);
-          
-          
-          //to find the right number for the new version, go through all the items in the given dir, the version number won't be bigger than count()
-          for(int i = 1; i < dirInfo.count(); i++) {
-              newFileName.clear();
-              newFileName.append(fileInfo.completeBaseName());
-              newFileName.append("_v");
-              newFileName.append(QString::number(i));
-              newFileName.append(".");
-              newFileName.append(fileInfo.suffix());
-              kDebug() << newFileName;
-              QFile newFile(originalPath + QString("/") + newFileName);
-              if(!newFile.exists()) 
-              {
-                  kDebug() << newFileName;
-                  return newFileName;
-              }
-          }
-      }
-  }
-  
-  
+
+QString VersionManager::getVersionedFilename(const QString& originalPath, const QString& originalName, 
+                                             qint64 fileSize, bool editingOriginal, bool fork)
+{
+    kDebug() << "Original path: " << originalPath << " | Original name: " << originalName
+             << " | Editing original: " << editingOriginal;
+
+    //check if we have enough free space for another file
+    KDiskFreeSpaceInfo diskInfo = KDiskFreeSpaceInfo::freeSpaceInfo(originalPath);
+
+    if(diskInfo.isValid() && diskInfo.available() > (uint)fileSize * 2)
+    {
+        //DMetadata metadata(originalPath + "/" + originalName);
+        QString newFileName;
+
+        if(!editingOriginal)
+        {
+            //the user is editing some subversion of the original image
+            if(fork)
+            {
+                //user wants to create a fork of current version
+            }
+            else
+            {
+                kDebug() << "Subversion image, will use this version";
+                kDebug() << originalName;
+                return originalName;
+            }
+        }
+        else
+        {
+            //the user is editing the original image itself, determine last saved version number and create a new one
+            kDebug() << "Original image, will create a new version";
+            QFileInfo fileInfo(originalPath + QString("/") + originalName);
+            QDir dirInfo(originalPath);
+
+            // To find the right number for the new version, go through all the items in the given dir, 
+            // the version number won't be bigger than count()
+            for(uint i = 1; i < dirInfo.count(); i++)
+            {
+                newFileName.clear();
+                newFileName.append(fileInfo.completeBaseName());
+                newFileName.append("_v");
+                newFileName.append(QString::number(i));
+                newFileName.append(".");
+                newFileName.append(fileInfo.suffix());
+                kDebug() << newFileName;
+                QFile newFile(originalPath + QString("/") + newFileName);
+                if(!newFile.exists()) 
+                {
+                    kDebug() << newFileName;
+                    return newFileName;
+                }
+            }
+        }
+    }
+
+    // FIXME: if space is not enough, do not return a null string there.
+    return QString();
 }
 
-
-}
+} // namespace Digikam
