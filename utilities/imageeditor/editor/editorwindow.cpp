@@ -138,7 +138,7 @@
 #include "themeengine.h"
 #include "thumbbar.h"
 #include "thumbnailsize.h"
-#include "../versionmanager/versionmanager.h"
+#include "versionmanager.h"
 
 namespace Digikam
 {

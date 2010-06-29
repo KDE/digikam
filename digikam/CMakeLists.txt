@@ -29,6 +29,7 @@ INCLUDE_DIRECTORIES(
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/threadimageio
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/template
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/threads
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../libs/versionmanager
 
                      # widgets and dialogs
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/common

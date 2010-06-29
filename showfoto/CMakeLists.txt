@@ -36,6 +36,7 @@ INCLUDE_DIRECTORIES( ../showfoto/setup
                      ../libs/threadimageio
                      ../libs/threads
                      ../libs/dialogs
+                     ../libs/versionmanager
                      ../utilities/setup
                      ../utilities/imageeditor/canvas
                      ../utilities/imageeditor/widgets

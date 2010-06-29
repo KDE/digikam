@@ -28,6 +28,7 @@ INCLUDE_DIRECTORIES(
                      ../libs/template
                      ../libs/threadimageio
                      ../libs/threads
+                     ../libs/versionmanager
 
                      # widgets and dialogs
                      ../libs/widgets/common
