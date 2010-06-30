@@ -9,6 +9,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 002 ==> 232233 : Databaseext-branch does not compile on Windows with mingw4.
 003 ==> 241782 : Tags, comments, author, etc. not written to metadata.
 004 ==> 232792 : digiKam crash when opening configuration.
-005 ==> 
+005 ==> 242863 : Caption field layout can be confused by pasted text.
+006 ==> 
+
 
 

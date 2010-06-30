@@ -6,7 +6,7 @@
  * Date        : 2006-30-08
  * Description : a progress dialog for digiKam
  *
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -49,12 +49,11 @@ class DIGIKAM_EXPORT DProgressDlg : public KDialog
 
 public:
 
-    explicit DProgressDlg(QWidget *parent=0, const QString& caption=QString());
+    explicit DProgressDlg(QWidget* parent=0, const QString& caption=QString());
     ~DProgressDlg();
 
     void setLabel(const QString& text);
     void setTitle(const QString& text);
-    void setActionListVSBarVisible(bool visible);
     void showCancelButton(bool show);
     void setAllowCancel(bool allowCancel);
     bool wasCancelled() const;

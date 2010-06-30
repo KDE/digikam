@@ -66,7 +66,7 @@ public:
     volatile bool running;
     volatile bool emitSignals;
 
-    DynamicThread::State state;
+    volatile DynamicThread::State state;
 
     QThread::Priority priority;
     QThread::Priority previousPriority;
@@ -243,12 +243,11 @@ void DynamicThreadPriv::run()
 
 void DynamicThread::wait(QMutexLocker &locker)
 {
-    Q_UNUSED(locker);
     while (d->state != Inactive)
-        d->condVar.wait(&d->mutex);
+        d->condVar.wait(locker.mutex());
 }
 
-bool DynamicThread::runningFlag() const
+bool DynamicThread::runningFlag() const volatile
 {
     return d->running;
 }

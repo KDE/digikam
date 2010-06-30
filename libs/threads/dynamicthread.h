@@ -100,7 +100,7 @@ protected:
 
     /** In you run() method, you shall regularly check for runningFlag()
      *  and cleanup and return if false. */
-    bool runningFlag() const;
+    bool runningFlag() const volatile;
 
     /**
      * This is the non-recursive mutex used to protect state variables
