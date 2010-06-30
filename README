@@ -86,10 +86,10 @@ http://dev.robotbattle.com/bugs/main_page.php
 
 Name            Version                       URL                                        Remarks
 
-CMake           >= 2.4.x (2.4.3 recommended)  http://www.cmake.org
-libqt           >= 4.3.x (4.5.x recommended)  http://www.qtsoftware.com                  Including run-time SQLite3 and Mysql database plugin.
-kdelibs         >= 4.0.x (4.3.x recommended)  http://www.kde.org                         Nepomuk support introduced with KDE 4.3.x.
-libkipi         >= 0.2.0                      http://www.digikam.org/sharedlibs
+CMake           >= 2.8.x                      http://www.cmake.org
+libqt           >= 4.6.x                      http://www.qtsoftware.com                  Including run-time SQLite3 and Mysql database plugin.
+kdelibs         >= 4.4.x                      http://www.kde.org                         Nepomuk support introduced with KDE 4.3.x.
+libkipi         >= 1.0.0                      http://www.digikam.org/sharedlibs
 libkexiv2       >= 1.1.0                      http://www.digikam.org/sharedlibs          Version from trunk KDE svn repository. Will be released with KDE 4.2. Exiv2 >= 0.18.2 shared library recommended.
 libkdcraw       >= 1.1.0                      http://www.digikam.org/sharedlibs          Version from trunk KDE svn repository. Will be released with KDE 4.4.2.
 liblcms         >= 1.17.x                     http://www.littlecms.com
@@ -100,7 +100,7 @@ libjasper       >= 1.7.x                      http://www.ece.uvic.ca/~mdadams/ja
 
 Optional :
 
-libkdepimlibs   >= 4.0.x (4.2.x recommended)  http://pim.kde.org                         To support KAddressBook entries.
+libkdepimlibs   >= 4.4.x                      http://pim.kde.org                         To support KAddressBook entries.
 libmarblewidget >= 0.5.1 (0.6.x recommended)  http://edu.kde.org/marble                  To support Geolocation using Marble Widget.
 liblensfun      >= 0.1.0                      http://lensfun.berlios.de                  To support LensCorrection editor plugin.
 libgphoto2      >= 2.4.0                      http://www.gphoto.org                      To support Gphoto2 Cameras. 
