@@ -86,9 +86,9 @@ http://dev.robotbattle.com/bugs/main_page.php
 
 Name            Version                       URL                                        Remarks
 
-CMake           >= 2.4.x (2.4.3 recommended)  http://www.cmake.org
+CMake           >= 2.8.x                      http://www.cmake.org
 libqt           >= 4.6.x                      http://www.qtsoftware.com                  Including run-time SQLite3 and Mysql database plugin.
-kdelibs         >= 4.3.x (4.4.x recommended)  http://www.kde.org                         Nepomuk support introduced with KDE 4.3.x.
+kdelibs         >= 4.4.x                      http://www.kde.org                         Nepomuk support introduced with KDE 4.3.x.
 libkface        >= 0.1.0                      http://www.digikam.org/sharedlibs
 libkipi         >= 1.2.0                      http://www.digikam.org/sharedlibs          Version from trunk KDE svn repository.
 libkexiv2       >= 1.2.0                      http://www.digikam.org/sharedlibs          Version from trunk KDE svn repository. Exiv2 >= 0.20.0 shared library recommended.
@@ -101,8 +101,8 @@ libjasper       >= 1.7.x                      http://www.ece.uvic.ca/~mdadams/ja
 
 Optional :
 
-libkdepimlibs   >= 4.0.x (4.4.x recommended)  http://pim.kde.org                         To support KAddressBook entries.
-libmarblewidget >= 0.5.1 (0.7.x recommended)  http://edu.kde.org/marble                  To support Geolocation using Marble Widget.
+libkdepimlibs   >= 4.4.x                      http://pim.kde.org                         To support KAddressBook entries.
+libmarblewidget >= 0.6.1                      http://edu.kde.org/marble                  To support Geolocation using Marble Widget.
 liblensfun      >= 0.1.0                      http://lensfun.berlios.de                  To support LensCorrection editor plugin.
 libgphoto2      >= 2.4.0                      http://www.gphoto.org                      To support Gphoto2 Cameras. 
 liblqr-1        >= 0.4.1                      http://liblqr.wikidot.com                  For Liquid Rescale tool. If no external libray is found, internal version is used instead. 
