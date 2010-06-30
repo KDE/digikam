@@ -55,9 +55,9 @@ public:
     {
     public:
 
+        bool           isFilterEntry;
         FilterAction   action;
         HistoryImageId referredImages;
-        bool isFilterEntry;
     };
 
     DImageHistory();
@@ -82,7 +82,7 @@ public:
 
     const FilterAction& action(int i) const;
     const HistoryImageId& referredImages(int i) const;
-    
+
     void setOriginalFile(const QString& filePath);
     QString originalFile();
 

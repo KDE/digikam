@@ -69,7 +69,6 @@ DImageHistory::DImageHistory(const DImageHistory& other)
 DImageHistory::~DImageHistory()
 {
     d->entries.clear();
-    
 }
 
 DImageHistory& DImageHistory::operator=(const DImageHistory& other)
@@ -96,7 +95,7 @@ int DImageHistory::size() const
 DImageHistory& DImageHistory::operator<<(const FilterAction& action)
 {
     Entry entry;
-    entry.action = action;
+    entry.action        = action;
     entry.isFilterEntry = true;
     d->entries << entry;
     kDebug() << "Entry added, total count " << d->entries.count();
@@ -107,7 +106,7 @@ DImageHistory& DImageHistory::operator<<(const HistoryImageId& imageId)
 {
     Entry entry;
     entry.referredImages = imageId;
-    entry.isFilterEntry = false;
+    entry.isFilterEntry  = false;
     d->entries << entry;
     return *this;
 }
@@ -192,7 +191,7 @@ QString DImageHistory::toXml() const
             stream.writeAttribute("filePath", entries().at(i).referredImages.m_filePath);
 
             stream.writeEndElement(); //fileParams
-            stream.writeEndElement(); //file     
+            stream.writeEndElement(); //file
 
         }
         if(!entries().at(i).action.isNull())
@@ -327,6 +326,5 @@ void DImageHistory::setOriginalFile(const QString& filePath)
 {
     d->originalFile = filePath;
 }
-
 
 } //namespace digikam
