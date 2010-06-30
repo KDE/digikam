@@ -174,10 +174,10 @@ void DatabaseWidget::setupMainArea()
     connect(databasePathEdit, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotDatabasePathEdited(const QString&)));
 
-    connect(databaseType, SIGNAL(currentIndexChanged(const QString&)),
-            this, SLOT(setDatabaseInputFields(const QString&)));
+    connect(databaseType, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(handleDBTypeIndexChanged(int)));
 
-    connect(internalServer, SIGNAL(stateChanged(int)),
+    connect(internalServer, SIGNAL(stateChanged(int index)),
             this, SLOT(slotHandleInternalServerCheckbox(int)));
 
     connect(checkDatabaseConnectionButton, SIGNAL(clicked()),
@@ -221,6 +221,12 @@ void DatabaseWidget::slotDatabasePathEdited(const QString& newPath)
 #endif
 
     checkDBPath();
+}
+
+void DatabaseWidget::slotHandleDBTypeIndexChanged(int index)
+{
+	const QString& dbType = databaseType->itemData(index).toString();
+	setDatabaseInputFields(dbType);
 }
 
 void DatabaseWidget::setDatabaseInputFields(const QString& currentIndexStr)
