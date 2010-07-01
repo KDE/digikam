@@ -130,6 +130,8 @@ TARGET_LINK_LIBRARIES(digikamthemedesigner
                       ${KIPI_LIBRARIES}
                       ${KEXIV2_LIBRARIES}
                       ${KDCRAW_LIBRARIES}
+                      ${KFACE_LIBRARIES}
+                      ${KMAP_LIBRARIES}
                       ${QT_QT3SUPPORT_LIBRARY}
                       ${STRIGI_LIBRARIES}
                       ${LCMS_LIBRARIES}
@@ -145,4 +147,3 @@ IF(MARBLEWIDGET_FOUND)
 ENDIF(MARBLEWIDGET_FOUND)
 
 INSTALL(TARGETS digikamthemedesigner ${INSTALL_TARGETS_DEFAULT_ARGS})
-

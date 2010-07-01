@@ -139,6 +139,7 @@ FIND_PACKAGE(Kdcraw)
 FIND_PACKAGE(Kexiv2)
 FIND_PACKAGE(Kipi)
 FIND_PACKAGE(Kface)
+FIND_PACKAGE(Kmap)
 
 # Extract version of libjpeg so that we can use the appropriate dir
 # See bug #227313, #228483
@@ -272,6 +273,7 @@ PRINT_LIBRARY_STATUS("libkipi" "http://www.digikam.org/sharedlibs" " (version >=
 PRINT_LIBRARY_STATUS("libkexiv2" "http://www.digikam.org/sharedlibs" " (version >= 1.2.0)" KEXIV2_FOR_DIGIKAM)
 PRINT_LIBRARY_STATUS("libkdcraw" "http://www.digikam.org/sharedlibs" " (version >= 1.1.0)" KDCRAW_FOR_DIGIKAM)
 PRINT_LIBRARY_STATUS("libkface" "http://www.digikam.org/sharedlibs" " (version >= 0.1.0)" KFACE_FOUND)
+PRINT_LIBRARY_STATUS("libkmap" "http://www.digikam.org/sharedlibs" " (version >= 0.1.0)" KMAP_FOUND)
 
 # ================================================================
 
@@ -368,13 +370,13 @@ ELSE(DOXYGEN_FOUND)
 
 ENDIF(DOXYGEN_FOUND)
 
-IF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND JASPER_FOUND AND KDCRAW_FOR_DIGIKAM AND KEXIV2_FOR_DIGIKAM AND KIPI_FOUND AND KFACE_FOUND)
+IF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND JASPER_FOUND AND KDCRAW_FOR_DIGIKAM AND KEXIV2_FOR_DIGIKAM AND KIPI_FOUND AND KFACE_FOUND AND KMAP_FOUND)
     MESSAGE(STATUS " digiKam will be compiled................. YES")
     SET(DIGIKAM_CAN_BE_COMPILED true)
-ELSE(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND AND JASPER_FOUND AND KDCRAW_FOR_DIGIKAM AND KEXIV2_FOR_DIGIKAM AND KIPI_FOUND AND KFACE_FOUND)
+ELSE(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND AND JASPER_FOUND AND KDCRAW_FOR_DIGIKAM AND KEXIV2_FOR_DIGIKAM AND KIPI_FOUND AND KFACE_FOUND AND KMAP_FOUND)
     MESSAGE(FATAL_ERROR " digiKam will be compiled................. NO  (Look README file for more details about dependencies)")
     SET(DIGIKAM_CAN_BE_COMPILED false)
-ENDIF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND JASPER_FOUND AND KDCRAW_FOR_DIGIKAM AND KEXIV2_FOR_DIGIKAM AND KIPI_FOUND AND KFACE_FOUND)
+ENDIF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND JASPER_FOUND AND KDCRAW_FOR_DIGIKAM AND KEXIV2_FOR_DIGIKAM AND KIPI_FOUND AND KFACE_FOUND AND KMAP_FOUND)
 
 MESSAGE(STATUS "----------------------------------------------------------------------------------")
 MESSAGE(STATUS "")
@@ -439,6 +441,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
                     ${KDCRAW_DEFINITIONS}
                     ${KEXIV2_DEFINITIONS}
                     ${KFACE_DEFINITIONS}
+                    ${KMAP_DEFINITIONS}
                    )
 
     # QT3 support rules
@@ -453,6 +456,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
                         ${KEXIV2_INCLUDE_DIR}
                         ${KDCRAW_INCLUDE_DIR}
                         ${KFACE_INCLUDE_DIR}
+                        ${KMAP_INCLUDE_DIR}
                         ${KDE4_INCLUDES}
                         ${QT_INCLUDES}
                         ${GPHOTO2_INCLUDE_DIRS}
