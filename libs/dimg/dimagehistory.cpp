@@ -54,10 +54,15 @@ public:
     QList<DImageHistory::Entry> entries;
 };
 
-K_GLOBAL_STATIC(ImageHistoryPriv, imageHistoryPrivSharedNull)
+class ImageHistoryPrivSharedNull : public QSharedDataPointer<ImageHistoryPriv>
+{
+    public:
+    ImageHistoryPrivSharedNull() : QSharedDataPointer<ImageHistoryPriv>(new ImageHistoryPriv) {}
+};
+K_GLOBAL_STATIC(ImageHistoryPrivSharedNull, imageHistoryPrivSharedNull)
 
 DImageHistory::DImageHistory()
-             : d(imageHistoryPrivSharedNull)
+             : d(*imageHistoryPrivSharedNull)
 {
 }
 
@@ -79,7 +84,7 @@ DImageHistory& DImageHistory::operator=(const DImageHistory& other)
 
 bool DImageHistory::isNull() const
 {
-    return d == imageHistoryPrivSharedNull;
+    return d == *imageHistoryPrivSharedNull;
 }
 
 bool DImageHistory::isEmpty() const
