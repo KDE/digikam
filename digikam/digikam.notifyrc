@@ -1,6 +1,7 @@
 [Global]
 IconName=digikam
 Comment=digiKam
+Comment[bg]=digiKam
 Comment[ca]=digiKam
 Comment[ca@valencia]=digiKam
 Comment[cs]=digiKam
@@ -34,6 +35,7 @@ Comment[zh_TW]=digiKam
 
 [Event/cameradownloaded]
 Name=Download complete
+Name[bg]=Изтеглянето приключи
 Name[ca]=Descàrrega completa
 Name[ca@valencia]=Descàrrega completa
 Name[cs]=Stahování dokončeno
@@ -63,6 +65,7 @@ Name[x-test]=xxDownload completexx
 Name[zh_CN]=下载完成
 Name[zh_TW]=下載完成
 Comment=A download from a camera or other device has finished.
+Comment[bg]=Изтеглянето от фотоапарат или друго подобно устройство приключи.
 Comment[ca]=Ha finalitzat la descàrrega des d'una càmera o un altre dispositiu.
 Comment[ca@valencia]=Ha finalitzat la descàrrega des d'una càmera o un altre dispositiu.
 Comment[cs]=Stahování z fotoaparátu nebo jiného zařízení bylo dokončeno.

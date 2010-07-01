@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=ImagePlugin_Enhance
+Name[bg]=Приставка за снимки - Дорисуване
 Name[ca]=ImagePlugin_Enhance
 Name[ca@valencia]=ImagePlugin_Enhance
 Name[cs]=ImagePlugin_Enhance
@@ -29,6 +30,7 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=digiKam plugin to enhance photograph
+Comment[bg]=Приставка на digiKam за дорисуване на повредени или липсващи области от снимки
 Comment[ca]=Connector pel digiKam per realçar una fotografia
 Comment[ca@valencia]=Connector pel digiKam per realçar una fotografia
 Comment[cs]=Modul digiKamu pro vylepšování fotografií
