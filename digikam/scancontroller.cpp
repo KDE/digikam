@@ -296,6 +296,7 @@ void ScanController::createProgressDialog()
         return;
 
     d->progressDialog = new DProgressDlg(0);
+    d->progressDialog->setLabel(i18n("<b>Scanning collections, please wait...</b>"));
     d->progressDialog->setWhatsThis(i18n("This shows the progress of the scan. "
                                          "During the scan, all files on disk "
                                          "are registered in a database."));
