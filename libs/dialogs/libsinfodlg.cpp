@@ -52,6 +52,10 @@ using namespace Marble;
 #include <libkdcraw/version.h>
 #include <libkdcraw/kdcraw.h>
 
+// Libkmap includes
+
+#include <libkmap/kmap.h>
+
 // C ANSI includes
 
 #ifndef Q_CC_MSVC
@@ -120,6 +124,8 @@ LibsInfoDlg::LibsInfoDlg(QWidget *parent)
     list.insert(i18n("LibCImg"),                     GreycstorationFilter::cimgVersionString());
     list.insert(i18n("LibLCMS"),                     QString::number(LCMS_VERSION));
     list.insert(i18n("LibPGF"),                      libPGFVersion());
+
+    list.insert(i18n("LibKMap"),                     KMapIface::KMap::version());
 
 #ifdef HAVE_MARBLEWIDGET
     list.insert(i18n("Marble widget"),               QString(MARBLE_VERSION_STRING));
