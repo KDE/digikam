@@ -7,7 +7,7 @@
  * Description : a widget to select image collections using
  *               digiKam album folder views
  *
- * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,10 +39,6 @@
 #include <ktabwidget.h>
 #include <kvbox.h>
 
-// LibKIPI includes
-
-#include <libkipi/version.h>
-
 // Local includes
 
 #include "album.h"
@@ -73,29 +69,28 @@ public:
     {
     }
 
-    KTabWidget     *tab;
+    KTabWidget*     tab;
 
-    AlbumModel     *albumModel;
-    AlbumTreeView  *albumTreeView;
+    AlbumModel*     albumModel;
+    AlbumTreeView*  albumTreeView;
 
-    TagModel       *tagModel;
-    TagTreeView    *tagTreeView;
+    TagModel*       tagModel;
+    TagTreeView*    tagTreeView;
 
-    SearchModel    *searchModel;
-    SearchTreeView *searchTreeView;
+    SearchModel*    searchModel;
+    SearchTreeView* searchTreeView;
 
-    KipiInterface  *iface;
+    KipiInterface*  iface;
 
-    SearchTextBar  *albumSearchBar;
-    SearchTextBar  *tagSearchBar;
-    SearchTextBar  *searchSearchBar;
+    SearchTextBar*  albumSearchBar;
+    SearchTextBar*  tagSearchBar;
+    SearchTextBar*  searchSearchBar;
 
-    void prepareTreeView(AbstractCheckableAlbumTreeView *treeView)
+    void prepareTreeView(AbstractCheckableAlbumTreeView* treeView)
     {
 
         treeView->checkableModel()->setShowCount(false);
         treeView->checkableModel()->setCheckable(true);
-
         treeView->setRootIsDecorated(true);
         treeView->setSortingEnabled(true);
         treeView->setSelectAlbumOnClick(false);
@@ -105,41 +100,36 @@ public:
 
     }
 
-    void fillCollectionsFromCheckedModel(QList<KIPI::ImageCollection> &collectionList,
-                                         AbstractCheckableAlbumModel *model,
-                                         const QString &ext)
+    void fillCollectionsFromCheckedModel(QList<KIPI::ImageCollection>& collectionList,
+                                         AbstractCheckableAlbumModel* model,
+                                         const QString& ext)
     {
-
         foreach(Album *album, model->checkedAlbums())
         {
-
             if (!album)
             {
                 continue;
             }
 
-            KipiImageCollection *col = new KipiImageCollection(KipiImageCollection::AllItems, album, ext);
+            KipiImageCollection* col = new KipiImageCollection(KipiImageCollection::AllItems, album, ext);
             collectionList.append(col);
-
         }
-
     }
-
 };
 
-KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface *iface, QWidget *parent)
+KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* iface, QWidget* parent)
                            : KIPI::ImageCollectionSelector(parent),
                              d(new KipiImageCollectionSelectorPriv)
 {
 
-    KSharedConfigPtr config = KGlobal::config();
+    KSharedConfigPtr config  = KGlobal::config();
     KConfigGroup configGroup = config->group("KipiImageCollectionSelector");
 
     d->iface = iface;
     d->tab   = new KTabWidget(this);
 
-    KVBox *albumBox  = new KVBox(d->tab);
-    d->albumModel = new AlbumModel(AbstractAlbumModel::IgnoreRootAlbum, albumBox);
+    KVBox* albumBox  = new KVBox(d->tab);
+    d->albumModel    = new AlbumModel(AbstractAlbumModel::IgnoreRootAlbum, albumBox);
     d->albumTreeView = new AlbumTreeView(d->albumModel, albumBox);
     d->albumTreeView->setEntryPrefix("AlbumTreeView");
     d->albumTreeView->setConfigGroup(configGroup);
@@ -158,8 +148,8 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface *iface, Q
 
     // -------------------------------------------------------------------------------
 
-    KVBox *tagBox = new KVBox(d->tab);
-    d->tagModel = new TagModel(AbstractAlbumModel::IgnoreRootAlbum, tagBox);
+    KVBox* tagBox  = new KVBox(d->tab);
+    d->tagModel    = new TagModel(AbstractAlbumModel::IgnoreRootAlbum, tagBox);
     d->tagTreeView = new TagTreeView(d->tagModel, tagBox);
     d->tagTreeView->setEntryPrefix("TagTreeView");
     d->tagTreeView->setConfigGroup(configGroup);
@@ -178,8 +168,8 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface *iface, Q
 
     // -------------------------------------------------------------------------------
 
-    KVBox *searchBox = new KVBox(d->tab);
-    d->searchModel = new SearchModel(searchBox);
+    KVBox* searchBox  = new KVBox(d->tab);
+    d->searchModel    = new SearchModel(searchBox);
     d->searchTreeView = new SearchTreeView(searchBox, d->searchModel);
     d->searchTreeView->setEntryPrefix("SearchTreeView");
     d->searchTreeView->setConfigGroup(configGroup);
@@ -203,7 +193,7 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface *iface, Q
     d->tab->addTab(tagBox, i18n("My Tags"));
     d->tab->addTab(searchBox, i18n("My Searches"));
 
-    QHBoxLayout *hlay = new QHBoxLayout(this);
+    QHBoxLayout* hlay = new QHBoxLayout(this);
     hlay->addWidget(d->tab);
     hlay->setMargin(0);
     hlay->setSpacing(0);
@@ -249,11 +239,7 @@ KipiImageCollectionSelector::~KipiImageCollectionSelector()
 
 QList<KIPI::ImageCollection> KipiImageCollectionSelector::selectedImageCollections() const
 {
-#if KIPI_VERSION >= 0x000300
     QString ext = d->iface->hostSetting("FileExtensions").toString();
-#else
-    QString ext = d->iface->fileExtensions();
-#endif
     QList<KIPI::ImageCollection> list;
 
     d->fillCollectionsFromCheckedModel(list, d->albumModel, ext);
