@@ -29,7 +29,6 @@
 #include <QStringList>
 #include <QString>
 #include <QLabel>
-#include <QLayout>
 #include <QGridLayout>
 #include <QTreeWidget>
 #include <QHeaderView>
@@ -43,42 +42,6 @@
 #include <kapplication.h>
 #include <kstandarddirs.h>
 #include <kaboutdata.h>
-
-#include "config-digikam.h"
-#ifdef HAVE_MARBLEWIDGET
-#include <marble/global.h>
-using namespace Marble;
-#endif // HAVE_MARBLEWIDGET
-
-// Libkexiv2 includes
-
-#include <libkexiv2/version.h>
-#include <libkexiv2/kexiv2.h>
-
-// Libkdcraw includes
-
-#include <libkdcraw/version.h>
-#include <libkdcraw/kdcraw.h>
-
-// C ANSI includes
-
-#ifndef Q_CC_MSVC
-extern "C"
-{
-#endif
-#include <png.h>
-#include <tiffvers.h>
-#include <jasper/jas_version.h>
-#include <lcms.h>
-
-// Avoid Warnings under Win32
-#undef HAVE_STDLIB_H
-#undef HAVE_STDDEF_H
-#include <jpeglib.h>
-
-#ifndef Q_CC_MSVC
-}
-#endif
 
 // Local includes
 

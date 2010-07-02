@@ -28,13 +28,12 @@
 #include <QStringList>
 #include <QString>
 #include <QTreeWidget>
-#include <QHeaderView>
 
 // KDE includes
 
 #include <klocale.h>
-#include <kapplication.h>
-#include <kaboutdata.h>
+
+// Marble widget includes
 
 #include "config-digikam.h"
 #ifdef HAVE_MARBLEWIDGET
@@ -74,7 +73,6 @@ extern "C"
 
 // Local includes
 
-#include "daboutdata.h"
 #include "greycstorationfilter.h"
 #include "pgfutils.h"
 
