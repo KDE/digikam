@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2004-2005 by Ralf Holzer <ralf at well.com>
- * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,7 +39,6 @@
 
 // LibKIPI includes
 
-#include <libkipi/version.h>
 #include <libkipi/interface.h>
 #include <libkipi/imagecollection.h>
 #include <libkipi/imageinfo.h>
@@ -87,7 +86,7 @@ public:
     void refreshImages( const KUrl::List& urls );
 
     int features() const;
-  
+
     void thumbnail( const KUrl& url, int size );
     void thumbnails( const KUrl::List& list, int size );
 
@@ -95,11 +94,7 @@ public:
     KIPI::UploadWidget* uploadWidget(QWidget *parent);
     QAbstractItemModel* getTagTree();
 
-#if KIPI_VERSION >= 0x000300
     QVariant hostSetting(const QString& settingName);
-#else
-    QString fileExtensions();
-#endif
 
 public Q_SLOTS:
 
@@ -112,8 +107,8 @@ private Q_SLOTS:
 
 private:
 
-    AlbumManager        *m_albumManager;
-    ThumbnailLoadThread *m_thumbLoadThread;
+    AlbumManager*        m_albumManager;
+    ThumbnailLoadThread* m_thumbLoadThread;
 
     KipiInterfacePrivate* const d;
 };

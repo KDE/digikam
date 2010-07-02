@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2004-2005 by Ralf Holzer <ralf at well.com>
- * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -94,11 +94,7 @@ KIPI::ImageCollection KipiInterface::currentAlbum()
     {
         return KIPI::ImageCollection(new KipiImageCollection(KipiImageCollection::AllItems,
                                          currAlbum,
-#if KIPI_VERSION >= 0x000300
                                          hostSetting("FileExtensions").toString()));
-#else
-                                         fileExtensions()));
-#endif
     }
     else
     {
@@ -113,11 +109,7 @@ KIPI::ImageCollection KipiInterface::currentSelection()
     {
         return KIPI::ImageCollection(new KipiImageCollection(KipiImageCollection::SelectedItems,
                                                              currAlbum,
-#if KIPI_VERSION >= 0x000300
                                          hostSetting("FileExtensions").toString()));
-#else
-                                         fileExtensions()));
-#endif
     }
     else
     {
@@ -128,11 +120,7 @@ KIPI::ImageCollection KipiInterface::currentSelection()
 QList<KIPI::ImageCollection> KipiInterface::allAlbums()
 {
     QList<KIPI::ImageCollection> result;
-#if KIPI_VERSION >= 0x000300
     QString fileFilter(hostSetting("FileExtensions").toString());
-#else
-    QString fileFilter(fileExtensions());
-#endif
 
     const AlbumList palbumList = m_albumManager->allPAlbums();
     for ( AlbumList::ConstIterator it = palbumList.constBegin();
@@ -215,7 +203,7 @@ bool KipiInterface::addImage( const KUrl& url, QString& errmsg )
         return false;
     }
 
-    PAlbum *targetAlbum = m_albumManager->findPAlbum(url.directory());
+    PAlbum* targetAlbum = m_albumManager->findPAlbum(url.directory());
 
     if ( !targetAlbum )
     {
@@ -238,7 +226,7 @@ void KipiInterface::delImage( const KUrl& url )
 
     // Is there a PAlbum for this URL
 
-    PAlbum *palbum = m_albumManager->findPAlbum( KUrl(url.directory()) );
+    PAlbum* palbum = m_albumManager->findPAlbum( KUrl(url.directory()) );
 
     if ( palbum )
     {
@@ -299,7 +287,6 @@ QAbstractItemModel* KipiInterface::getTagTree()
     return d->tagModel;
 }
 
-#if KIPI_VERSION >= 0x000300
 QVariant KipiInterface::hostSetting(const QString& settingName)
 {
     if (settingName == QString("WriteMetadataUpdateFiletimeStamp"))
@@ -328,18 +315,5 @@ QVariant KipiInterface::hostSetting(const QString& settingName)
 
     return QVariant();
 }
-#else
-QString KipiInterface::fileExtensions()
-{
-    // do not save this into a local variable, as this
-    // might change in the main app
-
-    AlbumSettings* s = AlbumSettings::instance();
-    return (s->getImageFileFilter() + ' ' +
-            s->getMovieFileFilter() + ' ' +
-            s->getAudioFileFilter() + ' ' +
-            s->getRawFileFilter());
-}
-#endif
 
 }  // namespace Digikam
