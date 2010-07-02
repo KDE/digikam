@@ -239,7 +239,7 @@ KUrl KipiImageCollection::path()
 {
     if (d->album->type() == Album::PHYSICAL)
     {
-        PAlbum *p = dynamic_cast<PAlbum*>(d->album);
+        PAlbum* p = dynamic_cast<PAlbum*>(d->album);
         KUrl url;
         url.setPath(p->folderPath());
         return url;
@@ -255,7 +255,7 @@ KUrl KipiImageCollection::uploadPath()
 {
     if (d->album->type() == Album::PHYSICAL)
     {
-        PAlbum *p = dynamic_cast<PAlbum*>(d->album);
+        PAlbum* p = dynamic_cast<PAlbum*>(d->album);
         KUrl url;
         url.setPath(p->folderPath());
         return url;
