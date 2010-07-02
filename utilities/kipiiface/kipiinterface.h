@@ -73,7 +73,7 @@ class KipiInterface : public KIPI::Interface
 
 public:
 
-    explicit KipiInterface(QObject *parent, const char *name=0);
+    explicit KipiInterface(QObject* parent, const char* name=0);
     ~KipiInterface();
 
     KIPI::ImageCollection currentAlbum();
@@ -90,7 +90,7 @@ public:
     void thumbnail( const KUrl& url, int size );
     void thumbnails( const KUrl::List& list, int size );
 
-    KIPI::ImageCollectionSelector* imageCollectionSelector(QWidget *parent);
+    KIPI::ImageCollectionSelector* imageCollectionSelector(QWidget* parent);
     KIPI::UploadWidget* uploadWidget(QWidget *parent);
     QAbstractItemModel* getTagTree();
 
@@ -99,16 +99,13 @@ public:
 public Q_SLOTS:
 
     void slotSelectionChanged(int count);
-    void slotCurrentAlbumChanged( Album *palbum );
+    void slotCurrentAlbumChanged(Album* palbum);
 
 private Q_SLOTS:
 
     void slotThumbnailLoaded(const LoadingDescription&, const QPixmap&);
 
 private:
-
-    AlbumManager*        m_albumManager;
-    ThumbnailLoadThread* m_thumbLoadThread;
 
     KipiInterfacePrivate* const d;
 };

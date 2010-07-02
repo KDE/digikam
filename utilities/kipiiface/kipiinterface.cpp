@@ -60,26 +60,27 @@ class KipiInterfacePrivate
 public:
 
     KipiInterfacePrivate()
-    : tagModel(0)
     {
+      tagModel        = 0;
+      thumbLoadThread = 0;
+      albumManager    = 0;
     }
 
-    QAbstractItemModel* tagModel;
-
+    AlbumManager*        albumManager;
+    ThumbnailLoadThread* thumbLoadThread;
+    QAbstractItemModel*  tagModel;
 };
 
-KipiInterface::KipiInterface(QObject *parent, const char *name)
+KipiInterface::KipiInterface(QObject* parent, const char* name)
              : KIPI::Interface(parent, name), d(new KipiInterfacePrivate())
 {
-    m_thumbLoadThread = ThumbnailLoadThread::defaultThread();
-    m_albumManager    = AlbumManager::instance();
-
-    d->tagModel = 0;
+    d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
+    d->albumManager    = AlbumManager::instance();
 
     connect(DigikamApp::instance()->view(), SIGNAL(signalSelectionChanged(int)),
             this, SLOT(slotSelectionChanged(int)));
 
-    connect(m_thumbLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
+    connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
             this, SLOT(slotThumbnailLoaded(const LoadingDescription&, const QPixmap&)));
 }
 
@@ -89,7 +90,7 @@ KipiInterface::~KipiInterface()
 
 KIPI::ImageCollection KipiInterface::currentAlbum()
 {
-    Album* currAlbum = m_albumManager->currentAlbum();
+    Album* currAlbum = d->albumManager->currentAlbum();
     if ( currAlbum )
     {
         return KIPI::ImageCollection(new KipiImageCollection(KipiImageCollection::AllItems,
@@ -104,7 +105,7 @@ KIPI::ImageCollection KipiInterface::currentAlbum()
 
 KIPI::ImageCollection KipiInterface::currentSelection()
 {
-    Album* currAlbum = m_albumManager->currentAlbum();
+    Album* currAlbum = d->albumManager->currentAlbum();
     if ( currAlbum )
     {
         return KIPI::ImageCollection(new KipiImageCollection(KipiImageCollection::SelectedItems,
@@ -122,7 +123,7 @@ QList<KIPI::ImageCollection> KipiInterface::allAlbums()
     QList<KIPI::ImageCollection> result;
     QString fileFilter(hostSetting("FileExtensions").toString());
 
-    const AlbumList palbumList = m_albumManager->allPAlbums();
+    const AlbumList palbumList = d->albumManager->allPAlbums();
     for ( AlbumList::ConstIterator it = palbumList.constBegin();
           it != palbumList.constEnd(); ++it )
     {
@@ -130,12 +131,11 @@ QList<KIPI::ImageCollection> KipiInterface::allAlbums()
         if ((*it)->isRoot())
             continue;
 
-        KipiImageCollection* col = new KipiImageCollection(KipiImageCollection::AllItems,
-                                                           *it, fileFilter);
+        KipiImageCollection* col = new KipiImageCollection(KipiImageCollection::AllItems, *it, fileFilter);
         result.append( KIPI::ImageCollection( col ) );
     }
 
-    const AlbumList talbumList = m_albumManager->allTAlbums();
+    const AlbumList talbumList = d->albumManager->allTAlbums();
     for ( AlbumList::ConstIterator it = talbumList.constBegin();
           it != talbumList.constEnd(); ++it )
     {
@@ -203,7 +203,7 @@ bool KipiInterface::addImage( const KUrl& url, QString& errmsg )
         return false;
     }
 
-    PAlbum* targetAlbum = m_albumManager->findPAlbum(url.directory());
+    PAlbum* targetAlbum = d->albumManager->findPAlbum(url.directory());
 
     if ( !targetAlbum )
     {
@@ -211,7 +211,7 @@ bool KipiInterface::addImage( const KUrl& url, QString& errmsg )
         return false;
     }
 
-    //m_albumManager->refreshItemHandler( url );
+    //d->albumManager->refreshItemHandler( url );
 
     return true;
 }
@@ -226,7 +226,7 @@ void KipiInterface::delImage( const KUrl& url )
 
     // Is there a PAlbum for this URL
 
-    PAlbum* palbum = m_albumManager->findPAlbum( KUrl(url.directory()) );
+    PAlbum* palbum = d->albumManager->findPAlbum( KUrl(url.directory()) );
 
     if ( palbum )
     {
@@ -252,7 +252,7 @@ void KipiInterface::slotCurrentAlbumChanged( Album *album )
 void KipiInterface::thumbnail(const KUrl& url, int /*size*/)
 {
     // NOTE: size is not used here. Cache use the max pixmap size to store thumbs (256).
-    m_thumbLoadThread->find(url.toLocalFile());
+    d->thumbLoadThread->find(url.toLocalFile());
 }
 
 void KipiInterface::thumbnails(const KUrl::List& list, int size)
@@ -266,7 +266,7 @@ void KipiInterface::slotThumbnailLoaded(const LoadingDescription& desc, const QP
     emit gotThumbnail( KUrl(desc.filePath), pix );
 }
 
-KIPI::ImageCollectionSelector* KipiInterface::imageCollectionSelector(QWidget *parent)
+KIPI::ImageCollectionSelector* KipiInterface::imageCollectionSelector(QWidget* parent)
 {
     return (new KipiImageCollectionSelector(this, parent));
 }
