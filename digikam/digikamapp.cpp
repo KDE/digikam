@@ -2377,6 +2377,7 @@ void DigikamApp::slotKipiPluginPlug()
 
         // List of obsolete kipi-plugins to not load.
         QStringList pluginActionsDisabled;
+        pluginActionsDisabled << QString("gpssync2");              // Experimental plugin renamed gpssync during GoSC2010.
         pluginActionsDisabled << QString("raw_converter_single");  // Obsolete since 0.9.5 and new Raw Import tool.
         pluginActionsDisabled << QString("batch_rename_images");   // Obsolete since 1.0.0, replaced by AdvancedRename.
         pluginActionsDisabled << QString("batch_border_images");   // Obsolete since 1.2.0, replaced by BQM border tool.
