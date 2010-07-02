@@ -9,7 +9,7 @@
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
  * Copyright (C) 2004-2005 by Ralf Holzer <ralf at well.com>
- * Copyright (C) 2004-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,10 +32,6 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-// LibKIPI includes
-
-#include <libkipi/version.h>
-
 // Local includes
 
 #include "album.h"
@@ -51,11 +47,27 @@
 namespace Digikam
 {
 
-KipiImageCollection::KipiImageCollection(Type tp, Album* album, const QString& filter)
+class KipiImageCollectionPriv
 {
-    m_tp        = tp;
-    m_album     = album;
-    m_imgFilter = filter;
+public:
+
+    KipiImageCollectionPriv()
+    {
+        album = 0;
+    }
+
+    QString                   imgFilter;
+
+    KipiImageCollection::Type type;
+    Album*                    album;
+};
+
+KipiImageCollection::KipiImageCollection(Type type, Album* album, const QString& filter)
+                   : KIPI::ImageCollectionShared(), d(new KipiImageCollectionPriv)
+{
+    d->type      = type;
+    d->album     = album;
+    d->imgFilter = filter;
 
     if (!album)
     {
@@ -65,30 +77,31 @@ KipiImageCollection::KipiImageCollection(Type tp, Album* album, const QString& f
 
 KipiImageCollection::~KipiImageCollection()
 {
+    delete d;
 }
 
 QString KipiImageCollection::name()
 {
-    if ( m_album->type() == Album::TAG )
+    if ( d->album->type() == Album::TAG )
     {
-        return i18n("Tag: %1", m_album->title());
+        return i18n("Tag: %1", d->album->title());
     }
     else
     {
-        return m_album->title();
+        return d->album->title();
     }
 }
 
 QString KipiImageCollection::category()
 {
-    if ( m_album->type() == Album::PHYSICAL )
+    if ( d->album->type() == Album::PHYSICAL )
     {
-        PAlbum* p = dynamic_cast<PAlbum*>(m_album);
+        PAlbum* p = dynamic_cast<PAlbum*>(d->album);
         return p->category();
     }
-    else if ( m_album->type() == Album::TAG )
+    else if ( d->album->type() == Album::TAG )
     {
-        TAlbum* p = dynamic_cast<TAlbum*>(m_album);
+        TAlbum* p = dynamic_cast<TAlbum*>(d->album);
         return i18n("Tag: %1", p->tagPath());
     }
     else
@@ -99,9 +112,9 @@ QString KipiImageCollection::category()
 
 QDate KipiImageCollection::date()
 {
-    if ( m_album->type() == Album::PHYSICAL )
+    if ( d->album->type() == Album::PHYSICAL )
     {
-        PAlbum* p = dynamic_cast<PAlbum*>(m_album);
+        PAlbum* p = dynamic_cast<PAlbum*>(d->album);
         return p->date();
     }
     else
@@ -112,9 +125,9 @@ QDate KipiImageCollection::date()
 
 QString KipiImageCollection::comment()
 {
-    if ( m_album->type() == Album::PHYSICAL )
+    if ( d->album->type() == Album::PHYSICAL )
     {
-        PAlbum* p = dynamic_cast<PAlbum*>(m_album);
+        PAlbum* p = dynamic_cast<PAlbum*>(d->album);
         return p->caption();
     }
     else
@@ -125,20 +138,20 @@ QString KipiImageCollection::comment()
 
 KUrl::List KipiImageCollection::images()
 {
-    switch ( m_tp )
+    switch ( d->type )
     {
         case AllItems:
         {
-            if (m_album->type() == Album::PHYSICAL)
+            if (d->album->type() == Album::PHYSICAL)
             {
-                return imagesFromPAlbum(dynamic_cast<PAlbum*>(m_album));
+                return imagesFromPAlbum(dynamic_cast<PAlbum*>(d->album));
             }
-            else if (m_album->type() == Album::TAG)
+            else if (d->album->type() == Album::TAG)
             {
-                return imagesFromTAlbum(dynamic_cast<TAlbum*>(m_album));
+                return imagesFromTAlbum(dynamic_cast<TAlbum*>(d->album));
             }
-            else if (m_album->type() == Album::DATE ||
-                    m_album->type() == Album::SEARCH)
+            else if (d->album->type() == Album::DATE ||
+                    d->album->type() == Album::SEARCH)
             {
                 return DigikamApp::instance()->view()->allUrls();
             }
@@ -191,7 +204,7 @@ KUrl::List KipiImageCollection::imagesFromPAlbum(PAlbum* album) const
 
     KUrl::List urlList;
 
-    NameFilter nameFilter(m_imgFilter);
+    NameFilter nameFilter(d->imgFilter);
 
     for (QStringList::const_iterator it = urls.constBegin(); it != urls.constEnd(); ++it)
     {
@@ -211,7 +224,7 @@ KUrl::List KipiImageCollection::imagesFromTAlbum(TAlbum* album) const
 
     KUrl::List urlList;
 
-    NameFilter nameFilter(m_imgFilter);
+    NameFilter nameFilter(d->imgFilter);
 
     for (QStringList::const_iterator it = urls.constBegin(); it != urls.constEnd(); ++it)
     {
@@ -224,9 +237,9 @@ KUrl::List KipiImageCollection::imagesFromTAlbum(TAlbum* album) const
 
 KUrl KipiImageCollection::path()
 {
-    if (m_album->type() == Album::PHYSICAL)
+    if (d->album->type() == Album::PHYSICAL)
     {
-        PAlbum *p = dynamic_cast<PAlbum*>(m_album);
+        PAlbum *p = dynamic_cast<PAlbum*>(d->album);
         KUrl url;
         url.setPath(p->folderPath());
         return url;
@@ -240,9 +253,9 @@ KUrl KipiImageCollection::path()
 
 KUrl KipiImageCollection::uploadPath()
 {
-    if (m_album->type() == Album::PHYSICAL)
+    if (d->album->type() == Album::PHYSICAL)
     {
-        PAlbum *p = dynamic_cast<PAlbum*>(m_album);
+        PAlbum *p = dynamic_cast<PAlbum*>(d->album);
         KUrl url;
         url.setPath(p->folderPath());
         return url;
@@ -266,7 +279,7 @@ QString KipiImageCollection::uploadRootName()
 
 bool KipiImageCollection::isDirectory()
 {
-    if (m_album->type() == Album::PHYSICAL)
+    if (d->album->type() == Album::PHYSICAL)
         return true;
     else
         return false;
@@ -275,7 +288,7 @@ bool KipiImageCollection::isDirectory()
 bool KipiImageCollection::operator==(ImageCollectionShared& imgCollection)
 {
     KipiImageCollection* thatCollection = static_cast<KipiImageCollection*>(&imgCollection);
-    return (m_album == thatCollection->m_album);
+    return (d->album == thatCollection->d->album);
 }
 
 }  // namespace Digikam
