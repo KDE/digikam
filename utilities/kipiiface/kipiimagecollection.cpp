@@ -24,7 +24,6 @@
  *
  * ============================================================ */
 
-
 #include "kipiimagecollection.h"
 
 // KDE includes
@@ -52,7 +51,7 @@
 namespace Digikam
 {
 
-KipiImageCollection::KipiImageCollection(Type tp, Album *album, const QString& filter)
+KipiImageCollection::KipiImageCollection(Type tp, Album* album, const QString& filter)
 {
     m_tp        = tp;
     m_album     = album;
@@ -75,45 +74,53 @@ QString KipiImageCollection::name()
         return i18n("Tag: %1", m_album->title());
     }
     else
+    {
         return m_album->title();
+    }
 }
 
 QString KipiImageCollection::category()
 {
     if ( m_album->type() == Album::PHYSICAL )
     {
-        PAlbum *p = dynamic_cast<PAlbum*>(m_album);
+        PAlbum* p = dynamic_cast<PAlbum*>(m_album);
         return p->category();
     }
     else if ( m_album->type() == Album::TAG )
     {
-        TAlbum *p = dynamic_cast<TAlbum*>(m_album);
+        TAlbum* p = dynamic_cast<TAlbum*>(m_album);
         return i18n("Tag: %1", p->tagPath());
     }
     else
+    {
         return QString();
+    }
 }
 
 QDate KipiImageCollection::date()
 {
     if ( m_album->type() == Album::PHYSICAL )
     {
-        PAlbum *p = dynamic_cast<PAlbum*>(m_album);
+        PAlbum* p = dynamic_cast<PAlbum*>(m_album);
         return p->date();
     }
     else
+    {
         return QDate();
+    }
 }
 
 QString KipiImageCollection::comment()
 {
     if ( m_album->type() == Album::PHYSICAL )
     {
-        PAlbum *p = dynamic_cast<PAlbum*>(m_album);
+        PAlbum* p = dynamic_cast<PAlbum*>(m_album);
         return p->caption();
     }
     else
+    {
         return QString();
+    }
 }
 
 KUrl::List KipiImageCollection::images()
