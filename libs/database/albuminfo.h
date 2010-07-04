@@ -84,7 +84,7 @@ public:
 
     typedef QList<AlbumInfo> List;
 
-    bool isNull() { return id == 0; }
+    bool isNull() const { return id == 0; }
 
     int     id;
     int     albumRootId;
@@ -118,7 +118,7 @@ public:
 
     typedef QList<TagInfo> List;
 
-    bool isNull() { return id == 0; }
+    bool isNull() const { return id == 0; }
 
     int     id;
     int     pid;
@@ -167,7 +167,7 @@ public:
 
     typedef QList<SearchInfo> List;
 
-    bool isNull() { return id == 0; }
+    bool isNull() const { return id == 0; }
 
     int                  id;
     QString              name;
@@ -189,7 +189,7 @@ public:
 
     AlbumShortInfo() : id(0) {};
 
-    bool isNull() { return id == 0; }
+    bool isNull() const { return id == 0; }
 
     int         id;
     QString     relativePath;
@@ -202,7 +202,7 @@ public:
 
     TagShortInfo() : id(0), pid(0) {};
 
-    bool isNull() { return id == 0; }
+    bool isNull() const { return id == 0; }
 
     int     id;
     int     pid;
@@ -237,7 +237,7 @@ public:
 
     ItemShortInfo() : id(0), albumID(0) {};
 
-    bool isNull() { return id == 0; }
+    bool isNull() const { return id == 0; }
 
     qlonglong id;
     QString   itemName;
@@ -255,7 +255,7 @@ public:
           category(DatabaseItem::UndefinedCategory)
     {};
 
-    bool isNull() { return id == 0; }
+    bool isNull() const { return id == 0; }
 
     qlonglong              id;
     int                    albumID;
@@ -296,7 +296,7 @@ public:
 
     CommentInfo() : id(-1), imageId(-1), type(DatabaseComment::UndefinedType) {};
 
-    bool isNull() { return id == -1; }
+    bool isNull() const { return id == -1; }
 
     int                   id;
     qlonglong             imageId;
@@ -313,12 +313,73 @@ public:
 
     CopyrightInfo() : id(-1) {};
 
-    bool isNull() { return id == -1; }
+    bool isNull() const { return id == -1; }
 
     qlonglong id;
     QString   property;
     QString   value;
     QString   extraValue;
+};
+
+class ImageHistoryEntry
+{
+public:
+
+    ImageHistoryEntry() : imageId(0) {};
+
+    bool isNull() const { return imageId == 0; }
+
+    qlonglong imageId;
+    QString   uuid;
+    QString   history;
+};
+
+namespace DatabaseRelation
+{
+    enum Type
+    {
+        UndefinedType = 0,
+        /** The subject is a derivative of the object */
+        DerivedFrom   = 1
+    };
+}
+
+class ImageRelation
+{
+public:
+
+    ImageRelation() : subjectId(0), objectId(0), type(DatabaseRelation::UndefinedType) {}
+
+    qlonglong              subjectId;
+    qlonglong              objectId;
+    DatabaseRelation::Type type;
+};
+
+class TagProperty
+{
+public:
+
+    TagProperty() : tagId(-1) {};
+
+    bool isNull() const { return tagId == -1; }
+
+    int tagId;
+    QString property;
+    QString value;
+};
+
+class ImageTagProperty
+{
+public:
+
+    ImageTagProperty() : imageId(-1), tagId(-1) {};
+
+    bool isNull() const { return imageId == -1; }
+
+    qlonglong imageId;
+    int tagId;
+    QString property;
+    QString value;
 };
 
 }  // namespace Digikam

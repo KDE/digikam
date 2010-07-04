@@ -248,7 +248,8 @@ public:
         Deleted,
         Renamed,
         Reparented,
-        IconChanged
+        IconChanged,
+        PropertiesChanged /// ImageTagProperties Table
     };
 
     TagChangeset();

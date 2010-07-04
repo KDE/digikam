@@ -429,6 +429,27 @@ public:
      */
     void setTagParentID(int tagID, int newParentTagID);
 
+    /**
+     * Returns the list of tag properties of the given tag.
+     */
+    QList<TagProperty> getTagProperties(int tagID);
+
+    /**
+     * Adds a tag property. Note that this never replaces existing entries.
+     * It is also all right to add multiple entries for a tag with the same property.
+     * To replace an existing entry, remove the entry before.
+     */
+    void addTagProperty(int tagId, const QString& property, const QString& value);
+    void addTagProperty(const TagProperty& property);
+
+    /**
+     * Removes properties for the given tag. If the value is given, removes only
+     * the entries with the given property/value pair. If only property is given,
+     * removes all properties with the given name. If property is null,
+     * removes all properties for the given tag.
+     */
+    void removeTagProperties(int tagId, const QString& property = QString(), const QString& value = QString());
+
     // ----------- Operations on SAlbums -----------
 
     /**
@@ -862,6 +883,45 @@ public:
     void removeImageCopyrightProperties(qlonglong imageID, const QString& property = QString(),
                                         const QString& extraValue = QString(),
                                         const QString& value = QString() /* NOTE parameter order */);
+
+
+    /**
+     * Retrieves the history entry for the given image.
+     */
+    ImageHistoryEntry getImageHistory(qlonglong imageId);
+
+    /**
+     * Retrieves the image UUID
+     */
+    QString getImageUUID(qlonglong imageId);
+
+    /**
+     * Retrieves the images with the given UUID
+     */
+    QList<qlonglong> getItemsForUUID(const QString& uuid);
+
+    /**
+     * Sets (adds or replaces) the image history
+     */
+    void setImageHistory(qlonglong imageId, const QString& uuid, const QString& history);
+
+    /**
+     * Adds an image relation entry
+     */
+    void addImageRelation(qlonglong subjectId, qlonglong objectId, DatabaseRelation::Type type);
+    void addImageRelation(const ImageRelation& relation);
+
+    /**
+     * Retrieves all images that the given image is related to (retrieves objects, given image is subject)
+     * If type is given, filters by type, otherwise returns all types.
+     */
+    QList<qlonglong> getRelatedImages(qlonglong subjectId, DatabaseRelation::Type type = DatabaseRelation::UndefinedType);
+    /**
+     * Retrieves all images that relate to the given image (retrieves subject, given image is object)
+     * If type is given, filters by type, otherwise returns all types.
+     */
+    QList<qlonglong> getRelatingImages(qlonglong objectId, DatabaseRelation::Type type = DatabaseRelation::UndefinedType);
+
     /**
      * Returns if there are valid entries in the ImageHaarMatrix table.
      * Returns false if the table is empty.
@@ -887,87 +947,6 @@ public:
      */
     QList<ItemScanInfo> getIdenticalFiles(qlonglong id);
     QList<ItemScanInfo> getIdenticalFiles(int fileSize, const QString& uniqueHash, qlonglong sourceId = -1);
-    /**
-     * Get the datetime for the item
-     * @param imageID the ID of the item
-     * @return the datetime for the item
-     */
-    //QDateTime getItemDate(qlonglong imageID);
-
-    /**
-     * Get the item rating
-     * @param imageID the ID of the item
-     * @return the rating for the item
-     */
-    //int getItemRating(qlonglong imageID);
-
-    /**
-     * Update the date of a item to supplied date
-     * @param imageID The ID of the item
-     * @param datetime The datetime to be stored. Should try to let that be
-     * the exif-datetime, but if not available the modification date.
-     * @return It will always return true. Maybe that will change.
-     */
-    //bool setItemDate(qlonglong imageID, const QDateTime& datetime);
-
-    /**
-     * Update the rating of a item to supplied value
-     * @param imageID The ID of the item
-     * @param rating The rating value to be stored.
-     */
-    //void setItemRating(qlonglong imageID, int rating);
-
-
-    /**
-     * Get the datetime for the item
-     * @param albumID the albumID of the item
-     * @param name    the name of the item
-     * @return the datetime for the item
-     */
-    //QDateTime getItemDate(int albumID, const QString& name);
-
-
-    /**
-     * Update the date of a item to supplied date
-     * @param albumID The albumID where the file is located.
-     * @param name The filename
-     * @param datetime The datetime to be stored. Should try to let that be
-     * the exif-datetime, but if not available the modification date.
-     * @return It will always return true. Maybe that will change.
-     */
-    //bool setItemDate(int albumID, const QString& name,
-      //               const QDateTime& datetime);
-
-    /**
-     * Get the caption for the item
-     * @param imageID the id  of the item
-     * @return the caption for the item
-     */
-    //QString getItemCaption(qlonglong imageID);
-
-    /**
-     * Get the caption for the item
-     * @param albumID the albumID of the item
-     * @param name    the name of the item
-     * @return the caption for the item
-     */
-    //QString getItemCaption(int albumID, const QString& name);
-
-    /**
-     * Set the caption for the item
-     * @param imageID the id of the item
-     * @param caption the caption for the item
-     */
-    //void setItemCaption(qlonglong imageID, const QString& caption);
-
-    /**
-     * Set the caption for the item
-     * @param albumID the albumID of the item
-     * @param name    the name of the item
-     * @param caption the caption for the item
-     */
-    //void setItemCaption(int albumID, const QString& name, const QString& caption);
-
 
     // ----------- Items and their tags -----------
 
@@ -1025,6 +1004,30 @@ public:
      * @return the list of IDs of all tags for the item
      */
     QList<int> getItemTagIDs(qlonglong imageID);
+
+    /**
+     * Get the properties for the given image/tag pair.
+     * If the tagID is -1, returns the ImageTagProperties for all tagIds of the given image.
+     */
+    QList<ImageTagProperty> getImageTagProperties(qlonglong imageId, int tagId = -1);
+
+    /**
+     * Adds a tag property. Note that this never replaces existing entries.
+     * It is also all right to add multiple entries for a tag with the same property.
+     * To replace an existing entry, remove the entry before.
+     */
+    void addImageTagProperty(qlonglong imageId, int tagId, const QString& property, const QString& value);
+    void addImageTagProperty(const ImageTagProperty& property);
+
+    /**
+     * Removes properties for the given tag. If the value is given, removes only
+     * the entries with the given property/value pair. If only property is given,
+     * removes all properties with the given name. If property is null,
+     * removes all properties for the given tag.
+     * If tagId is -1, removes all image tag properties for the given image.
+     * Note: After the first parameter you give as a wildcard, the following will be ignored and taken as wildcard as well.
+     */
+    void removeImageTagProperties(qlonglong imageId, int tagId = -1, const QString& property = QString(), const QString& value = QString());
 
     /**
      * Given a set of items (identified by their IDs),

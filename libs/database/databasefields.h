@@ -135,11 +135,24 @@ enum ImageCommentsField
     ImageCommentsLast  = Comment
 };
 
+enum ImageHistoryInfoField
+{
+    ImageHistoryInfoNone  = 0,
+    ImageUUID             = 1 << 0,
+    ImageHistory          = 1 << 1,
+    ImageRelations        = 1 << 2,
+    ImageHistoryInfoAll   =
+            ImageUUID | ImageHistory | ImageRelations,
+    ImageHistoryInfoFirst = ImageUUID,
+    ImageHistoryInfoLast  = ImageRelations
+};
+
 Q_DECLARE_FLAGS(Images, ImagesField)
 Q_DECLARE_FLAGS(ImageInformation, ImageInformationField)
 Q_DECLARE_FLAGS(ImageMetadata, ImageMetadataField)
 Q_DECLARE_FLAGS(ImageComments, ImageCommentsField)
 Q_DECLARE_FLAGS(ImagePositions, ImagePositionsField)
+Q_DECLARE_FLAGS(ImageHistoryInfo, ImageHistoryInfoField)
 
 /**
  * You can iterate over each of the Enumerations defined above:
@@ -163,6 +176,7 @@ DATABASEFIELDS_ENUM_ITERATOR(ImageInformation)
 DATABASEFIELDS_ENUM_ITERATOR(ImageMetadata)
 DATABASEFIELDS_ENUM_ITERATOR(ImagePositions)
 DATABASEFIELDS_ENUM_ITERATOR(ImageComments)
+DATABASEFIELDS_ENUM_ITERATOR(ImageHistoryInfo)
 
 /**
  * For your custom enum, you need to use the CustomEnum class.
@@ -204,6 +218,7 @@ public:
         imageMetadata    = ImageMetadataNone;
         imageComments    = ImageCommentsNone;
         imagePositions   = ImagePositionsNone;
+        imageHistory     = ImageHistoryInfoNone;
         customEnum       = (CustomEnum)0;
     }
 
@@ -212,6 +227,7 @@ public:
     DATABASEFIELDS_SET_DECLARE_METHODS(ImageMetadata, imageMetadata)
     DATABASEFIELDS_SET_DECLARE_METHODS(ImageComments, imageComments)
     DATABASEFIELDS_SET_DECLARE_METHODS(ImagePositions, imagePositions)
+    DATABASEFIELDS_SET_DECLARE_METHODS(ImageHistoryInfo, imageHistory)
 
     inline bool operator&(const Set& other)
     { return (images & other.images) || (imageInformation & other.imageInformation)  ||
@@ -237,6 +253,7 @@ private:
     ImageMetadata    imageMetadata;
     ImageComments    imageComments;
     ImagePositions   imagePositions;
+    ImageHistoryInfo imageHistory;
     CustomEnum       customEnum;
 };
 
@@ -276,6 +293,7 @@ public:
     static inline unsigned int uniqueKey(ImageMetadata f)     { return (int)f | (2 << 26);  }
     static inline unsigned int uniqueKey(ImageComments f)     { return (int)f | (3 << 26);  }
     static inline unsigned int uniqueKey(ImagePositions f)    { return (int)f | (4 << 26);  }
+    static inline unsigned int uniqueKey(ImageHistoryInfo f)  { return (int)f | (5 << 26);  }
     static inline unsigned int uniqueKey(CustomEnum f)        { return      f | (63 << 26); }
 
     // override relevant methods from QHash
@@ -284,6 +302,7 @@ public:
     DATABASEFIELDS_HASH_DECLARE_METHODS(ImageMetadata, uniqueKey);
     DATABASEFIELDS_HASH_DECLARE_METHODS(ImageComments, uniqueKey);
     DATABASEFIELDS_HASH_DECLARE_METHODS(ImagePositions, uniqueKey);
+    DATABASEFIELDS_HASH_DECLARE_METHODS(ImageHistoryInfo, uniqueKey);
     DATABASEFIELDS_HASH_DECLARE_METHODS(CustomEnum, uniqueKey);
 };
 
@@ -297,5 +316,6 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImageInformation)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImageMetadata)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImageComments)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImagePositions)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImageHistoryInfo)
 
 #endif // DATABASEFIELDS_H
