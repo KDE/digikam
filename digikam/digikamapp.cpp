@@ -1176,6 +1176,13 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
+    KAction *scriptConsoleAction = new KAction(i18n("Script Console"), this);
+    scriptConsoleAction->setShortcut(KShortcut(Qt::CTRL+SHIFT+Key_S));
+    connect(scriptConsoleAction, SIGNAL(triggered()), d->view, SLOT(slotScriptConsole()));
+    actionCollection()->addAction("script_console", scriptConsoleAction);
+
+    // -----------------------------------------------------------
+
     KAction *bqmAction = new KAction(KIcon("bqm-diff"), i18n("Batch Queue Manager"), this);
     bqmAction->setShortcut(KShortcut(Qt::Key_B));
     connect(bqmAction, SIGNAL(triggered()), d->view, SLOT(slotQueueMgr()));
