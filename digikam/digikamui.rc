@@ -82,7 +82,7 @@
   </Menu>
 
   <Menu name="Tools"><text>&amp;Tools</text>
-        <ActionList name="script_console"/>
+        <Action name="script_console"/>
         <Action name="search_quick" />
         <Action name="search_advanced" />
         <Action name="find_duplicates" />
@@ -100,7 +100,7 @@
       <Separator/>
         <ActionList name="tool_actions"/>
       <Separator/>
-        <ActionList name="batch_actions"/>	
+        <ActionList name="batch_actions"/>
   </Menu>
 
   <Menu name="Import"><text>I&amp;mport</text>
