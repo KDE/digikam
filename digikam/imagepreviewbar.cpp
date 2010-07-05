@@ -54,7 +54,6 @@
 #include "albumdb.h"
 #include "albummanager.h"
 #include "albumsettings.h"
-#include "albumiconviewtooltip.h"
 #include "ddragobjects.h"
 #include "imageattributeswatch.h"
 #include "metadatahub.h"

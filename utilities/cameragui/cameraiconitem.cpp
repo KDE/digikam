@@ -34,7 +34,6 @@
 
 #include "iconview.h"
 #include "thumbnailsize.h"
-#include "albumiconitem.h"
 #include "imagedelegate.h"
 #include "gpiteminfo.h"
 #include "themeengine.h"
