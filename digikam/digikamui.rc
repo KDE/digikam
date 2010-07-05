@@ -100,6 +100,7 @@
         <ActionList name="tool_actions"/>
       <Separator/>
         <ActionList name="batch_actions"/>
+	<ActionList name="script_console"/>
   </Menu>
 
   <Menu name="Import"><text>I&amp;mport</text>
