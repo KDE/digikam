@@ -32,7 +32,6 @@
 // Local includes
 #include "album.h"
 #include "albumdb.h"
-#include "albumlister.h"
 #include "databasetransaction.h"
 #include "imageinfo.h"
 #include "metadatahub.h"

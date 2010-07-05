@@ -198,14 +198,6 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView *view, const QDropEvent *
             KIO::Job* job = DIO::move(extUrls, extImageIDs, destAlbum);
             connect(job, SIGNAL(result(KJob*)),
                     this, SIGNAL(dioResult(KJob*)));
-
-            /*
-            // In recurssive album contents mode, we need to force AlbumLister to take a care about
-            // moved items. This will have no incidence in normal mode.
-            for (ImageInfoListIterator it = extImgInfList.begin(); it != extImgInfList.end(); ++it)
-            {
-                AlbumLister::instance()->invalidateItem(*it);
-            }*/
         }
         else if (copy)
         {
