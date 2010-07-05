@@ -1146,6 +1146,11 @@ void DigikamApp::setupActions()
     connect(d->rating5Star, SIGNAL(triggered()), d->view, SLOT(slotAssignRatingFiveStar()));
     actionCollection()->addAction("ratefivestar", d->rating5Star);
 
+    d->scriptConsoleAction = new KAction(i18n("Script Console"), this);
+    scriptConsoleAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_S));
+    connect(scriptConsoleAction, SIGNAL(triggered()), d->view, SLOT(slotScriptConsole()));
+    actionCollection()->addAction("script_console", scriptConsoleAction);
+
     // -----------------------------------------------------------
 
     KAction* findAction = new KAction(KIcon("system-search"), i18n("Search..."), this);
@@ -1173,13 +1178,6 @@ void DigikamApp::setupActions()
     ltAction->setShortcut(KShortcut(Qt::Key_L));
     connect(ltAction, SIGNAL(triggered()), d->view, SLOT(slotLightTable()));
     actionCollection()->addAction("light_table", ltAction);
-
-    // -----------------------------------------------------------
-
-    KAction *scriptConsoleAction = new KAction(i18n("Script Console"), this);
-    scriptConsoleAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_S));
-    connect(scriptConsoleAction, SIGNAL(triggered()), d->view, SLOT(slotScriptConsole()));
-    actionCollection()->addAction("script_console", scriptConsoleAction);
 
     // -----------------------------------------------------------
 
