@@ -18,6 +18,7 @@ Name[el]=Λήψη φωτογραφιών με το digiKam
 Name[en_GB]=Download Photos with digiKam
 Name[es]=Descargar fotos con digiKam
 Name[et]=Fotode allalaadimine digiKamiga
+Name[eu]=Deskargatu argazkiak digiKam-ekin
 Name[fi]=Siirrä valokuvat digiKamilla
 Name[fr]=Télécharger des photos avec digiKam
 Name[gl]=Descargar fotos con digiKam
