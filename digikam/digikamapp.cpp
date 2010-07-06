@@ -1,4 +1,4 @@
-/* ============================================================
+ /* ============================================================
  *
  * This file is a part of digiKam project
  * http://www.digikam.org
@@ -766,7 +766,13 @@ void DigikamApp::setupActions()
     actionCollection()->addAction("image_view", d->imagePreviewAction);
 
     // -----------------------------------------------------------
+    
+    d->scriptConsoleAction = new KAction(i18n("Script Console"), this);
+    d->scriptConsoleAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_S));
+    connect(d->scriptConsoleAction, SIGNAL(triggered()), this, SLOT(slotScriptConsole()));
+    actionCollection()->addAction("script_console", d->scriptConsoleAction);
 
+    // -----------------------------------------------------------
     d->imageViewAction = new KAction(KIcon("editimage"), i18n("Edit..."), this);
     d->imageViewAction->setShortcut(KShortcut(Qt::Key_F4));
     d->imageViewAction->setWhatsThis(i18n("Open the selected item in the image editor."));
@@ -1145,13 +1151,7 @@ void DigikamApp::setupActions()
     d->rating5Star->setShortcut(KShortcut(Qt::CTRL+Qt::Key_5));
     connect(d->rating5Star, SIGNAL(triggered()), d->view, SLOT(slotAssignRatingFiveStar()));
     actionCollection()->addAction("ratefivestar", d->rating5Star);
-
-    d->scriptConsoleAction = new KAction(i18n("Script Console"), this);
-    d->scriptConsoleAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_S));
-    connect(d->scriptConsoleAction, SIGNAL(triggered()), d->view, SLOT(slotScriptConsole()));
-    actionCollection()->addAction("script_console", d->scriptConsoleAction);
-
-    // -----------------------------------------------------------
+    //------------------------------------------------------------
 
     KAction* findAction = new KAction(KIcon("system-search"), i18n("Search..."), this);
     findAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_F));
@@ -2725,7 +2725,10 @@ void DigikamApp::slotDIOResult(KJob* kjob)
 }
 
 void DigikamApp::slotScriptConsole(){
-//the code for the slot goes here.
+    //the code for the slot goes here.
+    KMessageBox::error(this, i18n("Nothing to Worry Just Checking :)"));
+    
+
 }
 
 void DigikamApp::slotToggleShowBar()
