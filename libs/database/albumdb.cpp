@@ -1108,6 +1108,22 @@ QList<ImageTagProperty> AlbumDB::getImageTagProperties(qlonglong imageId, int ta
     return properties;
 }
 
+QList<int> AlbumDB::getTagIdsWithProperties(qlonglong imageId)
+{
+    QList<QVariant> values;
+
+    d->db->execSql( "SELECT DISTINCT tagid FROM ImageTagProperties WHERE imageid=?;",
+                    imageId,
+                    &values );
+
+    QList<int> tagIds;
+
+    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd(); ++it)
+        tagIds << (*it).toInt();
+
+    return tagIds;
+}
+
 void AlbumDB::addImageTagProperty(qlonglong imageId, int tagId, const QString& property, const QString& value)
 {
     d->db->execSql("INSERT INTO ImageTagProperties (imageid, tagid, property, value) VALUES(?, ?, ?, ?);",

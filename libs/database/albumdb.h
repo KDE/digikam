@@ -1012,6 +1012,11 @@ public:
     QList<ImageTagProperty> getImageTagProperties(qlonglong imageId, int tagId = -1);
 
     /**
+     * Get all tagIds for which ImageTagProperties exist for the given image.
+     */
+    QList<int> getTagIdsWithProperties(qlonglong imageId);
+
+    /**
      * Adds a tag property. Note that this never replaces existing entries.
      * It is also all right to add multiple entries for a tag with the same property.
      * To replace an existing entry, remove the entry before.
