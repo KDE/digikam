@@ -1450,65 +1450,21 @@ void AlbumDB::changeImageInformation(qlonglong imageId, const QVariantList& info
     if (fields == DatabaseFields::ImageInformationNone)
         return;
 
-    // first delete any stale albums left behind
-	QStringList fieldNames = imageInformationFieldList(fields);
-    QMap<QString, QVariant> parameters;
+    QStringList fieldNames = imageInformationFieldList(fields);
 
-    QMap<QString, QVariant> fieldValueMap;
-	for (int i=0; i<infos.size(); i++)
-	{
-	   const QVariant& value=infos[i];
-	   if (value.type() == QVariant::DateTime || value.type() == QVariant::Date)
-		   fieldValueMap.insert(fieldNames[i], value.toDateTime().toString(Qt::ISODate));
-	   else
-		   fieldValueMap.insert(fieldNames[i], value);
-	}
-	DBActionType fieldValueList;
-	fieldValueList.setValue(true); // In this case (map as object), the value flag is not important.
-	fieldValueList.setActionValue(fieldValueMap);
-
-	DBActionType fieldList;
-	fieldList.setValue(false);
-	fieldList.setActionValue(fieldNames);
-
-	DBActionType valueList;
-	valueList.setValue(true);
-	valueList.setActionValue(infos);
-
-    parameters.insert(":imageid", imageId);
-    parameters.insert(":fieldValueList", qVariantFromValue(fieldValueList));
-    parameters.insert(":fieldList", qVariantFromValue (fieldList));
-    parameters.insert(":valueList", qVariantFromValue(valueList));
-    if (DatabaseCoreBackend::NoErrors!=d->db->execDBAction(d->db->getDBAction(QString("changeImageInformation")), parameters))
+    QVariantList checkedValues = infos;
+    // Convert dateTime values to the appropriate string format
+    if (fields & DatabaseFields::CreationDate || fields & DatabaseFields::DigitizationDate)
     {
-       return;
+        for (QVariantList::iterator it = checkedValues.begin(); it != checkedValues.end(); ++it)
+        {
+            if (it->type() == QVariant::DateTime || it->type() == QVariant::Date)
+                *it = it->toDateTime().toString(Qt::ISODate);
+        }
     }
 
-//    QString query("UPDATE ImageInformation SET ");
-//
-//    QStringList fieldNames = imageInformationFieldList(fields);
-//    Q_ASSERT(fieldNames.size()==infos.size());
-//    query += fieldNames.join("=?,");
-//
-//    query += "=? WHERE imageid=?;";
-//
-//    QVariantList boundValues;
-//    // Take care for datetime values
-//    if (fields & DatabaseFields::CreationDate || fields & DatabaseFields::DigitizationDate)
-//    {
-//        foreach (const QVariant& value, infos)
-//        {
-//            if (value.type() == QVariant::DateTime || value.type() == QVariant::Date)
-//                boundValues << value.toDateTime().toString(Qt::ISODate);
-//            else
-//                boundValues << value;
-//        }
-//        boundValues << imageId;
-//    }
-//    else
-//        boundValues << infos << imageId;
-//
-//    d->db->execSql( query, boundValues );
+    d->db->execUpsertDBAction("changeImageInformation", imageId, fieldNames, checkedValues);
+
     d->db->recordChangeset(ImageChangeset(imageId, fields));
 }
 
@@ -1829,7 +1785,7 @@ ImageHistoryEntry AlbumDB::getImageHistory(qlonglong imageId)
     return entry;
 }
 
-QList<qlonglong> AlbumDB::getItemsForUUID(const QString& uuid)
+QList<qlonglong> AlbumDB::getItemsForUuid(const QString& uuid)
 {
     QList<QVariant> values;
 
@@ -1847,7 +1803,7 @@ QList<qlonglong> AlbumDB::getItemsForUUID(const QString& uuid)
     return imageIds;
 }
 
-QString AlbumDB::getImageUUID(qlonglong imageId)
+QString AlbumDB::getImageUuid(qlonglong imageId)
 {
     QList<QVariant> values;
 
@@ -1860,11 +1816,16 @@ QString AlbumDB::getImageUUID(qlonglong imageId)
     return values.first().toString();
 }
 
-void AlbumDB::setImageHistory(qlonglong imageId, const QString& uuid, const QString& history)
+void AlbumDB::setImageHistory(qlonglong imageId, const QString& history)
 {
-    d->db->execSql("REPLACE INTO ImageHistory (imageid, uuid, history) VALUES (?, ?, ?);",
-                   imageId, uuid, history);
-    d->db->recordChangeset(ImageChangeset(imageId, DatabaseFields::ImageUUID | DatabaseFields::ImageHistory));
+    d->db->execUpsertDBAction("changeImageHistory", imageId, QStringList() << "history", QVariantList() << history);
+    d->db->recordChangeset(ImageChangeset(imageId, DatabaseFields::ImageHistory));
+}
+
+void AlbumDB::setImageUuid(qlonglong imageId, const QString& uuid)
+{
+    d->db->execUpsertDBAction("changeImageHistory", imageId, QStringList() << "uuid", QVariantList() << uuid);
+    d->db->recordChangeset(ImageChangeset(imageId, DatabaseFields::ImageUUID));
 }
 
 void AlbumDB::addImageRelation(qlonglong subjectId, qlonglong objectId, DatabaseRelation::Type type)

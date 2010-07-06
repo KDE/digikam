@@ -893,17 +893,19 @@ public:
     /**
      * Retrieves the image UUID
      */
-    QString getImageUUID(qlonglong imageId);
+    QString getImageUuid(qlonglong imageId);
 
     /**
      * Retrieves the images with the given UUID
      */
-    QList<qlonglong> getItemsForUUID(const QString& uuid);
+    QList<qlonglong> getItemsForUuid(const QString& uuid);
 
     /**
-     * Sets (adds or replaces) the image history
+     * Changes (adds or updates) the image history
      */
-    void setImageHistory(qlonglong imageId, const QString& uuid, const QString& history);
+    void setImageHistory(qlonglong imageId, const QString& history);
+    void setImageUuid(qlonglong imageId, const QString& uuid);
+
 
     /**
      * Adds an image relation entry
