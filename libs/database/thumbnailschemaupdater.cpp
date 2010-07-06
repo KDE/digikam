@@ -58,6 +58,7 @@ ThumbnailSchemaUpdater::ThumbnailSchemaUpdater(ThumbnailDatabaseAccess *access)
 {
     m_access         = access;
     m_currentVersion = 0;
+    m_currentRequiredVersion = 0;
     m_observer       = 0;
     m_setError       = false;
 }
@@ -68,6 +69,8 @@ bool ThumbnailSchemaUpdater::update()
     // even on failure, try to set current version - it may have incremented
     if (m_currentVersion)
         m_access->db()->setSetting("DBThumbnailsVersion", QString::number(m_currentVersion));
+    if (m_currentRequiredVersion)
+        m_access->db()->setSetting("DBVersionRequired", QString::number(m_currentRequiredVersion));
     return success;
 }
 
@@ -169,10 +172,10 @@ bool ThumbnailSchemaUpdater::startUpdates()
 
 bool ThumbnailSchemaUpdater::makeUpdates()
 {
-    //DatabaseTransaction transaction(m_access);
     if (m_currentVersion < schemaVersion())
     {
-        return false;
+        if (m_currentVersion == 1)
+            updateV1ToV2();
     }
     return true;
 }
@@ -180,83 +183,42 @@ bool ThumbnailSchemaUpdater::makeUpdates()
 
 bool ThumbnailSchemaUpdater::createDatabase()
 {
-    if ( createTablesV1()
-         && createIndicesV1()
-         && createTriggersV1())
+    if ( createTables()
+         && createIndices()
+         && createTriggers())
     {
-        m_currentVersion = 1;
+        m_currentVersion = schemaVersion();
         return true;
     }
     else
         return false;
 }
 
-bool ThumbnailSchemaUpdater::createTablesV1()
+bool ThumbnailSchemaUpdater::createTables()
 {
-    m_access->backend()->execDBAction(m_access->backend()->getDBAction(QString("CreateThumbnailsDB")));
-    /*
-    if (!m_access->backend()->execSql(
-                    QString("CREATE TABLE Thumbnails "
-                            "(id INTEGER PRIMARY KEY, "
-                            " type INTEGER, "
-                            " modificationDate DATETIME, "
-                            " orientationHint INTEGER, "
-                            " data BLOB);") ))
-    {
-        return false;
-    }
-
-    if (!m_access->backend()->execSql(
-                    QString("CREATE TABLE UniqueHashes "
-                            "(uniqueHash TEXT, "
-                            " fileSize INTEGER, "
-                            " thumbId INTEGER, "
-                            " UNIQUE(uniqueHash, fileSize))") ))
-    {
-        return false;
-    }
-
-    if (!m_access->backend()->execSql(
-                    QString("CREATE TABLE FilePaths "
-                            "(path TEXT, "
-                            " thumbId INTEGER, "
-                            " UNIQUE(path));") ))
-    {
-        return false;
-    }
-
-    if (!m_access->backend()->execSql(
-                    QString("CREATE TABLE Settings         \n"
-                            "(keyword TEXT NOT NULL UNIQUE,\n"
-                            " value TEXT);") ))
-    {
-        return false;
-    }
-    */
-
-    return true;
+    return m_access->backend()->execDBAction(m_access->backend()->getDBAction(QString("CreateThumbnailsDB")));
 }
 
-bool ThumbnailSchemaUpdater::createIndicesV1()
+bool ThumbnailSchemaUpdater::createIndices()
 {
-    m_access->backend()->execDBAction(m_access->backend()->getDBAction(QString("CreateIndex_1")));
-    m_access->backend()->execDBAction(m_access->backend()->getDBAction(QString("CreateIndex_2")));
-    /*
-    m_access->backend()->execSql("CREATE INDEX id_uniqueHashes ON UniqueHashes (thumbId);");
-    m_access->backend()->execSql("CREATE INDEX id_filePaths ON FilePaths (thumbId);"); */
-    return true;
+    return m_access->backend()->execDBAction(m_access->backend()->getDBAction("CreateThumbnailsDBIndices"));
 }
 
-bool ThumbnailSchemaUpdater::createTriggersV1()
+bool ThumbnailSchemaUpdater::createTriggers()
 {
-    m_access->backend()->execDBAction(m_access->backend()->getDBAction(QString("CreateTrigger_1")));
-    /*
-    m_access->backend()->execSql("CREATE TRIGGER delete_thumbnails DELETE ON Thumbnails "
-                                 "BEGIN "
-                                 " DELETE FROM UniqueHashes WHERE UniqueHashes.thumbId = OLD.id; "
-                                 " DELETE FROM FilePaths WHERE FilePaths.thumbId = OLD.id; "
-                                 "END;");
-                                 */
+    return m_access->backend()->execDBAction(m_access->backend()->getDBAction("CreateThumbnailsDBTrigger"));
+}
+
+bool ThumbnailSchemaUpdater::updateV1ToV2()
+{
+    if (!m_access->backend()->execDBAction(m_access->backend()->getDBAction("UpdateThumbnailsDBSchemaFromV1ToV2")))
+    {
+        kError() << "Schema upgrade in ThumbnailDB from V1 to V2 failed!";
+        return false;
+    }
+
+    m_currentVersion = 2;
+    m_currentRequiredVersion = 1;
     return true;
 }
 
