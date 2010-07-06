@@ -154,36 +154,7 @@ void SetupDatabase::readSettings()
     AlbumSettings* settings = AlbumSettings::instance();
     if (!settings) return;
 
-    d->databaseWidget->originalDbPath = settings->getDatabaseFilePath();
-    d->databaseWidget->originalDbType = settings->getDatabaseType();
-    d->databaseWidget->databasePathEdit->setUrl(settings->getDatabaseFilePath());
-
-    d->databaseWidget->internalServer->setChecked(settings->getInternalDatabaseServer());
-    d->databaseWidget->databaseName->setText(settings->getDatabaseName());
-    d->databaseWidget->databaseNameThumbnails->setText(settings->getDatabaseNameThumbnails());
-    d->databaseWidget->hostName->setText(settings->getDatabaseHostName());
-    d->databaseWidget->hostPort->setValue(settings->getDatabasePort());
-    d->databaseWidget->connectionOptions->setText(settings->getDatabaseConnectoptions());
-
-    d->databaseWidget->userName->setText(settings->getDatabaseUserName());
-
-    d->databaseWidget->password->setText(settings->getDatabasePassword());
-
-    /* Now set the type according the database type from the settings.
-     * If no item is found, ignore the setting.
-     */
-    for (int i=0; i<d->databaseWidget->databaseType->count(); i++)
-    {
-        kDebug(50003) << "Comparing comboboxentry on index ["<< i <<"] [" 
-                      << d->databaseWidget->databaseType->itemText(i) 
-                      << "] with ["<< settings->getDatabaseType() << "]";
-
-        if (d->databaseWidget->databaseType->itemText(i)==settings->getDatabaseType())
-        {
-            d->databaseWidget->databaseType->setCurrentIndex(i);
-            d->databaseWidget->setDatabaseInputFields(d->databaseWidget->databaseType->itemText(i));
-        }
-    }
+    d->databaseWidget->setParametersFromSettings(settings);
 }
 
 }  // namespace Digikam

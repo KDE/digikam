@@ -175,9 +175,9 @@ void DatabaseWidget::setupMainArea()
             this, SLOT(slotDatabasePathEdited(const QString&)));
 
     connect(databaseType, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(handleDBTypeIndexChanged(int)));
+            this, SLOT(slotHandleDBTypeIndexChanged(int)));
 
-    connect(internalServer, SIGNAL(stateChanged(int index)),
+    connect(internalServer, SIGNAL(stateChanged(int)),
             this, SLOT(slotHandleInternalServerCheckbox(int)));
 
     connect(checkDatabaseConnectionButton, SIGNAL(clicked()),
@@ -332,10 +332,9 @@ void DatabaseWidget::setParametersFromSettings(const AlbumSettings *settings)
     {
         //kDebug(50003) << "Comparing comboboxentry on index ["<< i <<"] [" << databaseType->itemData(i)
           //            << "] with ["<< settings->getDatabaseType() << "]";
-        if (databaseType->itemText(i) == settings->getDatabaseType())
+        if (databaseType->itemData(i).toString() == settings->getDatabaseType())
         {
             databaseType->setCurrentIndex(i);
-            setDatabaseInputFields(databaseType->itemData(i).toString());
         }
     }
 }
