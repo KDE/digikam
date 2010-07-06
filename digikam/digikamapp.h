@@ -108,6 +108,7 @@ Q_SIGNALS:
     void signalPasteAlbumItemsSelection();
     void signalCancelButtonPressed();
 
+
     void signalWindowHasMoved();
 
     void queuedOpenCameraUiFromPath(const QString& path);
@@ -211,6 +212,7 @@ private Q_SLOTS:
     void slotImportAddImages();
     void slotImportAddFolders();
     void slotDIOResult(KJob*);
+    void slotScriptConsole();
 
 private:
 
