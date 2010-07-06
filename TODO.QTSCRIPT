@@ -11,6 +11,9 @@ Console.The user can dynamically send "signals" to digikam and trigger events.
 
 
 ********************* TO DO ********************************************************
+PROGRESS:Menu Item Created, Need To Add the QtScript Library to CMakeLists.txt for the QtAPI
+CURRENT STEP: 1
+
 1. Modify digikam's main menu "Tools" to add a Menu entry called Script.
         By modifying the digikamrc.ui to add the menu entry.
         Modifying the digikamapp.cpp to add KAction for the menu entry and 
