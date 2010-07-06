@@ -182,6 +182,7 @@ public:
         showMenuBarAction                    = 0;
         kipipluginsActionCollection          = 0;
         modelCollection                      = 0;
+        scriptConsoleAction                  = 0;
     }
 
     bool                                fullScreen;
@@ -283,6 +284,7 @@ public:
     KAction*                            slideShowAllAction;
     KAction*                            slideShowSelectionAction;
     KAction*                            slideShowRecursiveAction;
+    KAction*                            scriptConsoleAction;
 
     // Application Actions
     KAction*                            rawCameraListAction;
