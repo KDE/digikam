@@ -35,7 +35,6 @@
 
 // Local includes
 
-#include "imageinfo.h"
 #include "loadingcacheinterface.h"
 #include "loadingdescription.h"
 #include "previewloadthread.h"
