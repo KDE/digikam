@@ -192,6 +192,8 @@ public:
      */
     QueryState execDBAction(const DatabaseAction& action, QList<QVariant>* values = 0, QVariant* lastInsertId = 0);
 
+    QueryState execDBAction(const QString& action, QList<QVariant>* values = 0, QVariant* lastInsertId = 0);
+
     /**
      * Performs the database action on the current database.
      * Queries by the specified parameters can have named parameters which are
@@ -201,6 +203,22 @@ public:
     QueryState execDBAction(const DatabaseAction& action, const QMap<QString, QVariant>& bindingMap,
                             QList<QVariant>* values = 0, QVariant* lastInsertId = 0);
 
+    QueryState execDBAction(const QString& action, const QMap<QString, QVariant>& bindingMap,
+                            QList<QVariant>* values = 0, QVariant* lastInsertId = 0);
+
+    /**
+     * Performs a special DBAction that is usually needed to "INSERT or UPDATE" entries in a table.
+     * The corresponding DBAction must contain exactly the named parameters :id, :fieldValueList,
+     * :fieldList and :valueList.
+     * You pass the value to be bound to the ":id" field, then two lists of the same size:
+     * The first containing the field names, the second one
+     * containing the values as QVariants ready for binding.
+     */
+    QueryState execUpsertDBAction(const DatabaseAction& action, const QVariant& id,
+                                  const QStringList fieldNames, const QList<QVariant>& values);
+    QueryState execUpsertDBAction(const QString& action, const QVariant& id,
+                                  const QStringList fieldNames, const QList<QVariant>& values);
+
     /**
      * Performs the database action on the current database.
      * Queries by the specified parameters can have named parameters which are
@@ -209,6 +227,8 @@ public:
      * This method returns the last query, which is used to handle special cases.
      */
     QSqlQuery execDBActionQuery(const DatabaseAction& action, const QMap<QString, QVariant>& bindingMap);
+
+    QSqlQuery execDBActionQuery(const QString& action, const QMap<QString, QVariant>& bindingMap);
 
     /**
      * Executes the SQL statement, and write the returned data into the values list.

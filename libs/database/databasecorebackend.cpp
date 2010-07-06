@@ -475,6 +475,18 @@ DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDBAction(const Database
     return execDBAction(action, QMap<QString, QVariant>(), values, lastInsertId);
 }
 
+DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDBAction(const QString& action, QList<QVariant>* values,
+                                                                  QVariant* lastInsertId)
+{
+    return execDBAction(getDBAction(action), QMap<QString, QVariant>(), values, lastInsertId);
+}
+
+DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDBAction(const QString& action, const QMap<QString, QVariant>& bindingMap,
+                                                                  QList<QVariant>* values, QVariant* lastInsertId)
+{
+    return execDBAction(getDBAction(action), bindingMap, values, lastInsertId);
+}
+
 DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDBAction(const DatabaseAction& action, const QMap<QString, QVariant>& bindingMap,
                                                                   QList<QVariant>* values, QVariant* lastInsertId)
 {
@@ -536,6 +548,11 @@ DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDBAction(const Database
     */
 
     return returnResult;
+}
+
+QSqlQuery DatabaseCoreBackend::execDBActionQuery(const QString& action, const QMap<QString, QVariant>& bindingMap)
+{
+    return execDBActionQuery(getDBAction(action), bindingMap);
 }
 
 QSqlQuery DatabaseCoreBackend::execDBActionQuery(const DatabaseAction& action, const QMap<QString, QVariant>& bindingMap)
@@ -826,7 +843,7 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql)
 SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QMap<QString, QVariant>& bindingMap)
 {
     QString preparedString = sql;
-    QList<QVariant> namedPlaceholderValues;
+    QList<QVariant> valuesToBind;
 
     if (!bindingMap.isEmpty())
     {
@@ -835,34 +852,40 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QMap<QString, 
         #endif
 
         QRegExp identifierRegExp(":[A-Za-z0-9]+");
-        int pos=0;
+        int pos = 0;
 
-        while ((pos=identifierRegExp.indexIn(preparedString, pos))!=-1)
+        while ( (pos=identifierRegExp.indexIn(preparedString, pos)) != -1)
         {
             QString namedPlaceholder = identifierRegExp.cap(0);
+
             if (!bindingMap.contains(namedPlaceholder))
             {
-                kError()<<"Missing place holder ["<< namedPlaceholder <<"] in binding map. Following values are defined for this action ["<< bindingMap.keys() <<"]. This is a setup error!";
+                kError() << "Missing place holder" << namedPlaceholder
+                         << "in binding map. The following values are defined for this action:"
+                         << bindingMap.keys() <<". This is a setup error!";
                 //TODO What should we do here? How can we cancel that action?
             }
-            QVariant placeHolderValue = bindingMap[namedPlaceholder];
-            // Check if this is a map - then we assume, that there is a custom field/value list
+
+            QVariant placeHolderValue = bindingMap.value(namedPlaceholder);
             QString replaceStr;
-            if (placeHolderValue.userType() == qMetaTypeId<DBActionType>()){
+
+            if (placeHolderValue.userType() == qMetaTypeId<DBActionType>())
+            {
                 DBActionType actionType = placeHolderValue.value<DBActionType>();
                 bool isValue            = actionType.isValue();
                 QVariant value          = actionType.getActionValue();
-                if ( value.type()==QVariant::Map )
+
+                if ( value.type() == QVariant::Map )
                 {
                     QMap<QString, QVariant> placeHolderMap = value.toMap();
                     QMap<QString, QVariant>::const_iterator iterator;
                     for (iterator = placeHolderMap.constBegin(); iterator != placeHolderMap.constEnd(); ++iterator)
                     {
-                        QString  key   = iterator.key();
-                        QVariant value = iterator.value();
+                        const QString& key   = iterator.key();
+                        const QVariant& value = iterator.value();
                         replaceStr.append(key);
                         replaceStr.append("= ?");
-                        namedPlaceholderValues.append(value);
+                        valuesToBind.append(value);
 
                         // Add a semicolon to the statement, if we are not on the last entry
                         if ((iterator+1) != placeHolderMap.constEnd())
@@ -871,16 +894,17 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QMap<QString, 
                         }
                     }
                 }
-                else if ( value.type()==QVariant::List )
+                else if ( value.type() == QVariant::List )
                 {
                     QList<QVariant> placeHolderList = value.toList();
                     QList<QVariant>::const_iterator iterator;
-                    for (iterator = placeHolderList.constBegin(); iterator != placeHolderList.constEnd(); ++iterator){
-                        QVariant  entry = *iterator;
+                    for (iterator = placeHolderList.constBegin(); iterator != placeHolderList.constEnd(); ++iterator)
+                    {
+                        const QVariant& entry = *iterator;
                         if (isValue)
                         {
                             replaceStr.append("?");
-                            namedPlaceholderValues.append(entry);
+                            valuesToBind.append(entry);
                         }
                         else
                         {
@@ -894,16 +918,17 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QMap<QString, 
                         }
                     }
                 }
-                else if ( value.type()==QVariant::StringList )
+                else if (value.type() == QVariant::StringList )
                 {
                     QStringList placeHolderList = value.toStringList();
                     QStringList::const_iterator iterator;
-                    for (iterator = placeHolderList.constBegin(); iterator != placeHolderList.constEnd(); ++iterator){
-                        QString  entry = *iterator;
+                    for (iterator = placeHolderList.constBegin(); iterator != placeHolderList.constEnd(); ++iterator)
+                    {
+                        const QString& entry = *iterator;
                         if (isValue)
                         {
                             replaceStr.append("?");
-                            namedPlaceholderValues.append(entry);
+                            valuesToBind.append(entry);
                         }
                         else
                         {
@@ -917,6 +942,18 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QMap<QString, 
                         }
                     }
                 }
+                else
+                {
+                    if (isValue)
+                    {
+                        replaceStr = "?";
+                        valuesToBind.append(value);
+                    }
+                    else
+                    {
+                        replaceStr = value.toString();
+                    }
+                }
             }
             else
             {
@@ -924,8 +961,8 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QMap<QString, 
                 kDebug()<<"Bind key ["<< namedPlaceholder <<"] to value ["<< bindingMap[namedPlaceholder] <<"]";
                 #endif
 
-                namedPlaceholderValues.append(bindingMap[namedPlaceholder]);
-                replaceStr="?";
+                valuesToBind.append(placeHolderValue);
+                replaceStr = "?";
             }
 
             preparedString = preparedString.replace(pos, identifierRegExp.matchedLength(), replaceStr);
@@ -933,18 +970,47 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QMap<QString, 
         }
     }
     #ifdef DATABASCOREBACKEND_DEBUG
-    kDebug()<<"Prepared statement ["<< preparedString <<"] values ["<< namedPlaceholderValues <<"]";
+    kDebug()<<"Prepared statement ["<< preparedString <<"] values ["<< valuesToBind <<"]";
     #endif
 
     SqlQuery query = prepareQuery(preparedString);
 
-    for(int i=0; i<namedPlaceholderValues.size(); i++)
+    for(int i=0; i<valuesToBind.size(); i++)
     {
-        query.bindValue(i, namedPlaceholderValues[i]);
+        query.bindValue(i, valuesToBind[i]);
     }
 
     exec(query);
     return query;
+}
+
+DatabaseCoreBackend::QueryState DatabaseCoreBackend::execUpsertDBAction(const DatabaseAction& action, const QVariant& id,
+                                                                        const QStringList fieldNames, const QList<QVariant>& values)
+{
+    QMap<QString, QVariant> parameters;
+
+    QMap<QString, QVariant> fieldValueMap;
+    for (int i=0; i<fieldNames.size(); i++)
+    {
+        fieldValueMap.insert(fieldNames[i], values[i]);
+    }
+
+    DBActionType fieldValueList = DBActionType::value(fieldValueMap);
+    DBActionType fieldList = DBActionType::fieldEntry(fieldNames);
+    DBActionType valueList = DBActionType::value(values);
+
+    parameters.insert(":id", id);
+    parameters.insert(":fieldValueList", qVariantFromValue(fieldValueList));
+    parameters.insert(":fieldList", qVariantFromValue (fieldList));
+    parameters.insert(":valueList", qVariantFromValue(valueList));
+
+    return execDBAction(action, parameters);
+}
+
+DatabaseCoreBackend::QueryState DatabaseCoreBackend::execUpsertDBAction(const QString& action, const QVariant& id,
+                                                                        const QStringList fieldNames, const QList<QVariant>& values)
+{
+    return execUpsertDBAction(getDBAction(action), id, fieldNames, values);
 }
 
 bool DatabaseCoreBackend::connectionErrorHandling(int /*retries*/)
