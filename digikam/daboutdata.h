@@ -86,7 +86,7 @@ static inline void authorsRegistration(KAboutData& aboutData)
                           ki18n("Developer"),
                           "matze at welwarsky dot de");
 
-    aboutData.addAuthor ( ki18n("Julien Nardoux"),
+    aboutData.addAuthor ( ki18n("Julien Narboux"),
                           ki18n("Developer"),
                           "Julien at narboux dot fr");
 
