@@ -2724,6 +2724,10 @@ void DigikamApp::slotDIOResult(KJob* kjob)
     }
 }
 
+void DigikamApp::slotScriptConsole(){
+//the code for the slot goes here.
+}
+
 void DigikamApp::slotToggleShowBar()
 {
     d->view->toggleShowBar(d->showBarAction->isChecked());
