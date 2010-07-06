@@ -34,6 +34,7 @@
 
 #include "imageinfo.h"
 #include "parseresults.h"
+#include "photoinfocontainer.h"
 
 namespace Digikam
 {

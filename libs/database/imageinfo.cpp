@@ -35,13 +35,24 @@
 
 #include "albumdb.h"
 #include "databaseaccess.h"
+#include "databaseinfocontainers.h"
+#include "dimagehistory.h"
 #include "collectionmanager.h"
 #include "collectionlocation.h"
-#include "imagelister.h"
 #include "imageinfodata.h"
 #include "imageinfocache.h"
+#include "imagelister.h"
+#include "imagelisterrecord.h"
+#include "imageinfolist.h"
+#include "imagecomments.h"
+#include "imagecopyright.h"
+#include "imageextendedproperties.h"
+#include "imageposition.h"
 #include "imagescanner.h"
+#include "imagetagpair.h"
 #include "tagscache.h"
+#include "template.h"
+#include "photoinfocontainer.h"
 
 namespace Digikam
 {
@@ -478,6 +489,55 @@ ImagePosition ImageInfo::imagePosition() const
         return ImagePosition();
 
     return ImagePosition(m_data->id);
+}
+
+ImageTagPair ImageInfo::imageTagPair(int tagId) const
+{
+    if (!m_data)
+        return ImageTagPair();
+
+    return ImageTagPair(*this, tagId);
+}
+
+QList<ImageTagPair> ImageInfo::availableImageTagPairs() const
+{
+    if (!m_data)
+        return QList<ImageTagPair>();
+
+    return ImageTagPair::availablePairs(*this);
+}
+
+DImageHistory ImageInfo::imageHistory() const
+{
+    if (!m_data)
+        return DImageHistory();
+
+    ImageHistoryEntry entry = DatabaseAccess().db()->getImageHistory(m_data->id);
+    return DImageHistory::fromXml(entry.history);
+}
+
+void ImageInfo::setImageHistory(const DImageHistory& history)
+{
+    if (!m_data)
+        return;
+
+    DatabaseAccess().db()->setImageHistory(m_data->id, history.toXml());
+}
+
+QString ImageInfo::uuid() const
+{
+    if (!m_data)
+        return QString();
+
+    return DatabaseAccess().db()->getImageUuid(m_data->id);
+}
+
+void ImageInfo::setUuid(const QString& uuid)
+{
+    if (!m_data)
+        return;
+
+    DatabaseAccess().db()->setImageUuid(m_data->id, uuid);
 }
 
 ImageCommonContainer ImageInfo::imageCommonContainer() const

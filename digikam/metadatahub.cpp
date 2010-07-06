@@ -41,6 +41,7 @@
 // Local includes
 
 #include "imageinfo.h"
+#include "imagecomments.h"
 #include "template.h"
 #include "templatemanager.h"
 #include "albumsettings.h"

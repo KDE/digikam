@@ -40,6 +40,7 @@
 #include "albummanager.h"
 #include "albumsettings.h"
 #include "album.h"
+#include "databaseinfocontainers.h"
 #include "ditemtooltip.h"
 #include "imageinfo.h"
 

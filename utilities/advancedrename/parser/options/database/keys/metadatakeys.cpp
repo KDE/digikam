@@ -29,6 +29,7 @@
 
 // local includes
 
+#include "databaseinfocontainers.h"
 #include "imageinfo.h"
 
 static const QString KEY_MAKE("CameraMake");

@@ -62,6 +62,7 @@
 #include "databaseparameters.h"
 #include "databasetransaction.h"
 #include "databasewatch.h"
+#include "imagecomments.h"
 #include "imageinfo.h"
 #include "imagelister.h"
 #include "tagscache.h"

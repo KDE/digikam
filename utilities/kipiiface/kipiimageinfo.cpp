@@ -45,6 +45,8 @@
 #include "databaseaccess.h"
 #include "dmetadata.h"
 #include "imageattributeswatch.h"
+#include "imagecomments.h"
+#include "imageposition.h"
 #include "globals.h"
 #include "tagscache.h"
 

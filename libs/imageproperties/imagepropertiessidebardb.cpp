@@ -53,6 +53,8 @@
 #include "imagepropertiestab.h"
 #include "imagepropertiesmetadatatab.h"
 #include "imagepropertiescolorstab.h"
+#include "databaseinfocontainers.h"
+#include "imageposition.h"
 
 namespace Digikam
 {

@@ -57,6 +57,7 @@
 #include "gpssearchwidget.h"
 #include "imageinfo.h"
 #include "imageinfojob.h"
+#include "imageposition.h"
 #include "searchtextbar.h"
 #include "searchxml.h"
 

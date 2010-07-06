@@ -39,23 +39,27 @@
 
 // Local includes
 
+#include "albuminfo.h"
 #include "digikam_export.h"
 #include "dshareddata.h"
 #include "databaseurl.h"
-#include "imagelisterrecord.h"
 #include "imageinfolist.h"
-#include "imagecomments.h"
-#include "imagecopyright.h"
-#include "imageextendedproperties.h"
-#include "imageposition.h"
-#include "template.h"
-#include "photoinfocontainer.h"
-#include "databaseinfocontainers.h"
 
 namespace Digikam
 {
 
+class DImageHistory;
+class ImageComments;
+class ImageCommonContainer;
+class ImageCopyright;
+class ImageExtendedProperties;
 class ImageInfoData;
+class ImageListerRecord;
+class ImageMetadataContainer;
+class ImagePosition;
+class ImageTagPair;
+class PhotoInfoContainer;
+class Template;
 
 /**
  * The ImageInfo class contains provides access to the database for a single image.
@@ -222,6 +226,26 @@ public:
      * Retrieve the ImagePosition object for this item.
      */
     ImagePosition imagePosition() const;
+
+    /**
+     * Retrieve an ImageTagPair object for a single tag, or for all
+     * image/tag pairs for which properties are available
+     * (not necessarily the assigned tags)
+     */
+    ImageTagPair imageTagPair(int tagId) const;
+    QList<ImageTagPair> availableImageTagPairs() const;
+
+    /**
+     * Retrieves and sets the image history from the database
+     */
+    DImageHistory imageHistory() const;
+    void setImageHistory(const DImageHistory& history);
+
+    /**
+     * Retrieves and sets this' images UUID
+     */
+    QString uuid() const;
+    void setUuid(const QString& uuid);
 
     /**
      * Retrieve information about the image,
