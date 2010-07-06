@@ -1033,9 +1033,11 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagecopyright.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagequerybuilder.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagescanner.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagetagpair.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/namefilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/searchxml.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/schemaupdater.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/tagproperties.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/upgradedb_sqlite2tosqlite3.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databasecopymanager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseserverstarter.cpp
