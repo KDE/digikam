@@ -1147,9 +1147,9 @@ void DigikamApp::setupActions()
     actionCollection()->addAction("ratefivestar", d->rating5Star);
 
     d->scriptConsoleAction = new KAction(i18n("Script Console"), this);
-    scriptConsoleAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_S));
-    connect(scriptConsoleAction, SIGNAL(triggered()), d->view, SLOT(slotScriptConsole()));
-    actionCollection()->addAction("script_console", scriptConsoleAction);
+    d->scriptConsoleAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_S));
+    connect(d->scriptConsoleAction, SIGNAL(triggered()), d->view, SLOT(slotScriptConsole()));
+    actionCollection()->addAction("script_console", d->scriptConsoleAction);
 
     // -----------------------------------------------------------
 
