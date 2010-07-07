@@ -1840,18 +1840,22 @@ void AlbumDB::addImageRelation(const ImageRelation& relation)
     addImageRelation(relation.subjectId, relation.objectId, relation.type);
 }
 
-QList<qlonglong> AlbumDB::getRelatedImages(qlonglong subjectId, DatabaseRelation::Type type)
+QList<qlonglong> AlbumDB::getImagesRelatedFrom(qlonglong subjectId, DatabaseRelation::Type type)
 {
     QList<QVariant> values;
 
     if (type == DatabaseRelation::UndefinedType)
     {
-        d->db->execSql("SELECT object FROM ImageRelations WHERE subject=?;",
+        d->db->execSql("SELECT object FROM ImageRelations "
+                       "INNER JOIN Images ON ImageRelations.object=Images.id "
+                       "WHERE subject=? AND status!=3;",
                        subjectId, &values);
     }
     else
     {
-        d->db->execSql("SELECT object FROM ImageRelations WHERE subject=? AND type=?;",
+        d->db->execSql("SELECT object FROM ImageRelations "
+                       "INNER JOIN Images ON ImageRelations.object=Images.id "
+                       "WHERE subject=? AND type=? AND status!=3;",
                        subjectId, type, &values);
     }
 
@@ -1866,19 +1870,23 @@ QList<qlonglong> AlbumDB::getRelatedImages(qlonglong subjectId, DatabaseRelation
     return imageIds;
 }
 
-QList<qlonglong> AlbumDB::getRelatingImages(qlonglong objectId, DatabaseRelation::Type type)
+QList<qlonglong> AlbumDB::getImagesRelatingTo(qlonglong objectId, DatabaseRelation::Type type)
 {
     QList<QVariant> values;
 
     if (type == DatabaseRelation::UndefinedType)
     {
-        d->db->execSql("SELECT subject FROM ImageRelations WHERE object=?;",
+        d->db->execSql("SELECT subject FROM ImageRelations "
+                       "INNER JOIN Images ON ImageRelations.subject=Images.id "
+                       "WHERE object=? AND status!=3;",
                        objectId, &values);
     }
     else
     {
-        d->db->execSql("SELECT subject FROM ImageRelations WHERE object=? AND type=?;",
-                       objectId, type, &values);
+        d->db->execSql("SELECT subject FROM ImageRelations "
+                       "INNER JOIN Images ON ImageRelations.subject=Images.id "
+                       "WHERE object=? AND type=? AND status!=3;",
+                       objectId, &values);
     }
 
     QList<qlonglong> imageIds;
@@ -2644,6 +2652,15 @@ void AlbumDB::updateItem(qlonglong imageID, DatabaseItem::Category category,
                                                  | DatabaseFields::ModificationDate
                                                  | DatabaseFields::FileSize
                                                  | DatabaseFields::UniqueHash ));
+}
+
+void AlbumDB::setItemStatus(qlonglong imageID, DatabaseItem::Status status)
+{
+    QVariantList boundValues;
+    boundValues << (int)status << imageID;
+    d->db->execSql( QString("UPDATE Images SET status=? WHERE id=?;"),
+                    boundValues );
+    d->db->recordChangeset(ImageChangeset(imageID, DatabaseFields::Status));
 }
 
 /*

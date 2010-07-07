@@ -675,6 +675,12 @@ public:
                     const QString& uniqueHash);
 
     /**
+     * Updates the status field for the item.
+     * Note: Do not use this to set to the Removed status, see removeItems().
+     */
+    void setItemStatus(qlonglong imageID, DatabaseItem::Status status);
+
+    /**
      * Returns the requested fields from the Images table.
      * Choose the fields with the mask.
      * The fields will be returned in the following order and type:
@@ -916,13 +922,15 @@ public:
     /**
      * Retrieves all images that the given image is related to (retrieves objects, given image is subject)
      * If type is given, filters by type, otherwise returns all types.
+     * "Get images related to from this"
      */
-    QList<qlonglong> getRelatedImages(qlonglong subjectId, DatabaseRelation::Type type = DatabaseRelation::UndefinedType);
+    QList<qlonglong> getImagesRelatedFrom(qlonglong subjectId, DatabaseRelation::Type type = DatabaseRelation::UndefinedType);
     /**
      * Retrieves all images that relate to the given image (retrieves subject, given image is object)
      * If type is given, filters by type, otherwise returns all types.
+     * "Get images this image is relating to"
      */
-    QList<qlonglong> getRelatingImages(qlonglong objectId, DatabaseRelation::Type type = DatabaseRelation::UndefinedType);
+    QList<qlonglong> getImagesRelatingTo(qlonglong objectId, DatabaseRelation::Type type = DatabaseRelation::UndefinedType);
 
     /**
      * Returns if there are valid entries in the ImageHaarMatrix table.
