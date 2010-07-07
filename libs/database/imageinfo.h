@@ -200,6 +200,11 @@ public:
     QList<int> tagIds() const;
 
     /**
+     * Returns true if the image is marked as visible in the database.
+     */
+    bool isVisible() const;
+
+    /**
      * Retrieve the ImageComments object for this item.
      * This object allows full read and write access to all comments
      * and their properties.
@@ -246,6 +251,23 @@ public:
      */
     QString uuid() const;
     void setUuid(const QString& uuid);
+
+    /**
+     * Retrieve information about images from which this image
+     * is derived (ancestorImages) and images that have been derived
+     * from this images (derivedImages).
+     */
+    bool hasDerivedImages() const;
+    bool hasAncestorImages() const;
+
+    QList<ImageInfo> derivedImages() const;
+    QList<ImageInfo> ancestorImages() const;
+
+    /**
+     * Add a relation to the database:
+     * This image is derived from the ancestorImage.
+     */
+    void markDerivedFrom(const ImageInfo& ancestorImage);
 
     /**
      * Retrieve information about the image,
@@ -306,6 +328,11 @@ public:
      * Set the rating for the item
      */
     void        setRating(int value);
+
+    /**
+     * Set the visibility flag - triggers between Visible and Hidden
+     */
+    void        setVisible(bool isVisible);
 
 
     /**

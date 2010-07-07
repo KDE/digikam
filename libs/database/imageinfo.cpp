@@ -31,6 +31,10 @@
 #include <QFileInfo>
 #include <QHash>
 
+// KDE includes
+
+#include <kdebug.h>
+
 // Local includes
 
 #include "albumdb.h"
@@ -457,6 +461,72 @@ QString ImageInfo::filePath() const
         return albumRoot + album + m_data->name;
     else
         return albumRoot + album + '/' + m_data->name;
+}
+
+bool ImageInfo::isVisible() const
+{
+    if (!m_data)
+        return false;
+
+    QVariantList value = DatabaseAccess().db()->getImagesFields(m_data->id, DatabaseFields::Status);
+    if (!value.isEmpty())
+        return value.first().toInt() == DatabaseItem::Visible;
+    return false;
+}
+
+void ImageInfo::setVisible(bool isVisible)
+{
+    if (!m_data)
+        return;
+
+    if (m_data->albumId == 0)
+    {
+        kWarning() << "Attempt to make a Removed item visible with ImageInfo::setVisible";
+        return;
+    }
+
+    DatabaseAccess().db()->setItemStatus(m_data->id, isVisible ? DatabaseItem::Visible : DatabaseItem::Hidden);
+}
+
+bool ImageInfo::hasDerivedImages() const
+{
+    if (!m_data)
+        return false;
+
+    //TODO: Decide whether to cache some of these values, or create an optimized SQL query
+    return DatabaseAccess().db()->getImagesRelatingTo(m_data->id, DatabaseRelation::DerivedFrom).isEmpty();
+}
+
+bool ImageInfo::hasAncestorImages() const
+{
+    if (!m_data)
+        return false;
+
+    return !DatabaseAccess().db()->getImagesRelatedFrom(m_data->id, DatabaseRelation::DerivedFrom).isEmpty();
+}
+
+QList<ImageInfo> ImageInfo::derivedImages() const
+{
+    if (!m_data)
+        return QList<ImageInfo>();
+
+    return ImageInfoList(DatabaseAccess().db()->getImagesRelatingTo(m_data->id, DatabaseRelation::DerivedFrom));
+}
+
+QList<ImageInfo> ImageInfo::ancestorImages() const
+{
+    if (!m_data)
+        return QList<ImageInfo>();
+
+    return ImageInfoList(DatabaseAccess().db()->getImagesRelatedFrom(m_data->id, DatabaseRelation::DerivedFrom));
+}
+
+void ImageInfo::markDerivedFrom(const ImageInfo& ancestor)
+{
+    if (!m_data || ancestor.isNull())
+        return;
+
+    DatabaseAccess().db()->addImageRelation(m_data->id, ancestor.id(), DatabaseRelation::DerivedFrom);
 }
 
 ImageComments ImageInfo::imageComments(DatabaseAccess& access) const
