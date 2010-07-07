@@ -1285,7 +1285,7 @@ void AlbumDB::addImageInformation(qlonglong imageID, const QVariantList& infos, 
     d->db->recordChangeset(ImageChangeset(imageID, fields));
 }
 
-void AlbumDB::changeImageInformation(qlonglong imageId, const QVariantList& infos,
+void AlbumDB::changeImageInformation(qlonglong imageId, const QVariantList& uncheckedInfos,
                                      DatabaseFields::ImageInformation fields)
 {
     if (fields == DatabaseFields::ImageInformationNone)
@@ -1296,15 +1296,15 @@ void AlbumDB::changeImageInformation(qlonglong imageId, const QVariantList& info
     QMap<QString, QVariant> parameters;
 
     QMap<QString, QVariant> fieldValueMap;
-	for (int i=0; i<infos.size(); i++)
-	{
-	   const QVariant& value=infos[i];
-	   if (value.type() == QVariant::DateTime || value.type() == QVariant::Date)
-		   fieldValueMap.insert(fieldNames[i], value.toDateTime().toString(Qt::ISODate));
-	   else
-		   fieldValueMap.insert(fieldNames[i], value);
-	}
-	DBActionType fieldValueList;
+    QVariantList infos = uncheckedInfos;
+    for (int i=0; i<infos.size(); i++)
+    {
+        QVariant& value=infos[i];
+        if (value.type() == QVariant::DateTime || value.type() == QVariant::Date)
+            value = value.toDateTime().toString(Qt::ISODate);
+        fieldValueMap.insert(fieldNames[i], value);
+    }
+    DBActionType fieldValueList;
 	fieldValueList.setValue(true); // In this case (map as object), the value flag is not important.
 	fieldValueList.setActionValue(fieldValueMap);
 
