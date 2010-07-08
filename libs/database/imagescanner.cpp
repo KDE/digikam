@@ -243,6 +243,7 @@ void ImageScanner::scanFile(ScanMode mode)
                 scanImageCopyright();
                 scanIPTCCore();
                 scanTags();
+                scanImageHistory();
             }
         }
         else if (m_scanInfo.category == DatabaseItem::Video)
@@ -477,6 +478,22 @@ void ImageScanner::scanTags()
         QList<int> tagIds = TagsCache::instance()->getOrCreateTags(keywords);
         DatabaseAccess().db()->addTagsToItems(QList<qlonglong>() << m_scanInfo.id, tagIds);
     }
+}
+
+void ImageScanner::scanImageHistory()
+{
+    QString historyXml = m_metadata.getImageHistory();
+    if (!historyXml.isEmpty())
+    {
+        DatabaseAccess().db()->setImageHistory(m_scanInfo.id, historyXml);
+    }
+    //TODO implement UUID management
+    //TODO implement filling of the ImageRelationsTable:
+    //      - infrastructure to resolve a history image id in the database
+    //      - if resolution of history references is incomplete,
+    //        think how to repeat this step later on
+    //          a) mark the image in the database as unresolved history
+    //          b) just communicate this to the CollectionScanner, who will do it again when the directory is finished
 }
 
 void ImageScanner::scanVideoFile()

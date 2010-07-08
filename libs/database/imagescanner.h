@@ -167,6 +167,7 @@ protected:
     void scanImageCopyright();
     void scanIPTCCore();
     void scanTags();
+    void scanImageHistory();
     void scanVideoFile();
     void scanAudioFile();
 
