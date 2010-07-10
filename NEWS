@@ -14,8 +14,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 007 ==> 243696 : digiKam didn't detect my local collection anymore after replacing internal harddisk.
 008 ==> 243747 : Comment which is stored in database can't be accessed via digiKam.
 009 ==> 216273 : digiKam exif gps not in xmp.
-010 ==> 
-
-
-
-
+010 ==> 244114 : "Find similar" works for a single image, but "Find duplicates" doesn't work for a directory.
+011 ==> 
