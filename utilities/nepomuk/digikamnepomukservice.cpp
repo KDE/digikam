@@ -6,7 +6,7 @@
  * Date        : 2009-06-19
  * Description : Service to sync digikam and nepomuk storages
  *
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -95,16 +95,14 @@ public:
         changingNepomuk      = false;
     }
 
-    bool        syncToDigikam;
-    bool        syncToNepomuk;
-    bool        isConnected;
-    QTimer     *nepomukChangeTimer;
-    QTimer     *cleanIgnoreListTimer;
-    int         fullSyncJobs;
-
-    bool        changingDB;
-    bool        changingNepomuk;
-
+    bool                                     syncToDigikam;
+    bool                                     syncToNepomuk;
+    bool                                     isConnected;
+    bool                                     changingDB;
+    bool                                     changingNepomuk;
+    int                                      fullSyncJobs;
+    QTimer*                                  nepomukChangeTimer;
+    QTimer*                                  cleanIgnoreListTimer;
     QMultiHash<QUrl, WatchedNepomukProperty> ignoreUris;
 
     bool checkIgnoreUris(const QUrl& url, WatchedNepomukProperty property)
@@ -133,22 +131,23 @@ public:
         if (!nepomukChangeTimer->isActive())
             nepomukChangeTimer->start();
     }
-
 };
 
 class ChangingDB
 {
 public:
 
-    ChangingDB(NepomukServicePriv *d)
+    ChangingDB(NepomukServicePriv* d)
         : d(d)
     {
         d->changingDB = true;
     }
+
     ~ChangingDB()
     {
         d->changingDB = false;
     }
+
     NepomukServicePriv* const d;
 };
 
@@ -156,22 +155,24 @@ class ChangingNepomuk
 {
 public:
 
-    ChangingNepomuk(NepomukServicePriv *d)
+    ChangingNepomuk(NepomukServicePriv* d)
         : d(d)
     {
         d->changingNepomuk = true;
     }
+
     ~ChangingNepomuk()
     {
         d->changingNepomuk = false;
     }
+
     NepomukServicePriv* const d;
 };
 
 
 NepomukService::NepomukService(QObject* parent, const QVariantList&)
-            : Nepomuk::Service(parent),
-              d(new NepomukServicePriv)
+              : Nepomuk::Service(parent),
+                d(new NepomukServicePriv)
 {
     Nepomuk::ResourceManager::instance()->init();
 
@@ -201,7 +202,7 @@ void NepomukService::readConfig()
     // Reads from digikam config what this service should do
 
     KSharedConfig::Ptr config = digikamConfig();
-    KConfigGroup group = config->group("Nepomuk Settings");
+    KConfigGroup group        = config->group("Nepomuk Settings");
     // default to false here, regardless of default settings in digikam
     enableSyncToDigikam(group.readEntry("Sync Nepomuk to Digikam", false));
     enableSyncToNepomuk(group.readEntry("Sync Digikam to Nepomuk", false));
@@ -213,8 +214,10 @@ void NepomukService::enableSyncToDigikam(bool syncToDigikam)
     // Called from readConfig or via DBus (from DigikamApp)
 
     kDebug() << "Sync to digikam enabled: " << syncToDigikam;
+
     if (d->syncToDigikam == syncToDigikam)
         return;
+
     d->syncToDigikam = syncToDigikam;
 
     if (!d->isConnected)
@@ -252,12 +255,14 @@ void NepomukService::enableSyncToDigikam(bool syncToDigikam)
 
 void NepomukService::enableSyncToNepomuk(bool syncToNepomuk)
 {
-     // Controls syncing Digikam -> Nepomuk.
+    // Controls syncing Digikam -> Nepomuk.
     // Called from readConfig or via DBus (from DigikamApp)
 
     kDebug() << "Sync to nepomuk enabled:" << syncToNepomuk;
+
     if (d->syncToNepomuk == syncToNepomuk)
         return;
+
     d->syncToNepomuk = syncToNepomuk;
 
     if (!d->isConnected)
@@ -304,7 +309,7 @@ void NepomukService::triggerResync()
         d->triggerSyncToDigikam();
 }
 
-void NepomukService::setDatabase(const QString &paramsUrl)
+void NepomukService::setDatabase(const QString& paramsUrl)
 {
     // Called via DBus
     if (!d->syncToDigikam && !d->syncToNepomuk)
@@ -315,7 +320,7 @@ void NepomukService::setDatabase(const QString &paramsUrl)
     connectToDatabase(DatabaseParameters(url));
 }
 
-void NepomukService::connectToDatabase(const DatabaseParameters &params)
+void NepomukService::connectToDatabase(const DatabaseParameters& params)
 {
     // (Re-)connects to the database
     if (params == DatabaseAccess::parameters() || !params.isValid())
@@ -347,11 +352,14 @@ void NepomukService::slotImageChange(const ImageChangeset& changeset)
         return;
 
     DatabaseFields::Set changes = changeset.changes();
-    int settings = 0;
+    int settings                = 0;
+
     if (changes & DatabaseFields::Rating)
         settings |= SyncRating | SyncHasNoRating;
+
     if (changes & DatabaseFields::Comment)
         settings |= SyncComment;
+
     if (settings)
     {
         syncToNepomuk(changeset.ids(), (SyncToNepomukSettings)settings);
@@ -364,6 +372,7 @@ void NepomukService::slotImageTagChange(const ImageTagChangeset& changeset)
 
     if (d->changingDB)
         return;
+
     kDebug() << changeset.ids() << changeset.tags() << (changeset.operation()==ImageTagChangeset::Added);
 
     switch (changeset.operation())
@@ -404,7 +413,7 @@ void NepomukService::fullSyncDigikamToNepomuk()
     }
 }
 
-void NepomukService::slotFullSyncJobResult(KJob *job)
+void NepomukService::slotFullSyncJobResult(KJob* job)
 {
     Q_UNUSED(job);
     // when initial full sync is done
@@ -451,6 +460,7 @@ static int digikamToNepomukRating(int digikamRating)
     // Map [-1, 5] -> [0, 10]: 1->2, 2->4, 3->6, 4->8, 5->10 so that there are "full" and not half stars in dolphin
     if (digikamRating == -1)
         return 0;
+
     return 2*digikamRating;
 }
 
@@ -528,6 +538,7 @@ static Nepomuk::Tag nepomukForDigikamTag(int tagId)
         }
         return tag;
     }
+
     return Nepomuk::Tag();
 }
 
@@ -538,11 +549,13 @@ void NepomukService::syncTagsToNepomuk(const QList<qlonglong>& imageIds, const Q
         ChangingNepomuk changing(d);
         Nepomuk::Tag tag = nepomukForDigikamTag(tagId);
         kDebug() << tag.resourceUri();
+
         if (tag.isValid())
         {
             foreach (const qlonglong &imageId, imageIds)
             {
                 ImageInfo info(imageId);
+
                 if (!info.isNull())
                 {
                     Nepomuk::Resource res(info.fileUrl());
@@ -566,11 +579,13 @@ void NepomukService::pushTagsToNepomuk(const QList<ImageInfo>& imageInfos)
     foreach (const ImageInfo &info, imageInfos)
     {
         ChangingNepomuk changing(d);
+
         if (!info.isNull())
         {
             foreach (int tagId, info.tagIds())
             {
                 Nepomuk::Tag tag = nepomukForDigikamTag(tagId);
+
                 if (tag.isValid())
                 {
                     Nepomuk::Resource res(info.fileUrl());
@@ -599,7 +614,6 @@ void NepomukService::slotCollectionImageChange(const CollectionImageChangeset& c
 
 void NepomukService::slotStatementAdded(const Soprano::Statement& statement)
 {
-
     if (d->changingNepomuk) // no effect currently
         return;
 
@@ -635,13 +649,14 @@ void NepomukService::slotStatementRemoved(const Soprano::Statement& statement)
     if (d->changingNepomuk) // no effect currently
         return;
 
-    const Soprano::Node &subject = statement.subject();
+    const Soprano::Node &subject   = statement.subject();
     const Soprano::Node &predicate = statement.predicate();
 
     if (predicate == Soprano::Vocabulary::NAO::hasTag())
     {
         if (d->checkIgnoreUris(subject.uri(), NaoTags))
             return;
+
         kDebug() << "Removed tag" << subject.toN3() << statement.object().toN3() << d->changingNepomuk;
         Nepomuk::Resource res(subject.uri());
         removeTagInDigikam(res.property(Nepomuk::Vocabulary::NIE::url()).toString(), statement.object().uri());
@@ -694,13 +709,13 @@ void NepomukService::syncNepomukToDigikam()
     QString pathBinding("path"), valueBinding("value");
 
     query = nepomukChangeQuery("nao:numericRating", lastSyncDate);
-    it = mainModel()->executeQuery(query, Soprano::Query::QueryLanguageSparql);
+    it    = mainModel()->executeQuery(query, Soprano::Query::QueryLanguageSparql);
     QList<int> ratings;
     int rating;
     while( it.next() )
     {
         fileUrl = KUrl(it.binding(pathBinding).uri());
-        rating = it.binding(valueBinding).literal().toInt();
+        rating  = it.binding(valueBinding).literal().toInt();
         if (!fileUrl.isEmpty() && rating >= 0 && rating <= 10)
         {
             fileUrls << fileUrl;
@@ -711,7 +726,7 @@ void NepomukService::syncNepomukToDigikam()
 
     fileUrls.clear();
     query = nepomukChangeQuery("nao:description", lastSyncDate);
-    it = mainModel()->executeQuery(query, Soprano::Query::QueryLanguageSparql);
+    it    = mainModel()->executeQuery(query, Soprano::Query::QueryLanguageSparql);
     QList<QString> comments;
     QString comment;
     while( it.next() )
@@ -728,13 +743,13 @@ void NepomukService::syncNepomukToDigikam()
 
     fileUrls.clear();
     query = nepomukChangeQuery("nao:hasTag", lastSyncDate);
-    it = mainModel()->executeQuery(query, Soprano::Query::QueryLanguageSparql);
+    it    = mainModel()->executeQuery(query, Soprano::Query::QueryLanguageSparql);
     QList<QUrl> tags;
     QUrl tag;
     while( it.next() )
     {
         fileUrl = KUrl(it.binding(pathBinding).uri());
-        tag = it.binding(valueBinding).uri();
+        tag     = it.binding(valueBinding).uri();
         if (!fileUrl.isEmpty())
         {
             fileUrls << fileUrl;
@@ -791,6 +806,7 @@ void NepomukService::syncRatingToDigikam(const KUrl::List& fileUrls, const QList
     QList<ImageInfo> infos;
     QList<int> ratingsForInfos;
     const int size = fileUrls.size();
+
     for (int i=0; i<size; i++)
     {
         // If the path is not in digikam collections, info will be null.
@@ -951,7 +967,7 @@ int NepomukService::bestDigikamTagForTagName(const ImageInfo& info, const QStrin
     }
 }
 
-QString NepomukService::tagnameForNepomukTag(const QUrl& tagUri)
+QString NepomukService::tagnameForNepomukTag(const QUrl& tagUri) const
 {
     if (!tagUri.isEmpty())
     {
@@ -969,7 +985,7 @@ QString NepomukService::tagnameForNepomukTag(const QUrl& tagUri)
 
 // ------------------- Utilities ------------------------
 
-QDateTime NepomukService::lastSyncToDigikam()
+QDateTime NepomukService::lastSyncToDigikam() const
 {
     QString timeString = DatabaseAccess().db()->getSetting("SyncNepomukToDigikam-1-Time");
     if (!timeString.isNull())
@@ -1002,11 +1018,12 @@ void NepomukService::clearSyncedToNepomuk()
     DatabaseAccess().db()->setSetting("InitialSyncDigikamToNepomuk-1", QString());
 }
 
-DatabaseParameters NepomukService::databaseParameters()
+DatabaseParameters NepomukService::databaseParameters() const
 {
     // Check running digikam instance first
-    QDBusConnectionInterface *interface = QDBusConnection::sessionBus().interface();
-    QDBusReply<QStringList> reply = interface->registeredServiceNames();
+    QDBusConnectionInterface* interface = QDBusConnection::sessionBus().interface();
+    QDBusReply<QStringList> reply       = interface->registeredServiceNames();
+
     if (reply.isValid())
     {
         QStringList serviceNames = reply.value();
@@ -1031,7 +1048,7 @@ DatabaseParameters NepomukService::databaseParameters()
     }
 
     // no running instance, read settings file
-    KSharedConfig::Ptr config  = digikamConfig();
+    KSharedConfig::Ptr config = digikamConfig();
     DatabaseParameters params = DatabaseParameters::parametersFromConfig(config);
     if (!params.databaseName.isEmpty())
     {
@@ -1041,11 +1058,10 @@ DatabaseParameters NepomukService::databaseParameters()
     return DatabaseParameters();
 }
 
-KSharedConfig::Ptr NepomukService::digikamConfig()
+KSharedConfig::Ptr NepomukService::digikamConfig() const
 {
-    return KSharedConfig::openConfig(
-                KComponentData("digikam", QByteArray(), KComponentData::SkipMainComponentRegistration)
-                                    );
+    return KSharedConfig::openConfig(KComponentData("digikam", QByteArray(),
+                                     KComponentData::SkipMainComponentRegistration));
 }
 
 } // namespace Digikam
