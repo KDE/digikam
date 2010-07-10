@@ -39,16 +39,16 @@
 #include <kio/job.h>
 #include <kpluginfactory.h>
 #include <kurl.h>
-#include <Nepomuk/Resource>
-#include <Nepomuk/ResourceManager>
-#include <Nepomuk/Service>
-#include <Nepomuk/Tag>
-#include <Nepomuk/Variant>
-#include <Soprano/Model>
-#include <Soprano/QueryResultIterator>
-#include <Soprano/Statement>
-#include <Soprano/Vocabulary/NAO>
-#include <Soprano/Vocabulary/XMLSchema>
+#include <nepomuk/resource.h>
+#include <nepomuk/resourcemanager.h>
+#include <nepomuk/nepomukservice.h>
+#include <nepomuk/tag.h>
+#include <nepomuk/variant.h>
+#include <soprano/model.h>
+#include <soprano/queryresultiterator.h>
+#include <soprano/statement.h>
+#include <soprano/nao.h>
+#include <soprano/xsd.h>
 
 // Local includes
 
