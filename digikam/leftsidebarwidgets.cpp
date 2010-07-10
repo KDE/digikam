@@ -1120,7 +1120,7 @@ public:
     SearchModificationHelper* searchModificationHelper;
 };
 
-PeopleSideBarWidget::PeopleSideBarWidget(QWidget* parent, SearchModel* searchModel,
+PeopleSideBarWidget::PeopleSideBarWidget(QWidget* parent, SearchModel* /*searchModel*/,
                                          SearchModificationHelper *searchModificationHelper)
                    : SidebarWidget(parent), d(new PeopleSideBarWidgetPriv)
 {
@@ -1131,7 +1131,7 @@ PeopleSideBarWidget::PeopleSideBarWidget(QWidget* parent, SearchModel* searchMod
     d->timer                    = new QTimer(this);
     setAttribute(Qt::WA_DeleteOnClose);
 
-    QVBoxLayout* vlay           = new QVBoxLayout(this);
+//    QVBoxLayout* vlay           = new QVBoxLayout(this);
     QFrame *panel               = new QFrame(this);
     panel->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     panel->setLineWidth(1);
@@ -1229,11 +1229,9 @@ void PeopleSideBarWidget::setActive(bool active)
 
 void PeopleSideBarWidget::doLoadState()
 {
-
     KConfigGroup group = getConfigGroup();
 
 //    d->timeLineFolderView->loadState();
-
 }
 
 void PeopleSideBarWidget::doSaveState()
@@ -1254,7 +1252,7 @@ void PeopleSideBarWidget::applySettings()
     // nothing to do here right now
 }
 
-void PeopleSideBarWidget::changeAlbumFromHistory(Album *album)
+void PeopleSideBarWidget::changeAlbumFromHistory(Album* /*album*/)
 {
     //d->timeLineFolderView->slotSelectAlbum(album);
 }
