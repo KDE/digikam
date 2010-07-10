@@ -282,6 +282,44 @@ private:
 };
 #endif
 
+class PeopleSideBarWidgetPriv;
+/**
+ * SideBarWidget for People
+ *
+ * @author Aditya Bhatt
+ */
+class PeopleSideBarWidget : public SidebarWidget
+{
+    Q_OBJECT
+public:
+    PeopleSideBarWidget(QWidget *parent, SearchModel *searchModel,
+                          SearchModificationHelper *searchModificationHelper);
+    virtual ~PeopleSideBarWidget();
+
+    void setActive(bool active);
+    void doLoadState();
+    void doSaveState();
+    void applySettings();
+    void changeAlbumFromHistory(Album *album);
+    QPixmap getIcon();
+    QString getCaption();
+
+private Q_SLOTS:
+
+    void slotInit();
+//     void slotSelectionChanged();
+//     void slotResetSelection();
+//     void slotSaveSelection();
+//     void slotAlbumSelected(Album*);
+//     void slotCheckAboutSelection();
+
+
+private:
+    PeopleSideBarWidgetPriv *d;
+
+};
+
+
 }
 
 #endif /* LEFTSIDEBARWIDGETS_H */

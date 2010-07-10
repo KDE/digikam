@@ -78,6 +78,7 @@ INCLUDE_DIRECTORIES(
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/gpssearch
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/timeline
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/firstrun
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/facedetection
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/common
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser
@@ -315,7 +316,7 @@ SET(digikam_SRCS ${libdimgimagewindow_SRCS}
                  ${libtemplate_SRCS}
                  ${libadvancedrename_SRCS}
                  ${libdatabaseui_SRCS}
-
+                 ${libfacedetection_SRCS}
                  main.cpp
     )
 

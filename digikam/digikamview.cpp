@@ -117,7 +117,8 @@ public:
 #ifdef HAVE_MARBLEWIDGET
     GPSSearchSideBarWidget       *gpsSearchSideBar;
 #endif
-
+    PeopleSideBarWidget          *peopleSideBar;
+    
     DigikamApp*               parent;
 
     DigikamImageView*         iconView;
@@ -220,6 +221,13 @@ DigikamView::DigikamView(QWidget *parent, DigikamModelCollection *modelCollectio
                     d->searchModificationHelper);
     d->leftSideBarWidgets << d->gpsSearchSideBar;
 #endif
+    
+    // People Sidebar
+    d->peopleSideBar = new PeopleSideBarWidget(d->leftSideBar,
+                    d->modelCollection->getSearchModel(),
+                    d->searchModificationHelper);
+    d->leftSideBarWidgets << d->peopleSideBar;
+
 
 
     foreach(SidebarWidget *leftWidget, d->leftSideBarWidgets)

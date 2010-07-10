@@ -1224,6 +1224,10 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     SET(libtimeline_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/timeline/timelinewidget.cpp
        )
+    
+    SET(libfacedetection_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facedetection/peoplewidget.cpp
+       )
 
     SET(libadvancedrename_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/advancedrenamedialog.cpp

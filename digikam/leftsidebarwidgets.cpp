@@ -54,6 +54,7 @@
 #include "searchxml.h"
 #include "tagfolderview.h"
 #include "timelinewidget.h"
+#include "peoplewidget.h"
 
 namespace Digikam
 {
@@ -1096,5 +1097,208 @@ void GPSSearchSideBarWidget::slotDigikamViewImageSelected(const ImageInfoList &s
 }
 
 #endif
+
+
+// -----------------------------------------------------------------------------
+
+class PeopleSideBarWidgetPriv
+{
+public:
+    PeopleSideBarWidgetPriv() :
+        scaleBG(0),
+        cursorCountLabel(0),
+        scrollBar(0),
+        timer(0),
+        resetButton(0),
+        saveButton(0),
+        timeUnitCB(0),
+        nameEdit(0),
+        cursorDateLabel(0),
+        searchModel(0),
+        searchModificationHelper(0)
+    {}
+
+
+    QButtonGroup*       scaleBG;
+    QLabel*             cursorCountLabel;
+    QScrollBar*         scrollBar;
+    QTimer*             timer;
+    QToolButton*        resetButton;
+    QToolButton*        saveButton;
+
+    KComboBox*          timeUnitCB;
+    KLineEdit*          nameEdit;
+    KSqueezedTextLabel* cursorDateLabel;
+
+    SearchTextBar*      searchPeopleBar;
+    //EditableSearchTreeView* PeopleFolderView;
+//     PeopleWidget*     peopleWidget;
+
+    SearchModel*        searchModel;
+
+    SearchModificationHelper *searchModificationHelper;
+};
+
+PeopleSideBarWidget::PeopleSideBarWidget(QWidget *parent, SearchModel *searchModel,
+                                             SearchModificationHelper *searchModificationHelper) :
+    SidebarWidget(parent), d(new PeopleSideBarWidgetPriv)
+{
+
+    setObjectName("People Sidebar");
+
+    d->searchModificationHelper = searchModificationHelper;
+
+    d->timer = new QTimer(this);
+    setAttribute(Qt::WA_DeleteOnClose);
+
+    QVBoxLayout *vlay = new QVBoxLayout(this);
+    QFrame *panel     = new QFrame(this);
+    panel->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
+    panel->setLineWidth(1);
+
+    QGridLayout *grid = new QGridLayout(panel);
+
+    // ---------------------------------------------------------------
+
+    QWidget *hbox1    = new QWidget(panel);
+    QHBoxLayout *hlay = new QHBoxLayout(hbox1);
+
+    QLabel *label1 = new QLabel(i18n("Time Unit:"), hbox1);
+    
+    QWidget *scaleBox  = new QWidget(hbox1);
+    QHBoxLayout *hlay2 = new QHBoxLayout(scaleBox);
+    
+    ////////////
+    
+    hlay2->setMargin(0);
+    hlay2->setSpacing(0);
+    
+    hlay->setMargin(0);
+    hlay->setSpacing(KDialog::spacingHint());
+    hlay->addWidget(label1);
+    hlay->addWidget(d->timeUnitCB);
+    hlay->addItem(new QSpacerItem(10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum));
+    hlay->addWidget(scaleBox);
+
+    // ---------------------------------------------------------------
+
+    d->scrollBar      = new QScrollBar(panel);
+    d->scrollBar->setOrientation(Qt::Horizontal);
+    d->scrollBar->setMinimum(0);
+    d->scrollBar->setSingleStep(1);
+
+    d->cursorDateLabel  = new KSqueezedTextLabel(0, panel);
+    d->cursorCountLabel = new QLabel(panel);
+    d->cursorCountLabel->setAlignment(Qt::AlignRight);
+
+    // ---------------------------------------------------------------
+
+    KHBox *hbox2 = new KHBox(panel);
+    hbox2->setMargin(0);
+    hbox2->setSpacing(KDialog::spacingHint());
+
+    d->resetButton = new QToolButton(hbox2);
+    d->resetButton->setIcon(SmallIcon("document-revert"));
+    d->resetButton->setToolTip(i18n("Clear current selection"));
+    d->resetButton->setWhatsThis(i18n("If you press this button, the current date selection on the time-line will be cleared."));
+    d->nameEdit    = new KLineEdit(hbox2);
+    d->nameEdit->setClearButtonShown(true);
+    d->nameEdit->setWhatsThis(i18n("Enter the name of the current dates search to save in the "
+                                   "\"My Date Searches\" view"));
+
+    // ---------------------------------------------------------------
+
+    grid->addWidget(hbox1,               0, 0, 1, 4);
+    grid->addWidget(d->cursorDateLabel,  1, 0, 1, 3);
+    grid->addWidget(d->cursorCountLabel, 1, 3, 1, 1);
+
+    grid->addWidget(d->scrollBar,        3, 0, 1, 4);
+    grid->addWidget(hbox2,               4, 0, 1, 4);
+    grid->setColumnStretch(2, 10);
+    grid->setMargin(KDialog::spacingHint());
+    grid->setSpacing(KDialog::spacingHint());
+
+    // ---------------------------------------------------------------
+    // ---------------------------------------------------------------
+
+
+
+}
+
+QPixmap PeopleSideBarWidget::getIcon()
+{
+    return SmallIcon("user-identity");
+}
+
+QString PeopleSideBarWidget::getCaption()
+{
+    return i18n("People");
+}
+
+
+void PeopleSideBarWidget::slotInit()
+{
+    // Date Maps are loaded from AlbumManager to PeopleWidget after the GUI is initialized.
+    // AlbumManager query Date KIO slave to stats items from database and it can take a while.
+    // We waiting than TimeLineWidget is ready before to set last config from users.
+
+    loadState();
+
+}
+
+void PeopleSideBarWidget::setActive(bool active)
+{
+    if (active)
+    {
+        //AlbumManager::instance()->setCurrentAlbum(
+         //               d->PeopleFolderView->currentAlbum());
+    }
+}
+
+void PeopleSideBarWidget::doLoadState()
+{
+
+    KConfigGroup group = getConfigGroup();
+
+//    d->timeLineFolderView->loadState();
+
+}
+
+void PeopleSideBarWidget::doSaveState()
+{
+    KConfigGroup group = getConfigGroup();
+
+ //   group.writeEntry(d->configHistogramTimeUnitEntry, d->timeUnitCB->currentIndex());
+ //   group.writeEntry(d->configHistogramScaleEntry,    d->scaleBG->checkedId());
+ //   group.writeEntry(d->configCursorPositionEntry,    d->timeLineWidget->cursorDateTime());
+
+    //d->timeLineFolderView->saveState();
+
+    group.sync();
+
+}
+
+void PeopleSideBarWidget::applySettings()
+{
+    // nothing to do here right now
+}
+
+void PeopleSideBarWidget::changeAlbumFromHistory(Album *album)
+{
+    //d->timeLineFolderView->slotSelectAlbum(album);
+}
+
+PeopleSideBarWidget::~PeopleSideBarWidget()
+{
+    delete d;
+}
+
+
+
+
+
+
+
+
 
 }
