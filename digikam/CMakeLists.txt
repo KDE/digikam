@@ -320,6 +320,7 @@ SET(digikam_SRCS ${libdimgimagewindow_SRCS}
                  ${libadvancedrename_SRCS}
                  ${libdatabaseui_SRCS}
                  ${libfacedetection_SRCS}
+                 ${libscriptiface_SRCS}
                  main.cpp
     )
 

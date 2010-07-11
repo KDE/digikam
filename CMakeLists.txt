@@ -520,9 +520,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
 
     # ==================================================================================================
     # Common targets parts
-    SET(libscriptiface_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/scriptiface/scriptiface.cpp
-       )
+
 
     SET(libdimg_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/dimg.cpp
@@ -832,6 +830,10 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/exifwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/makernotewidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/xmpwidget.cpp
+       )
+
+    SET(libscriptiface_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/scriptiface/scriptiface.cpp
        )
 
     SET(libslideshow_SRCS
