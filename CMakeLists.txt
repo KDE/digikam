@@ -140,7 +140,11 @@ FIND_PACKAGE(Kexiv2)
 FIND_PACKAGE(Kipi)
 FIND_PACKAGE(Kface)
 FIND_PACKAGE(Kmap)
-
+#---------------following code is to add the QtScript libraries-----------------------
+target_link_libraries(
+    ${QT_QTSCRIPT_LIBRARY}
+)
+#-------------------------------------------------------------------------------------
 # Extract version of libjpeg so that we can use the appropriate dir
 # See bug #227313, #228483
 FILE(READ "${JPEG_INCLUDE_DIR}/jpeglib.h" jpeglib_h_content)
@@ -459,6 +463,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
                         ${KMAP_INCLUDE_DIR}
                         ${KDE4_INCLUDES}
                         ${QT_INCLUDES}
+                        ${QT_QTSCRIPT_INCLUDE_DIR} #to include the QtScript include directories
                         ${GPHOTO2_INCLUDE_DIRS}
                         ${CMAKE_CURRENT_SOURCE_DIR}/digikam
                         ${CMAKE_CURRENT_BINARY_DIR}/digikam
