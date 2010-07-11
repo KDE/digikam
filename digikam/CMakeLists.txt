@@ -61,6 +61,7 @@ INCLUDE_DIRECTORIES(
                      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/themeengine
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/kipiiface
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/cameragui
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/scriptiface
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/slideshow
                      ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/batch
@@ -178,6 +179,7 @@ TARGET_LINK_LIBRARIES(digikamcore
                       ${KDE4_SOLID_LIBS}
                       ${QT_QTSQL_LIBRARY}
                       ${QT_QT3SUPPORT_LIBRARY}
+                      ${QT_QTSCRIPT_LIBRARY} 
 
                       ${JPEG_LIBRARIES}
                       ${TIFF_LIBRARIES}

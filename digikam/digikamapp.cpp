@@ -135,6 +135,7 @@
 #include "thumbnailsize.h"
 #include "dmetadata.h"
 #include "uifilevalidator.h"
+#include "scriptiface.h"
 
 #include "databaseserverstarter.h"
 

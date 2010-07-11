@@ -141,7 +141,7 @@ FIND_PACKAGE(Kipi)
 FIND_PACKAGE(Kface)
 FIND_PACKAGE(Kmap)
 #---------------following code is to add the QtScript libraries-----------------------
-target_link_libraries(
+TARGET_LINK_LIBRARIES(
     ${QT_QTSCRIPT_LIBRARY}
 )
 #-------------------------------------------------------------------------------------
