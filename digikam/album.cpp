@@ -7,7 +7,7 @@
  * Description : digiKam album types
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi@pooh.tam.uiuc.edu>
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,7 +21,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "album.h"
 
@@ -158,7 +157,7 @@ void Album::clear()
     {
         nextChild = child->m_next;
         delete child;
-        child = nextChild;
+        child     = nextChild;
     }
 
     m_firstChild = 0;
@@ -274,11 +273,11 @@ PAlbum::PAlbum(int albumRoot, const QString& parentPath, const QString& title, i
 {
     // If path is /holidays/2007, title is only "2007", path is "/holidays"
     setTitle(title);
-    m_albumRootId = albumRoot;
+    m_albumRootId      = albumRoot;
     m_isAlbumRootAlbum = false;
-    m_parentPath  = parentPath + '/';
-    m_path        = title;
-    m_date        = QDate::currentDate();
+    m_parentPath       = parentPath + '/';
+    m_path             = title;
+    m_date             = QDate::currentDate();
 }
 
 PAlbum::~PAlbum()
@@ -498,8 +497,8 @@ SAlbum::~SAlbum()
 
 void SAlbum::setSearch(DatabaseSearch::Type type, const QString& query)
 {
-    m_searchType  = type;
-    m_query = query;
+    m_searchType = type;
+    m_query      = query;
 }
 
 DatabaseUrl SAlbum::databaseUrl() const
@@ -563,13 +562,13 @@ bool SAlbum::isDuplicatesSearch() const
 bool SAlbum::isTemporarySearch() const
 {
 
-    if (isHaarSearch()) {
+    if (isHaarSearch())
+    {
         return (title() == getTemporaryHaarTitle(DatabaseSearch::HaarImageSearch)) ||
                 title() == getTemporaryHaarTitle(DatabaseSearch::HaarSketchSearch);
     }
 
     return (title() == getTemporaryTitle(m_searchType));
-
 }
 
 QString SAlbum::displayTitle() const
@@ -596,6 +595,8 @@ QString SAlbum::displayTitle() const
                 return i18n("Current Search");
             case DatabaseSearch::DuplicatesSearch:
                 return i18n("Current Duplicates Search");
+            case DatabaseSearch::FaceSearch:
+                return i18n("Current Face Search");
             case DatabaseSearch::UndefinedType:
                 break;
         }
@@ -605,45 +606,45 @@ QString SAlbum::displayTitle() const
 
 QString SAlbum::getTemporaryTitle(DatabaseSearch::Type type, DatabaseSearch::HaarSearchType haarType)
 {
-
     switch(type)
     {
-    case DatabaseSearch::TimeLineSearch:
-        return "_Current_Time_Line_Search_";
-    case DatabaseSearch::HaarSearch:
-        return getTemporaryHaarTitle(haarType);
-    case DatabaseSearch::MapSearch:
-        return "_Current_Map_Search_";
-    case DatabaseSearch::KeywordSearch:
-    case DatabaseSearch::AdvancedSearch:
-    case DatabaseSearch::LegacyUrlSearch:
-        return "_Current_Search_View_Search_";
-    case DatabaseSearch::DuplicatesSearch:
-        return "_Current_Duplicates_Search_";
-    default:
-        kError() << "Untreated temporary search type " << type;
-        return "_Current_Unknown_Search_";
+        case DatabaseSearch::TimeLineSearch:
+            return "_Current_Time_Line_Search_";
+        case DatabaseSearch::HaarSearch:
+            return getTemporaryHaarTitle(haarType);
+        case DatabaseSearch::MapSearch:
+            return "_Current_Map_Search_";
+        case DatabaseSearch::KeywordSearch:
+        case DatabaseSearch::AdvancedSearch:
+        case DatabaseSearch::LegacyUrlSearch:
+            return "_Current_Search_View_Search_";
+        case DatabaseSearch::DuplicatesSearch:
+            return "_Current_Duplicates_Search_";
+        case DatabaseSearch::FaceSearch:
+            return "_Current_Face_Search_";
+        default:
+            kError() << "Untreated temporary search type " << type;
+            return "_Current_Unknown_Search_";
     }
-
 }
 
 QString SAlbum::getTemporaryHaarTitle(DatabaseSearch::HaarSearchType haarType)
 {
     switch(haarType)
     {
-    case DatabaseSearch::HaarImageSearch:
-        return "_Current_Fuzzy_Image_Search_";
-    case DatabaseSearch::HaarSketchSearch:
-        return "_Current_Fuzzy_Sketch_Search_";
-    default:
-        kError() << "Untreated temporary haar search type " << haarType;
-        return "_Current_Unknown_Haar_Search_";
+        case DatabaseSearch::HaarImageSearch:
+            return "_Current_Fuzzy_Image_Search_";
+        case DatabaseSearch::HaarSketchSearch:
+            return "_Current_Fuzzy_Sketch_Search_";
+        default:
+            kError() << "Untreated temporary haar search type " << haarType;
+            return "_Current_Unknown_Haar_Search_";
     }
 }
 
 // --------------------------------------------------------------------------
 
-AlbumIterator::AlbumIterator(Album *album)
+AlbumIterator::AlbumIterator(Album* album)
 {
     m_root    = album;
     m_current = album ? album->firstChild() : 0;
