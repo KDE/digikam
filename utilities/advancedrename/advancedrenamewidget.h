@@ -111,6 +111,11 @@ public:
     void focusLineEdit();
 
     /**
+     * highlight the LineEdit widgets text
+     */
+    void highlightLineEdit();
+
+    /**
      * highlight a word in the LineEdit widgets text
      */
     void highlightLineEdit(const QString& word);

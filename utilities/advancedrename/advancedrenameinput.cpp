@@ -377,6 +377,11 @@ void AdvancedRenameInput::slotSetFocus()
     d->lineEdit->ensureCursorVisible();
 }
 
+void AdvancedRenameInput::slotHighlightLineEdit()
+{
+    d->lineEdit->selectAll();
+}
+
 void AdvancedRenameInput::slotHighlightLineEdit(const QString& word)
 {
     QTextCursor cursor = d->lineEdit->textCursor();

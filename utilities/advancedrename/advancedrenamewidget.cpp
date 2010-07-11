@@ -353,6 +353,11 @@ void AdvancedRenameWidget::focusLineEdit()
     d->renameInput->slotSetFocus();
 }
 
+void AdvancedRenameWidget::highlightLineEdit()
+{
+    d->renameInput->slotHighlightLineEdit();
+}
+
 void AdvancedRenameWidget::highlightLineEdit(const QString& word)
 {
     d->renameInput->slotHighlightLineEdit(word);
