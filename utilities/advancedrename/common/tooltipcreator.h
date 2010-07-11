@@ -28,7 +28,6 @@
 
 #include <QString>
 #include <QPixmap>
-#include <QUrl>
 
 namespace Digikam
 {
@@ -44,7 +43,7 @@ public:
 
     QString tooltip(Parser* parser);
 
-    QUrl    getInfoIconResource();
+    QString getInfoIconResourceName();
     QPixmap getInfoIcon();
 
 private:

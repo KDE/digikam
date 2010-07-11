@@ -64,7 +64,7 @@ QString TooltipCreator::additionalInformation()
     information += "<div style='margin-top:20px;'";
 
     information += tableStart(90);
-    information += "<tr><td style='vertical-align:top;'><img src='mydata://info.png' /></td>";
+    information += "<tr><td style='vertical-align:top;'><img src='" + getInfoIconResourceName() + "' /></td>";
     information += "<td><ol>";
     foreach (const QString infoItem, infoItems)
     {
@@ -79,9 +79,9 @@ QString TooltipCreator::additionalInformation()
     return information;
 }
 
-QUrl TooltipCreator::getInfoIconResource()
+QString TooltipCreator::getInfoIconResourceName()
 {
-    return QUrl("mydata://info.png");
+    return QString("mydata://info.png");
 }
 
 QPixmap TooltipCreator::getInfoIcon()
