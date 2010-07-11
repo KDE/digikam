@@ -56,7 +56,7 @@ QString TooltipCreator::additionalInformation()
     infoItems << i18n("Modifiers can be applied to every renaming option.");
     infoItems << i18n("It is possible to assign multiple modifiers to an option, "
                       "they are applied in the order you assign them.");
-    infoItems << i18n("Be sure to take a look at the quick access buttons: They might provide "
+    infoItems << i18n("Be sure to use the quick access buttons: They might provide "
                       "additional information about renaming and modifier options.");
 
     QString information;
