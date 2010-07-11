@@ -30,6 +30,7 @@
 // KDE includes
 
 #include <klocale.h>
+#include <kiconloader.h>
 
 namespace Digikam
 {
@@ -52,6 +53,8 @@ TooltipDialog::TooltipDialog(QWidget* parent)
     d->textBrowser->setFrameStyle(QFrame::NoFrame);
     d->textBrowser->setOpenLinks(true);
     d->textBrowser->setOpenExternalLinks(true);
+
+
     setCaption(i18n("Information"));
     setButtons(KDialog::Close);
     setMainWidget(d->textBrowser);
@@ -65,6 +68,11 @@ TooltipDialog::~TooltipDialog()
 void TooltipDialog::setTooltip(const QString& tooltip)
 {
     clearTooltip();
+
+    // set image resources
+    d->textBrowser->document()->addResource(QTextDocument::ImageResource,
+                                            QUrl("mydata://info.png"),
+                                            QVariant(SmallIcon("lighttable", KIconLoader::SizeMedium)));
     d->textBrowser->setHtml(tooltip);
 }
 
