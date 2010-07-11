@@ -66,7 +66,7 @@ QString TooltipCreator::additionalInformation()
     information += tableStart(90);
     information += "<tr><td style='vertical-align:top;'><img src='" + getInfoIconResourceName() + "' /></td>";
     information += "<td><ol>";
-    foreach (const QString infoItem, infoItems)
+    foreach (const QString& infoItem, infoItems)
     {
         information += "<li>" + infoItem + "</li>";
 
