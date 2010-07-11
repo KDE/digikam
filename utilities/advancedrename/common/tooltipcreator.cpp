@@ -79,6 +79,16 @@ QString TooltipCreator::additionalInformation()
     return information;
 }
 
+QUrl TooltipCreator::getInfoIconResource()
+{
+    return QUrl("mydata://info.png");
+}
+
+QPixmap TooltipCreator::getInfoIcon()
+{
+    return SmallIcon("lighttable", KIconLoader::SizeMedium);
+}
+
 QString TooltipCreator::tooltip(Parser* parser)
 {
     if (!parser)

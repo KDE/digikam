@@ -27,6 +27,8 @@
 // Qt includes
 
 #include <QString>
+#include <QPixmap>
+#include <QUrl>
 
 namespace Digikam
 {
@@ -41,6 +43,9 @@ public:
     static TooltipCreator& getInstance();
 
     QString tooltip(Parser* parser);
+
+    QUrl    getInfoIconResource();
+    QPixmap getInfoIcon();
 
 private:
 
