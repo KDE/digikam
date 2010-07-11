@@ -2727,8 +2727,9 @@ void DigikamApp::slotDIOResult(KJob* kjob)
 
 void DigikamApp::slotScriptConsole(){
     //the code for the slot goes here.
-    KMessageBox::error(this, i18n("Nothing to Worry Just Checking :)"));
-    
+    //KMessageBox::error(this, i18n("Nothing to Worry Just Checking :)"));
+    scriptiface w;
+    w.show();   
 
 }
 

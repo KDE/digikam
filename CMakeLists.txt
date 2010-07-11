@@ -520,7 +520,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
 
     # ==================================================================================================
     # Common targets parts
-    SET(scriptiface_SRCS
+    SET(libscriptiface_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/scriptiface/scriptiface.cpp
        )
 
