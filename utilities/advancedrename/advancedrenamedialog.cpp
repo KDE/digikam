@@ -280,6 +280,7 @@ void AdvancedRenameDialog::slotAddImages(const KUrl::List& urls)
         QFileInfo info(urls.first().toLocalFile());
         d->advancedRenameWidget->setParseString(info.fileName());
         d->advancedRenameWidget->focusLineEdit();
+        d->advancedRenameWidget->highlightLineEdit(info.completeBaseName());
         d->singleFileModeOldFilename = info.fileName();
     }
     d->singleFileMode = (itemCount <= 1);

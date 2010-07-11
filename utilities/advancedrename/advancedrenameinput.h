@@ -137,6 +137,7 @@ public Q_SLOTS:
     void slotClearText();
     void slotClearTextAndHistory();
     void slotSetFocus();
+    void slotHighlightLineEdit(const QString& word);
 
 protected:
 

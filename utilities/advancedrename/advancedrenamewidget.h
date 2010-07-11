@@ -110,6 +110,11 @@ public:
      */
     void focusLineEdit();
 
+    /**
+     * highlight a word in the LineEdit widgets text
+     */
+    void highlightLineEdit(const QString& word);
+
 Q_SIGNALS:
 
     void signalTextChanged(const QString&);

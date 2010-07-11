@@ -353,6 +353,11 @@ void AdvancedRenameWidget::focusLineEdit()
     d->renameInput->slotSetFocus();
 }
 
+void AdvancedRenameWidget::highlightLineEdit(const QString& word)
+{
+    d->renameInput->slotHighlightLineEdit(word);
+}
+
 void AdvancedRenameWidget::readSettings()
 {
     KSharedConfig::Ptr config = KGlobal::config();
