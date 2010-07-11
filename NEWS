@@ -15,4 +15,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 008 ==> 243747 : Comment which is stored in database can't be accessed via digiKam.
 009 ==> 216273 : digiKam exif gps not in xmp.
 010 ==> 244114 : "Find similar" works for a single image, but "Find duplicates" doesn't work for a directory.
-011 ==> 
+011 ==> 244151 : Renaming image files causes them to vanish from an album.
+012 ==>
