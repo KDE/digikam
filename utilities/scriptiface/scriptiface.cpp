@@ -51,6 +51,8 @@ scriptiface::scriptiface(QWidget* parent)
     m_ui->setupUi(w);
     setMainWidget(w);
 
+    adjustSize();
+
     connect(this, SIGNAL(user1Clicked()),
             this, SLOT(slotEvaluate()));
 }
