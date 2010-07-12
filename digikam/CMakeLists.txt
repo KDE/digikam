@@ -158,7 +158,6 @@ KDE4_ADD_UI_FILES(digikamcore_LIB_SRCS
                   ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options/dateoptiondialogwidget.ui
                   ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/advancedrename/parser/options/sequencenumberoptiondialogwidget.ui
                   ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/printiface/printoptionspage.ui
-                  ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/scriptiface/scriptiface.ui
                  )
 
 KDE4_ADD_KCFG_FILES(digikamcore_LIB_SRCS

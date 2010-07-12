@@ -27,19 +27,16 @@
 
 // KDE includes
 
-#include <KDialog>
+#include <kdialog.h>
 
 // Local includes
 
 #include "digikam_export.h"
 
-namespace Ui
-{
-    class scriptiface;
-}
-
 namespace Digikam
 {
+
+class ScriptIfacePriv;
 
 class DIGIKAM_EXPORT scriptiface : public KDialog
 {
@@ -50,17 +47,13 @@ public:
     scriptiface(QWidget* parent = 0);
     ~scriptiface();
 
-protected:
-
-    void changeEvent(QEvent* e);
-
 private Q_SLOTS:
 
     void slotEvaluate();
 
 private:
 
-    Ui::scriptiface* const m_ui;
+    ScriptIfacePriv* const d;
 };
 
 } // namespace Digikam

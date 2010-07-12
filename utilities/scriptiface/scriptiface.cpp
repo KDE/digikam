@@ -24,20 +24,37 @@
 
 #include "scriptiface.moc"
 
+// KDE includes
+
+#include <ktextedit.h>
+#include <klocale.h>
+
 // Qt includes
 
 #include <QWidget>
-
-// local includes
-
-#include "ui_scriptiface.h"
+#include <QLabel>
+#include <QGridLayout>
 
 namespace Digikam
 {
 
+class ScriptIfacePriv
+{
+public:
+
+    ScriptIfacePriv()
+    {
+        edit  = 0;
+        label = 0;
+    }
+
+    KTextEdit* edit;
+    QLabel*    label;
+};
+
 scriptiface::scriptiface(QWidget* parent)
            : KDialog(parent),
-             m_ui(new Ui::scriptiface)
+             d(new ScriptIfacePriv)
 {
     setCaption(i18n("Script Console"));
     setButtons(Help|User1|Close);
@@ -47,10 +64,17 @@ scriptiface::scriptiface(QWidget* parent)
     setHelp("scriptconsole.anchor", "digikam");
     setModal(true);
 
-    QWidget* w = new QWidget(this);
-    m_ui->setupUi(w);
-    setMainWidget(w);
+    QWidget* w        = new QWidget(this);
+    QGridLayout* grid = new QGridLayout(w);
+    d->edit           = new KTextEdit(w);
+    d->label          = new QLabel(w);
+    grid->addWidget(d->edit,  0, 0, 2, 1);
+    grid->addWidget(d->label, 3, 1, 1, 1);
+    grid->setMargin(0);
+    grid->setSpacing(spacingHint());
+    grid->setRowStretch(0, 10);
 
+    setMainWidget(w);
     adjustSize();
 
     connect(this, SIGNAL(user1Clicked()),
@@ -59,25 +83,12 @@ scriptiface::scriptiface(QWidget* parent)
 
 scriptiface::~scriptiface()
 {
-    delete m_ui;
+    delete d;
 }
 
 void scriptiface::slotEvaluate()
 {
     // TODO
-}
-
-void scriptiface::changeEvent(QEvent* e)
-{
-    QDialog::changeEvent(e);
-    switch (e->type())
-    {
-        case QEvent::LanguageChange:
-             m_ui->retranslateUi(this);
-             break;
-        default:
-             break;
-    }
 }
 
 } // namespace DigiKam
