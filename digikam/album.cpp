@@ -162,10 +162,10 @@ void Album::removeChild(Album* child)
 
 void Album::clear()
 {
-    m_clearing = true;
-
+    m_clearing   = true;
     Album* child = m_firstChild;
     Album* nextChild;
+
     while (child)
     {
         nextChild = child->m_next;
@@ -659,10 +659,10 @@ QString SAlbum::getTemporaryHaarTitle(DatabaseSearch::HaarSearchType haarType)
 
 // --------------------------------------------------------------------------
 
-FAlbum::FAlbum(const QString& f_name, bool root): Album(Album::FACE, f_name, root)
+FAlbum::FAlbum(const QString& f_name, bool root)
+      : Album(Album::FACE, f_name, root)
 {
     m_name = f_name;
-    
 }
 
 FAlbum::~FAlbum()
@@ -677,7 +677,7 @@ QString FAlbum::name() const
 QString FAlbum::namePath(bool leadingSlash) const
 {
     if (isRoot())
-        return leadingSlash ? "/" : "";
+        return leadingSlash ? QString("/") : QString();
 
     QString u;
 
@@ -711,8 +711,8 @@ QString FAlbum::icon() const
     return m_icon;
 }
 
-
 // --------------------------------------------------------------------------
+
 AlbumIterator::AlbumIterator(Album* album)
 {
     m_root    = album;

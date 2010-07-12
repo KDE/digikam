@@ -508,9 +508,9 @@ public:
 
 private:
 
-    QString     m_name;    
+    QString     m_name;
     QString     m_icon;
-    
+
     friend class AlbumManager;
 };
 
