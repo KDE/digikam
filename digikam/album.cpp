@@ -669,6 +669,11 @@ FAlbum::~FAlbum()
 {
 }
 
+QString FAlbum::name() const
+{
+    return m_name;
+}
+
 QString FAlbum::namePath(bool leadingSlash) const
 {
     if (isRoot())

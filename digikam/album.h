@@ -499,6 +499,8 @@ public:
                "People/Friend/John" if leadingSlash if false.
      *         The root FAlbum returns "/" resp. "".
      */
+
+    QString     name() const;
     QString     namePath(bool leadingSlash = true) const;
     DatabaseUrl databaseUrl() const;
     QString     prettyUrl() const;

@@ -156,11 +156,13 @@ public:
         dateListJob        = 0;
         albumListJob       = 0;
         tagListJob         = 0;
+        personListJob      = 0;
         dirWatch           = 0;
         rootPAlbum         = 0;
         rootTAlbum         = 0;
         rootDAlbum         = 0;
         rootSAlbum         = 0;
+        rootFAlbum         = 0;
         currentAlbum       = 0;
         currentlyMovingAlbum = 0;
         changingDB         = false;
@@ -168,6 +170,7 @@ public:
         scanTAlbumsTimer   = 0;
         scanSAlbumsTimer   = 0;
         scanDAlbumsTimer   = 0;
+        scanFAlbumsTimer   = 0;
         updatePAlbumsTimer = 0;
         albumItemCountTimer= 0;
         tagItemCountTimer  = 0;
@@ -188,6 +191,7 @@ public:
     KIO::TransferJob*           albumListJob;
     KIO::TransferJob*           dateListJob;
     KIO::TransferJob*           tagListJob;
+    KIO::TransferJob*           personListJob;
 
     KDirWatch*                  dirWatch;
 
@@ -195,6 +199,7 @@ public:
     TAlbum*                     rootTAlbum;
     DAlbum*                     rootDAlbum;
     SAlbum*                     rootSAlbum;
+    SAlbum*                     rootFAlbum;
 
     QHash<int,Album *>          allAlbumsIdHash;
     QHash<PAlbumPath, PAlbum*>  albumPathHash;
@@ -210,6 +215,7 @@ public:
     QTimer*                     scanTAlbumsTimer;
     QTimer*                     scanSAlbumsTimer;
     QTimer*                     scanDAlbumsTimer;
+    QTimer*                     scanFAlbumsTimer;
     QTimer*                     updatePAlbumsTimer;
     QTimer*                     albumItemCountTimer;
     QTimer*                     tagItemCountTimer;
@@ -218,6 +224,7 @@ public:
     QMap<int, int>              pAlbumsCount;
     QMap<int, int>              tAlbumsCount;
     QMap<YearMonth, int>        dAlbumsCount;
+    QMap<QString, int>          fAlbumsCount;
 
     QList<QDateTime> buildDirectoryModList(const QFileInfo& dbFile)
     {
@@ -1723,6 +1730,22 @@ AlbumList AlbumManager::allDAlbums() const
     return list;
 }
 
+AlbumList AlbumManager::allFAlbums() const
+{
+    AlbumList list;
+    if (d->rootFAlbum)
+        list.append(d->rootFAlbum);
+
+    AlbumIterator it(d->rootFAlbum);
+    while (it.current())
+    {
+        list.append(*it);
+        ++it;
+    }
+
+    return list;
+}
+
 void AlbumManager::setCurrentAlbum(Album *album)
 {
     if (d->currentAlbum == album)
@@ -1744,6 +1767,11 @@ PAlbum* AlbumManager::currentPAlbum() const
 TAlbum* AlbumManager::currentTAlbum() const
 {
     return dynamic_cast<TAlbum*> (d->currentAlbum);
+}
+
+FAlbum* AlbumManager::currentFAlbum() const
+{
+    return dynamic_cast<FAlbum*> (d->currentAlbum);
 }
 
 PAlbum* AlbumManager::findPAlbum(const KUrl& url) const
@@ -1792,6 +1820,19 @@ DAlbum* AlbumManager::findDAlbum(int id) const
     int gid = d->rootDAlbum->globalID() + id;
 
     return (DAlbum*)(d->allAlbumsIdHash.value(gid));
+}
+
+FAlbum* AlbumManager::findFAlbum(const QString& name) const
+{
+    AlbumIterator it(d->rootFAlbum);
+    while (it.current())
+    {
+        FAlbum *falbum = static_cast<FAlbum *>(*it);
+        if (falbum->name() == name)
+            return falbum;
+        ++it;
+    }
+    return 0;
 }
 
 Album* AlbumManager::findAlbum(int gid) const
