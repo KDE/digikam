@@ -47,7 +47,7 @@ class DIGIKAM_EXPORT scriptiface : public KDialog
 
 public:
 
-    scriptiface(); //QWidget *parent = 0);
+    scriptiface(QWidget* parent = 0);
     ~scriptiface();
 
 protected:

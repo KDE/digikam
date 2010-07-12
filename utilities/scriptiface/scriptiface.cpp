@@ -28,8 +28,8 @@
 namespace Digikam
 {
 
-scriptiface::scriptiface()
-           : KDialog(),
+scriptiface::scriptiface(QWidget* parent)
+           : KDialog(parent),
              ui(new Ui::scriptiface)
 {
     ui->setupUi(this);
