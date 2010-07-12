@@ -62,6 +62,7 @@ class PAlbum;
 class TAlbum;
 class DAlbum;
 class SAlbum;
+class FAlbum;
 class AlbumChangeset;
 class TagChangeset;
 class SearchChangeset;
@@ -175,6 +176,11 @@ public:
      * @return a list of all DAlbums
      */
     AlbumList allDAlbums() const;
+    
+    /**
+     * @return a list of all FAlbums
+     */
+    AlbumList allFAlbums() const;
 
     /**
     * set the current album to @p album. Call this from views which show
@@ -197,6 +203,11 @@ public:
      * @returns the current TAlbum or null if no one is selected
      */
     TAlbum* currentTAlbum() const;
+    
+    /**
+     * @returns the current FAlbum or null if no one is selected
+     */
+    FAlbum* currentFAlbum() const;
     //@}
 
     /** @name Finding Albums
@@ -235,6 +246,12 @@ public:
      */
     DAlbum*   findDAlbum(int id) const;
 
+    /**
+     * @return a FAlbum with given name
+     * @param name the name for the FAlbum (name of the person which the FAlbum corresponds to
+     */
+    FAlbum*   findFAlbum(const QString& name) const;
+    
     /**
      * @return a Album with the given globalID
      * @param gid the global id for the album
@@ -471,6 +488,71 @@ public:
      * @param album the album to delete
      */
     bool deleteSAlbum(SAlbum* album);
+    //@}
+    
+    /** @name Operations on TAlbum
+     */
+    //@{
+    /**
+     * Create a new FAlbum with supplied properties as a child of the parent
+     * The person is added to the database
+     * \note the signalAlbumAdded will be fired before this function returns. Its
+     * recommended to connect to that signal to get notification of new album added
+     * @return the newly created FAlbum or 0 if it fails
+     * @param parent  the parent album under which to create the new FAlbum
+     * @param name    the name of the new album
+     * @param iconkde the iconkde for the new album (this is a filename which
+     * kde iconloader can load up
+     * @param errMsg  this will contain the error message describing why the
+     * operation failed
+     */
+    FAlbum* createFAlbum(FAlbum* parent, const QString& name, 
+                         const QString& iconkde, QString& errMsg);
+
+    /**
+     * Delete a FAlbum.
+     * The person is removed from the database
+     * \note the signalAlbumDeleted will be fired before this function returns. Its
+     * recommended to connect to that signal to get notification of album deletes
+     * @return true if the operation succeeds or false otherwise
+     * @param album   the FAlbum to delete
+     * @param errMsg  this will contain the error message describing why the
+     * operation failed
+     */
+    bool deleteFAlbum(FAlbum* album, QString& errMsg);
+
+    /**
+     * Renames a FAlbum.
+     * This updates the person name in the database
+     * @return true if the operation succeeds, false otherwise
+     * @param album the Album which should be renamed
+     * @param name the new name for the album
+     * @param errMsg this will contain the error message describing why the
+     * operation failed
+     */
+    bool renameFAlbum(FAlbum* album, const QString& name, QString& errMsg);
+
+    /**
+     * Update the icon for a FAlbum. 
+     * @return true if the operation succeeds, false otherwise
+     * @param album the album for which icon should be changed
+     * @param iconKDE  a simple filename which can be loaded by KIconLoader
+     * @param iconID   id of the icon image file
+     * @param errMsg this will contain the error message describing why the
+     * operation failed
+     * \note if iconKDE is not empty then iconID is used. So if you want to set
+     * the icon to a file which can be loaded by KIconLoader, pass it in as
+     * iconKDE. otherwise pass a null QString to iconKDE and set iconID
+     */
+    bool updateFAlbumIcon(FAlbum* album, const QString& iconKDE,
+                          qlonglong iconID, QString& errMsg);
+
+    /**
+     * @return A list with the name paths for a list of tag names.
+     * @param names list of tag album names
+     * @param leadingSlash if <code>true</code> return name paths with a leading slash
+     */
+    QStringList namePaths(const QList<QString>& tagNames, bool leadingSlash=true) const;
     //@}
 
     /** @name Accessors to counting maps
