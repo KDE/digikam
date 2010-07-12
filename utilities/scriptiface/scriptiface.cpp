@@ -43,6 +43,7 @@ scriptiface::scriptiface(QWidget* parent)
     setButtons(Help|User1|Close);
     setDefaultButton(User1);
     setButtonText(User1, i18n("Evaluate"));
+    setButtonIcon(User1, KIcon("run-build"));
     setHelp("scriptconsole.anchor", "digikam");
     setModal(true);
 
@@ -51,7 +52,7 @@ scriptiface::scriptiface(QWidget* parent)
     setMainWidget(w);
 
     connect(this, SIGNAL(user1Clicked()),
-            this, SLOT(slotEvaluate()) );
+            this, SLOT(slotEvaluate()));
 }
 
 scriptiface::~scriptiface()

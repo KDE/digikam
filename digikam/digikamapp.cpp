@@ -768,7 +768,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->scriptConsoleAction = new KAction(i18n("Script Console"), this);
+    d->scriptConsoleAction = new KAction(KIcon("application-x-shellscript"), i18n("Script Console"), this);
     d->scriptConsoleAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_S));
     connect(d->scriptConsoleAction, SIGNAL(triggered()), this, SLOT(slotScriptConsole()));
     actionCollection()->addAction("script_console", d->scriptConsoleAction);
