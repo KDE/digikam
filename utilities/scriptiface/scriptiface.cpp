@@ -52,7 +52,7 @@ public:
     QLabel*    label;
 };
 
-scriptiface::scriptiface(QWidget* parent)
+ScriptIface::ScriptIface(QWidget* parent)
            : KDialog(parent),
              d(new ScriptIfacePriv)
 {
@@ -81,12 +81,12 @@ scriptiface::scriptiface(QWidget* parent)
             this, SLOT(slotEvaluate()));
 }
 
-scriptiface::~scriptiface()
+ScriptIface::~ScriptIface()
 {
     delete d;
 }
 
-void scriptiface::slotEvaluate()
+void ScriptIface::slotEvaluate()
 {
     // TODO
 }

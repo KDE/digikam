@@ -38,14 +38,14 @@ namespace Digikam
 
 class ScriptIfacePriv;
 
-class DIGIKAM_EXPORT scriptiface : public KDialog
+class DIGIKAM_EXPORT ScriptIface : public KDialog
 {
     Q_OBJECT
 
 public:
 
-    scriptiface(QWidget* parent = 0);
-    ~scriptiface();
+    ScriptIface(QWidget* parent = 0);
+    ~ScriptIface();
 
 private Q_SLOTS:
 

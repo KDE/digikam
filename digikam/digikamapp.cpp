@@ -2893,8 +2893,7 @@ void DigikamApp::slotSetCheckedExifOrientationAction(const ImageInfo& info)
 
 void DigikamApp::slotScriptConsole()
 {
-    //KMessageBox::error(this, i18n("Nothing to Worry Just Checking :)"));
-    scriptiface w;
+    ScriptIface w;
     w.exec();
 }
 
