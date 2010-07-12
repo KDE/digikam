@@ -1369,6 +1369,11 @@ void AlbumManager::updateChangedPAlbums()
         scanPAlbums();
 }
 
+void AlbumManager::updateChangedFAlbums()
+{
+    // FIXME: Add stuff!
+}
+
 void AlbumManager::getAlbumItemsCount()
 {
     d->albumItemCountTimer->stop();
@@ -1394,6 +1399,16 @@ void AlbumManager::getAlbumItemsCount()
 
     connect(d->albumListJob, SIGNAL(data(KIO::Job*, const QByteArray&)),
             this, SLOT(slotAlbumsJobData(KIO::Job*, const QByteArray&)));
+}
+
+void AlbumManager::getPeopleItemsCount()
+{
+    // FIXME: Add stuff!
+}
+
+void AlbumManager::scanFAlbums()
+{
+    // FIXME: Add stuff!
 }
 
 void AlbumManager::scanTAlbums()
@@ -2612,6 +2627,16 @@ void AlbumManager::slotAlbumsJobData(KIO::Job*, const QByteArray& data)
 
     d->pAlbumsCount = albumsStatMap;
     emit signalPAlbumsDirty(albumsStatMap);
+}
+
+void AlbumManager::slotPeopleJobResult(KJob* job)
+{
+    // TODO: Add stuff!
+}
+
+void AlbumManager::slotPeopleJobData(KIO::Job*, const QByteArray& data)
+{
+    // TODO: Add stuff!
 }
 
 void AlbumManager::slotTagsJobResult(KJob* job)
