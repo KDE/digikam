@@ -582,6 +582,14 @@ public:
      * @return count map for DAlbums
      */
     QMap<YearMonth, int> getDAlbumsCount() const;
+    
+    /**
+     * Returns the latest count for FAlbums as also emitted via
+     * signalFAlbumsDirty.
+     *
+     * @return count map for FAlbums
+     */
+    QMap<QString, int> getFAlbumsCount() const;
 
     /**
      * Returns if the given album is currently being moved, that is,
@@ -624,6 +632,7 @@ Q_SIGNALS:
     void signalPAlbumsDirty(const QMap<int, int>&);
     void signalTAlbumsDirty(const QMap<int, int>&);
     void signalDAlbumsDirty(const QMap<YearMonth, int>&);
+    void signalFAlbumsDirty(const QMap<QString, int>&);
     void signalDatesMapDirty(const QMap<QDateTime, int>&);
 
 private Q_SLOTS:
@@ -634,6 +643,9 @@ private Q_SLOTS:
     void slotAlbumsJobData(KIO::Job* job, const QByteArray& data);
     void slotTagsJobResult(KJob* job);
     void slotTagsJobData(KIO::Job* job, const QByteArray& data);
+    void slotPeopleJobResult(KJob* job);
+    void slotPeopleJobData(KIO::Job* job, const QByteArray& data);
+    
     void slotDirWatchDirty(const QString& path);
     void slotKioFileMoved(const QString& urlFrom, const QString& urlTo);
     void slotKioFilesDeleted(const QStringList& urls);
@@ -654,6 +666,15 @@ private Q_SLOTS:
      */
     void scanPAlbums();
     void updateChangedPAlbums();
+    
+    /**
+     * Scan albums directly from database and creates new FAlbums
+     * It only creates those FAlbums which haven't already been
+     * created.
+     */
+    void scanFAlbums();
+    void updateChangedFAlbums();
+    
     /**
      * Scan tags directly from database and creates new TAlbums
      * It only creates those TAlbums which haven't already been
@@ -674,6 +695,7 @@ private Q_SLOTS:
 
     void getAlbumItemsCount();
     void getTagItemsCount();
+    void getPersonItemsCount();
 
 private:
 
