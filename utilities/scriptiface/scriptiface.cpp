@@ -40,6 +40,7 @@ namespace Digikam
 
 class ScriptIfacePriv
 {
+
 public:
 
     ScriptIfacePriv()
@@ -69,10 +70,10 @@ ScriptIface::ScriptIface(QWidget* parent)
     d->edit           = new KTextEdit(w);
     d->label          = new QLabel(w);
     grid->addWidget(d->edit,  0, 0, 2, 1);
-    grid->addWidget(d->label, 3, 1, 1, 1);
+    grid->addWidget(d->label, 3, 0, 2, 1);
     grid->setMargin(0);
     grid->setSpacing(spacingHint());
-    grid->setRowStretch(0, 10);
+    grid->setRowStretch(0, 10);    
 
     setMainWidget(w);
     adjustSize();
@@ -88,7 +89,12 @@ ScriptIface::~ScriptIface()
 
 void ScriptIface::slotEvaluate()
 {
-    // TODO
+    if(d->label->text()=="")
+    {
+        d->label->setText("hello");
+    }
+    else d->label->clear();
+
 }
 
 } // namespace DigiKam
