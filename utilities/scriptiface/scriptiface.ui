@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>scriptiface</class>
- <widget class="QDialog" name="scriptiface">
+ <widget class="QWidget" name="scriptiface">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -27,13 +27,6 @@
      <widget class="QTextEdit" name="scriptEdit"/>
     </item>
     <item row="1" column="0">
-     <widget class="QPushButton" name="evalButton">
-      <property name="text">
-       <string>&amp;Evaluate</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="0">
      <widget class="QLabel" name="resultLabel">
       <property name="text">
        <string/>

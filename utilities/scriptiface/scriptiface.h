@@ -54,9 +54,13 @@ protected:
 
     void changeEvent(QEvent* e);
 
+private Q_SLOTS:
+
+    void slotEvaluate();
+
 private:
 
-    Ui::scriptiface* ui;
+    Ui::scriptiface* const m_ui;
 };
 
 } // namespace Digikam

@@ -22,7 +22,14 @@
  *
  * ============================================================ */
 
-#include "scriptiface.h"
+#include "scriptiface.moc"
+
+// Qt includes
+
+#include <QWidget>
+
+// local includes
+
 #include "ui_scriptiface.h"
 
 namespace Digikam
@@ -30,14 +37,31 @@ namespace Digikam
 
 scriptiface::scriptiface(QWidget* parent)
            : KDialog(parent),
-             ui(new Ui::scriptiface)
+             m_ui(new Ui::scriptiface)
 {
-    ui->setupUi(this);
+    setCaption(i18n("Script Console"));
+    setButtons(Help|User1|Close);
+    setDefaultButton(User1);
+    setButtonText(User1, i18n("Evaluate"));
+    setHelp("scriptconsole.anchor", "digikam");
+    setModal(true);
+
+    QWidget* w = new QWidget(this);
+    m_ui->setupUi(w);
+    setMainWidget(w);
+
+    connect(this, SIGNAL(user1Clicked()),
+            this, SLOT(slotEvaluate()) );
 }
 
 scriptiface::~scriptiface()
 {
-    delete ui;
+    delete m_ui;
+}
+
+void scriptiface::slotEvaluate()
+{
+    // TODO
 }
 
 void scriptiface::changeEvent(QEvent* e)
@@ -46,7 +70,7 @@ void scriptiface::changeEvent(QEvent* e)
     switch (e->type())
     {
         case QEvent::LanguageChange:
-             ui->retranslateUi(this);
+             m_ui->retranslateUi(this);
              break;
         default:
              break;
