@@ -2185,6 +2185,51 @@ TAlbum* AlbumManager::createTAlbum(TAlbum* parent, const QString& name,
     return album;
 }
 
+FAlbum* AlbumManager::createFAlbum(FAlbum* parent, const QString& name,
+                                   const QString& iconkde, QString& errMsg)
+{
+    if (!parent)
+    {
+        errMsg = i18n("No parent found for person");
+        return 0;
+    }
+
+    // sanity checks
+    if (name.isEmpty())
+    {
+        errMsg = i18n("Person name cannot be empty");
+        return 0;
+    }
+
+    if (name.contains("/"))
+    {
+        errMsg = i18n("Person name cannot contain '/'");
+        return 0;
+    }
+
+    // first check if we have another album (person) with the same name
+    if (hasDirectChildAlbumWithTitle(parent, name))
+    {
+        errMsg = i18n("Person name already exists");
+        return 0;
+    }
+/*  // FIXME: ? Do I need this? 
+    ChangingDB changing(d);
+    int id = DatabaseAccess().db()->addTag(parent->id(), name, iconkde, 0);
+    if (id == -1)
+    {
+        errMsg = i18n("Failed to add tag to database");
+        return 0;
+    }
+*/
+    FAlbum *album = new FAlbum(name);
+    album->m_icon = iconkde;
+
+    //insertTAlbum(album, parent);
+
+    return album;
+}
+
 AlbumList AlbumManager::findOrCreateTAlbums(const QStringList& tagPaths)
 {
     // find tag ids for tag paths in list, create if they don't exist
