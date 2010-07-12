@@ -73,7 +73,7 @@ ScriptIface::ScriptIface(QWidget* parent)
     grid->addWidget(d->label, 3, 0, 2, 1);
     grid->setMargin(0);
     grid->setSpacing(spacingHint());
-    grid->setRowStretch(0, 10);    
+    grid->setRowStretch(0, 10);
 
     setMainWidget(w);
     adjustSize();
@@ -89,12 +89,11 @@ ScriptIface::~ScriptIface()
 
 void ScriptIface::slotEvaluate()
 {
-    if(d->label->text()=="")
+    if(d->label->text() == QString())
     {
         d->label->setText("hello");
     }
     else d->label->clear();
-
 }
 
 } // namespace DigiKam
