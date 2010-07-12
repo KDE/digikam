@@ -66,7 +66,8 @@ public:
         PHYSICAL=0, /**<  PHYSICAL: A physical album type @see PAlbum */
         TAG,        /**<  TAG:      A tag      album type @see TAlbum */
         DATE,       /**<  DATE:     A date     album type @see DAlbum */
-        SEARCH      /**<  SEARCH:   A search   album type @see SAlbum */
+        SEARCH,     /**<  SEARCH:   A search   album type @see SAlbum */
+        FACE        /**<  FACE:     A faces    album type @see FAlbum */
     };
 
     /**
@@ -212,6 +213,11 @@ protected:
      * Constructor
      */
     Album(Album::Type type, int id, bool root);
+    
+    /**
+     * Constructor
+     */
+    Album(Album::Type type, QString name, bool root);
 
     /**
      * Destructor
@@ -276,7 +282,8 @@ private:
     bool                     m_clearing;
 
     int                      m_id;
-
+    QString                  m_name;
+    
     QString                  m_title;
     QMap<const void*, void*> m_extraMap;
 
@@ -472,6 +479,36 @@ private:
     QString              m_query;
     DatabaseSearch::Type m_searchType;
 
+    friend class AlbumManager;
+};
+
+/**
+ * \class FAlbum
+ *
+ * A Face Album representation
+ */
+class FAlbum : public Album
+{
+public:
+
+    explicit FAlbum(const QString& f_name, bool root=false);
+    ~FAlbum();
+
+     /**
+     * @return The name path, e.g. "/People/Friend/John" if leadingSlash is true,
+               "People/Friend/John" if leadingSlash if false.
+     *         The root FAlbum returns "/" resp. "".
+     */
+    QString     namePath(bool leadingSlash = true) const;
+    DatabaseUrl databaseUrl() const;
+    QString     prettyUrl() const;
+    QString     icon() const;
+
+private:
+
+    QString     m_name;    
+    QString     m_icon;
+    
     friend class AlbumManager;
 };
 

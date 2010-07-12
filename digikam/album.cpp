@@ -53,6 +53,19 @@ Album::Album(Album::Type type, int id, bool root)
     m_root       = root;
 }
 
+Album::Album(Album::Type type, QString name, bool root)
+{
+    m_parent     = 0;
+    m_next       = 0;
+    m_prev       = 0;
+    m_firstChild = 0;
+    m_lastChild  = 0;
+    m_clearing   = false;
+    m_type       = type;
+    m_name       = name;
+    m_root       = root;
+}
+
 Album::~Album()
 {
     if (m_parent)
@@ -178,6 +191,8 @@ int Album::globalID() const
             return m_id | (1 << 29);
         case(SEARCH):
             return m_id | (1 << 30);
+        case(FACE):
+            return m_id | (1 << 31);
         default:
             kError() << "Unknown album type";
             return -1;
@@ -644,6 +659,55 @@ QString SAlbum::getTemporaryHaarTitle(DatabaseSearch::HaarSearchType haarType)
 
 // --------------------------------------------------------------------------
 
+FAlbum::FAlbum(const QString& f_name, bool root): Album(Album::FACE, f_name, root)
+{
+    m_name = f_name;
+    
+}
+
+FAlbum::~FAlbum()
+{
+}
+
+QString FAlbum::namePath(bool leadingSlash) const
+{
+    if (isRoot())
+        return leadingSlash ? "/" : "";
+
+    QString u;
+
+    if (parent())
+    {
+        u = ((FAlbum*)parent())->namePath(leadingSlash);
+        if (!parent()->isRoot())
+            u += '/';
+    }
+
+    u += title();
+
+    return u;
+}
+
+QString FAlbum::prettyUrl() const
+{
+    QString u = i18n("Person ") + namePath(true);
+    return u;
+}
+
+DatabaseUrl FAlbum::databaseUrl() const
+{
+    // FIXME : Make an alternative implemention for people
+    //return DatabaseUrl::fromTagIds(tagIDs());
+    return DatabaseUrl::albumUrl();
+}
+
+QString FAlbum::icon() const
+{
+    return m_icon;
+}
+
+
+// --------------------------------------------------------------------------
 AlbumIterator::AlbumIterator(Album* album)
 {
     m_root    = album;
