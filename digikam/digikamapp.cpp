@@ -767,7 +767,7 @@ void DigikamApp::setupActions()
     actionCollection()->addAction("image_view", d->imagePreviewAction);
 
     // -----------------------------------------------------------
-    
+
     d->scriptConsoleAction = new KAction(i18n("Script Console"), this);
     d->scriptConsoleAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_S));
     connect(d->scriptConsoleAction, SIGNAL(triggered()), this, SLOT(slotScriptConsole()));
@@ -2725,14 +2725,6 @@ void DigikamApp::slotDIOResult(KJob* kjob)
     }
 }
 
-void DigikamApp::slotScriptConsole()
-{
-    //the code for the slot goes here.
-    //KMessageBox::error(this, i18n("Nothing to Worry Just Checking :)"));
-    scriptiface w;
-    w.show();
-}
-
 void DigikamApp::slotToggleShowBar()
 {
     d->view->toggleShowBar(d->showBarAction->isChecked());
@@ -2897,6 +2889,13 @@ void DigikamApp::slotSetCheckedExifOrientationAction(const ImageInfo& info)
         case 8: d->imageSetExifOrientation8Action->setChecked(true); break;
         default: slotResetExifOrientationActions(); break;
     }
+}
+
+void DigikamApp::slotScriptConsole()
+{
+    //KMessageBox::error(this, i18n("Nothing to Worry Just Checking :)"));
+    scriptiface w;
+    w.exec();
 }
 
 }  // namespace Digikam
