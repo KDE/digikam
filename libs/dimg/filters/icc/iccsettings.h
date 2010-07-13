@@ -49,7 +49,7 @@ public:
 
     /** Global container for ICC settings. All accessor methods are thread-safe. */
 
-    static IccSettings *instance();
+    static IccSettings* instance();
 
     /// Returns the current ICC settings.
     ICCSettingsContainer settings();
@@ -63,7 +63,7 @@ public:
      * and the widget parameter is passed, the returned profile is for the widget's screen.
      * If no settings is specified, the default sRGB profile is returned.
      */
-    IccProfile monitorProfile(QWidget *widget = 0);
+    IccProfile monitorProfile(QWidget* widget = 0);
 
     /**
      * Returns if the monitor profile (as returned by monitorProfile())

@@ -83,12 +83,18 @@ public:
 
 // -----------------------------------------------------------------------------------------------
 
-class IccSettingsCreator { public: IccSettings object; };
+class IccSettingsCreator
+{
+public:
+
+    IccSettings object;
+};
+
 K_GLOBAL_STATIC(IccSettingsCreator, creator)
 
 // -----------------------------------------------------------------------------------------------
 
-IccSettings *IccSettings::instance()
+IccSettings* IccSettings::instance()
 {
     return &creator->object;
 }
@@ -98,7 +104,6 @@ IccSettings::IccSettings()
 {
     IccTransform::init();
     readFromConfig();
-
     qRegisterMetaType<ICCSettingsContainer>("ICCSettingsContainer");
 }
 
@@ -114,7 +119,7 @@ ICCSettingsContainer IccSettings::settings()
     return s;
 }
 
-IccProfile IccSettings::monitorProfile(QWidget *widget)
+IccProfile IccSettings::monitorProfile(QWidget* widget)
 {
     // system-wide profile set?
     IccProfile profile = d->profileFromWindowSystem(widget);
@@ -140,7 +145,7 @@ bool IccSettings::monitorProfileFromSystem()
 
     // Second, check all toplevel widgets
     QList<QWidget*> topLevels = qApp->topLevelWidgets();
-    foreach (QWidget *widget, topLevels)
+    foreach (QWidget* widget, topLevels)
         if (!d->profileFromWindowSystem(widget).isNull())
             return true;
 
@@ -155,14 +160,14 @@ bool IccSettings::monitorProfileFromSystem()
  *  Copyright (c) 2007 Thomas Zander <zander@kde.org>
  *  Copyright (c) 2007 Adrian Page <adrian@pagenet.plus.com>IccProfile IccSettingsPriv::profileForScreen(QWidget *widget)
 */
-IccProfile IccSettingsPriv::profileFromWindowSystem(QWidget *widget)
+IccProfile IccSettingsPriv::profileFromWindowSystem(QWidget* widget)
 {
 #ifdef Q_WS_X11
 
     Qt::HANDLE appRootWindow;
     QString atomName;
 
-    QDesktopWidget *desktop = QApplication::desktop();
+    QDesktopWidget* desktop = QApplication::desktop();
     int screenNumber        = desktop->screenNumber(widget);
 
     IccProfile profile;
@@ -192,30 +197,34 @@ IccProfile IccSettingsPriv::profileFromWindowSystem(QWidget *widget)
     static Atom icc_atom = XInternAtom( QX11Info::display(), atomName.toLatin1(), True );
 
     if  ( icc_atom != None &&
-          XGetWindowProperty ( QX11Info::display(),
-                    appRootWindow,
-                    icc_atom,
-                    0,
-                    INT_MAX,
-                    False,
-                    XA_CARDINAL,
-                    &type,
-                    &format,
-                    &nitems,
-                    &bytes_after,
-                    (unsigned char **) &str) == Success
-            && nitems
-                )
+          XGetWindowProperty(QX11Info::display(),
+                             appRootWindow,
+                             icc_atom,
+                             0,
+                             INT_MAX,
+                             False,
+                             XA_CARDINAL,
+                             &type,
+                             &format,
+                             &nitems,
+                             &bytes_after,
+                             (unsigned char**) &str) == Success &&
+          nitems
+        )
     {
         QByteArray bytes = QByteArray::fromRawData((char*)str, (quint32)nitems);
 
         if (!bytes.isEmpty())
             profile = bytes;
+
         kDebug() << "Found X.org XICC monitor profile" << profile.description();
     }
-    //else
-      //  kDebug() << "No X.org XICC profile installed for screen" << screenNumber;
-
+/*
+    else
+    {
+        kDebug() << "No X.org XICC profile installed for screen" << screenNumber;
+    }
+*/
     // insert to cache even if null
     {
         QMutexLocker lock(&mutex);
@@ -324,7 +333,7 @@ QList<IccProfile> IccSettingsPriv::scanDirectories(const QStringList& dirs)
     return profiles;
 }
 
-void IccSettingsPriv::scanDirectory(const QString& path, const QStringList& filter, QList<IccProfile> *profiles)
+void IccSettingsPriv::scanDirectory(const QString& path, const QStringList& filter, QList<IccProfile>* profiles)
 {
     QDir dir(path);
     QFileInfoList infos;
