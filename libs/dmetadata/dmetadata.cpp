@@ -607,8 +607,12 @@ bool DMetadata::getImageTagsPath(QStringList& tagsPath) const
     if (!tagsPath.isEmpty())
     {
         // Work around to Imach tags path list hosted in IPTC with '.' as separator.
-        tagsPath = tagsPath.replaceInStrings(".", "/");
-        kDebug() << "Tags Path imported from Imach: " << tagsPath;
+        QStringList ntp = tagsPath.replaceInStrings(".", "/");
+        if (ntp != tagsPath)
+        {
+            tagsPath = ntp;
+    	    kDebug() << "Tags Path imported from Imach: " << tagsPath;
+        }
         return true;
     }
 
