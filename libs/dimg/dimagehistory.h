@@ -55,7 +55,7 @@ public:
     {
     public:
 
-        bool           isFilterEntry;
+        bool           filterEntry;
         FilterAction   action;
         HistoryImageId referredImages;
     };

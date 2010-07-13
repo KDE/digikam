@@ -101,7 +101,7 @@ DImageHistory& DImageHistory::operator<<(const FilterAction& action)
 {
     Entry entry;
     entry.action        = action;
-    entry.isFilterEntry = true;
+    entry.filterEntry = true;
     d->entries << entry;
     kDebug() << "Entry added, total count " << d->entries.count();
     return *this;
@@ -111,7 +111,7 @@ DImageHistory& DImageHistory::operator<<(const HistoryImageId& imageId)
 {
     Entry entry;
     entry.referredImages = imageId;
-    entry.isFilterEntry  = false;
+    entry.filterEntry  = false;
     d->entries << entry;
     return *this;
 }
@@ -256,14 +256,14 @@ DImageHistory DImageHistory::fromXml(const QString& xml) //DImageHistory
 
         if(stream.name() == "file" && stream.tokenType() == QXmlStreamReader::StartElement) 
         {
-              kDebug() << "Parsing file tag";
+              //kDebug() << "Parsing file tag";
               stream.readNext();
               stream.readNext();
               if(stream.attributes().value("type") == "original")
               {
                   originalUUID = stream.attributes().value("fileUUID").toString();
                   entry.referredImages = HistoryImageId(originalUUID, "", stream.attributes().value("filePath").toString() + "/" + stream.attributes().value("fileName").toString(), QDateTime(QFileInfo(stream.attributes().value("filePath").toString()).created()));
-                  entry.isFilterEntry = false;
+                  entry.filterEntry = false;
                   h << entry;
                   h.setOriginalFile(stream.attributes().value("filePath").toString() + "/" + stream.attributes().value("fileName").toString());
                   continue;
@@ -271,13 +271,13 @@ DImageHistory DImageHistory::fromXml(const QString& xml) //DImageHistory
               else
               {
                   entry.referredImages = HistoryImageId(originalUUID, stream.attributes().value("fileUUID").toString(), stream.attributes().value("filePath").toString() + "/" + stream.attributes().value("fileName").toString(), QDateTime(QFileInfo(stream.attributes().value("filePath").toString()).created()));
-                  entry.isFilterEntry = false;
+                  entry.filterEntry = false;
                   //stream.readNextStartElement();
               }
         }
         else if(stream.name() == "filter" && stream.tokenType() == QXmlStreamReader::StartElement)
         {
-              kDebug() << "Parsing filter tag";
+              //kDebug() << "Parsing filter tag";
               FilterAction::Category c;
               switch(stream.attributes().value("filterCategory").toString().toInt())
               {
@@ -295,12 +295,12 @@ DImageHistory DImageHistory::fromXml(const QString& xml) //DImageHistory
                   break;
               }
               entry.action = FilterAction(stream.attributes().value("filterName").toString(), stream.attributes().value("filterVersion").toString().toInt(), c);
-              entry.isFilterEntry = true;
+              entry.filterEntry = true;
               stream.readNextStartElement(); //params tag
 
               if(stream.name() != "params") continue;
               stream.readNext(); //param .. tag
-              kDebug() << "Parsing params tag";
+              //kDebug() << "Parsing params tag";
               while(stream.name() != "params")
               {
                 stream.readNext();
@@ -316,9 +316,10 @@ DImageHistory DImageHistory::fromXml(const QString& xml) //DImageHistory
     }
     if (stream.hasError())
     {
-          // do error handling
+        //TODO: error handling
+        kDebug() << "An error ocurred during parsing: " << stream.errorString();
     }
-
+    //kDebug() << "Parsing done";
     return h;
 }
 
