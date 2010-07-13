@@ -53,6 +53,7 @@
 #include "imagepropertiestab.h"
 #include "imagepropertiesmetadatatab.h"
 #include "imagepropertiescolorstab.h"
+#include "imagepropertieshistorytab.h"
 #include "databaseinfocontainers.h"
 #include "imageposition.h"
 
@@ -290,6 +291,10 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
 
             m_dirtyGpsTab = true;
         }
+        else if (tab == m_historyTab)
+        {
+            m_historyTab->setCurrentURL(m_currentURL);
+        }
     }
     else  // Data from database available, multiple selection
     {
@@ -343,6 +348,11 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
                 m_gpsTab->setGPSInfoList(list);
             }
             m_dirtyGpsTab = true;
+        }
+        else if (tab == m_historyTab)
+        {
+            m_historyTab->setCurrentURL(m_currentURL);
+            
         }
     }
 

@@ -46,6 +46,7 @@ class ImagePropertiesGPSTab;
 class ImagePropertiesTab;
 class ImagePropertiesMetaDataTab;
 class ImagePropertiesColorsTab;
+class ImagePropertiesHistoryTab;
 
 class DIGIKAM_EXPORT ImagePropertiesSideBar : public Sidebar
 {
@@ -91,6 +92,8 @@ protected:
     ImagePropertiesTab         *m_propertiesTab;
     ImagePropertiesMetaDataTab *m_metadataTab;
     ImagePropertiesColorsTab   *m_colorTab;
+    ImagePropertiesHistoryTab  *m_historyTab;
+    
 };
 
 }  // namespace Digikam

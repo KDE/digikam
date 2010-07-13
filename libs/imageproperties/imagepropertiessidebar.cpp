@@ -40,6 +40,7 @@
 #include <kcursor.h>
 #include <kglobal.h>
 #include <kiconloader.h>
+#include <KDebug>
 
 // LibKDcraw includes
 
@@ -54,6 +55,7 @@
 #include "imagepropertiestab.h"
 #include "imagepropertiesmetadatatab.h"
 #include "imagepropertiescolorstab.h"
+#include "imagepropertieshistorytab.h"
 
 namespace Digikam
 {
@@ -75,11 +77,13 @@ ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget *parent,
     m_metadataTab        = new ImagePropertiesMetaDataTab(parent);
     m_colorTab           = new ImagePropertiesColorsTab(parent);
     m_gpsTab             = new ImagePropertiesGPSTab(parent);
+    m_historyTab         = new ImagePropertiesHistoryTab(parent);
 
     appendTab(m_propertiesTab, SmallIcon("document-properties"), i18n("Properties"));
     appendTab(m_metadataTab, SmallIcon("exifinfo"), i18n("Metadata"));
     appendTab(m_colorTab, SmallIcon("format-fill-color"), i18n("Colors"));
     appendTab(m_gpsTab, SmallIcon("applications-internet"), i18n("Geolocation"));
+    appendTab(m_historyTab, SmallIcon("exifinfo"), i18n("Filters History"));
 
     connect(this, SIGNAL(signalChangedTab(QWidget*)),
             this, SLOT(slotChangedTab(QWidget*)));
@@ -121,6 +125,7 @@ void ImagePropertiesSideBar::slotNoCurrentItem()
     m_metadataTab->setCurrentURL();
     m_colorTab->setData();
     m_gpsTab->setCurrentURL();
+    m_historyTab->setCurrentURL();
 
     m_dirtyPropertiesTab = false;
     m_dirtyMetadataTab   = false;
@@ -166,7 +171,10 @@ void ImagePropertiesSideBar::slotChangedTab(QWidget* tab)
         m_gpsTab->setCurrentURL(m_currentURL);
         m_dirtyGpsTab = true;
     }
-
+    else if (tab == m_historyTab)
+    {
+        m_historyTab->setCurrentURL(m_currentURL);
+    }
     unsetCursor();
 }
 

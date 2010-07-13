@@ -17,6 +17,10 @@ INSTALL(FILES histogramwidget.h
               previewwidget.h
               searchtextbar.h
               knotificationwrapper.h
+              imagefiltershistorytreeitem.h
+              imagefiltershistorymodel.h
+              imagefiltershistoryitemdelegate.h
+              imagehistoryview.h
          DESTINATION ${INCLUDE_INSTALL_DIR}/digikam COMPONENT Devel
         )
 
