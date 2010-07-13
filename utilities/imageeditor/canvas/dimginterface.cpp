@@ -70,6 +70,12 @@
 #include "editortooliface.h"
 #include <../dimg/dimg.h>
 
+
+#include "dimgfiltergenerator.h"
+#include "bcgfilter.h"
+#include "equalizefilter.h"
+#include <dimgfiltermanager.h>
+
 namespace Digikam
 {
 
@@ -587,6 +593,13 @@ void DImgInterface::setModified()
     emit signalUndoStateChanged(d->undoMan->anyMoreUndo(), d->undoMan->anyMoreRedo(), !d->undoMan->isAtOrigin());
 }
 
+void DImgInterface::setModified(FilterAction& action)
+{
+    d->image.setFilterAction(action);
+    emit signalModified();
+    emit signalUndoStateChanged(d->undoMan->anyMoreUndo(), d->undoMan->anyMoreRedo(), !d->undoMan->isAtOrigin());
+}
+
 bool DImgInterface::hasChangesToSave()
 {
     return !d->undoMan->isAtOrigin();
@@ -796,7 +809,9 @@ void DImgInterface::rotate90(bool saveUndo)
     d->origWidth  = d->image.width();
     d->origHeight = d->image.height();
 
-    setModified();
+    FilterAction action("digikam:rotate90", 1);
+
+    setModified(action);
 }
 
 void DImgInterface::rotate180(bool saveUndo)
@@ -810,7 +825,9 @@ void DImgInterface::rotate180(bool saveUndo)
     d->origWidth  = d->image.width();
     d->origHeight = d->image.height();
 
-    setModified();
+    FilterAction action("digikam:rotate180", 1);
+
+    setModified(action);
 }
 
 void DImgInterface::rotate270(bool saveUndo)
@@ -824,7 +841,9 @@ void DImgInterface::rotate270(bool saveUndo)
     d->origWidth  = d->image.width();
     d->origHeight = d->image.height();
 
-    setModified();
+    FilterAction action("digikam:rotate270", 1);
+
+    setModified(action);
 }
 
 void DImgInterface::flipHoriz(bool saveUndo)
@@ -836,7 +855,9 @@ void DImgInterface::flipHoriz(bool saveUndo)
 
     d->image.flip(DImg::HORIZONTAL);
 
-    setModified();
+    FilterAction action("digikam:flipHorizontal", 1);
+
+    setModified(action);
 }
 
 void DImgInterface::flipVert(bool saveUndo)
@@ -848,7 +869,9 @@ void DImgInterface::flipVert(bool saveUndo)
 
     d->image.flip(DImg::VERTICAL);
 
-    setModified();
+    FilterAction action("digikam:flipVertical", 1);
+
+    setModified(action);
 }
 
 void DImgInterface::crop(int x, int y, int w, int h)
@@ -860,7 +883,13 @@ void DImgInterface::crop(int x, int y, int w, int h)
     d->origWidth  = d->image.width();
     d->origHeight = d->image.height();
 
-    setModified();
+    FilterAction action("digikam:crop", 1);
+    action.addParameter("x", x);
+    action.addParameter("y", y);
+    action.addParameter("w", w);
+    action.addParameter("h", h);
+
+    setModified(action);
 }
 
 void DImgInterface::resize(int w, int h)
@@ -872,7 +901,11 @@ void DImgInterface::resize(int w, int h)
     d->origWidth  = d->image.width();
     d->origHeight = d->image.height();
 
-    setModified();
+    FilterAction action("digikam:resize", 1);
+    action.addParameter("w", w);
+    action.addParameter("h", h);
+    
+    setModified(action);
 }
 
 void DImgInterface::convertDepth(int depth)

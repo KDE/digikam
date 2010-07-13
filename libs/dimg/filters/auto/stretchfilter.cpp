@@ -39,6 +39,11 @@
 
 namespace Digikam
 {
+StretchFilter::StretchFilter(QObject* parent)
+             : DImgThreadedFilter(parent)
+{
+    initFilter();
+}
 
 StretchFilter::StretchFilter(DImg* orgImage, const DImg* refImage, QObject* parent)
              : DImgThreadedFilter(orgImage, parent, "StretchFilter"),
@@ -372,7 +377,7 @@ FilterAction StretchFilter::filterAction()
     return FilterAction(FilterIdentifier(), CurrentVersion());
 }
 
-void StretchFilter::readParameters(const Digikam::FilterAction& /*action*/)
+void StretchFilter::readParameters(const Digikam::FilterAction& action)
 {
     return; //Digikam::DImgThreadedFilter::readParameters(action);
 }

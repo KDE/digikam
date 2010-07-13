@@ -79,12 +79,19 @@ class DIGIKAM_EXPORT WBFilter : public DImgThreadedFilter
 {
 
 public:
-
+    explicit WBFilter(QObject* parent = 0);
     explicit WBFilter(DImg* orgImage, QObject* parent=0, const WBContainer& settings=WBContainer());
     virtual ~WBFilter();
 
     static void autoExposureAdjustement(const DImg* img, double& black, double& expo);
     static void autoWBAdjustementFromColor(const QColor& tc, double& temperature, double& green);
+
+    static QString          FilterIdentifier() { return "digikam:whiteBalance"; }
+    static QList<int>       SupportedVersions() { return QList<int>() << 1; }
+    static int              CurrentVersion() { return 1; }
+    virtual QString         filterIdentifier() const { return FilterIdentifier(); }
+    virtual FilterAction    filterAction();
+    void                    readParameters(const FilterAction& action);
 
 protected:
 

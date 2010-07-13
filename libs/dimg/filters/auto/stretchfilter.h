@@ -41,15 +41,16 @@ class DIGIKAM_EXPORT StretchFilter : public DImgThreadedFilter
 {
 
 public:
+    StretchFilter(QObject* parent = 0);
+    StretchFilter(DImg* orgImage, const DImg* refImage, QObject* parent=0);
+    virtual ~StretchFilter();
+
     static QString          FilterIdentifier() { return "digikam:stretchFilter"; }
     static QList<int>       SupportedVersions() { return QList<int>() << 1; }
     static int              CurrentVersion() { return 1; }
     virtual QString         filterIdentifier() const { return FilterIdentifier(); }
     virtual FilterAction    filterAction();
     void                    readParameters(const FilterAction& action);
-    
-    StretchFilter(DImg* orgImage, const DImg* refImage, QObject* parent=0);
-    virtual ~StretchFilter();
 
 private:
 

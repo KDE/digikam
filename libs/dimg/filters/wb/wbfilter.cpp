@@ -73,6 +73,13 @@ public:
     float mg;
     float mb;
 };
+WBFilter::WBFilter(QObject* parent)
+         : DImgThreadedFilter(parent),
+         d(new WBFilterPriv)
+{
+    initFilter();
+}
+
 
 WBFilter::WBFilter(DImg* orgImage, QObject* parent, const WBContainer& settings)
         : DImgThreadedFilter(orgImage, parent, "WBFilter"),
@@ -368,5 +375,31 @@ unsigned short WBFilter::pixelColor(int colorMult, int index, int value)
 
     return((unsigned short)CLAMP((int)((index - m_settings.saturation*(index - r)) * d->curve[index]), 0, (int)(d->rgbMax-1)));
 }
+
+FilterAction WBFilter::filterAction()
+{
+    FilterAction action(FilterIdentifier(), CurrentVersion());
+    action.addParameter("black", m_settings.black);
+    action.addParameter("exposition", m_settings.exposition);
+    action.addParameter("temperature", m_settings.temperature);
+    action.addParameter("green", m_settings.green);
+    action.addParameter("dark", m_settings.dark);
+    action.addParameter("gamma", m_settings.gamma);
+    action.addParameter("saturation", m_settings.saturation);
+
+    return action;
+}
+
+void WBFilter::readParameters(const Digikam::FilterAction& action)
+{
+    m_settings.black = action.parameter("black").toDouble();
+    m_settings.exposition = action.parameter("exposition").toDouble();
+    m_settings.temperature = action.parameter("temperature").toDouble();
+    m_settings.green = action.parameter("green").toDouble();
+    m_settings.dark = action.parameter("dark").toDouble();
+    m_settings.gamma = action.parameter("gamma").toDouble();
+    m_settings.saturation = action.parameter("saturation").toDouble();
+}
+
 
 }  // namespace Digikam

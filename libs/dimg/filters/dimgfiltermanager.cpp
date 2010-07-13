@@ -34,6 +34,12 @@
 
 #include "dimgfiltergenerator.h"
 #include "bcgfilter.h"
+#include "autoexpofilter.h"
+#include "autolevelsfilter.h"
+#include "equalizefilter.h"
+#include "normalizefilter.h"
+#include "stretchfilter.h"
+#include "wbfilter.h"
 #include "dimgfiltermanager.h"
 
 namespace Digikam
@@ -63,7 +69,13 @@ public:
 void DImgFilterManagerPriv::setupBuiltinGenerators()
 {
     builtinGenerators
-    << new BasicDImgFilterGenerator<BCGFilter>();
+        << new BasicDImgFilterGenerator<BCGFilter>()
+        //<< new BasicDImgFilterGenerator<AutoExpoFilter>()
+        //<< new BasicDImgFilterGenerator<AutoLevelsFilter>()
+        << new BasicDImgFilterGenerator<EqualizeFilter>()
+        //<< new BasicDImgFilterGenerator<NormalizeFilter>()
+        //<< new BasicDImgFilterGenerator<StretchFilter>();
+        << new BasicDImgFilterGenerator<WBFilter>();
 }
 
 class DImgFilterManagerCreator { public: DImgFilterManager object; };
@@ -140,6 +152,7 @@ bool DImgFilterManager::isSupported(const QString& filterIdentifier, int version
 
 DImgThreadedFilter* DImgFilterManager::createFilter(const QString& filterIdentifier, int version)
 {
+    kDebug() << "Creating filter " << filterIdentifier;
     DImgFilterGenerator* gen = d->filterMap.value(filterIdentifier);
     if (gen)
         return gen->createFilter(filterIdentifier, version);
