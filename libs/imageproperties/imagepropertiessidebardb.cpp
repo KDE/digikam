@@ -173,6 +173,7 @@ void ImagePropertiesSideBarDB::itemChanged(ImageInfoList infos, const QRect& rec
     m_dirtyMetadataTab   = false;
     m_dirtyColorTab      = false;
     m_dirtyGpsTab        = false;
+    m_dirtyHistoryTab    = false;
     d->dirtyDesceditTab  = false;
 
     // All tabs that store the ImageInfo list and access it after selection change
@@ -240,6 +241,11 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
             m_gpsTab->setCurrentURL(m_currentURL);
             m_dirtyGpsTab = true;
         }
+        else if (tab == m_historyTab && !m_dirtyHistoryTab)
+        {
+            m_historyTab->setCurrentURL(m_currentURL);
+            m_dirtyHistoryTab = true;
+        }
     }
     else if (d->currentInfos.count() == 1)   // Data from database available...
     {
@@ -291,9 +297,10 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
 
             m_dirtyGpsTab = true;
         }
-        else if (tab == m_historyTab)
+        else if (tab == m_historyTab && !m_dirtyHistoryTab)
         {
             m_historyTab->setCurrentURL(m_currentURL);
+            m_dirtyHistoryTab = true;
         }
     }
     else  // Data from database available, multiple selection
@@ -349,9 +356,10 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
             }
             m_dirtyGpsTab = true;
         }
-        else if (tab == m_historyTab)
+        else if (tab == m_historyTab && !m_dirtyHistoryTab)
         {
             m_historyTab->setCurrentURL(m_currentURL);
+            m_dirtyHistoryTab = true;
             
         }
     }

@@ -72,6 +72,7 @@ ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget *parent,
     m_dirtyMetadataTab   = false;
     m_dirtyColorTab      = false;
     m_dirtyGpsTab        = false;
+    m_dirtyHistoryTab    = false;
 
     m_propertiesTab      = new ImagePropertiesTab(parent);
     m_metadataTab        = new ImagePropertiesMetaDataTab(parent);
@@ -113,6 +114,7 @@ void ImagePropertiesSideBar::itemChanged(const KUrl& url, const QRect& rect, DIm
     m_dirtyMetadataTab   = false;
     m_dirtyColorTab      = false;
     m_dirtyGpsTab        = false;
+    m_dirtyHistoryTab    = false;
 
     slotChangedTab( getActiveTab() );
 }
@@ -131,6 +133,7 @@ void ImagePropertiesSideBar::slotNoCurrentItem()
     m_dirtyMetadataTab   = false;
     m_dirtyColorTab      = false;
     m_dirtyGpsTab        = false;
+    m_dirtyHistoryTab    = false;
 }
 
 void ImagePropertiesSideBar::slotImageSelectionChanged(const QRect& rect)
@@ -171,9 +174,10 @@ void ImagePropertiesSideBar::slotChangedTab(QWidget* tab)
         m_gpsTab->setCurrentURL(m_currentURL);
         m_dirtyGpsTab = true;
     }
-    else if (tab == m_historyTab)
+    else if (tab == m_historyTab && !m_dirtyHistoryTab)
     {
         m_historyTab->setCurrentURL(m_currentURL);
+        m_dirtyHistoryTab = true;
     }
     unsetCursor();
 }
