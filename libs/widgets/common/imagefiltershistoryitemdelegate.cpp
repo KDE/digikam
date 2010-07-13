@@ -42,7 +42,10 @@ ImageFiltersHistoryItemDelegate::~ImageFiltersHistoryItemDelegate()
 
 QSize ImageFiltersHistoryItemDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
-    return QSize(250, 30);
+    if(!index.model()->parent(index).isValid()) {
+        return QSize(250, 30);
+    }
+    else return QSize(250, 18);
 }
 
 void ImageFiltersHistoryItemDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const

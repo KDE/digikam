@@ -75,6 +75,7 @@ ImagePropertiesHistoryTab::ImagePropertiesHistoryTab(QWidget* parent)
     d->layout->addWidget(d->view);
 
     d->view->setItemDelegate(d->delegate);
+    d->view->setRootIsDecorated(false);
     d->view->setContextMenuPolicy(Qt::CustomContextMenu);
 
     connect(d->view, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showCustomContextMenu(QPoint)));
