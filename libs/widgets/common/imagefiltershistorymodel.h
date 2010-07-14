@@ -1,5 +1,5 @@
 /* ============================================================
- * 
+ *
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
@@ -13,7 +13,7 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -38,17 +38,21 @@
 #include "dimagehistory.h"
 #include "digikam_export.h"
 
-namespace Digikam {
+namespace Digikam
+{
 
 class ImageFiltersHistoryTreeItem;
 
 class DIGIKAM_EXPORT ImageFiltersHistoryModel : public QAbstractItemModel
 {
     Q_OBJECT
+
 public:
+
     ImageFiltersHistoryModel(QObject* parent = 0, const KUrl& url = KUrl());
     ~ImageFiltersHistoryModel();
-    Qt::ItemFlags flags(const QModelIndex &index) const;
+
+    Qt::ItemFlags flags(const QModelIndex& index) const;
     QVariant headerData(int section, Qt::Orientation orientation,
                         int role = Qt::DisplayRole) const;
     void setUrl(const KUrl& url);
@@ -57,15 +61,19 @@ public:
     int rowCount(const QModelIndex& parent = QModelIndex()) const;
     QModelIndex parent(const QModelIndex& index) const;
     QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
-    bool removeRows(int row, int count, const QModelIndex &parent);
+    bool removeRows(int row, int count, const QModelIndex& parent);
 
-public slots:
+public Q_SLOTS:
+
     void removeEntry(QModelIndex index);
 
 private:
 
-    void setupModelData(const QList< Digikam::DImageHistory::Entry >& entries, ImageFiltersHistoryTreeItem* parent);
-    ImageFiltersHistoryTreeItem *rootItem;
+    void setupModelData(const QList<Digikam::DImageHistory::Entry>& entries, ImageFiltersHistoryTreeItem* parent);
+
+private:
+
+    ImageFiltersHistoryTreeItem* m_rootItem;
 };
 
 } //namespace Digikam
