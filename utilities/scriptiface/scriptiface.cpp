@@ -46,14 +46,14 @@ public:
 
     ScriptIfacePriv()
     {
-        edit  = 0;
-        label = 0;
+        edit   = 0;
+        label  = 0;
+        engine = 0;
     }
 
-    KTextEdit* edit;
-    QLabel*    label;
-    //create a new QScript Engine object
-    QScriptEngine *engine;
+    KTextEdit*     edit;
+    QLabel*        label;
+    QScriptEngine* engine;     // create a new QScript Engine object
 };
 
 ScriptIface::ScriptIface(QWidget* parent)
@@ -68,12 +68,12 @@ ScriptIface::ScriptIface(QWidget* parent)
     setHelp("scriptconsole.anchor", "digikam");
     setModal(true);
 
-    QWidget* w           = new QWidget(this);
-    QGridLayout* grid   = new QGridLayout(w);
+    QWidget* w        = new QWidget(this);
+    QGridLayout* grid = new QGridLayout(w);
 
-    d->engine      = new QScriptEngine(this);
-    d->edit         = new KTextEdit(w);
-    d->label        = new QLabel(w);
+    d->engine         = new QScriptEngine(this);
+    d->edit           = new KTextEdit(w);
+    d->label          = new QLabel(w);
     grid->addWidget(d->edit,  0, 0, 2, 1);
     grid->addWidget(d->label, 3, 0, 2, 1);
     grid->setMargin(0);
@@ -85,7 +85,6 @@ ScriptIface::ScriptIface(QWidget* parent)
 
     connect(this, SIGNAL(user1Clicked()),
             this, SLOT(slotEvaluate()));
-          
 }
 
 ScriptIface::~ScriptIface()
@@ -95,7 +94,7 @@ ScriptIface::~ScriptIface()
 
 void ScriptIface::slotEvaluate()
 {
-    QString script        = d->edit->toPlainText();
+    QString script      = d->edit->toPlainText();
     QScriptValue result = d->engine->evaluate(script);
     d->label->setText(result.toString());
     /*if(d->label->text() == QString())
