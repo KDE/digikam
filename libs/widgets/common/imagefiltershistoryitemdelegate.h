@@ -1,5 +1,5 @@
 /* ============================================================
- * 
+ *
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
@@ -13,7 +13,7 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -24,18 +24,24 @@
 #ifndef IMAGEFILTERSHISTORYITEMDELEGATE_H
 #define IMAGEFILTERSHISTORYITEMDELEGATE_H
 
+// Qt includes
+
 #include <QtGui/QAbstractItemDelegate>
 
+namespace Digikam
+{
 
 class ImageFiltersHistoryItemDelegate : public QAbstractItemDelegate
 {
-
 public:
+
     ImageFiltersHistoryItemDelegate(QObject* parent = 0);
     ~ImageFiltersHistoryItemDelegate();
-    
+
     virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
     virtual void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
 };
+
+} //namespace Digikam
 
 #endif // IMAGEFILTERSHISTORYITEMDELEGATE_H

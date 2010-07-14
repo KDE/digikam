@@ -1,5 +1,5 @@
 /* ============================================================
- * 
+ *
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
@@ -13,7 +13,7 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -21,31 +21,39 @@
  *
  * ============================================================ */
 
+// Qt includes
+
 #include <QPainter>
 #include <QBrush>
 #include <QGradient>
 #include <QLinearGradient>
 
+// Local includes
+
 #include "imagefiltershistoryitemdelegate.h"
 
-
-ImageFiltersHistoryItemDelegate::ImageFiltersHistoryItemDelegate(QObject* parent)
-                                : QAbstractItemDelegate(parent)
+namespace Digikam
 {
 
+ImageFiltersHistoryItemDelegate::ImageFiltersHistoryItemDelegate(QObject* parent)
+                               : QAbstractItemDelegate(parent)
+{
 }
 
 ImageFiltersHistoryItemDelegate::~ImageFiltersHistoryItemDelegate()
 {
-
 }
 
-QSize ImageFiltersHistoryItemDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
+QSize ImageFiltersHistoryItemDelegate::sizeHint(const QStyleOptionViewItem& /*option*/, const QModelIndex& index) const
 {
-    if(!index.model()->parent(index).isValid()) {
+    if(!index.model()->parent(index).isValid())
+    {
         return QSize(250, 30);
     }
-    else return QSize(250, 18);
+    else
+    {
+        return QSize(250, 18);
+    }
 }
 
 void ImageFiltersHistoryItemDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
@@ -58,7 +66,8 @@ void ImageFiltersHistoryItemDelegate::paint(QPainter* painter, const QStyleOptio
     linearGradient.setColorAt(0.2, Qt::green);
     linearGradient.setColorAt(1.0, Qt::black);
 
-    if(!index.model()->parent(index).isValid()) {
+    if(!index.model()->parent(index).isValid())
+    {
         //painter->
         //painter->fillRect(option.rect, QBrush(QColor(235, 235, 240)));
         painter->drawRect(option.rect);
@@ -71,4 +80,4 @@ void ImageFiltersHistoryItemDelegate::paint(QPainter* painter, const QStyleOptio
     painter->restore();
 }
 
-
+} //namespace Digikam
