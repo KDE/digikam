@@ -13,7 +13,7 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -39,30 +39,46 @@
 #include "digikam_export.h"
 #include "dmetadata.h"
 
-namespace Digikam {
-
+namespace Digikam
+{
 class ImagePropertiesHistoryTabPriv;
 
-class DIGIKAM_EXPORT RemoveFilterAction : public QAction {
+class DIGIKAM_EXPORT RemoveFilterAction : public QAction
+{
     Q_OBJECT
+
 public:
-    RemoveFilterAction(QString& label, QModelIndex& index, QObject* parent = 0);
-    ~RemoveFilterAction() {}
-    void setIndex(QModelIndex &index) { m_index = index; }
 
-public slots:
-    void triggerSlot() { emit actionTriggered(m_index);}
+    RemoveFilterAction(const QString& label, const QModelIndex& index, QObject* parent = 0);
+    ~RemoveFilterAction(){}
 
-signals:
+    void setIndex(QModelIndex& index)
+    {
+        m_index = index;
+    }
+
+public Q_SLOTS:
+
+    void triggerSlot()
+    {
+        emit actionTriggered(m_index);
+    }
+
+Q_SIGNALS:
+
     void actionTriggered(QModelIndex index);
 
 private:
+
     QModelIndex m_index;
 };
 
+// -------------------------------------------------------------------------------------
+
 class DIGIKAM_EXPORT ImagePropertiesHistoryTab : public QWidget
 {
-      Q_OBJECT
+    Q_OBJECT
+
 public:
 
     ImagePropertiesHistoryTab(QWidget* parent);
@@ -70,8 +86,9 @@ public:
 
     void setCurrentURL(const KUrl& url=KUrl());
 
-public slots:
-    void showCustomContextMenu(const QPoint &position);
+public Q_SLOTS:
+
+    void showCustomContextMenu(const QPoint& position);
 
 private:
 
