@@ -47,6 +47,6 @@ private:
     ImageHistoryViewPriv* const d;
 };
 
-} //namespace Digikam
+} // namespace Digikam
 
 #endif // IMAGEHISTORYVIEW_H
