@@ -1,5 +1,5 @@
 /* ============================================================
- * 
+ *
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
@@ -13,7 +13,7 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -28,19 +28,22 @@
 
 #include <QTreeView>
 
-namespace Digikam {
-  
+namespace Digikam
+{
+
 class ImageHistoryViewPriv;
 
 class ImageHistoryView : QTreeView
 {
     Q_OBJECT
-    
+
 public:
+
     ImageHistoryView(QWidget* parent);
     ~ImageHistoryView();
-    
+
 private:
+
     ImageHistoryViewPriv* const d;
 };
 
