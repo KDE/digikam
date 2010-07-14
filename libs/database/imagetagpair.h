@@ -41,7 +41,7 @@ namespace Digikam
 class ImageInfo;
 class ImageTagPairPriv;
 
-class DIGIKAM_EXPORT ImageTagPair
+class DIGIKAM_DATABASE_EXPORT ImageTagPair
 {
 public:
 

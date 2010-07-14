@@ -31,14 +31,12 @@
 
 // Local includes
 
-#include "digikam_export.h"
-
 namespace Digikam
 {
 
 class ScriptIfacePriv;
 
-class DIGIKAM_EXPORT ScriptIface : public KDialog
+class ScriptIface : public KDialog
 {
     Q_OBJECT
 
