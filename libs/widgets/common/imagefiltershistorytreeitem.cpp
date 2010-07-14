@@ -1,5 +1,5 @@
 /* ============================================================
- * 
+ *
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
@@ -13,7 +13,7 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -23,60 +23,60 @@
 
 #include "imagefiltershistorytreeitem.h"
 
-namespace Digikam {
-  
-ImageFiltersHistoryTreeItem::ImageFiltersHistoryTreeItem(const QList< QVariant >& data, ImageFiltersHistoryTreeItem* parent)
+namespace Digikam
 {
-    parentItem = parent;
-    itemData = data;
+
+ImageFiltersHistoryTreeItem::ImageFiltersHistoryTreeItem(const QList<QVariant>& data, ImageFiltersHistoryTreeItem* parent)
+{
+    m_parentItem = parent;
+    m_itemData   = data;
 }
 
 ImageFiltersHistoryTreeItem::ImageFiltersHistoryTreeItem(const QString& data, ImageFiltersHistoryTreeItem* parent)
 {
-    parentItem = parent;
-    itemData.append(data);
+    m_parentItem = parent;
+    m_itemData.append(data);
 }
-
 
 ImageFiltersHistoryTreeItem::~ImageFiltersHistoryTreeItem()
 {
-    qDeleteAll(childItems);
+    qDeleteAll(m_childItems);
 }
 
-void ImageFiltersHistoryTreeItem::appendChild(ImageFiltersHistoryTreeItem *item)
+void ImageFiltersHistoryTreeItem::appendChild(ImageFiltersHistoryTreeItem* item)
 {
-    childItems.append(item);
+    m_childItems.append(item);
 }
 
-ImageFiltersHistoryTreeItem *ImageFiltersHistoryTreeItem::child(int row)
+ImageFiltersHistoryTreeItem* ImageFiltersHistoryTreeItem::child(int row)
 {
-    return childItems.value(row);
+    return m_childItems.value(row);
 }
 
 int ImageFiltersHistoryTreeItem::childCount() const
 {
-    return childItems.count();
+    return m_childItems.count();
 }
 
 int ImageFiltersHistoryTreeItem::columnCount() const
 {
-    return itemData.count();
+    return m_itemData.count();
 }
 
 QVariant ImageFiltersHistoryTreeItem::data(int column) const
 {
-    return itemData.value(column);
+    return m_itemData.value(column);
 }
 
-ImageFiltersHistoryTreeItem *ImageFiltersHistoryTreeItem::parent()
+ImageFiltersHistoryTreeItem* ImageFiltersHistoryTreeItem::parent()
 {
-    return parentItem;
+    return m_parentItem;
 }
 
 int ImageFiltersHistoryTreeItem::row() const
 {
-    if (parentItem)
-        return parentItem->childItems.indexOf(const_cast<ImageFiltersHistoryTreeItem*>(this));
+    if (m_parentItem)
+        return m_parentItem->m_childItems.indexOf(const_cast<ImageFiltersHistoryTreeItem*>(this));
 
     return 0;
 }
@@ -84,7 +84,7 @@ int ImageFiltersHistoryTreeItem::row() const
 void ImageFiltersHistoryTreeItem::removeChild(int row)
 {
     delete child(row);
-    childItems.removeAt(row);
+    m_childItems.removeAt(row);
 }
 
-} //namespace Digikam
+} // namespace Digikam

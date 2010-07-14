@@ -1,5 +1,5 @@
 /* ============================================================
- * 
+ *
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
@@ -13,7 +13,7 @@
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -29,32 +29,37 @@
 #include <QList>
 #include <QVariant>
 
+// local includes
+
 #include "digikam_export.h"
 
-namespace Digikam {
-  
+namespace Digikam
+{
+
 class DIGIKAM_EXPORT ImageFiltersHistoryTreeItem
 {
 public:
-    ImageFiltersHistoryTreeItem(const QList<QVariant> &data, ImageFiltersHistoryTreeItem *parent = 0);
-    ImageFiltersHistoryTreeItem(const QString &data, ImageFiltersHistoryTreeItem *parent = 0);
+
+    ImageFiltersHistoryTreeItem(const QList<QVariant>& data, ImageFiltersHistoryTreeItem* parent = 0);
+    ImageFiltersHistoryTreeItem(const QString& data, ImageFiltersHistoryTreeItem* parent = 0);
     ~ImageFiltersHistoryTreeItem();
-    
-    void appendChild(ImageFiltersHistoryTreeItem *child);
+
+    void appendChild(ImageFiltersHistoryTreeItem* child);
     void removeChild(int row);
-    ImageFiltersHistoryTreeItem *child(int row);
+    ImageFiltersHistoryTreeItem* child(int row);
     int childCount() const;
     int columnCount() const;
     QVariant data(int column) const;
     int row() const;
     ImageFiltersHistoryTreeItem *parent();
 
- private:
-     QList<ImageFiltersHistoryTreeItem*> childItems;
-     QList<QVariant> itemData;
-     ImageFiltersHistoryTreeItem *parentItem;
+private:
+
+     QList<ImageFiltersHistoryTreeItem*> m_childItems;
+     QList<QVariant>                     m_itemData;
+     ImageFiltersHistoryTreeItem*        m_parentItem;
 };
 
-} //namespace Digikam
+} // namespace Digikam
 
 #endif // IMAGEFILTERHISTORYTREEITEM_H
