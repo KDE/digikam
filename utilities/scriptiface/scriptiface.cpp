@@ -35,6 +35,7 @@
 #include <QLabel>
 #include <QGridLayout>
 #include <QtScript>
+#include <QtCore/QCoreApplication>
 
 namespace Digikam
 {
@@ -51,9 +52,11 @@ public:
         engine = 0;
     }
 
-    KTextEdit*     edit;
-    QLabel*        label;
-    QScriptEngine* engine;     // create a new QScript Engine object
+
+    KTextEdit* edit;
+    QLabel*    label;
+    //create a new QScript Engine object
+    QScriptEngine *engine;
 };
 
 ScriptIface::ScriptIface(QWidget* parent)
@@ -83,8 +86,16 @@ ScriptIface::ScriptIface(QWidget* parent)
     setMainWidget(w);
     adjustSize();
 
+    //Add the path to the Qt API binding libraries.
+    const QString *libPath = new QString("/usr/lib/qt4/plugins/script");
+    //import the plugins
+    d->engine->importExtension("qt.gui");   
     connect(this, SIGNAL(user1Clicked()),
             this, SLOT(slotEvaluate()));
+<<<<<<< HEAD
+=======
+
+>>>>>>> Added some imports to make availble few Qt APIs to the Script
 }
 
 ScriptIface::~ScriptIface()
