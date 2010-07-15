@@ -91,6 +91,8 @@ ScriptIface::ScriptIface(QWidget* parent)
     //import the plugins
     d->engine->importExtension("qt.gui");   
     connect(this, SIGNAL(user1Clicked()),
+            this, SLOT(slotEvaluate()));
+
 }
 ScriptIface::~ScriptIface()
 {
