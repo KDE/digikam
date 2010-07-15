@@ -1335,6 +1335,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/kdatetimeedit.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/leftsidebarwidgets.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/mediaplayerview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/mapwidgetview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/metadatahub.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/metadatamanager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/mimefilter.cpp
