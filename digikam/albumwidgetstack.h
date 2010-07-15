@@ -41,6 +41,7 @@
 #include "digikam_export.h"
 #include "imageinfo.h"
 #include "thumbbardock.h"
+//#include "mapwidgetview.h"
 
 namespace Digikam
 {
@@ -48,6 +49,7 @@ namespace Digikam
 class DigikamImageView;
 class ImagePreviewViewV2;
 class AlbumWidgetStackPriv;
+class MapWidgetView;
 
 class AlbumWidgetStack : public QStackedWidget
 {
@@ -60,7 +62,8 @@ public:
         PreviewAlbumMode=0,
         PreviewImageMode,
         WelcomePageMode,
-        MediaPlayerMode
+        MediaPlayerMode,
+        MapWidgetMode
     };
 
 public:
@@ -74,11 +77,14 @@ public:
     ThumbBarDock*     thumbBarDock();
     DigikamImageView* imageIconView();
     ImagePreviewViewV2* imagePreviewView();
+    MapWidgetView*      mapWidgetView();
 
     void setPreviewItem(const ImageInfo& info = ImageInfo(),
                         const ImageInfo& previous = ImageInfo(),
                         const ImageInfo& next = ImageInfo());
     int  previewMode();
+    void setMapViewMode();
+    void setIconViewMode();
     void setPreviewMode(int mode);
     void previewLoaded();
 

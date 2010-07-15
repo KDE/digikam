@@ -64,6 +64,7 @@
   <Menu name="View" >
    <text>&amp;View</text>
      <Action name="full_screen" />
+     <Action name="view_selection" />
      <Action name="slideshow" />
      <Separator/>
      <Action name="album_zoomin" />
@@ -162,6 +163,7 @@
   <Separator/>
   <Action name="full_screen" />
   <Action name="slideshow" />
+  <Action name="view_selection" />
   <WeakSeparator/>
   <Action name="logo_action" />
  </ToolBar>

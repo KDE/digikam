@@ -43,6 +43,7 @@
 #include <kselectaction.h>
 #include <kmenu.h>
 #include <kstatusbar.h>
+#include <kcombobox.h>
 
 // LibKIPI includes
 
@@ -112,6 +113,10 @@ public:
         deleteTagAction                      = 0;
         editTagAction                        = 0;
         imagePreviewAction                   = 0;
+        imageMapViewAction                   = 0;
+        imageViewSelectionAction             = 0;
+        imagePreviewViewAction               = 0;
+        imageIconViewAction                  = 0;
         imageViewAction                      = 0;
         imageLightTableAction                = 0;
         imageAddLightTableAction             = 0;
@@ -232,6 +237,10 @@ public:
 
     // Image Actions
     KToggleAction*                      imagePreviewAction;
+    KAction*                            imageMapViewAction;
+    KActionMenu*                        imageViewSelectionAction;
+    KAction*                            imageIconViewAction;
+    KAction*                            imagePreviewViewAction;
     KAction*                            imageLightTableAction;
     KAction*                            imageAddLightTableAction;
     KAction*                            imageAddCurrentQueueAction;
@@ -322,6 +331,7 @@ public:
     StatusProgressBar*                  statusProgressBar;
     StatusNavigateBar*                  statusNavigateBar;
     QString                             statusBarSelectionText;
+    KComboBox*                          mapViewSwitcher; 
 
     KIPI::PluginLoader*                 kipiPluginLoader;
 

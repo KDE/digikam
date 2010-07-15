@@ -522,6 +522,7 @@ void DigikamApp::setupStatusBar()
     d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
     statusBar()->addPermanentWidget(d->zoomBar);
 
+
     //------------------------------------------------------------------------------
 
     d->statusNavigateBar = new StatusNavigateBar(statusBar());
@@ -765,6 +766,23 @@ void DigikamApp::setupActions()
     d->imagePreviewAction->setShortcut(KShortcut(Qt::Key_F3));
     connect(d->imagePreviewAction, SIGNAL(triggered()), d->view, SLOT(slotImagePreview()));
     actionCollection()->addAction("image_view", d->imagePreviewAction);
+
+
+    // -----------------------------------------------------------
+   
+    d->imageViewSelectionAction = new KActionMenu(KIcon("viewimage"), i18n("Views"), this);
+    actionCollection()->addAction("view_selection", d->imageViewSelectionAction); 
+ 
+    d->imageIconViewAction = new KAction( i18n("Icon view..."), this);
+    actionCollection()->addAction("icon_view", d->imageIconViewAction);
+    connect(d->imageIconViewAction, SIGNAL(triggered()), d->view, SLOT(slotIconView()));
+    d->imageViewSelectionAction->addAction(d->imageIconViewAction);
+    
+    d->imageMapViewAction = new KAction( i18n("Map View..."), this);
+    actionCollection()->addAction("map_view", d->imageMapViewAction);
+    connect(d->imageMapViewAction, SIGNAL(triggered()), d->view, SLOT(slotMapWidgetView()));
+    d->imageViewSelectionAction->addAction(d->imageMapViewAction);
+
 
     // -----------------------------------------------------------
 

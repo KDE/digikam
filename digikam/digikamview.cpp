@@ -54,6 +54,7 @@
 #include "imageviewutilities.h"
 #include "leftsidebarwidgets.h"
 #include "loadingcacheinterface.h"
+#include "mapwidgetview.h"
 #include "metadatamanager.h"
 #include "queuemgrwindow.h"
 #include "scancontroller.h"
@@ -122,6 +123,7 @@ public:
     DigikamApp*               parent;
 
     DigikamImageView*         iconView;
+    MapWidgetView*            mapView;
     AlbumManager*             albumManager;
     AlbumHistory*             albumHistory;
     AlbumWidgetStack*         albumWidgetStack;
@@ -172,6 +174,7 @@ DigikamView::DigikamView(QWidget *parent, DigikamModelCollection *modelCollectio
     d->albumWidgetStack->setDockArea(d->dockArea);
 
     d->iconView = d->albumWidgetStack->imageIconView();
+    d->mapView = d->albumWidgetStack->mapWidgetView();
 
     d->rightSideBar = new ImagePropertiesSideBarDB(this, d->splitter, KMultiTabBar::Right, true);
     d->rightSideBar->setObjectName("Digikam Right Sidebar");
@@ -928,6 +931,7 @@ void DigikamView::slotAlbumSelected(Album* album)
     if (!album)
     {
         d->iconView->openAlbum(0);
+        d->mapView->openAlbum(0);
         emit signalAlbumSelected(false);
         emit signalTagSelected(false);
         return;
@@ -952,6 +956,7 @@ void DigikamView::slotAlbumSelected(Album* album)
     d->parent->enableAlbumForwardHistory(d->useAlbumHistory && !d->albumHistory->isForwardEmpty());
 
     d->iconView->openAlbum(album);
+    d->mapView->openAlbum(album);
     if (album->isRoot())
         d->albumWidgetStack->setPreviewMode(AlbumWidgetStack::WelcomePageMode);
     else
@@ -1236,6 +1241,37 @@ void DigikamView::slotEscapePreview()
         return;
 
     slotTogglePreviewMode(d->iconView->currentInfo());
+}
+
+void DigikamView::slotMapWidgetView()
+{
+    /*if(d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewImageMode)
+    {
+        d->albumWidgetStack->setPreviewMode( AlbumWidgetStack::PreviewAlbumMode );
+        emit signalThumbSizeChanged(d->iconView->thumbnailSize().size());
+
+        emit signalTogglePreview(false);
+    }*/
+
+    //the only way to go to map view that came in my mind was to switch to icon-view and then the map-view.
+    slotIconView();
+
+    d->albumWidgetStack->setMapViewMode();
+    
+}
+
+void DigikamView::slotIconView()
+{
+    //if it's PreviewImageMode, we close it first. Should I see if it's a movie preview or a welcome page?
+    if(d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewImageMode)
+    {
+        emit signalThumbSizeChanged(d->iconView->thumbnailSize().size());
+        emit signalTogglePreview(false);
+    }
+    
+    //and switch to icon view
+    d->albumWidgetStack->setIconViewMode();
+
 }
 
 void DigikamView::slotImagePreview()

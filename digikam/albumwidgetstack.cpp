@@ -54,6 +54,7 @@
 #include "welcomepageview.h"
 #include "mediaplayerview.h"
 #include "thumbbardock.h"
+#include "mapwidgetview.h"
 
 namespace Digikam
 {
@@ -73,6 +74,7 @@ public:
         imagePreviewView   = 0;
         welcomePageView    = 0;
         mediaPlayerView    = 0;
+        mapWidgetView      = 0;
         thumbbarTimer      = 0;
         needUpdateBar      = false;
     }
@@ -89,6 +91,7 @@ public:
     MediaPlayerView*  mediaPlayerView;
     ThumbBarDock*     thumbBarDock;
     WelcomePageView*  welcomePageView;
+    MapWidgetView*    mapWidgetView;
 };
 
 AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
@@ -104,11 +107,14 @@ AlbumWidgetStack::AlbumWidgetStack(QWidget *parent)
 
     d->welcomePageView = new WelcomePageView(this);
     d->mediaPlayerView = new MediaPlayerView(this);
+    d->mapWidgetView = new MapWidgetView(d->imageIconView->imageAlbumModel(), this);
+
 
     insertWidget(PreviewAlbumMode, d->imageIconView);
     insertWidget(PreviewImageMode, d->imagePreviewView);
     insertWidget(WelcomePageMode,  d->welcomePageView->view());
     insertWidget(MediaPlayerMode,  d->mediaPlayerView);
+    insertWidget(MapWidgetMode,    d->mapWidgetView);
 
     setPreviewMode(PreviewAlbumMode);
     setAttribute(Qt::WA_DeleteOnClose);
@@ -237,6 +243,11 @@ ImagePreviewViewV2* AlbumWidgetStack::imagePreviewView()
     return d->imagePreviewView;
 }
 
+MapWidgetView* AlbumWidgetStack::mapWidgetView()
+{
+    return d->mapWidgetView;
+}
+
 void AlbumWidgetStack::setPreviewItem(const ImageInfo& info, const ImageInfo& previous, const ImageInfo& next)
 {
     if (info.isNull())
@@ -297,10 +308,25 @@ int AlbumWidgetStack::previewMode()
     return indexOf(currentWidget());
 }
 
+
+void AlbumWidgetStack::setMapViewMode()
+{
+    setCurrentIndex(MapWidgetMode);
+}
+
+
+void AlbumWidgetStack::setIconViewMode()
+{
+    setCurrentIndex(PreviewAlbumMode);
+    d->thumbBarDock->hide();
+    emit signalToggledToPreviewMode(false);
+    d->imageIconView->setFocus();
+}
+
 void AlbumWidgetStack::setPreviewMode(int mode)
 {
     if (mode != PreviewAlbumMode && mode != PreviewImageMode &&
-        mode != WelcomePageMode  && mode != MediaPlayerMode)
+        mode != WelcomePageMode  && mode != MediaPlayerMode && mode != MapWidgetMode)
         return;
 
     if (mode == PreviewImageMode)
@@ -311,18 +337,25 @@ void AlbumWidgetStack::setPreviewMode(int mode)
     {
         d->thumbBarDock->hide();
     }
-
-    if (mode == PreviewAlbumMode || mode == WelcomePageMode)
+    
+/*    if(mode == MapWidgetMode)
     {
-        setPreviewItem();
         setCurrentIndex(mode);
-        emit signalToggledToPreviewMode(false);
     }
     else
-    {
-        setCurrentIndex(mode);
-    }
-    d->imageIconView->setFocus();
+    {*/
+        if (mode == PreviewAlbumMode || mode == WelcomePageMode)
+        {
+            setPreviewItem();
+            setCurrentIndex(mode);
+            emit signalToggledToPreviewMode(false);
+        }
+        else
+        {
+            setCurrentIndex(mode);
+        }
+        d->imageIconView->setFocus();
+//    }
 }
 
 void AlbumWidgetStack::previewLoaded()
