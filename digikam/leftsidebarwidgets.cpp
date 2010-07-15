@@ -1120,83 +1120,29 @@ public:
     SearchModificationHelper* searchModificationHelper;
 };
 
-PeopleSideBarWidget::PeopleSideBarWidget(QWidget* parent, SearchModel* /*searchModel*/,
-                                         SearchModificationHelper *searchModificationHelper)
-                   : SidebarWidget(parent), d(new PeopleSideBarWidgetPriv)
+PeopleSideBarWidget::PeopleSideBarWidget(QWidget* parent, TagModel* model)
+                    : SidebarWidget(parent), d(new TagViewSideBarWidgetPriv)
 {
-    setObjectName("People Sidebar");
+    setObjectName("TagView Sidebar");
 
-    d->searchModificationHelper = searchModificationHelper;
+    d->tagModel = model;
 
-    d->timer                    = new QTimer(this);
-    setAttribute(Qt::WA_DeleteOnClose);
+    QVBoxLayout* layout = new QVBoxLayout(this);
 
-//    QVBoxLayout* vlay           = new QVBoxLayout(this);
-    QFrame *panel               = new QFrame(this);
-    panel->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
-    panel->setLineWidth(1);
+    d->tagFolderView = new TagFolderView(this, model);
+    d->tagFolderView->setConfigGroup(getConfigGroup());
+    d->tagFolderView->setExpandNewCurrentItem(true);
+    d->tagFolderView->setAlbumManagerCurrentAlbum(true);
+    d->tagSearchBar  = new SearchTextBar(this, "DigikamViewTagSearchBar");
+    d->tagSearchBar->setHighlightOnResult(true);
+    d->tagSearchBar->setModel(model, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
+    d->tagSearchBar->setFilterModel(d->tagFolderView->albumFilterModel());
 
-    QGridLayout* grid = new QGridLayout(panel);
+    layout->addWidget(d->tagFolderView);
+    layout->addWidget(d->tagSearchBar);
 
-    // ---------------------------------------------------------------
-
-    QWidget* hbox1     = new QWidget(panel);
-    QHBoxLayout* hlay  = new QHBoxLayout(hbox1);
-
-    QLabel* label1     = new QLabel(i18n("Time Unit:"), hbox1);
-
-    QWidget* scaleBox  = new QWidget(hbox1);
-    QHBoxLayout* hlay2 = new QHBoxLayout(scaleBox);
-
-    ////////////
-
-    hlay2->setMargin(0);
-    hlay2->setSpacing(0);
-
-    hlay->setMargin(0);
-    hlay->setSpacing(KDialog::spacingHint());
-    hlay->addWidget(label1);
-    hlay->addWidget(d->timeUnitCB);
-    hlay->addItem(new QSpacerItem(10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum));
-    hlay->addWidget(scaleBox);
-
-    // ---------------------------------------------------------------
-
-    d->scrollBar        = new QScrollBar(panel);
-    d->scrollBar->setOrientation(Qt::Horizontal);
-    d->scrollBar->setMinimum(0);
-    d->scrollBar->setSingleStep(1);
-
-    d->cursorDateLabel  = new KSqueezedTextLabel(0, panel);
-    d->cursorCountLabel = new QLabel(panel);
-    d->cursorCountLabel->setAlignment(Qt::AlignRight);
-
-    // ---------------------------------------------------------------
-
-    KHBox* hbox2   = new KHBox(panel);
-    hbox2->setMargin(0);
-    hbox2->setSpacing(KDialog::spacingHint());
-
-    d->resetButton = new QToolButton(hbox2);
-    d->resetButton->setIcon(SmallIcon("document-revert"));
-    d->resetButton->setToolTip(i18n("Clear current selection"));
-    d->resetButton->setWhatsThis(i18n("If you press this button, the current date selection on the time-line will be cleared."));
-    d->nameEdit    = new KLineEdit(hbox2);
-    d->nameEdit->setClearButtonShown(true);
-    d->nameEdit->setWhatsThis(i18n("Enter the name of the current dates search to save in the "
-                                   "\"My Date Searches\" view"));
-
-    // ---------------------------------------------------------------
-
-    grid->addWidget(hbox1,               0, 0, 1, 4);
-    grid->addWidget(d->cursorDateLabel,  1, 0, 1, 3);
-    grid->addWidget(d->cursorCountLabel, 1, 3, 1, 1);
-
-    grid->addWidget(d->scrollBar,        3, 0, 1, 4);
-    grid->addWidget(hbox2,               4, 0, 1, 4);
-    grid->setColumnStretch(2, 10);
-    grid->setMargin(KDialog::spacingHint());
-    grid->setSpacing(KDialog::spacingHint());
+    connect(d->tagFolderView, SIGNAL(signalFindDuplicatesInAlbum(Album*)),
+            this, SIGNAL(signalFindDuplicatesInAlbum(Album*)));
 }
 
 QPixmap PeopleSideBarWidget::getIcon()

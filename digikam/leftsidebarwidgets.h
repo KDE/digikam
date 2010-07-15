@@ -315,8 +315,7 @@ class PeopleSideBarWidget : public SidebarWidget
 
 public:
 
-    PeopleSideBarWidget(QWidget* parent, SearchModel* searchModel,
-                        SearchModificationHelper* searchModificationHelper);
+    PeopleSideBarWidget(QWidget* parent, TagModel* tagModel);
     virtual ~PeopleSideBarWidget();
 
     void setActive(bool active);
@@ -338,7 +337,7 @@ private Q_SLOTS:
 
 private:
 
-    PeopleSideBarWidgetPriv* const d;
+    TagViewSideBarWidgetPriv* const d;
 };
 
 } // namespace Digikam

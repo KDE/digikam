@@ -224,8 +224,7 @@ DigikamView::DigikamView(QWidget *parent, DigikamModelCollection *modelCollectio
     
     // People Sidebar
     d->peopleSideBar = new PeopleSideBarWidget(d->leftSideBar,
-                    d->modelCollection->getSearchModel(),
-                    d->searchModificationHelper);
+                    d->modelCollection->getTagModel());
     d->leftSideBarWidgets << d->peopleSideBar;
 
 
