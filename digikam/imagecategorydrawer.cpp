@@ -205,6 +205,9 @@ void ImageCategoryDrawer::viewHeaderText(const QModelIndex& index, QString *head
             case Album::SEARCH:
                 textForSAlbum(static_cast<SAlbum*>(album), count, header, subLine);
                 break;
+            case Album::FACE:
+            default:
+                break;
         }
     }
 }
