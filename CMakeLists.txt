@@ -836,6 +836,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
 
     SET(libscriptiface_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/scriptiface/scriptiface.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/scriptiface/scriptimporter.cpp
        )
 
     SET(libslideshow_SRCS
