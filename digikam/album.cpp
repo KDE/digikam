@@ -393,10 +393,15 @@ QString PAlbum::folderPath() const
 
 // --------------------------------------------------------------------------
 
-TAlbum::TAlbum(const QString& title, int id, bool root)
+TAlbum::TAlbum(const QString& title, int id, bool root, bool person)
       : Album(Album::TAG, id, root)
 {
     setTitle(title);
+    
+    if(person)
+        m_person = true;
+    else
+        m_person = false;
 }
 
 TAlbum::~TAlbum()
@@ -424,7 +429,11 @@ QString TAlbum::tagPath(bool leadingSlash) const
 
 QString TAlbum::prettyUrl() const
 {
-    QString u = i18n("My Tags") + tagPath(true);
+    QString u;
+    if(m_person)
+        u = i18n("Person") + tagPath(true);
+    else
+        u = i18n("My Tags") + tagPath(true);
     return u;
 }
 

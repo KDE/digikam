@@ -360,7 +360,7 @@ class TAlbum : public Album
 {
 public:
 
-    TAlbum(const QString& title, int id, bool root=false);
+    TAlbum(const QString& title, int id, bool root=false, bool person = false);
     ~TAlbum();
 
     /**
@@ -380,6 +380,8 @@ private:
 
     QString m_icon;
 
+    bool    m_person;
+    
     friend class AlbumManager;
 };
 
