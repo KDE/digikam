@@ -17,4 +17,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 010 ==> 244114 : "Find similar" works for a single image, but "Find duplicates" doesn't work for a directory.
 011 ==> 244151 : Renaming image files causes them to vanish from an album.
 012 ==> 241418 : LZW compressed TIFFs from RawTherapee are won't display.
-013 ==>
+013 ==> 212848 : Crashed in slideshow while viewing.
+014 ==>
