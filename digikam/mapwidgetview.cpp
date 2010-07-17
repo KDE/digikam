@@ -85,8 +85,6 @@ MapWidgetView::MapWidgetView(ImageAlbumModel* model, QWidget* parent)
     d->selectionModel = new QItemSelectionModel(d->imageModel);
     d->mapViewModelHelper = new MapViewModelHelper(d->imageModel, d->selectionModel, this);
     QVBoxLayout *vBoxLayout = new QVBoxLayout(this);
-    QLabel* label = new QLabel(QString("Map view under construction.Please go back to icon-view."), this);
-    vBoxLayout->addWidget(label);
 
     d->mapWidget = new KMapIface::KMap(this);
     d->mapWidget->setEditModeAvailable(true);

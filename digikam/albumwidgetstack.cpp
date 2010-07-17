@@ -250,6 +250,10 @@ MapWidgetView* AlbumWidgetStack::mapWidgetView()
 
 void AlbumWidgetStack::setPreviewItem(const ImageInfo& info, const ImageInfo& previous, const ImageInfo& next)
 {
+
+    if(previewMode() == MapWidgetMode)
+        return;
+
     if (info.isNull())
     {
         if (previewMode() == MediaPlayerMode)
@@ -329,6 +333,7 @@ void AlbumWidgetStack::setPreviewMode(int mode)
         mode != WelcomePageMode  && mode != MediaPlayerMode && mode != MapWidgetMode)
         return;
 
+
     if (mode == PreviewImageMode)
     {
         d->thumbBarDock->restoreVisibility();
@@ -338,28 +343,23 @@ void AlbumWidgetStack::setPreviewMode(int mode)
         d->thumbBarDock->hide();
     }
     
-/*    if(mode == MapWidgetMode)
+    if (mode == PreviewAlbumMode || mode == WelcomePageMode)
+    {
+        setPreviewItem();
+        setCurrentIndex(mode);
+        emit signalToggledToPreviewMode(false);
+    }
+    else
     {
         setCurrentIndex(mode);
     }
-    else
-    {*/
-        if (mode == PreviewAlbumMode || mode == WelcomePageMode)
-        {
-            setPreviewItem();
-            setCurrentIndex(mode);
-            emit signalToggledToPreviewMode(false);
-        }
-        else
-        {
-            setCurrentIndex(mode);
-        }
-        d->imageIconView->setFocus();
-//    }
+    d->imageIconView->setFocus();
 }
 
 void AlbumWidgetStack::previewLoaded()
 {
+    if(previewMode() == MapWidgetMode)
+        return;
      emit signalToggledToPreviewMode(true);
 }
 

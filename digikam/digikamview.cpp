@@ -957,10 +957,14 @@ void DigikamView::slotAlbumSelected(Album* album)
 
     d->iconView->openAlbum(album);
     d->mapView->openAlbum(album);
-    if (album->isRoot())
-        d->albumWidgetStack->setPreviewMode(AlbumWidgetStack::WelcomePageMode);
-    else
-        d->albumWidgetStack->setPreviewMode(AlbumWidgetStack::PreviewAlbumMode);
+
+        if (album->isRoot())
+            d->albumWidgetStack->setPreviewMode(AlbumWidgetStack::WelcomePageMode);
+        else
+        {
+            if(d->albumWidgetStack->previewMode() != AlbumWidgetStack::MapWidgetMode)
+                d->albumWidgetStack->setPreviewMode(AlbumWidgetStack::PreviewAlbumMode);
+        }
 }
 
 void DigikamView::slotAlbumOpenInKonqui()
@@ -1021,6 +1025,10 @@ void DigikamView::slotImageSelected()
 
 void DigikamView::slotDispatchImageSelected()
 {
+
+    if(d->albumWidgetStack->previewMode() == AlbumWidgetStack::MapWidgetMode)
+        return;
+
     if (d->needDispatchSelection)
     {
         // the list of ImageInfos of currently selected items, currentItem first
@@ -1237,7 +1245,8 @@ void DigikamView::slotImageReadMetadata()
 void DigikamView::slotEscapePreview()
 {
     if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode ||
-        d->albumWidgetStack->previewMode() == AlbumWidgetStack::WelcomePageMode)
+        d->albumWidgetStack->previewMode() == AlbumWidgetStack::WelcomePageMode ||
+        d->albumWidgetStack->previewMode() == AlbumWidgetStack::MapWidgetMode)
         return;
 
     slotTogglePreviewMode(d->iconView->currentInfo());
@@ -1245,19 +1254,10 @@ void DigikamView::slotEscapePreview()
 
 void DigikamView::slotMapWidgetView()
 {
-    /*if(d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewImageMode)
-    {
-        d->albumWidgetStack->setPreviewMode( AlbumWidgetStack::PreviewAlbumMode );
-        emit signalThumbSizeChanged(d->iconView->thumbnailSize().size());
-
-        emit signalTogglePreview(false);
-    }*/
-
-    //the only way to go to map view that came in my mind was to switch to icon-view and then the map-view.
-    slotIconView();
+    if(d->albumWidgetStack->previewMode() != AlbumWidgetStack::PreviewAlbumMode)
+        slotIconView();
 
     d->albumWidgetStack->setMapViewMode();
-    
 }
 
 void DigikamView::slotIconView()
@@ -1277,34 +1277,45 @@ void DigikamView::slotIconView()
 void DigikamView::slotImagePreview()
 {
     ImageInfo info = d->iconView->currentInfo();
-    if (!info.isNull())
+    if (!info.isNull() && (d->albumWidgetStack->previewMode() != AlbumWidgetStack::MapWidgetMode))
         slotTogglePreviewMode(info);
 }
 
 // This method toggle between AlbumView and ImagePreview Modes, depending of context.
 void DigikamView::slotTogglePreviewMode(const ImageInfo &info)
 {
-    if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode && !info.isNull())
+    
+    if(d->albumWidgetStack->previewMode() != AlbumWidgetStack::MapWidgetMode)
     {
-        d->albumWidgetStack->setPreviewItem(info, d->iconView->previousInfo(info), d->iconView->nextInfo(info));
-    }
-    else
-    {
-        // We go back to AlbumView Mode.
-        d->albumWidgetStack->setPreviewMode( AlbumWidgetStack::PreviewAlbumMode );
+
+        if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode && !info.isNull())
+        {
+            d->albumWidgetStack->setPreviewItem(info, d->iconView->previousInfo(info), d->iconView->nextInfo(info));
+        }
+        else
+        {
+            // We go back to AlbumView Mode.
+            d->albumWidgetStack->setPreviewMode( AlbumWidgetStack::PreviewAlbumMode );
+        }
     }
 }
 
 void DigikamView::slotToggledToPreviewMode(bool b)
 {
-    toggleZoomActions();
 
-    if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
-        emit signalThumbSizeChanged(d->iconView->thumbnailSize().size());
-    else if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewImageMode)
-        slotZoomFactorChanged(d->albumWidgetStack->zoomFactor());
+    if(d->albumWidgetStack->previewMode() != AlbumWidgetStack::MapWidgetMode)
+    {
 
-    emit signalTogglePreview(b);
+        toggleZoomActions();
+
+        if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewAlbumMode)
+            emit signalThumbSizeChanged(d->iconView->thumbnailSize().size());
+        else if (d->albumWidgetStack->previewMode() == AlbumWidgetStack::PreviewImageMode)
+            slotZoomFactorChanged(d->albumWidgetStack->zoomFactor());
+
+        emit signalTogglePreview(b);
+    }
+
 }
 
 void DigikamView::slotImageEdit()

@@ -771,6 +771,7 @@ void DigikamApp::setupActions()
     // -----------------------------------------------------------
    
     d->imageViewSelectionAction = new KActionMenu(KIcon("viewimage"), i18n("Views"), this);
+    d->imageViewSelectionAction->setDelayed(false);
     actionCollection()->addAction("view_selection", d->imageViewSelectionAction); 
  
     d->imageIconViewAction = new KAction( i18n("Icon view..."), this);
