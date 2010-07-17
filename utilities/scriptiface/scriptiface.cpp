@@ -86,12 +86,12 @@ ScriptIface::ScriptIface(QWidget* parent)
     setMainWidget(w);
     adjustSize();
 
-    //Add the path to the Qt API binding libraries.
-    const QString *libPath = new QString("/usr/lib/qt4/plugins/script");
-    //import the plugins
-    d->engine->importExtension("qt.gui");   
     connect(this, SIGNAL(user1Clicked()),
             this, SLOT(slotEvaluate()));
+
+    //the following function calls
+    //importExtension() for each binding
+    ImportQtBindings();
 
 }
 ScriptIface::~ScriptIface()
@@ -109,6 +109,21 @@ void ScriptIface::slotEvaluate()
         d->label->setText("hello");
     }
     else d->label->clear();*/
+}
+void ScriptIface::ImportQtBindings()
+{
+    //import the plugins
+    d->engine->importExtension("qt.gui");
+    d->engine->importExtension("qt.core");
+    d->engine->importExtension("qt.network");
+    d->engine->importExtension("qt.opengl");
+    d->engine->importExtension("qt.phonon");
+    d->engine->importExtension("qt.sql");
+    d->engine->importExtension("qt.svg");
+    d->engine->importExtension("qt.uitools");
+    d->engine->importExtension("qt.webkit");
+    d->engine->importExtension("qt.xmlpatterns");
+    d->engine->importExtension("qt.xml");
 }
 
 } // namespace DigiKam
