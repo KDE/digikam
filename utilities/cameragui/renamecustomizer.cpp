@@ -134,6 +134,7 @@ RenameCustomizer::RenameCustomizer(QWidget* parent, const QString& cameraTitle)
 
     d->renameCustom         = new QRadioButton(i18nc("Custom Image Renaming", "Customize"), this);
     d->advancedRenameWidget = new AdvancedRenameWidget(this);
+    d->advancedRenameWidget->setLayoutStyle(AdvancedRenameWidget::LayoutCompact);
     d->advancedRenameWidget->setParser(new ImportRenameParser());
     d->buttonGroup->addButton(d->renameCustom, 2);
 

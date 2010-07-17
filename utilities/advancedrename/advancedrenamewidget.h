@@ -29,6 +29,8 @@
 #include <QtCore/QString>
 #include <QtGui/QWidget>
 
+class QMenu;
+
 namespace Digikam
 {
 
@@ -44,6 +46,12 @@ public:
 
     AdvancedRenameWidget(QWidget* parent = 0);
     ~AdvancedRenameWidget();
+
+    enum LayoutStyle
+    {
+        LayoutNormal,
+        LayoutCompact
+    };
 
     enum ControlWidget
     {
@@ -106,6 +114,13 @@ public:
     void setControlWidgets(ControlWidgets mask);
 
     /**
+     * set the layout style of the widget
+     * @param style the style of the layout
+     * @see LayoutStyle
+     */
+    void setLayoutStyle(LayoutStyle style);
+
+    /**
      * set focus for the LineEdit widget
      */
     void focusLineEdit();
@@ -133,7 +148,13 @@ private Q_SLOTS:
 private:
 
     void createToolTip();
-    void registerParserControls();
+
+    void   registerParserControls();
+    template<class T>
+    QMenu* createControlsMenu(QList<T*>& list);
+
+    void calculateLayout();
+
     void setupWidgets();
 
     void readSettings();
