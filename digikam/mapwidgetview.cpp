@@ -156,23 +156,17 @@ QItemSelectionModel* MapViewModelHelper::selectionModel() const
 
 bool MapViewModelHelper::itemCoordinates(const QModelIndex& index, KMapIface::WMWGeoCoordinate * const coordinates) const
 {
-    ImageInfo info          = d->model->retrieveImageInfo(index);
+    ImageInfo info          = d->model->imageInfo(index);
     ImagePosition imagePos  = info.imagePosition();
-    double latitude         = imagePos.latitudeNumber();
-    double longitude        = imagePos.longitudeNumber();
-
-    if(latitude != 0 && longitude != 0)
+    if (imagePos.isEmpty())
     {
-        KMapIface::WMWGeoCoordinate gpsCoordinates;
-        gpsCoordinates.setLatLon(latitude,longitude);
-
-        *coordinates = gpsCoordinates;
-
-        return true;
+        return false;
     }
-    
 
-    return false;
+    const KMapIface::WMWGeoCoordinate gpsCoordinates(imagePos.latitudeNumber(), imagePos.longitudeNumber());
+    *coordinates = gpsCoordinates;
+
+    return true;
 }
 
 QPixmap MapViewModelHelper::pixmapFromRepresentativeIndex(const QPersistentModelIndex& index, const QSize& size)
