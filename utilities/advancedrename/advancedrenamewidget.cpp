@@ -60,6 +60,7 @@ namespace Digikam
 class AdvancedRenameWidgetPriv
 {
     typedef AdvancedRenameWidget::ControlWidgets CWMask;
+    typedef AdvancedRenameWidget::LayoutStyle    LStyle;
 
 public:
 
@@ -99,11 +100,11 @@ public:
     RLabelExpander*      optionsLabel;
 
     CWMask               controlWidgetsMask;
-    AdvancedRenameWidget::LayoutStyle layoutStyle;
+    LStyle               layoutStyle;
 };
 
 AdvancedRenameWidget::AdvancedRenameWidget(QWidget* parent)
-                 : QWidget(parent), d(new AdvancedRenameWidgetPriv)
+                    : QWidget(parent), d(new AdvancedRenameWidgetPriv)
 {
     setupWidgets();
     setParser(new DefaultRenameParser());
@@ -388,7 +389,8 @@ void AdvancedRenameWidget::setupWidgets()
             mainLayout->addWidget(d->renameInput,           0, 0, 1,-1);
             mainLayout->addWidget(d->optionsButton,         1, 0, 1, 1);
             mainLayout->addWidget(d->modifiersButton,       1, 1, 1, 1);
-            mainLayout->addWidget(d->tooltipToggleButton,   1, 2, 1, 1);
+            mainLayout->addWidget(d->tooltipToggleButton,   1, 3, 1, 1);
+            mainLayout->setColumnStretch(2, 10);
             break;
         default:
             mainLayout->addWidget(d->renameInput,           0, 0, 1, 1);
