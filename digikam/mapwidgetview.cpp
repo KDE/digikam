@@ -37,6 +37,11 @@
 #include <KHBox>
 #include <KVBox>
 
+// libkmap includes
+
+#include <libkmap/kmap.h>
+#include <libkmap/itemmarkertiler.h>
+
 //local includes
 
 #include "imageposition.h"
@@ -86,8 +91,7 @@ MapWidgetView::MapWidgetView(ImageAlbumModel* model, QWidget* parent)
     d->mapWidget = new KMapIface::KMap(this);
     d->mapWidget->setEditModeAvailable(true);
 
-    KMapIface::MarkerModel* const kmapMarkerModel = new KMapIface::MarkerModel(this);
-    kmapMarkerModel->setMarkerModelHelper(d->mapViewModelHelper);
+    KMapIface::ItemMarkerTiler* const kmapMarkerModel = new KMapIface::ItemMarkerTiler(d->mapViewModelHelper, this);
     d->mapWidget->setGroupedModel(kmapMarkerModel);
 
     d->mapWidget->setBackend("marble");

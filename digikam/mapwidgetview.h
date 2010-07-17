@@ -30,9 +30,7 @@
 
 // libkmap includes
 
-#include <libkmap/html_widget.h>
-#include <libkmap/kmap.h>
-#include <libkmap/markermodel.h>
+#include <libkmap/kmap_primitives.h>
 
 // local includes
 
