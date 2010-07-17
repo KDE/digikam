@@ -169,6 +169,7 @@ EditorToolSettings::EditorToolSettings(QWidget *parent)
 
     d->okBtn = new KPushButton(d->btnBox1);
     d->okBtn->setGuiItem(KStandardGuiItem::ok());
+    d->okBtn->setDefault(true);
 
     d->cancelBtn = new KPushButton(d->btnBox1);
     d->cancelBtn->setGuiItem(KStandardGuiItem::cancel());

@@ -577,6 +577,11 @@ void EditorWindow::setupStandardActions()
     altBackwardAction->setShortcut( KShortcut(Qt::SHIFT+Qt::Key_Space) );
     connect(altBackwardAction, SIGNAL(triggered()), this, SLOT(slotBackward()));
 
+    KAction *applyToolAction = new KAction(i18n("Apply Tool"), this);
+    actionCollection()->addAction("editorwindow_apply_enter", applyToolAction);
+    applyToolAction->setShortcut( KShortcut(Qt::Key_Return) );
+    connect(applyToolAction, SIGNAL(triggered()), this, SLOT(slotApplyTool()));
+
     m_animLogo = new DLogoAction(this);
     actionCollection()->addAction("logo_action", m_animLogo);
 }
@@ -2228,6 +2233,12 @@ void EditorWindow::slotCloseTool()
 {
     if (d->toolIface)
         d->toolIface->slotCloseTool();
+}
+
+void EditorWindow::slotApplyTool()
+{
+    if (d->toolIface)
+        d->toolIface->slotApplyTool();
 }
 
 void EditorWindow::setPreviewModeMask(int mask)

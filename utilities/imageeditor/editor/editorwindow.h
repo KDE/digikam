@@ -276,6 +276,7 @@ private Q_SLOTS:
     void slotRawCameraList();
     void slotShowMenuBar();
     void slotCloseTool();
+    void slotApplyTool();
     void slotKioMoveFinished(KJob *job);
     void slotUndoStateChanged(bool, bool, bool);
 

@@ -242,6 +242,11 @@ void EditorTool::slotCloseTool()
     slotCancel();
 }
 
+void EditorTool::slotApplyTool()
+{
+    slotOk();
+}
+
 void EditorTool::slotPreviewModeChanged()
 {
     slotEffect();
