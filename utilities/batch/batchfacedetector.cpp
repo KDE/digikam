@@ -145,11 +145,7 @@ void BatchFaceDetector::processOne()
 {
     if (d->cancel) return;
     QString path = d->allPicturesPath.first();
-    LoadingDescription description(path, 0,
-                                   AlbumSettings::instance()->getExifRotate(),
-                                   LoadingDescription::ConvertToSRGB);
-    description.rawDecodingSettings.sixteenBitsImage = false;
-    d->previewLoadThread->load(description);
+    d->previewLoadThread->loadHighQuality(path, AlbumSettings::instance()->getExifRotate());
 }
 
 void BatchFaceDetector::complete()
