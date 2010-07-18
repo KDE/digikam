@@ -18,4 +18,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 011 ==> 244151 : Renaming image files causes them to vanish from an album.
 012 ==> 241418 : LZW compressed TIFFs from RawTherapee are won't display.
 013 ==> 212848 : Crashed in slideshow while viewing.
-014 ==>
+014 ==> 245061 :  [patch] "Restore Tag Filters" is broken, works only for top level nodes.
+015 ==> 
