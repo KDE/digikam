@@ -937,7 +937,7 @@ public:
      * Returns false if the table is empty.
      */
     bool hasHaarFingerprints();
-
+    
     /**
      * Returns a list of all images where the Haar fingerprint has either not been generated
      * yet, or is outdated because the file is identified as changed since
@@ -946,6 +946,8 @@ public:
      */
     QList<qlonglong> getDirtyOrMissingFingerprints();
     QStringList getDirtyOrMissingFingerprintURLs();
+    
+    QStringList getDirtyOrMissingFaceImageURLs();
 
     /**
      * Find items that are, with reasonable certainty, identical

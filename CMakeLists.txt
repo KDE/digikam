@@ -1009,6 +1009,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch/batchalbumssyncmetadata.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch/batchsyncmetadata.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch/fingerprintsgenerator.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/batch/batchfacedetector.cpp
        )
 
     SET(libdatabasecore_SRCS
