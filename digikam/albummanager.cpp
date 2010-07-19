@@ -2715,12 +2715,12 @@ void AlbumManager::slotAlbumsJobData(KIO::Job*, const QByteArray& data)
     emit signalPAlbumsDirty(albumsStatMap);
 }
 
-void AlbumManager::slotPeopleJobResult(KJob* job)
+void AlbumManager::slotPeopleJobResult(KJob* /*job*/)
 {
     // TODO: Add stuff!
 }
 
-void AlbumManager::slotPeopleJobData(KIO::Job*, const QByteArray& data)
+void AlbumManager::slotPeopleJobData(KIO::Job*, const QByteArray& /*data*/)
 {
     // TODO: Add stuff!
 }
