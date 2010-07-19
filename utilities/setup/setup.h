@@ -66,6 +66,7 @@ public:
         KipiPluginsPage,
         CameraPage,
         MiscellaneousPage,
+        ScriptManagerPage,
 
         SetupPageEnumLast
     };

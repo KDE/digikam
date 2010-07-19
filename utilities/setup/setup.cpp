@@ -58,6 +58,7 @@
 #include "setupslideshow.h"
 #include "setuptooltip.h"
 #include "setupdatabase.h"
+#include "setupscriptmanager.h"
 
 namespace Digikam
 {
@@ -85,6 +86,7 @@ public:
         page_plugins     = 0;
         page_camera      = 0;
         page_misc        = 0;
+        page_scriptmanager=0;
 
         databasePage     = 0;
         collectionsPage  = 0;
@@ -103,6 +105,7 @@ public:
         cameraPage       = 0;
         miscPage         = 0;
         pluginsPage      = 0;
+        scriptManagerPage= 0;
     }
 
     KPageWidgetItem*  page_database;
@@ -122,6 +125,7 @@ public:
     KPageWidgetItem*  page_plugins;
     KPageWidgetItem*  page_camera;
     KPageWidgetItem*  page_misc;
+    KPageWidgetItem*  page_scriptmanager;
 
     SetupDatabase*    databasePage;
     SetupCollections* collectionsPage;
@@ -140,6 +144,7 @@ public:
     SetupCamera*      cameraPage;
     SetupMisc*        miscPage;
     SetupPlugins*     pluginsPage;
+    SetupScriptManager* scriptManagerPage;
 
 public:
 
@@ -257,6 +262,13 @@ Setup::Setup(QWidget* parent)
     d->page_misc->setHeader(i18n("<qt>Miscellaneous Settings<br/>"
                                  "<i>Customize behavior of the other parts of digiKam</i></qt>"));
     d->page_misc->setIcon(KIcon("preferences-other"));
+    
+    //Added the Script Manager page
+    d->scriptManagerPage = new SetupScriptManager();
+    d->page_scriptmanager = addPage(d->scriptManagerPage , i18n("Script Manager"));
+    d->page_scriptmanager->setHeader(i18n("<qt>Script Manager<br/>"
+                                          "<i>Add/Remove and Manage Digikam Scripts</i></qt>"));
+    d->page_scriptmanager->setIcon(KIcon("application-x-shellscript"));
 
     for (int page = 0; page != SetupPageEnumLast; ++page)
     {
@@ -400,6 +412,7 @@ void Setup::slotOkClicked()
     d->iccPage->applySettings();
     d->miscPage->applySettings();
     d->pluginsPage->applyPlugins();
+    //d->scriptManagerPage->applySettings();//doesnt have applySettings method
 
     AlbumSettings::instance()->emitSetupChanged();
 
@@ -463,6 +476,7 @@ Setup::Page Setup::activePageIndex()
     if (cur == d->page_plugins)     return KipiPluginsPage;
     if (cur == d->page_camera)      return CameraPage;
     if (cur == d->page_misc)        return MiscellaneousPage;
+    if (cur == d->page_scriptmanager) return ScriptManagerPage;
 
     return DatabasePage;
 }
@@ -505,6 +519,8 @@ KPageWidgetItem* SetupPrivate::pageItem(Setup::Page page)
             return page_camera;
         case Setup::MiscellaneousPage:
             return page_misc;
+        case Setup::ScriptManagerPage:
+            return page_scriptmanager;
         default:
             return 0;
     }
