@@ -143,7 +143,7 @@ public:
 
 public:
 
-    KPageWidgetItem*  pageItem(Setup::Page page);
+    KPageWidgetItem* pageItem(Setup::Page page) const;
 };
 
 Setup::Setup(QWidget* parent)
@@ -264,7 +264,7 @@ Setup::Setup(QWidget* parent)
         if (!item)
             continue;
         QWidget* wgt            = item->widget();
-        QScrollArea *scrollArea = qobject_cast<QScrollArea*>(wgt);
+        QScrollArea* scrollArea = qobject_cast<QScrollArea*>(wgt);
         if (scrollArea)
             scrollArea->setFrameShape(QFrame::NoFrame);
     }
@@ -318,13 +318,13 @@ QSize Setup::sizeHint() const
             page == DcrawPage       ||
             page == MiscellaneousPage)
         {
-            KPageWidgetItem *item   = d->pageItem((Page)page);
+            KPageWidgetItem* item   = d->pageItem((Page)page);
             if (!item)
                 continue;
 
-            QWidget *page           = item->widget();
+            QWidget* page           = item->widget();
             maxHintHeight           = qMax(maxHintHeight, page->sizeHint().height());
-            QScrollArea *scrollArea = qobject_cast<QScrollArea*>(page);
+            QScrollArea* scrollArea = qobject_cast<QScrollArea*>(page);
 
             if (scrollArea)
                 maxWidgetHeight = qMax(maxWidgetHeight, scrollArea->widget()->sizeHint().height());
@@ -415,7 +415,7 @@ void Setup::slotOkClicked()
         if (result != KMessageBox::Yes)
             return;
 
-        BatchThumbsGenerator *thumbsGenerator = new BatchThumbsGenerator(this);
+        BatchThumbsGenerator* thumbsGenerator = new BatchThumbsGenerator(this);
         thumbsGenerator->show();
     }
 
@@ -467,7 +467,7 @@ Setup::Page Setup::activePageIndex()
     return DatabasePage;
 }
 
-KPageWidgetItem* SetupPrivate::pageItem(Setup::Page page)
+KPageWidgetItem* SetupPrivate::pageItem(Setup::Page page) const
 {
     switch(page)
     {
