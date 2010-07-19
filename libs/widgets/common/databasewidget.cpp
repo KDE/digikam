@@ -317,6 +317,7 @@ void DatabaseWidget::setParametersFromSettings(const AlbumSettings *settings)
 
     internalServer->setChecked(settings->getInternalDatabaseServer());
     databaseName->setText(settings->getDatabaseName());
+    databaseNameThumbnails->setText(settings->getDatabaseNameThumbnails());
     hostName->setText(settings->getDatabaseHostName());
     hostPort->setValue(settings->getDatabasePort());
     connectionOptions->setText(settings->getDatabaseConnectoptions());
@@ -354,10 +355,12 @@ DatabaseParameters DatabaseWidget::getDatabaseParameters()
         if (parameters.databaseType == QString(DatabaseParameters::SQLiteDatabaseType()))
         {
             parameters.databaseName = QDir::cleanPath(databasePathEdit->url().toLocalFile() + '/' + "digikam4.db");
+            parameters.databaseNameThumbnails = parameters.databaseName;
         }
         else
         {
             parameters.databaseName = databaseName->text();
+            parameters.databaseNameThumbnails = databaseNameThumbnails->text();
         }
     }
     else

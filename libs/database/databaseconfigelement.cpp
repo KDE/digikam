@@ -160,11 +160,6 @@ void DatabaseConfigElementLoader::readDBActions(QDomElement& sqlStatementElement
         {
             action.mode = dbActionElement.attribute("mode");
         }
-        else
-        {
-            kDebug() << "Missing statement attribute <mode>. Setting to default \"transaction\".";
-            action.mode = QString("transaction");
-        }
 
 
         QDomElement databaseElement = dbActionElement.firstChildElement("statement");
