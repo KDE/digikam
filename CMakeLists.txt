@@ -954,6 +954,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/cameralist.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/cameratype.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupdatabase.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupscriptmanager.cpp
        )
 
     SET(libkipiiface_SRCS
