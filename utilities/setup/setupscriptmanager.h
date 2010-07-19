@@ -3,11 +3,8 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * File Name : setupscriptmanager.h
- * Creation Date : 19-07-2010
+ * Date        : 19-07-2010
  * Description : script manager for digiKam
- * Last Modified : Monday 19 July 2010 02:41:37 AM IST
- *
  *
  * Copyright (C) 2010 Created By: Kunal Ghosh <kunal dot t2 at gmail dot com>
  * Copyright (C) 2010 Created By: Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -39,7 +36,7 @@ class SetupScriptManagerPriv;
 
 class SetupScriptManager : public QScrollArea
 {
-        Q_OBJECT
+    Q_OBJECT
 
 public:
 
@@ -49,10 +46,8 @@ public:
 private:
 
     SetupScriptManagerPriv* const d;
-
 };
 
 }//namespace digikam
 
 #endif /* SETUPSCRIPTMANAGER_H */
-
