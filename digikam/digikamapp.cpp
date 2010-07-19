@@ -769,16 +769,16 @@ void DigikamApp::setupActions()
 
 
     // -----------------------------------------------------------
-   
+
     d->imageViewSelectionAction = new KActionMenu(KIcon("viewimage"), i18n("Views"), this);
     d->imageViewSelectionAction->setDelayed(false);
-    actionCollection()->addAction("view_selection", d->imageViewSelectionAction); 
- 
+    actionCollection()->addAction("view_selection", d->imageViewSelectionAction);
+
     d->imageIconViewAction = new KAction( i18n("Icon view..."), this);
     actionCollection()->addAction("icon_view", d->imageIconViewAction);
     connect(d->imageIconViewAction, SIGNAL(triggered()), d->view, SLOT(slotIconView()));
     d->imageViewSelectionAction->addAction(d->imageIconViewAction);
-    
+
     d->imageMapViewAction = new KAction( i18n("Map View..."), this);
     actionCollection()->addAction("map_view", d->imageMapViewAction);
     connect(d->imageMapViewAction, SIGNAL(triggered()), d->view, SLOT(slotMapWidgetView()));
@@ -2912,8 +2912,8 @@ void DigikamApp::slotSetCheckedExifOrientationAction(const ImageInfo& info)
 
 void DigikamApp::slotScriptConsole()
 {
-    ScriptIface w;
-    w.exec();
+    ScriptIface *w = new ScriptIface();
+    w->show();
 }
 
 }  // namespace Digikam

@@ -69,7 +69,7 @@ ScriptIface::ScriptIface(QWidget* parent)
     setButtonText(User1, i18n("Evaluate"));
     setButtonIcon(User1, KIcon("run-build"));
     setHelp("scriptconsole.anchor", "digikam");
-    setModal(true);
+    setModal(false);
 
     QWidget* w        = new QWidget(this);
     QGridLayout* grid = new QGridLayout(w);
