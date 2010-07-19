@@ -49,7 +49,9 @@ class SetupScriptManagerPriv
 {
 public:
 
-    SetupScriptManagerPriv()
+    SetupScriptManagerPriv() :
+        configGroupName("ScriptManager Settings")
+
     {
         scriptLoaded = 0;
         scriptDebug  = 0;
@@ -57,14 +59,16 @@ public:
         group        = 0;
     }
 
-    QCheckBox*   scriptLoaded;
-    QPushButton* scriptDebug;
-    QPushButton* scriptInfo;
-    QGroupBox*   group;
+    const QString configGroupName;
+
+    QCheckBox*    scriptLoaded;
+    QPushButton*  scriptDebug;
+    QPushButton*  scriptInfo;
+    QGroupBox*    group;
 };
 
 SetupScriptManager::SetupScriptManager(QWidget* parent)
-                  : QScrollArea(parent),d(new SetupScriptManagerPriv)
+                  : QScrollArea(parent), d(new SetupScriptManagerPriv)
 {
     //The Script Manager Window is arranged as follows
     //initially there is a QGroupBox to which Vertical Layout is assigned
@@ -104,11 +108,28 @@ SetupScriptManager::SetupScriptManager(QWidget* parent)
     mainLayout->setMargin(0);
     mainLayout->setSpacing(KDialog::spacingHint());
     mainLayout->addStretch();
+
+    readSettings();
 }
 
 SetupScriptManager::~SetupScriptManager()
 {
     delete d;
+}
+
+void SetupScriptManager::applySettings()
+{
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(d->configGroupName);
+    // TODO
+    config->sync();
+}
+
+void SetupScriptManager::readSettings()
+{
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(d->configGroupName);
+    // TODO
 }
 
 } // namespace Digikam

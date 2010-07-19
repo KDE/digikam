@@ -43,6 +43,12 @@ public:
     SetupScriptManager ( QWidget* parent = 0 );
     ~SetupScriptManager();
 
+    void applySettings();
+
+private:
+
+    void readSettings();
+
 private:
 
     SetupScriptManagerPriv* const d;

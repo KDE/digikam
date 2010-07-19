@@ -69,86 +69,86 @@ public:
 
     SetupPrivate()
     {
-        page_database    = 0;
-        page_collections = 0;
-        page_albumView   = 0;
-        page_tooltip     = 0;
-        page_metadata    = 0;
-        page_template    = 0;
-        page_category    = 0;
-        page_mime        = 0;
-        page_lighttable  = 0;
-        page_editor      = 0;
-        page_dcraw       = 0;
-        page_iofiles     = 0;
-        page_slideshow   = 0;
-        page_icc         = 0;
-        page_plugins     = 0;
-        page_camera      = 0;
-        page_misc        = 0;
-        page_scriptmanager=0;
+        page_database      = 0;
+        page_collections   = 0;
+        page_albumView     = 0;
+        page_tooltip       = 0;
+        page_metadata      = 0;
+        page_template      = 0;
+        page_category      = 0;
+        page_mime          = 0;
+        page_lighttable    = 0;
+        page_editor        = 0;
+        page_dcraw         = 0;
+        page_iofiles       = 0;
+        page_slideshow     = 0;
+        page_icc           = 0;
+        page_plugins       = 0;
+        page_camera        = 0;
+        page_scriptmanager = 0;
+        page_misc          = 0;
 
-        databasePage     = 0;
-        collectionsPage  = 0;
-        albumViewPage    = 0;
-        tooltipPage      = 0;
-        metadataPage     = 0;
-        templatePage     = 0;
-        categoryPage     = 0;
-        mimePage         = 0;
-        lighttablePage   = 0;
-        editorPage       = 0;
-        dcrawPage        = 0;
-        iofilesPage      = 0;
-        slideshowPage    = 0;
-        iccPage          = 0;
-        cameraPage       = 0;
-        miscPage         = 0;
-        pluginsPage      = 0;
-        scriptManagerPage= 0;
+        databasePage      = 0;
+        collectionsPage   = 0;
+        albumViewPage     = 0;
+        tooltipPage       = 0;
+        metadataPage      = 0;
+        templatePage      = 0;
+        categoryPage      = 0;
+        mimePage          = 0;
+        lighttablePage    = 0;
+        editorPage        = 0;
+        dcrawPage         = 0;
+        iofilesPage       = 0;
+        slideshowPage     = 0;
+        iccPage           = 0;
+        cameraPage        = 0;
+        pluginsPage       = 0;
+        scriptManagerPage = 0;
+        miscPage          = 0;
     }
 
-    KPageWidgetItem*  page_database;
-    KPageWidgetItem*  page_collections;
-    KPageWidgetItem*  page_albumView;
-    KPageWidgetItem*  page_tooltip;
-    KPageWidgetItem*  page_metadata;
-    KPageWidgetItem*  page_template;
-    KPageWidgetItem*  page_category;
-    KPageWidgetItem*  page_mime;
-    KPageWidgetItem*  page_lighttable;
-    KPageWidgetItem*  page_editor;
-    KPageWidgetItem*  page_dcraw;
-    KPageWidgetItem*  page_iofiles;
-    KPageWidgetItem*  page_slideshow;
-    KPageWidgetItem*  page_icc;
-    KPageWidgetItem*  page_plugins;
-    KPageWidgetItem*  page_camera;
-    KPageWidgetItem*  page_misc;
-    KPageWidgetItem*  page_scriptmanager;
+    KPageWidgetItem*    page_database;
+    KPageWidgetItem*    page_collections;
+    KPageWidgetItem*    page_albumView;
+    KPageWidgetItem*    page_tooltip;
+    KPageWidgetItem*    page_metadata;
+    KPageWidgetItem*    page_template;
+    KPageWidgetItem*    page_category;
+    KPageWidgetItem*    page_mime;
+    KPageWidgetItem*    page_lighttable;
+    KPageWidgetItem*    page_editor;
+    KPageWidgetItem*    page_dcraw;
+    KPageWidgetItem*    page_iofiles;
+    KPageWidgetItem*    page_slideshow;
+    KPageWidgetItem*    page_icc;
+    KPageWidgetItem*    page_plugins;
+    KPageWidgetItem*    page_camera;
+    KPageWidgetItem*    page_misc;
+    KPageWidgetItem*    page_scriptmanager;
 
-    SetupDatabase*    databasePage;
-    SetupCollections* collectionsPage;
-    SetupAlbumView*   albumViewPage;
-    SetupToolTip*     tooltipPage;
-    SetupMetadata*    metadataPage;
-    SetupTemplate*    templatePage;
-    SetupCategory*    categoryPage;
-    SetupMime*        mimePage;
-    SetupLightTable*  lighttablePage;
-    SetupEditor*      editorPage;
-    SetupDcraw*       dcrawPage;
-    SetupIOFiles*     iofilesPage;
-    SetupSlideShow*   slideshowPage;
-    SetupICC*         iccPage;
-    SetupCamera*      cameraPage;
-    SetupMisc*        miscPage;
-    SetupPlugins*     pluginsPage;
+    SetupDatabase*      databasePage;
+    SetupCollections*   collectionsPage;
+    SetupAlbumView*     albumViewPage;
+    SetupToolTip*       tooltipPage;
+    SetupMetadata*      metadataPage;
+    SetupTemplate*      templatePage;
+    SetupCategory*      categoryPage;
+    SetupMime*          mimePage;
+    SetupLightTable*    lighttablePage;
+    SetupEditor*        editorPage;
+    SetupDcraw*         dcrawPage;
+    SetupIOFiles*       iofilesPage;
+    SetupSlideShow*     slideshowPage;
+    SetupICC*           iccPage;
+    SetupCamera*        cameraPage;
+    SetupMisc*          miscPage;
+    SetupPlugins*       pluginsPage;
     SetupScriptManager* scriptManagerPage;
 
 public:
 
-    KPageWidgetItem*  pageItem(Setup::Page page);
+    KPageWidgetItem* pageItem(Setup::Page page) const;
 };
 
 Setup::Setup(QWidget* parent)
@@ -257,18 +257,18 @@ Setup::Setup(QWidget* parent)
                                    "<i>Manage your camera devices</i></qt>"));
     d->page_camera->setIcon(KIcon("camera-photo"));
 
+
+    d->scriptManagerPage  = new SetupScriptManager();
+    d->page_scriptmanager = addPage(d->scriptManagerPage , i18n("Script Manager"));
+    d->page_scriptmanager->setHeader(i18n("<qt>Script Manager<br/>"
+                                          "<i>Add/Remove and Manage Digikam Scripts</i></qt>"));
+    d->page_scriptmanager->setIcon(KIcon("application-x-shellscript"));
+
     d->miscPage  = new SetupMisc();
     d->page_misc = addPage(d->miscPage, i18n("Miscellaneous"));
     d->page_misc->setHeader(i18n("<qt>Miscellaneous Settings<br/>"
                                  "<i>Customize behavior of the other parts of digiKam</i></qt>"));
     d->page_misc->setIcon(KIcon("preferences-other"));
-    
-    //Added the Script Manager page
-    d->scriptManagerPage = new SetupScriptManager();
-    d->page_scriptmanager = addPage(d->scriptManagerPage , i18n("Script Manager"));
-    d->page_scriptmanager->setHeader(i18n("<qt>Script Manager<br/>"
-                                          "<i>Add/Remove and Manage Digikam Scripts</i></qt>"));
-    d->page_scriptmanager->setIcon(KIcon("application-x-shellscript"));
 
     for (int page = 0; page != SetupPageEnumLast; ++page)
     {
@@ -276,7 +276,7 @@ Setup::Setup(QWidget* parent)
         if (!item)
             continue;
         QWidget* wgt            = item->widget();
-        QScrollArea *scrollArea = qobject_cast<QScrollArea*>(wgt);
+        QScrollArea* scrollArea = qobject_cast<QScrollArea*>(wgt);
         if (scrollArea)
             scrollArea->setFrameShape(QFrame::NoFrame);
     }
@@ -334,9 +334,9 @@ QSize Setup::sizeHint() const
             if (!item)
                 continue;
 
-            QWidget *page           = item->widget();
+            QWidget* page           = item->widget();
             maxHintHeight           = qMax(maxHintHeight, page->sizeHint().height());
-            QScrollArea *scrollArea = qobject_cast<QScrollArea*>(page);
+            QScrollArea* scrollArea = qobject_cast<QScrollArea*>(page);
 
             if (scrollArea)
                 maxWidgetHeight = qMax(maxWidgetHeight, scrollArea->widget()->sizeHint().height());
@@ -412,7 +412,7 @@ void Setup::slotOkClicked()
     d->iccPage->applySettings();
     d->miscPage->applySettings();
     d->pluginsPage->applyPlugins();
-    //d->scriptManagerPage->applySettings();//doesnt have applySettings method
+    d->scriptManagerPage->applySettings();
 
     AlbumSettings::instance()->emitSetupChanged();
 
@@ -460,28 +460,28 @@ Setup::Page Setup::activePageIndex()
 {
     KPageWidgetItem* cur = currentPage();
 
-    if (cur == d->page_collections) return CollectionsPage;
-    if (cur == d->page_albumView)   return AlbumViewPage;
-    if (cur == d->page_tooltip)     return ToolTipPage;
-    if (cur == d->page_metadata)    return MetadataPage;
-    if (cur == d->page_template)    return TemplatePage;
-    if (cur == d->page_category)    return CategoryPage;
-    if (cur == d->page_mime)        return MimePage;
-    if (cur == d->page_lighttable)  return LightTablePage;
-    if (cur == d->page_editor)      return EditorPage;
-    if (cur == d->page_dcraw)       return DcrawPage;
-    if (cur == d->page_iofiles)     return IOFilesPage;
-    if (cur == d->page_slideshow)   return SlideshowPage;
-    if (cur == d->page_icc)         return ICCPage;
-    if (cur == d->page_plugins)     return KipiPluginsPage;
-    if (cur == d->page_camera)      return CameraPage;
-    if (cur == d->page_misc)        return MiscellaneousPage;
+    if (cur == d->page_collections)   return CollectionsPage;
+    if (cur == d->page_albumView)     return AlbumViewPage;
+    if (cur == d->page_tooltip)       return ToolTipPage;
+    if (cur == d->page_metadata)      return MetadataPage;
+    if (cur == d->page_template)      return TemplatePage;
+    if (cur == d->page_category)      return CategoryPage;
+    if (cur == d->page_mime)          return MimePage;
+    if (cur == d->page_lighttable)    return LightTablePage;
+    if (cur == d->page_editor)        return EditorPage;
+    if (cur == d->page_dcraw)         return DcrawPage;
+    if (cur == d->page_iofiles)       return IOFilesPage;
+    if (cur == d->page_slideshow)     return SlideshowPage;
+    if (cur == d->page_icc)           return ICCPage;
+    if (cur == d->page_plugins)       return KipiPluginsPage;
+    if (cur == d->page_camera)        return CameraPage;
     if (cur == d->page_scriptmanager) return ScriptManagerPage;
+    if (cur == d->page_misc)          return MiscellaneousPage;
 
     return DatabasePage;
 }
 
-KPageWidgetItem* SetupPrivate::pageItem(Setup::Page page)
+KPageWidgetItem* SetupPrivate::pageItem(Setup::Page page) const
 {
     switch(page)
     {
@@ -517,10 +517,10 @@ KPageWidgetItem* SetupPrivate::pageItem(Setup::Page page)
             return page_plugins;
         case Setup::CameraPage:
             return page_camera;
-        case Setup::MiscellaneousPage:
-            return page_misc;
         case Setup::ScriptManagerPage:
             return page_scriptmanager;
+        case Setup::MiscellaneousPage:
+            return page_misc;
         default:
             return 0;
     }
