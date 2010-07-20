@@ -194,7 +194,7 @@ TagViewSideBarWidget::TagViewSideBarWidget(QWidget* parent, TagModel* model)
     d->tagFolderView = new TagFolderView(this, model);
     d->tagFolderView->setConfigGroup(getConfigGroup());
     d->tagFolderView->setExpandNewCurrentItem(true);
-    d->tagFolderView->setAlbumManagerCurrentAlbum(true);
+    d->tagFolderView->setAlbumManagerCurrentAlbum(true);    
     d->tagSearchBar  = new SearchTextBar(this, "DigikamViewTagSearchBar");
     d->tagSearchBar->setHighlightOnResult(true);
     d->tagSearchBar->setModel(model, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
@@ -1112,8 +1112,6 @@ public:
     KSqueezedTextLabel*       cursorDateLabel;
 
     SearchTextBar*            searchPeopleBar;
-//  EditableSearchTreeView*   PeopleFolderView;
-//  PeopleWidget*             peopleWidget;
 
     SearchModel*              searchModel;
 

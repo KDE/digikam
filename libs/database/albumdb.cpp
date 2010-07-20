@@ -1965,6 +1965,38 @@ QStringList AlbumDB::getDirtyOrMissingFingerprintURLs()
     return urls;
 }
 
+QStringList AlbumDB::getDirtyOrMissingFaceImageUrls()
+{
+    QList<QVariant> values;
+
+    d->db->execSql( QString("SELECT Albums.albumRoot, Albums.relativePath, Images.name FROM Images "
+                            "LEFT JOIN ImageScannedMatrix ON Images.id=ImageScannedMatrix.imageid "
+                            "LEFT JOIN Albums ON Albums.id=Images.album "
+                            " WHERE Images.status=1 AND Images.category=1 AND "
+                            " ( ImageScannedMatrix.imageid IS NULL "
+                            "   OR Images.modificationDate != ImageScannedMatrix.modificationDate "
+                            "   OR Images.uniqueHash != ImageScannedMatrix.uniqueHash ); "),
+                    &values );
+
+    QStringList urls;
+    QString albumRootPath, relativePath, name;
+    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
+    {
+        albumRootPath = CollectionManager::instance()->albumRootPath((*it).toInt());
+        ++it;
+        relativePath = (*it).toString();
+        ++it;
+        name = (*it).toString();
+        ++it;
+        if (relativePath == "/")
+            urls << albumRootPath + relativePath + name;
+        else
+            urls << albumRootPath + relativePath + '/' + name;
+    }
+
+    return urls;
+}
+
 QList<ItemScanInfo> AlbumDB::getIdenticalFiles(qlonglong id)
 {
     if (!id)

@@ -947,7 +947,13 @@ public:
     QList<qlonglong> getDirtyOrMissingFingerprints();
     QStringList getDirtyOrMissingFingerprintURLs();
     
-    QStringList getDirtyOrMissingFaceImageURLs();
+    /**
+     * Returns a list of all images where the Faces have either not been detected
+     * yet, or is outdated because the file is identified as changed since
+     * the generation of the fingerprint.
+     * Return image ids or item URLs.
+     */
+    QStringList getDirtyOrMissingFaceImageUrls();
 
     /**
      * Find items that are, with reasonable certainty, identical
