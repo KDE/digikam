@@ -406,6 +406,12 @@ void DigikamView::setupConnections()
     connect(d->fuzzySearchSideBar, SIGNAL(signalGenerateFingerPrintsFirstTime()),
             d->parent, SLOT(slotGenerateFingerPrintsFirstTime()));
 
+    connect(d->peopleSideBar, SIGNAL(signalScanForFacesFirstTime()),
+            d->parent, SLOT(slotDetectFacesFirstTime()));
+
+    /*connect(d->fuzzySearchSideBar, SIGNAL(signalGenerateFingerPrintsFirstTime()),
+            d->parent, SLOT(slotGenerateFingerPrintsFirstTime()));*/
+    
 #ifdef HAVE_MARBLEWIDGET
     connect(this, SIGNAL(signalNoCurrentItem()),
             d->gpsSearchSideBar, SLOT(slotDigikamViewNoCurrentItem()));

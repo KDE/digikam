@@ -1115,6 +1115,13 @@ PeopleSideBarWidget::PeopleSideBarWidget(QWidget* parent, TagModel* model)
 
     connect(d->tagFolderView, SIGNAL(signalFindDuplicatesInAlbum(Album*)),
             this, SIGNAL(signalFindDuplicatesInAlbum(Album*)));
+    
+    /*connect(d->rescanButton, SIGNAL(pressed()),
+            this, SIGNAL(signalUpdateFingerPrints()));
+*/
+    connect(d->rescanButton, SIGNAL(pressed()),
+            this, SIGNAL( signalScanForFacesFirstTime() ) );
+
 }
 
 QPixmap PeopleSideBarWidget::getIcon()

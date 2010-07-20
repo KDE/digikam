@@ -136,6 +136,7 @@
 #include "dmetadata.h"
 #include "uifilevalidator.h"
 #include "scriptiface.h"
+#include "batchfacedetector.h"
 
 #include "databaseserverstarter.h"
 
@@ -2582,6 +2583,11 @@ void DigikamApp::slotGenerateFingerPrintsFirstTime()
     runFingerPrintsGenerator(true);
 }
 
+void DigikamApp::slotDetectFacesFirstTime()
+{
+    runFaceScanner(true);
+}
+
 void DigikamApp::slotRebuildFingerPrints()
 {
     QString msg = i18n("Image fingerprinting can take some time.\n"
@@ -2599,6 +2605,23 @@ void DigikamApp::slotRebuildFingerPrints()
     runFingerPrintsGenerator(result == KMessageBox::Yes ? false : true);
 }
 
+void DigikamApp::slotScanForFaces()
+{
+    QString msg = i18n("Scanning for faces can take a lot of time.\n"
+                       "Which would you prefer?\n"
+                       "- Scan for changed or non-cataloged items in the database (quick)\n"
+                       "- Rescan all photographs (takes a long time)");
+    int result = KMessageBox::questionYesNoCancel(this, msg,
+                                                  i18n("Warning"),
+                                                  KGuiItem(i18n("Scan")),
+                                                  KGuiItem(i18n("Rescan All")));
+
+    if (result == KMessageBox::Cancel)
+        return;
+
+    runFaceScanner(result == KMessageBox::Yes ? false : true);
+}
+
 void DigikamApp::runFingerPrintsGenerator(bool rebuildAll)
 {
     FingerPrintsGenerator *fingerprintsGenerator = new FingerPrintsGenerator(this, rebuildAll);
@@ -2609,9 +2632,23 @@ void DigikamApp::runFingerPrintsGenerator(bool rebuildAll)
     fingerprintsGenerator->show();
 }
 
+void DigikamApp::runFaceScanner(bool rebuildAll)
+{
+    BatchFaceDetector *batchFaceDetector = new BatchFaceDetector(this, rebuildAll);
+
+    connect(batchFaceDetector, SIGNAL(signalDetectAllFacesDone()),
+            this, SLOT(slotScanForFacesDone()));
+
+    batchFaceDetector->show();
+}
 void DigikamApp::slotRebuildFingerPrintsDone()
 {
     d->config->group("General Settings").writeEntry("Finger Prints Generator First Run", true);
+}
+
+void DigikamApp::slotScanForFacesDone()
+{
+    d->config->group("General Settings").writeEntry("Face Scanner First Run", true);
 }
 
 void DigikamApp::slotDonateMoney()

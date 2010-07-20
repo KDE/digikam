@@ -334,10 +334,16 @@ private Q_SLOTS:
 //     void slotSaveSelection();
 //     void slotAlbumSelected(Album*);
 //     void slotCheckAboutSelection();
+    
+Q_SIGNALS:
+
+    void signalDetectFaces();
+    void signalScanForFacesFirstTime();
 
 private:
 
     PeopleSideBarWidgetPriv* const d;
+
 };
 
 } // namespace Digikam

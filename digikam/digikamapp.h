@@ -137,6 +137,7 @@ private:
     void openSolidCamera(const QString& udi, const QString& label = QString());
     void openSolidUsmDevice(const QString& udi, const QString& label = QString());
     void runFingerPrintsGenerator(bool rebuildAll);
+    void runFaceScanner(bool rebuildAll);
     void runThumbnailsGenerator(bool rebuildAll);
     void updateCameraMenu();
     void initGui();
@@ -197,6 +198,9 @@ private Q_SLOTS:
     void slotGenerateFingerPrintsFirstTime();
     void slotRebuildFingerPrints();
     void slotRebuildFingerPrintsDone();
+    void slotDetectFacesFirstTime();
+    void slotScanForFaces();
+    void slotScanForFacesDone();
 
     void slotChangeTheme(const QString& theme);
     void slotThemeChanged();
