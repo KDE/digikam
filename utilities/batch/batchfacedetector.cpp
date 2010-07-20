@@ -129,7 +129,8 @@ void BatchFaceDetector::slotDetectFaces()
     }
     else
     {
-        // FIXME: d->allPicturesPath = DatabaseAccess().db()->getDirtyOrMissingFingerprintURLs();
+        // FIXME: Currently the table query is only implemented in AlbumDB. Need to implement it in other files too
+        d->allPicturesPath = DatabaseAccess().db()->getDirtyOrMissingFaceImageUrls();
     }
 
     setMaximum(d->allPicturesPath.count());
