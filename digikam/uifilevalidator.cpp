@@ -43,11 +43,11 @@ class ToolbarNameHandler : public QXmlDefaultHandler
 {
 public:
 
-    virtual bool startElement(const QString & namespaceURI, const QString & localName, const QString & qName,
+    virtual bool startElement(const QString& namespaceURI, const QString& localName, const QString& qName,
                               const QXmlAttributes & atts);
 };
 
-bool ToolbarNameHandler::startElement(const QString & namespaceURI, const QString & localName, const QString & qName,
+bool ToolbarNameHandler::startElement(const QString& namespaceURI, const QString& localName, const QString& qName,
                                       const QXmlAttributes & atts)
 {
     Q_UNUSED(namespaceURI);
