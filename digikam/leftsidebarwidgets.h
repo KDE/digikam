@@ -337,7 +337,7 @@ private Q_SLOTS:
 
 private:
 
-    TagViewSideBarWidgetPriv* const d;
+    PeopleSideBarWidgetPriv* const d;
 };
 
 } // namespace Digikam
