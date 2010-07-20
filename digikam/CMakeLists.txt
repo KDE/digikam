@@ -320,6 +320,7 @@ SET(digikam_SRCS ${libdimgimagewindow_SRCS}
                  ${libdatabaseui_SRCS}
                  ${libfacedetection_SRCS}
                  ${libscriptiface_SRCS}
+                 ${libimageversionssidebar_SRCS}
                  main.cpp
     )
 
@@ -346,6 +347,7 @@ TARGET_LINK_LIBRARIES(digikam
                       ${STRIGI_LIBRARIES}
                       ${LCMS_LIBRARIES}
                       ${GPHOTO2_LIBRARIES}
+                      ${QT_QTSCRIPT_LIBRARY}
                       digikamcore
                       digikamdatabase
                      )
