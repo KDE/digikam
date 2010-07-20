@@ -39,6 +39,7 @@
 #include <kcodecs.h>
 #include <klocale.h>
 #include <kstandardguiitem.h>
+#include <kdebug.h>
 
 // Libkface includes
 
@@ -94,6 +95,9 @@ BatchFaceDetector::BatchFaceDetector(QWidget* /*parent*/, bool rebuildAll)
 {
     d->rebuildAll        = rebuildAll;
     d->previewLoadThread = new PreviewLoadThread();
+    
+    // For now, start the faceIface in detection mode
+    d->faceIface = new KFaceIface::Database(KFaceIface::Database::InitDetection);
 
     connect(d->previewLoadThread, SIGNAL(signalImageLoaded(const LoadingDescription&, const DImg&)),
             this, SLOT(slotGotImagePreview(const LoadingDescription&, const DImg&)));
@@ -175,8 +179,15 @@ void BatchFaceDetector::slotGotImagePreview(const LoadingDescription& desc, cons
 
     if (!img.isNull())
     {
-        // FIXME: Detect faces from the DImg here
+        // FIXME: Detect faces from the DImg here ?
+        QList<KFaceIface::Face> faceList = d->faceIface->detectFaces(desc.filePath);
+        QListIterator<KFaceIface::Face> it(faceList);
+        kDebug()<<"Faces detected in "<<desc.filePath;
+        while(it.hasNext())
+            kDebug()<<it.next();
     }
+    
+    
     QPixmap pix = DImg(img).smoothScale(128, 128, Qt::KeepAspectRatio).convertToPixmap();
     addedAction(pix, desc.filePath);
     advance(1);
