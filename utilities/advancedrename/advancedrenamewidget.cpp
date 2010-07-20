@@ -184,9 +184,9 @@ void AdvancedRenameWidget::setControlWidgets(ControlWidgets mask)
 {
     // we need a parser and at least one renaming option to successfully use
     // this widget.
-    bool enable       = d->parser && !(d->parser->options().isEmpty());
-    // enable the modifier toolbutton if environment has been set up correctly
+    bool enable = d->parser && !(d->parser->options().isEmpty());
 
+    // enable the modifier toolbutton if environment has been set up correctly
     bool enableModBtn = enable && !(d->parser->modifiers().isEmpty());
 
     d->renameInput->setEnabled(enable);
