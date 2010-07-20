@@ -1084,7 +1084,9 @@ void GPSSearchSideBarWidget::slotDigikamViewImageSelected(const ImageInfoList &s
 
 class PeopleSideBarWidgetPriv : public TagViewSideBarWidgetPriv
 {
-
+public:
+    
+    QPushButton* rescanButton;
 };
 
 PeopleSideBarWidget::PeopleSideBarWidget(QWidget* parent, TagModel* model)
@@ -1104,7 +1106,10 @@ PeopleSideBarWidget::PeopleSideBarWidget(QWidget* parent, TagModel* model)
     d->tagSearchBar->setHighlightOnResult(true);
     d->tagSearchBar->setModel(model, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
     d->tagSearchBar->setFilterModel(d->tagFolderView->albumFilterModel());
-
+    d->rescanButton = new QPushButton;
+    d->rescanButton->setText("Rescan collection for faces");
+    
+    layout->addWidget(d->rescanButton);
     layout->addWidget(d->tagFolderView);
     layout->addWidget(d->tagSearchBar);
 
