@@ -1082,44 +1082,13 @@ void GPSSearchSideBarWidget::slotDigikamViewImageSelected(const ImageInfoList &s
 
 // -----------------------------------------------------------------------------
 
-class PeopleSideBarWidgetPriv
+class PeopleSideBarWidgetPriv : public TagViewSideBarWidgetPriv
 {
-public:
-    PeopleSideBarWidgetPriv() :
-        scaleBG(0),
-        cursorCountLabel(0),
-        scrollBar(0),
-        timer(0),
-        resetButton(0),
-        saveButton(0),
-        timeUnitCB(0),
-        nameEdit(0),
-        cursorDateLabel(0),
-        searchModel(0),
-        searchModificationHelper(0)
-    {}
 
-
-    QButtonGroup*             scaleBG;
-    QLabel*                   cursorCountLabel;
-    QScrollBar*               scrollBar;
-    QTimer*                   timer;
-    QToolButton*              resetButton;
-    QToolButton*              saveButton;
-
-    KComboBox*                timeUnitCB;
-    KLineEdit*                nameEdit;
-    KSqueezedTextLabel*       cursorDateLabel;
-
-    SearchTextBar*            searchPeopleBar;
-
-    SearchModel*              searchModel;
-
-    SearchModificationHelper* searchModificationHelper;
 };
 
 PeopleSideBarWidget::PeopleSideBarWidget(QWidget* parent, TagModel* model)
-                    : SidebarWidget(parent), d(new TagViewSideBarWidgetPriv)
+                    : SidebarWidget(parent), d(new PeopleSideBarWidgetPriv)
 {
     setObjectName("TagView Sidebar");
 
