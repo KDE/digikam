@@ -243,10 +243,9 @@ FilterAction EqualizeFilter::filterAction()
     return action;
 }
 
-void EqualizeFilter::readParameters(const Digikam::FilterAction& action)
+void EqualizeFilter::readParameters(const Digikam::FilterAction& /*action*/)
 {
     return; //Digikam::DImgThreadedFilter::readParameters(action);
 }
-
 
 }  // namespace Digikam
